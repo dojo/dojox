@@ -1,6 +1,6 @@
 dojo.provide("dojox.date.posix");
 
-dojo.require("dojo.date");
+dojo.require("dojo.date.util");
 dojo.require("dojo.date.local");
 dojo.require("dojo.string");
 

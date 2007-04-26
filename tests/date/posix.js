@@ -1,8 +1,8 @@
-dojo.provide("tests.date.posix");
+dojo.provide("dojox.tests.date.posix");
 
 dojo.require("dojox.date.posix");
 
-tests.register("tests.date.posix", 
+tests.register("dojox.tests.date.posix", 
 	[
 	
 	//FIXME: set up by loading 'en' resources
