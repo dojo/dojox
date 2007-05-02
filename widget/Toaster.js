@@ -234,8 +234,7 @@ dojo.declare(
 			this._placeClip();
 
 			if(!this._scrollConnected){
-				this._scrollConnected = true;
-				this._scrollHandle = dojo.connect(window, "onscroll", this, this._placeClip);
+				this._scrollConnected = dojo.connect(window, "onscroll", this, this._placeClip);
 			}
 		},
 
@@ -246,8 +245,8 @@ dojo.declare(
 			dojo.style(this.containerNode, 'display', 'none');
 
 			if(this._scrollConnected){
+				dojo.disconnect(this._scrollConnected);
 				this._scrollConnected = false;
-				dojo.disconnect(window, "onscroll", this._scrollHandle);
 			}
 
 			dojo.style(this.containerNode, "opacity", 1);
