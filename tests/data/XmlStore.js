@@ -28,7 +28,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"*"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_one(t){
 			//	summary: 
@@ -46,7 +46,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_paging(t){
 			//	summary: 
@@ -114,7 +114,7 @@ tests.register("dojox.tests.data.XmlStore",
 			}
 
 			store.fetch({onComplete: completed, onError: error});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_pattern0(t){
 			//	summary: 
@@ -131,7 +131,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"?9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_pattern1(t){
 			//	summary: 
@@ -148,7 +148,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B57?"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_pattern2(t){
 			//	summary: 
@@ -165,7 +165,41 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9*"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
+		},
+		function testReadAPI_fetch_pattern_caseInsensitive(t){
+			//	summary: 
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.
+			//	description:
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.
+			var store = getBooks2Store();
+			var d = new doh.Deferred();                                                             
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"?9b574"}, queryIgnoreCase:true, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_pattern_caseSensitive(t){
+			//	summary: 
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case sensitive mode.
+			//	description:
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case sensitive mode.
+			var store = getBooks2Store();
+			var d = new doh.Deferred();                                                             
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"?9B574"}, queryIgnoreCase:false, onComplete: onComplete, onError: onError});
+			return d; //Object
 		},
 		function testReadAPI_fetch_all_rootItem(t){
 			//	summary: 
@@ -184,7 +218,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"*"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_withAttrMap_all(t){
 			var store = new dojox.data.XmlStore({url: dojo.moduleUrl("dojox", "tests/data/books_isbnAttr.xml").toString(),
@@ -200,7 +234,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"*"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_withAttrMap_one(t){
 			var store = new dojox.data.XmlStore({url: dojo.moduleUrl("dojox", "tests/data/books_isbnAttr.xml").toString(),
@@ -216,7 +250,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"2"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_withAttrMap_pattern0(t){
 			//	summary: 
@@ -234,7 +268,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"ABC?"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_withAttrMap_pattern1(t){
 			//	summary: 
@@ -252,7 +286,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A*"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_fetch_withAttrMap_pattern2(t){
 			//	summary: 
@@ -270,7 +304,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"?C*"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_getValue(t){
 			 //	summary: 
@@ -291,7 +325,7 @@ tests.register("dojox.tests.data.XmlStore",
 				 d.errback(error);
 			 }
 			 store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			 return d;
+			 return d; //Object
 		},
 		function testReadAPI_getValues(t){
 			 //	summary: 
@@ -314,7 +348,7 @@ tests.register("dojox.tests.data.XmlStore",
 				 d.errback(error);
 			 }
 			 store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			 return d;
+			 return d; //Object
 		},
 		function testReadAPI_isItem(t){
 			 //	summary: 
@@ -337,7 +371,7 @@ tests.register("dojox.tests.data.XmlStore",
 				 d.errback(error);
 			 }
 			 store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			 return d;
+			 return d; //Object
 		},
 		function testReadAPI_isItem_multistore(t){
 			//	summary: 
@@ -368,7 +402,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store1.fetch({query:{isbn:"A9B574"}, onComplete: onComplete1, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_hasAttribute(t){
 			//	summary: 
@@ -389,7 +423,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_containsValue(t){
 			//	summary: 
@@ -410,7 +444,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_sortDescending(t){
 			//	summary: 
@@ -436,7 +470,7 @@ tests.register("dojox.tests.data.XmlStore",
 
 			var sortAttributes = [{attribute: "isbn", descending: true}];
 			store.fetch({query:{isbn:"*"}, sort: sortAttributes, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_sortAscending(t){
 			//	summary: 
@@ -462,7 +496,7 @@ tests.register("dojox.tests.data.XmlStore",
 
 			var sortAttributes = [{attribute: "isbn"}];
 			store.fetch({query:{isbn:"*"}, sort: sortAttributes, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_isItemLoaded(t){
 			//	summary: 
@@ -482,7 +516,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testReadAPI_getFeatures(t){
 			//	summary: 
@@ -529,7 +563,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testWriteAPI_setValue(t){
 			//	summary: 
@@ -551,7 +585,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testWriteAPI_unsetAttribute(t){
 			//	summary: 
@@ -574,7 +608,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testWriteAPI_isDirty(t){
 			//	summary: 
@@ -597,7 +631,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		},
 		function testWriteAPI_revert(t){
 			//	summary: 
@@ -630,7 +664,7 @@ tests.register("dojox.tests.data.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			return d;
+			return d; //Object
 		}
 	]
 );

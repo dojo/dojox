@@ -476,6 +476,43 @@ tests.register("dojox.tests.data.CsvStore",
 			csvStore.fetch({query: {value: "bar\*foo"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
 			return d; //Object
 		},
+		function testReadAPI_fetch_patternMatch_caseInsensitive(t){
+			//	summary: 
+			//		Function to test exact pattern match with case insensitivity set.
+			//	description:
+			//		Function to test exact pattern match with case insensitivity set.
+			
+			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new tests.Deferred();
+			function completed(items, request){
+				t.is(1, items.length);
+				t.assertTrue(csvStore.getValue(items[0], "value") === "bar*foo");
+				d.callback(true);
+			}
+			
+			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_patternMatch_caseSensitive(t){
+			//	summary: 
+			//		Function to test exact pattern match with case insensitivity set.
+			//	description:
+			//		Function to test exact pattern match with case insensitivity set.
+			
+			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new tests.Deferred();
+			function completed(items, request){
+				t.is(0, items.length);
+				d.callback(true);
+			}
+			
+			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			return d; //Object
+		},
 		function testReadAPI_fetch_sortNumeric(t){
 			//	summary: 
 			//		Function to test sorting numerically.

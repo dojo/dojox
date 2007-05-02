@@ -127,11 +127,32 @@ dojo.declare("dojox.data.CsvStore",
 							/* anything */ value){
 		//	summary: 
 		//		See dojo.data.api.Read.containsValue()
+		return this._containsValue(item,attribute,value,false); //boolean
+	},
+
+	_containsValue: function(	/* item */ item, 
+								/* attribute || attribute-name-string */ attribute, 
+								/* anything */ value,
+								/* boolean */ ignoreCase){
+		//	summary: 
+		//		Internal function for looking at the values contained by the item.
+		//	description: 
+		//		Internal function for looking at the values contained by the item.  This 
+		//		function allows for denoting if the comparison should be case sensitive for
+		//		strings or not (for handling filtering cases where string case should not matter)
+		//	
+		//	item:
+		//		The data item to examine for attribute values.
+		//	attribute:
+		//		The attribute to inspect.
+		//	value:	
+		//		The value to match, strings may contain wildcard items like * and ?.
+		//	ignoreCase:
+		//		Flag to denote that if items are a string type, should case be used for comparison or not.
 		var possibleValue = this.getValue(item, attribute);
 		if(typeof value === "string" && typeof possibleValue != "undefined"){
-			return (possibleValue.match(dojo.data.util.filter.patternToRegExp(value)) !== null); //Boolean
+			return (possibleValue.match(dojo.data.util.filter.patternToRegExp(value, ignoreCase)) !== null); //Boolean
 		}
-		
 		return false; // Boolean
 	},
 
@@ -190,7 +211,7 @@ dojo.declare("dojox.data.CsvStore",
 					var candidateItem = arrayOfAllItems[i];
 					for(var key in requestArgs.query){
 						var value = requestArgs.query[key];
-						if(!self.containsValue(candidateItem, key, value)){
+						if(!self._containsValue(candidateItem, key, value, requestArgs.queryIgnoreCase)){
 							match = false;
 						}
 					}

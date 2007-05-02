@@ -411,7 +411,7 @@ dojo.declare("dojox.data.XmlStore",
 		//		An XML document
 		//	request:
 		//		A request object
-		// returns:
+		//	returns:
 		//		An array of items
 		var query = null;
 		if(request){
@@ -439,14 +439,14 @@ dojo.declare("dojox.data.XmlStore",
                         var queryValue = query[attribute];
 						if ((typeof value) === "string" && 
 							((typeof queryValue) === "string")){
-							if((value.match(dojo.data.util.filter.patternToRegExp(queryValue))) !== null){
+							if((value.match(dojo.data.util.filter.patternToRegExp(queryValue, request.queryIgnoreCase))) !== null){
 								continue;
 							}
 						}else if((typeof value) === "object"){
 							if(	value.toString && 
 								((typeof queryValue) === "string")){
 								var stringValue = value.toString();
-								if((stringValue.match(dojo.data.util.filter.patternToRegExp(queryValue))) !== null){
+								if((stringValue.match(dojo.data.util.filter.patternToRegExp(queryValue, request.queryIgnoreCase))) !== null){
 									continue;
 								}
 							}else{
