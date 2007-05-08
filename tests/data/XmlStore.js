@@ -1,14 +1,13 @@
 dojo.provide("dojox.tests.data.XmlStore");
 dojo.require("dojox.data.XmlStore");
 
-function getBooks2Store(){
+dojox.tests.data.XmlStore.getBooks2Store = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox", "tests/data/books2.xml").toString()});
-}
+};
 
-function getBooksStore(){
+dojox.tests.data.XmlStore.getBooksStore = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox", "tests/data/books.xml").toString()});
-}
-
+};
 
 tests.register("dojox.tests.data.XmlStore", 
 	[
@@ -17,7 +16,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching all xml items through an XML element called isbn
 			//	description:
 			//		Simple test of fetching all xml items through an XML element called isbn
-			var store = getBooksStore();
+			var store = dojox.tests.data.XmlStore.getBooksStore();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
@@ -35,7 +34,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
@@ -53,7 +52,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn
-			var store = getBooksStore();
+			var store = dojox.tests.data.XmlStore.getBooksStore();
 			
 			var d = new doh.Deferred();
 			function dumpFirstFetch(items, request){
@@ -121,7 +120,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 			var d = new doh.Deferred();                                                             
 			function onComplete(items, request) {
 				t.assertEqual(1, items.length);
@@ -138,7 +137,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
 				t.assertEqual(4, items.length);
@@ -155,7 +154,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn with * pattern match
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn with * pattern match
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
 				t.assertEqual(5, items.length);
@@ -172,7 +171,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 			var d = new doh.Deferred();                                                             
 			function onComplete(items, request) {
 				t.assertEqual(1, items.length);
@@ -189,7 +188,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case sensitive mode.
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case sensitive mode.
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 			var d = new doh.Deferred();                                                             
 			function onComplete(items, request) {
 				t.assertEqual(1, items.length);
@@ -311,7 +310,7 @@ tests.register("dojox.tests.data.XmlStore",
 			 //		Simple test of the getValue API
 			 //	description:
 			 //		Simple test of the getValue API
-			 var store = getBooks2Store();
+			 var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			 var d = new doh.Deferred();
 			 function onComplete(items, request) {
@@ -332,7 +331,7 @@ tests.register("dojox.tests.data.XmlStore",
 			 //		Simple test of the getValues API
 			 //	description:
 			 //		Simple test of the getValues API
-			 var store = getBooks2Store();
+			 var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			 var d = new doh.Deferred();
 			 function onComplete(items, request) {
@@ -355,17 +354,17 @@ tests.register("dojox.tests.data.XmlStore",
 			 //		Simple test of the isItem API
 			 //	description:
 			 //		Simple test of the isItem API
-			 var store = getBooks2Store();
+			 var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			 var d = new doh.Deferred();
 			 function onComplete(items, request) {
-				 t.assertEqual(1, items.length);
-				 var item = items[0];
-                 t.assertTrue(store.isItem(item));
-				 t.assertTrue(!store.isItem({}));
-				 t.assertTrue(!store.isItem("Foo"));
-				 t.assertTrue(!store.isItem(1));
-				 d.callback(true);
+				t.assertEqual(1, items.length);
+				var item = items[0];
+				t.assertTrue(store.isItem(item));
+				t.assertTrue(!store.isItem({}));
+				t.assertTrue(!store.isItem("Foo"));
+				t.assertTrue(!store.isItem(1));
+				d.callback(true);
 			 }
 			 function onError(error, request) {
 				 d.errback(error);
@@ -378,20 +377,19 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the isItem API across multiple store instances.
 			//	description:
 			//		Simple test of the isItem API across multiple store instances.
-			var store1 = getBooks2Store();
-			var store2 = getBooks2Store();
+			var store1 = dojox.tests.data.XmlStore.getBooks2Store();
+			var store2 = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete1(items, request) {
 				t.assertEqual(1, items.length);
 				var item1 = items[0];
-                t.assertTrue(store1.isItem(item1));
+				t.assertTrue(store1.isItem(item1));
 
 				function onComplete2(items, request) {
 					t.assertEqual(1, items.length);
 					var item2 = items[0];
 					t.assertTrue(store2.isItem(item2));
-
 					t.assertTrue(!store1.isItem(item2));
 					t.assertTrue(!store2.isItem(item1));
 					d.callback(true);
@@ -409,11 +407,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the hasAttribute API
 			//	description:
 			//		Simple test of the hasAttribute API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.hasAttribute(item,"isbn"));
 				t.assertTrue(!store.hasAttribute(item,"bob"));
@@ -430,11 +428,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the containsValue API
 			//	description:
 			//		Simple test of the containsValue API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
 				t.assertTrue(!store.containsValue(item,"isbn", "bob"));
@@ -451,16 +449,19 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the sorting API in descending order.
 			//	description:
 			//		Simple test of the sorting API in descending order.
-			var store = getBooksStore();
+			var store = dojox.tests.data.XmlStore.getBooksStore();
 
+			//Comparison is done as a string type (toString comparison), so the order won't be numeric
+			//So have to compare in 'alphabetic' order.
+			var order = [9,8,7,6,5,4,3,20,2,19,18,17,16,15,14,13,12,11,10,1];
+			
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(20, items.length);
+				console.log("Number of items: " + items.length);
+				t.assertEqual(20, items.length);
 
-				var itemId = 20;
 				for(var i = 0; i < items.length; i++){
-					t.assertTrue(itemId, store.getValue(items[i],"isbn").toString());
-					itemId--;
+					t.assertEqual(order[i], store.getValue(items[i],"isbn").toString());
 				}
 				d.callback(true);
 			}
@@ -477,15 +478,91 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the sorting API in ascending order.
 			//	description:
 			//		Simple test of the sorting API in ascending order.
-			var store = getBooksStore();
+			var store = dojox.tests.data.XmlStore.getBooksStore();
+
+			//Comparison is done as a string type (toString comparison), so the order won't be numeric
+			//So have to compare in 'alphabetic' order.
+			var order = [1,10,11,12,13,14,15,16,17,18,19,2,20,3,4,5,6,7,8,9];
+						
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(20, items.length);
+				var itemId = 1;
+				for(var i = 0; i < items.length; i++){
+					t.assertEqual(order[i], store.getValue(items[i],"isbn").toString());
+				}
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+
+			var sortAttributes = [{attribute: "isbn"}];
+			store.fetch({query:{isbn:"*"}, sort: sortAttributes, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_sortDescendingNumeric(t){
+			//	summary: 
+			//		Simple test of the sorting API in descending order using a numeric comparator.
+			//	description:
+			//		Simple test of the sorting API in descending order using a numeric comparator.
+			var store = dojox.tests.data.XmlStore.getBooksStore();
+
+			//isbn should be treated as a numeric, not as a string comparison
+			store.comparatorMap = {};
+			store.comparatorMap["isbn"] = function(a, b){
+				var ret = 0;
+				if(parseInt(a.toString()) > parseInt(b.toString())){
+					ret = 1;
+				}else if(parseInt(a.toString()) < parseInt(b.toString())){
+					ret = -1;
+				}
+				return ret; //int, {-1,0,1}
+			};
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(20, items.length);
+                		t.assertEqual(20, items.length);
+                		var itemId = 20;
+				for(var i = 0; i < items.length; i++){
+					t.assertEqual(itemId, store.getValue(items[i],"isbn").toString());
+					itemId--;
+				}
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
 
+			var sortAttributes = [{attribute: "isbn", descending: true}];
+			store.fetch({query:{isbn:"*"}, sort: sortAttributes, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_sortAscendingNumeric(t){
+			//	summary: 
+			//		Simple test of the sorting API in ascending order using a numeric comparator.
+			//	description:
+			//		Simple test of the sorting API in ascending order using a numeric comparator.
+			var store = dojox.tests.data.XmlStore.getBooksStore();
+
+			//isbn should be treated as a numeric, not as a string comparison
+			store.comparatorMap = {};
+			store.comparatorMap["isbn"] = function(a, b){
+				var ret = 0;
+				if(parseInt(a.toString()) > parseInt(b.toString())){
+					ret = 1;
+				}else if(parseInt(a.toString()) < parseInt(b.toString())){
+					ret = -1;
+				}
+				return ret; //int, {-1,0,1}
+			};
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(20, items.length);
 				var itemId = 1;
 				for(var i = 0; i < items.length; i++){
-					t.assertTrue(itemId, store.getValue(items[i],"isbn").toString());
+					t.assertEqual(itemId, store.getValue(items[i],"isbn").toString());
 					itemId++;
 				}
 				d.callback(true);
@@ -503,11 +580,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the isItemLoaded API
 			//	description:
 			//		Simple test of the isItemLoaded API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.isItemLoaded(item));
 				d.callback(true);
@@ -524,7 +601,7 @@ tests.register("dojox.tests.data.XmlStore",
 			//	description:
 			//		Simple test of the getFeatures function of the store
 
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 			var features = store.getFeatures(); 
 			var count = 0;
 			for(i in features){
@@ -538,20 +615,21 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the getAttributes API
 			//	description:
 			//		Simple test of the getAttributes API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				var attributes = store.getAttributes(item);
-				for(var i = 0; i < attributes.length; i++){
 
-
-				}
-				//Should be six, as all items will have tagName, childNodes, and text() special attributes 
+				//Should be six, as all items should have tagName, childNodes, and text() special attributes 
 				//in addition to any doc defined ones, which in this case are author, title, and isbn
 				//FIXME:  Figure out why IE returns 5!  Need to get firebug lite working in IE for that.
+				//Suspect it's childNodes, may not be defined if there are no child nodes.
+				for(var i = 0; i < attributes.length; i++){
+					console.log("attribute found: " + attributes[i]);
+				}
 				if(dojo.isIE){
 					t.assertEqual(5,attributes.length);
 				}else{
@@ -570,11 +648,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the setValue API
 			//	description:
 			//		Simple test of the setValue API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
 				store.setValue(item, "isbn", "A9B574-new");
@@ -592,11 +670,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the unsetAttribute API
 			//	description:
 			//		Simple test of the unsetAttribute API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
 				store.unsetAttribute(item,"isbn");
@@ -615,11 +693,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the isDirty API
 			//	description:
 			//		Simple test of the isDirty API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
 				store.setValue(item, "isbn", "A9B574-new");
@@ -638,11 +716,11 @@ tests.register("dojox.tests.data.XmlStore",
 			//		Simple test of the isDirty API
 			//	description:
 			//		Simple test of the isDirty API
-			var store = getBooks2Store();
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-                t.assertEqual(1, items.length);
+				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
 				t.assertTrue(!store.isDirty(item));
