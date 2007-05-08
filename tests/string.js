@@ -14,6 +14,8 @@ tests.register("dojox.tests.string",
 			t.is("foobarbaz", b.toString());
 			b.append("ben").append("zoo");
 			t.is("foobarbazbenzoo", b.toString());
+			b.append(5);
+			t.is("foobarbazbenzoo5", b.toString());
 		}
 	},
 	{

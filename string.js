@@ -6,15 +6,17 @@ dojo.provide("dojox.string");
 		//		A fast buffer for creating large strings
 		// str: The initial string to seed the buffer with
 		this.b = dojo.isIE ? [] : "";
-		this.append(str);
+		if(str){ this.append(str); }
 	};
 	
 	var m = {
 	 	append: function(){ 
 			// summary: Append all arguments to the end of the buffer
 			dojo.forEach(arguments, function(s){
-				if(dojo.isArrayLike(s)){ this.append.apply(this, s); }
-				else if(dojo.isString(s)){ 
+				if(dojo.isArrayLike(s)){ 
+					this.append.apply(this, s); 
+				}else{
+					if(!dojo.isString(s)){ s = String(s); } 
 					this._append(s);
 					this.length += s.length;
 				}
