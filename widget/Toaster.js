@@ -19,7 +19,7 @@ dojo.declare(
 		// summary
 		//		Message that slides in from the corner of the screen, used for notifications
 		//		like "new email".
-		templateString: '<div dojoAttachPoint="clipNode"><div dojoAttachPoint="containerNode" dojoAttachEvent="onClick:onSelect"><div dojoAttachPoint="contentNode"></div></div></div>',
+		templateString: '<div dojoAttachPoint="clipNode"><div dojoAttachPoint="containerNode" dojoAttachEvent="onclick:onSelect"><div dojoAttachPoint="contentNode"></div></div></div>',
 
 		// messageTopic: String
 		//		Name of topic; anything published to this topic will be displayed as a message.
@@ -108,7 +108,7 @@ dojo.declare(
 
 			// determine type of content and apply appropriately
 			for(var type in this.messageTypes){
-				this._removeClass(this.containerNode, "dojoToaster" + capitalize(this.messageTypes[type]));
+				dojo.removeClass(this.containerNode, "dojoToaster" + capitalize(this.messageTypes[type]));
 			}
 
 			dojo.style(this.containerNode, "opacity", 1);
@@ -118,7 +118,7 @@ dojo.declare(
 			}
 			this.contentNode.innerHTML = message;
 
-			this._addClass(this.containerNode, "dojoToaster" + capitalize(messageType || this.defaultType));
+			dojo.addClass(this.containerNode, "dojoToaster" + capitalize(messageType || this.defaultType));
 
 			// now do funky animation of widget appearing from
 			// bottom right of page and up
