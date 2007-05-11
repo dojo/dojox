@@ -72,7 +72,7 @@ cometd = new function(){
 		// selection.
 		var bindArgs = {
 			url: this.url,
-			handleAs: "text/json",
+			handleAs: "json",
 			content: { "message": dojo.toJson([props]) },
 			jsonpParam: "jsonp" // usually ignored
 		};
@@ -104,10 +104,11 @@ cometd = new function(){
 			d = dojo.xhrPost(bindArgs);
 		}
 		d.addCallback(dojo.hitch(this, "finishInit"));
+		d.addErrback(function(e){ console.debug("handshake error!:", e); });
 		return d;
 	}
 
-	this.finishInit = function(type, data, evt, request){
+	this.finishInit = function(data){
 		data = data[0];
 		this.handshakeReturn = data;
 		// pick a transport
@@ -149,17 +150,20 @@ cometd = new function(){
 
 	this._deliver = function(message){
 		// dipatch events along the specified path
-		if(!message["channel"]){
-			console.debug("cometd error: no channel for message!");
-			return;
-		}
 		if(!this.currentTransport){
 			this.backlog.push(["deliver", message]);
 			return;
 		}
+		if(!message["channel"]){
+			if(message["success"] !== true){
+				console.debug("cometd error: no channel for message!", message);
+				return;
+			}
+		}
 		this.lastMessage = message;
 		// check to see if we got a /meta channel message that we care about
-		if(	(message.channel.length > 5)&&
+		if(	(message["channel"]) &&
+			(message.channel.length > 5)&&
 			(message.channel.substr(0, 5) == "/meta")){
 			// check for various meta topic actions that we need to respond to
 			switch(message.channel){
@@ -185,7 +189,7 @@ cometd = new function(){
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
 			var tname = (this.globalTopicChannels[message.channel]) ? message.channel : "/cometd"+message.channel;
-			dojo.publish(tname, message);
+			dojo.publish(tname, [ message ]);
 		}
 	}
 
@@ -267,7 +271,7 @@ cometd = new function(){
 	this.subscribed = function(	/*string*/				channel, 
 								/*obj*/					message){
 		console.debug(channel);
-		console.debugShallow(message);
+		console.debug(message);
 	}
 
 	this.unsubscribe = function(/*string*/				channel, 
@@ -300,7 +304,7 @@ cometd = new function(){
 			// FIXME: if useLocalTopics is false, should we go ahead and
 			// destroy the local topic?
 			var tname = (useLocalTopics) ? channel : "/cometd"+channel;
-			dojo.event.topic.unsubscribe(tname, objOrFunc, funcName);
+			dojo.unsubscribe(tname, objOrFunc, funcName);
 		}
 		return this.currentTransport.sendMessage({
 			channel: "/meta/unsubscribe",
@@ -310,8 +314,7 @@ cometd = new function(){
 
 	this.unsubscribed = function(/*string*/				channel, 
 								/*obj*/					message){
-		console.debug(channel);
-		console.debugShallow(message);
+		console.debug(channel, message);
 	}
 
 	// FIXME: add an "addPublisher" function
@@ -454,7 +457,7 @@ cometd.longPollTransport = new function(){
 			switch(message.channel){
 				case "/meta/connect":
 					if(!message.successful){
-						dojo.debug("cometd connection error:", message.error);
+						console.debug("cometd connection error:", message.error);
 						return;
 					}
 					this.connectionId = message.connectionId;
@@ -463,35 +466,39 @@ cometd.longPollTransport = new function(){
 					break;
 				case "/meta/reconnect":
 					if(!message.successful){
-						dojo.debug("cometd reconnection error:", message.error);
+						console.debug("cometd reconnection error:", message.error);
 						return;
 					}
 					this.connected = true;
 					break;
 				case "/meta/subscribe":
 					if(!message.successful){
-						dojo.debug("cometd subscription error for channel", message.channel, ":", message.error);
+						console.debug("cometd subscription error for channel", message.channel, ":", message.error);
 						return;
 					}
 					// this.subscribed(message.channel);
-					dojo.debug(message.channel);
+					console.debug(message.channel);
 					break;
 			}
 		}
 	}
 
 	this.openTunnelWith = function(content, url){
-		dojo.xhrPost({
+		console.debug("openTunnelWith:", content, (url||cometd.url));
+		var d = dojo.xhrPost({
 			url: (url||cometd.url),
 			content: content,
-			handleAs: "text/json",
-		}).addCallback(dojo.hitch(this, function(data){
-				// console.debug(evt.responseText);
-				cometd.deliver(data);
-				this.connected = false;
-				this.tunnelCollapse();
-		})).addErrback(function(){ 
-			console.debug("tunnel opening failed"); 
+			handleAs: "json",
+		});
+		d.addCallback(dojo.hitch(this, function(data){
+			// console.debug(evt.responseText);
+			console.debug(data);
+			cometd.deliver(data);
+			this.connected = false;
+			this.tunnelCollapse();
+		}));
+		d.addErrback(function(err){ 
+			console.debug("tunnel opening failed:", err);
 		});
 		this.connected = true;
 	}
@@ -544,7 +551,7 @@ cometd.callbackPollTransport = new function(){
 		if(this.connected){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
-			message: dojo.json.serialize([
+			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
 					clientId:	cometd.clientId,
@@ -562,7 +569,7 @@ cometd.callbackPollTransport = new function(){
 			// try to restart the tunnel
 			this.connected = false;
 			this.openTunnelWith({
-				message: dojo.json.serialize([
+				message: dojo.toJson([
 					{
 						channel:	"/meta/reconnect",
 						connectionType: "long-polling",
