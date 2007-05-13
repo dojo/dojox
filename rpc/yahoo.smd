@@ -2,6 +2,10 @@
 	"SMDVersion":".1",
 	"objectName":"yahoo",
 	"serviceType":"JSON-P",
+	"required": {
+		"appid": "dojotoolkit",
+		"output": "json"
+	},
 	"methods":[
 		//
 		// MAPS 
