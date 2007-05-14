@@ -149,7 +149,7 @@ dojo.declare("dojox.wire.XmlWire",
 			value = [];
 			for(var i = 0; i < node.childNodes.length; i++){
 				var child = node.childNodes[i];
-				if (child.nodeName == exp) {
+				if(child.nodeName == exp){
 					value.push(child);
 				}
 			}
@@ -162,7 +162,7 @@ dojo.declare("dojox.wire.XmlWire",
 		//		Set an attribute value or a child text value to an element
 		//	description:
 		//		If 'exp' starts with '@', 'value' is set to the specified
-		//		attribute..
+		//		attribute.
 		//		If 'exp' is "text()", 'value' is set to a child text.
 		//	node:
 		//		A node
@@ -232,7 +232,7 @@ dojo.declare("dojox.wire.XmlWire",
 		//	returns:
 		//		A DOM document
 		if(node){
-			return node.ownerDocument; //Document
+			return (node.nodeType == 9 /* DOCUMENT_NODE */ ? node : node.ownerDocument); //Document
 		}else{
 			return dojox.data.dom.createDocument(); //Document
 		}

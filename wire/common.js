@@ -22,10 +22,10 @@ dojox.wire.register = function(/*Function||String*/wireClass, /*String*/key){
 	//	key:
 	//		A key property of arguments to create a Wire
 	if(!wireClass || !key){
-		return;  //undefined.
+		return; //undefined
 	}
 	if(dojox.wire._wireClasses[key]){ // key already in use
-		return;  //undefined
+		return; //undefined
 	}
 	dojox.wire._wireClasses[key] = wireClass;
 };
@@ -67,6 +67,9 @@ dojox.wire.create = function(/*Object*/args){
 		}
 	}else{
 		for(var key in args){
+			if(!args[key]){
+				continue;
+			}
 			wireClass = dojox.wire._wireClasses[key];
 			if(wireClass){
 				if(dojo.isString(wireClass)){

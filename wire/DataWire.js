@@ -153,7 +153,7 @@ dojo.declare("dojox.wire.DataWire",
 		//	value:
 		//		A value to set
 		var i1 = attribute.indexOf('[');
-		if (i1 >= 0) {
+		if(i1 >= 0){
 			var i2 = attribute.indexOf(']');
 			var index = attribute.substring(i1 + 1, i2);
 			attribute = attribute.substring(0, i1);

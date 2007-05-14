@@ -24,12 +24,16 @@ dojo.declare("dojox.wire.Wire",
 		//			value (for the source Wire)
 		dojo.mixin(this, args);
 
-		if(this.converter && dojo.isString(this.converter)){
-			var converterClass = dojox.wire._getClass(this.converter);
-			if(converterClass){
-				this.converter = new converterClass();
-			}else{
-				this.converter = undefined;
+		if(this.converter){
+			if(dojo.isString(this.converter)){
+				var converterClass = dojox.wire._getClass(this.converter);
+				if(converterClass){
+					this.converter = new converterClass();
+				}else{
+					this.converter = undefined;
+				}
+			}else if(dojo.isFunction(this.converter)){
+				this.converter = {convert: this.converter};
 			}
 		}
 	}, {
@@ -101,7 +105,7 @@ dojo.declare("dojox.wire.Wire",
 
 		if(value){
 			if(this.type){
-				if (this.type == "string"){
+				if(this.type == "string"){
 					value = value.toString();
 				}else if(this.type == "number"){
 					value = parseInt(value);
@@ -144,15 +148,12 @@ dojo.declare("dojox.wire.Wire",
 		//		A value to set
 		//	defaultObject:
 		//		A default root object
-
-		//dojo.debug(this._wireClass + ".setValue(): value=" + value);
 		var object = undefined;
 		if(dojox.wire.isWire(this.object)){
 			object = this.object.getValue(defaultObject);
 		}else{
 			object = (this.object || defaultObject);
 		}
-		//dojo.debug(this._wireClass + ".setValue(): object=" + object);
 
 		var property = undefined;
 		if(this.property){
@@ -189,7 +190,7 @@ dojo.declare("dojox.wire.Wire",
 			}
 			var newObject = this._setValue(object, value);
 			if(!object && newObject){
-				if (dojox.wire.isWire(this.object)){
+				if(dojox.wire.isWire(this.object)){
 					this.object.setValue(newObject, defaultObject);
 				}else{
 					throw new Error(this._wireClass + ".setValue(): invalid object");

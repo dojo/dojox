@@ -69,7 +69,7 @@ tests.register("dojox.tests.wire.Wire", [
 		var converter = {convert: function(v) { return v + 1; }};
 		var string = new dojox.wire.Wire({object: source, property: "a", converter: converter}).getValue();
 		t.assertEqual("11", string);
-		var number = new dojox.wire.Wire({object: source, property: "a", type: "number", converter: converter}).getValue();
+		var number = new dojox.wire.Wire({object: source, property: "a", type: "number", converter: converter.convert}).getValue();
 		t.assertEqual(2, number);
 	}
 
