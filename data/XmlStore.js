@@ -571,7 +571,7 @@ dojo.declare("dojox.data.XmlStore",
 		//	returns:
 		//		False for "tagName", otherwise true
 		if(attribute === "tagName"){
-			return false;
+			return false; //boolean
 		}
 
 		this._backupItem(item);
@@ -622,9 +622,20 @@ dojo.declare("dojox.data.XmlStore",
 		//		Set attribute values
 		//	description:
 		//		'item' must be an XML element.
+		//		If 'attribute' specifies "tagName", nothing is set and false is
+		//		returned.
 		//		If 'attribute' specifies "childNodes", the value (array of XML
 		//		elements) is set to the element's childNodes.
-		//		Otherwise, nothing is set and false is returned.
+		//		If 'attribute' specifies "text()", a text node is created with
+		//		the values and set it to the element as a child.
+		//		For generic attributes, if '_attributeMap' is specified,
+		//		an actual attribute name is looked up with the tag name of
+		//		the element and 'attribute' (concatenated with '.').
+		//		Then, if 'attribute' starts with "@", the first value is set to
+		//		the XML attribute.
+		//		Otherwise, child elements of the tag name specified with
+		//		'attribute' are replaced with new child elements and their
+		//		child text nodes of values.
 		//	item:
 		//		An XML element that holds the attribute
 		//	attribute:
@@ -633,11 +644,15 @@ dojo.declare("dojox.data.XmlStore",
 		//	value:
 		//		A attribute value to set
 		//	returns:
-		//		True for "childNodes", otherwise false
-		if(attribute === "childNodes"){
-			this._backupItem(item);
+		//		False for "tagName", otherwise true
+		if(attribute === "tagName"){
+			return false; //boolean
+		}
 
-			var element = item.element;
+		this._backupItem(item);
+
+		var element = item.element;
+		if(attribute === "childNodes"){
 			while(element.firstChild){
 				element.removeChild(element.firstChild);
 			}
@@ -645,9 +660,39 @@ dojo.declare("dojox.data.XmlStore",
 				var child = values[i].element;
 				element.appendChild(child);
 			}
-			return true; //boolean
+		}else if(attribute === "text()"){
+			while (element.firstChild){
+				element.removeChild(element.firstChild);
+			}
+			var value = "";
+			for(var i = 0; i < values.length; i++){
+				value += values[i];
+			}
+			var text = this._getDocument(element).createTextNode(value);
+			element.appendChild(text);
+		}else{
+			attribute = this._getAttribute(element.nodeName, attribute);
+			if(attribute.charAt(0) === '@'){
+				var name = attribute.substring(1);
+				element.setAttribute(name, values[0]);
+			}else{
+				for(var i = element.childNodes.length - 1; i >= 0; i--){
+					var node = element.childNodes[i];
+					if(	node.nodeType === 1 /*ELEMENT_NODE*/ &&
+						node.nodeName === attribute){
+						element.removeChild(node);
+					}
+				}
+				var document = this._getDocument(element);
+				for(var i = 0; i < values.length; i++){
+					var child = document.createElement(attribute);
+					var text = document.createTextNode(values[i]);
+					child.appendChild(text);
+					element.appendChild(child);
+				}
+			}
 		}
-		return false; //boolean
+		return true; //boolean
 	},
 	
 	unsetAttribute: function(/* item */ item, /* attribute || string */ attribute){

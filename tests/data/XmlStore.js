@@ -665,6 +665,32 @@ tests.register("dojox.tests.data.XmlStore",
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
+		function testWriteAPI_setValues(t){
+			//	summary: 
+			//		Simple test of the setValues API
+			//	description:
+			//		Simple test of the setValues API
+			var store = dojox.tests.data.XmlStore.getBooks2Store();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				var item = items[0];
+				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
+				store.setValues(item, "isbn", ["A9B574-new1", "A9B574-new2"]);
+				var values = store.getValues(item,"isbn");
+				t.assertEqual(values[0].toString(), "A9B574-new1");
+				t.assertEqual(values[1].toString(), "A9B574-new2");
+				store.setValues(values[0], "text()", ["A9B574", "-new3"]);
+				t.assertEqual(store.getValue(values[0],"text()").toString(), "A9B574-new3");
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
 		function testWriteAPI_unsetAttribute(t){
 			//	summary: 
 			//		Simple test of the unsetAttribute API
