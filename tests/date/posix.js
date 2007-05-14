@@ -136,80 +136,80 @@ function test_date_getStartOfWeek(t){
 	
 	// Monday
 	var date = new Date(2007, 0, 1);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 1), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 1), 1);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 2), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 2), 1);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 3), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 3), 1);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 4), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 4), 1);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 5), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 5), 1);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 6), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 6), 1);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 7), 1);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 7), 1);
 	t.is(date, weekStart);
 
 	// Sunday
 	date = new Date(2007, 0, 7);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 7), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 7), 0);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 8), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 8), 0);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 9), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 9), 0);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 10), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 10), 0);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 11), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 11), 0);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 12), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 12), 0);
 	t.is(date, weekStart);
-	weekStart = dojo.date.getStartOfWeek(new Date(2007, 0, 13), 0);
+	weekStart = dojox.date.posix.getStartOfWeek(new Date(2007, 0, 13), 0);
 	t.is(date, weekStart);
 },
 
 function test_date_setIsoWeekOfYear(t){
 	var date = new Date(2006,10,10);
-	var result = dojox.posix.setIsoWeekOfYear(date, 1);
+	var result = dojox.date.posix.setIsoWeekOfYear(date, 1);
 	t.is(new Date(2006,0,6), result);
-	result = dojox.posix.setIsoWeekOfYear(date, 10);
-	result = dojox.posix.setIsoWeekOfYear(date, 2);
+	result = dojox.date.posix.setIsoWeekOfYear(date, 10);
+	result = dojox.date.posix.setIsoWeekOfYear(date, 2);
 	t.is(new Date(2006,0,13), result);
-	result = dojox.posix.setIsoWeekOfYear(date, 10);
+	result = dojox.date.posix.setIsoWeekOfYear(date, 10);
 	t.is(new Date(2006,2,10), result);
-	result = dojox.posix.setIsoWeekOfYear(date, 52);
+	result = dojox.date.posix.setIsoWeekOfYear(date, 52);
 	t.is(new Date(2006,11,29), result);
-	var result = dojox.posix.setIsoWeekOfYear(date, -1);
+	var result = dojox.date.posix.setIsoWeekOfYear(date, -1);
 	t.is(new Date(2006,11,29), result);
-	var result = dojox.posix.setIsoWeekOfYear(date, -2);
+	var result = dojox.date.posix.setIsoWeekOfYear(date, -2);
 	t.is(new Date(2006,11,22), result);
-	var result = dojox.posix.setIsoWeekOfYear(date, -10);
+	var result = dojox.date.posix.setIsoWeekOfYear(date, -10);
 	t.is(new Date(2006,9,27), result);
 	
 	date = new Date(2004,10,10);
-	result = dojox.posix.setIsoWeekOfYear(date, 1);
+	result = dojox.date.posix.setIsoWeekOfYear(date, 1);
 	t.is(new Date(2003,11,31), result);
-	result = dojox.posix.setIsoWeekOfYear(date, 2);
+	result = dojox.date.posix.setIsoWeekOfYear(date, 2);
 	t.is(new Date(2004,0,7), result);
-	result = dojox.posix.setIsoWeekOfYear(date, -1);
+	result = dojox.date.posix.setIsoWeekOfYear(date, -1);
 	t.is(new Date(2004,11,29), result);
 },
 
 function test_date_getIsoWeekOfYear(t){
-	var week = dojox.posix.getIsoWeekOfYear(new Date(2006,0,1));
+	var week = dojox.date.posix.getIsoWeekOfYear(new Date(2006,0,1));
 	t.is(52, week);
-	week = dojox.posix.getIsoWeekOfYear(new Date(2006,0,4));
+	week = dojox.date.posix.getIsoWeekOfYear(new Date(2006,0,4));
 	t.is(1, week);
-	week = dojox.posix.getIsoWeekOfYear(new Date(2006,11,31));
+	week = dojox.date.posix.getIsoWeekOfYear(new Date(2006,11,31));
 	t.is(52, week);
-	week = dojox.posix.getIsoWeekOfYear(new Date(2007,0,1));
+	week = dojox.date.posix.getIsoWeekOfYear(new Date(2007,0,1));
 	t.is(1, week);
-	week = dojox.posix.getIsoWeekOfYear(new Date(2007,11,31));
+	week = dojox.date.posix.getIsoWeekOfYear(new Date(2007,11,31));
 	t.is(53, week);
-	week = dojox.posix.getIsoWeekOfYear(new Date(2008,0,1));
+	week = dojox.date.posix.getIsoWeekOfYear(new Date(2008,0,1));
 	t.is(1, week);
-	week = dojox.posix.getIsoWeekOfYear(new Date(2007,11,31));
+	week = dojox.date.posix.getIsoWeekOfYear(new Date(2007,11,31));
 	t.is(53, week);
 },
 
@@ -225,7 +225,7 @@ function test_date_getIsoWeeksInYear(t){
 	for(i=0; i < 400; i++) {
 		weeks = 52;
 		if(i == longYears[0]) { weeks = 53; longYears.shift(); }
-		result = dojox.posix.getIsoWeeksInYear(new Date(2000 + i, 0, 1));
+		result = dojox.date.posix.getIsoWeeksInYear(new Date(2000 + i, 0, 1));
 		t.is(/*weeks +" weeks in "+ (2000+i), */weeks, result);
 	}
 }
