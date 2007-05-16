@@ -68,12 +68,6 @@ dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 					xmlDoc.importNode(tmp.childNodes.item(i), true);
 				}
 				return xmlDoc;	//	DOMDocument
-				
-				// FIXME: probably not a good idea to have to return an HTML fragment
-				// FIXME: the tmp.doc.firstChild is as tested from IE, so it may not
-				// work that way across the board
-				return ((tmp.document)&&
-					(tmp.document.firstChild ?  tmp.document.firstChild : tmp));	//	DOMDocument
 			}
 		}else{
 			return _document.implementation.createDocument("", "", null); // DOMDocument
