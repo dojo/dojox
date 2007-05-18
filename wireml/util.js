@@ -1,0 +1,240 @@
+dojo.provide("dojox.wireml.util");
+
+dojo.require("dijit.util.manager");
+dojo.require("dojox.data.dom");
+dojo.require("dojox.wire.Wire");
+
+dojox.wireml._getValue = function(/*String*/source, /*Array*/args){
+	//	summary:
+	//		Return a value
+	//	description:
+	//		This method obtains an object by an ID of a widget or an DOM
+	//		element.
+	//		If 'source' specifies a dotted notation to its property, a Wire is
+	//		used to get the object property.
+	//		If 'source' starts with "arguments", 'args' is used as a root
+	//		object for the Wire.
+	//	source:
+	//		A string to specify an object and its property
+	//	args:
+	//		An optional arguments array
+	//	returns:
+	//		A value
+	if(!source){
+		return undefined; //undefined
+	}
+	var property = undefined;
+	if(args && source.length >= 9 && source.substring(0, 9) == "arguments"){
+		property = this.required.substring(9);
+		return new dojox.wire.Wire({property: property}).getValue(args);
+	}
+	var i = source.indexOf('.');
+	if(i >= 0){
+		property = source.substring(i + 1);
+		source = source.substring(0, i);
+	}
+	var object = (dijit.byId(source) || dojo.byId(source) || dojo.getObject(source));
+	if(!object){
+		return undefined; //undefined
+	}
+	if(!property){
+		return object; //Object
+	}else{
+		return new dojox.wire.Wire({object: object, property: property}).getValue(); //anything
+	}
+};
+
+dojox.wireml._setValue = function(/*String*/target, /*anything*/value){
+	//	summary:
+	//		Store a value
+	//	description:
+	//		This method stores a value by an ID of a widget or an DOM
+	//		element with a dotted notation to its property, using a Wire.
+	//	target:
+	//		A string to specify an object and its property
+	//	value:
+	//		A value
+	if(!target){
+		return; //undefined
+	}
+	var i = target.indexOf('.');
+	if(i < 0){
+		return; //undefined
+	}
+	var object = this._getValue(target.substring(0, i));
+	if(!object){
+		return; //undefined
+	}
+	var property = target.substring(i + 1);
+	new dojox.wire.Wire({object: object, property: property}).setValue(value);
+};
+
+dojo.declare("dojox.wireml.XmlElement",
+	null,
+	function(/*Element||String*/element){
+		//	summary:
+		//		Initialize with an XML element or a tag name
+		//	element:
+		//		An XML element or a tag name
+		if(dojo.isString(element)){
+			element = this._getDocument().createElement(element);
+		}
+		this.element = element;
+	}, {
+	//	summary:
+	//		An object wrapping an XML element
+	//	description:
+	//		This class represents an XML element.
+
+	getPropertyValue: function(/*String*/property){
+		//	summary:
+		//		Return a property value
+		//	description:
+		//		If 'property' starts with '@', the attribute value is returned.
+		//		If 'property' specifies "text()", the value of the first child
+		//		text is returned.
+		//		Otherwise, child elements of the tag name specified with
+		//		'property' are returned.
+		//	property:
+		//		A property name
+		//	returns:
+		//		A property value
+		var value = undefined;
+		if(!this.element){
+			return value; //undefined
+		}
+		if(!property){
+			return value; //undefined
+		}
+
+		if(property.charAt(0) == '@'){
+			var attribute = property.substring(1);
+			value = this.element.getAttribute(attribute);
+		}else if(property == "text()"){
+			var text = this.element.firstChild;
+			if(text){
+				value = text.nodeValue;
+			}
+		}else{ // child elements
+			var elements = [];
+			for(var i = 0; i < this.element.childNodes.length; i++){
+				var child = this.element.childNodes[i];
+				if(child.nodeName == property){
+					elements.push(new dojox.wireml.XmlElement(child));
+				}
+			}
+			if(elements.length > 0){
+				if(elements.length === 1){
+					value = elements[0];
+				}else{
+					value = elements;
+				}
+			}
+		}
+		return value; //String||Array||XmlElement
+	},
+
+	setPropertyValue: function(/*String*/property, /*String||Array||XmlElement*/value){
+		//	summary:
+		//		Store a property value
+		//	description:
+		//		If 'property' starts with '@', 'value' is set to the attribute.
+		//		If 'property' specifies "text()", 'value' is set as the first
+		//		child text.
+		//		If 'value' is a string, a child element of the tag name
+		//		specified with 'property' is created and 'value' is set as
+		//		the first child text of the child element.
+		//		Otherwise, 'value' is set to as child elements.
+		//	property:
+		//		A property name
+		//	value:
+		//		A property value
+		if(!this.element){
+			return; //undefined
+		}
+		if(!property){
+			return; //undefined
+		}
+
+		if(property.charAt(0) == '@'){
+			var attribute = property.substring(1);
+			if(value){
+				this.element.setAttribute(attribute, value);
+			}else{
+				this.element.removeAttribute(attribute);
+			}
+		}else if(property == "text()"){
+			while(this.element.firstChild){
+				this.element.removeChild(this.element.firstChild);
+			}
+			if(value){
+				var text = this._getDocument().createTextNode(value);
+				this.element.appendChild(text);
+			}
+		}else{ // child elements
+			var nextChild = null;
+			for(var i = this.element.childNodes.length - 1; i >= 0; i--){
+				var child = this.element.childNodes[i];
+				if(child.nodeName == property){
+					if(!nextChild){
+						nextChild = child.nextSibling;
+					}
+					this.element.removeChild(child);
+				}
+			}
+			if(value){
+				if(dojo.isArray(value)){
+					for(var i in value){
+						var e = value[i];
+						if(e.element){
+							this.element.insertBefore(e.element, nextChild);
+						}
+					}
+				}else if(value instanceof dojox.wireml.XmlElement){
+					if(value.element){
+						this.element.insertBefore(value.element, nextChild);
+					}
+				}else{ // assume string
+					var child = this._getDocument().createElement(property);
+					var text = this._getDocument().createTextNode(value);
+					child.appendChild(text);
+					this.element.insertBefore(child, nextChild);
+				}
+			}
+		}
+	},
+
+	toString: function(){
+		//	summary:
+		//		Return a value of the first text child of the element
+		//	description:
+		//		A value of the first text child of the element is returned.
+		//	returns:
+		//		A value of the first text child of the element
+		var s = "";
+		if(this.element){
+			var text = this.element.firstChild;
+			if(text){
+				s = text.nodeValue;
+			}
+		}
+		return s; //String
+	},
+
+	_getDocument: function(){
+		//	summary:
+		//		Return a DOM document
+		//	description:
+		//		If 'element' is specified, a DOM document of the element is
+		//		returned.
+		//		Otherwise, a DOM document is created.
+		//	returns:
+		//		A DOM document
+		if(this.element){
+			return (this.element.nodeType == 9 /* DOCUMENT_NODE */ ?
+				this.element : this.element.ownerDocument); //Document
+		}else{
+			return dojox.data.dom.createDocument(); //Document
+		}
+	}
+});

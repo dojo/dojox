@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>Test Invocation</title>
+<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript">
+dojo.provide("dojox.wireml.tests.markup.Invocation");
+
+dojo.require("dijit.util.parser");
+dojo.require("doh.runner");
+dojo.require("dojox.wireml.Invocation");
+
+dojox.wireml.tests.markup.Invocation = {
+	invoke: function(p1, p2){return p1 + p2;},
+	invokeError: function(p){throw new Error(p);},
+	parameters: {a: "A", b: "B", c: "C"}
+};
+
+dojo.addOnLoad(function(){
+	doh.register("dojox.wireml.tests.markup.Invocation", [
+
+		function test_Invocation_method(t){
+			dojo.publish("invokeMethod");
+			t.assertEqual("AB", dojox.wireml.tests.markup.Invocation.result);
+		},
+
+		function test_Invocation_topic(t){
+			dojo.publish("invokeTopic");
+			t.assertEqual("C", dojox.wireml.tests.markup.Invocation.error);
+		}
+
+	]);
+	doh.run();
+});
+</script>
+</head>
+<body>
+<div dojoType="dojox.wireml.Invocation"
+	triggerTopic="invokeMethod"
+	object="dojox.wireml.tests.markup.Invocation"
+	method="invoke"
+	parameters="dojox.wireml.tests.markup.Invocation.parameters.a,dojox.wireml.tests.markup.Invocation.parameters.b"
+	result="dojox.wireml.tests.markup.Invocation.result"></div>
+<div dojoType="dojox.wireml.Invocation"
+	triggerTopic="invokeTopic"
+	topic="invokeError"
+	parameters="dojox.wireml.tests.markup.Invocation.parameters.c"></div>
+<div dojoType="dojox.wireml.Invocation"
+	triggerTopic="invokeError"
+	object="dojox.wireml.tests.markup.Invocation"
+	method="invokeError"
+	error="dojox.wireml.tests.markup.Invocation.error"></div>
+</body>
+</html>

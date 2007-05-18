@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Test DataStore</title>
+<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript">
+dojo.provide("dojox.wireml.tests.markup.DataStore");
+
+dojo.require("dijit.util.parser");
+dojo.require("doh.runner");
+dojo.require("dojox.wireml.DataStore");
+dojo.require("dojox.wireml.Invocation");
+dojo.require("dojox.wireml.Transfer");
+
+dojox.wireml.tests.markup.DataStore = {
+	request: {onComplete: function(){}, onError: function(){}}
+};
+
+dojo.addOnLoad(function(){
+	doh.register("dojox.wireml.tests.markup.DataStore", [
+
+		function test_DataStore_url(t){
+			var d = new doh.Deferred();
+			dojo.connect(dojox.wireml.tests.markup.DataStore.request, "onComplete", function(){
+				t.assertEqual("X1", dojox.wireml.tests.markup.DataStore.target[0].a);
+				t.assertEqual("Y2", dojox.wireml.tests.markup.DataStore.target[1].b);
+				t.assertEqual("Z3", dojox.wireml.tests.markup.DataStore.target[2].c);
+				d.callback(true);
+			});
+			dojo.connect(dojox.wireml.tests.markup.DataStore.request, "onError", function(error){
+				d.errback(error);
+			});
+			dojo.publish("invokeFetch");
+			return d;
+		}
+
+	]);
+	doh.run();
+});
+</script>
+</head>
+<body>
+<div dojoType="dojox.wireml.DataStore"
+	id="DataStore1"
+	storeClass="dojox.data.XmlStore"
+	url="DataStore.xml"></div>
+<div dojoType="dojox.wireml.Invocation"
+	triggerTopic="invokeFetch"
+	object="DataStore1"
+	method="fetch"
+	parameters="dojox.wireml.tests.markup.DataStore.request">
+</div>
+<div dojoType="dojox.wireml.Transfer"
+	trigger="dojox.wireml.tests.markup.DataStore.request"
+	triggerEvent="onComplete"
+	source="arguments[0]"
+	sourceStore="DataStore1.store"
+	target="dojox.wireml.tests.markup.DataStore.target">
+	<div dojoType="dojox.wireml.ColumnWire"
+		column="a" attribute="x"></div>
+	<div dojoType="dojox.wireml.ColumnWire"
+		column="b" attribute="y"></div>
+	<div dojoType="dojox.wireml.ColumnWire"
+		column="c" attribute="z"></div>
+</div>
+</body>
+</html>
