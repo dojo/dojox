@@ -23,6 +23,9 @@ dojo.provide("dojox.string");
 			}, this);
 			return this; // dojox.string.Builder
 		},
+		concat: function(){
+			return this.append.apply(this, arguments);
+		},
 		clear: function(){
 			// summary: Remove all characters from the buffer
 			this._clear();
