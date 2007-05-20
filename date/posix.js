@@ -21,7 +21,7 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 	var bundle = dojo.date.locale._getGregorianBundle(locale);
 
 	var $ = function(property){
-		switch (property){
+		switch(property){
 			case "a": // abbreviated weekday name according to the current locale
 				return dojo.date.locale.getNames('days', 'abbr', 'format', locale)[dateObject.getDay()];
 
@@ -79,26 +79,26 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 			case "I": // hour as a decimal number using a 12-hour clock (range
 				      // 01 to 12)
 				return _(dateObject.getHours() % 12 || 12);
-				
+
 			case "j": // day of the year as a decimal number (range 001 to 366)
-				return _(dojo.date.getDayOfYear(dateObject), 3);
-				
+				return _(dojo.date.locale._getDayOfYear(dateObject), 3);
+
 			case "k": // Hour as a decimal number using a 24-hour clock (range
 					  // 0 to 23 (space-padded))
-				if (padChar == null) { padChar = " "; }
+				if(padChar == null){ padChar = " "; }
 				return _(dateObject.getHours());
 
 			case "l": // Hour as a decimal number using a 12-hour clock (range
 					  // 1 to 12 (space-padded))
-				if (padChar == null) { padChar = " "; }
+				if(padChar == null){ padChar = " "; }
 				return _(dateObject.getHours() % 12 || 12);
-			
+
 			case "m": // month as a decimal number (range 01 to 12)
 				return _(dateObject.getMonth() + 1);
-				
+
 			case "M": // minute as a decimal number
 				return _(dateObject.getMinutes());
-			
+
 			case "n":
 				return "\n";
 
@@ -128,7 +128,7 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 			case "U": // week number of the current year as a decimal number,
 				      // starting with the first Sunday as the first day of the
 				      // first week
-				return _(dojo.date.getWeekOfYear(dateObject));
+				return _(dojo.date.locale._getWeekOfYear(dateObject));
 
 			case "V": // week number of the year (Monday as the first day of the
 				      // week) as a decimal number [01,53]. If the week containing
@@ -140,7 +140,7 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 			case "W": // week number of the current year as a decimal number,
 				      // starting with the first Monday as the first day of the
 				      // first week
-				return _(dojo.date.getWeekOfYear(dateObject, 1));
+				return _(dojo.date.locale._getWeekOfYear(dateObject, 1));
 				
 			case "w": // day of the week as a decimal, Sunday being 0
 				return String(dateObject.getDay());
