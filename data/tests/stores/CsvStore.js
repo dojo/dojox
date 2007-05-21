@@ -1,7 +1,7 @@
-dojo.provide("dojox.tests.data.CsvStore");
+dojo.provide("dojox.data.tests.stores.CsvStore");
 dojo.require("dojox.data.CsvStore");
 
-dojox.tests.data.CsvStore.getDatasource = function(filepath){
+dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 	//  summary:
 	//		A simple helper function for getting the sample data used in each of the tests.
 	//  description:
@@ -9,12 +9,12 @@ dojox.tests.data.CsvStore.getDatasource = function(filepath){
 	
 	var dataSource = {};
 	if(dojo.isBrowser){
-		dataSource.url = dojo.moduleUrl("dojox.tests", filepath).toString();            
+		dataSource.url = dojo.moduleUrl("dojox.data.tests", filepath).toString();            
 	}else{
 		// When running tests in Rhino, xhrGet is not available,
 		// so we have the file data in the code below.
 		switch(filepath){
-			case "data/movies.csv":
+			case "stores/movies.csv":
 				var csvData = "";
 				csvData += "Title, Year, Producer\n";
 				csvData += "City of God, 2002, Katia Lund\n";
@@ -25,7 +25,7 @@ dojox.tests.data.CsvStore.getDatasource = function(filepath){
 				csvData += '"The Sequel to ""Dances With Wolves.""", 1982, Ridley Scott\n';
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
-			case "data/books.csv":
+			case "stores/books.csv":
 				var csvData = "";
 				csvData += "Title, Author\n";
 				csvData += "The Transparent Society, David Brin\n";
@@ -38,7 +38,7 @@ dojox.tests.data.CsvStore.getDatasource = function(filepath){
 				csvData += "The Sneetches and other stories, Dr. Seuss\n";
 				csvData += "News from Tartary, Peter Fleming\n";
 				break;
-			case "data/patterns.csv":
+			case "stores/patterns.csv":
 				var csvData = "";
 				csvData += "uniqueId, value\n";
 				csvData += "9, jfq4@#!$!@Rf14r14i5u\n";
@@ -58,7 +58,7 @@ dojox.tests.data.CsvStore.getDatasource = function(filepath){
 	return dataSource; //Object
 }
 
-dojox.tests.data.CsvStore.verifyItems = function(csvStore, items, attribute, compareArray){
+dojox.data.tests.stores.CsvStore.verifyItems = function(csvStore, items, attribute, compareArray){
 	//  summary:
 	//		A helper function for validating that the items array is ordered
 	//		the same as the compareArray
@@ -71,13 +71,13 @@ dojox.tests.data.CsvStore.verifyItems = function(csvStore, items, attribute, com
 	return true; //Boolean
 }
 
-dojox.tests.data.CsvStore.error = function(t, d, errData){
+dojox.data.tests.stores.CsvStore.error = function(t, d, errData){
 	//  summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);	
 }
 
-tests.register("dojox.tests.data.CsvStore", 
+tests.register("dojox.data.tests.stores.CsvStore", 
 	[
 		function testReadAPI_fetch_all(t){
 			//	summary: 
@@ -85,7 +85,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of a basic fetch on CsvStore.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -95,7 +95,7 @@ tests.register("dojox.tests.data.CsvStore",
 			}
 
 			//Get everything...
-			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_one(t){
@@ -104,7 +104,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of a basic fetch on CsvStore of a single item.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -114,7 +114,7 @@ tests.register("dojox.tests.data.CsvStore",
 			}
 			csvStore.fetch({ 	query: {Title: "*Sequel*"}, 
 								onComplete: onComplete, 
-								onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)
+								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
 							});
 			return d; //Object
 		},
@@ -124,7 +124,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of a basic fetch on CsvStore.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var d = new tests.Deferred();
@@ -147,7 +147,7 @@ tests.register("dojox.tests.data.CsvStore",
 			csvStore.fetch({	onBegin: onBegin,
 								onItem: onItem, 
 								onComplete: onComplete,
-								onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)
+								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
 							});
 			return d; //Object
 		},
@@ -157,7 +157,7 @@ tests.register("dojox.tests.data.CsvStore",
 			 //	description:
 			 //		Test of multiple fetches on a single result.  Paging, if you will.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -214,7 +214,7 @@ tests.register("dojox.tests.data.CsvStore",
 				csvStore.fetch(request);
 			}
 
-			csvStore.fetch({onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 
 		},
@@ -224,22 +224,22 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the getValue function of the store.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			         
-			t.is("City of God", 						csvStore.getValue(csvStore.getItemByIdentity("0"),"Title"));
-			t.is("Rain", 								csvStore.getValue(csvStore.getItemByIdentity("1"),"Title"));
-			t.is("2001: A Space Odyssey", 				csvStore.getValue(csvStore.getItemByIdentity("2"),"Title"));
+			t.is("City of God", 				csvStore.getValue(csvStore.getItemByIdentity("0"),"Title"));
+			t.is("Rain", 					csvStore.getValue(csvStore.getItemByIdentity("1"),"Title"));
+			t.is("2001: A Space Odyssey", 			csvStore.getValue(csvStore.getItemByIdentity("2"),"Title"));
 			t.is('This is a "fake" movie title', 		csvStore.getValue(csvStore.getItemByIdentity("3"),"Title"));
-			t.is("Alien", 								csvStore.getValue(csvStore.getItemByIdentity("4"),"Title"));
-			t.is('The Sequel to "Dances With Wolves."', csvStore.getValue(csvStore.getItemByIdentity("5"),"Title"));
-			t.is('Caine Mutiny, The', 					csvStore.getValue(csvStore.getItemByIdentity("6"),"Title"));
+			t.is("Alien", 					csvStore.getValue(csvStore.getItemByIdentity("4"),"Title"));
+			t.is('The Sequel to "Dances With Wolves."', 	csvStore.getValue(csvStore.getItemByIdentity("5"),"Title"));
+			t.is('Caine Mutiny, The', 			csvStore.getValue(csvStore.getItemByIdentity("6"),"Title"));
 
-			t.is("2002", 								csvStore.getValue(csvStore.getItemByIdentity("0"),"Year"));
-			t.is("1979", 								csvStore.getValue(csvStore.getItemByIdentity("4"),"Year"));
+			t.is("2002", 					csvStore.getValue(csvStore.getItemByIdentity("0"),"Year"));
+			t.is("1979", 					csvStore.getValue(csvStore.getItemByIdentity("4"),"Year"));
 
-			t.is("Stanley Kubrick", 					csvStore.getValue(csvStore.getItemByIdentity("2"),"Producer"));
-			t.is('Dymtryk "the King", Edward', 			csvStore.getValue(csvStore.getItemByIdentity("6"),"Producer"));
+			t.is("Stanley Kubrick", 			csvStore.getValue(csvStore.getItemByIdentity("2"),"Producer"));
+			t.is('Dymtryk "the King", Edward', 		csvStore.getValue(csvStore.getItemByIdentity("6"),"Producer"));
 		},	
 		function testReadAPI_getValues(t){
 			//	summary: 
@@ -247,7 +247,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the getValues function of the store.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var item = csvStore.getItemByIdentity("1");
@@ -263,7 +263,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the getItemByIdentity function of the store.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			for(var i=0; i<7; i++){
@@ -279,7 +279,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the getItemByIdentity function of the store.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -297,7 +297,7 @@ tests.register("dojox.tests.data.CsvStore",
 			}
 			
 			//Get everything...
-			csvStore.fetch({ onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({ onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_isItem(t){
@@ -306,7 +306,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the isItem function of the store
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			for(var i=0; i<7; i++){
@@ -324,7 +324,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the hasAttribute function of the store
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var item = csvStore.getItemByIdentity(1);
@@ -350,7 +350,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the containsValue function of the store
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
  			
 			var item = csvStore.getItemByIdentity("4");
@@ -377,7 +377,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the getAttributes function of the store
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var item = csvStore.getItemByIdentity("4");
@@ -406,7 +406,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Simple test of the getFeatures function of the store
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var features = csvStore.getFeatures(); 
@@ -423,18 +423,18 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test pattern matching of everything starting with lowercase e
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var d = new tests.Deferred();
 			function completed(items, request){
 				t.is(2, items.length);
 				var valueArray = [ "Alien", "The Sequel to \"Dances With Wolves.\""];
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "Title", valueArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "Title", valueArray));
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {Producer: "* Scott"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({query: {Producer: "* Scott"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch1(t){
@@ -443,18 +443,18 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test pattern matching of everything with $ in it.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
 			function completed(items, request){
 				t.assertTrue(items.length === 2);
 				var valueArray = [ "jfq4@#!$!@Rf14r14i5u", "bit$Bite"];
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "value", valueArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "value", valueArray));
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "*$*"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "*$*"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch2(t){
@@ -463,7 +463,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test exact pattern match
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -473,7 +473,7 @@ tests.register("dojox.tests.data.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "bar\*foo"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "bar\*foo"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseInsensitive(t){
@@ -482,7 +482,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test exact pattern match with case insensitivity set.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -492,7 +492,7 @@ tests.register("dojox.tests.data.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseSensitive(t){
@@ -501,7 +501,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test exact pattern match with case insensitivity set.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -510,7 +510,7 @@ tests.register("dojox.tests.data.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortNumeric(t){
@@ -519,7 +519,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting numerically.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var d = new tests.Deferred();
@@ -527,13 +527,13 @@ tests.register("dojox.tests.data.CsvStore",
 				t.assertTrue(items.length === 10);
 				// TODO: CsvStore treats everything like a string, so these numbers will be sorted lexicographically.
 				var orderedArray = [ "1", "10", "2", "3", "4", "5", "6", "7", "8", "9" ];
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray));
 				d.callback(true);
 			}
 
 			var sortAttributes = [{attribute: "uniqueId"}];
 			csvStore.fetch({onComplete: completed, 
-							onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d),
+							onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d),
 							sort: sortAttributes});
 			return d; //Object
 		},
@@ -543,7 +543,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting numerically.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -551,12 +551,12 @@ tests.register("dojox.tests.data.CsvStore",
 				t.is(10, items.length);
 				// TODO: CsvStore treats everything like a string, so these numbers will be sorted lexicographically.
 				var orderedArray = [ "9", "8", "7", "6", "5", "4", "3", "2", "10", "1" ];
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray));
 				d.callback(true);
 			}
 			
 			var sortAttributes = [{attribute: "uniqueId", descending: true}];
-			csvStore.fetch({ sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({ sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortNumericWithCount(t){
@@ -565,7 +565,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting numerically in descending order, returning only a specified number of them.
 		
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -573,7 +573,7 @@ tests.register("dojox.tests.data.CsvStore",
 				t.is(5, items.length);
 				// TODO: CsvStore treats everything like a string, so these numbers will be sorted lexicographically.
 				var orderedArray = [ "9", "8", "7", "6", "5" ];
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray));
 				d.callback(true);
 			}
 			
@@ -581,7 +581,7 @@ tests.register("dojox.tests.data.CsvStore",
 			csvStore.fetch({sort: sortAttributes, 
 							count: 5,
 							onComplete: completed,
-							onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+							onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortAlphabetic(t){
@@ -590,7 +590,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting alphabetic ordering.
 		
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -608,12 +608,12 @@ tests.register("dojox.tests.data.CsvStore",
 										undefined
 					];
 				t.is(10, items.length);
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "value", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "value", orderedArray));
 				d.callback(true);
 			}
 			
 			var sortAttributes = [{attribute: "value"}];
-			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortAlphabeticDescending(t){
@@ -622,7 +622,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting alphabetic ordering in descending mode.
 		
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new tests.Deferred();
@@ -640,12 +640,12 @@ tests.register("dojox.tests.data.CsvStore",
 										"123abc"
 					];
 				t.is(10, items.length);
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "value", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "value", orderedArray));
 				d.callback(true);
 			}
 			
 			var sortAttributes = [{attribute: "value", descending: true}];
-			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortMultiple(t){
@@ -654,7 +654,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting on multiple attributes.
 			
-			var args = dojox.tests.data.CsvStore.getDatasource("data/patterns.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 		
 			var d = new tests.Deferred();
@@ -672,13 +672,13 @@ tests.register("dojox.tests.data.CsvStore",
 										undefined
 									];
 				t.is(10, items.length);
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray0));
-				t.assertTrue(dojox.tests.data.CsvStore.verifyItems(csvStore, items, "value", orderedArray1));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "uniqueId", orderedArray0));
+				t.assertTrue(dojox.data.tests.stores.CsvStore.verifyItems(csvStore, items, "value", orderedArray1));
 				d.callback(true);
 			}
 			
 			var sortAttributes = [{ attribute: "value"}, { attribute: "uniqueId", descending: true}];
-			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortMultipleSpecialComparator(t){
@@ -687,7 +687,7 @@ tests.register("dojox.tests.data.CsvStore",
 			//	description:
 			//		Function to test sorting on multiple attributes with a custom comparator.
 
-			var args = dojox.tests.data.CsvStore.getDatasource("data/movies.csv");
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			csvStore.comparatorMap = {};
@@ -727,7 +727,7 @@ tests.register("dojox.tests.data.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.CsvStore.error, t, d)});
+			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		}
 	]

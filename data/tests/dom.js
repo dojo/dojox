@@ -1,7 +1,7 @@
-dojo.provide("dojox.tests.data.dom");
+dojo.provide("dojox.data.tests.dom");
 dojo.require("dojox.data.dom");
 
-tests.register("dojox.tests.data.dom", 
+tests.register("dojox.data.tests.dom", 
 	[
 		function testCreateDocument(t){
 			var document = dojox.data.dom.createDocument();

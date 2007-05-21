@@ -1,7 +1,7 @@
-dojo.provide("dojox.tests.data.OpmlStore");
+dojo.provide("dojox.data.tests.stores.OpmlStore");
 dojo.require("dojox.data.OpmlStore");
 
-dojox.tests.data.OpmlStore.getDatasource = function(filepath){
+dojox.data.tests.stores.OpmlStore.getDatasource = function(filepath){
 	//  summary:
 	//		A simple helper function for getting the sample data used in each of the tests.
 	//  description:
@@ -9,12 +9,12 @@ dojox.tests.data.OpmlStore.getDatasource = function(filepath){
 	
 	var dataSource = {};
 	if(dojo.isBrowser){
-		dataSource.url = dojo.moduleUrl("dojox.tests", filepath).toString();            
+		dataSource.url = dojo.moduleUrl("dojox.data.tests", filepath).toString();            
 	}else{
 		// When running tests in Rhino, xhrGet is not available,
 		// so we have the file data in the code below.
 		switch(filepath){
-			case "data/geography.xml":
+			case "stores/geography.xml":
 				var opmlData = "";
 				opmlData += '<?xml version="1.0" encoding="ISO-8859-1"?>\n';
 				opmlData += '	<opml version="1.0">\n';
@@ -74,7 +74,7 @@ dojox.tests.data.OpmlStore.getDatasource = function(filepath){
 	return dataSource; //Object
 }
 
-dojox.tests.data.OpmlStore.verifyItems = function(opmlStore, items, attribute, compareArray){
+dojox.data.tests.stores.OpmlStore.verifyItems = function(opmlStore, items, attribute, compareArray){
 	//  summary:
 	//		A helper function for validating that the items array is ordered
 	//		the same as the compareArray
@@ -87,13 +87,13 @@ dojox.tests.data.OpmlStore.verifyItems = function(opmlStore, items, attribute, c
 	return true; //Boolean
 }
 
-dojox.tests.data.OpmlStore.error = function(t, d, errData){
+dojox.data.tests.stores.OpmlStore.error = function(t, d, errData){
 	//  summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);	
 }
 
-tests.register("dojox.tests.data.OpmlStore", 
+tests.register("dojox.data.tests.stores.OpmlStore", 
 	[
 		function testReadAPI_fetch_all(t){
 			//	summary: 
@@ -101,7 +101,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of a basic fetch on OpmlStore.
 			
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -111,7 +111,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			}
 
 			//Get everything...
-			opmlStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_one(t){
@@ -120,7 +120,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of a basic fetch on OpmlStore of a single item.
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -130,7 +130,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			}
 			opmlStore.fetch({ 	query: {text: "Asia"}, 
 								onComplete: onComplete, 
-								onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
 							});
 			return d; //Object
 		},
@@ -140,7 +140,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of a basic fetch on OpmlStore.
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var d = new tests.Deferred();
@@ -163,7 +163,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			opmlStore.fetch({	onBegin: onBegin,
 								onItem: onItem, 
 								onComplete: onComplete,
-								onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
 							});
 			return d; //Object
 		},
@@ -173,7 +173,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			 //	description:
 			 //		Test of multiple fetches on a single result.  Paging, if you will.
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -230,7 +230,7 @@ tests.register("dojox.tests.data.OpmlStore",
 				opmlStore.fetch(request);
 			}
 
-			opmlStore.fetch({onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 
 		},
@@ -240,7 +240,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the getValue function of the store.
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -275,7 +275,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			}
 
 			//Get everything...
-			opmlStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},	
 		function testReadAPI_getValues(t){
@@ -284,7 +284,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the getValues function of the store.
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var d = new tests.Deferred();
@@ -319,7 +319,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//Get one item...
 			opmlStore.fetch({	query: {text: "North America"},
 								onComplete: completed, 
-								onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_isItem(t){
@@ -328,7 +328,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the isItem function of the store
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var d = new tests.Deferred();
@@ -346,7 +346,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			}
 
 			//Get everything...
-			opmlStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_hasAttribute(t){
@@ -355,7 +355,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the hasAttribute function of the store
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var d = new tests.Deferred();
@@ -383,7 +383,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//Get one item...
 			opmlStore.fetch({ 	query: {text: "Asia"}, 
 								onComplete: onComplete, 
-								onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
 							});
 			return d; //Object
 		},
@@ -393,7 +393,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the containsValue function of the store
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
  			
 			var d = new tests.Deferred();
@@ -426,7 +426,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//Get one item...
 			opmlStore.fetch({ 	query: {text: "North America"}, 
 								onComplete: onComplete, 
-								onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
 							});
 			return d; //Object
 		},
@@ -436,7 +436,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the getAttributes function of the store
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var d = new tests.Deferred();
@@ -454,7 +454,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			}
 
 			//Get everything...
-			opmlStore.fetch({ onComplete: onComplete, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({ onComplete: onComplete, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_getFeatures(t){
@@ -463,7 +463,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Simple test of the getFeatures function of the store
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var features = opmlStore.getFeatures(); 
@@ -480,18 +480,18 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test pattern matching of everything starting with Capital A
 
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
 			var d = new tests.Deferred();
 			function completed(items, request){
 				t.is(3, items.length);
 				var valueArray = [ "Africa", "Asia", "Australia"];
-				t.assertTrue(dojox.tests.data.OpmlStore.verifyItems(opmlStore, items, "text", valueArray));
+				t.assertTrue(dojox.data.tests.stores.OpmlStore.verifyItems(opmlStore, items, "text", valueArray));
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "A*"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "A*"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch1(t){
@@ -500,18 +500,18 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test pattern matching of everything with America in it.
 			
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
 			function completed(items, request){
 				t.assertTrue(items.length === 2);
 				var valueArray = [ "North America", "South America"];
-				t.assertTrue(dojox.tests.data.OpmlStore.verifyItems(opmlStore, items, "text", valueArray));
+				t.assertTrue(dojox.data.tests.stores.OpmlStore.verifyItems(opmlStore, items, "text", valueArray));
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "*America*"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "*America*"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch2(t){
@@ -520,7 +520,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test exact pattern match
 			
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -530,7 +530,7 @@ tests.register("dojox.tests.data.OpmlStore",
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "Europe"}, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "Europe"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseInsensitive(t){
@@ -539,7 +539,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test exact pattern match with case insensitivity set.
 			
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -549,7 +549,7 @@ tests.register("dojox.tests.data.OpmlStore",
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "asia"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "asia"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseSensitive(t){
@@ -558,7 +558,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test exact pattern match with case sensitivity set.
 			
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -567,7 +567,7 @@ tests.register("dojox.tests.data.OpmlStore",
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "ASIA"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "ASIA"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortAlphabetic(t){
@@ -576,7 +576,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test sorting alphabetic ordering.
 		
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -584,12 +584,12 @@ tests.register("dojox.tests.data.OpmlStore",
 				//Output should be in this order...
 				var orderedArray = [ "Africa", "Asia", "Australia", "Europe", "North America", "South America"];
 				t.is(6, items.length);
-				t.assertTrue(dojox.tests.data.OpmlStore.verifyItems(opmlStore, items, "text", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.OpmlStore.verifyItems(opmlStore, items, "text", orderedArray));
 				d.callback(true);
 			}
 			
 			var sortAttributes = [{attribute: "text"}];
-			opmlStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortAlphabeticDescending(t){
@@ -598,7 +598,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test sorting alphabetic ordering in descending mode.
 		
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -607,12 +607,12 @@ tests.register("dojox.tests.data.OpmlStore",
 				var orderedArray = [ "South America", "North America", "Europe", "Australia", "Asia", "Africa"
 					];
 				t.is(6, items.length);
-				t.assertTrue(dojox.tests.data.OpmlStore.verifyItems(opmlStore, items, "text", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.OpmlStore.verifyItems(opmlStore, items, "text", orderedArray));
 				d.callback(true);
 			}
 			
 			var sortAttributes = [{attribute: "text", descending: true}];
-			opmlStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+			opmlStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortAlphabeticWithCount(t){
@@ -621,7 +621,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			//	description:
 			//		Function to test sorting numerically in descending order, returning only a specified number of them.
 		
-			var args = dojox.tests.data.OpmlStore.getDatasource("data/geography.xml");
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
 			var d = new tests.Deferred();
@@ -630,7 +630,7 @@ tests.register("dojox.tests.data.OpmlStore",
 				var orderedArray = [ "South America", "North America", "Europe", "Australia"
 					];
 				t.is(4, items.length);
-				t.assertTrue(dojox.tests.data.OpmlStore.verifyItems(opmlStore, items, "text", orderedArray));
+				t.assertTrue(dojox.data.tests.stores.OpmlStore.verifyItems(opmlStore, items, "text", orderedArray));
 				d.callback(true);
 			}
 			
@@ -638,7 +638,7 @@ tests.register("dojox.tests.data.OpmlStore",
 			opmlStore.fetch({sort: sortAttributes, 
 							count: 4,
 							onComplete: completed,
-							onError: dojo.partial(dojox.tests.data.OpmlStore.error, t, d)});
+							onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		}
 	]
