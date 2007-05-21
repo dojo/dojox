@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.common");
+dojo.provide("dojox.wire.tests.programmatic.common");
 
 dojo.require("dojox.wire.common");
 
-tests.register("dojox.tests.wire.common", [
+tests.register("dojox.wire.tests.programmatic.common", [
 
 	function test_create(t){
 		var wire = dojox.wire.create({});

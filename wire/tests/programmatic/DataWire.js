@@ -1,9 +1,9 @@
-dojo.provide("dojox.tests.wire.DataWire");
+dojo.provide("dojox.wire.tests.programmatic.DataWire");
 
 dojo.require("dojox.wire.DataWire");
 dojo.require("dojox.data.XmlStore");
 
-tests.register("dojox.tests.wire.DataWire", [
+tests.register("dojox.wire.tests.programmatic.DataWire", [
 
 	function test_DataWire_attribute(t){
 		var store = new dojox.data.XmlStore();

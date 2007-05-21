@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.CompositeWire");
+dojo.provide("dojox.wire.tests.programmatic.CompositeWire");
 
 dojo.require("dojox.wire.CompositeWire");
 
-tests.register("dojox.tests.wire.CompositeWire", [
+tests.register("dojox.wire.tests.programmatic.CompositeWire", [
 
 	function test_CompositeWire_children(t){
 		var source = {a: "A", b: "B"};

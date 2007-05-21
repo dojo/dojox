@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.Wire");
+dojo.provide("dojox.wire.tests.programmatic.Wire");
 
 dojo.require("dojox.wire.Wire");
 
-tests.register("dojox.tests.wire.Wire", [
+tests.register("dojox.wire.tests.programmatic.Wire", [
 
 	function test_Wire_property(t){
 		var source = {a: "A", b: {c: "B.C"}};

@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.TableAdapter");
+dojo.provide("dojox.wire.tests.programmatic.TableAdapter");
 
 dojo.require("dojox.wire.TableAdapter");
 
-tests.register("dojox.tests.wire.TableAdapter", [
+tests.register("dojox.wire.tests.programmatic.TableAdapter", [
 
 	function test_TableAdapter_columns(t){
 		var source = [

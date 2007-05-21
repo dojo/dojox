@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.TreeAdapter");
+dojo.provide("dojox.wire.tests.programmatic.TreeAdapter");
 
 dojo.require("dojox.wire.TreeAdapter");
 
-tests.register("dojox.tests.wire.TreeAdapter", [
+tests.register("dojox.wire.tests.programmatic.TreeAdapter", [
 
 	function test_TreeAdapter_nodes(t){
 		var source = [

@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.TextAdapter");
+dojo.provide("dojox.wire.tests.programmatic.TextAdapter");
 
 dojo.require("dojox.wire.TextAdapter");
 
-tests.register("dojox.tests.wire.TextAdapter", [
+tests.register("dojox.wire.tests.programmatic.TextAdapter", [
 
 	function test_TextAdapter_segments(t){
 		var source = {a: "a", b: "b", c: "c"};

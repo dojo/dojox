@@ -1,8 +1,8 @@
-dojo.provide("dojox.tests.wire.XmlWire");
+dojo.provide("dojox.wire.tests.programmatic.XmlWire");
 
 dojo.require("dojox.wire.XmlWire");
 
-tests.register("dojox.tests.wire.XmlWire", [
+tests.register("dojox.wire.tests.programmatic.XmlWire", [
 
 	function test_XmlWire_path(t){
 		var object = {};
