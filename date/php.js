@@ -1,13 +1,13 @@
 dojo.provide("dojox.date.php");
 dojo.require("dojo.date");
 
-dojox.date.php.format = function(/*Date*/ date, /*String*/ format){
+dojox.date.php.format = function(/*Date*/ date, /*String*/ format, /*Object?*/ overrides){
 	// summary: Get a formatted string for a given date object
 	var df = new dojox.date.php.DateFormat(date);
-	return df.format(format);	
+	return df.format(format, overrides);	
 }
 
-dojox.date.php.DateFormat = function(date){
+dojox.date.php.DateFormat = function(/*Date*/ date){
 	this.date = date;
 }
 dojo.extend(dojox.date.php.DateFormat, {
@@ -17,12 +17,14 @@ dojo.extend(dojox.date.php.DateFormat, {
 	months_3: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 	monthdays: [31,28,31,30,31,30,31,31,30,31,30,31],
 
-	format: function(/*String*/ format){
+	format: function(/*String*/ format, /*Object?*/ overrides){
 		// summary: Format the internal date object
 		var parts = [];
 		for(var i = 0; i < format.length; i++){
 			var chr = format.charAt(i);
-			if(typeof this[chr] == "function"){
+			if(overrides && typeof overrides[chr] == "function"){
+				parts.push(overrides[chr].call(this));
+			}else if(typeof this[chr] == "function"){
 				parts.push(this[chr]());
 			}else{
 				parts.push(chr);
@@ -41,7 +43,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	D: function(){
 		// summary: A textual representation of a day, three letters
-		return weekdays_3[this.date.getDay()];
+		return this.weekdays_3[this.date.getDay()];
 	},
 
 	j: function(){
@@ -51,7 +53,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	l: function(){
 		// summary: A full textual representation of the day of the week
-		return weekdays[this.date.getDay()];
+		return this.weekdays[this.date.getDay()];
 	},
 	
 	N: function(){
@@ -78,7 +80,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	z: function(){
 		// summary: The day of the year (starting from 0)
-		var millis = this.date.getTime() - new Date(this.date.getYear(), 1, 1).getTime();
+		var millis = this.date.getTime() - new Date(this.date.getFullYear(), 0, 1).getTime();
 		return Math.floor(millis/86400000) + "";
 	},
 
@@ -87,12 +89,13 @@ dojo.extend(dojox.date.php.DateFormat, {
 	W: function(){
 		// summary: ISO-8601 week number of year, weeks starting on Monday (added in PHP 4.1.0)
 		var week;
-		var jan1_w = new Date(this.date.getYear(), 1, 1).getDay() + 1;
+		var jan1_w = new Date(this.date.getFullYear(), 0, 1).getDay() + 1;
 		var w = this.date.getDay() + 1;
 		var z = parseInt(this.z());
 
 		if(z <= (8 - jan1_w) && jan1_w > 4){
-			if(jan1_w == 5 || (jan1_w == 6 && Boolean(this.L()))){
+			var last_year = new Date(this.date.getFullYear() - 1, this.date.getMonth(), this.date.getDate());
+			if(jan1_w == 5 || (jan1_w == 6 && dojo.date.isLeapYear(last_year))){
 				week = 53;
 			}else{
 				week = 52;
@@ -108,7 +111,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 				week = 1;
 			}else{
 				var j = z + (7 - w) + (jan1_w - 1);
-				week = j / 7;
+				week = Math.ceil(j / 7);
 				if(jan1_w > 4){
 					--week;
 				}
@@ -241,7 +244,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	O: function(){
 		// summary: Difference to Greenwich time (GMT) in hours
-		var off = Math.abs(this.date.getTimeZoneOffset());
+		var off = Math.abs(this.date.getTimezoneOffset());
 		var hours = Math.floor(off / 60) + "";
 		var mins = (off % 60) + "";
 		if(hours.length == 1) hours = "0" + hours;
@@ -266,7 +269,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 		// summary:
 		//		Timezone offset in seconds. The offset for timezones west of UTC is always negative,
 		//		and for those east of UTC is always positive.
-		return this.date.getTimeZoneOffset() * -60;
+		return this.date.getTimezoneOffset() * -60;
 	},
 
 	// Full Date/Time
