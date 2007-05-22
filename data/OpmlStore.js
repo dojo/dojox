@@ -287,6 +287,11 @@ dojo.declare("dojox.data.OpmlStore",
 			 'dojo.data.api.Read': true
 		 };
 		 return features; //Object
+	},
+
+	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+		 //	summary: 
+		 //		See dojo.data.api.Read.close()
 	}
 });
 //Mix in the simple fetch implementation to this class.
