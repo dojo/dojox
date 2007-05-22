@@ -63,9 +63,9 @@ dojo.declare(
 			dojox.widget.Toaster.superclass.postCreate.apply(this);
 			this.hide();
 
-			this.clipNode.className = "dojoToasterClip";
-			this.containerNode.className += " dojoToasterContainer";
-			this.contentNode.className = "dojoToasterContent";
+			this.clipNode.className = "dijitToasterClip";
+			this.containerNode.className += " dijitToasterContainer";
+			this.contentNode.className = "dijitToasterContent";
 			if(this.messageTopic){
 				dojo.subscribe(this.messageTopic, this, "_handleMessage");
 			}
@@ -108,7 +108,7 @@ dojo.declare(
 
 			// determine type of content and apply appropriately
 			for(var type in this.messageTypes){
-				dojo.removeClass(this.containerNode, "dojoToaster" + capitalize(this.messageTypes[type]));
+				dojo.removeClass(this.containerNode, "dijitToaster" + capitalize(this.messageTypes[type]));
 			}
 
 			dojo.style(this.containerNode, "opacity", 1);
@@ -118,7 +118,7 @@ dojo.declare(
 			}
 			this.contentNode.innerHTML = message;
 
-			dojo.addClass(this.containerNode, "dojoToaster" + capitalize(messageType || this.defaultType));
+			dojo.addClass(this.containerNode, "dijitToaster" + capitalize(messageType || this.defaultType));
 
 			// now do funky animation of widget appearing from
 			// bottom right of page and up
