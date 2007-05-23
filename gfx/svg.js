@@ -65,7 +65,7 @@ dojo.extend(dojox.gfx.Shape, {
 					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
 					var gradient = this._setFillObject(f, "linearGradient");
 					dojo.forEach(["x1", "y1", "x2", "y2"], function(x){
-						gradient.setAttribute(x, (dojo.isSafari ? parseInt(f[x]) : f[x].toFixed(8)));
+						gradient.setAttribute(x, f[x].toFixed(8));
 					});
 					break;
 				case "radial":
@@ -191,7 +191,7 @@ dojo.extend(dojox.gfx.Shape, {
 			for(var i = 0; i < f.colors.length; ++i){
 				f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
 				var t = document.createElementNS(dojox.gfx.svg.xmlns.svg, "stop");
-				t.setAttribute("offset",     (dojo.isSafari ? parseInt(f.colors[i].offset) : f.colors[i].offset.toFixed(8)));
+				t.setAttribute("offset",     f.colors[i].offset.toFixed(8));
 				t.setAttribute("stop-color", f.colors[i].color.toCss());
 				fill.appendChild(t);
 			}
@@ -205,17 +205,10 @@ dojo.extend(dojox.gfx.Shape, {
 		var matrix = this.matrix;
 		if(matrix){
 			var tm = this.matrix;
-			if(dojo.isSafari){
-				this.rawNode.setAttribute("transform", "matrix(" +
-					parseInt(tm.xx) + "," + parseInt(tm.yx) + "," +
-					parseInt(tm.xy) + "," + parseInt(tm.yy) + "," +
-					parseInt(tm.dx) + "," + parseInt(tm.dy) + ")");
-			}else{
-				this.rawNode.setAttribute("transform", "matrix(" +
-					tm.xx.toFixed(8) + "," + tm.yx.toFixed(8) + "," +
-					tm.xy.toFixed(8) + "," + tm.yy.toFixed(8) + "," +
-					tm.dx.toFixed(8) + "," + tm.dy.toFixed(8) + ")");
-			}
+			this.rawNode.setAttribute("transform", "matrix(" +
+				tm.xx.toFixed(8) + "," + tm.yx.toFixed(8) + "," +
+				tm.xy.toFixed(8) + "," + tm.yy.toFixed(8) + "," +
+				tm.dx.toFixed(8) + "," + tm.dy.toFixed(8) + ")");
 		}else{
 			this.rawNode.removeAttribute("transform");
 		}
@@ -471,23 +464,12 @@ dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 		this.box = null;
 		var attr = [];
 		var p = this.shape.points;
-		if(dojo.isSafari){
-			for(var i = 0; i < p.length; ++i){
-				if(typeof p[i] == "number"){
-					attr.push(parseInt(p[i]));
-				}else{
-					attr.push(parseInt(p[i].x));
-					attr.push(parseInt(p[i].y));
-				}
-			}
-		}else{
-			for(var i = 0; i < p.length; ++i){
-				if(typeof p[i] == "number"){
-					attr.push(p[i].toFixed(8));
-				}else{
-					attr.push(p[i].x.toFixed(8));
-					attr.push(p[i].y.toFixed(8));
-				}
+		for(var i = 0; i < p.length; ++i){
+			if(typeof p[i] == "number"){
+				attr.push(p[i].toFixed(8));
+			}else{
+				attr.push(p[i].x.toFixed(8));
+				attr.push(p[i].y.toFixed(8));
 			}
 		}
 		this.rawNode.setAttribute("points", attr.join(" "));
