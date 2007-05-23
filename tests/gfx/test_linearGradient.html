@@ -18,7 +18,7 @@
 		<script type="text/javascript">
 			dojo.require("dojox.gfx.common");
 
-			dojo.addOnLoad(function(){
+			var makeShapes = function(){
 				var fillObj = {
 					type: "linear",
 					x1: 0, y1: 0,
@@ -31,12 +31,13 @@
 				var surface = dojox.gfx.createSurface(dojo.byId("grad"), 300, 100);
 				var group = surface.createGroup();
 				var rect = surface.createRect({ 
-					width: "300", // "100%", 
-					height: "100" // "100%" 
+					width:  300, // "100%", 
+					height: 100  // "100%" 
 				});
 				rect.setFill(fillObj);
 				group.add(rect);
-			});
+			};
+			dojo.addOnLoad(makeShapes);
 		</script>
 		<style>
 			v:group { text-align: left; }

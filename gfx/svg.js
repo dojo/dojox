@@ -845,7 +845,8 @@ dojox.gfx.attachNode = function(node){
 			}
 			break;
 		default:
-			dojo.debug("FATAL ERROR! tagName = " + node.tagName);
+			console.debug("FATAL ERROR! tagName = " + node.tagName);
+			return null;
 	}
 	s.attach(node);
 	return s;	// dojox.gfx.Shape

@@ -260,7 +260,7 @@ dojo.extend(dojox.gfx.Shape, {
 		var strokeStyle = dojox.gfx.util._copy(dojox.gfx.defaultStroke, true);
 		if(rawNode && rawNode.stroked){
 			strokeStyle.color = new dojo.Color(rawNode.strokecolor.value);
-			dojo.debug("We are expecting an .75pt here, instead of strokeweight = " + rawNode.strokeweight );
+			console.debug("We are expecting an .75pt here, instead of strokeweight = " + rawNode.strokeweight );
 			strokeStyle.width = dojox.gfx.normalizedLength(rawNode.strokeweight+"");
 			strokeStyle.color.a = rawNode.stroke.opacity;
 			strokeStyle.cap = this._translate(this._capMapReversed, rawNode.stroke.endcap);
@@ -1495,7 +1495,7 @@ dojox.gfx.attachNode = function(node){
 			}
 			break;
 		default:
-			dojo.debug("FATAL ERROR! tagName = " + node.tagName);
+			console.debug("FATAL ERROR! tagName = " + node.tagName);
 			return null;	// dojox.gfx.Shape
 	}
 	s.attach(node);
