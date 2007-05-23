@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Test Service</title>
+<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript">
+dojo.provide("dojox.wireml.tests.markup.Service");
+
+dojo.require("dijit.util.parser");
+dojo.require("doh.runner");
+dojo.require("dojox.wireml.Service");
+dojo.require("dojox.wireml.Invocation");
+dojo.require("dojox.wireml.Transfer");
+
+dojox.wireml.tests.markup.Service = {
+	query: {name: "a"}
+};
+
+dojo.addOnLoad(function(){
+	doh.register("dojox.wireml.tests.markup.Service", [
+
+		function test_Service_url(t){
+			var d = new doh.Deferred();
+			dojo.connect(dijit.byId("Invocation1"), "onComplete", function(){
+				t.assertEqual("a", dojox.wireml.tests.markup.Service.target.a);
+				d.callback(true);
+			});
+			dojo.connect(dijit.byId("Invocation1"), "onError", function(error){
+				d.errback(error);
+			});
+			dojo.publish("invokeGetXml");
+			return d;
+		},
+
+		function test_Service_serviceUrl(t){
+			var d = new doh.Deferred();
+			dojo.connect(dijit.byId("Invocation2"), "onComplete", function(){
+				t.assertEqual("a", dojox.wireml.tests.markup.Service.result.item.name);
+				d.callback(true);
+			});
+			dojo.connect(dijit.byId("Invocation2"), "onError", function(error){
+				d.errback(error);
+			});
+			dojo.publish("invokeGetJson");
+			return d;
+		}
+
+	]);
+	doh.run();
+});
+</script>
+</head>
+<body>
+<div dojoType="dojox.wireml.Service"
+	id="Service1"
+	url="Service/XML.smd"></div>
+<div dojoType="dojox.wireml.Invocation"
+	id="Invocation1"
+	triggerTopic="invokeGetXml"
+	object="Service1"
+	method="get"
+	parameters="dojox.wireml.tests.markup.Service.query">
+</div>
+<div dojoType="dojox.wireml.Transfer"
+	trigger="Invocation1"
+	triggerEvent="onComplete"
+	source="arguments[0].item.name"
+	target="dojox.wireml.tests.markup.Service.target.a"></div>
+<div dojoType="dojox.wireml.Service"
+	id="Service2"
+	serviceType="JSON"
+	serviceUrl="Service/{name}.json"></div>
+<div dojoType="dojox.wireml.Invocation"
+	id="Invocation2"
+	triggerTopic="invokeGetJson"
+	object="Service2"
+	method="get"
+	parameters="dojox.wireml.tests.markup.Service.query"
+	result="dojox.wireml.tests.markup.Service.result"></div>
+</body>
+</html>

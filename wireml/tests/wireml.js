@@ -7,6 +7,7 @@ try{
 		doh.registerUrl("dojox.wireml.tests.Invocation", dojo.moduleUrl("dojox", "wireml/tests/markup/Invocation.html"));
 		doh.registerUrl("dojox.wireml.tests.Data", dojo.moduleUrl("dojox", "wireml/tests/markup/Data.html"));
 		doh.registerUrl("dojox.wireml.tests.DataStore", dojo.moduleUrl("dojox", "wireml/tests/markup/DataStore.html"));
+		doh.registerUrl("dojox.wireml.tests.Service", dojo.moduleUrl("dojox", "wireml/tests/markup/Service.html"));
 	}
 }catch(e){
 	doh.debug(e);
