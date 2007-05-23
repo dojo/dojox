@@ -1,9 +1,9 @@
-dojo.provide("dojox.wireml.Invocation");
+dojo.provide("dojox.wire.ml.Invocation");
 
-dojo.require("dojox.wireml.Action");
+dojo.require("dojox.wire.ml.Action");
 
-dojo.declare("dojox.wireml.Invocation",
-	dojox.wireml.Action, {
+dojo.declare("dojox.wire.ml.Invocation",
+	dojox.wire.ml.Action, {
 	//	summary:
 	//		A widget to invoke a method or publish a topic
 	//	description:
@@ -50,7 +50,7 @@ dojo.declare("dojox.wireml.Invocation",
 				this.onError(e);
 			}
 		}else if(this.method){
-			var scope = (this.object ? dojox.wireml._getValue(this.object) : dj_global);
+			var scope = (this.object ? dojox.wire.ml._getValue(this.object) : dj_global);
 			if(!scope){
 				return; //undefined
 			}
@@ -111,10 +111,10 @@ dojo.declare("dojox.wireml.Invocation",
 		//	result:
 		//		The return value of a method or undefined for a topic
 		if(this.result){
-			dojox.wireml._setValue(this.result, result);
+			dojox.wire.ml._setValue(this.result, result);
 		}
 		if(this.error){ // clear error
-			dojox.wireml._setValue(this.error, "");
+			dojox.wire.ml._setValue(this.error, "");
 		}
 	},
 
@@ -130,7 +130,7 @@ dojo.declare("dojox.wireml.Invocation",
 			if(error && error.message){
 				error = error.message;
 			}
-			dojox.wireml._setValue(this.error, error);
+			dojox.wire.ml._setValue(this.error, error);
 		}
 	},
 
@@ -152,7 +152,7 @@ dojo.declare("dojox.wireml.Invocation",
 		var parameters = [];
 		var list = this.parameters.split(",");
 		if(list.length == 1){
-			var parameter = dojox.wireml._getValue(list[0]);
+			var parameter = dojox.wire.ml._getValue(list[0]);
 			if(dojo.isArray(parameter)){
 				parameters = parameter;
 			}else{
@@ -160,7 +160,7 @@ dojo.declare("dojox.wireml.Invocation",
 			}
 		}else{
 			for(var i in list){
-				parameters.push(dojox.wireml._getValue(list[i]));
+				parameters.push(dojox.wire.ml._getValue(list[i]));
 			}
 		}
 		return parameters; //Array

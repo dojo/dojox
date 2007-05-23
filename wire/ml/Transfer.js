@@ -1,16 +1,16 @@
-dojo.provide("dojox.wireml.Transfer");
-dojo.provide("dojox.wireml.ChildWire");
-dojo.provide("dojox.wireml.ColumnWire");
-dojo.provide("dojox.wireml.NodeWire");
-dojo.provide("dojox.wireml.SegmentWire");
+dojo.provide("dojox.wire.ml.Transfer");
+dojo.provide("dojox.wire.ml.ChildWire");
+dojo.provide("dojox.wire.ml.ColumnWire");
+dojo.provide("dojox.wire.ml.NodeWire");
+dojo.provide("dojox.wire.ml.SegmentWire");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dijit.base.Container");
 dojo.require("dojox.wire.common");
-dojo.require("dojox.wireml.Action");
+dojo.require("dojox.wire.ml.Action");
 
-dojo.declare("dojox.wireml.Transfer",
-	dojox.wireml.Action, {
+dojo.declare("dojox.wire.ml.Transfer",
+	dojox.wire.ml.Action, {
 	//	summary:
 	//		A widget to transfer values through source and target Wires
 	//	description:
@@ -113,21 +113,21 @@ dojo.declare("dojox.wireml.Transfer",
 			}else{
 				var i = args.object.indexOf('.');
 				if(i < 0){
-					args.object = dojox.wireml._getValue(args.object);
+					args.object = dojox.wire.ml._getValue(args.object);
 				}else{
 					args.property = args.object.substring(i + 1);
-					args.object = dojox.wireml._getValue(args.object.substring(0, i));
+					args.object = dojox.wire.ml._getValue(args.object.substring(0, i));
 				}
 			}
 		}
 		if(args.dataStore){
-			args.dataStore = dojox.wireml._getValue(args.dataStore);
+			args.dataStore = dojox.wire.ml._getValue(args.dataStore);
 		}
 		var childArgs = undefined;
 		var children = this.getChildren();
 		for(var i in children){
 			var child = children[i];
-			if(child instanceof dojox.wireml.ChildWire && child.which == which){
+			if(child instanceof dojox.wire.ml.ChildWire && child.which == which){
 				if(!childArgs){
 					childArgs = {};
 				}
@@ -143,7 +143,7 @@ dojo.declare("dojox.wireml.Transfer",
 	}
 });
 
-dojo.declare("dojox.wireml.ChildWire",
+dojo.declare("dojox.wire.ml.ChildWire",
 	dijit.base.Widget, {
 	//	summary:
 	//		A widget to add a child wire
@@ -212,7 +212,7 @@ dojo.declare("dojox.wireml.ChildWire",
 		//	returns:
 		//		Wire arguments object
 		return {
-			object: (this.object ? dojox.wireml._getValue(this.object) : undefined),
+			object: (this.object ? dojox.wire.ml._getValue(this.object) : undefined),
 			property: this.property,
 			type: this.type,
 			converter: this.converter,
@@ -222,8 +222,8 @@ dojo.declare("dojox.wireml.ChildWire",
 	}
 });
 
-dojo.declare("dojox.wireml.ColumnWire",
-	dojox.wireml.ChildWire, {
+dojo.declare("dojox.wire.ml.ColumnWire",
+	dojox.wire.ml.ChildWire, {
 	//	summary:
 	//		A widget to add a column wire
 	//	description:
@@ -258,8 +258,8 @@ dojo.declare("dojox.wireml.ColumnWire",
 	}
 });
 
-dojo.declare("dojox.wireml.NodeWire",
-	[dojox.wireml.ChildWire, dijit.base.Container], {
+dojo.declare("dojox.wire.ml.NodeWire",
+	[dojox.wire.ml.ChildWire, dijit.base.Container], {
 	//	summary:
 	//		A widget to add node wires
 	//	description:
@@ -319,7 +319,7 @@ dojo.declare("dojox.wireml.NodeWire",
 		var children = this.getChildren();
 		for(var i in children){
 			var child = children[i];
-			if(child instanceof dojox.wireml.NodeWire){
+			if(child instanceof dojox.wire.ml.NodeWire){
 				childArgs.push(child._getWires(parent));
 			}
 		}
@@ -330,8 +330,8 @@ dojo.declare("dojox.wireml.NodeWire",
 	}
 });
 
-dojo.declare("dojox.wireml.SegmentWire",
-	dojox.wireml.ChildWire, {
+dojo.declare("dojox.wire.ml.SegmentWire",
+	dojox.wire.ml.ChildWire, {
 	//	summary:
 	//		A widget to add a segment wire
 	//	description:

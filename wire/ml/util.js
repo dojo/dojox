@@ -1,10 +1,10 @@
-dojo.provide("dojox.wireml.util");
+dojo.provide("dojox.wire.ml.util");
 
 dojo.require("dijit.util.manager");
 dojo.require("dojox.data.dom");
 dojo.require("dojox.wire.Wire");
 
-dojox.wireml._getValue = function(/*String*/source, /*Array*/args){
+dojox.wire.ml._getValue = function(/*String*/source, /*Array*/args){
 	//	summary:
 	//		Return a value
 	//	description:
@@ -44,7 +44,7 @@ dojox.wireml._getValue = function(/*String*/source, /*Array*/args){
 	}
 };
 
-dojox.wireml._setValue = function(/*String*/target, /*anything*/value){
+dojox.wire.ml._setValue = function(/*String*/target, /*anything*/value){
 	//	summary:
 	//		Store a value
 	//	description:
@@ -69,7 +69,7 @@ dojox.wireml._setValue = function(/*String*/target, /*anything*/value){
 	new dojox.wire.Wire({object: object, property: property}).setValue(value);
 };
 
-dojo.declare("dojox.wireml.XmlElement",
+dojo.declare("dojox.wire.ml.XmlElement",
 	null,
 	function(/*Element||String*/element){
 		//	summary:
@@ -120,7 +120,7 @@ dojo.declare("dojox.wireml.XmlElement",
 			for(var i = 0; i < this.element.childNodes.length; i++){
 				var child = this.element.childNodes[i];
 				if(child.nodeName == property){
-					elements.push(new dojox.wireml.XmlElement(child));
+					elements.push(new dojox.wire.ml.XmlElement(child));
 				}
 			}
 			if(elements.length > 0){
@@ -190,7 +190,7 @@ dojo.declare("dojox.wireml.XmlElement",
 							this.element.insertBefore(e.element, nextChild);
 						}
 					}
-				}else if(value instanceof dojox.wireml.XmlElement){
+				}else if(value instanceof dojox.wire.ml.XmlElement){
 					if(value.element){
 						this.element.insertBefore(value.element, nextChild);
 					}

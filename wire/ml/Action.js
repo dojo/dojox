@@ -1,12 +1,12 @@
-dojo.provide("dojox.wireml.Action");
-dojo.provide("dojox.wireml.ActionFilter");
+dojo.provide("dojox.wire.ml.Action");
+dojo.provide("dojox.wire.ml.ActionFilter");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dijit.base.Container");
 dojo.require("dojox.wire.Wire");
-dojo.require("dojox.wireml.util");
+dojo.require("dojox.wire.ml.util");
 
-dojo.declare("dojox.wireml.Action",
+dojo.declare("dojox.wire.ml.Action",
 	[dijit.base.Widget, dijit.base.Container], {
 	//	summary:
 	//		A base widget to "run" a task on an event or a topic
@@ -49,7 +49,7 @@ dojo.declare("dojox.wireml.Action",
 		//		run() to be called on the topic.
 		if(this.triggerEvent){
 			if(this.trigger){
-				var scope = dojox.wireml._getValue(this.trigger);
+				var scope = dojox.wire.ml._getValue(this.trigger);
 				if(scope){
 					if(!scope[this.triggerEvent]){
 						// set a dummy function for an anonymous object
@@ -99,7 +99,7 @@ dojo.declare("dojox.wireml.Action",
 		var children = this.getChildren();
 		for(var i in children){
 			var child = children[i];
-			if(child instanceof dojox.wireml.ActionFilter){
+			if(child instanceof dojox.wire.ml.ActionFilter){
 				if(!child.filter.apply(child, arguments)){
 					return;
 				}
@@ -117,7 +117,7 @@ dojo.declare("dojox.wireml.Action",
 		var children = this.getChildren();
 		for(var i in children){
 			var child = children[i];
-			if(child instanceof dojox.wireml.Action){
+			if(child instanceof dojox.wire.ml.Action){
 				child.run.apply(child, arguments);
 			}
 		}
@@ -127,11 +127,11 @@ dojo.declare("dojox.wireml.Action",
 		//	summary:
 		//		Over-ride of base widget _destroy function to do some connection cleanup.
 		this._disconnect();
-		dojox.wireml.Action.superclass._destroy.apply(this,arguments);
+		dojox.wire.ml.Action.superclass._destroy.apply(this,arguments);
 	}
 });
 
-dojo.declare("dojox.wireml.ActionFilter",
+dojo.declare("dojox.wire.ml.ActionFilter",
 	dijit.base.Widget, {
 	//	summary:
 	//		A widget to define a filter for the parent Action to run
@@ -166,13 +166,13 @@ dojo.declare("dojox.wireml.ActionFilter",
 		if(!this.required){
 			return true; //Boolean
 		}
-		var value = dojox.wireml._getValue(this.required);
+		var value = dojox.wire.ml._getValue(this.required);
 		if(value){
 			return true; //Boolean
 		}
 		if(this.message){
 			if(this.error){
-				dojox.wireml._setValue(this.error, this.message);
+				dojox.wire.ml._setValue(this.error, this.message);
 			}else{
 				alert(this.message);
 			}

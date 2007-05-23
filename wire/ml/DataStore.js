@@ -1,9 +1,9 @@
-dojo.provide("dojox.wireml.DataStore");
+dojo.provide("dojox.wire.ml.DataStore");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dojox.wire.common");
 
-dojo.declare("dojox.wireml.DataStore",
+dojo.declare("dojox.wire.ml.DataStore",
 	dijit.base.Widget, {
 	//	summary:
 	//		A widget for a data store

@@ -1,11 +1,11 @@
-dojo.provide("dojox.wireml.Data");
-dojo.provide("dojox.wireml.DataProperty");
+dojo.provide("dojox.wire.ml.Data");
+dojo.provide("dojox.wire.ml.DataProperty");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dijit.base.Container");
-dojo.require("dojox.wireml.util");
+dojo.require("dojox.wire.ml.util");
 
-dojo.declare("dojox.wireml.Data",
+dojo.declare("dojox.wire.ml.Data",
 	[dijit.base.Widget, dijit.base.Container], {
 	//	summary:
 	//		A widget for a data object
@@ -37,7 +37,7 @@ dojo.declare("dojox.wireml.Data",
 		var children = this.getChildren();
 		for(var i in children){
 			var child = children[i];
-			if((child instanceof dojox.wireml.DataProperty) && child.name){
+			if((child instanceof dojox.wire.ml.DataProperty) && child.name){
 				this.setPropertyValue(child.name, child.getValue());
 			}
 		}
@@ -70,7 +70,7 @@ dojo.declare("dojox.wireml.Data",
 	}
 });
 
-dojo.declare("dojox.wireml.DataProperty",
+dojo.declare("dojox.wire.ml.DataProperty",
 	[dijit.base.Widget, dijit.base.Container], {
 	//	summary:
 	//		A widget to define a data property
@@ -112,7 +112,7 @@ dojo.declare("dojox.wireml.DataProperty",
 				var children = this.getChildren();
 				for(var i in children){
 					var child = children[i];
-					if(child instanceof dojox.wireml.DataProperty){
+					if(child instanceof dojox.wire.ml.DataProperty){
 						value.push(child.getValue());
 					}
 				}
@@ -121,16 +121,16 @@ dojo.declare("dojox.wireml.DataProperty",
 				var children = this.getChildren();
 				for(var i in children){
 					var child = children[i];
-					if((child instanceof dojox.wireml.DataProperty) && child.name){
+					if((child instanceof dojox.wire.ml.DataProperty) && child.name){
 						value[child.name] = child.getValue();
 					}
 				}
 			}else if(this.type == "element"){
-				value = new dojox.wireml.XmlElement(value);
+				value = new dojox.wire.ml.XmlElement(value);
 				var children = this.getChildren();
 				for(var i in children){
 					var child = children[i];
-					if((child instanceof dojox.wireml.DataProperty) && child.name){
+					if((child instanceof dojox.wire.ml.DataProperty) && child.name){
 						value.setPropertyValue(child.name, child.getValue());
 					}
 				}

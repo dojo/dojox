@@ -1,14 +1,14 @@
-dojo.provide("dojox.wireml.Service");
-dojo.provide("dojox.wireml.RestHandler");
-dojo.provide("dojox.wireml.XmlHandler");
-dojo.provide("dojox.wireml.JsonHandler");
+dojo.provide("dojox.wire.ml.Service");
+dojo.provide("dojox.wire.ml.RestHandler");
+dojo.provide("dojox.wire.ml.XmlHandler");
+dojo.provide("dojox.wire.ml.JsonHandler");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dojox.data.dom");
 dojo.require("dojox.wire.common");
-dojo.require("dojox.wireml.util");
+dojo.require("dojox.wire.ml.util");
 
-dojo.declare("dojox.wireml.Service",
+dojo.declare("dojox.wire.ml.Service",
 	dijit.base.Widget, {
 	//	summary:
 	//		A widget for a service
@@ -39,9 +39,9 @@ dojo.declare("dojox.wireml.Service",
 	},
 
 	_handlerClasses: {
-		"TEXT": "dojox.wireml.RestHandler",
-		"XML": "dojox.wireml.XmlHandler",
-		"JSON": "dojox.wireml.JsonHandler",
+		"TEXT": "dojox.wire.ml.RestHandler",
+		"XML": "dojox.wire.ml.XmlHandler",
+		"JSON": "dojox.wire.ml.JsonHandler",
 		"JSON-RPC": "dojo.rpc.JsonService"
 	},
 
@@ -104,7 +104,7 @@ dojo.declare("dojox.wireml.Service",
 	}
 });
 
-dojo.declare("dojox.wireml.RestHandler",
+dojo.declare("dojox.wire.ml.RestHandler",
 	null, {
 	//	summary:
 	//		A REST service handler
@@ -230,8 +230,8 @@ dojo.declare("dojox.wireml.RestHandler",
 	}
 });
 
-dojo.declare("dojox.wireml.XmlHandler",
-	dojox.wireml.RestHandler, {
+dojo.declare("dojox.wire.ml.XmlHandler",
+	dojox.wire.ml.RestHandler, {
 	//	summary:
 	//		A REST service handler for XML
 	//	description:
@@ -257,7 +257,7 @@ dojo.declare("dojox.wireml.XmlHandler",
 					content = p;
 				}else{
 					var element = p;
-					if(element instanceof dojox.wireml.XmlElement){
+					if(element instanceof dojox.wire.ml.XmlElement){
 						element = element.element;
 					}else if(element.nodeType === 9 /* DOCUMENT_NODE */){
 						element = element.documentElement;
@@ -281,14 +281,14 @@ dojo.declare("dojox.wireml.XmlHandler",
 		//	returns:
 		//		A result object
 		if(data){
-			data = new dojox.wireml.XmlElement(data);
+			data = new dojox.wire.ml.XmlElement(data);
 		}
 		return data;
 	}
 });
 
-dojo.declare("dojox.wireml.JsonHandler",
-	dojox.wireml.RestHandler, {
+dojo.declare("dojox.wire.ml.JsonHandler",
+	dojox.wire.ml.RestHandler, {
 	//	summary:
 	//		A REST service handler for JSON
 	//	description:
