@@ -472,6 +472,11 @@ dojo.declare("dojox.data.XmlStore",
 		return items;
 	},
 
+	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+		 //	summary: 
+		 //		See dojo.data.api.Read.close()
+	},
+
 /* dojo.data.api.Write */
 
 	newItem: function(/* object? */ keywordArgs){

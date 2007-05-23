@@ -1,5 +1,6 @@
 dojo.provide("dojox.data.tests.stores.OpmlStore");
 dojo.require("dojox.data.OpmlStore");
+dojo.require("dojo.data.api.Read");
 
 dojox.data.tests.stores.OpmlStore.getDatasource = function(filepath){
 	//  summary:
@@ -640,6 +641,32 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 							onComplete: completed,
 							onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
+		},
+		function testReadAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = new dojox.data.OpmlStore(dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml"));
+			var readApi = new dojo.data.api.Read();
+			var passed = true;
+
+			for(i in readApi){
+				if(i.toString().charAt(0) !== '_')
+				{
+					var member = readApi[i];
+					//Check that all the 'Read' defined functions exist on the test store.
+					if(typeof member === "function"){
+						var testStoreMember = testStore[i];
+						if(!(typeof testStoreMember === "function")){
+							passed = false;
+							break;
+						}
+					}
+				}
+			}
+			t.assertTrue(passed);
 		}
 	]
 );

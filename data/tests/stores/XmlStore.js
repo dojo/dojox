@@ -1,5 +1,8 @@
 dojo.provide("dojox.data.tests.stores.XmlStore");
 dojo.require("dojox.data.XmlStore");
+dojo.require("dojo.data.api.Read");
+dojo.require("dojo.data.api.Write");
+
 
 dojox.data.tests.stores.XmlStore.getBooks2Store = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString()});
@@ -769,6 +772,53 @@ tests.register("dojox.data.tests.stores.XmlStore",
 			}
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
 			return d; //Object
+		},
+		function testReadAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = dojox.data.tests.stores.XmlStore.getBooksStore();
+			var readApi = new dojo.data.api.Read();
+			var passed = true;
+
+			for(i in readApi){
+				var member = readApi[i];
+				//Check that all the 'Read' defined functions exist on the test store.
+				if(typeof member === "function"){
+					var testStoreMember = testStore[i];
+					if(!(typeof testStoreMember === "function")){
+						console.log("Problem with function: [" + i + "]");
+						passed = false;
+						break;
+					}
+				}
+			}
+			t.assertTrue(passed);
+		},
+		function testWriteAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test write API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test write API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = dojox.data.tests.stores.XmlStore.getBooksStore();
+			var writeApi = new dojo.data.api.Write();
+			var passed = true;
+
+			for(i in writeApi){
+				var member = writeApi[i];
+				//Check that all the 'Write' defined functions exist on the test store.
+				if(typeof member === "function"){
+					var testStoreMember = testStore[i];
+					if(!(typeof testStoreMember === "function")){
+						passed = false;
+						break;
+					}
+				}
+			}
+			t.assertTrue(passed);
 		}
 	]
 );

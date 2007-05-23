@@ -1,5 +1,7 @@
 dojo.provide("dojox.data.tests.stores.CsvStore");
 dojo.require("dojox.data.CsvStore");
+dojo.require("dojo.data.api.Read");
+dojo.require("dojo.data.api.Identity");
 
 dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 	//  summary:
@@ -729,6 +731,61 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			
 			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
+		},
+		function testReadAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = new dojox.data.CsvStore(dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv"));
+			var readApi = new dojo.data.api.Read();
+			var passed = true;
+
+			for(i in readApi){
+				if(i.toString().charAt(0) !== '_')
+				{
+					var member = readApi[i];
+					//Check that all the 'Read' defined functions exist on the test store.
+					if(typeof member === "function"){
+						console.log("Looking at function: [" + i + "]");
+						var testStoreMember = testStore[i];
+						if(!(typeof testStoreMember === "function")){
+							console.log("Problem with function: [" + i + "].   Got value: " + testStoreMember);
+							passed = false;
+							break;
+						}
+					}
+				}
+			}
+			t.assertTrue(passed);
+		},
+		function testIdentityAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test identity API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test identity API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = new dojox.data.CsvStore(dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv"));
+			var identityApi = new dojo.data.api.Identity();
+			var passed = true;
+
+			for(i in identityApi){
+				if(i.toString().charAt(0) !== '_')
+				{
+					var member = identityApi[i];
+					//Check that all the 'Read' defined functions exist on the test store.
+					if(typeof member === "function"){
+						console.log("Looking at function: [" + i + "]");
+						var testStoreMember = testStore[i];
+						if(!(typeof testStoreMember === "function")){
+							passed = false;
+							break;
+						}
+					}
+				}
+			}
+			t.assertTrue(passed);
 		}
 	]
 );
