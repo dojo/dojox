@@ -16,16 +16,16 @@ dojox.gfx.util._copy = function(o, deep){
 		}
 		return r;
 	}else if(dojo.isObject(o)){
-		var r = new o.constructor(), t = {};
+		var r = new o.constructor();
 		if(deep){
 			for(var i in o){
-				if(!(i in t)){
+				if(!(i in r) || r[i] != o[i]){
 					r[i] = dojox.gfx.util._copy(o[i], true);
 				}
 			}
 		}else{
 			for(var i in o){
-				if(!(i in t)){
+				if(!(i in r) || r[i] != o[i]){
 					r[i] = o[i];
 				}
 			}
