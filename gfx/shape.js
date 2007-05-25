@@ -100,13 +100,13 @@ dojo.declare("dojox.gfx.Shape", null,
 	getTransformedBoundingBox: function(){
 		// summary: returns an array of four points or null
 		//	four points represent four corners of the untransformed bounding box
-		if(!this.bbox){
+		var b = this.getBoundingBox();
+		if(!b){
 			return null;	// null
 		}
-		var g = dojox.gfx.matrix;
 		var m = this._getRealMatrix();
-		var b = this.getBoundingBox();
 		var r = [];
+		var g = dojox.gfx.matrix;
 		r.push(g.multiplyPoint(m, b.x, b.y));
 		r.push(g.multiplyPoint(m, b.x + b.width, b.y));
 		r.push(g.multiplyPoint(m, b.x + b.width, b.y + b.height));
