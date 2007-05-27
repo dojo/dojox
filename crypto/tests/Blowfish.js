@@ -13,6 +13,13 @@ dojo.require("dojox.crypto.Blowfish");
 		},
 		function testDecrypt(t){
 			t.assertEqual(message, dxc.Blowfish.decrypt(base64Encrypted, key));
+		},
+		function testShortMessage(t){
+			var msg="pass";
+			var pwd="foobar";
+			var enc=dxc.Blowfish.encrypt(msg, pwd);
+			var dec=dxc.Blowfish.decrypt(enc, pwd);
+			t.assertEqual(dec, msg);
 		}
 	]);
 })();

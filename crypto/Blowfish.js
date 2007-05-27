@@ -337,11 +337,16 @@ dojox.crypto.Blowfish = new function(){
 		var l=s.length;
 		while(s[--l]==p){ }
 		for (var i=0; i<l;){
-			var t=tab.indexOf(s[i++])<<18|tab.indexOf(s[i++])<<12|tab.indexOf(s[i++])<<6|tab.indexOf(s[i++]);
+			var t=tab.indexOf(s[i++])<<18;
+			if(i<=l){ t|=tab.indexOf(s[i++])<<12 };
+			if(i<=l){ t|=tab.indexOf(s[i++])<<6 };
+			if(i<=l){ t|=tab.indexOf(s[i++]) };
 			out.push((t>>>16)&0xff);
 			out.push((t>>>8)&0xff);
 			out.push(t&0xff);
 		}
+		//	strip off any null bytes
+		while(out[out.length-1]==0){ out.pop(); }
 		return out;
 	}
 ////////////////////////////////////////////////////////////////////////////
