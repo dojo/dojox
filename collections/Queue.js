@@ -1,5 +1,5 @@
 dojo.provide("dojox.collections.Queue");
-dojo.require("dojox.collections.common");
+dojo.require("dojox.collections");
 
 dojox.collections.Queue=function(/* array? */arr){
 	//	summary

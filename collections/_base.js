@@ -1,4 +1,4 @@
-dojo.provide("dojox.collections.common");
+dojo.provide("dojox.collections._base");
 
 dojox.collections.DictionaryEntry=function(/* string */k, /* object */v){
 	//	summary

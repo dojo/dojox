@@ -1,5 +1,5 @@
 dojo.provide("dojox.collections.ArrayList");
-dojo.require("dojox.collections.common");
+dojo.require("dojox.collections");
 
 dojox.collections.ArrayList=function(/* array? */arr){
 	//	summary

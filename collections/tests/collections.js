@@ -1,7 +1,8 @@
 dojo.provide("dojox.collections.tests.collections");
+dojo.require("dojox.collections");
 
 try{
-	dojo.require("dojox.collections.tests.common");
+	dojo.require("dojox.collections.tests._base");
 	dojo.require("dojox.collections.tests.ArrayList");
 	dojo.require("dojox.collections.tests.BinaryTree");
 	dojo.require("dojox.collections.tests.Dictionary");

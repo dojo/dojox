@@ -1,5 +1,5 @@
 dojo.provide("dojox.collections.BinaryTree");
-dojo.require("dojox.collections.common");
+dojo.require("dojox.collections");
 
 dojox.collections.BinaryTree=function(data){
 	function node(data, rnode, lnode){

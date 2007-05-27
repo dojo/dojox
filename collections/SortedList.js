@@ -1,5 +1,5 @@
 dojo.provide("dojox.collections.SortedList");
-dojo.require("dojox.collections.common");
+dojo.require("dojox.collections");
 
 dojox.collections.SortedList=function(/* object? */ dictionary){
 	//	summary

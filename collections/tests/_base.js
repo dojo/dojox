@@ -1,7 +1,7 @@
-dojo.provide("dojox.collections.tests.common");
-dojo.require("dojox.collections.common");
+dojo.provide("dojox.collections.tests._base");
+dojo.require("dojox.collections");
 
-tests.register("dojox.collections.tests.common", [
+tests.register("dojox.collections.tests._base", [
 	function testDictionaryEntry(t){
 		var d=new dojox.collections.DictionaryEntry("foo","bar");
 		t.assertEqual("bar", d.valueOf());
