@@ -1,4 +1,4 @@
-dojo.provide("dojox.crypto.common");
+dojo.provide("dojox.crypto._base");
 
 (function(){
 	var dxc=dojox.crypto;

@@ -1,5 +1,4 @@
 dojo.provide("dojox.crypto.Blowfish");
-dojo.require("dojox.crypto.common");
 
 /*	Blowfish
  *	Created based on the C# implementation by Marcus Hahn (http://www.hotpixel.net/)
