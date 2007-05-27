@@ -759,11 +759,11 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text,
 			}
 		}
 		if(!p){
-			p = document.createElement("v:path");
+			p = this.rawNode.ownerDocument.createElement("v:path");
 			r.appendChild(p);
 		}
 		if(!t){
-			t = document.createElement("v:textpath");
+			t = this.rawNode.ownerDocument.createElement("v:textpath");
 			r.appendChild(t);
 		}
 		p.textPathOk = true;
@@ -1322,11 +1322,11 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path,
 			}
 		}
 		if(!p){
-			p = document.createElement("v:path");
+			p = this.rawNode.ownerDocument.createElement("v:path");
 			r.appendChild(p);
 		}
 		if(!t){
-			t = document.createElement("v:textpath");
+			t = this.rawNode.ownerDocument.createElement("v:textpath");
 			r.appendChild(t);
 		}
 		p.textPathOk = true;
@@ -1401,12 +1401,12 @@ dojox.gfx.vml._creators = {
 		// image: Object: an image object (see dojox.gfx.defaultImage)
 		if(!this.rawNode) return null;
 		var shape = new dojox.gfx.Image();
-		var node = document.createElement('div');
+		var node = this.rawNode.ownerDocument.createElement('div');
 		node.style.position = "absolute";
 		node.style.width  = this.rawNode.style.width;
 		node.style.height = this.rawNode.style.height;
 		node.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, Dx=0, Dy=0)";
-		var img  = document.createElement('img');
+		var img  = this.rawNode.ownerDocument.createElement('img');
 		node.appendChild(img);
 		shape.setRawNode(node);
 		this.rawNode.appendChild(node);
@@ -1434,7 +1434,7 @@ dojox.gfx.vml._creators = {
 		// rawShape: Object: properties to be passed in to the classes "setShape" method
 		if(!this.rawNode) return null;
 		var shape = new shapeType();
-		var node = document.createElement('v:' + shapeType.nodeType);
+		var node = this.rawNode.ownerDocument.createElement('v:' + shapeType.nodeType);
 		shape.setRawNode(node);
 		this.rawNode.appendChild(node);
 		if(overrideSize) this._overrideSize(node);
@@ -1569,7 +1569,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// height: String: height of surface, e.g., "100px"
 
 	var s = new dojox.gfx.Surface();
-	s.rawNode = document.createElement("v:group");
+	s.rawNode = parentNode.ownerDocument.createElement("v:group");
 	s.rawNode.style.width  = width  ? width  : "100%";
 	s.rawNode.style.height = height ? height : "100%";
 	s.rawNode.style.position = "relative";
@@ -1579,7 +1579,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	s.rawNode.coordorigin = "0 0";
 	dojo.byId(parentNode).appendChild(s.rawNode);
 	// create a background rectangle, which is required to show all other shapes
-	var r = document.createElement("v:rect");
+	var r = parentNode.ownerDocument.createElement("v:rect");
 	r.style.left = r.style.top = 0;
 	r.style.width  = s.rawNode.style.width;
 	r.style.height = s.rawNode.style.height;
