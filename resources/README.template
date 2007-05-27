@@ -4,6 +4,9 @@ Project Name
 Version X.XXX
 Release date: MM/DD/YYYY
 -------------------------------------------------------------------------------
+Project state:
+prototype | expermental | beta | stable | production
+-------------------------------------------------------------------------------
 Project authors
 	Author one (author contact info)
 	Author two (author contact info)
@@ -15,6 +18,9 @@ Describe the point of the project here.
 Dependencies:
 
 List any dependencies here.
+-------------------------------------------------------------------------------
+Documentation
+
 -------------------------------------------------------------------------------
 Installation instructions
 
