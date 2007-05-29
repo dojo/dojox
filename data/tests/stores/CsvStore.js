@@ -494,7 +494,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "BAR\\*foo"}, queryOptions: {ignoreCase: true}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseSensitive(t){
@@ -512,7 +512,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "BAR\\*foo"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "BAR\\*foo"}, queryOptions: {ignoreCase: false}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortNumeric(t){

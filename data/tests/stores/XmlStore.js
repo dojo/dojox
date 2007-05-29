@@ -183,7 +183,7 @@ tests.register("dojox.data.tests.stores.XmlStore",
 			function onError(error, request) {
 				d.errback(error);
 			}
-			store.fetch({query:{isbn:"?9b574"}, queryIgnoreCase:true, onComplete: onComplete, onError: onError});
+			store.fetch({query:{isbn:"?9b574"}, queryOptions: {ignoreCase: true}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
 		function testReadAPI_fetch_pattern_caseSensitive(t){
@@ -200,7 +200,7 @@ tests.register("dojox.data.tests.stores.XmlStore",
 			function onError(error, request) {
 				d.errback(error);
 			}
-			store.fetch({query:{isbn:"?9B574"}, queryIgnoreCase:false, onComplete: onComplete, onError: onError});
+			store.fetch({query:{isbn:"?9B574"}, queryOptions: {ignoreCase: false}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
 		function testReadAPI_fetch_all_rootItem(t){

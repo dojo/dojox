@@ -206,12 +206,13 @@ dojo.declare("dojox.data.CsvStore",
 			var items = null;
 			if(requestArgs.query){
 				items = [];
+				var ignoreCase = requestArgs.queryOptions ? requestArgs.queryOptions.ignoreCase : false; 
 				for(var i = 0; i < arrayOfAllItems.length; ++i){
 					var match = true;
 					var candidateItem = arrayOfAllItems[i];
 					for(var key in requestArgs.query){
 						var value = requestArgs.query[key];
-						if(!self._containsValue(candidateItem, key, value, requestArgs.queryIgnoreCase)){
+						if(!self._containsValue(candidateItem, key, value, ignoreCase)){
 							match = false;
 						}
 					}

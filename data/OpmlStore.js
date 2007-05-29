@@ -232,12 +232,13 @@ dojo.declare("dojox.data.OpmlStore",
 			var items = null;
 			if(requestArgs.query){
 				items = [];
+				var ignoreCase = requestArgs.queryOptions ? requestArgs.queryOptions.ignoreCase : false; 
 				for(var i = 0; i < arrayOfItems.length; ++i){
 					var match = true;
 					var candidateItem = arrayOfItems[i];
 					for(var key in requestArgs.query){
 						var value = requestArgs.query[key];
-						if(!self._containsValue(candidateItem, key, value, requestArgs.queryIgnoreCase)){
+						if(!self._containsValue(candidateItem, key, value, ignoreCase)){
 							match = false;
 						}
 					}

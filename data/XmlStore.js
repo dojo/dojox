@@ -433,20 +433,21 @@ dojo.declare("dojox.data.XmlStore",
             var item = this._getItem(node);
 			if(query){
 				var found = true;
+				var ignoreCase = request.queryOptions ? request.queryOptions.ignoreCase : false; 
 				for(var attribute in query){
 					var value = this.getValue(item, attribute);
 					if(value){
-                        var queryValue = query[attribute];
+						var queryValue = query[attribute];
 						if ((typeof value) === "string" && 
 							((typeof queryValue) === "string")){
-							if((value.match(dojo.data.util.filter.patternToRegExp(queryValue, request.queryIgnoreCase))) !== null){
+							if((value.match(dojo.data.util.filter.patternToRegExp(queryValue, ignoreCase))) !== null){
 								continue;
 							}
 						}else if((typeof value) === "object"){
 							if(	value.toString && 
 								((typeof queryValue) === "string")){
 								var stringValue = value.toString();
-								if((stringValue.match(dojo.data.util.filter.patternToRegExp(queryValue, request.queryIgnoreCase))) !== null){
+								if((stringValue.match(dojo.data.util.filter.patternToRegExp(queryValue, ignoreCase))) !== null){
 									continue;
 								}
 							}else{

@@ -550,7 +550,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "asia"}, queryIgnoreCase:true, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "asia"}, queryOptions: {ignoreCase: true}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseSensitive(t){
@@ -568,7 +568,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 				d.callback(true);
 			}
 			
-			opmlStore.fetch({query: {text: "ASIA"}, queryIgnoreCase:false, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+			opmlStore.fetch({query: {text: "ASIA"}, queryOptions: {ignoreCase: false}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_sortAlphabetic(t){
