@@ -1,4 +1,4 @@
-dojo.provide("dojox.io.cometd");
+dojo.provide("dojox._cometd.cometd");
 dojo.require("dojo.AdapterRegistry");
 // FIXME: determine if we can use XMLHTTP to make x-domain posts despite not
 //        being able to hear back about the result
@@ -17,7 +17,7 @@ dojo.require("dojo.io.script");
 // the cometd object with the ability to mix in or call down to an auth-handler
 // object, the prototypical variant of which is a no-op
 
-dojox.io.cometd = new function(){
+dojox.cometd = new function(){
 
 	this.initialized = false;
 	this.connected = false;
@@ -388,7 +388,7 @@ cometd.blahTransport = new function(){
 cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahTransport);
 */
 
-dojox.io.cometd.longPollTransport = new function(){
+dojox.cometd.longPollTransport = new function(){
 	this.connected = false;
 	this.connectionId = null;
 
@@ -408,7 +408,7 @@ dojox.io.cometd.longPollTransport = new function(){
 			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
-					clientId:	dojox.io.cometd.clientId,
+					clientId:	dojox.cometd.clientId,
 					connectionType: "long-polling"
 					// FIXME: auth not passed here!
 					// "authToken": this.authToken
@@ -422,13 +422,13 @@ dojox.io.cometd.longPollTransport = new function(){
 		if(!this.connected){
 			// try to restart the tunnel
 			this.connected = false;
-			console.debug("clientId:", dojox.io.cometd.clientId);
+			console.debug("clientId:", dojox.cometd.clientId);
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
 						channel:	"/meta/reconnect",
 						connectionType: "long-polling",
-						clientId:	dojox.io.cometd.clientId,
+						clientId:	dojox.cometd.clientId,
 						connectionId:	this.connectionId,
 						timestamp:	this.lastTimestamp,
 						id:			this.lastId
@@ -485,14 +485,14 @@ dojox.io.cometd.longPollTransport = new function(){
 	this.openTunnelWith = function(content, url){
 		// console.debug("openTunnelWith:", content, (url||cometd.url));
 		var d = dojo.xhrPost({
-			url: (url||dojox.io.cometd.url),
+			url: (url||dojox.cometd.url),
 			content: content,
 			handleAs: "json",
 		});
 		d.addCallback(dojo.hitch(this, function(data){
 			// console.debug(evt.responseText);
 			// console.debug(data);
-			dojox.io.cometd.deliver(data);
+			dojox.cometd.deliver(data);
 			this.connected = false;
 			this.tunnelCollapse();
 		}));
@@ -512,15 +512,15 @@ dojox.io.cometd.longPollTransport = new function(){
 		// FIXME: what about auth fields?
 		if((bypassBacklog)||(this.connected)){
 			message.connectionId = this.connectionId;
-			message.clientId = dojox.io.cometd.clientId;
+			message.clientId = dojox.cometd.clientId;
 
 			return dojo.xhrPost({
-				url: dojox.io.cometd.url||djConfig["cometdRoot"],
+				url: dojox.cometd.url||djConfig["cometdRoot"],
 				handleAs: "json",
 				content: { 
 					message: dojo.toJson([ message ]) 
 				}
-			}).addCallback(dojox.io.cometd, "deliver");
+			}).addCallback(dojox.cometd, "deliver");
 		}else{
 			this.backlog.push(message);
 		}
@@ -532,7 +532,7 @@ dojox.io.cometd.longPollTransport = new function(){
 	}
 }
 
-dojox.io.cometd.callbackPollTransport = new function(){
+dojox.cometd.callbackPollTransport = new function(){
 	this.connected = false;
 	this.connectionId = null;
 
@@ -553,7 +553,7 @@ dojox.io.cometd.callbackPollTransport = new function(){
 			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
-					clientId:	dojox.io.cometd.clientId,
+					clientId:	dojox.cometd.clientId,
 					connectionType: "callback-polling"
 					// FIXME: auth not passed here!
 					// "authToken": this.authToken
@@ -572,7 +572,7 @@ dojox.io.cometd.callbackPollTransport = new function(){
 					{
 						channel:	"/meta/reconnect",
 						connectionType: "long-polling",
-						clientId:	dojox.io.cometd.clientId,
+						clientId:	dojox.cometd.clientId,
 						connectionId:	this.connectionId,
 						timestamp:	this.lastTimestamp,
 						id:			this.lastId
@@ -584,17 +584,17 @@ dojox.io.cometd.callbackPollTransport = new function(){
 	}
 
 	// the logic appears to be the same
-	this.deliver = dojox.io.cometd.longPollTransport.deliver;
+	this.deliver = dojox.cometd.longPollTransport.deliver;
 
 	this.openTunnelWith = function(content, url){
 		// create a <script> element to generate the request
 		dojo.io.script.get({
-			url: (url||dojox.io.cometd.url),
+			url: (url||dojox.cometd.url),
 			content: content,
 			handleAs: "json",
 			jsonpParam: "jsonp",
 		}).addCallback(dojo.hitch(this, function(data){
-				dojox.io.cometd.deliver(data);
+				dojox.cometd.deliver(data);
 				this.connected = false;
 				this.tunnelCollapse();
 			})
@@ -614,14 +614,14 @@ dojox.io.cometd.callbackPollTransport = new function(){
 		// FIXME: what about auth fields?
 		if((bypassBacklog)||(this.connected)){
 			message.connectionId = this.connectionId;
-			message.clientId = dojox.io.cometd.clientId;
+			message.clientId = dojox.cometd.clientId;
 			var bindArgs = {
-				url: dojox.io.cometd.url||djConfig["cometdRoot"],
+				url: dojox.cometd.url||djConfig["cometdRoot"],
 				handleAs: "json",
 				jsonpParam: "jsonp",
 				content: { message: dojo.toJson([ message ]) },
 			};
-			return dojo.io.script.get(bindArgs).addCallback(dojox.io.cometd, "deliver");
+			return dojo.io.script.get(bindArgs).addCallback(dojox.cometd, "deliver");
 		}else{
 			this.backlog.push(message);
 		}
@@ -633,5 +633,5 @@ dojox.io.cometd.callbackPollTransport = new function(){
 	}
 }
 
-dojox.io.cometd.connectionTypes.register("long-polling", dojox.io.cometd.longPollTransport.check, dojox.io.cometd.longPollTransport);
-dojox.io.cometd.connectionTypes.register("callback-polling", dojox.io.cometd.callbackPollTransport.check, dojox.io.cometd.callbackPollTransport);
+dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransport);
+dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
