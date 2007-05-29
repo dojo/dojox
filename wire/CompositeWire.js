@@ -1,6 +1,6 @@
 dojo.provide("dojox.wire.CompositeWire");
 
-dojo.require("dojox.wire.common");
+dojo.require("dojox.wire._base");
 dojo.require("dojox.wire.Wire");
 
 dojo.declare("dojox.wire.CompositeWire",

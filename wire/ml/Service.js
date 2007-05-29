@@ -5,7 +5,7 @@ dojo.provide("dojox.wire.ml.JsonHandler");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dojox.data.dom");
-dojo.require("dojox.wire.common");
+dojo.require("dojox.wire._base");
 dojo.require("dojox.wire.ml.util");
 
 dojo.declare("dojox.wire.ml.Service",

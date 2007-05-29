@@ -1,7 +1,7 @@
 dojo.provide("dojox.wire.tests.wire");
 
 try{
-	dojo.require("dojox.wire.tests.programmatic.common");
+	dojo.require("dojox.wire.tests.programmatic._base");
 	dojo.require("dojox.wire.tests.programmatic.Wire");
 	dojo.require("dojox.wire.tests.programmatic.DataWire");
 	dojo.require("dojox.wire.tests.programmatic.XmlWire");

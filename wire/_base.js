@@ -1,4 +1,4 @@
-dojo.provide("dojox.wire.common");
+dojo.provide("dojox.wire._base");
 
 dojox.wire._defaultWireClass = "dojox.wire.Wire";
 

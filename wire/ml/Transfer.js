@@ -6,7 +6,7 @@ dojo.provide("dojox.wire.ml.SegmentWire");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dijit.base.Container");
-dojo.require("dojox.wire.common");
+dojo.require("dojox.wire._base");
 dojo.require("dojox.wire.ml.Action");
 
 dojo.declare("dojox.wire.ml.Transfer",
