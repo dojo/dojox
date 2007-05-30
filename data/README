@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-DojoX Wire
+DojoX Data
 -------------------------------------------------------------------------------
 Version 0.9
 Release date: 05/29/2007
@@ -11,21 +11,15 @@ Project authors
 -------------------------------------------------------------------------------
 Project description
 
-The DojoX Wire project is a set of functions that build a generic data binding
-and service invocation library to simplify how data values across a wide
-variety of widget and non-widget JavaScript constructs are accessed, updated,
-and passed to and from services.  It also provides a set of widgets 
-within the dojox.wire.ml package to allow for declarative data binding 
-definitions in addition to the programmatic APIs.
-
-In essense, this project is an API to provide a simplified way of doing MVC
-patterns in the client.
+The DojoX Data project is a container for extensions and extra example stores
+that implement the dojo.data APIs.  It may also contain utility functions for
+working with specific types of data.
 
 -------------------------------------------------------------------------------
 Dependencies:
 
-DojoX Wire has dependencies on core dojo, the dijit widget system (for classes 
-in the dojox.wire.ml package), dojox.data, and the D.O.H. unit test framework.
+DojoX Data has dependencies on core dojo (dojo.data) and the D.O.H. unit test 
+framework.
 -------------------------------------------------------------------------------
 Documentation:
 
@@ -34,20 +28,15 @@ See the Dojo API tool (http://dojotoolkit.org/api)
 Installation instructions
 
 Grab the following from the Dojo SVN Repository:
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/wire.js
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/wire/*
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/data/*
 
 Install into the following directory structure:
-/dojox/wire/
+/dojox/data/
 
 ...which should be at the same level as your Dojo checkout.
 
-It should look like:
-/dojox/wire.js
-/dojox/wire/*
+/dojox/data/*
 
-Require in dojox.wire for all baseline functions (dojox.wire.connect, 
-dojox.wire.register, etc).  For specific Wire classes,
-require in the appropriate dojox.wire.<Class>.
+Require in the dojox.data stores you wish to use.
 -------------------------------------------------------------------------------
 
