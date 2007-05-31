@@ -1,6 +1,6 @@
 dojo.provide("dojox.gfx.shape");
 
-dojo.require("dojox.gfx.util");
+dojo.require("dojox.gfx._base");
 
 dojo.declare("dojox.gfx.Shape", null,
 	function(){
@@ -297,7 +297,7 @@ dojo.declare("dojox.gfx.shape.Rect", dojox.gfx.Shape,
 	function(rawNode) {
 		// summary: a generic rectangle
 		// rawNode: Node: a DOM Node
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultRect, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultRect, true);
 		this.attach(rawNode);
 	},
 {
@@ -311,7 +311,7 @@ dojo.declare("dojox.gfx.shape.Ellipse", dojox.gfx.Shape,
 	function(rawNode) {
 		// summary: a generic ellipse
 		// rawNode: Node: a DOM Node
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultEllipse, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultEllipse, true);
 		this.attach(rawNode);
 	},
 {
@@ -331,7 +331,7 @@ dojo.declare("dojox.gfx.shape.Circle", dojox.gfx.Shape,
 		// summary: a generic circle
 		//	(this is a helper object, which is defined for convenience)
 		// rawNode: Node: a DOM Node
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultCircle, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultCircle, true);
 		this.attach(rawNode);
 	},
 {
@@ -351,7 +351,7 @@ dojo.declare("dojox.gfx.shape.Line", dojox.gfx.Shape,
 		// summary: a generic line
 		//	(this is a helper object, which is defined for convenience)
 		// rawNode: Node: a DOM Node
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultLine, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultLine, true);
 		this.attach(rawNode);
 	},
 {
@@ -375,7 +375,7 @@ dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape,
 		// summary: a generic polyline/polygon
 		//	(this is a helper object, which is defined for convenience)
 		// rawNode: Node: a DOM Node
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultPolyline, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultPolyline, true);
 		this.attach(rawNode);
 	},
 {
@@ -409,7 +409,7 @@ dojo.declare("dojox.gfx.shape.Image", dojox.gfx.Shape,
 		// summary: a generic image
 		//	(this is a helper object, which is defined for convenience)
 		// rawNode: Node: a DOM Node
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultImage, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultImage, true);
 		this.attach(rawNode);
 	},
 {
@@ -424,7 +424,7 @@ dojo.declare("dojox.gfx.shape.Text", dojox.gfx.Shape,
 		// summary: a generic text
 		// rawNode: Node: a DOM Node
 		this.fontStyle = null;
-		this.shape = dojox.gfx.util._copy(dojox.gfx.defaultText, true);
+		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultText, true);
 		this.attach(rawNode);
 	},
 {

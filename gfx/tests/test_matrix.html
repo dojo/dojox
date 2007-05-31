@@ -1,0 +1,87 @@
+﻿<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>Dojo 2D Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">djConfig = {isDebug: true};</script>
+<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+<script type="text/javascript">
+
+dojo.require("dojox.gfx");
+
+mdebug = function(matrix){
+	var m = dojox.gfx.matrix.normalize(matrix);
+	console.debug("xx: " + m.xx + ", xy: " + m.xy + " | dx:" + m.dx);
+	console.debug("yx: " + m.yx + ", yy: " + m.yy + " | dy:" + m.dy);
+};
+
+pdebug = function(point){
+	console.debug("x: " + point.x + ", y: " + point.y);
+};
+
+dojo.addOnLoad(function(){
+	var m = dojox.gfx.matrix;
+	var a = new m.Matrix2D();
+	mdebug(a);
+	a = m.rotateg(30);
+	mdebug(a);
+	a = m.rotateg(45);
+	mdebug(a);
+	a = m.rotateg(90);
+	mdebug(a);
+	a = [new m.Matrix2D(), new m.Matrix2D(), new m.Matrix2D()];
+	mdebug(a);
+	a = [m.rotateg(30), m.rotateg(-30)];
+	mdebug(a);
+	a = [m.rotateg(30), m.invert(m.rotateg(30))];
+	mdebug(a);
+	a = m.rotategAt(90, 10, 10);
+	mdebug(a);
+	var b = m.multiplyPoint(a, 10, 10);
+	pdebug(b);
+	b = m.multiplyPoint(a, 10, 5);
+	pdebug(b);
+	b = m.multiplyPoint(a, 10, 15);
+	pdebug(b);
+	a = [m.scale(2,1), m.invert(m.rotateg(45))];
+	mdebug(a);
+	a = [m.scale(1,2), m.invert(m.rotateg(45))];
+	mdebug(a);
+	a = [m.invert(m.rotateg(45)), m.scale(2,1)];
+	mdebug(a);
+	a = [m.invert(m.rotateg(45)), m.scale(1,2)];
+	mdebug(a);
+	a = [m.rotategAt(45, 100, 100), m.scale(2)];
+	mdebug(a);
+	a = [m.scale(2), m.rotategAt(45, 100, 100)];
+	mdebug(a);
+	a = [m.rotateg(45), m.scale(2)];
+	mdebug(a);
+	a = [m.scale(2), m.rotateg(45)];
+	mdebug(a);
+	a = [m.rotategAt(45, 300, 200), m.translate(100, 100), m.scale(2,1)];
+	mdebug(a);
+	a = [m.translate(100, 100), m.rotateg(45), m.scale(2,1)];
+	mdebug(a);
+	a = [m.rotategAt(45, 250, 250), {dx: 150, dy: 150}];
+	mdebug(a);
+	a = 5;
+	mdebug(a);
+	a = [2, m.scale(2,1)];
+	mdebug(a);
+	a = m.reflect(1, 1);
+	b = m.multiplyPoint(a, 1, 0);
+	pdebug(b);
+	b = m.multiplyPoint(a, 0, 1);
+	pdebug(b);
+	a = m.project(1, 1);
+	b = m.multiplyPoint(a, 1, 0);
+	pdebug(b);
+	b = m.multiplyPoint(a, 0, 1);
+	pdebug(b);
+});
+
+</script>
+</head>
+<body>
+</body>
+</html>

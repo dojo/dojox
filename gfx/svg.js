@@ -1,6 +1,6 @@
 dojo.provide("dojox.gfx.svg");
 
-dojo.require("dojox.gfx.util");
+dojo.require("dojox.gfx._base");
 dojo.require("dojox.gfx.shape");
 dojo.require("dojox.gfx.path");
 
@@ -174,7 +174,7 @@ dojo.extend(dojox.gfx.Shape, {
 			}
 		}else{
 			fill = document.createElementNS(dojox.gfx.svg.xmlns.svg, nodeType);
-			fill.setAttribute("id", dojox.gfx.util._getUniqueId());
+			fill.setAttribute("id", dojox.gfx._base._getUniqueId());
 			defs.appendChild(fill);
 		}
 		if(nodeType == "pattern"){
@@ -305,7 +305,7 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 	
 	_getGradient: function(defaultGradient, gradient){
-		var fillStyle = dojox.gfx.util._copy(defaultGradient, true);
+		var fillStyle = dojox.gfx._base._copy(defaultGradient, true);
 		fillStyle.colors = [];
 		for(var i = 0; i < gradient.childNodes.length; ++i){
 			fillStyle.colors.push({
@@ -322,7 +322,7 @@ dojo.extend(dojox.gfx.Shape, {
 		if(!rawNode){ return null; }
 		var stroke = rawNode.getAttribute("stroke");
 		if(stroke == null || stroke == "none") return null;
-		var strokeStyle = dojox.gfx.util._copy(dojox.gfx.defaultStroke, true);
+		var strokeStyle = dojox.gfx._base._copy(dojox.gfx.defaultStroke, true);
 		var color = new dojo.Color(stroke);
 		if(color){
 			strokeStyle.color = color;
@@ -361,7 +361,7 @@ dojo.extend(dojox.gfx.Shape, {
 		// rawNode: Node: an SVG node
 		var shape = null;
 		if(rawNode){
-			shape = dojox.gfx.util._copy(this.shape, true);
+			shape = dojox.gfx._base._copy(this.shape, true);
 			for(var i in shape) {
 				shape[i] = rawNode.getAttribute(i);
 			}
@@ -520,7 +520,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		// rawNode: Node: an SVG node
 		var shape = null;
 		if(rawNode){
-			shape = dojox.gfx.util._copy(dojox.gfx.defaultText, true);
+			shape = dojox.gfx._base._copy(dojox.gfx.defaultText, true);
 			shape.x = rawNode.getAttribute("x");
 			shape.y = rawNode.getAttribute("y");
 			shape.align = rawNode.getAttribute("text-anchor");
@@ -611,7 +611,7 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 			if(surface){
 				var defs = surface.defNode;
 				path = document.createElementNS(dojox.gfx.svg.xmlns.svg, "path");
-				var id = dojox.gfx.util._getUniqueId();
+				var id = dojox.gfx._base._getUniqueId();
 				path.setAttribute("id", id);
 				defs.appendChild(path);
 				r.firstChild.setAttributeNS(dojox.gfx.svg.xmlns.xlink, "href", "#" + id);
@@ -659,7 +659,7 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 		// rawNode: Node: an SVG node
 		var shape = null;
 		if(rawNode){
-			shape = dojox.gfx.util._copy(dojox.gfx.defaultTextPath, true);
+			shape = dojox.gfx._base._copy(dojox.gfx.defaultTextPath, true);
 			shape.align = rawNode.getAttribute("text-anchor");
 			shape.decoration = rawNode.getAttribute("text-decoration");
 			shape.rotated = parseFloat(rawNode.getAttribute("rotate")) != 0;
@@ -697,7 +697,7 @@ dojox.gfx.svg._font = {
 		// summary: deduces a font style from a Node.
 		// rawNode: Node: an SVG node
 		if(!rawNode){ return null; }
-		var fontStyle = dojox.gfx.util._copy(dojox.gfx.defaultFont, true);
+		var fontStyle = dojox.gfx._base._copy(dojox.gfx.defaultFont, true);
 		fontStyle.style = rawNode.getAttribute("font-style");
 		fontStyle.variant = rawNode.getAttribute("font-variant");
 		fontStyle.weight = rawNode.getAttribute("font-weight");

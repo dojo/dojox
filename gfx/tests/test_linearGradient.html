@@ -1,0 +1,54 @@
+﻿<html 
+	xmlns:v="urn:schemas-microsoft-com:vml" 
+	xmlns:o="urn:schemas-microsoft-com:office:office" >
+   <head>
+		<title>Dojo Unified 2D Graphics</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript">
+			// Dojo configuration
+			djConfig = { 
+				isDebug: true
+			};
+		</script>
+		<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<!--<script type="text/javascript" src="../path.js"></script>-->
+		<!--<script type="text/javascript" src="../vml.js"></script>-->
+		<!--<script type="text/javascript" src="../svg.js"></script>-->
+		<script type="text/javascript">
+			dojo.require("dojox.gfx");
+
+			var makeShapes = function(){
+				var fillObj = {
+					type: "linear",
+					x1: 0, y1: 0,
+					x2: 300, y2: 0,
+					colors: [
+						{ offset: 0, color: "#000000" },
+						{ offset: 1, color: "#4a4949" }
+					]
+				};
+				var surface = dojox.gfx.createSurface(dojo.byId("grad"), 300, 100);
+				var group = surface.createGroup();
+				var rect = surface.createRect({ 
+					width:  300, // "100%", 
+					height: 100  // "100%" 
+				});
+				rect.setFill(fillObj);
+				group.add(rect);
+			};
+			dojo.addOnLoad(makeShapes);
+		</script>
+		<style>
+			v:group { text-align: left; }
+			#grad {
+				width: 300px;
+				height: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<h3>linear gradient test page</h3>
+		<div id="grad">
+		</div>
+	</body>
+</html>

@@ -1,13 +1,13 @@
-dojo.provide("dojox.gfx.util");
+dojo.provide("dojox.gfx._base");
 
 // candidate for dojox.lang:
-dojox.gfx.util._copy = function(o, deep){
+dojox.gfx._base._copy = function(o, deep){
 	if(!o){ return o; }
 	if(dojo.isArray(o)){
 		var r = [];
 		if(deep){
 			for(var i = 0; i < o.length; ++i){
-				r.push(dojox.gfx.util._copy(o[i], true));
+				r.push(dojox.gfx._base._copy(o[i], true));
 			}
 		}else{
 			for(var i = 0; i < o.length; ++i){
@@ -20,7 +20,7 @@ dojox.gfx.util._copy = function(o, deep){
 		if(deep){
 			for(var i in o){
 				if(!(i in r) || r[i] != o[i]){
-					r[i] = dojox.gfx.util._copy(o[i], true);
+					r[i] = dojox.gfx._base._copy(o[i], true);
 				}
 			}
 		}else{
@@ -38,7 +38,7 @@ dojox.gfx.util._copy = function(o, deep){
 // candidate for dojox.html.metrics (dynamic font resize handler is not implemented here)
 
 //	derived from Morris John's emResized measurer
-dojox.gfx.util._getFontMeasurements = function(){
+dojox.gfx._base._getFontMeasurements = function(){
 	//	summary
 	//	Returns an object that has pixel equivilents of standard font size values.
 	var heights = {
@@ -78,23 +78,23 @@ dojox.gfx.util._getFontMeasurements = function(){
 	return heights; 	//	object
 };
 
-dojox.gfx.util._fontMeasurements = null;
+dojox.gfx._base._fontMeasurements = null;
 
-dojox.gfx.util._getCachedFontMeasurements = function(recalculate){
-	if(recalculate || !dojox.gfx.util._fontMeasurements){
-		dojox.gfx.util._fontMeasurements = dojox.gfx.util._getFontMeasurements();
+dojox.gfx._base._getCachedFontMeasurements = function(recalculate){
+	if(recalculate || !dojox.gfx._base._fontMeasurements){
+		dojox.gfx._base._fontMeasurements = dojox.gfx._base._getFontMeasurements();
 	}
-	return dojox.gfx.util._fontMeasurements;
+	return dojox.gfx._base._fontMeasurements;
 };
 
 // candidate for dojo.dom
 
-dojox.gfx.util._uniqueId = 0;
-dojox.gfx.util._getUniqueId = function(){
+dojox.gfx._base._uniqueId = 0;
+dojox.gfx._base._getUniqueId = function(){
 	// summary: returns a unique string for use with any DOM element
 	var id;
 	do{
-		id = "dojoUnique" + (++dojox.gfx.util._uniqueId);
+		id = "dojoUnique" + (++dojox.gfx._base._uniqueId);
 	}while(dojo.byId(id));
 	return id;
 };
@@ -147,11 +147,11 @@ dojo.mixin(dojox.gfx, {
 		// summary: copies the original object, and all copied properties from the "update" object
 		// defaults: Object: the object to be cloned before updating
 		// update:   Object: the object, which properties are to be cloned during updating
-		if(!update) return dojox.gfx.util._copy(defaults, true);
+		if(!update) return dojox.gfx._base._copy(defaults, true);
 		var result = {};
 		for(var i in defaults){
 			if(!(i in result)){
-				result[i] = dojox.gfx.util._copy((i in update) ? update[i] : defaults[i], true);
+				result[i] = dojox.gfx._base._copy((i in update) ? update[i] : defaults[i], true);
 			}
 		}
 		return result; // Object
@@ -183,7 +183,7 @@ dojo.mixin(dojox.gfx, {
 	splitFontString: function(str){
 		// summary: converts a CSS font string to a font object
 		// str:		String:	a CSS font string
-		var font = dojox.gfx.util._copy(dojox.gfx.defaultFont);
+		var font = dojox.gfx._base._copy(dojox.gfx.defaultFont);
 		var t = str.split(/\s+/);
 		do{
 			if(t.length < 5){ break; }
@@ -214,7 +214,7 @@ dojo.mixin(dojox.gfx, {
 	mm_in_pt: 7.2 / 2.54,	// Number: millimeters per inch
 	px_in_pt: function(){
 		// summary: returns a number of pixels per point
-		return dojox.gfx.util._getCachedFontMeasurements()["12pt"] / 12;	// Number
+		return dojox.gfx._base._getCachedFontMeasurements()["12pt"] / 12;	// Number
 	},
 	pt2px: function(len){
 		// summary: converts points to pixels
