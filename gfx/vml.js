@@ -1568,9 +1568,8 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// width: String: width of surface, e.g., "100px"
 	// height: String: height of surface, e.g., "100px"
 
-	parentNode=dojo.byId(parentNode);
 	var s = new dojox.gfx.Surface();
-	s.rawNode = parentNode.ownerDocument.createElement("v:group");
+	s.rawNode = dojo.byId(parentNode).ownerDocument.createElement("v:group");
 	s.rawNode.style.width  = width  ? width  : "100%";
 	s.rawNode.style.height = height ? height : "100%";
 	s.rawNode.style.position = "relative";
@@ -1580,7 +1579,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	s.rawNode.coordorigin = "0 0";
 	dojo.byId(parentNode).appendChild(s.rawNode);
 	// create a background rectangle, which is required to show all other shapes
-	var r = parentNode.ownerDocument.createElement("v:rect");
+	var r = s.rawNode.ownerDocument.createElement("v:rect");
 	r.style.left = r.style.top = 0;
 	r.style.width  = s.rawNode.style.width;
 	r.style.height = s.rawNode.style.height;
