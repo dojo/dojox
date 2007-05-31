@@ -1568,6 +1568,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// width: String: width of surface, e.g., "100px"
 	// height: String: height of surface, e.g., "100px"
 
+	parentNode=dojo.byId(parentNode);
 	var s = new dojox.gfx.Surface();
 	s.rawNode = parentNode.ownerDocument.createElement("v:group");
 	s.rawNode.style.width  = width  ? width  : "100%";
