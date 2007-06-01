@@ -1,4 +1,4 @@
-dojo.provide("dojox.wire.ml.tests.wire/ml");
+dojo.provide("dojox.wire.tests.wireml");
 
 try{
 	if(dojo.isBrowser){

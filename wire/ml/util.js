@@ -221,6 +221,58 @@ dojo.declare("dojox.wire.ml.XmlElement",
 		return s; //String
 	},
 
+	toObject: function(){
+		//	summary:
+		//		Return an object representation of the element
+		//	description:
+		//		An object with properties for child elements, attributes and
+		//		text is returned.
+		//	returns:
+		//		An object representation of the element
+		if(!this.element){
+			return null; //null
+		}
+		var text = "";
+		var obj = {};
+		var elements = 0;
+		for(var i = 0; i < this.element.childNodes.length; i++){
+			var child = this.element.childNodes[i];
+			if(child.nodeType === 1 /* ELEMENT_NODE */){
+				elements++;
+				var o = new dojox.wire.ml.XmlElement(child).toObject();
+				var name = child.nodeName;
+				var p = obj[name];
+				if(!p){
+					obj[name] = o;
+				}else if(dojo.isArray(p)){
+					p.push(o);
+				}else{
+					obj[name] = [p, o]; // make them array
+				}
+			}else if(child.nodeType === 3 /* TEXT_NODE */){
+				text += child.nodeValue;
+			}
+		}
+		var attributes = 0;
+		if(this.element.nodeType === 1 /* ELEMENT_NODE */){
+			attributes = this.element.attributes.length;
+			for(var i = 0; i < attributes; i++){
+				var attr = this.element.attributes[i];
+				obj["@" + attr.nodeName] = attr.nodeValue;
+			}
+		}
+		if(elements === 0){
+			if(attributes === 0){
+				// text only
+				return text; //String
+			}
+			// text with attributes
+			obj["text()"] = text;
+		}
+		// else ignore text
+		return obj; //Object
+	},
+
 	_getDocument: function(){
 		//	summary:
 		//		Return a DOM document
