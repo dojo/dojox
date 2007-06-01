@@ -58,7 +58,7 @@ function makeCircleGrid(itemCount)
 			.setStroke({color: randColor(1), width: getRand(3)})
 			;
 		aShape.getEventSource().setAttribute('shapeid', id);
-		dojo.addClass(aShape.getEventSource(), "movable");
+		dojox.gfx._addClass(aShape.getEventSource(), "movable");
 		gShapes[id] = aShape;
 	}
 }

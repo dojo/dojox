@@ -206,9 +206,9 @@ makeShapes = function(){
 		.setStroke({color: "#800", width: 1})
 		.setFill("#d00")
 		;
-	dojo.addClass(hour_hand  .getEventSource(), "movable");
-	dojo.addClass(minute_hand.getEventSource(), "movable");
-	dojo.addClass(second_hand.getEventSource(), "movable");
+	dojox.gfx._addClass(hour_hand  .getEventSource(), "movable");
+	dojox.gfx._addClass(minute_hand.getEventSource(), "movable");
+	dojox.gfx._addClass(second_hand.getEventSource(), "movable");
 	surface.createCircle({r: 1}).setFill("black").setTransform({dx: 192.5, dy: 192.5});
 	
 	// attach events
