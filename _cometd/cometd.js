@@ -78,7 +78,7 @@ dojox.cometd = new function(){
 			url: this.url,
 			handleAs: this.handleAs,
 			content: { "message": dojo.toJson([props]) },
-			jsonpParam: "jsonp" // usually ignored
+			callbackParamName: "jsonp" // usually ignored
 		};
 		// dojo.hitch(this, "finishInit"),
 
@@ -631,7 +631,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			url: (url||dojox.cometd.url),
 			content: content,
 			handleAs: dojox.cometd.handleAs,
-			jsonpParam: "jsonp",
+			callbackParamName: "jsonp",
 		}).addCallback(dojo.hitch(this, function(data){
 				dojox.cometd.deliver(data);
 				this.connected = false;
@@ -656,7 +656,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			var bindArgs = {
 				url: dojox.cometd.url||djConfig["cometdRoot"],
 				handleAs: dojox.io.cometd.handleAs,
-				jsonpParam: "jsonp",
+				callbackParamName: "jsonp",
 				content: { message: dojo.toJson([ message ]) },
 			};
 			return dojo.io.script.get(bindArgs).addCallback(dojox.cometd, "deliver");
