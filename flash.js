@@ -1,2 +1,2 @@
 dojo.provide("dojox.flash");
-dojo.require("dojox._flash.common");
+dojo.require("dojox.flash._common");
