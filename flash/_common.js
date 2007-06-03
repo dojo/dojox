@@ -1,4 +1,4 @@
-dojo.provide("dojox._flash.common");
+dojo.provide("dojox.flash._common");
 
 dojox.flash = function(){
 	// summary:
@@ -182,8 +182,8 @@ dojox.flash = function(){
 	//	Initialize dojox.flash with the filename and Flash communication version to
 	//	use during page load; see the documentation for dojox.flash for details:
 	//		
-	//	dojox.flash.setSwf({flash6: dojo.moduleUrl("dojox", "_flash/tests/flash/HelloWorld_flash6.swf"),
-	//					 	flash8: dojo.moduleUrl("dojox", "_flash/tests/flash/HelloWorld_flash8.swf")});
+	//	dojox.flash.setSwf({flash6: dojo.moduleUrl("dojox", "flash/tests/flash/HelloWorld_flash6.swf"),
+	//					 	flash8: dojo.moduleUrl("dojox", "flash/tests/flash/HelloWorld_flash8.swf")});
 	//		
 	//	Now, your Flash methods can be called from JavaScript as if they are native
 	//	Flash methods, mirrored exactly on the JavaScript side:
@@ -214,8 +214,8 @@ dojox.flash = function(){
 	//		
 	//	If you have both Flash 6 and Flash 8 versions of your file:
 	//		
-	//	dojox.flash.setSwf({flash6: dojo.moduleUrl("dojox", "_flash/tests/flash/HelloWorld_flash6.swf"),
-	//					 	flash8: dojo.moduleUrl("dojox", "_flash/tests/flash/HelloWorld_flash8.swf")});
+	//	dojox.flash.setSwf({flash6: dojo.moduleUrl("dojox", "flash/tests/flash/HelloWorld_flash6.swf"),
+	//					 	flash8: dojo.moduleUrl("dojox", "flash/tests/flash/HelloWorld_flash8.swf")});
 	//											 
 	//	but want to force the browser to use a certain version of Flash for
 	//	all platforms (for testing, for example), use the djConfig
@@ -560,7 +560,7 @@ dojox.flash.Info.prototype = {
 		results.push(swfloc);
 		
 		// flash 6 gateway
-		results.push(dojo.moduleUrl("dojox", "_flash/flash6/flash6_gateway.swf")+"");
+		results.push(dojo.moduleUrl("dojox", "flash/flash6/flash6_gateway.swf")+"");
 		
 		return results;
 	},
