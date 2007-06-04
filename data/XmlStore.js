@@ -434,20 +434,31 @@ dojo.declare("dojox.data.XmlStore",
 			if(query){
 				var found = true;
 				var ignoreCase = request.queryOptions ? request.queryOptions.ignoreCase : false; 
+
+				//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
+				//same value for each item examined.  Much more efficient.
+				var regexpList = {};
+				for(var key in query){
+					var value = query[key];
+					if(typeof value === "string"){
+						regexpList[key] = dojo.data.util.filter.patternToRegExp(value, ignoreCase);
+					}
+				}
+
 				for(var attribute in query){
 					var value = this.getValue(item, attribute);
 					if(value){
 						var queryValue = query[attribute];
 						if ((typeof value) === "string" && 
-							((typeof queryValue) === "string")){
-							if((value.match(dojo.data.util.filter.patternToRegExp(queryValue, ignoreCase))) !== null){
+							(regexpList[attribute])){
+							if((value.match(regexpList[attribute])) !== null){
 								continue;
 							}
 						}else if((typeof value) === "object"){
 							if(	value.toString && 
-								((typeof queryValue) === "string")){
+								(regexpList[attribute])){
 								var stringValue = value.toString();
-								if((stringValue.match(dojo.data.util.filter.patternToRegExp(queryValue, ignoreCase))) !== null){
+								if((stringValue.match(regexpList[attribute])) !== null){
 									continue;
 								}
 							}else{

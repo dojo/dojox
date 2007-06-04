@@ -152,13 +152,17 @@ dojo.declare("dojox.data.OpmlStore",
 							/* anything */ value){
 		//	summary: 
 		//		See dojo.data.api.Read.containsValue()
-		return this._containsValue(item,attribute,value,false); //Boolean
+		var regexp = undefined;
+		if(typeof value === "string"){
+		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+		}
+		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
 
 	_containsValue: function(	/* item */ item, 
 								/* attribute || attribute-name-string */ attribute, 
 								/* anything */ value,
-								/* boolean */ ignoreCase){
+								/* RegExp?*/ regexp){
 		//	summary: 
 		//		Internal function for looking at the values contained by the item.
 		//	description: 
@@ -171,20 +175,23 @@ dojo.declare("dojox.data.OpmlStore",
 		//	attribute:
 		//		The attribute to inspect.
 		//	value:	
-		//		The value to match, strings may contain wildcard items like * and ?.
-		//	ignoreCase:
-		//		Flag to denote that if items are a string type, should case be used for comparison or not.
-		
+		//		The value to match.
+		//	regexp:
+		//		Optional regular expression generated off value if value was of string type to handle wildcarding.
+		//		If present and attribute values are string, then it can be used for comparison instead of 'value'
 		var values = this.getValues(item, attribute);
-		for(var i = 0; i < values.length; ++i){		
+		for(var i = 0; i < values.length; ++i){
 			var possibleValue = values[i];
-			if(typeof value === "string" && typeof possibleValue === "string"){
-				return (possibleValue.match(dojo.data.util.filter.patternToRegExp(value, ignoreCase)) !== null); //Boolean
-			}else if(possibleValue === value){
-				return true; //Boolean
+			if(typeof possibleValue === "string" && regexp){
+				return (possibleValue.match(regexp) !== null);
+			}else{
+				//Non-string matching.
+				if(value === possibleValue){
+					return true; // Boolean
+				}
 			}
 		}
-		return false; //Boolean
+		return false; // Boolean
 	},
 			
 	isItem: function(/* anything */ something){
@@ -233,12 +240,23 @@ dojo.declare("dojox.data.OpmlStore",
 			if(requestArgs.query){
 				items = [];
 				var ignoreCase = requestArgs.queryOptions ? requestArgs.queryOptions.ignoreCase : false; 
+
+				//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
+				//same value for each item examined.  Much more efficient.
+				var regexpList = {};
+				for(var key in requestArgs.query){
+					var value = requestArgs.query[key];
+					if(typeof value === "string"){
+						regexpList[key] = dojo.data.util.filter.patternToRegExp(value, ignoreCase);
+					}
+				}
+
 				for(var i = 0; i < arrayOfItems.length; ++i){
 					var match = true;
 					var candidateItem = arrayOfItems[i];
 					for(var key in requestArgs.query){
 						var value = requestArgs.query[key];
-						if(!self._containsValue(candidateItem, key, value, ignoreCase)){
+						if(!self._containsValue(candidateItem, key, value, regexpList[key])){
 							match = false;
 						}
 					}
