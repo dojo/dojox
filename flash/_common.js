@@ -299,19 +299,19 @@ dojox.flash = {
 		//		var swfloc8 = dojo.moduleUrl("dojox.storage", "Storage_version8.swf").toString();
 		//		dojox.flash.setSwf({flash6: swfloc6, flash8: swfloc8, visible: false}); 	
 		
-		if(fileInfo == null || dojo.lang.isUndefined(fileInfo)){
+		if(!fileInfo){
 			return;
 		}
 		
-		if(fileInfo.flash6 != null && !dojo.lang.isUndefined(fileInfo.flash6)){
+		if(fileInfo["flash6"]){
 			this.flash6_version = fileInfo.flash6;
 		}
 		
-		if(fileInfo.flash8 != null && !dojo.lang.isUndefined(fileInfo.flash8)){
+		if(fileInfo["flash8"]){
 			this.flash8_version = fileInfo.flash8;
 		}
 		
-		if(!dojo.lang.isUndefined(fileInfo.visible)){
+		if(fileInfo["visible"]){
 			this._visible = fileInfo.visible;
 		}
 		
@@ -441,19 +441,20 @@ dojox.flash.Info = function(){
 	
 	// Visual basic helper required to detect Flash Player ActiveX control 
 	// version information on Internet Explorer
-	if(dojo.render.html.ie){
-		document.writeln('<script language="VBScript" type="text/vbscript"\>');
-		document.writeln('Function VBGetSwfVer(i)');
-		document.writeln('  on error resume next');
-		document.writeln('  Dim swControl, swVersion');
-		document.writeln('  swVersion = 0');
-		document.writeln('  set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))');
-		document.writeln('  if (IsObject(swControl)) then');
-		document.writeln('    swVersion = swControl.GetVariable("$version")');
-		document.writeln('  end if');
-		document.writeln('  VBGetSwfVer = swVersion');
-		document.writeln('End Function');
-		document.writeln('</script\>');
+	if(dojo.isIE){
+		document.write([
+			'<script language="VBScript" type="text/vbscript"\>',
+			'Function VBGetSwfVer(i)',
+			'  on error resume next',
+			'  Dim swControl, swVersion',
+			'  swVersion = 0',
+			'  set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))',
+			'  if (IsObject(swControl)) then',
+			'    swVersion = swControl.GetVariable("$version")',
+			'  end if',
+			'  VBGetSwfVer = swVersion',
+			'End Function',
+			'</script\>'].join("\r\n"));
 	}
 	
 	this._detectVersion();
@@ -570,7 +571,7 @@ dojox.flash.Info.prototype = {
 		
 		// loop backwards through the versions until we find the newest version	
 		for(var testVersion = 25; testVersion > 0; testVersion--){
-			if(dojo.render.html.ie){
+			if(dojo.isIE){
 				versionStr = VBGetSwfVer(testVersion);
 			}else{
 				versionStr = this._JSFlashInfo(testVersion);		
@@ -581,7 +582,7 @@ dojox.flash.Info.prototype = {
 				return;
 			}else if(versionStr != 0){
 				var versionArray;
-				if(dojo.render.html.ie){
+				if(dojo.isIE){
 					var tempArray = versionStr.split(" ");
 					var tempString = tempArray[1];
 					versionArray = tempString.split(",");
@@ -657,7 +658,7 @@ dojox.flash.Info.prototype = {
 		
 		// at this point, we don't have a flash file to detect features on,
 		// so we need to instead look at the browser environment we are in
-		if(dojo.render.html.safari == true || dojo.render.html.opera == true){
+		if(dojo.isSafari||dojo.isOpera){
 			this.commVersion = 8;
 		}else{
 			this.commVersion = 6;
@@ -714,9 +715,7 @@ dojox.flash.Embed.prototype = {
 		//	information. Optional value; defaults to false.
 		
 		//dojo.debug("write");
-		if(dojo.lang.isUndefined(doExpressInstall)){
-			doExpressInstall = false;
-		}
+		doExpressInstall = !!doExpressInstall;
 		
 		// determine our container div's styling
 		var containerStyle = "";
@@ -1193,7 +1192,7 @@ dojox.flash.Communicator.prototype = {
 	}
 }
 
-// FIXME: dojo.delcare()-ify this
+// FIXME: dojo.declare()-ify this
 
 dojox.flash.Install = function(){
 	// summary: Helps install Flash plugin if needed.
