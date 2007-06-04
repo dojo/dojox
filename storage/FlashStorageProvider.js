@@ -7,7 +7,7 @@ dojo.require("dojox.flash");
 // description:
 //		Authors of this storage provider-
 //			Brad Neuberg, bkn3@columbia.edu	
-dojo.delclare(
+dojo.declare(
 	"dojox.storage.FlashStorageProvider",
 	[ dojox.storage.Provider ], null,
 	{
@@ -61,7 +61,7 @@ dojo.delclare(
 			
 			// serialize the value;
 			// handle strings differently so they have better performance
-			if(dojo.lang.isString(value)){
+			if(dojo.isString(value)){
 				value = "string:" + value;
 			}else{
 				value = dojo.json.serialize(value);
@@ -92,11 +92,10 @@ dojo.delclare(
 			// destringify the content back into a 
 			// real JavaScript object;
 			// handle strings differently so they have better performance
-			if(!dojo.lang.isUndefined(results) && results != null 
-				 && /^string:/.test(results)){
+			if(dojo.isString(results) && (/^string:/.test(results))){
 				results = results.substring("string:".length);
 			}else{
-				results = dojo.json.evalJson(results);
+				results = dojo.fromJson(results);
 			}
 		
 			return results;
@@ -183,14 +182,13 @@ dojo.delclare(
 			
 			// call anyone who wants to know the dialog is
 			// now hidden
-			if(dojox.storage.onHideSettingsUI != null &&
-				!dojo.lang.isUndefined(dojox.storage.onHideSettingsUI)){
+			if(dojo.isFunction(dojox.storage.onHideSettingsUI)){
 				dojox.storage.onHideSettingsUI.call(null);	
 			}
 		},
 		
 		getType: function(){
-			return "dojox.storage.browser.FlashStorageProvider";
+			return "dojox.storage.FlashStorageProvider";
 		},
 		
 		getResourceList: function(){ /* Array[] */
@@ -235,8 +233,8 @@ dojo.delclare(
 );
 
 // register the existence of our storage providers
-dojox.storage.manager.register("dojox.storage.browser.FlashStorageProvider",
-								new dojox.storage.browser.FlashStorageProvider());
+dojox.storage.manager.register("dojox.storage.FlashStorageProvider",
+								new dojox.storage.FlashStorageProvider());
 
 // now that we are loaded and registered tell the storage manager to initialize
 // itself
