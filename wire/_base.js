@@ -184,7 +184,7 @@ dojox.wire.disconnect = function(/*Object*/connection){
 	}
 
 	if(connection.topic){
-		dojo.unsubscribe(connection.topic, connection.handle);
+		dojo.unsubscribe(connection.handle);
 	}else{
 		dojo.disconnect(connection.handle);
 	}
