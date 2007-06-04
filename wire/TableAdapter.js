@@ -63,7 +63,7 @@ dojo.declare("dojox.wire.TableAdapter",
 	_setValue: function(/*Array*/object, /*Array*/value){
 		//	summary:
 		//		Not supported
-		dojo.unimplemented(this._wireClass + "._setValue");
+		throw new Error("Unsupported API: " + this._wireClass + "._setValue");
 	},
 
 	_getRow: function(/*Object||Array*/object){

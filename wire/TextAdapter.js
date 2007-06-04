@@ -57,7 +57,7 @@ dojo.declare("dojox.wire.TextAdapter",
 	_setValue: function(/*Object||Array*/object, /*String*/value){
 		//	summary:
 		//		Not supported
-		dojo.unimplemented(this._wireClass + "._setValue");
+		throw new Error("Unsupported API: " + this._wireClass + "._setValue");
 	},
 
 	_addSegment: function(/*String*/text, /*String*/segment){
