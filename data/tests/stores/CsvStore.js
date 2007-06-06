@@ -302,6 +302,19 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			csvStore.fetch({ onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
+		function testIdentityAPI_getIdentityAttributes(t){
+			//	summary: 
+			//		Simple test of the getIdentityAttributes
+			//	description:
+			//		Simple test of the getItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+
+			var item = csvStore.getItemByIdentity(1);
+			t.assertTrue(csvStore.isItem(item));
+			t.assertEqual(null, csvStore.getIdentityAttributes(item)); 
+		},
 		function testReadAPI_isItem(t){
 			//	summary: 
 			//		Simple test of the isItem function of the store

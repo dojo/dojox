@@ -412,6 +412,15 @@ dojo.declare("dojox.data.CsvStore",
 		return null; //null
 	},
 
+	getIdentityAttributes: function(/* item */ item){
+		 //	summary: 
+		 //		See dojo.data.api.Identity.getIdentifierAttributes()
+		 
+		 //Identity isn't a public attribute in the item, it's the row position index.
+		 //So, return null.
+		 return null;
+	},
+
 	_forceLoad: function(){
 		//	summary: 
 		//		Internal function to force a load of the store if it hasn't occurred yet.  This is required
