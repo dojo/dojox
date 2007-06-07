@@ -5,11 +5,11 @@ dojo.require("dojo.data.api.Write");
 
 
 dojox.data.tests.stores.XmlStore.getBooks2Store = function(){
-	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString()});
+	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString(), label: "title"});
 };
 
 dojox.data.tests.stores.XmlStore.getBooksStore = function(){
-	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books.xml").toString()});
+	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books.xml").toString(), label: "title"});
 };
 
 tests.register("dojox.data.tests.stores.XmlStore", 
@@ -308,6 +308,52 @@ tests.register("dojox.data.tests.stores.XmlStore",
 			store.fetch({query:{isbn:"?C*"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
+
+		function testReadAPI_getLabel(t){
+			//	summary: 
+			//		Simple test of the getLabel function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabel function against a store set that has a label defined.
+
+			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var label = store.getLabel(items[0]);
+				t.assertTrue(label !== null);
+				t.assertEqual("Title of 4", label);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
+			return d;
+		},
+		function testReadAPI_getLabelAttributes(t){
+			//	summary: 
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+
+			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var labelList = store.getLabelAttributes(items[0]);
+				t.assertTrue(dojo.isArray(labelList));
+				t.assertEqual("title", labelList[0]);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
+			return d;
+		},
+
 		function testReadAPI_getValue(t){
 			 //	summary: 
 			 //		Simple test of the getValue API

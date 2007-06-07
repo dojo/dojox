@@ -235,6 +235,53 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			return d; //Object
 
 		},
+		function testReadAPI_getLabel(t){
+			//	summary: 
+			//		Simple test of the getLabel function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabel function against a store set that has a label defined.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var label = opmlStore.getLabel(items[0]);
+				t.assertTrue(label !== null);
+				t.assertEqual("Asia", label);
+				d.callback(true);
+			}
+			opmlStore.fetch({ 	query: {text: "Asia"}, 
+						   		onComplete: onComplete, 
+						   		onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+						   	});
+			return d;
+		},
+		function testReadAPI_getLabelAttributes(t){
+			//	summary: 
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var labelList = opmlStore.getLabelAttributes(items[0]);
+				t.assertTrue(dojo.isArray(labelList));
+				t.assertEqual("text", labelList[0]);
+				d.callback(true);
+			}
+			opmlStore.fetch({ 	query: {text: "Asia"}, 
+							   	onComplete: onComplete, 
+							   	onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+			return d;
+		},
+
 		function testReadAPI_getValue(t){
 			//	summary: 
 			//		Simple test of the getValue function of the store.

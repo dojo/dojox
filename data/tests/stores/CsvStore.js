@@ -220,6 +220,57 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			return d; //Object
 
 		},
+		
+		function testReadAPI_getLabel(t){
+			//	summary: 
+			//		Simple test of the getLabel function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabel function against a store set that has a label defined.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			args.label = "Title";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var label = csvStore.getLabel(items[0]);
+				t.assertTrue(label !== null);
+				console.log("Got label: " + label);
+				t.assertEqual("The Sequel to \"Dances With Wolves.\"", label);
+				d.callback(true);
+			}
+			csvStore.fetch({ 	query: {Title: "*Sequel*"}, 
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
+							});
+			return d;
+		},
+		function testReadAPI_getLabelAttributes(t){
+			//	summary: 
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+
+			 var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			 args.label = "Title";
+			 var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var labelList = csvStore.getLabelAttributes(items[0]);
+				t.assertTrue(dojo.isArray(labelList));
+				t.assertEqual("Title", labelList[0]);
+				d.callback(true);
+			}
+			csvStore.fetch({ 	query: {Title: "*Sequel*"}, 
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
+							});
+			return d;
+		},
+
 		function testReadAPI_getValue(t){
 			//	summary: 
 			//		Simple test of the getValue function of the store.

@@ -225,6 +225,22 @@ dojo.declare("dojox.data.OpmlStore",
 		//			then loadItem() need not do any work at all and will not even invoke the callback handlers.
 	},
 
+	getLabel: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Read.getLabel()
+		if(this.isItem(item)){
+			//Reasonable OpmlStore label is the 'text' attribute.
+			return this.getValue(item,"text"); //String
+		}
+		return undefined; //undefined
+	},
+
+	getLabelAttributes: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Read.getLabelAttributes()
+		return ["text"]; //array
+	},
+
 	// The dojo.data.api.Read.fetch() function is implemented as
 	// a mixin from dojo.data.util.simpleFetch.
 	// That mixin requires us to define _fetchItems().

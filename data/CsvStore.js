@@ -9,6 +9,7 @@ dojo.declare("dojox.data.CsvStore",
 		// summary: initializer
 		// keywordParameters: {url: String}
 		// keywordParameters: {data: String}
+		// keywordParameters: {label: String} The column label for the column to use for the label returned by getLabel.
 		
 		this._attributes = [];			// e.g. ["Title", "Year", "Producer"]
 		this._attributeIndexes = {};	// e.g. {Title: 0, Year: 1, Producer: 2}
@@ -17,6 +18,7 @@ dojo.declare("dojox.data.CsvStore",
 		this._loadFinished = false;
 		this._csvFileUrl = keywordParameters.url;
 		this._csvData = keywordParameters.data;
+		this._labelAttr = keywordParameters.label;
 		this._storeProp = "_csvStore";	// Property name for the store reference on every item.
 		this._idProp = "_csvId"; 		// Property name for the Item Id on every item.
 		this._features = {	'dojo.data.api.Read': true,
@@ -204,6 +206,25 @@ dojo.declare("dojox.data.CsvStore",
 		//		See dojo.data.api.Read.getFeatures()
 		return this._features; //Object
 	},
+
+	getLabel: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Read.getLabel()
+		if(this._labelAttr && this.isItem(item)){
+			return this.getValue(item,this._labelAttr); //String
+		}
+		return undefined; //undefined
+	},
+
+	getLabelAttributes: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Read.getLabelAttributes()
+		if(this._labelAttr){
+			return [this._labelAttr]; //array
+		}
+		return null; //null
+	},
+
 
 	// The dojo.data.api.Read.fetch() function is implemented as
 	// a mixin from dojo.data.util.simpleFetch.

@@ -27,6 +27,7 @@ dojo.declare("dojox.data.XmlStore",
 			this._rootItem = args.rootItem;
 			this._keyAttribute = args.keyAttribute;
 			this._attributeMap = args.attributeMap;
+			this._labelAttr = args.label;
 		}
 		this._newItems = [];
 		this._deletedItems = [];
@@ -306,6 +307,27 @@ dojo.declare("dojox.data.XmlStore",
 			"dojo.data.api.Write": true
 		};
 		return features; //array
+	},
+
+	getLabel: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Read.getLabel()
+		if(this._labelAttr && this.isItem(item)){
+			var label = this.getValue(item,this._labelAttr);
+			if(label){
+				return label.toString();
+			}
+		}
+		return undefined; //undefined
+	},
+
+	getLabelAttributes: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Read.getLabelAttributes()
+		if(this._labelAttr){
+			return [this._labelAttr]; //array
+		}
+		return null; //null
 	},
 
 	_fetchItems: function(request, fetchHandler, errorHandler) {
