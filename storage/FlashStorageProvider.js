@@ -232,10 +232,5 @@ dojo.declare(
 	}
 );
 
-// register the existence of our storage providers
 dojox.storage.manager.register("dojox.storage.FlashStorageProvider",
 								new dojox.storage.FlashStorageProvider());
-
-// now that we are loaded and registered tell the storage manager to initialize
-// itself
-dojox.storage.manager.initialize();

@@ -8,6 +8,12 @@ var TestStorage = {
 	initialize: function(){
 		//console.debug("test_storage.initialize()");
 		
+		// do we even have a storage provider?
+		if(dojox.storage.manager.available == false){
+			alert("No storage provider is available on this browser");
+			return;
+		}
+		
 		// clear out old values and enable input forms
 		dojo.byId("storageNamespace").value = this.currentNamespace;
 		dojo.byId("storageNamespace").disabled = false;

@@ -1,6 +1,6 @@
 dojo.provide("dojox.storage.manager");
 dojo.require("dojo.AdapterRegistry");
-// FIXME: it's idiotic that we're not actually using an AdapterRegistry here.
+// FIXME: refactor this to use an AdapterRegistry
 
 dojox.storage.manager = new function(){
 	// summary: A singleton class in charge of the dojox.storage system
@@ -89,19 +89,16 @@ dojox.storage.manager = new function(){
 			this._initialized = true;
 			this.available = false;
 			this.currentProvider = null;
-			throw new Error("No storage provider found for this platform");
+			console.warn("No storage provider found for this platform");
+			this.loaded();
+			return;
 		}
 			
-		// create this provider and copy over it's properties
-		// so that it is available on the dojo.storage singleton
-		// rather than on the dojo.storage.SomeProvider class that
-		// was instantiated
+		// create this provider and mix in it's properties
+		// so that developers can do dojox.storage.put rather
+		// than dojox.storage.currentProvider.put, for example
 		this.currentProvider = providerToUse;
-	  	for(var i in providerToUse){
-			// FIXME: use dojo.mixin()
-	  		dojox.storage[i] = providerToUse[i];
-		}
-		dojox.storage.manager = this;
+		dojo.mixin(dojox.storage, this.currentProvider);
 		
 		// have the provider initialize itself
 		dojox.storage.initialize();
@@ -150,8 +147,9 @@ dojox.storage.manager = new function(){
 
 		// FIXME: This should REALLY not be in here, but it fixes a tricky
 		// Flash timing bug
-		if(	(this.currentProvider.getType() == "dojox.storage.browser.FlashStorageProvider") && 
-			(dojox.flash.ready == false)){
+		if(this.currentProvider != null
+			&& this.currentProvider.getType() == "dojox.storage.browser.FlashStorageProvider" 
+			&& dojox.flash.ready == false){
 			return false;
 		}else{
 			return this._initialized;

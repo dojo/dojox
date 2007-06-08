@@ -2,11 +2,11 @@ dojo.provide("dojox.storage.GearsStorageProvider");
 dojo.require("dojox.sql");
 
 if(dojo.isGears){
-
+	
 	(function(){
 		// make sure we don't define the gears provider if we're not gears
 		// enabled
-
+		
 		dojo.declare("dojox.storage.GearsStorageProvider", 
 			[ dojox.storage.Provider ],
 			function(){
@@ -213,10 +213,5 @@ if(dojo.isGears){
 		// register the existence of our storage providers
 		dojox.storage.manager.register("dojox.storage.GearsStorageProvider",
 										new dojox.storage.GearsStorageProvider());
-
-		// now that we are loaded and registered tell the storage manager to
-		// initialize itself
-		dojox.storage.manager.initialize();
-
 	})();
 }

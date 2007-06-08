@@ -278,4 +278,3 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 
 dojox.storage.manager.register("dojox.storage.WhatWGStorageProvider", 
 								new dojox.storage.WhatWGStorageProvider());
-dojox.storage.manager.initialize();
