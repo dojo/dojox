@@ -59,7 +59,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 			if(this.isValidKey(key) == false){
 				throw new Error("Invalid key given: " + key);
 			}
-			namespace  = namespace||this.DEFAULT_NAMESPACE;
+			namespace = namespace||this.DEFAULT_NAMESPACE;
 			
 			// get our full key name, which is namespace + key
 			key = this.getFullKey(key, namespace);	
@@ -107,7 +107,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 			if(this.isValidKey(key) == false){
 				throw new Error("Invalid key given: " + key);
 			}
-			namespace  = namespace||this.DEFAULT_NAMESPACE;
+			namespace = namespace||this.DEFAULT_NAMESPACE;
 			
 			// get our full key name, which is namespace + key
 			key = this.getFullKey(key, namespace);
@@ -164,7 +164,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 		},
 
 		getKeys: function(namespace){
-			namespace  = namespace||this.DEFAULT_NAMESPACE;
+			namespace = namespace||this.DEFAULT_NAMESPACE;
 			
 			if(this.isValidKey(namespace) == false){
 				throw new Error("Invalid namespace given: " + namespace);
@@ -197,7 +197,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 		},
 
 		clear: function(namespace){
-			namespace  = namespace||this.DEFAULT_NAMESPACE;
+			namespace = namespace||this.DEFAULT_NAMESPACE;
 			
 			if(this.isValidKey(namespace) == false){
 				throw new Error("Invalid namespace given: " + namespace);
@@ -223,7 +223,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 				}
 			}
 			
-			dojo.forEeach(keys, dojo.hitch(myStorage, "removeItem"));
+			dojo.forEach(keys, dojo.hitch(myStorage, "removeItem"));
 		},
 		
 		remove: function(key, namespace){
@@ -259,7 +259,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 		},
 		
 		getFullKey: function(key, namespace){
-			namespace  = namespace||this.DEFAULT_NAMESPACE;
+			namespace = namespace||this.DEFAULT_NAMESPACE;
 			
 			if(this.isValidKey(namespace) == false){
 				throw new Error("Invalid namespace given: " + namespace);

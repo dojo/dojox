@@ -222,19 +222,18 @@ var TestStorage = {
 	saveBook: function(evt){
 		this._printStatus("Loading book...");
 		
-		var d = new dojo.Deferred();
-		dojo.xhrGet({
+		var d = dojo.xhrGet({
 			url: "resources/testBook.txt",
 			handleAs: "text"
 		});
 		
-		d.addCallback(dojo.hitch(this, function(type, data, evt){
+		d.addCallback(dojo.hitch(this, function(results){
 			this._printStatus("Book loaded");
-			this._save("testBook", data);
+			this._save("testBook", results);
 		}));
 		
-		d.addErrback(dojo.hitch(this, function(type, error){ 
-			alert("Unable to load testBook.txt");
+		d.addErrback(dojo.hitch(this, function(error){ 
+			alert("Unable to load testBook.txt: " + error);
 		}));
 		
 		if(!typeof evt != "undefined" && evt != null){
@@ -248,19 +247,18 @@ var TestStorage = {
 	saveXML: function(evt){
 		this._printStatus("Loading XML...");
 		
-		var d = new dojo.Deferred();
-		dojo.xhrGet({
+		var d = dojo.xhrGet({
 			url: "resources/testXML.xml",
 			handleAs: "text"
 		});
 		
-		d.addCallback(dojo.hitch(this, function(type, data, evt){
+		d.addCallback(dojo.hitch(this, function(results){
 			this._printStatus("XML loaded");
-			this._save("testXML", data);
+			this._save("testXML", results);
 		}));
 		
-		d.addErrback(dojo.hitch(this, function(type, error){ 
-			alert("Unable to load testXML.xml");
+		d.addErrback(dojo.hitch(this, function(error){ 
+			alert("Unable to load testXML.xml: " + error);
 		}));
 		
 		if(!typeof evt != "undefined" && evt != null){
