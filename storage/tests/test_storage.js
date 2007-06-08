@@ -199,7 +199,7 @@ var TestStorage = {
 	printValueSize: function(){
 		var storageValue = dojo.byId("storageValue").value;
 		var size = 0;
-		if(storageValue != null && !dojo.lang.isUndefined(storageValue)){
+		if(storageValue != null && typeof storageValue != "undefined"){
 			size = storageValue.length;
 		}
 		
@@ -237,7 +237,7 @@ var TestStorage = {
 			alert("Unable to load testBook.txt");
 		}));
 		
-		if(!dojo.lang.isUndefined(evt) && evt != null){
+		if(!typeof evt != "undefined" && evt != null){
 			evt.preventDefault();
 			evt.stopPropagation();
 		}
@@ -263,7 +263,7 @@ var TestStorage = {
 			alert("Unable to load testXML.xml");
 		}));
 		
-		if(!dojo.lang.isUndefined(evt) && evt != null){
+		if(!typeof evt != "undefined" && evt != null){
 			evt.preventDefault();
 			evt.stopPropagation();
 		}
