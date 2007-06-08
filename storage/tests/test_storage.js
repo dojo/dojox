@@ -1,5 +1,5 @@
 dojo.require("dojox.storage");
-dojo.require("dojox.storage.Gears");
+dojo.require("dojox.storage.GearsStorageProvider");
 
 
 var TestStorage = {
@@ -41,7 +41,7 @@ var TestStorage = {
 		var buttonContainer = dojo.byId("buttonContainer");
 		var currentChild = buttonContainer.firstChild;
 		while (currentChild.nextSibling != null){
-			if (currentChild.nodeType == dojo.dom.ELEMENT_NODE){
+			if (currentChild.nodeType == 1){
 				var buttonName = currentChild.id;
 				var functionName = buttonName.match(/^(.*)Button$/)[1];
 				dojo.connect(currentChild, "onclick", this, this[functionName]);
@@ -171,7 +171,7 @@ var TestStorage = {
 			// delete this option
 			var options = directory.childNodes;
 			for(var i = 0; i < options.length; i++){
-				if(options[i].nodeType == dojo.dom.ELEMENT_NODE &&
+				if(options[i].nodeType == 1 &&
 					 options[i].value == key){
 					directory.removeChild(options[i]);
 					break;
