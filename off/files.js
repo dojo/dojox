@@ -27,15 +27,10 @@ dojox.off.files = {
 	
 	cache: function(urlOrList){ /* void */
 		// summary:
-		//	Caches a file or list of files to be
-		//	available offline. This can either
-		//	be a full URL, such as 
-		//	http://foobar.com/index.html,
-		//	or a relative URL, such as 
-		//	../index.html. This URL
-		//	is not actually cached until 
-		//	dojo.sync.synchronize() is
-		//	called.
+		//	Caches a file or list of files to be available offline. This can
+		//	either be a full URL, such as http://foobar.com/index.html,
+		//	or a relative URL, such as ../index.html. This URL
+		//	is not actually cached until dojo.sync.synchronize() is called.
 		// urlOrList: String or Array[]
 		//	A URL of a file to cache or an
 		//	Array of Strings of files to cache

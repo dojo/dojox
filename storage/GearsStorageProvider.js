@@ -71,7 +71,7 @@ if(dojo.isGears){
 					if(this.isValidKey(key) == false){
 						throw new Error("Invalid key given: " + key);
 					}
-					namespace  = namespace||this.DEFAULT_NAMESPACE;
+					namespace = namespace||this.DEFAULT_NAMESPACE;
 					
 					// serialize the value;
 					// handle strings differently so they have better performance
@@ -151,11 +151,10 @@ if(dojo.isGears){
 				},
 
 				getKeys: function(namespace){
-					namespace  = namespace||this.DEFAULT_NAMESPACE;
-					
 					if(this.isValidKey(namespace) == false){
 						throw new Error("Invalid namespace given: " + namespace);
 					}
+					namespace = namespace||this.DEFAULT_NAMESPACE;
 					
 					dojox.sql.open();
 					var rs = dojox.sql("SELECT key FROM " + this.TABLE_NAME
@@ -167,10 +166,10 @@ if(dojo.isGears){
 				},
 
 				clear: function(namespace){
-					namespace  = namespace||this.DEFAULT_NAMESPACE;
 					if(this.isValidKey(namespace) == false){
 						throw new Error("Invalid namespace given: " + namespace);
 					}
+					namespace = namespace||this.DEFAULT_NAMESPACE;
 					
 					dojox.sql.open();
 					dojox.sql("DELETE FROM " + this.TABLE_NAME 

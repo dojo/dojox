@@ -76,6 +76,8 @@ dojox.storage.manager = new function(){
 			if(forceProvider == providerToUse.getType()){
 				// still call isAvailable for this provider, since this helps some
 				// providers internally figure out if they are available
+				// FIXME: This should be refactored since it is non-intuitive
+				// that isAvailable() would initialize some state
 				providerToUse.isAvailable();
 				break;
 			}else if(providerToUse.isAvailable()){
@@ -91,9 +93,12 @@ dojox.storage.manager = new function(){
 		}
 			
 		// create this provider and copy over it's properties
+		// so that it is available on the dojo.storage singleton
+		// rather than on the dojo.storage.SomeProvider class that
+		// was instantiated
 		this.currentProvider = providerToUse;
 	  	for(var i in providerToUse){
-			// FIXME: really? and shouldn't this be dojo.mixin()?
+			// FIXME: use dojo.mixin()
 	  		dojox.storage[i] = providerToUse[i];
 		}
 		dojox.storage.manager = this;
