@@ -1,5 +1,4 @@
 dojo.require("dojox.storage");
-dojo.require("dojox.storage.GearsStorageProvider");
 
 
 var TestStorage = {
@@ -40,8 +39,8 @@ var TestStorage = {
 		// add onclick listeners to all of our buttons
 		var buttonContainer = dojo.byId("buttonContainer");
 		var currentChild = buttonContainer.firstChild;
-		while (currentChild.nextSibling != null){
-			if (currentChild.nodeType == 1){
+		while(currentChild.nextSibling != null){
+			if(currentChild.nodeType == 1){
 				var buttonName = currentChild.id;
 				var functionName = buttonName.match(/^(.*)Button$/)[1];
 				dojo.connect(currentChild, "onclick", this, this[functionName]);
@@ -412,7 +411,7 @@ var TestStorage = {
 		status.innerHTML = message;
 		
 		top.appendChild(status);
-		dojo.fadeOut({nodes: status, duration: 2000}).play();
+		dojo.fadeOut({node: status, duration: 2000}).play();
 	}
 };
 
