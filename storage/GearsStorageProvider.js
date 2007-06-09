@@ -80,7 +80,6 @@ if(dojo.isGears){
 					}else{
 						value = dojo.toJson(value);
 					}
-					// console.debug(value);
 					
 					// try to store the value	
 					try{
