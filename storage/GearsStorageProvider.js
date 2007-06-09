@@ -93,7 +93,7 @@ if(dojo.isGears){
 						dojox.sql.close();
 					}catch(e){
 						// indicate we failed
-						// console.debug(this.FAILED, key, e);
+						//console.debug(this.FAILED, key, e);
 						resultsHandler(this.FAILED, key, e.toString());
 						return;
 					}
@@ -106,7 +106,6 @@ if(dojo.isGears){
 						throw new Error("Invalid key given: " + key);
 					}
 					namespace = namespace||this.DEFAULT_NAMESPACE;
-					// console.debug(key, namespace);
 					
 					// try to find this key in the database
 					dojox.sql.open();
@@ -150,10 +149,10 @@ if(dojo.isGears){
 				},
 
 				getKeys: function(namespace){
+					namespace = namespace||this.DEFAULT_NAMESPACE;
 					if(this.isValidKey(namespace) == false){
 						throw new Error("Invalid namespace given: " + namespace);
 					}
-					namespace = namespace||this.DEFAULT_NAMESPACE;
 					
 					dojox.sql.open();
 					var rs = dojox.sql("SELECT key FROM " + this.TABLE_NAME
@@ -161,7 +160,12 @@ if(dojo.isGears){
 										namespace);
 					dojox.sql.close();
 					
-					return [].concat(rs);
+					var results = [];
+					for(var i = 0; i < rs.length; i++){
+						results.push(rs[i].key);
+					}
+					
+					return results;
 				},
 
 				clear: function(namespace){

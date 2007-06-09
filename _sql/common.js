@@ -51,9 +51,7 @@ dojox.sql = function(){
 	// 'args' now just has the SQL parameters
 
 	// get the Gears Database object
-	if(!dojox.sql.db){
-		dojox.sql.db = google.gears.factory.create("beta.database", "1.0");
-	}
+	dojox.sql._initDb();
 
 	// print out debug SQL output if the developer wants that
 	if(dojox.sql.debug == true){
@@ -90,19 +88,21 @@ if(typeof dojox.sql.debug == "undefined"){
 }
 
 dojox.sql.open = function(dbName){
-	if(!dojox.sql.db){ // FIXME: factor out into function call
-		dojox.sql.db = google.gears.factory.create('beta.database', '1.0');
-	}
+	dojox.sql._initDb();
 
 	dojox.sql.db.open(dbName||dojox.sql.dbName);
 }
 
 dojox.sql.close = function(dbName){
-	if(!dojox.sql.db){ // FIXME: factor out into function call
-		dojox.sql.db = google.gears.factory.create('beta.database', '1.0');
-	}
+	dojox.sql._initDb();
 
 	dojox.sql.db.close(dbName||dojox.sql.dbName);
+}
+
+dojox.sql._initDb = function(){
+	if(!dojox.sql.db){
+		dojox.sql.db = google.gears.factory.create('beta.database', '1.0');
+	}
 }
 
 dojox.sql._printDebugSQL = function(sql, args){
@@ -117,6 +117,34 @@ dojox.sql._printDebugSQL = function(sql, args){
 	msg += ")";
 	
 	console.debug(msg);
+}
+
+dojox.sql._normalizeResults = function(rs){
+	var results = [];
+	if(!rs){ return results; }
+	
+	while(rs.isValidRow() == true){
+		var row = {};
+		
+		for(var i = 0; i < rs.fieldCount(); i++){
+			var fieldName = rs.fieldName(i);
+			var fieldValue = rs.field(i);
+			// FIXME: POTENTIAL BUG: If field name starts with a number this
+			// will be misinterpreted as an array position instead of a property
+			// name; I don't want to put a regular expression test in here
+			// because I'm afraid it will seriously degrade performance for the 
+			// most common case, which is an ordinary property name
+			row[fieldName] = fieldValue;
+		}
+		
+		results.push(row);
+		
+		rs.next();
+	}
+	
+	rs.close();
+	
+	return results;
 }
 
 dojox.sql._needsEncrypt = function(sql){
@@ -300,32 +328,6 @@ dojox.sql._decrypt = function(resultSet, needsDecrypt, password, callback){
 	}
 	
 	dojox.sql._finishedSpawningCrypto = true;
-}
-
-dojox.sql._normalizeResults = function(rs){
-	var results = [];
-	if(!rs){ return results; }
-	
-	while(rs.isValidRow() == true){
-		var row = {};
-		
-		for(var i = 0; i < rs.fieldCount(); i++){
-			var fieldName = rs.fieldName(i);
-			var fieldValue = rs.field(i);
-			// FIXME: POTENTIAL BUG: If field name starts with a number this
-			// will be misinterpreted as an array position instead of a property
-			// name
-			row[fieldName] = fieldValue;
-		}
-		
-		results.push(row);
-		
-		rs.next();
-	}
-	
-	rs.close();
-	
-	return results;
 }
 
 dojox.sql._stripCryptoSQL = function(sql){
