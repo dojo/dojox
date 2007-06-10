@@ -91,6 +91,7 @@ dojo.mixin(dojox.off, {
 		//		Called when we go offline.
 		// description: 
 		//		This method is called when we move offline.
+		console.debug("offline");
 	},
 	
 	goOffline: function(){ /* void */
@@ -117,8 +118,7 @@ dojo.mixin(dojox.off, {
 		//		we are able to go online.
 		
 		//console.debug("goOnline");
-		if(dojox.off.sync.isSyncing == true
-			|| dojo.xoff.goingOnline == true){
+		if(dojox.off.sync.isSyncing || dojox.off.goingOnline){
 			return;
 		}
 		
@@ -189,9 +189,7 @@ dojo.mixin(dojox.off, {
 		//console.debug("dojox.off.initialize");
 		this._initializeCalled = true;
 		
-		if(this._storageLoaded == true
-			&& this._pageLoaded == true
-			&& this._initializeCalled == true){
+		if(this._storageLoaded && this._pageLoaded){
 			this._onLoad();
 		}
 	},
@@ -213,7 +211,7 @@ dojo.mixin(dojox.off, {
 		//		Offline will 'fail fast' if some core piece of data could not
 		//		be saved, automatically setting dojox.off.coreOperationFailed to
 		//		'true' and dojox.off.enabled to 'false'.
-		// status: dojo.storage.SUCCESS, dojo.storage.PENDING, dojo.storage.FAILED
+		// status: dojox.storage.SUCCESS, dojox.storage.PENDING, dojox.storage.FAILED
 		//		Whether the save succeeded, whether it is pending based on a UI
 		//		dialog asking the user for permission, or whether it failed.
 		// key: String
@@ -353,13 +351,12 @@ dojo.mixin(dojox.off, {
 			this._startNetworkThread();
 
 			// try to go online
-			var self = this;
-			this.goOnline(function(){
+			this.goOnline(dojo.hitch(this, function(){
 				// indicate we are ready to be used
-				for(var i = 0; i < self._onLoadListeners.length; i++){
-					self._onLoadListeners[i]();
+				for(var i = 0; i < this._onLoadListeners.length; i++){
+					this._onLoadListeners[i]();
 				}
-			});
+			}));
 		}else{ // we are disabled or a core operation failed
 			console.debug("this.coreOperationFailed="+this.coreOperationFailed);
 			if(this.coreOperationFailed == true){
@@ -373,32 +370,30 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_onPageLoad: function(){
-		//console.debug("dojox.off._onPageLoad");
+		console.debug("dojox.off._onPageLoad");
 		this._pageLoaded = true;
 		
-		if(this._pageLoaded == true
-			&& this._storageLoaded == true
-			&& this._initializeCalled == true){
-			this._onLoad();		
+		// console.debug(this._initializeCalled);
+		if(this._storageLoaded && this._initializeCalled){
+			this._onLoad();
 		}
 	},
 	
 	_onStorageLoad: function(){
-		//console.debug("dojox.off._onStorageLoad");
+		console.debug("dojox.off._onStorageLoad");
 		this._storageLoaded = true;
 		
 		// were we able to initialize storage? if
 		// not, then this is a core operation, and
 		// let's indicate we will need to fail fast
-		if(dojox.storage.initialized == false){
+		if(!dojox.storage.manager._initialized){
 			console.debug("failed initialization!");
 			this.coreOperationFailed = true;
 			this.enabled = false;
 		}
 		
-		if(this._pageLoaded == true
-			&& this._storageLoaded == true
-			&& this._initializeCalled == true){
+		// console.debug(this._initializeCalled);
+		if(this._pageLoaded && this._initializeCalled){
 			this._onLoad();		
 		}
 	},
@@ -419,72 +414,68 @@ dojo.mixin(dojox.off, {
 		//		whether the site is available or not and is boolean. If this
 		//		function is not present we call dojox.off.onOnline instead if we
 		//		are able to go online.
-		var self = this;
-		var bindArgs = {
-			url:	 dojox.off._getAvailabilityURL(),
-			sync:		false,
-			mimetype:	"text/plain",
-			error:		function(type, errObj){
-				//console.debug("_isSiteAvailable.error, type="+type+", errObj="+errObj.message);
-				self.goingOnline = false;
-				self.isOnline = false;
+	
+		var args = {
+			url:		dojox.off._getAvailabilityURL(),
+			// sync:		false,
+			handleAs:	"text/plain",
+			error:		dojo.hitch(this, function(type, errObj){
+				this.goingOnline = false;
+				this.isOnline = false;
 				if(finishedCallback){
 					finishedCallback(false);
 				}
-			},
-			load:		function(type, data, evt){
-				//console.debug("_isSiteAvailable.load, type="+type+", data="+data+", evt="+evt);	
-				self.goingOnline = false;
-				self.isOnline = true;
+			}),
+			load:		dojo.hitch(this, function(data){
+				console.debug("_isSiteAvailable.load, data="+data);	
+				this.goingOnline = false;
+				this.isOnline = true;
 				
 				if(finishedCallback){
 					finishedCallback(true);
-				}else if(self.onOnline){
-					self.onOnline();
+				}else if(this.onOnline){
+					this.onOnline();
 				}
-			}
+			})
 		};
-		
-		// dispatch the request
-		dojo.io.bind(bindArgs);
+		dojo.xhrGet(args);
 	},
 	
 	_startNetworkThread: function(){
-		//console.debug("startNetworkThread");
+		console.debug("startNetworkThread");
 		// kick off a thread that does periodic
 		// checks on the status of the network
 		if(this.doNetworkChecking == false){
 			return;
 		}
 		
+
 		window.setInterval(function(){
-			var bindArgs = {
-				url:	 dojox.off._getAvailabilityURL(),
+			console.debug("...");
+			var args = {
+				url:	 	dojox.off._getAvailabilityURL(),
 				sync:		false,
-				mimetype:	"text/plain",
-				error:		function(type, errObj){
-					//console.debug("dojox.off.networkThread.error, type="+type+", errObj="+errObj);
-					if(dojox.off.isOnline == true){
+				handleAs:	"text/plain",
+				error:		function(err){
+					if(dojox.off.isOnline){
 						dojox.off.isOnline = false;
 						dojox.off.onOffline();
 					}
 				},
-				load:		function(type, data, evt){
-					//console.debug("dojox.off.networkThread.load, type="+type+", data="+data+", evt="+evt);	
-					if(dojox.off.isOnline == false){
+				load:		function(data){
+					if(!dojox.off.isOnline){
 						dojox.off.isOnline = true;
 						dojox.off.onOnline();
 					}
 				}
 			};
-			
-			// dispatch the request
-			dojo.io.bind(bindArgs);
+			dojo.xhrGet(args);
+
 		}, this.NETWORK_CHECK * 1000);
 	},
 	
 	_getAvailabilityURL: function(){
-		var url = this.availabilityURL;
+		var url = this.availabilityURL.toString();
 		
 		// bust the browser's cache to make sure we are really talking to
 		// the server
@@ -542,4 +533,5 @@ dojo.mixin(dojox.off, {
 dojox.storage.manager.addOnLoad(dojo.hitch(dojox.off, "_onStorageLoad"));
 
 // wait until the page is finished loading
-dojo.connect(window, "onload", dojox.off, "_onPageLoad");
+// dojo._loaders.unshift(dojo.hitch(dojox.off, "_onPageLoad"));
+dojo.addOnLoad(dojox.off, "_onPageLoad");

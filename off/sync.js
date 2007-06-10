@@ -269,24 +269,24 @@ dojo.declare("dojox.off.sync.CommandLog", null, null,
 			try{
 				var self = this;
 				var resultsHandler = function(status, key, message){
-					if(status == dojo.storage.FAILED){
-						dojo.off.onSave(true, message, key, self.commands,
-										dojo.off.STORAGE_NAMESPACE);
+					if(status == dojox.storage.FAILED){
+						dojox.off.onSave(true, message, key, self.commands,
+										dojox.off.STORAGE_NAMESPACE);
 						if(finishedCallback){
 							finishedCallback();	
 						}
-					}else if(status == dojo.storage.SUCCESS){
+					}else if(status == dojox.storage.SUCCESS){
 						if(finishedCallback){
 							finishedCallback();
 						}
 					}
 				};
 				
-				dojo.storage.put("commandlog", this.commands, resultsHandler,
-								dojo.off.STORAGE_NAMESPACE);
+				dojox.storage.put("commandlog", this.commands, resultsHandler,
+								dojox.off.STORAGE_NAMESPACE);
 			}catch(exp){
-				dojo.off.onSave(true, exp.toString(), "commandlog", 
-								this.commands, dojo.off.STORAGE_NAMESPACE);
+				dojox.off.onSave(true, exp.toString(), "commandlog", 
+								this.commands, dojox.off.STORAGE_NAMESPACE);
 			}
 		},
 		
@@ -298,7 +298,7 @@ dojo.declare("dojox.off.sync.CommandLog", null, null,
 
 			//dojo.debug("dojox.off.sync.load");
 			
-			var commands = dojo.storage.get("commandlog", dojo.off.STORAGE_NAMESPACE);
+			var commands = dojox.storage.get("commandlog", dojox.off.STORAGE_NAMESPACE);
 			
 			if(commands == null || typeof commands == "undefined"){
 				commands = new Array();
@@ -416,8 +416,8 @@ dojo.mixin(dojox.off.sync, {
 
 		//dojo.debug("synchronize");
 		if(this.isSyncing == true
-			|| dojo.off.goingOnline == true
-			|| dojo.off.isOnline == false){
+			|| dojox.off.goingOnline == true
+			|| dojox.off.isOnline == false){
 			return;
 		}
 	
@@ -438,8 +438,8 @@ dojo.mixin(dojox.off.sync, {
 		}
 		
 		this.cancelled = true;
-		if(dojo.off.files.refreshing == true){
-			dojo.off.files.abortRefresh();
+		if(dojox.off.files.refreshing == true){
+			dojox.off.files.abortRefresh();
 		}
 		
 		if(this.onCancel){
@@ -471,7 +471,7 @@ dojo.mixin(dojox.off.sync, {
 			this.onRefreshUI();
 		}
 		
-		dojo.off.files.refresh(dojo.hitch(this, function(error, errorMessages){
+		dojox.off.files.refresh(dojo.hitch(this, function(error, errorMessages){
 			if(error == true){
 				this.error = true;
 				this.successful = false;

@@ -1,4 +1,6 @@
 dojo.provide("dojox.storage.GearsStorageProvider");
+dojo.require("dojox.storage.Provider");
+dojo.require("dojox.storage.manager");
 dojo.require("dojox.sql");
 
 if(dojo.isGears){
@@ -32,6 +34,7 @@ if(dojo.isGears){
 				_available: null,
 				
 				initialize: function(){
+					// console.debug("dojox.storage.GearsStorageProvider.initialize");
 					if(djConfig["disableGearsStorage"] == true){
 						return;
 					}
@@ -50,7 +53,7 @@ if(dojo.isGears){
 									+ " (namespace, key)");
 						dojox.sql.close();
 					}catch(e){
-						console.debug("dojox.storage.Gears.initialize:", e);
+						console.debug("dojox.storage.GearsStorageProvider.initialize:", e);
 						
 						this.initialized = false; // we were unable to initialize
 						dojox.storage.manager.loaded();
@@ -216,5 +219,7 @@ if(dojo.isGears){
 		// register the existence of our storage providers
 		dojox.storage.manager.register("dojox.storage.GearsStorageProvider",
 										new dojox.storage.GearsStorageProvider());
+	
+		dojox.storage.manager.initialize();
 	})();
 }

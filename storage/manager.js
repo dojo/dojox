@@ -60,7 +60,7 @@ dojox.storage.manager = new function(){
 		// summary:
 		//		Autodetects the best possible persistent storage provider
 		//		available on this platform. 
-		if(this._initialized == true){ // already finished
+		if(this._initialized){ // already finished
 			return;
 		}
 
@@ -125,8 +125,8 @@ dojox.storage.manager = new function(){
 		//		A function to call when Dojo Offline is ready to go
 		this._onLoadListeners.push(func);
 		
-		if(this.isInitialized() == true){
-			this.fireLoaded();
+		if(this.isInitialized()){
+			this._fireLoaded();
 		}
 	};
 	
@@ -202,13 +202,15 @@ dojox.storage.manager = new function(){
 
 		// FIXME: we should just provide a Deferred for this. That way you
 		// don't care when this happens or has happened. Deferreds are in Base
-		this.fireLoaded();
+		this._fireLoaded();
 	};
 	
-	this.fireLoaded = function(){
-		for(var i = 0; i < this._onLoadListeners.length; i++){
-			this._onLoadListeners[i]();
-		}
+	this._fireLoaded = function(){
+		dojo.forEach(this._onLoadListeners, function(i){ 
+			try{ 
+				i(); 
+			}catch(e){ console.debug(e); } 
+		});
 	};
 	
 	this.getResourceList = function(){
