@@ -417,7 +417,6 @@ dojo.mixin(dojox.off, {
 	
 		var args = {
 			url:		dojox.off._getAvailabilityURL(),
-			// sync:		false,
 			handleAs:	"text/plain",
 			error:		dojo.hitch(this, function(type, errObj){
 				this.goingOnline = false;
@@ -517,7 +516,7 @@ dojo.mixin(dojox.off, {
 		
 		// in src/loader.js, in the function 
 		// dojo.hostenv.loadUri, we added code to capture
-		// any uris that fwere loaded for dojo packages
+		// any uris that were loaded for dojo packages
 		// with calls to dojo.require()
 		// so we can add them to our list of captured
 		// files here
