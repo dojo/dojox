@@ -196,13 +196,6 @@ dojo.declare("dojox.storage.Provider",
 			console.warn("dojox.storage.hideSettingsUI not implemented");
 		},
 		
-		getType: function(){ /*String*/
-			// summary:
-			//		The provider name as a string, such as
-			//		"dojox.storage.FlashStorageProvider". 
-			console.warn("dojox.storage.getType not implemented");
-		},
-		
 		isValidKey: function(/*string*/ keyName){ /*Boolean*/
 			// summary:
 			//		Subclasses can call this to ensure that the key given is valid

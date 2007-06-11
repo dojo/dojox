@@ -187,10 +187,6 @@ dojo.declare(
 			}
 		},
 		
-		getType: function(){
-			return "dojox.storage.FlashStorageProvider";
-		},
-		
 		getResourceList: function(){ /* Array[] */
 			var swfloc6 = dojo.moduleUrl("dojox", "storage/Storage_version6.swf").toString();
 			var swfloc8 = dojo.moduleUrl("dojox", "storage/Storage_version8.swf").toString();

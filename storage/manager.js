@@ -73,7 +73,7 @@ dojox.storage.manager = new function(){
 		var providerToUse;
 		for(var i = 0; i < this._providers.length; i++){
 			providerToUse = this._providers[i];
-			if(forceProvider == providerToUse.getType()){
+			if(forceProvider == providerToUse.declaredClass){
 				// still call isAvailable for this provider, since this helps some
 				// providers internally figure out if they are available
 				// FIXME: This should be refactored since it is non-intuitive
@@ -148,7 +148,7 @@ dojox.storage.manager = new function(){
 		// FIXME: This should REALLY not be in here, but it fixes a tricky
 		// Flash timing bug
 		if(this.currentProvider != null
-			&& this.currentProvider.getType() == "dojox.storage.browser.FlashStorageProvider" 
+			&& this.currentProvider.declaredClass == "dojox.storage.browser.FlashStorageProvider" 
 			&& dojox.flash.ready == false){
 			return false;
 		}else{

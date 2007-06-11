@@ -203,15 +203,11 @@ if(dojo.isGears){
 				hasSettingsUI: function(){ return false; },
 				
 				showSettingsUI: function(){
-					throw new Error(this.getType() + " does not support a storage settings user-interface");
+					throw new Error(this.declaredClass + " does not support a storage settings user-interface");
 				},
 				
 				hideSettingsUI: function(){
-					throw new Error(this.getType() + " does not support a storage settings user-interface");
-				},
-				
-				getType: function(){
-					return "dojox.storage.GearsStorageProvider";
+					throw new Error(this.declaredClass + " does not support a storage settings user-interface");
 				}
 			}
 		);

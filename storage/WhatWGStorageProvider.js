@@ -247,15 +247,11 @@ dojo.declare("dojox.storage.WhatWGStorageProvider",
 		},
 		
 		showSettingsUI: function(){
-			throw new Error(this.getType() + " does not support a storage settings user-interface");
+			throw new Error(this.declaredClass + " does not support a storage settings user-interface");
 		},
 		
 		hideSettingsUI: function(){
-			throw new Error(this.getType() + " does not support a storage settings user-interface");
-		},
-		
-		getType: function(){
-			return "dojox.storage.WhatWGStorageProvider";
+			throw new Error(this.declaredClass + " does not support a storage settings user-interface");
 		},
 		
 		getFullKey: function(key, namespace){
