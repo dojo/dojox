@@ -31,10 +31,9 @@
 			// print out any SQL we execute
 			dojox.sql.debug = true;
 			
-					
 			var HelloWorld = {
 				/* hello world messages to be sent */
-				_messages: new Array(),
+				_messages: [],
 				
 				initialize: function(){
 					console.debug("HelloWorld.initialize");
@@ -48,6 +47,8 @@
 					
 					// Dojo Offline and Dojo Storage are ready to be used;
 					// the page is also finished loading
+
+					// FIXME: !!! can't we just effing connect()? This hitch-on-a-slot business is LUDICROUS
 					
 					// tell us when we go offline
 					dojox.off.onOffline = dojo.hitch(this, this.onOffline);
@@ -80,7 +81,7 @@
 					// we will have to load our data from persistent storage for 
 					// the user to be able to work with since we can't 
 					// load it from the network
-					if(dojox.off.isOnline == false){
+					if(!dojox.off.isOnline){
 						this.loadOfflineData();
 					}
 					
@@ -89,8 +90,8 @@
 				},
 				
 				loadOfflineData: function(){
-					console.debug("We are already offline -- loading Hello World "
-									+ "messages from persistent storage");
+					console.debug("We are already offline -- loading Hello World",
+									"messages from persistent storage");
 					
 					// get our Hello World messages from persistent storage,
 					// creating the MESSAGES table if it doesn't exist
@@ -194,7 +195,7 @@
 					// out any old messages we have persisted into 
 					// persistent storage since they are all sent now
 					
-					this._messages = new Array();
+					this._messages = [];
 					
 					dojox.sql.open();
 					dojox.sql("DROP TABLE IF EXISTS MESSAGES");
@@ -207,15 +208,13 @@
 				},
 				
 				printMessages: function(){
-					if(this._messages.length == 0){
+					if(!this._messages.length){
 						console.debug("No Hello World messages available");
 						return;
 					}
 					
 					console.debug("The following Hello World messages are persistently stored:");
-					for(var i = 0; i < this._messages.length; i++){
-						console.debug("Hello World: " + this._messages[i]);
-					}
+					dojo.forEach(this._messages, console.debug);
 				},
 				
 				send: function(){
@@ -224,15 +223,14 @@
 					// get the text to send
 					var inputElem = dojo.byId("helloInput");
 					var message = inputElem.value;
-					if(message == null || message == ""
-						|| typeof message == "undefined"){
+					if(!message || message == "" || typeof message == "undefined"){
 						alert("Please enter a Hello World message to send");
 						return;
 					}
 					
 					// if we are online, immediately 'send' this
 					// message to a network service
-					if(dojox.off.isOnline == true){
+					if(dojox.off.isOnline){
 						this.sendMessage(message);
 						inputElem.value = "";
 						return;
