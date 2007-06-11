@@ -54,7 +54,7 @@
 					dojo.connect(dojox.off, "onOffline", this, "onOffline");
 					
 					// tell us when we go online
-					dojo.connect(dojox.off, "onOnline" this, "onOnline");
+					dojo.connect(dojox.off, "onOnline", this, "onOnline");
 					
 					// Dojo Sync helps us with syncing when we go online;
 					// we have to help it though -- we must provide a way to
@@ -71,7 +71,7 @@
 					// When we go back online, Dojo Sync will replay each of 
 					// these commands, handing them to our onCommand handler
 					// for us to handle
-					dojo.connect(dojox.off.sync.log, "onCommand" this, "onCommand");
+					dojo.connect(dojox.off.sync.log, "onCommand", this, "onCommand");
 					
 					// This is an optional function to override, but it gets
 					// called when syncing is finished. 
