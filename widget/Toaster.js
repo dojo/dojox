@@ -4,8 +4,8 @@ dojo.require("dojo.fx");
 
 dojo.require("dijit.base.Widget");
 dojo.require("dijit.base.TemplatedWidget");
-dojo.require("dijit.util.BackgroundIframe");
 dojo.require("dijit.util.place");
+dojo.require("dijit.util.popup");
 
 // This is mostly taken from Jesse Kuhnert's MessageNotifier.
 // Modified by Bryan Forbes to support topics and a variable delay.
