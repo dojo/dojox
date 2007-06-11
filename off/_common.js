@@ -84,6 +84,8 @@ dojo.mixin(dojox.off, {
 		//		default implementation is to perform a synchronization.
 		//		Override with your own implementation if you don't want the
 		//		default behavior
+		console.debug("online");
+		this.isOnline = true;
 	},
 	
 	onOffline: function(){ /* void */
@@ -91,7 +93,8 @@ dojo.mixin(dojox.off, {
 		//		Called when we go offline.
 		// description: 
 		//		This method is called when we move offline.
-		console.debug("offline");
+
+		// console.debug("offline");
 	},
 	
 	goOffline: function(){ /* void */
@@ -284,7 +287,7 @@ dojo.mixin(dojox.off, {
 		// name for the most common scenario
 		// FIXME: TEST: Make sure syncing doesn't break if dojo.js
 		// can't be found, or report an error to developer
-		dojox.off.files.cache([dojo.baseUrl + "dojo.js"]);
+		dojox.off.files.cache(dojo.moduleUrl("dojo", "dojo.js"));
 		
 		// if we are debugging, we must individually add all dojo.require()
 		// JS files to offline cache
@@ -417,7 +420,7 @@ dojo.mixin(dojox.off, {
 	
 		var args = {
 			url:		dojox.off._getAvailabilityURL(),
-			handleAs:	"text/plain",
+			handleAs:	"text",
 			error:		dojo.hitch(this, function(type, errObj){
 				this.goingOnline = false;
 				this.isOnline = false;
@@ -448,25 +451,32 @@ dojo.mixin(dojox.off, {
 			return;
 		}
 		
+		var errFunc = dojo.hitch(this, 
+			function(err){
+				if(this.isOnline){
+					this.isOnline = false;
+					this.onOffline();
+				}
+			}
+		);
+
+		var successFunc = dojo.hitch(this, 
+			function(data){
+				if(!this.isOnline){
+					this.isOnline = true;
+					this.onOnline();
+				}
+			}
+		);
 
 		window.setInterval(function(){
 			console.debug("...");
 			var args = {
 				url:	 	dojox.off._getAvailabilityURL(),
 				sync:		false,
-				handleAs:	"text/plain",
-				error:		function(err){
-					if(dojox.off.isOnline){
-						dojox.off.isOnline = false;
-						dojox.off.onOffline();
-					}
-				},
-				load:		function(data){
-					if(!dojox.off.isOnline){
-						dojox.off.isOnline = true;
-						dojox.off.onOnline();
-					}
-				}
+				handleAs:	"text",
+				error:		errFunc,
+				load:		successFunc
 			};
 			dojo.xhrGet(args);
 
@@ -500,29 +510,16 @@ dojo.mixin(dojox.off, {
 		// cache list so that this app will load while offline
 		// even when we are debugging. we want to do this in 
 		// such a way that we don't hard code them here.
-		if(djConfig.isDebug == false){
-			return;
-		}
+		if(!djConfig.isDebug){ return; }
 		
-		/*
-		// FIXME: this should encompass all of Base.
-
-		// make sure the dojo bootstrap system is available offline
-		dojox.off.files.cache(djConfig.baseRelativePath + "src/bootstrap1.js");
-		dojox.off.files.cache(djConfig.baseRelativePath + "src/loader.js");
-		// FIXME: make this more generic for non-browser host environments
-		dojox.off.files.cache(djConfig.baseRelativePath + "src/hostenv_browser.js");
-		*/
-		
-		// in src/loader.js, in the function 
-		// dojo.hostenv.loadUri, we added code to capture
-		// any uris that were loaded for dojo packages
-		// with calls to dojo.require()
-		// so we can add them to our list of captured
+		// in _base/_loader/loader.js, in the function dojo._loadUri, we added
+		// code to capture any uris that were loaded for dojo packages with
+		// calls to dojo.require() so we can add them to our list of captured
 		// files here
-		if(typeof dojo.hostenv.loadedUris != "undefined"
-			&& dojo.hostenv.loadedUris.length > 0){
-			dojox.off.files.cache(dojo.hostenv.loadedUris);
+
+		dojox.off.files.cache(dojo.moduleUrl("dojo", "_base.js"));
+		if(dojo._loadedUrls.length){
+			dojox.off.files.cache(dojo._loadedUrls);
 		}
 	}
 });

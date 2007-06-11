@@ -335,12 +335,12 @@ dojo.declare("dojox.off.sync.CommandLog", null, null,
 dojo.mixin(dojox.off.sync, {
 	// onStart: Function
 	//		An event handler that will be called when syncing has started
-	onStart: null,
+	onStart: function(){},
 	
 	// onRefreshFiles: Function
 	//		An event handler that will be called when syncing starts refreshing
 	//		our offline file cache
-	onRefreshFiles: null,
+	onRefreshFiles: function(){},
 
 	// onUpload: Function
 	//		An event handler that will be called when syncing starts uploading
@@ -351,25 +351,25 @@ dojo.mixin(dojox.off.sync, {
 	//		using the command log as its dataset for applications that have
 	//		complex, custom upload syncing requirements. This method can also
 	//		be used to update a UI on the sync progress.
-	onUpload: null,
+	onUpload: function(){},
 	
 	// onDownload: Function
 	//		An event handler that is called to download any new data that is
 	//		needed into persistent storage. Applications are required to
 	//		implement this themselves, storing the required data into
 	//		persistent local storage using Dojo Storage. 
-	onDownload: null,
+	onDownload: function(){},
 	
 	// onFinished: Function
 	//		An event handler that will be called when syncing is finished; this
 	//		will be called whether an error ocurred or not; check
 	//		dojox.off.sync.successful and dojox.off.sync.error for sync details
-	onFinished: null,
+	onFinished: function(){},
 	
 	// onCancel: Function
 	//		Called when canceling has been initiated; canceling will be
 	//		attempted, followed by a call to onFinished
-	onCancel: null,
+	onCancel: function(){},
 	
 	// isSyncing: boolean
 	//		Whether we are in the middle of a syncing session.
@@ -415,15 +415,13 @@ dojo.mixin(dojox.off.sync, {
 		// summary: Begin a synchronization session.
 
 		//dojo.debug("synchronize");
-		if(this.isSyncing == true
-			|| dojox.off.goingOnline == true
-			|| dojox.off.isOnline == false){
+		if(this.isSyncing || dojox.off.goingOnline || (!dojox.off.isOnline)){
 			return;
 		}
 	
 		this.isSyncing = true;
 		this.successful = false;
-		this.details = new Array();
+		this.details = [];
 		this.cancelled = false;
 		
 		this.start();
@@ -433,41 +431,33 @@ dojo.mixin(dojox.off.sync, {
 		// summary:
 		//	Attempts to cancel this sync session
 		
-		if(this.isSyncing == false){
-			return;
-		}
+		if(!this.isSyncing){ return; }
 		
 		this.cancelled = true;
-		if(dojox.off.files.refreshing == true){
+		if(dojox.off.files.refreshing){
 			dojox.off.files.abortRefresh();
 		}
 		
-		if(this.onCancel){
-			this.onCancel();
-		}
+		this.onCancel();
 	},
 	
 	start: function(){ /* void */
-		if(this.cancelled == true){
+		if(this.cancelled){
 			this.finished();
 			return;
 		}
-		
-		if(this.onStart){
-			this.onStart();
-		}
-		
+		this.onStart();
 		this.refreshUI();
 	},
 	
 	refreshUI: function(){ /* void */
 		//dojo.debug("refreshUI");
-		if(this.cancelled == true){
+		if(this.cancelled){
 			this.finished();
 			return;
 		}
 		
-		if(this.onRefreshUI){
+		if(this.onRefreshUI){ // FIXME: WTF?
 			this.onRefreshUI();
 		}
 		
@@ -487,14 +477,11 @@ dojo.mixin(dojox.off.sync, {
 	},
 	
 	upload: function(){ /* void */
-		if(this.cancelled == true){
+		if(this.cancelled){
 			this.finished();
 			return;
 		}
-		
-		if(this.onUpload){
-			this.onUpload();
-		}
+		this.onUpload();
 		
 		var self = this;
 		// when we are done uploading start downloading
@@ -516,9 +503,7 @@ dojo.mixin(dojox.off.sync, {
 			return;
 		}
 		
-		if(this.onDownload){
-			this.onDownload();
-		}
+		this.onDownload();
 		
 		// actually do the download -- apps override
 		// the method below with their own implementations.
@@ -564,10 +549,7 @@ dojo.mixin(dojox.off.sync, {
 		}else{
 			this.successful = false;
 		}
-		
-		if(this.onFinished){
-			this.onFinished();
-		}
+		this.onFinished();
 	},
 	
 	save: function(finishedCallback){ /* void */
