@@ -51,10 +51,10 @@
 					// FIXME: !!! can't we just effing connect()? This hitch-on-a-slot business is LUDICROUS
 					
 					// tell us when we go offline
-					dojox.off.onOffline = dojo.hitch(this, this.onOffline);
+					dojo.connect(dojox.off, "onOffline", this, "onOffline");
 					
 					// tell us when we go online
-					dojox.off.onOnline = dojo.hitch(this, this.onOnline);
+					dojo.connect(dojox.off, "onOnline" this, "onOnline");
 					
 					// Dojo Sync helps us with syncing when we go online;
 					// we have to help it though -- we must provide a way to
@@ -63,7 +63,7 @@
 					// (onCommand)
 											
 					// set up how to download our data during syncing
-					dojox.sync.onDownload = dojo.hitch(this, this.doDownload);
+					dojo.connect(dojox.off.sync, "onDownload", this, "doDownload");
 					
 					// While offline, as a user works, we create Command objects
 					// to represent what they have done while offline, adding
@@ -71,11 +71,11 @@
 					// When we go back online, Dojo Sync will replay each of 
 					// these commands, handing them to our onCommand handler
 					// for us to handle
-					dojox.sync.log.onCommand = dojo.hitch(this, this.onCommand);
+					dojo.connect(dojox.off.sync.log, "onCommand" this, "onCommand");
 					
 					// This is an optional function to override, but it gets
 					// called when syncing is finished. 
-					dojox.sync.onFinished = dojo.hitch(this, this.onFinished);
+					dojo.connect(dojox.off.sync, "onFinished", this, "onFinished");
 					
 					// did the page load with us already offline? if so, 
 					// we will have to load our data from persistent storage for 
@@ -175,7 +175,7 @@
 					
 					// now tell Dojo Sync to continue it's syncing
 					// process
-					dojox.sync.finishedDownloading();
+					dojox.off.sync.finishedDownloading();
 				},
 				
 				getDownloadData: function(){
@@ -269,7 +269,7 @@
 					// in here to be useful later on
 					
 					var command = {action: "new hello world message", data: message};
-					dojox.sync.log.add(command);
+					dojox.off.sync.log.add(command);
 					
 					alert("This message has been saved for sending when we go back online");
 				},
@@ -294,7 +294,7 @@
 						// asynchronous so we don't lock up the UI. For this reason,
 						// we have to tell Dojo Sync when to continue replaying the
 						// Command Log
-						dojox.sync.log.continueReplay();
+						dojox.off.sync.log.continueReplay();
 					}
 				}
 			}
