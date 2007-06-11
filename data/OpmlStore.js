@@ -7,13 +7,19 @@ dojo.declare("dojox.data.OpmlStore",
 	null,
 	function(/* Object */ keywordParameters){
 		// summary: initializer
-		// keywordParameters: {url: String}
+		// keywordParameters: {url: String, label: String}  Where label is optional and configures what should be used as the return from getLabel()
 		this._xmlData = null;
 		this._arrayOfTopLevelItems = [];
 		this._metadataNodes = null;
 		this._loadFinished = false;
 		this._opmlFileUrl = keywordParameters.url;
 		this._opmlData = keywordParameters.data;  // XML DOM Document
+		if(keywordParameters.label){
+			this._labelAttr = keywordParameters.label;
+		}else{
+			this._labelAttr = "text"; //Default should be the generic test attribute of the node.
+		}
+
 	},{
 	/* summary:
 	 *   The OpmlStore implements the dojo.data.api.Read API.  
@@ -229,8 +235,7 @@ dojo.declare("dojox.data.OpmlStore",
 		//	summary: 
 		//		See dojo.data.api.Read.getLabel()
 		if(this.isItem(item)){
-			//Reasonable OpmlStore label is the 'text' attribute.
-			return this.getValue(item,"text"); //String
+			return this.getValue(item,this._labelAttr); //String
 		}
 		return undefined; //undefined
 	},
@@ -238,7 +243,7 @@ dojo.declare("dojox.data.OpmlStore",
 	getLabelAttributes: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
-		return ["text"]; //array
+		return [this._labelAttr]; //array
 	},
 
 	// The dojo.data.api.Read.fetch() function is implemented as

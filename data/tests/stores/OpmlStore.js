@@ -69,6 +69,60 @@ dojox.data.tests.stores.OpmlStore.getDatasource = function(filepath){
 				opmlData += '		</body>\n';
 				opmlData += '	</opml>\n';
 				break;
+			case "stores/geography_withspeciallabel.xml":
+				var opmlData = "";
+				opmlData += '<?xml version="1.0" encoding="ISO-8859-1"?>\n';
+				opmlData += '<opml version="1.0">\n';
+				opmlData += '	<head>\n';
+				opmlData += '		<title>geography.opml</title>\n';
+				opmlData += '		<dateCreated>2006-11-10</dateCreated>\n';
+				opmlData += '		<dateModified>2006-11-13</dateModified>\n';
+				opmlData += '		<ownerName>Magellan, Ferdinand</ownerName>\n';
+				opmlData += '	</head>\n';
+				opmlData += '	<body>\n';
+				opmlData += '		<outline text="Africa" type="continent" label="Continent/Africa">\n';
+				opmlData += '			<outline text="Egypt" type="country" label="Country/Egypt"/>\n';
+				opmlData += '			<outline text="Kenya" type="country" label="Country/Kenya">\n';
+				opmlData += '				<outline text="Nairobi" type="city" label="City/Nairobi"/>\n';
+				opmlData += '				<outline text="Mombasa" type="city" label="City/Mombasa"/>\n';
+				opmlData += '			</outline>\n';
+				opmlData += '			<outline text="Sudan" type="country" label="Country/Sudan">\n';
+				opmlData += '				<outline text="Khartoum" type="city" label="City/Khartoum"/>\n';
+				opmlData += '			</outline>\n';
+				opmlData += '		</outline>\n';
+				opmlData += '		<outline text="Asia" type="continent" label="Continent/Asia">\n';
+				opmlData += '			<outline text="China" type="country" label="Country/China"/>\n';
+				opmlData += '			<outline text="India" type="country" label="Country/India"/>\n';
+				opmlData += '			<outline text="Russia" type="country" label="Country/Russia"/>\n';
+				opmlData += '			<outline text="Mongolia" type="country" label="Country/Mongolia"/>\n';
+				opmlData += '		</outline>\n';
+				opmlData += '		<outline text="Australia" type="continent" population="21 million" label="Continent/Australia">\n';
+				opmlData += '			<outline text="Australia" type="country" population="21 million" label="Country/Australia"/>\n';
+				opmlData += '		</outline>\n';
+				opmlData += '		<outline text="Europe" type="continent" label="Contintent/Europe">\n';
+				opmlData += '			<outline text="Germany" type="country" label="Country/Germany"/>\n';
+				opmlData += '			<outline text="France" type="country"  label="Country/France"/>\n';
+				opmlData += '			<outline text="Spain" type="country"   label="Country/Spain"/>\n';
+				opmlData += '			<outline text="Italy" type="country"   label="Country/Italy"/>\n';
+				opmlData += '		</outline>\n';
+				opmlData += '		<outline text="North America" type="continent" label="Continent/North America">\n';
+				opmlData += '			<outline text="Mexico" type="country" population="108 million" area="1,972,550 sq km" label="Country/Mexico">\n';
+				opmlData += '				<outline text="Mexico City" type="city" population="19 million" timezone="-6 UTC" label="City/Mexico City"/>\n';
+				opmlData += '				<outline text="Guadalajara" type="city" population="4 million" timezone="-6 UTC"  label="City/Guadalajara"/>\n';
+				opmlData += '			</outline>\n';
+				opmlData += '			<outline text="Canada" type="country" population="33 million" area="9,984,670 sq km" label="Country/Canada">\n';
+				opmlData += '				<outline text="Ottawa" type="city" population="0.9 million" timezone="-5 UTC"    label="City/Ottawa"/>\n';
+				opmlData += '				<outline text="Toronto" type="city" population="2.5 million" timezone="-5 UTC"   label="City/Toronto"/>\n';
+				opmlData += '			</outline>\n';
+				opmlData += '			<outline text="United States of America" type="country" label="Country/United States of America"/>\n';
+				opmlData += '		</outline>\n';
+				opmlData += '		<outline text="South America" type="continent" label="Continent/South America">\n';
+				opmlData += '			<outline text="Brazil" type="country" population="186 million" label="Country/Brazil"/>\n';
+				opmlData += '			<outline text="Argentina" type="country" population="40 million" label="Country/Argentina"/>\n';
+				opmlData += '		</outline>\n';
+				opmlData += '	</body>\n';
+				opmlData += '</opml>\n';
+				break;
 		}
 		dataSource.data = opmlData;
 	}
@@ -273,6 +327,55 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 				var labelList = opmlStore.getLabelAttributes(items[0]);
 				t.assertTrue(dojo.isArray(labelList));
 				t.assertEqual("text", labelList[0]);
+				d.callback(true);
+			}
+			opmlStore.fetch({ 	query: {text: "Asia"}, 
+							   	onComplete: onComplete, 
+							   	onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+			return d;
+		},
+
+		function testReadAPI_getLabel_nondefault(t){
+			//	summary: 
+			//		Simple test of the getLabel function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabel function against a store set that has a label defined.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography_withspeciallabel.xml");
+			args.label="label";
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var label = opmlStore.getLabel(items[0]);
+				t.assertTrue(label !== null);
+				t.assertEqual("Continent/Asia", label);
+				d.callback(true);
+			}
+			opmlStore.fetch({ 	query: {text: "Asia"}, 
+						   		onComplete: onComplete, 
+						   		onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+						   	});
+			return d;
+		},
+		function testReadAPI_getLabelAttributes_nondefault(t){
+			//	summary: 
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+			//	description:
+			//		Simple test of the getLabelAttributes function against a store set that has a label defined.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography_withspeciallabel.xml");
+			args.label="label";
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(items.length, 1);
+				var labelList = opmlStore.getLabelAttributes(items[0]);
+				t.assertTrue(dojo.isArray(labelList));
+				t.assertEqual("label", labelList[0]);
 				d.callback(true);
 			}
 			opmlStore.fetch({ 	query: {text: "Asia"}, 
