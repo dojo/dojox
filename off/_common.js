@@ -519,7 +519,6 @@ dojo.mixin(dojox.off, {
 		// expose a public API to get this information
 	
 		for(var i = 0; i < dojo._loadedUrls.length; i++){
-			console.debug(dojo._loadedUrls[i]);
 			dojox.off.files.cache(dojo._loadedUrls[i]);
 		}
 	}
