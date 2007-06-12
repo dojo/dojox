@@ -461,7 +461,7 @@ dojo.declare("dojox.data.CsvStore",
 				throw error;
 			});
 		}else if(this._csvData){
-			self._processData(data);
+			self._processData(self._csvData);
 			self._csvData = null;
 		} 
 	}
