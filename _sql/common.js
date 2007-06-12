@@ -30,55 +30,81 @@ dojox.sql = function(){
 	// dojox.sql("SELECT DECRYPT(SOMECOL1, SOMECOL2) FROM
 	//				FOOBAR WHERE SOMECOL3 = ?", someParam,
 	//				"somePassword", callbackFunction)
-	
-	// determine our parameters
-	var sql = null;
-	var callbackFunction = null;
-	var password = null;
+	try{	
+		// get the Gears Database object
+		dojox.sql._initDb();
+		
+		// see if we need to open the db; if programmer
+		// manually called dojox.sql.open() let them handle
+		// it; otherwise we open and close automatically on
+		// each SQL execution
+		if(!dojox.sql._dbOpen){
+			dojox.sql.open();
+			dojox.sql._autoClose = true;
+		}
+		
+		// determine our parameters
+		var sql = null;
+		var callbackFunction = null;
+		var password = null;
 
-	var args = dojo._toArray(arguments);
+		var args = dojo._toArray(arguments);
 
-	sql = args.splice(0, 1)[0];
+		sql = args.splice(0, 1)[0];
 
-	// does this SQL statement use the ENCRYPT or DECRYPT
-	// keywords? if so, extract our callbackFunction and crypto
-	// password
-	if(dojox.sql._needsEncrypt(sql) || dojox.sql._needsDecrypt(sql)){
-		callbackFunction = args.splice(args.length - 1, 1)[0];
-		password = args.splice(args.length - 1, 1)[0];
+		// does this SQL statement use the ENCRYPT or DECRYPT
+		// keywords? if so, extract our callbackFunction and crypto
+		// password
+		if(dojox.sql._needsEncrypt(sql) || dojox.sql._needsDecrypt(sql)){
+			callbackFunction = args.splice(args.length - 1, 1)[0];
+			password = args.splice(args.length - 1, 1)[0];
+		}
+
+		// 'args' now just has the SQL parameters
+
+		// print out debug SQL output if the developer wants that
+		if(dojox.sql.debug == true){
+			dojox.sql._printDebugSQL(sql, args);
+		}
+
+		// handle SQL that needs encryption/decryption differently
+		// do we have an ENCRYPT SQL statement? if so, handle that first
+		if(dojox.sql._needsEncrypt(sql)){
+			dojox.sql._execEncryptSQL(sql, password, args, callbackFunction);
+			return; // encrypted results will arrive asynchronously
+		}else if(dojox.sql._needsDecrypt(sql)){ // otherwise we have a DECRYPT statement
+			dojox.sql._execDecryptSQL(sql, password, args, callbackFunction);
+			return; // decrypted results will arrive asynchronously
+		}
+
+		// console.debug(sql);
+
+		// execute the SQL and get the results
+		var rs = dojox.sql.db.execute(sql, args);
+
+		// Gears ResultSet object's are ugly -- normalize
+		// these into something JavaScript programmers know
+		// how to work with, basically an array of 
+		// JavaScript objects where each property name is
+		// simply the field name for a column of data
+		rs = dojox.sql._normalizeResults(rs);
+		
+		if(dojox.sql._autoClose){
+			dojox.sql.close();
+		}
+		
+		return rs;
+	}catch(exp){
+		if(dojox.sql._autoClose){
+			try{ dojox.sql.close(); }catch(e){}
+		}
+		
+		if(exp.message){
+			exp = exp.message;
+		}
+		
+		throw exp;
 	}
-
-	// 'args' now just has the SQL parameters
-
-	// get the Gears Database object
-	dojox.sql._initDb();
-
-	// print out debug SQL output if the developer wants that
-	if(dojox.sql.debug == true){
-		dojox.sql._printDebugSQL(sql, args);
-	}
-
-	// handle SQL that needs encryption/decryption differently
-	// do we have an ENCRYPT SQL statement? if so, handle that first
-	if(dojox.sql._needsEncrypt(sql)){
-		dojox.sql._execEncryptSQL(sql, password, args, callbackFunction);
-		return; // encrypted results will arrive asynchronously
-	}else if(dojox.sql._needsDecrypt(sql)){ // otherwise we have a DECRYPT statement
-		dojox.sql._execDecryptSQL(sql, password, args, callbackFunction);
-		return; // decrypted results will arrive asynchronously
-	}
-
-	// console.debug(sql);
-
-	// execute the SQL and get the results
-	var rs = dojox.sql.db.execute(sql, args);
-
-	// Gears ResultSet object's are ugly -- normalize
-	// these into something JavaScript programmers know
-	// how to work with, basically an array of 
-	// JavaScript objects where each property name is
-	// simply the field name for a column of data
-	return dojox.sql._normalizeResults(rs);
 }
 
 dojox.sql.dbName = "PersistentStorage";
@@ -88,15 +114,33 @@ if(typeof dojox.sql.debug == "undefined"){
 }
 
 dojox.sql.open = function(dbName){
-	dojox.sql._initDb();
-
-	dojox.sql.db.open(dbName||dojox.sql.dbName);
+	try{
+		dojox.sql._initDb();
+		
+		dojox.sql.db.open(dbName||dojox.sql.dbName);
+		dojox.sql._dbOpen = true;
+	}catch(exp){
+		if(exp.message){
+			exp = exp.message;
+		}
+		
+		throw exp;
+	}
 }
 
 dojox.sql.close = function(dbName){
-	dojox.sql._initDb();
-
-	dojox.sql.db.close(dbName||dojox.sql.dbName);
+	try{
+		dojox.sql._initDb();
+		
+		dojox.sql.db.close(dbName||dojox.sql.dbName);
+		dojox.sql._dbOpen = false;
+	}catch(exp){
+		if(exp.message){
+			exp = exp.message;
+		}
+		
+		throw exp;
+	}
 }
 
 dojox.sql._initDb = function(){
@@ -181,6 +225,10 @@ dojox.sql._execEncryptSQL = function(sql, password, args, callbackFunction){
 		
 		// was there an error during SQL execution?
 		if(exp != null){
+			if(dojox.sql._autoClose){
+				try{ dojox.sql.close(); }catch(e){}
+			}
+			
 			callbackFunction(null, true, exp.toString());
 			return;
 		}
@@ -188,6 +236,10 @@ dojox.sql._execEncryptSQL = function(sql, password, args, callbackFunction){
 		// normalize SQL results into a JavaScript object 
 		// we can work with
 		resultSet = dojox.sql._normalizeResults(resultSet);
+		
+		if(dojox.sql._autoClose){
+			dojox.sql.close();
+		}
 				
 		// are any decryptions necessary on the result set?
 		if(dojox.sql._needsDecrypt(sql)){
@@ -237,6 +289,10 @@ dojox.sql._execDecryptSQL = function(sql, password, args, callbackFunction){
 	
 	// was there an error during SQL execution?
 	if(exp != null){
+		if(dojox.sql._autoClose){
+			try{ dojox.sql.close(); }catch(e){}
+		}
+		
 		callbackFunction(resultSet, true, exp.toString());
 		return;
 	}
@@ -244,6 +300,10 @@ dojox.sql._execDecryptSQL = function(sql, password, args, callbackFunction){
 	// normalize SQL results into a JavaScript object 
 	// we can work with
 	resultSet = dojox.sql._normalizeResults(resultSet);
+	
+	if(dojox.sql._autoClose){
+		dojox.sql.close();
+	}
 	
 	// decrypt columns that need it
 	dojox.sql._decrypt(resultSet, needsDecrypt, password, function(finalResultSet){
@@ -408,7 +468,6 @@ dojox.sql._determineDecryptedColumns = function(sql){
 				if(/\s*\w* AS (\w*)/i.test(column)){
 					column = column.match(/\s*\w* AS (\w*)/i)[1];
 				}
-				console.log(column);
 				results[column] = true;
 			});
 		}
