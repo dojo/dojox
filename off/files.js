@@ -76,7 +76,7 @@ dojox.off.files = {
 	},
 	
 	refresh: function(finishedCallback){ /* void */
-		//dojo.debug("dojox.off.files.refresh");
+		//console.debug("dojox.off.files.refresh");
 		// summary:
 		//	Refreshes our list of offline resources,
 		//	making them available offline.
@@ -91,24 +91,24 @@ dojox.off.files = {
 			// get our local server
 			var localServer = google.gears.factory.create("beta.localserver", "1.0");
 			var storeName = dojox.off.STORAGE_NAMESPACE + "_store";
-		
+			
 			// refresh everything by simply removing
 			// any older stores
 			// FIXME: Explore whether this is truly needed -
 			// workaround for versioning without using
 			// Gears ManagedResourceStore
 			localServer.removeStore(storeName);
-		
+			
 			// open/create the resource store
 			localServer.openStore(storeName);
 			var store = localServer.createStore(storeName);
 			this._store = store;
-		
+
 			// add our list of files to capture
 			var self = this;
 			this._currentFileIndex = 0;
 			this._cancelID = store.capture(this.listOfURLs, function(url, success, captureId){
-				//dojo.debug("store.capture, url="+url+", success="+success);
+				//console.debug("store.capture, url="+url+", success="+success);
 				if(success == false){
 					self._cancelID = null;
 					self.refreshing = false;
@@ -119,6 +119,7 @@ dojox.off.files = {
 				}else{
 					self._currentFileIndex++;
 				}
+				
 			
 				if(self._currentFileIndex >= self.listOfURLs.length){
 					self._cancelID = null;
@@ -128,10 +129,6 @@ dojox.off.files = {
 			});
 		}catch(e){
 			this.refreshing = false;
-	
-			if(typeof e.message != "undefined"){
-				e = e.message;
-			}
 			
 			// can't refresh files -- core operation --
 			// fail fast

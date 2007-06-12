@@ -5,7 +5,7 @@
 			
 			/* Bring in the CSS for the default 
 			   Dojo Offline UI widget */
-			@import "resources/offline-widget.css";
+			@import "../../../../dojox/off/resources/offline-widget.css";
 	    </style>
 
 	    <script type="text/javascript" 
@@ -36,9 +36,8 @@
 				_messages: [],
 				
 				initialize: function(){
-					console.debug("HelloWorld.initialize");
+					//console.debug("HelloWorld.initialize");
 					
-					dojox.sql.open();
 					dojox.sql("CREATE TABLE IF NOT EXISTS MESSAGES ("
 								+ "id INTEGER PRIMARY KEY AUTOINCREMENT, "
 								+ "data TEXT NOT NULL "
@@ -96,14 +95,12 @@
 					// get our Hello World messages from persistent storage,
 					// creating the MESSAGES table if it doesn't exist
 					// yet
-					dojox.sql.open();
 					dojox.sql("CREATE TABLE IF NOT EXISTS MESSAGES ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT, "
 									+ "data TEXT NOT NULL "
 									+ ")"
 								);
 					this._messages = dojox.sql("SELECT * FROM MESSAGES");
-					dojox.sql.close();
 				},
 				
 				onOffline: function(){
@@ -145,8 +142,6 @@
 				},
 				
 				doDownload: function(){
-					console.debug("HelloWorld.doDownload");
-					
 					// this method is called during the syncing process;
 					// in it, we should get the data we need for offline
 					// use by calling a network service of some kind
@@ -157,7 +152,6 @@
 					
 					// persist this fake data into our persistent storage
 					try{
-						dojox.sql.open();
 						dojox.sql("DROP TABLE IF EXISTS MESSAGES");
 						dojox.sql("CREATE TABLE MESSAGES ("
 									+ "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -167,10 +161,8 @@
 						for(var i = 0; i < this._messages.length; i++){
 							dojox.sql("INSERT INTO MESSAGES (data) VALUES (?)", this._messages[i]);
 						}
-						dojox.sql.close();
 					}catch(exp){
 						console.debug("Unable to locally save downloaded data: " + exp);
-						dojox.sql.close();
 					}
 					
 					// now tell Dojo Sync to continue it's syncing
@@ -197,9 +189,7 @@
 					
 					this._messages = [];
 					
-					dojox.sql.open();
 					dojox.sql("DROP TABLE IF EXISTS MESSAGES");
-					dojox.sql.close();
 					
 					// since we overrode the dojox.sync.onFinished method,
 					// we have to manually tell the Dojo Offline widget
@@ -255,9 +245,7 @@
 					// now, persist this so it is available
 					// in the future if we don't reach a network while the
 					// browser is open
-					dojox.sql.open();
 					dojox.sql("INSERT INTO MESSAGES (data) VALUES (?)", message);
-					dojox.sql.close();
 					
 					// Dojo Sync has us represent offline actions as Command
 					// objects -- these can have anything we want inside of them.

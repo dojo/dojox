@@ -264,8 +264,6 @@ dojo.declare("dojox.off.sync.CommandLog", null, null,
 			//		add(). See 'autoSave' inside this class for details on how
 			//		to override this behavior for custom applications.	
 			
-			//console.debug("dojox.off.sync.save");
-			
 			try{
 				var self = this;
 				var resultsHandler = function(status, key, message){

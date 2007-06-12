@@ -84,7 +84,7 @@ dojo.mixin(dojox.off, {
 		//		default implementation is to perform a synchronization.
 		//		Override with your own implementation if you don't want the
 		//		default behavior
-		console.debug("online");
+		//console.debug("online");
 		this.isOnline = true;
 	},
 	
@@ -94,7 +94,7 @@ dojo.mixin(dojox.off, {
 		// description: 
 		//		This method is called when we move offline.
 
-		// console.debug("offline");
+		//console.debug("offline");
 	},
 	
 	goOffline: function(){ /* void */
@@ -198,6 +198,7 @@ dojo.mixin(dojox.off, {
 	},
 	
 	onSave: function(isCoreSave, status, key, value, namespace){
+		//console.debug("onSave, isCoreSave="+isCoreSave+", status="+status+", key="+key+", value="+value);
 		// summary:
 		//		A standard function that can be registered which is called when
 		//		some piece of data is saved locally.
@@ -280,7 +281,7 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_onLoad: function(){
-		console.debug("dojox.off._onLoad");
+		//console.debug("dojox.off._onLoad");
 		// both local storage and the page are finished loading
 		
 		// cache the Dojo JavaScript -- just use the default dojo.js
@@ -309,11 +310,7 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_onOfflineCacheChecked: function(){
-		console.debug("dojox.off._onOfflineCacheChecked");
 		// this method is part of our _onLoad series of startup tasks
-		console.debug("hasOfflineCache="+this.hasOfflineCache);
-		console.debug("coreOperationFailed="+this.coreOperationFailed);
-		console.debug("enabled="+this.enabled);
 		
 		// if we have an offline cache, see if we have been added to the 
 		// list of available offline web apps yet
@@ -345,7 +342,7 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_finishStartingUp: function(){
-		console.debug("dojox.off._finishStartingUp");
+		//console.debug("dojox.off._finishStartingUp");
 		// this method is part of our _onLoad series of startup tasks
 		
 		if(this.enabled == true){
@@ -361,7 +358,6 @@ dojo.mixin(dojox.off, {
 				}
 			}));
 		}else{ // we are disabled or a core operation failed
-			console.debug("this.coreOperationFailed="+this.coreOperationFailed);
 			if(this.coreOperationFailed == true){
 				this.onCoreOperationFailed();
 			}else{
@@ -373,7 +369,7 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_onPageLoad: function(){
-		console.debug("dojox.off._onPageLoad");
+		//console.debug("dojox.off._onPageLoad");
 		this._pageLoaded = true;
 		
 		// console.debug(this._initializeCalled);
@@ -383,14 +379,13 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_onStorageLoad: function(){
-		console.debug("dojox.off._onStorageLoad");
+		//console.debug("dojox.off._onStorageLoad");
 		this._storageLoaded = true;
 		
 		// were we able to initialize storage? if
 		// not, then this is a core operation, and
 		// let's indicate we will need to fail fast
 		if(!dojox.storage.manager._initialized){
-			console.debug("failed initialization!");
 			this.coreOperationFailed = true;
 			this.enabled = false;
 		}
@@ -402,7 +397,6 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_isSiteAvailable: function(finishedCallback){
-		//console.debug("isSiteAvailable");
 		// summary:
 		//		Determines if our web application's website is available.
 		// description:
@@ -417,11 +411,11 @@ dojo.mixin(dojox.off, {
 		//		whether the site is available or not and is boolean. If this
 		//		function is not present we call dojox.off.onOnline instead if we
 		//		are able to go online.
-	
 		var args = {
 			url:		dojox.off._getAvailabilityURL(),
 			handleAs:	"text",
-			error:		dojo.hitch(this, function(type, errObj){
+			error:		dojo.hitch(this, function(err){
+				//console.debug("_isSiteAvailable.error: " + err);
 				this.goingOnline = false;
 				this.isOnline = false;
 				if(finishedCallback){
@@ -429,7 +423,7 @@ dojo.mixin(dojox.off, {
 				}
 			}),
 			load:		dojo.hitch(this, function(data){
-				console.debug("_isSiteAvailable.load, data="+data);	
+				//console.debug("_isSiteAvailable.load, data="+data);	
 				this.goingOnline = false;
 				this.isOnline = true;
 				
@@ -444,7 +438,7 @@ dojo.mixin(dojox.off, {
 	},
 	
 	_startNetworkThread: function(){
-		console.debug("startNetworkThread");
+		//console.debug("startNetworkThread");
 		// kick off a thread that does periodic
 		// checks on the status of the network
 		if(this.doNetworkChecking == false){
@@ -470,7 +464,6 @@ dojo.mixin(dojox.off, {
 		);
 
 		window.setInterval(function(){
-			console.debug("...");
 			var args = {
 				url:	 	dojox.off._getAvailabilityURL(),
 				sync:		false,

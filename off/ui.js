@@ -67,13 +67,15 @@ dojo.mixin(dojox.off.ui, {
 	//	Use in conjunction with dojox.off.ui.learnHowPath.
 	customLearnHowPath: false,
 	
-	htmlTemplatePath: dojo.moduleUrl("dojox", "off/resources/offline-widget.html"),
-	cssTemplatePath: dojo.moduleUrl("dojox", "off/resources/offline-widget.css"),
-	onlineImagePath: dojo.moduleUrl("dojox", "off/resources/greenball.png"),
-	offlineImagePath: dojo.moduleUrl("dojox", "off/resources/redball.png"),
-	rollerImagePath: dojo.moduleUrl("dojox", "off/resources/roller.gif"),
-	checkmarkImagePath: dojo.moduleUrl("dojox", "off/resources/checkmark.png"),
-	learnHowJSPath: dojo.moduleUrl("dojox", "off/resources/learnhow.js"),
+	htmlTemplatePath: dojo.moduleUrl("dojox", "off/resources/offline-widget.html").uri,
+	cssTemplatePath: dojo.moduleUrl("dojox", "off/resources/offline-widget.css").uri,
+	onlineImagePath: dojo.moduleUrl("dojox", "off/resources/greenball.png").uri,
+	offlineImagePath: dojo.moduleUrl("dojox", "off/resources/redball.png").uri,
+	rollerImagePath: dojo.moduleUrl("dojox", "off/resources/roller.gif").uri,
+	checkmarkImagePath: dojo.moduleUrl("dojox", "off/resources/checkmark.png").uri,
+	learnHowJSPath: dojo.moduleUrl("dojox", "off/resources/learnhow.js").uri,
+	
+	_initialized: false,
 	
 	onStart: function(){
 		// summary:
@@ -158,6 +160,8 @@ dojo.mixin(dojox.off.ui, {
 		//	our UI. Default behavior is to update the Offline
 		//	Widget UI and to attempt a synchronization.
 		
+		if(this._initialized == false){ return; }
+		
 		// update UI
 		this._updateNetworkIndicator();
 				
@@ -176,6 +180,8 @@ dojo.mixin(dojox.off.ui, {
 		//	When we go offline, this method is called to update
 		//	our UI. Default behavior is to update the Offline
 		//	Widget UI.
+		
+		if(this._initialized == false){ return; }
 		
 		// update UI
 		this._updateNetworkIndicator();
@@ -261,11 +267,13 @@ dojo.mixin(dojox.off.ui, {
 		//	selects 'deny', then we can not continue to function.
 		//	We 'fail fast' in this scenario so that we are in a
 		//	known state. This callback is called when this occurs.
-		alert("Application does not have permission to use Dojo Offline");
+		console.log("Application does not have permission to use Dojo Offline");
+		
+		// FIXME: TODO: Update UI based on core operation failing
 	},
 
 	_initialize: function(){
-		//dojo.debug("dojox.off.ui._initialize");
+		//console.debug("dojox.off.ui._initialize");
 		// make sure our app name is correct
 		if(this._validateAppName(this.appName) == false){
 			alert("You must set dojox.off.ui.appName; it can only contain "
@@ -306,26 +314,25 @@ dojo.mixin(dojox.off.ui, {
 	},
 	
 	_doAutoEmbed: function(){
-		//dojo.debug("dojox.off.ui._doAutoEmbed");
+		//console.debug("dojox.off.ui._doAutoEmbed");
 		// fetch our HTML for the offline widget
 		var templatePath = this.htmlTemplatePath;
-		var bindArgs = {
-			url:	 templatePath,
-			handleAs:	"text/html",
-			error:		function(type, errObj){
-				dojox.off.enabled = false;
-				alert("Error loading the Dojo Offline Widget from "
-						+ templatePath + ": " + errObj.message);
-			},
-			load:		dojo.hitch(this, this._templateLoaded)	 
-		};
 		
 		// dispatch the request
-		dojo.xhrGet(bindArgs);
+		dojo.xhrGet({
+			url:	 templatePath,
+			handleAs:	"text",
+			error:		function(err){
+				dojox.off.enabled = false;
+				alert("Error loading the Dojo Offline Widget from "
+						+ templatePath + ": " + err.message);
+			},
+			load:		dojo.hitch(this, this._templateLoaded)	 
+		});
 	},
 	
-	_templateLoaded: function(type, data, evt){
-		//dojo.debug("dojo.of.ui._templateLoaded");
+	_templateLoaded: function(data){
+		//console.debug("dojo.off.ui._templateLoaded");
 		// inline our HTML
 		var container = dojo.byId(this.autoEmbedID);
 		if(container){
@@ -340,6 +347,8 @@ dojo.mixin(dojox.off.ui, {
 		
 		// update our 'Learn How' text
 		this._initLearnHow();
+		
+		this._initialized = true;
 		
 		// check offline cache settings
 		if(dojox.off.hasOfflineCache == false){
