@@ -381,13 +381,14 @@ var TestStorage = {
 	},
 	
 	_printProviderMetadata: function(){
-		var storageType = dojox.storage.currentProvider.declaredClass;
+		var storageType = dojox.storage.manager.currentProvider.declaredClass;
 		var isSupported = dojox.storage.isAvailable();
 		var maximumSize = dojox.storage.getMaximumSize();
 		var permanent = dojox.storage.isPermanent();
 		var uiConfig = dojox.storage.hasSettingsUI();
 		var moreInfo = "";
-		if(dojox.storage.currentProvider.declaredClass == "dojox.storage.FlashStorageProvider"){
+		if(dojox.storage.manager.currentProvider.declaredClass 
+				== "dojox.storage.FlashStorageProvider"){
 			moreInfo = "Flash Comm Version " + dojo.flash.info.commVersion;
 		}
 		
