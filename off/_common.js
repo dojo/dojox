@@ -290,9 +290,8 @@ dojo.mixin(dojox.off, {
 		// can't be found, or report an error to developer
 		dojox.off.files.cache(dojo.moduleUrl("dojo", "dojo.js"));
 		
-		// if we are debugging, we must individually add all dojo.require()
-		// JS files to offline cache
-		this._cacheDebugResources();
+		// pull in the files needed by Dojo
+		this._cacheDojoResources();
 		
 		// FIXME: need to pull in the firebug lite files here!
 		// workaround or else we will get an error on page load
@@ -497,22 +496,31 @@ dojo.mixin(dojox.off, {
 		}
 	},
 	
-	_cacheDebugResources: function(){
-		// if we are debugging, we must add all of the 
-		// individual dojo.require() JS files to our offline
-		// cache list so that this app will load while offline
-		// even when we are debugging. we want to do this in 
-		// such a way that we don't hard code them here.
-		if(!djConfig.isDebug){ return; }
+	_cacheDojoResources: function(){
+		// if we are debugging, then the core Dojo bootstrap
+		// system was loaded as separate JavaScript files;
+		// add these to our offline cache list. these are
+		// loaded before the dojo.require() system exists
+		if(djConfig.isDebug){
+			dojox.off.files.cache(dojo.moduleUrl("dojo", "_base.js").uri);
+			dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/loader.js").uri);
+			dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/bootstrap.js").uri);
+			
+			// FIXME: pull in the host environment file in a more generic way
+			// for other host environments
+			dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/hostenv_browser.js").uri);
+		}
 		
-		// in _base/_loader/loader.js, in the function dojo._loadUri, we added
-		// code to capture any uris that were loaded for dojo packages with
-		// calls to dojo.require() so we can add them to our list of captured
-		// files here
-
-		dojox.off.files.cache(dojo.moduleUrl("dojo", "_base.js"));
-		if(dojo._loadedUrls.length){
-			dojox.off.files.cache(dojo._loadedUrls);
+		// add anything that was brought in with a 
+		// dojo.require() that resulted in a JavaScript
+		// URL being fetched
+		
+		// FIXME: modify dojo/_base/_loader/loader.js to
+		// expose a public API to get this information
+	
+		for(var i = 0; i < dojo._loadedUrls.length; i++){
+			console.debug(dojo._loadedUrls[i]);
+			dojox.off.files.cache(dojo._loadedUrls[i]);
 		}
 	}
 });
