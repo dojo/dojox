@@ -31,7 +31,7 @@
 			// print out any SQL we execute
 			dojox.sql.debug = true;
 			
-			var HelloWorld = {
+			var helloWorld = {
 				/* hello world messages to be sent */
 				_messages: [],
 				
@@ -290,7 +290,7 @@
 			// Wait until Dojo Offline and Dojo Storage are ready
 			// before we initialize ourselves. When this gets called the page
 			// is also finished loading.
-			dojox.off.ui.onLoad = dojo.hitch(HelloWorld, HelloWorld.initialize);
+			dojox.off.ui.onLoad = dojo.hitch(helloWorld, helloWorld.initialize);
 			
 			// tell Dojo Offline we are ready for it to initialize itself now
 			// that we have finished configuring it for our application
