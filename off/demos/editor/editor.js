@@ -1,7 +1,7 @@
 dojo.require("dijit._editor.RichText");
 dojo.require("dojo.parser");
 
-dojo.require("dojox.storage");
+dojo.require("dojox.sql");
 dojo.require("dojox.off");
 dojo.require("dojox.off.ui");
 dojo.require("dojox.off.sync");
@@ -48,6 +48,9 @@ var moxie = {
 		var directory = dojo.byId("directory");
 		dojo.connect(directory, "onchange", this, this.directoryChange);
 		dojo.connect(dojo.byId("saveButton"), "onclick", this, this.save);
+		
+		// create our database
+		this._createDb();
 		
 		// load and write out our available keys
 		this._loadKeys();
@@ -153,16 +156,8 @@ var moxie = {
 		
 		// also add it to our offline, downloaded data
 		this._documents.push({fileName: key, content: value});
-		var self = this;
-		try{
-			dojox.storage.put("documents", this._documents, function(status, key, message){
-				if(status == dojox.storage.FAILED){
-					alert("Unable to locally save your document: " + message);
-				}
-			});	
-		}catch(exp){
-			alert("Unable to locally save your document: " + exp);
-		}
+		dojox.sql("INSERT INTO DOCUMENTS (fileName, content) VALUES (?, ?)",
+						key, value);
 		
 		// update our UI
 		this._printStatus("Saved '" + key + "'");
@@ -361,8 +356,12 @@ var moxie = {
 			headers:	{ "Accept" : "text/javascript" },
 			error:		function(err){
 				//console.debug("moxie._downloadData.error, err="+err);
+				if(err.message){
+					err = err.message;
+				}
+				
 				var message = "Unable to download our documents from server: "
-								+ err.message;
+								+ err;
 				dojox.off.sync.finishedDownloading(false, message);
 			},
 			load:		function(data){
@@ -376,46 +375,37 @@ var moxie = {
 	},
 	
 	_saveDownloadedData: function(data){
-		// persist the data into Dojo Storage, with the key
-		// "documents". 'data'
-		// is a JSON structure passed to us by the server
+		// 'data' is a JSON structure passed to us by the server
 		// that is an array of object literals, where each literal
 		// has a 'fileName' entry and a 'content' entry.
-		var self = this;
-		try{
-			dojox.storage.put("documents", data, function(status, key, message){
-				//console.debug("_saveDownloadedData.resultHandler, status="+status+", key="+key+", message="+message);
-				if(status == dojox.storage.SUCCESS){
-					// update our list of available keys
-					self._documents = data;
-					self._availableKeys = new Array();
-					for(var i = 0; i < data.length; i++){
-						var fileName = data[i].fileName;
-						self._availableKeys.push(fileName);
-					}
+		this._createDb();
 					
-					dojox.off.sync.finishedDownloading(true);
-				}else if(status == dojox.storage.FAILED){
-					dojox.off.sync.finishedDownloading(false, message);
-				}
-			});	
-		}catch(exp){
-			dojox.off.sync.finishedDownloading(false, exp.toString());
-		}
+		dojo.forEach(data, function(record){
+			dojox.sql("INSERT INTO DOCUMENTS (fileName, content) VALUES (?, ?)",
+						record.fileName, record.content);
+		});
+		dojox.off.sync.finishedDownloading(true, null);
 	},
 	
 	_loadDownloadedData: function(){
-		this._availableKeys = new Array();
-		this._documents = dojox.storage.get("documents");
+		this._availableKeys = [];
+		this._documents = dojox.sql("SELECT * FROM DOCUMENTS");
 		if(this._documents == null
 			|| typeof this._documents == "undefined"){
-			this._documents = new Array();
+			this._documents = [];
 		}
 		
 		for(var i = 0; i < this._documents.length; i++){
 			var fileName = this._documents[i].fileName;
 			this._availableKeys.push(fileName);
 		}
+	},
+	
+	_createDb: function(){
+		dojox.sql("DROP TABLE DOCUMENTS");
+		dojox.sql("CREATE TABLE IF NOT EXISTS DOCUMENTS ("
+					+ "fileName		TEXT NOT NULL PRIMARY KEY UNIQUE, "
+					+ "content		TEXT NOT NULL) ");
 	}
 };
 
