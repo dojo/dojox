@@ -36,7 +36,8 @@ public class Main{
 			server.start();
 		
 			System.out.println("Moxie ready to try on port 8000.");
-			System.out.println("Go to http://localhost:8000/moxie/* to test");
+			System.out.println("Open a web browser and go to:");
+			System.out.println("http://localhost:8000/dojox/off/demos/editor/editor.html");
 		}catch(Exception e){
 			e.printStackTrace();
 			System.exit(1);
