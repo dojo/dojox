@@ -11,8 +11,8 @@ dojo.require("dojox.off.sync");
 dojo.mixin(dojox.off, {
 	// NETWORK_CHECK: int
 	//		Time in seconds on how often we should check the status of the
-	//		network with an automatic background timer. Defaults to 20.
-	NETWORK_CHECK: 20,
+	//		network with an automatic background timer. Defaults to 5.
+	NETWORK_CHECK: 5,
 	
 	// STORAGE_NAMESPACE: String
 	//		The namespace we use to save core data into Dojo Storage.
