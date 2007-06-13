@@ -202,12 +202,12 @@ dojo.declare(
 			// sets up the position of the clipping node
 			var pd = this.positionDirection;
 			if(pd.match(/^t/)){
-				style.top = scroll.top+"px";
+				style.top = scroll.y+"px";
 			}else if(pd.match(/^b/)){
-				style.top = (view.h - nodeSize.h - 2 + scroll.top)+"px";
+				style.top = (view.h - nodeSize.h - 2 + scroll.y)+"px";
 			}
 			if(pd.match(/^[tb]r-/)){
-				style.left = (view.w - nodeSize.w - 1 - scroll.left)+"px";
+				style.left = (view.w - nodeSize.w - 1 - scroll.x)+"px";
 			}else if(pd.match(/^[tb]l-/)){
 				style.left = 0 + "px";
 			}
