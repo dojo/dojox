@@ -378,6 +378,8 @@ var moxie = {
 		// 'data' is a JSON structure passed to us by the server
 		// that is an array of object literals, where each literal
 		// has a 'fileName' entry and a 'content' entry.
+		dojox.sql("DROP TABLE IF EXISTS DOCUMENTS");
+		
 		this._createDb();
 					
 		dojo.forEach(data, function(record){
@@ -402,7 +404,6 @@ var moxie = {
 	},
 	
 	_createDb: function(){
-		dojox.sql("DROP TABLE IF EXISTS DOCUMENTS");
 		dojox.sql("CREATE TABLE IF NOT EXISTS DOCUMENTS ("
 					+ "fileName		TEXT NOT NULL PRIMARY KEY UNIQUE, "
 					+ "content		TEXT NOT NULL) ");
