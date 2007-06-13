@@ -4,114 +4,19 @@ Dependencies
 ------------
 
 Moxie requires the following pieces of software to install:
-* MySQL 4.1+
-* Tomcat 5.5
-* Apache 1 or 2
-
-You must also download the following third-party JARs and place them into demos/storage/server/WEB-INF/lib. We don't distribute these with Moxie out of license concerns. To make things easier, I have bundled these on to my own personal web server in a archive file here ( http://codinginparadise.org/projects/dojo_offline/extras/moxie-depends.tar.gz ); unzip this into the WEB-INF/lib directory relative to this directory. Or, you can download them one by one:
-
-* commons-beanutils.jar and commons-lang-2.2.jar - Download both of these from the Apache Common site. These are both available under the Apache License.
-* ezmorph-1.0.jar - Download this from http://ezmorph.sourceforge.net/ . Under the Apache License 2.0.
-* json-lib-1.0b2-jdk13.jar - Download this from http://json-lib.sourceforge.net/ . Under the Apache License 2.0.
-* mysql-connector-java-5.0.4-bin.jar - Download this from http://dev.mysql.com/downloads/connector/j/3.0.html . This is under the GPL -- however, since it is dynamically brought in at runtime by the JDBC infrastructure, it might not be infectious if you redistribute it.
+* Java 1.5+ 
 
 Building & Running
 ------------------
 
-Once your build environment is setup, go to the root buildscripts/ folder and type 'ant moxie-server', which should build the Moxie server-side environment. Take the generated WAR file located in demos/offline/moxie/server/moxie.war and drop it into your Tomcat's webapps directory.
+A build.sh file is provided in this directory; it will only currently run on Unix-based machines (Mac OS X, Linux, etc.)
 
-Construct the MySQL database needed for Moxie by running:
-mysql < demos/offline/moxie/server/create-db.sql
+Running the server-side of Moxie is simple. Just type:
 
-This will create a new database, named 'moxie', with a single table, named 'DOCUMENTS'.
+java -jar moxie.jar
 
-For Apache, you must have HTTP/1.1 caching turned on. This is different for Apache 1 and Apache 2. You can find instructions on configuring Apache for this here: http://www.websiteoptimization.com/speed/tweak/cache/. Some more details on how to do this for Moxie and Dojo Offline are provided below, along with info you can copy into your Apache config files.
+from this directory, and the Moxie server-side will start running, with an embedded web-server (Jetty) and database (Derby) already setup for you. In a web-browser, go to the following URL:
 
-Make sure that the Dojo Offline SDK is available to be served by your Apache web server. For the purposes of these docs, let's assume you have placed them to be available at /dojo_offline on the webserver, and that your web server is running at http://brad.com. So to access these it would be http://brad.com/dojo_offline. Let's say the physical directory where the SDK was unzipped is ~/web/dojo_offline.
+http://localhost:8000/dojox/off/demos/editor/editor.html
 
-For Apache 1, add the following to your httpd.conf file:
-
---------------------------------------------------------
-
-# Load the modules we need for Moxie and for Dojo Offline
-
-# URL Proxying - needed for Moxie
-LoadModule proxy_module       libexec/httpd/libproxy.so
-
-# HTTP/1.1 Expires Headers - needed for Dojo Offline
-LoadModule expires_module     libexec/httpd/mod_expires.so
-
-# HTTP/1.1 Headers in general - needed for Dojo Offline
-LoadModule headers_module     libexec/httpd/mod_headers.so
-
-
-# Now add these modules
-AddModule mod_proxy.c
-AddModule mod_expires.c
-AddModule mod_headers.c
-AddModule mod_alias.c
-
-
-# For anything served from the dojo_offline directory,
-# make sure that Dojo Offline caches it by giving all
-# the files good expires headers
-<IfModule mod_alias.c>
-	<Directory "~/web/dojo_offline">
-		ExpiresActive On
-		ExpiresDefault A2592000
-		Header Set Cache-Control "max-age=2592000"
-	</Directory>
-</IfModule>
-
-# Have Tomcat be served through Apache; change
-# 8000 to the port where Tomcat is running - this
-# will serve the Moxie Java server-side portion at 
-# the URL /moxie on Apache
-ProxyPass         /moxie  http://localhost:8000/moxie
-ProxyPassReverse  /moxie  http://localhost:8000/moxie
-
-# Mac installers use the DMG format - make sure Apache
-# serves this up with the right MIME type
-AddType  application/octet-stream      .dmg
-
---------------------------------------------------------
-
-For Apache 2, add the following to your httpd.conf file:
-
---------------------------------------------------------
-
-# Load the Apache modules we need - both of these
-# are needed for Dojo Offline
-LoadModule expires_module modules/mod_expires.so
-LoadModule headers_module modules/mod_headers.so
-
-# Needed for Moxie to proxy Tomcat requests through Apache
-LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-
-# Turn on the expires header for anything served under Dojo Offline;
-# this will cause Dojo Offline's local proxy to cache all of this
-# for offline availability
-<Directory "~/web/dojo_offline">
-        ExpiresActive On
-        ExpiresDefault "access plus 1 month"
-</Directory>
-
-# Have Tomcat be served through Apache - change port 8081
-# to where the Tomcat port is opened
-ProxyPass /moxie/ http://localhost:8081/moxie/
-ProxyPassReverse /moxie/ http://localhost:8081/moxie/
-
-# Mac installers use the DMG format - make sure Apache
-# serves this up with the right MIME type
-AddType  application/octet-stream      .dmg
-
---------------------------------------------------------
-
-Restart Apache.
-
-Make sure the MySQL daemon is running, then restart Tomcat with the moxie.war file present. 
-
-Navigate to http://localhost/moxie/* - This URL will serve up the list of documents that Moxie currently has saved -- there should be none, so this page should serve up blank -- make sure you don't get an error.
-
-Now go to http://localhost/dojo_offline/demos/offline/moxie/editor.html . This will load up Moxie. Now you can begin to play with Moxie and try it out for yourself. Feel free to use all of this code as a template for creating your own offline applications. 
+to run Moxie against your local server.
