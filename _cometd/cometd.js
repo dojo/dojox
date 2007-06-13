@@ -48,6 +48,11 @@ dojox.cometd = new function(){
 	}
 
 	this.init = function(props, root, bargs){
+		if(dojo.isString(props)){
+			var oldRoot = root;
+			root = props;
+			props = oldRoot;
+		}
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
 		props = props||{};
@@ -265,6 +270,15 @@ dojox.cometd = new function(){
 		// funcName:
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
+
+		if((useLocalTopics !== true)||(useLocalTopcis !== false)){
+			// similar to: function(channel, objOrFunc, funcName, useLocalTopics);
+			var ofn = funcName;
+			funcName = objOrFunc;
+			objOrFunc = useLocalTopics;
+			useLocalTopics = ofn;
+		}
+
 		if(!this.currentTransport){
 			this.backlog.push(["subscribe", channel, useLocalTopics, objOrFunc, funcName]);
 			return;
@@ -630,13 +644,11 @@ dojox.cometd.callbackPollTransport = new function(){
 		// create a <script> element to generate the request
 		dojo.io.script.get({
 			load: dojo.hitch(this, function(data){
-				console.debug("blah", data);
 				dojox.cometd.deliver(data);
 				this.connected = false;
 				this.tunnelCollapse();
 			}),
 			error: function(){ 
-				console.debug("blah", arguments);
 				console.debug("tunnel opening failed"); 
 			},
 			url: (url||dojox.cometd.url),
