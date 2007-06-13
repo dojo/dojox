@@ -402,7 +402,7 @@ var moxie = {
 	},
 	
 	_createDb: function(){
-		dojox.sql("DROP TABLE DOCUMENTS");
+		dojox.sql("DROP TABLE IF EXISTS DOCUMENTS");
 		dojox.sql("CREATE TABLE IF NOT EXISTS DOCUMENTS ("
 					+ "fileName		TEXT NOT NULL PRIMARY KEY UNIQUE, "
 					+ "content		TEXT NOT NULL) ");

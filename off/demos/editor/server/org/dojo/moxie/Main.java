@@ -19,18 +19,18 @@ public class Main{
 	public static void main(String args[]){
 		try{
 			// start our embedded web server, Jetty
-			Server server = new Server(8000);    
-			Context root = new Context(server,"/moxie",Context.SESSIONS);
-			Servlet moxieServlet = new MoxieServlet("jdbc:derby:moxie;create=true", null, null,
-													"org.apache.derby.jdbc.EmbeddedDriver");
-			root.addServlet(new ServletHolder(moxieServlet), "/*");
+			Server server = new Server(8000);   
 			
 			// serve up our Moxie/Dojo files
 			ResourceHandler resourceHandler = new ResourceHandler();
 			resourceHandler.setResourceBase("../../../../..");
-			HandlerList handlers = new HandlerList();
-			handlers.setHandlers(new Handler[] {resourceHandler, new DefaultHandler()} );
-			server.setHandler(handlers);
+			server.addHandler(resourceHandler);
+			
+			// add the Moxie servlet
+			Context moxieRoot = new Context(server, "/moxie", Context.SESSIONS);
+			Servlet moxieServlet = new MoxieServlet("jdbc:derby:moxie;create=true", null, null,
+													"org.apache.derby.jdbc.EmbeddedDriver");
+			moxieRoot.addServlet(new ServletHolder(moxieServlet), "/*");
 			
 			System.out.println("Starting web server on port 8000...");
 			server.start();
