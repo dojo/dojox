@@ -121,6 +121,7 @@ dojo.mixin(dojox.off, {
 		//		we are able to go online.
 		
 		//console.debug("goOnline");
+		
 		if(dojox.off.sync.isSyncing || dojox.off.goingOnline){
 			return;
 		}
@@ -187,7 +188,6 @@ dojo.mixin(dojox.off, {
 		//		provided to prevent this scenario, to slightly 'slow down' Dojo
 		//		Offline so it can be configured before running off and doing
 		//		its thing.	
-
 
 		//console.debug("dojox.off.initialize");
 		this._initializeCalled = true;
@@ -414,7 +414,7 @@ dojo.mixin(dojox.off, {
 			url:		dojox.off._getAvailabilityURL(),
 			handleAs:	"text",
 			error:		dojo.hitch(this, function(err){
-				//console.debug("_isSiteAvailable.error: " + err);
+				//console.debug("dojox.off._isSiteAvailable.error: " + err);
 				this.goingOnline = false;
 				this.isOnline = false;
 				if(finishedCallback){
@@ -422,7 +422,7 @@ dojo.mixin(dojox.off, {
 				}
 			}),
 			load:		dojo.hitch(this, function(data){
-				//console.debug("_isSiteAvailable.load, data="+data);	
+				//console.debug("dojox.off._isSiteAvailable.load, data="+data);	
 				this.goingOnline = false;
 				this.isOnline = true;
 				
@@ -438,6 +438,7 @@ dojo.mixin(dojox.off, {
 	
 	_startNetworkThread: function(){
 		//console.debug("startNetworkThread");
+		
 		// kick off a thread that does periodic
 		// checks on the status of the network
 		if(this.doNetworkChecking == false){
@@ -529,5 +530,4 @@ dojo.mixin(dojox.off, {
 dojox.storage.manager.addOnLoad(dojo.hitch(dojox.off, "_onStorageLoad"));
 
 // wait until the page is finished loading
-// dojo._loaders.unshift(dojo.hitch(dojox.off, "_onPageLoad"));
 dojo.addOnLoad(dojox.off, "_onPageLoad");

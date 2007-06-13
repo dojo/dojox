@@ -274,6 +274,7 @@ dojo.mixin(dojox.off.ui, {
 
 	_initialize: function(){
 		//console.debug("dojox.off.ui._initialize");
+		
 		// make sure our app name is correct
 		if(this._validateAppName(this.appName) == false){
 			alert("You must set dojox.off.ui.appName; it can only contain "
@@ -314,7 +315,6 @@ dojo.mixin(dojox.off.ui, {
 	},
 	
 	_doAutoEmbed: function(){
-		//console.debug("dojox.off.ui._doAutoEmbed");
 		// fetch our HTML for the offline widget
 		var templatePath = this.htmlTemplatePath;
 		
@@ -384,6 +384,8 @@ dojo.mixin(dojox.off.ui, {
 	
 	_testNetwork: function(){
 		var finishedCallback = dojo.hitch(this, function(isOnline){
+			//console.debug("testNetwork callback, isOnline="+isOnline);
+			
 			// display our online/offline results
 			this._goOnlineFinished(isOnline);
 			
@@ -680,17 +682,17 @@ dojo.mixin(dojox.off.ui, {
 
 // register ourselves to know when failed saves have 
 // occurred
-dojox.off.onSave = dojo.hitch(dojox.off.ui, dojox.off.ui.onSave);
+dojo.connect(dojox.off, "onSave", dojox.off.ui, "onSave");
 
 // register ourselves to know when an offline cache has
 // been installed even after the page is finished loading
-dojox.off.onOfflineCacheInstalled = 
-				dojo.hitch(dojox.off.ui, dojox.off.ui.onOfflineCacheInstalled);
+dojo.connect(dojox.off, "onOfflineCacheInstalled", dojox.off.ui, 
+				"onOfflineCacheInstalled");
 
 // register ourselves to know if some core operation failed
 // or was denied by the user
-dojox.off.onCoreOperationFailed = dojo.hitch(dojox.off.ui, 
-												dojox.off.ui.onCoreOperationFailed);
+dojo.connect(dojox.off, "onCoreOperationFailed", dojox.off.ui,
+				"onCoreOperationFailed");
 
 // start our magic when the Dojo Offline framework is ready to go
 dojox.off.addOnLoad(dojo.hitch(dojox.off.ui, dojox.off.ui._initialize));
