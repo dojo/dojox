@@ -1,4 +1,4 @@
-This directory contains a server-side implementation of Moxie to illustrate how to create a full client/server application with Dojo Offline.
+This directory contains a server-side implementation of Moxie to illustrate how to create a full client/server application with Dojo Offline. It is built in Java, with a Java servlet. It comes bundled with an open-source, embedded web-server named Jetty and an embedded open-source database named Derby so that you can quickly run the server-side with one command. Further, you can use this scaffolding to easily and quickly begin creating the server-side of your own Dojo Offline-based applications.
 
 Dependencies
 ------------
@@ -6,10 +6,13 @@ Dependencies
 Moxie requires the following pieces of software to install:
 * Java 1.5+ 
 
-Building & Running
+Building
 ------------------
 
 A build.sh file is provided in this directory; it will only currently run on Unix-based machines (Mac OS X, Linux, etc.)
+
+Running
+------------------
 
 Running the server-side of Moxie is simple. Just type:
 
