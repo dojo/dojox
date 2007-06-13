@@ -187,7 +187,7 @@ dojox.cometd = new function(){
 						console.debug("cometd subscription error for channel", message.channel, ":", message.error);
 						return;
 					}
-					this.subscribed(message.subscription, message);
+					dojox.cometd.subscribed(message.subscription, message);
 					break;
 				case "/meta/unsubscribe":
 					if(!message.successful){
@@ -230,6 +230,7 @@ dojox.cometd = new function(){
 		//		message
 		if(!this.currentTransport){
 			this.backlog.push(["publish", channel, data, properties]);
+			// console.debug(this.backlog);
 			return;
 		}
 		var message = {
@@ -461,7 +462,7 @@ dojox.cometd.longPollTransport = new function(){
 		if(	(dojox.cometd["advice"])&&
 			(dojox.cometd.advice["reconnect"]=="handshake")
 		){
-			dojox.io.cometd.init(null,dojox.io.cometd.url);
+			dojox.cometd.init(null,dojox.cometd.url);
 		}else{
 			this.openTunnelWith({
 				message: dojo.toJson([
@@ -514,7 +515,7 @@ dojox.cometd.longPollTransport = new function(){
 						console.debug("cometd subscription error for channel", message.channel, ":", message.error);
 						return;
 					}
-					this.subscribed(message.channel);
+					dojox.cometd.subscribed(message.channel);
 					// console.debug(message.channel);
 					break;
 			}
@@ -628,18 +629,21 @@ dojox.cometd.callbackPollTransport = new function(){
 	this.openTunnelWith = function(content, url){
 		// create a <script> element to generate the request
 		dojo.io.script.get({
+			load: dojo.hitch(this, function(data){
+				console.debug("blah", data);
+				dojox.cometd.deliver(data);
+				this.connected = false;
+				this.tunnelCollapse();
+			}),
+			error: function(){ 
+				console.debug("blah", arguments);
+				console.debug("tunnel opening failed"); 
+			},
 			url: (url||dojox.cometd.url),
 			content: content,
 			handleAs: dojox.cometd.handleAs,
 			callbackParamName: "jsonp",
-		}).addCallback(dojo.hitch(this, function(data){
-				dojox.cometd.deliver(data);
-				this.connected = false;
-				this.tunnelCollapse();
-			})
-		).addErrback(
-			function(){ console.debug("tunnel opening failed"); }
-		);
+		});
 		this.connected = true;
 	}
 
@@ -655,7 +659,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			message.clientId = dojox.cometd.clientId;
 			var bindArgs = {
 				url: dojox.cometd.url||djConfig["cometdRoot"],
-				handleAs: dojox.io.cometd.handleAs,
+				handleAs: dojox.cometd.handleAs,
 				callbackParamName: "jsonp",
 				content: { message: dojo.toJson([ message ]) },
 			};
