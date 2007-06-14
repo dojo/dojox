@@ -84,8 +84,8 @@ dojo.mixin(dojox.off, {
 		//		default implementation is to perform a synchronization.
 		//		Override with your own implementation if you don't want the
 		//		default behavior
-		//console.debug("online");
-		this.isOnline = true;
+		console.debug("online");
+		// dojox.off.isOnline = true;
 	},
 	
 	onOffline: function(){ /* void */
@@ -94,7 +94,7 @@ dojo.mixin(dojox.off, {
 		// description: 
 		//		This method is called when we move offline.
 
-		//console.debug("offline");
+		console.debug("offline");
 	},
 	
 	goOffline: function(){ /* void */
@@ -413,64 +413,59 @@ dojo.mixin(dojox.off, {
 		var args = {
 			url:		dojox.off._getAvailabilityURL(),
 			handleAs:	"text",
-			error:		dojo.hitch(this, function(err){
+			error:		function(err){
 				//console.debug("dojox.off._isSiteAvailable.error: " + err);
-				this.goingOnline = false;
-				this.isOnline = false;
+				dojox.off.goingOnline = false;
+				dojox.off.isOnline = false;
 				if(finishedCallback){
 					finishedCallback(false);
 				}
-			}),
-			load:		dojo.hitch(this, function(data){
+			},
+			load:		function(data){
 				//console.debug("dojox.off._isSiteAvailable.load, data="+data);	
-				this.goingOnline = false;
-				this.isOnline = true;
+				dojox.off.goingOnline = false;
+				dojox.off.isOnline = true;
 				
 				if(finishedCallback){
 					finishedCallback(true);
-				}else if(this.onOnline){
-					this.onOnline();
+				}else if(dojox.off.onOnline){
+					dojox.off.onOnline();
 				}
-			})
+			}
 		};
 		dojo.xhrGet(args);
 	},
 	
 	_startNetworkThread: function(){
-		//console.debug("startNetworkThread");
+		console.debug("startNetworkThread");
 		
 		// kick off a thread that does periodic
 		// checks on the status of the network
 		if(this.doNetworkChecking == false){
 			return;
 		}
-		
-		var errFunc = dojo.hitch(this, 
-			function(err){
-				if(this.isOnline){
-					this.isOnline = false;
-					this.onOffline();
-				}
-			}
-		);
-
-		var successFunc = dojo.hitch(this, 
-			function(data){
-				if(!this.isOnline){
-					this.isOnline = true;
-					this.onOnline();
-				}
-			}
-		);
 
 		window.setInterval(function(){
 			var args = {
 				url:	 	dojox.off._getAvailabilityURL(),
 				sync:		false,
 				handleAs:	"text",
-				error:		errFunc,
-				load:		successFunc
+				error:		function(err){
+					if(dojox.off.isOnline){
+						dojox.off.isOnline = false;
+						dojox.off.onOffline();
+						console.debug("going offline...");
+					}
+				},
+				load:	function(data){
+					if(!dojox.off.isOnline){
+						dojox.off.isOnline = true;
+						dojox.off.onOnline();
+						console.debug("...going online");
+					}
+				}
 			};
+
 			dojo.xhrGet(args);
 
 		}, this.NETWORK_CHECK * 1000);
@@ -512,16 +507,24 @@ dojo.mixin(dojox.off, {
 			dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/hostenv_browser.js").uri);
 		}
 		
-		// add anything that was brought in with a 
-		// dojo.require() that resulted in a JavaScript
-		// URL being fetched
-		
-		// FIXME: modify dojo/_base/_loader/loader.js to
-		// expose a public API to get this information
-	
-		for(var i = 0; i < dojo._loadedUrls.length; i++){
-			dojox.off.files.cache(dojo._loadedUrls[i]);
+		// in _base/_loader/loader.js, in the function dojo._loadUri, we added
+		// code to capture any uris that were loaded for dojo packages with
+		// calls to dojo.require() so we can add them to our list of captured
+		// files here
+
+		// grab the rest of the bootstraps just in case we're not being loaded through a build
+		dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/bootstrap.js"));
+		dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/loader.js"));
+		dojox.off.files.cache(dojo.moduleUrl("dojo", "_base/_loader/hostenv_browser.js"));
+		dojox.off.files.cache(dojo.moduleUrl("dojo", "_base.js"));
+
+		if(dojo._loadedUrls.length){
+			// pre-populate w/ loaded URLs to date
+			dojox.off.files.cache(dojo._loadedUrls);
 		}
+
+		// and make sure that should new URLs be loaded in the future that we grab them too
+		dojo.connect(dojo._loadedUrls, "push", dojox.off.files, "cache");
 	}
 });
 

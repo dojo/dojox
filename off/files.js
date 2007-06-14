@@ -34,14 +34,21 @@ dojox.off.files = {
 		// urlOrList: String or Array[]
 		//		A URL of a file to cache or an Array of Strings of files to
 		//		cache
+		// console.debug(urlOrList);
 		if(dojo.isString(urlOrList)||(urlOrList instanceof dojo._Url)){
 			this.listOfURLs.push(urlOrList+"");
 		}else{
 			dojo.forEach(urlOrList, function(url){ this.listOfURLs.push(url); }, this);
 		}
-		// console.debug(this.listOfURLs);
 	},
 	
+	clobber: function(/*String*/ ns){ /* void */
+		// summary: removes the default store. Think of it as "clearing the cache" for gears
+		var localServer = google.gears.factory.create("beta.localserver", "1.0");
+		var storeName = dojox.off.STORAGE_NAMESPACE + "_store";
+		localServer.removeStore(storeName);
+	},
+
 	remove: function(url){ /* void */
 		// summary:
 		//		Removes a URL from the list of files to cache.
@@ -78,13 +85,14 @@ dojox.off.files = {
 	refresh: function(finishedCallback){ /* void */
 		//console.debug("dojox.off.files.refresh");
 		// summary:
-		//	Refreshes our list of offline resources,
-		//	making them available offline.
+		//		Refreshes our list of offline resources, making them available
+		//		offline.
 		// finishedCallback: Function
-		//	A callback that receives two arguments: whether an error
-		//	occurred, which is a boolean; and an array of error message strings
-		//	with details on errors encountered. If no error occured then message is
-		//	empty array with length 0.
+		//		A callback that receives two arguments: whether an error
+		//		occurred, which is a boolean; and an array of error message
+		//		strings with details on errors encountered. If no error occured
+		//		then message is empty array with length 0.
+		finishedCallback = finishedCallback || function(){};
 		try{
 			this.refreshing = true;
 		
@@ -92,8 +100,8 @@ dojox.off.files = {
 			var localServer = google.gears.factory.create("beta.localserver", "1.0");
 			var storeName = dojox.off.STORAGE_NAMESPACE + "_store";
 			
-			// refresh everything by simply removing
-			// any older stores
+			// refresh everything by simply removing any older stores
+
 			// FIXME: Explore whether this is truly needed -
 			// workaround for versioning without using
 			// Gears ManagedResourceStore
@@ -105,28 +113,29 @@ dojox.off.files = {
 			this._store = store;
 
 			// add our list of files to capture
-			var self = this;
 			this._currentFileIndex = 0;
-			this._cancelID = store.capture(this.listOfURLs, function(url, success, captureId){
-				//console.debug("store.capture, url="+url+", success="+success);
-				if(success == false){
-					self._cancelID = null;
-					self.refreshing = false;
-					var errorMsgs = [];
-					errorMsgs.push("Unable to capture: " + url);
-					finishedCallback(true, errorMsgs);
-					return;
-				}else{
-					self._currentFileIndex++;
-				}
+			this._cancelID = store.capture(this.listOfURLs, 
+				dojo.hitch(this, function(url, success, captureId){
+					console.debug("store.capture, url="+url+", success="+success);
+					if(!success){
+						this._cancelID = null;
+						this.refreshing = false;
+						var errorMsgs = [];
+						errorMsgs.push("Unable to capture: " + url);
+						finishedCallback(true, errorMsgs);
+						return;
+					}else{
+						this._currentFileIndex++;
+					}
+					
 				
-			
-				if(self._currentFileIndex >= self.listOfURLs.length){
-					self._cancelID = null;
-					self.refreshing = false;
-					finishedCallback(false, []);
+					if(this._currentFileIndex >= this.listOfURLs.length){
+						this._cancelID = null;
+						this.refreshing = false;
+						finishedCallback(false, []);
+					}
 				}
-			});
+			));
 		}catch(e){
 			this.refreshing = false;
 			

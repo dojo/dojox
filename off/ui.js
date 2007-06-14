@@ -286,17 +286,16 @@ dojo.mixin(dojox.off.ui, {
 		
 		// set our run link text to its default
 		this.runLinkText = "Run " + this.appName;
-		
+
+		dojo.forEach(["onStart", "onRefreshUI", "onUpload", "onDownload", "onFinished", "onCancel" ], 
+			function(evt){
+				dojo.connect(dojo.off.sync, evt, this, evt);
+			}, this
+		);
 		// setup our event listeners for Dojo Offline events
 		// to update our UI
-		dojox.off.sync.onStart = dojo.hitch(this, this.onStart);
-		dojox.off.sync.onRefreshUI = dojo.hitch(this, this.onRefreshUI);
-		dojox.off.sync.onUpload = dojo.hitch(this, this.onUpload);
-		dojox.off.sync.onDownload = dojo.hitch(this, this.onDownload);
-		dojox.off.sync.onFinished = dojo.hitch(this, this.onFinished);
-		dojox.off.sync.onCancel = dojo.hitch(this, this.onCancel);
-		dojox.off.onOnline = dojo.hitch(this, this.onOnline);
-		dojox.off.onOffline = dojo.hitch(this, this.onOffline);
+		dojo.connect(dojox.off, "onOnline", this, "onOnline");
+		dojo.connect(dojox.off, "onOffline", this, "onOffline");
 		
 		// cache our default UI resources
 		dojox.off.files.cache([
