@@ -8,7 +8,6 @@
 dojo.provide("dojox.crypto.DES");
 
 dojox.crypto.DES.encrypt = function(plaintext, password, callback){
-	console.debug("dojox.crypto.DES.encrypt");
 	// summary:
 	//	Use Corrected Block TEA to encrypt plaintext using password
 	//	(note plaintext & password must be strings not string objects).
@@ -25,7 +24,6 @@ dojox.crypto.DES.encrypt = function(plaintext, password, callback){
 }
 
 dojox.crypto.DES.decrypt = function(ciphertext, password, callback){
-	console.debug("dojox.crypto.DES.decrypt");
 	// summary:
 	//	Use Corrected Block TEA to decrypt ciphertext using password
 	//	(note ciphertext & password must be strings not string objects).
@@ -79,19 +77,16 @@ dojox.crypto.DES._initWorkerPool = function(){
 			self._handleMessage = [];
 			
 			self._manager.onmessage = function(msg, sender){
-				console.debug("manager.onmessage, msg="+msg+", sender="+sender);
 				// get the callback necessary to serve this result
 				var callback = self._employed["_" + sender];
 				
 				// make this worker unemployed
-				console.debug("in manager, making worker unemployed");
 				self._employed["_" + sender] = undefined;
 				self._unemployed.push("_" + sender);
 				
 				// see if we need to assign new work
 				// that was queued up needing to be done
 				if(self._handleMessage.length){
-					console.debug("in the manager, assigning new work to old worker thread");
 					var handleMe = self._handleMessage.shift();
 					self._assignWork(handleMe.msg, handleMe.callback);
 				}
@@ -118,15 +113,12 @@ dojox.crypto.DES._initWorkerPool = function(){
 }
 
 dojox.crypto.DES._assignWork = function(msg, callback){
-	console.debug("assignWork, msg="+msg);
 	var self = dojox.crypto.DES;
 	
 	// can we immediately assign this work?
 	if(!self._handleMessage.length && self._unemployed.length){
-		console.debug("Immediately assigning work");
 		// get an unemployed worker
 		var workerID = self._unemployed.shift().substring(1); // remove _
-		console.debug("workerID="+workerID);
 		
 		// list this worker as employed
 		self._employed["_" + workerID] = callback;
@@ -134,7 +126,6 @@ dojox.crypto.DES._assignWork = function(msg, callback){
 		// do the worke
 		self._manager.sendMessage(msg, workerID);
 	}else{
-		console.debug("Qeueing up work");
 		// we have to queue it up
 		self._handleMessage = {msg: msg, callback: callback};
 	}

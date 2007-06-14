@@ -1,11 +1,12 @@
 <html>
 	<head>
-		<!--<style type="text/css">
-			@import "../../../../dojo/resources/dojo.css";
-	    </style>-->
-
 	    <script type="text/javascript" 
-	            src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+	            src="../../../../dojo/dojo.js" djConfig="isDebug: false"></script>
+	
+		<script type="text/javascript"
+				src="../../../../dojox/_sql/common.js"></script>
+		<script type="text/javascript"
+				src="../../../../dojox/crypto/DES.js"></script>
 		
 		<style type="text/css">
 			body{
@@ -40,13 +41,13 @@
 			});
 			
 			function readTable(){
-				var data = new Array();
-				var rows = document.getElementsByTagName("tr");
-				for(var i = 1; i < rows.length; i++){
-					var lastName = rows[i].childNodes[1].childNodes[0].nodeValue;
-					var firstName = rows[i].childNodes[3].childNodes[0].nodeValue;
-					var ssNumber = rows[i].childNodes[5].childNodes[0].nodeValue;
-					
+				var data = [];
+				var rows = dojo.query(".data-item");
+				dojo.forEach(rows, function(row){
+					var lastName = row.childNodes[1].childNodes[0].nodeValue;
+					var firstName = row.childNodes[3].childNodes[0].nodeValue;
+					var ssNumber = row.childNodes[5].childNodes[0].nodeValue;
+
 					data.push({lastName: lastName, firstName: firstName, ssNumber: ssNumber,
 								toString: function(){
 									return "{lastName: " + lastName 
@@ -54,7 +55,7 @@
 												+ ", ssNumber: " + ssNumber
 												+ "}";
 								}});
-				}
+				});
 				
 				return data;
 			}
@@ -68,10 +69,18 @@
 			}
 			
 			function encrypt(){
+				// disable our buttons
+				dojo.byId("encrypt").disabled = true;
+				dojo.byId("decrypt").disabled = true;
+				
 				var data = readTable();
 				
 				var password = document.getElementById("password").value;
 				
+				// delete any old data
+				dojox.sql("DELETE FROM CUSTOMERS");
+				
+				// insert new data
 				insertCustomers(data, 0, password);
 			}
 			
@@ -88,6 +97,10 @@
 							data[i].ssNumber,
 							password,
 							function(results, error, errorMsg){
+								// enable our buttons
+								dojo.byId("encrypt").disabled = false;
+								dojo.byId("decrypt").disabled = false;
+								
 								if(error == true){
 									alert(errorMsg);
 									return;
@@ -99,19 +112,27 @@
 			}
 			
 			function decrypt(){
-					var password = document.getElementById("password").value;
-					
-					dojox.sql("SELECT last_name, first_name, DECRYPT(social_security) FROM CUSTOMERS",
-								password,
-								function(results, error, errorMsg){
-									if(error == true){
-										alert(errorMsg);
-										return;
-									}
-									
-									setData(results);
+				// disable our buttons
+				dojo.byId("encrypt").disabled = true;
+				dojo.byId("decrypt").disabled = true;
+				
+				var password = document.getElementById("password").value;
+				
+				dojox.sql("SELECT last_name, first_name, DECRYPT(social_security) FROM CUSTOMERS",
+							password,
+							function(results, error, errorMsg){
+								// enable our buttons
+								dojo.byId("encrypt").disabled = false;
+								dojo.byId("decrypt").disabled = false;
+								
+								if(error == true){
+									alert(errorMsg);
+									return;
 								}
-							);
+								
+								setData(results);
+							}
+						);
 			}
 		</script>
 	</head>
@@ -136,61 +157,61 @@
 				<th>Social Security</th>
 			</tr>
 			
-			<tr>
-				<td>Doe1</td>
-				<td>John1</td>
-				<td>513-12-1500</td>
+			<tr class="data-item">
+				<td class="last-name">Doe1</td>
+				<td class="first-name">John1</td>
+				<td class="social-security">513-12-1500</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe2</td>
 				<td>John2</td>
 				<td>513-12-1501</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe3</td>
 				<td>John3</td>
 				<td>513-12-1502</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe4</td>
 				<td>John4</td>
 				<td>513-12-1503</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe5</td>
 				<td>John5</td>
 				<td>513-12-1504</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe6</td>
 				<td>John6</td>
 				<td>513-12-1505</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe7</td>
 				<td>John7</td>
 				<td>513-12-1506</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe8</td>
 				<td>John8</td>
 				<td>513-12-1507</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe9</td>
 				<td>John9</td>
 				<td>513-12-1508</td>
 			</tr>
 			
-			<tr>
+			<tr class="data-item">
 				<td>Doe10</td>
 				<td>John10</td>
 				<td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec fermentum vehicula elit. Etiam imperdiet venenatis lorem. Integer nonummy augue mattis erat. Vivamus libero. Quisque enim mi, pulvinar eu, nonummy sed, tincidunt eget, augue. Vestibulum sed mauris sit amet risus porttitor vestibulum. Integer pede nisi, vulputate ultrices, tristique at, euismod eu, felis. Pellentesque quis magna sed mi ullamcorper laoreet. Morbi condimentum volutpat leo. Proin leo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus ultricies elit id felis.
