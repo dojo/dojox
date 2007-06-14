@@ -8,58 +8,137 @@
 dojo.provide("dojox.crypto.DES");
 
 dojox.crypto.DES.encrypt = function(plaintext, password, callback){
+	console.debug("dojox.crypto.DES.encrypt");
 	// summary:
 	//	Use Corrected Block TEA to encrypt plaintext using password
-	//	(note plaintext & password must be strings not string objects)
-	// returns:
-	//	Return encrypted text as string
+	//	(note plaintext & password must be strings not string objects).
+	//	Results will be returned to the 'callback' asychronously.
+	var self = dojox.crypto.DES;
 	
-	// FIXME: Create a synchronous version of this that doesn't 
-	// depend on Gears if the callback is not present
+	self._initWorkerPool();
 	
-	var workerPool = google.gears.factory.create("beta.workerpool", "1.0");
-
-	workerPool.onmessage = function(msg, sender){
-		callback(msg);
-	}
-	var workerCode = 
-						String(_dojox_crypto_DES_workerInit) + " " +
-                 		String(_dojox_crypto_DES_workerHandler) + " " +
-                 		"_dojox_crypto_DES_workerInit();";
-	var workerID;
-	try{
-		workerID = workerPool.createWorker(workerCode);
-	}catch(exp){
-		if(exp.message){
-			throw exp.message;
-		}else{
-			throw exp;
-		}
-	}
+	var msg = {plaintext: plaintext, password: password};
+	msg = dojo.toJson(msg);
+	msg = "encr:" + String(msg);
 	
-	var args = {plaintext: plaintext, password: password};
-	args = dojo.toJson(args);
-	
-	workerPool.sendMessage("encr:" + String(args), workerID);
+	self._assignWork(msg, callback);
 }
 
 dojox.crypto.DES.decrypt = function(ciphertext, password, callback){
-	var workerPool = google.gears.factory.create("beta.workerpool", "1.0");
-	workerPool.onmessage = function(msg, sender){
-		callback(msg);
-	}
-	var workerCode = 
-						String(_dojox_crypto_DES_workerInit) +
-                 			String(_dojox_crypto_DES_workerHandler) +
-                 			"_dojox_crypto_DES_workerInit();";
-	var workerID = workerPool.createWorker(workerCode);
-	var args = {ciphertext: ciphertext, password: password};
-	args = dojo.toJson(args);
-	workerPool.sendMessage("decr:" + String(args), workerID);
+	console.debug("dojox.crypto.DES.decrypt");
+	// summary:
+	//	Use Corrected Block TEA to decrypt ciphertext using password
+	//	(note ciphertext & password must be strings not string objects).
+	//	Results will be returned to the 'callback' asychronously.
+	
+	var self = dojox.crypto.DES;
+	
+	self._initWorkerPool();
+	
+	var msg = {ciphertext: ciphertext, password: password};
+	msg = dojo.toJson(msg);
+	msg = "decr:" + String(msg);
+	
+	self._assignWork(msg, callback);
 }
 
 
 // supporting functions
+
+// _POOL_SIZE:
+//	Size of worker pool to create to help with crypto
+dojox.crypto.DES._POOL_SIZE = 20;
+
+dojox.crypto.DES._initWorkerPool = function(){
+	// bugs in Google Gears prevents us from dynamically creating
+	// and destroying workers as we need them -- the worker
+	// pool functionality stops working after a number of crypto
+	// cycles (probably related to a memory leak in Google Gears).
+	// this is too bad, since it results in much simpler code.
+	
+	// instead, we have to create a pool of workers and reuse them. we
+	// keep a stack of 'unemployed' Worker IDs that are currently not working.
+	// if a work request comes in, we pop off the 'unemployed' stack
+	// and put them to work, storing them in an 'employed' hashtable,
+	// keyed by their Worker ID with the value being the callback function
+	// that wants the result. when an employed worker is done, we get
+	// a message in our 'manager' which adds this worker back to the 
+	// unemployed stack and routes the result to the callback that
+	// wanted it. if all the workers were employed in the past but
+	// more work needed to be done (i.e. it's a tight labor pool ;) 
+	// then the work messages are pushed onto
+	// a 'handleMessage' queue as an object tuple {msg: msg, callback: callback}
+	
+	if(!dojo.exists("dojox.crypto.DES._manager")){
+		try{
+			var self = dojox.crypto.DES;
+			
+			self._manager = google.gears.factory.create("beta.workerpool", "1.0");
+			self._unemployed = [];
+			self._employed = {};
+			self._handleMessage = [];
+			
+			self._manager.onmessage = function(msg, sender){
+				console.debug("manager.onmessage, msg="+msg+", sender="+sender);
+				// get the callback necessary to serve this result
+				var callback = self._employed["_" + sender];
+				
+				// make this worker unemployed
+				console.debug("in manager, making worker unemployed");
+				self._employed["_" + sender] = undefined;
+				self._unemployed.push("_" + sender);
+				
+				// see if we need to assign new work
+				// that was queued up needing to be done
+				if(self._handleMessage.length){
+					console.debug("in the manager, assigning new work to old worker thread");
+					var handleMe = self._handleMessage.shift();
+					self._assignWork(handleMe.msg, handleMe.callback);
+				}
+				
+				// return results
+				callback(msg);
+			}
+			
+			// workers can't access Dojo global namespaces, so we have to 'fake'
+			// them with underscored function names to namespace these functions
+			// in the worker pool area
+			var code = String(_dojox_crypto_DES_workerInit) +
+	                 	String(_dojox_crypto_DES_workerHandler) +
+	                	"_dojox_crypto_DES_workerInit();";
+	
+			// create our worker pool
+			for(var i = 0; i < self._POOL_SIZE; i++){
+				self._unemployed.push("_" + self._manager.createWorker(code));
+			}
+		}catch(exp){
+			throw exp.message||exp;
+		}
+	}
+}
+
+dojox.crypto.DES._assignWork = function(msg, callback){
+	console.debug("assignWork, msg="+msg);
+	var self = dojox.crypto.DES;
+	
+	// can we immediately assign this work?
+	if(!self._handleMessage.length && self._unemployed.length){
+		console.debug("Immediately assigning work");
+		// get an unemployed worker
+		var workerID = self._unemployed.shift().substring(1); // remove _
+		console.debug("workerID="+workerID);
+		
+		// list this worker as employed
+		self._employed["_" + workerID] = callback;
+		
+		// do the worke
+		self._manager.sendMessage(msg, workerID);
+	}else{
+		console.debug("Qeueing up work");
+		// we have to queue it up
+		self._handleMessage = {msg: msg, callback: callback};
+	}
+}
 
 function _dojox_crypto_DES_workerInit() {
 	gearsWorkerPool.onmessage = _dojox_crypto_DES_workerHandler;
