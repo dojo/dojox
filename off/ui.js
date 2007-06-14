@@ -160,7 +160,7 @@ dojo.mixin(dojox.off.ui, {
 		//	our UI. Default behavior is to update the Offline
 		//	Widget UI and to attempt a synchronization.
 		
-		if(this._initialized == false){ return; }
+		if(!this._initialized){ return; }
 		
 		// update UI
 		this._updateNetworkIndicator();
@@ -181,7 +181,7 @@ dojo.mixin(dojox.off.ui, {
 		//	our UI. Default behavior is to update the Offline
 		//	Widget UI.
 		
-		if(this._initialized == false){ return; }
+		if(!this._initialized){ return; }
 		
 		// update UI
 		this._updateNetworkIndicator();
@@ -273,8 +273,9 @@ dojo.mixin(dojox.off.ui, {
 	},
 
 	_initialize: function(){
-		//console.debug("dojox.off.ui._initialize");
 		
+		console.debug("dojox.off.ui._initialize");
+
 		// make sure our app name is correct
 		if(this._validateAppName(this.appName) == false){
 			alert("You must set dojox.off.ui.appName; it can only contain "
@@ -289,7 +290,7 @@ dojo.mixin(dojox.off.ui, {
 
 		dojo.forEach(["onStart", "onRefreshUI", "onUpload", "onDownload", "onFinished", "onCancel" ], 
 			function(evt){
-				dojo.connect(dojo.off.sync, evt, this, evt);
+				dojo.connect(dojox.off.sync, evt, this, evt);
 			}, this
 		);
 		// setup our event listeners for Dojo Offline events
@@ -299,16 +300,16 @@ dojo.mixin(dojox.off.ui, {
 		
 		// cache our default UI resources
 		dojox.off.files.cache([
-							this.htmlTemplatePath,
-							this.cssTemplatePath,
-							this.onlineImagePath,
-							this.offlineImagePath,
-							this.rollerImagePath,
-							this.checkmarkImagePath
-							]);
+			this.htmlTemplatePath,
+			this.cssTemplatePath,
+			this.onlineImagePath,
+			this.offlineImagePath,
+			this.rollerImagePath,
+			this.checkmarkImagePath
+		]);
 		
 		// embed the offline widget UI
-		if(this.autoEmbed == true){
+		if(this.autoEmbed){
 			this._doAutoEmbed();
 		}
 	},
@@ -694,4 +695,4 @@ dojo.connect(dojox.off, "onCoreOperationFailed", dojox.off.ui,
 				"onCoreOperationFailed");
 
 // start our magic when the Dojo Offline framework is ready to go
-dojox.off.addOnLoad(dojo.hitch(dojox.off.ui, dojox.off.ui._initialize));
+dojox.off.addOnLoad(dojo.hitch(dojox.off.ui, "_initialize"));

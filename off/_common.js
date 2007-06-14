@@ -93,7 +93,6 @@ dojo.mixin(dojox.off, {
 		//		Called when we go offline.
 		// description: 
 		//		This method is called when we move offline.
-
 		console.debug("offline");
 	},
 	
@@ -344,7 +343,7 @@ dojo.mixin(dojox.off, {
 		//console.debug("dojox.off._finishStartingUp");
 		// this method is part of our _onLoad series of startup tasks
 		
-		if(this.enabled == true){
+		if(this.enabled){
 			// kick off a thread to check network status on
 			// a regular basis
 			this._startNetworkThread();
