@@ -426,15 +426,15 @@ dojo.mixin(dojox.off.ui, {
 	_initLearnHow: function(){
 		var learnHow = dojo.byId("dot-widget-learn-how-link");
 		
-		if(learnHow == null || typeof learnHow == "undefined"){
+		if(!learnHow){
 			return;
 		}
 		
-		if(this.customLearnHowPath == false){
+		if(!this.customLearnHowPath){
 			// add parameters to URL so the Learn How page
 			// can customize itself and display itself
 			// correctly based on framework settings
-			var dojoPath = djConfig.baseRelativePath;
+			var dojoPath = dojo.baseUrl;
 			this.learnHowPath += "?appName=" + encodeURIComponent(this.appName)
 									+ "&hasOfflineCache=" + dojox.off.hasOfflineCache
 									+ "&runLink=" + encodeURIComponent(this.runLink)
@@ -452,19 +452,13 @@ dojo.mixin(dojox.off.ui, {
 		
 		var appName = dojo.byId("dot-widget-learn-how-app-name");
 		
-		if(appName == null || typeof appName == "undefined"){
-			return;
-		}
-		
+		if(!appName){ return; }
 		appName.innerHTML = "";
 		appName.appendChild(document.createTextNode(this.appName));
 	},
 	
 	_validateAppName: function(appName){
-		if(appName == null || typeof appName == "undefined"){
-			return false;
-		}
-		
+		if(!appName){ return false; }
 		return (/^[a-z0-9 ]*$/i.test(appName));
 	},
 	
@@ -475,7 +469,7 @@ dojo.mixin(dojox.off.ui, {
 		var details = dojo.byId("dot-sync-details");
 		var cancel = dojo.byId("dot-sync-cancel");
 		
-		if(dojox.off.sync.isSyncing == true){
+		if(dojox.off.sync.isSyncing){
 			this._clearSyncMessage();
 			
 			if(roller){

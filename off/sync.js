@@ -63,7 +63,7 @@ dojo.declare("dojox.off.sync.CommandLog", null, null,
 		//	commands, or if an error occurred during replaying.
 		//	The default implementation simply continues the
 		//	synchronization process.
-		onReplayFinished: null,
+		onReplayFinished: function(){},
 		
 		replay: function(){ /* void */
 			// summary:
@@ -340,6 +340,8 @@ dojo.mixin(dojox.off.sync, {
 	//		our offline file cache
 	onRefreshFiles: function(){},
 
+	onRefreshUI: function(){},
+
 	// onUpload: Function
 	//		An event handler that will be called when syncing starts uploading
 	//		any local data changes we have on the client.  Applications can
@@ -455,12 +457,10 @@ dojo.mixin(dojox.off.sync, {
 			return;
 		}
 		
-		if(this.onRefreshUI){ // FIXME: WTF?
-			this.onRefreshUI();
-		}
+		this.onRefreshUI();
 		
 		dojox.off.files.refresh(dojo.hitch(this, function(error, errorMessages){
-			if(error == true){
+			if(error){
 				this.error = true;
 				this.successful = false;
 				for(var i = 0; i < errorMessages.length; i++){
@@ -541,12 +541,7 @@ dojo.mixin(dojox.off.sync, {
 	
 	finished: function(){ /* void */
 		this.isSyncing = false;
-		
-		if(this.cancelled == false && this.error == false){
-			this.successful = true;
-		}else{
-			this.successful = false;
-		}
+		this.successful = ((!this.cancelled)&&(!this.error));
 		this.onFinished();
 	},
 	
