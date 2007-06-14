@@ -1,6 +1,6 @@
 dojo.provide("dojox._sql.common");
 
-// dojo.require("dojo.crypto.DES");
+dojo.require("dojox.crypto.DES");
 
 dojox.sql = function(){
 	// There are four ways to call this:
@@ -30,7 +30,7 @@ dojox.sql = function(){
 	// dojox.sql("SELECT DECRYPT(SOMECOL1, SOMECOL2) FROM
 	//				FOOBAR WHERE SOMECOL3 = ?", someParam,
 	//				"somePassword", callbackFunction)
-	try{	
+	try{
 		// get the Gears Database object
 		dojox.sql._initDb();
 		
@@ -76,8 +76,6 @@ dojox.sql = function(){
 			dojox.sql._execDecryptSQL(sql, password, args, callbackFunction);
 			return; // decrypted results will arrive asynchronously
 		}
-
-		// console.debug(sql);
 
 		// execute the SQL and get the results
 		var rs = dojox.sql.db.execute(sql, args);
@@ -173,11 +171,6 @@ dojox.sql._normalizeResults = function(rs){
 		for(var i = 0; i < rs.fieldCount(); i++){
 			var fieldName = rs.fieldName(i);
 			var fieldValue = rs.field(i);
-			// FIXME: POTENTIAL BUG: If field name starts with a number this
-			// will be misinterpreted as an array position instead of a property
-			// name; I don't want to put a regular expression test in here
-			// because I'm afraid it will seriously degrade performance for the 
-			// most common case, which is an ordinary property name
 			row[fieldName] = fieldValue;
 		}
 		
@@ -200,6 +193,7 @@ dojox.sql._needsDecrypt = function(sql){
 }
 
 dojox.sql._execEncryptSQL = function(sql, password, args, callbackFunction){
+	//console.debug("execEncryptSQL, sql="+sql+", password="+password+", args="+args);
 	// strip the ENCRYPT/DECRYPT keywords from the SQL
 	var strippedSQL = dojox.sql._stripCryptoSQL(sql);
 	
@@ -258,7 +252,7 @@ dojox.sql._execEncryptSQL = function(sql, password, args, callbackFunction){
 }
 
 dojox.sql._execDecryptSQL = function(sql, password, args, callbackFunction){
-	//dojo.debug("execDecryptSQL, sql="+sql+", password="+password+", args="+args);
+	//console.debug("execDecryptSQL, sql="+sql+", password="+password+", args="+args);
 	// strip the ENCRYPT/DECRYPT keywords from the SQL
 	var strippedSQL = dojox.sql._stripCryptoSQL(sql);
 	
@@ -312,7 +306,7 @@ dojox.sql._execDecryptSQL = function(sql, password, args, callbackFunction){
 }
 
 dojox.sql._encrypt = function(sql, password, args, encryptColumns, callback){
-	//dojo.debug("_encrypt, sql="+sql+", password="+password+", args="+args);
+	//console.debug("_encrypt, sql="+sql+", password="+password+", args="+args);
 
 	// FIXME: This means we can't run several of these concurrently
 	dojox.sql._totalCrypto = 0;
@@ -330,13 +324,16 @@ dojox.sql._encrypt = function(sql, password, args, encryptColumns, callback){
 			// update the total number of encryptions we know must be done asynchronously
 			dojox.sql._totalCrypto++;
 			
-			/*
-			// FIXME: DES is a bug not a feature. This needs to use Blowfish at a minimum
-			// FIXME: hard-coding one encryption scheme is bone-headed
+			// FIXME: This currently uses DES as a proof-of-concept since the
+			// DES code used is quite fast and was easy to work with. Modify dojox.sql
+			// to be able to specify a different encryption provider through a 
+			// a SQL-like syntax, such as dojox.sql("SET ENCRYPTION BLOWFISH"),
+			// and modify the dojox.crypto.Blowfish code to be able to work using
+			// a Google Gears Worker Pool
 			
 			// do the actual encryption now, asychronously on a Gears worker thread
-			dojo.crypto.DES.encrypt(sqlParam, password, function(results){
-				//dojo.debug("Encrypted results returned, results="+results);
+			dojox.crypto.DES.encrypt(sqlParam, password, function(results){
+				//console.debug("Encrypted results returned, results="+results);
 				
 				// set the new encrypted value
 				dojox.sql._finalArgs[paramIndex] = results;
@@ -344,11 +341,10 @@ dojox.sql._encrypt = function(sql, password, args, encryptColumns, callback){
 				// are we done with all encryption?
 				if(dojox.sql._finishedCrypto >= dojox.sql._totalCrypto
 					&& dojox.sql._finishedSpawningCrypto == true){
-					//dojo.debug("done with all encrypts");
+					//console.debug("done with all encrypts");
 					callback(dojox.sql._finalArgs);
 				}
 			});
-			*/
 		}
 	}
 	
@@ -356,7 +352,7 @@ dojox.sql._encrypt = function(sql, password, args, encryptColumns, callback){
 }
 
 dojox.sql._decrypt = function(resultSet, needsDecrypt, password, callback){
-	//dojo.debug("decrypt, resultSet="+resultSet+", needsDecrypt="+needsDecrypt+", password="+password);
+	//console.debug("decrypt, resultSet="+resultSet+", needsDecrypt="+needsDecrypt+", password="+password);
 	// FIXME: This means we can't run several of these concurrently
 	dojox.sql._totalCrypto = 0;
 	dojox.sql._finishedCrypto = 0;
@@ -369,8 +365,6 @@ dojox.sql._decrypt = function(resultSet, needsDecrypt, password, callback){
 		// go through each of the column names in row,
 		// seeing if they need decryption
 		for(var columnName in row){
-			// FIXME: If a column name starts with a number this could
-			// break
 			if(needsDecrypt == "*" || needsDecrypt[columnName] == true){
 				dojox.sql._totalCrypto++;
 				var columnValue = row[columnName];
@@ -478,9 +472,9 @@ dojox.sql._determineDecryptedColumns = function(sql){
 
 dojox.sql._decryptSingleColumn = function(columnName, columnValue, password, currentRowIndex,
 										callback){
-	//dojo.debug("decryptSingleColumn, columnName="+columnName+", columnValue="+columnValue+", currentRowIndex="+currentRowIndex)
-	dojo.crypto.DES.decrypt(columnValue, password, function(results){
-		//dojo.debug("Decrypted results returned, results="+results);
+	//console.debug("decryptSingleColumn, columnName="+columnName+", columnValue="+columnValue+", currentRowIndex="+currentRowIndex)
+	dojox.crypto.DES.decrypt(columnValue, password, function(results){
+		//console.debug("Decrypted results returned, results="+results);
 		
 		// set the new decrypted value
 		dojox.sql._finalResultSet[currentRowIndex][columnName] = results;
@@ -488,7 +482,7 @@ dojox.sql._decryptSingleColumn = function(columnName, columnValue, password, cur
 		// are we done with all encryption?
 		if(dojox.sql._finishedCrypto >= dojox.sql._totalCrypto
 			&& dojox.sql._finishedSpawningCrypto == true){
-			//dojo.debug("done with all decrypts");
+			//console.debug("done with all decrypts");
 			callback(dojox.sql._finalResultSet);
 		}
 	});

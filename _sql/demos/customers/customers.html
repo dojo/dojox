@@ -1,0 +1,210 @@
+<html>
+	<head>
+		<!--<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+	    </style>-->
+
+	    <script type="text/javascript" 
+	            src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+		
+		<style type="text/css">
+			body{
+				padding: 2em;
+			}
+			
+			#dataTable{
+				margin-top: 2em;
+			}
+			
+			button{
+				margin-left: 1em;
+			}
+			
+			th{
+				text-align: left;
+			}
+		</style>
+		
+		<script>
+			dojo.require("dojox.sql");
+			
+			dojo.connect(window, "onload", function(){
+				// create our customer table
+				dojox.sql("DROP TABLE IF EXISTS CUSTOMERS");
+				dojox.sql("CREATE TABLE CUSTOMERS ("
+								+ "last_name TEXT, "
+								+ "first_name TEXT, "
+								+ "social_security TEXT"
+								+ ")"
+							);
+			});
+			
+			function readTable(){
+				var data = new Array();
+				var rows = document.getElementsByTagName("tr");
+				for(var i = 1; i < rows.length; i++){
+					var lastName = rows[i].childNodes[1].childNodes[0].nodeValue;
+					var firstName = rows[i].childNodes[3].childNodes[0].nodeValue;
+					var ssNumber = rows[i].childNodes[5].childNodes[0].nodeValue;
+					
+					data.push({lastName: lastName, firstName: firstName, ssNumber: ssNumber,
+								toString: function(){
+									return "{lastName: " + lastName 
+												+ ", firstName: " + firstName
+												+ ", ssNumber: " + ssNumber
+												+ "}";
+								}});
+				}
+				
+				return data;
+			}
+			
+			function setData(data){
+				var rows = document.getElementsByTagName("tr");
+				for(var i = 1; i < rows.length; i++){
+					var customer = data[i - 1];
+					rows[i].childNodes[5].childNodes[0].nodeValue = customer.social_security;
+				}
+			}
+			
+			function encrypt(){
+				var data = readTable();
+				
+				var password = document.getElementById("password").value;
+				
+				insertCustomers(data, 0, password);
+			}
+			
+			function insertCustomers(data, i, password){
+				var nextIndex = i + 1;
+				
+				if(i >= data.length){
+					var savedRows = dojox.sql("SELECT * FROM CUSTOMERS");
+					setData(savedRows);
+					return;
+				}
+				dojox.sql("INSERT INTO CUSTOMERS VALUES (?, ?, ENCRYPT(?))",
+							data[i].lastName, data[i].firstName,
+							data[i].ssNumber,
+							password,
+							function(results, error, errorMsg){
+								if(error == true){
+									alert(errorMsg);
+									return;
+								}
+								
+								insertCustomers(data, nextIndex, password);
+							}
+						);
+			}
+			
+			function decrypt(){
+					var password = document.getElementById("password").value;
+					
+					dojox.sql("SELECT last_name, first_name, DECRYPT(social_security) FROM CUSTOMERS",
+								password,
+								function(results, error, errorMsg){
+									if(error == true){
+										alert(errorMsg);
+										return;
+									}
+									
+									setData(results);
+								}
+							);
+			}
+		</script>
+	</head>
+	
+	<body>
+		<h1>Customers</h1>
+		
+		<label for="password">
+			Password:
+		</label>
+		
+		<input type="password" name="password" id="password">
+		
+		<button id="encrypt" onclick="encrypt()">Encrypt and Save</button>
+		
+		<button id="decrypt" onclick="decrypt()">Load and Decrypt</button>
+		
+		<table id="dataTable" border="1">
+			<tr>
+				<th>Last Name</th>
+				<th>First Name</th>
+				<th>Social Security</th>
+			</tr>
+			
+			<tr>
+				<td>Doe1</td>
+				<td>John1</td>
+				<td>513-12-1500</td>
+			</tr>
+			
+			<tr>
+				<td>Doe2</td>
+				<td>John2</td>
+				<td>513-12-1501</td>
+			</tr>
+			
+			<tr>
+				<td>Doe3</td>
+				<td>John3</td>
+				<td>513-12-1502</td>
+			</tr>
+			
+			<tr>
+				<td>Doe4</td>
+				<td>John4</td>
+				<td>513-12-1503</td>
+			</tr>
+			
+			<tr>
+				<td>Doe5</td>
+				<td>John5</td>
+				<td>513-12-1504</td>
+			</tr>
+			
+			<tr>
+				<td>Doe6</td>
+				<td>John6</td>
+				<td>513-12-1505</td>
+			</tr>
+			
+			<tr>
+				<td>Doe7</td>
+				<td>John7</td>
+				<td>513-12-1506</td>
+			</tr>
+			
+			<tr>
+				<td>Doe8</td>
+				<td>John8</td>
+				<td>513-12-1507</td>
+			</tr>
+			
+			<tr>
+				<td>Doe9</td>
+				<td>John9</td>
+				<td>513-12-1508</td>
+			</tr>
+			
+			<tr>
+				<td>Doe10</td>
+				<td>John10</td>
+				<td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec fermentum vehicula elit. Etiam imperdiet venenatis lorem. Integer nonummy augue mattis erat. Vivamus libero. Quisque enim mi, pulvinar eu, nonummy sed, tincidunt eget, augue. Vestibulum sed mauris sit amet risus porttitor vestibulum. Integer pede nisi, vulputate ultrices, tristique at, euismod eu, felis. Pellentesque quis magna sed mi ullamcorper laoreet. Morbi condimentum volutpat leo. Proin leo. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus ultricies elit id felis.
+
+Vivamus eget dolor ut augue interdum aliquet. Morbi fringilla odio pulvinar libero. Etiam non turpis a nisi suscipit condimentum. Vestibulum euismod sapien non metus. Cras vitae pede. Phasellus nec nisi sed ipsum hendrerit sodales. Nunc et mi eu enim ultrices rhoncus. Sed sed tellus. Aenean pretium congue est. Aliquam vitae justo. Pellentesque velit ligula, cursus vitae, luctus quis, malesuada sit amet, tellus.
+
+Proin gravida. Sed lacus. Cras odio. Mauris at est sit amet leo dictum sollicitudin. Aliquam tempor dolor sollicitudin sem. Nunc interdum imperdiet erat. Suspendisse iaculis tortor non felis. Etiam porta facilisis metus. Praesent ultrices. Donec posuere cursus diam. Donec nunc lectus, bibendum a, dignissim nec, euismod ac, ante. Ut hendrerit magna non libero. Praesent facilisis auctor quam. Aliquam pede metus, iaculis quis, interdum id, tincidunt sed, orci. Aliquam consequat lectus eu ante. Sed sagittis ultrices dolor.
+
+Proin convallis dui in massa. Vivamus aliquet iaculis elit. Vestibulum lobortis nisi vitae ligula. Nulla congue consequat odio. Cras mauris purus, auctor vel, dapibus ut, tempor et, est. Sed vitae nisl suscipit velit facilisis pretium. Proin dui eros, fringilla nec, placerat laoreet, iaculis in, orci. Maecenas nonummy erat non mi. Aenean faucibus. Morbi iaculis posuere dui. Pellentesque interdum adipiscing risus. Vivamus pharetra. Fusce placerat molestie magna. Duis semper orci at mauris. Fusce mauris. Integer commodo felis ut metus elementum cursus.
+
+Praesent ipsum ante, convallis scelerisque, feugiat sit amet, interdum eu, nisl. Phasellus ut arcu quis ipsum ullamcorper nonummy. Ut luctus ullamcorper erat. Donec volutpat, tortor et fringilla vulputate, neque orci molestie ligula, eu viverra sem mi id felis. Nam dictum. Integer et orci. Sed augue lectus, pretium sed, congue quis, ullamcorper cursus, nisi. Integer id pede nec lorem dictum lacinia. Nulla at lectus. Nam euismod lectus nec leo dictum aliquam. Etiam orci. In ac arcu. Pellentesque venenatis. Cras vestibulum dolor eu dolor. Aliquam aliquam blandit libero. Nulla facilisi. Praesent at urna. Praesent sit amet justo eu felis egestas feugiat.
+</td>
+			</tr>
+			
+		</table>
+	</body>
+</html>
