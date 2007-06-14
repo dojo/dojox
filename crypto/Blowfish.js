@@ -1,5 +1,7 @@
 dojo.provide("dojox.crypto.Blowfish");
 
+dojo.require("dojox.crypto._base");
+
 /*	Blowfish
  *	Created based on the C# implementation by Marcus Hahn (http://www.hotpixel.net/)
  *	Unsigned math functions derived from Joe Gregorio's SecureSyndication GM script

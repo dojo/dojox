@@ -1,5 +1,7 @@
 dojo.provide("dojox.crypto.MD5");
 
+dojo.require("dojox.crypto._base");
+
 /*	Return to a port of Paul Johnstone's MD5 implementation
  *	http://pajhome.org.uk/crypt/md5/index.html
  *
