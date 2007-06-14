@@ -83,9 +83,10 @@ dojox.cometd = new function(){
 			url: this.url,
 			handleAs: this.handleAs,
 			content: { "message": dojo.toJson([props]) },
-			callbackParamName: "jsonp" // usually ignored
+			callbackParamName: "jsonp", // usually ignored
+			load: dojo.hitch(this, "finishInit"),
+			error: function(e){ console.debug("handshake error!:", e); }
 		};
-		// dojo.hitch(this, "finishInit"),
 
 		// borrowed from dojo.uri.Uri in lieu of fixed host and port properties
         var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
@@ -106,15 +107,11 @@ dojox.cometd = new function(){
 		if(bargs){
 			dojo.mixin(bindArgs, bargs);
 		}
-		var d;
 		if(this._isXD){
-			d = dojo.io.script.get(bindArgs);
+			return dojo.io.script.get(bindArgs);
 		}else{
-			d = dojo.xhrPost(bindArgs);
+			return dojo.xhrPost(bindArgs);
 		}
-		d.addCallback(dojo.hitch(this, "finishInit"));
-		d.addErrback(function(e){ console.debug("handshake error!:", e); });
-		return d;
 	}
 
 	this.finishInit = function(data){
@@ -158,6 +155,7 @@ dojox.cometd = new function(){
 
 	// public API functions called by cometd or by the transport classes
 	this.deliver = function(messages){
+		// console.debug(messages);
 		dojo.forEach(messages, this._deliver, this);
 		return messages;
 	}
@@ -271,6 +269,11 @@ dojox.cometd = new function(){
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
 
+		if(!this.currentTransport){
+			this.backlog.push(["subscribe", channel, useLocalTopics, objOrFunc, funcName]);
+			return;
+		}
+
 		if((useLocalTopics !== true)||(useLocalTopcis !== false)){
 			// similar to: function(channel, objOrFunc, funcName, useLocalTopics);
 			var ofn = funcName;
@@ -278,11 +281,8 @@ dojox.cometd = new function(){
 			objOrFunc = useLocalTopics;
 			useLocalTopics = ofn;
 		}
+		// console.debug(objOrFunc, funcName);
 
-		if(!this.currentTransport){
-			this.backlog.push(["subscribe", channel, useLocalTopics, objOrFunc, funcName]);
-			return;
-		}
 		if(objOrFunc){
 			var tname = (useLocalTopics) ? channel : "/cometd"+channel;
 			if(useLocalTopics){
@@ -494,6 +494,7 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.deliver = function(message){
+		// console.debug(message);
 		// handle delivery details that this transport particularly cares
 		// about. Most functions of should be handled by the main cometd object
 		// with only transport-specific details and state being tracked here.
@@ -543,18 +544,18 @@ dojox.cometd.longPollTransport = new function(){
 			content: content,
 			// handleAs: "json",
 			handleAs: dojox.cometd.handleAs,
-		});
-		d.addCallback(dojo.hitch(this, function(data){
-			// console.debug(evt.responseText);
-			// console.debug(data);
-			dojox.cometd.deliver(data);
-			this.connected = false;
-			this.tunnelCollapse();
-		}));
-		d.addErrback(function(err){ 
-			console.debug("tunnel opening failed:", err);
+			load: dojo.hitch(this, function(data){
+				// console.debug(evt.responseText);
+				// console.debug(data);
+				dojox.cometd.deliver(data);
+				this.connected = false;
+				this.tunnelCollapse();
+			}),
+			error: function(err){ 
+				console.debug("tunnel opening failed:", err);
 
-			// TODO - follow advice to reconnect or rehandshake?
+				// TODO - follow advice to reconnect or rehandshake?
+			}
 		});
 		this.connected = true;
 	}
@@ -573,10 +574,11 @@ dojox.cometd.longPollTransport = new function(){
 			return dojo.xhrPost({
 				url: dojox.cometd.url||djConfig["cometdRoot"],
 				handleAs: dojox.cometd.handleAs,
+				load: dojo.hitch(dojox.cometd, "deliver"),
 				content: { 
 					message: dojo.toJson([ message ]) 
 				}
-			}).addCallback(dojox.cometd, "deliver");
+			});
 		}else{
 			this.backlog.push(message);
 		}
@@ -654,7 +656,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			url: (url||dojox.cometd.url),
 			content: content,
 			handleAs: dojox.cometd.handleAs,
-			callbackParamName: "jsonp",
+			callbackParamName: "jsonp"
 		});
 		this.connected = true;
 	}
@@ -672,10 +674,11 @@ dojox.cometd.callbackPollTransport = new function(){
 			var bindArgs = {
 				url: dojox.cometd.url||djConfig["cometdRoot"],
 				handleAs: dojox.cometd.handleAs,
+				load: dojo.hitch(dojox.cometd, "deliver"),
 				callbackParamName: "jsonp",
-				content: { message: dojo.toJson([ message ]) },
+				content: { message: dojo.toJson([ message ]) }
 			};
-			return dojo.io.script.get(bindArgs).addCallback(dojox.cometd, "deliver");
+			return dojo.io.script.get(bindArgs);
 		}else{
 			this.backlog.push(message);
 		}
