@@ -73,7 +73,7 @@ dojo.declare("dojox.data.XmlStore",
 		}else if (attribute === "childNodes"){
 			for (var i = 0; i < element.childNodes.length; i++) {
 				var node = element.childNodes[i];
-				if (node.nodeType === dojox.data.dom.OD) {
+				if (node.nodeType === 1 /*ELEMENT_NODE*/) {
 					return this._getItem(node); //object
 				}
 			}
@@ -81,7 +81,8 @@ dojo.declare("dojox.data.XmlStore",
 		}else if(attribute === "text()"){
 			for(var i = 0; i < element.childNodes.length; i++){
 				var node = element.childNodes[i];
-				if(node.nodeType === 3){
+				if(node.nodeType === 3 /*TEXT_NODE*/ ||
+					node.nodeType === 4 /*CDATA_SECTION_NODE*/){
 					return node.nodeValue; //string
 				}
 			}
@@ -363,7 +364,8 @@ dojo.declare("dojox.data.XmlStore",
 		var self = this;
 		var getArgs = {
 				url: url,
-				handleAs: "xml"
+				handleAs: "xml",
+				preventCache: true
 			};
 		var getHandler = dojo.xhrGet(getArgs);
 		getHandler.addCallback(function(data){

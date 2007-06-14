@@ -138,7 +138,8 @@ dojo.declare("dojox.wire.ml.RestHandler",
 			url: this._getUrl(method, parameters, url),
 			postData: this._getContent(method, parameters),
 			contentType: this.contentType,
-			handleAs: this.handleAs
+			handleAs: this.handleAs,
+			preventCache: true
 		};
 		// TODO: support this.headers?
 		var d = null;

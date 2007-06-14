@@ -22,7 +22,10 @@ dojo.addOnLoad(function(){
 			var d = new doh.Deferred();
 			dojo.connect(dijit.byId("Invocation1"), "onComplete", function(result){
  				t.assertEqual("a", dojox.wire.ml.tests.markup.Service.target.a);
-				t.assertEqual("a", result.toObject().item.name); // test XmlElement.toObject()
+ 				var o = result.toObject();
+				t.assertEqual("a", o.item.name); // test XmlElement.toObject()
+				t.assertEqual("b", o.item.data); // test XmlElement.toObject()
+
  				d.callback(true);
  			});
 			dojo.connect(dijit.byId("Invocation1"), "onError", function(error){

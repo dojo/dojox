@@ -249,7 +249,8 @@ dojo.declare("dojox.wire.ml.XmlElement",
 				}else{
 					obj[name] = [p, o]; // make them array
 				}
-			}else if(child.nodeType === 3 /* TEXT_NODE */){
+			}else if(child.nodeType === 3 /* TEXT_NODE */ ||
+					 child.nodeType === 4 /* CDATA_SECTION_NODE */){
 				text += child.nodeValue;
 			}
 		}
