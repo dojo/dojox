@@ -75,7 +75,7 @@
 					// When we go back online, Dojo Sync will replay each of 
 					// these action, handing them to our onReplay handler
 					// for us to handle and act upon now that we have a network
-					/*dojo.connect(dojox.off.sync.actions, "onReplay", this, 
+					dojo.connect(dojox.off.sync.actions, "onReplay", this, 
 								function(action, actionLog){
 									if(action.name == "new hello world message"){
 										// this was a hello world message created while offline
@@ -84,16 +84,15 @@
 										// service to replay this action, such as sending an email,
 										// creating a task, etc. Instead, we just do an alert box.
 										var message = action.data;
-										//self.sendMessage(message);
-										console.debug("sending message " + message);
+										self.sendMessage(message);
 						
 										// In a real application, the network call would be
 										// asynchronous so we don't lock up the UI. For this reason,
 										// we have to tell Dojo Sync when to continue replaying the
 										// Action Log
-										//actionLog.continueReplay();
+										actionLog.continueReplay();
 									}
-					});*/
+					});
 					
 					// did the page load with us already offline? if so, 
 					// we will have to load our data from persistent storage for 
