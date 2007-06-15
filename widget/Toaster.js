@@ -189,7 +189,6 @@ dojo.declare(
 		},
 
 		_placeClip: function(){
-			var scroll = dijit.util.getScroll();
 			var view = dijit.util.getViewport();
 
 			var nodeSize = dojo.marginBox(this.containerNode);
@@ -202,12 +201,12 @@ dojo.declare(
 			// sets up the position of the clipping node
 			var pd = this.positionDirection;
 			if(pd.match(/^t/)){
-				style.top = scroll.y+"px";
+				style.top = view.t+"px";
 			}else if(pd.match(/^b/)){
-				style.top = (view.h - nodeSize.h - 2 + scroll.y)+"px";
+				style.top = (view.h - nodeSize.h - 2 + view.t)+"px";
 			}
 			if(pd.match(/^[tb]r-/)){
-				style.left = (view.w - nodeSize.w - 1 - scroll.x)+"px";
+				style.left = (view.w - nodeSize.w - 1 - view.l)+"px";
 			}else if(pd.match(/^[tb]l-/)){
 				style.left = 0 + "px";
 			}
