@@ -24,8 +24,7 @@ dojo.mixin(dojox.off, {
 	//		The namespace we use to save core data into Dojo Storage.
 	//		We namespace based on the page's URL so that multiple
 	//		apps served from this domain won't have their data clash
-	STORAGE_NAMESPACE: "dojo_offline_" 
-						+ window.location.href.replace(/[:\/\\ \.]/g, "_"),
+	STORAGE_NAMESPACE: "dot_" + window.location.href.replace(/[:\/\\ \.]/g, "_"),
 	
 	// enabled: boolean
 	//		For advanced usage; most developers can ignore this.

@@ -96,7 +96,7 @@ dojox.off.files = {
 		
 			// get our local server
 			var localServer = google.gears.factory.create("beta.localserver", "1.0");
-			var storeName = dojox.off.STORAGE_NAMESPACE + "_store";
+			var storeName = "dot_store";
 			
 			// refresh everything by simply removing
 			// any older stores
