@@ -98,51 +98,46 @@ var moxie = {
 		this._save(key, value)
 	},
 	
-	_save: function(key, value, actionLog){
+	_save: function(key, value){
 		this._printStatus("Saving '" + key + "'...");
+		console.debug("key="+key+", value="+value);
 		
 		if(dojox.off.isOnline){
-			this._saveOnline(key, value, actionLog);
+			this._saveOnline(key, value);
 		}else{
 			this._saveOffline(key, value);
 		}
 	},
 	
-	_saveOnline: function(key, value, actionLog){
-		var self = this;
-		var doLoad = function(data){
-			//console.debug("load, data="+data);	
-			self._printStatus("Saved '" + key + "'");
-			
-			// add to our list of available keys
-			self._addKey(key);
-			
-			if(!actionLog.isReplaying){
-				// update the list of available keys
-				self._printAvailableKeys();
-			}else{
-				console.debug("About to continue");
-				actionLog.continueReplay();	
-			}
-		};
-		
-		var bindArgs = {
+	_saveOnline: function(key, value){
+		// dispatch the request
+		dojo.xhrPost({
 			url:	 "/moxie/" + encodeURIComponent(key),
 			content:	{ "content": value },
 			error:		function(err){
 				//console.debug("error, err="+err);
 				var msg = "Unable to save file " + key + ": " + err;
-				if(!actionLog.isReplaying){
+				if(!dojox.off.sync.actions.isReplaying){
 					alert(msg);
 				}else{
-					actionLog.haltReplay(msg);
+					dojox.off.sync.actions.haltReplay(msg);
 				}
 			},
-			load:		doLoad
-		};
-		
-		// dispatch the request
-		dojo.xhrPost(bindArgs);	
+			load:		dojo.hitch(this, function(data){
+				//console.debug("load, data="+data);	
+				this._printStatus("Saved '" + key + "'");
+			
+				// add to our list of available keys
+				this._addKey(key);
+			
+				if(!dojox.off.sync.actions.isReplaying){
+					// update the list of available keys
+					this._printAvailableKeys();
+				}else{
+					dojox.off.sync.actions.continueReplay();	
+				}
+			})
+		});	
 	},
 	
 	_saveOffline: function(key, value){
@@ -218,8 +213,7 @@ var moxie = {
 		directory.appendChild(optionNode);
 		
 		// sort our available keys alphabetically
-		var keys = this._availableKeys.slice();
-		keys.sort();
+		var keys = this._availableKeys.slice().sort();
 		
 		// add new ones
 		for (var i = 0; i < keys.length; i++) {
@@ -271,8 +265,7 @@ var moxie = {
 				alert("The file " + key + " is not available: "
 						+ err);
 			},
-			load:		function(data){
-				console.debug("load, data="+data);	
+			load:		function(data){	
 				self._updateEditorContents(data);
 			
 				// print out that we are done
@@ -325,10 +318,8 @@ var moxie = {
 		// setup what we do when we are replaying our action
 		// log when the network reappears
 		dojo.connect(dojox.off.sync.actions, "onReplay", this, function(action, actionLog){
-			console.debug("onReplay, action="+action);
-			console.debug("action.name="+action.name);
 			if(action.name == "save"){
-				this._save(action.key, action.value, actionLog);
+				this._save(action.key, action.value);
 			}
 		});
 		
@@ -383,6 +374,8 @@ var moxie = {
 			dojox.sql("INSERT INTO DOCUMENTS (fileName, content) VALUES (?, ?)",
 						record.fileName, record.content);
 		});
+		
+		this._documents = data;
 		
 		dojox.off.sync.finishedDownloading(true, null);
 	},

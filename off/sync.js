@@ -632,9 +632,14 @@ dojo.declare("dojox.off.sync.ActionLog", null, null, {
 		},
 		
 		_save: function(callback){
+			if(!callback){
+				callback = function(){};
+			}
+			
 			try{
 				var self = this;
 				var resultsHandler = function(status, key, message){
+					//console.debug("resultsHandler, status="+status+", key="+key+", message="+message);
 					if(status == dojox.storage.FAILED){
 						dojox.off.onFrameworkEvent("save", 
 											{status: dojox.storage.FAILED,
@@ -642,22 +647,23 @@ dojo.declare("dojox.off.sync.ActionLog", null, null, {
 											key: key,
 											value: message,
 											namespace: dojox.off.STORAGE_NAMESPACE});
-						if(callback){ callback(); }
+						callback();
 					}else if(status == dojox.storage.SUCCESS){
-						if(callback){ callback(); }
+						callback();
 					}
 				};
 				
 				dojox.storage.put("actionlog", this.entries, resultsHandler,
 									dojox.off.STORAGE_NAMESPACE);
 			}catch(exp){
-				console.debug(exp);
+				console.debug("dojox.off.sync._save: " + exp.message||exp);
 				dojox.off.onFrameworkEvent("save",
 							{status: dojox.storage.FAILED,
 							isCoreSave: true,
 							key: "actionlog",
 							value: this.entries,
 							namespace: dojox.off.STORAGE_NAMESPACE});
+				callback();
 			}
 		},
 		
