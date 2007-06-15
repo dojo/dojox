@@ -9,7 +9,8 @@
 	    </style>
 
 	    <script type="text/javascript" 
-	            src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+	            src="../../../../dojo/dojo.js" 
+				djConfig="isDebug: true"></script>
 		
 		<script>
 			dojo.require("dojox.off");
@@ -37,35 +38,62 @@
 					
 					// Dojo Offline and Dojo Storage are ready to be used;
 					// the page is also finished loading
-
-					// FIXME: replace hitches with connects
 					
-					// tell us when we go offline
-					dojo.connect(dojox.off, "onOffline", this, "onOffline");
+					// listen for syncing events; there are several different
+					// syncing event types returned, but we only care about 
+					// two: "download" and "finished"
+					var self = this;
+					dojo.connect(dojox.off.sync, "onSync", this, function(type){
+						if(type == "download"){
+							// the syncing process is at the download stage --
+							// download any data that is necessary to work
+							// offline
+							
+							// call some network service -- in our case
+							// we just add some fake data.
+							self._messages.push("Hi! This is fake downloaded data!");
 					
-					// tell us when we go online
-					dojo.connect(dojox.off, "onOnline", this, "onOnline");
+							// persist this fake data into Dojo Storage
+							dojox.storage.put("messages", self._messages);
 					
-					// Dojo Sync helps us with syncing when we go online;
-					// we have to help it though -- we must provide a way to
-					// download data for offline use (onDownload), and provide
-					// a way to help with syncing data created while offline
-					// (onCommand)
-											
-					// set up how to download our data during syncing
-					dojo.connect(dojox.off.sync, "onDownload", this, "doDownload");
+							// now tell Dojo Sync to continue its syncing
+							// process; a real network service would be
+							// asychronous, so we would have to tell the
+							// syncing system to continue at a later point
+							// when we got our network results back
+							dojox.off.sync.finishedDownloading();
+						}else if(type == "finished"){
+							// the syncing process is finished
+							this._messages = [];
+							dojox.storage.remove("messages");
+						}
+					});
 					
-					// While offline, as a user works, we create Command objects
+					// While offline, as a user works, we create action objects
 					// to represent what they have done while offline, adding
-					// them to a Command Log that will automatically be persisted. 
+					// them to an action log that will automatically be persisted. 
 					// When we go back online, Dojo Sync will replay each of 
-					// these commands, handing them to our onCommand handler
-					// for us to handle
-					dojo.connect(dojox.off.sync.log, "onCommand", this, "onCommand");
-					
-					// This is an optional function to override, but it gets
-					// called when syncing is finished. 
-					dojo.connect(dojox.off.sync, "onFinished", this, "onFinished");
+					// these action, handing them to our onReplay handler
+					// for us to handle and act upon now that we have a network
+					/*dojo.connect(dojox.off.sync.actions, "onReplay", this, 
+								function(action, actionLog){
+									if(action.name == "new hello world message"){
+										// this was a hello world message created while offline
+						
+										// In a real application, we would probably call some network
+										// service to replay this action, such as sending an email,
+										// creating a task, etc. Instead, we just do an alert box.
+										var message = action.data;
+										//self.sendMessage(message);
+										console.debug("sending message " + message);
+						
+										// In a real application, the network call would be
+										// asynchronous so we don't lock up the UI. For this reason,
+										// we have to tell Dojo Sync when to continue replaying the
+										// Action Log
+										//actionLog.continueReplay();
+									}
+					});*/
 					
 					// did the page load with us already offline? if so, 
 					// we will have to load our data from persistent storage for 
@@ -90,97 +118,6 @@
 					if(!dojo.exists("_messages", this)){
 						this._messages = [];
 					}
-				},
-				
-				onOffline: function(){
-					// this method is called if we move offline
-					
-					// the default Dojo Offline UI widget tells the user
-					// about on- or off-line network changes; however, it might
-					// be useful for your own application to also enable or disable
-					// parts of itself when the network status changes. If your
-					// app doesn't care, you can simply leave this method out and get
-					// rid of your dojox.off.onOffline = dojo.hitch(this, this.onOffline)
-					// call
-					
-					// let the Dojo Offline widget update it's UI
-					// since we have overridden this method
-					dojox.off.ui.onOffline();
-					
-					// do our app-specific actions here
-					console.debug("helloWorld.onOffline");
-				},
-				
-				onOnline: function(){
-					// this method is called if we move online
-					
-					// the default Dojo Offline UI widget tells the user
-					// about on- or off-line network changes; however, it might
-					// be useful for your own application to also enable or disable
-					// parts of itself when the network status changes. If your
-					// app doesn't care, you can simply leave this method out and get
-					// rid of your dojox.off.onOnline = dojo.hitch(this, this.onOnline)
-					// call
-					
-					// let the Dojo Offline widget update it's UI
-					// since we have overridden this method
-					dojox.off.ui.onOnline();
-					
-					// do our app-specific actions here
-					console.debug("helloWorld.onOnline");
-				},
-				
-				doDownload: function(){
-					// this method is called during the syncing process;
-					// in it, we should get the data we need for offline
-					// use by calling a network service of some kind
-					
-					// call some network service -- this is pseudocode,
-					// because a real network call would be asychronous
-					this._messages = this.getDownloadData();
-					
-					// persist this fake data into Dojo Storage
-					var self = this;
-					try{
-						dojox.storage.put("messages", this._messages, function(status, key, errorMsg){
-							// Dojo Storage callback method to tell us if the put() succeeded
-							if(status == dojox.storage.FAILED){
-								alert("Unable to locally save downloaded data: " + errorMsg);
-							}
-						});	
-					}catch(exp){
-						alert("Unable to locally save downloaded data: " + exp);
-					}
-					
-					// now tell Dojo Sync to continue it's syncing
-					// process
-					dojox.off.sync.finishedDownloading();
-				},
-				
-				getDownloadData: function(){
-					// we don't have any real data -- return fake data;
-					// in a real application we would make a network call
-					// here
-					this._messages.push("Hi! This is fake downloaded data!");
-					
-					return this._messages;
-				},
-				
-				onFinished: function(){
-					// called when syncing is done.
-					
-					// this is an optional method that does not need to be
-					// overridden, but it helps us because we want to clear
-					// out any old messages we have persisted into 
-					// persistent storage since they are all sent now
-					
-					this._messages = [];
-					dojox.storage.remove("messages");
-					
-					// since we overrode the dojox.sync.onFinished method,
-					// we have to manually tell the Dojo Offline widget
-					// that we are finished
-					dojox.off.ui.onFinished();
 				},
 				
 				printMessages: function(){
@@ -231,62 +168,27 @@
 					// now, persist this into Dojo Storage so it is available
 					// in the future if we don't reach a network while the
 					// browser is open
-					var self = this;
-					try{
-						dojox.storage.put("messages", this._messages, function(status, key, errorMsg){
-							// Dojo Storage callback method to tell us if the put() succeeded
-							if(status == dojox.storage.FAILED){
-								alert("Unable to locally save Hello World messages: " + errorMsg);
-							}
-						});	
-					}catch(exp){
-						alert("Unable to locally save Hello World messages: " + exp);
-					}
+					dojox.storage.put("messages", this._messages);
 					
-					// Dojo Sync has us represent offline actions as Command
+					// Dojo Sync has us represent offline actions as action
 					// objects -- these can have anything we want inside of them.
 					// When we create them, they will be added to an offline 
-					// Command Log, and when we go back online this log will
-					// simply be replayed. Each of these Command objects that we
-					// added while offline will be handed to our onCommand handler
-					// for us to deal with, so we have to place enough info
+					// Action Log, and when we go back online this log will
+					// simply be replayed. Each of the action objects that we
+					// added while offline will be handed to our onReplay handler
+					// for us to deal with later, so we have to place enough info
 					// in here to be useful later on
-					
-					var command = {action: "new hello world message", data: message};
-					dojox.off.sync.log.add(command);
+					var action = {name: "new hello world message", data: message};
+					dojox.off.sync.actions.add(action);
 					
 					alert("This message has been saved for sending when we go back online");
-				},
-				
-				onCommand: function(command){
-					// While offline, as a user works, we create Command objects
-					// to represent what they have done while offline, adding
-					// them to a Command Log that will automatically be persisted. 
-					// When we go back online, Dojo Sync will replay each of 
-					// these commands, handing them to our onCommand handler
-					// for us to handle
-					if(command.action == "new hello world message"){
-						// this was a hello world message created while offline
-						
-						// In a real application, we would probably call some network
-						// service to replay this action, such as sending an email,
-						// creating a task, etc. Instead, we just do an alert box.
-						var message = command.data;
-						this.sendMessage(message);
-						
-						// In a real application, the network call would be
-						// asynchronous so we don't lock up the UI. For this reason,
-						// we have to tell Dojo Sync when to continue replaying the
-						// Command Log
-						dojox.off.sync.log.continueReplay();
-					}
 				}
 			}
 					
 			// Wait until Dojo Offline and Dojo Storage are ready
 			// before we initialize ourselves. When this gets called the page
 			// is also finished loading.
-			dojox.off.ui.onLoad = dojo.hitch(helloWorld, helloWorld.initialize);
+			dojo.connect(dojox.off.ui, "onLoad", helloWorld, "initialize");
 			
 			// tell Dojo Offline we are ready for it to initialize itself now
 			// that we have finished configuring it for our application

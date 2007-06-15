@@ -17,20 +17,24 @@ dojo.mixin(dojox.off.ui, {
 	//	This application's name, such as "Foobar". Note that
 	//	this is a string, not HTML, so embedded markup will
 	//	not work, including entities. Only the following
-	//	characters are allowed: numbers, letters, and spaces
+	//	characters are allowed: numbers, letters, and spaces.
+	//	You must set this property.
 	appName: "setme",
 	
 	// autoEmbed: boolean
+	//	For advanced usage; most developers can ignore this.
 	//	Whether to automatically auto-embed the default Dojo Offline
 	//	widget into this page; default is true. 
 	autoEmbed: true,
 	
 	// autoEmbedID: String
+	//	For advanced usage; most developers can ignore this.
 	//	The ID of the DOM element that will contain our
 	//	Dojo Offline widget; defaults to the ID 'dot-widget'.
 	autoEmbedID: "dot-widget",
 	
 	// runLink: String
+	//	For advanced usage; most developers can ignore this.
 	//	The URL that should be navigated to to run this 
 	//	application offline; this will be placed inside of a
 	//	link that the user can drag to their desktop and double
@@ -46,6 +50,7 @@ dojo.mixin(dojox.off.ui, {
 	runLink: window.location.href,
 	
 	// runLinkTitle: String
+	//	For advanced usage; most developers can ignore this.
 	//	The text that will be inside of the link that a user
 	//	can drag to their desktop to run this application offline.
 	//	By default this is automatically set to "Run " plus your
@@ -53,6 +58,7 @@ dojo.mixin(dojox.off.ui, {
 	runLinkTitle: "Run Application",
 	
 	// learnHowPath: String
+	//	For advanced usage; most developers can ignore this.
 	//	The path to a web page that has information on 
 	//	how to use this web app offline; defaults to
 	//	src/off/ui-template/learnhow.html, relative to
@@ -62,6 +68,7 @@ dojo.mixin(dojox.off.ui, {
 	learnHowPath: dojo.moduleUrl("dojox", "off/resources/learnhow.html"),
 	
 	// customLearnHowPath: boolean
+	//	For advanced usage; most developers can ignore this.
 	//	Whether the developer is using their own custom page
 	//	for the Learn How instructional page; defaults to false.
 	//	Use in conjunction with dojox.off.ui.learnHowPath.
@@ -77,205 +84,19 @@ dojo.mixin(dojox.off.ui, {
 	
 	_initialized: false,
 	
-	onStart: function(){
-		// summary:
-		//	Updates our UI when synchronization first starts.
-		
-		this._updateSyncUI();
-	},
-	
-	onRefreshUI: function(){
-		// summary:
-		//	Updates our UI when synchronization starts
-		//	refreshing offline UI resources
-		
-		this._setSyncMessage("Downloading UI...");
-	},
-	
-	onUpload: function(){
-		// summary:
-		//	Updates our UI when synchronization starts
-		//	uploading locally changed data
-		
-		this._setSyncMessage("Uploading new data...");
-	},
-	
-	onDownload: function(){
-		// summary:
-		//	Updates our UI when synchronization starts
-		//	download new server data
-		
-		this._setSyncMessage("Downloading new data...");
-	},
-	
-	onFinished: function(){
-		// summary:
-		//	Updates our UI when synchronization
-		//	is finished
-		this._updateSyncUI();
-		
-		var checkmark = dojo.byId("dot-success-checkmark");
-		var details = dojo.byId("dot-sync-details");
-		
-		if(dojox.off.sync.successful == true){
-			this._setSyncMessage("Sync Successful");
-			if(checkmark){
-				checkmark.style.display = "inline";
-			}
-		}else if(dojox.off.sync.cancelled == true){
-			this._setSyncMessage("Sync Cancelled");
-			
-			if(checkmark){
-				checkmark.style.display = "none";
-			}
-		}else{
-			this._setSyncMessage("Sync Error");
-			
-			var messages = dojo.byId("dot-sync-messages");
-			if(messages){
-				dojo.addClass(messages, "dot-sync-error");
-			}
-			
-			if(checkmark){
-				checkmark.style.display = "none";
-			}
-		}
-		
-		if(dojox.off.sync.details.length > 0 && details){
-			details.style.display = "inline";
-		}
-	},
-	
-	onCancel: function(){
-		// summary:
-		//	Updates our UI as we attempt sync canceling
-		this._setSyncMessage("Canceling Sync...");
-	},
-	
-	onOnline: function(){
-		// summary:
-		//	Called when we go online.
-		// description:
-		//	When we go online, this method is called to update
-		//	our UI. Default behavior is to update the Offline
-		//	Widget UI and to attempt a synchronization.
-		
-		if(!this._initialized){ return; }
-		
-		// update UI
-		this._updateNetworkIndicator();
-				
-		// synchronize, but pause for a few seconds
-		// so that the user can orient themselves -
-		// 1 second
-		if(dojox.off.sync.autoSync == true){
-			window.setTimeout(dojo.hitch(dojox.off.sync, dojox.off.sync.synchronize), 1000);
-		}
-	},
-	
-	onOffline: function(){
-		// summary:
-		//	Called when we go offline
-		// description:
-		//	When we go offline, this method is called to update
-		//	our UI. Default behavior is to update the Offline
-		//	Widget UI.
-		
-		if(!this._initialized){ return; }
-		
-		// update UI
-		this._updateNetworkIndicator();
-		this._setSyncMessage("You are working offline");
-		
-		// clear old details
-		var details = dojo.byId("dot-sync-details");
-		if(details){
-			details.style.display = "none";
-		}
-	},
-	
-	onSave: function(status, isCoreSave, dataStore, item){
-		if(status == dojox.storage.FAILED
-			&& isCoreSave == true){
-			alert("Please increase the amount of local storage available "
-					+ "to this application");
-			this._showConfiguration();
-			if(dojox.storage.hasSettingsUI()){
-				dojox.storage.showSettingsUI();
-			}		
-			
-			// FIXME: Be able to know if storage size has changed
-			// due to user configuration
-		}
-	},
-	
 	onLoad: function(){
 		// summary:
-		//	A function that can be overridden that allows your
+		//	A function that should be connected to allow your
 		//	application to know when Dojo Offline, the page, and
 		//	the Offline Widget are all initialized and ready to be
-		//	used.
-	},
-	
-	onOfflineCacheInstalled: function(){
-		// summary:
-		//	A function that can be overridden that is called 
-		//	when a user has installed the offline cache after
-		//	the page has been loaded. If a user didn't have an offline cache
-		//	when the page loaded, a UI of some kind might have prompted them
-		//	to download one. This method is called if they have downloaded
-		//	and installed an offline cache so a UI can reinitialize itself
-		//	to begin using this offline cache.
-		
-		// clear out the 'needs offline cache' info
-		this._hideNeedsOfflineCache();
-		
-		// check to see if we need a browser restart
-		// to be able to use this web app offline
-		if(dojox.off.hasOfflineCache == true
-			&& dojox.off.browserRestart == true){
-			this._needsBrowserRestart();
-			return;
-		}else{
-			var browserRestart = dojo.byId("dot-widget-browser-restart");
-			if(browserRestart){
-				browserRestart.style.display = "none";
-			}
-		}
-		
-		// update our sync UI
-		this._updateSyncUI();
-		
-		// register our event listeners for our main buttons
-		this._initMainEvtHandlers();
-		
-		// if offline is disabled, disable everything
-		this._setOfflineEnabled(dojox.off.enabled);
-		
-		// try to go online
-		this._testNetwork();
-	},
-	
-	onCoreOperationFailed: function(){
-		// summary:
-		//	Called if the Dojo Offline machinery is denied
-		//	the ability to work with the offline cache for some
-		//	reason during an operation that is core to it's 
-		//	functionality. For example, if the offline cache
-		//	prompts the user to give permission to cache files
-		//	for offline use, as Google Gears does, and the user
-		//	selects 'deny', then we can not continue to function.
-		//	We 'fail fast' in this scenario so that we are in a
-		//	known state. This callback is called when this occurs.
-		console.log("Application does not have permission to use Dojo Offline");
-		
-		// FIXME: TODO: Update UI based on core operation failing
+		//	used:
+		//
+		//		dojo.connect(dojox.off.ui, "onLoad", someFunc)
 	},
 
 	_initialize: function(){
+		//console.debug("dojox.off.ui._initialize");
 		
-		console.debug("dojox.off.ui._initialize");
-
 		// make sure our app name is correct
 		if(this._validateAppName(this.appName) == false){
 			alert("You must set dojox.off.ui.appName; it can only contain "
@@ -287,26 +108,21 @@ dojo.mixin(dojox.off.ui, {
 		
 		// set our run link text to its default
 		this.runLinkText = "Run " + this.appName;
-
-		dojo.forEach(["onStart", "onRefreshUI", "onUpload", "onDownload", "onFinished", "onCancel" ], 
-			function(evt){
-				dojo.connect(dojox.off.sync, evt, this, evt);
-			}, this
-		);
+		
 		// setup our event listeners for Dojo Offline events
 		// to update our UI
-		dojo.connect(dojox.off, "onOnline", this, "onOnline");
-		dojo.connect(dojox.off, "onOffline", this, "onOffline");
+		dojo.connect(dojox.off, "onNetwork", this, "_onNetwork");
+		dojo.connect(dojox.off.sync, "onSync", this, "_onSync");
 		
 		// cache our default UI resources
 		dojox.off.files.cache([
-			this.htmlTemplatePath,
-			this.cssTemplatePath,
-			this.onlineImagePath,
-			this.offlineImagePath,
-			this.rollerImagePath,
-			this.checkmarkImagePath
-		]);
+							this.htmlTemplatePath,
+							this.cssTemplatePath,
+							this.onlineImagePath,
+							this.offlineImagePath,
+							this.rollerImagePath,
+							this.checkmarkImagePath
+							]);
 		
 		// embed the offline widget UI
 		if(this.autoEmbed){
@@ -316,16 +132,16 @@ dojo.mixin(dojox.off.ui, {
 	
 	_doAutoEmbed: function(){
 		// fetch our HTML for the offline widget
-		var templatePath = this.htmlTemplatePath;
-		
+
 		// dispatch the request
 		dojo.xhrGet({
-			url:	 templatePath,
+			url:	 this.htmlTemplatePath,
 			handleAs:	"text",
 			error:		function(err){
 				dojox.off.enabled = false;
+				err = err.message||err;
 				alert("Error loading the Dojo Offline Widget from "
-						+ templatePath + ": " + err.message);
+						+ this.htmlTemplatePath + ": " + err);
 			},
 			load:		dojo.hitch(this, this._templateLoaded)	 
 		});
@@ -335,15 +151,13 @@ dojo.mixin(dojox.off.ui, {
 		//console.debug("dojo.off.ui._templateLoaded");
 		// inline our HTML
 		var container = dojo.byId(this.autoEmbedID);
-		if(container){
-			container.innerHTML = data;
-		}
+		if(container){ container.innerHTML = data; }
 		
 		// fill out our image paths
 		this._initImages();
 		
 		// update our network indicator status ball
-		this._updateNetworkIndicator();
+		this._updateNetIndicator();
 		
 		// update our 'Learn How' text
 		this._initLearnHow();
@@ -351,22 +165,19 @@ dojo.mixin(dojox.off.ui, {
 		this._initialized = true;
 		
 		// check offline cache settings
-		if(dojox.off.hasOfflineCache == false){
+		if(!dojox.off.hasOfflineCache){
 			this._showNeedsOfflineCache();
 			return;
 		}
 		
 		// check to see if we need a browser restart
 		// to be able to use this web app offline
-		if(dojox.off.hasOfflineCache == true
-			&& dojox.off.browserRestart == true){
+		if(dojox.off.hasOfflineCache && dojox.off.browserRestart){
 			this._needsBrowserRestart();
 			return;
 		}else{
 			var browserRestart = dojo.byId("dot-widget-browser-restart");
-			if(browserRestart){
-				browserRestart.style.display = "none";
-			}
+			if(browserRestart){ browserRestart.style.display = "none"; }
 		}
 		
 		// update our sync UI
@@ -375,31 +186,28 @@ dojo.mixin(dojox.off.ui, {
 		// register our event listeners for our main buttons
 		this._initMainEvtHandlers();
 		
-		// if offline is disabled, disable everything
+		// if offline functionality is disabled, disable everything
 		this._setOfflineEnabled(dojox.off.enabled);
 		
 		// try to go online
-		this._testNetwork();
+		this._testNet();
 	},
 	
-	_testNetwork: function(){
-		var finishedCallback = dojo.hitch(this, function(isOnline){
+	_testNet: function(){
+		dojox.off.goOnline(dojo.hitch(this, function(isOnline){
 			//console.debug("testNetwork callback, isOnline="+isOnline);
 			
 			// display our online/offline results
-			this._goOnlineFinished(isOnline);
+			this._onNetwork(isOnline ? "online" : "offline");
 			
 			// indicate that our default UI 
 			// and Dojo Offline are now ready to
 			// be used
-			if(this.onLoad){
-				this.onLoad();
-			}
-		});
-		dojox.off.goOnline(finishedCallback);
+			this.onLoad();
+		}));
 	},
 	
-	_updateNetworkIndicator: function(){
+	_updateNetIndicator: function(){
 		var onlineImg = dojo.byId("dot-widget-network-indicator-online");
 		var offlineImg = dojo.byId("dot-widget-network-indicator-offline");
 		var titleText = dojo.byId("dot-widget-title-text");
@@ -415,7 +223,7 @@ dojo.mixin(dojox.off.ui, {
 		}
 		
 		if(titleText){
-			if(dojox.off.isOnline == true){
+			if(dojox.off.isOnline){
 				titleText.innerHTML = "Online";
 			}else{
 				titleText.innerHTML = "Offline";
@@ -426,15 +234,13 @@ dojo.mixin(dojox.off.ui, {
 	_initLearnHow: function(){
 		var learnHow = dojo.byId("dot-widget-learn-how-link");
 		
-		if(!learnHow){
-			return;
-		}
+		if(!learnHow){ return; }
 		
 		if(!this.customLearnHowPath){
 			// add parameters to URL so the Learn How page
 			// can customize itself and display itself
 			// correctly based on framework settings
-			var dojoPath = dojo.baseUrl;
+			var dojoPath = djConfig.baseRelativePath;
 			this.learnHowPath += "?appName=" + encodeURIComponent(this.appName)
 									+ "&hasOfflineCache=" + dojox.off.hasOfflineCache
 									+ "&runLink=" + encodeURIComponent(this.runLink)
@@ -453,12 +259,14 @@ dojo.mixin(dojox.off.ui, {
 		var appName = dojo.byId("dot-widget-learn-how-app-name");
 		
 		if(!appName){ return; }
+		
 		appName.innerHTML = "";
 		appName.appendChild(document.createTextNode(this.appName));
 	},
 	
 	_validateAppName: function(appName){
 		if(!appName){ return false; }
+		
 		return (/^[a-z0-9 ]*$/i.test(appName));
 	},
 	
@@ -472,33 +280,21 @@ dojo.mixin(dojox.off.ui, {
 		if(dojox.off.sync.isSyncing){
 			this._clearSyncMessage();
 			
-			if(roller){
-				roller.style.display = "inline";
-			}
+			if(roller){ roller.style.display = "inline"; }
 			
-			if(checkmark){
-				checkmark.style.display = "none";
-			}
+			if(checkmark){ checkmark.style.display = "none"; }
 			
 			if(syncMessages){
 				dojo.removeClass(syncMessages, "dot-sync-error");
 			}
 			
-			if(details){
-				details.style.display = "none";
-			}
+			if(details){ details.style.display = "none"; }
 			
-			if(cancel){
-				cancel.style.display = "inline";
-			}
+			if(cancel){ cancel.style.display = "inline"; }
 		}else{	
-			if(roller){
-				roller.style.display = "none";
-			}
+			if(roller){ roller.style.display = "none"; }
 			
-			if(cancel){
-				cancel.style.display = "none";
-			}
+			if(cancel){ cancel.style.display = "none"; }
 		}
 	},
 	
@@ -511,7 +307,7 @@ dojo.mixin(dojox.off.ui, {
 			// Brad Neuberg, bkn3@columbia.edu
 			//syncMessage.innerHTML = message;
 			
-			while(syncMessage.firstChild != null){
+			while(syncMessage.firstChild){
 				syncMessage.removeChild(syncMessage.firstChild);
 			}
 			syncMessage.appendChild(document.createTextNode(message));
@@ -549,7 +345,7 @@ dojo.mixin(dojox.off.ui, {
 		evt.preventDefault();
 		evt.stopPropagation();
 		
-		if(dojox.off.sync.details.length == 0){
+		if(!dojox.off.sync.details.length){
 			return;
 		}
 		
@@ -577,7 +373,7 @@ dojo.mixin(dojox.off.ui, {
 
 		var popup = window.open("", "SyncDetails", windowParams);
 		
-		if(popup == null || typeof popup == "undefined"){ // aggressive popup blocker
+		if(!popup){ // aggressive popup blocker
 			alert("Please allow popup windows for this domain; can't display sync details window");
 			return;
 		}
@@ -598,21 +394,6 @@ dojo.mixin(dojox.off.ui, {
 		evt.stopPropagation();
 		
 		dojox.off.sync.cancel();
-	},
-	
-	_goOnlineFinished: function(isOnline){
-		var roller = dojo.byId("dot-roller");
-		if(roller){
-			roller.style.display = "none";
-		}
-		
-		if(isOnline){
-			this._clearSyncMessage();
-			this.onOnline();
-		}else{
-			this._setSyncMessage("Network not available");
-			this.onOffline();
-		}
 	},
 	
 	_needsBrowserRestart: function(){
@@ -659,34 +440,161 @@ dojo.mixin(dojox.off.ui, {
 	},
 	
 	_setOfflineEnabled: function(enabled){
-		var elems = new Array();
+		var elems = [];
 		elems.push(dojo.byId("dot-sync-status"));
 		
 		for(var i = 0; i < elems.length; i++){
 			if(elems[i]){
-				if(enabled){
-					elems[i].style.visibility = "visible";
-				}else{
-					elems[i].style.visibility = "hidden";
-				}
+				elems[i].style.visibility = 
+							(enabled ? "visible" : "hidden");
 			}
 		}
-	}
+	},
+	
+	_syncFinished: function(){
+		this._updateSyncUI();
+		
+		var checkmark = dojo.byId("dot-success-checkmark");
+		var details = dojo.byId("dot-sync-details");
+		
+		if(dojox.off.sync.successful == true){
+			this._setSyncMessage("Sync Successful");
+			if(checkmark){ checkmark.style.display = "inline"; }
+		}else if(dojox.off.sync.cancelled == true){
+			this._setSyncMessage("Sync Cancelled");
+			
+			if(checkmark){ checkmark.style.display = "none"; }
+		}else{
+			this._setSyncMessage("Sync Error");
+			
+			var messages = dojo.byId("dot-sync-messages");
+			if(messages){
+				dojo.addClass(messages, "dot-sync-error");
+			}
+			
+			if(checkmark){ checkmark.style.display = "none"; }
+		}
+		
+		if(dojox.off.sync.details.length && details){
+			details.style.display = "inline";
+		}
+	},
+	
+	_onFrameworkEvent: function(type, saveData){
+		if(type == "save"){
+			if(saveData.status == dojox.storage.FAILED && !saveData.isCoreSave){
+				alert("Please increase the amount of local storage available "
+						+ "to this application");
+				if(dojox.storage.hasSettingsUI()){
+					dojox.storage.showSettingsUI();
+				}		
+			
+				// FIXME: Be able to know if storage size has changed
+				// due to user configuration
+			}
+		}else if(type == "coreOperationFailed"){
+			console.log("Application does not have permission to use Dojo Offline");
+		
+			// FIXME: TODO: Update UI based on core operation failing
+		}else if(type == "offlineCacheInstalled"){
+			// clear out the 'needs offline cache' info
+			this._hideNeedsOfflineCache();
+		
+			// check to see if we need a browser restart
+			// to be able to use this web app offline
+			if(dojox.off.hasOfflineCache == true
+				&& dojox.off.browserRestart == true){
+				this._needsBrowserRestart();
+				return;
+			}else{
+				var browserRestart = dojo.byId("dot-widget-browser-restart");
+				if(browserRestart){
+					browserRestart.style.display = "none";
+				}
+			}
+		
+			// update our sync UI
+			this._updateSyncUI();
+		
+			// register our event listeners for our main buttons
+			this._initMainEvtHandlers();
+		
+			// if offline is disabled, disable everything
+			this._setOfflineEnabled(dojox.off.enabled);
+		
+			// try to go online
+			this._testNet();
+		}
+	},
+	
+	_onSync: function(type){
+		//console.debug("ui, onSync="+type);
+		switch(type){
+			case "start": 
+				this._updateSyncUI();
+				break;
+				
+			case "refreshFiles":
+				this._setSyncMessage("Downloading UI...");
+				break;
+				
+			case "upload":
+				this._setSyncMessage("Uploading new data...");
+				break;
+				
+			case "download":
+				this._setSyncMessage("Downloading new data...");
+				break;
+				
+			case "finished":
+				this._syncFinished();
+				break;
+				
+			case "cancel":
+				this._setSyncMessage("Canceling Sync...");
+				break;
+				
+			default:
+				dojo.warn("Programming error: "
+							+ "Unknown sync type in dojox.off.ui: " + type);
+				break;
+		}
+	},
+	
+	_onNetwork: function(type){
+		// summary:
+		//	Called when we go on- or off-line
+		// description:
+		//	When we go online or offline, this method is called to update
+		//	our UI. Default behavior is to update the Offline
+		//	Widget UI and to attempt a synchronization.
+		// type: String
+		//	"online" if we just moved online, and "offline" if we just
+		//	moved offline.
+		
+		if(!this._initialized){ return; }
+		
+		// update UI
+		this._updateNetIndicator();
+		
+		if(type == "offline"){
+			this._setSyncMessage("You are working offline");
+		
+			// clear old details
+			var details = dojo.byId("dot-sync-details");
+			if(details){ details.style.display = "none"; }
+		}else{ // online
+			// synchronize, but pause for a few seconds
+			// so that the user can orient themselves
+			if(dojox.off.sync.autoSync){
+				window.setTimeout("dojox.off.sync.synchronize()", 1000);
+			}
+		}
+	},
 });
 
-// register ourselves to know when failed saves have 
-// occurred
-dojo.connect(dojox.off, "onSave", dojox.off.ui, "onSave");
-
-// register ourselves to know when an offline cache has
-// been installed even after the page is finished loading
-dojo.connect(dojox.off, "onOfflineCacheInstalled", dojox.off.ui, 
-				"onOfflineCacheInstalled");
-
-// register ourselves to know if some core operation failed
-// or was denied by the user
-dojo.connect(dojox.off, "onCoreOperationFailed", dojox.off.ui,
-				"onCoreOperationFailed");
+// register ourselves for low-level framework events
+dojo.connect(dojox.off, "onFrameworkEvent", dojox.off.ui, "_onFrameworkEvent");
 
 // start our magic when the Dojo Offline framework is ready to go
-dojox.off.addOnLoad(dojo.hitch(dojox.off.ui, "_initialize"));
+dojo.connect(dojox.off, "onLoad", dojox.off.ui, dojox.off.ui._initialize);

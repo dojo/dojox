@@ -101,7 +101,9 @@ if(dojo.isGears){
 						return;
 					}
 					
-					resultsHandler(dojox.storage.SUCCESS, key, null);
+					if(resultsHandler){
+						resultsHandler(dojox.storage.SUCCESS, key, null);
+					}
 				},
 
 				get: function(key, namespace){

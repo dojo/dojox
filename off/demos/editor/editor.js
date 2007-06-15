@@ -35,7 +35,7 @@ var moxie = {
 		// make sure the rich text control is finished
 		// loading; workaround for bug 3395
 		var richTextControl = dijit.byId("storageValue");
-		if(richTextControl.isLoaded == false){
+		if(!richTextControl.isLoaded){
 			dojo.connect(richTextControl, "onLoad", this, "initialize");
 			return;
 		}
@@ -69,9 +69,7 @@ var moxie = {
 		keyNameField.value = key;
 		
 		// if blank key ignore
-		if(key == ""){
-			return;
-		}
+		if(key == ""){ return; }
 		
 		this._load(key);		
 	},
@@ -86,12 +84,12 @@ var moxie = {
 		var richTextControl = dijit.byId("storageValue");
 		var value = richTextControl.getValue();
 		
-		if(key == null || typeof key == "undefined" || key == ""){
+		if(!key){
 			alert("Please enter a file name");
 			return;
 		}
 		
-		if(value == null || typeof value == "undefined" || value == ""){
+		if(!value){
 			alert("Please enter file contents");
 			return;
 		}
@@ -100,17 +98,17 @@ var moxie = {
 		this._save(key, value)
 	},
 	
-	_save: function(key, value, log){
+	_save: function(key, value, actionLog){
 		this._printStatus("Saving '" + key + "'...");
 		
-		if(dojox.off.isOnline == true){
-			this._saveOnline(key, value, log);
+		if(dojox.off.isOnline){
+			this._saveOnline(key, value, actionLog);
 		}else{
 			this._saveOffline(key, value);
 		}
 	},
 	
-	_saveOnline: function(key, value){
+	_saveOnline: function(key, value, actionLog){
 		var self = this;
 		var doLoad = function(data){
 			//console.debug("load, data="+data);	
@@ -119,24 +117,25 @@ var moxie = {
 			// add to our list of available keys
 			self._addKey(key);
 			
-			if(dojox.off.sync.log.isReplaying == false){
+			if(!actionLog.isReplaying){
 				// update the list of available keys
 				self._printAvailableKeys();
 			}else{
-				dojox.off.sync.log.continueReplay();	
+				console.debug("About to continue");
+				actionLog.continueReplay();	
 			}
 		};
 		
 		var bindArgs = {
 			url:	 "/moxie/" + encodeURIComponent(key),
-			content:	{"content": value},
+			content:	{ "content": value },
 			error:		function(err){
 				//console.debug("error, err="+err);
 				var msg = "Unable to save file " + key + ": " + err;
-				if(dojox.off.sync.log.isReplaying == false){
+				if(!actionLog.isReplaying){
 					alert(msg);
 				}else{
-					dojox.off.sync.log.haltReplay(msg);
+					actionLog.haltReplay(msg);
 				}
 			},
 			load:		doLoad
@@ -147,12 +146,12 @@ var moxie = {
 	},
 	
 	_saveOffline: function(key, value){
-		// create a command object to capture this action
-		var command = {name: "save", key: key, value: value};
+		// create an action object to capture this action
+		var action = {name: "save", key: key, value: value};
 		
-		// save it in our command log for replaying when we 
+		// save it in our action log for replaying when we 
 		// go back online
-		dojox.off.sync.log.add(command);
+		dojox.off.sync.actions.add(action);
 		
 		// also add it to our offline, downloaded data
 		this._documents.push({fileName: key, content: value});
@@ -166,7 +165,7 @@ var moxie = {
 	},
 	
 	_loadKeys: function(){
-		if(dojox.off.isOnline == true){
+		if(dojox.off.isOnline){
 			this._loadKeysOnline();
 		}else{
 			this._loadKeysOffline();
@@ -181,11 +180,12 @@ var moxie = {
 		var bindArgs = {
 			url:	 url,
 			handleAs:	"javascript",
-			headers:		{ "Accept" : "text/javascript" },
+			headers:	{ "Accept" : "text/javascript" },
 			error:		function(err){
 				//console.debug("error, err="+err);
+				err = err.message||err;
 				alert("Unable to load our list of available keys from "
-						+ "the server: " + err.message);
+						+ "the server: " + err);
 			},
 			load:		function(data){
 				//console.debug("load, data="+data);	
@@ -239,7 +239,7 @@ var moxie = {
 			}	
 		}	
 		
-		if(alreadyPresent == false){
+		if(!alreadyPresent){
 			this._availableKeys.push(key);
 		}
 	},
@@ -247,7 +247,7 @@ var moxie = {
 	_load: function(key){
 		this._printStatus("Loading '" + key + "'...");
 		
-		if(dojox.off.isOnline == true){
+		if(dojox.off.isOnline){
 			this._loadOnline(key);
 		}else{
 			this._loadOffline(key);
@@ -267,11 +267,12 @@ var moxie = {
 			handleAs:	"text",
 			error:		function(err){
 				//console.debug("error, err="+err);
+				err = err.message||err;
 				alert("The file " + key + " is not available: "
-						+ err.message);
+						+ err);
 			},
 			load:		function(data){
-				//console.debug("load, data="+data);	
+				console.debug("load, data="+data);	
 				self._updateEditorContents(data);
 			
 				// print out that we are done
@@ -292,7 +293,6 @@ var moxie = {
 				break;
 			}
 		}
-		
 		this._updateEditorContents(doc.content);
 	},
 	
@@ -322,31 +322,31 @@ var moxie = {
 	},
 	
 	_initOfflineHandlers: function(){
-		// setup what we do when we are replaying our command
+		// setup what we do when we are replaying our action
 		// log when the network reappears
-		var self = this;
-		dojox.off.sync.log.onCommand = function(command){
-			if(command.name == "save"){
-				self._save(command.key, command.value);
+		dojo.connect(dojox.off.sync.actions, "onReplay", this, function(action, actionLog){
+			console.debug("onReplay, action="+action);
+			console.debug("action.name="+action.name);
+			if(action.name == "save"){
+				this._save(action.key, action.value, actionLog);
 			}
-		}
+		});
 		
-		// setup how we download our data from the server
-		dojox.off.sync.doDownload = function(){
-			// actually download our data
-			self._downloadData();
-		}
-		
-		// refresh our UI when we are finished syncing
-		dojox.off.sync.onFinished = function(){
-			dojox.off.ui.onFinished();
-			
-			self._printAvailableKeys();
-		}
+		// handle syncing
+		dojo.connect(dojox.off.sync, "onSync", this, function(type){
+			// setup how we download our data from the server
+			if(type == "download"){
+				this._downloadData();
+			}else if(type == "finished"){
+				// refresh our UI when we are finished syncing
+				this._printAvailableKeys();
+			}
+		});
 	},
 	
 	_downloadData: function(){
 		var self = this;
+		
 		// add 'cachebust' to the URL to make sure we get a fresh
 		// copy that is not returned from either the browser's cache
 		// or the local offline proxy's cache
@@ -356,10 +356,7 @@ var moxie = {
 			headers:	{ "Accept" : "text/javascript" },
 			error:		function(err){
 				//console.debug("moxie._downloadData.error, err="+err);
-				if(err.message){
-					err = err.message;
-				}
-				
+				err = err.message||err;
 				var message = "Unable to download our documents from server: "
 								+ err;
 				dojox.off.sync.finishedDownloading(false, message);
@@ -386,16 +383,14 @@ var moxie = {
 			dojox.sql("INSERT INTO DOCUMENTS (fileName, content) VALUES (?, ?)",
 						record.fileName, record.content);
 		});
+		
 		dojox.off.sync.finishedDownloading(true, null);
 	},
 	
 	_loadDownloadedData: function(){
 		this._availableKeys = [];
 		this._documents = dojox.sql("SELECT * FROM DOCUMENTS");
-		if(this._documents == null
-			|| typeof this._documents == "undefined"){
-			this._documents = [];
-		}
+		if(!this._documents){ this._documents = []; }
 		
 		for(var i = 0; i < this._documents.length; i++){
 			var fileName = this._documents[i].fileName;

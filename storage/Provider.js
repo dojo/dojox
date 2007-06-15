@@ -86,6 +86,15 @@ dojo.declare("dojox.storage.Provider",
 			//			  alert("status="+status+", key="+key+", message="+message);
 			//			};
 			//			dojox.storage.put("test", "hello world", resultsHandler);
+			//	
+			//		Important note: if you are using Dojo Storage in conjunction with
+			//		Dojo Offline, then you don't need to provide
+			//		a resultsHandler; this is because for Dojo Offline we 
+			//		use Google Gears to persist data, which has unlimited data
+			//		once the user has given permission. If you are using Dojo
+			//		Storage apart from Dojo Offline, then under the covers hidden
+			//		Flash might be used, which is both asychronous and which might
+			//		get denied; in this case you must provide a resultsHandler.
 			// key:
 			//		A string key to use when retrieving this value in the future.
 			// value:

@@ -10,9 +10,14 @@ dojo.provide("dojox.off.files");
 //	what resources should be available offline,
 //	such as CSS files, JavaScript, HTML, etc.
 dojox.off.files = {
+	// listOfURLs: Array
+	//	For advanced usage; most developers can ignore this.
+	//	Our list of URLs that will be cached and made available
+	//	offline.
 	listOfURLs: [],
 	
 	// refreshing: boolean
+	//	For advanced usage; most developers can ignore this.
 	//	Whether we are currently in the middle
 	//	of refreshing our list of offline files.
 	refreshing: false,
@@ -21,7 +26,6 @@ dojox.off.files = {
 	
 	_error: false,
 	_errorMessages: [],
-	_finishedCallback: null,
 	_currentFileIndex: 0,
 	_store: null,
 	
@@ -34,21 +38,15 @@ dojox.off.files = {
 		// urlOrList: String or Array[]
 		//		A URL of a file to cache or an Array of Strings of files to
 		//		cache
-		// console.debug(urlOrList);
-		if(dojo.isString(urlOrList)||(urlOrList instanceof dojo._Url)){
+		if(dojo.isString(urlOrList)){
 			this.listOfURLs.push(urlOrList+"");
+		}else if(urlOrList instanceof dojo._Url){
+			this.listOfURLs.push(urlOrList.uri);
 		}else{
 			dojo.forEach(urlOrList, function(url){ this.listOfURLs.push(url); }, this);
 		}
 	},
 	
-	clobber: function(/*String*/ ns){ /* void */
-		// summary: removes the default store. Think of it as "clearing the cache" for gears
-		var localServer = google.gears.factory.create("beta.localserver", "1.0");
-		var storeName = dojox.off.STORAGE_NAMESPACE + "_store";
-		localServer.removeStore(storeName);
-	},
-
 	remove: function(url){ /* void */
 		// summary:
 		//		Removes a URL from the list of files to cache.
@@ -82,17 +80,17 @@ dojox.off.files = {
 		return false;
 	},
 	
-	refresh: function(finishedCallback){ /* void */
+	refresh: function(callback){ /* void */
 		//console.debug("dojox.off.files.refresh");
 		// summary:
-		//		Refreshes our list of offline resources, making them available
-		//		offline.
-		// finishedCallback: Function
-		//		A callback that receives two arguments: whether an error
-		//		occurred, which is a boolean; and an array of error message
-		//		strings with details on errors encountered. If no error occured
-		//		then message is empty array with length 0.
-		finishedCallback = finishedCallback || function(){};
+		//	For advanced usage; most developers can ignore this.
+		//	Refreshes our list of offline resources,
+		//	making them available offline.
+		// callback: Function
+		//	A callback that receives two arguments: whether an error
+		//	occurred, which is a boolean; and an array of error message strings
+		//	with details on errors encountered. If no error occured then message is
+		//	empty array with length 0.
 		try{
 			this.refreshing = true;
 		
@@ -100,8 +98,8 @@ dojox.off.files = {
 			var localServer = google.gears.factory.create("beta.localserver", "1.0");
 			var storeName = dojox.off.STORAGE_NAMESPACE + "_store";
 			
-			// refresh everything by simply removing any older stores
-
+			// refresh everything by simply removing
+			// any older stores
 			// FIXME: Explore whether this is truly needed -
 			// workaround for versioning without using
 			// Gears ManagedResourceStore
@@ -113,42 +111,43 @@ dojox.off.files = {
 			this._store = store;
 
 			// add our list of files to capture
+			var self = this;
 			this._currentFileIndex = 0;
-			this._cancelID = store.capture(this.listOfURLs, 
-				dojo.hitch(this, function(url, success, captureId){
-					console.debug("store.capture, url="+url+", success="+success);
-					if(!success){
-						this._cancelID = null;
-						this.refreshing = false;
-						var errorMsgs = [];
-						errorMsgs.push("Unable to capture: " + url);
-						finishedCallback(true, errorMsgs);
-						return;
-					}else{
-						this._currentFileIndex++;
-					}
-					
-				
-					if(this._currentFileIndex >= this.listOfURLs.length){
-						this._cancelID = null;
-						this.refreshing = false;
-						finishedCallback(false, []);
-					}
+			this._cancelID = store.capture(this.listOfURLs, function(url, success, captureId){
+				//console.debug("store.capture, url="+url+", success="+success);
+				if(!success){
+					self._cancelID = null;
+					self.refreshing = false;
+					var errorMsgs = [];
+					errorMsgs.push("Unable to capture: " + url);
+					callback(true, errorMsgs);
+					return;
+				}else{
+					self._currentFileIndex++;
 				}
-			));
+				
+				if(self._currentFileIndex >= self.listOfURLs.length){
+					self._cancelID = null;
+					self.refreshing = false;
+					callback(false, []);
+				}
+			});
 		}catch(e){
 			this.refreshing = false;
 			
 			// can't refresh files -- core operation --
 			// fail fast
-			dojox.off.coreOperationFailed = true;
+			dojox.off.coreOpFailed = true;
 			dojox.off.enabled = false;
-			dojox.off.onCoreOperationFailed();
+			dojox.off.onFrameworkEvent("coreOperationFailed");
 		}
 	},
 	
 	abortRefresh: function(){
-		if(this.refreshing == false){
+		// summary:
+		//	For advanced usage; most developers can ignore this.
+		//	Aborts and cancels a refresh.
+		if(!this.refreshing){
 			return;
 		}
 		
