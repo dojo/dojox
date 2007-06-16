@@ -281,6 +281,9 @@ dojo.mixin(dojox.off, {
 		// offline
 		dojox.off.files.cache(dojox.storage.manager.getResourceList());
 		
+		// slurp the page if the end-developer wants that
+		dojox.off.files._slurp();
+		
 		// see if we have an offline cache; when done, move
 		// on to the rest of our startup tasks
 		this._checkOfflineCacheAvailable(dojo.hitch(this, "_onOfflineCacheChecked"));

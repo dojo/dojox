@@ -28,6 +28,44 @@ dojox.off.files = {
 	_errorMessages: [],
 	_currentFileIndex: 0,
 	_store: null,
+	_doSlurp: false,
+	
+	slurp: function(){
+		// summary:
+		//	Autoscans the page to find all resources to
+		//	cache. This includes scripts, images, CSS, and hyperlinks
+		//	to pages that are in the same scheme/port/host as this
+		//	page. We also scan the embedded CSS of any stylesheets
+		//	to find @import statements and url()'s.
+		//  You should call this method from the top-level, outside of
+		//	any functions and before the page loads:
+		//
+		//	<script>
+		//		dojo.require("dojox.sql");
+		//		dojo.require("dojox.off");
+		//		dojo.require("dojox.off.ui");
+		//		dojo.require("dojox.off.sync");
+		//
+		//		// configure how we should work offline
+		//
+		//		// set our application name
+		//		dojox.off.ui.appName = "Moxie";
+		//
+		//		// automatically "slurp" the page and
+		//		// capture the resources we need offline
+		//		dojox.off.files.slurp();
+		//
+		// 		// tell Dojo Offline we are ready for it to initialize itself now
+		//		// that we have finished configuring it for our application
+		//		dojox.off.initialize();
+		//	</script>
+		
+		// just schedule the slurp once the page is loaded and
+		// Dojo Offline is ready to slurp; dojox.off will call
+		// our _slurp() method before indicating it is finished
+		// loading
+		this._doSlurp = true;
+	},
 	
 	cache: function(urlOrList){ /* void */
 		// summary:
@@ -38,13 +76,40 @@ dojox.off.files = {
 		// urlOrList: String or Array[]
 		//		A URL of a file to cache or an Array of Strings of files to
 		//		cache
+		
+		//console.debug("dojox.off.files.cache, urlOrList="+urlOrList);
+		
 		if(dojo.isString(urlOrList)){
-			this.listOfURLs.push(urlOrList+"");
+			var url = this._trimAnchor(urlOrList+"");
+			if(!this.isAvailable(url)){ 
+				this.listOfURLs.push(url); 
+			}
 		}else if(urlOrList instanceof dojo._Url){
-			this.listOfURLs.push(urlOrList.uri);
+			var url = this._trimAnchor(urlOrList.uri);
+			if(!this.isAvailable(url)){ 
+				this.listOfURLs.push(url); 
+			}
 		}else{
-			dojo.forEach(urlOrList, function(url){ this.listOfURLs.push(url); }, this);
+			dojo.forEach(urlOrList, function(url){
+				url = this._trimAnchor(url);
+				if(!this.isAvailable(url)){ 
+					this.listOfURLs.push(url); 
+				}
+			}, this);
 		}
+	},
+	
+	printURLs: function(){
+		// summary:
+		//	A helper function that will dump and print out
+		//	all of the URLs that are cached for offline
+		//	availability. This can help with debugging if you
+		//	are trying to make sure that all of your URLs are
+		//	available offline
+		console.debug("The following URLs are cached for offline use:");
+		dojo.forEach(this.listOfURLs, function(i){
+			console.debug(i);
+		});	
 	},
 	
 	remove: function(url){ /* void */
@@ -92,6 +157,10 @@ dojox.off.files = {
 		//	with details on errors encountered. If no error occured then message is
 		//	empty array with length 0.
 		try{
+			if(djConfig.isDebug){
+				this.printURLs();
+			}
+			
 			this.refreshing = true;
 		
 			// get our local server
@@ -153,5 +222,135 @@ dojox.off.files = {
 		
 		this._store.abortCapture(this._cancelID);
 		this.refreshing = false;
+	},
+	
+	_slurp: function(){
+		if(!this._doSlurp){
+			return;
+		}
+		
+		var handleUrl = dojo.hitch(this, function(url){
+			//console.debug("handleUrl, url="+url);
+			if(this._sameLocation(url)){
+				this.cache(url);
+			}
+		});
+		
+		handleUrl(window.location.href);
+		
+		dojo.forEach(dojo.query("script"), function(i){
+			try{
+				handleUrl(i.getAttribute("src"));
+			}catch(exp){
+				//console.debug("dojox.off.files.slurp 'script' error: " 
+				//				+ exp.message||exp);
+			}
+		});
+		
+		dojo.forEach(dojo.query("link"), function(i){
+			try{
+				if(!i.getAttribute("rel")
+					|| i.getAttribute("rel").toLowerCase() != "stylesheet"){
+					return;
+				}
+			
+				handleUrl(i.getAttribute("href"));
+			}catch(exp){
+				//console.debug("dojox.off.files.slurp 'link' error: " 
+				//				+ exp.message||exp);
+			}
+		});
+		
+		dojo.forEach(dojo.query("a"), function(i){
+			try{
+				handleUrl(i.getAttribute("href"));
+			}catch(exp){
+				//console.debug("dojox.off.files.slurp 'a' error: " 
+				//				+ exp.message||exp);
+			}
+		});
+		
+		// parse our style sheets for inline URLs and imports
+		dojo.forEach(document.styleSheets, function(sheet){
+			try{
+				if(sheet.cssRules){ // Firefox
+					dojo.forEach(sheet.cssRules, function(rule){
+						var text = rule.cssText;
+						if(text){
+							var matches = text.match(/url\(\s*([^\) ]*)\s*\)/i);
+							if(!matches){
+								return;
+							}
+							
+							for(var i = 1; i < matches.length; i++){
+								handleUrl(matches[i])
+							}
+						}
+					});
+				}else if(sheet.cssText){ // IE
+					var matches;
+					var text = sheet.cssText.toString();
+					// unfortunately, using RegExp.exec seems to be flakey
+					// for looping across multiple lines on IE using the
+					// global flag, so we have to simulate it
+					var lines = text.split(/\f|\r|\n/);
+					for(var i = 0; i < lines.length; i++){
+						matches = lines[i].match(/url\(\s*([^\) ]*)\s*\)/i);
+						if(matches && matches.length){
+							handleUrl(matches[1]);
+						}
+					}
+				}
+			}catch(exp){
+				//console.debug("dojox.off.files.slurp stylesheet parse error: " 
+				//				+ exp.message||exp);
+			}
+		});
+		
+		//this.printURLs();
+	},
+	
+	_sameLocation: function(url){
+		if(!url){ return false; }
+		
+		// filter out anchors
+		if(url.length && url.charAt(0) == "#"){
+			return false;
+		}
+		
+		// FIXME: dojo._Url should be made public;
+		// it's functionality is very useful for
+		// parsing URLs correctly, which is hard to
+		// do right
+		url = new dojo._Url(url);
+		
+		// totally relative -- ../../someFile.html
+		if(!url.scheme && !url.port && !url.host){ 
+			return true;
+		}
+		
+		// scheme relative with port specified -- brad.com:8080
+		if(!url.scheme && url.host && url.port
+				&& window.location.hostname == url.host
+				&& window.location.port == url.port){
+			return true;
+		}
+		
+		// scheme relative with no-port specified -- brad.com
+		if(!url.scheme && url.host && !url.port
+			&& window.location.hostname == url.host
+			&& window.location.port == 80){
+			return true;
+		}
+		
+		// else we have everything
+
+		return (window.location.protocol == (url.scheme + ":")
+				&& window.location.hostname == url.host
+				&& window.location.port == url.port);
+	},
+	
+	_trimAnchor: function(url){
+		return url.replace(/\#.*$/, "");
 	}
 }

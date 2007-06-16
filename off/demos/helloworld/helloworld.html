@@ -23,11 +23,9 @@
 			// set our application name
 			dojox.off.ui.appName = "Hello World";
 
-			// resources that Hello World needs when
-			// offline
-			dojox.off.files.cache([
-								"helloworld.html"
-								]);
+			// automatically "slurp" the page and
+			// capture the resources we need offline
+			dojox.off.files.slurp();
 			
 			var helloWorld = {
 				/* hello world messages to be sent */

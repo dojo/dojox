@@ -11,13 +11,9 @@ dojo.require("dojox.off.sync");
 // set our application name
 dojox.off.ui.appName = "Moxie";
 
-// add our list of resources we need offline
-// Moxie resources
-dojox.off.files.cache([
-					"editor.html",
-					"editor.js",
-					"about.html"
-					]);
+// automatically "slurp" the page and
+// capture the resources we need offline
+dojox.off.files.slurp();
 
 var moxie = {
 	_availableKeys: null,
@@ -29,7 +25,7 @@ var moxie = {
 		// make sure the rich text control is finished
 		// loading; workaround for bug 3395
 		var richTextControl = dijit.byId("storageValue");
-		if(!richTextControl.isLoaded){
+		if(!richTextControl || !richTextControl.isLoaded){
 			dojo.connect(richTextControl, "onLoad", this, "initialize");
 			return;
 		}
