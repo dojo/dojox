@@ -1,5 +1,5 @@
 dojo.provide("dojox.storage.manager");
-dojo.require("dojo.AdapterRegistry");
+//dojo.require("dojo.AdapterRegistry");
 // FIXME: refactor this to use an AdapterRegistry
 
 dojox.storage.manager = new function(){
