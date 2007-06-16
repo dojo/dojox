@@ -59,6 +59,13 @@ dojox.off.files = {
 		//		// that we have finished configuring it for our application
 		//		dojox.off.initialize();
 		//	</script>
+		//
+		//	Note that inline styles on elements are not handled (i.e.
+		//	if you somehow have an inline style that uses a URL);
+		//	object and embed tags are not scanned since their format
+		//	differs based on type; and elements created by JavaScript
+		//	after page load are not found. For these you must manually
+		//	add them with a dojox.off.files.cache() method call.
 		
 		// just schedule the slurp once the page is loaded and
 		// Dojo Offline is ready to slurp; dojox.off will call
@@ -261,6 +268,15 @@ dojox.off.files = {
 			}
 		});
 		
+		dojo.forEach(dojo.query("img"), function(i){
+			try{
+				handleUrl(i.getAttribute("src"));
+			}catch(exp){
+				//console.debug("dojox.off.files.slurp 'img' error: " 
+				//				+ exp.message||exp);
+			}
+		});
+		
 		dojo.forEach(dojo.query("a"), function(i){
 			try{
 				handleUrl(i.getAttribute("href"));
@@ -269,6 +285,8 @@ dojox.off.files = {
 				//				+ exp.message||exp);
 			}
 		});
+		
+		// FIXME: handle 'object' and 'embed' tag
 		
 		// parse our style sheets for inline URLs and imports
 		dojo.forEach(document.styleSheets, function(sheet){
