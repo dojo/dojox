@@ -358,7 +358,8 @@ dojo.mixin(dojox.off, {
 		// were we able to initialize storage? if
 		// not, then this is a core operation, and
 		// let's indicate we will need to fail fast
-		if(!dojox.storage.manager._initialized){
+		if(!dojox.storage.manager.isAvailable()
+			&& dojox.storage.manager.isInitialized()){
 			this.coreOpFailed = true;
 			this.enabled = false;
 		}

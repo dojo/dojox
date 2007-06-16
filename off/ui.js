@@ -590,7 +590,7 @@ dojo.mixin(dojox.off.ui, {
 				window.setTimeout("dojox.off.sync.synchronize()", 1000);
 			}
 		}
-	},
+	}
 });
 
 // register ourselves for low-level framework events

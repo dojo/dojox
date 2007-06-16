@@ -35,6 +35,10 @@ dojo.require("dojox.crypto.DES");
 dojox.sql = new Function("return dojox.sql._exec(arguments);");
 
 dojo.mixin(dojox.sql, {
+	// FIXME: This database name might make conflicts with
+	// other web applications that are also using Dojo SQL
+	// on the same host -- create a way to differentiate the
+	// database names
 	dbName: "PersistentStorage",
 	
 	// summary:
@@ -43,6 +47,10 @@ dojo.mixin(dojox.sql, {
 	debug: (dojo.exists("dojox.sql.debug")?dojox.sql.debug:false),
 
 	open: function(dbName){
+		if(this._dbOpen && (!dbName || dbName == this.dbName)){
+			return;
+		}
+		
 		try{
 			this._initDb();
 		
@@ -54,9 +62,18 @@ dojo.mixin(dojox.sql, {
 	},
 
 	close: function(dbName){
-		try{
-			this._initDb();
+		// on Internet Explorer, Google Gears throws an exception
+		// "Object not a collection", when we try to close the
+		// database -- just don't close it on this platform
+		// since we are running into a Gears bug; the Gears team
+		// said it's ok to not close a database connection
+		if(dojo.isIE){ return; }
 		
+		if(!this._dbOpen && (!dbName || dbName == this.dbName)){
+			return;
+		}
+		
+		try{
 			this.db.close(dbName||this.dbName);
 			this._dbOpen = false;
 		}catch(exp){
@@ -132,11 +149,20 @@ dojo.mixin(dojox.sql, {
 		
 			return rs;
 		}catch(exp){
+			exp = exp.message||exp;
+			
+			console.debug("SQL Exception: " + exp);
+			
 			if(this._autoClose){
-				try{ this.close(); }catch(e){}
+				try{ 
+					this.close(); 
+				}catch(e){
+					console.debug("Error closing database: " 
+									+ e.message||e);
+				}
 			}
 		
-			throw exp.message||exp;
+			throw exp;
 		}
 	},
 
@@ -179,7 +205,7 @@ dojo.mixin(dojox.sql, {
 		}
 	
 		rs.close();
-	
+		
 		return results;
 	},
 

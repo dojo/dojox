@@ -18,12 +18,6 @@ dojox.off.files.cache([
 					"editor.js",
 					"about.html"
 					]);
-					
-// add the RichText widget JavaScript files
-dojox.off.files.cache([
-					"../../../../dijit/_editor/selection.js",
-					"../../../../dijit/_editor/RichText.js"
-					]);
 
 var moxie = {
 	_availableKeys: null,

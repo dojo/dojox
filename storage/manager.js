@@ -14,10 +14,11 @@ dojox.storage.manager = new function(){
 	this.currentProvider = null;
 	
 	// available: Boolean
-	//	Whether storage of some kind is available
+	//	Whether storage of some kind is available.
 	this.available = false;
 	
 	this._initialized = false;
+	
 	this._providers = [];
 	this._onLoadListeners = [];
 	
