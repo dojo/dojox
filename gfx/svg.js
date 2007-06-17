@@ -58,29 +58,33 @@ dojo.extend(dojox.gfx.Shape, {
 			this.rawNode.setAttribute("fill-opacity", 0);
 			return this;
 		}
+		var f;
+		// FIXME: slightly magical. We're using the outer scope's "f", but setting it later
+		var setter = function(x){
+			if(dojo.isSafari){
+				// we assume that we're executing in the scope of the node to mutate
+				this.setAttributeNS(dojox.gfx.svg.xmlns.svg, x, f[x].toFixed(8));
+			}else{
+				this.setAttribute(x, f[x].toFixed(8));
+			}
+		}
 		if(typeof(fill) == "object" && "type" in fill){
 			// gradient
 			switch(fill.type){
 				case "linear":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
 					var gradient = this._setFillObject(f, "linearGradient");
-					dojo.forEach(["x1", "y1", "x2", "y2"], function(x){
-						gradient.setAttribute(x, f[x].toFixed(8));
-					});
+					dojo.forEach(["x1", "y1", "x2", "y2"], setter, gradient);
 					break;
 				case "radial":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
 					var gradient = this._setFillObject(f, "radialGradient");
-					dojo.forEach(["cx", "cy", "r"], function(x){
-						gradient.setAttribute(x, f[x].toFixed(8));
-					});
+					dojo.forEach(["cx", "cy", "r"], setter, gradient);
 					break;
 				case "pattern":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
 					var pattern = this._setFillObject(f, "pattern");
-					dojo.forEach(["x", "y", "width", "height"], function(x){
-						pattern.setAttribute(x, f[x].toFixed(8));
-					});
+					dojo.forEach(["x", "y", "width", "height"], setter, pattern);
 					break;
 			}
 			return this;
@@ -154,6 +158,7 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 
 	_setFillObject: function(f, nodeType){
+		var svgns = dojox.gfx.svg.xmlns.svg;
 		this.fillStyle = f;
 		var surface = this._getParentSurface();
 		var defs = surface.defNode;
@@ -164,7 +169,7 @@ dojo.extend(dojox.gfx.Shape, {
 			if(fill.tagName.toLowerCase() != nodeType.toLowerCase()){
 				var id = fill.id;
 				fill.parentNode.removeChild(fill);
-				fill = document.createElementNS(dojox.gfx.svg.xmlns.svg, nodeType);
+				fill = document.createElementNS(svgns, nodeType);
 				fill.setAttribute("id", id);
 				defs.appendChild(fill);
 			}else{
@@ -173,13 +178,13 @@ dojo.extend(dojox.gfx.Shape, {
 				}
 			}
 		}else{
-			fill = document.createElementNS(dojox.gfx.svg.xmlns.svg, nodeType);
+			fill = document.createElementNS(svgns, nodeType);
 			fill.setAttribute("id", dojox.gfx._base._getUniqueId());
 			defs.appendChild(fill);
 		}
 		if(nodeType == "pattern"){
 			fill.setAttribute("patternUnits", "userSpaceOnUse");
-			var img = document.createElementNS(dojox.gfx.svg.xmlns.svg, "image");
+			var img = document.createElementNS(svgns, "image");
 			img.setAttribute("x", 0);
 			img.setAttribute("y", 0);
 			img.setAttribute("width",  f.width .toFixed(8));
@@ -188,9 +193,10 @@ dojo.extend(dojox.gfx.Shape, {
 			fill.appendChild(img);
 		}else{
 			fill.setAttribute("gradientUnits", "userSpaceOnUse");
+			fill.setAttributeNS(svgns, "gradientUnits", "userSpaceOnUse");
 			for(var i = 0; i < f.colors.length; ++i){
 				f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-				var t = document.createElementNS(dojox.gfx.svg.xmlns.svg, "stop");
+				var t = document.createElementNS(svgns, "stop");
 				t.setAttribute("offset",     f.colors[i].offset.toFixed(8));
 				t.setAttribute("stop-color", f.colors[i].color.toCss());
 				fill.appendChild(t);
