@@ -13,10 +13,6 @@ dojo.require("dojo.io.script");
  * interface.
  */
 
-// TODO: the auth handling in this file is a *mess*. It should probably live in
-// the cometd object with the ability to mix in or call down to an auth-handler
-// object, the prototypical variant of which is a no-op
-
 dojox.cometd = new function(){
 
 	this.initialized = false;
@@ -60,10 +56,6 @@ dojox.cometd = new function(){
 		props.version = this.version;
 		props.minimumVersion = this.minimumVersion;
 		props.channel = "/meta/handshake";
-		// FIXME: do we just assume that the props knows
-		// everything we care about WRT to auth? Should we be trying to
-		// call back into it for subsequent auth actions? Should we fire
-		// local auth functions to ask for/get auth data?
 
         props.ext = { "json-comment-filtered": true };
 
@@ -121,7 +113,9 @@ dojox.cometd = new function(){
 		if (data["advice"]){
 			this.advice = data.advice;
 		}
-		if((!data.successful)&&(!data.authSuccessful)){
+		
+		// TODO remove authSuccessful when all clients updated to the spec
+		if((!data.successful)&&(!data.authSuccessful)){  
 			console.debug("cometd init failed");
 			// TODO follow advice
 			return;
@@ -140,13 +134,14 @@ dojox.cometd = new function(){
 		this.tunnelInit = dojo.hitch(this.currentTransport, "tunnelInit");
 		this.tunnelCollapse = dojo.hitch(this.currentTransport, "tunnelCollapse");
 
-		this.initialized = true;
 		this.currentTransport.startup(data);
 		while(this.backlog.length != 0){
 			var cur = this.backlog.shift();
 			var fn = cur.shift();
 			this[fn].apply(this, cur);
 		}
+
+		dojo.addOnUnload(dojox.cometd,"disconnect");
 	}
 
 	this._getRandStr = function(){
@@ -366,8 +361,6 @@ register themselves with cometd.connectionTypes
 here's a stub transport defintion:
 
 cometd.blahTransport = new function(){
-	this.connected = false;
-	this.authToken = null;
 	this.lastTimestamp = null;
 	this.lastId = null;
 
@@ -379,9 +372,9 @@ cometd.blahTransport = new function(){
 	}
 
 	this.startup = function(){
-		if(this.connected){ return; }
+		if(dojox.cometd.connected){ return; }
 		// FIXME: fill in startup routine here
-		this.connected = true;
+		dojox.cometd.connected = true;
 	}
 
 	this.sendMessage = function(message){
@@ -408,18 +401,15 @@ cometd.blahTransport = new function(){
 	}
 
 	this.disconnect = function(){
-		if(!this.connected){ return; }
+		if(!dojox.cometd.connected){ return; }
 		// FIXME: fill in shutdown routine here
-		this.connected = false;
+		dojox.cometd.connected = false;
 	}
 }
 cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahTransport);
 */
 
 dojox.cometd.longPollTransport = new function(){
-	this.connected = false;
-
-	this.authToken = null;
 	this.lastTimestamp = null;
 	this.lastId = null;
 	this.backlog = [];
@@ -429,7 +419,7 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(this.connected){ return; }
+		if(dojox.cometd.connected){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
@@ -437,19 +427,15 @@ dojox.cometd.longPollTransport = new function(){
 					channel:	"/meta/connect",
 					clientId:	dojox.cometd.clientId,
 					connectionType: "long-polling"
-					// FIXME: auth not passed here!
-					// "authToken": this.authToken
 				}
 			])
 		});
-		this.connected = true;
 	}
 
 	this.tunnelCollapse = function(){
-		if(!this.connected){
+		if(!dojox.cometd.connected){
 			// try to restart the tunnel
-			this.connected = false;
-			// console.debug("clientId:", dojox.cometd.clientId);
+			dojox.cometd.connected = false;
 			
 			// TODO handle transport specific advice
 			
@@ -477,7 +463,7 @@ dojox.cometd.longPollTransport = new function(){
 			(dojox.cometd.advice["reconnect"]=="handshake")
 		){
 			dojox.cometd.init(null,dojox.cometd.url);
-		}else{
+ 		}else if (dojox.cometd.initialized){
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
@@ -486,7 +472,6 @@ dojox.cometd.longPollTransport = new function(){
 						clientId:	dojox.cometd.clientId,
 						timestamp:	this.lastTimestamp,
 						id:			this.lastId
-						// FIXME: no authToken provision!
 					}
 				])
 			});
@@ -515,7 +500,7 @@ dojox.cometd.longPollTransport = new function(){
 						console.debug("cometd connection error:", message.error);
 						return;
 					}
-					this.connected = true;
+					dojox.cometd.initialized = true;
 					this.processBacklog();
 					break;
 				case "/meta/reconnect":
@@ -523,7 +508,6 @@ dojox.cometd.longPollTransport = new function(){
 						console.debug("cometd reconnection error:", message.error);
 						return;
 					}
-					this.connected = true;
 					break;
 				case "/meta/subscribe":
 					if(!message.successful){
@@ -542,22 +526,22 @@ dojox.cometd.longPollTransport = new function(){
 		var d = dojo.xhrPost({
 			url: (url||dojox.cometd.url),
 			content: content,
-			// handleAs: "json",
 			handleAs: dojox.cometd.handleAs,
 			load: dojo.hitch(this, function(data){
 				// console.debug(evt.responseText);
 				// console.debug(data);
+		                dojox.cometd.connected = false;
 				dojox.cometd.deliver(data);
-				this.connected = false;
 				this.tunnelCollapse();
 			}),
 			error: function(err){ 
 				console.debug("tunnel opening failed:", err);
+				dojo.cometd.connected = false;
 
 				// TODO - follow advice to reconnect or rehandshake?
 			}
 		});
-		this.connected = true;
+		dojox.cometd.connected = true;
 	}
 
 	this.processBacklog = function(){
@@ -567,8 +551,7 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.sendMessage = function(message, bypassBacklog){
-		// FIXME: what about auth fields?
-		if((bypassBacklog)||(this.connected)){
+		if((bypassBacklog)||(dojox.cometd.initialized)){
 			message.clientId = dojox.cometd.clientId;
 
 			return dojo.xhrPost({
@@ -585,15 +568,29 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.startup = function(handshakeData){
-		if(this.connected){ return; }
+		if(dojox.cometd.initialized){ return; }
 		this.tunnelInit();
+	}
+
+	this.disconnect = function(){
+		if(!dojox.cometd.initialized){ return; }
+        
+		dojo.xhrPost({
+			url: dojox.cometd.url||djConfig["cometdRoot"],
+			handleAs: dojox.cometd.handleAs,
+			content: { 
+				message: dojo.toJson([{  
+				    channel:	"/meta/disconnect",
+				    clientId:	dojox.cometd.clientId
+				}])
+			}
+		});
+		
+		dojox.cometd.initialized=false;
 	}
 }
 
 dojox.cometd.callbackPollTransport = new function(){
-	this.connected = false;
-
-	this.authToken = null;
 	this.lastTimestamp = null;
 	this.lastId = null;
 	this.backlog = [];
@@ -604,7 +601,7 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(this.connected){ return; }
+		if(dojox.cometd.connected){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
@@ -612,18 +609,15 @@ dojox.cometd.callbackPollTransport = new function(){
 					channel:	"/meta/connect",
 					clientId:	dojox.cometd.clientId,
 					connectionType: "callback-polling"
-					// FIXME: auth not passed here!
-					// "authToken": this.authToken
 				}
 			])
 		});
-		this.connected = true;
 	}
 
 	this.tunnelCollapse = function(){
-		if(!this.connected){
+	        // TODO implement advice handling
+		if(!dojox.cometd.connected){
 			// try to restart the tunnel
-			this.connected = false;
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
@@ -631,8 +625,7 @@ dojox.cometd.callbackPollTransport = new function(){
 						connectionType: "long-polling",
 						clientId:	dojox.cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:			this.lastId
-						// FIXME: no authToken provision!
+						id:		this.lastId
 					}
 				])
 			});
@@ -646,11 +639,12 @@ dojox.cometd.callbackPollTransport = new function(){
 		// create a <script> element to generate the request
 		dojo.io.script.get({
 			load: dojo.hitch(this, function(data){
+				dojox.cometd.connected = false;
 				dojox.cometd.deliver(data);
-				this.connected = false;
 				this.tunnelCollapse();
 			}),
 			error: function(){ 
+				dojox.cometd.connected = false;
 				console.debug("tunnel opening failed"); 
 			},
 			url: (url||dojox.cometd.url),
@@ -658,7 +652,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			handleAs: dojox.cometd.handleAs,
 			callbackParamName: "jsonp"
 		});
-		this.connected = true;
+		dojox.cometd.connected = true;
 	}
 
 	this.processBacklog = function(){
@@ -668,8 +662,7 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.sendMessage = function(message, bypassBacklog){
-		// FIXME: what about auth fields?
-		if((bypassBacklog)||(this.connected)){
+		if((bypassBacklog)||(dojox.cometd.initialized)){
 			message.clientId = dojox.cometd.clientId;
 			var bindArgs = {
 				url: dojox.cometd.url||djConfig["cometdRoot"],
@@ -685,9 +678,11 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.startup = function(handshakeData){
-		if(this.connected){ return; }
+		if(dojox.cometd.initialized){ return; }
 		this.tunnelInit();
 	}
+
+	this.disconnect = dojox.cometd.longPollTransport.disconnect;
 }
 dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransport);
 dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
