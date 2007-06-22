@@ -208,8 +208,8 @@ dojo.mixin(dojox.gfx.matrix, {
 		var M = new dojox.gfx.matrix.Matrix2D({
 			xx: m.yy/D, xy: -m.xy/D, 
 			yx: -m.yx/D, yy: m.xx/D, 
-			dx: (m.yx * m.dy - m.yy * m.dx) / D, 
-			dy: (m.xy * m.dx - m.xx * m.dy) / D
+			dx: (m.xy * m.dy - m.yy * m.dx) / D, 
+			dy: (m.yx * m.dx - m.xx * m.dy) / D
 		});
 		return M; // dojox.gfx.matrix.Matrix2D
 	},
