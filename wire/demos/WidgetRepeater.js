@@ -1,13 +1,13 @@
 dojo.provide("dojox.wire.demos.WidgetRepeater")
 		
 dojo.require("dojo.parser");
-dojo.require("dijit.base.Widget");
-dojo.require("dijit.base.TemplatedWidget");
-dojo.require("dijit.base.Container");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
+dojo.require("dijit._Container");
 
 dojo.declare(
 	"dojox.wire.demos.WidgetRepeater", 
-	[ dijit.base.Widget, dijit.base.TemplatedWidget, dijit.base.Container ],
+	[ dijit._Widget, dijit._Templated, dijit._Container ],
 	null,
 	{
 		//	summary:

@@ -1,12 +1,12 @@
 dojo.provide("dojox.wire.demos.TableContainer");
 
 dojo.require("dojo.parser");
-dojo.require("dijit.base.Widget");
-dojo.require("dijit.base.TemplatedWidget");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
 
 dojo.declare(
 	"dojox.wire.demos.TableContainer", 
-	[ dijit.base.Widget, dijit.base.TemplatedWidget, dijit.base.Container ],
+	[ dijit._Widget, dijit._Templated, dijit._Container ],
 	null,
 	{
 		//	summary:

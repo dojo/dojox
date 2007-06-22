@@ -1,13 +1,13 @@
 dojo.provide("dojox.wire.ml.Action");
 dojo.provide("dojox.wire.ml.ActionFilter");
 
-dojo.require("dijit.base.Widget");
-dojo.require("dijit.base.Container");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Container");
 dojo.require("dojox.wire.Wire");
 dojo.require("dojox.wire.ml.util");
 
 dojo.declare("dojox.wire.ml.Action",
-	[dijit.base.Widget, dijit.base.Container], {
+	[dijit._Widget, dijit._Container], {
 	//	summary:
 	//		A base widget to "run" a task on an event or a topic
 	//	description:
@@ -132,7 +132,7 @@ dojo.declare("dojox.wire.ml.Action",
 });
 
 dojo.declare("dojox.wire.ml.ActionFilter",
-	dijit.base.Widget, {
+	dijit._Widget, {
 	//	summary:
 	//		A widget to define a filter for the parent Action to run
 	//	description:

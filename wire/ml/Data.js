@@ -1,12 +1,12 @@
 dojo.provide("dojox.wire.ml.Data");
 dojo.provide("dojox.wire.ml.DataProperty");
 
-dojo.require("dijit.base.Widget");
-dojo.require("dijit.base.Container");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Container");
 dojo.require("dojox.wire.ml.util");
 
 dojo.declare("dojox.wire.ml.Data",
-	[dijit.base.Widget, dijit.base.Container], {
+	[dijit._Widget, dijit._Container], {
 	//	summary:
 	//		A widget for a data object
 	//	description:
@@ -71,7 +71,7 @@ dojo.declare("dojox.wire.ml.Data",
 });
 
 dojo.declare("dojox.wire.ml.DataProperty",
-	[dijit.base.Widget, dijit.base.Container], {
+	[dijit._Widget, dijit._Container], {
 	//	summary:
 	//		A widget to define a data property
 	//	description:

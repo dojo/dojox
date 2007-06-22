@@ -2,8 +2,8 @@ dojo.provide("dojox.widget.Toaster");
 
 dojo.require("dojo.fx");
 
-dojo.require("dijit.base.Widget");
-dojo.require("dijit.base.TemplatedWidget");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
 dojo.require("dijit.util.place");
 dojo.require("dijit.util.popup");
 
@@ -13,7 +13,7 @@ dojo.require("dijit.util.popup");
 
 dojo.declare(
 	"dojox.widget.Toaster",
-	[dijit.base.Widget, dijit.base.TemplatedWidget],
+	[dijit._Widget, dijit._Templated],
 	null,
 	{
 		// summary

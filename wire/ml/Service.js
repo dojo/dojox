@@ -3,13 +3,13 @@ dojo.provide("dojox.wire.ml.RestHandler");
 dojo.provide("dojox.wire.ml.XmlHandler");
 dojo.provide("dojox.wire.ml.JsonHandler");
 
-dojo.require("dijit.base.Widget");
+dojo.require("dijit._Widget");
 dojo.require("dojox.data.dom");
 dojo.require("dojox.wire._base");
 dojo.require("dojox.wire.ml.util");
 
 dojo.declare("dojox.wire.ml.Service",
-	dijit.base.Widget, {
+	dijit._Widget, {
 	//	summary:
 	//		A widget for a service
 	//	description:

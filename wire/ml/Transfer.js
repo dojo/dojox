@@ -4,8 +4,8 @@ dojo.provide("dojox.wire.ml.ColumnWire");
 dojo.provide("dojox.wire.ml.NodeWire");
 dojo.provide("dojox.wire.ml.SegmentWire");
 
-dojo.require("dijit.base.Widget");
-dojo.require("dijit.base.Container");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Container");
 dojo.require("dojox.wire._base");
 dojo.require("dojox.wire.ml.Action");
 
@@ -144,7 +144,7 @@ dojo.declare("dojox.wire.ml.Transfer",
 });
 
 dojo.declare("dojox.wire.ml.ChildWire",
-	dijit.base.Widget, {
+	dijit._Widget, {
 	//	summary:
 	//		A widget to add a child wire
 	//	description:
@@ -259,7 +259,7 @@ dojo.declare("dojox.wire.ml.ColumnWire",
 });
 
 dojo.declare("dojox.wire.ml.NodeWire",
-	[dojox.wire.ml.ChildWire, dijit.base.Container], {
+	[dojox.wire.ml.ChildWire, dijit._Container], {
 	//	summary:
 	//		A widget to add node wires
 	//	description:
