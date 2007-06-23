@@ -153,17 +153,15 @@ dojo.declare(
 				duration:250, 
 				onEnd: dojo.hitch(this,function(){
 					this._hideChild(oldWidget);
-					this._showChild(newWidget); 
 				})
 			}));
                 }
-		/*
-		anims.push(dojo.fadeIn({ node:newWidget.domNode, start:0, end:1, duration:250, 
+		anims.push(dojo.fadeIn({ node:newWidget.domNode, start:0, end:1, duration:300, 
 			onEnd: dojo.hitch(this,function(){
 				this._showChild(newWidget);
 				newWidget._resetActions();
 				}) 
-		})); */
+		})); 
 		dojo.fx.combine(anims).play();
 	}
 
