@@ -1,0 +1,53 @@
+-------------------------------------------------------------------------------
+dojox.presentation
+-------------------------------------------------------------------------------
+Version 0.1
+Release date: 06/25/2007
+-------------------------------------------------------------------------------
+Project state:
+prototype / experimental
+-------------------------------------------------------------------------------
+Credits
+	pete higgins (phiggins@gmail.com)
+-------------------------------------------------------------------------------
+Project description
+
+This is the presentation base class. It provides a mechanism for various
+display-oriented tasks. It includes a powerpoint-esque engine [prototype]
+and an image SlideShow [experimental].
+
+-------------------------------------------------------------------------------
+Dependencies:
+
+dojox.presentation requires both Dojo Core and Dijit systems.
+
+-------------------------------------------------------------------------------
+Documentation
+
+See the Dojo API tool (http://dojotoolkit.org/api)
+
+-------------------------------------------------------------------------------
+Installation instructions
+
+Installation instructions
+
+Grab the following from the Dojo SVN Repository:
+
+svn co http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/presentation*
+
+into your folder:
+/dojox/
+
+...which should be at the same level as your Dojo checkout.
+
+and require in dependancies via dojo.require('dojox.presentation');
+
+see /dojox/presentation/tests/test_presentation.html for example usage
+
+-------------------------------------------------------------------------------
+Additional Notes
+
+The prototype engine works so far, but does not handle node-level 
+actions ... (fade in a block, move a block, etc, etc) ... feel free
+to offer up ideas in DojoToolkit.org forums.
+

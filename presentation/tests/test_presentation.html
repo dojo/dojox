@@ -1,0 +1,101 @@
+<html>
+<head>
+	
+	<title>dojox.presentation - Presentation Mechanism</title>
+
+	<script type="text/javascript"> djConfig = { isDebug: true }; </script>
+	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+	<script type="text/javascript" src="../_base.js"></script>
+		
+	<script type="text/javascript">
+		dojo.require("dojox.presentation");
+		dojo.require("dijit._Calendar"); 
+		dojo.require("dijit.TitlePane"); 
+		dojo.require("dojo.parser"); 
+		dojo.require("dojo.fx");
+	</script>
+
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+	        @import "../../../dijit/themes/tundra/tundra.css";
+        	@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../resources/Show.css"; 		
+	</style>
+
+	<script type="text/javascript">
+		var externalAnimation = null;
+		function playIt() {
+			var node = dijit.byId('animated').slideTitle;
+			console.debug('fo!?!', node);
+			externalAnimation = dojo.fx.chain([
+				dojo.animateProperty({
+					node: node,
+					duration: 1000,
+					properties: { letterSpacing: {
+						end:-26.3, unit: 'em', start:3.2
+						},	
+					}
+				}),
+				dojo.animateProperty({
+					node: node,
+					duration: 800,
+					properties: { letterSpacing: {
+						end:2.8, unit: 'em' , start:-26.0
+						}
+					}
+				})
+			]);
+			setTimeout("externalAnimation.play()",50); 
+		}
+	</script>
+
+</head>
+<body class="tundra">
+	<div dojoType="dojox.presentation" id="testPresentation">
+		<div dojoType="dojox.presentation.Slide" id="myFirstSlide" title="Introduction">
+			<p>This is a brief overview of what the show widget is capable of</p>
+			<p dojoType="dojox.presentation.Part">... it's new, and completely different, so watch close</p>
+		</div>
+
+		<div dojoType="dojox.presentation.Slide" title="Basic Actions">
+			<p>Click, and more text will appear</p>
+			<div dojoType="dojox.presentation.Part" as="one">
+				<p>Lorem something something. I am text, hear me _roar_.</p>
+			</div>
+			<input dojoType="dojox.presentation.Action" for="one" on="click" toggle="fade">
+		</div>
+		<div dojoType="dojox.presentation.Slide" title="Automatically Advance">
+			<ul>
+			<li dojoType="dojox.presentation.Part" as="one">First You See me ...</li>
+			<li dojoType="dojox.presentation.Part" as="two">Then you see ME ...</li>
+			</ul>
+			
+		</div>
+		<div dojoType="dojox.presentation.Slide" title="Lazy Loading Remote Slide" href="/dojobox/lorem.html"></div>
+		<div dojoType="dojox.presentation.Slide" title="Click Blocking" noClick="true" id="animated">
+			<p>You cannot click on this page</p>
+			<p dojoType="dojox.presentation.Part" as="1">I told you that you can't click ...</p>
+			<a href="#" onclick="playIt()">click here to move the title</a>
+		</div>
+
+		<div dojoType="dojox.presentation.Slide" title="Widgets in Slide" id="wdijit" noClick="true">
+			<p>There is a widget in this page:</p>
+			<p>clicking has been stopped on this page to demonstrate the usage ..</p>
+			<div dojoType="dojox.presentation.Part">
+				<div dojoType="dijit._Calendar"></div>
+			</div>
+			<div dojoType="dijit.TitlePane" title="foobar" 
+					style="width:300px; position:absolute; right:40px; top:125px;">
+					I am a titlepane, you can do cool things with me. 
+			</div>
+			<div style="width:400px; position:absolute; right: 40px; bottom:100px;">
+			<p>... so I'm providing a next button: <button dojoType="dijit.form.Button" value="Next" 
+onClick="dijit.byId('testPresentation').nextSlide();">Next</button></p>
+			</div>
+		</div>
+		<div dojoType="dojox.presentation.Slide" title="The End">
+			<p>Thanks for watching!</p>
+		</div>
+	</div>
+</body>
+</html>
