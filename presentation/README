@@ -10,6 +10,7 @@ prototype / experimental
 Credits
 	pete higgins (phiggins@gmail.com)
 -------------------------------------------------------------------------------
+
 Project description
 
 This is the presentation base class. It provides a mechanism for various
@@ -17,37 +18,52 @@ display-oriented tasks. It includes a powerpoint-esque engine [prototype]
 and an image SlideShow [experimental].
 
 -------------------------------------------------------------------------------
+
 Dependencies:
 
-dojox.presentation requires both Dojo Core and Dijit systems.
+dojox.presentation requires both Dojo Base, Dojo FX Core, and Dijit system(s).
+
 
 -------------------------------------------------------------------------------
+
 Documentation
 
 See the Dojo API tool (http://dojotoolkit.org/api)
 
 -------------------------------------------------------------------------------
-Installation instructions
 
 Installation instructions
+
+This package is self-contained, but needs Dijit sytem. 
 
 Grab the following from the Dojo SVN Repository:
 
 svn co http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/presentation*
+svn co http://svn.dojotoolkit.org/var/src/dojo/dijit/*
 
-into your folder:
-/dojox/
-
-...which should be at the same level as your Dojo checkout.
+into your:
+/dojo root folder [checkout/release root]
 
 and require in dependancies via dojo.require('dojox.presentation');
 
-see /dojox/presentation/tests/test_presentation.html for example usage
+if you are using SlideShow, you must:
 
--------------------------------------------------------------------------------
-Additional Notes
+dojo.require("dojox.presentation.SlideShow");
 
-The prototype engine works so far, but does not handle node-level 
-actions ... (fade in a block, move a block, etc, etc) ... feel free
-to offer up ideas in DojoToolkit.org forums.
+see /dojox/presentation/tests/test_presentation.html for example usage, but 
+basically the structure is this:
+
+presentation />
+	Slide />
+	Slide />
+		Text Outside of Part is Static
+		Part />
+		Part />
+		Action forPart/>
+		Action forPart/>
+	Slide href="remote.html" />
+	Slide />
+		Part />
+		Action forPart/>
+/presentation>
 
