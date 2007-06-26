@@ -29,7 +29,7 @@ dojo.declare(
 	_showAnim: null,
 	_hideAnim: null, 
 
-	templatePath: dojo.moduleUrl("dojoc.layout","resources/FloatingPane.html"),
+	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
 
 	postCreate: function() {
 		this.title = this.label || this.title; 
