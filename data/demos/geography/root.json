@@ -1,0 +1,39 @@
+{  
+	identifier: 'name',
+	label: 'name',     
+	items: [
+		{ name:'Africa', type:'continent',
+		children:[{reference:'Egypt'}, {reference:'Kenya'}, {reference:'Sudan'}] },
+		{ name:'Egypt', type:'stub', parent: 'geography'},
+	 	{ name:'Kenya', type:'stub', parent: 'geography'},
+	 	{ name:'Sudan', type:'stub', parent: 'geography'},
+
+		{ name:'Asia', type:'continent',
+		children:[{reference:'China'}, {reference:'India'}, {reference:'Russia'}, {reference:'Mongolia'}] },
+		{ name:'China',    type:'stub', parent: 'geography'},
+	 	{ name:'India',    type:'stub', parent: 'geography'},
+		{ name:'Russia',   type:'stub', parent: 'geography'},
+		{ name:'Mongolia', type:'stub', parent: 'geography'},
+	 
+		{ name:'Australia', type:'continent', population:'21 million',
+		 children:{reference:'Commonwealth of Australia'}},
+		{ name:'Commonwealth of Australia', type:'stub', parent:'geography'},
+	 
+		{ name:'Europe', type:'continent',
+		children:[{reference:'Germany'}, {reference:'France'}, {reference:'Spain'}, {reference:'Italy'}] },
+		{ name:'Germany', type:'stub', parent: 'geography'},                 
+		{ name:'France',  type:'stub', parent: 'geography'},                 
+		{ name:'Spain',   type:'stub', parent: 'geography'},                 
+		{ name:'Italy',   type:'stub', parent: 'geography'},                 
+
+		{ name:'North America', type:'continent',
+		children:[{reference:'Mexico'}, {reference:'Canada'}, {reference:'United States of America'}] },
+		{ name:'Mexico',                   type:'stub', parent: 'geography'},
+		{ name:'Canada',                   type:'stub', parent: 'geography'},
+		{ name:'United States of America', type:'stub', parent: 'geography'},
+	 
+		{ name:'South America', type:'continent',
+		children:[{reference:'Brazil'}, {reference:'Argentina'}] },
+		{ name:'Brazil',    type:'stub', parent: 'geography'},                 
+		{ name:'Argentina', type:'stub', parent: 'geography'}                 
+]}
