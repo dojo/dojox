@@ -1,0 +1,42 @@
+-------------------------------------------------------------------------------
+dojoc.layout
+-------------------------------------------------------------------------------
+Version 0.002
+Release date: 06/01/2007
+-------------------------------------------------------------------------------
+Project state:
+[expermental]
+-------------------------------------------------------------------------------
+Credits
+	Pete Higgins (phiggins@gmail.com)
+-------------------------------------------------------------------------------
+Project description
+
+	placeholder for dijit.layout extensions. Currently only:
+	
+	dojox.layout.FloatingPane - an extension on TitlePane for drag/drop
+	operation
+
+-------------------------------------------------------------------------------
+Dependencies
+
+	require Dojo Core, Dojo Base (fx), and Dijit.TitlePane
+
+
+-------------------------------------------------------------------------------
+Installation:
+
+	checkout:
+
+	http://svn.dojotoolkit.org/var/src/dojo/dojox/layout/*
+	http://svn.dojotoolkit.org/var/src/dojo/dijit/*
+
+
+	and require via dojo.require("dojox.layout.FloatingPane");
+
+-------------------------------------------------------------------------------
+Usage:
+
+	<div dojoType="dojox.layout.FloatingPane" title="my title">
+		Content To be Floated
+	</div>
