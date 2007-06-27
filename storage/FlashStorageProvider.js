@@ -46,7 +46,7 @@ dojo.declare(
 
 		put: function(key, value, resultsHandler, namespace){
 			if(this.isValidKey(key) == false){
-				dojo.raise("Invalid key given: " + key);
+				throw new Error("Invalid key given: " + key);
 			}
 			
 			if(namespace == null || typeof namespace == "undefined"){
@@ -54,7 +54,7 @@ dojo.declare(
 			}
 			
 			if(this.isValidKey(namespace) == false){
-				dojo.raise("Invalid namespace given: " + namespace);
+				throw new Error("Invalid namespace given: " + namespace);
 			}
 				
 			this._statusHandler = resultsHandler;
@@ -72,7 +72,7 @@ dojo.declare(
 
 		get: function(key, namespace){
 			if(this.isValidKey(key) == false){
-				dojo.raise("Invalid key given: " + key);
+				throw new Error("Invalid key given: " + key);
 			}
 			
 			if(namespace == null || typeof namespace == "undefined"){
@@ -80,7 +80,7 @@ dojo.declare(
 			}
 			
 			if(this.isValidKey(namespace) == false){
-				dojo.raise("Invalid namespace given: " + namespace);
+				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
 			var results = dojox.flash.comm.get(key, namespace);
@@ -107,7 +107,7 @@ dojo.declare(
 			}
 			
 			if(this.isValidKey(namespace) == false){
-				dojo.raise("Invalid namespace given: " + namespace);
+				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
 			var results = dojox.flash.comm.getKeys(namespace);
@@ -140,7 +140,7 @@ dojo.declare(
 			}
 			
 			if(this.isValidKey(namespace) == false){
-				dojo.raise("Invalid namespace given: " + namespace);
+				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
 			dojox.flash.comm.clear(namespace);
@@ -152,7 +152,7 @@ dojo.declare(
 			}
 			
 			if(this.isValidKey(namespace) == false){
-				dojo.raise("Invalid namespace given: " + namespace);
+				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
 			dojox.flash.comm.remove(key, namespace);
