@@ -29,6 +29,7 @@ dojo.declare("dojox.wire.ml.Service",
 	serviceUrl: "",
 	serviceType: "",
 	handlerClass: "",
+	preventCache: true,
 
 	postCreate: function(){
 		//	summary:
@@ -136,18 +137,21 @@ dojo.declare("dojox.wire.ml.RestHandler",
 		var self = this;
 		var args = {
 			url: this._getUrl(method, parameters, url),
-			postData: this._getContent(method, parameters),
 			contentType: this.contentType,
 			handleAs: this.handleAs,
-			preventCache: true
+			headers: this.headers,
+			preventCache: this.preventCache
 		};
-		// TODO: support this.headers?
 		var d = null;
 		if(method == "POST"){
+			args.postData = this._getContent(method, parameters);
 			d = dojo.rawXhrPost(args);
-		}
-		// TODO: support "PUT" and "DELETE"
-		else{ // "GET"
+		}else if(method == "PUT"){
+			args.putData = this._getContent(method, parameters);
+			d = dojo.rawXhrPut(args);
+		}else if(method == "DELETE"){
+			d = dojo.xhrDelete(args);
+		}else{ // "GET"
 			d = dojo.xhrGet(args);
 		}
 		d.addCallbacks(function(result){
