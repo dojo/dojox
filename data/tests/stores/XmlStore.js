@@ -12,7 +12,7 @@ dojox.data.tests.stores.XmlStore.getBooksStore = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books.xml").toString(), label: "title"});
 };
 
-tests.register("dojox.data.tests.stores.XmlStore", 
+doh.register("dojox.data.tests.stores.XmlStore", 
 	[
 		function testReadAPI_fetch_all(t){
 			//	summary: 

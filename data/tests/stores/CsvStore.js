@@ -79,7 +79,7 @@ dojox.data.tests.stores.CsvStore.error = function(t, d, errData){
 	d.errback(errData);	
 }
 
-tests.register("dojox.data.tests.stores.CsvStore", 
+doh.register("dojox.data.tests.stores.CsvStore", 
 	[
 		function testReadAPI_fetch_all(t){
 			//	summary: 
@@ -90,7 +90,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
             function completedAll(items){
 				t.assertTrue((items.length === 7));
 				d.callback(true);
@@ -109,7 +109,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onComplete(items, request){
 				t.is(1, items.length);
 				d.callback(true);
@@ -129,7 +129,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			count = 0;
 
 			function onBegin(size, requestObj){
@@ -162,7 +162,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function dumpFirstFetch(items, request){
 				t.is(5, items.length);
 				request.start = 3;
@@ -279,7 +279,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.is('Dymtryk "the King", Edward', csvStore.getValue(item,"Producer"));
@@ -298,7 +298,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.is("City of God", csvStore.getValue(item,"Title"));
@@ -317,7 +317,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.is("1979", csvStore.getValue(item,"Year"));
@@ -336,7 +336,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.is("2001: A Space Odyssey", csvStore.getValue(item,"Title"));
@@ -356,7 +356,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				var names = csvStore.getValues(item,"Title");
@@ -377,7 +377,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				d.callback(true);	
@@ -395,7 +395,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item === null);
 				d.callback(true);	
@@ -411,7 +411,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item === null);
 				d.callback(true);	
@@ -427,7 +427,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item === null);
 				d.callback(true);	
@@ -444,7 +444,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(7, items.length);
 				var passed = true;
@@ -471,7 +471,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(csvStore.isItem(item));
 				t.assertEqual(null, csvStore.getIdentityAttributes(item)); 
@@ -489,7 +489,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(csvStore.isItem(item));
 				t.assertTrue(!csvStore.isItem({}));
@@ -510,7 +510,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.assertTrue(csvStore.hasAttribute(item, "Title"));
@@ -541,7 +541,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
  			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.assertTrue(csvStore.containsValue(item, "Title", "Alien"));
@@ -573,7 +573,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
 				t.assertTrue(csvStore.isItem(item));
@@ -598,7 +598,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onItem(item){
 				// Test an item that does not have all of the attributes
 				t.assertTrue(item !== null);
@@ -640,7 +640,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(2, items.length);
 				var valueArray = [ "Alien", "The Sequel to \"Dances With Wolves.\""];
@@ -660,7 +660,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.assertTrue(items.length === 2);
 				var valueArray = [ "jfq4@#!$!@Rf14r14i5u", "bit$Bite"];
@@ -680,7 +680,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(1, items.length);
 				t.assertTrue(csvStore.getValue(items[0], "value") === "bar*foo");
@@ -699,7 +699,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(1, items.length);
 				t.assertTrue(csvStore.getValue(items[0], "value") === "bar*foo");
@@ -718,7 +718,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(0, items.length);
 				d.callback(true);
@@ -736,7 +736,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.assertTrue(items.length === 10);
 				// TODO: CsvStore treats everything like a string, so these numbers will be sorted lexicographically.
@@ -760,7 +760,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(10, items.length);
 				// TODO: CsvStore treats everything like a string, so these numbers will be sorted lexicographically.
@@ -782,7 +782,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(5, items.length);
 				// TODO: CsvStore treats everything like a string, so these numbers will be sorted lexicographically.
@@ -807,7 +807,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				//Output should be in this order...
 				var orderedArray = [ 	"123abc",
@@ -839,7 +839,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				//Output should be in this order...
 				var orderedArray = [ 	undefined,
@@ -871,7 +871,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/patterns.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 		
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				var orderedArray0 = [ "8", "5", "3", "10", "6", "2", "4", "1", "9", "7" ];
 				var orderedArray1 = [	"123abc",
@@ -926,7 +926,7 @@ tests.register("dojox.data.tests.stores.CsvStore",
 		
 			var sortAttributes = [{attribute: "Producer", descending: true}, { attribute: "Title", descending: true}];
 		
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, findResult){
 				var orderedArray = [5,4,0,3,2,1,6];
 				t.assertTrue(items.length === 7);

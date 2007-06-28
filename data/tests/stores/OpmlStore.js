@@ -148,7 +148,7 @@ dojox.data.tests.stores.OpmlStore.error = function(t, d, errData){
 	d.errback(errData);	
 }
 
-tests.register("dojox.data.tests.stores.OpmlStore", 
+doh.register("dojox.data.tests.stores.OpmlStore", 
 	[
 		function testReadAPI_fetch_all(t){
 			//	summary: 
@@ -159,7 +159,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completedAll(items){
 				t.is(6, items.length);
 				d.callback(true);
@@ -178,7 +178,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onComplete(items, request){
 				t.is(1, items.length);
 				d.callback(true);
@@ -198,7 +198,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			count = 0;
 
 			function onBegin(size, requestObj){
@@ -231,7 +231,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function dumpFirstFetch(items, request){
 				t.is(5, items.length);
 				request.start = 3;
@@ -394,7 +394,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completedAll(items){
 				t.is(6, items.length);
 				
@@ -438,7 +438,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items){
 				t.is(1, items.length);
 				
@@ -482,7 +482,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completedAll(items){
 				t.is(6, items.length);
 				for(var i=0; i<6; i++){
@@ -509,7 +509,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onComplete(items){
 				t.is(1, items.length);
 				t.assertTrue(items[0] !== null);
@@ -547,7 +547,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
  			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onComplete(items){
 				t.is(1, items.length);
 				t.assertTrue(items[0] !== null);
@@ -590,7 +590,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function onComplete(items){
 				t.is(6, items.length);
 				t.assertTrue(opmlStore.isItem(items[0]));
@@ -634,7 +634,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(3, items.length);
 				var valueArray = [ "Africa", "Asia", "Australia"];
@@ -654,7 +654,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.assertTrue(items.length === 2);
 				var valueArray = [ "North America", "South America"];
@@ -674,7 +674,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(1, items.length);
 				t.assertTrue(opmlStore.getValue(items[0], "text") === "Europe");
@@ -693,7 +693,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(1, items.length);
 				t.assertTrue(opmlStore.getValue(items[0], "text") === "Asia");
@@ -712,7 +712,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(0, items.length);
 				d.callback(true);
@@ -730,7 +730,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				//Output should be in this order...
 				var orderedArray = [ "Africa", "Asia", "Australia", "Europe", "North America", "South America"];
@@ -752,7 +752,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				//Output should be in this order...
 				var orderedArray = [ "South America", "North America", "Europe", "Australia", "Asia", "Africa"
@@ -775,7 +775,7 @@ tests.register("dojox.data.tests.stores.OpmlStore",
 			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
 			var opmlStore = new dojox.data.OpmlStore(args);
 			
-			var d = new tests.Deferred();
+			var d = new doh.Deferred();
 			function completed(items, request){
 				//Output should be in this order...
 				var orderedArray = [ "South America", "North America", "Europe", "Australia"
