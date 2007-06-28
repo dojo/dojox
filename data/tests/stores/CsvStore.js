@@ -8,7 +8,7 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 	//		A simple helper function for getting the sample data used in each of the tests.
 	//  description:
 	//		A simple helper function for getting the sample data used in each of the tests.
-	
+
 	var dataSource = {};
 	if(dojo.isBrowser){
 		dataSource.url = dojo.moduleUrl("dojox.data.tests", filepath).toString();            
@@ -270,7 +270,6 @@ tests.register("dojox.data.tests.stores.CsvStore",
 							});
 			return d;
 		},
-
 		function testReadAPI_getValue(t){
 			//	summary: 
 			//		Simple test of the getValue function of the store.
@@ -279,21 +278,75 @@ tests.register("dojox.data.tests.stores.CsvStore",
 
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
-			         
-			t.is("City of God", 				csvStore.getValue(csvStore.getItemByIdentity("0"),"Title"));
-			t.is("Rain", 					csvStore.getValue(csvStore.getItemByIdentity("1"),"Title"));
-			t.is("2001: A Space Odyssey", 			csvStore.getValue(csvStore.getItemByIdentity("2"),"Title"));
-			t.is('This is a "fake" movie title', 		csvStore.getValue(csvStore.getItemByIdentity("3"),"Title"));
-			t.is("Alien", 					csvStore.getValue(csvStore.getItemByIdentity("4"),"Title"));
-			t.is('The Sequel to "Dances With Wolves."', 	csvStore.getValue(csvStore.getItemByIdentity("5"),"Title"));
-			t.is('Caine Mutiny, The', 			csvStore.getValue(csvStore.getItemByIdentity("6"),"Title"));
 
-			t.is("2002", 					csvStore.getValue(csvStore.getItemByIdentity("0"),"Year"));
-			t.is("1979", 					csvStore.getValue(csvStore.getItemByIdentity("4"),"Year"));
-
-			t.is("Stanley Kubrick", 			csvStore.getValue(csvStore.getItemByIdentity("2"),"Producer"));
-			t.is('Dymtryk "the King", Edward', 		csvStore.getValue(csvStore.getItemByIdentity("6"),"Producer"));
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.is('Dymtryk "the King", Edward', csvStore.getValue(item,"Producer"));
+				t.is('Caine Mutiny, The', csvStore.getValue(item,"Title"));
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "6", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
 		},	
+		function testReadAPI_getValue_2(t){
+			//	summary: 
+			//		Simple test of the getValue function of the store.
+			//	description:
+			//		Simple test of the getValue function of the store.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.is("City of God", csvStore.getValue(item,"Title"));
+				t.is("2002", csvStore.getValue(item,"Year"));
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "0", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},	
+		function testReadAPI_getValue_3(t){
+			//	summary: 
+			//		Simple test of the getValue function of the store.
+			//	description:
+			//		Simple test of the getValue function of the store.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.is("1979", csvStore.getValue(item,"Year"));
+				t.is("Alien", csvStore.getValue(item,"Title"));
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},	
+		function testReadAPI_getValue_4(t){
+			//	summary: 
+			//		Simple test of the getValue function of the store.
+			//	description:
+			//		Simple test of the getValue function of the store.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.is("2001: A Space Odyssey", csvStore.getValue(item,"Title"));
+				t.is("Stanley Kubrick", csvStore.getValue(item,"Producer"));
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "2", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},	
+
 		function testReadAPI_getValues(t){
 			//	summary: 
 			//		Simple test of the getValues function of the store.
@@ -303,34 +356,90 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var item = csvStore.getItemByIdentity("1");
-			t.assertTrue(item !== null);
-			var names = csvStore.getValues(item,"Title");
-            t.assertTrue(dojo.isArray(names));
-			t.is(1, names.length);
-			t.is("Rain", names[0]);
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				var names = csvStore.getValues(item,"Title");
+				t.assertTrue(dojo.isArray(names));
+				t.is(1, names.length);
+				t.is("Rain", names[0]);
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
 		},
-		function testIdentityAPI_getItemByIdentity(t){
+		function testIdentityAPI_fetchItemByIdentity(t){
 			//	summary: 
-			//		Simple test of the getItemByIdentity function of the store.
+			//		Simple test of the fetchItemByIdentity function of the store.
 			//	description:
-			//		Simple test of the getItemByIdentity function of the store.
+			//		Simple test of the fetchItemByIdentity function of the store.
 			
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 			
-			for(var i=0; i<7; i++){
-				t.assertTrue(csvStore.getItemByIdentity(i) !== null);
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				d.callback(true);	
 			}
-			t.is(null, csvStore.getItemByIdentity("7"));
-			t.is(null, csvStore.getItemByIdentity("-1"));
-			t.is(null, csvStore.getItemByIdentity("999999"));
+            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_bad1(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "7", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},
+		function testIdentityAPI_fetchItemByIdentity_bad2(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "-1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},
+		function testIdentityAPI_fetchItemByIdentity_bad3(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "999999", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
 		},
 		function testIdentityAPI_getIdentity(t){
 			//	summary: 
-			//		Simple test of the getItemByIdentity function of the store.
+			//		Simple test of the fetchItemByIdentity function of the store.
 			//	description:
-			//		Simple test of the getItemByIdentity function of the store.
+			//		Simple test of the fetchItemByIdentity function of the store.
 			
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
@@ -357,14 +466,19 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			//	summary: 
 			//		Simple test of the getIdentityAttributes
 			//	description:
-			//		Simple test of the getItemByIdentity function of the store.
+			//		Simple test of the fetchItemByIdentity function of the store.
 			
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var item = csvStore.getItemByIdentity(1);
-			t.assertTrue(csvStore.isItem(item));
-			t.assertEqual(null, csvStore.getIdentityAttributes(item)); 
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(csvStore.isItem(item));
+				t.assertEqual(null, csvStore.getIdentityAttributes(item)); 
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+		   	return d;
 		},
 		function testReadAPI_isItem(t){
 			//	summary: 
@@ -375,14 +489,17 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			for(var i=0; i<7; i++){
-				t.assertTrue(csvStore.isItem(csvStore.getItemByIdentity(i)));
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(csvStore.isItem(item));
+				t.assertTrue(!csvStore.isItem({}));
+				t.assertTrue(!csvStore.isItem({ item: "not an item" }));
+				t.assertTrue(!csvStore.isItem("not an item"));
+				t.assertTrue(!csvStore.isItem(["not an item"]));
+				d.callback(true);	
 			}
-			
-			t.assertTrue(!csvStore.isItem({}));
-			t.assertTrue(!csvStore.isItem({ item: "not an item" }));
-			t.assertTrue(!csvStore.isItem("not an item"));
-			t.assertTrue(!csvStore.isItem(["not an item"]));
+            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+		   	return d;
 		},
 		function testReadAPI_hasAttribute(t){
 			//	summary: 
@@ -393,22 +510,27 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var item = csvStore.getItemByIdentity(1);
-			t.assertTrue(item !== null);
-			t.assertTrue(csvStore.hasAttribute(item, "Title"));
-			t.assertTrue(csvStore.hasAttribute(item, "Producer"));
-			t.assertTrue(!csvStore.hasAttribute(item, "Year"));
-			t.assertTrue(!csvStore.hasAttribute(item, "Nothing"));
-			t.assertTrue(!csvStore.hasAttribute(item, "title"));
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.assertTrue(csvStore.hasAttribute(item, "Title"));
+				t.assertTrue(csvStore.hasAttribute(item, "Producer"));
+				t.assertTrue(!csvStore.hasAttribute(item, "Year"));
+				t.assertTrue(!csvStore.hasAttribute(item, "Nothing"));
+				t.assertTrue(!csvStore.hasAttribute(item, "title"));
 
-			//Test that null attributes throw an exception
-			var passed = false;
-			try{
-				csvStore.hasAttribute(item, null);
-			}catch (e){
-				passed = true;
+				//Test that null attributes throw an exception
+				var passed = false;
+				try{
+					csvStore.hasAttribute(item, null);
+				}catch (e){
+					passed = true;
+				}
+				t.assertTrue(passed);
+				d.callback(true);	
 			}
-			t.assertTrue(passed);
+            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+		   	return d;
 		},
 		function testReadAPI_containsValue(t){
 			//	summary: 
@@ -419,23 +541,28 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
  			
-			var item = csvStore.getItemByIdentity("4");
-			t.assertTrue(item !== null);
-			t.assertTrue(csvStore.containsValue(item, "Title", "Alien"));
-			t.assertTrue(csvStore.containsValue(item, "Year", "1979"));
-			t.assertTrue(csvStore.containsValue(item, "Producer", "Ridley Scott"));
-			t.assertTrue(!csvStore.containsValue(item, "Title", "Alien2"));
-			t.assertTrue(!csvStore.containsValue(item, "Year", "1979   "));
-			t.assertTrue(!csvStore.containsValue(item, "Title", null));
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.assertTrue(csvStore.containsValue(item, "Title", "Alien"));
+				t.assertTrue(csvStore.containsValue(item, "Year", "1979"));
+				t.assertTrue(csvStore.containsValue(item, "Producer", "Ridley Scott"));
+				t.assertTrue(!csvStore.containsValue(item, "Title", "Alien2"));
+				t.assertTrue(!csvStore.containsValue(item, "Year", "1979   "));
+				t.assertTrue(!csvStore.containsValue(item, "Title", null));
 
-			//Test that null attributes throw an exception
-			var passed = false;
-			try{
-				csvStore.containsValue(item, null, "foo");
-			}catch (e){
-				passed = true;
+				//Test that null attributes throw an exception
+				var passed = false;
+				try{
+					csvStore.containsValue(item, null, "foo");
+				}catch (e){
+					passed = true;
+				}
+				t.assertTrue(passed);
+				d.callback(true);	
 			}
-			t.assertTrue(passed);
+            csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+		   	return d;
 		},
 		function testReadAPI_getAttributes(t){
 			//	summary: 
@@ -446,26 +573,47 @@ tests.register("dojox.data.tests.stores.CsvStore",
 			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 			var csvStore = new dojox.data.CsvStore(args);
 
-			var item = csvStore.getItemByIdentity("4");
-			t.assertTrue(item !== null);
-			t.assertTrue(csvStore.isItem(item));
+			var d = new tests.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				t.assertTrue(csvStore.isItem(item));
 
-			var attributes = csvStore.getAttributes(item);
-			t.is(3, attributes.length);
-			for(var i = 0; i < attributes.length; i++){
-				t.assertTrue((attributes[i] === "Title" || attributes[i] === "Year" || attributes[i] === "Producer"));
+				var attributes = csvStore.getAttributes(item);
+				t.is(3, attributes.length);
+				for(var i = 0; i < attributes.length; i++){
+					t.assertTrue((attributes[i] === "Title" || attributes[i] === "Year" || attributes[i] === "Producer"));
+				}
+				d.callback(true);	
 			}
-			
-			// Test an item that does not have all of the attributes
-			var item = csvStore.getItemByIdentity(1);
-			t.assertTrue(item !== null);
-			t.assertTrue(csvStore.isItem(item));
-
-			var attributes = csvStore.getAttributes(item);
-			t.assertTrue(attributes.length === 2);
-			t.assertTrue(attributes[0] === "Title");
-			t.assertTrue(attributes[1] === "Producer");
+            csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+		   	return d;
 		},
+
+		function testReadAPI_getAttributes_onlyTwo(t){
+			//	summary: 
+			//		Simple test of the getAttributes function of the store
+			//	description:
+			//		Simple test of the getAttributes function of the store
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+
+			var d = new tests.Deferred();
+			function onItem(item){
+				// Test an item that does not have all of the attributes
+				t.assertTrue(item !== null);
+				t.assertTrue(csvStore.isItem(item));
+
+				var attributes = csvStore.getAttributes(item);
+				t.assertTrue(attributes.length === 2);
+				t.assertTrue(attributes[0] === "Title");
+				t.assertTrue(attributes[1] === "Producer");
+				d.callback(true);	
+			}
+            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+		   	return d;
+		},
+
 		function testReadAPI_getFeatures(t){
 			//	summary: 
 			//		Simple test of the getFeatures function of the store

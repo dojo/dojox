@@ -416,21 +416,67 @@ dojo.declare("dojox.data.CsvStore",
 		return null; //null
 	},
 
-	getItemByIdentity: function(/* String */ identity){
+	fetchItemByIdentity: function(/* Object */ keywordArgs){
 		//	summary: 
-		//		See dojo.data.api.Identity.getItemByIdentity()
+		//		See dojo.data.api.Identity.fetchItemByIdentity()
 
-		// Force a sync'ed load if it hasn't occurred yet
+		//Hasn't loaded yet, we have to trigger the load.
+		
+
 		if(!this._loadFinished){
-			this._forceLoad();
+			var self = this;
+			if(this._csvFileUrl){
+				var getArgs = {
+						url: self._csvFileUrl, 
+						handleAs: "text"
+					};
+				var getHandler = dojo.xhrGet(getArgs);
+				getHandler.addCallback(function(data){
+					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+					try{
+						self._processData(data);
+						var item = self._createItemFromIdentity(keywordArgs.identity);
+						if(!self.isItem(item)){
+							item = null;
+						}
+						if(keywordArgs.onItem){
+							keywordArgs.onItem.call(scope, item);
+						}
+					}catch(error){
+						if(keywordArgs.onError){
+							keywordArgs.onError.call(scope, error);
+						}
+					}
+				});
+				getHandler.addErrback(function(error){
+					if(keywordArgs.onError){
+						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+						keywordArgs.onError.call(scope, error);
+					}
+				});
+			}else if(this._csvData){
+				self._processData(self._csvData);
+				self._csvData = null;
+				var item = self._createItemFromIdentity(keywordArgs.identity);
+				if(!self.isItem(item)){
+					item = null;
+				}
+				if(keywordArgs.onItem){
+					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+					keywordArgs.onItem.call(scope, item);
+				}
+			}
+		}else{
+			//Already loaded.  We can just look it up and call back.
+			var item = this._createItemFromIdentity(keywordArgs.identity);
+			if(!this.isItem(item)){
+				item = null;
+			}
+			if(keywordArgs.onItem){
+				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+				keywordArgs.onItem.call(scope, item);
+			}
 		}
-		// First create an item from the identity, then make sure
-		// that the identity is part of this datastore.
-		var item = this._createItemFromIdentity(identity);
-		if(this.isItem(item)){
-			return item; //Object
-		}
-		return null; //null
 	},
 
 	getIdentityAttributes: function(/* item */ item){
@@ -440,30 +486,6 @@ dojo.declare("dojox.data.CsvStore",
 		 //Identity isn't a public attribute in the item, it's the row position index.
 		 //So, return null.
 		 return null;
-	},
-
-	_forceLoad: function(){
-		//	summary: 
-		//		Internal function to force a load of the store if it hasn't occurred yet.  This is required
-		//		for specific functions to work properly.  See dojo.data.api.Identity.getItemByIdentity()
-		var self = this;
-		if(this._csvFileUrl){
-			var getArgs = {
-					url: self._csvFileUrl, 
-					handleAs: "text",
-					sync: true
-				};
-			var getHandler = dojo.xhrGet(getArgs);
-			getHandler.addCallback(function(data){
-				self._processData(data);
-			});
-			getHandler.addErrback(function(error){
-				throw error;
-			});
-		}else if(this._csvData){
-			self._processData(self._csvData);
-			self._csvData = null;
-		} 
 	}
 });
 //Mix in the simple fetch implementation to this class.
