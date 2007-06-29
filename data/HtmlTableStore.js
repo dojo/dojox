@@ -186,16 +186,9 @@ dojo.declare("dojox.data.HtmlTableStore",
 		//	regexp:
 		//		Optional regular expression generated off value if value was of string type to handle wildcarding.
 		//		If present and attribute values are string, then it can be used for comparison instead of 'value'
-
-		console.log("Before getValues");
 		var values = this.getValues(item, attribute);
-		console.log("After getValues.  Number of values is: " + values.length);
-
 		for(var i = 0; i < values.length; ++i){
 			var possibleValue = values[i];
-			
-			console.log("Looking at: " + possibleValue);
-
 			if(typeof possibleValue === "string" && regexp){
 				return (possibleValue.match(regexp) !== null);
 			}else{
@@ -358,7 +351,7 @@ dojo.declare("dojox.data.HtmlTableStore",
 		//	summary: 
 		//		See dojo.data.api.Read.getLabel()
 		if(this.isItem(item))
-			return "Table Row #"+item.sectionRowIndex;
+			return "Table Row #" + this.getIdentity(item);
 		return undefined;
 	},
 
@@ -376,13 +369,21 @@ dojo.declare("dojox.data.HtmlTableStore",
 		//	summary: 
 		//		See dojo.data.api.Identity.getIdentity()
 		this._assertIsItem(item);
-		return item.sectionRowIndex;
+		//Opera doesn't support the sectionRowIndex, 
+		//So, have to call the indexOf to locate it. 
+		//Blah.
+		if(!dojo.isOpera){
+			return item.sectionRowIndex; // int	
+		}else{
+			return (dojo.indexOf(this._rootNode.rows, item) - 1) // int
+		}
 	},
 
 	getIdentityAttributes: function(/* item */ item){
 		 //	summary: 
 		 //		See dojo.data.api.Identity.getIdentityAttributes()
-		 return ["sectionRowIndex"];
+		 //Identity isn't taken from a public attribute.
+		 return null;
 	},
 
 	fetchItemByIdentity: function(keywordArgs){

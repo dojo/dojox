@@ -636,9 +636,9 @@ doh.register("dojox.data.tests.stores.HtmlTableStore",
 			function onComplete(items, request) {
 				t.assertEqual(1, items.length);
 				var item = items[0];
+				//Should have none, as it's not a public attribute.
 				var attributes = store.getIdentityAttributes(item);
-				t.assertEqual(1, attributes.length);
-				t.assertEqual("sectionRowIndex",attributes[0]);
+				t.assertEqual(null, attributes);
 				d.callback(true);
 			}
 			function onError(error, request) {
