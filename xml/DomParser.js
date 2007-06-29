@@ -73,14 +73,13 @@ dojox.xml.DomParser=new (function(){
 	function byName(name){
 		//	return all descendants with name.  Fully qualified (i.e. svg:svg)
 		function __(node, name, arr){
-			for(var i=0; i<node.childNodes.length; i++){
-				var c=node.childNodes[i];
+			dojo.forEach(node.childNodes, function(c){
 				if(c.nodeType==nodeTypes.ELEMENT){
 					if(name=="*"){ arr.push(c); }
 					else if(c.nodeName==name){ arr.push(c); }
 					__(c, name, arr);
 				}
-			}
+			});
 		}
 		var a=[];
 		__(this, name, a);
@@ -89,14 +88,13 @@ dojox.xml.DomParser=new (function(){
 	function byNameNS(name, ns){
 		//	return all descendants with name by namespace.  If no namespace passed, the default is used.
 		function __(node, name, ns, arr){
-			for(var i=0; i<node.childNodes.length; i++){
-				var c=node.childNodes[i];
+			dojo.forEach(node.childNodes, function(c){
 				if(c.nodeType==nodeTypes.ELEMENT){
 					if(name=="*"&&c.ownerDocument._nsPaths[ns]==c.namespace){ arr.push(c); }
 					else if(c.localName==name&&c.ownerDocument._nsPaths[ns]==c.namespace){ arr.push(c); }
 					__(c, name, ns, arr);
 				}
-			}
+			});
 		}
 		if(!ns){ ns=dNs; }
 		var a=[];
@@ -106,13 +104,12 @@ dojox.xml.DomParser=new (function(){
 	//	Only child nodes with name.
 	function childrenByName(name){
 		var a=[];
-		for(var i=0; i<this.childNodes.length; i++){
-			var c=this.childNodes[i];
+		dojo.forEach(this.childNodes, function(c){
 			if(c.nodeType==nodeTypes.ELEMENT){
 				if(name=="*"){ a.push(c); }
 				else if(c.nodeName==name){ a.push(c); }
 			}
-		}
+		});
 		return a;
 	}
 
