@@ -34,6 +34,8 @@ dojox.cometd = new function(){
 	this.handleAs="json-comment-optional";
 	this.advice;
 
+	this._subscriptions = [];
+
 	this.tunnelInit = function(childLocation, childDomain){
 		// placeholder
 	}
@@ -207,6 +209,9 @@ dojox.cometd = new function(){
 	}
 
 	this.disconnect = function(){
+		dojo.forEach(this._subscriptions, dojo.unsubscribe);
+		this._subscriptions = [];
+		this.backlog = [];
 		if(!this.currentTransport){
 			console.debug("no current transport to disconnect from");
 			return;
@@ -283,7 +288,10 @@ dojox.cometd = new function(){
 			if(useLocalTopics){
 				this.globalTopicChannels[channel] = true;
 			}
-			dojo.subscribe(tname, objOrFunc, funcName);
+
+			this._subscriptions.push(
+				dojo.subscribe(tname, objOrFunc, funcName)
+			);
 		}
 		// FIXME: would we handle queuing of the subscription if not connected?
 		// Or should the transport object?
@@ -328,6 +336,7 @@ dojox.cometd = new function(){
 			// FIXME: if useLocalTopics is false, should we go ahead and
 			// destroy the local topic?
 			var tname = (useLocalTopics) ? channel : "/cometd"+channel;
+			// FIXME: we're not passing a valid handle!!
 			dojo.unsubscribe(tname, objOrFunc, funcName);
 		}
 		return this.currentTransport.sendMessage({
