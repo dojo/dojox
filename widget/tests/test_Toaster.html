@@ -6,9 +6,11 @@
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/themes/dijit.css";
+		@import "../../../dijit/tests/css/dijitTests.css"; 
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.widget.Toaster");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
@@ -39,7 +41,7 @@
 		});
 	</script>
 </head>
-<body>
+<body class="tundra">
 	<div dojoType="dojox.widget.Toaster" id="toast" 
 		positionDirection="br-left" duration="0" 
 		messageTopic="testMessageTopic"></div>
@@ -54,6 +56,9 @@
 		onclick="showAnotherMessage();">Click to show another message</button>
 	<button type="submit" 
 		onclick="showYetAnotherMessage();">Click to show yet another message</button>
+
+	<h1>dojox.widget.Toaster test</h1>
+
 	<div style="color: #FF0000;">
 		When you click any of the buttons above, the bottom right hand message will
 		stay on the screen until you acknowledge it by clicking inside the message

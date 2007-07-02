@@ -57,8 +57,12 @@ dojo.declare(
 	templateString: null,
 	templatePath: dojo.moduleUrl('dojox.presentation','resources/Show.html'),
 
-	// icons:
+	// nextIcon: String
+	//	icon for navigation "next" button
 	nextIcon:dojo.moduleUrl('dojox.presentation','resources/icons/next.png'),
+
+	// prevIcon: String
+	// 	icon for navigation "previous" button
 	prevIcon:dojo.moduleUrl('dojox.presentation','resources/icons/prev.png'),
 
 	// private but safely settable:
@@ -82,9 +86,9 @@ dojo.declare(
 		var tmp = (dojo.isIE) 	? dojo.connect(document,'onkeydown',this,'gotoSlideByEvent') 
 					: dojo.connect(document,'onkeypress',this,'gotoSlideByEvent');
 		this._connects.push(tmp);
+
 		// only if this.fullScreen == true?
 		this._connects.push(dojo.connect(window,'onresize',this,'_resizeWindow'));
-
 		this._resizeWindow();
 		
 		this._updateSlides(); 
@@ -143,7 +147,8 @@ dojo.declare(
 				tmp.text = slide.title+" ("+i+") ";
 				this._option.parentNode.insertBefore(tmp,this._option);
 			}));
-			this._option.parentNode.removeChild(this._option);
+			//this._option.parentNode.removeChild(this._option);
+			dojo._destroyElement(this._option); 
 		}
 	},
 
