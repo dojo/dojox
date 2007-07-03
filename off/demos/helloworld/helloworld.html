@@ -1,5 +1,8 @@
 <html>
 	<head>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dojox/off/offline.js"></script>
+		
 		<style type="text/css">
 			@import "../../../../dojo/resources/dojo.css";
 			
@@ -7,9 +10,6 @@
 			   Dojo Offline UI widget */
 			@import "../../../../dojox/off/resources/offline-widget.css";
 	    </style>
-
-	    <script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
-		<script type="text/javascript" src="../../../../dojox/off/offline.js"></script>
 		
 		<script>
 			dojo.require("dojox.off");
@@ -181,7 +181,7 @@
 				}
 			}
 					
-			// Wait until Dojo Offline and Dojo Storage are ready
+			// Wait until Dojo Offline is ready
 			// before we initialize ourselves. When this gets called the page
 			// is also finished loading.
 			dojo.connect(dojox.off.ui, "onLoad", helloWorld, "initialize");

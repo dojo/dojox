@@ -1,6 +1,6 @@
 dojo.provide("dojox._sql.common");
 
-dojo.require("dojox.crypto.DES");
+dojo.require("dojox._sql._crypto");
 
 // summary:
 //	Executes a SQL expression.
@@ -363,7 +363,7 @@ dojo.declare("dojox.sql._SQLCrypto", null,
 				// a Google Gears Worker Pool
 			
 				// do the actual encryption now, asychronously on a Gears worker thread
-				dojox.crypto.DES.encrypt(sqlParam, password, dojo.hitch(this, function(results){
+				dojox._sql._crypto.encrypt(sqlParam, password, dojo.hitch(this, function(results){
 					// set the new encrypted value
 					this._finalArgs[paramIndex] = results;
 					this._finishedCrypto++;
@@ -501,7 +501,7 @@ dojo.declare("dojox.sql._SQLCrypto", null,
 	_decryptSingleColumn: function(columnName, columnValue, password, currentRowIndex,
 											callback){
 		//console.debug("decryptSingleColumn, columnName="+columnName+", columnValue="+columnValue+", currentRowIndex="+currentRowIndex)
-		dojox.crypto.DES.decrypt(columnValue, password, dojo.hitch(this, function(results){
+		dojox._sql._crypto.decrypt(columnValue, password, dojo.hitch(this, function(results){
 			// set the new decrypted value
 			this._finalResultSet[currentRowIndex][columnName] = results;
 			this._finishedCrypto++;

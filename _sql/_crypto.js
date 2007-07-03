@@ -2,12 +2,9 @@
 // Chris Veness (CLA signed); adapted for Dojo and Google Gears Worker Pool
 // by Brad Neuberg, bkn3@columbia.edu
 
-// TODO: FIXME: Have this DES class fit into the general dojox.crypto
-// framework better, having similar calling conventions
+dojo.provide("dojox._sql._crypto");
 
-dojo.provide("dojox.crypto.DES");
-
-dojo.mixin(dojox.crypto.DES,{
+dojo.mixin(dojox._sql._crypto,{
 	// _POOL_SIZE:
 	//	Size of worker pool to create to help with crypto
 	_POOL_SIZE: 20,

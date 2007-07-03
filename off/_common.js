@@ -434,7 +434,7 @@ dojo.mixin(dojox.off, {
 			}
 		);
 
-		window.setInterval(dojo.hitch(this, function(){
+		window.setInterval(dojo.hitch(this, function(){	
 			dojo.xhrGet({
 				url:	 	this._getAvailabilityURL(),
 				handleAs:	"text",
