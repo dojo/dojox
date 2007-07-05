@@ -40,7 +40,7 @@
 		dojo.require("dijit.form.Button");
 		dojo.require("dijit.form.Textbox");
 
-		dojo.require("dojo.data.JsonItemStore");
+		dojo.require("dojo.data.ItemFileReadStore");
 		dojo.require("dojox.wire");
 		dojo.require("dojox.wire.demos.TableContainer");
 
@@ -90,7 +90,7 @@
 	<!-------------------------------- Using dojox.wire, declaratively wire up the widgets. --------------------------->
 
 	<!-- The store that is queried in this demo -->    
-	<div dojoType="dojo.data.JsonItemStore"
+	<div dojoType="dojo.data.ItemFileReadStore"
 		jsId="DataStore1"
 		url="countries.json">
 	</div>

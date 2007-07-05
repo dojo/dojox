@@ -1,6 +1,6 @@
 <!--
   This file is a simple loader for the Lazy Load demo of a Datastore.  In this
-  Example, a simple extension of JsonItemStore that can do rudimentary lazy-loading
+  Example, a simple extension of ItemFileReadStore that can do rudimentary lazy-loading
   of items into the store is used to showcase how Datastores can hide how data
   is loaded from the widget.  As long as the widget implements to the Dojo.data API
   spec, then it should be able to use most datastores as input sources for its
@@ -34,7 +34,7 @@
 	</h3>
 	<p>
 		This simple demo shows how the dijit.Tree widget can work with a Datastore that does lazy-loading of values into the tree.  
-		In this demo, the Datastore is an extension of JsonItemStore that overrides the <i>isItemLoaded()</i> and <i>loadItem()</i> functions of
+		In this demo, the Datastore is an extension of ItemFileReadStore that overrides the <i>isItemLoaded()</i> and <i>loadItem()</i> functions of
 		with ones that can detect 'stub' items and use the data in the stub item to load the real data for that item when it
 		is required.  In this demo, the real data is required when one of the tree nodes is expanded.
 	</p>
