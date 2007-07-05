@@ -1,11 +1,6 @@
 dojo.require("dijit._editor.RichText");
 dojo.require("dojo.parser");
 
-dojo.require("dojox.sql");
-dojo.require("dojox.off");
-dojo.require("dojox.off.ui");
-dojo.require("dojox.off.sync");
-
 // configure how we should work offline
 
 // set our application name
