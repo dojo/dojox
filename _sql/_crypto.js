@@ -7,7 +7,7 @@ dojo.provide("dojox._sql._crypto");
 dojo.mixin(dojox._sql._crypto,{
 	// _POOL_SIZE:
 	//	Size of worker pool to create to help with crypto
-	_POOL_SIZE: 20,
+	_POOL_SIZE: 100,
 	
 	encrypt: function(plaintext, password, callback){
 		// summary:
