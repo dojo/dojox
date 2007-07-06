@@ -244,7 +244,7 @@ dojox.off.files = {
 		
 		handleUrl(window.location.href);
 		
-		dojo.forEach(dojo.query("script"), function(i){
+		dojo.query("script").forEach(function(i){
 			try{
 				handleUrl(i.getAttribute("src"));
 			}catch(exp){
@@ -253,7 +253,7 @@ dojox.off.files = {
 			}
 		});
 		
-		dojo.forEach(dojo.query("link"), function(i){
+		dojo.query("link").forEach(function(i){
 			try{
 				if(!i.getAttribute("rel")
 					|| i.getAttribute("rel").toLowerCase() != "stylesheet"){
@@ -267,7 +267,7 @@ dojox.off.files = {
 			}
 		});
 		
-		dojo.forEach(dojo.query("img"), function(i){
+		dojo.query("img").forEach(function(i){
 			try{
 				handleUrl(i.getAttribute("src"));
 			}catch(exp){
@@ -276,7 +276,7 @@ dojox.off.files = {
 			}
 		});
 		
-		dojo.forEach(dojo.query("a"), function(i){
+		dojo.query("a").forEach(function(i){
 			try{
 				handleUrl(i.getAttribute("href"));
 			}catch(exp){
