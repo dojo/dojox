@@ -7,8 +7,8 @@
 }
 
 .dojoxFloatingPaneContent {
-	
-
+	overflow:auto; 
+	background-color:#fff; 
 }
 
 .dojoxFloatingMiniMizeIcon {

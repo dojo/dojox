@@ -88,7 +88,7 @@
 
 		</div>
 
-		<div title="Alt Dock 1" style="width:200px; float:left;" dojoType="dojox.layout.FloatingPane" duration="350" >
+		<div title="Alt Dock 1" style="width:200px; height:200px; float:left;" dojoType="dojox.layout.FloatingPane" duration="350" resizable="true">
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
 		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
 		sagittis turpis. purus purus in nibh. Phasellus in nunc.
@@ -100,9 +100,17 @@
 		</div>
 
 		
-		<div dojoType="dojox.layout.FloatingPane" resizeable="false" style="width:200px" title="foobar" closable="false" dockable="false">
+		<div dojoType="dojox.layout.FloatingPane" 
+resizeable="false" style="width:200px; background:#ccc; " title="foobar" 
+closable="false" dockable="false">
 		This is just a pane. You cannot close me, you cannot resize me, you cannot minimize me.
 		</div> 
+
+		<div dojoType="dojox.layout.FloatingPane" 
+			title="remote pane" href="../../../dijit/tests/layout/doc0.html"
+			style="width:250px; height:250px; background:#fff;"
+		></div>
+
 
 		<div dojoType="dojox.layout.Dock" id="alternateDock" class="alternateDock"></div>
 

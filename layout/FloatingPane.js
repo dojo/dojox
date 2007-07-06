@@ -71,22 +71,23 @@ dojo.declare("dojox.layout.FloatingPane",
 			this.resizeHandle.style.display = "none"; 	
 		} else {
 			var foo = dojo.marginBox(this.domNode); 
-			this.domNode.style.height = foo.h+"px";
+			//this.domNode.style.height = foo.h+"px";
 			this.domNode.style.width = foo.w+"px"; 
 		}
 	},
 	
-	_resizePane: function(evt) {
-		console.debug('called resize'); 
-	},
-
 	startup: function() {
-		console.debug(this.resizable); 
+	
 		dojox.layout.FloatingPane.superclass.startup.call(this); 
+
+		dojo.style(this.domNode,"border","1px solid #dedede"); 
+		dojo.style(this.domNode,"overflow","hidden"); 
+		//dojo.style(this.dom
+
 		if (this.resizable) {
 			this.containerNode.style.overflow = "auto";
 			var tmp = new dojox.layout.ResizeHandle({ 
-				// targetContainer: this.containerNode, 
+				//targetContainer: this.containerNode, 
 				targetId: this.id, 
 				resizeAxis: this.resizeAxis 
 			},this.resizeHandle);
@@ -154,7 +155,9 @@ dojo.declare("dojox.layout.FloatingPane",
 	},
 
 	minimize: function() {
+		if (!this._isDocked) {
 		this.hide(dojo.hitch(this,"_dock"));
+		} 
 	},
 
 	_dock: function() {
@@ -162,15 +165,8 @@ dojo.declare("dojox.layout.FloatingPane",
 			this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
-	},
-
-	_onTitleClick: function() {
-
-	},
-	_onTitleKey: function() {
-
 	}
-
+	
 });
 
 dojo.declare("dojox.layout.Dock",
