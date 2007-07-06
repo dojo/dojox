@@ -195,7 +195,7 @@ dojo.mixin(dojox.off.ui, {
 	
 	_testNet: function(){
 		dojox.off.goOnline(dojo.hitch(this, function(isOnline){
-			//console.debug("testNetwork callback, isOnline="+isOnline);
+			//console.debug("testNet callback, isOnline="+isOnline);
 			
 			// display our online/offline results
 			this._onNetwork(isOnline ? "online" : "offline");
@@ -566,7 +566,6 @@ dojo.mixin(dojox.off.ui, {
 	},
 	
 	_onNetwork: function(type){
-		console.debug("onNetwork, type="+type);
 		// summary:
 		//	Called when we go on- or off-line
 		// description:
@@ -591,7 +590,6 @@ dojo.mixin(dojox.off.ui, {
 			
 			// if we fell offline during a sync, hide
 			// the sync info
-			console.debug("dojox.off.sync.isSyncing="+dojox.off.sync.isSyncing);
 			this._updateSyncUI();
 		}else{ // online
 			// synchronize, but pause for a few seconds
