@@ -4,7 +4,7 @@
 <head>
 	<title>dojox.layout.FloatPane - simplest extension on TitlePane ... ever.</title>
 		
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig=" isDebug: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true" ></script>
 	<script type="text/javascript" src="../FloatingPane.js"></script>
 	<script type="text/javascript">
 		// dojo.require("dojox.layout.FloatingPane"); 
@@ -15,8 +15,19 @@
 		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../resources/FloatingPane.css"; 
 
-	body { background:url('gridUnderlay.png') top left; } 
+	/* body { background:url('gridUnderlay.png') top left; }  */
+
+		.alternateDock {
+			position:absolute; 
+			background-color:#ededed; 
+			right:0px; top:0px; 
+			border-left:1px solid #ccc; 
+			height:100%; 
+		
+		}
+		#alternateDock ul.dojoxDockList { display:block; }
 
 	</style>
 	<script>
@@ -26,7 +37,9 @@
 			var tmp = new dojox.layout.FloatingPane({  
 				title: "dynamically created ...",
 				id:"floater3",
-				closeable:true
+				closeable:true,
+				resizable:true,
+				dockable: false
 			},"nonFloater");
 
 		}
@@ -34,7 +47,7 @@
 		var vpx, vpy = null;
 		dojo.addOnLoad(function(){
 
-			makeFloater();
+			 makeFloater();
 			vpx = dojo.byId('vpX');
 			vpy = dojo.byId('vpY');
 			// no publish in dnd.move, nevermind this... 
@@ -47,20 +60,26 @@
 <body class="tundra">
 
 
-		<a href="javascript:dijit.byId('floater1').hide()">close first pane</a> |
-		<a href="javascript:dijit.byId('floater1').show()">show first pane</a>
+		<a href="javascript:dijit.byId('floater1').hide()">hide first pane</a> |
+		<a href="javascript:dijit.byId('floater1').show()">show first pane</a> |
+		<a href="javascript:dijit.byId('floater1').minimize()">minimize 'uncloseable, dockable' pane pane</a>
 
-		<div dojoType="dojox.layout.FloatingPane" title="Floater test ... " id="floater1" style="width:300px;" duration="300">
+		<div dojoType="dojox.layout.FloatingPane" title="Floater test ... " resizable="true" id="floater1" style="width:300px;" duration="300">
 		<p>I am the content to be floated around</p>
 		</div>
 
-		<div dojoType="dojox.layout.FloatingPane" title="un-closable" style="width:200px;" toggle="fade" id="floater2">
+		<div dojoType="dojox.layout.FloatingPane" title="un-closable, dockable" style="width:200px; float:left; " closable="false" id="floater2">
+
+		I am dockable, though I have no dockTo="" attribute. I will create or use an existing dock 
+		on the bottom of the screen.
+		<br><br>
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
 		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc 
 		eleifend sagittis turpis. purus purus in nibh. Phasellus in nunc.
 		</div> 
 		
-		<div id="nonFloater" style="width:200px;" duration="750">
+		<div id="nonFloater" style="width:340px; float:left; " duration="750" >
+		I am made into a FloatingPane in dojo.addOnLoad();<br><br>
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
 		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
 		sagittis turpis. purus purus in nibh. Phasellus in nunc.
@@ -69,6 +88,23 @@
 
 		</div>
 
+		<div title="Alt Dock 1" style="width:200px; float:left;" dojoType="dojox.layout.FloatingPane" duration="350" >
+		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
+		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
+		sagittis turpis. purus purus in nibh. Phasellus in nunc.
+		</div>
+		<div title="Alt Dock 2" dojoType="dojox.layout.FloatingPane" resizable="true" style="width:200px; float:left;" duration="350" dockTo="alternateDock">
+		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
+		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
+		sagittis turpis. purus purus in nibh. Phasellus in nunc.
+		</div>
+
+		
+		<div dojoType="dojox.layout.FloatingPane" resizeable="false" style="width:200px" title="foobar" closable="false" dockable="false">
+		This is just a pane. You cannot close me, you cannot resize me, you cannot minimize me.
+		</div> 
+
+		<div dojoType="dojox.layout.Dock" id="alternateDock" class="alternateDock"></div>
 
 
 </body>

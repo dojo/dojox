@@ -15,7 +15,11 @@ Project description
 	placeholder for dijit.layout extensions. Currently only:
 	
 	dojox.layout.FloatingPane - an extension on TitlePane for drag/drop
-	operation
+	operation, "docking" [minimize/maximize], and [soon] resizing.
+
+	dojox.layout.ResizeHandle - resize handle to attach to a domNode.
+	works well on normal domNodes, but will require adding a resizeTo(w,h)
+	method to any widget you wish to use it on. [experimental]
 
 -------------------------------------------------------------------------------
 Dependencies
@@ -31,11 +35,10 @@ Installation:
 	http://svn.dojotoolkit.org/var/src/dojo/dojox/layout/*
 	http://svn.dojotoolkit.org/var/src/dojo/dijit/*
 
-
 	and require via dojo.require("dojox.layout.FloatingPane");
 
 -------------------------------------------------------------------------------
-Usage:
+Basic Usage:
 
 	<div dojoType="dojox.layout.FloatingPane" title="my title">
 		Content To be Floated
