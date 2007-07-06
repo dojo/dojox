@@ -502,7 +502,10 @@ dojo.mixin(dojox.off.ui, {
 		}else if(type == "coreOperationFailed"){
 			console.log("Application does not have permission to use Dojo Offline");
 		
-			// FIXME: TODO: Update UI based on core operation failing
+			if(!this._userInformed){
+				alert("This application will not work if Google Gears is not allowed to run");
+				this._userInformed = true;
+			}
 		}else if(type == "offlineCacheInstalled"){
 			// clear out the 'needs offline cache' info
 			this._hideNeedsOfflineCache();

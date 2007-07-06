@@ -168,7 +168,13 @@ dojo.mixin(dojox.sql, {
 
 	_initDb: function(){
 		if(!this.db){
-			this.db = google.gears.factory.create('beta.database', '1.0');
+			try{
+				this.db = google.gears.factory.create('beta.database', '1.0');
+			}catch(exp){
+				dojo.setObject("google.gears.denied", true);
+				dojox.off.onFrameworkEvent("coreOperationFailed");
+				throw "Google Gears must be allowed to run";
+			}
 		}
 	},
 

@@ -171,7 +171,13 @@ dojox.off.files = {
 			this.refreshing = true;
 		
 			// get our local server
-			var localServer = google.gears.factory.create("beta.localserver", "1.0");
+			var localServer;
+			try{
+				localServer = google.gears.factory.create("beta.localserver", "1.0");
+			}catch(exp){
+				dojo.setObject("google.gears.denied", true);
+				dojox.off.onFrameworkEvent("coreOperationFailed");
+			}
 			var storeName = "dot_store";
 			
 			// refresh everything by simply removing

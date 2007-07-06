@@ -245,11 +245,15 @@ dojo.mixin(dojox.off, {
 		if(type == "save"){
 			if(saveData.isCoreSave && (saveData.status == dojox.storage.FAILED)){
 				dojox.off.coreOpFailed = true;
-				dojox.off.enabledabled = false;
+				dojox.off.enabled = false;
 			
 				// FIXME: Stop the background network thread
 				dojox.off.onFrameworkEvent("coreOperationFailed");
 			}
+		}else if(type == "coreOperationFailed"){
+			dojox.off.coreOpFailed = true;
+			dojox.off.enabled = false;
+			// FIXME: Stop the background network thread
 		}
 	},
 	
