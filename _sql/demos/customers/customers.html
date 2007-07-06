@@ -1,7 +1,7 @@
 <html>
 	<head>
 	    <script type="text/javascript" 
-	            src="../../../../dojo/dojo.js" djConfig="isDebug: false"></script>
+	            src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 		
 		<style type="text/css">
 			body{
@@ -39,9 +39,11 @@
 				var data = [];
 				var rows = dojo.query(".data-item");
 				dojo.forEach(rows, function(row){
-					var lastName = row.childNodes[1].childNodes[0].nodeValue;
-					var firstName = row.childNodes[3].childNodes[0].nodeValue;
-					var ssNumber = row.childNodes[5].childNodes[0].nodeValue;
+					var td = row.getElementsByTagName("td");
+					
+					var lastName = td[0].childNodes[0].nodeValue;
+					var firstName = td[1].childNodes[0].nodeValue;
+					var ssNumber = td[2].childNodes[0].nodeValue;
 
 					data.push({lastName: lastName, firstName: firstName, ssNumber: ssNumber,
 								toString: function(){
@@ -59,7 +61,8 @@
 				var rows = document.getElementsByTagName("tr");
 				for(var i = 1; i < rows.length; i++){
 					var customer = data[i - 1];
-					rows[i].childNodes[5].childNodes[0].nodeValue = customer.social_security;
+					var td = rows[i].getElementsByTagName("td");
+					td[2].childNodes[0].nodeValue = customer.social_security;
 				}
 			}
 			
