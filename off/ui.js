@@ -148,7 +148,7 @@ dojo.mixin(dojox.off.ui, {
 	},
 	
 	_templateLoaded: function(data){
-		//console.debug("dojo.off.ui._templateLoaded");
+		//console.debug("dojox.off.ui._templateLoaded");
 		// inline our HTML
 		var container = dojo.byId(this.autoEmbedID);
 		if(container){ container.innerHTML = data; }
@@ -188,6 +188,9 @@ dojo.mixin(dojox.off.ui, {
 		
 		// if offline functionality is disabled, disable everything
 		this._setOfflineEnabled(dojox.off.enabled);
+		
+		// update our UI based on the state of the network
+		this._onNetwork(dojox.off.isOnline ? "online" : "offline");
 		
 		// try to go online
 		this._testNet();

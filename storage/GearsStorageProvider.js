@@ -34,7 +34,7 @@ if(dojo.isGears){
 				_available: null,
 				
 				initialize: function(){
-					// console.debug("dojox.storage.GearsStorageProvider.initialize");
+					//console.debug("dojox.storage.GearsStorageProvider.initialize");
 					if(djConfig["disableGearsStorage"] == true){
 						return;
 					}

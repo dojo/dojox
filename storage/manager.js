@@ -61,7 +61,11 @@ dojox.storage.manager = new function(){
 		// summary:
 		//		Autodetects the best possible persistent storage provider
 		//		available on this platform. 
+		
+		//console.debug("dojox.storage.manager.autodetect");
+		
 		if(this._initialized){ // already finished
+			//console.debug("dojox.storage.manager already initialized; returning");
 			return;
 		}
 
@@ -207,6 +211,8 @@ dojox.storage.manager = new function(){
 	};
 	
 	this._fireLoaded = function(){
+		//console.debug("dojox.storage.manager._fireLoaded");
+		
 		dojo.forEach(this._onLoadListeners, function(i){ 
 			try{ 
 				i(); 

@@ -237,7 +237,6 @@ dojox.off.files = {
 		}
 		
 		var handleUrl = dojo.hitch(this, function(url){
-			//console.debug("handleUrl, url="+url);
 			if(this._sameLocation(url)){
 				this.cache(url);
 			}
@@ -362,10 +361,9 @@ dojox.off.files = {
 		}
 		
 		// else we have everything
-
-		return (window.location.protocol == (url.scheme + ":")
+		return  window.location.protocol == (url.scheme + ":")
 				&& window.location.hostname == url.host
-				&& window.location.port == url.port);
+				&& (window.location.port == url.port || !window.location.port && !url.port);
 	},
 	
 	_trimAnchor: function(url){

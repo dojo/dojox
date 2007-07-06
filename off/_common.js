@@ -16,9 +16,9 @@ dojo.mixin(dojox.off, {
 	// NET_CHECK: int
 	//		For advanced usage; most developers can ignore this.
 	//		Time in seconds on how often we should check the status of the
-	//		network with an automatic background timer. Current default
-	//		is 10.
-	NET_CHECK: 10,
+	//		network with an automatic background timer. The current default
+	//		is 5 seconds.
+	NET_CHECK: 5,
 	
 	// STORAGE_NAMESPACE: String
 	//		For advanced usage; most developers can ignore this.
@@ -170,6 +170,7 @@ dojo.mixin(dojox.off, {
 		//		we are able to go online.
 		
 		//console.debug("goOnline");
+		
 		if(dojox.off.sync.isSyncing || dojox.off.goingOnline){
 			return;
 		}
@@ -261,6 +262,7 @@ dojo.mixin(dojox.off, {
 	
 	_onLoad: function(){
 		//console.debug("dojox.off._onLoad");
+		
 		// both local storage and the page are finished loading
 		
 		// cache the Dojo JavaScript -- just use the default dojo.js
@@ -324,6 +326,7 @@ dojo.mixin(dojox.off, {
 	
 	_finishStartingUp: function(){
 		//console.debug("dojox.off._finishStartingUp");
+		
 		// this method is part of our _onLoad series of startup tasks
 		
 		if(this.enabled){
@@ -333,7 +336,7 @@ dojo.mixin(dojox.off, {
 
 			// try to go online
 			this.goOnline(dojo.hitch(this, function(){
-				
+				//console.debug("Finished trying to go online");
 				// indicate we are ready to be used
 				dojox.off.onLoad();
 			}));
@@ -391,6 +394,7 @@ dojo.mixin(dojox.off, {
 		dojo.xhrGet({
 			url:		this._getAvailabilityURL(),
 			handleAs:	"text",
+			timeout:	this.NET_CHECK * 1000, 
 			error:		dojo.hitch(this, function(err){
 				//console.debug("dojox.off._isSiteAvailable.error: " + err);
 				this.goingOnline = false;
