@@ -295,6 +295,10 @@ dojo.mixin(dojox.off.ui, {
 			if(roller){ roller.style.display = "none"; }
 			
 			if(cancel){ cancel.style.display = "none"; }
+			
+			if(syncMessages){
+				dojo.removeClass(syncMessages, "dot-sync-error");
+			}
 		}
 	},
 	
@@ -562,6 +566,7 @@ dojo.mixin(dojox.off.ui, {
 	},
 	
 	_onNetwork: function(type){
+		console.debug("onNetwork, type="+type);
 		// summary:
 		//	Called when we go on- or off-line
 		// description:
@@ -583,6 +588,11 @@ dojo.mixin(dojox.off.ui, {
 			// clear old details
 			var details = dojo.byId("dot-sync-details");
 			if(details){ details.style.display = "none"; }
+			
+			// if we fell offline during a sync, hide
+			// the sync info
+			console.debug("dojox.off.sync.isSyncing="+dojox.off.sync.isSyncing);
+			this._updateSyncUI();
 		}else{ // online
 			// synchronize, but pause for a few seconds
 			// so that the user can orient themselves

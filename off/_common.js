@@ -16,8 +16,9 @@ dojo.mixin(dojox.off, {
 	// NET_CHECK: int
 	//		For advanced usage; most developers can ignore this.
 	//		Time in seconds on how often we should check the status of the
-	//		network with an automatic background timer. Defaults to 5.
-	NET_CHECK: 5,
+	//		network with an automatic background timer. Current default
+	//		is 10.
+	NET_CHECK: 10,
 	
 	// STORAGE_NAMESPACE: String
 	//		For advanced usage; most developers can ignore this.
@@ -416,30 +417,44 @@ dojo.mixin(dojox.off, {
 			return;
 		}
 		
-		var errFunc = dojo.hitch(this, 
-			function(err){
-				if(this.isOnline){
-					this.isOnline = false;
-					this.onNetwork("offline");
-				}
-			}
-		);
-
-		var successFunc = dojo.hitch(this, 
-			function(data){
-				if(!this.isOnline){
-					this.isOnline = true;
-					this.onNetwork("online");
-				}
-			}
-		);
-
 		window.setInterval(dojo.hitch(this, function(){	
-			dojo.xhrGet({
+			var d = dojo.xhrGet({
 				url:	 	this._getAvailabilityURL(),
 				handleAs:	"text",
-				error:		errFunc,
-				load:		successFunc
+				timeout: 	this.NET_CHECK * 1000,
+				error:		dojo.hitch(this, 
+								function(err){
+									if(this.isOnline){
+										this.isOnline = false;
+										
+										// FIXME: xhrGet() is not
+										// correctly calling abort
+										// on the XHR object when
+										// it times out; fix inside
+										// there instead of externally
+										// here
+										try{
+											if(typeof d.ioArgs.xhr.abort == "function"){
+												d.ioArgs.xhr.abort();
+											}
+										}catch(e){}
+					
+										// if things fell in the middle of syncing, 
+										// stop syncing
+										dojox.off.sync.isSyncing = false;
+					
+										this.onNetwork("offline");
+									}
+								}
+							),
+				load:		dojo.hitch(this, 
+								function(data){
+									if(!this.isOnline){
+										this.isOnline = true;
+										this.onNetwork("online");
+									}
+								}
+							)
 			});
 
 		}), this.NET_CHECK * 1000);
