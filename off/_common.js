@@ -333,7 +333,9 @@ dojo.mixin(dojox.off, {
 		
 		// this method is part of our _onLoad series of startup tasks
 		
-		if(this.enabled){
+		if(!this.hasOfflineCache){
+			this.onLoad();
+		}else if(this.enabled){
 			// kick off a thread to check network status on
 			// a regular basis
 			this._startNetworkThread();
