@@ -85,7 +85,6 @@ var moxie = {
 	
 	_save: function(key, value){
 		this._printStatus("Saving '" + key + "'...");
-		console.debug("key="+key+", value="+value);
 		
 		if(dojox.off.isOnline){
 			this._saveOnline(key, value);
@@ -134,10 +133,23 @@ var moxie = {
 		dojox.off.sync.actions.add(action);
 		
 		// also add it to our offline, downloaded data
-		this._documents.push({fileName: key, content: value});
-		dojox.sql("INSERT INTO DOCUMENTS (fileName, content) VALUES (?, ?)",
-						key, value);
 		
+		// do an update if this fileName is already in use
+		if(dojox.sql("SELECT * FROM DOCUMENTS WHERE fileName = ?", key).length){
+			dojox.sql("UPDATE DOCUMENTS SET content = ? WHERE fileName = ?",
+						value, key);
+			for(var i = 0; i < this._documents.length; i++){
+				if(this._documents[i].fileName == key){
+					this._documents[i].content = value;
+					break;
+				}
+			}
+		}else{
+			dojox.sql("INSERT INTO DOCUMENTS (fileName, content) VALUES (?, ?)",
+							key, value);
+			this._documents.push({fileName: key, content: value});
+		}
+						
 		// update our UI
 		this._printStatus("Saved '" + key + "'");
 		this._addKey(key);

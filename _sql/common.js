@@ -51,10 +51,13 @@ dojo.mixin(dojox.sql, {
 			return;
 		}
 		
+		if(!dbName){
+			dbName = this.dbName;
+		}
+		
 		try{
 			this._initDb();
-		
-			this.db.open(dbName||this.dbName);
+			this.db.open(dbName);
 			this._dbOpen = true;
 		}catch(exp){
 			throw exp.message||exp;
@@ -73,8 +76,12 @@ dojo.mixin(dojox.sql, {
 			return;
 		}
 		
+		if(!dbName){
+			dbName = this.dbName;
+		}
+		
 		try{
-			this.db.close(dbName||this.dbName);
+			this.db.close(dbName);
 			this._dbOpen = false;
 		}catch(exp){
 			throw exp.message||exp;
@@ -135,7 +142,7 @@ dojo.mixin(dojox.sql, {
 
 			// execute the SQL and get the results
 			var rs = this.db.execute(sql, args);
-
+			
 			// Gears ResultSet object's are ugly -- normalize
 			// these into something JavaScript programmers know
 			// how to work with, basically an array of 
