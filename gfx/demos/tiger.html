@@ -2,19 +2,18 @@
 <head>
 <title>dojox.gfx: Tiger</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-			@import "../../../dijit/tests/css/dijitTests.css";
-		</style>
-<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/themes/tundra/tundra.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 <script type="text/javascript">
 
+dojo.require("dijit.form.Slider");
+dojo.require("dojo.parser"); // scan page for widgets
+
 dojo.require("dojox.gfx");
-
-// no sliders yet
-
-//dojo.require ("dojo.widget.*");
-//dojo.require ("dojo.widget.Slider");
 
 var rotation = 0, scaling = 1;
 var surface, g, m = dojox.gfx.matrix;
@@ -523,57 +522,40 @@ makeShapes = function(){
 	g.createPath("M20.5 344.5C20.5 344.5 22 333.5 10.5 346.5").setFill(f).setStroke(s);
 	//surface.createLine({x1: 0, y1: 350, x2: 700, y2: 350}).setStroke("green");
 	//surface.createLine({y1: 0, x1: 350, y2: 700, x2: 350}).setStroke("green");
-    //dojo.event.connect(dojo.widget.byId("rotatingSlider"), "onChange", rotatingEvent);
-    //dojo.event.connect(dojo.widget.byId("scalingSlider"), "onChange", scalingEvent);
-    //dojo.byId("sliders").style.visibility = "visible";
+    dojo.connect(dijit.byId("rotatingSlider"), "onChange", rotatingEvent);
+    dojo.connect(dijit.byId("scalingSlider"), "onChange", scalingEvent);
 };
 
 dojo.addOnLoad(makeShapes);
 
 </script>
 <style type="text/css">
-td.pad { padding: 0px 5px 0px 5px; }
+	td.pad { padding: 0px 5px 0px 5px; }
 </style>
 </head>
-<body>
+<body class="tundra">
 	<h1>dojox.gfx: Tiger</h1>
 	<p>This example was directly converted from SVG file.</p>
-	<!--
-	<table id="sliders" style="visibility: hidden;">
-		<tr>
-			<td align="center" class="pad">Rotation (<span id="rotationValue">0</span>)</td>
-			<td align="center" class="pad">Scaling (<span id="scaleValue">1.000</span>)</td>
-		</tr>
-		<tr>
-			<td class="pad">
-				<div id="rotatingSlider" dojoType="SliderHorizontal" 
-					initialValue="0" minimum="-180" maximum="180" snapValues="73"
-					activeDrag="true"
-					buttonStyle="top: 1px;"
-					backgroundStyle="padding: 8px 4px; border: 1px solid black;"
-					backgroundSize="width:100px; height:5px;"
-					backgroundSrc="src/widget/templates/images/blank.gif"
-					progressBackgroundSrc="src/widget/templates/images/slider-bg.gif"
-					handleStyle="top: 0px; width: 13px; height: 18px;"
-					handleSrc="src/widget/templates/images/slider.gif">
-				</div>
-			</td>
-			<td class="pad">
-				<div id="scalingSlider" dojoType="SliderHorizontal" 
-					initialValue="1" minimum="0" maximum="1" snapValues="10"
-					activeDrag="true"
-					buttonStyle="top: 1px;"
-					backgroundStyle="padding: 8px 4px; border: 1px solid black;"
-					backgroundSize="width:100px; height:5px;"
-					backgroundSrc="src/widget/templates/images/blank.gif"
-					progressBackgroundSrc="src/widget/templates/images/slider-bg.gif"
-					handleStyle="top: 0px; width: 13px; height: 18px;"
-					handleSrc="src/widget/templates/images/slider.gif">
-				</div>
-			</td>
-		</tr>
+	<table>
+		<tr><td align="center" class="pad">Rotation (<span id="rotationValue">0</span>)</td></tr>
+		<tr><td>
+			<div id="rotatingSlider" dojoType="dijit.form.HorizontalSlider" 
+					value="0" minimum="-180" maximum="180" discreteValues="72" showButtons="false"
+					style="width: 600px;">
+				<div dojoType="dijit.form.HorizontalRule" container="topDecoration" count="73" style="height:5px;"></div>
+				<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="9" style="height:5px;"></div>
+				<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" labels="-180,-135,-90,-45,0,45,90,135,180" style="height:1.2em;font-size:75%;color:gray;"></div>
+			</div>
+		</td></tr>
+		<tr><td align="center" class="pad">Scaling (<span id="scaleValue">1.000</span>)</td></tr>
+		<tr><td>
+			<div id="scalingSlider" dojoType="dijit.form.HorizontalSlider" 
+					value="1" minimum="0" maximum="1"  showButtons="false" style="width: 600px;">
+				<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="5" style="height:5px;"></div>
+				<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" labels="10%,18%,32%,56%,100%" style="height:1.2em;font-size:75%;color:gray;"></div>
+			</div>
+		</td></tr>
 	</table>
-	-->
 	<div id="gfx_holder" style="width: 700px; height: 700px;"></div>
 </body>
 </html>
