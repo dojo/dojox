@@ -102,8 +102,8 @@ dojo.declare("dojox.data.demos.stores.LazyLoadJSIStore",
 							}
 							//Finalize the addition of the new stub item into the ItemFileReadStore list.
 							self._arrayOfAllItems.push(stub);
-							stub[self._storeRef] = self;
-							stub[self._itemId] = (self._arrayOfAllItems.length - 1); //Last one pushed in should be the item
+							stub[self._storeRefPropName] = self;
+							stub[self._itemNumPropName] = (self._arrayOfAllItems.length - 1); //Last one pushed in should be the item
 							values[j] = stub; //Set the stub item back in its place and replace the stub notation.
 						}
 					}
