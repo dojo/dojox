@@ -1,4 +1,5 @@
 dojo.provide("dojox.uuid.Uuid");
+dojo.require("dojox.uuid");
 
 dojox.uuid.Uuid = function(/*String?*/ input){
 	// summary: 
