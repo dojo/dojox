@@ -2,16 +2,11 @@
 <head>
 	<title>dojox.presentation.SlideShow Demo</title>
 		
-	<script type="text/javascript"> 
-		var djConfig = {
-			isDebug: true, 
-		}; 
-	</script>
-	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
-
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug:true"></script>
+	<script type="text/javascript" src="../SlideShow.js?foo"></script>
 	<script language="JavaScript" type="text/javascript">
 		
-		dojo.require("dojox.presentation.SlideShow");
+		//dojo.require("dojox.presentation.SlideShow");
 		dojo.require("dojo.parser");
 
 		dojo.addOnLoad(function(){
@@ -20,12 +15,13 @@
 				{
 					id:'second',
 					useNav:true,
-					showDialog:false,
+					showDialog:true,
+					dialogText:" Image: @idx of @end ... ",
 					isPausable: true,
-					toggleAnimation: "wipe",
+					toggleAnimation: "fade",
 					transitionInterval: 1000,
-					imgWidth:400, 
-					imgHeight:300,
+					imgWidth:200, 
+					imgHeight:200,
 					delay:3000,		
 					imgUrlBase:'images/',
 					src:'1.jpg',
@@ -77,7 +73,7 @@
 		@import "../../../dojo/resources/dojo.css";
 	        @import "../../../dijit/themes/tundra/tundra.css";
        		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../resources/SlideShow.css";
+		@import "../resources/SlideShow.css?foo1";
 
 		.dojoContentPane { padding: 1em; }
 	        body { margin: 0px; padding: 20px; }
@@ -93,8 +89,6 @@
 
 	<div class="contBox" stye="float:left;">
 		<div id="second" /></div> 	
-
-				
 
 		<p>can add images to stack, remove images from slideshow, and randomize playlist order, switch direction:<br />
 		<a href="javascript:dijit.byId('second').togglePaused();">toggle pause</a> | 
@@ -115,11 +109,11 @@
 		
 		<img id="markupSlideShow" dojoType="dojox.presentation.SlideShow"
 			imgUrlBase="images/"
-			imgUrls="tile-7.png;tile-6.png;tile-5.png"
+			imgUrls="tile-7.png,tile-6.png,tile-5.png"
 			transitionInterval="1000"
 			delay="2000"
 			useNav="false"
-			isPausable="true"
+			pausable="true"
 			showDialog="true"
 			src="images/tile-7.png"
 			imgWidth="150" imgHeight="150"

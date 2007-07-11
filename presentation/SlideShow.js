@@ -1,4 +1,5 @@
 dojo.provide("dojox.presentation.SlideShow");
+dojo.experimental("dojox.presentation.SlideShow"); 
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
@@ -15,15 +16,16 @@ dojo.declare(
 	templatePath: dojo.moduleUrl("dojox.presentation", "resources/SlideShow.html"),
 				
 	// iconImages:
-	//  need to theme more like 'tundra' maybe
-	navIconPlay: dojo.moduleUrl("dojox.presentation","resources/icons/navIconPlay.png"),		
-	navIconPause: dojo.moduleUrl("dojox.presentation","resources/icons/navIconPause.png"),
-	navIconDirDown: dojo.moduleUrl("dojox.presentation","resources/icons/navIconDirDown.png"),
-	navIconDirUp: dojo.moduleUrl("dojox.presentation","resources/icons/navIconDirUp.png"),
+	//  	FIXME: need to theme more like 'tundra' maybe
+	//navIconPlay: dojo.moduleUrl("dojox.presentation","resources/icons/navIconPlay.png"),		
+	//navIconPause: dojo.moduleUrl("dojox.presentation","resources/icons/navIconPause.png"),
+	//navIconDirDown: dojo.moduleUrl("dojox.presentation","resources/icons/navIconDirDown.png"),
+	//navIconDirUp: dojo.moduleUrl("dojox.presentation","resources/icons/navIconDirUp.png"),
 
 	// imgUrls: String[]
 	//	List of images to use
-	//	Ex: "1.jpg;2.jpg;3.jpg"
+	//	FIXME: i want to be a store, too.
+	//	Ex: "1.jpg,2.jpg,3.jpg" 
 	imgUrls: [],
 		
 	// imgUrlBase: String
@@ -33,7 +35,7 @@ dojo.declare(
 
 	// delay: Integer
 	//	Number of milliseconds to display each image
-	delay: 4000,
+	delay: 2700,
 
 	// transitionInterval: Integer
 	//	Number of milliseconds to transition between pictures
@@ -43,15 +45,25 @@ dojo.declare(
 	// 	one of "fade|scale" for different image transitions
 	toggleAnimation: "fade", 
 
+	// randomizeAnimation: Boolean
+	//	skip through the various available toggleAnimation methods 
 	randomizeAnimation: false, 
 	
 	// showDialog: Boolean
-	//	toggle visibility of dialog [x of n] 
+	//	visibility of dialogText setting. true for on, false for off. 
 	showDialog: true, 
+
+	// dialogText: String
+	// 	string to use as dialog template. some variables are available:
+	//		@idx : current position in slideshow
+	//		@end : number of images in slideshow
+	//		@src : filename of showing image
+	//		TODO: more?
+	dialogText: "[ @idx of @end ]",
 
 	// hideNavAfterEvent: Boolean
 	// 	wether to force hideNav() after a button is clicked
-	hideNavAfterEvent: true,
+	hideNavAfterEvent: false,
 
 	// useNav: Boolean
 	// 	toggle initial state of Nav, prevent from displaying
@@ -63,34 +75,38 @@ dojo.declare(
 		
 	// imgWidth: Integer
 	//	Width of image in pixels
-	imgWidth: 800,
+	imgWidth: 400,
 		
 	// imgHeight: Integer
 	//	Height of image in pixels
-	imgHeight: 600,
+	imgHeight: 400,
 
 	// preventCache: Boolean
-	//	If true, download the image every time, rather than using cached version in browser
+	//	If true, download the image every time, rather than using cached 
+	//	version in browser
 	preventCache: false,
 		
 	// stopped: Boolean
-	//	is Animation paused?
+	//	is SlideShow paused? true/false
 	stopped: false,
 
 	// direction: String
-	// 	(forewards|backwards) uhmmm ... moving forward? or backwards?
+	// 	(forwards|backwards) uhmmm ... moving forward? or backwards?
 	direction: 'forwards',
 
-	// isPausable: Boolean
+	// pausable: Boolean
 	// 	is Animation pausable?
-	isPausable: true,
+	pausable: true,
 
 	// navOpacity: Float
 	//	ending opacity
 	navOpacity: 0.75,
+
+	// navOpacityMin: Float
+	//	ending opacity for 'hidden' navigation
 	navOpacityMin: 0.0,
 
-	////// Properties
+	// _Properties
 	_urlsIdx: 0, 		// where in the images we are
 	_background: "img2", // what's in the bg
 	_foreground: "img1", // what's in the fg
@@ -102,7 +118,7 @@ dojo.declare(
 	forwards: null,	// holder var for directions
 	dialogStart: null, dialogEnd: null, 	// x of x placeholders
 
-	///////// our DOM nodes 
+	// our DOM nodes (does this need to be here?)
 	startStopButton: null,
 	slideShowHolder: null,
 	slideShowDialog: null, 
@@ -123,81 +139,86 @@ dojo.declare(
 		dojo.style(this.img1, "height", this.imgHeight);
 		dojo.style(this.img2, "width", this.imgWidth);
 		dojo.style(this.img2, "height", this.imgHeight);
-			if (!this.useNav) { dojo.style(this.slideShowNav, "display", "none"); } 
-			else {
-			this.startStopButton.type = "image"; 
-			this.startStopButton.src = this.navIconPlay; 
-			this.directionButton.type = "image";
-			this.directionButton.src = this.navIconDirUp;
-		}
-			if (this.showDialog) { this._updateDialog(); }
-			if (this.direction == "forwards") { this.forwards = true; } else { this.forwards = false; } 
-		// safari will cache the images and not fire an image onload event if	
-		// there are only two images in the slideshow
-		if(dojo.isSafari && this.imgUrls.length == 2) {
-			this.preventCache = true;
-		}
+			if(!this.useNav){ 
+				dojo.style(this.slideShowNav, "display", "none"); 
+			}
+			if(this.showDialog){ this._updateDialog(); }
+			if(this.direction == "forwards"){ this.forwards = true; } else { this.forwards = false; } 
+
 		if(this.imgUrls.length>1){
 			this.img2.src = this.imgUrlBase+this.imgUrls[this._urlsIdx++] + this._getUrlSuffix();
 			this._endTransition();
 		}else{
 			this.img1.src = this.imgUrlBase+this.imgUrls[this._urlsIdx++] + this._getUrlSuffix();
+			this.img2.src = this.imgUrlBase+this.imgUrls[--this._urlsIdx] + this._getUrlSuffix();
 		}
 	},
-		setGallery: function(/* String */ jsonData) { 
+
+	setGallery: function(/* String */ jsonData){ 
 		// summary: loads the images listed in jsonData array into imgUrls; 
 		this.imgUrls = jsonData;
 		this._urlsIdx = 0;
 	},
-		addImgUrl: function(str) {
+
+	addImgUrl: function(str){
 		// summary: puts an image in the imgUrls stack
 		this.imgUrls.push(str); 
 	},
 	
-	removeImgUrl: function() {
+	removeImgUrl: function(){
 		// summary: remove last imgUrls	
 		return this.imgUrls.shift(); 
 	},
-	shuffleImgUrls: function() {
+
+	shuffleImgUrls: function(){
 		// summary: mixup the urls, and start over.
-		// FIXME: shuffle is an added array prototype, don't know how to do this in widget-land	
-		// could just put the mix math code here?
+		// FIXME: shuffle is an added array prototype pre 1.3? 
+		// could just put the mix math code here? or assume availability of array.shuffle()?
 		this.imgUrls.shuffle();
 		this._urlsIdx = 0; 
 	},
+
 	
 	toggleNav: function() {
 		// summary: toggle navigation visibility
-		if (!this.useNav) { return; } 
-		if (this.navShowing) { this.hideNav(); } else { this.showNav(); } 
+		if(!this.useNav){ return; } 
+		if(this.navShowing){ this.hideNav(); }else{ this.showNav(); } 
 	},
 
 	showNav: function() {
 		// summary: show the navigation tab
-		if (!this.useNav) { return; } 
-		if (!this.navShowing) {
-			dojo.animateProperty({
-			node: this.slideShowNav, duration:this.navDur,
-			properties: { opacity: { start:this.navOpacityMin, end:this.navOpacity }}}).play(); 
-			this.navShowing = true; 
+		if(this.useNav){  
+			if(!this.navShowing){
+				dojo.animateProperty({
+					node: this.slideShowNav, 
+					duration:this.navDur,
+					properties: { 
+						opacity: { start:this.navOpacityMin, end:this.navOpacity }
+					}
+				}).play(); 
+				this.navShowing = true; 
+			}
 		}
 	},
 		
-	hideNav: function() {
+	hideNav: function(){
 		// summary: hide the navigation tab
-		if (!this.useNav) { return; } 
-		if (this.navShowing) { 
-			dojo.animateProperty({
-				node:this.slideShowNav, duration:this.navDur,
-				properties: { 
-					opacity: { start:this.navOpacity, end: this.navOpacityMin } 
-				}
-			}).play();
-			this.navShowing = false; 
+		if(this.useNav){
+			if (this.navShowing) { 
+				dojo.animateProperty({
+					node:this.slideShowNav, duration:this.navDur,
+					properties: { 
+						opacity: { start:this.navOpacity, end: this.navOpacityMin } 
+					}
+				}).play();
+				this.navShowing = false; 
+			}
 		}
 	},
+
 	toggleDirection: function() {
-	// summary: toggle the direction of the array-walk 
+		// summary: toggle the direction of the array-walk 
+		/* FIXME: DISABLED for now. use classes on template nodes.
 		if (this.direction == 'forwards') { 
 			this.direction = 'backwards'; 
 			this.directionButton.src= this.navIconDirDown;
@@ -206,10 +227,12 @@ dojo.declare(
 			this.directionButton.src = this.navIconDirUp;
 		} 
 		if (this.hideNavAfterEvent) { this.hideNav(); }
-		},
+		*/
+	},
 	
 	togglePaused: function(){
 		// summary: pauses or restarts the slideshow
+		/* DISABLED for now. refactoring.
 		if(this.stopped){
 			this.stopped = false;
 			this._backgroundImageLoaded();
@@ -225,97 +248,90 @@ dojo.declare(
 			}
 		}
 		if (this.hideNavAfterEvent) { this.hideNav(); } 
+		*/
 	},
-		_updateDialog: function() {
-		// FIXME: is there a neat JS way to use string substitution in this scope
-		// to allow a user-defined dialog string, like: dialogString="[ $start of $end Image ... ]"
-		// and update the innerHTML with the variables in their string?
+
+	_updateDialog: function() {
+		// summary: apply known info to dialogText template and update view
 		this.dialogStart = this._urlsIdx+1; 
 		this.dialogEnd = this.imgUrls.length; 
-		this.slideShowDialog.innerHTML = '[ '+this.dialogStart+' of '+this.dialogEnd+' ]';
+		this.slideShowDialog.innerHTML = this.dialogText.replace('@idx',this.dialogStart).replace('@end',this.dialogEnd);
 	},
-		_getUrlSuffix: function() {
-		if(this.preventCache) {
+
+	_getUrlSuffix: function(){
+		if(this.preventCache){
 			return "?ts=" + (new Date()).getTime();
-		} else {
+		}else{
 			return "";
 		}
 	},
-		_backgroundImageLoaded: function(){
+
+	_backgroundImageLoaded: function(){
 		// start fading out the _foreground image
 		if(this.stopped){ return; }
-			this.allowNavChange = false; 
-			// actually start the fadeOut effect
+		this.allowNavChange = false;
+		// actually start the fadeOut effect
 		// NOTE: if we wanted to use other transition types, we'd set them up
 		// 		 here as well
-		if(this.fadeAnim) {
+		if(this.fadeAnim){
 			this.fadeAnim.stop();
 		}
-			switch (this.toggleAnimation) {
-			case "fade" : 
-				this.fadeAnim = dojo.fadeOut({
-					node:this[this._foreground], 
-					duration: this.transitionInterval
-				}); 
-				break;
-			case "slide" : break;
-			case "wipe" : 
-				this.fadeAnim = dojo.animateProperty({
-					node:this[this._foreground],
-					duration: this.transitionInterval,
-					properties: {
-						width:{
-							start:this.imgWidth,
-							end:0, unit:"px"
-						},
-						height:{
-							start:this.imgHeight,
-							end:0, unit:"px"
-						}
-
-					}
-				});
-				break;
+		switch (this.toggleAnimation) {
+		case "fade" : 
+			this.fadeAnim = dojo.fadeOut({
+				node:this[this._foreground],
+				duration: this.transitionInterval
+			}); 
+			break;
+		case "slide" : break;
+		case "scale" : 
+			this.fadeAnim = dojo.animateProperty({
+				node:this[this._foreground],
+				duration: this.transitionInterval,
+				properties: {
+					width:{ start:this.imgWidth, end:0, unit:"px" },
+					height:{ start:this.imgHeight, end:0, unit:"px" }
+				}
+			});
+			break;
 		}
-			this._handle = dojo.connect(this.fadeAnim,"onEnd",this,"_endTransition");
+		this._handle = dojo.connect(this.fadeAnim,"onEnd",this,"_endTransition");
 		this.fadeAnim.play();
-		
 	},
+
 	_endTransition: function(){
-		// move the _foreground image to the _background 
-		// if (this.showDialog) {this._updateDialog(); }
-			with(this[this._background].style){ zIndex = parseInt(zIndex)+1; }
+		// summary: move the _foreground image to the _background 
+		with(this[this._background].style){ zIndex = parseInt(zIndex)+1; }
 		with(this[this._foreground].style){ zIndex = parseInt(zIndex)-1; }
-			// fg/bg book-keeping
+		// fg/bg book-keeping
 		var tmp = this._foreground;
 		this._foreground = this._background;
 		this._background = tmp;
 		this.allowNavChange = true;
-		// keep on truckin, 
 		// FIXME: is there a better method than setTimeout?
-		setTimeout(dojo.hitch(this,"_loadNextImage"),this.delay); 
+		setTimeout(dojo.hitch(this,"_loadNextImage"),this.delay);
 	},
 
 	_loadNextImage: function(){
-		// summary: after specified delay, load a new image in that container, 
-		// and call _backgroundImageLoaded() when it finishes loading
+		// summary: after specified delay, load a new image in that container,
+		// 	and call _backgroundImageLoaded() when it finishes loading
 
-
-		dojo.disconnect(this._handle); 
-		this._handle = dojo.connect(this[this._background],"onload", this, "_backgroundImageLoaded"); 
+		dojo.disconnect(this._handle);
+		this._handle = dojo.connect(this[this._background],"onload", this, "_backgroundImageLoaded");
 		dojo.style(this[this._background], "opacity", 1.0);
 		dojo.style(this[this._background], "width", this.imgWidth);
 		dojo.style(this[this._background], "height", this.imgHeight);
-		if (this.showDialog) { this._updateDialog(); }
+		if(this.showDialog){ this._updateDialog(); }
 		var nextIdx = (this.direction=='forwards') ? this._urlsIdx+1 : this._urlsIdx-1;
 		this[this._background].src = this.imgUrlBase+this.imgUrls[this._urlsIdx];
-		if (this.direction=='forwards') { 
-		if(nextIdx>(this.imgUrls.length-1)){ this._urlsIdx = 0;	} 
-			else { this._urlsIdx = nextIdx; } 
-		} else {
-			if (nextIdx<0) { this._urlsIdx = this.imgUrls.length-1; } 
-			else { this._urlsIdx = nextIdx; } 
+		if(this.direction=='forwards'){
+			if(nextIdx>(this.imgUrls.length-1)){
+				this._urlsIdx = 0;
+			}else{  this._urlsIdx = nextIdx; }
+		}else{
+			if(nextIdx<0){ 
+				this._urlsIdx = this.imgUrls.length-1;
+			}else{ this._urlsIdx = nextIdx; }
 		}
 	}
-	
 });
