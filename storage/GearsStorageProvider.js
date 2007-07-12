@@ -39,6 +39,11 @@ if(dojo.isGears){
 						return;
 					}
 					
+					// partition our storage data so that multiple apps
+					// on the same host won't collide
+					this.TABLE_NAME = "__DOJO_STORAGE_" 
+										+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
+					
 					// create the table that holds our data
 					try{
 						dojox.sql("CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + "( "

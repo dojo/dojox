@@ -35,11 +35,7 @@ dojo.require("dojox._sql._crypto");
 dojox.sql = new Function("return dojox.sql._exec(arguments);");
 
 dojo.mixin(dojox.sql, {
-	// FIXME: This database name might make conflicts with
-	// other web applications that are also using Dojo SQL
-	// on the same host -- create a way to differentiate the
-	// database names
-	dbName: "PersistentStorage",
+	dbName: null,
 	
 	// summary:
 	//	If true, then we print out any SQL that is executed
@@ -49,6 +45,11 @@ dojo.mixin(dojox.sql, {
 	open: function(dbName){
 		if(this._dbOpen && (!dbName || dbName == this.dbName)){
 			return;
+		}
+		
+		if(!this.dbName){
+			this.dbName = "dot_store_" 
+				+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
 		}
 		
 		if(!dbName){

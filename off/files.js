@@ -180,7 +180,7 @@ dojox.off.files = {
 				throw "Google Gears must be allowed to run";
 			}
 			
-			var storeName = "dot_store";
+			var storeName = "dot_store_" + dojox.off._STORAGE_APP_NAME;
 			
 			// refresh everything by simply removing
 			// any older stores
