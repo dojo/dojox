@@ -1,4 +1,5 @@
 dojo.provide("dojox.layout.FloatingPane");
+dojo.experimental("dojox.layout.FloatingPane"); 
 
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit._Templated"); 
@@ -22,7 +23,7 @@ dojo.declare("dojox.layout.FloatingPane",
 
 	// dockable: Boolean
 	//	allow minimizing of pane true/false
-	dockable: true, 
+	dockable: false, 
 
 	// resizable: Boolean
 	//	allow resizing of pane true/false
@@ -34,7 +35,7 @@ dojo.declare("dojox.layout.FloatingPane",
 
 	// title: String
 	//	title to put in titlebar
-	title: null,
+	title: "",
 
 	// dockTo: DomNode || null
 	//	if null, will create private layout.Dock that scrolls with viewport
@@ -59,24 +60,24 @@ dojo.declare("dojox.layout.FloatingPane",
 	templateString: null,
 	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
 
-	postCreate: function() {
+	postCreate: function(){
 		// summary: 
 		this.setTitle(this.title);
 		dojox.layout.FloatingPane.superclass.postCreate.apply(this,arguments);
 		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
 
-		if (!this.dockable) { this.dockNode.style.display = "none"; } 
-		if (!this.closable) { this.closeNode.style.display = "none"; } 
-		if (!this.resizable) {
+		if(!this.dockable){ this.dockNode.style.display = "none"; } 
+		if(!this.closable){ this.closeNode.style.display = "none"; } 
+		if(!this.resizable){
 			this.resizeHandle.style.display = "none"; 	
-		} else {
+		}else{
 			var foo = dojo.marginBox(this.domNode); 
 			//this.domNode.style.height = foo.h+"px";
 			this.domNode.style.width = foo.w+"px"; 
 		}
 	},
 	
-	startup: function() {
+	startup: function(){
 	
 		dojox.layout.FloatingPane.superclass.startup.call(this); 
 
@@ -93,20 +94,22 @@ dojo.declare("dojox.layout.FloatingPane",
 			},this.resizeHandle);
 		}
 
-		if (this.dockable) { 
+		if(this.dockable){ 
 			// FIXME: argh.
 			tmpName = this.dockTo; 
-			if (this.dockTo) { this.dockTo = dijit.byId(this.dockTo); }
-			else { this.dockTo = dijit.byId('dojoxGlobalFloatingDock'); }
-			if (!this.dockTo) {
+
+			if(this.dockTo){ this.dockTo = dijit.byId(this.dockTo); }
+			else{ this.dockTo = dijit.byId('dojoxGlobalFloatingDock'); }
+
+			if(!this.dockTo){
 				// we need to make our dock node, and position it against
 				// .dojoxDockDefault .. this is a lot. either dockto="node"
 				// and fail if node doesn't exist or make the global one
 				// once, and use it on empty OR invalid dockTo="" node?
-				if (tmpName) { 
+				if(tmpName){ 
 					var tmpId = tmpName;
 					var tmpNode = dojo.byId(tmpName); 
-				} else {
+				}else{
 					var tmpNode = document.createElement('div');
 					dojo.body().appendChild(tmpNode);
 					dojo.addClass(tmpNode,"dojoxFloatingDockDefault");
