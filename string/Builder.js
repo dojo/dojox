@@ -9,19 +9,22 @@ dojo.provide("dojox.string.Builder");
 		if(str){ this.append(str); }
 	};
 	
+	
+	
 	var m = {
 	 	append: function(){ 
 			// summary: Append all arguments to the end of the buffer
 			var s, j;
 			for(var i = 0; i < arguments.length; i++) {
 				s = arguments[i];
-				if(dojo.isArray(s)){
+				if(typeof(s) === "array"){
 					for(j = 0; j < s.length; j++) {
-						this._append(s[j]);
+						this.b += s[j];
 						this.length += s[j].length;
 					}
 				}else{
-					this._append(s);
+					if(typeof(s) !== "string") { s = String(s); };
+					this.b += s;
 					this.length += s.length;
 				}
 			}
