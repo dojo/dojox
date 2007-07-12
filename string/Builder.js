@@ -12,22 +12,15 @@ dojo.provide("dojox.string.Builder");
 	var m = {
 	 	append: function(){ 
 			// summary: Append all arguments to the end of the buffer
-			/*dojo.forEach(arguments, function(s){
-				if(dojo.isArrayLike(s)){ 
-					this.append.apply(this, s); 
-				}else{
-					if(!dojo.isString(s)){ s = String(s); } 
-					this._append(s);
-					this.length += s.length;
-				}
-			}, this);*/
-			var s;
+			var s, j;
 			for(var i = 0; i < arguments.length; i++) {
 				s = arguments[i];
 				if(dojo.isArray(s)){
-					this.append.apply(this, s);
+					for(j = 0; j < s.length; j++) {
+						this._append(s[j]);
+						this.length += s[j].length;
+					}
 				}else{
-					if(!dojo.isString(s)){ s = String(s); }
 					this._append(s);
 					this.length += s.length;
 				}
