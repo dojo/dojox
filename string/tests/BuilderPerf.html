@@ -116,6 +116,7 @@
               return s;
             }
           },
+          /*
           {
             name: "concatForAlias",
             test: function() {
@@ -136,6 +137,7 @@
               return s;
             }
           },
+          */
           {
             name: "concatOnce",
             test: function() {
@@ -154,6 +156,7 @@
               return b.toString();
             }
           },
+          /*
           {
             name: "builderForEach",
             test: function() {
@@ -164,6 +167,7 @@
               return b.toString();
             }
           },
+          */
           {
             name: "builderReusedFor",
             test: function() {
@@ -171,6 +175,22 @@
               for(var i = 0; i < words.length; i++) {
                 _builder.append(words[i]);
               }
+              return _builder.toString();
+            }
+          },
+          {
+            name: "builderOnce",
+            test: function() {
+              var b = new dojox.string.Builder();
+              b.appendArray(words);
+              return b.toString();
+            }
+          },
+          {
+            name: "builderReusedOnce",
+            test: function() {
+              _builder.clear();
+              _builder.appendArray(words);
               return _builder.toString();
             }
           },
@@ -184,6 +204,7 @@
               return s;
             }
           },
+          /*
           {
             name: "plusForAlias",
             test: function() {
@@ -208,6 +229,7 @@
               return words.join("");
             }
           },
+          */
           {
             name: "joinFor",
             test: function() {
@@ -217,7 +239,7 @@
               }
               return a.join("");
             }
-          },
+          }/*,
           {
             name: "joinForAlias",
             test: function() {
@@ -236,6 +258,7 @@
               return a.join("");
             }
           }
+          */
         ],
         words: words,
         expected: expected
