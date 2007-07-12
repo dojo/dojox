@@ -9,29 +9,15 @@ dojo.provide("dojox.string.Builder");
 		if(str){ this.append(str); }
 	};
 	
-	
-	
 	var m = {
-	 	append: function(){ 
+	 	append: function(/*String*/s){ 
 			// summary: Append all arguments to the end of the buffer
-			var s, j;
-			for(var i = 0; i < arguments.length; i++) {
-				s = arguments[i];
-				if(typeof(s) === "array"){
-					for(j = 0; j < s.length; j++) {
-						this.b += s[j];
-						this.length += s[j].length;
-					}
-				}else{
-					if(typeof(s) !== "string") { s = String(s); };
-					this.b += s;
-					this.length += s.length;
-				}
-			}
+			this.b += s;
 			return this; // dojox.string.Builder
 		},
-		concat: function(){
-			return this.append.apply(this, arguments);
+		appendArray: function(/*Array*/strings) {
+			this.b = String.prototype.concat.apply(this.b, strings);
+			return this;
 		},
 		clear: function(){
 			// summary: Remove all characters from the buffer
@@ -74,10 +60,17 @@ dojo.provide("dojox.string.Builder");
 				this.append(s.substring(index));
 			}
 			return this;
+		},
+		toString: function(){
+			return this.b;
+		},
+		_clear: function(){
+			this.b = "";
+		},
+		_reset: function(s){
+			this.b = s;
 		}
-		
 	}; // will hold methods for Builder
-	
 	
 	if(dojo.isIE){
 		dojo.mixin(m, {
@@ -85,30 +78,17 @@ dojo.provide("dojox.string.Builder");
 				// Summary: Get the buffer as a string
 				return this.b.join(""); 
 			},
-			_append: function(s){
+			append: function(s){
 				this.b.push(s);
+			},
+			appendArray: function(strings){
+				this.b = this.b.concat(strings);
 			},
 			_clear: function(){
 				this.b = [];
 			},
 			_reset: function(s){
 				this.b = [ s ];
-			}
-		});
-	}else{
-		dojo.mixin(m, {
-			toString: function(){ 
-				// Summary: Get the buffer as a string
-				return this.b; 
-			},
-			_append: function(s){
-				this.b += s;
-			},
-			_clear: function(){
-				this.b = "";
-			},
-			_reset: function(s){
-				this.b = s;
 			}
 		});
 	}
