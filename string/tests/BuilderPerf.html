@@ -16,21 +16,31 @@
                      setTimeout(function() { 
                        var words = parseInt(dojo.byId("numWords").value) || 10;
                        var iters = parseInt(dojo.byId("numIters").value) || 1000;
-                       buildAndRunSet(words, iters); 
+                       var dict = eval(dojo.byId("dict").value);
+                       buildAndRunSet(words, dict, iters); 
                       }, 0); 
                     });
     });
     
-    function element(tag, textOrChild) {
+    function element(tag, textOrChildOrArray) {
       var e = document.createElement(tag);
-      if(dojo.isArray(textOrChild)) dojo.forEach(textOrChild, function(c) { e.appendChild(c); });
-      if(dojo.isString(textOrChild)) e.appendChild(document.createTextNode(textOrChild));
-      else e.appendChild(textOrChild);
+      function append(n) {
+        if(dojo.isString(n)){
+          n = document.createTextNode(n);
+        } 
+        e.appendChild(n);
+      }
+      if(dojo.isArray(textOrChildOrArray)) {
+        dojo.forEach(textOrChildOrArray, append);
+      }else{
+        append(textOrChildOrArray);
+      }
       return e;
     }
     
     function log(t) {
       dojo.byId("mess").innerHTML = t;
+      console.log(t);
     }
     
     function reportRun(results){
@@ -38,8 +48,9 @@
       var report = element("dl",
                      element("dt", 
                              "Run with " + results.words + " words, " + 
-                                           results.iterations + " iterations and overhead of " + 
-                                           results.overhead));
+                                           results.iterations + " iterations, for loop overhead of " + 
+                                           results.overhead + ", average phrase of " +
+                                           results.wordSize + " characters"));
                           
       runs.sort(function(a,b) { return a.time - b.time; });
       dojo.forEach(runs, function(r) {
@@ -62,11 +73,19 @@
     
     function runSet(set, iterations){
       
+      function averagePhraseLen(words) {
+        var sizes = dojo.map(words, function(w) { return w.length; });
+        var total = 0;
+        dojo.forEach(sizes, function(s) { total += s; });
+        return total / sizes.length;
+      }
+      
       var tests = set.tests.concat(); //copy tests
       var resultSet = {};
       resultSet.words = set.words.length;
-      resultSet.overhead = runTest(function(){}, iterations);
+      resultSet.overhead = runTest(set.overhead, iterations);
       resultSet.iterations = iterations;
+      resultSet.wordSize = averagePhraseLen(set.words);
       var runs = [];
       
       function _run() {
@@ -85,22 +104,21 @@
           log("Done!");
           resultSet.runs = runs;
           reportRun(resultSet);
+          dojo.publish("perf/run/done");
         }
       }
-      setTimeout(_run, 0);
+      setTimeout(_run, 25);
     }
     
-    function buildTestSet(numWords) {
-      var words = [], i, wordsInLipsum = lipsum.length;
-      for(i = numWords; i > 0; i-=wordsInLipsum) { 
-        if(i >= wordsInLipsum) { words = words.concat(lipsum); }
-        else { words = words.concat(lipsum.slice(-i)); } 
+    function buildTestSet(numWords, dict) {
+      var words = [], i, dl = dict.length;
+      for(i = numWords; i > 0; i-=dl) { 
+        if(i >= dl) { words = words.concat(dict); }
+        else { words = words.concat(dict.slice(-i)); } 
       }
       if(words.length != numWords) throw new Error("wrong number of words, got " + words.length + ", expected " + numWords);
       
       var expected = words.join("");
-      
-      console.log(words);
       
       var _builder = new dojox.string.Builder();
       
@@ -222,14 +240,13 @@
               dojo.forEach(words, function(w) { s += w; });
               return s;
             }
-          },
+          },*/
           {
-            name: "joinExisting",
+            name: "joinOnce",
             test: function() {
               return words.join("");
             }
           },
-          */
           {
             name: "joinFor",
             test: function() {
@@ -261,14 +278,94 @@
           */
         ],
         words: words,
-        expected: expected
+        expected: expected,
+        overhead: function() { 
+          var w = words; 
+          var l = w.length; 
+          for(var i=0; i < l; i++) { 
+            ident(w[i]); 
+          } 
+        }
       };
     }
     
-    function buildAndRunSet(words, times) {
-      runSet(buildTestSet(words), times);
+    function buildAndRunSet(words, dict, times) {
+      runSet(buildTestSet(words, dict), times);
     }
     
+    function runSuite() {
+      var suite = [
+        {
+          words: 2,
+          times: 10000
+        },
+        {
+          words: 4,
+          times: 10000
+        },
+        {
+          words: 8,
+          times: 10000
+        },
+        {
+          words: 16,
+          times: 10000
+        },
+        {
+          words: 32,
+          times: 10000
+        },
+        {
+          words: 64,
+          times: 10000
+        },
+        {
+          words: 128,
+          times: 1000
+        },
+        {
+          words: 256,
+          times: 1000
+        },
+        {
+          words: 512,
+          times: 1000
+        },
+        {
+          words: 1024,
+          times: 1000
+        },
+        {
+          words: 2048,
+          times: 1000
+        },
+        {
+          words: 4096,
+          times: 100
+        },
+        {
+          words: 8192,
+          times: 100
+        }
+      ];
+      
+      var totalSuite = dojo.map(suite, function(s) { var n = {}; dojo.mixin(n,s); n.dict = lipsum; return n; });
+      totalSuite = totalSuite.concat(dojo.map(suite, function(s) { var n = {}; dojo.mixin(n,s); n.dict = lipsumLong; return n; }));
+      console.log(totalSuite);
+      
+      var handle = dojo.subscribe("perf/run/done", _run);
+      dojo.subscribe("perf/run/done", function(){ console.log("perf run done"); });
+      
+      function _run() {
+        var t = totalSuite.shift();
+        if(t) buildAndRunSet(t.words, t.dict, t.times);
+        if(totalSuite.length == 0) dojo.unsubscribe(handle);
+      }
+      
+      _run();
+    }
+    
+    function ident(i) { return i; }
     </script>
     <style type="text/css">
     html { 
@@ -298,6 +395,7 @@
     <table>
       <tr><td><label for="numWords">Words</label></td><td><input type="text" id="numWords" value="100"/></td></tr>
       <tr><td><label for="numIters">Iterations</label></td><td><input type="text" id="numIters" value="1000"/></td></tr>
+      <tr><td><label for="dict">Dictionary</label></td><td><input type="text" id="dict" value="lipsum"></td></tr>
       <tr><td></td><td><button id="run" disabled>Run Tests!</button></td></tr>
     </table>
     <div id="mess"></div>    
