@@ -129,6 +129,27 @@
             }
           },
           {
+            name: "forLoopCallingInlineFunction",
+            test: function() {
+              var s="",w=words; l=w.length;
+              function fn(w) { s += w; };
+              for(var i = 0; i < l; i++) {
+                fn(w[i]);
+              }
+              return s;
+            }
+          },
+          {
+            name: "forLoopCallingExternalFunction",
+            test: function() {
+              g_s="",w=words; l=w.length;
+              for(var i = 0; i < l; i++) {
+                externalAppend(w[i]);
+              }
+              return g_s;
+            }
+          },
+          {
             name: "forLoopWithInCheck",
             test: function() {
               var s="",w=words; l=w.length;
@@ -180,6 +201,9 @@
     
     function ident(w) { return w; }
     function empty() { }
+    
+    var g_s = "";
+    function externalAppend(w){ g_s += w; }
     
     </script>
     <style type="text/css">
