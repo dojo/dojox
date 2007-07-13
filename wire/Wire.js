@@ -90,7 +90,7 @@ dojo.declare("dojox.wire.Wire",
 			var list = this.property.split('.');
 			for(var i in list){
 				if(!object){
-					throw new Error(this._wireClass + ".getValue(): invalid property=" + this.property);
+					return object; //anything (null, undefined, etc)
 				}
 				object = this._getPropertyValue(object, list[i]);
 			}
