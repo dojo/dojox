@@ -1,24 +1,31 @@
 <html>
 <head>
   <title>peller's test</title>
-  <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+  <script type="text/javascript" src="../../../dojo/dojo.js"></script>
   <script type="text/javascript">
   dojo.addOnLoad(function() {
-  var a = new Array(100000);
-  for(var i=0; i<100000;i++){a[i]=i;}
-  
-  var start=new Date();
-  var x=0;
-  dojo.forEach(a, function(v,i){x=x+a[i];});
-  console.log("dojo.forEach elapsed:"+(new Date()-start)+" value="+x);
-  
-  var start=new Date();
-  var x=0;
-  for(var i=0;i<100000;i++){x=x+a[i];};
-  console.log("for loop elapsed:"+(new Date()-start)+" value="+x);
-  
-  
+    forLoop();
+    forEachLoop();
   });
+  
+  function forLoop() {
+    var start=new Date();
+    var x=0;
+    var a = g_a;
+    for(var i=0;i<100000;i++){x=x+a[i];};
+    console.log("for loop elapsed:"+(new Date()-start)+" value="+x);
+  }
+  
+  function forEachLoop() {
+    var start=new Date();
+    var x=0;
+    var a = g_a;
+    dojo.forEach(a, function(v,i){x=x+a[i];});
+    console.log("dojo.forEach elapsed:"+(new Date()-start)+" value="+x);
+  }
+  
+  var g_a = new Array(100000);
+  for(var i=0; i<100000;i++){g_a[i]=i;}
   </script>
 </head>
 <body>
