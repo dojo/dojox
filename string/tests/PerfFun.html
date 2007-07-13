@@ -188,6 +188,22 @@
               dojo.forEach(words, ident);
               return expected;
             }
+          },
+          {
+            name: "addUsingFor",
+            test: function() {
+              var x=0;
+              for(var i=0;i<1000;i++){x=x+a[i];}
+              return expected; // fake
+            }
+          },
+          {
+            name: "addUsingForEach",
+            test: function() {
+              var x=0;
+              dojo.forEach(a, function(v,i){x=x+a[i];});
+              return expected; // fake
+            }
           }
         ],
         words: words,
@@ -204,6 +220,9 @@
     
     var g_s = "";
     function externalAppend(w){ g_s += w; }
+    
+    var a = new Array(1000);
+    for(var i=0; i<1000;i++){a[i]=i;}
     
     </script>
     <style type="text/css">
