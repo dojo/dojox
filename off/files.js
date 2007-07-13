@@ -10,6 +10,14 @@ dojo.provide("dojox.off.files");
 //	what resources should be available offline,
 //	such as CSS files, JavaScript, HTML, etc.
 dojox.off.files = {
+	// versionURL: String
+	//	An optional file, that if present, records the version
+	//	of our bundle of files to make available offline. If this
+	//	file is present, and we are not currently debugging,
+	//	then we only refresh our offline files if the version has
+	//	changed. 
+	versionURL: "version.js",
+	
 	// listOfURLs: Array
 	//	For advanced usage; most developers can ignore this.
 	//	Our list of URLs that will be cached and made available
@@ -169,56 +177,27 @@ dojox.off.files = {
 			}
 			
 			this.refreshing = true;
-		
-			// get our local server
-			var localServer;
-			try{
-				localServer = google.gears.factory.create("beta.localserver", "1.0");
-			}catch(exp){
-				dojo.setObject("google.gears.denied", true);
-				dojox.off.onFrameworkEvent("coreOperationFailed");
-				throw "Google Gears must be allowed to run";
+			
+			if(this.versionURL){
+				this._getVersionInfo(function(oldVersion, newVersion, justDebugged){
+					//console.warn("getVersionInfo, oldVersion="+oldVersion+", newVersion="+newVersion
+					//				+ ", justDebugged="+justDebugged+", isDebug="+djConfig.isDebug);
+					if(djConfig.isDebug || !newVersion || justDebugged 
+							|| !oldVersion || oldVersion != newVersion){
+						console.warn("Refreshing offline file list");
+						this._doRefresh(callback);
+					}else{
+						console.warn("No need to refresh offline file list");
+						callback(false, []);
+					}
+				});
+			}else{
+				console.warn("Refreshing offline file list");
+				this._doRefresh(callback);
 			}
-			
-			var storeName = "dot_store_" + dojox.off._STORAGE_APP_NAME;
-			
-			// refresh everything by simply removing
-			// any older stores
-			// FIXME: Explore whether this is truly needed -
-			// workaround for versioning without using
-			// Gears ManagedResourceStore
-			localServer.removeStore(storeName);
-			
-			// open/create the resource store
-			localServer.openStore(storeName);
-			var store = localServer.createStore(storeName);
-			this._store = store;
-
-			// add our list of files to capture
-			var self = this;
-			this._currentFileIndex = 0;
-			this._cancelID = store.capture(this.listOfURLs, function(url, success, captureId){
-				//console.debug("store.capture, url="+url+", success="+success);
-				if(!success){
-					self._cancelID = null;
-					self.refreshing = false;
-					var errorMsgs = [];
-					errorMsgs.push("Unable to capture: " + url);
-					callback(true, errorMsgs);
-					return;
-				}else{
-					self._currentFileIndex++;
-				}
-				
-				if(self._currentFileIndex >= self.listOfURLs.length){
-					self._cancelID = null;
-					self.refreshing = false;
-					callback(false, []);
-				}
-			});
 		}catch(e){
 			this.refreshing = false;
-			
+                       
 			// can't refresh files -- core operation --
 			// fail fast
 			dojox.off.coreOpFailed = true;
@@ -376,5 +355,89 @@ dojox.off.files = {
 	
 	_trimAnchor: function(url){
 		return url.replace(/\#.*$/, "");
+	},
+	
+	_doRefresh: function(callback){
+		// get our local server
+		var localServer;
+		try{
+			localServer = google.gears.factory.create("beta.localserver", "1.0");
+		}catch(exp){
+			dojo.setObject("google.gears.denied", true);
+			dojox.off.onFrameworkEvent("coreOperationFailed");
+			throw "Google Gears must be allowed to run";
+		}
+		
+		var storeName = "dot_store_" 
+							+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
+			
+		// refresh everything by simply removing
+		// any older stores
+		localServer.removeStore(storeName);
+		
+		// open/create the resource store
+		localServer.openStore(storeName);
+		var store = localServer.createStore(storeName);
+		this._store = store;
+
+		// add our list of files to capture
+		var self = this;
+		this._currentFileIndex = 0;
+		this._cancelID = store.capture(this.listOfURLs, function(url, success, captureId){
+			//console.debug("store.capture, url="+url+", success="+success);
+			if(!success){
+				self._cancelID = null;
+				self.refreshing = false;
+				var errorMsgs = [];
+				errorMsgs.push("Unable to capture: " + url);
+				callback(true, errorMsgs);
+				return;
+			}else{
+				self._currentFileIndex++;
+			}
+			
+			if(self._currentFileIndex >= self.listOfURLs.length){
+				self._cancelID = null;
+				self.refreshing = false;
+				dojox.storage.put("justDebugged", djConfig.isDebug, null,
+									dojox.off.STORAGE_NAMESPACE);
+				callback(false, []);
+			}
+		});
+	},
+	
+	_getVersionInfo: function(callback){
+		var justDebugged = dojox.storage.get("justDebugged", 
+									dojox.off.STORAGE_NAMESPACE);
+		var oldVersion = dojox.storage.get("oldVersion",
+									dojox.off.STORAGE_NAMESPACE);
+		var newVersion = null;
+		
+		callback = dojo.hitch(this, callback);
+		
+		dojo.xhrGet({
+				url: this.versionURL + "?browserbust=" + new Date().getTime(),
+				timeout: 5 * 1000,
+				handleAs: "javascript",
+				error: function(err){
+					//console.warn("dojox.off.files._getVersionInfo, err=",err);
+					dojox.storage.remove("oldVersion", dojox.off.STORAGE_NAMESPACE);
+					dojox.storage.remove("justDebugged", dojox.off.STORAGE_NAMESPACE);
+					callback(oldVersion, newVersion, justDebugged);
+				},
+				load: function(data){
+					//console.warn("dojox.off.files._getVersionInfo, load=",data);
+					
+					// some servers incorrectly return 404's
+					// as a real page
+					if(data){
+						newVersion = data;
+						dojox.storage.put("oldVersion", newVersion, null,
+											dojox.off.STORAGE_NAMESPACE);
+					}
+					
+					callback(oldVersion, newVersion, justDebugged);
+				}
+		});
 	}
 }

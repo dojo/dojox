@@ -41,8 +41,7 @@ if(dojo.isGears){
 					
 					// partition our storage data so that multiple apps
 					// on the same host won't collide
-					this.TABLE_NAME = "__DOJO_STORAGE_" 
-										+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
+					this.TABLE_NAME = "__DOJO_STORAGE";
 					
 					// create the table that holds our data
 					try{

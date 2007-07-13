@@ -50,6 +50,7 @@ dojo.mixin(dojox.sql, {
 		if(!this.dbName){
 			this.dbName = "dot_store_" 
 				+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
+			//console.debug("Using Google Gears database " + this.dbName);
 		}
 		
 		if(!dbName){
