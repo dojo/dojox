@@ -129,6 +129,16 @@
             }
           },
           {
+            name: "forLoopWithInCheck",
+            test: function() {
+              var s="",w=words; l=w.length;
+              for(var i = 0; i < l; i++) {
+                if(i in w) s += w[i];
+              }
+              return s;
+            }
+          },
+          {
             name: "emptyFor",
             test: function() {
               var w = words; l = w.length;
