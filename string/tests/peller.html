@@ -10,12 +10,12 @@
   var start=new Date();
   var x=0;
   dojo.forEach(a, function(v,i){x=x+a[i];});
-  console.log("elapsed:"+(new Date()-start)+" value="+x);
+  console.log("dojo.forEach elapsed:"+(new Date()-start)+" value="+x);
   
   var start=new Date();
   var x=0;
   for(var i=0;i<100000;i++){x=x+a[i];};
-  console.log("elapsed:"+(new Date()-start)+" value="+x);
+  console.log("for loop elapsed:"+(new Date()-start)+" value="+x);
   
   
   });
