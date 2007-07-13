@@ -98,7 +98,7 @@
       
       var expected = words.join("");
       
-      console.log(words);
+      //console.log(words);
       
       return { 
         tests: [
@@ -127,6 +127,36 @@
               }
               return s;
             }
+          },
+          {
+            name: "emptyFor",
+            test: function() {
+              var w = words; l = w.length;
+              for(var i = 0; i < l; i++) empty(w[i]);
+              return expected;
+            }
+          },
+          {
+            name: "emptyForEach",
+            test: function() {
+              dojo.forEach(words, empty);
+              return expected;
+            }
+          } ,
+          {
+            name: "identFor",
+            test: function() {
+              var w = words; l = w.length;
+              for(var i = 0; i < l; i++) ident(w[i]);
+              return expected;
+            }
+          },
+          {
+            name: "identForEach",
+            test: function() {
+              dojo.forEach(words, ident);
+              return expected;
+            }
           }
         ],
         words: words,
@@ -139,6 +169,7 @@
     }
     
     function ident(w) { return w; }
+    function empty() { }
     
     </script>
     <style type="text/css">
