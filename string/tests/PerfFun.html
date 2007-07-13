@@ -105,30 +105,32 @@
           {
             name: "dojoForEach",
             test: function() {
-              dojo.forEach(words, ident);
-              return "";
+              var s = "";
+              dojo.forEach(words, function(w) { s+=w; });
+              return s;
             }
           },
           {
             name: "nativeForEach",
             test: function() {
-              words.forEach(ident);
-              return "";
+              var s = "";
+              words.forEach(function(w) { s += w; });
+              return s;
             }
           },
           {
             name: "forLoop",
             test: function() {
-              var w=words; l=w.length;
+              var s="",w=words; l=w.length;
               for(var i = 0; i < l; i++) {
-                ident(w[i]);
+                s += w[i];
               }
-              return "";
+              return s;
             }
           }
         ],
         words: words,
-        expected: ""
+        expected: expected
       };
     }
     
