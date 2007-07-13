@@ -228,10 +228,12 @@ dojo.mixin(dojox.off.sync, {
 					this.details.push(errorMessages[i]);
 				}
 				
-				this.finished();
-			}else{
-				this.upload();	
+				// even if we get an error while syncing files,
+				// keep syncing so we can upload and download
+				// data
 			}
+			
+			this.upload();
 		}));
 	},
 	

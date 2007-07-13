@@ -185,7 +185,7 @@ dojox.off.files = {
 					if(djConfig.isDebug || !newVersion || justDebugged 
 							|| !oldVersion || oldVersion != newVersion){
 						console.warn("Refreshing offline file list");
-						this._doRefresh(callback);
+						this._doRefresh(callback, newVersion);
 					}else{
 						console.warn("No need to refresh offline file list");
 						callback(false, []);
@@ -357,7 +357,7 @@ dojox.off.files = {
 		return url.replace(/\#.*$/, "");
 	},
 	
-	_doRefresh: function(callback){
+	_doRefresh: function(callback, newVersion){
 		// get our local server
 		var localServer;
 		try{
@@ -385,20 +385,24 @@ dojox.off.files = {
 		this._currentFileIndex = 0;
 		this._cancelID = store.capture(this.listOfURLs, function(url, success, captureId){
 			//console.debug("store.capture, url="+url+", success="+success);
-			if(!success){
+			if(!success && self.refreshing){
 				self._cancelID = null;
 				self.refreshing = false;
 				var errorMsgs = [];
 				errorMsgs.push("Unable to capture: " + url);
 				callback(true, errorMsgs);
 				return;
-			}else{
+			}else if(success){
 				self._currentFileIndex++;
 			}
 			
-			if(self._currentFileIndex >= self.listOfURLs.length){
+			if(success && self._currentFileIndex >= self.listOfURLs.length){
 				self._cancelID = null;
 				self.refreshing = false;
+				if(newVersion){
+					dojox.storage.put("oldVersion", newVersion, null,
+									dojox.off.STORAGE_NAMESPACE);
+				}
 				dojox.storage.put("justDebugged", djConfig.isDebug, null,
 									dojox.off.STORAGE_NAMESPACE);
 				callback(false, []);
@@ -432,8 +436,6 @@ dojox.off.files = {
 					// as a real page
 					if(data){
 						newVersion = data;
-						dojox.storage.put("oldVersion", newVersion, null,
-											dojox.off.STORAGE_NAMESPACE);
 					}
 					
 					callback(oldVersion, newVersion, justDebugged);
