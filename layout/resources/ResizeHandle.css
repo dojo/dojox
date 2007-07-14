@@ -6,7 +6,27 @@
 	width: 13px;
 	height: 13px;
 	z-index: 20;
-	cursor: nw-resize;
 	background-image: url('icons/resize.png');
 	line-height: 0px;
+}
+
+.dojoxResizeNW {
+	cursor: nw-resize;
+}
+
+.dojoxResizeNE {
+	cursor: ne-resize; 
+}
+
+.dojoxResizeW {
+	cursor: w-resize; 
+}
+
+.dojoxResizeN { 
+	cursor: n-resize; 
+}
+
+.dojoxResizeHandleClone {
+	position:absolute; top:0; left:0; 
+	border:1px dashed #666; 
 }
