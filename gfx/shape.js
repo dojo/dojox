@@ -77,7 +77,7 @@ dojo.declare("dojox.gfx.Shape", null,
 		//	(see dojox.gfx.defaultLinearGradient, 
 		//	dojox.gfx.defaultRadialGradient, 
 		//	dojox.gfx.defaultPattern, 
-		//	or dojox.gfx.color.Color)
+		//	or dojo.Color)
 		return this.fillStyle;	// Object
 	},
 	getStroke: function(){
