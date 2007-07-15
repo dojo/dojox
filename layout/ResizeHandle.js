@@ -118,7 +118,11 @@ dojo.declare("dojox.layout.ResizeHandle",
 
 		if (!this.activeResize) {
 			this.targetDomNode.appendChild(this._activeResizeNode); 
-			dojo.fadeIn({ node: this._activeResizeNode, duration:120}).play(); 
+			dojo.fadeIn({ node: this._activeResizeNode, duration:120, 
+				beforeBegin: dojo.hitch(this,function(){
+					this._activeResizeNode.style.display=''; 
+				})
+			}).play(); 
 		}
 
 		this._isSizing = true;
@@ -220,7 +224,11 @@ dojo.declare("dojox.layout.ResizeHandle",
 			dojo.disconnect(c); 
 		});
 		if (!this.activeResize) {
-			dojo.fadeOut({ node:this._activeResizeNode, duration:250}).play();
+			dojo.fadeOut({ node:this._activeResizeNode, duration:250,
+				onEnd: dojo.hitch(this,function(){
+					this._activeResizeNode.style.display="none";
+				})
+			}).play();
 			this._changeSizing(e);
 		}
 		this._isSizing = false;
