@@ -302,7 +302,7 @@ dojo.declare(
 
 	// title: String
 	//	string to insert into titleNode, title of Slide
-	title: null,
+	title: "",
 
 	// inherited from ContentPane FIXME: don't seem to work ATM?
 	refreshOnShow: true, 
