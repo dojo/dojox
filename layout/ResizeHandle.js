@@ -186,13 +186,14 @@ dojo.declare("dojox.layout.ResizeHandle",
 	},
 	
 	_changeSizing: function(/*Event*/ e){
+		// summary: apply sizing information based on information in (e) to attached node
 		var tmp = this._getNewCoords(e);
 		if(tmp===false){ return; }
 
 		if(this.targetWidget && typeof this.targetWidget.resize == "function"){ 
 			this.targetWidget.resize({ w: tmp.width, h: tmp.height });
 		}else{
-			if (this.animateSizing) {
+			if(this.animateSizing){
 				var anim = dojo.fx[this.animateMethod]([
 					dojo.animateProperty({
 						node: this.targetDomNode,
@@ -223,7 +224,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 		dojo.forEach(this._connects,function(c){
 			dojo.disconnect(c); 
 		});
-		if (!this.activeResize) {
+		if(!this.activeResize){
 			dojo.fadeOut({ node:this._activeResizeNode, duration:250,
 				onEnd: dojo.hitch(this,function(){
 					this._activeResizeNode.style.display="none";
