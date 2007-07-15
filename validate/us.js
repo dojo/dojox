@@ -1,14 +1,6 @@
 dojo.provide("dojox.validate.us");
 dojo.require("dojox.validate._base");
 
-dojox.validate.us.isCurrency = function(/*String*/value, /*Object?*/flags){
-	// summary: Validates U.S. currency
-	// value: the representation to check
-	// flags: flags in validate.isCurrency can be applied.
-	return dojox.validate.isCurrency(value, flags); // Boolean
-}
-
-
 dojox.validate.us.isState = function(/*String*/value, /*Object?*/flags){
 	// summary: Validates US state and territory abbreviations.
 	//

@@ -1,15 +1,6 @@
 dojo.provide("dojox.validate.ca");
 
 dojo.require("dojox.validate._base");
-// dojo.require("dojox.regexp.ca"); // TODO
-
-/* FIXME: can these first two just be aliases somehow? */
-dojox.validate.ca.isCurrency = function(/* String */ value, /* Object? */ flags) {
-	// summary: Validates Canadian currency. 
-	//     flags in validate.isCurrency can be applied. 
-	// returns: Boolean
-        return dojox.validate.us.isCurrency(value, flags); // same as US
-};
 
 dojox.validate.ca.isPhoneNumber = function(/* String */value) {
 	// summary: Validates 10 Canadian digit phone number for several common formats

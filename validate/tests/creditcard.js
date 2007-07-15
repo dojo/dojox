@@ -1,7 +1,7 @@
 dojo.provide("dojox.validate.tests.creditcard");
 dojo.require("dojox.validate.creditCard");
 
-tests.register("dojox.validate.texts.creditcard",
+tests.register("dojox.validate.tests.creditcard",
 	[{
 		name:"isValidLuhn",
 		runTests: function(tests) { 

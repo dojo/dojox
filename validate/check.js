@@ -83,7 +83,7 @@ dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 	// See if required input fields have values missing.
 	if(profile.required instanceof Array){
 		for(var i = 0; i < profile.required.length; i++){ 
-			if(!dojo.lang.isString(profile.required[i])){ continue; }
+			if(!dojo.isString(profile.required[i])){ continue; }
 			var elem = form[profile.required[i]];
 			// Are textbox, textarea, or password fields blank.
 			if(!dj_undef("type", elem) 
@@ -179,20 +179,20 @@ dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 			
 			var isValid = true;
 			// case 1: constraint value is validation function
-			if(dojo.lang.isFunction(profile.constraints[name])){
+			if(dojo.isFunction(profile.constraints[name])){
 				isValid = profile.constraints[name](elem.value);
-			}else if(dojo.lang.isArray(profile.constraints[name])){
+			}else if(dojo.isArray(profile.constraints[name])){
 				
 				// handle nested arrays for multiple constraints
-				if(dojo.lang.isArray(profile.constraints[name][0])){
+				if(dojo.isArray(profile.constraints[name][0])){
 					for (var i=0; i<profile.constraints[name].length; i++){
-						isValid = dojo.validate.evaluateConstraint(profile, profile.constraints[name][i], name, elem);
+						isValid = dojox.validate.evaluateConstraint(profile, profile.constraints[name][i], name, elem);
 						if(!isValid){ break; }
 					}
 				}else{
 					// case 2: constraint value is array, first elem is function,
 					// tail is parameters
-					isValid = dojo.validate.evaluateConstraint(profile, profile.constraints[name], name, elem);
+					isValid = dojox.validate.evaluateConstraint(profile, profile.constraints[name], name, elem);
 				}
 			}
 			
@@ -218,7 +218,6 @@ dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 			invalid[invalid.length] = elem.name;
 		}
 	}
-
 	return results; // Object
 };
 

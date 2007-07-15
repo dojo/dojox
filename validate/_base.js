@@ -28,66 +28,9 @@ dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
 
 }
 
-dojox.validate.isInteger = function(/*String*/value, /*Object?*/flags){
-	// summary:
-	//	Validates whether a string is in an integer format
-	//
-	// value  A string
-	// flags  {signed: Boolean|[true,false], separator: String}
-	//    flags.signed  The leading plus-or-minus sign.  Can be true, false, or [true, false].
-	//      Default is [true, false], (i.e. sign is optional).
-	//    flags.separator  The character used as the thousands separator.  Default is no separator.
-	//      For more than one symbol use an array, e.g. [",", ""], makes ',' optional.
-	
-	var re = new RegExp("^" + dojox.regexp.integer(flags) + "$");
-	return re.test(value); // Boolean
-}
-
-dojox.validate.isRealNumber = function(/*String*/value, /*Object?*/flags){
-	// summary:
-	//	Validates whether a string is a real valued number. 
-	//	Format is the usual exponential notation.
-	//
-	// value: A string
-	// flags: {places: Number, decimal: String, exponent: Boolean|[true,false], eSigned: Boolean|[true,false], ...}
-	//    flags.places  The integer number of decimal places.
-	//      If not given, the decimal part is optional and the number of places is unlimited.
-	//    flags.decimal  The character used for the decimal point.  Default is ".".
-	//    flags.exponent  Express in exponential notation.  Can be true, false, or [true, false].
-	//      Default is [true, false], (i.e. the exponential part is optional).
-	//    flags.eSigned  The leading plus-or-minus sign on the exponent.  Can be true, false, 
-	//      or [true, false].  Default is [true, false], (i.e. sign is optional).
-	//    flags in regexp.integer can be applied.
-	
-	var re = new RegExp("^" + dojox.regexp.realNumber(flags) + "$");
-	return re.test(value); // Boolean
-
-}
-
-dojox.validate.isCurrency = function(/*String*/value, /*Object?*/flags){
-	// summary:
-	//	Validates whether a string denotes a monetary value. 
-	// value: A string
-	// flags: {signed:Boolean|[true,false], symbol:String, placement:String, separator:String,
-	//	fractional:Boolean|[true,false], decimal:String}
-	//    flags.signed  The leading plus-or-minus sign.  Can be true, false, or [true, false].
-	//      Default is [true, false], (i.e. sign is optional).
-	//    flags.symbol  A currency symbol such as Yen "�", Pound "�", or the Euro sign "�".  
-	//      Default is "$".  For more than one symbol use an array, e.g. ["$", ""], makes $ optional.
-	//    flags.placement  The symbol can come "before" the number or "after".  Default is "before".
-	//    flags.separator  The character used as the thousands separator. The default is ",".
-	//    flags.fractional  The appropriate number of decimal places for fractional currency (e.g. cents)
-	//      Can be true, false, or [true, false].  Default is [true, false], (i.e. cents are optional).
-	//    flags.decimal  The character used for the decimal point.  Default is ".".
-	
-	var re = new RegExp("^" + dojox.regexp.currency(flags) + "$");
-return re.test(value); // Boolean
-}
-
 dojox.validate._isInRangeCache = {};
-
 dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
-	//summary:
+	// summary:
 	//	Validates whether a string denoting an integer, 
 	//	real number, or monetary value is between a max and min. 
 	//
@@ -96,12 +39,6 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	//    flags.max  A number, which the value must be less than or equal to for the validation to be true.
 	//    flags.min  A number, which the value must be greater than or equal to for the validation to be true.
 	//    flags.decimal  The character used for the decimal point.  Default is ".".
-	
-	
-	//stripping the separator allows NaN to perform as expected, if no separator, we assume ','
-	//once i18n support is ready for this, instead of assuming, we default to i18n's recommended value
-//	value = value.replace(new RegExp(dojo.lang.has(flags,'separator')?flags.separator:',', 'g'), '');
-//	value = value.replace(dojo.lang.has(flags,'symbol')?flags.symbol:'$', '');
 	
 	if(isNaN(value)){
 		return false; // Boolean
