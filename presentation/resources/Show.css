@@ -11,9 +11,11 @@
 			background:transparent; 
 			border-bottom:1px solid #000; 
 		}
+
 		p, li {
-		font-size: 17pt;
+			font-size: 17pt;
 		}
+
 		.dojoShowNav {
 			border-top:1px solid #ccc; 
 			background: #ededed;
@@ -36,10 +38,11 @@
 
 		.dojoShowNav option { font:6pt; color:#333; }
 		.dojoShowNav select {
-			margin: 0px; color:#999; 
-			margin-top:5px; 
-			padding:2px; 
-			border:1px solid #ccc; 
+			margin: 0px;
+			color: #999; 
+			margin-top: 5px; 
+			padding: 2px; 
+			border: 1px solid #ccc; 
 			-moz-border-radius:6pt 6pt; 
 		}
 
@@ -105,5 +108,5 @@
 .dojoShowSlideBody {
 	background:#fff;
 	margin: 15px;
-	background:url('/dojobox/dojo-tree/dojo_0.9/dijit/themes/tundra/images/testBodyBg.gif') repeat-x top left; 
+	background: url('../../../dijit/themes/tundra/images/testBodyBg.gif') repeat-x top left; 
 }
