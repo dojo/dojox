@@ -5,6 +5,7 @@ try{
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.HtmlTableStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.OpmlStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.XmlStore");
+	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.FlickrStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.dom");
 }catch(e){
 	doh.debug(e);
