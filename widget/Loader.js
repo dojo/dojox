@@ -34,8 +34,14 @@ dojo.declare("dojox.widget.Loader",
 	//	time in ms to toggle in/out the visual load indicator
 	duration: 125,
 
+	// _offset: Integer
+	//	distance in px from the mouse pointer to show attachToPointer avatar
+	_offset: 16, 
+
 	// holder for mousemove connection
 	_pointerConnect: null, 
+	_xhrStart: null,
+	_xhrEnd: null,
 
 	templateString: '<div dojoAttachPoint="loadNode" class="dojoxLoader">'
 		+'<img src="${loadIcon}" class="dojoxLoaderIcon"> <span dojoAttachPoint="loadMessageNode" class="dojoxLoaderMessage"></span>'
@@ -55,10 +61,10 @@ dojo.declare("dojox.widget.Loader",
 		}
 		this._setMessage(this.loadMessage); 
 
-		// create our connections.  would be easier, and this might be redundant
+		// FIXME: create our connections.  would be easier, and this might be redundant
 		// if Deferred published something
-		this.handle = dojo.connect(dojo,"_ioSetArgs",this,"_show"); 
-		this.otherHandle = dojo.connect(dojo.Deferred.prototype,"_fire",this,"_hide"); 
+		this._xhrStart = dojo.connect(dojo,"_ioSetArgs",this,"_show"); 
+		this._xhrEnd = dojo.connect(dojo.Deferred.prototype,"_fire",this,"_hide"); 
 
 	},
 
@@ -69,8 +75,7 @@ dojo.declare("dojox.widget.Loader",
 
 	_putLoader: function(/* Event */ e){
 		// summary: place the floating loading element based on mousemove connection position
-		// console.log('put image at: ',e.clientY,e.clientX); 
-		dijit.util.placeOnScreen(this.loadNode,{ x: e.clientX+16, y:e.clientY+16 }, ["TL","BR"]); 
+		dijit.util.placeOnScreen(this.loadNode,{ x: e.clientX+this._offset, y:e.clientY+this._offset }, ["TL","BR"]); 
 	},
 
 	_show: function(){
@@ -88,7 +93,9 @@ dojo.declare("dojox.widget.Loader",
 		// summary: publish "xhr ended" and hide progress indicator
 		dojo.publish("Loader", { message: 'ended' });
 		if(this.hasVisuals){ 
-			dojo.disconnect(this._pointerConnect); 
+			if(this.attachPointer){
+				dojo.disconnect(this._pointerConnect); 
+			}
 			dojo.fadeOut({ node: this.loadNode, duration:this.duration }).play();
 		}
 	}
