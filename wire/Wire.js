@@ -26,14 +26,25 @@ dojo.declare("dojox.wire.Wire",
 
 		if(this.converter){
 			if(dojo.isString(this.converter)){
-
 				//First check the object tree for it.  Might be defined variable
 				//name/global function (like a jsId, or just a function name).
 				var convertObject = dojo.getObject(this.converter);
-				if (convertObject){
-					if(dojo.isFunction(convertObject)){
-						this.converter = {convert: convertObject};
-					}else{
+				if (dojo.isFunction(convertObject)){
+					//We need to see if this is a pure function or an object constructor...
+					try{
+						var testObj = new convertObject();
+						if(testObj && !dojo.isFunction(testObj["convert"])){
+							//Looks like a 'pure' function...
+							this.converter = {convert: convertObject};
+						}else{
+							this.converter = testObj;
+						}
+					}catch(e){
+						//Do if this fails.	
+					}
+				}else if(dojo.isObject(convertObject)){
+					//It's an object, like a jsId ... see if it has a convert function
+					if(dojo.isFunction(convertObject["convert"])){
 						this.converter = convertObject;
 					}
 				}

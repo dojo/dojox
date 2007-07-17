@@ -1,6 +1,26 @@
 dojo.provide("dojox.wire.tests.programmatic.Wire");
-
 dojo.require("dojox.wire.Wire");
+
+//Simple connverter class to try to use.
+dojo.declare("dojox.wire.tests.programmatic.Wire.Converter", null, null, {
+	convert: function(v){
+		return v + 1;
+	}
+});
+
+//Simple converter function to try to use.
+//To get it in the global namespace, gotta assign it to the
+//'window' toplevel object.  Otherwise it ends up in the
+//dojo NS and can't be found.
+if (dojo.isBrowser) {
+	window["__wireTestConverterFunction"] = function(v){
+		return v + 1;
+	};
+}else{
+	var __wireTestConverterFunction = function(v){
+		return v + 1;
+	};
+}
 
 tests.register("dojox.wire.tests.programmatic.Wire", [
 
@@ -64,12 +84,35 @@ tests.register("dojox.wire.tests.programmatic.Wire", [
 		t.assertEqual(2, number + 1);
 	},
 
-	function test_Wire_converter(t){
+	function test_Wire_converterObject(t){
 		var source = {a: "1"};
 		var converter = {convert: function(v) { return v + 1; }};
 		var string = new dojox.wire.Wire({object: source, property: "a", converter: converter}).getValue();
 		t.assertEqual("11", string);
+	},
+
+	function test_Wire_converterFunction(t){
+		var source = {a: "1"};
+		var converter = {convert: function(v) { return v + 1; }};
 		var number = new dojox.wire.Wire({object: source, property: "a", type: "number", converter: converter.convert}).getValue();
+		t.assertEqual(2, number);
+	},
+
+	function test_Wire_converterObjectByString(t){
+		var source = {a: "1"};
+		var number = new dojox.wire.Wire({object: source, property: "a", type: "number", converter: "dojox.wire.tests.programmatic.Wire.Converter"}).getValue();
+		t.assertEqual(2, number);
+	},
+
+	function test_Wire_converterFunctionByString(t){
+		var source = {a: "1"};
+		var number = new dojox.wire.Wire({object: source, property: "a", type: "number", converter: "__wireTestConverterFunction"}).getValue();
+		t.assertEqual(2, number);
+	},
+
+	function test_Wire_converterObjectByStringDynamic(t){
+		var source = {a: "1"};
+		var number = new dojox.wire.Wire({object: source, property: "a", type: "number", converter: "dojox.wire.tests.programmatic.ConverterDynamic"}).getValue();
 		t.assertEqual(2, number);
 	}
 
