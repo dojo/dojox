@@ -26,11 +26,27 @@ dojo.declare("dojox.wire.Wire",
 
 		if(this.converter){
 			if(dojo.isString(this.converter)){
-				var converterClass = dojox.wire._getClass(this.converter);
-				if(converterClass){
-					this.converter = new converterClass();
-				}else{
-					this.converter = undefined;
+
+				//First check the object tree for it.  Might be defined variable
+				//name/global function (like a jsId, or just a function name).
+				var convertObject = dojo.getObject(this.converter);
+				if (convertObject){
+					if(dojo.isFunction(convertObject)){
+						this.converter = {convert: convertObject};
+					}else{
+						this.converter = convertObject;
+					}
+				}
+
+				//No object with that name (Converter is still a string), 
+				//then look for a class that needs to be dynamically loaded...
+				if (dojo.isString(this.converter)) {
+					var converterClass = dojox.wire._getClass(this.converter);
+					if(converterClass){
+						this.converter = new converterClass();
+					}else{
+						this.converter = undefined;
+					}
 				}
 			}else if(dojo.isFunction(this.converter)){
 				this.converter = {convert: this.converter};
