@@ -12,22 +12,20 @@ dojo.declare("dojox.data.XmlStore",
 		//		Initializer for the XML store.  
 		//	args:
 		//		An anonymous object to initialize properties.  It expects the following values:
-		//		url:		The url to an XML document that represents the whole store.
-		//		fetchUrl:   A URL for a fetch service that returns an XML document
-		//		saveUrl:	A URL for a save service that saves an XML document
+		//		url:		The url to a service or an XML document that represents the store
 		//		rootItem:	A tag name for root items
 		//		keyAttribute:	An attribute name for a key or an indentify
 		// 		attributeMap:   An anonymous object contains properties for attribute mapping,
 		//						{"tag_name.item_attribute_name": "@xml_attribute_name", ...}
+		//		sendQuery:		A boolean indicate to add a query string to the service URL 
 		console.log("XmlStore()");
 		if(args){
 			this._url = args.url;
-			this._fetchUrl = args.fetchUrl;
-			this._saveUrl = args.saveUrl;
-			this._rootItem = args.rootItem;
-			this._keyAttribute = args.keyAttribute;
-			this._attributeMap = args.attributeMap;
+			this._rootItem = (args.rootItem || args.rootitem);
+			this._keyAttribute = (args.keyAttribute || args.keyattribute);
+			this._attributeMap = (args.attributeMap || args.attributemap);
 			this._labelAttr = args.label;
+			this._sendQuery = (args.sendQuery || args.sendquery);
 		}
 		this._newItems = [];
 		this._deletedItems = [];
@@ -335,11 +333,11 @@ dojo.declare("dojox.data.XmlStore",
 		//	summary:
 		//		Fetch items (XML elements) that match to a query
 		//	description:
-		//		If '_fetchUrl' is specified, it is used to load an XML document
-		//		with a query string.
-		//		Otherwise and if '_url' is specified, the XML document is
-		//		loaded and list XML elements that match to a query (set of element
-		//		names and their text attribute values that the items to contain).
+		//		If '_sendQuery' is true, an XML document is loaded from
+		//		'_url' with a query string.
+		//		Otherwise, an XML document is loaded and list XML elements that
+		//		match to a query (set of element names and their text attribute
+		//		values that the items to contain).
 		//		A wildcard, "*" can be used to query values to match all
 		//		occurrences.
 		//		If '_rootItem' is specified, it is used to fetch items.
@@ -349,17 +347,13 @@ dojo.declare("dojox.data.XmlStore",
 		//		A function to call for fetched items
 		//	errorHandler:
 		//		A function to call on error
-		var localRequest = null;
 		var url = this._getFetchUrl(request);
-		if(this._url){
-			url = this._url;
-			localRequest = request; // use request for _getItems()
-		}
 		console.log("XmlStore._fetchItems(): url=" + url);
 		if(!url){
 			errorHandler(new Error("No URL specified."));
 			return;
 		}
+		var localRequest = (!this._sendQuery ? request : null); // use request for _getItems()
 
 		var self = this;
 		var getArgs = {
@@ -389,21 +383,23 @@ dojo.declare("dojox.data.XmlStore",
 		//	description:
 		//		This default implementation generates a query string in the form of
 		//		"?name1=value1&name2=value2..." off properties of 'query' object
-		//		specified in 'request' and appends it to '_fetchUrl'.
+		//		specified in 'request' and appends it to '_url', if '_sendQuery'
+		//		is set to false.
+		//		Otherwise, '_url' is returned as is.
 		//		Sub-classes may override this method for the custom URL generation.
 		//	request:
 		//		A request object
 		//	returns:
 		//		A fetch URL
-		if(!this._fetchUrl){
-			return null;
+		if(!this._sendQuery){
+			return this._url;
 		}
 		var query = request.query;
 		if(!query){
-			return this._fetchUrl;
+			return this._url;
 		}
 		if(dojo.isString(query)){
-			return this._fetchUrl + query;
+			return this._url + query;
 		}
 		var queryString = "";
 		for(var name in query){
@@ -416,9 +412,9 @@ dojo.declare("dojox.data.XmlStore",
 			}
 		}
 		if(!queryString){
-			return this._fetchUrl;
+			return this._url;
 		}
-		return this._fetchUrl + "?" + queryString;
+		return this._url + "?" + queryString;
 	},
 
 	_getItems: function(document, request) {
@@ -793,15 +789,15 @@ dojo.declare("dojox.data.XmlStore",
 		//	summary:
 		//		Save new and/or modified items (XML elements)
 		// 	description:
-		//		If '_saveUrl' is specified, it is used to save XML documents
-		//		for new, modified and/or deleted XML elements.
+		//		'_url' is used to save XML documents for new, modified and/or
+		//		deleted XML elements.
 		// 	keywordArgs:
 		//		An object for callbacks
 		if(!keywordArgs){
 			keywordArgs = {};
 		}
 		for(var i in this._modifiedItems){
-			this._saveItem(this._modifiedItems[i], keywordArgs);
+			this._saveItem(this._modifiedItems[i], keywordArgs, "PUT");
 		}
 		for(var i = 0; i < this._newItems.length; i++){
 			var item = this._newItems[i];
@@ -810,7 +806,7 @@ dojo.declare("dojox.data.XmlStore",
 				i--;
 				continue;
 			}
-			this._saveItem(this._newItems[i], keywordArgs);
+			this._saveItem(this._newItems[i], keywordArgs, "POST");
 		}
 		for(var i in this._deletedItems){
 			this._saveItem(this._deletedItems[i], keywordArgs, "DELETE");
@@ -860,15 +856,12 @@ dojo.declare("dojox.data.XmlStore",
 	},
 
 	_saveItem: function(item, keywordArgs, method){
-		var scope = (keywordArgs.scope || dj_global);
-		var url = null;
-		var method = (method || "POST");
-		var postContent = null;
-		if(method === "DELETE"){
+		if(method === "PUT"){
+			url = this._getPutUrl(item);
+		}else if(method === "DELETE"){
 			url = this._getDeleteUrl(item);
 		}else{ // POST
-			url = this._getSaveUrl(item);
-			postContent = this._getPostContent(item);
+			url = this._getPostUrl(item);
 		}
 		if(!url){
 			if(keywordArgs.onError){
@@ -877,66 +870,86 @@ dojo.declare("dojox.data.XmlStore",
 			return;
 		}
 
-		//FIXME:  Add in DELETE support when xhrDelete is added to base or core.
-		var self = this;
 		var saveArgs = {
 			url: url,
-			method: method,
+			method: (method || "POST"),
 			contentType: "text/xml",
-			handleAs: "text/xml",
-			postData: postContent
+			handleAs: "xml"
+		};
+		var saveHander;
+		if(method === "PUT"){
+			saveArgs.putData = this._getPutContent(item);
+			saveHandler = dojo.rawXhrPut(saveArgs);
+		}else if(method === "DELETE"){
+			saveHandler = dojo.xhrDelete(saveArgs);
+		}else{ // POST
+			saveArgs.postData = this._getPostContent(item);
+			saveHandler = dojo.rawXhrPost(saveArgs);
 		}
-		var saveHander = rawXhrPost(saveArgs);
+		var scope = (keywordArgs.scope || dojo.global);
+		var self = this;
 		saveHandler.addCallback(function(data){
 			self._forgetItem(item);
 			if(keywordArgs.onComplete){
 				keywordArgs.onComplete.call(scope);
 			}
 		});
-		saveHandler.addErrback(function(error) {
+		saveHandler.addErrback(function(error){
 			if(keywordArgs.onError){
 				keywordArgs.onError.call(scope, error);
 			}
 		});
 	},
 
-	_getSaveUrl: function(item){
+	_getPostUrl: function(item){
 		//	summary:
-		//		Generate a URL for save
+		//		Generate a URL for post
 		//	description:
-		//		This default implementation just returns '_saveUrl'.
-		//		Sub-classes may override this method for the custom URL based on
-		//		changes (new, deleted, or modified).
+		//		This default implementation just returns '_url'.
+		//		Sub-classes may override this method for the custom URL.
 		//	item:
 		//		An item to save
 		//	returns:
-		//		A save URL
-		return this._saveUrl;	//string
+		//		A post URL
+		return this._url; //string
+	},
+
+	_getPutUrl: function(item){
+		//	summary:
+		//		Generate a URL for put
+		//	description:
+		//		This default implementation just returns '_url'.
+		//		Sub-classes may override this method for the custom URL.
+		//	item:
+		//		An item to save
+		//	returns:
+		//		A put URL
+		return this._url; //string
 	},
 
 	_getDeleteUrl: function(item){
 		//	summary:
 		//		Generate a URL for delete
 		// 	description:
-		//		This default implementation returns '_saveUrl' with '_keyAttribute'
-		//	as a query string
+		//		This default implementation returns '_url' with '_keyAttribute'
+		//		as a query string.
 		//		Sub-classes may override this method for the custom URL based on
 		//		changes (new, deleted, or modified).
 		// 	item:
 		//		An item to delete
 		// 	returns:
 		//		A delete URL
-		if (!this._saveUrl) {
-			return this._saveUrl; //string
+		if (!this._url) {
+			return this._url; //string
 		}
-		var saveUrl = this._saveUrl;
+		var url = this._url;
 		if (item && this._keyAttribute) {
 			var value = this.getValue(item, this._keyAttribute);
 			if (value) {
-				saveUrl = saveUrl + '?' + this._keyAttribute + '=' + value;
+				url = url + '?' + this._keyAttribute + '=' + value;
 			}
 		}
-		return saveUrl;	//string
+		return url;	//string
 	},
 
 	_getPostContent: function(item){
@@ -946,6 +959,23 @@ dojo.declare("dojox.data.XmlStore",
 		//		This default implementation generates an XML document for one
 		//		(the first only) new or modified element.
 		//		Sub-classes may override this method for the custom post content
+		//		generation.
+		//	item:
+		//		An item to save
+		//	returns:
+		//		A post content
+		var element = item.element;
+		var declaration = "<?xml version=\"1.0\"?>"; // FIXME: encoding?
+		return declaration + dojox.data.dom.innerXML(element); //XML string
+	},
+
+	_getPutContent: function(item){
+		//	summary:
+		//		Generate a content to put
+		// 	description:
+		//		This default implementation generates an XML document for one
+		//		(the first only) new or modified element.
+		//		Sub-classes may override this method for the custom put content
 		//		generation.
 		//	item:
 		//		An item to save
