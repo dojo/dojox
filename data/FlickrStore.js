@@ -1,7 +1,6 @@
 dojo.provide("dojox.data.FlickrStore");
 
 dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.data.util.filter");
 dojo.require("dojo.io.script");
 dojo.require("dojo.date.stamp");
 
