@@ -1,0 +1,27 @@
+.tundra .dijitToasterContent{
+	padding:1em;
+	padding-top:0.25em;
+	background:#73c74a;
+}
+
+.tundra .dijitToasterMessage{ 
+	color:#fff;
+}
+.tundra .dijitToasterWarning{ }
+.tundra .dijitToasterError,
+.tundra .dijitToasterFatal{
+	font-weight:bold;
+	color:#fff;
+}
+
+.tundra .dijitToasterWarning .dijitToasterContent{
+	padding:1em;
+	padding-top:0.25em;
+	background:#d4d943;
+} 
+
+.tundra .dijitToasterError .dijitToasterContent{
+	padding:1em;
+	padding-top:0.25em;
+	background:#c46600;
+} 
