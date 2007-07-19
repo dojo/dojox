@@ -2,7 +2,7 @@
 	<div class="dojoShowNav" dojoAttachPoint="showNav" dojoAttachEvent="onmouseover: _showNav, onmouseout: _hideNav">
 	<div class="dojoShowNavToggler" dojoAttachPoint="showToggler">
 		<img dojoAttachPoint="prevNode" src="${prevIcon}" dojoAttachEvent="onclick:previousSlide">
-		<select dojoAttachEvent="onclick:gotoSlideByEvent; onchange:gotoSlideByEvent" dojoAttachPoint="select">
+		<select dojoAttachEvent="onclick:gotoSlideByEvent, onchange:gotoSlideByEvent" dojoAttachPoint="select">
 			<option dojoAttachPoint="_option">Title</option>
 		</select>
 		<img dojoAttachPoint="nextNode" src="${nextIcon}" dojoAttachEvent="onclick:nextSlide">
