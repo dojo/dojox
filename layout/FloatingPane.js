@@ -4,7 +4,6 @@ dojo.experimental("dojox.layout.FloatingPane");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit._Templated"); 
 dojo.require("dijit._Widget"); 
-dojo.require("dijit.util.place"); 
 dojo.require("dojo.dnd.move");
 dojo.require("dojox.layout.ResizeHandle"); 
 
@@ -207,7 +206,7 @@ dojo.declare("dojox.layout.Dock",
 		//	[b0rken atm] keeps the dock [in the event of a globalFloatingDock]
 		//	positioned at the bottom of the viewport. (math is off)
 		
-		var viewport = dijit.util.getViewport();
+		var viewport = dijit.getViewport();
 		var s = this.domNode.style;
 		console.debug(viewport); 
 		s.width = viewport.w + "px";

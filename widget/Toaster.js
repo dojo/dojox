@@ -4,8 +4,6 @@ dojo.require("dojo.fx");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
-dojo.require("dijit.util.place");
-dojo.require("dijit.util.popup");
 
 // This is mostly taken from Jesse Kuhnert's MessageNotifier.
 // Modified by Bryan Forbes to support topics and a variable delay.
@@ -189,7 +187,7 @@ dojo.declare(
 		},
 
 		_placeClip: function(){
-			var view = dijit.util.getViewport();
+			var view = dijit.getViewport();
 
 			var nodeSize = dojo.marginBox(this.containerNode);
 
@@ -214,7 +212,7 @@ dojo.declare(
 			style.clip = "rect(0px, " + nodeSize.w + "px, " + nodeSize.h + "px, 0px)";
 			if(dojo.isIE){
 				if(!this.bgIframe){
-					this.bgIframe = new dijit.util.BackgroundIframe(this.clipNode);
+					this.bgIframe = new dijit.BackgroundIframe(this.clipNode);
 					this.bgIframe.setZIndex(this.clipNode);
 				}
 				this.bgIframe.onResized();

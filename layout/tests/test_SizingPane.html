@@ -6,7 +6,7 @@
 		
 	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
 	<script type="text/javascript">
-		dojo.require("dijit.util.place"); 
+		dojo.require("dijit.dijit"); 
 		dojo.require("dojo.fx"); 
 	</script>
 	<style type="text/css">
@@ -71,7 +71,7 @@
 		}
 
 		function centerNode(node) {
-			var viewport = dijit.util.getViewport();
+			var viewport = dijit.getViewport();
 			var mb = dojo.marginBox(node);
 			var style = node.style;
 			offsetW = mb.w - style.width;
@@ -89,7 +89,7 @@
 			if (_showing) { return; }
 			if (animG && animG.status == "playing") { animG.stop(); }
 			_showing = true; 
-			var viewport = dijit.util.getViewport();
+			var viewport = dijit.getViewport();
 
 			var newLeft = (viewport.l + (viewport.w - boxMixin.endWidth)/2);
 			var newTop = (viewport.t + (viewport.h - boxMixin.endHeight)/2);
@@ -126,7 +126,7 @@
 			if (!_showing) return; 
 			if (animG && animG.status() == "playing") { animG.stop(); }
 			
-			var viewport = dijit.util.getViewport(); 
+			var viewport = dijit.getViewport(); 
 			var newLeft = (viewport.l + (viewport.w - boxMixin.startWidth)/2);
 			var newTop = (viewport.t + (viewport.h - boxMixin.startHeight)/2);
 

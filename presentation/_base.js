@@ -6,7 +6,6 @@ dojo.require("dijit._Container");
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.StackContainer"); 
 dojo.require("dijit.layout.ContentPane"); 
-dojo.require("dijit.util.place"); 
 dojo.require("dojo.fx"); 
 
 dojo.declare(
@@ -236,7 +235,7 @@ dojo.declare(
 
 		// only if this.fullScreen?
 		dojo.body().style.height = "auto";
-		var wh = dijit.util.getViewport(); 
+		var wh = dijit.getViewport(); 
 		var h = Math.max(
 			document.documentElement.scrollHeight || dojo.body().scrollHeight,
 			wh.h);

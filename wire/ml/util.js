@@ -1,6 +1,5 @@
 dojo.provide("dojox.wire.ml.util");
 
-dojo.require("dijit.util.manager");
 dojo.require("dojox.data.dom");
 dojo.require("dojox.wire.Wire");
 

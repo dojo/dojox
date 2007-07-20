@@ -3,7 +3,6 @@ dojo.experimental("dojox.widget.Loader");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated"); 
-dojo.require("dijit.util.place"); 
 
 dojo.declare("dojox.widget.Loader",
 	[dijit._Widget,dijit._Templated],
@@ -75,7 +74,7 @@ dojo.declare("dojox.widget.Loader",
 
 	_putLoader: function(/* Event */ e){
 		// summary: place the floating loading element based on mousemove connection position
-		dijit.util.placeOnScreen(this.loadNode,{ x: e.clientX+this._offset, y:e.clientY+this._offset }, ["TL","BR"]); 
+		dijit.placeOnScreen(this.loadNode,{ x: e.clientX+this._offset, y:e.clientY+this._offset }, ["TL","BR"]); 
 	},
 
 	_show: function(){
