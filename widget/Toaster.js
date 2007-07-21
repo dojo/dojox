@@ -24,6 +24,8 @@ dojo.declare(
 		//		Message format is either String or an object like
 		//		{message: "hello word", type: "error", duration: 500}
 		messageTopic: "",
+
+		_uniqueId: 0,
 		
 		// messageTypes: Enumeration
 		//		Possible message types.
@@ -142,7 +144,7 @@ dojo.declare(
 					style.left = 0+"px";
 					style.top = 0 - nodeSize.h - 10 + "px";
 				}else{
-					throw new Error(this.id + ".positionDirection is an invalid value: " + pd);
+					throw new Error(this.id + ".positionDirection is invalid: " + pd);
 				}
 
 				this.slideAnim = dojo.fx.slideTo({
@@ -157,9 +159,9 @@ dojo.declare(
 							node: this.containerNode,
 							duration: 1000});
 						dojo.connect(this.fadeAnim, "onEnd", this, function(evt){
-								this.isVisible = false;
-								this.hide();
-							});
+							this.isVisible = false;
+							this.hide();
+						});
 						//if duration == 0 we keep the message displayed until clicked
 						//TODO: fix so that if a duration > 0 is displayed when a duration==0 is appended to it, the fadeOut is canceled
 						if(duration>0){
@@ -167,18 +169,14 @@ dojo.declare(
 								// we must hide the iframe in order to fade
 								// TODO: figure out how to fade with a BackgroundIframe
 								if(this.bgIframe){
-									this.bgIframe.hide();
+									this.bgIframe.style.display="none";
 								}
 								this.fadeAnim.play();
 							}), duration);
 						}else{
-							dojo.connect(
-								this,
-								'onSelect',
-								this,
-								function(evt){
-									this.fadeAnim.play();
-								});
+							dojo.connect(this, 'onSelect', this, function(evt){
+								this.fadeAnim.play();
+							});
 						}
 						this.isVisible = true;
 					});
@@ -212,11 +210,12 @@ dojo.declare(
 			style.clip = "rect(0px, " + nodeSize.w + "px, " + nodeSize.h + "px, 0px)";
 			if(dojo.isIE){
 				if(!this.bgIframe){
+					this.clipNode.id = "__dojoXToaster_"+this._uniqueId++;
 					this.bgIframe = new dijit.BackgroundIframe(this.clipNode);
-					this.bgIframe.setZIndex(this.clipNode);
+//TODO					this.bgIframe.setZIndex(this.clipNode);
 				}
-				this.bgIframe.onResized();
-				this.bgIframe.show();
+//TODO				this.bgIframe.onResized();
+				this.bgIframe.style.display="";
 			}
 		},
 
