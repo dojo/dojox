@@ -168,8 +168,8 @@ dojo.declare(
 							setTimeout(dojo.hitch(this, function(evt){
 								// we must hide the iframe in order to fade
 								// TODO: figure out how to fade with a BackgroundIframe
-								if(this.bgIframe){
-									this.bgIframe.style.display="none";
+								if(this.bgIframe && this.bgIframe.iframe){
+									this.bgIframe.iframe.style.display="none";
 								}
 								this.fadeAnim.play();
 							}), duration);
@@ -215,7 +215,8 @@ dojo.declare(
 //TODO					this.bgIframe.setZIndex(this.clipNode);
 				}
 //TODO				this.bgIframe.onResized();
-				this.bgIframe.style.display="";
+				var iframe = this.bgIframe.iframe;
+				iframe && (iframe.style.display="block");
 			}
 		},
 
