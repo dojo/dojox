@@ -10,7 +10,7 @@ dojo.require("dojo.fx");
 
 dojo.declare(
 	"dojox.presentation",
-	[dijit.layout.StackContainer,dijit._Templated],
+	[ dijit.layout.StackContainer, dijit._Templated ],
 	null,
 	{
 	// summary:
@@ -65,12 +65,12 @@ dojo.declare(
 	prevIcon: dojo.moduleUrl('dojox.presentation','resources/icons/prev.png'),
 
 	// private but safely settable:
-	_navOpacMin: 0.15,
+	// _navOpacMin: 0.15,
+	_navOpacMin: 0,
 	_navOpacMax: 0.85,
 
 	// Private:
 	_slides: [], 
-	_connects: [],
 	_navShowing: true,
 	_inNav: false,
 	
@@ -85,13 +85,15 @@ dojo.declare(
 			this.showNav.style.display = "none"; 
 		} 
 
-		this._connects.push(dojo.connect(document,'onclick',this,'gotoSlideByEvent'));
+		this.connect(document,'onclick', 'gotoSlideByEvent');
+		/*
 		var tmp = (dojo.isIE) 	? dojo.connect(document,'onkeydown',this,'gotoSlideByEvent') 
 					: dojo.connect(document,'onkeypress',this,'gotoSlideByEvent');
-		this._connects.push(tmp);
+		*/
+		this.connect(document,'onkeypress', 'gotoSlideByEvent');
 
 		// only if this.fullScreen == true?
-		this._connects.push(dojo.connect(window,'onresize',this,'_resizeWindow'));
+		this.connect(window, 'onresize', '_resizeWindow');
 		this._resizeWindow();
 		
 		this._updateSlides(); 
@@ -137,8 +139,9 @@ dojo.declare(
 	},
 
 	_updateSlides: function(){
-		// summary: populate navigation select list with refs to slides
-		// 	call this if you add a node to your presentation dynamically.
+		// summary: 
+		//		populate navigation select list with refs to slides call this
+		//		if you add a node to your presentation dynamically.
 		this._slides = this.getChildren(); 
 		if(this.useNav){
 			// populate the select box with top-level slides
@@ -149,14 +152,17 @@ dojo.declare(
 				tmp.text = slide.title+" ("+i+") ";
 				this._option.parentNode.insertBefore(tmp,this._option);
 			}));
-			//this._option.parentNode.removeChild(this._option);
-			dojo._destroyElement(this._option); 
+			if(this._option.parentNode){
+				this._option.parentNode.removeChild(this._option);
+			}
+			// dojo._destroyElement(this._option); 
 		}
 	},
 
 	gotoSlideByEvent: function(/* Event */ evt){
-		// summary: main presentation function, determines next 'best action'
-		//	for a specified event.
+		// summary: 
+		//		main presentation function, determines next 'best action' for a
+		//		specified event.
 		var _node = evt.target;
 		var _type = evt.type;
 
@@ -180,6 +186,7 @@ dojo.declare(
 				this.selectedChildWidget._nextAction(evt); 
 			}
 		}
+		this._resizeWindow();
 		evt.stopPropagation(); 
 	},
 		
@@ -205,28 +212,30 @@ dojo.declare(
 	},
 	nextSlide: function(/*Event*/ evt){
 		// summary: transition to the next slide.
-		if (!this.selectedChildWidget.isLastChild) {
+		if(!this.selectedChildWidget.isLastChild){
 			this.forward();
 			this.select.selectedIndex += 1; 
 		}
-		if (this.setHash) { this._setHash(); }
-		if (evt) { evt.stopPropagation(); }
+		if(this.setHash){ this._setHash(); }
+		if(evt){ evt.stopPropagation(); }
 	},
 
 	previousSlide: function(/*Event*/ evt){
 		// summary: transition to the previous slide
-		if (!this.selectedChildWidget.isFirstChild) {
+		if(!this.selectedChildWidget.isFirstChild){
 			this.back();
 			this.select.selectedIndex -= 1; 
-		} else { this.selectedChildWidget._reset(); } 
-		if (this.setHash) { this._setHash(); }
-		if (evt) { evt.stopPropagation();}
+		}else{
+			this.selectedChildWidget._reset();
+		} 
+		if(this.setHash){ this._setHash(); }
+		if(evt){ evt.stopPropagation();}
 	},
 
 	_setHash: function(){
 		// summary: sets url #mark to direct slide access
 		var slideNo = this.select.selectedIndex+1;
-		window.location.href = "#"+this.widgetId+"_SlideNo_"+slideNo;
+		window.location.href = "#"+this.id+"_SlideNo_"+slideNo;
 
 	},
 
@@ -260,8 +269,9 @@ dojo.declare(
 					this._hideChild(oldWidget);
 				})
 			}));
-			*/ this._hideChild(oldWidget);
-                }
+			*/
+			this._hideChild(oldWidget);
+		}
 		if(newWidget){
 			/*
 			anims.push(dojo.fadeIn({ 
@@ -292,10 +302,12 @@ dojo.declare(
 	//	made up of direct HTML (no part/action relationship), and dojox.presentation.Part(s),
 	//	and their attached Actions.
 	
+	// FIXME: not sure why this isn't set as a templatePath
+
 	// templateString: String
 	//	make a ContentPane templated, and style the 'titleNode'
-	templateString: '<div dojoAttachPoint="showSlide" class="dojoShowPrint">'+
-			'	<h1 class="showTitle" dojoAttachPoint="slideTitle"><span dojoAttachPoint="slideTitleText">${title}</span></h1>'+
+	templateString: '<div dojoAttachPoint="showSlide" class="dojoShowPrint dojoShowSlide">'+
+			'	<h1 class="showTitle" dojoAttachPoint="slideTitle"><span class="dojoShowSlideTitle" dojoAttachPoint="slideTitleText">${title}</span></h1>'+
 			'	<div class="dojoShowBody" dojoAttachPoint="containerNode"></div>'+
 			'</div>',
 
