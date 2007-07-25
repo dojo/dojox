@@ -24,7 +24,7 @@ dojox.wire.ml._getValue = function(/*String*/source, /*Array*/args){
 	}
 	var property = undefined;
 	if(args && source.length >= 9 && source.substring(0, 9) == "arguments"){
-		property = this.required.substring(9);
+		property = source.substring(9);
 		return new dojox.wire.Wire({property: property}).getValue(args);
 	}
 	var i = source.indexOf('.');
