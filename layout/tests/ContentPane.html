@@ -1,0 +1,686 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>dojox.layout.ContentPane test</title>
+	<script src='../../../dojo/dojo.js' djConfig='isDebug:true, parseOnLoad:true'></script>
+	<script>
+		dojo.require('doh.runner');
+		dojo.require('dojox.layout.ContentPane');
+		dojo.require('dojo.parser');
+		dojo.require('dijit._Container');
+
+
+		// create a do nothing, only for test widget
+		dojo.declare("dojox.TestWidget",
+			[dijit._Widget, dijit._Templated], {
+			templateString: "<span class='dojoxTestWidget'></span>"
+		});
+
+		// used to test if we fire scrips to document scope
+		function documentCallback(){
+			arguments.callee.reached = true;
+			//console.debug('reached');
+		}
+		var unTypedVarInDocScope; // a closure test to make sure we can reach this from evaled scripts
+
+
+		var pane1, pane2;
+
+		dojo.addOnLoad(function(){
+
+			pane1 = dijit.byId('parsedPane');
+
+			function ieTrimSpaceBetweenTags(str){
+				return str.replace(/(<[a-z]*[^>]*>)\s*/ig, "$1");
+			}
+			function testHandle(t, handle){
+				t.assertTrue(handle);
+				t.assertTrue(dojo.isFunction(handle.cancel));
+				t.assertTrue(dojo.isFunction(handle.addOnLoad));
+				t.assertTrue(dojo.isFunction(handle.addOnUnload));
+			}
+
+			doh.register("basicChecks", [
+					{
+						name: 'setContent',
+						runTest: function(t){
+							var msg = "Simple Test";
+							pane1.setContent(msg);
+							t.assertEqual(msg, pane1.domNode.innerHTML);
+						}
+					},
+					{
+						name: 'setHref',
+						timeout: 1800,
+						runTest: function(t){
+							var msg = "simple remote Test"
+							pane1.setHref(dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?message='+encodeURI(msg)));
+
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual(msg, pane1.domNode.innerHTML)
+							}), 1500);
+							return d;
+						}
+					},
+					{
+						name: 'setContent_with_Widgets',
+						runTest: function(t){
+							var cont = "<div dojoType='dojox.TestWidget'>Test</div>";
+							pane1.setContent(cont);
+							t.assertFalse(cont.toLowerCase() == pane1.domNode.innerHTML.toLowerCase());
+							t.assertEqual(1, dijit._Container.prototype.getChildren.call(pane1).length);
+						}
+					},
+					{
+						name: 'changeContentTRHead',
+						runTest: function(t){
+							var trHead = dojo.query('table#tableTest > thead > tr')[0];
+							pane2 = new dojox.layout.ContentPane({} , trHead);
+							var html = "<td><div>This</div>Should<u>Work</u></td>";
+							pane2.setContent(html);
+							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
+							t.assertEqual(html.toLowerCase(), res);
+						},
+						tearDown: function(){
+							pane2.destroy();
+						}
+					},
+					{
+						name: 'changeContentTHead',
+						runTest: function(t){
+							var tHead = dojo.query('table#tableTest > thead')[0];
+							pane2 = new dojox.layout.ContentPane({}, tHead);
+							var html = "<tr><td><div>This</div>Should<u>Work</u></td></tr>";
+							pane2.setContent(html);
+							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
+							t.assertEqual(html.toLowerCase(), res);
+						},
+						tearDown: function(){
+							pane2.destroy();
+						}
+					},
+					{
+						name: 'changeContentTRBody',
+						runTest: function(t){
+							var trBody = dojo.query('table#tableTest > tbody > tr')[0];
+							pane2 = new dojox.layout.ContentPane({}, trBody);
+							var html = "<td><div>This</div>Should<u>Work</u></td>";
+							pane2.setContent(html);
+							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
+							t.assertEqual(html.toLowerCase(), res);
+						},
+						tearDown: function(){
+							pane2.destroy();
+						}
+					},
+					{
+						name: 'changeContentTBody',
+						runTest: function(t){
+							var tBody = dojo.query('table#tableTest > tbody')[0];
+							pane2 = new dojox.layout.ContentPane({}, tBody);
+							var html = "<tr><td><div>This</div>Should<u>Work</u></td></tr>";
+							pane2.setContent(html);
+							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
+							t.assertEqual(html.toLowerCase(), res);
+						},
+						tearDown: function(){
+							pane2.destroy();
+						}
+					},
+					{
+						name: 'changeContentTable',
+						runTest: function(t){
+							var table = dojo.query('table#tableTest')[0];
+							pane2 = new dojox.layout.ContentPane({}, table);
+							var html = "<tbody><tr><td><div>This</div>Should<u>Work</u></td></tr></tbody>";
+							pane2.setContent(html);
+							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
+							t.assertEqual(html.toLowerCase(), res);
+						},
+						tearDown: function(){
+							pane2.destroy();
+						}
+					},
+					{
+						name: 'ioArgsSetSyncLoad',
+						timeout: 1500,
+						runTest: function(t){
+							pane1.ioArgs.sync = true;
+							pane1.setHref(dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=sync'));
+
+							// since it was a sync fetch it should be loaded here
+							t.assertEqual('sync', pane1.domNode.innerHTML);
+						},
+						tearDown: function(){
+							pane1.ioArgs = {}; // back to defaults
+						}
+					},
+					{
+						name: 'ioArgsSetsHeader',
+						timeout: 1800,
+						runTest: function(t){
+							// test if we can set a custom header on every request
+							pane1.ioArgs.headers = {'X-TestHeader': 'Testing'};
+							pane1.setHref('remote/getResponse.php?mode=bounceHeaders');
+
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								var cont = pane1.domNode.innerHTML;
+								t.assertTrue(/X-TestHeader/i.test(cont));
+								t.assertTrue(/Testing/i.test(cont));
+							}), 1500);
+
+							return d;
+						},
+						tearDown: function(){
+							pane1.ioArgs = {}; // back to defaults
+						}
+					},
+					{
+						name: 'ioMethodPost',
+						timeout: 1800,
+						runTest: function(t){
+							// test to post some content on each request
+							pane1.ioMethod = dojo.xhrPost;
+							pane1.ioArgs.content = {test:'it should work'};
+							pane1.setHref('remote/getResponse.php?mode=bounceInput');
+
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('test=it%20should%20work', pane1.domNode.innerHTML);
+							}), 1500);
+							return d;
+						},
+						tearDown: function(){
+							// back to defaults
+							pane1.ioMethod = dojo.xhrGet;
+							pane1.ioArgs = {};
+						}
+					},
+					{
+						name: 'handleFrom_setContent',
+						runTest: function(t){
+							var unLoadCalled, loadCalled;
+							var handle = pane1.setContent("test 'var handle = setContent()'");
+							testHandle(t, handle);
+
+							handle.addOnLoad(function(){
+								loadCalled = true;
+							});
+
+							t.assertTrue(loadCalled);
+
+							handle.addOnUnload(function(){
+								unLoadCalled = true;
+							});
+
+							// test unLoad callback above
+							handle = pane1.setContent("testing 'addOnUnload(callback)'");
+							t.assertTrue(unLoadCalled);
+							testHandle(t, handle);
+						}
+					},
+					{
+						name: 'handleFrom_setHref_and_refresh_and_cancelWorking',
+						timeout: 3400,
+						runTest: function(t){
+							var unloadCalled, loadCalled;
+							var r_unloadCalled, r_loadCalled;
+							var r_handle, href = dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=test');
+
+							var handle = pane1.setHref(href);
+							testHandle(t, handle);
+							handle.addOnLoad(function(){
+								loadCalled = 'loadCalled';
+							});
+							handle.addOnUnload(function(){
+								unloadCalled = 'unloadCalled';
+							});
+
+							handle.cancel();
+
+							setTimeout(function(){
+								pane1.href = href;
+								handle = pane1.refresh();
+								testHandle(t, handle); // might throw and kill rest of test, infact we rely on that
+								r_handle = 'refreshHandle ok';
+								handle.addOnLoad(function(){
+									r_loadCalled = 'refresh loadCalled';
+									pane1.setContent(); // trigger unload
+								});
+								handle.addOnUnload(function(){
+									r_unloadCalled = 'refresh unloadCalled';
+								});
+							}, 1500); // wait for page load in case cancel didn't work
+
+							var d = new t.Deferred();
+
+							setTimeout(d.getTestCallback(function(){
+								// load from the href (was canceled)
+								t.assertEqual(undefined, loadCalled);
+								t.assertEqual(undefined, unloadCalled);
+
+								// load from the refresh
+								t.assertEqual('refreshHandle ok', r_handle);
+								t.assertEqual('refresh loadCalled', r_loadCalled);
+								t.assertEqual('refresh unloadCalled', r_unloadCalled);
+							}), 3200);
+
+							return d;
+						}
+					},
+					{
+						name: 'onLoadDeferred|onUnloadDeferred_call_order',
+						timeout: 6200,
+						runTest: function(t){
+							pane1.preventCache = 1;
+							var count = {u: 0, l: 0}; // need a object for the ref in closures
+							var href = dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=test').toString();
+		
+
+							function next(){
+								if(!isNaN(count.u) && !isNaN(count.l)){
+									if(count.u < 4 && count.l < 4){
+										pane1.setHref(href);
+										pane1.onLoadDeferred.addCallback(makeCallback('l', 'u', 1));
+										pane1.onUnloadDeferred.addCallback(makeCallback('u', 'l', 0));
+									}else{
+										pane1.setContent(); // unload to get even
+									}
+								}
+							}
+
+							function makeCallback(tryVar, compareVar, inc){
+								return function(){
+									//console.debug(tryVar, count[tryVar] + 1, count[compareVar] + inc)
+									if((++count[tryVar]) === (count[compareVar] + inc)){
+										count[tryVar];
+										if(tryVar == 'l'){
+											next(); // onload event, trigger new load
+										}
+									}else{
+										tryVar = 'failed '+(tryVar=='u'?'unload':'load')+' on '+count[tryVar]+' try';
+									}
+								}
+							}
+							
+							next(); // starts the loop
+	
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual(4, count.l);
+								t.assertEqual(4, count.u)
+							}), 6000); // 1.5 sec max on each load should be enough
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.preventCache;
+						}
+					}
+				]
+			);
+
+
+			doh.register("pathAdjustments",
+				[
+					{
+						name: 'cssPathAdjustments',
+						runTest: function(t){
+
+							// TODO: add support for media rules to @import
+
+							// we do this test as one big string to emulate as good as possible, 
+							// but split it later to easily see where we failed
+							var cssText = ".easy{ background-image:url(images/image.png) }\n"
+							+".dontReplaceEasy{ background-image:url(images/images/image.png) }\n"
+							+".hardurl{background-image:url(\t \"../../source/test/%20t'e(s)t.gif(\"1')?foo=bar11103&bar=baz-foo\"  \t);}body{};\n"
+							+".file{background-image: url(file:///home/nobody/image.png);}\n"
+							+".http{background-image: url(http://dojotoolkit.org/image.png);}\n"
+							+".https{background-image: url(https://dojotoolkit.org/image.png);}\n"
+							+".nonRelative{background-image:url(/toplevelfolder/image.gif);}\n"
+							+'@import "css/main.css";' + "@import \t'css/Newbee Url.css'\t;";
+
+							pane1.href = "deep/nested/file";
+							pane1.adjustPaths = 1;
+							pane1.renderStyles = 1;
+							var adjustedCss;
+
+							// hijack internals to snatch the styles before they are inserted to DOM (DOM messes formating)
+							var oldFunc = pane1._renderStyles;
+							pane1._renderStyles = (function(){
+								return function(styles){
+									adjustedCss = styles.join();
+								}
+							}).call(pane1);
+							pane1._setContent('<style>'+cssText+'</style>');
+							pane1._renderStyles = oldFunc;
+
+							adjustedCss = adjustedCss.split("\n");
+
+							var expectedCss = (".easy{ background-image:url('deep/nested/images/image.png') }\n"
+							+".dontReplaceEasy{ background-image:url('deep/nested/images/images/image.png') }\n"
+							+".hardurl{background-image:url('source/test/%20t'e(s)t.gif(\"1')?foo=bar11103&bar=baz-foo');}body{};\n"
+							+".file{background-image: url('file:///home/nobody/image.png');}\n"
+							+".http{background-image: url('http://dojotoolkit.org/image.png');}\n"
+							+".https{background-image: url('https://dojotoolkit.org/image.png');}\n"
+							+".nonRelative{background-image:url('/toplevelfolder/image.gif');}\n"
+							+"@import 'deep/nested/css/main.css';@import 'deep/nested/css/Newbee Url.css';").split("\n");
+
+							// we split and loop to get a faster hint of where it failed
+							for(var i = 0; i < expectedCss.length; i++){
+								t.assertEqual(expectedCss[i], adjustedCss[i]);
+							}
+						},
+						tearDown: function(){
+							delete pane1.adjustPaths; // get back to defaults
+							delete pane1.renderStyles;
+						}
+					},
+					{
+						name: 'htmlPathAdjustments',
+						timeout: 1800,
+						runTest: function(t){
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(
+								function(){
+									// check that images and styles have been applied
+									var cb = dojo.contentBox(dojo.byId('imgTest'));
+											//dojo.getComputedStyle(dojo.byId('imgTest'));
+									t.assertEqual(188, cb.w);
+									t.assertEqual(125, cb.h);
+
+									// make sure we didn't mess up the other inline styles
+									cb = dojo.contentBox(dojo.byId('inlineStyleTest'));
+									t.assertEqual(188, cb.w);
+									t.assertEqual(125, cb.h);
+
+									// make sure it is the correct image
+									var cs = dojo.getComputedStyle(dojo.byId('inlineStyleTest'));
+									var url = cs.backgroundImage;
+									//remove url(..)
+									url = url.replace(/^\s?url\(['"]?/, "").replace(/['"]?\);?\s?$/, ""); 
+									// compare image url to full path of this document
+									imageUrl = dojo.moduleUrl('dojox', 'layout/tests/images/testImage.gif');
+									t.assertEqual(new dojo._Url(document.location, imageUrl), url);
+
+									// make sure we loaded the <link rel='stylesheet' correctly
+									var mb = dojo.marginBox(dojo.byId('linkCssTest'));
+									t.assertEqual(112, mb.w); // 100px  + 2px border + 4px margin = 112px
+									t.assertEqual(112, mb.h);
+
+									// make sure we loaded the <style>@import '...'; correctly
+									mb = dojo.marginBox(dojo.byId('importCssTest'));
+									t.assertEqual(110, mb.w); // 100px + 1px border + 4px margin = 110px
+									t.assertEqual(110, mb.h);
+								}
+							), 1500);
+
+							pane1.adjustPaths = 1;pane1.renderStyles = 1;
+							pane1.setHref('remote/getResponse.php?mode=htmlPaths');
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.adjustPaths; // get back to defaults
+							delete pane1.renderStyles;
+						}
+					},
+					{
+						name: 'renderStylesOfByDefaultAndOldDeleted',
+						timeout: 1800,
+						runTest: function(t){
+							var d = new t.Deferred();
+
+							setTimeout(d.getTestCallback(
+								function(){
+									// innerHTML'ing <link tags works in some browser (IE, moz), but not all
+									// we can't test if LINK was loaded this way
+
+									// make sure we didn't load the <link rel='stylesheet'
+									//var mb = dojo.marginBox(dojo.byId('linkCssTest'));
+									//t.assertFalse(112 == mb.w);
+									//t.assertFalse(112 == mb.h);
+
+									// make sure we didn't load the <style>@import '...';
+									var mb = dojo.marginBox(dojo.byId('importCssTest'));
+									t.assertFalse(110 == mb.w);
+									t.assertFalse(110 == mb.h);
+								}
+							), 1500);
+							pane1.adjustPaths = 1;
+							pane1.setHref('remote/getResponse.php?mode=htmlPaths');
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.adjustPaths;
+						}
+					}
+				]
+			);
+
+
+			doh.register("scriptTests",
+				[
+					"t.assertTrue(pane1.executeScripts);",
+					{
+						name: 'leaveDojoMethodScriptsAsIs',
+						runTest: function(t){
+							pane1.setContent("<"
+								+"script type='dojo/method'>unTypedVarInDocScope = 'failure';<"
+								+"/script>");
+
+							var d = new t.Deferred();
+							// IE req to async this test
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('undefined', typeof unTypedVarInDocScope);
+								t.assertFalse(unTypedVarInDocScope == 'failure');
+							}), 40);
+
+							return d;
+						}
+					},
+					{
+						name: 'scripts_evals_in_global_scope',
+						timeout: 1800, // grabing remote js, wait for that
+						runTest: function(t){
+							pane1.setContent("<"
+								+"script>function scriptsInGlobalClicked(){ documentCallback(); }<"
+								+"/script><"+"script src='remote/getResponse.php?mode=remoteJsTrue'></"
+								+"script>"+"<a href='javascript:scriptsInGlobalClicked()' "
+									+"onfocus='scriptsInGlobalClicked();' id='anchorTag'>test</a>");
+
+							var link = dojo.byId('anchorTag');
+							dojo.isFunction(link.click) ? /*others*/ link.click() : /*moz*/ link.focus();
+							var d = new t.Deferred();
+					
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('boolean', typeof documentCallback.reached);
+								t.assertTrue(documentCallback.reached);
+								t.assertTrue(unTypedVarInDocScope);
+							}), 40);
+							return d;
+						}
+					},
+					{
+						name:'scriptsEvalsInOrder',
+						timeout: 1800,// grabing remote js, wait for that
+						runTest: function(t){
+							pane1.setContent("<"
+								+"script src='remote/getResponse.php?mode=remoteJsFalse'><"
+								+"/script><"+"script>unTypedVarInDocScope = 1;<"
+								+"/script>"); // scripts only test
+
+							// we need to make this async because of IEs strange events loops
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('number', typeof unTypedVarInDocScope);
+								t.assertEqual(1, unTypedVarInDocScope);
+							}), 40);
+							return d;
+						}
+					},
+					{
+						name:'scriptsWithHtmlComments',
+						runTest: function(t){
+							pane1.cleanContent = 1;
+							pane1.setContent("<"
+								+"script><!-- unTypedVarInDocScope = 2; --><"
+								+"/script>");
+
+							var d = new t.Deferred();
+							// IE need a async here
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('number', typeof unTypedVarInDocScope);
+								t.assertEqual(2, unTypedVarInDocScope);
+							}), 40);
+
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.cleanContent; // go back to default
+						}
+					},
+					{
+						name:'scriptsWithCData',
+						runTest: function(t){
+							pane1.cleanContent = 1;
+							pane1.setContent("<"
+								+"script><![CDATA[ unTypedVarInDocScope = 3; ]]><"
+								+"/script>");
+
+							var d = new t.Deferred();
+							// IE need a async here
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('number', typeof unTypedVarInDocScope);
+								t.assertEqual(3, unTypedVarInDocScope);
+							}), 40);
+
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.cleanContent; // go back to default
+						}
+					},
+					{
+						name: 'replace_container_with_dijit.byId()',
+						runTest: function(t){
+							unTypedVarInDocScope = 'failure';
+							pane1.scriptHasHooks = true;
+							pane1.setContent("<"
+							+"script>function testReplace(){"
+							+	"if(typeof _container_ != 'object'){return 'not replaced 1';}\n"
+							+	"if(_container_ != pane1){ return 'not replaced 2';}\n"
+							+	"if(!_container_ == pane1){ return 'not replaced 3';}\n"
+							+	"var tmp =_container_=dojo;\n"
+							+	"if(tmp != dojo){ return 'replaced when shouldnt 1';}\n"
+							+	"var tmp = _container_  \t \t = dojo;\n"
+							+	"if(tmp != dojo){ return 'replaced when shouldnt 2';}\n"
+							+	"return 'success';\n"
+							+"};\n"
+							+"unTypedVarInDocScope = testReplace();"
+							+"</"+"script>");
+
+							// let IE inhale here
+							var d = new t.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('success', unTypedVarInDocScope);
+							}), 40);
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.scriptHasHooks; // get back to default
+						}
+					},
+					{
+						name:'_container_onLoadDeferred|onUnloadDeferred',
+						runTest: function(t){
+							pane1.scriptHasHooks = true;
+							pane1.setContent("<"
+								+"script>"
+								+"var testConn;"
+								+"_container_.onLoadDeferred.addCallback(function(){"
+								+	"testConn = dojo.connect(dojo.byId('testForm'), 'onsubmit', null, function(){"
+								+		"unTypedVarInDocScope = dojo.byId('testInput').value;"
+								+	"});"
+								+	"dojo.byId('testButton').click();"
+								+"});"
+								+"_container_.onUnloadDeferred.addCallback(function(){"
+								+		"unTypedVarInDocScope = 'unloaded';"
+								+	"dojo.disconnect(testConn);"
+								+"});"
+								+"<"+"/script><form onsubmit='return false;' id='testForm'>"
+								+	"<input id='testInput' value='loaded'/>"
+								+	"<input type='submit' id='testButton'/>"
+								+"</form>");
+
+							var d = new t.Deferred();
+							// IE must breathe here
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('loaded', unTypedVarInDocScope);
+							}), 40);
+							return d;
+						},
+						tearDown: function(){
+							delete pane1.scriptHasHooks; // get back to default
+							pane1.setContent();
+						}
+					},
+					"t.assertEqual('unloaded', unTypedVarInDocScope)"
+				]
+			);
+
+
+			/*
+				add tests for:
+				applied css files with media
+			*/
+
+			doh.run();
+		});
+	</script>
+	<style>
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+
+		.box {
+			border: 1px solid black;
+			height: 150px;
+			width: 80%;
+			overflow: auto;
+		}
+
+		.red {
+			color: red;
+		}
+
+		.dojoxTestWidget {
+			border: 1px dashed red;
+			background-color: #C0E209 ;
+		}
+	</style>
+</head>
+<body class='tundra'>
+	<h1>dojox.layout.ContentPane</h1>
+	<h3>As dojox ContentPane is derived from dijit ContentPane, make sure that the dijit test passes before running this test</h3>
+	<h3 class='red'>Test relies on a php page as backend, so you need php installed on your server</h3>
+
+	<div class='box' dojoType="dojox.layout.ContentPane" id='parsedPane'>
+		Initial value
+	</div>
+
+	<table id='tableTest' class='box'>
+		<thead>
+			<tr>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td></td>
+			</tr>
+		<tbody>
+	</table>
+</body>
+</html>
