@@ -870,7 +870,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path,
 			this.vmlPath = this.vmlPath.concat(path);
 		}
 		if(typeof(this.vmlPath) == "string"){
-			this.rawNode.path.v = this.vmlPath + " e";
+			this.rawNode.path.v = this.vmlPath + " r0,0 e";
 		}
 	},
 	attachShape: function(rawNode){
@@ -893,7 +893,11 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path,
 				}
 			}
 		}
-		if(t.length) shape.path = t.join(" ");
+		var l = t.length;
+		if(l >= 4 && t[l - 1] == "" && t[l - 2] == 0 && t[l - 3] == 0 && t[l - 4] == "l"){
+			t.pop(); t.pop(); t.pop(); t.pop();
+		}
+		if(l) shape.path = t.join(" ");
 		return shape;	// dojox.gfx.path.Path
 	},
 	setShape: function(newShape){
@@ -903,7 +907,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path,
 		this.lastControl = {};
 		dojox.gfx.Path.superclass.setShape.apply(this, arguments);
 		this.vmlPath = this.vmlPath.join("");
-		this.rawNode.path.v = this.vmlPath + " e";
+		this.rawNode.path.v = this.vmlPath + " r0,0 e";
 		return this;
 	},
 	_pathVmlToSvgMap: {m: "M", l: "L", t: "m", r: "l", c: "C", v: "c", qb: "Q", x: "z", e: ""},
