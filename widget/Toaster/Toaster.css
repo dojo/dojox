@@ -1,3 +1,5 @@
+/* main classes for dojox.widget.Toaster */
+
 .tundra .dijitToasterContent{
 	padding:1em;
 	padding-top:0.25em;
@@ -24,4 +26,22 @@
 	padding:1em;
 	padding-top:0.25em;
 	background:#c46600;
-} 
+}
+
+
+/* imported from dijit.css */
+ 
+.dijitToasterClip {
+	position: absolute;
+	overflow: hidden;
+}
+
+.dijitToasterContainer {
+	display: block;
+	position: absolute;
+	width: 17.5em;
+	z-index: 5000;
+	margin: 0px;
+	font:0.75em Tahoma, Helvetica, Verdana, Arial;
+}
+ 
