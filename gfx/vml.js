@@ -432,7 +432,8 @@ dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 				parent.appendChild(this.rawNode);
 			}
 		}
-		return this.setTransform(this.matrix);	// self
+		// set all necessary styles, which are lost by VML (yes, it's a VML's bug)
+		return this.setTransform(this.matrix).setFill(this.fillStyle).setStroke(this.strokeStyle);	// self
 	}
 });
 dojox.gfx.Rect.nodeType = "roundrect"; // use a roundrect so the stroke join type is respected
