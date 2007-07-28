@@ -830,7 +830,7 @@ dojox.gfx.svg._creators = {
 	clear: function(){
 		// summary: removes all shapes from a group/surface
 		var r = this.rawNode;
-		while(r.lastChild && r.firstChild != r.lastChild){
+		while(r.lastChild){
 			r.removeChild(r.lastChild);
 		}
 		return this;	// self
