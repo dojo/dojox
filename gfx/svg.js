@@ -560,7 +560,29 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		if(rawNode) {
 			this.fontStyle = this.attachFont(rawNode);
 		}
-	}
+	},
+	getTextWidth: function(){ 
+		// summary: get the text width in pixels 
+		var rawNode = this.rawNode; 
+		var oldParent = rawNode.parentNode; 
+		var _measurementNode = rawNode.cloneNode(true); 
+		_measurementNode.style.visibility = "hidden"; 
+
+		// solution to the "orphan issue" in FF 
+		var _width = 0; 
+		var _text = _measurementNode.firstChild.nodeValue; 
+		oldParent.appendChild(_measurementNode); 
+
+		// solution to the "orphan issue" in Opera 
+		// (nodeValue == "" hangs firefox) 
+		if(_text!=""){ 
+			while(!_width){ 
+				_width = parseInt(_measurementNode.getBBox().width); 
+			} 
+		} 
+		oldParent.removeChild(_measurementNode); 
+		return _width; 
+	} 
 });
 dojox.gfx.Text.nodeType = "text";
 

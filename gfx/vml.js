@@ -830,7 +830,16 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text,
 				{dy: -dojox.gfx.normalizedLength(this.fontStyle ? this.fontStyle.size : "10pt") * 0.35});
 		}
 		return matrix;	// dojox.gfx.Matrix2D
-	}
+	},
+	getTextWidth: function(){ 
+		// summary: get the text width, in px 
+		var rawNode = this.rawNode; 
+		var _display = rawNode.style.display; 
+		rawNode.style.display = "inline"; 
+		var _width = dojox.gfx.pt2px(parseFloat(rawNode.currentStyle.width)); 
+		rawNode.style.display = _display; 
+		return _width; 
+	} 
 });
 dojox.gfx.Text.nodeType = "shape";
 
@@ -1573,7 +1582,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// height: String: height of surface, e.g., "100px"
 
 	var s = new dojox.gfx.Surface(), p = dojo.byId(parentNode);
-	s.rawNode = parent.ownerDocument.createElement("v:group");
+	s.rawNode = p.ownerDocument.createElement("v:group");
 	s.rawNode.style.width  = width  ? width  : "100%";
 	s.rawNode.style.height = height ? height : "100%";
 	//p.style.position = "absolute";
