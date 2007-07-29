@@ -1,128 +1,134 @@
 dojo.provide("dojox.layout.ContentPane");
 
 dojo.require("dijit.layout.ContentPane");
-dojo.require("dojox.string.Builder");
 
 (function(){ // private scope, sort of a namespace
 
 	// TODO: should these methods be moved to dojox.html.cssPathAdjust or something?
-	function adjustCssPaths(cssUrl, cssText, imports){
-		//	summary
-		//  say cssText comes from dojoroot/src/widget/templates/Foobar.css
-		// 	it has a css selector: .dojoFoo { background-image: url(images/bar.png);}
-		// then uri should point to dojoroot/src/widget/templates/
-		if(!cssText || !cssUrl){ return; }
 
-		var match, str = "", url = "", regex, pad = "";
-		var urlChrs = "[\\t\\s\\w\\(\\)\\/\\.\\\\'\"-:#=&?~]+";
+	// css at-rules must be set before any css declarations according to CSS spec
+	// match:
+	// @import 'http://dojotoolkit.org/dojo.css';
+	// @import 'you/never/thought/' print;
+	// @import url("it/would/work") tv, screen;
+	// @import url(/did/you/now.css);
+	// but not:
+	// @namespace dojo "http://dojotoolkit.org/dojo.css"; /* namespace URL should always be a absolute URI */
+	// @charset 'utf-8';
+	// @media print{ #menuRoot {display:none;} }
+
 		
-		if(imports){
-			pad = " ";
-			regex = new RegExp('(@import)(\\s+'+urlChrs+')\\s*(;)'); // TODO support media rules
-		}else{
-			regex = new RegExp('(url\\()\\s*('+urlChrs+')\\s*(\\))');
-		}
-		var regexProtocol = /https?:\/\//;
-		var regexTrim = new RegExp("^[\\s]*(['\"]?)("+urlChrs+")\\1[\\s]*?$");
-	
-		while(match = regex.exec(cssText)){
-			url = match[2].replace(regexTrim, "$2");
-			if(!regexProtocol.exec(url)){
-				url = (new dojo._Url(cssUrl, url).toString());
-			}
-			str += cssText.substring(0, match.index) + match[1] + pad + "'" + url + "'" + match[3];
-			cssText = cssText.substr(match.index + match[0].length);
-		}
+	// we adjust all paths that dont start on '/' or contains ':'
+	//(?![a-z]+:|\/)
 
-		str = str + cssText;
-
-		if(!imports){
-			str = arguments.callee(cssUrl, str, true);
-		}
-		return str; // String
+	if(dojo.isIE){
+		var alphaImageLoader = /(AlphaImageLoader\([^)]*?src=(['"]))(?![a-z]+:|\/)([^\r\n;}]+?)(\2[^)]*\)\s*[;}]?)/g;
 	}
 
-	function adjustHtmlPaths(htmlUrl, cont){
-		// TODO: clean up this mess!
-		// use dojox string builder to achive more speed on slow string merging env.
+	var cssPaths = /(?:(?:@import\s*(['"])(?![a-z]+:|\/)([^\r\n;{]+?)\1)|url\(\s*(['"]?)(?![a-z]+:|\/)([^\r\n;]+?)\3\s*\))([a-z, \s]*[;}]?)/g;
 
-		// attributepaths one tag can have multiple paths example:
-		// <input src="..." style="url(..)"/> or <a style="url(..)" href="..">
-		// strip out the tag and run fix on that.
-		// this guarantees that we won't run replace on another tag's attribute + it was easier do
-		var regexFindTag = /<[a-z][a-z0-9]*[^>]*\s(?:(?:src|href|style)=[^>])+[^>]*>/i;
-		// FIXME: get the url regex part from dojo.regex instead
-		var regexFindAttr = /\s(src|href|style)=(['"]?)([\w()\[\]\/.,\\'"-:;#=&?\s@]+?)\2/i;
-		// these are the supported protocols, all other is considered relative
-		var regexProtocols = /^(?:[#]|(?:(?:https?|ftps?|file|javascript|mailto|news):))/;
+	function adjustCssPaths(cssUrl, cssText){
+		//	summary:
+		//		adjusts relative paths in cssText to be relative to cssUrl
+		//		a path is considered relative if it doesn't start with '/' and not contains ':'
+		//	description:
+		//		Say we fetch a HTML page from level1/page.html
+		//		It has some inline CSS:
+		//			@import "css/page.css" tv, screen;
+		//			...
+		//			background-image: url(images/aplhaimage.png);
+		//
+		//		as we fetched this HTML and therefore this CSS
+		//		from level1/page.html, these paths needs to be adjusted to:
+		//			@import 'level1/css/page.css' tv, screen;
+		//			...
+		//			background-image: url(level1/images/alphaimage.png);
+		//		
+		//		In IE it will also adjust relative paths in AlphaImageLoader()
+		//			filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/alphaimage.png');
+		//		will be adjusted to:
+		//			filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='level1/images/alphaimage.png');
+		//
+		//		Please note that any relative paths in AlphaImageLoader in external css files wont work, as
+		//		the paths in AlphaImageLoader is MUST be declared relative to the HTML page,
+		//		not relative to the CSS file that declares it
+
+		if(!cssText || !cssUrl){ return; }
+
+		// support the ImageAlphaFilter if it exists, most people use it in IE 6 for transparent PNGs
+		// We are NOT going to kill it in IE 7 just because the PNGs work there. Somebody might have
+		// other uses for it.
+		// If user want to disable css filter in IE6  he/she should
+		// unset filter in a declaration that just IE 6 doesn't understands
+		// like * > .myselector { filter:none; }
+		if(alphaImageLoader){
+			cssText = cssText.replace(alphaImageLoader, function(ignore, pre, delim, url, post){
+				return pre + (new dojo._Url(cssUrl, './'+url).toString()) + post;
+			});
+		}
+
+		return cssText.replace(cssPaths, function(ignore, delimStr, strUrl, delimUrl, urlUrl, media){
+			if(strUrl){
+				return '@import "' + (new dojo._Url(cssUrl, './'+strUrl).toString()) + '"' + media;
+			}else{
+				return 'url(' + (new dojo._Url(cssUrl, './'+urlUrl).toString()) + ')' + media;
+			}
+		});
+	}
+
+	// attributepaths one tag can have multiple paths, example:
+	// <input src="..." style="url(..)"/> or <a style="url(..)" href="..">
+	// <img style='filter:progid...AlphaImageLoader(src="noticeTheSrcHereRunsThroughHtmlSrc")' src="img">
+	var htmlAttrPaths = /(<[a-z][a-z0-9]*\s[^>]*)(?:(href|src)=(['"]?)([^>]*?)\3|style=(['"]?)([^>]*?)\5)([^>]*>)/gi;
+
+	function adjustHtmlPaths(htmlUrl, cont){
 		var url = htmlUrl || "./";
 
-		var str = "", tag, tagFix = '', attr, path, origPath;
-
-		while(tag = regexFindTag.exec(cont)){
-			str += cont.substring(0, tag.index);
-			cont = cont.substring((tag.index + tag[0].length), cont.length);
-			tag = tag[0];
-
-			// loop through attributes
-			tagFix = '';
-			while(attr = regexFindAttr.exec(tag)){
-				path = ""; origPath = attr[3];
-				switch(attr[1].toLowerCase()){
-					case "src":// falltrough
-					case "href":
-						if(regexProtocols.exec(origPath)){
-							path = origPath;
-						} else {
-							path = (new dojo._Url(url, origPath).toString());
-						}
-						break;
-					case "style":// style
-						path = adjustCssPaths(url, origPath);
-						attr[2] = '"';
-						break;
-					default:
-						path = origPath;
-				}
-				fix = " " + attr[1] + '=' + attr[2] + path + attr[2];
-				// slices up tag before next attribute check
-				tagFix += tag.substring(0, attr.index) + fix;
-				tag = tag.substring((attr.index + attr[0].length), tag.length);
+		return cont.replace(htmlAttrPaths,
+			function(tag, start, name, delim, relUrl, delim2, cssText, end){
+				return start + (name ?
+							(name + '=' + delim + (new dojo._Url(url, relUrl).toString()) + delim)
+						: ('style=' + delim2 + adjustCssPaths(url, cssText) + delim2)
+				) + end;
 			}
-			str += tagFix + tag; 
-			//console.debug(tagFix + tag);
-		}
-		return str+cont;
+		);
 	}
 
 	function secureForInnerHtml(cont){
-		/********* remove <!DOCTYPE.. tag **********/
-		cont = cont.replace(/$\s*<!DOCTYPE\s[^>]+>/i, "");
-
-		/************** <title> ***********/
+		/********* remove <!DOCTYPE.. and <title>..</title> tag **********/
 		// khtml is picky about dom faults, you can't attach a <style> or <title> node as child of body
 		// must go into head, so we need to cut out those tags
-		var regex = /<title[^>]*>([\s\S]*?)<\/title>/i;
-		while(match = regex.exec(cont)){
-			cont = cont.substring(0, match.index) + s.substr(match.index + match[0].length);
-		}
-
-		return cont;
+		return cont.replace(/(?:\s*<!DOCTYPE\s[^>]+>|<title[^>]*>[\s\S]*?<\/title>)/ig, "");
 	}
 
 	function snarfStyles(/*String*/cssUrl, /*String*/cont, /*Array*/styles){
 		/****************  cut out all <style> and <link rel="stylesheet" href=".."> **************/
-		var regex = /(?:<(style)[^>]*>([\s\S]*?)<\/style>|<link ([^>]*rel=['"]?stylesheet['"]?[^>]*)>)/i;
-		var match, attr;
-		while(match = regex.exec(cont)){
-			if(match[1] && match[1].toLowerCase() == "style"){
-				styles.push(adjustCssPaths(cssUrl, match[2]));
-			}else if(attr = match[3].match(/href=(['"]?)([^'">]*)\1/i)){
-				styles.push("@import '" + attr[2] + "';");
+		// also return any attributes from this tag (might be a media attribute)
+		// if cssUrl is set it will adjust paths accordingly
+		styles.attributes = [];
+
+		return cont.replace(/(?:<style([^>]*)>([\s\S]*?)<\/style>|<link\s+(?=[^>]*rel=['"]?stylesheet)([^>]*?href=(['"])([^>]*?)\4[^>\/]*)\/?>)/gi,
+			function(ignore, styleAttr, cssText, linkAttr, delim, href){
+				// trim attribute
+				var i, attr = (styleAttr||linkAttr||"").replace(/^\s*([\s\S]*?)\s*$/i, "$1"); 
+				if(cssText){
+					i = styles.push(cssUrl ? adjustCssPaths(cssUrl, cssText) : cssText);
+				}else{
+					i = styles.push('@import "' + href + '";')
+					attr = attr.replace(/\s*(?:rel|href)=(['"])?[^\s]*\1\s*/gi, ""); // remove rel=... and href=...
+				}
+				if(attr){
+					attr = attr.split(/\s+/);// split on both "\n", "\t", " " etc
+					var atObj = {}, tmp;
+					for(var j = 0, e = attr.length; j < e; j++){
+						tmp = attr[j].split('=')// split name='value'
+						atObj[tmp[0]] = tmp[1].replace(/^\s*['"]?([\s\S]*?)['"]?\s*$/, "$1"); // trim and remove ''
+					}
+					styles.attributes[i - 1] = atObj;
+				}
+				return ""; // squelsh the <style> or <link>
 			}
-			cont = cont.substring(0, match.index) + cont.substr(match.index + match[0].length);
-		};
-		return cont;
+		);
 	}
 
 	function snarfScripts(cont, byRef){
@@ -130,32 +136,34 @@ dojo.require("dojox.string.Builder");
 		//		strips out script tags from cont
 		// invoke with 
 		//	byRef = {errBack:function(){/*add your download error code here*/, downloadRemote: true(default false)}}
-		//	byRef will have {code:}
+		//	byRef will have {code: 'jscode'} when this scope leaves
 		byRef.code = "";
-		var regex = /<script([^>]*)>([\s\S]*?)<\/script>/i;
-		var regexSrc = /src=(['"])([^'"]*)\1/, regexExcl = /type=['"]dojo\/method/i;
-		var tag, match, attr, src, s = "";
-		while(tag = cont.match(regex)){
-			s = cont.substring(0, tag.index);
-			cont = cont.substr(tag.index + tag[0].length);
 
-			if(byRef.downloadRemote && tag[1].length
-				&& (src = tag[1].match(regexSrc))
-			){
+		function download(src){
+			if(byRef.downloadRemote){
+				// console.debug('downloading',src);
 				dojo.xhrGet({
-					url: src[2],
+					url: src,
 					sync: true,
 					load: function(code){
 						byRef.code += code+";";
 					},
 					error: byRef.errBack
 				});
-			}else if(!regexExcl.test(tag[1])){
-				byRef.code += tag[2] + ";";
 			}
 		}
-
-		return s + cont; // String
+		
+		// match <script>, <script type="text/..., but not <script type="dojo(/method)...
+		return cont.replace(/<script\s*(?![^>]*type=['"]?dojo)(?:[^>]*?src=(['"]?)([^>]*?)\1[^>]*)?>([\s\S]*?)<\/script>/gi,
+			function(ignore, delim, src, code){
+				if(src){
+					download(src);
+				}else{
+					byRef.code += code;
+				}
+				return "";
+			}
+		);
 	}
 
 	function evalInGlobal(code, appendNode){
@@ -195,8 +203,13 @@ dojo.declare(
 {
 	// summary:
 	//		An extended version of dijit.layout.ContentPane
-	//		Supports inline scrips, relative path adjustments,
-	//		Java function content generation
+	//		Supports infile scrips and external ones declared by <script src=''
+	//		relative path adjustments (content fetched from a different folder)
+	//		<style> and <link rel='stylesheet' href='..'> tags,
+	//		css paths inside cssText is adjusted (if you set adjustPaths = true)
+	//
+	//		NOTE that dojo.require in script in the fetched file isn't recommended
+	//		Many widgets need to be required at page load to work properly
 
 	// adjustPaths: Boolean
 	//		Adjust relative paths in html string content to point to this page
@@ -226,6 +239,7 @@ dojo.declare(
 
 	// scriptHasHooks: Boolean
 	//		replace keyword '_container_' in scripts with 'dijit.byId(this.id)'
+	// NOTE this name might change in the near future
 	scriptHasHooks: false,
 
 	/*======
@@ -352,17 +366,15 @@ dojo.declare(
 	_setContent: function(cont){
 		// override dijit.layout.ContentPane._setContent, to enable path adjustments
 		var styles = [];// init vars
-
 		if(dojo.isString(cont)){
-			var url = this.href || './';
 			if(this.adjustPaths && this.href){
-				cont = adjustHtmlPaths(url, cont);
+				cont = adjustHtmlPaths(this.href, cont);
 			}
 			if(this.cleanContent){
 				cont = secureForInnerHtml(cont);
 			}
 			if(this.renderStyles || this.cleanContent){
-				cont = snarfStyles(url, cont, styles);
+				cont = snarfStyles(this.href, cont, styles);
 			}
 
 			// because of a bug in IE, script tags that is first in html hierarchy doesnt make it into the DOM 
@@ -438,12 +450,18 @@ dojo.declare(
 	_renderStyles: function(styles){
 		// insert css from content into document head
 		this._styleNodes = [];
-		var doc = this.domNode.ownerDocument;
+		var st, att, cssText, doc = this.domNode.ownerDocument;
 		var head = doc.getElementsByTagName('head')[0];
 
-		dojo.forEach(styles, function(cssText){
-			var st = doc.createElement('style');
-			st.setAttribute("type", "text/css");
+		for(var i = 0, e = styles.length; i < e; i++){
+			cssText = styles[i]; att = styles.attributes[i];
+			st = doc.createElement('style');
+			st.setAttribute("type", "text/css"); // this is required in CSS spec!
+
+			for(var x in att){
+				st.setAttribute(x, att[x])
+			}
+			
 			this._styleNodes.push(st);
 			head.appendChild(st); // must insert into DOM before setting cssText
 
@@ -452,7 +470,7 @@ dojo.declare(
 			}else{ // w3c
 				st.appendChild(doc.createTextNode(cssText));
 			}
-		}, this);
+		}
 	}
 });
 
