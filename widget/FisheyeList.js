@@ -74,6 +74,10 @@ dojo.declare("dojox.widget.FisheyeList",
 	// orientation: String
 	//	orientation of the menu, either "horizontal" or "vertical"
 	orientation: 'horizontal',
+
+	// isFixed: Boolean
+	//	toggle to enable additional listener (window scroll) if FisheyeList is in a fixed postion
+	isFixed: false,
 	
 	// conservativeTrigger: Boolean
 	//	if true, don't start enlarging menu items until mouse is over an image;
@@ -170,10 +174,14 @@ dojo.declare("dojox.widget.FisheyeList",
 		if(!this.conservativeTrigger){
 			this._onMouseMoveHandle = dojo.connect(document.documentElement, "onmousemove", this, "_onMouseMove");
 		}
+		if (this.isFixed){
+			this._onScrollHandle = dojo.connect(document,"onscroll",this,"_onScroll");
+		}
 			
 		// Deactivate the menu if mouse is moved off screen (doesn't work for FF?)
 		this._onMouseOutHandle = dojo.connect(document.documentElement, "onmouseout", this, "_onBodyOut");
 		this._addChildHandle = dojo.connect(this, "addChild", this, "_initializePositioning");
+		this._onResizeHandle = dojo.connect(window,"onresize", this, "_initializePositioning");
 	},
 	
 	_initializePositioning: function(){
@@ -321,6 +329,10 @@ dojo.declare("dojox.widget.FisheyeList",
 				this._setDormant(e);
 			}
 		}
+	},
+
+	_onScroll: function(){
+		this._calcHitGrid();	
 	},
 
 	onResized: function(){
@@ -582,6 +594,8 @@ dojo.declare("dojox.widget.FisheyeList",
 		dojo.disconnect(this._onMouseOutHandle);
 		dojo.disconnect(this._onMouseMoveHandle);
 		dojo.disconnect(this._addChildHandle);
+		if (this.isFixed) { dojo.disconnect(this._onScrollHandle); }
+		dojo.disconnect(this._onResizeHandle); 
 		dojox.widget.FisheyeList.superclass.destroyRecursive.call(this);
 	}
 });
