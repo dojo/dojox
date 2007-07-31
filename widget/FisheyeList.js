@@ -106,9 +106,10 @@ dojo.declare("dojox.widget.FisheyeList",
 	labelEdge: 'bottom',
 
 	postCreate: function(){
+		var e = this.EDGE;
 		dojo.setSelectable(this.domNode, false);
 
-		this.isHorizontal = (this.orientation == 'horizontal');
+		var isHorizontal = this.isHorizontal = (this.orientation == 'horizontal');
 		this.selectedNode = -1;
 
 		this.isOver = false;
@@ -120,41 +121,45 @@ dojo.declare("dojox.widget.FisheyeList",
 		//
 		// only some edges make sense...
 		//
-		this.anchorEdge = this._toEdge(this.attachEdge, this.EDGE.CENTER);
-		this.labelEdge  = this._toEdge(this.labelEdge,  this.EDGE.TOP);
+		this.anchorEdge = this._toEdge(this.attachEdge, e.CENTER);
+		this.labelEdge  = this._toEdge(this.labelEdge,  e.TOP);
 
-		if ( this.isHorizontal && (this.anchorEdge == this.EDGE.LEFT  )){ this.anchorEdge = this.EDGE.CENTER; }
-		if ( this.isHorizontal && (this.anchorEdge == this.EDGE.RIGHT )){ this.anchorEdge = this.EDGE.CENTER; }
-		if (!this.isHorizontal && (this.anchorEdge == this.EDGE.TOP   )){ this.anchorEdge = this.EDGE.CENTER; }
-		if (!this.isHorizontal && (this.anchorEdge == this.EDGE.BOTTOM)){ this.anchorEdge = this.EDGE.CENTER; }
+		if(this.labelEdge == e.CENTER){ this.labelEdge = e.TOP; }
 
-		if (this.labelEdge == this.EDGE.CENTER){ this.labelEdge = this.EDGE.TOP; }
-		if ( this.isHorizontal && (this.labelEdge == this.EDGE.LEFT  )){ this.labelEdge = this.EDGE.TOP; }
-		if ( this.isHorizontal && (this.labelEdge == this.EDGE.RIGHT )){ this.labelEdge = this.EDGE.TOP; }
-		if (!this.isHorizontal && (this.labelEdge == this.EDGE.TOP   )){ this.labelEdge = this.EDGE.LEFT; }
-		if (!this.isHorizontal && (this.labelEdge == this.EDGE.BOTTOM)){ this.labelEdge = this.EDGE.LEFT; }
+		if(isHorizontal){
+			if(this.anchorEdge == e.LEFT){ this.anchorEdge = e.CENTER; }
+			if(this.anchorEdge == e.RIGHT){ this.anchorEdge = e.CENTER; }
+			if(this.labelEdge == e.LEFT){ this.labelEdge = e.TOP; }
+			if(this.labelEdge == e.RIGHT){ this.labelEdge = e.TOP; }
+		}else{
+			if(this.anchorEdge == e.TOP){ this.anchorEdge = e.CENTER; }
+			if(this.anchorEdge == e.BOTTOM){ this.anchorEdge = e.CENTER; }
+			if(this.labelEdge == e.TOP){ this.labelEdge = e.LEFT; }
+			if(this.labelEdge == e.BOTTOM){ this.labelEdge = e.LEFT; }
+		}
 
 		//
 		// figure out the proximity size
 		//
-		this.proximityLeft   = this.itemWidth  * (this.effectUnits - 0.5);
-		this.proximityRight  = this.itemWidth  * (this.effectUnits - 0.5);
-		this.proximityTop    = this.itemHeight * (this.effectUnits - 0.5);
-		this.proximityBottom = this.itemHeight * (this.effectUnits - 0.5);
+		var effectUnits = this.effectUnits;
+		this.proximityLeft   = this.itemWidth  * (effectUnits - 0.5);
+		this.proximityRight  = this.itemWidth  * (effectUnits - 0.5);
+		this.proximityTop    = this.itemHeight * (effectUnits - 0.5);
+		this.proximityBottom = this.itemHeight * (effectUnits - 0.5);
 	
-		if(this.anchorEdge == this.EDGE.LEFT){
+		if(this.anchorEdge == e.LEFT){
 			this.proximityLeft = 0;
 		}
-		if(this.anchorEdge == this.EDGE.RIGHT){
+		if(this.anchorEdge == e.RIGHT){
 			this.proximityRight = 0;
 		}
-		if(this.anchorEdge == this.EDGE.TOP){
+		if(this.anchorEdge == e.TOP){
 			this.proximityTop = 0;
 		}
-		if(this.anchorEdge == this.EDGE.BOTTOM){
+		if(this.anchorEdge == e.BOTTOM){
 			this.proximityBottom = 0;
 		}
-		if(this.anchorEdge == this.EDGE.CENTER){
+		if(this.anchorEdge == e.CENTER){
 			this.proximityLeft   /= 2;
 			this.proximityRight  /= 2;
 			this.proximityTop    /= 2;
@@ -301,7 +306,7 @@ dojo.declare("dojox.widget.FisheyeList",
 		if(this.isOver){ return; }	// already activated?
 		this.isOver = true;
 
-		if (this.conservativeTrigger) {
+		if(this.conservativeTrigger){
 			// switch event handlers so that we handle mouse events from anywhere near
 			// the menu
 			this._onMouseMoveHandle = dojo.connect(document.documentElement, "onmousemove", this, "_onMouseMove");
@@ -318,8 +323,8 @@ dojo.declare("dojox.widget.FisheyeList",
 
 	_onMouseMove: function(/*Event*/ e){
 		// summary: called when mouse is moved
-		if((e.pageX >= this.hitX1) && (e.pageX <= this.hitX2) &&
-			(e.pageY >= this.hitY1) && (e.pageY <= this.hitY2)){
+		if(	(e.pageX >= this.hitX1) && (e.pageX <= this.hitX2) &&
+			(e.pageY >= this.hitY1) && (e.pageY <= this.hitY2)	){
 			if(!this.isOver){
 				this._setActive(e);
 			}
@@ -387,7 +392,7 @@ dojo.declare("dojox.widget.FisheyeList",
 			var cen2 = (x - this.proximityLeft) / this.itemWidth;
 			off_weight = (cen2 < 0.5) ? 1 : (this.totalWidth - x) / (this.proximityRight + (this.itemWidth / 2));
 		}
-		if (this.anchorEdge == this.EDGE.CENTER){
+		if(this.anchorEdge == this.EDGE.CENTER){
 			if(this.isHorizontal){
 				off_weight = y / (this.totalHeight);
 			}else{
@@ -418,6 +423,7 @@ dojo.declare("dojox.widget.FisheyeList",
 		var offset = 0;
 
 		if(cen < 0){
+
 			main_p = 0;
 
 		}else if(cen > this.itemCount - 1){
@@ -635,9 +641,9 @@ dojo.declare("dojox.widget.FisheyeListItem",
 		//	summary:
 		//		checks to see if wh is actually a node.
 		if(typeof Element == "function") {
-			try {
+			try{
 				return wh instanceof Element;	//	boolean
-			} catch(e) {}
+			}catch(e){}
 		}else{
 			// best-guess
 			return wh && !isNaN(wh.nodeType);	//	boolean
@@ -670,7 +676,7 @@ dojo.declare("dojox.widget.FisheyeListItem",
 		}
 
 		// Label
-		if (this.lblNode){
+		if(this.lblNode){
 			this.lblNode.appendChild(document.createTextNode(this.label));
 		}
 		dojo.setSelectable(this.domNode, false);
