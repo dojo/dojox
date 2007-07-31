@@ -17,7 +17,6 @@ dojox.wire.ml.tests.markup.Action = {
 
 dojo.addOnLoad(function(){
 	doh.register("dojox.wire.ml.tests.markup.Action", [
-
 		function test_Action_triggerEvent(t){
 			dojox.wire.ml.tests.markup.Action.target = {};
 			dojox.wire.ml.tests.markup.Action.transfer();
@@ -39,8 +38,43 @@ dojo.addOnLoad(function(){
 			dojox.wire.ml.tests.markup.Action.required = true;
 			dojo.publish("transferFilter");
 			t.assertEqual(dojox.wire.ml.tests.markup.Action.source.a, dojox.wire.ml.tests.markup.Action.target.a);
-		}
+		},
 
+		function test_ActionFilter_requiredSpecificNumber(t){
+			dojox.wire.ml.tests.markup.Action.value = null
+			dojox.wire.ml.tests.markup.Action.target = {};
+			dojo.publish("transferFilterNumber");
+
+			t.assertEqual(undefined, dojox.wire.ml.tests.markup.Action.target.a);
+
+			dojox.wire.ml.tests.markup.Action.value = 20;
+			dojo.publish("transferFilterNumber");
+			t.assertEqual(dojox.wire.ml.tests.markup.Action.source.a, dojox.wire.ml.tests.markup.Action.target.a);
+		},
+
+		function test_ActionFilter_requiredSpecificBoolean(t){
+			dojox.wire.ml.tests.markup.Action.value = null;
+			dojox.wire.ml.tests.markup.Action.target = {};
+			dojo.publish("transferFilterBoolean");
+	
+			t.assertEqual(undefined, dojox.wire.ml.tests.markup.Action.target.a);
+	
+			dojox.wire.ml.tests.markup.Action.value = true;
+			dojo.publish("transferFilterBoolean");
+			t.assertEqual(dojox.wire.ml.tests.markup.Action.source.a, dojox.wire.ml.tests.markup.Action.target.a);
+		},
+
+		function test_ActionFilter_requiredSpecificString(t){
+			dojox.wire.ml.tests.markup.Action.target = {};
+			dojox.wire.ml.tests.markup.Action.value = null;
+			dojo.publish("transferFilterString");
+	
+			t.assertEqual(undefined, dojox.wire.ml.tests.markup.Action.target.a);
+	
+			dojox.wire.ml.tests.markup.Action.value = "executeThis";
+			dojo.publish("transferFilterString");
+			t.assertEqual(dojox.wire.ml.tests.markup.Action.source.a, dojox.wire.ml.tests.markup.Action.target.a);
+		}
 	]);
 	doh.run();
 });
@@ -73,5 +107,41 @@ dojo.addOnLoad(function(){
 		source="dojox.wire.ml.tests.markup.Action.source.a"
 		target="dojox.wire.ml.tests.markup.Action.target.a"></div>
 </div>
+
+<div dojoType="dojox.wire.ml.Action"
+	triggerTopic="transferFilterNumber">
+	<div dojoType="dojox.wire.ml.ActionFilter"
+		required="dojox.wire.ml.tests.markup.Action.value"
+		requiredValue="20"
+		type="number"
+	</div>
+	<div dojoType="dojox.wire.ml.Transfer"
+		source="dojox.wire.ml.tests.markup.Action.source.a"
+		target="dojox.wire.ml.tests.markup.Action.target.a"></div>
+</div>
+
+<div dojoType="dojox.wire.ml.Action"
+	triggerTopic="transferFilterBoolean">
+	<div dojoType="dojox.wire.ml.ActionFilter"
+		required="dojox.wire.ml.tests.markup.Action.value"
+		requiredValue="true"
+		type="boolean"
+	</div>
+	<div dojoType="dojox.wire.ml.Transfer"
+		source="dojox.wire.ml.tests.markup.Action.source.a"
+		target="dojox.wire.ml.tests.markup.Action.target.a"></div>
+</div>
+
+<div dojoType="dojox.wire.ml.Action"
+	triggerTopic="transferFilterString">
+	<div dojoType="dojox.wire.ml.ActionFilter"
+		required="dojox.wire.ml.tests.markup.Action.value"
+		requiredValue="executeThis"
+	</div>
+	<div dojoType="dojox.wire.ml.Transfer"
+		source="dojox.wire.ml.tests.markup.Action.source.a"
+		target="dojox.wire.ml.tests.markup.Action.target.a"></div>
+</div>
+
 </body>
 </html>
