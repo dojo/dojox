@@ -8,13 +8,12 @@ dojox.validate.ca.isPhoneNumber = function(/* String */value) {
         return dojox.validate.us.isPhoneNumber(value);  // same as US
 };
 
-dojox.validate.ca.isProvence = function(/* String[2] */value) {
-	// summary: Validates Canadian provence abbreviations (2 chars)
+dojox.validate.ca.isProvince = function(/* String[2] */value) {
+	// summary: Validates Canadian province abbreviations (2 chars)
 	// returns: Boolean
 	var re = new RegExp("^" + dojox.regexp.ca.province() + "$", "i");
 	return re.test(value);
 }; 
- 
  
 dojox.validate.ca.isSocialInsuranceNumber = function(/* String */value) {
 	// summary: Validates Canadian 9 digit social insurance number for several common formats
