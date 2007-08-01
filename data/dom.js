@@ -140,7 +140,7 @@ dojox.data.dom.replaceChildren = function(/*Element*/node, /*Node || array*/ new
 
 	dojox.data.dom.removeChildren(node);
 	for(var i=0;i<nodes.length;i++){
-		dojox.data.dom.destroyNode(nodes[i]);
+		dojo._destroyElement(nodes[i]);
 	}
 
 	if(!dojo.isArray(newChildren)){
@@ -155,7 +155,7 @@ dojox.data.dom.replaceChildren = function(/*Element*/node, /*Node || array*/ new
 dojox.data.dom.removeChildren = function(/*Element*/node){
 	//	summary:
 	//		removes all children from node and returns the count of children removed.
-	//		The children nodes are not destroyed. Be sure to call destroyNode on them
+	//		The children nodes are not destroyed. Be sure to call dojo._destroyElement on them
 	//		after they are not used anymore.
 	//	node:
 	//		The node to remove all the children from.
@@ -166,22 +166,6 @@ dojox.data.dom.removeChildren = function(/*Element*/node){
 	return count; // int
 }
 
-dojox.data.dom.destroyNode = function(/*Node*/node){
-	//	summary:
-	//		destroy a node (it can not be used any more). For IE, this is the
-	//		right function to call to prevent memory leaks. While for other
-	//		browsers, this is identical to node.parentNode.removeChild(node);
-	//	node:
-	//		The node to destroy.
-	if(node.parentNode){
-		node.parentNode.removeChild(node);	}
-	if(node.nodeType != 3){ // ingore TEXT_NODE
-		if(dojo.isIE && node.outerHTML){
-			node.outerHTML=''; //prevent ugly IE mem leak associated with Node.removeChild (ticket #1727)
-		}
-		dojox.data.dom.clean(node);
-	}
-}
 
 dojox.data.dom.innerXML = function(/*Node*/node){
 	//	summary:
@@ -197,65 +181,3 @@ dojox.data.dom.innerXML = function(/*Node*/node){
 	}
 }
 
-dojox.data.dom.clean = function(/*DOMNode*/node){
-	// summary:
-	//		removes native event handlers so that destruction of the node
-	//		will not leak memory. On most browsers this is a no-op, but
-	//		it's critical for manual node removal on IE.
-	// node:
-	//		A DOM node. All of it's children will also be cleaned.
-	if(dojo.isIE){ 
-		dojox.data.dom._ie_clobber.clobber(node);
-	}
-}
-
-//Internal functions:
-dojox.data.dom._ie_clobber = new function(){
-	//	summary:
-	//		Internal function for handling cleanup of properties, etc, on nodes for IE.
-	//	description:
-	//		Internal function for handling cleanup of properties, etc, on nodes for IE.
-	//		This is needed to handle memory leaks in IE if cleanup isn't done manually.
-	this.clobberNodes = [];
-
-	function nukeProp(node, prop){
-		try{ node[prop] = null; 			}catch(e){ /* squelch */ }
-		try{ delete node[prop]; 			}catch(e){ /* squelch */ }
-		// FIXME: JotLive needs this, but I'm not sure if it's too slow or not
-		try{ node.removeAttribute(prop);	}catch(e){ /* squelch */ }
-	}
-
-	this.clobber = function(nodeRef){
-		var na;
-		var tna;
-		if(nodeRef){
-			tna = nodeRef.all || nodeRef.getElementsByTagName("*");
-			na = [nodeRef];
-			for(var x=0; x<tna.length; x++){
-				// if we're gonna be clobbering the thing, at least make sure
-				// we aren't trying to do it twice
-				if(tna[x]["__doClobber__"]){
-					na.push(tna[x]);
-				}
-			}
-		}else{
-			try{ window.onload = null; }catch(e){}
-			na = (this.clobberNodes.length) ? this.clobberNodes : document.all;
-		}
-		tna = null;
-		var basis = {};
-		for(var i = na.length-1; i>=0; i=i-1){
-			var el = na[i];
-			try{
-				if(el && el["__clobberAttrs__"]){
-					for(var j=0; j<el.__clobberAttrs__.length; j++){
-						nukeProp(el, el.__clobberAttrs__[j]);
-					}
-					nukeProp(el, "__clobberAttrs__");
-					nukeProp(el, "__doClobber__");
-				}
-			}catch(e){ /* squelch! */};
-		}
-		na = null;
-	}
-}

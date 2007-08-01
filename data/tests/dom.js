@@ -30,17 +30,6 @@ tests.register("dojox.data.tests.dom",
 			t.assertTrue(grandChild.tagName === "grandchildNode");
 
 		},
-		function testDestroyNode(t){
-			var simpleXml = "<parentNode><childNode><grandchildNode/></childNode><childNode/></parentNode>";
-			var document = dojox.data.dom.createDocument(simpleXml, "text/xml");
-            
-			var topNode = document.firstChild;
-            t.assertTrue(topNode !== null);
-			t.assertTrue(topNode.tagName === "parentNode");
-			t.assertTrue(topNode.childNodes.length == 2);
-			dojox.data.dom.destroyNode(topNode);
-			t.assertTrue(document.firstChild === null);
-		},
 		function testReadTextContent(t){
 			var text = "This is a bunch of child text on the node";
 			var simpleXml = "<parentNode>" + text + "</parentNode>";
@@ -50,7 +39,7 @@ tests.register("dojox.data.tests.dom",
             t.assertTrue(topNode !== null);
 			t.assertTrue(topNode.tagName === "parentNode");
 			t.assertTrue(text === dojox.data.dom.textContent(topNode));
-            dojox.data.dom.destroyNode(topNode);
+            dojo._destroyElement(topNode);
 			t.assertTrue(document.firstChild === null);
 		},
 		function testSetTextContent(t){
@@ -65,7 +54,7 @@ tests.register("dojox.data.tests.dom",
 			t.assertTrue(text === dojox.data.dom.textContent(topNode));
 			dojox.data.dom.textContent(topNode, text2);
 			t.assertTrue(text2 === dojox.data.dom.textContent(topNode));
-			dojox.data.dom.destroyNode(topNode);
+			dojo._destroyElement(topNode);
 			t.assertTrue(document.firstChild === null);
 
 		},
