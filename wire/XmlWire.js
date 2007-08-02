@@ -149,7 +149,7 @@ dojo.declare("dojox.wire.XmlWire",
 			value = [];
 			for(var i = 0; i < node.childNodes.length; i++){
 				var child = node.childNodes[i];
-				if(child.nodeName == exp){
+				if(child.nodeType === 1 /* ELEMENT_NODE */ && child.nodeName == exp){
 					value.push(child);
 				}
 			}
@@ -213,7 +213,7 @@ dojo.declare("dojox.wire.XmlWire",
 		var count = 1;
 		for(var i = 0; i < node.childNodes.length; i++){
 			var child = node.childNodes[i];
-			if(child.nodeName == name){
+			if(child.nodeType === 1 /* ELEMENT_NODE */ && child.nodeName == name){
 				if(count == index){
 					return child; //Node
 				}

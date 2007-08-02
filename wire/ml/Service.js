@@ -184,6 +184,7 @@ dojo.declare("dojox.wire.ml.RestHandler",
 			for(var name in query){
 				var value = query[name];
 				if(value){
+					value = encodeURIComponent(value);
 					var variable = "{" + name + "}";
 					var index = url.indexOf(variable);
 					if(index >= 0){ // encode in path
