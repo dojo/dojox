@@ -3,17 +3,16 @@ dojo.experimental("dojox.fx");
 
 dojo.require("dojo.fx"); 
 
-// FIXME: dojox.fx is not defined yet. is this how we do this? 
-dojox.fx = {}; 
-
 // convenience functions/maps
-// FIXME: i like the idea of doing this in dojox, but is it sound?
+// so you can dojox.fx[animationMethod](args) without needing to accomodate 
+// for the dojo.fx animation cases.
 dojox.fx.chain = dojo.fx.chain;
 dojox.fx.combine = dojo.fx.combine;
 dojox.fx.slideIn = dojo.fx.slideIn;
 dojox.fx.slideOut = dojo.fx.slideOut;
 dojox.fx.slideTo = dojo.fx.slideTo;
 
+/* dojox.fx _Animations: */
 dojox.fx.sizeTo = function(/* Object */args){
 	// summary:
 	//		Returns an animation that will size "node" 
@@ -37,9 +36,9 @@ dojox.fx.sizeTo = function(/* Object */args){
 	//
 	var node = args.node = dojo.byId(args.node);
 	var compute = dojo.getComputedStyle;
-	var method = args.method || "chain"; 
 
-	if (method=="chain"){ args.duration = args.duration/2; } 
+	var method = args.method || "chain"; 
+	if (method=="chain"){ args.duration = (args.duration/2); } 
 	
 	var top, newTop, left, newLeft, width, height = null;
 
@@ -69,13 +68,13 @@ dojox.fx.sizeTo = function(/* Object */args){
 
 	var anim1 = dojo.animateProperty(dojo.mixin({
 		properties: {
-			height: { start: height, end: args.height||1, unit:"px" },
-			top: { start: top, end: newTop },
+			height: { start: height, end: args.height || 0, unit:"px" },
+			top: { start: top, end: newTop }
 		}
 	}, args));
 	var anim2 = dojo.animateProperty(dojo.mixin({
 		properties: {
-			width: { start: width, end: args.width||1, unit:"px" },
+			width: { start: width, end: args.width || 0, unit:"px" },
 			left: { start: left, end: newLeft }
 		}
 	}, args));
@@ -89,7 +88,10 @@ dojox.fx.sizeTo = function(/* Object */args){
 	}
 	dojo.connect(anim, "beforeBegin", anim, init);
 	return anim; // dojo._Animation
-}
+};
+
+
+/* dojox.fx CSS Class _Animations: */
 
 dojox.fx.addClass = function(/* Object */args){
 	// summary:
@@ -102,7 +104,7 @@ dojox.fx.addClass = function(/* Object */args){
 	//
 	// additonal mixins:
 	//
-	//		args.class: String - class string (to be added onEnd)
+	//		args.cssClass: String - class string (to be added onEnd)
 	//		
 	var node = args.node = dojo.byId(args.node); 
 
@@ -115,19 +117,21 @@ dojox.fx.addClass = function(/* Object */args){
 		//	after the animation is done (potentially more flicker)
 		var innerNode = node; // FIXME: why do we do this like this?
 		return function(){
-			dojo.addClass(innerNode, args.class); 
+			dojo.addClass(innerNode, args.cssClass); 
+			innerNode.style.cssText = _beforeStyle; 
 		}
 	})();
 
 	// _getCalculatedStleChanges is the core of our style/class animations
 	var mixedProperties = dojox.fx._getCalculatedStyleChanges(args,true);
+	var _beforeStyle = node.style.cssText; 
 	var _anim = dojo.animateProperty(dojo.mixin({
 		properties: mixedProperties
 	},args));
 	dojo.connect(_anim,"onEnd",_anim,pushClass); 
 	return _anim; 
 
-}
+};
 
 dojox.fx.removeClass = function(/* Object */args){
 	// summary:
@@ -135,13 +139,13 @@ dojox.fx.removeClass = function(/* Object */args){
 	// 	node (args.node) to the properties calculated after removing 
 	//	a standard CSS className from a that node.
 	//	
-	//	calls dojo.removeClass(args.class) onEnd of animation		
+	//	calls dojo.removeClass(args.cssClass) onEnd of animation		
 	//
 	//	standard dojo._Animation object rules apply. 
 	//
 	// additonal mixins:
 	//
-	//	args.class: String - class string (to be removed from node)
+	//	args.cssClass: String - class string (to be removed from node)
 	//		
 	var node = args.node = dojo.byId(args.node); 
 
@@ -155,17 +159,19 @@ dojox.fx.removeClass = function(/* Object */args){
 		//
 		var innerNode = node;
 		return function(){
-			dojo.removeClass(innerNode, args.class); 
+			dojo.removeClass(innerNode, args.cssClass); 
+			innerNode.style.cssText = _beforeStyle; 
 		}
 	})();
 
 	var mixedProperties = dojox.fx._getCalculatedStyleChanges(args,false);
+	var _beforeStyle = node.style.cssText; 
 	var _anim = dojo.animateProperty(dojo.mixin({
 		properties: mixedProperties
 	},args));
 	dojo.connect(_anim,"onEnd",_anim,pullClass); 
 	return _anim; 
-}
+};
 
 dojox.fx._allowedProperties = [
 	// summary:
@@ -178,17 +184,16 @@ dojox.fx._allowedProperties = [
 	"height",
 
 	// these need to be filtered through dojo.colors?
-	"background", // normalize to:
-	"backgroundImage", "backgroundColor",
+	// "background", // normalize to:
+		/* "backgroundImage", */
+		"backgroundColor", // so we can use background offset?
 	"color",
 
-	"fontSize",
-
-	/*
-	"border", // the normalize on this one will be _hideous_ 
-		(color/style/width)
-		(left,top,right,bottom for each of _those_)
-	*/
+	//
+	// "border", // the normalize on this one will be _hideous_ 
+	//	(color/style/width)
+	//	(left,top,right,bottom for each of _those_)
+	//
 
 	// only if pos = absolute || relative?
 	"left", "top", "right", "bottom", 
@@ -201,7 +206,8 @@ dojox.fx._allowedProperties = [
 
 	// unit import/delicate?:
 	"lineHeight",
-	"letterSpacing"
+	"letterSpacing",
+	"fontSize"
 ];
 
 dojox.fx._getStyleSnapshot = function(/* Object */cache){
@@ -214,11 +220,9 @@ dojox.fx._getStyleSnapshot = function(/* Object */cache){
 	//	an array of raw, calculcated values, to be normalized/compared
 	//	elsewhere	
 
-	var styleSnap = []; 
-	dojo.forEach(dojox.fx._allowedProperties,function(style){
-		styleSnap.push(cache[style]); 
-	});
-	return styleSnap; // Array
+	return dojo.map(dojox.fx._allowedProperties,function(style){
+		return cache[style]; // String
+	}); // Array
 };
 
 dojox.fx._getCalculatedStyleChanges = function(/* Object */args, /*Boolean*/addClass){
@@ -230,7 +234,7 @@ dojox.fx._getCalculatedStyleChanges = function(/* Object */args, /*Boolean*/addC
 	//	
 	// args:
 	// 	we are expecting args.node (DomNode) and 
-	//	args.class (class String)
+	//	args.cssClass (class String)
 	// 
 	// addClass: 
 	// 	true to calculate what adding a class would do, 
@@ -241,24 +245,18 @@ dojox.fx._getCalculatedStyleChanges = function(/* Object */args, /*Boolean*/addC
 
 	// take our snapShots
 	var _before = dojox.fx._getStyleSnapshot(compute);
-	if (addClass) { dojo.addClass(node,args.class);
-	}else{ dojo.removeClass(node,args.class); }
-
+	dojo[(addClass ? "addClass" : "removeClass")](node,args.cssClass); 
 	var _after = dojox.fx._getStyleSnapshot(compute);
-	if (addClass) { dojo.removeClass(node,args.class); 
-	}else{ dojo.addClass(node,args.class);}
-
-	// FIXME:  two of these above should work, but don't? anyone?
-	// dojo[addClass ? "addClass" : "removeClass"](node,args.class); 
+	dojo[(addClass ? "removeClass" : "addClass")](node,args.cssClass); 
 
 	var calculated = {};
 	var i = 0;
 	dojo.forEach(dojox.fx._allowedProperties,function(prop){
 		if(_before[i] != _after[i]){
-			var tmp = { end: parseInt(_after[i]), unit: 'px' }; 
-			calculated[prop] = tmp; 
-		} // else { console.log('should be the same: ',prop,_before[i],_after[i]); }
+			// FIXME: the static unit: px is not good, either. need to parse unit from computed style?
+			calculated[prop] = { end: parseInt(_after[i]), unit: 'px' }; 
+		} 
 		i++;
 	});
 	return calculated; 
-}
+};

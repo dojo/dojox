@@ -40,38 +40,53 @@
 		.testClassThree {
 			bottom:90px;
 			right:90px;
-	
-
 		}
 	</style>
 	<script type="text/javascript">
-		var classNode, theNode = null; 
 
-		function fontTest(){
-			dojox.fx.addClass({
-				node: theNode,
-				class: "testFontSizeClass",
-				duration: 250
-			}).play(300);
-		}	
+		dojo.require("dojox.fx"); 
+
+		var classNode = null;
+		var theNode = null; 
+		var fontShowing = false; 
+	
+		var fontTest = function(){
+			console.log(fontShowing); 
+			if(!fontShowing){
+				dojox.fx.addClass({
+					node: theNode,
+					cssClass: "testFontSizeClass",
+					duration: 250,
+					onEnd: function(){ fontShowing=!fontShowing; }
+				}).play();	
+			}else{
+				dojox.fx.removeClass({
+					node: theNode,
+					cssClass: "testFontSizeClass",
+					duration: 250,
+					onEnd: function(){ fontShowing=!fontShowing; }
+				}).play();
+			}
+		};	
 
 		dojo.addOnLoad(function(){ 
 			classNode = dojo.byId('classNode'); 
 			theNode = dojo.byId('theNode'); 
-
-			var mixin = { node: theNode, class: "testClassOne", duration: 1000 };
+			var mixin = { 
+				node: theNode, 
+				cssClass: "testClassOne", 
+				duration: 1000 
+			};
 			classNode.innerHTML = theNode.className; 
-
-			// console.log(dojox.fx._getCalculatedStyleChanges(mixin,true));
-
 			var anim = dojox.fx.addClass(mixin);
-			dojo.connect(anim,"onEnd",function(){
+			dojo.connect(anim,"onEnd",this,function(){
 				classNode.innerHTML = theNode.className; 
+				console.log('foo'); 
 				dojox.fx.addClass({
-					node: theNode,
-					duration:500,
-					class:"testClassThree"	
-				}).play(500);
+					node: dojo.byId('theNode'),
+					cssClass: "testClassThree",
+					duration: 500
+				}).play(750); // this breaks in IE?!?
 			});
 			anim.play(); 
 		});
@@ -86,7 +101,7 @@
 	</p>
 
 	<div>
-	<button onclick="javascript:fontTest();">run font test</button>
+	<input type="button" onclick="fontTest();" value="run font test">	
 	</div>
 
 	prototype flow:
@@ -122,3 +137,4 @@
 
 </body>
 </html>
+
