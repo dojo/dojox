@@ -311,7 +311,7 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 	
 	_getGradient: function(defaultGradient, gradient){
-		var fillStyle = dojox.gfx._base._copy(defaultGradient, true);
+		var fillStyle = dojo.clone(defaultGradient);
 		fillStyle.colors = [];
 		for(var i = 0; i < gradient.childNodes.length; ++i){
 			fillStyle.colors.push({
@@ -328,7 +328,7 @@ dojo.extend(dojox.gfx.Shape, {
 		if(!rawNode){ return null; }
 		var stroke = rawNode.getAttribute("stroke");
 		if(stroke == null || stroke == "none") return null;
-		var strokeStyle = dojox.gfx._base._copy(dojox.gfx.defaultStroke, true);
+		var strokeStyle = dojo.clone(dojox.gfx.defaultStroke);
 		var color = new dojo.Color(stroke);
 		if(color){
 			strokeStyle.color = color;
@@ -367,7 +367,7 @@ dojo.extend(dojox.gfx.Shape, {
 		// rawNode: Node: an SVG node
 		var shape = null;
 		if(rawNode){
-			shape = dojox.gfx._base._copy(this.shape, true);
+			shape = dojo.clone(this.shape);
 			for(var i in shape) {
 				shape[i] = rawNode.getAttribute(i);
 			}
@@ -526,7 +526,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		// rawNode: Node: an SVG node
 		var shape = null;
 		if(rawNode){
-			shape = dojox.gfx._base._copy(dojox.gfx.defaultText, true);
+			shape = dojo.clone(dojox.gfx.defaultText);
 			shape.x = rawNode.getAttribute("x");
 			shape.y = rawNode.getAttribute("y");
 			shape.align = rawNode.getAttribute("text-anchor");
@@ -687,7 +687,7 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 		// rawNode: Node: an SVG node
 		var shape = null;
 		if(rawNode){
-			shape = dojox.gfx._base._copy(dojox.gfx.defaultTextPath, true);
+			shape = dojo.clone(dojox.gfx.defaultTextPath);
 			shape.align = rawNode.getAttribute("text-anchor");
 			shape.decoration = rawNode.getAttribute("text-decoration");
 			shape.rotated = parseFloat(rawNode.getAttribute("rotate")) != 0;
@@ -725,7 +725,7 @@ dojox.gfx.svg._font = {
 		// summary: deduces a font style from a Node.
 		// rawNode: Node: an SVG node
 		if(!rawNode){ return null; }
-		var fontStyle = dojox.gfx._base._copy(dojox.gfx.defaultFont, true);
+		var fontStyle = dojo.clone(dojox.gfx.defaultFont);
 		fontStyle.style = rawNode.getAttribute("font-style");
 		fontStyle.variant = rawNode.getAttribute("font-variant");
 		fontStyle.weight = rawNode.getAttribute("font-weight");

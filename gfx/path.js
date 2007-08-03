@@ -6,7 +6,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape,
 	function(rawNode){
 		// summary: a generalized path shape
 		// rawNode: Node: a DOM node to be used by this path object
-		this.shape = dojox.gfx._base._copy(dojox.gfx.defaultPath, true);
+		this.shape = dojo.clone(dojox.gfx.defaultPath);
 		this.segments = [];
 		this.absolute = true;
 		this.last = {};
@@ -327,10 +327,10 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path,
 		// summary: a generalized TextPath shape
 		// rawNode: Node: a DOM node to be used by this TextPath object
 		if(!("text" in this)){
-			this.text = dojox.gfx._base._copy(dojox.gfx.defaultTextPath, true);
+			this.text = dojo.clone(dojox.gfx.defaultTextPath);
 		}
 		if(!("fontStyle" in this)){
-			this.fontStyle = dojox.gfx._base._copy(dojox.gfx.defaultFont, true);
+			this.fontStyle = dojo.clone(dojox.gfx.defaultFont);
 		}
 	},
 {

@@ -25,41 +25,6 @@ dojox.gfx._removeClass = function(/*HTMLElement*/node, /*String*/classStr){
 }
 
 
-// candidate for dojox.lang:
-dojox.gfx._base._copy = function(o, deep){
-	if(!o){ return o; }
-	if(dojo.isArray(o)){
-		var r = [];
-		if(deep){
-			for(var i = 0; i < o.length; ++i){
-				r.push(dojox.gfx._base._copy(o[i], true));
-			}
-		}else{
-			for(var i = 0; i < o.length; ++i){
-				r.push(o[i]);
-			}
-		}
-		return r;
-	}else if(dojo.isObject(o)){
-		var r = new o.constructor();
-		if(deep){
-			for(var i in o){
-				if(!(i in r) || r[i] != o[i]){
-					r[i] = dojox.gfx._base._copy(o[i], true);
-				}
-			}
-		}else{
-			for(var i in o){
-				if(!(i in r) || r[i] != o[i]){
-					r[i] = o[i];
-				}
-			}
-		}
-		return r;
-	}
-	return o;
-};
-
 // candidate for dojox.html.metrics (dynamic font resize handler is not implemented here)
 
 //	derived from Morris John's emResized measurer
@@ -172,11 +137,11 @@ dojo.mixin(dojox.gfx, {
 		// summary: copies the original object, and all copied properties from the "update" object
 		// defaults: Object: the object to be cloned before updating
 		// update:   Object: the object, which properties are to be cloned during updating
-		if(!update) return dojox.gfx._base._copy(defaults, true);
+		if(!update) return dojo.clone(defaults);
 		var result = {};
 		for(var i in defaults){
 			if(!(i in result)){
-				result[i] = dojox.gfx._base._copy((i in update) ? update[i] : defaults[i], true);
+				result[i] = dojo.clone((i in update) ? update[i] : defaults[i]);
 			}
 		}
 		return result; // Object
@@ -208,7 +173,7 @@ dojo.mixin(dojox.gfx, {
 	splitFontString: function(str){
 		// summary: converts a CSS font string to a font object
 		// str:		String:	a CSS font string
-		var font = dojox.gfx._base._copy(dojox.gfx.defaultFont);
+		var font = dojo.clone(dojox.gfx.defaultFont);
 		var t = str.split(/\s+/);
 		do{
 			if(t.length < 5){ break; }
