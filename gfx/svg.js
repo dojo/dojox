@@ -94,6 +94,7 @@ dojo.extend(dojox.gfx.Shape, {
 		this.fillStyle = f;
 		this.rawNode.setAttribute("fill", f.toCss());
 		this.rawNode.setAttribute("fill-opacity", f.a);
+		this.rawNode.setAttribute("fill-rule", "evenodd");
 		return this;	// self
 	},
 
