@@ -9,7 +9,7 @@ dojo.require("dijit.layout.ContentPane");
 dojo.require("dojo.fx"); 
 
 dojo.declare(
-	"dojox.presentation",
+	"dojox.presentation.Deck",
 	[ dijit.layout.StackContainer, dijit._Templated ],
 	null,
 	{
@@ -77,7 +77,7 @@ dojo.declare(
 	startup: function(){
 		// summary: connect to the various handlers and controls for this presention
 		console.log('fooooo'); 
-		dojox.presentation.superclass.startup.call(this);
+		dojox.presentation.Deck.superclass.startup.call(this);
 
 		if(this.useNav){ 
 			this._hideNav(); 

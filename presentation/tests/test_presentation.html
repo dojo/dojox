@@ -79,7 +79,7 @@
 
 </head>
 <body class="tundra">
-	<div dojoType="dojox.presentation" id="testPresentation">
+	<div dojoType="dojox.presentation.Deck" id="testPresentation">
 		<div dojoType="dojox.presentation.Slide" id="myFirstSlide" title="Introduction">
 		
 			<p>This is a brief overview of what this presentation widget is capable of.</p>
@@ -123,7 +123,9 @@
 			<input dojoType="dojox.presentation.Action" forSlide="three" toggle="wipe" delay="1500">
 
 		</div>
+		<!--
 		<div dojoType="dojox.presentation.Slide" title="Remote Slide" href="_ext1.html"></div>
+		-->
 		<div dojoType="dojox.presentation.Slide" title="Click Blocking" id="animated">
 			<p>You cannot click on this page</p>
 			<p dojoType="dojox.presentation.Part" as="1">I told you that you can't click ...</p>
