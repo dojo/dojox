@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>dojox.fx.addClass / adojxo.fx.removeClass</title>
+		
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true" ></script>
+	<script type="text/javascript" src="../_base.js"></script>
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/dijit.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+
+		.baseClass {
+			position:absolute;
+			top:100px;
+			right:200px;
+			color:#666;
+			background-color:#ededed;
+			border:1px solid #ccc; 
+			padding:8px; 
+		}
+
+		.testFontSizeClass {
+			font-size:22px; 
+		}
+
+		.testClassOne {
+			width:100px;
+			height:100px;
+		}
+		
+		.testClassTwo {
+			width:250px;
+			height:150px; 
+			padding:30px; 
+		}
+
+		.testClassThree {
+			bottom:90px;
+			right:90px;
+	
+
+		}
+	</style>
+	<script type="text/javascript">
+		var classNode, theNode = null; 
+
+		function fontTest(){
+			dojox.fx.addClass({
+				node: theNode,
+				class: "testFontSizeClass",
+				duration: 250
+			}).play(300);
+		}	
+
+		dojo.addOnLoad(function(){ 
+			classNode = dojo.byId('classNode'); 
+			theNode = dojo.byId('theNode'); 
+
+			var mixin = { node: theNode, class: "testClassOne", duration: 1000 };
+			classNode.innerHTML = theNode.className; 
+
+			// console.log(dojox.fx._getCalculatedStyleChanges(mixin,true));
+
+			var anim = dojox.fx.addClass(mixin);
+			dojo.connect(anim,"onEnd",function(){
+				classNode.innerHTML = theNode.className; 
+				dojox.fx.addClass({
+					node: theNode,
+					duration:500,
+					class:"testClassThree"	
+				}).play(500);
+			});
+			anim.play(); 
+		});
+	</script>
+</head>
+<body class="tundra">
+
+	<h1 class="testTitle">dojox.fx.addlass/removeClass test</h1>
+
+	<p>this is Bill's animation idea, to animate to a CSS class 
+	(from it's existing class definition/computedStyle) ...
+	</p>
+
+	<div>
+	<button onclick="javascript:fontTest();">run font test</button>
+	</div>
+
+	prototype flow:
+	<ol>
+		<li>determine animate-able properties: {} of the node: before animation (current inherited style 
+		info)</li>
+		<li>create a (cloned?) node offscreen/hidden, and apply the new class? will it be reliable
+		 calculations?</li>
+		<li>determine _which_ properties have changed, and mixin to animateProperty</li>
+		<li>play()</li>
+	</ol>
+
+	pitfalls:
+	<ul>
+		<li>overhead.  what would be the best way to determine what properties 
+		are modified in a class? computedStyle is expensive? </li>
+		<li>one-off's: CSS can set border:1px solid #000, but javascript wants 
+		borderWidth:1px; borderColor: #000</li>
+		<li>colors. what a nightmare.</li>
+	</ul>
+
+	notes:
+	<ul>
+		<li>have a list of available properties, maybe two: one for normalized ones 
+		(width, height, etc), and one's we'll need to
+		muck with to match (borderTop, borderLeft, margins, etc, etc)?</li>
+		<li>i don't think my scope is proper. chaining tests casue issues. basic prototype in place, though.</li>
+	</ul>
+
+	<div id="theNode" class="baseClass">
+		current class string: <span id="classNode"></span>
+	</div>
+
+</body>
+</html>
