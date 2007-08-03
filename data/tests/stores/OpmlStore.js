@@ -189,6 +189,51 @@ doh.register("dojox.data.tests.stores.OpmlStore",
 							});
 			return d; //Object
 		},
+
+		function testReadAPI_fetch_one_deep(t){
+			//	summary: 
+			//		Simple test of a basic fetch on OpmlStore of a single item that's nested down as a child item.
+			//	description:
+			//		Simple test of a basic fetch on OpmlStore of a single item that's nested down as a child item.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.is(1, items.length);
+				d.callback(true);
+			}
+			opmlStore.fetch({ 	query: {text: "Mexico City"}, 
+								queryOptions: {deep:true},
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+			return d; //Object
+		},
+
+		function testReadAPI_fetch_one_deep_off(t){
+			//	summary: 
+			//		Simple test of a basic fetch on OpmlStore of a single item that's nested down as a child item.
+			//	description:
+			//		Simple test of a basic fetch on OpmlStore of a single item that's nested down as a child item.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				//Nothing should be found.
+				t.is(0, items.length);
+				d.callback(true);
+			}
+			opmlStore.fetch({ 	query: {text: "Mexico City"}, 
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+			return d; //Object
+		},
+
 		function testReadAPI_fetch_all_streaming(t){
 			//	summary: 
 			//		Simple test of a basic fetch on OpmlStore.

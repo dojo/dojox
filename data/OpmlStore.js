@@ -10,17 +10,20 @@ dojo.declare("dojox.data.OpmlStore",
 		// keywordParameters: {url: String, label: String}  Where label is optional and configures what should be used as the return from getLabel()
 		this._xmlData = null;
 		this._arrayOfTopLevelItems = [];
+		this._arrayOfAllItems = [];
 		this._metadataNodes = null;
 		this._loadFinished = false;
-		this._opmlFileUrl = keywordParameters.url;
+		this.url = keywordParameters.url;
 		this._opmlData = keywordParameters.data;  // XML DOM Document
 		if(keywordParameters.label){
-			this._labelAttr = keywordParameters.label;
-		}else{
-			this._labelAttr = "text"; //Default should be the generic test attribute of the node.
+			this.label = keywordParameters.label;
 		}
-
 	},{
+
+	label: "text",
+
+	url: "",
+
 	/* summary:
 	 *   The OpmlStore implements the dojo.data.api.Read API.  
 	 */
@@ -89,9 +92,42 @@ dojo.declare("dojox.data.OpmlStore",
 				var node = bodyChildNodes[i];
 				if(node.tagName == 'outline'){
 					this._arrayOfTopLevelItems.push(node);
+					this._arrayOfAllItems.push(node);
+					this._checkChildNodes(node);
 				}
 			}
 		}
+	},
+
+	_checkChildNodes: function(node /*Node*/){
+		//	summary:
+		//		Internal function to recurse over all child nodes from the store and add them
+		//		As non-toplevel items
+		//	description:
+		//		Internal function to recurse over all child nodes from the store and add them
+		//		As non-toplevel items
+		//
+		//	node:
+		//		The child node to walk.
+		if(node.firstChild){
+			for(var i = 0; i < node.childNodes.length; i++){
+				var child = node.childNodes[i];
+				if(child.tagName == 'outline'){
+					this._arrayOfAllItems.push(child);
+					this._checkChildNodes(child);
+				}
+			}
+		}
+	},
+
+	_getItemsArray: function(/*object?*/queryOptions){
+		//	summary: 
+		//		Internal function to determine which list of items to search over.
+		//	queryOptions: The query options parameter, if any.
+		if(queryOptions && queryOptions.deep) {
+			return this._arrayOfAllItems; 
+		}
+		return this._arrayOfTopLevelItems;
 	},
 
 /***************************************
@@ -235,7 +271,7 @@ dojo.declare("dojox.data.OpmlStore",
 		//	summary: 
 		//		See dojo.data.api.Read.getLabel()
 		if(this.isItem(item)){
-			return this.getValue(item,this._labelAttr); //String
+			return this.getValue(item,this.label); //String
 		}
 		return undefined; //undefined
 	},
@@ -243,7 +279,7 @@ dojo.declare("dojox.data.OpmlStore",
 	getLabelAttributes: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
-		return [this._labelAttr]; //array
+		return [this.label]; //array
 	},
 
 	// The dojo.data.api.Read.fetch() function is implemented as
@@ -296,17 +332,17 @@ dojo.declare("dojox.data.OpmlStore",
 		};
 
 		if(this._loadFinished){
-			filter(keywordArgs, this._arrayOfTopLevelItems);
+			filter(keywordArgs, this._getItemsArray(keywordArgs.queryOptions));
 		}else{
-			if(this._opmlFileUrl){
+			if(this.url !== ""){
 				var getArgs = {
-						url: self._opmlFileUrl, 
+						url: self.url, 
 						handleAs: "xml"
 					};
 				var getHandler = dojo.xhrGet(getArgs);
 				getHandler.addCallback(function(data){
 					self._processRawXmlTree(data);
-					filter(keywordArgs, self._arrayOfTopLevelItems);
+					filter(keywordArgs, self._getItemsArray(keywordArgs.queryOptions));
 				});
 				getHandler.addErrback(function(error){
 					throw error;
@@ -314,7 +350,7 @@ dojo.declare("dojox.data.OpmlStore",
 			}else if(this._opmlData){
 				this._processRawXmlTree(this._opmlData);
 				this._opmlData = null;
-				filter(keywordArgs, this._arrayOfTopLevelItems);
+				filter(keywordArgs, this._getItemsArray(keywordArgs.queryOptions));
 			}else{
 				throw new Error("dojox.data.OpmlStore: No OPML source data was provided as either URL or XML data input.");
 			}
