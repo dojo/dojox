@@ -559,6 +559,21 @@
 						}
 					},
 					{
+						name: 'scriptsWithTypeTextJavascript',
+						runTest: function(t){
+							pane1.setContent("<"
+								+"script type='text/javascript'> unTypedVarInDocScope = 'text/javascript'; <"
+								+"/script>");
+
+							var d = new t.Deferred();
+							// IE needs async here
+							setTimeout(d.getTestCallback(function(){
+								t.assertEqual('text/javascript', unTypedVarInDocScope);
+							}), 40);
+							return d;
+						}
+					},
+					{
 						name:'scriptsWithHtmlComments',
 						runTest: function(t){
 							pane1.cleanContent = 1;
