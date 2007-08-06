@@ -38,7 +38,7 @@
 		dojo.require("dijit.layout.LayoutContainer");
 		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dijit.form.Button");
-		dojo.require("dijit.form.Textbox");
+		dojo.require("dijit.form.TextBox");
 
 		dojo.require("dojo.data.ItemFileReadStore");
 		dojo.require("dojox.wire");
@@ -76,7 +76,7 @@
 						<div dojoType="dijit.form.Button" jsId="searchButton">Search Datastore</div>
 					</td>
 					<td align="right">
-						<div dojoType="dijit.form.Textbox" jsId="inputField" value="*"></div>
+						<div dojoType="dijit.form.TextBox" jsId="inputField" value="*"></div>
 					</td>
 				</tr>
 			</table>
@@ -108,7 +108,7 @@
 
 	<!-- 
 		Link existing of the text box to transfering the search string to the query param.
-		We are wiring the value of Textbox value of the widget to the name property of our request
+		We are wiring the value of TextBox value of the widget to the name property of our request
 		object.  The copy of values to the search should occur on each keyup event (each keypress)
 	 -->
 	<div dojoType="dojox.wire.ml.Transfer"
