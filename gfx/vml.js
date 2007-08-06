@@ -49,13 +49,13 @@ dojo.extend(dojox.gfx.Shape, {
 				case "linear":
 					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
 					this.fillStyle = f;
-					var s = "";
+					var s = [];
 					for(var i = 0; i < f.colors.length; ++i){
 						f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-						s += f.colors[i].offset.toFixed(8) + " " + f.colors[i].color.toHex() + ";";
+						s.push(f.colors[i].offset.toFixed(8) + " " + f.colors[i].color.toHex());
 					}
 					var fo = this.rawNode.fill;
-					fo.colors.value = s;
+					fo.colors.value = s.join(";");
 					fo.method = "sigma";
 					fo.type = "gradient";
 					fo.angle = (dojox.gfx.matrix._radToDeg(Math.atan2(f.x2 - f.x1, f.y2 - f.y1)) + 180) % 360;
@@ -64,24 +64,26 @@ dojo.extend(dojox.gfx.Shape, {
 				case "radial":
 					var f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
 					this.fillStyle = f;
+					var l = parseFloat(this.rawNode.style.left);
+					var t = parseFloat(this.rawNode.style.top);
 					var w = parseFloat(this.rawNode.style.width);
 					var h = parseFloat(this.rawNode.style.height);
 					var c = isNaN(w) ? 1 : 2 * f.r / w;
 					var i = f.colors.length - 1;
 					f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-					var s = "0 " + f.colors[i].color.toHex();
+					var s = ["0 " + f.colors[i].color.toHex()];
 					for(; i >= 0; --i){
 						f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-						s += (1 - c * f.colors[i].offset).toFixed(8) + " " + f.colors[i].color.toHex() + ";";
+						s.push((1 - c * f.colors[i].offset).toFixed(8) + " " + f.colors[i].color.toHex());
 					}
 					var fo = this.rawNode.fill;
-					fo.colors.value = s;
+					fo.colors.value = s.join(";");
 					fo.method = "sigma";
 					fo.type = "gradientradial";
-					if(isNaN(w) || isNaN(h)){
+					if(isNaN(w) || isNaN(h) || isNaN(l) || isNaN(t)){
 						fo.focusposition = "0.5 0.5";
 					}else{
-						fo.focusposition = (f.cx / w).toFixed(8) + " " + (f.cy / h).toFixed(8);
+						fo.focusposition = ((f.cx - l) / w).toFixed(8) + " " + ((f.cy - t) / h).toFixed(8);
 					}
 					fo.focussize = "0 0";
 					fo.on = true;

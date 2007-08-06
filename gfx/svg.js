@@ -200,6 +200,7 @@ dojo.extend(dojox.gfx.Shape, {
 				var t = document.createElementNS(svgns, "stop");
 				t.setAttribute("offset",     f.colors[i].offset.toFixed(8));
 				t.setAttribute("stop-color", f.colors[i].color.toCss());
+				t.setAttribute("stop-opacity", f.colors[i].color.a);
 				fill.appendChild(t);
 			}
 		}
