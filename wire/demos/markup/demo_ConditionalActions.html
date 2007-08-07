@@ -40,6 +40,7 @@
 		dojo.require("dojox.wire.ml.Data");
 		dojo.require("dijit.form.TextBox");
 		dojo.require("dijit.form.CheckBox");
+		dojo.require("dijit.form.ComboBox");
 	</script>
 </head>
 
@@ -52,6 +53,7 @@
 	shipping address if the 'Use Same Address' checkbox is checked true.
 	<br/>
 	<br/>
+    <div dojoType="dojo.data.ItemFileReadStore" url="states.json" jsId="statesStore"></div>
 	<table width="100%">
 		<tr>
 			<td colspan="2" align="center">
@@ -101,10 +103,10 @@
 		</tr>
 		<tr>
 			<td>
-				<b>State:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingState" name="billingstate" value=""  size="50"></div>
+				<b>State:</b> <div class="rJustified" dojoType="dijit.form.ComboBox" searchAttr="name" id="BillingState" name="billingstate" value=""   store="statesStore" size="46"></div>
 			</td>
 			<td>
-				<b>State:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="ShippingState" name="shippingstate" value="" disabled="true" size="50"></div>
+				<b>State:</b> <div class="rJustified" dojoType="dijit.form.ComboBox" searchAttr="name" id="ShippingState" name="shippingstate" value="" store="statesStore" disabled="true" size="46"></div>
 			</td>
 		</tr>
 		<tr>
@@ -166,7 +168,7 @@
 	</div>    
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingState"
-		triggerEvent="onkeyup">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
 		<div dojoType="dojox.wire.ml.Transfer" source="BillingState.value" target="ShippingState.value"></div>
 	</div>    
