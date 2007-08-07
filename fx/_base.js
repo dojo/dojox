@@ -8,8 +8,8 @@ dojo.require("dojo.fx");
 // for the dojo.fx animation cases.
 dojox.fx.chain = dojo.fx.chain;
 dojox.fx.combine = dojo.fx.combine;
-dojox.fx.slideIn = dojo.fx.slideIn;
-dojox.fx.slideOut = dojo.fx.slideOut;
+dojox.fx.wipeIn = dojo.fx.wipeIn;
+dojox.fx.wipeOut = dojo.fx.wipeOut;
 dojox.fx.slideTo = dojo.fx.slideTo;
 
 /* dojox.fx _Animations: */
@@ -34,7 +34,7 @@ dojox.fx.sizeTo = function(/* Object */args){
 	//	}).play();
 	//
 	//
-	var node = args.node = dojo.byId(args.node);
+	var node = (args.node = dojo.byId(args.node));
 	var compute = dojo.getComputedStyle;
 
 	var method = args.method || "chain"; 
@@ -80,12 +80,8 @@ dojox.fx.sizeTo = function(/* Object */args){
 	}, args));
 
 	// FIXME: 
-	// dojo.fx[args.method]([anim1,anim2]); 	
-	if(args.method == "combine"){
-		var anim = dojo.fx.combine([anim1,anim2]);
-	}else{
-		var anim = dojo.fx.chain([anim1,anim2]);
-	}
+	// dojo.fx[args.method]([anim1,anim2]);
+	var anim = dojo.fx[((args.method == "combine") ? "combine" : "chain")]([anim1,anim2]);
 	dojo.connect(anim, "beforeBegin", anim, init);
 	return anim; // dojo._Animation
 };
@@ -106,7 +102,7 @@ dojox.fx.addClass = function(/* Object */args){
 	//
 	//		args.cssClass: String - class string (to be added onEnd)
 	//		
-	var node = args.node = dojo.byId(args.node); 
+	var node = (args.node = dojo.byId(args.node)); 
 
 	var pushClass = (function(){
 		// summary: onEnd we want to add the class to the node 
@@ -147,7 +143,7 @@ dojox.fx.removeClass = function(/* Object */args){
 	//
 	//	args.cssClass: String - class string (to be removed from node)
 	//		
-	var node = args.node = dojo.byId(args.node); 
+	var node = (args.node = dojo.byId(args.node)); 
 
 	var pullClass = (function(){
 		// summary: onEnd we want to remove the class from the node 
@@ -240,7 +236,7 @@ dojox.fx._getCalculatedStyleChanges = function(/* Object */args, /*Boolean*/addC
 	// 	true to calculate what adding a class would do, 
 	// 	false to calculate what removing the class would do
 
-	var node = args.node = dojo.byId(args.node); 
+	var node = (args.node = dojo.byId(args.node)); 
 	var compute = dojo.getComputedStyle(node);
 
 	// take our snapShots
