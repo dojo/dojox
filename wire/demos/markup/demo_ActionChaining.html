@@ -78,7 +78,8 @@
 	</div>
 
 	<!-- 
-		Whenever a key is entered into the textbox, clone over the textbox value to another textbox.
+		Whenever a key is entered into the textbox, copy the value somewhere, then invoke a method on another widget, in this case
+		on just another text box.
 	-->
 	<div dojoType="dojox.wire.ml.Action"
 		id="action1"
@@ -95,8 +96,13 @@
 		id="action2"
 		trigger="targetCopy"
 		triggerEvent="onComplete">
-		<div dojoType="dojox.wire.ml.Invocation" object="targetField1"    method="getValue" result="data.tempData"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="targetField2"    method="setValue" parameters="data.tempData"></div>
+		<!--
+			Note that this uses the basic 'property' form of copying the property over and setting it.  The Wire
+			code supports both getX and setX functions of setting a property as well as direct access.  It first looks
+			for the getX/setX functions and if present, uses them.  If missing, it will just do direct access.  Because
+			of the standard getValue/setValue API of dijit form widgets, these transfers work really well and are very compact.   
+		-->
+		<div dojoType="dojox.wire.ml.Transfer" source="targetField1.value" target="targetField2.value"></div>
 	</div>    
 </body>
 </html>

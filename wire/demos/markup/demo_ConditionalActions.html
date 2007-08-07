@@ -5,7 +5,7 @@
 -->
 <html>
 <head>
-	<title>Sample Action Chaining</title>
+	<title>Conditional Actions Demo</title>
 	<style type="text/css">
 
 		@import "../../../../dijit/themes/tundra/tundra.css";
@@ -120,35 +120,6 @@
 
 	<!-------------------------------- Using dojox.wire, declaratively wire up the widgets. --------------------------->
 
-	<!--
-		This is an example of using the declarative data value definition.
-		In this case, these are effectively constants used to enable/diable widgets.
-	-->
-	<div dojoType="dojox.wire.ml.Data"
-		id="booleanValues">
-		<div dojoType="dojox.wire.ml.DataProperty"
-			name="true"
-			type="boolean"
-			value="true">
-		</div>
-		<div dojoType="dojox.wire.ml.DataProperty"
-			name="false"
-			type="boolean"
-			value="false">
-		</div>
-	</div>
-
-	<!--
-		Temp space to store values pulled from the form 
-	-->
-	<div dojoType="dojox.wire.ml.Data"
-		id="tempData">
-		<div dojoType="dojox.wire.ml.DataProperty"
-			name="value"
-			value="">
-		</div>            
-	</div>
-
 	<!-- 
 		Enable/disable the Right hand side of the shipping address view based on the checkbox events. 
 	-->
@@ -156,65 +127,14 @@
 		trigger="useSameAddress"
 		triggerEvent="setChecked">
 		<!--
-			Trigger a setting of the ShippingName field enablement based on the state of the checkbox.
+			Trigger a setting of the Shipping fields' input state based on the state of the checkbox.
 		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"    method="setDisabled" parameters="booleanValues.true">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>
-		</div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"    method="setDisabled" parameters="booleanValues.false">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="false" type="boolean"></div>
-		</div>
-
-		<!--
-			Trigger a setting of the ShippingAdress1 field enablement based on the state of the checkbox.
-		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"    method="setDisabled" parameters="booleanValues.true">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>
-		</div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"    method="setDisabled" parameters="booleanValues.false">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="false" type="boolean"></div>
-		</div>
-
-		<!--
-			Trigger a setting of the ShippingAdress2 field enablement based on the state of the checkbox.
-		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"    method="setDisabled" parameters="booleanValues.true">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>
-		</div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"    method="setDisabled" parameters="booleanValues.false">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="false" type="boolean"></div>
-		</div>
-
-
-		<!--
-			Trigger a setting of the ShippingCity field enablement based on the state of the checkbox.
-		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"    method="setDisabled" parameters="booleanValues.true">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>
-		</div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"    method="setDisabled" parameters="booleanValues.false">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="false" type="boolean"></div>
-		</div>
-
-		<!--
-			Trigger a setting of the ShippingState field enablement based on the state of the checkbox.
-		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"    method="setDisabled" parameters="booleanValues.true">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>
-		</div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"    method="setDisabled" parameters="booleanValues.false">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="false" type="boolean"></div>
-		</div>
-
-		<!--
-			Trigger a setting of the ShippingZip field enablement based on the state of the checkbox.
-		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"    method="setDisabled" parameters="booleanValues.true">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean" </div>
-		</div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"    method="setDisabled" parameters="booleanValues.false">
-			<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="false" type="boolean"></div>
-		</div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"    method="setDisabled" parameters="arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"    method="setDisabled" parameters="arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"    method="setDisabled" parameters="arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"    method="setDisabled" parameters="arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"    method="setDisabled" parameters="arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"    method="setDisabled" parameters="arguments[0]"></div>
 	</div>    
 
 	<!-- 
@@ -224,44 +144,38 @@
 		trigger="BillingName"
 		triggerEvent="onkeyup">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingName"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"   method="setValue" parameters="tempData.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingName.value" target="ShippingName.value"></div>
 	</div>    
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingAddress1"
 		triggerEvent="onkeyup">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingAddress1"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"   method="setValue" parameters="tempData.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingAddress1.value" target="ShippingAddress1.value"></div>
 	</div>    
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingAddress2"
 		triggerEvent="onkeyup">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingAddress2"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"   method="setValue" parameters="tempData.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingAddress2.value" target="ShippingAddress2.value"></div>
 	</div>
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingCity"
 		triggerEvent="onkeyup">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingCity"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"   method="setValue" parameters="tempData.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingCity.value" target="ShippingCity.value"></div>
 	</div>    
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingState"
 		triggerEvent="onkeyup">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingState"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"   method="setValue" parameters="tempData.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingState.value" target="ShippingState.value"></div>
 	</div>    
 
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingZip"
 		triggerEvent="onkeyup">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingZip"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"   method="setValue" parameters="tempData.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingZip.value" target="ShippingZip.value"></div>
 	</div>    
 
 
@@ -274,23 +188,19 @@
 		triggerEvent="setChecked">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>        
 
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingName"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"   method="setValue" parameters="tempData.value"></div>
-
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingAddress1"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"   method="setValue" parameters="tempData.value"></div>
-
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingAddress2"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"   method="setValue" parameters="tempData.value"></div>
-
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingCity"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"   method="setValue" parameters="tempData.value"></div>
-
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingState"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"   method="setValue" parameters="tempData.value"></div>
-
-		<div dojoType="dojox.wire.ml.Invocation" object="BillingZip"    method="getValue" result="tempData.value"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"   method="setValue" parameters="tempData.value"></div>
+		<!--
+			Note that this uses the basic 'property' form of copying the property over and setting it.  The Wire
+			code supports both getX and setX functions of setting a property as well as direct access.  It first looks
+			for the getX/setX functions and if present, uses them.  If missing, it will just do direct access.  Because
+			of the standard getValue/setValue API of dijit form widgets, transfers work well and are compact.   
+		-->
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingName.value" target="ShippingName.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingAddress1.value" target="ShippingAddress1.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingAddress2.value" target="ShippingAddress2.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingCity.value" target="ShippingCity.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingState.value" target="ShippingState.value"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="BillingZip.value" target="ShippingZip.value"></div>
 	</div>
+
 </body>
 </html>
