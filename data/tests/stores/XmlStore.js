@@ -50,73 +50,76 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
-		function testReadAPI_fetch_paging(t){
-			//	summary: 
-			//		Simple test of fetching one xml items through an XML element called isbn
-			//	description:
-			//		Simple test of fetching one xml items through an XML element called isbn
-			var store = dojox.data.tests.stores.XmlStore.getBooksStore();
-			
-			var d = new doh.Deferred();
-			function dumpFirstFetch(items, request){
-				t.assertEqual(5, items.length);
-				request.start = 3;
-				request.count = 1;
-				request.onComplete = dumpSecondFetch;
-				store.fetch(request);
+		{
+			name: "testReadAPI_fetch_paging",
+			timeout: 10000,
+			runTest: function(t){
+				//	summary: 
+				//		Simple test of fetching one xml items through an XML element called isbn
+				//	description:
+				//		Simple test of fetching one xml items through an XML element called isbn
+				var store = dojox.data.tests.stores.XmlStore.getBooksStore();
+				var d = new doh.Deferred();
+				function dumpFirstFetch(items, request){
+					t.assertEqual(5, items.length);
+					request.start = 3;
+					request.count = 1;
+					request.onComplete = dumpSecondFetch;
+					store.fetch(request);
+				}
+	
+				function dumpSecondFetch(items, request){
+					t.assertEqual(1, items.length);
+					request.start = 0;
+					request.count = 5;
+					request.onComplete = dumpThirdFetch;
+					store.fetch(request);
+				}
+	
+				function dumpThirdFetch(items, request){
+					t.assertEqual(5, items.length);
+					request.start = 2;
+					request.count = 20;
+					request.onComplete = dumpFourthFetch;
+					store.fetch(request);
+				 }
+	
+				function dumpFourthFetch(items, request){
+					t.assertEqual(18, items.length);
+					request.start = 9;
+					request.count = 100;
+					request.onComplete = dumpFifthFetch;
+					store.fetch(request);
+				}
+	
+				function dumpFifthFetch(items, request){
+					t.assertEqual(11, items.length);
+					request.start = 2;
+					request.count = 20;
+					request.onComplete = dumpSixthFetch;
+					store.fetch(request);
+				}
+	
+				function dumpSixthFetch(items, request){
+					t.assertEqual(18, items.length);
+					d.callback(true);
+				}
+	
+				function completed(items, request){
+					t.assertEqual(20, items.length);
+					request.start = 1;
+					request.count = 5;
+					request.onComplete = dumpFirstFetch;
+					store.fetch(request);
+				}
+	
+				function error(errData, request){
+					 d.errback(errData);
+				}
+	
+				store.fetch({onComplete: completed, onError: error});
+				return d; //Object
 			}
-
-			function dumpSecondFetch(items, request){
-				t.assertEqual(1, items.length);
-				request.start = 0;
-				request.count = 5;
-				request.onComplete = dumpThirdFetch;
-				store.fetch(request);
-			}
-
-			function dumpThirdFetch(items, request){
-				t.assertEqual(5, items.length);
-				request.start = 2;
-				request.count = 20;
-				request.onComplete = dumpFourthFetch;
-				store.fetch(request);
-			}
-
-			function dumpFourthFetch(items, request){
-				t.assertEqual(18, items.length);
-				request.start = 9;
-				request.count = 100;
-				request.onComplete = dumpFifthFetch;
-				store.fetch(request);
-			}
-
-			function dumpFifthFetch(items, request){
-				t.assertEqual(11, items.length);
-				request.start = 2;
-				request.count = 20;
-				request.onComplete = dumpSixthFetch;
-				store.fetch(request);
-			}
-
-			function dumpSixthFetch(items, request){
-				t.assertEqual(18, items.length);
-				d.callback(true);
-			}
-
-			function completed(items, request){
-				t.assertEqual(20, items.length);
-				request.start = 1;
-				request.count = 5;
-				request.onComplete = dumpFirstFetch;
-				store.fetch(request);
-			}
-
-			function error(errData, request){
-				d.errback(errData);
-			}
-
-			store.fetch({onComplete: completed, onError: error});
-			return d; //Object
 		},
 		function testReadAPI_fetch_pattern0(t){
 			//	summary: 
