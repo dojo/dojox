@@ -1075,8 +1075,8 @@ dojo.declare("dojox.data.XmlStore", null, {
 
 //FIXME: Is a full class here really needed for containment of the item or would
 //an anon object work fine?
-dojo.declare("dojox.data.XmlItem", null,
-	function(element, store) {
+dojo.declare("dojox.data.XmlItem", null, {
+	constructor: function(element, store) {
 		//	summary:
 		//		Initialize with an XML element
 		//	element:
@@ -1085,7 +1085,7 @@ dojo.declare("dojox.data.XmlItem", null,
 		//		The containing store, if any.
 		this.element = element;
 		this.store = store;
-	}, {
+	}, 
 	//	summary:
 	//		A data item of 'XmlStore'
 	//	description:
