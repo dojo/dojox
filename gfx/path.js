@@ -322,8 +322,8 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape,
 	_2PI: Math.PI * 2
 });
 
-dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path,
-	function(rawNode){
+dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
+	constructor: function(rawNode){
 		// summary: a generalized TextPath shape
 		// rawNode: Node: a DOM node to be used by this TextPath object
 		if(!("text" in this)){
@@ -333,7 +333,6 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path,
 			this.fontStyle = dojo.clone(dojox.gfx.defaultFont);
 		}
 	},
-{
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
 		this.text = dojox.gfx.makeParameters(this.text, 

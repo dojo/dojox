@@ -3,10 +3,17 @@ dojo.provide("dojox.data.OpmlStore");
 dojo.require("dojo.data.util.filter");
 dojo.require("dojo.data.util.simpleFetch");
 
-dojo.declare("dojox.data.OpmlStore",
-	null,
-	function(/* Object */ keywordParameters){
-		// summary: initializer
+dojo.declare("dojox.data.OpmlStore", null, {
+	/* summary:
+	 *   The OpmlStore implements the dojo.data.api.Read API.  
+	 */
+	 
+	/* examples:
+	 *   var opmlStore = new dojo.data.OpmlStore({url:"geography.xml"});
+	 *   var opmlStore = new dojo.data.OpmlStore({url:"http://example.com/geography.xml"});
+	 */
+	constructor: function(/* Object */ keywordParameters){
+		// summary: constructor
 		// keywordParameters: {url: String, label: String}  Where label is optional and configures what should be used as the return from getLabel()
 		this._xmlData = null;
 		this._arrayOfTopLevelItems = [];
@@ -18,20 +25,12 @@ dojo.declare("dojox.data.OpmlStore",
 		if(keywordParameters.label){
 			this.label = keywordParameters.label;
 		}
-	},{
+	},
 
 	label: "text",
 
 	url: "",
 
-	/* summary:
-	 *   The OpmlStore implements the dojo.data.api.Read API.  
-	 */
-	 
-	/* examples:
-	 *   var opmlStore = new dojo.data.OpmlStore({url:"geography.xml"});
-	 *   var opmlStore = new dojo.data.OpmlStore({url:"http://example.com/geography.xml"});
-	 */
 	_assertIsItem: function(/* item */ item){
 		if(!this.isItem(item)){ 
 			throw new Error("dojo.data.OpmlStore: a function was passed an item argument that was not an item");

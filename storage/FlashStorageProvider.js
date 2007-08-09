@@ -7,10 +7,7 @@ dojo.require("dojox.flash");
 // description:
 //		Authors of this storage provider-
 //			Brad Neuberg, bkn3@columbia.edu	
-dojo.declare(
-	"dojox.storage.FlashStorageProvider",
-	[ dojox.storage.Provider ], null,
-	{
+dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		initialized: false,
 		
 		_available: null,

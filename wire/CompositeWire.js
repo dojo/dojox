@@ -3,9 +3,20 @@ dojo.provide("dojox.wire.CompositeWire");
 dojo.require("dojox.wire._base");
 dojo.require("dojox.wire.Wire");
 
-dojo.declare("dojox.wire.CompositeWire",
-	dojox.wire.Wire,
-	function(/*Object*/args){
+dojo.declare("dojox.wire.CompositeWire", dojox.wire.Wire, {
+	//	summary:
+	//		A Wire for composite values in object or array
+	//	description:
+	//		This class has multiple child Wires for object properties or array
+	//		elements.
+	//		When an object with Wires is specified to 'children' property, they
+	//		are used to get or set an object with property values.
+	//		When an array of Wiares is specified to 'children' property, they
+	//		are used to get or set an array with element values.
+	
+	_wireClass: "dojox.wire.CompositeWire",
+
+	constructor: function(/*Object*/args){
 		//	summary:
 		//		Initialize properties
 		//	description:
@@ -17,18 +28,7 @@ dojo.declare("dojox.wire.CompositeWire",
 		//		children:
 		//			An object or array containing child Wires
 		this._initializeChildren(this.children);
-	}, {
-	//	summary:
-	//		A Wire for composite values in object or array
-	//	description:
-	//		This class has multiple child Wires for object properties or array
-	//		elements.
-	//		When an object with Wires is specified to 'children' property, they
-	//		are used to get or set an object with property values.
-	//		When an array of Wiares is specified to 'children' property, they
-	//		are used to get or set an array with element values.
-	_wireClass: "dojox.wire.CompositeWire",
-
+	},
 	_getValue: function(/*Object||Array*/object){
 		//	summary:
 		//		Return an object with property values or an array with element

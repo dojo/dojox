@@ -2,9 +2,26 @@ dojo.provide("dojox.wire.Wire");
 
 dojo.require("dojox.wire._base");
 
-dojo.declare("dojox.wire.Wire",
-	null,
-	function(/*Object*/args){
+dojo.declare("dojox.wire.Wire", null, {
+	//	summary:
+	//		A default and base Wire to access an object property
+	//	description:
+	//		This class accesses a property of an object with a dotted notation
+	//		specified to 'property' property, such as "a.b.c", which identifies
+	//		a descendant property, "object.a.b.c".
+	//		Property names in the dotted notation may have an array index, such
+	//		as "a[0]", to identify an array element, literally, "object.a[0]".
+	//		When a notation start with an array index, such as "[0].a", it
+	//		specifies an array element of the root object (array),
+	//		"object[0].a".
+	//		This class also serves as a base class for other Wire classes,
+	//		preparing a root object and converting a return value, so that
+	//		sub-classes just can implement _getValue() and _setValue() called
+	//		from getValue() and setValue() implemented by this calss.
+	
+	_wireClass: "dojox.wire.Wire",
+	
+	constructor: function(/*Object*/args){
 		//	summary:
 		//		Initialize properties
 		//	description:
@@ -63,23 +80,7 @@ dojo.declare("dojox.wire.Wire",
 				this.converter = {convert: this.converter};
 			}
 		}
-	}, {
-	//	summary:
-	//		A default and base Wire to access an object property
-	//	description:
-	//		This class accesses a property of an object with a dotted notation
-	//		specified to 'property' property, such as "a.b.c", which identifies
-	//		a descendant property, "object.a.b.c".
-	//		Property names in the dotted notation may have an array index, such
-	//		as "a[0]", to identify an array element, literally, "object.a[0]".
-	//		When a notation start with an array index, such as "[0].a", it
-	//		specifies an array element of the root object (array),
-	//		"object[0].a".
-	//		This class also serves as a base class for other Wire classes,
-	//		preparing a root object and converting a return value, so that
-	//		sub-classes just can implement _getValue() and _setValue() called
-	//		from getValue() and setValue() implemented by this calss.
-	_wireClass: "dojox.wire.Wire",
+	},
 
 	getValue: function(/*Object||Array*/defaultObject){
 		//	summary:

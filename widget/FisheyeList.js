@@ -4,14 +4,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 
-dojo.declare("dojox.widget.FisheyeList",
-	[dijit._Widget, dijit._Templated, dijit._Container],
-	function(){
-	//
-	// TODO
-	// fix really long labels in vertical mode
-	//
-	//
+dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit._Container], {
 	// summary
 	//	Menu similar to the fish eye menu on the Mac OS
 	// usage
@@ -33,13 +26,18 @@ dojo.declare("dojox.widget.FisheyeList",
 	//		...
 	//	</div>
 	//
-		 
+	constructor: function(){
+	//
+	// TODO
+	// fix really long labels in vertical mode
+	//
+	
 	this.pos = {'x': -1, 'y': -1};	// current cursor position, relative to the grid
-
+	
 	// for conservative trigger mode, when triggered, timerScale is gradually increased from 0 to 1
 	this.timerScale = 1.0;
 	
-},{
+	},
 
 	EDGE: {
 		CENTER: 0,
@@ -606,11 +604,7 @@ dojo.declare("dojox.widget.FisheyeList",
 	}
 });
 
-dojo.declare("dojox.widget.FisheyeListItem",
-	[dijit._Widget, dijit._Templated, dijit._Contained],
-	null,
-	{
-
+dojo.declare("dojox.widget.FisheyeListItem", [dijit._Widget, dijit._Templated, dijit._Contained], {
 	/*
 	 * summary
 	 *	Menu item inside of a FisheyeList.

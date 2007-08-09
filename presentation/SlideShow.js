@@ -4,11 +4,7 @@ dojo.experimental("dojox.presentation.SlideShow");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 
-dojo.declare(
-	"dojox.presentation.SlideShow",
-	[dijit._Widget, dijit._Templated],
-	null,
-	{
+dojo.declare("dojox.presentation.SlideShow", [dijit._Widget, dijit._Templated], {
 	/*
 		summary: 
 			Takes a bunch of pictures and displays them one by one, like a slide show.

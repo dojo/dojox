@@ -3,10 +3,7 @@ dojo.require("dijit._Templated");
 dojo.require("dijit._Widget");
 dojo.require("dojox.data.demos.widgets.FlickrView");
 
-dojo.declare(
-	"dojox.data.demos.widgets.FlickrViewList",
-	[dijit._Widget, dijit._Templated],
-	null,{
+dojo.declare("dojox.data.demos.widgets.FlickrViewList", [dijit._Widget, dijit._Templated], {
 	//Simple demo widget that is just a list of FlickrView Widgets.
 
 	templatePath: dojo.moduleUrl("dojox", "data/demos/widgets/templates/FlickrViewList.html"),

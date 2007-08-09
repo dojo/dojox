@@ -7,9 +7,7 @@ dojo.require("dijit._Widget");
 dojo.require("dojo.dnd.move");
 dojo.require("dojox.layout.ResizeHandle"); 
 
-dojo.declare("dojox.layout.FloatingPane",
-	[dijit.layout.ContentPane, dijit._Templated],
-	null,{	
+dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Templated], {
 	// summary:
 	//
 	// Makes a dijit.ContentPane float and draggable by it's title [similar to TitlePane]
@@ -171,9 +169,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	
 });
 
-dojo.declare("dojox.layout.Dock",
-	[dijit._Widget,dijit._Templated],
-	null,{
+dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 	// summary:
 	//	a widget that attaches to a node and keeps track of incoming / outgoing FloatingPanes
 	// 	and handles layout
@@ -216,9 +212,7 @@ dojo.declare("dojox.layout.Dock",
 
 });
 
-dojo.declare("dojox.layout._DockNode",
-	[dijit._Widget,dijit._Templated],
-	null,{
+dojo.declare("dojox.layout._DockNode", [dijit._Widget,dijit._Templated], {
 	// summary:
 	//	dojox.layout._DockNode is a private widget used to keep track of
 	//	which pane is docked.

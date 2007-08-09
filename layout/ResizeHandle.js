@@ -5,10 +5,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated"); 
 dojo.require("dojo.fx"); 
 
-dojo.declare("dojox.layout.ResizeHandle",
-	[dijit._Widget, dijit._Templated],
-	null,{
-
+dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 	// summary
 	//	The handle on the bottom-right corner of FloatingPane or other widgets that allows
 	//	the widget to be resized.

@@ -240,14 +240,13 @@ dojo.mixin(dojox.gfx, {
 	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g
 });
 
-dojo.declare("dojox.gfx.Surface", null,
-	function(){
+dojo.declare("dojox.gfx.Surface", null, {
+	constructor: function(){
 		// summary: a surface object to be used for drawings
 		
 		// underlying node
 		this.rawNode = null;
 	},
-{
 	getEventSource: function(){
 		// summary: returns a node, which can be used to attach event listeners
 		

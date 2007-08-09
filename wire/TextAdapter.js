@@ -2,9 +2,18 @@ dojo.provide("dojox.wire.TextAdapter");
 
 dojo.require("dojox.wire.CompositeWire");
 
-dojo.declare("dojox.wire.TextAdapter",
-	dojox.wire.CompositeWire,
-	function(/*Object*/args){
+dojo.declare("dojox.wire.TextAdapter", dojox.wire.CompositeWire, {
+	//	summary:
+	//		A composite Wire for a concatenated text
+	//	description:
+	//		This class has multiple child Wires for text segment values.
+	//		Wires in 'segments' property are used to get text segments and
+	//		values are concatenated with an optional delimiter string specified
+	//		to 'delimiter' property.
+	
+	_wireClass: "dojox.wire.TextAdapter",
+	
+	constructor: function(/*Object*/args){
 		//	summary:
 		//		Initialize properties
 		//	description:
@@ -21,15 +30,7 @@ dojo.declare("dojox.wire.TextAdapter",
 		if(!this.delimiter){
 			this.delimiter = "";
 		}
-	}, {
-	//	summary:
-	//		A composite Wire for a concatenated text
-	//	description:
-	//		This class has multiple child Wires for text segment values.
-	//		Wires in 'segments' property are used to get text segments and
-	//		values are concatenated with an optional delimiter string specified
-	//		to 'delimiter' property.
-	_wireClass: "dojox.wire.TextAdapter",
+	},
 
 	_getValue: function(/*Object||Array*/object){
 		//	summary:

@@ -2,9 +2,23 @@ dojo.provide("dojox.wire.DataWire");
 
 dojo.require("dojox.wire.Wire");
 
-dojo.declare("dojox.wire.DataWire",
-	dojox.wire.Wire,
-	function(/*Object*/args){
+dojo.declare("dojox.wire.DataWire", dojox.wire.Wire, {
+	//	summary:
+	//		A Wire for item attributes of data stores
+	//	description:
+	//		This class accesses item attributes of data stores with a dotted
+	//		notation of attribute names specified to 'attribute' property,
+	//		using data APIs of a data store specified to 'dataStore' property.
+	//		The root object for this class must be an item of the data store.
+	//		Intermediate attribute names in the dotted notation specify
+	//		attributes for child items, which are used for repeated calls to
+	//		data APIs until reached to a descendant attribute.
+	//		Attribute names may have an array index, such as "a[0]", to
+	//		identify an array element of the attribute value.
+	
+	_wireClass: "dojox.wire.DataWire",
+
+	constructor: function(/*Object*/args){
 		//	summary:
 		//		Initialize properties
 		//	description:
@@ -19,21 +33,7 @@ dojo.declare("dojox.wire.DataWire",
 		if(!this.dataStore && this.parent){
 			this.dataStore = this.parent.dataStore;
 		}
-	}, {
-	//	summary:
-	//		A Wire for item attributes of data stores
-	//	description:
-	//		This class accesses item attributes of data stores with a dotted
-	//		notation of attribute names specified to 'attribute' property,
-	//		using data APIs of a data store specified to 'dataStore' property.
-	//		The root object for this class must be an item of the data store.
-	//		Intermediate attribute names in the dotted notation specify
-	//		attributes for child items, which are used for repeated calls to
-	//		data APIs until reached to a descendant attribute.
-	//		Attribute names may have an array index, such as "a[0]", to
-	//		identify an array element of the attribute value.
-	_wireClass: "dojox.wire.DataWire",
-
+	},
 	_getValue: function(/*Object*/object){
 		//	summary:
 		//		Return an attribute value of an item

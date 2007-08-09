@@ -2,21 +2,7 @@ dojo.provide("dojox.wire.TableAdapter");
 
 dojo.require("dojox.wire.CompositeWire");
 
-dojo.declare("dojox.wire.TableAdapter",
-	dojox.wire.CompositeWire,
-	function(/*Object*/args){
-		//	summary:
-		//		Initialize properties
-		//	description:
-		//		If object properties or array elements specified in 'columns'
-		//		property are not Wires, Wires are created from them as
-		//		arguments, with 'parent' property set to this Wire instance.
-		//	args:
-		//		Arguments to initialize properties
-		//		columns:
-		//			An object or array containing child Wires for column values
-		this._initializeChildren(this.columns);
-	}, {
+dojo.declare("dojox.wire.TableAdapter", dojox.wire.CompositeWire, {
 	//	summary:
 	//		A composite Wire for table rows
 	//	description:
@@ -29,7 +15,22 @@ dojo.declare("dojox.wire.TableAdapter",
 	//		are used to get a row array with element values.
 	//		The row values are returned in an array.
 	//		This class only supports getValue(), but not setValue().
+	
 	_wireClass: "dojox.wire.TableAdapter",
+	
+	constructor: function(/*Object*/args){
+		//	summary:
+		//		Initialize properties
+		//	description:
+		//		If object properties or array elements specified in 'columns'
+		//		property are not Wires, Wires are created from them as
+		//		arguments, with 'parent' property set to this Wire instance.
+		//	args:
+		//		Arguments to initialize properties
+		//		columns:
+		//			An object or array containing child Wires for column values
+		this._initializeChildren(this.columns);
+	},
 
 	_getValue: function(/*Array*/object){
 		//	summary:

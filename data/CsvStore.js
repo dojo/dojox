@@ -3,27 +3,7 @@ dojo.provide("dojox.data.CsvStore");
 dojo.require("dojo.data.util.filter");
 dojo.require("dojo.data.util.simpleFetch");
 
-dojo.declare("dojox.data.CsvStore",
-	null,
-	function(/* Object */ keywordParameters){
-		// summary: initializer
-		// keywordParameters: {url: String}
-		// keywordParameters: {data: String}
-		// keywordParameters: {label: String} The column label for the column to use for the label returned by getLabel.
-		
-		this._attributes = [];			// e.g. ["Title", "Year", "Producer"]
-		this._attributeIndexes = {};	// e.g. {Title: 0, Year: 1, Producer: 2}
- 		this._dataArray = [];			// e.g. [[<Item0>],[<Item1>],[<Item2>]]
- 		this._arrayOfAllItems = [];		// e.g. [{_csvId:0,_csvStore:store},...]
-		this._loadFinished = false;
-		this._csvFileUrl = keywordParameters.url;
-		this._csvData = keywordParameters.data;
-		this._labelAttr = keywordParameters.label;
-		this._storeProp = "_csvStore";	// Property name for the store reference on every item.
-		this._idProp = "_csvId"; 		// Property name for the Item Id on every item.
-		this._features = {	'dojo.data.api.Read': true,
-							'dojo.data.api.Identity': true };
-	},{
+dojo.declare("dojox.data.CsvStore", null, {
 	//	summary:
 	//		The CsvStore implements the dojo.data.api.Read API and reads
 	//		data from files in CSV (Comma Separated Values) format.
@@ -44,6 +24,28 @@ dojo.declare("dojox.data.CsvStore",
 	 *   var csvStore = new dojox.data.CsvStore({url:"http://example.com/movies.csv");
 	 */
 
+	constructor: function(/* Object */ keywordParameters){
+		// summary: initializer
+		// keywordParameters: {url: String}
+		// keywordParameters: {data: String}
+		// keywordParameters: {label: String} The column label for the column to use for the label returned by getLabel.
+		
+		this._attributes = [];			// e.g. ["Title", "Year", "Producer"]
+		this._attributeIndexes = {};	// e.g. {Title: 0, Year: 1, Producer: 2}
+ 		this._dataArray = [];			// e.g. [[<Item0>],[<Item1>],[<Item2>]]
+ 		this._arrayOfAllItems = [];		// e.g. [{_csvId:0,_csvStore:store},...]
+		this._loadFinished = false;
+		this._csvFileUrl = keywordParameters.url;
+		this._csvData = keywordParameters.data;
+		this._labelAttr = keywordParameters.label;
+		this._storeProp = "_csvStore";	// Property name for the store reference on every item.
+		this._idProp = "_csvId"; 		// Property name for the Item Id on every item.
+		this._features = {	
+			'dojo.data.api.Read': true,
+			'dojo.data.api.Identity': true 
+		};
+	},
+	
 	_assertIsItem: function(/* item */ item){
 		//	summary:
 		//      This function tests whether the item passed in is indeed an item in the store.

@@ -3,18 +3,7 @@ dojo.provide("dojox.wire.XmlWire");
 dojo.require("dojox.data.dom");
 dojo.require("dojox.wire.Wire");
 
-dojo.declare("dojox.wire.XmlWire",
-	dojox.wire.Wire,
-	function(/*Object*/args){
-		//	summary:
-		//		Initialize properties
-		//	description:
-		//		'args' is just mixed in with no further processing.
-		//	args:
-		//		Arguments to initialize properties
-		//		path:
-		//			A simplified XPath to an attribute, a text or elements
-	},{
+dojo.declare("dojox.wire.XmlWire", dojox.wire.Wire, {
 	//	summary:
 	//		A Wire for XML nodes or values (element, attribute and text)
 	//	description:
@@ -28,8 +17,19 @@ dojo.declare("dojox.wire.XmlWire",
 	//		with slash-separated list, such as "a/b/@c", which specifies
 	//		the value of an attribute named "c" of an element named "b" as
 	//		a child of another element named "a" of a child of the root node.
+	
 	_wireClass: "dojox.wire.XmlWire",
-
+	
+	constructor: function(/*Object*/args){
+		//	summary:
+		//		Initialize properties
+		//	description:
+		//		'args' is just mixed in with no further processing.
+		//	args:
+		//		Arguments to initialize properties
+		//		path:
+		//			A simplified XPath to an attribute, a text or elements
+	},
 	_getValue: function(/*Node*/object){
 		//	summary:
 		//		Return an attribute value, a text value or an array of elements

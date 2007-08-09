@@ -2,10 +2,7 @@ dojo.provide("dojox.data.demos.widgets.FlickrView");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Widget");
 
-dojo.declare(
-	"dojox.data.demos.widgets.FlickrView",
-	[dijit._Widget, dijit._Templated],
-	null,{
+dojo.declare("dojox.data.demos.widgets.FlickrView", [dijit._Widget, dijit._Templated], {
 	//Simple demo widget for representing a view of a Flickr Item.
 
 	templatePath: dojo.moduleUrl("dojox", "data/demos/widgets/templates/FlickrView.html"),

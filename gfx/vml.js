@@ -502,12 +502,12 @@ dojo.declare("dojox.gfx.Circle", dojox.gfx.shape.Circle, {
 });
 dojox.gfx.Circle.nodeType = "oval";
 
-dojo.declare("dojox.gfx.Line", dojox.gfx.shape.Line,
-	function(rawNode){
-		if(rawNode) rawNode.setAttribute("dojoGfxType", "line");
-	}, {
+dojo.declare("dojox.gfx.Line", dojox.gfx.shape.Line, {
 	// summary: a line shape (VML)
-
+	
+	constructor: function(rawNode){
+		if(rawNode) rawNode.setAttribute("dojoGfxType", "line");
+	},
 	attachShape: function(rawNode){
 		// summary: builds a line shape from a Node.
 		// rawNode: Node: an VML node
@@ -534,12 +534,12 @@ dojo.declare("dojox.gfx.Line", dojox.gfx.shape.Line,
 });
 dojox.gfx.Line.nodeType = "shape";
 
-dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline,
-	function(rawNode){
-		if(rawNode) rawNode.setAttribute("dojoGfxType", "polyline");
-	}, {
+dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 	// summary: a polyline/polygon shape (VML)
 	
+	constructor: function(rawNode){
+		if(rawNode) rawNode.setAttribute("dojoGfxType", "polyline");
+	},
 	attachShape: function(rawNode){
 		// summary: builds a polyline/polygon shape from a Node.
 		// rawNode: Node: an VML node
@@ -606,12 +606,12 @@ dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline,
 });
 dojox.gfx.Polyline.nodeType = "shape";
 
-dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image,
-	function(rawNode){
-		if(rawNode) rawNode.setAttribute("dojoGfxType", "image");
-	}, {
+dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 	// summary: an image (VML)
 	
+	constructor: function(rawNode){
+		if(rawNode) rawNode.setAttribute("dojoGfxType", "image");
+	},
 	getEventSource: function() {
 		// summary: returns a Node, which is used as 
 		//	a source of events for this shape
@@ -684,13 +684,13 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image,
 });
 dojox.gfx.Image.nodeType = "div";
 
-dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, 
-	function(rawNode){
-		if(rawNode) rawNode.setAttribute("dojoGfxType", "text");
-		this.fontStyle = null;
-	}, {
+dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	// summary: an anchored text (VML)
-
+	
+	constructor: function(rawNode){
+		if(rawNode){rawNode.setAttribute("dojoGfxType", "text");}
+		this.fontStyle = null;
+	},
 	attachShape: function(rawNode){
 		// summary: builds a text shape from a Node.
 		// rawNode: Node: an VML node
@@ -859,16 +859,16 @@ dojox.gfx.path._calcArc = function(alpha){
 	};
 };
 
-dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path,
-	function(rawNode){
+dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
+	// summary: a path shape (VML)
+
+	constructor: function(rawNode){
 		if(rawNode && !rawNode.getAttribute("dojoGfxType")){
 			rawNode.setAttribute("dojoGfxType", "path");
 		}
 		this.vmlPath = "";
 		this.lastControl = {};
-	}, {
-	// summary: a path shape (VML)
-
+	},
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
@@ -1290,9 +1290,11 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path,
 });
 dojox.gfx.Path.nodeType = "shape";
 
-dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path,
-	function(rawNode){
-		if(rawNode) rawNode.setAttribute("dojoGfxType", "textpath");
+dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path, {
+	// summary: a textpath shape (VML)
+
+	constructor: function(rawNode){
+		if(rawNode){rawNode.setAttribute("dojoGfxType", "textpath");}
 		this.fontStyle = null;
 		if(!("text" in this)){
 			this.text = dojo.clone(dojox.gfx.defaultTextPath);
@@ -1300,9 +1302,7 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path,
 		if(!("fontStyle" in this)){
 			this.fontStyle = dojo.clone(dojox.gfx.defaultFont);
 		}
-	}, {
-	// summary: a textpath shape (VML)
-
+	},
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
 		this.text = dojox.gfx.makeParameters(this.text, 

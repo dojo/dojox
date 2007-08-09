@@ -5,8 +5,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Container");
 dojo.require("dojox.wire.ml.util");
 
-dojo.declare("dojox.wire.ml.Data",
-	[dijit._Widget, dijit._Container], {
+dojo.declare("dojox.wire.ml.Data", [dijit._Widget, dijit._Container], {
 	//	summary:
 	//		A widget for a data object
 	//	description:
@@ -70,8 +69,7 @@ dojo.declare("dojox.wire.ml.Data",
 	}
 });
 
-dojo.declare("dojox.wire.ml.DataProperty",
-	[dijit._Widget, dijit._Container], {
+dojo.declare("dojox.wire.ml.DataProperty", [dijit._Widget, dijit._Container], {
 	//	summary:
 	//		A widget to define a data property
 	//	description:

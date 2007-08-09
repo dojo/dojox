@@ -197,10 +197,7 @@ dojo.require("dijit.layout.ContentPane");
 	=====*/
 
 
-dojo.declare(
-	"dojox.layout.ContentPane",
-	dijit.layout.ContentPane,
-{
+dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	// summary:
 	//		An extended version of dijit.layout.ContentPane
 	//		Supports infile scrips and external ones declared by <script src=''

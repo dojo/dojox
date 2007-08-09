@@ -2,7 +2,7 @@ dojo.provide("dojox.wire.tests.programmatic.Wire");
 dojo.require("dojox.wire.Wire");
 
 //Simple connverter class to try to use.
-dojo.declare("dojox.wire.tests.programmatic.Wire.Converter", null, null, {
+dojo.declare("dojox.wire.tests.programmatic.Wire.Converter", null, {
 	convert: function(v){
 		return v + 1;
 	}

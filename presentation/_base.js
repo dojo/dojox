@@ -8,11 +8,7 @@ dojo.require("dijit.layout.StackContainer");
 dojo.require("dijit.layout.ContentPane"); 
 dojo.require("dojo.fx"); 
 
-dojo.declare(
-	"dojox.presentation.Deck",
-	[ dijit.layout.StackContainer, dijit._Templated ],
-	null,
-	{
+dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Templated ], {
 	// summary:
 	//	dojox.presentation class
 	//	basic powerpoint esque engine for handling transitons and control
@@ -333,7 +329,6 @@ dojo.declare(
 dojo.declare(
 	"dojox.presentation.Slide",
 	[dijit.layout.ContentPane,dijit._Contained,dijit._Container,dijit._Templated],
-	null,
 	{
 	// summary:
 	//	a Comonent of a dojox.presentation, and container for each 'Slide'
@@ -426,14 +421,11 @@ dojo.declare(
 	}
 });
 
-dojo.declare("dojox.presentation.Part",
-	[dijit._Widget,dijit._Contained],
-	null,
-	{
+dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 	// summary: 
-	// 	dojox.presentation.Part
+	//	dojox.presentation.Part
 	//	a node in a presentation.Slide that inherists control from a
-	// 	dojox.presentation.Action
+	//	dojox.presentation.Action
 	//	can be any element type, and requires styling before parsing
 	
 	// as: String
@@ -447,7 +439,7 @@ dojo.declare("dojox.presentation.Part",
 	startVisible: false,
 
 	// isShowing: Boolean,
-	// 	private holder for _current_ state of Part
+	//	private holder for _current_ state of Part
 	_isShowing: false,
 
 	postCreate: function(){
@@ -478,11 +470,7 @@ dojo.declare("dojox.presentation.Part",
 	}
 });
 
-dojo.declare(
-	"dojox.presentation.Action",
-	[dijit._Widget,dijit._Contained],
-	null,
-	{
+dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 	// summary:	
 	//	dojox.presention.Action:
 	//	a widget to attach to a dojox.presentation.Part to control

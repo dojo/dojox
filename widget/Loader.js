@@ -4,10 +4,7 @@ dojo.experimental("dojox.widget.Loader");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated"); 
 
-dojo.declare("dojox.widget.Loader",
-	[dijit._Widget,dijit._Templated],
-	null,
-	{
+dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 	// summary: a configurable global xhr-listener to display
 	// a loading message during running xhr's or to simply provide 
 	// base-level topic to subscribe to for custom loading messages 
