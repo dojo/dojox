@@ -76,6 +76,9 @@ dojox.data.tests.stores.CsvStore.verifyItems = function(csvStore, items, attribu
 dojox.data.tests.stores.CsvStore.error = function(t, d, errData){
 	//  summary:
 	//		The error callback function to be used for all of the tests.
+	for (i in errData) {
+		console.log(errData[i]);
+	}
 	d.errback(errData);	
 }
 
@@ -118,6 +121,96 @@ doh.register("dojox.data.tests.stores.CsvStore",
 								onComplete: onComplete, 
 								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
 							});
+			return d; //Object
+		},
+
+		function testReadAPI_fetch_Multiple(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore of a single item.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore of a single item.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+
+			var done = [false, false];
+
+			function onCompleteOne(items, request){
+				done[0] = true;
+				t.is(1, items.length);
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+			
+			function onCompleteTwo(items, request){
+				done[1] = true;
+				t.is(1, items.length);
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+			
+			try
+			{
+				csvStore.fetch({ 	query: {Title: "*Sequel*"}, 
+									onComplete: onCompleteOne, 
+									onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
+								});
+				csvStore.fetch({ 	query: {Title: "2001:*"}, 
+									onComplete: onCompleteTwo, 
+									onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
+								});
+			}
+			catch(e)
+			{
+				for (i in e) {
+					console.log(e[i]);
+				}
+			}
+
+			return d; //Object
+		},
+		function testReadAPI_fetch_MultipleMixed(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore of a single item.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore of a single item.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+
+			var done = [false, false];
+			function onComplete(items, request){
+				done[0] = true;
+				t.is(1, items.length);
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+			
+			function onItem(item){
+				done[1] = true;
+				t.assertTrue(item !== null);
+				t.is('Dymtryk "the King", Edward', csvStore.getValue(item,"Producer"));
+				t.is('Caine Mutiny, The', csvStore.getValue(item,"Title"));
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+
+			csvStore.fetch({ 	query: {Title: "*Sequel*"}, 
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
+							});
+			
+            csvStore.fetchItemByIdentity({identity: "6", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+
+
 			return d; //Object
 		},
 		function testReadAPI_fetch_all_streaming(t){
@@ -236,7 +329,6 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertEqual(items.length, 1);
 				var label = csvStore.getLabel(items[0]);
 				t.assertTrue(label !== null);
-				console.log("Got label: " + label);
 				t.assertEqual("The Sequel to \"Dances With Wolves.\"", label);
 				d.callback(true);
 			}

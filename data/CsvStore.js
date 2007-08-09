@@ -44,6 +44,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 			'dojo.data.api.Read': true,
 			'dojo.data.api.Identity': true 
 		};
+		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
+		this._queuedFetches = [];
 	},
 	
 	_assertIsItem: function(/* item */ item){
@@ -65,7 +67,6 @@ dojo.declare("dojox.data.CsvStore", null, {
 			throw new Error("dojox.data.CsvStore: a function was passed an attribute argument that was not an attribute object nor an attribute name string");
 		}
 	},
-	
 
 /***************************************
      dojo.data.api.Read API
@@ -238,6 +239,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		//		See dojo.data.util.simpleFetch.fetch()
 		
 		var self = this;
+
 		var filter = function(requestArgs, arrayOfAllItems){
 			var items = null;
 			if(requestArgs.query){
@@ -278,21 +280,31 @@ dojo.declare("dojox.data.CsvStore", null, {
 		};
 
 		if(this._loadFinished){
-			filter(keywordArgs, this._dataArray);
+			filter(keywordArgs, this._arrayOfAllItems);
 		}else{
 			if(this._csvFileUrl){
-				var getArgs = {
-						url: self._csvFileUrl, 
-						handleAs: "text"
-					};
-				var getHandler = dojo.xhrGet(getArgs);
-				getHandler.addCallback(function(data){
-					self._processData(data);
-					filter(keywordArgs, self._arrayOfAllItems);
-				});
-				getHandler.addErrback(function(error){
-					throw error;
-				});
+				//If fetches come in before the loading has finished, but while
+				//a load is in progress, we have to defer the fetching to be 
+				//invoked in the callback.
+				if(this._loadInProgress){
+					this._queuedFetches.push({args: keywordArgs, filter: filter});
+				}else{
+					this._loadInProgress = true;
+					var getArgs = {
+							url: self._csvFileUrl, 
+							handleAs: "text"
+						};
+					var getHandler = dojo.xhrGet(getArgs);
+					getHandler.addCallback(function(data){
+						self._processData(data);
+						filter(keywordArgs, self._arrayOfAllItems);
+						self._handleQueuedFetches();
+					});
+					getHandler.addErrback(function(error){
+						self._loadInProgress = false;
+						throw error;
+					});
+				}
 			}else if(this._csvData){
 				this._processData(this._csvData);
 				this._csvData = null;
@@ -390,12 +402,13 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 	
 	_processData: function(/* String */ data){
-		this._loadFinished = true;
 		this._getArrayOfArraysFromCsvFileContents(data);
 		this._arrayOfAllItems = [];
 		for(var i=0; i<this._dataArray.length; i++){
 			this._arrayOfAllItems.push(this._createItemFromIdentity(i));
 		}
+		this._loadFinished = true;
+		this._loadInProgress = false;
 	},
 	
 	_createItemFromIdentity: function(/* String */ identity){
@@ -428,34 +441,44 @@ dojo.declare("dojox.data.CsvStore", null, {
 		if(!this._loadFinished){
 			var self = this;
 			if(this._csvFileUrl){
-				var getArgs = {
-						url: self._csvFileUrl, 
-						handleAs: "text"
-					};
-				var getHandler = dojo.xhrGet(getArgs);
-				getHandler.addCallback(function(data){
-					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
-					try{
-						self._processData(data);
-						var item = self._createItemFromIdentity(keywordArgs.identity);
-						if(!self.isItem(item)){
-							item = null;
+				//If fetches come in before the loading has finished, but while
+				//a load is in progress, we have to defer the fetching to be 
+				//invoked in the callback.
+				if(this._loadInProgress){
+					this._queuedFetches.push({args: keywordArgs});
+				}else{
+					this._loadInProgress = true;
+					var getArgs = {
+							url: self._csvFileUrl, 
+							handleAs: "text"
+						};
+					var getHandler = dojo.xhrGet(getArgs);
+					getHandler.addCallback(function(data){
+						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+						try{
+							self._processData(data);
+							var item = self._createItemFromIdentity(keywordArgs.identity);
+							if(!self.isItem(item)){
+								item = null;
+							}
+							if(keywordArgs.onItem){
+								keywordArgs.onItem.call(scope, item);
+							}
+							self._handleQueuedFetches();
+						}catch(error){
+							if(keywordArgs.onError){
+								keywordArgs.onError.call(scope, error);
+							}
 						}
-						if(keywordArgs.onItem){
-							keywordArgs.onItem.call(scope, item);
-						}
-					}catch(error){
+					});
+					getHandler.addErrback(function(error){
+						this._loadInProgress = false;
 						if(keywordArgs.onError){
+							var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
 							keywordArgs.onError.call(scope, error);
 						}
-					}
-				});
-				getHandler.addErrback(function(error){
-					if(keywordArgs.onError){
-						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
-						keywordArgs.onError.call(scope, error);
-					}
-				});
+					});
+				}
 			}else if(this._csvData){
 				self._processData(self._csvData);
 				self._csvData = null;
@@ -488,6 +511,25 @@ dojo.declare("dojox.data.CsvStore", null, {
 		 //Identity isn't a public attribute in the item, it's the row position index.
 		 //So, return null.
 		 return null;
+	},
+
+	_handleQueuedFetches: function(){
+		//	summary: 
+		//		Internal function to execute delayed request in the store.
+		//Execute any deferred fetches now.
+		if (this._queuedFetches.length > 0) {
+			for(var i = 0; i < this._queuedFetches.length; i++){
+				var fData = this._queuedFetches[i];
+				var delayedFilter = fData.filter;
+				var delayedQuery = fData.args;
+				if(delayedFilter){
+					delayedFilter(delayedQuery, this._arrayOfAllItems); 
+				}else{
+					this.fetchItemByIdentity(fData.args);
+				}
+			}
+			this._queuedFetches = [];
+		}
 	}
 });
 //Mix in the simple fetch implementation to this class.

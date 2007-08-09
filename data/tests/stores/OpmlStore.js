@@ -190,6 +190,45 @@ doh.register("dojox.data.tests.stores.OpmlStore",
 			return d; //Object
 		},
 
+		function testReadAPI_fetch_one_Multiple(t){
+			//	summary: 
+			//		Simple test of a basic fetch on OpmlStore of a single item.
+			//	description:
+			//		Simple test of a basic fetch on OpmlStore of a single item.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			var done = [false,false];
+			function onCompleteOne(items, request){
+				done[0] = true;
+				t.is(1, items.length);
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+			function onCompleteTwo(items, request){
+				done[1] = true;
+				t.is(1, items.length);
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+
+			opmlStore.fetch({ 	query: {text: "Asia"}, 
+								onComplete: onCompleteOne, 
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+
+			opmlStore.fetch({ 	query: {text: "North America"}, 
+								onComplete: onCompleteTwo, 
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+
+			return d; //Object
+		},
+
 		function testReadAPI_fetch_one_deep(t){
 			//	summary: 
 			//		Simple test of a basic fetch on OpmlStore of a single item that's nested down as a child item.
