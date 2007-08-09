@@ -6,7 +6,8 @@
 		
 		h1.showTitle {
 			margin:0; 
-			padding:20px; 
+			margin-left:0; 
+			padding:0; 
 			font-size: 60px;
 			background:transparent; 
 			border-bottom:1px solid #000; 
@@ -60,14 +61,13 @@
 		}
 
 		.dojoShowBody {
-			background:#fff; 
+			background:#fff url('../../../dijit/themes/tundra/images/testBodyBg.gif') repeat-x top left; 
 			padding:10px; 
 		}
 
 		.dojoShow {
 			width:100%; height:100%; 
 			overflow:hidden;
-		/*	display: none; */
 		}
 }
 
@@ -96,17 +96,15 @@
 	height: 100px;
 	width:100%;
 	display:block;
-	/* background:url('/dojobox/dojo-tree/dojo_0.9/dijit/themes/tundra/titleBarBg.gif') repeat-x top left; */ 
 	background-color: #ededed; 
 	border-bottom:1px solid #666; 
 }
 .dojoShowSlideTitle h1 {
 	margin-top: 0;
-	line-height: 100px;
-	margin-left: 30px;
+	/* line-height: 100px;
+	margin-left: 30px; */
 }
 .dojoShowSlideBody {
-	background:#fff;
 	margin: 15px;
-	background: url('../../../dijit/themes/tundra/images/testBodyBg.gif') repeat-x top left; 
+	background:#fff url('../../../dijit/themes/tundra/images/testBodyBg.gif') repeat-x top left; 
 }

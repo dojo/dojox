@@ -64,11 +64,10 @@ dojo.declare(
 	// 	icon for navigation "previous" button
 	prevIcon: dojo.moduleUrl('dojox.presentation','resources/icons/prev.png'),
 
-	// private but safely settable:
-	// _navOpacMin: 0.15,
 	_navOpacMin: 0,
 	_navOpacMax: 0.85,
-
+	_slideIndex: 0,
+	
 	// Private:
 	_slides: [], 
 	_navShowing: true,
@@ -76,7 +75,6 @@ dojo.declare(
 	
 	startup: function(){
 		// summary: connect to the various handlers and controls for this presention
-		console.log('fooooo'); 
 		dojox.presentation.Deck.superclass.startup.call(this);
 
 		if(this.useNav){ 
@@ -85,30 +83,57 @@ dojo.declare(
 			this.showNav.style.display = "none"; 
 		} 
 
-		this.connect(document,'onclick', 'gotoSlideByEvent');
-		/*
-		var tmp = (dojo.isIE) 	? dojo.connect(document,'onkeydown',this,'gotoSlideByEvent') 
-					: dojo.connect(document,'onkeypress',this,'gotoSlideByEvent');
-		*/
-		this.connect(document,'onkeypress', 'gotoSlideByEvent');
-
+		this.connect(document,'onclick', '_onEvent');
+		this.connect(document,'onkeypress', '_onEvent');
+		
 		// only if this.fullScreen == true?
 		this.connect(window, 'onresize', '_resizeWindow');
 		this._resizeWindow();
 		
 		this._updateSlides(); 
 		
-		var th = window.location.hash;
-		if(th.length && this.setHash){
-			var parts = (""+window.location).split(this.id+"_SlideNo_");
-			if(parts.length>1){
-				this._gotoSlide(parseInt(parts[1]));
-			}	
-		}
-
+		this._readHash();
+		this._setHash();
 	},
 
+	moveTo: function(/* Integer */ number){
+		var slideIndex = number - 1; 
+		
+		if(slideIndex < 0)
+			slideIndex = 0;
+		
+		if(slideIndex > this._slides.length - 1)
+			slideIndex = this._slides.length - 1; 
+		
+		this._gotoSlide(slideIndex);
+	},
 
+	onMove: function (number){
+		// summary: stub function? TODOC: ?
+	},
+	
+	nextSlide: function(/*Event*/ evt){
+		// summary: transition to the next slide.
+		if (!this.selectedChildWidget.isLastChild) {
+			this._gotoSlide(this._slideIndex+1);
+		}
+		if (evt) { evt.stopPropagation(); }
+	},
+
+	previousSlide: function(/*Event*/ evt){
+		// summary: transition to the previous slide
+		if (!this.selectedChildWidget.isFirstChild) {
+			
+			this._gotoSlide(this._slideIndex-1);
+			
+		} else { this.selectedChildWidget._reset(); } 
+		if (evt) { evt.stopPropagation();}
+	},
+
+	getHash: function(id){
+		return this.id+"_SlideNo_"+id;
+	},
+	
 	_hideNav: function(evt){
 		// summary: hides navigation
 		if(this._navAnim){ this._navAnim.stop(); }
@@ -159,7 +184,7 @@ dojo.declare(
 		}
 	},
 
-	gotoSlideByEvent: function(/* Event */ evt){
+	_onEvent: function(/* Event */ evt){
 		// summary: 
 		//		main presentation function, determines next 'best action' for a
 		//		specified event.
@@ -168,34 +193,59 @@ dojo.declare(
 
 		if(_type == "click" || _type == "change"){
 			if(_node.index && _node.parentNode == this.select){ 
-				this.selectChild(this._slides[_node.index]); 
+				this._gotoSlide(_node.index);
 			}else if(_node == this.select){
-				this.selectChild(this._slides[_node.selectedIndex]);
+				this._gotoSlide(_node.selectedIndex);
 			}else{
 				if (this.noClick || this.selectedChildWidget.noClick || this._isUnclickable(evt)) return; 
 				this.selectedChildWidget._nextAction(evt);
 			}
 		}else if(_type=="keydown" || _type == "keypress"){
-			// TODO: match these again dojo.keys.*
+			
 			// FIXME: safari doesn't report keydown/keypress?
-			var key = evt.keyCode;
-			var ch = evt.charCode;
-			if(key == 63234 || key == 37){
-				this.previousSlide(evt);
-			}else if(key == 63235 || key == 39 || ch == 32) {
-				this.selectedChildWidget._nextAction(evt); 
+			
+			var key = (evt.charCode == dojo.keys.SPACE ? dojo.keys.SPACE : evt.keyCode);
+			switch(key){
+				case dojo.keys.DELETE:
+				case dojo.keys.BACKSPACE:
+				case dojo.keys.LEFT_ARROW:
+				case dojo.keys.UP_ARROW:
+				case dojo.keys.PAGE_UP:
+				case 80:	// key 'p'
+					this.previousSlide(evt);
+					break;
+
+				case dojo.keys.ENTER:
+				case dojo.keys.SPACE:
+				case dojo.keys.RIGHT_ARROW:
+				case dojo.keys.DOWN_ARROW:
+				case dojo.keys.PAGE_DOWN: 
+				case 78:	// key 'n'
+					this.selectedChildWidget._nextAction(evt); 
+					break;
+
+				case dojo.keys.HOME:	this._gotoSlide(0);
 			}
 		}
 		this._resizeWindow();
 		evt.stopPropagation(); 
 	},
 		
-	_gotoSlide: function(/* Integer */ slideNo) {
-		slideNo -= 1; 
-		this.selectChild(this._slides[slideNo]);
-		this._slides[slideNo]._reset();
-		this.select.selectedIndex = slideNo; 
-		if(this.setHash){ this._setHash(); }
+	_gotoSlide: function(/* Integer */ slideIndex){
+
+		this.selectChild(this._slides[slideIndex]);
+		this.selectedChildWidget._reset();
+
+		this._slideIndex = slideIndex;
+		
+		if(this.useNav){
+			this.select.selectedIndex = slideIndex; 
+		}
+		
+		if(this.setHash){ 
+			this._setHash(); 
+		}
+		this.onMove(this._slideIndex+1);
 	},
 
 	_isUnclickable: function(/* Event */ evt){
@@ -210,33 +260,23 @@ dojo.declare(
 		}
 		return false; 
 	},
-	nextSlide: function(/*Event*/ evt){
-		// summary: transition to the next slide.
-		if(!this.selectedChildWidget.isLastChild){
-			this.forward();
-			this.select.selectedIndex += 1; 
-		}
-		if(this.setHash){ this._setHash(); }
-		if(evt){ evt.stopPropagation(); }
-	},
 
-	previousSlide: function(/*Event*/ evt){
-		// summary: transition to the previous slide
-		if(!this.selectedChildWidget.isFirstChild){
-			this.back();
-			this.select.selectedIndex -= 1; 
-		}else{
-			this.selectedChildWidget._reset();
-		} 
-		if(this.setHash){ this._setHash(); }
-		if(evt){ evt.stopPropagation();}
+	_readHash: function(){
+		var th = window.location.hash;
+		if (th.length && this.setHash) {
+			var parts = (""+window.location).split(this.getHash(''));
+			if(parts.length>1){
+				this._gotoSlide(parseInt(parts[1])-1);
+			}
+		}
 	},
 
 	_setHash: function(){
 		// summary: sets url #mark to direct slide access
-		var slideNo = this.select.selectedIndex+1;
-		window.location.href = "#"+this.id+"_SlideNo_"+slideNo;
-
+		if(this.setHash){
+			var slideNo = this._slideIndex+1;
+			window.location.href = "#"+this.getHash(slideNo);	
+		}
 	},
 
 	_resizeWindow: function(/*Event*/ evt){
@@ -252,7 +292,6 @@ dojo.declare(
 		this.selectedChildWidget.domNode.style.height = h +'px';
 		this.selectedChildWidget.domNode.style.width = w +'px';
 	},
-
 
 	_transition: function(newWidget,oldWidget){ 
 		// summary: over-ride stackcontainers _transition method
@@ -289,7 +328,6 @@ dojo.declare(
 		}
 		//dojo.fx.combine(anims).play();
 	}
-
 });
 
 dojo.declare(
@@ -301,15 +339,10 @@ dojo.declare(
 	//	a Comonent of a dojox.presentation, and container for each 'Slide'
 	//	made up of direct HTML (no part/action relationship), and dojox.presentation.Part(s),
 	//	and their attached Actions.
-	
-	// FIXME: not sure why this isn't set as a templatePath
 
-	// templateString: String
+	// templatPath: String
 	//	make a ContentPane templated, and style the 'titleNode'
-	templateString: '<div dojoAttachPoint="showSlide" class="dojoShowPrint dojoShowSlide">'+
-			'	<h1 class="showTitle" dojoAttachPoint="slideTitle"><span class="dojoShowSlideTitle" dojoAttachPoint="slideTitleText">${title}</span></h1>'+
-			'	<div class="dojoShowBody" dojoAttachPoint="containerNode"></div>'+
-			'</div>',
+	templatePath: dojo.moduleUrl("dojox.presentation","resources/Slide.html"),
 
 	// title: String
 	//	string to insert into titleNode, title of Slide
@@ -482,7 +515,7 @@ dojo.declare(
 	_attached: [],
 	_nullAnim: false,
 
-	_runAction: function() {
+	_runAction: function(){
 		// summary: runs this action on attached node(s)
 
 		var anims = [];
@@ -504,7 +537,7 @@ dojo.declare(
 		if(_anim){ _anim.play(); }
 	},
 
-	_getSiblingsByType: function(/* String */ declaredClass) {
+	_getSiblingsByType: function(/* String */ declaredClass){
 		// summary: quick replacement for getChildrenByType("class"), but in 
 		// a child here ... so it's getSiblings. courtesy bill in #dojo 
 		// could be moved into parent, and just call this.getChildren(),
@@ -516,7 +549,7 @@ dojo.declare(
 		return siblings;
 	}, 
 	
-	postCreate: function() {
+	postCreate: function(){
 		// summary: run this once, should this be startup: function()?
 
 		// prevent actions from being visible, _always_

@@ -5,10 +5,10 @@
 
 	<script type="text/javascript"> djConfig = { isDebug: true, parseOnLoad: true }; </script>
 	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
-	<script type="text/javascript" src="../_base.js"></script>
+	
 		
 	<script type="text/javascript">
-		// dojo.require("dojox.presentation");
+		dojo.require("dojox.presentation");
 		dojo.require("dijit._Calendar"); 
 		dojo.require("dijit.TitlePane"); 
 		dojo.require("dojo.parser"); 
@@ -129,7 +129,7 @@
 		<div dojoType="dojox.presentation.Slide" title="Click Blocking" id="animated">
 			<p>You cannot click on this page</p>
 			<p dojoType="dojox.presentation.Part" as="1">I told you that you can't click ...</p>
-			<a href="#" onclick="playIt()">click here to move the title</a>
+			<a href="#" onClick="playIt()">click here to move the title</a>
 			<input dojoType="dojox.presentation.Action" forSlide="1" toggle="wipe">
 			<input dojoType="dojox.presentation.Action" forSlide="2">
 			<input dojoType="dojox.presentation.Action" forSlide="1" toggle="fade">
