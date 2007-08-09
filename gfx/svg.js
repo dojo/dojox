@@ -132,6 +132,7 @@ dojo.extend(dojox.gfx.Shape, {
 			var da = s.style.toLowerCase();
 			if(da in dojox.gfx.svg.dasharray){ da = dojox.gfx.svg.dasharray[da]; }
 			if(da instanceof Array){
+				da = dojo.clone(da);
 				for(var i = 0; i < da.length; ++i){
 					da[i] *= s.width;
 				}
