@@ -88,7 +88,6 @@ dojox.fx.sizeTo = function(/* Object */args){
 
 
 /* dojox.fx CSS Class _Animations: */
-
 dojox.fx.addClass = function(/* Object */args){
 	// summary:
 	//		returns an animation that will animate
@@ -166,7 +165,21 @@ dojox.fx.removeClass = function(/* Object */args){
 		properties: mixedProperties
 	},args));
 	dojo.connect(_anim,"onEnd",_anim,pullClass); 
-	return _anim; 
+	return _anim; // dojo._Animation
+};
+
+dojox.fx.toggleClass = function(/*HTMLElement*/node, /*String*/classStr, /*Boolean?*/condition){
+        //      summary:
+	//		creates an animation that will animate the effect of 
+	//		toggling a class on or off of a node.
+        //              Adds a class to node if not present, or removes if present.
+        //              Pass a boolean condition if you want to explicitly add or remove.
+        //      condition:
+        //              If passed, true means to add the class, false means to remove.
+        if(typeof condition == "undefined"){
+                condition = !dojo.hasClass(node, classStr);
+        }
+        return dojox.fx[(condition ? "addClass" : "removeClass")](node, classStr); // dojo._Animation
 };
 
 dojox.fx._allowedProperties = [
@@ -176,28 +189,26 @@ dojox.fx._allowedProperties = [
 	//	"predict" intent, or even something more clever ... 
 	//	open to suggestions.
 
+	// no-brainers:
 	"width",
 	"height",
-
+	// only if position = absolute || relative?
+	"left", "top", "right", "bottom", 
 	// these need to be filtered through dojo.colors?
 	// "background", // normalize to:
-		/* "backgroundImage", */
-		"backgroundColor", // so we can use background offset?
-	"color",
+	/* "backgroundImage", */
+	"backgroundPosition", // FIXME: to be effective, this needs "#px #px"?
+	"backgroundColor",
 
+	"color",
 	//
 	// "border", // the normalize on this one will be _hideous_ 
 	//	(color/style/width)
 	//	(left,top,right,bottom for each of _those_)
 	//
-
-	// only if pos = absolute || relative?
-	"left", "top", "right", "bottom", 
-
-	"padding", // normalize to: 
+	// "padding", // normalize to: 
 	"paddingLeft", "paddingRight", "paddingTop", "paddingBottom",
-
-	"margin", // normalize to:
+	// "margin", // normalize to:
 	"marginLeft", "marginTop", "marginRight", "marginBottom",
 
 	// unit import/delicate?:
@@ -213,9 +224,8 @@ dojox.fx._getStyleSnapshot = function(/* Object */cache){
 	// 	properties. 
 	//
 	// returns:  Array
-	//	an array of raw, calculcated values, to be normalized/compared
+	//	an array of raw, calculcated values (no keys), to be normalized/compared
 	//	elsewhere	
-
 	return dojo.map(dojox.fx._allowedProperties,function(style){
 		return cache[style]; // String
 	}); // Array

@@ -37,6 +37,20 @@
 			padding:30px; 
 		}
 
+		.hoverBaseClass {
+			height:22px; line-height:20px;
+			padding:20px;
+			font-size:12pt;
+			text-align:center;
+			border:2px solid #ccc;
+			background-color:#ededed;
+		}
+		.hoverTestClass {
+			font-size:18pt; 
+			padding:14px; 
+		}
+
+
 		.testClassThree {
 			bottom:90px;
 			right:90px;
@@ -49,22 +63,34 @@
 		var classNode = null;
 		var theNode = null; 
 		var fontShowing = false; 
-	
-		var fontTest = function(){
-			console.log(fontShowing); 
+
+		var _hoverAnim = null;
+		function hoverTest(/* Boolean */direction){
+			_hoverAnim = dojox.fx[(direction ? "addClass":"removeClass")]({
+				node: dojo.byId('hoverTestNode'),
+				cssClass: 'hoverTestClass',
+				duration: 400,
+			}).play();
+		}	
+
+		function fontTest(){
 			if(!fontShowing){
 				dojox.fx.addClass({
 					node: theNode,
 					cssClass: "testFontSizeClass",
 					duration: 250,
-					onEnd: function(){ fontShowing=!fontShowing; }
+					onEnd: function(){ 
+						fontShowing =!fontShowing; 
+					}
 				}).play();	
 			}else{
 				dojox.fx.removeClass({
 					node: theNode,
 					cssClass: "testFontSizeClass",
 					duration: 250,
-					onEnd: function(){ fontShowing=!fontShowing; }
+					onEnd: function(){ 
+						fontShowing=!fontShowing; 
+					}
 				}).play();
 			}
 		};	
@@ -79,14 +105,15 @@
 			};
 			classNode.innerHTML = theNode.className; 
 			var anim = dojox.fx.addClass(mixin);
-			dojo.connect(anim,"onEnd",this,function(){
+			dojo.connect(anim,"onEnd",function(){
 				classNode.innerHTML = theNode.className; 
-				console.log('foo'); 
-				dojox.fx.addClass({
-					node: dojo.byId('theNode'),
-					cssClass: "testClassThree",
+				console.log('foo',theNode); 
+				var anim2 = dojox.fx.addClass({
+					node: theNode,
+					cssClass: 'testClassThree',
 					duration: 500
-				}).play(750); // this breaks in IE?!?
+				}); // this breaks in IE?!?
+				anim2.play();
 			});
 			anim.play(); 
 		});
@@ -101,35 +128,14 @@
 	</p>
 
 	<div>
-	<input type="button" onclick="fontTest();" value="run font test">	
+	<input type="button" onclick="fontTest();" value="run font test"> 
 	</div>
-
-	prototype flow:
-	<ol>
-		<li>determine animate-able properties: {} of the node: before animation (current inherited style 
-		info)</li>
-		<li>create a (cloned?) node offscreen/hidden, and apply the new class? will it be reliable
-		 calculations?</li>
-		<li>determine _which_ properties have changed, and mixin to animateProperty</li>
-		<li>play()</li>
-	</ol>
-
-	pitfalls:
-	<ul>
-		<li>overhead.  what would be the best way to determine what properties 
-		are modified in a class? computedStyle is expensive? </li>
-		<li>one-off's: CSS can set border:1px solid #000, but javascript wants 
-		borderWidth:1px; borderColor: #000</li>
-		<li>colors. what a nightmare.</li>
-	</ul>
-
-	notes:
-	<ul>
-		<li>have a list of available properties, maybe two: one for normalized ones 
-		(width, height, etc), and one's we'll need to
-		muck with to match (borderTop, borderLeft, margins, etc, etc)?</li>
-		<li>i don't think my scope is proper. chaining tests casue issues. basic prototype in place, though.</li>
-	</ul>
+	<div>
+	<br><br>
+	<span id="hoverTestNode" class="hoverBaseClass" onmouseover="hoverTest(true);" onmouseout="hoverTest(false);"> Hover this small block of text </span>	
+	<br><br>
+	(FIXME: animation dies if you hover/unhover too quickly? not setting cssClass in that event.) 
+	</div>
 
 	<div id="theNode" class="baseClass">
 		current class string: <span id="classNode"></span>
