@@ -17,7 +17,7 @@ dojo.require("dojox.gfx");
 
 var rotation = 0, scaling = 1;
 var surface, g, m = dojox.gfx.matrix;
-var initial_matrix = m.normalize([m.rotateg(-10), m.translate(300, 100)]);
+var initial_matrix = m.normalize([m.rotateg(10), m.translate(300, 100)]);
 
 var updateMatrix = function(){
 	if(g){ g.setTransform([m.rotategAt(rotation, 350, 350), m.scaleAt(scaling, 350, 350), initial_matrix]); }
