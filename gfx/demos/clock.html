@@ -36,7 +36,7 @@ var diff_time = new Date();
 
 placeHand = function(shape, angle, shift) {
 	var move = {dx: center.x + (shift ? shift.dx : 0), dy: center.y + (shift ? shift.dy : 0)};
-	return shape.setTransform([move, dojox.gfx.matrix.rotateg(-angle)]);
+	return shape.setTransform([move, dojox.gfx.matrix.rotateg(angle)]);
 };
 
 placeHourHand = function(h, m, s) {
