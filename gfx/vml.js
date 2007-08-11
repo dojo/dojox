@@ -312,6 +312,7 @@ dojo.extend(dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
 	// summary: a group shape (VML), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
+	createShape: dojox.gfx._createShape,
 	add: function(shape){
 		// summary: adds a shape to a group/surface
 		// shape: dojox.gfx.Shape: an VML shape object

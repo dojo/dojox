@@ -240,6 +240,24 @@ dojo.mixin(dojox.gfx, {
 	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g
 });
 
+dojox.gfx._createShape = function(shape){
+	// summary: creates a shape object based on its type; it is meant to be used
+	//	by group-like objects
+	// shape: Object: a shape object
+	switch(shape.type){
+		case dojox.gfx.defaultPath.type:		return this.createPath(shape);
+		case dojox.gfx.defaultRect.type:		return this.createRect(shape);
+		case dojox.gfx.defaultCircle.type:		return this.createCircle(shape);
+		case dojox.gfx.defaultEllipse.type:		return this.createEllipse(shape);
+		case dojox.gfx.defaultLine.type:		return this.createLine(shape);
+		case dojox.gfx.defaultPolyline.type:	return this.createPolyline(shape);
+		case dojox.gfx.defaultImage.type:		return this.createImage(shape);
+		case dojox.gfx.defaultText.type:		return this.createText(shape);
+		case dojox.gfx.defaultTextPath.type:	return this.createTextPath(shape);
+	}
+	return null;
+};
+
 dojo.declare("dojox.gfx.Surface", null, {
 	// summary: a surface object to be used for drawings
 
@@ -252,22 +270,7 @@ dojo.declare("dojox.gfx.Surface", null, {
 		
 		return this.rawNode; // Node
 	},
-	createShape: function(shape){
-		// summary: creates a shape object based on its type
-		// shape: Object: a shape object
-		switch(shape.type){
-			case dojox.gfx.defaultPath.type:		return this.createPath(shape);
-			case dojox.gfx.defaultRect.type:		return this.createRect(shape);
-			case dojox.gfx.defaultCircle.type:		return this.createCircle(shape);
-			case dojox.gfx.defaultEllipse.type:		return this.createEllipse(shape);
-			case dojox.gfx.defaultLine.type:		return this.createLine(shape);
-			case dojox.gfx.defaultPolyline.type:	return this.createPolyline(shape);
-			case dojox.gfx.defaultImage.type:		return this.createImage(shape);
-			case dojox.gfx.defaultText.type:		return this.createText(shape);
-			case dojox.gfx.defaultTextPath.type:	return this.createTextPath(shape);
-		}
-		return null;
-	}
+	createShape: dojox.gfx._createShape
 });
 
 dojo.declare("dojox.gfx.Point", null, {
