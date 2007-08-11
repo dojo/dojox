@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>dojox.timing.Sequence class</title>
+		
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true" ></script>
+	<script type="text/javascript" src="../Sequence.js"></script>
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/dijit.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+
+		.block {
+			width:200px;
+			height:100px;
+			background:#666;
+			border:1px solid #ccc;
+			display:block; 
+			color:#fff;
+			text-align:center; 
+		}
+	
+	</style>
+	<script type="text/javascript">
+		// dojo.require("dojox.timing.Sequence"); 
+
+		var seqObj = null; var outputNode = null;
+
+		dojo.addOnLoad(function(){
+			outputNode = dojo.byId('logBox'); 
+		});
+
+		function runSequence(){
+			seqObj = new dojox.timing.Sequence({});
+       			seqObj.go(seq, function() { logMsg('done') });
+		};
+
+		function logMsg(msg){
+			outputNode.innerHTML += msg + "<br>"; 
+		}
+	
+		function showMessage(msg) {
+                      logMsg(msg);
+		}
+
+              function returnWhenDone() {
+                      logMsg("in returnWhenDone");
+                      window.setTimeout(continueSequence,1000);
+                      return false;
+              }
+              function continueSequence() {
+                      // continue the sequence run
+                      seqObj.goOn();
+              }
+
+              var seq = [
+                      {func: [showMessage, window, "i am first"], pauseAfter: 1000},
+                      {func: [showMessage, window, "after 1000ms pause this should be seen"], pauseAfter: 2000},
+                      {func: [showMessage, window, "another 2000ms pause and 1000ms pause before"], pauseAfter: 1000},
+                      {func: [showMessage, window, "repeat 10 times and pause 100ms after"], repeat: 10, pauseAfter: 100},
+                      {func: returnWhenDone}
+              ];
+
+	
+
+
+	</script>
+</head>
+<body class="tundra">
+
+	<h1>dojox.timing.Sequence tests</h1>
+	
+	<br>(example code in page source)<br>
+	<input type="button" onClick="runSequence()" value="Run Sequence">
+
+	<h3>Sequence output:</h3>
+	<div id="logBox" style="width:420px; height:250px; overflow:auto;">
+	</div>
+
+	<p>maybe need to put an _Animation sequence example here? seems much more robust 
+	than using chains and combines with delays and durations to hack timing ... </p>
+
+</body>
+</html>
