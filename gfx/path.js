@@ -2,16 +2,19 @@ dojo.provide("dojox.gfx.path");
 
 dojo.require("dojox.gfx.shape");
 
-dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape,
-	function(rawNode){
-		// summary: a generalized path shape
+dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
+	// summary: a generalized path shape
+	
+	constructor: function(rawNode){
+		// summary: a path constructor
 		// rawNode: Node: a DOM node to be used by this path object
 		this.shape = dojo.clone(dojox.gfx.defaultPath);
 		this.segments = [];
 		this.absolute = true;
 		this.last = {};
 		this.attach(rawNode);
-	}, {	
+	},
+	
 	// mode manipulations
 	setAbsoluteMode: function(mode){
 		// summary: sets an absolute or relative mode for path points
@@ -197,8 +200,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape,
 			}else if(t instanceof Array){
 				this._collectArgs(array, t);
 			}else if("x" in t && "y" in t){
-				array.push(t.x);
-				array.push(t.y);
+				array.push(t.x, t.y);
 			}
 		}
 	},
@@ -264,9 +266,6 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape,
 		// summary: formes an elliptic arc segment
 		var args = [];
 		this._collectArgs(args, arguments);
-		for(var i = 2; i < args.length; i += 7){
-			args[i] = -args[i];
-		}
 		this._pushSegment(this.absolute ? "A" : "a", args);
 		return this; // self
 	},
@@ -323,8 +322,10 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape,
 });
 
 dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
+	// summary: a generalized TextPath shape
+
 	constructor: function(rawNode){
-		// summary: a generalized TextPath shape
+		// summary: a TextPath shape constructor
 		// rawNode: Node: a DOM node to be used by this TextPath object
 		if(!("text" in this)){
 			this.text = dojo.clone(dojox.gfx.defaultTextPath);

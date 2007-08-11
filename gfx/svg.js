@@ -945,9 +945,11 @@ delete dojox.gfx.svg._creators;
 dojox.gfx.svg.Defines = function(){
 	this.rawNode = null;
 };
+
 dojo.extend(dojox.gfx.svg.Defines, {
 	setRawNode: function(rawNode){
 		this.rawNode = rawNode;
 	}
 });
+
 dojox.gfx.svg.Defines.nodeType = "defs";

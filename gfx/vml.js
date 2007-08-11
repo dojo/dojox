@@ -852,10 +852,10 @@ dojox.gfx.path._calcArc = function(alpha){
 	// return a start point, 1st and 2nd control points, and an end point
 	var p2 = {x: cosa + (4 / 3) * (1 - cosa), y: sina - (4 / 3) * cosa * (1 - cosa) / sina};
 	return {
-		s:  {x: cosa, y: sina},
-		c1: p2,
-		c2: {x: p2.x, y: -p2.y},
-		e:  {x: cosa, y: -sina}
+		e:  {x: cosa, y: sina},
+		c2: p2,
+		c1: {x: p2.x, y: -p2.y},
+		s:  {x: cosa, y: -sina}
 	};
 };
 
@@ -1187,10 +1187,10 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_curvePI4: dojox.gfx.path._calcArc(Math.PI / 8),
-	_calcArcTo: function(path, last, rx, ry, xRotg, large, cw, x, y){
+	_calcArcTo: function(path, last, rx, ry, xRotg, large, ccw, x, y){
 		var m = dojox.gfx.matrix;
 		// calculate parameters
-		var xRot = -dojox.gfx.matrix._degToRad(xRotg);
+		var xRot = dojox.gfx.matrix._degToRad(xRotg);
 		var rx2 = rx * rx;
 		var ry2 = ry * ry;
 		var pa = m.multiplyPoint(
@@ -1204,7 +1204,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			x:  c1 * rx * pa.y / ry,
 			y: -c1 * ry * pa.x / rx
 		};
-		if(large == cw){
+		if(large == ccw){
 			ca = {x: -ca.x, y: -ca.y};
 		}
 		// our center
@@ -1219,10 +1219,10 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			ca
 		);
 		// start of our arc
-		var startAngle = Math.atan2(c.y - last.y, last.x - c.x) - xRot;
-		var endAngle   = Math.atan2(c.y - y, x - c.x) - xRot;
+		var startAngle = Math.atan2(last.y - c.y, last.x - c.x) - xRot;
+		var endAngle   = Math.atan2(y - c.y, x - c.x) - xRot;
 		// size of our arc in radians
-		var theta = cw ? startAngle - endAngle : endAngle - startAngle;
+		var theta = ccw ? endAngle - startAngle : startAngle - endAngle;
 		if(theta < 0){
 			theta += dojox.gfx.vml.two_pi;
 		}else if(theta > dojox.gfx.vml.two_pi){
@@ -1237,23 +1237,23 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		// draw curve chunks
 		var alpha = dojox.gfx.vml.pi4 / 2;
 		var curve = this._curvePI4;
-		var step  = cw ? -alpha : alpha;
+		var step  = ccw ? alpha : -alpha;
 		for(var angle = theta; angle > 0; angle -= dojox.gfx.vml.pi4){
 			if(angle < dojox.gfx.vml.pi4){
 				alpha = angle / 2;
 				curve = dojox.gfx.path._calcArc(alpha);
-				step  = cw ? -alpha : alpha;
+				step  = ccw ? -alpha : alpha;
 			}
 			var c1, c2, e;
 			var M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
-			if(cw){
-				c1 = m.multiplyPoint(M, curve.c2);
-				c2 = m.multiplyPoint(M, curve.c1);
-				e  = m.multiplyPoint(M, curve.s );
-			}else{
+			if(ccw){
 				c1 = m.multiplyPoint(M, curve.c1);
 				c2 = m.multiplyPoint(M, curve.c2);
 				e  = m.multiplyPoint(M, curve.e );
+			}else{
+				c1 = m.multiplyPoint(M, curve.c2);
+				c2 = m.multiplyPoint(M, curve.c1);
+				e  = m.multiplyPoint(M, curve.s );
 			}
 			// draw the curve
 			path.push(" c");

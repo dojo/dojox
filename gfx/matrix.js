@@ -98,17 +98,17 @@ dojo.mixin(dojox.gfx.matrix, {
 		// summary: forms a rotating matrix
 		// description: The resulting matrix is used to rotate points 
 		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CCW)
+		// angle: Number: an angle of rotation in radians (>0 for CW)
 		var c = Math.cos(angle);
 		var s = Math.sin(angle);
-		return new dojox.gfx.matrix.Matrix2D({xx: c, xy: s, yx: -s, yy: c}); // dojox.gfx.matrix.Matrix2D
+		return new dojox.gfx.matrix.Matrix2D({xx: c, xy: -s, yx: s, yy: c}); // dojox.gfx.matrix.Matrix2D
 	},
 	rotateg: function(degree){
 		// summary: forms a rotating matrix
 		// description: The resulting matrix is used to rotate points
 		//		around the origin of coordinates (0, 0) by specified degree.
 		//		See dojox.gfx.matrix.rotate() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CCW)
+		// degree: Number: an angle of rotation in degrees (>0 for CW)
 		return dojox.gfx.matrix.rotate(dojox.gfx.matrix._degToRad(degree)); // dojox.gfx.matrix.Matrix2D
 	},
 	skewX: function(angle) {
@@ -116,7 +116,7 @@ dojo.mixin(dojox.gfx.matrix, {
 		// description: The resulting matrix is used to skew points in the x dimension
 		//		around the origin of coordinates (0, 0) by specified angle.
 		// angle: Number: an skewing angle in radians
-		return new dojox.gfx.matrix.Matrix2D({xy: Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
+		return new dojox.gfx.matrix.Matrix2D({xy: -Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
 	},
 	skewXg: function(degree){
 		// summary: forms an x skewing matrix
@@ -131,7 +131,7 @@ dojo.mixin(dojox.gfx.matrix, {
 		// description: The resulting matrix is used to skew points in the y dimension
 		//		around the origin of coordinates (0, 0) by specified angle.
 		// angle: Number: an skewing angle in radians
-		return new dojox.gfx.matrix.Matrix2D({yx: -Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
+		return new dojox.gfx.matrix.Matrix2D({yx: Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
 	},
 	skewYg: function(degree){
 		// summary: forms a y skewing matrix
@@ -308,7 +308,7 @@ dojo.mixin(dojox.gfx.matrix, {
 	rotateAt: function(angle, a, b){
 		// summary: rotates a picture using a specified point as a center of rotation
 		// description: Compare with dojox.gfx.matrix.rotate().
-		// angle: Number: an angle of rotation in radians (>0 for CCW)
+		// angle: Number: an angle of rotation in radians (>0 for CW)
 		// a: Number: an x component of a central point
 		// b: Number: a y component of a central point
 		
@@ -329,7 +329,7 @@ dojo.mixin(dojox.gfx.matrix, {
 	rotategAt: function(degree, a, b){
 		// summary: rotates a picture using a specified point as a center of rotation
 		// description: Compare with dojox.gfx.matrix.rotateg().
-		// degree: Number: an angle of rotation in degrees (>0 for CCW)
+		// degree: Number: an angle of rotation in degrees (>0 for CW)
 		// a: Number: an x component of a central point
 		// b: Number: a y component of a central point
 		

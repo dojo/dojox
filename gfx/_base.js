@@ -241,9 +241,9 @@ dojo.mixin(dojox.gfx, {
 });
 
 dojo.declare("dojox.gfx.Surface", null, {
+	// summary: a surface object to be used for drawings
+
 	constructor: function(){
-		// summary: a surface object to be used for drawings
-		
 		// underlying node
 		this.rawNode = null;
 	},
@@ -273,11 +273,11 @@ dojo.declare("dojox.gfx.Surface", null, {
 dojo.declare("dojox.gfx.Point", null, {
 	// summary: a hypothetical 2D point to be used for drawings - {x, y}
 	// description: This object is defined for documentation purposes.
-	//	You should use a naked object instead: {x: 1, y: 2}.
+	//	You should use the naked object instead: {x: 1, y: 2}.
 });
 
 dojo.declare("dojox.gfx.Rectangle", null, {
 	// summary: a hypothetical rectangle - {x, y, width, height}
 	// description: This object is defined for documentation purposes.
-	//	You should use a naked object instead: {x: 1, y: 2, width: 100, height: 200}.
+	//	You should use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
 });

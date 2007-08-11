@@ -156,7 +156,7 @@ dojo.addOnLoad(function()
 		surface.createRect({r: 20})
 			.setFill([0, 0, 255, 0.5])
 			// rotate it around its center and move to (100, 100)
-			.setTransform([dojox.gfx.matrix.translate(100, 100), dojox.gfx.matrix.rotategAt(30, 0, 0)])
+			.setTransform([dojox.gfx.matrix.translate(100, 100), dojox.gfx.matrix.rotategAt(-30, 0, 0)])
 			;
 	});
 
@@ -165,11 +165,11 @@ dojo.addOnLoad(function()
 		// anonymous red rectangle
 		surface.createRect(rect).setFill(new dojo.Color([255, 0, 0, 0.5]))
 			// skew it around LB point -30d, rotate it around LB point 30d, and move it to (100, 100)
-			.setTransform([dojox.gfx.matrix.translate(100, 100), dojox.gfx.matrix.rotategAt(30, 0, 100), dojox.gfx.matrix.skewXgAt(-30, 0, 100)]);
+			.setTransform([dojox.gfx.matrix.translate(100, 100), dojox.gfx.matrix.rotategAt(-30, 0, 100), dojox.gfx.matrix.skewXgAt(30, 0, 100)]);
 		// anonymous blue rectangle
 		surface.createRect(rect).setFill(new dojo.Color([0, 0, 255, 0.5]))
 			// skew it around LB point -30d, and move it to (100, 100)
-			.setTransform([dojox.gfx.matrix.translate(100, 100), dojox.gfx.matrix.skewXgAt(-30, 0, 100)]);
+			.setTransform([dojox.gfx.matrix.translate(100, 100), dojox.gfx.matrix.skewXgAt(30, 0, 100)]);
 		// anonymous yellow rectangle
 		surface.createRect(rect).setFill(new dojo.Color([255, 255, 0, 0.25]))
 			// move it to (100, 100)
@@ -187,7 +187,7 @@ dojo.addOnLoad(function()
 		group.createRect(rect).setFill([0, 255, 0, 0.5]).applyTransform(dojox.gfx.matrix.translate(30, 40));
 		console.debug( "lime_rect: translate(30,40) " );
 		
-		group.createRect(rect).setFill([255, 0, 0, 0.5]).applyTransform(dojox.gfx.matrix.rotateg(30));
+		group.createRect(rect).setFill([255, 0, 0, 0.5]).applyTransform(dojox.gfx.matrix.rotateg(-30));
 		console.debug( "red_rect: rotate 30 degree counterclockwise " );
 
 		group.createRect(rect).setFill([0, 255, 255, 0.5])
@@ -205,16 +205,16 @@ dojo.addOnLoad(function()
 		group.createRect(rect).setFill([0, 0, 255, 0.5]).setFill([128, 0, 128, 0.5]).applyTransform(dojox.gfx.matrix.flipXY);
 		console.debug( "purple_rect: flipXY" );
 
-		group.createRect(rect).setFill([0, 0, 255, 0.5]).setFill([255, 128, 0, 0.5]).applyTransform(dojox.gfx.matrix.skewXg(15));
+		group.createRect(rect).setFill([0, 0, 255, 0.5]).setFill([255, 128, 0, 0.5]).applyTransform(dojox.gfx.matrix.skewXg(-15));
 		console.debug( "purple_rect: skewXg 15 degree" );
 
-		group.createRect(rect).setFill([0, 0, 255, 0.5]).setFill([0, 0, 0, 0.5]).applyTransform(dojox.gfx.matrix.skewYg(50));
+		group.createRect(rect).setFill([0, 0, 255, 0.5]).setFill([0, 0, 0, 0.5]).applyTransform(dojox.gfx.matrix.skewYg(-50));
 		console.debug( "black_rect: skewXg 50 degree" );
 
 		// move
 		group
 			.setTransform({ xx: 1.5, yy: 0.5, dx: 100, dy: 100 })
-			.applyTransform(dojox.gfx.matrix.rotateg(30))
+			.applyTransform(dojox.gfx.matrix.rotateg(-30))
 			;
 	});
 

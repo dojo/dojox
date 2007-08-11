@@ -33,11 +33,11 @@ transformImage = function(){
 	}else if(radio[1].checked){
         image.setTransform(dojox.gfx.matrix.translate(100,100));
 	}else if(radio[2].checked){
-        image.setTransform([dojox.gfx.matrix.translate(100,0), dojox.gfx.matrix.rotateg(-45)]);
+        image.setTransform([dojox.gfx.matrix.translate(100,0), dojox.gfx.matrix.rotateg(45)]);
 	}else if(radio[3].checked){
         image.setTransform([dojox.gfx.matrix.translate(70,90), dojox.gfx.matrix.scale({x:1.5, y:0.5})]);
 	}else if(radio[4].checked){
-        image.setTransform([dojox.gfx.matrix.rotateg(-15), dojox.gfx.matrix.skewXg(30)]);
+        image.setTransform([dojox.gfx.matrix.rotateg(15), dojox.gfx.matrix.skewXg(-30)]);
 	}
 	var cb = document.getElementById("r2");
 	if(cb.checked && !image.getShape().x){
