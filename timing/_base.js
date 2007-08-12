@@ -26,7 +26,7 @@ dojo.extend(dojox.timing.Timer, {
 		}
 		this.interval = interval;
 		if (this.isRunning){
-			this.timer = window.setInterval(dojo.lang.hitch(this, "onTick"), this.interval);
+			this.timer = window.setInterval(dojo.hitch(this, "onTick"), this.interval);
 		}
 	},
 	
@@ -39,7 +39,7 @@ dojo.extend(dojox.timing.Timer, {
 			this.onStart();
 		}
 		this.isRunning = true;
-		this.timer = window.setInterval(dojo.lang.hitch(this, "onTick"), this.interval);
+		this.timer = window.setInterval(dojo.hitch(this, "onTick"), this.interval);
 	},
 	
 	stop : function(){

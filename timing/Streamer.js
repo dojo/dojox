@@ -70,7 +70,7 @@ dojox.timing.Streamer = function(
 			timer.start();
 			return;
 		}
-		dojo.raise("You cannot start a Streamer without an input and an output function.");
+		throw new Error("You cannot start a Streamer without an input and an output function.");
 	};
 	this.onStart = function(){ };
 	this.stop = function(){
