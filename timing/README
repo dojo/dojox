@@ -8,7 +8,7 @@ Project state:
 expermental
 -------------------------------------------------------------------------------
 Credits
-	Tom Trenka (ttrenka AT gmail.com): original Timer and Streamer
+	Tom Trenka (ttrenka AT gmail.com): original Timer, Streamer, Thread and ThreadPool
 	Wolfram Kriesing (http://wolfram.kriesing.de/blog/): Sequence
 	Jonathan Bond-Caron (jbondc AT gmail.com): port of Timer and Streamer
 	Pete Higgins (phiggins AT gmail.com): port of Sequence
@@ -32,6 +32,10 @@ real-time data updating).
 dojox.timing.Sequencer is an object, similar to Streamer, that will allow you
 to set up a set of functions to be executed in a specific order, at specific
 intervals.
+
+The DojoX Timing ThreadPool is a port from the original implementation in the
+f(m) library.  It allows a user to feed a set of callback functions (wrapped
+in a Thread constructor) to a pool for background processing.
 -------------------------------------------------------------------------------
 Dependencies:
 
