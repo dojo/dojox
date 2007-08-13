@@ -6,11 +6,12 @@ dojo.require("dojox.charting._color");
 (function(){
 	var dxc=dojox.charting;
 	dxc.Theme=function(/*object?*/kwArgs){
-		this.chart=dojo.mixin(dojo.clone(dxc.Theme._def.chart), kwArgs.chart);
-		this.axis=dojo.mixin(dojo.clone(dxc.Theme._def.axis), kwArgs.axis);
-		this.series=dojo.mixin(dojo.clone(dxc.Theme._def.series), kwArgs.series);
-		this.marker=dojo.mixin(dojo.clone(dxc.Theme._def.marker), kwArgs.marker);
-		this.markers=dojo.mixin(dojo.clone(dxc.Theme.Markers), kwArgs.markers);
+		kwArgs=kwArgs||{};
+		this.chart=dojo.mixin(dojo.clone(dxc.Theme._def.chart), kwArgs.chart||{});
+		this.axis=dojo.mixin(dojo.clone(dxc.Theme._def.axis), kwArgs.axis||{});
+		this.series=dojo.mixin(dojo.clone(dxc.Theme._def.series), kwArgs.series||{});
+		this.marker=dojo.mixin(dojo.clone(dxc.Theme._def.marker), kwArgs.marker||{});
+		this.markers=dojo.mixin(dojo.clone(dxc.Theme.Markers), kwArgs.markers||{});
 		this.colors=[];
 
 		//	push the colors, use _def colors if none passed.
