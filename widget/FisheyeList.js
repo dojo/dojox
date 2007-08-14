@@ -21,21 +21,21 @@ dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit
 	//			id="item1"
 	//			onclick="alert('click on' + this.label + '(from widget id ' + this.widgetId + ')!');"
 	//			label="Item 1"
-	//			iconsrc="images/fisheye_1.png">
+	//			iconSrc="images/fisheye_1.png">
 	//		</div>
 	//		...
 	//	</div>
 	//
 	constructor: function(){
-	//
-	// TODO
-	// fix really long labels in vertical mode
-	//
+		//
+		// TODO
+		// fix really long labels in vertical mode
+		//
 	
-	this.pos = {'x': -1, 'y': -1};	// current cursor position, relative to the grid
-	
-	// for conservative trigger mode, when triggered, timerScale is gradually increased from 0 to 1
-	this.timerScale = 1.0;
+		this.pos = {'x': -1, 'y': -1};	// current cursor position, relative to the grid
+		
+		// for conservative trigger mode, when triggered, timerScale is gradually increased from 0 to 1
+		this.timerScale = 1.0;
 	
 	},
 
@@ -47,7 +47,7 @@ dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit
 		BOTTOM: 4
 	},
 
-	templateString: '<div class="dojoHtmlFisheyeListBar"></div>',
+	templateString: '<div class="dojoxFisheyeListBar" dojoAttachPoint="containerNode"></div>',
 
 	snarfChildDomOutput: true,
 	
@@ -626,9 +626,9 @@ dojo.declare("dojox.widget.FisheyeListItem", [dijit._Widget, dijit._Templated, d
 	_blankImgPath: dojo.moduleUrl("dojox.widget", "FisheyeList/blank.gif"),
 
 	templateString:
-		'<div class="dojoHtmlFisheyeListItem">' +
-		'  <img class="dojoHtmlFisheyeListItemImage" dojoAttachPoint="imgNode" dojoAttachEvent="onmouseover:onMouseOver,onmouseout:onMouseOut,onclick:onClick">' +
-		'  <div class="dojoHtmlFisheyeListItemLabel" dojoAttachPoint="lblNode"></div>' +
+		'<div class="dojoxFisheyeListItem">' +
+		'  <img class="dojoxFisheyeListItemImage" dojoAttachPoint="imgNode" dojoAttachEvent="onmouseover:onMouseOver,onmouseout:onMouseOut,onclick:onClick">' +
+		'  <div class="dojoxFisheyeListItemLabel" dojoAttachPoint="lblNode"></div>' +
 		'</div>',
 
 	_isNode: function(/* object */wh){
