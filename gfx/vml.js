@@ -313,6 +313,20 @@ dojo.extend(dojox.gfx.Shape, {
 	}
 });
 
+dojox.gfx.vml._clear = function(){
+	// summary: removes all shapes from a group/surface
+	var r = this.rawNode;
+	while(r.firstChild != r.lastChild){
+		if(r.firstChild != this.bgNode){
+			r.removeChild(r.firstChild);
+		}
+		if(r.lastChild != this.bgNode){
+			r.removeChild(r.lastChild);
+		}
+	}
+	return this;	// self
+};
+
 dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
 	// summary: a group shape (VML), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
@@ -337,14 +351,7 @@ dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
 		}
 		return this;	// self
 	},
-	clear: function(){
-		// summary: removes all shapes from a group/surface
-		var r = this.rawNode;
-		while(r.lastChild){
-			r.removeChild(r.lastChild);
-		}
-		return dojox.gfx.Group.superclass.clear.call(this);	// self
-	},
+	clear: dojox.gfx.vml._clear,
 	attach: function(rawNode){
 		// summary: reconstructs all group shape parameters from a Node (VML).
 		// rawNode: Node: a node
@@ -354,6 +361,8 @@ dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
 			this.fillStyle = null;
 			this.strokeStyle = null;
 			this.matrix = null;
+			// attach the background
+			this.bgNode = rawNode.firstChild;	// TODO: check it first
 		}
 	}
 });
@@ -1446,7 +1455,16 @@ dojox.gfx.vml._creators = {
 	},
 	createGroup: function(){
 		// summary: creates a VML group shape
-		return this.createObject(dojox.gfx.Group, null, true);	// dojox.gfx.Group
+		var g = this.createObject(dojox.gfx.Group, null, true);	// dojox.gfx.Group
+		// create a background rectangle, which is required to show all other shapes
+		var r = g.rawNode.ownerDocument.createElement("v:rect");
+		r.style.left = r.style.top = 0;
+		r.style.width  = g.rawNode.style.width;
+		r.style.height = g.rawNode.style.height;
+		r.filled = r.stroked = false;
+		g.rawNode.appendChild(r);
+		g.bgNode = r;
+		return g;	// dojox.gfx.Group
 	},
 	createObject: function(shapeType, rawShape, overrideSize) {
 		// summary: creates an instance of the passed shapeType class
@@ -1568,19 +1586,7 @@ dojo.extend(dojox.gfx.Surface, {
 		}
 		return this;	// self
 	},
-	clear: function(){
-		// summary: removes all shapes from a group/surface
-		var r = this.rawNode;
-		while(r.firstChild != r.lastChild){
-			if(r.firstChild != this.bgNode){
-				r.removeChild(r.firstChild);
-			}
-			if(r.lastChild != this.bgNode){
-				r.removeChild(r.lastChild);
-			}
-		}
-		return this;	// self
-	}
+	clear: dojox.gfx.vml._clear
 });
 
 dojox.gfx.createSurface = function(parentNode, width, height){
