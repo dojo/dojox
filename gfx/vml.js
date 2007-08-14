@@ -43,10 +43,6 @@ dojo.extend(dojox.gfx.Shape, {
 			this.rawNode.filled = false;
 			return this;
 		}
-		// force creation of the fill sub-object, if it is not created automatically
-		if(!this.rawNode.fill){
-			this.rawNode.appendChild(this.rawNode.ownerDocument.createElement("v:fill"));
-		}
 		if(typeof(fill) == "object" && "type" in fill){
 			// gradient
 			switch(fill.type){
@@ -266,7 +262,7 @@ dojo.extend(dojox.gfx.Shape, {
 		var strokeStyle = dojo.clone(dojox.gfx.defaultStroke);
 		if(rawNode && rawNode.stroked){
 			strokeStyle.color = new dojo.Color(rawNode.strokecolor.value);
-			console.debug("We are expecting an .75pt here, instead of strokeweight = " + rawNode.strokeweight );
+			//console.debug("We are expecting an .75pt here, instead of strokeweight = " + rawNode.strokeweight );
 			strokeStyle.width = dojox.gfx.normalizedLength(rawNode.strokeweight+"");
 			strokeStyle.color.a = rawNode.stroke.opacity;
 			strokeStyle.cap = this._translate(this._capMapReversed, rawNode.stroke.endcap);
@@ -1534,7 +1530,7 @@ dojox.gfx.attachNode = function(node){
 			}
 			break;
 		default:
-			console.debug("FATAL ERROR! tagName = " + node.tagName);
+			//console.debug("FATAL ERROR! tagName = " + node.tagName);
 			return null;	// dojox.gfx.Shape
 	}
 	s.attach(node);
