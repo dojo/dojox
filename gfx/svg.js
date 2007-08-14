@@ -407,8 +407,6 @@ dojo.declare("dojox.gfx.Group", dojox.gfx.Shape, {
 	// summary: a group shape (SVG), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
 	
-	createShape: dojox.gfx._createShape,
-
 	setRawNode: function(rawNode){
 		// summary: sets a raw SVG node to be used by this shape
 		// rawNode: Node: an SVG node
@@ -810,6 +808,7 @@ dojox.gfx.svg._creators = {
 		this.add(shape);
 		return shape;	// dojox.gfx.Shape
 	},
+	createShape: dojox.gfx._createShape,
 	// group control
 	add: function(shape){
 		// summary: adds a shape to a group/surface

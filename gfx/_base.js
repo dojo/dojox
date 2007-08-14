@@ -269,8 +269,7 @@ dojo.declare("dojox.gfx.Surface", null, {
 		// summary: returns a node, which can be used to attach event listeners
 		
 		return this.rawNode; // Node
-	},
-	createShape: dojox.gfx._createShape
+	}
 });
 
 dojo.declare("dojox.gfx.Point", null, {

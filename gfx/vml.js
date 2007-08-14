@@ -43,6 +43,10 @@ dojo.extend(dojox.gfx.Shape, {
 			this.rawNode.filled = false;
 			return this;
 		}
+		// force creation of the fill sub-object, if it is not created automatically
+		if(!this.rawNode.fill){
+			this.rawNode.appendChild(this.rawNode.ownerDocument.createElement("v:fill"));
+		}
 		if(typeof(fill) == "object" && "type" in fill){
 			// gradient
 			switch(fill.type){
@@ -312,7 +316,6 @@ dojo.extend(dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
 	// summary: a group shape (VML), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
-	createShape: dojox.gfx._createShape,
 	add: function(shape){
 		// summary: adds a shape to a group/surface
 		// shape: dojox.gfx.Shape: an VML shape object
@@ -1459,6 +1462,7 @@ dojox.gfx.vml._creators = {
 		this.add(shape);
 		return shape;	// dojox.gfx.Shape
 	},
+	createShape: dojox.gfx._createShape,
 	_overrideSize: function(node){
 		node.style.width  = this.rawNode.style.width;
 		node.style.height = this.rawNode.style.height;
