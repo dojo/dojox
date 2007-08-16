@@ -1196,7 +1196,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_curvePI4: dojox.gfx.path._calcArc(Math.PI / 8),
-	_calcArcTo: function(path, last, rx, ry, xRotg, large, ccw, x, y){
+	_calcArcTo: function(path, last, rx, ry, xRotg, large, sweep, x, y){
 		var m = dojox.gfx.matrix;
 		// calculate parameters
 		var xRot = dojox.gfx.matrix._degToRad(xRotg);
@@ -1213,7 +1213,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			x:  c1 * rx * pa.y / ry,
 			y: -c1 * ry * pa.x / rx
 		};
-		if(large == ccw){
+		if(large == sweep){
 			ca = {x: -ca.x, y: -ca.y};
 		}
 		// our center
@@ -1231,7 +1231,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		var startAngle = Math.atan2(last.y - c.y, last.x - c.x) - xRot;
 		var endAngle   = Math.atan2(y - c.y, x - c.x) - xRot;
 		// size of our arc in radians
-		var theta = ccw ? endAngle - startAngle : startAngle - endAngle;
+		var theta = sweep ? endAngle - startAngle : startAngle - endAngle;
 		if(theta < 0){
 			theta += dojox.gfx.vml.two_pi;
 		}else if(theta > dojox.gfx.vml.two_pi){
@@ -1246,16 +1246,16 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		// draw curve chunks
 		var alpha = dojox.gfx.vml.pi4 / 2;
 		var curve = this._curvePI4;
-		var step  = ccw ? alpha : -alpha;
+		var step  = sweep ? alpha : -alpha;
 		for(var angle = theta; angle > 0; angle -= dojox.gfx.vml.pi4){
 			if(angle < dojox.gfx.vml.pi4){
 				alpha = angle / 2;
 				curve = dojox.gfx.path._calcArc(alpha);
-				step  = ccw ? -alpha : alpha;
+				step  = sweep ? alpha : -alpha;
 			}
 			var c1, c2, e;
 			var M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
-			if(ccw){
+			if(sweep){
 				c1 = m.multiplyPoint(M, curve.c1);
 				c2 = m.multiplyPoint(M, curve.c2);
 				e  = m.multiplyPoint(M, curve.e );
