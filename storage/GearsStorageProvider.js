@@ -186,6 +186,114 @@ if(dojo.isGears){
 							key);
 			},
 			
+			putMultiple: function(keys, values, resultsHandler, namespace) {
+ 				if(this.isValidKeyArray(keys) === false 
+						|| ! values instanceof Array 
+						|| keys.length != values.length){
+					throw new Error("Invalid arguments: keys = [" 
+									+ keys + "], values = [" + values + "]");
+				}
+				
+				if(namespace == null || typeof namespace == "undefined"){
+					namespace = dojox.storage.DEFAULT_NAMESPACE;		
+				}
+	
+				if(this.isValidKey(namespace) == false){
+					throw new Error("Invalid namespace given: " + namespace);
+				}
+	
+				this._statusHandler = resultsHandler;
+
+				// try to store the value	
+				try{
+					dojox.sql.open();
+					dojox.sql.db.execute("BEGIN TRANSACTION");
+					var _stmt = "REPLACE INTO " + this.TABLE_NAME + " VALUES (?, ?, ?)";
+					for(var i=0;i<keys.length;i++) {
+						// serialize the value;
+						// handle strings differently so they have better performance
+						var value = values[i];
+						if(dojo.isString(value)){
+							value = "string:" + value;
+						}else{
+							value = dojo.toJson(value);
+						}
+				
+						dojox.sql.db.execute( _stmt,
+							[namespace, keys[i], value]);
+					}
+					dojox.sql.db.execute("COMMIT TRANSACTION");
+					dojox.sql.close();
+				}catch(e){
+					// indicate we failed
+					console.debug("dojox.storage.GearsStorageProvider.putMultiple:", e);
+					if(resultsHandler){
+						resultsHandler(this.FAILED, keys, e.toString());
+					}
+					return;
+				}
+				
+				if(resultsHandler){
+					resultsHandler(dojox.storage.SUCCESS, key, null);
+				}
+			},
+
+			getMultiple: function(keys, namespace){
+				//	TODO: Maybe use SELECT IN instead
+
+				if(this.isValidKeyArray(keys) === false){
+					throw new ("Invalid key array given: " + keys);
+				}
+				
+				if(namespace == null || typeof namespace == "undefined"){
+					namespace = dojox.storage.DEFAULT_NAMESPACE;		
+				}
+				
+				if(this.isValidKey(namespace) == false){
+					throw new Error("Invalid namespace given: " + namespace);
+				}
+		
+				var _stmt = "SELECT * FROM " + this.TABLE_NAME	+ 
+					" WHERE namespace = ? AND "	+ " key = ?";
+				
+				var results = [];
+				for(var i=0;i<keys.length;i++){
+					var result = dojox.sql( _stmt, namespace, keys[i]);
+						
+					if( ! result.length){
+						results[i] = null;
+					}else{
+						result = result[0].value;
+						
+						// destringify the content back into a 
+						// real JavaScript object;
+						// handle strings differently so they have better performance
+						if(dojo.isString(result) && (/^string:/.test(result))){
+							results[i] = result.substring("string:".length);
+						}else{
+							results[i] = dojo.fromJson(result);
+						}
+					}
+				}
+				
+				return results;
+			},
+			
+			removeMultiple: function(keys, namespace){
+				namespace = namespace||this.DEFAULT_NAMESPACE;
+				
+				dojox.sql.open();
+				dojox.sql.db.execute("BEGIN TRANSACTION");
+				var _stmt = "DELETE FROM " + this.TABLE_NAME + " WHERE namespace = ? AND key = ?";
+
+				for(var i=0;i<keys.length;i++){
+					dojox.sql.db.execute( _stmt,
+						[namespace, keys[i]]);
+				}
+				dojox.sql.db.execute("COMMIT TRANSACTION");
+				dojox.sql.close();
+			}, 				
+			
 			isPermanent: function(){ return true; },
 
 			getMaximumSize: function(){ return this.SIZE_NO_LIMIT; },

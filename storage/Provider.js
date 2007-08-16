@@ -19,6 +19,7 @@ dojo.declare("dojox.storage.Provider", null, {
 	//		method. 
 	constructor: function(){
 	},
+	
 	// SUCCESS: String
 	//	Flag that indicates a put() call to a 
 	//	storage provider was succesful.
@@ -187,6 +188,93 @@ dojo.declare("dojox.storage.Provider", null, {
 		//	dojox.storage.SIZE_NO_LIMIT is 
 		//	returned
 		console.warn("dojox.storage.getMaximumSize not implemented");
+	},
+		
+	putMultiple: function(	/*array*/ keys,
+							/*array*/ values, 
+							/*function*/ resultsHandler,
+							/*string?*/ namespace){
+		// summary:
+		//		Puts multiple keys and values into this storage system.
+		// description:
+		//		Example-
+		//			var resultsHandler = function(status, key, message){
+		//			  alert("status="+status+", key="+key+", message="+message);
+		//			};
+		//			dojox.storage.put(["test"], ["hello world"], resultsHandler);
+		//	
+		//		Important note: if you are using Dojo Storage in conjunction with
+		//		Dojo Offline, then you don't need to provide
+		//		a resultsHandler; this is because for Dojo Offline we 
+		//		use Google Gears to persist data, which has unlimited data
+		//		once the user has given permission. If you are using Dojo
+		//		Storage apart from Dojo Offline, then under the covers hidden
+		//		Flash might be used, which is both asychronous and which might
+		//		get denied; in this case you must provide a resultsHandler.
+		// keys:
+		//		An array of string keys to use when retrieving this value in the future,
+		//		one per value to be stored
+		// values:
+		//		An array of values to store; this can be any JavaScript type, though the
+		//		performance of plain strings is considerably better
+		// resultsHandler:
+		//		A callback function that will receive three arguments. The
+		//		first argument is one of three values: dojox.storage.SUCCESS,
+		//		dojox.storage.FAILED, or dojox.storage.PENDING; these values
+		//		determine how the put request went. In some storage systems
+		//		users can deny a storage request, resulting in a
+		//		dojox.storage.FAILED, while in other storage systems a storage
+		//		request must wait for user approval, resulting in a
+		//		dojox.storage.PENDING status until the request is either
+		//		approved or denied, resulting in another call back with
+		//		dojox.storage.SUCCESS. 
+		//		The second argument in the call back is the key name that was being stored.
+		//		The third argument in the call back is an optional message that
+		//		details possible error messages that might have occurred during
+		//		the storage process.
+		//	namespace:
+		//		Optional string namespace that this value will be placed into;
+		//		if left off, the value will be placed into dojox.storage.DEFAULT_NAMESPACE
+		
+		console.warn("dojox.storage.putMultiple not implemented");
+		//	JAC: We could implement a 'default' puMultiple here by just doing each put individually
+	},
+
+	getMultiple: function(/*array*/ keys, /*string?*/ namespace){ /*Object*/
+		// summary:
+		//		Gets the valuse corresponding to each of the given keys. 
+		//		Returns a null array element for each given key that is
+		//		not in the storage system.
+		// keys:
+		//		An array of string keys to get the value of.
+		//	namespace:
+		//		Optional string namespace that this value will be retrieved from;
+		//		if left off, the value will be retrieved from dojox.storage.DEFAULT_NAMESPACE
+		// return: Returns any JavaScript object type; null if the key is not present
+
+		console.warn("dojox.storage.getMultiple not implemented");
+		//	JAC: We could implement a 'default' getMultiple here by just doing each get individually
+	},
+
+	removeMultiple: function(/*array*/ keys, /*string?*/ namespace) {
+		// summary: Removes the given keys from this storage system.
+
+		//	JAC: We could implement a 'default' removeMultiple here by just doing each remove individually
+		console.warn("dojox.storage.remove not implemented");
+	},
+	
+	isValidKeyArray: function( keys) {
+		if( keys === null || typeof keys === "undefined" || ! keys instanceof Array) {
+			return false;
+		}
+		
+		//	JAC: This could be optimized by running the key validity test directly over a joined string
+		for(var k=0;k<keys.length;k++) {
+			if( !this.isValidKey(keys[k])) {
+				return false;
+			}
+		}
+		return true;
 	},
 
 	hasSettingsUI: function(){ /*Boolean*/
