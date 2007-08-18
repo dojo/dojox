@@ -113,7 +113,7 @@
 
 		switch(msg.command){
 			case "loaded":
-				xipMasterFrame.dojo.io.XhrIframeProxy.clientFrameLoaded(xipStateId);
+				xipMasterFrame.dojox.io.proxy.xip.clientFrameLoaded(xipStateId);
 				break;
 			case "ok":
 				sendRequestPart();
@@ -130,7 +130,7 @@
 			case "end":
 				setServerUrl("ok");
 				xipResponseMessage += msg.message;
-				xipMasterFrame.dojo.io.XhrIframeProxy.receive(xipStateId, xipResponseMessage);
+				xipMasterFrame.dojox.io.proxy.xip.receive(xipStateId, xipResponseMessage);
 				break;
 		}
 	}
@@ -260,7 +260,7 @@
 	<h4>The Dojo Toolkit -- xip_client.html</h4>
 
 	<p>This file is used for Dojo's XMLHttpRequest Iframe Proxy. This is the "client" file used
-	internally by dojo.io.XhrIframeProxy.</p>
+	internally by dojox.io.proxy.xip.</p>
 	
 	<iframe src="javascript:false"></iframe>
 </body>

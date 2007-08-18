@@ -28,7 +28,7 @@ the response inside the facade XHR object that was created by dojox.io.proxy.xip
 -------------------------------------------------------------------------------
 Dependencies:
 
-xip.js: Dojo Core
+xip.js: Dojo Core, dojox.data.dom
 xip_client.html: none
 xip_server.html: none (but see Additional Notes section)
 -------------------------------------------------------------------------------

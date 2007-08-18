@@ -1,27 +1,23 @@
-dojo.provide("dojo.io.XhrIframeProxy");
+dojo.provide("dojox.io.proxy.xip");
 
-dojo.require("dojo.experimental");
-dojo.experimental("dojo.io.XhrIframeProxy");
+dojo.require("dojo.io.iframe");
+dojo.require("dojox.data.dom");
 
-dojo.require("dojo.io.IframeIO");
-dojo.require("dojo.dom");
-dojo.require("dojo.uri.Uri");
-
-dojo.io.XhrIframeProxy = {
+dojox.io.proxy.xip = {
 	//summary: Object that implements the iframe handling for XMLHttpRequest
 	//IFrame Proxying.
 	//description: Do not use this object directly. See the Dojo Book page
 	//on XMLHttpRequest IFrame Proxying:
-	//http://manual.dojotoolkit.org/WikiHome/DojoDotBook/Book75
+	//http://dojotoolkit.org/book/dojo-book-0-4/part-5-connecting-pieces/i-o/cross-domain-xmlhttprequest-using-iframe-proxy
 	//Usage of XHR IFrame Proxying does not work from local disk in Safari.
 
-	xipClientUrl: djConfig["xipClientUrl"] || dojo.uri.moduleUri("dojo.io", "xip_client.html"),
+	xipClientUrl: djConfig["xipClientUrl"] || dojo.moduleUrl("dojox.io.proxy", "xip_client.html"),
 
 	_state: {},
 	_stateIdCounter: 0,
 
 	needFrameRecursion: function(){
-		return (true == dojo.render.html.ie70);
+		return (dojo.isIE >= 7);
 	},
 
 	send: function(facade){		
@@ -55,7 +51,7 @@ dojo.io.XhrIframeProxy = {
 		this._state[stateId] = {
 			facade: facade,
 			stateId: stateId,
-			clientFrame: dojo.io.createIFrame(stateId, "", frameUrl)
+			clientFrame: dojo.io.iframe.create(stateId, "", frameUrl)
 		};
 		
 		return stateId;
@@ -95,7 +91,7 @@ dojo.io.XhrIframeProxy = {
 			//Fix responseXML.
 			var contentType = facade.getResponseHeader("Content-Type");
 			if(contentType && (contentType == "application/xml" || contentType == "text/xml")){
-				facade.responseXML = dojo.dom.createDocumentFromText(response.responseText, contentType);
+				facade.responseXML = dojox.data.dom.createDocument(response.responseText, contentType);
 			}
 		}
 		facade.readyState = 4;
@@ -131,7 +127,7 @@ dojo.io.XhrIframeProxy = {
 			requestData.data = facade._bodyData;
 		}
 
-		clientWindow.send(dojo.io.argsFromMap(requestData, "utf8"));
+		clientWindow.send(dojo.objectToQuery(requestData));
 	},
 	
 	destroyState: function(/*String*/stateId){
@@ -147,29 +143,29 @@ dojo.io.XhrIframeProxy = {
 
 	createFacade: function(){
 		if(arguments && arguments[0] && arguments[0]["iframeProxyUrl"]){
-			return new dojo.io.XhrIframeFacade(arguments[0]["iframeProxyUrl"]);
+			return new dojox.io.proxy.xip.XhrIframeFacade(arguments[0]["iframeProxyUrl"]);
 		}else{
-			return dojo.io.XhrIframeProxy.oldGetXmlhttpObject.apply(dojo.hostenv, arguments);
+			return dojox.io.proxy.xip._xhrObjOld.apply(dojo, arguments);
 		}
 	}
 }
 
 //Replace the normal XHR factory with the proxy one.
-dojo.io.XhrIframeProxy.oldGetXmlhttpObject = dojo.hostenv.getXmlhttpObject;
-dojo.hostenv.getXmlhttpObject = dojo.io.XhrIframeProxy.createFacade;
+dojox.io.proxy.xip.oldGetXmlhttpObject = dojo._xhrObj;
+dojo._xhrObj = dojox.io.proxy.xip.createFacade;
 
 /**
 	Using this a reference: http://www.w3.org/TR/XMLHttpRequest/
 
-	Does not implement the onreadystate callback since dojo.io.BrowserIO does
+	Does not implement the onreadystate callback since dojo.xhr* does
 	not use it.
 */
-dojo.io.XhrIframeFacade = function(ifpServerUrl){
-	//summary: XMLHttpRequest facade object used by dojo.io.XhrIframeProxy.
+dojox.io.proxy.xip.XhrIframeFacade = function(ifpServerUrl){
+	//summary: XMLHttpRequest facade object used by dojox.io.proxy.xip.
 	
 	//description: Do not use this object directly. See the Dojo Book page
 	//on XMLHttpRequest IFrame Proxying:
-	//http://manual.dojotoolkit.org/WikiHome/DojoDotBook/Book75
+	//http://dojotoolkit.org/book/dojo-book-0-4/part-5-connecting-pieces/i-o/cross-domain-xmlhttprequest-using-iframe-proxy
 	this._requestHeaders = {};
 	this._allResponseHeaders = null;
 	this._responseHeaders = {};
@@ -186,7 +182,7 @@ dojo.io.XhrIframeFacade = function(ifpServerUrl){
 	this._stateId = null;
 }
 
-dojo.lang.extend(dojo.io.XhrIframeFacade, {
+dojo.extend(dojox.io.proxy.xip.XhrIframeFacade, {
 	//The open method does not properly reset since Dojo does not reuse XHR objects.
 	open: function(/*String*/method, /*String*/uri){
 		this._method = method;
@@ -202,12 +198,12 @@ dojo.lang.extend(dojo.io.XhrIframeFacade, {
 	send: function(/*String*/stringData){
 		this._bodyData = stringData;
 		
-		this._stateId = dojo.io.XhrIframeProxy.send(this);
+		this._stateId = dojox.io.proxy.xip.send(this);
 		
 		this.readyState = 2;
 	},
 	abort: function(){
-		dojo.io.XhrIframeProxy.destroyState(this._stateId);
+		dojox.io.proxy.xip.destroyState(this._stateId);
 	},
 	
 	getAllResponseHeaders: function(){
