@@ -47,12 +47,21 @@ dojo.extend(dojox.gfx.Shape, {
 			// gradient
 			switch(fill.type){
 				case "linear":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill),
+						s = [], a = f.colors;
 					this.fillStyle = f;
-					var s = [];
-					for(var i = 0; i < f.colors.length; ++i){
-						f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-						s.push(f.colors[i].offset.toFixed(8) + " " + f.colors[i].color.toHex());
+					dojo.forEach(a, function(v, i, a){
+						a[i].color = dojox.gfx.normalizeColor(v.color);
+					});
+					if(a[0].offset > 0){
+						s.push("0 " + a[0].color.toHex());
+					}
+					for(var i = 0; i < a.length; ++i){
+						s.push(a[i].offset.toFixed(8) + " " + a[i].color.toHex());
+					}
+					var i = a.length - 1;
+					if(a[i].offset < 1){
+						s.push("1 " + a[i].color.toHex());
 					}
 					var fo = this.rawNode.fill;
 					fo.colors.value = s.join(";");
