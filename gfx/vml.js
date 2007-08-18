@@ -64,17 +64,36 @@ dojo.extend(dojox.gfx.Shape, {
 				case "radial":
 					var f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
 					this.fillStyle = f;
-					var l = parseFloat(this.rawNode.style.left);
-					var t = parseFloat(this.rawNode.style.top);
-					var w = parseFloat(this.rawNode.style.width);
-					var h = parseFloat(this.rawNode.style.height);
-					var c = isNaN(w) ? 1 : 2 * f.r / w;
-					var i = f.colors.length - 1;
-					f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-					var s = ["0 " + f.colors[i].color.toHex()];
+					var l = parseFloat(this.rawNode.style.left),
+						t = parseFloat(this.rawNode.style.top),
+						w = parseFloat(this.rawNode.style.width),
+						h = parseFloat(this.rawNode.style.height),
+						c = isNaN(w) ? 1 : 2 * f.r / w,
+						a = new Array(f.colors.length);
+					// massage colors
+					dojo.forEach(f.colors, function(v, i){
+						a[i] = {offset: 1 - v.offset * c, color: dojox.gfx.normalizeColor(v.color)};
+					});
+					var i = a.length - 1;
+					while(i >= 0 && a[i].offset < 0){ --i; }
+					if(i < a.length - 1){
+						// correct excessive colors
+						var q = a[i], p = a[i + 1];
+						p.color = dojo.blendColors(q.color, p.color, q.offset / (q.offset - p.offset));
+						p.offset = 0;
+						while(a.length - i > 2) a.pop();
+					}
+					// set colors
+					var i = a.length - 1;
+					var s = [];
+					if(a[i].offset > 0){
+						s.push("0 " + a[i].color.toHex());
+					}
 					for(; i >= 0; --i){
-						f.colors[i].color = dojox.gfx.normalizeColor(f.colors[i].color);
-						s.push((1 - c * f.colors[i].offset).toFixed(8) + " " + f.colors[i].color.toHex());
+						s.push(a[i].offset.toFixed(8) + " " + a[i].color.toHex());
+					}
+					if(a[0].offset < 1){
+						s.push("1 " + a[0].color.toHex());
 					}
 					var fo = this.rawNode.fill;
 					fo.colors.value = s.join(";");
