@@ -87,6 +87,7 @@ dojo.extend(dojox.gfx.Shape, {
 					dojo.forEach(["x", "y", "width", "height"], setter, pattern);
 					break;
 			}
+			this.fillStyle = f;
 			return this;
 		}
 		// color object
@@ -123,7 +124,7 @@ dojo.extend(dojox.gfx.Shape, {
 			rn.setAttribute("stroke-opacity", s.color.a);
 			rn.setAttribute("stroke-width",   s.width);
 			rn.setAttribute("stroke-linecap", s.cap);
-			if(typeof(s.join) == "number"){
+			if(typeof s.join == "number"){
 				rn.setAttribute("stroke-linejoin",   "miter");
 				rn.setAttribute("stroke-miterlimit", s.join);
 			}else{

@@ -771,10 +771,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		// newShape: Object: a text shape object
 		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
 		this.bbox = null;
-		var r = this.rawNode;
-		var s = this.shape;
-		var x = s.x;
-		var y = s.y.toFixed();
+		var r = this.rawNode, s = this.shape, x = s.x, y = s.y.toFixed();
 		switch(s.align){
 			case "middle":
 				x -= 5;
@@ -786,8 +783,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		this.rawNode.path.v = "m" + x.toFixed() + "," + y + 
 			"l" + (x + 10).toFixed() + "," + y + "e";
 		// find path and text path
-		var p = null, t = null;
-		var c = r.childNodes;
+		var p = null, t = null, c = r.childNodes;
 		for(var i = 0; i < c.length; ++i){
 			var tag = c[i].tagName;
 			if(tag == "path"){
@@ -818,8 +814,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	},
 	_setFont: function(){
 		// summary: sets a font object (VML)
-		var f = this.fontStyle;
-		var c = this.rawNode.childNodes;
+		var f = this.fontStyle, c = this.rawNode.childNodes;
 		for(var i = 0; i < c.length; ++i){
 			if(c[i].tagName == "textpath"){
 				c[i].style.font = dojox.gfx.makeFontString(f);
