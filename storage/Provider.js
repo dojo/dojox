@@ -264,13 +264,13 @@ dojo.declare("dojox.storage.Provider", null, {
 	},
 	
 	isValidKeyArray: function( keys) {
-		if( keys === null || typeof keys === "undefined" || ! keys instanceof Array) {
+		if(keys === null || typeof keys === "undefined" || ! keys instanceof Array){
 			return false;
 		}
 		
 		//	JAC: This could be optimized by running the key validity test directly over a joined string
-		for(var k=0;k<keys.length;k++) {
-			if( !this.isValidKey(keys[k])) {
+		for(var k=0;k<keys.length;k++){
+			if(!this.isValidKey(keys[k])){
 				return false;
 			}
 		}
