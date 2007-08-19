@@ -63,7 +63,7 @@
 			var ca = this.columns[index].attribute;
 			var qs = this.query.sort;
 			// clobber an existing sort arrow
-			dojo.query("> th", this.headRow).styles("background", "none").styles("paddingRight", "");
+			dojo.query("> th", this.headRow).styles("background", "").styles("paddingRight", "");
 			if(qs && qs[0].attribute == ca){
 				qs[0].descending = !qs[0].descending;
 			}else{
@@ -99,7 +99,7 @@
 	</table>
 
 	<span dojoType="demo.Table" store="continentStore"
-		query="{ query: { type: 'country', }, sort: [ { attribute: 'name', descending: true } ]  }" 
+		query="{ query: { type: 'country' }, sort: [ { attribute: 'name', descending: true } ]  }" 
 		id="foo">
 		<script type="dojo/method" event="preamble">
 			this.columns = [
