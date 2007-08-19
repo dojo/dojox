@@ -78,7 +78,7 @@
 			this.runQuery();
 		</script>
 		<script type="dojo/method" event="runQuery">
-			this.query.onBegin = dojo.hitch(this, function(){ this.body.innerHTML = ""; });
+			this.query.onBegin = dojo.hitch(this, function(){ dojo.query("tr", this.body).orphan(); });
 			this.query.onItem = dojo.hitch(this, "onItem");
 			this.query.onComplete = dojo.hitch(this, function(){
 				dojo.query("tr:nth-child(odd)", this.body).addClass("oddRow");
