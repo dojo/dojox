@@ -142,8 +142,8 @@ dojox.io.proxy.xip = {
 	},
 
 	createFacade: function(){
-		if(arguments && arguments[0] && arguments[0]["iframeProxyUrl"]){
-			return new dojox.io.proxy.xip.XhrIframeFacade(arguments[0]["iframeProxyUrl"]);
+		if(arguments && arguments[0] && arguments[0].iframeProxyUrl){
+			return new dojox.io.proxy.xip.XhrIframeFacade(arguments[0].iframeProxyUrl);
 		}else{
 			return dojox.io.proxy.xip._xhrObjOld.apply(dojo, arguments);
 		}
@@ -151,7 +151,7 @@ dojox.io.proxy.xip = {
 }
 
 //Replace the normal XHR factory with the proxy one.
-dojox.io.proxy.xip.oldGetXmlhttpObject = dojo._xhrObj;
+dojox.io.proxy.xip._xhrObjOld = dojo._xhrObj;
 dojo._xhrObj = dojox.io.proxy.xip.createFacade;
 
 /**
