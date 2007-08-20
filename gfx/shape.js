@@ -235,6 +235,7 @@ dojo.declare("dojox.gfx.Shape", null, {
 		return this.parentMatrix ? new dojox.gfx.matrix.Matrix2D([this.parentMatrix, this.matrix]) : this.matrix;	// dojox.gfx.Matrix2D
 	}
 });
+dojo.extend(dojox.gfx.Shape, dojox.gfx._eventsProcessing);
 
 dojo.declare("dojox.gfx.shape.VirtualGroup", dojox.gfx.Shape, {
 	// summary: a virtual group of shapes, which can be used 

@@ -258,6 +258,17 @@ dojox.gfx._createShape = function(shape){
 	return null;
 };
 
+dojox.gfx._eventsProcessing = {
+	connect: function(name, object, method){
+		return arguments.length > 2 ? 
+			dojo.connect(this.getEventSource(), name, object, method) :
+			dojo.connect(this.getEventSource(), name, object);
+	},
+	disconnect: function(token){
+		dojo.disconnect(token);
+	}
+};
+
 dojo.declare("dojox.gfx.Surface", null, {
 	// summary: a surface object to be used for drawings
 
@@ -271,6 +282,7 @@ dojo.declare("dojox.gfx.Surface", null, {
 		return this.rawNode; // Node
 	}
 });
+dojo.extend(dojox.gfx.Surface, dojox.gfx._eventsProcessing);
 
 dojo.declare("dojox.gfx.Point", null, {
 	// summary: a hypothetical 2D point to be used for drawings - {x, y}

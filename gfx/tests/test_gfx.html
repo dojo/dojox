@@ -7,11 +7,13 @@
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
+<script type="text/javascript" src="Silverlight.js"></script>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <!--<script type="text/javascript" src="../_base.js"></script>-->
 <!--<script type="text/javascript" src="../path.js"></script>-->
 <!--<script type="text/javascript" src="../vml.js"></script>-->
 <!--<script type="text/javascript" src="../svg.js"></script>-->
+<!--<script type="text/javascript" src="../silverlight.js"></script>-->
 <script type="text/javascript">
 
 dojo.require("dojox.gfx");
@@ -64,12 +66,14 @@ function getTestSurface(testName, testDescription, width, height)
    var imgUrl = 'images/' + testName + '.png';
    var errUrl = 'images/error.png';
    var imgToLoad = new Image();
+   /*
    dojo.connect(imgToLoad, 'onload', function() {
                          refImg.src = imgUrl;
                       });
    dojo.connect(imgToLoad, 'onerror', function() {
                          refImg.src = errUrl;
                       });
+	*/
 
    imgToLoad.src = imgUrl;
 
@@ -139,13 +143,15 @@ dojo.addOnLoad(function()
 		red_rect.setFill([255, 0, 0, 0.5]);
 		red_rect.setStroke({color: "blue", width: 10, join: "round" });
 		red_rect.setTransform({dx: 100, dy: 100});
-		dojo.connect(red_rect.getNode(), "onclick", function(){ alert("red"); });
+		//dojo.connect(red_rect.getNode(), "onclick", function(){ alert("red"); });
+		red_rect.connect("onclick", function(){ alert("red"); });
 	});
 
 	addTest('straight_rect', function(testName){
 		var surface = getTestSurface(testName, 'translucent rect with no stroke');
 		var blue_rect = surface.createRect(rect).setFill([0, 255, 0, 0.5]).setTransform({ dx: 100, dy: 100 });
-		dojo.connect( blue_rect.getNode(), "onclick", function(){ blue_rect.setShape({width: blue_rect.getShape().width + 20}); });
+		//dojo.connect( blue_rect.getNode(), "onclick", function(){ blue_rect.setShape({width: blue_rect.getShape().width + 20}); });
+		blue_rect.connect("onclick", function(){ blue_rect.setShape({width: blue_rect.getShape().width + 20}); });
 	});
 
 	addTest('rotated_rect', function(testName){
@@ -217,7 +223,6 @@ dojo.addOnLoad(function()
 			;
 	});
 
-   
 	addTest('attach', function(testName){
 		var surface = getTestSurface(testName, 'Attach to existed shape');
 		var red_rect = surface.createRect(rect)
@@ -242,7 +247,7 @@ dojo.addOnLoad(function()
 		console.debug("attach fillStyle: ");
 		isEqual(ar.fillStyle, red_rect.fillStyle, "rect.fillStyle");
 	});
-
+	
 	// test circle
 	addTest('circle', function(testName){
 		var surface = getTestSurface(testName, 'translucent green circle');
@@ -479,8 +484,8 @@ dojo.addOnLoad(function()
 		'rotated_rect',
 		'skew_rect',
 		'matrix_rect', 
-		'attach',
-		'attach_gradient',
+		//'attach',
+		//'attach_gradient',
 		'circle',
 		'arcTo',
 		'line',

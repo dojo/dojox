@@ -6,6 +6,7 @@
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
+<script type="text/javascript" src="Silverlight.js"></script>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <!--
 <script type="text/javascript" src="../common.js"></script>
@@ -13,10 +14,11 @@
 -->
 <!--<script type="text/javascript" src="../vml.js"></script>-->
 <!--<script type="text/javascript" src="../svg.js"></script>-->
+<!--<script type="text/javascript" src="../silverlight.js"></script>-->
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 
-var ROTATION = 15;
+var ROTATION = 30;
 
 var surface = null, t1, t2, t3, t4, t5;
 
@@ -43,7 +45,7 @@ makeShapes = function(){
 		.setTransform(m.rotategAt(ROTATION, 250, 50))
 		;
 	t2 = makeText(surface, {x: 250, y: 100, text: "Middle", align: "middle"}, 
-		{family: "Symbol", size: "24pt"}, "#FFFF00", "black")
+		{family: "Symbol", size: "24pt"}, "red", "black")
 		.setTransform(m.rotategAt(ROTATION, 250, 100))
 		;
 	t3 = makeText(surface, {x: 250, y: 150, text: "End", align: "end"}, 

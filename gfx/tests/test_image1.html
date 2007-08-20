@@ -6,9 +6,11 @@
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="Silverlight.js"></script>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <!--<script type="text/javascript" src="../vml.js"></script>-->
 <!--<script type="text/javascript" src="../svg.js"></script>-->
+<!--<script type="text/javascript" src="../silverlight.js"></script>-->
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 
@@ -22,8 +24,9 @@ makeShapes = function(){
 		surface.createLine({x1: 0, x2: grid_size, y1: i, y2: i}).setStroke("black");
 		surface.createLine({y1: 0, y2: grid_size, x1: i, x2: i}).setStroke("black");
 	}
-    image = surface.createImage({width: 333, height: 80, src: "http://dojotoolkit.org/files/downloadButton.gif"});
-    dojo.connect(image.getEventSource(), "onclick", function(){ alert("You didn't expect a download, did you?"); });
+    image = surface.createImage({width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+    //dojo.connect(image.getEventSource(), "onclick", function(){ alert("You didn't expect a download, did you?"); });
+    image.connect("onclick", function(){ alert("You didn't expect a download, did you?"); });
 };
 
 transformImage = function(){
@@ -47,12 +50,14 @@ transformImage = function(){
 	}
 };
 
-dojo.addOnLoad(makeShapes);
+//dojo.addOnLoad(makeShapes);
 
 </script>
 </head>
 <body>
-	<h1>dojox.gfx Image tests</h1>
+<h1>dojox.gfx Image tests</h1>
+<p><button onclick="makeShapes()">Go</button></p>
+<p>
 <input type="radio" name="switch" id="r1_reset" checked onclick="transformImage()" /><label for="r1_reset">Reset Image</label><br />
 <input type="radio" name="switch" id="r1_move" onclick="transformImage()" /><label for="r1_move">Move Image</label><br />
 <input type="radio" name="switch" id="r1_rotate" onclick="transformImage()" /><label for="r1_rotate">Rotate Image</label><br />
