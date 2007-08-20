@@ -50,13 +50,13 @@ transformImage = function(){
 	}
 };
 
-//dojo.addOnLoad(makeShapes);
+dojo.addOnLoad(makeShapes);
 
 </script>
 </head>
 <body>
 <h1>dojox.gfx Image tests</h1>
-<p><button onclick="makeShapes()">Go</button></p>
+<p>Note: Silverlight doesn't allow downloading images when run from a file system. This demo should be run from a server.</p>
 <p>
 <input type="radio" name="switch" id="r1_reset" checked onclick="transformImage()" /><label for="r1_reset">Reset Image</label><br />
 <input type="radio" name="switch" id="r1_move" onclick="transformImage()" /><label for="r1_move">Move Image</label><br />
