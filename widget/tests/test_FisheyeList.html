@@ -24,7 +24,7 @@
 		var counter = 1;
 		function addToFirstList(){
 			var item = new dojox.widget.FisheyeListItem();
-			item.caption = "Dynamically Added "+counter;
+			item.label = "Dynamically Added "+counter;
 			item.iconSrc = "images/fisheye_"+counter+".png"
 			item.postCreate();
 			counter++;
@@ -55,7 +55,7 @@
 
 	<div dojoType="dojox.widget.FisheyeListItem"
 		id="item1"
-		onclick="alert('click on' + this.caption + '(from widget id ' + this.widgetId + ')!');"
+		onclick="alert('click on ' + this.label + '(from widget id ' + this.widgetId + ')!');"
 		label="Item 1"
 		iconSrc="images/fisheye_1.png">
 	</div>
@@ -106,7 +106,7 @@
 
 	<div dojoType="dojox.widget.FisheyeListItem"
 		id="item1b"
-		onclick="alert('click on' + this.caption + '(from widget id ' + this.widgetId + ')!');"
+		onclick="alert('click on ' + this.label + '(from widget id ' + this.widgetId + ')!');"
 		label="Item 1"
 		iconSrc="images/fisheye_1.png">
 	</div>
