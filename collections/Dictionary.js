@@ -63,7 +63,7 @@ dojox.collections.Dictionary=function(/* dojox.collections.Dictionary? */diction
 				a.push(items[p]);	//	fill it up
 			}
 		}
-		var s=scope||dj_global;
+		var s=scope||dojo.global;
 		if(Array.forEach){
 			Array.forEach(a, fn, s);
 		}else{

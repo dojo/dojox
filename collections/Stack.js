@@ -36,7 +36,7 @@ dojox.collections.Stack=function(/* array? */arr){
 	this.forEach=function(/* function */ fn, /* object? */ scope){
 		//	summary
 		//	functional iterator, following the mozilla spec.
-		var s=scope||dj_global;
+		var s=scope||dojo.global;
 		if(Array.forEach){
 			Array.forEach(q, fn, s);
 		}else{

@@ -49,7 +49,7 @@ dojo.declare("dojox.wire.ml.Invocation", dojox.wire.ml.Action, {
 				this.onError(e);
 			}
 		}else if(this.method){
-			var scope = (this.object ? dojox.wire.ml._getValue(this.object) : dj_global);
+			var scope = (this.object ? dojox.wire.ml._getValue(this.object) : dojo.global);
 			if(!scope){
 				return; //undefined
 			}
