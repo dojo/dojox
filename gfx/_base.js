@@ -237,7 +237,12 @@ dojo.mixin(dojox.gfx, {
 	
 	// a constant used to split a SVG/VML path into primitive components
 	pathVmlRegExp: /([A-Za-z]+)|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
-	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g
+	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
+	
+	equalSources: function(a, b){
+		// summary: compares event sources, returns true if they are equal
+		return a && b && a == b;
+	}
 });
 
 dojox.gfx._createShape = function(shape){

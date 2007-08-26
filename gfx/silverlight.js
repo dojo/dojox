@@ -797,6 +797,8 @@ dojo.extend(dojox.gfx.Surface, {
 	}
 });
 
+dojox.gfx.silverlight.surfaces = {};
+
 dojox.gfx.createSurface = function(parentNode, width, height){
 	// summary: creates a surface (Silverlight)
 	// parentNode: Node: a parent node
@@ -809,7 +811,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	var t = parentNode.ownerDocument.createElement("script");
 	t.type = "text/xaml";
 	t.id = dojox.gfx._base._getUniqueId();
-	t.text = "<Canvas xmlns='http://schemas.microsoft.com/client/2007'/>";
+	t.text = "<Canvas xmlns='http://schemas.microsoft.com/client/2007' Name='" + dojox.gfx._base._getUniqueId() + "'/>";
 	document.body.appendChild(t);
 	// create a plugin
 	var pluginName = dojox.gfx._base._getUniqueId();
@@ -833,6 +835,8 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		null
 	);
 	s.rawNode = dojo.byId(pluginName).content.root;
+	// register the plugin with its parent node
+	dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
 	return s;	// dojox.gfx.Surface
 };
 
@@ -847,14 +851,21 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight._creators);
 
 
 (function(){
+	var surfaces = dojox.gfx.silverlight.surfaces;
 	var mouseFix = function(s, a){
-		var ev = {target: s};
+		var ev = {target: s, currentTarget: s, 
+			preventDefault: function(){}, stopPropagation: function(){}};
 		if(a){
-			var p = a.getPosition(null);
-			ev.x = p.x;
-			ev.y = p.y;
 			ev.ctrlKey = a.ctrl;
 			ev.shiftKey = a.shift;
+			var p = a.getPosition(null);
+			ev.x = ev.offsetX = ev.layerX = p.x;
+			ev.y = ev.offsetY = ev.layerY = p.y;
+			// calculate clientX and clientY
+			var parent = surfaces[s.getHost().content.root.name];
+			var t = dojo._abs(parent);
+			ev.clientX = t.x + p.x;
+			ev.clientY = t.y + p.y;
 		}
 		return ev;
 	};
@@ -868,8 +879,8 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight._creators);
 	};
 	var eventNames = {
 		onclick:		{name: "MouseLeftButtonUp", fix: mouseFix},
-		onmouseover:	{name: "MouseEnter", fix: mouseFix},
-		onmouseout:		{name: "MouseLeave", fix: mouseFix},
+		onmouseenter:	{name: "MouseEnter", fix: mouseFix},
+		onmouseleave:	{name: "MouseLeave", fix: mouseFix},
 		onmousedown:	{name: "MouseLeftButtonDown", fix: mouseFix},
 		onmouseup:		{name: "MouseLeftButtonUp", fix: mouseFix},
 		onmousemove:	{name: "MouseMove", fix: mouseFix},
@@ -882,10 +893,10 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight._creators);
 				{name: name, fix: function(){ return {}; }};
 			if(arguments.length > 2){
 				token = this.getEventSource().addEventListener(n.name, 
-					function(e){ dojo.hitch(object, method)(n.fix(e)); });
+					function(s, a){ dojo.hitch(object, method)(n.fix(s, a)); });
 			}else{
 				token = this.getEventSource().addEventListener(n.name, 
-					function(e){ object(n.fix(e)); });
+					function(s, a){ object(n.fix(s, a)); });
 			}
 			return {name: n.name, token: token};
 		},
@@ -895,6 +906,10 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight._creators);
 	};
 	dojo.extend(dojox.gfx.Shape, eventsProcessing);
 	dojo.extend(dojox.gfx.Surface, eventsProcessing);
+	dojox.gfx.equalSources = function(a, b){
+		return a && b && a.equals(b);
+	}
+
 })();
 
 
