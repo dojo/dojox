@@ -43,7 +43,7 @@ dojo.extend(dojox.gfx.Shape, {
 			this.rawNode.filled = false;
 			return this;
 		}
-		if(typeof(fill) == "object" && "type" in fill){
+		if(typeof fill == "object" && "type" in fill){
 			// gradient
 			switch(fill.type){
 				case "linear":
@@ -93,8 +93,7 @@ dojo.extend(dojox.gfx.Shape, {
 						while(a.length - i > 2) a.pop();
 					}
 					// set colors
-					var i = a.length - 1;
-					var s = [];
+					var i = a.length - 1, s = [];
 					if(a[i].offset > 0){
 						s.push("0 " + a[i].color.toHex());
 					}
@@ -171,7 +170,7 @@ dojo.extend(dojox.gfx.Shape, {
 		if(rn.stroke) {
 			rn.stroke.opacity = s.color.a;
 			rn.stroke.endcap = this._translate(this._capMap, s.cap);
-			if(typeof(s.join) == "number") {
+			if(typeof s.join == "number") {
 				rn.stroke.joinstyle = "miter";
 				rn.stroke.miterlimit = s.join;
 			}else{
@@ -194,7 +193,7 @@ dojo.extend(dojox.gfx.Shape, {
 		var matrix = this._getRealMatrix();
 		if(!matrix) return this;
 		var skew = this.rawNode.skew;
-		if(typeof(skew) == "undefined"){
+		if(typeof skew == "undefined"){
 			for(var i = 0; i < this.rawNode.childNodes.length; ++i){
 				if(this.rawNode.childNodes[i].tagName == "skew"){
 					skew = this.rawNode.childNodes[i];
@@ -205,12 +204,13 @@ dojo.extend(dojox.gfx.Shape, {
 		if(skew){
 			skew.on = false;
 			var mt = matrix.xx.toFixed(8) + " " + matrix.xy.toFixed(8) + " " + 
-				matrix.yx.toFixed(8) + " " + matrix.yy.toFixed(8) + " 0 0";
-			var offset = Math.floor(matrix.dx).toFixed() + "px " + Math.floor(matrix.dy).toFixed() + "px";
-			var l = parseFloat(this.rawNode.style.left);
-			var t = parseFloat(this.rawNode.style.top);
-			var w = parseFloat(this.rawNode.style.width);
-			var h = parseFloat(this.rawNode.style.height);
+				matrix.yx.toFixed(8) + " " + matrix.yy.toFixed(8) + " 0 0",
+				offset = Math.floor(matrix.dx).toFixed() + "px " + Math.floor(matrix.dy).toFixed() + "px",
+				s = this.rawNode.style,
+				l = parseFloat(s.left),
+				t = parseFloat(s.top),
+				w = parseFloat(s.width),
+				h = parseFloat(s.height);
 			if(isNaN(l)) l = 0;
 			if(isNaN(t)) t = 0;
 			if(isNaN(w)) w = 1;
@@ -243,8 +243,8 @@ dojo.extend(dojox.gfx.Shape, {
 		var fo = rawNode.fill;
 		if(rawNode) {
 			if(fo.on && fo.type == "gradient"){
-				var fillStyle = dojo.clone(dojox.gfx.defaultLinearGradient);
-				var rad = dojox.gfx.matrix._degToRad(fo.angle);
+				var fillStyle = dojo.clone(dojox.gfx.defaultLinearGradient),
+					rad = dojox.gfx.matrix._degToRad(fo.angle);
 				fillStyle.x2 = Math.cos(rad);
 				fillStyle.y2 = Math.sin(rad);
 				fillStyle.colors = [];
@@ -255,9 +255,9 @@ dojo.extend(dojox.gfx.Shape, {
 					fillStyle.colors.push({offset: dojox.gfx.vml._parseFloat(t[0]), color: new dojo.Color(t[1])});
 				}
 			}else if(fo.on && fo.type == "gradientradial"){
-				var fillStyle = dojo.clone(dojox.gfx.defaultRadialGradient);
-				var w = parseFloat(rawNode.style.width);
-				var h = parseFloat(rawNode.style.height);
+				var fillStyle = dojo.clone(dojox.gfx.defaultRadialGradient),
+					w = parseFloat(rawNode.style.width),
+					h = parseFloat(rawNode.style.height);
 				fillStyle.cx = isNaN(w) ? 0 : fo.focusposition.x * w;
 				fillStyle.cy = isNaN(h) ? 0 : fo.focusposition.y * h;
 				fillStyle.r  = isNaN(w) ? 1 : w / 2;
@@ -400,9 +400,7 @@ var zIndex = {
 	},
 	moveToBack: function(){
 		// summary: moves a shape to back of its parent's list of shapes (VML)
-		var r = this.rawNode;
-		var p = r.parentNode;
-		var n = p.firstChild;
+		var r = this.rawNode, p = r.parentNode, n = p.firstChild;
 		p.insertBefore(r, n);
 		if(n.tagName == "rect"){
 			// surface has a background rectangle, which position should be preserved
@@ -425,9 +423,7 @@ dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 		// a workaround for the VML's arcsize bug: cannot read arcsize of an instantiated node
 		var arcsize = rawNode.outerHTML.match(/arcsize = \"(\d*\.?\d+[%f]?)\"/)[1];
 		arcsize = (arcsize.indexOf("%") >= 0) ? parseFloat(arcsize) / 100 : dojox.gfx.vml._parseFloat(arcsize);
-		var style = rawNode.style;
-		var width  = parseFloat(style.width);
-		var height = parseFloat(style.height);
+		var style = rawNode.style, width  = parseFloat(style.width), height = parseFloat(style.height);
 		// make an object
 		var o = dojox.gfx.makeParameters(dojox.gfx.defaultRect, {
 			x: parseInt(style.left),
@@ -446,12 +442,11 @@ dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 		var style = this.rawNode.style;
 		style.left   = shape.x.toFixed();
 		style.top    = shape.y.toFixed();
-		style.width  = (typeof(shape.width) == "string" && shape.width.indexOf("%") >= 0)  ? shape.width  : shape.width.toFixed();
-		style.height = (typeof(shape.width) == "string" && shape.height.indexOf("%") >= 0) ? shape.height : shape.height.toFixed();
+		style.width  = (typeof shape.width == "string" && shape.width.indexOf("%") >= 0)  ? shape.width  : shape.width.toFixed();
+		style.height = (typeof shape.width == "string" && shape.height.indexOf("%") >= 0) ? shape.height : shape.height.toFixed();
 		var r = Math.min(1, (shape.r / Math.min(parseFloat(shape.width), parseFloat(shape.height)))).toFixed(8);
 		// a workaround for the VML's arcsize bug: cannot read arcsize of an instantiated node
-		var parent = this.rawNode.parentNode;
-		var before = null;
+		var parent = this.rawNode.parentNode, before = null;
 		if(parent){
 			if(parent.lastChild != this.rawNode){
 				for(var i = 0; i < parent.childNodes.length; ++i){
@@ -483,15 +478,15 @@ dojo.declare("dojox.gfx.Ellipse", dojox.gfx.shape.Ellipse, {
 	attachShape: function(rawNode){
 		// summary: builds an ellipse shape from a Node.
 		// rawNode: Node: an VML node
-		var style = this.rawNode.style;
-		var rx = parseInt(style.width ) / 2;
-		var ry = parseInt(style.height) / 2;
-		var o = dojox.gfx.makeParameters(dojox.gfx.defaultEllipse, {
-			cx: parseInt(style.left) + rx,
-			cy: parseInt(style.top ) + ry,
-			rx: rx,
-			ry: ry
-		});
+		var style = this.rawNode.style, 
+			rx = parseInt(style.width ) / 2, 
+			ry = parseInt(style.height) / 2;
+			o = dojox.gfx.makeParameters(dojox.gfx.defaultEllipse, {
+				cx: parseInt(style.left) + rx,
+				cy: parseInt(style.top ) + ry,
+				rx: rx,
+				ry: ry
+			});
 		return o;	// dojox.gfx.shape.Ellipse
 	},
 	setShape: function(newShape){
@@ -515,13 +510,13 @@ dojo.declare("dojox.gfx.Circle", dojox.gfx.shape.Circle, {
 	attachShape: function(rawNode){
 		// summary: builds a circle shape from a Node.
 		// rawNode: Node: an VML node
-		var style = this.rawNode.style;
-		var r = parseInt(style.width) / 2;
-		var o = dojox.gfx.makeParameters(dojox.gfx.defaultCircle, {
-			cx: parseInt(style.left) + r,
-			cy: parseInt(style.top)  + r,
-			r:  r
-		});
+		var style = this.rawNode.style,
+			r = parseInt(style.width) / 2,
+			o = dojox.gfx.makeParameters(dojox.gfx.defaultCircle, {
+				cx: parseInt(style.left) + r,
+				cy: parseInt(style.top)  + r,
+				r:  r
+			});
 		return o;	// dojox.gfx.shape.Circle
 	},
 	setShape: function(newShape){
@@ -548,8 +543,7 @@ dojo.declare("dojox.gfx.Line", dojox.gfx.shape.Line, {
 	attachShape: function(rawNode){
 		// summary: builds a line shape from a Node.
 		// rawNode: Node: an VML node
-		var p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
-		var shape = {};
+		var p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp), shape = {};
 		do{
 			if(p.length < 7 || p[0] != "m" || p[3] != "l" || p[6] != "e") break;
 			shape.x1 = parseInt(p[1]);
@@ -580,12 +574,11 @@ dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 	attachShape: function(rawNode){
 		// summary: builds a polyline/polygon shape from a Node.
 		// rawNode: Node: an VML node
-		var shape = dojo.clone(dojox.gfx.defaultPolyline);
-		var p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
+		var shape = dojo.clone(dojox.gfx.defaultPolyline),
+			p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
 		do{
 			if(p.length < 3 || p[0] != "m") break;
-			var x = parseInt(p[0]);
-			var y = parseInt(p[1]);
+			var x = parseInt(p[0]), y = parseInt(p[1]);
 			if(isNaN(x) || isNaN(y)) break;
 			shape.points.push({x: x, y: y});
 			if(p.length < 6 || p[3] != "l") break;
@@ -611,8 +604,7 @@ dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 			this.shape = dojox.gfx.makeParameters(this.shape, points);
 		}
 		this.bbox = null;
-		var attr = [];
-		var p = this.shape.points;
+		var attr = [], p = this.shape.points;
 		if(p.length > 0){
 			attr.push("m");
 			var k = 1;
@@ -827,8 +819,8 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		// summary: deduces a font style from a Node.
 		// rawNode: Node: an VML node
 		if(!rawNode){ return null; }
-		var fontStyle = dojo.clone(dojox.gfx.defaultFont);
-		var c = this.rawNode.childNodes;
+		var fontStyle = dojo.clone(dojox.gfx.defaultFont),
+			c = this.rawNode.childNodes;
 		for(var i = 0; i < c.length; ++i){
 			if(c[i].tagName == "textpath"){
 				var s = c[i].style;
@@ -868,8 +860,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	},
 	getTextWidth: function(){ 
 		// summary: get the text width, in px 
-		var rawNode = this.rawNode; 
-		var _display = rawNode.style.display; 
+		var rawNode = this.rawNode, _display = rawNode.style.display; 
 		rawNode.style.display = "inline"; 
 		var _width = dojox.gfx.pt2px(parseFloat(rawNode.currentStyle.width)); 
 		rawNode.style.display = _display; 
@@ -879,15 +870,14 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 dojox.gfx.Text.nodeType = "shape";
 
 dojox.gfx.path._calcArc = function(alpha){
-	var cosa  = Math.cos(alpha);
-	var sina  = Math.sin(alpha);
 	// return a start point, 1st and 2nd control points, and an end point
-	var p2 = {x: cosa + (4 / 3) * (1 - cosa), y: sina - (4 / 3) * cosa * (1 - cosa) / sina};
+	var cosa  = Math.cos(alpha), sina  = Math.sin(alpha),
+		p2 = {x: cosa + (4 / 3) * (1 - cosa), y: sina - (4 / 3) * cosa * (1 - cosa) / sina};
 	return {
-		e:  {x: cosa, y: sina},
-		c2: p2,
+		s:  {x: cosa, y: -sina},
 		c1: {x: p2.x, y: -p2.y},
-		s:  {x: cosa, y: -sina}
+		c2: p2,
+		e:  {x: cosa, y: sina}
 	};
 };
 
@@ -908,21 +898,19 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		dojox.gfx.Path.superclass._updateWithSegment.apply(this, arguments);
 		// add a VML path segment
 		var path = this[this.renderers[segment.action]](segment, last);
-		if(typeof(this.vmlPath) == "string"){
+		if(typeof this.vmlPath == "string"){
 			this.vmlPath += path.join("");
+			this.rawNode.path.v = this.vmlPath + " r0,0 e";
 		}else{
 			this.vmlPath = this.vmlPath.concat(path);
-		}
-		if(typeof(this.vmlPath) == "string"){
-			this.rawNode.path.v = this.vmlPath + " r0,0 e";
 		}
 	},
 	attachShape: function(rawNode){
 		// summary: builds a path shape from a Node.
 		// rawNode: Node: an VML node
-		var shape = dojo.clone(dojox.gfx.defaultPath);
-		var p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
-		var t = [], skip = false;
+		var shape = dojo.clone(dojox.gfx.defaultPath),
+			p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp),
+			t = [], skip = false;
 		for(var i = 0; i < p.length; ++p){
 			var s = p[i];
 			if(s in this._pathVmlToSvgMap) {
@@ -969,10 +957,10 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		Z: "_closePath", z: "_closePath"
 	},
 	_addArgs: function(path, args, from, upto){
-		if(typeof(upto) == "undefined"){
+		if(typeof upto == "undefined"){
 			upto = args.length;
 		}
-		if(typeof(from) == "undefined"){
+		if(typeof from == "undefined"){
 			from = 0;
 		}
 		for(var i = from; i < upto; ++i){
@@ -981,10 +969,10 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		}
 	},
 	_addArgsAdjusted: function(path, last, args, from, upto){
-		if(typeof(upto) == "undefined"){
+		if(typeof upto == "undefined"){
 			upto = args.length;
 		}
-		if(typeof(from) == "undefined"){
+		if(typeof from == "undefined"){
 			from = 0;
 		}
 		for(var i = from; i < upto; i += 2){
@@ -995,9 +983,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		}
 	},
 	_moveToA: function(segment){
-		var p = [" m"];
-		var n = segment.args;
-		var l = n.length;
+		var p = [" m"], n = segment.args, l = n.length;
 		if(l == 2){
 			this._addArgs(p, n);
 		}else{
@@ -1009,9 +995,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_moveToR: function(segment, last){
-		var p = ["x" in last ? " t" : " m"];
-		var n = segment.args;
-		var l = n.length;
+		var p = ["x" in last ? " t" : " m"], n = segment.args, l = n.length;
 		if(l == 2){
 			this._addArgs(p, n);
 		}else{
@@ -1035,10 +1019,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_hLineToA: function(segment, last){
-		var p = [" l"];
-		var n = segment.args;
-		var l = n.length;
-		var y = " " + last.y.toFixed();
+		var p = [" l"], n = segment.args, l = n.length, y = " " + last.y.toFixed();
 		for(var i = 0; i < l; ++i){
 			p.push(" ");
 			p.push(n[i].toFixed());
@@ -1048,9 +1029,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_hLineToR: function(segment){
-		var p = [" r"];
-		var n = segment.args;
-		var l = n.length;
+		var p = [" r"], n = segment.args, l = n.length;
 		for(var i = 0; i < l; ++i){
 			p.push(" ");
 			p.push(n[i].toFixed());
@@ -1060,10 +1039,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_vLineToA: function(segment, last){
-		var p = [" l"];
-		var n = segment.args;
-		var l = n.length;
-		var x = " " + last.x.toFixed();
+		var p = [" l"], n = segment.args, l = n.length, x = " " + last.x.toFixed();
 		for(var i = 0; i < l; ++i){
 			p.push(x);
 			p.push(" ");
@@ -1073,9 +1049,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_vLineToR: function(segment){
-		var p = [" r"];
-		var n = segment.args;
-		var l = n.length;
+		var p = [" r"], n = segment.args, l = n.length;
 		for(var i = 0; i < l; ++i){
 			p.push(" 0 ");
 			p.push(n[i].toFixed());
@@ -1084,9 +1058,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_curveToA: function(segment){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 6){
 			p.push(" c");
 			this._addArgs(p, n, i, i + 6);
@@ -1095,9 +1067,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_curveToR: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 6){
 			p.push(" v");
 			this._addArgs(p, n, i, i + 6);
@@ -1109,9 +1079,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_smoothCurveToA: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 4){
 			p.push(" c");
 			if(this.lastControl.type == "C"){
@@ -1128,9 +1096,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_smoothCurveToR: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 4){
 			p.push(" v");
 			if(this.lastControl.type == "C"){
@@ -1150,9 +1116,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_qCurveToA: function(segment){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 4){
 			p.push(" qb");
 			this._addArgs(p, n, i, i + 4);
@@ -1161,9 +1125,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_qCurveToR: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 4){
 			p.push(" qb");
 			this._addArgsAdjusted(p, last, n, i, i + 4);
@@ -1175,9 +1137,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_qSmoothCurveToA: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 2){
 			p.push(" qb");
 			if(this.lastControl.type == "Q"){
@@ -1197,9 +1157,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		return p;
 	},
 	_qSmoothCurveToR: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
+		var p = [], n = segment.args, l = n.length;
 		for(var i = 0; i < l; i += 2){
 			p.push(" qb");
 			if(this.lastControl.type == "Q"){
@@ -1222,20 +1180,18 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 	_calcArcTo: function(path, last, rx, ry, xRotg, large, sweep, x, y){
 		var m = dojox.gfx.matrix;
 		// calculate parameters
-		var xRot = dojox.gfx.matrix._degToRad(xRotg);
-		var rx2 = rx * rx;
-		var ry2 = ry * ry;
-		var pa = m.multiplyPoint(
-			m.rotate(-xRot), 
-			{x: (last.x - x) / 2, y: (last.y - y) / 2}
-		);
-		var pax2 = pa.x * pa.x;
-		var pay2 = pa.y * pa.y;
-		var c1 = Math.sqrt((rx2 * ry2 - rx2 * pay2 - ry2 * pax2) / (rx2 * pay2 + ry2 * pax2));
-		var ca = {
-			x:  c1 * rx * pa.y / ry,
-			y: -c1 * ry * pa.x / rx
-		};
+		var xRot = m._degToRad(xRotg),
+			rx2 = rx * rx, ry2 = ry * ry,
+			pa = m.multiplyPoint(
+				m.rotate(-xRot), 
+				{x: (last.x - x) / 2, y: (last.y - y) / 2}
+			),
+			pax2 = pa.x * pa.x, pay2 = pa.y * pa.y,
+			c1 = Math.sqrt((rx2 * ry2 - rx2 * pay2 - ry2 * pax2) / (rx2 * pay2 + ry2 * pax2)),
+			ca = {
+				x:  c1 * rx * pa.y / ry,
+				y: -c1 * ry * pa.x / rx
+			};
 		if(large == sweep){
 			ca = {x: -ca.x, y: -ca.y};
 		}
@@ -1250,34 +1206,36 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			], 
 			ca
 		);
-		// start of our arc
-		var startAngle = Math.atan2(last.y - c.y, last.x - c.x) - xRot;
-		var endAngle   = Math.atan2(y - c.y, x - c.x) - xRot;
-		// size of our arc in radians
-		var theta = sweep ? endAngle - startAngle : startAngle - endAngle;
-		if(theta < 0){
-			theta += dojox.gfx.vml.two_pi;
-		}else if(theta > dojox.gfx.vml.two_pi){
-			theta = dojox.gfx.vml.two_pi;
-		}
 		// calculate our elliptic transformation
 		var elliptic_transform = m.normalize([
 			m.translate(c.x, c.y),
 			m.rotate(xRot),
 			m.scale(rx, ry)
 		]);
+		// start, end, and size of our arc
+		var inversed = m.invert(elliptic_transform),
+			sp = m.multiplyPoint(inversed, last),
+			ep = m.multiplyPoint(inversed, x, y),
+			startAngle = Math.atan2(sp.y, sp.x),
+			endAngle   = Math.atan2(ep.y, ep.x),
+			// size of our arc in radians
+			theta = sweep ? endAngle - startAngle : startAngle - endAngle;
+		if(theta < 0){
+			theta += dojox.gfx.vml.two_pi;
+		}else if(theta > dojox.gfx.vml.two_pi){
+			theta = dojox.gfx.vml.two_pi;
+		}
 		// draw curve chunks
-		var alpha = dojox.gfx.vml.pi4 / 2;
-		var curve = this._curvePI4;
-		var step  = sweep ? alpha : -alpha;
-		for(var angle = theta; angle > 0; angle -= dojox.gfx.vml.pi4){
-			if(angle < dojox.gfx.vml.pi4){
+		var pi4 = Math.PI / 4, alpha = Math.PI / 8, curve = this._curvePI4, 
+			step  = sweep ? alpha : -alpha;
+		for(var angle = theta; angle > 0; angle -= pi4){
+			if(angle < pi4){
 				alpha = angle / 2;
 				curve = dojox.gfx.path._calcArc(alpha);
 				step  = sweep ? alpha : -alpha;
 			}
-			var c1, c2, e;
-			var M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
+			var c1, c2, e,
+				M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
 			if(sweep){
 				c1 = m.multiplyPoint(M, curve.c1);
 				c2 = m.multiplyPoint(M, curve.c2);
@@ -1294,13 +1252,9 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		}
 	},
 	_arcTo: function(segment, last){
-		var p = [];
-		var n = segment.args;
-		var l = n.length;
-		var relative = segment.action == "a";
+		var p = [], n = segment.args, l = n.length, relative = segment.action == "a";
 		for(var i = 0; i < l; i += 7){
-			var x1 = n[i + 5];
-			var y1 = n[i + 6];
+			var x1 = n[i + 5], y1 = n[i + 6];
 			if(relative){
 				x1 += last.x;
 				y1 += last.y;
@@ -1338,7 +1292,7 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path, {
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
 		this.text = dojox.gfx.makeParameters(this.text, 
-			typeof(newText) == "string" ? {text: newText} : newText);
+			typeof newText == "string" ? {text: newText} : newText);
 		this._setText();
 		return this;	// self
 	},
@@ -1354,11 +1308,9 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path, {
 	_setText: function(){
 		// summary: sets a text shape object (VML)
 		this.bbox = null;
-		var r = this.rawNode;
-		var s = this.text;
-		// find path and text path
-		var p = null, t = null;
-		var c = r.childNodes;
+		var r = this.rawNode, s = this.text,
+			// find path and text path
+			p = null, t = null, c = r.childNodes;
 		for(var i = 0; i < c.length; ++i){
 			var tag = c[i].tagName;
 			if(tag == "path"){
@@ -1388,8 +1340,7 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path, {
 	},
 	_setFont: function(){
 		// summary: sets a font object (VML)
-		var f = this.fontStyle;
-		var c = this.rawNode.childNodes;
+		var f = this.fontStyle, c = this.rawNode.childNodes;
 		for(var i = 0; i < c.length; ++i){
 			if(c[i].tagName == "textpath"){
 				c[i].style.font = dojox.gfx.makeFontString(f);
@@ -1448,8 +1399,7 @@ dojox.gfx.vml._creators = {
 		// summary: creates a VML image shape
 		// image: Object: an image object (see dojox.gfx.defaultImage)
 		if(!this.rawNode) return null;
-		var shape = new dojox.gfx.Image();
-		var node = this.rawNode.ownerDocument.createElement('div');
+		var shape = new dojox.gfx.Image(), node = this.rawNode.ownerDocument.createElement('div');
 		node.style.position = "absolute";
 		node.style.width  = this.rawNode.style.width;
 		node.style.height = this.rawNode.style.height;
@@ -1490,8 +1440,8 @@ dojox.gfx.vml._creators = {
 		// shapeType: Function: a class constructor to create an instance of
 		// rawShape: Object: properties to be passed in to the classes "setShape" method
 		if(!this.rawNode) return null;
-		var shape = new shapeType();
-		var node = this.rawNode.ownerDocument.createElement('v:' + shapeType.nodeType);
+		var shape = new shapeType(),
+			node = this.rawNode.ownerDocument.createElement('v:' + shapeType.nodeType);
 		shape.setRawNode(node);
 		this.rawNode.appendChild(node);
 		if(overrideSize) this._overrideSize(node);

@@ -19,7 +19,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	setAbsoluteMode: function(mode){
 		// summary: sets an absolute or relative mode for path points
 		// mode: Boolean: true/false or "absolute"/"relative" to specify the mode
-		this.absolute = typeof(mode) == "string" ? (mode == "absolute") : mode;
+		this.absolute = typeof mode == "string" ? (mode == "absolute") : mode;
 		return this; // self
 	},
 	getAbsoluteMode: function(){
@@ -153,7 +153,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		for(var i = 0; i < l; ++i){
 			path.push(dojox.gfx.formatNumber(n[i], true));
 		}
-		if(typeof(this.shape.path) == "string"){
+		if(typeof this.shape.path == "string"){
 			this.shape.path += path.join("");
 		}else{
 			var l = path.length;
@@ -172,7 +172,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// action: String: valid SVG code for a segment's type
 		// args: Array: a list of parameters for this segment
 		var group = this._validSegments[action.toLowerCase()];
-		if(typeof(group) == "number"){
+		if(typeof group == "number"){
 			if(group){
 				if(args.length >= group){
 					var segment = {action: action, args: args.slice(0, args.length - args.length % group)};
@@ -193,9 +193,9 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// args: Array: an input argument (can be values of Boolean, Number, dojox.gfx.Point, or an embedded array of them)
 		for(var i = 0; i < args.length; ++i){
 			var t = args[i];
-			if(typeof(t) == "boolean"){
+			if(typeof t == "boolean"){
 				array.push(t ? 1 : 0);
-			}else if(typeof(t) == "number"){
+			}else if(typeof t == "number"){
 				array.push(t);
 			}else if(t instanceof Array){
 				this._collectArgs(array, t);
@@ -307,7 +307,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	setShape: function(newShape){
 		// summary: forms a path using a shape
 		// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
-		this.shape = dojox.gfx.makeParameters(this.shape, typeof(newShape) == "string" ? {path: newShape} : newShape);
+		this.shape = dojox.gfx.makeParameters(this.shape, typeof newShape == "string" ? {path: newShape} : newShape);
 		var path = this.shape.path;
 		// switch to non-updating version of path building
 		this.shape.path = [];
@@ -337,7 +337,7 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
 		this.text = dojox.gfx.makeParameters(this.text, 
-			typeof(newText) == "string" ? {text: newText} : newText);
+			typeof newText == "string" ? {text: newText} : newText);
 		this._setText();
 		return this;	// self
 	},
