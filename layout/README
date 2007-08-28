@@ -26,6 +26,9 @@ Project description
 	Supports inline scripts, inline styles, relative path adjustments
 	and having a table tag as domNode.
 
+	dojox.layout.StretchPane -- an extension on dojox ContentPane
+	Supports animated resizing and calculated sizes for nodes see test files for examples.
+	
 -------------------------------------------------------------------------------
 Dependencies
 
@@ -61,3 +64,8 @@ Basic Usage:
 		Initial content, will be replace by href.
 		paths in folder.html will be adjusted to match this page
 	</div>
+
+	<div id="panex" dojoType="dojox.layout.StretchPane"
+		style="border: solid blue 1px; overflow:hidden"
+		x="90" y="60" w="40+0.2*w" h="40"
+     >Stretch horiz</div>
