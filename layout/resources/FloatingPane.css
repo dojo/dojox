@@ -1,33 +1,60 @@
-.dojoxFloatingCloseIcon {
-	background:url('icons/tabClose.png') no-repeat center center; 
-	width:16px;
-	height:16px; 
-	overflow:hidden;
-	float:right; 
+.dojoxFloatingPane {
+	background-color:#fff;
+	position:relative; 
 }
 
-.dojoxFloatingPaneContent {
-	overflow:auto; 
-	background-color:#fff; height:100%; width:100%; 
+/* titleNode */
+.dojoxFloatingPaneTitle {
+	padding:4px 4px 2px 4px; 
+	cursor:move; 
+}
+.soria .dojoxFloatingPaneTitle {
+	background:#4f8ced url("../../../dijit/themes/soria/images/gradientTopBg.png") repeat-x top left;
+	border:1px solid #6969FF;
+	background-position:0px -1px;
+	color:#fff; font-weight:bold;	
+}	
+.tundra .dojoxFloatingPaneTitle {
+	background:#fafafa url("../../../dijit/themes/tundra/images/titleBarBg.gif") repeat-x bottom left;
+	border:1px solid #bfbfbf;
+	color:#000; 	
 }
 
+/* Icons */
 .dojoxFloatingMiniMizeIcon {
-	background:url('icons/down.png') no-repeat center center; 
+	background:url('../../../dijit/themes/tundra/images/arrowDown.png') no-repeat center center; 
 	width:16px;
 	height:16px; 
 	overflow:hidden;
 	float:right; 
 }
+
 .dojoxFloatingResizeHandle {
 	background:url('icons/resize.png') no-repeat bottom right;
 	position:absolute; 
 	right:0; 
 	bottom:0; 	
-	/* background-color:#ededed; */
 	width:16px;
 	height:16px; 
 	cursor:nw-resize;
 }
+
+.dojoxFloatingCloseIcon {
+	width:16px;
+	height:16px; 
+	overflow:hidden;
+	float:right; 
+	cursor:pointer;
+}
+.soria .dojoxFloatingCloseIcon {
+	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat center center;
+	background-position:-65px -1px; 
+}
+.tundra .dojoxFloatingCloseIcon {
+	background:url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center; 	
+}
+
+/* our un-used dock styles for now */
 .dojoxFloatingDockDefault {
 	position:absolute;
 	bottom:0px;
@@ -54,17 +81,17 @@
 } 
 
 .dojoxDockRestoreButton {
-	background:url('icons/up.png') no-repeat center center;
+	background:url('../../../dijit/themes/tundra/images/arrowUp.png') no-repeat center center;
 	width:16px; height:16px;
 	overflow:hidden; 
 	float:right;
 	margin-top:2px; 
-	
 }
 
 .dojoxDockTitleNode {
 	overflow:hidden;
 }
+
 .dojoxDockNode {
 	cursor:pointer; 
 	border:1px solid #ccc;

@@ -62,6 +62,8 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		this.setTitle(this.title);
 		dojox.layout.FloatingPane.superclass.postCreate.apply(this,arguments);
 		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
+		this._listener = dojo.subscribe("/dnd/move/start",this,"zIndexes"); 
+		console.log(this._listener); 
 
 		if(!this.dockable){ this.dockNode.style.display = "none"; } 
 		if(!this.closable){ this.closeNode.style.display = "none"; } 
@@ -119,21 +121,26 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	},
 
 	setTitle: function(/* String */ title) {
+		// summary: Update the string in the titleNode
 		this.titleNode.innerHTML = title; 
 	},	
 
-	zIndexes: function() {
-		// summary: keep track of our own zIndex for bringToTop like behavior [not yet]
-		dojo.style(this.domNode,"zIndex","997"); 
+	zIndexes: function(/* DomNode */node) {
+		// summary: keep track of our own zIndex for bringToTop like behavior
+		if(node.id == this.id) { dojo.style(this.domNode,"zIndex","997"); }
+		else{ dojo.style(this.domNode,"zIndex",dojo.style(this.domNode,"zIndex")-1); }
 	},
 
 	// extend 		
 	close: function() {
+		// summary: close and destroy this widget
 		if (!this.closable) { return; }
+		dojo.unsubscribe(this._listener); 
 		this.hide(dojo.hitch(this,"destroy")); 
 	},
 
 	hide: function(/* Function */ callback) {
+		// summary: close but do not destroy this widget
 		dojo.fadeOut({node:this.domNode, duration:this.duration,
 			onEnd: dojo.hitch(this,function() { 
 				this.domNode.style.display = "none";
@@ -144,6 +151,7 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	},
 
 	show: function(callback) {
+		// summary: show the FloatingPane
 		var anim = dojo.fadeIn({node:this.domNode, duration:this.duration,
 			beforeBegin: dojo.hitch(this,function() {
 				this.domNode.style.display = ""; 
@@ -155,6 +163,7 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	},
 
 	minimize: function() {
+		// summary: hide and dock the FloatingPane
 		if (!this._isDocked) {
 		this.hide(dojo.hitch(this,"_dock"));
 		} 
