@@ -63,7 +63,6 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		dojox.layout.FloatingPane.superclass.postCreate.apply(this,arguments);
 		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
 		this._listener = dojo.subscribe("/dnd/move/start",this,"zIndexes"); 
-		console.log(this._listener); 
 
 		if(!this.dockable){ this.dockNode.style.display = "none"; } 
 		if(!this.closable){ this.closeNode.style.display = "none"; } 
@@ -82,7 +81,6 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 
 		dojo.style(this.domNode,"border","1px solid #dedede"); 
 		dojo.style(this.domNode,"overflow","hidden"); 
-		//dojo.style(this.dom
 
 		if (this.resizable) {
 			this.containerNode.style.overflow = "auto";
