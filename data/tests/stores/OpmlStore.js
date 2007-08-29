@@ -229,6 +229,49 @@ doh.register("dojox.data.tests.stores.OpmlStore",
 			return d; //Object
 		},
 
+		function testReadAPI_fetch_one_MultipleMixed(t){
+			//	summary: 
+			//		Simple test of a basic fetch on OpmlStore of a single item mixing two fetch types.
+			//	description:
+			//		Simple test of a basic fetch on Cpmltore of a single item mixing two fetch types.
+
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+
+			var done = [false, false];
+			function onComplete(items, request){
+				done[0] = true;
+				t.is(1, items.length);
+				console.log("Found item: " + opmlStore.getValue(items[0],"text") + " with identity: " + opmlStore.getIdentity(items[0]));
+				t.is(0, opmlStore.getIdentity(items[0]));
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+			
+			function onItem(item){
+				done[1] = true;
+				t.assertTrue(item !== null);
+				console.log("Found item: " + opmlStore.getValue(item,"text"));
+				t.is('Egypt', opmlStore.getValue(item,"text")); //Should be the second node parsed, ergo id 1, first node is id 0.
+				t.is(1, opmlStore.getIdentity(item)); 
+				if(done[0] && done[1]){
+					d.callback(true);
+				}
+			}
+
+			opmlStore.fetch({ 	query: {text: "Africa"}, 
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)
+							});
+			
+            opmlStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+
+			return d; //Object
+		},
+
 		function testReadAPI_fetch_one_deep(t){
 			//	summary: 
 			//		Simple test of a basic fetch on OpmlStore of a single item that's nested down as a child item.
@@ -704,10 +747,10 @@ doh.register("dojox.data.tests.stores.OpmlStore",
 			var features = opmlStore.getFeatures(); 
 			var count = 0;
 			for(i in features){
-				t.assertTrue((i === "dojo.data.api.Read"));
+				t.assertTrue((i === "dojo.data.api.Read") || (i === "dojo.data.api.Identity"));
 				count++;
 			}
-			t.assertTrue(count === 1);
+			t.assertTrue(count === 2);
 		},
 		function testReadAPI_fetch_patternMatch0(t){
 			//	summary: 
@@ -892,6 +935,127 @@ doh.register("dojox.data.tests.stores.OpmlStore",
 					var member = readApi[i];
 					//Check that all the 'Read' defined functions exist on the test store.
 					if(typeof member === "function"){
+						var testStoreMember = testStore[i];
+						if(!(typeof testStoreMember === "function")){
+							passed = false;
+							break;
+						}
+					}
+				}
+			}
+			t.assertTrue(passed);
+		},
+		function testIdentityAPI_fetchItemByIdentity(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				d.callback(true);	
+			}
+            opmlStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+			return d;
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_bad1(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+            opmlStore.fetchItemByIdentity({identity: "200", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+			return d;
+		},
+		function testIdentityAPI_fetchItemByIdentity_bad2(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			var d = new doh.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+            opmlStore.fetchItemByIdentity({identity: "-1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+			return d;
+		},
+		function testIdentityAPI_fetchItemByIdentity_bad3(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			var d = new doh.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+            opmlStore.fetchItemByIdentity({identity: "999999", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d)});
+			return d;
+		},
+		function testIdentityAPI_getIdentity(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml");
+			var opmlStore = new dojox.data.OpmlStore(args);
+			
+			var d = new doh.Deferred();
+			function completed(items, request){
+				var passed = true;
+				for(var i = 0; i < items.length; i++){
+					console.log("Identity is: " + opmlStore.getIdentity(items[i]) + " count is : "+ i);
+					if(!(opmlStore.getIdentity(items[i]) == i)){
+						passed=false;
+						break;
+					}
+				}
+				t.assertTrue(passed);
+				d.callback(true);
+			}
+			
+			//Get everything...
+			opmlStore.fetch({ onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.OpmlStore.error, t, d), queryOptions: {deep: true}});
+			return d; //Object
+		},
+		function testIdentityAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test identity API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test identity API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = new dojox.data.OpmlStore(dojox.data.tests.stores.CsvStore.getDatasource("stores/geography.xml"));
+			var identityApi = new dojo.data.api.Identity();
+			var passed = true;
+
+			for(i in identityApi){
+				if(i.toString().charAt(0) !== '_')
+				{
+					var member = identityApi[i];
+					//Check that all the 'Read' defined functions exist on the test store.
+					if(typeof member === "function"){
+						console.log("Looking at function: [" + i + "]");
 						var testStoreMember = testStore[i];
 						if(!(typeof testStoreMember === "function")){
 							passed = false;

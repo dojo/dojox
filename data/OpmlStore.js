@@ -27,6 +27,9 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		}
 		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
 		this._queuedFetches = [];
+		this._identityMap = {};
+		this._identCount = 0;
+		this._idProp = "_I";
 	},
 
 	label: "text",
@@ -51,7 +54,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 	
 	_removeChildNodesThatAreNotElementNodes: function(/* node */ node, /* boolean */ recursive){
 		var childNodes = node.childNodes;
-		if(childNodes.length == 0){
+		if(childNodes.length === 0){
 			return;
 		}
 		var nodesToRemove = [];
@@ -61,7 +64,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 			if(childNode.nodeType != 1){ 
 				nodesToRemove.push(childNode); 
 			}
-		};
+		}
 		for(i = 0; i < nodesToRemove.length; ++i){
 			childNode = nodesToRemove[i];
 			node.removeChild(childNode);
@@ -92,6 +95,8 @@ dojo.declare("dojox.data.OpmlStore", null, {
 			for(var i = 0; i < bodyChildNodes.length; ++i){
 				var node = bodyChildNodes[i];
 				if(node.tagName == 'outline'){
+					this._identityMap[this._identCount] = node;
+					this._identCount++;
 					this._arrayOfTopLevelItems.push(node);
 					this._arrayOfAllItems.push(node);
 					this._checkChildNodes(node);
@@ -114,6 +119,8 @@ dojo.declare("dojox.data.OpmlStore", null, {
 			for(var i = 0; i < node.childNodes.length; i++){
 				var child = node.childNodes[i];
 				if(child.tagName == 'outline'){
+					this._identityMap[this._identCount] = child;
+					this._identCount++;
 					this._arrayOfAllItems.push(child);
 					this._checkChildNodes(child);
 				}
@@ -145,7 +152,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 			return (item.firstChild || defaultValue); //Object
 		} else {
 			var value = item.getAttribute(attribute);
-			return (value != undefined) ? value : defaultValue; //Object
+			return (value !== undefined) ? value : defaultValue; //Object
 		}
 	},
 	
@@ -370,10 +377,109 @@ dojo.declare("dojox.data.OpmlStore", null, {
 	
 	getFeatures: function(){
 		// summary: See dojo.data.api.Read.getFeatures()
-		 var features = {
-			 'dojo.data.api.Read': true
-		 };
-		 return features; //Object
+		var features = {
+			'dojo.data.api.Read': true,
+			'dojo.data.api.Identity': true
+		};
+		return features; //Object
+	},
+
+/***************************************
+     dojo.data.api.Identity API
+***************************************/
+	getIdentity: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Identity.getIdentity()
+		if(this.isItem(item)){
+			//No ther way to do this other than O(n) without
+			//complete rework of how the tree stores nodes.
+			for(var i in this._identityMap){
+				if(this._identityMap[i] === item){
+					return i;
+				}
+			}
+		}
+		return null; //null
+	},
+
+	fetchItemByIdentity: function(/* Object */ keywordArgs){
+		//	summary: 
+		//		See dojo.data.api.Identity.fetchItemByIdentity()
+
+		//Hasn't loaded yet, we have to trigger the load.
+		if(!this._loadFinished){
+			var self = this;
+			if(this.url !== ""){
+				//If fetches come in before the loading has finished, but while
+				//a load is in progress, we have to defer the fetching to be 
+				//invoked in the callback.
+				if(this._loadInProgress){
+					this._queuedFetches.push({args: keywordArgs});
+				}else{
+					this._loadInProgress = true;
+					var getArgs = {
+							url: self.url, 
+							handleAs: "xml"
+						};
+					var getHandler = dojo.xhrGet(getArgs);
+					getHandler.addCallback(function(data){
+						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+						try{
+							self._processRawXmlTree(data);
+							var item = self._identityMap[keywordArgs.identity];
+							if(!self.isItem(item)){
+								item = null;
+							}
+							if(keywordArgs.onItem){
+								keywordArgs.onItem.call(scope, item);
+							}
+							self._handleQueuedFetches();
+						}catch(error){
+							if(keywordArgs.onError){
+								keywordArgs.onError.call(scope, error);
+							}
+						}
+					});
+					getHandler.addErrback(function(error){
+						this._loadInProgress = false;
+						if(keywordArgs.onError){
+							var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+							keywordArgs.onError.call(scope, error);
+						}
+					});
+				}
+			}else if(this._opmlData){
+				this._processRawXmlTree(this._opmlData);
+				this._opmlData = null;
+				var item = this._identityMap[keywordArgs.identity];
+				if(!self.isItem(item)){
+					item = null;
+				}
+				if(keywordArgs.onItem){
+					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+					keywordArgs.onItem.call(scope, item);
+				}
+			}
+		}else{
+			//Already loaded.  We can just look it up and call back.
+			var item = this._identityMap[keywordArgs.identity];
+			if(!this.isItem(item)){
+				item = null;
+			}
+			if(keywordArgs.onItem){
+				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+				keywordArgs.onItem.call(scope, item);
+			}
+		}
+	},
+
+	getIdentityAttributes: function(/* item */ item){
+		 //	summary: 
+		 //		See dojo.data.api.Identity.getIdentifierAttributes()
+		 
+		 //Identity isn't a public attribute in the item, it's the node count.
+		 //So, return null.
+		 return null;
 	},
 
 	_handleQueuedFetches: function(){
@@ -387,6 +493,8 @@ dojo.declare("dojox.data.OpmlStore", null, {
 				var delayedFilter = fData.filter;
 				if(delayedFilter){
 					delayedFilter(delayedQuery, this._getItemsArray(delayedQuery.queryOptions)); 
+				}else{
+					this.fetchItemByIdentity(delayedQuery);
 				}
 			}
 			this._queuedFetches = [];
