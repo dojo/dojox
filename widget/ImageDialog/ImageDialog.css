@@ -1,0 +1,64 @@
+.dojoxImageDialog {
+	position:absolute;
+	z-index:999;
+	overflow:hidden;
+	width:100px;
+	height:100px; 
+	border:11px solid #fff;
+	background:#fff url('loading.gif') no-repeat center center;
+}
+
+.dojoxImageDialogContainer {
+	position:absolute;
+	top:0; left:0; 
+}
+
+.dojoxImageDialogFooter {
+	height:50px; 
+	position:relative;
+	bottom:0;
+	left:0;
+	margin-top:8px;
+	color:#666;
+	z-index:1000;
+}
+
+.ImageDialogNext,
+.ImageDialogPrev,
+.ImageDialogClose {
+	float:right;
+	width:16px;
+	height:16px;
+	cursor:pointer;
+}
+
+.soria .ImageDialogNext,
+.soria .ImageDialogPrev,
+.soria .ImageDialogClose {
+	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat center center;
+	background-position:-65px 0;
+}
+.soria .ImageDialogNext {
+	background-position:-48px 0;
+}
+.soria .ImageDialogPrev {
+	background-position:-16px 0;
+}
+
+.tundra .ImageDialogClose {
+	background:url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center;
+}
+.tundra .ImageDialogNext {
+	background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat center center;
+}
+.tundra .ImageDialogPrev {
+	background:url('../../../dijit/themes/tundra/images/arrowLeft.png') no-repeat center center;
+}
+
+/* mow: should be be doing this: */
+.dijitDialogUnderlay {
+	background-color:#000; 
+}
+
+
+
