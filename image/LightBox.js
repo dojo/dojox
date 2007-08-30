@@ -32,7 +32,7 @@ dojo.declare("dojox.image.LightBox",
 		if (this.store){
 			this._attachedDialog = new dojox.image._LightBoxDialog({
 				store: this.store,
-				duration: this.duration,
+				duration: this.duration
 			});
 			this._attachedDialog.startup();
 		}
