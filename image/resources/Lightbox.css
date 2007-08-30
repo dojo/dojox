@@ -1,0 +1,71 @@
+.dojoxLightbox {
+	position:absolute;
+	z-index:999;
+	overflow:hidden;
+	width:100px;
+	height:100px; 
+	border:11px solid #fff;
+	background:#fff url('loading.gif') no-repeat center center;
+}
+
+.dojoxLightboxContainer {
+	position:absolute;
+	top:0; left:0; 
+}
+
+.dojoxLightboxFooter {
+	height:50px; 
+	position:relative;
+	bottom:0;
+	left:0;
+	margin-top:8px;
+	color:#333;
+	z-index:1000;
+	font-size:10pt;
+}
+.dojoxLightboxGroupText {
+	color:#666; 
+	font-size:8pt;
+}
+
+.LightboxNext,
+.LightboxPrev,
+.LightboxClose {
+	float:right;
+	width:16px;
+	height:16px;
+	cursor:pointer;
+}
+
+/* Tundra defaults */
+.LightboxClose {
+	background:url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center;
+}
+.LightboxNext {
+	background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat center center;
+}
+.LightboxPrev {
+	background:url('../../../dijit/themes/tundra/images/arrowLeft.png') no-repeat center center;
+}
+
+/* soria support */
+.soria .LightboxNext,
+.soria .LightboxPrev,
+.soria .LightboxClose {
+	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat center center;
+	background-position:-65px 0;
+}
+.soria .LightboxNext {
+	background-position:-48px 0;
+}
+.soria .LightboxPrev {
+	background-position:-16px 0;
+}
+
+/* mow: should be be doing this: */
+.dijitDialogUnderlay {
+	background-color:#000; 
+}
+
+
+
