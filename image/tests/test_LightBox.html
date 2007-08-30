@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Dojo LightBox Tests</title>
+	
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="../LightBox.js"></script>
+	<script type="text/javascript">
+		// dojo.require("dojox.image.LightBox"); 
+		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+		dojo.require("dojox.data.FlickrStore");
+	</script>
+
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+	
+		@import "../../../dijit/themes/dijit.css";
+		@import "../../../dijit/tests/css/dijitTests.css"; 
+
+		/* you need this file */		
+		@import "../resources/LightBox.css"; 
+
+		body, html { width:100%; height:100%; margin:0; padding:0; } 
+
+	</style>
+
+	<script type="text/javascript">
+		// programatic flickrstore implementation [basic]
+		function onComplete(items,request){
+			var lightBox = dijit.byId('fromStore');
+			if (items.length>0){
+				lightBox.domNode.href = flickrStore.getValue(items[0],"imageUrl");
+				dojo.forEach(items,function(item){
+					var part = {
+						caption: flickrStore.getValue(item,"title"),
+						href: flickrStore.getValue(item,"imageUrl"),
+					};
+					lightBox.addGroupImage(part);
+					console.log(part);
+				});
+			}
+			console.log(lightBox._attachedDialog.inGroup);
+		}
+
+		function onError(error,request){
+			console.warm(error,request);
+		}
+
+		function init(){
+			var flickrRequest = {
+				query: {},
+				onComplete: onComplete,
+				onError: onError,
+				userid: "jetstreet",
+				tags: "jetstreet",
+				count: 10
+			};
+			flickrStore.fetch(flickrRequest);
+		}
+		dojo.addOnLoad(init);
+	</script>
+
+
+</head>
+<body class="tundra">
+
+<div style="padding:20px;">
+	<h1 class="testTitle">Dojo-base LightBox implementation</h1>
+
+	<h3>Individual</h3>
+	<p>
+	<a href="images/imageVert.jpg" dojoType="dojox.image.LightBox" caption="More Guatemala...">tall</a>
+	<a href="images/imageHoriz.jpg" dojoType="dojox.image.LightBox" caption="Antigua, Guatemala">4:3 image</a>
+	</p>
+
+	<h3>Grouped: (fixme: flikrstore data is being included in this group)</h3>
+	<p>
+	<a href="images/imageHoriz2.jpg" dojoType="dojox.image.LightBox" group="group1" caption="Amterdamn Train Depot">wide image</a>
+	<a href="images/square.jpg" dojoType="dojox.image.LightBox" group="group1" caption="1:1 aspect">square</a>
+	<a href="images/extraWide.jpg" dojoType="dojox.image.LightBox" group="group1" caption="Greeneville, TN">wide image</a>
+	</p>	
+	
+
+	<h3>From dojox.data.FlickrStore (?)</h3>
+
+	<div dojoType="dojox.data.FlickrStore" jsId="flickrStore" label="caption"></div>
+
+	this doesn't fully work yet (use above links to test): 
+	<a href="" dojoType="dojox.image.LightBox" id="fromStore" store="flickrStore" group="flickrSet">flickr LightBox</a>
+	<!-- fixme: this is priority. maintaining simple structure 
+		above (simple markup), allow this widget to use a store,
+		and get values like:
+
+		var images = {
+			image1:{
+				href: 'file.png', caption: 'somewhere fun'
+			}
+		};
+
+		this same implementation could be use across all 
+		dojox.image projects? (picker, slideshow, 
+	-->
+	
+</div>
+
+</body>
+</html>

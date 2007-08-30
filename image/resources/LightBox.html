@@ -1,0 +1,17 @@
+<div class="dojoxImageDialog" dojoAttachPoint="containerNode">
+	<div style="position:relative">
+		<div dojoAttachPoint="overlayNode" class="dojoxImageDialogOverlay"></div>
+		<div dojoAttachPoint="imageContainer" class="dojoxImageDialogContainer">
+			<img dojoAttachPoint="imgNode" src="${imgUrl}" class="dojoxImageDialogImage">
+			<div class="dojoxImageDialogFooter" dojoAttachPoint="titleNode">
+				<div class="dijitInline ImageDialogClose" dojoAttachPoint="closeNode"></div>
+				
+				<span class="ImageDialogNext" dojoAttachPoint="nextNode"></span>	
+				<span class="ImageDialogPrev" dojoAttachPoint="prevNode"></span>
+
+				<span dojoAttachPoint="textNode">${caption}<br><span dojoAttachPoint="groupCount" class="ImageDialogGroupText"></span></span>		
+			</div>
+		</div>	
+		
+	</div>
+</div>
