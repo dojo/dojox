@@ -9,6 +9,7 @@
 
 	-webkit-box-shadow: 0px 6px 10px #636363; /* #adadad; */
 	-webkit-border-radius: 3px;
+	-moz-border-radius:4px;
 }
 
 .dojoxLightboxContainer {
