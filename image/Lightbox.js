@@ -41,14 +41,14 @@ dojo.declare("dojox.image.Lightbox",
 	_attachedDialog: null, // try to share a single underlay per page?
 
 	startup: function(){
-		dojox.image.Lightbox.superclass.startup.call(this);
-		if (!this.store){
-			this._clickConnect = dojo.connect(this.domNode,"onclick",this,"_handleClick");
+		this.inherited("startup", arguments);
+		if(!this.store){
+			this.connect(this.domNode, "onclick", "_handleClick");
 		}
 
 		// setup an attachment to the masterDialog (or create the masterDialog)
 		var tmp = dijit.byId('dojoxLightboxDialog');
-		if (tmp){
+		if(tmp){
 			this._attachedDialog = tmp;
 		}else{
 			// this is the first instance to start, so we make the masterDialog
@@ -127,39 +127,38 @@ dojo.declare("dojox.image._LightboxDialog",
 	// an array of objects, each object being a unique 'group'
 	_groups: { XnoGroupX: [] },
 	_imageReady: false,
-	_connects: [],	
 
 	startup: function(){
 
-		dojox.image._LightboxDialog.superclass.startup.call(this);
+		this.inherited("startup", arguments);
 
 		// FIXME: these are supposed to be available in dijit.Dialog already,
 		// but aren't making it over.
 		dojo.connect(document.documentElement,"onkeypress",this,"_handleKey");
-		dojo.connect(window,"onresize",this,"_position"); 
+		this.connect(window,"onresize","_position"); 
 
-		dojo.connect(this.nextNode,"onclick",this,"_nextImage");
-		dojo.connect(this.prevNode,"onclick",this,"_prevImage");
-		dojo.connect(this.closeNode,"onclick",this,"hide");
+		this.connect(this.nextNode, "onclick", "_nextImage");
+		this.connect(this.prevNode, "onclick", "_prevImage");
+		this.connect(this.closeNode, "onclick", "hide");
 		
 	},
 
 	show: function(/* Object */groupData){
 		// summary: starts the chain of events to show an image in the dialog
 
-		this._connects = [];
-
 		dojo.style(this.imgNode,"opacity","0"); 
 		dojo.style(this.titleNode,"opacity","0");
 
 		// we only need to call dijit.Dialog.show() if we're not already open?
-		if (!this.open){ dojox.image._LightboxDialog.superclass.show.call(this); }
+		if(!this.open){ 
+			this.inherited("show", arguments);
+		}
 	
 		this._imageReady = false; 
 
 		this.imgNode.src = groupData.href;
-		if ((groupData.group && !(groupData == "XnoGroupX")) || this.inGroup){ 
-			if (!this.inGroup){ 
+		if((groupData.group && !(groupData == "XnoGroupX")) || this.inGroup){ 
+			if(!this.inGroup){ 
 				this.inGroup = this._groups[(groupData.group)]; 
 				var i = 0;
 				dojo.forEach(this.inGroup,function(g){
@@ -180,12 +179,12 @@ dojo.declare("dojox.image._LightboxDialog",
 		this.textNode.innerHTML = groupData.title;
 	
 		// our image preloader
-		if (!this._imageReady){ 
-			this._imgConnect = dojo.connect(this.imgNode,"onload",dojo.hitch(this,function(){
+		if(!this._imageReady){ 
+			this._imgConnect = dojo.connect(this.imgNode,"onload", this, function(){
 				this._imageReady = true;
 				this.resizeTo({ w: this.imgNode.width, h:this.imgNode.height, duration:this.duration });
 				dojo.disconnect(this._imgConnect);
-			}));
+			});
 		}else{
 			// do it quickly. kind of a hack, but image is ready now
 			this.resizeTo({ w: this.imgNode.width, h:this.imgNode.height, duration:1 });
@@ -194,7 +193,7 @@ dojo.declare("dojox.image._LightboxDialog",
 
 	_nextImage: function(){
 		// summary: load next image in group
-		if (this._positionIndex+1<this.inGroup.length){
+		if(this._positionIndex+1<this.inGroup.length){
 			this._positionIndex++;
 		}else{
 			this._positionIndex = 0;
@@ -204,7 +203,7 @@ dojo.declare("dojox.image._LightboxDialog",
 
 	_prevImage: function(){
 		// summary: load previous image in group
-		if (this._positionIndex==0){
+		if(this._positionIndex==0){
 			this._positionIndex = this.inGroup.length-1;
 		}else{
 			this._positionIndex--;
@@ -218,7 +217,7 @@ dojo.declare("dojox.image._LightboxDialog",
 			dojo.fadeOut({ node:this.imgNode, duration:(this.duration/2) }),
 			dojo.fadeOut({ node:this.titleNode, duration:(this.duration/2) })
 		]);
-		dojo.connect(_loading,"onEnd",this,"_prepNodes");
+		this.connect(_loading,"onEnd","_prepNodes");
 		_loading.play(25);
 	},
 
@@ -236,7 +235,7 @@ dojo.declare("dojox.image._LightboxDialog",
 		var _sizeAnim = dojox.fx.sizeTo({ node: this.containerNode, duration:size.duration, 
 			width: size.w, height:size.h+30
 		});
-		dojo.connect(_sizeAnim,"onEnd",this,"showImage");
+		this.connect(_sizeAnim,"onEnd","showImage");
 		_sizeAnim.play(this.duration);
 	},
 
@@ -256,9 +255,8 @@ dojo.declare("dojox.image._LightboxDialog",
 		// summary: close the Lightbox
 		
 		dojo.fadeOut({node:this.titleNode, duration:200 }).play(25); 
-		dojox.image._LightboxDialog.superclass.hide.call(this);
+		this.inherited("hide", arguments);
 		//dojo.disconnect(this.imageReady);
-		dojo.forEach(this._connects,function(c){ dojo.disconnect(c); });
 		this.inGroup = null;
 		this._positionIndex = null;
 		
@@ -266,9 +264,12 @@ dojo.declare("dojox.image._LightboxDialog",
 	},
 
 	addImage: function(/* object */child,/* String? */group){
-		if (group){ 	
-			if(this._groups[(group)]){ this._groups[group].push(child); 
-			}else{ this._groups[(group)] = [child]; }
+		if(group){ 	
+			if(this._groups[(group)]){
+				this._groups[group].push(child); 
+			}else{
+				this._groups[(group)] = [child];
+			}
 		}else{ this._groups["XnoGroupX"].push(child); }
 	},
 
