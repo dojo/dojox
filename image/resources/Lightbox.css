@@ -6,6 +6,9 @@
 	height:100px; 
 	border:11px solid #fff;
 	background:#fff url('loading.gif') no-repeat center center;
+
+	-webkit-box-shadow: 0px 6px 10px #636363; /* #adadad; */
+	-webkit-border-radius: 3px;
 }
 
 .dojoxLightboxContainer {
@@ -65,6 +68,7 @@
 /* mow: should be be doing this: */
 .dijitDialogUnderlay {
 	background-color:#000; 
+	/* background-color:white; */
 }
 
 
