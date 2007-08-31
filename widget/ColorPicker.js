@@ -101,10 +101,10 @@ dojo.declare("dojox.widget.ColorPicker",
 		
 	},
 
-	_setTimer: function(/* DomNode */node){
+	_setTimer: function(/* dojo.dnd.Mover */mover){
 		this._timer = setInterval(dojo.hitch(this,"_updateColor"),45);	
 	},
-	_clearTimer: function(/* DomNode */node){
+	_clearTimer: function(/* dojo.dnd.Mover */mover){
 		clearInterval(this._timer);
 	},
 

@@ -123,9 +123,9 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		this.titleNode.innerHTML = title; 
 	},	
 
-	zIndexes: function(/* DomNode */node) {
+	zIndexes: function(/* dojo.dnd.Mover */mover) {
 		// summary: keep track of our own zIndex for bringToTop like behavior
-		if(node.id == this.id) { dojo.style(this.domNode,"zIndex","997"); }
+		if(mover.node.id == this.id) { dojo.style(this.domNode,"zIndex","997"); }
 		else{ dojo.style(this.domNode,"zIndex",dojo.style(this.domNode,"zIndex")-1); }
 	},
 
