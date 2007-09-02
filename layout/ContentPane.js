@@ -268,7 +268,7 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 
 	======*/
 
-	preamble: function(){
+	constructor: function(){
 		// init per instance properties, initializer doesn't work here because how things is hooked up in dijit._Widget
 		this.ioArgs = {};
 		this.ioMethod = dojo.xhrGet;
