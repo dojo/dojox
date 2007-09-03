@@ -53,14 +53,7 @@ dojox.collections.ArrayList=function(/* array? */arr){
 	this.forEach=function(/* function */ fn, /* object? */ scope){
 		//	summary
 		//	functional iterator, following the mozilla spec.
-		var s=scope||dojo.global;
-		if(Array.forEach){
-			Array.forEach(items, fn, s);
-		}else{
-			for(var i=0; i<items.length; i++){
-				fn.call(s, items[i], i, items);
-			}
-		}
+		dojo.forEach(items, fn, scope);
 	};
 	this.getIterator=function(){
 		//	summary

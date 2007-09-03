@@ -83,14 +83,7 @@ dojox.collections.SortedList=function(/* object? */ dictionary){
 	this.forEach=function(/* function */ fn, /* object? */ scope){
 		//	summary
 		//	functional iterator, following the mozilla spec.
-		var s=scope||dojo.global;
-		if(Array.forEach){
-			Array.forEach(q, fn, s);
-		}else{
-			for(var i=0; i<q.length; i++){
-				fn.call(s, q[i], i, q);
-			}
-		}
+		dojo.forEach(q, fn, scope);
 	};
 	this.getByIndex=function(/* int */ i){
 		//	summary

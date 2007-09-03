@@ -41,16 +41,7 @@ dojox.collections.Iterator=function(/* array */arr){
 	this.map=function(/* function */fn, /* object? */scope){
 		//	summary
 		//	Functional iteration with optional scope.
-		var s=scope||dojo.global;
-		if(Array.map){
-			return Array.map(a,fn,s);	//	array
-		}else{
-			var arr=[];
-			for(var i=0; i<a.length; i++){
-				arr.push(fn.call(s,a[i]));
-			}
-			return arr;		//	array
-		}
+		return dojo.map(a, fn, scope);
 	};
 	this.reset=function(){
 		//	summary
@@ -94,16 +85,7 @@ dojox.collections.DictionaryIterator=function(/* object */obj){
 	this.map=function(/* function */fn, /* object? */scope){
 		//	summary
 		//	Functional iteration with optional scope.
-		var s=scope||dojo.global;
-		if(Array.map){
-			return Array.map(a,fn,s);	//	array
-		}else{
-			var arr=[];
-			for(var i=0; i<a.length; i++){
-				arr.push(fn.call(s,a[i]));
-			}
-			return arr;		//	array
-		}
+		return dojo.map(a, fn, scope);
 	};
 	this.reset=function() { 
 		//	summary

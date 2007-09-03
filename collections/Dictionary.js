@@ -63,14 +63,7 @@ dojox.collections.Dictionary=function(/* dojox.collections.Dictionary? */diction
 				a.push(items[p]);	//	fill it up
 			}
 		}
-		var s=scope||dojo.global;
-		if(Array.forEach){
-			Array.forEach(a, fn, s);
-		}else{
-			for(var i=0; i<a.length; i++){
-				fn.call(s, a[i], i, a);
-			}
-		}
+		dojo.forEach(a, fn, scope);
 	};
 	this.getKeyList=function(){
 		//	summary
