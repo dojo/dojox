@@ -5,7 +5,14 @@ dojo.require("dojox.charting.Theme");
 	var dxc=dojox.charting;
 	var colors=dxc.Theme.defineColors({ hue:271, saturation:60, low:40, high:88 });
 	dxc.themes.PlotKit.purple=new dxc.Theme({
-		chart:{ backgroundColor:"#eee6f5", backgroundImage:null, border:0 },
+		chart:{
+			stroke:{ width:0 },
+			fill:{ color:"white" }
+		},
+		plotarea:{
+			stroke:{ width:0 },
+			fill:{ color:"#eee6f5" }
+		},
 		axis:{
 			stroke:{ color:"#fff",width:2 },
 			line:{ color:"#fff",width:1 },

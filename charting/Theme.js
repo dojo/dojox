@@ -1,18 +1,21 @@
 dojo.provide("dojox.charting.Theme");
-
-dojo.require("dojox.gfx");
 dojo.require("dojox.charting._color");
 
 (function(){
 	var dxc=dojox.charting;
+	//	TODO: Legend information
 	dxc.Theme=function(/*object?*/kwArgs){
 		kwArgs=kwArgs||{};
 		this.chart=dojo.mixin(dojo.clone(dxc.Theme._def.chart), kwArgs.chart||{});
+		this.plotarea=dojo.mixin(dojo.clone(dxc.Theme._def.plotarea), kwArgs.plotarea||{});
 		this.axis=dojo.mixin(dojo.clone(dxc.Theme._def.axis), kwArgs.axis||{});
 		this.series=dojo.mixin(dojo.clone(dxc.Theme._def.series), kwArgs.series||{});
 		this.marker=dojo.mixin(dojo.clone(dxc.Theme._def.marker), kwArgs.marker||{});
 		this.markers=dojo.mixin(dojo.clone(dxc.Theme.Markers), kwArgs.markers||{});
 		this.colors=[];
+		this.antiAlias=("antiAlias" in kwArgs)?kwArgs.antiAlias:true;
+		this.assignColors=("assignColors" in kwArgs)?kwArgs.assignColors:true;
+		this.assignMarkers=("assignMarkers" in kwArgs)?kwArgs.assignMarkers:true;
 
 		//	push the colors, use _def colors if none passed.
 		kwArgs.colors=kwArgs.colors||dxc.Theme._def.colors;
@@ -20,11 +23,9 @@ dojo.require("dojox.charting._color");
 			this.colors.push(item); 
 		}, this);
 
-		//	for color assignment, if needed.
-		var current=0;
-		this.nextColor=function(){
-			return this.colors[current++%this.colors.length];
-		};
+		//	private variables for color and marker indexing
+		this._current={ color:0, marker: 0 };
+		this._markers=[];
 	};
 
 	//	"static" fields
@@ -43,25 +44,34 @@ dojo.require("dojox.charting._color");
 		TRIANGLE_INVERTED:"m-3,-3 l3,6 3,-6 z"
 	};
 	dxc.Theme._def={
-		chart:{ backgroundColor:"#fff", backgroundImage:null, border:"1px solid #999" },
+		//	all objects are structs used directly in dojox.gfx
+		chart:{ 
+			stroke:{ width:0 },
+			fill:{ color:"white" } 
+		},	
+		plotarea:{ 
+			stroke:{ width:0 },
+			fill:{ color:"#ccc" } 
+		},	
+		//	TODO: label rotation on axis
 		axis:{
-			stroke:{ color:"#000",width:2 },
-			line:{ color:"#999",width:1,style:"Dot",cap:"round" },
-			majorTick:{ color:"#999", width:2, length:12 },
-			minorTick:{ color:"#999", width:1, length:8 },
-			font:"normal normal normal 8pt Tahoma",
-			fontColor:"#000"
+			stroke:{ color:"#000",width:2 },							//	the axis itself
+			line:{ color:"#ccc",width:1,style:"Dot",cap:"round" },		//	gridlines
+			majorTick:{ color:"#999", width:2, length:12, position:"center" },	//	major ticks on axis
+			minorTick:{ color:"#999", width:1, length:8, position:"center" },	//	minor ticks on axis
+			font:"normal normal normal 8pt Tahoma",						//	labels on axis
+			fontColor:"#000"											//	color of labels
 		},
 		series:{
-			stroke:{ width:2, color:"#333" },
-			fill:"#ccc",
-			font:"normal normal normal 7pt Tahoma",	//	label
-			fontColor:"#000"
+			stroke:{ width:2, color:"#333" },							//	line or outline
+			fill:"#ccc",												//	fill, if appropriate
+			font:"normal normal normal 7pt Tahoma",						//	if there's a label
+			fontColor:"#000"											// 	color of labels
 		},
 		marker:{	//	any markers on a series.
-			stroke:{ width:2 },
-			fill:"#333",
-			font:"normal normal normal 7pt Tahoma",	//	label
+			stroke:{ width:2 },											//	stroke or outline
+			fill:"#333",												//	fill if needed
+			font:"normal normal normal 7pt Tahoma",						//	label
 			fontColor:"#000"
 		},
 		colors:[
@@ -87,38 +97,108 @@ dojo.require("dojox.charting._color");
 			}
 			return c;
 		}
-		if(kwArgs.stops){
-			//	TODO: fill out colors based on n stops.
+		else if(kwArgs.stops){
+			//	create color ranges that are either equally distributed, or
+			//	(optionally) based on a passed "offset" property.  If you
+			//	pass an array of Colors, it will equally distribute, if
+			//	you pass an array of structs { color, offset }, it will
+			//	use the offset (0.0 - 1.0) to distribute.  Note that offset
+			//	values should be plotted on a line from 0.0 to 1.0--i.e.
+			//	they should be additive.  For example:
+			//	[ {color, offset:0}, { color, offset:0.2 }, { color, offset:0.5 }, { color, offset:1.0 } ]
+			//	
+			//	If you use stops for colors, you MUST have a color at 0.0 and one
+			//	at 1.0.
+		
+			//	figure out how many stops we have
+			var l=kwArgs.stops.length;
+			if(l<2){
+				throw new Error(
+					"dojox.charting.Theme::defineColors: when using stops to "
+					+ "define a color range, you MUST specify at least 2 colors."
+				);
+			}
+
+			//	figure out if the distribution is equal or not.  Note that
+			//	colors may not exactly match the stops you define; because
+			//	color generation is linear (i.e. evenly divided on a linear
+			//	axis), it's very possible that a color will land in between
+			//	two stops and not exactly *at* a stop.
+			//
+			//	The only two colors guaranteed will be the end stops (i.e.
+			//	the first and last stop), which will *always* be set as
+			//	the end stops.
+			if(typeof(kwArgs.stops[0].offset)=="undefined"){ 
+				//	set up equal offsets
+				var off=1/(l-1);
+				for(var i=0; i<l; i++){
+					kwArgs.stops[i]={
+						color:kwArgs.stops[i],
+						offset:off*i
+					};
+				}
+			}
+			//	ensure the ends.
+			kwArgs.stops[0].offset=0;
+			kwArgs.stops[l-1].offset=1;
+			kwArgs.stops.sort(function(a,b){ return a.offset-b.offset; });
+
+			//	create the colors.
+			//	first stop.
+			c.push(kwArgs.stops[0].color.toHex());
+
+			//	TODO: calculate the blend at n/steps and set the color
+
+			//	last stop
+			c.push(kwArgs.stops[l-1].color.toHex());
 		}
 	};
 	
 	//	prototype methods
 	dojo.extend(dxc.Theme, {
-		//	intended for private use by the charting engine.
-		_apply:function(shape, type, prop, color){
-			var o=dojo.clone(this[type][prop]);
-			if(color&&o.color){ o.color=color }
-			switch(prop){
-				case "stroke":
-				case "line":
-				case "majorTick":
-				case "minorTick":{
-					shape.setStroke(o);
-					break;
-				}
-				case "fill":{
-					shape.setFill(o);
-					break;
-				}
-				case "font":{
-					shape.setFont(o).setFill(this[type].fontColor);
-					break;
-				}
-			}
+		_buildMarkerArray: function(){
+			this._markers=[];
+			for(var p in this.markers){ this._markers.push(this.markers[p]); }
+			//	reset the position
+			this._current.marker=0;
 		},
-		_applyToChart:function(node){
-			var ns=node.style;
-			for(var p in this.chart){ ns[p]=chart[p]; }
+
+		addMarker:function(/* string */name, /*string*/segment){
+			//	summary
+			//	Add a custom marker to this theme.
+			//
+			//	example
+			//	myTheme.addMarker("Ellipse", foo);
+			this.markers[name]=segment;
+			this._buildMarkerArray();
+		},
+		setMarkers:function(/* object */obj){
+			//	summary
+			//	Set all the markers of this theme at once.  obj should be
+			//	a dictionary of keys and path segments.
+			//
+			//	example
+			//	myTheme.setMarkers({ "CIRCLE": foo });
+			this.markers=obj;
+			this._buildMarkerArray();
+		},
+
+		next: function(/* string? */type){
+			//	summary
+			//	get either the next color or the next marker, depending on what was
+			//	passed.  If type is not passed, it assumes color.
+			//
+			//	example
+			//	var color=myTheme.next();
+			//	var color=myTheme.next("color");
+			//	var marker=myTheme.next("marker");
+			if(!type) type="color";
+			if(type=="color"){
+				return this.colors[this._current.color++%this.colors.length];
+			}
+			else if(type=="marker"){
+				return this._markers[this._current.marker++%this._markers.length];
+			}
 		}
 	});
 })();
