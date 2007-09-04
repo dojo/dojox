@@ -11,25 +11,25 @@ tests.register("dojox.validate.tests.validate",
 	[{
 		name: "isText",
 		runTest: function(tests){
-			tests.t(dojox.validate.isValidISBN('0596007590')); //test string input
-			tests.t(dojox.validate.isValidISBN('0-596-00759-0')); //test string input with dashes
-			tests.f(dojox.validate.isValidISBN(0596007590)); //test numerical input as well
-			tests.t(dojox.validate.isValidISBN("960-425-059-0")); 
-			tests.t(dojox.validate.isValidISBN(9604250590)); //test numerical input as well
-			tests.t(dojox.validate.isValidISBN('0-9752298-0-X')); // test string with X
-			tests.t(dojox.validate.isValidISBN('0-9752298-0-x')); 
-			tests.t(dojox.validate.isValidISBN('097522980x')); 
-			tests.t(dojox.validate.isValidISBN('097522980X')); 
-			tests.f(dojox.validate.isValidISBN(0596007598)); //testing failures
-			tests.f(dojox.validate.isValidISBN('059-600759-X')); //testing failures
-			tests.f(dojox.validate.isValidISBN('059600')); // too short
+			tests.t(dojox.validate.isValidIsbn('0596007590')); //test string input
+			tests.t(dojox.validate.isValidIsbn('0-596-00759-0')); //test string input with dashes
+			tests.f(dojox.validate.isValidIsbn(0596007590)); //test numerical input as well
+			tests.t(dojox.validate.isValidIsbn("960-425-059-0")); 
+			tests.t(dojox.validate.isValidIsbn(9604250590)); //test numerical input as well
+			tests.t(dojox.validate.isValidIsbn('0-9752298-0-X')); // test string with X
+			tests.t(dojox.validate.isValidIsbn('0-9752298-0-x')); 
+			tests.t(dojox.validate.isValidIsbn('097522980x')); 
+			tests.t(dojox.validate.isValidIsbn('097522980X')); 
+			tests.f(dojox.validate.isValidIsbn(0596007598)); //testing failures
+			tests.f(dojox.validate.isValidIsbn('059-600759-X')); //testing failures
+			tests.f(dojox.validate.isValidIsbn('059600')); // too short
 
-			tests.t(dojox.validate.isValidISBN('9780596007591'));
-			tests.t(dojox.validate.isValidISBN('978-0-596 00759-1'));
-			tests.t(dojox.validate.isValidISBN(9780596007591));
-			tests.f(dojox.validate.isValidISBN('978059600759X'));
-			tests.f(dojox.validate.isValidISBN('978-3250-596 00759-1 '));
-			tests.f(dojox.validate.isValidISBN('3250-596 00759 '));
+			tests.t(dojox.validate.isValidIsbn('9780596007591'));
+			tests.t(dojox.validate.isValidIsbn('978-0-596 00759-1'));
+			tests.t(dojox.validate.isValidIsbn(9780596007591));
+			tests.f(dojox.validate.isValidIsbn('978059600759X'));
+			tests.f(dojox.validate.isValidIsbn('978-3250-596 00759-1 '));
+			tests.f(dojox.validate.isValidIsbn('3250-596 00759 '));
 
 			tests.t(dojox.validate.isText('            x'));
 			tests.t(dojox.validate.isText('x             '));
