@@ -67,7 +67,7 @@ dojo.addOnLoad(makeShapes);
 		<tr><td align="center" class="pad">Rotation (<span id="rotationValue">0</span>)</td></tr>
 		<tr><td>
 			<div id="rotatingSlider" dojoType="dijit.form.HorizontalSlider" 
-					value="0" minimum="-180" maximum="180" discreteValues="72" showButtons="false"
+					value="0" minimum="-180" maximum="180" discreteValues="72" showButtons="false" intermediateChanges="true"
 					style="width: 600px;">
 				<div dojoType="dijit.form.HorizontalRule" container="topDecoration" count="73" style="height:5px;"></div>
 				<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="9" style="height:5px;"></div>
@@ -76,7 +76,7 @@ dojo.addOnLoad(makeShapes);
 		</td></tr>
 		<tr><td align="center" class="pad">Scaling (<span id="scaleValue">1.000</span>)</td></tr>
 		<tr><td>
-			<div id="scalingSlider" dojoType="dijit.form.HorizontalSlider" 
+			<div id="scalingSlider" dojoType="dijit.form.HorizontalSlider"  intermediateChanges="true"
 					value="1" minimum="0" maximum="1"  showButtons="false" style="width: 600px;">
 				<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="5" style="height:5px;"></div>
 				<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" labels="10%,18%,32%,56%,100%" style="height:1.2em;font-size:75%;color:gray;"></div>
