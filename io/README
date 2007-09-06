@@ -15,7 +15,7 @@ Project description
 -------------------------------------------------------------------------------
 Dependencies:
 
-DojoX IO has no dependencies, outside of Dojo Core.
+DojoX IO depends on Dojo Core and DojoX Cryptography's MD5 implementation.
 -------------------------------------------------------------------------------
 Documentation
 
@@ -23,12 +23,21 @@ Documentation
 Installation instructions
 
 Grab the following from the Dojo SVN Repository:
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/crypto.js
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/crypto/*
+
+Install into the following directory structure:
+/dojox/crypto/
+
+AND
+
+Grab the following from the Dojo SVN Repository:
 http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/io/*
 
 Install into the following directory structure:
 /dojox/io/
 
-...which should be at the same level as your Dojo checkout.
+...both of which should be at the same level as your Dojo checkout.
 -------------------------------------------------------------------------------
 Additional Notes
 
