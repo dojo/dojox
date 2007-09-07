@@ -27,6 +27,17 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += '"The Sequel to ""Dances With Wolves.""", 1982, Ridley Scott\n';
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
+			case "stores/movies2.csv":
+				var csvData = "";
+				csvData += "Title, Year, Producer\n";
+				csvData += "City of God, 2002, Katia Lund\n";
+				csvData += "Rain,\"\", Christine Jeffs\n";
+				csvData += "2001: A Space Odyssey, 1968, Stanley Kubrick\n";
+				csvData += '"This is a ""fake"" movie title", 1957, Sidney Lumet\n';
+				csvData += "Alien, 1979   , Ridley Scott\n";
+				csvData += '"The Sequel to ""Dances With Wolves.""", 1982, Ridley Scott\n';
+				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
+				break;
 			case "stores/books.csv":
 				var csvData = "";
 				csvData += "Title, Author\n";
@@ -94,7 +105,26 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new doh.Deferred();
-            function completedAll(items){
+		function completedAll(items){
+				t.assertTrue((items.length === 7));
+				d.callback(true);
+			}
+
+			//Get everything...
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_withEmptyStringField(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies2.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+		function completedAll(items){
 				t.assertTrue((items.length === 7));
 				d.callback(true);
 			}
@@ -123,7 +153,6 @@ doh.register("dojox.data.tests.stores.CsvStore",
 							});
 			return d; //Object
 		},
-
 		function testReadAPI_fetch_Multiple(t){
 			//	summary: 
 			//		Simple test of a basic fetch on CsvStore of a single item.
@@ -208,9 +237,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
 							});
 			
-            csvStore.fetchItemByIdentity({identity: "6", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
-
-
+			csvStore.fetchItemByIdentity({identity: "6", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_all_streaming(t){
@@ -282,7 +309,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 
 			function dumpFourthFetch(items, request){
 				t.is(5, items.length);
-                request.start = 9;
+				request.start = 9;
 				request.count = 100;
 				request.onComplete = dumpFifthFetch;
 				csvStore.fetch(request);
@@ -378,7 +405,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.is('Caine Mutiny, The', csvStore.getValue(item,"Title"));
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "6", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "6", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},	
 		function testReadAPI_getValue_2(t){
@@ -416,7 +443,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.is("Alien", csvStore.getValue(item,"Title"));
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},	
 		function testReadAPI_getValue_4(t){
@@ -435,7 +462,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.is("Stanley Kubrick", csvStore.getValue(item,"Producer"));
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "2", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "2", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},	
 
@@ -457,7 +484,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.is("Rain", names[0]);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},
 		function testIdentityAPI_fetchItemByIdentity(t){
@@ -474,7 +501,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(item !== null);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},
 
@@ -492,7 +519,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(item === null);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "7", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "7", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},
 		function testIdentityAPI_fetchItemByIdentity_bad2(t){
@@ -508,7 +535,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(item === null);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "-1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "-1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},
 		function testIdentityAPI_fetchItemByIdentity_bad3(t){
@@ -524,7 +551,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(item === null);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "999999", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "999999", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d;
 		},
 		function testIdentityAPI_getIdentity(t){
@@ -569,7 +596,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertEqual(null, csvStore.getIdentityAttributes(item)); 
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 		   	return d;
 		},
 		function testReadAPI_isItem(t){
@@ -590,7 +617,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(!csvStore.isItem(["not an item"]));
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 		   	return d;
 		},
 		function testReadAPI_hasAttribute(t){
@@ -621,7 +648,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(passed);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 		   	return d;
 		},
 		function testReadAPI_containsValue(t){
@@ -653,7 +680,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(passed);
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 		   	return d;
 		},
 		function testReadAPI_getAttributes(t){
@@ -677,7 +704,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				}
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "4", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 		   	return d;
 		},
 
@@ -702,7 +729,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				t.assertTrue(attributes[1] === "Producer");
 				d.callback(true);	
 			}
-            csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetchItemByIdentity({identity: "1", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 		   	return d;
 		},
 

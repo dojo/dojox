@@ -368,7 +368,9 @@ dojo.declare("dojox.data.CsvStore", null, {
 						var lastChar = field.charAt(field.length - 1);
 						var secondToLastChar = field.charAt(field.length - 2);
 						var thirdToLastChar = field.charAt(field.length - 3);
-						if((firstChar == '"') && 
+						if(field.length === 2 && field == "\"\""){
+							listOfFields[j] = "";  //Special case empty string field.
+						}else if((firstChar == '"') && 
 								((lastChar != '"') || 
 								 ((lastChar == '"') && (secondToLastChar == '"') && (thirdToLastChar != '"')))){
 							if(j+1 === listOfFields.length){
