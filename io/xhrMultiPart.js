@@ -1,7 +1,7 @@
 dojo.provide("dojox.io.xhrMultiPart");
 
 dojo.require("dojo._base.xhr");
-dojo.require("dojox.crypto.MD5");
+dojo.require("dojox.uuid.generateRandomUuid");
 
 dojox.io.xhrMultiPart = function(args){
 	if(!args["file"]){
@@ -9,9 +9,7 @@ dojox.io.xhrMultiPart = function(args){
 	}
 
 	// unique guid as a boundary value for multipart posts
-	var boundary = dojox.crypto.MD5.compute(
-		new Date()+Math.round(Math.random*10000)
-	);
+	var boundary = dojox.uuid.generateRandomUuid();
 
 	var d = (dojo.isArray(args.file) ? args.file : [args.file]);
 	var tmp = [];
