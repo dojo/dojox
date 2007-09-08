@@ -1,4 +1,4 @@
-.sortListBody { margin:0; padding:0; }
+.sortListBody { margin:0; padding:0; background:#fff; }
 
 .soria .sortListBody li,
 .tundra .sortListBody li {
@@ -36,8 +36,6 @@
 	font-weight:bold;
 	color:#fff; 
 }
-
-.soria .sortListItem { background:#f2f5f9;}
 
 .sortListItemSelected { background:#b7cdee !important; }
 .sortListItemHover { background:#ff6 !important; }
