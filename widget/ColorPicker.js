@@ -1,13 +1,12 @@
 dojo.provide("dojox.widget.ColorPicker");
 dojo.experimental("dojox.widget.ColorPicker"); // level: prototype
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+dojo.require("dijit.form._FormWidget");
 dojo.require("dojo.dnd.move"); 
 dojo.require("dojo.fx"); 
 
 dojo.declare("dojox.widget.ColorPicker",
-	[dijit._Widget, dijit._Templated],
+	dijit.form._FormWidget,
 	{
 	// summary: a HSV color picker - like PhotoShop
 	//
@@ -63,7 +62,7 @@ dojo.declare("dojox.widget.ColorPicker",
 		// summary: As quickly as we can, set up ie6 alpha-filter support for our
 		// 	underlay.  we don't do image handles (done in css), just the 'core' 
 		//	of this widget: the underlay. 
-		if(dojo.isIE){ 
+		if(dojo.isIE && dojo.isIE<7){ 
 			this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
 			this.colorUnderlay.src = dojo.moduleUrl("dojox.widget","FisheyeList/blank.gif").toString();
 		}
@@ -106,6 +105,7 @@ dojo.declare("dojox.widget.ColorPicker",
 	},
 	_clearTimer: function(/* dojo.dnd.Mover */mover){
 		clearInterval(this._timer);
+		this.onChange(this.value);
 	},
 
 	_setHue: function(/* Decimal */h){
@@ -125,7 +125,7 @@ dojo.declare("dojox.widget.ColorPicker",
 		var v = Math.round(100-(dojo.style(this.cursorNode,"top")*this._sc)*100);
 
 		// limit hue calculations to only when it changes
-		if (h != this._hue){ this._setHue(h); }
+		if(h != this._hue){ this._setHue(h); }
 
 		var rgb = this._hsv2rgb(h,s/100,v/100,{ inputRange: 1 }); 
 		var hex = (dojo.colorFromArray(rgb).toHex());
@@ -143,11 +143,18 @@ dojo.declare("dojox.widget.ColorPicker",
 			this.Sval.value = s;
 			this.Vval.value = v;
 		}
+		this.value=hex;
+
+		// anytime we muck with the color, fire onChange?
+		if (!this._timer && !(arguments[1])){
+			this.setValue(this.value);	
+			this.onChange(this.value);
+		}
 	},
 
 	_setHuePoint: function(/* Event */evt){ 
 		// summary: set the hue picker handle on relative y coordinates
-		if (this.animatePoint){
+		if(this.animatePoint){
 			dojo.fx.slideTo({ 
 				node: this.hueCursorNode, 
 				duration:this.slideDuration,
@@ -157,13 +164,13 @@ dojo.declare("dojox.widget.ColorPicker",
 			}).play();
 		}else{
 			dojo.style(this.hueCursorNode,"top",(evt.layerY)+"px");
-			this._updateColor(); 
+			this._updateColor(false); 
 		}
 	},
 
 	_setPoint: function(/* Event */evt){
 		// summary: set our picker point based on relative x/y coordinates
-		if (this.animatePoint){
+		if(this.animatePoint){
 			dojo.fx.slideTo({ 
 				node: this.cursorNode, 
 				duration:this.slideDuration,
@@ -174,11 +181,12 @@ dojo.declare("dojox.widget.ColorPicker",
 		}else{
 			dojo.style(this.cursorNode,"left",(evt.layerX-this._offset)+"px");
 			dojo.style(this.cursorNode,"top",(evt.layerY-this._offset)+"px");
-			this._updateColor(); 
+			this._updateColor(false); 
 		}
 	},
 
 	// this ported directly from 0.4 dojo.gfx.colors.hsv, with bugs :)
+	// FIXME: use ttrenka's HSB ?
 	_hsv2rgb: function(/* int || Array */h, /* int */s, /* int */v, /* Object? */options){
 		//	summary
 		//	converts an HSV value set to RGB, ranges depending on optional options object.

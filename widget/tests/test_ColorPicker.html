@@ -24,7 +24,9 @@
 	<h1 class="testTitle">Dojox ColorPicker test</h1>
 
 	<h3>defaults:</h3>
-	<div id="picker" dojoType="dojox.widget.ColorPicker"></div>
+	<div id="picker" dojoType="dojox.widget.ColorPicker"
+		onChange="console.log('new val:',this.value)"
+	></div>
 
 	<h3>no animation, no hsv, no rgb, no webSafe info:</h3>
 	<div id="pickerToo" dojoType="dojox.widget.ColorPicker"
@@ -32,6 +34,7 @@
 		showHsv="false"
 		showRgb="false"	
 		webSafe="false"
+		onChange="console.log('new val:',this.value)"
 	></div>
 
 </body>
