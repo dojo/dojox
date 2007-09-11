@@ -10,20 +10,26 @@ dojo.declare("dojox.image.Lightbox",
 	//	a dojo-based Lightbox implementation. 
 	//
 	// description:
-	//	
-	//	
+	//	an Elegant, keyboard accessible, markup and store capable Lightbox widget to show images
+	//	in a modal dialog-esque format. Can show individual images as Modal dialog, or can group
+	//	images with multiple entry points, all using a single "master" Dialog for visualization
 	//
 	// examples:
+	//	
+	//	<a href="image1.jpg" dojoType="dojox.image.Lightbox">show lightbox</a>
+	//	<a href="image2.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
+	//	<a href="image3.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
 	//
-	//
-	//
+	//	FIXME: not implemented fully yet, though works with basic datastore access. need to manually call
+	//	widget._attachedDialog.addImage(item,"fromStore") for each item in a store result set.
+	//	<div dojoType="dojox.image.Lightbox" group="fromStore" store="storeName"></div>
 
 	// group: String
 	//	grouping images in a page with similar tags will provide a 'slideshow' like grouping of images
 	group: "",
 
 	// title: String 
-	//	A string of text to be shown in the Lightbox beneath the image
+	//	A string of text to be shown in the Lightbox beneath the image (empty if using a store)
 	title: "",
 
 	// href; String
@@ -42,10 +48,6 @@ dojo.declare("dojox.image.Lightbox",
 
 	startup: function(){
 		this.inherited("startup", arguments);
-		if(!this.store){
-			this.connect(this.domNode, "onclick", "_handleClick");
-		}
-
 		// setup an attachment to the masterDialog (or create the masterDialog)
 		var tmp = dijit.byId('dojoxLightboxDialog');
 		if(tmp){
@@ -55,7 +57,11 @@ dojo.declare("dojox.image.Lightbox",
 			this._attachedDialog = new dojox.image._LightboxDialog({ id: "dojoxLightboxDialog" });
 			this._attachedDialog.startup();
 		}
-		this._addSelf();
+		if(!this.store){
+			// FIXME: full store support lacking, have to manually call this._attachedDialog.addImage(imgage,group) as it stands
+			this._addSelf();
+			this.connect(this.domNode, "onclick", "_handleClick");
+		}
 	},
 
 	_addSelf: function(){
@@ -67,21 +73,13 @@ dojo.declare("dojox.image.Lightbox",
 
 	_handleClick: function(/* Event */e){
 		// summary: handle the click on the link 
-
-		// allow natural link to be followed (via this.disable())
 		if(!this._allowPassthru){ e.preventDefault(); }
 		else{ return; }
 		this.show();
 	},
 
 	show: function(){
-		this._attachedDialog.imgUrl = this.href; 
 		this._attachedDialog.show(this);
-	},
-
-	addGroupImage: function(/* Object */image){
-		// summary
-		this._attachedDialog._groups.push(image);
 	},
 
 	disable: function(){
@@ -110,14 +108,16 @@ dojo.declare("dojox.image._LightboxDialog",
 	// 
 	//	note: the could be the ImagePane i was talking about?
 
-	templatePath: dojo.moduleUrl("dojox.image","resources/Lightbox.html"),
-
-	// caption: String
-	// 	the current caption 
+	// title: String
+	// 	the current title 
 	title: "",
 
+	// FIXME: implement titleTemplate
+
 	// inGroup: Array
-	//	of objects. this is populated by from the JSON object _groups
+	//	Array of objects. this is populated by from the JSON object _groups, and
+	//	should not be populate manually. it is a placeholder for the currently 
+	//	showing group of images in this master dialog
 	inGroup: null,
 
 	// imgUrl: String
@@ -128,8 +128,10 @@ dojo.declare("dojox.image._LightboxDialog",
 	_groups: { XnoGroupX: [] },
 	_imageReady: false,
 
-	startup: function(){
+	templatePath: dojo.moduleUrl("dojox.image","resources/Lightbox.html"),
 
+	startup: function(){
+		// summary: add some extra event handlers, and startup our superclass.
 		this.inherited("startup", arguments);
 
 		// FIXME: these are supposed to be available in dijit.Dialog already,
@@ -144,23 +146,23 @@ dojo.declare("dojox.image._LightboxDialog",
 	},
 
 	show: function(/* Object */groupData){
-		// summary: starts the chain of events to show an image in the dialog
+		// summary: starts the chain of events to show an image in the dialog, including showing the dialog 
+		//	if it is not already visible
 
 		dojo.style(this.imgNode,"opacity","0"); 
 		dojo.style(this.titleNode,"opacity","0");
 
-		// we only need to call dijit.Dialog.show() if we're not already open?
-		if(!this.open){ 
-			this.inherited("show", arguments);
-		}
+		// we only need to call dijit.Dialog.show() if we're not already open.
+		if(!this.open){ this.inherited("show", arguments); }
 	
 		this._imageReady = false; 
-
+		
 		this.imgNode.src = groupData.href;
 		if((groupData.group && !(groupData == "XnoGroupX")) || this.inGroup){ 
 			if(!this.inGroup){ 
-				this.inGroup = this._groups[(groupData.group)]; 
+				this.inGroup = this._groups[(groupData.group)];
 				var i = 0;
+				// determine where we were or are in the show 
 				dojo.forEach(this.inGroup,function(g){
 					if (g.href == groupData.href){
 						this._positionIndex = i;
@@ -168,6 +170,7 @@ dojo.declare("dojox.image._LightboxDialog",
 					i++; 
 				},this);
 			}
+			if(!this._positionIndex){ this._positionIndex=0; this.imgNode.src = this.inGroup[this._positionIndex].href; }
 			this.groupCount.innerHTML = " (" +(this._positionIndex+1) +" of "+this.inGroup.length+")";
 			this.prevNode.style.visibility = "visible";
 			this.nextNode.style.visibility = "visible";
@@ -218,7 +221,7 @@ dojo.declare("dojox.image._LightboxDialog",
 			dojo.fadeOut({ node:this.titleNode, duration:(this.duration/2) })
 		]);
 		this.connect(_loading,"onEnd","_prepNodes");
-		_loading.play(25);
+		_loading.play(10);
 	},
 
 	_prepNodes: function(){
@@ -231,51 +234,61 @@ dojo.declare("dojox.image._LightboxDialog",
 	},
 
 	resizeTo: function(/* Object */size){
-		// summary: resize our dialog container, and fire showImage
-		var _sizeAnim = dojox.fx.sizeTo({ node: this.containerNode, duration:size.duration, 
-			width: size.w, height:size.h+30
+		// summary: resize our dialog container, and fire _showImage
+		var _sizeAnim = dojox.fx.sizeTo({ 
+			node: this.containerNode,
+			duration:size.duration||this.duration,
+			width: size.w, 
+			height:size.h+30
 		});
-		this.connect(_sizeAnim,"onEnd","showImage");
+		this.connect(_sizeAnim,"onEnd","_showImage");
 		_sizeAnim.play(this.duration);
 	},
 
-	showImage: function(){
+	_showImage: function(){
 		// summary: fade in the image, and fire showNav
 		dojo.fadeIn({ node: this.imgNode, duration:this.duration,
-			onEnd: dojo.hitch(this,"showNav")
+			onEnd: dojo.hitch(this,"_showNav")
 		}).play(75);
 	},
 
-	showNav: function(){
+	_showNav: function(){
 		// summary: fade in the footer, and setup our connections.
 		dojo.fadeIn({ node: this.titleNode, duration:200 }).play(25);
 	},
 
-	hide: function(e){
+	hide: function(){
 		// summary: close the Lightbox
-		
 		dojo.fadeOut({node:this.titleNode, duration:200 }).play(25); 
 		this.inherited("hide", arguments);
-		//dojo.disconnect(this.imageReady);
 		this.inGroup = null;
 		this._positionIndex = null;
-		
-
 	},
 
 	addImage: function(/* object */child,/* String? */group){
-		if(group){ 	
-			if(this._groups[(group)]){
-				this._groups[group].push(child); 
+		// summary: add an image to this master dialog
+		// 
+		// child.href: String - link to image (required)
+		// child.title: String - title to display
+		//
+		// group: String - attach to group of similar tag
+		//	or null for individual image instance
+
+		var g = group;
+		if(!child.href){ return; }
+		if(g){ 	
+			if(this._groups[(g)]){
+				this._groups[(g)].push(child); 
 			}else{
-				this._groups[(group)] = [child];
+				this._groups[(g)] = [(child)];
 			}
 		}else{ this._groups["XnoGroupX"].push(child); }
 	},
 
-	_handleKey: function(/* Event */evt){
+	_handleKey: function(/* Event */e){
+		// summary: handle keyboard navigation
 		if(!this.open){ return; }
-		var key = (evt.charCode == dojo.keys.SPACE ? dojo.keys.SPACE : evt.keyCode);
+		var key = (e.charCode == dojo.keys.SPACE ? dojo.keys.SPACE : e.keyCode);
 		switch(key){
 			case dojo.keys.ESCAPE: this.hide(); break;
 
@@ -289,6 +302,5 @@ dojo.declare("dojox.image._LightboxDialog",
 			case 80: // key "p" 
 				this._prevImage(); break;
 		}
-
 	}
 });

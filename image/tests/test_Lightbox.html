@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 	<script type="text/javascript" src="../Lightbox.js"></script>
 	<script type="text/javascript">
-		// dojo.require("dojox.image.Lightbox"); 
+		// dojo.require("dojox.image.Lightbox"); // un-comment when not debugging
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 		dojo.require("dojox.data.FlickrStore");
 	</script>
@@ -35,16 +35,15 @@
 						title: flickrStore.getValue(item,"title"),
 						href: flickrStore.getValue(item,"imageUrl")
 					};
+					// FIXME: make addImage more accessible, or do this internally
 					dijit.byId('fromStore')._attachedDialog.addImage(part,"flickrStore");
 				});
-				console.log(dijit.byId('fromStore')._attachedDialog._groups);
 				dojo.byId('flickrButton').disabled = false; 
 			}
-			
 		}
 
 		function onError(error,request){
-			console.warm(error,request);
+			console.warn(error,request);
 		}
 
 		function init(){
@@ -90,26 +89,11 @@
 	</p>
 
 	<h3>From dojox.data.FlickrStore (?)</h3>
+
 	<div dojoType="dojox.data.FlickrStore" jsId="flickrStore" label="title"></div>
-	<p>FIXME: need to set a dummy href for statup? works fine after that.</p>
-	<div href="images/imageVert.jpg" id="fromStore" dojoType="dojox.image.Lightbox" store="flickrStore" group="flickrStore"></div>
+	<div id="fromStore" dojoType="dojox.image.Lightbox" store="flickrStore" group="flickrStore"></div>
+
 	<input id="flickrButton" type="button" onclick="dijit.byId('fromStore').show()" value="show flickr lightbox" disabled="disabled">
-	<!-- 
-		<a href="" dojoType="dojox.image.Lightbox" store="flickrStore" query="{ tags: 'dojo' }">flickr Lightbox</a>
-
-		fixme: this is priority. maintaining simple structure 
-		above (simple markup), allow this widget to use a store,
-		and get values like:
-
-		var images = {
-			image1:{
-				href: 'file.png', title: 'somewhere fun'
-			}
-		};
-
-		this same implementation could be use across all 
-		dojox.image projects? (picker, slideshow, 
-	-->
 	
 </div>
 
