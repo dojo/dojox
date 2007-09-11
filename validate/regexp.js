@@ -309,7 +309,7 @@ dojox.regexp.numberFormat = function(/*Object?*/flags){
 	// Converts a number format to RE.
 	var digitRE = function(format){
 		// escape all special characters, except '?'
-		format = dojo.string.escapeRegExp(format, "?");
+		format = dojo.regexp.escapeString(format, "?");
 
 		// Now replace '?' with Regular Expression
 		format = format.replace(/\?/g, "\\d?");
