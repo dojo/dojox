@@ -8,8 +8,11 @@
 	td.cell { padding: 1em 1em 0em 0em; }
 	td.note { font-size: 80%; }
 </style>
-<!-- <script type="text/javascript" src="Silverlight.js"></script> -->
-<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, gfxRenderer: 'svg,silverlight,vml'"></script>
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
+<script type="text/javascript" src="Silverlight.js"></script>
+-->
+<script type="text/javascript" src="../../../dojo/dojo.js"></script>
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 dojo.require("dojox.gfx.move");
@@ -158,8 +161,7 @@ dojo.addOnLoad(init);
 	<p>Help: load a file, select an object, and add it, move it around, or apply operations to selected items:<br />
 	F &mdash; bring to front, B &mdash; bring to back, Q &mdash; rotate CCW, W &mdash; rotate CW, D &mdash; delete.<br />
 	(all operations work on currently dragged item).</p>
-	<p><strong>VML note:</strong> VML doesn't clip on surface boundaries, and auto-adjust the origin, which leads to some weird effects &mdash; don't be surprised.
-	VML doesn't process PNG images with opacity correctly.</p>
+	<p><strong>VML note:</strong> VML doesn't process PNG images with opacity correctly.</p>
 	<table><tr>
 		<td align="left" valign="top" class="cell"><div id="gfx" style="width: 500px; height: 500px; border: solid 1px black;"></div></td>
 		<td align="left" valign="top" class="cell"><table>

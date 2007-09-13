@@ -14,6 +14,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript">
 
 dojo.require("dojox.gfx");
+dojo.require("dojox.gfx.move");
 
 var container = null;
 var container_position = null;
@@ -57,51 +58,8 @@ function makeCircleGrid(itemCount){
 			.setFill(randColor(true))
 			.setStroke({color: randColor(true), width: getRand(0, 3)})
 			;
-		//dojox.gfx._addClass(shape.getEventSource(), "movable");
-		// connect an event using a closure
-		(function(){
-			var s = shape;
-			s.connect("onmousedown", function(e){ handleMouseDown(s, e); });
-		})();
+		new dojox.gfx.Moveable(shape);
 	}
-}
-
-var current_shape = null;
-var current_shape_window = null;
-var last_position = null;
-
-function handleMouseDown(shape, evt){
-	current_shape = shape;
-	last_position = {
-		x: evt.clientX - container_position.x,
-		y: evt.clientY - container_position.y
-	};
-	var params = shape.getShape();
-	var center = dojox.gfx.matrix.multiplyPoint(shape.getTransform(), params.cx, params.cy);
-	var dx = last_position.x - center.x;
-	var dy = last_position.y - center.y;
-	var r  = params.r;
-	current_shape_window = {
-		x1: r + dx,
-		y1: r + dy,
-		x2: surface_size.width  - r + dx,
-		y2: surface_size.height - r + dy
-	};
-	dojo.stopEvent(evt);
-}
-
-function handleMouseMove(evt){
-	if(!current_shape) return;
-	var x = Math.min(Math.max(evt.clientX - container_position.x, current_shape_window.x1), current_shape_window.x2);
-	var y = Math.min(Math.max(evt.clientY - container_position.y, current_shape_window.y1), current_shape_window.y2);
-	current_shape.applyTransform({dx: x - last_position.x, dy: y - last_position.y});
-	last_position = {x: x, y: y};
-	dojo.stopEvent(evt);
-}
-
-function handleMouseUp(evt){
-	current_shape = null;
-	dojo.stopEvent(evt);
 }
 
 function initGfx(){
@@ -112,9 +70,6 @@ function initGfx(){
 
 	makeCircleGrid(100);
 
-	dojo.connect(container, "onmousemove", handleMouseMove);
-	dojo.connect(container, "onmouseup",   handleMouseUp);
-	
 	// cancel text selection and text dragging
 	dojo.connect(container, "ondragstart",   dojo, "stopEvent");
 	dojo.connect(container, "onselectstart", dojo, "stopEvent");

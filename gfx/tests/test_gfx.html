@@ -1,5 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+﻿<html>
 <head>
 <title>Dojo Unified 2D Graphics</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -11,7 +10,7 @@
 The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
 <script type="text/javascript" src="Silverlight.js"></script>
 -->
-<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, gfxRenderer: 'svg,silverlight,vml'"></script>
 <!--<script type="text/javascript" src="../_base.js"></script>-->
 <!--<script type="text/javascript" src="../path.js"></script>-->
 <!--<script type="text/javascript" src="../vml.js"></script>-->
@@ -59,49 +58,20 @@ function getTestSurface(testName, testDescription, width, height)
    var testCell = document.createElement('td');
    var testHolder = document.createElement('div');
    testHolder.id = testName + '_holder';
-   var refCell = document.createElement('td');
-   var refHolder = document.createElement('div');
-   var refImg = document.createElement('img');
-   refImg.src = "images/placeholder.png";
-//   refImg.width = width;
-//   refImg.height = height;
-   refImg.id = testName + '_refimg';
-   var imgUrl = 'images/' + testName + '.png';
-   var errUrl = 'images/error.png';
-   var imgToLoad = new Image();
-   /*
-   dojo.connect(imgToLoad, 'onload', function() {
-                         refImg.src = imgUrl;
-                      });
-   dojo.connect(imgToLoad, 'onerror', function() {
-                         refImg.src = errUrl;
-                      });
-	*/
-
-   imgToLoad.src = imgUrl;
+   testHolder.style.width  = width;
+   testHolder.style.height = height;
 
    testCell.appendChild(testHolder);
    testRow.appendChild(testCell);
-   refHolder.appendChild(refImg);
-   refCell.appendChild(refHolder);
-   testRow.appendChild(refCell);
    gTestContainer.appendChild(testRow);
 
    var descRow = document.createElement('tr');
    var desc = document.createElement('td');
-   var ref = document.createElement('td');
    desc.innerHTML = testDescription;
-   ref.innerHTML = testName + '.png';
    descRow.appendChild(desc);
-   descRow.appendChild(ref);
    gTestContainer.appendChild(descRow);
 
-   // see if there's a reference image available
-   // our surface is created from scratch
-   //testSurfaceHolder.width = width + "px";
-   //testSurfaceHolder.height = height + "px";
-   var surface = dojox.gfx.createSurface(testHolder, width, height);
-   return surface;
+   return dojox.gfx.createSurface(testHolder, width, height);
 }
 
 function addTest(testName, fn)
@@ -380,20 +350,20 @@ dojo.addOnLoad(function()
 	});
 
 	// test path: curveTo, smoothCurveTo with relative.
-	addTest('qbCurveTo', function(testName) {
-		var surface = getTestSurface(testName, 'qbcurveTo, smoothQBCurveTo' );
+	addTest('qCurveTo', function(testName) {
+		var surface = getTestSurface(testName, 'qCurveTo, qSmoothCurveTo' );
 		surface.createPath()
-			.moveTo(10, 15).qbCurveTo(50, 50, 100, 100).smoothQBCurveTo(150, 20)
+			.moveTo(10, 15).qCurveTo(50, 50, 100, 100).qSmoothCurveTo(150, 20)
 			.setStroke({ color: "green", width: 1 }).setFill(null).setTransform({ dx: 10, dy: 30 })
 			;
 	});
 
-	addTest('qbCurveTo2', function(testName) {
-		var surface = getTestSurface(testName, 'qbcurveTo, smoothQBCurveTo with relative' );
+	addTest('qCurveTo2', function(testName) {
+		var surface = getTestSurface(testName, 'qCurveTo, qSmoothCurveTo with relative' );
 		surface.createPath()
-			.moveTo(10, 20).qbCurveTo(50, 50, 100, 100)
-			.setAbsoluteMode(false).smoothQBCurveTo(50, -80)
-			.setAbsoluteMode(true).smoothQBCurveTo(200, 80)
+			.moveTo(10, 20).qCurveTo(50, 50, 100, 100)
+			.setAbsoluteMode(false).qSmoothCurveTo(50, -80)
+			.setAbsoluteMode(true).qSmoothCurveTo(200, 80)
 			.setStroke({ color: "green", width: 1 }).setFill(null).setTransform({ dx: 10, dy: 30 })
 			;
 	});
@@ -438,17 +408,6 @@ dojo.addOnLoad(function()
 //			.setFill(rg)
 //			.setTransform({dx: 40, dy: 30})
 //			;
-	});
-
-	// TODO: test defines,pattern, path
-	addTest('pattern', function(testName) {
-		var surface = getTestSurface(testName, 'pattern fill');
-		var pat = new dojox.gfx.Pattern( {x:0, y:0, width:40, height:40, patternUnits:"userSpaceOnUse", viewBox:[0, 0, 10, 10] });
-		pat.createRect().setRect({width:25, height:20}).
-		setFill(new dojo.Color("red"));
-		surface.createRect(rect).setFill(pat).
-		setStroke({ color: new dojo.Color("blue"), width: 2}).
-		setTransform({dx: 40, dy: 30});
 	});
 
 	addTest('attach_gradient', function(testName) {
@@ -499,11 +458,10 @@ dojo.addOnLoad(function()
 		'setPath',
 		'curveTo',
 		'curveTo2',
-		//'qbCurveTo',
-		//'qbCurveTo2',
+		'qCurveTo',
+		'qCurveTo2',
 		'linearGradient',
 		'radialGradient'
-		//'pattern'
 	];
 
 	for (var i = 0; i < gTestsToRun.length; ++i) {

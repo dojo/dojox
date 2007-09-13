@@ -290,7 +290,6 @@ dojo.extend(dojox.gfx.Shape, {
 		var strokeStyle = dojo.clone(dojox.gfx.defaultStroke);
 		if(rawNode && rawNode.stroked){
 			strokeStyle.color = new dojo.Color(rawNode.strokecolor.value);
-			//console.debug("We are expecting an .75pt here, instead of strokeweight = " + rawNode.strokeweight );
 			strokeStyle.width = dojox.gfx.normalizedLength(rawNode.strokeweight+"");
 			strokeStyle.color.a = rawNode.stroke.opacity;
 			strokeStyle.cap = this._translate(this._capMapReversed, rawNode.stroke.endcap);
@@ -1564,26 +1563,36 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// width: String: width of surface, e.g., "100px"
 	// height: String: height of surface, e.g., "100px"
 
-	var s = new dojox.gfx.Surface(), p = dojo.byId(parentNode);
-	s.rawNode = p.ownerDocument.createElement("v:group");
-	s.rawNode.style.width  = width  ? width  : "100%";
-	s.rawNode.style.height = height ? height : "100%";
-	//p.style.position = "absolute";
-	//p.style.clip = "rect(0 " + s.rawNode.style.width + " " + s.rawNode.style.height + " 0)";
-	s.rawNode.style.position = "relative";
-	s.rawNode.coordsize = (width && height)
-		? (parseFloat(width) + " " + parseFloat(height))
-		: "100% 100%";
-	s.rawNode.coordorigin = "0 0";
-	p.appendChild(s.rawNode);
+	if(!width){ width = "100%"; }
+	if(!height){ height = "100%"; }
+	var s = new dojox.gfx.Surface(), p = dojo.byId(parentNode),
+		c = s.clipNode = p.ownerDocument.createElement("div"),
+		r = s.rawNode = p.ownerDocument.createElement("v:group"),
+		cs = c.style, rs = r.style;
+		
+	p.style.width  = width;
+	p.style.height = height;
+		
+	cs.width  = width;
+	cs.height = height;
+	cs.clip = "rect(0 " + width + " " + height + " 0)";
+	cs.position = "absolute";
+	rs.width  = width;
+	rs.height = height;
+	r.coordsize = (width == "100%" ? width : parseFloat(width)) + " " +
+		(height == "100%" ? height : parseFloat(height));
+	r.coordorigin = "0 0";
+	
 	// create a background rectangle, which is required to show all other shapes
-	var r = s.rawNode.ownerDocument.createElement("v:rect");
-	r.style.left = r.style.top = 0;
-	r.style.width  = s.rawNode.style.width;
-	r.style.height = s.rawNode.style.height;
-	r.filled = r.stroked = false;
-	s.rawNode.appendChild(r);
-	s.bgNode = r;
+	var b = s.bgNode = r.ownerDocument.createElement("v:rect"), bs = b.style;
+	bs.left = bs.top = 0;
+	bs.width  = rs.width;
+	bs.height = rs.height;
+	b.filled = b.stroked = false;
+
+	r.appendChild(b);
+	c.appendChild(r);
+	p.appendChild(c);
 	return s;	// dojox.gfx.Surface
 };
 
@@ -1591,9 +1600,10 @@ dojox.gfx.attachSurface = function(node){
 	// summary: creates a surface from a Node
 	// node: Node: an VML node
 	var s = new dojox.gfx.Surface();
-	s.rawNode = node;
-	var r = node.firstChild;
-	if(!r || r.tagName != "rect"){
+	s.clipNode = node;
+	var r = s.rawNode = node.firstChild;
+	var b = r.firstChild;
+	if(!b || b.tagName != "rect"){
 		return null;	// dojox.gfx.Surface
 	}
 	s.bgNode = r;
