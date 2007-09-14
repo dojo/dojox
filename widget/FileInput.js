@@ -25,14 +25,7 @@ dojo.declare("dojox.widget.FileInput",
 	//	ugh, this should be pulled from this.domNode
 	name: "uploadFile",
 
-	templateString: '<div class="dijitFileInput">'
-			+'	<input id="${id}" class="dijitFileInputReal" type="file" dojoAttachPoint="fileInput" name="${name}" />'
-			+'	<div class="dijitFakeInput">'
-				+'	<input class="dijitFileInputVisible" type="text" dojoAttachPoint="focusNode, inputNode" />'
-				+'	<span class="dijitFileInputText" dojoAttachPoint="titleNode">${label}</span>'
-				+'	<span class="dijitFileInputButton" dojoAttachPoint="cancelNode" dojoAttachEvent="onclick:_onClick">${cancelText}</span>'
-			+'	</div>'
-			+'</div>',
+	templatePath: dojo.moduleUrl("dojox.widget","FileInput/FileInput.html"),
 	
 	startup: function(){
 		// summary: listen for changes on our real file input

@@ -28,25 +28,16 @@ dojo.declare("dojox.widget.FileInputAuto",
 	//	default: 2 seconds
 	blurDelay: 2000,
 
-
 	_sent: false,
 
-	templateString: '<div class="dijitFileInput">'
-			+'	<input id="${id}" class="dijitFileInputReal" type="file" dojoAttachPoint="fileInput" name="${name}" />'
-			+'	<div class="dijitFakeInput" dojoAttachPoint="fakeNodeHolder">'
-				+'	<input class="dijitFileInputVisible" type="text" dojoAttachPoint="focusNode, inputNode" />'
-				+'	<span class="dijitFileInputText" dojoAttachPoint="titleNode">${label}</span>'
-				+'	<span class="dijitFileInputButton" dojoAttachPoint="cancelNode" dojoAttachEvent="onclick:_onClick">${cancelText}</span>'
-			+'	</div>'
-			+'	<div class="dijitProgressOverlay" dojoAttachPoint="overlay"></div>'
-			+'</div>',
+	// small template changes, new attachpoint: overlay
+	templatePath: dojo.moduleUrl("dojox.widget","FileInput/FileInputAuto.html"),
 
 	startup: function(){
 		// summary: add our extra blur listeners
 		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
 		this.inherited("startup",arguments);
-		
 	},
 
 	_onFocus: function(){
@@ -76,6 +67,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 		_newForm.appendChild(this.fileInput);
 		dojo.body().appendChild(_newForm);
 
+		// no error checking :( we are a prototype
 		dojo.io.iframe.send({
 			url: this.url+"?name="+this.name,
 			form: _newForm,
@@ -83,7 +75,8 @@ dojo.declare("dojox.widget.FileInputAuto",
 			handle: dojo.hitch(this,function(data,ioArgs){
 				var d = dojo.fromJson(data);
 				dojo.disconnect(this._blurListener); 
-				if(d.status == "success"){ // we should get this from ioArgs?
+				if(d.status == "success"){ 
+					// we should get this from ioArgs? or user-spcified callback?
 					dojo.style(this.overlay,"opacity","0");
 					dojo.style(this.overlay,"border","none");
 					dojo.style(this.overlay,"background","none"); 
@@ -98,16 +91,19 @@ dojo.declare("dojox.widget.FileInputAuto",
 					this._sent = true;
 					this.inputNode.value = d.details.name; 
 				}
-			}) // no error checking :( we are a prototype
+			}) 
 		});
 	},
 
 	_onClick: function(e){
 		// summary: accomodate our extra focusListeners
 		if(this._blurTimer){ clearTimeout(this._blurTimer); }
+
 		dojo.disconnect(this._blurListener);
 		dojo.disconnect(this._focusListener);
+
 		this.inherited("_onClick",arguments);
+
 		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
 	},
