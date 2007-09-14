@@ -1,28 +1,24 @@
 dojo.provide("dojox.fx._base");
-dojo.experimental("dojox.fx");
+// summary: add-on Animations to dojo.fx
 
 dojo.require("dojo.fx"); 
 
-// convenience functions/maps
-// so you can dojox.fx[animationMethod](args) without needing to accomodate 
-// for the dojo.fx animation cases.
+// convenience functions: 
 dojox.fx.chain = dojo.fx.chain;
 dojox.fx.combine = dojo.fx.combine;
 dojox.fx.wipeIn = dojo.fx.wipeIn;
 dojox.fx.wipeOut = dojo.fx.wipeOut;
 dojox.fx.slideTo = dojo.fx.slideTo;
 
-/* dojox.fx _Animations: */
 dojox.fx.sizeTo = function(/* Object */args){
 	// summary:
-	//		Returns an animation that will size "node" 
-	//		defined in args Object about it's center to
-	//		a width and height defined by (args.width, args.height), 
-	//		supporting an optional method: chain||combine mixin
-	//		(defaults to chain).	
-	//		
-	//		- works best on absolutely or relatively positioned
-	//		elements? 
+	//	Returns an animation that will size "node" 
+	//	defined in args Object about it's center to
+	//	a width and height defined by (args.width, args.height), 
+	//	supporting an optional method: chain||combine mixin
+	//	(defaults to chain).	
+	//
+	//	- works best on absolutely or relatively positioned elements? 
 	//	
 	// example:
 	//
@@ -86,183 +82,76 @@ dojox.fx.sizeTo = function(/* Object */args){
 	return anim; // dojo._Animation
 };
 
-
-/* dojox.fx CSS Class _Animations: */
-dojox.fx.addClass = function(/* Object */args){
-	// summary:
-	//		returns an animation that will animate
-	//		the properieds of a node to the properties
-	//		defined in a standard CSS .class definition.
-	//		(calculating the differences itself)
+dojox.fx.slideBy = function(/* Object */args){
+	// summary: returns an animation to slide a node by a defined offset.
 	//
-	//		standard _Animation object rules apply. 
-	//
-	// additonal mixins:
-	//
-	//		args.cssClass: String - class string (to be added onEnd)
-	//		
-	var node = (args.node = dojo.byId(args.node)); 
-
-	var pushClass = (function(){
-		// summary: onEnd we want to add the class to the node 
-		//	(as dojo.addClass naturally would) in case our 
-		//	class parsing misses anything the browser would 
-		// 	otherwise interpret. this may cause some flicker,
-		//	and will only apply the class so children can inherit 
-		//	after the animation is done (potentially more flicker)
-		var innerNode = node; // FIXME: why do we do this like this?
-		return function(){
-			dojo.addClass(innerNode, args.cssClass); 
-			innerNode.style.cssText = _beforeStyle; 
-		}
-	})();
-
-	// _getCalculatedStleChanges is the core of our style/class animations
-	var mixedProperties = dojox.fx._getCalculatedStyleChanges(args,true);
-	var _beforeStyle = node.style.cssText; 
-	var _anim = dojo.animateProperty(dojo.mixin({
-		properties: mixedProperties
-	},args));
-	dojo.connect(_anim,"onEnd",_anim,pushClass); 
-	return _anim; 
-
-};
-
-dojox.fx.removeClass = function(/* Object */args){
-	// summary:
-	//	returns an animation that will animate the properieds of a 
-	// 	node (args.node) to the properties calculated after removing 
-	//	a standard CSS className from a that node.
+	// description:
+	//	returns an animation that will slide a node (args.node) from it's
+	//	current position to it's current posision plus the numbers defined
+	//	in args.top and args.left. standard dojo.fx mixin's apply. 
 	//	
-	//	calls dojo.removeClass(args.cssClass) onEnd of animation		
-	//
-	//	standard dojo._Animation object rules apply. 
-	//
-	// additonal mixins:
-	//
-	//	args.cssClass: String - class string (to be removed from node)
-	//		
-	var node = (args.node = dojo.byId(args.node)); 
-
-	var pullClass = (function(){
-		// summary: onEnd we want to remove the class from the node 
-		//	(as dojo.removeClass naturally would) in case our class
-		//	parsing misses anything the browser would otherwise 
-		//	interpret. this may cause some flicker, and will only 
-		//	apply the class so children can inherit after the
-		//	animation is done (potentially more flicker)
-		//
+	//	usage:
+	//	dojox.fx.slideBy({ node: domNode, duration:400, 
+	//		top: 50, left: -22 }).play();
+	var node = (args.node = dojo.byId(args.node));	
+	var compute = dojo.getComputedStyle;
+	var top = null; var left = null;
+	var init = (function(){
 		var innerNode = node;
 		return function(){
-			dojo.removeClass(innerNode, args.cssClass); 
-			innerNode.style.cssText = _beforeStyle; 
+			var pos = compute(innerNode,'position');
+			top = (pos == 'absolute' ? node.offsetTop : parseInt(compute(node, 'top')) || 0);
+			left = (pos == 'absolute' ? node.offsetLeft : parseInt(compute(node, 'left')) || 0);
+			if(pos != 'absolute' && pos != 'relative'){
+				var ret = dojo.coords(innerNode, true);
+				top = ret.y;
+				left = ret.x;
+				innerNode.style.position="absolute";
+				innerNode.style.top=top+"px";
+				innerNode.style.left=left+"px";
+			}
 		}
 	})();
-
-	var mixedProperties = dojox.fx._getCalculatedStyleChanges(args,false);
-	var _beforeStyle = node.style.cssText; 
+	init();
 	var _anim = dojo.animateProperty(dojo.mixin({
-		properties: mixedProperties
-	},args));
-	dojo.connect(_anim,"onEnd",_anim,pullClass); 
+		properties: {
+			// FIXME: is there a way to update the _Line after creation?
+			// null start values allow chaining to work, animateProperty will
+			// determine them for us (except in ie6? -- ugh)
+			top: {  /* start: top, */end: top+(args.top||0) },
+			left: { /* start: left, */end: left+(args.left||0) }
+		}
+	}, args));
+	dojo.connect(_anim,"beforeBegin",_anim,init);
 	return _anim; // dojo._Animation
 };
 
-dojox.fx.toggleClass = function(/*HTMLElement*/node, /*String*/classStr, /*Boolean?*/condition){
-        //      summary:
-	//		creates an animation that will animate the effect of 
-	//		toggling a class on or off of a node.
-        //              Adds a class to node if not present, or removes if present.
-        //              Pass a boolean condition if you want to explicitly add or remove.
-        //      condition:
-        //              If passed, true means to add the class, false means to remove.
-        if(typeof condition == "undefined"){
-                condition = !dojo.hasClass(node, classStr);
-        }
-        return dojox.fx[(condition ? "addClass" : "removeClass")](node, classStr); // dojo._Animation
-};
-
-dojox.fx._allowedProperties = [
-	// summary:
-	//	this is our pseudo map of properties we will check for.
-	//	it should be much more intuitive. a way to normalize and
-	//	"predict" intent, or even something more clever ... 
-	//	open to suggestions.
-
-	// no-brainers:
-	"width",
-	"height",
-	// only if position = absolute || relative?
-	"left", "top", "right", "bottom", 
-	// these need to be filtered through dojo.colors?
-	// "background", // normalize to:
-	/* "backgroundImage", */
-	"backgroundPosition", // FIXME: to be effective, this needs "#px #px"?
-	"backgroundColor",
-
-	"color",
-	//
-	// "border", // the normalize on this one will be _hideous_ 
-	//	(color/style/width)
-	//	(left,top,right,bottom for each of _those_)
-	//
-	// "padding", // normalize to: 
-	"paddingLeft", "paddingRight", "paddingTop", "paddingBottom",
-	// "margin", // normalize to:
-	"marginLeft", "marginTop", "marginRight", "marginBottom",
-
-	// unit import/delicate?:
-	"lineHeight",
-	"letterSpacing",
-	"fontSize"
-];
-
-dojox.fx._getStyleSnapshot = function(/* Object */cache){
-	// summary: 
-	//	uses a dojo.getComputedStyle(node) cache reference and
-	// 	iterates through the 'documented/supported animate-able'
-	// 	properties. 
-	//
-	// returns:  Array
-	//	an array of raw, calculcated values (no keys), to be normalized/compared
-	//	elsewhere	
-	return dojo.map(dojox.fx._allowedProperties,function(style){
-		return cache[style]; // String
-	}); // Array
-};
-
-dojox.fx._getCalculatedStyleChanges = function(/* Object */args, /*Boolean*/addClass){
-	// summary:
-	//	calculate and normalize(?) the differences between two states
-	//	of a node (args.node) by either quickly adding or removing 
-	//	a class (and if that causes poor flicker later, we can attempt
-	//	to create a cloned node offscreen and do other weird calculations
-	//	
-	// args:
-	// 	we are expecting args.node (DomNode) and 
-	//	args.cssClass (class String)
+dojox.fx.crossFade = function(/* Object */args){
+	// summary: returns an animation cross fading two element simultaneously
 	// 
-	// addClass: 
-	// 	true to calculate what adding a class would do, 
-	// 	false to calculate what removing the class would do
+	// args addons:
+	//	args.nodes: Array - two element array of domNodes, or id's
+	//
+	// all other standard animation args mixins apply. args.node ignored.
+	//
+	if(dojo.isArray(args.nodes)){
+		// simple check for which node is visible, maybe too simple?
+		var node1 = args.nodes[0] = dojo.byId(args.nodes[0]);
+		var op1 = dojo.style(node1,"opacity");
+		var node2 = args.nodes[1] = dojo.byId(args.nodes[1]);
+		var op2 = dojo.style(node2, "opacity");
 
-	var node = (args.node = dojo.byId(args.node)); 
-	var compute = dojo.getComputedStyle(node);
-
-	// take our snapShots
-	var _before = dojox.fx._getStyleSnapshot(compute);
-	dojo[(addClass ? "addClass" : "removeClass")](node,args.cssClass); 
-	var _after = dojox.fx._getStyleSnapshot(compute);
-	dojo[(addClass ? "removeClass" : "addClass")](node,args.cssClass); 
-
-	var calculated = {};
-	var i = 0;
-	dojo.forEach(dojox.fx._allowedProperties,function(prop){
-		if(_before[i] != _after[i]){
-			// FIXME: the static unit: px is not good, either. need to parse unit from computed style?
-			calculated[prop] = { end: parseInt(_after[i]), unit: 'px' }; 
-		} 
-		i++;
-	});
-	return calculated; 
+		var _anim = dojo.fx.combine([
+			dojo[((op1==0)?"fadeIn":"fadeOut")](dojo.mixin({
+				node: node1
+			},args)),
+			dojo[((op1==0)?"fadeOut":"fadeIn")](dojo.mixin({
+				node: node2
+			},args))
+		]);
+		return _anim; // dojo._Animation
+	}else{
+		// improper syntax in args, needs Array
+		return false; // Boolean
+	}
 };
