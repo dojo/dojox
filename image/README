@@ -9,6 +9,7 @@ prototype | expermental
 -------------------------------------------------------------------------------
 Credits
 	Peter Higgins (phiggins@gmail.com)
+	Shane O'Sullivan (shaneosullivan1@gmail.com)
 -------------------------------------------------------------------------------
 Project description
 
@@ -20,6 +21,11 @@ Dependencies:
 
 	LightBox: dojo core, dojox.fx and optionally dojox.data. uses
 	either tundra or soria theme, no standalone icons.
+
+	SlideShow: dojo core, dojo.fx, and dojo.data (optional 
+	dojox.data store implementations apply)
+
+	Gallery: core, dojox.image.SlideShow
 
 -------------------------------------------------------------------------------
 Documentation
@@ -35,9 +41,14 @@ Installation instructions
 Additional Notes
 
 	LightBox: currently works as individual items, and grouped items,
-	but usage of dojox.data.FlickrStore is broken because all images
-	are grouped in one master group, the API is subject to change, and
-	is marked accordingly.
+	but usage of dojo.data is broken (atm). the API is subject to 
+ 	change, and is marked accordingly.
 
-	Hoping to implement: Picker, SlideShow, Carossel, Gallery using
+	Hoping to implement: Picker, Carossel, and Reflect using
 	a common API provided by dojox.image.Pane (?) 
+
+	SlideShow: Shows an image, one by one, from a datastore. Acts
+	as standing ImagePane implementation, 
+
+	Gallery: A combination Thumbnail view and SlideShow, using
+	a datastore, and providing navigation, and common API. 

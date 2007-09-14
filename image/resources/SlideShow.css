@@ -1,57 +1,98 @@
-
-.tundra .SlideShowHolder {
+.slideShowWrapper { 
 	position:relative; 
-	padding:0px;
-	z-index:21;
-	border:1px solid #000; 
+	background:#fff;
+	padding:8px; 
+	border:1px solid #333;	
+	padding-bottom:20px;
+	overflow:hidden;
+	-moz-border-radius:3pt;
+	-webkit-border-radius:4pt;
+	-webkit-drop-shadow:#ccc 4pt; 
 }
-
-.tundra .SlideShowNavHolder {
-	z-index:19;	
-	height:10px; 
+.slideShowNav { 
 	position:absolute;
-	top:0px;
-	left:0px; 
-	width:135px; 
-}
-
-.tundra .SlideShowNav {
-	z-index:20;
-	display:inline;
-	position:absolute; 
-	top:10px;
-	left:10px; 
-
-}
-
-.tundra .SlideShowImgHolder {
-	position:absolute; padding:0px; top:0; left:0; 
-}
-
-.tundra .SlideShowImg { 
-	position:absolute;
+	bottom:-18px;	
 	left:0px;
-	top:0px;
+	padding:0px 3px 2px 0px;
+	background-color:#fff; 
+	width:100%;
+}
+.slideShowNavWrapper { float:right;  }
+.slideShowTitle { 
+	float:left;
+	color:#333;
+	font-size:10pt;
+}
+.slideShowTitle .slideShowCounterText {
+	font-size:6pt; color:#666; 
+}
+.slideShowHidden {
+	position:absolute;
+	display: none;
+	height: 1px;
+	width: 1px;
+}
+.slideShowImageWapper {
+	position:absolute;
+	top:30px; 
+	overflow:hidden;
+}
+.slideShowImageWapper img {
+	border: 0px;
+}
+.slideShowNotifier {
+	background-color: red;
+	width: 100px;
+	height: 5px;
+	font-size: 1%;/*IE hack to get around the Empty-Div bug*/
+}
+.slideShowSlideShow {
+	position:absolute;
+	top:30px; 
+	padding: 0 5px;
+	border: 0px;
+	text-decoration: none; 
+	color: #2e6ab1;
+}
+.slideShowLoading { background-color: #fad66a; }
+.slideShowLoaded { background-color: transparent; }
+
+/* Soria-like */
+.soria .slideShowNav .slideShowNextIcon,
+.soria .slideShowNav .slideShowPrevIcon,
+.soria .slideShowNav .slideShowPlayIcon,
+.soria .slideShowPaused .slideShowNav .slideShowPlayIcon {
+	width:16px; 
+	height:16px;
+	float:right;
+	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat;
+	cursor:pointer;
+	position:relative;
+}
+.soria .slideShowNav .slideShowNextIcon { background-position:-336px -16px; }
+.soria .slideShowNav .slideShowPrevIcon { background-position:-320px -16px; }
+.soria .slideShowNav .slideShowPlayIcon { background-position:-288px -16px; }
+.soria .slideShowPaused .slideShowNav .slideShowPlayIcon { background-position:-304px -16px !important; }
+
+/* Tundra like */
+.tundra .slideShowNav .slideShowNextIcon,
+.tundra .slideShowNav .slideShowPrevIcon,
+.tundra .slideShowNav .slideShowPlayIcon,
+.tundra .slideShowPaused .slideShowNav .slideShowPlayIcon {
+	width:16px; 
+	height:16px;
+	float:right;
+	cursor:pointer;
+}
+/* FIXME: tundra needs a styled double-arrow set, and a pause icon */
+.tundra .slideShowNav .slideShowNextIcon { background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat; }
+.tundra .slideShowNav .slideShowPrevIcon { background:url('../../../dijit/themes/tundra/images/arrowLeft.png') no-repeat; }
+.tundra .slideShowNav .slideShowPlayIcon { background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat; }
+.tundra .slideShowPaused .slideShowNav .slideShowPlayIcon { background:url('../../../dijit/themes/tundra/images/pause.png') no-repeat !important; }
+
+/* Hack. can we use use .dj_ie6 ? */
+* html .slideShowPager li.currentpage, * html .pagination li.disablepage{ /*IE 6 and below. Adjust non linked LIs slightly to account for bugs*/
+margin-right: 5px;
+padding-right: 0;
 }
 
-.tundra .SlideShowDialog {
-	position:absolute;
-	bottom:0;
-	right:0;
-	padding:5px; 
-	background:transparent; 
-	z-index:43; 
-	
-}
-/*
-.tundra .SlideShowPlayIcon { 
-	width:46px;
-	height:46px;
-	background:url('icons/navIconPlay.png'); 
-}
-.tundra .SlideShowDirIcon {
-	width:46px; 
-	height:46px;
-	background:url('icons/navIconDirUp.png'); 
-}
-*/

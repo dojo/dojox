@@ -1,15 +1,14 @@
-<div class="SlideShowHolder" style="" dojoAttachPoint="slideShowHolder">
-		<div class="SlideShowNavHolder" dojoAttachPoint="slideShowNavHolder"></div>	
-		<div class="SlideShowDialog" dojoAttachPoint="slideShowDialog"></div>
-		<div class="SlideShowNav" dojoAttachPoint="slideShowNav">
-			<span class="SlideShowButton SlideShowPlayIcon" 
-				dojoAttachPoint="startStopButton" dojoAttachEvent="onclick: togglePaused" />
-			<span dojoAttachPoint="directionButton" class="SlideShowButton SlideShowDirIcon"
-				dojoAttachEvent="onclick: toggleDirection" />
-		</div>	
-		<div class="SlideShowImgHolder" dojoAttachPoint="imagesContainer">
-			<img class="SlideShowImg" style=" z-index: 5; " dojoAttachPoint="img1" />
-			<img class="SlideShowImg" style=" z-index: 4; " dojoAttachPoint="img2" />
-		</div>
-</div>
+<div dojoAttachPoint="outerNode" class="slideShowWrapper">
+	<div style="position:relative;" dojoAttachPoint="innerWrapper">
+		<div dojoAttachPoint="navNode" class="slideShowNav" dojoAttachEvent="onclick: _handleClick">
+			<div class="slideShowNextIcon" dojoAttachPoint="nextIcon"></div>
+			<div class="slideShowPrevIcon" dojoAttachPoint="prevIcon"></div>
+			<div class="slideShowPlayIcon" dojoAttachPoint="playIcon"></div>
 
+			<div class="dijitInline slideShowTitle" dojoAttachPoint="titleNode">${title}</div>
+		</div>
+		<div dojoAttachPoint="slideshowNode" class="slideShowSlideShow"></div>
+		<div dojoAttachPoint="largeNode" class="slideShowImageWrapper"></div>
+		<div dojoAttachPoint="hiddenNode" class="slideShowHidden"></div>
+	</div>
+</div>

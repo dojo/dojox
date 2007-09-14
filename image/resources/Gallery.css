@@ -1,0 +1,340 @@
+@import "SlideShow.css";
+
+.imageGalleryThumbsWrapper {
+	white-space: nowrap;
+	width: 100%;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	text-align: center;
+}
+
+.imageGalleryHidden {
+	position:absolute;
+	display: none;
+	height: 1px;
+	width: 1px;
+}
+
+.imageGalleryWrapper {
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+.imageGalleryWrapper table {
+	margin: 0px 0px 0px 0px;
+}
+
+.imageGalleryThumbsWrapper table {
+	border: 0px;
+}
+
+.imageThumbNav {
+	background-repeat: no-repeat;	
+	background-position:center;
+	height: 75px;
+	padding-top: 1px 1px 1px 1px;
+}
+.imageThumbNav img {
+	width: 30px;
+}
+
+.imageThumbPrev { 
+	background-image: url("images/arrowLeft.gif");
+}
+
+.imageThumbNext {
+	background-image: url("images/arrowRight.gif");
+}
+
+.imageGalleryImageWrapper {
+	width: 100%;
+}
+
+.imageGalleryImageWrapper img {
+	border: 0px;
+	max-width: 500px;
+	max-height: 375px;
+	width: expression(this.width > 500 ? 500: true);/*IE Hack*/
+	height: expression(this.height > 375 ? 375: true);/*IE Hack*/
+}
+
+.imageGalleryPagingContainer {
+	width: 100%;	
+}
+
+.imageGalleryPagingContainer .imageGalleryPrevImg{
+	
+}
+
+.imageGalleryPagingContainer .imageGalleryNextImg{
+	padding-left: 380px;
+}
+
+.imageGalleryThumb {
+	height: 75px;
+	max-width: 100px;
+	width: expression(this.width > 100 ? 100: true);/*IE Hack*/
+}
+
+.imageThumbPlaceholder {
+	width: 100px;
+	height: 75px;
+	padding: 0px;
+	padding-left: 1px;
+}
+
+.imageGalleryTitle {
+	font-size: large;
+	
+}
+
+.imageGalleryNotifier {
+	background-color: red;
+	width: 100px;
+	height: 5px;
+	font-size: 1%;/*IE hack to get around the Empty-Div bug*/
+}
+
+.imageGallerySlideshow {
+	padding: 0 5px;
+	border: 0px;
+	text-decoration: none; 
+	color: #2e6ab1;
+	text-align: center;
+	width: 100%;
+	float: left;
+}
+
+.imageGalleryPager{
+	padding: 2px;
+	float: left;
+	padding-left: 25px;
+}
+
+.imageGalleryPager ul {
+margin: 0;
+padding: 0;
+font-size: 16px;
+}
+
+.imageGalleryPager li {
+list-style-type: none;
+display: inline;
+padding-bottom: 1px;
+}
+
+.imageGalleryPager a, .imageGalleryPager a:visited{
+padding: 0 5px;
+border: 1px solid #9aafe5;
+text-decoration: none; 
+color: #2e6ab1;
+}
+
+.imageGalleryPager a:hover, .imageGalleryPager a:active{
+border: 1px solid #2b66a5;
+color: #000;
+background-color: lightyellow;
+}
+
+.imageGalleryPager li.currentpage{
+font-weight: bold;
+padding: 0 5px;
+border: 1px solid navy;
+background-color: #2e6ab1;
+color: #FFF;
+}
+
+.imageGalleryPager li.disablepage{
+padding: 0 5px;
+border: 1px solid #929292;
+color: #929292;
+}
+
+.imageGalleryPager li.nextpage{
+font-weight: bold;
+}
+
+* html .imageGalleryPager li.currentpage, * html .pagination li.disablepage{ /*IE 6 and below. Adjust non linked LIs slightly to account for bugs*/
+margin-right: 5px;
+padding-right: 0;
+}
+.imageGalleryPager {
+	
+}
+
+.imageGalleryLoading {
+	background-color: #fad66a;
+}
+
+.imageGalleryLoaded {
+	background-color: transparent;	
+}
+.imageGalleryThumbsWrapper {
+	white-space: nowrap;
+	width: 100%;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	text-align: center;
+}
+
+.imageGalleryHidden {
+	position:absolute;
+	display: none;
+	height: 1px;
+	width: 1px;
+}
+
+.imageGalleryWrapper {
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+.imageGalleryWrapper table {
+	margin: 0px 0px 0px 0px;
+}
+
+.imageGalleryThumbsWrapper table {
+	border: 0px;
+}
+
+.imageThumbNav {
+	background-repeat: no-repeat;	
+	background-position:center;
+	height: 75px;
+	padding-top: 1px 1px 1px 1px;
+}
+.imageThumbNav img {
+	width: 30px;
+}
+
+.imageThumbPrev { 
+	background-image: url("images/arrowLeft.gif");
+}
+
+.imageThumbNext {
+	background-image: url("images/arrowRight.gif");
+}
+
+.imageGalleryImageWrapper {
+	width: 100%;
+}
+
+.imageGalleryImageWrapper img {
+	border: 0px;
+	max-width: 500px;
+	max-height: 375px;
+	width: expression(this.width > 500 ? 500: true);/*IE Hack*/
+	height: expression(this.height > 375 ? 375: true);/*IE Hack*/
+}
+
+.imageGalleryPagingContainer {
+	width: 100%;	
+}
+
+.imageGalleryPagingContainer .imageGalleryPrevImg{
+	
+}
+
+.imageGalleryPagingContainer .imageGalleryNextImg{
+	padding-left: 380px;
+}
+
+.imageGalleryThumb {
+	height: 75px;
+	max-width: 100px;
+	width: expression(this.width > 100 ? 100: true);/*IE Hack*/
+}
+
+.imageThumbPlaceholder {
+	width: 100px;
+	height: 75px;
+	padding: 0px;
+	padding-left: 1px;
+}
+
+.imageGalleryTitle {
+	font-size: large;
+	
+}
+
+.imageGalleryNotifier {
+	background-color: red;
+	width: 100px;
+	height: 5px;
+	font-size: 1%;/*IE hack to get around the Empty-Div bug*/
+}
+
+.imageGallerySlideshow {
+	padding: 0 5px;
+	border: 0px;
+	text-decoration: none; 
+	color: #2e6ab1;
+	text-align: center;
+	width: 100%;
+	float: left;
+}
+
+.imageGalleryPager{
+	padding: 2px;
+	float: left;
+	padding-left: 25px;
+}
+
+.imageGalleryPager ul{
+margin: 0;
+padding: 0;
+font-size: 16px;
+}
+
+.imageGalleryPager li{
+list-style-type: none;
+display: inline;
+padding-bottom: 1px;
+}
+
+.imageGalleryPager a, .imageGalleryPager a:visited{
+padding: 0 5px;
+border: 1px solid #9aafe5;
+text-decoration: none; 
+color: #2e6ab1;
+}
+
+.imageGalleryPager a:hover, .imageGalleryPager a:active{
+border: 1px solid #2b66a5;
+color: #000;
+background-color: lightyellow;
+}
+
+.imageGalleryPager li.currentpage{
+font-weight: bold;
+padding: 0 5px;
+border: 1px solid navy;
+background-color: #2e6ab1;
+color: #FFF;
+}
+
+.imageGalleryPager li.disablepage{
+padding: 0 5px;
+border: 1px solid #929292;
+color: #929292;
+}
+
+.imageGalleryPager li.nextpage{
+font-weight: bold;
+}
+
+* html .imageGalleryPager li.currentpage, * html .pagination li.disablepage{ /*IE 6 and below. Adjust non linked LIs slightly to account for bugs*/
+margin-right: 5px;
+padding-right: 0;
+}
+.imageGalleryPager {
+	
+}
+
+.imageGalleryLoading {
+	background-color: #fad66a;
+}
+
+.imageGalleryLoaded {
+	background-color: transparent;	
+}

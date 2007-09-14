@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Testing dojox.image.SlideShow</title>
+
+	<style type="text/css">
+		@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../resources/SlideShow.css";
+	</style>
+	
+	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:false, isDebug: true, defaultTestTheme: 'soria'"></script>
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="../SlideShow.js"></script>
+	<script type="text/javascript" src="../../../dojo/data/ItemFileReadStore.js"></script>	
+
+	<script type="text/javascript">
+		// dojo.require("dojox.image.SlideShow");
+		// dojo.require("dojox.data.FlickrRestStore");
+		// dojo.require("dojo.data.ItemFileReadStore"); 
+		dojo.require("dojo.parser");	// find widgets		
+		
+		dojo.addOnLoad(function(){
+			// var widget = dijit.byId("gallery1");
+			// var flickrRestStore = new dojox.data.FlickrRestStore();
+			//var req = {
+			//	query: {
+			//		userid: "44153025@N00",
+			//		apikey: "8c6803164dbc395fb7131c9d54843627"
+			//	},
+			//	count: 20
+			//};
+			// widget.setDataStore(flickrRestStore, req);
+			dojo.parser.parse(dojo.body());
+			var widget = dijit.byId('gallery2'); 
+			widget.setDataStore(imageItemStore,
+				{ query: {}, count:20 },
+				{
+					imageThumbAttr: "thumb",
+					imageLargeAttr: "large"
+				}
+			);
+		});
+			
+	</script>
+</head>
+<body>
+	<h1 class="testTitle">dojox.image.SlideShow</h1>
+
+	<!-- 
+	<h2>from dojox.data.FlickrRestStore</h2>
+	<div id="gallery1" dojoType="dojox.image.SlideShow" imageWidth="300"></div>
+	-->
+
+	<h2>from dojo.data.ItemFileReadStore</h2>
+	<div jsId="imageItemStore" dojoType="dojo.data.ItemFileReadStore" url="images.json"></div>
+	<div id="gallery2" dojoType="dojox.image.SlideShow" ></div>
+
+</body>
+</html>
