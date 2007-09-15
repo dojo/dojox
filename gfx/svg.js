@@ -242,17 +242,6 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		this.rawNode = rawNode;
 	},
-
-	moveToFront: function(){
-		// summary: moves a shape to front of its parent's list of shapes (SVG)
-		this.rawNode.parentNode.appendChild(this.rawNode);
-		return this;	// self
-	},
-	moveToBack: function(){
-		// summary: moves a shape to back of its parent's list of shapes (SVG)
-		this.rawNode.parentNode.insertBefore(this.rawNode, this.rawNode.parentNode.firstChild);
-		return this;	// self
-	},
 	
 	setShape: function(newShape){
 		// summary: sets a shape object (SVG)
@@ -270,6 +259,21 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		return this;	// self
 	},
+
+	// move family
+
+	_moveToFront: function(){
+		// summary: moves a shape to front of its parent's list of shapes (SVG)
+		this.rawNode.parentNode.appendChild(this.rawNode);
+		return this;	// self
+	},
+	_moveToBack: function(){
+		// summary: moves a shape to back of its parent's list of shapes (SVG)
+		this.rawNode.parentNode.insertBefore(this.rawNode, this.rawNode.parentNode.firstChild);
+		return this;	// self
+	},
+	
+	// attach family
 	
 	attachFill: function(rawNode){
 		// summary: deduces a fill style from a Node.
@@ -407,7 +411,9 @@ dojo.extend(dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.Group", dojox.gfx.Shape, {
 	// summary: a group shape (SVG), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
-	
+	constructor: function(){
+		dojox.gfx.svg.Container._init.call(this);
+	},
 	setRawNode: function(rawNode){
 		// summary: sets a raw SVG node to be used by this shape
 		// rawNode: Node: an SVG node
@@ -712,8 +718,120 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 });
 dojox.gfx.TextPath.nodeType = "text";
 
+dojox.gfx.attachNode = function(node){
+	// summary: creates a shape from a Node
+	// node: Node: an SVG node
+	if(!node) return null;
+	var s = null;
+	switch(node.tagName.toLowerCase()){
+		case dojox.gfx.Rect.nodeType:
+			s = new dojox.gfx.Rect();
+			break;
+		case dojox.gfx.Ellipse.nodeType:
+			s = new dojox.gfx.Ellipse();
+			break;
+		case dojox.gfx.Polyline.nodeType:
+			s = new dojox.gfx.Polyline();
+			break;
+		case dojox.gfx.Path.nodeType:
+			s = new dojox.gfx.Path();
+			break;
+		case dojox.gfx.Circle.nodeType:
+			s = new dojox.gfx.Circle();
+			break;
+		case dojox.gfx.Line.nodeType:
+			s = new dojox.gfx.Line();
+			break;
+		case dojox.gfx.Image.nodeType:
+			s = new dojox.gfx.Image();
+			break;
+		case dojox.gfx.Text.nodeType:
+			var t = node.getElementsByTagName("textPath");
+			if(t && t.length){
+				s = new dojox.gfx.TextPath();
+			}else{
+				s = new dojox.gfx.Text();
+			}
+			break;
+		default:
+			console.debug("FATAL ERROR! tagName = " + node.tagName);
+			return null;
+	}
+	s.attach(node);
+	return s;	// dojox.gfx.Shape
+};
 
-dojox.gfx.svg._font = {
+dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
+	// summary: a surface object to be used for drawings (SVG)
+	constructor: function(){
+		dojox.gfx.svg.Container._init.call(this);
+	},
+	setDimensions: function(width, height){
+		// summary: sets the width and height of the rawNode
+		// width: String: width of surface, e.g., "100px"
+		// height: String: height of surface, e.g., "100px"
+		if(!this.rawNode){ return this; }
+		this.rawNode.setAttribute("width",  width);
+		this.rawNode.setAttribute("height", height);
+		return this;	// self
+	},
+	getDimensions: function(){
+		// summary: returns an object with properties "width" and "height"
+		return this.rawNode ? {width: this.rawNode.getAttribute("width"), height: this.rawNode.getAttribute("height")} : null; // Object
+	}
+});
+
+dojox.gfx.createSurface = function(parentNode, width, height){
+	// summary: creates a surface (SVG)
+	// parentNode: Node: a parent node
+	// width: String: width of surface, e.g., "100px"
+	// height: String: height of surface, e.g., "100px"
+
+	var s = new dojox.gfx.Surface();
+	s.rawNode = document.createElementNS(dojox.gfx.svg.xmlns.svg, "svg");
+	s.rawNode.setAttribute("width",  width);
+	s.rawNode.setAttribute("height", height);
+
+	var defs = new dojox.gfx.svg.Defines();
+	var node = document.createElementNS(dojox.gfx.svg.xmlns.svg, dojox.gfx.svg.Defines.nodeType); 
+	defs.setRawNode(node);
+	s.rawNode.appendChild(node);
+	s.defNode = node;
+	
+	dojo.byId(parentNode).appendChild(s.rawNode);
+	return s;	// dojox.gfx.Surface
+};
+
+dojox.gfx.attachSurface = function(node){
+	// summary: creates a surface from a Node
+	// node: Node: an SVG node
+	var s = new dojox.gfx.Surface();
+	s.rawNode = node;
+	var def_elems = node.getElementsByTagName("defs");
+	if(def_elems.length == 0){
+		return null;	// dojox.gfx.Surface
+	}
+	s.defNode = def_elems[0];
+	return s;	// dojox.gfx.Surface
+};
+
+// Gradient and pattern
+
+dojox.gfx.svg.Defines = function(){
+	this.rawNode = null;
+};
+
+dojo.extend(dojox.gfx.svg.Defines, {
+	setRawNode: function(rawNode){
+		this.rawNode = rawNode;
+	}
+});
+
+dojox.gfx.svg.Defines.nodeType = "defs";
+
+// Extenders
+
+dojox.gfx.svg.Font = {
 	_setFont: function(){
 		// summary: sets a font object (SVG)
 		var f = this.fontStyle;
@@ -739,12 +857,49 @@ dojox.gfx.svg._font = {
 	}
 };
 
-dojo.extend(dojox.gfx.Text, dojox.gfx.svg._font);
-dojo.extend(dojox.gfx.TextPath, dojox.gfx.svg._font);
+dojox.gfx.svg.Container = {
+	_init: function(){
+		dojox.gfx.shape.Container._init.call(this);
+	},
+	add: function(shape){
+		// summary: adds a shape to a group/surface
+		// shape: dojox.gfx.Shape: an VML shape object
+		if(this != shape.getParent()){
+			this.rawNode.appendChild(shape.rawNode);
+			//dojox.gfx.Group.superclass.add.apply(this, arguments);
+			//this.inherited(arguments);
+			dojox.gfx.shape.Container.add.apply(this, arguments);
+		}
+		return this;	// self
+	},
+	remove: function(shape, silently){
+		// summary: remove a shape from a group/surface
+		// shape: dojox.gfx.Shape: an VML shape object
+		// silently: Boolean?: if true, regenerate a picture
+		if(this == shape.getParent()){
+			if(this.rawNode == shape.rawNode.parentNode){
+				this.rawNode.removeChild(shape.rawNode);
+			}
+			//dojox.gfx.Group.superclass.remove.apply(this, arguments);
+			//this.inherited(arguments);
+			dojox.gfx.shape.Container.remove.apply(this, arguments);
+		}
+		return this;	// self
+	},
+	clear: function(){
+		// summary: removes all shapes from a group/surface
+		var r = this.rawNode;
+		while(r.lastChild){
+			r.removeChild(r.lastChild);
+		}
+		//return this.inherited(arguments);	// self
+		return dojox.gfx.shape.Container.clear.apply(this, arguments);
+	},
+	_moveChildToFront: dojox.gfx.shape.Container._moveChildToFront,
+	_moveChildToBack:  dojox.gfx.shape.Container._moveChildToBack
+};
 
-delete dojox.gfx.svg._font;
-
-dojox.gfx.svg._creators = {
+dojox.gfx.svg.Creator = {
 	// summary: SVG shape creators
 	createPath: function(path){
 		// summary: creates an SVG path shape
@@ -809,149 +964,14 @@ dojox.gfx.svg._creators = {
 		this.add(shape);
 		return shape;	// dojox.gfx.Shape
 	},
-	createShape: dojox.gfx._createShape,
-	// group control
-	add: function(shape){
-		// summary: adds a shape to a group/surface
-		// shape: dojox.gfx.Shape: an SVG shape object
-		var oldParent = shape.getParent();
-		if(oldParent){
-			oldParent.remove(shape, true);
-		}
-		shape._setParent(this, null);
-		this.rawNode.appendChild(shape.rawNode);
-		return this;	// self
-	},
-	remove: function(shape, silently){
-		// summary: remove a shape from a group/surface
-		// shape: dojox.gfx.Shape: an SVG shape object
-		// silently: Boolean?: if true, regenerate a picture
-		if(this.rawNode == shape.rawNode.parentNode){
-			this.rawNode.removeChild(shape.rawNode);
-		}
-		shape._setParent(null, null);
-		return this;	// self
-	},
-	clear: function(){
-		// summary: removes all shapes from a group/surface
-		var r = this.rawNode;
-		while(r.lastChild){
-			r.removeChild(r.lastChild);
-		}
-		return this;	// self
-	}
+	createShape: dojox.gfx._createShape
 };
 
-dojox.gfx.attachNode = function(node){
-	// summary: creates a shape from a Node
-	// node: Node: an SVG node
-	if(!node) return null;
-	var s = null;
-	switch(node.tagName.toLowerCase()){
-		case dojox.gfx.Rect.nodeType:
-			s = new dojox.gfx.Rect();
-			break;
-		case dojox.gfx.Ellipse.nodeType:
-			s = new dojox.gfx.Ellipse();
-			break;
-		case dojox.gfx.Polyline.nodeType:
-			s = new dojox.gfx.Polyline();
-			break;
-		case dojox.gfx.Path.nodeType:
-			s = new dojox.gfx.Path();
-			break;
-		case dojox.gfx.Circle.nodeType:
-			s = new dojox.gfx.Circle();
-			break;
-		case dojox.gfx.Line.nodeType:
-			s = new dojox.gfx.Line();
-			break;
-		case dojox.gfx.Image.nodeType:
-			s = new dojox.gfx.Image();
-			break;
-		case dojox.gfx.Text.nodeType:
-			var t = node.getElementsByTagName("textPath");
-			if(t && t.length){
-				s = new dojox.gfx.TextPath();
-			}else{
-				s = new dojox.gfx.Text();
-			}
-			break;
-		default:
-			console.debug("FATAL ERROR! tagName = " + node.tagName);
-			return null;
-	}
-	s.attach(node);
-	return s;	// dojox.gfx.Shape
-};
+dojo.extend(dojox.gfx.Text, dojox.gfx.svg.Font);
+dojo.extend(dojox.gfx.TextPath, dojox.gfx.svg.Font);
 
-dojo.extend(dojox.gfx.Surface, {
-	// summary: a surface object to be used for drawings (SVG)
+dojo.extend(dojox.gfx.Group, dojox.gfx.svg.Container);
+dojo.extend(dojox.gfx.Group, dojox.gfx.svg.Creator);
 
-	setDimensions: function(width, height){
-		// summary: sets the width and height of the rawNode
-		// width: String: width of surface, e.g., "100px"
-		// height: String: height of surface, e.g., "100px"
-		if(!this.rawNode){ return this; }
-		this.rawNode.setAttribute("width",  width);
-		this.rawNode.setAttribute("height", height);
-		return this;	// self
-	},
-	getDimensions: function(){
-		// summary: returns an object with properties "width" and "height"
-		return this.rawNode ? {width: this.rawNode.getAttribute("width"), height: this.rawNode.getAttribute("height")} : null; // Object
-	}
-});
-
-dojox.gfx.createSurface = function(parentNode, width, height){
-	// summary: creates a surface (SVG)
-	// parentNode: Node: a parent node
-	// width: String: width of surface, e.g., "100px"
-	// height: String: height of surface, e.g., "100px"
-
-	var s = new dojox.gfx.Surface();
-	s.rawNode = document.createElementNS(dojox.gfx.svg.xmlns.svg, "svg");
-	s.rawNode.setAttribute("width",  width);
-	s.rawNode.setAttribute("height", height);
-
-	var defs = new dojox.gfx.svg.Defines();
-	var node = document.createElementNS(dojox.gfx.svg.xmlns.svg, dojox.gfx.svg.Defines.nodeType); 
-	defs.setRawNode(node);
-	s.rawNode.appendChild(node);
-	s.defNode = node;
-	
-	dojo.byId(parentNode).appendChild(s.rawNode);
-	return s;	// dojox.gfx.Surface
-};
-
-dojox.gfx.attachSurface = function(node){
-	// summary: creates a surface from a Node
-	// node: Node: an SVG node
-	var s = new dojox.gfx.Surface();
-	s.rawNode = node;
-	var def_elems = node.getElementsByTagName("defs");
-	if(def_elems.length == 0){
-		return null;	// dojox.gfx.Surface
-	}
-	s.defNode = def_elems[0];
-	return s;	// dojox.gfx.Surface
-};
-
-dojo.extend(dojox.gfx.Group, dojox.gfx.svg._creators);
-dojo.extend(dojox.gfx.Surface, dojox.gfx.svg._creators);
-
-delete dojox.gfx.svg._creators;
-
-// Gradient and pattern
-
-dojox.gfx.svg.Defines = function(){
-	this.rawNode = null;
-};
-
-dojo.extend(dojox.gfx.svg.Defines, {
-	setRawNode: function(rawNode){
-		this.rawNode = rawNode;
-	}
-});
-
-dojox.gfx.svg.Defines.nodeType = "defs";
+dojo.extend(dojox.gfx.Surface, dojox.gfx.svg.Container);
+dojo.extend(dojox.gfx.Surface, dojox.gfx.svg.Creator);

@@ -211,15 +211,17 @@ dojo.extend(dojox.gfx.Shape, {
 		rawNode.stroke = null;
 		this.rawNode = rawNode;
 	},
+	
+	// move family
 
-	moveToFront: function(){
+	_moveToFront: function(){
 		// summary: moves a shape to front of its parent's list of shapes (Silverlight)
 		var c = this.parent.rawNode.children, r = this.rawNode;
 		c.remove(r);
 		c.add(r);
 		return this;	// self
 	},
-	moveToBack: function(){
+	_moveToBack: function(){
 		// summary: moves a shape to back of its parent's list of shapes (Silverlight)
 		var c = this.parent.rawNode.children, r = this.rawNode;
 		c.remove(r);
@@ -227,19 +229,7 @@ dojo.extend(dojox.gfx.Shape, {
 		return this;	// self
 	},
 	
-	setShape: function(newShape){
-		// summary: sets a shape object (Silverlight)
-		// newShape: Object: a shape object
-		//	(see dojox.gfx.defaultPath,
-		//	dojox.gfx.defaultPolyline,
-		//	dojox.gfx.defaultRect,
-		//	dojox.gfx.defaultEllipse,
-		//	dojox.gfx.defaultCircle,
-		//	dojox.gfx.defaultLine,
-		//	or dojox.gfx.defaultImage)
-		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
-		return this;	// self
-	},
+	// attach family
 	
 	attachFill: function(rawNode){
 		// summary: deduces a fill style from a Node.
@@ -292,7 +282,9 @@ dojo.extend(dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.Group", dojox.gfx.Shape, {
 	// summary: a group shape (Silverlight), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
-	
+	constructor: function(){
+		dojox.gfx.silverlight.Container._init.call(this);
+	},
 	setRawNode: function(rawNode){
 		// summary: sets a raw Silverlight node to be used by this shape
 		// rawNode: Node: an Silverlight node
@@ -613,125 +605,6 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 });
 dojox.gfx.TextPath.nodeType = "text";
 
-
-dojox.gfx.silverlight._font = {
-	_setFont: function(){
-		// summary: sets a font object (Silverlight)
-		var f = this.fontStyle, r = this.rawNode,
-			fw = dojox.gfx.silverlight.fontweight,
-			fo = dojox.gfx.silverlight.fonts, t = f.family.toLowerCase();
-		r.fontStyle = f.style == "italic" ? "Italic" : "Normal";
-		r.fontWeight = f.weight in fw ? fw[f.weight] : f.weight;
-		r.fontSize = dojox.gfx.normalizedLength(f.size);
-		r.fontFamily = t in fo ? fo[t] : f.family;
-	},
-	attachFont: function(rawNode){
-		// summary: deduces a font style from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// Object
-	}
-};
-
-dojo.extend(dojox.gfx.Text, dojox.gfx.silverlight._font);
-dojo.extend(dojox.gfx.TextPath, dojox.gfx.silverlight._font);
-
-delete dojox.gfx.silverlight._font;
-
-dojox.gfx.silverlight._creators = {
-	// summary: Silverlight shape creators
-	createPath: function(path){
-		// summary: creates an Silverlight path shape
-		// path: Object: a path object (see dojox.gfx.defaultPath)
-		return this.createObject(dojox.gfx.Path, path);	// dojox.gfx.Path
-	},
-	createRect: function(rect){
-		// summary: creates an Silverlight rectangle shape
-		// rect: Object: a path object (see dojox.gfx.defaultRect)
-		return this.createObject(dojox.gfx.Rect, rect);	// dojox.gfx.Rect
-	},
-	createCircle: function(circle){
-		// summary: creates an Silverlight circle shape
-		// circle: Object: a circle object (see dojox.gfx.defaultCircle)
-		return this.createObject(dojox.gfx.Circle, circle);	// dojox.gfx.Circle
-	},
-	createEllipse: function(ellipse){
-		// summary: creates an Silverlight ellipse shape
-		// ellipse: Object: an ellipse object (see dojox.gfx.defaultEllipse)
-		return this.createObject(dojox.gfx.Ellipse, ellipse);	// dojox.gfx.Ellipse
-	},
-	createLine: function(line){
-		// summary: creates an Silverlight line shape
-		// line: Object: a line object (see dojox.gfx.defaultLine)
-		return this.createObject(dojox.gfx.Line, line);	// dojox.gfx.Line
-	},
-	createPolyline: function(points){
-		// summary: creates an Silverlight polyline/polygon shape
-		// points: Object: a points object (see dojox.gfx.defaultPolyline)
-		//	or an Array of points
-		return this.createObject(dojox.gfx.Polyline, points);	// dojox.gfx.Polyline
-	},
-	createImage: function(image){
-		// summary: creates an Silverlight image shape
-		// image: Object: an image object (see dojox.gfx.defaultImage)
-		return this.createObject(dojox.gfx.Image, image);	// dojox.gfx.Image
-	},
-	createText: function(text){
-		// summary: creates an Silverlight text shape
-		// text: Object: a text object (see dojox.gfx.defaultText)
-		return this.createObject(dojox.gfx.Text, text);	// dojox.gfx.Text
-	},
-	createTextPath: function(text){
-		// summary: creates an Silverlight text shape
-		// text: Object: a textpath object (see dojox.gfx.defaultTextPath)
-		return this.createObject(dojox.gfx.TextPath, {}).setText(text);	// dojox.gfx.TextPath
-	},
-	createGroup: function(){
-		// summary: creates an Silverlight group shape
-		return this.createObject(dojox.gfx.Group);	// dojox.gfx.Group
-	},
-	createObject: function(shapeType, rawShape){
-		// summary: creates an instance of the passed shapeType class
-		// shapeType: Function: a class constructor to create an instance of
-		// rawShape: Object: properties to be passed in to the classes "setShape" method
-		if(!this.rawNode){ return null; }
-		var shape = new shapeType();
-		var node = this.rawNode.getHost().content.createFromXaml("<" + shapeType.nodeType + "/>");
-		shape.setRawNode(node);
-		shape.setShape(rawShape);
-		this.add(shape);
-		return shape;	// dojox.gfx.Shape
-	},
-	createShape: dojox.gfx._createShape,
-	// group control
-	add: function(shape){
-		// summary: adds a shape to a group/surface
-		// shape: dojox.gfx.Shape: an Silverlight shape object
-		var oldParent = shape.getParent();
-		if(oldParent){
-			oldParent.remove(shape, true);
-		}
-		shape._setParent(this, null);
-		this.rawNode.children.add(shape.rawNode);
-		return this;	// self
-	},
-	remove: function(shape, silently){
-		// summary: remove a shape from a group/surface
-		// shape: dojox.gfx.Shape: an Silverlight shape object
-		// silently: Boolean?: if true, regenerate a picture
-		var parent = shape.rawNode.getParent();
-		if(parent){
-			parent.children.remove(shape.rawNode);
-		}
-		shape._setParent(null, null);
-		return this;	// self
-	},
-	clear: function(){
-		// summary: removes all shapes from a group/surface
-		this.rawNode.children.clear();
-		return this;	// self
-	}
-};
-
 dojox.gfx.attachNode = function(node){
 	// summary: creates a shape from a Node
 	// node: Node: an Silverlight node
@@ -751,9 +624,11 @@ dojox.gfx.attachNode = function(node){
 		case dojox.gfx.Path.nodeType:
 			s = new dojox.gfx.Path();
 			break;
+		/*
 		case dojox.gfx.Circle.nodeType:
 			s = new dojox.gfx.Circle();
 			break;
+		*/
 		case dojox.gfx.Line.nodeType:
 			s = new dojox.gfx.Line();
 			break;
@@ -776,9 +651,11 @@ dojox.gfx.attachNode = function(node){
 	return s;	// dojox.gfx.Shape
 };
 
-dojo.extend(dojox.gfx.Surface, {
+dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	// summary: a surface object to be used for drawings (Silverlight)
-
+	constructor: function(){
+		dojox.gfx.silverlight.Container._init.call(this);
+	},
 	setDimensions: function(width, height){
 		// summary: sets the width and height of the rawNode
 		// width: String: width of surface, e.g., "100px"
@@ -846,9 +723,141 @@ dojox.gfx.attachSurface = function(node){
 	return null;	// dojox.gfx.Surface
 };
 
-dojo.extend(dojox.gfx.Group, dojox.gfx.silverlight._creators);
-dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight._creators);
+// Extenders
 
+dojox.gfx.silverlight.Font = {
+	_setFont: function(){
+		// summary: sets a font object (Silverlight)
+		var f = this.fontStyle, r = this.rawNode,
+			fw = dojox.gfx.silverlight.fontweight,
+			fo = dojox.gfx.silverlight.fonts, t = f.family.toLowerCase();
+		r.fontStyle = f.style == "italic" ? "Italic" : "Normal";
+		r.fontWeight = f.weight in fw ? fw[f.weight] : f.weight;
+		r.fontSize = dojox.gfx.normalizedLength(f.size);
+		r.fontFamily = t in fo ? fo[t] : f.family;
+	},
+	attachFont: function(rawNode){
+		// summary: deduces a font style from a Node.
+		// rawNode: Node: an Silverlight node
+		return null;	// Object
+	}
+};
+
+dojox.gfx.silverlight.Container = {
+	_init: function(){
+		dojox.gfx.shape.Container._init.call(this);
+	},
+	add: function(shape){
+		// summary: adds a shape to a group/surface
+		// shape: dojox.gfx.Shape: an VML shape object
+		if(this != shape.getParent()){
+			//dojox.gfx.Group.superclass.add.apply(this, arguments);
+			//this.inherited(arguments);
+			dojox.gfx.shape.Container.add.apply(this, arguments);
+			this.rawNode.children.add(shape.rawNode);
+		}
+		return this;	// self
+	},
+	remove: function(shape, silently){
+		// summary: remove a shape from a group/surface
+		// shape: dojox.gfx.Shape: an VML shape object
+		// silently: Boolean?: if true, regenerate a picture
+		if(this == shape.getParent()){
+			var parent = shape.rawNode.getParent();
+			if(parent){
+				parent.children.remove(shape.rawNode);
+			}
+			//dojox.gfx.Group.superclass.remove.apply(this, arguments);
+			//this.inherited(arguments);
+			dojox.gfx.shape.Container.remove.apply(this, arguments);
+		}
+		return this;	// self
+	},
+	clear: function(){
+		// summary: removes all shapes from a group/surface
+		this.rawNode.children.clear();
+		//return this.inherited(arguments);	// self
+		return dojox.gfx.shape.Container.clear.apply(this, arguments);
+	},
+	_moveChildToFront: dojox.gfx.shape.Container._moveChildToFront,
+	_moveChildToBack:  dojox.gfx.shape.Container._moveChildToBack
+};
+
+dojox.gfx.silverlight.Creator = {
+	// summary: Silverlight shape creators
+	createPath: function(path){
+		// summary: creates an Silverlight path shape
+		// path: Object: a path object (see dojox.gfx.defaultPath)
+		return this.createObject(dojox.gfx.Path, path);	// dojox.gfx.Path
+	},
+	createRect: function(rect){
+		// summary: creates an Silverlight rectangle shape
+		// rect: Object: a path object (see dojox.gfx.defaultRect)
+		return this.createObject(dojox.gfx.Rect, rect);	// dojox.gfx.Rect
+	},
+	createCircle: function(circle){
+		// summary: creates an Silverlight circle shape
+		// circle: Object: a circle object (see dojox.gfx.defaultCircle)
+		return this.createObject(dojox.gfx.Circle, circle);	// dojox.gfx.Circle
+	},
+	createEllipse: function(ellipse){
+		// summary: creates an Silverlight ellipse shape
+		// ellipse: Object: an ellipse object (see dojox.gfx.defaultEllipse)
+		return this.createObject(dojox.gfx.Ellipse, ellipse);	// dojox.gfx.Ellipse
+	},
+	createLine: function(line){
+		// summary: creates an Silverlight line shape
+		// line: Object: a line object (see dojox.gfx.defaultLine)
+		return this.createObject(dojox.gfx.Line, line);	// dojox.gfx.Line
+	},
+	createPolyline: function(points){
+		// summary: creates an Silverlight polyline/polygon shape
+		// points: Object: a points object (see dojox.gfx.defaultPolyline)
+		//	or an Array of points
+		return this.createObject(dojox.gfx.Polyline, points);	// dojox.gfx.Polyline
+	},
+	createImage: function(image){
+		// summary: creates an Silverlight image shape
+		// image: Object: an image object (see dojox.gfx.defaultImage)
+		return this.createObject(dojox.gfx.Image, image);	// dojox.gfx.Image
+	},
+	createText: function(text){
+		// summary: creates an Silverlight text shape
+		// text: Object: a text object (see dojox.gfx.defaultText)
+		return this.createObject(dojox.gfx.Text, text);	// dojox.gfx.Text
+	},
+	createTextPath: function(text){
+		// summary: creates an Silverlight text shape
+		// text: Object: a textpath object (see dojox.gfx.defaultTextPath)
+		return this.createObject(dojox.gfx.TextPath, {}).setText(text);	// dojox.gfx.TextPath
+	},
+	createGroup: function(){
+		// summary: creates an Silverlight group shape
+		return this.createObject(dojox.gfx.Group);	// dojox.gfx.Group
+	},
+	createObject: function(shapeType, rawShape){
+		// summary: creates an instance of the passed shapeType class
+		// shapeType: Function: a class constructor to create an instance of
+		// rawShape: Object: properties to be passed in to the classes "setShape" method
+		if(!this.rawNode){ return null; }
+		var shape = new shapeType();
+		var node = this.rawNode.getHost().content.createFromXaml("<" + shapeType.nodeType + "/>");
+		shape.setRawNode(node);
+		shape.setShape(rawShape);
+		this.add(shape);
+		return shape;	// dojox.gfx.Shape
+	},
+	createShape: dojox.gfx._createShape
+};
+
+dojo.extend(dojox.gfx.Text, dojox.gfx.silverlight.Font);
+//dojo.extend(dojox.gfx.TextPath, dojox.gfx.silverlight.Font);
+
+dojo.extend(dojox.gfx.Group, dojox.gfx.silverlight.Container);
+dojo.extend(dojox.gfx.Group, dojox.gfx.silverlight.Creator);
+
+dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight.Container);
+dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight.Creator);
 
 (function(){
 	var surfaces = dojox.gfx.silverlight.surfaces;
@@ -911,5 +920,3 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.silverlight._creators);
 	}
 
 })();
-
-

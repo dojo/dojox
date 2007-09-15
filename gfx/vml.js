@@ -233,6 +233,24 @@ dojo.extend(dojox.gfx.Shape, {
 		rawNode.filled  = false;
 		this.rawNode = rawNode;
 	},
+	
+	// move family
+
+	_moveToFront: function(){
+		// summary: moves a shape to front of its parent's list of shapes (VML)
+		this.rawNode.parentNode.appendChild(this.rawNode);
+		return this;
+	},
+	_moveToBack: function(){
+		// summary: moves a shape to back of its parent's list of shapes (VML)
+		var r = this.rawNode, p = r.parentNode, n = p.firstChild;
+		p.insertBefore(r, n);
+		if(n.tagName == "rect"){
+			// surface has a background rectangle, which position should be preserved
+			n.swapNode(r);
+		}
+		return this;
+	},
 
 	// Attach family
 	
@@ -336,45 +354,12 @@ dojo.extend(dojox.gfx.Shape, {
 	}
 });
 
-dojox.gfx.vml._clear = function(){
-	// summary: removes all shapes from a group/surface
-	var r = this.rawNode;
-	while(r.firstChild != r.lastChild){
-		if(r.firstChild != this.bgNode){
-			r.removeChild(r.firstChild);
-		}
-		if(r.lastChild != this.bgNode){
-			r.removeChild(r.lastChild);
-		}
-	}
-	return this;	// self
-};
-
-dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
+dojo.declare("dojox.gfx.Group", dojox.gfx.Shape, {
 	// summary: a group shape (VML), which can be used 
 	//	to logically group shapes (e.g, to propagate matricies)
-	add: function(shape){
-		// summary: adds a shape to a group/surface
-		// shape: dojox.gfx.Shape: an VML shape object
-		if(this != shape.getParent()){
-			this.rawNode.appendChild(shape.rawNode);
-			dojox.gfx.Group.superclass.add.apply(this, arguments);
-		}
-		return this;	// self
+	constructor: function(){
+		dojox.gfx.vml.Container._init.call(this);
 	},
-	remove: function(shape, silently){
-		// summary: remove a shape from a group/surface
-		// shape: dojox.gfx.Shape: an VML shape object
-		// silently: Boolean?: if true, regenerate a picture
-		if(this == shape.getParent()){
-			if(this.rawNode == shape.rawNode.parentNode){
-				this.rawNode.removeChild(shape.rawNode);
-			}
-			dojox.gfx.Group.superclass.remove.apply(this, arguments);
-		}
-		return this;	// self
-	},
-	clear: dojox.gfx.vml._clear,
 	attach: function(rawNode){
 		// summary: reconstructs all group shape parameters from a Node (VML).
 		// rawNode: Node: a node
@@ -387,30 +372,18 @@ dojo.declare("dojox.gfx.Group", dojox.gfx.shape.VirtualGroup, {
 			// attach the background
 			this.bgNode = rawNode.firstChild;	// TODO: check it first
 		}
+	},
+	// apply transformation
+	_applyTransform: function(){
+		// summary: applies a transformation matrix to a group
+		var matrix = this._getRealMatrix();
+		for(var i = 0; i < this.children.length; ++i){
+			this.children[i]._updateParentMatrix(matrix);
+		}
+		return this;	// self
 	}
 });
 dojox.gfx.Group.nodeType = "group";
-
-var zIndex = {
-	moveToFront: function(){
-		// summary: moves a shape to front of its parent's list of shapes (VML)
-		this.rawNode.parentNode.appendChild(this.rawNode);
-		return this;
-	},
-	moveToBack: function(){
-		// summary: moves a shape to back of its parent's list of shapes (VML)
-		var r = this.rawNode, p = r.parentNode, n = p.firstChild;
-		p.insertBefore(r, n);
-		if(n.tagName == "rect"){
-			// surface has a background rectangle, which position should be preserved
-			n.swapNode(r);
-		}
-		return this;
-	}
-};
-dojo.extend(dojox.gfx.Shape, zIndex);
-dojo.extend(dojox.gfx.Group, zIndex);
-delete zIndex;
 
 dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 	// summary: a rectangle shape (VML)
@@ -1360,8 +1333,180 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path, {
 });
 dojox.gfx.TextPath.nodeType = "shape";
 
+dojox.gfx.attachNode = function(node){
+	// summary: creates a shape from a Node
+	// node: Node: an VML node
+	if(!node) return null;
+	var s = null;
+	switch(node.tagName.toLowerCase()){
+		case dojox.gfx.Rect.nodeType:
+			s = new dojox.gfx.Rect();
+			break;
+		case dojox.gfx.Ellipse.nodeType:
+			s = (node.style.width == node.style.height)
+				? new dojox.gfx.Circle()
+				: new dojox.gfx.Ellipse();
+			break;
+		case dojox.gfx.Path.nodeType:
+			switch(node.getAttribute("dojoGfxType")){
+				case "line":
+					s = new dojox.gfx.Line();
+					break;
+				case "polyline":
+					s = new dojox.gfx.Polyline();
+					break;
+				case "path":
+					s = new dojox.gfx.Path();
+					break;
+				case "text":
+					s = new dojox.gfx.Text();
+					break;
+				case "textpath":
+					s = new dojox.gfx.TextPath();
+					break;
+			}
+			break;
+		case dojox.gfx.Image.nodeType:
+			switch(node.getAttribute("dojoGfxType")){
+				case "image":
+					s = new dojox.gfx.Image();
+					break;
+			}
+			break;
+		default:
+			//console.debug("FATAL ERROR! tagName = " + node.tagName);
+			return null;	// dojox.gfx.Shape
+	}
+	s.attach(node);
+	return s;	// dojox.gfx.Shape
+};
 
-dojox.gfx.vml._creators = {
+dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
+	// summary: a surface object to be used for drawings (VML)
+	constructor: function(){
+		dojox.gfx.vml.Container._init.call(this);
+	},
+	setDimensions: function(width, height){
+		// summary: sets the width and height of the rawNode
+		// width: String: width of surface, e.g., "100px"
+		// height: String: height of surface, e.g., "100px"
+		if(!this.rawNode) return this;
+		this.rawNode.style.width = width;
+		this.rawNode.style.height = height;
+		this.rawNode.coordsize = width + " " + height;
+		this.bgNode.style.width = width;
+		this.bgNode.style.height = height;
+		return this;	// self
+	},
+	getDimensions: function(){
+		// summary: returns an object with properties "width" and "height"
+		return this.rawNode ? { width: this.rawNode.style.width, height: this.rawNode.style.height } : null; // Object
+	}
+});
+
+dojox.gfx.createSurface = function(parentNode, width, height){
+	// summary: creates a surface (VML)
+	// parentNode: Node: a parent node
+	// width: String: width of surface, e.g., "100px"
+	// height: String: height of surface, e.g., "100px"
+
+	if(!width){ width = "100%"; }
+	if(!height){ height = "100%"; }
+	var s = new dojox.gfx.Surface(), p = dojo.byId(parentNode),
+		c = s.clipNode = p.ownerDocument.createElement("div"),
+		r = s.rawNode = p.ownerDocument.createElement("v:group"),
+		cs = c.style, rs = r.style;
+		
+	p.style.width  = width;
+	p.style.height = height;
+		
+	cs.width  = width;
+	cs.height = height;
+	cs.clip = "rect(0 " + width + " " + height + " 0)";
+	cs.position = "absolute";
+	rs.width  = width;
+	rs.height = height;
+	r.coordsize = (width == "100%" ? width : parseFloat(width)) + " " +
+		(height == "100%" ? height : parseFloat(height));
+	r.coordorigin = "0 0";
+	
+	// create a background rectangle, which is required to show all other shapes
+	var b = s.bgNode = r.ownerDocument.createElement("v:rect"), bs = b.style;
+	bs.left = bs.top = 0;
+	bs.width  = rs.width;
+	bs.height = rs.height;
+	b.filled = b.stroked = false;
+
+	r.appendChild(b);
+	c.appendChild(r);
+	p.appendChild(c);
+	return s;	// dojox.gfx.Surface
+};
+
+dojox.gfx.attachSurface = function(node){
+	// summary: creates a surface from a Node
+	// node: Node: an VML node
+	var s = new dojox.gfx.Surface();
+	s.clipNode = node;
+	var r = s.rawNode = node.firstChild;
+	var b = r.firstChild;
+	if(!b || b.tagName != "rect"){
+		return null;	// dojox.gfx.Surface
+	}
+	s.bgNode = r;
+	return s;	// dojox.gfx.Surface
+};
+
+// Extenders
+
+dojox.gfx.vml.Container = {
+	_init: function(){
+		dojox.gfx.shape.Container._init.call(this);
+	},
+	add: function(shape){
+		// summary: adds a shape to a group/surface
+		// shape: dojox.gfx.Shape: an VML shape object
+		if(this != shape.getParent()){
+			this.rawNode.appendChild(shape.rawNode);
+			//dojox.gfx.Group.superclass.add.apply(this, arguments);
+			//this.inherited(arguments);
+			dojox.gfx.shape.Container.add.apply(this, arguments);
+		}
+		return this;	// self
+	},
+	remove: function(shape, silently){
+		// summary: remove a shape from a group/surface
+		// shape: dojox.gfx.Shape: an VML shape object
+		// silently: Boolean?: if true, regenerate a picture
+		if(this == shape.getParent()){
+			if(this.rawNode == shape.rawNode.parentNode){
+				this.rawNode.removeChild(shape.rawNode);
+			}
+			//dojox.gfx.Group.superclass.remove.apply(this, arguments);
+			//this.inherited(arguments);
+			dojox.gfx.shape.Container.remove.apply(this, arguments);
+		}
+		return this;	// self
+	},
+	clear: function(){
+		// summary: removes all shapes from a group/surface
+		var r = this.rawNode;
+		while(r.firstChild != r.lastChild){
+			if(r.firstChild != this.bgNode){
+				r.removeChild(r.firstChild);
+			}
+			if(r.lastChild != this.bgNode){
+				r.removeChild(r.lastChild);
+			}
+		}
+		//return this.inherited(arguments);	// self
+		return dojox.gfx.shape.Container.clear.apply(this, arguments);
+	},
+	_moveChildToFront: dojox.gfx.shape.Container._moveChildToFront,
+	_moveChildToBack:  dojox.gfx.shape.Container._moveChildToBack
+};
+
+dojox.gfx.vml.Creator = {
 	// summary: VML shape creators
 	createPath: function(path){
 		// summary: creates a VML path shape
@@ -1456,156 +1601,8 @@ dojox.gfx.vml._creators = {
 	}
 };
 
-dojo.extend(dojox.gfx.Group, dojox.gfx.vml._creators);
-dojo.extend(dojox.gfx.Surface, dojox.gfx.vml._creators);
+dojo.extend(dojox.gfx.Group, dojox.gfx.vml.Container);
+dojo.extend(dojox.gfx.Group, dojox.gfx.vml.Creator);
 
-delete dojox.gfx.vml._creators;
-
-dojox.gfx.attachNode = function(node){
-	// summary: creates a shape from a Node
-	// node: Node: an VML node
-	if(!node) return null;
-	var s = null;
-	switch(node.tagName.toLowerCase()){
-		case dojox.gfx.Rect.nodeType:
-			s = new dojox.gfx.Rect();
-			break;
-		case dojox.gfx.Ellipse.nodeType:
-			s = (node.style.width == node.style.height)
-				? new dojox.gfx.Circle()
-				: new dojox.gfx.Ellipse();
-			break;
-		case dojox.gfx.Path.nodeType:
-			switch(node.getAttribute("dojoGfxType")){
-				case "line":
-					s = new dojox.gfx.Line();
-					break;
-				case "polyline":
-					s = new dojox.gfx.Polyline();
-					break;
-				case "path":
-					s = new dojox.gfx.Path();
-					break;
-				case "text":
-					s = new dojox.gfx.Text();
-					break;
-				case "textpath":
-					s = new dojox.gfx.TextPath();
-					break;
-			}
-			break;
-		case dojox.gfx.Image.nodeType:
-			switch(node.getAttribute("dojoGfxType")){
-				case "image":
-					s = new dojox.gfx.Image();
-					break;
-			}
-			break;
-		default:
-			//console.debug("FATAL ERROR! tagName = " + node.tagName);
-			return null;	// dojox.gfx.Shape
-	}
-	s.attach(node);
-	return s;	// dojox.gfx.Shape
-};
-
-dojo.extend(dojox.gfx.Surface, {
-	// summary: a surface object to be used for drawings (VML)
-
-	setDimensions: function(width, height){
-		// summary: sets the width and height of the rawNode
-		// width: String: width of surface, e.g., "100px"
-		// height: String: height of surface, e.g., "100px"
-		if(!this.rawNode) return this;
-		this.rawNode.style.width = width;
-		this.rawNode.style.height = height;
-		this.rawNode.coordsize = width + " " + height;
-		this.bgNode.style.width = width;
-		this.bgNode.style.height = height;
-		return this;	// self
-	},
-	getDimensions: function(){
-		// summary: returns an object with properties "width" and "height"
-		return this.rawNode ? { width: this.rawNode.style.width, height: this.rawNode.style.height } : null; // Object
-	},
-	// group control
-	add: function(shape){
-		// summary: adds a shape to a group/surface
-		// shape: dojox.gfx.Shape: an VMLshape object
-		var oldParent = shape.getParent();
-		if(this != oldParent){
-			this.rawNode.appendChild(shape.rawNode);
-			if(oldParent){
-				oldParent.remove(shape, true);
-			}
-			shape._setParent(this, null);
-		}
-		return this;	// self
-	},
-	remove: function(shape, silently){
-		// summary: remove a shape from a group/surface
-		// shape: dojox.gfx.Shape: an VML shape object
-		// silently: Boolean?: if true, regenerate a picture
-		if(this == shape.getParent()){
-			if(this.rawNode == shape.rawNode.parentNode){
-				this.rawNode.removeChild(shape.rawNode);
-			}
-			shape._setParent(null, null);
-		}
-		return this;	// self
-	},
-	clear: dojox.gfx.vml._clear
-});
-
-dojox.gfx.createSurface = function(parentNode, width, height){
-	// summary: creates a surface (VML)
-	// parentNode: Node: a parent node
-	// width: String: width of surface, e.g., "100px"
-	// height: String: height of surface, e.g., "100px"
-
-	if(!width){ width = "100%"; }
-	if(!height){ height = "100%"; }
-	var s = new dojox.gfx.Surface(), p = dojo.byId(parentNode),
-		c = s.clipNode = p.ownerDocument.createElement("div"),
-		r = s.rawNode = p.ownerDocument.createElement("v:group"),
-		cs = c.style, rs = r.style;
-		
-	p.style.width  = width;
-	p.style.height = height;
-		
-	cs.width  = width;
-	cs.height = height;
-	cs.clip = "rect(0 " + width + " " + height + " 0)";
-	cs.position = "absolute";
-	rs.width  = width;
-	rs.height = height;
-	r.coordsize = (width == "100%" ? width : parseFloat(width)) + " " +
-		(height == "100%" ? height : parseFloat(height));
-	r.coordorigin = "0 0";
-	
-	// create a background rectangle, which is required to show all other shapes
-	var b = s.bgNode = r.ownerDocument.createElement("v:rect"), bs = b.style;
-	bs.left = bs.top = 0;
-	bs.width  = rs.width;
-	bs.height = rs.height;
-	b.filled = b.stroked = false;
-
-	r.appendChild(b);
-	c.appendChild(r);
-	p.appendChild(c);
-	return s;	// dojox.gfx.Surface
-};
-
-dojox.gfx.attachSurface = function(node){
-	// summary: creates a surface from a Node
-	// node: Node: an VML node
-	var s = new dojox.gfx.Surface();
-	s.clipNode = node;
-	var r = s.rawNode = node.firstChild;
-	var b = r.firstChild;
-	if(!b || b.tagName != "rect"){
-		return null;	// dojox.gfx.Surface
-	}
-	s.bgNode = r;
-	return s;	// dojox.gfx.Surface
-};
+dojo.extend(dojox.gfx.Surface, dojox.gfx.vml.Container);
+dojo.extend(dojox.gfx.Surface, dojox.gfx.vml.Creator);

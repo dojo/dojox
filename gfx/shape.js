@@ -156,12 +156,20 @@ dojo.declare("dojox.gfx.Shape", null, {
 	
 	moveToFront: function(){
 		// summary: moves a shape to front of its parent's list of shapes
-		//	(the default implementation does nothing)
+		var p = this.getParent();
+		if(p){
+			p._moveChildToFront(this);
+			this._moveToFront();	// execute renderer-specific action
+		}
 		return this;	// self
 	},
 	moveToBack: function(){
 		// summary: moves a shape to back of its parent's list of shapes
-		//	(the default implementation does nothing)
+		var p = this.getParent();
+		if(p){
+			p._moveChildToBack(this);
+			this._moveToBack();	// execute renderer-specific action
+		}
 		return this;
 	},
 
@@ -235,14 +243,26 @@ dojo.declare("dojox.gfx.Shape", null, {
 		return this.parentMatrix ? new dojox.gfx.matrix.Matrix2D([this.parentMatrix, this.matrix]) : this.matrix;	// dojox.gfx.Matrix2D
 	}
 });
-dojo.extend(dojox.gfx.Shape, dojox.gfx._eventsProcessing);
 
-dojo.declare("dojox.gfx.shape.VirtualGroup", dojox.gfx.Shape, {
-	// summary: a virtual group of shapes, which can be used 
+dojox.gfx.shape._eventsProcessing = {
+	connect: function(name, object, method){
+		return arguments.length > 2 ? 
+			dojo.connect(this.getEventSource(), name, object, method) :
+			dojo.connect(this.getEventSource(), name, object);
+	},
+	disconnect: function(token){
+		dojo.disconnect(token);
+	}
+};
+
+dojo.extend(dojox.gfx.Shape, dojox.gfx.shape._eventsProcessing);
+
+dojox.gfx.shape.Container = {
+	// summary: a container of shapes, which can be used 
 	//	as a foundation for renderer-specific groups, or as a way 
 	//	to logically group shapes (e.g, to propagate matricies)
 	
-	constructor: function() {
+	_init: function() {
 		// children: Array: a list of children
 		this.children = [];
 	},
@@ -281,16 +301,60 @@ dojo.declare("dojox.gfx.shape.VirtualGroup", dojox.gfx.Shape, {
 		return this;
 	},
 	
-	// apply transformation
+	// moving child nodes
 	
-	_applyTransform: function(){
-		// summary: applies a transformation matrix to a group
-		var matrix = this._getRealMatrix();
+	_moveChildToFront: function(shape){
+		// summary: moves a shape to front of the list of shapes
 		for(var i = 0; i < this.children.length; ++i){
-			this.children[i]._updateParentMatrix(matrix);
+			if(this.children[i] == shape){
+				this.children.splice(i, 1);
+				this.children.push(shape);
+				break;
+			}
 		}
-		return this;	// self
+		return this;
+	},
+	_moveChildToBack: function(shape){
+		// summary: moves a shape to back of the list of shapes
+		for(var i = 0; i < this.children.length; ++i){
+			if(this.children[i] == shape){
+				this.children.splice(i, 1);
+				this.children.unshift(shape);
+				break;
+			}
+		}
+		return this;
 	}
+};
+
+dojo.declare("dojox.gfx.shape.Surface", null, {
+	// summary: a surface object to be used for drawings
+	constructor: function(){
+		// underlying node
+		this.rawNode = null;
+	},
+	getEventSource: function(){
+		// summary: returns a node, which can be used to attach event listeners
+		return this.rawNode; // Node
+	},
+	_getRealMatrix: function(){
+		// summary: always returns the identity matrix
+		return null;	// dojox.gfx.Matrix2D
+	}
+});
+
+dojo.extend(dojox.gfx.shape.Surface, dojox.gfx.shape._eventsProcessing);
+
+dojo.declare("dojox.gfx.Point", null, {
+	// summary: a hypothetical 2D point to be used for drawings - {x, y}
+	// description: This object is defined for documentation purposes.
+	//	You should use the naked object instead: {x: 1, y: 2}.
+});
+
+dojo.declare("dojox.gfx.Rectangle", null, {
+	// summary: a hypothetical rectangle - {x, y, width, height}
+	// description: This object is defined for documentation purposes.
+	//	You should use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
 });
 
 dojo.declare("dojox.gfx.shape.Rect", dojox.gfx.Shape, {
