@@ -229,44 +229,6 @@ dojo.extend(dojox.gfx.Shape, {
 		return this;	// self
 	},
 	
-	// attach family
-	
-	attachFill: function(rawNode){
-		// summary: deduces a fill style from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// Object
-	},
-	
-	attachStroke: function(rawNode){
-		// summary: deduces a stroke style from a Node.
-		// rawNode: Node: an SVG node
-		return null;	// Object
-	},
-
-	attachTransform: function(rawNode){
-		// summary: deduces a transformation matrix from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.matrix.Matrix
-	},
-	
-	attachShape: function(rawNode){
-		// summary: builds a shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Shape
-	},
-
-	attach: function(rawNode){
-		// summary: reconstructs all shape parameters from a Node.
-		// rawNode: Node: an Silverlight node
-		if(rawNode) {
-			this.rawNode = rawNode;
-			this.fillStyle = this.attachFill(rawNode);
-			this.strokeStyle = this.attachStroke(rawNode);
-			this.matrix = this.attachTransform(rawNode);
-			this.shape = this.attachShape(rawNode);
-		}
-	},
-	
 	_getRealMatrix: function(){
 		var m = this.matrix, p = this.parent, mm = dojox.gfx.matrix.multiply;
 		while(p){
@@ -295,12 +257,6 @@ dojox.gfx.Group.nodeType = "Canvas";
 
 dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 	// summary: a rectangle shape (Silverlight)
-
-	attachShape: function(rawNode){
-		// summary: builds a rectangle shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Rect
-	},
 	setShape: function(newShape){
 		// summary: sets a rectangle shape object (Silverlight)
 		// newShape: Object: a rectangle shape object
@@ -319,12 +275,6 @@ dojox.gfx.Rect.nodeType = "Rectangle";
 
 dojo.declare("dojox.gfx.Ellipse", dojox.gfx.shape.Ellipse, {
 	// summary: an ellipse shape (Silverlight)
-
-	attachShape: function(rawNode){
-		// summary: builds a rectangle shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Ellipse
-	},
 	setShape: function(newShape){
 		// summary: sets an ellipse shape object (Silverlight)
 		// newShape: Object: an ellipse shape object
@@ -342,12 +292,6 @@ dojox.gfx.Ellipse.nodeType = "Ellipse";
 
 dojo.declare("dojox.gfx.Circle", dojox.gfx.shape.Circle, {
 	// summary: a circle shape (Silverlight)
-
-	attachShape: function(rawNode){
-		// summary: builds a circle shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Circle
-	},
 	setShape: function(newShape){
 		// summary: sets a circle shape object (Silverlight)
 		// newShape: Object: a circle shape object
@@ -364,12 +308,6 @@ dojox.gfx.Circle.nodeType = "Ellipse";
 
 dojo.declare("dojox.gfx.Line", dojox.gfx.shape.Line, {
 	// summary: a line shape (Silverlight)
-
-	attachShape: function(rawNode){
-		// summary: builds a line shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Line
-	},
 	setShape: function(newShape){
 		// summary: sets a line shape object (Silverlight)
 		// newShape: Object: a line shape object
@@ -384,12 +322,6 @@ dojox.gfx.Line.nodeType = "Line";
 
 dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 	// summary: a polyline/polygon shape (Silverlight)
-	
-	attachShape: function(rawNode){
-		// summary: builds a polyline shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Polyline
-	},
 	setShape: function(points, closed){
 		// summary: sets a polyline/polygon shape object (Silverlight)
 		// points: Object: a polyline/polygon shape object
@@ -420,12 +352,6 @@ dojox.gfx.Polyline.nodeType = "Polyline";
 
 dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 	// summary: an image (Silverlight)
-
-	attachShape: function(rawNode){
-		// summary: builds an image shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Image
-	},
 	setShape: function(newShape){
 		// summary: sets an image shape object (Silverlight)
 		// newShape: Object: an image shape object
@@ -453,26 +379,12 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		//	shape. Once set, transforms, gradients, etc, can be applied.
 		//	(no fill & stroke by default)
 		this.rawNode = rawNode;
-	},
-	attachStroke: function(rawNode){
-		// summary: ignore attaching a stroke style
-		return null;
-	},
-	attachFill: function(rawNode){
-		// summary: ignore attaching a fill style
-		return null;
 	}
 });
 dojox.gfx.Image.nodeType = "Image";
 
 dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	// summary: an anchored text (Silverlight)
-
-	attachShape: function(rawNode){
-		// summary: builds a text shape from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// dojox.gfx.Text
-	},
 	setShape: function(newShape){
 		// summary: sets a text shape object (Silverlight)
 		// newShape: Object: a text shape object
@@ -537,14 +449,6 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		}
 		return this;
 	},
-	attach: function(rawNode){
-		// summary: reconstructs all shape parameters from a Node.
-		// rawNode: Node: an Silverlight node
-		dojox.gfx.Shape.prototype.attach.call(this, rawNode);
-		if(rawNode) {
-			this.fontStyle = this.attachFont(rawNode);
-		}
-	},
 	getTextWidth: function(){ 
 		// summary: get the text width in pixels 
 		return this.rawNode.actualWidth; 
@@ -554,7 +458,6 @@ dojox.gfx.Text.nodeType = "TextBlock";
 
 dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 	// summary: a path shape (Silverlight)
-
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
@@ -577,7 +480,6 @@ dojox.gfx.Path.nodeType = "Path";
 
 dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 	// summary: a textpath shape (Silverlight)
-
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
@@ -587,69 +489,9 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 		// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
 	},
 	_setText: function(){
-	},
-	attachText: function(rawNode){
-		// summary: builds a textpath shape from a Node.
-		// rawNode: Node: an SVG node
-		return null;	// dojox.gfx.TextPath
-	},
-	attach: function(rawNode){
-		// summary: reconstructs all shape parameters from a Node.
-		// rawNode: Node: an SVG node
-		dojox.gfx.Shape.prototype.attach.call(this, rawNode);
-		if(rawNode) {
-			this.fontStyle = this.attachFont(rawNode);
-			this.text = this.attachText(rawNode);
-		}
 	}
 });
 dojox.gfx.TextPath.nodeType = "text";
-
-dojox.gfx.attachNode = function(node){
-	// summary: creates a shape from a Node
-	// node: Node: an Silverlight node
-	return null;	// for now
-	if(!node) return null;
-	var s = null;
-	switch(node.tagName.toLowerCase()){
-		case dojox.gfx.Rect.nodeType:
-			s = new dojox.gfx.Rect();
-			break;
-		case dojox.gfx.Ellipse.nodeType:
-			s = new dojox.gfx.Ellipse();
-			break;
-		case dojox.gfx.Polyline.nodeType:
-			s = new dojox.gfx.Polyline();
-			break;
-		case dojox.gfx.Path.nodeType:
-			s = new dojox.gfx.Path();
-			break;
-		/*
-		case dojox.gfx.Circle.nodeType:
-			s = new dojox.gfx.Circle();
-			break;
-		*/
-		case dojox.gfx.Line.nodeType:
-			s = new dojox.gfx.Line();
-			break;
-		case dojox.gfx.Image.nodeType:
-			s = new dojox.gfx.Image();
-			break;
-		case dojox.gfx.Text.nodeType:
-			var t = node.getElementsByTagName("textPath");
-			if(t && t.length){
-				s = new dojox.gfx.TextPath();
-			}else{
-				s = new dojox.gfx.Text();
-			}
-			break;
-		default:
-			console.debug("FATAL ERROR! tagName = " + node.tagName);
-			return null;
-	}
-	s.attach(node);
-	return s;	// dojox.gfx.Shape
-};
 
 dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	// summary: a surface object to be used for drawings (Silverlight)
@@ -717,12 +559,6 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	return s;	// dojox.gfx.Surface
 };
 
-dojox.gfx.attachSurface = function(node){
-	// summary: creates a surface from a Node
-	// node: Node: an Silverlight node
-	return null;	// dojox.gfx.Surface
-};
-
 // Extenders
 
 dojox.gfx.silverlight.Font = {
@@ -735,11 +571,6 @@ dojox.gfx.silverlight.Font = {
 		r.fontWeight = f.weight in fw ? fw[f.weight] : f.weight;
 		r.fontSize = dojox.gfx.normalizedLength(f.size);
 		r.fontFamily = t in fo ? fo[t] : f.family;
-	},
-	attachFont: function(rawNode){
-		// summary: deduces a font style from a Node.
-		// rawNode: Node: an Silverlight node
-		return null;	// Object
 	}
 };
 

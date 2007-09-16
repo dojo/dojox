@@ -230,17 +230,15 @@ dojo.extend(dojox.gfx.Shape, {
 		//	assigns and clears the underlying node that will represent this
 		//	shape. Once set, transforms, gradients, etc, can be applied.
 		//	(no fill & stroke by default)
-		with(rawNode){
-			setAttribute("fill", "none");
-			setAttribute("fill-opacity", 0);
-			setAttribute("stroke", "none");
-			setAttribute("stroke-opacity", 0);
-			setAttribute("stroke-width", 1);
-			setAttribute("stroke-linecap", "butt");
-			setAttribute("stroke-linejoin", "miter");
-			setAttribute("stroke-miterlimit", 4);
-		}
-		this.rawNode = rawNode;
+		var r = this.rawNode = rawNode;
+		r.setAttribute("fill", "none");
+		r.setAttribute("fill-opacity", 0);
+		r.setAttribute("stroke", "none");
+		r.setAttribute("stroke-opacity", 0);
+		r.setAttribute("stroke-width", 1);
+		r.setAttribute("stroke-linecap", "butt");
+		r.setAttribute("stroke-linejoin", "miter");
+		r.setAttribute("stroke-miterlimit", 4);
 	},
 	
 	setShape: function(newShape){
@@ -273,128 +271,6 @@ dojo.extend(dojox.gfx.Shape, {
 		return this;	// self
 	},
 	
-	// attach family
-	
-	attachFill: function(rawNode){
-		// summary: deduces a fill style from a Node.
-		// rawNode: Node: an SVG node
-		var fillStyle = null;
-		if(rawNode){
-			var fill = rawNode.getAttribute("fill");
-			if(fill == "none"){ return null; }
-			var ref  = dojox.gfx.svg.getRef(fill);
-			if(ref){
-				var gradient = ref;
-				switch(gradient.tagName.toLowerCase()){
-					case "lineargradient":
-						fillStyle = this._getGradient(dojox.gfx.defaultLinearGradient, gradient);
-						dojo.forEach(["x1", "y1", "x2", "y2"], function(x){
-							fillStyle[x] = gradient.getAttribute(x);
-						});
-						break;
-					case "radialgradient":
-						fillStyle = this._getGradient(dojox.gfx.defaultRadialGradient, gradient);
-						dojo.forEach(["cx", "cy", "r"], function(x){
-							fillStyle[x] = gradient.getAttribute(x);
-						});
-						fillStyle.cx = gradient.getAttribute("cx");
-						fillStyle.cy = gradient.getAttribute("cy");
-						fillStyle.r  = gradient.getAttribute("r");
-						break;
-					case "pattern":
-						fillStyle = dojo.lang.shallowCopy(dojox.gfx.defaultPattern, true);
-						dojo.forEach(["x", "y", "width", "height"], function(x){
-							fillStyle[x] = gradient.getAttribute(x);
-						});
-						fillStyle.src = gradient.firstChild.getAttributeNS(dojox.gfx.svg.xmlns.xlink, "href");
-						break;
-				}
-			}else{
-				fillStyle = new dojo.Color(fill);
-				var opacity = rawNode.getAttribute("fill-opacity");
-				if(opacity != null) fillStyle.a = opacity;
-			}
-		}
-		return fillStyle;	// Object
-	},
-	
-	_getGradient: function(defaultGradient, gradient){
-		var fillStyle = dojo.clone(defaultGradient);
-		fillStyle.colors = [];
-		for(var i = 0; i < gradient.childNodes.length; ++i){
-			fillStyle.colors.push({
-				offset: gradient.childNodes[i].getAttribute("offset"),
-				color:  new dojo.Color(gradient.childNodes[i].getAttribute("stop-color"))
-			});
-		}
-		return fillStyle;
-	},
-
-	attachStroke: function(rawNode){
-		// summary: deduces a stroke style from a Node.
-		// rawNode: Node: an SVG node
-		if(!rawNode){ return null; }
-		var stroke = rawNode.getAttribute("stroke");
-		if(stroke == null || stroke == "none") return null;
-		var strokeStyle = dojo.clone(dojox.gfx.defaultStroke);
-		var color = new dojo.Color(stroke);
-		if(color){
-			strokeStyle.color = color;
-			strokeStyle.color.a = rawNode.getAttribute("stroke-opacity");
-			strokeStyle.width = rawNode.getAttribute("stroke-width");
-			strokeStyle.cap = rawNode.getAttribute("stroke-linecap");
-			strokeStyle.join = rawNode.getAttribute("stroke-linejoin");
-			if(strokeStyle.join == "miter"){
-				strokeStyle.join = rawNode.getAttribute("stroke-miterlimit");
-			}
-			strokeStyle.style = rawNode.getAttribute("dojoGfxStrokeStyle");
-		}
-		return strokeStyle;	// Object
-	},
-
-	attachTransform: function(rawNode){
-		// summary: deduces a transformation matrix from a Node.
-		// rawNode: Node: an SVG node
-		var matrix = null;
-		if(rawNode){
-			matrix = rawNode.getAttribute("transform");
-			if(matrix.match(/^matrix\(.+\)$/)){
-				var t = matrix.slice(7, -1).split(",");
-				matrix = dojox.gfx.matrix.normalize({
-					xx: parseFloat(t[0]), xy: parseFloat(t[2]), 
-					yx: parseFloat(t[1]), yy: parseFloat(t[3]), 
-					dx: parseFloat(t[4]), dy: parseFloat(t[5])
-				});
-			}
-		}
-		return matrix;	// dojox.gfx.matrix.Matrix
-	},
-	
-	attachShape: function(rawNode){
-		// summary: builds a shape from a Node.
-		// rawNode: Node: an SVG node
-		var shape = null;
-		if(rawNode){
-			shape = dojo.clone(this.shape);
-			for(var i in shape) {
-				shape[i] = rawNode.getAttribute(i);
-			}
-		}
-		return shape;	// dojox.gfx.Shape
-	},
-
-	attach: function(rawNode){
-		// summary: reconstructs all shape parameters from a Node.
-		// rawNode: Node: an SVG node
-		if(rawNode) {
-			this.rawNode = rawNode;
-			this.fillStyle = this.attachFill(rawNode);
-			this.strokeStyle = this.attachStroke(rawNode);
-			this.matrix = this.attachTransform(rawNode);
-			this.shape = this.attachShape(rawNode);
-		}
-	},
-	
 	_getRealMatrix: function(){
 		var m = this.matrix;
 		var p = this.parent;
@@ -424,17 +300,6 @@ dojox.gfx.Group.nodeType = "g";
 
 dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 	// summary: a rectangle shape (SVG)
-
-	attachShape: function(rawNode){
-		// summary: builds a rectangle shape from a Node.
-		// rawNode: Node: an SVG node
-		var shape = null;
-		if(rawNode){
-			shape = dojox.gfx.Rect.superclass.attachShape.apply(this, arguments);
-			shape.r = Math.min(rawNode.getAttribute("rx"), rawNode.getAttribute("ry"));
-		}
-		return shape;	// dojox.gfx.shape.Rect
-	},
 	setShape: function(newShape){
 		// summary: sets a rectangle shape object (SVG)
 		// newShape: Object: a rectangle shape object
@@ -463,7 +328,6 @@ dojox.gfx.Line.nodeType = "line";
 
 dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 	// summary: a polyline/polygon shape (SVG)
-	
 	setShape: function(points, closed){
 		// summary: sets a polyline/polygon shape object (SVG)
 		// points: Object: a polyline/polygon shape object
@@ -496,7 +360,6 @@ dojox.gfx.Polyline.nodeType = "polyline";
 
 dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 	// summary: an image (SVG)
-
 	setShape: function(newShape){
 		// summary: sets an image shape object (SVG)
 		// newShape: Object: an image shape object
@@ -516,37 +379,12 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 	setFill: function(){
 		// summary: ignore setting a fill style
 		return this;	// self
-	},
-	attachStroke: function(rawNode){
-		// summary: ignore attaching a stroke style
-		return null;
-	},
-	attachFill: function(rawNode){
-		// summary: ignore attaching a fill style
-		return null;
 	}
 });
 dojox.gfx.Image.nodeType = "image";
 
 dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	// summary: an anchored text (SVG)
-
-	attachShape: function(rawNode){
-		// summary: builds a text shape from a Node.
-		// rawNode: Node: an SVG node
-		var shape = null;
-		if(rawNode){
-			shape = dojo.clone(dojox.gfx.defaultText);
-			shape.x = rawNode.getAttribute("x");
-			shape.y = rawNode.getAttribute("y");
-			shape.align = rawNode.getAttribute("text-anchor");
-			shape.decoration = rawNode.getAttribute("text-decoration");
-			shape.rotated = parseFloat(rawNode.getAttribute("rotate")) != 0;
-			shape.kerning = rawNode.getAttribute("kerning") == "auto";
-			shape.text = rawNode.firstChild.nodeValue;
-		}
-		return shape;	// dojox.gfx.shape.Text
-	},
 	setShape: function(newShape){
 		// summary: sets a text shape object (SVG)
 		// newShape: Object: a text shape object
@@ -562,14 +400,6 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		r.setAttribute("kerning", s.kerning ? "auto" : 0);
 		r.textContent = s.text;
 		return this;	// self
-	},
-	attach: function(rawNode){
-		// summary: reconstructs all shape parameters from a Node.
-		// rawNode: Node: an SVG node
-		dojox.gfx.Shape.prototype.attach.call(this, rawNode);
-		if(rawNode) {
-			this.fontStyle = this.attachFont(rawNode);
-		}
 	},
 	getTextWidth: function(){ 
 		// summary: get the text width in pixels 
@@ -598,7 +428,6 @@ dojox.gfx.Text.nodeType = "text";
 
 dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 	// summary: a path shape (SVG)
-
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
@@ -619,7 +448,6 @@ dojox.gfx.Path.nodeType = "path";
 
 dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 	// summary: a textpath shape (SVG)
-
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
@@ -691,75 +519,9 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 		r.setAttribute("rotate", t.rotated ? 90 : 0);
 		r.setAttribute("kerning", t.kerning ? "auto" : 0);
 		r.firstChild.data = t.text;
-	},
-	attachText: function(rawNode){
-		// summary: builds a textpath shape from a Node.
-		// rawNode: Node: an SVG node
-		var shape = null;
-		if(rawNode){
-			shape = dojo.clone(dojox.gfx.defaultTextPath);
-			shape.align = rawNode.getAttribute("text-anchor");
-			shape.decoration = rawNode.getAttribute("text-decoration");
-			shape.rotated = parseFloat(rawNode.getAttribute("rotate")) != 0;
-			shape.kerning = rawNode.getAttribute("kerning") == "auto";
-			shape.text = rawNode.firstChild.nodeValue;
-		}
-		return shape;	// dojox.gfx.shape.TextPath
-	},
-	attach: function(rawNode){
-		// summary: reconstructs all shape parameters from a Node.
-		// rawNode: Node: an SVG node
-		dojox.gfx.Shape.prototype.attach.call(this, rawNode);
-		if(rawNode) {
-			this.fontStyle = this.attachFont(rawNode);
-			this.text = this.attachText(rawNode);
-		}
 	}
 });
 dojox.gfx.TextPath.nodeType = "text";
-
-dojox.gfx.attachNode = function(node){
-	// summary: creates a shape from a Node
-	// node: Node: an SVG node
-	if(!node) return null;
-	var s = null;
-	switch(node.tagName.toLowerCase()){
-		case dojox.gfx.Rect.nodeType:
-			s = new dojox.gfx.Rect();
-			break;
-		case dojox.gfx.Ellipse.nodeType:
-			s = new dojox.gfx.Ellipse();
-			break;
-		case dojox.gfx.Polyline.nodeType:
-			s = new dojox.gfx.Polyline();
-			break;
-		case dojox.gfx.Path.nodeType:
-			s = new dojox.gfx.Path();
-			break;
-		case dojox.gfx.Circle.nodeType:
-			s = new dojox.gfx.Circle();
-			break;
-		case dojox.gfx.Line.nodeType:
-			s = new dojox.gfx.Line();
-			break;
-		case dojox.gfx.Image.nodeType:
-			s = new dojox.gfx.Image();
-			break;
-		case dojox.gfx.Text.nodeType:
-			var t = node.getElementsByTagName("textPath");
-			if(t && t.length){
-				s = new dojox.gfx.TextPath();
-			}else{
-				s = new dojox.gfx.Text();
-			}
-			break;
-		default:
-			console.debug("FATAL ERROR! tagName = " + node.tagName);
-			return null;
-	}
-	s.attach(node);
-	return s;	// dojox.gfx.Shape
-};
 
 dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	// summary: a surface object to be used for drawings (SVG)
@@ -802,19 +564,6 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	return s;	// dojox.gfx.Surface
 };
 
-dojox.gfx.attachSurface = function(node){
-	// summary: creates a surface from a Node
-	// node: Node: an SVG node
-	var s = new dojox.gfx.Surface();
-	s.rawNode = node;
-	var def_elems = node.getElementsByTagName("defs");
-	if(def_elems.length == 0){
-		return null;	// dojox.gfx.Surface
-	}
-	s.defNode = def_elems[0];
-	return s;	// dojox.gfx.Surface
-};
-
 // Gradient and pattern
 
 dojox.gfx.svg.Defines = function(){
@@ -842,18 +591,6 @@ dojox.gfx.svg.Font = {
 		this.rawNode.setAttribute("font-weight", f.weight);
 		this.rawNode.setAttribute("font-size", f.size);
 		this.rawNode.setAttribute("font-family", f.family);
-	},
-	attachFont: function(rawNode){
-		// summary: deduces a font style from a Node.
-		// rawNode: Node: an SVG node
-		if(!rawNode){ return null; }
-		var fontStyle = dojo.clone(dojox.gfx.defaultFont);
-		fontStyle.style = rawNode.getAttribute("font-style");
-		fontStyle.variant = rawNode.getAttribute("font-variant");
-		fontStyle.weight = rawNode.getAttribute("font-weight");
-		fontStyle.size = rawNode.getAttribute("font-size");
-		fontStyle.family = rawNode.getAttribute("font-family");
-		return fontStyle;	// Object
 	}
 };
 

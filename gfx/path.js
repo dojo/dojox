@@ -12,7 +12,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this.segments = [];
 		this.absolute = true;
 		this.last = {};
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	
 	// mode manipulations

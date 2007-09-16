@@ -362,7 +362,7 @@ dojo.declare("dojox.gfx.shape.Rect", dojox.gfx.Shape, {
 	constructor: function(rawNode) {
 		// rawNode: Node: a DOM Node
 		this.shape = dojo.clone(dojox.gfx.defaultRect);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box (its shape in this case)
@@ -375,7 +375,7 @@ dojo.declare("dojox.gfx.shape.Ellipse", dojox.gfx.Shape, {
 	constructor: function(rawNode) {
 		// rawNode: Node: a DOM Node
 		this.shape = dojo.clone(dojox.gfx.defaultEllipse);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box
@@ -394,7 +394,7 @@ dojo.declare("dojox.gfx.shape.Circle", dojox.gfx.Shape, {
 	constructor: function(rawNode) {
 		// rawNode: Node: a DOM Node
 		this.shape = dojo.clone(dojox.gfx.defaultCircle);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box
@@ -413,7 +413,7 @@ dojo.declare("dojox.gfx.shape.Line", dojox.gfx.Shape, {
 	constructor: function(rawNode) {
 		// rawNode: Node: a DOM Node
 		this.shape = dojo.clone(dojox.gfx.defaultLine);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box
@@ -436,7 +436,7 @@ dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape, {
 	constructor: function(rawNode) {
 		// rawNode: Node: a DOM Node
 		this.shape = dojo.clone(dojox.gfx.defaultPolyline);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box
@@ -469,7 +469,7 @@ dojo.declare("dojox.gfx.shape.Image", dojox.gfx.Shape, {
 	constructor: function(rawNode) {
 		// rawNode: Node: a DOM Node
 		this.shape = dojo.clone(dojox.gfx.defaultImage);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box (its shape in this case)
@@ -483,7 +483,7 @@ dojo.declare("dojox.gfx.shape.Text", dojox.gfx.Shape, {
 		// rawNode: Node: a DOM Node
 		this.fontStyle = null;
 		this.shape = dojo.clone(dojox.gfx.defaultText);
-		this.attach(rawNode);
+		this.rawNode = rawNode;
 	},
 	setFont: function(newFont){
 		// summary: sets a font for text
