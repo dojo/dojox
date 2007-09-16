@@ -1,4 +1,4 @@
-dojo.provide("dojo.fx._arg");
+dojo.provide("dojox.fx._arg");
 
 dojox.fx._arg.StyleArgs = function(/*DOMNode*/ node, /*String*/ cssClass){
 	// summary:
