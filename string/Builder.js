@@ -14,6 +14,9 @@ dojo.provide("dojox.string.Builder");
 			// summary: Append all arguments to the end of the buffer 
 			return this.appendArray(dojo._toArray(arguments)); // dojox.string.Builder
 		},
+		concat: function(/*String*/s){
+			return this.append(s);
+		},
 		appendArray: function(/*Array*/strings) {
 			this.b = String.prototype.concat.apply(this.b, strings);
 			return this;
