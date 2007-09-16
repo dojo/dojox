@@ -10,7 +10,7 @@ dojo.experimental("dojox.fx.style");
 //	
 dojo.require("dojox.fx._base"); 
 
-dojox.fx.addClass = function(/* Object */args){
+dojox.fx.addClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 	// summary:
 	//		returns an animation that will animate
 	//		the properieds of a node to the properties
@@ -49,7 +49,7 @@ dojox.fx.addClass = function(/* Object */args){
 	return _anim; 
 };
 
-dojox.fx.removeClass = function(/* Object */args){
+dojox.fx.removeClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 	// summary:
 	//	returns an animation that will animate the properieds of a 
 	// 	node (args.node) to the properties calculated after removing 
@@ -155,7 +155,7 @@ dojox.fx._getStyleSnapshot = function(/* Object */cache){
 	}); // Array
 };
 
-dojox.fx._getCalculatedStyleChanges = function(/* Object */args, /*Boolean*/addClass){
+dojox.fx._getCalculatedStyleChanges = function(/*dojox.fx._arg.StyleArgs*/ args, /*Boolean*/addClass){
 	// summary:
 	//	calculate and normalize(?) the differences between two states
 	//	of a node (args.node) by either quickly adding or removing 
