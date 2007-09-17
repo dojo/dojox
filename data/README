@@ -8,6 +8,7 @@ Project state: beta
 -------------------------------------------------------------------------------
 Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
+	Shane O'Sullivan (shaneosullivan1@gmail.com)
 -------------------------------------------------------------------------------
 Project description
 
@@ -39,4 +40,19 @@ Install into the following directory structure:
 
 Require in the dojox.data stores you wish to use.
 -------------------------------------------------------------------------------
-
+Additional Notes: 
+	dojox.data.CvsStore - comma-separated (spreadsheet output)
+	datastore implementation 
+	
+	dojox.data.FlickrRestStore - advanced version of: dojox.data.FlickrStore 
+	(Caching + user key support) 
+	
+	dojox.data.FlickrStore - data store driven by Flickr.com public API. 
+	
+	dojox.data.HtmlTableStore - Implementation of an HTML Table reading 
+	datastore
+	
+	dojox.data.OpmlStore - Store for reading OMPL formatted data
+	
+	dojox.data.XmlStore - datastore for XML based services or  
+	documents.	         
