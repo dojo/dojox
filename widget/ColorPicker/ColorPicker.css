@@ -1,9 +1,11 @@
 .dojoxColorPicker {
 	padding:8px;
-	border:1px solid #666;
+	border:1px solid #a0a0a0;
 	background:#ededed;
 	width:300px;
 	height:150px; 
+	-moz-border-radius:4pt;
+	-webkit-border-radius:5pt;
 }
 
 
@@ -20,7 +22,7 @@
 	width:150px; 
 	height:150px;
 	z-index:1;
-	border:1px solid #333;
+	border:1px solid #a0a0a0;
 }
 
 .dojoxHuePickerUnderlay {
