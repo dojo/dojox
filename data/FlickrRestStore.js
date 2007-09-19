@@ -65,7 +65,15 @@ dojo.declare("dojox.data.FlickrRestStore",
 	//	Each element of this Object is an array of handlers to call back when the request finishes.
 	//	This prevents multiple requests being made for the same information.  
 	_handlers: null,
-		
+	
+	// _sortAttributes: Object
+	// A quick lookup of valid attribute names in a sort query.
+	_sortAttributes: {
+		"date-posted": true,
+		"date-taken": true,
+		"interestingness": true
+	},
+			
 	_fetchItems: function(request, fetchHandler, errorHandler){
 		// summary: Fetch flickr items that match to a query
 		// request:
@@ -74,9 +82,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//	A function to call for fetched items
 		// errorHandler:
 		//	A function to call on error
-
-		if(!request.query){
-			request.query={};
+		var query = request.query;
+		if(!query){
+			request.query = query = {};
 		}
 		
 		var primaryKey = [];
@@ -87,22 +95,25 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//Build up the content to send the request for.
 		var content = {
 			format: "json",
-			method: "flickr.people.getPublicPhotos",
+			method: "flickr.photos.search",
 			api_key: this._apikey,
+			extras: "owner_name,date_upload,date_taken",
 			jsoncallback: callbackFn
 		};
 		var isRest = false;
-		if(request.query.userid){
+		if(query.userid){
 			isRest = true;
 			content.user_id = request.query.userid;
 			primaryKey.push("userid"+request.query.userid);
 		}
-		if(request.query.apikey){
+		if(query.apikey){
 			isRest = true;
 			content.api_key = request.query.apikey;
 			secondaryKey.push("api"+request.query.apikey);
+		} else{
+			throw Exception("dojox.data.FlickrRestStore: An API key must be specified.");
 		}
-		if(request.query.page){
+		if(query.page){
 			content.page = request.query.page;
 			secondaryKey.push("page" + content.page);
 		}else if(typeof(request.start) != "undefined" && request.start != null) {
@@ -139,18 +150,59 @@ dojo.declare("dojox.data.FlickrRestStore",
 			secondaryKey.push("count" + request.count);
 		}
 		
-		if(request.query.lang){
+		if(query.lang){
 			content.lang = request.query.lang;
-			secondaryKey.push("lang" + request.lang);
+			primaryKey.push("lang" + request.lang);
 		}
 		var url = this._flickrRestUrl;
 		
-		if(request.query.set){
-		  content.method = "flickr.photosets.getPhotos";
-		  content.photoset_id = request.query.set; 
-		  requestKey.push("set" + request.query.set);
+		if(query.setid){
+			content.method = "flickr.photosets.getPhotos";
+			content.photoset_id = request.query.set; 
+			primaryKey.push("set" + request.query.set);
 		}
 		
+		if(query.tags){
+			if(query.tags instanceof Array){
+				content.tags = query.tags.join(",");
+			} else {
+				content.tags=query.tags;				
+			}
+			primaryKey.push("tags" + content.tags);
+			
+			if(query["tag_mode"] && (query.tag_mode.toLowerCase() == "any"
+				|| query.tag_mode.toLowerCase() == "all")){
+				content.tag_mode = query.tag_mode;
+			}
+		}
+		if(query.text){
+			content.text=query.text;
+			primaryKey.push("text:"+query.text);
+		}
+		
+		//The store only supports a single sort attribute, even though the
+		//Read API technically allows multiple sort attributes
+		if(query.sort && query.sort.length > 0){			
+			//The default sort attribute is 'date-posted'
+			if(!query.sort[0].attribute){
+				query.sort[0].attribute = "date-posted";
+			}
+			
+			//If the sort attribute is valid, check if it is ascending or
+			//descending.
+			if(this._sortAttributes[query.sort[0].attribute]) {
+				if(query.sort[0].descending){
+					content.sort = query.sort[0].attribute + "-desc";
+				} else {
+					content.sort = query.sort[0].attribute + "-asc";
+				}
+			}
+		} else {
+			//The default sort in the Dojo Data API is ascending.
+			content.sort = "date-posted-asc";
+		}
+		primaryKey.push("sort:"+content.sort);
+	
 		//Generate a unique key for this request, so the store can 
 		//detect duplicate requests.
 		primaryKey = primaryKey.join(".");
@@ -158,17 +210,17 @@ dojo.declare("dojox.data.FlickrRestStore",
 		var requestKey = primaryKey + secondaryKey;
 
 		var thisHandler = {
-	     		request: request,
-	     		fetchHandler: fetchHandler,
-	     		errorHandler: errorHandler
+			request: request,
+	    	fetchHandler: fetchHandler,
+	    	errorHandler: errorHandler
 	   	};
-	   	
+
 	   	//If the request has already been made, but not yet completed,
 	   	//then add the callback handler to the list of handlers
 	   	//for this request, and finish.
 	   	if(this._handlers[requestKey]){
-	     		this._handlers[requestKey].push(thisHandler);
-	     		return;
+	    	this._handlers[requestKey].push(thisHandler);
+	    	return;
 	   	}
 
   		this._handlers[requestKey] = [thisHandler];
@@ -291,7 +343,8 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//	summary: 
 		//      See dojo.data.api.Read.getAttributes()
 		return ["title", "author", "imageUrl", "imageUrlSmall", 
-					"imageUrlMedium", "imageUrlThumb", "link"]; 
+					"imageUrlMedium", "imageUrlThumb", "link",
+					"dateTaken", "datePublished"]; 
 	},
 	
 	getValues: function(item, attribute){
@@ -302,7 +355,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 		if(attribute === "title"){
 			return [this._unescapeHtml(item.title)]; // String
 		}else if(attribute === "author"){
-			return [item.owner]; // String
+			return [item.ownername]; // String
 		}else if(attribute === "imageUrlSmall"){
 			return [item.media.s]; // String
 		}else if(attribute === "imageUrl"){
@@ -313,7 +366,12 @@ dojo.declare("dojox.data.FlickrRestStore",
 			return [item.media.t]; // String
 		}else if(attribute === "link"){
 			return ["http://www.flickr.com/photos/" + item.owner + "/" + item.id]; // String
+		}else if(attribute === "dateTaken"){
+			return item.datetaken;
+		}else if(attribute === "datePublished"){
+			return item.datepublished;
 		}
+		
 		return undefined;
 	},
 

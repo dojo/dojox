@@ -28,14 +28,14 @@ doh.register("dojox.data.tests.stores.FlickrRestStore",
 					d.callback(true);
 				}
 				flickrStore.fetch({ 	
-									query: {
-										userid: "44153025@N00",
-										apikey: "8c6803164dbc395fb7131c9d54843627"
-									},
-									count: 1,
-									onComplete: onComplete, 
-									onError: dojo.partial(dojox.data.tests.stores.FlickrRestStore.error, doh, d)
-								});
+					query: {
+						userid: "44153025@N00",
+						apikey: "8c6803164dbc395fb7131c9d54843627"
+					},
+					count: 1,
+					onComplete: onComplete, 
+					onError: dojo.partial(dojox.data.tests.stores.FlickrRestStore.error, doh, d)
+				});
 				return d; //Object
 			}
 		},
@@ -62,7 +62,6 @@ doh.register("dojox.data.tests.stores.FlickrRestStore",
 					t.is(null, items);
 					d.callback(true);
 				}
-
 				//Get everything...
 				flickrStore.fetch({	
 					query: {
@@ -124,14 +123,14 @@ doh.register("dojox.data.tests.stores.FlickrRestStore",
 
 				function dumpFifthFetch(items, request){
 					t.is(11, items.length);
-					request.start = 2;
-					request.count = 20;
+					request.start = 4;
+					request.count = 16;
 					request.onComplete = dumpSixthFetch;
 					flickrStore.fetch(request);
 				}
 
 				function dumpSixthFetch(items, request){
-					t.is(20, items.length);
+					t.is(16, items.length);
 					d.callback(true);
 				}
 
@@ -410,7 +409,7 @@ doh.register("dojox.data.tests.stores.FlickrRestStore",
 					t.assertTrue(flickrStore.isItem(items[0]));
 
 					var attributes = flickrStore.getAttributes(items[0]);
-					t.is(7, attributes.length);
+					t.is(9, attributes.length);
 					d.callback(true);
 				}
 
