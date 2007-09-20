@@ -1,9 +1,16 @@
 dojo.provide("dojox._cometd.cometd");
 dojo.require("dojo.AdapterRegistry");
 // FIXME: determine if we can use XMLHTTP to make x-domain posts despite not
-//        being able to hear back about the result
+//		being able to hear back about the result
 dojo.require("dojo.io.script");
 // dojo.require("dojo.cookie"); // for peering
+
+// FIXME: need to add local topic support to advise about:
+//		successful handshake
+//		network failure of channel
+//		graceful disconnect
+
+// FIXME: need to add routable data in HTTP headers
 
 /*
  * this file defines Comet protocol client. Actual message transport is
@@ -33,6 +40,8 @@ dojox.cometd = new function(){
 	this.backlog = [];
 	this.handleAs="json-comment-optional";
 	this.advice;
+	this.pendingSubscriptions = {}
+	this.pendingUnsubscriptions = {}
 
 	this._subscriptions = [];
 
@@ -46,11 +55,6 @@ dojox.cometd = new function(){
 	}
 
 	this.init = function(props, root, bargs){
-		if(dojo.isString(props)){
-			var oldRoot = root;
-			root = props;
-			props = oldRoot;
-		}
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
 		props = props||{};
@@ -59,7 +63,7 @@ dojox.cometd = new function(){
 		props.minimumVersion = this.minimumVersion;
 		props.channel = "/meta/handshake";
 
-        props.ext = { "json-comment-filtered": true };
+		props.ext = { "json-comment-filtered": true };
 
 		// FIXME: what about ScriptSrcIO for x-domain comet?
 		this.url = root||djConfig["cometdRoot"];
@@ -67,7 +71,7 @@ dojox.cometd = new function(){
 			console.debug("no cometd root specified in djConfig and no root passed");
 			return;
 		}
-		
+
 		// FIXME: we need to select a way to handle JSONP-style stuff
 		// generically here. We already know if the server is gonna be on
 		// another domain (or can know it), so we should select appropriate
@@ -83,7 +87,7 @@ dojox.cometd = new function(){
 		};
 
 		// borrowed from dojo.uri.Uri in lieu of fixed host and port properties
-        var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
+		var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
 		var r = (""+window.location).match(new RegExp(regexp));
 		if(r[4]){
 			var tmp = r[4].split(":");
@@ -115,9 +119,9 @@ dojox.cometd = new function(){
 		if (data["advice"]){
 			this.advice = data.advice;
 		}
-		
+
 		// TODO remove authSuccessful when all clients updated to the spec
-		if((!data.successful)&&(!data.authSuccessful)){  
+		if((!data.successful)&&(!data.authSuccessful)){
 			console.debug("cometd init failed");
 			// TODO follow advice
 			return;
@@ -183,18 +187,34 @@ dojox.cometd = new function(){
 			// check for various meta topic actions that we need to respond to
 			switch(message.channel){
 				case "/meta/subscribe":
+					var pendingDef = this.pendingSubscriptions[message.subscription];
 					if(!message.successful){
-						console.debug("cometd subscription error for channel", message.channel, ":", message.error);
+						if(pendingDef){
+							pendingDef.errback(new Error(message.error));
+							delete this.pendingSubscriptions[message.subscription];
+						}
 						return;
 					}
 					dojox.cometd.subscribed(message.subscription, message);
+					if(pendingDef){
+						pendingDef.callback(true);
+						delete this.pendingSubscriptions[message.subscription];
+					}
 					break;
 				case "/meta/unsubscribe":
+					var pendingDef = this.pendingUnsubscriptions[message.subscription];
 					if(!message.successful){
-						console.debug("cometd unsubscription error for channel", message.channel, ":", message.error);
+						if(pendingDef){
+							pendingDef.errback(new Error(message.error));
+							delete this.pendingUnsubscriptions[message.subscription];
+						}
 						return;
 					}
 					this.unsubscribed(message.subscription, message);
+					if(pendingDef){
+						pendingDef.callback(true);
+						delete this.pendingUnsubscriptions[message.subscription];
+					}
 					break;
 			}
 		}
@@ -221,7 +241,7 @@ dojox.cometd = new function(){
 
 	// public API functions called by end users
 	this.publish = function(/*string*/channel, /*object*/data, /*object*/properties){
-		// summary: 
+		// summary:
 		//		publishes the passed message to the cometd server for delivery
 		//		on the specified topic
 		// channel:
@@ -246,9 +266,9 @@ dojox.cometd = new function(){
 		return this.currentTransport.sendMessage(message);
 	}
 
-	this.subscribe = function(	/*string*/				channel, 
-								/*boolean, optional*/	useLocalTopics, 
-								/*object, optional*/	objOrFunc, 
+	this.subscribe = function(	/*string*/				channel,
+								/*boolean, optional*/	useLocalTopics,
+								/*object, optional*/	objOrFunc,
 								/*string, optional*/	funcName){ // return: boolean
 		// summary:
 		//		inform the server of this client's interest in channel
@@ -269,18 +289,22 @@ dojox.cometd = new function(){
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
 
-		if(!this.currentTransport){
-			this.backlog.push(["subscribe", channel, useLocalTopics, objOrFunc, funcName]);
-			return;
+		if(this.pendingSubscriptions[channel]){
+			// We already asked to subscribe to this channel, and
+			// haven't heard back yet. Fail the previous attempt.
+			var oldDef = this.pendingSubscriptions[channel];
+			oldDef.cancel();
+			delete this.pendingSubscriptions[channel];
 		}
 
-		if((useLocalTopics !== true)||(useLocalTopcis !== false)){
-			// similar to: function(channel, objOrFunc, funcName, useLocalTopics);
-			var ofn = funcName;
-			funcName = objOrFunc;
-			objOrFunc = useLocalTopics;
-			useLocalTopics = ofn;
+		var pendingDef = new dojo.Deferred();
+		this.pendingSubscriptions[channel] = pendingDef;
+
+		if(!this.currentTransport){
+			this.backlog.push(["subscribe", channel, useLocalTopics, objOrFunc, funcName]);
+			return pendingDef;
 		}
+
 		// console.debug(objOrFunc, funcName);
 
 		if(objOrFunc){
@@ -295,20 +319,23 @@ dojox.cometd = new function(){
 		}
 		// FIXME: would we handle queuing of the subscription if not connected?
 		// Or should the transport object?
-		return this.currentTransport.sendMessage({
+		this.currentTransport.sendMessage({
 			channel: "/meta/subscribe",
 			subscription: channel
 		});
+
+		return pendingDef;
+
 	}
 
-	this.subscribed = function(	/*string*/				channel, 
+	this.subscribed = function(	/*string*/				channel,
 								/*obj*/					message){
 		// console.debug(channel, message);
 	}
 
-	this.unsubscribe = function(/*string*/				channel, 
-								/*boolean, optional*/	useLocalTopics, 
-								/*object, optional*/	objOrFunc, 
+	this.unsubscribe = function(/*string*/				channel,
+								/*boolean, optional*/	useLocalTopics,
+								/*object, optional*/	objOrFunc,
 								/*string, optional*/	funcName){ // return: boolean
 		// summary:
 		//		inform the server of this client's disinterest in channel
@@ -325,9 +352,21 @@ dojox.cometd = new function(){
 		//		channel
 		// funcName:
 		//		the second half of the objOrFunc/funcName pair for identifying
+
+		if(this.pendingUnsubscriptions[channel]){
+			// We already asked to subscribe to this channel, and
+			// haven't heard back yet. Fail the previous attempt.
+			var oldDef = this.pendingUnsubscriptions[channel];
+			oldDef.cancel();
+			delete this.pendingUnsubscriptions[channel];
+		}
+
+		var pendingDef = new dojo.Deferred();
+		this.pendingUnsubscriptions[channel] = pendingDef;
+
 		if(!this.currentTransport){
 			this.backlog.push(["unsubscribe", channel, useLocalTopics, objOrFunc, funcName]);
-			return;
+			return pendingDef;
 		}
 		//		a callback function to notifiy upon channel message delivery
 		if(objOrFunc){
@@ -339,13 +378,16 @@ dojox.cometd = new function(){
 			// FIXME: we're not passing a valid handle!!
 			dojo.unsubscribe(tname, objOrFunc, funcName);
 		}
-		return this.currentTransport.sendMessage({
+		this.currentTransport.sendMessage({
 			channel: "/meta/unsubscribe",
 			subscription: channel
 		});
+
+		return pendingDef;
+
 	}
 
-	this.unsubscribed = function(/*string*/				channel, 
+	this.unsubscribed = function(/*string*/				channel,
 								/*obj*/					message){
 		// console.debug(channel, message);
 	}
@@ -445,15 +487,15 @@ dojox.cometd.longPollTransport = new function(){
 		if(!dojox.cometd.connected){
 			// try to restart the tunnel
 			dojox.cometd.connected = false;
-			
+
 			// TODO handle transport specific advice
-			
+
 			if(dojox.cometd["advice"]){
 				if(dojox.cometd.advice["reconnect"]=="none"){
 					return;
 				}
-			
-	            if(	(dojox.cometd.advice["interval"])&&
+
+				if(	(dojox.cometd.advice["interval"])&&
 					(dojox.cometd.advice.interval>0) ){
 					setTimeout(function(){
 						dojox.cometd.currentTransport._reconnect();
@@ -464,9 +506,9 @@ dojox.cometd.longPollTransport = new function(){
 			}else{
 				this._reconnect();
 			}
-	    }
-	}	
-			
+		}
+	}
+
 	this._reconnect = function(){
 		if(	(dojox.cometd["advice"])&&
 			(dojox.cometd.advice["reconnect"]=="handshake")
@@ -518,14 +560,6 @@ dojox.cometd.longPollTransport = new function(){
 						return;
 					}
 					break;
-				case "/meta/subscribe":
-					if(!message.successful){
-						console.debug("cometd subscription error for channel", message.channel, ":", message.error);
-						return;
-					}
-					dojox.cometd.subscribed(message.channel);
-					// console.debug(message.channel);
-					break;
 			}
 		}
 	}
@@ -539,11 +573,11 @@ dojox.cometd.longPollTransport = new function(){
 			load: dojo.hitch(this, function(data){
 				// console.debug(evt.responseText);
 				// console.debug(data);
-		                dojox.cometd.connected = false;
+						dojox.cometd.connected = false;
 				dojox.cometd.deliver(data);
 				this.tunnelCollapse();
 			}),
-			error: function(err){ 
+			error: function(err){
 				console.debug("tunnel opening failed:", err);
 				dojo.cometd.connected = false;
 
@@ -567,8 +601,8 @@ dojox.cometd.longPollTransport = new function(){
 				url: dojox.cometd.url||djConfig["cometdRoot"],
 				handleAs: dojox.cometd.handleAs,
 				load: dojo.hitch(dojox.cometd, "deliver"),
-				content: { 
-					message: dojo.toJson([ message ]) 
+				content: {
+					message: dojo.toJson([ message ])
 				}
 			});
 		}else{
@@ -583,18 +617,18 @@ dojox.cometd.longPollTransport = new function(){
 
 	this.disconnect = function(){
 		if(!dojox.cometd.initialized){ return; }
-        
+
 		dojo.xhrPost({
 			url: dojox.cometd.url||djConfig["cometdRoot"],
 			handleAs: dojox.cometd.handleAs,
-			content: { 
-				message: dojo.toJson([{  
-				    channel:	"/meta/disconnect",
-				    clientId:	dojox.cometd.clientId
+			content: {
+				message: dojo.toJson([{
+					channel:	"/meta/disconnect",
+					clientId:	dojox.cometd.clientId
 				}])
 			}
 		});
-		
+
 		dojox.cometd.initialized=false;
 	}
 }
@@ -624,7 +658,7 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.tunnelCollapse = function(){
-	        // TODO implement advice handling
+		// TODO implement advice handling
 		if(!dojox.cometd.connected){
 			// try to restart the tunnel
 			this.openTunnelWith({
@@ -652,9 +686,9 @@ dojox.cometd.callbackPollTransport = new function(){
 				dojox.cometd.deliver(data);
 				this.tunnelCollapse();
 			}),
-			error: function(){ 
+			error: function(){
 				dojox.cometd.connected = false;
-				console.debug("tunnel opening failed"); 
+				console.debug("tunnel opening failed");
 			},
 			url: (url||dojox.cometd.url),
 			content: content,
