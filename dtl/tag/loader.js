@@ -71,7 +71,7 @@ dojo.mixin(dojox.dtl.tag.loader.ExtendsNode.prototype, {
 		if(this.parents[parent]){
 			return this.parents[parent];
 		}
-		this.parent = this.getTemplate(parent);
+		this.parent = this.getTemplate(dojox.dtl.text.getTemplateString(parent));
 		if(this.shared){
 			this.parents[parent] = this.parent;
 		}

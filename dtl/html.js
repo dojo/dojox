@@ -12,7 +12,7 @@ dojox.dtl.html = {
 	_trim: function(/*String*/ str){
 		return str.replace(this._re, "");
 	},
-	getTemplate: function(file){
+	getTemplate: function(text){
 		if(typeof this._commentable == "undefined"){
 			// Check to see if the browser can handle comments
 			this._commentable = false;
@@ -22,8 +22,6 @@ dojox.dtl.html = {
 				this._commentable = true;
 			}
 		}
-
-		var text = dojox.dtl.text.getTemplateString(file);
 
 		if(!this._commentable){
 			// Strip comments
@@ -163,12 +161,15 @@ dojox.dtl.html = {
 	}
 }
 
-dojox.dtl.HtmlTemplate = function(obj){
+dojox.dtl.HtmlTemplate = function(/*String|dojo._Url*/ obj){
 	// summary: Use this object for HTML templating
 	var ddh = dojox.dtl.html;
 
-	if(!obj.node && obj.toString){
-		obj = ddh.getTemplate(obj.toString());
+	if(!obj.node){
+		if(typeof obj == "object"){
+			obj = dojox.dtl.text.getTemplateString(obj);
+		}
+		obj = ddh.getTemplate(obj);
 	}
 	this.contents = obj.node;
 
@@ -546,8 +547,8 @@ dojo.extend(dojox.dtl.html.Parser, {
 		var token = this.contents.shift();
 		return {type: token[0], text: token[1]};
 	},
-	getTemplate: function(name){
-		return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(name));
+	getTemplate: function(/*String*/ loc){
+		return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(loc));
 	}
 });
 

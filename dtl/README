@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-DojoX Django Templating Language
+DojoX Django Template Language
 -------------------------------------------------------------------------------
 Version 0.0
 Release date: 09/20/2007
@@ -11,16 +11,16 @@ Project authors
 -------------------------------------------------------------------------------
 Project description
 
-The Django Templating language uses a system of templates that can be compiled
+The Django Template language uses a system of templates that can be compiled
 once and rendered indefinitely afterwards. It uses a simple system of tags
 and filters.
 
-This aims to be a 1:1 match with the Django Templating Language as outlined in
+This aims to be a 1:1 match with the Django Template Language as outlined in
 http://www.djangoproject.com/documentation/templates/. Many common tags and
 filters have been implemented (see below), along with new filters and tags as
 necessary (see below).
 
-The Django Templating Language is intended within Django to only handle text.
+The Django Template Language is intended within Django to only handle text.
 Our implementation is able to handle HTML in addition to text. Actually, the
 text and HTML portions of dojox.dtl are two separate layers, the HTML layer
 sits on top of the text layer (base). It's also been implemented in such a way
