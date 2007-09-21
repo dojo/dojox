@@ -134,7 +134,7 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		// summary: close and destroy this widget
 		if (!this.closable) { return; }
 		dojo.unsubscribe(this._listener); 
-		this.hide(dojo.hitch(this,"destroy")); 
+		this.hide(dojo.hitch(this,"destroyRecursive")); 
 	},
 
 	hide: function(/* Function */ callback) {
