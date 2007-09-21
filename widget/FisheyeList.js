@@ -688,14 +688,14 @@ dojo.declare("dojox.widget.FisheyeListItem", [dijit._Widget, dijit._Templated, d
 			this.parent._setActive(e);
 		}
 		if(this.label != "" ){
-			dojo.addClass(this.lblNode, "selected");
+			dojo.addClass(this.lblNode, "dojoxFishSelected");
 			this.parent._positionLabel(this);
 		}
 	},
 	
 	onMouseOut: function(/*Event*/ e){
 		// summary: callback when user moves mouse off of this menu item
-		dojo.removeClass(this.lblNode, "selected");
+		dojo.removeClass(this.lblNode, "dojoxFishSelected");
 	},
 
 	onClick: function(/*Event*/ e){

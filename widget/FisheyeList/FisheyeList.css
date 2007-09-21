@@ -9,7 +9,7 @@
 	white-space:pre; 
 }
 
-.dojoxFisheyeListItemLabel.selected {
+.dojoxFisheyeListItemLabel.dojoxFishSelected {
 	display: block;
 }
 
