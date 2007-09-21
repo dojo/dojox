@@ -35,6 +35,10 @@ dojo.mixin(dojox.dtl.filter.lists, {
 	},
 	join: function(value, arg){
 		// summary: Joins a list with a string, like Python's ``str.join(list)``
+		// description:
+		//		Django throws a compile error, but JS can't do arg checks
+		//		so we're left with run time errors, which aren't wise for something
+		//		as trivial here as an empty arg.
 		return value.join(arg);
 	},
 	length: function(value){

@@ -559,7 +559,7 @@ dojo.mixin(dojox.dtl.register, {
 	register.filter(dtf + ".lists", dtf + ".lists", ["dictsort", "dictsortreversed", "first", "join", "length", "length_is", "random", "slice", "unordered_list"]);
 	register.filter(dtf + ".logic", dtf + ".logic", ["default", "default_if_none", "divisibleby", "yesno"]);
 	register.filter(dtf + ".misc", dtf + ".misc", ["filesizeformat", "pluralize", "phone2numeric", "pprint"]);
-	register.filter(dtf + ".strings", dtf + ".strings", ["addslashes", "capfirst", "fix_ampersands", "floatformat", "linenumbers", "lower", "make_list", "center", "cut", "slugify"]);
+	register.filter(dtf + ".strings", dtf + ".strings", ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "title", "truncatewords", "upper"]);
 })();
 
 dojox.dtl.replace = function(str, token, repl){

@@ -12,6 +12,26 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		value = "" + value;
 		return value.charAt(0).toUpperCase() + value.substring(1);
 	},
+	center: function(value, arg){
+		// summary: Centers the value in a field of a given width
+		arg = arg || value.length;
+		value = value + "";
+		var diff = arg - value.length;
+		if(diff % 2){
+			value = value + " ";
+			diff -= 1;
+		}
+		for(var i = 0; i < diff; i += 2){
+			value = " " + value + " ";
+		}
+		return value;
+	},
+	cut: function(value, arg){
+		// summary: Removes all values of arg from the given string
+		arg = arg + "" || "";
+		value = value + "";
+		return value.replace(new RegExp(arg, "g"), "");
+	},
 	_fix_ampersands: /&(?!(\w+|#\d+);)/g,
 	fix_ampersands: function(value){
 		// summary: Replaces ampersands with ``&amp;`` entities
@@ -47,6 +67,14 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		}
 		return output.join("\n");
 	},
+	ljust: function(value, arg){
+		value = value + "";
+		arg = parseInt(arg);
+		while(value.length < arg){
+			value = value + " ";
+		}
+		return value;
+	},
 	lower: function(value){
 		// summary: Converts a string into all lowercase
 		return (value + "").toLowerCase();
@@ -73,38 +101,61 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		}
 		return [];
 	},
-	ljust: function(value, arg){
+	rjust: function(value, arg){
 		value = value + "";
 		arg = parseInt(arg);
 		while(value.length < arg){
-			value = value + " ";
+			value = " " + value;
 		}
 		return value;
-	},
-	center: function(value, arg){
-		// summary: Centers the value in a field of a given width
-		arg = arg || value.length;
-		value = value + "";
-		var diff = arg - value.length;
-		if(diff % 2){
-			value = value + " ";
-			diff -= 1;
-		}
-		for(var i = 0; i < diff; i += 2){
-			value = " " + value + " ";
-		}
-		return value;
-	},
-	cut: function(value, arg){
-		// summary: Removes all values of arg from the given string
-		arg = arg + "" || "";
-		value = value + "";
-		return value.replace(new RegExp(arg, "g"), "");
 	},
 	slugify: function(value){
 		// summary: Converts to lowercase, removes
 		//		non-alpha chars and converts spaces to hyphens
 		value = value.replace(/[^\w\s-]/g, "").toLowerCase();
 		return value.replace(/[\-\s]+/g, "-");
+	},
+	title: function(value){
+		// summary: Converts a string into titlecase
+		var last, title = "";
+		for(var i = 0, current; i < value.length; i++){
+			current = value.charAt(i);
+			if(last == " " || last == "\n" || last == "\t" || !last){
+				title += current.toUpperCase();
+			}else{
+				title += current.toLowerCase();
+			}
+			last = current;
+		}
+		return title;
+	},
+	_truncatewords: /[ \n\r\t]/,
+	truncatewords: function(value, arg){
+		// summary: Truncates a string after a certain number of words
+		// arg: Integer
+		//		Number of words to truncate after
+		arg = parseInt(arg);
+		if(!arg){
+			return value;
+		}
+
+		for(var i = 0, j = value.length, count = 0, current, last; i < value.length; i++){
+			current = value.charAt(i);
+			if(dojox.dtl.filter.strings._truncatewords.test(last)){
+				if(!dojox.dtl.filter.strings._truncatewords.test(current)){
+					++count;
+					if(count == arg){
+						return value.substring(0, j + 1);
+					}
+				}
+			}else if(!dojox.dtl.filter.strings._truncatewords.test(current)){
+				j = i;
+			}
+			last = current;
+		}
+		return value;
+	},
+	upper: function(value){
+		return value.toUpperCase();
 	}
 });

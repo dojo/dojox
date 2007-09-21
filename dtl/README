@@ -107,7 +107,7 @@ What's Been Done
 |      X      | linebreaks         |       X        |                |
 |      X      | linebreaksbr       |       X        |                |
 |      X      | linenumbers        |       X        |                |
-|      X      | ljust              |                |                |
+|      X      | ljust              |       X        |                |
 |      X      | lower              |       X        |                |
 |      X      | make_list          |       X        |                |
 |      X      | phone2numeric      |       X        |                |
@@ -115,7 +115,7 @@ What's Been Done
 |      X      | pprint             |       X        |                |
 |      X      | random             |       X        |                |
 |      X      | removetags         |       X        |                |
-|             | rjust              |                |                |
+|      X      | rjust              |       X        |                |
 |      X      | slice              |       X        |                |
 |      X      | slugify            |       X        |                |
 |             | stringformat       |                |                |
@@ -123,11 +123,11 @@ What's Been Done
 |      X      | time               |       X        |                |
 |      X      | timesince          |       X        |                |
 |      X      | timeuntil          |       X        |                |
-|             | title              |                |                |
-|             | truncatewords      |                |                |
+|      X      | title              |       X        |                |
+|      X      | truncatewords      |       X        |                |
 |             | truncatewords_html |                |                |
 |      X      | unordered_list     |       X        |                |
-|             | upper              |                |                |
+|      X      | upper              |       X        |                |
 |             | urlencode          |                |                |
 |             | urlize             |                |                |
 |             | urlizetrunc        |                |                |
