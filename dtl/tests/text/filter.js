@@ -5,51 +5,94 @@ dojo.require("dojox.date.php");
 
 doh.register("dojox.dtl.text.filter", 
 	[
-		function test_filter_dates(t){
-			var dtt = dojox.dtl;
+		function test_filter_add(t){
+			var dd = dojox.dtl;
 
-			var context = new dojox.dtl.Context({ now: new Date(2007, 0, 1), then: new Date(2007, 1, 1) });
-			var tpl = new dtt.Template('{{ now|date }}');
-			t.is(dojox.date.php.format(context.now, "N j, Y", dojox.dtl.utils.date._overrides), tpl.render(context));
-			tpl = new dtt.Template('{{ now|time }}');
-			t.is(dojox.date.php.format(context.now, "P", dojox.dtl.utils.date._overrides), tpl.render(context));
+			var context = new dd.Context({ four: 4 });
+			tpl = new dd.Template('{{ four|add:"6" }}');
+			t.is("10", tpl.render(context));
+			context.four = "4";
+			t.is("10", tpl.render(context));
+			tpl = new dd.Template('{{ four|add:"six" }}');
+			t.is("4", tpl.render(context));
+			tpl = new dd.Template('{{ four|add:"6.6" }}');
+			t.is("10", tpl.render(context));
+		},
+		function test_filter_addslashes(t){
+			var dd = dojox.dtl;
 
-			tpl = new dtt.Template('{{ now|timesince:then }}');
-			t.is("1 month", tpl.render(context));
-			context.then = new Date(2007, 0, 5);
-			t.is("4 days", tpl.render(context));
-			context.then = new Date(2007, 0, 17);
-			t.is("2 weeks", tpl.render(context));
-			context.then = new Date(2008, 1, 1);
-			t.is("1 year", tpl.render(context));
+			var context = new dd.Context({ unslashed: "Test back slashes \\, double quotes \" and single quotes '" })
+			var tpl = new dd.Template('{{ unslashed|addslashes }}');
+			t.is("Test back slashes \\\\, double quotes \\\" and single quotes \\'", tpl.render(context));
+		},
+		function test_filter_capfirst(t){
+			var dd = dojox.dtl;
 
-			context.then = new Date(2007, 1, 1);
-			tpl = new dtt.Template('{{ now|timeuntil:then }}');
-			t.is("1 month", tpl.render(context));
-			context.then = new Date(2007, 0, 5);
-			t.is("4 days", tpl.render(context));
-			context.then = new Date(2007, 0, 17);
-			t.is("2 weeks", tpl.render(context));
-			context.then = new Date(2008, 1, 1);
-			t.is("1 year", tpl.render(context));
+			var tpl = new dd.Template('{{ uncapped|capfirst }}');
+			t.is("Cap", tpl.render(new dd.Context({ uncapped: "cap" })));
+		},
+		function test_filter_center(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			var tpl = new dd.Template('{{ narrow|center }}');
+			context.narrow = "even";
+			t.is("even", tpl.render(context));
+			context.narrow = "odd";
+			t.is("odd", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|center:"5" }}');
+			context.narrow = "even";
+			t.is("even ", tpl.render(context));
+			context.narrow = "odd";
+			t.is(" odd ", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|center:"6" }}');
+			context.narrow = "even";
+			t.is(" even ", tpl.render(context));
+			context.narrow = "odd";
+			t.is(" odd  ", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|center:"12" }}');
+			context.narrow = "even";
+			t.is("    even    ", tpl.render(context));
+			context.narrow = "odd";
+			t.is("    odd     ", tpl.render(context));
+		},
+		function test_filter_cut(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ uncut: "Apples and oranges" });
+			var tpl = new dd.Template('{{ uncut|cut }}');
+			t.is("Apples and oranges", tpl.render(context));
+			tpl = new dd.Template('{{ uncut|cut:"A" }}');
+			t.is("pples and oranges", tpl.render(context));
+			tpl = new dd.Template('{{ uncut|cut:" " }}');
+			t.is("Applesandoranges", tpl.render(context));
+			tpl = new dd.Template('{{ uncut|cut:"e" }}');
+			t.is("Appls and orangs", tpl.render(context));
+		},
+		function test_filter_date(t){
+			var dd = dojox.dtl;
+			var context = new dd.Context({ now: new Date(2007, 0, 1), then: new Date(2007, 1, 1) });
+
+			var tpl = new dd.Template('{{ now|date }}');
+			t.is(dojox.date.php.format(context.now, "N j, Y", dd.utils.date._overrides), tpl.render(context));
 
 			context.then = new Date(2007, 0, 1);
-			tpl = new dtt.Template('{{ now|date:"d" }}');
+			tpl = new dd.Template('{{ now|date:"d" }}');
 			t.is("01", tpl.render(context));
 
-			tpl = new dtt.Template('{{ now|date:"D" }}');
+			tpl = new dd.Template('{{ now|date:"D" }}');
 			t.is("Mon", tpl.render(context));
 
-			tpl = new dtt.Template('{{ now|date:"j" }}');
+			tpl = new dd.Template('{{ now|date:"j" }}');
 			t.is("1", tpl.render(context));
 
-			tpl = new dtt.Template('{{ now|date:"l" }}');
+			tpl = new dd.Template('{{ now|date:"l" }}');
 			t.is("Monday", tpl.render(context));
 
-			tpl = new dtt.Template('{{ now|date:"N" }}');
+			tpl = new dd.Template('{{ now|date:"N" }}');
 			t.is("Jan.", tpl.render(context));
 
-			tpl = new dtt.Template('{{ now|date:"S" }}');
+			tpl = new dd.Template('{{ now|date:"S" }}');
 			t.is("st", tpl.render(context));
 			context.now.setDate(2);
 			t.is("nd", tpl.render(context));
@@ -113,97 +156,290 @@ doh.register("dojox.dtl.text.filter",
 			t.is("st", tpl.render(context));
 			context.now.setDate(1);
 
-			tpl = new dtt.Template('{{ now|date:"w" }}');
+			tpl = new dd.Template('{{ now|date:"w" }}');
 			t.is("1", tpl.render(context));
 
-			tpl = new dtt.Template('{{ now|date:"z" }}');
+			tpl = new dd.Template('{{ now|date:"z" }}');
 			t.is("0", tpl.render(context));
 		
-			tpl = new dtt.Template('{{ now|date:"W" }}');
+			tpl = new dd.Template('{{ now|date:"W" }}');
 			t.is("1", tpl.render(context));
 		},
+		function test_filter_default(t){
+			var dd = dojox.dtl;
 
-		function test_filter_htmlstring(t){
-			var dtt = dojox.dtl;
-			var context, tpl;
-
-			context = new dojox.dtl.Context({ unescaped: "Try & cover <all> the \"major\" 'situations' at once" });
-			tpl = new dtt.Template('{{ unescaped|escape }}');
-			t.is("Try &amp; cover &lt;all&gt; the &quot;major&quot; &#39;situations&#39; at once", tpl.render(context));
-
-			context = new dojox.dtl.Context({ unbroken: "This is just\r\n\n\ra bunch\nof text\n\n\nand such" });
-			tpl = new dtt.Template('{{ unbroken|linebreaks }}');
-			t.is("<p>This is just</p>\n\n<p>a bunch<br />of text</p>\n\n<p>and such</p>", tpl.render(context));
-
-			tpl = new dtt.Template('{{ unbroken|linebreaksbr }}');
-			t.is("This is just<br /><br />a bunch<br />of text<br /><br /><br />and such", tpl.render(context));
-
-			context = new dojox.dtl.Context({ tagged: "I'm gonna do something <script>evil</script> with the <html>filter" });
-			tpl = new dtt.Template('{{ tagged|removetags:"script <html>" }}');
-			t.is("I'm gonna do something evil with the filter", tpl.render(context));
-
-			tpl = new dtt.Template('{{ tagged|striptags }}');
-			t.is("I'm gonna do something evil with the filter", tpl.render(context));
+			var context = new dd.Context();
+			tpl = new dd.Template('{{ empty|default }}');
+			t.is("", tpl.render(context));
+			tpl = new dd.Template('{{ empty|default:"full" }}');
+			t.is("full", tpl.render(context));
+			context.empty = "not empty";
+			t.is("not empty", tpl.render(context));
 		},
+		function test_filter_default_if_none(t){
+			var dd = dojox.dtl;
 
-		function test_filter_integers(t){
-			var dtt = dojox.dtl;
-			var context, tpl;
-
-			context = new dojox.dtl.Context({ four: 4 });
-			tpl = new dtt.Template('{{ four|add:"6" }}');
-			t.is("10", tpl.render(context));
-			context.four = "4";
-			t.is("10", tpl.render(context));
-			tpl = new dtt.Template('{{ four|add:"six" }}');
-			t.is("4", tpl.render(context));
-			tpl = new dtt.Template('{{ four|add:"6.6" }}');
-			t.is("10", tpl.render(context));
-
-			context = new dojox.dtl.Context({ pi: 314159265 });
-			tpl = new dtt.Template('{{ pi|get_digit:1 }}');
-			t.is("3", tpl.render(context));
-			tpl = new dtt.Template('{{ pi|get_digit:"2" }}');
-			t.is("1", tpl.render(context));
-			tpl = new dtt.Template('{{ pi|get_digit:0 }}');
-			t.is("314159265", tpl.render(context));
-			tpl = new dtt.Template('{{ "nada"|get_digit:1 }}');
-			t.is("0", tpl.render(context));
+			var context = new dd.Context();
+			tpl = new dd.Template('{{ empty|default_if_none }}');
+			t.is("", tpl.render(context));
+			tpl = new dd.Template('{{ empty|default_if_none:"full" }}');
+			t.is("", tpl.render(context));
+			context.empty = null;
+			t.is("full", tpl.render(context));
+			context.empty = "not empty";
+			t.is("not empty", tpl.render(context));
 		},
+		function test_filter_dictsort(t){
+			var dd = dojox.dtl;
 
-		function test_filter_list(t){
-			var dtt = dojox.dtl;
-			var context, tpl, result;
-
-			context = new dojox.dtl.Context({
+			var context = new dd.Context({
 				fruit: [
 					{ name: "lemons", toString: function(){ return this.name; } },
 					{ name: "apples", toString: function(){ return this.name; } },
 					{ name: "grapes", toString: function(){ return this.name; } }
 				]
 			});
- 			tpl = new dtt.Template('{{ fruit|dictsort|join:"|" }}');
+ 			tpl = new dd.Template('{{ fruit|dictsort|join:"|" }}');
 			t.is("lemons|apples|grapes", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|dictsort:"name"|join:"|" }}');
+			tpl = new dd.Template('{{ fruit|dictsort:"name"|join:"|" }}');
 			t.is("apples|grapes|lemons", tpl.render(context));
+		},
+		function test_filter_dictsort_reversed(t){
+			var dd = dojox.dtl;
 
-			tpl = new dtt.Template('{{ fruit|dictsortreversed:"name"|join:"|" }}');
+			context = new dd.Context({
+				fruit: [
+					{ name: "lemons", toString: function(){ return this.name; } },
+					{ name: "apples", toString: function(){ return this.name; } },
+					{ name: "grapes", toString: function(){ return this.name; } }
+				]
+			});
+			tpl = new dd.Template('{{ fruit|dictsortreversed:"name"|join:"|" }}');
 			t.is("lemons|grapes|apples", tpl.render(context));
+		},
+		function test_filter_divisibleby(t){
+			var dd = dojox.dtl;
 
-			tpl = new dtt.Template('{{ fruit|first }}');
-			t.is("lemons", tpl.render(context));
-
-			tpl = new dtt.Template('{{ fruit|length }}');
-			t.is("3", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|first|length }}');
-			t.is("6", tpl.render(context));
-
-			tpl = new dtt.Template('{{ fruit|length_is:"3" }}');
+			context = new dd.Context();
+			tpl = new dd.Template('{{ 4|divisibleby:"2" }}');
 			t.is("true", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|length_is:"4" }}');
+			context = new dd.Context({ number: 4 });
+			tpl = new dd.Template('{{ number|divisibleby:3 }}');
 			t.is("false", tpl.render(context));
+		},
+		function test_filter_escape(t){
+			var dd = dojox.dtl;
 
-			tpl = new dtt.Template('{{ fruit|random }}');
+			var context = new dd.Context({ unescaped: "Try & cover <all> the \"major\" 'situations' at once" });
+			tpl = new dd.Template('{{ unescaped|escape }}');
+			t.is("Try &amp; cover &lt;all&gt; the &quot;major&quot; &#39;situations&#39; at once", tpl.render(context));
+		},
+		function test_filter_filesizeformat(t){
+			var dd = dojox.dtl;
+
+			var tpl = new dd.Template('{{ 1|filesizeformat }}');
+			t.is("1 byte", tpl.render());
+			tpl = new dd.Template('{{ 512|filesizeformat }}');
+			t.is("512 bytes", tpl.render());
+			tpl = new dd.Template('{{ 1024|filesizeformat }}');
+			t.is("1.0 KB", tpl.render());
+			tpl = new dd.Template('{{ 2048|filesizeformat }}');
+			t.is("2.0 KB", tpl.render());
+			tpl = new dd.Template('{{ 1048576|filesizeformat }}');
+			t.is("1.0 MB", tpl.render());
+			tpl = new dd.Template('{{ 1073741824|filesizeformat }}');
+			t.is("1.0 GB", tpl.render());
+		},
+		function test_filter_first(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				fruit: [
+					{ name: "lemons", toString: function(){ return this.name; } },
+					{ name: "apples", toString: function(){ return this.name; } },
+					{ name: "grapes", toString: function(){ return this.name; } }
+				]
+			});
+			tpl = new dd.Template('{{ fruit|first }}');
+			t.is("lemons", tpl.render(context));
+		},
+		function test_filter_fix_ampersands(t){
+			var dd = dojox.dtl;
+
+			var tpl = new dd.Template('{{ "One & Two"|fix_ampersands }}');
+			t.is("One &amp; Two", tpl.render());
+		},
+		function test_filter_floatformat(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ num1: 34.23234, num2: 34.00000 });
+			var tpl = new dd.Template('{{ num1|floatformat }}');
+			t.is("34.2", tpl.render(context));
+			tpl = new dd.Template('{{ num2|floatformat }}');
+			t.is("34", tpl.render(context));
+			tpl = new dd.Template('{{ num1|floatformat:3 }}');
+			t.is("34.232", tpl.render(context));
+			tpl = new dd.Template('{{ num2|floatformat:3 }}');
+			t.is("34.000", tpl.render(context));
+			tpl = new dd.Template('{{ num1|floatformat:-3 }}');
+			t.is("34.2", tpl.render(context));
+			tpl = new dd.Template('{{ num2|floatformat:-3 }}');
+			t.is("34", tpl.render(context));
+		},
+		function test_filter_get_digit(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ pi: 314159265 });
+			var tpl = new dd.Template('{{ pi|get_digit:1 }}');
+			t.is("3", tpl.render(context));
+			tpl = new dd.Template('{{ pi|get_digit:"2" }}');
+			t.is("1", tpl.render(context));
+			tpl = new dd.Template('{{ pi|get_digit:0 }}');
+			t.is("314159265", tpl.render(context));
+			tpl = new dd.Template('{{ "nada"|get_digit:1 }}');
+			t.is("0", tpl.render(context));
+		},
+		function test_filter_iriencode(t){
+			
+		},
+		function test_filter_join(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ items: ["foo", "bar", "baz" ]});
+			var tpl = new dd.Template("{{ items|join }}");
+			t.is("foo,bar,baz", tpl.render(context));
+
+			tpl = new dd.Template('{{ items|join:"mustard" }}');
+			t.is("foomustardbarmustardbaz", tpl.render(context));
+		},
+		function test_filter_length(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				fruit: [
+					{ name: "lemons", toString: function(){ return this.name; } },
+					{ name: "apples", toString: function(){ return this.name; } },
+					{ name: "grapes", toString: function(){ return this.name; } }
+				]
+			});
+			tpl = new dd.Template('{{ fruit|length }}');
+			t.is("3", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|first|length }}');
+			t.is("6", tpl.render(context));
+		},
+		function test_filter_length_is(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				fruit: [
+					{ name: "lemons", toString: function(){ return this.name; } },
+					{ name: "apples", toString: function(){ return this.name; } },
+					{ name: "grapes", toString: function(){ return this.name; } }
+				]
+			});
+			tpl = new dd.Template('{{ fruit|length_is:"3" }}');
+			t.is("true", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|length_is:"4" }}');
+			t.is("false", tpl.render(context));
+		},
+		function test_filter_linebreaks(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ unbroken: "This is just\r\n\n\ra bunch\nof text\n\n\nand such" });
+			tpl = new dd.Template('{{ unbroken|linebreaks }}');
+			t.is("<p>This is just</p>\n\n<p>a bunch<br />of text</p>\n\n<p>and such</p>", tpl.render(context));
+		},
+		function test_filter_linebreaksbr(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ unbroken: "This is just\r\n\n\ra bunch\nof text\n\n\nand such" });
+			tpl = new dd.Template('{{ unbroken|linebreaksbr }}');
+			t.is("This is just<br /><br />a bunch<br />of text<br /><br /><br />and such", tpl.render(context));
+		},
+		function test_filter_linenumbers(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ lines: "One\nTwo\nThree\nFour\n" });
+			var tpl = new dd.Template('{{ lines|linenumbers }}');
+			t.is("1. One\n2. Two\n3. Three\n4. Four\n5. ", tpl.render(context));
+		},
+		function test_filter_ljust(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			var tpl = new dd.Template('{{ narrow|ljust }}');
+			context.narrow = "even";
+			t.is("even", tpl.render(context));
+			context.narrow = "odd";
+			t.is("odd", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|ljust:"5" }}');
+			context.narrow = "even";
+			t.is("even ", tpl.render(context));
+			context.narrow = "odd";
+			t.is("odd  ", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|ljust:"6" }}');
+			context.narrow = "even";
+			t.is("even  ", tpl.render(context));
+			context.narrow = "odd";
+			t.is("odd   ", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|ljust:"12" }}');
+			context.narrow = "even";
+			t.is("even        ", tpl.render(context));
+			context.narrow = "odd";
+			t.is("odd         ", tpl.render(context));
+		},
+		function test_filter_lower(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ mixed: "MiXeD" });
+			var tpl  = new dd.Template('{{ mixed|lower }}');
+			t.is("mixed", tpl.render(context));
+		},
+		function test_filter_make_list(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ word: "foo", number: 314159265, arr: ["first", "second"], obj: {first: "first", second: "second"} });
+			var tpl = new dd.Template('{{ word|make_list|join:"|" }} {{ number|make_list|join:"|" }} {{ arr|make_list|join:"|" }} {{ obj|make_list|join:"|" }}');
+			t.is("f|o|o 3|1|4|1|5|9|2|6|5 first|second first|second", tpl.render(context));
+		},
+		function test_filter_phone2numeric(t){
+			var dd = dojox.dtl;
+
+			tpl = new dd.Template('{{ "1-800-pottedmeat"|phone2numeric }}');
+			t.is("1-800-7688336328", tpl.render());
+		},
+		function test_filter_pluralize(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ animals: ["bear", "cougar", "aardvark"] });
+			var tpl = new dd.Template('{{ animals|length }} animal{{ animals|length|pluralize }}');
+			t.is("3 animals", tpl.render(context));
+			context.animals = ["bear"];
+			t.is("1 animal", tpl.render(context));
+			context = new dd.Context({ fairies: ["tinkerbell", "Andy Dick" ]});
+			tpl = new dd.Template('{{ fairies|length }} fair{{ fairies|length|pluralize:"y,ies" }}');
+			t.is("2 fairies", tpl.render(context));
+			context.fairies.pop();
+			t.is("1 fairy", tpl.render(context));
+		},
+		function test_filter_pprint(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ animals: ["bear", "cougar", "aardvark"] });
+			tpl = new dd.Template("{{ animals|pprint }}");
+			t.is('["bear", "cougar", "aardvark"]', tpl.render(context));
+		},
+		function test_filter_random(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				fruit: [
+					{ name: "lemons", toString: function(){ return this.name; } },
+					{ name: "apples", toString: function(){ return this.name; } },
+					{ name: "grapes", toString: function(){ return this.name; } }
+				]
+			});
+			tpl = new dd.Template('{{ fruit|random }}');
 			result = tpl.render(context);
 			t.t(result == "lemons" || result == "apples" || result == "grapes");
 			var different = false;
@@ -215,187 +451,203 @@ doh.register("dojox.dtl.text.filter",
 				}
 			}
 			t.t(different);
-
-			tpl = new dtt.Template('{{ fruit|slice:":1"|join:"|" }}');
-			t.is("lemons", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|slice:"1"|join:"|" }}');
-			t.is("apples|grapes", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|slice:"1:3"|join:"|" }}');
-			t.is("apples|grapes", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|slice:""|join:"|" }}');
-			t.is("lemons|apples|grapes", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|slice:"-1"|join:"|" }}');
-			t.is("grapes", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|slice:":-1"|join:"|" }}');
-			t.is("lemons|apples", tpl.render(context));
-			tpl = new dtt.Template('{{ fruit|slice:"-2:-1"|join:"|" }}');
-			t.is("apples", tpl.render(context));
-
-			context = new dojox.dtl.Context({ states: ["States", [["Kansas", [["Lawrence", []], ["Topeka", []]]], ["Illinois", []]]] });
-			tpl = new dtt.Template('{{ states|unordered_list }}');
-			t.is("\t<li>States\n\t<ul>\n\t\t<li>Kansas\n\t\t<ul>\n\t\t\t<li>Lawrence</li>\n\t\t\t<li>Topeka</li>\n\t\t</ul>\n\t\t</li>\n\t\t<li>Illinois</li>\n\t</ul>\n\t</li>", tpl.render(context));
 		},
+		function test_filter_removetags(t){
+			var dd = dojox.dtl;
 
-		function test_filter_logic(t){
-			var dtt = dojox.dtl;
-			var context, tpl;
-			
-			context = new dojox.dtl.Context();
-			tpl = new dtt.Template('{{ empty|default }}');
-			t.is("", tpl.render(context));
-			tpl = new dtt.Template('{{ empty|default:"full" }}');
-			t.is("full", tpl.render(context));
-			context.empty = "not empty";
-			t.is("not empty", tpl.render(context));
-
-			context = new dojox.dtl.Context();
-			tpl = new dtt.Template('{{ empty|default_if_none }}');
-			t.is("", tpl.render(context));
-			tpl = new dtt.Template('{{ empty|default_if_none:"full" }}');
-			t.is("", tpl.render(context));
-			context.empty = null;
-			t.is("full", tpl.render(context));
-			context.empty = "not empty";
-			t.is("not empty", tpl.render(context));
-
-			tpl = new dtt.Template('{{ 4|divisibleby:"2" }}');
-			t.is("true", tpl.render(context));
-			context = new dojox.dtl.Context({ number: 4 });
-			tpl = new dtt.Template('{{ number|divisibleby:3 }}');
-			t.is("false", tpl.render(context));
-
-			tpl = new dtt.Template('{{ true|yesno }}');
-			t.is("yes", tpl.render(context));
-			context = new dojox.dtl.Context({ test: "value" });
-			tpl = new dtt.Template('{{ test|yesno }}');
-			t.is("yes", tpl.render(context));
-			tpl = new dtt.Template('{{ false|yesno }}');
-			t.is("no", tpl.render(context));
-			tpl = new dtt.Template('{{ null|yesno }}');
-			t.is("maybe", tpl.render(context));
-			tpl = new dtt.Template('{{ true|yesno:"bling,whack,soso" }}');
-			t.is("bling", tpl.render(context));
-			context = new dojox.dtl.Context({ test: "value" });
-			tpl = new dtt.Template('{{ test|yesno:"bling,whack,soso" }}');
-			t.is("bling", tpl.render(context));
-			tpl = new dtt.Template('{{ false|yesno:"bling,whack,soso" }}');
-			t.is("whack", tpl.render(context));
-			tpl = new dtt.Template('{{ null|yesno:"bling,whack,soso" }}');
-			t.is("soso", tpl.render(context));
-			tpl = new dtt.Template('{{ null|yesno:"bling,whack" }}');
-			t.is("whack", tpl.render(context));
+			var context = new dd.Context({ tagged: "I'm gonna do something <script>evil</script> with the <html>filter" });
+			tpl = new dd.Template('{{ tagged|removetags:"script <html>" }}');
+			t.is("I'm gonna do something evil with the filter", tpl.render(context));
 		},
+		function test_filter_rjust(t){
+			var dd = dojox.dtl;
 
-		function test_filter_misc(t){
-			var dtt = dojox.dtl;
-			var tpl;
-
-			tpl = new dtt.Template('{{ 1|filesizeformat }}');
-			t.is("1 byte", tpl.render());
-			tpl = new dtt.Template('{{ 512|filesizeformat }}');
-			t.is("512 bytes", tpl.render());
-			tpl = new dtt.Template('{{ 1024|filesizeformat }}');
-			t.is("1.0 KB", tpl.render());
-			tpl = new dtt.Template('{{ 2048|filesizeformat }}');
-			t.is("2.0 KB", tpl.render());
-			tpl = new dtt.Template('{{ 1048576|filesizeformat }}');
-			t.is("1.0 MB", tpl.render());
-			tpl = new dtt.Template('{{ 1073741824|filesizeformat }}');
-			t.is("1.0 GB", tpl.render());
-
-			context = new dojox.dtl.Context({ animals: ["bear", "cougar", "aardvark"] });
-			tpl = new dtt.Template('{{ animals|length }} animal{{ animals|length|pluralize }}');
-			t.is("3 animals", tpl.render(context));
-			context.animals = ["bear"];
-			t.is("1 animal", tpl.render(context));
-			context = new dojox.dtl.Context({ fairies: ["tinkerbell", "Andy Dick" ]});
-			tpl = new dtt.Template('{{ fairies|length }} fair{{ fairies|length|pluralize:"y,ies" }}');
-			t.is("2 fairies", tpl.render(context));
-			context.fairies.pop();
-			t.is("1 fairy", tpl.render(context));
-
-			tpl = new dtt.Template('{{ "1-800-pottedmeat"|phone2numeric }}');
-			t.is("1-800-7688336328", tpl.render());
-
-			context = new dojox.dtl.Context({ animals: ["bear", "cougar", "aardvark"] });
-			tpl = new dtt.Template("{{ animals|pprint }}");
-			t.is('["bear", "cougar", "aardvark"]', tpl.render(context));
-		},
-
-		function test_filter_string(t){
-			var dtt = dojox.dtl;
-			var context, tpl;
-
-			tpl = new dtt.Template('{{ unslashed|addslashes }}');
-			t.is("Test back slashes \\\\, double quotes \\\" and single quotes \\'", tpl.render(new dojox.dtl.Context({ unslashed: "Test back slashes \\, double quotes \" and single quotes '" })));
-
-			tpl = new dtt.Template('{{ uncapped|capfirst }}');
-			t.is("Cap", tpl.render(new dojox.dtl.Context({ uncapped: "cap" })));
-
-			tpl = new dtt.Template('{{ "One & Two"|fix_ampersands }}');
-			t.is("One &amp; Two", tpl.render());
-
-			context = new dojox.dtl.Context({ num1: 34.23234, num2: 34.00000 });
-			tpl = new dtt.Template('{{ num1|floatformat }}');
-			t.is("34.2", tpl.render(context));
-			tpl = new dtt.Template('{{ num2|floatformat }}');
-			t.is("34", tpl.render(context));
-			tpl = new dtt.Template('{{ num1|floatformat:3 }}');
-			t.is("34.232", tpl.render(context));
-			tpl = new dtt.Template('{{ num2|floatformat:3 }}');
-			t.is("34.000", tpl.render(context));
-			tpl = new dtt.Template('{{ num1|floatformat:-3 }}');
-			t.is("34.2", tpl.render(context));
-			tpl = new dtt.Template('{{ num2|floatformat:-3 }}');
-			t.is("34", tpl.render(context));
-
-			context = new dojox.dtl.Context({ lines: "One\nTwo\nThree\nFour\n" });
-			tpl = new dtt.Template('{{ lines|linenumbers }}');
-			t.is("1. One\n2. Two\n3. Three\n4. Four\n5. ", tpl.render(context));
-
-			context = new dojox.dtl.Context({ mixed: "MiXeD" });
-			tpl = new dtt.Template('{{ mixed|lower }}');
-			t.is("mixed", tpl.render(context));
-
-			context = new dojox.dtl.Context({ word: "foo", number: 314159265, arr: ["first", "second"], obj: {first: "first", second: "second"} });
-			tpl = new dtt.Template('{{ word|make_list|join:"|" }} {{ number|make_list|join:"|" }} {{ arr|make_list|join:"|" }} {{ obj|make_list|join:"|" }}');
-			t.is("f|o|o 3|1|4|1|5|9|2|6|5 first|second first|second", tpl.render(context));
-
-			context = new dojox.dtl.Context();
-			tpl = new dtt.Template('{{ narrow|center }}');
+			var context = new dd.Context();
+			var tpl = new dd.Template('{{ narrow|rjust }}');
 			context.narrow = "even";
 			t.is("even", tpl.render(context));
 			context.narrow = "odd";
 			t.is("odd", tpl.render(context));
-			tpl = new dtt.Template('{{ narrow|center:"5" }}');
+			tpl = new dd.Template('{{ narrow|rjust:"5" }}');
 			context.narrow = "even";
-			t.is("even ", tpl.render(context));
+			t.is(" even", tpl.render(context));
 			context.narrow = "odd";
-			t.is(" odd ", tpl.render(context));
-			tpl = new dtt.Template('{{ narrow|center:"6" }}');
+			t.is("  odd", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|rjust:"6" }}');
 			context.narrow = "even";
-			t.is(" even ", tpl.render(context));
+			t.is("  even", tpl.render(context));
 			context.narrow = "odd";
-			t.is(" odd  ", tpl.render(context));
-			tpl = new dtt.Template('{{ narrow|center:"12" }}');
+			t.is("   odd", tpl.render(context));
+			tpl = new dd.Template('{{ narrow|rjust:"12" }}');
 			context.narrow = "even";
-			t.is("    even    ", tpl.render(context));
+			t.is("        even", tpl.render(context));
 			context.narrow = "odd";
-			t.is("    odd     ", tpl.render(context));
+			t.is("         odd", tpl.render(context));
+		},
+		function test_filter_slice(t){
+			var dd = dojox.dtl;
 
-			context = new dojox.dtl.Context({ uncut: "Apples and oranges" });
-			tpl = new dtt.Template('{{ uncut|cut }}');
-			t.is("Apples and oranges", tpl.render(context));
-			tpl = new dtt.Template('{{ uncut|cut:"A" }}');
-			t.is("pples and oranges", tpl.render(context));
-			tpl = new dtt.Template('{{ uncut|cut:" " }}');
-			t.is("Applesandoranges", tpl.render(context));
-			tpl = new dtt.Template('{{ uncut|cut:"e" }}');
-			t.is("Appls and orangs", tpl.render(context));
+			var context = new dd.Context({
+				fruit: [
+					{ name: "lemons", toString: function(){ return this.name; } },
+					{ name: "apples", toString: function(){ return this.name; } },
+					{ name: "grapes", toString: function(){ return this.name; } }
+				]
+			});
+			tpl = new dd.Template('{{ fruit|slice:":1"|join:"|" }}');
+			t.is("lemons", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|slice:"1"|join:"|" }}');
+			t.is("apples|grapes", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|slice:"1:3"|join:"|" }}');
+			t.is("apples|grapes", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|slice:""|join:"|" }}');
+			t.is("lemons|apples|grapes", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|slice:"-1"|join:"|" }}');
+			t.is("grapes", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|slice:":-1"|join:"|" }}');
+			t.is("lemons|apples", tpl.render(context));
+			tpl = new dd.Template('{{ fruit|slice:"-2:-1"|join:"|" }}');
+			t.is("apples", tpl.render(context));
+		},
+		function test_filter_slugify(t){
+			var dd = dojox.dtl;
 
-			context = new dojox.dtl.Context({ unslugged: "Apples and oranges()"});
-			tpl = new dtt.Template('{{ unslugged|slugify }}');
+			var context = new dd.Context({ unslugged: "Apples and oranges()"});
+			tpl = new dd.Template('{{ unslugged|slugify }}');
 			t.is("apples-and-oranges", tpl.render(context));
+		},
+		function test_filter_stringformat(t){
+			
+		},
+		function test_filter_striptags(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ tagged: "I'm gonna do something <script>evil</script> with the <html>filter" });
+			tpl = new dd.Template('{{ tagged|striptags }}');
+			t.is("I'm gonna do something evil with the filter", tpl.render(context));
+		},
+		function test_filter_time(t){
+			var dd = dojox.dtl;
+			var context = new dd.Context({ now: new Date(2007, 0, 1) });
+
+			tpl = new dd.Template('{{ now|time }}');
+			t.is(dojox.date.php.format(context.now, "P", dd.utils.date._overrides), tpl.render(context));
+		},
+		function test_filter_timesince(t){
+			var dd = dojox.dtl;
+			var context = new dd.Context({ now: new Date(2007, 0, 1), then: new Date(2007, 1, 1) });
+
+			tpl = new dd.Template('{{ now|timesince:then }}');
+			t.is("1 month", tpl.render(context));
+			context.then = new Date(2007, 0, 5);
+			t.is("4 days", tpl.render(context));
+			context.then = new Date(2007, 0, 17);
+			t.is("2 weeks", tpl.render(context));
+			context.then = new Date(2008, 1, 1);
+			t.is("1 year", tpl.render(context));
+		},
+		function test_filter_timeuntil(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ now: new Date(2007, 0, 1), then: new Date(2007, 1, 1) });
+			var tpl = new dd.Template('{{ now|timeuntil:then }}');
+			t.is("1 month", tpl.render(context));
+			context.then = new Date(2007, 0, 5);
+			t.is("4 days", tpl.render(context));
+			context.then = new Date(2007, 0, 17);
+			t.is("2 weeks", tpl.render(context));
+			context.then = new Date(2008, 1, 1);
+			t.is("1 year", tpl.render(context));	
+		},
+		function test_filter_title(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ name: "potted meat" });
+			var tpl = new dd.Template("{{ name|title }}");
+			t.is("Potted Meat", tpl.render(context));
+
+			context.name = "What's going on?";
+			t.is("What's Going On?", tpl.render(context));
+
+			context.name = "use\nline\nbREAKs\tand tabs";
+			t.is("Use\nLine\nBreaks\tAnd Tabs", tpl.render(context));
+		},
+		function test_filter_truncatewords(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ word: "potted meat writes a lot of tests" });
+			var tpl = new dd.Template("{{ word|truncatewords }}");
+			t.is(context.word, tpl.render(context));
+
+			tpl = new dd.Template('{{ word|truncatewords:"1" }}');
+			t.is("potted", tpl.render(context));
+
+			tpl = new dd.Template('{{ word|truncatewords:"2" }}');
+			t.is("potted meat", tpl.render(context));
+
+			tpl = new dd.Template('{{ word|truncatewords:20" }}');
+			t.is(context.word, tpl.render(context));
+
+			context.word = "potted \nmeat   \nwrites  a lot of tests";
+			tpl = new dd.Template('{{ word|truncatewords:"3" }}');
+			t.is("potted \nmeat   \nwrites", tpl.render(context));
+		},
+		function test_filter_truncatewords_html(t){
+			
+		},
+		function test_filter_unordered_list(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ states: ["States", [["Kansas", [["Lawrence", []], ["Topeka", []]]], ["Illinois", []]]] });
+			tpl = new dd.Template('{{ states|unordered_list }}');
+			t.is("\t<li>States\n\t<ul>\n\t\t<li>Kansas\n\t\t<ul>\n\t\t\t<li>Lawrence</li>\n\t\t\t<li>Topeka</li>\n\t\t</ul>\n\t\t</li>\n\t\t<li>Illinois</li>\n\t</ul>\n\t</li>", tpl.render(context));
+		},
+		function test_filter_upper(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({ mixed: "MiXeD" });
+			var tpl  = new dd.Template('{{ mixed|upper }}');
+			t.is("MIXED", tpl.render(context));
+		},
+		function test_filter_urlencode(t){
+			
+		},
+		function test_filter_urlize(t){
+			
+		},
+		function test_filter_urlizetrunc(t){
+			
+		},
+		function test_filter_wordcount(t){
+			
+		},
+		function test_filter_wordwrap(t){
+			
+		},
+		function test_filter_yesno(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			tpl = new dd.Template('{{ true|yesno }}');
+			t.is("yes", tpl.render(context));
+			context = new dd.Context({ test: "value" });
+			tpl = new dd.Template('{{ test|yesno }}');
+			t.is("yes", tpl.render(context));
+			tpl = new dd.Template('{{ false|yesno }}');
+			t.is("no", tpl.render(context));
+			tpl = new dd.Template('{{ null|yesno }}');
+			t.is("maybe", tpl.render(context));
+			tpl = new dd.Template('{{ true|yesno:"bling,whack,soso" }}');
+			t.is("bling", tpl.render(context));
+			context = new dd.Context({ test: "value" });
+			tpl = new dd.Template('{{ test|yesno:"bling,whack,soso" }}');
+			t.is("bling", tpl.render(context));
+			tpl = new dd.Template('{{ false|yesno:"bling,whack,soso" }}');
+			t.is("whack", tpl.render(context));
+			tpl = new dd.Template('{{ null|yesno:"bling,whack,soso" }}');
+			t.is("soso", tpl.render(context));
+			tpl = new dd.Template('{{ null|yesno:"bling,whack" }}');
+			t.is("whack", tpl.render(context));
 		}
 	]
 );
