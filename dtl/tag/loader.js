@@ -55,7 +55,20 @@ dojo.mixin(dojox.dtl.tag.loader.ExtendsNode.prototype, {
 	parents: {},
 	getParent: function(context){
 		if(!this.parent){
-			this.parent = this.key.resolve(context);
+			this.parent = context.get(this.key, false);
+			if(!this.parent){
+				throw new Error("extends tag used a variable that did not resolve");
+			}
+			if(typeof this.parent == "object"){
+				if(this.parent.url){
+					if(this.parent.shared){
+						this.shared = true;
+					}
+					this.parent = this.parent.url.toString();
+				}else{
+					this.parent = this.parent.toString();
+				}
+			}
 			if(this.parent && this.parent.indexOf("shared:") == 0){
 				this.shared = true;
 				this.parent = this.parent.substring(7, parent.length);
@@ -122,7 +135,7 @@ dojox.dtl.tag.loader.extends_ = function(parser, text){
 	if(parts[1].charAt(0) == '"' || parts[1].charAt(0) == "'"){
 		parent = parts[1].substring(1, parts[1].length - 1);
 	}else{
-		key = dojox.dtl.text.VarNode(parts[1]);
+		key = parts[1];
 	}
 	if(parent && parent.indexOf("shared:") == 0){
 		shared = true;

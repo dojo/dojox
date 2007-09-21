@@ -59,11 +59,11 @@ Install into the following directory structure:
 What's Been Done
 
 | Implemented |     Tag     | Text Unit Test | HTML Unit Test |
-|      X      | block       |                |                |
+|      X      | block       |       X        |                |
 |             | comment     |                |                |
 |             | cycle       |                |                |
 |             | debug       |                |                |
-|      X      | extends     |                |                |
+|      X      | extends     |       X        |                |
 |             | filter      |                |                |
 |             | firstof     |                |                |
 |      X      | for         |                |                |

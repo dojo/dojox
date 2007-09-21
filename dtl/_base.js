@@ -204,7 +204,7 @@ dojox.dtl.Template = function(str){
 	var st = dojox.dtl.text;
 	var tokens = st.tokenize(str);
 	var parser = new st.Parser(tokens);
-	this.contents = parser.parse();
+	this.nodelist = parser.parse();
 }
 dojo.mixin(dojox.dtl.Template.prototype, {
 	render: function(context, /*concatenatable?*/ buffer){
@@ -213,7 +213,7 @@ dojo.mixin(dojox.dtl.Template.prototype, {
 			dojo.require("dojox.string.Builder");
 			buffer = new dojox.string.Builder();
 		}
-		return this.contents.render(context, buffer) + "";
+		return this.nodelist.render(context, buffer) + "";
 	}
 });
 
@@ -417,6 +417,9 @@ dojo.mixin(dojox.dtl.text.Parser.prototype, {
 		// summary: Returns the next token in the list.
 		var token = this.contents.shift();
 		return {type: token[0], text: token[1]};
+	},
+	getTemplate: function(file){
+		return new dojox.dtl.Template(file);
 	}
 });
 
