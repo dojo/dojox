@@ -68,7 +68,13 @@
 					}
 				},
 				_loadList: function(data){
-					this.contexts.list = new dojox.dtl.Context(data).extend({title: "Blog Posts"});
+					this.contexts.list = new dojox.dtl.Context(data).extend({
+						title: "Blog Posts",
+						base: {
+							url: dojo.moduleUrl("dojox.dtl.demos.templates", "blog_base.html"),
+							shared: true
+						}
+					});
 					this.render(this.templates.list, this.contexts.list);
 				},
 				_loadDetail: function(data){
@@ -78,11 +84,21 @@
 					}
 					context.blog.date = new Date(context.blog.date);
 					context.blog.title = this.contexts.list.get("blog_list", {})[data.key].title;
-					this.contexts.blogs[data.key] = new dojox.dtl.Context(context);
+					this.contexts.blogs[data.key] = new dojox.dtl.Context(context).extend({
+						base: {
+							url: dojo.moduleUrl("dojox.dtl.demos.templates", "blog_base.html"),
+							shared: true
+						}
+					});
 					this.render(this.templates.detail, this.contexts.blogs[data.key]);
 				},
 				_loadPage: function(data){
-					this.contexts.pages[data.key] = new dojox.dtl.Context(data);
+					this.contexts.pages[data.key] = new dojox.dtl.Context(data).extend({
+						base: {
+							url: dojo.moduleUrl("dojox.dtl.demos.templates", "blog_base.html"),
+							shared: true
+						}
+					});
 					this.render(this.templates.page, this.contexts.pages[data.key]);
 				}
 			});
