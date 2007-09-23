@@ -82,6 +82,16 @@ doh.register("dojox.dtl.text.tag",
 
 			template = new dd.Template("{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' as steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket.");
 			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. Extra Pocket. Hot Pocket. Diarrhea Pocket.", template.render(context));
+		},
+		function test_tag_debug(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				items: ["apple", "banana", "lemon"],
+				unplugged: "Torrey"
+			});
+			var template = new dd.Template("{% debug %}");
+			t.is('items: ["apple", "banana", "lemon"]\n\nunplugged: "Torrey"\n\n', template.render(context));
 		}
 	]
 );
