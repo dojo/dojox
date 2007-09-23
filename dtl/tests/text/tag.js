@@ -92,6 +92,12 @@ doh.register("dojox.dtl.text.tag",
 			});
 			var template = new dd.Template("{% debug %}");
 			t.is('items: ["apple", "banana", "lemon"]\n\nunplugged: "Torrey"\n\n', template.render(context));
+		},
+		function test_tag_filter(t){
+			var dd = dojox.dtl;
+
+			var template = new dd.Template('{% filter lower|center:"15" %}Hot Pocket{% endfilter %}');
+			t.is("  hot pocket   ", template.render());
 		}
 	]
 );
