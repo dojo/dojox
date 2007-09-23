@@ -209,7 +209,7 @@ dojox.dtl.Template = function(str){
 }
 dojo.extend(dojox.dtl.Template, {
 	render: function(context, /*concatenatable?*/ buffer){
-		context = context || {};
+		context = context || new dojox.dtl.Context({});
 		if(!buffer){
 			dojo.require("dojox.string.Builder");
 			buffer = new dojox.string.Builder();
@@ -238,6 +238,9 @@ dojox.dtl.Filter = function(token){
 			}else if(this._exists(matches, 2)){
 				// "text"
 				key = '"' + matches[2] + '"';
+			}else if(this._exists(matches, 8)){
+				// 'text'
+				key = '"' + matches[8] + '"';
 			}
 		}else{
 			if(this._exists(matches, 7)){
@@ -261,7 +264,7 @@ dojox.dtl.Filter = function(token){
 	this.filters = filters;
 } 
 dojo.extend(dojox.dtl.Filter, {
-	_re: /(?:^_\("([^\\"]*(?:\\.[^\\"])*)"\)|^"([^\\"]*(?:\\.[^\\"]*)*)"|^([a-zA-Z0-9_.]+)|\|(\w+)(?::(?:_\("([^\\"]*(?:\\.[^\\"])*)"\)|"([^\\"]*(?:\\.[^\\"]*)*)"|([a-zA-Z0-9_.]+)))?)/g,
+	_re: /(?:^_\("([^\\"]*(?:\\.[^\\"])*)"\)|^"([^\\"]*(?:\\.[^\\"]*)*)"|^([a-zA-Z0-9_.]+)|\|(\w+)(?::(?:_\("([^\\"]*(?:\\.[^\\"])*)"\)|"([^\\"]*(?:\\.[^\\"]*)*)"|([a-zA-Z0-9_.]+)))?|^'([^\\']*(?:\\.[^\\']*)*)')/g,
 	_exists: function(arr, index){
 		if(typeof arr[index] != "undefined" && arr[index] !== ""){
 			return true;
@@ -411,6 +414,11 @@ dojo.extend(dojox.dtl.Parser, {
 				}
 			}
 		}
+
+		if(stop_at.length){
+			throw new Error("Could not find closing tag(s): " + stop_at.toString());
+		}
+
 		return nodelist;
 	},
 	next: function(){
@@ -427,6 +435,9 @@ dojo.extend(dojox.dtl.Parser, {
 			}
 		}
 		throw new Error("Unclosed tag found when looking for " + endtag);
+	},
+	getVarNode: function(){
+		return dojox.dtl.VarNode;
 	},
 	getTemplate: function(file){
 		return new dojox.dtl.Template(file);
@@ -566,6 +577,7 @@ dojo.mixin(dojox.dtl.register, {
 	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for"]);
 	register.tag(dtt + ".loader", dtt + ".loader", ["extends", "block"]);
 	register.tag(dtt + ".misc", dtt + ".misc", ["comment"]);
+	register.tag(dtt + ".loop", dtt + ".loop", ["cycle"]);
 
 	var dtf = "dojox.dtl.filter";
 	register.filter(dtf + ".dates", dtf + ".dates", ["date", "time", "timesince", "timeuntil"]);

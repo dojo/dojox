@@ -544,6 +544,11 @@ dojo.extend(dojox.dtl.HtmlParser, {
 				}
 			}
 		}
+
+		if(stop_at.length){
+			throw new Error("Could not find closing tag(s): " + stop_at.toString());
+		}
+
 		return nodelist;
 	},
 	next: function(){
@@ -553,6 +558,9 @@ dojo.extend(dojox.dtl.HtmlParser, {
 	},
 	skipPast: function(endtag){
 		return dojox.dtl.Parser.prototype.skipPast.call(this, endtag);
+	},
+	getVarNode: function(){
+		return dojox.dtl.HtmlVarNode;
 	},
 	getTemplate: function(/*String*/ loc){
 		return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(loc));
