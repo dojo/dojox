@@ -579,7 +579,7 @@ dojo.mixin(dojox.dtl.register, {
 	var dtt = "dojox.dtl.tag";
 	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for"]);
 	register.tag(dtt + ".loader", dtt + ".loader", ["extends", "block"]);
-	register.tag(dtt + ".misc", dtt + ".misc", ["comment", "debug"]);
+	register.tag(dtt + ".misc", dtt + ".misc", ["comment", "debug", "filter"]);
 	register.tag(dtt + ".loop", dtt + ".loop", ["cycle"]);
 
 	var dtf = "dojox.dtl.filter";

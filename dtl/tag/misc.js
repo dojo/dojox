@@ -30,6 +30,27 @@ dojo.extend(dojox.dtl.tag.misc.DebugNode, {
 	toString: function(){ return "dojox.dtl.tag.misc.DebugNode"; }
 });
 
+dojox.dtl.tag.misc.FilterNode = function(varnode, nodelist){
+	this._varnode = varnode;
+	this._nodelist = nodelist;
+}
+dojo.extend(dojox.dtl.tag.misc.FilterNode, {
+	render: function(context, buffer){
+		// Doing this in HTML requires a different buffer with a fake root node
+		var output = this._nodelist.render(context, new dojox.string.Builder());
+		context.update({ "var": output.toString() });
+		var filtered = this._varnode.render(context, buffer);
+		context.pop();
+		return buffer;
+	},
+	unrender: function(context, buffer){
+		return buffer;
+	},
+	clone: function(buffer){
+		return new this.constructor(this._expression, this._nodelist.clone(context));
+	}
+});
+
 dojox.dtl.tag.misc.comment = function(parser, text){
 	// summary: Ignore everything between {% comment %} and {% endcomment %}
 	parser.skipPast("endcomment");
@@ -39,4 +60,13 @@ dojox.dtl.tag.misc.comment = function(parser, text){
 dojox.dtl.tag.misc.debug = function(parser, text){
 	// summary: Output the current context, maybe add more stuff later.
 	return new dojox.dtl.tag.misc.DebugNode(parser.getTextNode());
+}
+
+dojox.dtl.tag.misc.filter = function(parser, text){
+	// summary: Filter the contents of the blog through variable filters.
+	var parts = text.split(" ", 2);
+	var varnode = new (parser.getVarNode())("var|" + parts[1]);
+	var nodelist = parser.parse(["endfilter"]);
+	parser.next();
+	return new dojox.dtl.tag.misc.FilterNode(varnode, nodelist);
 }

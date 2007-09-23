@@ -64,7 +64,7 @@ What's Been Done
 |      X      | cycle       |       X        |                |
 |      X      | debug       |       X        |                |
 |      X      | extends     |       X        |                |
-|             | filter      |                |                |
+|      X      | filter      |       X        |                |
 |             | firstof     |                |                |
 |      X      | for         |                |                |
 |      X      | if          |                |                |
