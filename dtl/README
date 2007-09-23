@@ -60,7 +60,7 @@ What's Been Done
 
 | Implemented |     Tag     | Text Unit Test | HTML Unit Test |
 |      X      | block       |       X        |                |
-|             | comment     |                |                |
+|      X      | comment     |       X        |                |
 |             | cycle       |                |                |
 |             | debug       |                |                |
 |      X      | extends     |       X        |                |
@@ -175,7 +175,7 @@ the keys in the context.
 Buffers
 
 Both the base and HTML versions of dojox.dtl use buffers. The base version uses
-dojox.string.Buffer and the HTML version uses dojox.dtl.html.Buffer.
+dojox.string.Builder and the HTML version uses dojox.dtl.HtmlBuffer.
 
 The HTML buffer has several calls important to rendering:
 
@@ -199,5 +199,5 @@ cloned, they can't simply be re-rendered, especially if they involve a Node.
 Also, in the case of an if/else block, we need to be able to not just render
 one of the blocks, but also unrender the second.
 
-This is really simple code, a good example is the dojox.dtl.html.Node
+This is really simple code, a good example is the dojox.dtl.HtmlNode
 object. Each function in this object is only one line long.

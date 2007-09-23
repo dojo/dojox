@@ -134,7 +134,8 @@ dojo.extend(dojox.dtl.Context, {
 		if(dict){
 			dojo.mixin(this, dict);
 		}
-	}
+	},
+	toString: function(){ return "dojox.dtl.Context"; }
 });
 
 dojox.dtl.text = {
@@ -176,8 +177,8 @@ dojox.dtl.text = {
 		return dojo._getText(file.toString()) || "";
 	},
 	tokenize: function(str){
-		var st = dojox.dtl.text;
-		var types = st.types;
+		var st = dojox.dtl;
+		var types = st.text.types;
 		var tokens = [];
 
 		var re = /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(.+?)\s*%\})/g;
@@ -201,12 +202,12 @@ dojox.dtl.text = {
 }
 
 dojox.dtl.Template = function(str){
-	var st = dojox.dtl.text;
-	var tokens = st.tokenize(str);
+	var st = dojox.dtl;
+	var tokens = st.text.tokenize(str);
 	var parser = new st.Parser(tokens);
 	this.nodelist = parser.parse();
 }
-dojo.mixin(dojox.dtl.Template.prototype, {
+dojo.extend(dojox.dtl.Template, {
 	render: function(context, /*concatenatable?*/ buffer){
 		context = context || {};
 		if(!buffer){
@@ -214,16 +215,11 @@ dojo.mixin(dojox.dtl.Template.prototype, {
 			buffer = new dojox.string.Builder();
 		}
 		return this.nodelist.render(context, buffer) + "";
-	}
+	},
+	toString: function(){ return "dojox.dtl.Template"; }
 });
 
-dojox.dtl.text.resolveVariable = function(token, context){
-	// summary: Quickly resolve a variables
-	var filter = new dojox.dtl.text.Filter(token);
-	return filter.resolve(context);
-}
-
-dojox.dtl.text.Filter = function(token){
+dojox.dtl.Filter = function(token){
 	// summary: Uses a string to find (and manipulate) a variable
 	if(!token) throw new Error("Filter must be called with variable name");
 	this.contents = token;
@@ -264,7 +260,7 @@ dojox.dtl.text.Filter = function(token){
 	this.key = key;
 	this.filters = filters;
 } 
-dojo.mixin(dojox.dtl.text.Filter.prototype, {
+dojo.extend(dojox.dtl.Filter, {
 	_re: /(?:^_\("([^\\"]*(?:\\.[^\\"])*)"\)|^"([^\\"]*(?:\\.[^\\"]*)*)"|^([a-zA-Z0-9_.]+)|\|(\w+)(?::(?:_\("([^\\"]*(?:\\.[^\\"])*)"\)|"([^\\"]*(?:\\.[^\\"]*)*)"|([a-zA-Z0-9_.]+)))?)/g,
 	_exists: function(arr, index){
 		if(typeof arr[index] != "undefined" && arr[index] !== ""){
@@ -320,25 +316,27 @@ dojo.mixin(dojox.dtl.text.Filter.prototype, {
 			}
 		}
 		return current;
-	}
+	},
+	toString: function(){ return "dojox.dtl.Filter"; }
 });
 
-dojox.dtl.text.Node = function(/*Object*/ obj){
+dojox.dtl.Node = function(/*Object*/ obj){
 	// summary: Basic catch-all node
 	this.contents = obj;
 }
-dojo.mixin(dojox.dtl.text.Node.prototype, {
+dojo.extend(dojox.dtl.Node, {
 	render: function(context, buffer){
 		// summary: Adds content onto the buffer
 		return buffer.concat(this.contents);
-	}
+	},
+	toString: function(){ return "dojox.dtl.Node"; }
 });
 
-dojox.dtl.text.NodeList = function(/*Node[]*/ nodes){
+dojox.dtl.NodeList = function(/*Node[]*/ nodes){
 	// summary: Allows us to render a group of nodes
 	this.contents = nodes || [];
 }
-dojo.mixin(dojox.dtl.text.NodeList.prototype, {
+dojo.extend(dojox.dtl.NodeList, {
 	push: function(node){
 		// summary: Add a new node to the list
 		this.contents.push(node);
@@ -352,34 +350,36 @@ dojo.mixin(dojox.dtl.text.NodeList.prototype, {
 		return buffer;
 	},
 	unrender: function(context, buffer){ return buffer; },
-	clone: function(){ return this; }
+	clone: function(){ return this; },
+	toString: function(){ return "dojox.dtl.NodeList"; }
 });
 
-dojox.dtl.text.TextNode = dojox.dtl.text.Node;
+dojox.dtl.TextNode = dojox.dtl.Node;
 
-dojox.dtl.text.VarNode = function(str){
+dojox.dtl.VarNode = function(str){
 	// summary: A node to be processed as a variable
-	this.contents = new dojox.dtl.text.Filter(str);
+	this.contents = new dojox.dtl.Filter(str);
 }
-dojo.mixin(dojox.dtl.text.VarNode.prototype, {
+dojo.extend(dojox.dtl.VarNode, {
 	render: function(context, buffer){
 		var str = this.contents.resolve(context);
 		return buffer.concat(str);
-	}
+	},
+	toString: function(){ return "dojox.dtl.VarNode"; }
 });
 
-dojox.dtl.text.Parser = function(tokens){
+dojox.dtl.Parser = function(tokens){
 	// summary: Parser used during initialization and for tag groups.
 	this.contents = tokens;
 }
-dojo.mixin(dojox.dtl.text.Parser.prototype, {
+dojo.extend(dojox.dtl.Parser, {
 	parse: function(/*Array?*/ stop_at){
 		// summary: Turns tokens into nodes
 		// description: Steps into tags are they're found. Blocks use the parse object
 		//		to find their closing tag (the stop_at array). stop_at is inclusive, it
 		//		returns the node that matched.
-		var st = dojox.dtl.text;
-		var types = st.types;
+		var st = dojox.dtl;
+		var types = st.text.types;
 		var terminators = {};
 		var tokens = this.contents;
 		stop_at = stop_at || [];
@@ -418,9 +418,20 @@ dojo.mixin(dojox.dtl.text.Parser.prototype, {
 		var token = this.contents.shift();
 		return {type: token[0], text: token[1]};
 	},
+	skipPast: function(endtag){
+		var types = dojox.dtl.text.types;
+		while(this.contents.length){
+			var token = this.contents.shift();
+			if(token[0] == types.tag && token[1] == endtag){
+				return;
+			}
+		}
+		throw new Error("Unclosed tag found when looking for " + endtag);
+	},
 	getTemplate: function(file){
 		return new dojox.dtl.Template(file);
-	}
+	},
+	toString: function(){ return "dojox.dtl.Parser"; }
 });
 
 dojox.dtl.register = function(module, cols, args, /*Function*/ normalize){
@@ -554,6 +565,7 @@ dojo.mixin(dojox.dtl.register, {
 	var dtt = "dojox.dtl.tag";
 	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for"]);
 	register.tag(dtt + ".loader", dtt + ".loader", ["extends", "block"]);
+	register.tag(dtt + ".misc", dtt + ".misc", ["comment"]);
 
 	var dtf = "dojox.dtl.filter";
 	register.filter(dtf + ".dates", dtf + ".dates", ["date", "time", "timesince", "timeuntil"]);
@@ -574,4 +586,10 @@ dojox.dtl.replace = function(str, token, repl){
 		str = str.substring(0, pos) + repl + str.substring(pos + len);
 	}
 	return str;
+}
+
+dojox.dtl.resolveVariable = function(token, context){
+	// summary: Quickly resolve a variables
+	var filter = new dojox.dtl.Filter(token);
+	return filter.resolve(context);
 }

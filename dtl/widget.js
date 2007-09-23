@@ -33,15 +33,10 @@ dojo.declare("dojox.dtl._Widget", [dijit._Widget, dijit._Contained],
 dojo.declare("dojox.dtl.AttachPoint", [dijit._Widget, dijit._Container],
 	{
 		constructor: function(props, node){
-			this._render = new dojox.dtl.render.html.Render();
-			this._render.attach(node);
+			this._render = new dojox.dtl.render.html.Render(node);
 		},
 		render: function(/*dojox.dtl.HtmlTemplate*/ tpl, /*dojox.dtl.Context*/ context){
-			if(tpl !== this._template){
-				this._template = tpl;
-				this._render.setTemplate(tpl);
-			}
-			this._render.render(context);
+			this._render.render(tpl, context);
 		}
 	}
 );

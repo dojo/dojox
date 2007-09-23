@@ -6,7 +6,7 @@ dojox.dtl.tag.event.EventNode = function(type, fn){
 	this._type = type;
 	this.contents = fn;
 }
-dojo.mixin(dojox.dtl.tag.event.EventNode.prototype, {
+dojo.extend(dojox.dtl.tag.event.EventNode, {
 	render: function(context, buffer){
 		if(!this._clear){
 			buffer.getParent()[this._type] = null;

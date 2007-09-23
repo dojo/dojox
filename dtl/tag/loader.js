@@ -6,7 +6,7 @@ dojox.dtl.tag.loader.BlockNode = function(name, nodelist){
 	this.name = name;
 	this.nodelist = nodelist; // Can be overridden
 }
-dojo.mixin(dojox.dtl.tag.loader.BlockNode.prototype, {
+dojo.extend(dojox.dtl.tag.loader.BlockNode, {
 	render: function(context, buffer){
 		if(buffer.getParent) var parent = buffer.getParent(); // Need this for HTML tree structure
 		if(this.override){
@@ -51,7 +51,7 @@ dojox.dtl.tag.loader.ExtendsNode = function(getTemplate, nodelist, shared, paren
 	this.parent = parent;
 	this.key = key;
 }
-dojo.mixin(dojox.dtl.tag.loader.ExtendsNode.prototype, {
+dojo.extend(dojox.dtl.tag.loader.ExtendsNode, {
 	parents: {},
 	getParent: function(context){
 		if(!this.parent){
@@ -91,7 +91,7 @@ dojo.mixin(dojox.dtl.tag.loader.ExtendsNode.prototype, {
 		return this.parent;
 	},
 	render: function(context, buffer){
-		var st = dojox.dtl.text;
+		var st = dojox.dtl;
 		var stbl = dojox.dtl.tag.loader;
 		var parent = this.getParent(context);
 		var isChild = parent.nodelist[0] instanceof this.constructor;
@@ -123,9 +123,7 @@ dojo.mixin(dojox.dtl.tag.loader.ExtendsNode.prototype, {
 	unrender: function(context, buffer){
 		return this.rendered.unrender(context, buffer);
 	},
-	toString: function(){
-		return "dojox.dtl.block.ExtendsNode";
-	}
+	toString: function(){ return "dojox.dtl.block.ExtendsNode"; }
 });
 dojox.dtl.tag.loader.extends_ = function(parser, text){
 	var parts = text.split(" ");

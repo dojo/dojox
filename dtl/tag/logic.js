@@ -8,7 +8,7 @@ dojox.dtl.tag.logic.IfNode = function(bools, trues, falses, type){
 	this.falses = falses;
 	this.type = type;
 }
-dojo.mixin(dojox.dtl.tag.logic.IfNode.prototype, {
+dojo.extend(dojox.dtl.tag.logic.IfNode, {
 	render: function(context, buffer){
 		if(this.type == "or"){
 			for(var i = 0, bool; bool = this.bools[i]; i++){
@@ -40,7 +40,7 @@ dojox.dtl.tag.logic.ForNode = function(assign, loop, reversed, nodelist){
 	this.nodelist = nodelist;
 	this.pool = [];
 }
-dojo.mixin(dojox.dtl.tag.logic.ForNode.prototype, {
+dojo.extend(dojox.dtl.tag.logic.ForNode, {
 	render: function(context, buffer){
 		var parentloop = {};
 		if(context.forloop){
@@ -109,7 +109,7 @@ dojox.dtl.tag.logic.if_ = function(parser, text){
 			part = part.substring(4);
 			not = true;
 		}
-		bools.push([not, new dojox.dtl.text.Filter(part)]);
+		bools.push([not, new dojox.dtl.Filter(part)]);
 	}
 	var trues = parser.parse(["else", "endif"]);
 	var falses = false;

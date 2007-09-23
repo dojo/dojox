@@ -17,40 +17,45 @@ dojox.dtl.render.html.sensitivity = {
 	ATTRIBUTE: 2, // If an attribute or node changes, implement buffering
 	TEXT: 3 // If any text at all changes, implement buffering
 }
-dojox.dtl.render.html.Render = function(/*dojox.dtl.HtmlTemplate*/ tpl){
+dojox.dtl.render.html.Render = function(/*DOMNode?*/ attachPoint, /*dojox.dtl.HtmlTemplate?*/ tpl){
 	this._tpl = tpl;
-	this.swap = dojo.hitch(this, function(){
+	this._node = attachPoint;
+	this._swap = dojo.hitch(this, function(){
 		// summary: Swaps the node out the first time the DOM is changed
 		// description: Gets swapped back it at end of render
-		if(this.domNode === this._tpl.getRootNode()){
-			var frag = this.domNode;
-			this.domNode = this.domNode.cloneNode(true);
-			frag.parentNode.replaceChild(this.domNode, frag);
+		if(this._node === this._tpl.getRootNode()){
+			var frag = this._node;
+			this._node = this._node.cloneNode(true);
+			frag.parentNode.replaceChild(this._node, frag);
 		}
 	});
 }
-dojo.mixin(dojox.dtl.render.html.Render.prototype, {
-	setTemplate: function(/*dojox.dtl.HtmlTemplate*/ tpl, /*Object?*/ context){
-		this.context = context || this.context;
-		if(this._tpl && this.context){
-			this._tpl.unrender(this.context, this._tpl.getBuffer());
+dojo.extend(dojox.dtl.render.html.Render, {
+	sensitivity: dojox.dtl.render.html.sensitivity,
+	setAttachPoint: function(/*Node*/ node){
+		this._node = node;
+	},
+	render: function(/*dojox.dtl.HtmlTemplate*/ tpl, /*Object*/ context, /*dojox.dtl.HtmlBuffer?*/ buffer){
+		if(!this._node){
+			throw new Error("You cannot use the Render object without specifying where you want to render it");
+		}
+
+		buffer = buffer || tpl.getBuffer();
+
+		if(this._tpl && this._tpl !== tpl){
+			this._tpl.unrender(context, buffer);
 		}
 		this._tpl = tpl;
-	},
-	attach: function(/*Node*/ node){
-		this.domNode = node;
-	},
-	render: function(/*Object*/ context, /*dojox.dtl.html.Buffer?*/ buffer){
-		this.context = context;
-		buffer = buffer || this._tpl.getBuffer();
-		if(context.getThis() && context.getThis().buffer == 1){
-			buffer.onAddNode = this.swap;
-			buffer.onRemoveNode = this.swap;
+
+		if(context.getThis() && context.getThis().buffer == this.sensitivity.NODE){
+			buffer.onAddNode = this._swap;
+			buffer.onRemoveNode = this._swap;
 		}
-		var frag = this._tpl.render(context, buffer).getParent();
-		if(this.domNode !== frag){
-			this.domNode.parentNode.replaceChild(frag, this.domNode);
-			this.domNode = frag;
+
+		var frag = tpl.render(context, buffer).getParent();
+		if(this._node !== frag){
+			this._node.parentNode.replaceChild(frag, this._node);
+			this._node = frag;
 		}
 	}
 });

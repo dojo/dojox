@@ -3,7 +3,7 @@ dojo.provide("dojox.dtl.tag.html");
 dojo.require("dojox.dtl._base");
 
 dojox.dtl.tag.html.HtmlNode = function(name){
-	this.contents = new dojox.dtl.text.Filter(name);
+	this.contents = new dojox.dtl.Filter(name);
 	this._div = document.createElement("div");
 	this._lasts = [];
 }
@@ -42,7 +42,8 @@ dojo.extend(dojox.dtl.tag.html.HtmlNode, {
 	},
 	clone: function(buffer){
 		return new dojox.dtl.tag.html.HtmlNode(this.contents.contents);
-	}
+	},
+	toString: function(){ return "dojox.dtl.tag.html.HtmlNode"; }
 });
 
 dojox.dtl.tag.html.StyleNode = function(styles){
@@ -64,7 +65,8 @@ dojo.extend(dojox.dtl.tag.html.StyleNode, {
 	},
 	clone: function(buffer){
 		return new dojox.dtl.tag.html.HtmlNode(this._styles);
-	}
+	},
+	toString: function(){ return "dojox.dtl.tag.html.StyleNode"; }
 });
 
 dojox.dtl.tag.html.AttachNode = function(key){
@@ -89,7 +91,8 @@ dojo.extend(dojox.dtl.tag.html.AttachNode, {
 	},
 	clone: function(buffer){
 		return new dojox.dtl.tag.html.HtmlNode(this._styles);
-	}
+	},
+	toString: function(){ return "dojox.dtl.tag.html.AttachNode"; }
 });
 
 dojox.dtl.tag.html.html = function(parser, text){
