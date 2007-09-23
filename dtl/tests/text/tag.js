@@ -45,6 +45,43 @@ doh.register("dojox.dtl.text.tag",
 				found = true;
 			}
 			t.t(found);
+		},
+		function test_tag_cycle(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				items: ["apple", "banana", "lemon"],
+				unplugged: "Torrey"
+			});
+			var template = new dd.Template("{% for item in items %}{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' %} Pocket. {% endfor %}");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. ", template.render(context));
+			// Make sure that it doesn't break on re-render
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. ", template.render(context));
+
+			// Test repeating the loop
+			context.items.push("guava", "mango", "pineapple");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. Extra Pocket. Hot Pocket. Diarrhea Pocket. ", template.render(context));
+
+			// Repeat the above tests for the old style
+			// ========================================
+			context.items = context.items.slice(0, 3);
+			template = new dd.Template("{% for item in items %}{% cycle Hot,Diarrhea,Torrey,Extra %} Pocket. {% endfor %}");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. ", template.render(context));
+			// Make sure that it doesn't break on re-render
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. ", template.render(context));
+
+			// Test repeating the loop
+			context.items.push("guava", "mango", "pineapple");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. Extra Pocket. Hot Pocket. Diarrhea Pocket. ", template.render(context));
+
+			// Now test outside of the for loop
+			// ================================
+			context = new dojox.dtl.Context({ unplugged: "Torrey" });
+			template = new dd.Template("{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' as steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket.");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket.", template.render(context));
+
+			template = new dd.Template("{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' as steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket.");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. Extra Pocket. Hot Pocket. Diarrhea Pocket.", template.render(context));
 		}
 	]
 );
