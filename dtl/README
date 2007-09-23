@@ -62,7 +62,7 @@ What's Been Done
 |      X      | block       |       X        |                |
 |      X      | comment     |       X        |                |
 |      X      | cycle       |       X        |                |
-|             | debug       |                |                |
+|      X      | debug       |       X        |                |
 |      X      | extends     |       X        |                |
 |             | filter      |                |                |
 |             | firstof     |                |                |

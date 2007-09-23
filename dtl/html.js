@@ -562,6 +562,9 @@ dojo.extend(dojox.dtl.HtmlParser, {
 	getVarNode: function(){
 		return dojox.dtl.HtmlVarNode;
 	},
+	getTextNode: function(){
+		return dojox.dtl.HtmlTextNode;
+	},
 	getTemplate: function(/*String*/ loc){
 		return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(loc));
 	},

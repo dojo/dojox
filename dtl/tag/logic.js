@@ -30,6 +30,17 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 		if(this.falses) buffer = this.falses.unrender(context, buffer);
 		return buffer;
 	},
+	clone: function(context){
+		var trues = this.trues;
+		var falses = this.falses;
+		if(trues){
+			trues = trues.clone(context);
+		}
+		if(falses){
+			falses = falses.clone(context);
+		}
+		return new this.constructor(this.bools, trues, falses, this.type);
+	},
 	toString: function(){ return "dojox.dtl.tag.logic.IfNode"; }
 });
 
@@ -81,6 +92,9 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 			buffer = pool.unrender(context, buffer);
 		}
 		return buffer;
+	},
+	clone: function(context){
+		return new this.constructor(this.assign, this.loop, this.reversed, this.nodelist.clone(context));
 	},
 	toString: function(){ return "dojox.dtl.tag.logic.ForNode"; }
 });
