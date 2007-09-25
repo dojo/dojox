@@ -301,7 +301,12 @@ doh.register("dojox.dtl.text.filter",
 			t.is("0", tpl.render(context));
 		},
 		function test_filter_iriencode(t){
-			
+			var dd = dojox.dtl;
+
+			var tpl = new dd.Template('{{ "http://homepage.com/~user"|urlencode|iriencode }}');
+			t.is("http%3A//homepage.com/%7Euser", tpl.render());
+			tpl = new dd.Template('{{ "pottedmeat@dojotoolkit.org"|iriencode }}');
+			t.is("pottedmeat%40dojotoolkit.org", tpl.render());
 		},
 		function test_filter_join(t){
 			var dd = dojox.dtl;
@@ -597,7 +602,18 @@ doh.register("dojox.dtl.text.filter",
 			t.is("potted \nmeat   \nwrites", tpl.render(context));
 		},
 		function test_filter_truncatewords_html(t){
-			
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				body: "Test a string <em>that ends <i>inside a</i> tag</em> with different args",
+				size: 2
+			})
+			var tpl = new dd.Template('{{ body|truncatewords_html:size }}');
+			t.is("Test a ...", tpl.render(context));
+			context.size = 4;
+			t.is("Test a string <em>that ...</em>", tpl.render(context));
+			context.size = 6;
+			t.is("Test a string <em>that ends <i>inside ...</i></em>", tpl.render(context));
 		},
 		function test_filter_unordered_list(t){
 			var dd = dojox.dtl;
@@ -614,19 +630,59 @@ doh.register("dojox.dtl.text.filter",
 			t.is("MIXED", tpl.render(context));
 		},
 		function test_filter_urlencode(t){
-			
+			var dd = dojox.dtl;
+
+			var tpl = new dd.Template('{{ "http://homepage.com/~user"|urlencode }}');
+			t.is("http%3A//homepage.com/%7Euser", tpl.render());
 		},
 		function test_filter_urlize(t){
-			
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				body: "My favorite websites are www.televisionwithoutpity.com, http://daringfireball.net and you can email me at pottedmeat@sitepen.com"
+			});
+			var tpl = new dd.Template("{{ body|urlize }}");
+			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.televisionwithoutpity.com</a> <a href="http://daringfireball.net" rel="nofollow">http://daringfireball.net</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
 		},
 		function test_filter_urlizetrunc(t){
-			
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				body: "My favorite websites are www.televisionwithoutpity.com, http://daringfireball.net and you can email me at pottedmeat@sitepen.com"
+			});
+			var tpl = new dd.Template("{{ body|urlizetrunc }}");
+			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.televisionwithoutpity.com</a> <a href="http://daringfireball.net" rel="nofollow">http://daringfireball.net</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
+			tpl = new dd.Template('{{ body|urlizetrunc:"2" }}');
+			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.televisionwithoutpity.com</a> <a href="http://daringfireball.net" rel="nofollow">http://daringfireball.net</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
+			tpl = new dd.Template('{{ body|urlizetrunc:"10" }}');
+			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.tel...</a> <a href="http://daringfireball.net" rel="nofollow">http://...</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
 		},
 		function test_filter_wordcount(t){
-			
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				food: "Hot Pocket"
+			});
+			var tpl = new dd.Template("{{ food|wordcount }}");
+			t.is("2", tpl.render(context));
+			context.food = "";
+			t.is("0", tpl.render(context));
+			context.food = "A nice barbecue, maybe a little grilled veggies, some cole slaw.";
+			t.is("11", tpl.render(context));
 		},
 		function test_filter_wordwrap(t){
-			
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				body: "shrimp gumbo, shrimp pie, shrimp scampi, shrimp stew, fried shrimp, baked shrimp, shrimp o grotten, grilled shrimp, shrimp on a stick, shrimp salad, shrimp pop overs, shrimp cake, shrimp legs, shrimp stuffed eggs, shrimp cre oll, shrimp soup, creamed shrimp on toast, shrimp crapes, shrimply good crescent rolls, shrimp pizza, scalloped shrimp, boiled shrimp, shrimp cocktail"
+			});
+			var tpl = new dd.Template("{{ body|wordwrap }}");
+			t.is(context.body, tpl.render(context));
+			tpl = new dd.Template("{{ body|wordwrap:width }}");
+			context.width = 10;
+			t.is("shrimp\ngumbo,\nshrimp\npie,\nshrimp\nscampi,\nshrimp\nstew,\nfried\nshrimp,\nbaked\nshrimp,\nshrimp o\ngrotten,\ngrilled\nshrimp,\nshrimp on\na stick,\nshrimp\nsalad,\nshrimp pop\novers,\nshrimp\ncake,\nshrimp\nlegs,\nshrimp\nstuffed\neggs,\nshrimp cre\noll,\nshrimp\nsoup,\ncreamed\nshrimp on\ntoast,\nshrimp\ncrapes,\nshrimply\ngood\ncrescent\nrolls,\nshrimp\npizza,\nscalloped\nshrimp,\nboiled\nshrimp,\nshrimp\ncocktail", tpl.render(context));
+			tpl = new dd.Template('{{ body|wordwrap:"80" }}');
+			t.is("shrimp gumbo, shrimp pie, shrimp scampi, shrimp stew, fried shrimp, baked\nshrimp, shrimp o grotten, grilled shrimp, shrimp on a stick, shrimp salad,\nshrimp pop overs, shrimp cake, shrimp legs, shrimp stuffed eggs, shrimp cre oll,\nshrimp soup, creamed shrimp on toast, shrimp crapes, shrimply good crescent\nrolls, shrimp pizza, scalloped shrimp, boiled shrimp, shrimp cocktail", tpl.render(context));
 		},
 		function test_filter_yesno(t){
 			var dd = dojox.dtl;
