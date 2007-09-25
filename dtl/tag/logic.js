@@ -16,11 +16,27 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 				var filter = bool[1];
 				var value = filter.resolve(context);
 				if((value && !ifnot) || (ifnot && !value)){
-					if(this.falses)	buffer = this.falses.unrender(context, buffer);
+					if(this.falses){
+						buffer = this.falses.unrender(context, buffer);
+					}
 					return this.trues.render(context, buffer);
 				}
 				buffer = this.trues.unrender(context, buffer);
 				if(this.falses)	return this.falses.render(context, buffer);
+			}
+		}else{
+			for(var i = 0, bool; bool = this.bools[i]; i++){
+				var ifnot = bool[0];
+				var filter = bool[1];
+				var value = filter.resolve(context);
+				if(!((value && !ifnot) || (ifnot && !value))){
+					if(this.trues){
+						buffer = this.trues.unrender(context, buffer);
+					}
+					return this.falses.render(context, buffer);
+				}
+				buffer = this.falses.unrender(context, buffer);
+				if(this.falses)	return this.trues.render(context, buffer);
 			}
 		}
 		return buffer;

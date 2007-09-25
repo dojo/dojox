@@ -371,7 +371,7 @@ dojo.extend(dojox.dtl.HtmlVarNode, {
 		var dd = dojox.dtl;
 		var ddh = dd.html;
 		var str = this.contents.resolve(context);
-		if(str.render && str.getRootNode){
+		if(str && str.render && str.getRootNode){
 			var root = this._curr = str.getRootNode();
 			var lists = this._lists;
 			var list = lists[root];

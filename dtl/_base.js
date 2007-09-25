@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl._base");
 
 dojo.require("dojox.string.Builder");
+dojo.require("dojox.string.tokenize");
 
 dojox.dtl.Context = function(dict){
 	dojo.mixin(this, dict || {});
@@ -176,28 +177,17 @@ dojox.dtl.text = {
 	getTemplateString: function(file){
 		return dojo._getText(file.toString()) || "";
 	},
+	_re: /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(.+?)\s*%\})/g,
 	tokenize: function(str){
-		var st = dojox.dtl;
-		var types = st.text.types;
-		var tokens = [];
-
-		var re = /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(.+?)\s*%\})/g;
-		var match, lastIndex = 0;
-		while(match = re.exec(str)){
-			var content = str.substring(lastIndex, re.lastIndex - match[0].length);
-			if(content){
-				tokens.push([types.text, content]);
-			}
-			if(match[1]){
-				tokens.push([types.varr, match[1]]);
-			}else{
-				tokens.push([types.tag, match[2]]);
-			}
-			lastIndex = re.lastIndex;
+		return dojox.string.tokenize(str, dojox.dtl.text._re, dojox.dtl.text._parseDelims);
+	},
+	_parseDelims: function(varr, tag){
+		var types = dojox.dtl.text.types;
+		if(varr){
+			return [types.varr, varr];
+		}else{
+			return [types.tag, tag];
 		}
-		tokens.push([types.text, str.substr(lastIndex)]);
-
-		return tokens;
 	}
 }
 
@@ -393,23 +383,25 @@ dojo.extend(dojox.dtl.Parser, {
 		var nodelist = new st.NodeList();
 		while(tokens.length){
 			token = tokens.shift();
-			var type = token[0];
-			var text = token[1];
-			if(type == types.text){
-				nodelist.push(new st.TextNode(text));
-			}else if(type == types.varr){
-				nodelist.push(new st.VarNode(text));
-			}else if(type == types.tag){
-				if(terminators[text]){
-					tokens.unshift(token);
-					return nodelist;
-				}
-				var cmd = text.split(/\s+/g);
-				if(cmd.length){
-					cmd = cmd[0];
-					var fn = dojox.dtl.text.getTag(cmd);
-					if(fn){
-						nodelist.push(fn(this, text));
+			if(typeof token == "string"){
+				nodelist.push(new st.TextNode(token));
+			}else{
+				var type = token[0];
+				var text = token[1];
+				if(type == types.varr){
+					nodelist.push(new st.VarNode(text));
+				}else if(type == types.tag){
+					if(terminators[text]){
+						tokens.unshift(token);
+						return nodelist;
+					}
+					var cmd = text.split(/\s+/g);
+					if(cmd.length){
+						cmd = cmd[0];
+						var fn = dojox.dtl.text.getTag(cmd);
+						if(fn){
+							nodelist.push(fn(this, text));
+						}
 					}
 				}
 			}
@@ -589,7 +581,7 @@ dojo.mixin(dojox.dtl.register, {
 	register.filter(dtf + ".lists", dtf + ".lists", ["dictsort", "dictsortreversed", "first", "join", "length", "length_is", "random", "slice", "unordered_list"]);
 	register.filter(dtf + ".logic", dtf + ".logic", ["default", "default_if_none", "divisibleby", "yesno"]);
 	register.filter(dtf + ".misc", dtf + ".misc", ["filesizeformat", "pluralize", "phone2numeric", "pprint"]);
-	register.filter(dtf + ".strings", dtf + ".strings", ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "title", "truncatewords", "upper"]);
+	register.filter(dtf + ".strings", dtf + ".strings", ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "stringformat", "title", "truncatewords", "upper"]);
 })();
 
 dojox.dtl.replace = function(str, token, repl){

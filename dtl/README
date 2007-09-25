@@ -118,7 +118,7 @@ What's Been Done
 |      X      | rjust              |       X        |                |
 |      X      | slice              |       X        |                |
 |      X      | slugify            |       X        |                |
-|             | stringformat       |                |                |
+|      X      | stringformat       |       X        |                |
 |      X      | striptags          |       X        |                |
 |      X      | time               |       X        |                |
 |      X      | timesince          |       X        |                |

@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.filter.strings");
 
 dojo.require("dojox.dtl.filter.htmlstrings");
+dojo.require("dojox.string.sprintf");
 
 dojo.mixin(dojox.dtl.filter.strings, {
 	addslashes: function(value){
@@ -114,6 +115,19 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		//		non-alpha chars and converts spaces to hyphens
 		value = value.replace(/[^\w\s-]/g, "").toLowerCase();
 		return value.replace(/[\-\s]+/g, "-");
+	},
+	_strings: {},
+	stringformat: function(value, arg){
+		// summary:
+		//		Formats the variable according to the argument, a string formatting specifier.
+		//		This specifier uses Python string formating syntax, with the exception that
+		//		the leading "%" is dropped.
+		arg = "" + arg;
+		var strings = dojox.dtl.filter.strings._strings;
+		if(!strings[arg]){
+			strings[arg] = new dojox.string.sprintf.Formatter("%" + arg);
+		}
+		return strings[arg].format(value);
 	},
 	title: function(value){
 		// summary: Converts a string into titlecase
