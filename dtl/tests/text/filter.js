@@ -2,6 +2,7 @@ dojo.provide("dojox.dtl.tests.text.filter");
 
 dojo.require("dojox.dtl");
 dojo.require("dojox.date.php");
+dojo.require("dojox.string.sprintf");
 
 doh.register("dojox.dtl.text.filter", 
 	[
@@ -517,7 +518,10 @@ doh.register("dojox.dtl.text.filter",
 			t.is("apples-and-oranges", tpl.render(context));
 		},
 		function test_filter_stringformat(t){
-			
+			var dd = dojox.dtl;
+
+			var tpl = new dd.Template('{{ 42|stringformat:"7.3f" }}');
+			t.is(" 42.000", tpl.render());
 		},
 		function test_filter_striptags(t){
 			var dd = dojox.dtl;
