@@ -18,7 +18,7 @@
 	width:100%;
 }
 .slideShowNavWrapper { float:right;  }
-.slideShowTitle { 
+.slideShowTitle {
 	float:left;
 	color:#333;
 	font-size:10pt;
@@ -32,13 +32,13 @@
 	height: 1px;
 	width: 1px;
 }
-.slideShowImageWapper {
-	position:absolute;
-	top:30px; 
+.slideShowImageWrapper {
+	position:relative;
+	text-align: center;
 	overflow:hidden;
 }
-.slideShowImageWapper img {
-	border: 0px;
+.slideShowImageWrapper img {
+	border: 0px none;
 }
 .slideShowNotifier {
 	background-color: red;
@@ -69,10 +69,10 @@
 	cursor:pointer;
 	position:relative;
 }
-.soria .slideShowNav .slideShowNextIcon { background-position:-336px -16px; }
-.soria .slideShowNav .slideShowPrevIcon { background-position:-320px -16px; }
-.soria .slideShowNav .slideShowPlayIcon { background-position:-288px -16px; }
-.soria .slideShowPaused .slideShowNav .slideShowPlayIcon { background-position:-304px -16px !important; }
+.soria .slideShowNav .slideShowNextIcon { background-position:-336px 0px; }
+.soria .slideShowNav .slideShowPrevIcon { background-position:-320px 0px; }
+.soria .slideShowNav .slideShowPlayIcon { background-position:-288px 0px; }
+.soria .slideShowPaused .slideShowNav .slideShowPlayIcon { background-position:-304px 0px !important; }
 
 /* Tundra like */
 .tundra .slideShowNav .slideShowNextIcon,
