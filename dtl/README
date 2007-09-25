@@ -100,7 +100,7 @@ What's Been Done
 |      X      | fix_ampersands     |       X        |                |
 |      X      | floatformat        |       X        |                |
 |      X      | get_digit          |       X        |                |
-|             | iriencode          |                |                |
+|      X      | iriencode          |       X        |                |
 |      X      | join               |       X        |                |
 |      X      | length             |       X        |                |
 |      X      | length_is          |       X        |                |
@@ -125,14 +125,14 @@ What's Been Done
 |      X      | timeuntil          |       X        |                |
 |      X      | title              |       X        |                |
 |      X      | truncatewords      |       X        |                |
-|             | truncatewords_html |                |                |
+|      X      | truncatewords_html |       X        |                |
 |      X      | unordered_list     |       X        |                |
 |      X      | upper              |       X        |                |
-|             | urlencode          |                |                |
-|             | urlize             |                |                |
-|             | urlizetrunc        |                |                |
-|             | wordcount          |                |                |
-|             | wordwrap           |                |                |
+|      X      | urlencode          |       X        |                |
+|      X      | urlize             |       X        |                |
+|      X      | urlizetrunc        |       X        |                |
+|      X      | wordcount          |       X        |                |
+|      X      | wordwrap           |       X        |                |
 |      X      | yesno              |       X        |                |
 -------------------------------------------------------------------------------
 HTML-Specific Additions

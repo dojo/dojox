@@ -98,6 +98,54 @@ doh.register("dojox.dtl.text.tag",
 
 			var template = new dd.Template('{% filter lower|center:"15" %}Hot Pocket{% endfilter %}');
 			t.is("  hot pocket   ", template.render());
+		},
+		function test_tag_firstof(t){
+			t.t(false);
+		},
+		function test_tag_for(t){
+			t.t(false);
+		},
+		function test_tag_if(t){
+			t.t(false);
+		},
+		function test_tag_ifchanged(t){
+			t.t(false);
+		},
+		function test_tag_ifequal(t){
+			t.t(false);
+		},
+		function test_tag_ifnotequal(t){
+			t.t(false);
+		},
+		function test_tag_include(t){
+			t.t(false);
+		},
+		function test_tag_load(t){
+			t.t(false);
+		},
+		function test_tag_now(t){
+			t.t(false);
+		},
+		function test_tag_regroup(t){
+			t.t(false);
+		},
+		function test_tag_spaceless(t){
+			t.t(false);
+		},
+		function test_tag_ssi(t){
+			t.t(false);
+		},
+		function test_tag_templatetag(t){
+			t.t(false);
+		},
+		function test_tag_url(t){
+			t.t(false);
+		},
+		function test_tag_widthratio(t){
+			t.t(false);
+		},
+		function test_tag_with(t){
+			t.t(false);
 		}
 	]
 );

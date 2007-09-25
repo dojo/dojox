@@ -141,6 +141,29 @@ dojo.extend(dojox.dtl.Context, {
 
 dojox.dtl.text = {
 	types: {tag: -1, varr: -2,	text: 3},
+	pySplit: function(str){
+		// summary: Split a string according to Python's split function
+		str = str.replace(/^\s+|\s+$/, "");
+		if(!str.length){
+			return [];
+		}
+		return str.split(/\s+/g);
+	},
+	urlquote: function(/*String*/ url, /*String?*/ safe){
+		if(!safe){
+			safe = "/";
+		}
+		return dojox.string.tokenize(url, /([^\w-_.])/g, function(token){
+			if(safe.indexOf(token) == -1){
+				if(token == " "){
+					return "+";
+				}else{
+					return "%" + token.charCodeAt(0).toString(16).toUpperCase();
+				}
+			}
+			return token;
+		}).join("");
+	},
 	_get: function(module, name, errorless){
 		// summary: Used to find both tags and filters
 		var params = dojox.dtl.register.get(module, name, errorless);
@@ -581,7 +604,7 @@ dojo.mixin(dojox.dtl.register, {
 	register.filter(dtf + ".lists", dtf + ".lists", ["dictsort", "dictsortreversed", "first", "join", "length", "length_is", "random", "slice", "unordered_list"]);
 	register.filter(dtf + ".logic", dtf + ".logic", ["default", "default_if_none", "divisibleby", "yesno"]);
 	register.filter(dtf + ".misc", dtf + ".misc", ["filesizeformat", "pluralize", "phone2numeric", "pprint"]);
-	register.filter(dtf + ".strings", dtf + ".strings", ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "stringformat", "title", "truncatewords", "upper"]);
+	register.filter(dtf + ".strings", dtf + ".strings", ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "iriencode", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "stringformat", "title", "truncatewords", "truncatewords_html", "upper", "urlencode", "urlize", "urlizetrunc", "wordcount", "wordwrap"]);
 })();
 
 dojox.dtl.replace = function(str, token, repl){
