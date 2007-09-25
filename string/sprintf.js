@@ -1,5 +1,7 @@
 dojo.provide("dojox.string.sprintf");
 
+dojo.require("dojox.string.tokenize");
+
 dojox.string.sprintf = function(/*String*/ format, /*mixed...*/ filler){
 	for(var args = [], i = 1; i < arguments.length; i++){
 		args.push(arguments[i]);
@@ -11,34 +13,24 @@ dojox.string.sprintf = function(/*String*/ format, /*mixed...*/ filler){
 dojox.string.sprintf.Formatter = function(/*String*/ format){
 	var tokens = [];
 	this._mapped = false;
-
-	var re = this._re;
-	var match, lastIndex = 0;
-	while(match = re.exec(format)){
-		var content = format.substring(lastIndex, re.lastIndex - match[0].length);
-		if(content){
-			tokens.push(content);
-		}
-		tokens.push({
-			mapping: match[1],
-			flags: match[2],
-			_minWidth: match[3], // May be dependent on parameters
-			period: match[4],
-			_precision: match[5], // May be dependent on parameters
-			specifier: match[6]
-		});
-		if(match[1]){
-			this._mapped = true;
-		}
-		lastIndex = re.lastIndex;
-	}
-	tokens.push(format.substr(lastIndex));
-
 	this._format = format;
-	this._tokens = tokens;
+	this._tokens = dojox.string.tokenize(format, this._re, this._parseDelim, this);
 }
 dojo.extend(dojox.string.sprintf.Formatter, {
 	_re: /\%(?:\(([\w_]+)\))?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,
+	_parseDelim: function(mapping, flags, minWidth, period, precision, specifier){
+		if(mapping){
+			this._mapped = true;
+		}
+		return {
+			mapping: mapping,
+			flags: flags,
+			_minWidth: minWidth, // May be dependent on parameters
+			period: period,
+			_precision: precision, // May be dependent on parameters
+			specifier: specifier
+		};
+	},
 	_specifiers: {
 		b: {
 			base: 2,
