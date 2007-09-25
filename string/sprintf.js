@@ -17,13 +17,14 @@ dojox.string.sprintf.Formatter = function(/*String*/ format){
 	this._tokens = dojox.string.tokenize(format, this._re, this._parseDelim, this);
 }
 dojo.extend(dojox.string.sprintf.Formatter, {
-	_re: /\%(?:\(([\w_]+)\))?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,
-	_parseDelim: function(mapping, flags, minWidth, period, precision, specifier){
+	_re: /\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,
+	_parseDelim: function(mapping, intmapping, flags, minWidth, period, precision, specifier){
 		if(mapping){
 			this._mapped = true;
 		}
 		return {
 			mapping: mapping,
+			intmapping: intmapping,
 			flags: flags,
 			_minWidth: minWidth, // May be dependent on parameters
 			period: period,
@@ -117,6 +118,9 @@ dojo.extend(dojox.string.sprintf.Formatter, {
 					}
 					token.arg = filler[token.mapping];
 				}else{
+					if(token.intmapping){
+						var position = parseInt(token.intmapping) - 1;
+					}
 					if(position >= arguments.length){
 						throw new Error("got " + arguments.length + " printf arguments, insufficient for '" + this._format + "'");
 					}

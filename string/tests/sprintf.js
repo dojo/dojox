@@ -1,6 +1,7 @@
 dojo.provide("dojox.string.tests.sprintf");
 
 dojo.require("dojox.string.sprintf");
+dojo.require("dojo.string");
 
 
 // Mapping using the %(var) format
@@ -128,6 +129,23 @@ tests.register("dojox.string.tests.sprintf", [
 		runTest: function(t){
 			var sprintf = dojox.string.sprintf;
 
+			// %1$s format
+			t.is("%1$", sprintf("%1$"));
+			t.is("%0$s", sprintf("%0$s"));
+			t.is("Hot Pocket", sprintf("%1$s %2$s", "Hot", "Pocket"));
+			t.is("12.0 Hot Pockets", sprintf("%1$.1f %2$s %3$ss", 12, "Hot", "Pocket"));
+			t.is(" 42", sprintf("%1$*.f", "42", 3));
+
+			error = false;
+			try {
+				sprintf("%2$*s", "Hot Pocket");
+			}catch(e){
+				t.is("got 1 printf arguments, insufficient for '%2$*s'", e.message);
+				error = true;
+			}
+			t.t(error);
+
+			// %(map)s format
 			t.is("%(foo", sprintf("%(foo", {}));
 			t.is("Hot Pocket", sprintf("%(temperature)s %(crevace)s", {
 				temperature: "Hot",
