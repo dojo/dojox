@@ -199,6 +199,16 @@ tests.register("dojox.string.tests.sprintf", [
 		}
 	},
 	{
+		name: "vs. Formatter",
+		runTest: function(t){
+			var sprintf = dojox.string.sprintf;
+
+			for(var i = 0; i < 1000; i++){
+				sprintf("%d %s Pockets", i, "Hot");
+			}
+		}
+	},
+	{
 		name: "Formatter",
 		runTest: function(t){
 			var Formatter = dojox.string.sprintf.Formatter;
