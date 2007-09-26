@@ -19,7 +19,7 @@ dojo.extend(dojox.dtl.tag.misc.DebugNode, {
 			console.debug("DEBUG", key, ":", context[key]);
 			debug += key + ": " + dojo.toJson(context[key]) + "\n\n";
 		}
-		return new this._TextNode(debug).render(context, buffer);
+		return new this._TextNode(debug).render(context, buffer, this);
 	},
 	unrender: function(context, buffer){
 		return buffer;

@@ -8,15 +8,13 @@ dojox.dtl.tag.loader.BlockNode = function(name, nodelist){
 }
 dojo.extend(dojox.dtl.tag.loader.BlockNode, {
 	render: function(context, buffer){
-		if(buffer.getParent) var parent = buffer.getParent(); // Need this for HTML tree structure
 		if(this.override){
-			buffer = this.override.render(context, buffer);
+			buffer = this.override.render(context, buffer, this);
 			this.rendered = this.override;
 		}else{
-			buffer =  this.nodelist.render(context, buffer);
+			buffer =  this.nodelist.render(context, buffer, this);
 			this.rendered = this.nodelist;
 		}
-		if(buffer.setParent) buffer.setParent(parent, true); // Need this for HTML tree structure
 		this.override = null;
 		return buffer;
 	},
@@ -118,10 +116,10 @@ dojo.extend(dojox.dtl.tag.loader.ExtendsNode, {
 			}
 		}
 		this.rendered = parent;
-		return parent.render(context, buffer);
+		return parent.render(context, buffer, this);
 	},
 	unrender: function(context, buffer){
-		return this.rendered.unrender(context, buffer);
+		return this.rendered.unrender(context, buffer, this);
 	},
 	toString: function(){ return "dojox.dtl.block.ExtendsNode"; }
 });

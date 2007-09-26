@@ -19,10 +19,10 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 					if(this.falses){
 						buffer = this.falses.unrender(context, buffer);
 					}
-					return this.trues.render(context, buffer);
+					return this.trues.render(context, buffer, this);
 				}
 				buffer = this.trues.unrender(context, buffer);
-				if(this.falses)	return this.falses.render(context, buffer);
+				if(this.falses)	return this.falses.render(context, buffer, this);
 			}
 		}else{
 			for(var i = 0, bool; bool = this.bools[i]; i++){
@@ -33,10 +33,10 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 					if(this.trues){
 						buffer = this.trues.unrender(context, buffer);
 					}
-					return this.falses.render(context, buffer);
+					return this.falses.render(context, buffer, this);
 				}
 				buffer = this.falses.unrender(context, buffer);
-				if(this.falses)	return this.trues.render(context, buffer);
+				if(this.falses)	return this.trues.render(context, buffer, this);
 			}
 		}
 		return buffer;
@@ -97,7 +97,7 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 			if(j + 1 > this.pool.length){
 				this.pool.push(this.nodelist.clone(buffer));
 		 	}
-			buffer = this.pool[j].render(context, buffer);
+			buffer = this.pool[j].render(context, buffer, this);
 			++j;
 		}
 		context.pop();

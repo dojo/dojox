@@ -63,9 +63,6 @@ dojox.dtl.html = {
 
 		if(preNodes){
 			for(var i = 0, child; child = preNodes[i]; i++){
-				if(child.nodeType == 1){
-					tokens.push([types.elem, node]);
-				}
 				this._tokenize(node, child, tokens);
 			}
 		}
@@ -94,9 +91,6 @@ dojox.dtl.html = {
 			tokens.push([types.change, node.parentNode, true]);
 			if(postNodes){
 				for(var i = 0, child; child = postNodes[i]; i++){
-					if(child.nodeType == 1){
-						tokens.push([types.elem, node]);
-					}
 					this._tokenize(node, child, tokens);
 				}
 			}
@@ -114,9 +108,6 @@ dojox.dtl.html = {
 		
 		if(postNodes){
 			for(var i = 0, child; child = postNodes[i]; i++){
-				if(child.nodeType == 1){
-					tokens.push([types.elem, node]);
-				}
 				this._tokenize(node, child, tokens);
 			}
 		}
@@ -132,7 +123,6 @@ dojox.dtl.html = {
 		var data = child.data;
 		switch(child.nodeType){
 			case 1:
-				tokens.push([types.elem, child]);
 				this.tokenize(child, tokens);
 				break;
 			case 3:
@@ -140,7 +130,11 @@ dojox.dtl.html = {
 					if(data.indexOf("{{") != -1 || data.indexOf("{%") != -1){
 						var texts = dojox.dtl.text.tokenize(data);
 						for(var j = 0, text; text = texts[j]; j++){
-							tokens.push(text);
+							if(typeof text == "string"){
+								tokens.push([types.text, text]);
+							}else{
+								tokens.push(text);
+							}
 						}
 					}else{
 						tokens.push([child.nodeType, child]);
@@ -192,7 +186,9 @@ dojo.extend(dojox.dtl.HtmlTemplate, {
 	},
 	render: function(context, buffer){
 		buffer = buffer || this.getBuffer();
-		return this.nodelist.render(context || new dojox.dtl.Context({}), buffer);
+		var output = this.nodelist.render(context || new dojox.dtl.Context({}), buffer);
+		buffer._flushCache();
+		return output;
 	},
 	unrender: function(context, buffer){
 		return this.nodelist.unrender(context, buffer);
@@ -249,7 +245,7 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 			this._parent.className = value;
 		}else if(key == "for"){
 			this._parent.htmlFor = value;
-		}else if(node.getAttribute){;
+		}else if(this._parent.setAttribute){;
 			this._parent.setAttribute(key, value);
 		}
 		return this;
@@ -281,6 +277,13 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 		var arr = [];
 		this._cache.push([node, arr]);
 		return arr;
+	},
+	_flushCache: function(node){
+		for(var i = 0, cache; cache = this._cache[i]; i++){
+			if(!cache[1].length){
+				this._cache.splice(i--, 1);
+			}
+		}
 	},
 	toString: function(){ return "dojox.dtl.HtmlBuffer"; }
 });
@@ -317,10 +320,16 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 	unshift: function(node){
 		this.contents.unshift(node);
 	},
-	render: function(context, buffer){
+	render: function(context, buffer, /*Node*/ instance){
+		if(instance){
+			var parent = buffer.getParent();
+		}
 		for(var i = 0; i < this.contents.length; i++){
 			buffer = this.contents[i].render(context, buffer);
 			if(!buffer) throw new Error("Template node render functions must return their buffer");
+		}
+		if(parent){
+			buffer.setParent(parent, true);
 		}
 		return buffer;
 	},

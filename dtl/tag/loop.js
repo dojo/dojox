@@ -25,7 +25,7 @@ dojo.extend(dojox.dtl.tag.loop.CycleNode, {
 		}
 		var node = this._map[value][this._counter] = new this._VarNode(value);
 
-		return node.render(context, buffer);
+		return node.render(context, buffer, this);
 	},
 	unrender: function(context, buffer){
 		return buffer;
