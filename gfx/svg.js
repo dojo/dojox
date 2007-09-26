@@ -60,13 +60,6 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		var f;
 		// FIXME: slightly magical. We're using the outer scope's "f", but setting it later
-		/*
-		var setter = (false && dojo.isSafari) ? 
-			function(x){
-				// we assume that we're executing in the scope of the node to mutate
-				this.setAttributeNS(dojox.gfx.svg.xmlns.svg, x, f[x].toFixed(8));
-			} :
-		*/
 		var setter = function(x){
 				// we assume that we're executing in the scope of the node to mutate
 				this.setAttribute(x, f[x].toFixed(8));
@@ -189,7 +182,11 @@ dojo.extend(dojox.gfx.Shape, {
 			defs.appendChild(fill);
 		}
 		if(nodeType == "pattern"){
-			fill.setAttribute("patternUnits", "userSpaceOnUse");
+			if(dojo.isSafari){
+				fill.setAttributeNS(null, "patternUnits", "userSpaceOnUse");
+			}else{
+				fill.setAttribute("patternUnits", "userSpaceOnUse");
+			}
 			var img = document.createElementNS(svgns, "image");
 			img.setAttribute("x", 0);
 			img.setAttribute("y", 0);
@@ -198,7 +195,11 @@ dojo.extend(dojox.gfx.Shape, {
 			img.setAttributeNS(dojox.gfx.svg.xmlns.xlink, "href", f.src);
 			fill.appendChild(img);
 		}else{
-			fill.setAttribute("gradientUnits", "userSpaceOnUse");
+			if(dojo.isSafari){
+				fill.setAttributeNS(null, "gradientUnits", "userSpaceOnUse");
+			}else{
+				fill.setAttribute("gradientUnits", "userSpaceOnUse");
+			}
 			for(var i = 0; i < f.colors.length; ++i){
 				var c = f.colors[i], t = document.createElementNS(svgns, "stop"),
 					cc = c.color = dojox.gfx.normalizeColor(c.color);
