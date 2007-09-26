@@ -60,7 +60,7 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	postCreate: function(){
 		// summary: 
 		this.setTitle(this.title);
-		dojox.layout.FloatingPane.superclass.postCreate.apply(this,arguments);
+		this.inherited("postCreate",arguments);
 		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
 		this._listener = dojo.subscribe("/dnd/move/start",this,"zIndexes"); 
 
@@ -76,13 +76,12 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	},
 	
 	startup: function(){
-	
-		dojox.layout.FloatingPane.superclass.startup.call(this); 
+		this.inherited("startup",arguments);
 
 		dojo.style(this.domNode,"border","1px solid #dedede"); 
 		dojo.style(this.domNode,"overflow","hidden"); 
 
-		if (this.resizable) {
+		if(this.resizable){
 			this.containerNode.style.overflow = "auto";
 			var tmp = new dojox.layout.ResizeHandle({ 
 				//targetContainer: this.containerNode, 
@@ -95,8 +94,8 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 			// FIXME: argh.
 			tmpName = this.dockTo; 
 
-			if(this.dockTo){ this.dockTo = dijit.byId(this.dockTo); }
-			else{ this.dockTo = dijit.byId('dojoxGlobalFloatingDock'); }
+			if(this.dockTo){ this.dockTo = dijit.byId(this.dockTo); 
+			}else{ this.dockTo = dijit.byId('dojoxGlobalFloatingDock'); }
 
 			if(!this.dockTo){
 				// we need to make our dock node, and position it against
@@ -118,57 +117,60 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		} 
 	},
 
-	setTitle: function(/* String */ title) {
+	setTitle: function(/* String */ title){
 		// summary: Update the string in the titleNode
 		this.titleNode.innerHTML = title; 
 	},	
 
-	zIndexes: function(/* dojo.dnd.Mover */mover) {
+	zIndexes: function(/* dojo.dnd.Mover */mover){
 		// summary: keep track of our own zIndex for bringToTop like behavior
-		if(mover.node.id == this.id) { dojo.style(this.domNode,"zIndex","997"); }
-		else{ dojo.style(this.domNode,"zIndex",dojo.style(this.domNode,"zIndex")-1); }
+		if(mover.node.id == this.id){ 
+			dojo.style(this.domNode,"zIndex","997"); 
+		}else{ 
+			dojo.style(this.domNode,"zIndex",dojo.style(this.domNode,"zIndex")-1); 
+		}
 	},
 
 	// extend 		
-	close: function() {
+	close: function(){
 		// summary: close and destroy this widget
-		if (!this.closable) { return; }
+		if(!this.closable){ return; }
 		dojo.unsubscribe(this._listener); 
 		this.hide(dojo.hitch(this,"destroyRecursive")); 
 	},
 
-	hide: function(/* Function */ callback) {
+	hide: function(/* Function */ callback){
 		// summary: close but do not destroy this widget
 		dojo.fadeOut({node:this.domNode, duration:this.duration,
 			onEnd: dojo.hitch(this,function() { 
 				this.domNode.style.display = "none";
 				this.domNode.style.visibility = "hidden"; 
 				if (typeof callback == "function") { callback(); }
-				})
-			}).play();
+			})
+		}).play();
 	},
 
-	show: function(callback) {
+	show: function(callback){
 		// summary: show the FloatingPane
 		var anim = dojo.fadeIn({node:this.domNode, duration:this.duration,
-			beforeBegin: dojo.hitch(this,function() {
+			beforeBegin: dojo.hitch(this,function(){
 				this.domNode.style.display = ""; 
 				this.domNode.style.visibility = "visible";
 				if (typeof callback == "function") { callback(); }
 				this._isDocked = false; 
-				})
-			}).play();
+			})
+		}).play();
 	},
 
-	minimize: function() {
+	minimize: function(){
 		// summary: hide and dock the FloatingPane
-		if (!this._isDocked) {
-		this.hide(dojo.hitch(this,"_dock"));
+		if(!this._isDocked){
+			this.hide(dojo.hitch(this,"_dock"));
 		} 
 	},
 
-	_dock: function() {
-		if (!this._isDocked) {
+	_dock: function(){
+		if (!this._isDocked){
 			this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
@@ -186,7 +188,7 @@ dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 	// private _docked: array of panes currently in our dock
 	_docked: [],
 	
-	addNode: function(refNode) {
+	addNode: function(refNode){
 		// summary: FIXME: memory leak? 
 		var div = document.createElement('li');
 		this.containerNode.appendChild(div);
@@ -194,17 +196,17 @@ dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 		node.startup();
 	},
 
-	startup: function() {
+	startup: function(){
 		// summary: attaches some event listeners 
 		if (this.id == "dojoxGlobalFloatingDock" || this.isFixedDock) {
 			// attach window.onScroll, and a position like in presentation/dialog
 			dojo.connect(window,'onresize',this,"_positionDock");
 			dojo.connect(window,'onscroll',this,"_positionDock");
 		}
-		dojox.layout.Dock.superclass.startup.call(this); 
+		this.inherited("startup",arguments);
 	},
 	
-	_positionDock: function(e) {
+	_positionDock: function(e){
 		// summary: 
 		//	[b0rken atm] keeps the dock [in the event of a globalFloatingDock]
 		//	positioned at the bottom of the viewport. (math is off)
@@ -237,7 +239,7 @@ dojo.declare("dojox.layout._DockNode", [dijit._Widget,dijit._Templated], {
 			'<span class="dojoxDockTitleNode" dojoAttachPoint="titleNode">${title}</span>'+
 			'</li>',
 
-	restore: function() {
+	restore: function(){
 		// summary: remove this dock item from parent dock, and call show() on reffed floatingpane
 		this.paneRef.show();
 		this.destroy();
