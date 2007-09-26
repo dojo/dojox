@@ -211,6 +211,7 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		this.rawNode.setAttribute("fill", "url(#" + fill.getAttribute("id") +")");
 		this.rawNode.removeAttribute("fill-opacity");
+		this.rawNode.setAttribute("fill-rule", "evenodd");
 		return fill;
 	},
 	
