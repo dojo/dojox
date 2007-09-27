@@ -46,14 +46,14 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 		if(this.falses) buffer = this.falses.unrender(context, buffer);
 		return buffer;
 	},
-	clone: function(context){
+	clone: function(buffer){
 		var trues = this.trues;
 		var falses = this.falses;
 		if(trues){
-			trues = trues.clone(context);
+			trues = trues.clone(buffer);
 		}
 		if(falses){
-			falses = falses.clone(context);
+			falses = falses.clone(buffer);
 		}
 		return new this.constructor(this.bools, trues, falses, this.type);
 	},
@@ -95,7 +95,7 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 			};
 			context[this.assign] = item;
 			if(j + 1 > this.pool.length){
-				this.pool.push(this.nodelist.clone(buffer));
+				this.pool.push(this.nodelist.clone(buffer, true));
 		 	}
 			buffer = this.pool[j].render(context, buffer, this);
 			++j;
@@ -109,8 +109,8 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 		}
 		return buffer;
 	},
-	clone: function(context){
-		return new this.constructor(this.assign, this.loop, this.reversed, this.nodelist.clone(context));
+	clone: function(buffer){
+		return new this.constructor(this.assign, this.loop, this.reversed, this.nodelist.clone(buffer));
 	},
 	toString: function(){ return "dojox.dtl.tag.logic.ForNode"; }
 });

@@ -47,7 +47,7 @@ dojo.extend(dojox.dtl.tag.misc.FilterNode, {
 		return buffer;
 	},
 	clone: function(buffer){
-		return new this.constructor(this._expression, this._nodelist.clone(context));
+		return new this.constructor(this._expression, this._nodelist.clone(buffer));
 	}
 });
 

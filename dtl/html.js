@@ -2,6 +2,35 @@ dojo.provide("dojox.dtl.html");
 
 dojo.require("dojox.dtl._base");
 
+dojox.dtl.ObjectMap = function(){
+	this.contents = [];
+}
+dojo.extend(dojox.dtl.ObjectMap, {
+	get: function(key){
+		var contents = this.contents;
+		for(var i = 0, content; content = contents[i]; i++){
+			if(content[0] === key){
+				return content[1];
+			}
+		}
+	},
+	put: function(key, value){
+		var contents = this.contents;
+		for(var i = 0, content; content = contents[i]; i++){
+			if(content[0] === key){
+				if(arguments.length == 1){
+					contents.splice(i, 1);
+					return;
+				}
+				content[1] = value;
+				return;
+			}
+		}
+		contents.push([key, value]);
+	},
+	toString: function(){ return "dojox.dtl.ObjectMap"; }
+});
+
 dojox.dtl.html = {
 	types: dojo.mixin({change: -11, attr: -12, elem: 1, text: 3}, dojox.dtl.text.types),
 	_attributes: {},
@@ -314,6 +343,7 @@ dojox.dtl.HtmlNodeList = function(/*Node[]*/ nodes){
 	this.contents = nodes || [];
 }
 dojo.extend(dojox.dtl.HtmlNodeList, {
+	parents: new dojox.dtl.ObjectMap(),
 	push: function(node){
 		this.contents.push(node);
 	},
@@ -340,27 +370,40 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 		}
 		return buffer;
 	},
-	clone: function(buffer){
+	clone: function(buffer, /*Boolean?*/ preserveParent){
 		var dd = dojox.dtl;
 		var ddh = dd.html;
 		var parent = buffer.getParent();
 		var contents = this.contents;
-		var map = new dojox.dtl.ObjectMap();
 		var nodelist = new dd.HtmlNodeList();
+		var cloned = [];
 		for(var i = 0; i < contents.length; i++){
-			var clone = contents[i].clone(buffer);
-			if(clone.contents !== parent && (clone instanceof dd.ChangeNode || clone instanceof dd.HtmlNode)){
-				var node = clone.contents;
-				var item = map.get(node);
-				if(item){
-					clone.contents = item;
+			if(contents[i] instanceof dd.ChangeNode || contents[i] instanceof dd.HtmlNode){
+				if(!preserveParent && contents[i].contents !== parent){
+					var item = this.parents.get(contents[i].contents);
+					if(item){
+						var clone = contents[i].clone(buffer);
+						clone.contents = item;
+					}else{
+						var clone = contents[i].clone(buffer);
+						var node = clone.contents;
+						clone.contents = contents[i].contents.cloneNode(false); // Avoid attached nodes!
+						cloned.push(node);
+						this.parents.put(node, clone.contents);
+					}
 				}else{
-					clone.contents = clone.contents.cloneNode(false); // Avoid attached nodes!
-					map.put(node, clone.contents);
+					var clone = contents[i].clone(buffer);
 				}
+			}else{
+				var clone = contents[i].clone(buffer);
 			}
 			nodelist.push(clone);
 		}
+
+		for(var i = 0, clone; clone = cloned[i]; i++){
+			this.parents.put(clone);
+		}
+
 		return nodelist;
 	},
 	toString: function(){ return "dojox.dtl.HtmlNodeList"; }
@@ -578,31 +621,6 @@ dojo.extend(dojox.dtl.HtmlParser, {
 		return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(loc));
 	},
 	toString: function(){ return "dojox.dtl.HtmlParser"; }
-});
-
-dojox.dtl.ObjectMap = function(){
-	this.contents = [];
-}
-dojo.extend(dojox.dtl.ObjectMap, {
-	get: function(key){
-		var contents = this.contents;
-		for(var i = 0, content; content = contents[i]; i++){
-			if(content[0] === key){
-				return content[1];
-			}
-		}
-	},
-	put: function(key, value){
-		var contents = this.contents;
-		for(var i = 0, content; content = contents[i]; i++){
-			if(content[0] === key){
-				content[1] = value;
-				return;
-			}
-		}
-		contents.push([key, value]);
-	},
-	toString: function(){ return "dojox.dtl.ObjectMap"; }
 });
 
 dojox.dtl.register.tag("dojox.dtl.tag.event", "dojox.dtl.tag.event", [[/(attr:)?on(click|key(up))/i, "on"]]);
