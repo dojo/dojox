@@ -105,8 +105,11 @@ dojox.dtl.html = {
 				value = node.className || value;
 			}else if(key == "for"){
 				value = node.htmlFor || value;
-			}else if(node.getAttribute){;
+			}else if(node.getAttribute){
 				value = node.getAttribute(key, 2) || value;
+				if(dojo.isIE && key == "href"){
+					value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
+				}
 			}
 			if(typeof value == "function"){
 				value = value.toString().replace(this._re4, "$1");
@@ -274,7 +277,15 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 			this._parent.className = value;
 		}else if(key == "for"){
 			this._parent.htmlFor = value;
-		}else if(this._parent.setAttribute){;
+		}else if(key == "href"){
+			if(dojo.isIE && value.indexOf(location.href) == 0){
+				var pos = value.indexOf("http://", 1);
+				if(pos){
+					value = value.substring(pos);
+				}
+			}
+			this._parent.href = value;
+		}else if(this._parent.setAttribute){
 			this._parent.setAttribute(key, value);
 		}
 		return this;
