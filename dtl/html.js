@@ -381,7 +381,9 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 		}
 		return buffer;
 	},
-	clone: function(buffer, /*Boolean?*/ preserveParent){
+	clone: function(buffer){
+		// summary:
+		//		Used to create an identical copy of a NodeList, useful for things like the for tag.
 		var dd = dojox.dtl;
 		var ddh = dd.html;
 		var parent = buffer.getParent();
@@ -394,7 +396,7 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 				var item = this.parents.get(clone.contents);
 				if(item){
 					clone.contents = item;
-				}else if(parent !== clone.contents && (clone instanceof dd.HtmlNode || !preserveParent)){
+				}else if(parent !== clone.contents && clone instanceof dd.HtmlNode){
 					var node = clone.contents
 					clone.contents = clone.contents.cloneNode(false);
 					cloned.push(node);
