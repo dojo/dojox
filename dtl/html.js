@@ -389,24 +389,17 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 		var nodelist = new dd.HtmlNodeList();
 		var cloned = [];
 		for(var i = 0; i < contents.length; i++){
-			if(contents[i] instanceof dd.ChangeNode || contents[i] instanceof dd.HtmlNode){
-				if(!preserveParent && contents[i].contents !== parent){
-					var item = this.parents.get(contents[i].contents);
-					if(item){
-						var clone = contents[i].clone(buffer);
-						clone.contents = item;
-					}else{
-						var clone = contents[i].clone(buffer);
-						var node = clone.contents;
-						clone.contents = contents[i].contents.cloneNode(false); // Avoid attached nodes!
-						cloned.push(node);
-						this.parents.put(node, clone.contents);
-					}
-				}else{
-					var clone = contents[i].clone(buffer);
+			var clone = contents[i].clone(buffer);
+			if(clone instanceof dd.ChangeNode || clone instanceof dd.HtmlNode){
+				var item = this.parents.get(clone.contents);
+				if(item){
+					clone.contents = item;
+				}else if(parent !== clone.contents && (clone instanceof dd.HtmlNode || !preserveParent)){
+					var node = clone.contents
+					clone.contents = clone.contents.cloneNode(false);
+					cloned.push(node);
+					this.parents.put(node, clone.contents);
 				}
-			}else{
-				var clone = contents[i].clone(buffer);
 			}
 			nodelist.push(clone);
 		}
