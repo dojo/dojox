@@ -16,6 +16,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 dojo.require("dojox.gfx.move");
+dojo.require("dojox.gfx.utils");
 
 surface = null;
 container_pos = null;
@@ -100,31 +101,9 @@ onAdd = function(){
 		if(!opt.selected) continue;
 		var object = names[Number(opt.value)];
 		var group = surface.createGroup();
-		addObject(group, object);
+		dojox.gfx.utils.deserialize(group, object);
 		new dojox.gfx.Moveable(group); // make it moveable as whole
 	}
-};
-
-addObject = function(g, o){
-	var shape = ("shape" in o) ? g.createShape(o.shape) : g.createGroup();
-	if("transform" in o){
-		shape.setTransform(o.transform);
-	}
-	if("stroke" in o){
-		shape.setStroke(o.stroke);
-	}
-	if("fill" in o){
-		shape.setFill(o.fill);
-	}
-	if("font" in o){
-		shape.setFont(o.font);
-	}
-	if("children" in o){
-		for(var i = 0; i < o.children.length; ++i){
-			addObject(shape, o.children[i]);
-		}
-	}
-	return shape;
 };
 
 // event handling

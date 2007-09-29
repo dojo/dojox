@@ -13,8 +13,8 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 -->
 <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 <script type="text/javascript">
-
 dojo.require("dojox.gfx");
+dojo.require("dojox.gfx.utils");
 
 surface = null;
 grid_size = 500;
@@ -93,45 +93,13 @@ init = function(){
 };
 
 dump = function(){
-	var objects = dump_objects(surface);
+	var objects = dojox.gfx.utils.serialize(surface);
 	// name top-level objects
 	for(var i = 0; i < objects.length; ++i){
 		objects[i].name = "shape" + i;
 	}
 	// format and show
 	dojo.byId("io").value = dojo.toJson(objects, dojo.byId("pprint").checked);
-};
-
-dump_objects = function(shape){
-	var t = {}, v;
-	if(shape instanceof dojox.gfx.Group || shape instanceof dojox.gfx.Surface){
-		t.children = [];
-		for(var i = 0; i < shape.children.length; ++i){
-			t.children.push(dump_objects(shape.children[i]));
-		}
-		if(shape instanceof dojox.gfx.Surface){
-			return t.children;
-		}
-	}else{
-		t.shape = shape.getShape();
-	}
-	if(shape.getTransform){
-		v = shape.getTransform();
-		if(v){ t.transform = v; }
-	}
-	if(shape.getStroke){
-		v = shape.getStroke();
-		if(v){ t.stroke = v; }
-	}
-	if(shape.getFill){
-		v = shape.getFill();
-		if(v){ t.fill = v; }
-	}
-	if(shape.getFont){
-		 v = shape.getFont();
-		if(v){ t.font = v; }
-	}
-	return t;
 };
 
 dojo.addOnLoad(init);
