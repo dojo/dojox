@@ -15,7 +15,7 @@ dojox.gfx.utils.serialize = function(
 			return t.children;	// Array			
 		}		
 	}else{	
-		t.object = object.getShape();		
+		t.shape = object.getShape();		
 	}	
 	if(object.getTransform){	
 		v = object.getTransform();		
@@ -38,7 +38,7 @@ dojox.gfx.utils.serialize = function(
 
 dojox.gfx.utils.toJson = function(
 	/* dojox.gfx.Surface || dojox.gfx.Shape */ object, 
-	/* Boolean */ prettyPrint
+	/* Boolean? */ prettyPrint
 ){
 	return dojo.toJson(dojox.gfx.utils.serialize(object), prettyPrint);	// String
 };
