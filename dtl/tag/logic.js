@@ -73,7 +73,7 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 		if(context.forloop){
 			parentloop = context.forloop;
 		}
-		var items = context.get(this.loop, []);
+		var items = dojox.dtl.resolveVariable(this.loop, context);
 		context.push();
 		for(var i = items.length; i < this.pool.length; i++){
 			this.pool[i].unrender(context, buffer);

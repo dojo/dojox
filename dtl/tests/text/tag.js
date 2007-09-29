@@ -82,6 +82,15 @@ doh.register("dojox.dtl.text.tag",
 
 			template = new dd.Template("{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' as steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket.");
 			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. Extra Pocket. Hot Pocket. Diarrhea Pocket.", template.render(context));
+
+			// Test for nested objects
+			context.items = {
+				list: ["apple", "banana", "lemon"]
+			};
+			template = new dd.Template("{% for item in items.list %}{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' %} Pocket. {% endfor %}");
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. ", template.render(context));
+			// Make sure that it doesn't break on re-render
+			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. ", template.render(context));
 		},
 		function test_tag_debug(t){
 			var dd = dojox.dtl;
