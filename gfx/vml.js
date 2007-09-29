@@ -40,7 +40,7 @@ dojo.extend(dojox.gfx.Shape, {
 		if(!fill){
 			// don't fill
 			this.fillStyle = null;
-			this.rawNode.filled = false;
+			this.rawNode.filled = "f";
 			return this;
 		}
 		if(typeof fill == "object" && "type" in fill){
@@ -126,7 +126,7 @@ dojo.extend(dojox.gfx.Shape, {
 						fo.size.x = dojox.gfx.px2pt(f.width);
 						fo.size.y = dojox.gfx.px2pt(f.height);
 					}
-					fo.alignShape = false;
+					fo.alignShape = "f";
 					fo.position.x = 0;
 					fo.position.y = 0;
 					fo.origin.x = f.width  ? f.x / f.width  : 0;
@@ -153,7 +153,7 @@ dojo.extend(dojox.gfx.Shape, {
 		if(!stroke){
 			// don't stroke
 			this.strokeStyle = null;
-			this.rawNode.stroked = false;
+			this.rawNode.stroked = "f";
 			return this;
 		}
 		// normalize the stroke
@@ -202,7 +202,7 @@ dojo.extend(dojox.gfx.Shape, {
 			}
 		}
 		if(skew){
-			skew.on = false;
+			skew.on = "f";
 			var mt = matrix.xx.toFixed(8) + " " + matrix.xy.toFixed(8) + " " + 
 				matrix.yx.toFixed(8) + " " + matrix.yy.toFixed(8) + " 0 0",
 				offset = Math.floor(matrix.dx).toFixed() + "px " + Math.floor(matrix.dy).toFixed() + "px",
@@ -229,8 +229,8 @@ dojo.extend(dojox.gfx.Shape, {
 		//	assigns and clears the underlying node that will represent this
 		//	shape. Once set, transforms, gradients, etc, can be applied.
 		//	(no fill & stroke by default)
-		rawNode.stroked = false;
-		rawNode.filled  = false;
+		rawNode.stroked = "f";
+		rawNode.filled  = "f";
 		this.rawNode = rawNode;
 	},
 	
@@ -1009,6 +1009,8 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 		// summary: sets the width and height of the rawNode
 		// width: String: width of surface, e.g., "100px"
 		// height: String: height of surface, e.g., "100px"
+		this.width  = dojox.gfx.normalizedLength(width);	// in pixels
+		this.height = dojox.gfx.normalizedLength(height);	// in pixels
 		if(!this.rawNode) return this;
 		this.rawNode.style.width = width;
 		this.rawNode.style.height = height;
@@ -1019,7 +1021,12 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	},
 	getDimensions: function(){
 		// summary: returns an object with properties "width" and "height"
-		return this.rawNode ? { width: this.rawNode.style.width, height: this.rawNode.style.height } : null; // Object
+		var t = this.rawNode ? {
+			width:  dojox.gfx.normalizedLength(this.rawNode.style.width), 
+			height: dojox.gfx.normalizedLength(this.rawNode.style.height)} : null;
+		if(t.width  <= 0){ t.width  = this.width; }
+		if(t.height <= 0){ t.height = this.height; }
+		return t;	// Object
 	}
 });
 
@@ -1054,11 +1061,15 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	bs.left = bs.top = 0;
 	bs.width  = rs.width;
 	bs.height = rs.height;
-	b.filled = b.stroked = false;
+	b.filled = b.stroked = "f";
 
 	r.appendChild(b);
 	c.appendChild(r);
 	p.appendChild(c);
+	
+	s.width  = dojox.gfx.normalizedLength(width);	// in pixels
+	s.height = dojox.gfx.normalizedLength(height);	// in pixels
+
 	return s;	// dojox.gfx.Surface
 };
 
@@ -1179,7 +1190,7 @@ dojox.gfx.vml.Creator = {
 		r.style.left = r.style.top = 0;
 		r.style.width  = g.rawNode.style.width;
 		r.style.height = g.rawNode.style.height;
-		r.filled = r.stroked = false;
+		r.filled = r.stroked = "f";
 		g.rawNode.appendChild(r);
 		g.bgNode = r;
 		return g;	// dojox.gfx.Group
@@ -1188,6 +1199,7 @@ dojox.gfx.vml.Creator = {
 		// summary: creates an instance of the passed shapeType class
 		// shapeType: Function: a class constructor to create an instance of
 		// rawShape: Object: properties to be passed in to the classes "setShape" method
+		// overrideSize: Boolean: set the size explicitly, if true
 		if(!this.rawNode) return null;
 		var shape = new shapeType(),
 			node = this.rawNode.ownerDocument.createElement('v:' + shapeType.nodeType);
@@ -1200,9 +1212,11 @@ dojox.gfx.vml.Creator = {
 	},
 	createShape: dojox.gfx._createShape,
 	_overrideSize: function(node){
-		node.style.width  = this.rawNode.style.width;
-		node.style.height = this.rawNode.style.height;
-		node.coordsize = parseFloat(node.style.width) + " " + parseFloat(node.style.height);
+		var p = this;
+		for(; p && !(p instanceof dojox.gfx.Surface); p = p.parent);
+		node.style.width  = p.width;
+		node.style.height = p.height;
+		node.coordsize = p.width + " " + p.height;
 	}
 };
 

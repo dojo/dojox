@@ -502,6 +502,8 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 		// summary: sets the width and height of the rawNode
 		// width: String: width of surface, e.g., "100px"
 		// height: String: height of surface, e.g., "100px"
+		this.width  = dojox.gfx.normalizedLength(width);	// in pixels
+		this.height = dojox.gfx.normalizedLength(height);	// in pixels
 		var p = this.rawNode && this.rawNode.getHost();
 		if(p){
 			p.width = width;
@@ -512,7 +514,10 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	getDimensions: function(){
 		// summary: returns an object with properties "width" and "height"
 		var p = this.rawNode && this.rawNode.getHost();
-		return p ? {width: p.content.actualWidth, height: p.content.actualHeight} : null;	// Object
+		var t = p ? {width: p.content.actualWidth, height: p.content.actualHeight} : null;
+		if(t.width  <= 0){ t.width  = this.width; }
+		if(t.height <= 0){ t.height = this.height; }
+		return t;	// Object
 	}
 });
 
@@ -556,6 +561,8 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	s.rawNode = dojo.byId(pluginName).content.root;
 	// register the plugin with its parent node
 	dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
+	s.width  = dojox.gfx.normalizedLength(width);	// in pixels
+	s.height = dojox.gfx.normalizedLength(height);	// in pixels
 	return s;	// dojox.gfx.Surface
 };
 
