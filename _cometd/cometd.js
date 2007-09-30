@@ -27,17 +27,19 @@ dojox.cometd = new function(){
 
 	this.connectionTypes = new dojo.AdapterRegistry(true);
 
-	this.version = 0.1;
+	this.version = 0.9;
 	this.minimumVersion = 0.1;
 	this.clientId = null;
+	this.batch=0;
 
 	this._isXD = false;
 	this.handshakeReturn = null;
 	this.currentTransport = null;
 	this.url = null;
 	this.lastMessage = null;
+	this.topics = {};
 	this.globalTopicChannels = {};
-	this.backlog = [];
+	this._messageQ = [];
 	this.handleAs="json-comment-optional";
 	this.advice;
 	this.pendingSubscriptions = {}
@@ -54,7 +56,8 @@ dojox.cometd = new function(){
 		// placeholder
 	}
 
-	this.init = function(props, root, bargs){
+	this.init = function(root, props, bargs){
+                
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
 		props = props||{};
@@ -110,6 +113,8 @@ dojox.cometd = new function(){
 		}else{
 			return dojo.xhrPost(bindArgs);
 		}
+                
+		this.startBatch();
 	}
 
 	this.finishInit = function(data){
@@ -135,17 +140,13 @@ dojox.cometd = new function(){
 			data.version,
 			this._isXD
 		);
+		this.currentTransport._cometd = this;
 		this.currentTransport.version = data.version;
 		this.clientId = data.clientId;
 		this.tunnelInit = dojo.hitch(this.currentTransport, "tunnelInit");
 		this.tunnelCollapse = dojo.hitch(this.currentTransport, "tunnelCollapse");
 
 		this.currentTransport.startup(data);
-		while(this.backlog.length != 0){
-			var cur = this.backlog.shift();
-			var fn = cur.shift();
-			this[fn].apply(this, cur);
-		}
 
 		dojo.addOnUnload(dojox.cometd,"disconnect");
 	}
@@ -163,10 +164,6 @@ dojox.cometd = new function(){
 
 	this._deliver = function(message){
 		// dipatch events along the specified path
-		if(!this.currentTransport){
-			this.backlog.push(["deliver", message]);
-			return;
-		}
 
 		if(!message["channel"]){
 			if(message["success"] !== true){
@@ -186,6 +183,12 @@ dojox.cometd = new function(){
 			(message.channel.substr(0, 5) == "/meta")){
 			// check for various meta topic actions that we need to respond to
 			switch(message.channel){
+				case "/meta/connect":
+					if(message.successful && !this.initialized){
+						this.initialized = true;
+						this.endBatch();
+					}
+					break;
 				case "/meta/subscribe":
 					var pendingDef = this.pendingSubscriptions[message.subscription];
 					if(!message.successful){
@@ -231,7 +234,7 @@ dojox.cometd = new function(){
 	this.disconnect = function(){
 		dojo.forEach(this._subscriptions, dojo.unsubscribe);
 		this._subscriptions = [];
-		this.backlog = [];
+		this._messageQ = [];
 		if(!this.currentTransport){
 			console.debug("no current transport to disconnect from");
 			return;
@@ -251,11 +254,6 @@ dojox.cometd = new function(){
 		// properties:
 		//		Optional. Other meta-data to be mixed into the top-level of the
 		//		message
-		if(!this.currentTransport){
-			this.backlog.push(["publish", channel, data, properties]);
-			// console.debug(this.backlog);
-			return;
-		}
 		var message = {
 			data: data,
 			channel: channel
@@ -263,24 +261,25 @@ dojox.cometd = new function(){
 		if(properties){
 			dojo.mixin(message, properties);
 		}
-		return this.currentTransport.sendMessage(message);
+		this._sendMessage(message);
+	}
+        
+	this._sendMessage = function(/* object */ message){
+		if(this.currentTransport && this.initialized && this.batch==0){
+			return this.currentTransport.sendMessages([message]);
+		}
+		else{
+			this._messageQ.push(message);
+		}
 	}
 
-	this.subscribe = function(	/*string*/				channel,
-								/*boolean, optional*/	useLocalTopics,
-								/*object, optional*/	objOrFunc,
-								/*string, optional*/	funcName){ // return: boolean
+	this.subscribe = function(	/*string */					channel,
+								/*object, optional*/	     objOrFunc,
+								/*string, optional*/	     funcName){ // return: boolean
 		// summary:
 		//		inform the server of this client's interest in channel
 		// channel:
 		//		name of the cometd channel to subscribe to
-		// useLocalTopics:
-		//		Determines if up a local event topic subscription to the passed
-		//		function using the channel name that was passed is constructed,
-		//		or if the topic name will be prefixed with some other
-		//		identifier for local message distribution. Setting this to
-		//		"true" is a good way to hook up server-sent message delivery to
-		//		pre-existing local topics.
 		// objOrFunc:
 		//		an object scope for funcName or the name or reference to a
 		//		function to be called when messages are delivered to the
@@ -299,53 +298,36 @@ dojox.cometd = new function(){
 
 		var pendingDef = new dojo.Deferred();
 		this.pendingSubscriptions[channel] = pendingDef;
-
-		if(!this.currentTransport){
-			this.backlog.push(["subscribe", channel, useLocalTopics, objOrFunc, funcName]);
-			return pendingDef;
-		}
-
+                
 		// console.debug(objOrFunc, funcName);
 
 		if(objOrFunc){
-			var tname = (useLocalTopics) ? channel : "/cometd"+channel;
-			if(useLocalTopics){
-				this.globalTopicChannels[channel] = true;
-			}
-
-			this._subscriptions.push(
-				dojo.subscribe(tname, objOrFunc, funcName)
-			);
+			var tname = "/cometd"+channel;
+			var topic = dojo.subscribe(tname, objOrFunc, funcName);
+			this.topics[tname] = topic;
 		}
-		// FIXME: would we handle queuing of the subscription if not connected?
-		// Or should the transport object?
-		this.currentTransport.sendMessage({
+                
+		this._sendMessage({
 			channel: "/meta/subscribe",
 			subscription: channel
 		});
 
 		return pendingDef;
 
-	}
+	}      
 
-	this.subscribed = function(	/*string*/				channel,
-								/*obj*/					message){
-		// console.debug(channel, message);
-	}
+	this.subscribed = function(	/*string*/  channel,
+								/*obj*/     message){  
+ 	}
 
-	this.unsubscribe = function(/*string*/				channel,
-								/*boolean, optional*/	useLocalTopics,
+
+	this.unsubscribe = function(/*string*/			channel,
 								/*object, optional*/	objOrFunc,
 								/*string, optional*/	funcName){ // return: boolean
 		// summary:
 		//		inform the server of this client's disinterest in channel
 		// channel:
 		//		name of the cometd channel to subscribe to
-		// useLocalTopics:
-		//		Determines if up a local event topic subscription to the passed
-		//		function using the channel name that was passed is destroyed,
-		//		or if the topic name will be prefixed with some other
-		//		identifier for stopping message distribution.
 		// objOrFunc:
 		//		an object scope for funcName or the name or reference to a
 		//		function to be called when messages are delivered to the
@@ -363,22 +345,14 @@ dojox.cometd = new function(){
 
 		var pendingDef = new dojo.Deferred();
 		this.pendingUnsubscriptions[channel] = pendingDef;
-
-		if(!this.currentTransport){
-			this.backlog.push(["unsubscribe", channel, useLocalTopics, objOrFunc, funcName]);
-			return pendingDef;
-		}
-		//		a callback function to notifiy upon channel message delivery
+		
+		// a callback function to notifiy upon channel message delivery
 		if(objOrFunc){
-			// FIXME: should actual local topic unsubscription be delayed for
-			// successful unsubcribe notices from the other end? (guessing "no")
-			// FIXME: if useLocalTopics is false, should we go ahead and
-			// destroy the local topic?
-			var tname = (useLocalTopics) ? channel : "/cometd"+channel;
-			// FIXME: we're not passing a valid handle!!
-			dojo.unsubscribe(tname, objOrFunc, funcName);
+			var tname = "/cometd"+channel;
+			dojo.unsubscribe(this.topics[tname]);
 		}
-		this.currentTransport.sendMessage({
+                
+		this._sendMessage({
 			channel: "/meta/unsubscribe",
 			subscription: channel
 		});
@@ -387,19 +361,32 @@ dojox.cometd = new function(){
 
 	}
 
-	this.unsubscribed = function(/*string*/				channel,
-								/*obj*/					message){
-		// console.debug(channel, message);
+	this.unsubscribed = function(	/*string*/  channel,
+									/*obj*/     message){       
 	}
 
-	// FIXME: add an "addPublisher" function
+	this.startBatch = function(){
+		this.batch++;
+	}
+
+	this.endBatch = function(){
+		if(--this.batch <= 0 && this.currentTransport){
+			this.batch=0;
+
+			var messages=this._messageQ;
+			this._messageQ=[];
+			if(messages.length>0){
+				this.currentTransport.sendMessages(messages);
+			}
+		}
+	}
 }
 
 /*
 transport objects MUST expose the following methods:
 	- check
 	- startup
-	- sendMessage
+	- sendMessages
 	- deliver
 	- disconnect
 optional, standard but transport dependent methods are:
@@ -428,8 +415,8 @@ cometd.blahTransport = new function(){
 		dojox.cometd.connected = true;
 	}
 
-	this.sendMessage = function(message){
-		// FIXME: fill in message sending logic
+	this.sendMessages = function(message){
+		// FIXME: fill in message array sending logic
 	}
 
 	this.deliver = function(message){
@@ -461,22 +448,22 @@ cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahT
 */
 
 dojox.cometd.longPollTransport = new function(){
+	this._cometd=null;
 	this.lastTimestamp = null;
 	this.lastId = null;
-	this.backlog = [];
 
 	this.check = function(types, version, xdomain){
 		return ((!xdomain)&&(dojo.indexOf(types, "long-polling") >= 0));
 	}
 
 	this.tunnelInit = function(){
-		if(dojox.cometd.connected){ return; }
+		if(this._cometd.connected){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
-					clientId:	dojox.cometd.clientId,
+					clientId:	this._cometd.clientId,
 					connectionType: "long-polling"
 				}
 			])
@@ -484,56 +471,53 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.tunnelCollapse = function(){
-		if(!dojox.cometd.connected){
+		if(!this._cometd.connected){
 			// try to restart the tunnel
-			dojox.cometd.connected = false;
+			this._cometd.connected = false;
 
 			// TODO handle transport specific advice
 
-			if(dojox.cometd["advice"]){
-				if(dojox.cometd.advice["reconnect"]=="none"){
+			if(this._cometd["advice"]){
+				if(this._cometd.advice["reconnect"]=="none"){
 					return;
 				}
 
-				if(	(dojox.cometd.advice["interval"])&&
-					(dojox.cometd.advice.interval>0) ){
+				if(	(this._cometd.advice["interval"])&&
+					(this._cometd.advice.interval>0) ){
 					setTimeout(function(){
-						dojox.cometd.currentTransport._reconnect();
-					}, dojox.cometd.advice.interval);
+						this._connect();
+					}, this._cometd.advice.interval);
 				}else{
-					this._reconnect();
+					this._connect();
 				}
 			}else{
-				this._reconnect();
+				this._connect();
 			}
 		}
 	}
 
-	this._reconnect = function(){
-		if(	(dojox.cometd["advice"])&&
-			(dojox.cometd.advice["reconnect"]=="handshake")
+	this._connect = function(){
+		if(	(this._cometd["advice"])&&
+			(this._cometd.advice["reconnect"]=="handshake")
 		){
-			dojox.cometd.init(null,dojox.cometd.url);
- 		}else if (dojox.cometd.initialized){
+			this._cometd.init(null,this._cometd.url);
+ 		}else if(this._cometd.initialized){
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
-						channel:	"/meta/reconnect",
+						channel:	"/meta/connect",
 						connectionType: "long-polling",
-						clientId:	dojox.cometd.clientId,
+						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:			this.lastId
+						id:		this.lastId
 					}
 				])
 			});
 		}
 	}
 
-	this.deliver = function(message){
+	this.deliver = function(/*array*/ message){
 		// console.debug(message);
-		// handle delivery details that this transport particularly cares
-		// about. Most functions of should be handled by the main cometd object
-		// with only transport-specific details and state being tracked here.
 		if(message["timestamp"]){
 			this.lastTimestamp = message.timestamp;
 		}
@@ -541,40 +525,19 @@ dojox.cometd.longPollTransport = new function(){
 			this.lastId = message.id;
 		}
 
-		// check to see if we got a /meta channel message that we care about
-		if(	(message.channel.length > 5)&&
-			(message.channel.substr(0, 5) == "/meta")){
-			// check for various meta topic actions that we need to respond to
-			switch(message.channel){
-				case "/meta/connect":
-					if(!message.successful){
-						console.debug("cometd connection error:", message.error);
-						return;
-					}
-					dojox.cometd.initialized = true;
-					this.processBacklog();
-					break;
-				case "/meta/reconnect":
-					if(!message.successful){
-						console.debug("cometd reconnection error:", message.error);
-						return;
-					}
-					break;
-			}
-		}
 	}
 
 	this.openTunnelWith = function(content, url){
 		// console.debug("openTunnelWith:", content, (url||cometd.url));
 		var d = dojo.xhrPost({
-			url: (url||dojox.cometd.url),
+			url: (url||this._cometd.url),
 			content: content,
-			handleAs: dojox.cometd.handleAs,
+			handleAs: this._cometd.handleAs,
 			load: dojo.hitch(this, function(data){
 				// console.debug(evt.responseText);
 				// console.debug(data);
-						dojox.cometd.connected = false;
-				dojox.cometd.deliver(data);
+				this._cometd.connected = false;
+				this._cometd.deliver(data);
 				this.tunnelCollapse();
 			}),
 			error: function(err){
@@ -584,59 +547,50 @@ dojox.cometd.longPollTransport = new function(){
 				// TODO - follow advice to reconnect or rehandshake?
 			}
 		});
-		dojox.cometd.connected = true;
+		this._cometd.connected = true;
 	}
-
-	this.processBacklog = function(){
-		while(this.backlog.length > 0){
-			this.sendMessage(this.backlog.shift(), true);
+        
+	this.sendMessages = function(messages){
+		for(var i=messages.length; i-->0;){
+			messages[i].clientId = this._cometd.clientId;
 		}
-	}
-
-	this.sendMessage = function(message, bypassBacklog){
-		if((bypassBacklog)||(dojox.cometd.initialized)){
-			message.clientId = dojox.cometd.clientId;
-
-			return dojo.xhrPost({
-				url: dojox.cometd.url||djConfig["cometdRoot"],
-				handleAs: dojox.cometd.handleAs,
-				load: dojo.hitch(dojox.cometd, "deliver"),
-				content: {
-					message: dojo.toJson([ message ])
-				}
-			});
-		}else{
-			this.backlog.push(message);
-		}
+		return dojo.xhrPost({
+			url: this._cometd.url||djConfig["cometdRoot"],
+			handleAs: this._cometd.handleAs,
+			load: dojo.hitch(this._cometd, "deliver"),
+			content: {
+				message: dojo.toJson(messages)
+			}
+		});
 	}
 
 	this.startup = function(handshakeData){
-		if(dojox.cometd.initialized){ return; }
+		if(this._cometd.initialized){ return; }
 		this.tunnelInit();
 	}
 
 	this.disconnect = function(){
-		if(!dojox.cometd.initialized){ return; }
+		if(!this._cometd.initialized){ return; }
 
 		dojo.xhrPost({
-			url: dojox.cometd.url||djConfig["cometdRoot"],
-			handleAs: dojox.cometd.handleAs,
+			url: this._cometd.url||djConfig["cometdRoot"],
+			handleAs: this._cometd.handleAs,
 			content: {
 				message: dojo.toJson([{
 					channel:	"/meta/disconnect",
-					clientId:	dojox.cometd.clientId
+					clientId:	this._cometd.clientId
 				}])
 			}
 		});
 
-		dojox.cometd.initialized=false;
+		this._cometd.initialized=false;
 	}
 }
 
 dojox.cometd.callbackPollTransport = new function(){
+	this._cometd=null;
 	this.lastTimestamp = null;
 	this.lastId = null;
-	this.backlog = [];
 
 	this.check = function(types, version, xdomain){
 		// we handle x-domain!
@@ -644,13 +598,13 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(dojox.cometd.connected){ return; }
+		if(this._cometd.connected){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
-					clientId:	dojox.cometd.clientId,
+					clientId:	this._cometd.clientId,
 					connectionType: "callback-polling"
 				}
 			])
@@ -659,14 +613,14 @@ dojox.cometd.callbackPollTransport = new function(){
 
 	this.tunnelCollapse = function(){
 		// TODO implement advice handling
-		if(!dojox.cometd.connected){
+		if(!this._cometd.connected){
 			// try to restart the tunnel
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
-						channel:	"/meta/reconnect",
-						connectionType: "long-polling",
-						clientId:	dojox.cometd.clientId,
+						channel:	"/meta/connect",
+						connectionType: "callback-polling",
+						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
 						id:		this.lastId
 					}
@@ -682,46 +636,38 @@ dojox.cometd.callbackPollTransport = new function(){
 		// create a <script> element to generate the request
 		dojo.io.script.get({
 			load: dojo.hitch(this, function(data){
-				dojox.cometd.connected = false;
-				dojox.cometd.deliver(data);
+				this._cometd.connected = false;
+				this._cometd.deliver(data);
 				this.tunnelCollapse();
 			}),
 			error: function(){
-				dojox.cometd.connected = false;
+				this._cometd.connected = false;
 				console.debug("tunnel opening failed");
 			},
-			url: (url||dojox.cometd.url),
+			url: (url||this._cometd.url),
 			content: content,
-			handleAs: dojox.cometd.handleAs,
+			handleAs: this._cometd.handleAs,
 			callbackParamName: "jsonp"
 		});
-		dojox.cometd.connected = true;
+		this._cometd.connected = true;
 	}
-
-	this.processBacklog = function(){
-		while(this.backlog.length > 0){
-			this.sendMessage(this.backlog.shift(), true);
+        
+	this.sendMessages = function(/*array*/ messages){
+		for(var i=messages.length;i-->0;){
+			messages[i].clientId = this._cometd.clientId;
 		}
-	}
-
-	this.sendMessage = function(message, bypassBacklog){
-		if((bypassBacklog)||(dojox.cometd.initialized)){
-			message.clientId = dojox.cometd.clientId;
-			var bindArgs = {
-				url: dojox.cometd.url||djConfig["cometdRoot"],
-				handleAs: dojox.cometd.handleAs,
-				load: dojo.hitch(dojox.cometd, "deliver"),
-				callbackParamName: "jsonp",
-				content: { message: dojo.toJson([ message ]) }
-			};
-			return dojo.io.script.get(bindArgs);
-		}else{
-			this.backlog.push(message);
-		}
+		var bindArgs = {
+			url: this._cometd.url||djConfig["cometdRoot"],
+			handleAs: this._cometd.handleAs,
+			load: dojo.hitch(this._cometd, "deliver"),
+			callbackParamName: "jsonp",
+			content: { message: dojo.toJson( messages ) }
+		};
+		return dojo.io.script.get(bindArgs);
 	}
 
 	this.startup = function(handshakeData){
-		if(dojox.cometd.initialized){ return; }
+		if(this._cometd.initialized){ return; }
 		this.tunnelInit();
 	}
 
