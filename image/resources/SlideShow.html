@@ -1,14 +1,17 @@
 <div dojoAttachPoint="outerNode" class="slideShowWrapper">
 	<div style="position:relative;" dojoAttachPoint="innerWrapper">
 		<div dojoAttachPoint="navNode" class="slideShowNav" dojoAttachEvent="onclick: _handleClick">
-			<div class="slideShowNextIcon" dojoAttachPoint="nextIcon"></div>
-			<div class="slideShowPrevIcon" dojoAttachPoint="prevIcon"></div>
-			<div class="slideShowPlayIcon" dojoAttachPoint="playIcon"></div>
-
 			<div class="dijitInline slideShowTitle" dojoAttachPoint="titleNode">${title}</div>
 		</div>
 		<div dojoAttachPoint="slideshowNode" class="slideShowSlideShow"></div>
-		<div dojoAttachPoint="largeNode" class="slideShowImageWrapper"></div>
+		<div dojoAttachPoint="largeNode" class="slideShowImageWrapper">
+			
+		</div>
+		<div dojoAttachPoint="navNode" class="slideShowCtrl" dojoAttachEvent="onclick: _handleClick">
+			<span dojoAttachPoint="navPrev" class="slideShowCtrlPrev"></span>
+			<span dojoAttachPoint="navPlay" class="slideShowCtrlPlay"></span>
+			<span dojoAttachPoint="navNext" class="slideShowCtrlNext"></span>
+		</div>
 		<div dojoAttachPoint="hiddenNode" class="slideShowHidden"></div>
 	</div>
 </div>

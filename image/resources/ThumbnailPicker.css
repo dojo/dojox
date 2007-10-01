@@ -21,19 +21,32 @@
 .thumbNailWrapper .thumbNav {
 	background-repeat: no-repeat;	
 	background-position:center;
-	height: 75px;
 	padding-top: 1px 1px 1px 1px;
 }
+
+.thumbNailWrapper .enabled {
+	background-image: url("images/navBtns.gif");	
+}
+
 .thumbNailWrapper .thumbNav img {
 	width: 30px;
 }
-
-.thumbNailWrapper .thumbPrev {
-	background-image: url("images/arrowLeft.gif");
+.thumbNailWrapper .thumbClickable {
+	cursor: pointer;
+}
+.thumbNailWrapper .prevHoriz {
+	background-position: -9px -94px;
 }
 
-.thumbNailWrapper .thumbNext {
-	background-image: url("images/arrowRight.gif");
+.thumbNailWrapper .nextHoriz {
+	background-position: -11px -254px;
+}
+.thumbNailWrapper .prevVert {
+	background-position: 27px -412px;
+}
+
+.thumbNailWrapper .nextVert {
+	background-position: 27px -30px;
 }
 
 .thumbNailWrapper .imageGalleryImageWrapper,
@@ -49,6 +62,10 @@
 	height: 75px;
 	max-width: 100px;
 	width: expression(this.width > 100 ? 100: true);/*IE Hack*/
+}
+
+.thumbNailWrapper .thumbNav .imageGalleryThumb {
+	height: 50px;
 }
 
 .thumbNailWrapper .thumbPlaceholder {

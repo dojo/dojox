@@ -5,6 +5,7 @@
 	border:1px solid #333;	
 	padding-bottom:20px;
 	overflow:hidden;
+	text-align: center;
 	-moz-border-radius:3pt;
 	-webkit-border-radius:4pt;
 	-webkit-drop-shadow:#ccc 4pt; 
@@ -56,39 +57,46 @@
 }
 .slideShowLoading { background-color: #fad66a; }
 .slideShowLoaded { background-color: transparent; }
+/*
+.sprite-arrowbottom { background-position: 0 -30px; } 
+.sprite-arrowtop { background-position: 0 -430px; } 
+*/
+.slideShowCtrlPrev {
+	background-position: 0 -110px;
+	float: left;
+}
+.slideShowCtrlNext {
+	background-position: 0 -270px;
+	float: right;
+}
+.slideShowCtrlPlay {
+	background-position: 0 -190px;
+	position: absolute;
+}
+.slideShowPaused .slideShowCtrlPlay {
+	background-position: 0 -350px;
+	position: absolute;
+}
+.slideShowCtrl span.slideShowCtrlHide {
+	background-image: url("images/1pixel.gif");
+	cursor: auto;
+}
+.slideShowCtrl {
+	height: 50px;
+	width: 100%;
+	position: relative;
+	margin-top: -50px;
+}
+.slideShowCtrl span {
+	width: 50px;
+	height: 100%;
+	background-image: url("images/navBtns.gif");
+	cursor: pointer;
+}
 
 /* Soria-like */
-.soria .slideShowNav .slideShowNextIcon,
-.soria .slideShowNav .slideShowPrevIcon,
-.soria .slideShowNav .slideShowPlayIcon,
-.soria .slideShowPaused .slideShowNav .slideShowPlayIcon {
-	width:16px; 
-	height:16px;
-	float:right;
-	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat;
-	cursor:pointer;
-	position:relative;
-}
-.soria .slideShowNav .slideShowNextIcon { background-position:-336px 0px; }
-.soria .slideShowNav .slideShowPrevIcon { background-position:-320px 0px; }
-.soria .slideShowNav .slideShowPlayIcon { background-position:-288px 0px; }
-.soria .slideShowPaused .slideShowNav .slideShowPlayIcon { background-position:-304px 0px !important; }
 
 /* Tundra like */
-.tundra .slideShowNav .slideShowNextIcon,
-.tundra .slideShowNav .slideShowPrevIcon,
-.tundra .slideShowNav .slideShowPlayIcon,
-.tundra .slideShowPaused .slideShowNav .slideShowPlayIcon {
-	width:16px; 
-	height:16px;
-	float:right;
-	cursor:pointer;
-}
-/* FIXME: tundra needs a styled double-arrow set, and a pause icon */
-.tundra .slideShowNav .slideShowNextIcon { background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat; }
-.tundra .slideShowNav .slideShowPrevIcon { background:url('../../../dijit/themes/tundra/images/arrowLeft.png') no-repeat; }
-.tundra .slideShowNav .slideShowPlayIcon { background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat; }
-.tundra .slideShowPaused .slideShowNav .slideShowPlayIcon { background:url('../../../dijit/themes/tundra/images/pause.png') no-repeat !important; }
 
 /* Hack. can we use use .dj_ie6 ? */
 * html .slideShowPager li.currentpage, * html .pagination li.disablepage{ /*IE 6 and below. Adjust non linked LIs slightly to account for bugs*/
