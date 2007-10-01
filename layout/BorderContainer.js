@@ -14,7 +14,7 @@ dojo.declare(
 	//
 	// details
 	//	A BorderContainer is a box with a specified size (like style="width: 500px; height: 500px;"),
-	//	that contains children widgets marked with "align" of "top", "bottom", "left", "right", "center".
+	//	that contains children widgets marked with "position" of "top", "bottom", "left", "right", "center".
 	//	It takes it's children marked as top/bottom/left/right, and lays them out along the edges of the center box,
 	//	with "top" and "bottom" extending the full width of the container.
 	//
@@ -23,9 +23,9 @@ dojo.declare(
 	//		html, body{ height: 100%; width: 100%; }
 	//	</style>
 	//	<div dojoType="BorderContainer" style="width: 100%; height: 100%">
-	//		<div dojoType="ContentPane" align="top">header text</div>
-	//		<div dojoType="ContentPane" align="right" style="width: 200px;">table of contents</div>
-	//		<div dojoType="ContentPane" align="center">client area</div>
+	//		<div dojoType="ContentPane" position="top">header text</div>
+	//		<div dojoType="ContentPane" position="right" style="width: 200px;">table of contents</div>
+	//		<div dojoType="ContentPane" position="center">client area</div>
 	//	</div>
 	
 	top: {},
@@ -61,7 +61,7 @@ dojo.declare(
 		 * dim:
 		 *		{l, t, w, h} object specifying dimensions of container into which to place children
 		 * children:
-		 *		an array like [ {domNode: foo, align: "bottom" }, {domNode: bar, align: "client"} ]
+		 *		an array like [ {domNode: foo, position: "bottom" }, {domNode: bar, position: "client"} ]
 		 */
 
 //TODO: what is dim and why doesn't it look right?
@@ -75,8 +75,8 @@ dojo.declare(
 		dojo.forEach(children, function(child){
 			var style = child.domNode.style;
 			style.position = "absolute";
-			if(child.align){
-				this[child.align] = child.domNode;
+			if(child.position){
+				this[child.position] = child.domNode;
 			}
 		}, this);
 
@@ -108,8 +108,8 @@ dojo.declare(
 // Since any widget can be specified as a LayoutContainer child, mix it
 // into the base widget class.  (This is a hack, but it's effective.)
 dojo.extend(dijit._Widget, {
-	// align: String
+	// position: String
 	//		"top", "bottom", "left", "right", "center".
 	//		See the BorderContainer description for details on this parameter.
-	align: 'none'
+	position: 'none'
 });
