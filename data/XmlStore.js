@@ -414,7 +414,14 @@ dojo.declare("dojox.data.XmlStore", null, {
 		if(!queryString){
 			return this._url;
 		}
-		return this._url + "?" + queryString;
+		//Check to see if the URL already has query params or not.
+		var fullUrl = this._url;
+		if(fullUrl.indexOf("?") < 0){
+			fullUrl += "?";
+		}else{
+			fullUrl += "&";
+		}
+		return fullUrl + queryString;
 	},
 
 	_getItems: function(document, request) {
