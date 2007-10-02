@@ -66,7 +66,7 @@ dojo.declare("dojox.data.PicasaStore", null, {
 	getAttributes: function(item){
 		//	summary: 
 		//      See dojo.data.api.Read.getAttributes()
-                return ["id", "published", "updated", "category", "title$type", "title", "summary$type", "summary", "rights$type", "rights", "link", "author", "gphoto$id", "gphoto$name", "location"]; 
+		return ["id", "published", "updated", "category", "title$type", "title", "summary$type", "summary", "rights$type", "rights", "link", "author", "gphoto$id", "gphoto$name", "location"]; 
 	},
 
 	hasAttribute: function(item, attribute){
@@ -174,25 +174,25 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		//Build up the content to send the request for.
 		var content = {alt: "jsonm", pp: "1", psc: "G"};
 		content['start-index'] = "1";
-		if (request.query.start) {
-		        content['start-index'] = request.query.start;
+		if(request.query.start){
+			content['start-index'] = request.query.start;
 		}
-		if (request.query.tags) {
+		if(request.query.tags){
 			content.q = request.query.tags;
 		}
-		if (request.query.userid) {
+		if(request.query.userid){
 			content.uname = request.query.userid;
 		}
-		if (request.query.userids) {
+		if(request.query.userids){
 			content.ids = request.query.userids;
 		}
-		if (request.query.lang) {
+		if(request.query.lang){
 			content.hl = request.query.lang;
 		}
-		if (request.count) {
-		        content['max-results'] = request.count;
-		} else {
-		        content['max-results'] = "20";
+		if(request.count){
+			content['max-results'] = request.count;
+		}else{
+			content['max-results'] = "20";
 		}
 
 		//Linking this up to Picasa is a JOY!
@@ -222,22 +222,21 @@ dojo.declare("dojox.data.PicasaStore", null, {
 	},
 
 	_processPicasaData: function(data){
-		 var items = [];
-		 if(data.feed){
-			 items = data.feed.entry;
-			 //Add on the store ref so that isItem can work.
-			 for(var i = 0; i < items.length; i++){
-				 var item = items[i];
-				 item[this._storeRef] = this;
-			 }
-		 }
-		 return items;
+		var items = [];
+		if(data.feed){
+			items = data.feed.entry;
+			//Add on the store ref so that isItem can work.
+			for(var i = 0; i < items.length; i++){
+				var item = items[i];
+				item[this._storeRef] = this;
+			}
+		}
+		return items;
 	},
 
 	_unescapeHtml: function(str){
 		// summary: Utility function to un-escape XML special characters in an HTML string.
 		// description: Utility function to un-escape XML special characters in an HTML string.
-		//
 		// str: String.
 		//   The string to un-escape
 		// returns: HTML String converted back to the normal text (unescaped) characters (<,>,&, ", etc,).
