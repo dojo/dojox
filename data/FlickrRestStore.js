@@ -82,9 +82,11 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//	A function to call for fetched items
 		// errorHandler:
 		//	A function to call on error
-		var query = request.query;
-		if(!query){
+		var query = {};
+		if(!request.query){
 			request.query = query = {};
+		} else {
+			dojo.mixin(query, request.query);	
 		}
 		
 		var primaryKey = [];
@@ -111,7 +113,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 			content.api_key = request.query.apikey;
 			secondaryKey.push("api"+request.query.apikey);
 		} else{
-			throw Exception("dojox.data.FlickrRestStore: An API key must be specified.");
+			throw Error("dojox.data.FlickrRestStore: An API key must be specified.");
 		}
 		if(query.page){
 			content.page = request.query.page;
@@ -208,6 +210,19 @@ dojo.declare("dojox.data.FlickrRestStore",
 		primaryKey = primaryKey.join(".");
 		secondaryKey = secondaryKey.length > 0 ? "." + secondaryKey.join(".") : "";
 		var requestKey = primaryKey + secondaryKey;
+		
+		//Make a copy of the request, in case the source object is modified
+		//before the request completes
+		request = {
+			query: query,
+			count: request.count,
+			start: request.start,
+			_realCount: request._realCount,
+			_realStart: request._realStart,
+			onBegin: request.onBegin,
+			onComplete: request.onComplete,
+			onItem: request.onItem
+		};
 
 		var thisHandler = {
 			request: request,
@@ -440,4 +455,5 @@ dojo.declare("dojox.data.FlickrRestStore",
 		return false;
 	}
 });
+
 
