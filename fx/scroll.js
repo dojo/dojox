@@ -19,8 +19,9 @@ dojox.fx.smoothScroll = function(/* Object */args){
 	args = dojo.mixin({
 		"window": args.win,
 //		"offset": args.offset || {x:0,y:0},
-		"target": dojo._abs(args.node,true) // port: dojo.html.boxSizing.BORDER_BOX, win),
 	},args);
+	if(!args.target){ args.target = dojo._abs(args.node,true); }
+
 	var anim = new dojo._Animation(dojo.mixin({
 		beforeBegin: function(){
 			if(this.curve){ delete this.curve; }
