@@ -96,8 +96,8 @@ dojo.declare("dojox.image.Gallery",
 		
 		var _this = this;
 		dojo.subscribe(this.slideShow.getShowTopicName(), function(packet){
-			if(packet.index < _this.thumbPicker.thumbIndex
-			   || packet.index > _this.thumbPicker.thumbIndex + _this.thumbPicker.numberThumbs -1){
+			if(packet.index < _this.thumbPicker._thumbIndex
+			   || packet.index > _this.thumbPicker._thumbIndex + _this.thumbPicker.numberThumbs -1){
 				var index = packet.index - (packet.index % _this.thumbPicker.numberThumbs);
 				_this.thumbPicker.showThumbs(index);
 			}
