@@ -1,4 +1,4 @@
-﻿dojo.provide("dojox.gfx3d.lighting");
+dojo.provide("dojox.gfx3d.lighting");
 dojo.require("dojox.gfx._base");
 
 dojo.mixin(dojox.gfx3d.lighting, {

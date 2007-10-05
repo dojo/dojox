@@ -1,4 +1,4 @@
-﻿dojo.provide("dojox.gfx3d.matrix");
+dojo.provide("dojox.gfx3d.matrix");
 
 // candidates for dojox.math:
 dojox.gfx3d.matrix._degToRad = function(degree){ return Math.PI * degree / 180; };
