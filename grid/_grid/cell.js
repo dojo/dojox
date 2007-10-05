@@ -9,7 +9,7 @@ dojo.declare("dojox.grid.cell", null, {
 	// data source
 	format: function(inRowIndex){
 		var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex) : this.value;
-		if(this.editor && (this.editor.static || (i.rowIndex==inRowIndex && i.cell==this))){
+		if(this.editor && (this.editor["static"] || (i.rowIndex==inRowIndex && i.cell==this))){
 			return this.editor.format(d, inRowIndex);
 		}else{
 			return (f = this.formatter) ? f.call(this, d, inRowIndex) : d;

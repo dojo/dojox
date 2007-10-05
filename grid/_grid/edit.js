@@ -23,7 +23,7 @@ dojo.declare("dojox.grid.edit", null, {
 			this.apply();
 		}
 		// if dynamic or static editing...
-		if(this.isEditing() || (inCell.editor||0).static){
+		if(this.isEditing() || (inCell.editor||0)["static"]){
 			// let the editor focus itself as needed
 			this._focusEditor(inCell, inRowIndex);
 		}
@@ -54,7 +54,7 @@ dojo.declare("dojox.grid.edit", null, {
 	},
 	setEditCell: function(inCell, inRowIndex){
 		if(!this.isEditCell(inRowIndex, inCell.index)){
-			var editing = !(inCell.editor||0).static || (inRowIndex == this.info.rowIndex);
+			var editing = !(inCell.editor||0)["static"] || (inRowIndex == this.info.rowIndex);
 			this.start(inCell, inRowIndex, editing);
 		}
 	},

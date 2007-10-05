@@ -1,4 +1,4 @@
-﻿dojo.provide("dojox.grid._data.editors");
+dojo.provide("dojox.grid._data.editors");
 
 dojo.declare("dojox.grid.editors.base", null, {
 	constructor: function(inCell){
@@ -132,7 +132,7 @@ dojo.declare("dojox.grid.editors.select", dojox.grid.editors.input, {
 });
 
 dojo.declare("dojox.grid.editors.static", dojox.grid.editors.input, {
-	static: true,
+	"static": true,
 	_formatNode: function(inDatum, inRowIndex){
 		this.formatNode(this.getNode(inRowIndex), inDatum, inRowIndex);
 	},
@@ -143,7 +143,7 @@ dojo.declare("dojox.grid.editors.static", dojox.grid.editors.input, {
 	}
 });
 
-dojo.declare("dojox.grid.editors.bool", dojox.grid.editors.static, {
+dojo.declare("dojox.grid.editors.bool", dojox.grid.editors["static"], {
 	_valueProp: "checked",
 	format: function(inDatum, inRowIndex){
 		return '<input type="checkbox"' + (inDatum ? ' checked="checked"' : '') + ' style="width: auto" />';
