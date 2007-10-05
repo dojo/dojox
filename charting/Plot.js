@@ -1,5 +1,53 @@
 dojo.provide("dojox.charting.Plot");
 
+/**************************************************************************
+ *	dojox.charting.Plot
+ *
+ *	An abstract object describing up to 3 axes (x, y, z)
+ *	and a set of data series.
+ *
+ *	Series are created as keyword arguments, as opposed to
+ *	using specific constructors.  The Plot will alter these
+ *	objects and return references to the "fixed" versions.
+ *
+ *	Data series
+ *	-----------------------------------------------------------------------
+ *	Series are added to a plot through <plot>.add.  You can
+ *	pass either an array (which will become the data of the
+ *	series), or a keyword argument object:
+ *
+ *	{ data, title, bindings, color, marker, plotter, show }
+ *	data (Array): 		the raw data used for the plot
+ *	title (String): 	the title of the series
+ *	bindings (Object):	A set of property maps
+ *	color (dojo.Color):	the color used to render the series
+ *	marker (String):	an SVG path string used for marker on a point
+ *	plotter (Function):	the plotting function to be used to draw the data
+ *	show (Boolean):		a switch to show or hide the series
+ *
+ *	All properties are optional when created, but you should probably fill
+ *	out at least data, bindings, color and plotter.
+ *
+ *	When a series is added, a reference to the <plot>'s add method is 
+ *	attached to the keyword argument, so that you can chain add calls:
+ *
+ *	myPlot.add(data0).add(data1).add(data2);
+ *
+ *	You will also be returned a reference to the object passed, if you
+ *	want it:
+ *
+ *	var series0=myPlot.add(data0);
+ *
+ *	This way you can share series between different Plot objects.
+ *
+ *	Events
+ *	-----------------------------------------------------------------------
+ *	Plots fire off a number of mutation events that can be connected to
+ *	from a rendering object, so that a change in a property can be reflected
+ *	with a renderer (such as dojox.charting.Chart or dojox.charting.Sparkline).
+ *	See the setter methods defined below to learn what methods are available.
+ **************************************************************************/
+
 (function(){
 	var dxc=dojox.charting;
 	var axes=["x","y","z"];
@@ -7,14 +55,9 @@ dojo.provide("dojox.charting.Plot");
 		ZEROD:"zero-d",		//	pie charts mostly
 		ONED:"one-d",		//	bar charts
 		TWOD:"two-d",		//	normal
-		RADAR:"radar",		//	normal on a repeated basis
-		THREED:"three-d"	//	three axis charts (like surface)
+		THREED:"three-d"	//	3D charts
 	};
-	var scaleTypes={
-		LINEAR: "linear",
-		LOG: "log"
-	};
-	
+
 	dxc.Plot=function(/* object */kwArgs){
 		var self=this;
 		this._key="dojoxChartingPlot"+dxc.Plot.count++;
@@ -24,16 +67,14 @@ dojo.provide("dojox.charting.Plot");
 		//	set up the axes
 		this.axes={ };
 		dojo.forEach(axes, function(item){
-			this.axes[item]=kwArgs.axes&&kwArgs.axes[item]?kwArgs.axes[item]:null;
-			if(this.axes[item]){
-				this._initLabels(item, this.axes[item]);
-			}
+			this.axes[item]=(kwArgs.axes&&kwArgs.axes[item] ? kwArgs.axes[item] : null);
 		});
 
 		//	set up the series
 		this.series=[];
 		if(kwArgs.series){
 			dojo.forEach(kwArgs.series, function(item, i){
+				//	let the kwArgs keep the altered series objects.
 				kwArgs.series[i]=self.add(item);
 			});
 		}
@@ -64,188 +105,34 @@ dojo.provide("dojox.charting.Plot");
 		}
 	};
 	dxc.Plot.count=0;
-	dxc.Plot.axes={ count:0 };
 
 	dojo.extend(dxc.Plot, {
-		//	TODO: set and initialize axis origin points.
-		_initLabels:function(/* string */which, /* object */axis){
-			axis._labels=[];
-			if(axis.labels[0].label&&axis.labels[0].value!=null){
-				axis._labels=axis.labels.slice(0);
-			}
-			else if(!isNaN(axis.labels[0])){
-				dojo.forEach(axis.labels, function(item){
-					axis._labels.push({ label: item, value: item });
-				});
-			}
-			else {
-				// clone me
-				var a=axis.labels.slice(0);
-
-				//	do the bottom one.
-				var s=a.shift();
-				axis._labels.push({ label:s, value: axis.range.lower });
-
-				//	do the top one.
-				if(a.length>0){
-					var s=a.pop();
-					axis._labels.push({ label:s, value: axis.range.upper });
-				}
-				//	do the rest.
-				if(a.length>0){
-					var range=axis.range.upper-axis.range.lower;
-					var step=range/(axis.labels.length-1);
-					for(var i=1; i<=a.length; i++){
-						axis._labels.push({
-							label:a[i-1],
-							value:axis.range.lower+(step*i)
-						});
-					}
-				}
-			}
-
-			//	now process values for use in coords
-			//	TODO: dimensions other than 2.
-			dojo.forEach(axis._labels, function(item){
-				item[which]=item.value;
-				item[(which=="x"?"y":"x")]=axis._origin;
-			});
-		},
-		_initOrigin: function(which, axis){
-			var o=axis.origin;
-			if(isNaN(o)){
-				//	TODO: dimensions other than 2
-				var plane=(which=="x"?"y":"x");
-				if(o=="min"){
-					o=this.axes[plane].range.lower;
-				} else if(o=="max"){
-					o=this.axes[plane].range.upper;
-				} else {
-					o=0;
-				}
-			}
-			axis._origin=o;
-		},
-
 		//	setters.  Use these to trigger onSet events, a chart or sparkline may need that.
-		setTitle: function(s){
+		setTitle: function(/* String */s){
+			//	summary
+			//	Set the title of the plot and fire an onSet event
 			this.title=s;
-			this.onSet(this, "plot-title", s);
+			this.onSet(this, "title", s);
+			return this;	//	dojox.charting.Plot
 		},
-		setOrigin: function(which, val){
-			if(this.axes[which]){
-				this.axes[which].origin=val;
-				this._initOrigin(which, this.axes[which]);
-				this.onSet(this, "axis-origin", { which: which, axis: this.axes[which] });
-			}
-		},
-		setAxisTitle: function(which, s){
-			if(this.axes[which]){
-				this.axes[which].title=s;
-				this.onSet(this, "axis-title", { which: which, axis: this.axes[which] });
-			}
-		},
-		setLabels: function(which, obj){
-			if(this.axes[which]){
-				this.axes[which].labels=obj;
-				this._initLabels(which, this.axes[which]);
-				this.onSet(this, "axis-labels", { which: which, axis: this.axes[which] });
-			}
-		},
-		setRanges: function(which, obj){
-			if(this.axes[which]){
-				this.axes[which].range=obj;
-				this._initOrigin(which, this.axes[which]);
-				this._initLabels(which, this.axes[which]);
-				this.onSet(this, "axis-ranges", { which: which, axis: this.axes[which] });
-			}
-		},
-		setVisibility: function(type, which, val){
-			//	type: lines, ticksMajor, ticksMinor, labels, title, axis, series
-			if(type=="series"){
-				//	which is the series and not a string.
-				which.show=val;
-				this.onSet(this, "series-visibility", { series: which });
-			} else {
-				if(this.axes[which]&&(type in this.axes[which].show)){
-					this.axes[which].show[type]=val;
-					this.onSet(this, "axis-visibility", { which: which, axis: this.axes[which], attr: type });
-				}
-			}
-		},
-		setScaling: function(which, scale){
-			if(this.axes[which]){
-				this.axes[which].scale=scale;
-				this.onSet(this, "axis-scale", { which: which, axis: this.axes[which] });
-			}
-		},
-		setAxis: function(/* string */which, /* object */kwArgs){
-			kwArgs=dojo.mixin({
-				_key: "dojoxChartingAxis"+dxc.Plot.axes.count++,
-				title: which.toUpperCase()+" Axis",
-				labels:[],
-				_labels:[],
-				origin:"min",
-				_origin:0,
-				range:{ upper: 100, lower:0 },
-				scale:scaleTypes.LINEAR,
-				show:{
-					lines:false,
-					ticksMajor: false, 
-					ticksMinor: false,
-					labels: true,
-					title: true,
-					axis: true
-				}
-			}, kwArgs);
-			this.axes[which]=kwArgs;
-			this._initOrigin(which, this.axes[which]);
-			this._initLabels(which, this.axes[which]);
+		setAxis: function(/* string */which, /* dojox.charting.Axis */axis){
+			//	summary
+			//	Set <which> axis to the <axis> reference, and fire an onSet event.
+			this.axes[which]=axis;
 
-			this.onSet("axis", { which: which, axis: kwArgs });
+			//	TODO: more than 2 dimensions.
+			//	TODO: deal with shared axes.
+			dojo.connect(axis, "initOrigin", this, function(){
+				var against=this.axes[(which=="x")?"y":"x"];
+				if(against){
+					axis._initOrigin(against);
+				}
+			});
 
-			//	for chaining
+			this.onSet(this, "axis", { which: which, axis: axis });
 			return this;	//	dojox.charting.Plot
 		},
 
-		coords: function(/* object */item, /* object */rect){
-			//	returns the coordinates of the item for drawing
-			//	item is the data object returned from evaluate, with matching
-			//	values for the axes on this plot.
-			//	rect: { x, y, width, height }
-			var point={};
-
-			//	TODO: log scaling.
-			var map={
-				x: function(val, rect){
-					var offset=0-this.axes["x"].range.lower;
-					var min=this.axes["x"].range.lower+offset;
-					var max=this.axes["x"].range.upper+offset;
-					val+=offset;
-					return (val*(rect.width/max))+rect.x;	//	float
-				},
-				y: function(val, rect){
-					var max=this.axes["y"].range.upper;
-					var min=this.axes["y"].range.lower;
-					var offset=0;
-					if(min<0){
-						offset+=Math.abs(min);
-					}
-					max+=offset; min+=offset; val+=offset;
-					return ((rect.height/(max-min))*(max-val))+rect.y;
-				}
-			};
-			map._def=map.y;
-
-			for(var p in item){
-				if(this.axes[p]&&map[p]){
-					point[p]=map[p](item[p], rect);
-				} else {
-					point[p]=map._def(item[p], rect);
-				}
-			}
-			return point;
-		},
 		evaluate: function(/* object */series, /* object? */kwArgs){
 			//	summary
 			//	evaluate the passed series.
