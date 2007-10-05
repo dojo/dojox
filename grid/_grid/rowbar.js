@@ -1,0 +1,45 @@
+dojo.provide("dojox.grid._grid.rowbar");
+dojo.require("dojox.grid._grid.view");
+
+dojo.declare('dojox.GridRowView', dojox.GridView, {
+	defaultWidth: "3em",
+	noscroll: true,
+	padBorderWidth: 2, // FIXME: magic number
+	buildRendering: function(){
+		this.inherited('buildRendering', arguments);
+		this.scrollboxNode.style.overflow = "hidden";
+		this.headerNode.style.visibility = "hidden";
+	},	
+	getWidth: function(){
+		return this.viewWidth || this.defaultWidth;
+	},
+	buildRowContent: function(inRowIndex, inRowNode){
+		var w = this.contentNode.offsetWidth - this.padBorderWidth 
+		inRowNode.innerHTML = '<table style="width:' + w + 'px;"><tr><td class="dojoxGrid-rowbar-inner"></td></tr></table>';
+	},
+	renderHeader: function(){
+	},
+	resize: function(){
+		this.resizeHeight();
+	},
+	// styling
+	doStyleRowNode: function(inRowIndex, inRowNode){
+		var n = [ "dojoxGrid-rowbar" ];
+		if(this.grid.rows.isOver(inRowIndex)){
+			n.push("dojoxGrid-rowbar-over");
+		}
+		if(this.grid.selection.isSelected(inRowIndex)){
+			n.push("dojoxGrid-rowbar-selected");
+		}
+		inRowNode.className = n.join(" ");
+	},
+	// event handlers
+	domouseover: function(e){
+		this.grid.onMouseOverRow(e);
+	},
+	domouseout: function(e){
+		if(!this.isIntraRowEvent(e)){
+			this.grid.onMouseOutRow(e);
+		}
+	}
+});
