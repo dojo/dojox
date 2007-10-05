@@ -1,4 +1,4 @@
-﻿dojo.provide("dojox.grid._grid.cell");
+dojo.provide("dojox.grid._grid.cell");
 
 dojo.declare("dojox.grid.cell", null, {
 	styles: '',
