@@ -122,11 +122,15 @@ dojo.provide("dojox.charting.Plot");
 
 			//	TODO: more than 2 dimensions.
 			//	TODO: deal with shared axes.
-			dojo.connect(axis, "initOrigin", this, function(){
+			dojo.connect(axis, "setOrigin", this, function(){
 				var against=this.axes[(which=="x")?"y":"x"];
 				if(against){
 					axis._initOrigin(against);
 				}
+			});
+			//	connect to axis events as a passthrough
+			dojo.connect(axis, "onSet", this, function(axis, what, args){
+				this.onAxisChange(this, which, axis, what, args);
 			});
 
 			this.onSet(this, "axis", { which: which, axis: axis });
@@ -216,6 +220,7 @@ dojo.provide("dojox.charting.Plot");
 		//	event stubs
 		onAdd: function(plot, series){ },
 		onEvaluate: function(data, series, kwArgs){ },
-		onSet: function(plot, what, obj){ }
+		onSet: function(plot, what, obj){ },
+		onAxisChange: function(plot, which, axis, what, args){ }
 	});
 })();

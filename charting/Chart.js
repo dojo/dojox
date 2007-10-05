@@ -33,32 +33,35 @@ dojo.require("dojox.gfx");
 			this.invalidate([ "data" ]);
 		},
 		_onPlotSet: function(plot, what, obj){
-			//	generic handler to figure out what was set on a plot, and what to do about it.
-			var invalid=what.split("-");
-			var a=[];
-			switch(invalid[0]){
-				case "plot": a.push("plots");
-				case "axes": a.push("axes");
-				default: a.push("data");
-			}
-			this.invalidate(a);
+			//	TODO: determine what to invalidate.
+			this.invalidate();
+		},
+		_onAxisChange: function(plot, which, axis, what, args){
+			//	TODO: determine what to invalidate.
+			this.invalidate();
 		},
 
 		//	add and remove plots from the chart
 		//	make sure we disconnect any handlers we attached.
-		add: function(plot){
+		add: function(/* dojox.charting.Plot */plot){
+			//	summary
+			//	Add the plot to the chart, and attach handlers to it.
 			this.plots.push(plot);
 
-			if(!this._handles[plot._key]){
-				this._handles[plot._key]=[];
-			}
+			if(!this._handles[plot._key]){ this._handles[plot._key]=[]; }
+
+			//	create all the handles for the plot (including axes on the plot)
 			this._handles[plot._key].push(dojo.connect(plot, "onSet", this, "_onPlotSet"));
 			this._handles[plot._key].push(dojo.connect(plot, "onAdd", this, "_onPlotAdd"));
+			this._handles[plot._key].push(dojo.connect(plot, "onAxisChange", this, "_onAxisChange"));
+
 			this.onAdd(plot);
 			this.invalidate("plots");
-			return this;
+			return this;	//	dojox.charting.Chart
 		},
-		remove: function(plot){
+		remove: function(/* dojox.charting.Plot */plot){
+			//	summary
+			//	remove this plot from the chart, and disconnect any handlers.
 			var idx=-1;
 			for(var i=0; i<this.plots.length; i++){
 				if(this.plots[i]==plot){
@@ -77,7 +80,7 @@ dojo.require("dojox.gfx");
 				this.onRemove(plot);
 				this.invalidate("plots");
 			}
-			return this;
+			return this;	//	dojox.charting.Chart
 		},
 
 		//	get the unique axes for the chart.  Note that plots may share axes
@@ -151,6 +154,7 @@ dojo.require("dojox.gfx");
 		onMouseOver: function(){ },
 		onMouseOut: function(){ },
 
+		//	internal events for things to connect to.
 		onAdd: function(plot){ },
 		onRemove: function(plot){ },
 		onSetTheme: function(theme){ },
