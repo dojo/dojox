@@ -49,25 +49,25 @@ dojo.provide("dojox.charting.Plot");
  **************************************************************************/
 
 (function(){
-	var dxc=dojox.charting;
-	var axes=["x","y","z"];
-	var plotTypes={
+	var dxc = dojox.charting;
+	var axes = ["x","y","z"];
+	var plotTypes = {
 		ZEROD:"zero-d",		//	pie charts mostly
 		ONED:"one-d",		//	bar charts
 		TWOD:"two-d",		//	normal
 		THREED:"three-d"	//	3D charts
 	};
 
-	dxc.Plot=function(/* object */kwArgs){
-		var self=this;
-		this._key="dojoxChartingPlot"+dxc.Plot.count++;
-		this.title=kwArgs.title||"";
-		this.type=kwArgs.type||plotTypes.TWOD;
+	dxc.Plot = function(/* object */kwArgs){
+		var self = this;
+		this._key = "dojoxChartingPlot"+dxc.Plot.count++;
+		this.title = kwArgs.title||"";
+		this.type = kwArgs.type||plotTypes.TWOD;
 	
 		//	set up the axes
-		this.axes={ };
+		this.axes = { };
 		dojo.forEach(axes, function(item){
-			this.axes[item]=(kwArgs.axes&&kwArgs.axes[item] ? kwArgs.axes[item] : null);
+			this.axes[item] = (kwArgs.axes&&kwArgs.axes[item] ? kwArgs.axes[item] : null);
 		});
 
 		//	set up the series
@@ -75,16 +75,16 @@ dojo.provide("dojox.charting.Plot");
 		if(kwArgs.series){
 			dojo.forEach(kwArgs.series, function(item, i){
 				//	let the kwArgs keep the altered series objects.
-				kwArgs.series[i]=self.add(item);
+				kwArgs.series[i] = self.add(item);
 			});
 		}
 
 		//	we do this using the closure to allow for dual use in the passed
 		//	reference.  The return object is the altered arg, but a reference
 		//	to this.add method is made on it to allow chaining.
-		this.add=function(/* object||array */arg){
+		this.add = function(/* object||array */arg){
 			if(dojo.isArray(arg)){
-				arg={ data: arg };
+				arg = { data: arg };
 			}
 			self.series.push(arg);
 			
@@ -99,12 +99,12 @@ dojo.provide("dojox.charting.Plot");
 				show: true
 			}, arg);	//	last one wins
 
-			arg.add=self.add;
+			arg.add = self.add;
 			self.onAdd(self, arg);
 			return arg;		//	object
 		}
 	};
-	dxc.Plot.count=0;
+	dxc.Plot.count = 0;
 
 	dojo.extend(dxc.Plot, {
 		//	setters.  Use these to trigger onSet events, a chart or sparkline may need that.
@@ -140,7 +140,7 @@ dojo.provide("dojox.charting.Plot");
 		evaluate: function(/* object */series, /* object? */kwArgs){
 			//	summary
 			//	evaluate the passed series.
-			if(!series.show) return [];
+			if(!series.show){ return []; }
 
 			var ret=[];
 			var l=series.data.length;
@@ -171,44 +171,43 @@ dojo.provide("dojox.charting.Plot");
 							ret.push(o);
 						}
 					}
-				}
-				else if(kwArgs.from||kwArgs.length){
+				}else if(kwArgs.from||kwArgs.length){
 					if(kwArgs.from){ 
-						start=Math.max(kwArgs.from,0);
+						start = Math.max(kwArgs.from,0);
 						if(kwArgs.to){ 
-							end=Math.min(kwArgs.to, end);
+							end = Math.min(kwArgs.to, end);
 						}
-					} else {
+					}else{
 						if(kwArgs.length<0){
 							//	length points from end
-							start=Math.max((end+length),0);
-						} else {
-							end=Math.min((start+length),end);
+							start = Math.max((end+length),0);
+						}else{
+							end = Math.min((start+length),end);
 						}
 					}
 					for(var i=start; i<end; i++){
-						var o={ src: series.data[i], series:series };
+						var o = { src: series.data[i], series:series };
 						for(var p in series.bindings){
-							o[p]=series.data[i][series.bindings[p]];
+							o[p] = series.data[i][series.bindings[p]];
 						}
 						ret.push(o);
 					}
 				}
-			} else {
+			}else{
 				for(var i=start; i<end; i++){
-					var o={ src: series.data[i], series:series };
+					var o = { src: series.data[i], series:series };
 					for(var p in series.bindings){
-						o[p]=series.data[i][series.bindings[p]];
+						o[p] = series.data[i][series.bindings[p]];
 					}
 					ret.push(o);
 				}
 			}
 
 			//	sort by the x axis, if available.
-			if(ret.length>0 && typeof(ret[0].x)!="undefined"){
+			if((ret.length>0)&&(typeof(ret[0].x) != "undefined")){
 				ret.sort(function(a,b){
-					if(a.x>b.x) return 1;
-					if(a.x<b.x) return -1;
+					if(a.x>b.x){ return 1; }
+					if(a.x<b.x){ return -1; }
 					return 0;
 				});
 			}
