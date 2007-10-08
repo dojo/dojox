@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 
 		<script type="text/javascript">
-			dojo.require("dijit.form.TimeSpinner");
+			dojo.require("dojox.widget.TimeSpinner");
 			dojo.require("dojo.parser"); // scan page for widgets
 
 			function displayData() {
@@ -71,7 +71,7 @@
 	<form id="form1" action="" name="example" method="post">
 		<h1>time spinner</h1>
 		<br>
-		<input id="timeSpinner" dojoType="dijit.form.TimeSpinner"
+		<input id="timeSpinner" dojoType="dojox.widget.TimeSpinner"
 			onChange="console.debug('onChange fired for widget id = ' + this.id + ' with value = ' + arguments[0]);"
 			value="12:30 PM"
 			name="timeSpinner"
