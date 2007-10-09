@@ -10,17 +10,10 @@ dojox.fx.smoothScroll = function(/* Object */args){
 	// offset: {x: int, y: int} this will be added to the target position
 	// duration: Duration of the animation in milliseconds.
 
-	// /*DOMNode*/ node,
-	// /*Window*/ win,
-	
-	//
-	// <a name="exampleScrollPoint"></a> that is there for the test file. 
-
 	args = dojo.mixin({
-		"window": args.win,
-//		"offset": args.offset || {x:0,y:0},
+		"window": args.win
 	},args);
-	if(!args.target){ args.target = dojo._abs(args.node,true); }
+	if(!args.target){ args.target = dojo.coords(args.node,true); }
 
 	var anim = new dojo._Animation(dojo.mixin({
 		beforeBegin: function(){
@@ -33,4 +26,4 @@ dojox.fx.smoothScroll = function(/* Object */args){
 		}
 	},args));
 	return anim; // dojo._Animation
-}
+};

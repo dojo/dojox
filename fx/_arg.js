@@ -10,3 +10,14 @@ dojox.fx._arg.StyleArgs = function(/*DOMNode*/ node, /*String*/ cssClass){
 	this.node = node;
 	this.cssClass = cssClass;
 }
+
+dojox.fx._arg.ShadowResizeArgs = function(/* Int */x, /* Int */y){
+	// summary: 
+	//	The odd way to document object parameters.
+	// x:
+	//	the width to set
+	// y:
+	//	the height to set	
+	this.x = x;
+	this.y = y;
+}
