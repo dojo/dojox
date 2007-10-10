@@ -458,7 +458,7 @@ dojo.extend(dojox.dtl.HtmlVarNode, {
 		return buffer;
 	},
 	clone: function(){
-		return new dojox.dtl.HtmlVarNode(this.contents.key);
+		return new dojox.dtl.HtmlVarNode(this.contents.contents);
 	},
 	toString: function(){ return "dojox.dtl.HtmlVarNode"; }
 });
