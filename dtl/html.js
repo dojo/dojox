@@ -107,14 +107,17 @@ dojox.dtl.html = {
 				value = node.htmlFor || value;
 			}else if(node.getAttribute){
 				value = node.getAttribute(key, 2) || value;
-				if(dojo.isIE && (key == "href" || key == "src")){
-					var href = location.href.split("/");
-					href.pop();
-					href = href.join("/") + "/";
-					if(value.indexOf(href) == 0){
-						value = value.replace(href, "");
+				if(key == "href" || key == "src"){
+					node[key] = "";
+					if(dojo.isIE){
+						var href = location.href.split("/");
+						href.pop();
+						href = href.join("/") + "/";
+						if(value.indexOf(href) == 0){
+							value = value.replace(href, "");
+						}
+						value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
 					}
-					value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
 				}
 			}
 			if(typeof value == "function"){
