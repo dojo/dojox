@@ -107,7 +107,13 @@ dojox.dtl.html = {
 				value = node.htmlFor || value;
 			}else if(node.getAttribute){
 				value = node.getAttribute(key, 2) || value;
-				if(dojo.isIE && key == "href"){
+				if(dojo.isIE && (key == "href" || key == "src")){
+					var href = location.href.split("/");
+					href.pop();
+					href = href.join("/") + "/";
+					if(value.indexOf(href) == 0){
+						value = value.replace(href, "");
+					}
 					value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
 				}
 			}
@@ -277,14 +283,6 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 			this._parent.className = value;
 		}else if(key == "for"){
 			this._parent.htmlFor = value;
-		}else if(key == "href"){
-			if(dojo.isIE && value.indexOf(location.href) == 0){
-				var pos = value.indexOf("http://", 1);
-				if(pos){
-					value = value.substring(pos);
-				}
-			}
-			this._parent.href = value;
 		}else if(this._parent.setAttribute){
 			this._parent.setAttribute(key, value);
 		}
