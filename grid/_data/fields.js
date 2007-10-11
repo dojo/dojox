@@ -1,6 +1,9 @@
 dojo.provide("dojox.grid._data.fields");
 
 dojo.declare("dojox.grid.data.mixer", null, {
+	// summary:
+	//	basic collection class that provides a default value for items
+	
 	constructor: function(){
 		this.defaultValue = {};
 		this.values = [];

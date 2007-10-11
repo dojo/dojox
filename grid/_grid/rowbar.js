@@ -2,9 +2,11 @@ dojo.provide("dojox.grid._grid.rowbar");
 dojo.require("dojox.grid._grid.view");
 
 dojo.declare('dojox.GridRowView', dojox.GridView, {
+	// summary:
+	//	Custom grid view. If used in a grid structure, provides a small selectable region for grid rows.
 	defaultWidth: "3em",
 	noscroll: true,
-	padBorderWidth: 2, // FIXME: magic number
+	padBorderWidth: 2,
 	buildRendering: function(){
 		this.inherited('buildRendering', arguments);
 		this.scrollboxNode.style.overflow = "hidden";

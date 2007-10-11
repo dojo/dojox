@@ -1,5 +1,7 @@
 dojo.provide("dojox.grid._grid.drag");
 
+// summary:
+//	utility functions for dragging as used in grid.
 // begin closure
 (function(){
 

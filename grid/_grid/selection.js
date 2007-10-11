@@ -1,6 +1,9 @@
 dojo.provide('dojox.grid._grid.selection');
 
 dojo.declare("dojox.grid.selection", null, {
+	// summary:
+	//	Manages row selection for grid. Owned by grid and used internally 
+	//	for selection. Override to implement custom selection.
 	constructor: function(inGrid){
 		this.grid = inGrid;
 		this.selected = [];
@@ -10,22 +13,22 @@ dojo.declare("dojox.grid.selection", null, {
 	updating: 0,
 	selectedIndex: -1,
 	onCanSelect: function(inIndex){
-		return this.grid.canSelect(inIndex);
+		return this.grid.onCanSelect(inIndex);
 	},
 	onCanDeselect: function(inIndex){
-		return this.grid.canDeselect(inIndex);
+		return this.grid.onCanDeselect(inIndex);
 	},
 	onSelected: function(inIndex){
-		return this.grid.selected(inIndex);
+		return this.grid.onSelected(inIndex);
 	},
 	onDeselected: function(inIndex){
-		return this.grid.deselected(inIndex);
+		return this.grid.onDeselected(inIndex);
 	},
 	//onSetSelected: function(inIndex, inSelect) { };
 	onChanging: function(){
 	},
 	onChanged: function(){
-		//return this.grid.selectionChanged();
+		return this.grid.onSelectionChanged();
 	},
 	isSelected: function(inIndex){
 		return this.selected[inIndex];
@@ -89,7 +92,7 @@ dojo.declare("dojox.grid.selection", null, {
 				this.selectedIndex = inIndex;
 				this.beginUpdate();
 				this.selected[inIndex] = true;
-				this.grid.selected(inIndex);
+				this.grid.onSelected(inIndex);
 				//this.onSelected(inIndex);
 				//this.onSetSelected(inIndex, true);
 				this.endUpdate();
@@ -107,7 +110,7 @@ dojo.declare("dojox.grid.selection", null, {
 			}
 			this.beginUpdate();
 			delete this.selected[inIndex];
-			this.grid.deselected(inIndex);
+			this.grid.onDeselected(inIndex);
 			//this.onDeselected(inIndex);
 			//this.onSetSelected(inIndex, false);
 			this.endUpdate();

@@ -2,6 +2,10 @@ dojo.provide("dojox.grid._grid.builder");
 dojo.require("dojox.grid._grid.drag");
 
 dojo.declare("dojox.grid.builder", null, {
+	// summary:
+	//	Base class to produce html for grid content.
+	//	Also provide event decoration, providing grid related information inside the event object
+	// passed to grid events.
 	constructor: function(inView){
 		this.view = inView;
 		this.grid = inView.grid;
@@ -11,7 +15,7 @@ dojo.declare("dojox.grid.builder", null, {
 	_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0">',
 	// generate starting tags for a cell
 	generateCellMarkup: function(inCell, inMoreStyles, inMoreClasses){
-		var result = [], html = [ '<td' ];
+		var result = [], html = [ '<td tabIndex="-1"' ];
 		inCell.colSpan && html.push(' colspan="', inCell.colSpan, '"');
 		inCell.rowSpan && html.push(' rowspan="', inCell.rowSpan, '"');
 		html.push(' class="dojoxGrid-cell ');
@@ -124,6 +128,9 @@ dojo.declare("dojox.grid.builder", null, {
 });
 
 dojo.declare("dojox.grid.contentBuilder", dojox.grid.builder, {
+	// summary:
+	//	Produces html for grid data content. Owned by grid and used internally 
+	//	for rendering data. Override to implement custom rendering.
 	update: function(){
 		this.prepareHtml();
 	},
@@ -177,6 +184,9 @@ dojo.declare("dojox.grid.contentBuilder", dojox.grid.builder, {
 });
 
 dojo.declare("dojox.grid.headerBuilder", dojox.grid.builder, {
+	// summary:
+	//	Produces html for grid header content. Owned by grid and used internally 
+	//	for rendering data. Override to implement custom rendering.
 	bogusClickTime: 0,
 	overResizeWidth: 4,
 	minColWidth: 1,
@@ -243,7 +253,6 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.builder, {
 		return true;
 	},
 	// event handlers
-	// FIXME: drag
 	// resizing
 	prepareLeftResize: function(e){
 		var i = dojox.grid.getTdIndex(e.cellNode);
@@ -324,6 +333,9 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.builder, {
 });
 
 dojo.declare("dojox.grid.tableMap", null, {
+	// summary:
+	//	Maps an html table into a structure parsable for information about cell row and col spanning.
+	//	Used by headerBuilder
 	constructor: function(inRows){
 		this.mapRows(inRows);
 	},

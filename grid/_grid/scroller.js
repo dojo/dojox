@@ -1,13 +1,12 @@
 dojo.provide('dojox.grid._grid.scroller');
 
-// virtual scrollbox
-
-// Content must in /rows/
-// Rows are managed in contiguous sets called /pages/
-// There are a fixed # of rows per page
-// The minimum rendered unit is a page
-
 dojo.declare('dojox.grid.scroller.base', null, {
+	// summary:
+	//	virtual scrollbox, abstract class
+	//	Content must in /rows/
+	//	Rows are managed in contiguous sets called /pages/
+	//	There are a fixed # of rows per page
+	//	The minimum rendered unit is a page
 	constructor: function(){
 		this.pageHeights = [];
 		this.stack = [];
@@ -245,6 +244,8 @@ dojo.declare('dojox.grid.scroller.base', null, {
 });
 
 dojo.declare('dojox.grid.scroller', dojox.grid.scroller.base, {
+	// summary:
+	//	virtual scroller class, makes no assumption about shape of items being scrolled
 	constructor: function(){
 		this.pageNodes = [];
 	},
@@ -412,6 +413,9 @@ dojo.declare('dojox.grid.scroller', dojox.grid.scroller.base, {
 });
 
 dojo.declare('dojox.grid.scroller.columns', dojox.grid.scroller, {
+	// summary:
+	//	Virtual scroller class that scrolls list of columns. Owned by grid and used internally
+	//	for virtual scrolling.
 	constructor: function(inContentNodes){
 		this.setContentNodes(inContentNodes);
 	},

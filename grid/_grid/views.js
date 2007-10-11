@@ -1,6 +1,10 @@
 dojo.provide("dojox.grid._grid.views");
 
 dojo.declare('dojox.grid.views', null, {
+	// summary:
+	//	A collection of grid views. Owned by grid and used internally for managing grid views.
+	//	Grid creates views automatically based on grid's layout structure.
+	//	Users should typically not need to access individual views or the views collection directly.
 	constructor: function(inGrid){
 		this.grid = inGrid;
 	},

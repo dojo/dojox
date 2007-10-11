@@ -2,6 +2,9 @@ dojo.provide('dojox.grid._data.model');
 dojo.require('dojox.grid._data.fields');
 
 dojo.declare("dojox.grid.data.model", null, {
+	// summary:
+	//	Base abstract grid data model.
+	//	Makes no assumptions about the structure of grid data.
 	constructor: function(inFields, inData){
 		this.observers = [];
 		this.fields = new dojox.grid.data.fields();
@@ -96,6 +99,8 @@ dojo.declare("dojox.grid.data.model", null, {
 });
 
 dojo.declare("dojox.grid.data.table", dojox.grid.data.model, {
+	// summary:
+	//	Basic grid data model for static data in the form of an array of rows that are arrays of cell data
 	constructor: function(){
 		this.cache = [];
 	},
@@ -229,6 +234,9 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.model, {
 });
 
 dojo.declare("dojox.grid.data.dynamic", dojox.grid.data.table, {
+	// summary:
+	//	Grid data model for dynamic data such as data retrieved from a server.
+	//	Retrieves data automatically when requested and provides notification when data is received
 	constructor: function(){
 		this.page = [];
 		this.pages = [];

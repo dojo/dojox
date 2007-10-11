@@ -4,7 +4,8 @@ dojo.isNumber = function(v){
 	return (typeof v == 'number') || (v instanceof Number);
 }
 
-// grid utility library
+// summary:
+//	grid utility library
 
 dojo.mixin(dojox.grid, {
 	nop: function() {

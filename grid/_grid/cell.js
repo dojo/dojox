@@ -1,6 +1,11 @@
 dojo.provide("dojox.grid._grid.cell");
 
 dojo.declare("dojox.grid.cell", null, {
+	// summary:
+	//	Respresents a grid cell and contains information about column options and methods
+	//	for retrieving cell related information.
+	//	Each column in a grid layout has a cell object and most events and many methods
+	//	provide access to these objects.
 	styles: '',
 	constructor: function(inProps){
 		dojo.mixin(this, inProps);
@@ -8,8 +13,13 @@ dojo.declare("dojox.grid.cell", null, {
 	},
 	// data source
 	format: function(inRowIndex){
+		// summary:
+		//	provides the html for a given grid cell.
+		// inRowIndex: int
+		// grid row index
+		// returns: html for a given grid cell
 		var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex) : this.value;
-		if(this.editor && (this.editor["static"] || (i.rowIndex==inRowIndex && i.cell==this))){
+		if(this.editor && (this.editor.alwaysOn || (i.rowIndex==inRowIndex && i.cell==this))){
 			return this.editor.format(d, inRowIndex);
 		}else{
 			return (f = this.formatter) ? f.call(this, d, inRowIndex) : d;
@@ -17,13 +27,13 @@ dojo.declare("dojox.grid.cell", null, {
 	},
 	// utility
 	getNode: function(inRowIndex){
+		// summary:
+		//	gets the dom node for a given grid cell.
+		// inRowIndex: int
+		// grid row index
+		// returns: dom node for a given grid cell
 		return this.view.getCellNode(inRowIndex, this.index);
 	},
-	/*
-	getContentNode: function(inRowIndex) { 
-		return this.getCellNode(inRowIndex);
-	},
-	*/
 	isFlex: function(){
 		var uw = this.unitWidth;
 		return uw && (uw=='auto' || uw.slice(-1)=='%');

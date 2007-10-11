@@ -1,6 +1,8 @@
 dojo.provide("dojox.grid._grid.edit");
 
 dojo.declare("dojox.grid.edit", null, {
+	// summary:
+	//	Controls grid cell editing process. Owned by grid and used internally for editing.
 	constructor: function(inGrid){
 		this.grid = inGrid;
 		this.connections = [];
@@ -15,6 +17,12 @@ dojo.declare("dojox.grid.edit", null, {
 		});
 	},
 	cellFocus: function(inCell, inRowIndex){
+		// summary:
+		//	invoke editing when cell is focused
+		// inCell: cell object
+		//	grid cell object
+		// inRowIndex: int
+		//	grid row index
 		if(this.grid.singleClickEdit || this.isEditRow(inRowIndex)){
 			// if same row or quick editing, edit
 			this.setEditCell(inCell, inRowIndex);
@@ -23,7 +31,7 @@ dojo.declare("dojox.grid.edit", null, {
 			this.apply();
 		}
 		// if dynamic or static editing...
-		if(this.isEditing() || (inCell.editor||0)["static"]){
+		if(this.isEditing() || (inCell && (inCell.editor||0).alwaysOn)){
 			// let the editor focus itself as needed
 			this._focusEditor(inCell, inRowIndex);
 		}
@@ -44,17 +52,41 @@ dojo.declare("dojox.grid.edit", null, {
 	},
 	// Editing
 	isEditing: function(){
+		// summary:
+		//	indicates editing state of the grid.
+		// returns:
+		//	 true if grid is actively editing
 		return this.info.rowIndex !== undefined;
 	},
 	isEditCell: function(inRowIndex, inCellIndex){
+		// summary:
+		//	indicates if the given cell is being edited.
+		// inRowIndex: int
+		//	grid row index
+		// inCellIndex: int
+		//	grid cell index
+		// returns:
+		//	 true if given cell is being edited
 		return (this.info.rowIndex === inRowIndex) && (this.info.cell.index == inCellIndex);
 	},
 	isEditRow: function(inRowIndex){
+		// summary:
+		//	indicates if the given row is being edited.
+		// inRowIndex: int
+		//	grid row index
+		// returns:
+		//	 true if given row is being edited
 		return this.info.rowIndex === inRowIndex;
 	},
 	setEditCell: function(inCell, inRowIndex){
+		// summary:
+		//	set the given cell to be edited
+		// inRowIndex: int
+		//	grid row index
+		// inCell: object
+		//	grid cell object
 		if(!this.isEditCell(inRowIndex, inCell.index)){
-			var editing = !(inCell.editor||0)["static"] || (inRowIndex == this.info.rowIndex);
+			var editing = !(inCell.editor||0).alwaysOn || (inRowIndex == this.info.rowIndex);
 			this.start(inCell, inRowIndex, editing);
 		}
 	},
@@ -128,6 +160,8 @@ dojo.declare("dojox.grid.edit", null, {
 		this.grid.doApplyEdit(this.info.rowIndex);
 	},
 	apply: function(){
+		// summary:
+		//	apply a grid edit
 		if(this.isEditing()){
 			this.grid.beginUpdate();
 			this.editorApply();
@@ -139,6 +173,8 @@ dojo.declare("dojox.grid.edit", null, {
 		}
 	},
 	cancel: function(){
+		// summary:
+		//	cancel a grid edit
 		if(this.isEditing()){
 			this.grid.beginUpdate();
 			this.editorCancel();
@@ -149,12 +185,24 @@ dojo.declare("dojox.grid.edit", null, {
 		}
 	},
 	save: function(inRowIndex, inView){
+		// summary:
+		//	save the grid editing state
+		// inRowIndex: int
+		//	grid row index
+		// inView: object
+		//	grid view
 		var c = this.info.cell;
 		if(this.isEditRow(inRowIndex) && (!inView || c.view==inView)){
 			c.editor.save(c, this.info.rowIndex);
 		}
 	},
 	restore: function(inView, inRowIndex){
+		// summary:
+		//	restores the grid editing state
+		// inRowIndex: int
+		//	grid row index
+		// inView: object
+		//	grid view
 		var c = this.info.cell;
 		if(this.isEditRow(inRowIndex) && c.view == inView){
 			c.editor.restore(c, this.info.rowIndex);

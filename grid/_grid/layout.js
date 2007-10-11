@@ -2,6 +2,8 @@ dojo.provide("dojox.grid._grid.layout");
 dojo.require("dojox.grid._grid.cell");
 
 dojo.declare("dojox.grid.layout", null, {
+	// summary:
+	//	Controls grid cell layout. Owned by grid and used internally.
 	constructor: function(inGrid){
 		this.grid = inGrid;
 	},

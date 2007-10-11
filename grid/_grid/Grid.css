@@ -10,6 +10,10 @@
 	padding: 0;
 }
 
+.dojoxGrid td {
+	-moz-outline: none;
+}
+
 /* master header */
 
 .dojoxGrid-master-header {
@@ -224,7 +228,7 @@
 	background-color: #F8B8B6;
 }
 
-.dojoxGrid input, .dojoxGrid select, .dojoxGrid textarea {
+.dojoxGrid-input, .dojoxGrid-select, .dojoxGrid-textarea {
 	margin: 0;
 	padding: 0;
 	border-style: none;

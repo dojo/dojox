@@ -4,6 +4,28 @@ dojo.require("dojox.grid._data.model");
 dojo.require("dojox.grid._data.editors");
 
 dojo.declare('dojox.Grid', dojox.VirtualGrid, {
+	/* summary:
+			A grid widget with virtual scrolling, cell editing, complex rows, sorting, fixed columns, sizeable columns, etc.
+
+		description:
+			Grid is a subclass of VirtualGrid, providing binding to a data store.
+
+		usage:
+			A quick sample:
+			
+			define the grid structure:
+			var structure = [ // array of view objects
+			{ cells: [// array of rows, a row is an array of cells
+					[{ name: "Alpha", width: 6 }, { name: "Beta" }, { name: "Gamma", get: function }]
+			]};
+			
+			define a grid data model
+			var model = new dojox.grid.data.table(null, data);
+			
+			<div id="grid" model="model" structure="structure" dojoType="dojox.VirtualGrid"></div>
+	*/
+	// model: string or object
+	// grid data model
 	model: null, //'dojox._data.table',
 	postCreate: function(){
 		if(this.model){
@@ -25,6 +47,10 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		this.model.unobserver(this);
 	},
 	setModel: function(inModel){
+		// summary:
+		//	set the grid's data model
+		// inModel: model object
+		// new grid data model
 		this.model.unobserver(this);
 		this._setModel(inModel);
 	},
@@ -58,6 +84,8 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	},
 	// utility
 	refresh: function(){
+		// summary:
+		//	re-render the grid, getting new data from the model
 		this.edit.cancel();
 		this.model.measure();
 	},
@@ -68,6 +96,10 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		return f && this.model.canSort(f);
 	},
 	getSortField: function(inSortInfo){
+		// summary:
+		//	retrieves the model field on which to sort data.
+		// inSortInfo: int
+		//	1-based grid column index; positive if sort is ascending, otherwise negative
 		var c = this.getCell(this.getSortIndex(inSortInfo));
 		// we expect c.fieldIndex == -1 for non model fields
 		// that yields a getSortField value of 0, which can be detected as invalid
@@ -107,6 +139,11 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	//: protected
 	// editing
 	canEdit: function(inCell, inRowIndex){
+		// summary: 
+		//	determines if a given cell may be edited
+		//	inCell: grid cell
+		// inRowIndex: grid row index
+		// returns: true if given cell may be edited
 		return (this.model.canModify ? this.model.canModify(inRowIndex) : true);
 	},
 	doStartEdit: function(inCell, inRowIndex){
@@ -130,7 +167,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		this.model.endModifyRow(inRowIndex);
 		this.onApplyEdit(inRowIndex);
 	},
-	//$ Perform row styling 
+	// Perform row styling 
 	styleRowState: function(inRow){
 		if(this.model.getState){
 			var states=this.model.getState(inRow.index), c='';

@@ -20,7 +20,7 @@
 			height: 30em;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<!--<script type="text/javascript">
 		dojo.require("dojox.grid.Grid");
 		dojo.require("dojox.grid._data.model");
@@ -47,17 +47,42 @@
 	<script type="text/javascript" src="../_data/editors.js"></script>
 	<script type="text/javascript" src="../Grid.js"></script>
 	<script type="text/javascript" src="support/test_data.js"></script>
+	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
 		// a grid view is a group of columns
 		var view1 = {
 			cells: [[
-				{name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'}, {name: 'Column 3', width: "150px"}, {name: 'Column 4'}
-			],[
-				{name: 'Column 5'}, {name: 'Column 6'}, {name: 'Column 7'}, {name: 'Column 8', field: 3, colSpan: 2}
+				{name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'}, {name: 'Column 3', width: "150px"}, {name: 'Column 4'},
+				{name: 'Column 5'}, {name: 'Column 6'}, {name: 'Column 7', field: 0}, {name: 'Column 8'},
+				{name: 'Column 9'}, {name: 'Column 10'}, {name: 'Column 11', field: 0}, {name: 'Column 12', width: "150px"}, {name: 'Column 13'},
+				{name: 'Column 14'}, {name: 'Column 15'}, {name: 'Column 16', field: 0}, {name: 'Column 17'}
 			]]
 		};
 		// a grid layout is an array of views.
 		var layout = [ view1 ];
+		
+		
+		function keyDown(e) {
+			switch(e.keyCode){
+				case dojo.keys.LEFT_ARROW:
+					console.log('left arrow!');
+					break;
+				case dojo.keys.RIGHT_ARROW:
+					console.log('right arrow!');
+					break;
+				case dojo.keys.ENTER:
+					console.log('enter!');
+					break;
+			}
+			
+			
+		}
+		
+		dojo.addOnLoad(function() {
+			window["grid"] = dijit.byId("grid");
+			dojo.connect(grid, "onKeyDown", keyDown);
+		});
+		
 </script>
 </head>
 <body>
