@@ -484,9 +484,9 @@ dojox.cometd.longPollTransport = new function(){
 
 				if(	(this._cometd.advice["interval"])&&
 					(this._cometd.advice.interval>0) ){
-					setTimeout(function(){
-						this._connect();
-					}, this._cometd.advice.interval);
+					var transport = this;
+					setTimeout(function(){ transport._connect(); }, 
+						this._cometd.advice.interval);
 				}else{
 					this._connect();
 				}
