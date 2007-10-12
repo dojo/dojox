@@ -107,8 +107,8 @@ dojox.dtl.html = {
 				value = node.htmlFor || value;
 			}else if(node.getAttribute){
 				value = node.getAttribute(key, 2) || value;
-				if(key == "href" || key == "src"){
-					node[key] = "";
+				if((key == "href" || key == "src") && (value.indexOf("{%") != -1 || value.indexOf("{{") != -1)){
+					node.setAttribute(key, "");
 					if(dojo.isIE){
 						var href = location.href.split("/");
 						href.pop();
