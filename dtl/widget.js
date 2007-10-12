@@ -11,9 +11,11 @@ dojo.declare("dojox.dtl._Widget", [dijit._Widget, dijit._Contained],
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef;
 
-			var parent = this.getParent();
-			if(parent){
-				this.setAttachPoint(parent);
+			if(this.domNode){
+				var parent = this.getParent();
+				if(parent){
+					this.setAttachPoint(parent);
+				}
 			}
 		},
 		setAttachPoint: function(/*dojox.dtl.AttachPoint*/ attach){
