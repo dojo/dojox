@@ -140,7 +140,7 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		this.render();
 	},
 	sizeChange: function(){
-		dojox.grid.jobs.job(this.widgetId + 'SizeChange', 50, dojo.hitch(this, "update"));
+		dojox.grid.jobs.job(this.id + 'SizeChange', 50, dojo.hitch(this, "update"));
 	},
 	// managers
 	createManagers: function(){
