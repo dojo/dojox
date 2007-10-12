@@ -107,8 +107,7 @@ dojox.dtl.html = {
 				value = node.htmlFor || value;
 			}else if(node.getAttribute){
 				value = node.getAttribute(key, 2) || value;
-				if((key == "href" || key == "src") && (value.indexOf("{%") != -1 || value.indexOf("{{") != -1)){
-					node.setAttribute(key, "");
+				if(key == "href" || key == "src"){
 					if(dojo.isIE){
 						var href = location.href.split("/");
 						href.pop();
@@ -117,6 +116,9 @@ dojox.dtl.html = {
 							value = value.replace(href, "");
 						}
 						value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
+					}
+					if(value.indexOf("{%") != -1 || value.indexOf("{{") != -1){
+						node.setAttribute(key, "");
 					}
 				}
 			}
