@@ -59,7 +59,10 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	// splice out anything not part of a number
 	var pattern = "[^" + dec + "\\deE+-]";
 	value = value.replace(RegExp(pattern, "g"), "");
-	
+
+    // pad initial value with one 0 if it starts with a decimal character (fixes ticket #2908)
+	value = (value.indexOf(dec)==0) ? '0'+value : value;
+    
 	// trim ends of things like e, E, or the decimal character
 	value = value.replace(/^([+-]?)(\D*)/, "$1");
 	value = value.replace(/(\D*)$/, "");
