@@ -39,7 +39,7 @@ dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 	};
 
 	var _undef = function(name,object){
-                return (typeof object == "undefined");
+                return (typeof object[name] == "undefined");
         };
 
 	// Filters are applied before fields are validated.
