@@ -1,6 +1,7 @@
 dojo.provide("dojox.validate._base");
 
 dojo.require("dojo.regexp");		// dojo core expressions
+dojo.require("dojo.number");		// dojo number expressions
 dojo.require("dojox.validate.regexp"); 	// additional expressions
 
 dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
@@ -40,10 +41,12 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	//    flags.min  A number, which the value must be greater than or equal to for the validation to be true.
 	//    flags.decimal  The character used for the decimal point.  Default is ".".
 	
+    // fixes ticket #2908
+    value = dojo.number.parse(value, flags);
 	if(isNaN(value)){
 		return false; // Boolean
 	}
-	
+    
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};
 	var max = (typeof flags.max == "number") ? flags.max : Infinity;
@@ -55,23 +58,7 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	if(typeof cache[cacheIdx] != "undefined"){
 		return cache[cacheIdx];
 	}
-	
-	// splice out anything not part of a number
-	var pattern = "[^" + dec + "\\deE+-]";
-	value = value.replace(RegExp(pattern, "g"), "");
 
-    // pad initial value with one 0 if it starts with a decimal character (fixes ticket #2908)
-	value = (value.indexOf(dec)==0) ? '0'+value : value;
-    
-	// trim ends of things like e, E, or the decimal character
-	value = value.replace(/^([+-]?)(\D*)/, "$1");
-	value = value.replace(/(\D*)$/, "");
-	
-	// replace decimal with ".". The minus sign '-' could be the decimal!
-	pattern = "(\\d)[" + dec + "](\\d)";
-	value = value.replace(RegExp(pattern, "g"), "$1.$2");
-	
-	value = Number(value);
 	if ( value < min || value > max ) { cache[cacheIdx] = false; return false; } // Boolean
 
 	cache[cacheIdx] = true; return true; // Boolean
