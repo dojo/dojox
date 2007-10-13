@@ -28,11 +28,7 @@ dojo.declare("dojox.image.Gallery",
 	// imageWidth: Number
 	//	Maximum width of an image in the SlideShow widget
 	imageWidth: 500,
-	
-	// numberThumbs: Number
-	//	The number of thumbnail images to display
-	numberThumbs: 5,
-	
+		
 	// pageSize: Number
 	//	The number of records to retrieve from the data store per request.
 	pageSize: dojox.image.SlideShow.prototype.pageSize,
@@ -74,11 +70,9 @@ dojo.declare("dojox.image.Gallery",
 		this.inherited("postCreate",arguments)
 		
 		this.thumbPicker = new dojox.image.ThumbnailPicker({
-			numberThumbs: this.numberThumbs,
 			linkAttr: this.linkAttr,
 			imageLargeAttr: this.imageLargeAttr,
 			titleAttr: this.titleAttr,
-			numberThumbs: this.numberThumbs,
 			useLoadNotifier: true
 		}, this.thumbPickerNode);
 		
@@ -95,18 +89,27 @@ dojo.declare("dojox.image.Gallery",
 		}, this.slideShowNode);
 		
 		var _this = this;
+		//When an image is shown in the Slideshow, make sure it is visible
+		//in the ThumbnailPicker
 		dojo.subscribe(this.slideShow.getShowTopicName(), function(packet){
-			if(packet.index < _this.thumbPicker._thumbIndex
-			   || packet.index > _this.thumbPicker._thumbIndex + _this.thumbPicker.numberThumbs -1){
-				var index = packet.index - (packet.index % _this.thumbPicker.numberThumbs);
-				_this.thumbPicker.showThumbs(index);
-			}
-		});
-	
-		dojo.subscribe(this.thumbPicker.getTopicName(), function(evt){
+			//if(packet.index < _this.thumbPicker._thumbIndex
+			//   || packet.index > _this.thumbPicker._thumbIndex + _this.thumbPicker.numberThumbs -1){
+			//if(!_this.thumbPicker.isVisible(packet.index)){
+				//var index = packet.index - (packet.index % _this.thumbPicker.numberThumbs);
+				_this.thumbPicker._showThumbs(packet.index);
+			//}
+		});	
+		//When the user clicks a thumbnail, show that image
+		dojo.subscribe(this.thumbPicker.getClickTopicName(), function(evt){
 			_this.slideShow.showImage(evt.index);
 		});
-		
+		//When the ThumbnailPicker moves to show a new set of pictures,
+		//make the Slideshow start loading those pictures first.
+		dojo.subscribe(this.thumbPicker.getShowTopicName(), function(evt){
+			_this.slideShow.moveImageLoadingPointer(evt.index);
+		});
+		//When an image finished loading in the slideshow, update the loading
+		//notification in the ThumbnailPicker
 		dojo.subscribe(this.slideShow.getLoadTopicName(), function(index){
 			_this.thumbPicker.markImageLoaded(index);
 		});

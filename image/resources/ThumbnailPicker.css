@@ -1,91 +1,123 @@
-.thumbNailWrapper {
-	white-space: nowrap;
-	width: 100%;
-	overflow-y: hidden;
-	overflow-x: hidden;
-	text-align: center;
-}
-
-.thumbNailWrapper .thumbNailHidden {
-	position:absolute;
-	display: none;
-	height: 1px;
-	width: 1px;
-}
-
-.thumbNailWrapper table {
-	margin: 0px 0px 0px 0px;
-	border: 0px;
-}
-
-.thumbNailWrapper .thumbNav {
+.thumbWrapper .thumbNav {
 	background-repeat: no-repeat;	
-	background-position:center;
-	padding-top: 1px 1px 1px 1px;
-}
-
-.thumbNailWrapper .enabled {
-	background-image: url("images/navBtns.gif");	
-}
-
-.thumbNailWrapper .thumbNav img {
+	background-position: center;
+	padding-top: 1px;
 	width: 30px;
+	height: 100%;
 }
-.thumbNailWrapper .thumbClickable {
+
+.thumbOuter {
+	padding-bottom: 2px;
+}
+
+.thumbOuter.thumbHoriz {
+	width: 500px;
+	height: 85px;
+}
+
+.thumbOuter.thumbVert {
+	width: 100px;
+	height: 400px;
+}
+
+.thumbOuter .enabled {
+	background-image: url("images/navBtns.gif");
+	background-repeat: no-repeat;
+}
+
+.thumbOuter .thumbNav img {
+	width: 35px;
+	height: 75px;
+}
+.thumbOuter .thumbClickable div {
 	cursor: pointer;
 }
-.thumbNailWrapper .prevHoriz {
+.thumbOuter .prevHoriz {
 	background-position: -9px -94px;
+	position: relative;
+	float: left;
+	height: 100%;
 }
 
-.thumbNailWrapper .nextHoriz {
+.thumbOuter .nextHoriz {
 	background-position: -11px -254px;
+	position: relative;
+	float: right;
+	height: 100%;
+/*	margin-top: -85px;*/
 }
-.thumbNailWrapper .prevVert {
+.thumbOuter .prevVert {
 	background-position: 27px -412px;
+	height: 50px;
 }
 
-.thumbNailWrapper .nextVert {
+.thumbOuter .nextVert {
 	background-position: 27px -30px;
+	height: 50px;
 }
 
-.thumbNailWrapper .imageGalleryImageWrapper,
-.thumbNailWrapper .imageGalleryPagingContainer {
-	width: 100%;
-}
-
-.thumbNailWrapper .imageGalleryPagingContainer .imageGalleryNextImg{
-	padding-left: 380px;
-}
-
-.thumbNailWrapper .imageGalleryThumb {
+.thumbWrapper img {
 	height: 75px;
 	max-width: 100px;
 	width: expression(this.width > 100 ? 100: true);/*IE Hack*/
 }
 
-.thumbNailWrapper .thumbNav .imageGalleryThumb {
+.thumbWrapper .thumbNav .imageGalleryThumb {
 	height: 50px;
 }
 
-.thumbNailWrapper .thumbPlaceholder {
-	width: 100px;
-	height: 75px;
-	padding: 0px;
-	padding-left: 1px;
-}
-
-.thumbNailWrapper .imageGalleryNotifier {
+.thumbWrapper .thumbNotifier {
 	background-color: red;
-	width: 100px;
+	width: 0px;
+	margin-left: 2px;
 	height: 5px;
 	font-size: 1%;/*IE hack to get around the Empty-Div bug*/
 }
 
-.thumbNailWrapper .imageGalleryLoading {
-	background-color: #fad66a;
+.thumbWrapper .thumbLoaded {
+	background-color: transparent;	
 }
 
-.thumbNailWrapper .imageGalleryLoaded {
-	background-color: transparent;	
+.thumbScroller {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	text-align: center;
+}
+
+.thumbHoriz .thumbScroller {
+	width: 500px;
+	height: 85px;
+	float: left;
+}
+
+.thumbVert .thumbScroller {
+	height: 500px;
+	width: 100px;	
+}
+
+.thumbWrapper {
+	float: left;
+}
+
+.thumbVert .thumbWrapper {
+	width: 100px;
+	height: 10px;
+}
+.thumbHoriz .thumbWapper {
+	height:85px;
+	width: 10px;
+}
+
+.thumbWrapper.thumbHoriz div {
+	float: left;
+	padding-right: 2px;
+}
+
+.thumbWrapper.thumbVert {
+	width: 100px;
+}
+
+.thumbWrapper.thumbVert div {
+	padding-bottom: 2px;
 }

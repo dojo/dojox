@@ -8,7 +8,6 @@
 		@import "../../../dijit/tests/css/dijitTests.css";
 		@import "../resources/ThumbnailPicker.css";
 	</style>
-
 	
 	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:true, isDebug: true, defaultTestTheme:'soria'"></script>
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -80,13 +79,13 @@
 						+ "<br/><b>Title:</b> " + packet.title
 						+ "<br/><b>Link:</b> " + packet.link
 						;
-			}
+			};
 			
 			//When an image in the ThumbnailPicker is clicked on, it publishes
 			//information on the image to a topic, whose name is found by calling
 			//the 'getTopicName' function on the widget.
-			dojo.subscribe(dijit.byId('thumbPicker1').getTopicName(), updateDiv);
-			dojo.subscribe(dijit.byId('thumbPicker2').getTopicName(), updateDiv);
+			dojo.subscribe(dijit.byId('thumbPicker1').getClickTopicName(), updateDiv);
+			dojo.subscribe(dijit.byId('thumbPicker2').getClickTopicName(), updateDiv);
 		}
 		
 		dojo.addOnLoad(initFlickrGallery);
@@ -104,14 +103,14 @@
 	<h2>From FlickrRestStore:</h2>
 	This ThumbnailPicker should have 8 thumbnails, with each of them linking
 	to a URL when clicked on.  The cursor should also change when over an image.
-	<div id="thumbPicker1" dojoType="dojox.image.ThumbnailPicker" numberThumbs="8"
+	<div id="thumbPicker1" dojoType="dojox.image.ThumbnailPicker" size="500"
 			useHyperlink="true" ></div>
 
     <h2>From ItemFileReadStore:</h2>
 	This ThumbnailPicker should have 5 thumbnails. Clicking on a thumbnail should NOT
 	open a URL, and the cursor should not change when over an image that is not an arrow.
 	
-    <div id="thumbPicker2" dojoType="dojox.image.ThumbnailPicker" numberThumbs="5"
+    <div id="thumbPicker2" dojoType="dojox.image.ThumbnailPicker" size="400"
 		isClickable="false"></div>
 	<div jsId="imageItemStore" dojoType="dojo.data.ItemFileReadStore" url="images.json"></div>
 	
@@ -121,14 +120,14 @@
 	Unlike the ThumbnailPicker above, when these links are clicked on, this page
 	changes, instead of a popup window.
 	
-	<div id="thumbPicker3" dojoType="dojox.image.ThumbnailPicker" numberThumbs="6"
+	<div id="thumbPicker3" dojoType="dojox.image.ThumbnailPicker" size="600"
 		useHyperLink="true" hyperlinkTarget="this"></div>
 
 	<h2>From ItemFileReadStore, and vertical:</h2>
 	This ThumbnailPicker should have 5 thumbnails. Clicking on a thumbnail should NOT
 	open a URL, and the cursor should not change when over an image that is not an arrow.
 	The thumbnails should also be aligned vertically.
-    <div id="thumbPicker4" dojoType="dojox.image.ThumbnailPicker" numberThumbs="3"
+    <div id="thumbPicker4" dojoType="dojox.image.ThumbnailPicker" size="300"
 		isClickable="false" isHorizontal="false"></div>
 
 </body>
