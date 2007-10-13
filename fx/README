@@ -9,6 +9,7 @@ prototype / expermental
 -------------------------------------------------------------------------------
 Credits
 	Peter Higgins (dante@dojotoolkit.org)
+	Jonathan Bond-Caron (jbondc@gmail.com)
 
 -------------------------------------------------------------------------------
 Project description
@@ -21,25 +22,27 @@ Dependencies:
 	dojox.fx requires dojo (core) and the dojo.fx package
 	dojox.fx.easing requires only dojo core. 
 	
-	
 -------------------------------------------------------------------------------
 Documentation
 
 	existing API surface: 
 
-	dojo.fx._base:
+	dojox.fx._base:
 	- dojox.fx.crossFade - crossfade two nodes easily
 	- dojox.fx.sizeTo - size a node about it's center to a new width/height
 	- dojox.fx.slideBy - slide a node by a t,l offset
+	- dojox.fx.highlight - animates the background color of a node, and returns
+		it to the color it was. 
+
 	(all use standard _Animation properties, like duration, easing, node, etc)
 
-	dojo.fx._core:
+	dojox.fx._core:
 	- dojox.fx._Line - a 2-d _Line implementation, backwards compatible with
 		dojo._Line ... you might could safely do something akin to
 		dojo._Line.prototype = dojox.fx._Line.prototype;
 		and enable this for all dojo _Animations?
 
-	dojo.fx.style: - experimental CSS animation via class definitions
+	dojox.fx.style: - experimental CSS animation via class definitions
 	- dojox.fx.addClass - animate the effects of applying a class to a node
 	- dojox.fx.removeClass - "   "    "    "   removing a class from a node
 	- dojox.fx.toggleClass - wrapper for addClass/removeClass

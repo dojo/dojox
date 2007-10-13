@@ -20,7 +20,7 @@ dojox.fx.sizeTo = function(/* Object */args){
 	//
 	//	- works best on absolutely or relatively positioned elements? 
 	//	
-	// example:
+	// examples:
 	//
 	//	dojo.fx.sizeTo({ node:'myNode',
 	//		duration: 1000,
@@ -90,7 +90,7 @@ dojox.fx.slideBy = function(/* Object */args){
 	//	current position to it's current posision plus the numbers defined
 	//	in args.top and args.left. standard dojo.fx mixin's apply. 
 	//	
-	//	usage:
+	// examples:
 	//	dojox.fx.slideBy({ node: domNode, duration:400, 
 	//		top: 50, left: -22 }).play();
 	var node = (args.node = dojo.byId(args.node));	
@@ -154,4 +154,34 @@ dojox.fx.crossFade = function(/* Object */args){
 		// improper syntax in args, needs Array
 		return false; // Boolean
 	}
+};
+
+
+dojox.fx.highlight = function(/*Object*/ args){
+	// summary
+	//		Returns an animation that sets the node background to args.color
+	//		then gradually fades back the original nodes background color
+
+	var node = (args.node = dojo.byId(args.node));
+
+	args.duration = args.duration || 400;
+	// Assign default color light yellow
+	var startColor = args.color || '#ffff99';
+	var endColor = dojo.style(node, "backgroundColor");
+	var wasTransparent = (endColor == "transparent" || endColor == "rgba(0, 0, 0, 0)");
+
+	var anim = dojo.animateProperty(dojo.mixin({
+		properties: {
+			backgroundColor: { start: startColor, end: endColor }
+		}
+	}, args));
+
+	// necessary?
+	dojo.connect(anim, "onEnd", anim, function(){									   
+		if(wasTransparent){
+			node.style.backgroundColor = "transparent";
+		}
+	});
+
+	return anim; // dojo._Animation
 };
