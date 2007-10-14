@@ -24,12 +24,18 @@ dojo.declare("dojox.layout.RadioGroup",
 	// duration: Int
 	//	used for Fade and Slide RadioGroup's, the duration to run the transition animation. does not affect anything
 	//	in default RadioGroup
-	duration: 250,
+	duration: 750,
+
+	// hasButtons: Boolean
+	//	toggles internal button making on or off
+	hasButtons: true,
 
 	// templateString: String
 	//	the template for our container
 	templateString: '<div class="dojoxRadioGroup">'
-			+'	<table class="dojoxRadioButtons"><tbody><tr class="dojoxRadioButtonRow" dojoAttachPoint="buttonNode"></tr></tbody></table>'
+			+' 	<div dojoAttachPoint="buttonHolder" style="display:none;">'
+			+'		<table class="dojoxRadioButtons"><tbody><tr class="dojoxRadioButtonRow" dojoAttachPoint="buttonNode"></tr></tbody></table>'
+			+'	</div>'
 			+'	<div class="dojoxRadioView" dojoAttachPoint="containerNode"></div>'
 			+'</div>',
 
@@ -39,11 +45,13 @@ dojo.declare("dojox.layout.RadioGroup",
 		this._children = this.getChildren();
 		this._buttons = this._children.length;
 		this._size = dojo.coords(this.containerNode);
-		dojo.forEach(this._children,this._makeButton,this);
+		if(this.hasButtons){
+			dojo.style(this.buttonHolder,"display","block");
+			dojo.forEach(this._children,this._makeButton,this);
+		}
 	},
 
 	// private:
-
 	_makeButton: function(/* DomNode */n){
 		// summary: creates a hover button for a child node of the RadioGroup
 		dojo.style(n.domNode,"position","absolute");
@@ -106,10 +114,6 @@ dojo.declare("dojox.layout.RadioGroupFade",
 	{
 	// summary: An extension on a stock RadioGroup, that fades the panes.
 
-	// duration: Int
-	//	time in milliseconds to transition the fade
-	duration: 200,
-
 	_hideChild: function(page){
 		// summary: hide the specified child widget
 		dojo.fadeOut({
@@ -161,6 +165,9 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 	_showChild: function(page){
 		// summary: Slide in the selected child widget
 		this.inherited("_showChild",arguments);
+		if(this._anim && this._anim.status()=="playing"){
+			this._anim.gotoPercent(100,true);
+		}
 		this._anim = dojo.animateProperty({
 			node:page.domNode,
 			properties: {

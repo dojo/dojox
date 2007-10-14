@@ -1,3 +1,4 @@
+/* RadioGroup base Button styling: */
 .dojoxRadioButtons {
 	margin:0; padding:4px;
 	width:100%;
@@ -10,37 +11,35 @@
 }
 
 .dojoxRadioButton {
-	/* border:1px solid #fff; */
-	/* width:100%; */
 	text-align:center;
 	cursor:pointer;
 	margin:0;
 }
-.dojoxRadioButtonSelected {
-	/* border:1px solid #a0a0a0; */
-	background:#b7cdee;
 
+.dojoxRadioButtonSelected {
+	border:1px solid #ededed;
 }
+.tundra .dojoxRadioButtonSelected {
+	border:1px solid #a0a0a0;
+	background:#b7b7b7;
+}
+.soria .dojoxRadioButtonSelected {
+	background:#b7cdee url('../../../dijit/themes/soria/images/gradientTopBg.png') repeat-x top center;
+}
+
 .dojoxRadioButtonLabel {
 	padding:8px;
 	text-align:center;
-	width:100%;
 	display:block;
 }
+
 .dojoxRadioGroup {
 	overflow:hidden;
-	background:#fff;
 	border:0;
 	margin:0; padding:0;
 }
 .dojoxRadioView {
 	position:relative;
-	border:1px solid #b7cdee;
-	zoom:0;
-	margin-top:-2px;
-	overflow:hidden;			
+	overflow:hidden;
 	height:100%;
 }
-tr.dojoxRadioButtonRow {
-	margin:0; padding:0;
-}	
