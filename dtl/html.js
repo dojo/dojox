@@ -109,7 +109,8 @@ dojox.dtl.html = {
 				value = node.getAttribute(key, 2) || value;
 				if(key == "href" || key == "src"){
 					if(dojo.isIE){
-						var href = location.href.split("/");
+						var hash = location.href.lastIndexOf(location.hash);
+						var href = location.href.substring(0, hash).split("/");
 						href.pop();
 						href = href.join("/") + "/";
 						if(value.indexOf(href) == 0){
