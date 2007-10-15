@@ -7,7 +7,7 @@
 	@import "../../../dijit/tests/css/dijitTests.css";
 	@import "../../../dijit/themes/tundra/tundra.css";
 </style>
-<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: false"></script>
 <script type="text/javascript" src="../object.js"></script>
 <script type="text/javascript" src="../scheduler.js"></script>
 <script type="text/javascript">
@@ -22,13 +22,13 @@ rotate = function() {
 	var m = dojox.gfx3d.matrix;
 
 	if(dojo.byId('rx').checked){
-		angles.x += 10;
+		angles.x += 1;
 	}
 	if(dojo.byId('ry').checked){
-		angles.y += 10;
+		angles.y += 1;
 	}
 	if(dojo.byId('rz').checked){
-		angles.z += 10;
+		angles.z += 1;
 	}
 	var t = m.normalize([
 		m.cameraTranslate(-300, -200, 0),
@@ -67,7 +67,7 @@ makeObjects = function(){
 
 	view.applyCameraTransform(camera);
 	view.render();
-	window.setInterval(rotate, 1000);
+	window.setInterval(rotate, 50);
 };
 
 dojo.addOnLoad(makeObjects);
