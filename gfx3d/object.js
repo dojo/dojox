@@ -1,8 +1,10 @@
 dojo.provide("dojox.gfx3d.object");
+
 dojo.require("dojox.gfx");
 dojo.require("dojox.gfx3d.lighting");
 dojo.require("dojox.gfx3d.scheduler");
 dojo.require("dojox.gfx3d.vector");
+dojo.require("dojox.gfx3d.gradient");
 
 var out = function(o, x){
 	if(arguments.length > 1){
@@ -702,68 +704,11 @@ dojo.declare("dojox.gfx3d.Cube", dojox.gfx3d.Object, {
 
 dojo.declare("dojox.gfx3d.Cylinder", dojox.gfx3d.Object, {
 	constructor: function(){
-		// summary: a generic triangle 
-		//	(this is a helper object, which is defined for convenience)
 		this.object = dojo.clone(dojox.gfx3d.defaultCylinder);
 	},
 
-	gradient: function(model, tolerance, normal){
-		var p = dojox.gfx3d.lighting;
-		var type = this.fillStyle.type;
-		var finish = this.fillStyle.finish;
-		var pigment = this.fillStyle.color;
-		// FIXME: this is not true when Scale is applied.
-		var radius = this.object.radius;
-		var s = 0.5 / radius;
-		var colors = [];
-		var offset = 0;
-		var reference = dojox.gfx3d.vector.substract(normal, {x: 0, y: 0, z: 1});
-		for(; offset < 1; offset += s){
-			var cos = 2 * (offset - 0.5);
-			var sin = Math.sqrt(1 - cos * cos);
-			var vector = {x: cos * radius, y: 0, z: -sin * radius};
-			vector = dojox.gfx3d.vector.sum(vector, reference);
-
-			var color = model[type](vector, finish, pigment);
-			colors.push({offset: offset, color: color});
-		}
-		var vector = {x: radius, y: 0, z: 0};
-		var color = model[type](vector, finish, pigment);
-		colors.push({offset: offset, color: color});
-
-		// optimize color using a linear approximation
-		var tol2 = tolerance * tolerance;
-		var opt  = [colors[0]];
-		for(var i = 0; i < colors.length;){
-			var c1 = colors[i].color;
-			var j = i + 2;
-			for(; j < colors.length; ++j){
-				var c2 = colors[j].color;
-				var l  = j - i;
-				var stop = false;
-				for(var k = i + 1; k < j; ++k){
-					var x = (k - i) / l;
-					var c = p.addColor(p.scaleColor(1 - x, c1), p.scaleColor(x, c2));
-					if(tol2 < (p.diff2Color(c, colors[k].color) / p.length2Color(colors[k].color))){
-						stop = true;
-						break;
-					}
-				}
-				if(stop){
-					--j;
-					break;
-				}
-			}
-			opt.push(colors[j < colors.length ? j : (colors.length - 1)]);
-			i = j;
-		}
-
-		// return
-		return {type: "linear", y1: -radius, x1: 0, y2: radius, x2: 0, colors: opt};
-	},
-
 	render: function(camera){
-		//  Get the bottom surface first 
+		// get the bottom surface first 
 		var m = dojox.gfx3d.matrix.multiply(camera, this.matrix);
 		var angles = [0, Math.PI/4, Math.PI/3];
 		var center = dojox.gfx3d.matrix.multiplyPoint(m, this.object.center);
@@ -794,7 +739,7 @@ dojo.declare("dojox.gfx3d.Cylinder", dojox.gfx3d.Object, {
 		});
 
 		// X is 2b, c, f
-		var X = dojox.gfx3d.matrix.multiplyPoint(dojox.gfx3d.matrix.invert(A),b[0], b[1], b[2]);
+		var X = dojox.gfx3d.matrix.multiplyPoint(dojox.gfx3d.matrix.invert(A), b[0], b[1], b[2]);
 		var theta = Math.atan2(X.x, 1 - X.y) / 2;
 
 		// rotate the marks back to the canonical form
@@ -813,10 +758,10 @@ dojo.declare("dojox.gfx3d.Cylinder", dojox.gfx3d.Object, {
 		var d = Math.pow(probes[1].y, 2);
 
 		// the invert matrix is 
-		// 1/(ad -bc) [ d, -b; -c, a];
-		var rx = Math.sqrt( (a*d - b*c)/ (d-b) );
-		var ry  = Math.sqrt( (a*d - b*c)/ (a-c) );
-		 if(rx < ry){
+		// 1/(ad - bc) [ d, -b; -c, a];
+		var rx = Math.sqrt((a * d - b * c) / (d - b));
+		var ry = Math.sqrt((a * d - b * c) / (a - c));
+		if(rx < ry){
 			var t = rx;
 			rx = ry;
 			ry = t;
@@ -826,42 +771,46 @@ dojo.declare("dojox.gfx3d.Cylinder", dojox.gfx3d.Object, {
 		var top = dojox.gfx3d.matrix.multiplyPoint(m, 
 			dojox.gfx3d.vector.sum(this.object.center, {x: 0, y:0, z: this.object.height})); 
 
-		var d = Math.sqrt( Math.pow(center.x - top.x, 2) + Math.pow(center.y - top.y, 2) );
-		this.cache = {center: center, top: top, rx: rx, ry: ry, theta: theta};
+		var gradient = dojox.gfx3d.gradient(this.renderer.lighting, this.fillStyle, this.object.center, this.object.radius, Math.PI, 2 * Math.PI, m);
+		if(isNaN(rx) || isNaN(ry) || isNaN(theta)){
+			// in case the cap is invisible (parallel to the incident vector)
+			rx = this.object.radius, ry = 0, theta = 0;
+		}
+		this.cache = {center: center, top: top, rx: rx, ry: ry, theta: theta, gradient: gradient};
 	},
 
 	draw: function(){
-		var c = this.cache;
-		var centers = [c.center, c.top];
-		centers.sort( function(a, b){
-			return a.z - b.z;
-		});
+		var c = this.cache, v = dojox.gfx3d.vector, m = dojox.gfx.matrix,
+			centers = [c.center, c.top], normal = v.substract(c.top, c.center);
+		if(v.dotProduct(normal, this.renderer.lighting.incident) > 0){
+			centers = [c.top, c.center];
+			normal = v.substract(c.center, c.top);
+		}
 
-		var normal = dojox.gfx3d.vector.substract(c.top, c.center);
-		var gradient = this.gradient(this.renderer.lighting, 0.05, normal);
-		var color = this.renderer.lighting[this.fillStyle.type](normal, this.fillStyle.finish, this.fillStyle.color);
-		var d = Math.sqrt( Math.pow(c.center.x - c.top.x, 2) + Math.pow(c.center.y - c.top.y, 2) );
+		var color = this.renderer.lighting[this.fillStyle.type](normal, this.fillStyle.finish, this.fillStyle.color),
+			d = Math.sqrt( Math.pow(c.center.x - c.top.x, 2) + Math.pow(c.center.y - c.top.y, 2) );
 
 		if(this.shape){
 			this.shape.clear();
-		} else {
+		}else{
 			this.shape = this.renderer.createGroup();
 		}
-		var surf = this.shape.createPath("")
+		
+		this.shape.createPath("")
 			.moveTo(0, -c.rx)
 			.lineTo(d, -c.rx)
 			.lineTo(d, c.rx)
 			.lineTo(0, c.rx)
 			.arcTo(c.ry, c.rx, 0, true, true, 0, -c.rx)
-			.setTransform( [dojox.gfx.matrix.translate(centers[0]), 
-				dojox.gfx.matrix.rotate(Math.atan2(centers[1].y-centers[0].y, centers[1].x - centers[0].x))]);
+			.setFill(c.gradient).setStroke(this.strokeStyle)
+			.setTransform([m.translate(centers[0]), 
+				m.rotate(Math.atan2(centers[1].y - centers[0].y, centers[1].x - centers[0].x))]);
 
-		var front = this.shape.createEllipse({cx: centers[1].x, cy: centers[1].y, rx: c.rx, ry: c.ry})
-			.applyTransform(dojox.gfx.matrix.rotateAt(c.theta, centers[1].x, centers[1].y));
-
-		surf.setFill(gradient).setStroke(this.strokeStyle);
-
-		front.setFill(color).setStroke(this.strokeStyle);
+		if(c.rx > 0 && c.ry > 0){
+			this.shape.createEllipse({cx: centers[1].x, cy: centers[1].y, rx: c.rx, ry: c.ry})
+				.setFill(color).setStroke(this.strokeStyle)
+				.applyTransform(m.rotateAt(c.theta, centers[1]));
+		}
 	}
 });
 

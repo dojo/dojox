@@ -23,9 +23,9 @@ makeObjects = function(){
 	
 	var m = dojox.gfx3d.matrix;
 	var l = view.createCube({bottom: {x: 0, y: 0, z: 0}, top: {x: 100, y: 100, z: 100}})
-		.setFill({type: "plastic", finish: dojox.gfx3d.lighting.finish.dull, color: "lime"});
+		.setFill({type: "plastic", finish: "dull", color: "lime"});
 		
-	var camera = [m.cameraRotateXg(20), m.cameraRotateYg(30), m.cameraTranslate(-100, -100, 0)];
+	var camera = [m.cameraRotateXg(20), m.cameraRotateYg(20), m.cameraTranslate(-200, -200, 0)];
 	view.applyCameraTransform(camera);
 	view.render();
 	

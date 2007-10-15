@@ -7,6 +7,9 @@
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../lighting.js"></script>
+<script type="text/javascript" src="../gradient.js"></script>
+<script type="text/javascript" src="../object.js"></script>
 <script type="text/javascript">
 
 dojo.require("dojox.gfx3d");
@@ -14,21 +17,31 @@ dojo.require("dojox.gfx3d");
 makeObjects = function(){
 	var surface = dojox.gfx.createSurface("test", 500, 400);
 	var view = surface.createViewport();
-	view.setLights([{direction: {x: 10, y: 7, z: 5}, color: "white"}], {color: "white", intensity: 2}, "white");
+	view.setLights([
+			{direction: {x: 0, y: 0, z: -10}, color: "white"},
+			{direction: {x: 10, y: 0, z: -10}, color: "#444"}
+		], {color: "white", intensity: 2}, "white");
 
 	var m = dojox.gfx3d.matrix;
 	
-	view.createCylinder({center: {x: 0, y: 0, z: 0}, radious: 80, height: 100})
-		.setTransform([dojox.gfx3d.matrix.translate({x: -150, y: -50, z: 30}), dojox.gfx3d.matrix.rotateXg(40)])
-		.setFill({type: "plastic", finish: dojox.gfx3d.lighting.finish.dull, color: "lime"});
+	view.createCylinder({})
+		.setTransform([m.translate(150, 250, 0), m.rotateZg(60), m.rotateXg(-60)])
+		.setStroke("black")
+		.setFill({type: "plastic", finish: "glossy", color: "red"});
 	
+	view.createCylinder({})
+		.setTransform([m.translate(150, 100, 0), m.rotateZg(45), m.rotateXg(-135)])
+		.setStroke("black")
+		.setFill({type: "plastic", finish: "shiny", color: "yellow"});
 
-	view.createCylinder({center: {x: 0, y: 0, z: 0}, radious: 80, height: 100})
-		.setTransform([dojox.gfx3d.matrix.translate({x: -50, y: 150, z: 3}), dojox.gfx3d.matrix.rotateZg(40)])
-		.setFill({type: "plastic", finish: dojox.gfx3d.lighting.finish.dull, color: "blue"});
+	view.createCylinder({})
+		.setTransform([m.translate(250, 200, 0), m.rotateZg(-30), m.rotateXg(-30)])
+		.setStroke("black")
+		.setFill({type: "plastic", finish: "dull", color: "lime"});
 
-	var camera = dojox.gfx3d.matrix.normalize([
-			m.cameraRotateXg(60), m.cameraRotateYg(22), m.cameraTranslate(-200, -300, 0)]);
+	//var camera = m.normalize([m.cameraRotateXg(15), m.cameraRotateYg(15), m.cameraTranslate(-200, -300, 0)]);
+	//var camera = m.normalize([m.cameraRotateXg(15), m.cameraRotateYg(15)]);
+	var camera = m.normalize({});
 
 	view.applyCameraTransform(camera);
 	view.render();
