@@ -1,0 +1,34 @@
+-------------------------------------------------------------------------------
+dojox.lang
+-------------------------------------------------------------------------------
+Version 0.990
+Release date: 07/30/2007
+-------------------------------------------------------------------------------
+Project state:
+[beta]
+-------------------------------------------------------------------------------
+Credits
+	Eugene Lazutkin (eugene.lazutkin@gmail.com)
+-------------------------------------------------------------------------------
+Project description
+
+Implementation of common functional operations, and provisions.
+Later we can add other JS language-related helpers.
+-------------------------------------------------------------------------------
+Dependencies:
+
+None.
+-------------------------------------------------------------------------------
+Documentation
+
+-------------------------------------------------------------------------------
+Installation instructions
+
+Just include like that:
+
+dojo.require("dojox.lang.functional");
+
+-------------------------------------------------------------------------------
+Additional Notes
+
+See tests and the source for more details.
