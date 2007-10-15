@@ -115,6 +115,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 		} else{
 			throw Error("dojox.data.FlickrRestStore: An API key must be specified.");
 		}
+		request._curCount = request.count;
 		if(query.page){
 			content.page = request.query.page;
 			secondaryKey.push("page" + content.page);
@@ -124,32 +125,35 @@ dojo.declare("dojox.data.FlickrRestStore",
 			}
 			var diff = request.start % request.count;
 			var start = request.start, count = request.count;
+			//If the count does not divide cleanly into the start number,
+			//more work has to be done to figure out the best page to request
 			if(diff != 0) {
 				if(start < count / 2) {
+					//If the first record requested is less than half the amount requested,
+					//then request from 0 to the count record
 					count = start + count;
 					start = 0; 
 				} else {
-					start = Math.ceil(count / 2);
-					if(start != count / 2) {
-						count = (count / 2) + 1;
-					} else {
-						count /= 2;
-					}
+					start = Math.ceil((start + count) / 2);
+					start = (start % 2 == 0 ? start : start + 1);					
+					count = start * 2;
 				}
 				request._realStart = request.start;
 				request._realCount = request.count;
-				request.start = start;
-				request.count = count;
+				request._curStart = start;
+				request._curCount = count;
 			} else {
 				request._realStart = request._realCount = null;
+				request._curStart = request.start;
+				request._curCount = request.count;
 			}
 			
 			content.page = (start / count) + 1;
 			secondaryKey.push("page" + content.page);
 		}
-		if(request.count){
-			content.per_page = request.count;
-			secondaryKey.push("count" + request.count);
+		if(request._curCount){
+			content.per_page = request._curCount;
+			secondaryKey.push("count" + request._curCount);
 		}
 		
 		if(query.lang){
@@ -215,8 +219,8 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//before the request completes
 		request = {
 			query: query,
-			count: request.count,
-			start: request.start,
+			count: request._curCount,
+			start: request._curStart,
 			_realCount: request._realCount,
 			_realStart: request._realStart,
 			onBegin: request.onBegin,
@@ -455,5 +459,4 @@ dojo.declare("dojox.data.FlickrRestStore",
 		return false;
 	}
 });
-
 
