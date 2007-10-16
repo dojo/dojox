@@ -6,15 +6,16 @@ dojo.require("dojox.gfx3d.scheduler");
 dojo.require("dojox.gfx3d.vector");
 dojo.require("dojox.gfx3d.gradient");
 
+// FIXME: why the global "out" var here?
 var out = function(o, x){
 	if(arguments.length > 1){
-		console.debug("debug:", o);
+		// console.debug("debug:", o);
 		o = x;
 	}
 	var e = {};
 	for(var i in o){
-		if(i in e) continue;
-		console.debug("debug:", i, typeof o[i], o[i]);
+		if(i in e){ continue; }
+		// console.debug("debug:", i, typeof o[i], o[i]);
 	}
 };
 
@@ -203,6 +204,7 @@ dojo.declare("dojox.gfx3d.Scene", dojox.gfx3d.Object, {
 	},
 
 	addTodo: function(newObject){
+		// FIXME: use indexOf?
 		if(dojo.every(this.todos, function(item){ return item != newObject; })){
 			this.todos.push(newObject);
 			this.invalidate();
@@ -231,11 +233,7 @@ dojo.declare("dojox.gfx3d.Edges", dojox.gfx3d.Object, {
 		// summary: setup the object
 		// newObject: Array of points || Object
 		// style: String, optional
-		if(newObject instanceof Array){
-			this.object = dojox.gfx.makeParameters(this.object, { points: newObject, style: style } );
-		} else {
-			this.object = dojox.gfx.makeParameters(this.object, newObject);
-		}
+		this.object = dojox.gfx.makeParameters(this.object, (newObject instanceof Array) ? { points: newObject, style: style } : newObject);
 		return this;
 	},
 
@@ -256,7 +254,7 @@ dojo.declare("dojox.gfx3d.Edges", dojox.gfx3d.Object, {
 		var c = this.cache;
 		if(this.shape){
 			this.shape.setShape("")
-		} else {
+		}else{
 			this.shape = this.renderer.createPath();
 		}
 		var p = this.shape.setAbsoluteMode("absolute");
@@ -269,7 +267,7 @@ dojo.declare("dojox.gfx3d.Edges", dojox.gfx3d.Object, {
 			if(this.object.style == "loop"){
 				p.closePath();
 			}
-		} else {
+		}else{
 			for(var i = 0; i < this.cache.length; ){
 				p.moveTo(c[i].x, c[i].y);
 				i ++;
@@ -541,11 +539,7 @@ dojo.declare("dojox.gfx3d.Quads", dojox.gfx3d.Object, {
 		// summary: setup the object
 		// newObject: Array of points || Object
 		// style: String, optional
-		if(newObject instanceof Array){
-			this.object = dojox.gfx.makeParameters(this.object, { points: newObject, style: style } );
-		} else {
-			this.object = dojox.gfx.makeParameters(this.object, newObject);
-		}
+		this.object = dojox.gfx.makeParameters(this.object, (newObject instanceof Array) ? { points: newObject, style: style } : newObject );
 		return this;
 	},
 	render: function(camera){
@@ -562,7 +556,7 @@ dojo.declare("dojox.gfx3d.Quads", dojox.gfx3d.Object, {
 				pool = pool.slice(2,4);
 				i += 2;
 			}
-		} else {
+		}else{
 			for(var i = 0; i < c.length; ){
 				this.cache.push( [c[i], c[i+1], c[i+2], c[i+3], c[i] ] );
 				i += 4;
@@ -575,20 +569,35 @@ dojo.declare("dojox.gfx3d.Quads", dojox.gfx3d.Object, {
 		this.cache = dojox.gfx3d.scheduler.bsp(this.cache, function(it){  return it; });
 		if(this.shape){
 			this.shape.clear();
-		} else {
+		}else{
 			this.shape = this.renderer.createGroup();
 		}
+		// using naive iteration to speed things up a bit by avoiding function call overhead
+		for(var x=0; x<this.cache.length; x++){
+			this.shape.createPolyline(this.cache[x])
+				.setStroke(this.strokeStyle)
+				.setFill(this.toStdFill(lighting, dojox.gfx3d.vector.normalize(this.cache[x])));
+		}
+		/*
 		dojo.forEach(this.cache, function(item){
 			this.shape.createPolyline(item)
 				.setStroke(this.strokeStyle)
 				.setFill(this.toStdFill(lighting, dojox.gfx3d.vector.normalize(item)));
 		}, this);
+		*/
 	},
 
 	getZOrder: function(){
 		var zOrder = 0;
+		// using naive iteration to speed things up a bit by avoiding function call overhead
+		for(var x=0; x<this.cache.length; x++){
+			var i = this.cache[x];
+			zOrder += (i[0].z + i[1].z + i[2].z + i[3].z) / 4;
+		}
+		/*
 		dojo.forEach(this.cache, function(item){
 				zOrder += (item[0].z + item[1].z + item[2].z + item[3].z) / 4; });
+		*/
 		return (this.cache.length > 1) ?  zOrder / this.cache.length : 0;
 	}
 });
@@ -603,11 +612,7 @@ dojo.declare("dojox.gfx3d.Polygon", dojox.gfx3d.Object, {
 	setObject: function(newObject){
 		// summary: setup the object
 		// newObject: Array of points || Object
-		if(newObject instanceof Array){
-			this.object = dojox.gfx.makeParameters(this.object, {path: newObject})
-		} else {
-			this.object = dojox.gfx.makeParameters(this.object, newObject);
-		}
+		this.object = dojox.gfx.makeParameters(this.object, (newObject instanceof Array) ? {path: newObject} : newObject)
 		return this;
 	},
 
@@ -623,7 +628,7 @@ dojo.declare("dojox.gfx3d.Polygon", dojox.gfx3d.Object, {
 	draw: function(lighting){
 		if(this.shape){
 			this.shape.setShape({points: this.cache});
-		} else {
+		}else{
 			this.shape = this.renderer.createPolyline({points: this.cache});
 		}
 
@@ -633,8 +638,10 @@ dojo.declare("dojox.gfx3d.Polygon", dojox.gfx3d.Object, {
 
 	getZOrder: function(){
 		var zOrder = 0;
-		dojo.forEach(this.cache, function(item){
-				zOrder += item.z; });
+		// using naive iteration to speed things up a bit by avoiding function call overhead
+		for(var x=0; x<this.cache.length; x++){
+			zOrder += this.cache[x].z;
+		}
 		return (this.cache.length > 1) ?  zOrder / this.cache.length : 0;
 	},
 
@@ -684,14 +691,21 @@ dojo.declare("dojox.gfx3d.Cube", dojox.gfx3d.Object, {
 
 		if(this.shape){
 			this.shape.clear();
-		} else {
+		}else{
 			this.shape = this.renderer.createGroup();
 		}
+		for(var x=0; x<cache.length; x++){
+			this.shape.createPolyline(cache[x])
+				.setStroke(this.strokeStyle)
+				.setFill(this.toStdFill(lighting, dojox.gfx3d.vector.normalize(cache[x])));
+		}
+		/*
 		dojo.forEach(cache, function(item){
 			this.shape.createPolyline(item)
 				.setStroke(this.strokeStyle)
 				.setFill(this.toStdFill(lighting, dojox.gfx3d.vector.normalize(item)));
 		}, this);
+		*/
 	},
 
 	getZOrder: function(){
@@ -886,11 +900,7 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 		// or lights object
 		// ambient: Color: an ambient object
 		// specular: Color: an specular object
-		if(lights instanceof Array){
-			this.lights = {sources: lights, ambient: ambient, specular: specular};
-		} else {
-			this.lights = lights;
-		}
+		this.lights = (lights instanceof Array) ? {sources: lights, ambient: ambient, specular: specular} : lights;
 		var view = {x: 0, y: 0, z: 1};
 
 		this.lighting = new dojox.gfx3d.lighting.Model(view, this.lights.sources, 
@@ -938,13 +948,13 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 		var m = dojox.gfx3d.matrix;
 		
 		// Iterate the todos and call render to prepare the rendering:
-		dojo.forEach(this.todos, function(item){
-			item.render(dojox.gfx3d.matrix.normalize([
+		for(var x=0; x<this.todos.length; x++){
+			this.todos[x].render(dojox.gfx3d.matrix.normalize([
 				m.cameraRotateXg(180),
 				m.cameraTranslate(0, this.dimension.height, 0),
 				this.camera,
 			]), this.deep);
-		}, this);
+		}
 
 		this.objects = this.schedule(this.objects);
 		this.draw(this.todos, this.objects, this);
