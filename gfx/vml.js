@@ -48,7 +48,7 @@ dojo.extend(dojox.gfx.Shape, {
 			switch(fill.type){
 				case "linear":
 					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill),
-						s = [], a = f.colors;
+						s = [], a = f.colors, matrix = this._getRealMatrix(), m = dojox.gfx.matrix;
 					this.fillStyle = f;
 					dojo.forEach(a, function(v, i, a){
 						a[i].color = dojox.gfx.normalizeColor(v.color);
@@ -67,7 +67,9 @@ dojo.extend(dojox.gfx.Shape, {
 					fo.colors.value = s.join(";");
 					fo.method = "sigma";
 					fo.type = "gradient";
-					fo.angle = (dojox.gfx.matrix._radToDeg(Math.atan2(f.x2 - f.x1, f.y2 - f.y1)) + 180) % 360;
+					var fc1 = matrix ? m.multiplyPoint(matrix, f.x1, f.y1) : {x: f.x1, y: f.y1},
+						fc2 = matrix ? m.multiplyPoint(matrix, f.x2, f.y2) : {x: f.x2, y: f.y2};
+					fo.angle = (m._radToDeg(Math.atan2(fc2.x - fc1.x, fc2.y - fc1.y)) + 180) % 360;
 					fo.on = true;
 					break;
 				case "radial":
@@ -190,6 +192,9 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 	
 	_applyTransform: function() {
+		if(this.fillStyle && this.fillStyle.type == "linear"){
+			this.setFill(this.fillStyle);
+		}
 		var matrix = this._getRealMatrix();
 		if(!matrix) return this;
 		var skew = this.rawNode.skew;
