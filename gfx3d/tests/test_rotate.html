@@ -99,12 +99,12 @@ dojo.addOnLoad(makeObjects);
 </head>
 <body class="tundra">
 	<h1>Pilot Test</h1>
-	<p>There are two drawers(well, the name is quite misleading, it means draw-er) in dojox.gfx3d, conservative and chart:
+	<p>There are two drawers(well, the name is quite misleading, it means draw-er) in dojox.gfx3d, conservative and chart:</p>
 	<ul>
 		<li><em>conservative</em> drawer is a pessimist, it assumes that the movement, transformation of objects would take a big fat impact to the viewport, so it not only render the modified objects, but also reorder all the underlying 2D shapes and redraw them.</li>
 		<li> <em>chart</em> drawer is an optimist, it assumes the change of the objects does not take effect on the z-order, this is most likely true in chart application. It only render and then draw the modified objects.</li>
 	</ul>
-	The cube is in the center (0, 0, 0): The color of X, Y, Z axes are red, green, blue as the reference. The cube would rotate around X, Y, Z or their combination, it is up to you.</p>
+	<p>The cube is in the center (0, 0, 0): The color of X, Y, Z axes are red, green, blue as the reference. The cube would rotate around X, Y, Z or their combination, it is up to you.</p>
 	<p>Current Drawer: <strong id="drawer">Conservative</strong></p>
 <form>
 	<input id="conservative" type="button" value="Draw with conservative"/>
