@@ -26,7 +26,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	*/
 	// model: string or object
 	// grid data model
-	model: null, //'dojox._data.table',
+	model: 'dojox.grid.data.table',
 	postCreate: function(){
 		if(this.model){
 			if(typeof this.model == 'string'){

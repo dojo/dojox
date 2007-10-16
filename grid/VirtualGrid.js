@@ -102,7 +102,8 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		this.createLayout();
 		this.createViews();
 		this.createManagers();
-		//dojox.grid.watchTextSizePoll(this, 'textSizeChanged');
+		dojox.grid.initTextSizePoll();
+		this.connect(dojox.grid, "textSizeChanged", "textSizeChanged");
 		dojox.grid.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.keyEvents);
 	},
 	postCreate: function(){
@@ -114,7 +115,7 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		this.domNode.onReveal = null;
 		this.domNode.onSizeChange = null;
 		this.edit.destroy();
-		//dojox.grid.unwatchTextSizePoll(this, 'textSizeChanged');
+		dojox.grid.unwatchTextSizePoll(this, 'textSizeChanged');
 		this.views.destroyViews();
 		this.inherited(arguments);
 	},
@@ -126,7 +127,7 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		this.update();
 	},
 	textSizeChanged: function(){
-		setTimeout(this, "_textSizeChanged", 1);
+		setTimeout(dojo.hitch(this, "_textSizeChanged"), 1);
 	},
 	_textSizeChanged: function(){
 		if(this.domNode){
