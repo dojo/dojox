@@ -125,7 +125,6 @@
 	
 	
 	dojo.addOnLoad(function() {
-		window["grid"] = dijit.byId("grid");
 		csvStore = new dojox.data.CsvStore({url:"support/movies.csv"});
 		csvStore.fetch({ onComplete: updateGrid, onError: function() { console.log(arguments)}});
 	});
@@ -133,6 +132,6 @@
 </head>
 <body>
 <h5>dojox.Grid using Dojo.Data stores via simple binding</h5>
-<div id="grid" dojoType="dojox.Grid" elasticView="2"></div>
+<div jsId="grid" dojoType="dojox.Grid" elasticView="2"></div>
 </body>
 </html>
