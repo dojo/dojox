@@ -8,7 +8,8 @@ Project state: beta
 -------------------------------------------------------------------------------
 Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
-	Shane O'Sullivan (shaneosullivan1@gmail.com)
+	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore)
+	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 -------------------------------------------------------------------------------
 Project description
 
@@ -55,4 +56,7 @@ Additional Notes:
 	dojox.data.OpmlStore - Store for reading OMPL formatted data
 	
 	dojox.data.XmlStore - datastore for XML based services or  
-	documents.	         
+	documents.
+
+	dojox.data.QueryReadStore - datastore to provide sevrerside URL query
+	matching.  Similar to the 0.4.X ComboBox dataUrl parameter.	         
