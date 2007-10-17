@@ -1,0 +1,198 @@
+@import "Grid.css";
+
+.tundra .dojoxGrid {
+	position: relative;
+	background-color: #e9e9e9;
+	-moz-outline-style: none;
+	outline: none;
+}
+
+.tundra .dojoxGrid-header {
+	background-color:  #e9e9e9;
+}
+
+.tundra .dojoxGrid-header .dojoxGrid-cell { 
+	border: 1px solid transparent;
+	border-color: transparent #ACA899 transparent transparent;
+	background: url(../../../dijit/themes/tundra/images/buttonEnabled.png) #e9e9e9 top repeat-x;
+	padding-bottom: 2px;
+}
+
+.tundra .dojoxGrid-header .dojoxGrid-cell-over {
+	background-image: none;
+	/* background-color: white; */
+	background: url(../../../dijit/themes/tundra/images/buttonHover.png) #e9e9e9 top repeat-x;
+	/* border-bottom-color: #FEBE47; */
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom-width: 3px;
+}
+
+.tundra .dojoxGrid-sort-down {
+	background: url(../../../dijit/themes/tundra/images/arrowDown.png) right no-repeat;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+.tundra .dojoxGrid-sort-up {
+	background: url(../../../dijit/themes/tundra/images/arrowUp.png) right no-repeat;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+/* content */
+
+.tundra .dojoxGrid-scrollbox {
+	position: relative;
+	overflow: scroll;
+	background-color: #fefefe;
+	width: 100%;
+}
+
+.tundra .dojoxGrid-content {
+	position: relative;
+	overflow: hidden;
+	 -moz-outline-style: none;
+	outline: none;
+}
+
+/* rowbar */
+
+.tundra .dojoxGrid-rowbar { 
+	border: 1px solid;
+	/*
+	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
+	*/
+	border-color: transparent;
+	border-top: none;
+	background: url(../../../dijit/themes/tundra/images/buttonEnabled.png) #e9e9e9 top repeat-x;
+}
+
+.tundra .dojoxGrid-rowbar-inner {
+	border-top: 1px solid #F6F4EB;
+}
+
+.tundra .dojoxGrid-rowbar-over {
+	background-image: none;
+	background-color: white;
+	/*
+	border-top-color: #FEBE47;
+	border-bottom-color: #FEBE47;
+	*/
+	border-top-color: transparent;
+	border-bottom-color: transparent;
+}
+
+.tundra .dojoxGrid-rowbar-selected {
+	background-color: #D9E8F9;
+	background-image: none;
+	/*background-image: url(images/grid_green_dot.gif);*/
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/* rows */
+
+.tundra .dojoxGrid-row {
+	/*
+		border: 1px solid #E8E4D8;
+	*/
+	border: 1px solid #cccccc;
+	border-color: transparent;
+	/*padding: 0 0 1px 0;*/
+	border-left: none;
+	border-right: none;
+	background-color: #fefefe;
+	border-top: none;
+}
+
+.tundra .dojoxGrid-row-over {
+	border-top-color: transparent;
+	border-bottom-color: transparent;
+	background: url(../../../dijit/themes/tundra/images/buttonEnabled.png) #e9e9e9 top repeat-x;
+	/*border-bottom-width: 2px;
+	padding-bottom: 0;*/
+	/*background-color: #FFDD9D;*/
+	/*background-color: #FDFDFD;*/
+}
+
+.tundra .dojoxGrid-row-odd {
+	background-color: #f2f5f9;
+	/*background-color: #F9F7E8;*/
+}
+
+.tundra .dojoxGrid-row-selected {
+	background-color: #D9E8F9;
+}
+
+.tundra .dojoxGrid-invisible td, .dojoxGrid-header .dojoxGrid-invisible td {
+	border-top-width: 0;
+	border-bottom-width: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	height: 0;
+	overflow: hidden;
+}
+
+/* cells */
+
+.tundra .dojoxGrid-cell {
+	border: 1px solid;
+	border-color: transparent;
+	border-right-color: #cccccc;
+	padding: 3px 3px 3px 3px;
+	text-align: left;
+	overflow: hidden;
+}
+
+.tundra .dojoxGrid-cell-focus {
+	border: 1px dotted blue;
+}
+
+.tundra .dojoxGrid-cell-over {
+	border: 1px dotted #a6a6a6;
+}
+
+.tundra .dojoxGrid-cell-focus.dojoxGrid-cell-over {
+	border: 1px dotted #595959;
+}
+
+.dojoxGrid-cell-clip {
+	width: 100%;
+	overflow: hidden;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+}
+
+/* editing */
+
+/* FIXME: these colors are off! */
+.tundra .dojoxGrid-row-editing td {
+	background-color: #F4FFF4;
+}
+
+.tundra .dojoxGrid-row-inserting td {
+	background-color: #F4FFF4;
+}
+.tundra .dojoxGrid-row-inflight td {
+	background-color: #F2F7B7;
+}
+.tundra .dojoxGrid-row-error td {
+	background-color: #F8B8B6;
+}
+
+.dojoxGrid-input, .dojoxGrid-select, .dojoxGrid-textarea {
+	margin: 0;
+	padding: 0;
+	border-style: none;
+	width: 100%;
+	font-size: 100%;
+	font-family: inherit;
+}
+
+.dojoxGrid-hidden-focus {
+	position: absolute;
+	left: -1000px;
+	top: -1000px;
+	height: 0px, width: 0px;
+}
