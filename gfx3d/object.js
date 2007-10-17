@@ -785,7 +785,8 @@ dojo.declare("dojox.gfx3d.Cylinder", dojox.gfx3d.Object, {
 		var top = dojox.gfx3d.matrix.multiplyPoint(m, 
 			dojox.gfx3d.vector.sum(this.object.center, {x: 0, y:0, z: this.object.height})); 
 
-		var gradient = dojox.gfx3d.gradient(this.renderer.lighting, this.fillStyle, this.object.center, this.object.radius, Math.PI, 2 * Math.PI, m);
+		var gradient = this.fillStyle.type == "constant" ? this.fillStyle.color
+			: dojox.gfx3d.gradient(this.renderer.lighting, this.fillStyle, this.object.center, this.object.radius, Math.PI, 2 * Math.PI, m);
 		if(isNaN(rx) || isNaN(ry) || isNaN(theta)){
 			// in case the cap is invisible (parallel to the incident vector)
 			rx = this.object.radius, ry = 0, theta = 0;
