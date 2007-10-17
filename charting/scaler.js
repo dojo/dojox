@@ -98,6 +98,7 @@ dojo.provide("dojox.charting.scaler");
 			ticks.scale = span / (ticks.upperBound - ticks.lowerBound);
 			if(ticks.scale * ticks.minorTick >= minMinorStep){ break; }
 		}
+		ticks.minMinorStep = minMinorStep;
 		return ticks;	// Object
 	};
 })();

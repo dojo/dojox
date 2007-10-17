@@ -46,12 +46,13 @@ dojo.require("dojox.charting._color");
 	dxc.Theme._def={
 		//	all objects are structs used directly in dojox.gfx
 		chart:{ 
+			stroke: {width: 0},
 			fill: "white"
-		},	
+		},
 		plotarea:{ 
 			stroke: {width: 0},
 			fill: "#ccc"
-		},	
+		},
 		//	TODO: label rotation on axis
 		axis:{
 			stroke:{ color:"#000",width:2 },							//	the axis itself
@@ -198,6 +199,9 @@ dojo.require("dojox.charting._color");
 			else if(type=="marker"){
 				return this._markers[this._current.marker++%this._markers.length];
 			}
+		},
+		clear: function(){
+			this._current = {color: 0, marker: 0};
 		}
 	});
 })();

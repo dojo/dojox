@@ -158,8 +158,8 @@ dojo.require("dojox.charting.scaler");
 				apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});
 				apoly.push({x: lpoly[0].x, y: dim.height - offsets.b});
 				apoly.push(lpoly[0]);
-				var t = this.chart.theme, color = new dojo.Color(t.next("color"));
-				var area = this.chart.surface.createPolyline(apoly);
+				var t = this.chart.theme, color = new dojo.Color(t.next("color")), s = this.chart.surface;
+				var area = s.createPolyline(apoly);
 				if(run.fill){
 					area.setFill(run.fill);
 				}else{
@@ -167,7 +167,7 @@ dojo.require("dojox.charting.scaler");
 					f.a = 0.5;
 					area.setFill(augmentFill(t.series.fill, color));
 				}
-				var line = this.chart.surface.createPolyline(lpoly);
+				var line = s.createPolyline(lpoly);
 				if(run.stroke){
 					line.setStroke(run.stroke);
 				}else{

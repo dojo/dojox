@@ -7,11 +7,11 @@ dojo.require("dojox.charting.Theme");
 	dxc.themes.PlotKit.blue=new dxc.Theme({
 		chart:{
 			stroke:{ width:0 },
-			fill:{ color:"white" }
+			fill: "white"
 		},
 		plotarea:{
 			stroke:{ width:0 },
-			fill:{ color:"#e7eef6" }
+			fill: "#e7eef6"
 		},
 		axis:{
 			stroke:{ color:"#fff",width:2 },
