@@ -1,0 +1,74 @@
+﻿<html>
+<head>
+<title>Chart 2D</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
+<script type="text/javascript" src="Silverlight.js"></script>
+-->
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../Theme.js"></script>
+<script type="text/javascript" src="../plot2d/axes.js"></script>
+<script type="text/javascript" src="../plot2d/renderers.js"></script>
+<script type="text/javascript" src="../Chart2D.js"></script>
+<script type="text/javascript">
+
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.purple");
+
+makeObjects = function(){
+	var chart1 = new dojox.charting.Chart2D("test1");
+	chart1.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
+	chart1.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
+	chart1.render();
+
+	var chart2 = new dojox.charting.Chart2D("test2");
+	chart2.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {stroke: "red"});
+	chart2.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: "blue"});
+	chart2.render();
+
+	var chart3 = new dojox.charting.Chart2D("test3");
+	chart3.addPlot("default", {type: "Areas"});
+	chart3.setTheme(dojox.charting.themes.PlotKit.purple);
+	chart3.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
+	chart3.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
+	chart3.render();
+
+	var chart4 = new dojox.charting.Chart2D("test4");
+	chart4.addPlot("default", {type: "Areas"});
+	chart4.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {stroke: {color: "red", width: 2}, fill: "lightpink"});
+	chart4.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, fill: "lightblue"});
+	chart4.render();
+
+	var chart5 = new dojox.charting.Chart2D("test5");
+	chart5.addAxis("x");
+	chart5.addAxis("y", {vertical: true});
+	chart5.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
+	chart5.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
+	chart5.render();
+};
+
+//dojo.addOnLoad(makeObjects);
+
+</script>
+</head>
+<body>
+<h1>Chart 2D</h1>
+<p><button onclick="makeObjects();">Go</button></p>
+<p>Defaults: lines, no axes.</p>
+<div id="test1" style="width: 200px; height: 200px;"></div>
+<p>Defaults: lines, no axes, and custom strokes.</p>
+<div id="test2" style="width: 200px; height: 200px;"></div>
+<p>Areas, custom theme, no axes.</p>
+<div id="test3" style="width: 200px; height: 200px;"></div>
+<p>Areas, no axes, custom strokes and fills.</p>
+<div id="test4" style="width: 200px; height: 200px;"></div>
+<p>Lines, axes.</p>
+<div id="test5" style="width: 200px; height: 200px;"></div>
+<p>That's all Folks!</p>
+</body>
+</html>

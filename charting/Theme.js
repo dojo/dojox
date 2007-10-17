@@ -46,12 +46,11 @@ dojo.require("dojox.charting._color");
 	dxc.Theme._def={
 		//	all objects are structs used directly in dojox.gfx
 		chart:{ 
-			stroke:{ width:0 },
-			fill:{ color:"white" } 
+			fill: "white"
 		},	
 		plotarea:{ 
-			stroke:{ width:0 },
-			fill:{ color:"#ccc" } 
+			stroke: {width: 0},
+			fill: "#ccc"
 		},	
 		//	TODO: label rotation on axis
 		axis:{
@@ -63,16 +62,16 @@ dojo.require("dojox.charting._color");
 			fontColor:"#000"											//	color of labels
 		},
 		series:{
-			stroke:{ width:2, color:"#333" },							//	line or outline
-			fill:"#ccc",												//	fill, if appropriate
-			font:"normal normal normal 7pt Tahoma",						//	if there's a label
-			fontColor:"#000"											// 	color of labels
+			stroke: {width: 2, color: "#333"},							//	line or outline
+			fill: "#ccc",												//	fill, if appropriate
+			font: "normal normal normal 7pt Tahoma",					//	if there's a label
+			fontColor: "#000"											// 	color of labels
 		},
 		marker:{	//	any markers on a series.
-			stroke:{ width:2 },											//	stroke or outline
-			fill:"#333",												//	fill if needed
-			font:"normal normal normal 7pt Tahoma",						//	label
-			fontColor:"#000"
+			stroke: {width:2},											//	stroke or outline
+			fill: "#333",												//	fill if needed
+			font: "normal normal normal 7pt Tahoma",					//	label
+			fontColor: "#000"
 		},
 		colors:[
 			"#000","#111","#222","#333",
