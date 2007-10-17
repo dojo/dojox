@@ -50,6 +50,20 @@ makeObjects = function(){
 	chart5.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
 	chart5.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
 	chart5.render();
+
+	var chart6 = new dojox.charting.Chart2D("test6");
+	chart6.addAxis("x", {fixLower: "minor", fixUpper: "minor"});
+	chart6.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor"});
+	chart6.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
+	chart6.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
+	chart6.render();
+
+	var chart7 = new dojox.charting.Chart2D("test7");
+	chart7.addAxis("x", {fixLower: "major", fixUpper: "major"});
+	chart7.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
+	chart7.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
+	chart7.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
+	chart7.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -69,6 +83,10 @@ makeObjects = function(){
 <div id="test4" style="width: 200px; height: 200px;"></div>
 <p>Lines, axes.</p>
 <div id="test5" style="width: 200px; height: 200px;"></div>
+<p>Lines, axes (aligned on minor ticks).</p>
+<div id="test6" style="width: 200px; height: 200px;"></div>
+<p>Lines, axes (aligned on minor ticks).</p>
+<div id="test7" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
