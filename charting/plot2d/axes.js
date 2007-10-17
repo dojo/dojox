@@ -73,8 +73,10 @@ dojo.require("dojox.charting.scaler");
 					if(this.labels){
 						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
 					}else{
-						labelLength = Math.floor(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10);
+						labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10);
 						if(min < 0 || max < 0){ ++labelLength; }
+						var precision = Math.floor(Math.log(max - min) / Math.LN10);
+						if(precision > 0){ labelLength += precision; }
 					}
 					minMinorStep = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
 				}
@@ -106,20 +108,27 @@ dojo.require("dojox.charting.scaler");
 					offset = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
 				}
 				offset += labelGap + Math.max(ta.majorTick.length, ta.minorTick.length);
-				if(this.opt.leftBottom){
-					offsets.l = offset;
-				}else{
-					offsets.r = offset;
-				}
+				offsets[this.opt.leftBottom ? "l" : "r"] = offset;
+				offsets.t = offsets.b = size / 2;
 			}else{
 				if(size){
 					offset = size + labelGap;
 				}
 				offset += labelGap + Math.max(ta.majorTick.length, ta.minorTick.length);
-				if(this.opt.leftBottom){
-					offsets.b = offset;
-				}else{
-					offsets.t = offset;
+				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
+				if(size){
+					var labelLength = 0;
+					if(this.labels){
+						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
+					}else{
+						var s = this.scaler,
+							a = this._getLabel(s.majorStart, s.majorPrecision).length,
+							b = this._getLabel(s.majorStart + s.nMajorTicks * s.majorTick, s.majorPrecision).length,
+							c = this._getLabel(s.minorStart, s.minorPrecision).length,
+							d = this._getLabel(s.minorStart + s.nMinorTicks * s.minorTick, s.minorPrecision).length;
+						labelLength = Math.max(a, b, c, d);
+					}
+					offsets.l = offsets.r = Math.floor(size * labelLength * labelFudgeFactor) / 2;
 				}
 			}
 			return offsets;
@@ -164,7 +173,7 @@ dojo.require("dojox.charting.scaler");
 			var s = this.chart.surface, c = this.scaler,
 				nextMajor = c.majorStart, nextMinor = c.minorStart;
 			s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(ta.stroke);
-			while(nextMinor <= c.upperBound){
+			while(nextMinor <= c.upperBound + 1/c.scale){
 				var offset = (nextMinor - c.lowerBound) * c.scale,
 					x = start.x + axisVector.x * offset,
 					y = start.y + axisVector.y * offset;
@@ -180,7 +189,7 @@ dojo.require("dojox.charting.scaler");
 						y: y + labelOffset.y,
 						text: this._getLabel(nextMajor, c.majorPrecision),
 						align: labelAlign
-					}).setFont(ta.font).setStroke(ta.fontColor);
+					}).setFont(ta.font).setFill(ta.fontColor);
 					nextMajor += c.majorTick;
 				}else{
 					// minor tick
@@ -189,13 +198,13 @@ dojo.require("dojox.charting.scaler");
 						x2: x + tickVector.x * ta.minorTick.length,
 						y2: y + tickVector.y * ta.minorTick.length
 					}).setStroke(ta.minorTick);
-					if(this.opt.minorLabels && c.minMinorStep <= c.minorTick){
+					if(this.opt.minorLabels && (c.minMinorStep <= c.minorTick * c.scale)){
 						s.createText({
 							x: x + labelOffset.x,
 							y: y + labelOffset.y,
 							text: this._getLabel(nextMinor, c.minorPrecision),
 							align: labelAlign
-						}).setFont(ta.font).setStroke(ta.fontColor);
+						}).setFont(ta.font).setFill(ta.fontColor);
 					}
 				}
 				nextMinor += c.minorTick;

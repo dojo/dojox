@@ -129,7 +129,7 @@ dojo.require("dojox.charting.scaler");
 				var run = this.series[i],
 					poly = dojo.map(run.data, function(v, i){
 						return {
-							x: this._hScaler.scale * i + offsets.l,
+							x: this._hScaler.scale * (i + 1 - this._hScaler.lowerBound) + offsets.l,
 							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound)
 						};
 					}, this),
@@ -150,7 +150,7 @@ dojo.require("dojox.charting.scaler");
 				var run = this.series[i],
 					lpoly = dojo.map(run.data, function(v, i){
 						return {
-							x: this._hScaler.scale * i + offsets.l,
+							x: this._hScaler.scale * (i + 1 - this._hScaler.lowerBound) + offsets.l,
 							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound)
 						};
 					}, this),

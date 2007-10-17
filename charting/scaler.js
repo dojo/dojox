@@ -2,7 +2,7 @@ dojo.provide("dojox.charting.scaler");
 
 (function(){
 	// valid steps for the scaler
-	var steps = [1, 2, 5, 10];
+	var steps = [1, 5, 10];
 	
 	var isText = function(val, text){
 		val = val.toLowerCase();

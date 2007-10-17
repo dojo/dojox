@@ -110,6 +110,11 @@ dojo.require("dojox.charting.Theme");
 				offsets.t = Math.max(offsets.t, offs.t);
 				offsets.b = Math.max(offsets.b, offs.b);
 			}
+			// add some standard margins
+			offsets.l += 10;
+			offsets.r += 10;
+			offsets.t += 10;
+			offsets.b += 10;
 			// second run with realistic dimensions
 			var plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
@@ -124,7 +129,7 @@ dojo.require("dojox.charting.Theme");
 			// draw a chart background
 			var t = this.theme;
 			if(("chart" in t)){
-				var chartArea = this.surface.createRect({width: dim.width, height: dim.height});
+				var chartArea = this.surface.createRect({width: dim.width - 1, height: dim.height - 1});
 				if("fill" in t.chart){ chartArea.setFill(t.chart.fill); }
 				if("stroke" in t.chart){ chartArea.setStroke(t.chart.stroke); }
 			}
@@ -132,8 +137,8 @@ dojo.require("dojox.charting.Theme");
 			if(("plotarea" in t)){
 				var plotArea = this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width: dim.width - offsets.l - offsets.r, 
-					height: dim.height - offsets.t - offsets.b
+					width: dim.width - offsets.l - offsets.r - 1, 
+					height: dim.height - offsets.t - offsets.b - 1
 				});
 				if("fill" in t.plotarea){ plotArea.setFill(t.plotarea.fill); }
 				if("stroke" in t.plotarea){ plotArea.setStroke(t.plotarea.stroke); }
