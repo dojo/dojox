@@ -11,6 +11,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="Silverlight.js"></script>
 -->
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../../lang/functional.js"></script>
 <script type="text/javascript" src="../Theme.js"></script>
 <script type="text/javascript" src="../plot2d/axes.js"></script>
 <script type="text/javascript" src="../plot2d/renderers.js"></script>
@@ -82,6 +83,22 @@ makeObjects = function(){
 	chart10.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
 	chart10.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
 	chart10.render();
+
+	var chart11 = new dojox.charting.Chart2D("test11");
+	chart11.addPlot("default", {type: "StackedLines", markers: true, shadows: {dx: 2, dy: 2, dw: 2}});
+	chart11.addSeries("Series A", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "red", width: 2}, fill: "lightpink", marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart11.addSeries("Series B", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "blue", width: 2}, fill: "lightblue", marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+	chart11.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen", marker: "m0,-3 l3,3 -3,3 -3,-3 z"});
+	chart11.render();
+
+	var chart12 = new dojox.charting.Chart2D("test12");
+	chart12.addAxis("x", {fixLower: "major", fixUpper: "major"});
+	chart12.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
+	chart12.addPlot("default", {type: "StackedAreas"});
+	chart12.addSeries("Series A", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "red", width: 2}, fill: "lightpink"});
+	chart12.addSeries("Series B", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "blue", width: 2}, fill: "lightblue"});
+	chart12.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen"});
+	chart12.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -111,6 +128,10 @@ makeObjects = function(){
 <div id="test9" style="width: 200px; height: 200px;"></div>
 <p>10: Lines and markers, shadows, no axes, custom theme, custom markers, custom min/max.</p>
 <div id="test10" style="width: 200px; height: 200px;"></div>
+<p>11: Stacked lines, markers, shadows, no axes, custom strokes, fills, and markers.</p>
+<div id="test11" style="width: 200px; height: 200px;"></div>
+<p>11: Stacked areas, axes (aligned on major ticks), custom strokes and fills.</p>
+<div id="test12" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
