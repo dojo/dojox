@@ -99,6 +99,12 @@ makeObjects = function(){
 	chart12.addSeries("Series B", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "blue", width: 2}, fill: "lightblue"});
 	chart12.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen"});
 	chart12.render();
+
+	var chart13 = new dojox.charting.Chart2D("test13");
+	chart13.addPlot("default", {type: "Columns"});
+	chart13.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
+	chart13.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart13.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -130,8 +136,10 @@ makeObjects = function(){
 <div id="test10" style="width: 200px; height: 200px;"></div>
 <p>11: Stacked lines, markers, shadows, no axes, custom strokes, fills, and markers.</p>
 <div id="test11" style="width: 200px; height: 200px;"></div>
-<p>11: Stacked areas, axes (aligned on major ticks), custom strokes and fills.</p>
+<p>12: Stacked areas, axes (aligned on major ticks), custom strokes and fills.</p>
 <div id="test12" style="width: 200px; height: 200px;"></div>
+<p>13: Columns, no axes, custom strokes and fills.</p>
+<div id="test13" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

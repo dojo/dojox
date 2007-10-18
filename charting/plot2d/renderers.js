@@ -31,41 +31,66 @@ dojo.require("dojox.charting.scaler");
 
 	var defaultStats = {hmin: 1, hmax: 0, vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY};
 	
+	var collectSimpleStats = function(series){
+		var stats = dojo.clone(defaultStats);
+		for(var i = 0; i < series.length; ++i){
+			var run = series[i];
+			stats.hmax = Math.max(stats.hmax, run.data.length);
+			var haveMin = ("min" in run), haveMax = ("max" in run);
+			if(haveMin){
+				stats.vmin = Math.min(stats.vmin, run.min);
+				if(haveMax){
+					stats.vmax = Math.max(stats.vmax, run.max);
+				}else{
+					dojo.forEach(run.data, function(val){
+						if(isNaN(val)){ val = 0; }
+						stats.vmax = Math.max(stats.vmax, val);
+					});
+				}
+			}else{
+				if(haveMax){
+					stats.vmax = Math.max(stats.vmax, run.max);
+					dojo.forEach(run.data, function(val){
+						if(isNaN(val)){ val = 0; }
+						stats.vmin = Math.min(stats.vmin, val);
+					});
+				}else{
+					dojo.forEach(run.data, function(val){
+						if(isNaN(val)){ val = 0; }
+						stats.vmin = Math.min(stats.vmin, val);
+						stats.vmax = Math.max(stats.vmax, val);
+					});
+				}
+			}
+		}
+		return stats;
+	};
+	
+	var collectStackedStats = function(series){
+		// collect statistics
+		var stats = dojo.clone(defaultStats);
+		if(series.length){
+			// 1st pass: find the maximal length of runs
+			stats.hmax = df.foldl(series, "seed, run -> Math.max(seed, run.data.length)", stats.hmax);
+			// 2nd pass: stack values
+			for(var i = 0; i < stats.hmax; ++i){
+				var v = series[0].data[i];
+				if(isNaN(v)){ v = 0; }
+				stats.vmin = Math.min(stats.vmin, v);
+				for(var j = 1; j < series.length; ++j){
+					var t = series[j].data[i];
+					if(isNaN(t)){ t = 0; }
+					v += t;
+				}
+				stats.vmax = Math.max(stats.vmax, v);
+			}
+		}
+		return stats;
+	};
+
 	dojo.declare("dojox.charting.plot2d.renderers.Base", null, {
 		constructor: function(kwArgs, chart){
 			this.chart = chart;
-		},
-		clear: function(){
-			return this;
-		},
-		setAxis: function(axis){
-			return this;
-		},
-		addSeries: function(run){
-			return this;
-		},
-		calculateAxes: function(dim){
-			return this;
-		},
-		render: function(dim, offsets){
-			return this;
-		}
-	});
-
-	dojo.declare("dojox.charting.plot2d.renderers.Default", dojox.charting.plot2d.renderers.Base, {
-		constructor: function(kwArgs, chart){
-			this.opt = dojo.mixin({
-				hAxis: "x",
-				vAxis: "y",
-				style: "lines",
-				lines:   true,
-				areas:   false,
-				markers: false,
-				shadows: null
-			}, kwArgs);
-			this.series = [];
-			this.hAxis = this.opt.hAxis;
-			this.vAxis = this.opt.vAxis;
 		},
 		clear: function(){
 			this.series = [];
@@ -83,7 +108,14 @@ dojo.require("dojox.charting.scaler");
 			this.series.push(run);
 			return this;
 		},
+		calculateAxes: function(dim){
+			return this;
+		},
+		render: function(dim, offsets){
+			return this;
+		},
 		
+		// utilities
 		_calc: function(dim, stats){
 			// calculate scaler
 			if(this._hAxis){
@@ -104,42 +136,26 @@ dojo.require("dojox.charting.scaler");
 				this._vScaler = {lowerBound: stats.vmin, upperBound: stats.vmax, 
 					scale: dim.height / (stats.vmax - stats.vmin)};
 			}
+		}
+	});
+
+	dojo.declare("dojox.charting.plot2d.renderers.Default", dojox.charting.plot2d.renderers.Base, {
+		constructor: function(kwArgs, chart){
+			this.opt = dojo.mixin({
+				hAxis: "x",
+				vAxis: "y",
+				lines:   true,
+				areas:   false,
+				markers: false,
+				shadows: null
+			}, kwArgs);
+			this.series = [];
+			this.hAxis = this.opt.hAxis;
+			this.vAxis = this.opt.vAxis;
 		},
 		
 		calculateAxes: function(dim){
-			// collect statistics
-			var stats = dojo.clone(defaultStats);
-			for(var i = 0; i < this.series.length; ++i){
-				var run = this.series[i];
-				stats.hmax = Math.max(stats.hmax, run.data.length);
-				var haveMin = ("min" in run), haveMax = ("max" in run);
-				if(haveMin){
-					stats.vmin = Math.min(stats.vmin, run.min);
-					if(haveMax){
-						stats.vmax = Math.max(stats.vmax, run.max);
-					}else{
-						dojo.forEach(run.data, function(val){
-							if(isNaN(val)){ val = 0; }
-							stats.vmax = Math.max(stats.vmax, val);
-						});
-					}
-				}else{
-					if(haveMax){
-						stats.vmax = Math.max(stats.vmax, run.max);
-						dojo.forEach(run.data, function(val){
-							if(isNaN(val)){ val = 0; }
-							stats.vmin = Math.min(stats.vmin, val);
-						});
-					}else{
-						dojo.forEach(run.data, function(val){
-							if(isNaN(val)){ val = 0; }
-							stats.vmin = Math.min(stats.vmin, val);
-							stats.vmax = Math.max(stats.vmax, val);
-						});
-					}
-				}
-			}
-			this._calc(dim, stats);
+			this._calc(dim, collectSimpleStats(this.series));
 			return this;
 		},
 		render: function(dim, offsets){
@@ -230,25 +246,8 @@ dojo.require("dojox.charting.scaler");
 
 	dojo.declare("dojox.charting.plot2d.renderers.Stacked", dojox.charting.plot2d.renderers.Default, {
 		calculateAxes: function(dim){
-			// collect statistics
-			var stats = dojo.clone(defaultStats);
-			this._maxRunLength = 0;
-			if(this.series.length){
-				// 1st pass: find the maximal length of runs
-				this._maxRunLength = stats.hmax = df.foldl(this.series, "seed, run -> Math.max(seed, run.data.length)", stats.hmax);
-				// 2nd pass: stack values
-				for(var i = 0; i < stats.hmax; ++i){
-					var v = this.series[0].data[i];
-					if(isNaN(v)){ v = 0; }
-					stats.vmin = Math.min(stats.vmin, v);
-					for(var j = 1; j < this.series.length; ++j){
-						var t = this.series[j].data[i];
-						if(isNaN(t)){ t = 0; }
-						v += t;
-					}
-					stats.vmax = Math.max(stats.vmax, v);
-				}
-			}
+			var stats = collectStackedStats(this.series);
+			this._maxRunLength = stats.hmax;
 			this._calc(dim, stats);
 			return this;
 		},
@@ -339,6 +338,49 @@ dojo.require("dojox.charting.scaler");
 		constructor: function(kwArgs, chart){
 			this.opt.lines = true;
 			this.opt.areas = true;
+		}
+	});
+
+	dojo.declare("dojox.charting.plot2d.renderers.Columns", dojox.charting.plot2d.renderers.Base, {
+		constructor: function(kwArgs, chart){
+			this.opt = dojo.mixin({
+				hAxis: "x",
+				vAxis: "y",
+				shadows: null
+			}, kwArgs);
+			this.series = [];
+			this.hAxis = this.opt.hAxis;
+			this.vAxis = this.opt.vAxis;
+		},
+		
+		calculateAxes: function(dim){
+			var stats = collectSimpleStats(this.series);
+			stats.hmin -= 0.5;
+			stats.hmax += 0.5;
+			this._calc(dim, stats);
+			return this;
+		},
+		render: function(dim, offsets){
+			for(var i = this.series.length - 1; i >= 0; --i){
+				var run = this.series[i],
+					t = this.chart.theme, s = this.chart.surface, color, stroke, fill, f;
+				if(!run.fill || !run.stroke){
+					// need autogenerated color
+					color = new dojo.Color(t.next("color"));
+				}
+				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
+				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				for(var j = 0; j < run.data.length; ++j){
+					var v = run.data[j];
+					s.createRect({
+						x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound),
+						y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+						width:  this._hScaler.scale,
+						height: this._vScaler.scale * (v - this._vScaler.lowerBound)
+					}).setFill(fill).setStroke(stroke);
+				}
+			}
+			return this;
 		}
 	});
 })();
