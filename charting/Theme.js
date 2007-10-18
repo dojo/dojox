@@ -26,6 +26,7 @@ dojo.require("dojox.charting._color");
 		//	private variables for color and marker indexing
 		this._current={ color:0, marker: 0 };
 		this._markers=[];
+		this._buildMarkerArray();
 	};
 
 	//	"static" fields
