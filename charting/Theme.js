@@ -52,7 +52,7 @@ dojo.require("dojox.charting._color");
 		},
 		plotarea:{ 
 			stroke: {width: 0},
-			fill: "#ccc"
+			fill: "white"
 		},
 		//	TODO: label rotation on axis
 		axis:{
