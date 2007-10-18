@@ -64,6 +64,24 @@ makeObjects = function(){
 	chart7.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
 	chart7.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
 	chart7.render();
+
+	var chart8 = new dojox.charting.Chart2D("test8");
+	chart8.addPlot("default", {type: "Markers"});
+	chart8.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+	chart8.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart8.render();
+
+	var chart9 = new dojox.charting.Chart2D("test9");
+	chart9.addPlot("default", {type: "MarkersOnly"});
+	chart9.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+	chart9.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart9.render();
+
+	var chart10 = new dojox.charting.Chart2D("test10");
+	chart10.addPlot("default", {type: "Markers", shadows: {dx: 2, dy: 2, dw: 2}});
+	chart10.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+	chart10.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart10.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -73,20 +91,26 @@ makeObjects = function(){
 <body>
 <h1>Chart 2D</h1>
 <p><button onclick="makeObjects();">Go</button></p>
-<p>Defaults: lines, no axes.</p>
+<p>1: Defaults: lines, no axes.</p>
 <div id="test1" style="width: 200px; height: 200px;"></div>
-<p>Defaults: lines, no axes, and custom strokes.</p>
+<p>2: Defaults: lines, no axes, and custom strokes.</p>
 <div id="test2" style="width: 200px; height: 200px;"></div>
-<p>Areas, custom theme, no axes.</p>
+<p>3: Areas, custom theme, no axes.</p>
 <div id="test3" style="width: 200px; height: 200px;"></div>
-<p>Areas, no axes, custom strokes and fills.</p>
+<p>4: Areas, no axes, custom strokes and fills.</p>
 <div id="test4" style="width: 200px; height: 200px;"></div>
-<p>Lines, axes.</p>
+<p>5: Lines, axes.</p>
 <div id="test5" style="width: 200px; height: 200px;"></div>
-<p>Lines, axes (aligned on minor ticks).</p>
+<p>6: Lines, axes (aligned on minor ticks).</p>
 <div id="test6" style="width: 200px; height: 200px;"></div>
-<p>Lines, axes (aligned on major ticks).</p>
+<p>7: Lines, axes (aligned on major ticks).</p>
 <div id="test7" style="width: 200px; height: 200px;"></div>
+<p>8: Lines and markers, no axes, custom theme, custom markers, custom min/max.</p>
+<div id="test8" style="width: 200px; height: 200px;"></div>
+<p>9: Markers only, no axes, custom theme, custom markers, custom min/max.</p>
+<div id="test9" style="width: 200px; height: 200px;"></div>
+<p>10: Lines and markers, shadows, no axes, custom theme, custom markers, custom min/max.</p>
+<div id="test10" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

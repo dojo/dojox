@@ -140,22 +140,35 @@ dojo.require("dojox.charting.Theme");
 			// draw a chart background
 			var t = this.theme;
 			if(("chart" in t)){
-				var chartArea = this.surface.createRect({
-					width:  dim.width  - ("stroke" in t.chart ? 1 : 0), 
-					height: dim.height - ("stroke" in t.chart ? 1 : 0)
-				});
-				if("fill" in t.chart){ chartArea.setFill(t.chart.fill); }
-				if("stroke" in t.chart){ chartArea.setStroke(t.chart.stroke); }
+				if("fill" in t.chart){
+					this.surface.createRect({
+						width:  dim.width, 
+						height: dim.height
+					}).setFill(t.chart.fill);
+				}
+				if("stroke" in t.chart){
+					this.surface.createRect({
+						width:  dim.width - 1, 
+						height: dim.height - 1
+					}).setStroke(t.chart.stroke);
+				}
 			}
 			// draw a plot background
 			if(("plotarea" in t)){
-				var plotArea = this.surface.createRect({
-					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r - ("stroke" in t.plotarea ? 1 : 0), 
-					height: dim.height - offsets.t - offsets.b - ("stroke" in t.plotarea ? 1 : 0)
-				});
-				if("fill" in t.plotarea){ plotArea.setFill(t.plotarea.fill); }
-				if("stroke" in t.plotarea){ plotArea.setStroke(t.plotarea.stroke); }
+				if("fill" in t.plotarea){
+					this.surface.createRect({
+						x: offsets.l, y: offsets.t,
+						width:  dim.width  - offsets.l - offsets.r, 
+						height: dim.height - offsets.t - offsets.b
+					}).setFill(t.plotarea.fill);
+				}
+				if("stroke" in t.plotarea){
+					this.surface.createRect({
+						x: offsets.l, y: offsets.t,
+						width:  dim.width  - offsets.l - offsets.r - 1, 
+						height: dim.height - offsets.t - offsets.b - 1
+					}).setStroke(t.plotarea.stroke);
+				}
 			}
 			// go over the stack backwards
 			for(var i = this.stack.length - 1; i >= 0; --i){
