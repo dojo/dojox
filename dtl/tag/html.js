@@ -35,9 +35,11 @@ dojo.extend(dojox.dtl.tag.html.HtmlNode, {
 		if(this._rendered){
 			this._rendered = false;
 			this._last = "";
-			while(this._lasts.length){
-				buffer = buffer.remove(this._lasts.shift());
+			for(var i = 0, node; node = this._lasts[i++];){
+				buffer = buffer.remove(node);
+				dojo._destroyElement(node);
 			}
+			this._lasts = [];
 		}
 		return buffer;
 	},

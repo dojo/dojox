@@ -210,7 +210,6 @@ dojox.dtl.HtmlTemplate = function(/*String|dojo._Url*/ obj){
 		}
 		obj = ddh.getTemplate(obj);
 	}
-	this.contents = obj.node;
 
 	var tokens = ddh.tokenize(obj.node, [], obj.pres, obj.posts);
 	var parser = new dd.HtmlParser(tokens);
@@ -223,14 +222,21 @@ dojo.extend(dojox.dtl.HtmlTemplate, {
 		this.getRootNode().className = str;
 	},
 	getRootNode: function(){
-		return this.contents;
+		return this.rootNode;
 	},
 	getBuffer: function(){
 		return new dojox.dtl.HtmlBuffer();
 	},
 	render: function(context, buffer){
 		buffer = buffer || this.getBuffer();
+		this.rootNode = null;
+		var onSetParent = dojo.connect(buffer, "onSetParent", this, function(node){
+			if(!this.rootNode){
+				this.rootNode = node || true;
+			}
+		});
 		var output = this.nodelist.render(context || new dojox.dtl.Context({}), buffer);
+		dojo.disconnect(onSetParent);
 		buffer._flushCache();
 		return output;
 	},
@@ -257,14 +263,14 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 				// If we reach a node that already existed, fill in the cache for this same parent
 				var i = 0;
 				for(var i = 0, cache; cache = caches[i]; i++){
-					if(this.onAddNode) this.onAddNode();
+					this.onAddNode(node);
 					this._parent.insertBefore(cache, node);
 				}
 				caches.length = 0;
 			}
 			if(!node.parentNode || !node.parentNode.tagName){
 				if(!this._parent.childNodes.length){
-					if(this.onAddNode) this.onAddNode();
+					this.onAddNode(node);
 					this._parent.appendChild(node);
 				}else{
 					caches.push(node);
@@ -278,7 +284,7 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 			this._parent.removeAttribute(obj);
 		}else{
 			if(obj.parentNode === this._parent){
-				if(this.onRemoveNode) this.onRemoveNode();
+				this.onRemoveNode();
 				this._parent.removeChild(obj);
 			}
 		}
@@ -300,17 +306,28 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 		if(caches && caches.length && up){
 			for(var i = 0, cache; cache = caches[i]; i++){
 				if(cache !== this._parent && (!cache.parentNode || !cache.parentNode.tagName)){
+					this.onAddNode(cache);
 					this._parent.appendChild(cache);
 				}
 			}
 			caches.length = 0;
 		}
 
+		this.onSetParent(node, up);
 		this._parent = node;
 		return this;
 	},
 	getParent: function(){
 		return this._parent;
+	},
+	onSetParent: function(){
+		// summary: Stub called when setParent is used.
+	},
+	onAddNode: function(){
+		// summary: Stub called when new nodes are added
+	},
+	onRemoveNode: function(){
+		// summary: Stub called when nodes are removed
 	},
 	_getCache: function(node){
 		for(var i = 0, cache; cache = this._cache[i]; i++){
@@ -401,7 +418,7 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 				if(item){
 					clone.contents = item;
 				}else if(parent !== clone.contents && clone instanceof dd.HtmlNode){
-					var node = clone.contents
+					var node = clone.contents;
 					clone.contents = clone.contents.cloneNode(false);
 					cloned.push(node);
 					this.parents.put(node, clone.contents);

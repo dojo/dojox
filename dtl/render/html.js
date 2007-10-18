@@ -42,19 +42,24 @@ dojo.extend(dojox.dtl.render.html.Render, {
 
 		buffer = buffer || tpl.getBuffer();
 
+		if(context.getThis() && context.getThis().buffer == this.sensitivity.NODE){
+			var onAddNode = dojo.connect(buffer, "onAddNode", this, "_swap");
+			var onRemoveNode = dojo.connect(buffer, "onRemoveNode", this, "_swap");
+		}
+
 		if(this._tpl && this._tpl !== tpl){
 			this._tpl.unrender(context, buffer);
 		}
 		this._tpl = tpl;
 
-		if(context.getThis() && context.getThis().buffer == this.sensitivity.NODE){
-			buffer.onAddNode = this._swap;
-			buffer.onRemoveNode = this._swap;
-		}
-
 		var frag = tpl.render(context, buffer).getParent();
+
+		dojo.disconnect(onAddNode);
+		dojo.disconnect(onRemoveNode);
+
 		if(this._node !== frag){
 			this._node.parentNode.replaceChild(frag, this._node);
+			dojo._destroyElement(this._node);
 			this._node = frag;
 		}
 	}
