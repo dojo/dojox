@@ -18,6 +18,7 @@ dojo.require("dojox.charting.Theme");
 			this.stack = [];
 			this.renderers = {};
 			this.series = [];
+			this.runs = {};
 			
 			// create a surface
 			this.node = dojo.byId(node);
@@ -46,15 +47,25 @@ dojo.require("dojox.charting.Theme");
 					new dc.plot2d.renderers[kwArgs.type](kwArgs, this) :
 					new kwArgs.type(kwArgs, this);
 			}
-			this.stack.push(renderer);
-			this.renderers[name] = renderer;
+			renderer.name = name;
+			if(name in this.renderers){
+				this.stack[this.renderers[name]] = renderer;
+			}else{
+				this.renderers[name] = this.stack.length;
+				this.stack.push(renderer);
+			}
 			return this;
 		},
 		addSeries: function(name, data, kwArgs){
-			var run = {name: name, data: data};
+			var run = {name: name, data: data}, i;
 			if(kwArgs){ dojo.mixin(run, kwArgs); }
 			if(typeof run.plot != "string"){ run.plot = "default"; }
-			this.series.push(run);
+			if(name in this.runs){
+				this.series[this.runs[name]] = run;
+			}else{
+				this.runs[name] = this.series.length;
+				this.series.push(run);
+			}
 			return this;
 		},
 		render: function(){
@@ -71,10 +82,11 @@ dojo.require("dojox.charting.Theme");
 				var run = this.series[i];
 				if(!(run.plot in this.renderers)){
 					var renderer = new dc.plot2d.renderers.Default({}, this);
+					renderer.name = run.plot;
+					this.renderers[run.plot] = this.stack.length;
 					this.stack.push(renderer);
-					this.renderers[run.plot] = renderer;
 				}
-				this.renderers[run.plot].addSeries(run);
+				this.stack[this.renderers[run.plot]].addSeries(run);
 			}
 			// assign axes
 			for(var i = 0; i < this.stack.length; ++i){
@@ -120,7 +132,6 @@ dojo.require("dojox.charting.Theme");
 			df.forIn(this.axes, clear);
 			for(var i = 0; i < this.stack.length; ++i){
 				var renderer = this.stack[i];
-				// use the current dimension as an approximation
 				renderer.calculateAxes(plotArea);
 			}
 			
