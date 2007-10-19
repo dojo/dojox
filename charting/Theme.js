@@ -57,12 +57,12 @@ dojo.require("dojox.charting._color");
 		},
 		//	TODO: label rotation on axis
 		axis:{
-			stroke:{ color:"#000",width:2 },							//	the axis itself
+			stroke:{ color:"#333",width:1 },							//	the axis itself
 			line:{ color:"#ccc",width:1,style:"Dot",cap:"round" },		//	gridlines
-			majorTick:{ color:"#999", width:2, length:12, position:"center" },	//	major ticks on axis
-			minorTick:{ color:"#999", width:1, length:8, position:"center" },	//	minor ticks on axis
-			font:"normal normal normal 8pt Tahoma",						//	labels on axis
-			fontColor:"#000"											//	color of labels
+			majorTick:{ color:"#666", width:1, length:6, position:"center" },	//	major ticks on axis
+			minorTick:{ color:"#666", width:0.8, length:3, position:"center" },	//	minor ticks on axis
+			font:"normal normal normal 7pt Tahoma",						//	labels on axis
+			fontColor:"#333"											//	color of labels
 		},
 		series:{
 			outline: {width: 2, color: "#ccc"},							//	line or outline
@@ -72,7 +72,7 @@ dojo.require("dojox.charting._color");
 			fontColor: "#000"											// 	color of labels
 		},
 		marker:{	//	any markers on a series.
-			stroke: {width:2},											//	stroke or outline
+			stroke: {width:1},											//	stroke or outline
 			fill: "#333",												//	fill if needed
 			font: "normal normal normal 7pt Tahoma",					//	label
 			fontColor: "#000"
