@@ -154,6 +154,16 @@ makeObjects = function(){
 	chart19.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart19.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart19.render();
+
+	var chart20 = new dojox.charting.Chart2D("test20");
+	chart20.addAxis("x", {fixLower: "minor", fixUpper: "minor", minorTicks: false});
+	chart20.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", minorTicks: false, includeZero: true});
+	chart20.addPlot("front_grid", {type: "Grid", hMajorLines: true, vMajorLines: false});
+	chart20.addPlot("default", {type: "Columns", gap: 2});
+	chart20.addPlot("back_grid", {type: "Grid", hMajorLines: false, vMajorLines: true});
+	chart20.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
+	chart20.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart20.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -167,7 +177,7 @@ makeObjects = function(){
 <div id="test1" style="width: 400px; height: 400px;"></div>
 <p>2: Defaults: lines, no axes, and custom strokes.</p>
 <div id="test2" style="width: 400px; height: 400px;"></div>
-<p>3: Areas, custom theme, no axes.</p>
+<p>3: Areas, plotKit.orange theme, no axes.</p>
 <div id="test3" style="width: 400px; height: 400px;"></div>
 <p>4: Areas, no axes, custom strokes and fills.</p>
 <div id="test4" style="width: 400px; height: 400px;"></div>
@@ -201,6 +211,8 @@ makeObjects = function(){
 <div id="test18" style="width: 200px; height: 200px;"></div>
 <p>19: Clustered bars, custom axes, custom strokes, fills, and gap.</p>
 <div id="test19" style="width: 200px; height: 200px;"></div>
+<p>20: Columns with gaps beetwen them, grids, custom strokes, fills, axes.</p>
+<div id="test20" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
