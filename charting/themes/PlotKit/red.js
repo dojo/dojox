@@ -34,5 +34,5 @@ dojo.require("dojox.charting.Theme");
 		},
 		colors:[]
 	});
-	dxc.themes.PlotKit.red.defineColors({ hue:0, saturation:60, low:40, high:88 });
+	dxc.themes.PlotKit.red.defineColors({ hue:1, saturation:60, low:40, high:88 });
 })();
