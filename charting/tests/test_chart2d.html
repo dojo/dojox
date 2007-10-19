@@ -132,6 +132,22 @@ makeObjects = function(){
 	chart17.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart17.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart17.render();
+
+	var chart18 = new dojox.charting.Chart2D("test18");
+	chart18.addAxis("x", {fixLower: "minor", fixUpper: "minor", minorTicks: false});
+	chart18.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", minorTicks: false, includeZero: true});
+	chart18.addPlot("default", {type: "ClusteredColumns", gap: 2});
+	chart18.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
+	chart18.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart18.render();
+
+	var chart19 = new dojox.charting.Chart2D("test19");
+	chart19.addAxis("x", {fixLower: "major", fixUpper: "major", minorTicks: false, includeZero: true});
+	chart19.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", minorTicks: false});
+	chart19.addPlot("default", {type: "ClusteredBars", gap: 2});
+	chart19.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
+	chart19.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart19.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -175,6 +191,10 @@ makeObjects = function(){
 <div id="test16" style="width: 200px; height: 200px;"></div>
 <p>17: Stacked bars, no axes, custom strokes and fills.</p>
 <div id="test17" style="width: 200px; height: 200px;"></div>
+<p>18: Clustered columns, custom axes, custom strokes, fills, and gap.</p>
+<div id="test18" style="width: 200px; height: 200px;"></div>
+<p>19: Clustered bars, custom axes, custom strokes, fills, and gap.</p>
+<div id="test19" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
