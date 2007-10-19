@@ -42,9 +42,8 @@ dojo.require("dojox.charting.scaler");
 				fixLower: "none",
 				leftBottom:  true,
 				includeZero: false,
-				barsMode:    false,
-				natural:     false,
 				fixed:       true,
+				minorTicks:  true,
 				minorLabels: true
 			}, kwArgs);
 		},
@@ -193,18 +192,20 @@ dojo.require("dojox.charting.scaler");
 					nextMajor += c.majorTick;
 				}else{
 					// minor tick
-					s.createLine({
-						x1: x, y1: y,
-						x2: x + tickVector.x * ta.minorTick.length,
-						y2: y + tickVector.y * ta.minorTick.length
-					}).setStroke(ta.minorTick);
-					if(this.opt.minorLabels && (c.minMinorStep <= c.minorTick * c.scale)){
-						s.createText({
-							x: x + labelOffset.x,
-							y: y + labelOffset.y,
-							text: this._getLabel(nextMinor, c.minorPrecision),
-							align: labelAlign
-						}).setFont(ta.font).setFill(ta.fontColor);
+					if(this.opt.minorTicks){
+						s.createLine({
+							x1: x, y1: y,
+							x2: x + tickVector.x * ta.minorTick.length,
+							y2: y + tickVector.y * ta.minorTick.length
+						}).setStroke(ta.minorTick);
+						if(this.opt.minorLabels && (c.minMinorStep <= c.minorTick * c.scale)){
+							s.createText({
+								x: x + labelOffset.x,
+								y: y + labelOffset.y,
+								text: this._getLabel(nextMinor, c.minorPrecision),
+								align: labelAlign
+							}).setFont(ta.font).setFill(ta.fontColor);
+						}
 					}
 				}
 				nextMinor += c.minorTick;

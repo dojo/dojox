@@ -120,9 +120,9 @@ makeObjects = function(){
 	chart15.render();
 
 	var chart16 = new dojox.charting.Chart2D("test16");
+	chart16.addAxis("x", {fixLower: "major", fixUpper: "major", minorTicks: false});
+	chart16.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", minorTicks: false});
 	chart16.addPlot("default", {type: "Bars"});
-	chart16.addAxis("x", {fixLower: "major", fixUpper: "major"});
-	chart16.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
 	chart16.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart16.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart16.render();
@@ -171,7 +171,7 @@ makeObjects = function(){
 <div id="test14" style="width: 200px; height: 200px;"></div>
 <p>15: Stacked columns, no axes, custom strokes and fills.</p>
 <div id="test15" style="width: 200px; height: 200px;"></div>
-<p>16: Bars, axes aligned on major ticks, custom strokes and fills.</p>
+<p>16: Bars, axes aligned on major ticks, no minor ticks, custom strokes and fills.</p>
 <div id="test16" style="width: 200px; height: 200px;"></div>
 <p>17: Stacked bars, no axes, custom strokes and fills.</p>
 <div id="test17" style="width: 200px; height: 200px;"></div>
