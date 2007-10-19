@@ -65,6 +65,7 @@ dojo.require("dojox.charting._color");
 			fontColor:"#000"											//	color of labels
 		},
 		series:{
+			outline: {width: 2, color: "#ccc"},							//	line or outline
 			stroke: {width: 2, color: "#333"},							//	line or outline
 			fill: "#ccc",												//	fill, if appropriate
 			font: "normal normal normal 7pt Tahoma",					//	if there's a label
