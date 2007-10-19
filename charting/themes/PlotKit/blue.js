@@ -22,7 +22,7 @@ dojo.require("dojox.charting.Theme");
 		},
 		series:{
 			stroke:{ width:2, color:"#666" },
-			fill:"#666",
+			fill:new dojo.Color([0x66, 0x66, 0x66, 0.8]),
 			font:"normal normal normal 7pt Tahoma",	//	label
 			fontColor:"#000"
 		},
