@@ -402,13 +402,16 @@ dojo.require("dojox.charting.scaler");
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
-					s.createRect({
-						x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap,
-						y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
-						width:  this._hScaler.scale - 2 * gap,
-						height: this._vScaler.scale * (v - this._vScaler.lowerBound)
-					}).setFill(fill).setStroke(stroke);
+					var v = run.data[j],
+						width  = this._hScaler.scale - 2 * gap,
+						height = this._vScaler.scale * (v - this._vScaler.lowerBound);
+					if(width >= 1 && height >= 1){
+						s.createRect({
+							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+							width: width, height: height
+						}).setFill(fill).setStroke(stroke);
+					}
 				}
 			}
 			return this;
@@ -447,13 +450,16 @@ dojo.require("dojox.charting.scaler");
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < acc.length; ++j){
-					var v = acc[j];
-					s.createRect({
-						x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap,
-						y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
-						width:  this._hScaler.scale - 2 * gap,
-						height: this._vScaler.scale * (v - this._vScaler.lowerBound)
-					}).setFill(fill).setStroke(stroke);
+					var v = acc[j],
+						width  = this._hScaler.scale - 2 * gap,
+						height = this._vScaler.scale * (v - this._vScaler.lowerBound);
+					if(width >= 1 && height >= 1){
+						s.createRect({
+							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+							width: width, height: height
+						}).setFill(fill).setStroke(stroke);
+					}
 				}
 				// update the accumulator
 				for(var j = 0; j < run.data.length; ++j){
@@ -480,13 +486,16 @@ dojo.require("dojox.charting.scaler");
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
-					s.createRect({
-						x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap + thickness * i,
-						y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
-						width:  thickness,
-						height: this._vScaler.scale * (v - this._vScaler.lowerBound)
-					}).setFill(fill).setStroke(stroke);
+					var v = run.data[j],
+						width  = thickness,
+						height = this._vScaler.scale * (v - this._vScaler.lowerBound);
+					if(width >= 1 && height >= 1){
+						s.createRect({
+							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap + thickness * i,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+							width: width, height: height
+						}).setFill(fill).setStroke(stroke);
+					}
 				}
 			}
 			return this;
@@ -527,13 +536,16 @@ dojo.require("dojox.charting.scaler");
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
-					s.createRect({
-						x: offsets.l,
-						y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) + gap,
-						width:  this._hScaler.scale * (v - this._hScaler.lowerBound),
-						height: this._vScaler.scale - 2 * gap
-					}).setFill(fill).setStroke(stroke);
+					var v = run.data[j],
+						width  = this._hScaler.scale * (v - this._hScaler.lowerBound),
+						height = this._vScaler.scale - 2 * gap;
+					if(width >= 1 && height >= 1){
+						s.createRect({
+							x: offsets.l,
+							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) + gap,
+							width: width, height: height
+						}).setFill(fill).setStroke(stroke);
+					}
 				}
 			}
 			return this;
@@ -574,13 +586,16 @@ dojo.require("dojox.charting.scaler");
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < acc.length; ++j){
-					var v = acc[j];
-					s.createRect({
-						x: offsets.l,
-						y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) + gap,
-						width:  this._hScaler.scale * (v - this._hScaler.lowerBound),
-						height: this._vScaler.scale - 2 * gap
-					}).setFill(fill).setStroke(stroke);
+					var v = acc[j],
+						width  = this._hScaler.scale * (v - this._hScaler.lowerBound),
+						height = this._vScaler.scale - 2 * gap;
+					if(width >= 1 && height >= 1){
+						s.createRect({
+							x: offsets.l,
+							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) + gap,
+							width: width, height: height
+						}).setFill(fill).setStroke(stroke);
+					}
 				}
 				// update the accumulator
 				for(var j = 0; j < run.data.length; ++j){
@@ -607,14 +622,17 @@ dojo.require("dojox.charting.scaler");
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
-					s.createRect({
-						x: offsets.l,
-						y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) 
-							+ gap + thickness * (this.series.length - i - 1),
-						width:  this._hScaler.scale * (v - this._hScaler.lowerBound),
-						height: thickness
-					}).setFill(fill).setStroke(stroke);
+					var v = run.data[j],
+						width  = this._hScaler.scale * (v - this._hScaler.lowerBound),
+						height = thickness;
+					if(width >= 1 && height >= 1){
+						s.createRect({
+							x: offsets.l,
+							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) 
+								+ gap + thickness * (this.series.length - i - 1),
+							width: width, height: height
+						}).setFill(fill).setStroke(stroke);
+					}
 				}
 			}
 			return this;
