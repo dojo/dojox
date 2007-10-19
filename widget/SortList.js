@@ -80,7 +80,7 @@ dojo.declare("dojox.widget.SortList",
 		// break it: but we also don't want to run getComputedStyle or dojo.coords() every time resize() 
 		// is fired.
 		var offset = ((this._contentBox.h) - (dojo.style(this.titleNode,"height")))-10;
-		this.bodyWrapper.style.height = offset + "px"; 
+		this.bodyWrapper.style.height = Math.abs(offset) + "px"; 
 	},
 	
 	onSort: function(/* Event */e){
