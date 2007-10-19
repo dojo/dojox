@@ -36,7 +36,6 @@ dojo.require("dojox.charting._color");
 	//		relative motion, and with the assumption that the path segment
 	//		will be moved to the value point (i.e prepend Mx,y)
 	dxc.Theme.Markers={
-		NONE:"", 
 		CIRCLE:"m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0", 
 		SQUARE:"m-3,-3 l0,6 6,0 0,-6 z", 
 		DIAMOND:"m0,-3 l3,3 -3,3 -3,-3 z", 
