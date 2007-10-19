@@ -13,10 +13,14 @@
 			// summary; searches for a <a name=""></a> attrib, and scrolls to it
 			dojo.query('a[name="'+name+'"]').forEach(function(node){
 				// first one wins
-				var anim = dojox.fx.smoothScroll({ node: node, window:window, duration:300, easing:dojox.fx.easeOut }).play();
+				var anim = dojox.fx.smoothScroll({
+					node: node,
+					window:window,
+					duration:300,
+					easing:dojox.fx.easing.easeOut
+				}).play();
 				return;
-				}
-			);
+			});
 		}
 
 		dojo.addOnLoad(function(){
