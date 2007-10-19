@@ -5,11 +5,11 @@ dojo.require("dojox.charting.Theme");
 	var dxc=dojox.charting;
 	dxc.themes.PlotKit.purple=new dxc.Theme({
 		chart:{
-			stroke:{ width:0 },
+			stroke:null,
 			fill: "white"
 		},
 		plotarea:{
-			stroke:{ width:0 },
+			stroke:null,
 			fill: "#eee6f5"
 		},
 		axis:{

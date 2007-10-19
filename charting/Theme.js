@@ -47,11 +47,11 @@ dojo.require("dojox.charting._color");
 	dxc.Theme._def={
 		//	all objects are structs used directly in dojox.gfx
 		chart:{ 
-			stroke: {width: 0},
+			stroke:null,
 			fill: "white"
 		},
 		plotarea:{ 
-			stroke: {width: 0},
+			stroke:null,
 			fill: "white"
 		},
 		//	TODO: label rotation on axis
