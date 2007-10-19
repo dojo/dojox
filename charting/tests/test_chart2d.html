@@ -112,6 +112,12 @@ makeObjects = function(){
 	chart14.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart14.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart14.render();
+
+	var chart15 = new dojox.charting.Chart2D("test15");
+	chart15.addPlot("default", {type: "StackedColumns"});
+	chart15.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
+	chart15.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart15.render();
 };
 
 //dojo.addOnLoad(makeObjects);
@@ -149,6 +155,8 @@ makeObjects = function(){
 <div id="test13" style="width: 200px; height: 200px;"></div>
 <p>14: Columns with gaps beetwen them, vertical axis aligned on major ticks, custom strokes, fills.</p>
 <div id="test14" style="width: 200px; height: 200px;"></div>
+<p>15: Stacked columns, no axes, custom strokes and fills.</p>
+<div id="test15" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
