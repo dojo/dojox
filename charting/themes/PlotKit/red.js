@@ -3,7 +3,6 @@ dojo.require("dojox.charting.Theme");
 
 (function(){
 	var dxc=dojox.charting;
-	var colors=dxc.Theme.defineColors({ hue:0, saturation:60, low:40, high:88 });
 	dxc.themes.PlotKit.red=new dxc.Theme({
 		chart:{
 			stroke:{ width:0 },
@@ -33,6 +32,7 @@ dojo.require("dojox.charting.Theme");
 			font:"normal normal normal 7pt Tahoma",	//	label
 			fontColor:"#000"
 		},
-		colors:colors
+		colors:[]
 	});
+	dxc.themes.PlotKit.red.defineColors({ hue:0, saturation:60, low:40, high:88 });
 })();

@@ -19,7 +19,12 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript">
 
 dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.blue");
+dojo.require("dojox.charting.themes.PlotKit.cyan");
+dojo.require("dojox.charting.themes.PlotKit.green");
+dojo.require("dojox.charting.themes.PlotKit.orange");
 dojo.require("dojox.charting.themes.PlotKit.purple");
+dojo.require("dojox.charting.themes.PlotKit.red");
 
 makeObjects = function(){
 	var chart1 = new dojox.charting.Chart2D("test1");
@@ -34,9 +39,10 @@ makeObjects = function(){
 
 	var chart3 = new dojox.charting.Chart2D("test3");
 	chart3.addPlot("default", {type: "Areas"});
-	chart3.setTheme(dojox.charting.themes.PlotKit.purple);
-	chart3.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
-	chart3.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
+	chart3.setTheme(dojox.charting.themes.PlotKit.orange);
+	chart3.addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4]);
+	chart3.addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2]);
+	chart3.addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2]);
 	chart3.render();
 
 	var chart4 = new dojox.charting.Chart2D("test4");
@@ -158,19 +164,19 @@ makeObjects = function(){
 <h1>Chart 2D</h1>
 <p><button onclick="makeObjects();">Go</button></p>
 <p>1: Defaults: lines, no axes.</p>
-<div id="test1" style="width: 200px; height: 200px;"></div>
+<div id="test1" style="width: 400px; height: 400px;"></div>
 <p>2: Defaults: lines, no axes, and custom strokes.</p>
-<div id="test2" style="width: 200px; height: 200px;"></div>
+<div id="test2" style="width: 400px; height: 400px;"></div>
 <p>3: Areas, custom theme, no axes.</p>
-<div id="test3" style="width: 200px; height: 200px;"></div>
+<div id="test3" style="width: 400px; height: 400px;"></div>
 <p>4: Areas, no axes, custom strokes and fills.</p>
-<div id="test4" style="width: 200px; height: 200px;"></div>
+<div id="test4" style="width: 400px; height: 400px;"></div>
 <p>5: Lines, axes.</p>
-<div id="test5" style="width: 200px; height: 200px;"></div>
+<div id="test5" style="width: 400px; height: 400px;"></div>
 <p>6: Lines, axes (aligned on minor ticks).</p>
-<div id="test6" style="width: 200px; height: 200px;"></div>
+<div id="test6" style="width: 400px; height: 400px;"></div>
 <p>7: Lines, axes (aligned on major ticks).</p>
-<div id="test7" style="width: 200px; height: 200px;"></div>
+<div id="test7" style="width: 400px; height: 400px;"></div>
 <p>8: Lines and markers, no axes, custom theme, custom markers, custom min/max.</p>
 <div id="test8" style="width: 200px; height: 200px;"></div>
 <p>9: Markers only, no axes, custom theme, custom markers, custom min/max.</p>
