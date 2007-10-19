@@ -52,6 +52,7 @@ makeObjects = function(){
 	chart4.render();
 
 	var chart5 = new dojox.charting.Chart2D("test5");
+	chart5.setTheme(dojox.charting.themes.PlotKit.blue);
 	chart5.addAxis("x");
 	chart5.addAxis("y", {vertical: true});
 	chart5.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
@@ -59,6 +60,7 @@ makeObjects = function(){
 	chart5.render();
 
 	var chart6 = new dojox.charting.Chart2D("test6");
+	chart6.setTheme(dojox.charting.themes.PlotKit.cyan);
 	chart6.addAxis("x", {fixLower: "minor", fixUpper: "minor"});
 	chart6.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor"});
 	chart6.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
@@ -66,16 +68,24 @@ makeObjects = function(){
 	chart6.render();
 
 	var chart7 = new dojox.charting.Chart2D("test7");
+	chart7.setTheme(dojox.charting.themes.PlotKit.green);
 	chart7.addAxis("x", {fixLower: "major", fixUpper: "major"});
 	chart7.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
 	chart7.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1]);
 	chart7.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
 	chart7.render();
 
+//	var chart8 = new dojox.charting.Chart2D("test8");
+//	chart8.addPlot("default", {type: "Markers"});
+//	chart8.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+//	chart8.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+//	chart8.render();
+
 	var chart8 = new dojox.charting.Chart2D("test8");
+	chart8.setTheme(dojox.charting.themes.PlotKit.purple);
 	chart8.addPlot("default", {type: "Markers"});
-	chart8.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
-	chart8.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart8.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3});
+	chart8.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
 	chart8.render();
 
 	var chart9 = new dojox.charting.Chart2D("test9");

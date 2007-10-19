@@ -663,7 +663,7 @@ dojo.require("dojox.charting.scaler");
 			if(this.opt.hMinorLines){
 				for(var i = 0; i < scaler.nMinorTicks; ++i){
 					var y = dim.height - offsets.b - scaler.scale * 
-							(scaler.minorStart + i * scaler.minorTick);
+							(scaler.minorStart - scaler.lowerBound + i * scaler.minorTick);
 					s.createLine({
 						x1: offsets.l,
 						y1: y,
@@ -675,7 +675,7 @@ dojo.require("dojox.charting.scaler");
 			if(this.opt.hMajorLines){
 				for(var i = 0; i < scaler.nMajorTicks; ++i){
 					var y = dim.height - offsets.b - scaler.scale * 
-							(scaler.majorStart + i * scaler.majorTick);
+							(scaler.majorStart - scaler.lowerBound + i * scaler.majorTick);
 					s.createLine({
 						x1: offsets.l,
 						y1: y,
@@ -689,7 +689,7 @@ dojo.require("dojox.charting.scaler");
 			if(this.opt.vMinorLines){
 				for(var i = 0; i < scaler.nMinorTicks; ++i){
 					var x = offsets.l + scaler.scale * 
-							(scaler.minorStart + i * scaler.minorTick);
+							(scaler.minorStart - scaler.lowerBound + i * scaler.minorTick);
 					s.createLine({
 						x1: x,
 						y1: offsets.t,
@@ -701,7 +701,7 @@ dojo.require("dojox.charting.scaler");
 			if(this.opt.vMajorLines){
 				for(var i = 0; i < scaler.nMajorTicks; ++i){
 					var x = offsets.l + scaler.scale * 
-							(scaler.majorStart + i * scaler.majorTick);
+							(scaler.majorStart - scaler.lowerBound + i * scaler.majorTick);
 					s.createLine({
 						x1: x,
 						y1: offsets.t,

@@ -55,6 +55,7 @@ dojo.require("dojox.charting.scaler");
 			return "scaler" in this;
 		},
 		calculate: function(min, max, span, labels){
+			if(this.initialized()){ return this; }
 			this.labels = labels;
 			if(this.opt.includeZero){
 				if(min > 0){ min = 0; }
