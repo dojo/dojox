@@ -177,7 +177,7 @@ dojo.require("dojox.charting.scaler");
 					apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});
 					apoly.push({x: lpoly[0].x, y: dim.height - offsets.b});
 					apoly.push(lpoly[0]);
-					var f, fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.3, f);
+					var fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 					s.createPolyline(apoly).setFill(fill);
 				}
 				if(this.opt.lines || this.opt.markers){
@@ -281,7 +281,7 @@ dojo.require("dojox.charting.scaler");
 					apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});
 					apoly.push({x: lpoly[0].x, y: dim.height - offsets.b});
 					apoly.push(lpoly[0]);
-					var f, fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.3, f);
+					var fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 					s.createPolyline(apoly).setFill(fill);
 				}
 				if(this.opt.lines || this.opt.markers){
@@ -371,7 +371,7 @@ dojo.require("dojox.charting.scaler");
 					color = new dojo.Color(t.next("color"));
 				}
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
-				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
 					s.createRect({
@@ -416,7 +416,7 @@ dojo.require("dojox.charting.scaler");
 					color = new dojo.Color(t.next("color"));
 				}
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
-				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < acc.length; ++j){
 					var v = acc[j];
 					s.createRect({
@@ -449,7 +449,7 @@ dojo.require("dojox.charting.scaler");
 					color = new dojo.Color(t.next("color"));
 				}
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
-				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
 					s.createRect({
@@ -496,7 +496,7 @@ dojo.require("dojox.charting.scaler");
 					color = new dojo.Color(t.next("color"));
 				}
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
-				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
 					s.createRect({
@@ -543,7 +543,7 @@ dojo.require("dojox.charting.scaler");
 					color = new dojo.Color(t.next("color"));
 				}
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
-				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < acc.length; ++j){
 					var v = acc[j];
 					s.createRect({
@@ -576,7 +576,7 @@ dojo.require("dojox.charting.scaler");
 					color = new dojo.Color(t.next("color"));
 				}
 				stroke = run.stroke ? run.stroke : augmentStroke(t.series.stroke, color);
-				fill = run.fill ? run.fill : (f = dojo.clone(color), f.a = 0.7, f);
+				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
 					s.createRect({

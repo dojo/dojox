@@ -102,6 +102,7 @@ dojo.require("dojox.charting.Theme");
 			if(!this.theme){
 				this.theme = new dojox.charting.Theme(dojox.charting._def);
 			}
+			//dojox.charting.Theme.defineColors({num: this.series.length, cache: false})
 			
 			// calculate geometry
 			
