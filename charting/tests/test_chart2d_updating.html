@@ -1,0 +1,71 @@
+﻿<html>
+<head>
+<title>Chart 2D</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
+<script type="text/javascript" src="Silverlight.js"></script>
+-->
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../../lang/functional.js"></script>
+<script type="text/javascript" src="../Theme.js"></script>
+<script type="text/javascript" src="../scaler.js"></script>
+<script type="text/javascript" src="../plot2d/axes.js"></script>
+<script type="text/javascript" src="../plot2d/renderers.js"></script>
+<script type="text/javascript" src="../Chart2D.js"></script>
+<script type="text/javascript">
+
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.blue");
+dojo.require("dojox.charting.themes.PlotKit.cyan");
+dojo.require("dojox.charting.themes.PlotKit.green");
+dojo.require("dojox.charting.themes.PlotKit.orange");
+dojo.require("dojox.charting.themes.PlotKit.purple");
+dojo.require("dojox.charting.themes.PlotKit.red");
+var chart;
+
+makeObjects = function(){
+	chart = new dojox.charting.Chart2D("test");
+	chart.addPlot("default", {type: "Areas"});
+	chart.setTheme(dojox.charting.themes.PlotKit.orange);
+	chart.addSeries("Series A", makeSeries(10));
+	chart.addSeries("Series B", makeSeries(10));
+	chart.addSeries("Series C", makeSeries(10));
+	chart.render();
+    setInterval("updateTest()", 1000);
+};
+
+makeSeries = function(len){
+    var s = [];
+    while(s.length-1!=len)
+        s.push((Math.random()*25+1));
+    return s;
+}
+    
+updateTest = function(){
+    updateChart(chart, makeSeries(3));
+}
+
+updateChart = function(chart /* Chart Object */, newData /* Array */){
+    var i = 0;
+    dojo.forEach(chart.series, function(s) {
+        s.data.shift(); //remove oldest data
+        s.data.push(newData[i++]);
+    });
+    chart.render();
+}
+
+dojo.addOnLoad(makeObjects);
+
+</script>
+</head>
+<body>
+<h1>Chart 2D Updating Data</h1>
+<p>Areas, orange theme, no axes. Very crude example to show a chart with updating values.</p>
+<div id="test" style="width: 400px; height: 400px;"></div>
+</body>
+</html>
