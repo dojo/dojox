@@ -115,7 +115,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this.inherited("postCreate",arguments);
 		this.pageSize = Number(this.pageSize);
 
-		var _this = this;
 		this._scrollerSize = this.size - 75;
 		
 		var sizeProp = this._sizeProperty = this.isHorizontal ? "width" : "height";
@@ -129,16 +128,16 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		//If useHyperlink is true, then listen for a click on a thumbnail, and
 		//open the link
 		if(this.useHyperlink){
-			dojo.subscribe(this.getClickTopicName(), function(packet){
+			dojo.subscribe(this.getClickTopicName(), this, function(packet){
 				var index = packet.index;
-				var url = _this.imageStore.getValue(packet.data,_this.linkAttr);
+				var url = this.imageStore.getValue(packet.data,this.linkAttr);
 				
 				//If the data item doesn't contain a URL, do nothing
 				if(!url){return;}
 				
-				if(_this.hyperlinkTarget == "new"){
+				if(this.hyperlinkTarget == "new"){
 					window.open(url);
-				} else{
+				}else{
 					window.location = url;
 				}
 			});
@@ -162,7 +161,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var classExt = this.isHorizontal ? "Horiz" : "Vert";
 	
 		// FIXME: can we setup a listener around the whole element and determine based on e.target?	  
-		var _this = this;
 		dojo.addClass(this.navPrev, "prev" + classExt);
 		dojo.addClass(this.navNext, "next" + classExt);
 		dojo.addClass(this.thumbsNode, "thumb"+classExt);
@@ -171,15 +169,11 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this.navNextImg.setAttribute("src", this.tempImgPath);
 		this.navPrevImg.setAttribute("src", this.tempImgPath);
 		
-		dojo.connect(this.navPrev, "onclick", function(evt){
-			_this._prev();
-		});
-		dojo.connect(this.navNext, "onclick", function(evt){
-			_this._next();
-		});
+		dojo.connect(this.navPrev, "onclick", this, "_prev");
+		dojo.connect(this.navNext, "onclick", this, "_next");
 		this.isInitialized = true;
 		
-		if(this.isHorizontal) {
+		if(this.isHorizontal){
 			this._offsetAttr = "offsetLeft";
 			this._sizeAttr = "offsetWidth";
 			this._scrollAttr = "scrollLeft";
@@ -221,15 +215,14 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		//	data store.  The four attributes allowed are 'linkAttr', 'imageLargeAttr',
 		//	'imageThumbAttr' and 'titleAttr'
 		this.reset();
-		var _this = this;
 	
 		this.request = {
 			query: {},
 			start: request.start ? request.start : 0,
 			count: request.count ? request.count : 10,
-			onBegin: function(total) {
-				_this._maxPhotos = total;
-			}
+			onBegin: dojo.hitch(this, function(total){
+				this._maxPhotos = total;
+			})
 		};
 	
 		if(request.query){ dojo.mixin(this.request.query, request.query);}
@@ -252,9 +245,9 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		// summary: Resets the widget back to its original state.
 		this._loadedImages = {};
 		var img;
-		for(var pos = 0; pos < this._thumbs.length; pos++) {
+		for(var pos = 0; pos < this._thumbs.length; pos++){
 			img = this._thumbs[pos];
-			if(img) {
+			if(img){
 				//	dojo.event.browser.clean(img);
 				if(img.parentNode){
 					img.parentNode.removeChild(img);	
@@ -289,7 +282,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	
 		var idx = -1, img;
 	
-		for(var i = this._thumbIndex + 1; i < this._thumbs.length; i++) {
+		for(var i = this._thumbIndex + 1; i < this._thumbs.length; i++){
 			img = this._thumbs[i];
 			if(img[pos] - baseOffset + img[size] - origOffset > this._scrollerSize){
 				this._showThumbs(i);
@@ -319,6 +312,19 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this._showThumbs(0);
 	},
 
+	_checkLoad: function(img, idx){
+		dojo.publish(this.getShowTopicName(), [{index:idx}]);
+		this._updateNavControls();
+		this._loadingImages = {};
+	
+		this._thumbIndex = idx;
+	
+		//If we have not already requested the data from the store, do so. 
+		if(this.thumbsNode.offsetWidth - img.offsetLeft < (this._scrollerSize * 2)){
+			this._loadNextPage();
+		}
+	},
+
 	_showThumbs: function(idx){
 		// summary: Displays thumbnail images, starting at position 'idx'
 		// idx: Number
@@ -327,40 +333,39 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var idx = arguments.length == 0 ? this._thumbIndex : arguments[0];
 		idx = Math.min(Math.max(idx, 0), this._maxPhotos);
 		
-		if(idx >= this._maxPhotos) {return;}
+		if(idx >= this._maxPhotos){ return; }
 		
-		var img = _this._thumbs[idx];
-		if(!img){return;}
+		var img = this._thumbs[idx];
+		if(!img){ return; }
 		
 		var left = img.offsetLeft - this.thumbsNode.offsetLeft;
 		var top = img.offsetTop - this.thumbsNode.offsetTop;
 		var offset = this.isHorizontal ? left : top;
 				
-		if(offset >= this.thumbScroller[this._scrollAttr]
-			&& offset + img[this._sizeAttr] <= this.thumbScroller[this._scrollAttr] + this._scrollerSize){return;}
+		if(	(offset >= this.thumbScroller[this._scrollAttr]) &&
+			(offset + img[this._sizeAttr] <= this.thumbScroller[this._scrollAttr] + this._scrollerSize)
+		){
+			// FIXME: WTF is this checking for?
+			return;
+		}
 		
-		function checkLoad() {
-			dojo.publish(_this.getShowTopicName(), [{index:idx}]);
-			_this._updateNavControls();
-			_this._loadingImages = {};
-		
-			_this._thumbIndex = idx;
-		
-			//If we have not already requested the data from the store, do so. 
-			if(_this.thumbsNode.offsetWidth - img.offsetLeft < (_this._scrollerSize * 2)) {
-				_this._loadNextPage();
-			}
-		}	
 		
 		if(this.isScrollable){
 			var target = this.isHorizontal ? {x: left, y: 0} : { x:0, y:top};
-			dojox.fx.smoothScroll({target: target, win: this.thumbScroller,
-				duration:1000, easing:dojox.fx.easing.easeOut,
-				onEnd: checkLoad}).play();
-		} else{
-			if(this.isHorizontal){this.thumbScroller.scrollLeft = left;}
-			else{this.thumbScroller.scrollTop = top;}
-			checkLoad();
+			dojox.fx.smoothScroll({
+				target: target,
+				win: this.thumbScroller,
+				duration:300,
+				easing:dojox.fx.easing.easeOut,
+				onEnd: dojo.hitch(this, "_checkLoad", img, idx)
+			}).play(10);
+		}else{
+			if(this.isHorizontal){
+				this.thumbScroller.scrollLeft = left;
+			}else{
+				this.thumbScroller.scrollTop = top;
+			}
+			this._checkLoad(img, idx);
 		}	
 	},
 	
@@ -397,10 +402,10 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		
 		//Define the function to call when the items have been 
 		//returned from the data store.
-		var complete = function(items, request){
+		var complete = dojo.hitch(this, function(items, request){
 			if(items && items.length) {
 				var itemCounter = 0;
-				function loadNext() {
+				var loadNext = function(){
 					if(itemCounter >= items.length){
 						_this._loadInProgress = false;
 						return;
@@ -414,14 +419,16 @@ dojo.declare("dojox.image.ThumbnailPicker",
 				//Show or hide the navigation arrows on the thumbnails, 
 				//depending on whether or not the widget is at the start,
 				//end, or middle of the list of images. 
-				_this._updateNavControls();
-			} else {_this._loadInProgress = false;}
-		};
+				this._updateNavControls();
+			}else{
+				this._loadInProgress = false;
+			}
+		});
 	
 		//Define the function to call if the store reports an error. 
 		var error = function(){
 			this._loadInProgress = false;
-			alert("Error getting items");
+			console.debug("Error getting items");
 		};
 	
 		this.request.onComplete = complete;
@@ -433,83 +440,83 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this._noImages = false;
 		
 		//Execute the request for data. 
-		_this.imageStore.fetch(_this.request);
+		this.imageStore.fetch(this.request);
 	
-		function loadImage(data, index, callback) {	
-			var url = _this.imageStore.getValue(data,_this.imageThumbAttr);
+		var loadImage = dojo.hitch(this, function(data, index, callback){	
+			var url = this.imageStore.getValue(data,this.imageThumbAttr);
 			var img = document.createElement("img");
 			var imgContainer = document.createElement("div");
-			imgContainer.setAttribute("id","img_" + _this.widgetid+"_"+index);
+			imgContainer.setAttribute("id","img_" + this.widgetid+"_"+index);
 			imgContainer.appendChild(img);
 			img._index = index;
 			img._data = data;
 		
-			_this._thumbs[index] = imgContainer;
+			this._thumbs[index] = imgContainer;
 			var loadingDiv;
-			if(_this.useLoadNotifier){
+			if(this.useLoadNotifier){
 				loadingDiv = document.createElement("div");
 				loadingDiv.innerHTML = "<!-- -->";
-				loadingDiv.setAttribute("id","loadingDiv_" + _this.widgetid+"_"+index);
+				loadingDiv.setAttribute("id","loadingDiv_" + this.widgetid+"_"+index);
 	
 				//If this widget was previously told that the main image for this
 				//thumb has been loaded, make the loading indicator transparent.
-				_this._setThumbClass(loadingDiv,
-					_this._loadedImages[index] ? "thumbLoaded":"thumbNotifier");
+				this._setThumbClass(loadingDiv,
+					this._loadedImages[index] ? "thumbLoaded":"thumbNotifier");
 		
 				imgContainer.appendChild(loadingDiv);
 			}
-			var size = dojo.marginBox(_this.thumbsNode);
+			var size = dojo.marginBox(this.thumbsNode);
 			var defaultSize;
 			var sizeParam;
-			if(_this.isHorizontal){
-				defaultSize = _this.thumbWidth;
+			if(this.isHorizontal){
+				defaultSize = this.thumbWidth;
 				sizeParam = 'w';
 			} else{
-				defaultSize = _this.thumbHeight;
+				defaultSize = this.thumbHeight;
 				sizeParam = 'h';
 			}
 			size = size[sizeParam];
-			var sl = _this.thumbScroller.scrollLeft, st = _this.thumbScroller.scrollTop;
-			dojo.style(_this.thumbsNode, _this._sizeProperty, (size + defaultSize + 20) + "px");
+			var sl = this.thumbScroller.scrollLeft, st = this.thumbScroller.scrollTop;
+			dojo.style(this.thumbsNode, this._sizeProperty, (size + defaultSize + 20) + "px");
 			//Remember the scroll values, as changing the size can alter them
-			_this.thumbScroller.scrollLeft = sl;
-			_this.thumbScroller.scrollTop = st;
-			_this.thumbsNode.appendChild(imgContainer);
+			this.thumbScroller.scrollLeft = sl;
+			this.thumbScroller.scrollTop = st;
+			this.thumbsNode.appendChild(imgContainer);
 		
-			dojo.connect(img, "onload", function(){
+			dojo.connect(img, "onload", this, function(){
 				var realSize = dojo.marginBox(img)[sizeParam];
-				_this._totalSize += (Number(realSize) + 4);
-				dojo.style(_this.thumbsNode, _this._sizeProperty, _this._totalSize + "px");
+				this._totalSize += (Number(realSize) + 4);
+				dojo.style(this.thumbsNode, this._sizeProperty, this._totalSize + "px");
 		
-				if(_this.useLoadNotifier){dojo.style(loadingDiv, "width", (img.width - 4) + "px"); }
+				if(this.useLoadNotifier){dojo.style(loadingDiv, "width", (img.width - 4) + "px"); }
 				callback();
 				return false;
 			});
 		
-			dojo.connect(img, "onclick", function(evt){
-				dojo.publish(_this.getClickTopicName(),	[{
+			dojo.connect(img, "onclick", this, function(evt){
+				dojo.publish(this.getClickTopicName(),	[{
 					index: evt.target._index,
 					data: evt.target._data,
 					url: img.getAttribute("src"), 
-					largeUrl: _this.imageStore.getValue(data,_this.imageLargeAttr),
-					title: _this.imageStore.getValue(data,_this.titleAttr),
-					link: _this.imageStore.getValue(data,_this.linkAttr)
+					largeUrl: this.imageStore.getValue(data,this.imageLargeAttr),
+					title: this.imageStore.getValue(data,this.titleAttr),
+					link: this.imageStore.getValue(data,this.linkAttr)
 				}]);
 				return false;
 			});
 			dojo.addClass(img, "imageGalleryThumb");
 			img.setAttribute("src", url);
-			var title = _this.imageStore.getValue(data, _this.titleAttr);
+			var title = this.imageStore.getValue(data, this.titleAttr);
 			if(title){ img.setAttribute("title",title); }
-			_this._updateNavControls();
-		}
+			this._updateNavControls();
+		});
 	},
 
 	_updateNavControls: function(){
 		// summary: Updates the navigation controls to hide/show them when at
 		//	the first or last images.
 		var cells = [];
-		var change = function(node, add) {
+		var change = function(node, add){
 			var fn = add ? "addClass" : "removeClass";
 			dojo[fn](node,"enabled");
 			dojo[fn](node,"thumbClickable");
