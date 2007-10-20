@@ -8,7 +8,6 @@
 			@import "../../../dijit/themes/tundra/tundra.css";
 			@import "../_grid/tundraGrid.css";
 
-			/*
 			.dojoxGrid-row-editing td {
 				background-color: #F4FFF4;
 			}
@@ -26,6 +25,7 @@
 			}
 			.dojoxGrid textarea {
 			}
+			/*
 			*/
 			#controls {
 				padding: 6px 0;
@@ -56,60 +56,61 @@
 				[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
 				[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
 			];
-			for (var i=0; i<10; i++)
+			for(var i=0; i<10; i++){
 				data = data.concat(data);
+			}
 			model = new dojox.grid.data.table(null, data);
+
 			// ==========================================================================
 			// Tie some UI to the data model
 			// ==========================================================================
 			model.observer(this);
-			modelChange = function() {
+			modelChange = function(){
 				dojo.byId("rowCount").innerHTML = 'Row count: ' + model.count; 
 			}
+
 			// ==========================================================================
 			// Custom formatter
 			// ==========================================================================
-			formatMoney = function(inDatum) {
+			formatMoney = function(inDatum){
 				return isNaN(inDatum) ? '...' : '$' + parseFloat(inDatum).toFixed(2);
 			}
+
 			// ==========================================================================
 			// Grid structure
 			// ==========================================================================
-			statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', editor: dojox.grid.editors.select, options: [ "new", "read", "replied" ] };
-			gridLayout = [{
-				type: 'dojox.GridRowView', width: '20px'
-			},{
-				defaultCell: { width: 8, editor: dojox.grid.editors.input, styles: 'text-align: right;'  },
-				rows: [[
-					{ name: 'Id', width: 3, get: function(inRowIndex) { return inRowIndex+1;} },
-					{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.select, options: ["normal", "note", "important"]},
-					{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.bool },
-					statusCell,
-					{ name: 'Message', styles: '', width: '100%' },
-					{ name: 'Amount', formatter: formatMoney },
-					{ name: 'Amount', field: 4, formatter: formatMoney }
-				]]
-			},{
-				defaultCell: { width: 4, editor: dojox.grid.editors.input, styles: 'text-align: right;' },
-				rows: [[
-					{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', editor: dojox.grid.editors.bool}, 
-					statusCell,
-					{ name: 'Amount', field: 4, formatter: formatMoney},
-					{ name: 'Detail', value: 'Detail'}
-				]]
-			}];
+			statusCell = { 
+				field: 2,
+				name: 'Status',
+				styles: 'text-align: center;',
+				editor: dojox.grid.editors.select,
+				options: [ "new", "read", "replied" ]
+			};
+
+			gridLayout = [
+				{
+					type: 'dojox.GridRowView', width: '20px'
+				},
+				{
+					defaultCell: { width: 8, editor: dojox.grid.editors.input, styles: 'text-align: right;'  },
+					rows: [
+						[
+							{ name: 'Id', width: 3, get: function(inRowIndex){ return inRowIndex+1;} },
+							{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.select, options: ["normal", "note", "important"]},
+							{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.bool },
+							statusCell,
+							{ name: 'Message', styles: '', width: '100%' },
+							{ name: 'Amount', formatter: formatMoney }
+						]
+					]
+				}
+			];
 			// ==========================================================================
 			// UI Action
 			// ==========================================================================
 			addRow = function() {
 				grid.addRow([ "normal", false, "new", 'Now is the time for all good men to come to the aid of their party.', 99.99, 9.99, false ]);
 			}
-			// ==========================================================================
-			// Startup tasks
-			// ==========================================================================
-			dojo.addOnLoad(function() {
-				window["grid"] = dijit.byId("grid");
-			});
 		</script>
 	</head>
 	<body class="tundra">
@@ -127,7 +128,7 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>&nbsp;
 	</div>
 	<br />
-	<div id="grid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
+	<div jsId="grid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>
 	</body>
