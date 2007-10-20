@@ -1,29 +1,67 @@
-@import "Grid.css";
-
 .tundra .dojoxGrid {
-	font: 13px Myriad,Arial,Helvetica,clean,sans-serif; 
 	position: relative;
 	background-color: #e9e9e9;
+	font-size: 0.85em; /* inherit font-family from dojo.css */
 	-moz-outline-style: none;
 	outline: none;
+}
+
+.tundra .dojoxGrid table {
+	padding: 0;
+}
+
+.tundra .dojoxGrid td {
+	-moz-outline: none;
+}
+
+/* master header */
+
+.tundra .dojoxGrid-master-header {
+	position: relative;
+}
+
+/* master view */
+
+.tundra .dojoxGrid-master-view  {
+	position: relative;
+}
+
+/* views */
+
+.tundra .dojoxGrid-view {
+	position: absolute;
+	overflow: hidden;
+}
+
+/* header */
+
+.tundra .dojoxGrid-header {
+	position: absolute;
+	overflow: hidden;
 }
 
 .tundra .dojoxGrid-header {
 	background-color:  #e9e9e9;
 }
 
+.tundra .dojoxGrid-header table {
+	text-align: center;
+}
+
+.tundra .dojoxGrid-header .dojoxGrid-cell-content {
+	text-align: center;
+}
+
 .tundra .dojoxGrid-header .dojoxGrid-cell { 
 	border: 1px solid transparent;
-	border-color: transparent #ACA899 #919191 transparent;
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 top repeat-x;
+	/* border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB; */
+	border-color: white #ACA899 #919191 white;
+	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;
 	padding-bottom: 2px;
 }
 
 .tundra .dojoxGrid-header .dojoxGrid-cell-over {
-	background-image: none;
-	/* background-color: white; */
-	background: url(../../../dijit/themes/tundra/images/tabHover.png) #e9e9e9 top repeat-x;
-	/* border-bottom-color: #FEBE47; */
+	background: url(../../../dijit/themes/tundra/images/tabHover.png) #e9e9e9 repeat-x top;
 }
 
 .tundra .dojoxGrid-sort-down {
@@ -57,56 +95,56 @@
 /* rowbar */
 
 .tundra .dojoxGrid-rowbar { 
-	border: 1px solid;
+	border: none;
 	/*
 	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
 	*/
-	border-color: transparent;
-	border-top: none;
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 top repeat-x;
-	border-right: 1px solid #919191;
+	background: url(images/tabEnabled_rotated.png) #e9e9e9 repeat-y right;
+	border-right: 1px solid #cccccc;
+	padding: 0px;
 }
 
 .tundra .dojoxGrid-rowbar-inner {
-	border-top: 1px solid #F6F4EB;
+	border: none;
+	border-bottom: 1px solid #cccccc;
 }
 
 .tundra .dojoxGrid-rowbar-over {
-	background-image: none;
-	background-color: white;
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 top repeat-x;
-	border-top-color: transparent;
-	border-bottom-color: transparent;
+	background: url(images/tabHover_rotated.png) #e9e9e9 repeat-y right;
 }
 
 .tundra .dojoxGrid-rowbar-selected {
-	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd top repeat-x;
+	background-color: #D9E8F9;
+	background-image: none;
+	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd repeat-x top;
 	border-right: 1px solid #cccccc;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 /* rows */
 
 .tundra .dojoxGrid-row {
-	/*
-		border: 1px solid #E8E4D8;
-	*/
-	border: 1px solid #cccccc;
-	border-color: transparent;
-	/*padding: 0 0 1px 0;*/
+	position: relative;
+	width: 9000em;
+}
+
+.tundra .dojoxGrid-row {
+	border: none;
 	border-left: none;
 	border-right: none;
-	background-color: #fefefe;
+	background-color: white;
 	border-top: none;
 }
 
 .tundra .dojoxGrid-row-over {
-	border-top-color: transparent;
-	border-bottom-color: transparent;
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 top repeat-x;
-	/*border-bottom-width: 2px;
-	padding-bottom: 0;*/
-	/*background-color: #FFDD9D;*/
-	/*background-color: #FDFDFD;*/
+	border-top-color: #cccccc;
+	border-bottom-color: #cccccc;
+}
+
+.tundra .dojoxGrid-row-over .dojoxGrid-cell {
+	/* background-color: #e9e9e9; */
+	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;
 }
 
 .tundra .dojoxGrid-row-odd {
@@ -115,14 +153,24 @@
 }
 
 .tundra .dojoxGrid-row-selected {
-	/* background-color: #D9E8F9; */
-	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd top repeat-x;
+	background-color: #D9E8F9;
+	/*
+	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd repeat-x top;
+	*/
 }
 
-.tundra .dojoxGrid-row-over.dojoxGrid-row-odd {
-	/* background-color: #D9E8F9; */
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 top repeat-x;
+.tundra .dojoxGrid-row-table {
+	table-layout: fixed;
+	width: 0;
 }
+
+.tundra .dojoxGrid-invisible {
+	visibility: hidden;
+}		
+
+.tundra .Xdojo-ie .dojoxGrid-invisible {
+	display: none;
+}		
 
 .tundra .dojoxGrid-invisible td, .dojoxGrid-header .dojoxGrid-invisible td {
 	border-top-width: 0;
@@ -136,12 +184,16 @@
 /* cells */
 
 .tundra .dojoxGrid-cell {
-	border: 1px solid;
-	border-color: transparent;
-	border-right-color: #cccccc;
+	border: 1px solid transparent;
+	border-right: 1px solid #D5CDB5;
 	padding: 3px 3px 3px 3px;
 	text-align: left;
 	overflow: hidden;
+}
+
+.dj_ie6 .tundra .dojoxGrid-cell {
+	border: 1px solid white;
+	border-right: 1px solid #D5CDB5;
 }
 
 .tundra .dojoxGrid-cell-focus {
@@ -156,7 +208,7 @@
 	border: 1px dotted #595959;
 }
 
-.dojoxGrid-cell-clip {
+.tundra .dojoxGrid-cell-clip {
 	width: 100%;
 	overflow: hidden;
 	white-space:nowrap;
@@ -167,7 +219,9 @@
 
 /* FIXME: these colors are off! */
 .tundra .dojoxGrid-row-editing td {
-	background-color: #F4FFF4;
+	/* background-color: #F4FFF4; */
+	background: #f1f6fc url(../../../dijit/themes/tundra/images/buttonHover.png) repeat-x bottom;
+	/* padding: 0px 3px 0px 3px; */
 }
 
 .tundra .dojoxGrid-row-inserting td {
@@ -180,9 +234,11 @@
 	background-color: #F8B8B6;
 }
 
-.dojoxGrid-input, .dojoxGrid-select, .dojoxGrid-textarea {
+.tundra .dojoxGrid-input,
+.tundra .dojoxGrid-select,
+.tundra .dojoxGrid-textarea {
 	margin: 0;
-	padding: 0;
+	padding: 0px;
 	border-style: none;
 	width: 100%;
 	font-size: 100%;
