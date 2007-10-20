@@ -31,6 +31,8 @@ var chart;
 makeObjects = function(){
 	chart = new dojox.charting.Chart2D("test");
 	chart.addPlot("default", {type: "Areas"});
+   	chart.addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true});
+	chart.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true});
 	chart.setTheme(dojox.charting.themes.PlotKit.orange);
 	chart.addSeries("Series A", makeSeries(10));
 	chart.addSeries("Series B", makeSeries(10));
