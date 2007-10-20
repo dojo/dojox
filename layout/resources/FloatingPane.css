@@ -5,9 +5,14 @@
 
 /* titleNode */
 .dojoxFloatingPaneTitle {
-	padding:4px 4px 2px 4px; 
-	cursor:move; 
+	background: #cccccc;
+	background:#fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
+	border:1px solid #bfbfbf;
+	padding:4px 4px 2px 4px;
+	cursor: pointer;
+	white-space: nowrap;
 }
+
 .soria .dojoxFloatingPaneTitle {
 	background:#4f8ced url("../../../dijit/themes/soria/images/gradientTopBg.png") repeat-x top left;
 	border:1px solid #6969FF;
@@ -20,13 +25,40 @@
 	color:#000; 	
 }
 
+
 /* Icons */
-.dojoxFloatingMiniMizeIcon {
+.dojoxFloatingCloseIcon {
+	background:url('icons/tabClose.png') no-repeat center center; 
+	width:16px;
+	height:16px; 
+	overflow:hidden;
+	float:right; 
+}
+
+.dojoxFloatingMinimizeIcon {
 	background:url('../../../dijit/themes/tundra/images/arrowDown.png') no-repeat center center; 
 	width:16px;
 	height:16px; 
 	overflow:hidden;
 	float:right; 
+}
+
+.floatingPaneMaximized .dojoxFloatingMaximizeIcon { display:none; }
+.dojoxFloatingMaximizeIcon {
+	background:url('../../../dijit/themes/tundra/images/arrowUp.png') no-repeat center center;
+	width:16px;
+	height:16px;
+	overflow:hidden;
+	float:right;	
+}
+
+.floatingPaneMaximized .dojoxFloatingRestoreIcon { display:inline; }
+.dojoxFloatingRestoreIcon {
+	background:url('../../../dijit/themes/tundra/images/arrowDown.png') no-repeat center center;
+	width:16px; height:16px;
+	overflow:hidden; 
+	float:right;
+	display:none;
 }
 
 .dojoxFloatingResizeHandle {
@@ -72,19 +104,16 @@
 	*/
 }
 
-.dojoxDockList { 
-	display:inline; 
-	list-style-type:none; 
-	margin:0; 
-	margin-bottom:3px; 
-	padding:3px; 
-} 
+.dojoxDockList {
+	padding: 0px;
+	margin: 0px;
+}
 
 .dojoxDockRestoreButton {
 	background:url('../../../dijit/themes/tundra/images/arrowUp.png') no-repeat center center;
 	width:16px; height:16px;
 	overflow:hidden; 
-	float:right;
+	float:left;
 	margin-top:2px; 
 }
 
@@ -92,14 +121,38 @@
 	overflow:hidden;
 }
 
+/* Modifications */
+
+.dojoxDock {
+	display: block;
+	border: solid black 1px;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+	background:#fcfcfc;
+}
+
 .dojoxDockNode {
+	-moz-border-radius:4pt 4pt;
 	cursor:pointer; 
-	border:1px solid #ccc;
-	background-color:#ededed;
-	padding:3px; 
-	height:20px; 
-	margin-left:5px; 
-	-moz-border-radius:8pt 8pt;
-	width:120px; 
-	float:left; 
+	border: outset 2px gray;
+	list-style: none;
+	padding: 2px;
+	margin: 0px;
+	height: 16px;
+	width: auto;
+	float: left;
+	background:#fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
+}
+
+.dojoxFloatingPaneContent {
+	overflow:auto;
+	background-color:#fff; 
+	height:100%; 
+	width:100%; 
+}
+
+
+.dojoxFloatingPaneCanvas {
+	background-color:#fff;
 }

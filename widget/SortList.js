@@ -1,4 +1,3 @@
-
 dojo.provide("dojox.widget.SortList");
 dojo.experimental("dojox.widget.SortList"); // level: prototype, designed for dijit.chat.demo
 
@@ -11,7 +10,7 @@ dojo.declare("dojox.widget.SortList",
 	// summary: a sortable <ul> with a fixed header for use in dijit.demos.chat
 	//	for demonstration purposes only for now. feel free to make API suggestions
 	//	or fixes. 
-
+	//
 	// title: String 
 	//	the title in the header
 	title: "",
@@ -55,7 +54,7 @@ dojo.declare("dojox.widget.SortList",
 			var props = {
 				onItem: dojo.hitch(this,"_addItem"),
 				onComplete: dojo.hitch(this,"onSort")
-			}
+			};
 			this.store.fetch(props);	
 		}else{ this.onSort(); }
 		this.inherited("postCreate",arguments);
@@ -96,7 +95,7 @@ dojo.declare("dojox.widget.SortList",
 		}
 		var i=0;
 		dojo.forEach(arr,function(item){
-			dojo[(((i++)%2)==0)?"addClass":"removeClass"](item,"sortListItemOdd");
+			dojo[(((i++)%2)===0)?"addClass":"removeClass"](item,"sortListItemOdd");
 			this.containerNode.appendChild(item); 
 		},this);
 	},
@@ -134,12 +133,13 @@ dojo.declare("dojox.widget.SortList",
 		// summary: a basic sort function, use query sort, or keep this?
 		var aStr = a.innerHTML;
 		var bStr = b.innerHTML;
-		if (aStr>bStr) return 1;
-		if (aStr<bStr) return -1;
+		if(aStr>bStr){ return 1; }
+		if(aStr<bStr){ return -1; }
 		return 0;
 	},
 
-	setTitle: function(title){
+	setTitle: function(/* String */title){
+		// summary: Sets the widget title to a String
 		this.focusNode.innerHTML = title;
 	},
 

@@ -20,11 +20,15 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 
 	// dockable: Boolean
 	//	allow minimizing of pane true/false
-	dockable: false, 
+	dockable: true,
 
 	// resizable: Boolean
 	//	allow resizing of pane true/false
 	resizable: false,
+
+	// maxable: Boolean
+	//	horrible param name for "Can you maximize this floating pane"
+	maxable: false,
 
 	// resizeAxis: String
 	//	x | xy | y to limit pane's sizing direction
@@ -57,22 +61,28 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	templateString: null,
 	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
 
+	_restoreState: {},
+
 	postCreate: function(){
 		// summary: 
 		this.setTitle(this.title);
 		this.inherited("postCreate",arguments);
 		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
-		this._listener = dojo.subscribe("/dnd/move/start",this,"zIndexes"); 
+		//this._listener = dojo.subscribe("/dnd/move/start",this,"bringToTop"); 
 
 		if(!this.dockable){ this.dockNode.style.display = "none"; } 
 		if(!this.closable){ this.closeNode.style.display = "none"; } 
+		if(!this.maxable){
+			this.maxNode.style.display = "none";
+			this.restoreNode.style.display = "none";
+		}
 		if(!this.resizable){
 			this.resizeHandle.style.display = "none"; 	
 		}else{
 			var foo = dojo.marginBox(this.domNode); 
-			//this.domNode.style.height = foo.h+"px";
 			this.domNode.style.width = foo.w+"px"; 
-		}
+		}		
+		dojox.layout.FloatingPane._allFPs.push(this);
 	},
 	
 	startup: function(){
@@ -82,7 +92,11 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		dojo.style(this.domNode,"overflow","hidden"); 
 
 		if(this.resizable){
-			this.containerNode.style.overflow = "auto";
+			if(dojo.isIE){
+				this.canvas.style.overflow = "auto";
+			} else {
+				this.containerNode.style.overflow = "auto";
+			}
 			var tmp = new dojox.layout.ResizeHandle({ 
 				//targetContainer: this.containerNode, 
 				targetId: this.id, 
@@ -111,55 +125,55 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 					dojo.addClass(tmpNode,"dojoxFloatingDockDefault");
 					var tmpId = 'dojoxGlobalFloatingDock';
 				}
-				this.dockTo = new dojox.layout.Dock({ id: tmpId },tmpNode);
+				this.dockTo = new dojox.layout.Dock({ id: tmpId, autoPosition: "south" },tmpNode);
 				this.dockTo.startup(); 
 			}
-		} 
+			
+			if((this.domNode.style.display == "none")||(this.domNode.style.visibility == "hidden")){
+				// If the FP is created dockable and non-visible, start up docked.
+				this.minimize();
+			} 
+		} 		
+		this.connect(this.focusNode,'onmousedown',"bringToTop");
 	},
 
 	setTitle: function(/* String */ title){
 		// summary: Update the string in the titleNode
 		this.titleNode.innerHTML = title; 
 	},	
-
-	zIndexes: function(/* dojo.dnd.Mover */mover){
-		// summary: keep track of our own zIndex for bringToTop like behavior
-		if(mover.node.id == this.id){ 
-			dojo.style(this.domNode,"zIndex","997"); 
-		}else{ 
-			dojo.style(this.domNode,"zIndex",dojo.style(this.domNode,"zIndex")-1); 
-		}
-	},
-
-	// extend 		
+		
 	close: function(){
 		// summary: close and destroy this widget
 		if(!this.closable){ return; }
 		dojo.unsubscribe(this._listener); 
-		this.hide(dojo.hitch(this,"destroyRecursive")); 
+		this.hide(dojo.hitch(this,"destroy")); 
 	},
 
-	hide: function(/* Function */ callback){
+	hide: function(/* Function? */ callback){
 		// summary: close but do not destroy this widget
 		dojo.fadeOut({node:this.domNode, duration:this.duration,
 			onEnd: dojo.hitch(this,function() { 
 				this.domNode.style.display = "none";
 				this.domNode.style.visibility = "hidden"; 
+				if (this.dockTo) { this.dockTo._positionDock(null); }
 				if (typeof callback == "function") { callback(); }
 			})
 		}).play();
 	},
 
-	show: function(callback){
+	show: function(/* Function? */callback){
 		// summary: show the FloatingPane
 		var anim = dojo.fadeIn({node:this.domNode, duration:this.duration,
 			beforeBegin: dojo.hitch(this,function(){
 				this.domNode.style.display = ""; 
 				this.domNode.style.visibility = "visible";
+				this.dockTo._positionDock(null);
+				if (this.dockTo) { this.dockTo._positionDock(null); }
 				if (typeof callback == "function") { callback(); }
 				this._isDocked = false; 
 			})
 		}).play();
+		this.resize(dojo.coords(this.domNode));
 	},
 
 	minimize: function(){
@@ -169,13 +183,84 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 		} 
 	},
 
+	maximize: function(){
+		// summary: Make this floatingpane fullscreen (viewport)	
+		if(this._maximized){ return; }
+		this._naturalState = dojo.coords(this.domNode);
+		if(this._isDocked){
+			this.show();
+			setTimeout(dojo.hitch(this,"maximize"),this.duration);
+		}
+		dojo.addClass(this.focusNode,"floatingPaneMaximized");
+		this.resize(dijit.getViewport());
+		this._maximized = true;
+	},
+
+	_restore: function(){
+		if(this._maximized){
+			this.resize(this._naturalState);
+			dojo.removeClass(this.focusNode,"floatingPaneMaximized");
+			this._maximized = false;
+		}		
+	},
+
 	_dock: function(){
 		if (!this._isDocked){
 			this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
-	}
+	},
 	
+	resize: function(/* Object */dim) {
+		// summary: size the widget and place accordingly
+		this._currentState = dim;
+
+		dojo.style(this.domNode,"top",dim.t+"px");	
+		dojo.style(this.domNode,"left",dim.l+"px");
+		
+
+		dojo.style(this.domNode, "width", dim.w+"px"); 
+		dojo.style(this.canvas,  "width",  dim.w+"px");
+
+		dojo.style(this.domNode, "height", dim.h+"px");
+		dojo.style(this.canvas,  "height", (dim.h - this.focusNode.offsetHeight)+"px");
+		
+		
+	},
+	
+	bringToTop: function() {
+		// summary: bring this FloatingPane above all other panes
+		var windows = [];
+		var panes = dojox.layout.FloatingPane._allFPs;
+		for (var x = 0; x < panes.length; x++) {
+			if (this != panes[x]) {
+				windows.push(panes[x]);
+			}
+		}
+		windows.sort(function (a, b) {
+			return a.domNode.style.zIndex - b.domNode.style.zIndex;
+		});
+		windows.push(this);
+		var _startZ = 100;
+		for (x = 0; x < windows.length; x++) {
+			dojo.style(windows[x].domNode,"zIndex",(_startZ +x * 2));	
+		}
+	},
+	
+	destroy: function() {
+		// summary: Destroy this FloatingPane completely
+		var floatingPanes = dojox.layout.FloatingPane._allFPs;
+		for (var x = 0; x < floatingPanes.length; x++) {
+			if (this == floatingPanes[x]) {
+				floatingPanes.splice(x, 1);
+			}
+		}
+		this.inherited("destroy", arguments);
+	}
+});
+
+dojo.mixin(dojox.layout.FloatingPane, {
+	_allFPs: []
 });
 
 dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
@@ -188,8 +273,12 @@ dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 	// private _docked: array of panes currently in our dock
 	_docked: [],
 	
+	_inPositioning: false,
+	
+	autoPosition: false,
+	
 	addNode: function(refNode){
-		// summary: FIXME: memory leak? 
+		// summary: instert a dockNode refernce into the dock
 		var div = document.createElement('li');
 		this.containerNode.appendChild(div);
 		var node = new dojox.layout._DockNode({ title: refNode.title, paneRef: refNode },div);
@@ -202,20 +291,29 @@ dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 			// attach window.onScroll, and a position like in presentation/dialog
 			dojo.connect(window,'onresize',this,"_positionDock");
 			dojo.connect(window,'onscroll',this,"_positionDock");
+			if(dojo.isIE){
+				dojo.connect(this.domNode,'onresize', this,"_positionDock");
+			}
 		}
+		this._positionDock(null);
 		this.inherited("startup",arguments);
 	},
 	
-	_positionDock: function(e){
-		// summary: 
-		//	[b0rken atm] keeps the dock [in the event of a globalFloatingDock]
-		//	positioned at the bottom of the viewport. (math is off)
-		
-		var viewport = dijit.getViewport();
-		var s = this.domNode.style;
-		console.debug(viewport); 
-		s.width = viewport.w + "px";
-		s.top = (viewport.h + viewport.t) - 50 + "px"
+	_positionDock: function(/* Event? */e){
+		if(!this._inPositioning){	
+			if(this.autoPosition == "south"){
+				// Give some time for scrollbars to appear/disappear
+				setTimeout(dojo.hitch(this, function() {
+					this._inPositiononing = true;
+					var viewport = dijit.getViewport();
+					var s = this.domNode.style;
+					s.left = viewport.l + "px";
+					s.width = (viewport.w-2) + "px";
+					s.top = (viewport.h + viewport.t) - this.domNode.offsetHeight + "px";
+					this._inPositioning = false;
+				}), 500);
+			}
+		}
 	}
 
 
@@ -242,6 +340,7 @@ dojo.declare("dojox.layout._DockNode", [dijit._Widget,dijit._Templated], {
 	restore: function(){
 		// summary: remove this dock item from parent dock, and call show() on reffed floatingpane
 		this.paneRef.show();
+		this.paneRef.bringToTop();
 		this.destroy();
 	}
 
