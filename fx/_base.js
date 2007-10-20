@@ -34,7 +34,7 @@ dojox.fx.sizeTo = function(/* Object */args){
 	var compute = dojo.getComputedStyle;
 
 	var method = args.method || "chain"; 
-	if (method=="chain"){ args.duration = (args.duration/2); } 
+	if (method=="chain"){ args.duration = Math.floor(args.duration/2); } 
 	
 	var top, newTop, left, newLeft, width, height = null;
 
@@ -47,8 +47,8 @@ dojox.fx.sizeTo = function(/* Object */args){
 			width = parseInt(dojo.style(node,'width'));
 			height = parseInt(dojo.style(node,'height'));
 
-			newLeft = left - ((args.width - width)/2); 
-			newTop = top - ((args.height - height)/2); 
+			newLeft = left - Math.floor((args.width - width)/2); 
+			newTop = top - Math.floor((args.height - height)/2); 
 
 			if(pos != 'absolute' && pos != 'relative'){
 				var ret = dojo.coords(innerNode, true);
@@ -75,18 +75,16 @@ dojox.fx.sizeTo = function(/* Object */args){
 		}
 	}, args));
 
-	// FIXME: 
-	// dojo.fx[args.method]([anim1,anim2]);
 	var anim = dojo.fx[((args.method == "combine") ? "combine" : "chain")]([anim1,anim2]);
 	dojo.connect(anim, "beforeBegin", anim, init);
 	return anim; // dojo._Animation
 };
 
 dojox.fx.slideBy = function(/* Object */args){
-	// summary: returns an animation to slide a node by a defined offset.
+	// summary: Returns an animation to slide a node by a defined offset.
 	//
 	// description:
-	//	returns an animation that will slide a node (args.node) from it's
+	//	Returns an animation that will slide a node (args.node) from it's
 	//	current position to it's current posision plus the numbers defined
 	//	in args.top and args.left. standard dojo.fx mixin's apply. 
 	//	
@@ -127,7 +125,7 @@ dojox.fx.slideBy = function(/* Object */args){
 };
 
 dojox.fx.crossFade = function(/* Object */args){
-	// summary: returns an animation cross fading two element simultaneously
+	// summary: Returns an animation cross fading two element simultaneously
 	// 
 	// args addons:
 	//	args.nodes: Array - two element array of domNodes, or id's
@@ -158,7 +156,7 @@ dojox.fx.crossFade = function(/* Object */args){
 
 
 dojox.fx.highlight = function(/*Object*/ args){
-	// summary
+	// summary:
 	//		Returns an animation that sets the node background to args.color
 	//		then gradually fades back the original nodes background color
 

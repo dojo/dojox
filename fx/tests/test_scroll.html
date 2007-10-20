@@ -15,7 +15,7 @@
 				// first one wins
 				var anim = dojox.fx.smoothScroll({
 					node: node,
-					window:window,
+					win:window,
 					duration:300,
 					easing:dojox.fx.easing.easeOut
 				}).play();
@@ -34,13 +34,13 @@
 
 			dojo.connect(dojo.byId("goToHeader"), "onclick", function (e) {
 				var node = dojo.byId('targetHeader3');
-				var anim0 = dojox.fx.smoothScroll({ node: node, window: window, duration:500, easing:dojox.fx.easing.easeOut });
+				var anim0 = dojox.fx.smoothScroll({ node: node, win: window, duration:500, easing:dojox.fx.easing.easeOut });
 				anim0.play();
 			});
 
 			dojo.connect(dojo.byId("goToHeader1"), "onclick", function(/* Event */e){
 				var node = dojo.byId('targetHeader1');
-				var anim0 = dojox.fx.smoothScroll({ node: node, window: window, duration:1000, easing:dojox.fx.easing.easeOut });
+				var anim0 = dojox.fx.smoothScroll({ node: node, win: window, duration:1000, easing:dojox.fx.easing.easeOut });
 				anim0.play();
 			});
 		}); 

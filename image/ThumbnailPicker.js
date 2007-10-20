@@ -354,7 +354,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		
 		if(this.isScrollable){
 			var target = this.isHorizontal ? {x: left, y: 0} : { x:0, y:top};
-			dojox.fx.smoothScroll({target: target, window: this.thumbScroller,
+			dojox.fx.smoothScroll({target: target, win: this.thumbScroller,
 				duration:1000, easing:dojox.fx.easing.easeOut,
 				onEnd: checkLoad}).play();
 		} else{
