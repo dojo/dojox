@@ -13,6 +13,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <script type="text/javascript" src="../../lang/functional.js"></script>
 <script type="text/javascript" src="../Theme.js"></script>
+<script type="text/javascript" src="../scaler.js"></script>
 <script type="text/javascript" src="../plot2d/axes.js"></script>
 <script type="text/javascript" src="../plot2d/renderers.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
@@ -130,8 +131,8 @@ makeObjects = function(){
 	chart15.render();
 
 	var chart16 = new dojox.charting.Chart2D("test16");
-	chart16.addAxis("x", {fixLower: "major", fixUpper: "major", minorTicks: false});
-	chart16.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", minorTicks: false});
+	chart16.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
+	chart16.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true});
 	chart16.addPlot("default", {type: "Bars"});
 	chart16.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart16.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
@@ -144,23 +145,23 @@ makeObjects = function(){
 	chart17.render();
 
 	var chart18 = new dojox.charting.Chart2D("test18");
-	chart18.addAxis("x", {fixLower: "minor", fixUpper: "minor", minorTicks: false});
-	chart18.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", minorTicks: false, includeZero: true});
+	chart18.addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true});
+	chart18.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true});
 	chart18.addPlot("default", {type: "ClusteredColumns", gap: 2});
 	chart18.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart18.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart18.render();
 
 	var chart19 = new dojox.charting.Chart2D("test19");
-	chart19.addAxis("x", {fixLower: "major", fixUpper: "major", minorTicks: false, includeZero: true});
-	chart19.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", minorTicks: false});
+	chart19.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
+	chart19.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", natural: true});
 	chart19.addPlot("default", {type: "ClusteredBars", gap: 2});
 	chart19.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart19.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart19.render();
 
 	var chart20 = new dojox.charting.Chart2D("test20");
-	chart20.addAxis("x", {fixLower: "minor", fixUpper: "minor", minorTicks: false});
+	chart20.addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true});
 	chart20.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", minorTicks: false, includeZero: true});
 	chart20.addPlot("front_grid", {type: "Grid", hMajorLines: true, vMajorLines: false});
 	chart20.addPlot("default", {type: "Columns", gap: 2});

@@ -9,6 +9,7 @@ dojo.require("dojox.charting.scaler");
 	var dc = dojox.charting, df = dojox.lang.functional;
 	
 	var makeStroke = function(stroke){
+		if(!stroke){ return stroke; }
 		if(typeof stroke == "string" || stroke instanceof dojo.Color){
 			stroke = {color: stroke};
 		}
@@ -24,7 +25,9 @@ dojo.require("dojox.charting.scaler");
 	
 	var augmentStroke = function(stroke, color){
 		var s = makeStroke(stroke);
-		s.color = augmentColor(s.color, color);
+		if(s){
+			s.color = augmentColor(s.color, color);
+		}
 		return s;
 	};
 
@@ -131,7 +134,7 @@ dojo.require("dojox.charting.scaler");
 				}
 				this._hScaler = this._hAxis.getScaler();
 			}else{
-				this._hScaler = {lowerBound: stats.hmin, upperBound: stats.hmax, 
+				this._hScaler = {bounds: {lower: stats.hmin, upper: stats.hmax}, 
 					scale: dim.width / (stats.hmax - stats.hmin)};
 			}
 			if(this._vAxis){
@@ -140,7 +143,7 @@ dojo.require("dojox.charting.scaler");
 				}
 				this._vScaler = this._vAxis.getScaler();
 			}else{
-				this._vScaler = {lowerBound: stats.vmin, upperBound: stats.vmax, 
+				this._vScaler = {bounds: {lower: stats.vmin, upper: stats.vmax}, 
 					scale: dim.height / (stats.vmax - stats.vmin)};
 			}
 		}
@@ -170,8 +173,8 @@ dojo.require("dojox.charting.scaler");
 				var run = this.series[i],
 					lpoly = dojo.map(run.data, function(v, i){
 						return {
-							x: this._hScaler.scale * (i + 1 - this._hScaler.lowerBound) + offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound)
+							x: this._hScaler.scale * (i + 1 - this._hScaler.bounds.lower) + offsets.l,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower)
 						};
 					}, this);
 				var t = this.chart.theme, s = this.chart.surface, color, stroke, outline, marker;
@@ -285,8 +288,8 @@ dojo.require("dojox.charting.scaler");
 				var run = this.series[i],
 					lpoly = dojo.map(acc, function(v, i){
 						return {
-							x: this._hScaler.scale * (i + 1 - this._hScaler.lowerBound) + offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound)
+							x: this._hScaler.scale * (i + 1 - this._hScaler.bounds.lower) + offsets.l,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower)
 						};
 					}, this);
 				var t = this.chart.theme, s = this.chart.surface, color, stroke, outline, marker;
@@ -404,11 +407,11 @@ dojo.require("dojox.charting.scaler");
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j],
 						width  = this._hScaler.scale - 2 * gap,
-						height = this._vScaler.scale * (v - this._vScaler.lowerBound);
+						height = this._vScaler.scale * (v - this._vScaler.bounds.lower);
 					if(width >= 1 && height >= 1){
 						s.createRect({
-							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.bounds.lower) + gap,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower),
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
 					}
@@ -452,11 +455,11 @@ dojo.require("dojox.charting.scaler");
 				for(var j = 0; j < acc.length; ++j){
 					var v = acc[j],
 						width  = this._hScaler.scale - 2 * gap,
-						height = this._vScaler.scale * (v - this._vScaler.lowerBound);
+						height = this._vScaler.scale * (v - this._vScaler.bounds.lower);
 					if(width >= 1 && height >= 1){
 						s.createRect({
-							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.bounds.lower) + gap,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower),
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
 					}
@@ -488,11 +491,11 @@ dojo.require("dojox.charting.scaler");
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j],
 						width  = thickness,
-						height = this._vScaler.scale * (v - this._vScaler.lowerBound);
+						height = this._vScaler.scale * (v - this._vScaler.bounds.lower);
 					if(width >= 1 && height >= 1){
 						s.createRect({
-							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.lowerBound) + gap + thickness * i,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.lowerBound),
+							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.bounds.lower) + gap + thickness * i,
+							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower),
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
 					}
@@ -537,12 +540,12 @@ dojo.require("dojox.charting.scaler");
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j],
-						width  = this._hScaler.scale * (v - this._hScaler.lowerBound),
+						width  = this._hScaler.scale * (v - this._hScaler.bounds.lower),
 						height = this._vScaler.scale - 2 * gap;
 					if(width >= 1 && height >= 1){
 						s.createRect({
 							x: offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) + gap,
+							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.bounds.lower) + gap,
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
 					}
@@ -587,12 +590,12 @@ dojo.require("dojox.charting.scaler");
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < acc.length; ++j){
 					var v = acc[j],
-						width  = this._hScaler.scale * (v - this._hScaler.lowerBound),
+						width  = this._hScaler.scale * (v - this._hScaler.bounds.lower),
 						height = this._vScaler.scale - 2 * gap;
 					if(width >= 1 && height >= 1){
 						s.createRect({
 							x: offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) + gap,
+							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.bounds.lower) + gap,
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
 					}
@@ -623,12 +626,12 @@ dojo.require("dojox.charting.scaler");
 				fill = run.fill ? run.fill : augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j],
-						width  = this._hScaler.scale * (v - this._hScaler.lowerBound),
+						width  = this._hScaler.scale * (v - this._hScaler.bounds.lower),
 						height = thickness;
 					if(width >= 1 && height >= 1){
 						s.createRect({
 							x: offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.lowerBound) 
+							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.bounds.lower) 
 								+ gap + thickness * (this.series.length - i - 1),
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
@@ -678,10 +681,10 @@ dojo.require("dojox.charting.scaler");
 			// draw horizontal stripes and lines
 			var s = this.chart.surface, ta = this.chart.theme.axis,
 				scaler = this._vAxis.getScaler();
-			if(this.opt.hMinorLines){
-				for(var i = 0; i < scaler.nMinorTicks; ++i){
+			if(this.opt.hMinorLines && scaler.minor.tick){
+				for(var i = 0; i < scaler.minor.count; ++i){
 					var y = dim.height - offsets.b - scaler.scale * 
-							(scaler.minorStart - scaler.lowerBound + i * scaler.minorTick);
+							(scaler.minor.start - scaler.bounds.lower + i * scaler.minor.tick);
 					s.createLine({
 						x1: offsets.l,
 						y1: y,
@@ -690,10 +693,10 @@ dojo.require("dojox.charting.scaler");
 					}).setStroke(ta.minorTick);
 				}
 			}
-			if(this.opt.hMajorLines){
-				for(var i = 0; i < scaler.nMajorTicks; ++i){
+			if(this.opt.hMajorLines && scaler.major.tick){
+				for(var i = 0; i < scaler.major.count; ++i){
 					var y = dim.height - offsets.b - scaler.scale * 
-							(scaler.majorStart - scaler.lowerBound + i * scaler.majorTick);
+							(scaler.major.start - scaler.bounds.lower + i * scaler.major.tick);
 					s.createLine({
 						x1: offsets.l,
 						y1: y,
@@ -704,10 +707,10 @@ dojo.require("dojox.charting.scaler");
 			}
 			// draw vertical stripes and lines
 			scaler = this._hAxis.getScaler();
-			if(this.opt.vMinorLines){
-				for(var i = 0; i < scaler.nMinorTicks; ++i){
+			if(this.opt.vMinorLines && scaler.minor.tick){
+				for(var i = 0; i < scaler.minor.count; ++i){
 					var x = offsets.l + scaler.scale * 
-							(scaler.minorStart - scaler.lowerBound + i * scaler.minorTick);
+							(scaler.minor.start - scaler.bounds.lower + i * scaler.minor.tick);
 					s.createLine({
 						x1: x,
 						y1: offsets.t,
@@ -716,10 +719,10 @@ dojo.require("dojox.charting.scaler");
 					}).setStroke(ta.minorTick);
 				}
 			}
-			if(this.opt.vMajorLines){
-				for(var i = 0; i < scaler.nMajorTicks; ++i){
+			if(this.opt.vMajorLines && scaler.major.tick){
+				for(var i = 0; i < scaler.major.count; ++i){
 					var x = offsets.l + scaler.scale * 
-							(scaler.majorStart - scaler.lowerBound + i * scaler.majorTick);
+							(scaler.major.start - scaler.bounds.lower + i * scaler.major.tick);
 					s.createLine({
 						x1: x,
 						y1: offsets.t,

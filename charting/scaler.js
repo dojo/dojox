@@ -1,8 +1,7 @@
 dojo.provide("dojox.charting.scaler");
 
 (function(){
-	// valid steps for the scaler
-	var steps = [1, 5, 10];
+	var deltaLimit = 3;	// pixels
 	
 	var isText = function(val, text){
 		val = val.toLowerCase();
@@ -12,93 +11,129 @@ dojo.provide("dojox.charting.scaler");
 		return false;
 	};
 	
-	var calcTicks = function(min, max, kwArgs, unit, majorTick, minorTick){
+	var calcTicks = function(min, max, kwArgs, majorTick, minorTick, microTick, span){
+		kwArgs = dojo.clone(kwArgs);
+		if(!majorTick){
+			if(kwArgs.fixUpper == "major"){ kwArgs.fixUpper = "minor"; }
+			if(kwArgs.fixLower == "major"){ kwArgs.fixLower = "minor"; }
+		}
+		if(!minorTick){
+			if(kwArgs.fixUpper == "minor"){ kwArgs.fixUpper = "micro"; }
+			if(kwArgs.fixLower == "minor"){ kwArgs.fixLower = "micro"; }
+		}
+		if(!microTick){
+			if(kwArgs.fixUpper == "micro"){ kwArgs.fixUpper = "none"; }
+			if(kwArgs.fixLower == "micro"){ kwArgs.fixLower = "none"; }
+		}
 		var lowerBound = isText(kwArgs.fixLower, ["major"]) ? 
 				Math.floor(min / majorTick) * majorTick :
 					isText(kwArgs.fixLower, ["minor"]) ? 
 						Math.floor(min / minorTick) * minorTick :
-							isText(kwArgs.fixLower, ["unit"]) ?
-								Math.floor(min / unit) * unit :
-								min,
+							isText(kwArgs.fixLower, ["micro"]) ?
+								Math.floor(min / microTick) * unit : min,
 			upperBound = isText(kwArgs.fixUpper, ["major"]) ? 
 				Math.ceil(max / majorTick) * majorTick :
 					isText(kwArgs.fixUpper, ["minor"]) ? 
 						Math.ceil(max / minorTick) * minorTick :
 							isText(kwArgs.fixUpper, ["unit"]) ?
-								Math.ceil(max / unit) * unit :
-								max,
-			majorStart = isText(kwArgs.fixLower, ["major"]) ?
+								Math.ceil(max / unit) * unit : max,
+			majorStart = (isText(kwArgs.fixLower, ["major"]) || !majorTick) ?
 				lowerBound : Math.ceil(lowerBound / majorTick) * majorTick,
-			minorStart = isText(kwArgs.fixLower, ["major", "minor"]) ?
+			minorStart = (isText(kwArgs.fixLower, ["major", "minor"]) || !minorTick) ?
 				lowerBound : Math.ceil(lowerBound / minorTick) * minorTick,
-			nMajorTicks = (isText(kwArgs.fixUpper, ["major"]) ?
+			microStart = (isText(kwArgs.fixLower, ["major", "minor", "micro"]) || ! microTick) ?
+				lowerBound : Math.ceil(lowerBound / microTick) * microTick,
+			majorCount = !majorTick ? 0 : (isText(kwArgs.fixUpper, ["major"]) ?
 				Math.round((upperBound - majorStart) / majorTick) :
 				Math.floor((upperBound - majorStart) / majorTick)) + 1,
-			nMinorTicks = (isText(kwArgs.fixUpper, ["major", "minor"]) ?
+			minorCount = !minorTick ? 0 : (isText(kwArgs.fixUpper, ["major", "minor"]) ?
 				Math.round((upperBound - minorStart) / minorTick) :
 				Math.floor((upperBound - minorStart) / minorTick)) + 1,
-			minorPerMajor  = Math.round(majorTick / minorTick),
-			majorPrecision = Math.floor(Math.log(majorTick) / Math.LN10),
-			minorPrecision = Math.floor(Math.log(minorTick) / Math.LN10);
+			microCount = !microTick ? 0 : (isText(kwArgs.fixUpper, ["major", "minor", "micro"]) ?
+				Math.round((upperBound - microStart) / microTick) :
+				Math.floor((upperBound - microStart) / microTick)) + 1,
+			minorPerMajor  = minorTick ? Math.round(majorTick / minorTick) : 0,
+			microPerMinor  = microTick ? Math.round(minorTick / microTick) : 0,
+			majorPrecision = majorTick ? Math.floor(Math.log(majorTick) / Math.LN10) : 0,
+			minorPrecision = minorTick ? Math.floor(Math.log(minorTick) / Math.LN10) : 0;
 		return {
-			lowerBound:		lowerBound,
-			upperBound:		upperBound,
-			majorTick:		majorTick, 
-			majorStart:		majorStart,
-			nMajorTicks:	nMajorTicks,
-			minorTick:		minorTick, 
-			minorStart:		minorStart,
-			nMinorTicks:	nMinorTicks,
+			bounds: {
+				lower:	lowerBound,
+				upper:	upperBound
+			},
+			major: {
+				tick:	majorTick,
+				start:	majorStart,
+				count:	majorCount,
+				prec:	majorPrecision
+			},
+			minor: {
+				tick:	minorTick,
+				start:	minorStart,
+				count:	minorCount,
+				prec:	minorPrecision
+			},
+			micro: {
+				tick:	microTick,
+				start:	microStart,
+				count:	microCount,
+				prec:	0
+			},
 			minorPerMajor:	minorPerMajor,
-			majorPrecision:	Math.max(-majorPrecision, 0),
-			minorPrecision:	Math.max(-minorPrecision, 0)
+			microPerMinor:	microPerMinor,
+			scale:			span / (upperBound - lowerBound)
 		};
 	};
 
-	dojox.charting.scaler = function(min, max, span, minMinorStep, kwArgs){
-		var h = {fixUpper: "none", fixLower: "none"};
+	dojox.charting.scaler = function(min, max, span, kwArgs){
+		var h = {fixUpper: "none", fixLower: "none", natural: false};
 		if(kwArgs){
 			if("fixUpper" in kwArgs){ h.fixUpper = String(kwArgs.fixUpper); }
 			if("fixLower" in kwArgs){ h.fixLower = String(kwArgs.fixLower); }
+			if("natural"  in kwArgs){ h.natural  = Boolean(kwArgs.natural); }
 		}
 		
-		var diff = max * min < 0 ? Math.max(max, -min) : max - min;
-		
-		// find the base and steps
-		var unit = 1, step;
-		if(diff > unit){
-			// scale up
-			var factor = steps[steps.length - 1];
-			while(diff > unit){
-				step = unit * factor;
-				if(diff <= step){ break; }
-				unit = step;
+		var mag = Math.floor(Math.log(max - min) / Math.LN10),
+			major = Math.pow(10, mag), minor = 0, micro = 0, ticks;
+			
+		do{
+			minor = major / 10;
+			if(!h.natural || minor > 0.9){
+				ticks = calcTicks(min, max, h, major, minor, 0, span);
+				if(ticks.scale * ticks.minor.tick > deltaLimit){ break; }
 			}
-			for(step = 1; step < steps.length; ++step){
-				if(diff <= steps[step] * unit){ break; }
+			minor = major / 5;
+			if(!h.natural || minor > 0.9){
+				ticks = calcTicks(min, max, h, major, minor, 0, span);
+				if(ticks.scale * ticks.minor.tick > deltaLimit){ break; }
 			}
-		}else{
-			// scale down
-			var factor = steps[steps.length - 1];
-			while(diff <= unit){
-				unit /= factor;
-				if(diff > step){ break; }
+			minor = major / 2;
+			if(!h.natural || minor > 0.9){
+				ticks = calcTicks(min, max, h, major, minor, 0, span);
+				if(ticks.scale * ticks.minor.tick > deltaLimit){ break; }
 			}
-			for(step = 1; step < steps.length; ++step){
-				if(diff <= steps[step] * unit){ break; }
+			return calcTicks(min, max, h, major, 0, 0, span);	// Object
+		}while(false);
+			
+		do{
+			micro = minor / 10;
+			if(!h.natural || micro > 0.9){
+				ticks = calcTicks(min, max, h, major, minor, micro, span);
+				if(ticks.scale * ticks.micro.tick > deltaLimit){ break; }
 			}
-		}
-		
-		// calculate ticks
-		var majorStep = step - 1, majorTick = unit * steps[majorStep], ticks;
-		for(var i = majorStep - steps.length; i < majorStep; ++i){
-			if(i == -1){ continue; }
-			var minorTick = i < 0 ? unit / steps[steps.length - 1] * steps[steps.length + i] : unit * steps[i];
-			ticks = calcTicks(min, max, h, unit, majorTick, minorTick);
-			ticks.scale = span / (ticks.upperBound - ticks.lowerBound);
-			if(ticks.scale * ticks.minorTick >= minMinorStep){ break; }
-		}
-		ticks.minMinorStep = minMinorStep;
-		return ticks;	// Object
+			micro = minor / 5;
+			if(!h.natural || micro > 0.9){
+				ticks = calcTicks(min, max, h, major, minor, micro, span);
+				if(ticks.scale * ticks.micro.tick > deltaLimit){ break; }
+			}
+			micro = minor / 2;
+			if(!h.natural || micro > 0.9){
+				ticks = calcTicks(min, max, h, major, minor, micro, span);
+				if(ticks.scale * ticks.micro.tick > deltaLimit){ break; }
+			}
+			micro = 0;
+		}while(false);
+
+		return micro ? ticks : calcTicks(min, max, h, major, minor, 0, span);	// Object
 	};
 })();

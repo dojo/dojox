@@ -38,13 +38,16 @@ dojo.require("dojox.charting.scaler");
 	dojo.declare("dojox.charting.plot2d.axes.Default", dojox.charting.plot2d.axes.Base, {
 		constructor: function(kwArgs, chart){
 			this.opt = dojo.mixin({
-				fixUpper: "none",
-				fixLower: "none",
+				fixUpper:    "none",
+				fixLower:    "none",
+				natural:     false,
 				leftBottom:  true,
 				includeZero: false,
 				fixed:       true,
+				majorLabels: true,
 				minorTicks:  true,
-				minorLabels: true
+				minorLabels: true,
+				microTicks:  false
 			}, kwArgs);
 		},
 		clear: function(){
@@ -81,8 +84,12 @@ dojo.require("dojox.charting.scaler");
 					minMinorStep = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
 				}
 			}
-			this.scaler = dojox.charting.scaler(min, max, span, minMinorStep, {fixUpper: this.opt.fixUpper, fixLower: this.opt.fixLower});
-			//TODO: fix the scaler to conform other kwArgs
+			this.scaler = dojox.charting.scaler(min, max, span, {
+				fixUpper: this.opt.fixUpper, 
+				fixLower: this.opt.fixLower, 
+				natural:  this.opt.natural
+			});
+			this.scaler.minMinorStep = minMinorStep;
 			return this;
 		},
 		getScaler: function(){
@@ -99,10 +106,10 @@ dojo.require("dojox.charting.scaler");
 						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
 					}else{
 						var s = this.scaler,
-							a = this._getLabel(s.majorStart, s.majorPrecision).length,
-							b = this._getLabel(s.majorStart + s.nMajorTicks * s.majorTick, s.majorPrecision).length,
-							c = this._getLabel(s.minorStart, s.minorPrecision).length,
-							d = this._getLabel(s.minorStart + s.nMinorTicks * s.minorTick, s.minorPrecision).length;
+							a = this._getLabel(s.major.start, s.major.prec).length,
+							b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
+							c = this._getLabel(s.minor.start, s.minor.prec).length,
+							d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length;
 						labelLength = Math.max(a, b, c, d);
 					}
 					offset = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
@@ -122,10 +129,10 @@ dojo.require("dojox.charting.scaler");
 						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
 					}else{
 						var s = this.scaler,
-							a = this._getLabel(s.majorStart, s.majorPrecision).length,
-							b = this._getLabel(s.majorStart + s.nMajorTicks * s.majorTick, s.majorPrecision).length,
-							c = this._getLabel(s.minorStart, s.minorPrecision).length,
-							d = this._getLabel(s.minorStart + s.nMinorTicks * s.minorTick, s.minorPrecision).length;
+							a = this._getLabel(s.major.start, s.major.prec).length,
+							b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
+							c = this._getLabel(s.minor.start, s.minor.prec).length,
+							d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length;
 						labelLength = Math.max(a, b, c, d);
 					}
 					offsets.l = offsets.r = Math.floor(size * labelLength * labelFudgeFactor) / 2;
@@ -170,28 +177,42 @@ dojo.require("dojox.charting.scaler");
 			}
 			
 			// render shapes
-			var s = this.chart.surface, c = this.scaler,
-				nextMajor = c.majorStart, nextMinor = c.minorStart;
+			var s = this.chart.surface, c = this.scaler, step, next,
+				nextMajor = c.major.start, nextMinor = c.minor.start, nextMicro = c.micro.start;
 			s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(ta.stroke);
-			while(nextMinor <= c.upperBound + 1/c.scale){
-				var offset = (nextMinor - c.lowerBound) * c.scale,
+			if(this.opt.microTicks && c.micro.tick){
+				step = c.micro.tick, next = nextMicro;
+			}else if(this.opt.minorTicks && c.minor.tick){
+				step = c.minor.tick, next = nextMinor;
+			}else if(c.major.tick){
+				step = c.major.tick, next = nextMajor;
+			}else{
+				// don't draw anything
+				return this;
+			}
+			while(next <= c.bounds.upper + 1/c.scale){
+				var offset = (next - c.bounds.lower) * c.scale,
 					x = start.x + axisVector.x * offset,
 					y = start.y + axisVector.y * offset;
-				if(Math.abs(nextMinor - nextMajor) < c.minorTick / 2){
+				if(Math.abs(nextMajor - next) < step / 2){
 					// major tick
 					s.createLine({
 						x1: x, y1: y,
 						x2: x + tickVector.x * ta.majorTick.length,
 						y2: y + tickVector.y * ta.majorTick.length
 					}).setStroke(ta.majorTick);
-					s.createText({
-						x: x + labelOffset.x,
-						y: y + labelOffset.y,
-						text: this._getLabel(nextMajor, c.majorPrecision),
-						align: labelAlign
-					}).setFont(ta.font).setFill(ta.fontColor);
-					nextMajor += c.majorTick;
-				}else{
+					if(this.opt.majorLabels){
+						s.createText({
+							x: x + labelOffset.x,
+							y: y + labelOffset.y,
+							text: this._getLabel(nextMajor, c.major.prec),
+							align: labelAlign
+						}).setFont(ta.font).setFill(ta.fontColor);
+					}
+					nextMajor += c.major.tick;
+					nextMinor += c.minor.tick;
+					nextMicro += c.micro.tick;
+				}else if(Math.abs(nextMinor - next) < step / 2){
 					// minor tick
 					if(this.opt.minorTicks){
 						s.createLine({
@@ -199,24 +220,37 @@ dojo.require("dojox.charting.scaler");
 							x2: x + tickVector.x * ta.minorTick.length,
 							y2: y + tickVector.y * ta.minorTick.length
 						}).setStroke(ta.minorTick);
-						if(this.opt.minorLabels && (c.minMinorStep <= c.minorTick * c.scale)){
+						if(this.opt.minorLabels && (c.minMinorStep <= c.minor.tick * c.scale)){
 							s.createText({
 								x: x + labelOffset.x,
 								y: y + labelOffset.y,
-								text: this._getLabel(nextMinor, c.minorPrecision),
+								text: this._getLabel(nextMinor, c.minor.prec),
 								align: labelAlign
 							}).setFont(ta.font).setFill(ta.fontColor);
 						}
 					}
+					nextMinor += c.minor.tick;
+					nextMicro += c.micro.tick;
+				}else{
+					// micro tick
+					if(this.opt.microTicks){
+						s.createLine({
+							x1: x, y1: y,
+							// use minor ticks for now
+							x2: x + tickVector.x * ta.minorTick.length,
+							y2: y + tickVector.y * ta.minorTick.length
+						}).setStroke(ta.minorTick);
+					}
+					nextMicro += c.micro.tick;
 				}
-				nextMinor += c.minorTick;
+				next += step;
 			}
 			return this;
 		},
 		
 		// utilities
 		_getLabel: function(number, precision){
-			return this.opt.fixed ? number.toFixed(precision) : number.toString();
+			return this.opt.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
 		}
 	});
 })();

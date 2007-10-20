@@ -107,6 +107,8 @@ dojo.require("dojox.charting.Theme");
 			// calculate geometry
 			
 			var dim = this.surface.getDimensions();
+			dim.width  = dojox.gfx.normalizedLength(dim.width);
+			dim.height = dojox.gfx.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
 			for(var i = 0; i < this.stack.length; ++i){
 				var renderer = this.stack[i];
