@@ -147,5 +147,18 @@ tests.register("dojox.collections.tests.SortedList", [
 		sl.add("apple","orange");
 		sl.setByIndex(0, "bar");
 		t.assertEqual("bar", sl.getByIndex(0));
+	},
+	function testSorting(t){
+		var sl=new dojox.collections.SortedList();
+		sl.add("foo","bar");
+		sl.add("baz","fab");
+		sl.add("buck","shot");
+		sl.add("apple","orange");
+
+		var a=[];
+		sl.forEach(function(item){
+			a.push(item);
+		});
+		t.assertEqual("orange,fab,shot,bar", a.join());
 	}
 ]);
