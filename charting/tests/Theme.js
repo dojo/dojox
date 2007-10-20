@@ -1,14 +1,15 @@
 dojo.provide("dojox.charting.tests.Theme");
 dojo.require("dojox.charting.Theme");
+dojo.require("dojox.charting.themes.PlotKit.blue");
 
 (function(){
 	var dxc=dojox.charting;
-
+	var blue=dxc.themes.PlotKit.blue;
 	tests.register("dojox.charting.tests.Theme", [
 		function testDefineColor(t){
-			var h=45;
-			var args={ hue:h, num:16 };
-			var a=dxc.Theme.defineColors(args);
+			var args={ num:16, cache:false };
+			blue.defineColors(args);
+			var a=blue.colors;
 			var s="<table border=1>";
 			for(var i=0; i<a.length; i++){
 				if(i%8==0){
@@ -20,8 +21,9 @@ dojo.require("dojox.charting.Theme");
 			s+="</tr></table>";
 			doh.debug(s);
 
-			var args={ hue:h, num:32 };
-			var a=dxc.Theme.defineColors(args);
+			var args={ num:32, cache: false };
+			blue.defineColors(args);
+			var a=blue.colors;
 			var s="<table border=1 style=margin-top:12px;>";
 			for(var i=0; i<a.length; i++){
 				if(i%8==0){
@@ -33,8 +35,9 @@ dojo.require("dojox.charting.Theme");
 			s+="</tr></table>";
 			doh.debug(s);
 
-			var args={ hue:h, saturation:20, num:32 };
-			var a=dxc.Theme.defineColors(args);
+			var args={ saturation:20, num:32, cache:false };
+			blue.defineColors(args);
+			var a=blue.colors;
 			var s="<table border=1 style=margin-top:12px;>";
 			for(var i=0; i<a.length; i++){
 				if(i%8==0){
@@ -46,8 +49,9 @@ dojo.require("dojox.charting.Theme");
 			s+="</tr></table>";
 			doh.debug(s);
 
-			var args={ hue:h, low:10, high:90, num:32 };
-			var a=dxc.Theme.defineColors(args);
+			var args={ low:10, high:90, num:32, cache: false };
+			blue.defineColors(args);
+			var a=blue.colors;
 			var s="<table border=1 style=margin-top:12px;>";
 			for(var i=0; i<a.length; i++){
 				if(i%8==0){
