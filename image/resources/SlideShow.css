@@ -62,19 +62,19 @@
 .sprite-arrowtop { background-position: 0 -430px; } 
 */
 .slideShowCtrlPrev {
-	background-position: 0 -110px;
+	background-position: -96px 0px; 
 	float: left;
 }
 .slideShowCtrlNext {
-	background-position: 0 -270px;
+	background-position: -144px 0px;
 	float: right;
 }
 .slideShowCtrlPlay {
-	background-position: 0 -190px;
+	background-position: -190px 0px;
 	position: absolute;
 }
 .slideShowPaused .slideShowCtrlPlay {
-	background-position: 0 -350px;
+	background-position: -236px 0px;
 	position: absolute;
 }
 .slideShowCtrl span.slideShowCtrlHide {
@@ -90,10 +90,12 @@
 .slideShowCtrl span {
 	width: 50px;
 	height: 100%;
-	background-image: url("images/navBtns.gif");
+	background-image: url("images/buttons.png");
 	cursor: pointer;
 }
-
+.dj_ie6 .slideShowCtrl span {
+	background-image: url("images/buttons.gif");
+}
 /* Soria-like */
 
 /* Tundra like */

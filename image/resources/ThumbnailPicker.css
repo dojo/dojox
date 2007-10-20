@@ -21,39 +21,39 @@
 }
 
 .thumbOuter .enabled {
-	background-image: url("images/navBtns.gif");
-	background-repeat: no-repeat;
+	background: transparent url("images/buttons.png") no-repeat center center;
 }
+.dj_ie6 .thumbOuter .enabled { background-image: url("images/buttons.gif"); }
 
 .thumbOuter .thumbNav img {
-	width: 35px;
+	width: 48px;
 	height: 75px;
 }
 .thumbOuter .thumbClickable div {
 	cursor: pointer;
 }
 .thumbOuter .prevHoriz {
-	background-position: -9px -94px;
+	background-position: -96px 0px;
 	position: relative;
 	float: left;
 	height: 100%;
 }
 
 .thumbOuter .nextHoriz {
-	background-position: -11px -254px;
+	background-position: -144px 0px;
 	position: relative;
 	float: right;
 	height: 100%;
 /*	margin-top: -85px;*/
 }
 .thumbOuter .prevVert {
-	background-position: 27px -412px;
-	height: 50px;
+	background-position: 0px 0px;
+	height: 48px;
 }
 
 .thumbOuter .nextVert {
-	background-position: 27px -30px;
-	height: 50px;
+	background-position: -48px 0px;
+	height: 48px;
 }
 
 .thumbWrapper img {

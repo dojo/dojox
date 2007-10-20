@@ -119,8 +119,14 @@ dojo.declare("dojox.image.SlideShow",
 		img.setAttribute("height", this.imageHeight);
 
 		if(this.hasNav){
-			dojo.connect(this.outerNode, "onmouseover", function(evt){_this._showNav();});		
-			dojo.connect(this.outerNode, "onmouseout", function(evt){_this._hideNav(evt);});
+			dojo.connect(this.outerNode, "onmouseover", function(evt){
+				try{_this._showNav();}
+				catch(e){console.log("dojox.image.SlideShow: Caught exception onmouseover", e);}			
+			});		
+			dojo.connect(this.outerNode, "onmouseout", function(evt){
+				try{_this._hideNav(evt);}
+				catch(e){console.log("dojox.image.SlideShow: Caught exception onmouseout", e);}
+			});
 		}
 		
 		this.outerNode.style.width = this.imageWidth + "px";
@@ -222,9 +228,11 @@ dojo.declare("dojox.image.SlideShow",
 		// summary: Changes the image being displayed to the next image in the data store
 		// inTimer: Boolean
 		//	If true, a slideshow is active, otherwise the slideshow is inactive.
+		if(inTimer && this._timerCancelled){return false;}
+		
 		if(this.imageIndex + 1 >= this.maxPhotos){
-			if(inTimer && this.loop){ this.imageIndex = 0; 
-			}else{
+			if(inTimer && this.loop){ this.imageIndex = 0; }
+			else{
 				if(this._slideId){ this._stop; }
 				return false;
 			}
@@ -241,7 +249,8 @@ dojo.declare("dojox.image.SlideShow",
 		if(this._slideId){
 			this._stop();
 		}else{
-			dojo.toggleClass(this.domNode,"slideShowPaused");
+			dojo.toggleClass(this.domNode,"slideShowPaused");			
+			this._timerCancelled = false;
 			var success = this.showNextImage(true);
 			if(!success){
 				this._stop();
@@ -406,8 +415,7 @@ dojo.declare("dojox.image.SlideShow",
 			dojo.connect(img, "onload", function(){
 				_this._fitImage(img);
 				div.setAttribute("width",_this.imageWidth);
-				div.setAttribute("height",_this.imageHeight);
-				
+				div.setAttribute("height",_this.imageHeight);				
 				
 				dojo.publish(_this.getLoadTopicName(), [idx]);
 				_this._loadNextImage();
@@ -432,6 +440,7 @@ dojo.declare("dojox.image.SlideShow",
 		// summary: Stops a running slide show.
 		if(this._slideId) { clearTimeout(this._slideId); }
 		this._slideId = null;
+		this._timerCancelled = true;
 		dojo.removeClass(this.domNode,"slideShowPaused");
 	},
 
@@ -561,6 +570,10 @@ dojo.declare("dojox.image.SlideShow",
 		// summary:
 		//	Returns whether the mouse is over the passed element.
 		//	Element must be display:block (ie, not a <span>)
+		
+		//When the page is unloading, if this method runs it will throw an
+		//exception.
+		if(typeof(dojo)=="undefined"){return false;}
 		element = dojo.byId(element);
 		var m = {x: e.pageX, y: e.pageY};
 		var bb = dojo._getBorderBox(element);
