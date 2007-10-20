@@ -12,19 +12,17 @@ dojox.fx.smoothScroll = function(/* Object */args){
 	// win: a node or window object to scroll
 	
 	if(!args.target){ args.target = dojo.coords(args.node,true); }
-	
-	var isWindow = (!dojo.isIE) ? dojo.isFunction(args["win"].scrollTo) : dojo.isObject(args["win"].scrollTo);
-	var animFn;
-	if(isWindow){
-		animFn = function(/* Decimal[] */value){
-			args.win.scrollTo(value[0],value[1]);
-		};
-	}else{
-		animFn = function(/* Decimal[] */value){
-			args.win.scrollLeft = value[0];
-			args.win.scrollTop = value[1];
-		};
-	}
+
+	var isWindow = dojo[(dojo.isIE ? "isObject" : "isFunction")](args["win"].scrollTo);
+
+	var _anim = (isWindow) ?
+		(function(val){
+			args.win.scrollTo(val[0],val[1]);
+		}) :
+		(function(val){
+			args.win.scrollLeft = val[0];
+			args.win.scrollTop = val[1];
+		});
 
 	var anim = new dojo._Animation(dojo.mixin({
 		beforeBegin: function(){
@@ -32,7 +30,7 @@ dojox.fx.smoothScroll = function(/* Object */args){
 			var current = isWindow ? dojo._docScroll() : {x: args.win.scrollLeft, y: args.win.scrollTop};
 			anim.curve = new dojox.fx._Line([current.x,current.y],[args.target.x,args.target.y]);
 		},
-		onAnimate: animFn
+		onAnimate: _anim
 	},args));
 	return anim; // dojo._Animation
 };
