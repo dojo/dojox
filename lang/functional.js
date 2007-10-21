@@ -18,8 +18,10 @@ dojo.provide("dojox.lang.functional");
 // Notes:
 //	- Dojo provides following high-level functions in dojo/_base/array.js: 
 //		forEach, map, filter, every, some
+//	- These functions implemented with optional lambda expression as a parameter.
 //	- missing high-level functions are provided with the compatible API: 
-//		foldl, foldl1, scanl, scanl1, foldr, foldr1, scanr, scanr1, reduce
+//		foldl, foldl1, scanl, scanl1, foldr, foldr1, scanr, scanr1,
+//		reduce, reduceRight
 //	- lambda() and listcomp() produce functions, which after the comilation step are 
 //		as fast as regular JS functions (at least theoretically).
 
@@ -171,7 +173,7 @@ dojo.provide("dojox.lang.functional");
 			//	to right using a seed value as a starting point; returns the final 
 			//	value.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
-			for(var i = 0; i < a.length; z = f.call(o, z, a[i++]));
+			for(var i = 0; i < a.length; z = f.call(o, z, a[i], i, a), ++i);
 			return z;	// Object
 		},
 		foldl1: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -179,7 +181,7 @@ dojo.provide("dojox.lang.functional");
 			//	to right; returns the final value.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			var z = a[0];
-			for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));
+			for(var i = 1; i < a.length; z = f.call(o, z, a[i], i, a), ++i);
 			return z;	// Object
 		},
 		scanl: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
@@ -189,7 +191,7 @@ dojo.provide("dojox.lang.functional");
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			var n = a.length, t = new Array(n + 1);
 			t[0] = z;
-			for(var i = 0; i < n; z = f.call(o, z, a[i]), t[++i] = z);
+			for(var i = 0; i < n; z = f.call(o, z, a[i], i, a), t[++i] = z);
 			return t;	// Array
 		},
 		scanl1: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
@@ -199,7 +201,7 @@ dojo.provide("dojox.lang.functional");
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			var n = a.length, t = new Array(n), z = a[0];
 			t[0] = z;
-			for(var i = 1; i < n; z = f.call(o, z, a[i]), t[i++] = z);
+			for(var i = 1; i < n; z = f.call(o, z, a[i], i, a), t[i++] = z);
 			return t;	// Array
 		},
 		foldr: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
@@ -207,7 +209,7 @@ dojo.provide("dojox.lang.functional");
 			//	to left using a seed value as a starting point; returns the final 
 			//	value.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
-			for(var i = a.length; i > 0; z = f.call(o, a[--i], z));
+			for(var i = a.length; i > 0; --i, z = f.call(o, z, a[i], i, a));
 			return z;	// Object
 		},
 		foldr1: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -215,7 +217,7 @@ dojo.provide("dojox.lang.functional");
 			//	to left; returns the final value.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			var n = a.length, z = a[n - 1];
-			for(var i = n - 1; i > 0; z = f.call(o, a[--i], z));
+			for(var i = n - 1; i > 0; --i, z = f.call(o, z, a[i], i, a));
 			return z;	// Object
 		},
 		scanr: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
@@ -225,7 +227,7 @@ dojo.provide("dojox.lang.functional");
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			var n = a.length, t = new Array(n + 1);
 			t[n] = z;
-			for(var i = n; i > 0; z = f.call(o, a[--i], z), t[i] = z);
+			for(var i = n; i > 0; --i, z = f.call(o, z, a[i], i, a), t[i] = z);
 			return t;	// Array
 		},
 		scanr1: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
@@ -235,17 +237,70 @@ dojo.provide("dojox.lang.functional");
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			var n = a.length, t = new Array(n), z = a[n - 1];
 			t[n - 1] = z;
-			for(var i = n - 1; i > 0; z = f.call(o, a[--i], z), t[i] = z);
+			for(var i = n - 1; i > 0; --i, z = f.call(o, z, a[i], i, a), t[i] = z);
 			return t;	// Array
 		},
-		reduce: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o, /*Object?*/ z){
-			// summary: repeatedly applies a binary function to an array from left 
-			//	to right using an optional seed value as a starting point; 
-			//	returns the final value.
-			if(arguments.length < 4){
-				return df.foldl1(a, f, o);
+		// JS 1.6 standard array functions, which can take a lambda as a parameter.
+		// Consider using dojo._base.array functions, if you don't need the lambda support.
+		filter: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: creates a new array with all elements that pass the test 
+			//	implemented by the provided function.
+			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
+			var n = a.length, t = [], v;
+			for(var i = 0; i < n; ++i){
+				v = a[i];
+				if(f.call(o, v, i, a)){ t.push(v); }
 			}
-			return df.foldl(a, f, z, o);
+			return t;	// Array
+		},
+		forEach: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: executes a provided function once per array element.
+			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
+			var n = a.length;
+			for(var i = 0; i < n; f.call(o, a[i], i, a), ++i);
+		},
+		map: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: creates a new array with the results of calling 
+			//	a provided function on every element in this array.
+			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
+			var n = a.length, t = new Array(n);
+			for(var i = 0; i < n; t[i] = f.call(o, a[i], i, a), ++i);
+			return t;	// Array
+		},
+		every: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: tests whether all elements in the array pass the test 
+			//	implemented by the provided function.
+			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
+			var n = a.length;
+			for(var i = 0; i < n; ++i){
+				if(!f.call(o, a[i], i, a)){
+					return false;	// Boolean
+				}
+			}
+			return true;	// Boolean
+		},
+		some: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: tests whether some element in the array passes the test 
+			//	implemented by the provided function.
+			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
+			var n = a.length;
+			for(var i = 0; i < n; ++i){
+				if(f.call(o, a[i], i, a)){
+					return true;	// Boolean
+				}
+			}
+			return false;	// Boolean
+		},
+		// JS 1.8 standard array functions, which can take a lambda as a parameter.
+		reduce: function(/*Array*/ a, /*Function*/ f, /*Object?*/ z){
+			// summary: apply a function simultaneously against two values of the array 
+			//	(from left-to-right) as to reduce it to a single value.
+			return arguments.length < 3 ? df.foldl1(a, f) : df.foldl(a, f, z);	// Object
+		},
+		reduceRight: function(/*Array*/ a, /*Function*/ f, /*Object?*/ z){
+			// summary: apply a function simultaneously against two values of the array 
+			//	(from right-to-left) as to reduce it to a single value.
+			return arguments.length < 3 ? df.foldr1(a, f) : df.foldr(a, f, z);	// Object
 		},
 		// currying and partial functions
 		curry: function(/*Function|String|Array*/ f, /*Number?*/ arity){
@@ -358,7 +413,7 @@ dojo.provide("dojox.lang.functional");
 			this.value = value;
 		},
 		return_: function(/*Object*/ value){
-			return new df.Monad(value);
+			return new df.Monad(value);	// dojox.lang.functional.Monad
 		},
 		bind: function(/*Object*/ monad, /*Function|String|Array*/ f, /*Object?*/ o){
 			if(typeof monad.value == "undefined"){
@@ -369,10 +424,10 @@ dojo.provide("dojox.lang.functional");
 			return f.call(o, monad.value);	// dojox.lang.functional.Monad
 		},
 		// object helper
-		forIn: function(/*Object*/ obj, /*Function*/ f, /*Object?*/ o){
+		forIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: iterates over all object members skipping members, which 
 			//	are present in the empty object (IE and/or 3rd-party libraries).
-			o = o || d.global;
+			o = o || d.global; f = df.lambda(f);
 			for(var i in obj){
 				if(i in empty){ continue; }
 				f.call(o, obj[i], i, obj);
