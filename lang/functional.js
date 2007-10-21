@@ -13,7 +13,7 @@ dojo.provide("dojox.lang.functional");
 //	- parts of this module (most notably lamda, constFun, invoke, pluck, and partial) 
 //		are based on work by Oliver Steele (http://osteele.com/sources/javascript/functional/functional.js)
 //		which was published under MIT License
-//	- Simple monad was donated by Alex Russell.
+//	- Simple "maybe" monad was donated by Alex Russell.
 
 // Notes:
 //	- Dojo provides following high-level functions in dojo/_base/array.js: 
@@ -408,21 +408,6 @@ dojo.provide("dojox.lang.functional");
 				return o[m];
 			};
 		},
-		// monads
-		Monad: function(/*Object*/ value){
-			this.value = value;
-		},
-		return_: function(/*Object*/ value){
-			return new df.Monad(value);	// dojox.lang.functional.Monad
-		},
-		bind: function(/*Object*/ monad, /*Function|String|Array*/ f, /*Object?*/ o){
-			if(typeof monad.value == "undefined"){
-				return new df.Monad();	// dojox.lang.functional.Monad
-			}
-			o = o || d.global; f = df.lambda(f);
-			// side-effects go here
-			return f.call(o, monad.value);	// dojox.lang.functional.Monad
-		},
 		// object helper
 		forIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: iterates over all object members skipping members, which 
@@ -435,20 +420,34 @@ dojo.provide("dojox.lang.functional");
 		}
 	});
 
-	dojo.declare("dojox.lang.functional.Monad", null, {
+	// monads
+	dojo.declare("dojox.lang.functional.MaybeMonad", null, {
 		constructor: function(/*Object*/ value){
 			// summary: constructs a monad optionally initializing all additional members
-			this.value = value;
+			if(arguments.length){
+				this.value = value;
+			}
 		},
 		bind: function(/*dojox.lang.functional.Monad*/ monad, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: this is the classic bind method, which applies a function to a monad,
 			//	and returns a result as a monad; it is meant to be overwritten to incorporate
 			//	side effects
-			if(typeof monad.value == "undefined"){
-				return new this.constructor();	// dojox.lang.functional.Monad
+			if(!("value" in monad)){
+				return new this.constructor();	// dojox.lang.functional.MaybeMonad
 			}
+			// => possible side-effects go here
 			o = o || d.global; f = df.lambda(f);
 			return f.call(o, monad.value);	// dojox.lang.functional.Monad
+		},
+		// class-specific methods
+		isNothing: function(){
+			// summary: check if there is no bound value.
+			return !("value" in this);	// Boolean
 		}
 	});
+	df.MaybeMonad.returnMonad = function(/*Object*/ value){
+		// summary: puts a valye in the Maybe monad.
+		return new df.MaybeMonad(value);	// dojox.lang.functional.MaybeMonad
+	};
+	df.MaybeMonad.zero = new df.MaybeMonad();
 })();
