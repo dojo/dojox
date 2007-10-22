@@ -30,7 +30,7 @@
 			#controls {
 				padding: 6px 0;
 			}
-			#grid {
+			.myGrid {
 				width: 850px;
 				height: 350px;
 				border: 1px solid silver;
@@ -128,7 +128,7 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>&nbsp;
 	</div>
 	<br />
-	<div jsId="grid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
+	<div jsId="grid" class="myGrid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>
 	</body>

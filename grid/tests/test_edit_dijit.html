@@ -55,10 +55,13 @@
 		dojo.byId("rowCount").innerHTML = 'Row count: ' + model.count; 
 	}
 	// ==========================================================================
-	// Custom formatter
+	// Custom formatters
 	// ==========================================================================
 	formatMoney = function(inDatum) {
 		return isNaN(inDatum) ? '...' : '$' + parseFloat(inDatum).toFixed(2);
+	}
+	formatDate = function(inDatum) {
+		return dojo.date.locale.format(new Date(inDatum), this.constraint);
 	}
 	// ==========================================================================
 	// Grid structure
