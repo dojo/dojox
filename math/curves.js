@@ -1,6 +1,6 @@
 dojo.provide("dojox.math.curves");
 
-dojox.mixin(dojox.math.curves, {
+dojo.mixin(dojox.math.curves, {
 	Line:function (start, end) {
 		this.start = start;
 		this.end = end;
