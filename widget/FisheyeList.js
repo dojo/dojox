@@ -256,14 +256,14 @@ dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit
 		this._calcHitGrid();
 	},
 
-	_overElement: function(/* HTMLElement */element, /* DOMEvent */e){
-		//	summary
+	_overElement: function(/* DomNode|String */node, /* Event */e){
+		// summary:
 		//	Returns whether the mouse is over the passed element.
-		//	Element must be display:block (ie, not a <span>)
-		element = dojo.byId(element);
+		// Node: Must must be display:block (ie, not a <span>)
+		node = dojo.byId(node);
 		var mouse = {x: e.pageX, y: e.pageY};
-		var bb = dojo._getBorderBox(element);
-		var absolute = dojo.coords(element, true);
+		var bb = dojo._getBorderBox(node);
+		var absolute = dojo.coords(node, true);
 		var top = absolute.y;
 		var bottom = top + bb.h;
 		var left = absolute.x;

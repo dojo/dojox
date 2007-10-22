@@ -550,11 +550,11 @@ dojo.declare("dojox.image.SlideShow",
 		this._navShowing = true;
 	},
 	
-	_hideNav: function(evt){
+	_hideNav: function(/* Event */e){
 		// summary:	Hides the navigation controls
-		// evt: DomEvent
+		// e: Event
 		//	The DOM Event that triggered this function
-		if(!evt || !this._overElement(this.outerNode, evt)) {
+		if(!e || !this._overElement(this.outerNode, e)) {
 			var _this = this;
 			if(this._navAnim) {
 				this._navAnim.stop();
@@ -566,7 +566,7 @@ dojo.declare("dojox.image.SlideShow",
 		}
 	},
 	
-	_overElement: function(/* HTMLElement */element, /* DOMEvent */e){
+	_overElement: function(/*DomNode*/element, /*Event*/e){
 		// summary:
 		//	Returns whether the mouse is over the passed element.
 		//	Element must be display:block (ie, not a <span>)

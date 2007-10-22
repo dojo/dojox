@@ -89,7 +89,7 @@ dojox.fx.removeClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 	return _anim; // dojo._Animation
 };
 
-dojox.fx.toggleClass = function(/*HTMLElement*/node, /*String*/classStr, /*Boolean?*/condition){
+dojox.fx.toggleClass = function(/*DomNode|String*/node, /*String*/classStr, /*Boolean?*/condition){
         //      summary:
 	//		creates an animation that will animate the effect of 
 	//		toggling a class on or off of a node.
