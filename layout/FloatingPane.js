@@ -7,7 +7,9 @@ dojo.require("dijit._Widget");
 dojo.require("dojo.dnd.move");
 dojo.require("dojox.layout.ResizeHandle"); 
 
-dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Templated], {
+dojo.declare("dojox.layout.FloatingPane", 
+	[ dijit.layout.ContentPane, dijit._Templated ],
+{
 	// summary:
 	//
 	// Makes a dijit.ContentPane float and draggable by it's title [similar to TitlePane]
@@ -62,6 +64,7 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
 
 	_restoreState: {},
+	_allFPs: [],
 
 	postCreate: function(){
 		// summary: 
@@ -82,14 +85,11 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 			var foo = dojo.marginBox(this.domNode); 
 			this.domNode.style.width = foo.w+"px"; 
 		}		
-		dojox.layout.FloatingPane._allFPs.push(this);
+		this._allFPs.push(this);
 	},
 	
 	startup: function(){
 		this.inherited("startup",arguments);
-
-		dojo.style(this.domNode,"border","1px solid #dedede"); 
-		dojo.style(this.domNode,"overflow","hidden"); 
 
 		if(this.resizable){
 			if(dojo.isIE){
@@ -108,8 +108,11 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 			// FIXME: argh.
 			tmpName = this.dockTo; 
 
-			if(this.dockTo){ this.dockTo = dijit.byId(this.dockTo); 
-			}else{ this.dockTo = dijit.byId('dojoxGlobalFloatingDock'); }
+			if(this.dockTo){
+				this.dockTo = dijit.byId(this.dockTo); 
+			}else{
+				this.dockTo = dijit.byId('dojoxGlobalFloatingDock');
+			}
 
 			if(!this.dockTo){
 				// we need to make our dock node, and position it against
@@ -134,7 +137,8 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 				this.minimize();
 			} 
 		} 		
-		this.connect(this.focusNode,'onmousedown',"bringToTop");
+		this.connect(this.focusNode,"onmousedown","bringToTop");
+		this.connect(this.domNode,	"onmousedown","bringToTop");
 	},
 
 	setTitle: function(/* String */ title){
@@ -151,12 +155,18 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 
 	hide: function(/* Function? */ callback){
 		// summary: close but do not destroy this widget
-		dojo.fadeOut({node:this.domNode, duration:this.duration,
+		dojo.fadeOut({
+			node:this.domNode,
+			duration:this.duration,
 			onEnd: dojo.hitch(this,function() { 
 				this.domNode.style.display = "none";
 				this.domNode.style.visibility = "hidden"; 
-				if (this.dockTo) { this.dockTo._positionDock(null); }
-				if (typeof callback == "function") { callback(); }
+				if(this.dockTo){
+					this.dockTo._positionDock(null);
+				}
+				if(callback){
+					callback();
+				}
 			})
 		}).play();
 	},
@@ -205,63 +215,55 @@ dojo.declare("dojox.layout.FloatingPane", [dijit.layout.ContentPane, dijit._Temp
 	},
 
 	_dock: function(){
-		if (!this._isDocked){
+		if(!this._isDocked){
 			this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
 	},
 	
-	resize: function(/* Object */dim) {
+	resize: function(/* Object */dim){
 		// summary: size the widget and place accordingly
 		this._currentState = dim;
+		var dns = this.domNode.style;
 
-		dojo.style(this.domNode,"top",dim.t+"px");	
-		dojo.style(this.domNode,"left",dim.l+"px");
-		
+		dns.top = dim.t+"px";
+		dns.left = dim.l+"px";
 
-		dojo.style(this.domNode, "width", dim.w+"px"); 
-		dojo.style(this.canvas,  "width",  dim.w+"px");
+		dns.width = dim.w+"px"; 
+		this.canvas.style.width = dim.w+"px";
 
-		dojo.style(this.domNode, "height", dim.h+"px");
-		dojo.style(this.canvas,  "height", (dim.h - this.focusNode.offsetHeight)+"px");
-		
-		
+		dns.height = dim.h+"px";
+		this.canvas.style.height = (dim.h - this.focusNode.offsetHeight)+"px";
 	},
 	
-	bringToTop: function() {
+	_startZ: 100,
+	
+	bringToTop: function(){
 		// summary: bring this FloatingPane above all other panes
-		var windows = [];
-		var panes = dojox.layout.FloatingPane._allFPs;
-		for (var x = 0; x < panes.length; x++) {
-			if (this != panes[x]) {
-				windows.push(panes[x]);
-			}
-		}
-		windows.sort(function (a, b) {
+		var windows = dojo.filter(
+			this._allFPs,
+			function(i){
+				return i !== this;
+			}, 
+		this);
+		windows.sort(function(a, b){
 			return a.domNode.style.zIndex - b.domNode.style.zIndex;
 		});
 		windows.push(this);
-		var _startZ = 100;
-		for (x = 0; x < windows.length; x++) {
-			dojo.style(windows[x].domNode,"zIndex",(_startZ +x * 2));	
-		}
+		dojo.forEach(windows, function(w, x){
+			w.domNode.style.zIndex = (this._startZ + x * 2);
+			dojo.removeClass(w.domNode, "dojoxFloatingPaneFg");
+		}, this);
+		dojo.addClass(this.domNode, "dojoxFloatingPaneFg");
 	},
 	
-	destroy: function() {
+	destroy: function(){
 		// summary: Destroy this FloatingPane completely
-		var floatingPanes = dojox.layout.FloatingPane._allFPs;
-		for (var x = 0; x < floatingPanes.length; x++) {
-			if (this == floatingPanes[x]) {
-				floatingPanes.splice(x, 1);
-			}
-		}
+		this._allFPs.splice(dojo.indexOf(this._allFPs, this), 1);
 		this.inherited("destroy", arguments);
 	}
 });
 
-dojo.mixin(dojox.layout.FloatingPane, {
-	_allFPs: []
-});
 
 dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 	// summary:
@@ -332,7 +334,7 @@ dojo.declare("dojox.layout._DockNode", [dijit._Widget,dijit._Templated], {
 	//	reference to the FloatingPane we reprasent in any given dock
 	paneRef: null,
 
-	templateString: '<li dojoAttachEvent="ondblclick: restore" class="dojoxDockNode">'+
+	templateString: '<li dojoAttachEvent="onclick: restore" class="dojoxDockNode">'+
 			'<span dojoAttachPoint="restoreNode" class="dojoxDockRestoreButton" dojoAttachEvent="onclick: restore"></span>'+
 			'<span class="dojoxDockTitleNode" dojoAttachPoint="titleNode">${title}</span>'+
 			'</li>',

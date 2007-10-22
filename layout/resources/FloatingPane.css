@@ -1,6 +1,13 @@
 .dojoxFloatingPane {
 	background-color:#fff;
 	position:relative; 
+	border: 1px solid #dedede; 
+	overflow: hidden;
+	-webkit-box-shadow: 0px 5px 10px #adadad;
+}
+
+.dojoxFloatingPaneFg {
+	-webkit-box-shadow: 0px 8px 20px #525252;
 }
 
 /* titleNode */
@@ -125,7 +132,8 @@
 
 .dojoxDock {
 	display: block;
-	border: solid black 1px;
+	outline: 1px solid #adadad;
+	_border: 1px solid black;
 	position: absolute;
 	padding: 0px;
 	margin: 0px;
@@ -133,25 +141,26 @@
 }
 
 .dojoxDockNode {
-	-moz-border-radius:4pt 4pt;
+	border: 1px solid #adadad;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 3px;
 	cursor:pointer; 
-	border: outset 2px gray;
 	list-style: none;
 	padding: 2px;
 	margin: 0px;
 	height: 16px;
 	width: auto;
 	float: left;
-	background:#fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
+	background: #fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
 }
 
 .dojoxFloatingPaneContent {
-	overflow:auto;
-	background-color:#fff; 
-	height:100%; 
-	width:100%; 
+	overflow: auto;
+	background-color: #fff; 
+	height: 100%; 
+	width:	100%; 
 }
-
 
 .dojoxFloatingPaneCanvas {
 	background-color:#fff;
