@@ -134,9 +134,14 @@ dojo.declare("dojox.data.FlickrRestStore",
 					count = start + count;
 					start = 0; 
 				} else {
-					start = Math.ceil((start + count) / 2);
-					start = (start % 2 == 0 ? start : start + 1);					
-					count = start * 2;
+					var divLimit = 20, div = 2;
+					for(var i = divLimit; i > 0; i--) {
+						if(start % i == 0 && (start/i) >= count){
+							div = i;
+							break;
+						}
+					}
+					count = start/div;
 				}
 				request._realStart = request.start;
 				request._realCount = request.count;
