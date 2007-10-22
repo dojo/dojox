@@ -103,7 +103,7 @@
 	margin-bottom:3px; 
 	padding:0px; 
 	width:100%;
-	z-index:900; /* allows up to 99 panes above it, still staying on top most of the time */ 
+	z-index:99; /* position the dock _just_ below the lowest pane */
 
 	background:transparent;
 	/* background-color:#fff; 
