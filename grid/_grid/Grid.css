@@ -194,7 +194,7 @@
 }
 
 .dojoxGrid-cell-focus {
-	border: 1px dotted blue;
+	border: 1px dashed blue;
 }
 
 .dojoxGrid-cell-over {

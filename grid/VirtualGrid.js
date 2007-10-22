@@ -37,7 +37,7 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 			<div id="grid" rowCount="100" get="get" structure="structure" dojoType="dojox.VirtualGrid"></div>
 	*/
 
-	templateString: '<div class="dojoxGrid" hidefocus="hidefocus"><div class="dojoxGrid-master-header" dojoAttachPoint="headerNode"></div><div class="dojoxGrid-master-view" dojoAttachPoint="viewsNode"></div><span dojoAttachPoint="lastFocusNode" tabindex="0"></span></div>',
+	templateString: '<div class="dojoxGrid" hidefocus="hidefocus" role="wairole:grid"><div class="dojoxGrid-master-header" dojoAttachPoint="headerNode"></div><div class="dojoxGrid-master-view" dojoAttachPoint="viewsNode"></div><span dojoAttachPoint="lastFocusNode" tabindex="0"></span></div>',
 	// classTag: string
 	// css class applied to the grid's domNode
 	classTag: 'dojoxGrid',
