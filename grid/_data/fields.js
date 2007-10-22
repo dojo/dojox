@@ -89,7 +89,7 @@ dojo.declare('dojox.grid.data.field', null, {
 		this.name = inName;
 		this.compare = dojox.grid.data.compare;
 	},
-	na: '...'
+	na: dojox.grid.na
 });
 
 dojo.declare('dojox.grid.data.fields', dojox.grid.data.mixer, {

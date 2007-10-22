@@ -8,6 +8,7 @@ dojo.isNumber = function(v){
 //	grid utility library
 
 dojo.mixin(dojox.grid, {
+	na: '...',
 	nop: function() {
 	},
 	getTdIndex: function(td){

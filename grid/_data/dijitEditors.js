@@ -111,9 +111,7 @@ dojo.declare("dojox.grid.editors.DateTextBox", dojox.grid.editors.Dijit, {
 		});
 	}
 });
-formatDate = function(inDatum) {
-	return dojo.date.locale.format(new Date(inDatum), this.constraint);
-}
+
 
 dojo.declare("dojox.grid.editors.CheckBox", dojox.grid.editors.Dijit, {
 	editorClass: "dijit.form.CheckBox",
