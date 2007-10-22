@@ -115,7 +115,6 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		this.domNode.onReveal = null;
 		this.domNode.onSizeChange = null;
 		this.edit.destroy();
-		dojox.grid.unwatchTextSizePoll(this, 'textSizeChanged');
 		this.views.destroyViews();
 		this.inherited(arguments);
 	},
