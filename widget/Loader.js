@@ -76,7 +76,7 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 
 	_show: function(){
 		// summary: publish and show progress indicator
-		dojo.publish("Loader",{ message: 'started' });
+		dojo.publish("Loader",[{ message: 'started' }]);
 		if(this.hasVisuals){ 
 			if(this.attachToPointer){
 				this._pointerConnect = dojo.connect(document,"onmousemove",this,"_putLoader");
@@ -87,7 +87,7 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 
 	_hide: function(){
 		// summary: publish "xhr ended" and hide progress indicator
-		dojo.publish("Loader", { message: 'ended' });
+		dojo.publish("Loader",[{ message: 'ended' }]);
 		if(this.hasVisuals){ 
 			if(this.attachPointer){
 				dojo.disconnect(this._pointerConnect); 
