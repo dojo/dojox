@@ -98,15 +98,7 @@ dojo.declare("dojox.grid.data.model", null, {
 	dummy: 0
 });
 
-dojo.declare("dojox.grid.data.table", dojox.grid.data.model, {
-	// summary:
-	//	Basic grid data model for static data in the form of an array of rows that are arrays of cell data
-	constructor: function(){
-		this.cache = [];
-	},
-	colCount: 0, // tables introduce cols
-	data: null,
-	cache: null,
+dojo.declare("dojox.grid.data.rows", dojox.grid.data.model, {
 	// observer events
 	allChange: function(){
 		this.notify("AllChange", arguments);
@@ -118,6 +110,41 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.model, {
 	datumChange: function(){
 		this.notify("DatumChange", arguments);
 	},
+	// copyRow: function(inRowIndex); // abstract
+	// update
+	beginModifyRow: function(inRowIndex){
+		if(!this.cache[inRowIndex]){
+			this.cache[inRowIndex] = this.copyRow(inRowIndex);
+		}
+	},
+	endModifyRow: function(inRowIndex){
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			var data = this.getRow(inRowIndex);
+			if(!dojox.grid.arrayCompare(cache, data)){
+				this.update(cache, data, inRowIndex);
+			}
+			delete this.cache[inRowIndex];
+		}
+	},
+	cancelModifyRow: function(inRowIndex){
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			this.setRow(cache, inRowIndex);
+			delete this.cache[inRowIndex];
+		}
+	},
+});
+
+dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
+	// summary:
+	//	Basic grid data model for static data in the form of an array of rows that are arrays of cell data
+	constructor: function(){
+		this.cache = [];
+	},
+	colCount: 0, // tables introduce cols
+	data: null,
+	cache: null,
 	// morphology
 	measure: function(){
 		this.count = this.getRowCount();
@@ -140,6 +167,9 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.model, {
 	// access
 	getRow: function(inRowIndex){
 		return this.data[inRowIndex];
+	},
+	copyRow: function() {
+		this.getRow(inRowIndex).slice(0);
 	},
 	getDatum: function(inRowIndex, inColIndex){
 		return this.data[inRowIndex][inColIndex];
@@ -169,28 +199,6 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.model, {
 		}
 	},
 	// update
-	beginModifyRow: function(inRowIndex){
-		if(!this.cache[inRowIndex]){
-			this.cache[inRowIndex] = this.getRow(inRowIndex).slice(0);
-		}
-	},
-	endModifyRow: function(inRowIndex){
-		var cache = this.cache[inRowIndex];
-		if(cache){
-			var data = this.getRow(inRowIndex);
-			if(!dojox.grid.arrayCompare(cache, data)){
-				this.update(cache, data, inRowIndex);
-			}
-			delete this.cache[inRowIndex];
-		}
-	},
-	cancelModifyRow: function(inRowIndex){
-		var cache = this.cache[inRowIndex];
-		if(cache){
-			this.setRow(cache, inRowIndex);
-			delete this.cache[inRowIndex];
-		}
-	},
 	update: function(inOldData, inNewData, inRowIndex){
 		//delete this.cache[inRowIndex];	
 		//this.setRow(inNewData, inRowIndex);
