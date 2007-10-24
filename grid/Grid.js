@@ -40,8 +40,10 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	// model
 	_setModel: function(inModel){
 		this.model = inModel;
-		this.model.observer(this);
-		this.measureModel();
+		if (this.model) {
+			this.model.observer(this);
+			this.measureModel();
+		}
 	},
 	destroy: function(){
 		this.model.unobserver(this);
@@ -50,8 +52,8 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		// summary:
 		//	set the grid's data model
 		// inModel: model object
-		// new grid data model
-		this.model.unobserver(this);
+		if (this.model) 
+			this.model.unobserver(this);
 		this._setModel(inModel);
 	},
 	measureModel: function(){

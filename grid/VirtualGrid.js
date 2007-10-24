@@ -205,10 +205,10 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		if(!this.structure){
 			this.structure=window["layout"];
 		}
-		this.layout.setStructure(this.structure);
 		if(!this.structure){
 			return;
 		}
+		this.layout.setStructure(this.structure);
 		this.buildViews();
 		if(this.autoRender){
 			this.render();
