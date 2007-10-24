@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; utf-8" />
 <title>Test dojox.Grid Editing</title>
 <style>
 	@import "../_grid/Grid.css";
@@ -33,7 +33,7 @@
 	// Create a data model
 	// ==========================================================================
 	
-	s = (new Date()).getTime()
+	s = (new Date()).getTime();
 	
 	data = [ 
 		[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false, s],
@@ -44,23 +44,24 @@
 		[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true, s ],
 		[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false, s ]
 	];
-	for (var i=0, l = data.length, dl=100; i<dl; i++)
+	for(var i=0, l = data.length, dl=100; i<dl; i++){
 		data.push([].concat(data[i%l]));
+	}
 	model = new dojox.grid.data.table(null, data);
 	// ==========================================================================
 	// Tie some UI to the data model
 	// ==========================================================================
 	model.observer(this);
-	modelChange = function() {
+	modelChange = function(){
 		dojo.byId("rowCount").innerHTML = 'Row count: ' + model.count; 
 	}
 	// ==========================================================================
 	// Custom formatters
 	// ==========================================================================
-	formatMoney = function(inDatum) {
-		return isNaN(inDatum) ? '...' : '$' + parseFloat(inDatum).toFixed(2);
+	formatCurrency = function(inDatum){
+		return isNaN(inDatum) ? '...' : dojo.currency.format(inDatum, this.constraint);
 	}
-	formatDate = function(inDatum) {
+	formatDate = function(inDatum){
 		return dojo.date.locale.format(new Date(inDatum), this.constraint);
 	}
 	// ==========================================================================
@@ -73,13 +74,13 @@
 		defaultCell: { width: 8, editor: dojox.grid.editors.input, styles: 'text-align: right;'  },
 		rows: [[
 			{ name: 'Id', get: function(inRowIndex) { return inRowIndex+1;}, editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.NumberSpinner" },
-			{ name: 'Date', width: 10, field: 7, editor: dojox.grid.editors.DateTextBox, formatter: formatDate, constraint: {selector: "date"}},
+			{ name: 'Date', width: 10, field: 7, editor: dojox.grid.editors.DateTextBox, formatter: formatDate, constraint: {formatLength: 'long', selector: "date"}},
 			{ name: 'Priority', styles: 'text-align: center;', field: 0, /*editor: dojox.grid.editors.select*/ editor: dojox.grid.editors.ComboBox, options: ["normal", "note", "important"], width: 10},
 			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.CheckBox},
 			statusCell,
 			{ name: 'Message', styles: '', width: '100%', editor: dojox.grid.editors.Editor, editorToolbar: true },
-			{ name: 'Amount', formatter: formatMoney, editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.CurrencyTextBox" },
-			{ name: 'Amount', field: 4, formatter: formatMoney, editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.HorizontalSlider", width: 10}
+			{ name: 'Amount', formatter: formatCurrency, constraint: {currency: 'EUR'}, editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.CurrencyTextBox" },
+			{ name: 'Amount', field: 4, formatter: formatCurrency, constraint: {currency: 'EUR'}, editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.HorizontalSlider", width: 10}
 		]]
 	}];
 	// ==========================================================================

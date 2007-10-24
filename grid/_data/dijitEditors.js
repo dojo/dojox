@@ -24,20 +24,22 @@ dojo.declare("dojox.grid.editors.Dijit", dojox.grid.editors.base, {
 	getValue: function(inRowIndex){
 		return this.editor.getValue();
 	},
-	setValue: function(inRowIndex, inValue) {
+	setValue: function(inRowIndex, inValue){
 		if(this.editor&&this.editor.setValue){
 			this.editor.setValue(inValue);
 		}else{
 			this.inherited(arguments);
 		}
 	},
-	getEditorProps: function(inDatum) {
+	getEditorProps: function(inDatum){
 		return dojo.mixin({}, this.cell.editorProps||{}, {
+			constraints: dojo.mixin({}, this.cell.constraint) || {}, //TODO: really just for ValidationTextBoxes
 			value: inDatum
 		});
 	},
 	createEditor: function(inNode, inDatum, inRowIndex){
 		return new this.editorClass(this.getEditorProps(inDatum), inNode);
+
 	},
 	attachEditor: function(inNode, inDatum, inRowIndex){
 		inNode.appendChild(this.editor.domNode);
@@ -64,7 +66,7 @@ dojo.declare("dojox.grid.editors.Dijit", dojox.grid.editors.base, {
 	},
 	focus: function(inRowIndex, inNode){
 		if(this.editor){
-			setTimeout(dojo.hitch(this.editor, function() {
+			setTimeout(dojo.hitch(this.editor, function(){
 				dojox.grid.fire(this, "focus");
 			}), 0);
 		}
@@ -77,9 +79,9 @@ dojo.declare("dojox.grid.editors.Dijit", dojox.grid.editors.base, {
 
 dojo.declare("dojox.grid.editors.ComboBox", dojox.grid.editors.Dijit, {
 	editorClass: "dijit.form.ComboBox",
-	getEditorProps: function(inDatum) {
+	getEditorProps: function(inDatum){
 		var items=[];
-		dojo.forEach(this.cell.options, function(o) {
+		dojo.forEach(this.cell.options, function(o){
 			items.push({name: o, value: o});
 		});
 		var store = new dojo.data.ItemFileReadStore({data: {identifier:"name", items: items}});
@@ -98,15 +100,15 @@ dojo.declare("dojox.grid.editors.ComboBox", dojox.grid.editors.Dijit, {
 
 dojo.declare("dojox.grid.editors.DateTextBox", dojox.grid.editors.Dijit, {
 	editorClass: "dijit.form.DateTextBox",
-	setValue: function(inRowIndex, inValue) {
+	setValue: function(inRowIndex, inValue){
 		if(this.editor){
 			this.editor.setValue(new Date(inValue));
 		}else{
 			this.inherited(arguments);
 		}
 	},
-	getEditorProps: function(inDatum) {
-		return dojo.mixin({}, this.cell.editorProps||{}, {
+	getEditorProps: function(inDatum){
+		return dojo.mixin(this.inherited(arguments), {
 			value: new Date(inDatum)
 		});
 	}
@@ -115,15 +117,15 @@ dojo.declare("dojox.grid.editors.DateTextBox", dojox.grid.editors.Dijit, {
 
 dojo.declare("dojox.grid.editors.CheckBox", dojox.grid.editors.Dijit, {
 	editorClass: "dijit.form.CheckBox",
-	getValue: function() {
-		return this.editor.checked
+	getValue: function(){
+		return this.editor.checked;
 	}
 });
 
 
 dojo.declare("dojox.grid.editors.Editor", dojox.grid.editors.Dijit, {
 	editorClass: "dijit.Editor",
-	getEditorProps: function(inDatum) {
+	getEditorProps: function(inDatum){
 		return dojo.mixin({}, this.cell.editorProps||{}, {
 			height: this.cell.editorHeight || "100px"
 		});
