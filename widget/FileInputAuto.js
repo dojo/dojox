@@ -28,6 +28,16 @@ dojo.declare("dojox.widget.FileInputAuto",
 	//	default: 2 seconds
 	blurDelay: 2000,
 
+	// duration: Integer
+	//	The time in ms to use as the generic timing mechanism for the animations
+	//	set to 1 or 0 for "immediate respose"
+	duration: 500,
+
+	// uploadMessage: String
+	//	
+	//	FIXME: i18n somehow?
+	uploadMessage: "Uploading ...", 
+	
 	_sent: false,
 
 	// small template changes, new attachpoint: overlay
@@ -48,18 +58,27 @@ dojo.declare("dojox.widget.FileInputAuto",
 	_onBlur: function(){
 		// summary: start the upload timer
 		if(this._blurTimer){ clearTimeout(this._blurTimer); }
-		if(!this._sent){ this._blurTimer = setTimeout(dojo.hitch(this,"_sendFile"),this.blurDelay); }
+		if(!this._sent){
+			this._blurTimer = setTimeout(dojo.hitch(this,"_sendFile"),this.blurDelay);		
+		}
 	},
 
+
+	setMessage: function(/*String*/title){
+		// summary: set the text of the progressbar
+		this.overlay.innerHTML = title;	
+	},
+	
 	_sendFile: function(/* Event */e){
 		// summary: triggers the chain of events needed to upload a file in the background.
 		if(!this.fileInput.value){ return; }
 		dojo.style(this.fakeNodeHolder,"display","none");
 		dojo.style(this.overlay,"opacity","0");
 		dojo.style(this.overlay,"display","block");
-		this.overlay.innerHTML = "Uploading ...";
 
-		dojo.fadeIn({ node: this.overlay, duration:300 }).play();
+		this.setMessage(this.uploadMessage);
+
+		dojo.fadeIn({ node: this.overlay, duration:this.duration }).play();
 
 		var _newForm = document.createElement('form');
 		_newForm.setAttribute("enctype","multipart/form-data");
@@ -80,13 +99,13 @@ dojo.declare("dojox.widget.FileInputAuto",
 					dojo.style(this.overlay,"opacity","0");
 					dojo.style(this.overlay,"border","none");
 					dojo.style(this.overlay,"background","none"); 
-					var num = Math.floor((d.details.size/1024)*100)/100;
-					var size = (num>1)? num+"k" : ((num*1024)*100) + "bytes";
+					var num = (Math.floor((d.details.size/1024)*100)/100);
+					var size = (num>1) ? (num+"k") : (((num*1024)*100) + "bytes");
 					this.overlay.innerHTML = "success:" + d.details.name + " " +size;
 					this.overlay.style.backgroundImage = "none";
 					this.fileInput.style.display = "none";
 					this.fakeNodeHolder.style.display = "none";
-					dojo.fadeIn({ node:this.overlay, duration:500 }).play(25);
+					dojo.fadeIn({ node:this.overlay, duration:this.duration }).play(25);
 					this.onComplete(d);
 					this._sent = true;
 					this.inputNode.value = d.details.name; 

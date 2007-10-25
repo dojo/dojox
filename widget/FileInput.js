@@ -49,7 +49,7 @@ dojo.declare("dojox.widget.FileInput",
 	},
 
 	_onClick: function(/* Event */e){
-		// summary: on click of cacel button, since we can't clear the input because of
+		// summary: on click of cancel button, since we can't clear the input because of
 		// 	security reasons, we destroy it, and add a new one in it's place.
 		dojo.disconnect(this._listener);
 		dojo.disconnect(this._keyListener); 
