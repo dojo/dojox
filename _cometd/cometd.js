@@ -57,7 +57,7 @@ dojox.cometd = new function(){
 	}
 
 	this.init = function(root, props, bargs){
-                
+
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
 		props = props||{};
@@ -113,7 +113,7 @@ dojox.cometd = new function(){
 		}else{
 			return dojo.xhrPost(bindArgs);
 		}
-                
+
 		this.startBatch();
 	}
 
@@ -263,7 +263,7 @@ dojox.cometd = new function(){
 		}
 		this._sendMessage(message);
 	}
-        
+
 	this._sendMessage = function(/* object */ message){
 		if(this.currentTransport && this.initialized && this.batch==0){
 			return this.currentTransport.sendMessages([message]);
@@ -298,15 +298,16 @@ dojox.cometd = new function(){
 
 		var pendingDef = new dojo.Deferred();
 		this.pendingSubscriptions[channel] = pendingDef;
-                
-		// console.debug(objOrFunc, funcName);
 
 		if(objOrFunc){
 			var tname = "/cometd"+channel;
+			if(this.topics[tname]){
+				dojo.unsubscribe(this.topics[tname]);
+			}
 			var topic = dojo.subscribe(tname, objOrFunc, funcName);
 			this.topics[tname] = topic;
 		}
-                
+
 		this._sendMessage({
 			channel: "/meta/subscribe",
 			subscription: channel
@@ -314,29 +315,21 @@ dojox.cometd = new function(){
 
 		return pendingDef;
 
-	}      
+	}
 
 	this.subscribed = function(	/*string*/  channel,
-								/*obj*/     message){  
+								/*obj*/     message){
  	}
 
 
-	this.unsubscribe = function(/*string*/			channel,
-								/*object, optional*/	objOrFunc,
-								/*string, optional*/	funcName){ // return: boolean
+	this.unsubscribe = function(/*string*/			channel){ // return: boolean
 		// summary:
 		//		inform the server of this client's disinterest in channel
 		// channel:
-		//		name of the cometd channel to subscribe to
-		// objOrFunc:
-		//		an object scope for funcName or the name or reference to a
-		//		function to be called when messages are delivered to the
-		//		channel
-		// funcName:
-		//		the second half of the objOrFunc/funcName pair for identifying
+		//		name of the cometd channel to unsubscribe from
 
 		if(this.pendingUnsubscriptions[channel]){
-			// We already asked to subscribe to this channel, and
+			// We already asked to unsubscribe from this channel, and
 			// haven't heard back yet. Fail the previous attempt.
 			var oldDef = this.pendingUnsubscriptions[channel];
 			oldDef.cancel();
@@ -345,13 +338,12 @@ dojox.cometd = new function(){
 
 		var pendingDef = new dojo.Deferred();
 		this.pendingUnsubscriptions[channel] = pendingDef;
-		
-		// a callback function to notifiy upon channel message delivery
-		if(objOrFunc){
-			var tname = "/cometd"+channel;
+
+		var tname = "/cometd"+channel;
+		if(this.topics[tname]){
 			dojo.unsubscribe(this.topics[tname]);
 		}
-                
+
 		this._sendMessage({
 			channel: "/meta/unsubscribe",
 			subscription: channel
@@ -362,7 +354,7 @@ dojox.cometd = new function(){
 	}
 
 	this.unsubscribed = function(	/*string*/  channel,
-									/*obj*/     message){       
+									/*obj*/     message){
 	}
 
 	this.startBatch = function(){
@@ -485,7 +477,7 @@ dojox.cometd.longPollTransport = new function(){
 				if(	(this._cometd.advice["interval"])&&
 					(this._cometd.advice.interval>0) ){
 					var transport = this;
-					setTimeout(function(){ transport._connect(); }, 
+					setTimeout(function(){ transport._connect(); },
 						this._cometd.advice.interval);
 				}else{
 					this._connect();
@@ -549,7 +541,7 @@ dojox.cometd.longPollTransport = new function(){
 		});
 		this._cometd.connected = true;
 	}
-        
+
 	this.sendMessages = function(messages){
 		for(var i=messages.length; i-->0;){
 			messages[i].clientId = this._cometd.clientId;
@@ -651,7 +643,7 @@ dojox.cometd.callbackPollTransport = new function(){
 		});
 		this._cometd.connected = true;
 	}
-        
+
 	this.sendMessages = function(/*array*/ messages){
 		for(var i=messages.length;i-->0;){
 			messages[i].clientId = this._cometd.clientId;
