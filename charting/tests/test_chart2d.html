@@ -175,7 +175,7 @@ makeObjects = function(){
 	chart21.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", 
 		includeZero: true, min: 0, max: 8, minorLabels: false,
 		majorTicks: true, minorTicks: true, microTicks: false, 
-		majorTickValue: 2, minorTickValue: 1, microTickValue: 0.5});
+		majorTickStep: 2, minorTickStep: 1, microTickStep: 0.5});
 	chart21.addPlot("front_grid", {type: "Grid", hMajorLines: true, vMajorLines: false});
 	chart21.addPlot("default", {type: "Columns", gap: 2});
 	chart21.addPlot("back_grid", {type: "Grid", hMajorLines: false, vMajorLines: true});

@@ -51,9 +51,9 @@ dojo.require("dojox.charting.scaler");
 				
 				// have no defaults:
 				// min, max,
-				// majorTickSize,
-				// minorTickSize,
-				// microTickSize,
+				// majorTickStep,
+				// minorTickStep,
+				// microTickStep,
 				// labels
 				
 			}, kwArgs);
@@ -99,9 +99,9 @@ dojo.require("dojox.charting.scaler");
 				fixLower: this.opt.fixLower, 
 				natural:  this.opt.natural
 			};
-			if("majorTickValue" in this.opt){ kwArgs.majorTick = this.opt.majorTickValue; }
-			if("minorTickValue" in this.opt){ kwArgs.minorTick = this.opt.minorTickValue; }
-			if("microTickValue" in this.opt){ kwArgs.microTick = this.opt.microTickValue; }
+			if("majorTickStep" in this.opt){ kwArgs.majorTick = this.opt.majorTickStep; }
+			if("minorTickStep" in this.opt){ kwArgs.minorTick = this.opt.minorTickStep; }
+			if("microTickStep" in this.opt){ kwArgs.microTick = this.opt.microTickStep; }
 			this.scaler = dojox.charting.scaler(min, max, span, kwArgs);
 			this.scaler.minMinorStep = minMinorStep;
 			return this;
