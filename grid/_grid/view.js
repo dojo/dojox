@@ -243,7 +243,7 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 	},
 	// column resizing
 	setColWidth: function(inIndex, inWidth){
-		this.grid.getCell(inIndex).unitWidth = inWidth + 'px';
+		this.grid.setCellWidth(inIndex, inWidth + 'px');
 	},
 	update: function(){
 		var left = this.scrollboxNode.scrollLeft;

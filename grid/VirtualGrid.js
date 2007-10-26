@@ -444,6 +444,19 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 			this.rows.styleRowNode(inRowIndex, inRowNode);
 		}
 	},
+	// cells
+	getCell: function(inIndex){
+		// summary:
+		//	retrieves the cell object for a given grid column.
+		// inIndex: int
+		// grid column index of cell to retrieve
+		// returns:
+		//	a grid cell
+		return this.layout.cells[inIndex];
+	},
+	setCellWidth: function(inIndex, inUnitWidth) {
+		this.getCell(inIndex).unitWidth = inUnitWidth;
+	},
 	// sorting
 	canSort: function(inSortInfo){
 		// summary:
@@ -482,15 +495,6 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 			si = -this.sortInfo;
 		}
 		this.setSortInfo(si);
-	},
-	getCell: function(inIndex){
-		// summary:
-		//	retrieves the cell object for a given grid column.
-		// inIndex: int
-		// grid column index of cell to retrieve
-		// returns:
-		//	a grid cell
-		return this.layout.cells[inIndex];
 	},
 	setSortInfo: function(inSortInfo){
 		if(this.canSort(inSortInfo)){
