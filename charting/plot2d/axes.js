@@ -48,6 +48,14 @@ dojo.require("dojox.charting.scaler");
 				minorTicks:  true,
 				minorLabels: true,
 				microTicks:  false
+				
+				// have no defaults:
+				// min, max,
+				// majorTickSize,
+				// minorTickSize,
+				// microTickSize,
+				// labels
+				
 			}, kwArgs);
 		},
 		clear: function(){
@@ -59,7 +67,9 @@ dojo.require("dojox.charting.scaler");
 		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
-			this.labels = labels;
+			this.labels = "labels" in this.opt ? this.opt.labels : labels;
+			if("min" in this.opt){ min = this.opt.min; }
+			if("max" in this.opt){ max = this.opt.max; }
 			if(this.opt.includeZero){
 				if(min > 0){ min = 0; }
 				if(max < 0){ max = 0; }
@@ -84,11 +94,15 @@ dojo.require("dojox.charting.scaler");
 					minMinorStep = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
 				}
 			}
-			this.scaler = dojox.charting.scaler(min, max, span, {
+			var kwArgs = {
 				fixUpper: this.opt.fixUpper, 
 				fixLower: this.opt.fixLower, 
 				natural:  this.opt.natural
-			});
+			};
+			if("majorTickValue" in this.opt){ kwArgs.majorTick = this.opt.majorTickValue; }
+			if("minorTickValue" in this.opt){ kwArgs.minorTick = this.opt.minorTickValue; }
+			if("microTickValue" in this.opt){ kwArgs.microTick = this.opt.microTickValue; }
+			this.scaler = dojox.charting.scaler(min, max, span, kwArgs);
 			this.scaler.minMinorStep = minMinorStep;
 			return this;
 		},

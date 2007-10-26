@@ -169,6 +169,19 @@ makeObjects = function(){
 	chart20.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart20.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart20.render();
+
+	var chart21 = new dojox.charting.Chart2D("test21");
+	chart21.addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true});
+	chart21.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", 
+		includeZero: true, min: 0, max: 8, minorLabels: false,
+		majorTicks: true, minorTicks: true, microTicks: false, 
+		majorTickValue: 2, minorTickValue: 1, microTickValue: 0.5});
+	chart21.addPlot("front_grid", {type: "Grid", hMajorLines: true, vMajorLines: false});
+	chart21.addPlot("default", {type: "Columns", gap: 2});
+	chart21.addPlot("back_grid", {type: "Grid", hMajorLines: false, vMajorLines: true});
+	chart21.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
+	chart21.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart21.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -218,6 +231,8 @@ dojo.addOnLoad(makeObjects);
 <div id="test19" style="width: 200px; height: 200px;"></div>
 <p>20: Columns with gaps beetwen them, grids, custom strokes, fills, axes.</p>
 <div id="test20" style="width: 200px; height: 200px;"></div>
+<p>21: Columns with gaps beetwen them, grids, custom strokes, fills, axes, with min=0, max=8, and manually specified ticks on the vertical axis.</p>
+<div id="test21" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
