@@ -63,23 +63,19 @@
 				dockable: false,
 				maxable: true,
 				closable: true,
-				resizable: true
+				resizable: false
 			},node);
 			tmp.startup();
-			tmp.resize({ x:200, y:200 });			
+			tmp.resize({ w:300, h:175 });			
 		}
 
 		var vpx, vpy = null;
-		dojo.addOnLoad(function(){
-
-			 makeFloater();
-
-		});
+		dojo.addOnLoad(makeFloater);
 
 	</script>
 
 </head>
-<body class="tundra">
+<body>
 
 
 		<a href="javascript:dijit.byId('floater1').hide()">hide first pane</a> |

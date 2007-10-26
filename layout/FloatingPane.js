@@ -52,6 +52,9 @@ dojo.declare("dojox.layout.FloatingPane",
 	// animation holders for toggle
 	_showAnim: null,
 	_hideAnim: null, 
+	
+	// node in the dock (if docked)
+	_dockNode: null,
 
 	// iconSrc: String
 	//	[not implemented yet] will be either icon in titlepane to left
@@ -180,7 +183,11 @@ dojo.declare("dojox.layout.FloatingPane",
 				this.dockTo._positionDock(null);
 				if (this.dockTo) { this.dockTo._positionDock(null); }
 				if (typeof callback == "function") { callback(); }
-				this._isDocked = false; 
+				this._isDocked = false;
+				if (this._dockNode) { 
+					this._dockNode.destroy();
+					this._dockNode = null;
+				}
 			})
 		}).play();
 		this.resize(dojo.coords(this.domNode));
@@ -216,7 +223,7 @@ dojo.declare("dojox.layout.FloatingPane",
 
 	_dock: function(){
 		if(!this._isDocked){
-			this.dockTo.addNode(this);
+			this._dockNode = this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
 	},
@@ -285,6 +292,7 @@ dojo.declare("dojox.layout.Dock", [dijit._Widget,dijit._Templated], {
 		this.containerNode.appendChild(div);
 		var node = new dojox.layout._DockNode({ title: refNode.title, paneRef: refNode },div);
 		node.startup();
+		return node;
 	},
 
 	startup: function(){
