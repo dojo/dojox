@@ -8,10 +8,13 @@ dojo.require("dojox.charting.Theme");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting, 
-		clear = df.lambda("item.clear()"), o = {};
+		clear = df.lambda("item.clear()");
 
 	dojo.declare("dojox.charting.Chart2D", null, {
 		constructor: function(node, kwArgs){
+			// initialize parameters
+			this.margins = kwArgs && kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
+			
 			// default initialization
 			this.theme = null;
 			this.axes = {};
@@ -69,6 +72,23 @@ dojo.require("dojox.charting.Theme");
 			}
 			return this;
 		},
+		resize: function(width, height){
+			var box;
+			switch(arguments.length){
+				case 0:
+					box = dojo.marginBox(this.node);
+					break;
+				case 1: 
+					box = width;
+					break;
+				default:
+					box = {w: width, h: height};
+					break;
+			}
+			dojo.marginBox(this.node, box);
+			this.surface.setDimensions(box.w, box.h);
+			return this.render();
+		},
 		render: function(){
 			// clear old values
 			
@@ -79,26 +99,24 @@ dojo.require("dojox.charting.Theme");
 			// rebuild new connections, and add defaults
 			
 			// assign series
-			for(var i = 0; i < this.series.length; ++i){
-				var run = this.series[i];
+			dojo.forEach(this.series, function(run){
 				if(!(run.plot in this.renderers)){
-					var renderer = new dc.plot2d.renderers.Default({}, this);
-					renderer.name = run.plot;
+					var plot = new dc.plot2d.renderers.Default({}, this);
+					plot.name = run.plot;
 					this.renderers[run.plot] = this.stack.length;
-					this.stack.push(renderer);
+					this.stack.push(plot);
 				}
 				this.stack[this.renderers[run.plot]].addSeries(run);
-			}
+			}, this);
 			// assign axes
-			for(var i = 0; i < this.stack.length; ++i){
-				var renderer = this.stack[i];
-				if("hAxis" in renderer){
-					renderer.setAxis(this.axes[renderer.hAxis]);
+			dojo.forEach(this.stack, function(plot){
+				if("hAxis" in plot){
+					plot.setAxis(this.axes[plot.hAxis]);
 				}
-				if("vAxis" in renderer){
-					renderer.setAxis(this.axes[renderer.vAxis]);
+				if("vAxis" in plot){
+					plot.setAxis(this.axes[plot.vAxis]);
 				}
-			}
+			}, this);
 			// set up a theme
 			if(!this.theme){
 				this.theme = new dojox.charting.Theme(dojox.charting._def);
@@ -111,33 +129,18 @@ dojo.require("dojox.charting.Theme");
 			dim.width  = dojox.gfx.normalizedLength(dim.width);
 			dim.height = dojox.gfx.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
-			for(var i = 0; i < this.stack.length; ++i){
-				var renderer = this.stack[i];
-				// use the current dimension as an approximation
-				renderer.calculateAxes(dim);
-			}
+			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(dim); });
 			// assumption: we don't have stacked axes yet
 			var offsets = {l: 0, r: 0, t: 0, b: 0};
-			for(var i in this.axes){
-				if(i in o){ continue; }
-				var offs = this.axes[i].getOffsets();
-				offsets.l = Math.max(offsets.l, offs.l);
-				offsets.r = Math.max(offsets.r, offs.r);
-				offsets.t = Math.max(offsets.t, offs.t);
-				offsets.b = Math.max(offsets.b, offs.b);
-			}
-			// add some standard margins
-			offsets.l += 10;
-			offsets.r += 10;
-			offsets.t += 10;
-			offsets.b += 10;
+			df.forIn(this.axes, function(axis){
+				df.forIn(axis.getOffsets(), function(o, i){ offsets[i] += o; });
+			});
+			// add margins
+			df.forIn(this.margins, function(o, i){ offsets[i] += o; });
 			// second run with realistic dimensions
 			var plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
-			for(var i = 0; i < this.stack.length; ++i){
-				var renderer = this.stack[i];
-				renderer.calculateAxes(plotArea);
-			}
+			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(plotArea); });
 			
 			// generate shapes
 			
@@ -175,14 +178,9 @@ dojo.require("dojox.charting.Theme");
 				}
 			}
 			// go over the stack backwards
-			for(var i = this.stack.length - 1; i >= 0; --i){
-				this.stack[i].render(dim, offsets);
-			}
+			df.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
 			// go over axes
-			for(var i in this.axes){
-				if(i in o){ continue; }
-				this.axes[i].render(dim, offsets);
-			}
+			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
 			
 			return this;
 		}
