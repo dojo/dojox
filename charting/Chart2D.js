@@ -7,8 +7,8 @@ dojo.require("dojox.charting.plot2d.renderers");
 dojo.require("dojox.charting.Theme");
 
 (function(){
-	var n = dojox.gfx.normalizedLength, df = dojox.lang.functional,
-		dc = dojox.charting, clear = df.lambda("item.clear()"), o = {};
+	var df = dojox.lang.functional, dc = dojox.charting, 
+		clear = df.lambda("item.clear()"), o = {};
 
 	dojo.declare("dojox.charting.Chart2D", null, {
 		constructor: function(node, kwArgs){
@@ -22,7 +22,8 @@ dojo.require("dojox.charting.Theme");
 			
 			// create a surface
 			this.node = dojo.byId(node);
-			this.surface = dojox.gfx.createSurface(this.node, n(this.node.style.width), n(this.node.style.height));
+			var box = dojo.marginBox(node);
+			this.surface = dojox.gfx.createSurface(this.node, box.w, box.h);
 		},
 		setTheme: function(theme){
 			this.theme = theme;
