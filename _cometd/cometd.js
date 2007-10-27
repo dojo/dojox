@@ -30,6 +30,7 @@ dojox.cometd = new function(){
 	this.version = 0.9;
 	this.minimumVersion = 0.1;
 	this.clientId = null;
+	this.messageId = 0;
 	this.batch=0;
 
 	this._isXD = false;
@@ -65,6 +66,7 @@ dojox.cometd = new function(){
 		props.version = this.version;
 		props.minimumVersion = this.minimumVersion;
 		props.channel = "/meta/handshake";
+		props.id = this.messageId++;
 
 		props.ext = { "json-comment-filtered": true };
 
@@ -392,7 +394,6 @@ here's a stub transport defintion:
 
 cometd.blahTransport = new function(){
 	this.lastTimestamp = null;
-	this.lastId = null;
 
 	this.check = function(types, version, xdomain){
 		// summary:
@@ -414,9 +415,6 @@ cometd.blahTransport = new function(){
 	this.deliver = function(message){
 		if(message["timestamp"]){
 			this.lastTimestamp = message.timestamp;
-		}
-		if(message["id"]){
-			this.lastId = message.id;
 		}
 		if(	(message.channel.length > 5)&&
 			(message.channel.substr(0, 5) == "/meta")){
@@ -442,7 +440,6 @@ cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahT
 dojox.cometd.longPollTransport = new function(){
 	this._cometd=null;
 	this.lastTimestamp = null;
-	this.lastId = null;
 
 	this.check = function(types, version, xdomain){
 		return ((!xdomain)&&(dojo.indexOf(types, "long-polling") >= 0));
@@ -456,7 +453,8 @@ dojox.cometd.longPollTransport = new function(){
 				{
 					channel:	"/meta/connect",
 					clientId:	this._cometd.clientId,
-					connectionType: "long-polling"
+					connectionType: "long-polling",
+					id:		this._cometd.messageId++
 				}
 			])
 		});
@@ -501,7 +499,7 @@ dojox.cometd.longPollTransport = new function(){
 						connectionType: "long-polling",
 						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:		this.lastId
+						id:		this._cometd.messageId++
 					}
 				])
 			});
@@ -513,10 +511,6 @@ dojox.cometd.longPollTransport = new function(){
 		if(message["timestamp"]){
 			this.lastTimestamp = message.timestamp;
 		}
-		if(message["id"]){
-			this.lastId = message.id;
-		}
-
 	}
 
 	this.openTunnelWith = function(content, url){
@@ -543,8 +537,9 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.sendMessages = function(messages){
-		for(var i=messages.length; i-->0;){
+		for(var i=0; i<messages.length; i++){
 			messages[i].clientId = this._cometd.clientId;
+			messages[i].id = this._cometd.messageId++;
 		}
 		return dojo.xhrPost({
 			url: this._cometd.url||djConfig["cometdRoot"],
@@ -570,7 +565,8 @@ dojox.cometd.longPollTransport = new function(){
 			content: {
 				message: dojo.toJson([{
 					channel:	"/meta/disconnect",
-					clientId:	this._cometd.clientId
+					clientId:	this._cometd.clientId,
+					id:		this._cometd.messageId++
 				}])
 			}
 		});
@@ -582,7 +578,6 @@ dojox.cometd.longPollTransport = new function(){
 dojox.cometd.callbackPollTransport = new function(){
 	this._cometd=null;
 	this.lastTimestamp = null;
-	this.lastId = null;
 
 	this.check = function(types, version, xdomain){
 		// we handle x-domain!
@@ -597,7 +592,8 @@ dojox.cometd.callbackPollTransport = new function(){
 				{
 					channel:	"/meta/connect",
 					clientId:	this._cometd.clientId,
-					connectionType: "callback-polling"
+					connectionType: "callback-polling",
+					id:		this._cometd.messageId++
 				}
 			])
 		});
@@ -614,7 +610,7 @@ dojox.cometd.callbackPollTransport = new function(){
 						connectionType: "callback-polling",
 						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:		this.lastId
+						id:		this._cometd.messageId++,
 					}
 				])
 			});
@@ -645,8 +641,9 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.sendMessages = function(/*array*/ messages){
-		for(var i=messages.length;i-->0;){
+		for(var i=0; i<messages.length; i++){
 			messages[i].clientId = this._cometd.clientId;
+			messages[i].id = this._cometd.messageId++;
 		}
 		var bindArgs = {
 			url: this._cometd.url||djConfig["cometdRoot"],
