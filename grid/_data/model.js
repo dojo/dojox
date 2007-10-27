@@ -133,7 +133,7 @@ dojo.declare("dojox.grid.data.rows", dojox.grid.data.model, {
 			this.setRow(cache, inRowIndex);
 			delete this.cache[inRowIndex];
 		}
-	},
+	}
 });
 
 dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
