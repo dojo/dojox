@@ -127,7 +127,9 @@
 .slideShowImageWrapper {
 	position:relative;
 	text-align: center;
-	overflow:hidden;
+	margin-top: -42px;
+	float: left;
+	width: 100%;
 }
 .slideShowImageWrapper img {
 	border: 0px none;
@@ -177,7 +179,8 @@
 	height: 50px;
 	width: 100%;
 	position: relative;
-	margin-top: -50px;
+	z-index:999;
+	float: left;
 }
 .slideShowCtrl span {
 	width: 50px;

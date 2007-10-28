@@ -121,11 +121,11 @@ dojo.declare("dojox.image.SlideShow",
 		if(this.hasNav){
 			dojo.connect(this.outerNode, "onmouseover", function(evt){
 				try{_this._showNav();}
-				catch(e){console.log("dojox.image.SlideShow: Caught exception onmouseover", e);}			
+				catch(e){}			
 			});		
 			dojo.connect(this.outerNode, "onmouseout", function(evt){
 				try{_this._hideNav(evt);}
-				catch(e){console.log("dojox.image.SlideShow: Caught exception onmouseout", e);}
+				catch(e){}
 			});
 		}
 		
@@ -224,16 +224,16 @@ dojo.declare("dojox.image.SlideShow",
 		this.inherited("destroy",arguments);
 	},
 
-	showNextImage: function(inTimer){
+	showNextImage: function(inTimer, forceLoop){
 		// summary: Changes the image being displayed to the next image in the data store
 		// inTimer: Boolean
 		//	If true, a slideshow is active, otherwise the slideshow is inactive.
 		if(inTimer && this._timerCancelled){return false;}
 		
 		if(this.imageIndex + 1 >= this.maxPhotos){
-			if(inTimer && this.loop){ this.imageIndex = 0; }
+			if(inTimer && (this.loop || forceLoop)){ this.imageIndex = 0; }
 			else{
-				if(this._slideId){ this._stop; }
+				if(this._slideId){ this._stop(); }
 				return false;
 			}
 		}
@@ -251,7 +251,7 @@ dojo.declare("dojox.image.SlideShow",
 		}else{
 			dojo.toggleClass(this.domNode,"slideShowPaused");			
 			this._timerCancelled = false;
-			var success = this.showNextImage(true);
+			var success = this.showNextImage(true, true);
 			if(!success){
 				this._stop();
 			}
@@ -283,7 +283,6 @@ dojo.declare("dojox.image.SlideShow",
 		var _this = this;
 		var current = this.largeNode.getElementsByTagName("div");
 		this.imageIndex = idx;
-		var navShowing = this._navShowing;
 
 		var showOrLoadIt = function() {
 			//If the image is already loaded, then show it. 
@@ -301,7 +300,7 @@ dojo.declare("dojox.image.SlideShow",
 					if(img.tagName.toLowerCase() != "img"){img = img.firstChild;}
 					title = img.getAttribute("title");
 					
-					if(navShowing){
+					if(_this._navShowing){
 						_this._showNav(true);
 					}
 					dojo.publish(_this.getShowTopicName(), [{
@@ -330,7 +329,6 @@ dojo.declare("dojox.image.SlideShow",
 		//If an image is currently showing, fade it out, then show
 		//the new image. Otherwise, just show the new image. 	
 		if(current && current.length > 0){
-			this._hideNav();
 			dojo.fadeOut({
 				node: current[0],
 				duration: 300,
@@ -534,15 +532,14 @@ dojo.declare("dojox.image.SlideShow",
 		var margin = this._currentImage.height - this.navPlay._size.h - 10 + this._getTopPadding();
 		
 		if(margin > this._currentImage.height){margin += 10;}
-		
 		dojo[this.imageIndex < 1 ? "addClass":"removeClass"](this.navPrev, "slideShowCtrlHide");
 		dojo[this.imageIndex + 1 >= this.maxPhotos ? "addClass":"removeClass"](this.navNext, "slideShowCtrlHide");
-		dojo.style(this.navNode, "marginTop", "-"+margin+"px");
 	
 		var _this = this;
 		if(this._navAnim) {
 			this._navAnim.stop();
 		}
+		if(this._navShowing){return;}
 		this._navAnim = dojo.fadeIn({node: this.navNode, duration: 300,
 							onEnd: function(){_this._navAnim=null;}});
 		
