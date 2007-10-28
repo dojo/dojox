@@ -233,14 +233,14 @@
 	cursor: pointer;
 }
 .thumbOuter .prevHoriz {
-	background-position: -96px 0px;
+	background-position: -96px 12px;
 	position: relative;
 	float: left;
 	height: 100%;
 }
 
 .thumbOuter .nextHoriz {
-	background-position: -144px 0px;
+	background-position: -144px 12px;
 	position: relative;
 	float: right;
 	height: 100%;
@@ -249,11 +249,15 @@
 .thumbOuter .prevVert {
 	background-position: 0px 0px;
 	height: 48px;
+	width:48px;
+	margin-left:24px;
 }
 
 .thumbOuter .nextVert {
 	background-position: -48px 0px;
 	height: 48px;
+	width:48px;
+	margin-left:24px;
 }
 
 .thumbWrapper img {
