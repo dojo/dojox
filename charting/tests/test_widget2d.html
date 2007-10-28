@@ -21,6 +21,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 
 <script type="text/javascript">
 	dojo.require("dojox.charting.widget.Chart2D");
+	dojo.require("dojox.charting.themes.PlotKit.orange");
 	dojo.require("dojox.data.HtmlTableStore");
 	
 	seriesB = [2.6, 1.8, 2, 1, 1.4, 0.7, 2];
@@ -46,15 +47,33 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 		<tr><td>2  </td></tr>
 	</tbody>
 </table>
-<div dojoType="dojox.charting.widget.Chart2D" style="width: 300px; height: 300px;">
-	<div class="axis" name="x"></div>
-	<div class="axis" name="y" vertical="true" fixUpper="major" includeZere="true"></div>
-	<div class="plot" name="default" type="Areas"></div>
-	<div class="plot" name="grid" type="Grid"></div>
-	<div class="series" name="Series A" data="1, 2, 0.5, 1.5, 1, 2.8, 0.4"></div>
-	<div class="series" name="Series B" array="seriesB"></div>
-	<div class="series" name="Series C" store="tableStore" valueFn="Number(x)"></div>
-</div>
+<table><tr>
+	<td>
+		<div dojoType="dojox.charting.widget.Chart2D" style="width: 300px; height: 300px;">
+			<div class="axis" name="x" font="italic normal normal 8pt Tahoma"></div>
+			<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
+				font="italic normal normal 8pt Tahoma"></div>
+			<div class="plot" name="default" type="Areas"></div>
+			<div class="plot" name="grid" type="Grid"></div>
+			<div class="series" name="Series A" data="1, 2, 0.5, 1.5, 1, 2.8, 0.4"></div>
+			<div class="series" name="Series B" array="seriesB"></div>
+			<div class="series" name="Series C" store="tableStore" valueFn="Number(x)"></div>
+		</div>
+	</td>
+	<td>
+		<div dojoType="dojox.charting.widget.Chart2D" theme="dojox.charting.themes.PlotKit.orange" 
+				fill="'lightgrey'" style="width: 300px; height: 300px;">
+			<div class="axis" name="x" font="italic normal bold 10pt Tahoma"></div>
+			<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
+				font="italic normal bold 10pt Tahoma"></div>
+			<div class="plot" name="default" type="Areas"></div>
+			<div class="plot" name="grid" type="Grid"></div>
+			<div class="series" name="Series A" data="1, 2, 0.5, 1.5, 1, 2.8, 0.4"></div>
+			<div class="series" name="Series B" array="seriesB"></div>
+			<div class="series" name="Series C" store="tableStore" valueFn="Number(x)" stroke="'blue'" fill="'green'"></div>
+		</div>
+	</td>
+</tr></table>
 <p>That's all Folks!</p>
 </body>
 </html>

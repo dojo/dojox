@@ -19,6 +19,10 @@ dojo.require("dojox.lang.functional");
 		// margins for the chart: {l: 10, r: 10, t: 10, b: 10}
 		margins: null,
 		
+		// chart area
+		stroke: null,
+		fill:   null,
+		
 		// methods
 		
 		buildRendering: function(){
@@ -31,7 +35,11 @@ dojo.require("dojox.lang.functional");
 			
 			// build the chart
 			n.innerHTML = "";
-			var c = this.chart = new dojox.charting.Chart2D(n, this.margins);
+			var c = this.chart = new dojox.charting.Chart2D(n, {
+				margins: this.margins, 
+				stroke:  this.stroke,
+				fill:    this.fill
+			});
 			
 			// add collected parameters
 			if(this.theme){
@@ -145,6 +153,12 @@ dojo.require("dojox.lang.functional");
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs, t;
 		t = node.getAttribute("plot");
 		if(t != null){ kw.plot = t; }
+		t = node.getAttribute("marker");
+		if(t != null){ kw.marker = t; }
+		t = node.getAttribute("stroke");
+		if(t != null){ kw.stroke = eval("(" + t + ")"); }
+		t = node.getAttribute("fill");
+		if(t != null){ kw.fill = eval("(" + t + ")"); }
 		t = node.getAttribute("data");
 		if(t != null){
 			o.type = "data";

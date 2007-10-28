@@ -158,7 +158,7 @@ dojo.require("dojox.charting.scaler");
 			lines:   true,	// draw lines
 			areas:   false,	// draw areas
 			markers: false,	// draw markers
-			shadows: null	// draw shadows
+			shadows: 0		// draw shadows
 		},
 		optionalParams: {},	// no optional parameters
 		

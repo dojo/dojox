@@ -13,7 +13,10 @@ dojo.require("dojox.charting.Theme");
 	dojo.declare("dojox.charting.Chart2D", null, {
 		constructor: function(node, kwArgs){
 			// initialize parameters
-			this.margins = kwArgs && kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
+			if(!kwArgs){ kwArgs = {}; }
+			this.margins = kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
+			this.stroke  = kwArgs.stroke;
+			this.fill    = kwArgs.fill;
 			
 			// default initialization
 			this.theme = null;
@@ -148,37 +151,37 @@ dojo.require("dojox.charting.Theme");
 			// generate shapes
 			
 			// draw a chart background
-			var t = this.theme;
-			if(("chart" in t)){
-				if("fill" in t.chart){
-					this.surface.createRect({
-						width:  dim.width, 
-						height: dim.height
-					}).setFill(t.chart.fill);
-				}
-				if("stroke" in t.chart){
-					this.surface.createRect({
-						width:  dim.width - 1, 
-						height: dim.height - 1
-					}).setStroke(t.chart.stroke);
-				}
+			var t = this.theme,
+				fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill),
+				stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
+			if(fill){
+				this.surface.createRect({
+					width:  dim.width, 
+					height: dim.height
+				}).setFill(fill);
+			}
+			if(stroke){
+				this.surface.createRect({
+					width:  dim.width - 1, 
+					height: dim.height - 1
+				}).setStroke(stroke);
 			}
 			// draw a plot background
-			if(("plotarea" in t)){
-				if("fill" in t.plotarea){
-					this.surface.createRect({
-						x: offsets.l, y: offsets.t,
-						width:  dim.width  - offsets.l - offsets.r, 
-						height: dim.height - offsets.t - offsets.b
-					}).setFill(t.plotarea.fill);
-				}
-				if("stroke" in t.plotarea){
-					this.surface.createRect({
-						x: offsets.l, y: offsets.t,
-						width:  dim.width  - offsets.l - offsets.r - 1, 
-						height: dim.height - offsets.t - offsets.b - 1
-					}).setStroke(t.plotarea.stroke);
-				}
+			fill   = t.plotarea && t.plotarea.fill;
+			stroke = t.plotarea && t.plotarea.stroke;
+			if(fill){
+				this.surface.createRect({
+					x: offsets.l, y: offsets.t,
+					width:  dim.width  - offsets.l - offsets.r, 
+					height: dim.height - offsets.t - offsets.b
+				}).setFill(fill);
+			}
+			if(stroke){
+				this.surface.createRect({
+					x: offsets.l, y: offsets.t,
+					width:  dim.width  - offsets.l - offsets.r - 1, 
+					height: dim.height - offsets.t - offsets.b - 1
+				}).setStroke(stroke);
 			}
 			// go over the stack backwards
 			df.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
