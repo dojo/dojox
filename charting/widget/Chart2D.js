@@ -64,11 +64,11 @@ dojo.require("dojox.lang.functional");
 							var values;
 							if("valueFn" in series.kwArgs){
 								var fn = series.kwArgs.valueFn;
-								values = data.map(function(x){
+								values = dojo.map(data, function(x){
 									return fn(series.data.getValue(x, series.field, 0));
 								});
 							}else{
-								values = data.map(function(x){
+								values = dojo.map(data, function(x){
 									return series.data.getValue(x, series.field, 0);
 								});
 							}
