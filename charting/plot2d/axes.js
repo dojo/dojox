@@ -3,13 +3,17 @@ dojo.provide("dojox.charting.plot2d.axes");
 dojo.require("dojo.colors");
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.utils");
 dojo.require("dojox.charting.scaler");
 
 (function(){
-	var dc = dojox.charting, df = dojox.lang.functional, g = dojox.gfx,
+	var dc = dojox.charting, 
+		df = dojox.lang.functional, 
+		du = dojox.lang.utils, 
+		g = dojox.gfx,
 		labelGap = 4,				// in pixels
 		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
-	
+		
 	dojo.declare("dojox.charting.plot2d.axes.Base", null, {
 		constructor: function(kwArgs, chart){
 			this.chart = chart;
@@ -36,27 +40,32 @@ dojo.require("dojox.charting.scaler");
 	});
 
 	dojo.declare("dojox.charting.plot2d.axes.Default", dojox.charting.plot2d.axes.Base, {
+		 defaultParams: {
+			vertical:    false,		// true for vertical axis
+			fixUpper:    "none",	// align the upper on ticks: "major", "minor", "micro", "none"
+			fixLower:    "none",	// align the lower on ticks: "major", "minor", "micro", "none"
+			natural:     false,		// all tick marks should be made on natural numbers
+			leftBottom:  true,		// position of the axis, used with "vertical"
+			includeZero: false,		// 0 should be included
+			fixed:       true,		// all labels are fixed numbers
+			majorLabels: true,		// draw major labels
+			minorTicks:  true,		// draw minor ticks
+			minorLabels: true,		// draw minor labels
+			microTicks:  false		// draw micro ticks
+		},
+		optionalParams: {
+			"min":           0,		// minimal value on this axis
+			"max":           1,		// maximal value on this axis
+			"majorTickStep": 4,		// major tick step
+			"minorTickStep": 2,		// minor tick step
+			"microTickStep": 1,		// micro tick step
+			"labels":        []		// array of labels
+		},
+
 		constructor: function(kwArgs, chart){
-			this.opt = dojo.mixin({
-				fixUpper:    "none",
-				fixLower:    "none",
-				natural:     false,
-				leftBottom:  true,
-				includeZero: false,
-				fixed:       true,
-				majorLabels: true,
-				minorTicks:  true,
-				minorLabels: true,
-				microTicks:  false
-				
-				// have no defaults:
-				// min, max,
-				// majorTickStep,
-				// minorTickStep,
-				// microTickStep,
-				// labels
-				
-			}, kwArgs);
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
+			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 		},
 		clear: function(){
 			delete this.scaler;

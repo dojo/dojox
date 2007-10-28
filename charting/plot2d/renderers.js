@@ -6,7 +6,9 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.charting.scaler");
 
 (function(){
-	var dc = dojox.charting, df = dojox.lang.functional;
+	var dc = dojox.charting, 
+		df = dojox.lang.functional,
+		du = dojox.lang.utils;
 	
 	var makeStroke = function(stroke){
 		if(!stroke){ return stroke; }
@@ -150,15 +152,19 @@ dojo.require("dojox.charting.scaler");
 	});
 
 	dojo.declare("dojox.charting.plot2d.renderers.Default", dojox.charting.plot2d.renderers.Base, {
+		defaultParams: {
+			hAxis: "x",		// use a horizontal axis named "x"
+			vAxis: "y",		// use a vertical axis named "y"
+			lines:   true,	// draw lines
+			areas:   false,	// draw areas
+			markers: false,	// draw markers
+			shadows: null	// draw shadows
+		},
+		optionalParams: {},	// no optional parameters
+		
 		constructor: function(kwArgs, chart){
-			this.opt = dojo.mixin({
-				hAxis: "x",
-				vAxis: "y",
-				lines:   true,
-				areas:   false,
-				markers: false,
-				shadows: null
-			}, kwArgs);
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
@@ -374,13 +380,17 @@ dojo.require("dojox.charting.scaler");
 	});
 
 	dojo.declare("dojox.charting.plot2d.renderers.Columns", dojox.charting.plot2d.renderers.Base, {
+		defaultParams: {
+			hAxis: "x",		// use a horizontal axis named "x"
+			vAxis: "y",		// use a vertical axis named "y"
+			gap:	0,		// gap between columns in pixels
+			shadows: null	// draw shadows
+		},
+		optionalParams: {},	// no optional parameters
+		
 		constructor: function(kwArgs, chart){
-			this.opt = dojo.mixin({
-				hAxis: "x",
-				vAxis: "y",
-				gap:   0,
-				shadows: null
-			}, kwArgs);
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
@@ -506,13 +516,17 @@ dojo.require("dojox.charting.scaler");
 	});
 
 	dojo.declare("dojox.charting.plot2d.renderers.Bars", dojox.charting.plot2d.renderers.Base, {
+		defaultParams: {
+			hAxis: "x",		// use a horizontal axis named "x"
+			vAxis: "y",		// use a vertical axis named "y"
+			gap:	0,		// gap between columns in pixels
+			shadows: null	// draw shadows
+		},
+		optionalParams: {},	// no optional parameters
+		
 		constructor: function(kwArgs, chart){
-			this.opt = dojo.mixin({
-				hAxis: "x",
-				vAxis: "y",
-				gap:   0,
-				shadows: null
-			}, kwArgs);
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
@@ -643,18 +657,22 @@ dojo.require("dojox.charting.scaler");
 	});
 	
 	dojo.declare("dojox.charting.plot2d.renderers.Grid", null, {
+		defaultParams: {
+			hAxis: "x",			// use a horizontal axis named "x"
+			vAxis: "y",			// use a vertical axis named "y"
+			hMajorLines: true,	// draw horizontal major lines
+			hMinorLines: false,	// draw horizontal minor lines
+			vMajorLines: true,	// draw vertical major lines
+			vMinorLines: false,	// draw vertical minor lines
+			hStripes: "none",	// TBD
+			vStripes: "none"	// TBD
+		},
+		optionalParams: {},	// no optional parameters
+		
 		constructor: function(kwArgs, chart){
 			this.chart = chart;
-			this.opt = dojo.mixin({
-				hAxis: "x",
-				vAxis: "y",
-				hMajorLines: true,
-				hMinorLines: false,
-				vMajorLines: true,
-				vMinorLines: false,
-				hStripes: "none",
-				vStripes: "none"
-			}, kwArgs);
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
 		},

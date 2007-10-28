@@ -125,11 +125,13 @@ dojo.require("dojox.charting.Theme");
 			
 			// calculate geometry
 			
+			// 1st pass
 			var dim = this.surface.getDimensions();
 			dim.width  = dojox.gfx.normalizedLength(dim.width);
 			dim.height = dojox.gfx.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(dim); });
+			
 			// assumption: we don't have stacked axes yet
 			var offsets = {l: 0, r: 0, t: 0, b: 0};
 			df.forIn(this.axes, function(axis){
@@ -137,7 +139,8 @@ dojo.require("dojox.charting.Theme");
 			});
 			// add margins
 			df.forIn(this.margins, function(o, i){ offsets[i] += o; });
-			// second run with realistic dimensions
+			
+			// 2nd pass with realistic dimensions
 			var plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(plotArea); });
