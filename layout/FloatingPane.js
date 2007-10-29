@@ -1,14 +1,14 @@
 dojo.provide("dojox.layout.FloatingPane");
 dojo.experimental("dojox.layout.FloatingPane"); 
 
-dojo.require("dijit.layout.ContentPane");
+dojo.require("dojox.layout.ContentPane");
 dojo.require("dijit._Templated"); 
 dojo.require("dijit._Widget"); 
 dojo.require("dojo.dnd.move");
 dojo.require("dojox.layout.ResizeHandle"); 
 
 dojo.declare("dojox.layout.FloatingPane", 
-	[ dijit.layout.ContentPane, dijit._Templated ],
+	[ dojox.layout.ContentPane, dijit._Templated ],
 {
 	// summary:
 	//
