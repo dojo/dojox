@@ -181,13 +181,15 @@ dojo.declare("dojox.image._LightboxDialog",
 		}
 		this.textNode.innerHTML = groupData.title;
 	
-		// our image preloader
-		if(!this._imageReady){ 
+		if(!this._imageReady || this.imgNode.complete === true){ 
 			this._imgConnect = dojo.connect(this.imgNode,"onload", this, function(){
 				this._imageReady = true;
 				this.resizeTo({ w: this.imgNode.width, h:this.imgNode.height, duration:this.duration });
 				dojo.disconnect(this._imgConnect);
 			});
+			// onload doesn't fire in IE if you connect before you set the src. 
+			// hack to re-set the src after onload connection made:
+			if(dojo.isIE){ this.imgNode.src = this.imgNode.src; }
 		}else{
 			// do it quickly. kind of a hack, but image is ready now
 			this.resizeTo({ w: this.imgNode.width, h:this.imgNode.height, duration:1 });
