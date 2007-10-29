@@ -72,6 +72,14 @@ dojo.require("dojox.charting.scaler");
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
+			this.group = null;
+		},
+		purge: function(){
+			if(this.group){
+				this._clearGroup();
+				this.group = null;
+			}
+			return this;
 		},
 		clear: function(){
 			delete this.scaler;
@@ -216,7 +224,8 @@ dojo.require("dojox.charting.scaler");
 			}
 			
 			// render shapes
-			var s = this.chart.surface, c = this.scaler, step, next,
+			this._clearGroup();
+			var s = this.group, c = this.scaler, step, next,
 				nextMajor = c.major.start, nextMinor = c.minor.start, nextMicro = c.micro.start;
 			s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(taStroke);
 			if(this.opt.microTicks && c.micro.tick){
@@ -290,6 +299,13 @@ dojo.require("dojox.charting.scaler");
 		// utilities
 		_getLabel: function(number, precision){
 			return this.opt.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
+		},
+		_clearGroup: function(){
+			if(this.group){
+				this.group.clear();
+			}else{
+				this.group = this.chart.surface.createGroup();
+			}
 		}
 	});
 })();

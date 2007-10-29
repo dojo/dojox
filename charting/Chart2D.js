@@ -8,7 +8,7 @@ dojo.require("dojox.charting.Theme");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting, 
-		clear = df.lambda("item.clear()");
+		clear = df.lambda("item.clear()"), purge = df.lambda("item.purge()");
 
 	dojo.declare("dojox.charting.Chart2D", null, {
 		constructor: function(node, kwArgs){
@@ -25,6 +25,7 @@ dojo.require("dojox.charting.Theme");
 			this.renderers = {};
 			this.series = [];
 			this.runs = {};
+			this.dirty = true;
 			
 			// create a surface
 			this.node = dojo.byId(node);
@@ -33,6 +34,7 @@ dojo.require("dojox.charting.Theme");
 		},
 		setTheme: function(theme){
 			this.theme = theme;
+			this.dirty = true;
 			return this;
 		},
 		addAxis: function(name, kwArgs){
@@ -43,6 +45,7 @@ dojo.require("dojox.charting.Theme");
 					new dc.plot2d.axes[kwArgs.type](kwArgs, this) :
 					new kwArgs.type(kwArgs, this);
 			}
+			this.axes[name].dirty = true;
 			return this;
 		},
 		addPlot: function(name, kwArgs){
@@ -55,6 +58,7 @@ dojo.require("dojox.charting.Theme");
 					new kwArgs.type(kwArgs, this);
 			}
 			renderer.name = name;
+			renderer.dirty = true;
 			if(name in this.renderers){
 				this.stack[this.renderers[name]] = renderer;
 			}else{
@@ -64,7 +68,7 @@ dojo.require("dojox.charting.Theme");
 			return this;
 		},
 		addSeries: function(name, data, kwArgs){
-			var run = {name: name, data: data}, i;
+			var run = {name: name, data: data, dirty: true}, i;
 			if(kwArgs){ dojo.mixin(run, kwArgs); }
 			if(typeof run.plot != "string"){ run.plot = "default"; }
 			if(name in this.runs){
@@ -90,13 +94,18 @@ dojo.require("dojox.charting.Theme");
 			}
 			dojo.marginBox(this.node, box);
 			this.surface.setDimensions(box.w, box.h);
+			this.dirty = true;
 			return this.render();
 		},
 		render: function(){
 			// clear old values
 			
 			dojo.forEach(this.stack, clear);
-			this.surface.clear();
+			if(this.dirty){
+				dojo.forEach(this.axes,  purge);
+				dojo.forEach(this.stack, purge);
+				this.surface.clear();
+			}
 			//if(this.theme){ this.theme.clear(); }
 			
 			// rebuild new connections, and add defaults
@@ -150,44 +159,49 @@ dojo.require("dojox.charting.Theme");
 			
 			// generate shapes
 			
-			// draw a chart background
-			var t = this.theme,
-				fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill),
-				stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
-			if(fill){
-				this.surface.createRect({
-					width:  dim.width, 
-					height: dim.height
-				}).setFill(fill);
+			if(this.dirty){
+				// draw a chart background
+				var t = this.theme,
+					fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill),
+					stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
+				if(fill){
+					this.surface.createRect({
+						width:  dim.width, 
+						height: dim.height
+					}).setFill(fill);
+				}
+				if(stroke){
+					this.surface.createRect({
+						width:  dim.width - 1, 
+						height: dim.height - 1
+					}).setStroke(stroke);
+				}
+				// draw a plot background
+				fill   = t.plotarea && t.plotarea.fill;
+				stroke = t.plotarea && t.plotarea.stroke;
+				if(fill){
+					this.surface.createRect({
+						x: offsets.l, y: offsets.t,
+						width:  dim.width  - offsets.l - offsets.r, 
+						height: dim.height - offsets.t - offsets.b
+					}).setFill(fill);
+				}
+				if(stroke){
+					this.surface.createRect({
+						x: offsets.l, y: offsets.t,
+						width:  dim.width  - offsets.l - offsets.r - 1, 
+						height: dim.height - offsets.t - offsets.b - 1
+					}).setStroke(stroke);
+				}
 			}
-			if(stroke){
-				this.surface.createRect({
-					width:  dim.width - 1, 
-					height: dim.height - 1
-				}).setStroke(stroke);
-			}
-			// draw a plot background
-			fill   = t.plotarea && t.plotarea.fill;
-			stroke = t.plotarea && t.plotarea.stroke;
-			if(fill){
-				this.surface.createRect({
-					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r, 
-					height: dim.height - offsets.t - offsets.b
-				}).setFill(fill);
-			}
-			if(stroke){
-				this.surface.createRect({
-					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r - 1, 
-					height: dim.height - offsets.t - offsets.b - 1
-				}).setStroke(stroke);
-			}
+			
 			// go over the stack backwards
 			df.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
+			
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
-			
+
+			this.dirty = false;			
 			return this;
 		}
 	});
