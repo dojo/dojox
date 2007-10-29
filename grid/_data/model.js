@@ -168,7 +168,7 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
 	getRow: function(inRowIndex){
 		return this.data[inRowIndex];
 	},
-	copyRow: function() {
+	copyRow: function(inRowIndex) {
 		this.getRow(inRowIndex).slice(0);
 	},
 	getDatum: function(inRowIndex, inColIndex){
