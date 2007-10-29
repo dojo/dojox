@@ -11,32 +11,35 @@ dojox.color.Generator = new (function(){
 		}
 		if(!obj.toHsv){
 			//	either a raw string or object, return a Color.
-			return new dxc.Color(obj);
+			obj=new dxc.Color(obj);
 		}
 		return obj;
 	};
 
 	var factors=function(n, high, low){
 		var ret=[];
-		var i, n=Math.floor(col/2), step=(high-low)/n, cur=high;
+		var i, step=(high-low)/n, cur=high;
 		for(i=0; i<n; i++,cur-=step){ ret.push(cur); }
-		console.log("The generated factors of [", n, "], between ", high, " and ", low, ", is ", ret);
 		return ret;
 	};
 
 	var fill=function(color, num, factors){
-		var c=0, a=[], r, g, b;
+		var c=factors.length-1, a=[], r, g, b;
 		for(var i=0; i<num; i++){
 			if(i<factors.length){
-				 r=color.r+(255-color.r)*factors[i], g=color.g+(255-color.g)*factors[i], b=color.b+(255-color.b)*factors[i];
+				 r=color.r+(255-color.r)*factors[i], 
+				 g=color.g+(255-color.g)*factors[i], 
+				 b=color.b+(255-color.b)*factors[i];
 				 a.push(new dxc.Color({ r:r, g:g, b:b }));
 			}
 			else if(i==factors.length){
 				a.push(color);
 			}
 			else {
-				if(c>factors.length){ c=0; }	//	just in case.
-				r=color.r*factors[c], g=color.g*factors[c], b=color.b*factors[c++];
+				if(c<0){ c=factors.length-1; }	//	just in case.
+				r=color.r*(1-factors[c]), 
+				g=color.g*(1-factors[c]), 
+				b=color.b*(1-factors[c--]);
 				a.push(new dxc.Color({ r:r, g:g, b:b }));
 			}
 		}
@@ -46,12 +49,13 @@ dojox.color.Generator = new (function(){
 	var flatten=function(matrix, limit, ord){
 		//	todo: set up the ordering thing.
 		var ret=[];
-		for(var i=0; i<matrix.length; i++){
-			for(var j=0; j<matrix[i].length; j++){
-				ret.push(matrix[i][j]);
+		for(var i=0; i<matrix[0].length; i++){
+			for(var j=0; j<matrix.length; j++){
+				ret.push(matrix[j][i]);
 			}
 		}
-		return ret.slice(limit);
+		ret.length=limit;
+		return ret;
 	};
 
 	//	the color generator
@@ -64,8 +68,8 @@ dojox.color.Generator = new (function(){
 			num:32,					//	number of colors to derive
 			order:"bottom up",		//	the order of the returned color array
 			angle:30,				//	the angle of difference to use
-			high:0.667,				//	high part of range to generate tints and shades
-			low:0.25				//	low part of range to generate tints and shades
+			high:0.5,				//	high part of range to generate tints and shades
+			low:0.15				//	low part of range to generate tints and shades
 		}, kwArgs||{});
 		
 		var base=prep(kwArgs.base, "analogous");
@@ -73,14 +77,15 @@ dojox.color.Generator = new (function(){
 
 		//	let start the generation.  We use series to move further away from the center.
 		var num=kwArgs.num, hsv=base.toHsv();
-		var rows=kwArgs.series+1, col=Math.ceil(num/rows);
-		var factors=factors(col, kwArgs.high, kwArgs.low);
+		var rows=kwArgs.series+1, cols=Math.ceil(num/rows);
+		var fs=factors(Math.floor(cols/2), kwArgs.high, kwArgs.low);
 
 		var m=[], cur=hsv.h-(kwArgs.angle*(kwArgs.series/2));
-		for(var i=0; i<rows; i++,cur-=kwArgs.angle){
-			m.push(fill(dxc.fromHsv({ h: cur, s:hsv.s, v:hsv.v }), cols, factors));
+		for(var i=0; i<rows; i++,cur+=kwArgs.angle){
+			if(cur<0) { cur+=360 ; }
+			if(cur>=360){ cur-=360; }
+			m.push(fill(dxc.fromHsv({ h: cur, s:hsv.s, v:hsv.v }), cols, fs));
 		}
-		console.log("generated color list from analogous: ", m);
 		return flatten(m, num, kwArgs.order);	//	Array
 	};
 	
@@ -89,37 +94,38 @@ dojox.color.Generator = new (function(){
 		//	generates n colors based on a base color, using alterations to the RGB model only.
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
-			high:0.667,				//	high factor to generate tints and shades
-			low:0.25				//	low factor to generate tints and shades
+			high:0.5,				//	high factor to generate tints and shades
+			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
 		
 		var base=prep(kwArgs.base, "monochromatic");
 		if(!base){ return []; }
 
-		var factors=factors(Math.floor(kwArgs.num/2), kwArgs.high, kwArgs.low);
-		var a=fill(base, num, factors);
-		console.log("generated color list from monochromatic: ", a);
+		var fs=factors(Math.floor(kwArgs.num/2), kwArgs.high, kwArgs.low);
+		var a=fill(base, kwArgs.num, fs);
 		return a;	// Array
 	};
 	
 	this.triadic = function(kwArgs){
 		//	summary
-		//	generates n colors from a base color, using the triadic rules.
+		//	generates n colors from a base color, using the triadic rules, rough
+		//	approximation from kuler.adobe.com.
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
 			order:"bottom up",		//	the order of the returned color array
-			high:0.667,				//	high factor to generate tints and shades
-			low:0.25				//	low factor to generate tints and shades
+			high:0.5,				//	high factor to generate tints and shades
+			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
 		
 		var base=prep(kwArgs.base, "triadic");
 		if(!base){ return []; }
 
-		var num=kwArgs.num, rows=3, cols=Math.ceil(num/rows), factors=factors(cols, kwArgs.high, kwArgs.low);
+		var num=kwArgs.num, rows=3, cols=Math.ceil(num/rows), fs=factors(Math.floor(cols/2), kwArgs.high, kwArgs.low);
 		var m=[], hsv=base.toHsv();
 
 		//	hue calculations
-		var h1=(base.h+60)%360, h2=base.h-60;
+		var h1=hsv.h+57, h2=hsv.h-157;
+		if(h1>360){ h1-=360; }
 		if(h2<0){ h2+=360; }
 
 		//	sat calculations
@@ -129,10 +135,9 @@ dojox.color.Generator = new (function(){
 		//	value calcs
 		var v2=(hsv.v>=70) ? hsv.v-30 : hsv.v+30;
 		
-		m.push(fill(base, cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:h1, s:s1, v:hsv.v }), cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:h2, s:s2, v:v2 }), cols, factors));
-		console.log("generated color list from split complimentary: ", m);
+		m.push(fill(dojox.color.fromHsv({ h:h1, s:s1, v:hsv.v }), cols, fs));
+		m.push(fill(base, cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:h2, s:s2, v:v2 }), cols, fs));
 		return flatten(m, num, kwArgs.order);	//	Array
 	};
 	
@@ -142,19 +147,18 @@ dojox.color.Generator = new (function(){
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
 			order:"bottom up",		//	the order of the returned color array
-			high:0.667,				//	high factor to generate tints and shades
-			low:0.25				//	low factor to generate tints and shades
+			high:0.5,				//	high factor to generate tints and shades
+			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
 		
 		var base=prep(kwArgs.base, "complimentary");
 		if(!base){ return []; }
 
-		var num=kwArgs.num, rows=2, cols=Math.ceil(num/rows), factors=factors(cols, kwArgs.high, kwArgs.low);
+		var num=kwArgs.num, rows=2, cols=Math.ceil(num/rows), fs=factors(Math.floor(cols/2), kwArgs.high, kwArgs.low);
 		var m=[], hsv=base.toHsv();
 		var compliment=(hsv.h+120)%360;
-		m.push(fill(base, cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:compliment, s:hsv.s, v:hsv.v }), cols, factors));
-		console.log("generated color list from complementary: ", m);
+		m.push(fill(base, cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:compliment, s:hsv.s, v:hsv.v }), cols, fs));
 		return flatten(m, num, kwArgs.order);	//	Array
 	};
 	
@@ -165,23 +169,22 @@ dojox.color.Generator = new (function(){
 			num:32,					//	number of colors to derive
 			order:"bottom up",		//	the order of the returned color array
 			angle:30,				//	the angle of difference to use
-			high:0.667,				//	high factor to generate tints and shades
-			low:0.25				//	low factor to generate tints and shades
+			high:0.5,				//	high factor to generate tints and shades
+			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
 		
 		var base=prep(kwArgs.base, "splitComplementary");
 		if(!base){ return []; }
 
-		var num=kwArgs.num, rows=3, cols=Math.ceil(num/rows), factors=factors(cols, kwArgs.high, kwArgs.low);
+		var num=kwArgs.num, rows=3, cols=Math.ceil(num/rows), fs=factors(Math.floor(cols/2), kwArgs.high, kwArgs.low);
 		var m=[], hsv=base.toHsv();
 		var compliment=(hsv.h+120)%360;
 		var comp1=compliment-kwArgs.angle, comp2=(compliment+kwArgs.angle)%360;
 		if(comp1<0){ comp1+=360; }
 		
-		m.push(fill(base, cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:comp1, s:hsv.s, v:hsv.v }), cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:comp2, s:hsv.s, v:hsv.v }), cols, factors));
-		console.log("generated color list from split complimentary: ", m);
+		m.push(fill(base, cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:comp1, s:hsv.s, v:hsv.v }), cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:comp2, s:hsv.s, v:hsv.v }), cols, fs));
 		return flatten(m, num, kwArgs.order);	//	Array
 	};
 	
@@ -193,14 +196,14 @@ dojox.color.Generator = new (function(){
 			num:32,					//	number of colors to derive
 			order:"bottom up",		//	the order of the returned color array
 			angle:30,				//	the angle of difference to use
-			high:0.667,				//	high factor to generate tints and shades
-			low:0.25				//	low factor to generate tints and shades
+			high:0.5,				//	high factor to generate tints and shades
+			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
 		
 		var base=prep(kwArgs.base, "compound");
 		if(!base){ return []; }
 
-		var num=kwArgs.num, rows=4, cols=Math.ceil(num/rows), factors=factors(cols, kwArgs.high, kwArgs.low);
+		var num=kwArgs.num, rows=4, cols=Math.ceil(num/rows), fs=factors(Math.floor(cols/2), kwArgs.high, kwArgs.low);
 		var m=[], hsv=base.toHsv();
 		var comp=(hsv.h+120)%360;		//	other base angle.
 
@@ -217,12 +220,10 @@ dojox.color.Generator = new (function(){
 		var v1=hsv.v-20;
 		var v2=hsv.v;
 		
-		m.push(fill(base, cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:h1, s:s1, v:v1 }), cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:h2, s:s1, v:v1 }), cols, factors));
-		m.push(fill(dojox.color.fromHsv({ h:h3, s:s2, v:v2 }), cols, factors));
-
-		console.log("generated color list from compound: ", m);
+		m.push(fill(base, cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:h1, s:s1, v:v1 }), cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:h2, s:s1, v:v1 }), cols, fs));
+		m.push(fill(dojox.color.fromHsv({ h:h3, s:s2, v:v2 }), cols, fs));
 		return flatten(m, num, kwArgs.order);	//	Array
 	};
 	

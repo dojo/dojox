@@ -5,7 +5,9 @@ Version 0.9
 Release date: 10/20/2007
 -------------------------------------------------------------------------------
 Project state:
-experimental
+dojox.color._base: 			stable
+dojox.color.Colorspace:		experimental
+dojox.color.Generator:		beta
 -------------------------------------------------------------------------------
 Credits
 	Cal Henderson
