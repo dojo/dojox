@@ -610,7 +610,7 @@ dojox.cometd.callbackPollTransport = new function(){
 						connectionType: "callback-polling",
 						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:		this._cometd.messageId++,
+						id:		this._cometd.messageId++
 					}
 				])
 			});
