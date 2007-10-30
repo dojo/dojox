@@ -25,6 +25,12 @@ Currently it can be found here: http://docs.google.com/Doc?id=d764479_1hnb2tn
 -------------------------------------------------------------------------------
 Installation instructions
 
-Just include this line in your code:
+Grab the following from the Dojo SVN Repository:
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/gfx.js
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/gfx/*
 
-dojo.require("dojox.gfx");
+Install into the following directory structure:
+/dojox/gfx/
+
+...which should be at the same level as your Dojo checkout.
+-------------------------------------------------------------------------------

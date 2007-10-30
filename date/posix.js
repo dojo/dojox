@@ -285,5 +285,5 @@ dojox.date.posix.getIsoWeeksInYear = function(/*Date*/dateObject) {
 		return y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400);
 	}
 	var y = dateObject.getFullYear();
-	return ( p(y) % 7 == 4 || p(y-1) % 7 == 3 ) ? 53 : 52;
+	return ( p(y) % 7 == 4 || p(y-1) % 7 == 3 ) ? 53 : 52;	//	Integer
 }

@@ -29,8 +29,11 @@ See http://www.turboajax.com/products/turbogrid/ for legacy documentation.
 -------------------------------------------------------------------------------
 Installation instructions
 
-Just include this line in your code:
+Grab the following from the Dojo SVN Repository:
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/grid/*
 
-dojo.require("dojox.grid.Grid");
+Install into the following directory structure:
+/dojox/grid/
 
-See the tests in dojox/grid/tests for usage details.
+...which should be at the same level as your Dojo checkout.
+-------------------------------------------------------------------------------

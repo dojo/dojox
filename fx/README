@@ -10,7 +10,6 @@ prototype / expermental
 Credits
 	Peter Higgins (dante@dojotoolkit.org)
 	Jonathan Bond-Caron (jbondc@gmail.com)
-
 -------------------------------------------------------------------------------
 Project description
 
@@ -57,6 +56,12 @@ Documentation
 -------------------------------------------------------------------------------
 Installation instructions
 
-	checkout dojox/fx* from SVN and place into your	sibling dojox folder.
+Grab the following from the Dojo SVN Repository:
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/fx.js
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/fx/*
 
-	see dojox/fx/tests/* for examples, and API tool for details.
+Install into the following directory structure:
+/dojox/fx/
+
+...which should be at the same level as your Dojo checkout.
+-------------------------------------------------------------------------------

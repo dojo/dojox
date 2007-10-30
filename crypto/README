@@ -12,9 +12,8 @@ Project authors
 Project description
 
 The DojoX Cryptography project is a set of implementations of public crypto
-algorithms.  At the time of writing, only MD5 and Blowfish are complete and
-tested; at least 5 other algorithms will be added by the time Dojo 1.0 is
-released.
+algorithms.  At the time of writing, only MD5 and Blowfish are complete; others
+will follow.
 
 DojoX Cryptography is comprised of both symmetric (Blowfish) and asymmetric
 (MD5) algorithms.  Symmetric algs always implement encrypt() and decrypt()

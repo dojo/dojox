@@ -24,10 +24,13 @@ Documentation
 -------------------------------------------------------------------------------
 Installation instructions
 
-Just include like that:
+Grab the following from the Dojo SVN Repository:
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/lang/*
 
-dojo.require("dojox.lang.functional");
+Install into the following directory structure:
+/dojox/lang/
 
+...which should be at the same level as your Dojo checkout.
 -------------------------------------------------------------------------------
 Additional Notes
 
