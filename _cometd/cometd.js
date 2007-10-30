@@ -21,14 +21,21 @@ dojo.require("dojo.io.script");
  */
 
 dojox.cometd = new function(){
-
-	this.initialized = false;
-	this.connected = false;
+	
+	/* cometd states:
+ 	* DISCONNECTED:  _initialized==false && _connected==false
+ 	* CONNECTING:    _initialized==true  && _connected==false (handshake sent)
+ 	* CONNECTED:     _initialized==true  && _connected==true  (first successful connect)
+ 	* DISCONNECTING: _initialized==false && _connected==true  (disconnect sent)
+ 	*/
+	this._initialized = false;
+	this._connected = false;
+	this._polling = false;
 
 	this.connectionTypes = new dojo.AdapterRegistry(true);
 
-	this.version = 0.9;
-	this.minimumVersion = 0.1;
+	this.version = "1.0";
+	this.minimumVersion = "0.9";
 	this.clientId = null;
 	this.messageId = 0;
 	this.batch=0;
@@ -58,7 +65,6 @@ dojox.cometd = new function(){
 	}
 
 	this.init = function(root, props, bargs){
-
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
 		props = props||{};
@@ -66,7 +72,7 @@ dojox.cometd = new function(){
 		props.version = this.version;
 		props.minimumVersion = this.minimumVersion;
 		props.channel = "/meta/handshake";
-		props.id = this.messageId++;
+		props.id = ""+this.messageId++;
 
 		props.ext = { "json-comment-filtered": true };
 
@@ -110,13 +116,13 @@ dojox.cometd = new function(){
 		if(bargs){
 			dojo.mixin(bindArgs, bargs);
 		}
+		
+		this._initialized=true;
+		this.startBatch();
 		if(this._isXD){
 			return dojo.io.script.get(bindArgs);
-		}else{
-			return dojo.xhrPost(bindArgs);
 		}
-
-		this.startBatch();
+		return dojo.xhrPost(bindArgs);
 	}
 
 	this.finishInit = function(data){
@@ -149,8 +155,6 @@ dojox.cometd = new function(){
 		this.tunnelCollapse = dojo.hitch(this.currentTransport, "tunnelCollapse");
 
 		this.currentTransport.startup(data);
-
-		dojo.addOnUnload(dojox.cometd,"disconnect");
 	}
 
 	this._getRandStr = function(){
@@ -186,10 +190,12 @@ dojox.cometd = new function(){
 			// check for various meta topic actions that we need to respond to
 			switch(message.channel){
 				case "/meta/connect":
-					if(message.successful && !this.initialized){
-						this.initialized = true;
+					if(message.successful && !this._connected){
+						this._connected = this._initialized;
 						this.endBatch();
-					}
+					} else if (!this._initialized){
+						this._connected = false; // finish disconnect
+					}                                     
 					break;
 				case "/meta/subscribe":
 					var pendingDef = this.pendingSubscriptions[message.subscription];
@@ -223,6 +229,7 @@ dojox.cometd = new function(){
 					break;
 			}
 		}
+		
 		// send the message down for processing by the transport
 		this.currentTransport.deliver(message);
 
@@ -237,11 +244,12 @@ dojox.cometd = new function(){
 		dojo.forEach(this._subscriptions, dojo.unsubscribe);
 		this._subscriptions = [];
 		this._messageQ = [];
-		if(!this.currentTransport){
-			console.debug("no current transport to disconnect from");
-			return;
+		if(this._initialized && this.currentTransport) {
+			this.currentTransport.disconnect();
 		}
-		this.currentTransport.disconnect();
+		this._initialized=false;
+		if (!this._polling)
+			this._connected=false;
 	}
 
 	// public API functions called by end users
@@ -267,7 +275,7 @@ dojox.cometd = new function(){
 	}
 
 	this._sendMessage = function(/* object */ message){
-		if(this.currentTransport && this.initialized && this.batch==0){
+		if(this.currentTransport && this._connected && this.batch==0){
 			return this.currentTransport.sendMessages([message]);
 		}
 		else{
@@ -356,7 +364,7 @@ dojox.cometd = new function(){
 	}
 
 	this.unsubscribed = function(	/*string*/  channel,
-									/*obj*/     message){
+					/*obj*/     message){
 	}
 
 	this.startBatch = function(){
@@ -373,6 +381,11 @@ dojox.cometd = new function(){
 				this.currentTransport.sendMessages(messages);
 			}
 		}
+	}
+	
+	this._onUnload = function(){
+		// make this the last of the onUnload method
+		dojo.addOnUnload(dojox.cometd,"disconnect");
 	}
 }
 
@@ -403,9 +416,9 @@ cometd.blahTransport = new function(){
 	}
 
 	this.startup = function(){
-		if(dojox.cometd.connected){ return; }
+		if(dojox.cometd._polling){ return; }
 		// FIXME: fill in startup routine here
-		dojox.cometd.connected = true;
+		dojox.cometd._polling = true;
 	}
 
 	this.sendMessages = function(message){
@@ -429,9 +442,6 @@ cometd.blahTransport = new function(){
 	}
 
 	this.disconnect = function(){
-		if(!dojox.cometd.connected){ return; }
-		// FIXME: fill in shutdown routine here
-		dojox.cometd.connected = false;
 	}
 }
 cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahTransport);
@@ -446,7 +456,7 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(this._cometd.connected){ return; }
+		if(this._cometd._polling){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
@@ -454,16 +464,16 @@ dojox.cometd.longPollTransport = new function(){
 					channel:	"/meta/connect",
 					clientId:	this._cometd.clientId,
 					connectionType: "long-polling",
-					id:		this._cometd.messageId++
+					id:		""+this._cometd.messageId++
 				}
 			])
 		});
 	}
 
 	this.tunnelCollapse = function(){
-		if(!this._cometd.connected){
+		if(!this._cometd._polling){
 			// try to restart the tunnel
-			this._cometd.connected = false;
+			this._cometd._polling = false;
 
 			// TODO handle transport specific advice
 
@@ -491,7 +501,7 @@ dojox.cometd.longPollTransport = new function(){
 			(this._cometd.advice["reconnect"]=="handshake")
 		){
 			this._cometd.init(null,this._cometd.url);
- 		}else if(this._cometd.initialized){
+ 		}else if(this._cometd._connected){
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
@@ -499,7 +509,7 @@ dojox.cometd.longPollTransport = new function(){
 						connectionType: "long-polling",
 						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:		this._cometd.messageId++
+						id:		""+this._cometd.messageId++
 					}
 				])
 			});
@@ -522,24 +532,24 @@ dojox.cometd.longPollTransport = new function(){
 			load: dojo.hitch(this, function(data){
 				// console.debug(evt.responseText);
 				// console.debug(data);
-				this._cometd.connected = false;
+				this._cometd._polling = false;
 				this._cometd.deliver(data);
 				this.tunnelCollapse();
 			}),
 			error: function(err){
 				console.debug("tunnel opening failed:", err);
-				dojo.cometd.connected = false;
+				dojo.cometd._polling = false;
 
 				// TODO - follow advice to reconnect or rehandshake?
 			}
 		});
-		this._cometd.connected = true;
+		this._cometd._polling = true;
 	}
 
 	this.sendMessages = function(messages){
 		for(var i=0; i<messages.length; i++){
 			messages[i].clientId = this._cometd.clientId;
-			messages[i].id = this._cometd.messageId++;
+			messages[i].id = ""+this._cometd.messageId++;
 		}
 		return dojo.xhrPost({
 			url: this._cometd.url||djConfig["cometdRoot"],
@@ -552,13 +562,11 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.startup = function(handshakeData){
-		if(this._cometd.initialized){ return; }
+		if(this._cometd._connected){ return; }
 		this.tunnelInit();
 	}
 
 	this.disconnect = function(){
-		if(!this._cometd.initialized){ return; }
-
 		dojo.xhrPost({
 			url: this._cometd.url||djConfig["cometdRoot"],
 			handleAs: this._cometd.handleAs,
@@ -566,12 +574,10 @@ dojox.cometd.longPollTransport = new function(){
 				message: dojo.toJson([{
 					channel:	"/meta/disconnect",
 					clientId:	this._cometd.clientId,
-					id:		this._cometd.messageId++
+					id:		""+this._cometd.messageId++
 				}])
 			}
 		});
-
-		this._cometd.initialized=false;
 	}
 }
 
@@ -585,7 +591,7 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(this._cometd.connected){ return; }
+		if(this._cometd._polling){ return; }
 		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
@@ -593,7 +599,7 @@ dojox.cometd.callbackPollTransport = new function(){
 					channel:	"/meta/connect",
 					clientId:	this._cometd.clientId,
 					connectionType: "callback-polling",
-					id:		this._cometd.messageId++
+					id:		""+this._cometd.messageId++
 				}
 			])
 		});
@@ -601,7 +607,7 @@ dojox.cometd.callbackPollTransport = new function(){
 
 	this.tunnelCollapse = function(){
 		// TODO implement advice handling
-		if(!this._cometd.connected){
+		if(!this._cometd._polling){
 			// try to restart the tunnel
 			this.openTunnelWith({
 				message: dojo.toJson([
@@ -610,7 +616,7 @@ dojox.cometd.callbackPollTransport = new function(){
 						connectionType: "callback-polling",
 						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
-						id:		this._cometd.messageId++
+						id:		""+this._cometd.messageId++
 					}
 				])
 			});
@@ -624,12 +630,12 @@ dojox.cometd.callbackPollTransport = new function(){
 		// create a <script> element to generate the request
 		dojo.io.script.get({
 			load: dojo.hitch(this, function(data){
-				this._cometd.connected = false;
+				this._cometd._polling = false;
 				this._cometd.deliver(data);
 				this.tunnelCollapse();
 			}),
 			error: function(){
-				this._cometd.connected = false;
+				this._cometd._polling = false;
 				console.debug("tunnel opening failed");
 			},
 			url: (url||this._cometd.url),
@@ -637,13 +643,13 @@ dojox.cometd.callbackPollTransport = new function(){
 			handleAs: this._cometd.handleAs,
 			callbackParamName: "jsonp"
 		});
-		this._cometd.connected = true;
+		this._cometd._polling = true;
 	}
 
 	this.sendMessages = function(/*array*/ messages){
 		for(var i=0; i<messages.length; i++){
 			messages[i].clientId = this._cometd.clientId;
-			messages[i].id = this._cometd.messageId++;
+			messages[i].id = ""+this._cometd.messageId++;
 		}
 		var bindArgs = {
 			url: this._cometd.url||djConfig["cometdRoot"],
@@ -656,7 +662,7 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.startup = function(handshakeData){
-		if(this._cometd.initialized){ return; }
+		if(this._cometd._connected){ return; }
 		this.tunnelInit();
 	}
 
@@ -664,3 +670,6 @@ dojox.cometd.callbackPollTransport = new function(){
 }
 dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransport);
 dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
+
+dojo.addOnUnload(dojox.cometd,"_onUnload");
+
