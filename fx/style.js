@@ -12,17 +12,10 @@ dojo.require("dojox.fx._base");
 
 dojox.fx.addClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 	// summary:
-	//		returns an animation that will animate
-	//		the properieds of a node to the properties
+	//		creates an animation that will animate
+	//		the properties of a node to the properties
 	//		defined in a standard CSS .class definition.
 	//		(calculating the differences itself)
-	//
-	//		standard _Animation object rules apply. 
-	//
-	// additonal mixins:
-	//
-	//		args.cssClass: String - class string (to be added onEnd)
-	//		
 	var node = (args.node = dojo.byId(args.node)); 
 
 	var pushClass = (function(){
@@ -46,7 +39,7 @@ dojox.fx.addClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 		properties: mixedProperties
 	},args));
 	dojo.connect(_anim,"onEnd",_anim,pushClass); 
-	return _anim; 
+	return _anim; // dojo._Animation
 };
 
 dojox.fx.removeClass = function(/*dojox.fx._arg.StyleArgs*/ args){

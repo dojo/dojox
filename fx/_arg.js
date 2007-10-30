@@ -1,23 +1,23 @@
 dojo.provide("dojox.fx._arg");
 
-dojox.fx._arg.StyleArgs = function(/*DOMNode*/ node, /*String*/ cssClass){
+dojox.fx._arg.StyleArgs = function(/*Object*/ args){
 	// summary:
 	//		The node and CSS class to use for style manipulations.
-	// node:
+	// node: DOMNode
 	//		The node to manipulate
-	// cssClass:
+	// cssClass: String
 	//		The class to use during the manipulation
-	this.node = node;
-	this.cssClass = cssClass;
+	this.node = args.node;
+	this.cssClass = args.cssClass;
 }
 
-dojox.fx._arg.ShadowResizeArgs = function(/* Int */x, /* Int */y){
+dojox.fx._arg.ShadowResizeArgs = function(/*Object*/ args){
 	// summary: 
 	//	The odd way to document object parameters.
-	// x:
+	// x: Integer
 	//	the width to set
-	// y:
+	// y: Integer
 	//	the height to set	
-	this.x = x;
-	this.y = y;
+	this.x = args.x;
+	this.y = args.y;
 }
