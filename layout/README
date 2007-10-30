@@ -10,8 +10,8 @@ Project state:
 Credits
 	Pete Higgins (phiggins@gmail.com)
 	Fredrik Johansson (fj.mumme@gmail.com)
-	Adam Peller
-	Bill Keese
+	Adam Peller (peller)
+	Bill Keese (bill)
 -------------------------------------------------------------------------------
 Project description
 
@@ -28,14 +28,16 @@ Project description
 	Supports inline scripts, inline styles, relative path adjustments
 	and having a table tag as domNode.
 
-	dojox.layout.StretchPane -- an extension on dojox ContentPane
+	dojox.layout.StretchPane - an extension on dojox ContentPane
 	Supports animated resizing and calculated sizes for nodes see test files for examples.
-	
+
+	dojox.layout.BorderContainer - an experimental replacement for dijit.layout.BorderLayout
+	using CSS for layout. Incomplete. [experimental]
+
 -------------------------------------------------------------------------------
 Dependencies
 
-	require Dojo Core, Dojo Base (fx), and Dijit.TitlePane, Dijit.layout.ContentPane
-
+	require Dojo Core, Dojo Base (fx), and Dijit
 
 -------------------------------------------------------------------------------
 Installation:
