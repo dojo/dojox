@@ -239,19 +239,19 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			//	description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 
-			var lastRequestTimestamp = null;
+			var lastRequestHash = null;
 			var firstItems = [];
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
 				t.assertEqual(5, items.length);
-				lastRequestTimestamp = store.lastRequestTimestamp;
+				lastRequestHash = store.lastRequestHash;
 				firstItems = items;
 				
 				// Do the next request AFTER the previous one, so we are sure its sequential.
 				// We need to be sure so we can compare to the data from the first request.
 				function onComplete1(items, request) {
 					t.assertEqual(5, items.length);
-					t.assertEqual(lastRequestTimestamp, store.lastRequestTimestamp);
+					t.assertEqual(lastRequestHash, store.lastRequestHash);
 					t.assertEqual(firstItems[1], items[0]);
 					d.callback(true);
 				}
@@ -268,9 +268,47 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			return d; //Object
 		},
 		
-		function testReadApi_fetch_serverQuery(t) {
-			// TODO verify serverQuery vs. query 
-			t.assertTrue(true);
+		function testReadApi_fetch_server_paging(t) {
+			// Verify that the paging on the server side does work.
+			// This is the test for http://trac.dojotoolkit.org/ticket/4761
+			//
+			// How? We request 10 items from the server, start=0, count=10.
+			// The second request requests 5 items: start=5, count=5 and those
+			// 5 items should have the same values as the last 5 of the first
+			// request.
+			// This tests if the server side paging does work.
+			var store = dojox.data.tests.stores.QueryReadStore.getStore();
+
+			var lastRequestHash = null;
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(10, items.length);
+				lastRequestHash = store.lastRequestHash;
+				firstItems = items;
+				
+				// Do the next request AFTER the previous one, so we are sure its sequential.
+				// We need to be sure so we can compare to the data from the first request.
+				function onComplete1(items, request) {
+					t.assertEqual(5, items.length);
+					// Compare the timestamp of the last request, they must be different,
+					// since another server request was issued.
+					t.assertTrue(lastRequestHash!=store.lastRequestHash);
+					t.assertEqual(store.getValue(firstItems[5], "name"), store.getValue(items[0], "name"));
+					t.assertEqual(store.getValue(firstItems[6], "name"), store.getValue(items[1], "name"));
+					t.assertEqual(store.getValue(firstItems[7], "name"), store.getValue(items[2], "name"));
+					t.assertEqual(store.getValue(firstItems[8], "name"), store.getValue(items[3], "name"));
+					t.assertEqual(store.getValue(firstItems[9], "name"), store.getValue(items[4], "name"));
+					d.callback(true);
+				}
+				// Init a new store, or it will use the old data, since the query has not changed.
+				store.doClientPaging = false;
+				store.fetch({start:5, count:5, onComplete: onComplete1, onError: onError});
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{}, start:0, count:10, onComplete: onComplete, onError: onError});
+			return d; //Object
 		},
 		
 		function testReadApi_getFeatures(t) {

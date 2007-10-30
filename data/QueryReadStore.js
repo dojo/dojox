@@ -18,6 +18,12 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	//		can be used to retreive the data partially upon entering the
 	//		letters "ac" it returns only items like "action", "acting", etc.
 	//
+	//  note:
+	//      The field name "id" in a query is reserved for looking up data
+	//      by id. This is necessary as before the first fetch, the store
+	//      has no way of knowing which field the server will declare as
+	//      identifier.
+	//
 	//	examples:
 	//		// The parameter "query" contains the data that are sent to the server.
 	//		var store = new dojox.data.QueryReadStore({url:'/search.php'});
@@ -61,16 +67,24 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	_lastServerQuery:null,
 	
 	
-	// Store a timestamp of the last server request. Actually I introduced this
+	// Store a hash of the last server request. Actually I introduced this
 	// for testing, so I can check if no unnecessary requests were issued for
-	// client-side-paging. But I am sure people will find uses for it.
-	lastRequestTimestamp:null,
+	// client-side-paging.
+	lastRequestHash:null,
 	
 	// If this is false, every request is sent to the server.
 	// If it's true a second request with the same query will not issue another
 	// request, but use the already returned data. This assumes that the server
 	// does not do the paging.
 	doClientPaging:true,
+
+	// Items by identify for Identify API
+	_itemsByIdentity:null,
+	
+	// Identifier used
+	_identifier:null,
+
+	_features: {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true},
 	
 	constructor: function(/* Object */ params){
 		this.url = params.url;
@@ -79,7 +93,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		//this.useCache = typeof params.useCache=="undefined" ? this.useCache : params.useCache;
 	},
 	
-	getValue: function(	/* item */ item, /* attribute-name-string */ attribute, /* value? */ defaultValue){
+	getValue: function(/* item */ item, /* attribute-name-string */ attribute, /* value? */ defaultValue){
 		this._assertIsItem(item);
 		if(!this.hasAttribute(item, attribute)){
 			// read api says: return defaultValue "only if *item* does not have a value for *attribute*." 
@@ -162,6 +176,74 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		// Actually we have nothing to do here, or at least I dont know what to do here ...
 	},
 
+	fetch:function(/* Object? */ request){
+		//	summary:
+		//		See dojo.data.util.simpleFetch.fetch() this is just a copy and I adjusted
+		//		only the paging, since it happens on the server if doClientPaging is
+		//		false, thx to http://trac.dojotoolkit.org/ticket/4761 reporting this.
+		//		Would be nice to be able to use simpleFetch() to reduce copied code,
+		//		but i dont know how yet. Ideas please!
+		request = request || {};
+		if(!request.store){
+			request.store = this;
+		}
+		var self = this;
+	
+		var _errorHandler = function(errorData, requestObject){
+			if(requestObject.onError){
+				var scope = requestObject.scope || dojo.global;
+				requestObject.onError.call(scope, errorData, requestObject);
+			}
+		};
+	
+		var _fetchHandler = function(items, requestObject){
+			var oldAbortFunction = requestObject.abort || null;
+			var aborted = false;
+			
+			var startIndex = requestObject.start?requestObject.start:0;
+			if (self.doClientPaging==false) {
+				// For client paging we dont need no slicing of the result.
+				startIndex = 0;
+			}
+			var endIndex   = requestObject.count?(startIndex + requestObject.count):items.length;
+	
+			requestObject.abort = function(){
+				aborted = true;
+				if(oldAbortFunction){
+					oldAbortFunction.call(requestObject);
+				}
+			};
+	
+			var scope = requestObject.scope || dojo.global;
+			if(!requestObject.store){
+				requestObject.store = self;
+			}
+			if(requestObject.onBegin){
+				requestObject.onBegin.call(scope, items.length, requestObject);
+			}
+			if(requestObject.sort){
+				items.sort(dojo.data.util.sorter.createSortFunction(requestObject.sort, self));
+			}
+			if(requestObject.onItem){
+				for(var i = startIndex; (i < items.length) && (i < endIndex); ++i){
+					var item = items[i];
+					if(!aborted){
+						requestObject.onItem.call(scope, item, requestObject);
+					}
+				}
+			}
+			if(requestObject.onComplete && !aborted){
+				var subset = null;
+				if (!requestObject.onItem) {
+					subset = items.slice(startIndex, endIndex);
+				}
+				requestObject.onComplete.call(scope, subset, requestObject);   
+			}
+		};
+		this._fetchItems(request, _fetchHandler, _errorHandler);
+		return request;	// Object
+	},
+
 	getFeatures: function(){
 		return {
 			'dojo.data.api.Read': true
@@ -211,6 +293,15 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		//
 
 		var serverQuery = typeof request["serverQuery"]=="undefined" ? request.query : request.serverQuery;
+		//Need to add start and count
+		if(!this.doClientPaging){
+			serverQuery = serverQuery||{};
+			serverQuery.start = request.start?request.start:0;
+			// Count might not be sent if not given.
+			if (request.count) {
+				serverQuery.count = request.count;
+			}
+		}
 		// Compare the last query and the current query by simply json-encoding them,
 		// so we dont have to do any deep object compare ... is there some dojo.areObjectsEqual()???
 		if(this.doClientPaging && this._lastServerQuery!==null &&
@@ -220,23 +311,46 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		}else{
 			var xhrFunc = this.requestMethod.toLowerCase()=="post" ? dojo.xhrPost : dojo.xhrGet;
 			var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
-			var self = this;
-			xhrHandler.addCallback(function(data){
-				self._items = [];
+			xhrHandler.addCallback(dojo.hitch(this, function(data){
+				this._items = [];
 				// Store a ref to "this" in each item, so we can simply check if an item
 				// really origins form here (idea is from ItemFileReadStore, I just don't know
 				// how efficient the real storage use, garbage collection effort, etc. is).
 				for(var i in data.items){
-					self._items.push({i:data.items[i], r:self});
+					this._items.push({i:data.items[i], r:this});
 				}
-	// TODO actually we should do the same as dojo.data.ItemFileReadStore._getItemsFromLoadedData() to sanitize
-	// (does it really sanititze them) and store the data optimal. should we? for security reasons???
-				fetchHandler(self._items, request);
-			});
+				
+				var identifier = data.identifier;
+				this._itemsByIdentity = {};
+				if(identifier){
+					this._identifier = identifier;
+					for(i = 0; i < this._items.length; ++i){
+						var item = this._items[i].i;
+						var identity = item[identifier];
+						if(!this._itemsByIdentity[identity]){
+							this._itemsByIdentity[identity] = item;
+						}else{
+							throw new Error("dojo.data.QueryReadStore:  The json data as specified by: [" + this._url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
+						}
+					}
+				}else{
+					this._identifier = Number;
+					for(i = 0; i < this._items.length; ++i){
+						this._items[i].n = i;
+					}
+				}
+				
+				// TODO actually we should do the same as dojo.data.ItemFileReadStore._getItemsFromLoadedData() to sanitize
+				// (does it really sanititze them) and store the data optimal. should we? for security reasons???
+				fetchHandler(this._items, request);
+			}));
 			xhrHandler.addErrback(function(error){
 				errorHandler(error, request);
 			});
-			this.lastRequestTimestamp = new Date().getTime();
+			// Generate the hash using the time in milliseconds and a randon number.
+			// Since Math.randon() returns something like: 0.23453463, we just remove the "0."
+			// probably just for esthetic reasons :-).
+			this.lastRequestHash = new Date().getTime()+"-"+String(Math.random()).substring(2);
 			this._lastServerQuery = serverQuery;
 		}
 	},
@@ -260,9 +374,82 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		if(typeof attribute !== "string"){ 
 			throw new dojox.data.QueryReadStore.InvalidAttributeError(this._className+": '"+attribute+"' is not a valid attribute identifier.");
 		}
+	},
+
+	fetchItemByIdentity: function(/* Object */ keywordArgs){
+		//	summary: 
+		//		See dojo.data.api.Identity.fetchItemByIdentity()
+
+		// See if we have already loaded the item with that id
+		// In case there hasn't been a fetch yet, _itemsByIdentity is null
+		// and thus a fetch will be triggered below.
+		if(this._itemsByIdentity){
+			item = this._itemsByIdentity[keywordArgs.identity];
+			if(!(item === undefined)){
+				if(keywordArgs.onItem){
+					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+					keywordArgs.onItem.call(scope, item);
+				}
+				return;
+			}			
+		}
+
+		// Otherwise we need to go remote
+		// Set up error handler
+		var _errorHandler = function(errorData, requestObject){
+			var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+			if(keywordArgs.onError){
+				keywordArgs.onError.call(scope, error);
+			}
+		};
+		
+		// Set up fetch handler
+		var _fetchHandler = function(items, requestObject){
+			var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+			try{
+				// There is supposed to be only one result
+				var item = null;
+				if(items && items.length == 1){
+					item = items[0];
+				}
+				
+				// If no item was found, item is still null and we'll
+				// fire the onItem event with the null here
+				if(keywordArgs.onItem){
+					keywordArgs.onItem.call(scope, item);
+				}
+			}catch(error){
+				if(keywordArgs.onError){
+					keywordArgs.onError.call(scope, error);
+				}
+			}
+		};
+		
+		// Construct query
+		var request = {serverQuery:{id:keywordArgs.identity}};
+		
+		// Dispatch query
+		this._fetchItems(request, _fetchHandler, _errorHandler);
+	},
+	
+	getIdentity: function(/* item */ item){
+		//	summary: 
+		//		See dojo.data.api.Identity.getIdentity()
+		var identifier = null;
+		if(this._identifier === Number){
+			identifier = item.n; // Number
+		}else{
+			identifier = item.i[this._identifier];
+		}
+		return identifier;
+	},
+	
+	getIdentityAttributes: function(/* item */ item){
+		//	summary:
+		//		See dojo.data.api.Identity.getIdentityAttributes()
+		return [this._identifier];
 	}
 });
-dojo.extend(dojox.data.QueryReadStore, dojo.data.util.simpleFetch);
 
 dojo.declare("dojox.data.QueryReadStore.InvalidItemError", Error, {});
 dojo.declare("dojox.data.QueryReadStore.InvalidAttributeError", Error, {});

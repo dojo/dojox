@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="../../../dojox/data/QueryReadStore.js"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.form.ComboBox");
+		dojo.require("dijit.form.FilteringSelect");
 		dojo.require("dojox.data.QueryReadStore");
 
 		dojo.provide("ComboBoxReadStore");
@@ -62,7 +63,7 @@
 			}
 		});
 
-		var testStore = new ComboBoxReadStore({url:'stores/QueryReadStore.php'});;
+		var testStore = new dojox.data.QueryReadStore({url:'stores/QueryReadStore.php'});;
 		function doSearch() {
 			var queryOptions = {};
 			if (dojo.byId("ignoreCaseEnabled").checked) {
@@ -73,7 +74,7 @@
 			}
 		    
 			var query = {};
-			query.name = dojo.byId("searchText").value;
+			query.q = dojo.byId("searchText").value;
 			var request = {query:query, queryOptions:queryOptions};
 			request.start = dojo.query("#fetchForm")[0].pagingStart.value;
 			request.count = dojo.query("#fetchForm")[0].pagingCount.value;
@@ -84,11 +85,18 @@
 				if (radioButtons[i].checked) {
 					requestMethod = radioButtons[i].value;
 				}
-			}	
-		
+			}
+			
 			testStore.requestMethod = requestMethod;
 			testStore.doClientPaging = dojo.query("#fetchForm")[0].doClientPaging.checked;
-			function onComplete(items) {
+			
+			if (!testStore.doClientPaging) {
+				// We have to fill the serverQuery, since we also want to send the
+				// paging data "start" and "count" along with what is in query.
+				request.serverQuery = {q:request.query.name, start:request.start, count:request.count};
+			}
+			
+			request.onComplete = function (items) {
 				var s = "number of items: "+items.length+"<br /><br />";
 				for (var i=0; i<items.length; i++) {
 					s += i+": name: '"+testStore.getValue(items[i], "name")+"'<br />";
@@ -96,14 +104,23 @@
 				//s += "<pre>"+dojo.toJson(items)+"</pre>";
 				dojo.byId("fetchOutput").innerHTML = s;
 			};
-			request.onComplete = onComplete;
+
 			testStore.fetch(request);
 		}
 	</script>
 </head>
 <body class="tundra" style="margin:20px;">
 	<div dojoType="ComboBoxReadStore" jsId="store" url="stores/QueryReadStore.php" requestMethod="get"></div>
-	<input dojoType="dijit.form.ComboBox" store="store" pageSize="5" />
+	This is a ComboBox: <input id="cb" dojoType="dijit.form.ComboBox" store="store" pageSize="5" />
+	<br /><br /><hr />
+
+	This is a FilteringSelect: <input id="fs" dojoType="dijit.form.FilteringSelect" store="store" pageSize="5" />
+	<br />
+	<form id="filteringSelectForm">
+		<input id="selectById" value="0" size="3" />
+		<input type="button" value="set by id" onclick="dijit.byId('fs').setValue(dojo.byId('selectById').value)" />
+	</form>
+	
 	<br /><br /><hr />
 
 	This ComboBox uses a customized QueryReadStore, it prepares the query-string for the URL that
@@ -119,15 +136,16 @@
 &lt;div dojoType="ServerPagingReadStore" jsId="serverPagingStore" url="stores/QueryReadStore.php" requestMethod="get" doClientPaging="false"&gt;&lt;/div&gt;
 &lt;input dojoType="dijit.form.ComboBox" store="serverPagingStore" pageSize="10" /&gt;
 	</pre>
-	<pre>dojo.require("dojox.data.QueryReadStore");
-
-	dojo.provide("ServerPagingReadStore");
-	dojo.declare("ServerPagingReadStore", dojox.data.QueryReadStore, {
-		fetch:function(request) {
-			request.query = {q:request.query.name, start:request.start, count:request.count};
-			return this.inherited("fetch", arguments);
-		}
-	});</pre>
+	<pre>
+		dojo.require("dojox.data.QueryReadStore");
+		dojo.provide("ServerPagingReadStore");
+		dojo.declare("ServerPagingReadStore", dojox.data.QueryReadStore, {
+			fetch:function(request) {
+				request.serverQuery = {q:request.query.name, start:request.start, count:request.count};
+				return this.inherited("fetch", arguments);
+			}
+		});
+	</pre>
 </div>
 	<br /><br />
 	
