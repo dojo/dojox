@@ -60,7 +60,7 @@ dojo.provide("dojox.lang.functional");
 				}
 			} else {
 				var vars = s.
-					replace(/(?:\b[A-Z]|\.[a-zA-Z_$])[a-zA-Z_$\d]*|[a-zA-Z_$][a-zA-Z_$\d]*:|this|arguments|dojo|dijit|dojox|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, "").
+					replace(/(?:\b[A-Z]|\.[a-zA-Z_$])[a-zA-Z_$\d]*|[a-zA-Z_$][a-zA-Z_$\d]*:|this|true|false|null|undefined|typeof|instanceof|in|delete|new|void|arguments|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|eval|isFinite|isNaN|parseFloat|parseInt|unescape|dojo|dijit|dojox|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, "").
 					match(/([a-z_$][a-z_$\d]*)/gi) || [];
 				var t = {};
 				d.forEach(vars, function(v){
@@ -408,7 +408,7 @@ dojo.provide("dojox.lang.functional");
 				return o[m];
 			};
 		},
-		// object helper
+		// object helpers
 		forIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: iterates over all object members skipping members, which 
 			//	are present in the empty object (IE and/or 3rd-party libraries).
@@ -417,6 +417,11 @@ dojo.provide("dojox.lang.functional");
 				if(i in empty){ continue; }
 				f.call(o, obj[i], i, obj);
 			}
+		},
+		forEachReversed: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: executes a provided function once per array element.
+			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
+			for(var i = a.length - 1; i >= 0; f.call(o, a[i], i, a), --i);
 		}
 	});
 
