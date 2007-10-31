@@ -55,7 +55,9 @@ dojo.provide("dojox.charting.scaler");
 			minorPerMajor  = minorTick ? Math.round(majorTick / minorTick) : 0,
 			microPerMinor  = microTick ? Math.round(minorTick / microTick) : 0,
 			majorPrecision = majorTick ? Math.floor(Math.log(majorTick) / Math.LN10) : 0,
-			minorPrecision = minorTick ? Math.floor(Math.log(minorTick) / Math.LN10) : 0;
+			minorPrecision = minorTick ? Math.floor(Math.log(minorTick) / Math.LN10) : 0,
+			scale = span / (upperBound - lowerBound);
+		if(isNaN(scale)){ scale = 1; }
 		return {
 			bounds: {
 				lower:	lowerBound,
@@ -81,7 +83,7 @@ dojo.provide("dojox.charting.scaler");
 			},
 			minorPerMajor:	minorPerMajor,
 			microPerMinor:	microPerMinor,
-			scale:			span / (upperBound - lowerBound)
+			scale:			scale
 		};
 	};
 
