@@ -67,3 +67,16 @@ Additional Notes
 xip_client.html and xip_server.html do not work right away. You need to uncomment
 out the script tags in the files. Additionally, xip_server.html requires a JS file,
 isAllowed.js, to be defined. See the notes in xip_server.html for more informaiton.
+
+XDOMAIN BUILD INSTRUCTIONS:
+The dojox.io.proxy module requires some setup to use with an xdomain build.
+The xip_client.html file has to be served from the same domain as your web page.
+It cannot be served from the domain that has the xdomain build. Download xip_client.html
+and install it on your server. Then set djConfig.xipClientUrl to the local path
+of xip_client.html (just use a path, not a whole URL, since it will be on the same
+domain as the page). The path to the file should be the path relative to the web
+page that is using dojox.io.proxy.
+
+
+
+
