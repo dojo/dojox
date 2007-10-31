@@ -14,14 +14,11 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	//	basic powerpoint esque engine for handling transitons and control
 	//	in a page-by-page and part-by-part way
 	//	
-	//	TODO: [off topic] make slideshow be a presentation of images as children
-	//	TODO: make ^^ that possible via stripping this code down for mixins
-	//	TODO: port 0.4.x toggle into 0.9 for this idea specifically / globally?
 	// 	FIXME: parsing part(s)/widget(s) in href="" Slides not working
 	//	TODO: make auto actions progress. 
 	//	FIXME: Safari keydown/press/up listener not working. 
 	//	noClick=true prevents progression of slides in that broweser
-	
+	//	
 	// fullScreen: Boolean
 	// 	unsupported (that i know of) just yet. Default it to take control
 	//	of window. Would be nice to be able to contain presentation in a 
@@ -93,6 +90,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	},
 
 	moveTo: function(/* Integer */ number){
+		// summary: jump to slide based on param
 		var slideIndex = number - 1; 
 		
 		if(slideIndex < 0)
@@ -127,6 +125,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	},
 
 	getHash: function(id){
+		// summary: get the current hash to set in localtion
 		return this.id+"_SlideNo_"+id;
 	},
 	
@@ -228,7 +227,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	},
 		
 	_gotoSlide: function(/* Integer */ slideIndex){
-
+		// summary: goes to slide
 		this.selectChild(this._slides[slideIndex]);
 		this.selectedChildWidget._reset();
 
@@ -423,15 +422,14 @@ dojo.declare(
 
 dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 	// summary: 
-	//	dojox.presentation.Part
-	//	a node in a presentation.Slide that inherists control from a
+	//	a node in a presentation.Slide that inherits control from a
 	//	dojox.presentation.Action
 	//	can be any element type, and requires styling before parsing
-	
+	//	
 	// as: String
 	//	like an ID, attach to Action via (part) as="" / (action) forSlide="" tags
 	//	this should be unique identifier?
-	as:null,
+	as: null,
 	
 	// startVisible: boolean
 	//	true to leave in page on slide startup/reset
@@ -455,8 +453,8 @@ dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 	},
 
 	_quickToggle: function(){
-	// summary: ugly [unworking] fix to test setting state of component
-	//	before/after an animation. display:none prevents fadeIns?
+		// summary: ugly [unworking] fix to test setting state of component
+		//	before/after an animation. display:none prevents fadeIns?
 		if(this._isShowing){
 			dojo.style(this.domNode,'display','none');	
 			dojo.style(this.domNode,'visibility','hidden');
@@ -472,11 +470,10 @@ dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 
 dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 	// summary:	
-	//	dojox.presention.Action:
 	//	a widget to attach to a dojox.presentation.Part to control
 	//	it's properties based on an inherited chain of events ...
 	//
-
+	//
 	// on: String
 	//	FIXME: only 'click' supported ATM. plans include on="delay", 
 	//	on="end" of="", and on="auto". those should make semantic sense
@@ -534,7 +531,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 			return widget.declaredClass==declaredClass;
 			} 
 		);
-		return siblings;
+		return siblings; // dijit._Widget
 	}, 
 	
 	postCreate: function(){
