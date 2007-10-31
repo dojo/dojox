@@ -64,26 +64,17 @@
 				]]
 			} ];
 			
-		function initGridInLayout(container, grid){
-			var container = dijit.byId(container), grid = dijit.byId(grid);
-			// resize grid when its containing widget resizes
-			dojo.connect(container, "resize", grid, function() {
-				console.log(this.id, "resize")
-				grid.resize();
-			});
-			// render grid when it's shown
-			container.onShow = function() { 
-				console.log(grid.id, "render")
-				setTimeout(function(){grid.render()}, 0);
-			};
+		function initGridInLayout(g){
 			// render initially since containers don't do this for some reason.
+			var grid = dijit.byId(g);
+			dojo.connect(grid, "onShow", function(){ setTimeout(function(){grid.render()}, 1); });
 			grid.update();
 		}
 		
 		dojo.addOnLoad(function(){
-			initGridInLayout("tab1", "grid1");
-			initGridInLayout("tab2", "grid2");
-			initGridInLayout("bottomRight", "grid3");
+			initGridInLayout("grid1");
+			initGridInLayout("grid2");
+			initGridInLayout("grid3");
 		});
 	</script>
 </head>
@@ -117,13 +108,8 @@
 				sizeMin="50" sizeShare="80"
 			>
 				<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" sizeMin="20" sizeShare="70">
-
-					<div id="tab1" dojoType="dijit.layout.ContentPane" title="Tab 1">
-						<div id="grid1" dojoType="dojox.Grid" model="model"></div>
-					</div>
-					<div id="tab2" dojoType="dijit.layout.ContentPane" title="Tab 2">
-						<div id="grid2" dojoType="dojox.Grid" model="model" structure="layout2"></div>
-					</div>
+					<div id="grid1" dojoType="dojox.Grid" model="model" title="Tab 1"></div>
+					<div id="grid2" dojoType="dojox.Grid" model="model" structure="layout2" title="Tab 2"></div>
 				</div>
 				<div id="bottomRight" dojoType="dijit.layout.ContentPane" sizeMin="20" sizeShare="30">
 					<div id="grid3" dojoType="dojox.Grid" model="model" structure="layout2"></div>
