@@ -93,6 +93,10 @@ dojo.provide("dojox.charting.scaler");
 			if("natural"  in kwArgs){ h.natural  = Boolean(kwArgs.natural); }
 		}
 		
+		if(max <= min){
+			return calcTicks(min, max, h, 0, 0, 0, span);	// Object
+		}
+		
 		var mag = Math.floor(Math.log(max - min) / Math.LN10),
 			major = kwArgs && ("majorTick" in kwArgs) ? kwArgs.majorTick : Math.pow(10, mag), 
 			minor = 0, micro = 0, ticks;
@@ -120,7 +124,7 @@ dojo.provide("dojox.charting.scaler");
 				return calcTicks(min, max, h, major, 0, 0, span);	// Object
 			}while(false);
 		}
-			
+
 		// calculate micro ticks
 		if(kwArgs && ("microTick" in kwArgs)){
 			micro = kwArgs.microTick;
