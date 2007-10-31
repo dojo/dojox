@@ -11,7 +11,8 @@ dojox.fx.wipeOut = dojo.fx.wipeOut;
 dojox.fx.slideTo = dojo.fx.slideTo;
 
 dojox.fx.sizeTo = function(/* Object */args){
-	// summary:
+	// summary: Create an animation that will size a node
+	// description:
 	//	Returns an animation that will size "node" 
 	//	defined in args Object about it's center to
 	//	a width and height defined by (args.width, args.height), 
@@ -20,15 +21,14 @@ dojox.fx.sizeTo = function(/* Object */args){
 	//
 	//	- works best on absolutely or relatively positioned elements? 
 	//	
-	// examples:
-	//
-	//	dojo.fx.sizeTo({ node:'myNode',
-	//		duration: 1000,
-	//		width: 400,
-	//		height: 200,
-	//		method: "chain"
-	//	}).play();
-	//
+	// example:
+	// |	// size #myNode to 400px x 200px over 1 second
+	// |	dojo.fx.sizeTo({ node:'myNode',
+	// |		duration: 1000,
+	// |		width: 400,
+	// |		height: 200,
+	// |		method: "chain"
+	// |	}).play();
 	//
 	var node = (args.node = dojo.byId(args.node));
 	var compute = dojo.getComputedStyle;
@@ -88,9 +88,13 @@ dojox.fx.slideBy = function(/* Object */args){
 	//	current position to it's current posision plus the numbers defined
 	//	in args.top and args.left. standard dojo.fx mixin's apply. 
 	//	
-	// examples:
-	//	dojox.fx.slideBy({ node: domNode, duration:400, 
-	//		top: 50, left: -22 }).play();
+	// example:
+	// |	// slide domNode 50px down, and 22px left
+	// |	dojox.fx.slideBy({ 
+	// |		node: domNode, duration:400, 
+	// |		top: 50, left: -22 
+	// |	}).play();
+
 	var node = (args.node = dojo.byId(args.node));	
 	var compute = dojo.getComputedStyle;
 	var top = null; var left = null;
@@ -127,7 +131,7 @@ dojox.fx.slideBy = function(/* Object */args){
 dojox.fx.crossFade = function(/* Object */args){
 	// summary: Returns an animation cross fading two element simultaneously
 	// 
-	// args addons:
+	// args:
 	//	args.nodes: Array - two element array of domNodes, or id's
 	//
 	// all other standard animation args mixins apply. args.node ignored.
@@ -154,11 +158,14 @@ dojox.fx.crossFade = function(/* Object */args){
 	}
 };
 
-
 dojox.fx.highlight = function(/*Object*/ args){
-	// summary:
-	//		Returns an animation that sets the node background to args.color
-	//		then gradually fades back the original nodes background color
+	// summary: Highlight a node
+	// description:
+	//	Returns an animation that sets the node background to args.color
+	//	then gradually fades back the original node background color
+	//	
+	// example:
+	//	dojox.fx.highlight({ node:"foo" }).play(); 
 
 	var node = (args.node = dojo.byId(args.node));
 
@@ -174,8 +181,7 @@ dojox.fx.highlight = function(/*Object*/ args){
 		}
 	}, args));
 
-	// necessary?
-	dojo.connect(anim, "onEnd", anim, function(){									   
+	dojo.connect(anim, "onEnd", anim, function(){
 		if(wasTransparent){
 			node.style.backgroundColor = "transparent";
 		}
