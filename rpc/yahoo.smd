@@ -3,7 +3,7 @@
 	"objectName":"yahoo",
 	"serviceType":"JSON-P",
 	"required": {
-		"appid": "dojotoolkit",
+		"appId": "dojotoolkit",
 		"output": "json"
 	},
 	"methods":[
