@@ -2,14 +2,35 @@ dojo.provide("dojox.charting.Chart2D");
 
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
-dojo.require("dojox.charting.plot2d.axes");
-dojo.require("dojox.charting.plot2d.renderers");
+
 dojo.require("dojox.charting.Theme");
+dojo.require("dojox.charting.Series");
+
+dojo.require("dojox.charting.axis2d.Default");
+
+dojo.require("dojox.charting.plot2d.Default");
+dojo.require("dojox.charting.plot2d.Lines");
+dojo.require("dojox.charting.plot2d.Areas");
+dojo.require("dojox.charting.plot2d.Markers");
+dojo.require("dojox.charting.plot2d.MarkersOnly");
+dojo.require("dojox.charting.plot2d.Stacked");
+dojo.require("dojox.charting.plot2d.StackedLines");
+dojo.require("dojox.charting.plot2d.StackedAreas");
+dojo.require("dojox.charting.plot2d.Columns");
+dojo.require("dojox.charting.plot2d.StackedColumns");
+dojo.require("dojox.charting.plot2d.ClusteredColumns");
+dojo.require("dojox.charting.plot2d.Bars");
+dojo.require("dojox.charting.plot2d.StackedBars");
+dojo.require("dojox.charting.plot2d.ClusteredBars");
+dojo.require("dojox.charting.plot2d.Grid");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting, 
-		clear = df.lambda("item.clear()"), purge = df.lambda("item.purge()");
-
+		clear = df.lambda("item.clear()"), 
+		purge = df.lambda("item.purgeGroup()"),
+		makeClean = df.lambda("item.dirty = false"),
+		makeDirty = df.lambda("item.dirty = true");
+		
 	dojo.declare("dojox.charting.Chart2D", null, {
 		constructor: function(node, kwArgs){
 			// initialize parameters
@@ -20,11 +41,11 @@ dojo.require("dojox.charting.Theme");
 			
 			// default initialization
 			this.theme = null;
-			this.axes = {};
-			this.stack = [];
-			this.renderers = {};
-			this.series = [];
-			this.runs = {};
+			this.axes = {};		// map of axes
+			this.stack = [];	// stack of plotters
+			this.plots = {};	// map of plotter indices
+			this.series = [];	// stack of data runs
+			this.runs = {};		// map of data run indices
 			this.dirty = true;
 			
 			// create a surface
@@ -39,43 +60,82 @@ dojo.require("dojox.charting.Theme");
 		},
 		addAxis: function(name, kwArgs){
 			if(!kwArgs || !("type" in kwArgs)){
-				this.axes[name] = new dc.plot2d.axes.Default(kwArgs, this);
+				this.axes[name] = new dc.axis2d.Default(this, kwArgs);
 			}else{
 				this.axes[name] = typeof kwArgs.type == "string" ?
-					new dc.plot2d.axes[kwArgs.type](kwArgs, this) :
-					new kwArgs.type(kwArgs, this);
+					new dc.axis2d[kwArgs.type](this, kwArgs) :
+					new kwArgs.type(this, kwArgs);
 			}
 			this.axes[name].dirty = true;
+			this.dirty = true;
 			return this;
 		},
 		addPlot: function(name, kwArgs){
-			var renderer;
+			var plot;
 			if(!kwArgs || !("type" in kwArgs)){
-				renderer = new dc.plot2d.renderers.Default(kwArgs, this);
+				plot = new dc.plot2d.Default(this, kwArgs);
 			}else{
-				renderer = typeof kwArgs.type == "string" ?
-					new dc.plot2d.renderers[kwArgs.type](kwArgs, this) :
-					new kwArgs.type(kwArgs, this);
+				plot = typeof kwArgs.type == "string" ?
+					new dc.plot2d[kwArgs.type](this, kwArgs) :
+					new kwArgs.type(this, kwArgs);
 			}
-			renderer.name = name;
-			renderer.dirty = true;
-			if(name in this.renderers){
-				this.stack[this.renderers[name]] = renderer;
+			plot.name = name;
+			plot.dirty = true;
+			if(name in this.plots){
+				this.stack[this.plots[name]] = plot;
 			}else{
-				this.renderers[name] = this.stack.length;
-				this.stack.push(renderer);
+				this.plots[name] = this.stack.length;
+				this.stack.push(plot);
 			}
+			this.dirty = true;
 			return this;
 		},
 		addSeries: function(name, data, kwArgs){
-			var run = {name: name, data: data, dirty: true}, i;
-			if(kwArgs){ dojo.mixin(run, kwArgs); }
-			if(typeof run.plot != "string"){ run.plot = "default"; }
+			var run = new dc.Series(this, data, kwArgs);
 			if(name in this.runs){
 				this.series[this.runs[name]] = run;
 			}else{
 				this.runs[name] = this.series.length;
 				this.series.push(run);
+			}
+			this.dirty = true;
+			return this;
+		},
+		updateSeries: function(name, data){
+			if(name in this.runs){
+				var run = this.series[this.runs[name]],
+					plot = this.stack[this.plots[run.plot]], axis;
+				run.data = data;
+				run.dirty = true;
+				// check to see if axes and plot should be updated
+				if(plot.hAxis){
+					axis = this.axes[plot.hAxis];
+					if(axis.dependOnData()){
+						axis.dirty = true;
+						// find all plots and mark them dirty
+						dojo.forEach(this.stack, function(p){
+							if(p.hAxis && p.hAxis == plot.hAxis){
+								p.dirty = true;
+							}
+						});
+					}
+				}else{
+					plot.dirty = true;
+				}
+				if(plot.vAxis){
+					axis = this.axes[plot.vAxis];
+					if(axis.dependOnData()){
+						axis.dirty = true;
+						// find all plots and mark them dirty
+						dojo.forEach(this.stack, function(p){
+							if(p.vAxis && p.vAxis == plot.vAxis){
+								p.dirty = true;
+							}
+						});
+					}
+				}else{
+					plot.dirty = true;
+				}
 			}
 			return this;
 		},
@@ -98,34 +158,55 @@ dojo.require("dojox.charting.Theme");
 			return this.render();
 		},
 		render: function(){
-			// clear old values
-			
-			dojo.forEach(this.stack, clear);
 			if(this.dirty){
-				dojo.forEach(this.axes,  purge);
-				dojo.forEach(this.stack, purge);
-				this.surface.clear();
+				return this.fullRender();
 			}
-			//if(this.theme){ this.theme.clear(); }
+			
+			// calculate geometry
+			dojo.forEach(this.stack, function(plot){
+				if(plot.dirty || (plot.hAxis && this.axes[plot.hAxis].dirty) ||
+						(plot.vAxis && this.axes[plot.vAxis].dirty)){
+					plot.calculateAxes(this.plotArea);
+				}
+			}, this);
+
+			// go over the stack backwards
+			df.forEachReversed(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
+			
+			// go over axes
+			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);
+			
+			this._makeClean();
+			return this;
+		},
+		fullRender: function(){
+			this._makeDirty();
+			
+			// clear old values
+			dojo.forEach(this.stack,  clear);
+			dojo.forEach(this.axes,   purge);
+			dojo.forEach(this.series, purge);
+			dojo.forEach(this.stack,  purge);
+			this.surface.clear();
 			
 			// rebuild new connections, and add defaults
 			
 			// assign series
 			dojo.forEach(this.series, function(run){
-				if(!(run.plot in this.renderers)){
-					var plot = new dc.plot2d.renderers.Default({}, this);
+				if(!(run.plot in this.plots)){
+					var plot = new dc.plot2d.Default(this, {});
 					plot.name = run.plot;
-					this.renderers[run.plot] = this.stack.length;
+					this.plots[run.plot] = this.stack.length;
 					this.stack.push(plot);
 				}
-				this.stack[this.renderers[run.plot]].addSeries(run);
+				this.stack[this.plots[run.plot]].addSeries(run);
 			}, this);
 			// assign axes
 			dojo.forEach(this.stack, function(plot){
-				if("hAxis" in plot){
+				if(plot.hAxis){
 					plot.setAxis(this.axes[plot.hAxis]);
 				}
-				if("vAxis" in plot){
+				if(plot.vAxis){
 					plot.setAxis(this.axes[plot.vAxis]);
 				}
 			}, this);
@@ -138,14 +219,14 @@ dojo.require("dojox.charting.Theme");
 			// calculate geometry
 			
 			// 1st pass
-			var dim = this.surface.getDimensions();
+			var dim = this.dim = this.surface.getDimensions();
 			dim.width  = dojox.gfx.normalizedLength(dim.width);
 			dim.height = dojox.gfx.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(dim); });
 			
 			// assumption: we don't have stacked axes yet
-			var offsets = {l: 0, r: 0, t: 0, b: 0};
+			var offsets = this.offsets = {l: 0, r: 0, t: 0, b: 0};
 			df.forIn(this.axes, function(axis){
 				df.forIn(axis.getOffsets(), function(o, i){ offsets[i] += o; });
 			});
@@ -153,46 +234,44 @@ dojo.require("dojox.charting.Theme");
 			df.forIn(this.margins, function(o, i){ offsets[i] += o; });
 			
 			// 2nd pass with realistic dimensions
-			var plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
+			this.plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
-			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(plotArea); });
+			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(this.plotArea); }, this);
 			
 			// generate shapes
 			
-			if(this.dirty){
-				// draw a chart background
-				var t = this.theme,
-					fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill),
-					stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
-				if(fill){
-					this.surface.createRect({
-						width:  dim.width, 
-						height: dim.height
-					}).setFill(fill);
-				}
-				if(stroke){
-					this.surface.createRect({
-						width:  dim.width - 1, 
-						height: dim.height - 1
-					}).setStroke(stroke);
-				}
-				// draw a plot background
-				fill   = t.plotarea && t.plotarea.fill;
-				stroke = t.plotarea && t.plotarea.stroke;
-				if(fill){
-					this.surface.createRect({
-						x: offsets.l, y: offsets.t,
-						width:  dim.width  - offsets.l - offsets.r, 
-						height: dim.height - offsets.t - offsets.b
-					}).setFill(fill);
-				}
-				if(stroke){
-					this.surface.createRect({
-						x: offsets.l, y: offsets.t,
-						width:  dim.width  - offsets.l - offsets.r - 1, 
-						height: dim.height - offsets.t - offsets.b - 1
-					}).setStroke(stroke);
-				}
+			// draw a chart background
+			var t = this.theme,
+				fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill),
+				stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
+			if(fill){
+				this.surface.createRect({
+					width:  dim.width, 
+					height: dim.height
+				}).setFill(fill);
+			}
+			if(stroke){
+				this.surface.createRect({
+					width:  dim.width - 1, 
+					height: dim.height - 1
+				}).setStroke(stroke);
+			}
+			// draw a plot background
+			fill   = t.plotarea && t.plotarea.fill;
+			stroke = t.plotarea && t.plotarea.stroke;
+			if(fill){
+				this.surface.createRect({
+					x: offsets.l, y: offsets.t,
+					width:  dim.width  - offsets.l - offsets.r, 
+					height: dim.height - offsets.t - offsets.b
+				}).setFill(fill);
+			}
+			if(stroke){
+				this.surface.createRect({
+					x: offsets.l, y: offsets.t,
+					width:  dim.width  - offsets.l - offsets.r - 1, 
+					height: dim.height - offsets.t - offsets.b - 1
+				}).setStroke(stroke);
 			}
 			
 			// go over the stack backwards
@@ -200,9 +279,23 @@ dojo.require("dojox.charting.Theme");
 			
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
-
-			this.dirty = false;			
+			
+			this._makeClean();
 			return this;
+		},
+		_makeClean: function(){
+			// reset dirty flags
+			dojo.forEach(this.axes,   makeClean);
+			dojo.forEach(this.stack,  makeClean);
+			dojo.forEach(this.series, makeClean);
+			this.dirty = false;
+		},
+		_makeDirty: function(){
+			// reset dirty flags
+			dojo.forEach(this.axes,   makeDirty);
+			dojo.forEach(this.stack,  makeDirty);
+			dojo.forEach(this.series, makeDirty);
+			this.dirty = true;
 		}
 	});
 })();

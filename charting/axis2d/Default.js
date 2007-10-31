@@ -1,10 +1,12 @@
-dojo.provide("dojox.charting.plot2d.axes");
+dojo.provide("dojox.charting.axis2d.Default");
+
+dojo.require("dojox.charting.scaler");
+dojo.require("dojox.charting.axis2d.Base");
 
 dojo.require("dojo.colors");
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
-dojo.require("dojox.charting.scaler");
 
 (function(){
 	var dc = dojox.charting, 
@@ -14,32 +16,7 @@ dojo.require("dojox.charting.scaler");
 		labelGap = 4,				// in pixels
 		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
 		
-	dojo.declare("dojox.charting.plot2d.axes.Base", null, {
-		constructor: function(kwArgs, chart){
-			this.chart = chart;
-			this.vertical = kwArgs && kwArgs.vertical;
-		},
-		clear: function(){
-			return this;
-		},
-		initialized: function(){
-			return false;
-		},
-		calculate: function(min, max, span){
-			return this;
-		},
-		getScaler: function(){
-			return null;
-		},
-		getOffsets: function(){
-			return {l: 0, r: 0, t: 0, b: 0};
-		},
-		render: function(dim, offsets){
-			return this;
-		}
-	});
-
-	dojo.declare("dojox.charting.plot2d.axes.Default", dojox.charting.plot2d.axes.Base, {
+	dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Base, {
 		 defaultParams: {
 			vertical:    false,		// true for vertical axis
 			fixUpper:    "none",	// align the upper on ticks: "major", "minor", "micro", "none"
@@ -68,21 +45,19 @@ dojo.require("dojox.charting.scaler");
 			"fontColor":     ""		// color for labels as a string
 		},
 
-		constructor: function(kwArgs, chart){
+		constructor: function(chart, kwArgs){
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.group = null;
+			this.dirty = true;
 		},
-		purge: function(){
-			if(this.group){
-				this._clearGroup();
-				this.group = null;
-			}
-			return this;
+		dependOnData: function(){
+			return !("min" in this.opt) || !("max" in this.opt);
 		},
 		clear: function(){
 			delete this.scaler;
+			this.dirty = true;
 			return this;
 		},
 		initialized: function(){
@@ -182,6 +157,7 @@ dojo.require("dojox.charting.scaler");
 			return offsets;
 		},
 		render: function(dim, offsets){
+			if(!this.dirty){ return this; }
 			// prepare variable
 			var start, stop, axisVector, tickVector, labelOffset, labelAlign,
 				ta = this.chart.theme.axis, 
@@ -224,7 +200,7 @@ dojo.require("dojox.charting.scaler");
 			}
 			
 			// render shapes
-			this._clearGroup();
+			this.cleanGroup();
 			var s = this.group, c = this.scaler, step, next,
 				nextMajor = c.major.start, nextMinor = c.minor.start, nextMicro = c.micro.start;
 			s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(taStroke);
@@ -293,19 +269,13 @@ dojo.require("dojox.charting.scaler");
 				}
 				next += step;
 			}
+			this.dirty = false;
 			return this;
 		},
 		
 		// utilities
 		_getLabel: function(number, precision){
 			return this.opt.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
-		},
-		_clearGroup: function(){
-			if(this.group){
-				this.group.clear();
-			}else{
-				this.group = this.chart.surface.createGroup();
-			}
 		}
 	});
 })();

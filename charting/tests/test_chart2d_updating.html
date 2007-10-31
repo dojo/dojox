@@ -14,52 +14,59 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../../lang/functional.js"></script>
 <script type="text/javascript" src="../Theme.js"></script>
 <script type="text/javascript" src="../scaler.js"></script>
-<script type="text/javascript" src="../plot2d/axes.js"></script>
-<script type="text/javascript" src="../plot2d/renderers.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
 <script type="text/javascript">
 
 dojo.require("dojox.charting.Chart2D");
-dojo.require("dojox.charting.themes.PlotKit.blue");
-dojo.require("dojox.charting.themes.PlotKit.cyan");
-dojo.require("dojox.charting.themes.PlotKit.green");
 dojo.require("dojox.charting.themes.PlotKit.orange");
-dojo.require("dojox.charting.themes.PlotKit.purple");
-dojo.require("dojox.charting.themes.PlotKit.red");
-var chart;
 
-makeObjects = function(){
-	chart = new dojox.charting.Chart2D("test");
-	chart.addPlot("default", {type: "Areas"});
-   	chart.addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true});
-	chart.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true});
-	chart.setTheme(dojox.charting.themes.PlotKit.orange);
-	chart.addSeries("Series A", makeSeries(10));
-	chart.addSeries("Series B", makeSeries(10));
-	chart.addSeries("Series C", makeSeries(10));
-	chart.render();
-    setInterval("updateTest()", 1000);
+var chart, limit = 10, magnitude = 30;
+
+var randomValue = function(){
+	return Math.random() * magnitude;
 };
 
-makeSeries = function(len){
+var makeSeries = function(len){
     var s = [];
-    while(s.length-1!=len)
-        s.push((Math.random()*25+1));
+    do{
+        s.push(randomValue());
+	}while(s.length < len);
     return s;
-}
-    
-updateTest = function(){
-    updateChart(chart, makeSeries(3));
-}
+};
 
-updateChart = function(chart /* Chart Object */, newData /* Array */){
-    var i = 0;
-    dojo.forEach(chart.series, function(s) {
-        s.data.shift(); //remove oldest data
-        s.data.push(newData[i++]);
-    });
-    chart.render();
-}
+var seriesA = makeSeries(limit),
+	seriesB = makeSeries(limit),
+	seriesC = makeSeries(limit);
+
+var makeObjects = function(){
+	chart = new dojox.charting.Chart2D("test");
+	chart.setTheme(dojox.charting.themes.PlotKit.orange);
+   	chart.addAxis("x", {fixLower: "minor", natural: true, min: 1, max: limit});
+	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1});
+	chart.addPlot("default", {type: "Areas"});
+	chart.addSeries("Series A", seriesA);
+	chart.addSeries("Series B", seriesB);
+	chart.addSeries("Series C", seriesC);
+	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
+	chart.render();
+    setInterval("updateTest()", 200);
+};
+
+var updateTest = function(){
+	seriesA.shift();
+	seriesA.push(randomValue());
+	chart.updateSeries("Series A", seriesA);
+
+	seriesB.shift();
+	seriesB.push(randomValue());
+	chart.updateSeries("Series B", seriesB);
+
+	seriesC.shift();
+	seriesC.push(randomValue());
+	chart.updateSeries("Series C", seriesC);
+
+	chart.render();
+};
 
 dojo.addOnLoad(makeObjects);
 
@@ -67,7 +74,7 @@ dojo.addOnLoad(makeObjects);
 </head>
 <body>
 <h1>Chart 2D Updating Data</h1>
-<p>Areas, orange theme, no axes. Very crude example to show a chart with updating values.</p>
+<p>Areas, orange theme, axes, grid. Very crude example to show a chart with updating values.</p>
 <div id="test" style="width: 400px; height: 400px;"></div>
 </body>
 </html>
