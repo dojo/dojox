@@ -1,19 +1,21 @@
 -------------------------------------------------------------------------------
 dojox.fx
 -------------------------------------------------------------------------------
-Version 0.9.1
-Release date: 08/02/2007
+Version 1.0.0
+Release date: 10/31/2007
 -------------------------------------------------------------------------------
 Project state:
 prototype / expermental 
 -------------------------------------------------------------------------------
 Credits
-	Peter Higgins (dante@dojotoolkit.org)
+	Peter Higgins (dante)
 	Jonathan Bond-Caron (jbondc@gmail.com)
+	Shane O'Sullivan (shaneosullivan1@gmail.com)
 -------------------------------------------------------------------------------
 Project description
 
-	dojox.fx provides a class of animation effects to use.
+	dojox.fx provides a class of animation effects to use, and
+	other animation addons to dojo base.
 
 -------------------------------------------------------------------------------
 Dependencies:
@@ -57,8 +59,8 @@ Documentation
 Installation instructions
 
 Grab the following from the Dojo SVN Repository:
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/fx.js
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/fx/*
+http://svn.dojotoolkit.org/dojo/dojox/trunk/fx.js
+http://svn.dojotoolkit.org/dojo/dojox/trunk/fx/*
 
 Install into the following directory structure:
 /dojox/fx/
