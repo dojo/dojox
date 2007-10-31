@@ -1,14 +1,14 @@
 -------------------------------------------------------------------------------
 dojox.image
 -------------------------------------------------------------------------------
-Version 0.9
-Release date: 08/29/07
+Version 1.0
+Release date: 10/31/07
 -------------------------------------------------------------------------------
 Project state:
 prototype | expermental
 -------------------------------------------------------------------------------
 Credits
-	Peter Higgins (phiggins@gmail.com)
+	Peter Higgins (dante)
 	Shane O'Sullivan (shaneosullivan1@gmail.com)
 -------------------------------------------------------------------------------
 Project description 
@@ -25,7 +25,10 @@ Dependencies:
 	SlideShow: dojo core, dojo.fx, and dojo.data (optional 
 	dojox.data store implementations apply)
 
-	Gallery: core, dojox.image.SlideShow
+	ThumbNailPicker: dojo core, dojo.fx and dojo.data. Combined
+	with a SlideShow, creates a sample Gallery app.
+
+	Gallery: core, dojox.image.SlideShow, dojox.image.ThumbNailPicker
 
 -------------------------------------------------------------------------------
 Documentation
@@ -34,7 +37,7 @@ Documentation
 Installation instructions
 
 Grab the following from the Dojo SVN Repository:
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/image/*
+http://svn.dojotoolkit.org/dojo/dojox/trunk/image/*
 
 Install into the following directory structure:
 /dojox/image/
@@ -47,7 +50,7 @@ Additional Notes
 	but usage of dojo.data is broken (atm). the API is subject to 
  	change, and is marked accordingly.
 
-	Hoping to implement: Picker, Carossel, and Reflect using
+	Hoping to implement: Carossel, and Reflect using
 	a common API provided by dojox.image.Pane (?) 
 
 	SlideShow: Shows an image, one by one, from a datastore. Acts
