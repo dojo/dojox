@@ -48,21 +48,6 @@
 				{ "name":"radius", "type":"INTEGER" }
 			]
 		},
-		/*
-			// Yahoo's geocoding service is f'd for JSON and Y! advises that it
-			// may not be returning
-		{
-			// http://developer.yahoo.com/maps/rest/V1/geocode.html
-			"name":"geocode",
-			"serviceURL": "http://api.local.yahoo.com/MapsService/V1/geocode",
-			"parameters":[
-				{ "name":"street", "type":"STRING" },
-				{ "name":"city", "type":"STRING" },
-				{ "name":"zip", "type":"INTEGER" },
-				{ "name":"location", "type":"STRING" }
-			]
-		},
-		*/
 		//
 		// LOCAL SEARCH
 		//
@@ -279,15 +264,5 @@
 				{ "name":"site", "type":"STRING" } // defaults to null
 			]
 		}
-		/*
-		{
-			// 
-			"name":"",
-			"serviceURL": "",
-			"parameters":[
-				{ "name":"street", "type":"STRING" },
-			]
-		}
-		*/
 	]
 }
