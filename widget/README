@@ -1,14 +1,14 @@
 -------------------------------------------------------------------------------
 dojox.widget Collection
 -------------------------------------------------------------------------------
-Version 0.2
-Release date: 7/27/2007
+Version 1.0
+Release date: 10/31/2007
 -------------------------------------------------------------------------------
 Project state:
 expermental | beta
 -------------------------------------------------------------------------------
 Credits
-	Peter Higgins (phiggins@gmail.com)
+	Peter Higgins (dante)
 	Karl Tiedt (ktiedt@gmail.com)
 -------------------------------------------------------------------------------
 Project description
@@ -42,3 +42,23 @@ Installation instructions
 
 	should be all you need to use the Fisheye widget.	
 	
+	you can safely import the whole widget project into your 
+	dojox/ root directory from the following SVN url:
+
+	http://svn.dojotoolkit.org/dojo/dojox/widget
+
+-------------------------------------------------------------------------------
+Other Notes (Brief widget list):
+
+	* ColorPicker - Photoshop-like color picker
+	* FileInput - experimental dijit-like input type="file"
+	* FileInputAuto/Blind - extension to FileInput for 
+		added flair/automation
+	* FisheyeList - the classic FishEye Picker
+	* SortList - a degradable UL with a fixed header, scrolling,
+		and sorting. Can be the direct descendat of a
+		LayoutContainer and will size to fit.
+	* TimeSpinner - a number spinner that revolves through
+		time constrainsts
+	* Toaster - a messaging system to display non-obstrusive 
+		alerts on screen.
