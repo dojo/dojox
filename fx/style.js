@@ -127,9 +127,9 @@ dojox.fx.toggleClass = function(/*DomNode|String*/node, /*String*/cssClass, /*Bo
 	// |	dojox.fx.toggleClass("theNode","sampleClass").play();
 	
         if(typeof condition == "undefined"){
-                condition = !dojo.hasClass(node, classStr);
+                condition = !dojo.hasClass(node, cssClass);
         }
-        return dojox.fx[(condition ? "addClass" : "removeClass")]({ node: node, cssClass:classStr }); // dojo._Animation
+        return dojox.fx[(condition ? "addClass" : "removeClass")]({ node: node, cssClass:cssClass }); // dojo._Animation
 	// TODO: support 4th param animMixin to allow passing of easing and duration and other _Animtion options
 };
 
