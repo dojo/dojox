@@ -1,21 +1,16 @@
 dojo.provide("dojox._cometd.cometd");
 dojo.require("dojo.AdapterRegistry");
-// FIXME: determine if we can use XMLHTTP to make x-domain posts despite not
-//		being able to hear back about the result
 dojo.require("dojo.io.script");
-// dojo.require("dojo.cookie"); // for peering
 
 // FIXME: need to add local topic support to advise about:
 //		successful handshake
 //		network failure of channel
 //		graceful disconnect
 
-// FIXME: need to add routable data in HTTP headers
-
 /*
  * this file defines Comet protocol client. Actual message transport is
  * deferred to one of several connection type implementations. The default is a
- * forever-frame implementation. A single global object named "cometd" is
+ * long-polling implementation. A single global object named "dojox.cometd" is
  * used to mediate for these connection types in order to provide a stable
  * interface.
  */
@@ -46,7 +41,6 @@ dojox.cometd = new function(){
 	this.url = null;
 	this.lastMessage = null;
 	this.topics = {};
-	this.globalTopicChannels = {};
 	this._messageQ = [];
 	this.handleAs="json-comment-optional";
 	this.advice;
@@ -74,30 +68,13 @@ dojox.cometd = new function(){
 		props.channel = "/meta/handshake";
 		props.id = ""+this.messageId++;
 
-		props.ext = { "json-comment-filtered": true };
-
-		// FIXME: what about ScriptSrcIO for x-domain comet?
 		this.url = root||djConfig["cometdRoot"];
 		if(!this.url){
 			console.debug("no cometd root specified in djConfig and no root passed");
 			return;
 		}
 
-		// FIXME: we need to select a way to handle JSONP-style stuff
-		// generically here. We already know if the server is gonna be on
-		// another domain (or can know it), so we should select appropriate
-		// negotiation methods here as well as in final transport type
-		// selection.
-		var bindArgs = {
-			url: this.url,
-			handleAs: this.handleAs,
-			content: { "message": dojo.toJson([props]) },
-			callbackParamName: "jsonp", // usually ignored
-			load: dojo.hitch(this, "finishInit"),
-			error: function(e){ console.debug("handshake error!:", e); }
-		};
-
-		// borrowed from dojo.uri.Uri in lieu of fixed host and port properties
+		// Are we x-domain? borrowed from dojo.uri.Uri in lieu of fixed host and port properties
 		var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
 		var r = (""+window.location).match(new RegExp(regexp));
 		if(r[4]){
@@ -113,13 +90,36 @@ dojox.cometd = new function(){
 				this._isXD = ((urlHost != thisHost)||(urlPort != thisPort));
 			}
 		}
+
+		if(!this._isXD){
+			if(props.ext){
+				if(props.ext["json-comment-filtered"]!==true && props.ext["json-comment-filtered"]!==false){
+					props.ext["json-comment-filtered"] = true;
+				}
+			}else{
+				props.ext = { "json-comment-filtered": true };
+			}
+		} 
+
+		var bindArgs = {
+			url: this.url,
+			handleAs: this.handleAs,
+			content: { "message": dojo.toJson([props]) },
+			load: dojo.hitch(this, "finishInit"),
+			error: function(e){ console.debug("handshake error!:", e); }
+		};
+
 		if(bargs){
 			dojo.mixin(bindArgs, bargs);
 		}
-		
+		this._props=props;
 		this._initialized=true;
+		this.batch=0;
 		this.startBatch();
+		
+		// if xdomain, then we assume jsonp for handshake
 		if(this._isXD){
+			bindArgs.callbackParamName="jsonp";
 			return dojo.io.script.get(bindArgs);
 		}
 		return dojo.xhrPost(bindArgs);
@@ -128,15 +128,25 @@ dojox.cometd = new function(){
 	this.finishInit = function(data){
 		data = data[0];
 		this.handshakeReturn = data;
+		
 		// pick a transport
-		if (data["advice"]){
+		if(data["advice"]){
 			this.advice = data.advice;
 		}
-
-		// TODO remove authSuccessful when all clients updated to the spec
-		if((!data.successful)&&(!data.authSuccessful)){
+       
+       		if(!data.successful){
 			console.debug("cometd init failed");
-			// TODO follow advice
+			if(this.advice && this.advice["reconnect"]=="none"){
+				return;
+			}
+
+			if( this.advice && this.advice["interval"] && this.advice.interval>0 ){
+				var cometd=this;
+				setTimeout(function(){ cometd.init(cometd.url,cometd._props); }, this.advice.interval);
+			}else{
+				this.init(this.url,this._props);
+			}
+
 			return;
 		}
 		if(data.version < this.minimumVersion){
@@ -155,10 +165,6 @@ dojox.cometd = new function(){
 		this.tunnelCollapse = dojo.hitch(this.currentTransport, "tunnelCollapse");
 
 		this.currentTransport.startup(data);
-	}
-
-	this._getRandStr = function(){
-		return Math.random().toString().substring(2, 10);
 	}
 
 	// public API functions called by cometd or by the transport classes
@@ -193,7 +199,7 @@ dojox.cometd = new function(){
 					if(message.successful && !this._connected){
 						this._connected = this._initialized;
 						this.endBatch();
-					} else if (!this._initialized){
+					} else if(!this._initialized){
 						this._connected = false; // finish disconnect
 					}                                     
 					break;
@@ -235,7 +241,7 @@ dojox.cometd = new function(){
 
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
-			var tname = (this.globalTopicChannels[message.channel]) ? message.channel : "/cometd"+message.channel;
+			var tname = "/cometd"+message.channel;
 			dojo.publish(tname, [ message ]);
 		}
 	}
@@ -244,11 +250,12 @@ dojox.cometd = new function(){
 		dojo.forEach(this._subscriptions, dojo.unsubscribe);
 		this._subscriptions = [];
 		this._messageQ = [];
-		if(this._initialized && this.currentTransport) {
+		if(this._initialized && this.currentTransport){
+			this._initialized=false;
 			this.currentTransport.disconnect();
 		}
 		this._initialized=false;
-		if (!this._polling)
+		if(!this._polling)
 			this._connected=false;
 	}
 
@@ -372,7 +379,7 @@ dojox.cometd = new function(){
 	}
 
 	this.endBatch = function(){
-		if(--this.batch <= 0 && this.currentTransport){
+		if(--this.batch <= 0 && this.currentTransport && this._connected){
 			this.batch=0;
 
 			var messages=this._messageQ;
@@ -406,6 +413,8 @@ register themselves with cometd.connectionTypes
 here's a stub transport defintion:
 
 cometd.blahTransport = new function(){
+	this._connectionType="my-polling";
+	this._cometd=null;
 	this.lastTimestamp = null;
 
 	this.check = function(types, version, xdomain){
@@ -448,6 +457,7 @@ cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahT
 */
 
 dojox.cometd.longPollTransport = new function(){
+	this._connectionType="long-polling";
 	this._cometd=null;
 	this.lastTimestamp = null;
 
@@ -457,13 +467,12 @@ dojox.cometd.longPollTransport = new function(){
 
 	this.tunnelInit = function(){
 		if(this._cometd._polling){ return; }
-		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
 					clientId:	this._cometd.clientId,
-					connectionType: "long-polling",
+					connectionType: this._connectionType,
 					id:		""+this._cometd.messageId++
 				}
 			])
@@ -500,13 +509,13 @@ dojox.cometd.longPollTransport = new function(){
 		if(	(this._cometd["advice"])&&
 			(this._cometd.advice["reconnect"]=="handshake")
 		){
-			this._cometd.init(null,this._cometd.url);
+			this._cometd.init(this._cometd.url,this._cometd._props);
  		}else if(this._cometd._connected){
 			this.openTunnelWith({
 				message: dojo.toJson([
 					{
 						channel:	"/meta/connect",
-						connectionType: "long-polling",
+						connectionType: this._connectionType,
 						clientId:	this._cometd.clientId,
 						timestamp:	this.lastTimestamp,
 						id:		""+this._cometd.messageId++
@@ -516,7 +525,7 @@ dojox.cometd.longPollTransport = new function(){
 		}
 	}
 
-	this.deliver = function(/*array*/ message){
+	this.deliver = function(message){
 		// console.debug(message);
 		if(message["timestamp"]){
 			this.lastTimestamp = message.timestamp;
@@ -582,7 +591,8 @@ dojox.cometd.longPollTransport = new function(){
 }
 
 dojox.cometd.callbackPollTransport = new function(){
-	this._cometd=null;
+	this._connectionType = "callback-polling";
+	this._cometd = null;
 	this.lastTimestamp = null;
 
 	this.check = function(types, version, xdomain){
@@ -592,38 +602,20 @@ dojox.cometd.callbackPollTransport = new function(){
 
 	this.tunnelInit = function(){
 		if(this._cometd._polling){ return; }
-		// FIXME: open up the connection here
 		this.openTunnelWith({
 			message: dojo.toJson([
 				{
 					channel:	"/meta/connect",
 					clientId:	this._cometd.clientId,
-					connectionType: "callback-polling",
+					connectionType: this._connectionType,
 					id:		""+this._cometd.messageId++
 				}
 			])
 		});
 	}
 
-	this.tunnelCollapse = function(){
-		// TODO implement advice handling
-		if(!this._cometd._polling){
-			// try to restart the tunnel
-			this.openTunnelWith({
-				message: dojo.toJson([
-					{
-						channel:	"/meta/connect",
-						connectionType: "callback-polling",
-						clientId:	this._cometd.clientId,
-						timestamp:	this.lastTimestamp,
-						id:		""+this._cometd.messageId++
-					}
-				])
-			});
-		}
-	}
-
-	// the logic appears to be the same
+	this.tunnelCollapse = dojox.cometd.longPollTransport.tunnelCollapse;
+	this._connect = dojox.cometd.longPollTransport._connect;
 	this.deliver = dojox.cometd.longPollTransport.deliver;
 
 	this.openTunnelWith = function(content, url){
@@ -640,7 +632,6 @@ dojox.cometd.callbackPollTransport = new function(){
 			},
 			url: (url||this._cometd.url),
 			content: content,
-			handleAs: this._cometd.handleAs,
 			callbackParamName: "jsonp"
 		});
 		this._cometd._polling = true;
@@ -653,7 +644,6 @@ dojox.cometd.callbackPollTransport = new function(){
 		}
 		var bindArgs = {
 			url: this._cometd.url||djConfig["cometdRoot"],
-			handleAs: this._cometd.handleAs,
 			load: dojo.hitch(this._cometd, "deliver"),
 			callbackParamName: "jsonp",
 			content: { message: dojo.toJson( messages ) }
@@ -667,6 +657,21 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.disconnect = dojox.cometd.longPollTransport.disconnect;
+	
+
+	this.disconnect = function(){
+		dojo.io.script.get({
+			url: this._cometd.url||djConfig["cometdRoot"],
+			callbackParamName: "jsonp",
+			content: {
+				message: dojo.toJson([{
+					channel:        "/meta/disconnect",
+					clientId:       this._cometd.clientId,
+					id:             ""+this._cometd.messageId++
+				}])
+			}
+		});
+	}
 }
 dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransport);
 dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
