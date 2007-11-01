@@ -1,5 +1,4 @@
 dojo.provide("dojox.collections.Set");
-dojo.require("dojox.collections");
 dojo.require("dojox.collections.ArrayList");
 
 (function(){

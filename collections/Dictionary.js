@@ -1,5 +1,5 @@
 dojo.provide("dojox.collections.Dictionary");
-dojo.require("dojox.collections");
+dojo.require("dojox.collections._base");
 
 dojox.collections.Dictionary=function(/* dojox.collections.Dictionary? */dictionary){
 	//	summary

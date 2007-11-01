@@ -1,5 +1,5 @@
 dojo.provide("dojox.collections.Stack");
-dojo.require("dojox.collections");
+dojo.require("dojox.collections._base");
 
 dojox.collections.Stack=function(/* array? */arr){
 	//	summary
