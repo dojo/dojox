@@ -842,8 +842,9 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 				{x: (last.x - x) / 2, y: (last.y - y) / 2}
 			),
 			pax2 = pa.x * pa.x, pay2 = pa.y * pa.y,
-			c1 = Math.sqrt((rx2 * ry2 - rx2 * pay2 - ry2 * pax2) / (rx2 * pay2 + ry2 * pax2)),
-			ca = {
+			c1 = Math.sqrt((rx2 * ry2 - rx2 * pay2 - ry2 * pax2) / (rx2 * pay2 + ry2 * pax2));
+		if(isNaN(c1)){ c1 = 0; }
+		var	ca = {
 				x:  c1 * rx * pa.y / ry,
 				y: -c1 * ry * pa.x / rx
 			};
