@@ -1,7 +1,7 @@
 dojo.provide("dojox.grid._grid.builder");
 dojo.require("dojox.grid._grid.drag");
 
-dojo.declare("dojox.grid.builder", null, {
+dojo.declare("dojox.grid.Builder", null, {
 	// summary:
 	//	Base class to produce html for grid content.
 	//	Also provide event decoration, providing grid related information inside the event object
@@ -132,7 +132,7 @@ dojo.declare("dojox.grid.builder", null, {
 	}
 });
 
-dojo.declare("dojox.grid.contentBuilder", dojox.grid.builder, {
+dojo.declare("dojox.grid.contentBuilder", dojox.grid.Builder, {
 	// summary:
 	//	Produces html for grid data content. Owned by grid and used internally 
 	//	for rendering data. Override to implement custom rendering.
@@ -188,7 +188,7 @@ dojo.declare("dojox.grid.contentBuilder", dojox.grid.builder, {
 	}
 });
 
-dojo.declare("dojox.grid.headerBuilder", dojox.grid.builder, {
+dojo.declare("dojox.grid.headerBuilder", dojox.grid.Builder, {
 	// summary:
 	//	Produces html for grid header content. Owned by grid and used internally 
 	//	for rendering data. Override to implement custom rendering.
@@ -234,7 +234,7 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.builder, {
 	getCellX: function(e){
 		var x = e.layerX;
 		if(dojo.isMoz){
-			var n = dojox.grid.ascendDom(e.target, dojox.grid.makeNotTagName("td"));
+			var n = dojox.grid.ascendDom(e.target, dojox.grid.makeNotTagName("th"));
 			x -= (n && n.offsetLeft) || 0;
 			//x -= getProp(ascendDom(e.target, mkNotTagName("td")), "offsetLeft") || 0;
 		}
@@ -300,18 +300,18 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.builder, {
 	beginColumnResize: function(e){
 		dojo.stopEvent(e);
 		var spanners = [], nodes = this.tableMap.findOverlappingNodes(e.cellNode);
-		for(var i=0, cell; cell=nodes[i]; i++){
+		for(var i=0, cell; (cell=nodes[i]); i++){
 			spanners.push({ node: cell, index: this.getCellNodeIndex(cell), width: cell.offsetWidth });
 			//console.log("spanner: " + this.getCellNodeIndex(cell));
 		}
 		var drag = {
 			view: e.sourceView,
 			node: e.cellNode,
-			index: e.cellIndex, 
+			index: e.cellIndex,
 			w: e.cellNode.clientWidth,
 			spanners: spanners
 		};
-		//console.log(drag.index, drag.w);
+		console.log(drag.index, drag.w);
 		dojox.grid.drag.start(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
 	},
 	doResizeColumn: function(inDrag, inEvent){
