@@ -4,35 +4,42 @@ dojo.require("dojox.grid._data.model");
 dojo.require("dojox.grid._data.editors");
 
 dojo.declare('dojox.Grid', dojox.VirtualGrid, {
-	/* summary:
-			A grid widget with virtual scrolling, cell editing, complex rows, sorting, fixed columns, sizeable columns, etc.
+	//	summary:
+	//		A grid widget with virtual scrolling, cell editing, complex rows,
+	//		sorting, fixed columns, sizeable columns, etc.
+	//	description:
+	//		Grid is a subclass of VirtualGrid, providing binding to a data
+	//		store.
+	//	example:
+	//		define the grid structure:
+	//	|	var structure = [ // array of view objects
+	//	|		{ cells: [// array of rows, a row is an array of cells
+	//	|			[	{ name: "Alpha", width: 6 }, 
+	//	|				{ name: "Beta" }, 
+	//	|				{ name: "Gamma", get: formatFunction }
+	//	|			]
+	//	|		]}
+	//	|	];
+	//	  	
+	//		define a grid data model
+	//	|	var model = new dojox.grid.data.table(null, data);
+	//	|
+	//	|	<div id="grid" model="model" structure="structure" 
+	//	|		dojoType="dojox.VirtualGrid"></div>
+	//	
 
-		description:
-			Grid is a subclass of VirtualGrid, providing binding to a data store.
-
-		usage:
-			A quick sample:
-			
-			define the grid structure:
-			var structure = [ // array of view objects
-			{ cells: [// array of rows, a row is an array of cells
-					[{ name: "Alpha", width: 6 }, { name: "Beta" }, { name: "Gamma", get: function }]
-			]};
-			
-			define a grid data model
-			var model = new dojox.grid.data.table(null, data);
-			
-			<div id="grid" model="model" structure="structure" dojoType="dojox.VirtualGrid"></div>
-	*/
-	// model: string or object
-	// grid data model
+	//	model:
+	//		string or object grid data model
 	model: 'dojox.grid.data.table',
 	postCreate: function(){
+		console.debug(this.model);
 		if(this.model){
-			if(typeof this.model == 'string'){
-				var m = dojo.getObject(this.model);
-				this.model = (typeof m == 'function') ? new m() : m;
+			var m;
+			if(dojo.isString(this.model)){
+				m = dojo.getObject(this.model);
 			}
+			this.model = (dojo.isFunction(m)) ? new m() : m;
+			console.debug(this.model);
 			this._setModel(this.model);
 		}
 		this.inherited(arguments);
@@ -40,7 +47,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	// model
 	_setModel: function(inModel){
 		this.model = inModel;
-		if (this.model) {
+		if(this.model){
 			this.model.observer(this);
 			this.measureModel();
 		}

@@ -1,6 +1,6 @@
 dojo.provide("dojox.grid._data.fields");
 
-dojo.declare("dojox.grid.data.mixer", null, {
+dojo.declare("dojox.grid.data.Mixer", null, {
 	// summary:
 	//	basic collection class that provides a default value for items
 	
@@ -34,8 +34,9 @@ dojo.declare("dojox.grid.data.mixer", null, {
 	_set: function(inIndex, inField /*[, inField2, ... inFieldN] */){
 		// each field argument can be a single field object of an array of field objects
 		var v = this.get(inIndex);
-		for (var i=1; i<arguments.length; i++)
+		for(var i=1; i<arguments.length; i++){
 			dojo.mixin(v, arguments[i]);
+		}
 		this.values[inIndex] = v;
 	},
 	set: function(/* inIndex, inField [, inField2, ... inFieldN] | inArray */){
@@ -43,13 +44,13 @@ dojo.declare("dojox.grid.data.mixer", null, {
 			return;
 		}
 		var a = arguments[0];
-		if (!dojo.isArray(a)){
+		if(!dojo.isArray(a)){
 			this._set.apply(this, arguments);
 		}else{
-			if (a.length && a[0]["default"]){
+			if(a.length && a[0]["default"]){
 				this.setDefault(a.shift());
 			}
-			for (var i=0, l=a.length; i<l; i++){
+			for(var i=0, l=a.length; i<l; i++){
 				this._set(i, a[i]);
 			}
 		}
@@ -84,7 +85,7 @@ dojox.grid.data.generateComparator = function(inCompare, inColumn, inSubCompare)
 	}
 }
 
-dojo.declare('dojox.grid.data.field', null, {
+dojo.declare('dojox.grid.data.Field', null, {
 	constructor: function(inName){
 		this.name = inName;
 		this.compare = dojox.grid.data.compare;
@@ -92,9 +93,9 @@ dojo.declare('dojox.grid.data.field', null, {
 	na: dojox.grid.na
 });
 
-dojo.declare('dojox.grid.data.fields', dojox.grid.data.mixer, {
+dojo.declare('dojox.grid.data.Fields', dojox.grid.data.Mixer, {
 	constructor: function(inFieldClass){
-		var fieldClass = inFieldClass ? inFieldClass : dojox.grid.data.field;
+		var fieldClass = inFieldClass ? inFieldClass : dojox.grid.data.Field;
 		this.defaultValue = new fieldClass();
 	}
 });

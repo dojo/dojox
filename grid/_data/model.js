@@ -7,7 +7,7 @@ dojo.declare("dojox.grid.data.model", null, {
 	//	Makes no assumptions about the structure of grid data.
 	constructor: function(inFields, inData){
 		this.observers = [];
-		this.fields = new dojox.grid.data.fields();
+		this.fields = new dojox.grid.data.Fields();
 		if(inFields){
 			this.fields.set(inFields);
 		}
@@ -138,7 +138,8 @@ dojo.declare("dojox.grid.data.rows", dojox.grid.data.model, {
 
 dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
 	// summary:
-	//	Basic grid data model for static data in the form of an array of rows that are arrays of cell data
+	//	Basic grid data model for static data in the form of an array of rows
+	//	that are arrays of cell data
 	constructor: function(){
 		this.cache = [];
 	},
@@ -281,6 +282,10 @@ dojo.declare("dojox.grid.data.dynamic", dojox.grid.data.table, {
 		return (this.rowsPerPage ? this.rowsPerPage * inPageIndex : inPageIndex);
 	},
 	requestRows: function(inRowIndex, inCount){
+		// summary:
+		//		stub. Fill in to perform actual data row fetching logic. The
+		//		returning logic must provide the data back to the system via
+		//		setRow
 	},
 	rowsProvided: function(inRowIndex, inCount){
 		this.requests--;
@@ -350,5 +355,125 @@ dojo.declare("dojox.grid.data.dynamic", dojox.grid.data.table, {
 	// sort
 	canSort: function(){
 		return false;
+	}
+});
+
+// we treat dojo.data stores as dynamic stores because no matter how they got
+// here, they should always fill that contract
+dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.dynamic, {
+	// summary:
+	//		Grid data model for dynamic data retreived from a store which
+	//		implements the dojo.data API set.  Retrieves data automatically
+	//		when requested and provides notification when data is received
+	constructor: function(args){
+		this.page = [];
+		this.pages = [];
+		if(args){
+			dojo.mixin(this, args);
+		}
+		if(this.store){
+			this.requestRows();
+		}
+	},
+	query: { name: "*" }, // default, stupid query
+	store: null,
+	rowsPerPage: 100,
+	// data
+	getRowCount: function(){
+		return this.count;
+	},
+	getColCount: function(){
+		return this.fields.count();
+	},
+	setRowCount: function(inCount){
+		console.debug("inCount:", inCount);
+		this.count = inCount;
+		this.change();
+	},
+	beginReturn: function(inCount){
+		this.setRowCount(0);
+		this.clear();
+		this.setRowCount(inCount);
+	},
+	_setupFields: function(dataItem){
+		if(!this.fields.values.length){
+			this.fields._nameMaps = {};
+			var fields = dojo.map(this.store.getAttributes(dataItem), 
+				function(item, idx){ 
+					this.fields._nameMaps[item] = idx;
+					this.fields._nameMaps[idx+".idx"] = name;
+					return { name: item }; 
+				},
+				this
+			);
+			// set up field/index mappings
+			console.debug("new fields:", fields);
+			this.fields.set(fields);
+		}
+	},
+	processRows: function(dataArr, store){
+		console.debug(dataArr, store);
+		this._setupFields(dataArr[0]);
+		dojo.forEach(dataArr, function(item, idx){
+			var row = [];
+			dojo.forEach(this.fields.values, function(a){
+				row[a.name] = this.store.getValue(item, a.name)||"";
+				console.debug(a.name+":", row[a.name]);
+			}, this);
+			console.debug(idx, row);
+			this.setRow(row, idx);
+			this.rowChange(row, idx);
+		}, this);
+		// FIXME: 
+		//		scott, steve, how the hell do we actually get this to update
+		//		the visible UI for these rows?
+		this.update();
+	},
+	// request data 
+	requestRows: function(inRowIndex, inCount){
+		inRowIndex = (inRowIndex == undefined ? 0 : inRowIndex);
+		var params = { 
+			start: inRowIndex + 1,
+			count: this.rowsPerPage,
+			query: this.query||{ name: "*" },
+			onBegin: dojo.hitch(this, "beginReturn"),
+			onComplete: dojo.hitch(this, "processRows") // add to deferred?
+		}
+		console.debug("requestRows:", params.start, params.count);
+		this.store.fetch(params);
+	},
+	getRow: function(inRowIndex){
+		var row = this.data[inRowIndex];
+		if(!row){
+			this.preparePage(inRowIndex);
+		}
+		return row;
+	},
+	getDatum: function(inRowIndex, inColIndex){
+		var row = this.getRow(inRowIndex);
+		var idx = this.fields._nameMaps[inColIndex+".idx"];
+		console.debug("getDatum", inRowIndex, inColIndex);
+		return (row ? row[idx] : this.fields.get(inColIndex).na);
+	},
+	setDatum: function(inDatum, inRowIndex, inColIndex){
+		var n = this.fields._nameMaps[inColIndex+".idx"];
+		if(n){
+			this.data[inRowIndex][n] = inDatum;
+		}
+	},
+	/*
+	setDatum: function(inDatum, inRowIndex, inColIndex){
+		var row = this.getRow(inRowIndex);
+		if(row){
+			row[inColIndex] = inDatum;
+			this.datumChange(inDatum, inRowIndex, inColIndex);
+		}else{
+			console.debug('[' + this.declaredClass + '] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row');
+		}
+	},
+	*/
+	// sort
+	canSort: function(){
+		return false; // return true and re-issue the queries?
 	}
 });

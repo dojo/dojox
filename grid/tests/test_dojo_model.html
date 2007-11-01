@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>dojox.Grid with Dojo.Data via binding</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../_grid/tundraGrid.css";
+		
+		#grid {
+			width: 100%;
+			height: 50em;
+			padding: 1px;
+		}
+	</style>
+	<script type="text/javascript" src="../../../dojo/dojo.js"
+		djConfig="isDebug:false, debugAtAllCosts: true, parseOnLoad: true"></script>
+	<script type="text/javascript">
+		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid._data.model");
+		dojo.require("dojo.data.ItemFileReadStore");
+		dojo.require("dojox.data.CsvStore");
+		dojo.require("dojo.parser");
+	</script>
+	<script type="text/javascript">
+
+		/*
+		dojo.declare("dojox.grid.data.itemhash", dojox.grid.data.table, {
+			getFieldName: function(inIndex) {
+				var n = this.fields.get(inIndex);
+				return (n)&&(n.name);
+			},
+			_get: function(inRowIndex, inColIndex) {
+				var row = this.data[inRowIndex];
+				var n = this.getFieldName(inColIndex);
+				return (inColIndex == undefined || !n ? row : row[n]);
+			},
+			getDatum: function(inRowIndex, inColIndex) {
+				return this._get(inRowIndex, inColIndex);
+			},
+			getRow: function(inRowIndex) {
+				return this._get(inRowIndex);
+			},
+			setDatum: function(inDatum, inRowIndex, inColIndex) {
+				var n = this.getFieldName(inColIndex);
+				if (n)
+					this.data[inRowIndex][n] = inDatum;
+			},
+			// get items based on field names
+			createComparator: function(inField, inIndex, inSubCompare) {
+				return function(a, b) { 
+					var c = inField.name;				
+					var ineq = inField.compare(a[c], b[c]);
+					return (ineq ? (inIndex > 0 ? ineq : -ineq) : (inSubCompare && inSubCompare(a, b)));
+				}
+			},
+			makeComparator: function(inIndices) {
+				var result = null;
+				for (var i=inIndices.length-1, col; i>=0; i--) {	
+					col = Math.abs(inIndices[i]) - 1;
+					if (col >= 0) 
+						result = this.createComparator(this.fields.get(col), inIndices[i], result);
+				}
+				return result;
+			}
+		});
+
+		function getRow(inRowIndex){
+			return ' ' + inRowIndex;
+		}
+		
+		var layout = [
+			{ type: 'dojox.GridRowView', width: '20px' },
+			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			{ cells: [[
+				{ name: "Title", field: 0 },
+				{ name: "Year", field: 1, width: 20 },
+				{ name: "Producer", field: 2, width: 'auto' }
+			]]}
+		];
+		
+		updateGrid = function(inItems, inResult){
+			//var m = new dojox.grid.data.table(null, csvStore._dataArray);
+			var
+				m = new dojox.grid.data.itemhash(),
+				f = csvStore.getAttributes(inItems[0]),
+				i = 0;
+				fields = [];
+			dojo.forEach(f, function(a) {
+				fields.push({name: a});
+			});
+			m.fields.set(fields);
+			model = m;
+			dojo.forEach(inItems, function(item) {
+				var row = {};
+				dojo.forEach(fields, function(a) {
+					row[a.name] = csvStore.getValue(item, a.name)||"";
+				});
+				m.setRow(row, i++);
+			});
+			grid.setModel(m);
+		}
+		*/
+		var structure = [
+			{ type: 'dojox.GridRowView', width: '20px' },
+			{ cells: [[{ name: "Row", get: function(r){ return ""+r; }, width: 5}]], noscroll: true},
+			{ cells: [[
+				{ name: "Title", field: 0 },
+				{ name: "Year", field: 1, width: 20 },
+				{ name: "Producer", field: 2, width: 'auto' }
+			]]}
+		];
+		
+		
+	</script>
+</head>
+<body class="tundra">
+	<h5>dojox.Grid using Dojo.Data stores via simple binding</h5>
+	<span dojoType="dojox.data.CsvStore" 
+		jsId="csvStore" url="support/movies.csv">
+	</span>
+	<span dojoType="dojox.grid.data.DojoData" 
+		jsId="dataModel" store="csvStore" query="{ Title: '*' }">
+	</span>
+	<div jsId="grid" dojoType="dojox.Grid" 
+		model="dataModel" structure="structure" elasticView="2"></div>
+</body>
+</html>

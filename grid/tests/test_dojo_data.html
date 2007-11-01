@@ -45,53 +45,55 @@
 <script type="text/javascript" src="../_data/editors.js"></script>
 <script type="text/javascript" src="../Grid.js"></script>
 <script type="text/javascript">
-	dojox.grid.data.hashMixin = {
-		getFieldName: function(inIndex) {
+	dojox.grid.data.HashMixin = {
+		getFieldName: function(inIndex){
 			var n = this.fields.get(inIndex);
 			return (n)&&(n.name);
 		},
-		_get: function(inRowIndex, inColIndex) {
+		_get: function(inRowIndex, inColIndex){
 			var row = this.data[inRowIndex];
 			var n = this.getFieldName(inColIndex);
 			return (inColIndex == undefined || !n ? row : row[n]);
 		},
-		getDatum: function(inRowIndex, inColIndex) {
+		getDatum: function(inRowIndex, inColIndex){
 			return this._get(inRowIndex, inColIndex);
 		},
-		getRow: function(inRowIndex) {
+		getRow: function(inRowIndex){
 			return this._get(inRowIndex);
 		},
-		setDatum: function(inDatum, inRowIndex, inColIndex) {
+		setDatum: function(inDatum, inRowIndex, inColIndex){
 			var n = this.getFieldName(inColIndex);
-			if (n)
+			if(n){
 				this.data[inRowIndex][n] = inDatum;
+			}
 		},
 		// get items based on field names
-		createComparator: function(inField, inIndex, inSubCompare) {
-			return function(a, b) { 
+		createComparator: function(inField, inIndex, inSubCompare){
+			return function(a, b){ 
 				var c = inField.name;				
 				var ineq = inField.compare(a[c], b[c]);
 				return (ineq ? (inIndex > 0 ? ineq : -ineq) : (inSubCompare && inSubCompare(a, b)));
 			}
 		},
-		makeComparator: function(inIndices) {
+		makeComparator: function(inIndices){
 			var result = null;
-			for (var i=inIndices.length-1, col; i>=0; i--) {	
+			for(var i=inIndices.length-1, col; i>=0; i--){	
 				col = Math.abs(inIndices[i]) - 1;
-				if (col >= 0) 
+				if(col >= 0){
 					result = this.createComparator(this.fields.get(col), inIndices[i], result);
+				}
 			}
 			return result;
 		}
 	}
 
-	dojo.declare("dojox.grid.data.itemhash", dojox.grid.data.table, dojox.grid.data.hashMixin);
+	dojo.declare("dojox.grid.data.Itemhash", dojox.grid.data.table, dojox.grid.data.HashMixin);
 
-	function getRow(inRowIndex) {
+	function getRow(inRowIndex){
 		return ' ' + inRowIndex;
 	}
 	
-	var layout = [
+	var layout2 = [
 		{ type: 'dojox.GridRowView', width: '20px' },
 		{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 		{ cells: [[
@@ -103,11 +105,10 @@
 	
 	updateGrid = function(inItems, inResult){
 		//var m = new dojox.grid.data.table(null, csvStore._dataArray);
-		var
-			m = new dojox.grid.data.itemhash(),
-			f = csvStore.getAttributes(inItems[0]),
-			i = 0;
-			fields = [];
+		var m = new dojox.grid.data.Itemhash();
+		var f = csvStore.getAttributes(inItems[0]);
+		var i = 0;
+		var fields = [];
 		dojo.forEach(f, function(a) {
 			fields.push({name: a});
 		});
@@ -124,7 +125,7 @@
 	}
 	
 	
-	dojo.addOnLoad(function() {
+	dojo.addOnLoad(function(){
 		csvStore = new dojox.data.CsvStore({url:"support/movies.csv"});
 		csvStore.fetch({ onComplete: updateGrid, onError: function() { console.log(arguments)}});
 	});
@@ -132,6 +133,7 @@
 </head>
 <body>
 <h5>dojox.Grid using Dojo.Data stores via simple binding</h5>
-<div jsId="grid" dojoType="dojox.Grid" elasticView="2"></div>
+<div jsId="grid" dojoType="dojox.Grid" 
+	elasticView="2" structure="layout2"></div>
 </body>
 </html>
