@@ -201,6 +201,44 @@ makeObjects = function(){
 	chart21.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"});
 	chart21.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart21.render();
+
+	var chart22 = new dojox.charting.Chart2D("test22");
+	chart22.addAxis("x");
+	chart22.addAxis("y", {vertical: true});
+	chart22.addPlot("default", {type: "Columns", gap: 2});
+	chart22.addPlot("grid", {type: "Grid"});
+	chart22.addSeries("Series A", [2, 1, 0.5, -1, -2], {stroke: {color: "red"}, fill: "lightpink"});
+	chart22.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart22.render();
+
+	var chart23 = new dojox.charting.Chart2D("test23");
+	chart23.addAxis("x");
+	chart23.addAxis("y", {vertical: true});
+	chart23.addPlot("default", {type: "ClusteredColumns", gap: 2});
+	chart23.addPlot("grid", {type: "Grid"});
+	chart23.addSeries("Series A", [2, 1, 0.5, -1, -2], {stroke: {color: "red"}, fill: "lightpink"});
+	chart23.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart23.addSeries("Series C", [1, 0.5, -1, -2, -3], {stroke: {color: "green"}, fill: "lightgreen"});
+	chart23.render();
+
+	var chart24 = new dojox.charting.Chart2D("test24");
+	chart24.addAxis("x");
+	chart24.addAxis("y", {vertical: true});
+	chart24.addPlot("default", {type: "Bars", gap: 2});
+	chart24.addPlot("grid", {type: "Grid"});
+	chart24.addSeries("Series A", [2, 1, 0.5, -1, -2], {stroke: {color: "red"}, fill: "lightpink"});
+	chart24.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart24.render();
+
+	var chart25 = new dojox.charting.Chart2D("test25");
+	chart25.addAxis("x");
+	chart25.addAxis("y", {vertical: true});
+	chart25.addPlot("default", {type: "ClusteredBars", gap: 2});
+	chart25.addPlot("grid", {type: "Grid"});
+	chart25.addSeries("Series A", [2, 1, 0.5, -1, -2], {stroke: {color: "red"}, fill: "lightpink"});
+	chart25.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
+	chart25.addSeries("Series C", [1, 0.5, -1, -2, -3], {stroke: {color: "green"}, fill: "lightgreen"});
+	chart25.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -252,6 +290,14 @@ dojo.addOnLoad(makeObjects);
 <div id="test20" style="width: 200px; height: 200px;"></div>
 <p>21: Columns with gaps beetwen them, grids, custom strokes, fills, axes, with min=0, max=8, and manually specified ticks on the vertical axis.</p>
 <div id="test21" style="width: 200px; height: 200px;"></div>
+<p>22: Columns with positive and negative values, axes, and grid.</p>
+<div id="test22" style="width: 200px; height: 200px;"></div>
+<p>23: Clustered columns with positive and negative values, axes, and grid.</p>
+<div id="test23" style="width: 200px; height: 200px;"></div>
+<p>24: Bars with positive and negative values, axes, and grid.</p>
+<div id="test24" style="width: 200px; height: 200px;"></div>
+<p>25: Clustered bars with positive and negative values, axes, and grid.</p>
+<div id="test25" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

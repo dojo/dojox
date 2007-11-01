@@ -55,16 +55,21 @@ dojo.require("dojox.lang.functional");
 				}
 				stroke = run.stroke ? run.stroke : dc.augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
+				var baseline = Math.max(0, this._vScaler.bounds.lower),
+					xoff = offsets.l + this._hScaler.scale * (0.5 - this._hScaler.bounds.lower) + gap,
+					yoff = dim.height - offsets.b - this._vScaler.scale * (baseline - this._vScaler.bounds.lower);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j],
+					var v = run.data[j], 
 						width  = this._hScaler.scale - 2 * gap,
-						height = this._vScaler.scale * (v - this._vScaler.bounds.lower);
-					if(width >= 1 && height >= 1){
-						s.createRect({
-							x: offsets.l + this._hScaler.scale * (j + 0.5 - this._hScaler.bounds.lower) + gap,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower),
-							width: width, height: height
-						}).setFill(fill).setStroke(stroke);
+						height = this._vScaler.scale * (v - baseline),
+						h = Math.abs(height);
+					if(width >= 1 && h >= 1){
+						var rect = {
+							x: xoff + this._hScaler.scale * j,
+							y: yoff - (height < 0 ? 0 : height),
+							width: width, height: h
+						};
+						s.createRect(rect).setFill(fill).setStroke(stroke);
 					}
 				}
 				run.dirty = false;

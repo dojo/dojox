@@ -57,15 +57,19 @@ dojo.require("dojox.lang.functional");
 				}
 				stroke = run.stroke ? run.stroke : dc.augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
+				var baseline = Math.max(0, this._hScaler.bounds.lower),
+					xoff = offsets.l + this._hScaler.scale * (baseline - this._hScaler.bounds.lower),
+					yoff = dim.height - offsets.b - this._vScaler.scale * (1.5 - this._vScaler.bounds.lower) + gap;
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j],
-						width  = this._hScaler.scale * (v - this._hScaler.bounds.lower),
-						height = this._vScaler.scale - 2 * gap;
-					if(width >= 1 && height >= 1){
+						width  = this._hScaler.scale * (v - baseline),
+						height = this._vScaler.scale - 2 * gap,
+						w = Math.abs(width);
+					if(w >= 1 && height >= 1){
 						s.createRect({
-							x: offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.bounds.lower) + gap,
-							width: width, height: height
+							x: xoff + (width < 0 ? width : 0),
+							y: yoff - this._vScaler.scale * j,
+							width: w, height: height
 						}).setFill(fill).setStroke(stroke);
 					}
 				}
