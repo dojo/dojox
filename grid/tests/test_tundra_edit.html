@@ -56,10 +56,11 @@
 				[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
 				[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
 			];
-			for(var i=0; i<10; i++){
-				data = data.concat(data);
+			var rows = 10000;
+			for(var i=0, l=data.length; i<rows-l; i++){
+				data.push(data[i%l].slice(0));
 			}
-			model = new dojox.grid.data.table(null, data);
+			model = new dojox.grid.data.Table(null, data);
 
 			// ==========================================================================
 			// Tie some UI to the data model
