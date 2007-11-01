@@ -23,6 +23,7 @@ dojo.require("dojox.charting.plot2d.Bars");
 dojo.require("dojox.charting.plot2d.StackedBars");
 dojo.require("dojox.charting.plot2d.ClusteredBars");
 dojo.require("dojox.charting.plot2d.Grid");
+dojo.require("dojox.charting.plot2d.Pie");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting, 
@@ -214,7 +215,13 @@ dojo.require("dojox.charting.plot2d.Grid");
 			if(!this.theme){
 				this.theme = new dojox.charting.Theme(dojox.charting._def);
 			}
-			this.theme.defineColors({num: this.series.length, cache: false});
+			var requiredColors = this.series.length;
+			dojo.forEach(this.stack, function(plot){
+				if(plot instanceof dc.plot2d.Pie && plot.series && plot.series.data.length){
+					requiredColors += plot.series.data.length - 1;
+				}
+			}, this);
+			this.theme.defineColors({num: requiredColors, cache: false});
 			
 			// calculate geometry
 			

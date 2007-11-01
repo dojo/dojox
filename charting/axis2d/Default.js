@@ -49,8 +49,6 @@ dojo.require("dojox.lang.utils");
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.group = null;
-			this.dirty = true;
 		},
 		dependOnData: function(){
 			return !("min" in this.opt) || !("max" in this.opt);
