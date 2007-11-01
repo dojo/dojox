@@ -215,12 +215,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			if(!this.theme){
 				this.theme = new dojox.charting.Theme(dojox.charting._def);
 			}
-			var requiredColors = this.series.length;
-			dojo.forEach(this.stack, function(plot){
-				if(plot instanceof dc.plot2d.Pie && plot.series && plot.series.data.length){
-					requiredColors += plot.series.data.length - 1;
-				}
-			}, this);
+			var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
 			this.theme.defineColors({num: requiredColors, cache: false});
 			
 			// calculate geometry

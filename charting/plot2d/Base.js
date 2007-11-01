@@ -27,6 +27,9 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 	render: function(dim, offsets){
 		return this;
 	},
+	getRequiredColors: function(){
+		return this.series.length;
+	},
 	
 	// utilities
 	_calc: function(dim, stats){

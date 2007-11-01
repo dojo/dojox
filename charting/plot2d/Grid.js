@@ -46,6 +46,9 @@ dojo.require("dojox.lang.functional");
 			// nothing
 			return this;
 		},
+		getRequiredColors: function(){
+			return 0;
+		},
 		render: function(dim, offsets){
 			// draw horizontal stripes and lines
 			if(!this.dirty){ return this; }
