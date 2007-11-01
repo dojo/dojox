@@ -10,6 +10,9 @@
 	opacity:0;
 	filter:alpha(opacity:0);
 }
+.dijitFileInputRealBlind {
+	right:0;
+}
 .dijitFileInputReal:hover { cursor:pointer; } 
 
 .dijitFileInputButton,

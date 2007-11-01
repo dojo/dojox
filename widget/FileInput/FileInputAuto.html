@@ -1,9 +1,9 @@
 <div class="dijitFileInput">
-	<input id="${id}" class="dijitFileInputReal" type="file" dojoAttachPoint="fileInput" name="${name}" />
+	<input class="dijitFileInputReal" type="file" dojoAttachPoint="fileInput" />
 	<div class="dijitFakeInput" dojoAttachPoint="fakeNodeHolder">
 		<input class="dijitFileInputVisible" type="text" dojoAttachPoint="focusNode, inputNode" />
-		<span class="dijitFileInputText" dojoAttachPoint="titleNode">${label}</span>
-		<span class="dijitFileInputButton" dojoAttachPoint="cancelNode" dojoAttachEvent="onclick:_onClick">${cancelText}</span>
+		<span class="dijitInline dijitFileInputText" dojoAttachPoint="titleNode">${label}</span>
+		<span class="dijitInline dijitFileInputButton" dojoAttachPoint="cancelNode" dojoAttachEvent="onclick:_onClick">${cancelText}</span>
 	</div>
-	<div class="dijitProgressOverlay" dojoAttachPoint="overlay"></div>
+	<div class="dijitProgressOverlay" dojoAttachPoint="overlay">&nbsp;</div>
 </div>

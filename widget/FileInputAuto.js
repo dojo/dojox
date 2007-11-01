@@ -66,12 +66,16 @@ dojo.declare("dojox.widget.FileInputAuto",
 
 	setMessage: function(/*String*/title){
 		// summary: set the text of the progressbar
+		
+		// FIXME: this throws errors in IE?!?!?!? egads.		
 		this.overlay.innerHTML = title;	
 	},
 	
 	_sendFile: function(/* Event */e){
+		var i=0;
 		// summary: triggers the chain of events needed to upload a file in the background.
 		if(!this.fileInput.value){ return; }
+		
 		dojo.style(this.fakeNodeHolder,"display","none");
 		dojo.style(this.overlay,"opacity","0");
 		dojo.style(this.overlay,"display","block");
@@ -91,6 +95,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 			url: this.url+"?name="+this.name,
 			form: _newForm,
 			handleAs: "text",
+			// TODO: make this a setable callback
 			handle: dojo.hitch(this,function(data,ioArgs){
 				var d = dojo.fromJson(data);
 				dojo.disconnect(this._blurListener); 
@@ -142,14 +147,19 @@ dojo.declare("dojox.widget.FileInputBlind",
 	startup: function(){
 		// summary: hide our fileInput input field
 		this.inherited("startup",arguments);
-		this._off = dojo.style(this.inputNode,"width"); 
+		this._off = dojo.style(this.inputNode,"width");
+		this.inputNode.style.display = "none";
 		this._fixPosition();
-		this.inputNode.style.display = "none"; 
 	},
-
-	_fixPosition: function(){
-		// summary: offset the fileInput to position the button over the visible button
-		dojo.style(this.fileInput,"left","-"+this._off+"px");
+	
+	_fixPosition: function(){		
+		// summary: in this case, set the button under where the visible button is 
+		if(dojo.isIE){
+			dojo.style(this.fileInput,"width","1px");
+			//dojo.style(this.fileInput,"height",this.overlay.scrollHeight+"px")
+		}else{
+			dojo.style(this.fileInput,"left","-"+(this._off)+"px");
+		}
 	},
 
 	_onClick: function(e){
