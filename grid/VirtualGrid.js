@@ -217,8 +217,16 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 	// sizing
 	resize: function(){
 		// summary:
-		//	Updates the grid's rendering dimensions and resize it.
+		//	Update the grid's rendering dimensions and resize it
 		
+		// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars 
+		// can appear in our container, which may require an extra call to 'resize'
+		// to sort out.
+		
+		// if we have set up everything except the DOM, we cannot resize
+		if(!this.domNode.parentNode){
+			return;
+		}
 		// useful measurement
 		var padBorder = dojo._getPadBorderExtents(this.domNode);
 		// grid height
@@ -272,11 +280,8 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		//	Render the grid, headers, and views. Edit and scrolling states are reset. To retain edit and 
 		// scrolling states, see Update.
 
-		//dojox.grid.watchTextSizePoll(this, 'textSizeChanged');
-		if(!this.domNode){
-			console.log("Grid.render: domNode is null", this);
-			return;
-		}
+		if(!this.domNode){return;}
+		//
 		this.update = this.defaultUpdate;
 		this.scroller.init(this.rowCount, this.keepRows, this.rowsPerPage);
 		this.prerender();
