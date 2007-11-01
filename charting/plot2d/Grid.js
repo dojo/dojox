@@ -5,8 +5,7 @@ dojo.require("dojox.charting.plot2d.common");
 dojo.require("dojox.lang.functional");
 
 (function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		purgeGroup = df.lambda("item.purgeGroup()");
+	var du = dojox.lang.utils;
 
 	dojo.declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
 		defaultParams: {
