@@ -96,8 +96,6 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		if(!this.domNode.getAttribute('tabIndex')){
 			this.domNode.tabIndex = "0";
 		}
-		this.domNode.onReveal = dojo.hitch(this, "reveal");
-		this.domNode.onSizeChange = dojo.hitch(this, "sizeChange");
 		this.createScroller();
 		this.createLayout();
 		this.createViews();
@@ -105,6 +103,7 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 		dojox.grid.initTextSizePoll();
 		this.connect(dojox.grid, "textSizeChanged", "textSizeChanged");
 		dojox.grid.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.keyEvents);
+		this.connect(this, "onShow", "renderOnIdle");
 	},
 	postCreate: function(){
 		// replace stock styleChanged with one that triggers an update
@@ -136,11 +135,11 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 			this.render();
 		}
 	},
-	reveal: function(){
-		this.render();
-	},
 	sizeChange: function(){
 		dojox.grid.jobs.job(this.id + 'SizeChange', 50, dojo.hitch(this, "update"));
+	},
+	renderOnIdle: function() {
+		setTimeout(dojo.hitch(this, "render"), 1);
 	},
 	// managers
 	createManagers: function(){
@@ -209,6 +208,9 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 			return;
 		}
 		this.layout.setStructure(this.structure);
+		this._structureChanged();
+	},
+	_structureChanged: function() {
 		this.buildViews();
 		if(this.autoRender){
 			this.render();

@@ -404,6 +404,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	query: { name: "*" }, // default, stupid query
 	store: null,
+	clientSort: false,
 	// data
 	setData: function(inData) {
 		this.store = inData;
@@ -438,7 +439,8 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			function(item, idx){ 
 				m[item] = idx;
 				m[idx+".idx"] = name;
-				return { name: item };
+				// name == display name, key = property name
+				return { name: item, key: item };
 			},
 			this
 		);
@@ -503,6 +505,6 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	canSort: function(){
 		// Q: Return true and re-issue the queries?
 		// A: Return true only. Re-issue the query in 'sort'.
-		return false;
+		return this.clientSort;
 	}
 });

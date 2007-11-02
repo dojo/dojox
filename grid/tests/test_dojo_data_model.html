@@ -27,13 +27,28 @@
 			return ' ' + inRowIndex;
 		}
 		
-		var layout2 = [
+		var layoutMovies = [
+			// view 0
 			{ type: 'dojox.GridRowView', width: '20px' },
+			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			// view 2
+			{ cells: [[
+				{ field: "Title", width: 'auto' },
+				{ field: "Year", width: 5 },
+				{ field: "Producer", width: 20 }
+			]]}
+		];
+		
+		var layoutCountries = [
+			// view 0
+			{ type: 'dojox.GridRowView', width: '20px' },
+			// view 1
+			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			// view 2
 			{ cells: [[
 				{ field: 0, width: 'auto' },
-				{ field: 1, width: 5 },
-				{ field: 2, width: 20 }
+				{ width: 8 }
 			]]}
 		];
 	</script>
@@ -44,13 +59,14 @@
 		jsId="csvStore" url="support/movies.csv">
 	</span>
 	<span dojoType="dojox.grid.data.DojoData" 
-		jsId="dataModel" 
-		store="csvStore" 
+		jsId="dataModel"
+		store="csvStore"
 		rowsPerPage="5"
-		query="{ Title: '*' }">
+		query="{ Title: '*' }"
+		clientSort="true">
 	</span>
 	<div id="grid" dojoType="dojox.Grid" elasticView="2" 
-		model="dataModel" structure="layout2">
+		model="dataModel" structure="layoutMovies">
 	</div>
 
 	<span dojoType="dojo.data.ItemFileReadStore" 
@@ -63,7 +79,7 @@
 		query="{ name : '*' }">
 	</span>
 	<div id="grid2" dojoType="dojox.Grid" elasticView="2" 
-		model="dataModel2" structure="layout2">
+		model="dataModel2" structure="layoutCountries">
 	</div>
 </body>
 </html>

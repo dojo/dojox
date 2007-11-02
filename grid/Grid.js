@@ -48,12 +48,18 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	destroy: function(){
 		this.setModel(null);
 	},
+	// structure
+	_structureChanged: function() {
+		this.indexCellFields();
+		this.inherited(arguments);
+	},
 	// model
 	_setModel: function(inModel){
 		this.model = inModel;
 		if(this.model){
 			this.model.observer(this);
 			this.model.measure();
+			this.indexCellFields();
 		}
 	},
 	setModel: function(inModel){
@@ -81,6 +87,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		this.updateRow(inRowIndex);
 	},
 	modelFieldsChange: function() {
+		this.indexCellFields();
 		this.render();
 	},
 	// model insertion
@@ -93,8 +100,16 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	},
 	// cells
 	getCellName: function(inCell){
-		var v = this.model.fields.values;
-		return v.length && v[inCell.fieldIndex].name || this.inherited(arguments);
+		var v = this.model.fields.values, i = inCell.fieldIndex;
+		return i>=0 && i<v.length && v[i].name || this.inherited(arguments);
+	},
+	indexCellFields: function(){
+		var cells = this.layout.cells;
+		for(var i=0, c; cells && (c=cells[i]); i++){
+			if(dojo.isString(c.field)){
+				c.fieldIndex = this.model.fields.indexOf(c.field);
+			}
+		}
 	},
 	// utility
 	refresh: function(){

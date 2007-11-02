@@ -89,5 +89,12 @@ dojo.declare('dojox.grid.data.Fields', dojox.grid.data.Mixer, {
 	constructor: function(inFieldClass){
 		var fieldClass = inFieldClass ? inFieldClass : dojox.grid.data.Field;
 		this.defaultValue = new fieldClass();
+	},
+	indexOf: function(inKey){
+		for(var i=0; i<this.values.length; i++){
+			var v = this.values[i];
+			if(v && v.key == inKey){return i;}
+		}
+		return -1;
 	}
 });

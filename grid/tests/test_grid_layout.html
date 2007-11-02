@@ -57,24 +57,15 @@
 			};
 			// a grid layout is an array of views.
 			var layout = [ view1 ];
-			
 			var layout2 = [ {
 				cells: [[
 					{name: 'Alpha'}, {name: 'Beta'}, {name: 'Gamma'}, {name: 'Delta', width: "150px"}, {name: 'Epsilon'}, {name: 'Nexilon'}, {name: 'Zeta'}, {name: 'Eta', field: 0}, {name: 'Omega' }
 				]]
-			} ];
-			
-		function initGridInLayout(g){
-			// render initially since containers don't do this for some reason.
-			var grid = dijit.byId(g);
-			dojo.connect(grid, "onShow", function(){ setTimeout(function(){grid.render()}, 1); });
-			grid.update();
-		}
-		
+			} 
+		];
+		//
 		dojo.addOnLoad(function(){
-			initGridInLayout("grid1");
-			initGridInLayout("grid2");
-			initGridInLayout("grid3");
+			dijit.byId("grid3").update();
 		});
 	</script>
 </head>
