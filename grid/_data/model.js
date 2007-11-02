@@ -419,9 +419,10 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this.allChange();
 	},
 	beginReturn: function(inCount){
-		if (this.rowCount != inCount) {
-			//this.setRowCount(0);
-			//this.clear();
+		if(this.count != inCount){
+			// this.setRowCount(0);
+			// this.clear();
+			// console.debug(this.count, inCount);
 			this.setRowCount(inCount);
 		}
 	},
@@ -447,14 +448,15 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this.notify("FieldsChange");
 	},
 	processRows: function(items, store){
-		//console.debug(items, store);
+		// console.debug(arguments);
+		if(!items){ return; }
 		this._setupFields(items[0]);
 		dojo.forEach(items, function(item, idx){
 			var row = {};
 			dojo.forEach(this.fields.values, function(a){
 				row[a.name] = this.store.getValue(item, a.name)||"";
 			}, this);
-			this.setRow(row, idx);
+			this.setRow(row, store.start+idx);
 		}, this);
 		// FIXME: 
 		//	Q: scott, steve, how the hell do we actually get this to update
@@ -466,13 +468,14 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	requestRows: function(inRowIndex, inCount){
 		var row  = inRowIndex || 0;
 		var params = { 
-			//start: row + 1,
-			//count: this.rowsPerPage,
-			//query: this.query,
+			start: row,
+			count: this.rowsPerPage,
+			query: this.query,
 			onBegin: dojo.hitch(this, "beginReturn"),
+			//	onItem: dojo.hitch(console, "debug"),
 			onComplete: dojo.hitch(this, "processRows") // add to deferred?
 		}
-		console.debug("requestRows:", row + 1, this.rowsPerPage);
+		// console.debug("requestRows:", row, this.rowsPerPage);
 		this.store.fetch(params);
 	},
 	getRow: function(inRowIndex){
