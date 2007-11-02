@@ -70,14 +70,14 @@
 		// get items based on field names
 		createComparator: function(inField, inIndex, inSubCompare){
 			return function(a, b){ 
-				var c = inField.name;				
+				var c = inField.name;
 				var ineq = inField.compare(a[c], b[c]);
 				return (ineq ? (inIndex > 0 ? ineq : -ineq) : (inSubCompare && inSubCompare(a, b)));
 			}
 		},
 		makeComparator: function(inIndices){
 			var result = null;
-			for(var i=inIndices.length-1, col; i>=0; i--){	
+			for(var i=inIndices.length-1, col; i>=0; i--){
 				col = Math.abs(inIndices[i]) - 1;
 				if(col >= 0){
 					result = this.createComparator(this.fields.get(col), inIndices[i], result);

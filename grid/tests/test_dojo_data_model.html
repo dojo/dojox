@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>dojox.Grid with Dojo.Data via binding</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<style type="text/css">
+		@import "../_grid/Grid.css";
+		body {
+			font-size: 1em;
+			font-family: Geneva, Arial, Helvetica, sans-serif;
+		}
+		
+		#grid {
+			width: 65em;
+			height: 25em;
+			padding: 1px;
+		}
+	</style>
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileReadStore");
+	dojo.require("dojox.data.CsvStore");
+</script>
+<!-- Debugging -->
+<script type="text/javascript" src="../_grid/lib.js"></script>
+<script type="text/javascript" src="../_grid/drag.js"></script>
+<script type="text/javascript" src="../_grid/scroller.js"></script>
+<script type="text/javascript" src="../_grid/builder.js"></script>
+<script type="text/javascript" src="../_grid/cell.js"></script>
+<script type="text/javascript" src="../_grid/layout.js"></script>
+<script type="text/javascript" src="../_grid/rows.js"></script>
+<script type="text/javascript" src="../_grid/focus.js"></script>
+<script type="text/javascript" src="../_grid/selection.js"></script>
+<script type="text/javascript" src="../_grid/edit.js"></script>
+<script type="text/javascript" src="../_grid/view.js"></script>
+<script type="text/javascript" src="../_grid/views.js"></script>
+<script type="text/javascript" src="../_grid/rowbar.js"></script>
+<script type="text/javascript" src="../_grid/publicEvents.js"></script>
+<script type="text/javascript" src="../VirtualGrid.js"></script>
+<script type="text/javascript" src="../_data/fields.js"></script>
+<script type="text/javascript" src="../_data/model.js"></script>
+<script type="text/javascript" src="../_data/editors.js"></script>
+<script type="text/javascript" src="../Grid.js"></script>
+<script type="text/javascript">
+	function getRow(inRowIndex){
+		return ' ' + inRowIndex;
+	}
+	
+	var layout2 = [
+		{ type: 'dojox.GridRowView', width: '20px' },
+		{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+		{ cells: [[
+			{ field: 0, width: 'auto' },
+			{ field: 1, width: 5 },
+			{ field: 2, width: 20 }
+		]]}
+	];
+	
+	csvStore = new dojox.data.CsvStore({url:"support/movies.csv"});
+	model = new dojox.grid.data.DojoData(null, csvStore);
+	
+	dojo.addOnLoad(function(){
+	});
+</script>
+</head>
+<body>
+<h5>dojox.Grid using Dojo.Data stores via simple binding</h5>
+<div id="grid" dojoType="dojox.Grid" elasticView="2" model="model" structure="layout2"></div>
+</body>
+</html>

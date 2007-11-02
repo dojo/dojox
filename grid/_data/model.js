@@ -1,7 +1,7 @@
 dojo.provide('dojox.grid._data.model');
 dojo.require('dojox.grid._data.fields');
 
-dojo.declare("dojox.grid.data.model", null, {
+dojo.declare("dojox.grid.data.Model", null, {
 	// summary:
 	//	Base abstract grid data model.
 	//	Makes no assumptions about the structure of grid data.
@@ -19,7 +19,7 @@ dojo.declare("dojox.grid.data.model", null, {
 	observer: function(inObserver, inPrefix){
 		this.observers.push({o: inObserver, p: inPrefix||'model' });
 	},
-	unobserver: function(inObserver){
+	notObserver: function(inObserver){
 		for(var i=0, m, o; (o=this.observers[i]); i++){
 			if(o.o==inObserver){
 				this.observers.splice(i, 1);
@@ -94,11 +94,23 @@ dojo.declare("dojox.grid.data.model", null, {
 	canSort: function(/* (+|-)column_index+1, ... */){
 		return this.sort != null;
 	},
+	makeComparator: function(inIndices){
+		var idx, col, field, result = null;
+		for(var i=inIndices.length-1; i>=0; i--){
+			idx = inIndices[i];
+			col = Math.abs(idx) - 1;
+			if(col >= 0){
+				field = this.fields.get(col);
+				result = this.generateComparator(col.compare, col.field, idx > 0, result);
+			}
+		}
+		return result;
+	},
 	sort: null,
 	dummy: 0
 });
 
-dojo.declare("dojox.grid.data.rows", dojox.grid.data.model, {
+dojo.declare("dojox.grid.data.Rows", dojox.grid.data.Model, {
 	// observer events
 	allChange: function(){
 		this.notify("AllChange", arguments);
@@ -133,10 +145,16 @@ dojo.declare("dojox.grid.data.rows", dojox.grid.data.model, {
 			this.setRow(cache, inRowIndex);
 			delete this.cache[inRowIndex];
 		}
+	},
+	generateComparator: function(inCompare, inField, inTrueForAscend, inSubCompare){
+		return function(a, b){
+			var ineq = inCompare(a[inField], b[inField]);
+			return ineq ? (inTrueForAscend ? ineq : -ineq) : inSubCompare && inSubCompare(a, b);
+		}
 	}
 });
 
-dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
+dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 	// summary:
 	//	Basic grid data model for static data in the form of an array of rows
 	//	that are arrays of cell data
@@ -220,16 +238,6 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
 		return true;
 	},
 	// sort
-	makeComparator: function(inIndices){
-		var result = null;
-		for(var i=inIndices.length-1, col; i>=0; i--){
-			col = Math.abs(inIndices[i]) - 1;
-			if(col >= 0){
-				result = dojox.grid.data.generateComparator(this.fields.get(col).compare, inIndices[i], result);
-			}
-		}
-		return result;
-	},
 	sort: function(/* (+|-)column_index+1, ... */){
 		this.data.sort(this.makeComparator(arguments));
 	},
@@ -242,7 +250,23 @@ dojo.declare("dojox.grid.data.table", dojox.grid.data.rows, {
 	dummy: 0
 });
 
-dojo.declare("dojox.grid.data.dynamic", dojox.grid.data.table, {
+dojo.declare("dojox.grid.data.Objects", dojox.grid.data.Table, {
+	constructor: function(inFields, inData, inKey){
+		if (!inFields)
+			this.autoAssignFields();
+	},
+	autoAssignFields: function() {
+		var d = this.data[0], i = 0;
+		for (var f in d) {
+			this.fields.get(i++).key = f;
+		}
+	},
+	getDatum: function(inRowIndex, inColIndex){
+		return this.data[inRowIndex][this.fields.get(inColIndex).key];
+	}
+});
+
+dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 	// summary:
 	//	Grid data model for dynamic data such as data retrieved from a server.
 	//	Retrieves data automatically when requested and provides notification when data is received
@@ -358,88 +382,94 @@ dojo.declare("dojox.grid.data.dynamic", dojox.grid.data.table, {
 	}
 });
 
+// FIXME: deprecated: (included for backward compatibility only)
+dojox.grid.data.table = dojox.grid.data.Table;
+dojox.grid.data.dynamic = dojox.grid.data.Dyanamic;
+
 // we treat dojo.data stores as dynamic stores because no matter how they got
 // here, they should always fill that contract
-dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.dynamic, {
+dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	// summary:
 	//		Grid data model for dynamic data retreived from a store which
 	//		implements the dojo.data API set.  Retrieves data automatically
 	//		when requested and provides notification when data is received
-	constructor: function(args){
-		this.page = [];
-		this.pages = [];
+	constructor: function(inFields, inData, args){
+		this.count = 1;
 		if(args){
 			dojo.mixin(this, args);
-		}
-		if(this.store){
-			this.requestRows();
 		}
 	},
 	query: { name: "*" }, // default, stupid query
 	store: null,
-	rowsPerPage: 100,
 	// data
+	setData: function(inData) {
+		this.store = inData;
+		this.data = [];
+		this.allChange();
+	},
 	getRowCount: function(){
 		return this.count;
 	},
-	getColCount: function(){
-		return this.fields.count();
-	},
 	setRowCount: function(inCount){
-		console.debug("inCount:", inCount);
+		//console.debug("inCount:", inCount);
 		this.count = inCount;
-		this.change();
+		this.allChange();
 	},
 	beginReturn: function(inCount){
-		this.setRowCount(0);
-		this.clear();
-		this.setRowCount(inCount);
-	},
-	_setupFields: function(dataItem){
-		if(!this.fields.values.length){
-			this.fields._nameMaps = {};
-			var fields = dojo.map(this.store.getAttributes(dataItem), 
-				function(item, idx){ 
-					this.fields._nameMaps[item] = idx;
-					this.fields._nameMaps[idx+".idx"] = name;
-					return { name: item }; 
-				},
-				this
-			);
-			// set up field/index mappings
-			console.debug("new fields:", fields);
-			this.fields.set(fields);
+		if (this.rowCount != inCount) {
+			//this.setRowCount(0);
+			//this.clear();
+			this.setRowCount(inCount);
 		}
 	},
-	processRows: function(dataArr, store){
-		console.debug(dataArr, store);
-		this._setupFields(dataArr[0]);
-		dojo.forEach(dataArr, function(item, idx){
-			var row = [];
+	_setupFields: function(dataItem){
+		// abort if we already have setup fields
+		if (this.fields._nameMaps)
+		//if (this.fields.values.length)
+			return;
+		// set up field/index mappings
+		var m = {};
+		//console.debug("setting up fields", m);
+		var fields = dojo.map(this.store.getAttributes(dataItem),
+			function(item, idx){ 
+				m[item] = idx;
+				m[idx+".idx"] = name;
+				return { name: item };
+			},
+			this
+		);
+		this.fields._nameMaps = m;
+		//console.debug("new fields:", fields);
+		this.fields.set(fields);
+		this.notify("FieldsChange");
+	},
+	processRows: function(items, store){
+		//console.debug(items, store);
+		this._setupFields(items[0]);
+		dojo.forEach(items, function(item, idx){
+			var row = {};
 			dojo.forEach(this.fields.values, function(a){
 				row[a.name] = this.store.getValue(item, a.name)||"";
-				console.debug(a.name+":", row[a.name]);
 			}, this);
-			console.debug(idx, row);
 			this.setRow(row, idx);
-			this.rowChange(row, idx);
 		}, this);
 		// FIXME: 
-		//		scott, steve, how the hell do we actually get this to update
+		//	Q: scott, steve, how the hell do we actually get this to update
 		//		the visible UI for these rows?
-		this.update();
+		//	A: the goal is that Grid automatically updates to reflect changes
+		//		in model. In this case, setRow -> rowChanged -> (observed by) Grid -> modelRowChange -> updateRow
 	},
 	// request data 
 	requestRows: function(inRowIndex, inCount){
-		inRowIndex = (inRowIndex == undefined ? 0 : inRowIndex);
+		var row  = inRowIndex || 0;
 		var params = { 
-			start: inRowIndex + 1,
-			count: this.rowsPerPage,
-			query: this.query||{ name: "*" },
+			//start: row + 1,
+			//count: this.rowsPerPage,
+			//query: this.query,
 			onBegin: dojo.hitch(this, "beginReturn"),
 			onComplete: dojo.hitch(this, "processRows") // add to deferred?
 		}
-		console.debug("requestRows:", params.start, params.count);
+		console.debug("requestRows:", row + 1, this.rowsPerPage);
 		this.store.fetch(params);
 	},
 	getRow: function(inRowIndex){
@@ -450,10 +480,12 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.dynamic, {
 		return row;
 	},
 	getDatum: function(inRowIndex, inColIndex){
+		//console.debug("getDatum", inRowIndex, inColIndex);
 		var row = this.getRow(inRowIndex);
-		var idx = this.fields._nameMaps[inColIndex+".idx"];
-		console.debug("getDatum", inRowIndex, inColIndex);
-		return (row ? row[idx] : this.fields.get(inColIndex).na);
+		var field = this.fields.values[inColIndex];
+		return row && field ? row[field.name] : field ? field.na : '?';
+		//var idx = row && this.fields._nameMaps[inColIndex+".idx"];
+		//return (row ? row[idx] : this.fields.get(inColIndex).na);
 	},
 	setDatum: function(inDatum, inRowIndex, inColIndex){
 		var n = this.fields._nameMaps[inColIndex+".idx"];
@@ -461,19 +493,10 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.dynamic, {
 			this.data[inRowIndex][n] = inDatum;
 		}
 	},
-	/*
-	setDatum: function(inDatum, inRowIndex, inColIndex){
-		var row = this.getRow(inRowIndex);
-		if(row){
-			row[inColIndex] = inDatum;
-			this.datumChange(inDatum, inRowIndex, inColIndex);
-		}else{
-			console.debug('[' + this.declaredClass + '] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row');
-		}
-	},
-	*/
 	// sort
 	canSort: function(){
-		return false; // return true and re-issue the queries?
+		// Q: Return true and re-issue the queries?
+		// A: Return true only. Re-issue the query in 'sort'.
+		return false;
 	}
 });

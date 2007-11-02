@@ -54,7 +54,7 @@ dojo.declare("dojox.grid.layout", null, {
 		}
 		// fieldIndex progresses linearly from the last indexed field
 		// FIXME: support generating fieldIndex based a text field name (probably in Grid)
-		var fieldIndex = (inDef.field != undefined ? inDef.field : (inDef.get ? -1 : this.fieldIndex));
+		var fieldIndex = inDef.field != undefined ? inDef.field : (inDef.get ? -1 : this.fieldIndex);
 		if((inDef.field != undefined) || !inDef.get){
 			this.fieldIndex = (inDef.field > -1 ? inDef.field : this.fieldIndex) + 1; 
 		}

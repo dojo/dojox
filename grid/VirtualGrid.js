@@ -462,6 +462,9 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 	setCellWidth: function(inIndex, inUnitWidth) {
 		this.getCell(inIndex).unitWidth = inUnitWidth;
 	},
+	getCellName: function(inCell){
+		return "Cell " + inCell.index;
+	},
 	// sorting
 	canSort: function(inSortInfo){
 		// summary:

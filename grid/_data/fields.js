@@ -29,7 +29,7 @@ dojo.declare("dojox.grid.data.Mixer", null, {
 		}
 	},
 	get: function(inIndex){
-		return (this.values[inIndex] || this.build(inIndex));
+		return this.values[inIndex] || this.build(inIndex);
 	},
 	_set: function(inIndex, inField /*[, inField2, ... inFieldN] */){
 		// each field argument can be a single field object of an array of field objects
@@ -75,14 +75,6 @@ dojo.declare("dojox.grid.data.Mixer", null, {
 
 dojox.grid.data.compare = function(a, b){
 	return (a > b ? 1 : (a == b ? 0 : -1));
-}
-
-dojox.grid.data.generateComparator = function(inCompare, inColumn, inSubCompare){
-	return function(a, b){
-		var c = Math.abs(inColumn) - 1;
-		var ineq = inCompare(a[c], b[c]);
-		return ineq ? (inColumn > 0 ? ineq : -ineq) : inSubCompare && inSubCompare(a, b);
-	}
 }
 
 dojo.declare('dojox.grid.data.Field', null, {

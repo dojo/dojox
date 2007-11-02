@@ -31,42 +31,39 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	//	model:
 	//		string or object grid data model
 	model: 'dojox.grid.data.table',
+	// life cycle
 	postCreate: function(){
-		console.debug(this.model);
+		//console.debug(this.model);
 		if(this.model){
 			var m;
 			if(dojo.isString(this.model)){
 				m = dojo.getObject(this.model);
 			}
 			this.model = (dojo.isFunction(m)) ? new m() : m;
-			console.debug(this.model);
+			//console.debug(this.model);
 			this._setModel(this.model);
 		}
 		this.inherited(arguments);
+	},
+	destroy: function(){
+		this.setModel(null);
 	},
 	// model
 	_setModel: function(inModel){
 		this.model = inModel;
 		if(this.model){
 			this.model.observer(this);
-			this.measureModel();
+			this.model.measure();
 		}
-	},
-	destroy: function(){
-		this.model.unobserver(this);
 	},
 	setModel: function(inModel){
 		// summary:
 		//	set the grid's data model
 		// inModel: model object
-		if (this.model) 
-			this.model.unobserver(this);
-		this._setModel(inModel);
-	},
-	measureModel: function(){
-		if(this.model){
-			this.model.measure();
+		if (this.model) {
+			this.model.notObserver(this);
 		}
+		this._setModel(inModel);
 	},
 	// data socket (called in cell's context)
 	get: function(inRowIndex){
@@ -83,6 +80,9 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	modelDatumChange: function(inDatum, inRowIndex, inFieldIndex){
 		this.updateRow(inRowIndex);
 	},
+	modelFieldsChange: function() {
+		this.render();
+	},
 	// model insertion
 	modelInsertion: function(inRowIndex){
 		this.updateRowCount(this.model.getRowCount());
@@ -90,6 +90,11 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	// model removal
 	modelRemoval: function(inKeys){
 		this.updateRowCount(this.model.getRowCount());
+	},
+	// cells
+	getCellName: function(inCell){
+		var v = this.model.fields.values;
+		return v.length && v[inCell.fieldIndex].name || this.inherited(arguments);
 	},
 	// utility
 	refresh: function(){

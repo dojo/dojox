@@ -311,7 +311,7 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.Builder, {
 			w: e.cellNode.clientWidth,
 			spanners: spanners
 		};
-		console.log(drag.index, drag.w);
+		//console.log(drag.index, drag.w);
 		dojox.grid.drag.start(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
 	},
 	doResizeColumn: function(inDrag, inEvent){

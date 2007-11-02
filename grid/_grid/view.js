@@ -95,10 +95,11 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 	},
 	// note: not called in 'view' context
 	_getHeaderContent: function(inCell){
+		var n = inCell.name || inCell.grid.getCellName(inCell);
 		if(inCell.index != inCell.grid.getSortIndex()){
-			return inCell.name;
+			return n;
 		}
-		return [ '<div class="', inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-down' : 'dojoxGrid-sort-up', '">', inCell.name, '</div>' ].join('');
+		return [ '<div class="', inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-down' : 'dojoxGrid-sort-up', '">', n, '</div>' ].join('');
 	},
 	resize: function(){
 		this.resizeHeight();

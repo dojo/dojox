@@ -9,14 +9,17 @@ data = [
 	[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
 	[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
 ];
-for (var i=0; i<4; i++)
-	data = data.concat(data);
-model = new dojox.grid.data.table(null, data);
-
-// simple display of row info; based on model observing.
-modelChange = function() {
-	var n = dojo.byId('rowCount');
-	if (n)
-		n.innerHTML = Number(model.getRowCount()) + ' row(s)';
+var rows = 100;
+for(var i=0, l=data.length; i<rows-l; i++){
+	data.push(data[i%l].slice(0));
 }
 
+model = new dojox.grid.data.table(null, data);
+
+// simple display of row info; based on model observation
+modelChange = function() {
+	var n = dojo.byId('rowCount');
+	if (n) {
+		n.innerHTML = Number(model.getRowCount()) + ' row(s)';
+	}
+}
