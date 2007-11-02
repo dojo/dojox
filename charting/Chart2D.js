@@ -48,11 +48,18 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this.series = [];	// stack of data runs
 			this.runs = {};		// map of data run indices
 			this.dirty = true;
+			this.coords = null;
 			
 			// create a surface
 			this.node = dojo.byId(node);
 			var box = dojo.marginBox(node);
 			this.surface = dojox.gfx.createSurface(this.node, box.w, box.h);
+		},
+		getCoords: function(){
+			if(!this.coords){
+				this.coords = dojo.coords(this.node, true);
+			}
+			return this.coords;
 		},
 		setTheme: function(theme){
 			this.theme = theme;
@@ -156,6 +163,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			dojo.marginBox(this.node, box);
 			this.surface.setDimensions(box.w, box.h);
 			this.dirty = true;
+			this.coords = null;
 			return this.render();
 		},
 		render: function(){

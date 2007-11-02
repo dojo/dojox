@@ -31,7 +31,7 @@ dojo.require("dojox.gfx");
 				p.innerHTML = text;
 				s.color = fontColor;
 				chart.node.appendChild(p);
-				var parent = dojo.coords(chart.node, true), 
+				var parent = chart.getCoords(), 
 					box = dojo.marginBox(p),
 					size = g.normalizedLength(g.splitFontString(font).size),
 					top = parent.y + Math.floor(y - size);
