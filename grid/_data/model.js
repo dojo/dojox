@@ -399,6 +399,9 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			dojo.mixin(this, args);
 		}
 	},
+	markupFactory: function(args, node){
+		return new dojox.grid.data.DojoData(null, null, args);
+	},
 	query: { name: "*" }, // default, stupid query
 	store: null,
 	// data
