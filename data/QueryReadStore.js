@@ -384,7 +384,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		// In case there hasn't been a fetch yet, _itemsByIdentity is null
 		// and thus a fetch will be triggered below.
 		if(this._itemsByIdentity){
-			item = this._itemsByIdentity[keywordArgs.identity];
+			var item = this._itemsByIdentity[keywordArgs.identity];
 			if(!(item === undefined)){
 				if(keywordArgs.onItem){
 					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
