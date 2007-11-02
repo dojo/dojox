@@ -184,8 +184,13 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);
-			
+
 			this._makeClean();
+
+			// BEGIN FOR HTML CANVAS 
+			if(this.surface.render){ this.surface.render(); };	
+			// END FOR HTML CANVAS
+			
 			return this;
 		},
 		fullRender: function(){
@@ -291,6 +296,11 @@ dojo.require("dojox.charting.plot2d.Pie");
 			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
 			
 			this._makeClean();
+			
+			// BEGIN FOR HTML CANVAS 
+			if(this.surface.render){ this.surface.render(); };	
+			// END FOR HTML CANVAS
+			
 			return this;
 		},
 		_makeClean: function(){
