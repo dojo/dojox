@@ -237,7 +237,7 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 	},
 	// event dispatch(from Grid)
 	dispatchContentEvent: function(e){
-		return this.content.dispatchEvent(e); 
+		return this.content.dispatchEvent(e);
 	},
 	dispatchHeaderEvent: function(e){
 		return this.header.dispatchEvent(e);

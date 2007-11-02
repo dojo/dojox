@@ -296,6 +296,12 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.Builder, {
 			//}
 		}
 	},
+	doclick: function(e) {
+		if (new Date().getTime() < this.bogusClickTime) {
+			dojo.stopEvent(e);
+			return true;
+		}
+	},
 	// column resizing
 	beginColumnResize: function(e){
 		dojo.stopEvent(e);

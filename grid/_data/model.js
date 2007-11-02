@@ -101,7 +101,7 @@ dojo.declare("dojox.grid.data.Model", null, {
 			col = Math.abs(idx) - 1;
 			if(col >= 0){
 				field = this.fields.get(col);
-				result = this.generateComparator(col.compare, col.field, idx > 0, result);
+				result = this.generateComparator(field.compare, field.key, idx > 0, result);
 			}
 		}
 		return result;
