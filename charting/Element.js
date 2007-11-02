@@ -4,6 +4,7 @@ dojo.declare("dojox.charting.Element", null, {
 	constructor: function(chart){
 		this.chart = chart;
 		this.group = null;
+		this.htmlElements = [];
 		this.dirty = true;
 	},
 	createGroup: function(creator){
@@ -14,6 +15,7 @@ dojo.declare("dojox.charting.Element", null, {
 		return this;
 	},
 	purgeGroup: function(){
+		this.destroyHtmlElements();
 		if(this.group){
 			this.group.clear();
 			this.group.removeShape();
@@ -23,6 +25,7 @@ dojo.declare("dojox.charting.Element", null, {
 		return this;
 	},
 	cleanGroup: function(creator){
+		this.destroyHtmlElements();
 		if(!creator){ creator = this.chart.surface; }
 		if(this.group){
 			this.group.clear();
@@ -31,5 +34,9 @@ dojo.declare("dojox.charting.Element", null, {
 		}
 		this.dirty = true;
 		return this;
+	},
+	destroyHtmlElements: function(){
+		dojo.forEach(this.htmlElements, dojo._destroyElement);
+		this.htmlElements = [];
 	}
 });

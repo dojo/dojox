@@ -1,6 +1,7 @@
 dojo.provide("dojox.charting.plot2d.Pie");
 
 dojo.require("dojox.charting.Element");
+dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.plot2d.common");
 
 dojo.require("dojox.lang.functional");
@@ -9,6 +10,7 @@ dojo.require("dojox.gfx");
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
+		da = dojox.charting.axis2d.common,
 		g = dojox.gfx,
 		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
 
@@ -19,7 +21,8 @@ dojo.require("dojox.gfx");
 			fixed:			true,
 			precision:		1,
 			labelOffset:	20,
-			labelStyle:		"default"	// default/rows/auto
+			labelStyle:		"default",	// default/rows/auto
+			htmlLabels:		true		// use HTML to draw labels
 		},
 		optionalParams: {
 			font:		"",
@@ -104,8 +107,14 @@ dojo.require("dojox.gfx");
 						size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 					shift = Math.max(shift * labelFudgeFactor, 1) / 2 * size;
 					// draw the label
+					var elem = da.createText[this.opt.htmlLabels ? "html" : "gfx"]
+									(this.chart, s, circle.cx, circle.cy + size / 2, "middle",
+										"100%", taFont, taFontColor);
+					if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
+					/*
 					s.createText({x: circle.cx, y: circle.cy + size / 2, align: "middle", text: "100%"}).
 						setFont(taFont).setFill(taFontColor);
+					*/
 				}
 				return this;
 			}
@@ -146,10 +155,16 @@ dojo.require("dojox.gfx");
 						x = circle.cx + labelR * Math.cos(labelAngle),
 						y = circle.cy + labelR * Math.sin(labelAngle) + size / 2;
 					// draw the label
+					var elem = da.createText[this.opt.htmlLabels ? "html" : "gfx"]
+									(this.chart, s, x, y, "middle",
+										labels[i], taFont, taFontColor);
+					if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
+					/*
 					s.createText({x: x, y: y, align: "middle", text: labels[i]}).
 						setFont(taFont).setFill(taFontColor);
+					*/
 					start = end;
-				});
+				}, this);
 			}
 			return this;
 		},

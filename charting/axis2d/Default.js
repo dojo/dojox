@@ -1,6 +1,7 @@
 dojo.provide("dojox.charting.axis2d.Default");
 
 dojo.require("dojox.charting.scaler");
+dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.axis2d.Base");
 
 dojo.require("dojo.colors");
@@ -28,7 +29,8 @@ dojo.require("dojox.lang.utils");
 			majorLabels: true,		// draw major labels
 			minorTicks:  true,		// draw minor ticks
 			minorLabels: true,		// draw minor labels
-			microTicks:  false		// draw micro ticks
+			microTicks:  false,		// draw micro ticks
+			htmlLabels:  true		// use HTML to draw labels
 		},
 		optionalParams: {
 			"min":           0,		// minimal value on this axis
@@ -224,12 +226,18 @@ dojo.require("dojox.lang.utils");
 						y2: y + tickVector.y * taMajorTick.length
 					}).setStroke(taMajorTick);
 					if(this.opt.majorLabels){
+						var elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
+										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
+											this._getLabel(nextMajor, c.major.prec), taFont, taFontColor);
+						if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
+						/*
 						s.createText({
 							x: x + labelOffset.x,
 							y: y + labelOffset.y,
 							text: this._getLabel(nextMajor, c.major.prec),
 							align: labelAlign
 						}).setFont(taFont).setFill(taFontColor);
+						*/
 					}
 					nextMajor += c.major.tick;
 					nextMinor += c.minor.tick;
@@ -243,12 +251,18 @@ dojo.require("dojox.lang.utils");
 							y2: y + tickVector.y * taMinorTick.length
 						}).setStroke(taMinorTick);
 						if(this.opt.minorLabels && (c.minMinorStep <= c.minor.tick * c.scale)){
+							var elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
+											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
+												this._getLabel(nextMinor, c.minor.prec), taFont, taFontColor);
+							if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
+							/*
 							s.createText({
 								x: x + labelOffset.x,
 								y: y + labelOffset.y,
 								text: this._getLabel(nextMinor, c.minor.prec),
 								align: labelAlign
 							}).setFont(taFont).setFill(taFontColor);
+							*/
 						}
 					}
 					nextMinor += c.minor.tick;
