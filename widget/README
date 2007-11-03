@@ -55,6 +55,7 @@ Other Notes (Brief widget list):
 	* FileInputAuto/Blind - extension to FileInput for 
 		added flair/automation
 	* FisheyeList - the classic FishEye Picker
+	* Iterator - Basic array and datastore iterator class
 	* SortList - a degradable UL with a fixed header, scrolling,
 		and sorting. Can be the direct descendat of a
 		LayoutContainer and will size to fit.
