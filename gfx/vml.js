@@ -4,8 +4,6 @@ dojo.require("dojox.gfx._base");
 dojo.require("dojox.gfx.shape");
 dojo.require("dojox.gfx.path");
 
-dojo.experimental("dojox.gfx.vml");
-
 // dojox.gfx.vml.xmlns: String: a VML's namespace
 dojox.gfx.vml.xmlns = "urn:schemas-microsoft-com:vml";
 

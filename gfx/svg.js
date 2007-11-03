@@ -4,8 +4,6 @@ dojo.require("dojox.gfx._base");
 dojo.require("dojox.gfx.shape");
 dojo.require("dojox.gfx.path");
 
-dojo.experimental("dojox.gfx.svg");
-
 dojox.gfx.svg.xmlns = {
 	xlink: "http://www.w3.org/1999/xlink",
 	svg:   "http://www.w3.org/2000/svg"
