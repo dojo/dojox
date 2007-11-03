@@ -115,7 +115,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this.inherited("postCreate",arguments);
 		this.pageSize = Number(this.pageSize);
 
-		this._scrollerSize = this.size - 48 * 2;
+		this._scrollerSize = this.size - (51 * 2);
 		
 		var sizeProp = this._sizeProperty = this.isHorizontal ? "width" : "height";
 	

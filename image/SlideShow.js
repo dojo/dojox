@@ -231,7 +231,7 @@ dojo.declare("dojox.image.SlideShow",
 		if(inTimer && this._timerCancelled){return false;}
 		
 		if(this.imageIndex + 1 >= this.maxPhotos){
-			if(inTimer && (this.loop || forceLoop)){ this.imageIndex = 0; }
+			if(inTimer && (this.loop || forceLoop)){ this.imageIndex = -1; }
 			else{
 				if(this._slideId){ this._stop(); }
 				return false;
