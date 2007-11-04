@@ -45,6 +45,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	},
 	destroy: function(){
 		this.setModel(null);
+		this.inherited(arguments);
 	},
 	// structure
 	_structureChanged: function() {
