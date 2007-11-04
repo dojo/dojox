@@ -1,5 +1,5 @@
-dojo.provide('dojox.grid.tests.databaseModel');
-dojo.require('dojox.grid._data.model');
+dojo.provide("dojox.grid.tests.databaseModel");
+dojo.require("dojox.grid._data.model");
 
 // Provides a sparse array that is also traversable inorder 
 // with basic Array:
@@ -7,7 +7,7 @@ dojo.require('dojox.grid._data.model');
 //   - for...in iteration is in order of element creation 
 // maintains a secondary index for interating
 // over sparse elements inorder
-dojo.declare('dojox.grid.sparse', null, {
+dojo.declare("dojox.grid.Sparse", null, {
 	constructor: function() {
 		this.clear();
 	},
@@ -48,7 +48,7 @@ dojo.declare('dojox.grid.sparse', null, {
 });
 
 // sample custom model implementation that works with mysql server.
-dojo.declare("dojox.grid.data.dbtable", dojox.grid.data.dynamic, {
+dojo.declare("dojox.grid.data.DbTable", dojox.grid.data.Dynamic, {
 	delayedInsertCommit: true,
 	constructor: function(inFields, inData, inServer, inDatabase, inTable) {
 		this.server = inServer;
@@ -67,7 +67,7 @@ dojo.declare("dojox.grid.data.dbtable", dojox.grid.data.dynamic, {
 		this.states = {};
 		for (var i=0, s; (s=this.stateNames[i]); i++) {
 			delete this.states[s];
-			this.states[s] = new dojox.grid.sparse();
+			this.states[s] = new dojox.grid.Sparse();
 		}
 	},
 	// row state information
@@ -224,7 +224,7 @@ dojo.declare("dojox.grid.data.dbtable", dojox.grid.data.dynamic, {
 			errback: dojo.hitch(this, this.callbacks.removeError, indexes)
 		};
 		this.commitDelete(rows, cbs);
-		dojox.grid.data.dynamic.prototype.remove.apply(this, arguments);
+		dojox.grid.data.Dynamic.prototype.remove.apply(this, arguments);
 	},
 	cancelModifyRow: function(inRowIndex) {
 		if (this.isDelayedInsert(inRowIndex)) {
@@ -244,7 +244,7 @@ dojo.declare("dojox.grid.data.dbtable", dojox.grid.data.dynamic, {
 	},
 	removeInsert: function(inRowIndex) {
 		this.clearState(inRowIndex);
-		dojox.grid.data.dynamic.prototype.remove.call(this, [inRowIndex]);
+		dojox.grid.data.Dynamic.prototype.remove.call(this, [inRowIndex]);
 	},
 	// request data 
 	requestRows: function(inRowIndex, inCount)	{
@@ -269,16 +269,16 @@ dojo.declare("dojox.grid.data.dbtable", dojox.grid.data.dynamic, {
 		this.setSort(inSortIndex);
 		this.clearData();
 	},
-	clearSort: function() {
+	clearSort: function(){
 		this.sortField = '';
 		this.sortDesc = false;
 	},
-	endModifyRow: function(inRowIndex) {
+	endModifyRow: function(inRowIndex){
 		var cache = this.cache[inRowIndex];
 		var m = false;
-		if (cache) {
+		if(cache){
 			var data = this.getRow(inRowIndex);
-			if (!dojox.grid.arrayCompare(cache, data)) {
+			if(!dojox.grid.arrayCompare(cache, data)){
 				m = true;
 				this.update(cache, data, inRowIndex);
 			}	

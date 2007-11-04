@@ -4,15 +4,11 @@
 	<title>dojox.Grid Test: Mysql Table Editing</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style>
-		@import "../_grid/Grid.css";
+		@import "../_grid/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		body, html {
-		}
-		body {
-			font-family: Tahoma, Arial, Helvetica, sans-serif;
-			font-size: 11px;
-		}
+
 		.grid {
 			height: 30em;
 		}
@@ -50,7 +46,7 @@
 	<script type="text/javascript" src="../Grid.js"></script>
 	<script type="text/javascript" src="databaseModel.js"></script>
 	<script type="text/javascript">
-		var model = new dojox.grid.data.dbtable(null, null, 'support/data.php', "test", "testtbl");
+		var model = new dojox.grid.data.DbTable(null, null, 'support/data.php', "test", "testtbl");
 		// simple display of row info; based on model observing.
 		modelChange = function() {
 			dojo.byId('rowCount').innerHTML = model.count + ' row(s)';
@@ -105,14 +101,19 @@
 		});
 		
 		var gridLayout = [ 
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: "dojox.GridRowView", width: "20px" },
 			{
 			defaultCell: { width: 6, editor: dojox.grid.editors.Dijit }, 
 			cells: [[
 				{ name: 'Id', styles: 'text-align: right;', editorClass: "dijit.form.NumberTextBox" }, 
 				{ name: 'Name', width: 20},
 				{ name: 'Message', styles: 'text-align: right;'},
-				{ name: 'Date', editor: mySqlDateEditor, formatter: formatMySqlDate, constraint: {selector: "date"}, width: 10, styles: 'text-align:right;'}
+				{ name: 'Date', 
+					editor: mySqlDateEditor, 
+					formatter: formatMySqlDate, 
+					constraint: {selector: "date"}, 
+					width: 10, 
+					styles: 'text-align:right;'}
 			]]}
 		];
 
@@ -124,22 +125,25 @@
 			return ['', '', '', jsDateToMySqlDate(new Date())];
 		}
 		function addRow() {
-			if (model.canModify()) {
+			if(model.canModify()){
 				grid.addRow(getDefaultRow());
-			} else
+			}else{
 				waitMessage();
+			}
 		}
 		
-		function removeSelected() {
-			if (model.canModify()) {
+		function removeSelected(){
+			if(model.canModify()){
 				grid.removeSelectedRows();
-			}	else
+			}else{
 				waitMessage();
+			}
 		}
 	</script>
 </head>
-<body>
-	<h2>dojox.Grid Test: Mysql Table Editing</h2>
+<body class="tundra">
+	<h1>dojox.Grid Test: Mysql Table Editing</h1>
+	<br>
 	<button onclick="addRow()">Add Row</button>&nbsp;&nbsp;
 	<button onclick="removeSelected()">Remove Selected</button>&nbsp;&nbsp;
 	<button onclick="grid.edit.apply()">Apply Edit</button>&nbsp;&nbsp;

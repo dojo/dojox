@@ -4,9 +4,10 @@
 	<head>
 		<title>Test dojox.Grid Editing</title>
 		<style>
+			@import "../_grid/tundraGrid.css";
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/tundra/tundra.css";
-			@import "../_grid/tundraGrid.css";
+			@import "../../../dijit/tests/css/dijitTests.css";
 
 			.dojoxGrid-row-editing td {
 				background-color: #F4FFF4;
@@ -25,10 +26,12 @@
 			}
 			.dojoxGrid textarea {
 			}
-			/*
-			*/
+
 			#controls {
 				padding: 6px 0;
+			}
+			#controls button {
+				margin-left: 10px;
 			}
 			.myGrid {
 				width: 850px;
@@ -84,7 +87,7 @@
 				field: 2,
 				name: 'Status',
 				styles: 'text-align: center;',
-				editor: dojox.grid.editors.select,
+				editor: dojox.grid.editors.Select,
 				options: [ "new", "read", "replied" ]
 			};
 
@@ -93,12 +96,12 @@
 					type: 'dojox.GridRowView', width: '20px'
 				},
 				{
-					defaultCell: { width: 8, editor: dojox.grid.editors.input, styles: 'text-align: right;'  },
+					defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
 					rows: [
 						[
 							{ name: 'Id', width: 3, get: function(inRowIndex){ return inRowIndex+1;} },
-							{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.select, options: ["normal", "note", "important"]},
-							{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.bool },
+							{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: ["normal", "note", "important"]},
+							{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.Bool },
 							statusCell,
 							{ name: 'Message', styles: '', width: '100%' },
 							{ name: 'Amount', formatter: formatMoney }
@@ -115,21 +118,22 @@
 		</script>
 	</head>
 	<body class="tundra">
-	<h2>
-		dojox.Grid Basic Editing test
-	</h2>
+	<h1>dojox.Grid Basic Editing test</h1>
+	<br />
 	<div id="controls">
-		<button onclick="grid.refresh()">Refresh</button>&nbsp;&nbsp;&nbsp;
+		<button onclick="grid.refresh()">Refresh</button>
 		<button onclick="grid.edit.focusEditor()">Focus Editor</button>
-		<button onclick="grid.focus.next()">Next Focus</button>&nbsp;&nbsp;&nbsp;
+		<button onclick="grid.focus.next()">Next Focus</button>
 		<button onclick="addRow()">Add Row</button>
-		<button onclick="grid.removeSelectedRows()">Remove</button>&nbsp;&nbsp;&nbsp;
+		<button onclick="grid.removeSelectedRows()">Remove</button>
 		<button onclick="grid.edit.apply()">Apply</button>
-		<button onclick="grid.edit.cancel()">Cancel</button>&nbsp;&nbsp;&nbsp;
-		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>&nbsp;
+		<button onclick="grid.edit.cancel()">Cancel</button>
+		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 	</div>
 	<br />
-	<div jsId="grid" class="myGrid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
+	<div jsId="grid" class="myGrid" 
+		dojoType="dojox.Grid" model="model" 
+		structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>
 	</body>

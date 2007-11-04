@@ -74,14 +74,14 @@
 		statusCell = {
 			field: 2, name: 'Status', 
 			styles: 'text-align: center;', 
-			editor: dojox.grid.editors.select, 
+			editor: dojox.grid.editors.Select, 
 			options: [ "new", "read", "replied" ]
 		};
 
 		gridLayout = [{
 			type: 'dojox.GridRowView', width: '20px'
 		},{
-			defaultCell: { width: 8, editor: dojox.grid.editors.input, styles: 'text-align: right;'  },
+			defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
 			rows: [[
 				{ name: 'Id', 
 					get: function(inRowIndex) { return inRowIndex+1;}, 

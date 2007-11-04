@@ -121,15 +121,9 @@
 	// ==========================================================================
 	// UI Action
 	// ==========================================================================
-	addRow = function() {
+	addRow = function(){
 		grid.addRow([ "normal", false, "new", 'Now is the time for all good men to come to the aid of their party.', 99.99, 9.99, false ]);
 	}
-	// ==========================================================================
-	// Startup tasks
-	// ==========================================================================
-	dojo.addOnLoad(function() {
-		window["grid"] = dijit.byId("grid");
-	});
 </script>
 </head>
 <body>
@@ -147,7 +141,9 @@
 	<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>&nbsp;
 </div>
 <br />
-<div id="grid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
+<div id="grid" dojoType="dojox.Grid" 
+	jsId="grid"
+	model="model" structure="gridLayout"></div>
 <br />
 <div id="rowCount"></div>
 </body>

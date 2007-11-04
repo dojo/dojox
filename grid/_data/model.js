@@ -492,6 +492,18 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			this.data[inRowIndex][n] = inDatum;
 		}
 	},
+	// modification and store eventing
+	datumChange: function(){
+		this.notify("DatumChange", arguments);
+	},
+	insertion: function(/* index */){
+		this.notify("Insertion", arguments);
+		this.notify("Change", arguments);
+	},
+	removal: function(/* keys */){
+		this.notify("Removal", arguments);
+		this.notify("Change", arguments);
+	},
 	// sort
 	canSort: function(){
 		// Q: Return true and re-issue the queries?

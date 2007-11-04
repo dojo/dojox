@@ -1,6 +1,7 @@
 dojo.provide("dojox.grid._data.editors");
+dojo.provide("dojox.grid.editors");
 
-dojo.declare("dojox.grid.editors.base", null, {
+dojo.declare("dojox.grid.editors.Base", null, {
 	// summary:
 	//	base grid editor class. Other grid editors should inherited from this class.
 	constructor: function(inCell){
@@ -134,8 +135,9 @@ dojo.declare("dojox.grid.editors.base", null, {
 		this._finish(inRowIndex);
 	}
 });
+dojox.grid.editors.base = dojox.grid.editors.Base; // back-compat
 
-dojo.declare("dojox.grid.editors.input", dojox.grid.editors.base, {
+dojo.declare("dojox.grid.editors.Input", dojox.grid.editors.Base, {
 	// summary
 	// grid cell editor that provides a standard text input box
 	constructor: function(inCell){
@@ -169,8 +171,9 @@ dojo.declare("dojox.grid.editors.input", dojox.grid.editors.base, {
 		}catch(e){}
 	}
 });
+dojox.grid.editors.input = dojox.grid.editors.Input; // back compat
 
-dojo.declare("dojox.grid.editors.select", dojox.grid.editors.input, {
+dojo.declare("dojox.grid.editors.Select", dojox.grid.editors.Input, {
 	// summary:
 	// grid cell editor that provides a standard select
 	// options: text of each item
@@ -197,8 +200,9 @@ dojo.declare("dojox.grid.editors.select", dojox.grid.editors.input, {
 		}
 	}
 });
+dojox.grid.editors.select = dojox.grid.editors.Select; // back compat
 
-dojo.declare("dojox.grid.editors.alwaysOn", dojox.grid.editors.input, {
+dojo.declare("dojox.grid.editors.AlwaysOn", dojox.grid.editors.Input, {
 	// summary:
 	// grid cell editor that is always on, regardless of grid editing state
 	// alwaysOn: boolean
@@ -213,8 +217,9 @@ dojo.declare("dojox.grid.editors.alwaysOn", dojox.grid.editors.input, {
 		e.start(this.cell, inRowIndex, true);
 	}
 });
+dojox.grid.editors.alwaysOn = dojox.grid.editors.AlwaysOn; // back-compat
 
-dojo.declare("dojox.grid.editors.bool", dojox.grid.editors.alwaysOn, {
+dojo.declare("dojox.grid.editors.Bool", dojox.grid.editors.AlwaysOn, {
 	// summary:
 	// grid cell editor that provides a standard checkbox that is always on
 	_valueProp: "checked",
@@ -227,3 +232,4 @@ dojo.declare("dojox.grid.editors.bool", dojox.grid.editors.alwaysOn, {
 		}
 	}
 });
+dojox.grid.editors.bool = dojox.grid.editors.Bool; // back-compat
