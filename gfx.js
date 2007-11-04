@@ -10,7 +10,7 @@ dojo.require("dojox.gfx._base");
 		switch(renderers[i]){
 			case "svg":
 				//TODO: need more comprehensive test for SVG
-				if(!dojo.isIE && (!navigator.userAgent.indexOf("iPhone") < 0)){ dojox.gfx.renderer = "svg"; }
+				if(!dojo.isIE && (navigator.userAgent.indexOf("iPhone") < 0)){ dojox.gfx.renderer = "svg"; }
 				break;
 			case "vml":
 				if(dojo.isIE != 0){ dojox.gfx.renderer = "vml"; }
