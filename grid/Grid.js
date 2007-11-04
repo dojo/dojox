@@ -177,7 +177,6 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		return (this.model.canModify ? this.model.canModify(inRowIndex) : true);
 	},
 	doStartEdit: function(inCell, inRowIndex){
-		//console.log("doStartEdit [Row]", inRowIndex);
 		var edit = this.canEdit(inCell, inRowIndex);
 		if(edit){
 			this.model.beginModifyRow(inRowIndex);

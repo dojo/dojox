@@ -187,8 +187,8 @@ dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 	getRow: function(inRowIndex){
 		return this.data[inRowIndex];
 	},
-	copyRow: function(inRowIndex) {
-		this.getRow(inRowIndex).slice(0);
+	copyRow: function(inRowIndex){
+		return this.getRow(inRowIndex).slice(0);
 	},
 	getDatum: function(inRowIndex, inColIndex){
 		return this.data[inRowIndex][inColIndex];
@@ -390,14 +390,30 @@ dojox.grid.data.dynamic = dojox.grid.data.Dyanamic;
 // we treat dojo.data stores as dynamic stores because no matter how they got
 // here, they should always fill that contract
 dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
-	// summary:
-	//		Grid data model for dynamic data retreived from a store which
-	//		implements the dojo.data API set.  Retrieves data automatically
-	//		when requested and provides notification when data is received
+	//	summary:
+	//		A grid data model for dynamic data retreived from a store which
+	//		implements the dojo.data API set. Retrieves data automatically when
+	//		requested and provides notification when data is received
+	//	description:
+	//		This store subclasses the Dynamic grid data object in order to
+	//		provide paginated data access support, notification and view
+	//		updates for stores which support those features, and simple
+	//		field/column mapping for all dojo.data stores.
 	constructor: function(inFields, inData, args){
 		this.count = 1;
+		this._rowIdentities = {};
 		if(args){
 			dojo.mixin(this, args);
+		}
+		if(this.store){
+			// NOTE: we assume Read and Identity APIs for all stores!
+			var f = this.store.getFeatures();
+			this._canNotify = f['dojo.data.api.Notification'];
+			this._canWrite = f['dojo.data.api.Write'];
+
+			if(this._canNotify){
+				dojo.connect(this.store, "onSet", this, "_storeDatumChange");
+			}
 		}
 	},
 	markupFactory: function(args, node){
@@ -405,9 +421,12 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	query: { name: "*" }, // default, stupid query
 	store: null,
+	_canNotify: false,
+	_canWrite: false,
+	_rowIdentities: {},
 	clientSort: false,
 	// data
-	setData: function(inData) {
+	setData: function(inData){
 		this.store = inData;
 		this.data = [];
 		this.allChange();
@@ -427,35 +446,41 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	_setupFields: function(dataItem){
 		// abort if we already have setup fields
-		if (this.fields._nameMaps)
-		//if (this.fields.values.length)
+		if(this.fields._nameMaps){
 			return;
+		}
 		// set up field/index mappings
 		var m = {};
 		//console.debug("setting up fields", m);
 		var fields = dojo.map(this.store.getAttributes(dataItem),
 			function(item, idx){ 
 				m[item] = idx;
-				m[idx+".idx"] = name;
+				m[idx+".idx"] = item;
 				// name == display name, key = property name
 				return { name: item, key: item };
 			},
 			this
 		);
 		this.fields._nameMaps = m;
-		//console.debug("new fields:", fields);
+		// console.debug("new fields:", fields);
 		this.fields.set(fields);
 		this.notify("FieldsChange");
+	},
+	_getRowFromItem: function(item){
+		// gets us the row object (and row index) of an item
 	},
 	processRows: function(items, store){
 		// console.debug(arguments);
 		if(!items){ return; }
 		this._setupFields(items[0]);
 		dojo.forEach(items, function(item, idx){
-			var row = {};
+			var row = {}; 
+			row.__dojo_data_item = item;
 			dojo.forEach(this.fields.values, function(a){
 				row[a.name] = this.store.getValue(item, a.name)||"";
 			}, this);
+			// FIXME: where else do we need to keep this in sync?
+			this._rowIdentities[this.store.getIdentity(item)] = store.start+idx;
 			this.setRow(row, store.start+idx);
 		}, this);
 		// FIXME: 
@@ -488,19 +513,77 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	setDatum: function(inDatum, inRowIndex, inColIndex){
 		var n = this.fields._nameMaps[inColIndex+".idx"];
+		// console.debug("setDatum:", "n:"+n, inDatum, inRowIndex, inColIndex);
 		if(n){
 			this.data[inRowIndex][n] = inDatum;
+			this.datumChange(inDatum, inRowIndex, inColIndex);
 		}
 	},
-	// modification and store eventing
-	datumChange: function(){
-		this.notify("DatumChange", arguments);
+	// modification, update and store eventing
+	copyRow: function(inRowIndex){
+		var row = {};
+		var backstop = {};
+		var src = this.getRow(inRowIndex);
+		for(var x in src){
+			if(src[x] != backstop[x]){
+				row[x] = src[x];
+			}
+		}
+		return row;
+	},
+	_attrCompare: function(cache, data){
+		dojo.forEach(this.fields.values, function(a){
+			if(cache[a.name] != data[a.name]){ return false; }
+		}, this);
+		return true;
+	},
+	endModifyRow: function(inRowIndex){
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			var data = this.getRow(inRowIndex);
+			if(!this._attrCompare(cache, data)){
+				this.update(cache, data, inRowIndex);
+			}
+			delete this.cache[inRowIndex];
+		}
+	},
+	cancelModifyRow: function(inRowIndex){
+		// console.debug("cancelModifyRow", arguments);
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			this.setRow(cache, inRowIndex);
+			delete this.cache[inRowIndex];
+		}
+	},
+	_storeDatumChange: function(item, attr, oldVal, newVal){
+		// the store has changed some data under us, need to update the display
+		var rowId = this._rowIdentities[this.store.getIdentity(item)];
+		var row = this.getRow(rowId);
+		row[attr] = newVal;
+		var colId = this.fields._nameMaps[attr];
+		this.notify("DatumChange", [ newVal, rowId, colId ]);
+	},
+	datumChange: function(value, rowIdx, colIdx){
+		if(this._canWrite){
+			// we're chaning some data, which means we need to write back
+			var row = this.getRow(rowIdx);
+			var field = this.fields._nameMaps[colIdx+".idx"];
+			this.store.setValue(row.__dojo_data_item, field, value);
+			// we don't need to call DatumChange, an eventing store will tell
+			// us about the row change events
+		}else{
+			// we can't write back, so just go ahead and change our local copy
+			// of the data
+			this.notify("DatumChange", arguments);
+		}
 	},
 	insertion: function(/* index */){
+		console.debug("Insertion", arguments);
 		this.notify("Insertion", arguments);
 		this.notify("Change", arguments);
 	},
 	removal: function(/* keys */){
+		console.debug("Removal", arguments);
 		this.notify("Removal", arguments);
 		this.notify("Change", arguments);
 	},

@@ -95,24 +95,24 @@
 	// ==========================================================================
 	// Grid structure
 	// ==========================================================================
-	statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', editor: dojox.grid.editors.select, options: [ "new", "read", "replied" ] };
+	statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: [ "new", "read", "replied" ] };
 	gridLayout = [{
 		type: 'dojox.GridRowView', width: '20px'
 	},{
-		defaultCell: { width: 8, editor: dojox.grid.editors.input, styles: 'text-align: right;'  },
+		defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
 		rows: [[
 			{ name: 'Id', width: 3, get: function(inRowIndex) { return inRowIndex+1;} },
-			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.select, options: ["normal", "note", "important"]},
-			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.bool },
+			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: ["normal", "note", "important"]},
+			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.Bool },
 			statusCell,
 			{ name: 'Message', styles: '', width: '100%' },
 			{ name: 'Amount', formatter: formatMoney },
 			{ name: 'Amount', field: 4, formatter: formatMoney }
 		]]
 	},{
-		defaultCell: { width: 4, editor: dojox.grid.editors.input, styles: 'text-align: right;' },
+		defaultCell: { width: 4, editor: dojox.grid.editors.Input, styles: 'text-align: right;' },
 		rows: [[
-			{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', editor: dojox.grid.editors.bool}, 
+			{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', editor: dojox.grid.editors.Bool}, 
 			statusCell,
 			{ name: 'Amount', field: 4, formatter: formatMoney},
 			{ name: 'Detail', value: 'Detail'}
