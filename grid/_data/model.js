@@ -252,12 +252,13 @@ dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 
 dojo.declare("dojox.grid.data.Objects", dojox.grid.data.Table, {
 	constructor: function(inFields, inData, inKey){
-		if (!inFields)
+		if(!inFields){
 			this.autoAssignFields();
+		}
 	},
-	autoAssignFields: function() {
+	autoAssignFields: function(){
 		var d = this.data[0], i = 0;
-		for (var f in d) {
+		for(var f in d){
 			this.fields.get(i++).key = f;
 		}
 	},
@@ -411,9 +412,6 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this.data = [];
 		this.allChange();
 	},
-	getRowCount: function(){
-		return this.count;
-	},
 	setRowCount: function(inCount){
 		//console.debug("inCount:", inCount);
 		this.count = inCount;
@@ -479,13 +477,6 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		}
 		// console.debug("requestRows:", row, this.rowsPerPage);
 		this.store.fetch(params);
-	},
-	getRow: function(inRowIndex){
-		var row = this.data[inRowIndex];
-		if(!row){
-			this.preparePage(inRowIndex);
-		}
-		return row;
 	},
 	getDatum: function(inRowIndex, inColIndex){
 		//console.debug("getDatum", inRowIndex, inColIndex);
