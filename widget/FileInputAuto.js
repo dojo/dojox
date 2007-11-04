@@ -68,13 +68,12 @@ dojo.declare("dojox.widget.FileInputAuto",
 		// summary: set the text of the progressbar
 		
 		// FIXME: this throws errors in IE?!?!?!? egads.		
-		this.overlay.innerHTML = title;	
+		if(!dojo.isIE){ this.overlay.innerHTML = title;	}
 	},
 	
 	_sendFile: function(/* Event */e){
-		var i=0;
 		// summary: triggers the chain of events needed to upload a file in the background.
-		if(!this.fileInput.value){ return; }
+		if(!this.fileInput.value || this._sent){ return; }
 		
 		dojo.style(this.fakeNodeHolder,"display","none");
 		dojo.style(this.overlay,"opacity","0");
@@ -90,33 +89,36 @@ dojo.declare("dojox.widget.FileInputAuto",
 		_newForm.appendChild(this.fileInput);
 		dojo.body().appendChild(_newForm);
 
-		// no error checking :( we are a prototype
 		dojo.io.iframe.send({
 			url: this.url+"?name="+this.name,
 			form: _newForm,
 			handleAs: "text",
-			// TODO: make this a setable callback
-			handle: dojo.hitch(this,function(data,ioArgs){
-				var d = dojo.fromJson(data);
-				dojo.disconnect(this._blurListener); 
-				if(d.status == "success"){ 
-					// we should get this from ioArgs? or user-spcified callback?
-					dojo.style(this.overlay,"opacity","0");
-					dojo.style(this.overlay,"border","none");
-					dojo.style(this.overlay,"background","none"); 
-					var num = (Math.floor((d.details.size/1024)*100)/100);
-					var size = (num>1) ? (num+"k") : (((num*1024)*100) + "bytes");
-					this.overlay.innerHTML = "success:" + d.details.name + " " +size;
-					this.overlay.style.backgroundImage = "none";
-					this.fileInput.style.display = "none";
-					this.fakeNodeHolder.style.display = "none";
-					dojo.fadeIn({ node:this.overlay, duration:this.duration }).play(25);
-					this.onComplete(d);
-					this._sent = true;
-					this.inputNode.value = d.details.name; 
-				}
-			}) 
+			handle: dojo.hitch(this,"_handleSend")
 		});
+	},
+
+	_handleSend: function(data,ioArgs){
+		// summary: The callback to toggle the progressbar, and fire the user-defined callback
+		
+		if(!dojo.isIE){
+			// otherwise, this throws errors in ie? FIXME:
+			this.overlay.innerHTML = "";
+		}
+		
+		this._sent = true;
+		dojo.style(this.overlay,"opacity","0");
+		dojo.style(this.overlay,"border","none");
+		dojo.style(this.overlay,"background","none"); 
+
+		this.overlay.style.backgroundImage = "none";
+		this.fileInput.style.display = "none";
+		this.fakeNodeHolder.style.display = "none";
+		dojo.fadeIn({ node:this.overlay, duration:this.duration }).play(250);
+		
+		dojo.disconnect(this._blurListener);
+		dojo.disconnect(this._focusListener);
+		
+		this.onComplete(data,ioArgs,this);
 	},
 
 	_onClick: function(e){
@@ -132,8 +134,10 @@ dojo.declare("dojox.widget.FileInputAuto",
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
 	},
 
-	onComplete: function(/* Object */data){
-		// summary: stub function fired when an upload was successful to be overridden
+	onComplete: function(/* Object */data, /* dojo.Deferred._ioArgs */ioArgs, /* this */widgetRef){
+		// summary: stub function fired when an upload has finished. 
+		// data: the raw data found in the first [TEXTAREA] tag of the post url
+		// ioArgs: the dojo.Deferred data being passed from the handle: callback
 	}
 });
 
