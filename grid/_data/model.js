@@ -178,7 +178,7 @@ dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 		return (this.data && this.data.length ? this.data[0].length : this.fields.count());
 	},
 	badIndex: function(inCaller, inDescriptor){
-		console.debug('dojox.grid.data.table: badIndex');
+		console.debug('dojox.grid.data.Table: badIndex');
 	},
 	isGoodIndex: function(inRowIndex, inColIndex){
 		return (inRowIndex >= 0 && inRowIndex < this.count && (arguments.length < 2 || (inColIndex >= 0 && inColIndex < this.colCount)));
@@ -354,7 +354,7 @@ dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 	},
 	remove: function(inRowIndexes){
 		this.removePages(inRowIndexes);
-		dojox.grid.data.table.prototype.remove.apply(this, arguments);
+		dojox.grid.data.Table.prototype.remove.apply(this, arguments);
 	},
 	// access
 	getRow: function(inRowIndex){

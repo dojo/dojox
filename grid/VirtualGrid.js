@@ -11,31 +11,45 @@ dojo.require("dojox.grid._grid.edit");
 dojo.require("dojox.grid._grid.rowbar");
 dojo.require("dojox.grid._grid.publicEvents");
 
-dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
-	/* summary:
-			A grid widget with virtual scrolling, cell editing, complex rows, sorting, fixed columns, sizeable columns, etc.
-
-		description:
-			VirtualGrid provides the full set of grid features without any direct connection to a data store.
-			The grid exposes a get function for the grid, or optionally individual columns, to populate cell contents.
-			The grid is rendered based on its structure, an object describing column and cell layout.
-
-		usage:
-			A quick sample:
-			
-			define the grid structure:
-			var structure = [ // array of view objects
-			{ cells: [// array of rows, a row is an array of cells
-					[{ name: "Alpha", width: 6 }, { name: "Beta" }, { name: "Gamma", get: function }]
-			]};
-			
-			define a get function
-			function get(inRowIndex) { // called in cell context
-				return [this.index, inRowIndex].join(', ');
-			}
-			
-			<div id="grid" rowCount="100" get="get" structure="structure" dojoType="dojox.VirtualGrid"></div>
-	*/
+dojo.declare('dojox.VirtualGrid', 
+	[ dijit._Widget, dijit._Templated ], 
+{
+	// summary:
+	// 		A grid widget with virtual scrolling, cell editing, complex rows,
+	// 		sorting, fixed columns, sizeable columns, etc.
+	//
+	//	description:
+	//		VirtualGrid provides the full set of grid features without any
+	//		direct connection to a data store.
+	//
+	//		The grid exposes a get function for the grid, or optionally
+	//		individual columns, to populate cell contents.
+	//
+	//		The grid is rendered based on its structure, an object describing
+	//		column and cell layout.
+	//
+	//	example:
+	//		A quick sample:
+	//		
+	//		define a get function
+	//	|	function get(inRowIndex){ // called in cell context
+	//	|		return [this.index, inRowIndex].join(', ');
+	//	|	}
+	//		
+	//		define the grid structure:
+	//	|	var structure = [ // array of view objects
+	//	|		{ cells: [// array of rows, a row is an array of cells
+	//	|			[
+	//	|				{ name: "Alpha", width: 6 }, 
+	//	|				{ name: "Beta" }, 
+	//	|				{ name: "Gamma", get: get }]
+	//	|		]}
+	//	|	];
+	//		
+	//	|	<div id="grid" 
+	//	|		rowCount="100" get="get" 
+	//	|		structure="structure" 
+	//	|		dojoType="dojox.VirtualGrid"></div>
 
 	templateString: '<div class="dojoxGrid" hidefocus="hidefocus" role="wairole:grid"><div class="dojoxGrid-master-header" dojoAttachPoint="headerNode"></div><div class="dojoxGrid-master-view" dojoAttachPoint="viewsNode"></div><span dojoAttachPoint="lastFocusNode" tabindex="0"></span></div>',
 	// classTag: string
@@ -186,15 +200,19 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 	},
 	setStructure: function(inStructure){
 		// summary:
-		//	Install a new structure and rebuild the grid.
-		// inStructure: object
-		//	Structure object defines the grid layout and provides various options for grid views and columns
-		//	A grid structure is an array of view objects. A view object can specify a view type (view class),
-		//	width, noscroll (boolean flag for view scrolling), and cells. Cells is an array of objects 
-		//	corresponding to each grid column. The view cells object is an array of subrows
-		//	comprising a single row. Each subrow is an array of column objects. A column object can have a
-		//	name, width, value (default), get function to provide data, styles, and span attributes
-		//	(rowSpan, colSpan).
+		//		Install a new structure and rebuild the grid.
+		// inStructure: Object
+		//		Structure object defines the grid layout and provides various
+		//		options for grid views and columns
+		//	description:
+		//		A grid structure is an array of view objects. A view object can
+		//		specify a view type (view class), width, noscroll (boolean flag
+		//		for view scrolling), and cells. Cells is an array of objects
+		//		corresponding to each grid column. The view cells object is an
+		//		array of subrows comprising a single row. Each subrow is an
+		//		array of column objects. A column object can have a name,
+		//		width, value (default), get function to provide data, styles,
+		//		and span attributes (rowSpan, colSpan).
 
 		this.views.destroyViews();
 		this.structure = inStructure;
@@ -219,7 +237,7 @@ dojo.declare('dojox.VirtualGrid', [dijit._Widget, dijit._Templated], {
 	// sizing
 	resize: function(){
 		// summary:
-		//	Update the grid's rendering dimensions and resize it
+		//		Update the grid's rendering dimensions and resize it
 		
 		// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars 
 		// can appear in our container, which may require an extra call to 'resize'

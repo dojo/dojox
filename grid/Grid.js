@@ -30,17 +30,15 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 
 	//	model:
 	//		string or object grid data model
-	model: 'dojox.grid.data.table',
+	model: 'dojox.grid.data.Table',
 	// life cycle
 	postCreate: function(){
-		//console.debug(this.model);
 		if(this.model){
-			var m;
-			if(dojo.isString(this.model)){
-				m = dojo.getObject(this.model);
+			var m = this.model;
+			if(dojo.isString(m)){
+				m = dojo.getObject(m);
 			}
 			this.model = (dojo.isFunction(m)) ? new m() : m;
-			//console.debug(this.model);
 			this._setModel(this.model);
 		}
 		this.inherited(arguments);
@@ -55,6 +53,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	},
 	// model
 	_setModel: function(inModel){
+		// if(!inModel){ return; }
 		this.model = inModel;
 		if(this.model){
 			this.model.observer(this);
@@ -64,9 +63,11 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	},
 	setModel: function(inModel){
 		// summary:
-		//	set the grid's data model
-		// inModel: model object
-		if (this.model) {
+		//		set the grid's data model
+		// inModel:
+		//		model object, usually an instance of a dojox.grid.data.Model
+		//		subclass
+		if(this.model){
 			this.model.notObserver(this);
 		}
 		this._setModel(inModel);
