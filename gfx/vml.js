@@ -11,12 +11,6 @@ dojox.gfx.vml.xmlns = "urn:schemas-microsoft-com:vml";
 // dojox.gfx.vml.text_alignment: Object: mapping from SVG alignment to VML alignment
 dojox.gfx.vml.text_alignment = {start: "left", middle: "center", end: "right"};
 
-// dojox.gfx.vml.pi4: Number: Pi / 4
-dojox.gfx.vml.pi4 = Math.PI / 4;
-
-// dojox.gfx.vml.two_pi: Number: 2 * Pi
-dojox.gfx.vml.two_pi = Math.PI * 2;
-
 dojox.gfx.vml._parseFloat = function(str) {
 	// summary: a helper function to parse VML-specific floating-point values
 	// str: String: a representation of a floating-point number
