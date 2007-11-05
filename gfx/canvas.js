@@ -381,7 +381,7 @@ dojo.declare("dojox.gfx.Ellipse", dojox.gfx.shape.Ellipse, {
 		this._stroke();
 		ctx.closePath();
 		ctx.restore(); 
-	},
+	}
 });
 dojox.gfx.Ellipse.nodeType = "ellipse";
 
