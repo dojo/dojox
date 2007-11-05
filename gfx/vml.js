@@ -3,6 +3,7 @@ dojo.provide("dojox.gfx.vml");
 dojo.require("dojox.gfx._base");
 dojo.require("dojox.gfx.shape");
 dojo.require("dojox.gfx.path");
+dojo.require("dojox.gfx.arc");
 
 // dojox.gfx.vml.xmlns: String: a VML's namespace
 dojox.gfx.vml.xmlns = "urn:schemas-microsoft-com:vml";
@@ -829,82 +830,6 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		this.lastControl.type = "Q";
 		return p;
 	},
-	_curvePI4: dojox.gfx.path._calcArc(Math.PI / 8),
-	_calcArcTo: function(path, last, rx, ry, xRotg, large, sweep, x, y){
-		var m = dojox.gfx.matrix;
-		// calculate parameters
-		var xRot = m._degToRad(xRotg),
-			rx2 = rx * rx, ry2 = ry * ry,
-			pa = m.multiplyPoint(
-				m.rotate(-xRot), 
-				{x: (last.x - x) / 2, y: (last.y - y) / 2}
-			),
-			pax2 = pa.x * pa.x, pay2 = pa.y * pa.y,
-			c1 = Math.sqrt((rx2 * ry2 - rx2 * pay2 - ry2 * pax2) / (rx2 * pay2 + ry2 * pax2));
-		if(isNaN(c1)){ c1 = 0; }
-		var	ca = {
-				x:  c1 * rx * pa.y / ry,
-				y: -c1 * ry * pa.x / rx
-			};
-		if(large == sweep){
-			ca = {x: -ca.x, y: -ca.y};
-		}
-		// our center
-		var c = m.multiplyPoint(
-			[
-				m.translate(
-					(last.x + x) / 2,
-					(last.y + y) / 2
-				),
-				m.rotate(xRot)
-			], 
-			ca
-		);
-		// calculate our elliptic transformation
-		var elliptic_transform = m.normalize([
-			m.translate(c.x, c.y),
-			m.rotate(xRot),
-			m.scale(rx, ry)
-		]);
-		// start, end, and size of our arc
-		var inversed = m.invert(elliptic_transform),
-			sp = m.multiplyPoint(inversed, last),
-			ep = m.multiplyPoint(inversed, x, y),
-			startAngle = Math.atan2(sp.y, sp.x),
-			endAngle   = Math.atan2(ep.y, ep.x),
-			// size of our arc in radians
-			theta = sweep ? endAngle - startAngle : startAngle - endAngle;
-		if(theta < 0){
-			theta += dojox.gfx.vml.two_pi;
-		}else if(theta > dojox.gfx.vml.two_pi){
-			theta = dojox.gfx.vml.two_pi;
-		}
-		// draw curve chunks
-		var pi4 = Math.PI / 4, alpha = Math.PI / 8, curve = this._curvePI4, 
-			step  = sweep ? alpha : -alpha;
-		for(var angle = theta; angle > 0; angle -= pi4){
-			if(angle < pi4){
-				alpha = angle / 2;
-				curve = dojox.gfx.path._calcArc(alpha);
-				step  = sweep ? alpha : -alpha;
-			}
-			var c1, c2, e,
-				M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
-			if(sweep){
-				c1 = m.multiplyPoint(M, curve.c1);
-				c2 = m.multiplyPoint(M, curve.c2);
-				e  = m.multiplyPoint(M, curve.e );
-			}else{
-				c1 = m.multiplyPoint(M, curve.c2);
-				c2 = m.multiplyPoint(M, curve.c1);
-				e  = m.multiplyPoint(M, curve.s );
-			}
-			// draw the curve
-			path.push(" c");
-			this._addArgs(path, [c1.x, c1.y, c2.x, c2.y, e.x, e.y]);
-			startAngle += 2 * step;
-		}
-	},
 	_arcTo: function(segment, last){
 		var p = [], n = segment.args, l = n.length, relative = segment.action == "a";
 		for(var i = 0; i < l; i += 7){
@@ -913,11 +838,15 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 				x1 += last.x;
 				y1 += last.y;
 			}
-			this._calcArcTo(
-				p, last, n[i], n[i + 1], n[i + 2], 
+			var result = dojox.gfx.arc.arcAsBezier(
+				last, n[i], n[i + 1], n[i + 2], 
 				n[i + 3] ? 1 : 0, n[i + 4] ? 1 : 0,
 				x1, y1
 			);
+			for(var j = 0; j < result.length; ++j){
+				p.push(" c");
+				this._addArgs(p, result[j]);
+			}
 			last = {x: x1, y: y1};
 		}
 		this.lastControl = {};
