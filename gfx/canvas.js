@@ -1060,13 +1060,13 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 		// width: String: width of surface, e.g., "100px"
 		// height: String: height of surface, e.g., "100px"
 		if(!this.rawNode){ return this; }
-		this.rawNode.setAttribute("width",  width);
-		this.rawNode.setAttribute("height", height);
+		this.rawNode.width  = width;
+		this.rawNode.height = height;
 		return this;	// self
 	},
 	getDimensions: function(){
 		// summary: returns an object with properties "width" and "height"
-		return this.rawNode ? {width: this.rawNode.getAttribute("width"), height: this.rawNode.getAttribute("height")} : null; // Object
+		return this.rawNode ? {width: this.rawNode.width, height: this.rawNode.height} : null; // Object
 	},
 	render: function(){
 		// wait for pending images to load.
