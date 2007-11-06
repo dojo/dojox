@@ -94,6 +94,12 @@ dojo.declare("dojox.grid.data.Model", null, {
 	canSort: function(/* (+|-)column_index+1, ... */){
 		return this.sort != null;
 	},
+	generateComparator: function(inCompare, inField, inTrueForAscend, inSubCompare){
+		return function(a, b){
+			var ineq = inCompare(a[inField], b[inField]);
+			return ineq ? (inTrueForAscend ? ineq : -ineq) : inSubCompare && inSubCompare(a, b);
+		}
+	},
 	makeComparator: function(inIndices){
 		var idx, col, field, result = null;
 		for(var i=inIndices.length-1; i>=0; i--){
@@ -144,12 +150,6 @@ dojo.declare("dojox.grid.data.Rows", dojox.grid.data.Model, {
 		if(cache){
 			this.setRow(cache, inRowIndex);
 			delete this.cache[inRowIndex];
-		}
-	},
-	generateComparator: function(inCompare, inField, inTrueForAscend, inSubCompare){
-		return function(a, b){
-			var ineq = inCompare(a[inField], b[inField]);
-			return ineq ? (inTrueForAscend ? ineq : -ineq) : inSubCompare && inSubCompare(a, b);
 		}
 	}
 });

@@ -234,6 +234,9 @@ dojo.declare('dojox.VirtualGrid',
 			this.render();
 		}
 	},
+	hasLayout: function() {
+		return this.layout.cells.length;
+	},
 	// sizing
 	resize: function(){
 		// summary:
@@ -244,7 +247,7 @@ dojo.declare('dojox.VirtualGrid',
 		// to sort out.
 		
 		// if we have set up everything except the DOM, we cannot resize
-		if(!this.domNode.parentNode){
+		if(!this.domNode.parentNode || !this.hasLayout()){
 			return;
 		}
 		// useful measurement
@@ -301,6 +304,10 @@ dojo.declare('dojox.VirtualGrid',
 		// scrolling states, see Update.
 
 		if(!this.domNode){return;}
+		if(!this.hasLayout()) {
+			this.scroller.init(0, this.keepRows, this.rowsPerPage);
+			return;
+		}
 		//
 		this.update = this.defaultUpdate;
 		this.scroller.init(this.rowCount, this.keepRows, this.rowsPerPage);
@@ -384,10 +391,10 @@ dojo.declare('dojox.VirtualGrid',
 		inRowIndex = Number(inRowIndex);
 		if(this.updating){
 			this.invalidated[inRowIndex]=true;
-			return;
+		}else{
+			this.views.updateRow(inRowIndex, this.rows.getHeight(inRowIndex));
+			this.scroller.rowHeightChanged(inRowIndex);
 		}
-		this.views.updateRow(inRowIndex, this.rows.getHeight(inRowIndex));
-		this.scroller.rowHeightChanged(inRowIndex);
 	},
 	updateRowCount: function(inRowCount){
 		//summary: 
@@ -396,17 +403,18 @@ dojo.declare('dojox.VirtualGrid',
 		//	Number of rows in the grid.
 		if(this.updating){
 			this.invalidated.rowCount = inRowCount;
-			return;
+		}else{
+			this.rowCount = inRowCount;
+			if(this.layout.cells.length){
+				this.scroller.updateRowCount(inRowCount);
+				this.setScrollTop(this.scrollTop);
+			}
+			this.resize();
 		}
-		this.rowCount = inRowCount;
-		this.scroller.updateRowCount(inRowCount);
-		this.setScrollTop(this.scrollTop);
-		this.resize();
 	},
 	updateRowStyles: function(inRowIndex){
 		// summary:
 		//	Update the styles for a row after it's state has changed.
-		
 		this.views.updateRowStyles(inRowIndex);
 	},
 	rowHeightChanged: function(inRowIndex){

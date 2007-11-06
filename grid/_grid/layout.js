@@ -8,7 +8,7 @@ dojo.declare("dojox.grid.layout", null, {
 		this.grid = inGrid;
 	},
 	// flat array of grid cells
-	cells: null,
+	cells: [],
 	// structured array of grid cells
 	structure: null,
 	// default cell width

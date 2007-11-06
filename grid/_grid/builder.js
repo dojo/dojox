@@ -285,6 +285,8 @@ dojo.declare("dojox.grid.headerBuilder", dojox.grid.Builder, {
 			c = 'not-allowed';
 		}
 		e.sourceView.headerNode.style.cursor = c || ''; //'default';
+		if (c)
+			dojo.stopEvent(e);
 	},
 	domousedown: function(e){
 		if(!dojox.grid.drag.dragging){
