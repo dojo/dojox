@@ -57,7 +57,7 @@ dojo.provide("dojox.charting.scaler");
 			majorPrecision = majorTick ? Math.floor(Math.log(majorTick) / Math.LN10) : 0,
 			minorPrecision = minorTick ? Math.floor(Math.log(minorTick) / Math.LN10) : 0,
 			scale = span / (upperBound - lowerBound);
-		if(isNaN(scale)){ scale = 1; }
+		if(!isFinite(scale)){ scale = 1; }
 		return {
 			bounds: {
 				lower:	lowerBound,
