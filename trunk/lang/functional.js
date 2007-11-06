@@ -7,10 +7,10 @@ dojo.provide("dojox.lang.functional");
 //	- "reduce" family of functions
 //	- currying and partial functions
 //	- argument pre-processing: mixer and flip
-//	- miscelaneous useful functions
+//	- miscellaneous useful functions
 
 // Acknoledgements:
-//	- parts of this module (most notably lamda, constFun, invoke, pluck, and partial) 
+//	- parts of this module (most notably lambda, constFun, invoke, pluck, and partial) 
 //		are based on work by Oliver Steele (http://osteele.com/sources/javascript/functional/functional.js)
 //		which was published under MIT License
 //	- Simple "maybe" monad was donated by Alex Russell.
@@ -22,7 +22,7 @@ dojo.provide("dojox.lang.functional");
 //	- missing high-level functions are provided with the compatible API: 
 //		foldl, foldl1, scanl, scanl1, foldr, foldr1, scanr, scanr1,
 //		reduce, reduceRight
-//	- lambda() and listcomp() produce functions, which after the comilation step are 
+//	- lambda() and listcomp() produce functions, which after the compilation step are 
 //		as fast as regular JS functions (at least theoretically).
 
 (function(){
