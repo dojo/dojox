@@ -457,7 +457,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var loadingDiv;
 		if(this.useLoadNotifier){
 			loadingDiv = document.createElement("div");
-			loadingDiv.innerHTML = "<!-- -->";
 			loadingDiv.setAttribute("id","loadingDiv_" + this.widgetid+"_"+index);
 	
 			//If this widget was previously told that the main image for this
