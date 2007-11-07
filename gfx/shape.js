@@ -20,7 +20,7 @@ dojo.declare("dojox.gfx.Shape", null, {
 		//	or dojox.gfx.defaultImage)
 		this.shape = null;
 		
-		// matrix: dojox.gfx.matrix.Matrix: a transformation matrix
+		// matrix: dojox.gfx.Matrix2D: a transformation matrix
 		this.matrix = null;
 		
 		// fillStyle: Object: a fill object 
@@ -46,7 +46,7 @@ dojo.declare("dojox.gfx.Shape", null, {
 		//	or dojox.gfx.Group)
 		this.parent = null;
 		
-		// parentMatrix: dojox.gfx.matrix.Matrix
+		// parentMatrix: dojox.gfx.Matrix2D
 		//	a transformation matrix inherited from the parent
 		this.parentMatrix = null;
 	},
@@ -70,7 +70,7 @@ dojo.declare("dojox.gfx.Shape", null, {
 	},
 	getTransform: function(){
 		// summary: returns the current transformation matrix or null
-		return this.matrix;	// dojox.gfx.matrix.Matrix
+		return this.matrix;	// dojox.gfx.Matrix2D
 	},
 	getFill: function(){
 		// summary: returns the current fill object or null
@@ -116,6 +116,9 @@ dojo.declare("dojox.gfx.Shape", null, {
 	getEventSource: function(){
 		// summary: returns a Node, which is used as 
 		//	a source of events for this shape
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
 		return this.rawNode;	// Node
 	},
 	
@@ -132,6 +135,11 @@ dojo.declare("dojox.gfx.Shape", null, {
 		//	dojox.gfx.defaultCircle,
 		//	dojox.gfx.defaultLine,
 		//	or dojox.gfx.defaultImage)
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
+		this.shape = dojox.gfx.makeParameters(this.shape, shape);
+		this.bbox = null;
 		return this;	// self
 	},
 	setFill: function(fill){
@@ -142,6 +150,33 @@ dojo.declare("dojox.gfx.Shape", null, {
 		//	dojox.gfx.defaultRadialGradient, 
 		//	dojox.gfx.defaultPattern, 
 		//	or dojo.Color)
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
+		if(!fill){
+			// don't fill
+			this.fillStyle = null;
+			return this;	// self
+		}
+		var f = null;
+		if(typeof(fill) == "object" && "type" in fill){
+			// gradient or pattern
+			switch(fill.type){
+				case "linear":
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					break;
+				case "radial":
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					break;
+				case "pattern":
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					break;
+			}
+		}else{
+			// color object
+			f = dojox.gfx.normalizeColor(fill);
+		}
+		this.fillStyle = f;
 		return this;	// self
 	},
 	setStroke: function(stroke){
@@ -149,6 +184,39 @@ dojo.declare("dojox.gfx.Shape", null, {
 		//	(the default implementation simply ignores it)
 		// stroke: Object: a stroke object
 		//	(see dojox.gfx.defaultStroke) 
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
+		if(!stroke){
+			// don't stroke
+			this.strokeStyle = null;
+			return this;	// self
+		}
+		// normalize the stroke
+		if(typeof stroke == "string"){
+			stroke = {color: stroke};
+		}
+		var s = this.strokeStyle = dojox.gfx.makeParameters(dojox.gfx.defaultStroke, stroke);
+		s.color = dojox.gfx.normalizeColor(s.color);
+		return this;	// self
+	},
+	setTransform: function(matrix){
+		// summary: sets a transformation matrix
+		// matrix: dojox.gfx.Matrix2D: a matrix or a matrix-like object
+		//	(see an argument of dojox.gfx.Matrix2D 
+		//	constructor for a list of acceptable arguments)
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
+		this.matrix = dojox.gfx.matrix.clone(matrix ? dojox.gfx.matrix.normalize(matrix) : dojox.gfx.matrix.identity);
+		return this._applyTransform();	// self
+	},
+	
+	_applyTransform: function(){
+		// summary: physically sets a matrix
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
 		return this;	// self
 	},
 	
@@ -172,39 +240,39 @@ dojo.declare("dojox.gfx.Shape", null, {
 		}
 		return this;
 	},
+	_moveToFront: function(){
+		// summary: renderer-specific hook, see dojox.gfx.shape.Shape.moveToFront()
 
-	setTransform: function(matrix){
-		// summary: sets a transformation matrix
-		// matrix: dojox.gfx.matrix.Matrix: a matrix or a matrix-like object
-		//	(see an argument of dojox.gfx.matrix.Matrix 
-		//	constructor for a list of acceptable arguments)
-		this.matrix = dojox.gfx.matrix.clone(matrix ? dojox.gfx.matrix.normalize(matrix) : dojox.gfx.identity, true);
-		return this._applyTransform();	// self
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 	},
-	
+	_moveToBack: function(){
+		// summary: renderer-specific hook, see dojox.gfx.shape.Shape.moveToFront()
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+	},
+
 	// apply left & right transformation
 	
 	applyRightTransform: function(matrix){
 		// summary: multiplies the existing matrix with an argument on right side
 		//	(this.matrix * matrix)
-		// matrix: dojox.gfx.matrix.Matrix: a matrix or a matrix-like object
-		//	(see an argument of dojox.gfx.matrix.Matrix 
+		// matrix: dojox.gfx.Matrix2D: a matrix or a matrix-like object
+		//	(see an argument of dojox.gfx.Matrix2D 
 		//	constructor for a list of acceptable arguments)
 		return matrix ? this.setTransform([this.matrix, matrix]) : this;	// self
 	},
 	applyLeftTransform: function(matrix){
 		// summary: multiplies the existing matrix with an argument on left side
 		//	(matrix * this.matrix)
-		// matrix: dojox.gfx.matrix.Matrix: a matrix or a matrix-like object
-		//	(see an argument of dojox.gfx.matrix.Matrix 
+		// matrix: dojox.gfx.Matrix2D: a matrix or a matrix-like object
+		//	(see an argument of dojox.gfx.Matrix2D 
 		//	constructor for a list of acceptable arguments)
 		return matrix ? this.setTransform([matrix, this.matrix]) : this;	// self
 	},
-
 	applyTransform: function(matrix){
 		// summary: a shortcut for dojox.gfx.Shape.applyRightTransform
-		// matrix: dojox.gfx.matrix.Matrix: a matrix or a matrix-like object
-		//	(see an argument of dojox.gfx.matrix.Matrix 
+		// matrix: dojox.gfx.Matrix2D: a matrix or a matrix-like object
+		//	(see an argument of dojox.gfx.Matrix2D 
 		//	constructor for a list of acceptable arguments)
 		return matrix ? this.setTransform([this.matrix, matrix]) : this;	// self
 	},
@@ -225,14 +293,14 @@ dojo.declare("dojox.gfx.Shape", null, {
 		//	(see dojox.gfx.Surface,
 		//	dojox.gfx.shape.VirtualGroup,
 		//	or dojox.gfx.Group)
-		// matrix: dojox.gfx.matrix.Matrix:
+		// matrix: dojox.gfx.Matrix2D:
 		//	a 2D matrix or a matrix-like object
 		this.parent = parent;
 		return this._updateParentMatrix(matrix);	// self
 	},
 	_updateParentMatrix: function(matrix){
 		// summary: updates the parent matrix with new matrix
-		// matrix: dojox.gfx.matrix.Matrix:
+		// matrix: dojox.gfx.Matrix2D:
 		//	a 2D matrix or a matrix-like object
 		this.parentMatrix = matrix ? dojox.gfx.matrix.clone(matrix) : null;
 		return this._applyTransform();	// self
@@ -240,17 +308,33 @@ dojo.declare("dojox.gfx.Shape", null, {
 	_getRealMatrix: function(){
 		// summary: returns the cumulative ("real") transformation matrix
 		//	by combining the shape's matrix with its parent's matrix
-		return this.parentMatrix ? new dojox.gfx.matrix.Matrix2D([this.parentMatrix, this.matrix]) : this.matrix;	// dojox.gfx.Matrix2D
+		var m = this.matrix;
+		var p = this.parent;
+		while(p){
+			if(p.matrix){
+				m = dojox.gfx.matrix.multiply(p.matrix, m);
+			}
+			p = p.parent;
+		}
+		return m;	// dojox.gfx.Matrix2D
 	}
 });
 
 dojox.gfx.shape._eventsProcessing = {
 	connect: function(name, object, method){
-		return arguments.length > 2 ? 
+		// summary: connects a handler to an event on this shape
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
+		return arguments.length > 2 ?	// Object
 			dojo.connect(this.getEventSource(), name, object, method) :
 			dojo.connect(this.getEventSource(), name, object);
 	},
 	disconnect: function(token){
+		// summary: connects a handler by token from an event on this shape
+
+		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+
 		dojo.disconnect(token);
 	}
 };
@@ -298,7 +382,7 @@ dojox.gfx.shape.Container = {
 	clear: function(){
 		// summary: removes all shapes from a group/surface
 		this.children = [];
-		return this;
+		return this;	// self
 	},
 	
 	// moving child nodes
@@ -312,7 +396,7 @@ dojox.gfx.shape.Container = {
 				break;
 			}
 		}
-		return this;
+		return this;	// self
 	},
 	_moveChildToBack: function(shape){
 		// summary: moves a shape to back of the list of shapes
@@ -323,7 +407,7 @@ dojox.gfx.shape.Container = {
 				break;
 			}
 		}
-		return this;
+		return this;	// self
 	}
 };
 
@@ -438,6 +522,22 @@ dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape, {
 		this.shape = dojo.clone(dojox.gfx.defaultPolyline);
 		this.rawNode = rawNode;
 	},
+	setShape: function(points, closed){
+		// summary: sets a polyline/polygon shape object
+		// points: Object: a polyline/polygon shape object
+		// closed: Boolean: close the polyline to make a polygon
+		if(points && points instanceof Array){
+			// points: Array: an array of points
+			this.shape = dojox.gfx.makeParameters(this.shape, {points: points});
+			if(closed && this.shape.points.length){ 
+				this.shape.points.push(this.shape.points[0]);
+			}
+		}else{
+			this.shape = dojox.gfx.makeParameters(this.shape, points);
+		}
+		this.box = null;
+		return this;	// self
+	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box
 		if(!this.bbox && this.shape.points.length){
@@ -494,3 +594,83 @@ dojo.declare("dojox.gfx.shape.Text", dojox.gfx.Shape, {
 		return this;	// self
 	}
 });
+
+dojox.gfx.shape.Creator = {
+	// summary: shape creators
+	createShape: function(shape){
+		// summary: creates a shape object based on its type; it is meant to be used
+		//	by group-like objects
+		// shape: Object: a shape descriptor object
+		switch(shape.type){
+			case dojox.gfx.defaultPath.type:		return this.createPath(shape);
+			case dojox.gfx.defaultRect.type:		return this.createRect(shape);
+			case dojox.gfx.defaultCircle.type:		return this.createCircle(shape);
+			case dojox.gfx.defaultEllipse.type:		return this.createEllipse(shape);
+			case dojox.gfx.defaultLine.type:		return this.createLine(shape);
+			case dojox.gfx.defaultPolyline.type:	return this.createPolyline(shape);
+			case dojox.gfx.defaultImage.type:		return this.createImage(shape);
+			case dojox.gfx.defaultText.type:		return this.createText(shape);
+			case dojox.gfx.defaultTextPath.type:	return this.createTextPath(shape);
+		}
+		return null;
+	},
+	createGroup: function(){
+		// summary: creates an SVG group shape
+		return this.createObject(dojox.gfx.Group);	// dojox.gfx.Group
+	},
+	createRect: function(rect){
+		// summary: creates an SVG rectangle shape
+		// rect: Object: a path object (see dojox.gfx.defaultRect)
+		return this.createObject(dojox.gfx.Rect, rect);	// dojox.gfx.Rect
+	},
+	createEllipse: function(ellipse){
+		// summary: creates an SVG ellipse shape
+		// ellipse: Object: an ellipse object (see dojox.gfx.defaultEllipse)
+		return this.createObject(dojox.gfx.Ellipse, ellipse);	// dojox.gfx.Ellipse
+	},
+	createCircle: function(circle){
+		// summary: creates an SVG circle shape
+		// circle: Object: a circle object (see dojox.gfx.defaultCircle)
+		return this.createObject(dojox.gfx.Circle, circle);	// dojox.gfx.Circle
+	},
+	createLine: function(line){
+		// summary: creates an SVG line shape
+		// line: Object: a line object (see dojox.gfx.defaultLine)
+		return this.createObject(dojox.gfx.Line, line);	// dojox.gfx.Line
+	},
+	createPolyline: function(points){
+		// summary: creates an SVG polyline/polygon shape
+		// points: Object: a points object (see dojox.gfx.defaultPolyline)
+		//	or an Array of points
+		return this.createObject(dojox.gfx.Polyline, points);	// dojox.gfx.Polyline
+	},
+	createImage: function(image){
+		// summary: creates an SVG image shape
+		// image: Object: an image object (see dojox.gfx.defaultImage)
+		return this.createObject(dojox.gfx.Image, image);	// dojox.gfx.Image
+	},
+	createText: function(text){
+		// summary: creates an SVG text shape
+		// text: Object: a text object (see dojox.gfx.defaultText)
+		return this.createObject(dojox.gfx.Text, text);	// dojox.gfx.Text
+	},
+	createPath: function(path){
+		// summary: creates an SVG path shape
+		// path: Object: a path object (see dojox.gfx.defaultPath)
+		return this.createObject(dojox.gfx.Path, path);	// dojox.gfx.Path
+	},
+	createTextPath: function(text){
+		// summary: creates an SVG text shape
+		// text: Object: a textpath object (see dojox.gfx.defaultTextPath)
+		return this.createObject(dojox.gfx.TextPath, {}).setText(text);	// dojox.gfx.TextPath
+	},
+	createObject: function(shapeType, rawShape){
+		// summary: creates an instance of the passed shapeType class
+		// shapeType: Function: a class constructor to create an instance of
+		// rawShape: Object: properties to be passed in to the classes "setShape" method
+
+		// SHOULD BE RE-IMPLEMENTED BY THE RENDERER!
+
+		return null;	// dojox.gfx.Shape
+	}
+};

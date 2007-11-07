@@ -17,8 +17,8 @@ dojo.require("dojox.gfx.matrix");
 				e:  {x: cosa, y: sina}
 			};
 		},
-		twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,
-		curvePI4 = unitArcAsBezier(pi8);
+		twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8, 
+		pi48 = pi4 + pi8, curvePI4 = unitArcAsBezier(pi8);
 
 	dojo.mixin(dojox.gfx.arc, {
 		unitArcAsBezier: unitArcAsBezier,
@@ -78,22 +78,23 @@ dojo.require("dojox.gfx.matrix");
 				ep = m.multiplyPoint(inversed, x, y),
 				startAngle = Math.atan2(sp.y, sp.x),
 				endAngle   = Math.atan2(ep.y, ep.x),
-				// size of our arc in radians
-				theta = startAngle - endAngle;
+				theta = startAngle - endAngle;	// size of our arc in radians
 			if(sweep){ theta = -theta; }
 			if(theta < 0){
 				theta += twoPI;
 			}else if(theta > twoPI){
-				theta = twoPI;
+				theta -= twoPI;
 			}
+							
 			// draw curve chunks
 			var alpha = pi8, curve = curvePI4, step  = sweep ? alpha : -alpha,
 				result = [];
 			for(var angle = theta; angle > 0; angle -= pi4){
-				if(angle < pi4){
+				if(angle < pi48){
 					alpha = angle / 2;
 					curve = unitArcAsBezier(alpha);
 					step  = sweep ? alpha : -alpha;
+					angle = 0;	// stop the loop
 				}
 				var c1, c2, e,
 					M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);

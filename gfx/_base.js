@@ -244,21 +244,3 @@ dojo.mixin(dojox.gfx, {
 		return a && b && a == b;
 	}
 });
-
-dojox.gfx._createShape = function(shape){
-	// summary: creates a shape object based on its type; it is meant to be used
-	//	by group-like objects
-	// shape: Object: a shape object
-	switch(shape.type){
-		case dojox.gfx.defaultPath.type:		return this.createPath(shape);
-		case dojox.gfx.defaultRect.type:		return this.createRect(shape);
-		case dojox.gfx.defaultCircle.type:		return this.createCircle(shape);
-		case dojox.gfx.defaultEllipse.type:		return this.createEllipse(shape);
-		case dojox.gfx.defaultLine.type:		return this.createLine(shape);
-		case dojox.gfx.defaultPolyline.type:	return this.createPolyline(shape);
-		case dojox.gfx.defaultImage.type:		return this.createImage(shape);
-		case dojox.gfx.defaultText.type:		return this.createText(shape);
-		case dojox.gfx.defaultTextPath.type:	return this.createTextPath(shape);
-	}
-	return null;
-};

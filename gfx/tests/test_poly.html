@@ -11,10 +11,13 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="Silverlight.js"></script>
 -->
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
-<!--<script type="text/javascript" src="../shape.js"></script>-->
-<!--<script type="text/javascript" src="../path.js"></script>-->
+<script type="text/javascript" src="../_base.js"></script>
+<script type="text/javascript" src="../shape.js"></script>
+<script type="text/javascript" src="../path.js"></script>
+<script type="text/javascript" src="../arc.js"></script>
 <!--<script type="text/javascript" src="../vml.js"></script>-->
 <!--<script type="text/javascript" src="../svg.js"></script>-->
+<!--<script type="text/javascript" src="../canvas.js"></script>-->
 <!--<script type="text/javascript" src="../silverlight.js"></script>-->
 <script type="text/javascript">
 dojo.require("dojox.gfx");
@@ -27,14 +30,14 @@ makeShapes = function(){
 	var poly = surface.createPolyline([{x: 250, y: 250}, {x: 300, y: 300}, {x: 250, y: 350}, {x: 200, y: 300}, {x: 250, y: 250}])
 		.setStroke({color: "blue"})
 		;
-	// var rotate = dojox.gfx.matrix.rotategAt(5, 250, 250);
-	var rotate = dojox.gfx.matrix.rotategAt(0.4, 250, 250);
+	var rotate = dojox.gfx.matrix.rotategAt(5, 250, 250);
+	//var rotate = dojox.gfx.matrix.rotategAt(0.4, 250, 250);
 		
 	window.setInterval(function() {
 			line.applyTransform(rotate);
 			poly.applyTransform(rotate);
 		},
-		10
+		100
 	);
 };
 
@@ -43,7 +46,7 @@ dojo.addOnLoad(makeShapes);
 </script>
 </head>
 <body>
-	<h1>dojox.gfx Polyline test</h1>
+<h1>dojox.gfx Polyline test</h1>
 <div id="test" style="width: 500px; height: 500px;"></div>
 <p>That's all Folks!</p>
 </body>

@@ -297,10 +297,6 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			this._makeClean();
 			
-			// BEGIN FOR HTML CANVAS 
-			if(this.surface.render){ this.surface.render(); };	
-			// END FOR HTML CANVAS
-			
 			return this;
 		},
 		_makeClean: function(){

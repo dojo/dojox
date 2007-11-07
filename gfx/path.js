@@ -56,8 +56,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
-		var n = segment.args;
-		var l = n.length;
+		var n = segment.args, l = n.length;
 		// update internal variables: bbox, absolute, last
 		switch(segment.action){
 			case "M":
@@ -156,8 +155,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		if(typeof this.shape.path == "string"){
 			this.shape.path += path.join("");
 		}else{
-			var l = path.length;
-			var a = this.shape.path;
+			var l = path.length, a = this.shape.path;
 			for(var i = 0; i < l; ++i){
 				a.push(path[i]);
 			}
@@ -286,12 +284,11 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this.last = {};
 		if(!p) return;
 		// create segments
-		var action = "";	// current action
-		var args = [];		// current arguments
-		var l = p.length;
+		var action = "",	// current action
+			args = [],		// current arguments
+			l = p.length;
 		for(var i = 0; i < l; ++i){
-			var t = p[i];
-			var x = parseFloat(t);
+			var t = p[i], x = parseFloat(t);
 			if(isNaN(x)){
 				if(action){
 					this._pushSegment(action, args);
