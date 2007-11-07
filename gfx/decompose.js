@@ -64,10 +64,10 @@ dojo.require("dojox.gfx.matrix");
 		}
 		var d1 = Math.sqrt(vx1 * vx1 + vy1 * vy1),
 			d2 = Math.sqrt(vx2 * vx2 + vy2 * vy2);
-		if(isNaN(vx1 /= d1)){ vx1 = 0; }
-		if(isNaN(vy1 /= d1)){ vy1 = 0; }
-		if(isNaN(vx2 /= d2)){ vx2 = 0; }
-		if(isNaN(vy2 /= d2)){ vy2 = 0; }
+		if(!isFinite(vx1 /= d1)){ vx1 = 0; }
+		if(!isFinite(vy1 /= d1)){ vy1 = 0; }
+		if(!isFinite(vx2 /= d2)){ vx2 = 0; }
+		if(!isFinite(vy2 /= d2)){ vy2 = 0; }
 		return {	// Object
 			value1: l1,
 			value2: l2,

@@ -26,7 +26,7 @@ dojo.require("dojox.gfx._base");
 		}
 		if(dojox.gfx.renderer){ break; }
 	}
-	console.log(dojox.gfx.renderer);
+	console.log("gfx renderer = " + dojox.gfx.renderer);
 })();
 
 // include a renderer conditionally
