@@ -10,14 +10,15 @@ dojo.require("dojox.gfx.matrix");
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
 	};
 	
-	var calcFromValues = function(/* Number */ s1, /* Number */ s2){
-		// summary: uses two close FP values to approximate the result
-		if(!isFinite(s1)){
-			return s2;	// Number
-		}else if(!isFinite(s2)){
-			return s1;	// Number
+	var calcFromValues = function(/* Number */ r1, /* Number */ m1, /* Number */ r2, /* Number */ m2){
+		// summary: uses two close FP ration and their original magnitudes to approximate the result
+		if(!isFinite(r1)){
+			return r2;	// Number
+		}else if(!isFinite(r2)){
+			return r1;	// Number
 		}
-		return (s1 + s2) / 2;	// Number
+		m1 = Math.abs(m1), m2 = Math.abs(m2);
+		return (m1 * r1 + m2 * r2) / (m1 + m2);	// Number
 	};
 	
 	var transpose = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
@@ -80,8 +81,8 @@ dojo.require("dojox.gfx.matrix");
 		var sign = scaleSign(M),
 			a = result.angle1 = (Math.atan2(M.yx, M.yy) + Math.atan2(-sign * M.xy, sign * M.xx)) / 2,
 			cos = Math.cos(a), sin = Math.sin(a);
-		result.sx = calcFromValues(M.xx / cos, -M.xy / sin);
-		result.sy = calcFromValues(M.yy / cos, M.yx / sin);
+		result.sx = calcFromValues(M.xx / cos, cos, -M.xy / sin, sin);
+		result.sy = calcFromValues(M.yy / cos, cos,  M.yx / sin, sin);
 		return result;	// Object
 	};
 	
@@ -90,8 +91,8 @@ dojo.require("dojox.gfx.matrix");
 		var sign = scaleSign(M),
 			a = result.angle2 = (Math.atan2(sign * M.yx, sign * M.xx) + Math.atan2(-M.xy, M.yy)) / 2,
 			cos = Math.cos(a), sin = Math.sin(a);
-		result.sx = calcFromValues(M.xx / cos, M.yx / sin);
-		result.sy = calcFromValues(M.yy / cos, -M.xy / sin);
+		result.sx = calcFromValues(M.xx / cos, cos,  M.yx / sin, sin);
+		result.sy = calcFromValues(M.yy / cos, cos, -M.xy / sin, sin);
 		return result;	// Object
 	};
 	
