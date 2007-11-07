@@ -945,11 +945,17 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 		this.width  = dojox.gfx.normalizedLength(width);	// in pixels
 		this.height = dojox.gfx.normalizedLength(height);	// in pixels
 		if(!this.rawNode) return this;
-		this.rawNode.style.width = width;
-		this.rawNode.style.height = height;
-		this.rawNode.coordsize = width + " " + height;
-		this.bgNode.style.width = width;
-		this.bgNode.style.height = height;
+		var cs = this.clipNode.style, 
+			r = this.rawNode, rs = r.style,
+			bs = this.bgNode.style;
+		cs.width  = width;
+		cs.height = height;
+		cs.clip = "rect(0 " + width + " " + height + " 0)";
+		rs.width = width;
+		rs.height = height;
+		r.coordsize = width + " " + height;
+		bs.width = width;
+		bs.height = height;
 		return this;	// self
 	},
 	getDimensions: function(){
