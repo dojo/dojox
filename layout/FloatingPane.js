@@ -164,7 +164,7 @@ dojo.declare("dojox.layout.FloatingPane",
 			onEnd: dojo.hitch(this,function() { 
 				this.domNode.style.display = "none";
 				this.domNode.style.visibility = "hidden"; 
-				if(this.dockTo){
+				if(this.dockTo && this.dockable){
 					this.dockTo._positionDock(null);
 				}
 				if(callback){
@@ -180,8 +180,7 @@ dojo.declare("dojox.layout.FloatingPane",
 			beforeBegin: dojo.hitch(this,function(){
 				this.domNode.style.display = ""; 
 				this.domNode.style.visibility = "visible";
-				this.dockTo._positionDock(null);
-				if (this.dockTo) { this.dockTo._positionDock(null); }
+				if (this.dockTo && this.dockable) { this.dockTo._positionDock(null); }
 				if (typeof callback == "function") { callback(); }
 				this._isDocked = false;
 				if (this._dockNode) { 
@@ -222,7 +221,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	},
 
 	_dock: function(){
-		if(!this._isDocked){
+		if(!this._isDocked && this.dockable){
 			this._dockNode = this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
