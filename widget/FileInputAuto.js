@@ -83,13 +83,20 @@ dojo.declare("dojox.widget.FileInputAuto",
 
 		dojo.fadeIn({ node: this.overlay, duration:this.duration }).play();
 
-		var _newForm = document.createElement('form');
-		// FIXME: why node? why clone? ugh this is wrong?
-		_newForm.setAttribute("enctype","multipart/form-data");
-		var node = dojo.clone(this.fileInput);
+		var _newForm; 
+		if(dojo.isIE){
+			// just to reiterate, IE is a steaming pile of code. 
+			_newForm = document.createElement('<form enctype="multipart/form-data" method="post">');
+			_newForm.encoding = "multipart/form-data";
+			
+		}else{
+			// this is how all other sane browsers do it
+			_newForm = document.createElement('form');
+			_newForm.setAttribute("enctype","multipart/form-data");
+		}
 		_newForm.appendChild(this.fileInput);
 		dojo.body().appendChild(_newForm);
-
+	
 		dojo.io.iframe.send({
 			url: this.url+"?name="+this.name,
 			form: _newForm,
