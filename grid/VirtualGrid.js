@@ -247,7 +247,7 @@ dojo.declare('dojox.VirtualGrid',
 		// to sort out.
 		
 		// if we have set up everything except the DOM, we cannot resize
-		if(!this.domNode.parentNode || !this.hasLayout()){
+		if(!this.domNode.parentNode || this.domNode.parentNode.nodeType != 1 || !this.hasLayout()){
 			return;
 		}
 		// useful measurement
