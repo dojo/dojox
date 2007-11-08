@@ -528,14 +528,13 @@ dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape, {
 		// closed: Boolean: close the polyline to make a polygon
 		if(points && points instanceof Array){
 			// points: Array: an array of points
-			this.shape = dojox.gfx.makeParameters(this.shape, {points: points});
+			dojox.gfx.Shape.prototype.setShape.call(this, {points: points});
 			if(closed && this.shape.points.length){ 
 				this.shape.points.push(this.shape.points[0]);
 			}
 		}else{
-			this.shape = dojox.gfx.makeParameters(this.shape, points);
+			dojox.gfx.Shape.prototype.setShape.call(this, points);
 		}
-		this.box = null;
 		return this;	// self
 	},
 	getBoundingBox: function(){

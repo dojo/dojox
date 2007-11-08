@@ -22,8 +22,8 @@ dojo.experimental("dojox.gfx.canvas");
 			ctx.restore();
 		},
 		_renderTransform: function(/* Object */ ctx){
-			if(this.matrix){
-				var t = g.decompose(this.matrix);
+			if("canvasTransform" in this){
+				var t = this.canvasTransform;
 				ctx.translate(t.dx, t.dy);
 				ctx.rotate(t.angle2);
 				ctx.scale(t.sx, t.sy);
@@ -37,31 +37,10 @@ dojo.experimental("dojox.gfx.canvas");
 			// nothing
 		},
 		_renderFill: function(/* Object */ ctx, /* Boolean */ apply){
-			var fs = this.fillStyle, f;
-			if(fs){
-				if(typeof(fs) == "object" && "type" in fs){
-					switch(fs.type){
-						case "linear":
-						case "radial":
-							f = fs.type == "linear" ? 
-								ctx.createLinearGradient(fs.x1, fs.y1, fs.x2, fs.y2) :
-								ctx.createRadialGradient(fs.cx, fs.cy, 0, fs.cx, fs.cy, fs.r);
-							dojo.forEach(fs.colors, function(step){
-								f.addColorStop(step.offset, g.normalizeColor(step.color).toString());
-							});
-							break;
-						case "pattern":
-							var image = Image(fs.width, fs.height);
-							image.src = fs.src;
-							f = ctx.createPattern(image, "repeat");
-					}
-					ctx.fillStyle = f;
-				} else {
-					// Set fill color using CSS RGBA func style
-					ctx.fillStyle = fs.toString();
-				}
+			if("canvasFill" in this){
+				ctx.fillStyle = this.canvasFill;
 				if(apply){ ctx.fill(); }
-			}else if(!apply){
+			}else{
 				ctx.fillStyle = "rgba(0,0,0,0.0)";
 			}
 		},
@@ -89,21 +68,66 @@ dojo.experimental("dojox.gfx.canvas");
 		disconnect:		function(){}
 	});
 	
-	var addMakeDirty = function(shape, method){
+	var modifyMethod = function(shape, method, extra){
 			var old = shape.prototype[method];
-			shape.prototype[method] = function(){
-				this.surface.makeDirty();
-				return old.apply(this, arguments);
-			};
-		},
-		addMakeDirtyShape = function(shape){
-			dojo.forEach(["setShape", "setFill", "setStroke", "setTransform"], function(method){
-				addMakeDirty(shape, method);
-			});
+			shape.prototype[method] = extra ?
+				function(){
+					this.surface.makeDirty();
+					old.apply(this, arguments);
+					extra.call(this);
+					return this;
+				} :
+				function(){
+					this.surface.makeDirty();
+					return old.apply(this, arguments);
+				};
 		};
-	
-	addMakeDirtyShape(g.Shape);
 
+	modifyMethod(g.Shape, "setTransform", 		
+		function(){
+			// prepare Canvas-specific structures
+			if(this.matrix){
+				this.canvasTransform = g.decompose(this.matrix);
+			}else{
+				delete this.canvasTransform;
+			}
+		});
+
+	modifyMethod(g.Shape, "setFill",
+		function(){
+			// prepare Canvas-specific structures
+			var fs = this.fillStyle, f;
+			if(fs){
+				if(typeof(fs) == "object" && "type" in fs){
+					var ctx = this.surface.rawNode.getContext("2d");
+					switch(fs.type){
+						case "linear":
+						case "radial":
+							f = fs.type == "linear" ? 
+								ctx.createLinearGradient(fs.x1, fs.y1, fs.x2, fs.y2) :
+								ctx.createRadialGradient(fs.cx, fs.cy, 0, fs.cx, fs.cy, fs.r);
+							dojo.forEach(fs.colors, function(step){
+								f.addColorStop(step.offset, g.normalizeColor(step.color).toString());
+							});
+							break;
+						case "pattern":
+							var image = Image(fs.width, fs.height);
+							image.src = fs.src;
+							f = ctx.createPattern(image, "repeat");
+					}
+				}else{
+					// Set fill color using CSS RGBA func style
+					f = fs.toString();
+				}
+				this.canvasFill = f;
+			}else{
+				delete this.canvasFill;
+			}
+		});
+	
+	modifyMethod(g.Shape, "setStroke");
+	modifyMethod(g.Shape, "setShape");
+		
 	dojo.declare("dojox.gfx.Group", g.Shape, {
 		// summary: a group shape (Canvas), which can be used 
 		//	to logically group shapes (e.g, to propagate matricies)
@@ -142,7 +166,6 @@ dojo.experimental("dojox.gfx.canvas");
 	 		ctx.closePath();
 		}
 	});
-	addMakeDirtyShape(g.Rect);
 	
 	dojo.declare("dojox.gfx.Ellipse", gs.Ellipse, {
 		// summary: an ellipse shape (Canvas)
@@ -153,7 +176,6 @@ dojo.experimental("dojox.gfx.canvas");
 			ctx.arc(s.cx, s.cy, r, 0, twoPI, 1);
 		}
 	});
-	addMakeDirtyShape(g.Ellipse);
 
 	dojo.declare("dojox.gfx.Circle", gs.Circle, {
 		// summary: a circle shape (Canvas)
@@ -163,7 +185,6 @@ dojo.experimental("dojox.gfx.canvas");
 			ctx.arc(s.cx, s.cy, s.r, 0, twoPI, 1);
 		}
 	});
-	addMakeDirtyShape(g.Circle);
 
 	dojo.declare("dojox.gfx.Line", gs.Line, {
 		// summary: a line shape (Canvas)
@@ -174,7 +195,6 @@ dojo.experimental("dojox.gfx.canvas");
 			ctx.lineTo(s.x2, s.y2);
 		}
 	});
-	addMakeDirtyShape(g.Line);
 
 	dojo.declare("dojox.gfx.Polyline", gs.Polyline, {
 		// summary: a polyline/polygon shape (Canvas)
@@ -200,7 +220,6 @@ dojo.experimental("dojox.gfx.canvas");
 			}
 		}
 	});
-	addMakeDirtyShape(g.Polyline);
 	
 	dojo.declare("dojox.gfx.Image", gs.Image, {
 		// summary: an image shape (Canvas)
@@ -209,7 +228,6 @@ dojo.experimental("dojox.gfx.canvas");
 			// nothing for the moment
 		}
 	});
-	addMakeDirtyShape(g.Image);
 	
 	dojo.declare("dojox.gfx.Text", gs.Text, {
 		// summary: a text shape (Canvas)
@@ -218,8 +236,7 @@ dojo.experimental("dojox.gfx.canvas");
 			// nothing for the moment
 		}
 	});
-	addMakeDirtyShape(g.Text);
-	addMakeDirty(g.Text, "setFont");
+	modifyMethod(g.Text, "setFont");
 	
 	var pathRenderers = {
 		M: "_moveToA", m: "_moveToR", 
@@ -471,10 +488,9 @@ dojo.experimental("dojox.gfx.canvas");
 			this.lastControl = {};
 		}
 	});
-	addMakeDirtyShape(g.Path);
 	dojo.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo", 
 		"smoothCurveTo", "qCurveTo", "qSmoothCurveTo", "arcTo", "closePath"], 
-		function(method){ addMakeDirty(g.Path, method); }
+		function(method){ modifyMethod(g.Path, method); }
 	);
 
 	dojo.declare("dojox.gfx.TextPath", g.path.TextPath, {

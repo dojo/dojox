@@ -304,7 +304,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	setShape: function(newShape){
 		// summary: forms a path using a shape
 		// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
-		this.shape = dojox.gfx.makeParameters(this.shape, typeof newShape == "string" ? {path: newShape} : newShape);
+		dojox.gfx.Shape.prototype.setShape.call(this, typeof newShape == "string" ? {path: newShape} : newShape);
 		var path = this.shape.path;
 		// switch to non-updating version of path building
 		this.shape.path = [];
