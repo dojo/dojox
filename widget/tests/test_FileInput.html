@@ -17,7 +17,7 @@
 		// dojo.require("dojox.widget.FileInput"); 
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 		
-		var sampleCallback = function(data,ioArgs,widget){
+		var sampleCallback = function(data,ioArgs,widgetRef){
 			// this function is fired for every programatic FileUploadAuto
 			// when the upload is complete. It uses dojo.io.iframe, which
 			// expects the results to come wrapped in TEXTAREA tags.
@@ -34,16 +34,15 @@
 			// widget is a reference to the calling widget. you can manipulate the widget
 			// from within this callback function 
 			if(data){
-				var d = dojo.fromJson(data);
-				if(d.status && d.status == "success"){
-					widget.overlay.innerHTML = "success!";
+				if(data.status && data.status == "success"){
+					widgetRef.overlay.innerHTML = "success!";
 				}else{
-					widget.overlay.innerHTML = "error? ";
-					console.log(data,ioArgs);
+					widgetRef.overlay.innerHTML = "error? ";
+					console.log('error',data,ioArgs);
 				}
 			}else{
 				// debug assist
-				console.log(arguments);
+				console.log('ugh?',arguments);
 			}
 		}
 

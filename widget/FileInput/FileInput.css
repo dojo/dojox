@@ -20,14 +20,11 @@
 	border:1px solid #333;
 	padding:2px 12px 2px 12px; 
 	cursor:pointer;
-
 }
+
 .dijitFileInputButton {
-	opacity:0;
-	filter:alpha(opacity:0);
 	z-index:3;
 	visibility:hidden;
-	
 }
 .dijitFakeInput { position:absolute; top:0; left:0; z-index:1; }
 
@@ -79,5 +76,4 @@
 	border:1px solid #333;
 	padding:2px 12px 2px 12px;
 	background:#b7cdee url('../../../dijit/themes/soria/images/gradientTopBg.png') repeat-x; 
-
 }
