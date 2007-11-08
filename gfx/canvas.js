@@ -198,24 +198,36 @@ dojo.experimental("dojox.gfx.canvas");
 
 	dojo.declare("dojox.gfx.Polyline", gs.Polyline, {
 		// summary: a polyline/polygon shape (Canvas)
-		_renderShape: function(/* Object */ ctx){
-			var p = this.shape.points, f = p[0], c, i;
+		setShape: function(){
+			gs.Polyline.prototype.setShape.apply(this, arguments);
+			var p = this.shape.points, f = p[0], r = [], c, i;
 			if(p.length){
-				ctx.beginPath();
 				if(typeof f == "number"){
-					ctx.moveTo(f, p[1]);
+					r.push(f, p[1]);
 					i = 2;
 				}else{
-					ctx.moveTo(f.x, f.y);
-					i = 0
+					r.push(f.x, f.y);
+					i = 1;
 				}
 				for(; i < p.length; ++i){
 					c = p[i];
 					if(typeof c == "number"){
-						ctx.lineTo(c, p[++i]);
+						r.push(c, p[++i]);
 					}else{
-						ctx.lineTo(c.x, c.y);
+						r.push(c.x, c.y);
 					}
+				}
+			}
+			this.canvasPolyline = r;
+			return this;
+		},
+		_renderShape: function(/* Object */ ctx){
+			var p = this.canvasPolyline;
+			if(p.length){
+				ctx.beginPath();
+				ctx.moveTo(p[0], p[1]);
+				for(var i = 2; i < p.length; i += 2){
+					ctx.lineTo(p[i], p[i + 1]);
 				}
 			}
 		}
