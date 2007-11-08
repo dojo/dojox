@@ -199,7 +199,8 @@ dojo.experimental("dojox.gfx.canvas");
 	dojo.declare("dojox.gfx.Polyline", gs.Polyline, {
 		// summary: a polyline/polygon shape (Canvas)
 		setShape: function(){
-			gs.Polyline.prototype.setShape.apply(this, arguments);
+			g.Polyline.superclass.setShape.apply(this, arguments);
+			// prepare Canvas-specific structures
 			var p = this.shape.points, f = p[0], r = [], c, i;
 			if(p.length){
 				if(typeof f == "number"){
@@ -269,97 +270,86 @@ dojo.experimental("dojox.gfx.canvas");
 			this.last = {};
 			this.lastControl = {};
 		},
+		setShape: function(){
+			this.canvasPath = [];
+			return g.Path.superclass.setShape.apply(this, arguments);
+		},
+		_updateWithSegment: function(segment){
+			var last = dojo.clone(this.last);
+			this[pathRenderers[segment.action]](this.canvasPath, segment.action, segment.args);
+			this.last = last;
+			g.Path.superclass._updateWithSegment.apply(this, arguments);
+		},
 		_renderShape: function(/* Object */ ctx){
-			var p = this.shape.path.match(g.pathSvgRegExp),
-				action = "", args = [], l = p.length;
-			this.last = {}, this.lastControl = {};
+			var r = this.canvasPath;
 			ctx.beginPath();
-			for(var i = 0; i < l; ++i){
-				var t = p[i], x = parseFloat(t);
-				if(isNaN(x)){
-					if(action in pathRenderers){
-						this[pathRenderers[action]](ctx, action, args);
-					}
-					args = [];
-					action = t;
-				}else{
-					args.push(x);
-				}
-			}
-			if(action in pathRenderers){
-				this[pathRenderers[action]](ctx, action, args);
+			for(var i = 0; i < r.length; i += 2){
+				ctx[r[i]].apply(ctx, r[i + 1]);
 			}
 		},
-		_moveToA: function(ctx, action, args){
-			ctx.moveTo(args[0], args[1]);
+		_moveToA: function(result, action, args){
+			result.push("moveTo", [args[0], args[1]]);
 			for(var i = 2; i < args.length; i += 2){
-				ctx.lineTo(args[i], args[i + 1]);
+				result.push("lineTo", [args[i], args[i + 1]]);
 			}
 			this.last.x = args[args.length - 2];
 			this.last.y = args[args.length - 1];
 			this.lastControl = {};
 		},
-		_moveToR: function(ctx, action, args){
+		_moveToR: function(result, action, args){
 			if("x" in this.last){
-				ctx.moveTo(this.last.x += args[0], this.last.y += args[1]);
+				result.push("moveTo", [this.last.x += args[0], this.last.y += args[1]]);
 			}else{
-				ctx.moveTo(this.last.x = args[0], this.last.y = args[1]);
+				result.push("moveTo", [this.last.x = args[0], this.last.y = args[1]]);
 			}
 			for(var i = 2; i < args.length; i += 2){
-				ctx.lineTo(this.last.x += args[i], this.last.y += args[i + 1]);
+				result.push("lineTo", [this.last.x += args[i], this.last.y += args[i + 1]]);
 			}
 			this.lastControl = {};
 		},
-		_lineToA: function(ctx, action, args){
+		_lineToA: function(result, action, args){
 			for(var i = 0; i < args.length; i += 2){
-				ctx.lineTo(args[i], args[i + 1]);
+				result.push("lineTo", [args[i], args[i + 1]]);
 			}
 			this.last.x = args[args.length - 2];
 			this.last.y = args[args.length - 1];
 			this.lastControl = {};
 		},
-		_lineToR: function(ctx, action, args){
+		_lineToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 2){
-				ctx.lineTo(this.last.x += args[i], this.last.y += args[i + 1]);
+				result.push("lineTo", [this.last.x += args[i], this.last.y += args[i + 1]]);
 			}
 			this.lastControl = {};
 		},
-		_hLineToA: function(ctx, action, args){
+		_hLineToA: function(result, action, args){
 			for(var i = 0; i < args.length; ++i){
-				ctx.lineTo(args[i], this.last.y);
+				result.push("lineTo", [args[i], this.last.y]);
 			}
 			this.last.x = args[args.length - 1];
 			this.lastControl = {};
 		},
-		_hLineToR: function(ctx, action, args){
+		_hLineToR: function(result, action, args){
 			for(var i = 0; i < args.length; ++i){
-				ctx.lineTo(this.last.x += args[i], this.last.y);
+				result.push("lineTo", [this.last.x += args[i], this.last.y]);
 			}
 			this.lastControl = {};
 		},
-		_vLineToA: function(ctx, action, args){
+		_vLineToA: function(result, action, args){
 			for(var i = 0; i < args.length; ++i){
-				ctx.lineTo(this.last.x, args[i]);
+				result.push("lineTo", [this.last.x, args[i]]);
 			}
 			this.last.y = args[args.length - 1];
 			this.lastControl = {};
 		},
-		_vLineToR: function(ctx, action, args){
+		_vLineToR: function(result, action, args){
 			for(var i = 0; i < args.length; ++i){
-				ctx.lineTo(this.last.x, this.last.y += args[i]);
+				result.push("lineTo", [this.last.x, this.last.y += args[i]]);
 			}
 			this.lastControl = {};
 		},
-		_curveToA: function(ctx, action, args){
+		_curveToA: function(result, action, args){
 			for(var i = 0; i < args.length; i += 6){
-				ctx.bezierCurveTo(
-					args[i], 
-					args[i + 1], 
-					args[i + 2], 
-					args[i + 3], 
-					args[i + 4], 
-					args[i + 5]
-				);
+				result.push("bezierCurveTo", args.slice(i, i + 6));
 			}
 			this.last.x = args[args.length - 2];
 			this.last.y = args[args.length - 1];
@@ -367,32 +357,32 @@ dojo.experimental("dojox.gfx.canvas");
 			this.lastControl.y = args[args.length - 3];
 			this.lastControl.type = "C";
 		},
-		_curveToR: function(ctx, action, args){
+		_curveToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 6){
-				ctx.bezierCurveTo(
+				result.push("bezierCurveTo", [
 					this.last.x + args[i], 
 					this.last.y + args[i + 1], 
 					this.lastControl.x = this.last.x + args[i + 2], 
 					this.lastControl.y = this.last.y + args[i + 3], 
 					this.last.x + args[i + 4], 
 					this.last.y + args[i + 5]
-				);
+				]);
 				this.last.x += args[i + 4];
 				this.last.y += args[i + 5];
 			}
 			this.lastControl.type = "C";
 		},
-		_smoothCurveToA: function(ctx, action, args){
+		_smoothCurveToA: function(result, action, args){
 			for(var i = 0; i < args.length; i += 4){
 				var valid = this.lastControl.type == "C";
-				ctx.bezierCurveTo(
+				result.push("bezierCurveTo", [
 					valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
 					valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
 					args[i], 
 					args[i + 1], 
 					args[i + 2], 
 					args[i + 3]
-				);
+				]);
 				this.lastControl.x = args[i];
 				this.lastControl.y = args[i + 1];
 				this.lastControl.type = "C";
@@ -400,17 +390,17 @@ dojo.experimental("dojox.gfx.canvas");
 			this.last.x = args[args.length - 2];
 			this.last.y = args[args.length - 1];
 		},
-		_smoothCurveToR: function(ctx, action, args){
+		_smoothCurveToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 4){
 				var valid = this.lastControl.type == "C";
-				ctx.bezierCurveTo(
+				result.push("bezierCurveTo", [
 					valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
 					valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
 					this.last.x + args[i], 
 					this.last.y + args[i + 1], 
 					this.last.x + args[i + 2], 
 					this.last.y + args[i + 3]
-				);
+				]);
 				this.lastControl.x = this.last.x + args[i];
 				this.lastControl.y = this.last.y + args[i + 1];
 				this.lastControl.type = "C";
@@ -418,14 +408,9 @@ dojo.experimental("dojox.gfx.canvas");
 				this.last.y += args[i + 3];
 			}
 		},
-		_qCurveToA: function(ctx, action, args){
+		_qCurveToA: function(result, action, args){
 			for(var i = 0; i < args.length; i += 4){
-				ctx.quadraticCurveTo(
-					args[i], 
-					args[i + 1], 
-					args[i + 2], 
-					args[i + 3]
-				);
+				result.push("quadraticCurveTo", args.slice(i, i + 4));
 			}
 			this.last.x = args[args.length - 2];
 			this.last.y = args[args.length - 1];
@@ -433,48 +418,48 @@ dojo.experimental("dojox.gfx.canvas");
 			this.lastControl.y = args[args.length - 3];
 			this.lastControl.type = "Q";
 		},
-		_qCurveToR: function(ctx, action, args){
+		_qCurveToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 4){
-				ctx.quadraticCurveTo(
+				result.push("quadraticCurveTo", [
 					this.lastControl.x = this.last.x + args[i], 
 					this.lastControl.y = this.last.y + args[i + 1], 
 					this.last.x + args[i + 2], 
 					this.last.y + args[i + 3]
-				);
+				]);
 				this.last.x += args[i + 2];
 				this.last.y += args[i + 3];
 			}
 			this.lastControl.type = "Q";
 		},
-		_qSmoothCurveToA: function(ctx, action, args){
+		_qSmoothCurveToA: function(result, action, args){
 			for(var i = 0; i < args.length; i += 2){
 				var valid = this.lastControl.type == "Q";
-				ctx.quadraticCurveTo(
+				result.push("quadraticCurveTo", [
 					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
 					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
 					args[i], 
 					args[i + 1]
-				);
+				]);
 				this.lastControl.type = "Q";
 			}
 			this.last.x = args[args.length - 2];
 			this.last.y = args[args.length - 1];
 		},
-		_qSmoothCurveToR: function(ctx, action, args){
+		_qSmoothCurveToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 2){
 				var valid = this.lastControl.type == "Q";
-				ctx.quadraticCurveTo(
+				result.push("quadraticCurveTo", [
 					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
 					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
 					this.last.x + args[i], 
 					this.last.y + args[i + 1]
-				);
+				]);
 				this.lastControl.type = "Q";
 				this.last.x += args[i];
 				this.last.y += args[i + 1];
 			}
 		},
-		_arcTo: function(ctx, action, args){
+		_arcTo: function(result, action, args){
 			var relative = action == "a";
 			for(var i = 0; i < args.length; i += 7){
 				var x1 = args[i + 5], y1 = args[i + 6];
@@ -482,21 +467,21 @@ dojo.experimental("dojox.gfx.canvas");
 					x1 += this.last.x;
 					y1 += this.last.y;
 				}
-				var result = g.arc.arcAsBezier(
+				var arcs = g.arc.arcAsBezier(
 					this.last, args[i], args[i + 1], args[i + 2], 
 					args[i + 3] ? 1 : 0, args[i + 4] ? 1 : 0,
 					x1, y1
 				);
-				dojo.forEach(result, function(p){
-					ctx.bezierCurveTo(p[0], p[1], p[2], p[3], p[4], p[5]);
+				dojo.forEach(arcs, function(p){
+					result.push("bezierCurveTo", p);
 				});
 				this.last.x = x1;
 				this.last.y = y1;
 			}
 			this.lastControl = {};
 		},
-		_closePath: function(ctx, action, args){
-			ctx.closePath();
+		_closePath: function(result, action, args){
+			result.push("closePath", []);
 			this.lastControl = {};
 		}
 	});
