@@ -4,6 +4,7 @@ dojo.require("dojox.string.Builder");
 dojo.require("dojox.string.tokenize");
 
 dojox.dtl.Context = function(dict){
+	// summary: Pass one of these when rendering a template to tell the template what values to use.
 	dojo.mixin(this, dict || {});
 	this._dicts = [];
 	this._this = {};
@@ -102,17 +103,8 @@ dojo.extend(dojox.dtl.Context, {
 	getKeys: function(){
 		var keys = [];
 		for(var key in this){
-			if(isNaN(key)){
-				var found = false;
-				for(var protoKey in dojox.dtl.Context.prototype){
-					if(key == protoKey){
-						found = true;
-						break;
-					}
-				}
-				if(!found){
-					keys.push(key);
-				}
+			if(this.hasOwnProperty(key) && key != "_dicts" && key != "_this"){
+				keys.push(key);
 			}
 		}
 		return keys;

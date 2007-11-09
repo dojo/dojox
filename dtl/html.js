@@ -116,7 +116,7 @@ dojox.dtl.html = {
 						if(value.indexOf(href) == 0){
 							value = value.replace(href, "");
 						}
-						value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
+						value = decodeURIComponent(value);
 					}
 					if(value.indexOf("{%") != -1 || value.indexOf("{{") != -1){
 						node.setAttribute(key, "");
@@ -212,6 +212,9 @@ dojox.dtl.HtmlTemplate = function(/*String|dojo._Url*/ obj){
 	}
 
 	var tokens = ddh.tokenize(obj.node, [], obj.pres, obj.posts);
+	if(dojox.dtl.tests){
+		this.tokens = tokens.slice(0);
+	}
 	var parser = new dd.HtmlParser(tokens);
 	this.nodelist = parser.parse();
 }
@@ -329,6 +332,12 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 	onRemoveNode: function(){
 		// summary: Stub called when nodes are removed
 	},
+	onClone: function(/*DOMNode*/ from, /*DOMNode*/ to){
+		// summary: Stub called when a node is duplicated
+	},
+	onAddEvent: function(/*DOMNode*/ node, /*String*/ type, /*String*/ description){
+		// summary: Stub to call when you're adding an event
+	},
 	_getCache: function(node){
 		for(var i = 0, cache; cache = this._cache[i]; i++){
 			if(cache[0] === node){
@@ -420,6 +429,7 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 				}else if(parent !== clone.contents && clone instanceof dd.HtmlNode){
 					var node = clone.contents;
 					clone.contents = clone.contents.cloneNode(false);
+					buffer.onClone(node, clone.contents);
 					cloned.push(node);
 					this.parents.put(node, clone.contents);
 				}

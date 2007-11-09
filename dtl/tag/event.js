@@ -14,6 +14,7 @@ dojo.extend(dojox.dtl.tag.event.EventNode, {
 		}
 		if(this.contents && !this._rendered){
 			if(!context.getThis()) throw new Error("You must use Context.setObject(instance)");
+			buffer.onAddEvent(buffer.getParent(), this._type, this.contents);
 			this._rendered = dojo.connect(buffer.getParent(), this._type, context.getThis(), this.contents);
 		}
 		return buffer;

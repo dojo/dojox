@@ -19,24 +19,24 @@ dojox.dtl.render.html.sensitivity = {
 }
 dojox.dtl.render.html.Render = function(/*DOMNode?*/ attachPoint, /*dojox.dtl.HtmlTemplate?*/ tpl){
 	this._tpl = tpl;
-	this._node = attachPoint;
+	this.domNode = attachPoint;
 	this._swap = dojo.hitch(this, function(){
 		// summary: Swaps the node out the first time the DOM is changed
 		// description: Gets swapped back it at end of render
-		if(this._node === this._tpl.getRootNode()){
-			var frag = this._node;
-			this._node = this._node.cloneNode(true);
-			frag.parentNode.replaceChild(this._node, frag);
+		if(this.domNode === this._tpl.getRootNode()){
+			var frag = this.domNode;
+			this.domNode = this.domNode.cloneNode(true);
+			frag.parentNode.replaceChild(this.domNode, frag);
 		}
 	});
 }
 dojo.extend(dojox.dtl.render.html.Render, {
 	sensitivity: dojox.dtl.render.html.sensitivity,
 	setAttachPoint: function(/*Node*/ node){
-		this._node = node;
+		this.domNode = node;
 	},
 	render: function(/*dojox.dtl.HtmlTemplate*/ tpl, /*Object*/ context, /*dojox.dtl.HtmlBuffer?*/ buffer){
-		if(!this._node){
+		if(!this.domNode){
 			throw new Error("You cannot use the Render object without specifying where you want to render it");
 		}
 
@@ -57,10 +57,10 @@ dojo.extend(dojox.dtl.render.html.Render, {
 		dojo.disconnect(onAddNode);
 		dojo.disconnect(onRemoveNode);
 
-		if(this._node !== frag){
-			this._node.parentNode.replaceChild(frag, this._node);
-			dojo._destroyElement(this._node);
-			this._node = frag;
+		if(this.domNode !== frag){
+			this.domNode.parentNode.replaceChild(frag, this.domNode);
+			dojo._destroyElement(this.domNode);
+			this.domNode = frag;
 		}
 	}
 });
