@@ -86,7 +86,7 @@ dojo.declare("dojox.grid.edit", null, {
 		// inCell: object
 		//	grid cell object
 		if(!this.isEditCell(inRowIndex, inCell.index)){
-			var editing = !(inCell.editor||0).alwaysOn || (inRowIndex == this.info.rowIndex);
+			var editing = inCell.editor && (inCell.editor.alwaysOn || inRowIndex == this.info.rowIndex);
 			this.start(inCell, inRowIndex, editing);
 		}
 	},
@@ -192,7 +192,7 @@ dojo.declare("dojox.grid.edit", null, {
 		// inView: object
 		//	grid view
 		var c = this.info.cell;
-		if(this.isEditRow(inRowIndex) && (!inView || c.view==inView)){
+		if(this.isEditRow(inRowIndex) && (!inView || c.view==inView) && c.editor){
 			c.editor.save(c, this.info.rowIndex);
 		}
 	},
@@ -204,7 +204,7 @@ dojo.declare("dojox.grid.edit", null, {
 		// inView: object
 		//	grid view
 		var c = this.info.cell;
-		if(this.isEditRow(inRowIndex) && c.view == inView){
+		if(this.isEditRow(inRowIndex) && c.view == inView && c.editor){
 			c.editor.restore(c, this.info.rowIndex);
 		}
 	}
