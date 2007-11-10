@@ -86,7 +86,7 @@ dojo.declare("dojox.grid.edit", null, {
 		// inCell: object
 		//	grid cell object
 		if(!this.isEditCell(inRowIndex, inCell.index)){
-			var editing = inCell.editor && (inCell.editor.alwaysOn || inRowIndex == this.info.rowIndex);
+			var editing = (this.isEditRow(inRowIndex) || inCell.editor) && ((inCell.editor||0).alwaysOn || inRowIndex == this.info.rowIndex);
 			this.start(inCell, inRowIndex, editing);
 		}
 	},
