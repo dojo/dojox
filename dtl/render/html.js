@@ -41,6 +41,7 @@ dojo.extend(dojox.dtl.render.html.Render, {
 		}
 
 		buffer = buffer || tpl.getBuffer();
+		context = context || new dojox.dtl.Context();
 
 		if(context.getThis() && context.getThis().buffer == this.sensitivity.NODE){
 			var onAddNode = dojo.connect(buffer, "onAddNode", this, "_swap");
@@ -53,6 +54,9 @@ dojo.extend(dojox.dtl.render.html.Render, {
 		this._tpl = tpl;
 
 		var frag = tpl.render(context, buffer).getParent();
+		if(!frag){
+			throw new Error("Rendered template does not have a root node");
+		}
 
 		dojo.disconnect(onAddNode);
 		dojo.disconnect(onRemoveNode);

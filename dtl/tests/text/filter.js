@@ -4,6 +4,7 @@ dojo.require("dojox.dtl");
 dojo.require("dojox.date.php");
 dojo.require("dojox.string.sprintf");
 
+// If you update something here, update it in the HTML tests
 doh.register("dojox.dtl.text.filter", 
 	[
 		function test_filter_add(t){

@@ -38,7 +38,7 @@ doh.register("dojox.dtl.text.tag",
 			t.is("Hot Pocket", template.render());
 
 			var found = false;
-			try {
+			try{
 				template = new dd.Template('Hot{% comment %}<strong>Make me disappear</strong> Pocket');
 			}catch(e){
 				t.is("Unclosed tag found when looking for endcomment", e.message);
