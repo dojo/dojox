@@ -73,7 +73,8 @@ dojo.declare("dojox.image.Gallery",
 			linkAttr: this.linkAttr,
 			imageLargeAttr: this.imageLargeAttr,
 			titleAttr: this.titleAttr,
-			useLoadNotifier: true
+			useLoadNotifier: true,
+			size: this.imageWidth
 		}, this.thumbPickerNode);
 		
 		

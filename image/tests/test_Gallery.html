@@ -9,7 +9,7 @@
 		@import "../resources/image.css";
 	</style>
 
-	
+
 	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:true, isDebug: true, defaultTestTheme:'soria'"></script>
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 	<script type="text/javascript" src="../ThumbnailPicker.js"></script>
@@ -19,12 +19,12 @@
 	<script type="text/javascript" src="../../data/FlickrStore.js"></script>
 	<script type="text/javascript" src="../../data/FlickrRestStore.js"></script>
 	<script type="text/javascript" src="../../../dojo/data/ItemFileReadStore.js"></script>
-	
+
 	<script type="text/javascript">
 		// dojo.require("dojox.image.Gallery");
-		dojo.require("dojox.data.FlickrRestStore"); 
-		dojo.require("dojo.parser");	// find widgets		
-		
+		dojo.require("dojox.data.FlickrRestStore");
+		dojo.require("dojo.parser");	// find widgets
+
 		dojo.addOnLoad(function(){
 			var flickrRestStore = new dojox.data.FlickrRestStore();
 			var req = {
@@ -56,12 +56,12 @@
 	<h1 class="testTitle">dojox.image.Gallery</h1>
 
 	<h2>From FlickrRestStore:</h2>
-	<div id="gallery1" dojoType="dojox.image.Gallery" numberThumbs="4"></div>
+	<div id="gallery1" dojoType="dojox.image.Gallery" imageWidth="700" imageHeight="500"></div>
 
 <!--
 	<h2>From ItemFileReadStore:</h2>
 	<div id="gallery2" dojoType="dojox.image.Gallery"></div>
--->	
+-->
 
 </body>
 </html>
