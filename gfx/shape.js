@@ -573,6 +573,14 @@ dojo.declare("dojox.gfx.shape.Image", dojox.gfx.Shape, {
 	getBoundingBox: function(){
 		// summary: returns the bounding box (its shape in this case)
 		return this.shape;	// dojox.gfx.Rectangle
+	},
+	setStroke: function(){
+		// summary: ignore setting a stroke style
+		return this;	// self
+	},
+	setFill: function(){
+		// summary: ignore setting a fill style
+		return this;	// self
 	}
 });
 

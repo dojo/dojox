@@ -354,14 +354,6 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		r.source = n.src;
 		return this;	// self
 	},
-	setStroke: function(){
-		// summary: ignore setting a stroke style
-		return this;	// self
-	},
-	setFill: function(){
-		// summary: ignore setting a fill style
-		return this;	// self
-	},
 	setRawNode: function(rawNode){
 		// summary:
 		//	assigns and clears the underlying node that will represent this

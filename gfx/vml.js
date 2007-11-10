@@ -438,14 +438,6 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
         }
 		return this.setTransform(this.matrix);	// self
 	},
-	setStroke: function(){
-		// summary: ignore setting a stroke style
-		return this;	// self
-	},
-	setFill: function(){
-		// summary: ignore setting a fill style
-		return this;	// self
-	},
 	_applyTransform: function() {
 		var matrix = this._getRealMatrix();
 		if(!matrix) return this;

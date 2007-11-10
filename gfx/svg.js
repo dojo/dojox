@@ -361,14 +361,6 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		}
 		rawNode.setAttributeNS(dojox.gfx.svg.xmlns.xlink, "href", this.shape.src);
 		return this;	// self
-	},
-	setStroke: function(){
-		// summary: ignore setting a stroke style
-		return this;	// self
-	},
-	setFill: function(){
-		// summary: ignore setting a fill style
-		return this;	// self
 	}
 });
 dojox.gfx.Image.nodeType = "image";
