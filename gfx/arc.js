@@ -22,6 +22,7 @@ dojo.require("dojox.gfx.matrix");
 
 	dojo.mixin(dojox.gfx.arc, {
 		unitArcAsBezier: unitArcAsBezier,
+		curvePI4: curvePI4,
 		arcAsBezier: function(last, rx, ry, xRotg, large, sweep, x, y){
 			// summary: calculates an arc as a series of Bezier curves
 			//	given the last point and a standard set of SVG arc parameters,

@@ -9,7 +9,8 @@ dojo.require("dojox.gfx.decompose");
 dojo.experimental("dojox.gfx.canvas");
 
 (function(){
-	var g = dojox.gfx, gs = g.shape, m = g.matrix, twoPI = 2 * Math.PI;
+	var g = dojox.gfx, gs = g.shape, ga = g.arc, 
+		m = g.matrix, mp = m.multiplyPoint, twoPI = 2 * Math.PI;
 	
 	dojo.extend(g.Shape, {
 		render: function(/* Object */ ctx){
@@ -38,6 +39,10 @@ dojo.experimental("dojox.gfx.canvas");
 		},
 		_renderFill: function(/* Object */ ctx, /* Boolean */ apply){
 			if("canvasFill" in this){
+				if("canvasFillImage" in this){
+					this.canvasFill = ctx.createPattern(this.canvasFillImage, "repeat");
+					delete this.canvasFillImage;
+				}
 				ctx.fillStyle = this.canvasFill;
 				if(apply){ ctx.fill(); }
 			}else{
@@ -111,9 +116,9 @@ dojo.experimental("dojox.gfx.canvas");
 							});
 							break;
 						case "pattern":
-							var image = Image(fs.width, fs.height);
-							image.src = fs.src;
-							f = ctx.createPattern(image, "repeat");
+							var img = new Image(fs.width, fs.height);
+							this.surface.downloadImage(img, fs.src);
+							this.canvasFillImage = img;
 					}
 				}else{
 					// Set fill color using CSS RGBA func style
@@ -167,13 +172,42 @@ dojo.experimental("dojox.gfx.canvas");
 		}
 	});
 	
+	var bezierCircle = [];
+	(function(){
+		var u = ga.curvePI4;
+		bezierCircle.push(u.s, u.c1, u.c2, u.e);
+		for(var a = 45; a < 360; a += 45){
+			var r = m.rotateg(a);
+			bezierCircle.push(mp(r, u.c1), mp(r, u.c2), mp(r, u.e));
+		}
+	})();
+	
 	dojo.declare("dojox.gfx.Ellipse", gs.Ellipse, {
 		// summary: an ellipse shape (Canvas)
+		setShape: function(){
+			g.Ellipse.superclass.setShape.apply(this, arguments);
+			// prepare Canvas-specific structures
+			var s = this.shape, t, c1, c2, r = [],
+				M = m.normalize([m.translate(s.cx, s.cy), m.scale(s.rx, s.ry)]);
+			t = mp(M, bezierCircle[0]);
+			r.push([t.x, t.y]);
+			for(var i = 1; i < bezierCircle.length; i += 3){
+				c1 = mp(M, bezierCircle[i]);
+				c2 = mp(M, bezierCircle[i + 1]);
+				t  = mp(M, bezierCircle[i + 2]);
+				r.push([c1.x, c1.y, c2.x, c2.y, t.x, t.y]);
+			}
+			this.canvasEllipse = r;
+			return this;
+		},
 		_renderShape: function(/* Object */ ctx){
-			var s = this.shape, r = Math.max(s.rx, s.ry);
-			ctx.scale(s.rx / r, s.ry / r);
+			var r = this.canvasEllipse;
 			ctx.beginPath();
-			ctx.arc(s.cx, s.cy, r, 0, twoPI, 1);
+			ctx.moveTo.apply(ctx, r[0]);
+			for(var i = 1; i < r.length; ++i){
+				ctx.bezierCurveTo.apply(ctx, r[i]);
+			}
+			ctx.closePath();
 		}
 	});
 
@@ -236,9 +270,17 @@ dojo.experimental("dojox.gfx.canvas");
 	
 	dojo.declare("dojox.gfx.Image", gs.Image, {
 		// summary: an image shape (Canvas)
+		setShape: function(){
+			g.Image.superclass.setShape.apply(this, arguments);
+			// prepare Canvas-specific structures
+			var img = new Image();
+			this.surface.downloadImage(img, this.shape.src);
+			this.canvasImage = img;
+			return this;
+		},
 		_renderShape: function(/* Object */ ctx){
 			var s = this.shape;
-			// nothing for the moment
+			ctx.drawImage(this.canvasImage, s.x, s.y, s.width, s.height);
 		}
 	});
 	
@@ -467,7 +509,7 @@ dojo.experimental("dojox.gfx.canvas");
 					x1 += this.last.x;
 					y1 += this.last.y;
 				}
-				var arcs = g.arc.arcAsBezier(
+				var arcs = ga.arcAsBezier(
 					this.last, args[i], args[i + 1], args[i + 2], 
 					args[i + 3] ? 1 : 0, args[i + 4] ? 1 : 0,
 					x1, y1
@@ -502,7 +544,7 @@ dojo.experimental("dojox.gfx.canvas");
 		// summary: a surface object to be used for drawings (Canvas)
 		constructor: function(){
 			gs.Container._init.call(this);
-			this.dirty = false;
+			this.pendingImageCount = 0;
 			this.makeDirty();
 		},
 		setDimensions: function(width, height){
@@ -523,6 +565,7 @@ dojo.experimental("dojox.gfx.canvas");
 		},
 		render: function(){
 			// summary: render the all shapes
+			if(this.pendingImageCount){ return; }
 			var ctx = this.rawNode.getContext("2d");
 			ctx.save();
 			ctx.clearRect(0, 0, this.rawNode.width, this.rawNode.height);
@@ -530,14 +573,36 @@ dojo.experimental("dojox.gfx.canvas");
 				this.children[i].render(ctx);
 			}
 			ctx.restore();
-			this.dirty = false;
+			if("pendingRender" in this){
+				clearTimeout(this.pendingRender);
+				delete this.pendingRender;
+			}
 		},
 		makeDirty: function(){
 			// summary: internal method, which is called when we may need to redraw
-			if(!this.dirty){
-				setTimeout(dojo.hitch(this, this.render), 0);
-				this.dirty = true;
+			if(!this.pendingImagesCount && !("pendingRender" in this)){
+				this.pendingRender = setTimeout(dojo.hitch(this, this.render), 0);
 			}
+		},
+		downloadImage: function(img, url){
+			// summary: 
+			//		internal method, which starts an image download and renders, when it is ready
+			// img: Image:
+			//		the image object
+			// url: String:
+			//		the url of the image
+			var handler = dojo.hitch(this, this.onImageLoad);
+			if(!this.pendingImageCount++ && "pendingRender" in this){
+				clearTimeout(this.pendingRender);
+				delete this.pendingRender;
+			}
+			img.onload  = handler;
+			img.onerror = handler;
+			img.onabort = handler;
+			img.src = url;
+		},
+		onImageLoad: function(){
+			if(!--this.pendingImageCount){ this.render(); }
 		},
 
 		// events are not implemented
