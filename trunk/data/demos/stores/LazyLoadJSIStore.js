@@ -76,8 +76,8 @@ dojo.declare("dojox.data.demos.stores.LazyLoadJSIStore", dojo.data.ItemFileReadS
 				}
 			}
 
-			//Reset the item in the reference.  
-			self._arrayOfAllItems[item[self._itemId]] = item;
+			//Reset the item in the reference.
+			self._arrayOfAllItems[item[self._itemNumPropName]] = item;
 
 			//Scan the new values in the item for extra stub items we need to 
 			//add to the items array of the store so they can be lazy-loaded later...
