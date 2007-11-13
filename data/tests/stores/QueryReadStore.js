@@ -11,23 +11,6 @@ dojox.data.tests.stores.QueryReadStore.getStore = function(){
 		});
 };
 
-dojox.data.tests.stores.QueryReadStore.assertError = function(/*Error object*/expectedError, /*Object*/scope, /*String*/functionName, /*Array*/args) { 
-	//	summary: 
-	//              Test for a certain error to be thrown by the given function. 
-	//	example: 
-	//		dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidAttributeError, store, "getValue", [item, "NOT THERE"]); 
-	//		dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidItemError, store, "getValue", ["not an item", "NOT THERE"]); 
-	try{ 
-		scope[functionName].apply(scope, args); 
- 	}catch (e){ 
-		if(e instanceof expectedError){ 
-			return true; 
-		}else{ 
-			throw new doh._AssertFailure("assertError() failed: expected error |"+expectedError+"| but got |"+e+"|"); 
-		} 
-		throw new doh._AssertFailure("assertError() failed: expected error |"+expectedError+"| but no error caught."); 
-	}
-} 
 
 tests.register("dojox.data.tests.stores.QueryReadStore", 
 	[
@@ -58,9 +41,10 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				// TODO Test for null somehow ...
 				// Read api says: Returns null if and only if null was explicitly set as the attribute value.
 				
-				// Test for not-existing attributes without defaultValues and invalid items.
-				dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidAttributeError, store, "getValue", [item, "NOT THERE"]);
-				dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidItemError, store, "getValue", ["not an item", "NOT THERE"]);
+				// According to Read-API getValue() an exception is thrown when
+				// the item is not an item or when the attribute is not a string.
+				t.assertError(Error, store, "getValue", ["not an item", "NOT THERE"]);
+				t.assertError(Error, store, "getValue", [item, {}]);
 				
 				d.callback(true);
 			}
@@ -104,7 +88,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				var item = items[0];
 				// The good case(s).
 				t.assertEqual(['name', 'label', 'abbreviation'], store.getAttributes(item));
-				dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidItemError, store, "getAttributes", [{}]);
+				t.assertError(dojox.data.QueryReadStore.InvalidItemError, store, "getAttributes", [{}]);
 				
 				d.callback(true);
 			}
@@ -290,7 +274,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				// We need to be sure so we can compare to the data from the first request.
 				function onComplete1(items, request) {
 					t.assertEqual(5, items.length);
-					// Compare the timestamp of the last request, they must be different,
+					// Compare the hash of the last request, they must be different,
 					// since another server request was issued.
 					t.assertTrue(lastRequestHash!=store.lastRequestHash);
 					t.assertEqual(store.getValue(firstItems[5], "name"), store.getValue(items[0], "name"));

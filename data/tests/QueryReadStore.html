@@ -78,7 +78,7 @@
 			var request = {query:query, queryOptions:queryOptions};
 			request.start = dojo.query("#fetchForm")[0].pagingStart.value;
 			request.count = dojo.query("#fetchForm")[0].pagingCount.value;
-		
+
 			var requestMethod = "get";
 			var radioButtons = dojo.query("#fetchForm")[0].requestMethod;
 			for (var i=0; i<radioButtons.length; i++){
@@ -93,7 +93,7 @@
 			if (!testStore.doClientPaging) {
 				// We have to fill the serverQuery, since we also want to send the
 				// paging data "start" and "count" along with what is in query.
-				request.serverQuery = {q:request.query.name, start:request.start, count:request.count};
+				request.serverQuery = {q:request.query.q, start:request.start, count:request.count};
 			}
 			
 			request.onComplete = function (items) {
