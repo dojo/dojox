@@ -76,8 +76,8 @@
 			var query = {};
 			query.q = dojo.byId("searchText").value;
 			var request = {query:query, queryOptions:queryOptions};
-			request.start = dojo.query("#fetchForm")[0].pagingStart.value;
-			request.count = dojo.query("#fetchForm")[0].pagingCount.value;
+			request.start = parseInt(dojo.query("#fetchForm")[0].pagingStart.value);
+			request.count = parseInt(dojo.query("#fetchForm")[0].pagingCount.value);
 
 			var requestMethod = "get";
 			var radioButtons = dojo.query("#fetchForm")[0].requestMethod;
@@ -105,6 +105,7 @@
 				dojo.byId("fetchOutput").innerHTML = s;
 			};
 
+			console.log(dojo.toJson(request));
 			testStore.fetch(request);
 		}
 	</script>

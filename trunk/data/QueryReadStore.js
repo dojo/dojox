@@ -317,9 +317,9 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 				// Store a ref to "this" in each item, so we can simply check if an item
 				// really origins form here (idea is from ItemFileReadStore, I just don't know
 				// how efficient the real storage use, garbage collection effort, etc. is).
-				for(var i in data.items){
-					this._items.push({i:data.items[i], r:this});
-				}
+				dojo.forEach(data.items,function(e){ 
+					this._items.push({i:e, r:this}); 
+				},this); 
 				
 				var identifier = data.identifier;
 				this._itemsByIdentity = {};
