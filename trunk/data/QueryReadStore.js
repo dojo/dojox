@@ -87,22 +87,23 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	_features: {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true},
 	
 	constructor: function(/* Object */ params){
-		this.url = params.url;
-		this.requestMethod = typeof params.requestMethod=="undefined" ? this.requestMethod : params.requestMethod;
-		this.doClientPaging = typeof params.doClientPaging=="undefined" ? this.doClientPaging : params.doClientPaging;
-		//this.useCache = typeof params.useCache=="undefined" ? this.useCache : params.useCache;
+		dojo.mixin(this,params);
 	},
 	
 	getValue: function(/* item */ item, /* attribute-name-string */ attribute, /* value? */ defaultValue){
+		//	According to the Read API comments in getValue() and exception is
+		//	thrown when an item is not an item or the attribute not a string!
 		this._assertIsItem(item);
+		if (!dojo.isString(attribute)) {
+			throw new Error(this._className+".getValue(): Invalid attribute, string expected!");
+		}
 		if(!this.hasAttribute(item, attribute)){
 			// read api says: return defaultValue "only if *item* does not have a value for *attribute*." 
 			// Is this the case here? The attribute doesn't exist, but a defaultValue, sounds reasonable.
 			if(defaultValue){
 				return defaultValue;
 			}
-			//throw new Error(this._className+".getValue(): an invalid attribute for a given item was passed to the method 'getValue()'.");
-			throw new dojox.data.QueryReadStore.InvalidAttributeError(this._className+".getValue(): Item does not have the attribute '"+attribute+"'.");
+			console.log(this._className+".getValue(): Item does not have the attribute '"+attribute+"'.");
 		}
 		return item.i[attribute];
 	},
@@ -292,11 +293,10 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		//		  // The serverQuery contains more data than the query, so they might differ!
 		//
 
-		var serverQuery = typeof request["serverQuery"]=="undefined" ? request.query : request.serverQuery;
+		var serverQuery = request.serverQuery || request.query || {};
 		//Need to add start and count
 		if(!this.doClientPaging){
-			serverQuery = serverQuery||{};
-			serverQuery.start = request.start?request.start:0;
+			serverQuery.start = request.start || 0;
 			// Count might not be sent if not given.
 			if (request.count) {
 				serverQuery.count = request.count;
@@ -312,6 +312,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			var xhrFunc = this.requestMethod.toLowerCase()=="post" ? dojo.xhrPost : dojo.xhrGet;
 			var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
 			xhrHandler.addCallback(dojo.hitch(this, function(data){
+				data=this._filterResponse(data);
 				this._items = [];
 				// Store a ref to "this" in each item, so we can simply check if an item
 				// really origins form here (idea is from ItemFileReadStore, I just don't know
@@ -330,7 +331,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 						if(!this._itemsByIdentity[identity]){
 							this._itemsByIdentity[identity] = item;
 						}else{
-							throw new Error("dojo.data.QueryReadStore:  The json data as specified by: [" + this._url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
+							throw new Error("dojo.data.QueryReadStore:  The json data as specified by: [" + this.url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
 						}
 					}
 				}else{
@@ -355,6 +356,16 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		}
 	},
 	
+	_filterResponse: function(data){
+		//	summary:
+		//		If the data from servers needs to be processed before it can be processed by this
+		//		store, then this function should be re-implemented in subclass. This default 
+		//		implementation just return the data unchanged.
+		//	data:
+		//		The data received from server
+		return data;
+	},
+
 	_assertIsItem: function(/* item */ item){
 		//	summary:
 		//		It throws an error if item is not valid, so you can call it in every method that needs to
@@ -453,4 +464,5 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 
 dojo.declare("dojox.data.QueryReadStore.InvalidItemError", Error, {});
 dojo.declare("dojox.data.QueryReadStore.InvalidAttributeError", Error, {});
+
 
