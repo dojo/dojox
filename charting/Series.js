@@ -8,5 +8,9 @@ dojo.declare("dojox.charting.Series", dojox.charting.Element, {
 		if(typeof this.plot != "string"){ this.plot = "default"; }
 		this.data = data;
 		this.dirty = true;
+		this.clear();
+	},
+	clear: function(){
+		this.dyn = {};
 	}
 });

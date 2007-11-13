@@ -198,6 +198,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			// clear old values
 			dojo.forEach(this.stack,  clear);
+			dojo.forEach(this.series, purge);
 			dojo.forEach(this.axes,   purge);
 			dojo.forEach(this.series, purge);
 			dojo.forEach(this.stack,  purge);

@@ -36,6 +36,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../plot2d/StackedBars.js"></script>
 <script type="text/javascript" src="../plot2d/ClusteredBars.js"></script>
 <script type="text/javascript" src="../plot2d/Grid.js"></script>
+<script type="text/javascript" src="../plot2d/Pie.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
 <script type="text/javascript">
 
@@ -111,8 +112,8 @@ makeObjects = function(){
 
 	var chart10 = new dojox.charting.Chart2D("test10");
 	chart10.addPlot("default", {type: "Markers", shadows: {dx: 2, dy: 2, dw: 2}});
-	chart10.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
-	chart10.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart10.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3, stroke: {color: "red", width: 2, join: "round"}, marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+	chart10.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2], {stroke: {color: "blue", width: 2, join: "round"}, marker: "m-3,-3 l0,6 6,0 0,-6 z"});
 	chart10.render();
 
 	var chart11 = new dojox.charting.Chart2D("test11");
