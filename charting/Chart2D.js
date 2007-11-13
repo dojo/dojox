@@ -13,6 +13,7 @@ dojo.require("dojox.charting.plot2d.Lines");
 dojo.require("dojox.charting.plot2d.Areas");
 dojo.require("dojox.charting.plot2d.Markers");
 dojo.require("dojox.charting.plot2d.MarkersOnly");
+dojo.require("dojox.charting.plot2d.Scatter");
 dojo.require("dojox.charting.plot2d.Stacked");
 dojo.require("dojox.charting.plot2d.StackedLines");
 dojo.require("dojox.charting.plot2d.StackedAreas");
@@ -107,6 +108,9 @@ dojo.require("dojox.charting.plot2d.Pie");
 				this.series.push(run);
 			}
 			this.dirty = true;
+			// fix min/max
+			if(!("ymin" in run) && "min" in run){ run.ymin = run.min; }
+			if(!("ymax" in run) && "max" in run){ run.ymax = run.max; }
 			return this;
 		},
 		updateSeries: function(name, data){

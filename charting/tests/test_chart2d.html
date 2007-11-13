@@ -26,6 +26,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../plot2d/Areas.js"></script>
 <script type="text/javascript" src="../plot2d/Markers.js"></script>
 <script type="text/javascript" src="../plot2d/MarkersOnly.js"></script>
+<script type="text/javascript" src="../plot2d/Scatter.js"></script>
 <script type="text/javascript" src="../plot2d/Stacked.js"></script>
 <script type="text/javascript" src="../plot2d/StackedLines.js"></script>
 <script type="text/javascript" src="../plot2d/StackedAreas.js"></script>
@@ -241,6 +242,32 @@ makeObjects = function(){
 	chart25.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "blue"}, fill: "lightblue"});
 	chart25.addSeries("Series C", [1, 0.5, -1, -2, -3], {stroke: {color: "green"}, fill: "lightgreen"});
 	chart25.render();
+
+	var chart26 = new dojox.charting.Chart2D("test26");
+	chart26.setTheme(dojox.charting.themes.PlotKit.red);
+	chart26.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart26.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart26.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
+	chart26.addSeries("Series B", [{x: 0.3, y: 8}, {x: 4, y: 6}, {x: 5.5, y: 2}]);
+	chart26.render();
+
+	var chart27 = new dojox.charting.Chart2D("test27");
+	chart27.setTheme(dojox.charting.themes.PlotKit.purple);
+	chart27.addPlot("default", {type: "Scatter"});
+	chart27.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart27.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart27.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
+	chart27.addSeries("Series B", [{x: 0.3, y: 8}, {x: 4, y: 6}, {x: 5.5, y: 2}]);
+	chart27.render();
+
+	var chart28 = new dojox.charting.Chart2D("test28");
+	chart28.setTheme(dojox.charting.themes.PlotKit.blue);
+	chart28.addPlot("default", {type: "Default", lines: true, markers: true});
+	chart28.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart28.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart28.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
+	chart28.addSeries("Series B", [{x: 0.3, y: 8}, {x: 4, y: 6}, {x: 5.5, y: 2}]);
+	chart28.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -300,6 +327,12 @@ dojo.addOnLoad(makeObjects);
 <div id="test24" style="width: 200px; height: 200px;"></div>
 <p>25: Clustered bars with positive and negative values, axes, and grid.</p>
 <div id="test25" style="width: 200px; height: 200px;"></div>
+<p>26: Default lines with 2D data, custom axis, red theme.</p>
+<div id="test26" style="width: 200px; height: 200px;"></div>
+<p>27: Scatter chart, custom axis, purple theme.</p>
+<div id="test27" style="width: 200px; height: 200px;"></div>
+<p>28: Markers, lines, 2D data, custom axis, blue theme.</p>
+<div id="test28" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

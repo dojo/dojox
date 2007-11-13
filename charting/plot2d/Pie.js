@@ -29,7 +29,7 @@ dojo.require("dojox.gfx");
 			fontColor:	"",
 			radius:		0
 		},
-		
+
 		constructor: function(chart, kwArgs){
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
