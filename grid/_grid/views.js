@@ -138,15 +138,25 @@ dojo.declare('dojox.grid.views', null, {
 		// layout views
 		var setPosition = function(v, l, t){
 			with(v.domNode.style){
-				left = l + 'px';
+				if(!dojo._isBodyLtr()){
+					right = l + 'px';
+				}else{
+				 	left = l + 'px';
+				}
 				top = t + 'px';
 			}
 			with(v.headerNode.style){
-				left = l + 'px';
+				if(!dojo._isBodyLtr()){
+					right = l + 'px';
+				}else{
+					left = l + 'px';
+				}
 				top = 0;
 			}
 		}
 		// for views left of the client
+		//BiDi TODO: The left and right should not appear in BIDI environment. Should be replaced with 
+		//leading and tailing concept.
 		for(i=0; (v=this.views[i])&&(i<c); i++){
 			// get width
 			vw = this.getViewWidth(i);

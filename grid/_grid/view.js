@@ -12,7 +12,7 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 	// viewWidth: string
 	// width for the view, in valid css unit
 	viewWidth: "",
-	templateString: '<div class="dojoxGrid-view"><div class="dojoxGrid-header" dojoAttachPoint="headerNode"><div style="width: 9000em"><div dojoAttachPoint="headerContentNode"></div></div></div><input type="checkbox" class="dojoxGrid-hidden-focus" dojoAttachPoint="hiddenFocusNode" /><input type="checkbox" class="dojoxGrid-hidden-focus" /><div class="dojoxGrid-scrollbox" dojoAttachPoint="scrollboxNode"><div class="dojoxGrid-content" dojoAttachPoint="contentNode" hidefocus="hidefocus"></div></div></div>',
+	templateString: '<div class="dojoxGrid-view"><div class="dojoxGrid-header" dojoAttachPoint="headerNode"><div dojoAttachPoint="headerNodeContainer" style="width:9000em"><div dojoAttachPoint="headerContentNode"></div></div></div><input type="checkbox" class="dojoxGrid-hidden-focus" dojoAttachPoint="hiddenFocusNode" /><input type="checkbox" class="dojoxGrid-hidden-focus" /><div class="dojoxGrid-scrollbox" dojoAttachPoint="scrollboxNode"><div class="dojoxGrid-content" dojoAttachPoint="contentNode" hidefocus="hidefocus"></div></div></div>',
 	themeable: false,
 	classTag: 'dojoxGrid',
 	marginBottom: 0,
@@ -26,6 +26,10 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 		dojox.grid.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
 		this.content = new dojox.grid.contentBuilder(this);
 		this.header = new dojox.grid.headerBuilder(this);
+		//BiDi: in RTL case, style width='9000em' causes scrolling problem in head node
+		if(!dojo._isBodyLtr()){
+			this.headerNodeContainer.style.width = "";
+		}
 	},
 	destroy: function(){
 		dojox.grid.removeNode(this.headerNode);
@@ -210,7 +214,20 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 	},
 	// scrolling
 	lastTop: 0,
+	firstScroll:false,
 	doscroll: function(inEvent){
+		if(!dojo._isBodyLtr() && !this.firstScroll){
+			var s = dojo.marginBox(this.headerNodeContainer);
+			if(dojo.isIE){
+				this.headerNodeContainer.style.width = s.w + this.getScrollbarWidth() + 'px';	
+			}else if(dojo.isMoz){
+				//TODO currently only for FF, not sure for safari and opera
+				this.headerNodeContainer.style.width = s.w - this.getScrollbarWidth() + 'px';
+				//set scroll to right in FF
+				this.scrollboxNode.scrollLeft = this.scrollboxNode.scrollWidth - this.scrollboxNode.clientWidth;
+			}
+			this.firstScroll = true;
+		}
 		this.headerNode.scrollLeft = this.scrollboxNode.scrollLeft;
 		// 'lastTop' is a semaphore to prevent feedback-loop with setScrollTop below
 		var top = this.scrollboxNode.scrollTop;

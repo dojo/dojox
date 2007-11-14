@@ -152,7 +152,7 @@ dojo.declare('dojox.grid.scroller.base', null, {
 		var p = document.createElement('div');
 		p.style.position = 'absolute';
 		//p.style.width = '100%';
-		p.style.left = '0';
+		p.style[dojo._isBodyLtr() ? "left" : "right"] = '0';
 		return p;
 	},
 	getPageHeight: function(inPageIndex){
