@@ -14,15 +14,16 @@ dojo.declare("dojox.image.Lightbox",
 	//	in a modal dialog-esque format. Can show individual images as Modal dialog, or can group
 	//	images with multiple entry points, all using a single "master" Dialog for visualization
 	//
-	// examples:
-	//	
-	//	<a href="image1.jpg" dojoType="dojox.image.Lightbox">show lightbox</a>
-	//	<a href="image2.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
-	//	<a href="image3.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
+	// example:
+	// |	<a href="image1.jpg" dojoType="dojox.image.Lightbox">show lightbox</a>
+	// example: 
+	// |	<a href="image2.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
+	// |	<a href="image3.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
 	//
-	//	FIXME: not implemented fully yet, though works with basic datastore access. need to manually call
-	//	widget._attachedDialog.addImage(item,"fromStore") for each item in a store result set.
-	//	<div dojoType="dojox.image.Lightbox" group="fromStore" store="storeName"></div>
+	// example:	 
+	// |	not implemented fully yet, though works with basic datastore access. need to manually call
+	// |	widget._attachedDialog.addImage(item,"fromStore") for each item in a store result set.
+	// |	<div dojoType="dojox.image.Lightbox" group="fromStore" store="storeName"></div>
 
 	// group: String
 	//	grouping images in a page with similar tags will provide a 'slideshow' like grouping of images
@@ -96,8 +97,8 @@ dojo.declare("dojox.image.Lightbox",
 
 dojo.declare("dojox.image._LightboxDialog",
 	dijit.Dialog,{
-	//
-	// Description:
+	// summary: 
+	// description:
 	//	
 	//	a widget that intercepts anchor links (typically around images) 	
 	//	and displays a modal Dialog. this is the actual Popup, and should 
@@ -106,8 +107,6 @@ dojo.declare("dojox.image._LightboxDialog",
 	//	there will only be one of these on a page, so all dojox.image.Lightbox's will us it
 	//	(the first instance of a Lightbox to be show()'n will create me If i do not exist)
 	// 
-	//	note: the could be the ImagePane i was talking about?
-
 	// title: String
 	// 	the current title 
 	title: "",
@@ -127,6 +126,7 @@ dojo.declare("dojox.image._LightboxDialog",
 	// an array of objects, each object being a unique 'group'
 	_groups: { XnoGroupX: [] },
 	_imageReady: false,
+	_blankImg: dojo.moduleUrl("dojo","resources/blank.gif"),
 
 	templatePath: dojo.moduleUrl("dojox.image","resources/Lightbox.html"),
 
@@ -180,7 +180,7 @@ dojo.declare("dojox.image._LightboxDialog",
 			this.nextNode.style.visibility = "hidden";
 		}
 		this.textNode.innerHTML = groupData.title;
-	
+		
 		if(!this._imageReady || this.imgNode.complete === true){ 
 			this._imgConnect = dojo.connect(this.imgNode,"onload", this, function(){
 				this._imageReady = true;
@@ -261,7 +261,12 @@ dojo.declare("dojox.image._LightboxDialog",
 
 	hide: function(){
 		// summary: close the Lightbox
-		dojo.fadeOut({node:this.titleNode, duration:200 }).play(25); 
+		dojo.fadeOut({node:this.titleNode, duration:200,
+			onEnd: dojo.hitch(this,function(){
+				// refs #5112 - if you _don't_ change the .src, safari will _never_ fire onload for this image
+				this.imgNode.src = this._blankImg; 
+			}) 
+		}).play(25); 
 		this.inherited("hide", arguments);
 		this.inGroup = null;
 		this._positionIndex = null;
