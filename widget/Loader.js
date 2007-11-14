@@ -89,7 +89,7 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 		// summary: publish "xhr ended" and hide progress indicator
 		dojo.publish("Loader",[{ message: 'ended' }]);
 		if(this.hasVisuals){ 
-			if(this.attachPointer){
+			if(this.attachToPointer){
 				dojo.disconnect(this._pointerConnect); 
 			}
 			dojo.fadeOut({ node: this.loadNode, duration:this.duration }).play();
