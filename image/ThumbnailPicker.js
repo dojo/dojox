@@ -90,7 +90,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	titleAttr: "title",
 	
 	templatePath: dojo.moduleUrl("dojox.image", "resources/ThumbnailPicker.html"), 
-	tempImgPath: dojo.moduleUrl("dojox.image", "resources/images/1pixel.gif"),
+	tempImgPath: dojo.moduleUrl("dojo", "resources/blank.gif"),
 	
 	// thumbs: Array
 	// Stores the image nodes for the thumbnails.

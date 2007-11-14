@@ -171,7 +171,7 @@
 	position: absolute;
 }
 .slideShowCtrl span.slideShowCtrlHide {
-	background-image: url("images/1pixel.gif");
+	background-image: url("../../../dojo/resources/blank.gif");
 	cursor: auto;
 }
 

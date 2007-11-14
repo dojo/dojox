@@ -94,7 +94,7 @@ dojo.declare("dojox.image.SlideShow",
 	
 	// _tempImgPath: URL
 	//	URL to the image to display when an image is not yet fully loaded.
-	_tempImgPath: dojo.moduleUrl("dojox.image", "resources/images/1pixel.gif"),
+	_tempImgPath: dojo.moduleUrl("dojo", "resources/blank.gif"),
 
 	// _imageCounter: Number
 	//	A counter to keep track of which index image is to be loaded next
