@@ -623,7 +623,7 @@ dojo.declare("dojox.widget.FisheyeListItem", [dijit._Widget, dijit._Templated, d
 	//	will be set to the id of the orginal div element
 	id: "",
 
-	_blankImgPath: dojo.moduleUrl("dojox.widget", "FisheyeList/blank.gif"),
+	_blankImgPath: dojo.moduleUrl("dojo", "resources/blank.gif"),
 
 	templateString:
 		'<div class="dojoxFisheyeListItem">' +

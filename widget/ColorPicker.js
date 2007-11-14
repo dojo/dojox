@@ -64,7 +64,7 @@ dojo.declare("dojox.widget.ColorPicker",
 		//	of this widget: the underlay. 
 		if(dojo.isIE && dojo.isIE<7){ 
 			this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
-			this.colorUnderlay.src = dojo.moduleUrl("dojox.widget","FisheyeList/blank.gif").toString();
+			this.colorUnderlay.src = dojo.moduleUrl("dojo","resources/blank.gif").toString();
 		}
 		// hide toggle-able nodes:
 		if (!this.showRgb){ this.rgbNode.style.display = "none"; }
