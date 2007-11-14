@@ -86,8 +86,7 @@ dojo.declare("dojox.grid.edit", null, {
 		// inCell: object
 		//	grid cell object
 		if(!this.isEditCell(inRowIndex, inCell.index)){
-			var editing = (this.isEditRow(inRowIndex) || inCell.editor) && ((inCell.editor||0).alwaysOn || inRowIndex == this.info.rowIndex);
-			this.start(inCell, inRowIndex, editing);
+			this.start(inCell, inRowIndex, this.isEditRow(inRowIndex) || inCell.editor);
 		}
 	},
 	_focusEditor: function(inCell, inRowIndex){
@@ -112,13 +111,12 @@ dojo.declare("dojox.grid.edit", null, {
 			this.focusEditor();
 			// only catch once
 			this._catchBoomerang = 0;
-			//console.log("_boomerangFocus: caught boomerang");
 		}
 	},
 	_doCatchBoomerang: function(){
 		// give ourselves a few ms to boomerang IE focus effects
 		if(dojo.isIE){this._catchBoomerang = new Date().getTime() + this._boomerangWindow;}
-	},		
+	},
 	// end boomerang fix API
 	start: function(inCell, inRowIndex, inEditing){
 		this.grid.beginUpdate();
