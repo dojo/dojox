@@ -27,7 +27,9 @@ dojo.declare(
 	//		<div dojoType="ContentPane" position="right" style="width: 200px;">table of contents</div>
 	//		<div dojoType="ContentPane" position="center">client area</div>
 	//	</div>
-	
+
+	corners: "normal",
+
 	top: {},
 	bottom: {},
 	left: {}, // inside?
@@ -80,6 +82,7 @@ dojo.declare(
 			}
 		}, this);
 
+		var galley = this.corners == "galley";
 		var topStyle = this.top.style;
 		var rightStyle = this.right.style;
 		var leftStyle = this.left.style;
@@ -90,13 +93,22 @@ dojo.declare(
 		var centerCoords = dojo.coords(this.center);
 		var bottomCoords = dojo.coords(this.bottom);
 		var topCoords = dojo.coords(this.top);
-		rightStyle.top = leftStyle.top = centerStyle.top = topCoords.h + "px";
-		topStyle.top = topStyle.left = topStyle.right = "0px";
-		bottomStyle.left = bottomStyle.bottom = bottomStyle.right = "0px";
+		centerStyle.top = topCoords.h + "px";
+		rightStyle.top = leftStyle.top = galley ? "0px" : centerStyle.top;
+		topStyle.top = "0px";
+		bottomStyle.bottom = "0px";
+		if(galley){
+			topStyle.left = bottomStyle.left = leftCoords.w + "px";
+			topStyle.right = bottomStyle.right = rightCoords.w + "px";
+		}else{
+			topStyle.left = topStyle.right = "0px";
+			bottomStyle.left = bottomStyle.right = "0px";
+		}
 		leftStyle.left = rightStyle.right = "0px";
 		centerStyle.left = leftCoords.w + "px";
 		centerStyle.right =  rightCoords.w + "px";
-		rightStyle.bottom = leftStyle.bottom = centerStyle.bottom = bottomCoords.h + "px";
+		centerStyle.bottom = bottomCoords.h + "px";
+		rightStyle.bottom = leftStyle.bottom = galley ? "0px" : centerStyle.bottom;
 
 console.info(rightStyle.top, topStyle.top, bottomStyle.left, leftStyle.left, centerStyle.left, centerStyle.right, rightStyle.bottom);
 
