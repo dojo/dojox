@@ -36,38 +36,48 @@ dojo.require("dojox.lang.functional");
 			return fill;
 		},
 		
-		defaultStats: {hmin: 1, hmax: 0, vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY},
+		defaultStats: {hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY, 
+			vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY},
 		
 		collectSimpleStats: function(series){
 			var stats = dojo.clone(dc.defaultStats);
 			for(var i = 0; i < series.length; ++i){
 				var run = series[i];
-				stats.hmax = Math.max(stats.hmax, run.data.length);
-				var haveMin = ("min" in run), haveMax = ("max" in run);
-				if(haveMin){
-					stats.vmin = Math.min(stats.vmin, run.min);
-					if(haveMax){
-						stats.vmax = Math.max(stats.vmax, run.max);
-					}else{
-						dojo.forEach(run.data, function(val){
-							if(isNaN(val)){ val = 0; }
-							stats.vmax = Math.max(stats.vmax, val);
+				if(!run.data.length){ continue; }
+				if(typeof run.data[0] == "number"){
+					// 1D case
+					var old_vmin = stats.vmin, old_vmax = stats.vmax;
+					if(!("ymin" in run) || !("ymax" in run)){
+						dojo.forEach(run.data, function(val, i){
+							var x = i + 1, y = val;
+							if(isNaN(y)){ y = 0; }
+							stats.hmin = Math.min(stats.hmin, x);
+							stats.hmax = Math.max(stats.hmax, x);
+							stats.vmin = Math.min(stats.vmin, y);
+							stats.vmax = Math.max(stats.vmax, y);
 						});
 					}
+					if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
+					if("ymax" in run){ stats.vmax = Math.max(old_vmax, run.ymax); }
 				}else{
-					if(haveMax){
-						stats.vmax = Math.max(stats.vmax, run.max);
-						dojo.forEach(run.data, function(val){
-							if(isNaN(val)){ val = 0; }
-							stats.vmin = Math.min(stats.vmin, val);
-						});
-					}else{
-						dojo.forEach(run.data, function(val){
-							if(isNaN(val)){ val = 0; }
-							stats.vmin = Math.min(stats.vmin, val);
-							stats.vmax = Math.max(stats.vmax, val);
+					// 2D case
+					var old_hmin = stats.hmin, old_hmax = stats.hmax,
+						old_vmin = stats.vmin, old_vmax = stats.vmax;
+					if(!("xmin" in run) || !("xmax" in run) || !("ymin" in run) || !("ymax" in run)){
+						dojo.forEach(run.data, function(val, i){
+							var x = val.x, y = val.y;
+							if(isNaN(x)){ x = 0; }
+							if(isNaN(y)){ y = 0; }
+							stats.hmin = Math.min(stats.hmin, x);
+							stats.hmax = Math.max(stats.hmax, x);
+							stats.vmin = Math.min(stats.vmin, y);
+							stats.vmax = Math.max(stats.vmax, y);
 						});
 					}
+					if("xmin" in run){ stats.hmin = Math.min(old_hmin, run.xmin); }
+					if("xmax" in run){ stats.hmax = Math.max(old_hmax, run.xmax); }
+					if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
+					if("ymax" in run){ stats.vmax = Math.max(old_vmax, run.ymax); }
 				}
 			}
 			return stats;
@@ -78,6 +88,7 @@ dojo.require("dojox.lang.functional");
 			var stats = dojo.clone(dc.defaultStats);
 			if(series.length){
 				// 1st pass: find the maximal length of runs
+				stats.hmin = Math.min(stats.hmin, 1);
 				stats.hmax = df.foldl(series, "seed, run -> Math.max(seed, run.data.length)", stats.hmax);
 				// 2nd pass: stack values
 				for(var i = 0; i < stats.hmax; ++i){
