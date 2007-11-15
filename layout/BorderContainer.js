@@ -97,6 +97,13 @@ dojo.declare(
 		centerStyle.left = leftCoords.w + "px";
 		centerStyle.right =  rightCoords.w + "px";
 		rightStyle.bottom = leftStyle.bottom = centerStyle.bottom = bottomCoords.h + "px";
+
+console.info(rightStyle.top, topStyle.top, bottomStyle.left, leftStyle.left, centerStyle.left, centerStyle.right, rightStyle.bottom);
+
+		dojo.forEach(["top", "left", "center", "right", "bottom"], function(pos){
+			var widget = dijit.byNode(this[pos]);
+			if(widget && widget.resize){ widget.resize(); }
+		}, this);
 	},
 
 	resize: function(args){
