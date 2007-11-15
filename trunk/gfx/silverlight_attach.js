@@ -1,6 +1,6 @@
-dojo.require("dojox.gfx.svg");
+dojo.require("dojox.gfx.silverlight");
 
-dojo.experimental("dojox.gfx.svg_attach");
+dojo.experimental("dojox.gfx.silverlight_attach");
 
 (function(){
 	dojox.gfx.attachNode = function(node){

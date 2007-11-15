@@ -1,6 +1,6 @@
 ﻿<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
 <head>
-<title>Testing polyline and line transforms</title>
+<title>Testing surface resizing</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 	@import "../../../dojo/resources/dojo.css";
@@ -22,31 +22,39 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 
+var surface;
+
 makeShapes = function(){
-	var surface = dojox.gfx.createSurface("test", 500, 500);
-	var line = surface.createLine({x1: 250, y1: 50, x2: 250, y2: 250})
-		.setStroke({color: "blue"})
-		;
-	var poly = surface.createPolyline([{x: 250, y: 250}, {x: 300, y: 300}, {x: 250, y: 350}, {x: 200, y: 300}, {x: 250, y: 250}])
-		.setStroke({color: "blue"})
-		;
-	var rotate = dojox.gfx.matrix.rotategAt(5, 250, 250);
-	//var rotate = dojox.gfx.matrix.rotategAt(0.4, 250, 250);
-		
-	window.setInterval(function() {
-			line.applyTransform(rotate);
-			poly.applyTransform(rotate);
-		},
-		100
-	);
+	surface = dojox.gfx.createSurface("test", 500, 500);
+	surface.createRect({width: 300, height: 300}).setFill([255, 0, 0, 0.3]).setStroke("red");
+	surface.createRect({x: 200, y: 200, width: 300, height: 300}).setFill([0, 0, 255, 0.3]).setStroke("green");
 };
+
+getDim = function(){
+	var t = surface.getDimensions();
+	alert("dimensions: " + t.width + " by " + t.height);
+};
+
+make500x500 = function(){ surface.setDimensions(500, 500); };
+make400x400 = function(){ surface.setDimensions(400, 400); };
+make300x300 = function(){ surface.setDimensions(300, 300); };
 
 dojo.addOnLoad(makeShapes);
 
 </script>
 </head>
 <body>
-<h1>dojox.gfx Polyline test</h1>
+<h1>Testing surface resizing</h1>
+<!--<p><button onclick="makeShapes();">Go</button></p>-->
+<p>
+	<button onclick="getDim();">getDimensions</button>
+	&nbsp;
+	<button onclick="make300x300();">Make 300x300</button>
+	&nbsp;
+	<button onclick="make400x400();">Make 400x400</button>
+	&nbsp;
+	<button onclick="make500x500();">Make 500x500</button>
+</p>
 <div id="test" style="width: 500px; height: 500px;"></div>
 <p>That's all Folks!</p>
 </body>

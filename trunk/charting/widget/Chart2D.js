@@ -92,8 +92,8 @@ dojo.require("dojox.lang.functional");
 		if(!name){ return null; }
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
-			if(dojox.charting.plot2d.axes[type]){
-				type += "dojox.charting.axis2d." + type;
+			if(dojox.charting.axis2d[type]){
+				type = "dojox.charting.axis2d." + type;
 			}
 			var axis = eval("(" + type + ")");
 			if(axis){ kw.type = axis; } 

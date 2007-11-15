@@ -17,6 +17,11 @@ dojo.require("dojox.lang.utils");
 		labelGap = 4,				// in pixels
 		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
 		
+	var eq = function(/* Number */ a, /* Number */ b){
+		// summary: compare two FP numbers for equality
+		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
+	};
+
 	dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Base, {
 		 defaultParams: {
 			vertical:    false,		// true for vertical axis
@@ -38,7 +43,9 @@ dojo.require("dojox.lang.utils");
 			"majorTickStep": 4,		// major tick step
 			"minorTickStep": 2,		// minor tick step
 			"microTickStep": 1,		// micro tick step
-			"labels":        [],	// array of labels
+			"labels":        [],	// array of labels for major ticks
+									// with corresponding numeric values
+									// ordered by values
 			// theme components
 			"stroke":        {},	// stroke for an axis
 			"majorTick":     {},	// stroke + length for a tick
@@ -80,15 +87,13 @@ dojo.require("dojox.lang.utils");
 					minMinorStep = size + labelGap;
 				}
 			}else{
-				var labelLength = 0;
 				if(size){
+					var labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10);
+					if(min < 0 || max < 0){ ++labelLength; }
+					var precision = Math.floor(Math.log(max - min) / Math.LN10);
+					if(precision > 0){ labelLength += precision; }
 					if(this.labels){
-						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
-					}else{
-						labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10);
-						if(min < 0 || max < 0){ ++labelLength; }
-						var precision = Math.floor(Math.log(max - min) / Math.LN10);
-						if(precision > 0){ labelLength += precision; }
+						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
 					}
 					minMinorStep = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
 				}
@@ -117,16 +122,14 @@ dojo.require("dojox.lang.utils");
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){
 				if(size){
-					var labelLength = 0;
-					if(this.labels){
-						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
-					}else{
-						var s = this.scaler,
-							a = this._getLabel(s.major.start, s.major.prec).length,
-							b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
-							c = this._getLabel(s.minor.start, s.minor.prec).length,
-							d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length;
+					var s = this.scaler,
+						a = this._getLabel(s.major.start, s.major.prec).length,
+						b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
+						c = this._getLabel(s.minor.start, s.minor.prec).length,
+						d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length,
 						labelLength = Math.max(a, b, c, d);
+					if(this.labels){
+						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
 					}
 					offset = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
 				}
@@ -140,16 +143,14 @@ dojo.require("dojox.lang.utils");
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
 				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
 				if(size){
-					var labelLength = 0;
-					if(this.labels){
-						labelLength = df.foldl(dojo.map(this.labels, df.pluck("length")), Math.max);
-					}else{
-						var s = this.scaler,
-							a = this._getLabel(s.major.start, s.major.prec).length,
-							b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
-							c = this._getLabel(s.minor.start, s.minor.prec).length,
-							d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length;
+					var s = this.scaler,
+						a = this._getLabel(s.major.start, s.major.prec).length,
+						b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
+						c = this._getLabel(s.minor.start, s.minor.prec).length,
+						d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length,
 						labelLength = Math.max(a, b, c, d);
+					if(this.labels){
+						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
 					}
 					offsets.l = offsets.r = Math.floor(size * labelLength * labelFudgeFactor) / 2;
 				}
@@ -230,14 +231,6 @@ dojo.require("dojox.lang.utils");
 										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
 											this._getLabel(nextMajor, c.major.prec), taFont, taFontColor);
 						if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
-						/*
-						s.createText({
-							x: x + labelOffset.x,
-							y: y + labelOffset.y,
-							text: this._getLabel(nextMajor, c.major.prec),
-							align: labelAlign
-						}).setFont(taFont).setFill(taFontColor);
-						*/
 					}
 					nextMajor += c.major.tick;
 					nextMinor += c.minor.tick;
@@ -255,14 +248,6 @@ dojo.require("dojox.lang.utils");
 											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
 												this._getLabel(nextMinor, c.minor.prec), taFont, taFontColor);
 							if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
-							/*
-							s.createText({
-								x: x + labelOffset.x,
-								y: y + labelOffset.y,
-								text: this._getLabel(nextMinor, c.minor.prec),
-								align: labelAlign
-							}).setFont(taFont).setFill(taFontColor);
-							*/
 						}
 					}
 					nextMinor += c.minor.tick;
@@ -287,6 +272,31 @@ dojo.require("dojox.lang.utils");
 		
 		// utilities
 		_getLabel: function(number, precision){
+			if(this.opt.labels){
+				// classic binary search
+				var l = this.opt.labels, lo = 0, hi = l.length;
+				while(lo < hi){
+					var mid = Math.floor((lo + hi) / 2), val = l[mid].value;
+					if(val < number){
+						lo = mid + 1;
+					}else{
+						hi = mid;
+					}
+				}
+				// lets take into account FP errors
+				if(lo < l.length && eq(l[lo].value, number)){
+					return l[lo].text;
+				}
+				--lo;
+				if(lo < l.length && eq(l[lo].value, number)){
+					return l[lo].text;
+				}
+				lo += 2;
+				if(lo < l.length && eq(l[lo].value, number)){
+					return l[lo].text;
+				}
+				// otherwise we will produce a number
+			}
 			return this.opt.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
 		}
 	});
