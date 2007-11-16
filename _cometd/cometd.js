@@ -40,12 +40,12 @@ dojox.cometd = new function(){
 	this.currentTransport = null;
 	this.url = null;
 	this.lastMessage = null;
-	this.topics = {};
+	this._subscriptions = {};
 	this._messageQ = [];
 	this.handleAs="json-comment-optional";
 	this.advice;
-	this.pendingSubscriptions = {}
-	this.pendingUnsubscriptions = {}
+	this._deferredSubscribes = {}
+	this._deferredUnsubscribes = {}
 
 	this._subscriptions = [];
 
@@ -133,8 +133,8 @@ dojox.cometd = new function(){
 		if(data["advice"]){
 			this.advice = data.advice;
 		}
-       
-       		if(!data.successful){
+
+		if(!data.successful){
 			console.debug("cometd init failed");
 			if(this.advice && this.advice["reconnect"]=="none"){
 				return;
@@ -142,7 +142,7 @@ dojox.cometd = new function(){
 
 			if( this.advice && this.advice["interval"] && this.advice.interval>0 ){
 				var cometd=this;
-				setTimeout(function(){ cometd.init(cometd.url,cometd._props); }, this.advice.interval);
+				setTimeout(function(){cometd.init(cometd.url,cometd._props);},this.advice.interval);
 			}else{
 				this.init(this.url,this._props);
 			}
@@ -201,36 +201,32 @@ dojox.cometd = new function(){
 						this.endBatch();
 					} else if(!this._initialized){
 						this._connected = false; // finish disconnect
-					}                                     
+					}
 					break;
 				case "/meta/subscribe":
-					var pendingDef = this.pendingSubscriptions[message.subscription];
+					var deferred = this._deferredSubscribes[message.subscription];
 					if(!message.successful){
-						if(pendingDef){
-							pendingDef.errback(new Error(message.error));
-							delete this.pendingSubscriptions[message.subscription];
+						if(deferred){
+							deferred.errback(new Error(message.error));
 						}
 						return;
 					}
 					dojox.cometd.subscribed(message.subscription, message);
-					if(pendingDef){
-						pendingDef.callback(true);
-						delete this.pendingSubscriptions[message.subscription];
+					if(deferred){
+						deferred.callback(true);
 					}
 					break;
 				case "/meta/unsubscribe":
-					var pendingDef = this.pendingUnsubscriptions[message.subscription];
+					var deferred = this._deferredUnsubscribes[message.subscription];
 					if(!message.successful){
-						if(pendingDef){
-							pendingDef.errback(new Error(message.error));
-							delete this.pendingUnsubscriptions[message.subscription];
+						if(deferred){
+							deferred.errback(new Error(message.error));
 						}
 						return;
 					}
 					this.unsubscribed(message.subscription, message);
-					if(pendingDef){
-						pendingDef.callback(true);
-						delete this.pendingUnsubscriptions[message.subscription];
+					if(deferred){
+						deferred.callback(true);
 					}
 					break;
 			}
@@ -290,9 +286,9 @@ dojox.cometd = new function(){
 		}
 	}
 
-	this.subscribe = function(	/*string */					channel,
-								/*object, optional*/	     objOrFunc,
-								/*string, optional*/	     funcName){ // return: boolean
+	this.subscribe = function(	/*string */		channel,
+					/*object, optional*/	objOrFunc,
+					/*string, optional*/	funcName){ // return: boolean
 		// summary:
 		//		inform the server of this client's interest in channel
 		// channel:
@@ -305,69 +301,85 @@ dojox.cometd = new function(){
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
 
-		if(this.pendingSubscriptions[channel]){
-			// We already asked to subscribe to this channel, and
-			// haven't heard back yet. Fail the previous attempt.
-			var oldDef = this.pendingSubscriptions[channel];
-			oldDef.cancel();
-			delete this.pendingSubscriptions[channel];
-		}
-
-		var pendingDef = new dojo.Deferred();
-		this.pendingSubscriptions[channel] = pendingDef;
-
 		if(objOrFunc){
 			var tname = "/cometd"+channel;
-			if(this.topics[tname]){
-				dojo.unsubscribe(this.topics[tname]);
+			var subs=this._subscriptions[tname];
+			if (!subs || subs.length==0)
+			{
+				subs=[];
+				this._sendMessage({
+					channel: "/meta/subscribe",
+					subscription: channel
+				});
+				
+				this._deferredSubscribes[channel] = new dojo.Deferred();
+				if (this._deferredUnsubscribes[channel]){
+					this._deferredUnsubscribes[channel].cancel();
+					delete this._deferredUnsubscribes[channel];
+				}
 			}
+			
+			for (var i in subs){
+				if (subs[i].objOrFunc===objOrFunc&&(!subs[i].funcName&&!funcName||subs[i].funcName==funcName))
+					return;
+			}
+			
 			var topic = dojo.subscribe(tname, objOrFunc, funcName);
-			this.topics[tname] = topic;
+			subs.push( { topic: topic, objOrFunc: objOrFunc, funcName: funcName });
+			this._subscriptions[tname] =subs;
 		}
-
-		this._sendMessage({
-			channel: "/meta/subscribe",
-			subscription: channel
-		});
-
-		return pendingDef;
-
+		return this._deferredSubscribes[channel];
 	}
 
 	this.subscribed = function(	/*string*/  channel,
-								/*obj*/     message){
+					/*obj*/     message){
  	}
 
 
-	this.unsubscribe = function(/*string*/			channel){ // return: boolean
+	this.unsubscribe = function(	/*string*/		channel,
+					/*object, optional*/	objOrFunc,
+					/*string, optional*/	funcName){ 
 		// summary:
 		//		inform the server of this client's disinterest in channel
 		// channel:
 		//		name of the cometd channel to unsubscribe from
-
-		if(this.pendingUnsubscriptions[channel]){
-			// We already asked to unsubscribe from this channel, and
-			// haven't heard back yet. Fail the previous attempt.
-			var oldDef = this.pendingUnsubscriptions[channel];
-			oldDef.cancel();
-			delete this.pendingUnsubscriptions[channel];
-		}
-
-		var pendingDef = new dojo.Deferred();
-		this.pendingUnsubscriptions[channel] = pendingDef;
-
+		// objOrFunc:
+		//		an object scope for funcName or the name or reference to a
+		//		function to be called when messages are delivered to the
+		//		channel. If null then all subscribers to the channel are unsubscribed.
+		// funcName:
+		//		the second half of the objOrFunc/funcName pair for identifying
+		//		a callback function to notifiy upon channel message delivery
+		
 		var tname = "/cometd"+channel;
-		if(this.topics[tname]){
-			dojo.unsubscribe(this.topics[tname]);
+		var subs=this._subscriptions[tname];
+		if (!subs || subs.length==0)
+		      return;
+		      
+		var s=0;
+		for (var i in subs){
+			var sb=subs[i];
+			if (!objOrFunc||(sb.objOrFunc===objOrFunc&&(!sb.funcName&&!funcName||sb.funcName==funcName))){
+				dojo.unsubscribe(subs[i].topic);  
+				delete subs[i];    
+			}
+			else
+				s++;
 		}
-
-		this._sendMessage({
-			channel: "/meta/unsubscribe",
-			subscription: channel
-		});
-
-		return pendingDef;
-
+		
+		if (s==0) {
+			delete this._subscriptions[tname];
+			this._sendMessage({
+				channel: "/meta/unsubscribe",
+				subscription: channel
+			});
+			this._deferredUnsubscribes[channel] = new dojo.Deferred();
+			if (this._deferredSubscribes[channel]){
+				this._deferredSubscribes[channel].cancel();
+				delete this._deferredSubscribes[channel];
+			}
+		}
+		return this._deferredUnsubscribes[channel];
 	}
 
 	this.unsubscribed = function(	/*string*/  channel,
@@ -665,9 +677,9 @@ dojox.cometd.callbackPollTransport = new function(){
 			callbackParamName: "jsonp",
 			content: {
 				message: dojo.toJson([{
-					channel:        "/meta/disconnect",
-					clientId:       this._cometd.clientId,
-					id:             ""+this._cometd.messageId++
+					channel:"/meta/disconnect",
+					clientId:this._cometd.clientId,
+					id:""+this._cometd.messageId++
 				}])
 			}
 		});
