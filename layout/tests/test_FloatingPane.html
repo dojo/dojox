@@ -66,7 +66,7 @@
 				resizable: false
 			},node);
 			tmp.startup();
-			tmp.resize({ w:300, h:175 });			
+			tmp.resize({ w:300, h:125 });			
 		}
 
 		var vpx, vpy = null;
@@ -83,11 +83,11 @@
 		<a href="javascript:dijit.byId('floater1').minimize()">minimize 'uncloseable, dockable' pane pane</a> |
 		<a href="javascript:brandNewFloater()">new floater</a>
 
-		<div dojoType="dojox.layout.FloatingPane" title="Floater test ... " resizable="true" id="floater1" style="width:200px;" duration="300">
+		<div dojoType="dojox.layout.FloatingPane" title="Floater test ... " resizable="true" id="floater1" style="position:absolute; width:100px; height:100px; top:100px; left:0px; " duration="300">
 		<p style="margin:0; padding:10px;">I am the content to be floated around</p>
 		</div>
 
-		<div dojoType="dojox.layout.FloatingPane" title="un-closable, dockable" style="width:200px; position:absolute; " closable="false" id="floater2">
+		<div dojoType="dojox.layout.FloatingPane" title="un-closable, dockable" style="width:200px; position:absolute; top:100px; left:100px;" closable="false" id="floater2">
 		<p style="padding:8px; margin:0;">
 		I am dockable, though I have no dockTo="" attribute. I will create or use an existing dock 
 		on the bottom of the screen.
@@ -98,7 +98,7 @@
 		</p>
 		</div> 
 		
-		<div id="nonFloater" style="width:200px;" duration="750" >
+		<div id="nonFloater" style="width:100px; height:100px; top:100px; left:300px;" duration="750" >
 		<p style="padding:8x; margin:2px;">
 		I am made into a FloatingPane in dojo.addOnLoad();<br><br>
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
@@ -107,11 +107,11 @@
 		</p>
 		</div>
 
-		<div title="Alt Dock 1" style="width:100px; height:100px; float:left;" 
+		<div title="Alt Dock 1" style="width:100px; height:100px; position:absolute; top:200px; left:0; position:absolute; " 
 			dojoType="dojox.layout.FloatingPane" duration="350" resizable="true" 
 			dockTo="alternateDock" executeScripts="true" href="_script.html">
 		</div>
-		<div title="Alt Dock 2" dojoType="dojox.layout.FloatingPane" resizable="true" style="width:200px; float:left;" duration="350" dockTo="alternateDock">
+		<div title="Alt Dock 2" dojoType="dojox.layout.FloatingPane" resizable="true" style="width:100px; height:100px; position:absolute; top:200px; left:100px;" duration="350" dockTo="alternateDock">
 		<p style="color:#666; padding:8px; margin:0;">
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
 		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
@@ -121,15 +121,15 @@
 
 		
 		<div dojoType="dojox.layout.FloatingPane" 
-resizeable="false" style="width:200px; margin:0; background:#ccc; " title="foobar" 
-closable="false" dockable="false"><p style="padding:12px;">
+			resizeable="false" style="width:100px; 100px; top:200px; left:200px; position:absolute; " title="foobar" 
+			closable="false" dockable="false"><p style="padding:12px;">
 		This is just a pane. You cannot close me, you cannot resize me, you cannot minimize me.
 		</p>
 		</div> 
 
 		<div dojoType="dojox.layout.FloatingPane" 
 			title="remote pane" href="../../../dijit/tests/layout/doc0.html"
-			style="width:250px; height:250px; background:#fff; margin:0; "
+			style="width:250px; height:250px; background:#fff; position:absolute; top:300px; left:0px;"
 		></div>
 
 		<div dojoType="dojox.layout.Dock" id="alternateDock" class="alternateDock"></div>
