@@ -17,6 +17,7 @@ dojo.declare(
 	//	that contains children widgets marked with "position" of "top", "bottom", "left", "right", "center".
 	//	It takes it's children marked as top/bottom/left/right, and lays them out along the edges of the center box,
 	//	with "top" and "bottom" extending the full width of the container.
+	//  The outer size must be specified on the BorderContainer node.
 	//
 	// usage
 	//	<style>
