@@ -29,7 +29,10 @@ dojo.declare(
 	//		<div dojoType="ContentPane" position="center">client area</div>
 	//	</div>
 
-	corners: "normal",
+	// priority: String
+	//  choose which panels get priority in the layout: "headline" where the top and bottom extend the full width
+	//  of the container, or sidebar where the left and right sides extend from top to bottom.
+	priority: "headline",
 
 	top: {},
 	bottom: {},
@@ -83,7 +86,7 @@ dojo.declare(
 			}
 		}, this);
 
-		var galley = this.corners == "galley";
+		var sidebarLayout = this.priority == "sidebar";
 		var topStyle = this.top.style;
 		var rightStyle = this.right.style;
 		var leftStyle = this.left.style;
@@ -95,10 +98,10 @@ dojo.declare(
 		var bottomCoords = dojo.coords(this.bottom);
 		var topCoords = dojo.coords(this.top);
 		centerStyle.top = topCoords.h + "px";
-		rightStyle.top = leftStyle.top = galley ? "0px" : centerStyle.top;
+		rightStyle.top = leftStyle.top = sidebarLayout ? "0px" : centerStyle.top;
 		topStyle.top = "0px";
 		bottomStyle.bottom = "0px";
-		if(galley){
+		if(sidebarLayout){
 			topStyle.left = bottomStyle.left = leftCoords.w + "px";
 			topStyle.right = bottomStyle.right = rightCoords.w + "px";
 		}else{
@@ -109,9 +112,7 @@ dojo.declare(
 		centerStyle.left = leftCoords.w + "px";
 		centerStyle.right =  rightCoords.w + "px";
 		centerStyle.bottom = bottomCoords.h + "px";
-		rightStyle.bottom = leftStyle.bottom = galley ? "0px" : centerStyle.bottom;
-
-console.info(rightStyle.top, topStyle.top, bottomStyle.left, leftStyle.left, centerStyle.left, centerStyle.right, rightStyle.bottom);
+		rightStyle.bottom = leftStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
 
 		dojo.forEach(["top", "left", "center", "right", "bottom"], function(pos){
 			var widget = dijit.byNode(this[pos]);
