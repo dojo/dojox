@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>dojoClass detail information</title>
+	<title>using a dojo._Line and dojo._Animation</title>
 	<style type="text/css">
 	        @import "../../../dojo/resources/dojo.css";
 	        @import "../../../dijit/themes/tundra/tundra.css";
@@ -19,7 +19,7 @@
 		}
 	</style>
 	<script type="text/javascript"
-	        djConfig="parseOnLoad: true"
+	        djConfig="parseOnLoad: true, isDebug:false"
 	        src="../../../dojo/dojo.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
@@ -30,9 +30,7 @@
 		dojo.addOnLoad(function(){
 			// dojo._Line is just a simple class to hold some numbers, and return a given point
 			// on the line as a percentage, essentially
-			var _line = new dojo._Line(20,75); // a holder for the numbers 100..300
-			console.log(_line,_line.getValue(0.5 /* Float: 0..1 */)); // should return 200
-
+			var _line = new dojo._Line(20,75); // a holder for the numbers 20 .. 75
 			node = dojo.byId('node');
 
 			surface = dojox.gfx.createSurface(node,400,400);
@@ -75,7 +73,7 @@
 </head>
 <body class="tundra">
 	
-	<h1>animateProperty for dojox.gfx</h1>
+	<h1>an "animateProperty" for dojox.gfx</h1>
 	<div id="node"></div>
 
 </body>

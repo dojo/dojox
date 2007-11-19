@@ -6,6 +6,7 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
 	<script type="text/javascript">	
 		dojo.require("dojox.fx");
+		dojo.require("dojox.fx.ext-dojo.NodeList"); 
 	</script>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
@@ -37,5 +38,8 @@
 	<a href="javascript:void(0)" onClick="dojox.fx.highlight({node:'attention2', color:'#0066FF', duration:800}).play()">test #3</a>
     <br>
 	<a href="javascript:void(0)" onClick="dojox.fx.highlight({node:'attention3', color:'#0066FF', duration:800}).play()">test #4</a>
+    <br>
+	<a href="javascript:void(0)" onClick="dojo.query('a').highlight().play(100)">highlight via dojo.query</a>
+
 
 </body></html>

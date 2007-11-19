@@ -25,6 +25,8 @@
 	</style>
         <script type="text/javascript">
         
+	dojo.require("dojox.fx.ext-dojo.NodeList"); 
+
         var test1 = function(e){
                 // this is our click test,
                 dojox.fx.sizeTo({
@@ -112,7 +114,7 @@
         });
         </pre>
         <p>
-        little test blocks (works in Opera, FF/win/mac:
+        little test blocks (works in FF/win/mac + ie6) <a href="javascript:void(0)" onClick="dojo.query('.testBox').sizeTo({ width: 200, height: 200, duration:400 }).play()">dojo.query() test</a>
         </p>
 
         <div style="position:relative; height:60px; width:600px; margin:0 auto;">        

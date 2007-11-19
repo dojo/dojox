@@ -3,13 +3,6 @@ dojo.provide("dojox.fx._base");
 
 dojo.require("dojo.fx"); 
 
-// convenience functions: 
-dojox.fx.chain = dojo.fx.chain;
-dojox.fx.combine = dojo.fx.combine;
-dojox.fx.wipeIn = dojo.fx.wipeIn;
-dojox.fx.wipeOut = dojo.fx.wipeOut;
-dojox.fx.slideTo = dojo.fx.slideTo;
-
 dojox.fx.sizeTo = function(/* Object */args){
 	// summary: Create an animation that will size a node
 	// description:
@@ -31,36 +24,36 @@ dojox.fx.sizeTo = function(/* Object */args){
 	// |	}).play();
 	//
 	var node = (args.node = dojo.byId(args.node));
-	var compute = dojo.getComputedStyle;
 
 	var method = args.method || "chain"; 
+	if(!args.duration){ args.duration = 500; } // default duration needed
 	if (method=="chain"){ args.duration = Math.floor(args.duration/2); } 
 	
 	var top, newTop, left, newLeft, width, height = null;
 
-	var init = (function(){
-		var innerNode = node;
+	var init = (function(n){
 		return function(){
-			var pos = compute(innerNode).position;
-			top = (pos == 'absolute' ? node.offsetTop : parseInt(compute(node).top) || 0);
-			left = (pos == 'absolute' ? node.offsetLeft : parseInt(compute(node).left) || 0);
-			width = parseInt(dojo.style(node,'width'));
-			height = parseInt(dojo.style(node,'height'));
+			var cs = dojo.getComputedStyle(n);
+			var pos = cs.position;
+			top = (pos == 'absolute' ? n.offsetTop : parseInt(cs.top) || 0);
+			left = (pos == 'absolute' ? n.offsetLeft : parseInt(cs.left) || 0);
+			width = parseInt(cs.width);
+			height = parseInt(cs.height);
 
 			newLeft = left - Math.floor((args.width - width)/2); 
 			newTop = top - Math.floor((args.height - height)/2); 
 
 			if(pos != 'absolute' && pos != 'relative'){
-				var ret = dojo.coords(innerNode, true);
+				var ret = dojo.coords(n, true);
 				top = ret.y;
 				left = ret.x;
-				innerNode.style.position="absolute";
-				innerNode.style.top=top+"px";
-				innerNode.style.left=left+"px";
+				n.style.position="absolute";
+				n.style.top=top+"px";
+				n.style.left=left+"px";
 			}
 		}
-	})();
-	init(); // hmmm, do we need to init() or just the once beforeBegin?
+	})(node);
+	init(); 
 
 	var anim1 = dojo.animateProperty(dojo.mixin({
 		properties: {
@@ -96,32 +89,32 @@ dojox.fx.slideBy = function(/* Object */args){
 	// |	}).play();
 
 	var node = (args.node = dojo.byId(args.node));	
-	var compute = dojo.getComputedStyle;
 	var top = null; var left = null;
-	var init = (function(){
-		var innerNode = node;
+
+	var init = (function(n){
 		return function(){
-			var pos = compute(innerNode,'position');
-			top = (pos == 'absolute' ? node.offsetTop : parseInt(compute(node, 'top')) || 0);
-			left = (pos == 'absolute' ? node.offsetLeft : parseInt(compute(node, 'left')) || 0);
+			var cs = dojo.getComputedStyle(n);
+			var pos = cs.position;
+			top = (pos == 'absolute' ? n.offsetTop : parseInt(cs.top) || 0);
+			left = (pos == 'absolute' ? n.offsetLeft : parseInt(cs.left) || 0);
 			if(pos != 'absolute' && pos != 'relative'){
-				var ret = dojo.coords(innerNode, true);
+				var ret = dojo.coords(n, true);
 				top = ret.y;
 				left = ret.x;
-				innerNode.style.position="absolute";
-				innerNode.style.top=top+"px";
-				innerNode.style.left=left+"px";
+				n.style.position="absolute";
+				n.style.top=top+"px";
+				n.style.left=left+"px";
 			}
 		}
-	})();
+	})(node);
 	init();
 	var _anim = dojo.animateProperty(dojo.mixin({
 		properties: {
 			// FIXME: is there a way to update the _Line after creation?
 			// null start values allow chaining to work, animateProperty will
 			// determine them for us (except in ie6? -- ugh)
-			top: {  /* start: top, */end: top+(args.top||0) },
-			left: { /* start: left, */end: left+(args.left||0) }
+			top: {  /* start: top, */ end: top+(args.top||0) },
+			left: { /* start: left,*/ end: left+(args.left||0) }
 		}
 	}, args));
 	dojo.connect(_anim,"beforeBegin",_anim,init);

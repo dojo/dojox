@@ -4,6 +4,10 @@
 <head>
 	<title>dojox.fx.scroll</title>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+	<style type="text/css">
+		@import "../../../dijit/themes/tundra.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+	</style>
 	<!-- <script type="text/javascript" src="../scroll.js"></script> -->
 	<script type="text/javascript">	
 		dojo.require("dojox.fx.easing"); 
@@ -59,9 +63,10 @@
 	<ul>
 	   <li>dojox.fx.smoothScroll()</li>
 	</ul>
+	<p>
 	which will create and return a dojo._Animation to scroll 
-	a window to a desired offset.
-	<p></p> 
+	a window to a desired offset. (or a node that has overflow:auto/hidden, if you pass the domNode as the win: argument)
+	</p> 
 	
 	
 	<h2><code>getScroll</code></h2>

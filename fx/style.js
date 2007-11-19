@@ -23,31 +23,30 @@ dojox.fx.addClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 	//	(calculating the differences itself)
 	//
 	// example:
-	// 
-	// 	.bar { line-height: 12px; }
-	// 	.foo { line-height: 40px; }
-	// 	<div class="bar" id="test">
-	//	Multi<br>line<br>text
-	//	</div> 
-	// 
-	// 	// animate to line-height:40px
-	// 	dojo.fx.addClass({ node:"test", cssClass:"foo" }).play();
+	// | 
+	// |	.bar { line-height: 12px; }
+	// |	.foo { line-height: 40px; }
+	// |	<div class="bar" id="test">
+	// |	Multi<br>line<br>text
+	// |	</div> 
+	// |
+	// |	// animate to line-height:40px
+	// |	dojo.fx.addClass({ node:"test", cssClass:"foo" }).play();
 	// 
 	var node = (args.node = dojo.byId(args.node)); 
 
-	var pushClass = (function(){
+	var pushClass = (function(n){
 		// summary: onEnd we want to add the class to the node 
 		//	(as dojo.addClass naturally would) in case our 
 		//	class parsing misses anything the browser would 
 		// 	otherwise interpret. this may cause some flicker,
 		//	and will only apply the class so children can inherit 
 		//	after the animation is done (potentially more flicker)
-		var innerNode = node; // FIXME: why do we do this like this?
 		return function(){
-			dojo.addClass(innerNode, args.cssClass); 
-			innerNode.style.cssText = _beforeStyle; 
+			dojo.addClass(n, args.cssClass); 
+			n.style.cssText = _beforeStyle; 
 		}
-	})();
+	})(node);
 
 	// _getCalculatedStleChanges is the core of our style/class animations
 	var mixedProperties = dojox.fx._getCalculatedStyleChanges(args,true);
@@ -79,7 +78,7 @@ dojox.fx.removeClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 
 	var node = (args.node = dojo.byId(args.node)); 
 
-	var pullClass = (function(){
+	var pullClass = (function(n){
 		// summary: onEnd we want to remove the class from the node 
 		//	(as dojo.removeClass naturally would) in case our class
 		//	parsing misses anything the browser would otherwise 
@@ -87,12 +86,11 @@ dojox.fx.removeClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 		//	apply the class so children can inherit after the
 		//	animation is done (potentially more flicker)
 		//
-		var innerNode = node;
 		return function(){
-			dojo.removeClass(innerNode, args.cssClass); 
-			innerNode.style.cssText = _beforeStyle; 
+			dojo.removeClass(n, args.cssClass); 
+			n.style.cssText = _beforeStyle; 
 		}
-	})();
+	})(node);
 
 	var mixedProperties = dojox.fx._getCalculatedStyleChanges(args,false);
 	var _beforeStyle = node.style.cssText; 
@@ -134,8 +132,8 @@ dojox.fx.toggleClass = function(/*DomNode|String*/node, /*String*/cssClass, /*Bo
 };
 
 dojox.fx._allowedProperties = [
-	// summary:
-	//	this is our pseudo map of properties we will check for.
+	// summary: Our pseudo map of properties we will check for.
+	// description:
 	//	it should be much more intuitive. a way to normalize and
 	//	"predict" intent, or even something more clever ... 
 	//	open to suggestions.
@@ -144,7 +142,7 @@ dojox.fx._allowedProperties = [
 	"width",
 	"height",
 	// only if position = absolute || relative?
-	"left", "top", "right", "bottom", 
+	"left", "top", // "right", "bottom", 
 	// these need to be filtered through dojo.colors?
 	// "background", // normalize to:
 	/* "backgroundImage", */
@@ -196,12 +194,12 @@ dojox.fx._getCalculatedStyleChanges = function(/*dojox.fx._arg.StyleArgs*/ args,
 	// 	false to calculate what removing the class would do
 
 	var node = (args.node = dojo.byId(args.node)); 
-	var compute = dojo.getComputedStyle(node);
+	var cs = dojo.getComputedStyle(node);
 
 	// take our snapShots
-	var _before = dojox.fx._getStyleSnapshot(compute);
+	var _before = dojox.fx._getStyleSnapshot(cs);
 	dojo[(addClass ? "addClass" : "removeClass")](node,args.cssClass); 
-	var _after = dojox.fx._getStyleSnapshot(compute);
+	var _after = dojox.fx._getStyleSnapshot(cs);
 	dojo[(addClass ? "removeClass" : "addClass")](node,args.cssClass); 
 
 	var calculated = {};

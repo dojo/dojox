@@ -55,6 +55,9 @@ Documentation
 			dojo.fx.easing.easeIn/easeOut/easeInOut
 		to use in an _Animation easing: property	
 
+	dojox.fx.ext-dojo.NodeList - extensions to dojo.NodeList-fx wrapping the
+		relevant dojox.fx animations into dojo.NodeList 
+
 -------------------------------------------------------------------------------
 Installation instructions
 
