@@ -34,11 +34,11 @@ dojo.declare(
 	//  of the container, or sidebar where the left and right sides extend from top to bottom.
 	priority: "headline",
 
-	top: {},
-	bottom: {},
-	left: {}, // inside?
-	right: {}, // outside?
-	center: {},
+	_top: {},
+	_bottom: {},
+	_left: {}, // aka inside in LTR mode
+	_right: {}, // aka outside in LTR mode
+	_center: {},
 
 	layout: function(){
 		this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
@@ -81,22 +81,32 @@ dojo.declare(
 		dojo.forEach(children, function(child){
 			var style = child.domNode.style;
 			style.position = "absolute";
-			if(child.position){
-				this[child.position] = child.domNode;
+			var position = child.position;
+			if(position){
+				if(position == "leading"){ position = "left"; }
+				if(position == "trailing"){ position = "right"; }
+				if(!dojo._isBodyLtr()){
+					if(position == "left"){
+						position = "right";
+					}else if(position == "right"){
+						position = "left";
+					}
+				}
+				this["_"+position] = child.domNode;
 			}
 		}, this);
 
 		var sidebarLayout = this.priority == "sidebar";
-		var topStyle = this.top.style;
-		var rightStyle = this.right.style;
-		var leftStyle = this.left.style;
-		var centerStyle = this.center.style;
-		var bottomStyle = this.bottom.style;
-		var rightCoords = dojo.coords(this.right);
-		var leftCoords = dojo.coords(this.left);
-		var centerCoords = dojo.coords(this.center);
-		var bottomCoords = dojo.coords(this.bottom);
-		var topCoords = dojo.coords(this.top);
+		var topStyle = this._top.style;
+		var rightStyle = this._right.style;
+		var leftStyle = this._left.style;
+		var centerStyle = this._center.style;
+		var bottomStyle = this._bottom.style;
+		var rightCoords = dojo.coords(this._right);
+		var leftCoords = dojo.coords(this._left);
+		var centerCoords = dojo.coords(this._center);
+		var bottomCoords = dojo.coords(this._bottom);
+		var topCoords = dojo.coords(this._top);
 		centerStyle.top = topCoords.h + "px";
 		rightStyle.top = leftStyle.top = sidebarLayout ? "0px" : centerStyle.top;
 		topStyle.top = "0px";
@@ -115,7 +125,7 @@ dojo.declare(
 		rightStyle.bottom = leftStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
 
 		dojo.forEach(["top", "left", "center", "right", "bottom"], function(pos){
-			var widget = dijit.byNode(this[pos]);
+			var widget = dijit.byNode(this["_"+pos]);
 			if(widget && widget.resize){ widget.resize(); }
 		}, this);
 	},
@@ -130,7 +140,7 @@ dojo.declare(
 // into the base widget class.  (This is a hack, but it's effective.)
 dojo.extend(dijit._Widget, {
 	// position: String
-	//		"top", "bottom", "left", "right", "center".
+	//		"top", "bottom", "leading", "trailing", "left", "right", "center".
 	//		See the BorderContainer description for details on this parameter.
 	position: 'none'
 });
