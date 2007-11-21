@@ -123,6 +123,23 @@ dojo.declare(
 		centerStyle.right =  rightCoords.w + "px";
 		centerStyle.bottom = bottomCoords.h + "px";
 		rightStyle.bottom = leftStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
+		if(dojo.isIE){
+			this.domNode._top = this._top;
+			this.domNode._bottom = this._bottom;
+			var containerHeight = "dojo.style("+this.id+",'height')";
+			var middleHeight = containerHeight+"-dojo.style("+this.id+"._top,'height')-dojo.style("+this.id+"._bottom, 'height')";
+			centerStyle.setExpression("height", middleHeight);
+//What I'd think would work
+//			leftStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
+//			rightStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
+//What actually works
+			leftStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight);
+			rightStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight);
+
+			if(dojo.isIE < 7){
+				//TODO
+			}
+		}
 
 		dojo.forEach(["top", "left", "center", "right", "bottom"], function(pos){
 			var widget = dijit.byNode(this["_"+pos]);
