@@ -137,7 +137,13 @@ dojo.declare(
 			rightStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight);
 
 			if(dojo.isIE < 7){
-				//TODO
+				this.domNode._left = this._left;
+				this.domNode._right = this._right;
+				var containerWidth = "dojo.style("+this.id+",'width')";
+				var middleWidth = containerWidth+"-dojo.style("+this.id+"._left,'width')-dojo.style("+this.id+"._right, 'width')";
+				centerStyle.setExpression("width", middleWidth);
+				topStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth");
+				bottomStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth");
 			}
 		}
 
