@@ -72,7 +72,6 @@ dojo.declare("dojox.layout.FloatingPane",
 	// privates:
 	_restoreState: {},
 	_allFPs: [],
-	_highlighted: false,
 	_startZ: 100,
 	
 	postCreate: function(){
@@ -148,7 +147,7 @@ dojo.declare("dojox.layout.FloatingPane",
 			} 
 		} 		
 		this.connect(this.focusNode,"onmousedown","bringToTop");
-		this.connect(this.domNode,	"onmousedown","bringToTop");
+		this.connect(this.domNode,"onmousedown","bringToTop");
 	},
 
 	setTitle: function(/* String */ title){
@@ -202,7 +201,6 @@ dojo.declare("dojox.layout.FloatingPane",
 	minimize: function(){
 		// summary: hide and dock the FloatingPane
 		if(!this._isDocked){ this.hide(dojo.hitch(this,"_dock")); } 
-		if(this._highlighted){ this.highlight(); } // toggle off
 	},
 
 	maximize: function(){
@@ -216,24 +214,6 @@ dojo.declare("dojox.layout.FloatingPane",
 		dojo.addClass(this.focusNode,"floatingPaneMaximized");
 		this.resize(dijit.getViewport());
 		this._maximized = true;
-	},
-
-	highlight: function(){
-		// summary: Make this node modal-like, and inject an underlay between it and the other FloatingPanes
-		if(!this._highlightSetup){
-			this._setupHighlight();
-		}
-		this.bringToTop();
-		this._underlay._setZindex(this._highZ - 1);
-
-		this._underlay[(this._highlighted ? "hide" : "show")]();
-		this._highlighted = !this._highlighted;
-
-	},
-
-	_setupHighlight: function(){	
-		this._underlay = new dojox.layout._Underlay({});
-		this._highlightSetup = true;
 	},
 
 	_restore: function(){
@@ -282,8 +262,7 @@ dojo.declare("dojox.layout.FloatingPane",
 		windows.push(this);
 		
 		dojo.forEach(windows, function(w, x){
-			this._highZ = this._startZ + (x * 2);
-			w.domNode.style.zIndex = this._highZ;
+			w.domNode.style.zIndex = this._startZ + (x * 2);
 			dojo.removeClass(w.domNode, "dojoxFloatingPaneFg");
 		}, this);
 		dojo.addClass(this.domNode, "dojoxFloatingPaneFg");
@@ -292,7 +271,6 @@ dojo.declare("dojox.layout.FloatingPane",
 	destroy: function(){
 		// summary: Destroy this FloatingPane completely
 		this._allFPs.splice(dojo.indexOf(this._allFPs, this), 1);
-		this._underlay.destroy();
 		this.inherited("destroy", arguments);
 	}
 });
@@ -381,86 +359,3 @@ dojo.declare("dojox.layout._DockNode", [dijit._Widget,dijit._Templated], {
 	}
 
 });
-
-
-dojo.declare(
-	"dojox.layout._Underlay",
-	[dijit._Widget, dijit._Templated],
-	{
-		// summary: The component that grays out the screen behind the FloatingPane 
-		// description: This is copied directly from dijit/Dialog.js - but we don't need
-		// any of the Dialog code, just these 30 lines
-	
-		// Template has two divs; outer div is used for fade-in/fade-out, and also to hold background iframe.
-		// Inner div has opacity specified in CSS file.
-		templateString: "<div class=dijitDialogUnderlayWrapper id='${id}_underlay'><div class=dijitDialogUnderlay dojoAttachPoint='node'></div></div>",
-
-		// weight: Integer
-		//	The z-index to give this underlay
-		weight: null,
-
-		postCreate: function(){
-			// summary: Append the underlay to the body
-			dojo.body().appendChild(this.domNode);
-			this.bgIframe = new dijit.BackgroundIframe(this.domNode);
-		},
-
-
-		layout: function(){
-			// summary: Sets he background to the size of the viewport
-			//
-			// description:
-			//	Sets the background to the size of the viewport (rather than the size
-			//	of the document) since we need to cover the whole browser window, even
-			//	if the document is only a few lines long.
-
-			var viewport = dijit.getViewport();
-			var is = this.node.style,
-				os = this.domNode.style;
-
-			os.top = viewport.t + "px";
-			os.left = viewport.l + "px";
-			is.width = viewport.w + "px";
-			is.height = viewport.h + "px";
-
-			// process twice since the scroll bar may have been removed
-			// by the previous resizing
-			var viewport2 = dijit.getViewport();
-			if(viewport.w != viewport2.w){ is.width = viewport2.w + "px"; }
-			if(viewport.h != viewport2.h){ is.height = viewport2.h + "px"; }
-		},
-
-		show: function(){
-			// summary: Show the dialog underlay
-			if(this.weight){ this._setZindex(this.weight); }
-			this.domNode.style.display = "block";
-			this.layout();
-			if(this.bgIframe.iframe){
-				this.bgIframe.iframe.style.display = "block";
-			}
-			this._scrollHandler = this.connect(window, "onscroll", "layout");
-			this._resizeHandler = this.connect(window, "onresize", "layout");
-		},
-
-		hide: function(){
-			// summary: hides the dialog underlay
-			this.domNode.style.display = "none";
-			if(this.bgIframe.iframe){
-				this.bgIframe.iframe.style.display = "none";
-			}
-			this.disconnect(this._resizeHandler);
-			this.disconnect(this._scrollHandler); 
-		},
-
-		uninitialize: function(){
-			if(this.bgIframe){
-				this.bgIframe.destroy();
-			}
-		},
-	
-		_setZindex: function(/* Int */z){
-			dojo.style(this.domNode,"zIndex",z);
-		}
-
-	}
-);
