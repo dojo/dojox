@@ -40,6 +40,13 @@ dojo.declare(
 	_right: {}, // aka outside in LTR mode
 	_center: {},
 
+	postCreate: function(){
+		this.inherited("postCreate", arguments);
+
+		this.domNode.style.position = "relative";
+		dojo.addClass(this.domNode, "dijitBorderContainer");
+	},
+
 	layout: function(){
 		this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 	},
@@ -73,16 +80,14 @@ dojo.declare(
 //TODO: what is dim and why doesn't it look right?
 		// copy dim because we are going to modify it
 //		dim = dojo.mixin({}, dim);
-
-		this.domNode.style.position = "relative";
-
+if(!this._init){
+		this._splitters = {};
 		//FIXME: do this once? somewhere else?
-		dojo.addClass(container, "dijitBorderContainer");
-		dojo.forEach(children, function(child){
-			var style = child.domNode.style;
-			style.position = "absolute";
+		dojo.forEach(this.getChildren(), function(child){
 			var position = child.position;
 			if(position){
+				child.domNode.style.position = "absolute";
+
 				if(position == "leading"){ position = "left"; }
 				if(position == "trailing"){ position = "right"; }
 				if(!dojo._isBodyLtr()){
@@ -93,8 +98,16 @@ dojo.declare(
 					}
 				}
 				this["_"+position] = child.domNode;
+
+				if(child.splitter){
+					var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, position: position });
+					this._splitters[position] = splitter.domNode;
+					dojo.place(splitter.domNode, child.domNode, "after");
+				}
 			}
 		}, this);
+this._init = true;
+}
 
 		var sidebarLayout = this.priority == "sidebar";
 		var topStyle = this._top.style;
@@ -107,21 +120,50 @@ dojo.declare(
 		var centerCoords = dojo.coords(this._center);
 		var bottomCoords = dojo.coords(this._bottom);
 		var topCoords = dojo.coords(this._top);
-		centerStyle.top = topCoords.h + "px";
+
+		var topSplitter = this._splitters.top;
+		if(topSplitter){
+			topSplitter.style.top = topCoords.h + "px";
+			topSplitter.style.left = (sidebarLayout ? leftCoords.w : "0") + "px";
+			topSplitter.style.right = (sidebarLayout ? rightCoords.w : "0") + "px";
+		}
+
+		var bottomSplitter = this._splitters.bottom;
+		if(bottomSplitter){
+			bottomSplitter.style.bottom = bottomCoords.h + "px";
+			bottomSplitter.style.left = (sidebarLayout ? leftCoords.w : "0") + "px";
+			bottomSplitter.style.right = (sidebarLayout ? rightCoords.w : "0") + "px";
+		}
+
+		var leftSplitter = this._splitters.left;
+		if(leftSplitter){
+			leftSplitter.style.left = leftCoords.w + "px";
+			leftSplitter.style.top = (sidebarLayout ? "0" : topCoords.h) + "px";
+			leftSplitter.style.bottom = (sidebarLayout ? "0" : bottomCoords.h) + "px";
+		}
+
+		var rightSplitter = this._splitters.right;
+		if(rightSplitter){
+			rightSplitter.style.right = rightCoords.w + "px";
+			rightSplitter.style.top = (sidebarLayout ? "0" : topCoords.h) + "px";
+			rightSplitter.style.bottom = (sidebarLayout ? "0" : bottomCoords.h) + "px";
+		}
+
+		centerStyle.top = topCoords.h + (topSplitter ? dojo.coords(topSplitter).h : 0) + "px";
 		rightStyle.top = leftStyle.top = sidebarLayout ? "0px" : centerStyle.top;
 		topStyle.top = "0px";
 		bottomStyle.bottom = "0px";
 		if(sidebarLayout){
-			topStyle.left = bottomStyle.left = leftCoords.w + "px";
-			topStyle.right = bottomStyle.right = rightCoords.w + "px";
+			topStyle.left = bottomStyle.left = leftCoords.w + (leftSplitter && !dojo._isBodyLtr() ? dojo.coords(leftSplitter).w : 0) + "px";
+			topStyle.right = bottomStyle.right = rightCoords.w + (rightSplitter && dojo._isBodyLtr() ? dojo.coords(rightSplitter).w : 0) + "px";
 		}else{
 			topStyle.left = topStyle.right = "0px";
 			bottomStyle.left = bottomStyle.right = "0px";
 		}
 		leftStyle.left = rightStyle.right = "0px";
-		centerStyle.left = leftCoords.w + "px";
-		centerStyle.right =  rightCoords.w + "px";
-		centerStyle.bottom = bottomCoords.h + "px";
+		centerStyle.left = leftCoords.w + (leftSplitter ? dojo.coords(leftSplitter).w : 0) + "px";
+		centerStyle.right =  rightCoords.w + (rightSplitter ? dojo.coords(rightSplitter).w : 0) + "px";
+		centerStyle.bottom = bottomCoords.h + (bottomSplitter ? dojo.coords(bottomSplitter).h : 0) + "px";
 		rightStyle.bottom = leftStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
 		if(dojo.isIE){
 			this.domNode._top = this._top;
@@ -165,5 +207,58 @@ dojo.extend(dijit._Widget, {
 	// position: String
 	//		"top", "bottom", "leading", "trailing", "left", "right", "center".
 	//		See the BorderContainer description for details on this parameter.
-	position: 'none'
+	position: 'none',
+
+	// splitter: Boolean
+	splitter: false
+});
+
+dojo.require("dijit._Templated");
+
+dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
+{
+	thickness: 10,
+	container: null,
+	childNode: null,
+	position: null,
+	_handlers: [],
+
+	// summary: A draggable spacer between two items in a BorderContainer
+	templateString: '<div class="dijitSplitter" dojoAttachEvent="onmousedown:_startDrag" style="position: absolute; background-color: red"></div>',
+
+	postCreate: function(){
+		this.inherited("postCreate", arguments);
+		this.horizontal = /top|bottom/.test(this.position);
+		dojo.addClass(this.domNode, "dijitSplitter" + this.horizontal ? "Horizontal" : "Vertical");		
+		this.domNode.style[this.horizontal ? "height" : "width"] = this.thickness + "px";
+	},
+
+	_startDrag: function(e){
+		this.pageOffset = /top|bottom/.test(this.position) ? e.pageY : e.pageX;
+		this.childCoords = dojo.coords(this.childNode);
+
+		this._handlers.push(dojo.connect(dojo.doc, "onmousemove", this, "_drag"));
+		this._handlers.push(dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag"));
+		dojo.stopEvent(e);
+	},
+
+	_drag: function(e){
+		var factor = /top|left/.test(this.position) ? 1 : -1;
+		if(this.horizontal){
+			this.childNode.style.height = factor * (e.pageY - this.pageOffset) + this.childCoords.h + "px";
+		}else{
+			this.childNode.style.width = factor * (e.pageX - this.pageOffset) + this.childCoords.w + "px";
+		}
+		this.container.layout();
+	},
+
+	_stopDrag: function(e){
+		dojo.forEach(this._handlers, dojo.disconnect);
+		this._handlers = [];
+	},
+
+	destroy: function(){
+		this.inherited("destroy", arguments);
+		this._stopDrag();
+	}
 });
