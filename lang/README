@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 dojox.lang
 -------------------------------------------------------------------------------
-Version 0.990
+Version 0.991
 Release date: 07/30/2007
 -------------------------------------------------------------------------------
 Project state:
@@ -9,10 +9,12 @@ Project state:
 -------------------------------------------------------------------------------
 Credits
 	Eugene Lazutkin (eugene.lazutkin@gmail.com)
+	Peter Higgins (dante) port of work for Ivan Sagalaev (CLA)
 -------------------------------------------------------------------------------
 Project description
 
-Implementation of common functional operations, and provisions.
+Implementation of common functional operations, and provisions, and a
+syntax highlighting engine.
 Later we can add other JS language-related helpers.
 -------------------------------------------------------------------------------
 Dependencies:
