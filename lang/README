@@ -9,12 +9,10 @@ Project state:
 -------------------------------------------------------------------------------
 Credits
 	Eugene Lazutkin (eugene.lazutkin@gmail.com)
-	Peter Higgins (dante) port of work for Ivan Sagalaev (CLA)
 -------------------------------------------------------------------------------
 Project description
 
-Implementation of common functional operations, and provisions, and a
-syntax highlighting engine.
+Implementation of common functional operations, and provisions
 Later we can add other JS language-related helpers.
 -------------------------------------------------------------------------------
 Dependencies:
