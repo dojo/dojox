@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="../FloatingPane.js"></script>
 	<script type="text/javascript">
 		// dojo.require("dojox.layout.FloatingPane"); 
+		dojo.require("dijit.layout.TabContainer");
 		dojo.require("dijit.form.ComboBox"); 
 		dojo.require("dijit.form.Button"); 
 		dojo.require("dojo.parser"); // scan page for widgets
@@ -140,5 +141,27 @@
 		node is not being manipulated, just having it's innerHTML read. For demonstration purposes.
 		</p>
 		</div>
+		
+		<div dojotype="dojox.layout.FloatingPane" title="Child layout test" 
+			style="width:400px; height:300px;" resizable="true">
+			<div dojotype="dijit.layout.TabContainer">
+				<div dojotype="dijit.layout.ContentPane" title="Tab 1">
+					First Page
+				</div>
+				<div dojotype="dijit.layout.ContentPane" title="Tab 2">
+					<div dojotype="dijit.layout.TabContainer">
+						<div dojotype="dijit.layout.ContentPane" title="Sub-tab 1">
+							Story of Paul.
+						</div>
+						<div dojotype="dijit.layout.ContentPane" title="Sub-tab 2">
+							Story about Paul.
+						</div>
+						<div dojotype="dijit.layout.ContentPane" title="Sub-tab 3">
+							Story about... guess who.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
 </body>
 </html>

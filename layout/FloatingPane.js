@@ -98,6 +98,8 @@ dojo.declare("dojox.layout.FloatingPane",
 	},
 	
 	startup: function(){
+		if(this._started){ return; }
+		
 		this.inherited("startup",arguments);
 
 		if(this.resizable){
@@ -147,7 +149,12 @@ dojo.declare("dojox.layout.FloatingPane",
 			} 
 		} 		
 		this.connect(this.focusNode,"onmousedown","bringToTop");
-		this.connect(this.domNode,"onmousedown","bringToTop");
+		this.connect(this.domNode,	"onmousedown","bringToTop");
+
+		// Initial resize to give child the opportunity to lay itself out
+		this.resize(dojo.coords(this.domNode));
+		
+		this._started = true;
 	},
 
 	setTitle: function(/* String */ title){
@@ -159,7 +166,7 @@ dojo.declare("dojox.layout.FloatingPane",
 		// summary: close and destroy this widget
 		if(!this.closable){ return; }
 		dojo.unsubscribe(this._listener);
-		this.hide(dojo.hitch(this,"destroy")); 
+		this.hide(dojo.hitch(this,"destroyRecursive",arguments)); 
 	},
 
 	hide: function(/* Function? */ callback){
@@ -226,7 +233,6 @@ dojo.declare("dojox.layout.FloatingPane",
 
 	_dock: function(){
 		if(!this._isDocked && this.dockable){
-			if(this._highlighted){ this.highlight(); }
 			this._dockNode = this.dockTo.addNode(this);
 			this._isDocked = true;
 		}
@@ -235,17 +241,24 @@ dojo.declare("dojox.layout.FloatingPane",
 	resize: function(/* Object */dim){
 		// summary: size the widget and place accordingly
 		this._currentState = dim;
-		var dns = this.domNode.style;
 
-		// resizehandle only reports w and h only
+		// From the ResizeHandle we only get width and height information
+		var dns = this.domNode.style;
 		if(dim.t){ dns.top = dim.t+"px"; }
 		if(dim.l){ dns.left = dim.l+"px"; }
-
 		dns.width = dim.w+"px"; 
-		this.canvas.style.width = dim.w+"px";
-
 		dns.height = dim.h+"px";
-		this.canvas.style.height = (dim.h - this.focusNode.offsetHeight)+"px";
+
+		// Now resize canvas
+		var mbCanvas = {l: 0, t: 0, w: dim.w, h: (dim.h - this.focusNode.offsetHeight)};
+		dojo.marginBox(this.canvas, mbCanvas);
+
+		// If the single child can resize, forward resize event to it so it can
+		// fit itself properly into the content area
+		this._checkIfSingleChild();
+		if(this._singleChild && this._singleChild.resize){
+			this._singleChild.resize(mbCanvas);
+		}
 	},
 	
 	bringToTop: function(){

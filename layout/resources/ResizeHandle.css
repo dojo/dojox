@@ -22,6 +22,7 @@
 	cursor: w-resize; 
 }
 
+
 .dojoxResizeN { 
 	cursor: n-resize; 
 }
@@ -29,4 +30,5 @@
 .dojoxResizeHandleClone {
 	position:absolute; top:0; left:0; 
 	border:1px dashed #666; 
+	z-index:999; 
 }
