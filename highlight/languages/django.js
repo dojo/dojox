@@ -1,6 +1,6 @@
-dojo.provide("dojox.lang.languages.django"); 
+dojo.provide("dojox.highlight.languages.django"); 
 
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
     // summary: django higlight definitions     
     django : {
 	defaultMode: {

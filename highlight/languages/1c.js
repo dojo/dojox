@@ -1,11 +1,11 @@
-dojo.provide("dojox.lang.languages.1c");
+dojo.provide("dojox.highlight.languages.1c");
 
 var IDENT_RE_RU = '[a-zA-Zа-яА-Я][a-zA-Z0-9_а-яА-Я]*';
 var NUMBER_RE = '\\b\\d+(\\.\\d+)?';
 
 var OneS_KEYWORDS = {'процедура':1,'функция':1,'экспорт':1,'перем':1,'конецфункции':1,'конецпроцедуры':1,'если':1,'тогда':1,'иначе':1,'иначеесли':1,'конецесли':1,'попытка':1,'исключение':1,'конецпопытки':1,'ложь':1,'истина':1,'неопределено':1,'и':1,'или':1,'не':1,'null':1,'для':1,'каждого':1,'из':1,'по':1,'цикл':1,'конеццикла':1};
 
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   "1c" : {
     defaultMode: {
       lexems: [IDENT_RE_RU],

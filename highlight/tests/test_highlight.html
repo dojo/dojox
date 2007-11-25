@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <head>
-	<title>dojox.lang.highlight | The Dojo Toolkit</title>
+	<title>dojox.highlight - syntax highlighting | The Dojo Toolkit</title>
 	<style type="text/css">
 		@import "../../../dijit/tests/css/dijitTests.css";
 
 		/* a sample set of definitions to use as a foundation to color your code */
 		@import "../languages/highlight.css";
 
-		/* additional styling for this test case */				
+		/* additional styling for this test case */
 		pre code[class]:after {
 		  content: 'highlight: ' attr(class);
 		  display: block; text-align: right;
@@ -34,31 +34,32 @@
 	<script type="text/javascript">
 		// initHighlightOnLoad is deprecated.
 		// if parseOnLoad==true, the onLoad init stuff is run.
-		// if parseOnLoad==false, you can call initHightlightOnLoad
-		// at any time, though the parameters are null.
-		// or dojox.lang.highlight.init(node);
-		// utilizing the dojo build system, the dojox.lang.Highlighter
+		// if parseOnLoad==false, you can call dojox.highlight.init(domNode)
+		// 
+		// utilizing the dojo build system, the dojox.highlight engine
 		// will "do it's best" based on the language maps available
 		// at the time of construction.
+		//
+		dojo.require("dojox.highlight");
+
 		// several layer-like files have been provided grouping
 		// similar langauges, and a catch all language module
-		// dojox.lang.languages._all is available for "best results"
-		dojo.require("dojox.lang.highlight");
+		// dojox.highlight.languages._all is available for "best results"
 
 		// we need some language definitions:		
-		dojo.require("dojox.lang.languages._all");
-		//dojo.require("dojox.lang.languages._static");
-		//dojo.require("dojox.lang.languages._dynamic");
-		//dojo.require("dojox.lang.languages._www");
+		dojo.require("dojox.highlight.languages._all");
+		//dojo.require("dojox.highlight.languages._static");
+		//dojo.require("dojox.highlight.languages._dynamic");
+		//dojo.require("dojox.highlight.languages._www");
 	
 
 	</script>
 </head>
 <body>
 
-<h1 class="testTitle">dojox.lang.Highlight</h1>
+<h1 class="testTitle">dojox.highlight</h1>
 
-<p>syntax highlighing for a number of languages.</p>
+<p>client-side syntax highlighing for a number of languages.</p>
 
 <h2>Examples:</h2>
 

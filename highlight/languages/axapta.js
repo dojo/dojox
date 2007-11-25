@@ -1,9 +1,9 @@
-dojo.provide("dojox.lang.languages.axapta"); 
+dojo.provide("dojox.highlight.languages.axapta"); 
 //
-// Axapta definition (с) Dmitri Roudakov <dmitri@roudakov.ru>
+// Axapta definition (c) Dmitri Roudakov <dmitri@roudakov.ru>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   // summary: axapta highlight definitions
   axapta  : {
     defaultMode: {

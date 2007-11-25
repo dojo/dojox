@@ -1,9 +1,9 @@
-dojo.provide("dojox.lang.languages.rsl"); 
+dojo.provide("dojox.highlight.languages.rsl"); 
 //
 // RenderMan Shading Language (c) Konstantin Evdokimenko <qewerty@gmail.com>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.lang.LANGUAGES, {
+dojo.mixin(dojox.highlight.LANGUAGES, {
   // summary: RenderMan Shading Langauge highlight definitions
   rsl : {
     defaultMode: {

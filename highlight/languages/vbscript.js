@@ -1,9 +1,9 @@
-dojo.provide("dojox.lang.languages.vbscript");
+dojo.provide("dojox.highlight.languages.vbscript");
 //
 // VBScript definition (c) Nikita Ledyaev <lenikita@yandex.ru>
 // released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   // summary: VBScript highlight definitions
   vbscript : {
     defaultMode: {

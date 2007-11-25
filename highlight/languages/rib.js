@@ -1,9 +1,9 @@
-dojo.provide("dojox.lang.languages.rib"); 
+dojo.provide("dojox.highlight.languages.rib"); 
 //
 // RenderMan Interface Bytestream (c) Konstantin Evdokimenko <qewerty@gmail.com>
 // Released BSD, Contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   // summary: RenderMan Inferface Bytestream highlight definitions
   rib  : {
     defaultMode: {

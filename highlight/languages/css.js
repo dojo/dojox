@@ -1,6 +1,6 @@
-dojo.provide("dojox.lang.languages.css"); 
+dojo.provide("dojox.highlight.languages.css"); 
 
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   css : {
     defaultMode: {
       contains: ['id', 'class', 'attr_selector', 'rules', 'comment'],

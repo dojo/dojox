@@ -1,6 +1,6 @@
-dojo.provide("dojox.lang.languages.cpp"); 
+dojo.provide("dojox.highlight.languages.cpp"); 
 
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   // summary: C++ highlight definitions
   cpp: {
     defaultMode: {

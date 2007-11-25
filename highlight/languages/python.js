@@ -1,6 +1,6 @@
-dojo.provide("dojox.lang.languages.python"); 
+dojo.provide("dojox.highlight.languages.python"); 
 
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
     // summary: Python highlight definitions 
     python : {
         defaultMode: {

@@ -1,9 +1,9 @@
-dojo.provide("dojox.lang.languages.ruby"); 
+dojo.provide("dojox.highlight.languages.ruby"); 
 //
 // Ruby definition (c) Anton Kovalyov <anton@kovalyov.net>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   // summary: Ruby highlight definitions
   ruby : {
     defaultMode: {

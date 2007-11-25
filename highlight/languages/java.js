@@ -1,9 +1,9 @@
-dojo.provide("dojox.lang.languages.java"); 
+dojo.provide("dojox.highlight.languages.java"); 
 //
 // Java definition (с) Vsevolod Solovyov <vsevolod.solovyov@gmail.com>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   // summary: Java highlight definitions
   java : {
     defaultMode: {

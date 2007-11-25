@@ -1,6 +1,6 @@
-dojo.provide("dojox.lang.languages.javascript");
+dojo.provide("dojox.highlight.languages.javascript");
 
-dojo.mixin(dojox.lang.LANGUAGES,{
+dojo.mixin(dojox.highlight.LANGUAGES,{
   javascript : {
     defaultMode: {
       lexems: [UNDERSCORE_IDENT_RE],
