@@ -299,6 +299,12 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			var features = store.getFeatures();
 			t.assertTrue(features["dojo.data.api.Read"]);
+			t.assertTrue(features["dojo.data.api.Identity"]);
+			var count = 0;
+			for (i in features){
+				count++;
+			}
+			t.assertEqual(2, count);
 		},
 		function testReadAPI_functionConformance(t){
 			//	summary:
