@@ -7,6 +7,7 @@ try{
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.XmlStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.FlickrStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.FlickrRestStore");
+	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.jsonPathStore");
 	//Load only if in a browser AND if the location is remote (not file.  As it needs a PHP server to work).
 	if(dojo.isBrowser){
 		if(window.location.protocol !== "file:"){
