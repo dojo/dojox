@@ -246,9 +246,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	},
 
 	getFeatures: function(){
-		return {
-			'dojo.data.api.Read': true
-		};
+		return this._features;
 	},
 
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
