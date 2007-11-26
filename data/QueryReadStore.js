@@ -160,7 +160,10 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		// >>> store.isItem({name:"me", label:"me too"});
 		// false
 		//
-		return typeof something.r!="undefined" && something.r==this;
+		if(something){
+			return typeof something.r!="undefined" && something.r==this;
+		}
+		return false;
 	},
 	
 	isItemLoaded: function(/* anything */ something) {
@@ -397,10 +400,10 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			if(!(item === undefined)){
 				if(keywordArgs.onItem){
 					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
-					keywordArgs.onItem.call(scope, item);
+					keywordArgs.onItem.call(scope, {i:item, r:this});
 				}
 				return;
-			}			
+			}
 		}
 
 		// Otherwise we need to go remote
@@ -462,5 +465,6 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 
 dojo.declare("dojox.data.QueryReadStore.InvalidItemError", Error, {});
 dojo.declare("dojox.data.QueryReadStore.InvalidAttributeError", Error, {});
+
 
 
