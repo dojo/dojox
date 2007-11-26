@@ -353,7 +353,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			// Since Math.randon() returns something like: 0.23453463, we just remove the "0."
 			// probably just for esthetic reasons :-).
 			this.lastRequestHash = new Date().getTime()+"-"+String(Math.random()).substring(2);
-			this._lastServerQuery = serverQuery;
+			this._lastServerQuery = dojo.mixin({}, serverQuery);
 		}
 	},
 	
