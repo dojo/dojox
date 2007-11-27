@@ -82,5 +82,58 @@
 		Here's some text that comes AFTER the combo box.
 	</div>
 </div>
+
+<br />
+<p>Vertical panels only with splitters</p>
+
+<div dojoType="dojox.layout.BorderContainer" priority="sidebar"
+	style="border: 2px solid black; width: 90%; height: 300px; padding: 10px;"
+>
+	<div dojoType="dijit.layout.ContentPane" position="top" style="background-color: #b39b86; height: 100px;" splitter="true">
+		top bar
+	</div>
+	<div dojoType="dijit.layout.ContentPane" position="bottom" style="background-color: #b39b86; height: 100px;" splitter="true">
+		bottom bar
+	</div>
+	<div dojoType="dijit.layout.ContentPane" position="center" style="background-color: #f5ffbf; padding: 10px;">
+		main panel with <a href="http://www.dojotoolkit.org/">a link</a>.<br />
+		(to check we're copying children around properly).<br />
+		<select dojoType="dijit.form.FilteringSelect">
+			<option value="1">foo</option>
+			<option value="2">bar</option>
+			<option value="3">baz</option>
+		</select>
+		Here's some text that comes AFTER the combo box.
+	</div>
+</div>
+
+<br />
+<p>More fun with layouts</p>
+
+<style type="text/css">
+		#mondrian .dijitSplitter { background-color: black }
+</style>
+<div id="mondrian" dojoType="dojox.layout.BorderContainer" priority="sidebar" style="height: 300px; width: 400px">
+	<div dojoType="dijit.layout.ContentPane" position="top" style="height: 100px" splitter="true">
+		<div dojoType="dojox.layout.BorderContainer" style="height: 100px; width: 100%">
+			<div dojoType="dijit.layout.ContentPane" position="leading" style="width: 125px" splitter="true"></div>
+			<div dojoType="dijit.layout.ContentPane" position="center" style="background-color: yellow" splitter="true"></div>
+		</div>
+	</div>
+	<div dojoType="dijit.layout.ContentPane" position="bottom" style="height: 100px" splitter="true">
+		<div dojoType="dojox.layout.BorderContainer" style="height: 100px; width: 100%">
+			<div dojoType="dijit.layout.ContentPane" position="top" style="height: 40px" splitter="true"></div>
+			<div dojoType="dijit.layout.ContentPane" position="center"></div>
+		</div>
+	</div>
+	<div dojoType="dijit.layout.ContentPane" position="leading" style="width: 100px" splitter="true">
+		<div dojoType="dojox.layout.BorderContainer" style="height: 300px; width: 100%">
+			<div dojoType="dijit.layout.ContentPane" position="center"></div>
+			<div dojoType="dijit.layout.ContentPane" position="bottom" style="height: 100px; background-color: red" splitter="true"></div>
+		</div>
+	</div>
+	<div dojoType="dijit.layout.ContentPane" position="trailing" style="width: 100px" splitter="true"></div>
+</div>
+<br />
 </body>
 </html>

@@ -39,12 +39,6 @@ dojo.declare(
 
 //TODO: activeSizing, persist for splitters?
 
-	_top: {},
-	_bottom: {},
-	_left: {}, // aka inside in LTR mode
-	_right: {}, // aka outside in LTR mode
-	_center: {},
-
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
 
@@ -114,62 +108,76 @@ if(!this._init){
 this._init = true;
 }
 
-		var sidebarLayout = this.priority == "sidebar";
-		var topStyle = this._top.style;
-		var rightStyle = this._right.style;
-		var leftStyle = this._left.style;
-		var centerStyle = this._center.style;
-		var bottomStyle = this._bottom.style;
-		var rightCoords = dojo.coords(this._right);
-		var leftCoords = dojo.coords(this._left);
-		var centerCoords = dojo.coords(this._center);
-		var bottomCoords = dojo.coords(this._bottom);
-		var topCoords = dojo.coords(this._top);
+		var sidebarLayout = (this.priority == "sidebar");
+		var topHeight = 0, bottomHeight = 0, leftWidth = 0, rightWidth = 0;
+		var topStyle = {}, leftStyle = {}, rightStyle = {}, bottomStyle = {},
+			centerStyle = (this._center && this._center.style) || {};
+
+		if(this._top){
+			topStyle = this._top.style;
+			topHeight = dojo.coords(this._top).h;
+		}
+		if(this._left){
+			leftStyle = this._left.style;
+			leftWidth = dojo.coords(this._left).w;
+		}
+		if(this._right){
+			rightStyle = this._right.style;
+			rightWidth = dojo.coords(this._right).w;
+		}
+		if(this._bottom){
+			bottomStyle = this._bottom.style;
+			bottomHeight = dojo.coords(this._bottom).h;
+		}
 
 		var topSplitter = this._splitters.top;
 		if(topSplitter){
-			topSplitter.style.top = topCoords.h + "px";
-			topSplitter.style.left = (sidebarLayout ? leftCoords.w : "0") + "px";
-			topSplitter.style.right = (sidebarLayout ? rightCoords.w : "0") + "px";
+			topSplitter.style.top = topHeight + "px";
+			topSplitter.style.left = (sidebarLayout ? leftWidth : "0") + "px";
+			topSplitter.style.right = (sidebarLayout ? rightWidth : "0") + "px";
 		}
 
 		var bottomSplitter = this._splitters.bottom;
 		if(bottomSplitter){
-			bottomSplitter.style.bottom = bottomCoords.h + "px";
-			bottomSplitter.style.left = (sidebarLayout ? leftCoords.w : "0") + "px";
-			bottomSplitter.style.right = (sidebarLayout ? rightCoords.w : "0") + "px";
+			bottomSplitter.style.bottom = bottomHeight + "px";
+			bottomSplitter.style.left = (sidebarLayout ? leftWidth : "0") + "px";
+			bottomSplitter.style.right = (sidebarLayout ? rightWidth : "0") + "px";
 		}
 
 		var leftSplitter = this._splitters.left;
 		if(leftSplitter){
-			leftSplitter.style.left = leftCoords.w + "px";
-			leftSplitter.style.top = (sidebarLayout ? "0" : topCoords.h) + "px";
-			leftSplitter.style.bottom = (sidebarLayout ? "0" : bottomCoords.h) + "px";
+			leftSplitter.style.left = leftWidth + "px";
+			leftSplitter.style.top = (sidebarLayout ? "0" : topHeight) + "px";
+			leftSplitter.style.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
 		}
 
 		var rightSplitter = this._splitters.right;
 		if(rightSplitter){
-			rightSplitter.style.right = rightCoords.w + "px";
-			rightSplitter.style.top = (sidebarLayout ? "0" : topCoords.h) + "px";
-			rightSplitter.style.bottom = (sidebarLayout ? "0" : bottomCoords.h) + "px";
+			rightSplitter.style.right = rightWidth + "px";
+			rightSplitter.style.top = (sidebarLayout ? "0" : topHeight) + "px";
+			rightSplitter.style.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
 		}
 
-		centerStyle.top = topCoords.h + (topSplitter ? dojo.coords(topSplitter).h : 0) + "px";
-		rightStyle.top = leftStyle.top = sidebarLayout ? "0px" : centerStyle.top;
+		centerStyle.top = topHeight + (topSplitter ? dojo.coords(topSplitter).h : 0) + "px";
+		centerStyle.left = leftWidth + (leftSplitter ? dojo.coords(leftSplitter).w : 0) + "px";
+		centerStyle.right =  rightWidth + (rightSplitter ? dojo.coords(rightSplitter).w : 0) + "px";
+		centerStyle.bottom = bottomHeight + (bottomSplitter ? dojo.coords(bottomSplitter).h : 0) + "px";
+
+		leftStyle.top = rightStyle.top = sidebarLayout ? "0px" : centerStyle.top;
+		leftStyle.left = rightStyle.right = "0px";
+		leftStyle.bottom = rightStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
+
 		topStyle.top = "0px";
 		bottomStyle.bottom = "0px";
 		if(sidebarLayout){
-			topStyle.left = bottomStyle.left = leftCoords.w + (leftSplitter && !dojo._isBodyLtr() ? dojo.coords(leftSplitter).w : 0) + "px";
-			topStyle.right = bottomStyle.right = rightCoords.w + (rightSplitter && dojo._isBodyLtr() ? dojo.coords(rightSplitter).w : 0) + "px";
+			topStyle.left = bottomStyle.left = leftWidth + (leftSplitter && !dojo._isBodyLtr() ? dojo.coords(leftSplitter).w : 0) + "px";
+			topStyle.right = bottomStyle.right = rightWidth + (rightSplitter && dojo._isBodyLtr() ? dojo.coords(rightSplitter).w : 0) + "px";
 		}else{
 			topStyle.left = topStyle.right = "0px";
 			bottomStyle.left = bottomStyle.right = "0px";
 		}
-		leftStyle.left = rightStyle.right = "0px";
-		centerStyle.left = leftCoords.w + (leftSplitter ? dojo.coords(leftSplitter).w : 0) + "px";
-		centerStyle.right =  rightCoords.w + (rightSplitter ? dojo.coords(rightSplitter).w : 0) + "px";
-		centerStyle.bottom = bottomCoords.h + (bottomSplitter ? dojo.coords(bottomSplitter).h : 0) + "px";
-		rightStyle.bottom = leftStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
+
+//FIXME: refactor so that IE codes still runs if any of /top|bottom|left|right/ are undefined
 		if(dojo.isIE){
 			this.domNode._top = this._top;
 			this.domNode._bottom = this._bottom;
