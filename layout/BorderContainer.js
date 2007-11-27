@@ -14,10 +14,13 @@ dojo.declare(
 	//
 	// details
 	//	A BorderContainer is a box with a specified size (like style="width: 500px; height: 500px;"),
-	//	that contains children widgets marked with "position" of "top", "bottom", "left", "right", "center".
-	//	It takes it's children marked as top/bottom/left/right, and lays them out along the edges of the center box,
-	//	with "top" and "bottom" extending the full width of the container.
-	//  The outer size must be specified on the BorderContainer node.
+	//	that contains children widgets marked with "position" of "top", "bottom", "leading", "trailing", "center".
+	//  Children will be laid out inside the edges of the box with the remaining space left for the center.
+	//  Optional splitters may be specified on the edge widgets to make them resizable by the user.
+	//  The outer size must be specified on the BorderContainer node.  Width must be specified for the sides
+	//  and height for the top and bottom.
+	//  "left" and "right" may be used interchangably for "leading" and "trailing" except that those terms do
+	//  not reflect the fact that they will be reversed in right-to-left environments.
 	//
 	// usage
 	//	<style>
@@ -31,8 +34,10 @@ dojo.declare(
 
 	// priority: String
 	//  choose which panels get priority in the layout: "headline" where the top and bottom extend the full width
-	//  of the container, or sidebar where the left and right sides extend from top to bottom.
+	//  of the container, or "sidebar" where the left and right sides extend from top to bottom.
 	priority: "headline",
+
+//TODO: activeSizing, persist for splitters?
 
 	_top: {},
 	_bottom: {},
@@ -189,10 +194,7 @@ this._init = true;
 			}
 		}
 
-		dojo.forEach(["top", "left", "center", "right", "bottom"], function(pos){
-			var widget = dijit.byNode(this["_"+pos]);
-			if(widget && widget.resize){ widget.resize(); }
-		}, this);
+		dojo.forEach(this.getChildren(), function(child){ child.resize && child.resize(); });
 	},
 
 	resize: function(args){
@@ -217,14 +219,20 @@ dojo.require("dijit._Templated");
 
 dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 {
+	// thickness: Number
 	thickness: 10,
+
 	container: null,
 	childNode: null,
 	position: null,
-	_handlers: [],
+
+	// live: Boolean
+	//		If true, the child's size changes as you drag the bar;
+	//		otherwise, the size doesn't change until you drop the bar (by mouse-up)
+	live: true,
 
 	// summary: A draggable spacer between two items in a BorderContainer
-	templateString: '<div class="dijitSplitter" dojoAttachEvent="onmousedown:_startDrag" style="position: absolute; background-color: red"></div>',
+	templateString: '<div class="dijitSplitter" dojoAttachEvent="onmousedown:_startDrag" style="position: absolute; z-index: 9999"></div>',
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
@@ -234,31 +242,47 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	},
 
 	_startDrag: function(e){
-		this.pageOffset = /top|bottom/.test(this.position) ? e.pageY : e.pageX;
-		this.childCoords = dojo.coords(this.childNode);
+		dojo.addClass(this.domNode, "dijitSplitterActive");
+		this._resize = this.live;
+		var horizontal = this.horizontal;
+		this._pageStart = horizontal ? e.pageY : e.pageX;
+		this._childStart = dojo.coords(this.childNode)[ horizontal ? 'h' : 'w' ];
+		var axis = horizontal ? 'y' : 'x';
+		this._splitterStart = dojo.coords(this.domNode)[axis] - dojo.coords(this.container.domNode)[axis];
 
+		this._handlers = [];
 		this._handlers.push(dojo.connect(dojo.doc, "onmousemove", this, "_drag"));
 		this._handlers.push(dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag"));
 		dojo.stopEvent(e);
 	},
 
 	_drag: function(e){
-		var factor = /top|left/.test(this.position) ? 1 : -1;
-		if(this.horizontal){
-			this.childNode.style.height = factor * (e.pageY - this.pageOffset) + this.childCoords.h + "px";
+		var horizontal = this.horizontal;
+		var delta = (horizontal ? e.pageY : e.pageX) - this._pageStart;
+		if(this._resize){
+			var factor = /top|left/.test(this.position) ? 1 : -1;
+			var childSize = factor * delta + this._childStart;
+			this.childNode.style[ horizontal ? "height" : "width" ] = childSize + "px";
+			this.container.layout();
 		}else{
-			this.childNode.style.width = factor * (e.pageX - this.pageOffset) + this.childCoords.w + "px";
+			var splitterCoord = delta + this._splitterStart;
+			this.domNode.style[ horizontal ? "top" : "left" ] = splitterCoord + "px"; //FIXME: this ends up off by a few pixels for right/bottom
 		}
-		this.container.layout();
 	},
 
 	_stopDrag: function(e){
+		dojo.removeClass(this.domNode, "dijitSplitterActive");
+		this._drag(e);
+		this._resize = true;
+		this._drag(e);
 		dojo.forEach(this._handlers, dojo.disconnect);
-		this._handlers = [];
+		delete this._handlers;
 	},
 
 	destroy: function(){
 		this.inherited("destroy", arguments);
 		this._stopDrag();
+		delete this.childNode;
+		delete this.container;
 	}
 });
