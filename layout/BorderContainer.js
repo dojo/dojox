@@ -240,7 +240,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	live: true,
 
 	// summary: A draggable spacer between two items in a BorderContainer
-	templateString: '<div class="dijitSplitter" dojoAttachEvent="onmousedown:_startDrag" style="position: absolute; z-index: 9999"></div>',
+	templateString: '<div class="dijitSplitter" dojoAttachEvent="onkeypress:_onKeyPress,onmousedown:_startDrag" style="position: absolute; z-index: 9999" tabIndex="0"></div>',
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
@@ -257,24 +257,20 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._childStart = dojo.coords(this.childNode)[ horizontal ? 'h' : 'w' ];
 		var axis = horizontal ? 'y' : 'x';
 		this._splitterStart = dojo.coords(this.domNode)[axis] - dojo.coords(this.container.domNode)[axis];
-
-		this._handlers = [];
-		this._handlers.push(dojo.connect(dojo.doc, "onmousemove", this, "_drag"));
-		this._handlers.push(dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag"));
+		this._handlers = [
+				dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
+				dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
+			];
 		dojo.stopEvent(e);
 	},
 
 	_drag: function(e){
-		var horizontal = this.horizontal;
-		var delta = (horizontal ? e.pageY : e.pageX) - this._pageStart;
+		var delta = (this.horizontal ? e.pageY : e.pageX) - this._pageStart;
 		if(this._resize){
-			var factor = /top|left/.test(this.position) ? 1 : -1;
-			var childSize = factor * delta + this._childStart;
-			this.childNode.style[ horizontal ? "height" : "width" ] = childSize + "px";
-			this.container.layout();
+			this._move(delta, this._childStart);
 		}else{
 			var splitterCoord = delta + this._splitterStart;
-			this.domNode.style[ horizontal ? "top" : "left" ] = splitterCoord + "px"; //FIXME: this ends up off by a few pixels for right/bottom
+			this.domNode.style[ this.horizontal ? "top" : "left" ] = splitterCoord + "px"; //FIXME: this ends up off by a few pixels for right/bottom
 		}
 	},
 
@@ -285,6 +281,33 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._drag(e);
 		dojo.forEach(this._handlers, dojo.disconnect);
 		delete this._handlers;
+	},
+
+	_onKeyPress: function(/*Event*/ e){
+		// should we apply typematic to this?
+		this._resize = true;
+		var horizontal = this.horizontal;
+		var tick = 1;
+		switch(e.keyCode){
+			case horizontal ? dojo.keys.UP_ARROW : dojo.keys.LEFT_ARROW:
+				tick *= -1;
+				break;
+			case horizontal ? dojo.keys.DOWN_ARROW : dojo.keys.RIGHT_ARROW:
+				break;
+			default:
+//				this.inherited("_onKeyPress", arguments);
+				return;
+		}
+		this._move(tick, dojo.coords(this.childNode)[ horizontal ? 'h' : 'w' ]);
+		dojo.stopEvent(e);
+	},
+
+	_move: function(/*Number*/delta, oldChildSize){
+		var factor = /top|left/.test(this.position) ? 1 : -1;
+		var childStart = oldChildSize;
+		var childSize = factor * delta + childStart;
+		this.childNode.style[ this.horizontal ? "height" : "width" ] = childSize + "px";
+		this.container.layout();
 	},
 
 	destroy: function(){
