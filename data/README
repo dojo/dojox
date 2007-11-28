@@ -10,6 +10,7 @@ Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
 	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
+	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 -------------------------------------------------------------------------------
 Project description
 
@@ -60,3 +61,6 @@ Additional Notes:
 
 	dojox.data.QueryReadStore - datastore to provide serverside URL query
 	matching.  Similar to the 0.4.X ComboBox dataUrl parameter.	         
+
+	dojox.data.jsonPathStore - datastore that takes an arbitrary js object
+	and uses it as the store. Pre-Alpha at the moment.
