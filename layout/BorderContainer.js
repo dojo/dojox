@@ -177,28 +177,31 @@ this._init = true;
 			bottomStyle.left = bottomStyle.right = "0px";
 		}
 
-//FIXME: refactor so that IE codes still runs if any of /top|bottom|left|right/ are undefined
 		if(dojo.isIE){
 			this.domNode._top = this._top;
 			this.domNode._bottom = this._bottom;
 			var containerHeight = "dojo.style("+this.id+",'height')";
-			var middleHeight = containerHeight+"-dojo.style("+this.id+"._top,'height')-dojo.style("+this.id+"._bottom, 'height')";
-			centerStyle.setExpression("height", middleHeight);
+			var middleHeight = containerHeight;
+			if(this._top){ middleHeight += "-dojo.style("+this.id+"._top,'height')"; }
+			if(this._bottom){ middleHeight += "-dojo.style("+this.id+"._bottom, 'height')"; }
+			if(this._center){ centerStyle.setExpression("height", middleHeight); }
 //What I'd think would work
 //			leftStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
 //			rightStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
 //What actually works
-			leftStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight);
-			rightStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight);
+			if(this._left){ leftStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight); }
+			if(this._right){ rightStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight); }
 
 			if(dojo.isIE < 7){
 				this.domNode._left = this._left;
 				this.domNode._right = this._right;
 				var containerWidth = "dojo.style("+this.id+",'width')";
-				var middleWidth = containerWidth+"-dojo.style("+this.id+"._left,'width')-dojo.style("+this.id+"._right, 'width')";
-				centerStyle.setExpression("width", middleWidth);
-				topStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth");
-				bottomStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth");
+				var middleWidth = containerWidth;
+				if(this._left){ middleWidth += "-dojo.style("+this.id+"._left,'width')"; }
+				if(this._right){ middleWidth += "-dojo.style("+this.id+"._right, 'width')"; }
+				if(this._center){ centerStyle.setExpression("width", middleWidth); }
+				if(this._top){ topStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth"); }
+				if(this._bottom){ bottomStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth"); }
 			}
 		}
 
