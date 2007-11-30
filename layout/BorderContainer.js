@@ -46,19 +46,60 @@ dojo.declare(
 		dojo.addClass(this.domNode, "dijitBorderContainer");
 	},
 
+	startup: function(){
+		if(this._started){ return; }
+
+		this._splitters = {};
+		if(this.getChildren){
+			dojo.forEach(this.getChildren(), this._setupChild, this);
+		}
+
+		this.inherited("startup", arguments);
+	},
+
+	_setupChild: function(/*Widget*/child){
+		var position = child.position;
+		if(position){
+			child.domNode.style.position = "absolute";
+
+			if(position == "leading"){ position = "left"; }
+			if(position == "trailing"){ position = "right"; }
+			if(!dojo._isBodyLtr()){
+				if(position == "left"){
+					position = "right";
+				}else if(position == "right"){
+					position = "left";
+				}
+			}
+			this["_"+position] = child.domNode;
+
+			if(child.splitter){
+				var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, position: position });
+				this._splitters[position] = splitter.domNode;
+				dojo.place(splitter.domNode, child.domNode, "after");
+			}
+		}
+	},
+
 	layout: function(){
 		this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 	},
 
 	addChild: function(/*Widget*/ child, /*Integer?*/ insertIndex){
 		dijit._Container.prototype.addChild.apply(this, arguments);
+		this._setupChild(child);
 		if(this._started){
 			this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 		}
 	},
 
-	removeChild: function(/*Widget*/ widget){
+	removeChild: function(/*Widget*/ child){
 		dijit._Container.prototype.removeChild.apply(this, arguments);
+		if(child.position){
+			//TODO: is this right?
+			var splitter = this._splitters[child.position];
+			splitter.destroy();
+		}
 		if(this._started){
 			this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 		}
@@ -79,34 +120,8 @@ dojo.declare(
 //TODO: what is dim and why doesn't it look right?
 		// copy dim because we are going to modify it
 //		dim = dojo.mixin({}, dim);
-if(!this._init){
-		this._splitters = {};
-		//FIXME: do this once? somewhere else?
-		dojo.forEach(this.getChildren(), function(child){
-			var position = child.position;
-			if(position){
-				child.domNode.style.position = "absolute";
 
-				if(position == "leading"){ position = "left"; }
-				if(position == "trailing"){ position = "right"; }
-				if(!dojo._isBodyLtr()){
-					if(position == "left"){
-						position = "right";
-					}else if(position == "right"){
-						position = "left";
-					}
-				}
-				this["_"+position] = child.domNode;
-
-				if(child.splitter){
-					var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, position: position });
-					this._splitters[position] = splitter.domNode;
-					dojo.place(splitter.domNode, child.domNode, "after");
-				}
-			}
-		}, this);
-this._init = true;
-}
+//TODO: need to test in quirks vs std mode in IE
 
 		var sidebarLayout = (this.priority == "sidebar");
 		var topHeight = 0, bottomHeight = 0, leftWidth = 0, rightWidth = 0;
@@ -115,6 +130,7 @@ this._init = true;
 
 		if(this._top){
 			topStyle = this._top.style;
+//TODO: for all dojo.coords -- try to replace with dojo.style?
 			topHeight = dojo.coords(this._top).h;
 		}
 		if(this._left){
@@ -132,36 +148,45 @@ this._init = true;
 
 		var topSplitter = this._splitters.top;
 		if(topSplitter){
-			topSplitter.style.top = topHeight + "px";
-			topSplitter.style.left = (sidebarLayout ? leftWidth : "0") + "px";
-			topSplitter.style.right = (sidebarLayout ? rightWidth : "0") + "px";
+			var topSplitterStyle = topSplitter.style;
+			topSplitterStyle.top = topHeight + "px";
+			topSplitterStyle.left = (sidebarLayout ? leftWidth : "0") + "px";
+			topSplitterStyle.right = (sidebarLayout ? rightWidth : "0") + "px";
 		}
 
 		var bottomSplitter = this._splitters.bottom;
 		if(bottomSplitter){
-			bottomSplitter.style.bottom = bottomHeight + "px";
-			bottomSplitter.style.left = (sidebarLayout ? leftWidth : "0") + "px";
-			bottomSplitter.style.right = (sidebarLayout ? rightWidth : "0") + "px";
+			var bottomSplitterStyle = bottomSplitter.style;
+			bottomSplitterStyle.bottom = bottomHeight + "px";
+			bottomSplitterStyle.left = (sidebarLayout ? leftWidth : "0") + "px";
+			bottomSplitterStyle.right = (sidebarLayout ? rightWidth : "0") + "px";
 		}
 
 		var leftSplitter = this._splitters.left;
 		if(leftSplitter){
-			leftSplitter.style.left = leftWidth + "px";
-			leftSplitter.style.top = (sidebarLayout ? "0" : topHeight) + "px";
-			leftSplitter.style.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
+			var leftSplitterStyle = leftSplitter.style;
+			leftSplitterStyle.left = leftWidth + "px";
+			leftSplitterStyle.top = (sidebarLayout ? "0" : topHeight) + "px";
+			leftSplitterStyle.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
 		}
 
 		var rightSplitter = this._splitters.right;
 		if(rightSplitter){
-			rightSplitter.style.right = rightWidth + "px";
-			rightSplitter.style.top = (sidebarLayout ? "0" : topHeight) + "px";
-			rightSplitter.style.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
+			var rightSplitterStyle = rightSplitter.style;
+			rightSplitterStyle.right = rightWidth + "px";
+			rightSplitterStyle.top = (sidebarLayout ? "0" : topHeight) + "px";
+			rightSplitterStyle.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
 		}
 
-		centerStyle.top = topHeight + (topSplitter ? dojo.coords(topSplitter).h : 0) + "px";
-		centerStyle.left = leftWidth + (leftSplitter ? dojo.coords(leftSplitter).w : 0) + "px";
-		centerStyle.right =  rightWidth + (rightSplitter ? dojo.coords(rightSplitter).w : 0) + "px";
-		centerStyle.bottom = bottomHeight + (bottomSplitter ? dojo.coords(bottomSplitter).h : 0) + "px";
+		var topSplitterSize = topSplitter ? dojo.coords(topSplitter).h : 0;
+		var leftSplitterSize = leftSplitter ? dojo.coords(leftSplitter).w : 0;
+		var rightSplitterSize = rightSplitter ? dojo.coords(rightSplitter).w : 0;
+		var bottomSplitterSize = bottomSplitter ? dojo.coords(bottomSplitter).h : 0;
+
+		centerStyle.top = topHeight + topSplitterSize + "px";
+		centerStyle.left = leftWidth + leftSplitterSize + "px";
+		centerStyle.right =  rightWidth + rightSplitterSize + "px";
+		centerStyle.bottom = bottomHeight + bottomSplitterSize + "px";
 
 		leftStyle.top = rightStyle.top = sidebarLayout ? "0px" : centerStyle.top;
 		leftStyle.left = rightStyle.right = "0px";
@@ -170,22 +195,24 @@ this._init = true;
 		topStyle.top = "0px";
 		bottomStyle.bottom = "0px";
 		if(sidebarLayout){
-			topStyle.left = bottomStyle.left = leftWidth + (leftSplitter && !dojo._isBodyLtr() ? dojo.coords(leftSplitter).w : 0) + "px";
-			topStyle.right = bottomStyle.right = rightWidth + (rightSplitter && dojo._isBodyLtr() ? dojo.coords(rightSplitter).w : 0) + "px";
+			topStyle.left = bottomStyle.left = leftWidth + (dojo._isBodyLtr() ? 0 : leftSplitterSize) + "px";
+			topStyle.right = bottomStyle.right = rightWidth + (dojo._isBodyLtr() ? rightSplitterSize : 0) + "px";
 		}else{
 			topStyle.left = topStyle.right = "0px";
 			bottomStyle.left = bottomStyle.right = "0px";
 		}
 
 		if(dojo.isIE){
+			//FIXME: hack.  use IDs instead
 			this.domNode._top = this._top;
 			this.domNode._bottom = this._bottom;
+
 			var containerHeight = "dojo.style("+this.id+",'height')";
 			var middleHeight = containerHeight;
 			if(this._top){ middleHeight += "-dojo.style("+this.id+"._top,'height')"; }
 			if(this._bottom){ middleHeight += "-dojo.style("+this.id+"._bottom, 'height')"; }
 			if(this._center){ centerStyle.setExpression("height", middleHeight); }
-//What I'd think would work
+//TODO: What I'd think would work
 //			leftStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
 //			rightStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
 //What actually works
@@ -193,8 +220,10 @@ this._init = true;
 			if(this._right){ rightStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight); }
 
 			if(dojo.isIE < 7){
+				//FIXME: hack.  use IDs instead
 				this.domNode._left = this._left;
 				this.domNode._right = this._right;
+
 				var containerWidth = "dojo.style("+this.id+",'width')";
 				var middleWidth = containerWidth;
 				if(this._left){ middleWidth += "-dojo.style("+this.id+"._left,'width')"; }
@@ -206,10 +235,6 @@ this._init = true;
 		}
 
 		dojo.forEach(this.getChildren(), function(child){ child.resize && child.resize(); });
-	},
-
-	resize: function(args){
-		this.layout();
 	}
 });
 
@@ -278,12 +303,15 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	},
 
 	_stopDrag: function(e){
-		dojo.removeClass(this.domNode, "dijitSplitterActive");
-		this._drag(e);
-		this._resize = true;
-		this._drag(e);
-		dojo.forEach(this._handlers, dojo.disconnect);
-		delete this._handlers;
+		try{
+			dojo.removeClass(this.domNode, "dijitSplitterActive");
+			this._drag(e);
+			this._resize = true;
+			this._drag(e);
+		}finally{
+			dojo.forEach(this._handlers, dojo.disconnect);
+			delete this._handlers;
+		}
 	},
 
 	_onKeyPress: function(/*Event*/ e){
