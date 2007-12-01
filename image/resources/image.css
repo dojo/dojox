@@ -64,13 +64,13 @@
 
 /* dojox.image.Lightbox:tundra */
 .tundra .LightboxClose {
-	background:url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center;
+	background:url('images/close.png') no-repeat center center;
 }
 .tundra .LightboxNext {
-	background:url('../../../dijit/themes/tundra/images/arrowRight.png') no-repeat center center;
+	background:url('images/right.png') no-repeat center center;
 }
 .tundra .LightboxPrev {
-	background:url('../../../dijit/themes/tundra/images/arrowLeft.png') no-repeat center center;
+	background:url('images/left.png') no-repeat center center;
 }
 
 /* dojox.image.Lightbox:soria */
