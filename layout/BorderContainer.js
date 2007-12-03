@@ -37,7 +37,9 @@ dojo.declare(
 	//  of the container, or "sidebar" where the left and right sides extend from top to bottom.
 	priority: "headline",
 
-//TODO: activeSizing, persist for splitters?
+	liveSplitters: true,
+
+// persist for splitters?
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
@@ -74,7 +76,7 @@ dojo.declare(
 			this["_"+position] = child.domNode;
 
 			if(child.splitter){
-				var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, position: position });
+				var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, position: position, live: this.liveSplitters });
 				this._splitters[position] = splitter.domNode;
 				dojo.place(splitter.domNode, child.domNode, "after");
 			}
@@ -94,12 +96,12 @@ dojo.declare(
 	},
 
 	removeChild: function(/*Widget*/ child){
-		dijit._Container.prototype.removeChild.apply(this, arguments);
-		if(child.position){
-			//TODO: is this right?
-			var splitter = this._splitters[child.position];
-			splitter.destroy();
+		var splitter = this._splitters[child.position];
+		if(splitter){
+			dijit.byNode(splitter).destroy();
+			delete this._splitters[child.position];
 		}
+		dijit._Container.prototype.removeChild.apply(this, arguments);
 		if(this._started){
 			this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 		}
@@ -260,8 +262,8 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	position: null,
 
 	// live: Boolean
-	//		If true, the child's size changes as you drag the bar;
-	//		otherwise, the size doesn't change until you drop the bar (by mouse-up)
+	//		If true, the child's size changes and the child widget is redrawn as you drag the splitter;
+	//		otherwise, the size doesn't change until you drop the splitter (by mouse-up)
 	live: true,
 
 	// summary: A draggable spacer between two items in a BorderContainer
@@ -305,11 +307,14 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 			this._resize = true;
 			this._drag(e);
 		}finally{
-			dojo.forEach(this._handlers, dojo.disconnect);
-			delete this._handlers;
+			this._cleanupHandlers();
 		}
 	},
 
+	_cleanupHandlers: function(){
+		dojo.forEach(this._handlers, dojo.disconnect);
+		delete this._handlers;
+	},
 	_onKeyPress: function(/*Event*/ e){
 		// should we apply typematic to this?
 		this._resize = true;
@@ -338,9 +343,9 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	},
 
 	destroy: function(){
-		this.inherited("destroy", arguments);
-		this._stopDrag();
+		this._cleanupHandlers();
 		delete this.childNode;
 		delete this.container;
+		this.inherited("destroy", arguments);
 	}
 });

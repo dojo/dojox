@@ -14,6 +14,24 @@
 		dojo.require("dijit.form.FilteringSelect");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 	</script>
+	<script>
+function togglePanel(button, id){
+var leftPanel = dijit.byId(id);
+if(leftPanel){
+	dijit.byId('border1').removeChild(leftPanel);
+	leftPanel.destroy();
+	button.innerHTML='Add left panel';
+}else{
+	var container = dijit.byId('border1');
+	var div = dojo.doc.createElement('div');
+	div.innerHTML='left';
+	container.domNode.appendChild(div);
+	leftPanel = new dijit.layout.ContentPane({id: id, position:'left', style:'background-color: #acb386; width:100px', splitter:true}, div);
+	dijit.byId('border1').addChild(leftPanel);
+	button.innerHTML='Remove left panel';
+}
+}
+	</script>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../css/dijitTests.css";
@@ -30,13 +48,13 @@
 <h2>dojox.layout.BorderContainer tests</h2>
 <p>Headline layout (default)</p>
 
-<div dojoType="dojox.layout.BorderContainer"
+<div id="border1" dojoType="dojox.layout.BorderContainer"
 	style="border: 2px solid black; width: 90%; height: 300px; padding: 10px;"
 >
 <div dojoType="dijit.layout.ContentPane" position="top" style="background-color: #b39b86; height: 100px;" splitter="true">
 		top bar
 	</div>
-	<div dojoType="dijit.layout.ContentPane" position="left" style="background-color: #acb386; width: 100px;" splitter="true">
+	<div id="border1-left" dojoType="dijit.layout.ContentPane" position="left" style="background-color: #acb386; width: 100px;" splitter="true">
 		left
 	</div>
 	<div dojoType="dijit.layout.ContentPane" position="center" style="background-color: #f5ffbf; padding: 10px;">
@@ -59,10 +77,12 @@
 	
 </div>
 
-<br />
-<p>Sidebar layout</p>
+<button onClick="togglePanel(this, 'border1-left')">Remove left panel</button>
 
-<div dojoType="dojox.layout.BorderContainer" priority="sidebar"
+<br />
+<p>Sidebar layout, liveSplitters: false</p>
+
+<div dojoType="dojox.layout.BorderContainer" priority="sidebar" liveSplitters="false"
 	style="border: 2px solid black; width: 90%; height: 300px; padding: 10px;"
 >
 	<div dojoType="dijit.layout.ContentPane" position="leading" style="background-color: #acb386; width: 100px;">
