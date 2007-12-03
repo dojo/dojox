@@ -96,12 +96,14 @@ dojo.declare(
 	},
 
 	removeChild: function(/*Widget*/ child){
-		var splitter = this._splitters[child.position];
+		var position = child.position;
+		var splitter = this._splitters[position];
 		if(splitter){
 			dijit.byNode(splitter).destroy();
-			delete this._splitters[child.position];
+			delete this._splitters[position];
 		}
 		dijit._Container.prototype.removeChild.apply(this, arguments);
+		delete this["_"+position];
 		if(this._started){
 			this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 		}
