@@ -255,9 +255,6 @@ dojo.require("dijit._Templated");
 
 dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 {
-	// thickness: Number
-	thickness: 10,
-
 	container: null,
 	childNode: null,
 	position: null,
@@ -268,13 +265,12 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	live: true,
 
 	// summary: A draggable spacer between two items in a BorderContainer
-	templateString: '<div class="dijitSplitter" dojoAttachEvent="onkeypress:_onKeyPress,onmousedown:_startDrag" style="position: absolute; z-index: 9999" tabIndex="0"></div>',
+	templateString: '<div class="dijitSplitter" dojoAttachEvent="onkeypress:_onKeyPress,onmousedown:_startDrag" style="position: absolute; z-index: 9999" tabIndex="0"><div class="dijitSplitterThumb"></div></div>',
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
 		this.horizontal = /top|bottom/.test(this.position);
-		dojo.addClass(this.domNode, "dijitSplitter" + this.horizontal ? "Horizontal" : "Vertical");		
-		this.domNode.style[this.horizontal ? "height" : "width"] = this.thickness + "px";
+		dojo.addClass(this.domNode, "dijitSplitter" + (this.horizontal ? "Horizontal" : "Vertical"));		
 	},
 
 	_startDrag: function(e){
