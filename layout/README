@@ -34,6 +34,9 @@ Project description
 	dojox.layout.RadioGroup - a stack container with sliding or fading transitions
 	(and an internal button set to mimic a tab container, but fires on hover)
 
+	dojox.layout.ScrollPane - a dynamically scrolling pane. Adjusts naturally sized content
+	to a "viewport" and scrolls based on relative mouse position.
+
 -------------------------------------------------------------------------------
 Dependencies
 
