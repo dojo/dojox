@@ -921,8 +921,11 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 		// except calling invalidate, since invalidate is used as
 		// any modification needs to redraw the object itself, call invalidate.
 		// then call render.
-		if(dojo.every(this.todos, function(item){
-			return item != newObject; })){
+		if(dojo.every(this.todos, 
+			function(item){
+				return item != newObject; 
+			}
+		)){
 			this.todos.push(newObject);
 		}
 	},
@@ -935,8 +938,8 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 	setDimensions: function(dim){
 		if(dim){
 			this.dimension = {
-				width:  typeof dim.width  == "string" ? parseInt(dim.width)  : dim.width,
-				height: typeof dim.height == "string" ? parseInt(dim.height) : dim.height
+				width:  dojo.isString(dim.width) ? parseInt(dim.width)  : dim.width,
+				height: dojo.isString(dim.height) ? parseInt(dim.height) : dim.height
 			};
 		}else{
 			this.dimension = null;
@@ -945,7 +948,8 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 
 	render: function(){
 		// summary: iterate all children and call their render callback function.
-		if(this.todos.length == 0){ return; }
+		if(!this.todos.length){ return; }
+		// console.debug("Viewport::render");
 		var m = dojox.gfx3d.matrix;
 		
 		// Iterate the todos and call render to prepare the rendering:
