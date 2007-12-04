@@ -1,10 +1,12 @@
 dojo.provide("dojox.layout.ScrollPane");
 dojo.experimental("dojox.layout.ScrollPane");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit.layout._LayoutWidget");
 dojo.require("dijit._Templated");
 
-dojo.declare("dojox.layout.ScrollPane",[dijit._Widget,dijit._Templated],{
+dojo.declare("dojox.layout.ScrollPane",
+    [dijit.layout._LayoutWidget,dijit._Templated],
+    {
     // summary: A pane that "scrolls" its content based on the mouse poisition inside
     //
     // description:
@@ -29,6 +31,8 @@ dojo.declare("dojox.layout.ScrollPane",[dijit._Widget,dijit._Templated],{
     // _lo: the height of the visible pane
     _lo: null,
 
+    _offset: 15,
+    
     // orientation: String
     //		either "horizontal" or "vertical" for scroll orientation. 
     orientation: "vertical",
@@ -36,38 +40,70 @@ dojo.declare("dojox.layout.ScrollPane",[dijit._Widget,dijit._Templated],{
     // our simple template
     templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
 
-    init: function(){
+    layout: function(){
 	// summary: calculates required sizes. call this if we add/remove content manually, or reload the content.
-	this._line = new dojo._Line(0,this.containerNode[(this._vertical ? "scrollHeight" : "scrollWidth" )]);
-	this._lo = dojo.coords(this.wrapper,true);
+        this._lo = dojo.coords(this.wrapper,true);
+        this._size = (this._vertical ?
+           (this.containerNode.scrollHeight - this._lo.h)  :
+           (this.containerNode.scrollWidth - this._lo.w)     
+        );
+        this._line = new dojo._Line(0-this._offset,this._size+(this._offset*2));
+
+        // share a relative position w the scroll offset via a line
+        var u = this._lo[(this._vertical?"h":"w")]
+        var size = u * (u / this._size);
+        var center = Math.floor(u - size);        
+        this._helpLine = new dojo._Line(0,center);
+
+        // size the helper
+        dojo.style(this.helper,this._dir,Math.floor(size)+"px");
+        
     },
 
     postCreate: function(){
 	this.inherited(arguments);
+ 
+        // for the helper
+        this._showAnim = dojo._fade({ node:this.helper, end:0.5, duration:350 });
+        this._hideAnim = dojo.fadeOut({ node:this.helper, duration: 750 });
+
+        // orientation helper
 	this._vertical = (this.orientation == "vertical");
-	// so it has a width
-	if(!this._vertical){ dojo.addClass(this.containerNode,"dijitInline"); }
-	dojo.style(this.wrapper,"overflow","hidden");	
+	if(!this._vertical){
+            dojo.addClass(this.containerNode,"dijitInline");
+            this._edge = "left";
+            this._dir = "width";
+        } else {
+            this._dir = "height";
+            this._edge = "top";
+        }
+        
+        this._hideAnim.play();
+	dojo.style(this.wrapper,"overflow","hidden");
+    
     },	
 
-    startup: function(){
-	this.inherited(arguments);
-	this.connect(this.domNode,"onmousemove","_calc");
-	this.init();
+    _set: function(/* Int */n){
+	// summary: set the pane's scroll offset, and position the virtual scroll helper 
+	this.wrapper[(this._vertical ? "scrollTop" : "scrollLeft")] = Math.floor(this._line.getValue(n));
+        dojo.style(this.helper,this._edge,Math.floor(this._helpLine.getValue(n))+"px");    
     },
-
-    _set: function(/* Int */diff){
-	// summary: set the pane's scroll offset 
-	this.wrapper[(this._vertical ? "scrollTop" : "scrollLeft")] = Math.floor(diff);
-    },
-
+    
     _calc: function(/* Event */e){
 	// summary: calculate the relative offset of the cursor over the node, and call _set
-	var n = (this._vertical ? 
-	    ((e.pageY-(this._lo.t)-5)/this._lo.h) :
-	    ((e.pageX-(this._lo.l)-15)/this._lo.w)
+	this._set(this._vertical ? 
+	    ((e.pageY-(this._lo.y))/this._lo.h) :
+	    ((e.pageX-(this._lo.x))/this._lo.w)
 	);
-	this._set(this._line.getValue(n))
+    },
+    
+    _enter: function(e){
+        if(this._hideAnim && this._hideAnim.status()=="playing"){ this._hideAnim.stop(); }
+        this._showAnim.play();
+    },
+    
+    _leave: function(e){
+        this._hideAnim.play();    
     }
     
 });
