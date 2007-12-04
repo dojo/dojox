@@ -26,16 +26,16 @@ dojo.declare(
 	//	<style>
 	//		html, body{ height: 100%; width: 100%; }
 	//	</style>
-	//	<div dojoType="BorderContainer" style="width: 100%; height: 100%">
-	//		<div dojoType="ContentPane" position="top">header text</div>
-	//		<div dojoType="ContentPane" position="right" style="width: 200px;">table of contents</div>
-	//		<div dojoType="ContentPane" position="center">client area</div>
+	//	<div dojoType="BorderContainer" design="sidebar" style="width: 100%; height: 100%">
+	//		<div dojoType="ContentPane" location="top">header text</div>
+	//		<div dojoType="ContentPane" location="right" style="width: 200px;">table of contents</div>
+	//		<div dojoType="ContentPane" location="center">client area</div>
 	//	</div>
 
-	// priority: String
-	//  choose which panels get priority in the layout: "headline" where the top and bottom extend the full width
-	//  of the container, or "sidebar" where the left and right sides extend from top to bottom.
-	priority: "headline",
+	// design: String
+	//  choose which design is used for the layout: "headline" (default) where the top and bottom extend
+	//  the full width of the container, or "sidebar" where the left and right sides extend from top to bottom.
+	design: "headline",
 
 	liveSplitters: true,
 
@@ -60,24 +60,24 @@ dojo.declare(
 	},
 
 	_setupChild: function(/*Widget*/child){
-		var position = child.position;
-		if(position){
+		var location = child.location;
+		if(location){
 			child.domNode.style.position = "absolute";
 
-			if(position == "leading"){ position = "left"; }
-			if(position == "trailing"){ position = "right"; }
+			if(location == "leading"){ location = "left"; }
+			if(location == "trailing"){ location = "right"; }
 			if(!dojo._isBodyLtr()){
-				if(position == "left"){
-					position = "right";
-				}else if(position == "right"){
-					position = "left";
+				if(location == "left"){
+					location = "right";
+				}else if(location == "right"){
+					location = "left";
 				}
 			}
-			this["_"+position] = child.domNode;
+			this["_"+location] = child.domNode;
 
 			if(child.splitter){
-				var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, position: position, live: this.liveSplitters });
-				this._splitters[position] = splitter.domNode;
+				var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, location: location, live: this.liveSplitters });
+				this._splitters[location] = splitter.domNode;
 				dojo.place(splitter.domNode, child.domNode, "after");
 			}
 		}
@@ -96,14 +96,14 @@ dojo.declare(
 	},
 
 	removeChild: function(/*Widget*/ child){
-		var position = child.position;
-		var splitter = this._splitters[position];
+		var location = child.location;
+		var splitter = this._splitters[location];
 		if(splitter){
 			dijit.byNode(splitter).destroy();
-			delete this._splitters[position];
+			delete this._splitters[location];
 		}
 		dijit._Container.prototype.removeChild.apply(this, arguments);
-		delete this["_"+position];
+		delete this["_"+location];
 		if(this._started){
 			this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 		}
@@ -118,7 +118,7 @@ dojo.declare(
 		 * dim:
 		 *		{l, t, w, h} object specifying dimensions of container into which to place children
 		 * children:
-		 *		an array like [ {domNode: foo, position: "bottom" }, {domNode: bar, position: "client"} ]
+		 *		an array like [ {domNode: foo, location: "bottom" }, {domNode: bar, location: "client"} ]
 		 */
 
 //TODO: what is dim and why doesn't it look right?
@@ -127,7 +127,7 @@ dojo.declare(
 
 //TODO: need to test in quirks vs std mode in IE
 
-		var sidebarLayout = (this.priority == "sidebar");
+		var sidebarLayout = (this.design == "sidebar");
 		var topHeight = 0, bottomHeight = 0, leftWidth = 0, rightWidth = 0;
 		var topStyle = {}, leftStyle = {}, rightStyle = {}, bottomStyle = {},
 			centerStyle = (this._center && this._center.style) || {};
@@ -246,10 +246,10 @@ dojo.declare(
 // Since any widget can be specified as a LayoutContainer child, mix it
 // into the base widget class.  (This is a hack, but it's effective.)
 dojo.extend(dijit._Widget, {
-	// position: String
+	// location: String
 	//		"top", "bottom", "leading", "trailing", "left", "right", "center".
 	//		See the BorderContainer description for details on this parameter.
-	position: 'none',
+	location: 'none',
 
 	// splitter: Boolean
 	splitter: false
@@ -261,7 +261,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 {
 	container: null,
 	childNode: null,
-	position: null,
+	location: null,
 
 	// live: Boolean
 	//		If true, the child's size changes and the child widget is redrawn as you drag the splitter;
@@ -273,7 +273,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
-		this.horizontal = /top|bottom/.test(this.position);
+		this.horizontal = /top|bottom/.test(this.location);
 		dojo.addClass(this.domNode, "dijitSplitter" + (this.horizontal ? "Horizontal" : "Vertical"));		
 	},
 
@@ -337,7 +337,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	},
 
 	_move: function(/*Number*/delta, oldChildSize){
-		var factor = /top|left/.test(this.position) ? 1 : -1;
+		var factor = /top|left/.test(this.location) ? 1 : -1;
 		var childStart = oldChildSize;
 		var childSize = factor * delta + childStart;
 		this.childNode.style[ this.horizontal ? "height" : "width" ] = childSize + "px";
