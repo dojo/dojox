@@ -48,6 +48,18 @@ dojox.fx = {
 	//	A package of animations, and FX-related code, extending Dojo Core fx.
 	//	Including this package includes all the Base and Core fx packages.
 	//
+	
+	style: { // summary: Module to provide CSS animations
+	},
+
+	scroll: { // summary: Module to provide scroll-related FX 
+	}
+};
+dojox.fx["ext-dojo"] = {
+	// summary: Direct extensions to dojo.fx namespace
+	NodeList: {
+		// summary: module to include to support dojox.fx animations in dojo.query()
+	}
 };
 
 dojox.gfx = { 
