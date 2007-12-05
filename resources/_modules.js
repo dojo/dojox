@@ -1,5 +1,5 @@
+/*=====
 // this file is in place as a quick way to give summaries to all available dojox projects.
-// it is a fallback file, and should never be included in your source or build, ever. really.
 
 dojox.charting = { 
 	// summary: Vector Data Driven graphs and charts 
@@ -14,7 +14,7 @@ dojox.color = {
 };
 
 dojox.cometd = { 
-	// summary: A comted client written in dojo
+	// summary: A cometd client written in Dojo
 };
 
 dojox.crypto = { 
@@ -89,7 +89,7 @@ dojox.highlight = {
 	//	and customize colors in the highlight.css.
 	//
 	//	It is provided as a dojo package, contributed under CLA 
-	//	by Ivan Sagalaev and is available origionally from:
+	//	by Ivan Sagalaev and is available originally from:
 	// 	http://softwaremaniacs.org/soft/highlight/en/	
 	//	
 };
@@ -177,4 +177,4 @@ dojox.wire = { // FIXME:
 dojox.xml = { // FIXME:
 
 };
-
+=====*/
