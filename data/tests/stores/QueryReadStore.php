@@ -81,6 +81,9 @@ foreach ($allItems as $item) {
 	}
 }
 
+//Handle total number of matches as a return, regardless of page size.
+$numRows = count($ret);
+
 // Handle paging, if given.
 if (array_key_exists("start", $_REQUEST)) {
 	$ret = array_slice($ret, $_REQUEST['start']);
@@ -89,4 +92,4 @@ if (array_key_exists("count", $_REQUEST)) {
 	$ret = array_slice($ret, 0, $_REQUEST['count']);
 }
 
-print '/*'.json_encode(array('items'=>$ret)).'*/';
+print '/*'.json_encode(array('numRows'=>$numRows, 'items'=>$ret)).'*/';

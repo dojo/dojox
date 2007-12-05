@@ -200,7 +200,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			}
 		};
 	
-		var _fetchHandler = function(items, requestObject){
+		var _fetchHandler = function(items, requestObject, numRows){
 			var oldAbortFunction = requestObject.abort || null;
 			var aborted = false;
 			
@@ -223,7 +223,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 				requestObject.store = self;
 			}
 			if(requestObject.onBegin){
-				requestObject.onBegin.call(scope, items.length, requestObject);
+				requestObject.onBegin.call(scope, numRows, requestObject);
 			}
 			if(requestObject.sort){
 				items.sort(dojo.data.util.sorter.createSortFunction(requestObject.sort, self));
@@ -314,6 +314,8 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
 			xhrHandler.addCallback(dojo.hitch(this, function(data){
 				data=this._filterResponse(data);
+				var numRows = data.numRows || -1;
+
 				this._items = [];
 				// Store a ref to "this" in each item, so we can simply check if an item
 				// really origins form here (idea is from ItemFileReadStore, I just don't know
@@ -344,7 +346,8 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 				
 				// TODO actually we should do the same as dojo.data.ItemFileReadStore._getItemsFromLoadedData() to sanitize
 				// (does it really sanititze them) and store the data optimal. should we? for security reasons???
-				fetchHandler(this._items, request);
+				numRows = (numRows === -1) ? this._items.length : numRows;
+				fetchHandler(this._items, request, numRows);
 			}));
 			xhrHandler.addErrback(function(error){
 				errorHandler(error, request);
