@@ -42,7 +42,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Return an attribute value
 		//	description:
-		//		'item' must be an XML element.
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		If 'attribute' specifies "tagName", the tag name of the element is
 		//		returned.
 		//		If 'attribute' specifies "childNodes", the first element child is
@@ -108,7 +108,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Return an array of attribute values
 		//	description:
-		//		'item' must be an XML element.
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		If 'attribute' specifies "tagName", the tag name of the element is
 		//		returned.
 		//		If 'attribute' specifies "childNodes", child elements are returned.
@@ -173,7 +173,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Return an array of attribute names
 		// 	description:
-		//		'item' must be an XML element.
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		tag names of child elements and XML attribute names of attributes
 		//		specified to the element are returned along with special attribute
 		//		names applicable to the element including "tagName", "childNodes"
@@ -234,7 +234,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Check whether an element has the attribute
 		//	item:
-		//		An XML element
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//	attribute:
 		//		A tag name of a child element, An XML attribute name or one of
 		//		special names
@@ -247,7 +247,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Check whether the attribute values contain the value
 		//	item:
-		//		An XML element that holds the attribute
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//	attribute:
 		//		A tag name of a child element, An XML attribute name or one of
 		//		special names
@@ -519,7 +519,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 
 	newItem: function(/* object? */ keywordArgs){
 		//	summary:
-		//		Return a new XML element
+		//		Return a new dojox.data.XmlItem
 		//	description:
 		//		At least, 'keywordArgs' must contain "tagName" to be used for
 		//		the new	element.
@@ -568,7 +568,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 	
 	deleteItem: function(/* item */ item){
 		//	summary:
-		//		Delete an XML element
+		//		Delete an dojox.data.XmlItem (wrapper to a XML element).
 		//	item:
 		//		An XML element to delete
 		//	returns:
@@ -589,7 +589,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Set an attribute value
 		//	description:
-		//		'item' must be an XML element.
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		If 'attribute' specifies "tagName", nothing is set and false is
 		//		returned.
 		//		If 'attribute' specifies "childNodes", the value (XML element) is
@@ -664,7 +664,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Set attribute values
 		//	description:
-		//		'item' must be an XML element.
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		If 'attribute' specifies "tagName", nothing is set and false is
 		//		returned.
 		//		If 'attribute' specifies "childNodes", the value (array of XML
@@ -742,7 +742,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Remove an attribute
 		//	description:
-		//		'item' must be an XML element.
+		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		'attribute' can be an XML attribute name of the element or one of
 		//		special names described below.
 		//		If 'attribute' specifies "tagName", nothing is removed and false is
