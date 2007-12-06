@@ -1,6 +1,331 @@
+/*
+	Copyright (c) 2004-2007, The Dojo Foundation
+	All Rights Reserved.
+
+	Licensed under the Academic Free License version 2.1 or above OR the
+	modified BSD license. For more information on Dojo licensing, see:
+
+		http://dojotoolkit.org/book/dojo-book-0-9/introduction/licensing
+*/
+
+/*
+	This is a compiled version of Dojo, built for deployment and not for
+	development. To get an editable version, please visit:
+
+		http://dojotoolkit.org
+
+	for documentation and information on getting the source.
+*/
+
+if(!dojo._hasResource["dojo.AdapterRegistry"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.AdapterRegistry"] = true;
+dojo.provide("dojo.AdapterRegistry");
+
+dojo.AdapterRegistry = function(/*Boolean?*/ returnWrappers){
+	//	summary:
+	//		A registry to make contextual calling/searching easier.
+	//	description:
+	//		Objects of this class keep list of arrays in the form [name, check,
+	//		wrap, directReturn] that are used to determine what the contextual
+	//		result of a set of checked arguments is. All check/wrap functions
+	//		in this registry should be of the same arity.
+	//	example:
+	//	|	// create a new registry
+	//	|	var reg = new dojo.AdapterRegistry();
+	//	|	reg.register("handleString",
+	//	|		dojo.isString,
+	//	|		function(str){
+	//	|			// do something with the string here
+	//	|		}
+	//	|	);
+	//	|	reg.register("handleArr",
+	//	|		dojo.isArray,
+	//	|		function(arr){
+	//	|			// do something with the array here
+	//	|		}
+	//	|	);
+	//	|
+	//	|	// now we can pass reg.match() *either* an array or a string and
+	//	|	// the value we pass will get handled by the right function
+	//	|	reg.match("someValue"); // will call the first function
+	//	|	reg.match(["someValue"]); // will call the second
+
+	this.pairs = [];
+	this.returnWrappers = returnWrappers || false; // Boolean
+}
+
+dojo.extend(dojo.AdapterRegistry, {
+	register: function(/*String*/ name, /*Function*/ check, /*Function*/ wrap, /*Boolean?*/ directReturn, /*Boolean?*/ override){
+		//	summary: 
+		//		register a check function to determine if the wrap function or
+		//		object gets selected
+		//	name:
+		//		a way to identify this matcher.
+		//	check:
+		//		a function that arguments are passed to from the adapter's
+		//		match() function. The check function should return true if the
+		//		given arguments are appropriate for the wrap function.
+		//	directReturn:
+		//		If directReturn is true, the value passed in for wrap will be
+		//		returned instead of being called. Alternately, the
+		//		AdapterRegistry can be set globally to "return not call" using
+		//		the returnWrappers property. Either way, this behavior allows
+		//		the registry to act as a "search" function instead of a
+		//		function interception library.
+		//	override:
+		//		If override is given and true, the check function will be given
+		//		highest priority. Otherwise, it will be the lowest priority
+		//		adapter.
+		this.pairs[((override) ? "unshift" : "push")]([name, check, wrap, directReturn]);
+	},
+
+	match: function(/* ... */){
+		// summary:
+		//		Find an adapter for the given arguments. If no suitable adapter
+		//		is found, throws an exception. match() accepts any number of
+		//		arguments, all of which are passed to all matching functions
+		//		from the registered pairs.
+		for(var i = 0; i < this.pairs.length; i++){
+			var pair = this.pairs[i];
+			if(pair[1].apply(this, arguments)){
+				if((pair[3])||(this.returnWrappers)){
+					return pair[2];
+				}else{
+					return pair[2].apply(this, arguments);
+				}
+			}
+		}
+		throw new Error("No match found");
+	},
+
+	unregister: function(name){
+		// summary: Remove a named adapter from the registry
+
+		// FIXME: this is kind of a dumb way to handle this. On a large
+		// registry this will be slow-ish and we can use the name as a lookup
+		// should we choose to trade memory for speed.
+		for(var i = 0; i < this.pairs.length; i++){
+			var pair = this.pairs[i];
+			if(pair[0] == name){
+				this.pairs.splice(i, 1);
+				return true;
+			}
+		}
+		return false;
+	}
+});
+
+}
+
+if(!dojo._hasResource["dojo.io.script"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.io.script"] = true;
+dojo.provide("dojo.io.script");
+
+/*=====
+dojo.io.script.__ioArgs = function(kwArgs){
+	//	summary:
+	//		All the properties described in the dojo.__ioArgs type, apply to this
+	//		type as well, EXCEPT "handleAs". It is not applicable to
+	//		dojo.io.script.get() calls, since it is implied by the usage of
+	//		"callbackParamName" (response will be a JSONP call returning JSON)
+	//		or "checkString" (response is pure JavaScript defined in
+	//		the body of the script that was attached). The following additional
+	//		properties are allowed for dojo.io.script.get():
+	//	callbackParamName: String
+	//		The URL parameter name that indicates the JSONP callback string.
+	//		For instance, when using Yahoo JSONP calls it is normally, 
+	//		callbackParamName: "callback". For AOL JSONP calls it is normally 
+	//		callbackParamName: "c".
+	//	checkString: String
+	//		A string of JavaScript that when evaluated like so: 
+	//		"typeof(" + checkString + ") != 'undefined'"
+	//		being true means that the script fetched has been loaded. 
+	//		Do not use this if doing a JSONP type of call (use callbackParamName instead).
+}
+=====*/
+
+dojo.io.script = {
+	get: function(/*dojo.io.script.__ioArgs*/args){
+		//	summary:
+		//		sends a get request using a dynamically created script tag.
+		var dfd = this._makeScriptDeferred(args);
+		var ioArgs = dfd.ioArgs;
+		dojo._ioAddQueryToUrl(ioArgs);
+
+		this.attach(ioArgs.id, ioArgs.url);
+		dojo._ioWatch(dfd, this._validCheck, this._ioCheck, this._resHandle);
+		return dfd;
+	},
+
+	attach: function(/*String*/id, /*String*/url){
+		//	summary:
+		//		creates a new <script> tag pointing to the specified URL and
+		//		adds it to the document.
+		//	description:
+		//		Attaches the script element to the DOM. Use this method if you
+		//		just want to attach a script to the DOM and do not care when or
+		//		if it loads.
+		var element = dojo.doc.createElement("script");
+		element.type = "text/javascript";
+		element.src = url;
+		element.id = id;
+		dojo.doc.getElementsByTagName("head")[0].appendChild(element);
+	},
+
+	remove: function(/*String*/id){
+		//summary: removes the script element with the given id.
+		dojo._destroyElement(dojo.byId(id));
+		
+		//Remove the jsonp callback on dojo.io.script, if it exists.
+		if(this["jsonp_" + id]){
+			delete this["jsonp_" + id];
+		}
+	},
+
+	_makeScriptDeferred: function(/*Object*/args){
+		//summary: 
+		//		sets up a Deferred object for an IO request.
+		var dfd = dojo._ioSetArgs(args, this._deferredCancel, this._deferredOk, this._deferredError);
+
+		var ioArgs = dfd.ioArgs;
+		ioArgs.id = "dojoIoScript" + (this._counter++);
+		ioArgs.canDelete = false;
+
+		//Special setup for jsonp case
+		if(args.callbackParamName){
+			//Add the jsonp parameter.
+			ioArgs.query = ioArgs.query || "";
+			if(ioArgs.query.length > 0){
+				ioArgs.query += "&";
+			}
+			ioArgs.query += args.callbackParamName + "=dojo.io.script.jsonp_" + ioArgs.id + "._jsonpCallback";
+
+			//Setup the Deferred to have the jsonp callback.
+			ioArgs.canDelete = true;
+			dfd._jsonpCallback = this._jsonpCallback;
+			this["jsonp_" + ioArgs.id] = dfd;
+		}
+		return dfd; // dojo.Deferred
+	},
+	
+	_deferredCancel: function(/*Deferred*/dfd){
+		//summary: canceller function for dojo._ioSetArgs call.
+
+		//DO NOT use "this" and expect it to be dojo.io.script.
+		dfd.canceled = true;
+		if(dfd.ioArgs.canDelete){
+			dojo.io.script._deadScripts.push(dfd.ioArgs.id);
+		}
+	},
+
+	_deferredOk: function(/*Deferred*/dfd){
+		//summary: okHandler function for dojo._ioSetArgs call.
+
+		//DO NOT use "this" and expect it to be dojo.io.script.
+
+		//Add script to list of things that can be removed.		
+		if(dfd.ioArgs.canDelete){
+			dojo.io.script._deadScripts.push(dfd.ioArgs.id);
+		}
+
+		if(dfd.ioArgs.json){
+			//Make sure to *not* remove the json property from the
+			//Deferred, so that the Deferred can still function correctly
+			//after the response is received.
+			return dfd.ioArgs.json;
+		}else{
+			//FIXME: cannot return the dfd here, otherwise that stops
+			//the callback chain in Deferred. So return the ioArgs instead.
+			//This doesn't feel right.
+			return dfd.ioArgs;
+		}
+	},
+	
+	_deferredError: function(/*Error*/error, /*Deferred*/dfd){
+		//summary: errHandler function for dojo._ioSetArgs call.
+
+		if(dfd.ioArgs.canDelete){
+			//DO NOT use "this" and expect it to be dojo.io.script.
+			if(error.dojoType == "timeout"){
+				//For timeouts, remove the script element immediately to
+				//avoid a response from it coming back later and causing trouble.
+				dojo.io.script.remove(dfd.ioArgs.id);
+			}else{
+				dojo.io.script._deadScripts.push(dfd.ioArgs.id);
+			}
+		}
+		console.debug("dojo.io.script error", error);
+		return error;
+	},
+
+	_deadScripts: [],
+	_counter: 1,
+
+	_validCheck: function(/*Deferred*/dfd){
+		//summary: inflight check function to see if dfd is still valid.
+
+		//Do script cleanup here. We wait for one inflight pass
+		//to make sure we don't get any weird things by trying to remove a script
+		//tag that is part of the call chain (IE 6 has been known to
+		//crash in that case).
+		var _self = dojo.io.script;
+		var deadScripts = _self._deadScripts;
+		if(deadScripts && deadScripts.length > 0){
+			for(var i = 0; i < deadScripts.length; i++){
+				//Remove the script tag
+				_self.remove(deadScripts[i]);
+			}
+			dojo.io.script._deadScripts = [];
+		}
+
+		return true;
+	},
+
+	_ioCheck: function(/*Deferred*/dfd){
+		//summary: inflight check function to see if IO finished.
+
+		//Check for finished jsonp
+		if(dfd.ioArgs.json){
+			return true;
+		}
+
+		//Check for finished "checkString" case.
+		var checkString = dfd.ioArgs.args.checkString;
+		if(checkString && eval("typeof(" + checkString + ") != 'undefined'")){
+			return true;
+		}
+
+		return false;
+	},
+
+	_resHandle: function(/*Deferred*/dfd){
+		//summary: inflight function to handle a completed response.
+		if(dojo.io.script._ioCheck(dfd)){
+			dfd.callback(dfd);
+		}else{
+			//This path should never happen since the only way we can get
+			//to _resHandle is if _ioCheck is true.
+			dfd.errback(new Error("inconceivable dojo.io.script._resHandle error"));
+		}
+	},
+
+	_jsonpCallback: function(/*JSON Object*/json){
+		//summary: 
+		//		generic handler for jsonp callback. A pointer to this function
+		//		is used for all jsonp callbacks. NOTE: the "this" in this
+		//		function will be the Deferred object that represents the script
+		//		request.
+		this.ioArgs.json = json;
+	}
+}
+
+}
+
+if(!dojo._hasResource["dojox._cometd.cometd"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox._cometd.cometd"] = true;
 dojo.provide("dojox._cometd.cometd");
-dojo.require("dojo.AdapterRegistry");
-dojo.require("dojo.io.script");
+
+
 
 // FIXME: need to add local topic support to advise about:
 //		successful handshake
@@ -51,12 +376,12 @@ dojox.cometd = new function(){
 	this._subscriptions = [];
 
 	this.state = function() {
-	    return this._initialized?(this._connected?this.CONNECTED:this.CONNECTING):(this._connected?this.DISCONNECTING:this.DISCONNECTED);
+		return this._initialized?(this._connected?this.CONNECTED:this.CONNECTING):(this._connected?this.DISCONNECTING:this.DISCONNECTED);
 	}
 
-	this.init = function(  /*String*/       root, 
-			       /*Object|null */ props, 
-			       /*Object|null */ bargs){	// return: dojo.Deferred      
+	this.init = function(	/*String*/	root, 
+				/*Object|null */ props, 
+				/*Object|null */ bargs){	// return: dojo.Deferred
 		//	summary:
 		//		Initialize the cometd implementation of the Bayeux protocol
 		//	description:
@@ -140,11 +465,12 @@ dojox.cometd = new function(){
 		}
 		this._props=props;
 		for (var tname in this._subscriptions){
-		    for (var sub in this._subscriptions[tname]) {
-			if (this._subscriptions[tname][sub].topic)
-			    dojo.unsubscribe(this._subscriptions[tname][sub].topic);
-		    }
+			for (var sub in this._subscriptions[tname]) {
+				if (this._subscriptions[tname][sub].topic)
+		 			dojo.unsubscribe(this._subscriptions[tname][sub].topic);
+			}
 		}
+		this._messageQ = [];
 		this._subscriptions = [];
 		this._initialized=true;
 		this.batch=0;
@@ -153,10 +479,10 @@ dojox.cometd = new function(){
 		var r;
 		// if xdomain, then we assume jsonp for handshake
 		if(this._isXD){
-		    bindArgs.callbackParamName="jsonp";
-		    r= dojo.io.script.get(bindArgs);
+			bindArgs.callbackParamName="jsonp";
+			r= dojo.io.script.get(bindArgs);
 		} else
-		    r = dojo.xhrPost(bindArgs);
+			r = dojo.xhrPost(bindArgs);
 		dojo.publish("/cometd/meta", [{cometd:this,action:"handshake",successful:true,state:this.state()}]);
 		return r;
 	}
@@ -184,9 +510,9 @@ dojox.cometd = new function(){
 	}
 
 	
-	this.subscribe = function(      /*String */    channel,
-					/*Object */    objOrFunc,
-					/*String */    funcName){ // return: dojo.Deferred
+	this.subscribe = function(	/*String */	channel,
+					/*Object */	objOrFunc,
+					/*String */	funcName){ // return: dojo.Deferred
 		// summary:
 		//		inform the server of this client's interest in channel
 		// channel:
@@ -231,7 +557,7 @@ dojox.cometd = new function(){
 
 
 
-	this.unsubscribe = function(    /*string*/      channel,
+	this.unsubscribe = function(	/*string*/	channel,
 					/*object|null*/ objOrFunc,
 					/*string|null*/ funcName){ 
 		// summary:
@@ -249,14 +575,14 @@ dojox.cometd = new function(){
 		var tname = "/cometd"+channel;
 		var subs=this._subscriptions[tname];
 		if (!subs || subs.length==0)
-		      return;
-		      
+			return;
+
 		var s=0;
 		for (var i in subs){
 			var sb=subs[i];
 			if (!objOrFunc||(sb.objOrFunc===objOrFunc&&(!sb.funcName&&!funcName||sb.funcName==funcName))){
-				dojo.unsubscribe(subs[i].topic);  
-				delete subs[i];    
+				dojo.unsubscribe(subs[i].topic);
+				delete subs[i];
 			}
 			else
 				s++;
@@ -287,10 +613,10 @@ dojox.cometd = new function(){
 		//	|       dojox.cometd.disconnect();
 
 		for (var tname in this._subscriptions){
-		    for (var sub in this._subscriptions[tname]) {
-			if (this._subscriptions[tname][sub].topic)
-			    dojo.unsubscribe(this._subscriptions[tname][sub].topic);
-		    }
+			for (var sub in this._subscriptions[tname]) {
+				if (this._subscriptions[tname][sub].topic)
+					dojo.unsubscribe(this._subscriptions[tname][sub].topic);
+			}
 		}
 		this._subscriptions = [];
 		this._messageQ = [];
@@ -309,12 +635,12 @@ dojox.cometd = new function(){
 	
 	// public extension points
 	
-	this.subscribed = function(     /*string*/  channel,
-					/*obj*/     message){
+	this.subscribed = function(	/*string*/	channel,
+					/*obj*/	message){
 	}
 
-	this.unsubscribed = function(   /*string*/  channel,
-					/*obj*/     message){
+	this.unsubscribed = function(	/*string*/	channel,
+					/*obj*/	message){
 	}
 
 
@@ -352,19 +678,19 @@ dojox.cometd = new function(){
 		
 		// If all OK
 		if(successful){
-		    // pick a transport
-		    this.currentTransport = this.connectionTypes.match(
-			data.supportedConnectionTypes,
-			data.version,
-			this._isXD
-		    );
-		    // initialize the transport
-		    this.currentTransport._cometd = this;
-		    this.currentTransport.version = data.version;
-		    this.clientId = data.clientId;
-		    this.tunnelInit = dojo.hitch(this.currentTransport, "tunnelInit");
-		    this.tunnelCollapse = dojo.hitch(this.currentTransport, "tunnelCollapse");
-		    this.currentTransport.startup(data);
+			// pick a transport
+			this.currentTransport = this.connectionTypes.match(
+				data.supportedConnectionTypes,
+				data.version,
+				this._isXD
+			);
+			// initialize the transport
+			this.currentTransport._cometd = this;
+			this.currentTransport.version = data.version;
+			this.clientId = data.clientId;
+			this.tunnelInit = dojo.hitch(this.currentTransport, "tunnelInit");
+			this.tunnelCollapse = dojo.hitch(this.currentTransport, "tunnelCollapse");
+			this.currentTransport.startup(data);
 		}
 
 		dojo.publish("/cometd/meta", [{cometd:this,action:"handshook",successful:successful,state:this.state()}]);
@@ -374,7 +700,7 @@ dojox.cometd = new function(){
 			console.debug("cometd init failed");
 			// follow advice
 			if(this._advice && this._advice["reconnect"]=="none"){
-			    console.debug("cometd reconnect: none");
+				console.debug("cometd reconnect: none");
 			} else if( this._advice && this._advice["interval"] && this._advice.interval>0 ){
 				setTimeout(dojo.hitch(this,function(){this.init(cometd.url,this._props);}),this._advice.interval);
 			}else{
@@ -455,10 +781,10 @@ dojox.cometd = new function(){
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
 			try {
-			    var tname = "/cometd"+message.channel;
-			    dojo.publish(tname, [ message ]);
+				var tname = "/cometd"+message.channel;
+				dojo.publish(tname, [ message ]);
 			}catch(e){
-			    console.debug(e);
+				console.debug(e);
 			}
 		}
 	}
@@ -564,7 +890,8 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(this._cometd._polling){ return; }
+		if(this._cometd._polling)
+			return;
 		this.openTunnelWith({
 			message: dojo.toJson([
 				{
@@ -578,35 +905,39 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.tunnelCollapse = function(){
-		if(!this._cometd._polling){
-			// try to restart the tunnel
-			this._cometd._polling = false;
-
-			// TODO handle transport specific advice
-
-			if(this._cometd._advice){
-				if(this._cometd._advice["reconnect"]=="none"){
-					return;
-				}
-
-				if(	(this._cometd._advice["interval"])&&
-					(this._cometd._advice.interval>0) ){
-					setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._advice.interval);
-				}else{
-					this._connect();
-				}
+		// TODO handle transport specific advice
+		
+		if(!this._cometd._initialized)
+			return;
+			
+		if(this._cometd._advice){
+			if(this._cometd._advice["reconnect"]=="none"){
+				return;
+			}
+			if(	(this._cometd._advice["interval"])&&
+				(this._cometd._advice.interval>0) ){
+				setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._advice.interval);
 			}else{
 				this._connect();
 			}
+		}else{
+			this._connect();
 		}
 	}
 
 	this._connect = function(){
+		if(!this._cometd._initialized)
+			return;
+		if(this._cometd._polling) {
+			console.debug("wait for poll to complete or fail");
+			setTimeout(dojo.hitch(this,function(){ this._connect(); }),500); 
+			return;
+		}
+			
 		if(	(this._cometd._advice)&&
 			(this._cometd._advice["reconnect"]=="handshake")
 		){
 			this._cometd._connected=false;
-			this._cometd._polling=false;
 			this._initialized = false;
 			this._cometd.init(this._cometd.url,this._cometd._props);
  		}else if(this._cometd._connected){
@@ -632,14 +963,12 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this.openTunnelWith = function(content, url){
-		// console.debug("openTunnelWith:", content, (url||cometd.url));
+		this._cometd._polling = true;
 		var d = dojo.xhrPost({
 			url: (url||this._cometd.url),
 			content: content,
 			handleAs: this._cometd.handleAs,
 			load: dojo.hitch(this, function(data){
-				// console.debug(evt.responseText);
-				// console.debug(data);
 				this._cometd._polling = false;
 				this._cometd.deliver(data);
 				this.tunnelCollapse();
@@ -649,13 +978,12 @@ dojox.cometd.longPollTransport = new function(){
 				console.debug("tunnel opening failed:", err);
 				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
 				if (!this._cometd._advice || !this._cometd._advice.interval)
-				    this._cometd._advice={reconnect:"retry",interval:0};
+					this._cometd._advice={reconnect:"retry",interval:0};
 				if (this._cometd._advice.interval<this._cometd._maxInterval)
-				    this._cometd._advice.interval+=this._cometd._backoffInterval;
-				setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._advice.interval);
+					this._cometd._advice.interval+=this._cometd._backoffInterval;
+				this.tunnelCollapse();
 			})
 		});
-		this._cometd._polling = true;
 	}
 
 	this.sendMessages = function(messages){
@@ -704,7 +1032,8 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		if(this._cometd._polling){ return; }
+		if(this._cometd._polling){ 
+			return; }
 		this.openTunnelWith({
 			message: dojo.toJson([
 				{
@@ -722,7 +1051,7 @@ dojox.cometd.callbackPollTransport = new function(){
 	this.deliver = dojox.cometd.longPollTransport.deliver;
 
 	this.openTunnelWith = function(content, url){
-		// create a <script> element to generate the request
+		this._cometd._polling = true;
 		dojo.io.script.get({
 			load: dojo.hitch(this, function(data){
 				this._cometd._polling = false;
@@ -734,16 +1063,15 @@ dojox.cometd.callbackPollTransport = new function(){
 				console.debug("tunnel opening failed:", err);
 				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
 				if (!this._cometd._advice || !this._cometd._advice.interval)
-				    this._cometd._advice={reconnect:"retry",interval:0};
+					this._cometd._advice={reconnect:"retry",interval:0};
 				if (this._cometd._advice.interval<this._cometd._maxInterval)
-				    this._cometd._advice.interval+=this._cometd._backoffInterval;
-				setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._advice.interval);
+					this._cometd._advice.interval+=this._cometd._backoffInterval;
+				this.tunnelCollapse();
 			}),
-                        url: (url||this._cometd.url),
-                        content: content,
-                        callbackParamName: "jsonp"
+			url: (url||this._cometd.url),
+			content: content,
+			callbackParamName: "jsonp"
 		});
-		this._cometd._polling = true;
 	}
 
 	this.sendMessages = function(/*array*/ messages){
@@ -786,4 +1114,15 @@ dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTrans
 dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
 
 dojo.addOnUnload(dojox.cometd,"_onUnload");
+
+
+}
+
+if(!dojo._hasResource["dojox.cometd"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.cometd"] = true;
+// stub loader for the cometd module since no implementation code is allowed to live in top-level files
+dojo.provide("dojox.cometd");
+
+
+}
 
