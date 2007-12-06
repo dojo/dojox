@@ -367,6 +367,7 @@ dojo.declare('dojox.VirtualGrid',
 	// update
 	defaultUpdate: function(){
 		// note: initial update calls render and subsequently this function.
+		if(!this.domNode){return;}
 		if(this.updating){
 			this.invalidated.all = true;
 			return;
