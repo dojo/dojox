@@ -60,19 +60,32 @@
 		var easeInOutAnim = dojo.fx.chain([
 			dojo.fadeOut({
 				node: 'easeInOut',
-				duration:2000,
-				easing: dojox.fx.easing.easeInOut
+				duration:2000
 			}),
 			dojo.fadeIn({	
 				node: 'easeInOut',
+				duration:2000
+			})
+		]);
+
+		var linearEaseAnim = dojo.fx.chain([
+			dojo.fadeOut({
+				node: 'linearEase',
 				duration:2000,
-				easing: dojox.fx.easing.easeInOut
+				easing: dojox.fx.easing.linear
+			}),
+			dojo.fadeIn({
+				node: 'linearEase',
+				duration:2000,
+				easing: dojox.fx.easing.linear
 			})
 		]);
 
 		dojo.connect(dojo.byId('easeIn'),"onclick",easeInAnim,"play");
 		dojo.connect(dojo.byId('easeOut'),"onclick",easeOutAnim,"play");
 		dojo.connect(dojo.byId('easeInOut'),"onclick",easeInOutAnim,"play");
+		dojo.connect(dojo.byId('linearEase'),"onclick",linearEaseAnim,"play");
+
 
 		// argh! FIXME: combine and chain are destructive to the animations. :(
 		// allAnim = dojo.fx.combine([easeInAnim,easeOutAnim,easeInOutAnim]);
@@ -81,6 +94,7 @@
 			easeInAnim.play();
 			easeOutAnim.play();
 			easeInOutAnim.play(); 
+			linearEaseAnim.play();
 			} 
 		}; 
 
@@ -97,10 +111,13 @@
 	<br><br>
 	<div id="easeOut" class="block">dojox.fx.easing.easeOut</div>
 	<br><br>
-	<div id="easeInOut" class="block">dojox.fx.easing.easeInOut</div>
+	<div id="linearEase" class="block">dojox.fx.easing.linear</div>
+	<br><br>
+	<div id="easeInOut" class="block">dojo default easing</div>
 	
 	<p>
-	dojox.fx.easing is stand-alone, and does not require the dojox.fx base files. 
+	dojox.fx.easing is stand-alone, and does not require the dojox.fx base files. to see a chart
+	of these functions see <a href="example_easingChart2D.html">example_easingChart2D.html</a> 
 	</p>	
 
 </body>

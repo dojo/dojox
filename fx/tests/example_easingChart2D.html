@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>visualising dojo._Animation.easing via dojox.charting</title>
+
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="../../../dojo/resources/dojo.css">
+
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="../../../dijit/themes/tundra/tundra.css">
+
+	<style type="text/css">
+	.box { padding:14px; 
+		border:1px solid #b7b7b7;
+		-moz-border-radius:8pt;
+	}
+	</style>
+	
+	<script type="text/javascript" djConfig="isDebug:false, parseOnLoad: true"
+		src="../../../dojo/dojo.js"></script>
+
+	<script type="text/javascript">
+		// one simple theme, and the charting engine:
+		dojo.require("dijit.form.Button");
+		dojo.require("dojox.charting.Chart2D");
+		dojo.require("dijit.Dialog"); 
+		// and easing functions:
+		dojo.require("dojox.fx.easing"); 
+
+		var d=1; 
+		var masterData = [];
+		var makeSeriesFromEasing = function(/* function */easingFunc,/* string */str){
+			// make some data by running a 2sec animation with an easing function
+			// and adding it to the chart
+			var seriesData = [];
+			var anim = new dojo._Animation({
+				// should be ~ 30 ticks
+				duration: 3000,
+				rate: 100,
+				// and 100 values
+				curve: new dojo._Line(0,30),
+				// sanity check:
+				easing: (dojo.isFunction(easingFunc) ? easingFunc : dojo._defaultEasing),
+				// put the data in the array at each tick
+				onAnimate: function(){ seriesData.push(arguments[0]); },
+				onEnd: function(){ 
+					// then add the series to the chart, and render it:
+					masterData.push(seriesData);   
+					chart12.addSeries("Series "+str,
+						seriesData,
+						{ stroke: { color: "black", width: 0 }, fill: "rgba(30,0,255,0.10)" }
+					);
+					chart12.render();
+				}
+			});
+			anim.play(25);
+		};
+
+		var chart12; 
+		dojo.addOnLoad(function(){
+			// setup our chart
+			chart12 = new dojox.charting.Chart2D("easingChart");
+			chart12.addAxis("x", {fixLower: "major", fixUpper: "major"});
+			chart12.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
+			chart12.addPlot("default", {type: "Areas"});
+		});
+
+	</script>
+</head>
+<body class="tundra" style="padding:20px">
+
+	<h1>dojo._Animation.easing</h1>
+	
+	<p>this is actually running animations recording the values returned from the
+	animation, which is modified by the easing functions.
+	</p>
+
+		<button dojoType="dijit.form.Button">
+			default
+			<script type="dojo/method" event="onClick">
+				makeSeriesFromEasing(dojo._defaultEasing,'default');
+				this.setDisabled(true);
+			</script>
+		</button>	
+		<button dojoType="dijit.form.Button">
+			easeIn
+			<script type="dojo/method" event="onClick">
+				makeSeriesFromEasing(dojox.fx.easing.easeIn,'In');
+				this.setDisabled(true);
+			</script>
+		</button> 
+		<button dojoType="dijit.form.Button">
+			easeOut
+			<script type="dojo/method" event="onClick">
+				makeSeriesFromEasing(dojox.fx.easing.easeOut,'Out');
+				this.setDisabled(true);
+			</script>
+		</button>
+		<button dojoType="dijit.form.Button">
+			linear
+			<script type="dojo/method" event="onClick">
+				makeSeriesFromEasing(dojox.fx.easing.linear,'linear');
+				this.setDisabled(true);
+			</script>
+		</button>
+
+		
+
+		<button dojoType="dijit.form.Button">
+			Custom Function
+			<script type="dojo/method" event="onClick">
+				dialog.show();
+			</script>			
+		</button>
+
+		<button dojoType="dijit.form.Button">
+			render()
+			<script type="dojo/method" event="onClick">
+				chart12.render();
+				console.dir(chart12);
+			</script>
+		</button>
+
+		<button dojoType="dijit.form.Button">
+			Clear All
+			<script type="dojo/method" event="onClick">
+				dojo.forEach(chart12.series,function(series){
+					series.data = [];
+					series.destroy();
+				});
+				dojo.query("button").forEach(function(n){
+					dijit.getEnclosingWidget(n).setDisabled(false);
+				});
+				chart12.render();
+			</script>
+		</button>
+
+		<div class="box">
+			<div id="easingChart" style="height:300px"></div>
+		</div>
+
+		<div dojoType="dijit.Dialog" jsId="dialog" duration="1" title="Custom Easing Function" style="width:300px;">
+			
+			var easing = function(/* decimal */n){
+			<textarea id="funcText" rows="4" cols="30"></textarea>
+			<br>
+			}; // return something, btw.
+			<p></p>
+			<button dojoType="dijit.form.Button">
+				Try It
+				<script type="dojo/method" event="onClick">
+					dialog.hide();
+					d++;
+					var val = dojo.byId("funcText").value;
+					var easeFuncText = "var ease = function(n){ "+val+" };";					
+					var foo = dojo.eval(easeFuncText);
+					makeSeriesFromEasing(ease,"dynSeries"+d);				
+				</script>
+			</button>
+		</div>
+
+</body>
+</html>
