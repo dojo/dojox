@@ -37,21 +37,22 @@ dojo.declare("dojox.layout.ScrollPane",
     //		either "horizontal" or "vertical" for scroll orientation. 
     orientation: "vertical",
 
-    // our simple template
     templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
 
     layout: function(){
 	// summary: calculates required sizes. call this if we add/remove content manually, or reload the content.
+
+	dojo.style(this.wrapper,this._dir,this.domNode.style[this._dir]);
         this._lo = dojo.coords(this.wrapper,true);
-        this._size = (this._vertical ?
+        this._size = Math.max(0,(this._vertical ?
            (this.containerNode.scrollHeight - this._lo.h)  :
            (this.containerNode.scrollWidth - this._lo.w)     
-        );
+        ));
         this._line = new dojo._Line(0-this._offset,this._size+(this._offset*2));
 
         // share a relative position w the scroll offset via a line
         var u = this._lo[(this._vertical?"h":"w")]
-        var size = u * (u / this._size);
+        var size = u * (u / Math.max(1,this._size));
         var center = Math.floor(u - size);        
         this._helpLine = new dojo._Line(0,center);
 
@@ -83,7 +84,7 @@ dojo.declare("dojox.layout.ScrollPane",
     
     },	
 
-    _set: function(/* Int */n){
+    _set: function(/* Float */n){
 	// summary: set the pane's scroll offset, and position the virtual scroll helper 
 	this.wrapper[(this._vertical ? "scrollTop" : "scrollLeft")] = Math.floor(this._line.getValue(n));
         dojo.style(this.helper,this._edge,Math.floor(this._helpLine.getValue(n))+"px");    

@@ -10,11 +10,15 @@
 	<script language="JavaScript" type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.addOnLoad(function(){
+			var i;
 			var n = dojo.byId("hold");
-			for(var i=0; i<12; i++){
-				n.appendChild(dojo.clone(dojo.byId("clone")));
+			var c = dojo.query(".clone")[0];
+			for(i=0; i<12; i++){
+				var b = dojo.clone(c);
+				n.appendChild(b); // dojo.clone(dojo.byId("clone")));
 			}
 			dojo.parser.parse();
+			dijit.byId("horiz").layout(); 
 		});
 	</script>
 	<style type="text/css">
@@ -55,10 +59,10 @@
 <div class="container">
 	<h1 class='testTitle'>dojox.layout.ScrollPane</h1>
 	<h2>horizontal</h2>
-	<div dojoType="dojox.layout.ScrollPane" orientation="horizontal"  style="width:600px; height:125px; border:1px solid #b7b7b7" id="horiz">
+	<div dojoType="dojox.layout.ScrollPane" orientation="horizontal"  style="width:600px; height:125px" id="horiz">
 		<div class="dijitInline" id="hold">
-			<div class="dijitInline example" id="clone">
-				<h2>Foo!</h2><p>text <ul><li>bar</li><li>bar</li></p>
+			<div class="dijitInline clone example">
+				<h2>Foo!</h2><p>text <ul><li>bar</li><li>bar</li></ul></p>
 			</div>
 		</div>
 	</div>
