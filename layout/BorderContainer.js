@@ -27,9 +27,9 @@ dojo.declare(
 	//		html, body{ height: 100%; width: 100%; }
 	//	</style>
 	//	<div dojoType="BorderContainer" design="sidebar" style="width: 100%; height: 100%">
-	//		<div dojoType="ContentPane" location="top">header text</div>
-	//		<div dojoType="ContentPane" location="right" style="width: 200px;">table of contents</div>
-	//		<div dojoType="ContentPane" location="center">client area</div>
+	//		<div dojoType="ContentPane" region="top">header text</div>
+	//		<div dojoType="ContentPane" region="right" style="width: 200px;">table of contents</div>
+	//		<div dojoType="ContentPane" region="center">client area</div>
 	//	</div>
 
 	// design: String
@@ -60,26 +60,26 @@ dojo.declare(
 	},
 
 	_setupChild: function(/*Widget*/child){
-		var location = child.location;
-		if(location){
+		var region = child.region;
+		if(region){
 			child.domNode.style.position = "absolute";
 
-			if(location == "leading"){ location = "left"; }
-			if(location == "trailing"){ location = "right"; }
+			if(region == "leading"){ region = "left"; }
+			if(region == "trailing"){ region = "right"; }
 			if(!dojo._isBodyLtr()){
-				if(location == "left"){
-					location = "right";
-				}else if(location == "right"){
-					location = "left";
+				if(region == "left"){
+					region = "right";
+				}else if(region == "right"){
+					region = "left";
 				}
 			}
-			this["_"+location] = child.domNode;
+			this["_"+region] = child.domNode;
 
 			if(child.splitter){
-				var opp = ({left:'right', right:'left', leading:'trailing', trailing:'leading', top:'bottom', bottom:'top'})[child.location];
-				var oppNode = dojo.query('[location='+opp+']', this.domNode)[0];
-				var splitter = new dojox.layout._Splitter({ container: this, child: child, location: location, oppNode: oppNode, live: this.liveSplitters });
-				this._splitters[location] = splitter.domNode;
+				var opp = ({left:'right', right:'left', leading:'trailing', trailing:'leading', top:'bottom', bottom:'top'})[child.region];
+				var oppNode = dojo.query('[region='+opp+']', this.domNode)[0];
+				var splitter = new dojox.layout._Splitter({ container: this, child: child, region: region, oppNode: oppNode, live: this.liveSplitters });
+				this._splitters[region] = splitter.domNode;
 				dojo.place(splitter.domNode, child.domNode, "after");
 			}
 		}
@@ -98,14 +98,14 @@ dojo.declare(
 	},
 
 	removeChild: function(/*Widget*/ child){
-		var location = child.location;
-		var splitter = this._splitters[location];
+		var region = child.region;
+		var splitter = this._splitters[region];
 		if(splitter){
 			dijit.byNode(splitter).destroy();
-			delete this._splitters[location];
+			delete this._splitters[region];
 		}
 		dijit._Container.prototype.removeChild.apply(this, arguments);
-		delete this["_"+location];
+		delete this["_"+region];
 		if(this._started){
 			this._layoutChildren(this.domNode, this._contentBox, this.getChildren());
 		}
@@ -120,7 +120,7 @@ dojo.declare(
 		 * dim:
 		 *		{l, t, w, h} object specifying dimensions of container into which to place children
 		 * children:
-		 *		an array like [ {domNode: foo, location: "bottom" }, {domNode: bar, location: "client"} ]
+		 *		an array like [ {domNode: foo, region: "bottom" }, {domNode: bar, region: "client"} ]
 		 */
 
 //TODO: what is dim and why doesn't it look right?
@@ -183,6 +183,7 @@ dojo.declare(
 		if(rightSplitter){
 			dojo.mixin(rightSplitter.style, splitterBounds);
 			rightSplitter.style.right = rightWidth + "px";
+console.log("RIGHT SPLITTER="+rightWidth);
 		}
 
 		var topSplitterSize = topSplitter ? dojo.marginBox(topSplitter).h : 0;
@@ -205,8 +206,7 @@ dojo.declare(
 		dojo.mixin(rightStyle, bounds);
 		leftStyle.left = rightStyle.right = "0px";
 
-		topStyle.top = "0px";
-		bottomStyle.bottom = "0px";
+		topStyle.top = bottomStyle.bottom = "0px";
 		if(sidebarLayout){
 			topStyle.left = bottomStyle.left = leftWidth + (dojo._isBodyLtr() ? 0 : leftSplitterSize) + "px";
 			topStyle.right = bottomStyle.right = rightWidth + (dojo._isBodyLtr() ? rightSplitterSize : 0) + "px";
@@ -255,10 +255,10 @@ dojo.declare(
 // Since any widget can be specified as a LayoutContainer child, mix it
 // into the base widget class.  (This is a hack, but it's effective.)
 dojo.extend(dijit._Widget, {
-	// location: String
+	// region: String
 	//		"top", "bottom", "leading", "trailing", "left", "right", "center".
 	//		See the BorderContainer description for details on this parameter.
-	location: 'none',
+	region: 'none',
 
 	// splitter: Boolean
 	splitter: false,
@@ -277,7 +277,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 /*=====
 	container: null,
 	child: null,
-	location: null,
+	region: null,
 =====*/
 
 	// live: Boolean
@@ -290,10 +290,10 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
-		this.horizontal = /top|bottom/.test(this.location);
+		this.horizontal = /top|bottom/.test(this.region);
 		dojo.addClass(this.domNode, "dijitSplitter" + (this.horizontal ? "Horizontal" : "Vertical"));
 
-		this._factor = /top|left/.test(this.location) ? 1 : -1;
+		this._factor = /top|left/.test(this.region) ? 1 : -1;
 		this._minSize = this.child.minSize;
 	},
 
@@ -304,8 +304,13 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._pageStart = horizontal ? e.pageY : e.pageX;
 		var dim = horizontal ? 'h' : 'w';
 		this._childStart = dojo.marginBox(this.child.domNode)[dim];
-		var edge = horizontal ? 't' : 'l';
-		this._splitterStart = dojo.marginBox(this.domNode)[edge] - dojo.marginBox(this.container.domNode)[edge];
+		if(dojo.isSafari){
+			var axis = horizontal ? 'y' : 'x';
+			this._splitterStart = dojo.coords(this.domNode)[axis] - dojo.coords(this.container.domNode)[axis];
+		}else{
+			var edge = horizontal ? 't' : 'l';
+			this._splitterStart = dojo.marginBox(this.domNode)[edge] - dojo.marginBox(this.container.domNode)[edge];
+		}
 		this._handlers = [
 				dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
 				dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
