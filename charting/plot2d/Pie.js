@@ -5,7 +5,6 @@ dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.plot2d.common");
 
 dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.adapter");
 dojo.require("dojox.gfx");
 
 (function(){
@@ -77,7 +76,7 @@ dojo.require("dojox.gfx");
 				var labels = dojo.map(slices, function(x){
 					return this._getLabel(x * 100) + "%";
 				}, this);
-				shift = df.foldl1(dojo.map(labels, df.pluck("length")), "x, y -> Math.max(x, y)");
+				shift = df.foldl1(df.map(labels, "x.length"), "x, y -> Math.max(x, y)");
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 				shift = Math.max(shift * labelFudgeFactor, 1) / 2 * size;
 				if(this.opt.labelOffset < 0){
