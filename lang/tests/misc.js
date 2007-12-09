@@ -20,6 +20,8 @@ dojo.require("dojox.lang.functional.zip");
 		function testCompose1(t){ t.assertEqual(df.lambda(["+5", "*3"])(8), 8 * 3 + 5); },
 		function testCompose2(t){ t.assertEqual(df.lambda(["+5", "*3"].reverse())(8), (8 + 5) * 3); },
 		
-		function testForIn(t){ t.assertEqual(result.sort().join(", "), "[a] = 1, [b] = 2"); }
+		function testForIn(t){ t.assertEqual(result.sort().join(", "), "[a] = 1, [b] = 2"); },
+		function testKeys(t){ t.assertEqual(df.keys({a: 1, b: 2, c: 3}), ["a", "b", "c"]); },
+		function testValues(t){ t.assertEqual(df.values({a: 1, b: 2, c: 3}), [1, 2, 3]); }
 	]);
 })();

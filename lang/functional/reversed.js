@@ -20,7 +20,7 @@ dojo.require("dojox.lang.functional.lambda");
 	d.mixin(df, {
 		// JS 1.6 standard array functions, which can take a lambda as a parameter.
 		// Consider using dojo._base.array functions, if you don't need the lambda support.
-		filterRev: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+		filterRev: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: creates a new array with all elements that pass the test 
 			//	implemented by the provided function.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
@@ -31,12 +31,12 @@ dojo.require("dojox.lang.functional.lambda");
 			}
 			return t;	// Array
 		},
-		forEachRev: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+		forEachRev: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: executes a provided function once per array element.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
 			for(var i = a.length - 1; i >= 0; f.call(o, a[i], i, a), --i);
 		},
-		mapRev: function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+		mapRev: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: creates a new array with the results of calling 
 			//	a provided function on every element in this array.
 			a = typeof a == "string" ? a.split("") : a; o = o || d.global; f = df.lambda(f);
