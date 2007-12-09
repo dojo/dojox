@@ -39,7 +39,7 @@ dojo.declare(
 
 	liveSplitters: true,
 
-// persist for splitters?
+//TODO: persist for splitters?
 
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
@@ -76,7 +76,9 @@ dojo.declare(
 			this["_"+location] = child.domNode;
 
 			if(child.splitter){
-				var splitter = new dojox.layout._Splitter({ container: this, childNode: child.domNode, location: location, live: this.liveSplitters });
+				var opp = ({left:'right', right:'left', leading:'trailing', trailing:'leading', top:'bottom', bottom:'top'})[child.location];
+				var oppNode = dojo.query('[location='+opp+']', this.domNode)[0];
+				var splitter = new dojox.layout._Splitter({ container: this, child: child, location: location, oppNode: oppNode, live: this.liveSplitters });
 				this._splitters[location] = splitter.domNode;
 				dojo.place(splitter.domNode, child.domNode, "after");
 			}
@@ -252,16 +254,24 @@ dojo.extend(dijit._Widget, {
 	location: 'none',
 
 	// splitter: Boolean
-	splitter: false
+	splitter: false,
+
+	// minSize: Number
+	minSize: 0,
+
+	// maxSize: Number
+	maxSize: Infinity
 });
 
 dojo.require("dijit._Templated");
 
 dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 {
+/*=====
 	container: null,
-	childNode: null,
+	child: null,
 	location: null,
+=====*/
 
 	// live: Boolean
 	//		If true, the child's size changes and the child widget is redrawn as you drag the splitter;
@@ -274,7 +284,10 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	postCreate: function(){
 		this.inherited("postCreate", arguments);
 		this.horizontal = /top|bottom/.test(this.location);
-		dojo.addClass(this.domNode, "dijitSplitter" + (this.horizontal ? "Horizontal" : "Vertical"));		
+		dojo.addClass(this.domNode, "dijitSplitter" + (this.horizontal ? "Horizontal" : "Vertical"));
+
+		this._factor = /top|left/.test(this.location) ? 1 : -1;
+		this._minSize = this.child.minSize;
 	},
 
 	_startDrag: function(e){
@@ -282,13 +295,19 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._resize = this.live;
 		var horizontal = this.horizontal;
 		this._pageStart = horizontal ? e.pageY : e.pageX;
-		this._childStart = dojo.coords(this.childNode)[ horizontal ? 'h' : 'w' ];
+		var dim = horizontal ? 'h' : 'w';
+		this._childStart = dojo.coords(this.child.domNode)[dim];
 		var axis = horizontal ? 'y' : 'x';
 		this._splitterStart = dojo.coords(this.domNode)[axis] - dojo.coords(this.container.domNode)[axis];
 		this._handlers = [
 				dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
 				dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
 			];
+
+		var available = dojo.coords(this.container.domNode)[dim] - (this.oppNode ? dojo.coords(this.oppNode)[dim] : 0);
+		var fudge = 10; //TODO: specify? use width of splitter?
+		this._maxSize = Math.min(this.child.maxSize, available - fudge * this._factor);
+
 		dojo.stopEvent(e);
 	},
 
@@ -298,6 +317,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 			this._move(delta, this._childStart);
 		}else{
 			var splitterCoord = delta + this._splitterStart;
+			//TODO: min/max constraints
 			this.domNode.style[ this.horizontal ? "top" : "left" ] = splitterCoord + "px"; //FIXME: this ends up off by a few pixels for right/bottom
 		}
 	},
@@ -317,6 +337,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		dojo.forEach(this._handlers, dojo.disconnect);
 		delete this._handlers;
 	},
+
 	_onKeyPress: function(/*Event*/ e){
 		// should we apply typematic to this?
 		this._resize = true;
@@ -332,21 +353,21 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 //				this.inherited("_onKeyPress", arguments);
 				return;
 		}
-		this._move(tick, dojo.coords(this.childNode)[ horizontal ? 'h' : 'w' ]);
+		this._move(tick, dojo.coords(this.child.domNode)[ horizontal ? 'h' : 'w' ]);
 		dojo.stopEvent(e);
 	},
 
 	_move: function(/*Number*/delta, oldChildSize){
-		var factor = /top|left/.test(this.location) ? 1 : -1;
 		var childStart = oldChildSize;
-		var childSize = factor * delta + childStart;
-		this.childNode.style[ this.horizontal ? "height" : "width" ] = childSize + "px";
+		var childSize = this._factor * delta + childStart;
+		this.child.domNode.style[ this.horizontal ? "height" : "width" ] =
+			Math.max(Math.min(childSize, this._maxSize), this._minSize) + "px";
 		this.container.layout();
 	},
 
 	destroy: function(){
 		this._cleanupHandlers();
-		delete this.childNode;
+		delete this.child;
 		delete this.container;
 		this.inherited("destroy", arguments);
 	}
