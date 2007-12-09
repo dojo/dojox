@@ -296,19 +296,22 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		var horizontal = this.horizontal;
 		this._pageStart = horizontal ? e.pageY : e.pageX;
 		var dim = horizontal ? 'h' : 'w';
-		this._childStart = dojo.coords(this.child.domNode)[dim];
-		var axis = horizontal ? 'y' : 'x';
-		this._splitterStart = dojo.coords(this.domNode)[axis] - dojo.coords(this.container.domNode)[axis];
+		this._childStart = dojo.marginBox(this.child.domNode)[dim];
+		var edge = horizontal ? 't' : 'l';
+		this._splitterStart = dojo.marginBox(this.domNode)[edge] - dojo.marginBox(this.container.domNode)[edge];
 		this._handlers = [
 				dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
 				dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
 			];
+		this._computeMaxSize();
+		dojo.stopEvent(e);
+	},
 
-		var available = dojo.coords(this.container.domNode)[dim] - (this.oppNode ? dojo.coords(this.oppNode)[dim] : 0);
+	_computeMaxSize: function(){
+		var dim = this.horizontal ? 'h' : 'w';
+		var available = dojo.marginBox(this.container.domNode)[dim] - (this.oppNode ? dojo.marginBox(this.oppNode)[dim] : 0);
 		var fudge = 10; //TODO: specify? use width of splitter?
 		this._maxSize = Math.min(this.child.maxSize, available - fudge * this._factor);
-
-		dojo.stopEvent(e);
 	},
 
 	_drag: function(e){
@@ -316,9 +319,9 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		if(this._resize){
 			this._move(delta, this._childStart);
 		}else{
-			var splitterCoord = delta + this._splitterStart;
 			//TODO: min/max constraints
-			this.domNode.style[ this.horizontal ? "top" : "left" ] = splitterCoord + "px"; //FIXME: this ends up off by a few pixels for right/bottom
+			var splitterEdge = delta + this._splitterStart;
+			this.domNode.style[ this.horizontal ? "top" : "left" ] = splitterEdge + "px";
 		}
 	},
 
@@ -353,7 +356,8 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 //				this.inherited("_onKeyPress", arguments);
 				return;
 		}
-		this._move(tick, dojo.coords(this.child.domNode)[ horizontal ? 'h' : 'w' ]);
+		this._computeMaxSize();
+		this._move(tick, dojo.marginBox(this.child.domNode)[ horizontal ? 'h' : 'w' ]);
 		dojo.stopEvent(e);
 	},
 
