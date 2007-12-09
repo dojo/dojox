@@ -136,7 +136,6 @@ dojo.declare(
 
 		if(this._top){
 			topStyle = this._top.style;
-//TODO: why can't dojo.marginBox singletons be replaced with dojo.style?
 			topHeight = dojo.marginBox(this._top).h;
 		}
 		if(this._left){
@@ -152,36 +151,38 @@ dojo.declare(
 			bottomHeight = dojo.marginBox(this._bottom).h;
 		}
 
+		var splitterBounds = {
+			left: (sidebarLayout ? leftWidth : "0") + "px",
+			right: (sidebarLayout ? rightWidth : "0") + "px"
+		};
+
 		var topSplitter = this._splitters.top;
 		if(topSplitter){
-			var topSplitterStyle = topSplitter.style;
-			topSplitterStyle.top = topHeight + "px";
-			topSplitterStyle.left = (sidebarLayout ? leftWidth : "0") + "px";
-			topSplitterStyle.right = (sidebarLayout ? rightWidth : "0") + "px";
+			dojo.mixin(topSplitter.style, splitterBounds);
+			topSplitter.style.top = topHeight + "px";
 		}
 
 		var bottomSplitter = this._splitters.bottom;
 		if(bottomSplitter){
-			var bottomSplitterStyle = bottomSplitter.style;
-			bottomSplitterStyle.bottom = bottomHeight + "px";
-			bottomSplitterStyle.left = (sidebarLayout ? leftWidth : "0") + "px";
-			bottomSplitterStyle.right = (sidebarLayout ? rightWidth : "0") + "px";
+			dojo.mixin(bottomSplitter.style, splitterBounds);
+			bottomSplitter.style.bottom = bottomHeight + "px";
 		}
+
+		splitterBounds = {
+			top: (sidebarLayout ? "0" : topHeight) + "px",
+			bottom: (sidebarLayout ? "0" : bottomHeight) + "px"
+		};
 
 		var leftSplitter = this._splitters.left;
 		if(leftSplitter){
-			var leftSplitterStyle = leftSplitter.style;
-			leftSplitterStyle.left = leftWidth + "px";
-			leftSplitterStyle.top = (sidebarLayout ? "0" : topHeight) + "px";
-			leftSplitterStyle.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
+			dojo.mixin(leftSplitter.style, splitterBounds);
+			leftSplitter.style.left = leftWidth + "px";
 		}
 
 		var rightSplitter = this._splitters.right;
 		if(rightSplitter){
-			var rightSplitterStyle = rightSplitter.style;
-			rightSplitterStyle.right = rightWidth + "px";
-			rightSplitterStyle.top = (sidebarLayout ? "0" : topHeight) + "px";
-			rightSplitterStyle.bottom = (sidebarLayout ? "0" : bottomHeight) + "px";
+			dojo.mixin(rightSplitter.style, splitterBounds);
+			rightSplitter.style.right = rightWidth + "px";
 		}
 
 		var topSplitterSize = topSplitter ? dojo.marginBox(topSplitter).h : 0;
@@ -189,14 +190,20 @@ dojo.declare(
 		var rightSplitterSize = rightSplitter ? dojo.marginBox(rightSplitter).w : 0;
 		var bottomSplitterSize = bottomSplitter ? dojo.marginBox(bottomSplitter).h : 0;
 
-		centerStyle.top = topHeight + topSplitterSize + "px";
-		centerStyle.left = leftWidth + leftSplitterSize + "px";
-		centerStyle.right =  rightWidth + rightSplitterSize + "px";
-		centerStyle.bottom = bottomHeight + bottomSplitterSize + "px";
+		dojo.mixin(centerStyle, {
+			top: topHeight + topSplitterSize + "px",
+			left: leftWidth + leftSplitterSize + "px",
+			right:  rightWidth + rightSplitterSize + "px",
+			bottom: bottomHeight + bottomSplitterSize + "px"
+		});
 
-		leftStyle.top = rightStyle.top = sidebarLayout ? "0px" : centerStyle.top;
+		var bounds = {
+			top: sidebarLayout ? "0px" : centerStyle.top,
+			bottom: sidebarLayout ? "0px" : centerStyle.bottom
+		};
+		dojo.mixin(leftStyle, bounds);
+		dojo.mixin(rightStyle, bounds);
 		leftStyle.left = rightStyle.right = "0px";
-		leftStyle.bottom = rightStyle.bottom = sidebarLayout ? "0px" : centerStyle.bottom;
 
 		topStyle.top = "0px";
 		bottomStyle.bottom = "0px";
