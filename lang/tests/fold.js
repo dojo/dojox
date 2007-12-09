@@ -1,5 +1,8 @@
 ﻿dojo.provide("dojox.lang.tests.fold");
-dojo.require("dojox.lang.functional");
+
+dojo.require("dojox.lang.functional.fold");
+dojo.require("dojox.lang.functional.scan");
+dojo.require("dojox.lang.functional.curry");
 
 (function(){
 	var df = dojox.lang.functional, a = df.arg;

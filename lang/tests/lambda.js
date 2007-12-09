@@ -1,5 +1,7 @@
 ﻿dojo.provide("dojox.lang.tests.lambda");
+
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.sequence");
 
 (function(){
 	var df = dojox.lang.functional;

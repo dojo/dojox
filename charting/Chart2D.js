@@ -2,6 +2,8 @@ dojo.provide("dojox.charting.Chart2D");
 
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.fold");
+dojo.require("dojox.lang.functional.reversed");
 
 dojo.require("dojox.charting.Theme");
 dojo.require("dojox.charting.Series");
@@ -198,7 +200,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			}, this);
 
 			// go over the stack backwards
-			df.forEachReversed(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
+			df.forEachRev(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
 			
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);

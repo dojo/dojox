@@ -1,5 +1,7 @@
 ﻿dojo.provide("dojox.lang.tests.listcomp");
-dojo.require("dojox.lang.functional");
+
+dojo.require("dojox.lang.functional.listcomp");
+dojo.require("dojox.lang.functional.sequence");
 
 (function(){
 	var df = dojox.lang.functional;

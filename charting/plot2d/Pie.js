@@ -5,6 +5,7 @@ dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.plot2d.common");
 
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.adapter");
 dojo.require("dojox.gfx");
 
 (function(){

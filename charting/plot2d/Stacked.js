@@ -4,6 +4,8 @@ dojo.require("dojox.charting.plot2d.common");
 dojo.require("dojox.charting.plot2d.Default");
 
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.sequence");
+dojo.require("dojox.lang.functional.reversed");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common,
@@ -32,7 +34,7 @@ dojo.require("dojox.lang.functional");
 				dojo.forEach(this.series, purgeGroup);
 				this.cleanGroup();
 				var s = this.group;
-				df.forEachReversed(this.series, function(item){ item.cleanGroup(s); });
+				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, stroke, outline, color, marker;
 			for(var i = this.series.length - 1; i >= 0; --i){

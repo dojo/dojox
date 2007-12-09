@@ -5,6 +5,7 @@ dojo.require("dojox.charting.plot2d.Base");
 
 dojo.require("dojox.lang.utils");
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.reversed");
 
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
@@ -40,7 +41,7 @@ dojo.require("dojox.lang.functional");
 				dojo.forEach(this.series, purgeGroup);
 				this.cleanGroup();
 				var s = this.group;
-				df.forEachReversed(this.series, function(item){ item.cleanGroup(s); });
+				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, color, stroke, fill, f,
 				gap = this.opt.gap < this._hScaler.scale / 3 ? this.opt.gap : 0;

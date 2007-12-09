@@ -1,5 +1,8 @@
 ﻿dojo.provide("dojox.lang.tests.misc");
-dojo.require("dojox.lang.functional");
+
+dojo.require("dojox.lang.functional.object");
+dojo.require("dojox.lang.functional.zip");
+dojo.require("dojox.lang.functional.adapter");
 
 (function(){
 	var df = dojox.lang.functional, fun = df.lambda("100*a + 10*b + c"), result = [];

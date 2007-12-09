@@ -1,9 +1,11 @@
-dojo.provide("dojox.lang.tests.std");
+dojo.provide("dojox.lang.tests.array");
+
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.fold");
 
 (function(){
 	var df = dojox.lang.functional, v, isOdd = "%2";
-	tests.register("dojox.lang.tests.std", [
+	tests.register("dojox.lang.tests.array", [
 		function testFilter1(t){ t.assertEqual(df.filter([1, 2, 3], isOdd), [1, 3]); },
 		function testFilter2(t){ t.assertEqual(df.filter([1, 2, 3], "%2==0"), [2]); },
 		
