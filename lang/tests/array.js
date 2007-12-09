@@ -2,6 +2,7 @@ dojo.provide("dojox.lang.tests.array");
 
 dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.functional.fold");
+dojo.require("dojox.lang.functional.reversed");
 
 (function(){
 	var df = dojox.lang.functional, v, isOdd = "%2";
@@ -22,6 +23,10 @@ dojo.require("dojox.lang.functional.fold");
 			var iter = new revArrayIter([1, 2, 3]);
 			t.assertEqual(df.filter(iter, isOdd), [3, 1]);
 		},
+		function testFilterRev(t){
+			var iter = new revArrayIter([1, 2, 3]);
+			t.assertEqual(df.filter(iter, isOdd), df.filterRev([1, 2, 3], isOdd));
+		},
 		
 		function testForEach(t){
 			t.assertEqual((v = [], df.forEach([1, 2, 3], function(x){ v.push(x); }), v), [1, 2, 3]);
@@ -30,11 +35,18 @@ dojo.require("dojox.lang.functional.fold");
 			var iter = new revArrayIter([1, 2, 3]);
 			t.assertEqual((v = [], df.forEach(iter, function(x){ v.push(x); }), v), [3, 2, 1]);
 		},
+		function testForEachRev(t){
+			t.assertEqual((v = [], df.forEachRev([1, 2, 3], function(x){ v.push(x); }), v), [3, 2, 1]);
+		},
 		
 		function testMap(t){ t.assertEqual(df.map([1, 2, 3], "+3"), [4, 5, 6]); },
 		function testMapIter(t){
 			var iter = new revArrayIter([1, 2, 3]);
 			t.assertEqual(df.map(iter, "+3"), [6, 5, 4]);
+		},
+		function testMapRev(t){
+			var iter = new revArrayIter([1, 2, 3]);
+			t.assertEqual(df.map(iter, "+3"), df.mapRev([1, 2, 3], "+3"));
 		},
 		
 		function testEvery1(t){ t.assertFalse(df.every([1, 2, 3], isOdd)); },
