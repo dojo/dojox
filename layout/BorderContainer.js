@@ -305,18 +305,17 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._childStart = dojo.marginBox(this.child.domNode)[dim];
 		this._splitterStart = parseInt(this.domNode.style[this.region]);
 		this._handlers = [
-				dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
-				dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
-			];
+			dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
+			dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
+		];
 		this._computeMaxSize();
 		dojo.stopEvent(e);
 	},
 
 	_computeMaxSize: function(){
 		var dim = this.horizontal ? 'h' : 'w';
-		var available = dojo.marginBox(this.container.domNode)[dim] - (this.oppNode ? dojo.marginBox(this.oppNode)[dim] : 0);
-		var fudge = 10; //TODO: specify? use width of splitter?
-		this._maxSize = Math.min(this.child.maxSize, available - fudge * this._factor);
+		var available = dojo.contentBox(this.container.domNode)[dim] - (this.oppNode ? dojo.contentBox(this.oppNode)[dim] : 0);
+		this._maxSize = Math.min(this.child.maxSize, available);
 	},
 
 	_drag: function(e){
