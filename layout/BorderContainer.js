@@ -183,7 +183,6 @@ dojo.declare(
 		if(rightSplitter){
 			dojo.mixin(rightSplitter.style, splitterBounds);
 			rightSplitter.style.right = rightWidth + "px";
-console.log("RIGHT SPLITTER="+rightWidth);
 		}
 
 		var topSplitterSize = topSplitter ? dojo.marginBox(topSplitter).h : 0;
@@ -304,13 +303,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._pageStart = horizontal ? e.pageY : e.pageX;
 		var dim = horizontal ? 'h' : 'w';
 		this._childStart = dojo.marginBox(this.child.domNode)[dim];
-		if(dojo.isSafari){
-			var axis = horizontal ? 'y' : 'x';
-			this._splitterStart = dojo.coords(this.domNode)[axis] - dojo.coords(this.container.domNode)[axis];
-		}else{
-			var edge = horizontal ? 't' : 'l';
-			this._splitterStart = dojo.marginBox(this.domNode)[edge] - dojo.marginBox(this.container.domNode)[edge];
-		}
+		this._splitterStart = parseInt(this.domNode.style[this.region]);
 		this._handlers = [
 				dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
 				dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
@@ -331,9 +324,10 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		if(this._resize){
 			this._move(delta, this._childStart);
 		}else{
-			//TODO: min/max constraints
-			var splitterEdge = delta + this._splitterStart;
-			this.domNode.style[ this.horizontal ? "top" : "left" ] = splitterEdge + "px";
+			var splitterEdge = this._factor * delta + this._splitterStart;
+			var childSize = this._factor * delta + this._childStart;
+			splitterEdge -= this._factor * (Math.max(Math.min(childSize, this._maxSize), this._minSize) - childSize);
+			this.domNode.style[this.region] = splitterEdge + "px";
 		}
 	},
 
@@ -374,8 +368,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	},
 
 	_move: function(/*Number*/delta, oldChildSize){
-		var childStart = oldChildSize;
-		var childSize = this._factor * delta + childStart;
+		var childSize = this._factor * delta + oldChildSize;
 		this.child.domNode.style[ this.horizontal ? "height" : "width" ] =
 			Math.max(Math.min(childSize, this._maxSize), this._minSize) + "px";
 		this.container.layout();
