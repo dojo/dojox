@@ -1,13 +1,13 @@
-dojo.provide("dojox.crypto.tests.Blowfish");
-dojo.require("dojox.crypto.Blowfish");
+dojo.provide("dojox.encoding.crypto.tests.Blowfish");
+dojo.require("dojox.encoding.crypto.Blowfish");
 
 (function(){
 	var message="The rain in Spain falls mainly on the plain.";
 	var key="foobar";
 	var base64Encrypted="WI5J5BPPVBuiTniVcl7KlIyNMmCosmKTU6a/ueyQuoUXyC5dERzwwdzfFsiU4vBw";
-	var dxc=dojox.crypto;
+	var dxc=dojox.encoding.crypto;
 
-	tests.register("dojox.crypto.tests.Blowfish", [
+	tests.register("dojox.encoding.crypto.tests.Blowfish", [
 		function testEncrypt(t){
 			t.assertEqual(base64Encrypted, dxc.Blowfish.encrypt(message, key));
 		},

@@ -1,4 +1,5 @@
-dojo.provide("dojox.encoding.lzw");
+dojo.provide("dojox.encoding.compression.lzw");
+dojo.require("dojox.encoding.bits");
 
 (function(){
 	var _bits = function(x){
@@ -7,12 +8,12 @@ dojo.provide("dojox.encoding.lzw");
 		return w;
 	};
 
-	dojox.encoding.lzw.Encoder = function(n){
+	dojox.encoding.compression.lzw.Encoder = function(n){
 		this.size = n;
 		this.init();
 	};
 
-	dojo.extend(dojox.encoding.lzw.Encoder, {
+	dojo.extend(dojox.encoding.compression.lzw.Encoder, {
 		init: function(){
 			this.dict = {};
 			for(var i = 0; i < this.size; ++i){
@@ -48,12 +49,12 @@ dojo.provide("dojox.encoding.lzw");
 		}
 	});
 
-	dojox.encoding.lzw.Decoder = function(n){
+	dojox.encoding.compression.lzw.Decoder = function(n){
 		this.size = n;
 		this.init();
 	};
 
-	dojo.extend(dojox.encoding.lzw.Decoder, {
+	dojo.extend(dojox.encoding.compression.lzw.Decoder, {
 		init: function(){
 			this.codes = new Array(this.size);
 			for(var i = 0; i < this.size; ++i){

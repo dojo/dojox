@@ -1,15 +1,10 @@
 dojo.provide("dojox.crypto._base");
 
-(function(){
-	var dxc=dojox.crypto;
-	dxc.cipherModes={ 
-		//	summary
-		//	Enumeration for various cipher modes.
-		ECB:0, CBC:1, PCBC:2, CFB:3, OFB:4, CTR:5 
-	};
-	dxc.outputTypes={ 
-		//	summary
-		//	Enumeration for input and output encodings.
-		Base64:0, Hex:1, String:2, Raw:3 
-	};
-})();
+dojo.require("dojox.encoding.crypto._base");
+dojo.require("dojox.encoding.digests._base");
+
+console.warn("dojox.crypto._base: DojoX Crypto has been merged into DojoX Encoding, please see DojoX Encoding for more information.  Will be removed with the next release.");
+
+//	unfortunately there's no way of pointing at two files with an alias, particularly 
+//	when both have similarly named things; but we'll try anyways.
+dojox.crypto._base=dojo.mixin(dojox.encoding.crypto._base, dojox.encoding.digests._base);

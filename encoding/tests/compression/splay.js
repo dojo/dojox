@@ -1,5 +1,5 @@
-dojo.provide("dojox.encoding.tests.splay");
-dojo.require("dojox.encoding.splay");
+dojo.provide("dojox.encoding.tests.compression.splay");
+dojo.require("dojox.encoding.compression.splay");
 dojo.require("dojox.encoding.bits");
 
 (function(){
@@ -7,7 +7,7 @@ dojo.require("dojox.encoding.bits");
 	var msg2 = "The rain in Spain falls mainly on the plain.1";
 	var msg3 = "The rain in Spain falls mainly on the plain.ab";
 	var msg4 = "The rain in Spain falls mainly on the plain.!@#";
-	var dc = dojox.encoding, dcb = dc.bits;
+	var dc = dojox.encoding.compression, dcb = dojox.encoding.bits;
 	
 	var s2b = function(s){
 		var b = [];
@@ -36,7 +36,7 @@ dojo.require("dojox.encoding.bits");
 		return b2s(t);
 	};
 
-	tests.register("dojox.encoding.tests.splay", [
+	tests.register("dojox.encoding.tests.compression.splay", [
 		function testSplayMsg1(t){ t.assertEqual(msg1, decode(msg1.length, encode(msg1))); },
 		function testSplayMsg2(t){ t.assertEqual(msg2, decode(msg2.length, encode(msg2))); },
 		function testSplayMsg3(t){ t.assertEqual(msg3, decode(msg3.length, encode(msg3))); },

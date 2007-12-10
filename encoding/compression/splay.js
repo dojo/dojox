@@ -1,13 +1,14 @@
-dojo.provide("dojox.encoding.splay");
+dojo.provide("dojox.encoding.compression.splay");
+dojo.require("dojox.encoding.bits");
 
-dojox.encoding.Splay = function(n){
+dojox.encoding.compression.Splay = function(n){
 	this.up = new Array(2 * n + 1);
 	this.left = new Array(n);
 	this.right = new Array(n);
 	this.reset();
 };
 
-dojo.extend(dojox.encoding.Splay, {
+dojo.extend(dojox.encoding.compression.Splay, {
 	reset: function(){
 		for(var i = 1; i < this.up.length; this.up[i] = Math.floor((i - 1) / 2), ++i);
 		for(var i = 0; i < this.left.length; this.left[i] = 2 * i + 1, this.right[i] = 2 * i + 2, ++i);
