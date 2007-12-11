@@ -3,20 +3,20 @@
 		<title>Compress colors</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-			@import "../../../dijit/tests/css/dijitTests.css";
+			@import "../../../../dojo/resources/dojo.css";
+			@import "../../../../dijit/tests/css/dijitTests.css";
 			
 			.pane { margin-top: 2em; }
 		</style>
-		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.encoding.tests.colors");
-			dojo.require("dojox.encoding.ascii85");
+			dojo.require("dojox.encoding.tests.compression.colors");
+			dojo.require("dojox.encoding.easy64");
 			dojo.require("dojox.encoding.bits");
-			dojo.require("dojox.encoding.splay");
-			dojo.require("dojox.encoding.lzw");
+			dojo.require("dojox.encoding.compression.splay");
+			dojo.require("dojox.encoding.compression.lzw");
 			
-			var dc = dojox.encoding, colors = dc.tests.colors;
+			var dc = dojox.encoding, dcc = dc.compression, colors = dc.tests.compression.colors;
 			
 			var run = function(){
 				var empty = {}, names = [];
@@ -27,7 +27,7 @@
 				names.sort();
 				var output = new dc.bits.OutputStream(), result = [];
 				// encode names
-				var s = names.join("{"), encoder = new dc.lzw.Encoder(27);
+				var s = names.join("{"), encoder = new dcc.lzw.Encoder(27);
 				result.push("<div>Input is " + s.length + " bytes long.</div>");
 				result.push("<div>Input: " + s + ".</div>");
 				for(var i = 0; i < s.length; ++i){
@@ -40,7 +40,7 @@
 				result.push("<div>Output is " + Math.ceil(w / 8) + " bytes (" + w + " bits) long.</div>");
 				var buf = output.getBuffer();
 				{
-					var input = new dc.bits.InputStream(buf, buf.length * 8), decoder = new dc.lzw.Decoder(27);
+					var input = new dc.bits.InputStream(buf, buf.length * 8), decoder = new dcc.lzw.Decoder(27);
 					var t = [];
 					for(var w = 0; w < s.length;){
 						var v = decoder.decode(input);
@@ -55,14 +55,14 @@
 					p = p.join("");
 					result.push("<div>Control: " + p + ".</div>");
 				}
-				while(buf.length % 4){ buf.push(0); }
-				var a85 = dc.ascii85.encode(buf);
-				result.push("<div>Encoded output is " + a85.length + " bytes.</div>");
-				result.push("<div><textarea>" + a85 + "</textarea></div>");
+				while(buf.length % 3){ buf.push(0); }
+				var e64 = dc.easy64.encode(buf);
+				result.push("<div>Encoded output is " + e64.length + " bytes.</div>");
+				result.push("<div><textarea>" + e64 + "</textarea></div>");
 				// test
 				{
-					var buf = dc.ascii85.decode(a85);
-					var input = new dc.bits.InputStream(buf, buf.length * 8), decoder = new dc.lzw.Decoder(27);
+					var buf = dc.easy64.decode(e64);
+					var input = new dc.bits.InputStream(buf, buf.length * 8), decoder = new dcc.lzw.Decoder(27);
 					var t = [];
 					for(var w = 0; w < s.length;){
 						var v = decoder.decode(input);
@@ -85,9 +85,9 @@
 				}
 				result.push("<div>Output is " + buf.length + " bytes long.</div>");
 				while(buf.length % 4){ buf.push(0); }
-				a85 = dc.ascii85.encode(buf);
-				result.push("<div>Encoded output is " + a85.length + " bytes.</div>");
-				result.push("<div><textarea>" + a85 + "</textarea></div>");
+				e64 = dc.easy64.encode(buf);
+				result.push("<div>Encoded output is " + e64.length + " bytes.</div>");
+				result.push("<div><textarea>" + e64 + "</textarea></div>");
 				dojo.byId("status").innerHTML = result.join("\n");
 			};			
 			

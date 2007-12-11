@@ -1,7 +1,7 @@
-dojo.provide("dojox.encoding.tests.colors2");
+dojo.provide("dojox.encoding.tests.compression.colors2");
 
 // all CSS3 colors
-dojox.encoding.tests.colors2 = {};
+dojox.encoding.tests.compression.colors2 = {};
 
 (function(){
 	var n = "!mi-='%@Md%8;F\"=E5(:$@nHf!(;HYAOL),#XJKa#UHDMYQ0@q6C8='JBa#m1`YRS;3_\\P=@.(bN\\!)0d:Nar*Fo]]G`\\[X7Cb@r#pc;D3!k*8^\"bS8DAYbu'J5[`7Fh5S1e8`@1^N\"n8R:+ZQt]Ab.S>NP-jkO\"N$oQpbVbYtZl1&rSs%_;'!e8\"ij:*R!%9&P.+o0%cF&0F<\"eWn+rm!a<(02!d\\-J\\O@`K![IaPrqh6H4S!U<Nh]PS,\"!C;0W&Y]X[<[E&`1gQ?_;g\\mbQn^c!eV!05V['T@)Lio1O0QV>7CU!\"5jICR2\\X?!FilaO:$aE\"G1NIfMJ<.)1d;?OH9VU%LiGhi9=d?$EjW!BM0)1mGfg@\"os1\\E*A>+>YdjUK:P>T'7tj.UQ?<89]$:\\Li]GF*H8o*Z,o]Q_E]tq?C^%'^cfU9B9sH-^t.-R;J6P9!buNg*%$9#>Y'*n;MPc7=>*]sb&NmgKSZcd2nWt6I@SX7agi3!0)M'T3O@@/>W+I:H9?@A7tjT8':(9PG\\m@_T8Ws\\\".VLCkg7IYKZ7M3.XQqX$4V`bEQF?<#jJ>#4Z#6:ZeYffa.W#0CW3@s2*ESkiD6hN#EAhXBm5F%&U_=k*tFq@rYS/!:$=M9epZ<`=HN:X\"!CRI(`>iqTRe(S@A\"&0!Dib&)1p9P)$NZb^e+i_UHHq\\_8AYC+oiIMLj_TW=u'3Nn?c=#_6Z^s/;EY/3Z(cZ\"CaOq6g>>I+;'H>Nh`>\"-3N</&5*&\\7KQKk5tM(]O9-gi%iL^#RH+KW@$+oOOO9;*#)6$,]ge#)$j.>DnX+!(g67=pRcf38l7XNQ:_FJ,l2V)C@@A;H1dN#\\$n75qg6-:\".KQkn!?a7e\"J7C0p3Pn`]hKrG_4WG*5qo\\tH,20o2QOZljnj_lZ&C6!.u8Qu:_L$8$4.[V@`&A0J,fQL";
@@ -54,7 +54,7 @@ dojox.encoding.tests.colors2 = {};
 	var n2 = dojo.map(t, function(x){ return String.fromCharCode(x); }).join("").split("{");
 	i = a(c);
 	for(var j = 0, k = 0; j < n2.length; ++j){
-		dojox.encoding.tests.colors2[n2[j]] = [i[k++], i[k++], i[k++]];
+		dojox.encoding.tests.compression.colors2[n2[j]] = [i[k++], i[k++], i[k++]];
 	}
 
 })();

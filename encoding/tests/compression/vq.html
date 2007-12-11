@@ -3,18 +3,18 @@
 		<title>Compress colors using VQ</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-			@import "../../../dijit/tests/css/dijitTests.css";
+			@import "../../../../dojo/resources/dojo.css";
+			@import "../../../../dijit/tests/css/dijitTests.css";
 			
 			.pane { margin-top: 2em; }
 		</style>
-		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.encoding.tests.colors");
-			dojo.require("dojox.encoding.splay");
+			dojo.require("dojox.encoding.tests.compression.colors");
+			dojo.require("dojox.encoding.compression.splay");
 			dojo.require("dojox.encoding.bits");
 			
-			var colors = dojox.encoding.tests.colors;
+			var colors = dojox.encoding.tests.compression.colors;
 			
 			var dist = function(a, b){
 				var r = a[0] - b[0], g = a[1] - b[1], b = a[2] - b[2];
@@ -111,13 +111,13 @@
 				}while(jitter > 1 && niter < 1000);
 				// calculate the required number of bytes
 				var output = new dojox.encoding.bits.OutputStream(),
-					splay = new dojox.encoding.Splay(256);
+					splay = new dojox.encoding.compression.Splay(256);
 				for(var i = 0; i < clusters.length; ++i){
 					var c = clusters[i], m = c.members, d = 0, ol = output.getWidth();
 					output.putBits(c.center[0], 8);
 					output.putBits(c.center[1], 8);
 					output.putBits(c.center[2], 8);
-					splay.init();
+					splay.reset();
 					c.maxdist = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 					for(var j = 0; j < m.length; ++j){
 						var color = colors[m[j]];

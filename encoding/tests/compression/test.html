@@ -3,18 +3,18 @@
 		<title>Test colors</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-			@import "../../../dijit/tests/css/dijitTests.css";
+			@import "../../../../dojo/resources/dojo.css";
+			@import "../../../../dijit/tests/css/dijitTests.css";
 			
 			.pane { margin-top: 2em; }
 		</style>
-		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 		<script type="text/javascript" src="colors2.js"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.encoding.tests.colors");
-			//dojo.require("dojox.encoding.tests.colors2");
-			dojo.require("dojox.encoding.tests.colors3");
-			var dct = dojox.encoding.tests;
+			dojo.require("dojox.encoding.tests.compression.colors");
+			//dojo.require("dojox.encoding.tests.compression.colors2");
+			dojo.require("dojox.encoding.tests.compression.colors3");
+			var dct = dojox.encoding.tests.compression;
 			
 			var test = function(c1, c2, result){
 				var empty = {};

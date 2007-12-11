@@ -1,7 +1,7 @@
-dojo.provide("dojox.encoding.tests.colors");
+dojo.provide("dojox.encoding.tests.compression.colors");
 
 // all CSS3 colors
-dojox.encoding.tests.colors = {
+dojox.encoding.tests.compression.colors = {
 aliceblue:	[240,248,255],
 antiquewhite:	[250,235,215],
 aqua:	[0,255,255],
