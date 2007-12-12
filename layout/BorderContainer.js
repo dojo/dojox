@@ -127,8 +127,6 @@ dojo.declare(
 		// copy dim because we are going to modify it
 //		dim = dojo.mixin({}, dim);
 
-//TODO: need to test in quirks vs std mode in IE
-
 		var sidebarLayout = (this.design == "sidebar");
 		var topHeight = 0, bottomHeight = 0, leftWidth = 0, rightWidth = 0;
 		var topStyle = {}, leftStyle = {}, rightStyle = {}, bottomStyle = {},
@@ -215,34 +213,31 @@ dojo.declare(
 		}
 
 		if(dojo.isIE){
-			//FIXME: hack.  use IDs instead
-			this.domNode._top = this._top;
-			this.domNode._bottom = this._bottom;
-
-			var containerHeight = "dojo.style("+this.id+",'height')";
+			var containerHeight = dojo.contentBox(this.id).h;
 			var middleHeight = containerHeight;
-			if(this._top){ middleHeight += "-dojo.style("+this.id+"._top,'height')"; }
-			if(this._bottom){ middleHeight += "-dojo.style("+this.id+"._bottom, 'height')"; }
-			if(this._center){ centerStyle.setExpression("height", middleHeight); }
-//TODO: What I'd think would work
-//			leftStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
-//			rightStyle.setExpression("height", sidebarLayout ? containerHeight : middleHeight);
-//What actually works
-			if(this._left){ leftStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight); }
-			if(this._right){ rightStyle.setExpression("height", sidebarLayout ? this.id+".offsetHeight" : middleHeight + "+" + this.id+".offsetHeight-"+containerHeight); }
+			if(this._top){ middleHeight -= dojo.marginBox(this._top).h; }
+			if(this._bottom){ middleHeight -= dojo.marginBox(this._bottom).h; }
+			if(topSplitter){ middleHeight -= topSplitterSize; }
+			if(bottomSplitter){ middleHeight -= bottomSplitterSize; }
+			if(this._center){ centerStyle.height = middleHeight; }
+			var sidebarHeight = sidebarLayout ? containerHeight : middleHeight;
+			if(this._left){ leftStyle.height = sidebarHeight; }
+			if(this._right){ rightStyle.height = sidebarHeight; }
+			if(leftSplitter){ leftSplitter.style.height = sidebarHeight; }
+			if(rightSplitter){ rightSplitter.style.height = sidebarHeight; }
 
 			if(dojo.isIE < 7){
-				//FIXME: hack.  use IDs instead
-				this.domNode._left = this._left;
-				this.domNode._right = this._right;
-
+//TODO: use dojo.marginBox instead of dojo.style?
 				var containerWidth = "dojo.style("+this.id+",'width')";
 				var middleWidth = containerWidth;
-				if(this._left){ middleWidth += "-dojo.style("+this.id+"._left,'width')"; }
-				if(this._right){ middleWidth += "-dojo.style("+this.id+"._right, 'width')"; }
+				if(leftSplitter){ middleWidth -= leftSplitterSize; }
+				if(rightSplitter){ middleWidth -= rightSplitterSize; }
+				if(this._left){ middleWidth += "-dojo.style("+this._left.id+",'width')"; }
+				if(this._right){ middleWidth += "-dojo.style("+this._right.id+", 'width')"; }
 				if(this._center){ centerStyle.setExpression("width", middleWidth); }
 				if(this._top){ topStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth"); }
 				if(this._bottom){ bottomStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth"); }
+//TODO: expressions for splitter widths also
 			}
 		}
 
