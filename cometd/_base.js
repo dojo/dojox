@@ -1,4 +1,4 @@
-dojo.provide("dojox.cometd._cometd");
+dojo.provide("dojox.cometd._base");
 dojo.require("dojo.AdapterRegistry");
 dojo.require("dojo.io.script");
 
