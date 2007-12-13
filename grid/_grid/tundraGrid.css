@@ -251,3 +251,8 @@
 	top: -1000px;
 	height: 0px, width: 0px;
 }
+
+.dijit_a11y .dojoxGrid-rowbar-selected * .dojoxGrid-rowbar-inner {
+	background: none;
+	border: 4px white solid !important;
+}
