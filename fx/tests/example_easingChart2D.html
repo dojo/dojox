@@ -153,8 +153,7 @@
 					dialog.hide();
 					d++;
 					var val = dojo.byId("funcText").value;
-					var easeFuncText = "var ease = function(n){ "+val+" };";					
-					var foo = dojo.eval(easeFuncText);
+					var ease = new Function("n", val);
 					makeSeriesFromEasing(ease,"dynSeries"+d);				
 				</script>
 			</button>
