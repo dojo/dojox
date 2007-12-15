@@ -84,8 +84,8 @@
                                 }));
                                 delay+=200;
                         });
-                        this.setDisabled(true);
-                        dijit.byId('removeTall').setDisabled(false);
+                        this.setAttribute('disabled',true);
+                        dijit.byId('removeTall').setAttribute('disabled',false);
                         dojo.fx.combine(_anims).play();
                 </script>
         </button>
@@ -102,8 +102,8 @@
                                 }));
                                 delay+=200;
                         });
-                        this.setDisabled(true);
-                        dijit.byId('addTall').setDisabled(false);
+                        this.setAttribute('disabled',true);
+                        dijit.byId('addTall').setAttribute('disabled',false);
                         dojo.fx.combine(_anims).play();
                 </script>
         </button>        
@@ -120,8 +120,8 @@
                                 }));
                                 delay+=200;
                         });
-                        this.setDisabled(true);
-                        dijit.byId('removeWide').setDisabled(false);
+                        this.setAttribute('disabled',true);
+                        dijit.byId('removeWide').setAttribute('disabled',false);
                         dojo.fx.combine(_anims).play();
                 </script>
         </button>
@@ -138,8 +138,8 @@
                                 }));
                                 delay+=200;
                         });
-                        this.setDisabled(true);
-                        dijit.byId('addWide').setDisabled(false);
+                        this.setAttribute('disabled',true);
+                        dijit.byId('addWide').setAttribute('disabled',false);
                         dojo.fx.combine(_anims).play();
                 </script>
         </button>
