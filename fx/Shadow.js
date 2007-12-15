@@ -1,4 +1,5 @@
 dojo.provide("dojox.fx.Shadow");
+dojo.experimental("dojox.fx.Shadow"); 
 
 dojo.require("dijit._Widget"); 
 dojo.require("dojo.NodeList-fx"); 
