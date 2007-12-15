@@ -70,7 +70,7 @@ dojo.declare(
 		var sw = this.selectedChildWidget;
 		
 		var lastStep = sw.isLastChild;
-		this.nextButton.setDisabled(lastStep);
+		this.nextButton.setAttribute("disabled",lastStep);
 		this._setButtonClass(this.nextButton);
 		if(sw.doneFunction){
 			this.doneButton.domNode.style.display = "";
@@ -81,7 +81,7 @@ dojo.declare(
 			// #1438 issue here.
 			this.doneButton.domNode.style.display = "none";
 		}
-		this.previousButton.setDisabled(!this.selectedChildWidget.canGoBack);
+		this.previousButton.setAttribute("disabled",!this.selectedChildWidget.canGoBack);
 		this._setButtonClass(this.previousButton);
 	},
 
