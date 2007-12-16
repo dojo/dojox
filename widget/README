@@ -51,15 +51,33 @@ Installation instructions
 Other Notes (Brief widget list):
 
 	* ColorPicker - Photoshop-like color picker
+
 	* FileInput - experimental dijit-like input type="file"
+
 	* FileInputAuto/Blind - extension to FileInput for 
 		added flair/automation
+
 	* FisheyeList - the classic FishEye Picker
+
 	* Iterator - Basic array and datastore iterator class
+	
+	* Loader - an experimental Class that listens to XHR 
+		connections in the background, and displays 
+		a loading indicator.
+
+	* MultiComboBox - an experimental ComboBox that allows
+		multiple entries bases on a separator character.
+
 	* SortList - a degradable UL with a fixed header, scrolling,
 		and sorting. Can be the direct descendat of a
 		LayoutContainer and will size to fit.
+
 	* TimeSpinner - a number spinner that revolves through
 		time constrainsts
+
 	* Toaster - a messaging system to display non-obstrusive 
 		alerts on screen.
+
+	* Wizard - a StackContainer with built-in navigation to
+		ease in the creation of 'step-based' content.
+		Requires dojo >= 1.1 
