@@ -4,6 +4,10 @@ dojo.require("dijit.layout.StackContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.Button");
 
+dojo.require("dojo.i18n"); 
+dojo.requireLocalization("dijit", "common"); 
+dojo.requireLocalization("dojox.widget", "Wizard"); 
+
 dojo.declare(
 	"dojox.widget.WizardContainer",
 	[dijit.layout.StackContainer,dijit._Templated],
@@ -42,11 +46,22 @@ dojo.declare(
 	//		"WizardButtonDisabled" CSS class
 	hideDisabled: false,
 
+	postMixInProperties: function(){
+		this.inherited(arguments);
+		var labels = dojo.mixin({cancel: dojo.i18n.getLocalization("dijit", "common", this.lang).buttonCancel},
+			dojo.i18n.getLocalization("dojox.widget", "Wizard", this.lang));
+		for(prop in labels){
+			if(!this[prop + "ButtonLabel"]){
+				this[prop + "ButtonLabel"] = labels[prop];
+			}
+		}
+	},
+
 	startup: function(){
 		this.inherited(arguments);
 		
-		this.connect(this.nextButton, "onClick","_forward");
-		this.connect(this.previousButton, "onClick","back");
+		this.connect(this.nextButton, "onClick", "_forward");
+		this.connect(this.previousButton, "onClick", "back");
 
 		if(this.cancelFunction){
 			this.cancelFunction = dojo.getObject(this.cancelFunction);
@@ -54,14 +69,9 @@ dojo.declare(
 		}else{
 			this.cancelButton.domNode.style.display = "none";
 		}
-		this.connect(this.doneButton, "onClick","done");
-		
-		if(this.nextButtonLabel){ this.nextButton.setLabel(this.nextButtonLabel); }
-		if(this.previousButtonLabel){ this.previousButton.setLabel(this.previousButtonLabel); }
-		if(this.cancelButtonLabel){ this.cancelButton.setLabel(this.cancelButtonLabel); }
-		if(this.doneButtonLabel){ this.doneButton.setLabel(this.doneButtonLabel); }
+		this.connect(this.doneButton, "onClick", "done");
 
-		dojo.subscribe(this.id+"-selectChild",dojo.hitch(this,"_checkButtons"));
+		dojo.subscribe(this.id+"-selectChild", dojo.hitch(this,"_checkButtons"));
 		this._checkButtons();
 	},
 
@@ -70,7 +80,7 @@ dojo.declare(
 		var sw = this.selectedChildWidget;
 		
 		var lastStep = sw.isLastChild;
-		this.nextButton.setAttribute("disabled",lastStep);
+		this.nextButton.setAttribute("disabled", lastStep);
 		this._setButtonClass(this.nextButton);
 		if(sw.doneFunction){
 			this.doneButton.domNode.style.display = "";
@@ -81,16 +91,12 @@ dojo.declare(
 			// #1438 issue here.
 			this.doneButton.domNode.style.display = "none";
 		}
-		this.previousButton.setAttribute("disabled",!this.selectedChildWidget.canGoBack);
+		this.previousButton.setAttribute("disabled", !this.selectedChildWidget.canGoBack);
 		this._setButtonClass(this.previousButton);
 	},
 
 	_setButtonClass: function(button){
-		if(this.hideDisabled){
-			button.domNode.style.display = button.disabled ? "none" : "";	
-		}else{
-			button.domNode.style.display = "";
-		} 
+		button.domNode.style.display = (this.hideDisabled && button.disabled) ? "none" : "";	
 	},
 
 	_forward: function(){
@@ -153,11 +159,13 @@ dojo.declare(
 		//		if it isn't, then display error.
 		//		Returns true to advance, false to not advance.
 		var r = true;
-		if (this.passFunction && dojo.isFunction(this.passFunction)){
+		if(this.passFunction && dojo.isFunction(this.passFunction)){
 			var failMessage = this.passFunction();
 			switch(typeof failMessage){
-				case "boolean" : r = failMessage; break;
-				case "string" :
+				case "boolean":
+					r = failMessage;
+					break;
+				case "string":
 					alert(failMessage);
 					r = false;
 					break;
