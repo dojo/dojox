@@ -16,13 +16,13 @@ You can use this file as is or as a starting point for you own styling
 .django .template_tag,
 .django .variable,
 .smalltalk .class {
-  color: #800;
+	color: #800;
 }
 
 .comment,
 .java .annotation,
 .template_comment {
-  color: #888;
+	color: #888;
 }
 
 .number,
@@ -30,7 +30,7 @@ You can use this file as is or as a starting point for you own styling
 .javascript .literal,
 .smalltalk .symbol,
 .smalltalk .char {
-  color: #080;
+	color: #080;
 }
 
 .javadoc,
@@ -41,7 +41,7 @@ You can use this file as is or as a starting point for you own styling
 .smalltalk .array,
 .css .attr_selector,
 .xml .pi {
-  color: #88F;
+	color: #88F;
 }
 
 .keyword,
@@ -54,5 +54,5 @@ You can use this file as is or as a starting point for you own styling
 .rsl .built_in,
 .smalltalk .class,
 .xml .tag .title {
-  font-weight: bold;
+	font-weight: bold;
 }
