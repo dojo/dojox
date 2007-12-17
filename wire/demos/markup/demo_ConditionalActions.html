@@ -53,7 +53,7 @@
 	shipping address if the 'Use Same Address' checkbox is checked true.
 	<br/>
 	<br/>
-    <div dojoType="dojo.data.ItemFileReadStore" url="states.json" jsId="statesStore"></div>
+	<div dojoType="dojo.data.ItemFileReadStore" url="states.json" jsId="statesStore"></div>
 	<table width="100%">
 		<tr>
 			<td colspan="2" align="center">
@@ -122,6 +122,18 @@
 
 	<!-------------------------------- Using dojox.wire, declaratively wire up the widgets. --------------------------->
 
+	<!--
+		This is a simple data map so that the attributes we support modifying on ComboBox, TextField, etc, are lookupable.
+		since steAttribute(attr, value), replaced the single attribute setDisabled
+	-->
+	<div dojoType="dojox.wire.ml.Data"
+		id="attributesMap">
+		<div dojoType="dojox.wire.ml.DataProperty"
+			name="disabled"
+			value="disabled"></div>
+	</div>
+
+
 	<!-- 
 		Enable/disable the Right hand side of the shipping address view based on the checkbox events. 
 	-->
@@ -131,12 +143,12 @@
 		<!--
 			Trigger a setting of the Shipping fields' input state based on the state of the checkbox.
 		-->
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"    method="setDisabled" parameters="arguments[0]"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"    method="setDisabled" parameters="arguments[0]"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"    method="setDisabled" parameters="arguments[0]"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"    method="setDisabled" parameters="arguments[0]"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"    method="setDisabled" parameters="arguments[0]"></div>
-		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"    method="setDisabled" parameters="arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingName"    method="setAttribute" parameters="attributesMap.disabled, arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress1"    method="setAttribute" parameters="attributesMap.disabled, arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingAddress2"    method="setAttribute" parameters="attributesMap.disabled, arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingCity"    method="setAttribute" parameters="attributesMap.disabled, arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingState"    method="setAttribute" parameters="attributesMap.disabled, arguments[0]"></div>
+		<div dojoType="dojox.wire.ml.Invocation" object="ShippingZip"    method="setAttribute" parameters="attributesMap.disabled, arguments[0]"></div>
 	</div>    
 
 	<!-- 
