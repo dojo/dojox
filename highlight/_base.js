@@ -6,8 +6,11 @@ dojo.require("dojox.highlight");
 //	orig BSD release available from: http://softwaremaniacs.org/soft/highlight/
 //
 
-// FIXME: Half of this is global, half of it is private. decide direction
-// and implement. 
+// FIXME: Half of this is global, half of it is private. decide direction and
+// implement. 
+
+// FIXME: we *really* need to start using dojox.string.Builder to improve
+// string concat performance.
 
 // FIXME: these need not be global, but are common in all dojox.highlight.LANGUAGES
 IDENT_RE = '[a-zA-Z][a-zA-Z0-9_]*';
@@ -63,12 +66,15 @@ dojox.highlight.LANGUAGES = {};
 
 	function Highlighter(language_name,value){
 		// methods:
-		function subMode(lexem) {
+		function subMode(lexem){
 			if(!modes[modes.length - 1].contains){ return null; }
 			for(var i in modes[modes.length - 1].contains){
 				var className = modes[modes.length - 1].contains[i];
-				for (var key in language.modes){
-					if (language.modes[key].className == className && language.modes[key].beginRe.test(lexem)){
+				for(var key in language.modes){
+					if(
+						(language.modes[key].className == className)&&
+						(language.modes[key].beginRe.test(lexem))
+					){
 						return language.modes[key];
 					}
 				}
@@ -77,8 +83,8 @@ dojox.highlight.LANGUAGES = {};
 		}
 
 		function endOfMode(mode_index, lexem){
-			if (modes[mode_index].end && modes[mode_index].endRe.test(lexem)){ return 1; }
-			if (modes[mode_index].endsWithParent) {
+			if(modes[mode_index].end && modes[mode_index].endRe.test(lexem)){ return 1; }
+			if(modes[mode_index].endsWithParent){
 				var level = endOfMode(mode_index - 1, lexem);
 				return level ? level + 1 : 0;
 			}//if
@@ -86,37 +92,37 @@ dojox.highlight.LANGUAGES = {};
 		}
 	
 		function isIllegal(lexem){
-			if (!modes[modes.length - 1].illegalRe){ return false; }
+			if(!modes[modes.length - 1].illegalRe){ return false; }
 			return modes[modes.length - 1].illegalRe.test(lexem);
 		}
 
 		function eatModeChunk(value, index){
 			if(!modes[modes.length - 1].terminators){
 				var terminators = [];
-				if (modes[modes.length - 1].contains)
-					for (var key in language.modes){
-						if (contains(modes[modes.length - 1].contains, language.modes[key].className) &&
+				if(modes[modes.length - 1].contains)
+					for(var key in language.modes){
+						if(contains(modes[modes.length - 1].contains, language.modes[key].className) &&
 							!contains(terminators, language.modes[key].begin)){
 							terminators[terminators.length] = language.modes[key].begin;
 						}
 					}//for
 	
 				var mode_index = modes.length - 1;
-				do {
-					if (modes[mode_index].end && !contains(terminators, modes[mode_index].end)){
+				do{
+					if( modes[mode_index].end && !contains(terminators, modes[mode_index].end) ){
 						terminators[terminators.length] = modes[mode_index].end;
 					}
 					mode_index--;
-				} while(modes[mode_index + 1].endsWithParent);
+				}while(modes[mode_index + 1].endsWithParent);
 	
-				if (modes[modes.length - 1].illegal){
-					if (!contains(terminators, modes[modes.length - 1].illegal)){
+				if(modes[modes.length - 1].illegal){
+					if(!contains(terminators, modes[modes.length - 1].illegal)){
 						terminators[terminators.length] = modes[modes.length - 1].illegal;
 					}
 				}
 	
 				var terminator_re = '(' + terminators[0];
-				for (var i = 0; i < terminators.length; i++){
+				for(var i = 0; i < terminators.length; i++){
 					terminator_re += '|' + terminators[i];
 				}
 				terminator_re += ')';
@@ -125,40 +131,47 @@ dojox.highlight.LANGUAGES = {};
 	
 			value = value.substr(index);
 			var match = modes[modes.length - 1].terminators.exec(value);
-			if (!match) 
+			if(!match){
 				return [value, '', true];
-			if (match.index == 0)
+			}
+			if(match.index == 0){
 				return ['', match[0], false];
-			else
+			}else{
 				return [value.substr(0, match.index), match[0], false];
+			}
 		}
 	  
-		function escape(value) {
+		function escape(value){ // keyword?
 			return value.replace(/&/gm, '&amp;').replace(/</gm, '&lt;').replace(/>/gm, '&gt;');
 		}
 	  
-		function keywordMatch(mode, match) {
+		function keywordMatch(mode, match){
 			var match_str = language.case_insensitive ? match[0].toLowerCase() : match[0]
-			for (var className in mode.keywordGroups) {
+			for(var className in mode.keywordGroups){
 				var value = mode.keywordGroups[className].hasOwnProperty(match_str);
-				if (value)
+				if(value){
 					return [className, value];
+				}
 			}//for
 			return false;
 		}
 	  
-		function processKeywords(buffer) {
+		function processKeywords(buffer){
 			var mode = modes[modes.length - 1];
-			if (!mode.keywords || !mode.lexems)
+			if(!mode.keywords || !mode.lexems){
 				return escape(buffer);
-			if (!mode.lexemsRe) {
+			}
+			if(!mode.lexemsRe){
 				var lexems = [];
-				for (var key in mode.lexems)
-					if (!contains(lexems, mode.lexems[key]))
+				for(var key in mode.lexems){
+					if(!contains(lexems, mode.lexems[key])){
 						lexems[lexems.length] = mode.lexems[key];
+					}
+				}
 				var lexems_re = '(' + lexems[0];
-				for (var i = 1; i < lexems.length; i++)
+				for(var i = 1; i < lexems.length; i++){
 					lexems_re += '|' + lexems[i];
+				}
 				lexems_re += ')';
 				mode.lexemsRe = langRe(language, lexems_re, true);
 			}//if
@@ -166,10 +179,10 @@ dojox.highlight.LANGUAGES = {};
 			var last_index = 0;
 			mode.lexemsRe.lastIndex = 0;
 			var match = mode.lexemsRe.exec(buffer);
-			while (match) {
+			while(match){
 				result += escape(buffer.substr(last_index, match.index - last_index));
 				keyword_match = keywordMatch(mode, match);
-				if (keyword_match) {
+				if(keyword_match){
 					keyword_count += keyword_match[1];
 					result += '<span class="'+ keyword_match[0] +'">' + escape(match[0]) + '</span>';
 				}else{
@@ -222,14 +235,14 @@ dojox.highlight.LANGUAGES = {};
 			}
 		}
 
-		function highlight(value) {
+		function highlight(value){
 			var index = 0;
 			language.defaultMode.buffer = '';
-			do {
+			do{
 				var mode_info = eatModeChunk(value, index);
 				processModeInfo(mode_info[0], mode_info[1], mode_info[2]);
 				index += mode_info[0].length + mode_info[1].length;
-			} while(!mode_info[2]); 
+			}while(!mode_info[2]); 
 			if(modes.length > 1){
 				throw 'Illegal';
 			}
@@ -247,7 +260,7 @@ dojox.highlight.LANGUAGES = {};
 			this.relevance = relevance;
 			this.keyword_count = keyword_count;
 			this.result = result;
-		} catch(e){
+		}catch(e){
 			if(e == 'Illegal'){
 				this.relevance = 0;
 				this.keyword_count = 0;
@@ -258,19 +271,19 @@ dojox.highlight.LANGUAGES = {};
 		}
 	}
 
-	function contains(array, item){
+	function contains(arr, item){
 		// assist function. FIXME: dojo.inArray()? 
-		if (!array){ return false; }
-		for (var key in array){
-			if (array[key] == item){ return true; }
+		if(!arr){ return false; }
+		for(var key in arr){
+			if(arr[key] == item){ return true; }
 		}
-	return false; // Boolean
+		return false; // Boolean
 	}
 
 	function blockText(block){
 		var result = '';
-		for (var i = 0; i < block.childNodes.length; i++){
-			if (block.childNodes[i].nodeType == 3){
+		for(var i = 0; i < block.childNodes.length; i++){
+			if(block.childNodes[i].nodeType == 3){
 				result += block.childNodes[i].nodeValue;
 			}else if(block.childNodes[i].nodeName == 'BR'){
 				result += '\n';
@@ -284,14 +297,15 @@ dojox.highlight.LANGUAGES = {};
 	dojox.highlight.init = function(/* DomNode */block){
 		// summary: the main (only required) public API. highlight a node.
 		if(dojo.hasClass(block,"no-highlight")){ return; }
-		try { blockText(block);
-		}catch (e){
-			if (e == 'Complex markup'){ return; }
+		try{ 
+			blockText(block);
+		}catch(e){
+			if(e == 'Complex markup'){ return; }
 		}
 	
 		var classes = block.className.split(/\s+/);
-		for (var i = 0; i < classes.length; i++) {
-			if (dojox.highlight.LANGUAGES[classes[i]]) {
+		for(var i = 0; i < classes.length; i++){
+			if(dojox.highlight.LANGUAGES[classes[i]]){
 				highlightLanguage(block, classes[i]);
 				return;
 			}//if
@@ -299,7 +313,7 @@ dojox.highlight.LANGUAGES = {};
 		highlightAuto(block);
 	}
 
-	function highlightLanguage(block, language) {
+	function highlightLanguage(block, language){
 		var highlight = new Highlighter(language, blockText(block));
 		// See these 4 lines? This is IE's notion of "block.innerHTML = result". Love this browser :-/
 		var container = document.createElement('div');
@@ -316,10 +330,10 @@ dojox.highlight.LANGUAGES = {};
 		var relevance = 0;
 		var block_text = blockText(block);
 
-		for (var key in dojox.highlight.LANGUAGES){
+		for(var key in dojox.highlight.LANGUAGES){
 			var highlight = new Highlighter(key, block_text);
 			relevance = highlight.keyword_count + highlight.relevance;
-			if (relevance > max_relevance){
+			if(relevance > max_relevance){
 				max_relevance = relevance;
 				result = highlight;
 			}
@@ -342,14 +356,14 @@ dojox.highlight.LANGUAGES = {};
 	dojox.highlight.compileRes = function(){
 		for (var i in dojox.highlight.LANGUAGES){
 			var language = dojox.highlight.LANGUAGES[i];
-			for (var key in language.modes){
-				if (language.modes[key].begin){
+			for(var key in language.modes){
+				if(language.modes[key].begin){
 					language.modes[key].beginRe = langRe(language, '^' + language.modes[key].begin);
 				}
-				if (language.modes[key].end){
+				if(language.modes[key].end){
 					language.modes[key].endRe = langRe(language, '^' + language.modes[key].end);
 				}
-				if (language.modes[key].illegal){
+				if(language.modes[key].illegal){
 					language.modes[key].illegalRe = langRe(language, '^(?:' + language.modes[key].illegal + ')');
 				}
 				language.defaultMode.illegalRe = langRe(language, '^(?:' + language.defaultMode.illegal + ')');
@@ -360,20 +374,23 @@ dojox.highlight.LANGUAGES = {};
 	dojox.highlight.compileKeywords = function(){
 
 		var modeWords = function(mode){
-			if (!mode.keywordGroups){
-				for (var key in mode.keywords){
-        				if (mode.keywords[key] instanceof Object){ mode.keywordGroups = mode.keywords;
-					}else{ mode.keywordGroups = { keyword: mode.keywords }; }
+			if(!mode.keywordGroups){
+				for(var key in mode.keywords){
+        			if(mode.keywords[key] instanceof Object){  // dojo.isObject?
+						mode.keywordGroups = mode.keywords;
+					}else{ 
+						mode.keywordGroups = { keyword: mode.keywords };
+					}
 					break;
 				}
 			}
 		};
 
-		for (var i in dojox.highlight.LANGUAGES){
+		for(var i in dojox.highlight.LANGUAGES){
 			var lang = dojox.highlight.LANGUAGES[i];
 			if(!lang.defaultMode || !lang.modes){ return; }
 			modeWords(lang.defaultMode);
-			for (var key in lang.modes){
+			for(var key in lang.modes){
 				modeWords(lang.modes[key]);
 			}
 		}
@@ -389,10 +406,12 @@ dojo.addOnLoad(function(){
 });
 
 if(djConfig && djConfig.parseOnLoad){
-	// summary: deprecate initHighlightingOnLoad, and parse if parseOnLoad = true
+	// summary:
+	//		deprecate initHighlightingOnLoad, and parse if parseOnLoad = true
 	//		this is our own mini-parser extension? FIXME: use dojoType="" and
 	//		declared classes? or just a function to wrap that. a single public
 	//		api: dojox.highlight.init(node) or a string even?
+
 	// FIXME: this code _needs_ the <pre> node. deprecate w/ _Templated and make class? 
 	dojo.addOnLoad(function(){
 		dojo.query("pre > code").forEach(dojox.highlight.init);
