@@ -10,19 +10,19 @@ dojo.require("dojox.highlight");
 // and implement. 
 
 // FIXME: these need not be global, but are common in all dojox.highlight.LANGUAGES
-var IDENT_RE = '[a-zA-Z][a-zA-Z0-9_]*';
-var UNDERSCORE_IDENT_RE = '[a-zA-Z_][a-zA-Z0-9_]*';
-var NUMBER_RE = '\\b\\d+(\\.\\d+)?';
-var C_NUMBER_RE = '\\b(0x[A-Za-z0-9]+|\\d+(\\.\\d+)?)';
+IDENT_RE = '[a-zA-Z][a-zA-Z0-9_]*';
+UNDERSCORE_IDENT_RE = '[a-zA-Z_][a-zA-Z0-9_]*';
+NUMBER_RE = '\\b\\d+(\\.\\d+)?';
+C_NUMBER_RE = '\\b(0x[A-Za-z0-9]+|\\d+(\\.\\d+)?)';
 // Common modes
-var APOS_STRING_MODE = {
-  className: 'string',
-  begin: '\'', end: '\'',
-  illegal: '\\n',
-  contains: ['escape'],
-  relevance: 0
+APOS_STRING_MODE = {
+	className: 'string',
+	begin: '\'', end: '\'',
+	illegal: '\\n',
+	contains: ['escape'],
+	relevance: 0
 };
-var QUOTE_STRING_MODE = {
+QUOTE_STRING_MODE = {
 	className: 'string',
 	begin: '"', 
 	end: '"',
@@ -30,25 +30,25 @@ var QUOTE_STRING_MODE = {
 	contains: ['escape'],
 	relevance: 0
 };
-var BACKSLASH_ESCAPE = {
+BACKSLASH_ESCAPE = {
 	className: 'escape',
 	begin: '\\\\.', end: '^',
 	relevance: 0
 };
-var C_LINE_COMMENT_MODE = {
+C_LINE_COMMENT_MODE = {
 	className: 'comment',
 	begin: '//', end: '$',
 	relevance: 0
 };
-var C_BLOCK_COMMENT_MODE = {
+C_BLOCK_COMMENT_MODE = {
 	className: 'comment',
 	begin: '/\\*', end: '\\*/'
 };
-var HASH_COMMENT_MODE = {
+HASH_COMMENT_MODE = {
 	className: 'comment',
 	begin: '#', end: '$'
 };
-var C_NUMBER_MODE = {
+C_NUMBER_MODE = {
 	className: 'number',
 	begin: C_NUMBER_RE, end: '^',
 	relevance: 0

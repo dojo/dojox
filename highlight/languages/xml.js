@@ -1,18 +1,18 @@
 dojo.provide("dojox.highlight.languages.xml");
 
 // FIXME: these are reused  [stray globals]
-var XML_COMMENT = {
+XML_COMMENT = {
 	className: 'comment',
 	begin: '<!--', end: '-->'
 };
 
-var XML_ATTR = {
+XML_ATTR = {
 	className: 'attribute',
 	begin: ' [a-zA-Z-]+=', end: '^',
 	contains: ['value']
 };
 
-var XML_VALUE = {
+XML_VALUE = {
 	className: 'value',
 	begin: '"', end: '"'
 };
