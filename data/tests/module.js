@@ -12,6 +12,7 @@ try{
 	if(dojo.isBrowser){
 		if(window.location.protocol !== "file:"){
 			dojo.require("dojox.data.tests.stores.QueryReadStore");
+			dojo.require("dojox.data.tests.stores.SnapLogicStore");
 		}
 	}
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.dom");
