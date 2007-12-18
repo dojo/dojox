@@ -153,7 +153,7 @@ dojox.regexp.host = function(/*Object?*/flags){
 	var domainNameRE = "([0-9a-zA-Z]([-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?\\.)+" + dojox.regexp.tld(flags);
 
 	// port number RE
-	var portRE = ( flags.allowPort ) ? "(\\:" + dojox.regexp.integer({signed: false}) + ")?" : "";
+	var portRE = flags.allowPort ? "(\\:\\d+)?" : "";
 
 	// build host RE
 	var hostNameRE = domainNameRE;
@@ -175,7 +175,7 @@ dojox.regexp.url = function(/*Object?*/flags){
 
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};
-	if(typeof flags.scheme == "undefined"){ flags.scheme = [true, false]; }
+	if(!("scheme" in flags)){ flags.scheme = [true, false]; }
 
 	// Scheme RE
 	var protocolRE = dojo.regexp.buildGroupRE(flags.scheme,
