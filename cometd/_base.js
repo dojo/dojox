@@ -41,15 +41,15 @@ dojox.cometd = new function(){
 	this.url = null;
 	this.lastMessage = null;
 	this._messageQ = [];
-	this.handleAs="json-comment-optional";
+	this.handleAs = "json-comment-optional";
 	this._advice;
-	this._maxInterval=30000;
-	this._backoffInterval=1000;
+	this._maxInterval = 30000;
+	this._backoffInterval = 1000;
 	this._deferredSubscribes = {};
 	this._deferredUnsubscribes = {};
 	this._subscriptions = [];
-	this._extendInList=[];	// List of functions invoked before delivering messages
-	this._extendOutList=[]; // List of functions invoked before sending messages
+	this._extendInList = [];	// List of functions invoked before delivering messages
+	this._extendOutList = [];	// List of functions invoked before sending messages
 
 	this.state = function() {
 		return this._initialized?(this._connected?this.CONNECTED:this.CONNECTING):(this._connected?this.DISCONNECTING:this.DISCONNECTED);
@@ -142,10 +142,11 @@ dojox.cometd = new function(){
 			dojo.mixin(bindArgs, bargs);
 		}
 		this._props=props;
-		for (var tname in this._subscriptions){
-			for (var sub in this._subscriptions[tname]) {
-				if (this._subscriptions[tname][sub].topic)
+		for(var tname in this._subscriptions){
+			for(var sub in this._subscriptions[tname]){
+				if(this._subscriptions[tname][sub].topic){
 		 			dojo.unsubscribe(this._subscriptions[tname][sub].topic);
+				}
 			}
 		}
 		this._messageQ = [];
@@ -206,18 +207,18 @@ dojox.cometd = new function(){
 		if(objOrFunc){
 			var tname = "/cometd"+channel;
 			var subs=this._subscriptions[tname];
-			if (!subs || subs.length==0)
-			{
+			if(!subs || subs.length==0){
 				subs=[];
 				this._sendMessage({
 					channel: "/meta/subscribe",
 					subscription: channel
 				});
 				
-				this._deferredSubscribes[channel] = new dojo.Deferred();
-				if (this._deferredUnsubscribes[channel]){
-					this._deferredUnsubscribes[channel].cancel();
-					delete this._deferredUnsubscribes[channel];
+				var _ds = this._deferredSubscribes;
+				_ds[channel] = new dojo.Deferred();
+				if(_ds[channel]){
+					_ds[channel].cancel();
+					delete _ds[channel];
 				}
 			}
 			
@@ -227,7 +228,11 @@ dojox.cometd = new function(){
 			}
 			
 			var topic = dojo.subscribe(tname, objOrFunc, funcName);
-			subs.push( { topic: topic, objOrFunc: objOrFunc, funcName: funcName });
+			subs.push({ 
+				topic: topic, 
+				objOrFunc: objOrFunc, 
+				funcName: funcName
+			});
 			this._subscriptions[tname] =subs;
 		}
 		return this._deferredSubscribes[channel];
@@ -252,21 +257,27 @@ dojox.cometd = new function(){
 		
 		var tname = "/cometd"+channel;
 		var subs=this._subscriptions[tname];
-		if (!subs || subs.length==0)
+		if(!subs || subs.length==0){
 			return;
+		}
 
 		var s=0;
-		for (var i in subs){
+		for(var i in subs){
 			var sb=subs[i];
-			if (!objOrFunc||(sb.objOrFunc===objOrFunc&&(!sb.funcName&&!funcName||sb.funcName==funcName))){
+			if( (!objOrFunc) ||
+				(
+					sb.objOrFunc===objOrFunc &&
+					(!sb.funcName && !funcName || sb.funcName==funcName)
+				)
+			){
 				dojo.unsubscribe(subs[i].topic);
 				delete subs[i];
-			}
-			else
+			}else{
 				s++;
+			}
 		}
 		
-		if (s==0) {
+		if(s==0){
 			delete this._subscriptions[tname];
 			this._sendMessage({
 				channel: "/meta/unsubscribe",
@@ -290,10 +301,11 @@ dojox.cometd = new function(){
 		//	example:
 		//	|	dojox.cometd.disconnect();
 
-		for (var tname in this._subscriptions){
-			for (var sub in this._subscriptions[tname]) {
-				if (this._subscriptions[tname][sub].topic)
+		for(var tname in this._subscriptions){
+			for(var sub in this._subscriptions[tname]){
+				if(this._subscriptions[tname][sub].topic){
 					dojo.unsubscribe(this._subscriptions[tname][sub].topic);
+				}
 			}
 		}
 		this._subscriptions = [];
@@ -313,14 +325,9 @@ dojox.cometd = new function(){
 	
 	// public extension points
 	
-	this.subscribed = function(	/*string*/	channel,
-					/*obj*/	message){
-	}
+	this.subscribed = function(	/*String*/channel, /*Object*/message){ }
 
-	this.unsubscribed = function(	/*string*/	channel,
-					/*obj*/	message){
-	}
-
+	this.unsubscribed = function(/*String*/channel, /*Object*/message){ }
 
 
 	// private methods (TODO name all with leading _)
@@ -334,10 +341,12 @@ dojox.cometd = new function(){
 	}
 	
 	this._backoff = function(){
-		if (!this._advice || !this._advice.interval)
+		if(!this._advice || !this._advice.interval){
 			this._advice={reconnect:"retry",interval:0}; // TODO Is this good advice?
-		if (this._advice.interval<this._maxInterval)
+		}
+		if(this._advice.interval<this._maxInterval){
 			this._advice.interval+=this._backoffInterval;
+		}
 	}
 
 	this._finishInit = function(data){
@@ -387,15 +396,18 @@ dojox.cometd = new function(){
 			// follow advice
 			if(this._advice && this._advice["reconnect"]=="none"){
 				console.debug("cometd reconnect: none");
-			} else if( this._advice && this._advice["interval"] && this._advice.interval>0 ){
-				setTimeout(dojo.hitch(this,function(){this.init(cometd.url,this._props);}),this._advice.interval);
+			}else if(this._advice && this._advice["interval"] && this._advice.interval>0 ){
+				setTimeout(
+					dojo.hitch(this, function(){ this.init(cometd.url,this._props); }),
+					this._advice.interval
+				);
 			}else{
 				this.init(this.url,this._props);
 			}
 		}
 	}
 
-	this._extendIn= function(message){
+	this._extendIn = function(message){
 		// Handle extensions for inbound messages
 		var m=message;
 		dojo.forEach(dojox.cometd._extendInList, function(f){
@@ -597,8 +609,7 @@ dojox.cometd.longPollTransport = new function(){
 	this.tunnelCollapse = function(){
 		// TODO handle transport specific advice
 		
-		if(!this._cometd._initialized)
-			return;
+		if(!this._cometd._initialized){ return; }
 			
 		if(this._cometd._advice){
 			if(this._cometd._advice["reconnect"]=="none"){
@@ -616,15 +627,14 @@ dojox.cometd.longPollTransport = new function(){
 	}
 
 	this._connect = function(){
-		if(!this._cometd._initialized)
-			return;
+		if(!this._cometd._initialized){ return; }
 		if(this._cometd._polling) {
 			console.debug("wait for poll to complete or fail");
 			setTimeout(dojo.hitch(this,function(){ this._connect(); }),500);
 			return;
 		}
 			
-		if(	(this._cometd._advice)&&
+		if(	(this._cometd._advice) &&
 			(this._cometd._advice["reconnect"]=="handshake")
 		){
 			this._cometd._connected=false;
@@ -715,13 +725,13 @@ dojox.cometd.callbackPollTransport = new function(){
 	}
 
 	this.tunnelInit = function(){
-		var message={
+		var message = {
 			channel:	"/meta/connect",
 			clientId:	this._cometd.clientId,
 			connectionType: this._connectionType,
 			id:	""+this._cometd.messageId++
 		};
-		message=this._cometd._extendOut(message);		
+		message = this._cometd._extendOut(message);		
 		this.openTunnelWith({
 			message: dojo.toJson([message])
 		});
@@ -794,5 +804,3 @@ dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTrans
 dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
 
 dojo.addOnUnload(dojox.cometd,"_onUnload");
-
-
