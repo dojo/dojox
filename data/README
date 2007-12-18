@@ -11,6 +11,11 @@ Project authors
 	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
+	Russell Jones (KeyValueStore) (CLA)
+	Benjamin Schell (KeyValueStore) (Corporate CLA)
+	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
+         
+        
 -------------------------------------------------------------------------------
 Project description
 
@@ -64,3 +69,8 @@ Additional Notes:
 
 	dojox.data.jsonPathStore - datastore that takes an arbitrary js object
 	and uses it as the store. Pre-Alpha at the moment.
+        
+	dojox.data.KeyValueStore - datastore that mimics a key/value property
+	file format.
+        
+	dojox.data.SnapLogicStore - Store to interface to SnapLogic data services.
