@@ -12,11 +12,13 @@ dojo.provide("dojox.highlight.languages.smalltalk");
 		smalltalk : {
 			defaultMode: {
 				lexems: [UNDERSCORE_IDENT_RE],
-				contains: ['comment', 'string', 'class', 'method',
-			    		'number', 'symbol', 'char', 'localvars', 'array'],
+				contains: [
+					'comment', 'string', 'class', 'method', 'number', 'symbol',
+					'char', 'localvars', 'array'
+				],
 				keywords: SMALLTALK_KEYWORDS
-	     		},
-	     		modes: [
+			},
+			modes: [
 				{
 					className: 'class',
 					begin: '\\b[A-Z][A-Za-z0-9_]*', end: '^',
