@@ -460,11 +460,10 @@ dojox.cometd = new function(){
 					if(message.successful && !this._connected){
 						this._connected = this._initialized;
 						this.endBatch();
-						dojo.publish("/cometd/meta", [{cometd:this,action:"connect",successful:true,state:this.state()}]);
 					} else if(!this._initialized){
 						this._connected = false; // finish disconnect
-						dojo.publish("/cometd/meta", [{cometd:this,action:"connect",successful:false,state:this.state()}]);
 					}
+                                        dojo.publish("/cometd/meta", [{cometd:this,action:"connect",successful:message.successful,state:this.state()}]);
 					break;
 				case "/meta/subscribe":
 					var deferred = this._deferredSubscribes[message.subscription];
