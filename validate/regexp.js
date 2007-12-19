@@ -17,7 +17,7 @@ dojox.regexp.tld = function(/*Object?*/flags){
 	//    flags.allowGeneric  Include the generic domains.  Default is true.
 	//    flags.allowInfra  Include infrastructure domains.  Default is true.
 
-if(a=1)x{}
+if(a=1){}
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};
 	if(typeof flags.allowCC != "boolean"){ flags.allowCC = true; }
