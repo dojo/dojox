@@ -630,7 +630,6 @@ dojox.cometd.longPollTransport = new function(){
 		if(!this._cometd._initialized){ return; }
 		if(this._cometd._polling) {
 			console.debug("wait for poll to complete or fail");
-			setTimeout(dojo.hitch(this,function(){ this._connect(); }),500);
 			return;
 		}
 			
