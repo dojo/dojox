@@ -29,27 +29,27 @@ dojox.cometd = new function(){
 
 	this.connectionTypes = new dojo.AdapterRegistry(true);
 
-	this.version = "1.0";
-	this.minimumVersion = "0.9";
-	this.clientId = null;
-	this.messageId = 0;
+	this.version="1.0";
+	this.minimumVersion="0.9";
+	this.clientId=null;
+	this.messageId=0;
 	this.batch=0;
 
 	this._isXD = false;
-	this.handshakeReturn = null;
-	this.currentTransport = null;
+	this.handshakeReturn=null;
+	this.currentTransport=null;
 	this.url = null;
-	this.lastMessage = null;
-	this._messageQ = [];
-	this.handleAs = "json-comment-optional";
-	this._advice;
-	this._maxInterval = 30000;
-	this._backoffInterval = 1000;
-	this._deferredSubscribes = {};
-	this._deferredUnsubscribes = {};
-	this._subscriptions = [];
-	this._extendInList = [];	// List of functions invoked before delivering messages
-	this._extendOutList = [];	// List of functions invoked before sending messages
+	this.lastMessage=null;
+	this._messageQ=[];
+	this.handleAs="json-comment-optional";
+	this._advice={};
+	this._maxInterval=30000;
+	this._backoffInterval=1000;
+	this._deferredSubscribes={};
+	this._deferredUnsubscribes={};
+	this._subscriptions=[];
+	this._extendInList=[];	// List of functions invoked before delivering messages
+	this._extendOutList=[];	// List of functions invoked before sending messages
 
 	this.state = function() {
 		return this._initialized?(this._connected?this.CONNECTED:this.CONNECTING):(this._connected?this.DISCONNECTING:this.DISCONNECTED);
@@ -93,20 +93,20 @@ dojox.cometd = new function(){
 		this.url = root||djConfig["cometdRoot"];
 		if(!this.url){
 			console.debug("no cometd root specified in djConfig and no root passed");
-			return;
+			return null;
 		}
 
 		// Are we x-domain? borrowed from dojo.uri.Uri in lieu of fixed host and port properties
 		var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
-		var r = (""+window.location).match(new RegExp(regexp));
-		if(r[4]){
-			var tmp = r[4].split(":");
+		var parts = (""+window.location).match(new RegExp(regexp));
+		if(parts[4]){
+			var tmp = parts[4].split(":");
 			var thisHost = tmp[0];
 			var thisPort = tmp[1]||"80"; // FIXME: match 443
 
-			r = this.url.match(new RegExp(regexp));
-			if(r[4]){
-				tmp = r[4].split(":");
+			parts = this.url.match(new RegExp(regexp));
+			if(parts[4]){
+				tmp = parts[4].split(":");
 				var urlHost = tmp[0];
 				var urlPort = tmp[1]||"80";
 				this._isXD = ((urlHost != thisHost)||(urlPort != thisPort));
@@ -224,7 +224,7 @@ dojox.cometd = new function(){
 			
 			for (var i in subs){
 				if (subs[i].objOrFunc===objOrFunc&&(!subs[i].funcName&&!funcName||subs[i].funcName==funcName))
-					return;
+					return null;
 			}
 			
 			var topic = dojo.subscribe(tname, objOrFunc, funcName);
@@ -258,7 +258,7 @@ dojox.cometd = new function(){
 		var tname = "/cometd"+channel;
 		var subs=this._subscriptions[tname];
 		if(!subs || subs.length==0){
-			return;
+			return null;
 		}
 
 		var s=0;
@@ -392,7 +392,7 @@ dojox.cometd = new function(){
 		// If there is a problem
 		if(!successful){
 			console.debug("cometd init failed");
-			this.backoff();
+			this._backoff();
 			// follow advice
 			if(this._advice && this._advice["reconnect"]=="none"){
 				console.debug("cometd reconnect: none");
@@ -451,6 +451,7 @@ dojox.cometd = new function(){
 		}
 
 		// check to see if we got a /meta channel message that we care about
+		var deferred=null;
 		if(	(message["channel"]) &&
 			(message.channel.length > 5)&&
 			(message.channel.substr(0, 5) == "/meta")){
@@ -466,7 +467,7 @@ dojox.cometd = new function(){
 					dojo.publish("/cometd/meta",[{cometd:this,action:"connect",successful:message.successful,state:this.state()}]);
 					break;
 				case "/meta/subscribe":
-					var deferred = this._deferredSubscribes[message.subscription];
+					deferred = this._deferredSubscribes[message.subscription];
 					if(!message.successful){
 						if(deferred){
 							deferred.errback(new Error(message.error));
@@ -479,7 +480,7 @@ dojox.cometd = new function(){
 					}
 					break;
 				case "/meta/unsubscribe":
-					var deferred = this._deferredUnsubscribes[message.subscription];
+					deferred = this._deferredUnsubscribes[message.subscription];
 					if(!message.successful){
 						if(deferred){
 							deferred.errback(new Error(message.error));
@@ -514,6 +515,7 @@ dojox.cometd = new function(){
 		}
 		else{
 			this._messageQ.push(message);
+			return null;
 		}
 	}
 
