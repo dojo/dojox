@@ -5,7 +5,7 @@ dojo.require("dijit.form._FormWidget");
 dojo.require("dijit._Templated"); 
 
 dojo.declare("dojox.widget.FileInput",
-	[dijit.form._FormWidget,dijit._Templated],
+	dijit.form._FormWidget,
 	{
 	// summary: A styled input type="file"
 	//
@@ -29,7 +29,6 @@ dojo.declare("dojox.widget.FileInput",
 	
 	startup: function(){
 		// summary: listen for changes on our real file input
-		this.inherited("startup",arguments);
 		this._listener = dojo.connect(this.fileInput,"onchange",this,"_matchValue");
 		this._keyListener = dojo.connect(this.fileInput,"onkeyup",this,"_matchValue");
 	},
