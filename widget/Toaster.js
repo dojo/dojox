@@ -1,18 +1,14 @@
 dojo.provide("dojox.widget.Toaster");
 
 dojo.require("dojo.fx");
-
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 
-// This is mostly taken from Jesse Kuhnert's MessageNotifier.
-// Modified by Bryan Forbes to support topics and a variable delay.
-// Modified by Karl Tiedt to support 0 duration messages that require user interaction and message stacking
-
 dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
-		// summary
+		// summary:
 		//		Message that slides in from the corner of the screen, used for notifications
 		//		like "new email".
+		
 		templateString: '<div dojoAttachPoint="clipNode"><div dojoAttachPoint="containerNode" dojoAttachEvent="onclick:onSelect"><div dojoAttachPoint="contentNode"></div></div></div>',
 
 		// messageTopic: String
@@ -56,7 +52,7 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 		separator: "<hr></hr>",
 
 		postCreate: function(){
-			dojox.widget.Toaster.superclass.postCreate.apply(this);
+			this.inherited(arguments);
 			this.hide();
 
 			this.clipNode.className = "dijitToasterClip";
@@ -75,8 +71,12 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 			}
 		},
 
+		_capitalize: function(/* String */w){
+				return w.substring(0,1).toUpperCase() + w.substring(1);
+		},
+
 		setContent: function(/*String*/message, /*String*/messageType, /*int?*/duration){
-			// summary
+			// summary:
 			//		sets and displays the given message and show duration
 			// message:
 			//		the message
@@ -92,19 +92,15 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 				}
 				if(this.slideAnim.status() == "playing" || (this.fadeAnim && this.fadeAnim.status() == "playing")){
 					setTimeout(dojo.hitch(this, function(){
-						this.setContent(message, messageType);
+						this.setContent(message, messageType, duration);
 					}), 50);
 					return;
 				}
 			}
 
-			var capitalize = function(word){
-				return word.substring(0,1).toUpperCase() + word.substring(1);
-			};
-
 			// determine type of content and apply appropriately
 			for(var type in this.messageTypes){
-				dojo.removeClass(this.containerNode, "dijitToaster" + capitalize(this.messageTypes[type]));
+				dojo.removeClass(this.containerNode, "dijitToaster" + this._capitalize(this.messageTypes[type]));
 			}
 
 			dojo.style(this.containerNode, "opacity", 1);
@@ -114,15 +110,19 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 			}
 			this.contentNode.innerHTML = message;
 
-			dojo.addClass(this.containerNode, "dijitToaster" + capitalize(messageType || this.defaultType));
+			dojo.addClass(this.containerNode, "dijitToaster" + this._capitalize(messageType || this.defaultType));
 
 			// now do funky animation of widget appearing from
 			// bottom right of page and up
 			this.show();
 			var nodeSize = dojo.marginBox(this.containerNode);
-			
+			this._cancelHideTimer();
 			if(this.isVisible){
 				this._placeClip();
+				//update hide timer if no sticky message in stack 
+				if (!this._stickyMessage)
+					this._setHideTimer(duration);
+
 			}else{
 				var style = this.containerNode.style;
 				var pd = this.positionDirection;
@@ -142,44 +142,63 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 				}else{
 					throw new Error(this.id + ".positionDirection is invalid: " + pd);
 				}
-
 				this.slideAnim = dojo.fx.slideTo({
 					node: this.containerNode,
 					top: 0, left: 0,
 					duration: 450});
-				dojo.connect(this.slideAnim, "onEnd", this, function(nodes, anim){
+				this.connect(this.slideAnim, "onEnd", function(nodes, anim){
 						//we build the fadeAnim here so we dont have to duplicate it later
 						// can't do a fadeHide because we're fading the
 						// inner node rather than the clipping node
 						this.fadeAnim = dojo.fadeOut({
 							node: this.containerNode,
 							duration: 1000});
-						dojo.connect(this.fadeAnim, "onEnd", this, function(evt){
+						this.connect(this.fadeAnim, "onEnd", function(evt){
 							this.isVisible = false;
 							this.hide();
 						});
-						//if duration == 0 we keep the message displayed until clicked
-						//TODO: fix so that if a duration > 0 is displayed when a duration==0 is appended to it, the fadeOut is canceled
-						if(duration>0){
-							setTimeout(dojo.hitch(this, function(evt){
-								// we must hide the iframe in order to fade
-								// TODO: figure out how to fade with a BackgroundIframe
-								if(this.bgIframe && this.bgIframe.iframe){
-									this.bgIframe.iframe.style.display="none";
-								}
-								this.fadeAnim.play();
-							}), duration);
-						}else{
-							dojo.connect(this, 'onSelect', this, function(evt){
-								this.fadeAnim.play();
-							});
-						}
+						this._setHideTimer(duration);
+						this.connect(this, 'onSelect', function(evt){
+							this._cancelHideTimer();
+							//force clear sticky message
+							this._stickyMessage=false;
+							this.fadeAnim.play();
+						});
+
 						this.isVisible = true;
 					});
 				this.slideAnim.play();
 			}
 		},
-
+		
+		_cancelHideTimer:function(){
+			if (this._hideTimer){
+				clearTimeout(this._hideTimer);
+				this._hideTimer=null;
+			}
+		},
+		
+		_setHideTimer:function(duration){
+			this._cancelHideTimer();
+			//if duration == 0 we keep the message displayed until clicked
+			if(duration>0){
+				this._cancelHideTimer();
+				this._hideTimer=setTimeout(dojo.hitch(this, function(evt){
+					// we must hide the iframe in order to fade
+					// TODO: figure out how to fade with a BackgroundIframe
+					if(this.bgIframe && this.bgIframe.iframe){
+						this.bgIframe.iframe.style.display="none";
+					}
+					this._hideTimer=null;
+					//force clear sticky message
+					this._stickyMessage=false;
+					this.fadeAnim.play();
+				}), duration);
+			}
+			else
+				this._stickyMessage=true;
+		},
+		
 		_placeClip: function(){
 			var view = dijit.getViewport();
 
@@ -208,11 +227,9 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 				if(!this.bgIframe){
 					this.clipNode.id = "__dojoXToaster_"+this._uniqueId++;
 					this.bgIframe = new dijit.BackgroundIframe(this.clipNode);
-//TODO					this.bgIframe.setZIndex(this.clipNode);
 				}
-//TODO				this.bgIframe.onResized();
 				var iframe = this.bgIframe.iframe;
-				iframe && (iframe.style.display="block");
+				if(iframe){ iframe.style.display="block"; }
 			}
 		},
 
@@ -222,7 +239,7 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 
 		show: function(){
 			// summary: show the Toaster
-			dojo.style(this.containerNode, 'display', '');
+			dojo.style(this.domNode, 'display', 'block');
 
 			this._placeClip();
 
@@ -234,8 +251,7 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 		hide: function(){
 			// summary: hide the Toaster
 
-			//Q: ALP: I didn't port all the toggler stuff from d.w.HtmlWidget.  Is it needed? Ditto for show.
-			dojo.style(this.containerNode, 'display', 'none');
+			dojo.style(this.domNode, 'display', 'none');
 
 			if(this._scrollConnected){
 				dojo.disconnect(this._scrollConnected);
