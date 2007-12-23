@@ -5,12 +5,15 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated"); 
 dojo.require("dojo.fx"); 
 
-dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
-	// summary
+dojo.declare("dojox.layout.ResizeHandle",
+	[dijit._Widget, dijit._Templated],
+	{
+	// summary: A dragable handle used to resize an attached node.
+	// description:
 	//	The handle on the bottom-right corner of FloatingPane or other widgets that allows
 	//	the widget to be resized.
 	//	Typically not used directly.
-
+	//
 	// targetId: String
 	//	id of the Widget OR DomNode that I will size
 	targetId: '',
@@ -55,22 +58,11 @@ dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 	//	smallest width in px resize node can be
 	minWidth: 100,
 
-	// resize handle template, fairly easy to override: 
 	templateString: '<div dojoAttachPoint="resizeHandle" class="dojoxResizeHandle"><div></div></div>',
-
-	// private propteries and holders
-	_isSizing: false,
-	_connects: [],
-	_resizeHelper: null,	
-	_activeResizeLastEvent: null,
-	// defaults to match default resizeAxis. set resizeAxis variable to modify. 
-	_resizeX: true,
-	_resizeY: true,
-
 
 	postCreate: function(){
 		// summary: setup our one major listener upon creation
-		dojo.connect(this.resizeHandle, "onmousedown", this, "_beginSizing");
+		this.connect(this.resizeHandle, "onmousedown", "_beginSizing");
 		if(!this.activeResize){ 
 			// there shall be only a single resize rubberbox that at the top
 			// level so that we can overlay it on anything whenever the user
@@ -121,7 +113,7 @@ dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 
 		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : dojo.byId(this.targetId);
 		if (this.targetContainer) { this.targetDomNode = this.targetContainer; } 
-		if (!this.targetDomNode){ return; }
+		if (!this.targetDomNode){ return false; }
 
 		if (!this.activeResize) {
 			var c = dojo.coords(this.targetDomNode, true);
@@ -136,9 +128,9 @@ dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 		var mb = (this.targetWidget) ? dojo.marginBox(this.targetDomNode) : dojo.contentBox(this.targetDomNode);  
 		this.startSize  = { 'w':mb.w, 'h':mb.h };
 
-		this._connects = []; 
-		this._connects.push(dojo.connect(document,"onmousemove",this,"_updateSizing")); 
-		this._connects.push(dojo.connect(document,"onmouseup", this, "_endSizing"));
+		this._pconnects = []; 
+		this._pconnects.push(dojo.connect(document,"onmousemove",this,"_updateSizing")); 
+		this._pconnects.push(dojo.connect(document,"onmouseup", this, "_endSizing"));
 
 		e.preventDefault();
 	},
@@ -195,8 +187,6 @@ dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 
 		if(this.targetWidget && typeof this.targetWidget.resize == "function"){ 
 			this.targetWidget.resize(tmp);
-//			dojo.style(this.targetDomNode,"width",tmp.w+"px"); 
-//			dojo.style(this.targetDomNode,"height",tmp.h+"px");
 		}else{
 			if(this.animateSizing){
 				var anim = dojo.fx[this.animateMethod]([
@@ -225,9 +215,7 @@ dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 
 	_endSizing: function(/*Event*/ e){
 		// summary: disconnect listenrs and cleanup sizing
-		dojo.forEach(this._connects,function(c){
-			dojo.disconnect(c); 
-		});
+		dojo.forEach(this._pconnects,dojo.disconnect);
 		if(!this.activeResize){
 			this._resizeHelper.hide();
 			this._changeSizing(e);
@@ -236,15 +224,14 @@ dojo.declare("dojox.layout.ResizeHandle", [dijit._Widget, dijit._Templated], {
 	}
 });
 
-dojo.declare("dojox.layout._ResizeHelper", [dijit._Widget], {
-	// summary:
-	//	dojox.layout._DockNode is a private widget used to keep track of
-	//	which pane is docked.
+dojo.declare("dojox.layout._ResizeHelper",
+	dijit._Widget,
+	{
+	// summary: A global private resize helper shared between any resizeHandle with activeSizing='false;
 	
 	startup: function(){
-		if(this._started){ return; }
-		
-		this.inherited("startup",arguments);
+		if(this._started){ return; }	
+		this.inherited(arguments);
 	},
 
 	show: function(){
@@ -267,7 +254,8 @@ dojo.declare("dojox.layout._ResizeHelper", [dijit._Widget], {
 	
 	resize: function(/* Object */dim){
 		// summary: size the widget and place accordingly
-
+		
+		// FIXME: this is off when padding present
 		dojo.marginBox(this.domNode, dim);
 	}
 });

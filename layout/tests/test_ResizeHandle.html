@@ -9,7 +9,8 @@
 	<script type="text/javascript" src="../ResizeHandle.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		dojo.require("dojo.parser"); 
-		dojo.require("dijit.layout.ContentPane"); 
+		dojo.require("dijit.layout.ContentPane");
+		dojo.require("dijit.form.Button");
 		// dojo.require("dojox.layout.ResizeHandle");
 	
 		function makeNewSizer(){
@@ -69,8 +70,15 @@
 		style="width: 300px; height: 200px; padding:10px; border: 1px solid #dedede; position: relative; background: white;"
 		id="testWindow"
 	>
+		
+		<button dojoType='dijit.form.Button'>
+			kill handle
+			<script type="dojo/method" event="onClick">
+				dijit.byId("hand1").destroy();
+			</script>
+		</button>
 		Content Pane w/a resize handle. activeResize'ing only on layout Widgets? FIXME: :)
-		<div dojoType="dojox.layout.ResizeHandle" targetId="testWindow"></div>
+		<div id="hand1" dojoType="dojox.layout.ResizeHandle" targetId="testWindow"></div>
 	</div>
 
 	<br>
@@ -78,8 +86,14 @@
 	<div id="plainDiv"
 		style="width: 300px; padding:3px; height: 200px; border:1px solid #666; position: relative; background: white;"
 	>
+		<button dojoType='dijit.form.Button'>
+			kill handle
+			<script type="dojo/method" event="onClick">
+				dijit.byId("hand2").destroy();
+			</script>
+		</button>
 		Plain div w/a resize handle. All Default settings.
-		<div dojoType="dojox.layout.ResizeHandle" targetId="plainDiv"></div>
+		<div id="hand2" dojoType="dojox.layout.ResizeHandle" targetId="plainDiv"></div>
 	</div>
 
 	<br><br>	
