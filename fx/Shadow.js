@@ -42,7 +42,7 @@ dojo.declare("dojox.fx.Shadow",
 	startup: function(){
 		// summary: Initializes the shadow.
 
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 		this.node.style.position = "relative";
 		// make all the pieces of the shadow, and position/size them as much
 		// as possible (but a lot of the coordinates are set in sizeShadow
@@ -69,7 +69,6 @@ dojo.declare("dojox.fx.Shadow",
 		var img;
 		var url = this.shadowPng + name.toUpperCase() + ".png";
 		if((dojo.isIE)&&(dojo.isIE<7)){
-			console.log('foo'); 
 			img=document.createElement("div");
 			img.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+url+"'"+
 				(sizing?", sizingMethod='"+sizing+"'":"") + ")";
