@@ -90,8 +90,11 @@ dojox.io.proxy.xip = {
 			
 			//Fix responseXML.
 			var contentType = facade.getResponseHeader("Content-Type");
-			if(contentType && (contentType == "application/xml" || contentType == "text/xml")){
-				facade.responseXML = dojox.data.dom.createDocument(response.responseText, contentType);
+			if(contentType){
+				var mimeType = contentType.split(";")[0];
+				if(mimeType == "application/xml" || mimeType == "text/xml"){
+					facade.responseXML = dojox.data.dom.createDocument(response.responseText, contentType);
+				}
 			}
 		}
 		facade.readyState = 4;
@@ -103,11 +106,7 @@ dojox.io.proxy.xip = {
 		var state = this._state[stateId];
 		var facade = state.facade;
 
-		if(this.needFrameRecursion()){
-			var clientWindow = window.open("", state.stateId + "_clientEndPoint");
-		}else{
-			var clientWindow = state.clientFrame.contentWindow;
-		}
+		var clientWindow = this.needFrameRecursion() ? window.open("", state.stateId + "_clientEndPoint") : state.clientFrame.contentWindow;
 
 		var reqHeaders = [];
 		for(var param in facade._requestHeaders){
