@@ -24,7 +24,7 @@ dojo.declare("dojox.image.Lightbox",
 	// |	not implemented fully yet, though works with basic datastore access. need to manually call
 	// |	widget._attachedDialog.addImage(item,"fromStore") for each item in a store result set.
 	// |	<div dojoType="dojox.image.Lightbox" group="fromStore" store="storeName"></div>
-
+	//
 	// group: String
 	//	grouping images in a page with similar tags will provide a 'slideshow' like grouping of images
 	group: "",
@@ -48,7 +48,7 @@ dojo.declare("dojox.image.Lightbox",
 	_attachedDialog: null, // try to share a single underlay per page?
 
 	startup: function(){
-		this.inherited("startup", arguments);
+		this.inherited(arguments);
 		// setup an attachment to the masterDialog (or create the masterDialog)
 		var tmp = dijit.byId('dojoxLightboxDialog');
 		if(tmp){
@@ -97,7 +97,7 @@ dojo.declare("dojox.image.Lightbox",
 
 dojo.declare("dojox.image._LightboxDialog",
 	dijit.Dialog,{
-	// summary: 
+	// summary: The "dialog" shared  between any Lightbox instances on the page
 	// description:
 	//	
 	//	a widget that intercepts anchor links (typically around images) 	
@@ -132,7 +132,7 @@ dojo.declare("dojox.image._LightboxDialog",
 
 	startup: function(){
 		// summary: add some extra event handlers, and startup our superclass.
-		this.inherited("startup", arguments);
+		this.inherited(arguments);
 
 		// FIXME: these are supposed to be available in dijit.Dialog already,
 		// but aren't making it over.
@@ -153,7 +153,7 @@ dojo.declare("dojox.image._LightboxDialog",
 		dojo.style(this.titleNode,"opacity","0");
 
 		// we only need to call dijit.Dialog.show() if we're not already open.
-		if(!this.open){ this.inherited("show", arguments); }
+		if(!this.open){ this.inherited(arguments); }
 	
 		this._imageReady = false; 
 		
@@ -267,7 +267,7 @@ dojo.declare("dojox.image._LightboxDialog",
 				this.imgNode.src = this._blankImg; 
 			}) 
 		}).play(25); 
-		this.inherited("hide", arguments);
+		this.inherited(arguments);
 		this.inGroup = null;
 		this._positionIndex = null;
 	},

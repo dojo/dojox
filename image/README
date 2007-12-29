@@ -30,6 +30,8 @@ Dependencies:
 
 	Gallery: core, dojox.image.SlideShow, dojox.image.ThumbNailPicker
 
+	Magnifier: dojo core, dijit._Widget, dojox.gfx
+
 -------------------------------------------------------------------------------
 Documentation
 
@@ -58,3 +60,7 @@ Additional Notes
 
 	Gallery: A combination Thumbnail view and SlideShow, using
 	a datastore, and providing navigation, and common API. 
+
+	Magnifier: Unobtrusive way to attach a hovering window window
+	when moving the mouse over an image. The window shows a a zoomed
+	version of the original source. (experimental)

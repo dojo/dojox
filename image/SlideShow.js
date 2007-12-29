@@ -61,6 +61,10 @@ dojo.declare("dojox.image.SlideShow",
 	//	If true, then images are preloaded, before the user navigates to view them.
 	//	If false, an image is not loaded until the user views it.
 	autoLoad: true,
+
+	// autoStart: Boolean
+	//	If true, the SlideShow begins playing immediately
+	autoStart: false,
 	
 	// fixedHeight: Boolean
 	// If true, the widget does not resize itself to fix the displayed image.
@@ -111,7 +115,7 @@ dojo.declare("dojox.image.SlideShow",
 
 	postCreate: function(){
 		// summary: Initilizes the widget, sets up listeners and shows the first image
-		this.inherited("postCreate",arguments);
+		this.inherited(arguments);
 		var img = document.createElement("img");
 
 		// FIXME: should API be to normalize an image to fit in the specified height/width?
@@ -158,6 +162,7 @@ dojo.declare("dojox.image.SlideShow",
 		//	data store.  The three attributes allowed are 'linkAttr', 'imageLargeAttr' and 'titleAttr'
 		this.reset();
 		var _this = this;
+		
 		this._request = {
 			query: {},
 			start: ((request.start) ? request.start : 0),
@@ -171,10 +176,12 @@ dojo.declare("dojox.image.SlideShow",
 			this.imageLargeAttr = paramNames.imageLargeAttr;
 		}
 	
-		var _this = this;
 		var _complete = function(items){
 			_this.showImage(0); 
 			_this._request.onComplete = null;
+			if(_this.autoStart){
+				_this.toggleSlideShow(); 
+			}
 		};
 		
 		this.imageStore = dataStore;
@@ -221,7 +228,7 @@ dojo.declare("dojox.image.SlideShow",
 	destroy: function(){
 		// summary: Cleans up the widget when it is being destroyed
 		if(this._slideId) { this._stop(); }
-		this.inherited("destroy",arguments);
+		this.inherited(arguments);
 	},
 
 	showNextImage: function(inTimer, forceLoop){

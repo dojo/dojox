@@ -112,7 +112,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	postCreate: function(){
 		// summary: Initializes styles and listeners		
 		this.widgetid = this.id;
-		this.inherited("postCreate",arguments);
+		this.inherited(arguments);
 		this.pageSize = Number(this.pageSize);
 
 		this._scrollerSize = this.size - (51 * 2);
@@ -144,6 +144,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		}
 	
 		if(this.isScrollable) {
+			// FIXME: does this break builds or anything? 
 			dojo.require("dojox.fx.scroll");
 			dojo.require("dojox.fx.easing"); 
 		}
@@ -169,8 +170,8 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this.navNextImg.setAttribute("src", this.tempImgPath);
 		this.navPrevImg.setAttribute("src", this.tempImgPath);
 		
-		dojo.connect(this.navPrev, "onclick", this, "_prev");
-		dojo.connect(this.navNext, "onclick", this, "_next");
+		this.connect(this.navPrev, "onclick", "_prev");
+		this.connect(this.navNext, "onclick", "_next");
 		this.isInitialized = true;
 		
 		if(this.isHorizontal){
@@ -262,7 +263,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	
 	isVisible: function(idx) {
 		// summary: Returns true if the image at the specified index is currently visible. False otherwise.
-		var img = this._thumbs[idx];;
+		var img = this._thumbs[idx];
 		if(!img){return false;}
 		var pos = this.isHorizontal ? "offsetLeft" : "offsetTop";
 		var size = this.isHorizontal ? "offsetWidth" : "offsetHeight";
@@ -329,8 +330,9 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		// summary: Displays thumbnail images, starting at position 'idx'
 		// idx: Number
 		//	The index of the first thumbnail
-		var _this = this;
-		var idx = arguments.length == 0 ? this._thumbIndex : arguments[0];
+
+		// var _this = this;
+		if(!idx){ idx = this._thumbIndex; }
 		idx = Math.min(Math.max(idx, 0), this._maxPhotos);
 		
 		if(idx >= this._maxPhotos){ return; }
