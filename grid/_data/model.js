@@ -31,7 +31,7 @@ dojo.declare("dojox.grid.data.Model", null, {
 		if(!this.isUpdating()){
 			var a = inArgs || [];
 			for(var i=0, m, o; (o=this.observers[i]); i++){
-				m = o.p + inMsg, o = o.o;
+				m = o.p + inMsg; o = o.o;
 				(m in o)&&(o[m].apply(o, a));
 			}
 		}
@@ -385,7 +385,7 @@ dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 
 // FIXME: deprecated: (included for backward compatibility only)
 dojox.grid.data.table = dojox.grid.data.Table;
-dojox.grid.data.dynamic = dojox.grid.data.Dyanamic;
+dojox.grid.data.dynamic = dojox.grid.data.Dynamic;
 
 // we treat dojo.data stores as dynamic stores because no matter how they got
 // here, they should always fill that contract
