@@ -1,5 +1,6 @@
 <?php
 
+/*
 // Open the Curl session
 if (!$_POST['url'])
 	exit;
@@ -20,8 +21,9 @@ $response = curl_exec($session);
 header("Content-Type: application/xml;");
 
 // expects a json response and filters it
-echo "/*" . $response . "*/";
-curl_close($session);
+*/
+// echo "/*" . $response . "*/";
+// curl_close($session);
 
 ?>
 
