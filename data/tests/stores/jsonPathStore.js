@@ -202,7 +202,7 @@ doh.register("dojox.data.tests.stores.jsonPathStore",
 				var store= new dojox.data.jsonPathStore({data:dojox.data.tests.testData, mode: dojox.data.SYNC_MODE});
 				var result = store.fetch("$.store.book[*].author"); 	
 				doh.assertFalse(store.isItem(result[0]));
-				var result = store.fetch("$.store.book[*]"); 	
+				result = store.fetch("$.store.book[*]"); 	
 				doh.assertTrue(store.isItem(result[0]));
 				return true;
 			}
@@ -231,7 +231,7 @@ doh.register("dojox.data.tests.stores.jsonPathStore",
 			runTest: function(t) {
 				var store= new dojox.data.jsonPathStore({data:dojox.data.tests.testData, mode: dojox.data.SYNC_MODE});
 				var result = store.fetch("$.store.book[*]"); 	
-				doh.assertEqual(dojo.toJson(store.getAttributes(result[0])),'["category", "author", "title", "price", "_meta", "_id"]');
+				doh.assertEqual(dojo.toJson(store.getAttributes(result[0])),'["category","author","title","price","_meta","_id"]');
 				return true;
 			}
 		},
@@ -240,7 +240,7 @@ doh.register("dojox.data.tests.stores.jsonPathStore",
 			runTest: function(t) {
 				var store= new dojox.data.jsonPathStore({data:dojox.data.tests.testData, mode: dojox.data.SYNC_MODE, hideMetaAttributes: true});
 				var result = store.fetch("$.store.book[*]"); 	
-				doh.assertEqual('["category", "author", "title", "price", "_id"]',dojo.toJson(store.getAttributes(result[0])));
+				doh.assertEqual('["category","author","title","price","_id"]',dojo.toJson(store.getAttributes(result[0])));
 				return true;
 			}
 		},
@@ -270,7 +270,7 @@ doh.register("dojox.data.tests.stores.jsonPathStore",
 			runTest: function(t) {
 				var store= new dojox.data.jsonPathStore({data:dojox.data.tests.testData, mode: dojox.data.SYNC_MODE});
 				//doh.debug("Store Features: ", dojo.toJson(store.getFeatures()));
-				var success='{"dojo.data.api.Read": true, "dojo.data.api.Identity": true, "dojo.data.api.Write": true, "dojo.data.api.Notification": true}';
+				var success='{"dojo.data.api.Read":true,"dojo.data.api.Identity":true,"dojo.data.api.Write":true,"dojo.data.api.Notification":true}';
 				doh.assertEqual(success,dojo.toJson(store.getFeatures()));
 				return true;
 			}
@@ -289,7 +289,7 @@ doh.register("dojox.data.tests.stores.jsonPathStore",
 			runTest: function(t) {
 				var store= new dojox.data.jsonPathStore({data:dojox.data.tests.testData, mode: dojox.data.SYNC_MODE, labelAttribute: ["title", "author"]});
 				var result = store.fetch("$.store.book[0]")[0]; 	
-				doh.assertEqual('["title", "author"]',dojo.toJson(store.getLabelAttributes(result)));
+				doh.assertEqual('["title","author"]',dojo.toJson(store.getLabelAttributes(result)));
 				return true;
 			}
 		},
@@ -332,8 +332,7 @@ doh.register("dojox.data.tests.stores.jsonPathStore",
 				var store= new dojox.data.jsonPathStore({data:dojox.data.tests.testData, mode: dojox.data.SYNC_MODE, idAttribute: "_id"});
 				//do a search to popuplate some of the itesm with autoId data
 				var result = store.fetch("$.store.book[0]"); 	
-	
-				var result = store.dump({cleanMeta: true});
+				result = store.dump({cleanMeta: true});
 				doh.assertEqual(dojox.data.tests.testData,result);
 				return true;
 			}
