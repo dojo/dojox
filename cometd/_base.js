@@ -398,7 +398,7 @@ dojox.cometd = new function(){
 				console.debug("cometd reconnect: none");
 			}else if(this._advice && this._advice["interval"] && this._advice.interval>0 ){
 				setTimeout(
-					dojo.hitch(this, function(){ this.init(cometd.url,this._props); }),
+					dojo.hitch(this, function(){ this.init(this.url,this._props); }),
 					this._advice.interval
 				);
 			}else{
