@@ -22,7 +22,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 	dojo.require("dojox.charting.themes.PlotKit.orange");
 	dojo.require("dojox.charting.themes.PlotKit.blue");
 	dojo.require("dojox.charting.themes.PlotKit.green");
-	dojo.require("dojox.data.HtmlTableStore");
+	dojo.require("dojox.data.HtmlStore");
 	
 	seriesB = [2.6, 1.8, 2, 1, 1.4, 0.7, 2];
 	
@@ -33,7 +33,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <body>
 <h1>Chart 2D</h1>
 <p>Examples of charts using widgets.</p>
-<div dojoType="dojox.data.HtmlTableStore" tableId="tableExample" jsId="tableStore"></div>
+<div dojoType="dojox.data.HtmlStore" dataId="tableExample" jsId="tableStore"></div>
 <table id="tableExample" style="display: none;">
 	<thead>
 		<tr><th>value</th></tr>

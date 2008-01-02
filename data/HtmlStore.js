@@ -1,20 +1,19 @@
-dojo.provide("dojox.data.HtmlTableStore");
+dojo.provide("dojox.data.HtmlStore");
 
 dojo.require("dojox.data.dom");
 dojo.require("dojo.data.util.simpleFetch");
 dojo.require("dojo.data.util.filter");
 
-dojo.declare("dojox.data.HtmlTableStore", null, {
+dojo.declare("dojox.data.HtmlStore", null, {
 	constructor: function(/*Object*/args){
-		dojo.deprecated("dojox.data.HtmlTableStore", "Please use dojox.data.HtmlStore");
 		//	summary:
 		//		Initializer for the HTML table store.  
 		//	description:
-		//		The HtmlTableStore can be created in one of two ways: a) by parsing an existing
-		//		table DOM node on the current page or b) by referencing an external url and giving
-		//		the id of the table in that page.  The remote url will be parsed as an html page.
+		//		The HtmlStore can be created in one of two ways: a) by parsing an existing
+		//		table or list DOM node on the current page or b) by referencing an external url and giving
+		//		the id of the table or listin that page.  The remote url will be parsed as an html page.
 		//
-		//		The HTML table should be of the following form:
+		//		The HTML table or list should be of the following form:
 		//		<table id="myTable">
 		//			<thead>
 		//				<tr>
@@ -33,52 +32,97 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//				</tr>
 		//			</tbody>
 		//		</table>
+		// -or-
+		//		<ul id="myUnorderedList">
+		//			<li>Value.1</li>
+		//			<li>Value.2</li>
+		//		</ul>
+		//
+		// -or-
+		//		<ol id="myOrderedList">
+		//			<li>Value.1</li>
+		//			<li>Value.2</li>
+		//		</ol>
 		//
 		//	args:
 		//		An anonymous object to initialize properties.  It expects the following values:
-		//		tableId:	The id of the HTML table to use.
+		//		dataId:	The id of the HTML table to use.
 		//		OR
-		//		url:		The url of the remote page to load
-		//		tableId:	The id of the table element in the remote page
+		//		url:	The url of the remote page to load
+		//		dataId:	The id of the table element in the remote page
 		
 		if(args.url){
-			if(!args.tableId)
-				throw new Error("dojo.data.HtmlTableStore: Cannot instantiate using url without an id!");
+			if(!args.dataId)
+				throw new Error("dojo.data.HtmlStore: Cannot instantiate using url without an id!");
 			this.url = args.url;
-			this.tableId = args.tableId;
+			this.dataId = args.dataId;
 		}else{
-			if(args.tableId){
-				this._rootNode = dojo.byId(args.tableId);
-				this.tableId = this._rootNode.id;
+			if(args.dataId){
+				this._rootNode = dojo.byId(args.dataId);
+				this.dataId = this._rootNode.id;
 			}else{
-				this._rootNode = dojo.byId(this.tableId);
+				this._rootNode = dojo.byId(this.dataId);
 			}
-			this._getHeadings();
-			for(var i=0; i<this._rootNode.rows.length; i++){
-				this._rootNode.rows[i].store = this;
-			}
+			this._indexItems();
 		}
 	},
 
 	url: "",     // So the parser can instantiate the store via markup.
-	tableId: "", // So the parser can instantiate the store via markup.
+	dataId: "", // So the parser can instantiate the store via markup.
+	
+	_indexItems: function(){
+		this._getHeadings();
+		if (this._rootNode.rows){//tables
+			if(this._rootNode.tBodies && this._rootNode.tBodies.length > 0) {
+				this._rootNode = this._rootNode.tBodies[0];
+			}
+			var i;
+			for(i=0; i<this._rootNode.rows.length; i++){
+				this._rootNode.rows[i].store = this;
+				this._rootNode.rows[i]._ident = i+1;
+			}
+		}else{//lists
+			var c=1;
+			for(i=0; i<this._rootNode.childNodes.length; i++){
+				if(this._rootNode.childNodes[i].nodeType===1){
+					this._rootNode.childNodes[i].store = this;
+					this._rootNode.childNodes[i]._ident = c;
+					c++;
+				}
+			}
+		}
+	},
 
 	_getHeadings: function(){
 		//	summary:
 		//		Function to load the attribute names from the table header so that the 
 		//		attributes (cells in a row), can have a reasonable name.
+		//      For list items, returns single implicit heading, ["name"]
 		this._headings = [];
-		dojo.forEach(this._rootNode.tHead.rows[0].cells, dojo.hitch(this, function(th){
-			this._headings.push(dojox.data.dom.textContent(th));
-		}));
+		if(this._rootNode.tHead){
+			dojo.forEach(this._rootNode.tHead.rows[0].cells, dojo.hitch(this, function(th){
+				this._headings.push(dojox.data.dom.textContent(th));
+			}));
+		}else{
+			this._headings = ["name"];
+		}
 	},
 	
 	_getAllItems: function(){
 		//	summary:
 		//		Function to return all rows in the table as an array of items.
 		var items = [];
-		for(var i=1; i<this._rootNode.rows.length; i++){
-			items.push(this._rootNode.rows[i]);
+                var i;
+		if(this._rootNode.rows){//table
+			for(i=0; i<this._rootNode.rows.length; i++){
+				items.push(this._rootNode.rows[i]);
+			}
+		}else{ //list
+			for(i=0; i<this._rootNode.childNodes.length; i++){
+				if (this._rootNode.childNodes[i].nodeType===1){
+					items.push(this._rootNode.childNodes[i]);
+				}
+			}
 		}
 		return items; //array
 	},
@@ -89,7 +133,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//	item: 
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){ 
-			throw new Error("dojo.data.HtmlTableStore: a function was passed an item argument that was not an item");
+			throw new Error("dojo.data.HtmlStore: a function was passed an item argument that was not an item");
 		}
 	},
 
@@ -102,7 +146,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//	returns:
 		//		Returns the index (column) that the attribute resides in the row.
 		if(typeof attribute !== "string"){ 
-			throw new Error("dojo.data.HtmlTableStore: a function was passed an attribute argument that was not an attribute name string");
+			throw new Error("dojo.data.HtmlStore: a function was passed an attribute argument that was not an attribute name string");
 			return -1;
 		}
 		return dojo.indexOf(this._headings, attribute); //int
@@ -130,7 +174,11 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		var index = this._assertIsAttribute(attribute);
 
 		if(index>-1){
-			return [dojox.data.dom.textContent(item.cells[index])] ;
+			if (item.cells){
+			  return [dojox.data.dom.textContent(item.cells[index])];
+			}else{//return Value for lists
+			    return [dojox.data.dom.textContent(item)];
+			}
 		}
 		return []; //Array
 	},
@@ -222,7 +270,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		this._assertIsItem(keywordArgs.item);
 	},
 	
-	_fetchItems: function(request, fetchHandler, errorHandler) {
+	_fetchItems: function(request, fetchHandler, errorHandler){
 		//	summary:
 		//		Fetch items (XML elements) that match to a query
 		//	description:
@@ -245,11 +293,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 			this._finishFetchItems(request, fetchHandler, errorHandler);
 		}else{
 			if(!this.url){
-				this._rootNode = dojo.byId(this.tableId);
-				this._getHeadings();
-				for(var i=0; i<this._rootNode.rows.length; i++){
-					this._rootNode.rows[i].store = this;
-				}
+				this._rootNode = dojo.byId(this.dataId);
 			}else{
 				var getArgs = {
 						url: this.url,
@@ -275,11 +319,8 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 
 					var d = document.createElement("div");
 					d.innerHTML = data;
-					self._rootNode = findNode(d, self.tableId);
-					self._getHeadings.call(self);
-					for(var i=0; i<self._rootNode.rows.length; i++) {
-						self._rootNode.rows[i].store = self;
-					}
+					self._rootNode = findNode(d, self.dataId);
+					self._indexItems();
 					self._finishFetchItems(request, fetchHandler, errorHandler);
 				});
 				getHandler.addErrback(function(error){
@@ -301,8 +342,8 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 			//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
 			//same value for each item examined.  Much more efficient.
 			var regexpList = {};
+			var key;
                         var value;
-                        var key;
 			for(key in request.query){
 				value = request.query[key]+'';
 				if(typeof value === "string"){
@@ -352,15 +393,24 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 	getLabel: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabel()
-		if(this.isItem(item))
-			return "Table Row #" + this.getIdentity(item);
+		if(this.isItem(item)){
+			if(item.cells){
+				return "Item #" + this.getIdentity(item);
+			}else{
+				return this.getValue(item,"name");
+			}
+		}
 		return undefined;
 	},
 
 	getLabelAttributes: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
-		return null;
+		if(item.cells){
+			return null;
+		}else{
+			return ["name"];
+		}
 	},
 
 /***************************************
@@ -371,13 +421,10 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//	summary: 
 		//		See dojo.data.api.Identity.getIdentity()
 		this._assertIsItem(item);
-		//Opera doesn't support the sectionRowIndex, 
-		//So, have to call the indexOf to locate it. 
-		//Blah.
-		if(!dojo.isOpera){
-			return item.sectionRowIndex; // int	
+		if(this.hasAttribute(item, "name")){
+		 	return this.getValue(item,"name");
 		}else{
-			return (dojo.indexOf(this._rootNode.rows, item) - 1) // int
+			return item._ident;
 		}
 	},
 
@@ -394,17 +441,22 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		var identity = keywordArgs.identity;
 		var self = this;
 		var item = null;
-                var scope = null;
+		var scope = null;
 
 		if(!this._rootNode){
 			if(!this.url){
-				this._rootNode = dojo.byId(this.tableId);
-				this._getHeadings();
-				for(var i=0; i<this._rootNode.rows.length; i++){
-					this._rootNode.rows[i].store = this;
+				this._rootNode = dojo.byId(this.dataId);
+				this._indexItems();
+				if(self._rootNode.rows){ //Table
+					item = this._rootNode.rows[identity + 1];
+				}else{ //Lists
+					for(var i = 0; i < self._rootNode.childNodes.length; i++){
+						if(self._rootNode.childNodes[i].nodeType === 1 && identity === dojox.data.dom.textContent(self._rootNode.childNodes[i])) {
+								item = self._rootNode.childNodes[i];
+						}
+					}
 				}
-				item = this._rootNode.rows[identity+1];
-				if (keywordArgs.onItem){
+				if(keywordArgs.onItem){
 					scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
@@ -420,7 +472,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 						if(node.id == id){
 							return node; //object
 						}
-						if(node.childNodes) {
+						if(node.childNodes){
 							for(var i=0; i<node.childNodes.length; i++){
 								var returnNode = findNode(node.childNodes[i], id);
 								if(returnNode){
@@ -432,13 +484,19 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 					}
 					var d = document.createElement("div");
 					d.innerHTML = data;
-					self._rootNode = findNode(d, self.tableId);
-					self._getHeadings.call(self);
-					for(var i=0; i<self._rootNode.rows.length; i++){
-						self._rootNode.rows[i].store = self;
+					self._rootNode = findNode(d, self.dataId);
+					self._indexItems();
+					if(self._rootNode.rows && identity <= self._rootNode.rows.length){ //Table
+						item = self._rootNode.rows[identity-1];
+					}else{ //List
+						for(var i = 0; i < self._rootNode.childNodes.length; i++){
+							if(self._rootNode.childNodes[i].nodeType === 1 && identity === dojox.data.dom.textContent(self._rootNode.childNodes[i])) {
+									item = self._rootNode.childNodes[i];
+									break;
+							}
+						}
 					}
-					item = self._rootNode.rows[identity+1];
-					if (keywordArgs.onItem){
+					if(keywordArgs.onItem){
 						scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 						keywordArgs.onItem.call(scope, item);
 					}
@@ -454,7 +512,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		}else{
 			if(this._rootNode.rows[identity+1]){
 				item = this._rootNode.rows[identity+1];
-				if (keywordArgs.onItem){
+				if(keywordArgs.onItem){
 					scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
@@ -462,4 +520,4 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		}
 	}
 });
-dojo.extend(dojox.data.HtmlTableStore,dojo.data.util.simpleFetch);
+dojo.extend(dojox.data.HtmlStore,dojo.data.util.simpleFetch);
