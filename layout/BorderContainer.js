@@ -213,8 +213,13 @@ dojo.declare(
 		}
 
 		if(dojo.isIE){
-			var borderBox = function(n){
-				return dojo._getBorderBox(n, dojo.getComputedStyle(n));
+			var borderBox = function(n, b){
+				n=dojo.byId(n);
+				var s = dojo.getComputedStyle(n);
+				if(!b){ return dojo._getBorderBox(n, s); }
+				var me = dojo._getMarginExtents(n, s);
+				dojo._setMarginBox(n, b.l, b.t, b.w + me.w, b.h + me.h, s);
+				return null;
 			}
 			var containerHeight = borderBox(this.domNode).h;
 			var middleHeight = containerHeight;
@@ -227,10 +232,10 @@ dojo.declare(
 
 			if(topSplitter){ middleHeight -= topSplitterSize; }
 			if(bottomSplitter){ middleHeight -= bottomSplitterSize; }
-			if(this._center){ centerStyle.height = middleHeight; }
+			if(this._center){ borderBox(this._center, { h: middleHeight }); }
 			sidebarHeight = sidebarLayout ? containerHeight : middleHeight;
-			if(this._left){ leftStyle.height = sidebarHeight; }
-			if(this._right){ rightStyle.height = sidebarHeight; }
+			if(this._left){ borderBox(this._left, {h: sidebarHeight}); }
+			if(this._right){ borderBox(this._right, {h: sidebarHeight}); }
 
 			if(dojo.isIE < 7){ //FIXME: or IE7 in quirks mode?
 //TODO: use dojo.marginBox instead of dojo.style?
