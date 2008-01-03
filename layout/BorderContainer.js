@@ -213,20 +213,26 @@ dojo.declare(
 		}
 
 		if(dojo.isIE){
-			var containerHeight = dojo.contentBox(this.id).h;
+			var borderBox = function(n){
+				return dojo._getBorderBox(n, dojo.getComputedStyle(n));
+			}
+			var containerHeight = borderBox(this.domNode).h;
 			var middleHeight = containerHeight;
 			if(this._top){ middleHeight -= dojo.marginBox(this._top).h; }
 			if(this._bottom){ middleHeight -= dojo.marginBox(this._bottom).h; }
-			if(topSplitter){ middleHeight -= topSplitterSize; }
-			if(bottomSplitter){ middleHeight -= bottomSplitterSize; }
-			if(this._center){ centerStyle.height = middleHeight; }
+
 			var sidebarHeight = sidebarLayout ? containerHeight : middleHeight;
-			if(this._left){ leftStyle.height = sidebarHeight; }
-			if(this._right){ rightStyle.height = sidebarHeight; }
 			if(leftSplitter){ leftSplitter.style.height = sidebarHeight; }
 			if(rightSplitter){ rightSplitter.style.height = sidebarHeight; }
 
-			if(dojo.isIE < 7){
+			if(topSplitter){ middleHeight -= topSplitterSize; }
+			if(bottomSplitter){ middleHeight -= bottomSplitterSize; }
+			if(this._center){ centerStyle.height = middleHeight; }
+			sidebarHeight = sidebarLayout ? containerHeight : middleHeight;
+			if(this._left){ leftStyle.height = sidebarHeight; }
+			if(this._right){ rightStyle.height = sidebarHeight; }
+
+			if(dojo.isIE < 7){ //FIXME: or IE7 in quirks mode?
 //TODO: use dojo.marginBox instead of dojo.style?
 				var containerWidth = "dojo.style("+this.id+",'width')";
 				var middleWidth = containerWidth;
@@ -241,7 +247,7 @@ dojo.declare(
 			}
 		}
 
-		dojo.forEach(this.getChildren(), function(child){ child.resize && child.resize(); });
+		dojo.forEach(this.getChildren(), function(child){ if(child.resize){ child.resize(); } });
 	}
 });
 
@@ -301,7 +307,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._splitterStart = parseInt(this.domNode.style[this.region]);
 		this._handlers = [
 			dojo.connect(dojo.doc, "onmousemove", this, "_drag"),
-			dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag")
+			dojo.connect(dojo.doc, "onmouseup", this, "_stopDrag") //FIXME: IE only stops drag when mouseup over the splitter node?
 		];
 		this._computeMaxSize();
 		dojo.stopEvent(e);
