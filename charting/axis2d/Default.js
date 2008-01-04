@@ -88,14 +88,23 @@ dojo.require("dojox.lang.utils");
 				}
 			}else{
 				if(size){
-					var labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10);
-					if(min < 0 || max < 0){ ++labelLength; }
-					var precision = Math.floor(Math.log(max - min) / Math.LN10);
-					if(precision > 0){ labelLength += precision; }
+					var labelWidth, i;
 					if(this.labels){
-						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
+						labelWidth = df.foldl(df.map(this.labels, function(label){
+							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
+						}), "Math.max(a, b)", 0);
+					}else{
+						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10), t = [];
+						if(min < 0 || max < 0){ t.push("-"); }
+						for(i = 0; i < labelLength; ++i){ t.push("9"); }
+						var precision = Math.floor(Math.log(max - min) / Math.LN10);
+						if(precision > 0){
+							t.push(".");
+							for(i = 0; i < precision; ++i){ t.push("9"); }
+						}
+						labelWidth = dojox.gfx._base._getTextBox(t.join(""), {font: taFont}).w;
 					}
-					minMinorStep = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
+					minMinorStep = labelWidth + labelGap;
 				}
 			}
 			var kwArgs = {
@@ -114,7 +123,7 @@ dojo.require("dojox.lang.utils");
 			return this.scaler;
 		},
 		getOffsets: function(){
-			var offsets = {l: 0, r: 0, t: 0, b: 0};
+			var offsets = {l: 0, r: 0, t: 0, b: 0}, s, labelWidth, gtb, a, b, c, d;
 			var offset = 0, ta = this.chart.theme.axis,
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
 				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
@@ -122,16 +131,20 @@ dojo.require("dojox.lang.utils");
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){
 				if(size){
-					var s = this.scaler,
-						a = this._getLabel(s.major.start, s.major.prec).length,
-						b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
-						c = this._getLabel(s.minor.start, s.minor.prec).length,
-						d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length,
-						labelLength = Math.max(a, b, c, d);
+					s = this.scaler;
 					if(this.labels){
-						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
+						labelWidth = df.foldl(df.map(this.labels, function(label){
+							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
+						}), "Math.max(a, b)", 0);
+					}else{
+						gtb = dojox.gfx._base._getTextBox;
+						a = gtb(this._getLabel(s.major.start, s.major.prec), {font: taFont}).w;
+						b = gtb(this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec), {font: taFont}).w;
+						c = gtb(this._getLabel(s.minor.start, s.minor.prec), {font: taFont}).w;
+						d = gtb(this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec), {font: taFont}).w;
+						labelWidth = Math.max(a, b, c, d);
 					}
-					offset = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
+					offset = labelWidth + labelGap;
 				}
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
 				offsets[this.opt.leftBottom ? "l" : "r"] = offset;
@@ -143,16 +156,20 @@ dojo.require("dojox.lang.utils");
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
 				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
 				if(size){
-					var s = this.scaler,
-						a = this._getLabel(s.major.start, s.major.prec).length,
-						b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
-						c = this._getLabel(s.minor.start, s.minor.prec).length,
-						d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length,
-						labelLength = Math.max(a, b, c, d);
+					s = this.scaler;
 					if(this.labels){
-						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
+						labelWidth = df.foldl(df.map(this.labels, function(label){
+							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
+						}), "Math.max(a, b)", 0);
+					}else{
+						gtb = dojox.gfx._base._getTextBox;
+						a = gtb(this._getLabel(s.major.start, s.major.prec), {font: taFont}).w;
+						b = gtb(this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec), {font: taFont}).w;
+						c = gtb(this._getLabel(s.minor.start, s.minor.prec), {font: taFont}).w;
+						d = gtb(this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec), {font: taFont}).w;
+						labelWidth = Math.max(a, b, c, d);
 					}
-					offsets.l = offsets.r = Math.floor(size * labelLength * labelFudgeFactor) / 2;
+					offsets.l = offsets.r = labelWidth / 2;
 				}
 			}
 			return offsets;
@@ -218,7 +235,7 @@ dojo.require("dojox.lang.utils");
 			while(next <= c.bounds.upper + 1/c.scale){
 				var offset = (next - c.bounds.lower) * c.scale,
 					x = start.x + axisVector.x * offset,
-					y = start.y + axisVector.y * offset;
+					y = start.y + axisVector.y * offset, elem;
 				if(Math.abs(nextMajor - next) < step / 2){
 					// major tick
 					s.createLine({
@@ -227,7 +244,7 @@ dojo.require("dojox.lang.utils");
 						y2: y + tickVector.y * taMajorTick.length
 					}).setStroke(taMajorTick);
 					if(this.opt.majorLabels){
-						var elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
+						elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
 										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
 											this._getLabel(nextMajor, c.major.prec), taFont, taFontColor);
 						if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
@@ -244,7 +261,7 @@ dojo.require("dojox.lang.utils");
 							y2: y + tickVector.y * taMinorTick.length
 						}).setStroke(taMinorTick);
 						if(this.opt.minorLabels && (c.minMinorStep <= c.minor.tick * c.scale)){
-							var elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
+							elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
 											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
 												this._getLabel(nextMinor, c.minor.prec), taFont, taFontColor);
 							if(this.opt.htmlLabels){ this.htmlElements.push(elem); }

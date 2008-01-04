@@ -1,93 +1,131 @@
 dojo.provide("dojox.gfx._base");
 
-// candidates for dojox.style (work on VML and SVG nodes)
-dojox.gfx._hasClass = function(/*DomNode*/node, /*String*/classStr){
-	//	summary:
-	//		Returns whether or not the specified classes are a portion of the
-	//		class list currently applied to the node. 
-	// return (new RegExp('(^|\\s+)'+classStr+'(\\s+|$)')).test(node.className)	// Boolean
-	return ((" "+node.getAttribute("className")+" ").indexOf(" "+classStr+" ") >= 0);  // Boolean
-}
-
-dojox.gfx._addClass = function(/*DomNode*/node, /*String*/classStr){
-	//	summary:
-	//		Adds the specified classes to the end of the class list on the
-	//		passed node.
-	var cls = node.getAttribute("className");
-	if((" "+cls+" ").indexOf(" "+classStr+" ") < 0){
-		node.setAttribute("className", cls + (cls ? ' ' : '') + classStr);
+(function(){
+	var g = dojox.gfx, b = g._base;
+	
+	// candidates for dojox.style (work on VML and SVG nodes)
+	g._hasClass = function(/*DomNode*/node, /*String*/classStr){
+		//	summary:
+		//		Returns whether or not the specified classes are a portion of the
+		//		class list currently applied to the node. 
+		// return (new RegExp('(^|\\s+)'+classStr+'(\\s+|$)')).test(node.className)	// Boolean
+		return ((" "+node.getAttribute("className")+" ").indexOf(" "+classStr+" ") >= 0);  // Boolean
 	}
-}
-
-dojox.gfx._removeClass = function(/*DomNode*/node, /*String*/classStr){
-	//	summary: Removes classes from node.
-	node.setAttribute("className", node.getAttribute("className").replace(new RegExp('(^|\\s+)'+classStr+'(\\s+|$)'), "$1$2"));
-}
-
-
-// candidate for dojox.html.metrics (dynamic font resize handler is not implemented here)
-
-//	derived from Morris John's emResized measurer
-dojox.gfx._base._getFontMeasurements = function(){
-	//	summary
-	//	Returns an object that has pixel equivilents of standard font size values.
-	var heights = {
-		'1em':0, '1ex':0, '100%':0, '12pt':0, '16px':0, 'xx-small':0, 'x-small':0,
-		'small':0, 'medium':0, 'large':0, 'x-large':0, 'xx-large':0
-	};
-
-	if(dojo.isIE){
-		//	we do a font-size fix if and only if one isn't applied already.
-		//	NOTE: If someone set the fontSize on the HTML Element, this will kill it.
-		dojo.doc.documentElement.style.fontSize="100%";
+	g._addClass = function(/*DomNode*/node, /*String*/classStr){
+		//	summary:
+		//		Adds the specified classes to the end of the class list on the
+		//		passed node.
+		var cls = node.getAttribute("className");
+		if((" "+cls+" ").indexOf(" "+classStr+" ") < 0){
+			node.setAttribute("className", cls + (cls ? ' ' : '') + classStr);
+		}
 	}
-
-	//	set up the measuring node.
-	var div=dojo.doc.createElement("div");
-	div.style.position="absolute";
-	div.style.left="-100px";
-	div.style.top="0";
-	div.style.width="30px";
-	div.style.height="1000em";
-	div.style.border="0";
-	div.style.margin="0";
-	div.style.padding="0";
-	div.style.outline="0";
-	div.style.lineHeight="1";
-	div.style.overflow="hidden";
-	dojo.body().appendChild(div);
-
-	//	do the measurements.
-	for(var p in heights){
-		div.style.fontSize = p;
-		heights[p] = Math.round(div.offsetHeight * 12/16) * 16/12 / 1000;
+	g._removeClass = function(/*DomNode*/node, /*String*/classStr){
+		//	summary: Removes classes from node.
+		node.setAttribute("className", node.getAttribute("className").replace(new RegExp('(^|\\s+)'+classStr+'(\\s+|$)'), "$1$2"));
 	}
 	
-	dojo.body().removeChild(div);
-	div = null;
-	return heights; 	//	object
-};
-
-dojox.gfx._base._fontMeasurements = null;
-
-dojox.gfx._base._getCachedFontMeasurements = function(recalculate){
-	if(recalculate || !dojox.gfx._base._fontMeasurements){
-		dojox.gfx._base._fontMeasurements = dojox.gfx._base._getFontMeasurements();
-	}
-	return dojox.gfx._base._fontMeasurements;
-};
-
-// candidate for dojo.dom
-
-dojox.gfx._base._uniqueId = 0;
-dojox.gfx._base._getUniqueId = function(){
-	// summary: returns a unique string for use with any DOM element
-	var id;
-	do{
-		id = "dojoUnique" + (++dojox.gfx._base._uniqueId);
-	}while(dojo.byId(id));
-	return id;
-};
+	
+	// candidate for dojox.html.metrics (dynamic font resize handler is not implemented here)
+	
+	//	derived from Morris John's emResized measurer
+	b._getFontMeasurements = function(){
+		//	summary
+		//	Returns an object that has pixel equivilents of standard font size values.
+		var heights = {
+			'1em':0, '1ex':0, '100%':0, '12pt':0, '16px':0, 'xx-small':0, 'x-small':0,
+			'small':0, 'medium':0, 'large':0, 'x-large':0, 'xx-large':0
+		};
+	
+		if(dojo.isIE){
+			//	we do a font-size fix if and only if one isn't applied already.
+			//	NOTE: If someone set the fontSize on the HTML Element, this will kill it.
+			dojo.doc.documentElement.style.fontSize="100%";
+		}
+	
+		//	set up the measuring node.
+		var div=dojo.doc.createElement("div");
+		div.style.position="absolute";
+		div.style.left="-100px";
+		div.style.top="0";
+		div.style.width="30px";
+		div.style.height="1000em";
+		div.style.border="0";
+		div.style.margin="0";
+		div.style.padding="0";
+		div.style.outline="0";
+		div.style.lineHeight="1";
+		div.style.overflow="hidden";
+		dojo.body().appendChild(div);
+	
+		//	do the measurements.
+		for(var p in heights){
+			div.style.fontSize = p;
+			heights[p] = Math.round(div.offsetHeight * 12/16) * 16/12 / 1000;
+		}
+		
+		dojo.body().removeChild(div);
+		div = null;
+		return heights; 	//	object
+	};
+	
+	var fontMeasurements = null;
+	
+	b._getCachedFontMeasurements = function(recalculate){
+		if(recalculate || !fontMeasurements){
+			fontMeasurements = b._getFontMeasurements();
+		}
+		return fontMeasurements;
+	};
+	
+	// candidate for dojox.html.metrics
+	
+	var measuringNode = null, empty = {};
+	b._getTextBox = function(/* String */ text, /* Object */ style, /* String? */ className){
+		var m;
+		if(!measuringNode){
+			m = measuringNode = dojo.doc.createElement("div");
+			m.style.position = "absolute";
+			m.style.left = "-10000px";
+			m.style.top = "0";
+			dojo.body().appendChild(m);
+		}else{
+			m = measuringNode;
+		}
+		// reset styles
+		m.className = "";
+		m.style.border = "0";
+		m.style.margin = "0";
+		m.style.padding = "0";
+		m.style.outline = "0";
+		// set new style
+		if(arguments.length > 1 && style){
+			for(var i in style){
+				if(i in empty){ continue; }
+				m.style[i] = style[i];
+			}
+		}
+		// set classes
+		if(arguments.length > 2 && className){
+			m.className = className;
+		}
+		// take a measure
+		m.innerHTML = text;
+		return dojo.marginBox(m);
+	};
+	
+	// candidate for dojo.dom
+	
+	var uniqueId = 0;
+	b._getUniqueId = function(){
+		// summary: returns a unique string for use with any DOM element
+		var id;
+		do{
+			id = "dojoUnique" + (++uniqueId);
+		}while(dojo.byId(id));
+		return id;
+	};
+})();
 
 dojo.mixin(dojox.gfx, {
 	// summary: defines constants, prototypes, and utility functions
