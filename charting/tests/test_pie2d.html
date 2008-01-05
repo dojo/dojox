@@ -12,6 +12,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 -->
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <script type="text/javascript" src="../../lang/functional.js"></script>
+<script type="text/javascript" src="../../lang/functional/fold.js"></script>
 <script type="text/javascript" src="../../lang/utils.js"></script>
 <script type="text/javascript" src="../Theme.js"></script>
 <script type="text/javascript" src="../scaler.js"></script>
@@ -23,6 +24,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.PlotKit.blue");
 dojo.require("dojox.charting.themes.PlotKit.green");
+dojo.require("dojox.charting.themes.PlotKit.red");
 
 makeObjects = function(){
 	var chart1 = new dojox.charting.Chart2D("test1");
@@ -71,6 +73,33 @@ makeObjects = function(){
 	});
 	chart4.addSeries("Series A", [4, 2, 1, 1]);
 	chart4.render();
+
+	var chart5 = new dojox.charting.Chart2D("test5");
+	chart5.setTheme(dojox.charting.themes.PlotKit.red);
+	chart5.addPlot("default", {
+		type: "Pie", 
+		font: "normal normal bold 14pt Tahoma", 
+		fontColor: "white", 
+		labelOffset: 40
+	});
+	chart5.addSeries("Series A", [{y: 4, text: "Red"}, {y: 2, text: "Green"}, {y: 1, text: "Blue"}, {y: 1, text: "Other"}]);
+	chart5.render();
+
+	var chart6 = new dojox.charting.Chart2D("test6");
+	chart6.setTheme(dojox.charting.themes.PlotKit.red);
+	chart6.addPlot("default", {
+		type: "Pie", 
+		font: "normal normal bold 14pt Tahoma", 
+		fontColor: "white", 
+		labelOffset: 40
+	});
+	chart6.addSeries("Series A", [
+		{y: 4, text: "Red", color: "red"},
+		{y: 2, text: "Green", color: "green"},
+		{y: 1, text: "Blue", color: "blue"},
+		{y: 1, text: "Other", color: "white", fontColor: "black"}
+	]);
+	chart6.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -81,13 +110,18 @@ dojo.addOnLoad(makeObjects);
 <h1>Pie 2D</h1>
 <!--<p><button onclick="makeObjects();">Go</button></p>-->
 <p>1: Pie with internal labels.</p>
-<div id="test1" style="width: 400px; height: 400px;"></div>
+<div id="test1" style="width: 300px; height: 300px;"></div>
 <p>2: Pie with external labels and precision=0.</p>
-<div id="test2" style="width: 400px; height: 400px;"></div>
+<div id="test2" style="width: 300px; height: 300px;"></div>
 <p>3/4: Two pies with internal and external labels with a constant radius.</p>
 <table border="1"><tr>
 	<td><div id="test3" style="width: 300px; height: 300px;"></div></td>
 	<td><div id="test4" style="width: 300px; height: 300px;"></div></td>
+</tr></table>
+<p>5/6: Pie with internal custom labels and custom colors.</p>
+<table border="1"><tr>
+	<td><div id="test5" style="width: 300px; height: 300px;"></div></td>
+	<td><div id="test6" style="width: 300px; height: 300px;"></div></td>
 </tr></table>
 <p>That's all Folks!</p>
 </body>

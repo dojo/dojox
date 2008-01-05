@@ -14,8 +14,7 @@ dojo.require("dojox.lang.utils");
 		df = dojox.lang.functional, 
 		du = dojox.lang.utils, 
 		g = dojox.gfx,
-		labelGap = 4,				// in pixels
-		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
+		labelGap = 4;	// in pixels
 		
 	var eq = function(/* Number */ a, /* Number */ b){
 		// summary: compare two FP numbers for equality
