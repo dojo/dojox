@@ -52,13 +52,15 @@
 				}
 				e = new Date();
 				console.log("dojo.forEach:", e.getTime() - b.getTime());
-				b = new Date();
-				for(var i = 0; i < ITER; ++i){
-					var t = foldl_3(sample, function(a, b){ return a + b; }, 0);
-					console.assert(t == SUM);
+				if(sample.forEach){
+					b = new Date();
+					for(var i = 0; i < ITER; ++i){
+						var t = foldl_3(sample, function(a, b){ return a + b; }, 0);
+						console.assert(t == SUM);
+					}
+					e = new Date();
+					console.log("Array.forEach:", e.getTime() - b.getTime());
 				}
-				e = new Date();
-				console.log("Array.forEach:", e.getTime() - b.getTime());
 			});
 		</script>
 	</head>
