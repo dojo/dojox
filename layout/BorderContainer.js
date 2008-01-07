@@ -42,7 +42,7 @@ dojo.declare(
 //TODO: persist for splitters?
 
 	postCreate: function(){
-		this.inherited("postCreate", arguments);
+		this.inherited(arguments);
 
 		this.domNode.style.position = "relative";
 		dojo.addClass(this.domNode, "dijitBorderContainer");
@@ -56,7 +56,7 @@ dojo.declare(
 			dojo.forEach(this.getChildren(), this._setupChild, this);
 		}
 
-		this.inherited("startup", arguments);
+		this.inherited(arguments);
 	},
 
 	_setupChild: function(/*Widget*/child){
@@ -237,8 +237,9 @@ dojo.declare(
 			if(this._left){ borderBox(this._left, {h: sidebarHeight}); }
 			if(this._right){ borderBox(this._right, {h: sidebarHeight}); }
 
-			if(dojo.isIE < 7){ //FIXME: or IE7 in quirks mode?
+			if(document.compatMode == "BackCompat" || dojo.isIE < 7){
 //TODO: use dojo.marginBox instead of dojo.style?
+/*
 				var containerWidth = "dojo.style("+this.id+",'width')";
 				var middleWidth = containerWidth;
 				if(leftSplitter){ middleWidth -= leftSplitterSize; }
@@ -248,7 +249,22 @@ dojo.declare(
 				if(this._center){ centerStyle.setExpression("width", middleWidth); }
 				if(this._top){ topStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth"); }
 				if(this._bottom){ bottomStyle.setExpression("width", sidebarLayout ? middleWidth + "+" + this.id+".offsetWidth-"+containerWidth : this.id+".offsetWidth"); }
-//TODO: expressions for splitter widths also
+*/
+				var containerWidth = borderBox(this.domNode).w;
+				var middleWidth = containerWidth;
+				if(this._left){ middleWidth -= dojo.marginBox(this._left).w; }
+				if(this._right){ middleWidth -= dojo.marginBox(this._right).w; }
+
+				var sidebarWidth = sidebarLayout ? middleWidth : containerWidth;
+				if(topSplitter){ topSplitter.style.width = sidebarWidth; }
+				if(bottomSplitter){ bottomSplitter.style.width = sidebarWidth; }
+
+				if(leftSplitter){ middleWidth -= leftSplitterSize; }
+				if(rightSplitter){ middleWidth -= rightSplitterSize; }
+				if(this._center){ borderBox(this._center, { w: middleWidth }); }
+				sidebarWidth = sidebarLayout ? middleWidth : containerWidth;
+				if(this._top){ borderBox(this._top, {w: sidebarWidth}); }
+				if(this._bottom){ borderBox(this._bottom, {w: sidebarWidth}); }
 			}
 		}
 
@@ -294,7 +310,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 	templateString: '<div class="dijitSplitter" dojoAttachEvent="onkeypress:_onKeyPress,onmousedown:_startDrag" style="position: absolute; z-index: 9999" tabIndex="0"><div class="dijitSplitterThumb"></div></div>',
 
 	postCreate: function(){
-		this.inherited("postCreate", arguments);
+		this.inherited(arguments);
 		this.horizontal = /top|bottom/.test(this.region);
 		dojo.addClass(this.domNode, "dijitSplitter" + (this.horizontal ? "Horizontal" : "Vertical"));
 
@@ -357,14 +373,15 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._resize = true;
 		var horizontal = this.horizontal;
 		var tick = 1;
+		var dk = dojo.keys;
 		switch(e.keyCode){
-			case horizontal ? dojo.keys.UP_ARROW : dojo.keys.LEFT_ARROW:
+			case horizontal ? dk.UP_ARROW : dk.LEFT_ARROW:
 				tick *= -1;
 				break;
-			case horizontal ? dojo.keys.DOWN_ARROW : dojo.keys.RIGHT_ARROW:
+			case horizontal ? dk.DOWN_ARROW : dk.RIGHT_ARROW:
 				break;
 			default:
-//				this.inherited("_onKeyPress", arguments);
+//				this.inherited(arguments);
 				return;
 		}
 		this._computeMaxSize();
@@ -383,6 +400,6 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 		this._cleanupHandlers();
 		delete this.child;
 		delete this.container;
-		this.inherited("destroy", arguments);
+		this.inherited(arguments);
 	}
 });
