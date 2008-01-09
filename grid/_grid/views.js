@@ -2,32 +2,40 @@ dojo.provide("dojox.grid._grid.views");
 
 dojo.declare('dojox.grid.views', null, {
 	// summary:
-	//	A collection of grid views. Owned by grid and used internally for managing grid views.
-	//	Grid creates views automatically based on grid's layout structure.
-	//	Users should typically not need to access individual views or the views collection directly.
+	//		A collection of grid views. Owned by grid and used internally for managing grid views.
+	// description:
+	//		Grid creates views automatically based on grid's layout structure.
+	//		Users should typically not need to access individual views or the views collection directly.
 	constructor: function(inGrid){
 		this.grid = inGrid;
 	},
+
 	defaultWidth: 200,
+
 	views: [],
+
 	// operations
 	resize: function(){
 		this.onEach("resize");
 	},
+
 	render: function(){
 		this.onEach("render");
 		this.normalizeHeaderNodeHeight();
 	},
+
 	// views
 	addView: function(inView){
 		inView.idx = this.views.length;
 		this.views.push(inView);
 	},
+
 	destroyViews: function(){
 		for (var i=0, v; v=this.views[i]; i++)
 			v.destroy();
 		this.views = [];
 	},
+
 	getContentNodes: function(){
 		var nodes = [];
 		for(var i=0, v; v=this.views[i]; i++){
@@ -35,11 +43,13 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		return nodes;
 	},
+
 	forEach: function(inCallback){
 		for(var i=0, v; v=this.views[i]; i++){
 			inCallback(v, i);
 		}
 	},
+
 	onEach: function(inMethod, inArgs){
 		inArgs = inArgs || [];
 		for(var i=0, v; v=this.views[i]; i++){
@@ -48,6 +58,7 @@ dojo.declare('dojox.grid.views', null, {
 			}
 		}
 	},
+
 	// layout
 	normalizeHeaderNodeHeight: function(){
 		var rowNodes = [];
@@ -58,6 +69,7 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		this.normalizeRowNodeHeights(rowNodes);
 	},
+
 	normalizeRowNodeHeights: function(inRowNodes){
 		var h = 0; 
 		for(var i=0, n, o; (n=inRowNodes[i]); i++){
@@ -79,6 +91,7 @@ dojo.declare('dojox.grid.views', null, {
 			inRowNodes[0].parentNode.offsetHeight;
 		}
 	},
+
 	renormalizeRow: function(inRowIndex){
 		var rowNodes = [];
 		for(var i=0, v, n; (v=this.views[i])&&(n=v.getRowNode(inRowIndex)); i++){
@@ -87,9 +100,11 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		this.normalizeRowNodeHeights(rowNodes);
 	},
+
 	getViewWidth: function(inIndex){
 		return this.views[inIndex].getWidth() || this.defaultWidth;
 	},
+
 	measureHeader: function(){
 		this.forEach(function(inView){
 			inView.headerContentNode.style.height = '';
@@ -101,6 +116,7 @@ dojo.declare('dojox.grid.views', null, {
 		});
 		return h;
 	},
+
 	measureContent: function(){
 		var h = 0;
 		this.forEach(function(inView) {
@@ -108,6 +124,7 @@ dojo.declare('dojox.grid.views', null, {
 		});
 		return h;
 	},
+
 	findClient: function(inAutoWidth){
 		// try to use user defined client
 		var c = this.grid.elasticView || -1;
@@ -131,6 +148,7 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		return c;
 	},
+
 	_arrange: function(l, t, w, h){
 		var i, v, vw, len = this.views.length;
 		// find the client
@@ -194,11 +212,13 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		return l;
 	},
+
 	arrange: function(l, t, w, h){
-		var w = this._arrange(l, t, w, h);
+		w = this._arrange(l, t, w, h);
 		this.resize();
 		return w;
 	},
+	
 	// rendering
 	renderRow: function(inRowIndex, inNodes){
 		var rowNodes = [];
@@ -209,9 +229,11 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		this.normalizeRowNodeHeights(rowNodes);
 	},
+	
 	rowRemoved: function(inRowIndex){
 		this.onEach("rowRemoved", [ inRowIndex ]);
 	},
+	
 	// updating
 	updateRow: function(inRowIndex, inHeight){
 		for(var i=0, v; v=this.views[i]; i++){
@@ -219,9 +241,11 @@ dojo.declare('dojox.grid.views', null, {
 		}
 		this.renormalizeRow(inRowIndex);
 	},
+	
 	updateRowStyles: function(inRowIndex){
 		this.onEach("updateRowStyles", [ inRowIndex ]);
 	},
+	
 	// scrolling
 	setScrollTop: function(inTop){
 		var top = inTop;
@@ -231,11 +255,14 @@ dojo.declare('dojox.grid.views', null, {
 		return top;
 		//this.onEach("setScrollTop", [ inTop ]);
 	},
+	
 	getFirstScrollingView: function(){
+		// summary: Returns the first grid view with a scroll bar 
 		for(var i=0, v; (v=this.views[i]); i++){
 			if(v.hasScrollbar()){
 				return v;
 			}
 		}
 	}
+	
 });

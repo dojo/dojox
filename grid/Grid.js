@@ -31,6 +31,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	//	model:
 	//		string or object grid data model
 	model: 'dojox.grid.data.Table',
+	
 	// life cycle
 	postCreate: function(){
 		if(this.model){
@@ -43,15 +44,18 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		}
 		this.inherited(arguments);
 	},
+	
 	destroy: function(){
 		this.setModel(null);
 		this.inherited(arguments);
 	},
+	
 	// structure
 	_structureChanged: function() {
 		this.indexCellFields();
 		this.inherited(arguments);
 	},
+	
 	// model
 	_setModel: function(inModel){
 		// if(!inModel){ return; }
@@ -62,49 +66,60 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 			this.indexCellFields();
 		}
 	},
+	
 	setModel: function(inModel){
 		// summary:
-		//		set the grid's data model
-		// inModel:
-		//		model object, usually an instance of a dojox.grid.data.Model
+		//		Set the grid's data model
+		// inModel: Object
+		//		Model object, usually an instance of a dojox.grid.data.Model
 		//		subclass
 		if(this.model){
 			this.model.notObserver(this);
 		}
 		this._setModel(inModel);
 	},
-	// data socket (called in cell's context)
+	
+
 	get: function(inRowIndex){
+		// summary: data socket (called in cell's context)	
 		return this.grid.model.getDatum(inRowIndex, this.fieldIndex);
 	},
+
 	// model modifications
 	modelAllChange: function(){
 		this.rowCount = (this.model ? this.model.getRowCount() : 0);
 		this.updateRowCount(this.rowCount);
 	},
+
 	modelRowChange: function(inData, inRowIndex){
 		this.updateRow(inRowIndex);
 	},
+
 	modelDatumChange: function(inDatum, inRowIndex, inFieldIndex){
 		this.updateRow(inRowIndex);
 	},
+
 	modelFieldsChange: function() {
 		this.indexCellFields();
 		this.render();
 	},
+
 	// model insertion
 	modelInsertion: function(inRowIndex){
 		this.updateRowCount(this.model.getRowCount());
 	},
+
 	// model removal
 	modelRemoval: function(inKeys){
 		this.updateRowCount(this.model.getRowCount());
 	},
+
 	// cells
 	getCellName: function(inCell){
 		var v = this.model.fields.values, i = inCell.fieldIndex;
 		return i>=0 && i<v.length && v[i].name || this.inherited(arguments);
 	},
+
 	indexCellFields: function(){
 		var cells = this.layout.cells;
 		for(var i=0, c; cells && (c=cells[i]); i++){
@@ -113,33 +128,38 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 			}
 		}
 	},
+
 	// utility
 	refresh: function(){
 		// summary:
-		//	re-render the grid, getting new data from the model
+		//		Re-render the grid, getting new data from the model
 		this.edit.cancel();
 		this.model.measure();
 	},
+
 	// sorting
 	canSort: function(inSortInfo){
 		var f = this.getSortField(inSortInfo);
 		// 0 is not a valid sort field
 		return f && this.model.canSort(f);
 	},
+
 	getSortField: function(inSortInfo){
 		// summary:
-		//	retrieves the model field on which to sort data.
-		// inSortInfo: int
-		//	1-based grid column index; positive if sort is ascending, otherwise negative
+		//		Retrieves the model field on which to sort data.
+		// inSortInfo: Integer
+		//		1-based grid column index; positive if sort is ascending, otherwise negative
 		var c = this.getCell(this.getSortIndex(inSortInfo));
 		// we expect c.fieldIndex == -1 for non model fields
 		// that yields a getSortField value of 0, which can be detected as invalid
 		return (c.fieldIndex+1) * (this.sortInfo > 0 ? 1 : -1);
 	},
+
 	sort: function(){
 		this.edit.apply();
 		this.model.sort(this.getSortField());
 	},
+
 	// row editing
 	addRow: function(inRowData, inIndex){
 		this.edit.apply();
@@ -159,6 +179,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 			this.edit.setEditCell(c, i);
 		}
 	},
+
 	removeSelectedRows: function(){
 		this.edit.apply();
 		var s = this.selection.getSelected();
@@ -167,16 +188,21 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 			this.selection.clear();
 		}
 	},
+
 	//: protected
 	// editing
 	canEdit: function(inCell, inRowIndex){
 		// summary: 
-		//	determines if a given cell may be edited
-		//	inCell: grid cell
-		// inRowIndex: grid row index
-		// returns: true if given cell may be edited
+		//		Determines if a given cell may be edited
+		// inCell: Object
+		//		A grid cell
+		// inRowIndex: Integer
+		//		Grid row index
+		// returns: Boolean
+		//		True if given cell may be edited
 		return (this.model.canModify ? this.model.canModify(inRowIndex) : true);
 	},
+
 	doStartEdit: function(inCell, inRowIndex){
 		var edit = this.canEdit(inCell, inRowIndex);
 		if(edit){
@@ -185,20 +211,24 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		}
 		return edit;
 	},
+
 	doApplyCellEdit: function(inValue, inRowIndex, inFieldIndex){
 		this.model.setDatum(inValue, inRowIndex, inFieldIndex);
 		this.onApplyCellEdit(inValue, inRowIndex, inFieldIndex);
 	},
+
 	doCancelEdit: function(inRowIndex){
 		this.model.cancelModifyRow(inRowIndex);
 		this.onCancelEdit.apply(this, arguments);
 	},
+
 	doApplyEdit: function(inRowIndex){
 		this.model.endModifyRow(inRowIndex);
 		this.onApplyEdit(inRowIndex);
 	},
-	// Perform row styling 
+
 	styleRowState: function(inRow){
+		// summary: Perform row styling
 		if(this.model.getState){
 			var states=this.model.getState(inRow.index), c='';
 			for(var i=0, ss=["inflight", "error", "inserting"], s; s=ss[i]; i++){
@@ -210,9 +240,13 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 			inRow.customClasses += c;
 		}
 	},
+
 	onStyleRow: function(inRow){
 		this.styleRowState(inRow);
 		this.inherited(arguments);
 	},
+
+	// FIXME: why?
 	junk: 0
+
 });

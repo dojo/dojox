@@ -1,27 +1,38 @@
 dojo.provide("dojox.grid._grid.view");
+
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dojox.grid._grid.builder");
 
-dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
+dojo.declare('dojox.GridView',
+	[dijit._Widget, dijit._Templated],
+	{
 	// summary:
-	//	A collection of grid columns. A grid is comprised of a set of views that stack horizontally.
-	//	Grid creates views automatically based on grid's layout structure.
-	//	Users should typically not need to access individual views directly.
+	//		A collection of grid columns. A grid is comprised of a set of views that stack horizontally.
+	//		Grid creates views automatically based on grid's layout structure.
+	//		Users should typically not need to access individual views directly.
+	//
+	// defaultWidth: String
+	//		Default widget of the view
 	defaultWidth: "18em",
-	// viewWidth: string
-	// width for the view, in valid css unit
+
+	// viewWidth: String
+	// 		Width for the view, in valid css unit
 	viewWidth: "",
-	templateString: '<div class="dojoxGrid-view"><div class="dojoxGrid-header" dojoAttachPoint="headerNode"><div dojoAttachPoint="headerNodeContainer" style="width:9000em"><div dojoAttachPoint="headerContentNode"></div></div></div><input type="checkbox" class="dojoxGrid-hidden-focus" dojoAttachPoint="hiddenFocusNode" /><input type="checkbox" class="dojoxGrid-hidden-focus" /><div class="dojoxGrid-scrollbox" dojoAttachPoint="scrollboxNode"><div class="dojoxGrid-content" dojoAttachPoint="contentNode" hidefocus="hidefocus"></div></div></div>',
+
+	templatePath: dojo.moduleUrl("dojox.grid","resources/GridView.html"),
+	
 	themeable: false,
 	classTag: 'dojoxGrid',
 	marginBottom: 0,
 	rowPad: 2,
+
 	postMixInProperties: function(){
 		this.rowNodes = [];
 	},
+
 	postCreate: function(){
-		dojo.connect(this.scrollboxNode, "onscroll", dojo.hitch(this, "doscroll"));
+		this.connect(this.scrollBoxNode,"onscroll","doscroll");
 		dojox.grid.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu' ]);
 		dojox.grid.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
 		this.content = new dojox.grid.contentBuilder(this);
@@ -31,10 +42,12 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			this.headerNodeContainer.style.width = "";
 		}
 	},
+
 	destroy: function(){
 		dojox.grid.removeNode(this.headerNode);
 		this.inherited("destroy", arguments);
 	},
+
 	// focus 
 	focus: function(){
 		if(dojo.isSafari || dojo.isOpera){
@@ -43,10 +56,11 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			this.scrollboxNode.focus();
 		}
 	},
+
 	setStructure: function(inStructure){
 		var vs = this.structure = inStructure;
 		// FIXME: similar logic is duplicated in layout
-		if(vs.width && dojo.isNumber(vs.width)){
+		if(vs.width && !isNaN(vs.width)){
 			this.viewWidth = vs.width + 'em';
 		}else{
 			this.viewWidth = vs.width || this.viewWidth; //|| this.defaultWidth;
@@ -61,6 +75,7 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 		// accomodate new structure
 		this.updateStructure();
 	},
+
 	testFlexCells: function(){
 		// FIXME: cheater, this function does double duty as initializer and tester
 		this.flexCells = false;
@@ -72,31 +87,39 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 		}
 		return this.flexCells;
 	},
+
 	updateStructure: function(){
 		// header builder needs to update table map
 		this.header.update();
 		// content builder needs to update markup cache
 		this.content.update();
 	},
+
 	getScrollbarWidth: function(){
-		return (this.noscroll ? 0 : dojox.grid.getScrollbarWidth());
+		return (this.noscroll ? 0 : dojox.grid.getScrollbarWidth()); // Integer
 	},
+
 	getColumnsWidth: function(){
-		return this.headerContentNode.firstChild.offsetWidth;
+		return this.headerContentNode.firstChild.offsetWidth; // Integer
 	},
+
 	getWidth: function(){
-		return this.viewWidth || (this.getColumnsWidth()+this.getScrollbarWidth()) +'px';
+		return this.viewWidth || (this.getColumnsWidth()+this.getScrollbarWidth()) +'px'; // String
 	},
+
 	getContentWidth: function(){
-		return Math.max(0, dojo._getContentBox(this.domNode).w - this.getScrollbarWidth()) + 'px';
+		return Math.max(0, dojo._getContentBox(this.domNode).w - this.getScrollbarWidth()) + 'px'; // String
 	},
+
 	render: function(){
 		this.scrollboxNode.style.height = '';
 		this.renderHeader();
 	},
+
 	renderHeader: function(){
 		this.headerContentNode.innerHTML = this.header.generateHtml(this._getHeaderContent);
 	},
+
 	// note: not called in 'view' context
 	_getHeaderContent: function(inCell){
 		var n = inCell.name || inCell.grid.getCellName(inCell);
@@ -105,13 +128,16 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 		}
 		return [ '<div class="', inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-down' : 'dojoxGrid-sort-up', '">', n, '</div>' ].join('');
 	},
+
 	resize: function(){
 		this.resizeHeight();
 		this.resizeWidth();
 	},
+
 	hasScrollbar: function(){
-		return (this.scrollboxNode.clientHeight != this.scrollboxNode.offsetHeight);
+		return (this.scrollboxNode.clientHeight != this.scrollboxNode.offsetHeight); // Boolean
 	},
+
 	resizeHeight: function(){
 		if(!this.grid.autoHeight){
 			var h = this.domNode.clientHeight;
@@ -121,6 +147,7 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			dojox.grid.setStyleHeightPx(this.scrollboxNode, h);
 		}
 	},
+
 	resizeWidth: function(){
 		if(this.flexCells){
 			// the view content width
@@ -137,6 +164,7 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			style.width = w;
 		}
 	},
+
 	setSize: function(w, h){
 		with(this.domNode.style){
 			if(w){
@@ -150,12 +178,14 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			}
 		}
 	},
+
 	renderRow: function(inRowIndex, inHeightPx){
 		var rowNode = this.createRowNode(inRowIndex);
 		this.buildRow(inRowIndex, rowNode, inHeightPx);
 		this.grid.edit.restore(this, inRowIndex);
 		return rowNode;
 	},
+
 	createRowNode: function(inRowIndex){
 		var node = document.createElement("div");
 		node.className = this.classTag + '-row';
@@ -163,10 +193,12 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 		this.rowNodes[inRowIndex] = node;
 		return node;
 	},
+
 	buildRow: function(inRowIndex, inRowNode){
 		this.buildRowContent(inRowIndex, inRowNode);
 		this.styleRow(inRowIndex, inRowNode);
 	},
+
 	buildRowContent: function(inRowIndex, inRowNode){
 		inRowNode.innerHTML = this.content.generateHtml(inRowIndex, inRowIndex); 
 		if(this.flexCells){
@@ -174,32 +206,39 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			inRowNode.firstChild.style.width = this.contentWidth;
 		}
 	},
+
 	rowRemoved:function(inRowIndex){
 		this.grid.edit.save(this, inRowIndex);
 		delete this.rowNodes[inRowIndex];
 	},
+
 	getRowNode: function(inRowIndex){
 		return this.rowNodes[inRowIndex];
 	},
+
 	getCellNode: function(inRowIndex, inCellIndex){
 		var row = this.getRowNode(inRowIndex);
 		if(row){
 			return this.content.getCellNode(row, inCellIndex);
 		}
 	},
+
 	// styling
 	styleRow: function(inRowIndex, inRowNode){
 		inRowNode._style = dojox.grid.getStyleText(inRowNode);
 		this.styleRowNode(inRowIndex, inRowNode);
 	},
+
 	styleRowNode: function(inRowIndex, inRowNode){
 		if(inRowNode){
 			this.doStyleRowNode(inRowIndex, inRowNode);
 		}
 	},
+
 	doStyleRowNode: function(inRowIndex, inRowNode){
 		this.grid.styleRowNode(inRowIndex, inRowNode);
 	},
+
 	// updating
 	updateRow: function(inRowIndex, inHeightPx, inPageNode){
 		var rowNode = this.getRowNode(inRowIndex);
@@ -209,12 +248,15 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 		}
 		return rowNode;
 	},
+
 	updateRowStyles: function(inRowIndex){
 		this.styleRowNode(inRowIndex, this.getRowNode(inRowIndex));
 	},
+
 	// scrolling
 	lastTop: 0,
 	firstScroll:false,
+
 	doscroll: function(inEvent){
 		if(!dojo._isBodyLtr() && !this.firstScroll){
 			var s = dojo.marginBox(this.headerNodeContainer);
@@ -235,34 +277,41 @@ dojo.declare('dojox.GridView', [dijit._Widget, dijit._Templated], {
 			this.grid.scrollTo(top);
 		}
 	},
+
 	setScrollTop: function(inTop){
 		// 'lastTop' is a semaphore to prevent feedback-loop with doScroll above
 		this.lastTop = inTop;
 		this.scrollboxNode.scrollTop = inTop;
 		return this.scrollboxNode.scrollTop;
 	},
+
 	// event handlers (direct from DOM)
 	doContentEvent: function(e){
 		if(this.content.decorateEvent(e)){
 			this.grid.onContentEvent(e);
 		}
 	},
+
 	doHeaderEvent: function(e){
 		if(this.header.decorateEvent(e)){
 			this.grid.onHeaderEvent(e);
 		}
 	},
+
 	// event dispatch(from Grid)
 	dispatchContentEvent: function(e){
 		return this.content.dispatchEvent(e);
 	},
+
 	dispatchHeaderEvent: function(e){
 		return this.header.dispatchEvent(e);
 	},
+
 	// column resizing
 	setColWidth: function(inIndex, inWidth){
 		this.grid.setCellWidth(inIndex, inWidth + 'px');
 	},
+
 	update: function(){
 		var left = this.scrollboxNode.scrollLeft;
 		this.content.update();
