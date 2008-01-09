@@ -66,18 +66,15 @@ dojo.declare(
 
 			if(region == "leading"){ region = "left"; }
 			if(region == "trailing"){ region = "right"; }
-			if(!dojo._isBodyLtr()){
-				if(region == "left"){
-					region = "right";
-				}else if(region == "right"){
-					region = "left";
-				}
+
+			var flip = {left:'right', right:'left', leading:'trailing', trailing:'leading', top:'bottom', bottom:'top'};
+			if(!dojo._isBodyLtr() && /left|right/.test(region)){
+				region = flip[region];
 			}
 			this["_"+region] = child.domNode;
 
 			if(child.splitter){
-				var opp = ({left:'right', right:'left', leading:'trailing', trailing:'leading', top:'bottom', bottom:'top'})[child.region];
-				var oppNode = dojo.query('[region='+opp+']', this.domNode)[0];
+				var oppNode = dojo.query('[region=' + flip[child.region] + ']', this.domNode)[0]; //FIXME: null ref?
 				var splitter = new dojox.layout._Splitter({ container: this, child: child, region: region, oppNode: oppNode, live: this.liveSplitters });
 				this._splitters[region] = splitter.domNode;
 				dojo.place(splitter.domNode, child.domNode, "after");
@@ -237,7 +234,7 @@ dojo.declare(
 			if(this._left){ borderBox(this._left, {h: sidebarHeight}); }
 			if(this._right){ borderBox(this._right, {h: sidebarHeight}); }
 
-			if(document.compatMode == "BackCompat" || dojo.isIE < 7){
+			if(dojo.isIE && (document.compatMode == "BackCompat" || dojo.isIE < 7)){
 //TODO: use dojo.marginBox instead of dojo.style?
 /*
 				var containerWidth = "dojo.style("+this.id+",'width')";
@@ -336,7 +333,7 @@ dojo.declare("dojox.layout._Splitter", [ dijit._Widget, dijit._Templated ],
 
 	_computeMaxSize: function(){
 		var dim = this.horizontal ? 'h' : 'w';
-		var available = dojo.contentBox(this.container.domNode)[dim] - (this.oppNode ? dojo.contentBox(this.oppNode)[dim] : 0);
+		var available = dojo.contentBox(this.container.domNode)[dim] - (this.oppNode ? dojo.marginBox(this.oppNode)[dim] : 0);
 		this._maxSize = Math.min(this.child.maxSize, available);
 	},
 
