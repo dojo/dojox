@@ -182,3 +182,4 @@ dojox.fx.highlight = function(/*Object*/ args){
 
 	return anim; // dojo._Animation
 };
+

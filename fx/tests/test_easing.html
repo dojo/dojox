@@ -11,6 +11,16 @@
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
 
+		.bounce {
+			position:absolute;
+			top:300px;
+			left:400px;
+			width:25px;
+			height:25px;
+			border:1px solid #b7b7b7;
+			background:#ededed;
+		}
+
 		.block {
 			width:200px;
 			height:100px;
@@ -85,7 +95,13 @@
 		dojo.connect(dojo.byId('easeOut'),"onclick",easeOutAnim,"play");
 		dojo.connect(dojo.byId('easeInOut'),"onclick",easeInOutAnim,"play");
 		dojo.connect(dojo.byId('linearEase'),"onclick",linearEaseAnim,"play");
-
+		dojo.connect(window,"onclick",function(e){
+			dojo.fx.slideTo({
+				node:"bounce",
+				top:e.pageY, left:e.pageX,
+				easing: dojox.fx.easing.easeOutBack
+			}).play();
+		});
 
 		// argh! FIXME: combine and chain are destructive to the animations. :(
 		// allAnim = dojo.fx.combine([easeInAnim,easeOutAnim,easeInOutAnim]);
@@ -119,6 +135,8 @@
 	dojox.fx.easing is stand-alone, and does not require the dojox.fx base files. to see a chart
 	of these functions see <a href="example_easingChart2D.html">example_easingChart2D.html</a> 
 	</p>	
+
+	<div id="bounce" class="bounce">bounce</div>
 
 </body>
 </html>

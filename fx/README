@@ -11,18 +11,21 @@ Credits
 	Peter Higgins (dante)
 	Jonathan Bond-Caron (jbondc@gmail.com)
 	Shane O'Sullivan (shaneosullivan1@gmail.com)
+	Bryan Forbes (bforbes)
+
 -------------------------------------------------------------------------------
 Project description
 
 	dojox.fx provides a class of animation effects to use, and
-	other animation addons to dojo base.
+	other animation and Effects additions to dojo base.
 
 -------------------------------------------------------------------------------
 Dependencies:
 
 	dojox.fx requires dojo (core) and the dojo.fx package
 	dojox.fx.easing requires only dojo core. 
-	
+	dojox.fx.scroll requires dojox.fx._core and dojo.fx
+
 -------------------------------------------------------------------------------
 Documentation
 
@@ -51,12 +54,14 @@ Documentation
 	dojox.fx.easing: - a collection of easing functions to use
 		this is a "stand alone" class, and can be used via:
 		dojo.require("dojox.fx.easing"); 
-		and provides: 
-			dojo.fx.easing.easeIn/easeOut/easeInOut
 		to use in an _Animation easing: property	
+		ported/decoded by Bryan Forbes from Robert Penner's Flash easing
+		functions, contributed under CLA. 
 
 	dojox.fx.ext-dojo.NodeList - extensions to dojo.NodeList-fx wrapping the
 		relevant dojox.fx animations into dojo.NodeList 
+
+	dojox.fx.Shadow - Class to add drop shadows to a node
 
 -------------------------------------------------------------------------------
 Installation instructions
