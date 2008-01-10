@@ -221,7 +221,13 @@ dojo.declare("dojox.layout.ResizeHandle",
 			this._changeSizing(e);
 		}
 		this._isSizing = false;
+		this.onResize(e);
+	},
+	
+	onResize: function(e){
+		// summary: Stub fired when sizing is done, for things like Grid
 	}
+	
 });
 
 dojo.declare("dojox.layout._ResizeHelper",
