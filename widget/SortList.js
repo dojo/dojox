@@ -7,28 +7,27 @@ dojo.require("dijit._Templated");
 dojo.declare("dojox.widget.SortList",
 	[dijit.layout._LayoutWidget, dijit._Templated],
 	{
-	// summary: a sortable <ul> with a fixed header for use in dijit.demos.chat
-	//	for demonstration purposes only for now. feel free to make API suggestions
-	//	or fixes. 
+	// summary: A sortable unordered-list with a fixed header for use in dijit.demos.chat
+	//		for demonstration purposes only for now. feel free to make API suggestions
+	//		or fixes. 
 	//
 	// title: String 
-	//	the title in the header
+	//		The title in the header
 	title: "",
 	
 	// heading: String
-	//	in the event a parent container is expecting a title="" attribute, set it for the parent 
-	//	via title, and the title of this widget via heading="" ... assuming you want different 
-	//	titles for each. eg: TabContainer, AccordionContainer, etc. 
+	//		In the event a parent container is expecting a title="" attribute, set it for the parent 
+	//		via title, and the title of this widget via heading="" ... assuming you want different 
+	//		titles for each. eg: TabContainer, AccordionContainer, etc. 
 	heading: "",
 
 	// descending: Boolean
-	//	toggle sort order based on this value. 
+	//		Toggle sort order based on this value. 
 	descending: true,
 
 	// selected: Array
-	//	a list of the selected <li> nodes at any given time.
+	//		A list of the selected <li> nodes at any given time.
 	selected: null,
-
 
 	// sortable: Boolean
 	//	toggle to enable/disable sorting
@@ -41,27 +40,26 @@ dojo.declare("dojox.widget.SortList",
 	templatePath: dojo.moduleUrl("dojox.widget","SortList/SortList.html"),
 
 	_addItem: function(item){
-		var node = document.createElement("li");
+		var node = dojo.doc.createElement("li");
 		var text = this.store.getValue(item,this.key);
 		node.innerHTML = text;
 		this.containerNode.appendChild(node);
 	},
 
 	postCreate: function(){
-		if (this.store){
-			// FIXME: is this right?
-			this.store = eval(this.store);
+		if(this.store){
+			this.store = dojo.getObject(this.store);
 			var props = {
 				onItem: dojo.hitch(this,"_addItem"),
 				onComplete: dojo.hitch(this,"onSort")
 			};
 			this.store.fetch(props);	
 		}else{ this.onSort(); }
-		this.inherited("postCreate",arguments);
+		this.inherited(arguments);
 	},
 
 	startup: function(){
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 		if(this.heading){ 
 			this.setTitle(this.heading); this.title=this.heading; 
 		}
@@ -72,7 +70,7 @@ dojo.declare("dojox.widget.SortList",
 
 	resize: function(){
 		// summary: do our additional calculations when resize() is called by or in a parent
-		this.inherited("resize",arguments);
+		this.inherited(arguments);
 		// FIXME: 
 		// the 10 comes from the difference between the contentBox and calculated height
 		// because of badding and border extents. this shouldn't be done this way, a theme change will 
@@ -95,14 +93,14 @@ dojo.declare("dojox.widget.SortList",
 		}
 		var i=0;
 		dojo.forEach(arr,function(item){
-			dojo[(((i++)%2)===0)?"addClass":"removeClass"](item,"sortListItemOdd");
+			dojo[(i++)%2 === 0 ? "addClass" : "removeClass"](item,"sortListItemOdd");
 			this.containerNode.appendChild(item); 
 		},this);
 	},
 	
 	_set: function(/* Event */e){
 		// summary: set hover state 
-		if (e.target != this.bodyWrapper){
+		if(e.target !== this.bodyWrapper){
 			dojo.addClass(e.target,"sortListItemHover");
 		}
 	},
@@ -140,7 +138,7 @@ dojo.declare("dojox.widget.SortList",
 
 	setTitle: function(/* String */title){
 		// summary: Sets the widget title to a String
-		this.focusNode.innerHTML = title;
+		this.focusNode.innerHTML = this.title = title;
 	},
 
 	onChanged: function(){
