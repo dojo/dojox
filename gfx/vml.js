@@ -38,10 +38,11 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		if(typeof fill == "object" && "type" in fill){
 			// gradient
+			var i, f, fo, a, s;
 			switch(fill.type){
 				case "linear":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill),
-						s = [], a = f.colors, matrix = this._getRealMatrix(), m = dojox.gfx.matrix;
+					var matrix = this._getRealMatrix(), m = dojox.gfx.matrix;
+					s = [], a = f.colors, f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
 					this.fillStyle = f;
 					dojo.forEach(a, function(v, i, a){
 						a[i].color = dojox.gfx.normalizeColor(v.color);
@@ -49,14 +50,14 @@ dojo.extend(dojox.gfx.Shape, {
 					if(a[0].offset > 0){
 						s.push("0 " + a[0].color.toHex());
 					}
-					for(var i = 0; i < a.length; ++i){
+					for(i = 0; i < a.length; ++i){
 						s.push(a[i].offset.toFixed(8) + " " + a[i].color.toHex());
 					}
-					var i = a.length - 1;
+					i = a.length - 1;
 					if(a[i].offset < 1){
 						s.push("1 " + a[i].color.toHex());
 					}
-					var fo = this.rawNode.fill;
+					fo = this.rawNode.fill;
 					fo.colors.value = s.join(";");
 					fo.method = "sigma";
 					fo.type = "gradient";
@@ -66,19 +67,19 @@ dojo.extend(dojox.gfx.Shape, {
 					fo.on = true;
 					break;
 				case "radial":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
 					this.fillStyle = f;
 					var l = parseFloat(this.rawNode.style.left),
 						t = parseFloat(this.rawNode.style.top),
 						w = parseFloat(this.rawNode.style.width),
 						h = parseFloat(this.rawNode.style.height),
-						c = isNaN(w) ? 1 : 2 * f.r / w,
-						a = new Array(f.colors.length);
+						c = isNaN(w) ? 1 : 2 * f.r / w;
+					a = new Array(f.colors.length);
 					// massage colors
 					dojo.forEach(f.colors, function(v, i){
 						a[i] = {offset: 1 - v.offset * c, color: dojox.gfx.normalizeColor(v.color)};
 					});
-					var i = a.length - 1;
+					i = a.length - 1;
 					while(i >= 0 && a[i].offset < 0){ --i; }
 					if(i < a.length - 1){
 						// correct excessive colors
@@ -88,7 +89,7 @@ dojo.extend(dojox.gfx.Shape, {
 						while(a.length - i > 2) a.pop();
 					}
 					// set colors
-					var i = a.length - 1, s = [];
+					i = a.length - 1, s = [];
 					if(a[i].offset > 0){
 						s.push("0 " + a[i].color.toHex());
 					}
@@ -98,7 +99,7 @@ dojo.extend(dojox.gfx.Shape, {
 					if(a[0].offset < 1){
 						s.push("1 " + a[0].color.toHex());
 					}
-					var fo = this.rawNode.fill;
+					fo = this.rawNode.fill;
 					fo.colors.value = s.join(";");
 					fo.method = "sigma";
 					fo.type = "gradientradial";
@@ -111,9 +112,9 @@ dojo.extend(dojox.gfx.Shape, {
 					fo.on = true;
 					break;
 				case "pattern":
-					var f = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
 					this.fillStyle = f;
-					var fo = this.rawNode.fill;
+					fo = this.rawNode.fill;
 					fo.type = "tile";
 					fo.src = f.src;
 					if(f.width && f.height){
@@ -977,10 +978,11 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	p.style.width  = width;
 	p.style.height = height;
 		
+	cs.position = "absolute";
 	cs.width  = width;
 	cs.height = height;
 	cs.clip = "rect(0 " + width + " " + height + " 0)";
-	cs.position = "absolute";
+	rs.position = "absolute";
 	rs.width  = width;
 	rs.height = height;
 	r.coordsize = (width == "100%" ? width : parseFloat(width)) + " " +
@@ -1110,7 +1112,7 @@ dojo.mixin(dojox.gfx.shape.Creator, {
 	},
 	_overrideSize: function(node){
 		var p = this;
-		for(; p && !(p instanceof dojox.gfx.Surface); p = p.parent);
+		while(p && !(p instanceof dojox.gfx.Surface)){ p = p.parent; }
 		node.style.width  = p.width;
 		node.style.height = p.height;
 		node.coordsize = p.width + " " + p.height;
