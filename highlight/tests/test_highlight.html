@@ -51,7 +51,20 @@
 		//dojo.require("dojox.highlight.languages._static");
 		//dojo.require("dojox.highlight.languages._dynamic");
 		//dojo.require("dojox.highlight.languages._www");
-	
+
+		var lazyCode = function(){
+			
+			dojo.xhrGet({
+				url: "../../../dojo/_base.js",
+				load: function(data){
+					var n = dojo.byId("foobar");
+					n.innerHTML = data.replace(/\</gi,"&lt;");
+					dojo.addClass(n,"javascript"); 
+					dojox.highlight.init(n);
+				}
+			});
+		};	
+		dojo.addOnLoad(lazyCode); 
 
 	</script>
 </head>
@@ -670,3 +683,36 @@ public boolean unpack(container packedClass)
   &lt;p&gt;Hello, World!
 &lt;/div&gt;
 </code></pre>
+
+<p>Normal dojo-looking code
+
+<pre><code>
+dojo.provide("some.object");
+dojo.declare("some.object",null,{
+	param: "value",
+	_myMethod: function(/* Event */e){
+		this.inherited(arguments);
+	},
+	// comments
+	_another: function(){
+		dojo.addClass("foo","hovered");
+	}
+});
+dojo.addOnLoad(function(){
+	//
+	// comments with &lt;HTML&gt; inline
+	var d = dojo;
+	d.mixin(d,{
+		foo: function(e){
+			d.bar(e);
+		},
+		bar: function(e){
+			alert(e);
+		}
+	});
+});
+</code></pre>
+
+<p>Lazy, xhr'd code:
+
+<pre><code id="foobar"></code></pre>
