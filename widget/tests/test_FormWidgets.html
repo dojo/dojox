@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Testing degradable form widgets | The Dojo Toolkit</title>
+
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="../../../dijit/themes/tundra/tundra.css">
+
+	<style type="text/css">
+	@import "../../../dijit/tests/css/dijitTests.css";
+	#select, #select2 {
+		width:255px;
+		height:300px;
+		overflow:auto;
+	}
+	</style>
+	
+	<script type="text/javascript" djConfig="isDebug:false, parseOnLoad: true"
+		src="../../../dojo/dojo.js"></script>
+
+	<script src="../FormWidgets.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+
+		// provides dojox.widget.Select, and dojox.widget.Hidden		
+		dojo.require("dojox.widget.FormWidgets");
+
+		// needed for tests:
+		dojo.require("dijit.form.Form");
+		dojo.require("dijit.form.Button");
+		dojo.require("dijit.layout.SplitContainer");
+
+		dojo.addOnLoad(function(){
+			
+			// ref a clonable node, then split it between two selects
+			var c = dojo.query(".clone")[0];
+			var l = -1;
+			opt = function(){			
+				return dojo.byId((++l%2 == 0 ? "select":"select2" ));
+			}
+			// based on the the 'dijit' object
+			for(var i in dijit){
+				var n = opt().appendChild(dojo.clone(c));
+				n.value = n.innerHTML = i
+			}
+			
+			// turn any non-dojoType selects into widgets programatically:
+			dojo.query("select").forEach(function(n){
+				if(!dijit.byNode(n)){
+						var foo = new dojox.widget.Select({
+						},n);
+				}
+			});
+			
+			// add a programatic hidden widget to each form on this page:
+			var count = 0;
+			dojo.query("form").forEach(function(n){
+				var input = dojo.doc.createElement('input');
+				dojo.attr(input,"type","hidden");
+				dojo.attr(input,"name","hiddenFromCode"+(++count)+"");
+				dojo.attr(input,"value","programatically created");
+				var hidden = new dojox.widget.Hidden({},input);
+				n.appendChild(hidden.domNode);
+				hidden.startup();
+			});
+			
+			
+			// listen to the "move items" buttons
+			dojo.query("button.switch")
+				.connect("onclick",function(e){
+					switch(e.target.id.toString()){
+						case "left" : dijit.byId("select").addSelected(dijit.byId("select2")); break;
+						case "right" : dijit.byId("select2").addSelected(dijit.byId("select")); break;
+					}	
+			});
+			
+			// listen to the invert buttons
+			dojo.query("button.invert")
+				.connect("onclick",function(e){
+					switch(e.target.id.toString()){
+						case "i1" : dijit.byId("select").invertSelection(); break;
+						case "i2" : dijit.byId("select2").invertSelection(); break;
+						case "i3" : dijit.byId("select3").invertSelection(); break;
+					}
+			});
+				
+			// there is only one debug button
+			dojo.query(".debug").connect("onclick",function(e){
+				console.log('select getValues:',dijit.byId("select").getValues());	
+				console.log('select2 getValues:',dijit.byId("select2").getValues());
+				console.log('select3 getValues:',dijit.byId("select3").getValues());
+			});
+				
+			// natural form reaction:
+			dojo.connect(dojo.byId("test"),"onsubmit",function(e){
+				e.preventDefault();	
+			});
+			dojo.connect(dojo.byId("formSubmit"),"onclick",function(e){
+				// see what the real form says about our widgets:
+				var vals = dojo.formToJson("test");
+				console.log(vals);
+			});
+		});
+	</script>
+</head>
+<body class="tundra" style="padding:20px">
+		
+		<h1 class="testTitle">dijit.form.Form capable form supplements:</h1>
+		
+		<p>Includes: dojox.widget.Select, dojox.widget.TextArea, and dojox.widget.Hidden (i'm serious)</p>
+		
+		<form action="null.html" method="get" id="test">
+		
+		<input type="hidden" dojoType="dojox.widget.Hidden" name="hidden0" value="hidden value uno" />
+		
+		<select id="select" multiple="true" size="7" name="easing">
+			<option class="clone" value="dojo._defaultEasing">dojo._defaultEasing</option>
+		</select>
+	
+		<span>
+			<button class="switch" id="left">&lt;</button>
+			<button class="switch" id="right">&gt;</button>
+		</span>
+
+		<select id="select2" multiple="true" size="7" name="second">	
+		</select>
+
+		<br><br>
+
+		<button class='invert' id="i1">invert first list</button>
+		<button class="invert" id="i2">invert second list</button>
+		<button id="formSubmit">Submit</button>
+
+		</form>
+
+		<button class="debug">call getValues()</button>
+
+		<h3>markup:</h3>
+
+		<select id="select3" multiple="true" name="select3"
+			dojoType="dojox.widget.Select"
+			style="height:200px; width:175px; border:5px solid #ededed;">
+
+			<option value="TN" selected="true">Tennessee</option>
+			<option value="VA">Virginia</option>
+			<option value="WA">Washington</option>
+			<option value="FL">Florida</option>
+			<option value="CA">California</option>
+
+		</select>
+
+		<br><br>
+		<button class='invert' id="i3">invert markup list</button>
+
+		<h3>in a dijit.form.Form:</h3>
+
+		<form name="dijitForm" dojoType="dijit.form.Form" id="dijitForm">
+			
+			<input type="hidden" name="hiddenVal" value="yeh, but not caught by form.getValues()" />
+			<input type="hidden" name="hidden2" value="yeh, caught by form.getValues()"
+				dojoType="dojox.widget.Hidden"	
+				/>
+						
+			<select id="select4" dojoType="dojox.widget.Select" name="numbers" multiple="true" size="8">
+					<option value="1">one</option>
+					<option value="2">two</option>
+					<option value="3">three</option>
+					<option value="four">4</option>
+			</select>
+
+			<p>a textArea:<br>
+			<textarea dojoType="dojox.widget.TextArea" name="ta2">
+				shichashaw, textarea text baw.				
+			</textarea>
+			</p>
+
+			<br><br>
+			<button dojoType="dijit.form.Button" type="submit">
+					Submit
+					<script type="dojo/method" event="onClick">
+							console.log("testing semantic and dijit form:");
+							var f = dijit.byId("dijitForm");
+							var c = f.getValues();
+							console.log('vals: ',c);
+							console.log('formToJson: ',dojo.formToJson(f.domNode));
+					</script>
+			</button>
+			
+		</form>
+
+		<h3>in a SplitContainer:</h3>
+
+		<div id="splitC" dojoType="dijit.layout.SplitContainer" style="width:500px; height:75px">
+			<select dojoType="dojox.widget.Select" multiple="true" name="splitN">
+					<option value="1">one</option>
+					<option value="2">two</option>
+					<option value="3">three</option>
+					<option value="four">4</option>
+			</select>
+			<textarea name="textAreaN3" dojoType="dojox.widget.TextArea">
+				This is just some text.
+			</textarea>
+			<select dojoType="dojox.widget.Select" name="splitN3" multiple="true">
+					<option value="1">one</option>
+					<option value="2">two</option>
+					<option value="3">three</option>
+					<option value="four">4</option>				
+			</select>
+		</div>
+	
+		<button dojoType="dijit.form.Button">
+			GetValues()
+			<script type="dojo/method" event="onClick">
+				console.log('getting values from split:');
+				dojo.query("#splitC > select").forEach(function(n){
+					// dumpt the select's name attrib, and the value(s) selected:
+					console.log(n.name,dijit.byNode(n).getValue());
+				});
+				dojo.query("#splitC > textarea").forEach(function(n){
+					console.log(n.name,dijit.byNode(n).getValue());
+				})
+			</script>
+		</button>
+	
+</body>
+</html>
