@@ -135,9 +135,9 @@ dojo.declare("dojox.storage.Provider", null, {
 		console.warn("dojox.storage.get not implemented");
 	},
 
-	hasKey: function(/*string*/ key, /*string?*/ namespace){ /*Boolean*/
+	hasKey: function(/*string*/ key, /*string?*/ namespace){
 		// summary: Determines whether the storage has the given key. 
-		return (this.get(key) != null);
+		return !!this.get(key, namespace); // Boolean
 	},
 
 	getKeys: function(/*string?*/ namespace){ /*Array*/
@@ -264,17 +264,14 @@ dojo.declare("dojox.storage.Provider", null, {
 	},
 	
 	isValidKeyArray: function( keys) {
-		if(keys === null || typeof keys === "undefined" || ! keys instanceof Array){
+		if(keys === null || keys === undefined || !dojo.isArray(keys)){
 			return false;
 		}
-		
+
 		//	JAC: This could be optimized by running the key validity test directly over a joined string
-		for(var k=0;k<keys.length;k++){
-			if(!this.isValidKey(keys[k])){
-				return false;
-			}
-		}
-		return true;
+		return !dojo.some(keys, function(key){
+			return !this.isValidKey(key);
+		}); // Boolean
 	},
 
 	hasSettingsUI: function(){ /*Boolean*/
@@ -299,7 +296,7 @@ dojo.declare("dojox.storage.Provider", null, {
 		//		in a consistent way across different storage providers. We use
 		//		the lowest common denominator for key values allowed: only
 		//		letters, numbers, and underscores are allowed. No spaces. 
-		if((keyName == null)||(typeof keyName == "undefined")){
+		if(keyName === null || keyName === undefined){
 			return false;
 		}
 			
