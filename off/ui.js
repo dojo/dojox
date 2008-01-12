@@ -601,7 +601,7 @@ dojo.mixin(dojox.off.ui, {
 			// synchronize, but pause for a few seconds
 			// so that the user can orient themselves
 			if(dojox.off.sync.autoSync){
-				window.setTimeout("dojox.off.sync.synchronize()", 1000);
+				window.setTimeout(dojox._scopeName + ".off.sync.synchronize()", 1000);
 			}
 		}
 	}
