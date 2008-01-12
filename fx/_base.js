@@ -183,3 +183,54 @@ dojox.fx.highlight = function(/*Object*/ args){
 	return anim; // dojo._Animation
 };
 
+ 
+dojox.fx.wipeTo = function(/*Object*/ args){
+	// summary: Animate a node wiping to a specific width or height
+	//	
+	// description:
+	//		Returns an animation that will expand the
+	//		node defined in 'args' object from it's current to
+	//		the height or width value given by the args object.
+	//
+	//		default to height:, so leave height null and specify width:
+	//		to wipeTo a width. note: this may be deprecated by a 
+	//
+	//      Note that the final value should not include
+	//      units and should be an integer.  Thus a valid args object
+	//      would look something like this:
+	//
+	//      dojox.fx.wipeTo({node: "nodeId", height: 200}).play();
+	//
+	//		Node must have no margin/border/padding, so put another
+	//		node inside your target node for additional styling.
+
+	args.node = dojo.byId(args.node);
+	var node = args.node, s = node.style;
+
+	var dir = (args.width ? "width" : "height");
+	var endVal = args[dir];
+
+	var props = {};
+	props[dir] = {
+		// wrapped in functions so we wait till the last second to query (in case value has changed)
+		start: function(){
+			// start at current [computed] height, but use 1px rather than 0
+			// because 0 causes IE to display the whole panel
+			s.overflow="hidden";
+			if(s.visibility=="hidden"||s.display=="none"){
+				s[dir] = "1px";
+				s.display="";
+				s.visibility="";
+				return 1;
+			}else{
+				var now = dojo.style(node,dir);
+				return Math.max(now, 1);
+			}
+		},
+		end: endVal,
+		unit: "px"
+	};
+
+	var anim = dojo.animateProperty(dojo.mixin({ properties: props },args));
+	return anim; // dojo._Animation
+}

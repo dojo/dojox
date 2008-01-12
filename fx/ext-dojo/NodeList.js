@@ -49,6 +49,14 @@ dojo.extend(dojo.NodeList, {
 		//	|	// fade all elements with class "bar" to to 50% opacity
 		//	|	dojo.query(".bar").fadeTo({ end: 0.5 }).play();
 		return this._anim(dojo,"_fade",args);
+	},
+	
+	wipeTo: function(args){
+		// summary:
+		//		Wipe all elements of the NodeList to a specified width: or height:
+		// example:
+		//	| dojo.query(".box").wipeTo({ width: 300px }).play();
+		return this._anim(dojox.fx, "wipeTo", args);
 	}
 
 });
