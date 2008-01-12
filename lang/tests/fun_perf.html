@@ -136,7 +136,7 @@
 				tests["raw reduceRight"] = function(){
 					for(var i = 0; i < ITER; ++i){
 						var z = 0;
-						for(var j = 0; j < sample.length; ++j){
+						for(var j = sample.length - 1; j >= 0; --j){
 							z = add(z, sample[j]);
 						}
 					}
