@@ -10,57 +10,163 @@
 		<script type="text/javascript" src="../functional/fold.js"></script>
 		<script type="text/javascript">
 			dojo.addOnLoad(function(){
-				var LEN = 1000, ITER = 100, SUM = (LEN - 1) * LEN / 2, b, e;
-				var foldl_1 = function(/*Array*/ a, /*Function*/ f, /*Object*/ z){
-					for(var i = 0; i < a.length; z = f.call(dojo.global, z, a[i++]));
-					return z;
+				var LEN = 2000, ITER = 200, b, e, tests = {},
+					df = dojox.lang.functional,
+					sample = df.repeat(LEN, "+1", 0),
+					add = df.lambda("+"),
+					isOdd = df.lambda("%2");
+					
+				var clock = function(body){
+					var b = new Date();
+					body();
+					var e = new Date();
+					return e.getTime() - b.getTime();	// in ms
 				};
-				var foldl_2 = function(/*Array*/ a, /*Function*/ f, /*Object*/ z){
-					dojo.forEach(a, function(x){ z = f.call(dojo.global, z, x); });
-					return z;
-				};
-				var foldl_3 = function(/*Array*/ a, /*Function*/ f, /*Object*/ z){
-					a.forEach(function(x){ z = f.call(dojo.global, z, x); });
-					return z;
-				};
-				var sample = dojox.lang.functional.repeat(LEN, function(x){ return x + 1; }, 0);
-				b = new Date();
-				for(var i = 0; i < ITER; ++i){
-					var t = dojox.lang.functional.foldl(sample, function(a, b){ return a + b; }, 0);
-					console.assert(t == SUM);
-				}
-				e = new Date();
-				console.log("dojox.lang.functional.foldl:", e.getTime() - b.getTime());
-				b = new Date();
-				for(var i = 0; i < ITER; ++i){
-					var t = dojox.lang.functional.reduce(sample, function(a, b){ return a + b; });
-					console.assert(t == SUM);
-				}
-				e = new Date();
-				console.log("dojox.lang.functional.reduce:", e.getTime() - b.getTime());
-				b = new Date();
-				for(var i = 0; i < ITER; ++i){
-					var t = foldl_1(sample, function(a, b){ return a + b; }, 0);
-					console.assert(t == SUM);
-				}
-				e = new Date();
-				console.log("raw loop:", e.getTime() - b.getTime());
-				b = new Date();
-				for(var i = 0; i < ITER; ++i){
-					var t = foldl_2(sample, function(a, b){ return a + b; }, 0);
-					console.assert(t == SUM);
-				}
-				e = new Date();
-				console.log("dojo.forEach:", e.getTime() - b.getTime());
-				if(sample.forEach){
+				
+				var log = function(name, body){
 					b = new Date();
-					for(var i = 0; i < ITER; ++i){
-						var t = foldl_3(sample, function(a, b){ return a + b; }, 0);
-						console.assert(t == SUM);
-					}
+					var ms = clock(body);
 					e = new Date();
-					console.log("Array.forEach:", e.getTime() - b.getTime());
+					console.log(name + ":", ms);
+				};
+
+				// filter
+				tests["raw filter"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						var t = [];
+						for(var j = 0; j < sample.length; ++j){
+							if(isOdd(sample[j])){ t.push(sample[j]); }
+						}
+					}
+				};
+				tests["dojo.filter"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						dojo.filter(sample, isOdd);
+					}
+				};
+				tests["df.filter"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						df.filter(sample, isOdd);
+					}
+				};
+				if(sample.filter){
+					tests["Array.prototype.filter"] = function(){
+						for(var i = 0; i < ITER; ++i){
+							sample.filter(isOdd);
+						}
+					};
 				}
+
+				// map
+				tests["raw map"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						var t = [];
+						for(var j = 0; j < sample.length; ++j){
+							t.push(isOdd(sample[j]));
+						}
+					}
+				};
+				tests["dojo.map"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						dojo.map(sample, isOdd);
+					}
+				};
+				tests["df.map"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						df.map(sample, isOdd);
+					}
+				};
+				if(sample.map){
+					tests["Array.prototype.map"] = function(){
+						for(var i = 0; i < ITER; ++i){
+							sample.map(isOdd);
+						}
+					};
+				}
+
+				// forEach
+				tests["raw forEach"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						for(var j = 0; j < sample.length; ++j){
+							isOdd(sample[j]);
+						}
+					}
+				};
+				tests["dojo.forEach"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						dojo.forEach(sample, isOdd);
+					}
+				};
+				tests["df.forEach"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						df.forEach(sample, isOdd);
+					}
+				};
+				if(sample.forEach){
+					tests["Array.prototype.forEach"] = function(){
+						for(var i = 0; i < ITER; ++i){
+							sample.forEach(isOdd);
+						}
+					};
+				}
+
+				// reduce
+				tests["raw reduce"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						var z = 0;
+						for(var j = 0; j < sample.length; ++j){
+							z = add(z, sample[j]);
+						}
+					}
+				};
+				tests["df.reduce"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						df.reduce(sample, add, 0);
+					}
+				};
+				if(sample.reduce){
+					tests["Array.prototype.reduce"] = function(){
+						for(var i = 0; i < ITER; ++i){
+							sample.reduce(add, 0);
+						}
+					};
+				}
+
+				// reduceRight
+				tests["raw reduceRight"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						var z = 0;
+						for(var j = 0; j < sample.length; ++j){
+							z = add(z, sample[j]);
+						}
+					}
+				};
+				tests["df.reduceRight"] = function(){
+					for(var i = 0; i < ITER; ++i){
+						df.reduceRight(sample, add, 0);
+					}
+				};
+				if(sample.reduceRight){
+					tests["Array.prototype.reduceRight"] = function(){
+						for(var i = 0; i < ITER; ++i){
+							sample.reduceRight(add, 0);
+						}
+					};
+				}
+				
+				var keys = df.keys(tests), i = 0;
+				
+				var doTest = function(){
+					log(keys[i], tests[keys[i]]);
+					++i;
+					if(i < keys.length){
+						setTimeout(doTest, 1);
+					}else{
+						console.log("that's all");
+					}
+				};
+				
+				setTimeout(doTest, 1);
 			});
 		</script>
 	</head>
