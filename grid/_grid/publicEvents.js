@@ -139,128 +139,128 @@ dojox.grid.publicEvents = {
 	
 	onCellMouseOut: function(e){
 		// summary:
-		//	event fired when mouse moves out of a cell.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves out of a cell.
+		// e: Event
+		//		Decorated event object which contains reference to grid, cell, and rowIndex
 		dojo.removeClass(e.cellNode, this.cellOverClass);
 	},
 
 	onCellClick: function(e){
 		// summary:
-		//	event fired when a cell is clicked.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when a cell is clicked.
+		// e: Event
+		//		Decorated event object which contains reference to grid, cell, and rowIndex
 		this.focus.setFocusCell(e.cell, e.rowIndex);
 		this.onRowClick(e);
 	},
 
 	onCellDblClick: function(e){
 		// summary:
-		//	event fired when a cell is double-clicked.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when a cell is double-clicked.
+		// e: Event
+		//		Decorated event object contains reference to grid, cell, and rowIndex
 		this.edit.setEditCell(e.cell, e.rowIndex); 
 		this.onRowDblClick(e);
 	},
 
 	onCellContextMenu: function(e){
 		// summary:
-		//	event fired when a cell context menu is accessed via mouse right click.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when a cell context menu is accessed via mouse right click.
+		// e: Event
+		//		Decorated event object which contains reference to grid, cell, and rowIndex
 		this.onRowContextMenu(e);
 	},
 
 	onCellFocus: function(inCell, inRowIndex){
 		// summary:
-		//	event fired when a cell receives focus.
-		// inCell: object
-		//	cell object containing properties of the grid column.
-		// inRowIndex: int
-		//	index of the grid row
+		//		Event fired when a cell receives focus.
+		// inCell: Object
+		//		Cell object containing properties of the grid column.
+		// inRowIndex: Integer
+		//		Index of the grid row
 		this.edit.cellFocus(inCell, inRowIndex);
 	},
 
 	// row events
 	onRowClick: function(e){
 		// summary:
-		//	event fired when a row is clicked.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when a row is clicked.
+		// e: Event
+		//		Decorated event object which contains reference to grid, cell, and rowIndex
 		this.edit.rowClick(e);
 		this.selection.clickSelectEvent(e);
 	},
 
 	onRowDblClick: function(e){
 		// summary:
-		//	event fired when a row is double clicked.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when a row is double clicked.
+		// e: Event
+		//		decorated event object which contains reference to grid, cell, and rowIndex
 	},
 
 	onRowMouseOver: function(e){
 		// summary:
-		//	event fired when mouse moves over a data row.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves over a data row.
+		// e: Event
+		//		Decorated event object which contains reference to grid, cell, and rowIndex
 	},
 
 	onRowMouseOut: function(e){
 		// summary:
-		//	event fired when mouse moves out of a data row.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves out of a data row.
+		// e: Event
+		// 		Decorated event object contains reference to grid, cell, and rowIndex
 	},
 
 	onRowContextMenu: function(e){
 		// summary:
-		//	event fired when a row context menu is accessed via mouse right click.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when a row context menu is accessed via mouse right click.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 		dojo.stopEvent(e);
 	},
 
 	// header events
 	onHeaderMouseOver: function(e){
 		// summary:
-		//	event fired when mouse moves over the grid header.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves over the grid header.
+		// e: Event
+		// 		Decorated event object contains reference to grid, cell, and rowIndex
 	},
 
 	onHeaderMouseOut: function(e){
 		// summary:
-		//	event fired when mouse moves out of the grid header.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves out of the grid header.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 	},
 
 	onHeaderCellMouseOver: function(e){
 		// summary:
-		//	event fired when mouse moves over a header cell.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves over a header cell.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 		dojo.addClass(e.cellNode, this.cellOverClass);
 	},
 
 	onHeaderCellMouseOut: function(e){
 		// summary:
-		//	event fired when mouse moves out of a header cell.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when mouse moves out of a header cell.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 		dojo.removeClass(e.cellNode, this.cellOverClass);
 	},
 
 	onHeaderClick: function(e){
 		// summary:
-		//	event fired when the grid header is clicked.
-		// e: decorated event object 
-		//	contains reference to grid, cell, and rowIndex
+		//		Event fired when the grid header is clicked.
+		// e: Event
+		// Decorated event object which contains reference to grid, cell, and rowIndex
 	},
 
 	onHeaderCellClick: function(e){
 		// summary:
-		//	event fired when a header cell is clicked.
+		//		Event fired when a header cell is clicked.
 		// e: Event
 		//		Decorated event object which contains reference to grid, cell, and rowIndex
 		this.setSortIndex(e.cell.index);
@@ -329,7 +329,7 @@ dojox.grid.publicEvents = {
 	onApplyEdit: function(inRowIndex){
 		// summary:
 		//		Event fired when editing is applied for a given grid row
-		// inRowIndex: int
+		// inRowIndex: Integer
 		//		Index of the grid row
 	},
 
