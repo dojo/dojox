@@ -176,8 +176,17 @@ dojo.declare("dojox.wire.ml.RestHandler", null, {
 		//		A base URL
 		//	returns:
 		//		A URL
+		var query;
 		if(method == "GET" || method == "DELETE"){
-			var query = parameters[0];
+			if(parameters.length > 0){
+				query = parameters[0];
+			}
+		}else{ // "POST" || "PUT"
+			if(parameters.length > 1){
+				query = parameters[1];
+			}
+		}
+		if(query){
 			var queryString = "";
 			for(var name in query){
 				var value = query[name];
