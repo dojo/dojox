@@ -1,4 +1,4 @@
-dojo.provide("dojox.tests.module");
+dojo.provide("dojox.wire.tests.module");
 
 try{
 	dojo.require("dojox.wire.tests.wire");
