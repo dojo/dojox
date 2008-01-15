@@ -410,7 +410,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			var f = this.store.getFeatures();
 			this._canNotify = f['dojo.data.api.Notification'];
 			this._canWrite = f['dojo.data.api.Write'];
-
+			this._canIdentify = f['dojo.data.api.Identity'];
 			if(this._canNotify){
 				dojo.connect(this.store, "onSet", this, "_storeDatumChange");
 			}
@@ -423,8 +423,12 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	store: null,
 	_canNotify: false,
 	_canWrite: false,
+	_canIdentify: false,
 	_rowIdentities: {},
 	clientSort: false,
+	sortFields: null,
+	queryOptions: null,
+
 	// data
 	setData: function(inData){
 		this.store = inData;
@@ -469,7 +473,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	_getRowFromItem: function(item){
 		// gets us the row object (and row index) of an item
 	},
-	processRows: function(items, store){
+	processRows: function(items, request){
 		// console.debug(arguments);
 		if(!items){ return; }
 		this._setupFields(items[0]);
@@ -477,11 +481,19 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			var row = {}; 
 			row.__dojo_data_item = item;
 			dojo.forEach(this.fields.values, function(a){
-				row[a.name] = this.store.getValue(item, a.name)||"";
+				value = this.store.getValue(item, a.name);
+				row[a.name] = (value === undefined || value === null)?"":value;
 			}, this);
+			
 			// FIXME: where else do we need to keep this in sync?
-			this._rowIdentities[this.store.getIdentity(item)] = store.start+idx;
-			this.setRow(row, store.start+idx);
+			//Handle stores that implement identity and try to handle those that do not.
+			if (this._canIdentify) {
+				this._rowIdentities[this.store.getIdentity(item)] = {rowId: request.start+idx};
+			}else{
+				var identity = dojo.toJson(request.query) + ":start:" + request.start + ":idx:" + idx + ":sort:" + dojo.toJson(request.sort);
+				this._rowIdentities[identity] = {rowId: request.start+idx, item: item};
+			}
+			this.setRow(row, request.start+idx);
 		}, this);
 		// FIXME: 
 		//	Q: scott, steve, how the hell do we actually get this to update
@@ -496,11 +508,12 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			start: row,
 			count: this.rowsPerPage,
 			query: this.query,
+			sort: this.sortFields,
+			queryOptions: this.queryOptions,
 			onBegin: dojo.hitch(this, "beginReturn"),
-			//	onItem: dojo.hitch(console, "debug"),
-			onComplete: dojo.hitch(this, "processRows") // add to deferred?
-		}
-		// console.debug("requestRows:", row, this.rowsPerPage);
+			onComplete: dojo.hitch(this, "processRows"), // add to deferred?
+			onError: dojo.hitch(this, "processError")
+		};
 		this.store.fetch(params);
 	},
 	getDatum: function(inRowIndex, inColIndex){
@@ -557,11 +570,28 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	_storeDatumChange: function(item, attr, oldVal, newVal){
 		// the store has changed some data under us, need to update the display
-		var rowId = this._rowIdentities[this.store.getIdentity(item)];
+		var rowId = null;
+		//Handle identity and nonidentity capable stores.
+		if(this._canIdentify){
+			rowId = this._rowIdentities[this.store.getIdentity(item)].rowId;
+		}else{
+			//Not efficient, but without identity support, 
+			//not a better way to do it.  Basically, do our best to locate it
+			//This may or may not work, but best we can do here.
+			var id;
+			for(id in this._rowIdentities){
+				if(this._rowIdentities[id].item === item){
+					rowId = id;
+					break;
+				}
+			}
+		}
 		var row = this.getRow(rowId);
-		row[attr] = newVal;
-		var colId = this.fields._nameMaps[attr];
-		this.notify("DatumChange", [ newVal, rowId, colId ]);
+		if(row){
+			row[attr] = newVal;
+			var colId = this.fields._nameMaps[attr];
+			this.notify("DatumChange", [ newVal, rowId, colId ]);
+		}
 	},
 	datumChange: function(value, rowIdx, colIdx){
 		if(this._canWrite){
@@ -587,10 +617,38 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this.notify("Removal", arguments);
 		this.notify("Change", arguments);
 	},
-	// sort
 	canSort: function(){
 		// Q: Return true and re-issue the queries?
 		// A: Return true only. Re-issue the query in 'sort'.
-		return this.clientSort;
+		// Note, above are original comments :)
+		return true;
+	},
+	sort: function(colIndex){
+		var col = Math.abs(colIndex) - 1;
+		this.sortFields = [{'attribute': this.fields.values[col].name, 'descending': (colIndex>0)}];
+		
+		// Since we're relying on the data store to sort, we have to refresh our data.
+		this.refresh();
+	},
+	refresh: function(){
+		this.clearData(true);
+		this.requestRows();
+	},
+	clearData: function(/* boolean */ keepStore){
+		this._rowIdentities = {};
+		this.pages = [];
+		this.bop = this.eop = -1;
+		this.setData((keepStore?this.store:[]));
+	},
+	processError: function(error, request){
+		//	summary:
+		//		Hook function to trap error messages from the store and emit them.  
+		//		Intended for connecting to and handling the error object or at least reporting it.
+		//
+		//	error:
+		//		The error object returned by the store when a problem occurred.
+		//	request:
+		//		The request object that caused the error.
+		console.log(error);
 	}
 });
