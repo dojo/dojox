@@ -727,4 +727,33 @@ dojo.addOnLoad(function(){
 
 <p>Text with inlined JavaScript code: <code class="javascript">dojo.forEach(a, function(x){ console.log(x); });</code> &mdash; that was the inlined sample.</p>
 
+<hr>
+
+<p>Markuped code (python), no language was specified:</p>
+
+<pre><code dojoType="dojo.highlight.Code">@requires_authorization
+def somefunc(param1, param2):
+  '''A docstring'''
+  if param1 > param2: # interesting
+    print 'Gre\'ater'
+    print ''
+  return param2 - param1 + 1
+  
+class SomeClass:<br>    pass
+</code></pre>
+
+<p>Markuped code, "python" was specified:</p>
+
+<pre><code dojoType="dojo.highlight.Code" class="python">@requires_authorization
+def somefunc(param1, param2):
+  '''A docstring'''
+  if param1 > param2: # interesting
+    print 'Gre\'ater'
+    print ''
+  return param2 - param1 + 1
+  
+class SomeClass:<br>    pass
+</code></pre>
+
+
 </body><html>

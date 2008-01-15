@@ -337,18 +337,22 @@ dojo.provide("dojox.highlight._base");
 	
 	// more utilities
 	
-	function replaceTextPreCode(node, className, text){
-		// See these 4 lines? This is IE's notion of "node.innerHTML = text". Love this browser :-/
-		var container = document.createElement('div'),
-			environment = node.parentNode.parentNode;
-		container.innerHTML = '<pre><code class="' + className + '">' + text + '</code></pre>';
-		environment.replaceChild(container.firstChild, node.parentNode);
+	function replaceText(node, className, text){
+		if(String(node.tagName).toLowerCase() == "code" && String(node.parentNode.tagName).toLowerCase() == "pre"){
+			// See these 4 lines? This is IE's notion of "node.innerHTML = text". Love this browser :-/
+			var container = document.createElement('div'),
+				environment = node.parentNode.parentNode;
+			container.innerHTML = '<pre><code class="' + className + '">' + text + '</code></pre>';
+			environment.replaceChild(container.firstChild, node.parentNode);
+		}else{
+			node.className = className;
+			node.innerHTML = text;
+		}
 	}
 
 	function highlightLanguage(block, lang){
 		var highlight = new Highlighter(lang, blockText(block));
-		//block.innerHTML = highlight.result.replace("\n", "<br>");
-		replaceTextPreCode(block, block.className, highlight.result);
+		replaceText(block, block.className, highlight.result);
 	}
 
 	function highlightAuto(block){
@@ -365,8 +369,7 @@ dojo.provide("dojox.highlight._base");
 			}
 		}
 		if(result){
-			//block.innerHTML = result.replace("\n", "<br>");
-			replaceTextPreCode(block, langName, result);
+			replaceText(block, langName, result);
 		}
 	}
 	
@@ -388,6 +391,12 @@ dojo.provide("dojox.highlight._base");
 		if(!flag){
 			highlightAuto(block);
 		}
+	};
+
+	// pseudo object for markup creation
+	dh.Code = function(params, node){
+		dh.init(node);
+		return {};
 	};
 })();
 
