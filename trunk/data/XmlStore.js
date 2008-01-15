@@ -24,17 +24,30 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		sendQuery:		A boolean indicate to add a query string to the service URL 
 		console.log("XmlStore()");
 		if(args){
-			this._url = args.url;
-			this._rootItem = (args.rootItem || args.rootitem);
-			this._keyAttribute = (args.keyAttribute || args.keyattribute);
+			this.url = args.url;
+			this.rootItem = (args.rootItem || args.rootitem || this.rootItem);
+			this.keyAttribute = (args.keyAttribute || args.keyattribute || this.keyAttribute);
 			this._attributeMap = (args.attributeMap || args.attributemap);
-			this._labelAttr = args.label;
-			this._sendQuery = (args.sendQuery || args.sendquery);
+			this.label = args.label || this.label;
+			this.sendQuery = (args.sendQuery || args.sendquery || this.sendQuery);
 		}
 		this._newItems = [];
 		this._deletedItems = [];
 		this._modifiedItems = [];
 	},
+
+	//Values that may be set by the parser.  
+	//Ergo, have to be instantiated to something
+	//So the parser knows how to set them.
+	url: "",
+
+	rootItem: "",
+
+	keyAttribute: "",
+
+	label: "",
+
+	sendQuery: false,
 
 /* dojo.data.api.Read */
 
@@ -311,8 +324,8 @@ dojo.declare("dojox.data.XmlStore", null, {
 	getLabel: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabel()
-		if(this._labelAttr && this.isItem(item)){
-			var label = this.getValue(item,this._labelAttr);
+		if((this.label !== "") && this.isItem(item)){
+			var label = this.getValue(item,this.label);
 			if(label){
 				return label.toString();
 			}
@@ -323,8 +336,8 @@ dojo.declare("dojox.data.XmlStore", null, {
 	getLabelAttributes: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
-		if(this._labelAttr){
-			return [this._labelAttr]; //array
+		if(this.label !== ""){
+			return [this.label]; //array
 		}
 		return null; //null
 	},
@@ -333,14 +346,14 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Fetch items (XML elements) that match to a query
 		//	description:
-		//		If '_sendQuery' is true, an XML document is loaded from
-		//		'_url' with a query string.
+		//		If 'sendQuery' is true, an XML document is loaded from
+		//		'url' with a query string.
 		//		Otherwise, an XML document is loaded and list XML elements that
 		//		match to a query (set of element names and their text attribute
 		//		values that the items to contain).
 		//		A wildcard, "*" can be used to query values to match all
 		//		occurrences.
-		//		If '_rootItem' is specified, it is used to fetch items.
+		//		If 'rootItem' is specified, it is used to fetch items.
 		//	request:
 		//		A request object
 		//	fetchHandler:
@@ -353,7 +366,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 			errorHandler(new Error("No URL specified."));
 			return;
 		}
-		var localRequest = (!this._sendQuery ? request : null); // use request for _getItems()
+		var localRequest = (!this.sendQuery ? request : null); // use request for _getItems()
 
 		var self = this;
 		var getArgs = {
@@ -383,23 +396,23 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	description:
 		//		This default implementation generates a query string in the form of
 		//		"?name1=value1&name2=value2..." off properties of 'query' object
-		//		specified in 'request' and appends it to '_url', if '_sendQuery'
+		//		specified in 'request' and appends it to 'url', if 'sendQuery'
 		//		is set to false.
-		//		Otherwise, '_url' is returned as is.
+		//		Otherwise, 'url' is returned as is.
 		//		Sub-classes may override this method for the custom URL generation.
 		//	request:
 		//		A request object
 		//	returns:
 		//		A fetch URL
-		if(!this._sendQuery){
-			return this._url;
+		if(!this.sendQuery){
+			return this.url;
 		}
 		var query = request.query;
 		if(!query){
-			return this._url;
+			return this.url;
 		}
 		if(dojo.isString(query)){
-			return this._url + query;
+			return this.url + query;
 		}
 		var queryString = "";
 		for(var name in query){
@@ -412,10 +425,10 @@ dojo.declare("dojox.data.XmlStore", null, {
 			}
 		}
 		if(!queryString){
-			return this._url;
+			return this.url;
 		}
 		//Check to see if the URL already has query params or not.
-		var fullUrl = this._url;
+		var fullUrl = this.url;
 		if(fullUrl.indexOf("?") < 0){
 			fullUrl += "?";
 		}else{
@@ -446,8 +459,11 @@ dojo.declare("dojox.data.XmlStore", null, {
 		}
 		var items = [];
 		var nodes = null;
-		if(this._rootItem){
-			nodes = document.getElementsByTagName(this._rootItem);
+
+		console.log("Looking up root item: " + this.rootItem);
+		if(this.rootItem !== ""){
+			
+			nodes = document.getElementsByTagName(this.rootItem);
 		}
 		else{
 			nodes = document.documentElement.childNodes;
@@ -533,8 +549,8 @@ dojo.declare("dojox.data.XmlStore", null, {
 		keywordArgs = (keywordArgs || {});
 		var tagName = keywordArgs.tagName;
 		if(!tagName){
-			tagName = this._rootItem;
-			if(!tagName){
+			tagName = this.rootItem;
+			if(tagName === ""){
 				return null;
 			}
 		}
@@ -795,7 +811,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Save new and/or modified items (XML elements)
 		// 	description:
-		//		'_url' is used to save XML documents for new, modified and/or
+		//		'url' is used to save XML documents for new, modified and/or
 		//		deleted XML elements.
 		// 	keywordArgs:
 		//		An object for callbacks
@@ -911,33 +927,33 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	summary:
 		//		Generate a URL for post
 		//	description:
-		//		This default implementation just returns '_url'.
+		//		This default implementation just returns 'url'.
 		//		Sub-classes may override this method for the custom URL.
 		//	item:
 		//		An item to save
 		//	returns:
 		//		A post URL
-		return this._url; //string
+		return this.url; //string
 	},
 
 	_getPutUrl: function(item){
 		//	summary:
 		//		Generate a URL for put
 		//	description:
-		//		This default implementation just returns '_url'.
+		//		This default implementation just returns 'url'.
 		//		Sub-classes may override this method for the custom URL.
 		//	item:
 		//		An item to save
 		//	returns:
 		//		A put URL
-		return this._url; //string
+		return this.url; //string
 	},
 
 	_getDeleteUrl: function(item){
 		//	summary:
 		//		Generate a URL for delete
 		// 	description:
-		//		This default implementation returns '_url' with '_keyAttribute'
+		//		This default implementation returns 'url' with 'keyAttribute'
 		//		as a query string.
 		//		Sub-classes may override this method for the custom URL based on
 		//		changes (new, deleted, or modified).
@@ -945,14 +961,14 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		An item to delete
 		// 	returns:
 		//		A delete URL
-		if (!this._url) {
-			return this._url; //string
+		if (!this.url !== "") {
+			return this.url; //string
 		}
-		var url = this._url;
-		if (item && this._keyAttribute) {
-			var value = this.getValue(item, this._keyAttribute);
+		var url = this.url;
+		if (item && this.keyAttribute !== "") {
+			var value = this.getValue(item, this.keyAttribute);
 			if (value) {
-				url = url + '?' + this._keyAttribute + '=' + value;
+				url = url + '?' + this.keyAttribute + '=' + value;
 			}
 		}
 		return url;	//string
