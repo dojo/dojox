@@ -1,9 +1,12 @@
 dojo.provide("dojox.highlight.languages.javascript");
 
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	javascript : {
+dojo.require("dojox.highlight._base");
+
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.javascript = {
 		defaultMode: {
-			lexems: [UNDERSCORE_IDENT_RE],
+			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			contains: ['string', 'comment', 'number', 'regexp', 'function'],
 			keywords: {
 				'keyword': {
@@ -17,12 +20,12 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			}
 		},
 		modes: [
-			C_LINE_COMMENT_MODE,
-			C_BLOCK_COMMENT_MODE,
-			C_NUMBER_MODE,
-			APOS_STRING_MODE,
-			QUOTE_STRING_MODE,
-			BACKSLASH_ESCAPE,
+			dhc.C_LINE_COMMENT_MODE,
+			dhc.C_BLOCK_COMMENT_MODE,
+			dhc.C_NUMBER_MODE,
+			dhc.APOS_STRING_MODE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE,
 			{
 				className: 'regexp',
 				begin: '/.*?[^\\\\/]/[gim]*', end: '^'
@@ -30,13 +33,13 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			{
 				className: 'function',
 				begin: 'function\\b', end: '{',
-				lexems: [UNDERSCORE_IDENT_RE],
+				lexems: [dhc.UNDERSCORE_IDENT_RE],
 				keywords: {'function': 1},
 				contains: ['title', 'params']
 			},
 			{
 				className: 'title',
-				begin: UNDERSCORE_IDENT_RE, end: '^'
+				begin: dhc.UNDERSCORE_IDENT_RE, end: '^'
 			},
 			{
 				className: 'params',
@@ -44,5 +47,5 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 				contains: ['string', 'comment']
 			}
 		]
-	}
-});
+	};
+})();

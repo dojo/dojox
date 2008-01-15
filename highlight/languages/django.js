@@ -1,30 +1,34 @@
 dojo.provide("dojox.highlight.languages.django"); 
 
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: django higlight definitions     
-	django : {
+dojo.require("dojox.highlight._base");
+dojo.require("dojox.highlight.languages.xml");
+dojo.require("dojox.highlight.languages.html");
+
+(function(){ 
+	var dh = dojox.highlight, dhc = dh.constants, dhl = dh.languages, x = dhl.xml, h = dhl.html;
+	dhl.django = {
 		defaultMode: {
 			contains: ['tag', 'comment', 'doctype', 'template_comment', 'template_tag', 'variable']
 		},
 		case_insensitive: true,
 		modes: [
-			XML_COMMENT,
-			HTML_DOCTYPE,
+			x.XML_COMMENT,
+			h.HTML_DOCTYPE,
 			{
 				className: 'tag',
-				lexems: [IDENT_RE],
-				keywords: HTML_TAGS,
+				lexems: [dhc.IDENT_RE],
+				keywords: h.HTML_TAGS,
 				begin: '<[A-Za-z/]', end: '>',
 				contains: ['attribute', 'template_comment', 'template_tag', 'variable']
 			},
-			XML_ATTR,
-			HTML_ATTR,
+			x.XML_ATTR,
+			h.HTML_ATTR,
 			{
 				className: 'value',
 				begin: '"', end: '"',
 				contains: ['template_comment', 'template_tag', 'variable']
 			},
-			HTML_VALUE,
+			h.HTML_VALUE,
 			{
 				className: 'template_comment',
 				begin: '\\{\\%\\s*comment\\s*\\%\\}', 
@@ -37,7 +41,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			{
 				className: 'template_tag',
 				begin: '\\{\\%', end: '\\%\\}',
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				keywords: {
 					'comment': 1, 'endcomment': 1, 'load': 1,
 					'templatetag': 1, 'ifchanged': 1, 'endifchanged': 1,
@@ -60,7 +64,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			{
 				className: 'filter',
 				begin: '\\|[A-Za-z]+\\:?', end: '^', excludeEnd: true,
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				keywords: {
 					'truncatewords': 1, 'removetags': 1, 'linebreaksbr': 1,
 					'yesno': 1, 'get_digit': 1, 'timesince': 1, 'random': 1,
@@ -85,5 +89,5 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 				begin: '"', end: '"'
 			}
 		]
-	}
-});
+	};
+})();

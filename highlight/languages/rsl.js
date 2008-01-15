@@ -1,13 +1,17 @@
 dojo.provide("dojox.highlight.languages.rsl"); 
+
+dojo.require("dojox.highlight._base");
+
 //
 // RenderMan Shading Language (c) Konstantin Evdokimenko <qewerty@gmail.com>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.highlight.LANGUAGES, {
-	// summary: RenderMan Shading Langauge highlight definitions
-	rsl : {
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.rsl = {
+		// summary: RenderMan Shading Langauge highlight definitions
 		defaultMode: {
-			lexems: [UNDERSCORE_IDENT_RE],
+			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			illegal: '</',
 			contains: [
 				'comment', 'string', 'number', 'preprocessor', 'shader',
@@ -32,7 +36,7 @@ dojo.mixin(dojox.highlight.LANGUAGES, {
 				className: 'shader',
 				begin: 'surface |displacement |light |volume |imager ', 
 				end: '\\(',
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				keywords: {
 					'surface': 1, 'displacement': 1, 'light': 1, 'volume': 1,
 					'imager': 1
@@ -41,19 +45,19 @@ dojo.mixin(dojox.highlight.LANGUAGES, {
 			{
 				className: 'shading',
 				begin: 'illuminate|illuminance|gather', end: '\\(',
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				keywords: {'illuminate': 1, 'illuminance': 1, 'gather': 1}
 			},
-			C_LINE_COMMENT_MODE,
-			C_BLOCK_COMMENT_MODE,
-			C_NUMBER_MODE,
-			QUOTE_STRING_MODE,
-			APOS_STRING_MODE,
-			BACKSLASH_ESCAPE,
+			dhc.C_LINE_COMMENT_MODE,
+			dhc.C_BLOCK_COMMENT_MODE,
+			dhc.C_NUMBER_MODE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.APOS_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE,
 			{
 				className: 'preprocessor',
 				begin: '#', end: '$'
 			}
 		]
-	}
-});
+	};
+})();

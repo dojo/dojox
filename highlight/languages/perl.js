@@ -1,10 +1,12 @@
 dojo.provide("dojox.highlight.languages.perl");
+
+dojo.require("dojox.highlight._base");
+
 //
 // Perl Highlight definitions (с) Peter Leonov <gojpeg@gmail.com>
 // released under BSD, contributed under CLA to the Dojo Foundation
 //
 (function(){
-
     var PERL_NUMBER_RE = '(\\b0[0-7]+)|(\\b0x[0-9a-fA-F]+)|(\\b[1-9]\\d*(\\.\\d+)?)|0\\b';
     var PERL_KEYWORDS = {
 		'getpwent': 1, 'getservent': 1, 'quotemeta': 1, 'msgrcv': 1, 
@@ -54,112 +56,111 @@ dojo.provide("dojox.highlight.languages.perl");
 		1, 'ne': 1, 'm': 1
 	};
 
-	dojo.mixin(dojox.highlight.LANGUAGES,{
-		perl : {
-			defaultMode: {
-				lexems: [IDENT_RE],
-				contains: ['comment', 'string', 'number', 'regexp', 'sub', 'variable', 'operator', 'pod', 'identifier'],
-				keywords: PERL_KEYWORDS
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.perl = {
+		defaultMode: {
+			lexems: [dhc.IDENT_RE],
+			contains: ['comment', 'string', 'number', 'regexp', 'sub', 'variable', 'operator', 'pod', 'identifier'],
+			keywords: PERL_KEYWORDS
+		},
+		modes: [
+			// variables
+			{
+				className: 'variable',
+				begin: '\\$\\d', end: '^',
+				relevance: 5
 			},
-			modes: [
-				// variables
-				{
-					className: 'variable',
-					begin: '\\$\\d', end: '^',
-					relevance: 5
-				},
-				{
-					className: 'variable',
-					begin: '[\\$\\%\\@\\*](\\^\\w\\b|#\\w+|[^\\s\\w{]|{\\w+}|\\w+)', end: '^'
-				},
+			{
+				className: 'variable',
+				begin: '[\\$\\%\\@\\*](\\^\\w\\b|#\\w+|[^\\s\\w{]|{\\w+}|\\w+)', end: '^'
+			},
 
-				// numbers and strings
-				{
-					className: 'number',
-					begin: PERL_NUMBER_RE, end: '^',
-					relevance: 0
-				},
-				{
-					className: 'string',
-					begin: 'q[qwxr]?\\(', end: '[^\\\\]\\)',
-					relevance: 10
-				},
-				{
-					className: 'string',
-					begin: 'qw\\s+q', end: 'q',
-					relevance: 10
-				},
-				APOS_STRING_MODE,
-				QUOTE_STRING_MODE,
-				BACKSLASH_ESCAPE,
-				{
-					className: 'string',
-					begin: '`', end: '`',
-					contains: ['escape']
-				},
+			// numbers and strings
+			{
+				className: 'number',
+				begin: PERL_NUMBER_RE, end: '^',
+				relevance: 0
+			},
+			{
+				className: 'string',
+				begin: 'q[qwxr]?\\(', end: '[^\\\\]\\)',
+				relevance: 10
+			},
+			{
+				className: 'string',
+				begin: 'qw\\s+q', end: 'q',
+				relevance: 10
+			},
+			dhc.APOS_STRING_MODE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE,
+			{
+				className: 'string',
+				begin: '`', end: '`',
+				contains: ['escape']
+			},
 
-				// regexps
-				{
-					className: 'regexp',
-					begin: '(s|tr|y)(/.*?[^\\\\]/|//)(.*?[^\\\\]/|/)[a-z]*', end: '^',
-					relevance: 10
-				},
-				{
-					className: 'regexp',
-					begin: '(m|qr)?//[cgimosxe]*', end: '^',
-					relevance: 0 // allows empty "//" which is a common comment delimiter in other languages
-				},
-				{
-					className: 'regexp',
-					begin: '(m|qr)?/.*?[^\\\\/]/[cgimosxe]*', end: '^'
-				},
+			// regexps
+			{
+				className: 'regexp',
+				begin: '(s|tr|y)(/.*?[^\\\\]/|//)(.*?[^\\\\]/|/)[a-z]*', end: '^',
+				relevance: 10
+			},
+			{
+				className: 'regexp',
+				begin: '(m|qr)?//[cgimosxe]*', end: '^',
+				relevance: 0 // allows empty "//" which is a common comment delimiter in other languages
+			},
+			{
+				className: 'regexp',
+				begin: '(m|qr)?/.*?[^\\\\/]/[cgimosxe]*', end: '^'
+			},
 
-				// bareword context
-				{
-					className: 'string',
-					begin: '{\\w+}', end: '^',
-					relevance: 0
-				},
-				{
-					className: 'string',
-					begin: '\-?\\w+\\s*\\=\\>', end: '^',
-					relevance: 5
-				},
+			// bareword context
+			{
+				className: 'string',
+				begin: '{\\w+}', end: '^',
+				relevance: 0
+			},
+			{
+				className: 'string',
+				begin: '\-?\\w+\\s*\\=\\>', end: '^',
+				relevance: 5
+			},
 
-				// subroutines
-				{
-					className: 'sub',
-					begin: '\\bsub\\b', end: '(\\s*\\(.*?\\))?[;{]',
-					lexems: [IDENT_RE],
-					keywords: {'sub':1},
-					contains: ['identifier'],
-					relevance: 10
-				},
+			// subroutines
+			{
+				className: 'sub',
+				begin: '\\bsub\\b', end: '(\\s*\\(.*?\\))?[;{]',
+				lexems: [dhc.IDENT_RE],
+				keywords: {'sub':1},
+				contains: ['identifier'],
+				relevance: 10
+			},
 
-				// operators
-				{
-					className: 'operator',
-					begin: '-\\w\\b', end: '^'
-				},
+			// operators
+			{
+				className: 'operator',
+				begin: '-\\w\\b', end: '^'
+			},
 
-				// comments
-				HASH_COMMENT_MODE,
+			// comments
+			dhc.HASH_COMMENT_MODE,
 
-				// pod
-				{
-					className: 'pod',
-					begin: '\\=\\w', end: '\\=cut'
-				},
+			// pod
+			{
+				className: 'pod',
+				begin: '\\=\\w', end: '\\=cut'
+			},
 
-				// identifiers
-				{
-					className: 'identifier',
-					begin: '\\b[a-zA-Z]\\w*\\b', end: '^',
-					lexems: [IDENT_RE],
-					keywords: PERL_KEYWORDS,
-					relevance: 0
-				}
-			]
-		}
-	});
+			// identifiers
+			{
+				className: 'identifier',
+				begin: '\\b[a-zA-Z]\\w*\\b', end: '^',
+				lexems: [dhc.IDENT_RE],
+				keywords: PERL_KEYWORDS,
+				relevance: 0
+			}
+		]
+	};
 })();

@@ -1,7 +1,8 @@
 dojo.provide("dojox.highlight.languages.sql");
 
-(function(){
+dojo.require("dojox.highlight._base");
 
+(function(){
 	var SQL_KEYWORDS = {
 		'all': 1, 'partial': 1, 'global': 1, 'month': 1, 
 		'current_timestamp': 1, 'using': 1, 'go': 1, 'revoke': 1, 
@@ -46,52 +47,51 @@ dojo.provide("dojox.highlight.languages.sql");
 		'having': 1, 'left': 1
 	};
 
-	dojo.mixin(dojox.highlight.LANGUAGES,{
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.sql = {
 		// summary: SQL highlight definitions
-		sql : {
-			case_insensitive: true,
-				defaultMode: {
-					lexems: [IDENT_RE],
-					contains: ['string', 'number', 'comment'],
-					keywords: {
-						'keyword': SQL_KEYWORDS,
-						'aggregate': {'count': 1, 'sum': 1, 'min': 1, 'max': 1, 'avg': 1}
-					}
+		case_insensitive: true,
+			defaultMode: {
+				lexems: [dhc.IDENT_RE],
+				contains: ['string', 'number', 'comment'],
+				keywords: {
+					'keyword': SQL_KEYWORDS,
+					'aggregate': {'count': 1, 'sum': 1, 'min': 1, 'max': 1, 'avg': 1}
+				}
+		},
+		modes: [
+			dhc.C_NUMBER_MODE,
+			dhc.C_BLOCK_COMMENT_MODE,
+			{
+				className: 'comment',
+				begin: '--', end: '$'
 			},
-			modes: [
-				C_NUMBER_MODE,
-				C_BLOCK_COMMENT_MODE,
-				{
-					className: 'comment',
-					begin: '--', end: '$'
-				},
-				{
-					className: 'string',
-					begin: '\'', end: '\'',
-					contains: ['escape', 'squote'],
-					relevance: 0
-				},
-				{
-					className: 'squote',
-					begin: '\'\'', end: '^'
-				},
-				{
-					className: 'string',
-					begin: '"', end: '"',
-					contains: [ 'escape', 'dquote'],
-					relevance: 0
-				},
-				{
-					className: 'dquote',
-					begin: '""', end: '^'
-				},
-				{
-					className: 'string',
-					begin: '`', end: '`',
-					contains: ['escape']
-				},
-				BACKSLASH_ESCAPE
-			]
-		} 
-	});
+			{
+				className: 'string',
+				begin: '\'', end: '\'',
+				contains: ['escape', 'squote'],
+				relevance: 0
+			},
+			{
+				className: 'squote',
+				begin: '\'\'', end: '^'
+			},
+			{
+				className: 'string',
+				begin: '"', end: '"',
+				contains: [ 'escape', 'dquote'],
+				relevance: 0
+			},
+			{
+				className: 'dquote',
+				begin: '""', end: '^'
+			},
+			{
+				className: 'string',
+				begin: '`', end: '`',
+				contains: ['escape']
+			},
+			dhc.BACKSLASH_ESCAPE
+		]
+	};
 })();

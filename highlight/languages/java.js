@@ -1,13 +1,18 @@
-dojo.provide("dojox.highlight.languages.java"); 
+dojo.provide("dojox.highlight.languages.java");
+
+dojo.require("dojox.highlight._base");
+
 //
 // Java definition (с) Vsevolod Solovyov <vsevolod.solovyov@gmail.com>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: Java highlight definitions
-	java : {
+
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.java = {
+		// summary: Java highlight definitions
 		defaultMode: {
-			lexems: [UNDERSCORE_IDENT_RE],
+			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			contains: ['comment', 'string', 'class', 'number', 'javadoc', 'annotation'],
 			keywords: {
 				'false': 1, 'synchronized': 1, 'int': 1, 'abstract': 1,
@@ -27,7 +32,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 		modes: [
 			{
 				className: 'class',
-				lexems: [UNDERSCORE_IDENT_RE],
+				lexems: [dhc.UNDERSCORE_IDENT_RE],
 				begin: '(class |interface )', end: '{', 
 				illegal: ':',
 				keywords: {'class': 1, 'interface': 1},
@@ -36,34 +41,34 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			{
 				className: 'inheritance',
 				begin: '(implements|extends)', end: '^',
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				keywords: {'extends': 1, 'implements': 1},
 				relevance: 10
 			},
 			{
 				className: 'title',
-				begin: UNDERSCORE_IDENT_RE, end: '^'
+				begin: dhc.UNDERSCORE_IDENT_RE, end: '^'
 			},
 			{
 				className: 'params',
 				begin: '\\(', end: '\\)',
 				contains: ['string', 'annotation']
 			},
-			C_NUMBER_MODE,
-			APOS_STRING_MODE,
-			QUOTE_STRING_MODE,
-			BACKSLASH_ESCAPE,
-			C_LINE_COMMENT_MODE,
+			dhc.C_NUMBER_MODE,
+			dhc.APOS_STRING_MODE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE,
+			dhc.C_LINE_COMMENT_MODE,
 			{
 				className: 'javadoc',
 				begin: '/\\*\\*', end: '\\*/',
 				relevance: 10
 			},
-			C_BLOCK_COMMENT_MODE,
+			dhc.C_BLOCK_COMMENT_MODE,
 			{
 				className: 'annotation',
 				begin: '@[A-Za-z]+', end: '^'
 			}
 		]
-	}
-});
+	};
+})();

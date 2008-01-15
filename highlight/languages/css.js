@@ -1,11 +1,15 @@
 dojo.provide("dojox.highlight.languages.css"); 
 
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	css : {
+dojo.require("dojox.highlight._base");
+dojo.require("dojox.highlight.languages.html");
+
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants, dhl = dh.languages;
+	dhl.css = {
 		defaultMode: {
 			contains: ['id', 'class', 'attr_selector', 'rules', 'comment'],
-			keywords: HTML_TAGS,
-			lexems: [IDENT_RE],
+			keywords: dhl.html.HTML_TAGS,
+			lexems: [dhc.IDENT_RE],
 			illegal: '='
 		},
 		case_insensitive: true,
@@ -74,7 +78,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 				},
 				contains: ['comment', 'value']
 			},
-			C_BLOCK_COMMENT_MODE,
+			dhc.C_BLOCK_COMMENT_MODE,
 			{
 				className: 'value',
 				begin: ':', 
@@ -84,5 +88,5 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 				excludeEnd: true
 			}
 		]
-	}
-});
+	};
+})();

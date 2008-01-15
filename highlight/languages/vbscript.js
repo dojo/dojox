@@ -1,13 +1,17 @@
 dojo.provide("dojox.highlight.languages.vbscript");
+
+dojo.require("dojox.highlight._base");
+
 //
 // VBScript definition (c) Nikita Ledyaev <lenikita@yandex.ru>
 // released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: VBScript highlight definitions
-	vbscript : {
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.vbscript = {
+		// summary: VBScript highlight definitions
 		defaultMode: {
-			lexems: [IDENT_RE],
+			lexems: [dhc.IDENT_RE],
 			contains: ['string', 'comment', 'number', 'built_in'],
 			keywords: {
 				'keyword': {
@@ -52,13 +56,13 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 		},
 		case_insensitive: true,
 		modes: [
-			QUOTE_STRING_MODE,
-			BACKSLASH_ESCAPE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE,
 			{
 				className: 'comment',
 				begin: '\'', end: '$'
 			},
-			C_NUMBER_MODE
+			dhc.C_NUMBER_MODE
 		]
-	}
-});
+	};
+})();

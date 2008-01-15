@@ -1,25 +1,26 @@
 dojo.provide("dojox.highlight.languages.xml");
 
-// FIXME: these are reused  [stray globals]
-XML_COMMENT = {
-	className: 'comment',
-	begin: '<!--', end: '-->'
-};
+dojo.require("dojox.highlight._base");
 
-XML_ATTR = {
-	className: 'attribute',
-	begin: ' [a-zA-Z-]+=', end: '^',
-	contains: ['value']
-};
-
-XML_VALUE = {
-	className: 'value',
-	begin: '"', end: '"'
-};
-
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: XML highlight definitions
-	xml: {
+(function(){
+	var XML_COMMENT = {
+		className: 'comment',
+		begin: '<!--', end: '-->'
+	};
+	
+	var XML_ATTR = {
+		className: 'attribute',
+		begin: ' [a-zA-Z-]+=', end: '^',
+		contains: ['value']
+	};
+	
+	var XML_VALUE = {
+		className: 'value',
+		begin: '"', end: '"'
+	};
+	
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.xml = {
 		defaultMode: {
 			contains: ['pi', 'comment', 'cdata', 'tag']
 		},
@@ -55,9 +56,10 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			},
 			XML_ATTR,
 			XML_VALUE
-		]
-	}
-});
-
-
-
+		],
+		// exporting constants
+		XML_COMMENT: XML_COMMENT,
+		XML_ATTR: XML_ATTR,
+		XML_VALUE: XML_VALUE
+	};
+})();

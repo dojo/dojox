@@ -1,13 +1,17 @@
 dojo.provide("dojox.highlight.languages.rib"); 
+
+dojo.require("dojox.highlight._base");
+
 //
 // RenderMan Interface Bytestream (c) Konstantin Evdokimenko <qewerty@gmail.com>
 // Released BSD, Contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: RenderMan Inferface Bytestream highlight definitions
-	rib  : {
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.rib = {
+		// summary: RenderMan Inferface Bytestream highlight definitions
 		defaultMode: {
-			lexems: [UNDERSCORE_IDENT_RE],
+			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			illegal: '</',
 			contains: ['comment', 'string', 'number'],
 			keywords: {
@@ -26,11 +30,11 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			}
 		},
 		modes: [
-			HASH_COMMENT_MODE,
-			C_NUMBER_MODE,
-			APOS_STRING_MODE,
-			QUOTE_STRING_MODE,
-			BACKSLASH_ESCAPE
+			dhc.HASH_COMMENT_MODE,
+			dhc.C_NUMBER_MODE,
+			dhc.APOS_STRING_MODE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE
 		]
-	}
-});//rib
+	};
+})();

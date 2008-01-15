@@ -1,13 +1,17 @@
-dojo.provide("dojox.highlight.languages.ruby"); 
+dojo.provide("dojox.highlight.languages.ruby");
+
+dojo.require("dojox.highlight._base");
+
 //
 // Ruby definition (c) Anton Kovalyov <anton@kovalyov.net>
 // Released BSD, contributed under CLA to the Dojo Foundation
 //
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: Ruby highlight definitions
-	ruby : {
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.ruby = {
+		// summary: Ruby highlight definitions
 		defaultMode: {
-			lexems: [UNDERSCORE_IDENT_RE],
+			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			contains: ['comment', 'string', 'class', 'function', 'symbol', 'instancevar'],
 			keywords: {
 				'and': 1, 'false': 1, 'then': 1, 'defined': 1, 'module': 1, 
@@ -20,7 +24,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			}
 		},
 		modes: [
-			HASH_COMMENT_MODE,
+			dhc.HASH_COMMENT_MODE,
 			{
 				className: 'comment',
 				begin: '^\\=begin', end: '^\\=end',
@@ -46,7 +50,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			},
 			{
 				className: 'function',
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				begin: '\\bdef ', end: '$',
 				illegal: '[{\\:]',
 				keywords: {'def': 1},
@@ -55,7 +59,7 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			},    
 			{ 
 				className: 'class',
-				lexems: [IDENT_RE],
+				lexems: [dhc.IDENT_RE],
 				begin: '\\bclass ', end: '$',
 				illegal: '[{\\:]',
 				contains: ['title', 'inheritance', 'comment'],      
@@ -63,11 +67,11 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			},
 			{
 				className: 'title',
-				begin: 'self.' + IDENT_RE, end: '^'
+				begin: 'self.' + dhc.IDENT_RE, end: '^'
 			},
 			{
 				className: 'title',
-				begin: IDENT_RE, end: '^'
+				begin: dhc.IDENT_RE, end: '^'
 			},
 			{
 				className: 'inheritance',
@@ -76,16 +80,16 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			},
 			{
 				className: 'parent',
-				begin: '(' + IDENT_RE + '::)?' + IDENT_RE, end: '^'
+				begin: '(' + dhc.IDENT_RE + '::)?' + dhc.IDENT_RE, end: '^'
 			},
 			{
 				className: 'symbol',
-				begin: ':' + UNDERSCORE_IDENT_RE, end: '^'
+				begin: ':' + dhc.UNDERSCORE_IDENT_RE, end: '^'
 			},
 			{
 				className: 'instancevar',
-				begin: '\\@' + UNDERSCORE_IDENT_RE, end: '^'
+				begin: '\\@' + dhc.UNDERSCORE_IDENT_RE, end: '^'
 			}
 		]
-	}
-});
+	};
+})();

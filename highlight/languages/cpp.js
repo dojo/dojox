@@ -1,10 +1,13 @@
 dojo.provide("dojox.highlight.languages.cpp"); 
 
-dojo.mixin(dojox.highlight.LANGUAGES,{
-	// summary: C++ highlight definitions
-	cpp: {
+dojo.require("dojox.highlight._base");
+
+(function(){
+	var dh = dojox.highlight, dhc = dh.constants;
+	dh.languages.cpp = {
+		// summary: C++ highlight definitions
 		defaultMode: {
-			lexems: [ UNDERSCORE_IDENT_RE ],
+			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			illegal: '</',
 			contains: ['comment', 'string', 'number', 'preprocessor'],
 			keywords: {
@@ -26,11 +29,11 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 			}
 		},
 		modes: [
-			C_LINE_COMMENT_MODE,
-			C_BLOCK_COMMENT_MODE,
-			C_NUMBER_MODE,
-			QUOTE_STRING_MODE,
-			BACKSLASH_ESCAPE,
+			dhc.C_LINE_COMMENT_MODE,
+			dhc.C_BLOCK_COMMENT_MODE,
+			dhc.C_NUMBER_MODE,
+			dhc.QUOTE_STRING_MODE,
+			dhc.BACKSLASH_ESCAPE,
 			{
 				className: 'string',
 				begin: '\'', 
@@ -42,5 +45,5 @@ dojo.mixin(dojox.highlight.LANGUAGES,{
 				begin: '#', end: '$'
 			}
 		]
-	}
-});
+	};
+})();

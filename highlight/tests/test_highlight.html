@@ -29,7 +29,9 @@
 	</style>
 
 	<script type="text/javascript" djConfig="parseOnLoad:true, isDebug:true" src="../../../dojo/dojo.js"></script>
-	<script type="text/javascript" src="../highlight.js"></script>
+	<script type="text/javascript" src="../_base.js"></script>
+	<script type="text/javascript" src="../languages/cpp.js"></script>
+	<script type="text/javascript" src="../languages/java.js"></script>
 
 	<script type="text/javascript">
 		// initHighlightOnLoad is deprecated.
@@ -54,13 +56,17 @@
 
 		var lazyCode = function(){
 			
+			dojo.query("code").forEach(dojox.highlight.init);
+			
 			dojo.xhrGet({
 				url: "../../../dojo/_base.js",
 				load: function(data){
-					var n = dojo.byId("foobar");
-					n.innerHTML = data.replace(/\</gi,"&lt;");
-					dojo.addClass(n,"javascript"); 
-					dojox.highlight.init(n);
+					var n = dojo.byId("foobar"),
+						c = document.createElement('div'),
+						e = n.parentNode.parentNode;
+					c.innerHTML = '<pre><code class="javascript">' + data.replace(/\</gi,"&lt;") + '</code></pre>';
+					e.replaceChild(c.firstChild, n.parentNode);
+					dojo.query("pre > code", e).forEach(dojox.highlight.init);
 				}
 			});
 		};	
@@ -72,11 +78,11 @@
 
 <h1 class="testTitle">dojox.highlight</h1>
 
-<p>client-side syntax highlighing for a number of languages.</p>
+<p>client-side syntax highlighting for a number of languages.</p>
 
 <h2>Examples:</h2>
 
-<p>Some Python code:
+<p>Some Python code:</p>
 
 <pre><code>@requires_authorization
 def somefunc(param1, param2):
@@ -89,7 +95,7 @@ def somefunc(param1, param2):
 class SomeClass:<br>    pass
 </code></pre>
 
-<p>Short sample of Ruby:
+<p>Short sample of Ruby:</p>
 
 <pre><code># Ruby support for highlight.js
   
@@ -111,7 +117,7 @@ class CategoriesController &lt; App::ApplicationController
 end
 </code></pre>
 
-<p>A bit of Perl:
+<p>A bit of Perl:</p>
 
 <pre><code># loads object
 sub load
@@ -156,7 +162,7 @@ sub load
 }
 </code></pre>
 
-<p>A chunk of PHP:
+<p>A chunk of PHP:</p>
 
 <pre><code>require_once 'Zend.php';
 require_once 'Zend/Uri/Exception.php';
@@ -238,7 +244,7 @@ abstract class Zend_Uri
 }
 </code></pre>
 
-<p>A custom XML document:
+<p>A custom XML document:</p>
 
 <pre><code>&lt;?xml version="1.0"?&gt;
 &lt;response value="ok"&gt;
@@ -250,7 +256,7 @@ abstract class Zend_Uri
 &lt;/response&gt;
 </code></pre>
 
-<p>Some HTML code:
+<p>Some HTML code:</p>
 
 <pre><code>&lt;head&gt;
   &lt;title&gt;Title&lt;/title&gt;
@@ -263,7 +269,7 @@ abstract class Zend_Uri
 &lt;/body&gt;
 </code></pre>
 
-<p>HTML with Django templates:
+<p>HTML with Django templates:</p>
 
 <pre><code>{% if articles|length %}
 {% for article in articles %}
@@ -283,7 +289,7 @@ multiline.
 {% endcomment %}
 </code></pre>
 
-<p>Some CSS code:
+<p>Some CSS code:</p>
 
 <pre><code>body, 
 html {
@@ -300,7 +306,7 @@ p[lang=ru] {
 }
 </pre></code>
 
-<p>Javascript here too (right from the source, mind you): 
+<p>Javascript here too (right from the source, mind you):</p>
 
 <pre><code>function initHighlight(block) {
   if (block.className.search(/\bno\-highlight\b/) != -1)
@@ -321,7 +327,7 @@ p[lang=ru] {
   highlightAuto(block);
 }//initHighlight</code></pre>
 
-<p>VBScript
+<p>VBScript</p>
 
 <pre><code>' creating configuration storage and initializing with default values
 Set cfg = CreateObject("Scripting.Dictionary")
@@ -362,7 +368,7 @@ for i = 0 to ubound(ini_strings)
     end if
 next</code></pre>
 
-<P>Delphi code
+<p>Delphi code</p>
 
 <pre><code>TList=Class(TObject) 
 Private
@@ -396,7 +402,7 @@ Begin
 End;{CopyFile}
 </code></pre>
 
-<p>From Java world:
+<p>From Java world:</p>
 
 <pre><code>package l2f.gameserver.model;
 
@@ -465,7 +471,7 @@ public abstract class L2Character extends L2Object
 }
 </code></pre>
 
-<p>C++:
+<p>C++:</p>
 
 <pre><code>#include &lt;iostream&gt;
 
@@ -533,7 +539,7 @@ WorldEnd
 FrameEnd
 </code></pre>
 
-<p>SQL:
+<p>SQL:</p>
 
 <pre><code>BEGIN;
 CREATE TABLE "cicero_topic" (
@@ -560,7 +566,7 @@ select count(*) from cicero_forum;
 COMMIT;
 </code></pre>
 
-<p>Good old classic SmallTalk:
+<p>Good old classic SmallTalk:</p>
 
 <pre><code>Object>>method: num
     "comment 123"
@@ -604,7 +610,7 @@ heapExample
     Transcript cr; show: 'Time for SortedCollection: ' , time printString , ' msecs'
 </code></pre>
 
-<p>Axapta:
+<p>Axapta:</p>
 
 <pre><code>class ExchRateLoadBatch extends RunBaseBatch
 {
@@ -643,7 +649,7 @@ public boolean unpack(container packedClass)
 }
 </code></pre>
 
-<p>And this is a russian enterpise system "1С":
+<p>And this is the russian enterpise system "1С":</p>
 
 <pre><code class="1c">
 #Если Клиент Тогда
@@ -671,20 +677,20 @@ public boolean unpack(container packedClass)
 
 <hr>
 
-<p>Explicit Python highlight:
+<p>Explicit Python highlight:</p>
 
 <pre><code class="python">for x in [1, 2, 3]:
   count(x)
 </code></pre>
 
-<p>Disabled highlighting:
+<p>Disabled highlighting:</p>
 
 <pre><code class="no-highlight">&lt;div id="contents"&gt;
   &lt;p&gt;Hello, World!
 &lt;/div&gt;
 </code></pre>
 
-<p>Normal dojo-looking code
+<p>Normal dojo-looking code</p>
 
 <pre><code>
 dojo.provide("some.object");
@@ -713,6 +719,12 @@ dojo.addOnLoad(function(){
 });
 </code></pre>
 
-<p>Lazy, xhr'd code:
+<p>Lazy, xhr'd code:</p>
 
 <pre><code id="foobar"></code></pre>
+
+<hr>
+
+<p>Text with inlined JavaScript code: <code class="javascript">dojo.forEach(a, function(x){ console.log(x); });</code> &mdash; that was the inlined sample.</p>
+
+</body><html>
