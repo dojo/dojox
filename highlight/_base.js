@@ -225,10 +225,17 @@ dojo.provide("dojox.highlight._base");
 			value = value.substr(index);
 			var match = mode.terminatorsRe.exec(value);
 			if(!match){
-				return [value, "", true];
+				return {
+					buffer: value,
+					lexeme: "",
+					end:    true
+				};
 			}
-			return [match.index ? value.substr(0, match.index) : "", match[0], false];
-			// FIXME: {buffer, lexeme, end}
+			return {
+				buffer: match.index ? value.substr(0, match.index) : "",
+				lexeme: match[0],
+				end:    false
+			};
 		},
 	
 		keywordMatch: function(mode, match){
@@ -326,9 +333,9 @@ dojo.provide("dojox.highlight._base");
 			this.lang.defaultMode.buffer = '';
 			do{
 				var modeInfo = this.eatModeChunk(value, index);
-				this.processModeInfo(modeInfo[0], modeInfo[1], modeInfo[2]);
-				index += modeInfo[0].length + modeInfo[1].length;
-			}while(!modeInfo[2]);
+				this.processModeInfo(modeInfo.buffer, modeInfo.lexeme, modeInfo.end);
+				index += modeInfo.buffer.length + modeInfo.lexeme.length;
+			}while(!modeInfo.end);
 			if(this.modes.length > 1){
 				throw 'Illegal';
 			}
@@ -396,21 +403,5 @@ dojo.provide("dojox.highlight._base");
 	// pseudo object for markup creation
 	dh.Code = function(params, node){
 		dh.init(node);
-		return {};
 	};
 })();
-
-/*
-if(djConfig && djConfig.parseOnLoad){
-	// summary:
-	//		deprecate initHighlightingOnLoad, and parse if parseOnLoad = true
-	//		this is our own mini-parser extension? FIXME: use dojoType="" and
-	//		declared classes? or just a function to wrap that. a single public
-	//		api: dojox.highlight.init(node) or a string even?
-
-	// FIXME: this code _needs_ the <pre> node. deprecate w/ _Templated and make class? 
-	dojo.addOnLoad(function(){
-		dojo.query("pre > code").forEach(dojox.highlight.init);
-	});
-}
-*/
