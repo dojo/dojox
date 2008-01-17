@@ -84,7 +84,7 @@
 				},n);
 			}).connect("onclick",function(e){
 				// you can still access the onclick of the real node
-				alert(e.fisheyeTarget.innerHTML);
+				alert(e.target.innerHTML);
 			});
 
 			dojo.query("a").forEach(function(n){
