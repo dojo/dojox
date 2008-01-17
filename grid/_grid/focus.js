@@ -41,11 +41,13 @@ dojo.declare("dojox.grid.focus", null, {
 		var n = this.cell && this.cell.getNode(this.rowIndex);
 		if(n){
 			dojo.toggleClass(n, this.focusClass, inBork);
-			this.scrollIntoView();
-			try{
-				if(!this.grid.edit.isEditing())
-					dojox.grid.fire(n, "focus");
-			}catch(e){}
+			if (inBork){
+				this.scrollIntoView();
+				try{
+					if(!this.grid.edit.isEditing())
+						dojox.grid.fire(n, "focus");
+				}catch(e){}
+			}
 		}
 	},
 	scrollIntoView: function() {
@@ -100,7 +102,7 @@ dojo.declare("dojox.grid.focus", null, {
 		//	grid row index
 		if(inCell && !this.isFocusCell(inCell, inRowIndex)){
 			this.tabbingOut = false;
-			this.focusGrid();
+			this.focusGridView();
 			this._focusifyCellNode(false);
 			this.cell = inCell;
 			this.rowIndex = inRowIndex;
@@ -181,8 +183,11 @@ dojo.declare("dojox.grid.focus", null, {
 		this.tabbingOut = true;
 		inFocusNode.focus();
 	},
-	focusGrid: function(){
+	focusGridView: function(){
 		dojox.grid.fire(this.focusView, "focus");
+	},
+	focusGrid: function(inSkipFocusCell){
+		this.focusGridView();
 		this._focusifyCellNode(true);
 	},
 	doFocus: function(e){
