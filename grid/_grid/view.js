@@ -32,7 +32,7 @@ dojo.declare('dojox.GridView',
 	},
 
 	postCreate: function(){
-		this.connect(this.scrollBoxNode,"onscroll","doscroll");
+		this.connect(this.scrollboxNode,"onscroll","doscroll");
 		dojox.grid.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu' ]);
 		dojox.grid.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
 		this.content = new dojox.grid.contentBuilder(this);
