@@ -126,10 +126,15 @@ dojo.declare("dojox.image._LightboxDialog",
 	// imgUrl: String
 	//		The src="" attrib of our imageNode (can be null at statup)
 	imgUrl: "",
+		
+	// errorMessage: String
+	// 		The text to display when an unreachable image is linked
+	errorMessage: "Image not found.",
 
 	// an array of objects, each object being a unique 'group'
 	_groups: { XnoGroupX: [] },
 	_imageReady: false,
+	_errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),
 	_blankImg: dojo.moduleUrl("dojo","resources/blank.gif"),
 
 	templatePath: dojo.moduleUrl("dojox.image","resources/Lightbox.html"),
@@ -140,7 +145,7 @@ dojo.declare("dojox.image._LightboxDialog",
 
 		// FIXME: these are supposed to be available in dijit.Dialog already,
 		// but aren't making it over.
-		dojo.connect(document.documentElement,"onkeypress",this,"_handleKey");
+		this.connect(document.documentElement,"onkeypress","_handleKey");
 		this.connect(window,"onresize","_position"); 
 
 		this.connect(this.nextNode, "onclick", "_nextImage");
@@ -191,6 +196,22 @@ dojo.declare("dojox.image._LightboxDialog",
 				this._imageReady = true;
 				this.resizeTo({ w: this.imgNode.width, h:this.imgNode.height, duration:this.duration });
 				dojo.disconnect(this._imgConnect);
+				if(this._imgError){ dojo.disconnect(this._imgError); }
+			});
+			this._imgError = dojo.connect(this.imgNode, "onerror", this, function(){
+				dojo.disconnect(this._imgError);
+				dojo.disconnect(this._imgConnect);
+				this.imgNode.src = this._errorImg;
+				this._imgError = dojo.connect(this.imgNode,"onload",this,function(){
+					dojo.disconnect(this._imgError);
+					this._imageReady = true;
+					this.textNode.innerHTML = this.errorMessage;
+					this.resizeTo({
+						w: this.imgNode.width,
+						h:this.imgNode.height,
+						duration:this.duration
+					});
+				});
 			});
 			// onload doesn't fire in IE if you connect before you set the src. 
 			// hack to re-set the src after onload connection made:
