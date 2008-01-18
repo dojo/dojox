@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>Dojo Lightbox Tests</title>
+	<title>dojox.image.Lightbox Tests | The Dojo Toolkit</title>
 	
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -15,7 +15,6 @@
 
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-	
 		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
 
@@ -36,6 +35,8 @@
 						href: flickrStore.getValue(item,"imageUrl")
 					};
 					// FIXME: make addImage more accessible, or do this internally
+					// _attachedDialog is dijit.byId("dojoxLightboxDialog"), and the
+					// is only one per page.
 					dijit.byId('fromStore')._attachedDialog.addImage(part,"flickrStore");
 				});
 				dojo.byId('flickrButton').disabled = false; 
@@ -65,30 +66,32 @@
 <body class="tundra">
 
 <div style="padding:20px;">
-	<h1 class="testTitle">Dojo-base Lightbox implementation</h1>
+	<h1 class="testTitle">a Dojo based Lightbox implementation:</h1>
 
 	<h3>Individual</h3>
 	<p>
-	<a href="images/imageVert.jpg" dojoType="dojox.image.Lightbox" title="More Guatemala...">tall</a>
-	<a href="images/imageHoriz.jpg" dojoType="dojox.image.Lightbox" title="Antigua, Guatemala">4:3 image</a>
+		<a href="images/imageVert.jpg" dojoType="dojox.image.Lightbox" title="More Guatemala...">tall</a>
+		<a href="images/imageHoriz.jpg" dojoType="dojox.image.Lightbox" title="Antigua, Guatemala">4:3 image</a>
+		<a href="images/broken.jpg" dojoType="dojox.image.Lightbox" title="broken href example">Broken link</a>
 	</p>
 
 	<h3>Grouped:</h3>
 	<p>
-	<a href="images/imageHoriz2.jpg" dojoType="dojox.image.Lightbox" group="group1" title="Amterdamn Train Depot">wide image</a>
-	<a href="images/square.jpg" dojoType="dojox.image.Lightbox" group="group1" title="1:1 aspect">square</a>
-	<a href="images/extraWide.jpg" dojoType="dojox.image.Lightbox" group="group1" title="Greeneville, TN">wide image</a>
+		<a href="images/imageHoriz2.jpg" dojoType="dojox.image.Lightbox" group="group1" title="Amterdamn Train Depot">wide image</a>
+		<a href="images/square.jpg" dojoType="dojox.image.Lightbox" group="group1" title="1:1 aspect">square</a>
+		<a href="images/extraWide.jpg" dojoType="dojox.image.Lightbox" group="group1" title="Greeneville, TN">wide image</a>
+		<a href="images/broken.jpg" dojoType="dojox.image.Lightbox" group="group1" title="broken href example">Broken link</a>
 	</p>	
 
 	<h3>Alternate Group:</h3>	
 	<p>
-	<a href="images/imageHoriz2.jpg" dojoType="dojox.image.Lightbox" group="group2" title="Amterdamn Train Depot">wide image</a>
-	<a href="images/square.jpg" dojoType="dojox.image.Lightbox" group="group2" title="1:1 aspect">square</a>
-	<a href="images/imageHoriz.jpg" dojoType="dojox.image.Lightbox" group="group2" title="Antigua, Guatemala">4:3 image</a>
-	<a href="images/imageVert.jpg" dojoType="dojox.image.Lightbox" group="group2" title="More Guatemala...">tall</a>
+		<a href="images/imageHoriz2.jpg" dojoType="dojox.image.Lightbox" group="group2" title="Amterdamn Train Depot">wide image</a>
+		<a href="images/square.jpg" dojoType="dojox.image.Lightbox" group="group2" title="1:1 aspect">square</a>
+		<a href="images/imageHoriz.jpg" dojoType="dojox.image.Lightbox" group="group2" title="Antigua, Guatemala">4:3 image</a>
+		<a href="images/imageVert.jpg" dojoType="dojox.image.Lightbox" group="group2" title="More Guatemala...">tall</a>
 	</p>
 
-	<h3>From dojox.data.FlickrStore (?)</h3>
+	<h3>From dojox.data.FlickrStore:</h3>
 
 	<div dojoType="dojox.data.FlickrStore" jsId="flickrStore" label="title"></div>
 	<div id="fromStore" dojoType="dojox.image.Lightbox" store="flickrStore" group="flickrStore"></div>
