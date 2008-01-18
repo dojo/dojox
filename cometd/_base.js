@@ -121,9 +121,10 @@ dojox.cometd = new function(){
 			}else{
 				props.ext = { "json-comment-filtered": true };
 			}
+			props.supportedConnectionTypes = dojo.map(this.connectionTypes.pairs, "return item[0]");
 		}
 
-		props=this._extendOut(props);
+		props = this._extendOut(props);
 
 		var bindArgs = {
 			url: this.url,
@@ -141,7 +142,7 @@ dojox.cometd = new function(){
 		if(bargs){
 			dojo.mixin(bindArgs, bargs);
 		}
-		this._props=props;
+		this._props = props;
 		for(var tname in this._subscriptions){
 			for(var sub in this._subscriptions[tname]){
 				if(this._subscriptions[tname][sub].topic){
@@ -151,17 +152,18 @@ dojox.cometd = new function(){
 		}
 		this._messageQ = [];
 		this._subscriptions = [];
-		this._initialized=true;
-		this.batch=0;
+		this._initialized = true;
+		this.batch = 0;
 		this.startBatch();
 		
 		var r;
 		// if xdomain, then we assume jsonp for handshake
 		if(this._isXD){
-			bindArgs.callbackParamName="jsonp";
-			r= dojo.io.script.get(bindArgs);
-		} else
+			bindArgs.callbackParamName = "jsonp";
+			r = dojo.io.script.get(bindArgs);
+		}else{
 			r = dojo.xhrPost(bindArgs);
+		}
 		dojo.publish("/cometd/meta", [{cometd:this,action:"handshake",successful:true,state:this.state()}]);
 		return r;
 	}
@@ -222,9 +224,10 @@ dojox.cometd = new function(){
 				}
 			}
 			
-			for (var i in subs){
-				if (subs[i].objOrFunc===objOrFunc&&(!subs[i].funcName&&!funcName||subs[i].funcName==funcName))
+			for(var i in subs){
+				if( subs[i].objOrFunc === objOrFunc && (!subs[i].funcName&&!funcName||subs[i].funcName==funcName) ){
 					return null;
+				}
 			}
 			
 			var topic = dojo.subscribe(tname, objOrFunc, funcName);
@@ -353,6 +356,8 @@ dojox.cometd = new function(){
 		//	summary:
 		//		Handle the handshake return from the server and initialize
 		//		connection if all is OK
+		console.debug("_finishInit():", data);
+		// data = data.length ? data[0] : data;
 		data = data[0];
 		this.handshakeReturn = data;
 		
@@ -398,7 +403,7 @@ dojox.cometd = new function(){
 				console.debug("cometd reconnect: none");
 			}else if(this._advice && this._advice["interval"] && this._advice.interval>0 ){
 				setTimeout(
-					dojo.hitch(this, function(){ this.init(this.url,this._props); }),
+					dojo.hitch(this, "init", this.url, this._props),
 					this._advice.interval
 				);
 			}else{
@@ -407,24 +412,22 @@ dojox.cometd = new function(){
 		}
 	}
 
+	// fixme: lots of repeated code...why?
+
 	this._extendIn = function(message){
 		// Handle extensions for inbound messages
-		var m=message;
 		dojo.forEach(dojox.cometd._extendInList, function(f){
-			var n=f(m);
-			if(n)m=n;
+			message = f(message)||message;
 		});
-		return m;
+		return message;
 	}
 
-	this._extendOut= function(message){
+	this._extendOut = function(message){
 		// Handle extensions for inbound messages
-		var m=message;
 		dojo.forEach(dojox.cometd._extendOutList, function(f){
-			var n=f(m);
-			if(n)m=n;
+			message = f(message)||message;
 		});
-		return m;
+		return message;
 	}
 
 
