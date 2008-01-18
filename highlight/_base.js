@@ -249,11 +249,11 @@ dojo.provide("dojox.highlight._base");
 		
 		buildLexemes: function(mode){
 			var lexemes = {};
-			for(var key in mode.lexems){
-				lexemes[mode.lexems[key]] = 1;
-			}
+			dojo.forEach(mode.lexems, function(lexeme){
+				lexemes[lexeme] = 1;
+			});
 			var t = [];
-			for(i in lexemes){ t.push(i); }
+			for(var i in lexemes){ t.push(i); }
 			mode.lexemsRe = this.langRe("(" + t.join("|") + ")", true);
 		},
 	
