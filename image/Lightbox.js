@@ -171,13 +171,11 @@ dojo.declare("dojox.image._LightboxDialog",
 		if((groupData.group && !(groupData == "XnoGroupX")) || this.inGroup){ 
 			if(!this.inGroup){ 
 				this.inGroup = this._groups[(groupData.group)];
-				var i = 0;
 				// determine where we were or are in the show 
-				dojo.forEach(this.inGroup,function(g){
-					if (g.href == groupData.href){
+				dojo.forEach(this.inGroup,function(g,i){
+					if(g.href == groupData.href){
 						this._positionIndex = i;
 					}
-					i++; 
 				},this);
 			}
 			if(!this._positionIndex){ this._positionIndex=0; this.imgNode.src = this.inGroup[this._positionIndex].href; }
