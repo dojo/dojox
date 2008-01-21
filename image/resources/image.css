@@ -62,30 +62,38 @@
 	cursor:pointer;
 }
 
-/* dojox.image.Lightbox:tundra */
+/* dojox.image.Lightbox:tundra:nihilo */
+
+.nihilo .LightboxClose,
 .tundra .LightboxClose {
 	background:url('images/close.png') no-repeat center center;
 }
+.nihilo .LightboxNext,
 .tundra .LightboxNext {
 	background:url('images/right.png') no-repeat center center;
 }
+.nihilo .LightboxPrev,
 .tundra .LightboxPrev {
 	background:url('images/left.png') no-repeat center center;
 }
 
 /* dojox.image.Lightbox:soria */
+.soria .LightboxClose,
 .soria .LightboxNext,
-.soria .LightboxPrev,
-.soria .LightboxClose {
-	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat center center;
-	background-position:-65px 0;
+.soria .LightboxPrev {
+	width:15px;
+	height:15px;
+	background:url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png') no-repeat center center;
+	background-position:-60px;
 }
 .soria .LightboxNext {
-	background-position:-48px 0;
+	background-position:-30px 0;
 }
 .soria .LightboxPrev {
-	background-position:-16px 0;
+	background-position:0 0;
 }
+
+
 
 /* dojox.image.SlideShow */
 
