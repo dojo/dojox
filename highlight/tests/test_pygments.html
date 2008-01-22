@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>dojox.highlight.pygments - syntax highlighting | The Dojo Toolkit</title>
+	<style type="text/css">
+		@import "../../../dijit/tests/css/dijitTests.css";
+
+		/* a sample set of definitions to use as a foundation to color your code */
+		@import "../resources/pygments/default.css";
+		
+		pre code {
+		  display: block;
+		}
+	</style>
+	<script type="text/javascript" djConfig="parseOnLoad: true, isDebug: true" src="../../../dojo/dojo.js"></script>
+	<script type="text/javascript" src="../_base.js"></script>
+	<script type="text/javascript" src="../languages/pygments/javascript.js"></script>
+	<script type="text/javascript" src="../languages/pygments/css.js"></script>
+	<script type="text/javascript">
+		dojo.require("dojox.highlight");
+		dojo.require("dojox.highlight.languages.pygments.javascript");
+		dojo.require("dojo.parser");
+	</script>
+</head>
+<body>
+<p>Javascript:</p>
+
+<pre><code dojoType="dojox.highlight.Code">function initHighlight(block) {
+  if (block.className.search(/\bno\-highlight\b/) != -1)
+    return false;
+  try {
+    blockText(block);
+  } catch (e) {
+    if (e == 'Complex markup')
+      return;
+  }//try
+  var classes = block.className.split(/\s+/);
+  for (var i = 0; i &lt; classes.length; i++) {
+    if (LANGUAGES[classes[i]]) {
+      highlightLanguage(block, classes[i]);
+      return;
+    }//if
+  }//for
+  highlightAuto(block);
+}//initHighlight</code></pre>
+
+<p>Some CSS code:</p>
+
+<pre><code dojoType="dojox.highlight.Code">body, 
+html {
+  font: Tahoma, Arial, sans-serif;
+}
+
+#content {
+  width: 100%; /* комментарий */
+  height: 100%
+}
+
+p[lang=ru] {
+  color: red;
+}
+</pre></code>
+
+</body>
+</html>
