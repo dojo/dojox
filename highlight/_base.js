@@ -91,7 +91,7 @@ dojo.provide("dojox.highlight._base");
     			if(kw instanceof Object){  // dojo.isObject?
 					mode.keywordGroups = mode.keywords;
 				}else{ 
-					mode.keywordGroups = { keyword: mode.keywords };
+					mode.keywordGroups = {keyword: mode.keywords};
 				}
 				break;
 			}
@@ -101,9 +101,7 @@ dojo.provide("dojox.highlight._base");
 	function buildKeywords(lang){
 		if(lang.defaultMode && lang.modes){
 			buildKeywordGroups(lang.defaultMode);
-			for(var key in lang.modes){
-				buildKeywordGroups(lang.modes[key]);
-			}
+			dojo.forEach(lang.modes, buildKeywordGroups);
 		}
 	}
 	
@@ -141,8 +139,7 @@ dojo.provide("dojox.highlight._base");
 
 	dojo.extend(Highlighter, {
 		buildRes: function(){
-			for(var key in this.lang.modes){
-				var mode = this.lang.modes[key];
+			dojo.forEach(this.lang.modes, function(mode){
 				if(mode.begin){
 					mode.beginRe = this.langRe('^' + mode.begin);
 				}
@@ -152,20 +149,19 @@ dojo.provide("dojox.highlight._base");
 				if(mode.illegal){
 					mode.illegalRe = this.langRe('^(?:' + mode.illegal + ')');
 				}
-			}
+			}, this);
 			this.lang.defaultMode.illegalRe = this.langRe('^(?:' + this.lang.defaultMode.illegal + ')');
 		},
 		
 		subMode: function(lexeme){
 			var classes = this.modes[this.modes.length - 1].contains;
 			if(classes){
-				for(var i in classes){
+				var modes = this.lang.modes;
+				for(var i = 0; i < classes.length; ++i){
 					var className = classes[i];
-					for(var key in this.lang.modes){
-						var mode = this.lang.modes[key];
-						if(mode.className == className && mode.beginRe.test(lexeme)){
-							return mode;
-						}
+					for(var j = 0; j < modes.length; ++j){
+						var mode = modes[j];
+						if(mode.className == className && mode.beginRe.test(lexeme)){ return mode; }
 					}
 				}
 			}
@@ -196,12 +192,11 @@ dojo.provide("dojox.highlight._base");
 			var mode = this.modes[this.modes.length - 1],
 				terminators = {};
 			if(mode.contains){
-				for(var key in this.lang.modes){
-					var lmode = this.lang.modes[key];
-					if(dojo.indexOf(mode.contains, lmode.className) >= 0 && !(lmode.begin in terminators)){
+				dojo.forEach(this.lang.modes, function(lmode){
+					if(dojo.indexOf(mode.contains, lmode.className) >= 0){
 						terminators[lmode.begin] = 1;
 					}
-				}
+				});
 			}
 			for(var i = this.modes.length - 1; i >= 0; --i){
 				var m = this.modes[i];
@@ -366,7 +361,7 @@ dojo.provide("dojox.highlight._base");
 		var result = "", langName = "", bestRelevance = 2,
 			textBlock = blockText(block);
 		for(var key in dh.languages){
-			if(key.charAt(0) == "_"){ continue; }	// skip internal members
+			if(!dh.languages[key].defaultMode){ continue; }	// skip internal members
 			var highlight = new Highlighter(key, textBlock),
 				relevance = highlight.keywordCount + highlight.relevance;
 			if(!result || relevance > relevanceMax){
