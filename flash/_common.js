@@ -647,9 +647,9 @@ dojox.flash.Info.prototype = {
 		}
 		
 		// detect if the user has over-ridden the default flash version
-		if (typeof djConfig["forceFlashComm"] != "undefined" &&
-				typeof djConfig["forceFlashComm"] != null){
-			this.commVersion = djConfig["forceFlashComm"];
+		if (typeof dojo.config["forceFlashComm"] != "undefined" &&
+				typeof dojo.config["forceFlashComm"] != null){
+			this.commVersion = dojo.config["forceFlashComm"];
 			return;
 		}
 		
@@ -732,7 +732,7 @@ dojox.flash.Embed.prototype = {
 		// Flash 6
 		if(flashVer == 6){
 			swfloc = dojox.flash.flash6_version;
-			var dojoPath = djConfig.baseRelativePath;
+			var dojoPath = dojo.config.baseRelativePath;
 			swfloc = swfloc + "?baseRelativePath=" + escape(dojoPath);
 			objectHTML = 
 						  '<embed id="' + this.id + '" src="' + swfloc + '" '
@@ -748,7 +748,7 @@ dojox.flash.Embed.prototype = {
 			swfloc = dojox.flash.flash8_version;
 			var swflocObject = swfloc;
 			var swflocEmbed = swfloc;
-			var dojoPath = djConfig.baseRelativePath;
+			var dojoPath = dojo.config.baseRelativePath;
 			if(doExpressInstall){
 				// the location to redirect to after installing
 				var redirectURL = escape(window.location);

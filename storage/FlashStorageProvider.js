@@ -16,7 +16,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		_statusHandler: null,
 		
 		initialize: function(){
-			if(djConfig["disableFlashStorage"] == true){
+			if(dojo.config["disableFlashStorage"] == true){
 				return;
 			}
 			
@@ -59,7 +59,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 
 		isAvailable: function(){
-			return (this._available = !djConfig["disableFlashStorage"]);
+			return (this._available = !dojo.config["disableFlashStorage"]);
 		},
 
 		put: function(key, value, resultsHandler, namespace){

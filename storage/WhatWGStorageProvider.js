@@ -27,7 +27,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 	_storageEventListener: null,
 	
 	initialize: function(){
-		if(djConfig["disableWhatWGStorage"] == true){
+		if(dojo.config["disableWhatWGStorage"] == true){
 			return;
 		}
 		

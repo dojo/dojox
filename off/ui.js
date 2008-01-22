@@ -243,7 +243,7 @@ dojo.mixin(dojox.off.ui, {
 			// add parameters to URL so the Learn How page
 			// can customize itself and display itself
 			// correctly based on framework settings
-			var dojoPath = djConfig.baseRelativePath;
+			var dojoPath = dojo.config.baseRelativePath;
 			this.learnHowPath += "?appName=" + encodeURIComponent(this.appName)
 									+ "&hasOfflineCache=" + dojox.off.hasOfflineCache
 									+ "&runLink=" + encodeURIComponent(this.runLink)

@@ -90,7 +90,7 @@ dojox.cometd = new function(){
 		props.channel = "/meta/handshake";
 		props.id = ""+this.messageId++;
 
-		this.url = root||djConfig["cometdRoot"];
+		this.url = root||dojo.config["cometdRoot"];
 		if(!this.url){
 			console.debug("no cometd root specified in djConfig and no root passed");
 			return null;
@@ -687,7 +687,7 @@ dojox.cometd.longPollTransport = new function(){
 			messages[i]=this._cometd._extendOut(messages[i]);
 		}
 		return dojo.xhrPost({
-			url: this._cometd.url||djConfig["cometdRoot"],
+			url: this._cometd.url||dojo.config["cometdRoot"],
 			handleAs: this._cometd.handleAs,
 			load: dojo.hitch(this._cometd, "deliver"),
 			content: {
@@ -709,7 +709,7 @@ dojox.cometd.longPollTransport = new function(){
 		};
 		message=this._cometd._extendOut(message);
 		dojo.xhrPost({
-			url: this._cometd.url||djConfig["cometdRoot"],
+			url: this._cometd.url||dojo.config["cometdRoot"],
 			handleAs: this._cometd.handleAs,
 			content: {
 				message: dojo.toJson([message])
@@ -772,7 +772,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			messages[i]=this._cometd._extendOut(messages[i]);
 		}
 		var bindArgs = {
-			url: this._cometd.url||djConfig["cometdRoot"],
+			url: this._cometd.url||dojo.config["cometdRoot"],
 			load: dojo.hitch(this._cometd, "deliver"),
 			callbackParamName: "jsonp",
 			content: { message: dojo.toJson( messages ) }
@@ -795,7 +795,7 @@ dojox.cometd.callbackPollTransport = new function(){
 		};
 		message=this._cometd._extendOut(message);		
 		dojo.io.script.get({
-			url: this._cometd.url||djConfig["cometdRoot"],
+			url: this._cometd.url||dojo.config["cometdRoot"],
 			callbackParamName: "jsonp",
 			content: {
 				message: dojo.toJson([message])

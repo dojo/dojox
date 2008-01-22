@@ -72,7 +72,7 @@ dojox.storage.manager = new function(){
 		// a flag to force the storage manager to use a particular 
 		// storage provider type, such as 
 		// djConfig = {forceStorageProvider: "dojox.storage.WhatWGStorageProvider"};
-		var forceProvider = djConfig["forceStorageProvider"]||false;
+		var forceProvider = dojo.config["forceStorageProvider"]||false;
 
 		// go through each provider, seeing if it can be used
 		var providerToUse;

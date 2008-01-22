@@ -11,7 +11,7 @@ dojox.io.proxy.xip = {
 	//http://dojotoolkit.org/book/dojo-book-0-4/part-5-connecting-pieces/i-o/cross-domain-xmlhttprequest-using-iframe-proxy
 	//Usage of XHR IFrame Proxying does not work from local disk in Safari.
 
-	xipClientUrl: djConfig["xipClientUrl"] || dojo.moduleUrl("dojox.io.proxy", "xip_client.html"),
+	xipClientUrl: dojo.config["xipClientUrl"] || dojo.moduleUrl("dojox.io.proxy", "xip_client.html"),
 
 	_state: {},
 	_stateIdCounter: 0,
