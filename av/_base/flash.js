@@ -173,6 +173,14 @@ dojo.provide("dojox.av._base.flash");
 			}
 			return null;
 		}
-		dojox.av.flash.onInitialize();
+
+		if(dojo._initFired){
+			dojox.av.flash.onInitialize();
+		} else {
+			dojo.addOnLoad(function(){
+				console.log("firing off dojox.av.flash.onInitialize() for sane browsers.");
+				dojox.av.flash.onInitialize();
+			});
+		}
 	}
 })();

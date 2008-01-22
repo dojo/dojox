@@ -8,4 +8,10 @@ dojox.av.flash.place = function(node, kwArgs){
 	}
 	return null;
 }
-dojox.av.flash.onInitialize();
+if(dojo._initFired){
+	dojox.av.flash.onInitialize();
+} else {
+	dojo.addOnLoad(function(){
+		dojox.av.flash.onInitialize();
+	});
+}
