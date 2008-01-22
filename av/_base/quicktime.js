@@ -108,13 +108,19 @@ dojo.provide("dojox.av._base.quicktime");
 		setTimeout(function(){
 			var v = [ 0, 0, 0 ];
 			if(qt){
-				v = qt.GetQuickTimeVersion().split(".");
-				qtVersion = { major: parseInt(v[0]||0), minor: parseInt(v[1]||0), rev: parseInt(v[2]||0) };
+				try {
+					v = qt.GetQuickTimeVersion().split(".");
+					qtVersion = { major: parseInt(v[0]||0), minor: parseInt(v[1]||0), rev: parseInt(v[2]||0) };
+				} catch(e){ 
+					qtVersion = { major: 0, minor: 0, rev: 0 };
+				}
 			}
 
 			dojox.av.quicktime.supported = v[0];
 			dojox.av.quicktime.version = qtVersion;
-			dojox.av.quicktime.onInitialize();
+			if(dojox.av.quicktime.supported){
+				dojox.av.quicktime.onInitialize();
+			}
 
 			//	fricking IE.  gonna end up leaving the movie in the doc, for some
 			//		reason getting an unspecified error when trying to remove it.
