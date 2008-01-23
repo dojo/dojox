@@ -22,6 +22,7 @@
 	<script src="../FormWidgets.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
+		var globalVals = null;
 
 		// provides dojox.widget.Select, and dojox.widget.Hidden		
 		dojo.require("dojox.widget.FormWidgets");
@@ -169,6 +170,13 @@
 					<option value="four">4</option>
 			</select>
 
+			<select id="select5" dojoType="dojox.widget.Select" name="singleNumber">
+				<option value="1">one</option>
+				<option value="2">two</option>
+				<option value="3">three</option>
+				<option value="four">4</option>
+			</select>
+
 			<p>a textArea:<br>
 			<textarea dojoType="dojox.widget.TextArea" name="ta2">
 				shichashaw, textarea text baw.				
@@ -178,13 +186,22 @@
 			<br><br>
 			<button dojoType="dijit.form.Button" type="submit">
 					Submit
-					<script type="dojo/method" event="onClick">
+					<script type="dojo/method" event="onClick" args="e">
+							e.preventDefault();
 							console.log("testing semantic and dijit form:");
 							var f = dijit.byId("dijitForm");
-							var c = f.getValues();
-							console.log('vals: ',c);
+							globalVals = f.getValues();
+							dijit.byId("setValueButton").setAttribute("disabled",false);
+							console.log('vals: ',globalVals);
 							console.log('formToJson: ',dojo.formToJson(f.domNode));
 					</script>
+			</button>
+			
+			<button dojoType="dijit.form.Button" id="setValueButton" disabled="disabled">
+				setValues()
+				<script type="dojo/method" event="onClick">
+					dijit.byId("dijitForm").setValues(globalVals);
+				</script>
 			</button>
 			
 		</form>

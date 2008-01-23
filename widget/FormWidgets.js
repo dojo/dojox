@@ -6,7 +6,9 @@ dojo.require("dijit._Widget");
 dojo.declare("dojox.widget.Select",dijit._Widget,{
 	// summary: Wrapper for a native select multiple="true" element to
 	//		interact with dijit.form.Form
-
+	//
+	// name: String
+	// 		The name of this form element
 	name: "",
 	
 	postCreate: function(){
@@ -46,14 +48,16 @@ dojo.declare("dojox.widget.Select",dijit._Widget,{
 	},
 	
 	getValue: function(){
-		// summary: serialize the values of the selected nodes, and return the string
-		return this.getValues(); 
+		// summary: serialize the values of the selected nodes
+		return this.getValues(); // Array
 	},
 	
-	// FIXME: implement:
-	// setValue: function(/* Array */value)
-	// logic? iterate through array of values, append if non-existant, select
-	// if found or exists?
+	setValue: function(/* Array */values){
+		// summary: Set the value(s) of this Select based on passed values
+		dojo.query("option",this.domNode).forEach(function(n){
+			n.selected = (dojo.indexOf(values,n.value) === 0);
+		});
+	},
 		
 	invertSelection: function(onChange){
 		// summary: Invert the selection
@@ -61,21 +65,22 @@ dojo.declare("dojox.widget.Select",dijit._Widget,{
 		//		If null, onChange is not fired.
 		this._selected = dojo.query("option",this.domNode).filter(function(n){
 			n.selected = !n.selected;
-			return n.selected;
+			return n.selected; // Boolean
 		});
 		if(onChange){ this.onChange(); }
 	},
 
 	_setSelected: function(e){
+		// summary: Re-populate the selected NodeList
 		this._selected = dojo.query("option",this.domNode).filter(function(n){
-			return n.selected;
+			return n.selected; // Boolean
 		});
 		if(e && e.type){ this.onChange(this._selected); }
-		return this._selected;
+		return this._selected; // dojo.NodeList
 	},
 	
 	// for layout widgets:
-	resize: function(size){
+	resize: function(/* Object */size){
 		dojo.style(this.domNode,"width",size.w+"px");
 		dojo.style(this.domNode,"height",size.h+"px");
 	},
@@ -96,6 +101,11 @@ dojo.declare("dojox.widget.Hidden",
 	//	|	<input type="hidden" dojoType="dojox.widget.Hidden" name="foo" value="bar" />
 	//
 	name: "",
+	
+	postCreate: function(){
+		this.inherited(arguments);
+		this.connect(this.domNode,"onchange","onChange");
+	},
 	
 	getValue: function(){
 		// summary: Normalized getter for this input
