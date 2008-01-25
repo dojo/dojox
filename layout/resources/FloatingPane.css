@@ -13,7 +13,7 @@
 /* titleNode */
 .dojoxFloatingPaneTitle {
 	background: #cccccc;
-	background:#fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
+	background:#fafafa repeat-x bottom left;
 	border:1px solid #bfbfbf;
 	padding:4px 4px 2px 4px;
 	cursor: pointer;
@@ -21,11 +21,14 @@
 }
 
 .soria .dojoxFloatingPaneTitle {
-	background:#4f8ced url("../../../dijit/themes/soria/images/gradientTopBg.png") repeat-x top left;
-	border:1px solid #6969FF;
-	background-position:0px -1px;
-	color:#fff; font-weight:bold;	
-}	
+	background:#fff url("../../../dijit/themes/soria/images/titleBar.png") repeat-x top left;
+	border:1px solid #b1badf;
+	font-size: 0.9em;
+	font-weight: bold;
+	line-height:1.2em;
+}
+
+
 .tundra .dojoxFloatingPaneTitle {
 	background:#fafafa url("../../../dijit/themes/tundra/images/titleBarBg.gif") repeat-x bottom left;
 	border:1px solid #bfbfbf;
@@ -49,6 +52,10 @@
 	overflow:hidden;
 	float:right; 
 }
+.soria .dojoxFloatingMinimizeIcon {
+		background:url("../../../dijit/themes/soria/images/spriteRoundedIconsSmallBl.png") no-repeat -15px top;
+
+}
 
 .floatingPaneMaximized .dojoxFloatingMaximizeIcon { display:none; }
 .dojoxFloatingMaximizeIcon {
@@ -57,6 +64,9 @@
 	height:16px;
 	overflow:hidden;
 	float:right;	
+}
+.soria .dojoxFloatingMaximizeIcon {
+	background:url("../../../dijit/themes/soria/images/spriteRoundedIconsSmallBl.png") no-repeat -45px top;
 }
 
 .floatingPaneMaximized .dojoxFloatingRestoreIcon { display:inline; }
@@ -79,16 +89,17 @@
 }
 
 .dojoxFloatingCloseIcon {
-	width:16px;
-	height:16px; 
+	width:15px;
+	height:15px; 
 	overflow:hidden;
 	float:right; 
 	cursor:pointer;
 }
+
 .soria .dojoxFloatingCloseIcon {
-	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat center center;
-	background-position:-65px -1px; 
+	background:url("../../../dijit/themes/soria/images/spriteRoundedIconsSmallBl.png") no-repeat -60px top;
 }
+
 .tundra .dojoxFloatingCloseIcon {
 	background:url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center; 	
 }
@@ -123,6 +134,9 @@
 	float:left;
 	margin-top:2px; 
 }
+.soria .dojoxDockRestoreButton {
+	background:url("../../../dijit/themes/soria/images/spriteRoundedIconsSmallBl.png") no-repeat -45px top;
+}
 
 .dojoxDockTitleNode {
 	overflow:hidden;
@@ -154,8 +168,7 @@
 	background: #fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
 }
 .soria .dojoxDockNode {
-	background:#b7cdee url("../../../dijit/themes/soria/images/gradientTopBg.png") repeat-x;
-	
+	background:#b7cdee url("../../../dijit/themes/soria/images/titleBar.png") repeat-x;
 }
 
 .dojoxFloatingPaneContent {
