@@ -165,7 +165,7 @@ dojo.declare("dojox.widget.Iterator",
 			query: query||this.query,
 			start: start||this.start,
 			count: end||this.fetchMax,
-			onComplete: dojo.hitch(this,"onDataAvailable"),
+			onComplete: dojo.hitch(this,"onDataAvailable")
 		});
 	}
 });
