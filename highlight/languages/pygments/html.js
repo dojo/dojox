@@ -80,7 +80,7 @@ dojo.require("dojox.highlight.languages.pygments._html");
 			
 			{
 				className: "_tag",
-				begin: "\\<", end: "\\>",
+				begin: "\\<(?!/)", end: "\\>",
 				contains: ["name tag", "name attribute", "string", "_value"]
 			},
 			{

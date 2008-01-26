@@ -5,8 +5,7 @@
 	<style type="text/css">
 		@import "../../../dijit/tests/css/dijitTests.css";
 
-		/* a sample set of definitions to use as a foundation to color your code */
-		@import "../resources/pygments/default.css";
+		/* CSS rules for debugging */
 		
 		pre code[class]:after {
 		  content: 'highlight: ' attr(class);
@@ -21,6 +20,9 @@
 		  display: block;
 		}
 	</style>
+	<!-- a sample set of definitions to use as a foundation to color your code -->
+	<link rel="stylesheet" type="text/css" href="../resources/pygments/default.css" />
+	
 	<script type="text/javascript" djConfig="parseOnLoad: true, isDebug: true" src="../../../dojo/dojo.js"></script>
 	<!--
 	<script type="text/javascript" src="../_base.js"></script>
@@ -39,10 +41,37 @@
 		*/
 		dojo.require("dojox.highlight.languages.pygments._www");
 		dojo.require("dojo.parser");
+		
+		dojo.addOnLoad(function(){
+			var sel = dojo.byId("theme"),
+				sty = dojo.query("link[rel='stylesheet']", document.head)[0];
+			dojo.query("option[value='default']", sel)[0].selected = "selected";
+			dojo.connect(sel, "onchange", function(){
+				sty.href = "../resources/pygments/" + sel.value + ".css";
+			});
+		});
 	</script>
 </head>
 <body>
 <h1>Test Pygments-based highlighting</h1>
+
+<p>Current theme from the pygments set: 
+<select id="theme">
+	<option value="autumn">Autumn</option>
+	<option value="borland">Borland</option>
+	<option value="colorful">Colorful</option>
+	<option value="default">Default</option>
+	<option value="emacs">Emacs</option>
+	<option value="friendly">Friendly</option>
+	<option value="fruity">Fruity</option>
+	<option value="manni">Manni</option>
+	<option value="murphy">Murphy</option>
+	<option value="native">Native</option>
+	<option value="pastie">Pastie</option>
+	<option value="perldoc">Perldoc</option>
+	<option value="trac">Trac</option>
+</select>
+</p>
 	
 <p>Javascript:</p>
 
