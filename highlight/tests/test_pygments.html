@@ -8,21 +8,42 @@
 		/* a sample set of definitions to use as a foundation to color your code */
 		@import "../resources/pygments/default.css";
 		
+		pre code[class]:after {
+		  content: 'highlight: ' attr(class);
+		  display: block; text-align: right;
+		  font-size: smaller;
+		  color: #CCC; background: white;
+		  border-top: solid 1px;
+		  padding-top: 0.5em;
+		}
+		
 		pre code {
 		  display: block;
 		}
 	</style>
 	<script type="text/javascript" djConfig="parseOnLoad: true, isDebug: true" src="../../../dojo/dojo.js"></script>
+	<!--
 	<script type="text/javascript" src="../_base.js"></script>
 	<script type="text/javascript" src="../languages/pygments/javascript.js"></script>
 	<script type="text/javascript" src="../languages/pygments/css.js"></script>
+	<script type="text/javascript" src="../languages/pygments/html.js"></script>
+	<script type="text/javascript" src="../languages/pygments/xml.js"></script>
+	-->
 	<script type="text/javascript">
 		dojo.require("dojox.highlight");
+		/*
 		dojo.require("dojox.highlight.languages.pygments.javascript");
+		dojo.require("dojox.highlight.languages.pygments.css");
+		dojo.require("dojox.highlight.languages.pygments.html");
+		dojo.require("dojox.highlight.languages.pygments.xml");
+		*/
+		dojo.require("dojox.highlight.languages.pygments._www");
 		dojo.require("dojo.parser");
 	</script>
 </head>
 <body>
+<h1>Test Pygments-based highlighting</h1>
+	
 <p>Javascript:</p>
 
 <pre><code dojoType="dojox.highlight.Code">function initHighlight(block) {
@@ -52,7 +73,7 @@ html {
 }
 
 #content {
-  width: 100%; /* комментарий */
+  width: 100%; /* test comment */
   height: 100%
 }
 
@@ -60,6 +81,31 @@ p[lang=ru] {
   color: red;
 }
 </pre></code>
+
+<p>Some HTML code:</p>
+
+<pre><code dojoType="dojox.highlight.Code">&lt;head&gt;
+  &lt;title&gt;Title&lt;/title&gt;
+&lt;body&gt;
+  &lt;p class="something"&gt;Something&lt;/p&gt;
+  &lt;p class=something&gt;Something&lt;/p&gt;
+  &lt;!-- comment --&gt;
+  &lt;p class&gt;Something&lt;/p&gt;
+  &lt;p class="something" title="p"&gt;Something&lt;/p&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>A custom XML document:</p>
+
+<pre><code dojoType="dojox.highlight.Code">&lt;?xml version="1.0"?&gt;
+&lt;response value="ok"&gt;
+  &lt;text&gt;Ok&lt;/text&gt;
+  &lt;comment/&gt;
+  &lt;ns:description&gt;&lt;![CDATA[ 
+  CDATA is &lt;not&gt; magical. 
+  ]]&gt;&lt;/ns:description&gt;
+&lt;/response&gt;
+</code></pre>
 
 </body>
 </html>

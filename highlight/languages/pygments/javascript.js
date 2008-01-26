@@ -102,13 +102,15 @@ dojo.require("dojox.highlight._base");
 			// operators
 			{
 				className: "operator",
-				begin: "\\|\\||&&|\\+\\+|--|-=|\\+=|/=|\\*=|==|[-\\+\\*/=\\?:~\\^]", end: "^"
+				begin: "\\|\\||&&|\\+\\+|--|-=|\\+=|/=|\\*=|==|[-\\+\\*/=\\?:~\\^]", end: "^",
+				relevance: 0
 			},
 
 			// punctuations
 			{
 				className: "punctuation",
-				begin: "[{}\\(\\)\\[\\]\\.;]", end: "^"
+				begin: "[{}\\(\\)\\[\\]\\.;]", end: "^",
+				relevance: 0
 			},
 			
 			// functions
@@ -121,14 +123,15 @@ dojo.require("dojox.highlight._base");
 						"function": 1
 					}
 				},
-				contains: ["name function", 'params']
+				contains: ["name function", "_params"],
+				relevance: 5
 			},
 			{
 				className: "name function",
 				begin: dhc.UNDERSCORE_IDENT_RE, end: '^'
 			},
 			{
-				className: "params",
+				className: "_params",
 				begin: "\\(", end: "\\)",
 				contains: ["comment single", "comment multiline"]
 			}
