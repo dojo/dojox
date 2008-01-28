@@ -1,6 +1,6 @@
 <!--
 	/*
-		Copyright (c) 2004-2006, The Dojo Foundation
+		Copyright (c) 2004-2008, The Dojo Foundation
 		All Rights Reserved.
 	
 		Licensed under the Academic Free License version 2.1 or above OR the
@@ -200,9 +200,9 @@
 		var clientUrl = makeClientUrl(cmd, message);
 		//Safari won't let us replace across domains.
 		if(navigator.userAgent.indexOf("Safari") == -1){
-			parent.location.replace(clientUrl);
+			xipClientWindow.location.replace(clientUrl);
 		}else{
-			parent.location = clientUrl;
+			xipClientWindow.location = clientUrl;
 		}
 	}
 
@@ -349,22 +349,18 @@
 		if(!xipStateId.match(/^XhrIframeProxy[0-9]+$/)){
 			throw "Invalid state ID";
 		}
-
-		xipUseFrameRecursion = config["fr"];
-
+	
 		setInterval(pollHash, 10);
 		
-		if(xipUseFrameRecursion == "true"){
-			var serverUrl = window.location.href.split("#")[0];
-			document.getElementById("iframeHolder").innerHTML = '<iframe name="'
-				+ xipStateId + '_clientEndPoint'
-				+ '" src="javascript:false">'
-				+ '</iframe>';
-			var iframeNode = document.getElementsByTagName("iframe")[0];
-			iframeNode.src = makeClientUrl("init", 'id=' + xipStateId + '&server='
-				+ encodeURIComponent(serverUrl) + '&fr=endpoint');
-		}else{
-			setClientUrl("loaded");
+		var serverUrl = window.location.href.split("#")[0];
+		document.getElementById("iframeHolder").innerHTML = '<iframe name="'
+			+ xipStateId + '_clientEndPoint'
+			+ '" src="javascript:false">'
+			+ '</iframe>';
+		xipClientWindow = document.getElementsByTagName("iframe")[0];
+		xipClientWindow.src = makeClientUrl("init", 'id=' + xipStateId + "&callback=" + encodeURIComponent(config.callback));
+		if(xipClientWindow.contentWindow){
+			xipClientWindow = xipClientWindow.contentWindow;
 		}
 	}
 
