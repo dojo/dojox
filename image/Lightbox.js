@@ -410,12 +410,12 @@ dojo.declare("dojox.image._LightboxDialog",
 
 		// trigger the nasty width="auto" workaround in show()
 		this._wasStyled = true;
-		with(this.imgNode.style){
-			// we actually have to style this image, it's too big
-			height = ns.h + "px";	
-			width = ns.w + "px";
-		}
-		
+
+		// we actually have to style this image, it's too big
+		var s = this.imgNode.style;
+		s.height = ns.h + "px";	
+		s.width = ns.w + "px";
+
 		ns.duration = size.duration;
 		return ns; // Object
 
