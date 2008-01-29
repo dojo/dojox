@@ -444,5 +444,4 @@ dojo.declare("dojox.image._LightboxDialog",
 		this._animConnects.push(dojo.connect(this._loadingAnim, "onEnd", this, "_prepNodes"));
 		this._showNavAnim = dojo.fadeIn({ node: this.titleNode, duration:225 });
 	}
-	
 });
