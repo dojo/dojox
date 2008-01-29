@@ -1,0 +1,155 @@
+{
+	transport: "POST",
+	envelope: "URL",
+	target: "../../dojox/rpc/tests/resources",
+	strictParameters: false,
+	parameters: {
+                appId: {},
+                outputType: {
+                        default: "json"
+                },
+
+                ignoreErrors: {
+                        optional: true
+                }
+        },
+
+        services: {
+                postEcho: {
+                        target: "echo.php",
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+
+                getEcho: {
+			transport: "GET",
+                        target: "echo.php",
+
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+
+                postJsonEcho: {
+			transport: "POST",
+			envelope: "JSON",
+                        target: "rawEcho.php",
+
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+
+                jsonpEcho: {
+			transport: "JSONP",
+                        target: "jsonpEcho.php",
+			callbackParamName: "testCallbackParam",
+
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+
+                postJsonRpc10Echo: {
+			transport: "POST",
+			envelope: "JSON-RPC-1.0",
+			target: "jsonRpc10.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+                postJsonRpc10EchoNamed: {
+			transport: "POST",
+			envelope: "JSON-RPC-1.0",
+			target: "jsonRpc10.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+                jsonpJsonRpc12Echo: {
+			transport: "JSONP",
+			envelope: "JSON-RPC-1.2",
+			target: "jsonpJsonRpcEcho.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+                jsonpJsonRpc12EchoNamed: {
+			transport: "JSONP",
+			envelope: "JSON-RPC-1.2",
+			target: "jsonpJsonRpcEcho.php",
+
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+
+                postJsonRpc10ForcedError: {
+			envelope: "JSON-RPC-1.0",
+			transport: "POST",
+			target: "jsonRpc10.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+                postJsonRpc12Echo: {
+			transport: "POST",
+			envelope: "JSON-RPC-1.2",
+			target: "jsonRpc12.php",
+
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+
+                getJsonRpc12Echo: {
+			transport: "GET",
+			envelope: "JSON-RPC-1.2",
+			target: "jsonRpcPostGetEcho.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+                postJsonRpc12EchoNamed: {
+			transport: "POST",
+			envelope: "JSON-RPC-1.2",
+			target: "jsonRpcPostGetEcho.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+                getJsonRpc12EchoNamed: {
+			transport: "GET",
+			envelope: "JSON-RPC-1.2",
+			target: "jsonRpcPostGetEcho.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                },
+
+
+                postJsonRpc12ForcedError: {
+			envelope: "JSON-RPC-1.2",
+			transport: "POST",
+			target: "jsonRpc12.php",
+
+                        parameters: [
+                                {type: "string", optional: true}
+                        ]
+                }
+	}	
+}
