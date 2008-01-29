@@ -108,9 +108,6 @@ dojo.require("dojox.sketch._Plugin");
 		}
 	}
 	p.initialize=function(){ };
-	p.remove=function(){
-		this.figure._delete([this],true);
-	};
 	p.destroy=function(){ };
 	p.draw=function(){ };
 	p.apply=function(obj){ };

@@ -44,15 +44,6 @@ dojo.require("dojox.xml.DomParser");
 				figure._delete([ann],true);
 				return;
 			}
-//			if(state.cmdname==ta.CommandTypes.Convert){
-//				//	need a better way of doing this, but basically this means
-//				//		run it through our figure's converter.
-//				var ann=figure.get(from.shapeId);
-//				var o=dojox.xml.DomParser.parse(toText).documentElement;
-//				var t=o.getAttribute('annotation');
-//				figure.convert(ann, t);
-//				return;
-//			}
 			
 			//	we can simply reinit and draw from the shape itself,
 			//		regardless of the actual command.
@@ -94,7 +85,6 @@ dojo.require("dojox.xml.DomParser");
 			this._steps.push(state);
 			this._undoedSteps=[];
 
-//			onAdd(this,state);
 		};
 		this.destroy=function(){
 //			store.removeEditor(figure);
@@ -107,11 +97,6 @@ dojo.require("dojox.xml.DomParser");
 				this._undoedSteps.push(state);
 				this.apply(state,state.after,state.before);
 			}
-//			store.undo(figure);
-//			if(position<0){ return; }
-//			applyState(currentState, currentState.after, currentState.before);
-//			onUndo(this,currentState);
-//			currentState=states[--position];
 		};
 		this.redo=function(){
 			var state=this._undoedSteps.pop();
@@ -119,12 +104,6 @@ dojo.require("dojox.xml.DomParser");
 				this._steps.push(state);
 				this.apply(state,state.before,state.after);
 			}
-//			store.redo(figure);
-//			if(position>=states.length){ return; }
-//			var state=states[++position];
-//			currentState=state;
-//			applyState(state, state.before, state.after);
-//			onRedo(this,state);
 		};
 	};
 })();

@@ -174,7 +174,6 @@ dojo.require("dojox.sketch.UndoStack");
 			if(!o){
 				self.clearSelections();
 				self._ctool.onMouseDown(e);
-//				dojo.stopEvent(e);
 			}else{
 				if(o.type && o.type()!="Anchor"){
 					self.select(o);
@@ -182,7 +181,6 @@ dojo.require("dojox.sketch.UndoStack");
 				o.beginEdit();
 				self._c=o;
 			}
-//			dojo.stopEvent(e);
 		};
 		this._mm=function(e){
 			if(!self._ctr) return;
@@ -206,7 +204,6 @@ dojo.require("dojox.sketch.UndoStack");
 				}
 				self._ctool.onMouseMove(e,rect);
 			}
-//			dojo.stopEvent(e);
 		};
 		this._mu=function(e){
 			if(self._c){
@@ -219,20 +216,18 @@ dojo.require("dojox.sketch.UndoStack");
 			//	clear the stuff out.
 			self._c=self._ctr=self._lp=self._action=self._prevState=self._startPoint=null;
 			self._cshape=self._start=self._end=self._absEnd=null;
-//			dojo.stopEvent(e);
 		};
 
 		this._delete=function(arr,noundo){
 			for(var i=0; i<arr.length; i++){
-				var before=arr[i].serialize();
+				//var before=arr[i].serialize();
+				if(!noundo){
+					arr[i].remove();
+				}
 				arr[i].setMode(ta.Annotation.Modes.View);
 				arr[i].destroy();
 				self.remove(arr[i]);
 				self._remove(arr[i]);
-				if(!noundo){
-					arr[i].remove();
-					//self.history.add(ta.CommandTypes.Delete, arr[i], before);
-				}
 			}
 			arr.splice(0,arr.length);
 		};
