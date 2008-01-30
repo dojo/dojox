@@ -53,17 +53,17 @@ dojo.require("dojox.gfx");
 				chart.node.insertBefore(wrap, chart.node.firstChild);
 				switch(align){
 					case "middle":
-						s.left = Math.floor(x - box.w / 2);
+						s.left = Math.floor(x - box.w / 2) + "px";
 						break;
 					case "end":
-						s.left = Math.floor(x - box.w);
+						s.left = Math.floor(x - box.w) + "px";
 						break;
 					//case "start":
 					default:
-						s.left = Math.floor(x);
+						s.left = Math.floor(x) + "px";
 						break;
 				}
-				s.top = Math.floor(y - size);
+				s.top = Math.floor(y - size) + "px";
 				return p;
 			}
 		}
