@@ -1,4 +1,5 @@
 dojo.provide("dojox.sketch.Figure");
+dojo.experimental("dojox.sketch");
 
 dojo.require("dojox.gfx");
 dojo.require("dojox.sketch.UndoStack");
