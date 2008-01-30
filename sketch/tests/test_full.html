@@ -1,9 +1,14 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
 		<title>Annotator/Figure Testing</title>
-		<link href="../../../dijit/themes/tundra/tundra.css" type="text/css" rel="stylesheet"/>
+<style type="text/css">
+@import "../../../dojo/resources/dojo.css";
+@Import "../../../dijit/themes/tundra/tundra.css";
+@import "../../../dijit/themes/tundra/tundra_rtl.css";
+</style>
 		<link href="../resources/sketch.css" type="text/css" rel="stylesheet"/>
-		<link rel="stylesheet" type="text/css" href="../../widget/templates/FCKDefault/EditorToolbarFCKStyle.css" />
 		<style type="text/css">
 			body {
 				background:#fff url("images/testsBodyBg.gif") repeat-x top left;
@@ -30,6 +35,7 @@
 			dojo.require("dojox.sketch.PreexistingAnnotation");
 			var f, a, t;
 			function init(){
+			alert(document.documentElement.className)
 				var ta=dojox.sketch;
 				f=new ta.Figure();
 				dojo.connect(f, "_mu", function(){ dojo.byId("output").value=f.serialize(); });
