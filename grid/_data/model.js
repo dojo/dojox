@@ -475,7 +475,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	processRows: function(items, request){
 		// console.debug(arguments);
-		if(!items){ return; }
+		if(!items || items.length == 0){ return; }
 		this._setupFields(items[0]);
 		dojo.forEach(items, function(item, idx){
 			var row = {}; 
