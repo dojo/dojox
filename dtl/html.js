@@ -534,6 +534,9 @@ dojo.extend(dojox.dtl.ChangeNode, {
 		if(!this.contents.parentNode){
 			return buffer;
 		}
+		if(!buffer.getParent()){
+			return buffer;
+		}
 		return buffer.setParent(this.contents);
 	},
 	clone: function(buffer){

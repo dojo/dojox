@@ -434,7 +434,7 @@ doh.register("dojox.dtl.text.filter",
 
 			var context = new dd.Context({ animals: ["bear", "cougar", "aardvark"] });
 			tpl = new dd.Template("{{ animals|pprint }}");
-			t.is('["bear", "cougar", "aardvark"]', tpl.render(context));
+			t.is('["bear","cougar","aardvark"]', tpl.render(context));
 		},
 		function test_filter_random(t){
 			var dd = dojox.dtl;
