@@ -44,17 +44,24 @@ dojox.dtl.HtmlBuffer.prototype.onAddEvent = function(node, type, description){
 }
 
 dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context*/ context) {
-	var div = document.createElement("div");
-	dojo.style(div, "visibility", "hidden");
-	var attach = document.createElement("div");
-	div.appendChild(attach);
-	dojo.body().appendChild(div);
+	try {
+		var div = document.createElement("div");
+		dojo.style(div, "visibility", "hidden");
+		var attach = document.createElement("div");
+		div.appendChild(attach);
+		dojo.body().appendChild(div);
 
-	var buffer = template.getBuffer();
-	var canvas = new dojox.dtl.render.html.Render(attach);
-	canvas.render(template, context, buffer);
-	
-	return dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, buffer._clones, buffer._events).toString();
+		var buffer = template.getBuffer();
+		var canvas = new dojox.dtl.render.html.Render(attach);
+		canvas.render(template, context, buffer);
+
+		return dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, buffer._clones, buffer._events).toString();
+	}
+	catch(e){
+		throw e;
+	}finally{
+		div.parentNode.removeChild(div);
+	}
 }
 
 dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, output) {

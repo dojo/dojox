@@ -34,11 +34,7 @@ dojo.extend(dojox.dtl.ObjectMap, {
 dojox.dtl.html = {
 	types: dojo.mixin({change: -11, attr: -12, elem: 1, text: 3}, dojox.dtl.text.types),
 	_attributes: {},
-	_re: /(^\s+|\s+$)/g,
 	_re4: /^function anonymous\(\)\s*{\s*(.*)\s*}$/,
-	_trim: function(/*String*/ str){
-		return str.replace(this._re, "");
-	},
 	getTemplate: function(text){
 		if(typeof this._commentable == "undefined"){
 			// Check to see if the browser can handle comments
@@ -56,6 +52,25 @@ dojox.dtl.html = {
 		}
 
 		var match;
+
+		// Some tags can't contain text. So we wrap the text in tags that they can have.
+		if(text.indexOf("<select") != -1 || text.indexOf("<SELECT") != -1){
+			var selectRe = /<select[\s\S]*?>([\s\S]+?)<\/select>/ig;
+			while(match = selectRe.exec(text)){
+				var replace = [];
+				// Do it like this to make sure we don't double-wrap
+				var tokens = dojox.string.tokenize(match[1], /(<option[\s\S]*?>[\s\S]*?<\/option>)/ig, function(option){ return {data: option}; });
+				for(var i = 0; i < tokens.length; i++) {
+					if(dojo.isObject(tokens[i])){
+						replace.push(tokens[i].data);
+					}else{
+						replace.push('<option iscomment="true">' + dojo.trim(tokens[i]) + "</option>");
+					}
+				}
+				text = text.replace(match[1], replace.join(""));
+			}
+		}
+
 		var re = /\b([a-zA-Z]+)="/g;
 		while(match = re.exec(text)){
 			this._attributes[match[1]] = true;
@@ -137,6 +152,13 @@ dojox.dtl.html = {
 		}
 
 		for(var i = 0, child; child = children[i]; i++){
+			if(child.nodeType == 1 && child.getAttribute("iscomment")){
+				child.parentNode.removeChild(child);
+				child = {
+					nodeType: 8,
+					data: child.innerHTML
+				};
+			}
 			this.__tokenize(child, tokens);
 		}
 
@@ -177,10 +199,10 @@ dojox.dtl.html = {
 				return;
 			case 8:
 				if(data.indexOf("{%") == 0){
-					tokens.push([types.tag, this._trim(data.substring(2, data.length - 3))]);
+					tokens.push([types.tag, dojo.trim(data.substring(2, data.length - 3))]);
 				}
 				if(data.indexOf("{{") == 0){
-					tokens.push([types.varr, this._trim(data.substring(2, data.length - 3))]);
+					tokens.push([types.varr, dojo.trim(data.substring(2, data.length - 3))]);
 				}
 				if(child.parentNode) child.parentNode.removeChild(child);
 				return;
@@ -255,7 +277,6 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 			return this;
 		}
 		if(this._closed && (node.nodeType != 3 || dojo.trim(node.data))){
-			console.debug(node);
 			throw new Error("Content should not exist outside of the root node in template");
 		}
 		if(node.nodeType){
@@ -284,9 +305,9 @@ dojo.extend(dojox.dtl.HtmlBuffer, {
 		if(typeof obj == "string"){
 			this._parent.removeAttribute(obj);
 		}else{
-			if(obj.parentNode === this._parent){
+			if(obj.parentNode){
 				this.onRemoveNode();
-				this._parent.removeChild(obj);
+				obj.parentNode.removeChild(obj);
 			}
 		}
 		return this;
@@ -631,7 +652,7 @@ dojo.extend(dojox.dtl.HtmlParser, {
 					cmd = cmd[0];
 					var fn = dojox.dtl.text.getTag(cmd);
 					if(typeof fn != "function"){
-						throw new Error("Function not found for ", cmd);
+						throw new Error("Function not found for " + cmd);
 					}
 					var tpl = fn(this, value);
 					if(tpl){

@@ -96,7 +96,7 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 			context[this.assign] = item;
 			if(j + 1 > this.pool.length){
 				this.pool.push(this.nodelist.clone(buffer));
-		 	}
+			}
 			buffer = this.pool[j].render(context, buffer, this);
 			++j;
 		}

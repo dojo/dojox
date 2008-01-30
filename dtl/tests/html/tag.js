@@ -77,6 +77,20 @@ doh.register("dojox.dtl.html.tag",
 			var template = new dd.HtmlTemplate('<div><ul>{% for item in items %}<li class="{{ item|length }}">{{ item }}</li>{% endfor %}</ul></div>');
 
 			t.is('<div><ul><li class="5">apple</li><li class="6">banana</li><li class="5">lemon</li></ul></div>', dd.tests.html.util.render(template, context));
+
+			// The line break is there to make sure our regex works
+			template = new dd.HtmlTemplate('<div><select>{% for item in items %}<option>{{ item }}</option>\n{% endfor %}</select></div>');
+
+			t.is('<div><select><option>apple</option><option>banana</option><option>lemon</option></select></div>', dd.tests.html.util.render(template, context));
+		},
+		function test_tag_if(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({key: true});
+			var template = new dd.HtmlTemplate('{% if key %}<div>has key</div>{% else %}<div>no key</div>{% endif %}');
+			t.is("<div>has key</div>", dd.tests.html.util.render(template, context));
+			context.key = false;
+			t.is("<div>no key</div>", dd.tests.html.util.render(template, context));
 		}
 	]
 );
