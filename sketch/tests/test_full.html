@@ -6,7 +6,6 @@
 <style type="text/css">
 @import "../../../dojo/resources/dojo.css";
 @Import "../../../dijit/themes/tundra/tundra.css";
-@import "../../../dijit/themes/tundra/tundra_rtl.css";
 </style>
 		<link href="../resources/sketch.css" type="text/css" rel="stylesheet"/>
 		<style type="text/css">
@@ -35,7 +34,6 @@
 			dojo.require("dojox.sketch.PreexistingAnnotation");
 			var f, a, t;
 			function init(){
-			alert(document.documentElement.className)
 				var ta=dojox.sketch;
 				f=new ta.Figure();
 				dojo.connect(f, "_mu", function(){ dojo.byId("output").value=f.serialize(); });
