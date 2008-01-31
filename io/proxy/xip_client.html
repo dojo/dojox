@@ -65,15 +65,23 @@
 	xipStateId = config.id;
 	xipMasterFrame = parent.parent;
 
-	var parts = config.callback.split(".");
-	xipCallbackObject = xipMasterFrame;
-	for(var i = 0; i < parts.length - 1; i++){
-		xipCallbackObject = xipCallbackObject[parts[i]];
-	}
-	xipCallback = parts[parts.length - 1];
-	
-	callMaster = function(stateId, message){
-		xipCallbackObject[xipCallback](stateId + "#" + message);
+	//Set up an HTML5 messaging publisher if postMessage exists.
+	//As of this writing, this is only useful to get Opera 9.25+ to work.
+	if(typeof document.postMessage != "undefined"){
+		callMaster = function(stateId, message){
+			xipMasterFrame.document.postMessage(stateId + "#" + message);
+		}
+	}else{
+		var parts = config.callback.split(".");
+		xipCallbackObject = xipMasterFrame;
+		for(var i = 0; i < parts.length - 1; i++){
+			xipCallbackObject = xipCallbackObject[parts[i]];
+		}
+		xipCallback = parts[parts.length - 1];
+
+		callMaster = function(stateId, message){
+			xipCallbackObject[xipCallback](stateId + "#" + message);
+		}
 	}
 
 	//Call the master frame to let it know it is OK to start sending.

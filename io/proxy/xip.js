@@ -53,46 +53,66 @@ dojox.io.proxy.xip = {
 	_stateIdCounter: 0,
 	_isWebKit: navigator.userAgent.indexOf("WebKit") != -1,
 
-	send: function(facade){
+
+	send: function(/*Object*/facade){
+		//summary: starts the xdomain request using the provided facade.
+		//This method first does some init work, then delegates to _realSend.
+
+		var url = this.xipClientUrl;
+		//Make sure we are not dealing with javascript urls, just to be safe.
+		if(url.split(":")[0].match(/javascript/i) || facade._ifpServerUrl.split(":")[0].match(/javascript/i)){
+			return;
+		}
+		
+		//Make xip_client a full URL.
+		var colonIndex = url.indexOf(":");
+		var slashIndex = url.indexOf("/");
+		if(colonIndex == -1 || slashIndex < colonIndex){
+			//No colon or we are starting with a / before a colon, so we need to make a full URL.
+			var loc = window.location.href;
+			if(slashIndex == 0){
+				//Have a full path, just need the domain.
+				url = loc.substring(0, loc.indexOf("/", 9)) + url; //Using 9 to get past http(s)://
+			}else{
+				url = loc.substring(0, (loc.lastIndexOf("/") + 1)) + url;
+			}
+		}
+		this.fullXipClientUrl = url;
+
+		//Set up an HTML5 messaging listener if postMessage exists.
+		//As of this writing, this is only useful to get Opera 9.25+ to work.
+		if(typeof document.postMessage != "undefined"){
+			document.addEventListener("message", dojo.hitch(this, this.fragmentReceivedEvent), false);
+		}
+
+		//Now that we did first time init, always use the realSend method.
+		this.send = this._realSend;
+		return this._realSend(facade); //Object
+	},
+
+	_realSend: function(facade){
+		//summary: starts the actual xdomain request using the provided facade.
 		var stateId = "XhrIframeProxy" + (this._stateIdCounter++);
 		facade._stateId = stateId;
-		var url = this.xipClientUrl;
 
-		//Make sure we are not dealing with javascript urls, just to be safe.
-		if(!url.split(":")[0].match(/javascript/i) && !facade._ifpServerUrl.split(":")[0].match(/javascript/i)){
-			//Make xip_client a full URL.
-			var colonIndex = url.indexOf(":");
-			var slashIndex = url.indexOf("/");
-			if(colonIndex == -1 || slashIndex < colonIndex){
-				//No colon or we are starting with a / before a colon, so we need to make a full URL.
-				var loc = window.location.href;
-				if(slashIndex == 0){
-					//Have a full path, just need the domain.
-					url = loc.substring(0, loc.indexOf("/", 9)) + url; //Using 9 to get past http(s)://
-				}else{
-					url = loc.substring(0, (loc.lastIndexOf("/") + 1)) + url;
-				}
-			}
-	
-			var frameUrl = facade._ifpServerUrl + "#0:init:id=" + stateId + "&client=" 
-				+ encodeURIComponent(url) + "&callback=" + encodeURIComponent(this._callbackName);
-	
-			this._state[stateId] = {
-				facade: facade,
-				stateId: stateId,
-				clientFrame: dojo.io.iframe.create(stateId, "", frameUrl),
-				isSending: false,
-				serverUrl: facade._ifpServerUrl,
-				requestData: null,
-				responseMessage: "",
-				requestParts: [],
-				idCounter: 1,
-				partIndex: 0,
-				serverWindow: null
-			};
-	
-			return stateId;
-		}
+		var frameUrl = facade._ifpServerUrl + "#0:init:id=" + stateId + "&client=" 
+			+ encodeURIComponent(this.fullXipClientUrl) + "&callback=" + encodeURIComponent(this._callbackName);
+
+		this._state[stateId] = {
+			facade: facade,
+			stateId: stateId,
+			clientFrame: dojo.io.iframe.create(stateId, "", frameUrl),
+			isSending: false,
+			serverUrl: facade._ifpServerUrl,
+			requestData: null,
+			responseMessage: "",
+			requestParts: [],
+			idCounter: 1,
+			partIndex: 0,
+			serverWindow: null
+		};
+
+		return stateId; //Object
 	},
 
 	receive: function(/*String*/stateId, /*String*/urlEncodedData){
@@ -144,13 +164,11 @@ dojox.io.proxy.xip = {
 		var state = this._state[stateId];
 		var facade = state.facade;
 
-		var clientWindow = state.clientFrame.contentWindow;
-
 		var reqHeaders = [];
 		for(var param in facade._requestHeaders){
 			reqHeaders.push(param + ": " + facade._requestHeaders[param]);
 		}
-		
+
 		var requestData = {
 			uri: facade._uri
 		};
@@ -199,9 +217,13 @@ dojox.io.proxy.xip = {
 			if (!state.serverWindow){
 				state.serverWindow = document.getElementById(state.stateId).contentWindow;
 			}
-			
-			if(state.serverWindow.contentWindow){
-				state.serverWindow = state.serverWindow.contentWindow;
+
+			//Make sure we have contentWindow, but only do this for non-postMessage
+			//browsers (right now just opera is postMessage).
+			if(typeof document.postMessage == "undefined"){
+				if(state.serverWindow.contentWindow){
+					state.serverWindow = state.serverWindow.contentWindow;
+				}
 			}
 
 			this.sendRequestStart(stateId);
@@ -274,6 +296,14 @@ dojox.io.proxy.xip = {
 			serverUrl += ":" + message;
 		}
 		return serverUrl;
+	},
+
+	fragmentReceivedEvent: function(evt){
+		//summary: HTML5 document messaging endpoint. Unpack the event to see
+		//if we want to use it.
+		if(evt.uri.split("#")[0] == this.fullXipClientUrl){
+			this.fragmentReceived(evt.data);
+		}
 	},
 
 	fragmentReceived: function(frag){
