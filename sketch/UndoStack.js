@@ -53,21 +53,20 @@ dojo.require("dojox.xml.DomParser");
 		},
 		//	stack methods.
 		add: function(/*String*/cmd, /*ta.Annotation?*/ann, /*String?*/before){
-//var fullText=this.figure.serialize();
 			var id=ann?ann.id:'';
-			var bbox=ann?ann.getBBox():{};
+			//var bbox=ann?ann.getBBox():{};
 			var after=ann?ann.serialize():"";
 			if(cmd==ta.CommandTypes.Delete) after="";
 			
-			if(ann){
+			/*if(ann){
 				//	fix the bbox x/y coords
 				var t=ann.transform;
 				bbox.x+=t.dx;
 				bbox.y+=t.dy;
-			}
+			}*/
 			var state={
 				cmdname:cmd,
-				bbox:bbox,
+				//bbox:bbox,
 //					fullText:fullText,
 				before:{
 					shapeId: id,

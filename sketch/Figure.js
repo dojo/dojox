@@ -27,10 +27,6 @@ dojo.require("dojox.sketch.UndoStack");
 
 		this.obj={};		//	lookup table for shapes.  Not keen on this solution.
 
-		this.initUndoStack=function(){
-			this.history=new ta.UndoStack(this);
-		};
-
 		this.initUndoStack();
 
 		//	what is selected.
@@ -235,6 +231,9 @@ dojo.require("dojox.sketch.UndoStack");
 	};
 
 	var p=ta.Figure.prototype;
+	p.initUndoStack=function(){
+			this.history=new ta.UndoStack(this);
+	};
 	p.initialize=function(node){
 		this.node=node;
 		this.surface=dojox.gfx.createSurface(node, this.size.w, this.size.h);
@@ -285,9 +284,13 @@ dojo.require("dojox.sketch.UndoStack");
 		var w=this.size.w*this.zoomFactor;
 		var h=this.size.h*this.zoomFactor;
 		this.surface.setDimensions(w, h);
-		
 		//	then scale it.
 		this.group.setTransform(dojox.gfx.matrix.scale(this.zoomFactor, this.zoomFactor));
+		if(dojo.isIE){
+			this.image.rawNode.style.width=Math.max(w,this.size.w);
+			this.image.rawNode.style.height=Math.max(h,this.size.h);
+		}
+		//this.rect.setShape({width:w,height:h});
 	};
 	p.getFit=function(){
 		//	assume fitting the parent node.
