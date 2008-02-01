@@ -43,16 +43,16 @@ dojo.require("dojox.sketch._Plugin");
 			var f=this.figure;
 			var _=f.nextKey();
 			var a=new (this.annotation)(f, "annotation-"+_);
-			a.label='#';
 			a.transform={dx:start.x/f.zoomFactor, dy:start.y/f.zoomFactor};
 			a.end={ x:end.x/f.zoomFactor, y:end.y/f.zoomFactor };
 			if(a.control){
 				a.control={ x:Math.round((end.x/2)/f.zoomFactor),y:Math.round((end.y/2)/f.zoomFactor) };
 			}
+			f.onBeforeCreateShape(a);
 			a.initialize();
 			f.select(a);
-			f.history.add(ta.CommandTypes.Create,a);
 			f.onCreateShape(a);
+			f.history.add(ta.CommandTypes.Create,a);
 		}
 	});
 	ta.Annotation=function(figure, id){

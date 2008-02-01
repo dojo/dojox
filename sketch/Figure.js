@@ -140,18 +140,7 @@ dojo.require("dojox.sketch.UndoStack");
 				dojo.stopEvent(e);
 			}
 		};
-
-		this.setTool=function(/*dojox.sketch._Plugin*/t){
-			this._ctool=t;
-		};
-		this.onDblClickShape=function(shape,e){
-			if(shape['onDblClick']){
-				shape.onDblClick(e);
-			}
-		};
-
-		this.onCreateShape=function(shape){};
-
+	
 		//	drag handlers.
 		this._md=function(e){
 			var o=self._fromEvt(e);
@@ -234,6 +223,17 @@ dojo.require("dojox.sketch.UndoStack");
 	p.initUndoStack=function(){
 			this.history=new ta.UndoStack(this);
 	};
+	p.setTool=function(/*dojox.sketch._Plugin*/t){
+		this._ctool=t;
+	};
+	p.onDblClickShape=function(shape,e){
+		if(shape['onDblClick']){
+			shape.onDblClick(e);
+		}
+	};
+
+	p.onCreateShape=function(shape){};
+	p.onBeforeCreateShape=function(shape){};
 	p.initialize=function(node){
 		this.node=node;
 		this.surface=dojox.gfx.createSurface(node, this.size.w, this.size.h);

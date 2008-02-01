@@ -77,9 +77,9 @@ dojo.require("dojox.xml.DomParser");
 					shapeText:after
 				}
 			};
-			console.log('annotator history add',state);
+			//console.log('dojox.sketch history add',state);
 			this._steps.push(state);
-			this._undoedSteps=[];
+			this._undoedSteps = [];
 		},
 		destroy: function(){},
 		undo: function(){
