@@ -71,7 +71,7 @@ dojo.declare(
 		}
 		this.connect(this.doneButton, "onClick", "done");
 
-		dojo.subscribe(this.id+"-selectChild", dojo.hitch(this,"_checkButtons"));
+		this._subscription = dojo.subscribe(this.id+"-selectChild", dojo.hitch(this,"_checkButtons"));
 		this._checkButtons();
 	},
 
@@ -109,6 +109,11 @@ dojo.declare(
 	done: function(){
 		// summary: Finish the wizard's operation
 		this.selectedChildWidget.done();
+	},
+	
+	destroy: function(){
+		dojo.unsubscribe(this._subscription);
+		this.inherited(arguments);
 	}
 });
 
@@ -179,4 +184,5 @@ dojo.declare(
 			this.doneFunction();
 		}
 	}
+
 });
