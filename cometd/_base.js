@@ -56,8 +56,8 @@ dojox.cometd = new function(){
 	}
 
 	this.init = function(	/*String*/	root,
-				/*Object|null */ props,
-				/*Object|null */ bargs){	// return: dojo.Deferred
+				/*Object?*/ props,
+				/*Object?*/ bargs){	// return: dojo.Deferred
 		//	summary:
 		//		Initialize the cometd implementation of the Bayeux protocol
 		//	description:
@@ -169,7 +169,7 @@ dojox.cometd = new function(){
 	}
 	
 	
-	this.publish = function(/*String*/channel, /*Object */data, /*Object|null */properties){
+	this.publish = function(/*String*/ channel, /*Object*/ data, /*Object?*/ props){
 		// summary:
 		//		publishes the passed message to the cometd server for delivery
 		//		on the specified topic
@@ -184,8 +184,8 @@ dojox.cometd = new function(){
 			data: data,
 			channel: channel
 		};
-		if(properties){
-			dojo.mixin(message, properties);
+		if(props){
+			dojo.mixin(message, props);
 		}
 		this._sendMessage(message);
 	}
@@ -193,7 +193,8 @@ dojox.cometd = new function(){
 	
 	this.subscribe = function(	/*String */	channel,
 					/*Object */	objOrFunc,
-					/*String */	funcName){ // return: dojo.Deferred
+					/*String */	funcName,
+					/*Object?*/ props){ // return: dojo.Deferred
 		// summary:
 		//		inform the server of this client's interest in channel
 		// channel:
@@ -206,15 +207,15 @@ dojox.cometd = new function(){
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
 
+		props = props||{};
 		if(objOrFunc){
 			var tname = "/cometd"+channel;
-			var subs=this._subscriptions[tname];
+			var subs = this._subscriptions[tname];
 			if(!subs || subs.length==0){
-				subs=[];
-				this._sendMessage({
-					channel: "/meta/subscribe",
-					subscription: channel
-				});
+				subs = [];
+				props.channel = "/meta/subscribe";
+				props.subscription = channel;
+				this._sendMessage(props);
 				
 				var _ds = this._deferredSubscribes;
 				_ds[channel] = new dojo.Deferred();
@@ -243,9 +244,10 @@ dojox.cometd = new function(){
 
 
 
-	this.unsubscribe = function(	/*string*/	channel,
-					/*object|null*/ objOrFunc,
-					/*string|null*/ funcName){
+	this.unsubscribe = function(	/*String*/	channel,
+					/*Object?*/ objOrFunc,
+					/*String?*/ funcName,
+					/*Object?*/ props){
 		// summary:
 		//		inform the server of this client's disinterest in channel
 		// channel:
@@ -259,14 +261,14 @@ dojox.cometd = new function(){
 		//		a callback function to notifiy upon channel message delivery
 		
 		var tname = "/cometd"+channel;
-		var subs=this._subscriptions[tname];
+		var subs = this._subscriptions[tname];
 		if(!subs || subs.length==0){
 			return null;
 		}
 
 		var s=0;
 		for(var i in subs){
-			var sb=subs[i];
+			var sb = subs[i];
 			if( (!objOrFunc) ||
 				(
 					sb.objOrFunc===objOrFunc &&
@@ -281,11 +283,11 @@ dojox.cometd = new function(){
 		}
 		
 		if(s==0){
+			props = props||{};
+			props.channel = "/meta/subscribe";
+			props.subscription = channel;
 			delete this._subscriptions[tname];
-			this._sendMessage({
-				channel: "/meta/unsubscribe",
-				subscription: channel
-			});
+			this._sendMessage(props);
 			this._deferredUnsubscribes[channel] = new dojo.Deferred();
 			if (this._deferredSubscribes[channel]){
 				this._deferredSubscribes[channel].cancel();
