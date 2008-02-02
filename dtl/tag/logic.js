@@ -10,11 +10,12 @@ dojox.dtl.tag.logic.IfNode = function(bools, trues, falses, type){
 }
 dojo.extend(dojox.dtl.tag.logic.IfNode, {
 	render: function(context, buffer){
+		var i, bool, ifnot, filter, value;
 		if(this.type == "or"){
-			for(var i = 0, bool; bool = this.bools[i]; i++){
-				var ifnot = bool[0];
-				var filter = bool[1];
-				var value = filter.resolve(context);
+			for(i = 0; bool = this.bools[i]; i++){
+				ifnot = bool[0];
+				filter = bool[1];
+				value = filter.resolve(context);
 				if((value && !ifnot) || (ifnot && !value)){
 					if(this.falses){
 						buffer = this.falses.unrender(context, buffer);
@@ -25,10 +26,10 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 				if(this.falses)	return this.falses.render(context, buffer, this);
 			}
 		}else{
-			for(var i = 0, bool; bool = this.bools[i]; i++){
-				var ifnot = bool[0];
-				var filter = bool[1];
-				var value = filter.resolve(context);
+			for(i = 0; bool = this.bools[i]; i++){
+				ifnot = bool[0];
+				filter = bool[1];
+				value = filter.resolve(context);
 				if(!((value && !ifnot) || (ifnot && !value))){
 					if(this.trues){
 						buffer = this.trues.unrender(context, buffer);
@@ -69,31 +70,53 @@ dojox.dtl.tag.logic.ForNode = function(assign, loop, reversed, nodelist){
 }
 dojo.extend(dojox.dtl.tag.logic.ForNode, {
 	render: function(context, buffer){
-		var parentloop = {};
+		var i, parentloop = {};
 		if(context.forloop){
 			parentloop = context.forloop;
 		}
-		var items = dojox.dtl.resolveVariable(this.loop, context);
 		context.push();
-		for(var i = items.length; i < this.pool.length; i++){
+
+		var items = dojox.dtl.resolveVariable(this.loop, context);
+		for(i = items.length; i < this.pool.length; i++){
 			this.pool[i].unrender(context, buffer);
 		}
 		if(this.reversed){
-			items = items.reversed();
+			items = items.reverse();
 		}
+
+		var isObject = dojo.isObject(items) && !dojo.isArrayLike(items);
+		var arred = [];
+		if(isObject){
+			for(var key in items){
+				arred.push([key, items[key]]);
+			}
+		}else{
+			arred = items;
+		}
+
 		var j = 0;
-		for(var i in items){
-			var item = items[i];
+		for(i = 0; i < arred.length; i++){
+			var item = arred[i];
 			context.forloop = {
-				key: i,
 				counter0: j,
 				counter: j + 1,
-				revcounter0: items.length - j - 1,
-				revcounter: items.length - j,
+				revcounter0: arred.length - j - 1,
+				revcounter: arred.length - j,
 				first: j == 0,
+				last: j == arred.length - 1,
 				parentloop: parentloop
 			};
-			context[this.assign] = item;
+
+			if(this.assign.length > 1 && dojo.isArrayLike(item)){
+				var zipped = {};
+				for(var k = 0; k < item.length && k < this.assign.length; k++){
+					zipped[this.assign[k]] = item[k];
+				}
+				context.update(zipped);
+			}else{
+				context[this.assign[0]] = (isObject) ? item[1] : item;
+			}
+
 			if(j + 1 > this.pool.length){
 				this.pool.push(this.nodelist.clone(buffer));
 			}
@@ -116,9 +139,7 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 });
 
 dojox.dtl.tag.logic.if_ = function(parser, text){
-	var parts = text.split(/\s+/g);
-	var type;
-	var bools = [];
+	var i, part, type, falses, bool = [], parts = text.split(/\s+/g);
 	parts.shift();
 	text = parts.join(" ");
 	parts = text.split(" and ");
@@ -127,13 +148,13 @@ dojox.dtl.tag.logic.if_ = function(parser, text){
 		parts = text.split(" or ");
 	}else{
 		type = "and";
-		for(var i = 0; i < parts.length; i++){
+		for(i = 0; i < parts.length; i++){
 			if(parts[i] == "or"){
 				throw new Error("'if' tags can't mix 'and' and 'or'");
 			}
 		}
 	}
-	for(var i = 0, part; part = parts[i]; i++){
+	for(i = 0; part = parts[i]; i++){
 		var not = false;
 		if(part.indexOf("not ") == 0){
 			part = part.substring(4);
@@ -142,19 +163,32 @@ dojox.dtl.tag.logic.if_ = function(parser, text){
 		bools.push([not, new dojox.dtl.Filter(part)]);
 	}
 	var trues = parser.parse(["else", "endif"]);
-	var falses = false;
+	falses = false;
 	var token = parser.next();
 	if(token.text == "else"){
-		var falses = parser.parse(["endif"]);
+		falses = parser.parse(["endif"]);
 		parser.next();
 	}
 	return new dojox.dtl.tag.logic.IfNode(bools, trues, falses, type);
 }
 
 dojox.dtl.tag.logic.for_ = function(parser, text){
-	var parts = text.split(/\s+/g);
-	var reversed = parts.length == 5;
+	var parts = dojox.dtl.text.pySplit(text);
+	if(parts.length < 4){
+		throw new Error("'for' statements should have at least four words: " + text);
+	}
+	var reversed = parts[parts.length - 1] == "reversed";
+	var index = (reversed) ? -3 : -2;
+	if(parts[parts.length + index] != "in"){
+		throw new Error("'for' tag received an invalid argument: " + text);
+	}
+	var loopvars = parts.slice(1, index).join(" ").split(/ *, */);
+	for(var i = 0; i < loopvars.length; i++){
+		if(!loopvars[i] || loopvars[i].indexOf(" ") != -1){
+			throw new Error("'for' tag received an invalid argument: " + text);
+		}
+	}
 	var nodelist = parser.parse(["endfor"]);
 	parser.next();
-	return new dojox.dtl.tag.logic.ForNode(parts[1], parts[3], reversed, nodelist);
+	return new dojox.dtl.tag.logic.ForNode(loopvars, parts[parts.length + index + 1], reversed, nodelist);
 }

@@ -100,7 +100,7 @@ doh.register("dojox.dtl.text.tag",
 				unplugged: "Torrey"
 			});
 			var template = new dd.Template("{% debug %}");
-			t.is('items: ["apple", "banana", "lemon"]\n\nunplugged: "Torrey"\n\n', template.render(context));
+			t.is('items: ["apple","banana","lemon"]\n\nunplugged: "Torrey"\n\n', template.render(context));
 		},
 		function test_tag_filter(t){
 			var dd = dojox.dtl;
@@ -112,7 +112,64 @@ doh.register("dojox.dtl.text.tag",
 			t.t(false);
 		},
 		function test_tag_for(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				items: ["apple", "banana", "lemon"]
+			});
+			var template = new dd.Template("{% for item in items %}<li>{{ item }}</li>{% endfor %}");
+			t.is("<li>apple</li><li>banana</li><li>lemon</li>", template.render(context));
+
+			template = new dd.Template("{% for item in items reversed %}<li>{{ item }}</li>{% endfor %}");
+			t.is("<li>lemon</li><li>banana</li><li>apple</li>", template.render(context));
+
+			context.items = {
+				apple: "Red Delicious",
+				banana: "Cavendish",
+				lemon: "Citrus"
+			};
+			template = new dd.Template("{% for key, value in items %}<li>{{ value }} {{ key|title }}</li>{% endfor %}");
+			t.is("<li>Red Delicious Apple</li><li>Cavendish Banana</li><li>Citrus Lemon</li>", template.render(context));
+
+			// The same thing above, but using "zipped" sets
+			context.items = [
+				["apple", "Red Delicious", 1.99],
+				["banana", "Cavendish", 0.49],
+				["lemon", "Citrus", 0.29]
+			];
+			template = new dd.Template("{% for fruit, type, price in items %}<li>{{ type }} {{ fruit|title }} costs ${{ price}}</li>{% endfor %}");
+			t.is("<li>Red Delicious Apple costs $1.99</li><li>Cavendish Banana costs $0.49</li><li>Citrus Lemon costs $0.29</li>", template.render(context));
+
+			template = new dd.Template("{% for fruit, type, price in items reversed %}<li>{{ type }} {{ fruit|title }} costs ${{ price}}</li>{% endfor %}");
+			t.is("<li>Citrus Lemon costs $0.29</li><li>Cavendish Banana costs $0.49</li><li>Red Delicious Apple costs $1.99</li>", template.render(context));
+
+			// Now to create some errors
+			var found = false;
+			try {
+				template = new dd.Template("{% for item initems %}<li>{{ item }}</li>{% endfor %}");
+			}catch(e){
+				found = true;
+				t.is("'for' statements should have at least four words: for item initems", e.message);
+			}
+			t.t(found);
+
+			found = false;
+			try {
+				template = new dd.Template("{% for item ni items %}<li>{{ item }}</li>{% endfor %}");
+			}catch(e){
+				found = true;
+				t.is("'for' tag received an invalid argument: for item ni items", e.message);
+			}
+			t.t(found);
+
+			found = false;
+			try {
+				template = new dd.Template("{% for my item in items %}<li>{{ item }}</li>{% endfor %}");
+			}catch(e){
+				found = true;
+				t.is("'for' tag received an invalid argument: for my item in items", e.message);
+			}
+			t.t(found);
 		},
 		function test_tag_if(t){
 			t.t(false);
