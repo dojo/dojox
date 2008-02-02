@@ -24,7 +24,7 @@ dojo.declare("dojox.gfx.Moveable", null, {
 	// methods
 	destroy: function(){
 		// summary: stops watching for possible move, deletes all references, so the object can be garbage-collected
-		dojo.forEach(this.events, "disconnect", this.shape);
+		dojo.forEach(this.events, this.shape.disconnect, this.shape);
 		this.events = this.shape = null;
 	},
 	
