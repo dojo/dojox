@@ -71,7 +71,7 @@ should be tested inside a for loop.
 |      X      | filter      |       X        |                |
 |             | firstof     |                |                |
 |      X      | for         |       X        |                |
-|      X      | if          |                |                |
+|      X      | if          |       X        |                |
 |             | ifchanged   |                |                |
 |             | ifequal     |                |                |
 |             | ifnotequal  |                |                |

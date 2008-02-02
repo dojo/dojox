@@ -172,7 +172,52 @@ doh.register("dojox.dtl.text.tag",
 			t.t(found);
 		},
 		function test_tag_if(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				jokes: {
+					hot_pockets: true,
+					unicycles: true,
+					bacon: true
+				}
+			});
+			var template = new dd.Template("Comedian is {% if jokes.hot_pockets and jokes.unicycles and jokes.bacon %}funny{% else %}not funny{% endif %}");
+			t.is("Comedian is funny", template.render(context));
+
+			context.jokes.unicycles = false;
+			t.is("Comedian is not funny", template.render(context));
+
+			context.comedians = {
+				hedberg: true,
+				gaffigan: true,
+				cook: true
+			};
+			template = new dd.Template("Show will be {% if comedians.hedberg or comedians.gaffigan %}worth seeing{% else %}not worth seeing{% endif %}");
+			t.is("Show will be worth seeing", template.render(context));
+
+			// NOTE: "and" is implied by nesting. eg {% if sunny %}{% if windy %}It's Sunny and Windy{% endif %}{% endif %}
+			// Not mixing ands and ors allows for MUCH faster rendering
+			template = new dd.Template("Show will {% if comedians.hedberg or comedians.gaffigan %}{% if comedians.cook %}not {% endif %}be worth seeing{% else %}not be worth seeing{% endif %}");
+			t.is("Show will not be worth seeing", template.render(context));
+
+			context.comedians.cook = false;
+			t.is("Show will be worth seeing", template.render(context));
+
+			template = new dd.Template("Show will be {% if comedians.hedberg and comedians.gaffigan and not comedians.cook %}AWESOME{% else %}almost awesome{% endif %}");
+			t.is("Show will be AWESOME", template.render(context));
+
+			context.comedians.cook = true;
+			t.is("Show will be almost awesome", template.render(context));
+
+			// Now we test for errors.
+			var found = false;
+			try {
+				template = new dd.Template("Show will be {% if comedians.hedberg or comedians.gaffigan and not comedians.cook %}worth seeing{% else %}not worth seeing{% endif %}");
+			}catch(e){
+				found = true;
+				t.is("'if' tags can't mix 'and' and 'or'", e.message);
+			}
+			t.t(found);
 		},
 		function test_tag_ifchanged(t){
 			t.t(false);

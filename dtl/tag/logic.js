@@ -20,25 +20,30 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 					if(this.falses){
 						buffer = this.falses.unrender(context, buffer);
 					}
-					return this.trues.render(context, buffer, this);
+					return (this.trues) ? this.trues.render(context, buffer, this) : buffer;
 				}
-				buffer = this.trues.unrender(context, buffer);
-				if(this.falses)	return this.falses.render(context, buffer, this);
 			}
+			if(this.trues){
+				buffer = this.trues.unrender(context, buffer);
+			}
+			return (this.falses) ? this.falses.render(context, buffer, this) : buffer;
 		}else{
 			for(i = 0; bool = this.bools[i]; i++){
 				ifnot = bool[0];
 				filter = bool[1];
 				value = filter.resolve(context);
-				if(!((value && !ifnot) || (ifnot && !value))){
+				// If we ever encounter a false value
+				if(value == ifnot){
 					if(this.trues){
 						buffer = this.trues.unrender(context, buffer);
 					}
-					return this.falses.render(context, buffer, this);
+					return (this.falses) ? this.falses.render(context, buffer, this) : buffer;
 				}
-				buffer = this.falses.unrender(context, buffer);
-				if(this.falses)	return this.trues.render(context, buffer, this);
 			}
+			if(this.falses){
+				buffer = this.falses.unrender(context, buffer);
+			}
+			return (this.trues) ? this.trues.render(context, buffer, this) : buffer;
 		}
 		return buffer;
 	},
@@ -139,7 +144,7 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 });
 
 dojox.dtl.tag.logic.if_ = function(parser, text){
-	var i, part, type, falses, bool = [], parts = text.split(/\s+/g);
+	var i, part, type, falses, bools = [], parts = dojox.dtl.text.pySplit(text);
 	parts.shift();
 	text = parts.join(" ");
 	parts = text.split(" and ");
@@ -149,7 +154,8 @@ dojox.dtl.tag.logic.if_ = function(parser, text){
 	}else{
 		type = "and";
 		for(i = 0; i < parts.length; i++){
-			if(parts[i] == "or"){
+			if(parts[i].indexOf(" or ") != -1){
+				// Note, since we split by and, this is the only place we need to error check
 				throw new Error("'if' tags can't mix 'and' and 'or'");
 			}
 		}
@@ -157,7 +163,7 @@ dojox.dtl.tag.logic.if_ = function(parser, text){
 	for(i = 0; part = parts[i]; i++){
 		var not = false;
 		if(part.indexOf("not ") == 0){
-			part = part.substring(4);
+			part = part.slice(4);
 			not = true;
 		}
 		bools.push([not, new dojox.dtl.Filter(part)]);
