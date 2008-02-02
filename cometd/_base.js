@@ -516,7 +516,7 @@ dojox.cometd = new function(){
 
 	this._sendMessage = function(/* object */ message){
 		// console.debug(this.currentTransport, this._connected, this.batch);
-		/// if(this.currentTransport && this._connected && !this.batch){
+		// if(this.currentTransport && this._connected && !this.batch){
 		if(this.currentTransport && !this.batch){
 			return this.currentTransport.sendMessages([message]);
 		}else{
@@ -530,7 +530,7 @@ dojox.cometd = new function(){
 	}
 
 	this.endBatch = function(){
-		if(--this.batch <= 0 && this.currentTransport && this._connected){
+		if(--this.batch <= 0 && this.currentTransport){ // && this._connected){
 			this.batch=0;
 
 			var messages=this._messageQ;
