@@ -48,19 +48,13 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 		return buffer;
 	},
 	unrender: function(context, buffer){
-		if(this.trues) buffer = this.trues.unrender(context, buffer);
-		if(this.falses) buffer = this.falses.unrender(context, buffer);
+		buffer = (this.trues) ? this.trues.unrender(context, buffer) : buffer;
+		buffer = (this.falses) ? this.falses.unrender(context, buffer) : buffer;
 		return buffer;
 	},
 	clone: function(buffer){
-		var trues = this.trues;
-		var falses = this.falses;
-		if(trues){
-			trues = trues.clone(buffer);
-		}
-		if(falses){
-			falses = falses.clone(buffer);
-		}
+		var trues = (this.trues) ? this.trues.clone(buffer) : null;
+		var falses = (this.falses) ? this.falses.clone(buffer) : null;
 		return new this.constructor(this.bools, trues, falses, this.type);
 	},
 	toString: function(){ return "dojox.dtl.tag.logic.IfNode"; }
@@ -87,6 +81,12 @@ dojo.extend(dojox.dtl.tag.logic.IfEqualNode, {
 			buffer = this.trues.unrender(context, buffer);
 		}
 		return (this.falses) ? this.falses.render(context, buffer, this) : buffer;
+	},
+	unrender: function(context, buffer){
+		return dojox.dtl.tag.logic.IfNode.prototype.unrender.call(this, context, buffer);
+	},
+	clone: function(buffer){
+		return dojox.dtl.tag.logic.IfNode.prototype.unrender.call(this, buffer);
 	}
 });
 
