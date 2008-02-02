@@ -466,7 +466,7 @@ dojox.cometd = new function(){
 					if(message.successful && !this._connected){
 						this._connected = this._initialized;
 						this.endBatch();
-					} else if(!this._initialized){
+					}else if(!this._initialized){
 						this._connected = false; // finish disconnect
 					}
 					dojo.publish("/cometd/meta",[{cometd:this,action:"connect",successful:message.successful,state:this.state()}]);
@@ -515,10 +515,11 @@ dojox.cometd = new function(){
 	}
 
 	this._sendMessage = function(/* object */ message){
-		if(this.currentTransport && this._connected && this.batch==0){
+		// console.debug(this.currentTransport, this._connected, this.batch);
+		/// if(this.currentTransport && this._connected && !this.batch){
+		if(this.currentTransport && !this.batch){
 			return this.currentTransport.sendMessages([message]);
-		}
-		else{
+		}else{
 			this._messageQ.push(message);
 			return null;
 		}
