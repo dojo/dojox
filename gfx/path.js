@@ -331,12 +331,20 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 			this.fontStyle = dojo.clone(dojox.gfx.defaultFont);
 		}
 	},
+	getText: function(){
+		// summary: returns the current text object or null
+		return this.text;	// Object
+	},
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
 		this.text = dojox.gfx.makeParameters(this.text, 
 			typeof newText == "string" ? {text: newText} : newText);
 		this._setText();
 		return this;	// self
+	},
+	getFont: function(){
+		// summary: returns the current font object or null
+		return this.fontStyle;	// Object
 	},
 	setFont: function(newFont){
 		// summary: sets a font for text

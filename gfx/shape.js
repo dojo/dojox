@@ -592,6 +592,10 @@ dojo.declare("dojox.gfx.shape.Text", dojox.gfx.Shape, {
 		this.shape = dojo.clone(dojox.gfx.defaultText);
 		this.rawNode = rawNode;
 	},
+	getFont: function(){
+		// summary: returns the current font object or null
+		return this.fontStyle;	// Object
+	},
 	setFont: function(newFont){
 		// summary: sets a font for text
 		// newFont: Object: a font object (see dojox.gfx.defaultFont) or a font string
