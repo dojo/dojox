@@ -17,7 +17,8 @@ dojo.extend(dojox.dtl.Context, {
 		//		passed objecct mixed in.
 		var context = new dojox.dtl.Context();
 		var keys = this.getKeys();
-		for(var i = 0, key; key = keys[i]; i++){
+		var i, key;
+		for(i = 0; key = keys[i]; i++){
 			if(typeof obj[key] != "undefined"){
 				context[key] = obj[key];
 			}else{
@@ -29,12 +30,12 @@ dojo.extend(dojox.dtl.Context, {
 			keys = obj.getKeys();
 		}else if(typeof obj == "object"){
 			keys = [];
-			for(var key in obj){
+			for(key in obj){
 				keys.push(key);
 			}
 		}
 
-		for(var i = 0, key; key = keys[i]; i++){
+		for(i = 0; key = keys[i]; i++){
 			context[key] = obj[key];
 		}
 
@@ -45,6 +46,7 @@ dojo.extend(dojox.dtl.Context, {
 		//		defined in the filter.
 		var context = new dojox.dtl.Context();
 		var keys = [];
+		var i;
 		if(filter instanceof dojox.dtl.Context){
 			keys = filter.getKeys();
 		}else if(typeof filter == "object"){
@@ -52,14 +54,14 @@ dojo.extend(dojox.dtl.Context, {
 				keys.push(key);
 			}
 		}else{
-			for(var i = 0, arg; arg = arguments[i]; i++){
+			for(i = 0, arg; arg = arguments[i]; i++){
 				if(typeof arg == "string"){
 					keys.push(arg);
 				}
 			}
 		}
 
-		for(var i = 0, key; key = keys[i]; i++){
+		for(i = 0, key; key = keys[i]; i++){
 			context[key] = this[key];
 		}
 
@@ -159,23 +161,24 @@ dojox.dtl.text = {
 	_get: function(module, name, errorless){
 		// summary: Used to find both tags and filters
 		var params = dojox.dtl.register.get(module, name, errorless);
-		if(!params) return;
+		if(!params) return null;
 
 		var require = params.getRequire();
 		var obj = params.getObj();
 		var fn = params.getFn();
 
+		var parts;
 		if(fn.indexOf(":") != -1){
-			var parts = fn.split(":");
+			parts = fn.split(":");
 			fn = parts.pop();
 		}
 
 		dojo.requireIf(true, require);
 
 		var parent = window;
-		var parts = obj.split(".");
+		parts = obj.split(".");
 		for(var i = 0, part; part = parts[i]; i++){
-			if(!parent[part]) return;
+			if(!parent[part]) return null;
 			parent = parent[part];
 		}
 		return parent[fn || name] || parent[name + "_"];
@@ -304,7 +307,7 @@ dojo.extend(dojox.dtl.Filter, {
 			current = (path.indexOf(".") == -1) ? parseInt(path) : parseFloat(path);
 		}else if(first == '"' && first == last){
 			current = path.substring(1, path.length - 1);
-		}else{;
+		}else{
 			if(path == "true") return true;
 			if(path == "false") return false;
 			if(path == "null" || path == "None") return null;
@@ -479,10 +482,11 @@ dojox.dtl.register = function(module, cols, args, /*Function*/ normalize){
 	}
 
 	ddr[module] = function(/*String*/ name, /*mixed...*/ parameters){
+		var normalized;
 		if(normalize){
-			var normalized = normalize(arguments);
+			normalized = normalize(arguments);
 		}else{
-			var normalized = [arguments];
+			normalized = [arguments];
 		}
 
 		for(var i = 0, args; args = normalized[i]; i++){
@@ -533,6 +537,7 @@ dojo.mixin(dojox.dtl.register, {
 			}
 		}
 		if(!errorless) throw new Error("'" + module + "' of name '" + name + "' does not exist");
+		return null;
 	},
 	_normalize: function(args){
 		// summary:
@@ -587,7 +592,7 @@ dojo.mixin(dojox.dtl.register, {
 (function(){
 	var register = dojox.dtl.register;
 	var dtt = "dojox.dtl.tag";
-	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for"]);
+	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for", "ifequal", "ifnotequal"]);
 	register.tag(dtt + ".loader", dtt + ".loader", ["extends", "block"]);
 	register.tag(dtt + ".misc", dtt + ".misc", ["comment", "debug", "filter"]);
 	register.tag(dtt + ".loop", dtt + ".loop", ["cycle"]);

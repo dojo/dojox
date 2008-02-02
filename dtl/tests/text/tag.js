@@ -223,10 +223,55 @@ doh.register("dojox.dtl.text.tag",
 			t.t(false);
 		},
 		function test_tag_ifequal(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				user: {
+					id: 314
+				},
+				comment: {
+					user_id: 314
+				}
+			});
+
+			var template = new dd.Template("{% ifequal user.id comment.user_id %}You posted this{% endifequal %}");
+			t.is("You posted this", template.render(context));
+
+			context.user.id = 313;
+			t.is("", template.render(context));
+
+			// Errors
+			var found = false;
+			try {
+				template = new dd.Template("{% ifequal user.id %}You posted this{% endifequal %}");
+			}catch(e){
+				found = true;
+				t.is("ifequal takes two arguments", e.message);
+			}
+			t.t(found);
+
+			found = false;
+			try {
+				template = new dd.Template("{% ifequal user.id comment.user_id %}You posted this{% endif %}");
+			}catch(e){
+				found = true;
+				t.is("'tag' of name 'endif' does not exist", e.message);
+			}
+			t.t(found);
 		},
 		function test_tag_ifnotequal(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				favorite: "hedberg",
+				comedian: "cook"
+			});
+
+			var template = new dd.Template("{% ifnotequal favorite comedian %}Not your favorite{% else %}Your favorite{% endifnotequal %}");
+			t.is("Not your favorite", template.render(context));
+
+			context.comedian = "hedberg";
+			t.is("Your favorite", template.render(context));
 		},
 		function test_tag_include(t){
 			t.t(false);

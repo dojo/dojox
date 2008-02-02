@@ -66,6 +66,30 @@ dojo.extend(dojox.dtl.tag.logic.IfNode, {
 	toString: function(){ return "dojox.dtl.tag.logic.IfNode"; }
 });
 
+dojox.dtl.tag.logic.IfEqualNode = function(var1, var2, trues, falses, negate){
+	this.var1 = new dojox.dtl.Filter(var1);
+	this.var2 = new dojox.dtl.Filter(var2);
+	this.trues = trues;
+	this.falses = falses;
+	this.negate = negate;
+}
+dojo.extend(dojox.dtl.tag.logic.IfEqualNode, {
+	render: function(context, buffer){
+		var var1 = this.var1.resolve(context);
+		var var2 = this.var2.resolve(context);
+		if((this.negate && var1 != var2) || (!this.negate && var1 == var2)){
+			if(this.falses){
+				buffer = this.falses.unrender(context, buffer);
+			}
+			return (this.trues) ? this.trues.render(context, buffer, this) : buffer;
+		}
+		if(this.trues){
+			buffer = this.trues.unrender(context, buffer);
+		}
+		return (this.falses) ? this.falses.render(context, buffer, this) : buffer;
+	}
+});
+
 dojox.dtl.tag.logic.ForNode = function(assign, loop, reversed, nodelist){
 	this.assign = assign;
 	this.loop = loop;
@@ -143,58 +167,80 @@ dojo.extend(dojox.dtl.tag.logic.ForNode, {
 	toString: function(){ return "dojox.dtl.tag.logic.ForNode"; }
 });
 
-dojox.dtl.tag.logic.if_ = function(parser, text){
-	var i, part, type, falses, bools = [], parts = dojox.dtl.text.pySplit(text);
-	parts.shift();
-	text = parts.join(" ");
-	parts = text.split(" and ");
-	if(parts.length == 1){
-		type = "or";
-		parts = text.split(" or ");
-	}else{
-		type = "and";
-		for(i = 0; i < parts.length; i++){
-			if(parts[i].indexOf(" or ") != -1){
-				// Note, since we split by and, this is the only place we need to error check
-				throw new Error("'if' tags can't mix 'and' and 'or'");
+dojo.mixin(dojox.dtl.tag.logic, {
+	if_: function(parser, text){
+		var i, part, type, bools = [], parts = dojox.dtl.text.pySplit(text);
+		parts.shift();
+		text = parts.join(" ");
+		parts = text.split(" and ");
+		if(parts.length == 1){
+			type = "or";
+			parts = text.split(" or ");
+		}else{
+			type = "and";
+			for(i = 0; i < parts.length; i++){
+				if(parts[i].indexOf(" or ") != -1){
+					// Note, since we split by and, this is the only place we need to error check
+					throw new Error("'if' tags can't mix 'and' and 'or'");
+				}
 			}
 		}
-	}
-	for(i = 0; part = parts[i]; i++){
-		var not = false;
-		if(part.indexOf("not ") == 0){
-			part = part.slice(4);
-			not = true;
+		for(i = 0; part = parts[i]; i++){
+			var not = false;
+			if(part.indexOf("not ") == 0){
+				part = part.slice(4);
+				not = true;
+			}
+			bools.push([not, new dojox.dtl.Filter(part)]);
 		}
-		bools.push([not, new dojox.dtl.Filter(part)]);
-	}
-	var trues = parser.parse(["else", "endif"]);
-	falses = false;
-	var token = parser.next();
-	if(token.text == "else"){
-		falses = parser.parse(["endif"]);
-		parser.next();
-	}
-	return new dojox.dtl.tag.logic.IfNode(bools, trues, falses, type);
-}
-
-dojox.dtl.tag.logic.for_ = function(parser, text){
-	var parts = dojox.dtl.text.pySplit(text);
-	if(parts.length < 4){
-		throw new Error("'for' statements should have at least four words: " + text);
-	}
-	var reversed = parts[parts.length - 1] == "reversed";
-	var index = (reversed) ? -3 : -2;
-	if(parts[parts.length + index] != "in"){
-		throw new Error("'for' tag received an invalid argument: " + text);
-	}
-	var loopvars = parts.slice(1, index).join(" ").split(/ *, */);
-	for(var i = 0; i < loopvars.length; i++){
-		if(!loopvars[i] || loopvars[i].indexOf(" ") != -1){
+		var trues = parser.parse(["else", "endif"]);
+		var falses = false;
+		var token = parser.next();
+		if(token.text == "else"){
+			falses = parser.parse(["endif"]);
+			parser.next();
+		}
+		return new dojox.dtl.tag.logic.IfNode(bools, trues, falses, type);
+	},
+	_ifequal: function(parser, text, negate){
+		var parts = dojox.dtl.text.pySplit(text);
+		if(parts.length != 3){
+			throw new Error(parts[0] + " takes two arguments");
+		}
+		var end = 'end' + parts[0];
+		var trues = parser.parse(["else", end]);
+		var falses = false;
+		var token = parser.next();
+		if(token.text == "else"){
+			falses = parser.parse([end]);
+			parser.next();
+		}
+		return new dojox.dtl.tag.logic.IfEqualNode(parts[1], parts[2], trues, falses, negate);
+	},
+	ifequal: function(parser, text){
+		return dojox.dtl.tag.logic._ifequal(parser, text);
+	},
+	ifnotequal: function(parser, text){
+		return dojox.dtl.tag.logic._ifequal(parser, text, true);
+	},
+	for_: function(parser, text){
+		var parts = dojox.dtl.text.pySplit(text);
+		if(parts.length < 4){
+			throw new Error("'for' statements should have at least four words: " + text);
+		}
+		var reversed = parts[parts.length - 1] == "reversed";
+		var index = (reversed) ? -3 : -2;
+		if(parts[parts.length + index] != "in"){
 			throw new Error("'for' tag received an invalid argument: " + text);
 		}
+		var loopvars = parts.slice(1, index).join(" ").split(/ *, */);
+		for(var i = 0; i < loopvars.length; i++){
+			if(!loopvars[i] || loopvars[i].indexOf(" ") != -1){
+				throw new Error("'for' tag received an invalid argument: " + text);
+			}
+		}
+		var nodelist = parser.parse(["endfor"]);
+		parser.next();
+		return new dojox.dtl.tag.logic.ForNode(loopvars, parts[parts.length + index + 1], reversed, nodelist);
 	}
-	var nodelist = parser.parse(["endfor"]);
-	parser.next();
-	return new dojox.dtl.tag.logic.ForNode(loopvars, parts[parts.length + index + 1], reversed, nodelist);
-}
+});

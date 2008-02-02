@@ -73,8 +73,8 @@ should be tested inside a for loop.
 |      X      | for         |       X        |                |
 |      X      | if          |       X        |                |
 |             | ifchanged   |                |                |
-|             | ifequal     |                |                |
-|             | ifnotequal  |                |                |
+|      X      | ifequal     |       X        |                |
+|      X      | ifnotequal  |       X        |                |
 |             | include     |                |                |
 |             | load        |                |                |
 |             | now         |                |                |
