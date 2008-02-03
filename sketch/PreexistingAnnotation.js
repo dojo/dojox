@@ -45,7 +45,7 @@ dojo.require("dojox.sketch.Anchor");
 		
 		for(var i=0; i<obj.childNodes.length; i++){
 			var c=obj.childNodes[i];
-			if(c.localName=="text") this.property('label',c.childNodes[0].nodeValue);
+			if(c.localName=="text") this.property('label',c.childNodes.length?c.childNodes[0].nodeValue:'');
 			else if(c.localName=="rect"){
 				if(c.getAttribute('x')!==null) this.start.x=parseFloat(c.getAttribute('x'), 10);
 				if(c.getAttribute('width')!==null) this.end.x=parseFloat(c.getAttribute('width'), 10)+parseFloat(c.getAttribute('x'), 10);

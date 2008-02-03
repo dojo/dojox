@@ -67,7 +67,7 @@ dojo.require("dojox.sketch.Anchor");
 		
 		for(var i=0; i<obj.childNodes.length; i++){
 			var c=obj.childNodes[i];
-			if(c.localName=="text") this.property('label',c.childNodes[0].nodeValue);
+			if(c.localName=="text") this.property('label',c.childNodes.length?c.childNodes[0].nodeValue:'');
 			else if(c.localName=="path"){
 				//	the line
 				var d=c.getAttribute('d').split(" ");
