@@ -42,7 +42,7 @@ dojo.require("dojox.sketch.Anchor");
 		this.labelShape=this.shape.createText({
 			x:0, y:0, text:this.property('label'), align:"start"
 		}).setFont(font).setFill(this.property('fill'));
-		this.lineShape=this.shape.createLine({ x1:1, x2:this.getTextBox().w, y1:2, y2:2 }).setStroke({ color:this.property('fill'), width:1 });
+		this.lineShape=this.shape.createLine({ x1:1, x2:this.labelShape.getTextWidth(), y1:2, y2:2 }).setStroke({ color:this.property('fill'), width:1 });
 		this.lineShape.getEventSource().setAttribute("shape-rendering","crispEdges");
 	};
 	p.destroy=function(){
@@ -61,12 +61,12 @@ dojo.require("dojox.sketch.Anchor");
 		this.apply(obj);
 		this.shape.setTransform(this.transform);
 		this.labelShape.setShape({ x:0, y:0, text:this.property('label') }).setFill(this.property('fill'));
-		this.lineShape.setShape({ x1:1, x2:this.getTextBox().w+1, y1:2, y2:2 }).setStroke({ color:this.property('fill'), width:1 });
+		this.lineShape.setShape({ x1:1, x2:this.labelShape.getTextWidth()+1, y1:2, y2:2 }).setStroke({ color:this.property('fill'), width:1 });
 	};
 	p.serialize=function(){
 		var s=this.property('stroke');
 		return '<g '+this.writeCommonAttrs()+'>'
-			+ '<line x1="1" x2="'+this.getTextBox().w+1+'" y1="5" y2="5" style="stroke:'+s.color+';stroke-weight:'+s.width+'" />'
+			+ '<line x1="1" x2="'+this.labelShape.getTextWidth()+1+'" y1="5" y2="5" style="stroke:'+s.color+';stroke-weight:'+s.width+'" />'
 			+ '<text style="fill:'+this.property('fill')+';" font-weight="bold" '
 			+ 'x="0" y="0">'
 			+ this.property('label')
