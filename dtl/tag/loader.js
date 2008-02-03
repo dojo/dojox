@@ -8,18 +8,23 @@ dojox.dtl.tag.loader.BlockNode = function(name, nodelist){
 }
 dojo.extend(dojox.dtl.tag.loader.BlockNode, {
 	render: function(context, buffer){
-		if(this.override){
-			buffer = this.override.render(context, buffer, this);
-			this.rendered = this.override;
-		}else{
-			buffer =  this.nodelist.render(context, buffer, this);
-			this.rendered = this.nodelist;
+		var name = this.name;
+		var nodelist = this.nodelist;
+		if(buffer.blocks){
+			var block = buffer.blocks[name];
+			if(block){
+				nodelist = block.nodelist;
+				block.used = true;
+			}
 		}
-		this.override = null;
-		return buffer;
+		this.rendered = nodelist;
+		return nodelist.render(context, buffer, this);
 	},
 	unrender: function(context, buffer){
 		return this.rendered.unrender(context, buffer);
+	},
+	clone: function(buffer){
+		return new this.constructor(this.name, this.nodelist.clone(buffer));
 	},
 	setOverride: function(nodelist){
 		// summary: In a shared parent, we override, not overwrite
@@ -89,34 +94,38 @@ dojo.extend(dojox.dtl.tag.loader.ExtendsNode, {
 		return this.parent;
 	},
 	render: function(context, buffer){
-		var st = dojox.dtl;
-		var stbl = dojox.dtl.tag.loader;
 		var parent = this.getParent(context);
-		var isChild = parent.nodelist[0] instanceof this.constructor;
-		var parentBlocks = {};
-		for(var i = 0, node; node = parent.nodelist.contents[i]; i++){
-			if(node instanceof stbl.BlockNode){
-				parentBlocks[node.name] = node;
-			}
-		}
+
+		buffer.blocks = buffer.blocks || {};
+
+		// The parent won't always be in the default parent's nodelist
 		for(var i = 0, node; node = this.nodelist.contents[i]; i++){
-			if(node instanceof stbl.BlockNode){
-				var block = parentBlocks[node.name];
-				if(!block){
-					if(isChild){
-						parent.nodelist[0].nodelist.append(node);
-					}
-				}else{
-					if(this.shared){
-						block.setOverride(node.nodelist);
-					}else{
-						block.nodelist = node.nodelist;
-					}
+			if(node instanceof dojox.dtl.tag.loader.BlockNode){
+				buffer.blocks[node.name] = {
+					shared: this.shared,
+					nodelist: node.nodelist,
+					used: false
 				}
 			}
 		}
+
 		this.rendered = parent;
-		return parent.render(context, buffer, this);
+		buffer = parent.nodelist.render(context, buffer, this);
+
+		var rerender = false;
+		for(var name in buffer.blocks){
+			var block = buffer.blocks[name];
+			if(!block.used){
+				rerender = true;
+				parent.nodelist[0].nodelist.append(block.nodelist);
+			}
+		}
+
+		if(rerender){
+			buffer = parent.nodelist.render(context, buffer, this);
+		}
+
+		return buffer;
 	},
 	unrender: function(context, buffer){
 		return this.rendered.unrender(context, buffer, this);

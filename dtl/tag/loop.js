@@ -58,7 +58,6 @@ dojo.extend(dojox.dtl.tag.loop.IfChangedNode, {
 			change = dojo.toJson(dojo.map(this.vars, function(item){
 				return item.resolve(context);
 			}));
-			console.debug("CHANGE", change);
 		}else{
 			change = this.nodes.dummyRender(context, buffer);
 		}

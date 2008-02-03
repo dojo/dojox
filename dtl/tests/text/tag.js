@@ -8,28 +8,39 @@ doh.register("dojox.dtl.text.tag",
 			var dd = dojox.dtl;
 
 			// Simple (messy) string-based extension
-			var template = new dd.Template('{% extends "../../dojox/dtl/tests/text/templates/pocket.html" %}{% block pocket %}Simple{% endblock %}');
+			var template = new dd.Template('{% extends "../../dojox/dtl/tests/templates/pocket.html" %}{% block pocket %}Simple{% endblock %}');
 			t.is("Simple Pocket", template.render());
 
 			// Variable replacement
 			var context = new dd.Context({
-				parent: "../../dojox/dtl/tests/text/templates/pocket.html"
+				parent: "../../dojox/dtl/tests/templates/pocket.html"
 			})
 			template = new dd.Template('{% extends parent %}{% block pocket %}Variabled{% endblock %}');
 			t.is("Variabled Pocket", template.render(context));
 
 			// Nicer dojo.moduleUrl and variable based extension
-			context.parent = dojo.moduleUrl("dojox.dtl.tests.text.templates", "pocket.html");
+			context.parent = dojo.moduleUrl("dojox.dtl.tests.templates", "pocket.html");
 			template = new dd.Template('{% extends parent %}{% block pocket %}Slightly More Advanced{% endblock %}');
 			t.is("Slightly More Advanced Pocket", template.render(context));
 
 			// dojo.moduleUrl with support for more variables.
 			// This is important for HTML templates where the "shared" flag will be important.
 			context.parent = {
-				url: dojo.moduleUrl("dojox.dtl.tests.text.templates", "pocket.html")
+				url: dojo.moduleUrl("dojox.dtl.tests.templates", "pocket.html")
 			}
 			template = new dd.Template('{% extends parent %}{% block pocket %}Super{% endblock %}');
 			t.is("Super Pocket", template.render(context));
+		},
+		function test_tag_block(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				parent: dojo.moduleUrl("dojox.dtl.tests.templates", "pocket2.html"),
+				items: ["apple", "banana", "lemon" ]
+			});
+
+			var template = new dd.Template("{% extends parent %}{% block pocket %}My {{ item }}{% endblock %}");
+			t.is("(My apple) (My banana) (My lemon) Pocket", template.render(context));
 		},
 		function test_tag_comment(t){
 			var dd = dojox.dtl;
