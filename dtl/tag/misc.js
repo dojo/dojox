@@ -51,6 +51,35 @@ dojo.extend(dojox.dtl.tag.misc.FilterNode, {
 	}
 });
 
+dojox.dtl.tag.misc.FirstOfNode = function(vars, TextNode){
+	this._vars = vars;
+	this.vars = dojo.map(vars, function(item){
+		return new dojox.dtl.Filter(item);
+	});
+	this.contents = new TextNode("");
+}
+dojo.extend(dojox.dtl.tag.misc.FirstOfNode, {
+	render: function(context, buffer){
+		for(var i = 0, item; item = this.vars[i]; i++){
+			var resolved = item.resolve(context);
+			if(typeof resolved != "undefined"){
+				if(resolved === null){
+					resolved = "null";
+				}
+				this.contents.set(resolved);
+				return this.contents.render(context, buffer);
+			}
+		}
+		return this.contents.unrender(context, buffer);
+	},
+	unrender: function(context, buffer){
+		return this.contents.unrender(context, buffer);
+	},
+	clone: function(buffer){
+		return new this.constructor(this._vars, this.contents.constructor);
+	}
+});
+
 dojox.dtl.tag.misc.comment = function(parser, text){
 	// summary: Ignore everything between {% comment %} and {% endcomment %}
 	parser.skipPast("endcomment");
@@ -69,4 +98,12 @@ dojox.dtl.tag.misc.filter = function(parser, text){
 	var nodelist = parser.parse(["endfilter"]);
 	parser.next();
 	return new dojox.dtl.tag.misc.FilterNode(varnode, nodelist);
+}
+
+dojox.dtl.tag.misc.firstof = function(parser, text){
+	var parts = dojox.dtl.text.pySplit(text).slice(1);
+	if(!parts.length){
+		throw new Error("'firstof' statement requires at least one argument");
+	}
+	return new dojox.dtl.tag.misc.FirstOfNode(parts, parser.getTextNode());
 }

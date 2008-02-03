@@ -91,6 +91,43 @@ doh.register("dojox.dtl.html.tag",
 			t.is("<div>has key</div>", dd.tests.html.util.render(template, context));
 			context.key = false;
 			t.is("<div>no key</div>", dd.tests.html.util.render(template, context));
+		},
+		function test_tag_ifchanged(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				year: 2008,
+				days: [
+					new Date(2008, 0, 12),
+					new Date(2008, 0, 28),
+					new Date(2008, 1, 1),
+					new Date(2008, 1, 1),
+					new Date(2008, 1, 1)
+				]
+			});
+
+			var template = new dd.HtmlTemplate("<div><h1>Archive for {{ year }}</h1>"+
+"{% for date in days %}"+
+'{% ifchanged %}<h3>Month: </h3><h3>{{ date|date:"F" }}</h3>{% endifchanged %}'+
+'<a href="{{ date|date:\'M/d\'|lower }}/">{{ date|date:\'j\' }}</a>'+
+"{% endfor %}</div>");
+
+			t.is('<div><h1>Archive for 2008</h1>'+
+'<h3>Month: </h3><h3>January</h3>'+
+'<a href="jan/12/">12</a>'+
+'<a href="jan/28/">28</a>'+
+'<h3>Month: </h3><h3>February</h3>'+
+'<a href="feb/01/">1</a>'+
+'<a href="feb/01/">1</a>'+
+'<a href="feb/01/">1</a></div>', dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate('<div>{% for date in days %}'+
+'{% ifchanged date.date %} {{ date.date }} {% endifchanged %}'+
+'{% ifchanged date.hour date.date %}'+
+'{{ date.hour }}'+
+'{% endifchanged %}'+
+'{% endfor %}</div>');
+			t.is('<div> 2008-01-12 0 2008-01-28 0 2008-02-01 0</div>', dd.tests.html.util.render(template, context));
 		}
 	]
 );

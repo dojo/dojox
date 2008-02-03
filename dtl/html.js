@@ -416,6 +416,8 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 		this.contents.unshift(node);
 	},
 	render: function(context, buffer, /*Node*/ instance){
+		buffer = buffer || dojox.dtl.HtmlTemplate.prototype.getBuffer();
+
 		if(instance){
 			var parent = buffer.getParent();
 		}
@@ -427,6 +429,28 @@ dojo.extend(dojox.dtl.HtmlNodeList, {
 			buffer.setParent(parent, true);
 		}
 		return buffer;
+	},
+	dummyRender: function(context, buffer){
+		// summary: A really expensive way of checking to see how a rendering will look.
+		//		Used in the ifchanged tag
+		var dd = dojox.dtl;
+		var div = document.createElement("div");
+
+		var parent = buffer.getParent();
+		var old = this.parents.get(parent);
+		this.parents.put(parent, div);
+		var nodelist = this.clone(buffer, div);
+		if(old){
+			this.parents.put(parent, old);
+		}else{
+			this.parents.put(parent);
+		}
+
+		buffer = dd.HtmlTemplate.prototype.getBuffer();
+		nodelist.unshift(new dd.ChangeNode(div));
+		nodelist.push(new dd.ChangeNode(div, true));
+		nodelist.render(context, buffer);
+		return div.innerHTML;
 	},
 	unrender: function(context, buffer){
 		for(var i = 0; i < this.contents.length; i++){
@@ -587,6 +611,9 @@ dojox.dtl.HtmlTextNode = function(str){
 	this.contents = document.createTextNode(str);
 }
 dojo.extend(dojox.dtl.HtmlTextNode, {
+	set: function(data){
+		this.contents.data = data;
+	},
 	render: function(context, buffer){
 		return buffer.concat(this.contents);
 	},

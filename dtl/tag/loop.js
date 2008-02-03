@@ -39,6 +39,48 @@ dojo.extend(dojox.dtl.tag.loop.CycleNode, {
 	toString: function(){ return "dojox.dtl.tag.loop.CycleNode"; }
 });
 
+dojox.dtl.tag.loop.IfChangedNode = function(nodes, vars, shared){
+	this.nodes = nodes;
+	this._vars = vars;
+	this.shared = shared || {last: null};
+	this.vars = dojo.map(vars, function(item){
+		return new dojox.dtl.Filter(item);
+	});
+}
+dojo.extend(dojox.dtl.tag.loop.IfChangedNode, {
+	render: function(context, buffer){
+		if(context.forloop && context.forloop.first){
+			this.shared.last = null;
+		}
+
+		var change;
+		if(this.vars.length){
+			change = dojo.toJson(dojo.map(this.vars, function(item){
+				return item.resolve(context);
+			}));
+			console.debug("CHANGE", change);
+		}else{
+			change = this.nodes.dummyRender(context, buffer);
+		}
+
+		if(change != this.shared.last){
+			var firstloop = (this.shared.last === null);
+			this.shared.last = change;
+			context.push();
+			context.ifchanged = {firstloop: firstloop}
+			buffer = this.nodes.render(context, buffer);
+			context.pop();
+		}
+		return buffer;
+	},
+	unrender: function(context, buffer){
+		this.nodes.unrender(context, buffer);
+	},
+	clone: function(buffer){
+		return new this.constructor(this.nodes.clone(buffer), this._vars, this.shared);
+	}
+});
+
 dojox.dtl.tag.loop.cycle = function(parser, text){
 	// summary: Cycle among the given strings each time this tag is encountered
 	var args = text.split(" ");
@@ -82,4 +124,11 @@ dojox.dtl.tag.loop.cycle = function(parser, text){
 	}
 
 	return node;
+}
+
+dojox.dtl.tag.loop.ifchanged = function(parser, text){
+	var parts = dojox.dtl.text.pySplit(text);
+	var nodes = parser.parse(["endifchanged"]);
+	parser.next();
+	return new dojox.dtl.tag.loop.IfChangedNode(nodes, parts.slice(1));
 }

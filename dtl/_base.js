@@ -46,7 +46,7 @@ dojo.extend(dojox.dtl.Context, {
 		//		defined in the filter.
 		var context = new dojox.dtl.Context();
 		var keys = [];
-		var i;
+		var i, arg;
 		if(filter instanceof dojox.dtl.Context){
 			keys = filter.getKeys();
 		}else if(typeof filter == "object"){
@@ -54,7 +54,7 @@ dojo.extend(dojox.dtl.Context, {
 				keys.push(key);
 			}
 		}else{
-			for(i = 0, arg; arg = arguments[i]; i++){
+			for(i = 0; arg = arguments[i]; i++){
 				if(typeof arg == "string"){
 					keys.push(arg);
 				}
@@ -113,16 +113,29 @@ dojo.extend(dojox.dtl.Context, {
 	},
 	get: function(key, otherwise){
 		if(typeof this[key] != "undefined"){
-			return this[key];
+			return this._normalize(this[key]);
 		}
 
 		for(var i = 0, dict; dict = this._dicts[i]; i++){
 			if(typeof dict[key] != "undefined"){
-				return dict[key];
+				return this._normalize(dict[key]);
 			}
 		}
 
 		return otherwise;
+	},
+	_normalize: function(value){
+		if(value instanceof Date){
+			value.year = value.getFullYear();
+			value.month = value.getMonth() + 1;
+			value.day = value.getDate();
+			value.date = value.year + "-" + ("0" + value.month).slice(-2) + "-" + ("0" + value.day).slice(-2);
+			value.hour = value.getHours();
+			value.minute = value.getMinutes();
+			value.second = value.getSeconds();
+			value.microsecond = value.getMilliseconds();
+		}
+		return value;
 	},
 	update: function(dict){
 		this.push();
@@ -210,19 +223,20 @@ dojox.dtl.text = {
 }
 
 dojox.dtl.Template = function(str){
-	var st = dojox.dtl;
-	var tokens = st.text.tokenize(str);
-	var parser = new st.Parser(tokens);
+	var dd = dojox.dtl;
+	var tokens = dd.text.tokenize(str);
+	var parser = new dd.Parser(tokens);
 	this.nodelist = parser.parse();
 }
 dojo.extend(dojox.dtl.Template, {
 	render: function(context, /*concatenatable?*/ buffer){
+		buffer = buffer || this.getBuffer();
 		context = context || new dojox.dtl.Context({});
-		if(!buffer){
-			dojo.require("dojox.string.Builder");
-			buffer = new dojox.string.Builder();
-		}
 		return this.nodelist.render(context, buffer) + "";
+	},
+	getBuffer: function(){
+		dojo.require("dojox.string.Builder");
+		return new dojox.string.Builder();
 	},
 	toString: function(){ return "dojox.dtl.Template"; }
 });
@@ -339,6 +353,9 @@ dojox.dtl.Node = function(/*Object*/ obj){
 	this.contents = obj;
 }
 dojo.extend(dojox.dtl.Node, {
+	set: function(data){
+		this.contents = data;
+	},
 	render: function(context, buffer){
 		// summary: Adds content onto the buffer
 		return buffer.concat(this.contents);
@@ -349,6 +366,7 @@ dojo.extend(dojox.dtl.Node, {
 dojox.dtl.NodeList = function(/*Node[]*/ nodes){
 	// summary: Allows us to render a group of nodes
 	this.contents = nodes || [];
+	this.last = "";
 }
 dojo.extend(dojox.dtl.NodeList, {
 	push: function(node){
@@ -362,6 +380,9 @@ dojo.extend(dojox.dtl.NodeList, {
 			if(!buffer) throw new Error("Template node render functions must return their buffer");
 		}
 		return buffer;
+	},
+	dummyRender: function(context, buffer){
+		return this.render(context, dojox.dtl.Template.prototype.getBuffer()).toString();
 	},
 	unrender: function(context, buffer){ return buffer; },
 	clone: function(){ return this; },
@@ -594,8 +615,8 @@ dojo.mixin(dojox.dtl.register, {
 	var dtt = "dojox.dtl.tag";
 	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for", "ifequal", "ifnotequal"]);
 	register.tag(dtt + ".loader", dtt + ".loader", ["extends", "block"]);
-	register.tag(dtt + ".misc", dtt + ".misc", ["comment", "debug", "filter"]);
-	register.tag(dtt + ".loop", dtt + ".loop", ["cycle"]);
+	register.tag(dtt + ".misc", dtt + ".misc", ["comment", "debug", "filter", "firstof"]);
+	register.tag(dtt + ".loop", dtt + ".loop", ["cycle", "ifchanged"]);
 
 	var dtf = "dojox.dtl.filter";
 	register.filter(dtf + ".dates", dtf + ".dates", ["date", "time", "timesince", "timeuntil"]);

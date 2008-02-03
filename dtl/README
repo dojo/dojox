@@ -69,10 +69,10 @@ should be tested inside a for loop.
 |      X      | debug       |       X        |                |
 |      X      | extends     |       X        |                |
 |      X      | filter      |       X        |                |
-|             | firstof     |                |                |
+|      X      | firstof     |       X        |                |
 |      X      | for         |       X        |                |
 |      X      | if          |       X        |                |
-|             | ifchanged   |                |                |
+|      X      | ifchanged   |       X        |       X        |
 |      X      | ifequal     |       X        |                |
 |      X      | ifnotequal  |       X        |                |
 |             | include     |                |                |

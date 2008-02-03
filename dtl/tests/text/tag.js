@@ -82,7 +82,7 @@ doh.register("dojox.dtl.text.tag",
 
 			template = new dd.Template("{% cycle 'Hot' 'Diarrhea' unplugged 'Extra' as steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket. {% cycle steakum %} Pocket.");
 			t.is("Hot Pocket. Diarrhea Pocket. Torrey Pocket. Extra Pocket. Hot Pocket. Diarrhea Pocket.", template.render(context));
-
+//t.t(false)
 			// Test for nested objects
 			context.items = {
 				list: ["apple", "banana", "lemon"]
@@ -109,7 +109,20 @@ doh.register("dojox.dtl.text.tag",
 			t.is("  hot pocket   ", template.render());
 		},
 		function test_tag_firstof(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				found: "unicorn"
+			});
+
+			var template = new dd.Template("{% firstof one two three four found %}");
+			t.is("unicorn", template.render(context));
+
+			context.four = null;
+			t.is("null", template.render(context));
+
+			context.three = false;
+			t.is("false", template.render(context));
 		},
 		function test_tag_for(t){
 			var dd = dojox.dtl;
@@ -220,7 +233,40 @@ doh.register("dojox.dtl.text.tag",
 			t.t(found);
 		},
 		function test_tag_ifchanged(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				year: 2008,
+				days: [
+					new Date(2008, 0, 12),
+					new Date(2008, 0, 28),
+					new Date(2008, 1, 1),
+					new Date(2008, 1, 1),
+					new Date(2008, 1, 1)
+				]
+			});
+
+			var template = new dd.Template("<h1>Archive for {{ year }}</h1>"+
+"{% for date in days %}"+
+'{% ifchanged %}<h3>{{ date|date:"F" }}</h3>{% endifchanged %}'+
+'<a href="{{ date|date:\'M/d\'|lower }}/">{{ date|date:\'j\' }}</a>'+
+"{% endfor %}");
+			t.is('<h1>Archive for 2008</h1>'+
+'<h3>January</h3>'+
+'<a href="jan/12/">12</a>'+
+'<a href="jan/28/">28</a>'+
+'<h3>February</h3>'+
+'<a href="feb/01/">1</a>'+
+'<a href="feb/01/">1</a>'+
+'<a href="feb/01/">1</a>', template.render(context));
+
+			template = new dd.Template('{% for date in days %}'+
+'{% ifchanged date.date %} {{ date.date }} {% endifchanged %}'+
+'{% ifchanged date.hour date.date %}'+
+'{{ date.hour }}'+
+'{% endifchanged %}'+
+'{% endfor %}');
+			t.is(' 2008-01-12 0 2008-01-28 0 2008-02-01 0', template.render(context));
 		},
 		function test_tag_ifequal(t){
 			var dd = dojox.dtl;
