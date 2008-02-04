@@ -4,9 +4,9 @@ dojox.color.Generator = new (function(){
 	var dxc=dojox.color;
 
 	//	common helper functions
-	var prep=function(obj, fnName){
+	var prep=function(obj){
 		if(!obj){
-			console.warn("dojox.color.Generator::", fnName, ": no base color was passed. ", obj);
+			console.warn("dojox.color.Generator:: no base color was passed. ", obj);
 			return null;
 		}
 		if(!obj.toHsv){
@@ -17,8 +17,7 @@ dojox.color.Generator = new (function(){
 	};
 
 	var factors=function(n, high, low){
-		var ret=[];
-		var i, step=(high-low)/n, cur=high;
+		var ret=[], i, step=(high-low)/n, cur=high;
 		for(i=0; i<n; i++,cur-=step){ ret.push(cur); }
 		return ret;
 	};
@@ -46,28 +45,26 @@ dojox.color.Generator = new (function(){
 		return a;
 	};
 	
-	var flatten=function(matrix, limit, ord){
-		//	todo: set up the ordering thing.
+	var flatten=function(matrix, limit){
 		var ret=[];
 		for(var i=0; i<matrix[0].length; i++){
 			for(var j=0; j<matrix.length; j++){
 				ret.push(matrix[j][i]);
 			}
 		}
-		ret.length=limit;
-		return ret;
+		return ret.slice(0, limit);
 	};
 
 	//	the color generator
-	this.analogous= function(kwArgs){
+	this.analogous= function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors based on a base color, based on a fixed hue angle delta
 		//	(relative to the base hue) with slight variations in saturation.
 		kwArgs=dojo.mixin({
 			series:4,				//	number of analogous lines to generate
 			num:32,					//	number of colors to derive
-			order:"bottom up",		//	the order of the returned color array
-			angle:30,				//	the angle of difference to use
+			angleHigh:30,			//	the angle of difference to use, subtracted
+			angleLow:8,				//	the angle of difference to use, added
 			high:0.5,				//	high part of range to generate tints and shades
 			low:0.15				//	low part of range to generate tints and shades
 		}, kwArgs||{});
@@ -80,16 +77,29 @@ dojox.color.Generator = new (function(){
 		var rows=kwArgs.series+1, cols=Math.ceil(num/rows);
 		var fs=factors(Math.floor(cols/2), kwArgs.high, kwArgs.low);
 
-		var m=[], cur=hsv.h-(kwArgs.angle*(kwArgs.series/2));
-		for(var i=0; i<rows; i++,cur+=kwArgs.angle){
-			if(cur<0) { cur+=360 ; }
-			if(cur>=360){ cur-=360; }
-			m.push(fill(dxc.fromHsv({ h: cur, s:hsv.s, v:hsv.v }), cols, fs));
+		//	generate the angle differences
+		var ang=[];
+		var gen=Math.floor(kwArgs.series/2);
+		for(var i=1; i<=gen; i++){
+			var a=hsv.h+((kwArgs.angleLow*i)+1);
+			if(a>=360){ a-=360; }
+			ang.push(a);
 		}
-		return flatten(m, num, kwArgs.order);	//	Array
+		ang.push(0);
+		for(i=1; i<=gen; i++){
+			a=hsv.h-(kwArgs.angleHigh*i);
+			if(a<0){ a+=360; }
+			ang.push(a);
+		}
+
+		var m=[], cur=0;
+		for(i=0; i<rows; i++){
+			m.push(fill(dxc.fromHsv({ h: ang[cur++], s:hsv.s, v:hsv.v }), cols, fs));
+		}
+		return flatten(m, num);	//	Array
 	};
 	
-	this.monochromatic = function(kwArgs){
+	this.monochromatic = function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors based on a base color, using alterations to the RGB model only.
 		kwArgs=dojo.mixin({
@@ -106,13 +116,12 @@ dojox.color.Generator = new (function(){
 		return a;	// Array
 	};
 	
-	this.triadic = function(kwArgs){
+	this.triadic = function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using the triadic rules, rough
 		//	approximation from kuler.adobe.com.
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
-			order:"bottom up",		//	the order of the returned color array
 			high:0.5,				//	high factor to generate tints and shades
 			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
@@ -138,15 +147,14 @@ dojox.color.Generator = new (function(){
 		m.push(fill(dojox.color.fromHsv({ h:h1, s:s1, v:hsv.v }), cols, fs));
 		m.push(fill(base, cols, fs));
 		m.push(fill(dojox.color.fromHsv({ h:h2, s:s2, v:v2 }), cols, fs));
-		return flatten(m, num, kwArgs.order);	//	Array
+		return flatten(m, num);	//	Array
 	};
 	
-	this.complementary = function(kwArgs){
+	this.complementary = function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using complimentary rules.
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
-			order:"bottom up",		//	the order of the returned color array
 			high:0.5,				//	high factor to generate tints and shades
 			low:0.15				//	low factor to generate tints and shades
 		}, kwArgs||{});
@@ -159,15 +167,14 @@ dojox.color.Generator = new (function(){
 		var compliment=(hsv.h+120)%360;
 		m.push(fill(base, cols, fs));
 		m.push(fill(dojox.color.fromHsv({ h:compliment, s:hsv.s, v:hsv.v }), cols, fs));
-		return flatten(m, num, kwArgs.order);	//	Array
+		return flatten(m, num);	//	Array
 	};
 	
-	this.splitComplementary = function(kwArgs){
+	this.splitComplementary = function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using split complimentary rules.
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
-			order:"bottom up",		//	the order of the returned color array
 			angle:30,				//	the angle of difference to use
 			high:0.5,				//	high factor to generate tints and shades
 			low:0.15				//	low factor to generate tints and shades
@@ -185,16 +192,15 @@ dojox.color.Generator = new (function(){
 		m.push(fill(base, cols, fs));
 		m.push(fill(dojox.color.fromHsv({ h:comp1, s:hsv.s, v:hsv.v }), cols, fs));
 		m.push(fill(dojox.color.fromHsv({ h:comp2, s:hsv.s, v:hsv.v }), cols, fs));
-		return flatten(m, num, kwArgs.order);	//	Array
+		return flatten(m, num);	//	Array
 	};
 	
-	this.compound = function(kwArgs){
+	this.compound = function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using a *very* rough approximation
 		//	of the Compound rules at http://kuler.adobe.com
 		kwArgs=dojo.mixin({
 			num:32,					//	number of colors to derive
-			order:"bottom up",		//	the order of the returned color array
 			angle:30,				//	the angle of difference to use
 			high:0.5,				//	high factor to generate tints and shades
 			low:0.15				//	low factor to generate tints and shades
@@ -224,10 +230,10 @@ dojox.color.Generator = new (function(){
 		m.push(fill(dojox.color.fromHsv({ h:h1, s:s1, v:v1 }), cols, fs));
 		m.push(fill(dojox.color.fromHsv({ h:h2, s:s1, v:v1 }), cols, fs));
 		m.push(fill(dojox.color.fromHsv({ h:h3, s:s2, v:v2 }), cols, fs));
-		return flatten(m, num, kwArgs.order);	//	Array
+		return flatten(m, num);	//	Array
 	};
 	
-	this.shades = function(kwArgs){
+	this.shades = function(/* Object */kwArgs){
 		//	summary
 		//	generates n colors based on a base color using only changes
 		//	in value.  Similar to monochromatic but a bit more linear.
@@ -246,8 +252,6 @@ dojox.color.Generator = new (function(){
 		for(var i=0; i<num; i++,cur+=step){
 			a.push(dxc.fromHsv({ h:hsv.h, s:hsv.s, v:Math.min(Math.round(hsv.v*cur),100) }));
 		}
-
-		console.log("generated color list from shades: ", a);
 		return a;	// Array
 	};
 })();
