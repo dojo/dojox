@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.tests.text.filter");
 
 dojo.require("dojox.dtl");
+dojo.require("dojox.dtl.utils.date");
 dojo.require("dojox.date.php");
 dojo.require("dojox.string.sprintf");
 
@@ -76,7 +77,7 @@ doh.register("dojox.dtl.text.filter",
 			var context = new dd.Context({ now: new Date(2007, 0, 1), then: new Date(2007, 1, 1) });
 
 			var tpl = new dd.Template('{{ now|date }}');
-			t.is(dojox.date.php.format(context.now, "N j, Y", dd.utils.date._overrides), tpl.render(context));
+			t.is(dojox.dtl.utils.date.format(context.now, "N j, Y"), tpl.render(context));
 
 			context.then = new Date(2007, 0, 1);
 			tpl = new dd.Template('{{ now|date:"d" }}');
@@ -541,7 +542,7 @@ doh.register("dojox.dtl.text.filter",
 			var context = new dd.Context({ now: new Date(2007, 0, 1) });
 
 			tpl = new dd.Template('{{ now|time }}');
-			t.is(dojox.date.php.format(context.now, "P", dd.utils.date._overrides), tpl.render(context));
+			t.is(dojox.dtl.utils.date.format(context.now, "P"), tpl.render(context));
 		},
 		function test_filter_timesince(t){
 			var dd = dojox.dtl;

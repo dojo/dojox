@@ -1,14 +1,38 @@
 dojo.provide("dojox.date.php");
 dojo.require("dojo.date");
+dojo.require("dojox.string.tokenize");
 
-dojox.date.php.format = function(/*Date*/ date, /*String*/ format, /*Object?*/ overrides){
+dojox.date.php.format = function(/*Date*/ date, /*String*/ format){
 	// summary: Get a formatted string for a given date object
-	var df = new dojox.date.php.DateFormat(date);
-	return df.format(format, overrides);	
+	var df = new dojox.date.php.DateFormat(format);
+	return df.format(date);	
 }
 
-dojox.date.php.DateFormat = function(/*Date*/ date){
-	this.date = date;
+dojox.date.php.DateFormat = function(/*String*/ format){
+	// summary: Format the internal date object
+	if(!this.regex){
+		var keys = [];
+		for(var key in this.constructor.prototype){
+			if(dojo.isString(key) && key.length == 1 && dojo.isFunction(this[key])){
+				keys.push(key);
+			}
+		}
+		this.constructor.prototype.regex = new RegExp("(?:(\\\\.)|([" + keys.join("") + "]))", "g");
+	}
+
+	var replacements = [];
+
+	this.tokens = dojox.string.tokenize(format, this.regex, function(escape, token, i){
+		if(token){
+			replacements.push([i, token]);
+			return token;
+		}
+		if(escape){
+			return escape.charAt(1);
+		}
+	});
+
+	this.replacements = replacements;
 }
 dojo.extend(dojox.date.php.DateFormat, {
 	weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -17,20 +41,12 @@ dojo.extend(dojox.date.php.DateFormat, {
 	months_3: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 	monthdays: [31,28,31,30,31,30,31,31,30,31,30,31],
 
-	format: function(/*String*/ format, /*Object?*/ overrides){
-		// summary: Format the internal date object
-		var parts = [];
-		for(var i = 0; i < format.length; i++){
-			var chr = format.charAt(i);
-			if(overrides && typeof overrides[chr] == "function"){
-				parts.push(overrides[chr].call(this));
-			}else if(typeof this[chr] == "function"){
-				parts.push(this[chr]());
-			}else{
-				parts.push(chr);
-			}
+	format: function(/*Date*/ date){
+		this.date = date;
+		for(var i = 0, replacement; replacement = this.replacements[i]; i++){
+			this.tokens[replacement[0]] = this[replacement[1]]();
 		}
-		return parts.join("");
+		return this.tokens.join("");
 	},
 
 	// Day
@@ -136,7 +152,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	M: function(){
 		// summary: A short textual representation of a month, three letters
-		return months_3[this.date.getMonth()];
+		return this.months_3[this.date.getMonth()];
 	},
 
 	n: function(){

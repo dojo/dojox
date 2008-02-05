@@ -16,7 +16,7 @@ dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ pa
 			tokens.push(content);
 		}
 		if(parseDelim){
-			var parsed = parseDelim.apply(instance, match.slice(1));
+			var parsed = parseDelim.apply(instance, match.slice(1).concat(tokens.length));
 			if(typeof parsed != "undefined"){
 				tokens.push(parsed);
 			}

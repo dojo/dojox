@@ -337,7 +337,34 @@ doh.register("dojox.dtl.text.tag",
 			t.t(false);
 		},
 		function test_tag_now(t){
-			t.t(false);
+			var dd = dojox.dtl;
+
+			var template = new dd.Template('It is {% now "jS F Y H:i" %}');
+			t.t(template.render().match(/^It is \d{1,2}[a-z]{2} [A-Z][a-z]+ [0-9]{4,} \d{2}:\d{2}$/));
+
+			template = new dd.Template('It is the {% now "jS \\o\\f F" %}');
+			t.t(template.render().match(/^It is the \d{1,2}[a-z]{2} of [A-Z][a-z]+$/));
+
+			template = new dd.Template("It is the {% now 'jS \\o\\f F' %}");
+			t.t(template.render().match(/^It is the \d{1,2}[a-z]{2} of [A-Z][a-z]+$/));
+
+			var found = false;
+			try{
+				template = new dd.Template("It is the {% now 'jS \\o\\f F %}");
+			}catch(e){
+				found = true;
+				t.is("'now' statement takes one argument", e.message);
+			}
+			t.t(found);
+
+			found = false;
+			try{
+				template = new dd.Template('It is the {% now "jS \\o\\f F %}');
+			}catch(e){
+				found = true;
+				t.is("'now' statement takes one argument", e.message);
+			}
+			t.t(found);
 		},
 		function test_tag_regroup(t){
 			t.t(false);

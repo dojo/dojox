@@ -2,9 +2,39 @@ dojo.provide("dojox.dtl.utils.date");
 
 dojo.require("dojox.date.php");
 
+dojox.dtl.utils.date.DateFormat = function(/*String*/ format){
+	dojox.date.php.DateFormat.call(this, format);
+}
+dojo.extend(dojox.dtl.utils.date.DateFormat, dojox.date.php.DateFormat.prototype, {
+	f: function(){
+		// summary:
+		//		Time, in 12-hour hours and minutes, with minutes left off if they're zero.
+		// description: 
+		//		Examples: '1', '1:30', '2:05', '2'
+		//		Proprietary extension.
+		if(!this.date.getMinutes()) return this.g();
+	},
+	N: function(){
+		// summary: Month abbreviation in Associated Press style. Proprietary extension.
+		return dojox.dtl.utils.date._months_ap[this.date.getMonth()];
+	},
+	P: function(){
+		// summary:
+		//		Time, in 12-hour hours, minutes and 'a.m.'/'p.m.', with minutes left off
+		//		if they're zero and the strings 'midnight' and 'noon' if appropriate.
+		// description:
+		//		Examples: '1 a.m.', '1:30 p.m.', 'midnight', 'noon', '12:30 p.m.'
+		//		Proprietary extension.
+		if(!this.date.getMinutes() && !this.date.getHours()) return 'midnight';
+		if(!this.date.getMinutes() && this.date.getHours() == 12) return 'noon';
+		return self.f() + " " + self.a();
+	}
+});
+
 dojo.mixin(dojox.dtl.utils.date, {
 	format: function(/*Date*/ date, /*String*/ format){
-		return dojox.date.php.format(date, format, dojox.dtl.utils.date._overrides);
+		var df = new dojox.dtl.utils.date.DateFormat(format);
+		return df.format(date);
 	},
 	timesince: function(d, now){
 		// summary:
@@ -35,29 +65,4 @@ dojo.mixin(dojox.dtl.utils.date, {
 		[60 * 1000, function(n){ return (n == 1) ? 'minute' : 'minutes'; }]
 	],
 	_months_ap: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
-	_overrides: {
-		f: function(){
-			// summary:
-			//		Time, in 12-hour hours and minutes, with minutes left off if they're zero.
-			// description: 
-			//		Examples: '1', '1:30', '2:05', '2'
-			//		Proprietary extension.
-			if(!this.date.getMinutes()) return this.g();
-		},
-		N: function(){
-			// summary: Month abbreviation in Associated Press style. Proprietary extension.
-			return dojox.dtl.utils.date._months_ap[this.date.getMonth()];
-		},
-		P: function(){
-			// summary:
-			//		Time, in 12-hour hours, minutes and 'a.m.'/'p.m.', with minutes left off
-			//		if they're zero and the strings 'midnight' and 'noon' if appropriate.
-			// description:
-			//		Examples: '1 a.m.', '1:30 p.m.', 'midnight', 'noon', '12:30 p.m.'
-			//		Proprietary extension.
-			if(!this.date.getMinutes() && !this.date.getHours()) return 'midnight';
-			if(!this.date.getMinutes() && this.date.getHours() == 12) return 'noon';
-			return self.f() + " " + self.a();
-		}
-	}
 });

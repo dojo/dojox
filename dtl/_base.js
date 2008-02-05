@@ -613,6 +613,7 @@ dojo.mixin(dojox.dtl.register, {
 (function(){
 	var register = dojox.dtl.register;
 	var dtt = "dojox.dtl.tag";
+	register.tag(dtt + ".date", dtt + ".date", ["now"]);
 	register.tag(dtt + ".logic", dtt + ".logic", ["if", "for", "ifequal", "ifnotequal"]);
 	register.tag(dtt + ".loader", dtt + ".loader", ["extends", "block"]);
 	register.tag(dtt + ".misc", dtt + ".misc", ["comment", "debug", "filter", "firstof"]);
