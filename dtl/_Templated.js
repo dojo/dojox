@@ -3,11 +3,16 @@ dojo.require("dijit._Templated");
 dojo.require("dojox.dtl._base");
 
 dojo.declare("dojox.dtl._Templated", [dijit._Templated], {
+	_dijitTemplateCompat: false,
 	buildRendering: function(){
 		var node;
-		var t = dojox.dtl._Templated.getCachedTemplate(this.templatePath, this.templateString, this._skipNodeCache);
+		var t = this.getCachedTemplate(	this.templatePath, 
+										this.templateString, 
+										this._skipNodeCache);
 		if(t instanceof dojox.dtl.Template){
-			node = dijit._Templated._createNodesFromText(t.render(new dojox.dtl.Context(this)))[0];
+			node = dijit._Templated._createNodesFromText(
+				t.render(new dojox.dtl.Context(this))
+			)[0];
 		}else{
 			node = t;
 			if(this.domNode){
@@ -38,17 +43,11 @@ dojo.declare("dojox.dtl._Templated", [dijit._Templated], {
 
 		this._fillContent(source);
 	},
-	render: function(){
-		this.buildRendering();
-	}
-});
-
-dojo.mixin(dojox.dtl._Templated, {
 	_templateCache: {},
 	getCachedTemplate: function(templatePath, templateString, alwaysUseString){
 		// summary:
 		//		Layer for dijit._Templated.getCachedTemplate
-		var tmplts = dojox.dtl._Templated._templateCache;
+		var tmplts = this._templateCache;
 		var key = templateString || templatePath;
 		if(tmplts[key]){
 			return tmplts[key];
@@ -56,11 +55,21 @@ dojo.mixin(dojox.dtl._Templated, {
 
 		templateString = dojo.string.trim(templateString || dijit._Templated._sanitizeTemplateString(dojo._getText(templatePath)));
 
+		if(	this._dijitTemplateCompat && 
+			(alwaysUseString || templateString.match(/\$\{([^\}]+)\}/g))
+		){
+
+			templateString = this._stringRepl(templateString);
+		}
+
 		// If we always use a string, or find no variables, just store it as a node
 		if(alwaysUseString || !templateString.match(/\{[{%]([^\}]+)[%}]\}/g)){
 			return (tmplts[key] = dijit._Templated._createNodesFromText(templateString)[0]);
 		}else{
 			return (tmplts[key] = new dojox.dtl.Template(templateString));
 		}
+	},
+	render: function(){
+		this.buildRendering();
 	}
 });

@@ -8,6 +8,8 @@
 					dojo.require("dojox.dtl._Templated");
 
 					dojo.declare("Fruit", [dijit._Widget, dojox.dtl._Templated], {
+						oldRepl: "some value for testing the old style template substitution",
+						_dijitTemplateCompat: true,
 						items: ["apple", "banana", "orange"],
 						keyUp: function(e){
 							if(e.keyCode == dojo.keys.ENTER){
@@ -22,7 +24,7 @@
 								dojo.query("input", this.domNode).forEach("item.focus();");
 							}
 						},
-						templateString: '<div><input dojoAttachEvent="onkeyup: keyUp"><div dojoAttachPoint="speak"></div><ul>{% for item in items %}<li>{{ item }}</li>{% endfor %}</ul></div>'
+						templateString: '<div><input dojoAttachEvent="onkeyup: keyUp"><ul>{% for item in items %}<li>{{ item }} ${oldRepl}</li>{% endfor %}</ul></div>'
 					});
 
 	        dojo.require("dojo.parser");
