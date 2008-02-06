@@ -1,4 +1,4 @@
-dojo.provide("dojox.dtl.NodeList-dtl");
+dojo.provide("dojox.dtl.ext-dojo.NodeList");
 dojo.require("dojox.dtl._base");
 
 dojo.extend(dojo.NodeList, {
