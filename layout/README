@@ -28,9 +28,6 @@ Project description
 	Supports inline scripts, inline styles, relative path adjustments
 	and having a table tag as domNode.
 
-	dojox.layout.BorderContainer - an experimental replacement for dijit.layout.BorderLayout
-	using CSS for layout. Incomplete. [experimental]
-
 	dojox.layout.RadioGroup - a stack container with sliding or fading transitions
 	(and an internal button set to mimic a tab container, but fires on hover)
 
