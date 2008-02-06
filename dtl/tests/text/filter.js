@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.tests.text.filter");
 
 dojo.require("dojox.dtl");
+dojo.require("dojox.dtl.Context");
 dojo.require("dojox.dtl.utils.date");
 dojo.require("dojox.date.php");
 dojo.require("dojox.string.sprintf");

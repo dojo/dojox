@@ -13,7 +13,7 @@ dojo.mixin(dojox.dtl.filter.lists, {
 
 		var items = [];
 		for(var key in value){
-			items.push([dojox.dtl.resolveVariable('var.' + arg, new dojox.dtl.Context({ 'var' : value[key]})), value[key]]);
+			items.push([new dojox.dtl._Filter('var.' + arg).resolve(new dojox.dtl._Context({ 'var' : value[key]})), value[key]]);
 		}
 		items.sort(dojox.dtl.filter.lists._dictsort);
 		var output = [];

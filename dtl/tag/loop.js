@@ -44,7 +44,7 @@ dojox.dtl.tag.loop.IfChangedNode = function(nodes, vars, shared){
 	this._vars = vars;
 	this.shared = shared || {last: null};
 	this.vars = dojo.map(vars, function(item){
-		return new dojox.dtl.Filter(item);
+		return new dojox.dtl._Filter(item);
 	});
 }
 dojo.extend(dojox.dtl.tag.loop.IfChangedNode, {

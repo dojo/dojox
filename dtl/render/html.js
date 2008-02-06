@@ -1,4 +1,5 @@
 dojo.provide("dojox.dtl.render.html");
+dojo.require("dojox.dtl.Context");
 
 dojox.dtl.render.html.sensitivity = {
 	// summary:

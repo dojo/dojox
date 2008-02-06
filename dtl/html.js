@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.html");
 
 dojo.require("dojox.dtl._base");
+dojo.require("dojox.dtl.Context");
 
 dojox.dtl.ObjectMap = function(){
 	this.contents = [];
@@ -499,7 +500,7 @@ dojox.dtl.HtmlVarNode = function(str){
 	// description:
 	//		Will render an object that supports the render function
 	// 		and the getRootNode function
-	this.contents = new dojox.dtl.Filter(str);
+	this.contents = new dojox.dtl._Filter(str);
 	this._lists = {};
 }
 dojo.extend(dojox.dtl.HtmlVarNode, {
@@ -718,5 +719,7 @@ dojo.extend(dojox.dtl.HtmlParser, {
 	toString: function(){ return "dojox.dtl.HtmlParser"; }
 });
 
-dojox.dtl.register.tag("dojox.dtl.tag.event", "dojox.dtl.tag.event", [[/(attr:)?on(click|key(up))/i, "on"]]);
-dojox.dtl.register.tag("dojox.dtl.tag.html", "dojox.dtl.tag.html", ["html", "attr:attach", "attr:tstyle"]);
+dojox.dtl.register.tags("dojox.dtl.tag", {
+	"event": [[/(attr:)?on(click|key(up))/i, "on"]],
+	"html": ["html", "attr:attach", "attr:tstyle"]
+});

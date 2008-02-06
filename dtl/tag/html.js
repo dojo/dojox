@@ -3,7 +3,7 @@ dojo.provide("dojox.dtl.tag.html");
 dojo.require("dojox.dtl._base");
 
 dojox.dtl.tag.html.HtmlNode = function(name){
-	this.contents = new dojox.dtl.Filter(name);
+	this.contents = new dojox.dtl._Filter(name);
 	this._div = document.createElement("div");
 	this._lasts = [];
 }

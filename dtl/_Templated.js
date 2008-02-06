@@ -11,7 +11,7 @@ dojo.declare("dojox.dtl._Templated", [dijit._Templated], {
 										this._skipNodeCache);
 		if(t instanceof dojox.dtl.Template){
 			node = dijit._Templated._createNodesFromText(
-				t.render(new dojox.dtl.Context(this))
+				t.render(new dojox.dtl._Context(this))
 			)[0];
 		}else{
 			node = t;
@@ -58,7 +58,6 @@ dojo.declare("dojox.dtl._Templated", [dijit._Templated], {
 		if(	this._dijitTemplateCompat && 
 			(alwaysUseString || templateString.match(/\$\{([^\}]+)\}/g))
 		){
-
 			templateString = this._stringRepl(templateString);
 		}
 

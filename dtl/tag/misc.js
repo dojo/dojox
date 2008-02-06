@@ -54,7 +54,7 @@ dojo.extend(dojox.dtl.tag.misc.FilterNode, {
 dojox.dtl.tag.misc.FirstOfNode = function(vars, TextNode){
 	this._vars = vars;
 	this.vars = dojo.map(vars, function(item){
-		return new dojox.dtl.Filter(item);
+		return new dojox.dtl._Filter(item);
 	});
 	this.contents = new TextNode("");
 }

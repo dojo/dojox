@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.tests.text.tag");
 
 dojo.require("dojox.dtl");
+dojo.require("dojox.dtl.Context");
 
 doh.register("dojox.dtl.text.tag", 
 	[
@@ -312,7 +313,7 @@ doh.register("dojox.dtl.text.tag",
 				template = new dd.Template("{% ifequal user.id comment.user_id %}You posted this{% endif %}");
 			}catch(e){
 				found = true;
-				t.is("'tag' of name 'endif' does not exist", e.message);
+				t.is("Could not find closing tag(s): else,endifequal", e.message);
 			}
 			t.t(found);
 		},

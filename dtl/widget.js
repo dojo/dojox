@@ -3,6 +3,7 @@ dojo.provide("dojox.dtl.widget");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Container")
 dojo.require("dojox.dtl.html");
+dojo.require("dojox.dtl.Context");
 dojo.require("dojox.dtl.render.html");
 
 dojo.declare("dojox.dtl._Widget", [dijit._Widget, dijit._Contained],
