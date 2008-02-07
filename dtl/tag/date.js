@@ -21,5 +21,5 @@ dojox.dtl.tag.date.now = function(parser, text){
 		throw new Error("'now' statement takes one argument");
 	}
 	var format = parts[1];
-	return new dojox.dtl.tag.date.NowNode(format, parser.getTextNode());
+	return new dojox.dtl.tag.date.NowNode(format, parser.getTextNodeConstructor());
 }

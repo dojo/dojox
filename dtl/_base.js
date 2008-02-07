@@ -368,10 +368,10 @@ dojo.require("dojox.string.tokenize");
 			}
 			throw new Error("Unclosed tag found when looking for " + endtag);
 		},
-		getVarNode: function(){
+		getVarNodeConstructor: function(){
 			return dd._VarNode;
 		},
-		getTextNode: function(){
+		getTextNodeConstructor: function(){
 			return dd._TextNode;
 		},
 		getTemplate: function(file){

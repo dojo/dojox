@@ -88,13 +88,13 @@ dojox.dtl.tag.misc.comment = function(parser, text){
 
 dojox.dtl.tag.misc.debug = function(parser, text){
 	// summary: Output the current context, maybe add more stuff later.
-	return new dojox.dtl.tag.misc.DebugNode(parser.getTextNode());
+	return new dojox.dtl.tag.misc.DebugNode(parser.getTextNodeConstructor());
 }
 
 dojox.dtl.tag.misc.filter = function(parser, text){
 	// summary: Filter the contents of the blog through variable filters.
 	var parts = text.split(" ", 2);
-	var varnode = new (parser.getVarNode())("var|" + parts[1]);
+	var varnode = new (parser.getVarNodeConstructor())("var|" + parts[1]);
 	var nodelist = parser.parse(["endfilter"]);
 	parser.next();
 	return new dojox.dtl.tag.misc.FilterNode(varnode, nodelist);
@@ -105,5 +105,5 @@ dojox.dtl.tag.misc.firstof = function(parser, text){
 	if(!parts.length){
 		throw new Error("'firstof' statement requires at least one argument");
 	}
-	return new dojox.dtl.tag.misc.FirstOfNode(parts, parser.getTextNode());
+	return new dojox.dtl.tag.misc.FirstOfNode(parts, parser.getTextNodeConstructor());
 }

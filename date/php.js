@@ -186,7 +186,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	y: function(){
 		// summary: A two digit representation of a year
-		return this.date.getFullYear.substsring(2, 4);
+		return this.Y().slice(-2);
 	},
 
 	// Time

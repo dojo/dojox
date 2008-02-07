@@ -64,5 +64,5 @@ dojo.mixin(dojox.dtl.utils.date, {
 		[60 * 60 * 1000, function(n){ return (n == 1) ? 'hour' : 'hours'; }],
 		[60 * 1000, function(n){ return (n == 1) ? 'minute' : 'minutes'; }]
 	],
-	_months_ap: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
+	_months_ap: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]
 });

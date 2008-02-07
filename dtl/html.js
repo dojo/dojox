@@ -707,10 +707,10 @@ dojo.extend(dojox.dtl.HtmlParser, {
 	skipPast: function(endtag){
 		return dojox.dtl.Parser.prototype.skipPast.call(this, endtag);
 	},
-	getVarNode: function(){
+	getVarNodeConstructor: function(){
 		return dojox.dtl.HtmlVarNode;
 	},
-	getTextNode: function(){
+	getTextNodeConstructor: function(){
 		return dojox.dtl.HtmlTextNode;
 	},
 	getTemplate: function(/*String*/ loc){

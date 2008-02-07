@@ -112,14 +112,14 @@ dojox.dtl.tag.loop.cycle = function(parser, text){
 	if(args.length > 4 && args[args.length - 2] == "as"){
 		var name = args[args.length - 1];
 
-		var node = new dojox.dtl.tag.loop.CycleNode(args.slice(1, args.length - 2), name, parser.getVarNode());
+		var node = new dojox.dtl.tag.loop.CycleNode(args.slice(1, args.length - 2), name, parser.getVarNodeConstructor());
 
 		if(!parser._namedCycleNodes){
 			parser._namedCycleNodes = {};
 		}
 		parser._namedCycleNodes[name] = node;
 	}else{
-		node = new dojox.dtl.tag.loop.CycleNode(args.slice(1), null, parser.getVarNode());
+		node = new dojox.dtl.tag.loop.CycleNode(args.slice(1), null, parser.getVarNodeConstructor());
 	}
 
 	return node;
