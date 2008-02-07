@@ -210,7 +210,23 @@ dojo.declare('dojox.VirtualGrid',
 	},
 	
 	createView: function(inClass){
-		var c = eval(inClass);
+		if(dojo.isAIR){
+			var obj = window;
+			var names = inClass.split('.');
+			for(var i=0;i<names.length;i++){
+				if(typeof obj[names[i]]=='undefined'){
+					var undefstring = names[0];
+					for(var j=1;j<=i;j++){
+						undefstring+="."+names[j];
+					}
+					throw new Error(undefstring+" is undefined");
+				}
+				obj = obj[names[i]];
+			}
+			var c = obj;
+		}else{
+			var c = eval(inClass);
+		}
 		var view = new c({ grid: this });
 		this.viewsNode.appendChild(view.domNode);
 		this.headerNode.appendChild(view.headerNode);

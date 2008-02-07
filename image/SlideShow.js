@@ -463,7 +463,8 @@ dojo.declare("dojox.image.SlideShow",
 
 	_startTimer: function(){
 		// summary: Starts a timeout to show the next image when a slide show is active
-		this._slideId = setTimeout("dijit.byId('"+this.id +"').showNextImage(true);", this.slideshowInterval * 1000);
+		var id = this.id;
+		this._slideId = setTimeout(function(){dijit.byId(id).showNextImage(true);}, this.slideshowInterval * 1000);
 	},
 	
 	_calcNavDimensions: function() {

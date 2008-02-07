@@ -49,7 +49,7 @@ var makeObjects = function(){
 	chart.addSeries("Series C", seriesC);
 	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
 	chart.render();
-    setInterval("updateTest()", 200);
+    setInterval(function(){updateTest();}, 200);
 };
 
 var updateTest = function(){
