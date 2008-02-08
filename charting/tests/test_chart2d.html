@@ -61,7 +61,7 @@ makeObjects = function(){
 	chart2.render();
 
 	var chart3 = new dojox.charting.Chart2D("test3");
-	chart3.addPlot("default", {type: "Areas"});
+	chart3.addPlot("default", {type: "Areas", tension:3});
 	chart3.setTheme(dojox.charting.themes.PlotKit.orange);
 	chart3.addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4]);
 	chart3.addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2]);
@@ -129,7 +129,7 @@ makeObjects = function(){
 	chart12.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
 	chart12.addPlot("default", {type: "StackedAreas"});
 	chart12.addSeries("Series A", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "red", width: 2}, fill: "lightpink"});
-	chart12.addSeries("Series B", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "blue", width: 2}, fill: "lightblue"});
+	chart12.addSeries("Series B", [1, 1.6, 1.3, 1.4, 1.1, 1.5, 1.1], {stroke: {color: "blue", width: 2}, fill: "lightblue"});
 	chart12.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen"});
 	chart12.render();
 
@@ -262,7 +262,7 @@ makeObjects = function(){
 
 	var chart28 = new dojox.charting.Chart2D("test28");
 	chart28.setTheme(dojox.charting.themes.PlotKit.blue);
-	chart28.addPlot("default", {type: "Default", lines: true, markers: true});
+	chart28.addPlot("default", {type: "Default", lines: true, markers: true, tension:2});
 	chart28.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart28.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart28.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
