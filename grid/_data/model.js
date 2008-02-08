@@ -402,17 +402,22 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	constructor: function(inFields, inData, args){
 		this.count = 1;
 		this._rowIdentities = {};
+		this._currentlyProcessing = [];
 		if(args){
 			dojo.mixin(this, args);
 		}
 		if(this.store){
-			// NOTE: we assume Read and Identity APIs for all stores!
 			var f = this.store.getFeatures();
 			this._canNotify = f['dojo.data.api.Notification'];
 			this._canWrite = f['dojo.data.api.Write'];
 			this._canIdentify = f['dojo.data.api.Identity'];
 			if(this._canNotify){
 				dojo.connect(this.store, "onSet", this, "_storeDatumChange");
+				dojo.connect(this.store, "onDelete", this, "_storeDatumDelete");
+				dojo.connect(this.store, "onNew", this, "_storeDatumNew");
+			}
+			if(this._canWrite) {
+				dojo.connect(this.store, "revert", this, "refresh");
 			}
 		}
 	},
@@ -421,6 +426,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	query: { name: "*" }, // default, stupid query
 	store: null,
+	_currentlyProcessing: null,
 	_canNotify: false,
 	_canWrite: false,
 	_canIdentify: false,
@@ -473,26 +479,22 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	_getRowFromItem: function(item){
 		// gets us the row object (and row index) of an item
 	},
+	_createRow: function(item){
+		var row = {}; 
+		row.__dojo_data_item = item;
+		dojo.forEach(this.fields.values, function(a){
+			value = this.store.getValue(item, a.name);
+			row[a.name] = (value === undefined || value === null)?"":value;
+		}, this);
+		return row;
+	},
 	processRows: function(items, request){
 		// console.debug(arguments);
 		if(!items || items.length == 0){ return; }
 		this._setupFields(items[0]);
 		dojo.forEach(items, function(item, idx){
-			var row = {}; 
-			row.__dojo_data_item = item;
-			dojo.forEach(this.fields.values, function(a){
-				value = this.store.getValue(item, a.name);
-				row[a.name] = (value === undefined || value === null)?"":value;
-			}, this);
-			
-			// FIXME: where else do we need to keep this in sync?
-			//Handle stores that implement identity and try to handle those that do not.
-			if (this._canIdentify) {
-				this._rowIdentities[this.store.getIdentity(item)] = {rowId: request.start+idx};
-			}else{
-				var identity = dojo.toJson(request.query) + ":start:" + request.start + ":idx:" + idx + ":sort:" + dojo.toJson(request.sort);
-				this._rowIdentities[identity] = {rowId: request.start+idx, item: item};
-			}
+			var row = this._createRow(item);
+			this._setRowId(item, request.start, idx);
 			this.setRow(row, request.start+idx);
 		}, this);
 		// FIXME: 
@@ -568,11 +570,26 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			delete this.cache[inRowIndex];
 		}
 	},
-	_storeDatumChange: function(item, attr, oldVal, newVal){
-		// the store has changed some data under us, need to update the display
+	_setRowId: function(item, offset, idx){
+		// FIXME: where else do we need to keep this in sync?
+		//Handle stores that implement identity and try to handle those that do not.
+		if (this._canIdentify) {
+			this._rowIdentities[this.store.getIdentity(item)] = {rowId: offset+idx, item: item};
+		}else{
+			var identity = dojo.toJson(this.query) + ":start:" + offset + ":idx:" + idx + ":sort:" + dojo.toJson(this.sortFields);
+			this._rowIdentities[identity] = {rowId: offset+idx, item: item};
+		}
+	},
+	_getRowId: function(item, isNotItem){
+		//	summary:
+		//		Function determine the row index for a particular item
+		//	item:
+		//		The store item to examine to determine row index.
+		//	isNotItem:
+		//		Boolean flag to indicate if the item passed is a store item or not.
 		var rowId = null;
 		//Handle identity and nonidentity capable stores.
-		if(this._canIdentify){
+		if(this._canIdentify && !isNotItem){
 			rowId = this._rowIdentities[this.store.getIdentity(item)].rowId;
 		}else{
 			//Not efficient, but without identity support, 
@@ -581,17 +598,50 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			var id;
 			for(id in this._rowIdentities){
 				if(this._rowIdentities[id].item === item){
-					rowId = id;
+					rowId = this._rowIdentities[id].rowId;
 					break;
 				}
 			}
 		}
+		return rowId;
+	},
+	_storeDatumChange: function(item, attr, oldVal, newVal){
+		// the store has changed some data under us, need to update the display
+		var rowId = this._getRowId(item);
 		var row = this.getRow(rowId);
 		if(row){
 			row[attr] = newVal;
 			var colId = this.fields._nameMaps[attr];
 			this.notify("DatumChange", [ newVal, rowId, colId ]);
 		}
+	},
+	_storeDatumDelete: function(item){
+		if(dojo.indexOf(this._currentlyProcessing, item) != -1)
+			return;
+		// the store has deleted some item under us, need to remove that item from
+		// the view if possible.  It may be the deleted item isn't even in the grid.
+		var rowId = this._getRowId(item, true);
+		if(rowId != null){
+			this._removeItems([rowId]);
+		}
+	},
+	_storeDatumNew: function(item){
+		if(this._disableNew)
+			return;
+		// the store has added some item under us, need to add it to the view.
+		this._insertItem(item, this.data.length);
+	},
+	insert: function(item, index){
+		// Push the given item back to the store
+		this._disableNew = true;
+		var i = this.store.newItem(item);
+		this._disableNew = false;
+		this._insertItem(i, index);
+	},
+	_insertItem: function(storeItem, index){
+		var row = this._createRow(storeItem);
+		this._setRowId(storeItem, 0, index);
+		dojox.grid.data.Dynamic.prototype.insert.apply(this, [row, index]);
 	},
 	datumChange: function(value, rowIdx, colIdx){
 		if(this._canWrite){
@@ -617,6 +667,34 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this.notify("Removal", arguments);
 		this.notify("Change", arguments);
 	},
+	remove: function(inRowIndexes){
+		//	summary:
+		//		Function to remove a set of items from the store based on the row index.
+		//	inRowIndexes:
+		//		An array of row indexes from the grid to remove from the store.
+		/* Call delete on the store */ 
+		for(var i=inRowIndexes.length-1; i>=0; i--){
+			// Need to find the item, then remove each from the data store
+			var item = this.data[inRowIndexes[i]].__dojo_data_item;
+			this._currentlyProcessing.push(item);
+			this.store.deleteItem(item);
+		}
+		/* Remove from internal data structure and the view */
+		this._removeItems(arguments);
+		this._currentlyProcessing = [];
+	},
+	_removeItems: function(inRowIndexes /*array*/){
+		//	summary:
+		//		Function to remove a set of items from the store based on the row index.
+		//	inRowIndexes:
+		//		An array of row indexes from the grid to remove from the store.
+		dojox.grid.data.Dynamic.prototype.remove.apply(this, arguments);
+		// Rebuild _rowIdentities
+		this._rowIdentities = {};
+		for (var i = 0; i < this.data.length; i++){
+			this._setRowId(this.data[i].__dojo_data_item, 0, i);
+		}
+	},
 	canSort: function(){
 		// Q: Return true and re-issue the queries?
 		// A: Return true only. Re-issue the query in 'sort'.
@@ -631,6 +709,8 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this.refresh();
 	},
 	refresh: function(){
+		//	summary:
+		//		Function to cause the model to re-query the store and rebuild the current viewport.
 		this.clearData(true);
 		this.requestRows();
 	},
