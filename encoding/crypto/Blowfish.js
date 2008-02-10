@@ -167,35 +167,27 @@ dojox.encoding.crypto.Blowfish = new function(){
 		]
 	}
 ////////////////////////////////////////////////////////////////////////////
+//	fixes based on patch submitted by Peter Wood (#5791)
 	function add(x,y){
-		var sum=(x+y)&0xffffffff;
-		if (sum<0){
-			sum=-sum;
-			return (0x10000*((sum>>16)^0xffff))+(((sum&0xffff)^0xffff)+1);
-		}
-		return sum;
-	}
-	function split(x){
-		var r=x&0xffffffff;
-		if(r<0) {
-			r=-r;
-			return [((r&0xffff)^0xffff)+1,(r>>16)^0xffff];
-		}
-		return [r&0xffff,(r>>16)];
+		var lsw=(x&0xffff)+(y&0xffff), msw=(x>>16)+(y>>16)+(lsw>>16);
+		return (msw<<16)|(lsw&0xffff);
 	}
 	function xor(x,y){
-		var xs=split(x);
-		var ys=split(y);
-		return (0x10000*(xs[1]^ys[1]))+(xs[0]^ys[0]);
+		var lsw=(x&0xffff)^(y&0xffff), msw=(x>>16)^(y>>16);
+		return (msw<<16)|(lsw&0xffff);
 	}
 	function $(v, box){
 		var d=v&0xff; v>>=8;
 		var c=v&0xff; v>>=8;
 		var b=v&0xff; v>>=8;
 		var a=v&0xff;
-		var r=add(box.s0[a],box.s1[b]);
-		r=xor(r,box.s2[c]);
-		return add(r,box.s3[d]);
+
+		var lsw=(box.s0[a]&0xffff)+(box.s1[b]&0xffff), msw=(box.s0[a]>>16)+(box.s1[b]>>16)+(lsw>>16);
+		var r=(msw<<16)|(lsw&0xffff);
+		lsw=(r&0xffff)^(box.s2[c]&0xffff), msw=(r>>16)^(box.s2[c]>>16);
+		r=(msw<<16)|(lsw&0xffff);
+		lsw=(r&0xffff)+(box.s3[d]&0xffff), msw=(r>>16)+(box.s3[d]>>16)+(lsw>>16);
+		return (msw<<16)|(lsw&0xffff);
 	}
 ////////////////////////////////////////////////////////////////////////////
 	function eb(o, box){
@@ -257,12 +249,13 @@ dojox.encoding.crypto.Blowfish = new function(){
 			k=a;
 		}
 		//	init the boxes
-		var box = { p:[], s0:[], s1:[], s2:[], s3:[] };
-		for(var i=0; i<boxes.p.length; i++) box.p.push(boxes.p[i]);
-		for(var i=0; i<boxes.s0.length; i++) box.s0.push(boxes.s0[i]);
-		for(var i=0; i<boxes.s1.length; i++) box.s1.push(boxes.s1[i]);
-		for(var i=0; i<boxes.s2.length; i++) box.s2.push(boxes.s2[i]);
-		for(var i=0; i<boxes.s3.length; i++) box.s3.push(boxes.s3[i]);
+		var box = { 
+			p:boxes.p.slice(0), 
+			s0:boxes.s0.slice(0), 
+			s1:boxes.s1.slice(0), 
+			s2:boxes.s2.slice(0), 
+			s3:boxes.s3.slice(0) 
+		};
 
 		//	init p with the key
 		var pos=0;
@@ -294,7 +287,6 @@ dojox.encoding.crypto.Blowfish = new function(){
 
 ////////////////////////////////////////////////////////////////////////////
 //	PUBLIC FUNCTIONS
-//	0.2: Only supporting ECB mode for now.
 ////////////////////////////////////////////////////////////////////////////
 	this.getIV=function(/* dojox.encoding.crypto.outputTypes? */ outputType){
 		//	summary
