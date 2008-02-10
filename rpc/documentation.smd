@@ -1,0 +1,42 @@
+{
+	envelope: "URL",
+	transport: "JSONP",
+	services: {
+		get: {
+			target: "http://redesign.dojotoolkit.org/jsdoc/jsonp",
+			callbackParamName: "callback",
+			parameters: [
+				{
+					name: "name",
+					type: "string",
+					optional: false
+				},
+				{
+					name: "exact",
+					type: "boolean",
+					optional: true
+				},
+				{
+					name: "resource",
+					type: "string",
+					optional: true
+				},
+				{
+					name: "project",
+					type: "string",
+					optional: true
+				},
+				{
+					name: "version",
+					type: "string",
+					optional: true
+				},
+				{
+					name: "attributes",
+					type: "array",
+					optional: true
+				}
+			]
+		}
+	}
+}

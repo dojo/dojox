@@ -251,7 +251,7 @@ dojox.rpc.registerTransport(
 	"JSONP",
 	function(r){
 		return dojo.io.script.get({
-			url: r.target + '?' + r.data,
+			url: r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data,
 			timeout: r.timeout,
 			preventCache: r.preventCache || true, 
 			callbackParamName: r.callbackParamName || "callback"
