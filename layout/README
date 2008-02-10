@@ -32,7 +32,11 @@ Project description
 	(and an internal button set to mimic a tab container, but fires on hover)
 
 	dojox.layout.ScrollPane - a dynamically scrolling pane. Adjusts naturally sized content
-	to a "viewport" and scrolls based on relative mouse position.
+	to a "viewport" and scrolls based on relative mouse position. 
+
+	dojox.layout.DragPane - an experimental start of a simple Dragable pane 
+	(drag larger content around inside of a sized pane) Does not support borderContainer
+	LayoutContainer resizing yet. 
 
 -------------------------------------------------------------------------------
 Dependencies
@@ -69,4 +73,3 @@ Basic Usage:
 		Initial content, will be replace by href.
 		paths in folder.html will be adjusted to match this page
 	</div>
-
