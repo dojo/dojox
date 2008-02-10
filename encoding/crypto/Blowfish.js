@@ -6,9 +6,6 @@ dojo.require("dojox.encoding.crypto._base");
 /*	Blowfish
  *	Created based on the C# implementation by Marcus Hahn (http://www.hotpixel.net/)
  *	Unsigned math based on Paul Johnstone and Peter Wood patches.
- *
- *	version 1.0 
- *	TRT 
  *	2005-12-08
  */
 dojox.encoding.crypto.Blowfish = new function(){
@@ -249,7 +246,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 			p: dojo.map(boxes.p.slice(0), function(item){
 				var l=k.length, j;
 				for(j=0; j<4; j++){ data=(data*POW8)|k[pos++ % l]; }
-				return xor(item, data);
+				return (((item>>0x10)^(data>>0x10))<<0x10)|(((item&0xffff)^(data&0xffff))&0xffff);
 			}),
 			s0:boxes.s0.slice(0), 
 			s1:boxes.s1.slice(0), 
@@ -356,8 +353,8 @@ dojox.encoding.crypto.Blowfish = new function(){
 				|plaintext.charCodeAt(pos+7);
 
 			if(isCBC){
-				o.left=xor(o.left, vector.left);
-				o.right=xor(o.right, vector.right);
+				o.left=(((o.left>>0x10)^(vector.left>>0x10))<<0x10)|(((o.left&0xffff)^(vector.left&0xffff))&0xffff);
+				o.right=(((o.right>>0x10)^(vector.right>>0x10))<<0x10)|(((o.right&0xffff)^(vector.right&0xffff))&0xffff);
 			}
 
 			eb(o, bx);	//	encrypt the block
@@ -447,8 +444,8 @@ dojox.encoding.crypto.Blowfish = new function(){
 			db(o, bx);	//	decrypt the block
 
 			if(isCBC){
-				o.left=xor(o.left, vector.left);
-				o.right=xor(o.right, vector.right);
+				o.left=(((o.left>>0x10)^(vector.left>>0x10))<<0x10)|(((o.left&0xffff)^(vector.left&0xffff))&0xffff);
+				o.right=(((o.right>>0x10)^(vector.right>>0x10))<<0x10)|(((o.right&0xffff)^(vector.right&0xffff))&0xffff);
 				vector.left=left;
 				vector.right=right;
 			}
