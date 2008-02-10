@@ -109,7 +109,7 @@ dojo.require("dojox.dtl._base");
 			}
 			context.push();
 
-			var items = new dd._Filter(this.loop).resolve(context);
+			var items = new dd._Filter(this.loop).resolve(context) || [];
 			for(i = items.length; i < this.pool.length; i++){
 				this.pool[i].unrender(context, buffer);
 			}
