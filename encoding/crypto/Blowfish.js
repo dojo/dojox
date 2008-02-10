@@ -242,44 +242,35 @@ dojox.encoding.crypto.Blowfish = new function(){
 	//	but we should be more secure this way.
 	function init(key){
 		var k=key;
-		if (typeof(k)=="string"){
-			var a=[];
-			for(var i=0; i<k.length; i++) 
-				a.push(k.charCodeAt(i)&0xff);
-			k=a;
+		if(dojo.isString(k)){
+			k = dojo.map(k.split(""), function(item){
+				return item.charCodeAt(0) & 0xff;
+			});
 		}
+
 		//	init the boxes
+		var pos=0, data=0, res={ left:0, right:0 }, i, j;
 		var box = { 
-			p:boxes.p.slice(0), 
+			p: dojo.map(boxes.p.slice(0), function(item){
+				var l=k.length, j;
+				for(j=0; j<4; j++){ data=(data*POW8)|k[pos++ % l]; }
+				return xor(item, data);
+			}),
 			s0:boxes.s0.slice(0), 
 			s1:boxes.s1.slice(0), 
 			s2:boxes.s2.slice(0), 
 			s3:boxes.s3.slice(0) 
 		};
 
-		//	init p with the key
-		var pos=0;
-		var data=0;
-		for(var i=0; i < box.p.length; i++){
-			for (var j=0; j<4; j++){
-				data = (data*POW8) | k[pos];
-				if(++pos==k.length) pos=0;
-			}
-			box.p[i] = xor(box.p[i], data);
-		}
-
 		//	encrypt p and the s boxes
-		var res={ left:0, right:0 };
-		for(var i=0; i<box.p.length;){
+		for(i=0, l=box.p.length; i<l;){
 			eb(res, box);
-			box.p[i++]=res.left;
-			box.p[i++]=res.right;
+			box.p[i++]=res.left, box.p[i++]=res.right;
 		}
-		for (var i=0; i<4; i++){
-			for(var j=0; j<box["s"+i].length;){
+		for(i=0; i<4; i++){
+			for(j=0, l=box["s"+i].length; j<l;){
 				eb(res, box);
-				box["s"+i][j++]=res.left;
-				box["s"+i][j++]=res.right;
+				box["s"+i][j++]=res.left, box["s"+i][j++]=res.right;
 			}
 		}
 		return box;
@@ -294,10 +285,9 @@ dojox.encoding.crypto.Blowfish = new function(){
 		var out=outputType||dojox.encoding.crypto.outputTypes.Base64;
 		switch(out){
 			case dojox.encoding.crypto.outputTypes.Hex:{
-				var s=[];
-				for(var i=0; i<iv.length; i++)
-					s.push((iv[i]).toString(16));
-				return s.join("");		//	string
+				return dojo.map(iv, function(item){
+					return item.toString(16);
+				}).join("");			//	string
 			}
 			case dojox.encoding.crypto.outputTypes.String:{
 				return iv.join("");		//	string
@@ -310,6 +300,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 			}
 		}
 	};
+
 	this.setIV=function(/* string */data, /* dojox.encoding.crypto.outputTypes? */inputType){
 		//	summary
 		//	sets the initialization vector to data (as interpreted as inputType)
@@ -317,18 +308,15 @@ dojox.encoding.crypto.Blowfish = new function(){
 		var ba=null;
 		switch(ip){
 			case dojox.encoding.crypto.outputTypes.String:{
-				ba=[];
-				for (var i=0; i<data.length; i++){
-					ba.push(data.charCodeAt(i));
-				}
+				ba = dojo.map(data.split(""), function(item){
+					return item.charCodeAt(0);
+				});
 				break;
 			}
 			case dojox.encoding.crypto.outputTypes.Hex:{
 				ba=[];
-				var i=0;
-				while (i+1<data.length){
-					ba.push(parseInt(data.substr(i,2),16));
-					i+=2;
+				for(var i=0, l=data.length-1; i<l; i+=2){
+					ba.push(parseInt(data.substr(i,2), 16));
 				}
 				break;
 			}
@@ -345,7 +333,8 @@ dojox.encoding.crypto.Blowfish = new function(){
 		iv={};
 		iv.left=ba[0]*POW24|ba[1]*POW16|ba[2]*POW8|ba[3];
 		iv.right=ba[4]*POW24|ba[5]*POW16|ba[6]*POW8|ba[7];
-	}
+	};
+
 	this.encrypt = function(/* string */plaintext, /* string */key, /* object? */ao){
 		//	summary
 		//	encrypts plaintext using key; allows user to specify output type and cipher mode via keyword object "ao"
@@ -356,14 +345,10 @@ dojox.encoding.crypto.Blowfish = new function(){
 			if (ao.cipherMode) mode=ao.cipherMode;
 		}
 
-		var bx = init(key);
-		var padding = 8-(plaintext.length&7);
-		for (var i=0; i<padding; i++) plaintext+=String.fromCharCode(padding);
-		var cipher=[];
-		var count=plaintext.length >> 3;
-		var pos=0;
-		var o={};
-		var isCBC=(mode==dojox.encoding.crypto.cipherModes.CBC);
+		var bx = init(key), padding = 8-(plaintext.length&7);
+		for (var i=0; i<padding; i++){ plaintext+=String.fromCharCode(padding); }
+
+		var cipher=[], count=plaintext.length >> 3, pos=0, o={}, isCBC=(mode==dojox.encoding.crypto.cipherModes.CBC);
 		var vector={left:iv.left||null, right:iv.right||null};
 		for(var i=0; i<count; i++){
 			o.left=plaintext.charCodeAt(pos)*POW24
@@ -397,12 +382,12 @@ dojox.encoding.crypto.Blowfish = new function(){
 			cipher.push(o.right&0xff);
 			pos+=8;
 		}
+
 		switch(out){
 			case dojox.encoding.crypto.outputTypes.Hex:{
-				var s=[];
-				for(var i=0; i<cipher.length; i++)
-					s.push((cipher[i]).toString(16));
-				return s.join("");	//	string
+				return dojo.map(cipher, function(item){
+					return item.toString(16);
+				}).join("");	//	string
 			}
 			case dojox.encoding.crypto.outputTypes.String:{
 				return cipher.join("");	//	string
@@ -431,19 +416,16 @@ dojox.encoding.crypto.Blowfish = new function(){
 		var c=null;
 		switch(ip){
 			case dojox.encoding.crypto.outputTypes.Hex:{
-				c=[];
-				var i=0;
-				while (i+1<ciphertext.length){
-					c.push(parseInt(ciphertext.substr(i,2),16));
-					i+=2;
+				c = [];
+				for(var i=0, l=ciphertext.length-1; i<l; i+=2){
+					c.push(parseInt(ciphertext.substr(i,2), 16));
 				}
 				break;
 			}
 			case dojox.encoding.crypto.outputTypes.String:{
-				c=[];
-				for (var i=0; i<ciphertext.length; i++){
-					c.push(ciphertext.charCodeAt(i));
-				}
+				c = dojo.map(ciphertext.split(""), function(item){
+					return item.charCodeAt(0);
+				});
 				break;
 			}
 			case dojox.encoding.crypto.outputTypes.Raw:{
@@ -456,10 +438,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 			}
 		}
 
-		var count=c.length >> 3;
-		var pos=0;
-		var o={};
-		var isCBC=(mode==dojox.encoding.crypto.cipherModes.CBC);
+		var count=c.length >> 3, pos=0, o={}, isCBC=(mode==dojox.encoding.crypto.cipherModes.CBC);
 		var vector={left:iv.left||null, right:iv.right||null};
 		for(var i=0; i<count; i++){
 			o.left=c[pos]*POW24|c[pos+1]*POW16|c[pos+2]*POW8|c[pos+3];
@@ -497,9 +476,9 @@ dojox.encoding.crypto.Blowfish = new function(){
 		}
 
 		//	convert to string
-		for(var i=0; i<pt.length; i++)
-			pt[i]=String.fromCharCode(pt[i]);
-		return pt.join("");		//	string
+		return dojo.map(pt, function(item){
+			return String.fromCharCode(item);
+		}).join("");	//	string
 	};
 
 	this.setIV("0000000000000000", dojox.encoding.crypto.outputTypes.Hex);
