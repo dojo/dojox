@@ -5,9 +5,7 @@ dojo.require("dojox.encoding.crypto._base");
 
 /*	Blowfish
  *	Created based on the C# implementation by Marcus Hahn (http://www.hotpixel.net/)
- *	Unsigned math functions derived from Joe Gregorio's SecureSyndication GM script
- *	http://bitworking.org/projects/securesyndication/
- *	(Note that this is *not* an adaption of the above script)
+ *	Unsigned math based on Paul Johnstone and Peter Wood patches.
  *
  *	version 1.0 
  *	TRT 
@@ -169,28 +167,25 @@ dojox.encoding.crypto.Blowfish = new function(){
 ////////////////////////////////////////////////////////////////////////////
 //	fixes based on patch submitted by Peter Wood (#5791)
 	function add(x,y){
-		var lsw=(x&0xffff)+(y&0xffff), msw=(x>>16)+(y>>16)+(lsw>>16);
-		return (msw<<16)|(lsw&0xffff);
+		return (((x>>0x10)+(y>>0x10)+(((x&0xffff)+(y&0xffff))>>0x10))<<0x10)|(((x&0xffff)+(y&0xffff))&0xffff);
 	}
 	function xor(x,y){
-		var lsw=(x&0xffff)^(y&0xffff), msw=(x>>16)^(y>>16);
-		return (msw<<16)|(lsw&0xffff);
+		return (((x>>0x10)^(y>>0x10))<<0x10)|(((x&0xffff)^(y&0xffff))&0xffff);
 	}
-	function $(v, box){
-		var d=v&0xff; v>>=8;
-		var c=v&0xff; v>>=8;
-		var b=v&0xff; v>>=8;
-		var a=v&0xff;
 
-		var lsw=(box.s0[a]&0xffff)+(box.s1[b]&0xffff), msw=(box.s0[a]>>16)+(box.s1[b]>>16)+(lsw>>16);
-		var r=(msw<<16)|(lsw&0xffff);
-		lsw=(r&0xffff)^(box.s2[c]&0xffff), msw=(r>>16)^(box.s2[c]>>16);
-		r=(msw<<16)|(lsw&0xffff);
-		lsw=(r&0xffff)+(box.s3[d]&0xffff), msw=(r>>16)+(box.s3[d]>>16)+(lsw>>16);
-		return (msw<<16)|(lsw&0xffff);
+	function $(v, box){
+		var d=box.s3[v&0xff]; v>>=8;
+		var c=box.s2[v&0xff]; v>>=8;
+		var b=box.s1[v&0xff]; v>>=8;
+		var a=box.s0[v&0xff];
+
+		var r = (((a>>0x10)+(b>>0x10)+(((a&0xffff)+(b&0xffff))>>0x10))<<0x10)|(((a&0xffff)+(b&0xffff))&0xffff);
+		r = (((r>>0x10)^(c>>0x10))<<0x10)|(((r&0xffff)^(c&0xffff))&0xffff);
+		return (((r>>0x10)+(d>>0x10)+(((r&0xffff)+(d&0xffff))>>0x10))<<0x10)|(((r&0xffff)+(d&0xffff))&0xffff);
 	}
 ////////////////////////////////////////////////////////////////////////////
 	function eb(o, box){
+		//	TODO: see if this can't be made more efficient
 		var l=o.left;
 		var r=o.right;
 		l=xor(l,box.p[0]);
