@@ -96,7 +96,7 @@ dojo.require("dojox.dtl._base");
 
 	ddtl.ForNode = dojo.extend(function(assign, loop, reversed, nodelist){
 		this.assign = assign;
-		this.loop = loop;
+		this.loop = new dd._Filter(loop);
 		this.reversed = reversed;
 		this.nodelist = nodelist;
 		this.pool = [];
@@ -109,7 +109,7 @@ dojo.require("dojox.dtl._base");
 			}
 			context.push();
 
-			var items = new dd._Filter(this.loop).resolve(context) || [];
+			var items = this.loop.resolve(context) || [];
 			for(i = items.length; i < this.pool.length; i++){
 				this.pool[i].unrender(context, buffer);
 			}
