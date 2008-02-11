@@ -17,9 +17,9 @@ dojo.extend(dojo.NodeList, {
 			});
 		}
 
-		d.text._resolveString(template).addCallback(function(templateString){
+		d.text._resolveTemplateArg(template).addCallback(function(templateString){
 			template = new d.Template(templateString);
-			d.text._resolveObject(context).addCallback(function(contextObject){
+			d.text._resolveContextArg(context).addCallback(function(contextObject){
 				render(contextObject);
 			});
 		});

@@ -76,10 +76,7 @@ dojo.require("dojox.string.tokenize");
 		pySplit: function(str){
 			// summary: Split a string according to Python's split function
 			str = dojo.trim(str);
-			if(!str.length){
-				return [];
-			}
-			return str.split(/\s+/g);
+			return (!str.length) ? [] : str.split(/\s+/g);
 		},
 		_get: function(module, name, errorless){
 			// summary: Used to find both tags and filters
@@ -113,36 +110,41 @@ dojo.require("dojox.string.tokenize");
 		getTemplateString: function(file){
 			return dojo._getText(file.toString()) || "";
 		},
-		_resolveLazy: function(args, key, sync, json){
-			var content = args[key] || args;
-			var url = args.url || ((json && content.constructor != Object) ? content : false);
-			if(url){
-				if(sync){
-					if(json){
-						return dojo.eval(dojo._getText(url) || {});
-					}else{
-						return dd.text.getTemplateString(url);
-					}
-				}else{
-					return dojo.xhrGet({
-						handleAs: (json) ? "json" : "text",
-						url: url
-					});
-				}
-			}
+		_resolveLazy: function(location, sync, json){
 			if(sync){
-				return args[key] || args;
+				if(json){
+					return dojo.fromJson(dojo._getText(location)) || {};
+				}else{
+					return dd.text.getTemplateString(location);
+				}
 			}else{
-				var d = new dojo.Deferred();
-				d.callback(args[key] || args);
-				return d;
+				return dojo.xhrGet({
+					handleAs: (json) ? "json" : "text",
+					url: location
+				});
 			}
 		},
-		_resolveString: function(args, sync){
-			return ddt._resolveLazy(args, "string", sync);
+		_resolveTemplateArg: function(arg, sync){
+			if(dojo.isString(arg) && arg.match(/^\s*[<{]/)){
+				if(!sync){
+					var d = new dojo.Deferred();
+					d.callback(arg);
+					return d;
+				}
+				return arg;
+			}
+			return ddt._resolveLazy(arg, sync);
 		},
-		_resolveObject: function(args, sync){
-			return ddt._resolveLazy(args, "obj", sync, true);
+		_resolveContextArg: function(arg, sync){
+			if(arg.constructor == Object){
+				if(!sync){
+					var d = new dojo.Deferred;
+					d.callback(arg);
+					return d;
+				}
+				return arg;
+			}
+			return ddt._resolveLazy(arg, sync, true);
 		},
 		_re: /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(.+?)\s*%\})/g,
 		tokenize: function(str){
@@ -158,35 +160,11 @@ dojo.require("dojox.string.tokenize");
 		}
 	}
 
-	/*=====
-	dd.__StringArgs = function(url, string){
-		// summary:
-		//		Differentiate between a url that contains a string,
-		//		or the string itself
-		// url: String|dojo._Url?
-		//		The URL to load the string from
-		// string: String?
-		//		The string itself
-		this.url = url;
-		this.string = string;
-	}
-	dd.__ObjectArgs = function(url, obj){
-		// summary:
-		//		Differentiate between a url that contains JSON,
-		//		or the object itself
-		// url: String|dojo._Url?
-		//		The URL to load the object from
-		// obj: Object?
-		//		The object
-		this.url = url;
-		this.obj = obj;
-	}
-	=====*/
-
-	dd.Template = dojo.extend(function(template){
-		// template: dojox.dtl.__StringArgs|String
-		//		The template string or location
-		var str = ddt._resolveString(template, true);
+	dd.Template = dojo.extend(function(/*String|dojo._Url*/ template){
+		// template:
+		//		The string or location of the string to
+		//		use as a template
+		var str = ddt._resolveTemplateArg(template, true);
 		var tokens = ddt.tokenize(str);
 		var parser = new dd._Parser(tokens);
 		this.nodelist = parser.parse();
@@ -197,7 +175,7 @@ dojo.require("dojox.string.tokenize");
 			//		A node reference or set of nodes
 			// context: dojo._Url|String|Object
 			//		The context object or location
-			ddt._resolveObject(context).addCallback(this, function(contextObject){
+			ddt._resolveContextArg(context).addCallback(this, function(contextObject){
 				var content = this.render(new dd._Context(contextObject));
 				if(node.forEach){
 					node.forEach(function(item){
@@ -225,56 +203,57 @@ dojo.require("dojox.string.tokenize");
 		// summary: Uses a string to find (and manipulate) a variable
 		if(!token) throw new Error("Filter must be called with variable name");
 		this.contents = token;
-		var key = null;
-		var re = this._re;
-		var matches, filter, arg, fn;
-		var filters = [];
-		while(matches = re.exec(token)){
-			if(key === null){
-				if(this._exists(matches, 3)){
-					// variable
-					key = matches[3];
-				}else if(this._exists(matches, 1)){
-					// _("text")
-					key = '"' + matches[1] + '"';
-				}else if(this._exists(matches, 2)){
-					// "text"
-					key = '"' + matches[2] + '"';
-				}else if(this._exists(matches, 9)){
-					// 'text'
-					key = '"' + matches[9] + '"';
-				}
-			}else{
-				if(this._exists(matches, 7)){
-					// :variable
-					arg = [true, matches[7]];
-				}else if(this._exists(matches, 5)){
-					// :_("text")
-					arg = [false, matches[5].replace(/\\"/g, '"')];
-				}else if(this._exists(matches, 6)){
-					// :"text"
-					arg = [false, matches[6].replace(/\\"/g, '"')];
-				}else if(this._exists(matches, 8)){
-					// :"text"
-					arg = [false, matches[8].replace(/\\'/g, "'")];
-				}
-				// Get a named filter
-				fn = ddt.getFilter(matches[4]);
-				if(typeof fn != "function") throw new Error(matches[4] + " is not registered as a filter");
-				filters.push([fn, arg]);
-			}
-		}
+		this.key = null;
+		this.filters = [];
 
-		this.key = key;
-		this.filters = filters;
+		dojox.string.tokenize(token, this._re, this._tokenize, this);
 	},
 	{
 		_re: /(?:^_\("([^\\"]*(?:\\.[^\\"])*)"\)|^"([^\\"]*(?:\\.[^\\"]*)*)"|^([a-zA-Z0-9_.]+)|\|(\w+)(?::(?:_\("([^\\"]*(?:\\.[^\\"])*)"\)|"([^\\"]*(?:\\.[^\\"]*)*)"|([a-zA-Z0-9_.]+)|'([^\\']*(?:\\.[^\\']*)*)'))?|^'([^\\']*(?:\\.[^\\']*)*)')/g,
-		_exists: function(arr, index){
-			if(typeof arr[index] != "undefined" && arr[index] !== ""){
-				return true;
+		_values: {
+			0: '"', // _("text")
+			1: '"', // "text"
+			2: "", // variable
+			8: '"' // 'text'
+		},
+		_args: {
+			4: '"', // :_("text")
+			5: '"', // :"text"
+			6: "", // :variable
+			7: "'"// :'text'
+		},
+		_tokenize: function(){
+			var pos, arg;
+
+			for(var i = 0, has = []; i < arguments.length; i++){
+				has[i] = (typeof arguments[i] != "undefined" && arguments[i] !== "");
 			}
-			return false;
+
+			if(!this.key){
+				for(pos in this._values){
+					if(has[pos]){
+						this.key = this._values[pos] + arguments[pos] + this._values[pos];
+						break;
+					}
+				}
+			}else{
+				for(pos in this._args){
+					if(has[pos]){
+						var value = arguments[pos];
+						if(this._args[pos] == "'"){
+							value = value.replace(/\\'/g, "'");
+						}else if(this._args[pos] == '"'){
+							value = value.replace(/\\"/g, '"');
+						}
+						arg = [!this._args[pos], value];
+						break;
+					}
+				}
+				// Get a named filter
+				var fn = ddt.getFilter(arguments[3]);
+				if(!dojo.isFunction(fn)) throw new Error(arguments[3] + " is not registered as a filter");
+				this.filters.push([fn, arg]);
+			}
 		},
 		resolve: function(context){
 			var str = this.resolvePath(this.key, context);
@@ -302,15 +281,15 @@ dojo.require("dojox.string.tokenize");
 			}else if(first == '"' && first == last){
 				current = path.substring(1, path.length - 1);
 			}else{
-				if(path == "true") return true;
-				if(path == "false") return false;
-				if(path == "null" || path == "None") return null;
+				if(path == "true"){ return true; }
+				if(path == "false"){ return false; }
+				if(path == "null" || path == "None"){ return null; }
 				parts = path.split(".");
 				current = context.get(parts.shift());
 				while(parts.length){
 					if(current && typeof current[parts[0]] != "undefined"){
 						current = current[parts[0]];
-						if(typeof current == "function"){
+						if(dojo.isFunction(current)){
 							if(current.alters_data){
 								current = "";
 							}else{
@@ -327,7 +306,7 @@ dojo.require("dojox.string.tokenize");
 		}
 	});
 
-	dd._Node = dojo.extend(function(/*Object*/ obj){
+	dd._TextNode = dd._Node = dojo.extend(function(/*Object*/ obj){
 		// summary: Basic catch-all node
 		this.contents = obj;
 	},
@@ -355,18 +334,16 @@ dojo.require("dojox.string.tokenize");
 			// summary: Adds all content onto the buffer
 			for(var i = 0; i < this.contents.length; i++){
 				buffer = this.contents[i].render(context, buffer);
-				if(!buffer) throw new Error("Template node render functions must return their buffer");
+				if(!buffer) throw new Error("Template must return buffer");
 			}
 			return buffer;
 		},
-		dummyRender: function(context, buffer){
+		dummyRender: function(context){
 			return this.render(context, dd.Template.prototype.getBuffer()).toString();
 		},
-		unrender: function(context, buffer){ return buffer; },
+		unrender: function(){ return arguments[1]; },
 		clone: function(){ return this; }
 	});
-
-	dd._TextNode = dd._Node;
 
 	dd._VarNode = dojo.extend(function(str){
 		// summary: A node to be processed as a variable
@@ -384,6 +361,7 @@ dojo.require("dojox.string.tokenize");
 		this.contents = tokens;
 	},
 	{
+		i: 0,
 		parse: function(/*Array?*/ stop_at){
 			// summary: Turns tokens into nodes
 			// description: Steps into tags are they're found. Blocks use the parse object
@@ -391,16 +369,15 @@ dojo.require("dojox.string.tokenize");
 			//		returns the node that matched.
 			var types = ddt.types;
 			var terminators = {};
-			var tokens = this.contents;
 			stop_at = stop_at || [];
 			for(var i = 0; i < stop_at.length; i++){
 				terminators[stop_at[i]] = true;
 			}
 
 			var nodelist = new dd._NodeList();
-			while(tokens.length){
-				token = tokens.shift();
-				if(typeof token == "string"){
+			while(this.i < this.contents.length){
+				token = this.contents[this.i++];
+				if(dojo.isString(token)){
 					nodelist.push(new dd._TextNode(token));
 				}else{
 					var type = token[0];
@@ -409,7 +386,7 @@ dojo.require("dojox.string.tokenize");
 						nodelist.push(new dd._VarNode(text));
 					}else if(type == types.tag){
 						if(terminators[text]){
-							tokens.unshift(token);
+							--this.i;
 							return nodelist;
 						}
 						var cmd = text.split(/\s+/g);
@@ -428,17 +405,18 @@ dojo.require("dojox.string.tokenize");
 				throw new Error("Could not find closing tag(s): " + stop_at.toString());
 			}
 
+			this.contents.length = 0;
 			return nodelist;
 		},
 		next: function(){
 			// summary: Returns the next token in the list.
-			var token = this.contents.shift();
+			var token = this.contents[this.i++];
 			return {type: token[0], text: token[1]};
 		},
 		skipPast: function(endtag){
 			var types = ddt.types;
-			while(this.contents.length){
-				var token = this.contents.shift();
+			while(this.i < this.contents.length){
+				var token = this.contents[this.i++];
 				if(token[0] == types.tag && token[1] == endtag){
 					return;
 				}
