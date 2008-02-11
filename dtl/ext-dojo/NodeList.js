@@ -3,13 +3,27 @@ dojo.require("dojox.dtl._base");
 
 dojo.extend(dojo.NodeList, {
 	dtl: function(template, context){
+		// args: dojox.dtl.__StringArgs|String
+		//		The template string or location
+		// context: dojox.dtl.__ObjectArgs|Object
+		//		The context object or location
 		var d = dojox.dtl;
-		template = new d.Template(template);
-		context = new d._Context(context);
-		var content = template.render(context);
-		this.forEach(function(node){
-			node.innerHTML = content;
+
+		var self = this;
+		var render = function(data){
+			var content = template.render(new d._Context(context));
+			self.forEach(function(node){
+				node.innerHTML = content;
+			});
+		}
+
+		d.text._resolveString(template).addCallback(function(templateString){
+			template = new d.Template(templateString);
+			d.text._resolveObject(context).addCallback(function(contextObject){
+				render(contextObject);
+			});
 		});
+
 		return this;
 	}
 });

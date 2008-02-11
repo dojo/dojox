@@ -113,6 +113,37 @@ dojo.require("dojox.string.tokenize");
 		getTemplateString: function(file){
 			return dojo._getText(file.toString()) || "";
 		},
+		_resolveLazy: function(args, key, sync, json){
+			var content = args[key] || args;
+			var url = args.url || ((json && content.constructor != Object) ? content : false);
+			if(url){
+				if(sync){
+					if(json){
+						return dojo.eval(dojo._getText(url) || {});
+					}else{
+						return dd.text.getTemplateString(url);
+					}
+				}else{
+					return dojo.xhrGet({
+						handleAs: (json) ? "json" : "text",
+						url: url
+					});
+				}
+			}
+			if(sync){
+				return args[key] || args;
+			}else{
+				var d = new dojo.Deferred();
+				d.callback(args[key] || args);
+				return d;
+			}
+		},
+		_resolveString: function(args, sync){
+			return ddt._resolveLazy(args, "string", sync);
+		},
+		_resolveObject: function(args, sync){
+			return ddt._resolveLazy(args, "obj", sync, true);
+		},
 		_re: /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(.+?)\s*%\})/g,
 		tokenize: function(str){
 			return dojox.string.tokenize(str, ddt._re, ddt._parseDelims);
@@ -127,12 +158,58 @@ dojo.require("dojox.string.tokenize");
 		}
 	}
 
-	dd.Template = dojo.extend(function(str){
+	/*=====
+	dd.__StringArgs = function(url, string){
+		// summary:
+		//		Differentiate between a url that contains a string,
+		//		or the string itself
+		// url: String|dojo._Url?
+		//		The URL to load the string from
+		// string: String?
+		//		The string itself
+		this.url = url;
+		this.string = string;
+	}
+	dd.__ObjectArgs = function(url, obj){
+		// summary:
+		//		Differentiate between a url that contains JSON,
+		//		or the object itself
+		// url: String|dojo._Url?
+		//		The URL to load the object from
+		// obj: Object?
+		//		The object
+		this.url = url;
+		this.obj = obj;
+	}
+	=====*/
+
+	dd.Template = dojo.extend(function(template){
+		// template: dojox.dtl.__StringArgs|String
+		//		The template string or location
+		var str = ddt._resolveString(template, true);
 		var tokens = ddt.tokenize(str);
 		var parser = new dd._Parser(tokens);
 		this.nodelist = parser.parse();
 	},
 	{
+		update: function(node, context){
+			// node: DOMNode|String|dojo.NodeList
+			//		A node reference or set of nodes
+			// context: dojo._Url|String|Object
+			//		The context object or location
+			ddt._resolveObject(context).addCallback(this, function(contextObject){
+				var content = this.render(new dd._Context(contextObject));
+				if(node.forEach){
+					node.forEach(function(item){
+						item.innerHTML = content;
+					});
+				}else{
+					dojo.byId(node).innerHTML = content;
+				}
+			});
+
+			return this;
+		},
 		render: function(context, /*concatenatable?*/ buffer){
 			buffer = buffer || this.getBuffer();
 			context = context || new dd._Context({});
