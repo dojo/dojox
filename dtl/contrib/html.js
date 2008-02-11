@@ -1,13 +1,13 @@
-dojo.provide("dojox.dtl.tag.html");
+dojo.provide("dojox.dtl.contrib.html");
 
-dojo.require("dojox.dtl._base");
+dojo.require("dojox.dtl.html");
 
-dojox.dtl.tag.html.HtmlNode = function(name){
+dojox.dtl.contrib.html.HtmlNode = dojo.extend(function(name){
 	this.contents = new dojox.dtl._Filter(name);
 	this._div = document.createElement("div");
 	this._lasts = [];
-}
-dojo.extend(dojox.dtl.tag.html.HtmlNode, {
+},
+{
 	render: function(context, buffer){
 		var text = this.contents.resolve(context);
 		text = text.replace(/<(\/?script)/ig, '&lt;$1').replace(/\bon[a-z]+\s*=/ig, '');
@@ -44,19 +44,18 @@ dojo.extend(dojox.dtl.tag.html.HtmlNode, {
 		return buffer;
 	},
 	clone: function(buffer){
-		return new dojox.dtl.tag.html.HtmlNode(this.contents.contents);
-	},
-	toString: function(){ return "dojox.dtl.tag.html.HtmlNode"; }
+		return new this.constructor(this.contents.contents);
+	}
 });
 
-dojox.dtl.tag.html.StyleNode = function(styles){
+dojox.dtl.contrib.html.StyleNode = dojo.extend(function(styles){
 	this.contents = {};
 	this._styles = styles;
 	for(var key in styles){
 		this.contents[key] = new dojox.dtl.Template(styles[key]);
 	}
-}
-dojo.extend(dojox.dtl.tag.html.StyleNode, {
+},
+{
 	render: function(context, buffer){
 		for(var key in this.contents){
 			dojo.style(buffer.getParent(), key, this.contents[key].render(context));
@@ -67,15 +66,14 @@ dojo.extend(dojox.dtl.tag.html.StyleNode, {
 		return buffer;
 	},
 	clone: function(buffer){
-		return new dojox.dtl.tag.html.HtmlNode(this._styles);
-	},
-	toString: function(){ return "dojox.dtl.tag.html.StyleNode"; }
+		return new this.constructor(this._styles);
+	}
 });
 
-dojox.dtl.tag.html.AttachNode = function(key){
+dojox.dtl.contrib.html.AttachNode = dojo.extend(function(key){
 	this.contents = key;
-}
-dojo.extend(dojox.dtl.tag.html.AttachNode, {
+},
+{
 	render: function(context, buffer){
 		if(!this._rendered){
 			this._rendered = true;
@@ -93,40 +91,35 @@ dojo.extend(dojox.dtl.tag.html.AttachNode, {
 		return buffer;
 	},
 	clone: function(buffer){
-		return new dojox.dtl.tag.html.HtmlNode(this._styles);
-	},
-	toString: function(){ return "dojox.dtl.tag.html.AttachNode"; }
-});
-
-dojox.dtl.tag.html.html = function(parser, text){
-	var parts = text.split(" ", 2);
-	return new dojox.dtl.tag.html.HtmlNode(parts[1]);
-}
-
-dojox.dtl.tag.html.tstyle = function(parser, text){
-	var styles = {};
-	text = text.replace(dojox.dtl.tag.html.tstyle._re, "");
-	var rules = text.split(dojox.dtl.tag.html.tstyle._re1);
-	for(var i = 0, rule; rule = rules[i]; i++){
-		var parts = rule.split(dojox.dtl.tag.html.tstyle._re2);
-		var key = parts[0];
-		var value = parts[1];
-		if(value.indexOf("{{") == 0){
-			styles[key] = value;
-		}
+		return new this.constructor(this._styles);
 	}
-	return new dojox.dtl.tag.html.StyleNode(styles);
-}
-dojo.mixin(dojox.dtl.tag.html.tstyle, {
-	_re: /^tstyle\s+/,
-	_re1: /\s*;\s*/g,
-	_re2: /\s*:\s*/g
 });
 
-dojox.dtl.tag.html.attach = function(parser, text){
-	var parts = text.split(dojox.dtl.tag.html.attach._re);
-	return new dojox.dtl.tag.html.AttachNode(parts[1]);
-}
-dojo.mixin(dojox.dtl.tag.html.attach, {
-	_re: /\s+/g
-})
+dojo.mixin(dojox.dtl.contrib.html, {
+	html: function(parser, text){
+		var parts = text.split(" ", 2);
+		return new dojox.dtl.contrib.html.HtmlNode(parts[1]);
+	},
+	tstyle: function(parser, text){
+		var styles = {};
+		text = text.replace(/^tstyle\s+/, "");
+		var rules = text.split(/\s*;\s*/g);
+		for(var i = 0, rule; rule = rules[i]; i++){
+			var parts = rule.split(/\s*:\s*/g);
+			var key = parts[0];
+			var value = parts[1];
+			if(value.indexOf("{{") == 0){
+				styles[key] = value;
+			}
+		}
+		return new dojox.dtl.contrib.html.StyleNode(styles);
+	},
+	attach: function(parser, text){
+		var parts = dojox.dtl.text.pySplit(text);
+		return new dojox.dtl.contrib.html.AttachNode(parts[1]);
+	}
+});
+
+dd.register.tags("dojox.dtl.contrib", {
+	"html": ["html", "attr:attach", "attr:tstyle"]
+});

@@ -125,7 +125,7 @@ dojo.require("dojox.string.tokenize");
 			}
 		},
 		_resolveTemplateArg: function(arg, sync){
-			if(dojo.isString(arg) && arg.match(/^\s*[<{]/)){
+			if(dojo.isString(arg) && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1)){
 				if(!sync){
 					var d = new dojo.Deferred();
 					d.callback(arg);

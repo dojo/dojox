@@ -1,12 +1,12 @@
-dojo.provide("dojox.dtl.tag.event");
+dojo.provide("dojox.dtl.contrib.event");
 
-dojo.require("dojox.dtl._base");
+dojo.require("dojox.dtl.html");
 
-dojox.dtl.tag.event.EventNode = function(type, fn){
+dojox.dtl.contrib.event.EventNode = dojo.extend(function(type, fn){
 	this._type = type;
 	this.contents = fn;
-}
-dojo.extend(dojox.dtl.tag.event.EventNode, {
+},
+{
 	render: function(context, buffer){
 		if(!this._clear){
 			buffer.getParent()[this._type] = null;
@@ -27,13 +27,16 @@ dojo.extend(dojox.dtl.tag.event.EventNode, {
 		return buffer;
 	},
 	clone: function(){
-		return new dojox.dtl.tag.event.EventNode(this._type, this.contents);
-	},
-	toString: function(){ return "dojox.dtl.tag.event." + this._type; }
+		return new this.constructor(this._type, this.contents);
+	}
 });
 
-dojox.dtl.tag.event.on = function(parser, text){
+dojox.dtl.contrib.event.on = function(parser, text){
 	// summary: Associates an event type to a function (on the current widget) by name
 	var parts = text.split(" ");
-	return new dojox.dtl.tag.event.EventNode(parts[0], parts[1]);
+	return new dojox.dtl.contrib.event.EventNode(parts[0], parts[1]);
 }
+
+dd.register.tags("dojox.dtl.contrib", {
+	"event": [[/(attr:)?on(click|key(up))/i, "on"]]
+});
