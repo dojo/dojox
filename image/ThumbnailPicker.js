@@ -332,7 +332,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		//	The index of the first thumbnail
 
 		// var _this = this;
-		if(!idx){ idx = this._thumbIndex; }
+		if(typeof idx == "undefined" || idx == null){ idx = this._thumbIndex; }
 		idx = Math.min(Math.max(idx, 0), this._maxPhotos);
 		
 		if(idx >= this._maxPhotos){ return; }
