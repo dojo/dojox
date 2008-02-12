@@ -292,8 +292,8 @@ dojo.declare("dojox.layout.FloatingPane",
 	destroy: function(){
 		// summary: Destroy this FloatingPane completely
 		this._allFPs.splice(dojo.indexOf(this._allFPs, this), 1);
-    this._destroyResizeHandle = true;
-    this.inherited(arguments);
+		this._destroyResizeHandle = true;
+		this.inherited(arguments);
 	},
 
 	destroyRecursive: function(/*Boolean*/ finalize){
@@ -304,20 +304,20 @@ dojo.declare("dojox.layout.FloatingPane",
 		this.destroy();
 	},
 
-  destroyDescendants: function(){
+	destroyDescendants: function(){
 		// summary: We overload here the destroyDescendants method from _Widget
 		//    so we do not destroy the ResizeHandle when this._destroyResizeHandle
 		//    is false.
 		if(this._destroyResizeHandle){
-		  this.inherited(arguments);
+			this.inherited(arguments);
 		}else{
-		  dojo.forEach(this.getDescendants(), function(widget){
-			if(widget.declaredClass != "dojox.layout.ResizeHandle"){
-				widget.destroy();
-			}
-      });
-    }
-  }
+			dojo.forEach(this.getDescendants(), function(widget){
+				if(widget.declaredClass != "dojox.layout.ResizeHandle"){
+					widget.destroy();
+				}
+			});
+		}
+	}
     
 });
 
