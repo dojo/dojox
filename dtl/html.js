@@ -77,7 +77,7 @@ dojo.require("dojox.dtl.Context");
 
 			var re = /\b([a-zA-Z]+)="/g;
 			while(match = re.exec(text)){
-				this._attributes[match[1]] = true;
+				this._attributes[match[1].toLowerCase()] = true;
 			}
 			var div = document.createElement("div");
 			div.innerHTML = text;
@@ -145,14 +145,14 @@ dojo.require("dojox.dtl.Context");
 				if(typeof value == "function"){
 					value = value.toString().replace(this._re4, "$1");
 				}
-				if(typeof value == "string" && (value.indexOf("{%") != -1 || value.indexOf("{{") != -1 || (value && ddt.getTag("attr:" + key, true)))){
-					if(!change){
-						// Only do a change request if we need to
-						tokens.push([types.change, node]);
-						change = true;
-					}
-					tokens.push([types.attr, node, key, value]);
+
+				if(!change){
+					// Only do a change request if we need to
+					tokens.push([types.change, node]);
+					change = true;
 				}
+				// We'll have to resolve attributes during parsing
+				tokens.push([types.attr, node, key, value]);
 			}
 
 			for(var i = 0, child; child = children[i]; i++){
@@ -321,6 +321,11 @@ dojo.require("dojox.dtl.Context");
 				this._parent.setAttribute(key, value);
 			}
 			return this;
+		},
+		addEvent: function(context, type, fn){
+			if(!context.getThis()){ throw new Error("You must use Context.setObject(instance)"); }
+			this.onAddEvent(this.getParent(), type, fn);
+			return dojo.connect(this.getParent(), type, context.getThis(), fn);
 		},
 		setParent: function(node, /*Boolean?*/ up, /*Boolean?*/ root){
 			if(!this._parent) this._parent = this._first = node;
@@ -641,9 +646,9 @@ dojo.require("dojox.dtl.Context");
 					nodelist.push(new dd.ChangeNode(value, token[2], token[3]));
 				}else if(type == types.attr){
 					var fn = ddt.getTag("attr:" + token[2], true);
-					if(fn){
+					if(fn && token[3]){
 						nodelist.push(fn(null, token[2] + " " + token[3]));
-					}else{
+					}else if(dojo.isString(token[3]) && (token[3].indexOf("{%") != -1 || token[3].indexOf("{{") != -1)){
 						nodelist.push(new dd.AttributeNode(token[2], token[3]));
 					}
 				}else if(type == types.elem){

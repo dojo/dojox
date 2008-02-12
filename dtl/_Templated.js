@@ -2,22 +2,31 @@ dojo.provide("dojox.dtl._Templated");
 dojo.require("dijit._Templated");
 dojo.require("dojox.dtl._base");
 
-dojo.declare("dojox.dtl._Templated", [dijit._Templated], {
+dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 	_dijitTemplateCompat: false,
 	buildRendering: function(){
 		var node;
-		var t = this.getCachedTemplate(	this.templatePath, 
-										this.templateString, 
-										this._skipNodeCache);
-		if(t instanceof dojox.dtl.Template){
-			node = dijit._Templated._createNodesFromText(
-				t.render(new dojox.dtl._Context(this))
-			)[0];
-		}else{
-			node = t;
-			if(this.domNode){
-				return;
+
+		if(this.domNode && !this._template){
+			return;
+		}
+
+		if(!this._template){
+			var t = this.getCachedTemplate(
+				this.templatePath,
+				this.templateString,
+				this._skipNodeCache
+			);
+			if(t instanceof dojox.dtl.Template) {
+				this._template = t;
+			}else{
+				node = t;
 			}
+		}
+		if(!node){
+			node = dijit._Templated._createNodesFromText(
+				this._template.render(new dojox.dtl._Context(this))
+			)[0];
 		}
 
 		this._attachTemplateNodes(node);

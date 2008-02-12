@@ -80,8 +80,13 @@ dojo.require("dojox.string.tokenize");
 		},
 		_get: function(module, name, errorless){
 			// summary: Used to find both tags and filters
-			var params = dd.register.get(module, name, errorless);
-			if(!params) return null;
+			var params = dd.register.get(module, name.toLowerCase(), errorless);
+			if(!params){
+				if(!errorless){
+					throw new Error("No tag found for " + name);
+				}
+				return null;
+			}
 
 			var fn = params[1];
 			var require = params[2];
@@ -356,6 +361,21 @@ dojo.require("dojox.string.tokenize");
 		}
 	});
 
+	dd._NoOpNode = dojo.extend(function(){
+		// summary: Adds a no-op node. Useful in custom tags
+	},
+	{
+		render: function(){
+			return arguments[1];
+		},
+		unrender: function(){
+			return arguments[1]
+		},
+		clone: function(){
+			return this;
+		}
+	});
+
 	dd._Parser = dojo.extend(function(tokens){
 		// summary: Parser used during initialization and for tag groups.
 		this.contents = tokens;
@@ -459,6 +479,9 @@ dojo.require("dojox.string.tokenize");
 						key = fn[0];
 						fn = fn[1];
 					}
+					if(dojo.isString(key)){
+						key = key.toLowerCase();
+					}
 					dd.register._registry[type].push([
 						key,
 						fn,
@@ -478,7 +501,7 @@ dojo.require("dojox.string.tokenize");
 	dd.register.tags("dojox.dtl.tag", {
 		"date": ["now"],
 		"logic": ["if", "for", "ifequal", "ifnotequal"],
-		"loader": ["extends", "block"],
+		"loader": ["extends", "block", "load"],
 		"misc": ["comment", "debug", "filter", "firstof"],
 		"loop": ["cycle", "ifchanged"]
 	});

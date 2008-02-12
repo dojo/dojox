@@ -5,11 +5,9 @@
 				djConfig="isDebug: true, parseOnLoad: true"></script>
 	    <script type="text/javascript" src="../../../dijit/dijit.js"></script> 
 	    <script type="text/javascript">
-					dojo.require("dojox.dtl._Templated");
+					dojo.require("dojox.dtl._HtmlTemplated");
 
-					dojo.declare("Fruit", [dijit._Widget, dojox.dtl._Templated], {
-						oldRepl: "Fruit: ",
-						_dijitTemplateCompat: true,
+					dojo.declare("Fruit", [dijit._Widget, dojox.dtl._HtmlTemplated], {
 						items: ["apple", "banana", "orange"],
 						keyUp: function(e){
 							if(e.keyCode == dojo.keys.ENTER){
@@ -21,10 +19,9 @@
 								}
 								e.target.value = "";
 								this.render();
-								dojo.query("input", this.domNode).forEach("item.focus();");
 							}
 						},
-						templateString: '<div><input dojoAttachEvent="onkeyup: keyUp"><ul>{% for item in items %}<li>${oldRepl} {{ item }}</li>{% endfor %}</ul></div>'
+						templateString: '{% load dojox.dtl.contrib.event %}<div><input dojoAttachEvent="onkeyup: keyUp"><ul>{% for item in items %}<li>{{ item }}</li>{% endfor %}</ul></div>'
 					});
 
 	        dojo.require("dojo.parser");
