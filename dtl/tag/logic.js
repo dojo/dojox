@@ -147,7 +147,7 @@ dojo.require("dojox.dtl._base");
 					}
 					context.update(zipped);
 				}else{
-					context[this.assign[0]] = (isObject) ? item[1] : item;
+					context[this.assign[0]] = item;
 				}
 
 				if(j + 1 > this.pool.length){

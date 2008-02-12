@@ -80,6 +80,10 @@ dojo.require("dojox.string.tokenize");
 		},
 		_get: function(module, name, errorless){
 			// summary: Used to find both tags and filters
+			if(module == "tag" && name == "load"){
+				return ddt.load;
+			}
+
 			var params = dd.register.get(module, name.toLowerCase(), errorless);
 			if(!params){
 				if(!errorless){
@@ -234,7 +238,7 @@ dojo.require("dojox.string.tokenize");
 			var pos, arg;
 
 			for(var i = 0, has = []; i < arguments.length; i++){
-				has[i] = (typeof arguments[i] != "undefined" && arguments[i] !== "");
+				has[i] = (typeof arguments[i] != "undefined" && dojo.isString(arguments[i]) && arguments[i]);
 			}
 
 			if(!this.key){
@@ -293,8 +297,8 @@ dojo.require("dojox.string.tokenize");
 				if(path == "false"){ return false; }
 				if(path == "null" || path == "None"){ return null; }
 				parts = path.split(".");
-				current = context.get(parts.shift());
-				for(var i = 0; i < parts.length; i++){
+				current = context.get(parts[0]);
+				for(var i = 1; i < parts.length; i++){
 					var part = parts[i];
 					if(current){
 						if(dojo.isObject(current) && part == "items" && typeof current[part] == "undefined"){
@@ -306,11 +310,14 @@ dojo.require("dojox.string.tokenize");
 							continue;
 						}
 
-						if(typeof current[part] == "undefined"){
+						if(current.get && dojo.isFunction(current.get)){
+							current = current.get(part);
+						}else if(typeof current[part] == "undefined"){
 							break;
+						}else{
+							current = current[part];
 						}
 
-						current = current[part];
 						if(dojo.isFunction(current)){
 							if(current.alters_data){
 								current = "";
@@ -512,6 +519,14 @@ dojo.require("dojox.string.tokenize");
 		filters: function(/*String*/ base, /*Object*/ locations){
 			dd.register._any("filters", base, locations);
 		}
+	}
+
+	ddt.load = function(parser, text){
+		var parts = dd.text.pySplit(text);
+		for(var i = 1, part; part = parts[i]; i++){
+			dojo["require"](part);
+		}
+		return new dd._NoOpNode();
 	}
 
 	dd.register.tags("dojox.dtl.tag", {

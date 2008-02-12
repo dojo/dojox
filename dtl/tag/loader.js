@@ -154,13 +154,6 @@ dojo.require("dojox.dtl._base");
 			}
 			var nodelist = parser.parse();
 			return new dojox.dtl.tag.loader.ExtendsNode(parser.getTemplate, nodelist, shared, parent, key);
-		},
-		load: function(parser, text){
-			var parts = dd.text.pySplit(text);
-			for(var i = 1, part; part = parts[i]; i++){
-				dojo["require"](part);
-			}
-			return new dd._NoOpNode();
 		}
 	});
 })();

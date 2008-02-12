@@ -24,9 +24,15 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 			}
 		}
 		if(!node){
-			node = dijit._Templated._createNodesFromText(
+			var nodes = dijit._Templated._createNodesFromText(
 				this._template.render(new dojox.dtl._Context(this))
-			)[0];
+			);
+			for(var i = 0; i < nodes.length; i++){
+				if(nodes[i].nodeType == 1){
+					node = nodes[i];
+					break;
+				}
+			}
 		}
 
 		this._attachTemplateNodes(node);
