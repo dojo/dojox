@@ -3,9 +3,10 @@ dojo.experimental("dojox.layout.ExpandoPane"); // just to show it can be done?
 
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit._Templated");
+dojo.require("dijit._Container");
 
 dojo.declare("dojox.layout.ExpandoPane",
-	[dijit.layout.ContentPane,dijit._Templated],
+	[dijit.layout.ContentPane,dijit._Templated,dijit._Contained],
 	{
 	// summary: An experimental expando-pane for dijit.layout.BorderContainer
 	//
@@ -35,7 +36,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 
 		this.inherited(arguments);
 		this._animConnects = [];
-		this._container = dijit.byId("bc");
+		this._container = this.getParent();
 		this._titleHeight = dojo._getBorderBox(this.titleWrapper).h + 2;
 	
 		// FIXME: should be check both?
@@ -64,7 +65,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		var _common = {
 			node:this.domNode,
 			duration:this.duration
-		}
+		};
 		this._showAnim = dojo.animateProperty(dojo.mixin(_common,{
 			easing:this.easeIn,
 			properties: {
@@ -75,7 +76,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			easing:this.easeOut,
 			properties: {
 				width:{
-					end: this._titleHeight - 6, unit:"px"
+					end: (this._titleHeight - 6), unit:"px"
 				}
 			}
 		}));
@@ -116,6 +117,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 	resize: function(){
 		// summary: we aren't a layout widget, but need to act like one:
 		var size = dojo.marginBox(this.domNode);
+		// FIXME: do i even need to do this query/forEach? why not just set the containerHeight always
 		dojo.query("[attachParent]",this.domNode).forEach(function(n){
 			var dij = dijit.byNode(n);
 			if(dij){
@@ -125,6 +127,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		},this);
 		this.inherited(arguments);
 	},
+	
 	_trap: function(e){
 		dojo.stopEvent(e);
 	}

@@ -9,11 +9,17 @@
 	overflow:hidden;
 }
 .dojoxExpandoIcon {
-	background:url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png') no-repeat center center;
 	width:14px;
 	cursor:pointer;
 	background-position:-60px 0px;
 	height:14px;
+}
+
+.soria .dojoxExpandoIcon {
+	background:url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png') no-repeat center center;
+}
+.nihilo .dojoxExpandoIcon {
+	background:url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.gif') no-repeat center center;
 }
 .dojoxExpandoClosed .dojoxExpandoIcon {
 	background-position:0px 0px;
@@ -37,12 +43,23 @@
 .dojoxExpandoPane .iconLeft .dojoxExpandoIcon {
 	float:left;
 }
+
 .nihilo .dojoxExpandoTitle {
 	height:16px;
 	font-size:0.9em;
-	background:#fafafa;
+	font-weight:bold;
 	padding:3px;
 	padding-top:7px;
 	padding-bottom:7px;
-	background:url("../../../dijit/themes/nihilo/images/tabStripe.gif") repeat-x left bottom; 
+	background:#fafafa url("../../../dijit/themes/nihilo/images/tabStripe.gif") repeat-x left bottom; 
+}
+
+.soria .dojoxExpandoTitle {
+	height:16px;
+	font-size:0.9em;
+	font-weight:bold;
+	padding:3px;
+	padding-top:7px;
+	padding-bottom:7px;
+	background:#f0f4fc url("../../../dijit/themes/soria/images/tabStripe.gif") repeat-x left bottom; 
 }
