@@ -229,10 +229,9 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		if(request.query){ dojo.mixin(this.request.query, request.query);}
 	
 		if(paramNames && paramNames.imageThumbAttr){
-			var attrNames = ["imageThumbAttr", "imageLargeAttr", "linkAttr", "titleAttr"];
-			for(var i = 0; i< attrNames.length; i++){
-				if(paramNames[attrNames[i]]){this[attrNames[i]] = paramNames[attrNames[i]];}	
-			}
+			dojo.forEach(["imageThumbAttr", "imageLargeAttr", "linkAttr", "titleAttr"], function(attrName){
+				if(paramNames[attrName]){ this[attrName] = paramNames[attrName]; }	
+			}, this);
 		}
 		
 		this.request.start = 0;
@@ -245,16 +244,14 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	reset: function(){
 		// summary: Resets the widget back to its original state.
 		this._loadedImages = {};
-		var img;
-		for(var pos = 0; pos < this._thumbs.length; pos++){
-			img = this._thumbs[pos];
+		dojo.forEach(this._thumbs, function(img){
 			if(img){
 				//	dojo.event.browser.clean(img);
 				if(img.parentNode){
 					img.parentNode.removeChild(img);	
 				}
 			}
-		}
+		});
 	
 		this._thumbs = [];
 		this.isInitialized = false;
@@ -331,8 +328,8 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		// index: Number
 		//	The index of the first thumbnail
 
-		// var _this = this;
-		if(typeof index == "undefined" || index == null){ index = this._thumbIndex; }
+//FIXME: When is this be called with an invalid index?  Do we need this check at all?
+//		if(typeof index != "number"){ index = this._thumbIndex; }
 		index = Math.min(Math.max(index, 0), this._maxPhotos);
 		
 		if(index >= this._maxPhotos){ return; }
@@ -399,42 +396,40 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		
 		var pos = start;
 		while(pos < this._thumbs.length && this._thumbs[pos]){pos ++;}	
-	
-		var _this = this;
-		
+			
 		//Define the function to call when the items have been 
 		//returned from the data store.
 		var complete = function(items, request){
-			if(items && items.length) {
+			if(items && items.length){
 				var itemCounter = 0;
-				var loadNext = function(){
+				var loadNext = dojo.hitch(this, function(){
 					if(itemCounter >= items.length){
-						_this._loadInProgress = false;
+						this._loadInProgress = false;
 						return;
 					}
 					var counter = itemCounter++;
-					
-					_this._loadImage(items[counter], pos + counter, loadNext);
-				}
+
+					this._loadImage(items[counter], pos + counter, loadNext);
+				});
 				loadNext();
-				
+
 				//Show or hide the navigation arrows on the thumbnails, 
 				//depending on whether or not the widget is at the start,
 				//end, or middle of the list of images. 
-				_this._updateNavControls();
+				this._updateNavControls();
 			}else{
-				_this._loadInProgress = false;
+				this._loadInProgress = false;
 			}
 		};
 	
 		//Define the function to call if the store reports an error. 
 		var error = function(){
-			_this._loadInProgress = false;
+			this._loadInProgress = false;
 			console.debug("Error getting items");
 		};
-	
-		this.request.onComplete = complete; //FIXME: hitch
-		this.request.onError = error; //FIXME: hitch
+
+		this.request.onComplete = dojo.hitch(this, complete);
+		this.request.onError = dojo.hitch(this, error);
 	
 		//Increment the start parameter. This is the dojo.data API's
 		//version of paging. 
