@@ -27,15 +27,15 @@ dojo.declare("dojox.image.ThumbnailPicker",
 
 	// size: Number
 	// Width or height in pixels, depending if horizontal or vertical.
-	size: 500,
+	size: 500, //FIXME: use CSS?
 
 	// thumbHeight: Number
 	// Default height of a thumbnail image
-	thumbHeight: 75,
+	thumbHeight: 75, // FIXME: use CSS?
 
 	// thumbWidth: Number
 	// Default width of an image
-	thumbWidth: 100,
+	thumbWidth: 100, // FIXME: use CSS?
 
 	// useLoadNotifier: Boolean
 	// Setting useLoadNotifier to true makes a colored DIV appear under each
@@ -193,14 +193,14 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		// summary: Returns the name of the dojo topic that can be
 		//   subscribed to in order to receive notifications on
 		//   which thumbnail was selected.
-		return (this.widgetId ? this.widgetId : this.id) + "/select"; // String
+		return (this.widgetId || this.id) + "/select"; // String
 	},
 
 	getShowTopicName: function(){
 		// summary: Returns the name of the dojo topic that can be
 		//   subscribed to in order to receive notifications on
 		//   which thumbnail is now visible
-		return (this.widgetId ? this.widgetId : this.id) + "/show"; // String
+		return (this.widgetId || this.id) + "/show"; // String
 	},
 
 	setDataStore: function(dataStore, request, /*optional*/paramNames){
@@ -219,8 +219,8 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	
 		this.request = {
 			query: {},
-			start: request.start ? request.start : 0,
-			count: request.count ? request.count : 10,
+			start: request.start || 0,
+			count: request.count || 10,
 			onBegin: dojo.hitch(this, function(total){
 				this._maxPhotos = total;
 			})
@@ -261,9 +261,9 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this._noImages = true;
 	},
 	
-	isVisible: function(idx) {
+	isVisible: function(index) {
 		// summary: Returns true if the image at the specified index is currently visible. False otherwise.
-		var img = this._thumbs[idx];
+		var img = this._thumbs[index];
 		if(!img){return false;}
 		var pos = this.isHorizontal ? "offsetLeft" : "offsetTop";
 		var size = this.isHorizontal ? "offsetWidth" : "offsetHeight";
@@ -281,7 +281,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var firstThumb = this._thumbs[this._thumbIndex];
 		var origOffset = firstThumb[pos] - baseOffset;
 	
-		var idx = -1, img;
+		var index = -1, img;
 	
 		for(var i = this._thumbIndex + 1; i < this._thumbs.length; i++){
 			img = this._thumbs[i];
@@ -301,7 +301,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var firstThumb = this._thumbs[this._thumbIndex];
 		var origOffset = firstThumb[pos] - this.thumbsNode[pos];
 	
-		var idx = -1, img;
+		var index = -1, img;
 	
 		for(var i = this._thumbIndex - 1; i > -1; i--) {
 			img = this._thumbs[i];
@@ -313,12 +313,12 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this._showThumbs(0);
 	},
 
-	_checkLoad: function(img, idx){
-		dojo.publish(this.getShowTopicName(), [{index:idx}]);
+	_checkLoad: function(img, index){
+		dojo.publish(this.getShowTopicName(), [{index:index}]);
 		this._updateNavControls();
 		this._loadingImages = {};
 	
-		this._thumbIndex = idx;
+		this._thumbIndex = index;
 	
 		//If we have not already requested the data from the store, do so. 
 		if(this.thumbsNode.offsetWidth - img.offsetLeft < (this._scrollerSize * 2)){
@@ -326,18 +326,18 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		}
 	},
 
-	_showThumbs: function(idx){
-		// summary: Displays thumbnail images, starting at position 'idx'
-		// idx: Number
+	_showThumbs: function(index){
+		// summary: Displays thumbnail images, starting at position 'index'
+		// index: Number
 		//	The index of the first thumbnail
 
 		// var _this = this;
-		if(typeof idx == "undefined" || idx == null){ idx = this._thumbIndex; }
-		idx = Math.min(Math.max(idx, 0), this._maxPhotos);
+		if(typeof index == "undefined" || index == null){ index = this._thumbIndex; }
+		index = Math.min(Math.max(index, 0), this._maxPhotos);
 		
-		if(idx >= this._maxPhotos){ return; }
+		if(index >= this._maxPhotos){ return; }
 		
-		var img = this._thumbs[idx];
+		var img = this._thumbs[index];
 		if(!img){ return; }
 		
 		var left = img.offsetLeft - this.thumbsNode.offsetLeft;
@@ -359,7 +359,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 				win: this.thumbScroller,
 				duration:300,
 				easing:dojox.fx.easing.easeOut,
-				onEnd: dojo.hitch(this, "_checkLoad", img, idx)
+				onEnd: dojo.hitch(this, "_checkLoad", img, index)
 			}).play(10);
 		}else{
 			if(this.isHorizontal){
@@ -367,7 +367,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 			}else{
 				this.thumbScroller.scrollTop = top;
 			}
-			this._checkLoad(img, idx);
+			this._checkLoad(img, index);
 		}	
 	},
 	
@@ -395,7 +395,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		// summary: Loads the next page of thumbnail images
 		if(this._loadInProgress){return;}
 		this._loadInProgress = true;
-		var start = this.request.start + (this._noImages == true ? 0 : this.pageSize);
+		var start = this.request.start + (this._noImages ? 0 : this.pageSize);
 		
 		var pos = start;
 		while(pos < this._thumbs.length && this._thumbs[pos]){pos ++;}	
@@ -433,8 +433,8 @@ dojo.declare("dojox.image.ThumbnailPicker",
 			console.debug("Error getting items");
 		};
 	
-		this.request.onComplete = complete;
-		this.request.onError = error;
+		this.request.onComplete = complete; //FIXME: hitch
+		this.request.onError = error; //FIXME: hitch
 	
 		//Increment the start parameter. This is the dojo.data API's
 		//version of paging. 
