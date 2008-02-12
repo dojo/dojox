@@ -8,13 +8,11 @@ Project state:
 dojox.string.Builder: stable
 dojox.string.sprintf: beta
 dojox.string.tokenize: beta
-dojox.string.url: beta
 -------------------------------------------------------------------------------
 Project authors
 	Ben Lowery
 	Tom Trenka (ttrenka@gmail.com)
 	Neil Roberts
-	Kris Zyp
 -------------------------------------------------------------------------------
 Project description
 
