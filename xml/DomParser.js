@@ -113,6 +113,14 @@ dojox.xml.DomParser=new (function(){
 		return a;
 	}
 
+	function _createTextNode(v){
+		return { 
+							nodeType:nodeTypes.TEXT,
+							nodeName:"#text",
+							nodeValue:v.replace(normalize," ").replace(egt,">").replace(elt,"<").replace(eapos,"'").replace(equot,'"').replace(eamp,"&")
+						};
+	}
+
 	//	attribute functions
 	function getAttr(name){
 		for(var i=0; i<this.attributes.length; i++){
@@ -225,8 +233,10 @@ dojox.xml.DomParser=new (function(){
 				if(obj.parentNode){
 					obj=obj.parentNode;
 				}
-				continue;
-			}
+				var text=res[3];
+				if(text.length>0)
+					obj.appendChild(_createTextNode(text));
+			}else
 
 			//	open tags.
 			if(res[1].length>0){
@@ -336,14 +346,6 @@ dojox.xml.DomParser=new (function(){
 					}
 					root._add(o);
 
-					var text=res[3].replace(trim,"");
-					if(text.length>0)
-						o.childNodes.push({ 
-							nodeType:nodeTypes.TEXT, 
-							nodeName:"#text", 
-							nodeValue:text.replace(normalize," ").replace(egt,">").replace(elt,"<").replace(eapos,"'").replace(equot,'"').replace(eamp,"&") 
-						});
-
 					if(obj){
 						obj.childNodes.push(o);
 						o.parentNode=obj;
@@ -351,6 +353,10 @@ dojox.xml.DomParser=new (function(){
 						if(res[2].charAt(res[2].length-1)!="/"){
 							obj=o;
 						}
+					}
+					var text=res[3];
+					if(text.length>0){
+						obj.childNodes.push(_createTextNode(text));
 					}
 				}
 			}
