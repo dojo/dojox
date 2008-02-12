@@ -43,9 +43,9 @@ dojo.declare("dojox.layout.FloatingPane",
 	title: "",
 
 	// dockTo: DomNode?
-	//		if null, will create private layout.Dock that scrolls with viewport
+	//		if empty, will create private layout.Dock that scrolls with viewport
 	//		on bottom span of viewport.	
-	dockTo: null,
+	dockTo: "",
 
 	// duration: Integer
 	//		Time is MS to spend toggling in/out node
@@ -73,6 +73,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	_restoreState: {},
 	_allFPs: [],
 	_startZ: 100,
+  _destroyResizeHandle: true,    
 
 	templateString: null,
 	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
@@ -80,7 +81,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	postCreate: function(){
 	
 		this.setTitle(this.title);
-		this.inherited("postCreate",arguments);
+		this.inherited(arguments);
 		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
 		//this._listener = dojo.subscribe("/dnd/move/start",this,"bringToTop"); 
 
@@ -103,13 +104,14 @@ dojo.declare("dojox.layout.FloatingPane",
 	startup: function(){
 		if(this._started){ return; }
 		
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 
 		if(this.resizable){
+			this._destroyResizeHandle = false;      
 			if(dojo.isIE){
-				this.canvas.style.overflow = "auto";
-			} else {
-				this.containerNode.style.overflow = "auto";
+					this.canvas.style.overflow = "auto";
+			}else{
+					this.containerNode.style.overflow = "auto";
 			}
 			
 			new dojox.layout.ResizeHandle({ 
@@ -121,7 +123,7 @@ dojo.declare("dojox.layout.FloatingPane",
 
 		if(this.dockable){ 
 			// FIXME: argh.
-			tmpName = this.dockTo; 
+			var tmpName = this.dockTo; 
 
 			if(this.dockTo){
 				this.dockTo = dijit.byId(this.dockTo); 
@@ -290,9 +292,33 @@ dojo.declare("dojox.layout.FloatingPane",
 	destroy: function(){
 		// summary: Destroy this FloatingPane completely
 		this._allFPs.splice(dojo.indexOf(this._allFPs, this), 1);
-		this.inherited("destroy", arguments);
-	}
-	
+    this._destroyResizeHandle = true;
+    this.inherited(arguments);
+	},
+
+	destroyRecursive: function(/*Boolean*/ finalize){
+		// summary: Override of the destroyRecursive to set making sure that
+		// the resize handle gets destroyed by setting this._destroyResizeHandle = true;
+		this._destroyResizeHandle = true;
+		this.destroyDescendants();
+		this.destroy();
+	},
+
+  destroyDescendants: function(){
+		// summary: We overload here the destroyDescendants method from _Widget
+		//    so we do not destroy the ResizeHandle when this._destroyResizeHandle
+		//    is false.
+		if(this._destroyResizeHandle){
+		  this.inherited(arguments);
+		}else{
+		  dojo.forEach(this.getDescendants(), function(widget){
+			if(widget.declaredClass != "dojox.layout.ResizeHandle"){
+				widget.destroy();
+			}
+      });
+    }
+  }
+    
 });
 
 
@@ -333,7 +359,7 @@ dojo.declare("dojox.layout.Dock",
 			}
 		}
 		this._positionDock(null);
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 
 	},
 	
