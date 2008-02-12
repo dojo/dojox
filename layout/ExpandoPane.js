@@ -113,12 +113,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 		// summary: we aren't a layout widget, but need to act like one:
 		var size = dojo.marginBox(this.domNode);
 		dojo.query("[attachParent]",this.domNode).forEach(function(n){
-			console.log(n);
 			var dij = dijit.byNode(n);
 			if(dij){
 				var h = size.h - this._titleHeight;
-				console.log(h);
-				dojo.style(this.containerNode,"height",h+"px");
+				dojo.style(this.containerNode,"height", h +"px");
 			}
 		},this);
 		this.inherited(arguments);
