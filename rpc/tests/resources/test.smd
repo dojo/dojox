@@ -1,7 +1,6 @@
 {
 	transport: "POST",
 	envelope: "URL",
-	target: "../../dojox/rpc/tests/resources",
 	strictParameters: false,
 	parameters: {
                 appId: {},
@@ -30,6 +29,40 @@
                                 {name: "message", type: "string", optional: true}
                         ]
                 },
+                getEchoJson: {
+			transport: "GET",
+                        target: "echoJson.php",
+						contentType:"application/json",
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+                getPathEcho: {
+					transport: "GET",
+					envelope: "PATH",
+                    target: "echo.php?message=",
+
+                    parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+            restStore: {
+				transport: "REST",
+                        target: "store.php",
+                        parameters: [
+                                {name: "location", type: "string", optional: true}
+                        ]
+                },
+            jsonRestStore: {
+				transport: "REST",
+                        target: "store.php",
+						contentType:"application/json",
+                        parameters: [
+                                {name: "location", type: "string", optional: true}
+                        ]
+                },
+
+
 
                 postJsonEcho: {
 			transport: "POST",

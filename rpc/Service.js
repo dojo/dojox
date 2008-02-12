@@ -1,5 +1,7 @@
 dojo.provide("dojox.rpc.Service");
 
+dojo.require("dojo.AdapterRegistry");
+
 dojo.declare("dojox.rpc.Service", null, {
 	constructor: function(smd, options){
 		//summary:
@@ -16,28 +18,39 @@ dojo.declare("dojox.rpc.Service", null, {
 		//		matches those defined in the smd.  smdString allows a developer to pass
 		//		a jsonString directly, which will be converted into an object or alternatively
 		//		smdObject is accepts an smdObject directly.
-		//				
-
+		//
+		var url;
+		var _this = this;
+		function processSmd(smd){
+			smd._baseUrl = new dojo._Url(location.href,url || '.') + '';
+			_this._smd = smd;
+			
+			//generate the methods
+			for(var serviceName in _this._smd.services){
+				_this[serviceName]=_this._generateService(serviceName, _this._smd.services[serviceName]);
+	
+			}
+		}				
 		if(smd){
 			//if the arg is a string, we assume it is a url to retrieve an smd definition from
 			if( (dojo.isString(smd)) || (smd instanceof dojo._Url)){
 				if (smd instanceof dojo._Url){
-					var url = smd + "";
+					url = smd + "";
 				}else{
 					url = smd;
 				}
 				var def = dojo.xhrGet({
 					url: url,
-					handleAs: "json-comment-optional",
+					handleAs: "json",
 					sync: true
 				});
 				
-				def.addCallback(this, "_processSmd");
+				def.addCallback(processSmd);
 				def.addErrback(function() {
 					throw new Error("Unable to load SMD from " + smd);
 				});
 			}else{
-				this._processSmd(smd);
+				processSmd(smd);
 			}
 		}
 
@@ -45,59 +58,78 @@ dojo.declare("dojox.rpc.Service", null, {
 		this._requestId=0;
 	},
 
-	_processSmd: function(smd){
-		this._smd = smd;
-
-		//generate the methods
-		for(var serviceName in this._smd.services){
-			this[serviceName]=this._generateService(serviceName, this._smd.services[serviceName]);
-		}
-	},
-
 	_generateService: function(serviceName, method){
 		if(this[method]){
 			throw new Error("WARNING: "+ serviceName+ " already exists for service. Unable to generate function");
 		}
 		method.name = serviceName;
-		return dojo.hitch(this, "_executeMethod",method);
+		var func = dojo.hitch(this, "_executeMethod",method);
+		var transport = dojox.rpc.transportRegistry.match(method.transport || this._smd.transport);
+		if (transport.getExecutor)
+			func = transport.getExecutor(func,method,this);
+		var schema = method.returns || (method._schema = {}); // define the schema
+		schema._idPrefix = serviceName +'/'; // schemas are minimally used to track the id prefixes for the different services
+		dojox.rpc.services[serviceName] = func; // register the service
+		schema._service = func;
+		func.serviceName = serviceName;
+		func._schema = schema;
+		
+		return func; 
 	},
 
-	_executeMethod: function(){
-		var method = arguments[0];
-
+	_executeMethod: function(method){
 		var args = [];
 		for (var i=1; i< arguments.length; i++){
 			args.push(arguments[i]);
 		}
 		
-		if ((args.length==1) && dojo.isObject(args[0])){
+		console.log("values ",dojo.isArray(method.parameters),args.length==1);
+		if (method.parameters && method.parameters[0] && method.parameters[0].name && (args.length==1) && dojo.isObject(args[0])){
+			// if it is the parameters are not named in the definition, than we should use ordered params, otherwise try to determine by parameters 
 			args = args[0];
+			console.log("is named");
 		}
+		console.log(args);
+		var smd = this._smd;
+		var envelope = method.envelope || smd.envelope || "NONE";
+		var envDef = dojox.rpc.envelopeRegistry.match(envelope);
+		var schema = method._schema || method.returns; // serialize with the right schema for the context;
+		var request = envDef.serialize.apply(this, [smd, method, args, this._options]);
+		var contentType = (method.contentType || smd.contentType || request.contentType);
+		var isJson = (contentType + '').match(/application\/json/);
 
-		var envelope = method.envelope || this._smd.envelope || "NONE";
-		var request = dojox.rpc.envelopes[envelope].serialize.apply(this, [this._smd, method, args, this._options]);
-		var deferred = dojox.rpc.transports[request.transport].apply(this,[request]); 
-		deferred.addBoth(this, dojox.rpc.envelopes[request.envelope].deserialize);
+		// this allows to mandate synchronous behavior from elsewhere when necessary, this may need to be changed to be one-shot in FF3 new sync handling model
+		dojo.mixin(request,{sync : dojox.rpc._sync, 
+				handleAs : isJson ? "json" : "text",
+				contentType : contentType,
+				target : request.target || dojox.rpc.getTarget(smd, method),
+				transport: method.transport || smd.transport || request.transport,
+				envelope: method.envelope || smd.envelope || request.envelope,
+				timeout: method.timeout || smd.timeout,
+                callbackParamName: method.callbackParamName || smd.callbackParamName,
+				preventCache: method.preventCache || smd.preventCache});
+		 
+		var deferred = (method.restMethod || dojox.rpc.transportRegistry.match(request.transport).fire).call(this,request);
+		var _this = this; 
+		deferred.addBoth(function(results) {
+			// if it is an application/json content type, than it should be handled as json
+			// we have to do conversion here instead of in XHR so that we can set the currentSchema before running it
+			results = envDef.deserialize.call(_this,isJson ? dojox.rpc.resolveJson(results,schema) : results); 
+			delete dojox._newId; // cleanup															
+			return results;									
+		});
 		return deferred;
 	}
 });
 
 dojox.rpc.getTarget = function(smd, method){
-	var dest="";
+	
+	var dest=smd._baseUrl;
 	if (smd.target){
-		dest = smd.target;
+		dest = new dojo._Url(dest,smd.target) + '';
 	}
-		
 	if (method.target){
-		if (method.target[0]=='/'){
-			dest = method.target;
-		}else{
-			if (dest.length>0){
-				dest += "/" + method.target;
-			}else{
-				dest = method.target;
-			}
-		}
+		dest = new dojo._Url(dest,method.target) + '';
 	}
 	return dest;
 }
@@ -143,118 +175,109 @@ dojox.rpc.toOrdered=function(method, args){
 	return data;
 }
 
-dojox.rpc.transports = {};
-dojox.rpc.envelopes = {};
-
-dojox.rpc.registerTransport = function (name, sendMethod){
-	//summary
-	//add a new transport type to the available transports for rpc services
-	dojox.rpc.transports[name]=sendMethod;
-}
-
-dojox.rpc.registerEnvelope= function (name, serialize, deserialize){
-	//summary
-	//add a new envelope type to the available transports for rpc services
-	dojox.rpc.envelopes[name]={
-		serialize: serialize,
-		deserialize: deserialize
-	};
-}
+dojox.rpc.transportRegistry = new dojo.AdapterRegistry(true);
+dojox.rpc.envelopeRegistry = new dojo.AdapterRegistry(true);
 //Built In Envelopes
 
-dojox.rpc.registerEnvelope(
-	"URL",
-	function(smd, method, data, options){ 
-		var d = dojo.objectToQuery(dojox.rpc.toNamed(method, data, method.strictParameters||smd.strictParameters));
-		var trans = method.transport || smd.transport || "POST";
-
-		return {
-			data: d,
-			target: dojox.rpc.getTarget(smd, method),
-			transport: trans,
-			envelope: method.envelope || smd.envelope,
-			timeout: method.timeout || smd.timeout,
-			preventCache: method.preventCache || smd.preventCache,
-			callbackParamName: method.callbackParamName || smd.callbackParamName,
+dojox.rpc.envelopeRegistry.register(
+	"URL",function(str){return str == "URL"},{
+		serialize:function(smd, method, data, options){ 
+			var d = dojo.objectToQuery(dojox.rpc.toNamed(method, data, method.strictParameters||smd.strictParameters));
+	
+			return {
+				data: d,
+		                transport:"POST"
+			}
+		},
+		deserialize:function(results){
+			return results;
 		}
-	},
-	function(results){
-		return results;
 	}
 );
 
-dojox.rpc.registerEnvelope(
-	"JSON",
-	function(smd, method, data, options){ 
-		var d = dojo.toJson(dojox.rpc.toNamed(method, data, method.strictParameters||smd.strictParameters));
-		var trans = method.transport || smd.transport || "POST";
-
-		return {
-			data: d,
-			target: dojox.rpc.getTarget(smd, method),
-			transport: trans,
-			envelope: method.envelope || smd.envelope,
-			timeout: method.timeout || smd.timeout,
-			preventCache: method.preventCache || smd.preventCache,
-			callbackParamName: method.callbackParamName || smd.callbackParamName,
+dojox.rpc.envelopeRegistry.register(
+	"JSON",function(str){return str == "JSON"},{
+		serialize: function(smd, method, data, options){ 
+			var d = dojox.rpc.toJson(dojox.rpc.toNamed(method, data, method.strictParameters||smd.strictParameters));
+	
+			return {
+				data: d
+			}
+		},
+		deserialize: function(results){
+			return results;
 		}
-	},
-	function(results){
-		return results;
+	}
+);
+dojox.rpc.envelopeRegistry.register(
+	"PATH",function(str){return str == "PATH"},{
+		serialize:function(smd, method, data, options){
+			var i;
+			var target = dojox.rpc.getTarget(smd, method);
+			if (dojo.isArray(data)) {
+				for (i = 0; i < data.length;i++)
+					target += '/' + data[i];
+			}
+			else {
+				for (i in data)
+					target += '/' + i + '/' + data[i];				
+			}
+	
+			return {
+				data:'',
+				target: target
+			}
+		},
+		deserialize:function(results){
+			return results;
+		}
 	}
 );
 
 
 
 //post is registered first because it is the default;
-dojox.rpc.registerTransport(
-	"POST",
-	function(r){
-		console.log("TARGET: ", r.target);
-		return dojo.rawXhrPost({
-			url: r.target,
-			postData: r.data,
-			timeout: r.timeout,
-			handleAs: "text"
-		});
+dojox.rpc.transportRegistry.register(
+	"POST",function(str){return str == "POST"},{
+		fire:function(r){
+			console.log("TARGET: ", r.target);
+			r.url = r.target;
+			r.postData = r.data;
+			return dojo.rawXhrPost(r);
+		}		
 	}
 );
-/*
-dojox.rpc.registerTransport(
-	"RAW-POST",
-	function(r){
-		return dojo.rawXhrPost({
-			url: r.target,
-			postData: r.data,
-			timeout: r.timeout,
-			handleAs: "text"
-		});
-	}
-);
-*/
 
-dojox.rpc.registerTransport(
-	"GET",
-	function(r){
-		return dojo.xhrGet({
-			url: r.target +'?'+  r.data,
-			//content: r.data,
-			timeout: r.timeout,
-			handleAs: "text",
-			preventCache: r.preventCache || true 	
-		});
+dojox.rpc.transportRegistry.register(
+	"GET",function(str){return str == "GET"},{
+		fire: function(r){
+			r.url=  r.target + (r.data ? '?'+  r.data : '');
+			r.preventCache = r.preventCache || true;
+			return dojo.xhrGet(r);
+		}
 	}
 );
 
 //only works if you include dojo.io.script 
-dojox.rpc.registerTransport(
-	"JSONP",
-	function(r){
-		return dojo.io.script.get({
-			url: r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data,
-			timeout: r.timeout,
-			preventCache: r.preventCache || true, 
-			callbackParamName: r.callbackParamName || "callback"
-		});
+dojox.rpc.transportRegistry.register(
+	"JSONP",function(str){return str == "JSONP"},{	
+		fire:function(r){
+			r.url = r.target + ((r.target.indexOf("?") == -1) ? '?' : '&') + r.data,
+			r.callbackParamName = r.callbackParamName || "callback";
+			return dojo.io.script.get(r);
+		}
 	}
 );
+dojox.rpc.services={};
+// The RPC service can have it's own serializer. It needs to define this if they are not defined by JsonReferencing
+if (!dojox.rpc.toJson) {
+	dojox.rpc.toJson = function() {
+		return dojo.toJson.apply(dojo,arguments);
+	}
+	dojox.rpc.fromJson = function() {
+		return dojo.fromJson.apply(dojo,arguments);
+	}
+	dojox.rpc.resolveJson = function(it) {
+		return it;
+	}
+}
