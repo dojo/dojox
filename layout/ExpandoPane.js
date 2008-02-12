@@ -120,6 +120,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 			}
 		},this);
 		this.inherited(arguments);
+	},
+	_trap: function(e){
+		dojo.stopEvent(e);
 	}
 
 });
