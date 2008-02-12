@@ -36,6 +36,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		this.inherited(arguments);
 		this._animConnects = [];
 		this._container = dijit.byId("bc");
+		this._titleHeight = dojo._getBorderBox(this.titleWrapper).h + 2;
 	
 		// FIXME: should be check both?
 		if(typeof this.easeIn == "string"){
@@ -74,7 +75,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			easing:this.easeOut,
 			properties: {
 				width:{
-					end:this._titleHeight-6, unit:"px"
+					end: this._titleHeight - 6, unit:"px"
 				}
 			}
 		}));
