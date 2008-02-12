@@ -271,7 +271,7 @@ dojo.require("dojox.dtl.Context");
 	{
 		concat: function(/*DOMNode*/ node){
 			if(!this._parent){
-				if(node.nodeType == 3){
+				if(node.nodeType == 3 && dojo.trim(node.data)){
 					throw new Error("Text should not exist outside of the root node in template");
 				}
 				return this;
@@ -303,11 +303,15 @@ dojo.require("dojox.dtl.Context");
 		},
 		remove: function(obj){
 			if(typeof obj == "string"){
-				this._parent.removeAttribute(obj);
+				if(this._parent){
+					this._parent.removeAttribute(obj);
+				}
 			}else{
 				if(obj.parentNode){
 					this.onRemoveNode();
-					obj.parentNode.removeChild(obj);
+					if(obj.parentNode){
+						obj.parentNode.removeChild(obj);
+					}
 				}
 			}
 			return this;

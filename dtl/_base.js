@@ -130,7 +130,7 @@ dojo.require("dojox.string.tokenize");
 			}
 		},
 		_resolveTemplateArg: function(arg, sync){
-			if(dojo.isString(arg) && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1)){
+			if(ddt._isTemplate(arg)){
 				if(!sync){
 					var d = new dojo.Deferred();
 					d.callback(arg);
@@ -139,6 +139,9 @@ dojo.require("dojox.string.tokenize");
 				return arg;
 			}
 			return ddt._resolveLazy(arg, sync);
+		},
+		_isTemplate: function(arg){
+			return dojo.isString(arg) && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1);
 		},
 		_resolveContextArg: function(arg, sync){
 			if(arg.constructor == Object){
@@ -280,20 +283,34 @@ dojo.require("dojox.string.tokenize");
 		resolvePath: function(path, context){
 			var current, parts;
 			var first = path.charAt(0);
-			var last = path.charAt(path.length - 1);
+			var last = path.slice(-1);
 			if(!isNaN(parseInt(first))){
 				current = (path.indexOf(".") == -1) ? parseInt(path) : parseFloat(path);
 			}else if(first == '"' && first == last){
-				current = path.substring(1, path.length - 1);
+				current = path.slice(1, -1);
 			}else{
 				if(path == "true"){ return true; }
 				if(path == "false"){ return false; }
 				if(path == "null" || path == "None"){ return null; }
 				parts = path.split(".");
 				current = context.get(parts.shift());
-				while(parts.length){
-					if(current && typeof current[parts[0]] != "undefined"){
-						current = current[parts[0]];
+				for(var i = 0; i < parts.length; i++){
+					var part = parts[i];
+					if(current){
+						if(dojo.isObject(current) && part == "items" && typeof current[part] == "undefined"){
+							var items = [];
+							for(var key in current){
+								items.push([key, current[key]]);
+							}
+							current = items;
+							continue;
+						}
+
+						if(typeof current[part] == "undefined"){
+							break;
+						}
+
+						current = current[part];
 						if(dojo.isFunction(current)){
 							if(current.alters_data){
 								current = "";
@@ -304,7 +321,6 @@ dojo.require("dojox.string.tokenize");
 					}else{
 						return "";
 					}
-					parts.shift();
 				}
 			}
 			return current;

@@ -10,28 +10,46 @@ dojox.dtl._HtmlTemplated = {
 			this.domNode = this.srcNodeRef;
 
 			if(!this._render){
-				this._template = this.getCachedTemplate(this.templatePath, this.templateString, this._skipNodeCache);
+				this._template = this._getCachedTemplate(this.templatePath, this.templateString);
 				this._render = new dojox.dtl.render.html.Render(this.domNode, this._template);
 			}
 
 			this.render();
 		},
+		setTemplate: function(/*String|dojo._Url*/ template, /*dojox.dtl.Context?*/ context){
+			// summary:
+			//		Quickly switch between templated by location
+			if(dojox.dtl.text._isTemplate(template)){
+				this._template = this._getCachedTemplate(null, template);
+			}else{
+				this._template = this._getCachedTemplate(template);
+			}
+			this.render(context);
+		},
 		render: function(/*dojox.dtl.Context?*/ context){
+			this._render.render(this._template, this._getContext(context));
+		},
+		_getContext: function(context){
 			context = context || new dojox.dtl.Context(this);
 			context.setThis(this);
-			this._render.render(this._template, context);
+			return context;
 		},
-		_templateCache: {},
-		getCachedTemplate: function(templatePath, templateString, alwaysUseString){
-			var tmplts = this._templateCache;
-			var key = templateString || templatePath;
+		_getCachedTemplate: function(templatePath, templateString){
+			if(!this._templates){
+				this._templates = {};
+			}
+			var key = templateString || templatePath.toString();
+			var tmplts = this._templates;
 			if(tmplts[key]){
 				return tmplts[key];
 			}
-
-			templateString = dojo.string.trim(templateString || dijit._Templated._sanitizeTemplateString(dojo._getText(templatePath)));
-
-			return (tmplts[key] = new dojox.dtl.HtmlTemplate(templateString));
-		},
+			return (tmplts[key] = new dojox.dtl.HtmlTemplate(
+				dijit._Templated.getCachedTemplate(
+					templatePath,
+					templateString,
+					true
+				)
+			));
+		}
 	}
 };

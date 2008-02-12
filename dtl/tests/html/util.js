@@ -4,10 +4,7 @@ dojo.require("dojox.dtl.html");
 dojo.require("dojox.string.Builder");
 
 dojox.dtl.HtmlBuffer.prototype.onClone = function(from, to){
-	if(!this._clones){
-		this._clones = [];
-	}
-	var clones = this._clones;
+	var clones = this._clones = this._clones || [];
 
 	for(var i = 0, group; group = clones[i]; i++){
 		for(var j = 0, item; item = group[j]; j++){
@@ -24,10 +21,7 @@ dojox.dtl.HtmlBuffer.prototype.onClone = function(from, to){
 	clones.push([from, to]);
 }
 dojox.dtl.HtmlBuffer.prototype.onAddEvent = function(node, type, description){
-	if(!this._events){
-		this._events = [];
-	}
-	var events = this._events;
+	var events = this._events = this._events || [];
 
 	var found = false;
 	for(var i = 0, evt; evt = events[i]; i++){
@@ -66,6 +60,8 @@ dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context
 
 dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, output) {
 	var types = dojox.dtl.html.types;
+	clones = clones || [];
+	events = events || [];
 
 	if (node.nodeType == 3) {
 		output.append(node.nodeValue);
@@ -113,7 +109,9 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 					}
 				}
 			}
-			output.append(" ").append(attribute[2]).append('="').append(value.replace(/"/g, '\\"')).append('"');
+			if(value){
+				output.append(" ").append(attribute[2]).append('="').append(value.replace(/"/g, '\\"')).append('"');
+			}
 		}
 
 		// Deal with events

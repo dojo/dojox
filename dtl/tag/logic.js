@@ -121,7 +121,7 @@ dojo.require("dojox.dtl._base");
 			var arred = [];
 			if(isObject){
 				for(var key in items){
-					arred.push([key, items[key]]);
+					arred.push(items[key]);
 				}
 			}else{
 				arred = items;

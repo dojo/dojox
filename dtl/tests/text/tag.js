@@ -153,7 +153,7 @@ doh.register("dojox.dtl.text.tag",
 				banana: "Cavendish",
 				lemon: "Citrus"
 			};
-			template = new dd.Template("{% for key, value in items %}<li>{{ value }} {{ key|title }}</li>{% endfor %}");
+			template = new dd.Template("{% for key, value in items.items %}<li>{{ value }} {{ key|title }}</li>{% endfor %}");
 			t.is("<li>Red Delicious Apple</li><li>Cavendish Banana</li><li>Citrus Lemon</li>", template.render(context));
 
 			// The same thing above, but using "zipped" sets
@@ -313,7 +313,7 @@ doh.register("dojox.dtl.text.tag",
 				template = new dd.Template("{% ifequal user.id comment.user_id %}You posted this{% endif %}");
 			}catch(e){
 				found = true;
-				t.is("Could not find closing tag(s): else,endifequal", e.message);
+				t.is("No tag found for endif", e.message);
 			}
 			t.t(found);
 		},
@@ -335,7 +335,9 @@ doh.register("dojox.dtl.text.tag",
 			t.t(false);
 		},
 		function test_tag_load(t){
-			t.t(false);
+			t.f(dojo.string);
+			new dojox.dtl.Template("{% load dojo.string %}");
+			t.t(dojo.string);
 		},
 		function test_tag_now(t){
 			var dd = dojox.dtl;

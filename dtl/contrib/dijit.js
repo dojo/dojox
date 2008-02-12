@@ -1,12 +1,37 @@
-dojo.provide("dojox.dtl.contrib.event");
+dojo.provide("dojox.dtl.contrib.dijit");
 
 dojo.require("dojox.dtl.html");
 
 (function(){
 	var dd = dojox.dtl;
-	var ddce = dd.contrib.event;
+	var ddcd = dd.contrib.dijit;
 
-	ddce.EventNode = dojo.extend(function(types, fns){
+	ddcd.AttachNode = dojo.extend(function(key){
+		this.contents = key;
+	},
+	{
+		render: function(context, buffer){
+			if(!this._rendered){
+				this._rendered = true;
+				context.getThis()[this.contents] = buffer.getParent();
+			}
+			return buffer;
+		},
+		unrender: function(context, buffer){
+			if(this._rendered){
+				this._rendered = false;
+				if(context.getThis()[this.contents] === buffer.getParent()){
+					delete context.getThis()[this.contents];
+				}
+			}
+			return buffer;
+		},
+		clone: function(buffer){
+			return new this.constructor(this._styles);
+		}
+	});
+
+	ddcd.EventNode = dojo.extend(function(types, fns){
 		this._types = types;
 		this.contents = fns;
 		this._rendered = [];
@@ -39,7 +64,11 @@ dojo.require("dojox.dtl.html");
 		}
 	});
 
-	dojo.mixin(ddce, {
+	dojo.mixin(ddcd, {
+		dojoAttachPoint: function(parser, text){
+			var parts = dd.text.pySplit(text);
+			return new ddcd.AttachNode(parts[1]);
+		},
 		dojoAttachEvent: function(parser, text){
 			text = text.slice(16);
 			var type, events = text.split(/\s*,\s*/);
@@ -64,16 +93,16 @@ dojo.require("dojox.dtl.html");
 					fns.push(fn);
 				}
 			}
-			return new ddce.EventNode(types, fns);
+			return new ddcd.EventNode(types, fns);
 		},
 		on: function(parser, text){
 			// summary: Associates an event type to a function (on the current widget) by name
 			var parts = text.split(" ");
-			return new ddce.EventNode([parts[0]], [parts[1]]);
+			return new ddcd.EventNode([parts[0]], [parts[1]]);
 		}
 	});
 
 	dd.register.tags("dojox.dtl.contrib", {
-		"event": ["attr:dojoAttachEvent", "attr:dojoAttachPoint", [/(attr:)?on(click|key(up))/i, "on"]]
+		"dijit": ["attr:dojoAttachPoint", ["attr:attach", "dojoAttachPoint"], "attr:dojoAttachEvent", [/(attr:)?on(click|key(up))/i, "on"]]
 	});
 })();

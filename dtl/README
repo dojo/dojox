@@ -76,7 +76,7 @@ should be tested inside a for loop.
 |      X      | ifequal     |       X        |                |
 |      X      | ifnotequal  |       X        |                |
 |             | include     |                |                |
-|             | load        |                |                |
+|      X      | load        |       X        |                |
 |      X      | now         |       X        |                |
 |             | regroup     |                |                |
 |             | spaceless   |                |                |
