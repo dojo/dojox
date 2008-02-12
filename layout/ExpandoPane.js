@@ -88,8 +88,11 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	toggle:function(e){
 		// summary: toggle this pane's visibility
-		if(this._showing){					
-			dojo.style(this.cwrapper,{ "visibility":"hidden" });
+		if(this._showing){
+			dojo.style(this.cwrapper,{
+				"visibility":"hidden",
+				"opacity":"0"
+			});
 			if(this._showAnim && this._showAnim.stop()){}
 			this._hideAnim.play();
 		}else{
@@ -105,6 +108,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		this._showing = !this._showing;
 		if(this._showing){
 			dojo.style(this.cwrapper,{ "visibility":"visible" });
+			dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
 		}
 		setTimeout(dojo.hitch(this._container,"layout"),50);
 	},
