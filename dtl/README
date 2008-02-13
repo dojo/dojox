@@ -75,16 +75,16 @@ should be tested inside a for loop.
 |      X      | ifchanged   |       X        |       X        |
 |      X      | ifequal     |       X        |                |
 |      X      | ifnotequal  |       X        |                |
-|             | include     |                |                |
+|      X      | include     |       X        |       X        |
 |      X      | load        |       X        |                |
 |      X      | now         |       X        |                |
-|             | regroup     |                |                |
-|             | spaceless   |                |                |
-|             | ssi         |                |                |
-|             | templatetag |                |                |
-|             | url         |                |                |
-|             | widthratio  |                |                |
-|             | with        |                |                |
+|      X      | regroup     |       X        |                |
+|      X      | spaceless   |       X        |       X        |
+|      X      | ssi         |       X        |       X        |
+|      X      | templatetag |       X        |                |
+|     N/A     | url         |                |                |
+|      X      | widthratio  |       X        |                |
+|      X      | with        |       X        |                |
 
 | Implemented | Filter             | Text Unit Test | HTML Unit Test |
 |      X      | add                |       X        |                |

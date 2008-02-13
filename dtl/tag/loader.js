@@ -125,6 +125,82 @@ dojo.require("dojox.dtl._base");
 		toString: function(){ return "dojox.dtl.block.ExtendsNode"; }
 	});
 
+	ddtl.IncludeNode = dojo.extend(function(path, constant, getTemplate, TextNode, parsed){
+		this._path = path;
+		this.constant = constant;
+		this.path = (constant) ? path : new dd._Filter(path);
+		this.getTemplate = getTemplate;
+		this.TextNode = TextNode;
+		this.parsed = (arguments.length == 5) ? parsed : true;
+	},
+	{
+		_cache: {},
+		render: function(context, buffer){
+			var location = (this.constant) ? this.path : this.path.resolve(context);
+			var templateString = dd.text._resolveTemplateArg(location, true);
+			if(this.parsed){
+				var template = this.getTemplate(templateString);
+				this.rendered = template.nodelist;
+				return this.rendered.render(context, buffer, this);
+			}else{
+				if(this.TextNode == dd._TextNode){
+					if(!this.rendered){
+						this.rendered = new this.TextNode("");
+					}
+					this.rendered.set(templateString);
+					return this.rendered.render(context, buffer);
+				}else{
+					if(this.last && location != this.last){
+						buffer = this.unrender(context, buffer);
+						this.last = location;
+					}
+					if(this._cache[location]){
+						this.nodelist = [];
+						var children = [];
+						var exists = false;
+						for(var i = 0, child; child = this._cache[location][i]; i++){
+							if(!i && child.parentNode){
+								exists = true;
+							}
+							if(exists){
+								child = child.cloneNode(true);
+							}
+							this.nodelist.push(child.cloneNode(true));
+						}
+					}else{
+						this.nodelist = [];
+						var div = document.createElement("div");
+						div.innerHTML = templateString;
+						var children = div.childNodes;
+						while(children.length){
+							var removed = div.removeChild(children[0]);
+							this.nodelist.push(removed);
+						}
+						this._cache[location] = this.nodelist;
+					}
+					for(var i = 0, add; add = this.nodelist[i]; i++){
+						buffer = buffer.concat(add);
+					}
+				}
+			}
+			return buffer;
+		},
+		unrender: function(context, buffer){
+			if(this.rendered){
+				buffer = this.rendered.unrender(context, buffer);
+			}
+			if(this.nodelist){
+				for(var i = 0, node; node = this.nodelist[i]; i++){
+					buffer = buffer.remove(node);
+				}
+			}
+			return buffer;
+		},
+		clone: function(buffer){
+			return new this.constructor(this._path, this.constant, this.getTemplate, this.TextNode, this.parsed);
+		}
+	});
+
 	dojo.mixin(ddtl, {
 		block: function(parser, text){
 			var parts = text.split(" ");
@@ -154,6 +230,38 @@ dojo.require("dojox.dtl._base");
 			}
 			var nodelist = parser.parse();
 			return new dojox.dtl.tag.loader.ExtendsNode(parser.getTemplate, nodelist, shared, parent, key);
+		},
+		include: function(parser, token){
+			var parts = dd.text.pySplit(token);
+			if(parts.length != 2){
+				throw new Error(parts[0] + " tag takes one argument: the name of the template to be included");
+			}
+			var path = parts[1];
+			var constant = false;
+			if((path.charAt(0) == '"' || path.slice(-1) == "'") && path.charAt(0) == path.slice(-1)){
+				path = path.slice(1, -1);
+				constant = true;
+			}
+			return new ddtl.IncludeNode(path, constant, parser.getTemplate, parser.getTextNodeConstructor());
+		},
+		ssi: function(parser, token){
+			// We're going to treat things a little differently here.
+			// First of all, this tag is *not* portable, so I'm not
+			// concerned about it being a "drop in" replacement.
+
+			// Instead, we'll just replicate the include tag, but with that
+			// optional "parsed" parameter.
+			var parts = dd.text.pySplit(token);
+			var parsed = false;
+			if(parts.length == 3){
+				parsed = (parts.pop() == "parsed");
+				if(!parsed){
+					throw new Error("Second (optional) argument to ssi tag must be 'parsed'");
+				}
+			}
+			var node = ddtl.include(parser, parts.join(" "));
+			node.parsed = parsed;
+			return node;
 		}
 	});
 })();

@@ -129,6 +129,55 @@ doh.register("dojox.dtl.html.tag",
 '{% endifchanged %}'+
 '{% endfor %}</div>');
 			t.is('<div> 2008-01-12 0 2008-01-28 0 2008-02-01 0</div>', dd.tests.html.util.render(template, context));
-		}
+		},
+		function test_tag_include(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				hello: dojo.moduleUrl("dojox.dtl.tests.templates", "hello.html"),
+				person: "Bob",
+				people: ["Charles", "Ralph", "Julia"]
+			});
+
+			var template = new dd.HtmlTemplate("<div>{% include hello %}</div>");
+			t.is("<div>Hello, <span>Bob</span></div>", dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate('<div>{% include "../../dojox/dtl/tests/templates/hello.html" %}</div>');
+			t.is("<div>Hello, <span>Bob</span></div>", dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate('<div>{% for person in people %}<div class="include">{% include hello %} </div>{% endfor %}</div>');
+			t.is('<div><div class="include">Hello, <span>Charles</span> </div><div class="include">Hello, <span>Ralph</span> </div><div class="include">Hello, <span>Julia</span> </div></div>', dd.tests.html.util.render(template, context));
+		},
+		function test_tag_spaceless(t){
+			var dd = dojox.dtl;
+
+			var template = new dd.HtmlTemplate("{% spaceless %}<ul> \n <li>Hot</li> \n\n<li>Pocket </li>\n </ul>{% endspaceless %}");
+			t.is("<ul><li>Hot</li><li>Pocket </li></ul>", dd.tests.html.util.render(template));
+		},
+		function test_tag_ssi(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				hello: dojo.moduleUrl("dojox.dtl.tests.templates", "hello.html"),
+				person: "Bob",
+				people: ["Charles", "Ralph", "Julia"]
+			});
+
+			console.log(1);
+			var template = new dd.HtmlTemplate("<div>{% ssi hello parsed %}</div>");
+			t.is("<div>Hello, <span>Bob</span></div>", dd.tests.html.util.render(template, context));
+
+			console.log(2);
+			template = new dd.HtmlTemplate("<div>{% ssi hello %}</div>");
+			t.is("<div>Hello, <span>{{ person }}</span></div>", dd.tests.html.util.render(template, context));
+
+			console.log(3);
+			template = new dd.HtmlTemplate('<div>{% ssi "../../dojox/dtl/tests/templates/hello.html" parsed %}</div>');
+			t.is("<div>Hello, <span>Bob</span></div>", dd.tests.html.util.render(template, context));
+
+			console.log(4);
+			template = new dd.HtmlTemplate('<div>{% for person in people %}{% ssi hello parsed %} {% endfor %}</div>');
+			t.is("<div>Hello, <span>Charles</span> Hello, <span>Ralph</span> Hello, <span>Julia</span> </div>", dd.tests.html.util.render(template, context));
+		},
 	]
 );

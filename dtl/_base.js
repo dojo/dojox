@@ -267,6 +267,9 @@ dojo.require("dojox.string.tokenize");
 				this.filters.push([fn, arg]);
 			}
 		},
+		getExpression: function(){
+			return this.contents;
+		},
 		resolve: function(context){
 			var str = this.resolvePath(this.key, context);
 			for(var i = 0, filter; filter = this.filters[i]; i++){
@@ -384,20 +387,11 @@ dojo.require("dojox.string.tokenize");
 		}
 	});
 
-	dd._NoOpNode = dojo.extend(function(){
+	dd._noOpNode = new function(){
 		// summary: Adds a no-op node. Useful in custom tags
-	},
-	{
-		render: function(){
-			return arguments[1];
-		},
-		unrender: function(){
-			return arguments[1]
-		},
-		clone: function(){
-			return this;
-		}
-	});
+		this.render = this.unrender = function(){ return arguments[1]; }
+		this.clone = function(){ return this; }
+	}
 
 	dd._Parser = dojo.extend(function(tokens){
 		// summary: Parser used during initialization and for tag groups.
@@ -526,15 +520,15 @@ dojo.require("dojox.string.tokenize");
 		for(var i = 1, part; part = parts[i]; i++){
 			dojo["require"](part);
 		}
-		return new dd._NoOpNode();
+		return dd._noOpNode;
 	}
 
 	dd.register.tags("dojox.dtl.tag", {
 		"date": ["now"],
 		"logic": ["if", "for", "ifequal", "ifnotequal"],
-		"loader": ["extends", "block", "load"],
-		"misc": ["comment", "debug", "filter", "firstof"],
-		"loop": ["cycle", "ifchanged"]
+		"loader": ["extends", "block", "include", "load", "ssi"],
+		"misc": ["comment", "debug", "filter", "firstof", "spaceless", "templatetag", "widthratio", "with"],
+		"loop": ["cycle", "ifchanged", "regroup"]
 	});
 	dd.register.filters("dojox.dtl.filter", {
 		"dates": ["date", "time", "timesince", "timeuntil"],

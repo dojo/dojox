@@ -185,19 +185,17 @@ dojo.require("dojox.dtl.Context");
 					this._tokenize(child, tokens);
 					return;
 				case 3:
-					if(data.match(/[^\s\n]/)){
-						if(data.indexOf("{{") != -1 || data.indexOf("{%") != -1){
-							var texts = ddt.tokenize(data);
-							for(var j = 0, text; text = texts[j]; j++){
-								if(typeof text == "string"){
-									tokens.push([types.text, text]);
-								}else{
-									tokens.push(text);
-								}
+					if(data.match(/[^\s\n]/) && (data.indexOf("{{") != -1 || data.indexOf("{%") != -1)){
+						var texts = ddt.tokenize(data);
+						for(var j = 0, text; text = texts[j]; j++){
+							if(typeof text == "string"){
+								tokens.push([types.text, text]);
+							}else{
+								tokens.push(text);
 							}
-						}else{
-							tokens.push([child.nodeType, child]);
 						}
+					}else{
+						tokens.push([child.nodeType, child]);
 					}
 					if(child.parentNode) child.parentNode.removeChild(child);
 					return;
@@ -287,6 +285,7 @@ dojo.require("dojox.dtl.Context");
 					for(var i = 0, cache; cache = caches[i]; i++){
 						this.onAddNode(node);
 						this._parent.insertBefore(cache, node);
+						this.onAddNodeComplete(node);
 					}
 					caches.length = 0;
 				}
@@ -294,6 +293,7 @@ dojo.require("dojox.dtl.Context");
 					if(!this._parent.childNodes.length){
 						this.onAddNode(node);
 						this._parent.appendChild(node);
+						this.onAddNodeComplete(node);
 					}else{
 						caches.push(node);
 					}
@@ -344,6 +344,7 @@ dojo.require("dojox.dtl.Context");
 					if(cache !== this._parent && (!cache.parentNode || !cache.parentNode.tagName)){
 						this.onAddNode(cache);
 						this._parent.appendChild(cache);
+						this.onAddNodeComplete(cache);
 					}
 				}
 				caches.length = 0;
@@ -359,10 +360,13 @@ dojo.require("dojox.dtl.Context");
 		onSetParent: function(){
 			// summary: Stub called when setParent is used.
 		},
-		onAddNode: function(){
-			// summary: Stub called when new nodes are added
+		onAddNode: function(node){
+			// summary: Stub called before new nodes are added
 		},
-		onRemoveNode: function(){
+		onAddNodeComplete: function(node){
+			// summary: Stub called after new nodes are added
+		},
+		onRemoveNode: function(node){
 			// summary: Stub called when nodes are removed
 		},
 		onClone: function(/*DOMNode*/ from, /*DOMNode*/ to){
@@ -540,7 +544,7 @@ dojo.require("dojox.dtl.Context");
 			return buffer;
 		},
 		clone: function(){
-			return new this.constructor(this.contents.contents);
+			return new this.constructor(this.contents.getExpression());
 		}
 	});
 

@@ -50,7 +50,7 @@ dojo.require("dojox.dtl.html");
 			return buffer;
 		},
 		clone: function(buffer){
-			return new this.constructor(this.contents.contents);
+			return new this.constructor(this.contents.getExpression());
 		}
 	});
 

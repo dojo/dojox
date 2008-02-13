@@ -5,9 +5,10 @@
 	<table>
 		<tr>
 			{% for item in flickr %}<td><img src="{{ item.imageUrlThumb }}" dojoAttachEvent="onclick: selectThumbnail" class="{{ item.imageUrl }}" /></td>{% endfor %}
+			<td width="100%"></td>
 		</tr>
 		<tr>
-			<td colspan="{{ flickr|length }}">
+			<td colspan="{{ flickr|length|add:1 }}">
 				{% if selected %}<img src="{{ selected }}" />{% endif %}
 			</td>
 		</tr>

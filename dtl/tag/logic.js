@@ -90,7 +90,7 @@ dojo.require("dojox.dtl._base");
 			return ddtl.IfNode.prototype.unrender.call(this, context, buffer);
 		},
 		clone: function(buffer){
-			return ddtl.tag.logic.IfNode.prototype.unrender.call(this, buffer);
+			return new this.constructor(this.var1.getExpression(), this.var2.getExpression(), this.trues, this.falses, this.negate);
 		}
 	});
 
@@ -166,7 +166,7 @@ dojo.require("dojox.dtl._base");
 			return buffer;
 		},
 		clone: function(buffer){
-			return new this.constructor(this.assign, this.loop, this.reversed, this.nodelist.clone(buffer));
+			return new this.constructor(this.assign, this.loop.getExpression(), this.reversed, this.nodelist.clone(buffer));
 		}
 	});
 
