@@ -149,6 +149,12 @@
 	<div id="container">
 		<div id="grid1" dojoType="dojox.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 	</div>
+
+	<p> Grid is essentially hidden (height of zero) when parent container is unsized 
+		(nothing, including the header, should be displayed):</p>
+	<div id="unsizedContainer">
+		<div id="grid2" dojoType="dojox.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+	</div>
 		
 </body>
 </html>

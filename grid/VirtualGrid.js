@@ -314,9 +314,17 @@ dojo.declare('dojox.VirtualGrid',
 			var h = dojo._getContentBox(this.domNode.parentNode).h;
 			dojo.marginBox(this.domNode, { h: Math.max(0, h) });
 		}
-		// header height
-		var t = this.views.measureHeader();
-		this.headerNode.style.height = t + 'px';
+		var h = dojo._getContentBox(this.domNode).h;
+		if(h == 0){
+			// We need to hide the header, since the Grid is essentially hidden.
+			this.headerNode.style.display = "none";
+		}else{
+			// Otherwise, show the header and give it an appropriate height.
+			this.headerNode.style.display = "block";
+			// header height
+			var t = this.views.measureHeader();
+			this.headerNode.style.height = t + 'px';
+		}
 		// content extent
 		var l = 1, h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 		if(this.autoWidth){
