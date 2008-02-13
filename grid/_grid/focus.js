@@ -78,11 +78,9 @@ dojo.declare("dojox.grid.focus", null, {
 		}else if(rt < sr.t){
 			this.grid.setScrollTop(rt);
 		}
-},
+	},
 	styleRow: function(inRow){
-		if(inRow.index == this.rowIndex){
-			this._focusifyCellNode(true);
-		}
+		return;
 	},
 	setFocusIndex: function(inRowIndex, inCellIndex){
 		// summary:
