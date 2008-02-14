@@ -12,6 +12,7 @@
 					dojo.require("dijit.form.Button");
 
 					dojo.declare("Fruit", [dijit._Widget, dojox.dtl._HtmlTemplated], {
+						widgetsInTemplate: true,
 						items: ["apple", "banana", "orange"],
 						keyUp: function(e){
 							if((e.type == "click" || e.keyCode == dojo.keys.ENTER) && this.input.value){

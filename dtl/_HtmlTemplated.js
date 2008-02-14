@@ -11,8 +11,12 @@ dojox.dtl._HtmlTemplated = {
 			this.domNode = this.srcNodeRef;
 
 			if(!this._render){
+				var ddcd = dojox.dtl.contrib.dijit;
+				ddcd.widgetsInTemplate = this.widgetsInTemplate;
+				var old = ddcd.widgetsInTemplate;
 				this._template = this._getCachedTemplate(this.templatePath, this.templateString);
 				this._render = new dojox.dtl.render.html.Render(this.domNode, this._template);
+				ddcd.widgetsInTemplate = old;
 			}
 
 			this.render();
@@ -28,11 +32,7 @@ dojox.dtl._HtmlTemplated = {
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context){
-			var ddcd = dojox.dtl.contrib.dijit;
-			var old = ddcd.widgetsInTemplate;
-			ddcd.widgetsInTemplate = this.widgetsInTemplate;
 			this._render.render(this._template, this._getContext(context));
-			ddcd.widgetsInTemplate = old;
 		},
 		_getContext: function(context){
 			context = context || new dojox.dtl.Context(this);
