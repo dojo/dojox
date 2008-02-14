@@ -3,30 +3,38 @@
 			<title>Demo using dojox.dtl._Templated</title>
 	    <script type="text/javascript" src="../../../dojo/dojo.js"
 				djConfig="isDebug: true, parseOnLoad: true"></script>
-	    <script type="text/javascript" src="../../../dijit/dijit.js"></script> 
+	    <script type="text/javascript" src="../../../dijit/dijit.js"></script>
+			<style type="text/css">
+				@import "../../../dijit/themes/tundra/tundra.css";
+			</style>
 	    <script type="text/javascript">
 					dojo.require("dojox.dtl._HtmlTemplated");
+					dojo.require("dijit.form.Button");
 
 					dojo.declare("Fruit", [dijit._Widget, dojox.dtl._HtmlTemplated], {
 						items: ["apple", "banana", "orange"],
 						keyUp: function(e){
-							if(e.keyCode == dojo.keys.ENTER){
-								var i = dojo.indexOf(this.items, e.target.value);
+							if((e.type == "click" || e.keyCode == dojo.keys.ENTER) && this.input.value){
+								var i = dojo.indexOf(this.items, this.input.value);
 								if(i != -1){
 									this.items.splice(i, 1);
 								}else{
-									this.items.push(e.target.value);
+									this.items.push(this.input.value);
 								}
-								e.target.value = "";
+								this.input.value = "";
 								this.render();
 							}
 						},
-						templateString: '{% load dojox.dtl.contrib.dijit %}<div><input dojoAttachEvent="onkeyup: keyUp"><ul>{% for item in items %}<li>{{ item }}</li>{% endfor %}</ul></div>'
+						postCreate: function(){
+							dojo.connect(this.button, "onClick", this, "keyUp");
+						},
+						// Note, the load tag here is superfluous, since _HtmlTemplate has a dojo.require for it.
+						templateString: '<!--{% load dojox.dtl.contrib.dijit %}--><div><input dojoAttachEvent="onkeyup: keyUp" dojoAttachPoint="input"> <button dojoType="dijit.form.Button" dojoAttachPoint="button">Add/Remove Item</button><ul><!--{% for item in items %}--><li><!--{{ item }}--></li><!--{% endfor %}--></ul></div>'
 					});
 
 	        dojo.require("dojo.parser");
 	    </script>
-			<body>
+			<body class="tundra">
 				<div dojoType="Fruit"></div>
 			</body>
 	</head>

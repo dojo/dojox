@@ -2,6 +2,7 @@ dojo.provide("dojox.dtl._HtmlTemplated");
 dojo.require("dijit._Templated");
 dojo.require("dojox.dtl.html");
 dojo.require("dojox.dtl.render.html");
+dojo.require("dojox.dtl.contrib.dijit");
 
 dojox.dtl._HtmlTemplated = {
 	prototype: {
@@ -27,7 +28,11 @@ dojox.dtl._HtmlTemplated = {
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context){
+			var ddcd = dojox.dtl.contrib.dijit;
+			var old = ddcd.widgetsInTemplate;
+			ddcd.widgetsInTemplate = this.widgetsInTemplate;
 			this._render.render(this._template, this._getContext(context));
+			ddcd.widgetsInTemplate = old;
 		},
 		_getContext: function(context){
 			context = context || new dojox.dtl.Context(this);

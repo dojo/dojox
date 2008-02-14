@@ -15,8 +15,8 @@ The Django Template language uses a system of templates that can be compiled
 once and rendered indefinitely afterwards. It uses a simple system of tags
 and filters.
 
-This aims to be a 1:1 match with the Django Template Language as outlined in
-http://www.djangoproject.com/documentation/templates/. Many common tags and
+This is a 1:1 match with the Django Template Language as outlined in
+http://www.djangoproject.com/documentation/templates/. All applicable tags and
 filters have been implemented (see below), along with new filters and tags as
 necessary (see below).
 

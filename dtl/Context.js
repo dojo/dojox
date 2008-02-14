@@ -1,7 +1,10 @@
 dojo.provide("dojox.dtl.Context");
 dojo.require("dojox.dtl._base");
 
-dojo.declare("dojox.dtl.Context", [dojox.dtl._Context], {
+dojox.dtl.Context = dojo.extend(function(dict){
+	dojox.dtl._Context.call(this, dict);
+}, dojox.dtl._Context.prototype,
+{
 	_this: {},
 	constructor: function(){
 		this._this = {};

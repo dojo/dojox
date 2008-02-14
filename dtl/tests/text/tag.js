@@ -350,9 +350,9 @@ doh.register("dojox.dtl.text.tag",
 			t.is("Hello, <span>Charles</span> Hello, <span>Ralph</span> Hello, <span>Julia</span> ", template.render(context));
 		},
 		function test_tag_load(t){
-			t.f(dojo.string);
-			new dojox.dtl.Template("{% load dojo.string %}");
-			t.t(dojo.string);
+			t.f(dojox.dtl.tests.text.load);
+			new dojox.dtl.Template("{% load dojox.dtl.tests.text.load %}");
+			t.t(dojox.dtl.tests.text.load);
 		},
 		function test_tag_now(t){
 			var dd = dojox.dtl;

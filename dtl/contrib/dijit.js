@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.contrib.dijit");
 
 dojo.require("dojox.dtl.html");
+dojo.require("dojo.parser");
 
 (function(){
 	var dd = dojox.dtl;
@@ -64,7 +65,27 @@ dojo.require("dojox.dtl.html");
 		}
 	});
 
+	ddcd.DojoTypeNode = dojo.extend(function(node){
+		this._node = node;
+		this.dijit = dojo.parser.instantiate([node.cloneNode(true)])[0];
+	},
+	{
+		render: function(context, buffer){
+			if(this.dijit.dojoAttachPoint){
+				(context.getThis())[this.dijit.dojoAttachPoint] = this.dijit;
+			}
+			return buffer.concat(this.dijit.domNode);
+		},
+		unrender: function(context, buffer){
+			return buffer.remove(this.dijit.domNode);
+		},
+		clone: function(){
+			return new this.constructor(this._node);
+		}
+	});
+
 	dojo.mixin(ddcd, {
+		widgetsInTemplate: true,
 		dojoAttachPoint: function(parser, text){
 			var parts = dd.text.pySplit(text);
 			return new ddcd.AttachNode(parts[1]);
@@ -95,6 +116,13 @@ dojo.require("dojox.dtl.html");
 			}
 			return new ddcd.EventNode(types, fns);
 		},
+		dojoType: function(parser, text){
+			if(ddcd.widgetsInTemplate){
+				var node = parser.swallowNode();
+				return new ddcd.DojoTypeNode(node);
+			}
+			return dd._noOpNode;
+		},
 		on: function(parser, text){
 			// summary: Associates an event type to a function (on the current widget) by name
 			var parts = text.split(" ");
@@ -103,6 +131,6 @@ dojo.require("dojox.dtl.html");
 	});
 
 	dd.register.tags("dojox.dtl.contrib", {
-		"dijit": ["attr:dojoAttachPoint", ["attr:attach", "dojoAttachPoint"], "attr:dojoAttachEvent", [/(attr:)?on(click|key(up))/i, "on"]]
+		"dijit": ["attr:dojoType", "attr:dojoAttachPoint", ["attr:attach", "dojoAttachPoint"], "attr:dojoAttachEvent", [/(attr:)?on(click|key(up))/i, "on"]]
 	});
 })();

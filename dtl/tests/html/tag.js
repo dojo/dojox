@@ -163,19 +163,15 @@ doh.register("dojox.dtl.html.tag",
 				people: ["Charles", "Ralph", "Julia"]
 			});
 
-			console.log(1);
 			var template = new dd.HtmlTemplate("<div>{% ssi hello parsed %}</div>");
 			t.is("<div>Hello, <span>Bob</span></div>", dd.tests.html.util.render(template, context));
 
-			console.log(2);
 			template = new dd.HtmlTemplate("<div>{% ssi hello %}</div>");
 			t.is("<div>Hello, <span>{{ person }}</span></div>", dd.tests.html.util.render(template, context));
 
-			console.log(3);
 			template = new dd.HtmlTemplate('<div>{% ssi "../../dojox/dtl/tests/templates/hello.html" parsed %}</div>');
 			t.is("<div>Hello, <span>Bob</span></div>", dd.tests.html.util.render(template, context));
 
-			console.log(4);
 			template = new dd.HtmlTemplate('<div>{% for person in people %}{% ssi hello parsed %} {% endfor %}</div>');
 			t.is("<div>Hello, <span>Charles</span> Hello, <span>Ralph</span> Hello, <span>Julia</span> </div>", dd.tests.html.util.render(template, context));
 		},

@@ -80,10 +80,6 @@ dojo.require("dojox.string.tokenize");
 		},
 		_get: function(module, name, errorless){
 			// summary: Used to find both tags and filters
-			if(module == "tag" && name == "load"){
-				return ddt.load;
-			}
-
 			var params = dd.register.get(module, name.toLowerCase(), errorless);
 			if(!params){
 				if(!errorless){
@@ -158,14 +154,19 @@ dojo.require("dojox.string.tokenize");
 			}
 			return ddt._resolveLazy(arg, sync, true);
 		},
-		_re: /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(.+?)\s*%\})/g,
+		_re: /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(load\s*)?(.+?)\s*%\})/g,
 		tokenize: function(str){
 			return dojox.string.tokenize(str, ddt._re, ddt._parseDelims);
 		},
-		_parseDelims: function(varr, tag){
+		_parseDelims: function(varr, load, tag){
 			var types = ddt.types;
 			if(varr){
 				return [types.varr, varr];
+			}else if(load){
+				var parts = dd.text.pySplit(dojo.trim(tag));
+				for(var i = 0, part; part = parts[i]; i++){
+					dojo["require"](part);
+				}
 			}else{
 				return [types.tag, tag];
 			}
@@ -473,6 +474,7 @@ dojo.require("dojox.string.tokenize");
 
 	dd.register = {
 		_registry: {
+			attributes: [],
 			tags: [],
 			filters: []
 		},
@@ -488,6 +490,22 @@ dojo.require("dojox.string.tokenize");
 				}
 			}
 		},
+		getAttributeTags: function(){
+			var tags = [];
+			var registry = dd.register._registry.attributes;
+			for(var i = 0, entry; entry = registry[i]; i++){
+				if(entry.length == 3){
+					tags.push(entry);
+				}else{
+					var fn = dojo.getObject(entry[1]);
+					if(fn && dojo.isFunction(fn)){
+						entry.push(fn);
+						tags.push(entry);
+					}
+				}
+			}
+			return tags;
+		},
 		_any: function(type, base, locations){
 			for(var path in locations){
 				for(var i = 0, fn; fn = locations[path][i]; i++){
@@ -497,6 +515,13 @@ dojo.require("dojox.string.tokenize");
 						fn = fn[1];
 					}
 					if(dojo.isString(key)){
+						if(key.substr(0, 5) == "attr:"){
+							var attr = fn;
+							if(attr.substr(0, 5) == "attr:"){
+								attr = attr.slice(5);
+							}
+							dd.register._registry.attributes.push([attr, base + "." + path + "." + attr]);
+						}
 						key = key.toLowerCase();
 					}
 					dd.register._registry[type].push([
@@ -513,14 +538,6 @@ dojo.require("dojox.string.tokenize");
 		filters: function(/*String*/ base, /*Object*/ locations){
 			dd.register._any("filters", base, locations);
 		}
-	}
-
-	ddt.load = function(parser, text){
-		var parts = dd.text.pySplit(text);
-		for(var i = 1, part; part = parts[i]; i++){
-			dojo["require"](part);
-		}
-		return dd._noOpNode;
 	}
 
 	dd.register.tags("dojox.dtl.tag", {

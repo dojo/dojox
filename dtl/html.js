@@ -36,7 +36,7 @@ dojo.require("dojox.dtl.Context");
 
 	var ddt = dd.text;
 	var ddh = dd.html = {
-		types: dojo.mixin({change: -11, attr: -12, elem: 1, text: 3}, ddt.types),
+		types: dojo.mixin({change: -11, attr: -12, custom: -13, elem: 1, text: 3}, ddt.types),
 		_attributes: {},
 		_re4: /^function anonymous\(\)\s*{\s*(.*)\s*}$/,
 		getTemplate: function(text){
@@ -101,11 +101,41 @@ dojo.require("dojox.dtl.Context");
 
 			return tokens;
 		},
+		_swallowed: [],
 		_tokenize: function(/*Node*/ node, /*Array*/ tokens){
 			var types = this.types;
+			var swallowed = this._swallowed;
+			var i, j, tag, child;
+
+			if(!tokens.first){
+				// Try to efficiently associate tags that use an attribute to
+				// remove the node from DOM (eg dojoType) so that we can efficiently
+				// locate them later in the tokenizing.
+				tokens.first = true;
+				var tags = dd.register.getAttributeTags();
+				for(i = 0; tag = tags[i]; i++){
+					try{
+						(tag[2])({ swallowNode: function(){ throw 1; }}, "");
+					}catch(e){
+						swallowed.push(tag);
+					}
+				}
+			}
+
+
+			for(i = 0; tag = swallowed[i]; i++){
+				var text = node.getAttribute(tag[0]);
+				if(text){
+					if(node.parentNode && node.parentNode.removeChild){
+						node.parentNode.removeChild(node);
+					}
+					tokens.push([types.custom, (tag[2])({ swallowNode: function(){ return node; }}, text)]);
+					return;
+				}
+			}
 
 			var children = [];
-			for(var i = 0, child; child = node.childNodes[i]; i++){
+			for(i = 0; child = node.childNodes[i]; i++){
 				children.push(child);
 			}
 
@@ -155,7 +185,7 @@ dojo.require("dojox.dtl.Context");
 				tokens.push([types.attr, node, key, value]);
 			}
 
-			for(var i = 0, child; child = children[i]; i++){
+			for(i = 0, child; child = children[i]; i++){
 				if(child.nodeType == 1 && child.getAttribute("iscomment")){
 					child.parentNode.removeChild(child);
 					child = {
@@ -201,10 +231,17 @@ dojo.require("dojox.dtl.Context");
 					return;
 				case 8:
 					if(data.indexOf("{%") == 0){
-						tokens.push([types.tag, dojo.trim(data.substring(2, data.length - 3))]);
+						var text = dojo.trim(data.slice(2, -2));
+						if(text.substr(0, 5) == "load "){
+							var parts = dd.text.pySplit(dojo.trim(text));
+							for(var i = 1, part; part = parts[i]; i++){
+								dojo["require"](part);
+							}
+						}
+						tokens.push([types.tag, text]);
 					}
 					if(data.indexOf("{{") == 0){
-						tokens.push([types.varr, dojo.trim(data.substring(2, data.length - 3))]);
+						tokens.push([types.varr, dojo.trim(data.slice(2, -2))]);
 					}
 					if(child.parentNode) child.parentNode.removeChild(child);
 					return;
@@ -650,7 +687,9 @@ dojo.require("dojox.dtl.Context");
 				var token = tokens.shift();
 				var type = token[0];
 				var value = token[1];
-				if(type == types.change){
+				if(type == types.custom){
+					nodelist.push(value);
+				}else if(type == types.change){
 					nodelist.push(new dd.ChangeNode(value, token[2], token[3]));
 				}else if(type == types.attr){
 					var fn = ddt.getTag("attr:" + token[2], true);
