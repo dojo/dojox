@@ -4,10 +4,10 @@ dojo.provide("dojox.image.SlideShow");
 // For a sample usage, see http://www.skynet.ie/~sos/photos.php
 //
 // @author  Copyright 2007 Shane O Sullivan (shaneosullivan1@gmail.com)
-// @license Licensed under the Academic Free License 3.0 http://www.opensource.org/licenses/afl-3.0.php
 //
 //	TODO: more cleanups
 //
+dojo.require("dojo.string");
 dojo.require("dojo.fx");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
@@ -15,6 +15,8 @@ dojo.require("dijit._Templated");
 dojo.declare("dojox.image.SlideShow",
 	[dijit._Widget, dijit._Templated],
 	{
+	// summary: A Slideshow Widget
+
 	// imageHeight: Number
 	//	The maximum height of an image
 	imageHeight: 375,
@@ -28,13 +30,13 @@ dojo.declare("dojox.image.SlideShow",
 	title: "",
 
 	// titleTemplate: String
-	//	a way to customize the wording in the title. supported tags to be populated are:
-	//		@title = the passed title of the image
-	//		@current = the current index of the image
-	//		@total = the total number of images in the SlideShow
+	//	a way to customize the wording in the title. supported parameters to be populated are:
+	//		${title} = the passed title of the image
+	//		${current} = the current index of the image
+	//		${total} = the total number of images in the SlideShow
 	//
 	//	should add more?
-	titleTemplate: '@title <span class="slideShowCounterText">(@current of @total)</span>',
+	titleTemplate: '${title} <span class="slideShowCounterText">(${current} of ${total})</span>',
 
 	// noLink: Boolean
 	//	Prevents the slideshow from putting an anchor link around the displayed image
@@ -125,11 +127,11 @@ dojo.declare("dojox.image.SlideShow",
 		if(this.hasNav){
 			dojo.connect(this.outerNode, "onmouseover", function(evt){
 				try{_this._showNav();}
-				catch(e){}			
+				catch(e){} //TODO: remove try/catch
 			});		
 			dojo.connect(this.outerNode, "onmouseout", function(evt){
 				try{_this._hideNav(evt);}
-				catch(e){}
+				catch(e){} //TODO: remove try/catch
 			});
 		}
 		
@@ -139,8 +141,7 @@ dojo.declare("dojox.image.SlideShow",
 		var _this = this;
 		
 		this.largeNode.appendChild(img);
-		this._tmpImage = img;
-		this._currentImage = img;
+		this._tmpImage = this._currentImage = img;
 		this._fitSize(true);
 		
 		this._loadImage(0, function(){
@@ -165,8 +166,8 @@ dojo.declare("dojox.image.SlideShow",
 		
 		this._request = {
 			query: {},
-			start: ((request.start) ? request.start : 0),
-			count: ((request.count) ? request.count : this.pageSize),
+			start: request.start || 0,
+			count: request.count || this.pageSize,
 			onBegin: function(count, request){
 				_this.maxPhotos = count;
 			}
@@ -200,11 +201,9 @@ dojo.declare("dojox.image.SlideShow",
 		while(this.hiddenNode.firstChild){
 			this.hiddenNode.removeChild(this.hiddenNode.firstChild);
 		}
-		var img;
-		for(var pos = 0; pos < this.images.length; pos++){
-			img = this.images[pos];
+		dojo.forEach(this.images, function(img){
 			if(img && img.parentNode){ img.parentNode.removeChild(img); }
-		}
+		});
 		this.images = [];
 		this.isInitialized = false;
 		this._imageCounter = 0;
@@ -269,7 +268,7 @@ dojo.declare("dojox.image.SlideShow",
 		// summary: Returns the topic id published to when an image is shown
 		// description:
 		//	The information published is: index, title and url
-		return (this.widgetId ? this.widgetId : this.id) + "/imageShow";
+		return (this.widgetId || this.id) + "/imageShow";
 	},
 
 	getLoadTopicName: function(){
@@ -443,7 +442,7 @@ dojo.declare("dojox.image.SlideShow",
 
 	_stop: function(){
 		// summary: Stops a running slide show.
-		if(this._slideId) { clearTimeout(this._slideId); }
+		if(this._slideId){ clearTimeout(this._slideId); }
 		this._slideId = null;
 		this._timerCancelled = true;
 		dojo.removeClass(this.domNode,"slideShowPaused");
@@ -452,7 +451,7 @@ dojo.declare("dojox.image.SlideShow",
 	_prev: function(){
 		// summary: Show the previous image.
 		// FIXME: either pull code from showNext/prev, or call it here
-		if(this.imageIndex < 1) { return;}
+		if(this.imageIndex < 1){ return; }
 		this.showImage(this.imageIndex - 1);
 	},
 
@@ -473,7 +472,7 @@ dojo.declare("dojox.image.SlideShow",
 		dojo.style(this.navNode, "position", "absolute");
 		
 		//Place the navigation controls far off screen
-		dojo.style(this.navNode, "left", "-10000px");
+		dojo.style(this.navNode, "top", "-10000px");
 		
 		//Make the navigation controls visible
 		dojo._setOpacity(this.navNode, 99);
@@ -491,16 +490,15 @@ dojo.declare("dojox.image.SlideShow",
 		// summary: Sets the title of the image to be displayed
 		// title: String
 		//	The String title of the image
-		this.titleNode.innerHTML = this.titleTemplate.replace('@title',title)
-			.replace('@current', String(Number(this.imageIndex) + 1)) 
-			.replace('@total',String(this.maxPhotos));
+		this.titleNode.innerHTML = dojo.string.substitute(this.titleTemplate,
+			{ title: title, current: 1 + this.imageIndex, total: this.maxPhotos});
 	},
 	
 	_fitImage: function(img) {
 		// summary: Ensures that the image width and height do not exceed the maximum.
 		// img: Node
 		//	The image DOM node to optionally resize
-		var width = img.width
+		var width = img.width;
 		var height = img.height;
 		
 		if(width > this.imageWidth){
