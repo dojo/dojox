@@ -1,7 +1,7 @@
 {% load dojox.dtl.contrib.data %}
 {% bind_data items to store as flickr %}
 <div>
-	<input dojoAttachEvent="onkeyup: keyUp">
+	<input dojoAttachEvent="onkeypress: keyUp">
 	<table>
 		<tr>
 			{% for item in flickr %}<td><img src="{{ item.imageUrlThumb }}" dojoAttachEvent="onclick: selectThumbnail" class="{{ item.imageUrl }}" /></td>{% endfor %}
