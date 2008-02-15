@@ -11,19 +11,25 @@ dojo.require("dojox.dtl._base");
 	},
 	{
 		get: function(key){
+			var store = this.store;
+			var item = this.item;
+
 			if(key == "getLabel"){
-				return this.store.getLabel(this.item);
+				return store.getLabel(item);
 			}else if(key == "getAttributes"){
-				return this.store.getAttributes(this.item);
+				return store.getAttributes(item);
 			}else if(key == "getIdentity"){
-				if(this.store.getIdentity){
-					return this.store.getIdentity(this.item);
+				if(store.getIdentity){
+					return store.getIdentity(item);
 				}
 				return "Store has no identity API";
 			}else{
-				if(this.store.hasAttribute(this.item, key)){
-					return this.store.getValue(this.item, key);
+				if(store.hasAttribute(item, key)){
+					return store.getValue(item, key);
 				}else{
+					if(key.slice(-1) == "s" && store.hasAttribute(item, key.slice(0, -1))){
+						return store.getValues(item, key.slice(0, -1));
+					}
 					return "Item has no attribute: " + key;
 				}
 			}
