@@ -12,6 +12,12 @@ dojo.mixin(dojox.dtl.filter.lists, {
 		if(!arg) return value;
 
 		var items = [];
+		if(value.forEach){
+			var list = value, value = [];
+			list.forEach(function(item){
+				value.push(item);
+			});
+		}
 		for(var key in value){
 			items.push([new dojox.dtl._Filter('var.' + arg).resolve(new dojox.dtl._Context({ 'var' : value[key]})), value[key]]);
 		}
@@ -88,13 +94,13 @@ dojo.mixin(dojox.dtl.filter.lists, {
 	},
 	_unordered_list: function(value, tabs){
 		var ddl = dojox.dtl.filter.lists;
-		var indent = "";
-		for(var i = 0; i < tabs; i++){
+		var i, indent = "";
+		for(i = 0; i < tabs; i++){
 			indent += "\t";
 		}
 		if(value[1] && value[1].length){
 			var recurse = [];
-			for(var i = 0; i < value[1].length; i++){
+			for(i = 0; i < value[1].length; i++){
 				recurse.push(ddl._unordered_list(value[1][i], tabs + 1))
 			}
 			return indent + "<li>" + value[0] + "\n" + indent + "<ul>\n" + recurse.join("\n") + "\n" + indent + "</ul>\n" + indent + "</li>";
