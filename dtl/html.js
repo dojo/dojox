@@ -407,20 +407,13 @@ dojo.require("dojox.dtl.Context");
 			// summary: Stub to call when you're adding an event
 		},
 		_getCache: function(node){
-			for(var i = 0, cache; cache = this._cache[i]; i++){
-				if(cache[0] === node){
-					return cache[1];
-				}
-			}
-			var arr = [];
-			this._cache.push([node, arr]);
-			return arr;
+			this._cache.push(node);
+			node._cache = node._cache || [];
+			return node._cache;
 		},
-		_flushCache: function(node){
-			for(var i = 0, cache; cache = this._cache[i]; i++){
-				if(!cache[1].length){
-					this._cache.splice(i--, 1);
-				}
+		_flushCache: function(){
+			for(var i = 0, node; node = this._cache[i]; i++){
+				node._cache = null;
 			}
 		}
 	});
@@ -553,7 +546,7 @@ dojo.require("dojox.dtl.Context");
 					list.push(new dd.ChangeNode(buffer.getParent()));
 					list.push(new dd._HtmlNode(root));
 					list.push(str);
-					list.push(new dd.ChangeNode(buffer.getParent(), true));
+					list.push(new dd.ChangeNode(buffer.getParent()));
 				}
 				return list.render(context, buffer);
 			}else{
