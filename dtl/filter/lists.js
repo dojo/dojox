@@ -11,19 +11,19 @@ dojo.mixin(dojox.dtl.filter.lists, {
 		// summary: Takes a list of dicts, returns that list sorted by the property given in the argument.
 		if(!arg) return value;
 
-		var items = [];
-		if(value.forEach){
-			var list = value, value = [];
-			list.forEach(function(item){
-				value.push(item);
-			});
+		var i, item, items = [];
+		if(!dojo.isArray(value)){
+			var obj = value, value = [];
+			for(var key in obj){
+				value.push(obj[k]);
+			}
 		}
-		for(var key in value){
-			items.push([new dojox.dtl._Filter('var.' + arg).resolve(new dojox.dtl._Context({ 'var' : value[key]})), value[key]]);
+		for(i = 0; i < value.length; i++){
+			items.push([new dojox.dtl._Filter('var.' + arg).resolve(new dojox.dtl._Context({ 'var' : value[i]})), value[i]]);
 		}
 		items.sort(dojox.dtl.filter.lists._dictsort);
 		var output = [];
-		for(var i = 0, item; item = items[i]; i++){
+		for(i = 0; item = items[i]; i++){
 			output.push(item[1]);
 		}
 		return output;
