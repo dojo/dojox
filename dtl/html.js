@@ -262,6 +262,7 @@ dojo.require("dojox.dtl.Context");
 		if(dd.tests){
 			this.tokens = tokens.slice(0);
 		}
+
 		var parser = new dd._HtmlParser(tokens);
 		this.nodelist = parser.parse();
 	},
@@ -318,7 +319,6 @@ dojo.require("dojox.dtl.Context");
 				var caches = this._getCache(this._parent);
 				if(node.parentNode === this._parent){
 					// If we reach a node that already existed, fill in the cache for this same parent
-					var i = 0;
 					for(var i = 0, cache; cache = caches[i]; i++){
 						this.onAddNode(node);
 						this._parent.insertBefore(cache, node);
@@ -327,13 +327,7 @@ dojo.require("dojox.dtl.Context");
 					caches.length = 0;
 				}
 				if(!node.parentNode || !node.parentNode.tagName){
-					if(!this._parent.childNodes.length){
-						this.onAddNode(node);
-						this._parent.appendChild(node);
-						this.onAddNodeComplete(node);
-					}else{
-						caches.push(node);
-					}
+					caches.push(node);
 				}
 			}
 			return this;
@@ -474,7 +468,7 @@ dojo.require("dojox.dtl.Context");
 				if(!buffer) throw new Error("Template node render functions must return their buffer");
 			}
 			if(parent){
-				buffer.setParent(parent, true);
+				buffer.setParent(parent);
 			}
 			return buffer;
 		},
