@@ -398,7 +398,7 @@ doh.register("dojox.dtl.text.tag",
 			});
 
 			var template = new dd.Template("{% regroup people|dictsort:'gender' by gender as grouped %}<ul>{% for group in grouped %}<li>{{ group.grouper }}<ul>{% for item in group.list %}<li>{{ item.firstName }} {{ item.lastName }}</li>{% endfor %}</ul></li>{% endfor %}</ul>");
-			t.is("<ul><li>Female<ul><li>Condoleezza Rice</li><li>Margaret Thatcher</li></ul></li><li>Male<ul><li>Bill Clinton</li><li>George Bush</li></ul></li><li>Unkown<ul><li>Path Smith</li></ul></li></ul>", template.render(context));
+			t.t(template.render(context).match(new RegExp("^<ul><li>Female<ul><li>(Condoleezza Rice|Margaret Thatcher)</li><li>(Condoleezza Rice|Margaret Thatcher)</li></ul></li><li>Male<ul><li>(Bill Clinton|George Bush)</li><li>(Bill Clinton|George Bush)</li></ul></li><li>Unkown<ul><li>Path Smith</li></ul></li></ul>$")));
 		},
 		function test_tag_spaceless(t){
 			var dd = dojox.dtl;
