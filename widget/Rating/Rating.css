@@ -1,0 +1,18 @@
+.dojoxRatingStar {
+	background-image:url(rating_empty.png);
+	background-position:left center;
+	position:relative;
+	height:15px;
+	width:15px;
+	float:left;
+}
+
+.dojoxRatingStarChecked {
+	background-image:url(rating_full.png);
+}
+
+.dojoxRatingStarHover {
+	background-image:url(rating_full.png);
+	opacity:.5;
+}
+
