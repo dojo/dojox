@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Dojox QueryReadStore+grid Demo</title>
+	<style type="text/css">
+		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+		/* BE SURE TO NEVER FORGET IMPORTING THE GRID's CSS, or you will wonder why the hell the grid looks so strange (or even think that it doesnt work) */
+		@import "../../../dojox/grid/_grid/tundraGrid.css";
+	</style>
+
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="demo_QueryReadStore.js"></script>
+</head>
+<body class="tundra">
+
+	<h1 class="testTitle">Dojox QueryReadStore + Grid demo - sortable and filterable</h1>
+ 
+	<h2>The grid is in HTML, store, model, etc. are JS, sorting is added by extending the model class</h2>
+	<b>Capabilities:</b> load data from server, show data, paging (30 rows at a time), sort, filter
+	<br /><br />
+	<input type="text" onkeyup="doSearch(this)" />
+	<div id="grid1" dojoType="dojox.Grid" style="height:300px; width:800px;"></div>
+	<script>
+		// Connect the model and store AFTER the page is loaded, since we can only access
+		// the widget then, since it will be created just before dojo.addOnLoad() is called.
+		var grid = null;
+		dojo.addOnLoad(function() {
+			// Instanciate the store, pass it to the model, connect them to the grid and add the layout ... just some hand work :-)
+			var store = new dojox.data.QueryReadStore({url:"../tests/stores/QueryReadStore.php", requestMethod:"post", doClientPaging:false});
+			var model = new DojoDataSortable(null, null, {store:store, rowsPerPage:30});
+			grid = dijit.byId("grid1");
+			grid.setModel(model);
+			grid.setStructure(gridLayout);
+		});
+		
+		var lastSearchValue = "";
+		function doSearch(el) {
+			if (el.value!=lastSearchValue) {
+				grid.model.query = {name:el.value};
+				grid.model.requestRows(null, null, dojo.hitch(this, function() {
+					grid.widget.updateRowCount(grid.model.getRowCount());
+				}));
+				lastSearchValue = el.value;
+			}
+		}
+	</script>
+
+</body>
+</html>
