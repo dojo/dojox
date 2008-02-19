@@ -523,8 +523,9 @@ doh.register("dojox.rpc.tests.echo",
 
 				return d;
 			}
-		},
-		{
+		}
+	/*
+		,{
 			name: "#13 GET,JSON-RPC 1.2, Ordered Parameters",
 			timeout: 4000,
 			setUp: function(){
@@ -572,7 +573,6 @@ doh.register("dojox.rpc.tests.echo",
 				//test when given named params
 				var td = this.svc.getJsonRpc12EchoNamed({message: this.name});
 				td.addCallback(this, function(result){
-					console.log("RESULT2: ", result);
 					if (result==this.name){
 						d.callback(true);
 					}else{
@@ -611,8 +611,8 @@ doh.register("dojox.rpc.tests.echo",
 
 				return d;
 			}
-		},
-
+		}
+		*/
 	]
 );
 

@@ -11,6 +11,9 @@ Service.js: beta - this will become dojo.rpc.Service eventually and replace
 JsonRPC.js: beta - plugins for json-rpc for the rpc system
 Rest.js: beta - plugins for REST style services for the rpc system
 
+Stores: CouchDBRestStore.js  JsonReferencing.js  PersevereRestStore.js
+These stores are fresh new and alpha. The will likely be moved to dojox.data 
+after they are well tested and documented.
 -------------------------------------------------------------------------------
 Project authors
 	Dustin Machi

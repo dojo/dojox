@@ -83,13 +83,10 @@ dojo.declare("dojox.rpc.Service", null, {
 			args.push(arguments[i]);
 		}
 		
-		console.log("values ",dojo.isArray(method.parameters),args.length==1);
 		if (method.parameters && method.parameters[0] && method.parameters[0].name && (args.length==1) && dojo.isObject(args[0])){
 			// if it is the parameters are not named in the definition, than we should use ordered params, otherwise try to determine by parameters 
 			args = args[0];
-			console.log("is named");
 		}
-		console.log(args);
 		var smd = this._smd;
 		var envelope = method.envelope || smd.envelope || "NONE";
 		var envDef = dojox.rpc.envelopeRegistry.match(envelope);
@@ -115,7 +112,6 @@ dojo.declare("dojox.rpc.Service", null, {
 			// if it is an application/json content type, than it should be handled as json
 			// we have to do conversion here instead of in XHR so that we can set the currentSchema before running it
 			results = envDef.deserialize.call(_this,isJson ? dojox.rpc.resolveJson(results,schema) : results); 
-			delete dojox._newId; // cleanup															
 			return results;									
 		});
 		return deferred;
@@ -240,7 +236,6 @@ dojox.rpc.envelopeRegistry.register(
 dojox.rpc.transportRegistry.register(
 	"POST",function(str){return str == "POST"},{
 		fire:function(r){
-			console.log("TARGET: ", r.target);
 			r.url = r.target;
 			r.postData = r.data;
 			return dojo.rawXhrPost(r);
@@ -257,6 +252,7 @@ dojox.rpc.transportRegistry.register(
 		}
 	}
 );
+
 
 //only works if you include dojo.io.script 
 dojox.rpc.transportRegistry.register(

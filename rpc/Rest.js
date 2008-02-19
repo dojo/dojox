@@ -1,19 +1,35 @@
 dojo.provide("dojox.rpc.Rest");
-
+dojo.require("dojox.rpc.Service");
+// This provides a HTTP REST service with full range REST verbs include PUT,POST, and DELETE.
+// A normal GET query is done by using the service directly:
+// var services = dojo.rpc.Service({services: {myRestService: {transport: "REST",...
+// services.myRestService("parameters");
+// 
+// The modifying methods can be called as sub-methods of the rest service method like:
+//  services.myRestService.put("parameters","data to put in resource");
+//  services.myRestService.post("parameters","data to post to the resource");
+//  services.myRestService['delete']("parameters");
 dojox.rpc._restMethods = { // these are the common rest methods 
 	put : function(r){
+		// execute a PUT
 		r.url = r.target +'?'+  r.data;
 		r.putData = dojox.rpc._restMethods.sendData;
 		return dojo.rawXhrPut(r);
 	},
 	post : function(r){
+		// execute a POST
 		r.url = r.target +'?'+  r.data;
 		r.postData = dojox.rpc._restMethods.sendData;
 		var def = dojo.rawXhrPost(r);
-		def.addCallback(function(result) {
-			dojox._newId = def.ioArgs.xhr.getResponseHeader('Content-Location'); // we need some way to communicate the id of the newly created object
+		var postObj = dojox.rpc._restMethods.sendObj;
+/*	 This is a possible HTTP-compliant way to determine the id of a posted object	 
+ 		def.addCallback(function(result) {
+		 	dojox._newId = def.ioArgs.xhr.getResponseHeader('Content-Location');
+			if (dojox._newId) {// we need some way to communicate the id of the newly created object
+				dojox.rpc._index[postObj._id = dojox._newId] = postObj;
+			}
 			return result; 
-		});
+		});*/
 		return def;
 	},
 	"delete" : function(r){
@@ -30,8 +46,9 @@ dojox.rpc.transportRegistry.register(
 		fire: function(r){
 			r.url=  r.target + (r.data ? '?'+  r.data : '');
 			var def = dojo.xhrGet(r);
+			var newId = dojox.rpc._restQuery;
 			def.addCallback(function(res) {
-				dojox._newId = dojox.rpc._restQuery; // we need some way to communicate the id of the newly created object
+				dojox._newId = newId; // we need some way to communicate the id of the newly created object
 				delete dojox.rpc._restQuery;
 				return res;
 			});
@@ -49,7 +66,7 @@ dojox.rpc.transportRegistry.register(
 					return function() {
 						
 						if (restMethod.sender) {
-							var sendData = arguments[--arguments.length];
+							var sendData = dojox.rpc._restMethods.sendObj = arguments[--arguments.length];
 							var isJson = ((method.contentType || svc._smd.contentType) + '').match(/application\/json/);
 							dojox.rpc._restMethods.sendData = isJson ? dojox.rpc.toJson(sendData,false,method._schema || method.returns) : sendData;// serialize with the right schema for the context;
 						}

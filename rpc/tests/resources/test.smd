@@ -48,14 +48,14 @@
                 },
             restStore: {
 				transport: "REST",
-                        target: "store.php",
+                        target: "fakestore.php", 
                         parameters: [
                                 {name: "location", type: "string", optional: true}
                         ]
                 },
             jsonRestStore: {
 				transport: "REST",
-                        target: "store.php",
+                        target: "fakestore.php",
 						contentType:"application/json",
                         parameters: [
                                 {name: "location", type: "string", optional: true}

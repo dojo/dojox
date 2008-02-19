@@ -6,9 +6,7 @@ dojo.require("dojo.date.stamp");
 // This enhances the capabilities of dojo.toJson and dojo.fromJson,
 // adding referencing support, date handling, and other extra format handling.
 // On parsing, references are resolved. When references are made to 
-// ids/objects that have been loaded yet, an unloaded object
-// will be used in place of the reference, which will be of the form:
-// {_notLoaded:true,id:"the reference"}
+// ids/objects that have been loaded yet, the $ref property will remain
  
 
 
@@ -49,11 +47,12 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 				return {attr:attr || 'id',prefix:schema._idPrefix};
 			}
 		}
+
 		return false;
 	}
 	function walk(it,stop,schema,idInfo,defaultId){
 		// this walks the new graph, resolving references and making other changes 
-	 	var val;
+	 	var val,i;
 	 	var id = it[idInfo.attr];
 	 	id = (id && (idInfo.prefix + id)) || defaultId; // if there is an id, prefix it, otherwise inherit 
 	 	var target = it;
@@ -70,14 +69,13 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 			}
 			
 		}		
-		for (var i in it){
-			val = it[i];
-			if (val && dojo.isObject(val)){
+		for (i in it){
+			if (it.hasOwnProperty(i) && (typeof (val=it[i]) =='object') && val){
 				if (ref==val.$ref){ // a reference was found
 					var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
 					if(/[\w\[\]\.\$ \/\r\n\t]/.test(stripped) && !/=|((^|\W)new\W)/.test(stripped)){ // make sure it is a safe reference
 						var path = ref.match(/(^\.*[^\.\[]+)([\.\[].*)?/); // divide along the path
-						if ((ref=path[1]=='$' ? root:dojox.rpc._index[new dojo._Url(idInfo.prefix,path[1]) + '']) &&  // a $ indicates to start with the root, otherwise start with an id 
+						if ((ref=path[1]=='$' ? root:dojox.rpc._index[new dojo._Url(idInfo.prefix,path[1])]) &&  // a $ indicates to start with the root, otherwise start with an id 
 							(ref = path[2] ? eval('ref' + path[2]) : ref)){// starting point was found, use eval to resolve remaining property references
 							// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have 
 							// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet, 
@@ -125,8 +123,9 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 		}
 		if (target != it){ // this means we are updating, we need to remove deleted
 			for (i in target){
-				if (!it.hasOwnProperty(i) && i != '_id'){
+				if (!it.hasOwnProperty(i) && i != '_id' && !(target instanceof Array && isNaN(i))){
 					propertyChange(i,target[i],undefined);
+					delete target[i];
 				}
 			}
 		}
@@ -134,7 +133,7 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 	}
 	var idInfo = makeIdInfo(schema)||{attr:'id',prefix:''};
 	if (!root){ return root; } 
-	root = walk(root,false,schema,idInfo,dojox._newId && (new dojo._Url(idInfo.prefix,dojox._newId) + '')); // do the main walk through
+	root = walk(root,false,schema,idInfo,dojox._newId && new dojo._Url(idInfo.prefix,dojox._newId)); // do the main walk through
 	walk(reWalk,false,schema,idInfo); // re walk any parts that were not able to resolve references on the first round
 	return root;
 };
@@ -207,7 +206,7 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 			var newLine = prettyPrint ? "\n" : "";
 			var sep = prettyPrint ? " " : "";
 			
-			if (dojo.isArray(it)){
+			if (it instanceof Array){
 				var res = dojo.map(it, function(obj,i){
 					var val = serialize(obj, path + '[' + i + ']', nextIndent);
 					if(typeof val != "string"){
@@ -244,7 +243,8 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 		return dojo.toJson(it); // use the default serializer for primitives
 	}
 	var json = serialize(it,'$','');
-	for (var i in paths)  // cleanup the temporary path-generated ids
+	for (i in paths){  // cleanup the temporary path-generated ids
 		delete paths[i]._id;
+	}
 	return json;
 }
