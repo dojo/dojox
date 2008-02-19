@@ -32,6 +32,8 @@ dojo.require("dojox.cometd");
 dojox.cometd.timesync= new function(){
 
 	this._window=10;// The window size for the sliding average of offset samples.
+	this._minWindow=4;// The window size for the sliding average of offset samples.
+	this._offsets=new Array(); // The samples used to calculate the average offset.
 	this.offset=0;	// The offset in ms between the clients clock and the servers clock. Add this to the local
 			// time epoch to obtain server time.
 	this.samples=0; // The number of samples used to calculate the offset. If 0, the offset is not valid.
@@ -76,16 +78,22 @@ dojox.cometd.timesync= new function(){
 		//	The incoming bayeux message
 		
 		var channel=msg.channel;
-		if (channel=="/meta/handshake" || channel=="/meta/connect"){
+		if (channel &&  channel.indexOf('/meta/')==0){
 			if (msg.ext && msg.ext.timesync){
 				var sync=msg.ext.timesync;
 				var now=new Date().getTime();
-				var offset=sync.ts-sync.tc-(now-sync.tc-sync.p)/2;
 				
-				if (this.samples++==0)
-					this.offset=offset;
-				else
-					this.offset=(this.offset*(this._window-1)+offset)/this._window;
+				this._offsets.push(sync.ts-sync.tc-(now-sync.tc-sync.p)/2);
+				if (this._offsets.length>this._window)
+					this._offsets.shift();		
+				this.samples++;
+				var total=0;
+				for (var i in this._offsets)
+					total+=this._offsets[i];
+				this.offset=parseInt((total/this._offsets.length).toFixed());
+				
+				if (this.samples<this._minWindow)
+					setTimeout("dojox.cometd.publish('/meta/ping',null)",100);
 			}
 		}
 		return msg;
@@ -100,7 +108,7 @@ dojox.cometd.timesync= new function(){
 		//	The outgoing bayeux message
 		
 		var channel=msg.channel;
-		if (channel=="/meta/handshake" || channel=="/meta/connect"){
+		if (channel &&  channel.indexOf('/meta/')==0){
 			var now=new Date().getTime();
 			if (!msg.ext)
 				msg.ext={};
