@@ -10,7 +10,7 @@ dojo.require("dojox.dtl.utils.date");
 			if(value instanceof Date){
 				return value;
 			}
-			value = new Date(date);
+			value = new Date(value);
 			if(value.getTime() == new Date(0).getTime()){
 				return "";
 			}
