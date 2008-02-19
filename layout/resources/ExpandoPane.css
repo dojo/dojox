@@ -37,25 +37,37 @@
 	display:none;
 	visibility:hidden;
 }
-.dojoxExpandoPane .iconRight .dojoxExpandoIcon {
+.dojoxExpandoBottom .dojoxExpandoIcon,
+.dojoxExpandoTop .dojoxExpandoIcon,
+.dojoxExpandoLeft .dojoxExpandoIcon {
 	float:right;
 }
-.dojoxExpandoPane .iconLeft .dojoxExpandoIcon {
+.dojoxExpandoRight .dojoxExpandoIcon {
 	float:left;
 }
 
 .nihilo .dojoxExpandoTitle {
-	height:16px;
+	height:18px;
 	font-size:0.9em;
 	font-weight:bold;
 	padding:3px;
 	padding-top:7px;
 	padding-bottom:7px;
-	background:#fafafa url("../../../dijit/themes/nihilo/images/tabStripe.gif") repeat-x left bottom; 
+	background:#fafafa url("../../../dijit/themes/nihilo/images/tabStripe.gif") repeat-x left bottom;
+	
+}
+.nihilo .dojoxExpandoTop {
+	border-bottom:1px solid #ccc;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc; 
+}
+
+.soria .dojoxExpandoTop {
+	
 }
 
 .soria .dojoxExpandoTitle {
-	height:16px;
+	height:18px;
 	font-size:0.9em;
 	font-weight:bold;
 	padding:3px;

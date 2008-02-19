@@ -16,6 +16,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 	//		command, and supports having Layout Children as direct descendants
 	//		via a custom "attachParent" attribute
 
+	maxHeight:"",
+	maxWidth:"",
+
 	tamplateString:null,
 	templatePath:dojo.moduleUrl("dojox.layout","resources/ExpandoPane.html"),
 
@@ -31,32 +34,46 @@ dojo.declare("dojox.layout.ExpandoPane",
 	// duration: Integer
 	//		duration to run show/hide animations
 	duration:420,
-
+	
 	postCreate:function(){
 
 		this.inherited(arguments);
 		this._animConnects = [];
+
+		this._isHorizontal = true;
+		
 		this._container = this.getParent();
-		this._titleHeight = dojo._getBorderBox(this.titleWrapper).h + 2;
+		this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
 	
-		// FIXME: should be check both?
-		if(typeof this.easeIn == "string"){
+		if(typeof this.easeOut == "string"){
 			this.easeOut = dojo.getObject(this.easeOut);
+		}
+		if(typeof this.easeIn == "string"){
 			this.easeIn = dojo.getObject(this.easeIn); 
 		}
 	
+		var thisClass = "";
 		if(this.region){
 			// FIXME: add suport for alternate region types?
 			switch(this.region){
 				case "right" :
-					dojo.addClass(this.titleWrapper,"iconLeft");
+					thisClass = "Right";
 					break;
 				case "left" :
-					dojo.addClass(this.titleWrapper,"iconRight");
+					thisClass = "Left";
+					break;
+				case "top" :
+					thisClass = "Top";
+					break;
+				case "bottom" :
+					thisClass = "Bottom"; 
 					break;
 			}
+			dojo.addClass(this.domNode,"dojoxExpando"+thisClass);
+			this._isHorizontal = !/top|bottom/.test(this.region);
 		}
 		this._setupAnims();
+		dojo.style(this.domNode,"overflow","hidden");
 	},
 	
 	_setupAnims:function(){
@@ -66,19 +83,28 @@ dojo.declare("dojox.layout.ExpandoPane",
 			node:this.domNode,
 			duration:this.duration
 		};
+
+		var isHorizontal = this._isHorizontal;
+		var showProps = {};
+		var hideProps = {};
+
+		var dimension = isHorizontal ? "width" : "height"; 
+		showProps[dimension] = { 
+			end:this[( isHorizontal ? "maxWidth" : "maxHeight")] || 275, 
+			unit:"px" 
+		};
+		hideProps[dimension] = { 
+			end: this._titleHeight, 
+			unit:"px"
+		};
+
 		this._showAnim = dojo.animateProperty(dojo.mixin(_common,{
 			easing:this.easeIn,
-			properties: {
-				width:{ end:this.maxWidth||275, unit:"px" }
-			}
+			properties: showProps 
 		}));
 		this._hideAnim = dojo.animateProperty(dojo.mixin(_common,{
 			easing:this.easeOut,
-			properties: {
-				width:{
-					end: (this._titleHeight - 6), unit:"px"
-				}
-			}
+			properties: hideProps
 		}));
 
 		this._animConnects = [
@@ -92,26 +118,27 @@ dojo.declare("dojox.layout.ExpandoPane",
 		if(this._showing){
 			dojo.style(this.cwrapper,{
 				"visibility":"hidden",
-				"opacity":"0"
+				"opacity":"0",
+				"overflow":"hidden"
 			});
+			dojo.addClass(this.domNode,"dojoxExpandoClosed");
 			if(this._showAnim && this._showAnim.stop()){}
 			this._hideAnim.play();
 		}else{
 			if(this._hideAnim && this._hideAnim.stop()){}
 			this._showAnim.play();
-			
 		}
-		dojo[(this._showing ? "addClass" : "removeClass")](this.domNode,"dojoxExpandoClosed");
 	},
 	
 	_setEnd: function(){
 		// summary: common animation onEnd code
 		this._showing = !this._showing;
 		if(this._showing){
-			dojo.style(this.cwrapper,{ "visibility":"visible" });
+			dojo.style(this.cwrapper,{ "opacity":"0", "visibility":"visible" });
 			dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
+			dojo.removeClass(this.domNode,"dojoxExpandoClosed");
 		}
-		setTimeout(dojo.hitch(this._container,"layout"),50);
+		setTimeout(dojo.hitch(this._container,"layout"),15);
 	},
 	
 	resize: function(){
@@ -119,8 +146,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		var size = dojo.marginBox(this.domNode);
 		// FIXME: do i even need to do this query/forEach? why not just set the containerHeight always
 		dojo.query("[attachParent]",this.domNode).forEach(function(n){
-			var dij = dijit.byNode(n);
-			if(dij){
+			if(dijit.byNode(n)){
 				var h = size.h - this._titleHeight;
 				dojo.style(this.containerNode,"height", h +"px");
 			}
