@@ -189,6 +189,7 @@ dojo.declare('dojox.GridView',
 	createRowNode: function(inRowIndex){
 		var node = document.createElement("div");
 		node.className = this.classTag + '-row';
+		node[dojox.grid.gridViewTag] = this;
 		node[dojox.grid.rowIndexTag] = inRowIndex;
 		this.rowNodes[inRowIndex] = node;
 		return node;
