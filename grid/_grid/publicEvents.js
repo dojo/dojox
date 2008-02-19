@@ -150,7 +150,9 @@ dojox.grid.publicEvents = {
 		//		Event fired when a cell is clicked.
 		// e: Event
 		//		Decorated event object which contains reference to grid, cell, and rowIndex
-		this.focus.setFocusCell(e.cell, e.rowIndex);
+		if(!this.edit.isEditCell(e.rowIndex, e.cellIndex)){
+			this.focus.setFocusCell(e.cell, e.rowIndex);
+		}
 		this.onRowClick(e);
 	},
 
