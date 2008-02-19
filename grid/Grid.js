@@ -177,6 +177,9 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		for(var j=0, c; ((c=this.getCell(j)) && !c.editor); j++){}
 		if(c&&c.editor){
 			this.edit.setEditCell(c, i);
+			this.focus.setFocusCell(c, i);
+		}else{
+			this.focus.setFocusCell(this.getCell(0), i);
 		}
 	},
 
