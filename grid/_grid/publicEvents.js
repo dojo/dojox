@@ -78,13 +78,37 @@ dojox.grid.publicEvents = {
 				}
 				break;
 			case dk.UP_ARROW:
-				if(!this.edit.isEditing()){
+				if(!this.edit.isEditing() && this.focus.rowIndex != 0){
+					dojo.stopEvent(e);
 					this.focus.move(-1, 0);
 				}
 				break;
 			case dk.DOWN_ARROW:
-				if(!this.edit.isEditing()){
+				if(!this.edit.isEditing() && this.focus.rowIndex+1 != this.model.count){
+					dojo.stopEvent(e);
 					this.focus.move(1, 0);
+				}
+				break;
+			case dk.PAGE_UP:
+				if(!this.edit.isEditing() && this.focus.rowIndex != 0){
+					dojo.stopEvent(e);
+					if(this.focus.rowIndex != this.scroller.firstVisibleRow+1) {
+						this.focus.move(this.scroller.firstVisibleRow-this.focus.rowIndex, 0);
+					} else {
+						this.setScrollTop(this.scroller.findScrollTop(this.focus.rowIndex-1));
+						this.focus.move(this.scroller.firstVisibleRow-this.scroller.lastVisibleRow+1, 0);
+					}
+				}
+				break;
+			case dk.PAGE_DOWN:
+				if(!this.edit.isEditing() && this.focus.rowIndex+1 != this.model.count){
+					dojo.stopEvent(e);
+					if (this.focus.rowIndex != this.scroller.lastVisibleRow-1) {
+						this.focus.move(this.scroller.lastVisibleRow-this.focus.rowIndex-1, 0);
+					} else {
+						this.setScrollTop(this.scroller.findScrollTop(this.focus.rowIndex+1));
+						this.focus.move(this.scroller.lastVisibleRow-this.scroller.firstVisibleRow-1, 0);
+					}
 				}
 				break;
 		}
