@@ -134,52 +134,58 @@ dojo.require("dojox.dtl._base");
 		this.parsed = (arguments.length == 5) ? parsed : true;
 	},
 	{
-		_cache: {},
+		_cache: [{}, {}],
 		render: function(context, buffer){
-			var location = (this.constant) ? this.path : this.path.resolve(context);
-			var templateString = dd.text._resolveTemplateArg(location, true);
-			if(this.parsed){
-				var template = this.getTemplate(templateString);
-				this.rendered = template.nodelist;
+			var location = ((this.constant) ? this.path : this.path.resolve(context)).toString();
+			var parsed = Number(this.parsed);
+			var dirty = false;
+			if(location != this.last){
+				dirty = true;
+				if(this.last){
+					buffer = this.unrender(context, buffer);
+				}
+				this.last = location;
+			}
+
+			var cache = this._cache[parsed];
+
+			if(parsed){
+				if(!cache[location]){
+					cache[location] = dd.text._resolveTemplateArg(location, true);
+				}
+				if(dirty){
+					var template = this.getTemplate(cache[location]);
+					this.rendered = template.nodelist;
+				}
 				return this.rendered.render(context, buffer, this);
 			}else{
 				if(this.TextNode == dd._TextNode){
-					if(!this.rendered){
+					if(dirty){
 						this.rendered = new this.TextNode("");
+						this.rendered.set(dd.text._resolveTemplateArg(location, true));
 					}
-					this.rendered.set(templateString);
 					return this.rendered.render(context, buffer);
 				}else{
-					if(this.last && location != this.last){
-						buffer = this.unrender(context, buffer);
-						this.last = location;
-					}
-					if(this._cache[location]){
-						this.nodelist = [];
-						var children = [];
-						var exists = false;
-						for(var i = 0, child; child = this._cache[location][i]; i++){
-							if(!i && child.parentNode){
-								exists = true;
-							}
-							if(exists){
-								child = child.cloneNode(true);
-							}
-							this.nodelist.push(child.cloneNode(true));
-						}
-					}else{
-						this.nodelist = [];
+					if(!cache[location]){
+						var nodelist = [];
 						var div = document.createElement("div");
-						div.innerHTML = templateString;
+						div.innerHTML = dd.text._resolveTemplateArg(location, true);
 						var children = div.childNodes;
 						while(children.length){
 							var removed = div.removeChild(children[0]);
-							this.nodelist.push(removed);
+							nodelist.push(removed);
 						}
-						this._cache[location] = this.nodelist;
+						cache[location] = nodelist;
 					}
-					for(var i = 0, add; add = this.nodelist[i]; i++){
-						buffer = buffer.concat(add);
+					if(dirty){
+						this.nodelist = [];
+						var exists = true;
+						for(var i = 0, child; child = cache[location][i]; i++){
+							this.nodelist.push(child.cloneNode(true));
+						}
+					}
+					for(var i = 0, node; node = this.nodelist[i]; i++){
+						buffer = buffer.concat(node);
 					}
 				}
 			}

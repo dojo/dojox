@@ -11,7 +11,7 @@ dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ pa
 	var tokens = [];
 	var match, content, lastIndex = 0;
 	while(match = re.exec(str)){
-		content = str.substring(lastIndex, re.lastIndex - match[0].length);
+		content = str.slice(lastIndex, re.lastIndex - match[0].length);
 		if(content.length){
 			tokens.push(content);
 		}
@@ -23,7 +23,7 @@ dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ pa
 		}
 		lastIndex = re.lastIndex;
 	}
-	content = str.substr(lastIndex);
+	content = str.slice(lastIndex);
 	if(content.length){
 		tokens.push(content);
 	}

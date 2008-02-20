@@ -198,8 +198,9 @@ dojo.require("dojox.dtl.Context");
 
 			if(node.parentNode && node.parentNode.tagName){
 				if(change){
-					tokens.push([types.change, node.parentNode, true]);
+					tokens.push([types.change, node, true]);
 				}
+				tokens.push([types.change, node.parentNode]);
 				node.parentNode.removeChild(node);
 			}else{
 				// If this node is parentless, it's a base node, so we have to "up" change to itself
@@ -281,14 +282,12 @@ dojo.require("dojox.dtl.Context");
 		render: function(context, buffer){
 			buffer = buffer || this.getBuffer();
 			this.rootNode = null;
-			var onSetParent = dojo.connect(buffer, "onSetParent", this, function(node){
-				if(!this.rootNode){
-					this.rootNode = node || true;
-				}
-			});
 			var output = this.nodelist.render(context || new dd.Context({}), buffer);
-			dojo.disconnect(onSetParent);
-			buffer._flushCache();
+			this.rootNode = buffer.getRootNode();
+			for(var i = 0, node; node = buffer._cache[i]; i++){
+				node._cache = null;
+				delete node._cache;
+			}
 			return output;
 		},
 		unrender: function(context, buffer){
@@ -306,7 +305,12 @@ dojo.require("dojox.dtl.Context");
 	},
 	{
 		concat: function(/*DOMNode*/ node){
-			if(!this._parent){
+			var parent = this._parent;
+			if(node._rendered && !parent._dirty){
+				return this;
+			}
+
+			if(!parent){
 				if(node.nodeType == 3 && dojo.trim(node.data)){
 					throw new Error("Text should not exist outside of the root node in template");
 				}
@@ -315,21 +319,26 @@ dojo.require("dojox.dtl.Context");
 			if(this._closed && (node.nodeType != 3 || dojo.trim(node.data))){
 				throw new Error("Content should not exist outside of the root node in template");
 			}
-			if(node.nodeType){
-				var caches = this._getCache(this._parent);
-				if(node.parentNode === this._parent){
-					// If we reach a node that already existed, fill in the cache for this same parent
-					for(var i = 0, cache; cache = caches[i]; i++){
-						this.onAddNode(node);
-						this._parent.insertBefore(cache, node);
-						this.onAddNodeComplete(node);
+			if(parent._dirty){
+				if(node._rendered && node.parentNode == parent){
+					var caches = parent._cache;
+					if(caches){
+						for(var i = 0, cache; cache = caches[i]; i++){
+							this.onAddNode(cache);
+							cache._rendered = true;
+							parent.insertBefore(cache, node);
+							this.onAddNodeComplete(cache);
+						}
 					}
-					caches.length = 0;
 				}
-				if(!node.parentNode || !node.parentNode.tagName){
-					caches.push(node);
-				}
+				parent._dirty = false;
 			}
+			if(!parent._cache){
+				parent._cache = [];
+				this._cache.push(parent);
+			}
+			parent._dirty = true;
+			parent._cache.push(node);
 			return this;
 		},
 		remove: function(obj){
@@ -343,6 +352,7 @@ dojo.require("dojox.dtl.Context");
 					if(obj.parentNode){
 						obj.parentNode.removeChild(obj);
 					}
+					obj._rendered = false;
 				}
 			}
 			return this;
@@ -369,16 +379,22 @@ dojo.require("dojox.dtl.Context");
 				this._closed = true;
 			}
 
-			var caches = this._getCache(this._parent);
-			if(caches && caches.length && up){
-				for(var i = 0, cache; cache = caches[i]; i++){
-					if(cache !== this._parent && (!cache.parentNode || !cache.parentNode.tagName)){
-						this.onAddNode(cache);
-						this._parent.appendChild(cache);
-						this.onAddNodeComplete(cache);
+			if(up){
+				var parent = this._parent;
+				if(parent._dirty){
+					var caches = this._parent._cache;
+					for(var i = 0, cache; cache = caches[i]; i++){
+						if(cache !== this._parent){
+							this.onAddNode(cache);
+							cache._rendered = true;
+							this._parent.appendChild(cache);
+							this.onAddNodeComplete(cache);
+						}
 					}
+					caches.length = 0;
+
+					parent._dirty = false;
 				}
-				caches.length = 0;
 			}
 
 			this.onSetParent(node, up);
@@ -388,8 +404,14 @@ dojo.require("dojox.dtl.Context");
 		getParent: function(){
 			return this._parent;
 		},
-		onSetParent: function(){
+		getRootNode: function(){
+			return this.rootNode;
+		},
+		onSetParent: function(node){
 			// summary: Stub called when setParent is used.
+			if(!this.rootNode){
+				this.rootNode = node || true;
+			}
 		},
 		onAddNode: function(node){
 			// summary: Stub called before new nodes are added
@@ -405,16 +427,6 @@ dojo.require("dojox.dtl.Context");
 		},
 		onAddEvent: function(/*DOMNode*/ node, /*String*/ type, /*String*/ description){
 			// summary: Stub to call when you're adding an event
-		},
-		_getCache: function(node){
-			this._cache.push(node);
-			node._cache = node._cache || [];
-			return node._cache;
-		},
-		_flushCache: function(){
-			for(var i = 0, node; node = this._cache[i]; i++){
-				node._cache = null;
-			}
 		}
 	});
 
@@ -424,9 +436,17 @@ dojo.require("dojox.dtl.Context");
 	},
 	{
 		render: function(context, buffer){
+			if(this._rendered){
+				return buffer;
+			}
+			this._rendered = true;
 			return buffer.concat(this.contents);
 		},
 		unrender: function(context, buffer){
+			if(!this._rendered){
+				return buffer;
+			}
+			this._rendered = false;
 			return buffer.remove(this.contents);
 		},
 		clone: function(buffer){
@@ -536,6 +556,7 @@ dojo.require("dojox.dtl.Context");
 	{
 		render: function(context, buffer){
 			this._rendered = true;
+
 			var str = this.contents.resolve(context);
 			if(str && str.render && str.getRootNode){
 				var root = this._curr = str.getRootNode();
@@ -550,20 +571,22 @@ dojo.require("dojox.dtl.Context");
 				}
 				return list.render(context, buffer);
 			}else{
-				if(!this._txt) this._txt = document.createTextNode(str);
-				if(this._txt.data != str) this._txt.data = str;
+				if(!this._txt){
+					this._txt = document.createTextNode(str);
+				}
+				this._txt.data = str;
 				return buffer.concat(this._txt);
 			}
-			return buffer;
 		},
 		unrender: function(context, buffer){
-			if(this._rendered){
-				this._rendered = false;
-				if(this._curr){
-					return this._lists[this._curr].unrender(context, buffer);
-				}else if(this._txt){
-					return buffer.remove(this._txt);
-				}
+			if(!this._rendered){
+				return buffer;
+			}
+			this._rendered = false;
+			if(this._curr){
+				return this._lists[this._curr].unrender(context, buffer);
+			}else if(this._txt){
+				return buffer.remove(this._txt);
 			}
 			return buffer;
 		},

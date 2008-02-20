@@ -103,11 +103,17 @@ dojo.require("dojox.dtl._base");
 	},
 	{
 		render: function(context, buffer){
-			var i, parentloop = {};
-			if(context.forloop){
-				parentloop = context.forloop;
+			var i, j, k;
+			var dirty = false;
+			var assign = this.assign;
+
+			for(k = 0; k < assign.length; k++){
+				if(typeof context[assign[k]] != "undefined"){
+					dirty = true;
+					context.push();
+					break;
+				}
 			}
-			context.push();
 
 			var items = this.loop.resolve(context) || [];
 			for(i = items.length; i < this.pool.length; i++){
@@ -127,27 +133,32 @@ dojo.require("dojox.dtl._base");
 				arred = items;
 			}
 
+			var forloop = context.forloop = {
+				parentloop: context.forloop || {}
+			};
 			var j = 0;
 			for(i = 0; i < arred.length; i++){
 				var item = arred[i];
-				context.forloop = {
-					counter0: j,
-					counter: j + 1,
-					revcounter0: arred.length - j - 1,
-					revcounter: arred.length - j,
-					first: j == 0,
-					last: j == arred.length - 1,
-					parentloop: parentloop
-				};
 
-				if(this.assign.length > 1 && dojo.isArrayLike(item)){
+				forloop.counter0 = j;
+				forloop.counter = j + 1;
+				forloop.revcounter0 = arred.length - j - 1;
+				forloop.revcounter = arred.length - j;
+				forloop.first = !j;
+				forloop.last = (j == arred.length - 1);
+
+				if(assign.length > 1 && dojo.isArrayLike(item)){
+					if(!dirty){
+						dirty = true;
+						context.push();
+					}
 					var zipped = {};
-					for(var k = 0; k < item.length && k < this.assign.length; k++){
-						zipped[this.assign[k]] = item[k];
+					for(var k = 0; k < item.length && k < assign.length; k++){
+						zipped[assign[k]] = item[k];
 					}
 					context.update(zipped);
 				}else{
-					context[this.assign[0]] = item;
+					context[assign[0]] = item;
 				}
 
 				if(j + 1 > this.pool.length){
@@ -156,7 +167,14 @@ dojo.require("dojox.dtl._base");
 				buffer = this.pool[j].render(context, buffer, this);
 				++j;
 			}
-			context.pop();
+
+			delete context.forloop;
+			for(k = 0; k < assign.length; k++){
+				delete context[assign[k]];
+			}
+			if(dirty){
+				context.pop();
+			}
 			return buffer;
 		},
 		unrender: function(context, buffer){

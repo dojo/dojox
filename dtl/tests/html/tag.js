@@ -2,7 +2,6 @@ dojo.provide("dojox.dtl.tests.html.tag");
 
 dojo.require("dojox.dtl.html");
 dojo.require("dojox.dtl.Context");
-dojo.require("dojox.dtl.render.html");
 dojo.require("dojox.dtl.tests.html.util");
 
 doh.register("dojox.dtl.html.tag", 

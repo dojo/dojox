@@ -1,6 +1,7 @@
 dojo.provide("dojox.dtl.tests.html.util");
 
 dojo.require("dojox.dtl.html");
+dojo.require("dojox.dtl.render.html");
 dojo.require("dojox.string.Builder");
 
 dojox.dtl.HtmlBuffer.prototype.onClone = function(from, to){
@@ -48,8 +49,20 @@ dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context
 		var buffer = template.getBuffer();
 		var canvas = new dojox.dtl.render.html.Render(attach);
 		canvas.render(template, context, buffer);
+		var clones = buffer._clones;
+		var events = buffer._events;
 
-		return dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, buffer._clones, buffer._events).toString();
+		var first = dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
+
+		buffer = template.getBuffer();
+		buffer._clones = clones;
+		buffer._events = events;
+		canvas.render(template, context, buffer);
+
+		var second = dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
+
+		doh.is("Compare re-render: " + first, "Compare re-render: " + second);
+		return first;
 	}
 	catch(e){
 		throw e;
@@ -73,14 +86,18 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 		}
 		output.append("<").append(name);
 
-		// Deal with attributes
 		var attributes = dojo.filter(tokens, function(token){
 			if(token[0] == types.attr){
 				for(var i = 0, group; group = clones[i]; i++){
+					// group is any set of nodes that were originally the sam
 					var count = 0;
 					for(var j = 0, item; item = group[j]; j++){
 						if(item === token[1] || item === node){
 							if(count++){
+								// This is entered when we have 2 hits within a clone group.
+								//		The first would be the original node
+								//		The second would be if our current node is a clone
+								//		of the original
 								return true;
 							}
 						}
@@ -88,6 +105,7 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 				}
 			}
 		});
+
 		for(var i = 0, attribute; attribute = attributes[i]; i++){
 			var value = "";
 			if(attribute[2] == "class"){
