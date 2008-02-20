@@ -121,7 +121,7 @@ dojo.require("dojox.gfx");
 				this.dyn.push({color: color, fill: shape.getFill(), stroke: shape.getStroke()});
 				if(this.opt.labels){
 					// draw the label
-					var elem = da.createText[this.opt.htmlLabels ? "html" : "gfx"]
+					var elem = da.createText[this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx"]
 									(this.chart, s, circle.cx, circle.cy + size / 2, "middle",
 										"100%", taFont, taFontColor);
 					if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
@@ -175,7 +175,7 @@ dojo.require("dojox.gfx");
 						x = circle.cx + labelR * Math.cos(labelAngle),
 						y = circle.cy + labelR * Math.sin(labelAngle) + size / 2;
 					// draw the label
-					var elem = da.createText[this.opt.htmlLabels ? "html" : "gfx"]
+					var elem = da.createText[this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx"]
 									(this.chart, s, x, y, "middle",
 										labels[i], taFont, 
 										(typeof v == "object" && "fontColor" in v) 

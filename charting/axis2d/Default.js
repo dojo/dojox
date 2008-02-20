@@ -243,7 +243,7 @@ dojo.require("dojox.lang.utils");
 						y2: y + tickVector.y * taMajorTick.length
 					}).setStroke(taMajorTick);
 					if(this.opt.majorLabels){
-						elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
+						elem = dc.axis2d.common.createText[this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx"]
 										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
 											this._getLabel(nextMajor, c.major.prec), taFont, taFontColor);
 						if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
@@ -260,7 +260,7 @@ dojo.require("dojox.lang.utils");
 							y2: y + tickVector.y * taMinorTick.length
 						}).setStroke(taMinorTick);
 						if(this.opt.minorLabels && (c.minMinorStep <= c.minor.tick * c.scale)){
-							elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
+							elem = dc.axis2d.common.createText[this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx"]
 											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
 												this._getLabel(nextMinor, c.minor.prec), taFont, taFontColor);
 							if(this.opt.htmlLabels){ this.htmlElements.push(elem); }

@@ -28,9 +28,8 @@ dojo.require("dojox.gfx");
 				}).setFont(font).setFill(fontColor);
 			},
 			html: function(chart, creator, x, y, align, text, font, fontColor){
-				var p = dojo.doc.createElement("div"), s = p.style,
-					wrap = dojo.doc.createElement("div"), w = wrap.style;
 				// setup the text node
+				var p = dojo.doc.createElement("div"), s = p.style;
 				clearNode(s);
 				s.font = font;
 				p.innerHTML = text;
@@ -41,16 +40,9 @@ dojo.require("dojox.gfx");
 				dojo.body().appendChild(p);
 				var size = g.normalizedLength(g.splitFontString(font).size),
 					box = dojo.marginBox(p);
-				// reset the text node
+				// new settings for the text node
 				dojo.body().removeChild(p);
 				s.position = "relative";
-				// setup the wrapper node
-				clearNode(w);
-				w.width = "0px";
-				w.height = "0px";
-				wrap.appendChild(p)
-				// insert nodes and setup positions
-				chart.node.insertBefore(wrap, chart.node.firstChild);
 				switch(align){
 					case "middle":
 						s.left = Math.floor(x - box.w / 2) + "px";
@@ -64,6 +56,14 @@ dojo.require("dojox.gfx");
 						break;
 				}
 				s.top = Math.floor(y - size) + "px";
+				// setup the wrapper node
+				var wrap = dojo.doc.createElement("div"), w = wrap.style;
+				clearNode(w);
+				w.width = "0px";
+				w.height = "0px";
+				// insert nodes
+				wrap.appendChild(p)
+				chart.node.insertBefore(wrap, chart.node.firstChild);
 				return p;
 			}
 		}
