@@ -317,6 +317,7 @@ dojo.require("dojox.string.tokenize");
 						if(current.get && dojo.isFunction(current.get)){
 							current = current.get(part);
 						}else if(typeof current[part] == "undefined"){
+							current = current[part];
 							break;
 						}else{
 							current = current[part];
