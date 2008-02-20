@@ -11,7 +11,6 @@ dojo.mixin(dojox.dtl.filter.lists, {
 		// summary: Takes a list of dicts, returns that list sorted by the property given in the argument.
 		if(!arg) return value;
 
-		console.time("dictsort");
 		var i, item, items = [];
 		if(!dojo.isArray(value)){
 			var obj = value, value = [];
@@ -27,7 +26,6 @@ dojo.mixin(dojox.dtl.filter.lists, {
 		for(i = 0; item = items[i]; i++){
 			output.push(item[1]);
 		}
-		console.timeEnd("dictsort");
 		return output;
 	},
 	dictsortreversed: function(value, arg){
