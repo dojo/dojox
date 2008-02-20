@@ -308,8 +308,9 @@ dojo.require("dojox.dtl.Context");
 			var output = this.nodelist.render(context || new dd.Context({}), buffer);
 			this.rootNode = buffer.getRootNode();
 			for(var i = 0, node; node = buffer._cache[i]; i++){
-				node._cache = null;
-				delete node._cache;
+				if(node._cache){
+					node._cache.length = 0;
+				}
 			}
 			return output;
 		},
@@ -329,7 +330,7 @@ dojo.require("dojox.dtl.Context");
 	{
 		concat: function(/*DOMNode*/ node){
 			var parent = this._parent;
-			if(node._rendered && !parent._dirty){
+			if(node.parentNode && node.parentNode.tagName && !parent._dirty){
 				return this;
 			}
 
@@ -343,15 +344,15 @@ dojo.require("dojox.dtl.Context");
 				throw new Error("Content should not exist outside of the root node in template");
 			}
 			if(parent._dirty){
-				if(node._rendered && node.parentNode == parent){
+				if(node._drawn && node.parentNode == parent){
 					var caches = parent._cache;
 					if(caches){
 						for(var i = 0, cache; cache = caches[i]; i++){
 							this.onAddNode(cache);
-							cache._rendered = true;
 							parent.insertBefore(cache, node);
 							this.onAddNodeComplete(cache);
 						}
+						caches.length = 0;
 					}
 				}
 				parent._dirty = false;
@@ -375,7 +376,6 @@ dojo.require("dojox.dtl.Context");
 					if(obj.parentNode){
 						obj.parentNode.removeChild(obj);
 					}
-					obj._rendered = false;
 				}
 			}
 			return this;
@@ -409,13 +409,11 @@ dojo.require("dojox.dtl.Context");
 					for(var i = 0, cache; cache = caches[i]; i++){
 						if(cache !== this._parent){
 							this.onAddNode(cache);
-							cache._rendered = true;
 							this._parent.appendChild(cache);
 							this.onAddNodeComplete(cache);
 						}
 					}
 					caches.length = 0;
-
 					parent._dirty = false;
 				}
 			}
