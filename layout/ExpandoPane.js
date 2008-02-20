@@ -18,6 +18,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 
 	maxHeight:"",
 	maxWidth:"",
+	splitter:"",
 
 	tamplateString:null,
 	templatePath:dojo.moduleUrl("dojox.layout","resources/ExpandoPane.html"),
@@ -43,7 +44,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		this._isHorizontal = true;
 		
 		this._container = this.getParent();
-		this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
+		this._closedSize = this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
 	
 		if(typeof this.easeOut == "string"){
 			this.easeOut = dojo.getObject(this.easeOut);
@@ -72,13 +73,50 @@ dojo.declare("dojox.layout.ExpandoPane",
 			dojo.addClass(this.domNode,"dojoxExpando"+thisClass);
 			this._isHorizontal = !/top|bottom/.test(this.region);
 		}
-		this._setupAnims();
 		dojo.style(this.domNode,"overflow","hidden");
+	},
+	
+	startup: function(){
+		this.inherited(arguments);
+		if(this.splitter){
+			// find our splitter and tie into it's drag logic
+			var myid = this.id;
+			dijit.registry.filter(function(w){
+				return w && w.child && w.child.id == myid;
+			}).forEach(dojo.hitch(this,function(w){
+				this.connect(w,"_stopDrag","_afterResize");
+			}));
+		}
+		this._currentSize = dojo.marginBox(this.domNode);
+		this._showSize = this._currentSize[(this._isHorizontal ? "w":"h")];
+		this._setupAnims();
+	},
+	
+	_afterResize: function(e){
+		var tmp = this._currentSize;
+		this._currentSize = dojo.marginBox(this.domNode);
+		var n = this._currentSize[(this._isHorizontal ? "w" : "h")] 
+		if(n> this._titleHeight){
+			if(!this._showing){
+				console.log('done being dragged:',e);			
+				this._showing = !this._showing; 
+				this._showEnd();
+			}
+			this._showSize = n;
+			this._setupAnims();
+		}else{
+			this._showSize = tmp[(this._isHorizontal ? "w" : "h")];
+			this._showing = false;
+			this._hideWrapper();
+			this._hideAnim.gotoPercent(89,true);
+		}
+
 	},
 	
 	_setupAnims:function(){
 		// summary: create the show and hide animations
 		dojo.forEach(this._animConnects,dojo.disconnect);
+		
 		var _common = {
 			node:this.domNode,
 			duration:this.duration
@@ -90,11 +128,11 @@ dojo.declare("dojox.layout.ExpandoPane",
 
 		var dimension = isHorizontal ? "width" : "height"; 
 		showProps[dimension] = { 
-			end:this[( isHorizontal ? "maxWidth" : "maxHeight")] || 275, 
+			end: this._showSize, 
 			unit:"px" 
 		};
 		hideProps[dimension] = { 
-			end: this._titleHeight, 
+			end: this._closedSize, 
 			unit:"px"
 		};
 
@@ -108,36 +146,42 @@ dojo.declare("dojox.layout.ExpandoPane",
 		}));
 
 		this._animConnects = [
-			dojo.connect(this._showAnim,"onEnd",this,"_setEnd"),
-			dojo.connect(this._hideAnim,"onEnd",this,"_setEnd")
+			dojo.connect(this._showAnim,"onEnd",this,"_showEnd"),
+			dojo.connect(this._hideAnim,"onEnd",this,"_hideEnd")
 		];
 	},
 	
 	toggle:function(e){
 		// summary: toggle this pane's visibility
 		if(this._showing){
-			dojo.style(this.cwrapper,{
-				"visibility":"hidden",
-				"opacity":"0",
-				"overflow":"hidden"
-			});
-			dojo.addClass(this.domNode,"dojoxExpandoClosed");
+			this._hideWrapper();
 			if(this._showAnim && this._showAnim.stop()){}
 			this._hideAnim.play();
 		}else{
 			if(this._hideAnim && this._hideAnim.stop()){}
 			this._showAnim.play();
 		}
+		this._showing = !this._showing;
 	},
 	
-	_setEnd: function(){
+	_hideWrapper:function(){
+		dojo.style(this.cwrapper,{
+				"visibility":"hidden",
+				"opacity":"0",
+				"overflow":"hidden"
+		});
+	},
+	
+	_showEnd: function(){
 		// summary: common animation onEnd code
-		this._showing = !this._showing;
-		if(this._showing){
-			dojo.style(this.cwrapper,{ "opacity":"0", "visibility":"visible" });
-			dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
-			dojo.removeClass(this.domNode,"dojoxExpandoClosed");
-		}
+		dojo.style(this.cwrapper,{ "opacity":"0", "visibility":"visible" });
+		dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
+		dojo.removeClass(this.domNode,"dojoxExpandoClosed");
+		setTimeout(dojo.hitch(this._container,"layout"),15);
+	},
+	
+	_hideEnd: function(){
+		dojo.addClass(this.domNode,"dojoxExpandoClosed");
 		setTimeout(dojo.hitch(this._container,"layout"),15);
 	},
 	
