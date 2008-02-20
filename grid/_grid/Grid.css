@@ -243,3 +243,14 @@
 	top: -1000px;
 	height: 0px, width: 0px;
 }
+
+.gridArrowButtonChar {
+	display:none !important;
+}
+.dijit_a11y .gridArrowButtonChar {
+	display:inline !important;
+}
+.dijit_a11y .dojoxGrid-sort-down, .dijit_a11y .dojoxGrid-sort-up {
+	margin-left: 0;
+	padding-left: 0;
+}

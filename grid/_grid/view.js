@@ -126,7 +126,7 @@ dojo.declare('dojox.GridView',
 		if(inCell.index != inCell.grid.getSortIndex()){
 			return n;
 		}
-		return [ '<div class="', inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-down' : 'dojoxGrid-sort-up', '">', n, '</div>' ].join('');
+		return [ '<div class="', inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-down' : 'dojoxGrid-sort-up', '"><div class="gridArrowButtonChar">', inCell.grid.sortInfo > 0 ? '&#9660;' : '&#9650;', '</div>', n, '</div>' ].join('');
 	},
 
 	resize: function(){
