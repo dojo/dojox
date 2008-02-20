@@ -153,7 +153,7 @@ dojo.require("dojox.dtl._base");
 						context.push();
 					}
 					var zipped = {};
-					for(var k = 0; k < item.length && k < assign.length; k++){
+					for(k = 0; k < item.length && k < assign.length; k++){
 						zipped[assign[k]] = item[k];
 					}
 					context.update(zipped);

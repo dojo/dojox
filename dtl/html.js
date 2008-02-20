@@ -56,22 +56,45 @@ dojo.require("dojox.dtl.Context");
 			}
 
 			var match;
-
+			var pairs = [
+				[true, "select", "option"],
+				[dojo.isSafari, "tr", "th"],
+				[dojo.isSafari, "tr", "td"],
+				[dojo.isSafari, "thead", "tr", "th"],
+				[dojo.isSafari, "tbody", "tr", "td"]
+			];
 			// Some tags can't contain text. So we wrap the text in tags that they can have.
-			if(text.indexOf("<select") != -1 || text.indexOf("<SELECT") != -1){
-				var selectRe = /<select[\s\S]*?>([\s\S]+?)<\/select>/ig;
-				while(match = selectRe.exec(text)){
-					var replace = [];
-					// Do it like this to make sure we don't double-wrap
-					var tokens = dojox.string.tokenize(match[1], /(<option[\s\S]*?>[\s\S]*?<\/option>)/ig, function(option){ return {data: option}; });
-					for(var i = 0; i < tokens.length; i++) {
-						if(dojo.isObject(tokens[i])){
-							replace.push(tokens[i].data);
-						}else{
-							replace.push('<option iscomment="true">' + dojo.trim(tokens[i]) + "</option>");
+			for(var i = 0, pair; pair = pairs[i]; i++){
+				if(!pair[0]){
+					continue;
+				}
+				if(text.indexOf("<" + pair[1]) != -1){
+					var selectRe = new RegExp("<" + pair[1] + "[\\s\\S]*?>([\\s\\S]+?)</" + pair[1] + ">", "ig");
+					while(match = selectRe.exec(text)){
+						// Do it like this to make sure we don't double-wrap
+						var found = false;
+						var tokens = dojox.string.tokenize(match[1], new RegExp("(<" + pair[2] + "[\\s\\S]*?>[\\s\\S]*?</" + pair[2] + ">)", "ig"), function(child){ found = true; return {data: child}; });
+						if(found){
+							var replace = [];
+							for(var j = 0; j < tokens.length; j++) {
+								if(dojo.isObject(tokens[j])){
+									replace.push(tokens[j].data);
+								}else{
+									var close = pair[pair.length - 1];
+									var k, replacement = "";
+									for(k = 2; k < pair.length - 1; k++){
+										replacement += "<" + pair[k] + ">";
+									}
+									replacement += "<" + close + ' iscomment="true">' + dojo.trim(tokens[j]) + "</" + close + ">";
+									for(k = 2; k < pair.length - 1; k++){
+										replacement += "</" + pair[k] + ">";
+									}
+									replace.push(replacement);
+								}
+							}
+							text = text.replace(match[1], replace.join(""));
 						}
 					}
-					text = text.replace(match[1], replace.join(""));
 				}
 			}
 

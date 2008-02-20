@@ -22,11 +22,15 @@
 									return item.innerHTML;
 								});
 							});
+							console.time("render1");
 							this.render();
+							console.timeEnd("render1");
 						},
 						sortColumn: function(e){
 							this.pos = dojo.indexOf(this.ths, e.target.innerHTML);
+							console.time("render2");
 							this.render();
+							console.timeEnd("render2");
 						},
 						templateString: '<table><thead><tr><!--{% for th in ths %}--><th dojoAttachEvent="onclick: sortColumn"><!--{{ th }}--></th><!--{% endfor %}--></tr></thead><tbody><!--{% for tr in trs|dictsort:pos %}--><tr><!--{% for td in tr %}--><td><!--{{ td }}--></td><!--{% endfor %}--></tr><!--{% endfor %}--></tbody></table>'
 					});

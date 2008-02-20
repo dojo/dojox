@@ -19,7 +19,7 @@ dojox.dtl._HtmlTemplated = {
 				ddcd.widgetsInTemplate = old;
 			}
 
-			this.render();
+			this._rendering = setTimeout(dojo.hitch(this, this.render), 10);
 		},
 		setTemplate: function(/*String|dojo._Url*/ template, /*dojox.dtl.Context?*/ context){
 			// summary:
@@ -32,6 +32,10 @@ dojox.dtl._HtmlTemplated = {
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context){
+			if(this._rendering){
+				clearTimeout(this._rendering);
+				delete this._rendering;
+			}
 			this._render.render(this._template, this._getContext(context));
 		},
 		_getContext: function(context){
