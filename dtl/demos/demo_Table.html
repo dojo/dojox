@@ -6,10 +6,26 @@
 	    <script type="text/javascript" src="../../../dijit/dijit.js"></script>
 			<style type="text/css">
 				@import "../../../dijit/themes/tundra/tundra.css";
+
+				table {
+					border-collapse: collapse;
+				}
+				th {
+					background-color: #ccf;
+				}
+				th, td {
+					border: 1px solid #aaa;
+					padding: 2px 15px;
+				}
+				tr.even td {
+					background-color: #ffc;
+				}
 			</style>
 	    <script type="text/javascript">
 					dojo.require("dojox.dtl._HtmlTemplated");
-					dojo.require("dijit.form.Button");
+					dojo.require("dojox.dtl.tag.logic");
+					dojo.require("dojox.dtl.tag.loop");
+					dojo.require("dojox.dtl.filter.lists");
 
 					dojo.declare("demo.Table", [dijit._Widget, dojox.dtl._HtmlTemplated], {
 						pos: 0,
@@ -32,7 +48,7 @@
 							this.render();
 							console.timeEnd("render2");
 						},
-						templateString: '<table><thead><tr><!--{% for th in ths %}--><th dojoAttachEvent="onclick: sortColumn"><!--{{ th }}--></th><!--{% endfor %}--></tr></thead><tbody><!--{% for tr in trs|dictsort:pos %}--><tr><!--{% for td in tr %}--><td><!--{{ td }}--></td><!--{% endfor %}--></tr><!--{% endfor %}--></tbody></table>'
+						templateString: '<table><thead><tr><!--{% for th in ths %}--><th dojoAttachEvent="onclick: sortColumn"><!--{{ th }}--></th><!--{% endfor %}--></tr></thead><tbody><!--{% for tr in trs|dictsort:pos %}--><tr class="{% cycle \'odd\' \'even\' %}"><!--{% for td in tr %}--><td><!--{{ td }}--></td><!--{% endfor %}--></tr><!--{% endfor %}--></tbody></table>'
 					});
 
 	        dojo.require("dojo.parser");

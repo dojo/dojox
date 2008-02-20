@@ -640,17 +640,18 @@ dojo.require("dojox.dtl.Context");
 		}
 	});
 
-	dd.AttributeNode = dojo.extend(function(key, value){
+	dd.AttributeNode = dojo.extend(function(key, value, nodelist){
 		// summary: Works on attributes
-		this._key = key;
-		this._value = value;
-		this._tpl = new dd.Template(value);
+		this.key = key;
+		this.value = value;
+		this.nodelist = nodelist || (new dd.Template(value)).nodelist;
+
 		this.contents = "";
 	},
 	{
 		render: function(context, buffer){
-			var key = this._key;
-			var value = this._tpl.render(context);
+			var key = this.key;
+			var value = this.nodelist.dummyRender(context);
 			if(this._rendered){
 				if(value != this.contents){
 					this.contents = value;
@@ -664,15 +665,10 @@ dojo.require("dojox.dtl.Context");
 			return buffer;
 		},
 		unrender: function(context, buffer){
-			if(this._rendered){
-				this._rendered = false;
-				this.contents = "";
-				return buffer.remove(this.contents);
-			}
-			return buffer;
+			return buffer.remove(this.key);
 		},
-		clone: function(){
-			return new dd.AttributeNode(this._key, this._value);
+		clone: function(buffer){
+			return new this.constructor(this.key, this.value, this.nodelist.clone(buffer));
 		}
 	});
 

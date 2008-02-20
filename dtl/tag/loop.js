@@ -7,39 +7,41 @@ dojo.require("dojox.string.tokenize");
 	var dd = dojox.dtl;
 	var ddtl = dd.tag.loop;
 
-	ddtl.CycleNode = dojo.extend(function(cyclevars, name, VarNode){
-		this._cyclevars = cyclevars;
-		this._counter = -1
-		this._name = name;
-		this._map = {};
-		this._VarNode = VarNode;
+	ddtl.CycleNode = dojo.extend(function(cyclevars, name, TextNode, shared){
+		this.cyclevars = cyclevars;
+		this.name = name;
+		this.TextNode = TextNode;
+		this.shared = shared || {counter: -1, map: {}};
 	},
 	{
 		render: function(context, buffer){
 			if(context.forloop && !context.forloop.counter0){
-				this._counter = -1;
+				this.shared.counter = -1;
 			}
 
-			++this._counter;
-			var value = this._cyclevars[this._counter % this._cyclevars.length];
-			if(this._name){
-				context[this._name] = value;
-			}
-			if(!this._map[value]){
-				this._map[value] = {};
-			}
-			var node = this._map[value][this._counter] = new this._VarNode(value);
+			++this.shared.counter;
+			var value = this.cyclevars[this.shared.counter % this.cyclevars.length];
 
-			return node.render(context, buffer, this);
+			var map = this.shared.map;
+			if(!map[value]){
+				map[value] = new dd._Filter(value);
+			}
+			value = map[value].resolve(context, buffer);
+
+			if(this.name){
+				context[this.name] = value;
+			}
+			if(!this.contents){
+				this.contents = new this.TextNode("");
+			}
+			this.contents.set(value);
+			return this.contents.render(context, buffer);
 		},
 		unrender: function(context, buffer){
-			return buffer;
+			return this.contents.unrender(context, buffer);
 		},
 		clone: function(){
-			return new this.constructor(this._cyclevars, this._name);
-		},
-		_onEnd: function(){
-			this._counter = -1;
+			return new this.constructor(this.cyclevars, this.name, this.TextNode, this.shared);
 		}
 	});
 
@@ -156,14 +158,14 @@ dojo.require("dojox.string.tokenize");
 			if(args.length > 4 && args[args.length - 2] == "as"){
 				var name = args[args.length - 1];
 
-				var node = new ddtl.CycleNode(args.slice(1, args.length - 2), name, parser.getVarNodeConstructor());
+				var node = new ddtl.CycleNode(args.slice(1, args.length - 2), name, parser.getTextNodeConstructor());
 
 				if(!parser._namedCycleNodes){
 					parser._namedCycleNodes = {};
 				}
 				parser._namedCycleNodes[name] = node;
 			}else{
-				node = new ddtl.CycleNode(args.slice(1), null, parser.getVarNodeConstructor());
+				node = new ddtl.CycleNode(args.slice(1), null, parser.getTextNodeConstructor());
 			}
 
 			return node;

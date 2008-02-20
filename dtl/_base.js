@@ -141,7 +141,7 @@ dojo.require("dojox.string.tokenize");
 			return ddt._resolveLazy(arg, sync);
 		},
 		_isTemplate: function(arg){
-			return dojo.isString(arg) && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1);
+			return (typeof arg == "undefined") || (dojo.isString(arg) && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
 		},
 		_resolveContextArg: function(arg, sync){
 			if(arg.constructor == Object){
@@ -177,7 +177,7 @@ dojo.require("dojox.string.tokenize");
 		// template:
 		//		The string or location of the string to
 		//		use as a template
-		var str = ddt._resolveTemplateArg(template, true);
+		var str = ddt._resolveTemplateArg(template, true) || "";
 		var tokens = ddt.tokenize(str);
 		var parser = new dd._Parser(tokens);
 		this.nodelist = parser.parse();
