@@ -157,10 +157,10 @@ dojo.extend(dojox.gfx.Shape, {
 	_setFillObject: function(f, nodeType){
 		var svgns = dojox.gfx.svg.xmlns.svg;
 		this.fillStyle = f;
-		var surface = this._getParentSurface();
-		var defs = surface.defNode;
-		var fill = this.rawNode.getAttribute("fill");
-		var ref  = dojox.gfx.svg.getRef(fill);
+		var surface = this._getParentSurface(),
+			defs = surface.defNode,
+			fill = this.rawNode.getAttribute("fill"),
+			ref  = dojox.gfx.svg.getRef(fill);
 		if(ref){
 			fill = ref;
 			if(fill.tagName.toLowerCase() != nodeType.toLowerCase()){
@@ -332,8 +332,7 @@ dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 			this.shape = dojox.gfx.makeParameters(this.shape, points);
 		}
 		this.box = null;
-		var attr = [];
-		var p = this.shape.points;
+		var attr = [], p = this.shape.points;
 		for(var i = 0; i < p.length; ++i){
 			if(typeof p[i] == "number"){
 				attr.push(p[i].toFixed(8));
@@ -372,8 +371,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		// newShape: Object: a text shape object
 		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
 		this.bbox = null;
-		var r = this.rawNode;
-		var s = this.shape;
+		var r = this.rawNode, s = this.shape;
 		r.setAttribute("x", s.x);
 		r.setAttribute("y", s.y);
 		r.setAttribute("text-anchor", s.align);
@@ -386,14 +384,13 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	},
 	getTextWidth: function(){ 
 		// summary: get the text width in pixels 
-		var rawNode = this.rawNode; 
-		var oldParent = rawNode.parentNode; 
-		var _measurementNode = rawNode.cloneNode(true); 
+		var rawNode = this.rawNode,
+			oldParent = rawNode.parentNode,
+			_measurementNode = rawNode.cloneNode(true); 
 		_measurementNode.style.visibility = "hidden"; 
 
 		// solution to the "orphan issue" in FF 
-		var _width = 0; 
-		var _text = _measurementNode.firstChild.nodeValue; 
+		var _width = 0, _text = _measurementNode.firstChild.nodeValue; 
 		oldParent.appendChild(_measurementNode); 
 
 		// solution to the "orphan issue" in Opera 
@@ -448,13 +445,13 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 		if(typeof this.shape.path != "string"){ return; }
 		var r = this.rawNode;
 		if(!r.firstChild){
-			var tp = document.createElementNS(dojox.gfx.svg.xmlns.svg, "textPath");
-			var tx = document.createTextNode("");
+			var tp = document.createElementNS(dojox.gfx.svg.xmlns.svg, "textPath"),
+				tx = document.createTextNode("");
 			tp.appendChild(tx);
 			r.appendChild(tp);
 		}
-		var ref  = r.firstChild.getAttributeNS(dojox.gfx.svg.xmlns.xlink, "href");
-		var path = ref && dojox.gfx.svg.getRef(ref);
+		var ref  = r.firstChild.getAttributeNS(dojox.gfx.svg.xmlns.xlink, "href"),
+			path = ref && dojox.gfx.svg.getRef(ref);
 		if(!path){
 			var surface = this._getParentSurface();
 			if(surface){
@@ -473,8 +470,8 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 	_setText: function(){
 		var r = this.rawNode;
 		if(!r.firstChild){
-			var tp = document.createElementNS(dojox.gfx.svg.xmlns.svg, "textPath");
-			var tx = document.createTextNode("");
+			var tp = document.createElementNS(dojox.gfx.svg.xmlns.svg, "textPath"),
+				tx = document.createTextNode("");
 			tp.appendChild(tx);
 			r.appendChild(tp);
 		}
@@ -596,6 +593,13 @@ dojox.gfx.svg.Container = {
 		while(r.lastChild){
 			r.removeChild(r.lastChild);
 		}
+		var d = this.defNode;
+		if(d){
+			while(d.lastChild){
+				d.removeChild(d.lastChild);
+			}
+			r.appendChild(d);
+		}
 		//return this.inherited(arguments);	// self
 		return dojox.gfx.shape.Container.clear.apply(this, arguments);
 	},
@@ -610,8 +614,8 @@ dojo.mixin(dojox.gfx.shape.Creator, {
 		// shapeType: Function: a class constructor to create an instance of
 		// rawShape: Object: properties to be passed in to the classes "setShape" method
 		if(!this.rawNode){ return null; }
-		var shape = new shapeType();
-		var node = document.createElementNS(dojox.gfx.svg.xmlns.svg, shapeType.nodeType); 
+		var shape = new shapeType(),
+			node = document.createElementNS(dojox.gfx.svg.xmlns.svg, shapeType.nodeType); 
 		shape.setRawNode(node);
 		this.rawNode.appendChild(node);
 		shape.setShape(rawShape);
