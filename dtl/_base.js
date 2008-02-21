@@ -216,12 +216,19 @@ dojo.require("dojox.string.tokenize");
 		// summary: Uses a string to find (and manipulate) a variable
 		if(!token) throw new Error("Filter must be called with variable name");
 		this.contents = token;
-		this.key = null;
-		this.filters = [];
 
-		dojox.string.tokenize(token, this._re, this._tokenize, this);
+		var cache = this._cache[token];
+		if(cache){
+			this.key = cache[0];
+			this.filters = cache[1];
+		}else{
+			this.filters = [];
+			dojox.string.tokenize(token, this._re, this._tokenize, this);
+			this._cache[token] = [this.key, this.filters];
+		}
 	},
 	{
+		_cache: {},
 		_re: /(?:^_\("([^\\"]*(?:\\.[^\\"])*)"\)|^"([^\\"]*(?:\\.[^\\"]*)*)"|^([a-zA-Z0-9_.]+)|\|(\w+)(?::(?:_\("([^\\"]*(?:\\.[^\\"])*)"\)|"([^\\"]*(?:\\.[^\\"]*)*)"|([a-zA-Z0-9_.]+)|'([^\\']*(?:\\.[^\\']*)*)'))?|^'([^\\']*(?:\\.[^\\']*)*)')/g,
 		_values: {
 			0: '"', // _("text")

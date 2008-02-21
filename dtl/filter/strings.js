@@ -188,7 +188,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		}
 		return value;
 	},
-	_truncate_words: /(&.*?;|<.*?>|(\w[\w-]*))/g,
+	_truncate_words: /(&.*?;|<.*?>|(\w[\w\-]*))/g,
 	_truncate_tag: /<(\/)?([^ ]+?)(?: (\/)| .*?)?>/,
 	_truncate_singlets: { br: true, col: true, link: true, base: true, img: true, param: true, area: true, hr: true, input: true },
 	truncatewords_html: function(value, arg){

@@ -16,6 +16,13 @@ dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ pa
 			tokens.push(content);
 		}
 		if(parseDelim){
+			if(dojo.isOpera){
+				var copy = match.slice(0);
+				while(copy.length < match.length){
+					copy.push(null);
+				}
+				match = copy;
+			}
 			var parsed = parseDelim.apply(instance, match.slice(1).concat(tokens.length));
 			if(typeof parsed != "undefined"){
 				tokens.push(parsed);
