@@ -6,9 +6,9 @@
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../FisheyeList/FisheyeList.css";
 	
-		.fisheyebar {
-			width:550px;
+		.dojoxFisheyeListBar {
 			margin: 0 auto;
 			text-align: center;
 		}
@@ -20,7 +20,6 @@
 			left: 0px;
 			top: 0px;
 			width: 100%;
-			height:85px; 
 			border-bottom:2px solid #333;
 		}
 		
@@ -33,19 +32,14 @@
 		}
 		
 		.page {
-			padding: 85px 20px 20px 20px;
+			padding: 50px 20px 20px 20px;
 		}
-		.outerbar img {
-			top:0;
-			position:relative;
-			vertical-align:super;
-			float:left;
-		}
+		
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.widget.FisheyeLite");
+		dojo.require("dojox.widget.FisheyeList");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 
 		function load_app(id){
@@ -55,46 +49,46 @@
 	</script>
 </head>
 <body class="tundra"><div class="outerbar">
-	<div class="fisheyebar">
-	<img dojoType="dojox.widget.FisheyeLite"
-		style="width:75px; height:75px"
-		properties="{ width:1.65, height:1.65 }"
-		onClick="alert('click on ' + this.label + '(from widget id ' + this.widgetid + ')!');"
-		src="images/icon_browser.png"
-	/>
+	<div dojoType="dojox.widget.FisheyeList"
+		itemWidth="50" itemHeight="50"
+		itemMaxWidth="200" itemMaxHeight="200"
+		orientation="horizontal"
+		effectUnits="2"
+		itemPadding="10"
+		attachEdge="top"
+		labelEdge="bottom"
+		id="fisheye1"
+	>
+	<div dojoType="dojox.widget.FisheyeListItem"
+		id="item1"
+		onclick="alert('click on ' + this.label + '(from widget id ' + this.widgetid + ')!');"
+		label="Item 1"
+		iconSrc="images/icon_browser.png">
+	</div>
 
-	<img dojoType="dojox.widget.FisheyeLite"
+	<div dojoType="dojox.widget.FisheyeListItem"
 		label="Item 2"
-		src="images/icon_calendar.png"
-		style="width:75px; height:75px"
-		properties="{ width:1.65, height:1.65 }"
-	/>
+		iconSrc="images/icon_calendar.png">
+	</div>
 
-	<img dojoType="dojox.widget.FisheyeLite"
+	<div dojoType="dojox.widget.FisheyeListItem"
 		label="Item 3"
-		style="width:75px; height:75px"
-		properties="{ width:1.55, height:1.65 }"
-		onClick="alert('click on ' + this.label + '(from widget id ' + this.widgetid + ')!');"
-		src="images/icon_email.png"
-	/>
+		onclick="alert('click on ' + this.label + '(from widget id ' + this.widgetid + ')!');"
+		iconSrc="images/icon_email.png">
+	</div>
 
-	<img dojoType="dojox.widget.FisheyeLite"
-		src="images/icon_texteditor.png" style="width:75px; height:75px"
-		properties="{ width:1.65, height:1.65 }"
-	/>
+	<div dojoType="dojox.widget.FisheyeListItem"
+		iconSrc="images/icon_texteditor.png">
+	</div>
 
-	<img dojoType="dojox.widget.FisheyeLite"
+	<div dojoType="dojox.widget.FisheyeListItem"
 		label="Really Long Item Label"
-		src="images/icon_update.png"
-		style="width:75px; height:75px"
-		properties="{ width:1.65, height:1.65 }"
-	/>
+		iconSrc="images/icon_update.png">
+	</div>
 
-	<img dojoType="dojox.widget.FisheyeLite"
-		src="images/icon_users.png"
-		style="width:75px; height:75px"
-		properties="{ width:1.75, height:1.75 }"
-	/>
+	<div dojoType="dojox.widget.FisheyeListItem"
+		iconSrc="images/icon_users.png">
+	</div>
 </div></div>
 
 <div class="page">
