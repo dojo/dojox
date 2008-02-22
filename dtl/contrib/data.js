@@ -25,12 +25,12 @@ dojo.require("dojox.dtl._base");
 				return "Store has no identity API";
 			}else{
 				if(store.hasAttribute(item, key)){
-					return store.getValue(item, key);
-				}else{
-					if(key.slice(-1) == "s" && store.hasAttribute(item, key.slice(0, -1))){
-						return store.getValues(item, key.slice(0, -1));
-					}
-					return "Item has no attribute: " + key;
+					var value = store.getValue(item, key);
+					return (dojo.isObject(value)) ? new ddcd._BoundItem(value, store) : value;
+				}else if(key.slice(-1) == "s" && store.hasAttribute(item, key.slice(0, -1))){
+					return dojo.map(store.getValues(item, key.slice(0, -1)), function(value){
+						return (dojo.isObject(value)) ? new ddcd._BoundItem(value, store) : value;
+					});
 				}
 			}
 		}
