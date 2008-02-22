@@ -39,6 +39,9 @@ dojox.dtl._HtmlTemplated = {
 			this._render.render(this._template, this._getContext(context));
 		},
 		_getContext: function(context){
+			if (!(context instanceof dojox.dtl.Context)) {
+				context = false;
+			}
 			context = context || new dojox.dtl.Context(this);
 			context.setThis(this);
 			return context;
