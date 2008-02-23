@@ -1,136 +1,159 @@
 dojo.provide("dojox.jsonPath.query");
 
-dojox.jsonPath._regularExpressions = {
-	"regA": /[\['](\??\(.*?\))[\]']/g,
-	"regB": /'?\.'?|\['?/g,
-	"regC": /;;;|;;/g,
-	"regD": /;$|'?\]|'$/g,
-	"regE": /#([0-9]+)/g,
-	"regF": /^[0-9*]+$/,
-	"regG": /,/,
-	"regH": /'?,'?/,
-	"regI": /^\(.*?\)$/,
-	"regJ": /^\?\(.*?\)$/,
-	"regK": /^\?\((.*?)\)$/,
-	"regL": /^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/,
-	"regM": /^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g,
-	"regN": /@/g,
-	"regO": /\^/g,
-	"regP": /^\$;/
-};
-
-dojox.jsonPath.query = function(/*Object*/obj, /*String*/expr, /*Object*/arg) {
-	// summay
+dojox.jsonPath.query = function(/*Object*/obj, /*String*/expr, /*Object*/arg){
+	// summaRy
 	// 	Perform jsonPath query `expr` on javascript object or json string `obj`
 	//	obj - object || json string to perform query on
 	//	expr - jsonPath expression (string) to be evaluated
 	//	arg - {}special arugments.  
-	//		resultType: "VALUE"||"PATH"} (defaults to value)
+	//		resultType: "VALUE"||"BOTH"||"PATH"} (defaults to value)
+	//		evalType: "RESULT"||"ITEM"} (defaults to ?)
 
 	var re = dojox.jsonPath._regularExpressions;
-	if (!arg){arg={};};
+	if (!arg){arg={};}
 
+	var strs = [];
+	function _str(i){ return strs[i];}
+	var acc;
+	if (arg.resultType == "PATH" && arg.evalType == "RESULT") throw Error("RESULT based evaluation not supported with PATH based results");
 	var P = {
 		resultType: arg.resultType || "VALUE",
-		result: [],
-
-		normalize: function(expr) {
+		normalize: function(expr){
 			var subx = [];
-
-			return expr.replace(re.regA, function($0,$1){return "[#"+(subx.push($1)-1)+"]";})
-				.replace(re.regB, ";")
-				.replace(re.regC, ";..;")
-				.replace(re.regD, "")
-				.replace(re.regE, function($0,$1){return subx[$1];});
-		},
-
-		asPath: function(path) {
-			var x = path.split(";"), p = "$";
-			for (var i=1,n=x.length; i<n; i++){
-				p += re.regF.test(x[i]) ? ("["+x[i]+"]") : ("['"+x[i]+"']");
+			expr = expr.replace(/'([^']|'')*'/g, function(t){return "_str("+(strs.push(eval(t))-1)+")";});
+			var ll = -1;
+			while(ll!=subx.length){
+				ll=subx.length;//TODO: Do expression syntax checking
+				expr = expr.replace(/(\??\([^\(\)]*\))/g, function($0){return "#"+(subx.push($0)-1);});
 			}
-			return p;
-		},
-
-		store: function(p, v) {
-			if (p){
-				switch(P.resultType){
-					case "PATH":
-						P.result.push(P.asPath(p));
-						break;
-					case "BOTH":
-						P.result.push({path: P.asPath(p), value: v});
-						break;
-					case "VALUE":
-					default:
-						P.result.push(v);	
-						break;
-				}
+			expr = expr.replace(/[\['](#[0-9]+)[\]']/g,'[$1]')
+						  .replace(/'?\.'?|\['?/g, ";")
+						  .replace(/;;;|;;/g, ";..;")
+						  .replace(/;$|'?\]|'$/g, "");
+			ll = -1;
+			while(ll!=expr){
+				ll=expr;
+					 expr = expr.replace(/#([0-9]+)/g, function($0,$1){return subx[$1];});
 			}
-			return !!p;
+			return expr.split(";");
 		},
-
-		trace: function(expr, val, path) {
-			if (expr) {
-				var x = expr.split(";"), loc = x.shift();
-				x = x.join(";");
-				if (val && val.hasOwnProperty(loc)){
-					P.trace(x, val[loc], path + ";" + loc);
-				}else if (loc === "*"){
-					P.walk(loc, x, val, path, function(m,l,x,v,p) { P.trace(m+";"+x,v,p); });
-				}else if (loc === ".."){
-					P.trace(x, val, path);
-					P.walk(loc, x, val, path, function(m,l,x,v,p) { typeof v[m] === "object" && P.trace("..;"+x,v[m],p+";"+m); });
-				}else if (re.regG.test(loc)) { // [name1,name2,...]
-					for (var s=loc.split(re.regH),i=0,n=s.length; i<n; i++){
-						P.trace(s[i]+";"+x, val, path);
+		asPaths: function(paths){
+			for (var j=0;j<paths.length;j++){
+			var p = "$";
+			var x= paths[j];
+			for (var i=1,n=x.length; i<n; i++)
+				p += /^[0-9*]+$/.test(x[i]) ? ("["+x[i]+"]") : ("['"+x[i]+"']");
+			paths[j]=p;
+		  }
+			return paths;
+		},
+		exec: function(locs, val, rb){
+			var path = ['$'];
+			var result=rb?val:[val];
+			var paths=[path];
+			function add(v, p,def){
+			  if (v && v.hasOwnProperty(p) && P.resultType != "VALUE") paths.push(path.concat([p]));
+				if (def) 
+				  result = v[p];
+			  else if (v && v.hasOwnProperty(p))  
+					result.push(v[p]);
+			}
+			function desc(v){
+				result.push(v);
+				paths.push(path);
+				P.walk(v,function(i){
+					if (typeof v[i] ==='object')  {
+						var oldPath = path;
+						path = path.concat(i);
+						desc(v[i]);
+						path = oldPath;
 					}
-				}else if (re.regI.test(loc)){ // [(expr)]
-					P.trace(P.eval(loc, val, path.substr(path.lastIndexOf(";")+1))+";"+x, val, path);
-				}else if (re.regJ.test(loc)){ // [?(expr)]
-					P.walk(loc, x, val, path, function(m,l,x,v,p) { if (P.eval(l.replace(re.regK,"$1"),v[m],m)) P.trace(m+";"+x,v,p); });
-				}else if (re.regL.test(loc)){ // [start:end:step]  phyton slice syntax
-					P.slice(loc, x, val, path);
-				}
-			}else{
-       			     	P.store(path, val);
+				});
 			}
-		},
+			function slice(loc, val){
+				if (val instanceof Array){
+					var len=val.length, start=0, end=len, step=1;
+					loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function($0,$1,$2,$3){start=parseInt($1||start);end=parseInt($2||end);step=parseInt($3||step);});
+					start = (start < 0) ? Math.max(0,start+len) : Math.min(len,start);
+					end = (end < 0) ? Math.max(0,end+len) : Math.min(len,end);
+				  	for (var i=start; i<end; i+=step)
+						add(val,i);
+				}
+			}
+			function repStr(str){
+				var i=loc.match(/^_str\(([0-9]+)\)$/);
+				return i?strs[i[1]]:str;
+			}
+			function oper(val){
+				if (/^\(.*?\)$/.test(loc)) // [(expr)]
+					add(val, P.eval(loc, val),rb);
+				else if (loc === "*"){
+					P.walk(val, rb && val instanceof Array ? // if it is result based, there is no point to just return the same array
+					function(i){P.walk(val[i],function(j){ add(val[i],j); })} :
+					function(i){ add(val,i); });
+				}
+				else if (loc === "..") 
+					desc(val);
+				else if (/,/.test(loc)){ // [name1,name2,...]
+					for (var s=loc.split(/'?,'?/),i=0,n=s.length; i<n; i++)
+						add(val,repStr(s[i])); 
+				}
+				else if (/^\?\(.*?\)$/.test(loc)) // [?(expr)]
+					P.walk(val, function(i){ if (P.eval(loc.replace(/^\?\((.*?)\)$/,"$1"),val[i])) add(val,i); });
+				else if (/^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/.test(loc)) // [start:end:step]  python slice syntax
+					slice(loc, val);
+				else {
+					loc=repStr(loc);
+					if (rb && val instanceof Array && !/^[0-9*]+$/.test(loc)) 
+						P.walk(val, function(i){ add(val[i], loc)});
+					else 
+						add(val,loc,rb);		
+				}
 
-		walk: function(loc, expr, val, path, f) {
-			if (val instanceof Array) {
+			}
+			while (locs.length){
+				var loc = locs.shift();
+				if ((val = result) === null || val===undefined) return val;
+				result = [];
+				var valPaths = paths;
+				paths = [];
+				if (rb) 
+					oper(val)
+				else
+					P.walk(val,function(i){path=valPaths[i]||path;oper(val[i])});
+			}
+			if (P.resultType == "BOTH"){
+				paths = P.asPaths(paths);
+				var newResult = [];
+				for (var i =0;i <paths.length;i++)
+					newResult.push({path:paths[i],value:result[i]});
+				return newResult;
+			}
+			return P.resultType == "PATH" ? P.asPaths(paths):result;
+		},
+		walk: function(val, f){
+			if (val instanceof Array){
 				for (var i=0,n=val.length; i<n; i++)
 					if (i in val)
-						f(i,loc,expr,val,path);
-			}else if (typeof val === "object"){
+						f(i);
+			}
+			else if (typeof val === "object"){
 				for (var m in val)
 					if (val.hasOwnProperty(m))
-						f(m,loc,expr,val,path);
+						f(m);
 			}
 		},
-
-		slice: function(loc, expr, val, path) {
-			if (val instanceof Array) {
-				var len=val.length, start=0, end=len, step=1;
-				loc.replace(re.regM, function($0,$1,$2,$3){start=parseInt($1||start);end=parseInt($2||end);step=parseInt($3||step);});
-				start = (start < 0) ? Math.max(0,start+len) : Math.min(len,start);
-				end   = (end < 0)   ? Math.max(0,end+len)   : Math.min(len,end);
-				for (var i=start; i<end; i+=step)
-					P.trace(i+";"+expr, val, path);
-			}
-		},
-
-		eval: function(x, _v, _vname) {
-			try { 
-				return obj && _v && eval(x.replace(re.regN, "_v")); 
-			}catch(e){ 
-				throw new SyntaxError("dojox.jsonPath: " + e.message + ": " + x.replace(re.regN, "_v").replace(re.regO, "_a")); 
-			}
+		eval: function(x, _v){
+			try { return $ && _v && eval(x.replace(/@/g,'_v')); }
+			catch(e){ throw new SyntaxError("jsonPath: " + e.message + ": " + x.replace(/@/g, "_v").replace(/\^/g, "_a")); }
 		}
 	};
 
-	if (expr && obj && (P.resultType == "VALUE" || P.resultType == "PATH" || P.resultType=="BOTH")) {
-		P.trace(P.normalize(expr).replace(re.regP,""), obj, "$");
-		return P.result.length ? P.result : false;
-	}
+	var $ = obj;
+	if (expr && obj){
+		return P.exec(P.normalize(expr).slice(1), obj, arg.evalType == "RESULT");
+	}	
+
+	return false;
+
 }; 
