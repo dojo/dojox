@@ -42,7 +42,9 @@ dojo.extend(dojox.gfx.Shape, {
 			switch(fill.type){
 				case "linear":
 					var matrix = this._getRealMatrix(), m = dojox.gfx.matrix;
-					s = [], a = f.colors, f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					s = [];
+					f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					a = f.colors; 
 					this.fillStyle = f;
 					dojo.forEach(a, function(v, i, a){
 						a[i].color = dojox.gfx.normalizeColor(v.color);
