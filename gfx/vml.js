@@ -76,10 +76,14 @@ dojo.extend(dojox.gfx.Shape, {
 						w = parseFloat(this.rawNode.style.width),
 						h = parseFloat(this.rawNode.style.height),
 						c = isNaN(w) ? 1 : 2 * f.r / w;
-					a = new Array(f.colors.length);
+					a = [];
+					// add a color at the offset 0 (1 in VML coordinates)
+					if(f.colors[0].offset > 0){
+						a.push({offset: 1, color: dojox.gfx.normalizeColor(f.colors[0].color)});
+					}
 					// massage colors
 					dojo.forEach(f.colors, function(v, i){
-						a[i] = {offset: 1 - v.offset * c, color: dojox.gfx.normalizeColor(v.color)};
+						a.push({offset: 1 - v.offset * c, color: dojox.gfx.normalizeColor(v.color)});
 					});
 					i = a.length - 1;
 					while(i >= 0 && a[i].offset < 0){ --i; }
@@ -97,9 +101,6 @@ dojo.extend(dojox.gfx.Shape, {
 					}
 					for(; i >= 0; --i){
 						s.push(a[i].offset.toFixed(8) + " " + a[i].color.toHex());
-					}
-					if(a[0].offset < 1){
-						s.push("1 " + a[0].color.toHex());
 					}
 					fo = this.rawNode.fill;
 					fo.colors.value = s.join(";");
