@@ -1,16 +1,25 @@
 /*=====
 // this file is in place as a quick way to give summaries to all available dojox projects.
 
+dojox = {
+	// summary: A container for any Dojo Toolkit projects that are cutting-edge or experimental in nature.
+	// description: 
+	//	DojoX acts as a container for all sorts of on-the-edge ideas; it is also a breeding 
+	//	ground for objects to be eventually added to either the Dojo project or to Dijit, and 
+	//	finally can act as a place for basic extension utilities that are not commonly used in
+	//	day-to-day web pages but are essential for application development.
+}
+
 dojox.charting = { 
 	// summary: Vector Data Driven graphs and charts 
 };
 
-dojox.collections = { // FIXME:
-
+dojox.collections = { 
+	// summary: A set of lists and hashes for easy use within your applications.
 };
 
 dojox.color = { 
-	// summary: Advanced color methods, including HSV, HSL, CMYK, etc.
+	// summary: Advanced color methods, including HSV, HSL, and CMYK conversion, a color generator and advanced colorspace calculations.
 };
 
 dojox.cometd = { 
@@ -18,7 +27,7 @@ dojox.cometd = {
 };
 
 dojox.crypto = { 
-	// summary: A cryptography project 
+	// summary: Cryptography in JS.  DEPRECATED: use dojox.encoding instead.
 };	
 
 dojox.data = { 
@@ -34,11 +43,11 @@ dojox.dtl = {
 };
 
 dojox.encoding = { 
-	// summary: Experimental encoding project	
+	// summary: Various encoding algorithms, including crypto and digests.
 };
 
-dojox.flash = { // FIXME:
-
+dojox.flash = { 
+	// summary: Objects to support the Flash-based storage provider (dojox.storage).
 };
 
 dojox.fx = {
@@ -107,18 +116,22 @@ dojox.jsonPath = {
 };
 
 dojox.layout = { 
-	// summary: A Collection of layout related Widgets
+	// summary: A collection of layout related Widgets
 };
 
 dojox.lang = { 
 	// summary: Language specific extensions
+	functional: {
+		// summary: Functional language constructs, including currying and lambda.
+	}
 };
 
-dojox.math = { // FIXME:
-
+dojox.math = { 
+	// summary: A collection of various advanced math functions.
 };
 
-dojox.off = { // summary: the Dojo Offline project
+dojox.off = { 
+	// summary: the Dojo Offline project
 };
 
 dojox.presentation = {
@@ -129,24 +142,24 @@ dojox.regexp = {
 	// summary: Additional pre-made regular expressions for use
 };
 
-dojox.sql = { // FIXME:
-
+dojox.sql = { 
+	// summary: objects to support Dojo Offline (dojox.off)
 };
 
-dojox.storage = { // FIXME:
-
+dojox.storage = { 
+	// summary: Objects for mass storage within the browser.  For when cookies just aren't enough.
 };
 
-dojox.string = { // FIXME:
-
+dojox.string = {
+	// summary: A collection of various objects for advanced string manipulation, including a Builder and a tokenizer.
 };
 
-dojox.timing = { // FIXME:
-
+dojox.timing = {
+	// summary: A set of objects to perform advanced time-based tasks, including a basic Timer.
 };
 
-dojox.uuid = { // FIXME:
-
+dojox.uuid = { 
+	// summary: Universally Unique Identifier (UUID) implementations, including an implementation of UUID 2
 };
 
 dojox.validate = { 
@@ -174,7 +187,7 @@ dojox.wire = { // FIXME:
 
 };
 
-dojox.xml = { // FIXME:
-
+dojox.xml = {
+	// summary: XML utilities.  Currently only includes a DomParser, which returns a psuedo-XML document in JSON-like form.
 };
 =====*/
