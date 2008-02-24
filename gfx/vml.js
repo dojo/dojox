@@ -44,7 +44,7 @@ dojo.extend(dojox.gfx.Shape, {
 					var matrix = this._getRealMatrix(), m = dojox.gfx.matrix;
 					s = [];
 					f = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
-					a = f.colors; 
+					a = f.colors;
 					this.fillStyle = f;
 					dojo.forEach(a, function(v, i, a){
 						a[i].color = dojox.gfx.normalizeColor(v.color);
@@ -137,6 +137,8 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		// color object
 		this.fillStyle = dojox.gfx.normalizeColor(fill);
+		this.rawNode.fill.method = "any";
+		this.rawNode.fill.type = "solid";
 		this.rawNode.fillcolor = this.fillStyle.toHex();
 		this.rawNode.fill.opacity = this.fillStyle.a;
 		this.rawNode.filled = true;
