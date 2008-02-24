@@ -1,6 +1,6 @@
 dojo.provide("dojox.crypto.Blowfish");
 dojo.require("dojox.encoding.crypto.Blowfish");
 
-console.warn("dojox.crypto.Blowfish: DojoX Crypto has been merged into DojoX Encoding, please see DojoX Encoding for more information.  Will be removed with the next release.");
+dojo.deprecated("dojox.crypto.Blowfish", "DojoX cryptography has been merged into DojoX Encoding. To use Blowfish, include dojox.encoding.crypto.Blowfish.", "1.2");
 
 dojox.crypto.Blowfish=dojox.encoding.crypto.Blowfish;

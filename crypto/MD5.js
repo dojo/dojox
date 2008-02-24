@@ -1,6 +1,6 @@
 dojo.provide("dojox.crypto.MD5");
 dojo.require("dojox.encoding.digests.MD5");
 
-console.warn("dojox.crypto.MD5: DojoX Crypto has been merged into DojoX Encoding, please see DojoX Encoding for more information.  Will be removed with the next release.");
+dojo.deprecated("dojox.crypto.MD5.compute", "DojoX cryptography has been merged into DojoX Encoding. To use MD5, include dojox.encoding.digests.MD5.", "1.2");
 
 dojox.crypto.MD5.compute=dojox.encoding.digests.MD5;
