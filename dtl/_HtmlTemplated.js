@@ -12,14 +12,15 @@ dojox.dtl._HtmlTemplated = {
 
 			if(!this._render){
 				var ddcd = dojox.dtl.contrib.dijit;
-				ddcd.widgetsInTemplate = this.widgetsInTemplate;
 				var old = ddcd.widgetsInTemplate;
+				ddcd.widgetsInTemplate = this.widgetsInTemplate;
 				this._template = this._getCachedTemplate(this.templatePath, this.templateString);
 				this._render = new dojox.dtl.render.html.Render(this.domNode, this._template);
 				ddcd.widgetsInTemplate = old;
 			}
 
-			this._rendering = setTimeout(dojo.hitch(this, this.render), 10);
+			var self = this;
+			this._rendering = setTimeout(function(){ self.render(); }, 10);
 		},
 		setTemplate: function(/*String|dojo._Url*/ template, /*dojox.dtl.Context?*/ context){
 			// summary:
