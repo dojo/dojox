@@ -14,35 +14,36 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		//		the id of the table or listin that page.  The remote url will be parsed as an html page.
 		//
 		//		The HTML table or list should be of the following form:
-		//		<table id="myTable">
-		//			<thead>
-		//				<tr>
-		//					<th>Attribute1</th>
-		//					<th>Attribute2</th>
-		//				</tr>
-		//			</thead>
-		//			<tbody>
-		//				<tr>
-		//					<td>Value1.1</td>
-		//					<td>Value1.2</td>
-		//				</tr>
-		//				<tr>
-		//					<td>Value2.1</td>
-		//					<td>Value2.2</td>
-		//				</tr>
-		//			</tbody>
-		//		</table>
+		//
+		//		|	<table id="myTable">
+		//		|		<thead>
+		//		|			<tr>
+		//		|				<th>Attribute1</th>
+		//		|				<th>Attribute2</th>
+		//		|			</tr>
+		//		|		</thead>
+		//		|		<tbody>
+		//		|			<tr>
+		//		|				<td>Value1.1</td>
+		//		|				<td>Value1.2</td>
+		//		|			</tr>
+		//		|			<tr>
+		//		|				<td>Value2.1</td>
+		//		|				<td>Value2.2</td>
+		//		|			</tr>
+		//		|		</tbody>
+		//		|	</table>
 		// -or-
-		//		<ul id="myUnorderedList">
-		//			<li>Value.1</li>
-		//			<li>Value.2</li>
-		//		</ul>
+		//		|	<ul id="myUnorderedList">
+		//		|		<li>Value.1</li>
+		//		|		<li>Value.2</li>
+		//		|	</ul>
 		//
 		// -or-
-		//		<ol id="myOrderedList">
-		//			<li>Value.1</li>
-		//			<li>Value.2</li>
-		//		</ol>
+		//		|	<ol id="myOrderedList">
+		//		|		<li>Value.1</li>
+		//		|		<li>Value.2</li>
+		//		|	</ol>
 		//
 		//	args:
 		//		An anonymous object to initialize properties.  It expects the following values:

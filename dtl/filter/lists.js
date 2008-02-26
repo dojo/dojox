@@ -117,17 +117,17 @@ dojo.mixin(dojox.dtl.filter.lists, {
 		//		``['States', [['Kansas', [['Lawrence', []], ['Topeka', []]]], ['Illinois', []]]]``,
 		//		then ``{{ var|unordered_list }}`` would return::
 		//
-		//		<li>States
-		//		<ul>
-		//			<li>Kansas
-		//			<ul>
-		//				<li>Lawrence</li>
-		//				<li>Topeka</li>
-		//			</ul>
-		//			</li>
-		//			<li>Illinois</li>
-		//		</ul>
-		//		</li>
+		//		|	<li>States
+		//		|	<ul>
+		//		|		<li>Kansas
+		//		|		<ul>
+		//		|			<li>Lawrence</li>
+		//		|			<li>Topeka</li>
+		//		|		</ul>
+		//		|		</li>
+		//		|		<li>Illinois</li>
+		//		|	</ul>
+		//		|	</li>
 		return dojox.dtl.filter.lists._unordered_list(value, 1);
 	}
 });

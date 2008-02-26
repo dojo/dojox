@@ -10,7 +10,7 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 //		Formats the date object using the specifications of the POSIX strftime function
 //
 // description:
-//		see <http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html>
+//		see http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
 
 	// zero pad
 	var padChar = null;
