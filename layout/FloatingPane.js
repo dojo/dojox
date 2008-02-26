@@ -73,7 +73,6 @@ dojo.declare("dojox.layout.FloatingPane",
 	_restoreState: {},
 	_allFPs: [],
 	_startZ: 100,
-  _destroyResizeHandle: true,    
 
 	templateString: null,
 	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
@@ -107,14 +106,13 @@ dojo.declare("dojox.layout.FloatingPane",
 		this.inherited(arguments);
 
 		if(this.resizable){
-			this._destroyResizeHandle = false;      
 			if(dojo.isIE){
 					this.canvas.style.overflow = "auto";
 			}else{
 					this.containerNode.style.overflow = "auto";
 			}
 			
-			new dojox.layout.ResizeHandle({ 
+			this._resizeHandle = new dojox.layout.ResizeHandle({ 
 				targetId: this.id, 
 				resizeAxis: this.resizeAxis 
 			},this.resizeHandle);
@@ -292,33 +290,11 @@ dojo.declare("dojox.layout.FloatingPane",
 	destroy: function(){
 		// summary: Destroy this FloatingPane completely
 		this._allFPs.splice(dojo.indexOf(this._allFPs, this), 1);
-		this._destroyResizeHandle = true;
-		this.inherited(arguments);
-	},
-
-	destroyRecursive: function(/*Boolean*/ finalize){
-		// summary: Override of the destroyRecursive to set making sure that
-		// the resize handle gets destroyed by setting this._destroyResizeHandle = true;
-		this._destroyResizeHandle = true;
-		this.destroyDescendants();
-		this.destroy();
-	},
-
-	destroyDescendants: function(){
-		// summary: We overload here the destroyDescendants method from _Widget
-		//    so we do not destroy the ResizeHandle when this._destroyResizeHandle
-		//    is false.
-		if(this._destroyResizeHandle){
-			this.inherited(arguments);
-		}else{
-			dojo.forEach(this.getDescendants(), function(widget){
-				if(widget.declaredClass != "dojox.layout.ResizeHandle"){
-					widget.destroy();
-				}
-			});
+		if(this._resizeHandle){
+			this._resizeHandle.destroy();
 		}
+		this.inherited(arguments);
 	}
-    
 });
 
 
