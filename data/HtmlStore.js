@@ -33,13 +33,16 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		//		|			</tr>
 		//		|		</tbody>
 		//		|	</table>
+		//
 		// -or-
+		//
 		//		|	<ul id="myUnorderedList">
 		//		|		<li>Value.1</li>
 		//		|		<li>Value.2</li>
 		//		|	</ul>
 		//
 		// -or-
+		//
 		//		|	<ol id="myOrderedList">
 		//		|		<li>Value.1</li>
 		//		|		<li>Value.2</li>
