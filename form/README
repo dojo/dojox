@@ -1,0 +1,33 @@
+-------------------------------------------------------------------------------
+dojox.form Collection
+-------------------------------------------------------------------------------
+Version 1.0
+Release date: 02/26/2008
+-------------------------------------------------------------------------------
+Project state:
+experimental
+-------------------------------------------------------------------------------
+Credits
+	Nathan Toone (nathan)
+
+-------------------------------------------------------------------------------
+Project description
+
+	This is a collection of additional widgets that can be used in forms.
+-------------------------------------------------------------------------------
+Dependencies:
+
+	Depends on dojo core and dijit
+-------------------------------------------------------------------------------
+Documentation
+
+-------------------------------------------------------------------------------
+Installation instructions
+
+	Install into /dojox/form
+-------------------------------------------------------------------------------
+Additional Notes (Brief widget list):
+
+	* CheckedMultiSelect - an extension to dijit.form.MultiSelect which
+						uses check boxes instead of ctrl-click
+

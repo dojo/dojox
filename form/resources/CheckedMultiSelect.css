@@ -1,0 +1,5 @@
+/* Make backgrounds white like a "real" select element */
+.dojoxMultiSelect .dijitMenuItem { 
+	background-color: #FFF; 
+	cursor: default;
+}

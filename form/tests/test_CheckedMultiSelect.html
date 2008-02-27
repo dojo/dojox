@@ -1,0 +1,64 @@
+<html>
+	<head>
+	    <script type="text/javascript" 
+	        src="../../../dojo/dojo.js"
+	        djConfig="isDebug: true, parseOnLoad: true">
+	    </script>
+	    <script type="text/javascript">
+			dojo.require("doh.runner");
+	        dojo.require("dojo.parser");
+			dojo.require("dojox.form.CheckedMultiSelect");
+			dojo.require("dijit.form.Form");
+			
+			dojo.addOnLoad(function(){
+				doh.register("tests",
+					[
+						function test_setValue(t){
+							t.is(["VA","WA"], form.getValues().ms1);
+							form.setValues({ms1: ["TN","CA"]});
+							t.is(["TN","CA"], form.getValues().ms1);
+							ms1.invertSelection();
+							t.is(["VA","WA","FL"], form.getValues().ms1);							
+						},
+						function test_addSelected(t){
+							ms1.addSelected(ms2);
+							t.is([], form.getValues().ms2);
+							ms1.invertSelection();
+							t.is(["TN","CA"], form.getValues().ms1);
+						},
+					]
+				);
+				doh.run();
+			});
+		</script>
+		<link rel="stylesheet" type="text/css" href="../../../dijit/themes/tundra/tundra.css">
+		<link rel="stylesheet" type="text/css" href="../resources/CheckedMultiSelect.css">
+		<link rel="stylesheet" type="text/css" href="../../../dijit/tests/css/dijitTests.css">
+	</head>	
+	<body class="tundra">
+		<h1 class="testTitle">Test: dojox.form.CheckedMultiSelect</h1>
+		<h2>Automated test</h2>
+		<form dojoType="dijit.form.Form" jsId="form">
+			<select jsId="ms1" multiple="true" size="5" name="ms1" dojoType="dojox.form.CheckedMultiSelect">
+				<option value="TN">Tennessee</option>
+				<option value="VA" selected="selected">Virginia</option>
+				<option value="WA" selected="selected">Washington</option>
+				<option value="FL">Florida</option>
+				<option value="CA">California</option>
+			</select>
+		<hr>
+			<select jsId="ms2" multiple="true" size="5" name="ms2" dojoType="dojox.form.CheckedMultiSelect">
+				<option value="UT">Utah</option>
+				<option value="TX" selected="selected">Texas</option>
+				<option value="GA" selected="selected">Georgia</option>
+				<option value="ID">Idaho</option>
+				<option value="WY">Wyoming</option>
+				<option value="OR">Oregon</option>
+				<option value="PA">Pennsylvania</option>
+			</select>
+		<hr>
+			<select jsId="ms3" multiple="true" size="5" name="ms3" dojoType="dojox.form.CheckedMultiSelect">
+			</select>
+		</form>
+	</body>
+</html>
