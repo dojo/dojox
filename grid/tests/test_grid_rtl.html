@@ -5,9 +5,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../_grid/Grid.css";
+		@import "../_grid/Grid_rtl.css";
 		@import "../_grid/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/themes/tundra/tundra_rtl.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -23,7 +25,7 @@
 			height: 30em;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<!--<script type="text/javascript">
 		dojo.require("dojox.grid.Grid");
 		dojo.require("dojox.grid._data.model");
@@ -63,7 +65,7 @@
 		var layout = [ view1 ];
 </script>
 </head>
-<body>
+<body dir="rtl">
 <div class="heading">dojox.Grid Basic Test</div>
 <div id="grid" dojoType="dojox.Grid" model="model" structure="layout"></div>
 </body>
