@@ -174,6 +174,8 @@ dojox.grid.publicEvents = {
 		//		Event fired when a cell is clicked.
 		// e: Event
 		//		Decorated event object which contains reference to grid, cell, and rowIndex
+		this._click[0] = this._click[1];
+		this._click[1] = e;
 		if(!this.edit.isEditCell(e.rowIndex, e.cellIndex)){
 			this.focus.setFocusCell(e.cell, e.rowIndex);
 		}
@@ -185,7 +187,13 @@ dojox.grid.publicEvents = {
 		//		Event fired when a cell is double-clicked.
 		// e: Event
 		//		Decorated event object contains reference to grid, cell, and rowIndex
-		this.edit.setEditCell(e.cell, e.rowIndex); 
+		if(dojo.isIE){
+			this.edit.setEditCell(this._click[1].cell, this._click[1].rowIndex);
+		}else if(this._click[0].rowIndex != this._click[1].rowIndex){
+			this.edit.setEditCell(this._click[0].cell, this._click[0].rowIndex);
+		}else{
+			this.edit.setEditCell(e.cell, e.rowIndex);
+		}
 		this.onRowDblClick(e);
 	},
 

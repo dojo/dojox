@@ -109,6 +109,9 @@ dojo.declare('dojox.VirtualGrid',
 	// singleClickEdit: boolean
 	//		Single-click starts editing. Default is double-click
 	singleClickEdit: false,
+
+	// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
+	_click: null,
 	
 	// private
 	sortInfo: 0,
@@ -137,6 +140,7 @@ dojo.declare('dojox.VirtualGrid',
 		// replace stock styleChanged with one that triggers an update
 		this.styleChanged = this._styleChanged;
 		this.setStructure(this.structure);
+		this._click = [];
 	},
 	
 	destroy: function(){
