@@ -680,7 +680,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			this.store.deleteItem(item);
 		}
 		/* Remove from internal data structure and the view */
-		this._removeItems(arguments);
+		this._removeItems(inRowIndexes);
 		this._currentlyProcessing = [];
 	},
 	_removeItems: function(inRowIndexes /*array*/){
