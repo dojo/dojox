@@ -42,7 +42,6 @@ dojox.rpc.envelopeRegistry.register(
 		},
 	
 		deserialize: function(results){
-			console.log("results: ", results);
 			var obj = dojox.rpc.resolveJson(results);
 			if (obj.error) {
 				var e = new Error(obj.error.message);

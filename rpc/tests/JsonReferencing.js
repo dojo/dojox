@@ -2,8 +2,8 @@ dojo.provide("dojox.rpc.tests.JsonReferencing");
 dojo.require("dojox.rpc.JsonReferencing");
 
 
-doh.register("dojox.rpc.tests.JsonReferencing", 
-	[function fromRefJson(t) {
+doh.register("dojox.rpc.tests.JsonReferencing", [
+	function fromRefJson(t) {
 			var testStr = '{a:{$ref:"$"},id:"root",c:{d:"e",f:{$ref:"root.c"}},b:{$ref:"$.c"}}';
 
 			var mirrorObj = dojox.rpc.fromJson(testStr);
@@ -23,5 +23,4 @@ doh.register("dojox.rpc.tests.JsonReferencing",
 			t.assertEqual(mirrorObj.b.c.f, mirrorObj.b);
 			t.assertEqual(mirrorObj.b.h, mirrorObj.a);
 	}
-	
 ]);

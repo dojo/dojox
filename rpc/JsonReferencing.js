@@ -1,37 +1,37 @@
 dojo.provide("dojox.rpc.JsonReferencing");
 dojo.require("dojo.date.stamp");
+dojo.require("dojo._base.Deferred");
 
 // summary:
 // Adds advanced JSON {de}serialization capabilities to the base json library.
 // This enhances the capabilities of dojo.toJson and dojo.fromJson,
 // adding referencing support, date handling, and other extra format handling.
 // On parsing, references are resolved. When references are made to 
-// ids/objects that have been loaded yet, the $ref property will remain
+// ids/objects that have been loaded yet, a Deferred object will be used as the
+// value and as soon as a callback is added to the Deferred object, the target
+// object will be loaded.
  
 
 
 dojox.rpc._index={}; // the global map of id->object
-dojox.rpc.onUpdate = function(/*Object*/ object, 
-					/* attribute-name-string */ attribute, 
-					/* any */ oldValue,
-					/* any */ newValue){
+dojox.rpc.onUpdate = function(/*Object*/ object,  /* attribute-name-string */ attribute,  /* any */ oldValue,  /* any */ newValue){
 		//	summary:
 		//		This function is called when an existing object in the system is updated. Existing objects are found by id. 
-					};
+};
 
 dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
-// summary:
-// 		Indexes and resolves references in the JSON object. 
-// A JSON Schema object that can be used to advise the handling of the JSON (defining ids, date properties, urls, etc)
-//  
-// root: 
-//		The root object of the object graph to be processed
-//
-// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
-// 		Currently this provides a means for context based id handling
-//
-// return:
-//		An object, the result of the processing
+	// summary:
+	// 		Indexes and resolves references in the JSON object. 
+	// A JSON Schema object that can be used to advise the handling of the JSON (defining ids, date properties, urls, etc)
+	//  
+	// root: 
+	//		The root object of the object graph to be processed
+	//
+	// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
+	// 		Currently this provides a means for context based id handling
+	//
+	// return:
+	//		An object, the result of the processing
 	var ref,reWalk=[];
 	function makeIdInfo(schema){ // find out what attribute and what id prefix to use
 		if (schema){
@@ -71,7 +71,8 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 		}		
 		for (i in it){
 			if (it.hasOwnProperty(i) && (typeof (val=it[i]) =='object') && val){
-				if (ref==val.$ref){ // a reference was found
+				ref=val.$ref;
+				if (ref){ // a reference was found
 					var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
 					if(/[\w\[\]\.\$ \/\r\n\t]/.test(stripped) && !/=|((^|\W)new\W)/.test(stripped)){ // make sure it is a safe reference
 						var path = ref.match(/(^\.*[^\.\[]+)([\.\[].*)?/); // divide along the path
@@ -89,7 +90,17 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 								var rewalking = true; // we only want to add it once
 							}
 							else {
-								val._id = idInfo.prefix + val.$ref; 
+								ref = val.$ref;
+								val = new dojo.Deferred();
+								val._id = idInfo.prefix + ref;
+								(function(val,ref){
+									var connectId = dojo.connect(val,"addCallbacks",function(){
+										dojo.disconnect(connectId);
+										dojox.rpc.services[idInfo.prefix.substring(0,idInfo.prefix.length-1)](ref) // otherwise call by looking up the service 
+											.addCallback(dojo.hitch(val,val.callback));
+										
+									});
+								})(val,ref);
 							}
 						}
 					}
@@ -106,7 +117,7 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 					}
 				}
 			}
-			if (typeof val == "string" && schema && schema.properties && schema.properties[i] && schema.properties[i].format=='date-time'){// parse the date string
+			if (dojo.isString(val) && schema && schema.properties && schema.properties[i] && schema.properties[i].format=='date-time'){// parse the date string
 				val = dojo.date.stamp.fromISOString(val); // create a date object
 			}
 			it[i] = val;
@@ -133,24 +144,24 @@ dojox.rpc.resolveJson = function(/*Object*/ root,/*Object?*/ schema){
 	}
 	var idInfo = makeIdInfo(schema)||{attr:'id',prefix:''};
 	if (!root){ return root; } 
-	root = walk(root,false,schema,idInfo,dojox._newId && new dojo._Url(idInfo.prefix,dojox._newId)); // do the main walk through
+	root = walk(root,false,schema,idInfo,dojox._newId && (new dojo._Url(idInfo.prefix,dojox._newId) +'')); // do the main walk through
 	walk(reWalk,false,schema,idInfo); // re walk any parts that were not able to resolve references on the first round
 	return root;
 };
 dojox.rpc.fromJson = function(/*String*/ str,/*Object?*/ schema){
-// summary:
-// 		evaluates the passed string-form of a JSON object. 
-// A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)
-// which may defined by setting dojox.currentSchema to the current schema you want to use for this evaluation
-//  
-// json: 
-//		a string literal of a JSON item, for instance:
-//			'{ "foo": [ "bar", 1, { "baz": "thud" } ] }'
-// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
-// 		Currently this provides a means for context based id handling
-//
-// return:
-//		An object, the result of the evaluation
+	// summary:
+	// 		evaluates the passed string-form of a JSON object. 
+	// A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)
+	// which may defined by setting dojox.currentSchema to the current schema you want to use for this evaluation
+	//  
+	// json: 
+	//		a string literal of a JSON item, for instance:
+	//			'{ "foo": [ "bar", 1, { "baz": "thud" } ] }'
+	// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
+	// 		Currently this provides a means for context based id handling
+	//
+	// return:
+	//		An object, the result of the evaluation
 	root = eval('(' + str + ')'); // do the eval
 	if (root){
 		return this.resolveJson(root,schema);
@@ -181,7 +192,7 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 	var idPrefix = (schema&& schema._idPrefix) || ''; // the id prefix for this context 
 	var paths={};
 	function serialize(it,path,_indentStr){ 
-		if (typeof it == 'object' && it){
+		if (it && dojo.isObject(it)){
 			var value;
 			if (it instanceof Date){ // properly serialize dates
 				return '"' + dojo.date.stamp.toISOString(it,{zulu:true}) + '"';
@@ -191,9 +202,9 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 				
 				if (path != '$'){
 					return serialize({$ref:id.charAt(0)=='$' ? id : // a pure path based reference, leave it alone
-				 									id.substring(0,idPrefix.length)==idPrefix ?  // see if the reference is in the current context
-				 										id.substring(idPrefix.length): // a reference with a prefix matching the current context, the prefix should be removed
-				 										'../' + id});// a reference to a different context, assume relative url based referencing
+ 									id.substring(0,idPrefix.length)==idPrefix ?  // see if the reference is in the current context
+ 										id.substring(idPrefix.length): // a reference with a prefix matching the current context, the prefix should be removed
+	 										'../' + id});// a reference to a different context, assume relative url based referencing
 				}
 				path = id;
 			}
@@ -209,7 +220,7 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 			if (it instanceof Array){
 				var res = dojo.map(it, function(obj,i){
 					var val = serialize(obj, path + '[' + i + ']', nextIndent);
-					if(typeof val != "string"){
+					if(!dojo.isString(val)){
 						val = "undefined";
 					}
 					return newLine + nextIndent + val;
@@ -222,7 +233,7 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 				var keyStr;
 				if(typeof i == "number"){
 					keyStr = '"' + i + '"';
-				}else if(typeof i == "string" && i != '_id'){
+				}else if(dojo.isString(i) && i != '_id'){
 					keyStr = dojo._escapeString(i);
 				}else{
 					// skip non-string or number keys
@@ -231,7 +242,7 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 				var val = serialize(it[i],path+(i.match(/^[a-zA-Z]\w*$/) ? // can we use simple .property syntax? 
 													('.' + i) : // yes, otherwise we have to escape it
 													('[' + dojo._escapeString(i) + ']')),nextIndent);
-				if(typeof val != "string"){
+				if(!dojo.isString(val)){
 					// skip non-serializable values
 					continue;
 				}

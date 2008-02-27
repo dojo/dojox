@@ -32,28 +32,28 @@
                 getEchoJson: {
 			transport: "GET",
                         target: "echoJson.php",
-						contentType:"application/json",
+			contentType:"application/json",
                         parameters: [
                                 {name: "message", type: "string", optional: true}
                         ]
                 },
                 getPathEcho: {
-					transport: "GET",
-					envelope: "PATH",
-                    target: "echo.php?message=",
+			transport: "GET",
+			envelope: "PATH",
+			target: "echo.php?message=",
 
-                    parameters: [
+			parameters: [
                                 {name: "message", type: "string", optional: true}
                         ]
                 },
-            restStore: {
-				transport: "REST",
-                        target: "fakestore.php", 
+		restStore: {
+			transport: "REST",
+			target: "fakestore.php", 
                         parameters: [
                                 {name: "location", type: "string", optional: true}
                         ]
                 },
-            jsonRestStore: {
+		jsonRestStore: {
 				transport: "REST",
                         target: "fakestore.php",
 						contentType:"application/json",

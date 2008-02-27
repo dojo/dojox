@@ -46,7 +46,7 @@ dojo.declare("dojox.rpc.Service", null, {
 				});
 				
 				def.addCallback(processSmd);
-				def.addErrback(function() {
+				def.addErrback(function(){
 					throw new Error("Unable to load SMD from " + smd);
 				});
 			}else{
@@ -54,7 +54,7 @@ dojo.declare("dojox.rpc.Service", null, {
 			}
 		}
 
-		if (options) {this._options = options}
+		if (options){this._options = options}
 		this._requestId=0;
 	},
 
@@ -79,15 +79,24 @@ dojo.declare("dojox.rpc.Service", null, {
 
 	_executeMethod: function(method){
 		var args = [];
-		for (var i=1; i< arguments.length; i++){
+		var i;
+		for (i=1; i< arguments.length; i++){
 			args.push(arguments[i]);
 		}
 		
-		if (method.parameters && method.parameters[0] && method.parameters[0].name && (args.length==1) && dojo.isObject(args[0])){
-			// if it is the parameters are not named in the definition, than we should use ordered params, otherwise try to determine by parameters 
-			args = args[0];
-		}
 		var smd = this._smd;
+		if (method.parameters && method.parameters[0] && method.parameters[0].name && (args.length==1) && dojo.isObject(args[0])){
+			// if it is the parameters are not named in the definition, then we should use ordered params, otherwise try to determine by parameters 
+			args = args[0];
+			// inherit root-level parameters
+			if (smd.parameters && smd.parameters[0]){
+				for (i=0; i< smd.parameters.length; i++){
+					if (smd.parameters[i]["name"] && smd.parameters[i]["default"]){
+						args[smd.parameters[i]["name"]] = smd.parameters[i]["default"];
+					}
+				}
+			}
+		}
 		var envelope = method.envelope || smd.envelope || "NONE";
 		var envDef = dojox.rpc.envelopeRegistry.match(envelope);
 		var schema = method._schema || method.returns; // serialize with the right schema for the context;
@@ -107,13 +116,12 @@ dojo.declare("dojox.rpc.Service", null, {
 				preventCache: method.preventCache || smd.preventCache});
 		 
 		var deferred = (method.restMethod || dojox.rpc.transportRegistry.match(request.transport).fire).call(this,request);
-		var _this = this; 
-		deferred.addBoth(function(results) {
+		deferred.addBoth(dojo.hitch(this,function(results){
 			// if it is an application/json content type, than it should be handled as json
 			// we have to do conversion here instead of in XHR so that we can set the currentSchema before running it
-			results = envDef.deserialize.call(_this,isJson ? dojox.rpc.resolveJson(results,schema) : results); 
+			results = envDef.deserialize.call(this,isJson ? dojox.rpc.resolveJson(results,schema) : results); 
 			return results;									
-		});
+		}));
 		return deferred;
 	}
 });
@@ -133,7 +141,7 @@ dojox.rpc.getTarget = function(smd, method){
 dojox.rpc.toNamed=function(method, args, strictParams){
 	var i;
 	if (!dojo.isArray(args)){
-		if (strictParams) {
+		if (strictParams){
 			//verify that all required parameters were supplied
 			for (i=0; i<method.parameters.length;i++){
 				if ((!method.parameters[i].optional) && (!args[method.parameters[i].name])){
@@ -210,7 +218,7 @@ dojox.rpc.envelopeRegistry.register(
 		serialize:function(smd, method, data, options){
 			var i;
 			var target = dojox.rpc.getTarget(smd, method);
-			if (dojo.isArray(data)) {
+			if (dojo.isArray(data)){
 				for (i = 0; i < data.length;i++)
 					target += '/' + data[i];
 			}
@@ -266,14 +274,14 @@ dojox.rpc.transportRegistry.register(
 );
 dojox.rpc.services={};
 // The RPC service can have it's own serializer. It needs to define this if they are not defined by JsonReferencing
-if (!dojox.rpc.toJson) {
-	dojox.rpc.toJson = function() {
+if (!dojox.rpc.toJson){
+	dojox.rpc.toJson = function(){
 		return dojo.toJson.apply(dojo,arguments);
 	}
-	dojox.rpc.fromJson = function() {
+	dojox.rpc.fromJson = function(){
 		return dojo.fromJson.apply(dojo,arguments);
 	}
-	dojox.rpc.resolveJson = function(it) {
+	dojox.rpc.resolveJson = function(it){
 		return it;
 	}
 }
