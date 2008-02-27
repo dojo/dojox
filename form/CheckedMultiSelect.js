@@ -33,12 +33,16 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	// option: Element
 	//		The option that is associated with this item
 	option: null,
+	parent: null,
 
 	_changeBox: function(){
 		// summary:
 		//		Called to force the select to match the state of the check box
 		//		(only on click of the checkbox)
 		this.option.selected = this.checkBox.getValue() && true;
+
+		// fire the parent's change
+		this.parent._onChange();
 	},
 
 	_labelClick: function(){
@@ -78,7 +82,7 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 	_addChild: function(/*Element*/ option){
 		// summary:
 		//		Adds and returns a child for the given option.
-		var item = new dojox.form._CheckedMultiSelectItem({option: option});
+		var item = new dojox.form._CheckedMultiSelectItem({option: option, parent: this});
 		this.selectBody.appendChild(item.domNode);
 		return item;
 	},
@@ -111,6 +115,12 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 		this._updateChildren();
 	},
 
+	addOption: function(/*Element*/ option){
+		// summary: Adds the given option to the select
+		this.containerNode.appendChild(option);
+		this._loadChildren();
+	},
+	
 	addSelected: function(select){
 		this.inherited(arguments);
 		

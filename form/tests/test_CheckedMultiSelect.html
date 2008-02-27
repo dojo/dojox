@@ -8,6 +8,7 @@
 			dojo.require("doh.runner");
 	        dojo.require("dojo.parser");
 			dojo.require("dojox.form.CheckedMultiSelect");
+			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.Form");
 			
 			dojo.addOnLoad(function(){
@@ -29,6 +30,9 @@
 					]
 				);
 				doh.run();
+				dojo.connect(ms1, "onChange", function(val){
+					console.log("First Select Changed to " + val);
+				});
 			});
 		</script>
 		<link rel="stylesheet" type="text/css" href="../../../dijit/themes/tundra/tundra.css">
@@ -59,6 +63,21 @@
 		<hr>
 			<select jsId="ms3" multiple="true" size="5" name="ms3" dojoType="dojox.form.CheckedMultiSelect">
 			</select>
+		<hr>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					console.dir(form.getValues());
+				</script>
+				Get Values
+			</button>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					var idx = dojo.query("option", ms3.domNode).length;
+					var o = new Option("Option " + (idx + 1), idx);
+					ms3.addOption(o);
+				</script>
+				Add Option
+			</button>
 		</form>
 	</body>
 </html>
