@@ -145,6 +145,12 @@ dojo.declare("dojox.grid.Builder",
 				this.grid.onMouseOutRow(e);
 			}
 		}
+	},
+	
+	domousedown: function(e){
+		if (e.cellNode)
+			this.grid.onMouseDown(e);
+		this.grid.onMouseDownRow(e)
 	}
 
 });
@@ -340,6 +346,9 @@ dojo.declare("dojox.grid.headerBuilder",
 		if(!dojox.grid.drag.dragging){
 			if((this.overRightResizeArea(e) || this.overLeftResizeArea(e)) && this.canResize(e)){
 				this.beginColumnResize(e);
+			}else{
+				this.grid.onMouseDown(e);
+				this.grid.onMouseOverRow(e);
 			}
 			//else{
 			//	this.beginMoveColumn(e);

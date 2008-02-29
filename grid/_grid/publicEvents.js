@@ -129,6 +129,15 @@ dojox.grid.publicEvents = {
 		//		Decorated event object that contains reference to grid, cell, and rowIndex
 		e.rowIndex == -1 ? this.onHeaderCellMouseOut(e) : this.onCellMouseOut(e);
 	},
+	
+	onMouseDown: function(e){
+		// summary:
+		//		Event fired when mouse is down inside grid.
+		// e: Event
+		//		Decorated event object that contains reference to grid, cell, and rowIndex
+		e.rowIndex == -1 ? this.onHeaderCellMouseDown(e) : this.onCellMouseDown(e);
+	},
+	
 	onMouseOverRow: function(e){
 		// summary:
 		//		Event fired when mouse is over any row (data or header).
@@ -151,6 +160,15 @@ dojox.grid.publicEvents = {
 			this.onRowMouseOut(e);
 		}
 	},
+	
+	onMouseDownRow: function(e){
+		// summary:
+		//		Event fired when mouse is down inside grid row
+		// e: Event
+		//		Decorated event object that contains reference to grid, cell, and rowIndex
+		if(e.rowIndex != -1)
+			this.onRowMouseDown(e);
+	},
 
 	// cell events
 	onCellMouseOver: function(e){
@@ -167,6 +185,13 @@ dojox.grid.publicEvents = {
 		// e: Event
 		//		Decorated event object which contains reference to grid, cell, and rowIndex
 		dojo.removeClass(e.cellNode, this.cellOverClass);
+	},
+	
+	onCellMouseDown: function(e){
+		// summary:
+		//		Event fired when mouse is down in a header cell.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 	},
 
 	onCellClick: function(e){
@@ -245,6 +270,13 @@ dojox.grid.publicEvents = {
 		// e: Event
 		// 		Decorated event object contains reference to grid, cell, and rowIndex
 	},
+	
+	onRowMouseDown: function(e){
+		// summary:
+		//		Event fired when mouse is down in a row.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
+	},
 
 	onRowContextMenu: function(e){
 		// summary:
@@ -283,6 +315,13 @@ dojox.grid.publicEvents = {
 		// e: Event
 		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 		dojo.removeClass(e.cellNode, this.cellOverClass);
+	},
+	
+	onHeaderCellMouseDown: function(e) {
+		// summary:
+		//		Event fired when mouse is down in a header cell.
+		// e: Event
+		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 	},
 
 	onHeaderClick: function(e){
