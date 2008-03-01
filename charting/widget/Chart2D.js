@@ -65,7 +65,7 @@ dojo.require("dojox.lang.functional");
 							"query": "", 
 							"queryOptions": null, 
 							"start": 0, 
-							"count": 1, 
+							"count": 1 //, 
 							// "sort": []
 						}, 
 						true
