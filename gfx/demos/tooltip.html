@@ -23,41 +23,57 @@
 		dojo.require("dijit._Widget"); dojo.require("dijit._Templated");
 		
 		dojo.declare("demo.Tooltip",[dijit._Widget,dijit._Templated],{
+			
 			// attachId: String|DomNode?
 			// 		the Id or domNode to attach this tooltip to
 			attachId:"",
+
 			// attachHover: Boolean
 			// 		disable hover behavior for the target
 			attachHover:true,
+
 			// attachParent: Boolean
 			//		automatically attach to our parentnode rather than byId or query
 			attachParent:false,
+
 			// attachQuery: String?
 			//		an optional selector query to attach this tooltip to
 			attachQuery:"",
+
 			// attachScope: String|DomNode?
 			//		and optional scope to run the query against, passed as the
 			//		second arg to dojo.query()
 			queryScope:"",
+
 			// hideDelay: Int
 			// 		time in my to delay automatically closing the node
 			hideDelay: 123, // ms
+
 			// persists: Boolean
 			//		if true, the node will stay visible until explicitly closed
 			//		via _hide() or click on closeIcon
 			persists:false,
 			
-			templateString:'<div class="foo"><div style="position:relative;"><div dojoAttachPoint="surfaceNode"></div><div class="tooltipBody" dojoAttachPoint="containerNode"></div></div></div>',
+			templateString:
+				'<div class="foo">'
+					+'<div style="position:relative;">'
+						+'<div dojoAttachPoint="surfaceNode"></div>'
+						+'<div class="tooltipBody" dojoAttachPoint="containerNode"></div>'
+					+'</div>'
+				+'</div>',
 			
 			postCreate:function(){
-				
+				// call _Widget postCreate first
 				this.inherited(arguments);
+				// gfx version of "_Templated" idea:
 				this._initSurface();
 				
 				if(this.attachParent){
+					// over-ride and reuse attachId as domNode from now on
 					this.attachId = this.domNode.parentNode;
 				}
 				if(this.attachId){
+					// domNode again. setup connections
 					this.attachId = dojo.byId(this.attachId);
 					if(this.attachHover){
 						this.connect(this.attachId,"onmouseenter","_show");
@@ -66,6 +82,7 @@
 						this.connect(this.attachId,"onmouseleave","_initHide");
 					}
 				}else if(this.attachQuery){
+					// setup connections via dojo.query for multi-tooltips
 					var nl = dojo.query(this.attachQuery,this.queryScope);
 					if(this.attachHover){ nl.connect("onmouseenter",this,"_show") }
 					if(!this.persists){ nl.connect("onmouseleave",this,"_initHide") }
@@ -90,16 +107,19 @@
 				if(!this.persists){
 					this.connect(this.domNode,"onmouseleave","_initHide");
 				}
+				// hide quickly
 				this._postHide();
 			},
 			
 			_initHide: function(e){
+				// summary: start the timer for the hideDelay
 				if(!this.persists && this.hideDelay){
 					this._delay = setTimeout(dojo.hitch(this,"_hide",e||null),this.hideDelay);
 				}
 			},
 			
 			_clearDelay: function(){
+				// summary: clear our hide delay timeout
 				if(this._delay){ clearTimeout(this._delay); }
 			},
 			
@@ -107,6 +127,7 @@
 				// summary: show the widget
 				this._clearDelay();
 				var pos = dojo.coords(e.target || this.attachId,true)
+				// we need to more accurately position the domNode:
 				dojo.style(this.domNode,{
 					top: pos.y - (pos.h / 2) - 50,
 					left: pos.x + pos.w - 25,
@@ -132,30 +153,27 @@
 				this.tooltip.createPath("M213,101.072c0,6.675-5.411,12.086-12.086,12.086H13.586 c-6.675,0-12.086-5.411-12.086-12.086V21.004c0-6.675,5.411-12.086,12.086-12.086h187.328c6.675,0,12.086,5.411,12.086,12.086 V101.072z")
 					.setFill("rgba(0,0,0,0.25)");
 				
-				var _t = this;
-				var p = this.tooltip.createPath("M211.5,97.418c0,6.627-5.373,12-12,12 h-186c-6.627,0-12-5.373-12-12v-79.5c0-6.627,5.373-12,12-12h186c6.627,0,12,5.373,12,12V97.418z")
+				this.tooltip.createPath("M211.5,97.418c0,6.627-5.373,12-12,12 h-186c-6.627,0-12-5.373-12-12v-79.5c0-6.627,5.373-12,12-12h186c6.627,0,12,5.373,12,12V97.418z")
 					.setStroke({ width:2, color:"#FFF" })
-					.setFill("rgba(0,0,0,0.5)");
-				// make sure we don't cause ourselves to hide	
-				p.connect("onmouseover",function(e){
-					_t._clearDelay();
-				});
+					.setFill("rgba(0,0,0,0.5)")
+					.connect("onmouseover",dojo.hitch(this,"_clearDelay"));
 				
-				// make the close icon
-				this._toolButton = this.surface.createGroup();
-				this._toolButton.createEllipse({ cx:207.25, cy:12.32, rx: 7.866, ry: 7.099 })
-					.setFill("#ededed");
-				this._toolButton.createCircle({ cx:207.25, cy: 9.25, r:8.25 })
-					.setStroke({ width:2, color:"#FFF" })
-					.setFill("#000")
-				;
-				this._toolButton.connect("onclick",function(e){ _t._hide(); });	
-					
-				this._toolButton.createLine({ x1:203.618, y1:5.04, x2: 210.89, y2:12.979 })
-					.setStroke({ width:2, color:"#d6d6d6" });
-				this._toolButton.createLine({ x1:203.539, y1:12.979, x2: 210.89, y2:5.04 })
-					.setStroke({ width:2, color:"#d6d6d6" });
-					
+				if(this.persists){
+					// make the close icon
+					this._toolButton = this.surface.createGroup();
+					this._toolButton.createEllipse({ cx:207.25, cy:12.32, rx: 7.866, ry: 7.099 })
+						.setFill("#ededed");
+					this._toolButton.createCircle({ cx:207.25, cy: 9.25, r:8.25 })
+						.setStroke({ width:2, color:"#FFF" })
+						.setFill("#000")
+					;
+					this._toolButton.connect("onclick",dojo.hitch(this,"_hide"));	
+					// the X	
+					this._toolButton.createLine({ x1:203.618, y1:5.04, x2: 210.89, y2:12.979 })
+						.setStroke({ width:2, color:"#d6d6d6" });
+					this._toolButton.createLine({ x1:203.539, y1:12.979, x2: 210.89, y2:5.04 })
+						.setStroke({ width:2, color:"#d6d6d6" });
+				}
 			}	
 		});
 	</script>
@@ -166,11 +184,7 @@
 	<h1>dojox.gfx: A Sample tooltip</h1>
 
 	<ul style="width:150px; border:2px solid #ededed; cursor:pointer">
-		<!-- a simple tooltip -->
-		<li id="warn1">
-			Hover trigger
-			<div attachId="warn1" dojoType="demo.Tooltip">Canvas renderer doesn't implement event handling.</div>
-		</li>
+		
 	
 		<!-- you can put any content you want in there -->
 		<li id="warn2">
@@ -184,6 +198,12 @@
 					</script>
 				</button>
 			</p></div>
+		</li>
+
+		<!-- a simple tooltip -->
+		<li id="warn1">
+			Hover trigger / persists
+			<div persists="true" attachId="warn1" dojoType="demo.Tooltip">Canvas renderer doesn't implement event handling.</div>
 		</li>
 
 		<!-- these get the same tooltip from the attachQuery=".multitip" below -->
