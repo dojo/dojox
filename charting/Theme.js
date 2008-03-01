@@ -4,29 +4,29 @@ dojo.require("dojox.charting._color");
 (function(){
 	var dxc=dojox.charting;
 	//	TODO: Legend information
-	dxc.Theme=function(/*object?*/kwArgs){
+
+	dxc.Theme = function(/*Object?*/ kwArgs){
 		kwArgs=kwArgs||{};
-		this.chart=dojo.mixin(dojo.clone(dxc.Theme._def.chart), kwArgs.chart||{});
-		this.plotarea=dojo.mixin(dojo.clone(dxc.Theme._def.plotarea), kwArgs.plotarea||{});
-		this.axis=dojo.mixin(dojo.clone(dxc.Theme._def.axis), kwArgs.axis||{});
-		this.series=dojo.mixin(dojo.clone(dxc.Theme._def.series), kwArgs.series||{});
-		this.marker=dojo.mixin(dojo.clone(dxc.Theme._def.marker), kwArgs.marker||{});
-		this.markers=dojo.mixin(dojo.clone(dxc.Theme.Markers), kwArgs.markers||{});
-		this.colors=[];
-		this.antiAlias=("antiAlias" in kwArgs)?kwArgs.antiAlias:true;
-		this.assignColors=("assignColors" in kwArgs)?kwArgs.assignColors:true;
-		this.assignMarkers=("assignMarkers" in kwArgs)?kwArgs.assignMarkers:true;
-		this._colorCache=null;
+		var def = dxc.Theme._def;
+		dojo.forEach(["chart", "plotarea", "axis", "series", "marker"], function(n){
+			this[n] = dojo.mixin(dojo.clone(def[n]), kwArgs[n]||{});
+		}, this);
+		this.markers = dojo.mixin(dojo.clone(dxc.Theme.Markers), kwArgs.markers||{});
+		this.colors = [];
+		this.antiAlias = ("antiAlias" in kwArgs)?kwArgs.antiAlias:true;
+		this.assignColors = ("assignColors" in kwArgs)?kwArgs.assignColors:true;
+		this.assignMarkers = ("assignMarkers" in kwArgs)?kwArgs.assignMarkers:true;
+		this._colorCache = null;
 
 		//	push the colors, use _def colors if none passed.
-		kwArgs.colors=kwArgs.colors||dxc.Theme._def.colors;
+		kwArgs.colors = kwArgs.colors||def.colors;
 		dojo.forEach(kwArgs.colors, function(item){ 
 			this.colors.push(item); 
 		}, this);
 
 		//	private variables for color and marker indexing
-		this._current={ color:0, marker: 0 };
-		this._markers=[];
+		this._current = { color:0, marker: 0 };
+		this._markers = [];
 		this._buildMarkerArray();
 	};
 
@@ -36,12 +36,12 @@ dojo.require("dojox.charting._color");
 	//		relative motion, and with the assumption that the path segment
 	//		will be moved to the value point (i.e prepend Mx,y)
 	dxc.Theme.Markers={
-		CIRCLE:"m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0", 
-		SQUARE:"m-3,-3 l0,6 6,0 0,-6 z", 
-		DIAMOND:"m0,-3 l3,3 -3,3 -3,-3 z", 
-		CROSS:"m0,-3 l0,6 m-3,-3 l6,0", 
-		X:"m-3,-3 l6,6 m0,-6 l-6,6", 
-		TRIANGLE:"m-3,3 l3,-6 3,6 z", 
+		CIRCLE:		"m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0", 
+		SQUARE:		"m-3,-3 l0,6 6,0 0,-6 z", 
+		DIAMOND:	"m0,-3 l3,3 -3,3 -3,-3 z", 
+		CROSS:		"m0,-3 l0,6 m-3,-3 l6,0", 
+		X:			"m-3,-3 l6,6 m0,-6 l-6,6", 
+		TRIANGLE:	"m-3,3 l3,-6 3,6 z", 
 		TRIANGLE_INVERTED:"m-3,-3 l3,6 3,-6 z"
 	};
 	dxc.Theme._def={
@@ -56,16 +56,34 @@ dojo.require("dojox.charting._color");
 		},
 		//	TODO: label rotation on axis
 		axis:{
-			stroke:{ color:"#333",width:1 },							//	the axis itself
-			line:{ color:"#ccc",width:1,style:"Dot",cap:"round" },		//	gridlines
-			majorTick:{ color:"#666", width:1, length:6, position:"center" },	//	major ticks on axis
-			minorTick:{ color:"#666", width:0.8, length:3, position:"center" },	//	minor ticks on axis
-			font:"normal normal normal 7pt Tahoma",						//	labels on axis
-			fontColor:"#333"											//	color of labels
+			stroke:	{ //	the axis itself
+				color:"#333",
+				width:1
+			},
+			line:	{ //	gridlines
+				color:"#ccc",
+				width:1,
+				style:"Dot",
+				cap:"round"
+			},
+			majorTick:	{ //	major ticks on axis
+				color:"#666",
+				width:1, 
+				length:6, 
+				position:"center"
+			},
+			minorTick:	{ //	minor ticks on axis
+				color:"#666", 
+				width:0.8, 
+				length:3, 
+				position:"center"
+			},	
+			font: "normal normal normal 7pt Tahoma", //	labels on axis
+			fontColor:"#333"						//	color of labels
 		},
 		series:{
-			outline: {width: 2, color: "#ccc"},							//	line or outline
-			stroke: {width: 2, color: "#333"},							//	line or outline
+			outline: {width: 0.1, color: "#ccc"},							//	line or outline
+			stroke: {width: 1.5, color: "#333"},							//	line or outline
 			fill: "#ccc",												//	fill, if appropriate
 			font: "normal normal normal 7pt Tahoma",					//	if there's a label
 			fontColor: "#000"											// 	color of labels
@@ -87,13 +105,15 @@ dojo.require("dojox.charting._color");
 	//	prototype methods
 	dojo.extend(dxc.Theme, {
 		defineColors: function(obj){
-			//	we can generate a set of colors based on keyword arguments
+			//	summary:
+			//		Generate a set of colors for the theme based on keyword
+			//		arguments
 			var kwArgs=obj||{};
 
 			//	deal with caching
-			var cache=false;
-			if(kwArgs.cache===undefined){ cache=true; }
-			if(kwArgs.cache==true){ cache=true; }
+			var cache = false;
+			if(kwArgs.cache === undefined){ cache = true; }
+			if(kwArgs.cache == true){ cache = true; }
 			
 			if(cache){
 				this._colorCache=kwArgs;
@@ -110,8 +130,7 @@ dojo.require("dojox.charting._color");
 					c.push(kwArgs.colors[i%l]);
 				}
 				this.colors=c;
-			}
-			else if(kwArgs.hue){
+			}else if(kwArgs.hue){
 				//	single hue, generate a set based on brightness
 				var s=kwArgs.saturation||100;	//	saturation
 				var st=kwArgs.low||30;
@@ -121,8 +140,7 @@ dojo.require("dojox.charting._color");
 					c.push(dxc._color.fromHsb(kwArgs.hue, s, st+(step*i)).toHex());
 				}
 				this.colors=c;
-			}
-			else if(kwArgs.stops){
+			}else if(kwArgs.stops){
 				//	create color ranges that are either equally distributed, or
 				//	(optionally) based on a passed "offset" property.  If you
 				//	pass an array of Colors, it will equally distribute, if
@@ -153,7 +171,7 @@ dojo.require("dojox.charting._color");
 				//	The only two colors guaranteed will be the end stops (i.e.
 				//	the first and last stop), which will *always* be set as
 				//	the end stops.
-				if(typeof(kwArgs.stops[0].offset)=="undefined"){ 
+				if(typeof(kwArgs.stops[0].offset) == "undefined"){ 
 					//	set up equal offsets
 					var off=1/(l-1);
 					for(var i=0; i<l; i++){
@@ -181,50 +199,53 @@ dojo.require("dojox.charting._color");
 		},
 	
 		_buildMarkerArray: function(){
-			this._markers=[];
+			this._markers = [];
 			for(var p in this.markers){ this._markers.push(this.markers[p]); }
 			//	reset the position
 			this._current.marker=0;
 		},
 
-		addMarker:function(/* string */name, /*string*/segment){
-			//	summary
-			//	Add a custom marker to this theme.
-			//
-			//	example
-			//	myTheme.addMarker("Ellipse", foo);
+		addMarker:function(/*String*/ name, /*String*/ segment){
+			//	summary:
+			//		Add a custom marker to this theme.
+			//	example:
+			//	|	myTheme.addMarker("Ellipse", foo);
 			this.markers[name]=segment;
 			this._buildMarkerArray();
 		},
-		setMarkers:function(/* object */obj){
-			//	summary
-			//	Set all the markers of this theme at once.  obj should be
-			//	a dictionary of keys and path segments.
+		setMarkers:function(/*Object*/ obj){
+			//	summary:
+			//		Set all the markers of this theme at once.  obj should be a
+			//		dictionary of keys and path segments.
 			//
-			//	example
-			//	myTheme.setMarkers({ "CIRCLE": foo });
+			//	example:
+			//	|	myTheme.setMarkers({ "CIRCLE": foo });
 			this.markers=obj;
 			this._buildMarkerArray();
 		},
 
-		next: function(/* string? */type){
-			//	summary
-			//	get either the next color or the next marker, depending on what was
-			//	passed.  If type is not passed, it assumes color.
-			//
-			//	example
-			//	var color=myTheme.next();
-			//	var color=myTheme.next("color");
-			//	var marker=myTheme.next("marker");
-			if(!type) type="color";
-			if(type=="color"){
-				return this.colors[this._current.color++%this.colors.length];
-			}
-			else if(type=="marker"){
-				return this._markers[this._current.marker++%this._markers.length];
+		next: function(/*String?*/ type){
+			//	summary:
+			//		get either the next color or the next marker, depending on
+			//		what was passed. If type is not passed, it assumes color.
+			//	type:
+			//		Optional. One of either "color" or "marker". Defaults to
+			//		"color".
+			//	example:
+			//	|	var color = myTheme.next();
+			//	|	var color = myTheme.next("color");
+			//	|	var marker = myTheme.next("marker");
+			if(type == "marker"){
+				return this._markers[ this._current.marker++ % this._markers.length ];
+			}else{
+				return this.colors[ this._current.color++ % this.colors.length ];
 			}
 		},
 		clear: function(){
+			// summary:
+			//		resets both marker and color counters back to the start.
+			//		Subsequent calls to `next` will retrievie the first value
+			//		of each depending on the passed type.
 			this._current = {color: 0, marker: 0};
 		}
 	});

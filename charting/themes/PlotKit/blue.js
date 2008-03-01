@@ -21,8 +21,8 @@ dojo.require("dojox.charting.Theme");
 			fontColor:"#999"
 		},
 		series:{
-			outline:{ width:1, color:"#fff" },
-			stroke:{ width:2, color:"#666" },
+			outline:{ width: 0.1, color:"#fff" },
+			stroke:{ width: 1.5, color:"#666" },
 			fill:new dojo.Color([0x66, 0x66, 0x66, 0.8]),
 			font:"normal normal normal 7pt Tahoma",	//	label
 			fontColor:"#000"
