@@ -32,7 +32,7 @@ dojo.require("dojox.charting.Theme");
 		},
 		series:{
 			outline:{ width: 0, color: "black" },
-			stroke:	{ width: 0, color: "black" },
+			stroke:	{ width: 1, color: "black" },
 			fill:	dojo.colorFromHex("#3b444b"),
 			font: "normal normal normal 7pt Tahoma",	//	label
 			fontColor: "#717171"
