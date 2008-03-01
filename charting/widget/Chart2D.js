@@ -58,7 +58,22 @@ dojo.require("dojox.lang.functional");
 				}else{
 					c.addSeries(series.name, [0], series.kwArgs);
 					var kw = {};
-					du.updateWithPattern(kw, series.kwArgs, {"query": "", "queryOptions": null, "start": 0, "count": 1, "sort": []}, true);
+					du.updateWithPattern(
+						kw, 
+						series.kwArgs, 
+						{
+							"query": "", 
+							"queryOptions": null, 
+							"start": 0, 
+							"count": 1, 
+							// "sort": []
+						}, 
+						true
+					);
+					if(series.kwArgs.sort){
+						// sort is a complex object type and doesn't survive coercian
+						kw.sort = dojo.clone(series.kwArgs.sort);
+					}
 					dojo.mixin(kw, {
 						onComplete: function(data){
 							var values;
@@ -178,17 +193,17 @@ dojo.require("dojox.lang.functional");
 			t = node.getAttribute("field");
 			o.field = t != null ? t : "value";
 			t = node.getAttribute("query");
-			if(t != null){ kw.query = t; }
+			if(!!t){ kw.query = t; }
 			t = node.getAttribute("queryOptions");
-			if(t != null){ kw.queryOptions = eval("(" + t + ")"); }
+			if(!!t){ kw.queryOptions = eval("(" + t + ")"); }
 			t = node.getAttribute("start");
-			if(t != null){ kw.start = Number(t); }
+			if(!!t){ kw.start = Number(t); }
 			t = node.getAttribute("count");
-			if(t != null){ kw.count = Number(t); }
+			if(!!t){ kw.count = Number(t); }
 			t = node.getAttribute("sort");
-			if(t != null){ kw.sort = eval("(" + t + ")"); }
+			if(!!t){ kw.sort = eval("("+t+")"); }
 			t = node.getAttribute("valueFn");
-			if(t != null){ kw.valueFn = df.lambda(t); }
+			if(!!t){ kw.valueFn = df.lambda(t); }
 			return o;
 		}
 		return null;
