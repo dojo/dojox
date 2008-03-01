@@ -30,12 +30,33 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		djConfig="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.Grid");
 		dojo.require("dojox.grid._data.model");
 		dojo.require("dojo.parser");
 	</script>
+	<!-- Debugging -->
+	<script type="text/javascript" src="../_grid/lib.js"></script>
+	<script type="text/javascript" src="../_grid/drag.js"></script>
+	<script type="text/javascript" src="../_grid/scroller.js"></script>
+	<script type="text/javascript" src="../_grid/builder.js"></script>
+	<script type="text/javascript" src="../_grid/cell.js"></script>
+	<script type="text/javascript" src="../_grid/layout.js"></script>
+	<script type="text/javascript" src="../_grid/rows.js"></script>
+	<script type="text/javascript" src="../_grid/focus.js"></script>
+	<script type="text/javascript" src="../_grid/selection.js"></script>
+	<script type="text/javascript" src="../_grid/edit.js"></script>
+	<script type="text/javascript" src="../_grid/view.js"></script>
+	<script type="text/javascript" src="../_grid/views.js"></script>
+	<script type="text/javascript" src="../_grid/rowbar.js"></script>
+	<script type="text/javascript" src="../_grid/publicEvents.js"></script>
+	<script type="text/javascript" src="../VirtualGrid.js"></script>
+	<script type="text/javascript" src="../_data/fields.js"></script>
+	<script type="text/javascript" src="../_data/model.js"></script>
+	<script type="text/javascript" src="../_data/editors.js"></script>
+	<script type="text/javascript" src="../Grid.js"></script>
+	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
 		data = [ 
 			[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false ],
@@ -143,7 +164,7 @@
 	<button onclick="fitHeight()">Fit Data Height</button>&nbsp;
 	<button onclick="fitBoth()">Fit Data Width & Height</button>
 	<button onclick="sizeDefault()">DefaultSize</button><br><br>
-	<div id="grid" dojoType="dojox.Grid" model="model" structure="structure" elasticView="2"></div>
+	<div id="grid" dojoType="dojox.Grid" autoWidth="true" autoHeight="true" model="model" structure="structure" elasticView="2"></div>
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container">
@@ -155,6 +176,8 @@
 	<div id="unsizedContainer">
 		<div id="grid2" dojoType="dojox.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 	</div>
-		
+
+	<p> Grid is autoHeight and autoWidth via markup</p>
+		<div id="grid3" dojoType="dojox.VirtualGrid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 </body>
 </html>

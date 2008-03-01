@@ -288,10 +288,11 @@ dojo.declare('dojox.VirtualGrid',
 	},
 
 	// sizing
-	resize: function(){
+	resize: function(dim /* optional resize dimensions */){
 		// summary:
 		//		Update the grid's rendering dimensions and resize it
-		
+		// dim: Object?
+		//		{w: int, h: int, l: int, t: int}
 		// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars 
 		// can appear in our container, which may require an extra call to 'resize'
 		// to sort out.
@@ -314,12 +315,15 @@ dojo.declare('dojox.VirtualGrid',
 				this.fitTo = "parent";
 			}
 		}
-		if(this.fitTo == "parent"){
+		// if we are given dimensions, size the grid's domNode to those dimensions
+		if(dim){
+			dojo.contentBox(this.domNode, dim);
+		}else if(this.fitTo == "parent"){
 			var h = dojo._getContentBox(this.domNode.parentNode).h;
 			dojo.marginBox(this.domNode, { h: Math.max(0, h) });
 		}
 		var h = dojo._getContentBox(this.domNode).h;
-		if(h == 0){
+		if(h == 0 && !this.autoHeight){
 			// We need to hide the header, since the Grid is essentially hidden.
 			this.headerNode.style.display = "none";
 		}else{
