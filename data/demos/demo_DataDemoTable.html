@@ -63,7 +63,7 @@
 			var ca = this.columns[index].attribute;
 			var qs = this.query.sort;
 			// clobber an existing sort arrow
-			dojo.query("> th", this.headRow).styles("background", "").styles("paddingRight", "");
+			dojo.query("> th", this.headRow).style("background", "").style("paddingRight", "");
 			if(qs && qs[0].attribute == ca){
 				qs[0].descending = !qs[0].descending;
 			}else{
