@@ -6,10 +6,13 @@
 			@import "../../../dijit/tests/css/dijitTests.css";
 			.volume { color: #666666; }
 
-			.label { text-align: right; }
+			.label { 
+				text-align: right;
+				line-height: 1.5em;
+			}
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" 
-			djConfig="parseOnLoad: true"></script>
+			djConfig="isDebug: false, parseOnLoad: true"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.charting.widget.Chart2D");
 			dojo.require("dojox.charting.themes.ET.greys");
@@ -39,7 +42,7 @@
 			</tbody>
 		</table>
 
-		<table cellpadding="0" cellspacing="0" border="0">
+		<table cellpadding="0" cellspacing="3" border="0">
 			<tr>
 				<td class="label">
 					Simple Sparkline:
@@ -47,7 +50,8 @@
 				<td>
 					<div dojoType="dojox.charting.widget.Chart2D" 
 						theme="dojox.charting.themes.ET.greys" 
-						style="width: 100px; height: 40px;">
+						margins="{ l: 0, r: 0, t: 0, b: 0 }"
+						style="width: 100px; height: 15px;">
 						<div class="plot" name="default" type="Lines"></div>
 						<div class="series" name="Series A" store="tableStore" valueFn="Number(x)"></div>
 					</div>
@@ -66,7 +70,8 @@
 						url="data/goog_prices.csv"></div>
 					<div dojoType="dojox.charting.widget.Chart2D" 
 						theme="dojox.charting.themes.ET.greys" 
-						style="width: 100px; height: 40px;">
+						margins="{ l: 0, r: 0, t: 0, b: 0 }"
+						style="width: 100px; height: 15px;">
 						<div class="plot" name="default" type="Lines"></div>
 						<div class="series" 
 							name="Closing Price" 
@@ -104,7 +109,8 @@
 						url="data/yahoo_prices.csv"></div>
 					<div dojoType="dojox.charting.widget.Chart2D" 
 						theme="dojox.charting.themes.ET.greys" 
-						style="width: 100px; height: 40px;">
+						margins="{ l: 0, r: 0, t: 0, b: 0 }"
+						style="width: 100px; height: 15px;">
 						<div class="plot" name="default" type="Lines"></div>
 						<div class="series" 
 							name="Closing Price" 
@@ -136,12 +142,12 @@
 					<a href="http://finance.google.com/finance?q=Microsoft">Microsoft</a> Closing Price &amp; <span class="volume">Volume</span>:
 				</td>
 				<td>
-
 					<div dojoType="dojox.data.CsvStore" jsId="msftStore" 
 						url="data/msft_prices.csv"></div>
 					<div dojoType="dojox.charting.widget.Chart2D" 
 						theme="dojox.charting.themes.ET.greys" 
-						style="width: 100px; height: 40px;">
+						margins="{ l: 0, r: 0, t: 0, b: 0 }"
+						style="width: 100px; height: 15px;">
 						<div class="plot" name="default" type="Lines"></div>
 						<div class="series" 
 							name="Closing Price" 
