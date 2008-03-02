@@ -14,12 +14,11 @@
 			width: 51em;
 			border: 1px solid silver;
 		}
-		
-		#info {
-			width: 700px;
-		}
+		#info { width: 700px; }
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" 
+		djConfig="debugAtAllCosts: false, isDebug:false, parseOnLoad: true">
+	</script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.Grid");
 		dojo.require("dojox.grid._data.model");
@@ -43,17 +42,26 @@
 		model.observer(this);
 		
 		// report some model send/receive status
-		model.onSend = function(inParams) {
-			dojo.byId('sendInfo').innerHTML = dojo.string.substitute('Request rows ${0} to ${1}.&nbsp&nbsp;', [inParams.start, inParams.start + inParams.results -1]);
+		model.onSend = function(inParams){
+			dojo.byId('sendInfo').innerHTML = dojo.string.substitute(
+				'Request rows ${0} to ${1}.&nbsp&nbsp;',
+				[inParams.start, inParams.start + inParams.results -1]
+			);
 		}
 		model.onReceive = function(inData) {
-			dojo.byId('receiveInfo').innerHTML = dojo.string.substitute('Receive rows ${0} to ${1}.&nbsp&nbsp;', [inData.firstResultPosition, inData.firstResultPosition + inData.totalResultsReturned-1]);
+			dojo.byId('receiveInfo').innerHTML = dojo.string.substitute(
+				'Receive rows ${0} to ${1}.&nbsp&nbsp;', 
+				[
+					inData.firstResultPosition, 
+					inData.firstResultPosition + inData.totalResultsReturned-1
+				]
+			);
 		}
 
 
 		// Define grid structure
 		// remove the height from the header image cell / row cells have a default height so there's less adjustment when thumb comes in.
-		beforeImageRow = function(inRowIndex, inSubRows) {
+		beforeImageRow = function(inRowIndex, inSubRows){
 			inSubRows[0].hidden = (inRowIndex == -1);
 		}
 		
@@ -90,8 +98,12 @@
 				this.updateRowCount(this.rowCount);
 			},
 			modelRowChange: function(inData, inRowIndex) {
-				if (inRowIndex % this.colCount == this.colCount - 1 || inRowIndex == this.model.count - 1)
+				if(
+					(inRowIndex % this.colCount == this.colCount - 1)||
+					(inRowIndex == this.model.count - 1)
+				){
 					this.updateRow(Math.floor(inRowIndex / this.colCount));
+				}
 			}
 		});
 		
@@ -101,7 +113,7 @@
 		}
 		
 		// execute search
-		doSearch = function() {
+		doSearch = function(){
 			model.clearData();
 			model.setRowCount(0);
 			grid.render();
@@ -109,32 +121,29 @@
 			model.requestRows();
 		}
 		
-		keypress = function(e) {
-			if (e.keyCode == dojo.keys.ENTER)
-				doSearch();
-		}
-		dojo.addOnLoad(function() {
-			dojo.connect(dojo.byId("searchInput"), "keypress", keypress);
+		dojo.addOnLoad(function(){
+			dojo.query("#searchInput").onkeypress(function(e){
+				if(e.keyCode == dojo.keys.ENTER){ doSearch(); }
+			});
 			doSearch();
 		});
 		
 	</script>
 </head>
 <body>
-<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.Grid - Image Search Test</div>
-<input id="searchInput" type="text" value="apple">&nbsp;&nbsp;
-<button onclick="doSearch()">Search</button><br>
-<br>
-<div jsId="grid" class="grid" structure="imageLayout" dojoType="dojox.ImageGrid" model="model"></div>
-<br>
-<div id="info">
-	<div id="rowCount" style="float: left"></div>
-	<div style="float: right">
-		<div id="sendInfo" style="text-align: right"></div>
-		<div id="receiveInfo" style="text-align: right"></div>
+	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.Grid - Image Search Test</div>
+	<input id="searchInput" type="text" value="apple">
+	<button onclick="doSearch()" style="clear: both;">Search</button>
+	<div jsId="grid" class="grid" structure="imageLayout" dojoType="dojox.ImageGrid" model="model"></div>
+	<br>
+	<div id="info">
+		<div id="rowCount" style="float: left"></div>
+		<div style="float: right">
+			<div id="sendInfo" style="text-align: right"></div>
+			<div id="receiveInfo" style="text-align: right"></div>
+		</div>
 	</div>
-</div>
-<br /><br />
-<p>Note: requires PHP for proxy.</p>
-</body>
+	<br /><br />
+	<p>Note: requires PHP for proxy.</p>
+	</body>
 </html>
