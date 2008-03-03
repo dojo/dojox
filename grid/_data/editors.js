@@ -186,8 +186,8 @@ dojo.declare("dojox.grid.editors.Select", dojox.grid.editors.Input, {
 	format: function(inDatum, inRowIndex){
 		this.needFormatNode(inDatum, inRowIndex);
 		var h = [ '<select class="dojoxGrid-select">' ];
-		for (var i=0, o, v; (o=this.options[i])&&(v=this.values[i]); i++){
-			h.push("<option", (inDatum==o ? ' selected' : ''), /*' value="' + v + '"',*/ ">", o, "</option>");
+		for (var i=0, o, v; ((o=this.options[i]) !== undefined)&&((v=this.values[i]) !== undefined); i++){
+			h.push("<option", (inDatum==v ? ' selected' : ''), ' value="' + v + '"', ">", o, "</option>");
 		}
 		h.push('</select>');
 		return h.join('');

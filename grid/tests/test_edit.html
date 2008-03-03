@@ -66,13 +66,13 @@
 	// Create a data model
 	// ==========================================================================
 	data = [ 
-		[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false ],
-		[ "important", false, "new", 'Because a % sign always indicates', 9.33, -5, false ],
-		[ "important", false, "read", 'Signs can be selectively', 19.34, 0, true ],
-		[ "note", false, "read", 'However the reserved characters', 15.63, 0, true ],
-		[ "normal", false, "replied", 'It is therefore necessary', 24.22, 5.50, true ],
-		[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
-		[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
+		[ 0, false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false ],
+		[ 1, false, "new", 'Because a % sign always indicates', 9.33, -5, false ],
+		[ 1, false, "read", 'Signs can be selectively', 19.34, 0, true ],
+		[ 2, false, "read", 'However the reserved characters', 15.63, 0, true ],
+		[ 0, false, "replied", 'It is therefore necessary', 24.22, 5.50, true ],
+		[ 1, false, "replied", 'To problems of corruption by', 9.12, -3, true ],
+		[ 2, false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
 	];
 	var rows = 10000;
 	for(var i=0, l=data.length; i<rows-l; i++){
@@ -102,7 +102,7 @@
 		defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
 		rows: [[
 			{ name: 'Id', width: 3, get: function(inRowIndex) { return inRowIndex+1;} },
-			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: ["normal", "note", "important"]},
+			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: ["normal", "note", "important"], values: [0, 1, 2], formatter: function(inDatum) { return this.options[inDatum]}},
 			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.Bool },
 			statusCell,
 			{ name: 'Message', styles: '', width: '100%' },
