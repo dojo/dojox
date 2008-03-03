@@ -46,6 +46,30 @@ dojo.require("dojox.lang.functional.lambda");
 			var n = a.length, t = new Array(n);
 			for(var i = n - 1, j = 0; i >= 0; t[j++] = f.call(o, a[i], i, a), --i);
 			return t;	// Array
+		},
+		everyRev: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: tests whether all elements in the array pass the test 
+			//	implemented by the provided function.
+			if(typeof a == "string"){ a = a.split(""); }
+			o = o || d.global; f = df.lambda(f);
+			for(var i = a.length - 1; i >= 0; --i){
+				if(!f.call(o, a[i], i, a)){
+					return false;	// Boolean
+				}
+			}
+			return true;	// Boolean
+		},
+		someRev: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
+			// summary: tests whether some element in the array passes the test 
+			//	implemented by the provided function.
+			if(typeof a == "string"){ a = a.split(""); }
+			o = o || d.global; f = df.lambda(f);
+			for(var i = a.length - 1; i >= 0; --i){
+				if(f.call(o, a[i], i, a)){
+					return true;	// Boolean
+				}
+			}
+			return false;	// Boolean
 		}
 	});
 })();

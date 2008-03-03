@@ -55,6 +55,8 @@ dojo.require("dojox.lang.functional.reversed");
 			var iter = new revArrayIter([1, 3, 5]);
 			t.assertTrue(df.every(iter, isOdd));
 		},
+		function testEveryRev1(t){ t.assertFalse(df.everyRev([1, 2, 3], isOdd)); },
+		function testEveryRev2(t){ t.assertTrue(df.everyRev([1, 3, 5], isOdd)); },
 
 		function testSome1(t){ t.assertFalse(df.some([2, 4, 6], isOdd)); },
 		function testSome2(t){ t.assertTrue(df.some([1, 2, 3], isOdd)); },
@@ -62,6 +64,8 @@ dojo.require("dojox.lang.functional.reversed");
 			var iter = new revArrayIter([1, 2, 3]);
 			t.assertTrue(df.some(iter, isOdd));
 		},
+		function testSomeRev1(t){ t.assertFalse(df.someRev([2, 4, 6], isOdd)); },
+		function testSomeRev2(t){ t.assertTrue(df.someRev([1, 2, 3], isOdd)); },
 
 		function testReduce1(t){ t.assertEqual(df.reduce([4, 2, 1], "x-y"), 1); },
 		function testReduce2(t){ t.assertEqual(df.reduce([4, 2, 1], "x-y", 8), 1); },
