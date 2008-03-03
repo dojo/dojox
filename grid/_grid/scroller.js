@@ -303,7 +303,7 @@ dojo.declare('dojox.grid.scroller', dojox.grid.scroller.base, {
 	preparePageNode: function(inPageIndex, inReusePageIndex, inNodes){
 		var p = (inReusePageIndex === null ? this.createPageNode() : this.invalidatePageNode(inReusePageIndex, inNodes));
 		p.pageIndex = inPageIndex;
-		p.id = 'page-' + inPageIndex;
+		p.id = (this._pageIdPrefix || "") + 'page-' + inPageIndex;
 		inNodes[inPageIndex] = p;
 	},
 	// implementation for page manager

@@ -198,6 +198,7 @@ dojo.declare('dojox.VirtualGrid',
 	createScroller: function(){
 		// summary: Creates a new virtual scroller
 		this.scroller = new dojox.grid.scroller.columns();
+		this.scroller._pageIdPrefix = this.id + '-';
 		this.scroller.renderRow = dojo.hitch(this, "renderRow");
 		this.scroller.removeRow = dojo.hitch(this, "rowRemoved");
 	},
