@@ -256,11 +256,23 @@ dojo.declare("dojox.grid.data.Objects", dojox.grid.data.Table, {
 			this.autoAssignFields();
 		}
 	},
+	allChange: function(){
+		this.notify("FieldsChange");
+		this.inherited(arguments);
+	},
 	autoAssignFields: function(){
-		var d = this.data[0], i = 0;
+		var d = this.data[0], i = 0, field;
 		for(var f in d){
-			this.fields.get(i++).key = f;
+			field = this.fields.get(i++);
+			if (!dojo.isString(field.key)){
+				field.key = f;
+			}
 		}
+	},
+	setData: function(inData){
+		this.data = (inData || []);
+		this.autoAssignFields();
+		this.allChange();
 	},
 	getDatum: function(inRowIndex, inColIndex){
 		return this.data[inRowIndex][this.fields.get(inColIndex).key];
