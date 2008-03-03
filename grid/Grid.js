@@ -207,11 +207,8 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	},
 
 	doStartEdit: function(inCell, inRowIndex){
-		var edit = this.canEdit(inCell, inRowIndex);
-		if(edit){
-			this.model.beginModifyRow(inRowIndex);
-			this.onStartEdit(inCell, inRowIndex);
-		}
+		this.model.beginModifyRow(inRowIndex);
+		this.onStartEdit(inCell, inRowIndex);
 	},
 
 	doApplyCellEdit: function(inValue, inRowIndex, inFieldIndex){

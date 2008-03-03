@@ -95,7 +95,7 @@ dojo.declare("dojox.grid.edit", null, {
 		//		Grid row index
 		// inCell: Object
 		//		Grid cell object
-		if(!this.isEditCell(inRowIndex, inCell.index)){
+		if(!this.isEditCell(inRowIndex, inCell.index) && this.grid.canEdit(inCell, inRowIndex)){
 			this.start(inCell, inRowIndex, this.isEditRow(inRowIndex) || inCell.editor);
 		}
 	},
@@ -170,7 +170,9 @@ dojo.declare("dojox.grid.edit", null, {
 	},
 
 	applyCellEdit: function(inValue, inCell, inRowIndex){
-		this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.fieldIndex);
+		if(this.grid.canEdit(inCell, inRowIndex)){
+			this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.fieldIndex);
+		}
 	},
 
 	applyRowEdit: function(){
