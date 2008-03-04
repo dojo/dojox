@@ -362,10 +362,16 @@ dojo.require("dojox.dtl.Context");
 			}
 			return this;
 		},
-		addEvent: function(context, type, fn){
+		addEvent: function(context, type, fn, /*Array|Function*/ args){
 			if(!context.getThis()){ throw new Error("You must use Context.setObject(instance)"); }
 			this.onAddEvent(this.getParent(), type, fn);
-			return dojo.connect(this.getParent(), type, context.getThis(), fn);
+			var resolved = fn;
+			if(dojo.isArray(args)){
+				resolved = function(e){
+					this[fn].apply(this, [e].concat(args));
+				}
+			}
+			return dojo.connect(this.getParent(), type, context.getThis(), resolved);
 		},
 		setParent: function(node, /*Boolean?*/ up, /*Boolean?*/ root){
 			if(!this._parent) this._parent = this._first = node;
