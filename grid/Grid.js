@@ -3,6 +3,9 @@ dojo.require("dojox.grid.VirtualGrid");
 dojo.require("dojox.grid._data.model");
 dojo.require("dojox.grid._data.editors");
 
+// FIXME: 
+//		we are at the wrong location! 
+
 dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	//	summary:
 	//		A grid widget with virtual scrolling, cell editing, complex rows,
@@ -249,3 +252,6 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	junk: 0
 
 });
+
+// alias us to the right location
+dojox.grid.Grid = dojox.Grid;
