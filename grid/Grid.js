@@ -2,6 +2,7 @@ dojo.provide("dojox.grid.Grid");
 dojo.require("dojox.grid.VirtualGrid");
 dojo.require("dojox.grid._data.model");
 dojo.require("dojox.grid._data.editors");
+dojo.require("dojox.grid._data.dijitEditors");
 
 // FIXME: 
 //		we are at the wrong location! 
