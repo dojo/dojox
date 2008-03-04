@@ -363,6 +363,9 @@ dojo.declare('dojox.VirtualGrid',
 	},
 
 	// render 
+	startup: function() {
+		this.render();
+	},
 	render: function(){
 		// summary:
 		//	Render the grid, headers, and views. Edit and scrolling states are reset. To retain edit and 
