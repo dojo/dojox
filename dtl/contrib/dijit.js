@@ -46,16 +46,20 @@ dojo.require("dojo.parser");
 				if(!this._clear){
 					buffer.getParent()[type] = null;
 				}
-				if(!this._rendered.length){
-					var fn = this.contents[i];
-					var args;
-					if(dojo.isArray(fn)){
-						args = dojo.map(fn.slice(1), function(item){
-							return new dd._Filter(item).resolve(context);
-						});
-						fn = fn[0];
+				var fn = this.contents[i];
+				var args;
+				if(dojo.isArray(fn)){
+					if(this._rendered[i]){
+						dojo.disconnect(this._rendered[i]);
+						this._rendered[i] = false;
 					}
-					this._rendered.push(buffer.addEvent(context, type, fn, args));
+					args = dojo.map(fn.slice(1), function(item){
+						return new dd._Filter(item).resolve(context);
+					});
+					fn = fn[0];
+				}
+				if(!this._rendered[i]){
+					this._rendered[i] = buffer.addEvent(context, type, fn, args);
 				}
 			}
 			this._clear = true;
