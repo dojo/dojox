@@ -372,6 +372,7 @@ dojo.declare('dojox.VirtualGrid',
 		// scrolling states, see Update.
 
 		if(!this.domNode){return;}
+		
 		if(!this.hasLayout()) {
 			this.scroller.init(0, this.keepRows, this.rowsPerPage);
 			return;
@@ -385,6 +386,9 @@ dojo.declare('dojox.VirtualGrid',
 	},
 
 	prerender: function(){
+		// if autoHeight, make sure scroller knows not to virtualize; everything must be rendered.
+		this.keepRows = this.autoHeight ? 0 : this.constructor.prototype.keepRows;
+		this.scroller.setKeepInfo(this.keepRows);
 		this.views.render();
 		this.resize();
 	},
