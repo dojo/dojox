@@ -234,7 +234,7 @@ dojo.declare('dojox.VirtualGrid',
 		}
 		var view = new c({ grid: this });
 		this.viewsNode.appendChild(view.domNode);
-		this.headerNode.appendChild(view.headerNode);
+		this.viewsHeaderNode.appendChild(view.headerNode);
 		this.views.addView(view);
 		return view;
 	},
@@ -326,13 +326,13 @@ dojo.declare('dojox.VirtualGrid',
 		var h = dojo._getContentBox(this.domNode).h;
 		if(h == 0 && !this.autoHeight){
 			// We need to hide the header, since the Grid is essentially hidden.
-			this.headerNode.style.display = "none";
+			this.viewsHeaderNode.style.display = "none";
 		}else{
 			// Otherwise, show the header and give it an appropriate height.
-			this.headerNode.style.display = "block";
+			this.viewsHeaderNode.style.display = "block";
 			// header height
 			var t = this.views.measureHeader();
-			this.headerNode.style.height = t + 'px';
+			this.viewsHeaderNode.style.height = t + 'px';
 		}
 		// content extent
 		var l = 1, h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
@@ -353,7 +353,7 @@ dojo.declare('dojox.VirtualGrid',
 
 	resizeHeight: function(){
 		var t = this.views.measureHeader();
-		this.headerNode.style.height = t + 'px';
+		this.viewsHeaderNode.style.height = t + 'px';
 		// content extent
 		var h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 		//this.views.arrange(0, 0, 0, h);
