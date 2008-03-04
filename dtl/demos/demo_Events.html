@@ -27,10 +27,11 @@
 							}
 						},
 						postCreate: function(){
+						 	this.render();
 							dojo.connect(this.button, "onClick", this, "keyUp");
 						},
 						debug: function(e, verb, fruit){
-						  console.debug("You " + verb + " a:", fruit);
+							console.debug("You " + verb + " a:", fruit);
 						},
 						// Note, the load tag here is superfluous, since _HtmlTemplate has a dojo.require for it.
 						templateString: '<!--{% load dojox.dtl.contrib.dijit %}--><div><input dojoAttachEvent="onkeyup: keyUp" dojoAttachPoint="input"> <button dojoType="dijit.form.Button" dojoAttachPoint="button">Add/Remove Item</button><ul><!--{% for item in items %}--><li onclick="debug \'ate\' item"><!--{{ item }}--></li><!--{% endfor %}--></ul></div>'

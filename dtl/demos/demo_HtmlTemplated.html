@@ -27,6 +27,7 @@
 							}
 						},
 						postCreate: function(){
+							this.render();
 							dojo.connect(this.button, "onClick", this, "keyUp");
 						},
 						// Note, the load tag here is superfluous, since _HtmlTemplate has a dojo.require for it.
