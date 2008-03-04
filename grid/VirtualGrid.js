@@ -289,15 +289,21 @@ dojo.declare('dojox.VirtualGrid',
 	},
 
 	// sizing
-	resize: function(dim /* optional resize dimensions */){
-		// summary:
+	resize: function(sizeBox){
+	// summary:
 		//		Update the grid's rendering dimensions and resize it
-		// dim: Object?
+		// sizeBox: Object?
 		//		{w: int, h: int, l: int, t: int}
+		
 		// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars 
 		// can appear in our container, which may require an extra call to 'resize'
 		// to sort out.
-		
+		this._sizeBox = sizeBox;
+		this._resize();
+		this.sizeChange();
+	},
+	
+	_resize: function(){
 		// if we have set up everything except the DOM, we cannot resize
 		if(!this.domNode.parentNode || this.domNode.parentNode.nodeType != 1 || !this.hasLayout()){
 			return;
@@ -317,8 +323,8 @@ dojo.declare('dojox.VirtualGrid',
 			}
 		}
 		// if we are given dimensions, size the grid's domNode to those dimensions
-		if(dim){
-			dojo.contentBox(this.domNode, dim);
+		if(this._sizeBox){
+			dojo.contentBox(this.domNode, this._sizeBox);
 		}else if(this.fitTo == "parent"){
 			var h = dojo._getContentBox(this.domNode.parentNode).h;
 			dojo.marginBox(this.domNode, { h: Math.max(0, h) });
@@ -363,9 +369,6 @@ dojo.declare('dojox.VirtualGrid',
 	},
 
 	// render 
-	startup: function() {
-		this.render();
-	},
 	render: function(){
 		// summary:
 		//	Render the grid, headers, and views. Edit and scrolling states are reset. To retain edit and 
@@ -390,7 +393,7 @@ dojo.declare('dojox.VirtualGrid',
 		this.keepRows = this.autoHeight ? 0 : this.constructor.prototype.keepRows;
 		this.scroller.setKeepInfo(this.keepRows);
 		this.views.render();
-		this.resize();
+		this._resize();
 	},
 
 	postrender: function(){
@@ -495,7 +498,7 @@ dojo.declare('dojox.VirtualGrid',
 				this.scroller.updateRowCount(inRowCount);
 				this.setScrollTop(this.scrollTop);
 			}
-			this.resize();
+			this._resize();
 		}
 	},
 
