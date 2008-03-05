@@ -1,4 +1,4 @@
-.tundra .dojoxGrid {
+.soria .dojoxGrid {
 	position: relative;
 	background-color: #e9e9e9;
 	font-size: 0.85em; /* inherit font-family from dojo.css */
@@ -8,79 +8,78 @@
 	height: 0;
 }
 
-.tundra .dojoxGrid table {
+.soria .dojoxGrid table {
 	padding: 0;
 }
 
-.tundra .dojoxGrid td {
+.soria .dojoxGrid td {
 	-moz-outline: none;
 }
 
 /* master header */
 
-.tundra .dojoxGrid-master-header {
+.soria .dojoxGrid-master-header {
 	position: relative;
 }
 
 /* master view */
 
-.tundra .dojoxGrid-master-view  {
+.soria .dojoxGrid-master-view  {
 	position: relative;
 }
 
 /* views */
 
-.tundra .dojoxGrid-view {
+.soria .dojoxGrid-view {
 	position: absolute;
 	overflow: hidden;
 }
 
 /* header */
 
-.tundra .dojoxGrid-header {
+.soria .dojoxGrid-header {
 	position: absolute;
 	overflow: hidden;
 }
 
-.tundra .dojoxGrid-header {
+.soria .dojoxGrid-header {
 	background-color:  #e9e9e9;
 }
 
-.tundra .dojoxGrid-header table {
+.soria .dojoxGrid-header table {
 	text-align: center;
 }
 
-.tundra .dojoxGrid-header .dojoxGrid-cell-content {
+.soria .dojoxGrid-header .dojoxGrid-cell-content {
 	text-align: center;
 }
 
-.tundra .dojoxGrid-header .dojoxGrid-cell { 
+.soria .dojoxGrid-header .dojoxGrid-cell { 
 	border: 1px solid transparent;
 	/* border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB; */
 	border-color: white #ACA899 #919191 white;
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;
+	background: url(../../../dijit/themes/soria/images/titleBar.png) #e9e9e9 repeat-x top;
 	padding-bottom: 2px;
 	color: #000 !important;
 }
 
-.tundra .dojoxGrid-header .dojoxGrid-cell-over {
-	background: url(../../../dijit/themes/tundra/images/tabHover.png) #e9e9e9 repeat-x top;
-	color: #000 !important;
+.soria .dojoxGrid-header .dojoxGrid-cell-over {
+	background: url(../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-x top;
 }
 
-.tundra .dojoxGrid-sort-down {
-	background: url(../../../dijit/themes/tundra/images/arrowDown.png) right no-repeat;
+.soria .dojoxGrid-sort-down {
+	background: url(images/grid_sort_down.gif) right no-repeat;
 	padding-left: 0px;
 	margin-left: 0px;
 }
 
-.tundra .dojoxGrid-sort-up {
-	background: url(../../../dijit/themes/tundra/images/arrowUp.png) right no-repeat;
+.soria .dojoxGrid-sort-up {
+	background: url(images/grid_sort_up.gif) right no-repeat;
 	padding-left: 0px;
 	margin-left: 0px;
 }
 
-.tundra .gridArrowButtonChar {
+.soria .gridArrowButtonChar {
 	display:none !important;
 }
 .dijit_a11y .gridArrowButtonChar {
@@ -89,14 +88,14 @@
 
 /* content */
 
-.tundra .dojoxGrid-scrollbox {
+.soria .dojoxGrid-scrollbox {
 	position: relative;
 	overflow: scroll;
 	background-color: #fefefe;
 	width: 100%;
 }
 
-.tundra .dojoxGrid-content {
+.soria .dojoxGrid-content {
 	position: relative;
 	overflow: hidden;
 	 -moz-outline-style: none;
@@ -105,29 +104,29 @@
 
 /* rowbar */
 
-.tundra .dojoxGrid-rowbar { 
+.soria .dojoxGrid-rowbar { 
 	border: none;
 	/*
 	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
 	*/
-	background: url(images/tabEnabled_rotated.png) #e9e9e9 repeat-y right;
+	background: url(images/titleBar.png) #e9e9e9 repeat-y right;
 	border-right: 1px solid #cccccc;
 	padding: 0px;
 }
 
-.tundra .dojoxGrid-rowbar-inner {
+.soria .dojoxGrid-rowbar-inner {
 	border: none;
 	border-bottom: 1px solid #cccccc;
 }
 
-.tundra .dojoxGrid-rowbar-over {
-	background: url(images/tabHover_rotated.png) #e9e9e9 repeat-y right;
+.soria .dojoxGrid-rowbar-over {
+	background: url(images/titleBarActive.png) #e9e9e9 repeat-y right;
 }
 
-.tundra .dojoxGrid-rowbar-selected {
+.soria .dojoxGrid-rowbar-selected {
 	background-color: #D9E8F9;
 	background-image: none;
-	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd repeat-x top;
+	background: url(../../../dijit/themes/soria/images/titleBar.png) #dddddd repeat-x top;
 	border-right: 1px solid #cccccc;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -135,12 +134,12 @@
 
 /* rows */
 
-.tundra .dojoxGrid-row {
+.soria .dojoxGrid-row {
 	position: relative;
 	width: 9000em;
 }
 
-.tundra .dojoxGrid-row {
+.soria .dojoxGrid-row {
 	border: none;
 	border-left: none;
 	border-right: none;
@@ -148,44 +147,40 @@
 	border-top: none;
 }
 
-.tundra .dojoxGrid-row-over {
+.soria .dojoxGrid-row-over {
 	border-top-color: #cccccc;
 	border-bottom-color: #cccccc;
 }
 
-.tundra .dojoxGrid-row-over .dojoxGrid-cell {
+.soria .dojoxGrid-row-over .dojoxGrid-cell {
 	background-color: #60a1ea; 
 	color:#fff;
-	/*background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;*/
 }
 
-.tundra .dojoxGrid-row-odd {
+.soria .dojoxGrid-row-odd {
 	background-color: #f2f5f9;
 	/*background-color: #F9F7E8;*/
 }
 
-.tundra .dojoxGrid-row-selected {
+.soria .dojoxGrid-row-selected {
 	background-color: #D9E8F9;
-	/*
-	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd repeat-x top;
-	*/
 }
 
-.tundra .dojoxGrid-row-table {
+.soria .dojoxGrid-row-table {
 	table-layout: fixed;
 	width: 0;
 	border-collapse: collapse;
 }
 
-.tundra .dojoxGrid-invisible {
+.soria .dojoxGrid-invisible {
 	visibility: hidden;
 }		
 
-.tundra .Xdojo-ie .dojoxGrid-invisible {
+.soria .Xdojo-ie .dojoxGrid-invisible {
 	display: none;
 }		
 
-.tundra .dojoxGrid-invisible td, .dojoxGrid-header .dojoxGrid-invisible td {
+.soria .dojoxGrid-invisible td, .dojoxGrid-header .dojoxGrid-invisible td {
 	border-top-width: 0;
 	border-bottom-width: 0;
 	padding-top: 0;
@@ -196,31 +191,31 @@
 
 /* cells */
 
-.tundra .dojoxGrid-cell {
+.soria .dojoxGrid-cell {
 	border: 1px dotted #D5CDB5;
 	padding: 3px 3px 3px 3px;
 	text-align: left;
 	overflow: hidden;
 }
 
-.dj_ie6 .tundra .dojoxGrid-cell {
+.dj_ie6 .soria .dojoxGrid-cell {
 	border: 1px solid white;
 	border-right: 1px solid #D5CDB5;
 }
 
-.tundra .dojoxGrid-cell-focus {
+.soria .dojoxGrid-cell-focus {
 	border: 1px dotted #a6a6a6;
 }
 
-.tundra .dojoxGrid-cell-over {
+.soria .dojoxGrid-cell-over {
 	border: 1px dotted #a6a6a6;
 }
 
-.tundra .dojoxGrid-cell-focus.dojoxGrid-cell-over {
+.soria .dojoxGrid-cell-focus.dojoxGrid-cell-over {
 	border: 1px dotted #595959;
 }
 
-.tundra .dojoxGrid-cell-clip {
+.soria .dojoxGrid-cell-clip {
 	width: 100%;
 	overflow: hidden;
 	white-space:nowrap;
@@ -230,25 +225,25 @@
 /* editing */
 
 /* FIXME: these colors are off! */
-.tundra .dojoxGrid-row-editing td {
+.soria .dojoxGrid-row-editing td {
 	/* background-color: #F4FFF4; */
 	background-color: #60a1ea; 
 	/* padding: 0px 3px 0px 3px; */
 }
 
-.tundra .dojoxGrid-row-inserting td {
+.soria .dojoxGrid-row-inserting td {
 	background-color: #F4FFF4;
 }
-.tundra .dojoxGrid-row-inflight td {
+.soria .dojoxGrid-row-inflight td {
 	background-color: #F2F7B7;
 }
-.tundra .dojoxGrid-row-error td {
+.soria .dojoxGrid-row-error td {
 	background-color: #F8B8B6;
 }
 
-.tundra .dojoxGrid-input,
-.tundra .dojoxGrid-select,
-.tundra .dojoxGrid-textarea {
+.soria .dojoxGrid-input,
+.soria .dojoxGrid-select,
+.soria .dojoxGrid-textarea {
 	margin: 0;
 	padding: 0px;
 	border-style: none;
