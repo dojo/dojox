@@ -21,34 +21,6 @@
 		dojo.require("dojox.data.CsvStore");
 		dojo.require("dojo.parser");
 	</script>
-	<script type="text/javascript">
-		function getRow(inRowIndex){
-			return ' ' + inRowIndex;
-		}
-		
-		var layoutCountries = [
-			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
-			// view 1
-			{
-				cells: [
-					[
-						{ name: "Row", get: getRow, width: 5}
-					]
-				],
-				noscroll: true
-			},
-			// view 2
-			{
-				cells: [
-					[
-						{ field: 0, width: 'auto' },
-						{ width: 8 }
-					]
-				]
-			}
-		];
-	</script>
 </head>
 <body class="tundra">
 	<h5>dojox.grid.Grid structure from markup</h5>
@@ -97,6 +69,35 @@
 	</table>
 
 	<h5>A "regular" Grid from markup (no table defintion)</h5>
+	<script type="text/javascript">
+		// helper functions and structure definitions for the old markup construction syntax
+		function getRow(inRowIndex){
+			return ' ' + inRowIndex;
+		}
+		
+		var layoutCountries = [
+			// view 0
+			{ type: 'dojox.GridRowView', width: '20px' },
+			// view 1
+			{
+				cells: [
+					[
+						{ name: "Row", get: getRow, width: 5}
+					]
+				],
+				noscroll: true
+			},
+			// view 2
+			{
+				cells: [
+					[
+						{ field: 0, width: 'auto' },
+						{ width: 8 }
+					]
+				]
+			}
+		];
+	</script>
 	<span dojoType="dojox.grid.data.DojoData" 
 		jsId="dataModel2" 
 		rowsPerPage="20"
