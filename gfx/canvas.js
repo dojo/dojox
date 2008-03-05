@@ -10,7 +10,7 @@ dojo.experimental("dojox.gfx.canvas");
 
 (function(){
 	var g = dojox.gfx, gs = g.shape, ga = g.arc, 
-		m = g.matrix, mp = m.multiplyPoint, twoPI = 2 * Math.PI;
+		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2;
 	
 	dojo.extend(g.Shape, {
 		_render: function(/* Object */ ctx){
@@ -160,14 +160,17 @@ dojo.experimental("dojox.gfx.canvas");
 				xl2 = xl + r, xr2 = xr - r, yt2 = yt + r, yb2 = yb - r;
 			ctx.beginPath();
 			ctx.moveTo(xl2, yt);
-			ctx.lineTo(xr2, yt);
-			if(r){ ctx.arcTo(xr, yt, xr, yt2, r); }
-			ctx.lineTo(xr, yb2);
-			if(r){ ctx.arcTo(xr, yb, xr2, yb, r); }
-			ctx.lineTo(xl2, yb);
-			if(r){ ctx.arcTo(xl, yb, xl, yb2, r); }
-			ctx.lineTo(xl, yt2);
-			if(r){ ctx.arcTo(xl, yt, xl2, yt, r); }
+			if(r){
+				ctx.arc(xr2, yt2, r, -halfPI, 0, false);
+				ctx.arc(xr2, yb2, r, 0, halfPI, false);
+				ctx.arc(xl2, yb2, r, halfPI, pi, false);
+				ctx.arc(xl2, yt2, r, pi, halfPI, false);
+			}else{
+				ctx.lineTo(xr2, yt);
+				ctx.lineTo(xr, yb2);
+				ctx.lineTo(xl2, yb);
+				ctx.lineTo(xl, yt2);
+			}
 	 		ctx.closePath();
 		}
 	});
