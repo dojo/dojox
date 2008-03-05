@@ -246,7 +246,7 @@ dojo.require("dojox.dtl.Context");
 		}
 	};
 
-	dd.HtmlTemplate = dojo.extend(function(/*String|dojo._Url*/ obj){
+	dd.HtmlTemplate = dojo.extend(function(/*String|DOMNode|dojo._Url*/ obj){
 		// summary: Use this object for HTML templating
 		if(!obj.nodes){
 			if(typeof obj == "object"){
