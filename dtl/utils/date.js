@@ -12,7 +12,7 @@ dojo.extend(dojox.dtl.utils.date.DateFormat, dojox.date.php.DateFormat.prototype
 		// description: 
 		//		Examples: '1', '1:30', '2:05', '2'
 		//		Proprietary extension.
-		if(!this.date.getMinutes()) return this.g();
+		return (!this.date.getMinutes()) ? this.g() : this.g() + ":" + this.m();
 	},
 	N: function(){
 		// summary: Month abbreviation in Associated Press style. Proprietary extension.
@@ -27,7 +27,7 @@ dojo.extend(dojox.dtl.utils.date.DateFormat, dojox.date.php.DateFormat.prototype
 		//		Proprietary extension.
 		if(!this.date.getMinutes() && !this.date.getHours()) return 'midnight';
 		if(!this.date.getMinutes() && this.date.getHours() == 12) return 'noon';
-		return self.f() + " " + self.a();
+		return this.f() + " " + this.a();
 	}
 });
 
