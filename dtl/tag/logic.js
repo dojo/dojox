@@ -120,7 +120,7 @@ dojo.require("dojox.dtl._base");
 				this.pool[i].unrender(context, buffer);
 			}
 			if(this.reversed){
-				items = items.reverse();
+				items = items.slice(0).reverse();
 			}
 
 			var isObject = dojo.isObject(items) && !dojo.isArrayLike(items);
