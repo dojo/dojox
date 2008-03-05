@@ -251,6 +251,9 @@ dojo.require("dojox.dtl.Context");
 		if(!obj.nodes){
 			var node = dojo.byId(obj);
 			if(node){
+				dojo.forEach(["class", "src", "href", "name", "value"], function(item){
+					ddh._attributes[item] = true;
+				});
 				obj = {
 					nodes: [node]
 				};
