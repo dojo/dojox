@@ -228,7 +228,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	
 		if(request.query){ dojo.mixin(this.request.query, request.query);}
 	
-		if(paramNames && paramNames.imageThumbAttr){
+		if(paramNames){
 			dojo.forEach(["imageThumbAttr", "imageLargeAttr", "linkAttr", "titleAttr"], function(attrName){
 				if(paramNames[attrName]){ this[attrName] = paramNames[attrName]; }	
 			}, this);

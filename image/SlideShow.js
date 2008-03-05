@@ -173,8 +173,10 @@ dojo.declare("dojox.image.SlideShow",
 			}
 		};
 		if(request.query){ dojo.mixin(this._request.query, request.query); }
-		if(paramNames && paramNames.imageLargeAttr){
-			this.imageLargeAttr = paramNames.imageLargeAttr;
+		if(paramNames){
+			dojo.forEach(["imageLargeAttr", "linkAttr", "titleAttr"], function(attrName){
+				if(paramNames[attrName]){ this[attrName] = paramNames[attrName]; }	
+			}, this);
 		}
 	
 		var _complete = function(items){
