@@ -249,15 +249,15 @@ dojo.require("dojox.dtl.Context");
 	dd.HtmlTemplate = dojo.extend(function(/*String|DOMNode|dojo._Url*/ obj){
 		// summary: Use this object for HTML templating
 		if(!obj.nodes){
-			if(typeof obj == "object"){
-				obj = ddt.getTemplateString(obj);
-			}
 			var node = dojo.byId(obj);
 			if(node){
 				obj = {
 					nodes: [node]
 				};
 			}else{
+				if(typeof obj == "object"){
+					obj = ddt.getTemplateString(obj);
+				}
 				obj = ddh.getTemplate(obj);
 			}
 		}
