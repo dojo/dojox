@@ -78,6 +78,13 @@
 	margin-left: 0px;
 }
 
+.tundra .gridArrowButtonChar {
+	display:none !important;
+}
+.dijit_a11y .gridArrowButtonChar {
+	display:inline !important;
+}
+
 /* content */
 
 .tundra .dojoxGrid-scrollbox {
@@ -145,8 +152,8 @@
 }
 
 .tundra .dojoxGrid-row-over .dojoxGrid-cell {
-	/* background-color: #e9e9e9; */
-	background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;
+	background-color: #e9e9e9; 
+	/*background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;*/
 }
 
 .tundra .dojoxGrid-row-odd {
