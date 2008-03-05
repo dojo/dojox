@@ -152,7 +152,8 @@
 }
 
 .tundra .dojoxGrid-row-over .dojoxGrid-cell {
-	background-color: #e9e9e9; 
+	background-color: #60a1ea; 
+	color:#fff;
 	/*background: url(../../../dijit/themes/tundra/images/tabEnabled.png) #e9e9e9 repeat-x top;*/
 }
 
@@ -171,6 +172,7 @@
 .tundra .dojoxGrid-row-table {
 	table-layout: fixed;
 	width: 0;
+	border-collapse: collapse;
 }
 
 .tundra .dojoxGrid-invisible {
@@ -193,8 +195,7 @@
 /* cells */
 
 .tundra .dojoxGrid-cell {
-	border: 1px solid transparent;
-	border-right: 1px solid #D5CDB5;
+	border: 1px dotted #D5CDB5;
 	padding: 3px 3px 3px 3px;
 	text-align: left;
 	overflow: hidden;
