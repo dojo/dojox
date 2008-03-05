@@ -12,7 +12,7 @@ dojo.extend(dojox.dtl.utils.date.DateFormat, dojox.date.php.DateFormat.prototype
 		// description: 
 		//		Examples: '1', '1:30', '2:05', '2'
 		//		Proprietary extension.
-		return (!this.date.getMinutes()) ? this.g() : this.g() + ":" + this.m();
+		return (!this.date.getMinutes()) ? this.g() : this.g() + ":" + this.i();
 	},
 	N: function(){
 		// summary: Month abbreviation in Associated Press style. Proprietary extension.
