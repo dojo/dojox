@@ -37,7 +37,7 @@ dojox.dtl._HtmlTemplated = {
 				clearTimeout(this._rendering);
 				delete this._rendering;
 			}
-			this._render.render(this._template, this._getContext(context));
+			this._render.render(this._getContext(context));
 		},
 		_getContext: function(context){
 			if (!(context instanceof dojox.dtl.Context)) {

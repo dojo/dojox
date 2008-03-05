@@ -47,8 +47,8 @@ dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context
 		dojo.body().appendChild(div);
 
 		var buffer = template.getBuffer();
-		var canvas = new dojox.dtl.render.html.Render(attach);
-		canvas.render(template, context, buffer);
+		var canvas = new dojox.dtl.render.html.Render(attach, template);
+		canvas.render(context, template, buffer);
 		var clones = buffer._clones;
 		var events = buffer._events;
 
@@ -57,7 +57,7 @@ dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context
 		buffer = template.getBuffer();
 		buffer._clones = clones;
 		buffer._events = events;
-		canvas.render(template, context, buffer);
+		canvas.render(context, template, buffer);
 
 		var second = dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
 

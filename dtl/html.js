@@ -317,6 +317,10 @@ dojo.require("dojox.dtl.Context");
 				return this;
 			}
 
+			if(node.nodeType == 1 && !this.rootNode){
+				this.rootNode = node || true;
+			}
+
 			if(!parent){
 				if(node.nodeType == 3 && dojo.trim(node.data)){
 					throw new Error("Text should not exist outside of the root node in template");
@@ -354,6 +358,10 @@ dojo.require("dojox.dtl.Context");
 					this._parent.removeAttribute(obj);
 				}
 			}else{
+				if(obj.nodeType == 1 && !this.getRootNode() && !this._removed){
+					this._removed = true;
+					return this;
+				}
 				if(obj.parentNode){
 					this.onRemoveNode();
 					if(obj.parentNode){
@@ -419,9 +427,6 @@ dojo.require("dojox.dtl.Context");
 		},
 		onSetParent: function(node){
 			// summary: Stub called when setParent is used.
-			if(!this.rootNode){
-				this.rootNode = node || true;
-			}
 		},
 		onAddNode: function(node){
 			// summary: Stub called before new nodes are added
@@ -446,9 +451,6 @@ dojo.require("dojox.dtl.Context");
 	},
 	{
 		render: function(context, buffer){
-			if(this._rendered){
-				return buffer;
-			}
 			this._rendered = true;
 			return buffer.concat(this.contents);
 		},
