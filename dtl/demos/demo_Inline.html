@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>Demo using dojox.dtl._HtmlTemplated inline in DOM</title>
+    <script type="text/javascript" src="../../../dojo/dojo.js"
+			djConfig="isDebug: true"></script>
+		<script type="text/javascript">
+			dojo.require("dojox.dtl.html");
+			dojo.require("dojox.dtl.Context");
+
+			dojo.addOnLoad(function(){
+				var template = new dojox.dtl.HtmlTemplate("template");
+				var context = new dojox.dtl.Context({
+					items: ["apple", "banana", "orange"]
+				});
+				template.render(context);
+				setTimeout(function(){
+					context.items.push("guava");
+					template.render(context);
+				}, 1000);
+			});
+		</script>
+	</head>
+	<body>
+		<ul id="template">
+			{% for item in items %}
+				<li>{{ item }}</li>
+			{% endfor %}
+		</ul>
+	</body>
+</html>

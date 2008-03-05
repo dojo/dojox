@@ -99,6 +99,7 @@ dojo.require("dojox.dtl.Context");
 		_swallowed: [],
 		_tokenize: function(/*Node*/ node, /*Array*/ tokens){
 			var types = this.types;
+			var first = false;
 			var swallowed = this._swallowed;
 			var i, j, tag, child;
 
@@ -106,7 +107,7 @@ dojo.require("dojox.dtl.Context");
 				// Try to efficiently associate tags that use an attribute to
 				// remove the node from DOM (eg dojoType) so that we can efficiently
 				// locate them later in the tokenizing.
-				tokens.first = true;
+				first = tokens.first = true;
 				var tags = dd.register.getAttributeTags();
 				for(i = 0; tag = tags[i]; i++){
 					try{
@@ -191,7 +192,7 @@ dojo.require("dojox.dtl.Context");
 				this.__tokenize(child, tokens);
 			}
 
-			if(node.parentNode && node.parentNode.tagName){
+			if(!first && node.parentNode && node.parentNode.tagName){
 				if(change){
 					tokens.push([types.change, node, true]);
 				}
@@ -251,7 +252,14 @@ dojo.require("dojox.dtl.Context");
 			if(typeof obj == "object"){
 				obj = ddt.getTemplateString(obj);
 			}
-			obj = ddh.getTemplate(obj);
+			var node = dojo.byId(obj);
+			if(node){
+				obj = {
+					nodes: [node]
+				};
+			}else{
+				obj = ddh.getTemplate(obj);
+			}
 		}
 
 		var tokens = ddh.tokenize(obj.nodes);
@@ -302,7 +310,7 @@ dojo.require("dojox.dtl.Context");
 	{
 		concat: function(/*DOMNode*/ node){
 			var parent = this._parent;
-			if(node.parentNode && node.parentNode.tagName && !parent._dirty){
+			if(node.parentNode && node.parentNode.tagName && parent && !parent._dirty){
 				return this;
 			}
 
