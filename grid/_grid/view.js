@@ -130,15 +130,15 @@ dojo.declare('dojox.GridView',
 	},
 
 	resize: function(){
-		this.resizeHeight();
-		this.resizeWidth();
+		this.adaptHeight();
+		this.adaptWidth();
 	},
 
 	hasScrollbar: function(){
 		return (this.scrollboxNode.clientHeight != this.scrollboxNode.offsetHeight); // Boolean
 	},
 
-	resizeHeight: function(){
+	adaptHeight: function(){
 		if(!this.grid.autoHeight){
 			var h = this.domNode.clientHeight;
 			if(!this.hasScrollbar()){ // no scrollbar is rendered
@@ -148,7 +148,7 @@ dojo.declare('dojox.GridView',
 		}
 	},
 
-	resizeWidth: function(){
+	adaptWidth: function(){
 		if(this.flexCells){
 			// the view content width
 			this.contentWidth = this.getContentWidth();

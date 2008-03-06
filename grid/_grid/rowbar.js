@@ -22,7 +22,9 @@ dojo.declare('dojox.GridRowView', dojox.GridView, {
 	renderHeader: function(){
 	},
 	resize: function(){
-		this.resizeHeight();
+		this.adaptHeight();
+	},
+	adaptWidth: function(){
 	},
 	// styling
 	doStyleRowNode: function(inRowIndex, inRowNode){

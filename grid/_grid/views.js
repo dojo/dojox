@@ -21,7 +21,6 @@ dojo.declare('dojox.grid.views', null, {
 
 	render: function(){
 		this.onEach("render");
-		this.normalizeHeaderNodeHeight();
 	},
 
 	// views
@@ -91,6 +90,14 @@ dojo.declare('dojox.grid.views', null, {
 			inRowNodes[0].parentNode.offsetHeight;
 		}
 	},
+	
+	resetHeaderNodeHeight: function(){
+		for(var i=0, v, n; (v=this.views[i]); i++){
+			n = v.headerContentNode.firstChild;
+			if(n)
+				n.style.height = "";
+		}
+	},
 
 	renormalizeRow: function(inRowIndex){
 		var rowNodes = [];
@@ -105,13 +112,17 @@ dojo.declare('dojox.grid.views', null, {
 		return this.views[inIndex].getWidth() || this.defaultWidth;
 	},
 
+	// must be called after view widths are properly set or height can be miscalculated
+	// if there are flex columns
 	measureHeader: function(){
+		// need to reset view header heights so they are properly measured.
+		this.resetHeaderNodeHeight();
 		this.forEach(function(inView){
 			inView.headerContentNode.style.height = '';
 		});
 		var h = 0;
+		// calculate maximum view header height
 		this.forEach(function(inView){
-			//console.log('headerContentNode', inView.headerContentNode.offsetHeight, inView.headerContentNode.offsetWidth);
 			h = Math.max(inView.headerNode.offsetHeight, h);
 		});
 		return h;
@@ -149,19 +160,19 @@ dojo.declare('dojox.grid.views', null, {
 		return c;
 	},
 
-	_arrange: function(l, t, w, h){
+	arrange: function(l, w){
 		var i, v, vw, len = this.views.length;
 		// find the client
 		var c = (w <= 0 ? len : this.findClient());
 		// layout views
-		var setPosition = function(v, l, t){
+		var setPosition = function(v, l){
 			with(v.domNode.style){
 				if(!dojo._isBodyLtr()){
 					right = l + 'px';
 				}else{
 				 	left = l + 'px';
 				}
-				top = t + 'px';
+				top = 0 + 'px';
 			}
 			with(v.headerNode.style){
 				if(!dojo._isBodyLtr()){
@@ -179,8 +190,8 @@ dojo.declare('dojox.grid.views', null, {
 			// get width
 			vw = this.getViewWidth(i);
 			// process boxes
-			v.setSize(vw, h);
-			setPosition(v, l, t);
+			v.setSize(vw, 0);
+			setPosition(v, l);
 			vw = v.domNode.offsetWidth;
 			// update position
 			l += vw;
@@ -194,31 +205,25 @@ dojo.declare('dojox.grid.views', null, {
 			// get width
 			vw = this.getViewWidth(j);
 			// set size
-			v.setSize(vw, h);
+			v.setSize(vw, 0);
 			// measure in pixels
 			vw = v.domNode.offsetWidth;
 			// update position
 			r -= vw;
 			// set position
-			setPosition(v, r, t);
+			setPosition(v, r);
 		}
 		if(c<len){
 			v = this.views[c];
 			// position the client box between left and right boxes	
 			vw = Math.max(1, r-l);
 			// set size
-			v.setSize(vw + 'px', h);
-			setPosition(v, l, t);
+			v.setSize(vw + 'px', 0);
+			setPosition(v, l);
 		}
 		return l;
 	},
 
-	arrange: function(l, t, w, h){
-		w = this._arrange(l, t, w, h);
-		this.resize();
-		return w;
-	},
-	
 	// rendering
 	renderRow: function(inRowIndex, inNodes){
 		var rowNodes = [];

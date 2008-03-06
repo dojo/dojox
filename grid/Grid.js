@@ -247,10 +247,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	onStyleRow: function(inRow){
 		this.styleRowState(inRow);
 		this.inherited(arguments);
-	},
-
-	// FIXME: why?
-	junk: 0
+	}
 
 });
 

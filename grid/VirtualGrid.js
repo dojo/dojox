@@ -303,13 +303,18 @@ dojo.declare('dojox.VirtualGrid',
 		this.sizeChange();
 	},
 	
+	_getPadBorder: function() {
+		this._padBorder = this._padBorder || dojo._getPadBorderExtents(this.domNode);
+		return this._padBorder;
+	},
+	
 	_resize: function(){
 		// if we have set up everything except the DOM, we cannot resize
 		if(!this.domNode.parentNode || this.domNode.parentNode.nodeType != 1 || !this.hasLayout()){
 			return;
 		}
 		// useful measurement
-		var padBorder = dojo._getPadBorderExtents(this.domNode);
+		var padBorder = this._getPadBorder();
 		// grid height
 		if(this.autoHeight){
 			this.domNode.style.height = 'auto';
@@ -329,6 +334,7 @@ dojo.declare('dojox.VirtualGrid',
 			var h = dojo._getContentBox(this.domNode.parentNode).h;
 			dojo.marginBox(this.domNode, { h: Math.max(0, h) });
 		}
+		
 		var h = dojo._getContentBox(this.domNode).h;
 		if(h == 0 && !this.autoHeight){
 			// We need to hide the header, since the Grid is essentially hidden.
@@ -336,35 +342,41 @@ dojo.declare('dojox.VirtualGrid',
 		}else{
 			// Otherwise, show the header and give it an appropriate height.
 			this.viewsHeaderNode.style.display = "block";
-			// header height
-			var t = this.views.measureHeader();
-			this.viewsHeaderNode.style.height = t + 'px';
 		}
-		// content extent
-		var l = 1, h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
-		if(this.autoWidth){
-			// grid width set to total width
-			this.domNode.style.width = this.views.arrange(l, 0, 0, h) + 'px';
-		}else{
-			// views fit to our clientWidth
-			var w = this.domNode.clientWidth || (this.domNode.offsetWidth - padBorder.w);
-			this.views.arrange(l, 0, w, h);
-		}
-		// virtual scroller height
-		this.scroller.windowHeight = h; 
+		
+		// NOTE: it is essential that width be applied before height
+		// Header height can only be calculated properly after view widths have been set.
+		// This is because flex column width is naturally 0 in Firefox.
+		// Therefore prior to width sizing flex columns with spaces are maximally wrapped 
+		// and calculated to be too tall.
+		this.adaptWidth();
+		this.adaptHeight();
+		
 		// default row height (FIXME: use running average(?), remove magic #)
 		this.scroller.defaultRowHeight = this.rows.getDefaultHeightPx() + 1;
 		this.postresize();
 	},
 
-	resizeHeight: function(){
-		var t = this.views.measureHeader();
-		this.viewsHeaderNode.style.height = t + 'px';
+	adaptWidth: function() {
+		// private: sets width and position for views and update grid width if necessary
+		var
+			w = this.autoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w);
+			vw = this.views.arrange(1, w);
+		this.views.onEach("adaptWidth");
+		if (this.autoWidth)
+			this.domNode.style.width = vw + "px";
+	},
+
+	adaptHeight: function(){
+		// private: measures and normalizes header height, then sets view heights, and then updates scroller
+		var vns = this.viewsHeaderNode.style, t = vns.display == "none" ? 0 : this.views.measureHeader();
+		vns.height = t + 'px';
+		// header heights are reset during measuring so must be normalized after measuring.
+		this.views.normalizeHeaderNodeHeight();
 		// content extent
 		var h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
-		//this.views.arrange(0, 0, 0, h);
 		this.views.onEach('setSize', [0, h]);
-		this.views.onEach('resizeHeight');
+		this.views.onEach('adaptHeight');
 		this.scroller.windowHeight = h; 
 	},
 
