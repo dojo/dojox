@@ -6,15 +6,14 @@ dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 
 dojo.declare("dojox.layout.ExpandoPane",
-	[dijit.layout.ContentPane,dijit._Templated,dijit._Contained],
+	[dijit.layout.ContentPane, dijit._Templated, dijit._Contained],
 	{
 	// summary: An experimental expando-pane for dijit.layout.BorderContainer
 	//
 	// description:
-	//		Works just like a ContentPane inside of a borderContainer, though
-	//		only supports left and right regions. Will expand/collapse on
+	//		Works just like a ContentPane inside of a borderContainer. Will expand/collapse on
 	//		command, and supports having Layout Children as direct descendants
-	//		via a custom "attachParent" attribute
+	//		via a custom "attachParent" attribute on the child.
 
 	maxHeight:"",
 	maxWidth:"",
@@ -71,7 +70,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 					break;
 			}
 			dojo.addClass(this.domNode,"dojoxExpando"+thisClass);
-			this._isHorizontal = !/top|bottom/.test(this.region);
+			this._isHorizontal = /top|bottom/.test(this.region);
 		}
 		dojo.style(this.domNode,"overflow","hidden");
 	},
@@ -88,14 +87,14 @@ dojo.declare("dojox.layout.ExpandoPane",
 			}));
 		}
 		this._currentSize = dojo.marginBox(this.domNode);
-		this._showSize = this._currentSize[(this._isHorizontal ? "w":"h")];
+		this._showSize = this._currentSize[(this._isHorizontal ? "h" : "w")];
 		this._setupAnims();
 	},
 	
 	_afterResize: function(e){
 		var tmp = this._currentSize;
 		this._currentSize = dojo.marginBox(this.domNode);
-		var n = this._currentSize[(this._isHorizontal ? "w" : "h")] 
+		var n = this._currentSize[(this._isHorizontal ? "h" : "w")] 
 		if(n> this._titleHeight){
 			if(!this._showing){
 				console.log('done being dragged:',e);			
@@ -105,7 +104,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			this._showSize = n;
 			this._setupAnims();
 		}else{
-			this._showSize = tmp[(this._isHorizontal ? "w" : "h")];
+			this._showSize = tmp[(this._isHorizontal ? "h" : "w")];
 			this._showing = false;
 			this._hideWrapper();
 			this._hideAnim.gotoPercent(89,true);
@@ -126,7 +125,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		var showProps = {};
 		var hideProps = {};
 
-		var dimension = isHorizontal ? "width" : "height"; 
+		var dimension = isHorizontal ? "height" : "width";
 		showProps[dimension] = { 
 			end: this._showSize, 
 			unit:"px" 
@@ -177,12 +176,12 @@ dojo.declare("dojox.layout.ExpandoPane",
 		dojo.style(this.cwrapper,{ "opacity":"0", "visibility":"visible" });
 		dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
 		dojo.removeClass(this.domNode,"dojoxExpandoClosed");
-		setTimeout(dojo.hitch(this._container,"layout"),15);
+		setTimeout(dojo.hitch(this._container, "layout"), 15);
 	},
 	
 	_hideEnd: function(){
 		dojo.addClass(this.domNode,"dojoxExpandoClosed");
-		setTimeout(dojo.hitch(this._container,"layout"),15);
+		setTimeout(dojo.hitch(this._container, "layout"), 15);
 	},
 	
 	resize: function(){
