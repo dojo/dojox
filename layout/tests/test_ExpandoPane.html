@@ -173,12 +173,23 @@
 <body>
 		<div id="bc" style="width:100%; height:100%;" dojoType="dijit.layout.BorderContainer">
 			<div id="header" dojoType="dijit.layout.ContentPane" region="top">Dojo Expando Pane Test</div>
-			<div dojoType="dojox.layout.ExpandoPane" splitter="true" duration="125" region="left" title="Left Section" id="leftPane" maxWidth="275" style="width:275px; background:#fafafa">
+			<div dojoType="dojox.layout.ExpandoPane" 
+				splitter="true" 
+				duration="125" 
+				region="left" 
+				title="Left Section" 
+				id="leftPane" 
+				maxWidth="275" 
+				style="width: 275px; background: #fafafa;">
 				<div dojoType="dijit.layout.TabContainer" attachParent="true" tabPosition="bottom">
 					<div dojoType="dijit.layout.ContentPane" title="Search">
 						<div class="searchBar">
-							<p><span>Search:</span> <input id="searchBox" name="searchBox" />
-								<span id="runSearchIcon"><img src="run.gif" style="height:16px; width:16px;"/></span>
+							<p>
+								<span style="float: left;">Search:</span>
+								<input id="searchBox" name="searchBox" style="float: left;">
+								<span id="runSearchIcon" style="border: none; floast: left; padding: 3px;">
+									<img src="../../presentation/resources/icons/next.png" style="height:12px; width:12px;">
+								</span>
 							</p>
 						</div>
 						
@@ -213,7 +224,16 @@
 					</div>
 				</div>
 			</div>
-			<div dojoType="dojox.layout.ExpandoPane" splitter="true" title="Right Section" region="right" id="rightPane" maxWidth="275" style="background:#fafafa; width:275px" easeIn="dojox.fx.easing.backOut" easeOut="dojox.fx.easing.backInOut">
+			<div dojoType="dojox.layout.ExpandoPane" 
+				splitter="true" 
+				title="Right Section" 
+				region="right" 
+				id="rightPane" 
+				maxWidth="275" 
+				style="background:#fafafa; width:275px" 
+				easeIn="dojox.fx.easing.backOut" 
+				easeOut="dojox.fx.easing.backInOut">
+
 				<div dojoType="dijit.layout.AccordionContainer" id="rightAccordion" style="width:275px;" attachParent="true">
 					<div dojoType="dijit.layout.AccordionPane" title="Easing Selection">
 						<div class="wrap">
