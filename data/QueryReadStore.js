@@ -1,9 +1,6 @@
 dojo.provide("dojox.data.QueryReadStore");
-dojo.provide("dojox.data.QueryReadStore.InvalidItemError");
-dojo.provide("dojox.data.QueryReadStore.InvalidAttributeError");
 
 dojo.require("dojo.string");
-dojo.require("dojo.data.util.simpleFetch");
 
 dojo.declare("dojox.data.QueryReadStore", null, {
 	/*
@@ -334,7 +331,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 						if(!this._itemsByIdentity[identity]){
 							this._itemsByIdentity[identity] = item;
 						}else{
-							throw new Error("dojo.data.QueryReadStore:  The json data as specified by: [" + this.url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
+							throw new Error(this._className+":  The json data as specified by: [" + this.url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
 						}
 					}
 				}else{
@@ -377,7 +374,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		//	item: 
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
-			throw new dojox.data.QueryReadStore.InvalidItemError(this._className+": a function was passed an item argument that was not an item");
+			throw new Error(this._className+": Invalid item argument.");
 		}
 	},
 
@@ -387,7 +384,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		//	attribute: 
 		//		The attribute to test for being contained by the store.
 		if(typeof attribute !== "string"){ 
-			throw new dojox.data.QueryReadStore.InvalidAttributeError(this._className+": '"+attribute+"' is not a valid attribute identifier.");
+			throw new Error(this._className+": Invalid attribute argument ('"+attribute+"').");
 		}
 	},
 
@@ -465,9 +462,3 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		return [this._identifier];
 	}
 });
-
-dojo.declare("dojox.data.QueryReadStore.InvalidItemError", Error, {});
-dojo.declare("dojox.data.QueryReadStore.InvalidAttributeError", Error, {});
-
-
-

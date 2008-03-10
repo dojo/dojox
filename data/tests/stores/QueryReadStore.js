@@ -69,8 +69,8 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 
 				// Test for not-existing attributes without defaultValues and invalid items.
 				// TODO
-				//dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidAttributeError, store, "getValues", [item, "NOT THERE"]);
-				//dojox.data.tests.stores.QueryReadStore.assertError(dojox.data.QueryReadStore.InvalidItemError, store, "getValues", ["not an item", "NOT THERE"]);
+				t.assertEqual([], store, "getValues", [item, "NOT THERE"]);
+				t.assertEqual([], store, "getValues", ["not an item", "NOT THERE"]);
 				
 				d.callback(true);
 			}
@@ -88,7 +88,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				var item = items[0];
 				// The good case(s).
 				t.assertEqual(['name', 'label', 'abbreviation'], store.getAttributes(item));
-				t.assertError(dojox.data.QueryReadStore.InvalidItemError, store, "getAttributes", [{}]);
+				t.assertError(Error, store, "getAttributes", [{}]);
 				
 				d.callback(true);
 			}
