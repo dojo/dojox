@@ -39,9 +39,6 @@
 		function doSearch(el) {
 			if (el.value!=lastSearchValue) {
 				grid.model.query = {name:el.value};
-				grid.model.requestRows(null, null, dojo.hitch(this, function() {
-					grid.widget.updateRowCount(grid.model.getRowCount());
-				}));
 				lastSearchValue = el.value;
 			}
 		}
