@@ -69,9 +69,15 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 
 				// Test for not-existing attributes without defaultValues and invalid items.
 				// TODO
-				t.assertEqual([], store, "getValues", [item, "NOT THERE"]);
-				t.assertEqual([], store, "getValues", ["not an item", "NOT THERE"]);
-				
+				t.assertEqual([], store.getValues(item, "NOT THERE"));
+				var errThrown = false;
+				try{
+					//Should throw an exception.
+					var values = store.getValues("not an item", "NOT THERE");
+				}catch (e){
+					errThrown = true;
+				}
+				t.assertTrue(errThrown);
 				d.callback(true);
 			}
 			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
@@ -87,9 +93,22 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			function onComplete(items, request){
 				var item = items[0];
 				// The good case(s).
-				t.assertEqual(['name', 'label', 'abbreviation'], store.getAttributes(item));
+				t.assertEqual(['id', 'name', 'label', 'abbreviation'], store.getAttributes(item));
 				t.assertError(Error, store, "getAttributes", [{}]);
 				
+				d.callback(true);
+			}
+			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
+			return d; //Object
+		},
+
+		function testReadApi_getLabel(t){
+			var store = dojox.data.tests.stores.QueryReadStore.getStore();
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				var item = items[0];
+				// The good cases.
+				t.assertEqual(["<img src='images/Alabama.jpg'/>Alabama"], store.getLabel(item));
 				d.callback(true);
 			}
 			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});

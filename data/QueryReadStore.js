@@ -82,6 +82,8 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	_identifier:null,
 
 	_features: {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true},
+
+	_labelAttr: "label",
 	
 	constructor: function(/* Object */ params){
 		dojo.mixin(this,params);
@@ -106,6 +108,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	},
 	
 	getValues: function(/* item */ item, /* attribute-name-string */ attribute){
+		this._assertIsItem(item);
 		var ret = [];
 		if(this.hasAttribute(item, attribute)){
 			ret.push(item.i[attribute]);
@@ -254,13 +257,22 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	},
 
 	getLabel: function(/* item */ item){
-		// Override it to return whatever the label shall be, see Read-API.
-		return undefined;
+		//	summary:
+		//		See dojo.data.api.Read.getLabel()
+		if(this._labelAttr && this.isItem(item)){
+			return this.getValue(item, this._labelAttr); //String
+		}
+		return undefined; //undefined
 	},
 
 	getLabelAttributes: function(/* item */ item){
-		return null;
-	},
+		//	summary:
+		//		See dojo.data.api.Read.getLabelAttributes()
+		if(this._labelAttr){
+			return [this._labelAttr]; //array
+		}
+		return null; //null
+        },
 	
 	_fetchItems: function(request, fetchHandler, errorHandler){
 		//	summary:
@@ -310,7 +322,10 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			var xhrFunc = this.requestMethod.toLowerCase()=="post" ? dojo.xhrPost : dojo.xhrGet;
 			var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
 			xhrHandler.addCallback(dojo.hitch(this, function(data){
-				data=this._filterResponse(data);
+				data = this._filterResponse(data);
+				if (data.label){
+					this._labelAttr = data.label;
+				}
 				var numRows = data.numRows || -1;
 
 				this._items = [];
