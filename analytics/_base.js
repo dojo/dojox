@@ -48,7 +48,6 @@ dojo.extend(dojox.analytics, {
 		}
 
 		this._data.push({plugin: dataType, data: data});
-		console.log("Add Data: ", dataType);
 	},
 
 	checkData: function(){
@@ -99,7 +98,6 @@ dojo.extend(dojox.analytics, {
 				this._split=1;
 			}else{
 				//console.log("script send: ", this._inTransit, " Remaining in queue: ", this._data.length);
-				console.log("remaining in queue: " + this._data.length);
 				return query;
 			}	
 		}
@@ -118,7 +116,6 @@ dojo.extend(dojox.analytics, {
 		} else {
 			this.schedulePusher();
 		}
-		console.log("Request Completed");
 	}
 });
 
