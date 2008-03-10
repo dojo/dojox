@@ -370,6 +370,11 @@ dojox.off.files = {
 		
 		var storeName = "dot_store_" 
 							+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
+							
+		// clip at 64 characters, the max length of a resource store name
+		if(storeName.length >= 64){
+		  storeName = storeName.substring(0, 63);
+		}
 			
 		// refresh everything by simply removing
 		// any older stores
