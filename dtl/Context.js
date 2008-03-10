@@ -2,13 +2,10 @@ dojo.provide("dojox.dtl.Context");
 dojo.require("dojox.dtl._base");
 
 dojox.dtl.Context = dojo.extend(function(dict){
+	this._this = {};
 	dojox.dtl._Context.call(this, dict);
 }, dojox.dtl._Context.prototype,
 {
-	_this: {},
-	constructor: function(){
-		this._this = {};
-	},
 	extend: function(/*dojox.dtl.Context|Object*/ obj){
 		// summary: Returns a clone of this context object, with the items from the
 		//		passed objecct mixed in.
