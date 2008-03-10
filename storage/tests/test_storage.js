@@ -1,6 +1,5 @@
 dojo.require("dojox.storage");
 
-
 var TestStorage = {
 	currentProvider: "default",
 	currentNamespace: dojox.storage.DEFAULT_NAMESPACE,
@@ -10,9 +9,20 @@ var TestStorage = {
 		
 		// do we even have a storage provider?
 		if(dojox.storage.manager.available == false){
+			var o = document.createElement("option");
+			o.appendChild(document.createTextNode("None"));
+			o.value = "None";
+			o.selected = true;
+			var selector = dojo.byId("currentStorageProvider");
+			selector.disabled = true;
+			selector.appendChild(o);
+			
 			alert("No storage provider is available on this browser");
 			return;
 		}
+		
+		// what should our starting namespace be?
+		this._determineCurrentNamespace();
 		
 		// clear out old values and enable input forms
 		dojo.byId("storageNamespace").value = this.currentNamespace;
@@ -22,6 +32,9 @@ var TestStorage = {
 		dojo.byId("storageValue").value = "";
 		dojo.byId("storageValue").disabled = false;
 		
+		// write out available providers
+		this._printAvailableProviders();
+		
 		// write out our available namespaces
 		this._printAvailableNamespaces();
 		
@@ -29,6 +42,8 @@ var TestStorage = {
 		this._printAvailableKeys();
 		
 		// initialize our event handlers
+		var providerDirectory = dojo.byId("currentStorageProvider");
+		dojo.connect(providerDirectory, "onchange", this, this.providerChange);
 		var namespaceDirectory = dojo.byId("namespaceDirectory");
 		dojo.connect(namespaceDirectory, "onchange", this, this.namespaceChange);
 		var directory = dojo.byId("directory");
@@ -63,6 +78,20 @@ var TestStorage = {
 		if(dojox.storage.hasSettingsUI() == false){
 			dojo.byId("configureButton").disabled = true;	
 		}
+	},
+	
+	providerChange: function(evt){
+	  var provider = evt.target.value;
+	  
+	  // reload the page with this provider
+	  var query = "";
+	  if(window.location.href.indexOf("forceStorageProvider") == -1){
+	    query = "?";
+	  }else{
+	    query = "&";
+	  }
+	  
+	  window.location.href += query + "forceStorageProvider=" + provider;
 	},
 	
 	namespaceChange: function(evt){
@@ -279,6 +308,7 @@ var TestStorage = {
 		this._printStatus("Saving '" + key + "'...");
 		var self = this;
 		var saveHandler = function(status, keyName){
+		  //console.debug("saveHandler, status="+status+", keyName="+keyName);
 			if(status == dojox.storage.FAILED){
 				alert("You do not have permission to store data for this web site. "
 			        + "Press the Configure button to grant permission.");
@@ -291,18 +321,10 @@ var TestStorage = {
 				if(typeof namespace != "undefined"
 					&& namespace != null){
 					self.currentNamespace = namespace;
-				}
+				}		
 				
-				// update the list of available keys and namespaces
-				// put this on a slight timeout, because saveHandler is called back
-				// from Flash, which can cause problems in Flash 8 communication
-				// which affects Safari
-				// FIXME: Find out what is going on in the Flash 8 layer and fix it
-				// there
-				window.setTimeout(function(){ 
-					self._printAvailableKeys();
-					self._printAvailableNamespaces();
-				}, 1);
+			  self._printAvailableKeys();
+				self._printAvailableNamespaces();
 			}
 		};
 		
@@ -352,6 +374,9 @@ var TestStorage = {
 			var optionNode = document.createElement("option");
 			optionNode.appendChild(document.createTextNode(availableNamespaces[i]));
 			optionNode.value = availableNamespaces[i];
+			if(this.currentNamespace == availableNamespaces[i]){
+			  optionNode.selected = true;
+			}
 			namespacesDir.appendChild(optionNode);
 		}
 	},
@@ -389,9 +414,8 @@ var TestStorage = {
 		var moreInfo = "";
 		if(dojox.storage.manager.currentProvider.declaredClass 
 				== "dojox.storage.FlashStorageProvider"){
-			moreInfo = "Flash Comm Version " + dojo.flash.info.commVersion;
+			moreInfo = "Flash Version " + dojox.flash.info.version;
 		}
-		
 		dojo.byId("currentStorageProvider").innerHTML = storageType;
 		dojo.byId("isSupported").innerHTML = isSupported;
 		dojo.byId("isPersistent").innerHTML = permanent;
@@ -417,6 +441,47 @@ var TestStorage = {
 		
 		top.appendChild(status);
 		dojo.fadeOut({node: status, duration: 2000}).play();
+	},
+	
+	_determineCurrentNamespace: function(){
+	  // what is current namespace?
+		var availableNamespaces = dojox.storage.getNamespaces();
+		if(this.currentNamespace == dojox.storage.DEFAULT_NAMESPACE){
+		  // do we even have the default namespace in our available namespaces?
+		  var defaultPresent = false;
+		  for(var i = 0; i < availableNamespaces.length; i++){
+		    if(availableNamespaces[i] == dojox.storage.DEFAULT_NAMESPACE){
+		      defaultPresent = true;
+		    }
+		  }
+		  
+		  if(!defaultPresent && availableNamespaces.length){
+		    this.currentNamespace = availableNamespaces[0];
+		  }
+		}
+	},
+	
+	_printAvailableProviders: function(){
+	  // it is scary that this timeout is needed; if it is not present,
+		// the options don't appear on Firefox and Safari, even though the
+		// page is finished loading! it might have to do with some strange
+		// interaction where our initialize method is called from ExternalInterface,
+		// which originated inside of Flash. -- Brad Neuberg
+		window.setTimeout(function(){
+  	  var selector = dojo.byId("currentStorageProvider");
+  	  var p = dojox.storage.manager.providers;
+  	  for(var i = 0; i < p.length; i++){
+  	    var name = p[i].declaredClass;
+  	    var o = document.createElement("option");
+  			o.appendChild(document.createTextNode(name));
+  			o.value = name;
+  			if(dojox.storage.manager.currentProvider == p[i]){
+  			  o.selected = true;
+  			}
+			
+  			selector.appendChild(o);
+  		}
+  	}, 1);
 	}
 };
 

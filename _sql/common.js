@@ -50,7 +50,10 @@ dojo.mixin(dojox.sql, {
 		if(!this.dbName){
 			this.dbName = "dot_store_" 
 				+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
-			//console.debug("Using Google Gears database " + this.dbName);
+			// database names in Gears are limited to 64 characters long
+			if(this.dbName.length > 63){
+			  this.dbName = this.dbName.substring(0, 63);
+			}
 		}
 		
 		if(!dbName){

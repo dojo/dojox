@@ -1,6 +1,6 @@
 import DojoExternalInterface;
 
-class Storage {
+class Storage{
 	public static var SUCCESS = "success";
 	public static var FAILED = "failed";
 	public static var PENDING = "pending";
@@ -17,7 +17,6 @@ class Storage {
 	public function Storage(){
 		flush_delay = Storage.FLUSH_DELAY_DEFAULT;
 	
-		//getURL("javascript:console.debug('FLASH:Storage constructor')");
 		DojoExternalInterface.initialize();
 		DojoExternalInterface.addCallback("put", this, put);
 		DojoExternalInterface.addCallback("putMultiple", this, putMultiple);
@@ -37,18 +36,22 @@ class Storage {
 		// preload the System Settings finished button movie for offline
 		// access so it is in the cache
 		_root.createEmptyMovieClip("_settingsBackground", 1);
-		// getURL("javascript:alert('"+DojoExternalInterface.dojoPath+"');");
 		_root._settingsBackground.loadMovie(DojoExternalInterface.dojoPath + "storage_dialog.swf");
 	}
 
+  //  FIXME: Whoever added this Flush code did not document why it
+  //  exists. Please also put your name and a bug number so I know 
+  //  who to contact. -- Brad Neuberg
+	
 	//	Set a new value for the flush delay timer.
 	//	Possible values:
 	//	  0 : Perform the flush synchronously after each "put" request
 	//	> 0 : Wait until 'newDelay' ms have passed without any "put" request to flush
-	//	 -1 : Do not  automatically flush
+	//	 -1 : Do not automatically flush
 	public function setFlushDelay(newDelay){
 		flush_delay = Number(newDelay);
 	}
+	
 	public function getFlushDelay(){
 		return String(flush_delay);
 	}
@@ -60,11 +63,7 @@ class Storage {
 		}
 	
 		var so = SharedObject.getLocal(namespace);
-
-			//var st = (new Date()).getTime();
 		var flushResults = so.flush();
-			//var end = (new Date()).getTime();
-			//getURL("javascript:dojo.debug('FLASH: flush - not a word game - took " + (end - st) + "ms')");
 
 		// return results of this command to JavaScript
 		var statusResults;
@@ -76,22 +75,32 @@ class Storage {
 			statusResults = Storage.FAILED;
 		}
 		
-		DojoExternalInterface.call("dojox.storage._onStatus", null, statusResults, null);
+		DojoExternalInterface.call("dojox.storage._onStatus", statusResults, 
+		                            null, namespace);
 	}
 
-	// FIXME: This code has gotten ugly -- refactor
 	public function put(keyName, keyValue, namespace){
 		// Get the SharedObject for these values and save it
 		so = SharedObject.getLocal(namespace);
 		
 		//  Save the key and value
 		so.data[keyName] = keyValue;
+		
+		// Save the namespace
+		// FIXME: Tie this into the flush/no-flush stuff below; right now
+		// we immediately write out this namespace. -- Brad Neuberg
+    addNamespace(namespace, keyName);
 
 		//	Do all the flush/no-flush stuff
-		var keyNames = new Array(); keyNames[0] = keyName;
-		postWrite( so, keyNames, namespace);
+		var keyNames = new Array(); 
+		keyNames[0] = keyName;
+		postWrite(so, keyNames, namespace);
 	}
 	
+	//  FIXME: Whoever added this code did not document what the
+	//  put/get multiple functionality is and why it exists. Please
+	//  also put your name and a bug number so I know who to contact.
+	//  -- Brad Neuberg
 	public function putMultiple(metaKey, metaValue, metaLengths, namespace){
 		// Get the SharedObject for these values and save it
 		so = SharedObject.getLocal(namespace);
@@ -107,17 +116,18 @@ class Storage {
 		}
 		
 		//	Do all the flush/no-flush stuff
-		postWrite( so, keys, namespace);
+		postWrite(so, keys, namespace);
 	}
 
-	public function postWrite( so, keyNames, namespace){
-		//	TODO: Review all this 'handler' stuff. In particular, the flush could now be with keys pending
-		//	from several different requests, not only the ones passed in this method call
+	public function postWrite(so, keyNames, namespace){
+		//	TODO: Review all this 'handler' stuff. In particular, the flush 
+		//  could now be with keys pending from several different requests, not 
+		//  only the ones passed in this method call
 
 		// prepare a storage status handler
 		var self = this;
 		so.onStatus = function(infoObject:Object){
-			//getURL("javascript:console.debug('FLASH: onStatus, infoObject="+infoObject.code+"')");
+			//trace("onStatus, infoObject="+infoObject.code);
 			
 			// delete the data value if the request was denied
 			if(infoObject.code == "SharedObject.Flush.Failed"){
@@ -142,24 +152,23 @@ class Storage {
 					return;
 				}
 			}
-			//getURL("javascript:console.debug('FLASH: onStatus, statusResults="+statusResults+"')");
+			//trace("onStatus, statusResults="+statusResults);
 			
 			// give the status results to JavaScript
-			DojoExternalInterface.call("dojox.storage._onStatus", null, statusResults, keyNames[0]);
+			DojoExternalInterface.call("dojox.storage._onStatus", statusResults, 
+			                            keyNames[0], namespace);
 		}
 		
 		//	Clear any pending flush timers
 		if(timer){
-			//getURL("javascript:dojo.debug('FLASH: clearing timer')");
-			_global.clearTimeout( timer);
+			_global.clearTimeout(timer);
 		}
 		
 		//	If we have a flush delay set, set a timer for its execution
 		if(flush_delay > 0){
-			timer = _global.setTimeout( flush, flush_delay, namespace);
+			timer = _global.setTimeout(flush, flush_delay, namespace);
 		//	With a flush_delay value of 0, execute the flush request synchronously
 		}else if(flush_delay == 0){
-			//getURL("javascript:dojo.debug('FLASH: calling flush now')");
 			flush(namespace);
 		}
 		//	Otherwise just don't flush - will be probably be flushed manually
@@ -175,7 +184,6 @@ class Storage {
 	
 	//	Returns an array with the contents of each key value on the metaKeys array
 	public function getMultiple(metaKeys, namespace){
-		
 		//	get the storage object
 		so = SharedObject.getLocal(namespace);
 		
@@ -184,7 +192,7 @@ class Storage {
 		var results = new Array();
 		
 		//	Read from storage into results array
-		for(var i=0;i<keys.length;i++){
+		for(var i = 0;i < keys.length;i++){
 			var val = so.data[keys[i]];
 			val = val.split("\\").join("\\\\");
 			val = val.split('"').join('\\"');
@@ -218,18 +226,17 @@ class Storage {
 		removeNamespace(namespace);
 	}
 	
-	public function getKeys(namespace){
+	public function getKeys(namespace) : String{
 		// Returns a list of the available keys in this namespace
 		
 		// get the storage object
 		so = SharedObject.getLocal(namespace);
-		
 		// get all of the keys
-		var results = new Array();
+		var results = [];
 		for(var i in so.data){
 			results.push(i);	
 		}
-			
+		
 		// remove our key that records our list of namespaces
 		for(var i = 0; i < results.length; i++){
 			if(results[i] == _NAMESPACE_KEY){
@@ -238,20 +245,26 @@ class Storage {
 			}
 		}
 		
-		// join the keys together in a comma seperated string
+		// a bug in ExternalInterface transforms Arrays into
+		// Strings, so we can't use those here! -- BradNeuberg
 		results = results.join(",");
 		
 		return results;
 	}
 	
-	public function getNamespaces(){
+	public function getNamespaces() : String{
 		var allNamespaces = SharedObject.getLocal(_NAMESPACE_KEY);
-		var results = new Array();
+		var results = [];
+		
 		for(var i in allNamespaces.data){
 			results.push(i);
 		}
-	
-		return results.join(",");
+		
+		// a bug in ExternalInterface transforms Arrays into
+		// Strings, so we can use those here! -- BradNeuberg
+		results = results.join(",");
+		
+		return results;
 	}
 	
 	public function remove(keyName, namespace){
@@ -275,8 +288,7 @@ class Storage {
 	}
 	
 	//	Removes all the values for each keys on the metaKeys array
-	public function removeMultiple(metaKeys, namespace){
-		
+	public function removeMultiple(metaKeys, namespace){		
 		//	get the storage object
 		so = SharedObject.getLocal(namespace);
 		
@@ -341,7 +353,8 @@ class Storage {
 				}
 				
 				// give the status results to JavaScript
-				DojoExternalInterface.call("dojox.storage._onStatus", null, statusResults, keyName);
+				DojoExternalInterface.call("dojox.storage._onStatus", statusResults, 
+				                            keyName, namespace);
 			}
 		}
 		
@@ -360,7 +373,8 @@ class Storage {
 				statusResults = Storage.FAILED;
 			}
 			
-			DojoExternalInterface.call("dojox.storage._onStatus", null, statusResults, keyName);
+			DojoExternalInterface.call("dojox.storage._onStatus", statusResults, 
+			                            keyName, namespace);
 		}
 	}
 	
@@ -379,7 +393,6 @@ class Storage {
 	}
 
 	static function main(mc){
-		//getURL("javascript:console.debug('FLASH: storage loaded')");
 		_root.app = new Storage(); 
 	}
 }

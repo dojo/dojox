@@ -16,10 +16,14 @@ dojox.storage.manager = new function(){
 	// available: Boolean
 	//	Whether storage of some kind is available.
 	this.available = false;
+
+  // providers: Array
+  //  Array of all the static provider instances, useful if you want to
+  //  loop through and see what providers have been registered.
+  this.providers = [];
 	
 	this._initialized = false;
-	
-	this._providers = [];
+
 	this._onLoadListeners = [];
 	
 	this.initialize = function(){
@@ -42,8 +46,13 @@ dojox.storage.manager = new function(){
 		// instance:
 		//		An instance of this provider, which we will use to call
 		//		isAvailable() on. 
-		this._providers[this._providers.length] = instance; //FIXME: push?
-		this._providers[name] = instance; // FIXME: this._providers is an array, not a hash
+		
+		// keep list of providers as a list so that we can know what order
+		// storage providers are preferred; also, store the providers hashed
+		// by name in case someone wants to get a provider that uses
+		// a particular storage backend
+		this.providers.push(instance);
+		this.providers[name] = instance;
 	};
 	
 	this.setProvider = function(storageClass){
@@ -65,28 +74,27 @@ dojox.storage.manager = new function(){
 		//console.debug("dojox.storage.manager.autodetect");
 		
 		if(this._initialized){ // already finished
-			//console.debug("dojox.storage.manager already initialized; returning");
 			return;
 		}
 
 		// a flag to force the storage manager to use a particular 
 		// storage provider type, such as 
 		// djConfig = {forceStorageProvider: "dojox.storage.WhatWGStorageProvider"};
-		var forceProvider = dojo.config["forceStorageProvider"]||false;
+		var forceProvider = dojo.config["forceStorageProvider"] || false;
 
 		// go through each provider, seeing if it can be used
 		var providerToUse;
 		//FIXME: use dojo.some
-		for(var i = 0; i < this._providers.length; i++){
-			providerToUse = this._providers[i];
-			if(forceProvider == providerToUse.declaredClass){
+		for(var i = 0; i < this.providers.length; i++){
+			providerToUse = this.providers[i];
+			if(forceProvider && forceProvider == providerToUse.declaredClass){
 				// still call isAvailable for this provider, since this helps some
 				// providers internally figure out if they are available
 				// FIXME: This should be refactored since it is non-intuitive
 				// that isAvailable() would initialize some state
 				providerToUse.isAvailable();
 				break;
-			}else if(providerToUse.isAvailable()){
+			}else if(!forceProvider && providerToUse.isAvailable()){
 				break;
 			}
 		}
@@ -152,7 +160,9 @@ dojox.storage.manager = new function(){
 		//		be used. 
 
 		// FIXME: This should REALLY not be in here, but it fixes a tricky
-		// Flash timing bug
+		// Flash timing bug.
+		// Confirm that this is still needed with the newly refactored Dojo
+		// Flash. Used to be for Internet Explorer. -- Brad Neuberg
 		if(this.currentProvider != null
 			&& this.currentProvider.declaredClass == "dojox.storage.FlashStorageProvider" 
 			&& dojox.flash.ready == false){
@@ -238,7 +248,7 @@ dojox.storage.manager = new function(){
 		//		were to sync against Dojo Offline on Firefox 2, then we would
 		//		not grab the FlashStorageProvider resources needed for Safari.
 		var results = [];
-		dojo.forEach(dojox.storage.manager._providers, function(currentProvider){
+		dojo.forEach(dojox.storage.manager.providers, function(currentProvider){
 			results = results.concat(currentProvider.getResourceList());
 		});
 		

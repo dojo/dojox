@@ -9,18 +9,47 @@
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
     </style>
+    
+    <!--
+  		// 'forceStorageProvider' is a flag to force a particular storage type. 
+  		// Example:
+  		//
+  		//var djConfig = { 
+  		//					isDebug: false, 
+  		//					forceStorageProvider: "dojox.storage.FlashStorageProvider" 
+  		//				  };
+  	-->
+
+    <script>
+      // most storage providers have to be loaded when the page first loads;
+      // the code below is so that we can use the storage provider pulldown,
+      // select a provider, change the URL to force this provider, and then
+      // reload the page to force this new provider
+      var loc = window.location;
+      var forceStorageProvider = undefined;
+      // does the URL have a storage provider for us to force using?
+      if(loc && loc.search && loc.search.indexOf("forceStorageProvider") != -1){
+        var m = loc.search.match(/forceStorageProvider=([a-zA-Z0-9_\.]*)/g);
+        if(m && m.length){
+          // forceStorageProvider can repeat as a query parameter if the
+          // page has been reloaded several times, so just grab the last
+          // one
+          forceStorageProvider = m[m.length - 1];
+          if(forceStorageProvider.indexOf("=") != -1){
+            forceStorageProvider = forceStorageProvider.split("=");
+            forceStorageProvider = forceStorageProvider[1];
+          }
+        }
+      }
+      
+      var djConfig = { 
+  							isDebug: false, 
+  							forceStorageProvider: forceStorageProvider
+  		};
+    </script>
 
     <script type="text/javascript" 
-            src="../../../dojo/dojo.js" djConfig="isDebug: false"></script>
-
-	<!--
-		// 'forceStorageProvider' is a flag to 
-		// force a particular storage type. Example:
-		//var djConfig = { 
-		//					isDebug: false, 
-		//					forceStorageProvider: "dojox.storage.FlashStorageProvider" 
-		//				  };
-	-->
+            src="../../../dojo/dojo.js"></script>
 	
 	<script type="text/javascript" src="test_storage.js"></script>
 	
@@ -45,6 +74,7 @@
 		.status { float: right; padding-left: 5px; padding-right: 5px; background: red; color: white; }
 		.providerMetadata { font-weight: bold; margin-bottom: 0.5em; }
 		.providerMetadataValue { font-weight: normal; }
+		.firebug { clear: both; } // clear Firebug Lite to bottom of screen
 	</style>
 	
 </head>
@@ -118,7 +148,7 @@
 			<div>
 				Storage Provider:
 				
-				<span id="currentStorageProvider">None</span>
+				<select id="currentStorageProvider" size="1"></select>
 			</div>
 		</div>
 		

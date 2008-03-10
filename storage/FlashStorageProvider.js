@@ -1,4 +1,5 @@
 dojo.provide("dojox.storage.FlashStorageProvider");
+
 dojo.require("dojox.flash");
 dojo.require("dojox.storage.manager");
 dojo.require("dojox.storage.Provider");
@@ -9,27 +10,39 @@ dojo.require("dojox.storage.Provider");
 // description:
 //		Authors of this storage provider-
 //			Brad Neuberg, bkn3@columbia.edu	
-dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
+dojo.declare("dojox.storage.FlashStorageProvider", dojox.storage.Provider, {
 		initialized: false,
 		
 		_available: null,
 		_statusHandler: null,
+		_flashReady: false,
+		_pageReady: false,
 		
 		initialize: function(){
+		  //console.debug("FlashStorageProvider.initialize");
 			if(dojo.config["disableFlashStorage"] == true){
 				return;
 			}
 			
 			// initialize our Flash
-			var loadedListener = function(){
-				// indicate our Flash subsystem is now loaded
-				dojox.storage._flashLoaded();
-			}
-			dojox.flash.addLoadedListener(loadedListener);
-			dojox.flash.setSwf({
-				flash6: dojo.moduleUrl("dojox", "storage/Storage_version6.swf").toString(), 
-				flash8: dojo.moduleUrl("dojox", "storage/Storage_version8.swf").toString(), 
-				visible: false
+			dojox.flash.addLoadedListener(dojo.hitch(this, function(){
+			  //console.debug("flashReady");
+			  // indicate our Flash subsystem is now loaded
+			  this._flashReady = true;
+			  if(this._flashReady && this._pageReady){
+				  this._loaded();
+				}
+			}));
+			var swfLoc = dojo.moduleUrl("dojox", "storage/Storage.swf").toString();
+			dojox.flash.setSwf(swfLoc, false);
+			
+			// wait till page is finished loading
+			dojo.connect(dojo, "loaded", this, function(){
+			  //console.debug("pageReady");
+			  this._pageReady = true;
+			  if(this._flashReady && this._pageReady){
+			    this._loaded();
+			  }
 			});
 		},
 		
@@ -63,15 +76,15 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 
 		put: function(key, value, resultsHandler, namespace){
-			if(this.isValidKey(key) == false){
+			if(!this.isValidKey(key)){
 				throw new Error("Invalid key given: " + key);
 			}
 			
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 				
@@ -89,15 +102,16 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 
 		putMultiple: function(keys, values, resultsHandler, namespace){
-			if(this.isValidKeyArray(keys) === false || ! values instanceof Array || keys.length != values.length){
+			if(!this.isValidKeyArray(keys) || ! values instanceof Array 
+			    || keys.length != values.length){
 				throw new Error("Invalid arguments: keys = [" + keys + "], values = [" + values + "]");
 			}
 			
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 
@@ -121,15 +135,15 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 
 		get: function(key, namespace){
-			if(this.isValidKey(key) == false){
+			if(!this.isValidKey(key)){
 				throw new Error("Invalid key given: " + key);
 			}
 			
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
@@ -143,14 +157,15 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 
 		getMultiple: function(/*array*/ keys, /*string?*/ namespace){ /*Object*/
-			if(this.isValidKeyArray(keys) === false){
+			if(!this.isValidKeyArray(keys)){
 				throw new ("Invalid key array given: " + keys);
 			}
-			if(namespace == null || typeof namespace == "undefined"){
+			
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
@@ -160,7 +175,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 			
 			//	destringify each entry back into a real JS object
 			//FIXME: use dojo.map
-			for(var i=0;i<results.length;i++){
+			for(var i = 0; i < results.length; i++){
 				results[i] = (results[i] == "") ? null : this._destringify(results[i]);
 			}
 			
@@ -181,44 +196,47 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 		
 		getKeys: function(namespace){
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
 			var results = dojox.flash.comm.getKeys(namespace);
 			
-			if(results == ""){
-				return [];
+			// Flash incorrectly returns an empty string as "null"
+			if(results == null || results == "null"){
+			  results = "";
 			}
-
-			// the results are returned comma seperated; split them
+			
 			results = results.split(",");
+			results.sort();
 			
 			return results;
 		},
 		
 		getNamespaces: function(){
 			var results = dojox.flash.comm.getNamespaces();
-			if(results == ""){
-				return [dojox.storage.DEFAULT_NAMESPACE];
+			
+			// Flash incorrectly returns an empty string as "null"
+			if(results == null || results == "null"){
+			  results = dojox.storage.DEFAULT_NAMESPACE;
 			}
 			
-			// the results are returned comma seperated; split them
 			results = results.split(",");
+			results.sort();
 			
 			return results;
 		},
 
 		clear: function(namespace){
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
@@ -226,11 +244,11 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 		
 		remove: function(key, namespace){
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
@@ -238,14 +256,14 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 		
 		removeMultiple: function(/*array*/ keys, /*string?*/ namespace){ /*Object*/
-			if(this.isValidKeyArray(keys) === false){
+			if(!this.isValidKeyArray(keys)){
 				dojo.raise("Invalid key array given: " + keys);
 			}
-			if(namespace == null || typeof namespace == "undefined"){
+			if(!namespace){
 				namespace = dojox.storage.DEFAULT_NAMESPACE;		
 			}
 			
-			if(this.isValidKey(namespace) == false){
+			if(!this.isValidKey(namespace)){
 				throw new Error("Invalid namespace given: " + namespace);
 			}
 			
@@ -283,17 +301,13 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		},
 		
 		getResourceList: function(){ /* Array[] */
-			var swfloc6 = dojo.moduleUrl("dojox", "storage/Storage_version6.swf").toString();
-			var swfloc8 = dojo.moduleUrl("dojox", "storage/Storage_version8.swf").toString();
-			
-			var results = dojox.flash.info.getResourceList(swfloc6, swfloc8);
-			results.push(dojo.moduleUrl("dojox", "storage/storage_dialog.swf").toString());
-					
-			return results;
+			// Dojo Offline no longer uses the FlashStorageProvider for offline
+			// storage; Gears is now required
+			return [];
 		},
 		
-		/** Called when the Flash is finished loading. */
-		_flashLoaded: function(){
+		/** Called when Flash and the page are finished loading. */
+		_loaded: function(){
 			// get available namespaces
 			this._allNamespaces = this.getNamespaces();
 			
@@ -305,7 +319,8 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 		
 		//	Called if the storage system needs to tell us about the status
 		//	of a put() request. 
-		_onStatus: function(statusResult, key){
+		_onStatus: function(statusResult, key, namespace){
+		  //console.debug("onStatus, statusResult="+statusResult+", key="+key);
 			var ds = dojox.storage;
 			var dfo = dojox.flash.obj;
 			
@@ -317,7 +332,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 			}
 			
 			if(ds._statusHandler){
-				ds._statusHandler.call(null, statusResult, key);		
+				ds._statusHandler.call(null, statusResult, key, namespace);		
 			}
 		}
 	}
@@ -325,5 +340,3 @@ dojo.declare("dojox.storage.FlashStorageProvider", [ dojox.storage.Provider ], {
 
 dojox.storage.manager.register("dojox.storage.FlashStorageProvider",
 								new dojox.storage.FlashStorageProvider());
-
-dojox.storage.manager.initialize(); // is this redundant?  GearsStorageProvider does this.

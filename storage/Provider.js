@@ -237,7 +237,8 @@ dojo.declare("dojox.storage.Provider", null, {
 		//		if left off, the value will be placed into dojox.storage.DEFAULT_NAMESPACE
 		
 		console.warn("dojox.storage.putMultiple not implemented");
-		//	JAC: We could implement a 'default' puMultiple here by just doing each put individually
+		//	JAC: We could implement a 'default' puMultiple here by just doing 
+		//  each put individually
 	},
 
 	getMultiple: function(/*array*/ keys, /*string?*/ namespace){ /*Object*/
@@ -253,13 +254,15 @@ dojo.declare("dojox.storage.Provider", null, {
 		// return: Returns any JavaScript object type; null if the key is not present
 
 		console.warn("dojox.storage.getMultiple not implemented");
-		//	JAC: We could implement a 'default' getMultiple here by just doing each get individually
+		//	JAC: We could implement a 'default' getMultiple here by just 
+		//  doing each get individually
 	},
 
 	removeMultiple: function(/*array*/ keys, /*string?*/ namespace) {
 		// summary: Removes the given keys from this storage system.
 
-		//	JAC: We could implement a 'default' removeMultiple here by just doing each remove individually
+		//	JAC: We could implement a 'default' removeMultiple here by just 
+		//  doing each remove individually
 		console.warn("dojox.storage.remove not implemented");
 	},
 	
@@ -268,7 +271,8 @@ dojo.declare("dojox.storage.Provider", null, {
 			return false;
 		}
 
-		//	JAC: This could be optimized by running the key validity test directly over a joined string
+		//	JAC: This could be optimized by running the key validity test 
+		//  directly over a joined string
 		return !dojo.some(keys, function(key){
 			return !this.isValidKey(key);
 		}); // Boolean
@@ -314,6 +318,9 @@ dojo.declare("dojox.storage.Provider", null, {
 		//	to cache these resources to ensure the machinery
 		//	used by this storage provider is available offline.
 		//	What is returned is an array of URLs.
+		//  Note that Dojo Offline uses Gears as its native 
+		//  storage provider, and does not support using other
+		//  kinds of storage providers while offline anymore.
 		
 		return [];
 	}

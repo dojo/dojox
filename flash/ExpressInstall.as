@@ -18,7 +18,7 @@
  *
  */
 
-class ExpressInstall {
+class ExpressInstall{
 	public var needsUpdate:Boolean;
 	private var updater:MovieClip;
 	private var hold:MovieClip;
@@ -32,7 +32,7 @@ class ExpressInstall {
 		this.loadUpdater();
 	}
 
-	public function loadUpdater():Void {
+	public function loadUpdater():Void{
 		System.security.allowDomain("fpdownload.macromedia.com");
 
 		// hope that nothing is at a depth of 10000000, you can change this depth if needed, but you want
