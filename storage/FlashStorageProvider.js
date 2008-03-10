@@ -311,7 +311,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", dojox.storage.Provider, {
 			// get available namespaces
 			this._allNamespaces = this.getNamespaces();
 			
-			this._initialized = true;
+			this.initialized = true;
 
 			// indicate that this storage provider is now loaded
 			dojox.storage.manager.loaded();
