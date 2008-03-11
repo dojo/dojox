@@ -2,9 +2,9 @@ dojo.provide("dojox.data.tests.stores.SnapLogicStore");
 dojo.require("dojox.data.SnapLogicStore");
 dojo.require("dojo.data.api.Read");
 
-var pipelineUrl = dojo.moduleUrl("dojox.data.tests", "stores/snap_pipeline.php").toString();
-var pipelineSize = 14;
-var attributes = ["empno", "ename", "job", "hiredate", "sal", "comm", "deptno"];
+dojox.data.tests.stores.SnapLogicStore.pipelineUrl = dojo.moduleUrl("dojox.data.tests", "stores/snap_pipeline.php").toString();
+dojox.data.tests.stores.SnapLogicStore.pipelineSize = 14;
+dojox.data.tests.stores.SnapLogicStore.attributes = ["empno", "ename", "job", "hiredate", "sal", "comm", "deptno"];
 
 dojox.data.tests.stores.SnapLogicStore.error = function(t, d, errData){
 	//  summary:
@@ -23,7 +23,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Simple test of a basic fetch from a SnapLogic pipeline
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onComplete(items, request){
@@ -46,13 +46,13 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Simple test of a basic fetch on SnapLogic pipeline.
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				count = 0;
 
 				function onBegin(size, requestObj){
-					t.assertEqual(pipelineSize, size);
+					t.assertEqual(dojox.data.tests.stores.SnapLogicStore.pipelineSize, size);
 				}
 				function onItem(item, requestObj){
 					t.assertTrue(store.isItem(item));
@@ -60,7 +60,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				}
 				function onComplete(items, request){
 					t.assertEqual(10, count);
-					t.is(null, items);
+					t.assertTrue(items === null);
 					d.callback(true);
 				}
 
@@ -83,11 +83,11 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Try fetching 0 records. A count of the items in the pipeline should be returned.
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onBegin(count, request){
-					t.assertEqual(pipelineSize, count);
+					t.assertEqual(dojox.data.tests.stores.SnapLogicStore.pipelineSize, count);
 					d.callback(true);
 				}
 				store.fetch({	count: 0,
@@ -106,12 +106,12 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Test of multiple fetches on a single result.  Paging, if you will.
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function dumpFirstFetch(items, request){
 					t.assertEqual(request.count, items.length);
-                    request.start = pipelineSize / 3;
+					request.start = dojox.data.tests.stores.SnapLogicStore.pipelineSize / 3;
 					request.count = 1;
 					request.onComplete = dumpSecondFetch;
 					store.fetch(request);
@@ -120,36 +120,36 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				function dumpSecondFetch(items, request){
 					t.assertEqual(1, items.length);
 					request.start = 0;
-					request.count = pipelineSize / 2;
+					request.count = dojox.data.tests.stores.SnapLogicStore.pipelineSize / 2;
 					request.onComplete = dumpThirdFetch;
 					store.fetch(request);
 				}
 
 				function dumpThirdFetch(items, request){
 					t.assertEqual(request.count, items.length);
-					request.count = pipelineSize * 2;
+					request.count = dojox.data.tests.stores.SnapLogicStore.pipelineSize * 2;
 					request.onComplete = dumpFourthFetch;
 					store.fetch(request);
 				}
 
 				function dumpFourthFetch(items, request){
-					t.assertEqual(pipelineSize, items.length);
-					request.start = Math.floor(3 * pipelineSize / 4);
-					request.count = pipelineSize;
+					t.assertEqual(dojox.data.tests.stores.SnapLogicStore.pipelineSize, items.length);
+					request.start = Math.floor(3 * dojox.data.tests.stores.SnapLogicStore.pipelineSize / 4);
+					request.count = dojox.data.tests.stores.SnapLogicStore.pipelineSize;
 					request.onComplete = dumpFifthFetch;
 					store.fetch(request);
 				}
 
 				function dumpFifthFetch(items, request){
-					t.assertEqual(pipelineSize - request.start, items.length);
+					t.assertEqual(dojox.data.tests.stores.SnapLogicStore.pipelineSize - request.start, items.length);
 					request.start = 2;
-					request.count = pipelineSize * 10;
+					request.count = dojox.data.tests.stores.SnapLogicStore.pipelineSize * 10;
 					request.onComplete = dumpSixthFetch;
 					store.fetch(request);
 				}
 
 				function dumpSixthFetch(items, request){
-					t.assertEqual(pipelineSize - request.start, items.length);
+					t.assertEqual(dojox.data.tests.stores.SnapLogicStore.pipelineSize - request.start, items.length);
 					d.callback(true);
 				}
 
@@ -168,7 +168,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Test that the label function returns undefined since it's not supported.
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onComplete(items, request){
@@ -193,7 +193,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Simple test of the getLabelAttributes returns null since it's not supported.
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onComplete(items, request){
@@ -217,7 +217,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//		Simple test of the getValue function of the store.
 				//	description:
 				//		Simple test of the getValue function of the store.
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function completedAll(items){
@@ -246,15 +246,15 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//		Simple test of the getValue function of the store.
 				//	description:
 				//		Simple test of the getValue function of the store.
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function completedAll(items){
 					t.assertEqual(1, items.length);
-					for(var i = 0; i < attributes.length; ++i){
-						var values = store.getValues(items[0], attributes[i]);
+					for(var i = 0; i < dojox.data.tests.stores.SnapLogicStore.attributes.length; ++i){
+						var values = store.getValues(items[0], dojox.data.tests.stores.SnapLogicStore.attributes[i]);
 						t.assertTrue(dojo.isArray(values));
-						t.assertTrue(values[0] === store.getValue(items[0], attributes[i]));
+						t.assertTrue(values[0] === store.getValue(items[0], dojox.data.tests.stores.SnapLogicStore.attributes[i]));
 					}
 					d.callback(true);
 				}
@@ -273,7 +273,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//		Simple test of the isItem function of the store
 				//	description:
 				//		Simple test of the isItem function of the store
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function completedAll(items){
@@ -300,14 +300,14 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Simple test of the hasAttribute function of the store
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onComplete(items){
 					t.assertEqual(1, items.length);
 					t.assertTrue(items[0] !== null);
-					for(var i = 0; i < attributes.length; ++i){
-						t.assertTrue(store.hasAttribute(items[0], attributes[i]));
+					for(var i = 0; i < dojox.data.tests.stores.SnapLogicStore.attributes.length; ++i){
+						t.assertTrue(store.hasAttribute(items[0], dojox.data.tests.stores.SnapLogicStore.attributes[i]));
 					}
 					t.assertTrue(!store.hasAttribute(items[0], "Nothing"));
 					t.assertTrue(!store.hasAttribute(items[0], "Text"));
@@ -340,7 +340,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Simple test of the containsValue function of the store
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onComplete(items){
@@ -367,16 +367,16 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 				//	description:
 				//		Simple test of the getAttributes function of the store
 
-				var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+				var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 				var d = new doh.Deferred();
 				function onComplete(items){
 					t.assertEqual(1, items.length);
 
 					var itemAttributes = store.getAttributes(items[0]);
-					t.assertEqual(attributes.length, itemAttributes.length);
-					for(var i = 0; i < attributes.length; ++i){
-						t.assertTrue(dojo.indexOf(itemAttributes, attributes[i]) !== -1);
+					t.assertEqual(dojox.data.tests.stores.SnapLogicStore.attributes.length, itemAttributes.length);
+					for(var i = 0; i < dojox.data.tests.stores.SnapLogicStore.attributes.length; ++i){
+						t.assertTrue(dojo.indexOf(itemAttributes, dojox.data.tests.stores.SnapLogicStore.attributes[i]) !== -1);
 					}
 					d.callback(true);
 				}
@@ -394,7 +394,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 			//	description:
 			//		Simple test of the getFeatures function of the store
 
-			var store = new dojox.data.SnapLogicStore({url: pipelineUrl});
+			var store = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 
 			var features = store.getFeatures(); 
 			var count = 0;
@@ -411,7 +411,7 @@ doh.register("dojox.data.tests.stores.SnapLogicStore",
 			//	description:
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
 
-			var testStore = new dojox.data.SnapLogicStore({url: pipelineUrl});
+			var testStore = new dojox.data.SnapLogicStore({url: dojox.data.tests.stores.SnapLogicStore.pipelineUrl});
 			var readApi = new dojo.data.api.Read();
 			var passed = true;
 

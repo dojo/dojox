@@ -198,6 +198,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 					}
 					request.onItem.call(scope, items[i], request);
 				}
+				items = null;
 			}
 
 			if(request.onComplete && !request._aborted){
