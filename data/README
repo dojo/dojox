@@ -8,13 +8,12 @@ Project state: stable
 -------------------------------------------------------------------------------
 Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
-	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore)
+	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 	Russell Jones (KeyValueStore) (CLA)
 	Benjamin Schell (KeyValueStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
-
 
 -------------------------------------------------------------------------------
 Project description
@@ -48,6 +47,8 @@ Install into the following directory structure:
 Require in the dojox.data stores you wish to use.
 -------------------------------------------------------------------------------
 Additional Notes: 
+	dojox.data.AtomReadStore - Reads Atom XML documents.
+
 	dojox.data.CvsStore - comma-separated (spreadsheet output)
 	datastore implementation 
 	
