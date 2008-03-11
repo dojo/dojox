@@ -711,6 +711,26 @@ doh.register("dojox.dtl.text.filter",
 			t.is("soso", tpl.render(context));
 			tpl = new dd.Template('{{ null|yesno:"bling,whack" }}');
 			t.is("whack", tpl.render(context));
+		},
+		function test_filter_contrib_key(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				headers: ["action", "type"],
+				items: [
+					{
+						action: "eat",
+						type: "apple",
+					},
+					{
+						action: "mash",
+						type: "banana"
+					}
+				]
+			});
+
+			var tpl = new dd.Template("{% load dojox.dtl.contrib.objects %}<ul>{% for item in items %}<li><ul>{% for header in headers %}<li>{{ header }}: {{ item|key:header }}</li>{% endfor %}</ul></li>{% endfor %}</ul>");
+			t.is('<ul><li><ul><li>action: eat</li><li>type: apple</li></ul></li><li><ul><li>action: mash</li><li>type: banana</li></ul></li></ul>', tpl.render(context));
 		}
 	]
 );
