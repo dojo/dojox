@@ -515,8 +515,23 @@ dojox.cometd = new function(){
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
 			try {
-				var tname = "/cometd"+message.channel;
-				dojo.publish(tname, [ message ]);
+                                var messages=[message];
+
+				// Determine target topic
+				var tname="/cometd"+message.channel;
+
+				// Deliver to globs that apply to target topic
+				var tnameParts=message.channel.split("/");
+				var tnameGlob="/cometd";
+				for (var i=1;i<tnameParts.length-1;i++) {
+					dojo.publish(tnameGlob+"/**",messages);
+					tnameGlob+="/"+tnameParts[i];
+				}
+				dojo.publish(tnameGlob+"/**",messages);
+				dojo.publish(tnameGlob+"/*",messages);
+	
+				// deliver to target topic
+				dojo.publish(tname,messages);
 			}catch(e){
 				console.debug(e);
 			}
