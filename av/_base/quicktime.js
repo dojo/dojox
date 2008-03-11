@@ -5,8 +5,7 @@ dojo.provide("dojox.av._base.quicktime");
 		dojox.av.quicktime
 
 		Base functionality to insert a QuickTime movie
-		into a document on the fly.  Based on Apple's 
-		AC_QuickTime.js code.
+		into a document on the fly.
 	 ******************************************************/
 
 	var qtMarkup, qtVersion, installed, __def__={

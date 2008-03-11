@@ -5,11 +5,7 @@ dojo.provide("dojox.av._base.flash");
 		dojox.av.flash
 
 		Base functionality to insert a flash movie into
-		a document on the fly.  Based on Brad Neuberg's
-		work with dojox.flash and SWFObject by Geoff Stearns.
-
-		SWFObject: http://blog.deconcept.com/swfobject/
-		(c) 2007 by Geoff Stearns.
+		a document on the fly.
 
 		Support for Flash 6 is dropped in favor of Flash 8;
 		multiple movies are supported.
