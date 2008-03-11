@@ -47,7 +47,7 @@ dojox.grid.publicEvents = {
 		// summary:
 		// 		Grid key event handler. By default enter begins editing and applies edits, escape cancels and edit,
 		// 		tab, shift-tab, and arrow keys move grid cell focus.
-		if(e.altKey || e.ctrlKey || e.metaKey ){
+		if(e.altKey || e.ctrlKey || e.metaKey){
 			return;
 		}
 		var dk = dojo.keys;
@@ -56,7 +56,7 @@ dojox.grid.publicEvents = {
 				this.edit.cancel();
 				break;
 			case dk.ENTER:
-				if (!e.shiftKey) {
+				if(!e.shiftKey){
 					var isEditing = this.edit.isEditing();
 					this.edit.apply();
 					if(!isEditing){
@@ -68,13 +68,12 @@ dojox.grid.publicEvents = {
 				this.focus[e.shiftKey ? 'previousKey' : 'nextKey'](e);
 				break;
 			case dk.LEFT_ARROW:
-				if(!this.edit.isEditing()){
-				this.focus.move(0, -1);
-				}
-				break;
 			case dk.RIGHT_ARROW:
 				if(!this.edit.isEditing()){
-					this.focus.move(0, 1);
+					dojo.stopEvent(e);
+					var offset = (e.keyCode == dk.LEFT_ARROW) ? 1 : -1;
+					if(dojo._isBodyLtr()){ offset *= -1; }
+					this.focus.move(0, offset);
 				}
 				break;
 			case dk.UP_ARROW:
@@ -92,9 +91,9 @@ dojox.grid.publicEvents = {
 			case dk.PAGE_UP:
 				if(!this.edit.isEditing() && this.focus.rowIndex != 0){
 					dojo.stopEvent(e);
-					if(this.focus.rowIndex != this.scroller.firstVisibleRow+1) {
+					if(this.focus.rowIndex != this.scroller.firstVisibleRow+1){
 						this.focus.move(this.scroller.firstVisibleRow-this.focus.rowIndex, 0);
-					} else {
+					}else{
 						this.setScrollTop(this.scroller.findScrollTop(this.focus.rowIndex-1));
 						this.focus.move(this.scroller.firstVisibleRow-this.scroller.lastVisibleRow+1, 0);
 					}
@@ -103,9 +102,9 @@ dojox.grid.publicEvents = {
 			case dk.PAGE_DOWN:
 				if(!this.edit.isEditing() && this.focus.rowIndex+1 != this.model.count){
 					dojo.stopEvent(e);
-					if (this.focus.rowIndex != this.scroller.lastVisibleRow-1) {
+					if(this.focus.rowIndex != this.scroller.lastVisibleRow-1){
 						this.focus.move(this.scroller.lastVisibleRow-this.focus.rowIndex-1, 0);
-					} else {
+					}else{
 						this.setScrollTop(this.scroller.findScrollTop(this.focus.rowIndex+1));
 						this.focus.move(this.scroller.lastVisibleRow-this.scroller.firstVisibleRow-1, 0);
 					}
