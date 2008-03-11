@@ -1,5 +1,36 @@
-/* Make backgrounds white like a "real" select element */
-.dojoxMultiSelect .dijitMenuItem { 
-	background-color: #FFF; 
-	cursor: default;
+/*
+**----------------------------------------------------------------------------
+**  CheckedMultiSelect
+**----------------------------------------------------------------------------
+*/
+.dojoxMultiSelectSelect { display: none; }
+
+.dojoxMultiSelect {
+	border: solid black 1px;
+	margin: 1px 0;
+	overflow: scroll; 
+	overflow-y: scroll; 
+	overflow-x: hidden; 
+	height: 100px;
 }
+
+.dj_ie .dojoxMultiSelect,
+.dj_safari .dojoxMultiSelect {
+	/* So that the scroll bar doesn't cover stuff up */
+	padding-right: 15px;
+}
+
+.dojoxMultiSelectItem {
+	white-space: nowrap;
+	padding:.1em .2em;
+	cursor:default;
+}
+
+.dojoxMultiSelectDisabled * {
+	color:gray !important;
+}
+
+.dojoxMultiSelectItemLabel {
+	margin-left: .2em;
+}
+

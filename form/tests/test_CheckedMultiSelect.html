@@ -43,7 +43,7 @@
 		<h1 class="testTitle">Test: dojox.form.CheckedMultiSelect</h1>
 		<h2>Automated test</h2>
 		<form dojoType="dijit.form.Form" jsId="form">
-			<select jsId="ms1" multiple="true" size="5" name="ms1" dojoType="dojox.form.CheckedMultiSelect">
+			<select jsId="ms1" multiple="true" name="ms1" dojoType="dojox.form.CheckedMultiSelect">
 				<option value="TN">Tennessee</option>
 				<option value="VA" selected="selected">Virginia</option>
 				<option value="WA" selected="selected">Washington</option>
@@ -51,7 +51,7 @@
 				<option value="CA">California</option>
 			</select>
 		<hr>
-			<select jsId="ms2" multiple="true" size="5" name="ms2" dojoType="dojox.form.CheckedMultiSelect">
+			<select jsId="ms2" multiple="true" name="ms2" dojoType="dojox.form.CheckedMultiSelect">
 				<option value="UT">Utah</option>
 				<option value="TX" selected="selected">Texas</option>
 				<option value="GA" selected="selected">Georgia</option>
@@ -61,7 +61,7 @@
 				<option value="PA">Pennsylvania</option>
 			</select>
 		<hr>
-			<select jsId="ms3" multiple="true" size="5" name="ms3" dojoType="dojox.form.CheckedMultiSelect">
+			<select jsId="ms3" multiple="true" name="ms3" dojoType="dojox.form.CheckedMultiSelect">
 			</select>
 		<hr>
 			<button dojoType="dijit.form.Button">
@@ -73,10 +73,18 @@
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					var idx = dojo.query("option", ms3.domNode).length;
-					var o = new Option("Option " + (idx + 1), idx);
+					var o = new Option("", "");
+					o.value = idx + "";
+					o.innerHTML = "Option " + (idx + 1);
 					ms3.addOption(o);
 				</script>
 				Add Option
+			</button>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					ms3.setAttribute("disabled", !ms3.disabled);
+				</script>
+				Toggle Disabled
 			</button>
 		</form>
 	</body>
