@@ -30,7 +30,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 			this.unescapeHTML = args.unescapeHTML;
 		}
 		if(!this.url){
-			throw Error("AtomReadStore: a URL must be specified when creating the data store");
+			throw new Error("AtomReadStore: a URL must be specified when creating the data store");
 		}
 	},
 
