@@ -21,6 +21,10 @@ Documentation
 See http://docs.google.com/View?docid=dhkhksk4_8gdp9gr for documentation and a t
 utorial on using Dojo Offline.
 
+Please note that when building the offline profile, you _must_ pass in the variable offlineProfile=true:
+
+./build.sh profile=offline action=release offlineProfile=true
+
 -------------------------------------------------------------------------------
 Installation instructions
 
