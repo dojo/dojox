@@ -75,7 +75,8 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 
 		if(!retVal && attribute=="summary") {
 			var content = this.getValue(item, "content");
-			var text = content.text.replace(/(<([^>]+)>)/ig,"");
+			var regexp = new RegExp("/(<([^>]+)>)/g", "i");
+			var text = content.text.replace(regexp,"");
 			retVal = {
 				text: text.substring(0, Math.min(400, text.length)),
 				type: "text"
@@ -84,8 +85,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		}
 
 		if(retVal && this.unescapeHTML){
-			if ((attribute == "content" || attribute == "summary" || attribute == "subtitle")
-					&& !item["_"+attribute+"Escaped"]) {
+			if ((attribute == "content" || attribute == "summary" || attribute == "subtitle") && !item["_"+attribute+"Escaped"]) {
 				retVal.text = this._unescapeHTML(retVal.text);
 				item["_"+attribute+"Escaped"] = true;
 			}
@@ -117,7 +117,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 			this._parseItem(item);
 		}
 		var retVal = item._attribs[attribute];
-		return retVal ? ((retVal.length != undefined && typeof(retVal) != "string") ? retVal : [retVal]) : undefined;
+		return retVal ? ((retVal.length !== undefined && typeof(retVal) !== "string") ? retVal : [retVal]) : undefined;
 	},
 
 	getAttributes: function(/* item */ item) {
@@ -271,7 +271,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 				element: this.doc.getElementsByTagName("feed")[0],
 				store: this,
 				_attribs: {}
-			}
+			};
 			this._parseItem(this._feedMetaData);
 		}
 		return this._feedMetaData._attribs[attribute] || defaultValue;
@@ -395,8 +395,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		var query = request.query;
 
 		if(!feedNodes || feedNodes.length != 1){
-			console.log("dojox.data.AtomReadStore: Received an invalid Atom document, number of feed tags = "
-						+ (feedNodes? feedNodes.length : 0));
+			console.log("dojox.data.AtomReadStore: Received an invalid Atom document, number of feed tags = " + (feedNodes? feedNodes.length : 0));
 			return items;
 		}
 
@@ -513,9 +512,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 
 	_unescapeHTML : function(text) {
 		//Replace HTML character codes with their unencoded equivalents, e.g. &#8217; with '
-
-		text = text.replace(/&#8217;/m , "'").replace(/&#8243;/m , "\"")
-			.replace(/&#60;/m,">").replace(/&#62;/m,"<").replace(/&#38;/m,"&");
+		text = text.replace(/&#8217;/m , "'").replace(/&#8243;/m , "\"").replace(/&#60;/m,">").replace(/&#62;/m,"<").replace(/&#38;/m,"&");
 		return text;
 	},
 
