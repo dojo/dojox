@@ -39,16 +39,13 @@ dojo.declare("dojox.rpc.Service", null, {
 				}else{
 					url = smd;
 				}
-				var def = dojo.xhrGet({
-					url: url,
-					handleAs: "json",
-					sync: true
-				});
-				
-				def.addCallback(processSmd);
-				def.addErrback(function(){
-					throw new Error("Unable to load SMD from " + smd);
-				});
+			
+				var text = dojo._getText(url);
+				if(!text){
+					throw new Error("Unable to load SMD from " + smd)
+				}else{
+					processSmd(dojo.fromJson(text));
+				}
 			}else{
 				processSmd(smd);
 			}
