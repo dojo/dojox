@@ -32,12 +32,45 @@ is provided (buildFlashStorage.sh)
 -------------------------------------------------------------------------------
 Documentation
 
-TBD
+See http://manual.dojotoolkit.org/WikiHome/DojoDotBook/Book50 for the
+authoritative Dojo Storage docs.
+
+See dojox/storage/demos/helloworld.html for a simple Hello World example
+you can base your code off of.
 
 -------------------------------------------------------------------------------
 Installation instructions
 
-TBD
+If you want to use Dojo Storage in a web browser:
+
+These installation instructions are to use Dojo Storage in a web browser; at
+runtime, Dojo Storage will autodetect and use the best available storage
+option. This includes:
+
+  * Google Gears
+  * HTML 5 Web Browsers (Firefox 2+)
+  * Hidden Flash
+  
+If you are using a release build (if you downloaded Dojo from the Dojo
+website then this is a release build -- if you checked it out from
+Subversion yourself then you will have to build things yourself), if you 
+only want to grab just the files from Dojo to use Dojo Storage
+in the browser, take the following (but make sure to keep the directory
+layout the same, or else things won't work correctly!):
+
+* dojo/dojo.js
+* dojox/storage/storage-browser.js
+* dojox/storage/Storage.swf
+
+To help with testing and development and to make sure you have everything 
+right, its also useful to grab the following files:
+
+* dojox/storage/README
+* dojox/storage/demos/helloworld.html
+
+If you want to use Dojo Storage with Adobe AIR:
+
+[TBD! Why don't you write this and contribute!]
 
 -------------------------------------------------------------------------------
 Additional Notes
