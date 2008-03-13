@@ -80,7 +80,7 @@ dojox.help = {
 					names = dojox.help._names[root];
 				}
 				for(var j = 0, variable; variable = names[j]; j++){
-					if((name == "window" || variable.indexOf(name + ".") == 0) && variable.indexOf(searchFor) != -1){
+					if((name == "window" || variable.indexOf(name + ".") == 0) && variable.toLowerCase().indexOf(searchFor) != -1){
 						if(variable.slice(-10) == ".prototype"){ continue; }
 						var obj = dojo.getObject(variable);
 						if(obj){
