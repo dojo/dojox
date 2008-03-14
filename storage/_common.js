@@ -8,7 +8,7 @@ dojo.require("dojox.storage.manager");
   ./build.sh action=release profile=offline offlineProfile=true
 */
 dojo.require("dojox.storage.GearsStorageProvider");
-//>>excludeStart("offlineProfileExclude", kwArgs.profile == "offline");
+//>>excludeStart("offlineProfileExclude", kwArgs.dojoxStorageBuildOption == "offline");
 dojo.require("dojox.storage.WhatWGStorageProvider");
 dojo.require("dojox.storage.FlashStorageProvider");
 //>>excludeEnd("offlineProfileExclude");
