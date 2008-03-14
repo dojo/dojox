@@ -1,7 +1,11 @@
 <html>
 	<head>
-		<script src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
-		<script>
+		<title>
+			Yahoo Search Demo
+		</title>
+		<script src="../../../dojo/dojo.js" type="text/javascript"
+			djConfig="parseOnLoad: true, isDebug: true"></script>
+		<script type="text/javascript">
 			dojo.require("dojo.io.script")
 			dojo.require("dojox.rpc.Service");
 			dojo.require("dijit._Widget");
@@ -10,7 +14,8 @@
 
 			dojo.declare("YahooWebSearchApiWidget", [dijit._Widget, dojox.dtl._Templated], {
 				constructor: function(params, node){
-					this.yahoo = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.SMDLibrary", "yahoo.smd"));
+					var mu = dojo.moduleUrl("dojox.rpc.SMDLibrary", "yahoo.smd");
+					this.yahoo = new dojox.rpc.Service(mu);
 				},
 				onSearch: function(e){
 					if(e.keyCode == dojo.keys.ENTER){
