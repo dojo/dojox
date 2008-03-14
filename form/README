@@ -33,3 +33,7 @@ Additional Notes (Brief widget list):
 
 	* PasswordValidator - a widget which simplifies the common "old/new/verify" 
 						mechanism of specifying passwords
+ 	
+ 	* DropDownSelect - an extension to dijit.form.DropDownButton which is
+ 						meant to mirror the html <select> drop down
+
