@@ -12,8 +12,13 @@
 			dojo.require("dijit.form.Form");
 			
 			var numOptions = 0;
+			var numChanges = 0;
 			
 			dojo.addOnLoad(function(){
+				dojo.connect(s1, "onChange", function(val){
+					console.log("First Select Changed to " + val);
+					numChanges++;
+				});
 				doh.register("tests",
 					[
 						function test_setValue(t){
@@ -22,13 +27,11 @@
 							t.is("WA", s1.value);
 							s1.setAttribute("value", "UT");
 							t.is("TN", s1.value);
+							t.is(2, numChanges);
 						}
 					]
 				);
 				doh.run();
-				dojo.connect(s1, "onChange", function(val){
-					console.log("First Select Changed to " + val);
-				});
 			});
 		</script>
 		<style>
@@ -80,10 +83,10 @@
 				<span value="NM">New<br>&nbsp;&nbsp;Mexico</span>
 			</div>
 			<div jsId="s5" name="s5" value="move" dojoType="dojox.form.DropDownSelect">
-				<span value="copy"><img style="vertical-align: middle; margin: 0px" src="../../../dijit/themes/tundra/images/dndCopy.png" /> Copy</span>
-				<span value="move"><img  style="vertical-align: middle; margin: 0px" src="../../../dijit/themes/tundra/images/dndMove.png" /> Move</span>
-				<span value="nocopy"><img  style="vertical-align: middle; margin: 0px" src="../../../dijit/themes/tundra/images/dndNoCopy.png" /> No Copy</span>
-				<span value="nomove"><img  style="vertical-align: middle; margin: 0px" src="../../../dijit/themes/tundra/images/dndNoMove.png" /> No Move</span>
+				<span value="copy"><img style="vertical-align: middle;margin-top: 1px;margin-bottom:1px;" src="../../../dijit/themes/tundra/images/dndCopy.png" /> Copy</span>
+				<span value="move"><img  style="vertical-align: middle;margin-top: 1px;margin-bottom:1px;" src="../../../dijit/themes/tundra/images/dndMove.png" /> Move</span>
+				<span value="nocopy"><img  style="vertical-align: middle;margin-top: 1px;margin-bottom:1px;" src="../../../dijit/themes/tundra/images/dndNoCopy.png" /> No Copy</span>
+				<span value="nomove"><img  style="vertical-align: middle;margin-top: 1px;margin-bottom:1px;" src="../../../dijit/themes/tundra/images/dndNoMove.png" /> No Move</span>
 			</div>
 		<hr>
 			<h4 class="testSubtitle">Empty</h4>

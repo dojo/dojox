@@ -18,8 +18,9 @@
 	padding: 0px;
 }
 
-/* Make vertical-align be auto */
-.dojoxDropDownSelect .dijitButtonNode .dijitButtonText * {
+/* Fix the baseline of our label (for multi-size font elements) */
+.dijitButtonNode .dojoxDropDownSelectLabel *
+{
 	vertical-align: baseline;
 }
 
