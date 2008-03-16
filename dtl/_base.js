@@ -163,7 +163,7 @@ dojo.require("dojox.string.tokenize");
 			if(varr){
 				return [types.varr, varr];
 			}else if(load){
-				var parts = dd.text.pySplit(dojo.trim(tag));
+				var parts = dd.text.pySplit(tag);
 				for(var i = 0, part; part = parts[i]; i++){
 					dojo["require"](part);
 				}

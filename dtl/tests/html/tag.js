@@ -64,6 +64,29 @@ doh.register("dojox.dtl.html.tag",
 			}
 			t.t(found);
 		},
+		function test_structures(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				actions: ["ate", "picked"],
+				items: [
+					{
+						name: "apple"
+					},
+					{
+						name: "banana",
+						date: new Date(2007, 2, 16, 14, 30, 10)
+					},
+					{
+						name: "orange",
+						date: new Date(2008, 0, 1, 12, 0, 0)
+					}
+				]
+			});
+
+			var template = new dd.HtmlTemplate('<div><ul>I {% for action in actions %}{% if not forloop.first %}, {% endif %}{{action}}{% endfor %} the following:<ul>{% for item in items %}<li>{{ item.name }}{% if item.date %} at {{ item.date|date:"P" }}{% endif %}</li>{% endfor %}</ul></ul></div>');
+			t.is('<div><ul>I ate, picked the following:<ul><li>apple</li><li>banana at 2:30 pm</li><li>orange at noon</li></ul></ul></div>', dd.tests.html.util.render(template, context));
+		},
 		function test_tag_extend(t){
 			// Problems to look for:
 			//	* Content outside of blocks
@@ -129,6 +152,34 @@ doh.register("dojox.dtl.html.tag",
 '{% endfor %}</div>');
 			t.is('<div> 2008-01-12 0 2008-01-28 0 2008-02-01 0</div>', dd.tests.html.util.render(template, context));
 		},
+		function test_tag_ifequal(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				items: [
+					{ name: "apple", color: "red" },
+					{ name: "banana", color: "yellow" },
+					{ name: "pear", color: "green" },
+					{ name: "kiwi", color: "brown" }
+				],
+				edit_item: "banana"
+			});
+
+			var template = new dd.HtmlTemplate("<div><ul>{% for item in items %}<li>{{ item.name }}</li>{% endfor %}</ul></div>");
+			t.is('<div><ul><li>apple</li><li>banana</li><li>pear</li><li>kiwi</li></ul></div>', dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}<li><span>{{ item.name }}</span><br/><p>{{ item.color }}</p></li>{% endfor %}</ul></div>");
+			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><span>banana</span><br/><p>yellow</p></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}<li>{% ifequal item.name edit_item %}<label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label>{% else %}<span>{{ item.name }}</span><br/><p>{{ item.color }}</p>{% endifequal %}</li>{% endfor %}</ul></div>");
+			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}<li>{% ifequal item.name edit_item %}<div><label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label></div>{% else %}<div><span>{{ item.name }}</span><br/><p>{{ item.color }}</p></div>{% endifequal %}</li>{% endfor %}</ul></div>");
+			t.is('<div><ul><li><div><span>apple</span><br/><p>red</p></div></li><li><div><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></div></li><li><div><span>pear</span><br/><p>green</p></div></li><li><div><span>kiwi</span><br/><p>brown</p></div></li></ul></div>', dd.tests.html.util.render(template, context));
+
+			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}{% ifequal item.name edit_item %}<li><label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label></li>{% else %}<li><span>{{ item.name }}</span><br/><p>{{ item.color }}</p></li>{% endifequal %}{% endfor %}</ul></div>");
+			t.is('div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
+		},
 		function test_tag_include(t){
 			var dd = dojox.dtl;
 
@@ -173,6 +224,6 @@ doh.register("dojox.dtl.html.tag",
 
 			template = new dd.HtmlTemplate('<div>{% for person in people %}{% ssi hello parsed %} {% endfor %}</div>');
 			t.is("<div>Hello, <span>Charles</span> Hello, <span>Ralph</span> Hello, <span>Julia</span> </div>", dd.tests.html.util.render(template, context));
-		},
+		}
 	]
 );

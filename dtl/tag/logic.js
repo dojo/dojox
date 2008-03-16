@@ -90,7 +90,7 @@ dojo.require("dojox.dtl._base");
 			return ddtl.IfNode.prototype.unrender.call(this, context, buffer);
 		},
 		clone: function(buffer){
-			return new this.constructor(this.var1.getExpression(), this.var2.getExpression(), this.trues, this.falses, this.negate);
+			return new this.constructor(this.var1.getExpression(), this.var2.getExpression(), this.trues.clone(buffer), this.falses.clone(buffer), this.negate);
 		}
 	});
 

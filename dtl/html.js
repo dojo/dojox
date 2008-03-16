@@ -70,7 +70,7 @@ dojo.require("dojox.dtl.Context");
 				}
 			}
 
-			var re = /\b([a-zA-Z]+)="/g;
+			var re = /\b([a-zA-Z]+)=['"]/g;
 			while(match = re.exec(text)){
 				this._attributes[match[1].toLowerCase()] = true;
 			}
