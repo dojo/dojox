@@ -221,11 +221,11 @@ dojox.cometd = new function(){
 				this._sendMessage(props);
 				
 				var _ds = this._deferredSubscribes;
-				_ds[channel] = new dojo.Deferred();
 				if(_ds[channel]){
 					_ds[channel].cancel();
 					delete _ds[channel];
 				}
+				_ds[channel] = new dojo.Deferred();
 			}
 			
 			for(var i in subs){
