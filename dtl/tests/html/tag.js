@@ -178,7 +178,7 @@ doh.register("dojox.dtl.html.tag",
 			t.is('<div><ul><li><div><span>apple</span><br/><p>red</p></div></li><li><div><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></div></li><li><div><span>pear</span><br/><p>green</p></div></li><li><div><span>kiwi</span><br/><p>brown</p></div></li></ul></div>', dd.tests.html.util.render(template, context));
 
 			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}{% ifequal item.name edit_item %}<li><label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label></li>{% else %}<li><span>{{ item.name }}</span><br/><p>{{ item.color }}</p></li>{% endifequal %}{% endfor %}</ul></div>");
-			t.is('div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
+			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
 		},
 		function test_tag_include(t){
 			var dd = dojox.dtl;
