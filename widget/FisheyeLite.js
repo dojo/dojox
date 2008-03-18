@@ -92,7 +92,7 @@ dojo.declare("dojox.widget.FisheyeLite",
 		// create two properties: objects, one for each "state"
 		var _in = {};
 		var _out = {};
-		var cs = dojo.getComputedStyle(this.domNode);		
+		var cs = dojo.getComputedStyle(this._target);		
 		for(var p in this.properties){
 			var v = parseInt(cs[p]);
 			// note: do not set negative scale for [a list of properties] for IE support
