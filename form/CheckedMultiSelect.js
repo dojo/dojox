@@ -40,7 +40,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		// summary:
 		//		Called when the label portion is clicked
 		dojo.stopEvent(e);
-		if (this.disabled){
+		if(this.disabled){
 			return;
 		}
 		var cb = this.checkBox;
@@ -120,15 +120,18 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 	_updateChildren: function(){
 		// summary:
 		//		Called to update the checked states of my children to match me
-		dojo.forEach(this.children,function(i){
-			i._updateBox();
+		dojo.forEach(this.children,function(child){
+			child._updateBox();
 		});
 	},
 	
 	_addChild: function(/*Element*/ option){
 		// summary:
 		//		Adds and returns a child for the given option.
-		var item = new dojox.form._CheckedMultiSelectItem({option: option, parent: this});
+		var item = new dojox.form._CheckedMultiSelectItem({
+			option: option,
+			parent: this
+		});
 		this.wrapperDiv.appendChild(item.domNode);
 		return item;
 	},
@@ -138,15 +141,15 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 		//		Reloads the children to match our box.
 
 		// Destroy any existing children before loading them again
-		dojo.forEach(this.children, function(i){
-			i.destroyRecursive();
+		dojo.forEach(this.children, function(child){
+			child.destroyRecursive();
 		});
-		this.children = dojo.query("option", this.domNode).map(function(i){
-			return this._addChild(i);
+		this.children = dojo.query("option", this.domNode).map(function(child){
+			return this._addChild(child);
 		}, this);
-		this.options = dojo.map(this.children, function(i){
-			var opt = i.option;
-			return {value:opt.value, label: opt.text};
+		this.options = dojo.map(this.children, function(child){
+			var opt = child.option;
+			return { value:opt.value, label: opt.text };
 		});
 		// Update the statuses of the children
 		this._updateChildren();
@@ -162,14 +165,14 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 	},
 
 	removeOption: function(/*String*/ optionId){
-		dojo.query("option[value=" + optionId + "]", this.domNode).forEach(function(i){
-			i.parentNode.removeChild(i);
+		dojo.query("option[value=" + optionId + "]", this.domNode).forEach(function(node){
+			node.parentNode.removeChild(node);
 		}, this);
 	},
 	
 	setOptionLabel: function(/*string*/ optionId, /*string*/ label){
-		dojo.query("option[value=" + optionId + "]", this.domNode).forEach(function(i){
-			i.innerHTML = label;
+		dojo.query("option[value=" + optionId + "]", this.domNode).forEach(function(node){
+			node.innerHTML = label;
 		});
 	},
 
@@ -189,9 +192,9 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 		this.inherited(arguments);
 		switch(attr){
 			case "disabled":
-				dojo.forEach(this.children, function(i){
-					if (i && i.setAttribute){
-						i.setAttribute(attr, value);
+				dojo.forEach(this.children, function(node){
+					if(node && node.setAttribute){
+						node.setAttribute(attr, value);
 					}
 				});
 				break;
