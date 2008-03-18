@@ -105,6 +105,14 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 					(valueOrIdx.value && i.value === valueOrIdx.value));
 		});
 	},
+	
+	setOptionLabel: function(/*string*/ value, /*string*/ label){
+		dojo.forEach(this.options, function(i){
+			if(i.value === value){
+				i.label = label;
+			}
+		});
+	},
 
 	destroy: function(){
 		// summary:
@@ -207,6 +215,7 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		this.connect(this, "onChange", "_updateSelectedState");
 		this.connect(this, "addOption", "_resetButtonState");
 		this.connect(this, "removeOption", "_resetButtonState");
+		this.connect(this, "setOptionLabel", "_resetButtonState");
 	},
 
 	startup: function(){

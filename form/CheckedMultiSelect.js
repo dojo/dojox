@@ -93,6 +93,22 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 	// children: dojox.form._CheckedMultiSelectItem[]
 	//		Array of all our children (for updating them)
 	children: [],
+	
+	/*=====
+	dojox.form.__SelectOption = function(){
+		//	value: String
+		//		The value of the option.  Setting to empty (or missing) will
+		//		place a separator at that location
+		//	label: String
+		//		The label for our option.  It can contain html tags.
+		this.value = value;
+		this.label = label;
+	}
+	=====*/
+
+	// options: dojox.form.__SelectOption[]
+	//		our set of options
+	options: null,
 
 	_mouseDown: function(e){
 		// summary:
@@ -128,19 +144,35 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form.MultiSelect, {
 		this.children = dojo.query("option", this.domNode).map(function(i){
 			return this._addChild(i);
 		}, this);
-		
+		this.options = dojo.map(this.children, function(i){
+			var opt = i.option;
+			return {value:opt.value, label: opt.text};
+		});
 		// Update the statuses of the children
 		this._updateChildren();
 	},
 
-	addOption: function(/*Element*/ option){
+	addOption: function(/* dojox.form.__SelectOption or string, optional */ value, /* string? */ label){
 		// summary: Adds the given option to the select
-console.log("Adding");
-console.debug(option);
-		this.containerNode.appendChild(option);
-		this._loadChildren();
+		
+		var o = new Option("","");
+		o.value = value.value || value;
+		o.innerHTML = value.label || label;
+		this.containerNode.appendChild(o);
+	},
+
+	removeOption: function(/*String*/ optionId){
+		dojo.query("option[value=" + optionId + "]", this.domNode).forEach(function(i){
+			i.parentNode.removeChild(i);
+		}, this);
 	},
 	
+	setOptionLabel: function(/*string*/ optionId, /*string*/ label){
+		dojo.query("option[value=" + optionId + "]", this.domNode).forEach(function(i){
+			i.innerHTML = label;
+		});
+	},
+
 	addSelected: function(select){
 		this.inherited(arguments);
 		
@@ -174,8 +206,11 @@ console.debug(option);
 
 		// Load children and make connections
 		this._loadChildren();
-		dojo.connect(this, "setValue", this, "_updateChildren");
-		dojo.connect(this, "invertSelection", this, "_updateChildren");
+		this.connect(this, "setValue", "_updateChildren");
+		this.connect(this, "invertSelection", "_updateChildren");
+		this.connect(this, "addOption", "_loadChildren");
+		this.connect(this, "removeOption", "_loadChildren");
+		this.connect(this, "setOptionLabel", "_loadChildren");
 		this._started = true;
 	}
 });

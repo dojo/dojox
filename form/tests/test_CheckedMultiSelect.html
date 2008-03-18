@@ -35,9 +35,12 @@
 				});
 			});
 		</script>
-		<link rel="stylesheet" type="text/css" href="../../../dijit/themes/tundra/tundra.css">
-		<link rel="stylesheet" type="text/css" href="../resources/CheckedMultiSelect.css">
-		<link rel="stylesheet" type="text/css" href="../../../dijit/tests/css/dijitTests.css">
+		<style>
+			@import url(../../../dojo/resources/dojo.css);
+			@import url(../../../dijit/themes/tundra/tundra.css);
+			@import url(../resources/CheckedMultiSelect.css);
+			@import url(../../../dijit/tests/css/dijitTests.css);
+		</style>
 	</head>	
 	<body class="tundra">
 		<h1 class="testTitle">Test: dojox.form.CheckedMultiSelect</h1>
@@ -73,10 +76,7 @@
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					var idx = dojo.query("option", ms3.domNode).length;
-					var o = new Option("", "");
-					o.value = idx + "";
-					o.innerHTML = "Option " + (idx + 1);
-					ms3.addOption(o);
+					ms3.addOption(idx + "", "Option " + (idx + 1));
 				</script>
 				Add Option
 			</button>
