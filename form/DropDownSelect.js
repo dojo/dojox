@@ -48,11 +48,14 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 			menu.addChild(new dijit.MenuSeparator());
 		}else{
 			// Just a regular menu option
-			var click = dojo.hitch(this, function(){this.setAttribute("value", option);});
-			menu.addChild(new dijit.MenuItem({
-									id: this.id + "_item_" + option.value,
-									label: option.label,
-									onClick: click}));
+			var click = dojo.hitch(this, "setAttribute","value",option);
+			var mi = new dijit.MenuItem({
+				id: this.id + "_item_" + option.value,
+				label: option.label,
+				onClick: click
+			});
+			menu.addChild(mi);
+
 		}
 	},
 
@@ -64,8 +67,8 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		
 		// reset the menu to make it "populatable on the next click
 		var dropDown = this.dropDown;
-		dojo.forEach(dropDown.getChildren(), function(i){
-			i.destroyRecursive();
+		dojo.forEach(dropDown.getChildren(), function(child){
+			child.destroyRecursive();
 		});
 		this._isPopulated = false;
 		
@@ -81,8 +84,8 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		var val = this.value;
 		if(val){
 			var testId = this.id + "_item_" + val;
-			dojo.forEach(this.dropDown.getChildren(), function(i){
-				dojo[i.id === testId ? "addClass" : "removeClass"](i.domNode,
+			dojo.forEach(this.dropDown.getChildren(), function(child){
+				dojo[child.id === testId ? "addClass" : "removeClass"](child.domNode,
 														this.baseClass + "SelectedOption");
 			}, this);
 		}
@@ -93,23 +96,23 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		//		Adds an option to the end of the select.  If value is empty or 
 		//		missing, a separator is created instead.
 		
-		this.options.push(value.value ? value : {value:value, label:label});
+		this.options.push(value.value ? value : { value:value, label:label });
 	},
 	
 	removeOption: function(/* string, dojox.form.__SelectOption or number */ valueOrIdx){
 		// summary:
 		//		Removes the given option
-		this.options = dojo.filter(this.options, function(i, idx){
+		this.options = dojo.filter(this.options, function(node, idx){
 			return !((typeof valueOrIdx === "number" && idx === valueOrIdx) ||
-					(typeof valueOrIdx === "string" && i.value === valueOrIdx) ||
-					(valueOrIdx.value && i.value === valueOrIdx.value));
+					(typeof valueOrIdx === "string" && node.value === valueOrIdx) ||
+					(valueOrIdx.value && node.value === valueOrIdx.value));
 		});
 	},
 	
 	setOptionLabel: function(/*string*/ value, /*string*/ label){
-		dojo.forEach(this.options, function(i){
-			if(i.value === value){
-				i.label = label;
+		dojo.forEach(this.options, function(node){
+			if(node.value === value){
+				node.label = label;
 			}
 		});
 	},
@@ -153,18 +156,19 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		if(attr === "value"){
 			// If a string is passed, then we set our value from looking it up.
 			if(typeof value === "string"){
-				value = dojo.filter(this.options, function(i){
-					return i.value === value;
+				value = dojo.filter(this.options, function(node){
+					return node.value === value;
 				})[0];
 			}
 			
 			// If we don't have a value, try to show the first item
 			if(!value){
-				value = this.options[0] || {value: "", label: ""};
+				value = this.options[0] || { value: "", label: "" };
 			}
 			this.value = value.value;
-			if(this._started)
-				this.setLabel(value.label||this.emptyLabel||"&nbsp;");
+			if(this._started){
+				this.setLabel(value.label || this.emptyLabel || "&nbsp;");
+			}
 			this._handleOnChange(value.value);
 			value = this.value;
 		}else{
@@ -180,12 +184,12 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		var opts = this.options;
 		if(!opts){
 			opts = this.options = this.srcNodeRef ? dojo.query(">", 
-						this.srcNodeRef).map(function(i){
-							if(i.getAttribute("type") === "separator"){
+						this.srcNodeRef).map(function(node){
+							if(node.getAttribute("type") === "separator"){
 								return { value: "", label: "" };
 							}
-							return { value: i.getAttribute("value"),
-										label: String(i.innerHTML) };
+							return { value: node.getAttribute("value"),
+										label: String(node.innerHTML) };
 						}, this) : [];
 		}
 		
