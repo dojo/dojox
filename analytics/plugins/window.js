@@ -3,7 +3,7 @@ dojo.provide("dojox.analytics.plugins.window");
 // window startup data
 dojox.analytics.plugins.window = new (function(){
 	this.addData = dojo.hitch(dojox.analytics, "addData", "window");
-	this.windowConnects = djConfig["windowConnects"] || ["open", "onerror"];
+	this.windowConnects = dojo.config["windowConnects"] || ["open", "onerror"];
 
 	for(var i=0; i<this.windowConnects.length;i++){
 		dojo.connect(window, this.windowConnects[i], dojo.hitch(this, "addData", this.windowConnects[i]));

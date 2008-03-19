@@ -1,10 +1,10 @@
 dojo.provide("dojox.analytics.plugins.mouseOver");
 
 dojox.analytics.plugins.mouseOver = new (function(){
-	this.watchMouse = djConfig["watchMouseOver"] || true;
-	this.mouseSampleDelay = djConfig["sampleDelay"] || 2500;
+	this.watchMouse = dojo.config["watchMouseOver"] || true;
+	this.mouseSampleDelay = dojo.config["sampleDelay"] || 2500;
 	this.addData = dojo.hitch(dojox.analytics, "addData", "mouseOver");
-	this.targetProps = djConfig["targetProps"] || ["id","className","localName","href", "spellcheck", "lang", "textContent", "value" ];
+	this.targetProps = dojo.config["targetProps"] || ["id","className","localName","href", "spellcheck", "lang", "textContent", "value" ];
 
 	this.toggleWatchMouse=function(){
 		if (this._watchingMouse){

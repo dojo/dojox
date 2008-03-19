@@ -12,7 +12,7 @@ dojox.analytics.plugins.dojo = new (function(){
 			}
 		}
 
-		if (djConfig){data.djConfig=djConfig}
+		if (dojo.config){data.djConfig=dojo.config}
 		this.addData(data);
 	}));
 })();

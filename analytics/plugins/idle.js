@@ -3,7 +3,7 @@ dojo.provide("dojox.analytics.plugins.idle");
 // window startup data
 dojox.analytics.plugins.idle = new (function(){
 	this.addData = dojo.hitch(dojox.analytics, "addData", "idle");
-	this.idleTime=djConfig["idleTime"] || 60000;
+	this.idleTime=dojo.config["idleTime"] || 60000;
 	this.idle=true;
 
 	this.setIdle = function(){

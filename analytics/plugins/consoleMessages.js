@@ -5,7 +5,7 @@ dojox.analytics.plugins.consoleMessages = new (function(){
 	//	plugin to have analyitcs return the base info dojo collects
 	this.addData = dojo.hitch(dojox.analytics, "addData", "consoleMessages");
 
-	var lvls = djConfig["consoleLogFuncs"] || ["error", "warn", "info", "rlog"];
+	var lvls = dojo.config["consoleLogFuncs"] || ["error", "warn", "info", "rlog"];
 	if(!console){
 		console={};
 	}
