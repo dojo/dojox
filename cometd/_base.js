@@ -18,10 +18,12 @@ dojo.require("dojo.io.script");
 dojox.cometd = new function(){
 	
 	// cometd states:
- 	this.DISCONNECTED="DISCONNECTED";	// _initialized==false 	&& _connected==false
- 	this.CONNECTING="CONNECTING";		// _initialized==true	&& _connected==false (handshake sent)
- 	this.CONNECTED="CONNECTED";		// _initialized==true	&& _connected==true (first successful connect)
- 	this.DISCONNECTING="DISCONNECING";	// _initialized==false 	&& _connected==true (disconnect sent)
+
+	// alex; OMG, these "constants" need to die. Java truly is a degenerative disease.
+ 	this.DISCONNECTED = "DISCONNECTED";		// _initialized==false 	&& _connected==false
+ 	this.CONNECTING = "CONNECTING";			// _initialized==true	&& _connected==false (handshake sent)
+ 	this.CONNECTED = "CONNECTED";			// _initialized==true	&& _connected==true (first successful connect)
+ 	this.DISCONNECTING = "DISCONNECING";	// _initialized==false 	&& _connected==true (disconnect sent)
  	
 	this._initialized = false;
 	this._connected = false;
@@ -29,31 +31,33 @@ dojox.cometd = new function(){
 
 	this.connectionTypes = new dojo.AdapterRegistry(true);
 
-	this.version="1.0";
-	this.minimumVersion="0.9";
-	this.clientId=null;
-	this.messageId=0;
-	this.batch=0;
+	this.version =	"1.0";
+	this.minimumVersion = "0.9";
+	this.clientId = null;
+	this.messageId = 0;
+	this.batch = 0;
 
 	this._isXD = false;
-	this.handshakeReturn=null;
-	this.currentTransport=null;
+	this.handshakeReturn = null;
+	this.currentTransport = null;
 	this.url = null;
-	this.lastMessage=null;
-	this._messageQ=[];
-	this.handleAs="json-comment-optional";
-	this._advice={};
-	this._backoffInterval=0;
-	this._backoffIncrement=1000;
-	this._backoffMax=60000;
-	this._deferredSubscribes={};
-	this._deferredUnsubscribes={};
-	this._subscriptions=[];
-	this._extendInList=[];	// List of functions invoked before delivering messages
-	this._extendOutList=[];	// List of functions invoked before sending messages
+	this.lastMessage = null;
+	this._messageQ = [];
+	this.handleAs = "json-comment-optional";
+	this._advice = {};
+	this._backoffInterval = 0;
+	this._backoffIncrement = 1000;
+	this._backoffMax = 60000;
+	this._deferredSubscribes = {};
+	this._deferredUnsubscribes = {};
+	this._subscriptions = [];
+	this._extendInList = [];	// List of functions invoked before delivering messages
+	this._extendOutList = [];	// List of functions invoked before sending messages
 
 	this.state = function() {
-		return this._initialized?(this._connected?this.CONNECTED:this.CONNECTING):(this._connected?this.DISCONNECTING:this.DISCONNECTED);
+		return this._initialized ? 
+			(this._connected ? "CONNECTED" : "CONNECTING") : 
+			( this._connected ? "DISCONNECTING" : "DISCONNECTED");
 	}
 
 	this.init = function(	/*String*/	root,
@@ -167,7 +171,14 @@ dojox.cometd = new function(){
 		}else{
 			r = dojo.xhrPost(bindArgs);
 		}
-		dojo.publish("/cometd/meta", [{cometd:this,action:"handshake",successful:true,state:this.state()}]);
+		dojo.publish("/cometd/meta", [
+			{
+				cometd: this,
+				action: "handshake",
+				successful: true,
+				state: this.state()
+			}
+		]);
 		return r;
 	}
 	
@@ -240,9 +251,11 @@ dojox.cometd = new function(){
 				objOrFunc: objOrFunc, 
 				funcName: funcName
 			});
-			this._subscriptions[tname] =subs;
+			this._subscriptions[tname] = subs;
 		}
-		return this._deferredSubscribes[channel];
+		var ret = this._deferredSubscribes[channel]||{};
+		ret.args = dojo._toArray(arguments);
+		return ret;
 	}
 
 
@@ -262,6 +275,15 @@ dojox.cometd = new function(){
 		// funcName:
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
+
+		if(
+			(arguments.length == 1) &&
+			(!dojo.isString(channel)) &&
+			(channel.args)
+		){
+			// it's a subscription handle, unroll
+			return this.unsubscribe.apply(this, channel.args);
+		}
 		
 		var tname = "/cometd"+channel;
 		var subs = this._subscriptions[tname];
