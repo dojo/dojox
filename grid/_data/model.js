@@ -651,6 +651,10 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		this._insertItem(i, index);
 	},
 	_insertItem: function(storeItem, index){
+		// Set up our fields if we haven't already 
+		if(!this.fields._nameMaps){
+			this._setupFields(storeItem);
+		}
 		var row = this._createRow(storeItem);
 		this._setRowId(storeItem, 0, index);
 		dojox.grid.data.Dynamic.prototype.insert.apply(this, [row, index]);
