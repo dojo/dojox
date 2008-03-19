@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 DojoX Data
 -------------------------------------------------------------------------------
-Version 1.0
-Release date: 05/29/2007
+Version 1.1
+Release date: 03/18/2008
 -------------------------------------------------------------------------------
 Project state: stable
 -------------------------------------------------------------------------------
@@ -31,6 +31,15 @@ framework.
 Documentation:
 
 See the Dojo API tool (http://dojotoolkit.org/api)
+-------------------------------------------------------------------------------
+Contributions:
+
+For contributions to be committed into the dojox repository, the datastore 
+should have basic unit tests that exercise the API's that the store declares it
+implements.  Documentation and demos are a plus, but unit tests are required
+to be committed into this sub-package.  This is necessary to help keep the 
+provided datastores as stable as possible.
+
 -------------------------------------------------------------------------------
 Installation instructions
 
