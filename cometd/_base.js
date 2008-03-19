@@ -209,17 +209,54 @@ dojox.cometd = new function(){
 					/*Object */	objOrFunc,
 					/*String */	funcName,
 					/*Object?*/ props){ // return: dojo.Deferred
-		// summary:
+		//	summary:
 		//		inform the server of this client's interest in channel
-		// channel:
+		//	description:
+		//		`dojox.cometd.subscribe()` handles all the hard work of telling
+		//		the server that we want to be notified when events are
+		//		published on a particular topic. `subscribe` accepts a function
+		//		to handle messages and returns a `dojo.Deferred` object which
+		//		has an extra property added to it which makes it suitable for
+		//		passing to `dojox.cometd.unsubscribe()` as a "subscription
+		//		handle" (much like the handle object that `dojo.connect()`
+		//		produces and which `dojo.disconnect()` expects).
+		//		
+		//		Note that of a subscription is registered before a connection
+		//		with the server is established, events sent before the
+		//		connection is established will not be delivered to this client.
+		//		The deferred object which `subscribe` returns will callback
+		//		when the server successfuly acknolwedges receipt of our
+		//		"subscribe" request.
+		//	channel:
 		//		name of the cometd channel to subscribe to
-		// objOrFunc:
+		//	objOrFunc:
 		//		an object scope for funcName or the name or reference to a
 		//		function to be called when messages are delivered to the
 		//		channel
-		// funcName:
+		//	funcName:
 		//		the second half of the objOrFunc/funcName pair for identifying
 		//		a callback function to notifiy upon channel message delivery
+		//	example:
+		//		Simple subscribe use-case
+		//	|	dojox.cometd.init("http://myserver.com:8080/cometd");
+		//	|	// log out all incoming messages on /foo/bar
+		//	|	dojox.cometd.subscribe("/foo/bar", console, "debug");
+		//	example:
+		//		Subscribe before connection is initialized
+		//	|	dojox.cometd.subscribe("/foo/bar", console, "debug");
+		//	|	dojox.cometd.init("http://myserver.com:8080/cometd");
+		//	example:
+		//		Subscribe an unsubscribe
+		//	|	dojox.cometd.init("http://myserver.com:8080/cometd");
+		//	|	var h = dojox.cometd.subscribe("/foo/bar", console, "debug");
+		//	|	dojox.cometd.unsubscribe(h);
+		//	example:
+		//		Listen for successful subscription:
+		//	|	dojox.cometd.init("http://myserver.com:8080/cometd");
+		//	|	var h = dojox.cometd.subscribe("/foo/bar", console, "debug");
+		//	|	h.addCallback(function(){
+		//	|		console.debug("subscription to /foo/bar established");
+		//	|	});
 
 		props = props||{};
 		if(objOrFunc){
@@ -255,7 +292,7 @@ dojox.cometd = new function(){
 		}
 		var ret = this._deferredSubscribes[channel]||{};
 		ret.args = dojo._toArray(arguments);
-		return ret;
+		return ret; // dojo.Deferred
 	}
 
 
@@ -319,7 +356,7 @@ dojox.cometd = new function(){
 				delete this._deferredSubscribes[channel];
 			}
 		}
-		return this._deferredUnsubscribes[channel];
+		return this._deferredUnsubscribes[channel]; // dojo.Deferred
 	}
 	
 	
