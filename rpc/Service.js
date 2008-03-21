@@ -206,7 +206,8 @@ dojox.rpc.envelopeRegistry.register(
 			var d = dojox.rpc.toJson(dojox.rpc.toNamed(method, data, method.strictParameters||smd.strictParameters));
 	
 			return {
-				data: d
+				data: d,
+				contentType : 'application/json'
 			}
 		},
 		deserialize: function(results){
