@@ -126,15 +126,14 @@
 
 	This ComboBox uses a customized QueryReadStore, it prepares the query-string for the URL that
 	way that the paging parameters "start" and "count" are also send.<br />
-	<div dojoType="ServerPagingReadStore" jsId="serverPagingStore" url="stores/QueryReadStore.php" requestMethod="get" doClientPaging="false"></div>
+	<div dojoType="ServerPagingReadStore" jsId="serverPagingStore" url="stores/QueryReadStore.php" requestMethod="get"></div>
 	<input dojoType="dijit.form.ComboBox" store="serverPagingStore" pageSize="5" />
 	<br />
 	<a href="javascript://" onclick="var d = dojo.byId('pagingCode'); d.style.display= d.style.display=='none'?'block':'none';">Click here to  see the code!</a>
 <div id="pagingCode" style="display:none;">
-	The HTML might look like this, the important attribute: <em>doClientPaging="false"</em> this takes care that the same query is fired to the server
-	and its not assumed that the client (the store) does the paging on the old data.
+	The HTML might look like this.
 	<pre>
-&lt;div dojoType="ServerPagingReadStore" jsId="serverPagingStore" url="stores/QueryReadStore.php" requestMethod="get" doClientPaging="false"&gt;&lt;/div&gt;
+&lt;div dojoType="ServerPagingReadStore" jsId="serverPagingStore" url="stores/QueryReadStore.php" requestMethod="get"&gt;&lt;/div&gt;
 &lt;input dojoType="dijit.form.ComboBox" store="serverPagingStore" pageSize="10" /&gt;
 	</pre>
 	<pre>

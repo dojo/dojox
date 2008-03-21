@@ -2,8 +2,9 @@ dojo.provide("dojox.data.QueryReadStore");
 
 dojo.require("dojo.string");
 
-dojo.declare("dojox.data.QueryReadStore", null, {
-	/*
+dojo.declare("dojox.data.QueryReadStore",
+	null,
+	{
 	//	summary:
 	//		This class provides a store that is mainly intended to be used
 	//		for loading data dynamically from the server, used i.e. for
@@ -15,32 +16,45 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	//		can be used to retreive the data partially upon entering the
 	//		letters "ac" it returns only items like "action", "acting", etc.
 	//
-	//  note:
-	//      The field name "id" in a query is reserved for looking up data
-	//      by id. This is necessary as before the first fetch, the store
-	//      has no way of knowing which field the server will declare as
-	//      identifier.
+	// note:
+	//		The field name "id" in a query is reserved for looking up data
+	//		by id. This is necessary as before the first fetch, the store
+	//		has no way of knowing which field the server will declare as
+	//		identifier.
 	//
 	//	examples:
-	//		// The parameter "query" contains the data that are sent to the server.
-	//		var store = new dojox.data.QueryReadStore({url:'/search.php'});
-	//		store.fetch({query:{name:'a'}, queryOptions:{ignoreCase:false}});
+	// |	// The parameter "query" contains the data that are sent to the server.
+	// |	var store = new dojox.data.QueryReadStore({url:'/search.php'});
+	// |	store.fetch({query:{name:'a'}, queryOptions:{ignoreCase:false}});
 	//
-	//		// Since "serverQuery" is given, it overrules and those data are
-	//		// sent to the server.
-	//		var store = new dojox.data.QueryReadStore({url:'/search.php'});
-	//		store.fetch({serverQuery:{name:'a'}, queryOptions:{ignoreCase:false}});
+	// |	// Since "serverQuery" is given, it overrules and those data are
+	// |	// sent to the server.
+	// |	var store = new dojox.data.QueryReadStore({url:'/search.php'});
+	// |	store.fetch({serverQuery:{name:'a'}, queryOptions:{ignoreCase:false}});
+	//
+	// |	<div dojoType="dojox.data.QueryReadStore"
+	// |		jsId="store2"
+	// |		url="../tests/stores/QueryReadStore.php"
+	// |		requestMethod="post"></div>
+	// |	<div dojoType="dojox.grid.data.DojoData"
+	// |		jsId="model2"
+	// |		store="store2"
+	// |		sortFields="[{attribute: 'name', descending: true}]"
+	// |		rowsPerPage="30"></div>
+	// |	<div dojoType="dojox.Grid" id="grid2"
+	// |		model="model2"
+	// |		structure="gridLayout"
+	// |		style="height:300px; width:800px;"></div>
+
 	//
 	//	todo:
 	//		- there is a bug in the paging, when i set start:2, count:5 after an initial fetch() and doClientPaging:true
 	//		  it returns 6 elemetns, though count=5, try it in QueryReadStore.html
-	//		- allow configuring if the paging shall takes place on the client or the server
 	//		- add optional caching
 	//		- when the first query searched for "a" and the next for a subset of
 	//		  the first, i.e. "ab" then we actually dont need a server request, if
 	//		  we have client paging, we just need to filter the items we already have
 	//		  that might also be tooo much logic
-	*/
 	
 	url:"",
 	requestMethod:"get",
@@ -69,11 +83,14 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 	// client-side-paging.
 	lastRequestHash:null,
 	
-	// If this is false, every request is sent to the server.
-	// If it's true a second request with the same query will not issue another
-	// request, but use the already returned data. This assumes that the server
-	// does not do the paging.
-	doClientPaging:true,
+	// summary:
+	//		By default every request for paging is sent to the server.
+	doClientPaging:false,
+
+	// summary:
+	//		By default all the sorting is done serverside before the data is returned
+	//		which is the proper place to be doing it for really large datasets.
+	doClientSorting:false,
 
 	// Items by identify for Identify API
 	_itemsByIdentity:null,
@@ -225,7 +242,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			if(requestObject.onBegin){
 				requestObject.onBegin.call(scope, numRows, requestObject);
 			}
-			if(requestObject.sort){
+			if(requestObject.sort && this.doClientSorting){
 				items.sort(dojo.data.util.sorter.createSortFunction(requestObject.sort, self));
 			}
 			if(requestObject.onItem){
@@ -272,7 +289,7 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			return [this._labelAttr]; //array
 		}
 		return null; //null
-        },
+	},
 	
 	_fetchItems: function(request, fetchHandler, errorHandler){
 		//	summary:
@@ -310,6 +327,18 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 			// Count might not be sent if not given.
 			if (request.count) {
 				serverQuery.count = request.count;
+			}
+		}
+		if(!this.doClientSorting){
+			if(request.sort){
+				var sort = request.sort[0];
+				if(sort && sort.attribute){
+					var sortStr = sort.attribute;
+					if(sort.descending){
+						sortStr = "-" + sortStr;
+					}
+					serverQuery.sort = sortStr;
+				}
 			}
 		}
 		// Compare the last query and the current query by simply json-encoding them,
@@ -476,4 +505,5 @@ dojo.declare("dojox.data.QueryReadStore", null, {
 		//		See dojo.data.api.Identity.getIdentityAttributes()
 		return [this._identifier];
 	}
-});
+}
+);
