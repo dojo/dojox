@@ -241,7 +241,7 @@ dojo.declare('dojox.VirtualGrid',
 
 	buildViews: function(){
 		for(var i=0, vs; (vs=this.layout.structure[i]); i++){
-			this.createView(vs.type || "dojox.GridView").setStructure(vs);
+			this.createView(vs.type || dojox._scopeName + ".GridView").setStructure(vs);
 		}
 		this.scroller.setContentNodes(this.views.getContentNodes());
 	},
