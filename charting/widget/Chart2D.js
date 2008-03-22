@@ -108,12 +108,12 @@ dojo.require("dojox.lang.functional");
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dojox.charting.axis2d[type]){
-				type = "dojox.charting.axis2d." + type;
+				type = dojox._scopeName + ".charting.axis2d." + type;
 			}
 			var axis = eval("(" + type + ")");
 			if(axis){ kw.type = axis; } 
 		}else{
-			type = "dojox.charting.axis2d.Default";
+			type = dojox._scopeName + ".charting.axis2d.Default";
 		}
 		var dp = eval("(" + type + ".prototype.defaultParams)");
 		for(var x in dp){
@@ -138,12 +138,12 @@ dojo.require("dojox.lang.functional");
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dojox.charting.plot2d[type]){
-				type = "dojox.charting.plot2d." + type;
+				type = dojox._scopeName + ".charting.plot2d." + type;
 			}
 			var plot = eval("(" + type + ")");
 			if(plot){ kw.type = plot; } 
 		}else{
-			type = "dojox.charting.plot2d.Default";
+			type = dojox._scopeName + ".charting.plot2d.Default";
 		}
 		var dp = eval("(" + type + ".prototype.defaultParams)");
 		for(var x in dp){

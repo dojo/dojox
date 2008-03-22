@@ -435,7 +435,7 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 			}
 			if(this.scriptHasHooks){
 				// replace _container_ with dijit.byId(this.id)
-				code = code.replace(/_container_(?!\s*=[^=])/g, "dijit.byId('"+this.id+"')");
+				code = code.replace(/_container_(?!\s*=[^=])/g, dijit._scopeName + ".byId('"+this.id+"')");
 			}
 			try{
 				evalInGlobal(code, (this.containerNode || this.domNode));

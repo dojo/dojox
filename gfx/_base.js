@@ -121,7 +121,7 @@ dojo.provide("dojox.gfx._base");
 		// summary: returns a unique string for use with any DOM element
 		var id;
 		do{
-			id = "dojoUnique" + (++uniqueId);
+			id = dojo._scopeName + "Unique" + (++uniqueId);
 		}while(dojo.byId(id));
 		return id;
 	};
