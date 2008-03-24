@@ -111,4 +111,4 @@ if (array_key_exists("count", $_REQUEST)) {
 	$ret = array_slice($ret, 0, $_REQUEST['count']);
 }
 
-print '/*'.json_encode(array('numRows'=>$numRows, 'items'=>$ret)).'*/';
+print '/*'.json_encode(array('numRows'=>$numRows, 'items'=>$ret, 'identity'=>'id')).'*/';
