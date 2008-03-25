@@ -13,15 +13,16 @@
 		
 		var _clearPane = function(){
 			var ch = dijit.byId("bc").getChildren();
-			dojo.forEach(ch,function(ch){ }
 			dojo.forEach(["pane0","pane1","pane2","pane3"],function(p){
-				dojo.byId("hidden").appendChild(dojo.byId(p))
+
+				dojo.byId("hidden").appendChild(dojo.byId(p));
 				var dij = dijit.getEnclosingWidget(p.parentNode);
 				if(dij){
 					console.log(dij);
 					dijit.byId("bc").removeChild(dij);
 					dij.destroy();
 				}
+
 			});
 		};
 
