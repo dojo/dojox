@@ -29,6 +29,9 @@ dojox.cometd = new function(){
 	this._connected = false;
 	this._polling = false;
 
+	this.expectedNetworkDelay = 5000; // expected max network delay
+	this.connectTimeout = 0;    // If set, used as ms to wait for a connect response and sent as the advised timeout
+
 	this.connectionTypes = new dojo.AdapterRegistry(true);
 
 	this.version =	"1.0";
@@ -545,6 +548,7 @@ dojox.cometd = new function(){
 						if(deferred){
 							deferred.errback(new Error(message.error));
 						}
+						this.currentTransport.cancelConnect();
 						return;
 					}
 					dojox.cometd.subscribed(message.subscription, message);
@@ -558,6 +562,7 @@ dojox.cometd = new function(){
 						if(deferred){
 							deferred.errback(new Error(message.error));
 						}
+						this.currentTransport.cancelConnect();
 						return;
 					}
 					this.unsubscribed(message.subscription, message);
@@ -565,6 +570,11 @@ dojox.cometd = new function(){
 						deferred.callback(true);
 					}
 					break;
+				default:
+					if(message.successful && !message.successful){
+						this.currentTransport.cancelConnect();
+						return;
+					}
 			}
 		}
 		
@@ -628,6 +638,19 @@ dojox.cometd = new function(){
 		// make this the last of the onUnload method
 		dojo.addOnUnload(dojox.cometd,"disconnect");
 	}
+
+	this._connectTimeout = function(){
+		// return the connect timeout in ms, calculated as the minimum of the advised timeout
+		// and the configured timeout.  Else 0 to indicate no client side timeout
+		var _advised=0;
+		if (this._advice && this._advice.timeout && this.expectedNetworkDelay>0)
+			_advised=this._advice.timeout + this.expectedNetworkDelay;
+		
+		if (this.connectTimeout>0 && this.connectTimeout<_advised)
+			return this.connectTimeout;
+		
+		return 0;
+	}
 }
 
 /*
@@ -672,6 +695,11 @@ cometd.blahTransport = new function(){
 	}
 
 	this.disconnect = function(){
+		// send orderly disconnect message
+	}
+
+	this.cancelConnect = function(){
+		// cancel the current connection
 	}
 }
 cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahTransport);
@@ -726,6 +754,9 @@ dojox.cometd.longPollTransport = new function(){
 				clientId:	this._cometd.clientId,
 				id:	""+this._cometd.messageId++
 			};
+			if (this._cometd.connectTimeout>this._cometd.expectedNetworkDelay)
+				message.advice={timeout:(this._cometd.connectTimeout-this._cometd.expectedNetworkDelay)};
+			                    
 			message=this._cometd._extendOut(message);
 			this.openTunnelWith({message: dojo.toJson([message])});
 		}
@@ -737,7 +768,7 @@ dojox.cometd.longPollTransport = new function(){
 
 	this.openTunnelWith = function(content, url){
 		this._cometd._polling = true;
-		var d = dojo.xhrPost({
+		var post = {
 			url: (url||this._cometd.url),
 			content: content,
 			handleAs: this._cometd.handleAs,
@@ -754,7 +785,13 @@ dojox.cometd.longPollTransport = new function(){
 				this._cometd._backoff();
 				this.tunnelCollapse();
 			})
-		});
+		};
+
+		var connectTimeout=this._cometd._connectTimeout();
+		if (connectTimeout>0)
+			post.timeout=connectTimeout;
+
+		this._poll = dojo.xhrPost(post);
 	}
 
 	this.sendMessages = function(messages){
@@ -796,6 +833,19 @@ dojox.cometd.longPollTransport = new function(){
 			}
 		});
 	}
+
+	this.cancelConnect = function(){
+		if (this._poll) {
+			this._poll.cancel();
+			this._cometd._polling=false;
+			dojo.debug("tunnel opening cancelled");
+			dojo.event.topic.publish("/cometd/meta", {cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state(),cancel:true});
+			this._cometd._backoff();
+			this.disconnect();
+			this.tunnelCollapse();
+		}
+	}
+
 }
 
 dojox.cometd.callbackPollTransport = new function(){
@@ -826,7 +876,7 @@ dojox.cometd.callbackPollTransport = new function(){
 
 	this.openTunnelWith = function(content, url){
 		this._cometd._polling = true;
-		dojo.io.script.get({
+		var script = {
 			load: dojo.hitch(this, function(data){
 				this._cometd._polling=false;
 				this._cometd.deliver(data);
@@ -843,7 +893,11 @@ dojox.cometd.callbackPollTransport = new function(){
 			url: (url||this._cometd.url),
 			content: content,
 			callbackParamName: "jsonp"
-		});
+		};
+		var connectTimeout=this._cometd._connectTimeout();
+		if (connectTimeout>0)
+			script.timeout=connectTimeout;
+		dojo.io.script.get(script);
 	}
 
 	this.sendMessages = function(/*array*/ messages){
@@ -883,6 +937,8 @@ dojox.cometd.callbackPollTransport = new function(){
 			}
 		});
 	}
+
+	this.cancelConnect = function(){}
 }
 dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransport);
 dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
