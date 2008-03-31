@@ -57,6 +57,7 @@ dojox.help = {
 			dojo.forEach(dojox.help._namespaces, function(item){ roots[item] = true; });
 		}
 
+		var searchForLower = searchFor.toLowerCase();
 		var found = [];
 		out:
 		for(var i = 0, namespace; namespace = namespaces[i]; i++){
@@ -80,7 +81,7 @@ dojox.help = {
 					names = dojox.help._names[root];
 				}
 				for(var j = 0, variable; variable = names[j]; j++){
-					if((name == "window" || variable.indexOf(name + ".") == 0) && variable.toLowerCase().indexOf(searchFor) != -1){
+					if((name == "window" || variable.indexOf(name + ".") == 0) && variable.toLowerCase().indexOf(searchForLower) != -1){
 						if(variable.slice(-10) == ".prototype"){ continue; }
 						var obj = dojo.getObject(variable);
 						if(obj){
@@ -378,12 +379,12 @@ dojox.help = {
 		if(namespace && dojo.isString(namespace)){
 			dojox.help.__recurse(dojo.getObject(namespace), namespace, namespace, items, recursive);
 		}else{
-			for(var i = 0, namespace; namespace = dojox.help._namespaces[i]; i++){
-				if(window[namespace]){
-					dojox.help._recursions.push([window[namespace], namespace, namespace]);
-					window[namespace].__name__ = namespace;
-					if(!window[namespace].help){
-						window[namespace].help = dojox.help._help;
+			for(var i = 0, ns; ns = dojox.help._namespaces[i]; i++){
+				if(window[ns]){
+					dojox.help._recursions.push([window[ns], ns, ns]);
+					window[ns].__name__ = ns;
+					if(!window[ns].help){
+						window[ns].help = dojox.help._help;
 					}
 				}
 			}
