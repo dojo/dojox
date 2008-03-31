@@ -21,9 +21,12 @@
     
     function element(tag, textOrChild) {
       var e = document.createElement(tag);
-      if(dojo.isArray(textOrChild)) dojo.forEach(textOrChild, function(c) { e.appendChild(c); });
-      if(dojo.isString(textOrChild)) e.appendChild(document.createTextNode(textOrChild));
-      else e.appendChild(textOrChild);
+      if(dojo.isArray(textOrChild)){  dojo.forEach(textOrChild, function(c) { e.appendChild(c); }); }
+      if(dojo.isString(textOrChild)){
+      	e.appendChild(document.createTextNode(textOrChild));
+      }else{
+      	e.appendChild(textOrChild);
+      }
       return e;
     }
     
@@ -32,7 +35,7 @@
     }
     
     function reportRun(results){
-      var runs = results.runs
+      var runs = results.runs;
       var report = element("dl",
                      element("dt", 
                              "Run with " + results.words + " words, " + 
@@ -49,7 +52,7 @@
     
     function runTest(test, iterations, expected) {
       var i;
-      if(expected != test()) throw new Error("Test failed expecting " + expected + ", got " + test());
+      if(expected != test()){ throw new Error("Test failed expecting " + expected + ", got " + test()); }
       var start = new Date().getTime(), end;
       for(i=0; i < iterations; i++){
         test();
@@ -71,10 +74,9 @@
         var t = tests.pop();
         try {
           log("Running " + t.name);
-          if(t) runs.push({ name: t.name, time: runTest(t.test, iterations, set.expected)});
+          if(t && !t.skip){ runs.push({ name: t.name, time: runTest(t.test, iterations, set.expected)}); }
         } catch(e) {
-          console.error("Error running " + t.name);
-          console.error(e);
+          console.error("Error running " + t.name, e);
         }
         if(tests.length > 0) {
           setTimeout(_run, 0);
@@ -94,8 +96,8 @@
         if(i >= wordsInLipsum) { words = words.concat(lipsum); }
         else { words = words.concat(lipsum.slice(-i)); } 
       }
-      if(words.length != numWords) throw new Error("wrong number of words, got " + words.length + ", expected " + numWords);
-      
+      if(words.length != numWords){ throw new Error("wrong number of words, got " + words.length + ", expected " + numWords); }
+
       var expected = words.join("");
       
       //console.log(words);
@@ -116,7 +118,8 @@
               var s = "";
               words.forEach(function(w) { s += w; });
               return s;
-            }
+            },
+            skip: !words.forEach
           },
           {
             name: "forLoop",
@@ -132,7 +135,7 @@
             name: "forLoopCallingInlineFunction",
             test: function() {
               var s="",w=words; l=w.length;
-              function fn(w) { s += w; };
+              function fn(w) { s += w; }
               for(var i = 0; i < l; i++) {
                 fn(w[i]);
               }
@@ -142,7 +145,7 @@
           {
             name: "forLoopCallingExternalFunction",
             test: function() {
-              g_s="",w=words; l=w.length;
+              var g_s="",w=words; l=w.length;
               for(var i = 0; i < l; i++) {
                 externalAppend(w[i]);
               }
@@ -154,7 +157,7 @@
             test: function() {
               var s="",w=words; l=w.length;
               for(var i = 0; i < l; i++) {
-                if(i in w) s += w[i];
+                if(i in w){ s += w[i]; }
               }
               return s;
             }
@@ -163,7 +166,7 @@
             name: "emptyFor",
             test: function() {
               var w = words; l = w.length;
-              for(var i = 0; i < l; i++) empty(w[i]);
+              for(var i = 0; i < l; i++){ empty(w[i]); }
               return expected;
             }
           },
@@ -178,7 +181,7 @@
             name: "identFor",
             test: function() {
               var w = words; l = w.length;
-              for(var i = 0; i < l; i++) ident(w[i]);
+              for(var i = 0; i < l; i++){ ident(w[i]); }
               return expected;
             }
           },
