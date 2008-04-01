@@ -349,7 +349,7 @@ dojox.cometd = new function(){
 		
 		if(s==0){
 			props = props||{};
-			props.channel = "/meta/subscribe";
+			props.channel = "/meta/unsubscribe";
 			props.subscription = channel;
 			delete this._subscriptions[tname];
 			this._sendMessage(props);
