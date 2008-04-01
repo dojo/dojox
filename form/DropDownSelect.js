@@ -3,7 +3,7 @@ dojo.provide("dojox.form.DropDownSelect");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.Menu");
 
-dojo.require("dojo.data.ItemFileWriteStore");
+dojo.requireLocalization("dijit.form", "validate");
 
 dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 	// summary:
@@ -11,6 +11,18 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 	//		can take as its input a <select>.
 
 	baseClass: "dojoxDropDownSelect",
+	
+	// required: Boolean
+	//		Can be true or false, default is false.
+	required: false,
+
+	// state: String
+	//		Shows current state (ie, validation result) of input (Normal, Warning, or Error)
+	state: "",
+
+	//	tooltipPosition: String[]
+	//		See description of dijit.Tooltip.defaultPosition for details on this parameter.
+	tooltipPosition: [],
 
 	/*=====
 	dojox.form.__SelectOption = function(){
@@ -160,6 +172,47 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		}
 	},
 	
+	validate: function(/*Boolean*/ isFocused){
+		// summary:
+		//		Called by oninit, onblur, and onkeypress.
+		// description:
+		//		Show missing or invalid messages if appropriate, and highlight textbox field.
+		var isValid = this.isValid(isFocused);
+		this.state = isValid ? "" : "Error";
+		this._setStateClass();
+		dijit.setWaiState(this.focusNode, "invalid", isValid ? "false" : "true");
+		var message = isValid ? "" : this._missingMsg;
+		if(this._message !== message){
+			this._message = message;
+			dijit.hideTooltip(this.domNode);
+			if(message){
+				dijit.showTooltip(message, this.domNode, this.tooltipPosition);
+			}
+		}
+		return isValid;		
+	},
+
+	isValid: function(/*Boolean*/ isFocused){
+		// summary: Whether or not this is a valid value
+		return (!this.required || !/^\s*$/.test(this.value));
+	},
+	
+	reset: function(){
+		// summary: Overridden so that the state will be cleared.
+		this.inherited(arguments);
+		dijit.hideTooltip(this.domNode);
+		this.state = "";
+		this._setStateClass();
+		delete this._message;
+	},
+
+	postMixInProperties: function(){
+		// summary: set the missing message
+		this.inherited(arguments);
+		this._missingMsg = dojo.i18n.getLocalization("dijit.form", "validate", 
+									this.lang).missingMessage;
+	},
+
 	_fillContent: function(){
 		// summary:  
 		//		Loads our options and sets up our dropdown correctly.  We 
