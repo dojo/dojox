@@ -39,12 +39,11 @@ dojo.require("dojox.lang.functional.reversed");
 
 			//	inner function for translating polylines to curves with tension
 			function curve(arr, tension){
-				var p=dojo.map(arr, function(item, i){
+				return dojo.map(arr, function(item, i){
 					if(i==0){ return "M" + item.x + "," + item.y; }
 					var dx=item.x-arr[i-1].x, dy=arr[i-1].y;
 					return "C"+(item.x-(tension-1)*(dx/tension))+","+dy+" "+(item.x-(dx/tension))+","+item.y+" "+item.x+","+item.y;
-				});
-				return p.join(" ");
+				}).join(" ");
 			}
 				
 			var t = this.chart.theme, stroke, outline, color, marker;

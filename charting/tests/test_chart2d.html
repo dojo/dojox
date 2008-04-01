@@ -36,6 +36,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../plot2d/Bars.js"></script>
 <script type="text/javascript" src="../plot2d/StackedBars.js"></script>
 <script type="text/javascript" src="../plot2d/ClusteredBars.js"></script>
+<script type="text/javascript" src="../plot2d/Bubble.js"></script>
 <script type="text/javascript" src="../plot2d/Grid.js"></script>
 <script type="text/javascript" src="../plot2d/Pie.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
@@ -281,6 +282,14 @@ makeObjects = function(){
 	chart29.addSeries("Series D", [0.7, 1.5, -1.2, -1.25, 3] );
 	chart29.render();
 
+	var chart30 = new dojox.charting.Chart2D("test30");
+	chart30.setTheme(dojox.charting.themes.PlotKit.green);
+	chart30.addPlot("default", {type: "Bubble", shadows: {dx: 2, dy: 2, dw: 2}});
+	chart30.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart30.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart30.addSeries("Series A", [{x: 0.5, y: 5, size: 1.4}, {x: 1.5, y: 1.5, size:4.5}, {x: 2, y: 9, size:1.5}, {x: 5, y: 0.3, size:0.8}]);
+	chart30.addSeries("Series B", [{x: 0.3, y: 8, size: 2.5}, {x: 4, y: 6, size:1.1}, {x: 5.5, y: 2, size: 3.2}]);
+	chart30.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -348,6 +357,8 @@ dojo.addOnLoad(makeObjects);
 <div id="test28" style="width: 400px; height: 200px;"></div>
 <p>29: Clustered columns with positive and negative values, readable theme.</p>
 <div id="test29" style="width: 500px; height: 300px;"></div>
+<p>30: Bubble chart, green theme.</p>
+<div id="test30" style="width: 500px; height: 300px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
