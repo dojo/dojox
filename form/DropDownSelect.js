@@ -154,23 +154,7 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		//			make sure and route those requests through _setValue()
 		//			instead.
 		if(attr === "value"){
-			// If a string is passed, then we set our value from looking it up.
-			if(typeof value === "string"){
-				value = dojo.filter(this.options, function(node){
-					return node.value === value;
-				})[0];
-			}
-			
-			// If we don't have a value, try to show the first item
-			if(!value){
-				value = this.options[0] || { value: "", label: "" };
-			}
-			this.value = value.value;
-			if(this._started){
-				this.setLabel(value.label || this.emptyLabel || "&nbsp;");
-			}
-			this._handleOnChange(value.value);
-			value = this.value;
+			this.setValue(value);
 		}else{
 			this.inherited(arguments);
 		}
@@ -203,6 +187,26 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		this.dropDown = new dijit.Menu();
 	},
 
+	setValue: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
+		// summary: set the value of the widget.
+		// If a string is passed, then we set our value from looking it up.
+		if(typeof newValue === "string"){
+			newValue = dojo.filter(this.options, function(node){
+				return node.value === newValue;
+			})[0];
+		}
+		
+		// If we don't have a value, try to show the first item
+		if(!newValue){
+			newValue = this.options[0] || { value: "", label: "" };
+		}
+		this.value = newValue.value;
+		if(this._started){
+			this.setLabel(newValue.label || this.emptyLabel || "&nbsp;");
+		}
+		this._handleOnChange(newValue.value, priorityChange);
+	},
+	
 	postCreate: function(){
 		// summary: sets up our event handling that we need for functioning
 		//			as a select
@@ -220,6 +224,7 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		this.connect(this, "addOption", "_resetButtonState");
 		this.connect(this, "removeOption", "_resetButtonState");
 		this.connect(this, "setOptionLabel", "_resetButtonState");
+		this.setValue(this.value, null);
 	},
 
 	startup: function(){
@@ -259,5 +264,36 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 		}else{
 			this.inherited(arguments);
 		}
-	}
+	},
+
+	_getValueDeprecated: false, // remove when _FormWidget:getValue is removed
+	getValue: function(){
+		// summary: get the value of the widget.
+		return this._lastValue;
+	},
+
+	undo: function(){
+		// summary: restore the value to the last value passed to onChange
+		this.setValue(this._lastValueReported, false);
+	},
+
+	_valueChanged: function(){
+		var v = this.getValue();
+		var lv = this._lastValueReported;
+		// Equality comparison of objects such as dates are done by reference so
+		// two distinct objects are != even if they have the same data. So use
+		// toStrings in case the values are objects.
+		return ((v !== null && (v !== undefined) && v.toString)?v.toString():'') !== ((lv !== null && (lv !== undefined) && lv.toString)?lv.toString():'');
+	},
+
+	_onKeyPress: function(e){
+		if(e.keyCode == dojo.keys.ESCAPE && !e.shiftKey && !e.ctrlKey && !e.altKey){
+			if(this._valueChanged()){
+				this.undo();
+				dojo.stopEvent(e);
+				return false;
+			}
+		}
+		return true;
+	}	
 });
