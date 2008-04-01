@@ -349,7 +349,7 @@ dojox.cometd = new function(){
 		
 		if(s==0){
 			props = props||{};
-			props.channel = "/meta/subscribe";
+			props.channel = "/meta/unsubscribe";
 			props.subscription = channel;
 			delete this._subscriptions[tname];
 			this._sendMessage(props);
@@ -584,7 +584,7 @@ dojox.cometd = new function(){
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
 			try {
-                                var messages=[message];
+				var messages=[message];
 
 				// Determine target topic
 				var tname="/cometd"+message.channel;
