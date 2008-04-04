@@ -68,7 +68,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	
 	startup: function(){
 		// summary: connect to the various handlers and controls for this presention
-		dojox.presentation.Deck.superclass.startup.call(this);
+		this.inherited(arguments);
 
 		if(this.useNav){ 
 			this._hideNav(); 
@@ -361,6 +361,7 @@ dojo.declare(
 
 	startup: function(){
 		// summary: setup this slide with actions and components (Parts)
+		this.inherited(arguments);
 		this.slideTitleText.innerHTML = this.title; 
 		var children = this.getChildren();
 		this._actions = [];
@@ -429,7 +430,7 @@ dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 	// as: String
 	//	like an ID, attach to Action via (part) as="" / (action) forSlide="" tags
 	//	this should be unique identifier?
-	as: null,
+	as: "",
 	
 	// startVisible: boolean
 	//	true to leave in page on slide startup/reset
@@ -482,7 +483,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 
 	// forSlide: String
 	//	attach this action to a dojox.presentation.Part with a matching 'as' attribute
-	forSlide: null,
+	forSlide: "",
 
 	// toggle: String
 	//	will toggle attached [matching] node(s) via forSlide/as relationship(s)
@@ -509,12 +510,11 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 			// FIXME: this is ugly, and where is toggle class? :(
 			var dir = (node._isShowing) ? "Out" : "In";
 			// node._isShowing =! node._isShowing; 
-			node._quickToggle(); // (?) this is annoying
 			//var _anim = dojox.fx[ this.toggle ? this.toggle+dir : "fade"+dir]({ 
 			var _anim = dojo.fadeIn({
 				node:node.domNode, 
-				duration: this.duration
-				//beforeBegin: dojo.hitch(node,"_quickToggle")
+				duration: this.duration,
+				beforeBegin: dojo.hitch(node,"_quickToggle")
 			});
 			anims.push(_anim);
 		},this);
@@ -537,6 +537,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 	postCreate: function(){
 		// summary: run this once, should this be startup: function()?
 
+		this.inherited(arguments);
 		// prevent actions from being visible, _always_
 		dojo.style(this.domNode,"display","none"); 
  		var parents = this._getSiblingsByType('dojox.presentation.Part');
