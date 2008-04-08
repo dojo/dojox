@@ -6,9 +6,6 @@
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		.searchResult {
-			background-color:#FFAAAA;
-		}
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
@@ -36,20 +33,6 @@
 			<br /><button dojoType="dijit.form.Button" onclick="refresh1()">refresh</button>
 		</div>
 	</div>
-
-	<h2>Highlight the search results in the drop down list</h2>
-	This requires the server to put a SPAN around the searched string in the label.<br />
-	(Be sure to have autoComplete turned off since it only works when the searched string is the start of the value)
-	<br />
-	<div dojoType="dijit.form.ComboBox"
-		id="cb2"
-		store="store1"
-		pageSize="10"
-		labelAttr="highlightedLabel"
-		labelType="html"
-		autoComplete="false"
-		></div>
-
 
 	<script type="text/javascript">
 		dojo.require("dojox.data.QueryReadStore");

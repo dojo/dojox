@@ -207,7 +207,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-				t.assertEqual(8, items.length);
+				t.assertEqual(12, items.length);
 				d.callback(true);
 			}
 			function onError(error, request) {
@@ -227,7 +227,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			var d = new doh.Deferred();
 			var passed = false;
 			function onBegin(size, request){
-				t.assertEqual(8, size);
+				t.assertEqual(12, size);
 				passed = true;
 			}
 			function onComplete(items, request) {
@@ -255,11 +255,11 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			var d = new doh.Deferred();
 			var passed = false;
 			function onBegin(size, request){
-				t.assertEqual(8, size);
+				t.assertEqual(12, size);
 				passed = true;
 			}
 			function onComplete(items, request) {
-				t.assertEqual(3, items.length);
+				t.assertEqual(5, items.length);
 				if(passed){
 					d.callback(true);
 				}else{
@@ -284,7 +284,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			var d = new doh.Deferred();
 			var passed = false;
 			function onBegin(size, request){
-				t.assertEqual(8, size);
+				t.assertEqual(12, size);
 				passed = true;
 			}
 			function onComplete(items, request) {

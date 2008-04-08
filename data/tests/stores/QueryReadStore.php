@@ -94,14 +94,15 @@ foreach ($allItems as $item) {
 	if (!$q || $foundWord) {
 		// Put a span around the searched characters to highlight them.
 		$resultItem = $item;
-		if ($foundWord) {
-			$resultItem['highlightedLabel'] = substr($item['name'], 0, $foundPos) .
-				'<span class="searchResult">' .
-				substr($item['name'], $foundPos, strlen($q)) . '</span>' .
-				substr($item['name'], $foundPos+strlen($q));
-		} else {
-			$resultItem['highlightedLabel'] = $item['name'];
-		}
+		// Currently we dont need custom highlighting, its implemented in the client too.
+		//if ($foundWord) {
+		//	$resultItem['highlightedLabel'] = substr($item['name'], 0, $foundPos) .
+		//		'<span class="searchResult">' .
+		//		substr($item['name'], $foundPos, strlen($q)) . '</span>' .
+		//		substr($item['name'], $foundPos+strlen($q));
+		//} else {
+		//	$resultItem['highlightedLabel'] = $item['name'];
+		//}
 		$ret[] = $resultItem;
 	}
 }
