@@ -7,7 +7,7 @@
 .dojoxDropDownSelect {
 	margin: 0.2em;
 }
-.dijit_a11y .dojoxDropDownSelectDisabled .dijitButtonNode {
+.dijit_a11y .dojoxDropDownSelectDisabled {
     border-style: dotted !important;
     border-color: #999 !important;
     color:#999 !important;
@@ -16,6 +16,16 @@
 /* And remove the padding - so it looks a "bit" more like a text box */
 .dojoxDropDownSelect .dijitButtonNode {
 	padding: 0px;
+	border: none;
+	background: transparent none;
+}
+
+/* Fix for FF2 not showing the button label */
+.dj_ff2 .dojoxDropDownSelect .dijitButtonNode {
+	width: 100%;
+}
+.dj_ff2 .dojoxDropDownSelect {
+	overflow: hidden;
 }
 
 /* Fix the baseline of our label (for multi-size font elements) */
@@ -68,7 +78,7 @@
 }
 
 /* Make unselected "look" more like a text box and less like a button */
-.tundra .dojoxDropDownSelect .dijitButtonNode {
+.tundra .dojoxDropDownSelect {
     background:#fff url("../../../dijit/themes/tundra/images/validationInputBg.png") repeat-x top left;
     #background:#fff url('../../../dijit/themes/tundra/images/validationInputBg.gif') repeat-x top left;
     border:1px solid #b3b3b3;
@@ -76,7 +86,7 @@
 }
 
 /* Mirror DropDownButton */
-.tundra .dojoxDropDownSelectDisabled .dijitButtonNode {
+.tundra .dojoxDropDownSelectDisabled {
     /* disabled state - inner */
     border-color: #d5d5d5 #bdbdbd #bdbdbd #d5d5d5;
     /*color:#b4b4b4;*/
@@ -84,14 +94,12 @@
     opacity: 0.60; /* Safari, Opera and Mozilla */
 }
 
-.dj_ie .tundra .dojoxDropDownSelectDisabled .dijitButtonNode * {
+.dj_ie .tundra .dojoxDropDownSelectDisabled * {
     filter: gray() alpha(opacity=50); /* IE */
 }
 
-.tundra .dojoxDropDownSelectHover .dijitButtonNode,
-.tundra .dojoxDropDownSelect .dojoxDropDownSelectButtonOpened {
-    /* hover and opened state - inner */
-    /* TODO: change from Hover to Selected so that button is still highlighted while drop down is being used */
+.tundra .dojoxDropDownSelectHover {
+    /* hover state - inner */
     border-color:#a5beda;
     border-bottom-color:#5c7590;
     border-right-color:#5c7590;
@@ -99,9 +107,10 @@
     background:#fcfdff url("../../../dijit/themes/tundra/images/buttonHover.png") repeat-x bottom;
 }
 
-.tundra .dojoxDropDownSelectActive .dijitButtonNode {
-    /* active state - inner (for when you are pressing a normal button, or
-     * when a toggle button is in a depressed state
+.tundra .dojoxDropDownSelectActive,
+.tundra .dojoxDropDownSelectOpened {
+    /* active and opened state - inner (for when you are pressing a normal button, or
+     * when a toggle button is in a depressed state)
      */
     border-color:#366dba;
     background: #ededed url("../../../dijit/themes/tundra/images/buttonActive.png") bottom repeat-x;
@@ -122,7 +131,7 @@
 }
 
 /* Make unselected "look" more like a text box and less like a button */
-.soria .dojoxDropDownSelect .dijitButtonNode {
+.soria .dojoxDropDownSelect {
     background:#fff url("../../../dijit/themes/soria/images/validationInputBg.png") repeat-x top left;
     #background:#fff url('../../../dijit/themes/soria/images/validationInputBg.gif') repeat-x top left;
     border:1px solid #8ba0bd;
@@ -130,7 +139,7 @@
 }
 
 /* Mirror DropDownButton */
-.soria .dojoxDropDownSelectDisabled .dijitButtonNode {
+.soria .dojoxDropDownSelectDisabled {
     /* disabled state - inner */
     border-color: #b9bbdd #b9bbdd #b9bbdd #b9bbdd;
     /*color:#b4b4b4;*/
@@ -138,21 +147,20 @@
     opacity: 0.60; /* Safari, Opera and Mozilla */
 }
 
-.dj_ie .soria .dojoxDropDownSelectDisabled .dijitButtonNode * {
+.dj_ie .soria .dojoxDropDownSelectDisabled * {
     filter: gray() alpha(opacity=50); /* IE */
 }
 
-.soria .dojoxDropDownSelectHover .dijitButtonNode,
-.soria .dojoxDropDownSelect .dojoxDropDownSelectButtonOpened {
+.soria .dojoxDropDownSelectHover {
     /* hover state - inner */
-    /* TODO: change from Hover to Selected so that button is still highlighted while drop down is being used */
     color:#000;
     background:#acc5e2 url("../../../dijit/themes/soria/images/buttonHover.png") repeat-x top left;
 }
 
-.soria .dojoxDropDownSelectActive .dijitButtonNode {
-    /* active state - inner (for when you are pressing a normal button, or
-     * when a toggle button is in a depressed state
+.soria .dojoxDropDownSelectActive,
+.soria .dojoxDropDownSelectOpened {
+    /* active and opened state - inner (for when you are pressing a normal button, or
+     * when a toggle button is in a depressed state)
      */
     border-color:#657c9c;
     background: #91b4e5 url("../../../dijit/themes/soria/images/buttonActive.png") top left repeat-x;
@@ -172,7 +180,7 @@
 }
 
 /* Make unselected "look" more like a text box and less like a button */
-.nihilo .dojoxDropDownSelect .dijitButtonNode {
+.nihilo .dojoxDropDownSelect {
     background:#fff url("../../../dijit/themes/nihilo/images/validationInputBg.png") repeat-x top left;
     #background:#fff url('../../../dijit/themes/nihilo/images/validationInputBg.gif') repeat-x top left;
     border:1px solid #d3d3d3;
@@ -180,7 +188,7 @@
 }
 
 /* Mirror DropDownButton */
-.nihilo .dojoxDropDownSelectDisabled .dijitButtonNode {
+.nihilo .dojoxDropDownSelectDisabled {
     /* disabled state - inner */
     border-color: #dedede;
     /*color:#b4b4b4;*/
@@ -188,21 +196,20 @@
     opacity: 0.60; /* Safari, Opera and Mozilla */
 }
 
-.dj_ie .nihilo .dojoxDropDownSelectDisabled .dijitButtonNode * {
+.dj_ie .nihilo .dojoxDropDownSelectDisabled * {
     filter: gray() alpha(opacity=50); /* IE */
 }
 
-.nihilo .dojoxDropDownSelectHover .dijitButtonNode,
-.nihilo .dojoxDropDownSelect .dojoxDropDownSelectButtonOpened {
+.nihilo .dojoxDropDownSelectHover {
     /* hover state - inner */
-    /* TODO: change from Hover to Selected so that button is still highlighted while drop down is being used */
     color:#000;
     background:#fcfcfc url("../../../dijit/themes/nihilo/images/buttonHover.png") repeat-x top left;
 }
 
-.nihilo .dojoxDropDownSelectActive .dijitButtonNode {
-    /* active state - inner (for when you are pressing a normal button, or
-     * when a toggle button is in a depressed state
+.nihilo .dojoxDropDownSelectActive,
+.nihilo .dojoxDropDownSelectOpened {
+    /* active and opened state - inner (for when you are pressing a normal button, or
+     * when a toggle button is in a depressed state)
      */
     border-color:#dedede;
     background: #f5f5f5 url("../../../dijit/themes/nihilo/images/buttonActive.png") top left repeat-x;

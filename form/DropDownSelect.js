@@ -1,16 +1,19 @@
 dojo.provide("dojox.form.DropDownSelect");
 
-dojo.require("dijit.form.Button");
+dojo.require("dojox.form._FormSelectWidget");
+dojo.require("dojox.form._HasDropDown");
 dojo.require("dijit.Menu");
 
 dojo.requireLocalization("dijit.form", "validate");
 
-dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
+dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.form._HasDropDown], {
 	// summary:
 	//		This is a "Styleable" select box - it is basically a DropDownButton which
 	//		can take as its input a <select>.
 
 	baseClass: "dojoxDropDownSelect",
+	
+	templatePath: dojo.moduleUrl("dojox.form", "resources/DropDownSelect.html"),
 	
 	// required: Boolean
 	//		Can be true or false, default is false.
@@ -24,154 +27,76 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 	//		See description of dijit.Tooltip.defaultPosition for details on this parameter.
 	tooltipPosition: [],
 
-	/*=====
-	dojox.form.__SelectOption = function(){
-		//	value: String
-		//		The value of the option.  Setting to empty (or missing) will
-		//		place a separator at that location
-		//	label: String
-		//		The label for our option.  It can contain html tags.
-		this.value = value;
-		this.label = label;
-	}
-	=====*/
-
-	// options: dojox.form.__SelectOption[]
-	//		our set of options
-	options: null,
-	
 	// emptyLabel: string
 	//		What to display in an "empty" dropdown
 	emptyLabel: "",
 	
-	// _isPopulated: boolean
-	//		Whether or not we have been populated
-	_isPopulated: false,
+	// _isLoaded: boolean
+	//		Whether or not we have been loaded
+	_isLoaded: false,
+	
+	// _connections: Object
+	//		The connections we need to make for updating states
+	_connections: dojo.mixin(dojo.clone(dojox.form._FormSelectWidget.prototype._connections),
+		{"_setStateClass": ["openDropDown", "closeDropDown"]}),
 
-	_addMenuItem: function(/* dojox.form.__SelectOption */ option){
+	_fillContent: function(){
+		// summary:  
+		//		Set the value to be the first, or the selected index
+		this.inherited(arguments);
+		if(this.options.length && !this.value){
+			var si = this.srcNodeRef.selectedIndex;
+			this.value = this.options[si != -1 ? si : 0].value;
+		}
+		
+		// Create the dropDown widget
+		this.dropDown = new dijit.Menu();
+	},
+
+	_addOptionItem: function(/* dojox.form.__SelectOption */ option){
 		// summary:
-		//		For the given option, add a menu item to our dropdown
+		//		For the given option, add a option to our dropdown
 		//		If the option doesn't have a value, then a separator is added 
 		//		in that place.
 		var menu = this.dropDown;
-
 		if(!option.value){
 			// We are a separator (no label set for it)
 			menu.addChild(new dijit.MenuSeparator());
 		}else{
 			// Just a regular menu option
-			var click = dojo.hitch(this, "setAttribute","value",option);
+			var click = dojo.hitch(this, "setValue", option);
 			var mi = new dijit.MenuItem({
-				id: this.id + "_item_" + option.value,
+				option: option,
 				label: option.label,
 				onClick: click
 			});
 			menu.addChild(mi);
-
 		}
 	},
 
-	_resetButtonState: function(){
+	_getChildren: function(){ return this.dropDown.getChildren(); },
+	
+	_loadChildren: function(){
 		// summary: 
 		//		Resets the menu and the length attribute of the button - and
 		//		ensures that the label is appropriately set.
+		this.inherited(arguments);
 		var len = this.options.length;
-		
-		// reset the menu to make it "populatable on the next click
-		var dropDown = this.dropDown;
-		dojo.forEach(dropDown.getChildren(), function(child){
-			child.destroyRecursive();
-		});
-		this._isPopulated = false;
+		this._isLoaded = false;
 		
 		// Set our length attribute and our value
 		this.setAttribute("readOnly", (len === 1));
 		this.setAttribute("disabled", (len === 0));	
-		this.setAttribute("value", this.value);
+		this.setValue(this.value);
 	},
 	
-	_updateSelectedState: function(){
-		// summary:
-		//		Sets the "selected" class on the item for styling purposes
-		var val = this.value;
-		if(val){
-			var testId = this.id + "_item_" + val;
-			dojo.forEach(this.dropDown.getChildren(), function(child){
-				dojo[child.id === testId ? "addClass" : "removeClass"](child.domNode,
-														this.baseClass + "SelectedOption");
-			}, this);
-		}
-	},
-	
-	addOption: function(/* dojox.form.__SelectOption or string, optional */ value, /* string? */ label){
-		// summary:
-		//		Adds an option to the end of the select.  If value is empty or 
-		//		missing, a separator is created instead.
-		
-		this.options.push(value.value ? value : { value:value, label:label });
-	},
-	
-	removeOption: function(/* string, dojox.form.__SelectOption or number */ valueOrIdx){
-		// summary:
-		//		Removes the given option
-		this.options = dojo.filter(this.options, function(node, idx){
-			return !((typeof valueOrIdx === "number" && idx === valueOrIdx) ||
-					(typeof valueOrIdx === "string" && node.value === valueOrIdx) ||
-					(valueOrIdx.value && node.value === valueOrIdx.value));
-		});
-	},
-	
-	setOptionLabel: function(/*string*/ value, /*string*/ label){
-		dojo.forEach(this.options, function(node){
-			if(node.value === value){
-				node.label = label;
-			}
-		});
-	},
-
-	destroy: function(){
-		// summary:
-		//		Clear out an outstanding hack handle
-		if(this._labelHackHandle){
-			clearTimeout(this._labelHackHandle);
-		}
-		this.inherited(arguments);
-	},
-	
-	setLabel: function(/* string */ content){
-		// summary:
-		//		Wraps our label in a div - that way, our rich text can work
-		//		correctly.
-
-		content = '<div class=" ' + this.baseClass + 'Label">' +
-					content +
+	_setDisplay: function(/*String*/ newDisplay){
+		// summary: sets the display for the given value (or values)
+		this.containerNode.innerHTML = '<div class=" ' + this.baseClass + 'Label">' +
+					(newDisplay || this.emptyLabel || "&nbsp;") +
 					'</div>';
-		//		Because FF2 has a problem with layout, we need to delay this
-		//		call for it.
-		if(this._labelHackHandle){
-			clearTimeout(this._labelHackHandle);
-		}
-		if(dojo.isFF === 2){
-			this._labelHackHandle = setTimeout(dojo.hitch(this, function(){
-				this._labelHackHandle = null;
-				dijit.form.DropDownButton.prototype.setLabel.call(this, content);
-			}), 0);
-		}else{
-			this.inherited(arguments);
-		}
 	},
 
-	setAttribute: function(/*string*/ attr, /* anything */ value){
-		// summary: sometime we get called to set our value - we need to 
-		//			make sure and route those requests through _setValue()
-		//			instead.
-		if(attr === "value"){
-			this.setValue(value);
-		}else{
-			this.inherited(arguments);
-		}
-	},
-	
 	validate: function(/*Boolean*/ isFocused){
 		// summary:
 		//		Called by oninit, onblur, and onkeypress.
@@ -213,140 +138,57 @@ dojo.declare("dojox.form.DropDownSelect", dijit.form.DropDownButton, {
 									this.lang).missingMessage;
 	},
 
-	_fillContent: function(){
-		// summary:  
-		//		Loads our options and sets up our dropdown correctly.  We 
-		//		don't want any content, so we don't call any inherit chain
-		//		function.
-		var opts = this.options;
-		if(!opts){
-			opts = this.options = this.srcNodeRef ? dojo.query(">", 
-						this.srcNodeRef).map(function(node){
-							if(node.getAttribute("type") === "separator"){
-								return { value: "", label: "" };
-							}
-							return { value: node.getAttribute("value"),
-										label: String(node.innerHTML) };
-						}, this) : [];
-		}
-		
-		// Set the value to be the first, or the selected index
-		if(opts.length && !this.value){
-			var si = this.srcNodeRef.selectedIndex;
-			this.value = opts[si != -1 ? si : 0].value;
-		}
-		
-		// Create the dropDown widget
-		this.dropDown = new dijit.Menu();
-	},
-
-	setValue: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
-		// summary: set the value of the widget.
-		// If a string is passed, then we set our value from looking it up.
-		if(typeof newValue === "string"){
-			newValue = dojo.filter(this.options, function(node){
-				return node.value === newValue;
-			})[0];
-		}
-		
-		// If we don't have a value, try to show the first item
-		if(!newValue){
-			newValue = this.options[0] || { value: "", label: "" };
-		}
-		this.value = newValue.value;
-		if(this._started){
-			this.setLabel(newValue.label || this.emptyLabel || "&nbsp;");
-		}
-		this._handleOnChange(newValue.value, priorityChange);
-	},
-	
-	postCreate: function(){
-		// summary: sets up our event handling that we need for functioning
-		//			as a select
-
-		this.inherited(arguments);
-
-		// Make our event connections for updating state
-		var fx = function(){
-			dojo[this._opened ? "addClass" : "removeClass"](this.focusNode,
-														this.baseClass + "ButtonOpened");
-		};
-		this.connect(this, "_openDropDown", fx);
-		this.connect(this, "_closeDropDown", fx);
-		this.connect(this, "onChange", "_updateSelectedState");
-		this.connect(this, "addOption", "_resetButtonState");
-		this.connect(this, "removeOption", "_resetButtonState");
-		this.connect(this, "setOptionLabel", "_resetButtonState");
-		this.setValue(this.value, null);
-	},
-
 	startup: function(){
-		// summary: 
-		//		FF2 has layout problems if the reset call isn't done on a
-		//		slight delay
+		if(this._started){ return; }
+
+		// the child widget from srcNodeRef is the dropdown widget.  Insert it in the page DOM,
+		// make it invisible, and store a reference to pass to the popup code.
+		if(!this.dropDown){
+			var dropDownNode = dojo.query("[widgetId]", this.dropDownContainer)[0];
+			this.dropDown = dijit.byNode(dropDownNode);
+			delete this.dropDownContainer;
+		}
 		this.inherited(arguments);
-		if(dojo.isFF === 2){
-			setTimeout(dojo.hitch(this, this._resetButtonState), 0);
-		}else{
-			this._resetButtonState();
-		}
 	},
 	
-	_populate: function(/* function */ callback){
-		// summary: 
-		//			populates the menu (and does the callback, if passed)
+	_onMenuMouseup: function(e){
+		// override this to actually "pretend" to do a click on our menu - it will
+		// call onExecute - so it will close our popup for us.  For non-menu
+		// popups, it will not execute.
+		var dropDown = this.dropDown, t = e.target;
 		
-		var dropDown = this.dropDown;
-		
-		// Add each menu item
-		dojo.forEach(this.options, this._addMenuItem, this);
-		
-		// Update states
-		this._updateSelectedState();
-		dojo.addClass(this.dropDown.domNode, this.baseClass + "Menu");
-		this._isPopulated = true;
-		if(callback){ callback.call(this); }
-	},
-	
-	_toggleDropDown: function(){
-		// summary: Overrides DropDownButton's toggle function to make sure 
-		//			that the values are correctly populated.
-		var dropDown = this.dropDown;
-		if(dropDown && !dropDown.isShowingNow && !this._isPopulated){
-			this._populate(dojox.form.DropDownSelect.superclass._toggleDropDown);
-		}else{
-			this.inherited(arguments);
-		}
-	},
-
-	_getValueDeprecated: false, // remove when _FormWidget:getValue is removed
-	getValue: function(){
-		// summary: get the value of the widget.
-		return this._lastValue;
-	},
-
-	undo: function(){
-		// summary: restore the value to the last value passed to onChange
-		this.setValue(this._lastValueReported, false);
-	},
-
-	_valueChanged: function(){
-		var v = this.getValue();
-		var lv = this._lastValueReported;
-		// Equality comparison of objects such as dates are done by reference so
-		// two distinct objects are != even if they have the same data. So use
-		// toStrings in case the values are objects.
-		return ((v !== null && (v !== undefined) && v.toString)?v.toString():'') !== ((lv !== null && (lv !== undefined) && lv.toString)?lv.toString():'');
-	},
-
-	_onKeyPress: function(e){
-		if(e.keyCode == dojo.keys.ESCAPE && !e.shiftKey && !e.ctrlKey && !e.altKey){
-			if(this._valueChanged()){
-				this.undo();
-				dojo.stopEvent(e);
-				return false;
+		if(dropDown.onItemClick){
+			var menuItem;
+			while(t && !(menuItem = dijit.byNode(t))){
+				t = t.parentNode;
+			}
+			if(menuItem && menuItem.getParent){
+				menuItem.getParent().onItemClick(menuItem, e);
 			}
 		}
-		return true;
-	}	
+		// TODO: how to handle non-menu popups?
+	},
+
+	isLoaded: function(){
+		return this._isLoaded;
+	},
+	
+	loadDropDown: function(){
+		// summary: populates the menu
+		this._loadChildren();
+		dojo.addClass(this.dropDown.domNode, this.baseClass + "Menu");
+		this._isLoaded = true;
+		this.openDropDown();
+	},
+	
+	setAttribute: function(/*string*/ attr, /* anything */ value){
+        // summary: sometime we get called to set our value - we need to
+        //          make sure and route those requests through _setValue()
+        //          instead.
+        if(attr === "value"){
+            this.setValue(value);
+        }else{
+            this.inherited(arguments);
+        }
+    }
 });

@@ -13,6 +13,7 @@
 			
 			var numOptions = 0;
 			var numChanges = 0;
+			var perfNum = 100;
 			
 			dojo.addOnLoad(function(){
 				dojo.connect(s1, "onChange", function(val){
@@ -23,11 +24,25 @@
 					[
 						function test_setValue(t){
 							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s6:"", s7:"NY"}, form.getValues());
-							s1.setAttribute("value", "WA");
+							s1.setValue("WA");
 							t.is("WA", s1.value);
-							s1.setAttribute("value", "UT");
+							s1.setValue("UT");
 							t.is("TN", s1.value);
 							t.is(2, numChanges);
+						},
+						function test_performance(t){
+							var i, start = new Date(), add, del;
+							for(i = 0; i < perfNum; i++){
+								s6.addOption(i + "", "Option " + (i + 1));
+							}
+							add = new Date();
+							for(i = 0; i < perfNum; i++){
+								s6.removeOption(i + "");
+							}
+							del = new Date();
+							console.log("Create (" + perfNum + "): " + (add.getTime() - start.getTime()) +
+										"ms, Remove: " + (del.getTime() - add.getTime()) + "ms");
+							t.t(true);
 						}
 					]
 				);

@@ -11,12 +11,16 @@
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.Form");
 			
+			var perfNum = 100;
+			var numOptions = 0;
+		
 			dojo.addOnLoad(function(){
 				doh.register("tests",
 					[
 						function test_setValue(t){
 							t.is(["VA","WA"], form.getValues().ms1);
-							form.setValues({ms1: ["TN","CA"]});
+							t.is(["TX","GA"], form.getValues().ms2);
+							ms1.setValue(["TN","CA"]);
 							t.is(["TN","CA"], form.getValues().ms1);
 							ms1.invertSelection();
 							t.is(["VA","WA","FL"], form.getValues().ms1);							
@@ -27,6 +31,20 @@
 							ms1.invertSelection();
 							t.is(["TN","CA"], form.getValues().ms1);
 						},
+						function test_performance(t){
+							var i, start = new Date(), add, del;
+							for(i = 0; i < perfNum; i++){
+								ms3.addOption(i + "", "Option " + (i + 1));
+							}
+							add = new Date();
+							for(i = 0; i < perfNum; i++){
+								ms3.removeOption(i + "");
+							}
+							del = new Date();
+							console.log("Create (" + perfNum + "): " + (add.getTime() - start.getTime()) +
+										"ms, Remove: " + (del.getTime() - add.getTime()) + "ms");
+							t.t(true);
+						}
 					]
 				);
 				doh.run();
@@ -40,6 +58,9 @@
 			@import url(../../../dijit/themes/tundra/tundra.css);
 			@import url(../resources/CheckedMultiSelect.css);
 			@import url(../../../dijit/tests/css/dijitTests.css);
+		</style>
+		<style>
+		.ark { text-decoration: underline; }
 		</style>
 	</head>	
 	<body class="tundra">
@@ -75,8 +96,8 @@
 			</button>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
-					var idx = dojo.query("option", ms3.domNode).length;
-					ms3.addOption(idx + "", "Option " + (idx + 1));
+					numOptions++;
+					ms3.addOption(numOptions + "", "Option " + (numOptions));
 				</script>
 				Add Option
 			</button>
@@ -85,6 +106,12 @@
 					ms3.setAttribute("disabled", !ms3.disabled);
 				</script>
 				Toggle Disabled
+			</button>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					ms1.invertSelection(true);
+				</script>
+				Invert Selection
 			</button>
 		</form>
 	</body>
