@@ -38,7 +38,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		this.option.selected = this.checkBox.getValue() && true;
 
 		// fire the parent's change
-		this.parent._onChange();
+		this.parent._updateSelection();
 		
 		// refocus the parent
 		this.parent.focus();
@@ -105,7 +105,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 	_updateSelection: function(){
 		this.inherited(arguments);
 		dojo.forEach(this._getChildren(), function(c){ c._updateBox(); });
-		this.value = this._getValueFromOpts();
 	},
 	
 	_getChildren: function(){
@@ -119,8 +118,8 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 			select.removeOption(n.value);
 			this.addOption(n);
 		}, this);
-		select._onChange();
-		this._onChange();
+		select._updateSelection();
+		this._updateSelection();
 	},
 	
 	invertSelection: function(onChange){
@@ -131,12 +130,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 			i.selected = !i.selected;
 		});
 		this._updateSelection();
-		this._handleOnChange(this.value, onChange==true);
-	},
-
-	_onChange: function(/*Event*/ e){
-		this._updateSelection();
-		this._handleOnChange(this.value, true);
 	},
 
 	setAttribute: function(attr, value){

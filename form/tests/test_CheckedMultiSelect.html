@@ -44,6 +44,18 @@
 							console.log("Create (" + perfNum + "): " + (add.getTime() - start.getTime()) +
 										"ms, Remove: " + (del.getTime() - add.getTime()) + "ms");
 							t.t(true);
+						},
+						function delete_selected(t){
+							t.is(["TN","CA"], ms1.getValue());
+							var d = new doh.Deferred();
+							ms1.removeOption("CA");
+							window.setTimeout(function(){
+								try{
+									t.is(["TN"], ms1.getValue());
+									d.callback(true);
+								}catch(e){ d.errback(e); }
+							}, 100);
+							return d;
 						}
 					]
 				);

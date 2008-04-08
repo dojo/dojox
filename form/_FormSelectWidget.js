@@ -151,14 +151,25 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 				}) ? "addClass" : "removeClass"](child.domNode, this.baseClass + "SelectedOption");
 			}, this);
 		}
+		this.value = this._getValueFromOpts();
+		this._handleOnChange(this.value);
 	},
 	
 	_getValueFromOpts: function(){
-		return dojo.map(dojo.filter(this.options, function(i){
+		if(!this._multiValue && this.options.length){
+			// Mirror what a select does - choose the first one
+			return dojo.filter(this.options, function(i){
+				return i.selected;
+			})[0].value || this.options[0].value;
+		}else if(this._multiValue){
+			// Set value to be the sum of all selected
+			return dojo.map(dojo.filter(this.options, function(i){
 				return i.selected;
 			}), function(i){
 				return i.value;
 			}) || [];
+		}
+		return "";
 	},
 	
 	_fillContent: function(){
@@ -178,12 +189,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 										selected: node.selected || false };
 						}, this) : [];
 		}
-		if(!this._multiValue && opts.length && !this.value){
-			// Mirror what a select does - choose the first one
-			var si = this.srcNodeRef.selectedIndex;
-			this.value = this.options[si != -1 ? si : 0].value;
-		}else if(this._multiValue && !this.value){
-			// Set value to be the sum of all selected
+		if(!this.value){
 			this.value = this._getValueFromOpts();
 		}else if(this._multiValue && typeof this.value == "string"){
 			this.value = this.value.split(",");
