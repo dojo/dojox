@@ -158,9 +158,14 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 	_getValueFromOpts: function(){
 		if(!this._multiValue && this.options.length){
 			// Mirror what a select does - choose the first one
-			return dojo.filter(this.options, function(i){
+			var opt = dojo.filter(this.options, function(i){
 				return i.selected;
-			})[0].value || this.options[0].value;
+			})[0];
+			if(opt && opt.value){
+				return opt.value
+			}else{
+				return this.options[0].value;
+			}
 		}else if(this._multiValue){
 			// Set value to be the sum of all selected
 			return dojo.map(dojo.filter(this.options, function(i){
