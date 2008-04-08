@@ -23,6 +23,18 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	//		Whether or not this widget is disabled
 	disabled: false,
 
+	postMixInProperties: function(){
+		// summary:
+		//		Set the appropriate _subClass value - based on if we are multi-
+		//		or single-select
+		if(this.parent._multiValue){
+			this._type = {type: "checkbox", baseClass: "dijitCheckBox"};
+		}else{
+			this._type = {type: "radio", baseClass: "dijitRadio"};
+		}
+		this.inherited(arguments);
+	},
+
 	postCreate: function(){
 		// summary:
 		//		Set innerHTML here - since the template gets messed up sometimes
@@ -34,9 +46,13 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	_changeBox: function(){
 		// summary:
 		//		Called to force the select to match the state of the check box
-		//		(only on click of the checkbox)
-		this.option.selected = this.checkBox.getValue() && true;
-
+		//		(only on click of the checkbox)  Radio-based calls setValue
+		//		instead.
+		if(this.parent._multiValue){
+			this.option.selected = this.checkBox.getValue() && true;
+		}else{
+			this.parent.setValue(this.option.value);
+		}
 		// fire the parent's change
 		this.parent._updateSelection();
 		
@@ -85,8 +101,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 	templatePath: dojo.moduleUrl("dojox.form", "resources/CheckedMultiSelect.html"),
 
 	baseClass: "dojoxMultiSelect",
-
-	_multiValue: true, // for Form
 
 	_mouseDown: function(e){
 		// summary:

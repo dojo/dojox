@@ -3,6 +3,10 @@ dojo.provide("dojox.form._FormSelectWidget");
 dojo.require("dijit.form._FormWidget");
 
 dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
+	// multiple: Boolean
+	//		Matches the select's "multiple=" value
+	multiple: "",
+	
 	// _multiValue: Boolean
 	//		Whether or not we are multi-valued (for form)
 	_multiValue: false,
@@ -140,6 +144,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 	_updateSelection: function(){
 		// summary:
 		//		Sets the "selected" class on the item for styling purposes
+		this.value = this._getValueFromOpts();
 		var val = this.value;
 		if(!dojo.isArray(val)){
 			val = [val];
@@ -151,7 +156,6 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 				}) ? "addClass" : "removeClass"](child.domNode, this.baseClass + "SelectedOption");
 			}, this);
 		}
-		this.value = this._getValueFromOpts();
 		this._handleOnChange(this.value);
 	},
 	
@@ -164,6 +168,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 			if(opt && opt.value){
 				return opt.value
 			}else{
+				this.options[0].selected = true;
 				return this.options[0].value;
 			}
 		}else if(this._multiValue){
@@ -175,6 +180,11 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 			}) || [];
 		}
 		return "";
+	},
+	
+	postMixInProperties: function(){
+		this._multiValue = (this.multiple.toLowerCase() === "true");
+		this.inherited(arguments);
 	},
 	
 	_fillContent: function(){
