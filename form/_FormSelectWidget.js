@@ -96,7 +96,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		}, this);
 		
 		// Make sure some sane default is set
-		newValue = dojo.filter(newValue, function(i){ return i; });
+		newValue = dojo.filter(newValue, function(i){ return i && i.value; });
 		if(!this._multiValue && (!newValue[0] || !newValue[0].value) && this.options.length){
 			newValue[0] = this.options[0];
 		}
