@@ -961,14 +961,13 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		An item to delete
 		// 	returns:
 		//		A delete URL
-		if (!this.url !== "") {
-			return this.url; //string
-		}
 		var url = this.url;
 		if (item && this.keyAttribute !== "") {
 			var value = this.getValue(item, this.keyAttribute);
 			if (value) {
-				url = url + '?' + this.keyAttribute + '=' + value;
+				var key = this.keyAttribute.charAt(0) ==='@' ? this.keyAttribute.substring(1): this.keyAttribute;
+				url += url.indexOf('?') < 0 ? '?' : '&';
+				url += key + '=' + value;
 			}
 		}
 		return url;	//string
