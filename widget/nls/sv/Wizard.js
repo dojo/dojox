@@ -1,5 +1,5 @@
 ({
-	next: "Nästa",
-	previous: "Föregående",
-	done: "Avsluta"
+next: "Nästa",
+previous: "Föregående",
+done: "Stäng"
 })
