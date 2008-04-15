@@ -428,8 +428,9 @@ dojox.cometd = new function(){
 
 	this._interval = function(){
 		var i=this._backoffInterval+(this._advice?(this._advice.interval?this._advice.interval:0):0);
-		if (i>0)
+		if (i>0){
 			console.debug("Retry in interval+backoff="+this._advice.interval+"+"+this._backoffInterval+"="+i+"ms");
+		}
 		return i;
 	}
 
@@ -584,7 +585,7 @@ dojox.cometd = new function(){
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
 			try {
-				var messages=[message];
+                                var messages=[message];
 
 				// Determine target topic
 				var tname="/cometd"+message.channel;
@@ -643,11 +644,13 @@ dojox.cometd = new function(){
 		// return the connect timeout in ms, calculated as the minimum of the advised timeout
 		// and the configured timeout.  Else 0 to indicate no client side timeout
 		var _advised=0;
-		if (this._advice && this._advice.timeout && this.expectedNetworkDelay>0)
+		if (this._advice && this._advice.timeout && this.expectedNetworkDelay>0){
 			_advised=this._advice.timeout + this.expectedNetworkDelay;
+		}
 		
-		if (this.connectTimeout>0 && this.connectTimeout<_advised)
+		if (this.connectTimeout>0 && this.connectTimeout<_advised){
 			return this.connectTimeout;
+		}
 		
 		return 0;
 	}
@@ -754,8 +757,9 @@ dojox.cometd.longPollTransport = new function(){
 				clientId:	this._cometd.clientId,
 				id:	""+this._cometd.messageId++
 			};
-			if (this._cometd.connectTimeout>this._cometd.expectedNetworkDelay)
+			if (this._cometd.connectTimeout>this._cometd.expectedNetworkDelay){
 				message.advice={timeout:(this._cometd.connectTimeout-this._cometd.expectedNetworkDelay)};
+			}
 			                    
 			message=this._cometd._extendOut(message);
 			this.openTunnelWith({message: dojo.toJson([message])});
@@ -788,8 +792,9 @@ dojox.cometd.longPollTransport = new function(){
 		};
 
 		var connectTimeout=this._cometd._connectTimeout();
-		if (connectTimeout>0)
+		if (connectTimeout>0) {
 			post.timeout=connectTimeout;
+		}
 
 		this._poll = dojo.xhrPost(post);
 	}
@@ -895,8 +900,9 @@ dojox.cometd.callbackPollTransport = new function(){
 			callbackParamName: "jsonp"
 		};
 		var connectTimeout=this._cometd._connectTimeout();
-		if (connectTimeout>0)
+		if (connectTimeout>0) {
 			script.timeout=connectTimeout;
+		}
 		dojo.io.script.get(script);
 	}
 
