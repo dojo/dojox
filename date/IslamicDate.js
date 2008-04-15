@@ -1,11 +1,8 @@
 dojo.provide("dojox.date.IslamicDate");
 dojo.experimental("dojox.date.IslamicDate");
 
-dojo.require("dojo.cldr.supplemental"); //TODO: do we use this?
-dojo.require("dojo.date"); //TODO: do we use this?
 dojo.require("dojo.date.locale"); //TODO: move dependency to another module?
 dojo.requireLocalization("dojo.cldr", "islamic");
-dojo.date.locale.addCustomFormats("dojo.cldr","islamic"); //TODO: is this needed?
 
 dojo.declare("dojox.date.IslamicDate", null, {
 	// summary: The component defines the Islamic (Hijri) Calendar Object
@@ -76,10 +73,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		}
 	},
 
-	weekDays:dojo.date.locale.getNames('days', 'wide', 'format'),
-	
-	months:dojo.date.locale.getNames('months', 'wide', 'format'),
-	
 	getDate:function(){
 		// summary: This function returns the date value (1 - 30)
 		//
@@ -589,5 +582,35 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 //TODOC
 dojox.date.IslamicDate.getDaysInHijriMonth = function(/*dojox.date.IslamicDate*/month){
-	return new dojox.date.IslamicDate().getDaysInHijriMonth(month.getMonth(),year.getFullYear()); // dojox.date.IslamicDate
+	return new dojox.date.IslamicDate().getDaysInHijriMonth(month.getMonth(),month.getFullYear()); // dojox.date.IslamicDate
 };
+
+dojox.date.IslamicDate._getNames = function(/*String*/item, /*String*/type, /*String?*/use, /*String?*/locale){
+	// summary:
+	//		Used to get localized strings from dojo.cldr for day or month names.
+	//
+	// item:
+	//	'months' || 'days'
+	// type:
+	//	'wide' || 'narrow' || 'abbr' (e.g. "Monday", "Mon", or "M" respectively, in English)
+	// use:
+	//	'standAlone' || 'format' (default)
+	// locale:
+	//	override locale used to find the names
+
+	var label;
+	var lookup = dojo.i18n.getLocalization("dojo.cldr", "islamic", locale);
+	var props = [item, use, type];
+	if(use == 'standAlone'){
+		label = lookup[props.join('-')];
+	}
+	props[1] = 'format';
+
+	// return by copy so changes won't be made accidentally to the in-memory model
+	return (label || lookup[props.join('-')]).concat(); /*Array*/
+};
+
+dojox.date.IslamicDate.weekDays = dojox.date.IslamicDate._getNames('days', 'wide', 'format');
+
+dojox.date.IslamicDate.months = dojox.date.IslamicDate._getNames('months', 'wide', 'format');
+	
