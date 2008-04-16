@@ -64,6 +64,7 @@ $allItems = array(
 	array('id'=>58, 'name'=>"West Virginia", 'label'=>"West Virginia", 'abbreviation'=>"WV", 'capital'=>'Charleston'),
 	array('id'=>59, 'name'=>"Wisconsin", 'label'=>"Wisconsin", 'abbreviation'=>"WI", 'capital'=>'Madison'),
 	array('id'=>60, 'name'=>"Wyoming", 'label'=>"Wyoming", 'abbreviation'=>"WY", 'capital'=>'Cheyenne'),
+	array('id'=>61, 'name'=>"Special chars !\"$%&/()=? <a >#'+*-_.:,; <", 'label'=>"Special chars !\"$%&/()=? <a >#'+*-_.:,;<", 'abbreviation'=>":-)", 'capital'=>'/dev/null'),
 );
 
 $q = "";
