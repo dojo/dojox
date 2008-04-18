@@ -83,9 +83,9 @@ dojo.declare(
 
 			month.setDate(1);
 			var firstDay = month.getDay();
-			var daysInMonth = dojox.date.IslamicDate.getDaysInHijriMonth(month);
+			var daysInMonth = dojox.date.IslamicDate.getDaysInIslamicMonth(month);
 			var preMonth = new dojox.date.IslamicDate(month.getFullYear(),(month.getMonth()-1), month.getDate());
-			var daysInPreviousMonth = dojox.date.IslamicDate.getDaysInHijriMonth(preMonth);
+			var daysInPreviousMonth = dojox.date.IslamicDate.getDaysInIslamicMonth(preMonth);
 			var today = new dojox.date.IslamicDate();
 			today.setHours(0,0,0,0);
 			var selected = this.value;

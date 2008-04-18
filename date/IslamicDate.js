@@ -146,23 +146,23 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 		date = parseInt(date);
 
-		if((date>0)&&(date<=this.getDaysInHijriMonth(this.Month, this.Year))){
+		if((date>0)&&(date<=this.getDaysInIslamicMonth(this.Month, this.Year))){
 			this.Date = date;
 		}else{
 			var mdays;
 			if(date>0){
-				for(mdays = this.getDaysInHijriMonth(this.Month, this.Year);	
+				for(mdays = this.getDaysInIslamicMonth(this.Month, this.Year);	
 					date > mdays; 
-						date -= mdays,mdays =this.getDaysInHijriMonth(this.Month, this.Year)){
+						date -= mdays,mdays =this.getDaysInIslamicMonth(this.Month, this.Year)){
 					this.Month++;
 					if(this.Month >= 12){this.Year++; this.Month -= 12;}
 				}
 
 				this.Date = date;
 			}else{
-				for(mdays = this.getDaysInHijriMonth((this.Month-1)>=0 ?(this.Month-1) :11 ,((this.Month-1)>=0)? this.Year: this.Year-1);	
+				for(mdays = this.getDaysInIslamicMonth((this.Month-1)>=0 ?(this.Month-1) :11 ,((this.Month-1)>=0)? this.Year: this.Year-1);	
 						date <= 0; 
-							mdays = this.getDaysInHijriMonth((this.Month-1)>=0 ? (this.Month-1) :11,((this.Month-1)>=0)? this.Year: this.Year-1)){
+							mdays = this.getDaysInIslamicMonth((this.Month-1)>=0 ? (this.Month-1) :11,((this.Month-1)>=0)? this.Year: this.Year-1)){
 					this.Month--;
 					if(this.Month < 0){this.Year--; this.Month += 12;}
 
@@ -224,7 +224,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 						
 		while(hours >= 24){
 			this.Date++;
-			var mdays = this.getDaysInHijriMonth(this.Month, this.Year);
+			var mdays = this.getDaysInIslamicMonth(this.Month, this.Year);
 			if(this.Date > mdays){
 			
 					this.Month ++;
@@ -246,7 +246,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			if(this.Hours >= 24){		 
 				this.Date++;
 				this.Hours -= 24;
-				var mdays = this.getDaysInHijriMonth(this.Month, this.Year);
+				var mdays = this.getDaysInIslamicMonth(this.Month, this.Year);
 				if(this.Date > mdays){
 						this.Month ++;
 						if(this.Month >= 12){this.Year++; this.Month -= 12;}
@@ -271,7 +271,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 				if(this.Hours >= 24){		 
 					this.Date++;
 					this.Hours -= 24;
-					var mdays = this.getDaysInHijriMonth(this.Month, this.Year);
+					var mdays = this.getDaysInIslamicMonth(this.Month, this.Year);
 					if(this.Date > mdays){
 						this.Month ++;
 						if(this.Month >= 12){this.Year++; this.Month -= 12;}
@@ -299,7 +299,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 					if(this.Hours >= 24){		 
 						this.Date++;
 						this.Hours -= 24;
-						var mdays = this.getDaysInHijriMonth(this.Month, this.Year);
+						var mdays = this.getDaysInIslamicMonth(this.Month, this.Year);
 				if(this.Date > mdays){
 					this.Month ++;
 					if(this.Month >= 12){this.Year++; this.Month -= 12;}
@@ -357,7 +357,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 	//TODO: would it make more sense to make this a constructor option? or a static?
 	fromGregorian:function(/*Date*/gdate){
-		// summary: This function returns the equivalent Hijri Date value for the Gregorian Date
+		// summary: This function returns the equivalent Islamic Date value for the Gregorian Date
 		// example:
 		// |		var dateIslamic = new dojox.date.IslamicDate();
 		// |		var dateGregorian = new Date(2008,10,12);
@@ -474,23 +474,23 @@ dojo.declare("dojox.date.IslamicDate", null, {
 	},
 
 	_yearStart:function(/*Number*/year){
-		//summary: return start of Hijri year
+		//summary: return start of Islamic year
 		 return (year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
 	_monthStart:function(/*Number*/year,/*Number*/month){
-		//summary: return the start of Hijri Month
+		//summary: return the start of Islamic Month
 		return Math.ceil(29.5*month) +
 			(year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
 	_civilLeapYear:function(/*Number*/year){
-		//summary: return Boolean value if Hijri leap year
+		//summary: return Boolean value if Islamic leap year
 		return (14 + 11 * year) % 30 < 11;
 	},
 
-	getDaysInHijriMonth:function(/*Number*/month ,/*Number*/ year){
-		//summary: returns the number of days in the given Hijri Month
+	getDaysInIslamicMonth:function(/*Number*/month ,/*Number*/ year){
+		//summary: returns the number of days in the given Islamic Month
 		var length =0;
 		length = 29 + ((month+1) % 2);
 		if((month == 11)&& this._civilLeapYear(year)){
@@ -555,7 +555,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 	ISLAMIC_EPOCH : 1948439.5,
 
 	_islamic_to_jd:function(year, month, day){
-		//summary: convert from Hijri Date to JD
+		//summary: convert from Islamic Date to JD
 		return (day +
 			Math.ceil(29.5 * (month - 1)) +
 			(year - 1) * 354 +
@@ -566,7 +566,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 	GREGORIAN_EPOCH : 1721425.5,
 
 	_gregorian_to_jd:function(year, month, day)	{
-		//summary: convert from JD Date to Hijri Date
+		//summary: convert from JD Date to Islamic Date
 		return (this.GREGORIAN_EPOCH - 1) +
 			(365 * (year - 1)) +
 			Math.floor((year - 1) / 4) +
@@ -581,8 +581,8 @@ dojo.declare("dojox.date.IslamicDate", null, {
 });
 
 //TODOC
-dojox.date.IslamicDate.getDaysInHijriMonth = function(/*dojox.date.IslamicDate*/month){
-	return new dojox.date.IslamicDate().getDaysInHijriMonth(month.getMonth(),month.getFullYear()); // dojox.date.IslamicDate
+dojox.date.IslamicDate.getDaysInIslamicMonth = function(/*dojox.date.IslamicDate*/month){
+	return new dojox.date.IslamicDate().getDaysInIslamicMonth(month.getMonth(),month.getFullYear()); // dojox.date.IslamicDate
 };
 
 dojox.date.IslamicDate._getNames = function(/*String*/item, /*String*/type, /*String?*/use, /*String?*/locale){
