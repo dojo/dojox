@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+	
 	<title>dojox.highlight.pygments - syntax highlighting | The Dojo Toolkit</title>
 	<style type="text/css">
 		@import "../../../dijit/tests/css/dijitTests.css";
@@ -55,27 +57,28 @@
 	</script>
 </head>
 <body>
-<h1>Test Pygments-based highlighting</h1>
 
-<p>Current theme from the pygments set: 
-<select id="theme">
-	<option value="autumn">Autumn</option>
-	<option value="borland">Borland</option>
-	<option value="colorful">Colorful</option>
-	<option value="default">Default</option>
-	<option value="emacs">Emacs</option>
-	<option value="friendly">Friendly</option>
-	<option value="fruity">Fruity</option>
-	<option value="manni">Manni</option>
-	<option value="murphy">Murphy</option>
-	<option value="native">Native</option>
-	<option value="pastie">Pastie</option>
-	<option value="perldoc">Perldoc</option>
-	<option value="trac">Trac</option>
-</select>
-</p>
+	<h1>Test Pygments-based highlighting</h1>
+
+	<p>Current theme from the pygments set: 
+		<select id="theme">
+			<option value="autumn">Autumn</option>
+			<option value="borland">Borland</option>
+			<option value="colorful">Colorful</option>
+			<option value="default">Default</option>
+			<option value="emacs">Emacs</option>
+			<option value="friendly">Friendly</option>
+			<option value="fruity">Fruity</option>
+			<option value="manni">Manni</option>
+			<option value="murphy">Murphy</option>
+			<option value="native">Native</option>
+			<option value="pastie">Pastie</option>
+			<option value="perldoc">Perldoc</option>
+			<option value="trac">Trac</option>
+		</select>
+	</p>
 	
-<p>Javascript:</p>
+	<p>Javascript:</p>
 
 <pre><code dojoType="dojox.highlight.Code">function initHighlight(block) {
   if (block.className.search(/\bno\-highlight\b/) != -1)
@@ -94,9 +97,10 @@
     }//if
   }//for
   highlightAuto(block);
-}//initHighlight</code></pre>
+}//initHighlight
+</code></pre>
 
-<p>Some CSS code:</p>
+	<p>Some CSS code:</p>
 
 <pre><code dojoType="dojox.highlight.Code">body, 
 html {
@@ -111,9 +115,9 @@ html {
 p[lang=ru] {
   color: red;
 }
-</pre></code>
+</code></pre>
 
-<p>Some HTML code:</p>
+	<p>Some HTML code:</p>
 
 <pre><code dojoType="dojox.highlight.Code">&lt;head&gt;
   &lt;title&gt;Title&lt;/title&gt;

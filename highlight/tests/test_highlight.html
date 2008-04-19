@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
+	
 	<title>dojox.highlight - syntax highlighting | The Dojo Toolkit</title>
+
 	<style type="text/css">
 		@import "../../../dijit/tests/css/dijitTests.css";
 
@@ -77,18 +81,18 @@
 </head>
 <body>
 
-<h1 class="testTitle">dojox.highlight</h1>
+	<h1 class="testTitle">dojox.highlight</h1>
 
-<p>client-side syntax highlighting for a number of languages.</p>
+	<p>client-side syntax highlighting for a number of languages.</p>
 
-<p><em>NOTE:</em> All languages listed here have working language definitions, though
-not all exist in the release or dojo subversion. The missing packs are not publically available.
-<span style="display:none">based on</span>
-</p>
+	<p><em>NOTE:</em> All languages listed here have working language definitions, though
+	not all exist in the release or dojo subversion. The missing packs are not publically available.
+	<span style="display:none">based on</span>
+	</p>
 
-<h2>Examples:</h2>
+	<h2>Examples:</h2>
 
-<p>Some Python code:</p>
+	<p>Some Python code:</p>
 
 <pre><code>@requires_authorization
 def somefunc(param1, param2):
@@ -100,19 +104,8 @@ def somefunc(param1, param2):
   
 class SomeClass:<br>    pass
 </code></pre>
-<!--
 
-<p>Short sample of Ruby:</p>
-	FIXME: example needed
--->
-
-<!--
-
-	<p>A bit of Perl:</p>
-	 FIXME: example needed
--->
-
-<p>A chunk of PHP: </p>
+	<p>A chunk of PHP: </p>
 
 <pre><code class="php">
 $opAr = array (    "-a|--append", // a or append toggle, nothing extra
@@ -183,7 +176,7 @@ return $return;
 
 </code></pre>
 
-<p>A custom XML document:</p>
+	<p>A custom XML document:</p>
 
 <pre><code>&lt;?xml version="1.0"?&gt;
 &lt;response value="ok"&gt;
@@ -195,7 +188,7 @@ return $return;
 &lt;/response&gt;
 </code></pre>
 
-<p>Some HTML code:</p>
+	<p>Some HTML code:</p>
 
 <pre><code>&lt;head&gt;
   &lt;title&gt;Title&lt;/title&gt;
@@ -208,7 +201,7 @@ return $return;
 &lt;/body&gt;
 </code></pre>
 
-<p>HTML with Django templates:</p>
+	<p>HTML with Django templates:</p>
 
 <pre><code>{% if articles|length %}
 {% for article in articles %}
@@ -228,7 +221,7 @@ multiline.
 {% endcomment %}
 </code></pre>
 
-<p>Some CSS code:</p>
+	<p>Some CSS code:</p>
 
 <pre><code>body, 
 html {
@@ -243,22 +236,22 @@ html {
 p[lang=ru] {
   color: red;
 }
-</pre></code>
+</code></pre>
 
-<p>Explicit Python highlight:</p>
+	<p>Explicit Python highlight:</p>
 
 <pre><code class="python">for x in [1, 2, 3]:
   count(x)
 </code></pre>
 
-<p>Disabled highlighting:</p>
+	<p>Disabled highlighting:</p>
 
 <pre><code class="no-highlight">&lt;div id="contents"&gt;
   &lt;p&gt;Hello, World!
 &lt;/div&gt;
 </code></pre>
 
-<p>Normal dojo-looking code</p>
+	<p>Normal dojo-looking code</p>
 
 <pre><code>
 dojo.provide("some.object");
@@ -287,17 +280,17 @@ dojo.addOnLoad(function(){
 });
 </code></pre>
 
-<p>Lazy, xhr'd code:</p>
+	<p>Lazy, xhr'd code:</p>
 
 <pre><code id="foobar"></code></pre>
 
 <hr>
 
-<p>Text with inlined JavaScript code: <code class="javascript">dojo.forEach(a, function(x){ console.log(x); });</code> &mdash; that was the inlined sample.</p>
+	<p>Text with inlined JavaScript code: <code class="javascript">dojo.forEach(a, function(x){ console.log(x); });</code> &mdash; that was the inlined sample.</p>
 
 <hr>
 
-<p>Markuped code (python), no language was specified:</p>
+	<p>Markuped code (python), no language was specified:</p>
 
 <pre><code dojoType="dojo.highlight.Code">@requires_authorization
 def somefunc(param1, param2):
@@ -310,9 +303,10 @@ def somefunc(param1, param2):
 class SomeClass:<br>    pass
 </code></pre>
 
-<p>Markuped code, "python" was specified:</p>
+	<p>Markuped code, "python" was specified:</p>
 
-<pre><code dojoType="dojo.highlight.Code" class="python">@requires_authorization
+<pre><code dojoType="dojo.highlight.Code" class="python">
+@requires_authorization
 def somefunc(param1, param2):
   '''A docstring'''
   if param1 > param2: # interesting
@@ -322,6 +316,5 @@ def somefunc(param1, param2):
   
 class SomeClass:<br>    pass
 </code></pre>
-
 
 </body><html>
