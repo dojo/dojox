@@ -15,15 +15,15 @@ dojo.require("dojox.lang.functional.lambda");
 //	- take any valid lambda argument as the functional argument
 
 (function(){
-	var df = dojox.lang.functional;
+	var df = dojox.lang.functional, ap = Array.prototype;
 
 	var currying = function(/*Object*/ info){
 		return function(){	// Function
 			if(arguments.length + info.args.length < info.arity){
 				return currying({func: info.func, arity: info.arity, 
-					args: Array.prototype.concat.apply(info.args, arguments)});
+					args: ap.concat.apply(info.args, arguments)});
 			}
-			return info.func.apply(this, Array.prototype.concat.apply(info.args, arguments));
+			return info.func.apply(this, ap.concat.apply(info.args, arguments));
 		};
 	};
 
@@ -54,7 +54,7 @@ dojo.require("dojox.lang.functional.lambda");
 				}
 			}
 			return function(){	// Function
-				var t = Array.prototype.slice.call(args, 0); // clone the array
+				var t = ap.slice.call(args, 0); // clone the array
 				for(var i = 0; i < p.length; ++i){
 					t[p[i]] = arguments[i];
 				}
