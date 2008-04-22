@@ -1,0 +1,220 @@
+<html>
+	<head>
+		<title>aspects</title>
+		<style type="text/css">
+			@import "../../../dojo/resources/dojo.css";
+		</style>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+		<script type="text/javascript" src="../aspect.js"></script>
+		<script type="text/javascript">
+			dojo.require("dojox.lang.aspect");
+			dojo.require("dojo.string");
+			
+			var test = function(){
+				// This is a test class, don't program like this!
+				var Rect = function(){
+					this.x = this.y = this.width = this.height = 0;
+				};
+				dojo.extend(Rect, {
+					// getters
+					getX: function(){ return this.x; },
+					getY: function(){ return this.y; },
+					getWidth: function(){ return this.width; },
+					getHeight: function(){ return this.height; },
+					// setters
+					setX: function(val){ this.x = val; },
+					setY: function(val){ this.y = val; },
+					setWidth: function(val){ this.width = val; },
+					setHeight: function(val){ this.height = val; },
+					// special methods
+					getPerimeter: function(){ return 2 * (this.width + this.height); },
+					getArea: function(){ return this.width * this.height; },
+					getCorner: function(){ return {x: this.x + this.width, y: this.y + this.height}; },
+					move: function(x, y){ this.x = x; this.y = y; },
+					makeSquare: function(l){ this.width = this.height = l; },
+					scale: function(s){ this.width *= s; this.height *= s; },
+					pointInside: function(x, y){
+						return	this.x <= x && x < (this.x + this.width) &&
+								this.y <= y && y < (this.y + this.height);
+					},
+					assertSquare: function(){
+						if(this.getHeight() != this.getWidth()){
+							throw "NOT A SQUARE!";
+						}
+					}
+				});
+				
+				var aop = dojox.lang.aspect;
+				
+				// our simple advices
+				var TraceArguments = {
+					before: function(/*arguments*/){
+						var joinPoint = aop.getContext().joinPoint,
+							args = Array.prototype.join.call(arguments, ", ");
+						console.log("=> " + joinPoint.targetName + "(" + args + ")");
+					}
+				};
+				var TraceReturns = {
+					afterReturning: function(retVal){
+						var joinPoint = aop.getContext().joinPoint;
+						console.log("<= " + joinPoint.targetName + " returns " + retVal);
+					},
+					afterThrowing: function(excp){
+						var joinPoint = aop.getContext().joinPoint;
+						console.log("<= " + joinPoint.targetName + " throws: " + excp);
+					}
+				};
+				
+				console.log("create rect1 and call its methods without aspects.");
+				var rect1 = new Rect;
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				console.log("=================================");
+				
+				console.log("create rect2, attach advices to the instance, and repeat...");
+				var rect2 = new Rect;
+				aop.advise(rect2, /^get/, TraceReturns);
+				aop.advise(rect2, [/^set/, "move", "makeSquare"], TraceArguments);
+				aop.advise(rect2, "pointInside", [TraceReturns, TraceArguments]);
+				rect2.move(100, 100);
+				rect2.makeSquare(200);
+				rect2.pointInside(150, 250);
+				console.log("perimeter: " + rect2.getPerimeter());
+				console.log("area: " + rect2.getArea());
+				console.log("=================================");
+
+				console.log("attach advices to the prototype, and repeat with rect1...");
+				var h1 = aop.advise(Rect.prototype, /^get/, TraceReturns);
+				var h2 = aop.advise(Rect.prototype, [/^set/, "move", "makeSquare"], TraceArguments);
+				var h3 = aop.advise(Rect.prototype, "pointInside", [TraceReturns, TraceArguments]);
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				console.log("=================================");
+				
+				console.log("remove advices for getters and setters from the prototype, and repeat with rect1...");
+				aop.unadvise(h1);
+				aop.unadvise(h2);
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				console.log("=================================");
+
+				console.log("repeat with rect2...");
+				rect2.move(100, 100);
+				rect2.makeSquare(200);
+				rect2.pointInside(150, 250);
+				console.log("perimeter: " + rect2.getPerimeter());
+				console.log("area: " + rect2.getArea());
+				console.log("=================================");
+
+				console.log("test rect2 with throwing an exception...");
+				aop.advise(rect2, /^assert/, TraceReturns);
+				try{
+					rect2.assertSquare();
+					rect2.width = 300; // triggering exception
+					rect2.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				console.log("=================================");
+				
+				// more complex dynamic tracing advice
+				var Trace = function(context){
+					this.name = context.joinPoint.targetName;
+				};
+				dojo.extend(Trace, {
+					before: function(/*arguments*/){
+						this.args = Array.prototype.join.call(arguments, ", ");
+					},
+					afterReturning: function(retVal){
+						var buf = "-- " + this.name + "(" + this.args + ")";
+						if(retVal == undefined){
+							// procedure without a return value
+							console.log(buf);
+						}else{
+							// function with returned value
+							console.log(buf + " returns: " + retVal);
+						}
+					},
+					afterThrowing: function(excp){
+						console.log("-- " + this.name + "(" + this.args + ") throws: " + excp);
+					}
+				});
+				
+				// remove tracing for pointInside
+				aop.unadvise(h3);
+				
+				console.log("create rect3, and trace all its methods...");
+				var rect3 = new Rect;
+				aop.advise(rect3, /^\S/, function(context){ return new Trace(context); });
+				rect3.move(100, 100);
+				rect3.makeSquare(200);
+				rect3.pointInside(150, 250);
+				console.log("perimeter: " + rect3.getPerimeter());
+				console.log("area: " + rect3.getArea());
+				rect3.assertSquare();
+				console.log("=================================");
+				
+				var TraceAll = function(context, id){
+					this.name = context.joinPoint.targetName;
+					this.prefix = dojo.string.pad("", context.depth * 2, "--", true) + "-- #" + id;
+				};
+				dojo.extend(TraceAll, {
+					before: function(/*arguments*/){
+						var args = Array.prototype.join.call(arguments, ", ");
+						console.log(this.prefix + " => before " + this.name + "(" + args + ")");
+					},
+					around: function(/*arguments*/){
+						var args = Array.prototype.join.call(arguments, ", ");
+						console.log(this.prefix + " => around " + this.name + "(" + args + ")");
+						var retVal = aop.proceed.apply(null, arguments);
+						console.log(this.prefix + " <= around " + this.name + " returns " + retVal);
+						return retVal;	// should return a value, if the target returns a value
+					},
+					afterReturning: function(retVal){
+						console.log(this.prefix + " <= afterR " + this.name + " returns " + retVal);
+					},
+					afterThrowing: function(excp){
+						console.log(this.prefix + " <= afterT " + this.name + " throws: " + excp);
+					},
+					after: function(){
+						console.log(this.prefix + " <= after  " + this.name);
+					}
+				});
+				
+				console.log("create rect4, and attach two tracer to all its methods...");
+				var rect4 = new Rect;
+				aop.advise(rect4, /^\S/, [
+					function(context){ return new TraceAll(context, 1); },
+					function(context){ return new TraceAll(context, 2); }
+				]);
+				rect4.move(100, 100);
+				rect4.makeSquare(200);
+				rect4.pointInside(150, 250);
+				console.log("perimeter: " + rect4.getPerimeter());
+				console.log("area: " + rect4.getArea());
+				try{
+					rect4.assertSquare();
+					rect4.width = 300; // triggering exception
+					rect4.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				console.log("=================================");
+			};
+			//dojo.addOnLoad(test);
+		</script>
+	</head>
+	<body>
+		<p>This test is meant to run with Firebug. Open the console.</p>
+		<p><button onclick="test()">Start</button></p>
+	</body>
+</html>
