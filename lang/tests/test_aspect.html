@@ -209,6 +209,45 @@
 					// squelch
 				}
 				console.log("=================================");
+
+				var TraceTopLevel = function(context){
+					this.name = context.joinPoint.targetName;
+				};
+				dojo.extend(TraceTopLevel, {
+					before: function(/*arguments*/){
+						var args = Array.prototype.join.call(arguments, ", ");
+						console.log("=> " + this.name + "(" + args + ")");
+					},
+					afterReturning: function(retVal){
+						console.log("<= " + this.name + " returns: " + retVal);
+					},
+					afterThrowing: function(excp){
+						console.log("<= " + this.name + " throws: " + excp);
+					}
+				});
+
+				console.log("create rect5, and track only top-level calls...");
+				var rect5 = new Rect;
+				aop.advise(rect5, /^\S/,
+					function(context){
+						return aop.cflow(context.instance) ? 
+							{} :						// do nothing
+							new TraceTopLevel(context);	// log top level
+					}
+				);
+				rect5.move(100, 100);
+				rect5.makeSquare(200);
+				rect5.pointInside(150, 250);
+				console.log("perimeter: " + rect5.getPerimeter());
+				console.log("area: " + rect5.getArea());
+				try{
+					rect5.assertSquare();
+					rect5.width = 300; // triggering exception
+					rect5.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				console.log("=================================");
 			};
 			//dojo.addOnLoad(test);
 		</script>

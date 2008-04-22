@@ -154,11 +154,11 @@ dojo.provide("dojox.lang.aspect");
 		//		if advising has failed.
 		//
 		// obj: 
-		//		The source object for the advised function. 
+		//		A source object for the advised function. 
 		//		Cannot be a DOM node.
 		//
 		// method:
-		//		String name of the function in obj. In case of RegExp all
+		//		A string name of the function in obj. In case of RegExp all
 		//		methods of obj matching the regular expression are advised.
 		//
 		// advice:
@@ -166,9 +166,11 @@ dojo.provide("dojox.lang.aspect");
 		//		returns such object, or an array of previous items. 
 		//		The advice object can define following 
 		//		member functions: before, around, afterReturning, afterThrowing, 
-		//		after. If the function is supplied, it is called once per call 
-		//		to create a temporary advice object, which is destroyed after 
-		//		the processing.
+		//		after. If the function is supplied, it is called with a context 
+		//		object once per call to create a temporary advice object, which 
+		//		is destroyed after the processing. The temporary advice object
+		//		can implement a destroy() method, if it wants to be called when
+		//		not needed.
 
 		var m = [], i, j, t;
 		if(!(method instanceof Array)){
@@ -217,7 +219,7 @@ dojo.provide("dojox.lang.aspect");
 		return [obj, methods];	// Object
 	};
 	
-	aop.unadvise = function(handle){
+	aop.unadvise = function(/*Object*/ handle){
 		// summary:
 		//		Detach previously attached AOP-style advices.
 		//
@@ -248,6 +250,51 @@ dojo.provide("dojox.lang.aspect");
 		//		Returns the context information for the advice in effect.
 		
 		return context;
+	};
+	
+	aop.getContextStack = function(){
+		// summary:
+		//		Returns the context stack, which reflects executing advices
+		//		up to this point. The array is ordered from oldest to newest.
+		//		In order to get the active context use dojox.lang.aspect.getContext().
+		
+		return contextStack;	// Array
+	};
+	
+	aop.cflow = function(/*Object*/ instance, /*String|RegExp|Array?*/ method){
+		// summary:
+		//		Returns true if the context stack contains a context for a given 
+		//		instance that satisfies a given method name criteria.
+		//
+		// instance:
+		//		An instance to be matched. If null, any context will be examined.
+		//		Otherwise the context should belong to this instance.
+		//
+		// method:
+		//		An optional pattern to be matched against a method name. Can be a string, 
+		//		a RegExp object or an array of strings and RegExp objects. 
+		//		If it is omitted, any name will satisfy the criteria.
+
+		if(arguments.length > 1 && !(method instanceof Array)){
+			method = [method];
+		}
+		
+		for(var i = contextStack.length - 1; i >= 0; --i){
+			var c = contextStack[i];
+			// check if instance matches
+			if(instance && c.instance != instance){ continue; }
+			if(!method){ return true; }
+			var n = c.joinPoint.targetName;
+			for(var j = method.length - 1; j >= 0; --j){
+				var m = method[j];
+				if(m instanceof RegExp){
+					if(m.test(n)){ return true; }
+				}else{
+					if(n == m){ return true; }
+				}
+			}
+		}
+		return false;	// Boolean
 	};
 	
 	aop.proceed = function(){
@@ -285,12 +332,13 @@ Advice = {
 };
 
 Context = {
-	instance:  ..., // Object,
-	joinPoint: ...	// Object (see below)
+	instance:  ..., // the instance we operate on
+	joinPoint: ...,	// Object (see below)
+	depth:     ...	// current depth of the context stack
 };
 
 JoinPoint = {
-	target: ...,	// the original function being wrapped
-	name:   ...		// name of the method
+	target:     ...,	// the original function being wrapped
+	targetName: ...		// name of the method
 };
 */
