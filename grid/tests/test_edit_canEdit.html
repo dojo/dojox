@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Test dojox.Grid Editing</title>
+<title>Test dojox.grid.Grid Editing</title>
 <style>
-	@import "../_grid/Grid.css";
+	@import "../resources/Grid.css";
 	body {
 		font-family: Tahoma, Arial, Helvetica, sans-serif;
 		font-size: 11px;
@@ -77,7 +77,7 @@
 	for(var i=0, l=data.length; i<rows-l; i++){
 		data.push(data[i%l].slice(0));
 	}
-	model = new dojox.grid.data.Table(null, data);
+	model = new dojox.grid._data.Table(null, data);
 	// ==========================================================================
 	// Tie some UI to the data model
 	// ==========================================================================
@@ -94,24 +94,24 @@
 	// ==========================================================================
 	// Grid structure
 	// ==========================================================================
-	statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: [ "new", "read", "replied" ] };
+	statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', editor: dojox.grid._data.editors.Select, options: [ "new", "read", "replied" ] };
 	gridLayout = [{
-		type: 'dojox.GridRowView', width: '20px'
+		type: 'dojox.grid._grid.GridRowView', width: '20px'
 	},{
-		defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
+		defaultCell: { width: 8, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;'  },
 		rows: [[
 			{ name: 'Id', width: 3, get: function(inRowIndex) { return inRowIndex+1;} },
-			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: ["normal", "note", "important"]},
-			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.Bool },
+			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid._data.editors.Select, options: ["normal", "note", "important"]},
+			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid._data.editors.Bool },
 			statusCell,
 			{ name: 'Message', styles: '', width: '100%' },
 			{ name: 'Amount', formatter: formatMoney },
 			{ name: 'Amount', field: 4, formatter: formatMoney }
 		]]
 	},{
-		defaultCell: { width: 4, editor: dojox.grid.editors.Input, styles: 'text-align: right;' },
+		defaultCell: { width: 4, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;' },
 		rows: [[
-			{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', editor: dojox.grid.editors.Bool}, 
+			{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', editor: dojox.grid._data.editors.Bool}, 
 			statusCell,
 			{ name: 'Amount', field: 4, formatter: formatMoney},
 			{ name: 'Detail', value: 'Detail'}
@@ -134,7 +134,7 @@
 </head>
 <body>
 <h2>
-	dojox.Grid Basic Editing test
+	dojox.grid.Grid Basic Editing test
 </h2>
 <div id="controls">
 	<button onclick="grid.refresh()">Refresh</button>&nbsp;&nbsp;&nbsp;
@@ -147,7 +147,7 @@
 	<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>&nbsp;
 </div>
 <br />
-<div id="grid" dojoType="dojox.Grid" 
+<div id="grid" dojoType="dojox.grid.Grid" 
 	jsId="grid"
 	model="model" structure="gridLayout"></div>
 <br />

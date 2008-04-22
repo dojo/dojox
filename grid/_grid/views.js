@@ -1,6 +1,6 @@
 dojo.provide("dojox.grid._grid.views");
 
-dojo.declare('dojox.grid.views', null, {
+dojo.declare('dojox.grid._grid.Views', null, {
 	// summary:
 	//		A collection of grid views. Owned by grid and used internally for managing grid views.
 	// description:

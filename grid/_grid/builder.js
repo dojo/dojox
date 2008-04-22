@@ -1,7 +1,7 @@
 dojo.provide("dojox.grid._grid.builder");
 dojo.require("dojox.grid._grid.drag");
 
-dojo.declare("dojox.grid.Builder",
+dojo.declare("dojox.grid._grid.Builder",
 	null,
 	{
 	// summary:
@@ -155,8 +155,8 @@ dojo.declare("dojox.grid.Builder",
 
 });
 
-dojo.declare("dojox.grid.contentBuilder",
-	dojox.grid.Builder,
+dojo.declare("dojox.grid._grid.ContentBuilder",
+	dojox.grid._grid.Builder,
 	{
 	// summary:
 	//		Produces html for grid data content. Owned by grid and used internally 
@@ -218,8 +218,8 @@ dojo.declare("dojox.grid.contentBuilder",
 	
 });
 
-dojo.declare("dojox.grid.headerBuilder",
-	dojox.grid.Builder,
+dojo.declare("dojox.grid._grid.HeaderBuilder",
+	dojox.grid._grid.Builder,
 	{
 	// summary:
 	//		Produces html for grid header content. Owned by grid and used internally 
@@ -229,11 +229,11 @@ dojo.declare("dojox.grid.headerBuilder",
 	overResizeWidth: 4,
 	minColWidth: 1,
 	
-	// FIXME: isn't this getting mixed from dojox.grid.Builder, -1 character?
+	// FIXME: isn't this getting mixed from dojox.grid._grid.Builder, -1 character?
 	_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
 
 	update: function(){
-		this.tableMap = new dojox.grid.tableMap(this.view.structure.rows);
+		this.tableMap = new dojox.grid._grid.TableMap(this.view.structure.rows);
 	},
 
 	generateHtml: function(inGetValue, inValue){
@@ -420,12 +420,12 @@ dojo.declare("dojox.grid.headerBuilder",
 
 });
 
-dojo.declare("dojox.grid.tableMap",
+dojo.declare("dojox.grid._grid.TableMap",
 	null,
 	{
 	// summary:
 	//		Maps an html table into a structure parsable for information about cell row and col spanning.
-	//		Used by headerBuilder
+	//		Used by HeaderBuilder
 	constructor: function(inRows){
 		this.mapRows(inRows);
 	},

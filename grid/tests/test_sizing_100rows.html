@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid Sizing Example</title>
+	<title>dojox.grid.Grid Sizing Example</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		
 		body {
 			font-size: 0.9em;
@@ -57,7 +57,7 @@
 		// grid structure
 		// a grid view is a group of columns
 		// a special view providing selection feedback
-		var rowBar = {type: 'dojox.GridRowView', width: '20px'};
+		var rowBar = {type: 'dojox.grid._grid.GridRowView', width: '20px'};
 		
 		// a view without scrollbars
 		var leftView = {
@@ -141,7 +141,7 @@
 </script>
 </head>
 <body class="tundra">
-<div class="heading">dojox.Grid Sizing Test</div>
+<div class="heading">dojox.grid.Grid Sizing Test</div>
 	Grid width: <input id="gridWidth" type="text">&nbsp; 
 	and height: <input id="gridHeight" type="text">&nbsp;
 	<button onclick="resizeGrid()">Resize Grid</button><br><br>
@@ -149,20 +149,20 @@
 	<button onclick="fitHeight()">Fit Data Height</button>&nbsp;
 	<button onclick="fitBoth()">Fit Data Width & Height</button>
 	<button onclick="sizeDefault()">DefaultSize</button><br><br>
-	<div id="grid" dojoType="dojox.Grid" autoWidth="true" autoHeight="true" model="model" structure="structure" elasticView="2"></div>
+	<div id="grid" dojoType="dojox.grid.Grid" autoWidth="true" autoHeight="true" model="model" structure="structure" elasticView="2"></div>
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container">
-		<div id="grid1" dojoType="dojox.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid1" dojoType="dojox.grid.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 	</div>
 
 	<p> Grid is essentially hidden (height of zero) when parent container is unsized 
 		(nothing, including the header, should be displayed):</p>
 	<div id="unsizedContainer">
-		<div id="grid2" dojoType="dojox.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid2" dojoType="dojox.grid.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 	</div>
 
 	<p> Grid is autoHeight and autoWidth via markup</p>
-		<div id="grid3" dojoType="dojox.VirtualGrid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="100" elasticView="2"></div>
+		<div id="grid3" dojoType="dojox.grid.VirtualGrid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="100" elasticView="2"></div>
 </body>
 </html>

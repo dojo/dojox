@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid with Dojo.Data via binding</title>
+	<title>dojox.grid.Grid with Dojo.Data via binding</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		
 		#grid {
 			width: 65em;
@@ -27,7 +27,7 @@
     
 		var layoutCountries = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -39,18 +39,18 @@
 	</script>
 </head>
 <body class="tundra">
-	<h5>dojox.Grid using Dojo.Data stores where a query returns no results.  No errors should be reported in Firebug and the grid should be empty</h5>
+	<h5>dojox.grid.Grid using Dojo.Data stores where a query returns no results.  No errors should be reported in Firebug and the grid should be empty</h5>
     <br>
 	<span dojoType="dojo.data.ItemFileReadStore" 
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel" 
 		rowsPerPage="20"
 		store="jsonStore" 
 		query="{ noSuchAttr : '*' }">
 	</span>
-	<div id="grid" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel" structure="layoutCountries">
 	</div>
 </body>

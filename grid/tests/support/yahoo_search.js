@@ -1,5 +1,5 @@
 // model that works with Yahoo Search API
-dojo.declare("dojox.grid.data.yahooSearch", dojox.grid.data.dynamic, 
+dojo.declare("dojox.grid._data.yahooSearch", dojox.grid._data.dynamic, 
 	function(inFields, inData) {
 		this.rowsPerPage = 20;
 		this.fieldNames = [];

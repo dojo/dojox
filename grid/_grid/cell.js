@@ -1,6 +1,6 @@
 dojo.provide("dojox.grid._grid.cell");
 
-dojo.declare("dojox.grid.cell", null, {
+dojo.declare("dojox.grid._grid.Cell", null, {
 	// summary:
 	//	Respresents a grid cell and contains information about column options and methods
 	//	for retrieving cell related information.

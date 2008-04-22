@@ -1,6 +1,6 @@
 dojo.provide('dojox.grid._grid.selection');
 
-dojo.declare("dojox.grid.selection",
+dojo.declare("dojox.grid._grid.Selection",
 	null,
 	{
 	// summary:

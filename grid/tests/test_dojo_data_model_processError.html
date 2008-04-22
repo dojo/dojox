@@ -1,13 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid with Dojo.Data model with trapping of data store errors.</title>
+	<title>dojox.grid.Grid with Dojo.Data model with trapping of data store errors.</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		
 		#grid{
 			width: 65em;
@@ -35,14 +35,14 @@
 	</script>
 </head>
 <body class="tundra">
-	<h1>dojox.Grid using Dojo.Data stores via simple binding</h1>
+	<h1>dojox.grid.Grid using Dojo.Data stores via simple binding</h1>
 
 	<h2>dojox.data.CsvStore:</h2>.
 	<i>This grid does not load data.  The data store references a non-existent URL on purpose.  It should trigger a failure that we catch and display in an alert</i>
 	<span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore" url="support/NoSuchMovieFile.csv">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel"
 		store="csvStore"
 		rowsPerPage="5"
@@ -56,7 +56,7 @@
 			alert("Error was encountered when store was queried: " + dojo.toJson(error, true));
 		</script>
 	</span>
-	<div id="grid" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel" structure="layoutMovies">
 	</div>
 </body>

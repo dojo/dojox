@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Test dojox.Grid Expand Rows</title>
+	<title>Test dojox.grid.Grid Expand Rows</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
-		@import "../_grid/Grid.css";
+		@import "../resources/Grid.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -37,7 +37,7 @@
 		// a grid view is a group of columns
 		
 		// a special view providing selection feedback
-		var rowBar = {type: 'dojox.GridRowView', width: '20px' };
+		var rowBar = {type: 'dojox.grid._grid.GridRowView', width: '20px' };
 		
 		// inRow is an array of subRows. we hide the summary subRow except for every nth row
 		function onBeforeRow(inDataIndex, inRow) {
@@ -99,9 +99,9 @@
 </script>
 </head>
 <body>
-<div class="heading">dojox.Grid Expand Row Example</div>
+<div class="heading">dojox.grid.Grid Expand Row Example</div>
 
-<div id="grid" dojoType="dojox.VirtualGrid" get="get" structure="structure" rowCount="100000" autoWidth="true"></div>
+<div id="grid" dojoType="dojox.grid.VirtualGrid" get="get" structure="structure" rowCount="100000" autoWidth="true"></div>
 
 </body>
 </html>

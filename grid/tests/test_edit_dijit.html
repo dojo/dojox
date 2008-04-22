@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Test dojox.Grid Editing</title>
+	<title>Test dojox.grid.Grid Editing</title>
 	<style type="text/css">
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/themes/tundra/tundra_rtl.css";
@@ -45,7 +45,7 @@
 		for(var i=0, l=data.length; i<rows; i++){
 			data.push(data[i%l].slice(0));
 		}
-		model = new dojox.grid.data.Table(null, data);
+		model = new dojox.grid._data.Table(null, data);
 		// ==========================================================================
 		// Tie some UI to the data model
 		// ==========================================================================
@@ -73,35 +73,35 @@
 		statusCell = {
 			field: 2, name: 'Status', 
 			styles: 'text-align: center;', 
-			editor: dojox.grid.editors.Select, 
+			editor: dojox.grid._data.editors.Select, 
 			options: [ "new", "read", "replied" ]
 		};
 
 		gridLayout = [{
-			type: 'dojox.GridRowView', width: '20px'
+			type: 'dojox.grid._grid.GridRowView', width: '20px'
 		},{
-			defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
+			defaultCell: { width: 8, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;'  },
 			rows: [[
 				{ name: 'Id', 
 					get: function(inRowIndex) { return inRowIndex+1;}, 
-					editor: dojox.grid.editors.Dijit,
+					editor: dojox.grid._data.editors.Dijit,
 					editorClass: "dijit.form.NumberSpinner" },
 				{ name: 'Date', width: 10, field: 7, 
-					editor: dojox.grid.editors.DateTextBox, 
+					editor: dojox.grid._data.editors.DateTextBox, 
 					formatter: formatDate, 
 					constraint: {formatLength: 'long', selector: "date"}},
 				{ name: 'Priority', styles: 'text-align: center;', field: 0, 
-					editor: dojox.grid.editors.ComboBox, 
+					editor: dojox.grid._data.editors.ComboBox, 
 					options: ["normal", "note", "important"], width: 10},
 				{ name: 'Mark', width: 3, styles: 'text-align: center;', 
-					editor: dojox.grid.editors.CheckBox},
+					editor: dojox.grid._data.editors.CheckBox},
 				statusCell,
 				{ name: 'Message', styles: '', width: '100%', 
-					editor: dojox.grid.editors.Editor, editorToolbar: true },
+					editor: dojox.grid._data.editors.Editor, editorToolbar: true },
 				{ name: 'Amount', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
-					editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.CurrencyTextBox" },
+					editor: dojox.grid._data.editors.Dijit, editorClass: "dijit.form.CurrencyTextBox" },
 				{ name: 'Amount', field: 4, formatter: formatCurrency, constraint: {currency: 'EUR'}, 
-					editor: dojox.grid.editors.Dijit, editorClass: "dijit.form.HorizontalSlider", width: 10}
+					editor: dojox.grid._data.editors.Dijit, editorClass: "dijit.form.HorizontalSlider", width: 10}
 			]]
 		}];
 		// ==========================================================================
@@ -117,7 +117,7 @@
 	</script>
 </head>
 <body>
-	<h1>dojox.Grid Basic Editing test</h1>
+	<h1>dojox.grid.Grid Basic Editing test</h1>
 	<br />
 	<div id="controls">
 		<button onclick="grid.refresh()">Refresh</button>
@@ -130,7 +130,7 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 	</div>
 	<br />
-	<div id="grid" jsId="grid" dojoType="dojox.Grid" model="model" structure="gridLayout"></div>
+	<div id="grid" jsId="grid" dojoType="dojox.grid.Grid" model="model" structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>
 </body>

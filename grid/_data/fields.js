@@ -1,6 +1,6 @@
 dojo.provide("dojox.grid._data.fields");
 
-dojo.declare("dojox.grid.data.Mixer", null, {
+dojo.declare("dojox.grid._data.Mixer", null, {
 	// summary:
 	//	basic collection class that provides a default value for items
 	
@@ -73,21 +73,21 @@ dojo.declare("dojox.grid.data.Mixer", null, {
 	}
 });
 
-dojox.grid.data.compare = function(a, b){
+dojox.grid._data.compare = function(a, b){
 	return (a > b ? 1 : (a == b ? 0 : -1));
 }
 
-dojo.declare('dojox.grid.data.Field', null, {
+dojo.declare('dojox.grid._data.Field', null, {
 	constructor: function(inName){
 		this.name = inName;
-		this.compare = dojox.grid.data.compare;
+		this.compare = dojox.grid._data.compare;
 	},
 	na: dojox.grid.na
 });
 
-dojo.declare('dojox.grid.data.Fields', dojox.grid.data.Mixer, {
+dojo.declare('dojox.grid._data.Fields', dojox.grid._data.Mixer, {
 	constructor: function(inFieldClass){
-		var fieldClass = inFieldClass ? inFieldClass : dojox.grid.data.Field;
+		var fieldClass = inFieldClass ? inFieldClass : dojox.grid._data.Field;
 		this.defaultValue = new fieldClass();
 	},
 	indexOf: function(inKey){

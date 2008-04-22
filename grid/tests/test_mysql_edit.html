@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html debug="true">
 <head>
-	<title>dojox.Grid Test: Mysql Table Editing</title>
+	<title>dojox.grid.Grid Test: Mysql Table Editing</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style>
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
@@ -44,7 +44,7 @@
 	<script type="text/javascript" src="../Grid.js"></script>
 	<script type="text/javascript" src="databaseModel.js"></script>
 	<script type="text/javascript">
-		var model = new dojox.grid.data.DbTable(null, null, 'support/data.php', "test", "testtbl");
+		var model = new dojox.grid._data.DbTable(null, null, 'support/data.php', "test", "testtbl");
 		// simple display of row info; based on model observing.
 		modelChange = function() {
 			dojo.byId('rowCount').innerHTML = model.count + ' row(s)';
@@ -87,7 +87,7 @@
 		}
 		
 		// custom simple MySql date editor
-		dojo.declare("mySqlDateEditor", dojox.grid.editors.DateTextBox, {
+		dojo.declare("mySqlDateEditor", dojox.grid._data.editors.DateTextBox, {
 			format: function(inDatum, inRowIndex){
 				inDatum = mysqlDateToJsDate(inDatum);
 				return this.inherited(arguments, [inDatum, inRowIndex]);
@@ -99,9 +99,9 @@
 		});
 		
 		var gridLayout = [ 
-			{ type: "dojox.GridRowView", width: "20px" },
+			{ type: "dojox.grid._grid.GridRowView", width: "20px" },
 			{
-			defaultCell: { width: 6, editor: dojox.grid.editors.Dijit }, 
+			defaultCell: { width: 6, editor: dojox.grid._data.editors.Dijit }, 
 			cells: [[
 				{ name: 'Id', styles: 'text-align: right;', editorClass: "dijit.form.NumberTextBox" }, 
 				{ name: 'Name', width: 20},
@@ -140,7 +140,7 @@
 	</script>
 </head>
 <body class="tundra">
-	<h1>dojox.Grid Test: Mysql Table Editing</h1>
+	<h1>dojox.grid.Grid Test: Mysql Table Editing</h1>
 	<br>
 	<button onclick="addRow()">Add Row</button>&nbsp;&nbsp;
 	<button onclick="removeSelected()">Remove Selected</button>&nbsp;&nbsp;
@@ -148,7 +148,7 @@
 	<button onclick="grid.edit.cancel()">Cancel Edit</button>&nbsp;&nbsp;
 	<button onclick="grid.refresh()">Refresh</button>
 	<br><br>
-	<div jsId="grid" class="grid" structure="gridLayout" dojoType="dojox.Grid" model="model" singleClickEdit="true" autoWidth="true"></div>
+	<div jsId="grid" class="grid" structure="gridLayout" dojoType="dojox.grid.Grid" model="model" singleClickEdit="true" autoWidth="true"></div>
 	<div id="rowCount"></div>
 	<p>Note: This test requires MySql and PHP and works with the database table available in support/testtbl.sql.</p>
 </body>

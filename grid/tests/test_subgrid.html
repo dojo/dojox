@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>dojox.Grid Subgrid Test</title>
+<title>dojox.grid.Grid Subgrid Test</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </meta>
 <style>
 		@import "../../../dojo/resources/dojo.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		
 		body { font-size: 1.0em; }
 		#grid {
@@ -68,7 +68,7 @@
 		
 		// Main grid structure 
 		var gridCells = [
-			{ type: 'dojox.GridRowView', width: '20px' }, 
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' }, 
 			{ 
 				onBeforeRow: function(inDataIndex, inSubRows) {
 					inSubRows[1].hidden = !detailRows[inDataIndex];
@@ -143,7 +143,7 @@
 				} else {
 					subGridProps.dataRow = inRowIndex;
 					subGridProps.widgetId = id;
-					subGrid = new dojox.VirtualGrid(subGridProps, n);
+					subGrid = new dojox.grid.VirtualGrid(subGridProps, n);
 				}
 				if (subGrid) {
 					subGrid.render();
@@ -173,7 +173,7 @@
 	</script>
 </head>
 <body class="tundra">
-	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.Grid showing sub-grid.</div>
-	<div id="grid" dojoType="dojox.VirtualGrid" structure="gridCells" rowCount="100000" autoWidth="true"></div>
+	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid showing sub-grid.</div>
+	<div id="grid" dojoType="dojox.grid.VirtualGrid" structure="gridCells" rowCount="100000" autoWidth="true"></div>
 </body>
 </html>

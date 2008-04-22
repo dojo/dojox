@@ -1,7 +1,7 @@
 dojo.provide("dojox.grid._grid.layout");
 dojo.require("dojox.grid._grid.cell");
 
-dojo.declare("dojox.grid.layout", null, {
+dojo.declare("dojox.grid._grid.Layout", null, {
 	// summary:
 	//	Controls grid cell layout. Owned by grid and used internally.
 	constructor: function(inGrid){
@@ -58,7 +58,7 @@ dojo.declare("dojox.grid.layout", null, {
 		if((inDef.field != undefined) || !inDef.get){
 			this.fieldIndex = (inDef.field > -1 ? inDef.field : this.fieldIndex) + 1; 
 		}
-		return new dojox.grid.cell(
+		return new dojox.grid._grid.Cell(
 			dojo.mixin({}, this._defaultCellProps, inDef, {
 				grid: this.grid,
 				subrow: inRowIndex,

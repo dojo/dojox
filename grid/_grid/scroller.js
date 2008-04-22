@@ -1,6 +1,6 @@
 dojo.provide('dojox.grid._grid.scroller');
 
-dojo.declare('dojox.grid.scroller.base', null, {
+dojo.declare('dojox.grid._grid.ScrollerBase', null, {
 	// summary:
 	//	virtual scrollbox, abstract class
 	//	Content must in /rows/
@@ -247,7 +247,7 @@ dojo.declare('dojox.grid.scroller.base', null, {
 	dummy: 0
 });
 
-dojo.declare('dojox.grid.scroller', dojox.grid.scroller.base, {
+dojo.declare('dojox.grid._grid.Scroller', dojox.grid._grid.ScrollerBase, {
 	// summary:
 	//	virtual scroller class, makes no assumption about shape of items being scrolled
 	constructor: function(){
@@ -416,7 +416,7 @@ dojo.declare('dojox.grid.scroller', dojox.grid.scroller.base, {
 	dummy: 0
 });
 
-dojo.declare('dojox.grid.scroller.columns', dojox.grid.scroller, {
+dojo.declare('dojox.grid._grid.ColumnScroller', dojox.grid._grid.Scroller, {
 	// summary:
 	//	Virtual scroller class that scrolls list of columns. Owned by grid and used internally
 	//	for virtual scrolling.
@@ -437,7 +437,7 @@ dojo.declare('dojox.grid.scroller.columns', dojox.grid.scroller, {
 	},
 	scroll: function(inTop) {
 		if(this.colCount){
-			dojox.grid.scroller.prototype.scroll.call(this, inTop);
+			dojox.grid._grid.Scroller.prototype.scroll.call(this, inTop);
 		}
 	},
 	// resize

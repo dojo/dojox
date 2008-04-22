@@ -1,13 +1,13 @@
 dojo.provide('dojox.grid._data.model');
 dojo.require('dojox.grid._data.fields');
 
-dojo.declare("dojox.grid.data.Model", null, {
+dojo.declare("dojox.grid._data.Model", null, {
 	// summary:
 	//	Base abstract grid data model.
 	//	Makes no assumptions about the structure of grid data.
 	constructor: function(inFields, inData){
 		this.observers = [];
-		this.fields = new dojox.grid.data.Fields();
+		this.fields = new dojox.grid._data.Fields();
 		if(inFields){
 			this.fields.set(inFields);
 		}
@@ -116,7 +116,7 @@ dojo.declare("dojox.grid.data.Model", null, {
 	dummy: 0
 });
 
-dojo.declare("dojox.grid.data.Rows", dojox.grid.data.Model, {
+dojo.declare("dojox.grid._data.Rows", dojox.grid._data.Model, {
 	// observer events
 	allChange: function(){
 		this.notify("AllChange", arguments);
@@ -154,7 +154,7 @@ dojo.declare("dojox.grid.data.Rows", dojox.grid.data.Model, {
 	}
 });
 
-dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
+dojo.declare("dojox.grid._data.Table", dojox.grid._data.Rows, {
 	// summary:
 	//	Basic grid data model for static data in the form of an array of rows
 	//	that are arrays of cell data
@@ -178,7 +178,7 @@ dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 		return (this.data && this.data.length ? this.data[0].length : this.fields.count());
 	},
 	badIndex: function(inCaller, inDescriptor){
-		console.debug('dojox.grid.data.Table: badIndex');
+		console.debug('dojox.grid._data.Table: badIndex');
 	},
 	isGoodIndex: function(inRowIndex, inColIndex){
 		return (inRowIndex >= 0 && inRowIndex < this.count && (arguments.length < 2 || (inColIndex >= 0 && inColIndex < this.colCount)));
@@ -250,7 +250,7 @@ dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 	dummy: 0
 });
 
-dojo.declare("dojox.grid.data.Objects", dojox.grid.data.Table, {
+dojo.declare("dojox.grid._data.Objects", dojox.grid._data.Table, {
 	constructor: function(inFields, inData, inKey){
 		if(!inFields){
 			this.autoAssignFields();
@@ -279,7 +279,7 @@ dojo.declare("dojox.grid.data.Objects", dojox.grid.data.Table, {
 	}
 });
 
-dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
+dojo.declare("dojox.grid._data.Dynamic", dojox.grid._data.Table, {
 	// summary:
 	//	Grid data model for dynamic data such as data retrieved from a server.
 	//	Retrieves data automatically when requested and provides notification when data is received
@@ -366,7 +366,7 @@ dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 	},
 	remove: function(inRowIndexes){
 		this.removePages(inRowIndexes);
-		dojox.grid.data.Table.prototype.remove.apply(this, arguments);
+		dojox.grid._data.Table.prototype.remove.apply(this, arguments);
 	},
 	// access
 	getRow: function(inRowIndex){
@@ -386,7 +386,7 @@ dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 			row[inColIndex] = inDatum;
 			this.datumChange(inDatum, inRowIndex, inColIndex);
 		}else{
-			console.debug('[' + this.declaredClass + '] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row');
+			console.debug('[' + this.declaredClass + '] dojox.grid._data.dynamic.set: cannot set data on an non-loaded row');
 		}
 	},
 	// sort
@@ -396,12 +396,12 @@ dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 });
 
 // FIXME: deprecated: (included for backward compatibility only)
-dojox.grid.data.table = dojox.grid.data.Table;
-dojox.grid.data.dynamic = dojox.grid.data.Dynamic;
+dojox.grid._data.table = dojox.grid._data.Table;
+dojox.grid._data.dynamic = dojox.grid._data.Dynamic;
 
 // we treat dojo.data stores as dynamic stores because no matter how they got
 // here, they should always fill that contract
-dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
+dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 	//	summary:
 	//		A grid data model for dynamic data retreived from a store which
 	//		implements the dojo.data API set. Retrieves data automatically when
@@ -434,7 +434,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		}
 	},
 	markupFactory: function(args, node){
-		return new dojox.grid.data.DojoData(null, null, args);
+		return new dojox.grid._data.DojoData(null, null, args);
 	},
 	query: { name: "*" }, // default, stupid query
 	store: null,
@@ -657,7 +657,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		}
 		var row = this._createRow(storeItem);
 		this._setRowId(storeItem, 0, index);
-		dojox.grid.data.Dynamic.prototype.insert.apply(this, [row, index]);
+		dojox.grid._data.Dynamic.prototype.insert.apply(this, [row, index]);
 	},
 	datumChange: function(value, rowIdx, colIdx){
 		if(this._canWrite){
@@ -704,7 +704,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		//		Function to remove a set of items from the store based on the row index.
 		//	inRowIndexes:
 		//		An array of row indexes from the grid to remove from the store.
-		dojox.grid.data.Dynamic.prototype.remove.apply(this, arguments);
+		dojox.grid._data.Dynamic.prototype.remove.apply(this, arguments);
 		// Rebuild _rowIdentities
 		this._rowIdentities = {};
 		for (var i = 0; i < this.data.length; i++){

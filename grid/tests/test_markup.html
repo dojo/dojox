@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid with Dojo.Data via binding</title>
+	<title>dojox.grid.Grid with Dojo.Data via binding</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		
 		#grid, #grid2 {
 			width: 65em;
@@ -77,7 +77,7 @@
 		
 		var layoutCountries = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{
 				cells: [
@@ -98,7 +98,7 @@
 			}
 		];
 	</script>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel2" 
 		rowsPerPage="20"
 		store="jsonStore" 

@@ -12,7 +12,7 @@ dojo.require("dojox.grid._grid.edit");
 dojo.require("dojox.grid._grid.rowbar");
 dojo.require("dojox.grid._grid.publicEvents");
 
-dojo.declare('dojox.VirtualGrid', 
+dojo.declare('dojox.grid.VirtualGrid', 
 	[ dijit._Widget, dijit._Templated ], 
 	{
 	// summary:
@@ -50,7 +50,7 @@ dojo.declare('dojox.VirtualGrid',
 	//	|	<div id="grid" 
 	//	|		rowCount="100" get="get" 
 	//	|		structure="structure" 
-	//	|		dojoType="dojox.VirtualGrid"></div>
+	//	|		dojoType="dojox.grid.VirtualGrid"></div>
 
 	templatePath: dojo.moduleUrl("dojox.grid","resources/VirtualGrid.html"),
 	
@@ -121,7 +121,7 @@ dojo.declare('dojox.VirtualGrid',
 	buildRendering: function(){
 		this.inherited(arguments);
 		// reset get from blank function (needed for markup parsing) to null, if not changed
-		if(this.get == dojox.VirtualGrid.prototype.get){
+		if(this.get == dojox.grid.VirtualGrid.prototype.get){
 			this.get = null;
 		}
 		if(!this.domNode.getAttribute('tabIndex')){
@@ -186,18 +186,18 @@ dojo.declare('dojox.VirtualGrid',
 		//		create grid managers for various tasks including rows, focus, selection, editing
 		
 		// row manager
-		this.rows = new dojox.grid.rows(this);
+		this.rows = new dojox.grid._grid.Rows(this);
 		// focus manager
-		this.focus = new dojox.grid.focus(this);
+		this.focus = new dojox.grid._grid.Focus(this);
 		// selection manager
-		this.selection = new dojox.grid.selection(this);
+		this.selection = new dojox.grid._grid.Selection(this);
 		// edit manager
-		this.edit = new dojox.grid.edit(this);
+		this.edit = new dojox.grid._grid.Edit(this);
 	},
 
 	createScroller: function(){
 		// summary: Creates a new virtual scroller
-		this.scroller = new dojox.grid.scroller.columns();
+		this.scroller = new dojox.grid._grid.ColumnScroller();
 		this.scroller._pageIdPrefix = this.id + '-';
 		this.scroller.renderRow = dojo.hitch(this, "renderRow");
 		this.scroller.removeRow = dojo.hitch(this, "rowRemoved");
@@ -205,12 +205,12 @@ dojo.declare('dojox.VirtualGrid',
 
 	createLayout: function(){
 		// summary: Creates a new Grid layout
-		this.layout = new dojox.grid.layout(this);
+		this.layout = new dojox.grid._grid.Layout(this);
 	},
 
 	// views
 	createViews: function(){
-		this.views = new dojox.grid.views(this);
+		this.views = new dojox.grid._grid.Views(this);
 		this.views.createView = dojo.hitch(this, "createView");
 	},
 	
@@ -241,7 +241,7 @@ dojo.declare('dojox.VirtualGrid',
 
 	buildViews: function(){
 		for(var i=0, vs; (vs=this.layout.structure[i]); i++){
-			this.createView(vs.type || dojox._scopeName + ".GridView").setStructure(vs);
+			this.createView(vs.type || dojox._scopeName + ".grid._grid.GridView").setStructure(vs);
 		}
 		this.scroller.setContentNodes(this.views.getContentNodes());
 	},
@@ -772,4 +772,4 @@ dojo.declare('dojox.VirtualGrid',
 
 });
 
-dojo.mixin(dojox.VirtualGrid.prototype, dojox.grid.publicEvents);
+dojo.mixin(dojox.grid.VirtualGrid.prototype, dojox.grid.publicEvents);

@@ -4,7 +4,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dojox.grid._grid.builder");
 
-dojo.declare('dojox.GridView',
+dojo.declare('dojox.grid._grid.GridView',
 	[dijit._Widget, dijit._Templated],
 	{
 	// summary:
@@ -35,8 +35,8 @@ dojo.declare('dojox.GridView',
 		this.connect(this.scrollboxNode,"onscroll","doscroll");
 		dojox.grid.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
 		dojox.grid.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
-		this.content = new dojox.grid.contentBuilder(this);
-		this.header = new dojox.grid.headerBuilder(this);
+		this.content = new dojox.grid._grid.ContentBuilder(this);
+		this.header = new dojox.grid._grid.HeaderBuilder(this);
 		//BiDi: in RTL case, style width='9000em' causes scrolling problem in head node
 		if(!dojo._isBodyLtr()){
 			this.headerNodeContainer.style.width = "";

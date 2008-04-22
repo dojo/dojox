@@ -1,7 +1,7 @@
 dojo.provide("dojox.grid._grid.rowbar");
 dojo.require("dojox.grid._grid.view");
 
-dojo.declare('dojox.GridRowView', dojox.GridView, {
+dojo.declare('dojox.grid._grid.GridRowView', dojox.grid._grid.GridView, {
 	// summary:
 	//	Custom grid view. If used in a grid structure, provides a small selectable region for grid rows.
 	defaultWidth: "3em",

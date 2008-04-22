@@ -17,8 +17,8 @@
 	}
 
 	// global var "model"
-	model = new dojox.grid.data.Objects(null, [ { col1: "fake" } ]);
-	model2 = new dojox.grid.data.Objects(null, [ { col1: "fake" } ]);
+	model = new dojox.grid._data.Objects(null, [ { col1: "fake" } ]);
+	model2 = new dojox.grid._data.Objects(null, [ { col1: "fake" } ]);
 
 	// simple display of row info; based on model observation
 	// global var "modelChange"

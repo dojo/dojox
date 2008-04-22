@@ -1,6 +1,6 @@
 dojo.provide("dojox.grid._grid.rows");
 
-dojo.declare("dojox.grid.rows", null, {
+dojo.declare("dojox.grid._grid.Rows", null, {
 	//	Stores information about grid rows. Owned by grid and used internally.
 	constructor: function(inGrid){
 		this.grid = inGrid;

@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid - Image Search Test</title>
+	<title>dojox.grid.Grid - Image Search Test</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style>
-		@import "../_grid/Grid.css";
+		@import "../resources/Grid.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -36,7 +36,7 @@
 			{ name: 'Width', na: ''}
 		];
 		// create data model
-		var model = new dojox.grid.data.yahooSearch(imageFields, null, "searchInput");
+		var model = new dojox.grid._data.yahooSearch(imageFields, null, "searchInput");
 		model.url = 'http://search.yahooapis.com/ImageSearchService/V1/imageSearch';
 		model.observer(this);
 		
@@ -77,7 +77,7 @@
 		
 		// Create grid subclass to function as we need to display images only.
 		// adds indirection between model row and grid row.
-		dojo.declare("dojox.ImageGrid", dojox.Grid, {
+		dojo.declare("dojox.ImageGrid", dojox.grid.Grid, {
 			postCreate: function() {
 				this.inherited(arguments);
 				this.modelDatumChange = this.modelRowChange;
@@ -90,7 +90,7 @@
 			// called in cell context
 			get: function(inRowIndex) {
 				var r = this.grid.getDataRowIndex(this, inRowIndex);
-				return dojox.Grid.prototype.get.call(this, r);
+				return dojox.grid.Grid.prototype.get.call(this, r);
 			},
 			modelAllChange: function(){
 				this.rowCount = Math.ceil(this.model.getRowCount() / this.colCount);
@@ -130,7 +130,7 @@
 	</script>
 </head>
 <body>
-	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.Grid - Image Search Test</div>
+	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid - Image Search Test</div>
 	<input id="searchInput" type="text" value="apple">
 	<button onclick="doSearch()" style="clear: both;">Search</button>
 	<div jsId="grid" class="grid" structure="imageLayout" dojoType="dojox.ImageGrid" model="model"></div>

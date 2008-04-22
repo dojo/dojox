@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Test dojox.Grid Events</title>
+	<title>Test dojox.grid.Grid Events</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
-		@import "../_grid/Grid.css";
+		@import "../resources/Grid.css";
 		body,td,th {
 			font-family: Geneva, Arial, Helvetica, sans-serif;
 		}	
@@ -134,7 +134,7 @@
 			var makeEvent = function(inIndex, inName) {
 				return function(e) {
 					setEventData(inIndex, e);
-					dojox.VirtualGrid.prototype[inName].apply(this, arguments);
+					dojox.grid.VirtualGrid.prototype[inName].apply(this, arguments);
 				}
 			}
 			for (var i=0, e; (e=eventRows[i]); i++)
@@ -143,7 +143,7 @@
 				
 		// Grid structure
 		var layout = [// array of view objects
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			{ noscroll: true, cells: [// array of rows, a row is an array of cells
 					[{ name: "Alpha", value: '<input type="checkbox"></input>', rowSpan: 2, width: 6, styles: 'text-align:center;' }, { name: "Alpha2", value: "Alpha2" }], 
 					[{ name: "Alpha3", value: "Alpha3" }]
@@ -167,8 +167,8 @@
 	</script>
 </head>
 <body>
-<h3>dojox.Grid Event Tracking</h3>
-<div id="eventGrid" autoWidth="true" autoHeight="true" structure="eventLayout" dojoType="dojox.VirtualGrid"></div>
-<div id="grid" rowCount="100" dojoType="dojox.VirtualGrid"></div>
+<h3>dojox.grid.Grid Event Tracking</h3>
+<div id="eventGrid" autoWidth="true" autoHeight="true" structure="eventLayout" dojoType="dojox.grid.VirtualGrid"></div>
+<div id="grid" rowCount="100" dojoType="dojox.grid.VirtualGrid"></div>
 </body>
 </html>

@@ -7,7 +7,7 @@ dojo.require("dojox.grid._data.dijitEditors");
 // FIXME: 
 //		we are at the wrong location! 
 
-dojo.declare('dojox.Grid', dojox.VirtualGrid, {
+dojo.declare('dojox.grid.Grid', dojox.grid.VirtualGrid, {
 	//	summary:
 	//		A grid widget with virtual scrolling, cell editing, complex rows,
 	//		sorting, fixed columns, sizeable columns, etc.
@@ -26,15 +26,15 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 	//	|	];
 	//	  	
 	//		define a grid data model
-	//	|	var model = new dojox.grid.data.table(null, data);
+	//	|	var model = new dojox.grid._data.Table(null, data);
 	//	|
 	//	|	<div id="grid" model="model" structure="structure" 
-	//	|		dojoType="dojox.VirtualGrid"></div>
+	//	|		dojoType="dojox.grid.VirtualGrid"></div>
 	//	
 
 	//	model:
 	//		string or object grid data model
-	model: 'dojox.grid.data.Table',
+	model: 'dojox.grid._data.Table',
 	
 	// life cycle
 	postCreate: function(){
@@ -75,7 +75,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		// summary:
 		//		Set the grid's data model
 		// inModel: Object
-		//		Model object, usually an instance of a dojox.grid.data.Model
+		//		Model object, usually an instance of a dojox.grid._data.Model
 		//		subclass
 		if(this.model){
 			this.model.notObserver(this);
@@ -251,7 +251,7 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 
 });
 
-dojox.Grid.markupFactory = function(props, node, ctor){
+dojox.grid.Grid.markupFactory = function(props, node, ctor){
 	// handle setting up a data model for a store if one
 	// isn't provided. There are some caveats:
 	//		* we only really handle dojo.data sources well. They're the future
@@ -276,7 +276,7 @@ dojox.Grid.markupFactory = function(props, node, ctor){
 		var mNode = node.cloneNode(false);
 		d.attr(mNode, {
 			"jsId": null,
-			"dojoType": d.attr(node, "dataModelClass") || "dojox.grid.data.DojoData"
+			"dojoType": d.attr(node, "dataModelClass") || "dojox.grid._data.DojoData"
 		});
 		props.model = d.parser.instantiate([mNode])[0];
 	}
@@ -351,9 +351,5 @@ dojox.Grid.markupFactory = function(props, node, ctor){
 		});
 		// console.debug(dojo.toJson(props.structure, true));
 	}
-	return new dojox.Grid(props, node);
+	return new dojox.grid.Grid(props, node);
 }
-
-
-// alias us to the right location
-dojox.grid.Grid = dojox.Grid;

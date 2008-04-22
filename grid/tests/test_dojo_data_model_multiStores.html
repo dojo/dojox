@@ -1,13 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid with Dojo.Data via binding.  Multiple Store implementations.</title>
+	<title>dojox.grid.Grid with Dojo.Data via binding.  Multiple Store implementations.</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		
 		#grid, #grid2, #grid3, #grid4, #grid5, #grid6{
 			width: 65em;
@@ -45,7 +45,7 @@
 
 		var layoutMovies = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -58,7 +58,7 @@
 		
 		var layoutCountries = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -70,7 +70,7 @@
 
 		var layoutBooks = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -84,7 +84,7 @@
 		//get function of a cell.
 		var layoutFlickrData = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -96,7 +96,7 @@
 
 		var layoutOpmlData = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -108,7 +108,7 @@
 
 		var layoutHtmlTable = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -122,12 +122,12 @@
 	</script>
 </head>
 <body class="tundra">
-	<h1>dojox.Grid using Dojo.Data stores via simple binding with multiple store implementations.</h1>
+	<h1>dojox.grid.Grid using Dojo.Data stores via simple binding with multiple store implementations.</h1>
 	<p>
 		This page demonstrates the Grid can display data accessed by dojo.data implementing Datastores.  
 		Each of the datastores used stores data in a different format, and as this test and demonstration
 		page shows, the logic for rendering the data is virtually identical.  You define your source store,
-		you define the model for accessing the data, which is ij this case the dojox.grid.data.DojoData model
+		you define the model for accessing the data, which is ij this case the dojox.grid._data.DojoData model
 		and then you define the layout, which maps the data attribute names to columns in the grid.  You can 
 		even perform cusomization of what is displayed, as demonstrated in the dojox.data.FlickrStore layout.  
 		The image url is displayed as a clickable link that opens a new page.
@@ -152,13 +152,13 @@
 	<span dojoType="dojo.data.ItemFileReadStore" 
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel" 
 		rowsPerPage="20"
 		store="jsonStore" 
 		query="{ name : '*' }">
 	</span>
-	<div id="grid" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel" structure="layoutCountries">
 	</div>
 
@@ -168,14 +168,14 @@
 	<span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore" url="support/movies.csv">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel2"
 		store="csvStore"
 		rowsPerPage="5"
 		query="{ Title: '*' }"
 		clientSort="true">
 	</span>
-	<div id="grid2" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid2" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel2" structure="layoutMovies">
 
 	</div>
@@ -185,13 +185,13 @@
 	<span dojoType="dojox.data.XmlStore" 
 		jsId="xmlStore" url="support/books.xml">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel3" 
 		rowsPerPage="5"
 		store="xmlStore" 
 		query="{ title : '*' }">
 	</span>
-	<div id="grid3" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid3" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel3" structure="layoutBooks">
 	</div>
 
@@ -201,13 +201,13 @@
 	<span dojoType="dojox.data.FlickrStore" 
 		jsId="flickrStore">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel4" 
 		rowsPerPage="5"
 		store="flickrStore" 
 		query="{ tags : '3dny' }">
 	</span>
-	<div id="grid4" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid4" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel4" structure="layoutFlickrData">
 	</div>
 
@@ -217,7 +217,7 @@
 	<span dojoType="dojox.data.OpmlStore" 
 		jsId="opmlStore" url="support/geography.xml">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel5" 
 		rowsPerPage="5"
 		store="opmlStore" 
@@ -225,7 +225,7 @@
 		queryOptions="{deep: true}"
 		sortFields="[ { attribute : 'text' } ]">
 	</span>
-	<div id="grid5" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid5" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel5" structure="layoutOpmlData">
 	</div>
 
@@ -235,13 +235,13 @@
 	<span dojoType="dojox.data.HtmlStore" 
 		jsId="htmlStore" dataId="tableExample">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel6" 
 		rowsPerPage="5"
 		store="htmlStore" 
 		query="{}">
 	</span>
-	<div id="grid6" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid6" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel6" structure="layoutHtmlTable">
 	</div>
 

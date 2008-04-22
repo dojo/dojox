@@ -2,10 +2,10 @@
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid with Dojo.Data via binding</title>
+	<title>dojox.grid.Grid with Dojo.Data via binding</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
@@ -29,10 +29,10 @@
 			return ' ' + inRowIndex;
 		}
 
-		var iEditor = dojox.grid.editors.Input;
+		var iEditor = dojox.grid._data.editors.Input;
 		var layoutMovies = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -45,7 +45,7 @@
 
 		var layoutCountries = [
 			// view 0
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
@@ -57,20 +57,20 @@
 	</script>
 </head>
 <body class="tundra">
-	<h1>dojox.Grid using Dojo.Data stores via simple binding</h1>
+	<h1>dojox.grid.Grid using Dojo.Data stores via simple binding</h1>
 	<!--
 	<br>
 	<span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore" url="support/movies.csv">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel"
 		store="csvStore"
 		rowsPerPage="5"
 		query="{ Title: '*' }"
 		clientSort="true">
 	</span>
-	<div id="grid" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel" structure="layoutMovies">
 	</div>
 	-->
@@ -96,18 +96,18 @@
 	<span dojoType="dojo.data.ItemFileWriteStore" 
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
-	<span dojoType="dojox.grid.data.DojoData" 
+	<span dojoType="dojox.grid._data.DojoData" 
 		jsId="dataModel2" 
 		rowsPerPage="20"
 		store="jsonStore" 
 		clientSort="true"
 		query="{ name : '*' }">
 	</span>
-	<div id="grid2" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid2" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel2" structure="layoutCountries">
 	</div>
 
-	<div id="grid3" dojoType="dojox.Grid" elasticView="2" 
+	<div id="grid3" dojoType="dojox.grid.Grid" elasticView="2" 
 		model="dataModel2" structure="layoutCountries">
 	</div>
 </body>

@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid Styling Test</title>
+	<title>dojox.grid.Grid Styling Test</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
-		@import "../_grid/Grid.css";
+		@import "../resources/Grid.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -115,7 +115,7 @@
 				if (over)	
 					customClasses += ' overRow';
 				if (!over && !selected)
-					dojox.Grid.prototype.onStyleRow.apply(this, arguments);
+					dojox.grid.Grid.prototype.onStyleRow.apply(this, arguments);
 			}	
 		}
 		
@@ -125,7 +125,7 @@
 </script>
 </head>
 <body>
-<div class="heading">dojox.Grid Styling Example</div>
-<div id="grid" dojoType="dojox.Grid" onStyleRow="onStyleRow" model="model" structure="structure"></div>
+<div class="heading">dojox.grid.Grid Styling Example</div>
+<div id="grid" dojoType="dojox.grid.Grid" onStyleRow="onStyleRow" model="model" structure="structure"></div>
 </body>
 </html>

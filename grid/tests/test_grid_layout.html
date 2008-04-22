@@ -2,10 +2,10 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>dojox.Grid in Layout Demo</title>
+	<title>dojox.grid.Grid in Layout Demo</title>
 	<style type="text/css">
-		@import "../_grid/Grid.css";
-		@import "../_grid/tundraGrid.css";
+		@import "../resources/Grid.css";
+		@import "../resources/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
@@ -99,11 +99,11 @@
 				sizeMin="50" sizeShare="80"
 			>
 				<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" sizeMin="20" sizeShare="70">
-					<div id="grid1" dojoType="dojox.Grid" model="model" title="Tab 1"></div>
-					<div id="grid2" dojoType="dojox.Grid" model="model" structure="layout2" title="Tab 2"></div>
+					<div id="grid1" dojoType="dojox.grid.Grid" model="model" title="Tab 1"></div>
+					<div id="grid2" dojoType="dojox.grid.Grid" model="model" structure="layout2" title="Tab 2"></div>
 				</div>
 				<div id="bottomRight" dojoType="dijit.layout.ContentPane" sizeMin="20" sizeShare="30">
-					<div id="grid3" dojoType="dojox.Grid" model="model" structure="layout2"></div>
+					<div id="grid3" dojoType="dojox.grid.Grid" model="model" structure="layout2"></div>
 				</div>
 			</div>
 		</div>

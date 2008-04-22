@@ -2,9 +2,9 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Test dojox.Grid Editing</title>
+		<title>Test dojox.grid.Grid Editing</title>
 		<style>
-			@import "../_grid/tundraGrid.css";
+			@import "../resources/tundraGrid.css";
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/tundra/tundra.css";
 			@import "../../../dijit/tests/css/dijitTests.css";
@@ -62,7 +62,7 @@
 			for(var i=0, l=data.length; i<rows-l; i++){
 				data.push(data[i%l].slice(0));
 			}
-			model = new dojox.grid.data.Table(null, data);
+			model = new dojox.grid._data.Table(null, data);
 
 			// ==========================================================================
 			// Tie some UI to the data model
@@ -86,21 +86,21 @@
 				field: 2,
 				name: 'Status',
 				styles: 'text-align: center;',
-				editor: dojox.grid.editors.Select,
+				editor: dojox.grid._data.editors.Select,
 				options: [ "new", "read", "replied" ]
 			};
 
 			gridLayout = [
 				{
-					type: 'dojox.GridRowView', width: '20px'
+					type: 'dojox.grid._grid.GridRowView', width: '20px'
 				},
 				{
-					defaultCell: { width: 8, editor: dojox.grid.editors.Input, styles: 'text-align: right;'  },
+					defaultCell: { width: 8, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;'  },
 					rows: [
 						[
 							{ name: 'Id', width: 3, get: function(inRowIndex){ return inRowIndex+1;} },
-							{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid.editors.Select, options: ["normal", "note", "important"]},
-							{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid.editors.Bool },
+							{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid._data.editors.Select, options: ["normal", "note", "important"]},
+							{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid._data.editors.Bool },
 							statusCell,
 							{ name: 'Message', styles: '', width: '100%' },
 							{ name: 'Amount', formatter: formatMoney }
@@ -117,7 +117,7 @@
 		</script>
 	</head>
 	<body class="tundra">
-	<h1>dojox.Grid Basic Editing test</h1>
+	<h1>dojox.grid.Grid Basic Editing test</h1>
 	<br />
 	<div id="controls">
 		<button onclick="grid.refresh()">Refresh</button>
@@ -131,7 +131,7 @@
 	</div>
 	<br />
 	<div jsId="grid" class="myGrid" 
-		dojoType="dojox.Grid" model="model" 
+		dojoType="dojox.grid.Grid" model="model" 
 		structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>

@@ -2,7 +2,7 @@ dojo.require("dojo.io.script")
 dojo.require("dojox.rpc.Service");
 
 // model that works with Yahoo Search API
-dojo.declare("dojox.grid.data.yahooSearch", dojox.grid.data.Dynamic, {
+dojo.declare("dojox.grid._data.yahooSearch", dojox.grid._data.Dynamic, {
 	constructor: function(inFields, inData, inSearchNode){
 		this.rowsPerPage = 20;
 		this.searchNode = inSearchNode;

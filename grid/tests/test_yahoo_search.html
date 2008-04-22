@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.Grid - Yahoo Search Test</title>
+	<title>dojox.grid.Grid - Yahoo Search Test</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style>
-		@import "../_grid/Grid.css";
+		@import "../resources/Grid.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -43,7 +43,7 @@
 			{ name: 'Width', na: ''}
 		];
 
-		var model = new dojox.grid.data.yahooSearch(imageFields, null, "searchInput");
+		var model = new dojox.grid._data.yahooSearch(imageFields, null, "searchInput");
 		model.observer(this);
 		// report some model send/receive status
 		model.onSend = function(inParams) {
@@ -55,7 +55,7 @@
 
 		
 		var webLayout = [ 
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			{ noscroll: true,
 				cells: [
 					[ { name: 'Row', width: 3, styles: 'text-align: center;', get: function(inRowIndex) { return inRowIndex + 1 } }]
@@ -75,7 +75,7 @@
 		}
 		
 		var imageLayout = [ 
-			{ type: 'dojox.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
 			{ noscroll: true,
 				cells: [
 					[ { name: 'Row', width: 3, styles: 'text-align: center;', get: function(inRowIndex) { return inRowIndex + 1 } }]
@@ -119,14 +119,14 @@
 	</script>
 </head>
 <body>
-<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.Grid - Yahoo Search Test</div>
+<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid - Yahoo Search Test</div>
 <div style="padding-bottom: 3px;">
 	<label><input id="webRb" type="radio" name="searchType" checked>Web</label>&nbsp;&nbsp;
 	<label><input id="imageRb" type="radio" name="searchType">Images</label>
 </div>	
 <input id="searchInput" type="text" value="apple">&nbsp;&nbsp;
 <button onclick="doSearch()">Search</button><br><br>
-<div jsId="grid" class="grid" autoWidth="true" structure="webLayout" dojoType="dojox.Grid" model="model" elasticView="1"></div>
+<div jsId="grid" class="grid" autoWidth="true" structure="webLayout" dojoType="dojox.grid.Grid" model="model" elasticView="1"></div>
 <br>
 <div id="info">
 	<div id="rowCount" style="float: left"></div>

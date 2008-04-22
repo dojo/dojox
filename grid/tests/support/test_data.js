@@ -17,7 +17,7 @@
 	}
 
 	// global var "model"
-	model = new dojox.grid.data.Table(null, data);
+	model = new dojox.grid._data.Table(null, data);
 
 	// simple display of row info; based on model observation
 	// global var "modelChange"

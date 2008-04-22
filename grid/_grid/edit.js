@@ -1,6 +1,6 @@
 dojo.provide("dojox.grid._grid.edit");
 
-dojo.declare("dojox.grid.edit", null, {
+dojo.declare("dojox.grid._grid.Edit", null, {
 	// summary:
 	//		Controls grid cell editing process. Owned by grid and used internally for editing.
 	constructor: function(inGrid){

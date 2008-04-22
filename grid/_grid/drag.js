@@ -5,13 +5,13 @@ dojo.provide("dojox.grid._grid.drag");
 // begin closure
 (function(){
 
-var dgdrag = dojox.grid.drag = {};
+var dgdrag = dojox.grid._grid.drag = {};
 
 dgdrag.dragging = false;
 dgdrag.hysteresis = 2;
 
 dgdrag.capture = function(inElement) {
-	//console.debug('dojox.grid.drag.capture');
+	//console.debug('dojox.grid._grid.drag.capture');
 	if (inElement.setCapture)
 		inElement.setCapture();
 	else {
@@ -22,7 +22,7 @@ dgdrag.capture = function(inElement) {
 }
 
 dgdrag.release = function(inElement) {
-	//console.debug('dojox.grid.drag.release');
+	//console.debug('dojox.grid._grid.drag.release');
 	if(inElement.releaseCapture){
 		inElement.releaseCapture();
 	}else{
@@ -57,7 +57,7 @@ dgdrag.start = function(inElement, inOnDrag, inOnEnd, inEvent, inOnStart){
 }
 
 dgdrag.end = function(){
-	//console.debug("dojox.grid.drag.end");
+	//console.debug("dojox.grid._grid.drag.end");
 	dgdrag.release(dgdrag.elt);
 	dgdrag.elt.onmousemove = dgdrag.events.oldmove;
 	dgdrag.elt.onmouseup = dgdrag.events.oldup;
@@ -95,7 +95,7 @@ dgdrag.mousemove = function(inEvent){
 }
 
 dgdrag.mouseup = function(inEvent){
-	//console.debug("dojox.grid.drag.mouseup");
+	//console.debug("dojox.grid._grid.drag.mouseup");
 	dojo.stopEvent(dojo.fixEvent(inEvent));
 	dgdrag.end();
 }

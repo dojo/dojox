@@ -12,7 +12,7 @@ dojo.require("dijit.form.CurrencyTextBox");
 dojo.require("dijit.form.Slider");
 dojo.require("dijit.Editor");
 
-dojo.declare("dojox.grid.editors.Dijit", dojox.grid.editors.base, {
+dojo.declare("dojox.grid._data.editors.Dijit", dojox.grid._data.editors.base, {
 	editorClass: "dijit.form.TextBox",
 	constructor: function(inCell){
 		this.editor = null;
@@ -78,7 +78,7 @@ dojo.declare("dojox.grid.editors.Dijit", dojox.grid.editors.base, {
 	}
 });
 
-dojo.declare("dojox.grid.editors.ComboBox", dojox.grid.editors.Dijit, {
+dojo.declare("dojox.grid._data.editors.ComboBox", dojox.grid._data.editors.Dijit, {
 	editorClass: "dijit.form.ComboBox",
 	getEditorProps: function(inDatum){
 		var items=[];
@@ -99,7 +99,7 @@ dojo.declare("dojox.grid.editors.ComboBox", dojox.grid.editors.Dijit, {
 	}
 });
 
-dojo.declare("dojox.grid.editors.DateTextBox", dojox.grid.editors.Dijit, {
+dojo.declare("dojox.grid._data.editors.DateTextBox", dojox.grid._data.editors.Dijit, {
 	editorClass: "dijit.form.DateTextBox",
 	setValue: function(inRowIndex, inValue){
 		if(this.editor){
@@ -116,7 +116,7 @@ dojo.declare("dojox.grid.editors.DateTextBox", dojox.grid.editors.Dijit, {
 });
 
 
-dojo.declare("dojox.grid.editors.CheckBox", dojox.grid.editors.Dijit, {
+dojo.declare("dojox.grid._data.editors.CheckBox", dojox.grid._data.editors.Dijit, {
 	editorClass: "dijit.form.CheckBox",
 	getValue: function(){
 		return this.editor.checked;
@@ -134,7 +134,7 @@ dojo.declare("dojox.grid.editors.CheckBox", dojox.grid.editors.Dijit, {
 });
 
 
-dojo.declare("dojox.grid.editors.Editor", dojox.grid.editors.Dijit, {
+dojo.declare("dojox.grid._data.editors.Editor", dojox.grid._data.editors.Dijit, {
 	editorClass: "dijit.Editor",
 	getEditorProps: function(inDatum){
 		return dojo.mixin({}, this.cell.editorProps||{}, {
