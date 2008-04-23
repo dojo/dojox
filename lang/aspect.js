@@ -87,7 +87,7 @@ dojo.provide("dojox.lang.aspect");
 				// process around and after events
 				try{
 					// call the around advice or the original method
-					ret = aop.proceed.apply(this, arguments);
+					ret = aop.proceed.apply(null, arguments);
 				}catch(e){
 					// process after throwing and after events
 					context.dynIndex = context.dynAdvices.length;
@@ -146,6 +146,75 @@ dojo.provide("dojox.lang.aspect");
 		//
 		// description:
 		//		Attaches AOP-style advices to a method. Can attach several 
+		//		advices at once and operate on several methods of an object.
+		//		The latter is achieved when a RegExp is specified as
+		//		a method name, or an array of strings and regular expressions
+		//		is used. In this case all functional methods that
+		//		satisfy the RegExp condition are processed. This function 
+		//		returns a handle, which can be used to unadvise, or null,
+		//		if advising has failed.
+		//		
+		//		This function is a convenience wrapper for 
+		//		dojox.lang.aspect.adviseRaw().
+		//
+		// obj: 
+		//		A source object for the advised function. Cannot be a DOM node.
+		//		If this object is a constructor, its prototype is advised.
+		//
+		// method:
+		//		A string name of the function in obj. In case of RegExp all
+		//		methods of obj matching the regular expression are advised.
+		//
+		// advice:
+		//		An object, which defines advises, or a function, which
+		//		returns such object, or an array of previous items. 
+		//		The advice object can define following member functions: 
+		//		before, around, afterReturning, afterThrowing, after. 
+		//		If the function is supplied, it is called with a context 
+		//		object once per call to create a temporary advice object, which 
+		//		is destroyed after the processing. The temporary advice object
+		//		can implement a destroy() method, if it wants to be called when
+		//		not needed.
+		
+		if(typeof obj != "object" && obj.prototype){
+			obj = obj.prototype;
+		}
+
+		var methods = [];
+		if(!(method instanceof Array)){
+			method = [method];
+		}
+		
+		// identify advised methods
+		for(var j = 0; j < method.length; ++j){
+			var t = method[j];
+			if(t instanceof RegExp){
+				for(var i in obj){
+					if(d.isFunction(obj[i]) && t.test(i)){
+						methods.push(i);
+					}
+				}
+			}else{
+				if(d.isFunction(obj[t])){
+					methods.push(t);
+				}
+			}
+		}
+
+		if(!d.isArray(advice)){ advice = [advice]; }
+
+		return aop.adviseRaw(obj, methods, advice);	// Object
+	};
+	
+	aop.adviseRaw = function(/*Object*/ obj, 
+						/*Array*/ methods, 
+						/*Array*/ advices
+						){
+		// summary:
+		//		Attach AOP-style advices to a method. 
+		//
+		// description:
+		//		Attaches AOP-style advices to a method. Can attach several 
 		//		advices at once and operate on several methods of the object.
 		//		The latter is achieved when a RegExp is specified as
 		//		a method name. In this case all functional methods that
@@ -157,49 +226,26 @@ dojo.provide("dojox.lang.aspect");
 		//		A source object for the advised function. 
 		//		Cannot be a DOM node.
 		//
-		// method:
-		//		A string name of the function in obj. In case of RegExp all
-		//		methods of obj matching the regular expression are advised.
+		// methods:
+		//		An array of method names (strings) to be advised.
 		//
-		// advice:
-		//		An object, which defines advises, or a function, which
-		//		returns such object, or an array of previous items. 
-		//		The advice object can define following 
-		//		member functions: before, around, afterReturning, afterThrowing, 
-		//		after. If the function is supplied, it is called with a context 
+		// advices:
+		//		An array of advices represented by objects or functions that
+		//		return such objects on demand during the event processing.
+		//		The advice object can define following member functions: 
+		//		before, around, afterReturning, afterThrowing, after. 
+		//		If the function is supplied, it is called with a context 
 		//		object once per call to create a temporary advice object, which 
 		//		is destroyed after the processing. The temporary advice object
 		//		can implement a destroy() method, if it wants to be called when
 		//		not needed.
 
-		var m = [], i, j, t;
-		if(!(method instanceof Array)){
-			method = [method];
-		}
-		
-		// identify advised methods
-		for(j = 0; j < method.length; ++j){
-			t = method[j];
-			if(t instanceof RegExp){
-				for(i in obj){
-					if(d.isFunction(obj[i]) && t.test(i)){
-						m.push(i);
-					}
-				}
-			}else{
-				if(d.isFunction(obj[t])){
-					m.push(t);
-				}
-			}
-		}
-		if(!m.length){ return null; }
+		if(!methods.length || !advices.length){ return null; }
 		
 		// attach advices
-		if(!d.isArray(advice)){ advice = [advice]; }
-		var methods = {}, al = advice.length;
-		for(i = m.length - 1; i >= 0; --i){
-			var name = m[i], o = obj[name], ao = new Array(al);
-			t = o.advices;
+		var m = {}, al = advices.length;
+		for(var i = methods.length - 1; i >= 0; --i){
+			var name = methods[i], o = obj[name], ao = new Array(al), t = o.advices;
 			// create a stub, if needed
 			if(!t){
 				var x = obj[name] = getDispatcher();
@@ -210,15 +256,15 @@ dojo.provide("dojox.lang.aspect");
 				t = x.advices;
 			}
 			// attach advices
-			for(j = 0; j < al; ++j){
-				ao[j] = t.add(advice[j]);
+			for(var j = 0; j < al; ++j){
+				ao[j] = t.add(advices[j]);
 			}
-			methods[name] = ao;
+			m[name] = ao;
 		}
 		
-		return [obj, methods];	// Object
+		return [obj, m];	// Object
 	};
-	
+
 	aop.unadvise = function(/*Object*/ handle){
 		// summary:
 		//		Detach previously attached AOP-style advices.
@@ -234,12 +280,24 @@ dojo.provide("dojox.lang.aspect");
 				t.remove(ao[i]);
 			}
 			if(t.isEmpty()){
-				if(o._listeners.length){
+				// check if we can remove all stubs
+				var empty = true, ls = o._listeners;
+				if(ls.length){
+					for(i in ls){
+						if(!(i in ap)){
+							empty = false;
+							break;
+						}
+					}
+				}
+				if(empty){
+					// revert to the original method
+					obj[name] = o.target;
+				}else{
+					// replace with the dojo.connect() stub
 					var x = obj[name] = d._listener.getDispatcher();
 					x.target = o.target;
-					x._listeners = o._listeners;
-				}else{
-					obj[name] = o.target;
+					x._listeners = ls;
 				}
 			}
 		}
@@ -259,42 +317,6 @@ dojo.provide("dojox.lang.aspect");
 		//		In order to get the active context use dojox.lang.aspect.getContext().
 		
 		return contextStack;	// Array
-	};
-	
-	aop.cflow = function(/*Object*/ instance, /*String|RegExp|Array?*/ method){
-		// summary:
-		//		Returns true if the context stack contains a context for a given 
-		//		instance that satisfies a given method name criteria.
-		//
-		// instance:
-		//		An instance to be matched. If null, any context will be examined.
-		//		Otherwise the context should belong to this instance.
-		//
-		// method:
-		//		An optional pattern to be matched against a method name. Can be a string, 
-		//		a RegExp object or an array of strings and RegExp objects. 
-		//		If it is omitted, any name will satisfy the criteria.
-
-		if(arguments.length > 1 && !(method instanceof Array)){
-			method = [method];
-		}
-		
-		for(var i = contextStack.length - 1; i >= 0; --i){
-			var c = contextStack[i];
-			// check if instance matches
-			if(instance && c.instance != instance){ continue; }
-			if(!method){ return true; }
-			var n = c.joinPoint.targetName;
-			for(var j = method.length - 1; j >= 0; --j){
-				var m = method[j];
-				if(m instanceof RegExp){
-					if(m.test(n)){ return true; }
-				}else{
-					if(n == m){ return true; }
-				}
-			}
-		}
-		return false;	// Boolean
 	};
 	
 	aop.proceed = function(){

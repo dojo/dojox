@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="../aspect.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.lang.aspect");
+			dojo.require("dojox.lang.aspect.cflow");
 			dojo.require("dojo.string");
 			
 			var test = function(){
@@ -86,10 +87,10 @@
 				console.log("area: " + rect2.getArea());
 				console.log("=================================");
 
-				console.log("attach advices to the prototype, and repeat with rect1...");
-				var h1 = aop.advise(Rect.prototype, /^get/, TraceReturns);
-				var h2 = aop.advise(Rect.prototype, [/^set/, "move", "makeSquare"], TraceArguments);
-				var h3 = aop.advise(Rect.prototype, "pointInside", [TraceReturns, TraceArguments]);
+				console.log("attach advices to the Rect class, and repeat with rect1...");
+				var h1 = aop.advise(Rect, /^get/, TraceReturns);
+				var h2 = aop.advise(Rect, [/^set/, "move", "makeSquare"], TraceArguments);
+				var h3 = aop.advise(Rect, "pointInside", [TraceReturns, TraceArguments]);
 				rect1.move(100, 100);
 				rect1.makeSquare(200);
 				rect1.pointInside(150, 250);
@@ -97,7 +98,7 @@
 				console.log("area: " + rect1.getArea());
 				console.log("=================================");
 				
-				console.log("remove advices for getters and setters from the prototype, and repeat with rect1...");
+				console.log("remove advices for getters and setters from the class, and repeat with rect1...");
 				aop.unadvise(h1);
 				aop.unadvise(h2);
 				rect1.move(100, 100);
@@ -136,7 +137,7 @@
 					},
 					afterReturning: function(retVal){
 						var buf = "-- " + this.name + "(" + this.args + ")";
-						if(retVal == undefined){
+						if(typeof retVal == "undefined"){
 							// procedure without a return value
 							console.log(buf);
 						}else{
@@ -165,7 +166,7 @@
 				
 				var TraceAll = function(context, id){
 					this.name = context.joinPoint.targetName;
-					this.prefix = dojo.string.pad("", context.depth * 2, "--", true) + "-- #" + id;
+					this.prefix = dojo.string.pad("", context.depth * 2, "--", true) + "-- #" + (id || 1);
 				};
 				dojo.extend(TraceAll, {
 					before: function(/*arguments*/){
@@ -230,7 +231,7 @@
 				var rect5 = new Rect;
 				aop.advise(rect5, /^\S/,
 					function(context){
-						return aop.cflow(context.instance) ? 
+						return aop.cflow(this) ? 		// "this" is the advised object
 							{} :						// do nothing
 							new TraceTopLevel(context);	// log top level
 					}
@@ -247,6 +248,65 @@
 				}catch(e){
 					// squelch
 				}
+				console.log("=================================");
+				
+				var log = function(){
+					// log the rect1pointInside state
+					var method = "native";
+					if(rect1.pointInside.target){
+						if(rect1.pointInside.advices){
+							method = "dojox.lang.aspect";
+						}else if(rect1.pointInside._listeners){
+							method = "dojo.connect";
+						}
+					}
+					console.log("Method: " + method);
+				};
+				
+				console.log("use dojo.connect() on rect1 to trace...");
+				console.log("Running native method.");
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Connecting an event processor.");
+				h1 = dojo.connect(rect1, "pointInside", function(){
+					var args = Array.prototype.join.call(arguments, ", ");
+					console.log("from dojo.connect(): " + args);
+				});
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Connecting the TraceAll advice.");
+				h2 = aop.advise(rect1, "pointInside", 
+					function(context){ return new TraceAll(context); });
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Disconnecting the event processor.");
+				dojo.disconnect(h1);
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Disconnecting the advise.");
+				aop.unadvise(h2);
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Connecting the TraceAll advice.");
+				h2 = aop.advise(rect1, "pointInside", 
+					function(context){ return new TraceAll(context); });
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Connecting an event processor.");
+				h1 = dojo.connect(rect1, "pointInside", function(){
+					var args = Array.prototype.join.call(arguments, ", ");
+					console.log("from dojo.connect(): " + args);
+				});
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Disconnecting the advise.");
+				aop.unadvise(h2);
+				log();
+				rect1.pointInside(150, 250);
+				console.log("Disconnecting the event processor.");
+				dojo.disconnect(h1);
+				log();
+				rect1.pointInside(150, 250);
 				console.log("=================================");
 			};
 			//dojo.addOnLoad(test);
