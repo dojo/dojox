@@ -92,44 +92,35 @@ dojo.provide("dojox.html.metrics");
 	var scroll={ w:16, h:16 };
 	dhm.getScrollbar=function(){ return { w:scroll.w, h:scroll.h }; };
 
-	var fontResizeInterval = 200;
-	var fontResizeHandle = null;
-	var fontResizeNode = null;
+	dhm._fontResizeNode = null;
 
 	dhm.initOnFontResize = function(interval){
-		var f = null;
-		if(!fontResizeNode){
-			f = fontResizeNode = dojo.doc.createElement("div");
-			var fs = f.style;
-			fs.top = "0px";
-			fs.left = "0px";
-			fs.position = "absolute";
-			fs.visibility = "hidden";
-			f.innerHTML = "TheQuickBrownFoxJumpedOverTheLazyDog";
-			dojo.body().appendChild(f);
-		}else{
-			f = fontResizeNode;
-		}
+		var f = dhm._fontResizeNode = dojo.doc.createElement("iframe");
+		var fs = f.style;
+		fs.position = "absolute";
+		fs.width = "5em";
+		fs.height = "10em";
+		fs.top = "-10000px";
+		dojo.body().appendChild(f);
 
-		var intervalDiff = (typeof interval != "undefined" && interval != null && !isNaN(interval) &&
-							interval != fontResizeInterval);
-		if(!fontResizeHandle || intervalDiff){
-			clearInterval(fontResizeHandle);
-			var fw = f.offsetWidth;
-			var job = function(){
-				if(f.offsetWidth != fw){
-					fw = f.offsetWidth;
-					dhm.onFontResize();
+		if(dojo.isIE){
+			f.onreadystatechange = function(){
+				if(f.contentWindow.document.readyState == "complete"){
+					f.onresize = Function('window.parent.'+dojox._scopeName+'.html.metrics._fontresize()');
 				}
-			}
-			if(intervalDiff){
-				fontResizeInterval = interval;
-			}
-			setInterval(job, fontResizeInterval);
+			};
+		}else{
+			f.onload = function(){
+				f.contentWindow.onresize = Function('window.parent.'+dojox._scopeName+'.html.metrics._fontresize()');
+			};
 		}
+		dhm.initOnFontResize = function(){};
 	};
-	
+
 	dhm.onFontResize = function(){};
+	dhm._fontresize = function(){
+		dhm.onFontResize();
+	}
 
 	dojo.addOnLoad(function(){
 		// getScrollbar metrics node
@@ -146,10 +137,6 @@ dojo.provide("dojox.html.metrics");
 
 		// text size poll setup
 		if("fontSizeWatch" in dojo.config && !!dojo.config.fontSizeWatch){
-			var interval = Number(dojo.config["fontSizeInterval"]);
-			if(!isNaN(interval)){
-				fontResizeInterval = interval;
-			}
 			dhm.initOnFontResize();
 		}
 	});
