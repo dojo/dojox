@@ -86,22 +86,6 @@ dojo.mixin(dojox.grid,{
 		return inNode;
 	},
 	
-	getScrollbarWidth: function(){
-		if(this._scrollBarWidth){
-			return this._scrollBarWidth;
-		}
-		this._scrollBarWidth = 18;
-		try{
-			var e = document.createElement("div");
-			e.style.cssText = "top:0;left:0;width:100px;height:100px;overflow:scroll;position:absolute;visibility:hidden;";
-			document.body.appendChild(e);
-			this._scrollBarWidth = e.offsetWidth - e.clientWidth;
-			document.body.removeChild(e);
-			delete e;
-		}catch (ex){}
-		return this._scrollBarWidth;
-	},
-	
 	// needed? dojo has _getProp
 	getRef: function(name, create, context){
 		var obj=context||dojo.global, parts=name.split("."), prop=parts.pop();
@@ -196,31 +180,6 @@ dojo.mixin(dojox.grid,{
 		var cache = inArray[inI];
 		inArray[inI] = inArray[inJ];
 		inArray[inJ] = cache;
-	},
-	
-	initTextSizePoll: function(inInterval) {
-		var f = document.createElement("div");
-		with (f.style) {
-			top = "0px";
-			left = "0px";
-			position = "absolute";
-			visibility = "hidden";
-		}
-		f.innerHTML = "TheQuickBrownFoxJumpedOverTheLazyDog";
-		document.body.appendChild(f);
-		var fw = f.offsetWidth;
-		var job = function() {
-			if (f.offsetWidth != fw) {
-				fw = f.offsetWidth;
-				dojox.grid.textSizeChanged();
-			}
-		}
-		window.setInterval(job, inInterval||200);
-		dojox.grid.initTextSizePoll = dojox.grid.nop;
-	},
-	
-	textSizeChanged: function() {
-
 	}
 });
 

@@ -2,6 +2,7 @@ dojo.provide("dojox.grid._grid.view");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
+dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid._grid.builder");
 
 dojo.declare('dojox.grid._grid.GridView',
@@ -96,7 +97,7 @@ dojo.declare('dojox.grid._grid.GridView',
 	},
 
 	getScrollbarWidth: function(){
-		return (this.noscroll ? 0 : dojox.grid.getScrollbarWidth()); // Integer
+		return (this.noscroll ? 0 : dojox.html.metrics.getScrollbar().w); // Integer
 	},
 
 	getColumnsWidth: function(){
@@ -142,7 +143,7 @@ dojo.declare('dojox.grid._grid.GridView',
 		if(!this.grid.autoHeight){
 			var h = this.domNode.clientHeight;
 			if(!this.hasScrollbar()){ // no scrollbar is rendered
-				h -= dojox.grid.getScrollbarWidth();
+				h -= dojox.html.metrics.getScrollbar().w;
 			}
 			dojox.grid.setStyleHeightPx(this.scrollboxNode, h);
 		}

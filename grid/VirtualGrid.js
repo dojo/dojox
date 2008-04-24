@@ -1,5 +1,6 @@
 dojo.provide("dojox.grid.VirtualGrid");
 
+dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid._grid.lib");
 dojo.require("dojox.grid._grid.scroller");
 dojo.require("dojox.grid._grid.view");
@@ -131,8 +132,8 @@ dojo.declare('dojox.grid.VirtualGrid',
 		this.createLayout();
 		this.createViews();
 		this.createManagers();
-		dojox.grid.initTextSizePoll();
-		this.connect(dojox.grid, "textSizeChanged", "textSizeChanged");
+		dojox.html.metrics.initOnFontResize();
+		this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
 		dojox.grid.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.keyEvents);
 		this.connect(this, "onShow", "renderOnIdle");
 	},
