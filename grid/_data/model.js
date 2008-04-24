@@ -98,7 +98,7 @@ dojo.declare("dojox.grid._data.Model", null, {
 		return function(a, b){
 			var ineq = inCompare(a[inField], b[inField]);
 			return ineq ? (inTrueForAscend ? ineq : -ineq) : inSubCompare && inSubCompare(a, b);
-		}
+		};
 	},
 	makeComparator: function(inIndices){
 		var idx, col, field, result = null;
@@ -178,7 +178,7 @@ dojo.declare("dojox.grid._data.Table", dojox.grid._data.Rows, {
 		return (this.data && this.data.length ? this.data[0].length : this.fields.count());
 	},
 	badIndex: function(inCaller, inDescriptor){
-		console.debug('dojox.grid._data.Table: badIndex');
+//		console.debug('dojox.grid._data.Table: badIndex');
 	},
 	isGoodIndex: function(inRowIndex, inColIndex){
 		return (inRowIndex >= 0 && inRowIndex < this.count && (arguments.length < 2 || (inColIndex >= 0 && inColIndex < this.colCount)));
@@ -385,8 +385,8 @@ dojo.declare("dojox.grid._data.Dynamic", dojox.grid._data.Table, {
 		if(row){
 			row[inColIndex] = inDatum;
 			this.datumChange(inDatum, inRowIndex, inColIndex);
-		}else{
-			console.debug('[' + this.declaredClass + '] dojox.grid._data.dynamic.set: cannot set data on an non-loaded row');
+//		}else{
+//			console.debug('[' + this.declaredClass + '] dojox.grid._data.dynamic.set: cannot set data on an non-loaded row');
 		}
 	},
 	// sort
@@ -674,12 +674,12 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		}
 	},
 	insertion: function(/* index */){
-		console.debug("Insertion", arguments);
+//		console.debug("Insertion", arguments);
 		this.notify("Insertion", arguments);
 		this.notify("Change", arguments);
 	},
 	removal: function(/* keys */){
-		console.debug("Removal", arguments);
+//		console.debug("Removal", arguments);
 		this.notify("Removal", arguments);
 		this.notify("Change", arguments);
 	},
@@ -699,7 +699,7 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		this._removeItems(inRowIndexes);
 		this._currentlyProcessing = [];
 	},
-	_removeItems: function(inRowIndexes /*array*/){
+	_removeItems: function(inRowIndexes /*Array*/){
 		//	summary:
 		//		Function to remove a set of items from the store based on the row index.
 		//	inRowIndexes:
@@ -707,9 +707,12 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		dojox.grid._data.Dynamic.prototype.remove.apply(this, arguments);
 		// Rebuild _rowIdentities
 		this._rowIdentities = {};
-		for (var i = 0; i < this.data.length; i++){
-			this._setRowId(this.data[i].__dojo_data_item, 0, i);
-		}
+		dojo.forEach(this.data, function(data, i){
+			// A given row may not be loaded if the user has scrolled very quickly
+			if(data && data.__dojo_data_item){
+				this._setRowId(data.__dojo_data_item, 0, i);
+			}
+		}, this);
 	},
 	canSort: function(){
 		// Q: Return true and re-issue the queries?
@@ -719,7 +722,7 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 	},
 	sort: function(colIndex){
 		var col = Math.abs(colIndex) - 1;
-		this.sortFields = [{'attribute': this.fields.values[col].name, 'descending': (colIndex>0)}];
+		this.sortFields = [{attribute: this.fields.values[col].name, descending: (colIndex>0)}];
 		
 		// Since we're relying on the data store to sort, we have to refresh our data.
 		this.refresh();
