@@ -343,7 +343,7 @@ dojo.declare("dojox.grid._grid.HeaderBuilder",
 	},
 
 	domousedown: function(e){
-		if(!dojox.grid.drag.dragging){
+		if(!dojox.grid._grid.drag.dragging){
 			if((this.overRightResizeArea(e) || this.overLeftResizeArea(e)) && this.canResize(e)){
 				this.beginColumnResize(e);
 			}else{
@@ -380,7 +380,7 @@ dojo.declare("dojox.grid._grid.HeaderBuilder",
 			spanners: spanners
 		};
 		//console.log(drag.index, drag.w);
-		dojox.grid.drag.start(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
+		dojox.grid._grid.drag.start(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
 	},
 
 	doResizeColumn: function(inDrag, inEvent){
