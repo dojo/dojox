@@ -37,12 +37,12 @@ dojo.declare("dojox.grid._grid.Rows", null, {
 		this.applyStyles(row);
 	},
 	applyStyles: function(inRow){
-		with(inRow){
-			node.className = customClasses;
-			var h = node.style.height;
-			dojox.grid.setStyleText(node, customStyles + ';' + (node._style||''));
-			node.style.height = h;
-		}
+		var i = inRow;
+
+		i.node.className = i.customClasses;
+		var h = i.node.style.height;
+		dojox.grid.setStyleText(i.node, i.customStyles + ';' + (i.node._style||''));
+		i.node.style.height = h;
 	},
 	updateStyles: function(inRowIndex){
 		this.grid.updateRowStyles(inRowIndex);

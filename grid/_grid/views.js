@@ -166,22 +166,18 @@ dojo.declare('dojox.grid._grid.Views', null, {
 		var c = (w <= 0 ? len : this.findClient());
 		// layout views
 		var setPosition = function(v, l){
-			with(v.domNode.style){
-				if(!dojo._isBodyLtr()){
-					right = l + 'px';
-				}else{
-				 	left = l + 'px';
-				}
-				top = 0 + 'px';
+			var ds = v.domNode.style;
+			var hs = v.headerNode.style;
+
+			if(!dojo._isBodyLtr()){
+				ds.right = l + 'px';
+				hs.right = l + 'px';
+			}else{
+				ds.left = l + 'px';
+				hs.left = l + 'px';
 			}
-			with(v.headerNode.style){
-				if(!dojo._isBodyLtr()){
-					right = l + 'px';
-				}else{
-					left = l + 'px';
-				}
-				top = 0;
-			}
+			ds.top = 0 + 'px';
+			hs.top = 0;
 		}
 		// for views left of the client
 		//BiDi TODO: The left and right should not appear in BIDI environment. Should be replaced with 

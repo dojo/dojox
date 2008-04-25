@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Test dojox.grid.Grid Basic</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<style type="text/css">
+		@import "../resources/Grid.css";
+		@import "../resources/tundraGrid.css";
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
+		body {
+			font-size: 0.9em;
+			font-family: Geneva, Arial, Helvetica, sans-serif;
+		}
+		.heading {
+			font-weight: bold;
+			padding-bottom: 0.25em;
+		}
+	</style>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false"></script>
+	<!--<script type="text/javascript">
+		dojo.require("dojox.grid.Grid");
+		dojo.require("dojo.parser");
+	</script>-->
+	<!-- Debugging -->
+	<script type="text/javascript" src="../_grid/lib.js"></script>
+	<script type="text/javascript" src="../_grid/drag.js"></script>
+	<script type="text/javascript" src="../_grid/scroller.js"></script>
+	<script type="text/javascript" src="../_grid/builder.js"></script>
+	<script type="text/javascript" src="../_grid/cell.js"></script>
+	<script type="text/javascript" src="../_grid/layout.js"></script>
+	<script type="text/javascript" src="../_grid/rows.js"></script>
+	<script type="text/javascript" src="../_grid/focus.js"></script>
+	<script type="text/javascript" src="../_grid/selection.js"></script>
+	<script type="text/javascript" src="../_grid/edit.js"></script>
+	<script type="text/javascript" src="../_grid/view.js"></script>
+	<script type="text/javascript" src="../_grid/views.js"></script>
+	<script type="text/javascript" src="../_grid/rowbar.js"></script>
+	<script type="text/javascript" src="../_grid/publicEvents.js"></script>
+	<script type="text/javascript" src="../VirtualGrid.js"></script>
+	<script type="text/javascript" src="../_data/fields.js"></script>
+	<script type="text/javascript" src="../_data/model.js"></script>
+	<script type="text/javascript" src="../_data/editors.js"></script>
+	<script type="text/javascript" src="../Grid.js"></script>
+	<script type="text/javascript" src="support/test_data.js"></script>
+	<script type="text/javascript">
+		// a grid view is a group of columns
+		var view1 = {
+			cells: [[
+				{name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'}, {name: 'Column 3', width: "150px"}, {name: 'Column 4'}
+			],[
+				{name: 'Column 5'}, {name: 'Column 6'}, {name: 'Column 7'}, {name: 'Column 8', field: 3, colSpan: 2}
+			]]
+		};
+		// a grid layout is an array of views.
+		var layout = [ view1 ];
+	</script>
+	<script type="text/javascript">
+		var startCreationTests = function(){
+			setTimeout(function(){
+				var total_time = 0;
+				for(var i=0; i<30; i++){
+					var mod = new dojox.grid._data.Table(null, data);
+
+					var st_time = new Date().getTime();
+					var grid = new dojox.grid.Grid({
+						model: mod,
+						structure: layout
+					});
+					dojo.body().appendChild(grid.domNode);
+					grid.render();
+					total_time += (new Date().getTime() - st_time);
+					dojo.body().removeChild(grid.domNode);
+				}
+				console.log("Average time for programmatic creation with no source node: ", total_time / 30);
+				setTimeout(function(){
+					total_time = 0;
+					for(var i=0; i<30; i++){
+						var mod = new dojox.grid._data.Table(null, data);
+						var node = dojo.doc.createElement("div");
+						dojo.body().appendChild(node);
+						var st_time = new Date().getTime();
+						var grid = new dojox.grid.Grid({
+							model: mod,
+							structure: layout
+						}, node);
+						total_time += (new Date().getTime() - st_time);
+						dojo.body().removeChild(grid.domNode);
+					}
+					console.log("Average time for programmatic creation with source node: ", total_time / 30);
+				}, 1000);
+			}, 1000);
+		}
+		var startModelReuseTests = function(){
+			setTimeout(function(){
+				var total_time = 0;
+				for(var i=0; i<30; i++){
+
+					var st_time = new Date().getTime();
+					var mod = new dojox.grid._data.Table(null, data);
+					var grid = new dojox.grid.Grid({
+						model: mod,
+						structure: layout
+					});
+					dojo.body().appendChild(grid.domNode);
+					grid.render();
+					total_time += (new Date().getTime() - st_time);
+					dojo.body().removeChild(grid.domNode);
+				}
+				console.log("Total time to create 30 grids with separate models (including model creation time): ", total_time);
+				setTimeout(function(){
+					total_time = 0;
+					var mod = new dojox.grid._data.Table(null, data);
+					for(var i=0; i<30; i++){
+						var node = dojo.doc.createElement("div");
+						dojo.body().appendChild(node);
+						var st_time = new Date().getTime();
+						var grid = new dojox.grid.Grid({
+							model: mod,
+							structure: layout
+						}, node);
+						total_time += (new Date().getTime() - st_time);
+						dojo.body().removeChild(grid.domNode);
+					}
+					console.log("Total time to create 30 grids with a shared model: ", total_time);
+				}, 1000);
+			}, 1000);
+		}
+	</script>
+</head>
+<body>
+<div class="heading">dojox.grid.Grid Performance Test</div>
+<button onclick="startCreationTests()">Start Creation Tests</button>
+<button onclick="startModelReuseTests()">Start Model Re-use Tests</button>
+</body>
+</html>

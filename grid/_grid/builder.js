@@ -498,11 +498,10 @@ dojo.declare("dojox.grid._grid.TableMap",
 		var row = this.map[m.j];
 		for(var j=0, row; (row=this.map[j]); j++){
 			if(j == m.j){ continue; }
-			with(row[m.i]){
-				//console.log("overlaps: r: %d, c: %d", r, c);
-				var n = this.getNode(inTable, r, c);
-				if(n){ nodes.push(n); }
-			}
+			var rw = row[m.i];
+			//console.log("overlaps: r: %d, c: %d", rw.r, rw.c);
+			var n = this.getNode(inTable, rw.r, rw.c);
+			if(n){ nodes.push(n); }
 		}
 		//console.log(nodes);
 		return nodes;

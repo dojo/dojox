@@ -159,25 +159,22 @@ dojo.declare('dojox.grid._grid.GridView',
 		// but clientWidth seemingly does not include scrollbar width in some cases
 		var w = this.scrollboxNode.offsetWidth - this.getScrollbarWidth();
 		w = Math.max(w, this.getColumnsWidth()) + 'px';
-		with(this.contentNode){
-			style.width = '';
-			offsetWidth;
-			style.width = w;
-		}
+
+		var cn = this.contentNode;
+		cn.style.width = '';
+		cn.offsetWidth;
+		cn.style.width = w;
 	},
 
 	setSize: function(w, h){
-		with(this.domNode.style){
-			if(w){
-				width = w;
-			}
-			height = (h >= 0 ? h + 'px' : '');
+		var ds = this.domNode.style;
+		var hs = this.headerNode.style;
+
+		if(w){
+			ds.width = w;
+			hs.width = w;
 		}
-		with(this.headerNode.style){
-			if(w){
-				width = w;
-			}
-		}
+		ds.height = (h >= 0 ? h + 'px' : '');
 	},
 
 	renderRow: function(inRowIndex, inHeightPx){

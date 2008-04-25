@@ -18,8 +18,16 @@ dojo.declare("dojox.grid._grid.Layout", null, {
 		this.fieldIndex = 0;
 		this.cells = [];
 		var s = this.structure = [];
-		for(var i=0, viewDef, rows; (viewDef=inStructure[i]); i++){
-			s.push(this.addViewDef(viewDef));
+		if(!dojo.isArray(inStructure[0])){
+			if("cells" in inStructure[0]){
+				for(var i=0, viewDef, rows; (viewDef=inStructure[i]); i++){
+					s.push(this.addViewDef(viewDef));
+				}
+			}else{
+				s.push(this.addViewDef({ cells: [inStructure] }));
+			}
+		}else{
+			s.push(this.addViewDef({ cells: inStructure }));
 		}
 		this.cellCount = this.cells.length;
 	},

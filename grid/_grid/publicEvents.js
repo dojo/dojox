@@ -36,9 +36,8 @@ dojox.grid.publicEvents = {
 		// 		customStyles to control row css classes and styles; both properties are strings.
 		//
 		// example: onStyleRow({ selected: true, over:true, odd:false })
-		with(inRow){
-			customClasses += (odd?" dojoxGrid-row-odd":"") + (selected?" dojoxGrid-row-selected":"") + (over?" dojoxGrid-row-over":"");
-		}
+		var i = inRow;
+			i.customClasses += (i.odd?" dojoxGrid-row-odd":"") + (i.selected?" dojoxGrid-row-selected":"") + (i.over?" dojoxGrid-row-over":"");
 		this.focus.styleRow(inRow);
 		this.edit.styleRow(inRow);
 	},

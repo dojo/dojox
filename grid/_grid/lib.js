@@ -96,9 +96,8 @@ dojo.mixin(dojox.grid,{
 	},
 	
 	getProp: function(name, create, context){
-		with(dojox.grid.getRef(name, create, context)){
-			return (obj)&&(prop)&&(prop in obj ? obj[prop] : (create ? obj[prop]={} : undefined));
-		}
+		var ref = dojox.grid.getRef(name, create, context);
+		return (ref.obj)&&(ref.prop)&&(ref.prop in ref.obj ? ref.obj[ref.prop] : (create ? ref.obj[ref.prop]={} : undefined));
 	},
 	
 	indexInParent: function(inNode){
