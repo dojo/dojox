@@ -12,17 +12,47 @@
 
 dojo.require("dojox.html.metrics");
 
+var sz_to_cell = {};
+
+var updateSize = function(){
+	var sz = dojox.html.metrics.getFontMeasurements();
+	for(var p in sz_to_cell){
+		sz_to_cell[p].innerHTML = sz[p];
+	}
+}
+
 dojo.addOnLoad(function(){
 	dojo.connect(dojox.html.metrics, "onFontResize", function(){
 		console.log("Text size changed: ", dojox.html.metrics.getFontMeasurements());
+		updateSize();
 	});
 	console.log("Scrollbar measurements: ", dojox.html.metrics.getScrollbar());
 	console.log("Font measurements: ", dojox.html.metrics.getFontMeasurements());
+
+	var sz = dojox.html.metrics.getFontMeasurements();
+	for(var p in sz){
+		var row = document.createElement('tr');
+		var rel = document.createElement('td');
+		var act = sz_to_cell[p] = document.createElement('td');
+
+		rel.innerHTML = p;
+		act.innerHTML = sz[p];
+
+		row.appendChild(rel);
+		row.appendChild(act);
+
+		dojo.byId('sz_table').appendChild(row);
+	}
 });
 
 </script>
 </head>
 <body>
 	<div>Here is some text!</div>
+	<table id="sz_table" border="1">
+		<tr>
+			<th>Relative size</th><th>Actual pixel size (px)</th>
+		</tr>
+	</table>
 </body>
 </html>
