@@ -5,6 +5,8 @@ dojo.require("dojox.dtl._base");
 	var dd = dojox.dtl;
 	var ddcd = dd.contrib.data;
 
+	var first = true;
+
 	ddcd._BoundItem = dojo.extend(function(item, store){
 		this.item = item;
 		this.store = store;
@@ -24,14 +26,35 @@ dojo.require("dojox.dtl._base");
 				}
 				return "Store has no identity API";
 			}else{
-				if(store.hasAttribute(item, key)){
-					var value = store.getValue(item, key);
-					return (dojo.isObject(value) && store.isItem(value)) ? new ddcd._BoundItem(value, store) : value;
-				}else if(key.slice(-1) == "s" && store.hasAttribute(item, key.slice(0, -1))){
-					return dojo.map(store.getValues(item, key.slice(0, -1)), function(value){
-						return (dojo.isObject(value) && store.isItem(value)) ? new ddcd._BoundItem(value, store) : value;
-					});
+				if(!store.hasAttribute(item, key)){
+					if(key.slice(-1) == "s"){
+						if(first){
+							first = false;
+							dojo.deprecated("You no longer need an extra s to call getValues, it can be figured out automatically");
+						}
+						key = key.slice(0, -1);
+					}
+					if(!store.hasAttribute(item, key)){
+						return;
+					}
 				}
+
+				var values = store.getValues(item, key);
+				if(!values){
+					return;
+				}
+				if(!dojo.isArray(values)){
+					return new ddcd._BoundItem(values, store);
+				}
+
+				values = dojo.map(values, function(value){
+					if(dojo.isObject(value) && store.isItem(value)){
+						return new ddcd._BoundItem(value, store);
+					}
+					return value;
+				});
+				values.get = ddcd._get;
+				return values;
 			}
 		}
 	});
@@ -68,6 +91,12 @@ dojo.require("dojox.dtl._base");
 	});
 
 	dojo.mixin(ddcd, {
+		_get: function(key){
+			console.debug(key);
+			if(this.length){
+				return this[0].get(key);
+			}
+		},
 		bind_data: function(parser, text){
 			var parts = dd.text.pySplit(text);
 
