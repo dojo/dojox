@@ -45,32 +45,32 @@ dojo.declare("dojox.image.MagnifierLite",
 	_createGlass: function(){
 		// summary: make img and glassNode elements as children of the body
 
-		this.glassNode = dojo.doc.createElement('div');
-		this.surfaceNode = this.glassNode.appendChild(dojo.doc.createElement('div'));
-		dojo.addClass(this.glassNode,"glassNode");
-		dojo.body().appendChild(this.glassNode);
-		with(this.glassNode.style){
-			height = this.glassSize + "px";
-			width = this.glassSize + "px";
-		}
+		var node = this.glassNode = dojo.doc.createElement('div');
+		this.surfaceNode = node.appendChild(dojo.doc.createElement('div'));
+		dojo.addClass(node,"glassNode");
+		dojo.body().appendChild(node);
+		dojo.style(node,{
+			height: this.glassSize + "px",
+			width: this.glassSize + "px"
+		});
 		
-		this.img = dojo.doc.createElement('img');
-		this.glassNode.appendChild(this.img);
-		this.img.src = this.domNode.src;
+		this.img = dojo.clone(this.domNode);
+		node.appendChild(this.img);
 		// float the image around inside the .glassNode 
-		with(this.img.style){
-			position = "relative";
-			top = 0; left = 0;
-			width = this._zoomSize.w+"px";
-			height = this._zoomSize.h+"px";
-		}
+		dojo.style(this.img, {
+			position: "relative",
+			top: 0,
+			left: 0,
+			width: this._zoomSize.w + "px",
+			height: this._zoomSize.h + "px"
+		});
 
 	},
 	
 	_adjustScale: function(){
 		// summary: update the calculations should this.scale change
 
-		this.offset = dojo.coords(this.domNode,true);
+		this.offset = dojo.coords(this.domNode, true);
 		this._imageSize = { w: this.offset.w, h:this.offset.h };
 		this._zoomSize = {
 			w: this._imageSize.w * this.scale,
@@ -81,28 +81,30 @@ dojo.declare("dojox.image.MagnifierLite",
 	_showGlass: function(e){
 		// summary: show the overlay
 		this._placeGlass(e);		
-		with(this.glassNode.style){
-			visibility = "visible";
-			display = "";
-		}			
+		dojo.style(this.glassNode, {
+			visibility: "visible",
+			display:""
+		});			
 		
 	},
 	
 	_hideGlass: function(e){
 		// summary: hide the overlay
-		this.glassNode.style.visibility = "hidden";
-		this.glassNode.style.display = "none";
+		dojo.style(this.glassNode, {
+			visibility: "hidden",
+			display:"none"
+		});
 	},
 	
 	_placeGlass: function(e){
 		// summary: position the overlay centered under the cursor
 
 		this._setImage(e);
-		var t = Math.floor(e.pageY - (this.glassSize/2));
-		var l = Math.floor(e.pageX - (this.glassSize/2));
-		dojo.style(this.glassNode,"top",t);
-		dojo.style(this.glassNode,"left",l);
-
+		dojo.style(this.glassNode,{ 
+			top: Math.floor(e.pageY - (this.glassSize / 2)) + "px", 
+			left:Math.floor(e.pageX - (this.glassSize / 2)) + "px"
+		});
+		
 	},
 
 	_setImage: function(e){
@@ -110,12 +112,12 @@ dojo.declare("dojox.image.MagnifierLite",
 
 		var xOff = (e.pageX - this.offset.l) / this.offset.w;
 		var yOff = (e.pageY - this.offset.t) / this.offset.h;
-		var x = (this._zoomSize.w * xOff * -1)+(this.glassSize*xOff);
-		var y = (this._zoomSize.h * yOff * -1)+(this.glassSize*yOff);
-		with(this.img.style){
-			top = y+"px";
-			left = x+"px";
-		}
+		var x = (this._zoomSize.w * xOff * -1) + (this.glassSize * xOff);
+		var y = (this._zoomSize.h * yOff * -1) + (this.glassSize * yOff);
+		dojo.style(this.img, {
+			top: y + "px",
+			left: x + "px"
+		});
 
 	}
 
