@@ -36,10 +36,10 @@ dojo.declare(
 	//		Label override for the "Done" button.
 	doneButtonLabel: "",
 
-	// cancelFunction: FunctionName
+	// cancelFunction: Function|String
 	//		Name of function to call if user presses cancel button.
 	//		Cancel button is not displayed if function is not specified.
-	cancelFunction: "",
+	cancelFunction: null,
 
 	// hideDisabled: Boolean
 	//		If true, disabled buttons are hidden; otherwise, they are assigned the
@@ -64,14 +64,16 @@ dojo.declare(
 		this.connect(this.previousButton, "onClick", "back");
 
 		if(this.cancelFunction){
-			this.cancelFunction = dojo.getObject(this.cancelFunction);
+			if(dojo.isString(this.cancelFunction)){
+				this.cancelFunction = dojo.getObject(this.cancelFunction);
+			}
 			this.connect(this.cancelButton, "onClick", this.cancelFunction);
 		}else{
 			this.cancelButton.domNode.style.display = "none";
 		}
 		this.connect(this.doneButton, "onClick", "done");
 
-		this._subscription = dojo.subscribe(this.id+"-selectChild", dojo.hitch(this,"_checkButtons"));
+		this._subscription = dojo.subscribe(this.id + "-selectChild", dojo.hitch(this,"_checkButtons"));
 		this._checkButtons();
 	},
 
@@ -83,6 +85,7 @@ dojo.declare(
 		this.nextButton.setAttribute("disabled", lastStep);
 		this._setButtonClass(this.nextButton);
 		if(sw.doneFunction){
+			console.log(sw.doneFunction);
 			this.doneButton.domNode.style.display = "";
 			if(lastStep){
 				this.nextButton.domNode.style.display = "none";
@@ -136,25 +139,21 @@ dojo.declare(
 	//		Name of function that checks if it's OK to advance to the next panel.
 	//		If it's not OK (for example, mandatory field hasn't been entered), then
 	//		returns an error message (String) explaining the reason.
-	passFunction: "",
+	passFunction: null,
 	
 	// doneFunction: String
 	//		Name of function that is run if you press the "Done" button from this panel
-	doneFunction: "",
+	doneFunction: null,
 
-	postMixInProperties: function(){
-		if(this.passFunction){
-			this.passFunction = dojo.getObject(this.passFunction);
-		}
-		if(this.doneFunction){
-			this.doneFunction = dojo.getObject(this.doneFunction);
-		}
-		this.inherited(arguments);
-	},
-	
 	startup: function(){
 		this.inherited(arguments);
-		if(this.isFirstChild){ this.canGoBack = false; }	
+		if(this.isFirstChild){ this.canGoBack = false; }
+		if(dojo.isString(this.passFunction)){
+			this.passFunction = dojo.getObject(this.passFunction);
+		}
+		if(dojo.isString(this.doneFunction) && this.doneFunction){
+			this.doneFunction = dojo.getObject(this.doneFunction);
+		}
 	},
 
 	_checkPass: function(){
@@ -162,7 +161,9 @@ dojo.declare(
 		//		Called when the user presses the "next" button.
 		//		Calls passFunction to see if it's OK to advance to next panel, and
 		//		if it isn't, then display error.
-		//		Returns true to advance, false to not advance.
+		//		Returns true to advance, false to not advance. If passFunction
+		//		returns a string, it is assumed to be a custom error message, and
+		//		is alert()'ed
 		var r = true;
 		if(this.passFunction && dojo.isFunction(this.passFunction)){
 			var failMessage = this.passFunction();
@@ -176,13 +177,11 @@ dojo.declare(
 					break;
 			}
 		}
-		return r;
+		return r; // Boolean
 	},
 
 	done: function(){
-		if(this.doneFunction && dojo.isFunction(this.doneFunction)){
-			this.doneFunction();
-		}
+		if(this.doneFunction && dojo.isFunction(this.doneFunction)){ this.doneFunction(); }
 	}
 
 });

@@ -48,10 +48,14 @@
 			<div dojoType="dojox.widget.WizardPane">
 				<h1>Tab 2</h1>
 			</div>
-			<div dojoType="dojox.widget.WizardPane" doneFunction="done">
+			<div dojoType="dojox.widget.WizardPane">
 				<h1>Tab 3</h1>
 	
 				You won't be able to come back, but you can finish now...
+				<script type='dojo/method' event="doneFunction">
+					done();
+					console.log('inline done function called');
+				</script>
 			</div>
 			<div dojoType="dojox.widget.WizardPane" canGoBack="false">
 				<h1>Tab 4</h1>
@@ -62,6 +66,10 @@
 				<h1>Tab 5</h1>
 				... and now you can finish up.
 			</div>
+			<script type="dojo/method" event="cancelFunction">
+				alert("dojo/method cancel function on container! bye.")
+				this.destroy();
+			</script>
 		</div>
 	
 		<p>The next shows the option to hide the inactive buttons, with a smaller width...</p>
@@ -111,14 +119,29 @@
 			</div>
 		</div>
 
-		<h2>Intentionally Errors:</h2>
-		<div id="wizardError" dojoType="dojox.widget.WizardContainer" style="height:100px" cancelFunction="notAFunctionName">
-			<div dojoType="dojox.widget.WizardPane" doneFunction="done">
-				refs #1438? You will see errors if you press 'cancel', though the
-				'done' button does in fact show up. 
-			</div>
-		</div>
+			<h2>Another like above, but with dojo/method passFunction</h2>
+			<div id="wizard4" dojoType="dojox.widget.WizardContainer" style="width: 600px; height: 400px; margin:0 auto;">
+				<div dojoType="dojox.widget.WizardPane" id="Agreement12">
+					<script type="dojo/method" event="passFunction">
+						return "cant do that yet";
+					</script>
+					<h1>Agreement Terms</h1>
 
+					<div dojoType="dijit.layout.ContentPane" style="width:400px; border:1px solid #b7b7b7; background:#fff; padding:8px; margin:0 auto; height:200px; overflow:auto; "
+						href="../../../dojo/LICENSE"></div>
+
+					<form action="#" name="acceptAgreement">
+						<p>
+						<input type="checkbox" name="accept" value="true"/> I accept the terms of this agreement.
+						</p>
+					</form>
+				</div>
+				<div dojoType="dojox.widget.WizardPane" canGoBack="false">
+					<h1>Complete</h1>
+					<p>The license has been accepted.</p>
+				</div>
+			</div>
+			
 	</div>
 
 </body>
