@@ -71,41 +71,39 @@
 			// turn li's in this page into fisheye items, presumtiously:	
 			dojo.query("li.bounce").instantiate(dojox.widget.FisheyeLite,{});
 
-			dojo.query("span.line").forEach(function(n){
+			dojo.query("span.line")
+				.instantiate(dojox.widget.FisheyeLite,{
 				// make a widget from each of the lines in the lineHeightTest
-				new dojox.widget.FisheyeLite({
 					properties: {
 						fontSize:1.75
 					},
 					easeOut: dojox.fx.easing.backInOut,
 					durationOut: 500
-				},n);
-			}).connect("onclick",function(e){
+				})
+				.connect("onclick",function(e){
 				// you can still access the onclick of the real node
-				alert(e.target.innerHTML);
-			});
+					alert(e.target.innerHTML);
+				})
+			;
 
-			dojo.query("a").forEach(function(n){
-				// all the anchorhs get a little letter spacing love
-				new dojox.widget.FisheyeLite({
-					properties:{
-						fontSize:1.15,
-						letterSpacing:2.85
-					}
-				},n);
+			dojo.query("a").instantiate(dojox.widget.FisheyeLite,{
+				properties:{
+					fontSize:1.15,
+					letterSpacing:2.85
+				}
+			})
 			// stop anchors from doing _anything_	
-			}).connect("onclick",dojo,"stopEvent");
+			.connect("onclick",dojo,"stopEvent");
 
-			dojo.query(".imgBounce").forEach(function(n){
+			dojo.query(".imgBounce").instantiate(dojox.widget.FisheyeLite,{
 				// all the images need a width and a height (well, not need,
-				// but to scale you do)
-				new dojox.widget.FisheyeLite({
-					properties: {
-						height:1.75,
-						width:1.75
-					}
-				},n);
+				// but to scale you do)				
+				properties: {
+					height:1.75,
+					width:1.75
+				}
 			});
+			
 
 			// 
 			var vv = 0;
