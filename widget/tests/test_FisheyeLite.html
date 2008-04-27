@@ -69,9 +69,7 @@
 		dojo.addOnLoad(function(){
 			
 			// turn li's in this page into fisheye items, presumtiously:	
-			dojo.query("li.bounce").forEach(function(n){
-				new dojox.widget.FisheyeLite({ },n);
-			});
+			dojo.query("li.bounce").instantiate(dojox.widget.FisheyeLite,{});
 
 			dojo.query("span.line").forEach(function(n){
 				// make a widget from each of the lines in the lineHeightTest
