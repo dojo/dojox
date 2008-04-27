@@ -9,7 +9,7 @@ experimental
 -------------------------------------------------------------------------------
 Credits
 	Nathan Toone (nathan)
-
+	Peter Higgins	(dante)
 -------------------------------------------------------------------------------
 Project description
 
@@ -37,3 +37,4 @@ Additional Notes (Brief widget list):
  	* DropDownSelect - an extension to dijit.form.DropDownButton which is
  						meant to mirror the html <select> drop down
 
+	* _ColorPicker - An HSV ColorPicker intended to be a drop down
