@@ -110,6 +110,15 @@
 				<p>The license has been accepted.</p>
 			</div>
 		</div>
+
+		<h2>Intentionally Errors:</h2>
+		<div id="wizardError" dojoType="dojox.widget.WizardContainer" style="height:100px" cancelFunction="notAFunctionName">
+			<div dojoType="dojox.widget.WizardPane" doneFunction="done">
+				refs #1438? You will see errors if you press 'cancel', though the
+				'done' button does in fact show up. 
+			</div>
+		</div>
+
 	</div>
 
 </body>
