@@ -6,8 +6,9 @@
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		/* BE SURE TO NEVER FORGET IMPORTING THE GRID's CSS, or you will wonder why the hell the grid looks so strange (or even think that it doesnt work) */
-		@import "../../../dojox/grid/_grid/tundraGrid.css";
+		/* BE SURE TO NEVER FORGET IMPORTING THE GRID's CSS, or you will wonder why the 
+		   grid looks so strange (or even think that it doesnt work) */
+		@import "../../../dojox/grid/resources/tundraGrid.css";
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
@@ -22,7 +23,7 @@
 	open FireBug and you see a server request being issued, to retreive another 30 rows/items.<br />
 	<br /><br />
 	<input type="text" onkeyup="doSearch(this)" />
-	<div id="grid1" dojoType="dojox.Grid" style="height:300px; width:800px;"></div>
+	<div id="grid1" dojoType="dojox.grid.Grid" style="height:300px; width:800px;"></div>
 
 	<h2>The store and grid are "generated" and connected in HTML, filtering is done via JS</h2>
 	This store is by default sorted descending by name (not as the one above, which is ascending).
@@ -30,12 +31,12 @@
 		jsId="store2"
 		url="../tests/stores/QueryReadStore.php"
 		requestMethod="post"></div>
-	<div dojoType="dojox.grid.data.DojoData"
+	<div dojoType="dojox.grid._data.DojoData"
 		jsId="model2"
 		store="store2"
 		sortFields="[{attribute: 'capital', descending: true}]"
 		rowsPerPage="30"></div>
-	<div dojoType="dojox.Grid" id="grid2"
+	<div dojoType="dojox.grid.Grid" id="grid2"
 		model="model2"
 		structure="gridLayout"
 		style="height:300px; width:800px;"></div>
@@ -99,7 +100,7 @@
 				url:"../tests/stores/QueryReadStore.php",
 				requestMethod:"post"
 			});
-			var model = new dojox.grid.data.DojoData(null, null, {
+			var model = new dojox.grid._data.DojoData(null, null, {
 				store:store,
 				rowsPerPage:30,
 				sortFields:[{attribute: 'name', descending: false}]
