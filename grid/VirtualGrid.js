@@ -5,12 +5,12 @@ dojo.require("dojox.grid._grid.lib");
 dojo.require("dojox.grid._grid.scroller");
 dojo.require("dojox.grid._grid.view");
 dojo.require("dojox.grid._grid.views");
-dojo.require("dojox.grid._grid.layout");
+dojo.require("dojox.grid._Layout");
 dojo.require("dojox.grid._grid.rows");
 dojo.require("dojox.grid._grid.focus");
 dojo.require("dojox.grid._grid.selection");
 dojo.require("dojox.grid._grid.edit");
-dojo.require("dojox.grid._grid.rowbar");
+dojo.require("dojox.grid._RowSelector");
 dojo.require("dojox.grid._grid.publicEvents");
 
 dojo.declare('dojox.grid.VirtualGrid', 
@@ -111,6 +111,11 @@ dojo.declare('dojox.grid.VirtualGrid',
 	//		Single-click starts editing. Default is double-click
 	singleClickEdit: false,
 
+	// rowSelector: Boolean|String
+	// 		If set to true, will add a row selector view to this grid.  If set to a CSS width, will add
+	// 		a row selector of that width to this grid.
+	rowSelector: '',
+
 	// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
 	_click: null,
 	
@@ -206,7 +211,7 @@ dojo.declare('dojox.grid.VirtualGrid',
 
 	createLayout: function(){
 		// summary: Creates a new Grid layout
-		this.layout = new dojox.grid._grid.Layout(this);
+		this.layout = new dojox.grid._Layout(this);
 	},
 
 	// views
