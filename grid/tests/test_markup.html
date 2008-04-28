@@ -54,7 +54,8 @@
 		store="jsonStore"
 		rowsPerPage="20"
 		query="{ name: '*' }"
-		style="width: 600px; height: 300px;">
+		style="width: 600px; height: 300px;"
+		rowSelector="20px">
 		<colgroup span="1" noscroll="true" width="300px"></colgroup>
 		<colgroup span="4"></colgroup>
 		<thead>
@@ -77,7 +78,7 @@
 		
 		var layoutCountries = [
 			// view 0
-			{ type: 'dojox.grid._grid.GridRowView', width: '20px' },
+			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
 			{
 				cells: [
