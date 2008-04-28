@@ -19,7 +19,7 @@ dojo.declare("dojox.grid._grid.Layout", null, {
 		this.cells = [];
 		var s = this.structure = [];
 		if(!dojo.isArray(inStructure[0])){
-			if("cells" in inStructure[0]){
+			if(inStructure[0] && "cells" in inStructure[0]){
 				for(var i=0, viewDef, rows; (viewDef=inStructure[i]); i++){
 					s.push(this.addViewDef(viewDef));
 				}
