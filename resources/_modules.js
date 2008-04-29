@@ -2,16 +2,33 @@
 // this file is in place as a quick way to give summaries to all available dojox projects.
 
 dojox = {
-	// summary: A container for any Dojo Toolkit projects that are cutting-edge or experimental in nature.
-	// description: 
-	//	DojoX acts as a container for all sorts of on-the-edge ideas; it is also a breeding 
-	//	ground for objects to be eventually added to either the Dojo project or to Dijit, and 
-	//	finally can act as a place for basic extension utilities that are not commonly used in
-	//	day-to-day web pages but are essential for application development.
+	// summary:
+	//	DojoX: the home for Dojo eXtensions
+	//
+	// description:
+	//	DojoX is a collection of subprojects provided by Dojo committers and subject to
+	//	the generous licensing and policies of the [Dojo CLA](http://dojotoolkit.org/cla)
+	//	Each subproject in DojoX has its own top-level directory and a README file with
+	//	status information and project status and a stability rating (experimental, beta, stable)
+	//
+	//	Projects may or may not depend on other top-level Dojo projects, like Dojo or Dijit.
+	//	Unlike Dojo and Dijit, code is not subject to i18n and a11y restrictions and may vary
+	//	in quality (experimental code is encouraged in DojoX, but currently prohibited in Dojo
+	//	and Dijit)
+	//
+	//	DojoX projects may mature to a stable state and stay in DojoX, or on occasion
+	//	after proving themselves may migrate to Dojo Core or Dijit.  Dojo and Dijit projects
+	//	are constrained both by development resources as well as design goals, so DojoX is
+	//	a natural place to provide enhanced behavior or extend Dojo Core or Dijit primitives.
+	//	DojoX can also be an incubator for entirely new projects.
 }
 
+dojox._sql = { 
+	// summary: objects to support Dojo Offline (dojox.off)
+};
+
 dojox.charting = { 
-	// summary: Vector Data Driven graphs and charts 
+	// summary: Vector graphic, data-driven graphs and charts 
 };
 
 dojox.collections = { 
@@ -47,7 +64,7 @@ dojox.encoding = {
 };
 
 dojox.flash = { 
-	// summary: Objects to support the Flash-based storage provider (dojox.storage).
+	// summary: Utilities to embed and communicate with Flash-based objects
 };
 
 dojox.fx = {
@@ -72,13 +89,12 @@ dojox.fx["ext-dojo"] = {
 };
 
 dojox.gfx = { 
-	// summary: Cross-browser vector drawing API
+	// summary: Cross-browser vector graphics API
 	// description: 
 	//
 	//	dojox.gfx is an advanced API providing normalized vector drawing
 	//	in a variety of browsers. It has individual renderers for SVG, VML,
 	//	Canvas, and Silverlight.
-	//
 };
 
 dojox.gfx3d = { 
@@ -86,7 +102,7 @@ dojox.gfx3d = {
 };
 
 dojox.grid = { 
-	// summary: An advanced Grid project
+	// summary: An advanced Grid widget with virtual scrolling, cell editing, and much more 
 };	
 
 dojox.highlight = { 
@@ -142,10 +158,6 @@ dojox.regexp = {
 	// summary: Additional pre-made regular expressions for use
 };
 
-dojox.sql = { 
-	// summary: objects to support Dojo Offline (dojox.off)
-};
-
 dojox.storage = { 
 	// summary: Objects for mass storage within the browser.  For when cookies just aren't enough.
 };
@@ -173,18 +185,17 @@ dojox.validate = {
 };
 
 dojox.widget = { 
-	// summary: A Collection of un-categorized widgets, or code not requiring it's own package.
+	// summary: A collection of un-categorized widgets, or code not requiring it's own package.
 	// 
 	// description: 
 	// 	These are standalone widgets with varying levels of stability. Some are useful, 
 	//	some were created for demonstration purposes, and learning tools. The each maintain
 	//	their own .css file (typically dojox/widget/WidgetName/WidgetName.css)
-	//
-	//	
 };
 
-dojox.wire = { // FIXME:
-
+dojox.wire = {
+	// summary:
+	//	Declarative data binding and action tags for simplified MVC
 };
 
 dojox.xml = {
