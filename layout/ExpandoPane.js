@@ -23,17 +23,20 @@ dojo.declare("dojox.layout.ExpandoPane",
 	templatePath:dojo.moduleUrl("dojox.layout","resources/ExpandoPane.html"),
 
 	_showing:true,
-	_titleHeight: 28, // FIXME: calculate
 
 	// easeOut: String|Function
 	//		easing function used to hide pane
-	easeOut:"dojo._DefaultEasing",
+	easeOut: "dojo._DefaultEasing",
+	
 	// easeIn: String|Function
 	//		easing function use to show pane
-	easeIn:"dojo._DefaultEasing",
+	easeIn: "dojo._DefaultEasing",
+	
 	// duration: Integer
 	//		duration to run show/hide animations
 	duration:420,
+	
+	startExpanded: true, 
 	
 	postCreate:function(){
 
@@ -45,10 +48,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 		this._container = this.getParent();
 		this._closedSize = this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
 	
-		if(typeof this.easeOut == "string"){
+		if(dojo.isString(this.easeOut)){
 			this.easeOut = dojo.getObject(this.easeOut);
 		}
-		if(typeof this.easeIn == "string"){
+		if(dojo.isString(this.easeIn)){
 			this.easeIn = dojo.getObject(this.easeIn); 
 		}
 	
@@ -89,15 +92,21 @@ dojo.declare("dojox.layout.ExpandoPane",
 		this._currentSize = dojo.marginBox(this.domNode);
 		this._showSize = this._currentSize[(this._isHorizontal ? "h" : "w")];
 		this._setupAnims();
+
+		if(this.startExpanded){
+			this._showing = true;
+		}else{
+			this._hideWrapper();
+			this._hideAnim.gotoPercent(99,true);
+		}
 	},
 	
 	_afterResize: function(e){
 		var tmp = this._currentSize;
 		this._currentSize = dojo.marginBox(this.domNode);
 		var n = this._currentSize[(this._isHorizontal ? "h" : "w")] 
-		if(n> this._titleHeight){
-			if(!this._showing){
-				console.log('done being dragged:',e);			
+		if(n > this._titleHeight){
+			if(!this._showing){	
 				this._showing = !this._showing; 
 				this._showEnd();
 			}
@@ -114,7 +123,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	_setupAnims:function(){
 		// summary: create the show and hide animations
-		dojo.forEach(this._animConnects,dojo.disconnect);
+		dojo.forEach(this._animConnects, dojo.disconnect);
 		
 		var _common = {
 			node:this.domNode,
@@ -154,10 +163,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 		// summary: toggle this pane's visibility
 		if(this._showing){
 			this._hideWrapper();
-			if(this._showAnim && this._showAnim.stop()){}
+			this._showAnim && this._showAnim.stop();
 			this._hideAnim.play();
 		}else{
-			if(this._hideAnim && this._hideAnim.stop()){}
+			this._hideAnim && this._hideAnim.stop();
 			this._showAnim.play();
 		}
 		this._showing = !this._showing;
@@ -165,15 +174,15 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	_hideWrapper:function(){
 		dojo.style(this.cwrapper,{
-				"visibility":"hidden",
-				"opacity":"0",
-				"overflow":"hidden"
+				visibility:"hidden",
+				opacity:"0",
+				overflow:"hidden"
 		});
 	},
 	
 	_showEnd: function(){
 		// summary: common animation onEnd code
-		dojo.style(this.cwrapper,{ "opacity":"0", "visibility":"visible" });
+		dojo.style(this.cwrapper,{ opacity: 0, visibility:"visible" });		
 		dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
 		dojo.removeClass(this.domNode,"dojoxExpandoClosed");
 		setTimeout(dojo.hitch(this._container, "layout"), 15);
