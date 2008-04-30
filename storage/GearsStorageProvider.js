@@ -232,7 +232,7 @@ if(dojo.isGears){
 				}
 				
 				if(resultsHandler){
-					resultsHandler(dojox.storage.SUCCESS, key, null);
+					resultsHandler(dojox.storage.SUCCESS, keys, null);
 				}
 			},
 
