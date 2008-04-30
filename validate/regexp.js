@@ -281,7 +281,7 @@ dojox.regexp.ca.province = function(){
 	// summary: a regular expression to match Canadian Province Abbreviations
 	var stateRE = 
 		"AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT";
-	return "(" + statesRE + ")";
+	return "(" + stateRE + ")";
 }
 
 dojox.regexp.numberFormat = function(/*Object?*/flags){
