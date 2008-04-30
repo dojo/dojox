@@ -110,7 +110,15 @@ dojo.declare("dojox.form._HasDropDown",
 			this.connect(this.dropDownNode, "onclick", "_onDropDownMouse");
 			this.connect(this.dropDownNode, "onkeydown", "_onDropDownKeydown");
 			this.connect(this.dropDownNode, "onblur", "_onDropDownBlur");
-			this.connect(this.dropDownNode, "onkeypress", "_onKey");		
+			this.connect(this.dropDownNode, "onkeypress", "_onKey");	
+			
+			// If we have a _setStateClass function (which happens when
+			// we are a form widget), then we need to connect our open/close
+			// functions to it
+			if(this._setStateClass){
+				this.connect(this, "openDropDown", "_setStateClass");
+				this.connect(this, "closeDropDown", "_setStateClass");
+			}
 		},
 		
 		postCreate: function(){

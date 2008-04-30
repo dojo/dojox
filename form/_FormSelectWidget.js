@@ -27,36 +27,71 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 	=====*/
 
 	// options: dojox.form.__SelectOption[]
-	//		our set of options
+	//		The set of options for our select item.  Roughly corresponds to
+	//      the html <option> tag.
 	options: null,
 	
-	// _connections: Object
-	//		The connections we need to make for updating states
-	_connections: {
-		"_updateSelection": ["onChange"],
-		"_loadChildren": ["startup"]
-	},
-
-	_delayedLoad: function(){
-		// summary: 
-		//		Launches "_loadChildren" on a slight delay to improve performance
-		//		for a common case where you call "addOption" or "removeOption"
-		//		repeatedly.  That way, we only need to iterate once for rapid-fire
-		//		adds or removes.
-		if(this._pendingLoad){
-			window.clearTimeout(this._pendingLoad);
-			this._pendingLoad = null;
+	getOptions: function(/* anything */ valueOrIdx){
+		// summary:
+		//		Returns a given option (or options).
+		// valueOrIdx:
+		//		If passed in as a string, that string is used to look up the option
+		//		in the array of options - based on the value property. 
+		//		(See dojox.form.__SelectOption).
+		//
+		//		If passed in a number, then the option with the given index (0-based)
+		//		within this select will be returned.
+		//		
+		//		If passed in a dojox.form.__SelectOption, the same option will be
+		//		returned if and only if it exists within this select.
+		//		
+		//		If passed an array, then an array will be returned with each element
+		//		in the array being looked up.
+		//
+		//		If not passed a value, then the current value of the widget will
+		//		be used for the lookup
+		//
+		// returns:
+		//		The option corresponding with the given value or index.  null
+		//		is returned if any of the following are true:
+		//			- A string value is passed in which doesn't exist
+		//			- An index is passed in which is outside the bounds of the array of options
+		//			- A dojox.form.__SelectOption is passed in which is not a part of the select
+		
+		// NOTE: the compare for passing in a dojox.form.__SelectOption checks
+		//		if the value property matches - NOT if the exact option exists
+		// NOTE: if passing in an array, null elements will be placed in the returned
+		//		array when a value is not found.
+		var lookupValue = valueOrIdx || this.getValue(), 
+			opts = this.options, l = opts.length;
+		
+		if(dojo.isArray(lookupValue)){
+			return dojo.map(lookupValue, "return this.getOptions(item);", this); // dojox.form.__SelectOption[]
 		}
-		this._pendingLoad = window.setTimeout(dojo.hitch(this, "_loadChildren"), 1);
+		if(dojo.isObject(valueOrIdx) && valueOrIdx.value){ 
+			lookupValue = valueOrIdx.value;
+		}
+		if(typeof lookupValue == "string"){
+			for(var i=0; i<l; i++){
+				if(opts[i].value === lookupValue){
+					lookupValue = i;
+					break;
+				}
+			}
+		}
+		if(typeof lookupValue == "number" && lookupValue >= 0 && lookupValue < l){
+			return this.options[lookupValue] // dojox.form.__SelectOption
+		}
+		return null; // null
 	},
-
+	
 	addOption: function(/* dojox.form.__SelectOption or string, optional */ value, /* string? */ label){
 		// summary:
 		//		Adds an option to the end of the select.  If value is empty or 
 		//		missing, a separator is created instead.
 		
 		this.options.push(value.value ? value : { value:value, label:label });
-		this._delayedLoad();
+		this._loadChildren();
 	},
 	
 	removeOption: function(/* string, dojox.form.__SelectOption or number */ valueOrIdx){
@@ -67,7 +102,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 					(typeof valueOrIdx === "string" && node.value === valueOrIdx) ||
 					(valueOrIdx.value && node.value === valueOrIdx.value));
 		});
-		this._delayedLoad();
+		this._loadChildren();
 	},
 	
 	setOptionLabel: function(/*string*/ value, /*string*/ label){
@@ -78,7 +113,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 				node.label = label;
 			}
 		});
-		this._delayedLoad();
+		this._loadChildren();
 	},
 
 	setValue: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
@@ -117,11 +152,6 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		return this._lastValue;
 	},
 
-	getSelected: function(){
-		// summary: gets the selected options of this widget
-		return dojo.filter(this.options, function(i){return i.selected;});
-	},
-	
 	undo: function(){
 		// summary: restore the value to the last value passed to onChange
 		this.setValue(this._lastValueReported, false);
@@ -218,19 +248,16 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		this.inherited(arguments);
 
 		// Make our event connections for updating state
-		var i;
-		for(i in this._connections){
-			dojo.forEach(this._connections[i], function(tgt){
-				this.connect(this, tgt, i);
-			}, this);
-		}
+		this.connect(this, "onChange", "_updateSelection");
+		this.connect(this, "startup", "_loadChildren");
+		
 		this.setValue(this.value, null);
 	},
 	
 	_addOptionItem: function(/* dojox.form.__SelectOption */ option){
 		// summary:
 		//		User-overridable function which, for the given option, adds an 
-		//		to the select.  If the option doesn't have a value, then a 
+		//		item to the select.  If the option doesn't have a value, then a 
 		//		separator is added in that place.  Make sure to store the option
 		//		in the created option widget.
 	},

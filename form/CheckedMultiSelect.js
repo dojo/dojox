@@ -127,15 +127,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 		});
 	},
 
-	addSelected: function(select){
-		dojo.forEach(select.getSelected(), function(n){
-			select.removeOption(n.value);
-			this.addOption(n);
-		}, this);
-		select._updateSelection();
-		this._updateSelection();
-	},
-	
 	invertSelection: function(onChange){
 		// summary: Invert the selection
 		// onChange: Boolean

@@ -35,11 +35,6 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	//		Whether or not we have been loaded
 	_isLoaded: false,
 	
-	// _connections: Object
-	//		The connections we need to make for updating states
-	_connections: dojo.mixin(dojo.clone(dojox.form._FormSelectWidget.prototype._connections),
-		{"_setStateClass": ["openDropDown", "closeDropDown"]}),
-
 	_fillContent: function(){
 		// summary:  
 		//		Set the value to be the first, or the selected index

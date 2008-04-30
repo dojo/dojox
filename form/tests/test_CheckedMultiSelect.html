@@ -11,7 +11,7 @@
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.Form");
 			
-			var perfNum = 100;
+			var perfNum = 1;
 			var numOptions = 0;
 		
 			dojo.addOnLoad(function(){
@@ -26,7 +26,10 @@
 							t.is(["VA","WA","FL"], form.getValues().ms1);							
 						},
 						function test_addSelected(t){
-							ms1.addSelected(ms2);
+							dojo.forEach(ms2.getOptions(), function(i){
+								ms2.removeOption(i);
+								ms1.addOption(i);
+							});
 							t.is([], form.getValues().ms2);
 							ms1.invertSelection();
 							t.is(["TN","CA"], form.getValues().ms1);
