@@ -162,7 +162,7 @@ dojox.rpc.fromJson = function(/*String*/ str,/*Object?*/ schema){
 	//
 	// return:
 	//		An object, the result of the evaluation
-	root = eval('(' + str + ')'); // do the eval
+	var root = eval('(' + str + ')'); // do the eval
 	if (root){
 		return this.resolveJson(root,schema);
 	}
@@ -253,7 +253,7 @@ dojox.rpc.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/
 		
 		return dojo.toJson(it); // use the default serializer for primitives
 	}
-	var json = serialize(it,'$','');
+	var json = serialize(it,'$',''), i;
 	for (i in paths){  // cleanup the temporary path-generated ids
 		delete paths[i]._id;
 	}
