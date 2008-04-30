@@ -241,7 +241,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 		}
 
 		//	init the boxes
-		var pos=0, data=0, res={ left:0, right:0 }, i, j;
+		var pos=0, data=0, res={ left:0, right:0 }, i, j, l;
 		var box = { 
 			p: dojo.map(boxes.p.slice(0), function(item){
 				var l=k.length, j;
