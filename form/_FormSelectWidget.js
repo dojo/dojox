@@ -90,7 +90,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		Adds an option to the end of the select.  If value is empty or 
 		//		missing, a separator is created instead.
 		
-		this.options.push(value.value ? value : { value:value, label:label });
+		this.options.push(dojo.isObject(value) ? value : { value:value, label:label });
 		this._loadChildren();
 	},
 	
