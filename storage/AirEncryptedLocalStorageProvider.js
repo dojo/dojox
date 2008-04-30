@@ -153,7 +153,7 @@ if (dojo.isAIR) {
 				// try to store the value	
 				try{
 					for(var i=0;i<keys.length;i++) {
-						this.put(keys[i], value[i], null, namespace);
+						this.put(keys[i], values[i], null, namespace);
 					}
 				}catch(e){
 					// indicate we failed
@@ -165,7 +165,7 @@ if (dojo.isAIR) {
 				}
 				
 				if(resultsHandler){
-					resultsHandler(this.SUCCESS, key, null);
+					resultsHandler(this.SUCCESS, keys, null);
 				}
 			},
 
