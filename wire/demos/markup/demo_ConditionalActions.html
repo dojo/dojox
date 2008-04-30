@@ -72,7 +72,7 @@
 
 		<tr>
 			<td>
-				<b>Name:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingName" name="billingname" value=""  size="50"></div>
+				<b>Name:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingName" name="billingname" value=""  size="50" intermediateChanges="true"></div>
 			</td>
 			<td>
 				<b>Name:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="ShippingName" name="shippingname" value="" disabled="true" size="50"></div>
@@ -80,7 +80,7 @@
 		</tr>
 		<tr>
 			<td>
-				<b>Address 1:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingAddress1" name="billingaddress1" value=""  size="50"></div>
+				<b>Address 1:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingAddress1" name="billingaddress1" value=""  size="50" intermediateChanges="true"></div>
 			</td>
 			<td>
 				<b>Address 1:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="ShippingAddress1" name="shippingaddress1" value="" disabled="true" size="50"></div>
@@ -88,7 +88,7 @@
 		</tr>
 		<tr>
 			<td>
-				<b>Address 2:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingAddress2" name="billingaddress2" value=""  size="50"></div>
+				<b>Address 2:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingAddress2" name="billingaddress2" value=""  size="50" intermediateChanges="true"></div>
 			</td>
 			<td>
 				<b>Address 2:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="ShippingAddress2" name="shippingaddress2" value="" disabled="true" size="50"></div>
@@ -96,7 +96,7 @@
 		</tr>
 		<tr>
 			<td>
-				<b>City:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingCity" name="billingcity" value=""  size="50"></div>
+				<b>City:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingCity" name="billingcity" value=""  size="50" intermediateChanges="true"></div>
 			</td>
 			<td>
 				<b>City:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="ShippingCity" name="shippingcity" value="" disabled="true" size="50"></div>
@@ -112,7 +112,7 @@
 		</tr>
 		<tr>
 			<td>
-				<b>Zip code:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingZip" name="billingzip" value=""  size="50"></div>
+				<b>Zip code:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="BillingZip" name="billingzip" value=""  size="50" intermediateChanges="true"></div>
 			</td>
 			<td>
 				<b>Zip code:</b> <div class="rJustified" dojoType="dijit.form.TextBox" id="ShippingZip" name="shippingzip" value="" disabled="true" size="50"></div>
@@ -140,7 +140,7 @@
 	-->
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="useSameAddress"
-		triggerEvent="setChecked">
+		triggerEvent="onChange">
 		<!--
 			Trigger a setting of the Shipping fields' input state based on the state of the checkbox.
 		-->
@@ -157,25 +157,25 @@
 	-->
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingName"
-		triggerEvent="onkeyup">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
 		<div dojoType="dojox.wire.ml.Transfer" source="BillingName.value" target="ShippingName.value"></div>
 	</div>    
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingAddress1"
-		triggerEvent="onkeyup">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
 		<div dojoType="dojox.wire.ml.Transfer" source="BillingAddress1.value" target="ShippingAddress1.value"></div>
 	</div>    
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingAddress2"
-		triggerEvent="onkeyup">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
 		<div dojoType="dojox.wire.ml.Transfer" source="BillingAddress2.value" target="ShippingAddress2.value"></div>
 	</div>
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingCity"
-		triggerEvent="onkeyup">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
 		<div dojoType="dojox.wire.ml.Transfer" source="BillingCity.value" target="ShippingCity.value"></div>
 	</div>    
@@ -188,7 +188,7 @@
 
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="BillingZip"
-		triggerEvent="onkeyup">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="useSameAddress.checked" requiredValue="true" type="boolean"></div>        
 		<div dojoType="dojox.wire.ml.Transfer" source="BillingZip.value" target="ShippingZip.value"></div>
 	</div>    
@@ -200,7 +200,7 @@
 	-->
 	<div dojoType="dojox.wire.ml.Action"
 		trigger="useSameAddress"
-		triggerEvent="setChecked">
+		triggerEvent="onChange">
 		<div dojoType="dojox.wire.ml.ActionFilter" required="arguments[0]" requiredValue="true" type="boolean"></div>        
 
 		<!--

@@ -76,7 +76,7 @@
 						<div dojoType="dijit.form.Button" jsId="searchButton">Search Datastore</div>
 					</td>
 					<td align="right">
-						<div dojoType="dijit.form.TextBox" jsId="inputField" value="*"></div>
+						<div dojoType="dijit.form.TextBox" jsId="inputField" value="*" intermediateChanges="true"></div>
 					</td>
 				</tr>
 			</table>
@@ -112,7 +112,7 @@
 		object.  The copy of values to the search should occur on each keyup event (each keypress)
 	 -->
 	<div dojoType="dojox.wire.ml.Transfer"
-		trigger="inputField" triggerEvent="onkeyup"
+		trigger="inputField" triggerEvent="onChange"
 		source="inputField.textbox.value" 
 		target="dataHolder.request.query.name">
 	</div>
