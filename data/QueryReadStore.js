@@ -456,7 +456,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			var _errorHandler = function(errorData, requestObject){
 				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
 				if(keywordArgs.onError){
-					keywordArgs.onError.call(scope, error);
+					keywordArgs.onError.call(scope, errorData);
 				}
 			};
 			
