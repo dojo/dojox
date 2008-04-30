@@ -6,7 +6,7 @@ dojo.provide("dojox.lang.aspect.cflow");
 	
 	aop.cflow = function(/*Object*/ instance, /*String|RegExp|Array?*/ method){
 		// summary:
-		//		Returns true if the context stack contains a context for a given 
+		//		Returns true if the context stack contains a context for a given
 		//		instance that satisfies a given method name criteria.
 		//
 		// instance:
@@ -14,8 +14,8 @@ dojo.provide("dojox.lang.aspect.cflow");
 		//		Otherwise the context should belong to this instance.
 		//
 		// method:
-		//		An optional pattern to be matched against a method name. Can be a string, 
-		//		a RegExp object or an array of strings and RegExp objects. 
+		//		An optional pattern to be matched against a method name. Can be a string,
+		//		a RegExp object or an array of strings and RegExp objects.
 		//		If it is omitted, any name will satisfy the criteria.
 	
 		if(arguments.length > 1 && !(method instanceof Array)){

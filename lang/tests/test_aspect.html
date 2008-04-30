@@ -6,9 +6,18 @@
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
 		<script type="text/javascript" src="../aspect.js"></script>
+		<script type="text/javascript" src="../aspect/cflow.js"></script>
+		<script type="text/javascript" src="../aspect/tracer.js"></script>
+		<script type="text/javascript" src="../aspect/timer.js"></script>
+		<script type="text/javascript" src="../aspect/profiler.js"></script>
+		<script type="text/javascript" src="../aspect/counter.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.lang.aspect");
 			dojo.require("dojox.lang.aspect.cflow");
+			dojo.require("dojox.lang.aspect.tracer");
+			dojo.require("dojox.lang.aspect.timer");
+			dojo.require("dojox.lang.aspect.profiler");
+			dojo.require("dojox.lang.aspect.counter");
 			dojo.require("dojo.string");
 			
 			var test = function(){
@@ -40,7 +49,7 @@
 					},
 					assertSquare: function(){
 						if(this.getHeight() != this.getWidth()){
-							throw "NOT A SQUARE!";
+							throw new Error("NOT A SQUARE!");
 						}
 					}
 				});
@@ -155,7 +164,7 @@
 				
 				console.log("create rect3, and trace all its methods...");
 				var rect3 = new Rect;
-				aop.advise(rect3, /^\S/, function(context){ return new Trace(context); });
+				aop.advise(rect3, /^\S/, Trace);
 				rect3.move(100, 100);
 				rect3.makeSquare(200);
 				rect3.pointInside(150, 250);
@@ -231,9 +240,9 @@
 				var rect5 = new Rect;
 				aop.advise(rect5, /^\S/,
 					function(context){
-						return aop.cflow(this) ? 		// "this" is the advised object
-							{} :						// do nothing
-							new TraceTopLevel(context);	// log top level
+						return aop.cflow(context.instance) ? 	// the advised object
+							{} :								// do nothing
+							new TraceTopLevel(context);			// log top level
 					}
 				);
 				rect5.move(100, 100);
@@ -252,15 +261,15 @@
 				
 				var log = function(){
 					// log the rect1pointInside state
-					var method = "native";
+					var dispatcher = "native";
 					if(rect1.pointInside.target){
 						if(rect1.pointInside.advices){
-							method = "dojox.lang.aspect";
+							dispatcher = "dojox.lang.aspect";
 						}else if(rect1.pointInside._listeners){
-							method = "dojo.connect";
+							dispatcher = "dojo.connect";
 						}
 					}
-					console.log("Method: " + method);
+					console.log("Dispatcher: " + dispatcher);
 				};
 				
 				console.log("use dojo.connect() on rect1 to trace...");
@@ -275,8 +284,7 @@
 				log();
 				rect1.pointInside(150, 250);
 				console.log("Connecting the TraceAll advice.");
-				h2 = aop.advise(rect1, "pointInside", 
-					function(context){ return new TraceAll(context); });
+				h2 = aop.advise(rect1, "pointInside", TraceAll);
 				log();
 				rect1.pointInside(150, 250);
 				console.log("Disconnecting the event processor.");
@@ -288,8 +296,7 @@
 				log();
 				rect1.pointInside(150, 250);
 				console.log("Connecting the TraceAll advice.");
-				h2 = aop.advise(rect1, "pointInside", 
-					function(context){ return new TraceAll(context); });
+				h2 = aop.advise(rect1, "pointInside", TraceAll);
 				log();
 				rect1.pointInside(150, 250);
 				console.log("Connecting an event processor.");
@@ -308,12 +315,84 @@
 				log();
 				rect1.pointInside(150, 250);
 				console.log("=================================");
+				
+				console.log("trace all methods of rect1...");
+				h1 = aop.advise(rect1, /^\S/, aop.tracer(true));
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				try{
+					rect1.assertSquare();
+					rect1.width = 300; // triggering exception
+					rect1.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				aop.unadvise(h1);
+				console.log("=================================");
+				
+				console.log("count all get* methods of rect1...");
+				var counter = aop.counter();
+				h1 = aop.advise(rect1, /^get/, counter);
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				try{
+					rect1.assertSquare();
+					rect1.width = 300; // triggering exception
+					rect1.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				aop.unadvise(h1);
+				console.log("get* methods were called", counter.calls, "times, with", counter.errors, "errors.");
+				console.log("=================================");
+
+				console.log("time all methods of rect1...");
+				h1 = aop.advise(rect1, /^\S/, aop.timer());
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				try{
+					rect1.assertSquare();
+					rect1.width = 300; // triggering exception
+					rect1.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				aop.unadvise(h1);
+				console.log("=================================");
+
+				/*
+				console.log("profile all methods of rect1...");
+				h1 = aop.advise(rect1, /^\S/, aop.profiler("Profile1"));
+				rect1.move(100, 100);
+				rect1.makeSquare(200);
+				rect1.pointInside(150, 250);
+				console.log("perimeter: " + rect1.getPerimeter());
+				console.log("area: " + rect1.getArea());
+				try{
+					rect1.assertSquare();
+					rect1.width = 300; // triggering exception
+					rect1.assertSquare();
+				}catch(e){
+					// squelch
+				}
+				aop.unadvise(h1);
+				console.log("=================================");
+				*/
 			};
 			//dojo.addOnLoad(test);
 		</script>
 	</head>
 	<body>
-		<p>This test is meant to run with Firebug. Open the console.</p>
+		<p>This test is meant to run with Firebug. Open the console to see the output.</p>
 		<p><button onclick="test()">Start</button></p>
 	</body>
 </html>

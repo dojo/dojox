@@ -75,12 +75,13 @@ dojo.provide("dojox.lang.aspect");
 				for(i = advices.prev_before; i != advices; i = i.prev_before){
 					if(i.dynamic){
 						// instantiate a dynamic advice
-						context.dynAdvices.push(a = i.advice.call(this, context));
+						context.dynAdvices.push(a = new i.advice(context));
 						if(t = a.before){
 							t.apply(a, arguments);
 						}
 					}else{
-						i.advice.before.apply(i.advice, arguments);
+						t = i.advice;
+						t.before.apply(t, arguments);
 					}
 				}
 
@@ -137,27 +138,27 @@ dojo.provide("dojox.lang.aspect");
 		};
 	};
 
-	aop.advise = function(/*Object*/ obj, 
-						/*String|RegExp|Array*/ method, 
+	aop.advise = function(/*Object*/ obj,
+						/*String|RegExp|Array*/ method,
 						/*Object|Function|Array*/ advice
 						){
 		// summary:
-		//		Attach AOP-style advices to a method. 
+		//		Attach AOP-style advices to a method.
 		//
 		// description:
-		//		Attaches AOP-style advices to a method. Can attach several 
+		//		Attaches AOP-style advices to a method. Can attach several
 		//		advices at once and operate on several methods of an object.
 		//		The latter is achieved when a RegExp is specified as
 		//		a method name, or an array of strings and regular expressions
 		//		is used. In this case all functional methods that
-		//		satisfy the RegExp condition are processed. This function 
+		//		satisfy the RegExp condition are processed. This function
 		//		returns a handle, which can be used to unadvise, or null,
 		//		if advising has failed.
 		//		
-		//		This function is a convenience wrapper for 
+		//		This function is a convenience wrapper for
 		//		dojox.lang.aspect.adviseRaw().
 		//
-		// obj: 
+		// obj:
 		//		A source object for the advised function. Cannot be a DOM node.
 		//		If this object is a constructor, its prototype is advised.
 		//
@@ -167,16 +168,16 @@ dojo.provide("dojox.lang.aspect");
 		//
 		// advice:
 		//		An object, which defines advises, or a function, which
-		//		returns such object, or an array of previous items. 
-		//		The advice object can define following member functions: 
-		//		before, around, afterReturning, afterThrowing, after. 
-		//		If the function is supplied, it is called with a context 
-		//		object once per call to create a temporary advice object, which 
+		//		returns such object, or an array of previous items.
+		//		The advice object can define following member functions:
+		//		before, around, afterReturning, afterThrowing, after.
+		//		If the function is supplied, it is called with a context
+		//		object once per call to create a temporary advice object, which
 		//		is destroyed after the processing. The temporary advice object
 		//		can implement a destroy() method, if it wants to be called when
 		//		not needed.
 		
-		if(typeof obj != "object" && obj.prototype){
+		if(typeof obj != "object"){
 			obj = obj.prototype;
 		}
 
@@ -206,24 +207,24 @@ dojo.provide("dojox.lang.aspect");
 		return aop.adviseRaw(obj, methods, advice);	// Object
 	};
 	
-	aop.adviseRaw = function(/*Object*/ obj, 
-						/*Array*/ methods, 
+	aop.adviseRaw = function(/*Object*/ obj,
+						/*Array*/ methods,
 						/*Array*/ advices
 						){
 		// summary:
-		//		Attach AOP-style advices to a method. 
+		//		Attach AOP-style advices to a method.
 		//
 		// description:
-		//		Attaches AOP-style advices to a method. Can attach several 
+		//		Attaches AOP-style advices to a method. Can attach several
 		//		advices at once and operate on several methods of the object.
 		//		The latter is achieved when a RegExp is specified as
 		//		a method name. In this case all functional methods that
-		//		satisfy the RegExp condition are processed. This function 
+		//		satisfy the RegExp condition are processed. This function
 		//		returns a handle, which can be used to unadvise, or null,
 		//		if advising has failed.
 		//
-		// obj: 
-		//		A source object for the advised function. 
+		// obj:
+		//		A source object for the advised function.
 		//		Cannot be a DOM node.
 		//
 		// methods:
@@ -232,10 +233,10 @@ dojo.provide("dojox.lang.aspect");
 		// advices:
 		//		An array of advices represented by objects or functions that
 		//		return such objects on demand during the event processing.
-		//		The advice object can define following member functions: 
-		//		before, around, afterReturning, afterThrowing, after. 
-		//		If the function is supplied, it is called with a context 
-		//		object once per call to create a temporary advice object, which 
+		//		The advice object can define following member functions:
+		//		before, around, afterReturning, afterThrowing, after.
+		//		If the function is supplied, it is called with a context
+		//		object once per call to create a temporary advice object, which
 		//		is destroyed after the processing. The temporary advice object
 		//		can implement a destroy() method, if it wants to be called when
 		//		not needed.
@@ -269,7 +270,7 @@ dojo.provide("dojox.lang.aspect");
 		// summary:
 		//		Detach previously attached AOP-style advices.
 		//
-		// handle: 
+		// handle:
 		//		The object returned by dojox.lang.aspect.advise().
 		
 		if(!handle){ return; }
@@ -324,7 +325,7 @@ dojo.provide("dojox.lang.aspect");
 		//		Call the original function (or the next level around advice) in an around advice code.
 		//
 		// description:
-		//		Calls the original function (or the next level around advice). 
+		//		Calls the original function (or the next level around advice).
 		//		Accepts and passes on any number of arguments, and returns a value.
 		//		This function is valid only in the content of around calls.
 		
