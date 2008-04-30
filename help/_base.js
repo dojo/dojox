@@ -357,7 +357,7 @@ dojox.help = {
 				attributes: ["parameters"]
 			})).addCallback(this, function(datas){
 				for(var i = 0, data; data = datas[i]; i++){
-					fn = dojox.help._toStrings[data.name];
+					var fn = dojox.help._toStrings[data.name];
 					if(fn){
 						dojox.help._parse.call(fn, [data]);
 						delete dojox.help._toStrings[data.name];
