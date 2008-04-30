@@ -115,10 +115,10 @@ dojox.xml.DomParser=new (function(){
 
 	function _createTextNode(v){
 		return { 
-							nodeType:nodeTypes.TEXT,
-							nodeName:"#text",
-							nodeValue:v.replace(normalize," ").replace(egt,">").replace(elt,"<").replace(eapos,"'").replace(equot,'"').replace(eamp,"&")
-						};
+			nodeType:nodeTypes.TEXT,
+			nodeName:"#text",
+			nodeValue:v.replace(normalize," ").replace(egt,">").replace(elt,"<").replace(eapos,"'").replace(equot,'"').replace(eamp,"&")
+		};
 	}
 
 	//	attribute functions

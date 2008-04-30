@@ -79,7 +79,7 @@ dojo.declare("dojox.sketch.Toolbar", dijit.Toolbar, {
 			for(var i=0; i<this.figure.selected.length; i++){
 				var before=this.figure.selected[i].serialize();
 				this.figure.convert(this.figure.selected[i], s);
-				this.figure.history.add(ta.CommandTypes.Convert, this.figure.selected[i], before);
+				this.figure.history.add(dojox.sketch.CommandTypes.Convert, this.figure.selected[i], before);
 			}
 		}
 	}
