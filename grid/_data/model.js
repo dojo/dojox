@@ -737,7 +737,6 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		this._rowIdentities = {};
 		this.pages = [];
 		this.bop = this.eop = -1;
-		this.count = 0;
 		this.setData((keepStore?this.store:[]));
 	},
 	processError: function(error, request){
