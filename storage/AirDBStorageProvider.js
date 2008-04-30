@@ -174,9 +174,9 @@ if (dojo.isAIR) {
 					this._beginTransaction();
 					for(var i=0;i<keys.length;i++) {
 						this._sql("DELETE FROM " + this.TABLE_NAME + " WHERE namespace = :namespace AND key = :key",
-							{ ":namespace":namespace, ":key":key[i] });
+							{ ":namespace":namespace, ":key":keys[i] });
 						this._sql("INSERT INTO " + this.TABLE_NAME + " VALUES (:namespace, :key, :value)",
-						 	{ ":namespace":namespace, ":key":key[i], ":value":value });
+						 	{ ":namespace":namespace, ":key":keys[i], ":value":values[i] });
 					}
 					this._commitTransaction();
 				}catch(e){
@@ -189,7 +189,7 @@ if (dojo.isAIR) {
 				}
 				
 				if(resultsHandler){
-					resultsHandler(this.SUCCESS, key, null);
+					resultsHandler(this.SUCCESS, keys, null);
 				}
 			},
 
