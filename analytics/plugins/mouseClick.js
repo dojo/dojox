@@ -21,12 +21,12 @@ dojox.analytics.plugins.mouseClick = new (function(){
 					for(var j=0;j<props.length;j++){
 						if(e[i][props[j]]){
 							if (props[j]=="text" || props[j]=="textContent"){
-                                                                if ((e[i]["localName"]!="HTML")&&(e[i]["localName"]!="BODY")){
-                                                                        t[i][props[j]]=e[i][props[j]].substr(0,50);
-                                                                }
-                                                        }else{
-                                                                t[i][props[j]]=e[i][props[j]];
-                                                        }
+								if ((e[i]["localName"]!="HTML")&&(e[i]["localName"]!="BODY")){
+									t[i][props[j]]=e[i][props[j]].substr(0,50);
+								}
+							}else{
+								t[i][props[j]]=e[i][props[j]];
+							}
 						}
 					}
 					break;
