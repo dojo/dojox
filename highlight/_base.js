@@ -363,7 +363,7 @@ dojo.provide("dojox.highlight._base");
 		for(var key in dh.languages){
 			if(!dh.languages[key].defaultMode){ continue; }	// skip internal members
 			var highlight = new Highlighter(key, textBlock),
-				relevance = highlight.keywordCount + highlight.relevance;
+				relevance = highlight.keywordCount + highlight.relevance, relevanceMax = 0;
 			if(!result || relevance > relevanceMax){
 				relevanceMax = relevance;
 				result = highlight.result;
