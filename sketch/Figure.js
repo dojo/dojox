@@ -363,7 +363,8 @@ dojo.require("dojox.sketch.UndoStack");
 		//	convert an existing annotation to a different kind of annotation
 		var ctor=t+"Annotation";
 		if(!ta[ctor]) return;
-		var type=ann.type(), id=ann.id, label=ann.label, mode=ann.mode; tokenId=ann.tokenId;
+		var type=ann.type(), id=ann.id, label=ann.label, mode=ann.mode,
+			tokenId=ann.tokenId;
 		var start, end, control, transform;
 		switch(type){
 			case "Preexisting":
