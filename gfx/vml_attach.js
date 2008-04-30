@@ -152,7 +152,7 @@ dojo.experimental("dojox.gfx.vml_attach");
 	var attachTransform = function(object) {
 		// summary: deduces a transformation matrix from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var s = rawNode.skew, sm = s.matrix, so = s.offset;
+		var s = object.rawNode.skew, sm = s.matrix, so = s.offset;
 		object.matrix = dojox.gfx.matrix.normalize({
 			xx: sm.xtox,
 			xy: sm.ytox,
@@ -335,7 +335,7 @@ dojo.experimental("dojox.gfx.vml_attach");
 		// summary: builds a path shape from a Node.
 		// object: dojox.gfx.Shape: an VML shape
 		var shape = object.shape = dojo.clone(dojox.gfx.defaultPath),
-			p = rawNode.path.v.match(dojox.gfx.pathVmlRegExp),
+			p = object.rawNode.path.v.match(dojox.gfx.pathVmlRegExp),
 			t = [], skip = false, map = dojox.gfx.Path._pathVmlToSvgMap;
 		for(var i = 0; i < p.length; ++p){
 			var s = p[i];

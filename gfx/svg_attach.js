@@ -82,8 +82,8 @@ dojo.experimental("dojox.gfx.svg_attach");
 			object.fillStyle = null;
 			return;
 		}
-		var fillStyle = null, gradient  = dojox.gfx.svg.getRef(fill);
-		if(ref){
+		var fillStyle = null, gradient = dojox.gfx.svg.getRef(fill);
+		if(gradient){
 			switch(gradient.tagName.toLowerCase()){
 				case "lineargradient":
 					fillStyle = _getGradient(dojox.gfx.defaultLinearGradient, gradient);
@@ -110,7 +110,7 @@ dojo.experimental("dojox.gfx.svg_attach");
 			}
 		}else{
 			fillStyle = new dojo.Color(fill);
-			var opacity = rawNode.getAttribute("fill-opacity");
+			var opacity = object.rawNode.getAttribute("fill-opacity");
 			if(opacity != null){ fillStyle.a = opacity; }
 		}
 		object.fillStyle = fillStyle;
