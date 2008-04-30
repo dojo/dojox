@@ -99,7 +99,7 @@ if (dojo.isAIR) {
 			getNamespaces: function(){
 				var results = [ this.DEFAULT_NAMESPACE ];
 				var dir = air.File.applicationStorageDirectory.resolvePath(this._storagePath);
-				var files = dir.getDirectoryListing();
+				var files = dir.getDirectoryListing(), i;
 				for (i = 0; i < files.length; i++) {
 					if(files[i].isDirectory && files[i].name != this.DEFAULT_NAMESPACE){
 						results.push(files[i].name);
@@ -117,7 +117,7 @@ if (dojo.isAIR) {
 				var results = [];
 				var dir = air.File.applicationStorageDirectory.resolvePath(this._storagePath + namespace);
 				if (dir.exists && dir.isDirectory){
-					var files = dir.getDirectoryListing();
+					var files = dir.getDirectoryListing(), i;
 					for (i = 0; i < files.length; i++) {
 						results.push(files[i].name);
 					}
@@ -163,7 +163,7 @@ if (dojo.isAIR) {
 				// try to store the value	
 				try{
 					for(var i=0;i<keys.length;i++) {
-						this.put(keys[i], value[i], null, namespace);
+						this.put(keys[i], values[i], null, namespace);
 					}
 				}catch(e){
 					// indicate we failed
@@ -175,7 +175,7 @@ if (dojo.isAIR) {
 				}
 				
 				if(resultsHandler){
-					resultsHandler(this.SUCCESS, key, null);
+					resultsHandler(this.SUCCESS, keys, null);
 				}
 			},
 
