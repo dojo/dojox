@@ -888,8 +888,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		}
 		if(!url){
 			if(keywordArgs.onError){
-				// FIXME: where is postContent defined?
-				keywordArgs.onError.call(scope, new Error("No URL for saving content: " + postContent));
+				keywordArgs.onError.call(scope, new Error("No URL for saving content: " + this._getPostContent(item)));
 			}
 			return;
 		}
