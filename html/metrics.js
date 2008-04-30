@@ -49,7 +49,7 @@ dojo.provide("dojox.html.metrics");
 	
 	dhm.getCachedFontMeasurements = function(recalculate){
 		if(recalculate || !fontMeasurements){
-			fontMeasurements = b._getFontMeasurements();
+			fontMeasurements = dhm.getFontMeasurements();
 		}
 		return fontMeasurements;
 	};
