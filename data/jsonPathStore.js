@@ -887,7 +887,7 @@ dojo.declare("dojox.data.jsonPathStore",
 					var pInfo = this._references[rid];
 
 					console.log("deleteItem(): ", pInfo, pInfo.parent);
-					parentItem = pInfo.parent;
+					var parentItem = pInfo.parent;
 					var attribute = pInfo.attribute;	
 					if(parentItem && parentItem[attribute] && !dojo.isArray(parentItem[attribute])){
 						this._setDirty(parentItem);
