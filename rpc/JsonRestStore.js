@@ -185,7 +185,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	item: /* object */
 			//	attribute: /* string */
 			//	value: /* anything */
-			return getValue(item,attribute)==value;
+			return this.getValue(item,attribute)==value;
 		},
 
 

@@ -62,7 +62,7 @@ dojox.xml.DomParser=new (function(){
 				if(all[id]){ delete all[id]; }
 			};
 
-			this.byId=this.getElementById=function(id){ return keys[id]; };
+			this.byId=this.getElementById=function(id){ return all[id]; };
 			this.byName=this.getElementsByTagName=byName;
 			this.byNameNS=this.getElementsByTagNameNS=byNameNS;
 			this.childrenByName=childrenByName;
