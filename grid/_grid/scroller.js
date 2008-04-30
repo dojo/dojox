@@ -60,7 +60,7 @@ dojo.declare('dojox.grid._grid.ScrollerBase', null, {
 		this.invalidateNodes();
 		this.rowCount = inRowCount;
 		// update page count, adjust document height
-		oldPageCount = this.pageCount;
+		var oldPageCount = this.pageCount;
 		this.pageCount = Math.ceil(this.rowCount / this.rowsPerPage);
 		if(this.pageCount < oldPageCount){
 			for(var i=oldPageCount-1; i>=this.pageCount; i--){

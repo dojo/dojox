@@ -21,6 +21,7 @@ dojo.mixin(dojox.grid,{
 	},
 	
 	getTd: function(rowOwner, rowIndex, cellIndex){
+		// FIXME: what is inTable?
 		return (dojox.grid.getTr(inTable, rowIndex)||0)[cellIndex];
 	},
 	

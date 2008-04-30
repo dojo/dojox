@@ -366,7 +366,7 @@ dojo.declare('dojox.grid.VirtualGrid',
 	adaptWidth: function() {
 		// private: sets width and position for views and update grid width if necessary
 		var
-			w = this.autoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w);
+			w = this.autoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w),
 			vw = this.views.arrange(1, w);
 		this.views.onEach("adaptWidth");
 		if (this.autoWidth)
@@ -454,7 +454,7 @@ dojo.declare('dojox.grid.VirtualGrid',
 		// summary:
 		//		Use after calling beginUpdate to render any changes made to rows.
 		this.updating = false;
-		var i = this.invalidated;
+		var i = this.invalidated, r;
 		if(i.all){
 			this.update();
 		}else if(i.rowCount != undefined){
