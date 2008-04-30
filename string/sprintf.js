@@ -283,7 +283,7 @@ dojo.extend(dojox.string.sprintf.Formatter, {
 			if(token.alternative){
 				token.arg = '0x' + token.arg;
 			}
-			toke.art = token.toUpper ? token.arg.toUpperCase() : token.arg.toLowerCase();
+			token.arg = token.toUpper ? token.arg.toUpperCase() : token.arg.toLowerCase();
 		}
 		if(token.base == 8){
 			if(token.alternative && token.arg.charAt(0) != '0'){
