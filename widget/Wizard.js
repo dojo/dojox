@@ -50,6 +50,7 @@ dojo.declare(
 		this.inherited(arguments);
 		var labels = dojo.mixin({cancel: dojo.i18n.getLocalization("dijit", "common", this.lang).buttonCancel},
 			dojo.i18n.getLocalization("dojox.widget", "Wizard", this.lang));
+		var prop;
 		for(prop in labels){
 			if(!this[prop + "ButtonLabel"]){
 				this[prop + "ButtonLabel"] = labels[prop];
