@@ -369,6 +369,7 @@ dojo.declare("dojox.data.QueryReadStore",
 					this._itemsByIdentity = {};
 					if(identifier){
 						this._identifier = identifier;
+						var i;
 						for(i = 0; i < this._items.length; ++i){
 							var item = this._items[i].i;
 							var identity = item[identifier];
