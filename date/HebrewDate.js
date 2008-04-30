@@ -531,7 +531,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 				//FIXME: redeclaration of mName
 				var mName = mName.replace(/\D{3}\s/,'');
 				mName = mName.toString();
-				this.Month = getIndex(dojox.date.HebrewDate.months,mName);
+				this.Month = this._getIndex(dojox.date.HebrewDate.months,mName);
 				var sD = dayYear.split(/\s/);
 				this.Date = sD[0];
 				this.Year = sD[1];
@@ -555,7 +555,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 					dayYear = dayYear.toString();
 					var mName = mD.replace(/\s\d{1,2}\s\d{4}/,'');
 					mName = mName.toString();
-					this.Month = getIndex(dojox.date.HebrewDate.months,mName);
+					this.Month = this._getIndex(dojox.date.HebrewDate.months,mName);
 					var sD = dayYear.split(/\s/);
 					this.Date = sD[0];
 					this.Year = sD[1];
@@ -605,7 +605,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 	},
 			
 	_getIndex:function(arr,str){
-
+		var i;
 		for(i=0;i<arr.length;i++){
 			if(arr[i]==str){
 				return i;

@@ -465,6 +465,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 	_getIndex:function(arr,str){
 		//summary: returns the String str index in the array arr
+		var i;
 		for(i=0;i<arr.length;i++){
 			if(arr[i]==str){
 				return i;
@@ -546,8 +547,8 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		yearday = wjd -this._gregorian_to_jd(year, 1, 1);
 		leapadj = ((wjd < this._gregorian_to_jd(year, 3, 1)) ? 0 :
 					(this._leap_gregorian(year) ? 1 : 2));
-		month = Math.floor((((yearday + leapadj) * 12) + 373) / 367);
-		day = (wjd - this._gregorian_to_jd(year, month, 1)) + 1;
+		var month = Math.floor((((yearday + leapadj) * 12) + 373) / 367);
+		var day = (wjd - this._gregorian_to_jd(year, month, 1)) + 1;
 
 		return new Date(year, month-1, day);
 	},
