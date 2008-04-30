@@ -390,7 +390,7 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 
 			// rationale for this block:
 			// if containerNode/domNode is a table derivate tag, some browsers dont allow innerHTML on those
-			var node = (this.containerNode || this.domNode), pre = post = '', walk = 0;
+			var node = (this.containerNode || this.domNode), post, pre = post = '', walk = 0;
 			switch(node.nodeName.toLowerCase()){
 				case 'tr':
 					pre = '<tr>'; post = '</tr>';
