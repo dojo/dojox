@@ -53,8 +53,8 @@ dojo.require("dojo._base.xhr");
 				// precedent by order of loading 
 				return true; 
 			},
-			function(){
-				// FIXME: where does "args" come from inside this function!!??!
+			function(method, args){
+				// FIXME: where does "hasBody" come from inside this function!!??!
 				args.url = proxyUrl + encodeURIComponent(args.url);
 				return plainXhr.call(dojo, method, args, hasBody);
 			});
