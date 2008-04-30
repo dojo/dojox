@@ -63,7 +63,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		//		See dojo.data.api.Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
-		i = dojo.indexOf(item.attributes, attribute);
+		var i = dojo.indexOf(item.attributes, attribute);
 		if(i !== -1){
 			return item.values[i];
 		}
@@ -124,7 +124,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		//		See dojo.data.api.Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
-		i = dojo.indexOf(item.attributes, attribute);
+		var i = dojo.indexOf(item.attributes, attribute);
 		if(i !== -1){
 			return [item.values[i]];	// Array
 		}
@@ -162,7 +162,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		}
 		
 		if(request.onItem || request.onComplete){
-			response = request._dataResponse;
+			var response = request._dataResponse;
 
 			if (!response.length){
 				request.onError.call(scope, 
@@ -172,7 +172,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 			}else if(request.query != 'record count'){
 				//If this was not a record count request, the first element returned will contain
 				//the field names.
-				field_names = response.shift();
+				var field_names = response.shift();
 				
 				var items = [];
 				for(var i = 0; i < response.length; ++i){
