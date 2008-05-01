@@ -173,12 +173,12 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		return this._isLoaded;
 	},
 	
-	loadDropDown: function(){
+	loadDropDown: function(/* Function */ loadCallback){
 		// summary: populates the menu
 		this._loadChildren();
 		dojo.addClass(this.dropDown.domNode, this.baseClass + "Menu");
 		this._isLoaded = true;
-		this.openDropDown();
+		loadCallback();
 	},
 	
 	setAttribute: function(/*string*/ attr, /* anything */ value){

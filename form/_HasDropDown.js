@@ -168,10 +168,10 @@ dojo.declare("dojox.form._HasDropDown",
 			return true;
 		},
 		
-		loadDropDown: function(){
+		loadDropDown: function(/* Function */ loadCallback){
 			// summary: loads the data for the dropdown, and at some point, calls
-			//		openDropDown
-			this.openDropDown();
+			//		the given callback
+			loadCallback();
 		},
 
 		toggleDropDown: function(){
@@ -183,7 +183,7 @@ dojo.declare("dojox.form._HasDropDown",
 			if(!this._opened){
 				// If we aren't loaded, load it first so there isn't a flicker
 				if(!this.isLoaded()){
-					this.loadDropDown();
+					this.loadDropDown(dojo.hitch(this, "openDropDown"));
 					return;
 				}else{
 					this.openDropDown();
