@@ -183,7 +183,7 @@ dojo.declare("dojox.form._HasDropDown",
 			if(!this._opened){
 				// If we aren't loaded, load it first so there isn't a flicker
 				if(!this.isLoaded()){
-					this.loadDropDown(dojo.hitch(this, "openDropDown"));
+					this.loadDropDown();
 					return;
 				}else{
 					this.openDropDown();
