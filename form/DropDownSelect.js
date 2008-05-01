@@ -48,25 +48,30 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		this.dropDown = new dijit.Menu();
 	},
 
+	_getMenuItemForOption: function(/* dojox.form.__SelectOption */ option){
+		// summary:
+		//		For the given option, return the menu item that should be
+		//		used to display it.  This can be overridden as needed
+		if(!option.value){
+			// We are a separator (no label set for it)
+			return new dijit.MenuSeparator();
+		}else{
+			// Just a regular menu option
+			var click = dojo.hitch(this, "setValue", option);
+			return new dijit.MenuItem({
+				option: option,
+				label: option.label,
+				onClick: click
+			});
+		}
+	},
+
 	_addOptionItem: function(/* dojox.form.__SelectOption */ option){
 		// summary:
 		//		For the given option, add a option to our dropdown
 		//		If the option doesn't have a value, then a separator is added 
 		//		in that place.
-		var menu = this.dropDown;
-		if(!option.value){
-			// We are a separator (no label set for it)
-			menu.addChild(new dijit.MenuSeparator());
-		}else{
-			// Just a regular menu option
-			var click = dojo.hitch(this, "setValue", option);
-			var mi = new dijit.MenuItem({
-				option: option,
-				label: option.label,
-				onClick: click
-			});
-			menu.addChild(mi);
-		}
+		this.dropDown.addChild(this._getMenuItemForOption(option));
 	},
 
 	_getChildren: function(){ return this.dropDown.getChildren(); },

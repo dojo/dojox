@@ -26,7 +26,7 @@
 							t.is(["VA","WA","FL"], form.getValues().ms1);							
 						},
 						function test_addSelected(t){
-							dojo.forEach(ms2.getOptions(), function(i){
+							dojo.forEach(ms2.getOptions(ms2.getValue()), function(i){
 								ms2.removeOption(i);
 								ms1.addOption(i);
 							});

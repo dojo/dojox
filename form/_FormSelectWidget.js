@@ -48,8 +48,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		If passed an array, then an array will be returned with each element
 		//		in the array being looked up.
 		//
-		//		If not passed a value, then the current value of the widget will
-		//		be used for the lookup
+		//		If not passed a value, then all options will be returned
 		//
 		// returns:
 		//		The option corresponding with the given value or index.  null
@@ -62,9 +61,11 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		if the value property matches - NOT if the exact option exists
 		// NOTE: if passing in an array, null elements will be placed in the returned
 		//		array when a value is not found.
-		var lookupValue = valueOrIdx || this.getValue(), 
-			opts = this.options, l = opts.length;
-		
+		var lookupValue = valueOrIdx, opts = this.options || [], l = opts.length;
+
+		if(!lookupValue){
+			return opts; // dojox.form.__SelectOption[]
+		}
 		if(dojo.isArray(lookupValue)){
 			return dojo.map(lookupValue, "return this.getOptions(item);", this); // dojox.form.__SelectOption[]
 		}
@@ -119,12 +120,13 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 	setValue: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
 		// summary: set the value of the widget.
 		// If a string is passed, then we set our value from looking it up.
+		var opts = this.getOptions() || [];
 		if(!dojo.isArray(newValue)){
 			newValue = [newValue];
 		}
 		dojo.forEach(newValue, function(i, idx){
 			if(typeof i === "string"){
-				newValue[idx] = dojo.filter(this.options, function(node){
+				newValue[idx] = dojo.filter(opts, function(node){
 					return node.value === i;
 				})[0] || {value: "", label: ""};
 			}
@@ -132,10 +134,10 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		
 		// Make sure some sane default is set
 		newValue = dojo.filter(newValue, function(i){ return i && i.value; });
-		if(!this._multiValue && (!newValue[0] || !newValue[0].value) && this.options.length){
-			newValue[0] = this.options[0];
+		if(!this._multiValue && (!newValue[0] || !newValue[0].value) && opts.length){
+			newValue[0] = opts[0];
 		}
-		dojo.forEach(this.options, function(i){
+		dojo.forEach(opts, function(i){
 			i.selected = dojo.some(newValue, function(v){ return v.value === i.value; });
 		});
 		var val = dojo.map(newValue, function(i){ return i.value; }),
@@ -190,20 +192,24 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 	},
 	
 	_getValueFromOpts: function(){
-		if(!this._multiValue && this.options.length){
+		// summary:
+		//		Returns the value of the widget by reading the options for
+		//		the selected flag
+		var opts = this.getOptions() || [];
+		if(!this._multiValue && opts.length){
 			// Mirror what a select does - choose the first one
-			var opt = dojo.filter(this.options, function(i){
+			var opt = dojo.filter(opts, function(i){
 				return i.selected;
 			})[0];
 			if(opt && opt.value){
 				return opt.value
 			}else{
-				this.options[0].selected = true;
-				return this.options[0].value;
+				opts[0].selected = true;
+				return opts[0].value;
 			}
 		}else if(this._multiValue){
 			// Set value to be the sum of all selected
-			return dojo.map(dojo.filter(this.options, function(i){
+			return dojo.map(dojo.filter(opts, function(i){
 				return i.selected;
 			}), function(i){
 				return i.value;
