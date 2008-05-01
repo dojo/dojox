@@ -128,7 +128,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		the children will only be loaded once.
 		if(!dojo.isArray(newOption)){ newOption = [newOption]; }
 		dojo.forEach(newOption, function(i){
-			var oldOpt = this.getOption(i), k;
+			var oldOpt = this.getOptions(i), k;
 			if(oldOpt){
 				for(k in i){ oldOpt[k] = i[k]; }
 			}
