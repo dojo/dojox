@@ -47,7 +47,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 		// summary: add our extra blur listeners
 		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 	},
 
 	_onFocus: function(){
@@ -126,6 +126,9 @@ dojo.declare("dojox.widget.FileInputAuto",
 		dojo.disconnect(this._blurListener);
 		dojo.disconnect(this._focusListener);
 
+		//remove the form used to send the request
+		dojo.body().removeChild(ioArgs.args.form);
+
 		this.onComplete(data,ioArgs,this);
 	},
 
@@ -136,7 +139,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 		dojo.disconnect(this._blurListener);
 		dojo.disconnect(this._focusListener);
 
-		this.inherited("_onClick",arguments);
+		this.inherited(arguments);
 
 		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
@@ -159,7 +162,7 @@ dojo.declare("dojox.widget.FileInputBlind",
 	
 	startup: function(){
 		// summary: hide our fileInput input field
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 		this._off = dojo.style(this.inputNode,"width");
 		this.inputNode.style.display = "none";
 		this._fixPosition();
@@ -176,7 +179,7 @@ dojo.declare("dojox.widget.FileInputBlind",
 
 	_onClick: function(e){
 		// summary: onclick, we need to reposition our newly created input type="file"
-		this.inherited("_onClick",arguments);
+		this.inherited(arguments);
 		this._fixPosition(); 
 	}
 });
