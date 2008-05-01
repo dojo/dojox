@@ -61,7 +61,8 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			return new dijit.MenuItem({
 				option: option,
 				label: option.label,
-				onClick: click
+				onClick: click,
+				disabled: option.disabled || false,
 			});
 		}
 	},

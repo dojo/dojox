@@ -20,9 +20,12 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		The label for our option.  It can contain html tags.
 		//  selected: Boolean
 		//		Whether or not we are a selected option
+		//	disabled: Boolean
+		//		Whether or not this specific option is disabled
 		this.value = value;
 		this.label = label;
 		this.selected = selected;
+		this.disabled = disabled;
 	}
 	=====*/
 
@@ -252,11 +255,12 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 			opts = this.options = this.srcNodeRef ? dojo.query(">", 
 						this.srcNodeRef).map(function(node){
 							if(node.getAttribute("type") === "separator"){
-								return { value: "", label: "", selected: false };
+								return { value: "", label: "", selected: false, disabled: false };
 							}
 							return { value: node.getAttribute("value"),
 										label: String(node.innerHTML),
-										selected: node.selected || false };
+										selected: node.getAttribute("selected") || false,
+										disabled: node.getAttribute("disabled") || false };
 						}, this) : [];
 		}
 		if(!this.value){
