@@ -67,8 +67,10 @@ dojo.declare("dojox.widget.FileInputAuto",
 	setMessage: function(/*String*/title){
 		// summary: set the text of the progressbar
 		
-		// FIXME: this throws errors in IE?!?!?!? egads.		
-		if(!dojo.isIE){ this.overlay.innerHTML = title;	}
+		// innerHTML throws errors in IE! so use DOM manipulation instead
+		//this.overlay.innerHTML = title;
+		this.overlay.removeChild(this.overlay.firstChild);
+		this.overlay.appendChild(document.createTextNode(title));
 	},
 	
 	_sendFile: function(/* Event */e){
@@ -107,10 +109,9 @@ dojo.declare("dojox.widget.FileInputAuto",
 
 	_handleSend: function(data,ioArgs){
 		// summary: The callback to toggle the progressbar, and fire the user-defined callback
-		if(!dojo.isIE){
-			// otherwise, this throws errors in ie? FIXME:
-			this.overlay.innerHTML = "";
-		}
+
+		// innerHTML throws errors in IE! so use DOM manipulation instead
+		this.overlay.removeChild(this.overlay.firstChild);
 		
 		this._sent = true;
 		dojo.style(this.overlay,"opacity","0");
