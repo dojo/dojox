@@ -162,7 +162,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			while(t && !(menuItem = dijit.byNode(t))){
 				t = t.parentNode;
 			}
-			if(menuItem && menuItem.getParent){
+			if(menuItem && menuItem.onClick && menuItem.getParent){
 				menuItem.getParent().onItemClick(menuItem, e);
 			}
 		}

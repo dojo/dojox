@@ -11,7 +11,7 @@
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.Form");
 			
-			var perfNum = 1;
+			var perfNum = 100;
 			var numOptions = 0;
 		
 			dojo.addOnLoad(function(){
@@ -35,14 +35,14 @@
 							t.is(["TN","CA"], form.getValues().ms1);
 						},
 						function test_performance(t){
-							var i, start = new Date(), add, del;
+							var i, start, add, del, opts = [];
 							for(i = 0; i < perfNum; i++){
-								ms3.addOption(i + "", "Option " + (i + 1));
+								opts.push({value: i + "", label: "Option " + (i + 1)});
 							}
+							start = new Date();
+							ms3.addOption(opts);
 							add = new Date();
-							for(i = 0; i < perfNum; i++){
-								ms3.removeOption(i + "");
-							}
+							ms3.removeOption(opts);
 							del = new Date();
 							console.log("Create (" + perfNum + "): " + (add.getTime() - start.getTime()) +
 										"ms, Remove: " + (del.getTime() - add.getTime()) + "ms");
@@ -133,14 +133,14 @@
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					numOptions++;
-					ms3.addOption(numOptions + "", "Option " + (numOptions));
+					ms3.addOption({value: numOptions + "", label: "Option " + (numOptions)});
 				</script>
 				Add Check Option
 			</button>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					numOptions++;
-					ss3.addOption(numOptions + "", "Option " + (numOptions));
+					ss3.addOption({value: numOptions + "", label: "Option " + (numOptions)});
 				</script>
 				Add Radio Option
 			</button>

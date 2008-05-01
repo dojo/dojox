@@ -86,34 +86,53 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		return null; // null
 	},
 	
-	addOption: function(/* dojox.form.__SelectOption or string, optional */ value, /* string? */ label){
-		// summary:
-		//		Adds an option to the end of the select.  If value is empty or 
-		//		missing, a separator is created instead.
-		
-		this.options.push(dojo.isObject(value) ? value : { value:value, label:label });
-		this._loadChildren();
-	},
-	
-	removeOption: function(/* string, dojox.form.__SelectOption or number */ valueOrIdx){
-		// summary:
-		//		Removes the given option
-		this.options = dojo.filter(this.options, function(node, idx){
-			return !((typeof valueOrIdx === "number" && idx === valueOrIdx) ||
-					(typeof valueOrIdx === "string" && node.value === valueOrIdx) ||
-					(valueOrIdx.value && node.value === valueOrIdx.value));
-		});
-		this._loadChildren();
-	},
-	
-	setOptionLabel: function(/*string*/ value, /*string*/ label){
-		// summary:
-		//		Sets the label for the given option.
-		dojo.forEach(this.options, function(node){
-			if(node.value === value){
-				node.label = label;
+	addOption: function(/* dojox.form.__SelectOption, dojox.form.__SelectOption[] */ option){
+		//	summary:
+		//		Adds an option or options to the end of the select.  If value
+		//		of the option is empty or missing, a separator is created instead.
+		//		Passing in an array of options will yeild slightly better performance
+		//		since the children are only loaded once.
+		if(!dojo.isArray(option)){ option = [option]; }
+		dojo.forEach(option, function(i){
+			if(i && dojo.isObject(i)){
+				this.options.push(i);
 			}
-		});
+		}, this);
+		this._loadChildren();
+	},
+	
+	removeOption: function(/* string, dojox.form.__SelectOption, number, or array */ valueOrIdx){
+		// summary:
+		//		Removes the given option or options.  You can remove by string 
+		//		(in which case the value is removed), number (in which case the
+		//		index in the options array is removed), or select option (in 
+		//		which case, the select option with a matching value is removed).
+		//		You can also pass in an array of those values for a slightly
+		//		better performance since the children are only loaded once.
+		if(!dojo.isArray(valueOrIdx)){ valueOrIdx = [valueOrIdx]; }
+		dojo.forEach(valueOrIdx, function(i){
+			this.options = dojo.filter(this.options, function(node, idx){
+				return !((typeof i === "number" && idx === i) ||
+						(typeof i === "string" && node.value === i) ||
+						(i.value && node.value === i.value));
+			});
+		}, this);
+		this._loadChildren();
+	},
+	
+	updateOption: function(/* dojox.form.__SelectOption, dojox.form.__SelectOption[] */ newOption){
+		// summary:
+		//		Updates the values of the given option.  The option to update
+		//		is matched based on the value of the entered option.  Passing
+		//		in an array of new options will yeild better performance since
+		//		the children will only be loaded once.
+		if(!dojo.isArray(newOption)){ newOption = [newOption]; }
+		dojo.forEach(newOption, function(i){
+			var oldOpt = this.getOption(i), k;
+			if(oldOpt){
+				for(k in i){ oldOpt[k] = i[k]; }
+			}
+		}, this);
 		this._loadChildren();
 	},
 

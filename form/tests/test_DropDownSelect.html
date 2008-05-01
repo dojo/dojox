@@ -13,7 +13,7 @@
 			
 			var numOptions = 0;
 			var numChanges = 0;
-			var perfNum = 1;
+			var perfNum = 100;
 			
 			dojo.addOnLoad(function(){
 				dojo.connect(s1, "onChange", function(val){
@@ -31,14 +31,14 @@
 							t.is(2, numChanges);
 						},
 						function test_performance(t){
-							var i, start = new Date(), add, del;
+							var i, start, add, del, opts = [];
 							for(i = 0; i < perfNum; i++){
-								s6.addOption(i + "", "Option " + (i + 1));
+								opts.push({value: i + "", label: "Option " + (i + 1)});
 							}
+							start = new Date();
+							s6.addOption(opts);
 							add = new Date();
-							for(i = 0; i < perfNum; i++){
-								s6.removeOption(i + "");
-							}
+							s6.removeOption(opts);
 							del = new Date();
 							console.log("Create (" + perfNum + "): " + (add.getTime() - start.getTime()) +
 										"ms, Remove: " + (del.getTime() - add.getTime()) + "ms");
@@ -122,7 +122,7 @@
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					numOptions++;
-					s6.addOption(numOptions + "", "Option " + numOptions);
+					s6.addOption({value: numOptions + "", label: "Option " + numOptions});
 				</script>
 				Add Option
 			</button>
