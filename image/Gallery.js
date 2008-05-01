@@ -72,6 +72,7 @@ dojo.declare("dojox.image.Gallery",
 		this.thumbPicker = new dojox.image.ThumbnailPicker({
 			linkAttr: this.linkAttr,
 			imageLargeAttr: this.imageLargeAttr,
+			imageThumbAttr: this.imageThumbAttr,
 			titleAttr: this.titleAttr,
 			useLoadNotifier: true,
 			size: this.imageWidth

@@ -8,7 +8,7 @@ Project state: stable
 -------------------------------------------------------------------------------
 Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
-	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore)
+	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore, GoogleSeachStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 	Russell Jones (KeyValueStore) (CLA)
@@ -87,3 +87,13 @@ Additional Notes:
 	file format.
 
 	dojox.data.SnapLogicStore - Store to interface to SnapLogic data services.
+        
+	dojox.data.GoogleSearchStore - Store to interface Google's AJAX search services.  
+		There are many subclasses of this store for particular types of searches:
+		dojox.data.GoogleWebSearchStore
+		dojox.data.GoogleBlogSearchStore
+		dojox.data.GoogleLocalSearchStore
+		dojox.data.GoogleVideoSearchStore
+		dojox.data.GoogleNewsSearchStore
+		dojox.data.GoogleBookSearchStore
+		dojox.data.GoogleImageSearchStore

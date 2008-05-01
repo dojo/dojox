@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Testing the Image Gallery</title>
+
+	<style type="text/css">
+		@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../resources/image.css";
+	</style>
+
+
+	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:true, isDebug: true, defaultTestTheme:'soria'"></script>
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="../ThumbnailPicker.js"></script>
+	<script type="text/javascript" src="../SlideShow.js"></script>
+	<script type="text/javascript" src="../Gallery.js"></script>
+	<script type="text/javascript" src="../../data/GoogleSearchStore.js"></script>
+
+	<script type="text/javascript">
+		// dojo.require("dojox.image.Gallery");
+		dojo.require("dojox.data.GoogleSearchStore");
+		dojo.require("dojo.parser");	// find widgets
+
+		dojo.addOnLoad(function(){
+			var googleImageStore = new dojox.data.GoogleImageSearchStore();
+			var req = {
+				query: {
+					text: "kinsale"
+				},
+				count: 32
+			};
+			dijit.byId('gallery1').setDataStore(googleImageStore, req);
+		});
+	</script>
+</head>
+<body>
+	<h1 class="testTitle">dojox.image.Gallery</h1>
+
+	<h2>From GoogleImageSearchStore:</h2>
+	<div id="gallery1" dojoType="dojox.image.Gallery" imageWidth="700" imageHeight="500" 
+		imageThumbAttr="tbUrl" imageLargeAttr="unescapedUrl" titleAttr="titleNoFormatting"></div>
+
+</body>
+</html>
