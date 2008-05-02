@@ -9,19 +9,29 @@ dojo.provide("dojox.string.Builder");
 		if(str){ this.append(str); }
 	};
 	
-	/*
-		A note: it looks like Firefox has some issues iterating over
-		the arguments object, so if you are going use append, you 
-		should do all you can to pass a single argument for best
-		results.
-	 */
 	var m = {
 	 	append: function(/*String*/s){ 
 			// summary: Append all arguments to the end of the buffer 
 			if(arguments.length>1){
-				//	try a different kind of optimization
-				var tmp="";
-				switch(arguments.length){
+				/*  
+					This is a loop unroll designed specifically for Firefox;
+					it would seem that static index access on an Arguments
+					object is a LOT faster than doing dynamic index access.
+					Therefore, we create a buffer string and take advantage
+					of JS's switch fallthrough.  The peformance of this method
+					comes very close to straight up string concatenation (+=).
+
+					If the arguments object length is greater than 9, we fall
+					back to standard dynamic access.
+
+					This optimization seems to have no real effect on either
+					Safari or Opera, so we just use it for all.
+
+					Loop unroll per suggestion from Kris Zyp, implemented by 
+					Tom Trenka.
+				 */
+				var tmp="", l=arguments.length;
+				switch(l){
 					case 9: tmp=arguments[8]+tmp;
 					case 8: tmp=arguments[7]+tmp;
 					case 7: tmp=arguments[6]+tmp;
