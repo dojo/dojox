@@ -66,7 +66,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		array when a value is not found.
 		var lookupValue = valueOrIdx, opts = this.options || [], l = opts.length;
 
-		if(!lookupValue){
+		if(lookupValue === undefined){
 			return opts; // dojox.form.__SelectOption[]
 		}
 		if(dojo.isArray(lookupValue)){
@@ -113,12 +113,12 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		You can also pass in an array of those values for a slightly
 		//		better performance since the children are only loaded once.
 		if(!dojo.isArray(valueOrIdx)){ valueOrIdx = [valueOrIdx]; }
-		dojo.forEach(valueOrIdx, function(i){
+		var oldOpts = this.getOptions(valueOrIdx);
+		dojo.forEach(oldOpts, function(i){
 			this.options = dojo.filter(this.options, function(node, idx){
-				return !((typeof i === "number" && idx === i) ||
-						(typeof i === "string" && node.value === i) ||
-						(i.value && node.value === i.value));
+				return (node.value !== i.value);
 			});
+			this._removeOptionItem(i);
 		}, this);
 		this._loadChildren();
 	},
@@ -289,6 +289,12 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		//		item to the select.  If the option doesn't have a value, then a 
 		//		separator is added in that place.  Make sure to store the option
 		//		in the created option widget.
+	},
+	
+	_removeOptionItem: function(/* dojox.form.__SelectOption */ option){
+		// summary:
+		//		User-overridable function which, for the given option, removes
+		//		its item from the select.
 	},
 	
 	_setDisplay: function(/*String or String[]*/ newDisplay){
