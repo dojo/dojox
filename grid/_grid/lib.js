@@ -14,18 +14,6 @@ dojo.mixin(dojox.grid,{
 	},
 	
 	// from lib.js
-	setStyleText: function(inNode, inStyleText){
-		if(inNode.style.cssText == undefined){
-			inNode.setAttribute("style", inStyleText);
-		}else{
-			inNode.style.cssText = inStyleText;
-		}
-	},
-	
-	getStyleText: function(inNode, inStyleText){
-		return (inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText);
-	},
-	
 	setStyle: function(inElement, inStyle, inValue){
 		if(inElement && inElement.style[inStyle] != inValue){
 			inElement.style[inStyle] = inValue;
@@ -53,20 +41,6 @@ dojo.mixin(dojox.grid,{
 		inNode = dojo.byId(inNode);
 		inNode && inNode.parentNode && inNode.parentNode.removeChild(inNode);
 		return inNode;
-	},
-	
-	// needed? dojo has _getProp
-	getRef: function(name, create, context){
-		var obj=context||dojo.global, parts=name.split("."), prop=parts.pop();
-		for(var i=0, p; obj&&(p=parts[i]); i++){
-			obj = (p in obj ? obj[p] : (create ? obj[p]={} : undefined));
-		}
-		return { obj: obj, prop: prop }; 
-	},
-	
-	getProp: function(name, create, context){
-		var ref = dojox.grid.getRef(name, create, context);
-		return (ref.obj)&&(ref.prop)&&(ref.prop in ref.obj ? ref.obj[ref.prop] : (create ? ref.obj[ref.prop]={} : undefined));
 	},
 	
 	indexInParent: function(inNode){
@@ -150,28 +124,3 @@ dojo.mixin(dojox.grid,{
 		inArray[inJ] = cache;
 	}
 });
-
-dojox.grid.jobs = {
-
-	cancel: function(inHandle){
-		if(inHandle){
-			window.clearTimeout(inHandle);
-		}
-	},
-
-	jobs: [],
-
-	job: function(inName, inDelay, inJob){
-		dojox.grid.jobs.cancelJob(inName);
-		var job = function(){
-			delete dojox.grid.jobs.jobs[inName];
-			inJob();
-		}
-		dojox.grid.jobs.jobs[inName] = setTimeout(job, inDelay);
-	},
-
-	cancelJob: function(inName){
-		dojox.grid.jobs.cancel(dojox.grid.jobs.jobs[inName]);
-	}
-
-}

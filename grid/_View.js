@@ -36,6 +36,10 @@ dojo.require("dojox.grid._grid.drag");
 		var name = inTagName.toUpperCase();
 		return function(node){ return node.tagName != name; };
 	};
+
+	var getStyleText = function(inNode, inStyleText){
+		return (inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText);
+	};
 	
 
 	// base class for generating markup for the views
@@ -762,7 +766,7 @@ dojo.require("dojox.grid._grid.drag");
 
 		// styling
 		styleRow: function(inRowIndex, inRowNode){
-			inRowNode._style = dojox.grid.getStyleText(inRowNode);
+			inRowNode._style = getStyleText(inRowNode);
 			this.styleRowNode(inRowIndex, inRowNode);
 		},
 

@@ -1,8 +1,6 @@
-dojo.provide('dojox.grid._grid.selection');
+dojo.provide('dojox.grid.Selection');
 
-dojo.declare("dojox.grid._grid.Selection",
-	null,
-	{
+dojo.declare("dojox.grid.Selection", null, {
 	// summary:
 	//		Manages row selection for grid. Owned by grid and used internally 
 	//		for selection. Override to implement custom selection.
@@ -46,6 +44,7 @@ dojo.declare("dojox.grid._grid.Selection",
 	},
 
 	getFirstSelected: function(){
+		if(!this.selected.length){ return -1; }
 		for(var i=0, l=this.selected.length; i<l; i++){
 			if(this.selected[i]){
 				return i;
@@ -83,14 +82,14 @@ dojo.declare("dojox.grid._grid.Selection",
 		return c;
 	},
 
-	beginUpdate: function(){
+	_beginUpdate: function(){
 		if(this.updating == 0){
 			this.onChanging();
 		}
 		this.updating++;
 	},
 
-	endUpdate: function(){
+	_endUpdate: function(){
 		this.updating--;
 		if(this.updating == 0){
 			this.onChanged();
@@ -98,7 +97,9 @@ dojo.declare("dojox.grid._grid.Selection",
 	},
 
 	select: function(inIndex){
-		this.unselectAll(inIndex);
+		if(!this.multiSelect){
+			this.unselectAll(inIndex);
+		}
 		this.addToSelection(inIndex);
 	},
 
@@ -109,12 +110,12 @@ dojo.declare("dojox.grid._grid.Selection",
 		}else{
 			if(this.onCanSelect(inIndex) !== false){
 				this.selectedIndex = inIndex;
-				this.beginUpdate();
+				this._beginUpdate();
 				this.selected[inIndex] = true;
 				this.grid.onSelected(inIndex);
 				//this.onSelected(inIndex);
 				//this.onSetSelected(inIndex, true);
-				this.endUpdate();
+				this._endUpdate();
 			}
 		}
 	},
@@ -128,12 +129,12 @@ dojo.declare("dojox.grid._grid.Selection",
 			if(this.onCanDeselect(inIndex) === false){
 				return;
 			}
-			this.beginUpdate();
+			this._beginUpdate();
 			delete this.selected[inIndex];
 			this.grid.onDeselected(inIndex);
 			//this.onDeselected(inIndex);
 			//this.onSetSelected(inIndex, false);
-			this.endUpdate();
+			this._endUpdate();
 		}
 	},
 
@@ -143,6 +144,25 @@ dojo.declare("dojox.grid._grid.Selection",
 
 	toggleSelect: function(inIndex){
 		this.setSelected(inIndex, !this.selected[inIndex])
+	},
+
+	_range: function(inFrom, inTo, func){
+		var s = (inFrom >= 0 ? inFrom : inTo), e = inTo;
+		if(s > e){
+			e = s;
+			s = inTo;
+		}
+		for(var i=s; i<=e; i++){
+			func(i);
+		}
+	},
+
+	selectRange: function(inFrom, inTo){
+		this._range(inFrom, inTo, dojo.hitch(this, "addToSelection"));
+	},
+
+	deselectRange: function(inFrom, inTo){
+		this._range(inFrom, inTo, dojo.hitch(this, "deselect"));
 	},
 
 	insert: function(inIndex){
@@ -159,7 +179,7 @@ dojo.declare("dojox.grid._grid.Selection",
 		}
 	},
 
-	unselectAll: function(inExcept){
+	deselectAll: function(inExcept){
 		for(var i in this.selected){
 			if((i!=inExcept)&&(this.selected[i]===true)){
 				this.deselect(i);
@@ -167,19 +187,8 @@ dojo.declare("dojox.grid._grid.Selection",
 		}
 	},
 
-	shiftSelect: function(inFrom, inTo){
-		var s = (inFrom >= 0 ? inFrom : inTo), e = inTo;
-		if(s > e){
-			e = s;
-			s = inTo;
-		}
-		for(var i=s; i<=e; i++){
-			this.addToSelection(i);
-		}
-	},
-
 	clickSelect: function(inIndex, inCtrlKey, inShiftKey){
-		this.beginUpdate();
+		this._beginUpdate();
 		if(!this.multiSelect){
 			this.select(inIndex);
 		}else{
@@ -188,14 +197,14 @@ dojo.declare("dojox.grid._grid.Selection",
 				this.unselectAll(inIndex);
 			}
 			if(inShiftKey){
-				this.shiftSelect(lastSelected, inIndex);
+				this.selectRange(lastSelected, inIndex);
 			}else if(inCtrlKey){
 				this.toggleSelect(inIndex);
 			}else{
 				this.addToSelection(inIndex)
 			}
 		}
-		this.endUpdate();
+		this._endUpdate();
 	},
 
 	clickSelectEvent: function(e){
@@ -203,9 +212,8 @@ dojo.declare("dojox.grid._grid.Selection",
 	},
 
 	clear: function(){
-		this.beginUpdate();
+		this._beginUpdate();
 		this.unselectAll();
-		this.endUpdate();
+		this._endUpdate();
 	}
-
 });
