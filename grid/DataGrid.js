@@ -5,6 +5,7 @@ dojo.require("dojox.grid.VirtualGrid");
 dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	model: null,
 	query: { name: '*' },
+	fetchText: '...',
 
 	_model_connects: null,
 	_identity_map: null,
@@ -29,6 +30,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
+		var info = this._identity_map[this.model.getIdentity(item)];
+		if(info){
+			this.updateRow(info.idx);
+		}
 	},
 
 	_onNew: function(item, parentInfo){
@@ -122,7 +127,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 
 	_getItemAttr: function(idx, attr){
 		var item = this._getItem(idx);
-		return (!item ? dojox.grid.na : this.model.getValue(item, attr));
+		return (!item ? this.fetchText : this.model.getValue(item, attr));
 	},
 
 	// paging
@@ -186,7 +191,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		if(!c){
 			return null;
 		}else{
-			return [{ attribute: c.dataAttr, descending: (this.sortInfo>0) }];
+			return [{ attribute: c.dataAttr, descending: !(this.sortInfo>0) }];
 		}
 	},
 

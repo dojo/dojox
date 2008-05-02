@@ -1,6 +1,6 @@
-dojo.provide("dojox.grid._grid.views");
+dojo.provide("dojox.grid._ViewManager");
 
-dojo.declare('dojox.grid._grid.Views', null, {
+dojo.declare('dojox.grid._ViewManager', null, {
 	// summary:
 	//		A collection of grid views. Owned by grid and used internally for managing grid views.
 	// description:
@@ -30,8 +30,9 @@ dojo.declare('dojox.grid._grid.Views', null, {
 	},
 
 	destroyViews: function(){
-		for (var i=0, v; v=this.views[i]; i++)
+		for(var i=0, v; v=this.views[i]; i++){
 			v.destroy();
+		}
 		this.views = [];
 	},
 
@@ -63,8 +64,8 @@ dojo.declare('dojox.grid._grid.Views', null, {
 		var rowNodes = [];
 		for(var i=0, v; (v=this.views[i]); i++){
 			if(v.headerContentNode.firstChild){
-				rowNodes.push(v.headerContentNode)
-			};
+				rowNodes.push(v.headerContentNode);
+			}
 		}
 		this.normalizeRowNodeHeights(rowNodes);
 	},
@@ -94,8 +95,9 @@ dojo.declare('dojox.grid._grid.Views', null, {
 	resetHeaderNodeHeight: function(){
 		for(var i=0, v, n; (v=this.views[i]); i++){
 			n = v.headerContentNode.firstChild;
-			if(n)
+			if(n){
 				n.style.height = "";
+			}
 		}
 	},
 
@@ -130,7 +132,7 @@ dojo.declare('dojox.grid._grid.Views', null, {
 
 	measureContent: function(){
 		var h = 0;
-		this.forEach(function(inView) {
+		this.forEach(function(inView){
 			h = Math.max(inView.domNode.offsetHeight, h);
 		});
 		return h;

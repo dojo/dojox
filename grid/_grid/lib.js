@@ -8,38 +8,6 @@ dojo.mixin(dojox.grid,{
 		// summary: a null function?
 	},
 
-	getTdIndex: function(td){
-		return td.cellIndex >=0 ? td.cellIndex : dojo.indexOf(td.parentNode.cells, td);
-	},
-	
-	getTrIndex: function(tr){
-		return tr.rowIndex >=0 ? tr.rowIndex : dojo.indexOf(tr.parentNode.childNodes, tr);
-	},
-	
-	getTr: function(rowOwner, index){
-		return rowOwner && ((rowOwner.rows||0)[index] || rowOwner.childNodes[index]);
-	},
-	
-	getTd: function(rowOwner, rowIndex, cellIndex){
-		// FIXME: what is inTable?
-		return (dojox.grid.getTr(inTable, rowIndex)||0)[cellIndex];
-	},
-	
-	findTable: function(node){
-		for (var n=node; n && n.tagName!='TABLE'; n=n.parentNode);
-		return n;
-	},
-	
-	ascendDom: function(inNode, inWhile){
-		for (var n=inNode; n && inWhile(n); n=n.parentNode);
-		return n;
-	},
-	
-	makeNotTagName: function(inTagName){
-		var name = inTagName.toUpperCase();
-		return function(node){ return node.tagName != name; };
-	},
-	
 	fire: function(ob, ev, args){
 		var fn = ob && ev && ob[ev];
 		return fn && (args ? fn.apply(ob, args) : ob[ev]());

@@ -3,8 +3,8 @@ dojo.provide("dojox.grid.VirtualGrid");
 dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid._grid.lib");
 dojo.require("dojox.grid._grid.scroller");
-dojo.require("dojox.grid._grid.view");
-dojo.require("dojox.grid._grid.views");
+dojo.require("dojox.grid._View");
+dojo.require("dojox.grid._ViewManager");
 dojo.require("dojox.grid._Layout");
 dojo.require("dojox.grid._grid.rows");
 dojo.require("dojox.grid._grid.focus");
@@ -216,7 +216,7 @@ dojo.declare('dojox.grid.VirtualGrid',
 
 	// views
 	createViews: function(){
-		this.views = new dojox.grid._grid.Views(this);
+		this.views = new dojox.grid._ViewManager(this);
 		this.views.createView = dojo.hitch(this, "createView");
 	},
 	
@@ -247,7 +247,7 @@ dojo.declare('dojox.grid.VirtualGrid',
 
 	buildViews: function(){
 		for(var i=0, vs; (vs=this.layout.structure[i]); i++){
-			this.createView(vs.type || dojox._scopeName + ".grid._grid.GridView").setStructure(vs);
+			this.createView(vs.type || dojox._scopeName + ".grid._View").setStructure(vs);
 		}
 		this.scroller.setContentNodes(this.views.getContentNodes());
 	},
