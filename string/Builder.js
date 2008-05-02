@@ -9,25 +9,20 @@ dojo.provide("dojox.string.Builder");
 		if(str){ this.append(str); }
 	};
 	
+	/*
+		A note: it looks like Firefox has some issues iterating over
+		the arguments object, so if you are going use append, you 
+		should do all you can to pass a single argument for best
+		results.
+	 */
 	var m = {
 	 	append: function(/*String*/s){ 
 			// summary: Append all arguments to the end of the buffer 
 			if(arguments.length>1){
-				//	Some Duff's device love here.
-				var n = Math.floor(arguments.length/8), r = arguments.length%8, i=0;
-				do {
-					switch(r){
-						case 0: this.b += arguments[i++];
-						case 7: this.b += arguments[i++];
-						case 6: this.b += arguments[i++];
-						case 5: this.b += arguments[i++];
-						case 4: this.b += arguments[i++];
-						case 3: this.b += arguments[i++];
-						case 2: this.b += arguments[i++];
-						case 1: this.b += arguments[i++];
-					}
-					r = 0;
-				} while(--n>0);
+				var i=0;
+				while(i<arguments.length){
+					this.b += arguments[i++];
+				}
 			} else {
 				this.b += s;
 			}
