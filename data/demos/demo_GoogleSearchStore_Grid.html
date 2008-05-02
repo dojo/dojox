@@ -7,7 +7,7 @@
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/themes/tundra/tundra_rtl.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../../../dojox/Grid/resources/tundraGrid.css";
+		@import "../../../dojox/grid/resources/tundraGrid.css";
 
 		.tundra .dojoxGrid-cell {
 				text-indent: 3px;
@@ -17,6 +17,7 @@
 	<title>Google Search Store with Grid</title>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dijit/dijit.js"></script>
 	<script type="text/javascript" src="../GoogleSearchStore.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.Grid");
@@ -25,6 +26,7 @@
 		dojo.require("dojox.wire.ml.Invocation");
 		dojo.require("dojox.wire.ml.Transfer");
 		dojo.require("dojox.wire.ml.Action");
+		dojo.require("dojox.data.GoogleSearchStore");
 
 		var href = function(value) {
 			return "<a href=\"" + value + "\" target=\"_blank\">" + value + "</a>";  
