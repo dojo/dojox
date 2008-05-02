@@ -12,7 +12,26 @@ dojo.provide("dojox.string.Builder");
 	var m = {
 	 	append: function(/*String*/s){ 
 			// summary: Append all arguments to the end of the buffer 
-			return this.appendArray(dojo._toArray(arguments)); // dojox.string.Builder
+			if(arguments.length>1){
+				//	Some Duff's device love here.
+				var n = Math.floor(arguments.length/8), r = arguments.length%8, i=0;
+				do {
+					switch(r){
+						case 0: this.b += arguments[i++];
+						case 7: this.b += arguments[i++];
+						case 6: this.b += arguments[i++];
+						case 5: this.b += arguments[i++];
+						case 4: this.b += arguments[i++];
+						case 3: this.b += arguments[i++];
+						case 2: this.b += arguments[i++];
+						case 1: this.b += arguments[i++];
+					}
+					r = 0;
+				} while(--n>0);
+			} else {
+				this.b += s;
+			}
+			return this;	//	dojox.string.Builder
 		},
 		concat: function(/*String*/s){
 			return this.append(s);
@@ -79,6 +98,30 @@ dojo.provide("dojox.string.Builder");
 			toString: function(){ 
 				// Summary: Get the buffer as a string
 				return this.b.join(""); 
+			},
+			append: function(/*String*/s){ 
+				// summary: Append all arguments to the end of the buffer 
+				if(arguments.length>1){
+					//	Some Duff's device love here.
+					var n = Math.floor(arguments.length/8), r = arguments.length%8, i=0;
+					do {
+						switch(r){
+							case 0: this.b[this.b.length]=arguments[i++];
+							case 7: this.b[this.b.length]=arguments[i++];
+							case 6: this.b[this.b.length]=arguments[i++];
+							case 5: this.b[this.b.length]=arguments[i++];
+							case 4: this.b[this.b.length]=arguments[i++];
+							case 3: this.b[this.b.length]=arguments[i++];
+							case 2: this.b[this.b.length]=arguments[i++];
+							case 1: this.b[this.b.length]=arguments[i++];
+						}
+						r = 0;
+					} while(--n>0);
+				} else {
+					//	this seems to shave off a little time over .push().
+					this.b[this.b.length]=s;
+				}
+				return this;	//	dojox.string.Builder
 			},
 			appendArray: function(strings){
 				this.b = this.b.concat(strings);
