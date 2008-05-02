@@ -1,7 +1,7 @@
 .dijitFileInput {
 	position:relative;
 	height:1.3em;
-	padding:2px;  
+	/*padding:2px;*/
 }
 
 .dijitFileInputReal {
@@ -26,7 +26,7 @@
 	z-index:3;
 	visibility:hidden;
 }
-.dijitFakeInput { position:absolute; top:0; left:0; z-index:1; }
+.dijitFakeInput { position:absolute; top:0; left:0; z-index:1; white-space: nowrap; }
 
 .dijitProgressOverlay {
 	display:none;
@@ -45,16 +45,16 @@
 	background-color:#cad2de;
 }
 .tundra .dijitFakeInput input {
-	font-size: inherit;
+	/*font-size: inherit;*/
+	padding: 0;
 	background:#fff url("../../../dijit/themes/tundra/images/validationInputBg.png") repeat-x top left;
 	border:1px solid #9b9b9b;
 	line-height: normal;
-	padding: 0.2em 0.3em;
 }
 .tundra .dijitFileInputButton, 
 .tundra .dijitFileInputText {
 	border:1px solid #9b9b9b;
-	padding:2px 12px 2px 12px; /* .3em .4em .2em .4em; */
+	padding:0px 12px 0px 12px; /* .3em .4em .2em .4em; */
 	background:#e9e9e9 url("../../../dijit/themes/tundra/images/buttonEnabled.png") repeat-x top;
 }
 

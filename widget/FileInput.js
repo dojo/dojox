@@ -47,12 +47,14 @@ dojo.declare("dojox.widget.FileInput",
 		this.titleNode.innerHTML = label;
 	},
 
-	_onClick: function(/* Event */e){
+	reset: function(/* Event */e){
 		// summary: on click of cancel button, since we can't clear the input because of
 		// 	security reasons, we destroy it, and add a new one in it's place.
 		dojo.disconnect(this._listener);
-		dojo.disconnect(this._keyListener); 
-		this.domNode.removeChild(this.fileInput);
+		dojo.disconnect(this._keyListener);
+		if(this.fileInput){
+			this.domNode.removeChild(this.fileInput);
+		}
 		dojo.fadeOut({ node: this.cancelNode, duration:275 }).play(); 
 
 		// should we use cloneNode()? can we?

@@ -100,7 +100,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 		dojo.body().appendChild(_newForm);
 	
 		dojo.io.iframe.send({
-			url: this.url+"?name="+this.name,
+			url: this.url,
 			form: _newForm,
 			handleAs: "json",
 			handle: dojo.hitch(this,"_handleSend")
@@ -128,19 +128,22 @@ dojo.declare("dojox.widget.FileInputAuto",
 
 		//remove the form used to send the request
 		dojo.body().removeChild(ioArgs.args.form);
+		this.fileInput = null;
 
 		this.onComplete(data,ioArgs,this);
 	},
 
-	_onClick: function(e){
+	reset: function(e){
 		// summary: accomodate our extra focusListeners
 		if(this._blurTimer){ clearTimeout(this._blurTimer); }
 
 		dojo.disconnect(this._blurListener);
 		dojo.disconnect(this._focusListener);
 
+		this.overlay.style.display = "none";
+		this.fakeNodeHolder.style.display = "";
 		this.inherited(arguments);
-
+		this._sent = false;
 		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
 	},
@@ -177,7 +180,7 @@ dojo.declare("dojox.widget.FileInputBlind",
 		}
 	},
 
-	_onClick: function(e){
+	reset: function(e){
 		// summary: onclick, we need to reposition our newly created input type="file"
 		this.inherited(arguments);
 		this._fixPosition(); 
