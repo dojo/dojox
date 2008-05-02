@@ -19,9 +19,26 @@ dojo.provide("dojox.string.Builder");
 	 	append: function(/*String*/s){ 
 			// summary: Append all arguments to the end of the buffer 
 			if(arguments.length>1){
-				var i=0;
-				while(i<arguments.length){
-					this.b += arguments[i++];
+				//	try a different kind of optimization
+				var tmp="";
+				switch(arguments.length){
+					case 9: tmp=arguments[8]+tmp;
+					case 8: tmp=arguments[7]+tmp;
+					case 7: tmp=arguments[6]+tmp;
+					case 6: tmp=arguments[5]+tmp;
+					case 5: tmp=arguments[4]+tmp;
+					case 4: tmp=arguments[3]+tmp;
+					case 3: tmp=arguments[2]+tmp;
+					case 2: {
+						this.b+=arguments[0]+arguments[1]+tmp;
+						break;
+					}
+					default: {
+						var i=0;
+						while(i<arguments.length){
+							this.b += arguments[i++];
+						}
+					}
 				}
 			} else {
 				this.b += s;
