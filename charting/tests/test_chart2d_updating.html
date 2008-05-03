@@ -14,34 +14,35 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../../lang/functional.js"></script>
 <script type="text/javascript" src="../Theme.js"></script>
 <script type="text/javascript" src="../scaler.js"></script>
+<script type="text/javascript" src="../axis2d/Default.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
 <script type="text/javascript">
 
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.PlotKit.orange");
 
-var chart, limit = 10, magnitude = 30;
+var chart, limit = 10, magnitude = 30, counter = [0, 0, 0];
 
-var randomValue = function(){
-	return Math.random() * magnitude;
+var randomValue = function(nCounter){
+	return {x: ++counter[nCounter], y: Math.random() * magnitude};
 };
 
-var makeSeries = function(len){
+var makeSeries = function(len, nCounter){
     var s = [];
     do{
-        s.push(randomValue());
+        s.push(randomValue(nCounter));
 	}while(s.length < len);
     return s;
 };
 
-var seriesA = makeSeries(limit),
-	seriesB = makeSeries(limit),
-	seriesC = makeSeries(limit);
+var seriesA = makeSeries(limit, 0),
+	seriesB = makeSeries(limit, 1),
+	seriesC = makeSeries(limit, 2);
 
 var makeObjects = function(){
 	chart = new dojox.charting.Chart2D("test");
 	chart.setTheme(dojox.charting.themes.PlotKit.orange);
-   	chart.addAxis("x", {fixLower: "minor", natural: true, min: 1, max: limit});
+   	chart.addAxis("x", {fixLower: "minor", natural: true});
 	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1});
 	chart.addPlot("default", {type: "Areas"});
 	chart.addSeries("Series A", seriesA);
@@ -49,20 +50,20 @@ var makeObjects = function(){
 	chart.addSeries("Series C", seriesC);
 	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
 	chart.render();
-    setInterval(function(){updateTest();}, 200);
+    setInterval(function(){updateTest();}, 500);
 };
 
 var updateTest = function(){
 	seriesA.shift();
-	seriesA.push(randomValue());
+	seriesA.push(randomValue(0));
 	chart.updateSeries("Series A", seriesA);
 
 	seriesB.shift();
-	seriesB.push(randomValue());
+	seriesB.push(randomValue(1));
 	chart.updateSeries("Series B", seriesB);
 
 	seriesC.shift();
-	seriesC.push(randomValue());
+	seriesC.push(randomValue(2));
 	chart.updateSeries("Series C", seriesC);
 
 	chart.render();
