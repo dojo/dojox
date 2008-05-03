@@ -208,7 +208,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this._makeClean();
 
 			// BEGIN FOR HTML CANVAS 
-			if(this.surface.render){ this.surface.render(); };	
+			if(this.surface.render){ this.surface.render(); };
 			// END FOR HTML CANVAS
 			
 			return this;
@@ -275,25 +275,10 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			// generate shapes
 			
-			// draw a chart background
-			var t = this.theme,
-				fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill),
-				stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
-			if(fill){
-				this.surface.createRect({
-					width:  dim.width, 
-					height: dim.height
-				}).setFill(fill);
-			}
-			if(stroke){
-				this.surface.createRect({
-					width:  dim.width - 1, 
-					height: dim.height - 1
-				}).setStroke(stroke);
-			}
 			// draw a plot background
-			fill   = t.plotarea && t.plotarea.fill;
-			stroke = t.plotarea && t.plotarea.stroke;
+			var t = this.theme,
+				fill   = t.plotarea && t.plotarea.fill,
+				stroke = t.plotarea && t.plotarea.stroke;
 			if(fill){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
@@ -311,6 +296,44 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			// go over the stack backwards
 			df.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
+			
+			// pseudo-clipping: matting
+			fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill);
+			stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
+			if(fill){
+				if(offsets.l){	// left
+					this.surface.createRect({
+						width:  offsets.l,
+						height: dim.height
+					}).setFill(fill);
+				}
+				if(offsets.r){	// right
+					this.surface.createRect({
+						x: dim.width - offsets.r,
+						width:  offsets.r,
+						height: dim.height
+					}).setFill(fill);
+				}
+				if(offsets.t){	// top
+					this.surface.createRect({
+						width:  dim.width,
+						height: offsets.t
+					}).setFill(fill);
+				}
+				if(offsets.b){	// bottom
+					this.surface.createRect({
+						y: dim.height - offsets.b,
+						width:  dim.width,
+						height: offsets.b
+					}).setFill(fill);
+				}
+			}
+			if(stroke){
+				this.surface.createRect({
+					width:  dim.width - 1, 
+					height: dim.height - 1
+				}).setStroke(stroke);
+			}
 			
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
