@@ -36,8 +36,10 @@ dojo.declare("dojox.charting.Element", null, {
 		return this;
 	},
 	destroyHtmlElements: function(){
-		dojo.forEach(this.htmlElements, dojo._destroyElement);
-		this.htmlElements = [];
+		if(this.htmlElements.length){
+			dojo.forEach(this.htmlElements, dojo._destroyElement);
+			this.htmlElements = [];
+		}
 	},
 	destroy: function(){
 		this.purgeGroup();
