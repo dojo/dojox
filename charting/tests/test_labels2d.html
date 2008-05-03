@@ -14,7 +14,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../../lang/functional.js"></script>
 <script type="text/javascript" src="../../lang/utils.js"></script>
 <script type="text/javascript" src="../Theme.js"></script>
-<script type="text/javascript" src="../scaler.js"></script>
+<script type="text/javascript" src="../scaler/linear.js"></script>
 <script type="text/javascript" src="../Element.js"></script>
 <script type="text/javascript" src="../axis2d/common.js"></script>
 <script type="text/javascript" src="../axis2d/Base.js"></script>
@@ -64,7 +64,8 @@ makeObjects = function(){
 	});
 	chart2.addAxis("y", {
 		vertical: true, fixLower: "major", fixUpper: "major", natural: true,
-		labels: [{value: 0, text: ""}, {value: 1, text: "Jan"}, {value: 2, text: "Feb"}, 
+		labels: [{value: 0, text: ""}, 
+			{value: 1, text: "Jan"}, {value: 2, text: "Feb"}, 
 			{value: 3, text: "Mar"}, {value: 4, text: "Apr"}, 
 			{value: 5, text: "May"}, {value: 6, text: "Jun"}]
 	});
@@ -81,7 +82,8 @@ makeObjects = function(){
 	});
 	chart3.addAxis("y", {
 		vertical: true, fixLower: "major", fixUpper: "major", natural: true,
-		labels: [{value: 0, text: ""}, {value: 1, text: "J A N"}, {value: 2, text: "F E B"}, 
+		labels: [{value: 0, text: ""}, 
+			{value: 1, text: "J A N"}, {value: 2, text: "F E B"}, 
 			{value: 3, text: "M A R"}, {value: 4, text: "A P R"}, 
 			{value: 5, text: "M A Y"}, {value: 6, text: "J U N"}]
 	});

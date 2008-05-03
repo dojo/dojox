@@ -1,6 +1,6 @@
 dojo.provide("dojox.charting.axis2d.Default");
 
-dojo.require("dojox.charting.scaler");
+dojo.require("dojox.charting.scaler.linear");
 dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.axis2d.Base");
 
@@ -114,7 +114,7 @@ dojo.require("dojox.lang.utils");
 			if("majorTickStep" in this.opt){ kwArgs.majorTick = this.opt.majorTickStep; }
 			if("minorTickStep" in this.opt){ kwArgs.minorTick = this.opt.minorTickStep; }
 			if("microTickStep" in this.opt){ kwArgs.microTick = this.opt.microTickStep; }
-			this.scaler = dojox.charting.scaler(min, max, span, kwArgs);
+			this.scaler = dc.scaler.linear.buildScaler(min, max, span, kwArgs);
 			this.scaler.minMinorStep = minMinorStep;
 			return this;
 		},
@@ -232,7 +232,8 @@ dojo.require("dojox.lang.utils");
 				return this;
 			}
 			// special platform specific rules for html labels
-			var labelType = this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx";
+			var forceHtmlLabels = dojox.gfx.renderer == "canvas",
+				labelType = forceHtmlLabels || this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx";
 			while(next <= c.bounds.upper + 1/c.scale){
 				var offset = (next - c.bounds.lower) * c.scale,
 					x = start.x + axisVector.x * offset,

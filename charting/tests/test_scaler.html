@@ -11,17 +11,17 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="Silverlight.js"></script>
 -->
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
-<script type="text/javascript" src="../scaler.js"></script>
+<script type="text/javascript" src="../scaler/linear.js"></script>
 <script type="text/javascript">
 
-dojo.require("dojox.charting.scaler");
+dojo.require("dojox.charting.scaler.linear");
 
 calc = function(){
 	var min = parseFloat(dojo.byId("imin").value);
 	var max = parseFloat(dojo.byId("imax").value);
 	var span = parseFloat(dojo.byId("ispan").value);
 	
-	var o = dojox.charting.scaler(
+	var o = dojox.charting.scaler.linear.buildScaler(
 		min, max, span, {
 			fixLower: dojo.byId("ifl").value,
 			fixUpper: dojo.byId("ifu").value,
@@ -52,6 +52,7 @@ calc = function(){
 	dojo.byId("omicp").innerHTML = o.micro.prec;
 	
 	dojo.byId("oscale").innerHTML = o.scale;
+	dojo.byId("ospan").innerHTML  = o.span;
 };
 
 </script>
@@ -92,6 +93,7 @@ calc = function(){
 	<tr><td>micro.prec</td><td><span id="omicp">&nbsp;</span></td></tr>
 
 	<tr><td>scale</td><td><span id="oscale">&nbsp;</span></td></tr>
+	<tr><td>span</td><td><span id="ospan">&nbsp;</span></td></tr>
 </table>
 </body>
 </html>
