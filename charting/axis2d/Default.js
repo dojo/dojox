@@ -67,7 +67,7 @@ dojo.require("dojox.lang.utils");
 			return this;
 		},
 		initialized: function(){
-			return "scaler" in this;
+			return "scaler" in this && !(this.dirty && this.dependOnData());
 		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
