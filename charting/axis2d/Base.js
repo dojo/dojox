@@ -18,6 +18,9 @@ dojo.declare("dojox.charting.axis2d.Base", dojox.charting.Element, {
 	getScaler: function(){
 		return null;
 	},
+	getTicks: function(){
+		return null;
+	},
 	getOffsets: function(){
 		return {l: 0, r: 0, t: 0, b: 0};
 	},

@@ -28,11 +28,11 @@ var randomValue = function(nCounter){
 };
 
 var makeSeries = function(len, nCounter){
-    var s = [];
-    do{
-        s.push(randomValue(nCounter));
+	var s = [];
+	do{
+		s.push(randomValue(nCounter));
 	}while(s.length < len);
-    return s;
+	return s;
 };
 
 var seriesA = makeSeries(limit, 0),
@@ -42,7 +42,7 @@ var seriesA = makeSeries(limit, 0),
 var makeObjects = function(){
 	chart = new dojox.charting.Chart2D("test");
 	chart.setTheme(dojox.charting.themes.PlotKit.orange);
-   	chart.addAxis("x", {fixLower: "minor", natural: true});
+	chart.addAxis("x", {fixLower: "minor", natural: true});
 	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1});
 	chart.addPlot("default", {type: "Areas"});
 	chart.addSeries("Series A", seriesA);
@@ -50,7 +50,7 @@ var makeObjects = function(){
 	chart.addSeries("Series C", seriesC);
 	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
 	chart.render();
-    setInterval(function(){updateTest();}, 500);
+	setInterval(function(){updateTest();}, 500);
 };
 
 var updateTest = function(){

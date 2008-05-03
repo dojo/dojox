@@ -35,7 +35,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 		destroy = df.lambda("item.destroy()"),
 		makeClean = df.lambda("item.dirty = false"),
 		makeDirty = df.lambda("item.dirty = true");
-		
+
 	dojo.declare("dojox.charting.Chart2D", null, {
 		constructor: function(node, kwArgs){
 			// initialize parameters
@@ -43,7 +43,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this.margins = kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
 			this.stroke  = kwArgs.stroke;
 			this.fill    = kwArgs.fill;
-			
+
 			// default initialization
 			this.theme = null;
 			this.axes = {};		// map of axes
@@ -53,7 +53,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this.runs = {};		// map of data run indices
 			this.dirty = true;
 			this.coords = null;
-			
+
 			// create a surface
 			this.node = dojo.byId(node);
 			var box = dojo.marginBox(node);
@@ -190,7 +190,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			if(this.dirty){
 				return this.fullRender();
 			}
-			
+
 			// calculate geometry
 			dojo.forEach(this.stack, function(plot){
 				if(plot.dirty || (plot.hAxis && this.axes[plot.hAxis].dirty) ||
@@ -201,7 +201,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 
 			// go over the stack backwards
 			df.forEachRev(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
-			
+
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);
 
@@ -210,21 +210,21 @@ dojo.require("dojox.charting.plot2d.Pie");
 			// BEGIN FOR HTML CANVAS 
 			if(this.surface.render){ this.surface.render(); };
 			// END FOR HTML CANVAS
-			
+
 			return this;
 		},
 		fullRender: function(){
 			this._makeDirty();
-			
+
 			// clear old values
 			dojo.forEach(this.stack,  clear);
 			dojo.forEach(this.series, purge);
 			df.forIn(this.axes, purge);
 			dojo.forEach(this.stack,  purge);
 			this.surface.clear();
-			
+
 			// rebuild new connections, and add defaults
-			
+
 			// assign series
 			dojo.forEach(this.series, function(run){
 				if(!(run.plot in this.plots)){
@@ -250,16 +250,16 @@ dojo.require("dojox.charting.plot2d.Pie");
 			}
 			var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
 			this.theme.defineColors({num: requiredColors, cache: false});
-			
+
 			// calculate geometry
-			
+
 			// 1st pass
 			var dim = this.dim = this.surface.getDimensions();
 			dim.width  = dojox.gfx.normalizedLength(dim.width);
 			dim.height = dojox.gfx.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(dim); });
-			
+
 			// assumption: we don't have stacked axes yet
 			var offsets = this.offsets = {l: 0, r: 0, t: 0, b: 0};
 			df.forIn(this.axes, function(axis){
@@ -267,14 +267,14 @@ dojo.require("dojox.charting.plot2d.Pie");
 			});
 			// add margins
 			df.forIn(this.margins, function(o, i){ offsets[i] += o; });
-			
+
 			// 2nd pass with realistic dimensions
 			this.plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(this.plotArea); }, this);
-			
+
 			// generate shapes
-			
+
 			// draw a plot background
 			var t = this.theme,
 				fill   = t.plotarea && t.plotarea.fill,
@@ -293,10 +293,10 @@ dojo.require("dojox.charting.plot2d.Pie");
 					height: dim.height - offsets.t - offsets.b - 1
 				}).setStroke(stroke);
 			}
-			
+
 			// go over the stack backwards
 			df.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
-			
+
 			// pseudo-clipping: matting
 			fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill);
 			stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
@@ -330,16 +330,16 @@ dojo.require("dojox.charting.plot2d.Pie");
 			}
 			if(stroke){
 				this.surface.createRect({
-					width:  dim.width - 1, 
+					width:  dim.width - 1,
 					height: dim.height - 1
 				}).setStroke(stroke);
 			}
-			
+
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
-			
+
 			this._makeClean();
-			
+
 			return this;
 		},
 		_makeClean: function(){
