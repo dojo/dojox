@@ -64,7 +64,7 @@ dojo.require("dojox.gfx");
 				// insert nodes
 				wrap.appendChild(p)
 				chart.node.insertBefore(wrap, chart.node.firstChild);
-				return p;
+				return wrap;
 			}
 		}
 	});
