@@ -32,7 +32,7 @@ dojo.require("dojox.gfx");
 				var p = dojo.doc.createElement("div"), s = p.style;
 				clearNode(s);
 				s.font = font;
-				p.innerHTML = text;
+				p.innerHTML = String(text).replace(/\s/g, "&nbsp;");
 				s.color = fontColor;
 				// measure the size
 				s.position = "absolute";
