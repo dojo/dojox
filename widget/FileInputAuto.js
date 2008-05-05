@@ -75,8 +75,10 @@ dojo.declare("dojox.widget.FileInputAuto",
 	
 	_sendFile: function(/* Event */e){
 		// summary: triggers the chain of events needed to upload a file in the background.
-		if(!this.fileInput.value || this._sent){ return; }
-		
+		if(this._sent || this._sending || !this.fileInput.value){ return; }
+
+		this._sending = true;
+
 		dojo.style(this.fakeNodeHolder,"display","none");
 		dojo.style(this.overlay,"opacity","0");
 		dojo.style(this.overlay,"display","block");
@@ -114,6 +116,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 		this.overlay.removeChild(this.overlay.firstChild);
 		
 		this._sent = true;
+		this._sending = false;
 		dojo.style(this.overlay,"opacity","0");
 		dojo.style(this.overlay,"border","none");
 		dojo.style(this.overlay,"background","none"); 
@@ -144,6 +147,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 		this.fakeNodeHolder.style.display = "";
 		this.inherited(arguments);
 		this._sent = false;
+		this._sending = false;
 		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
 	},
