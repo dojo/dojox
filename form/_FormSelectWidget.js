@@ -72,8 +72,22 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		if(dojo.isArray(lookupValue)){
 			return dojo.map(lookupValue, "return this.getOptions(item);", this); // dojox.form.__SelectOption[]
 		}
-		if(dojo.isObject(valueOrIdx) && valueOrIdx.value){ 
-			lookupValue = valueOrIdx.value;
+		if(dojo.isObject(valueOrIdx)){
+			// We were passed an option - so return either the value (if we have
+			// one) or return the actual option itself (if it's one of our options)
+			if (valueOrIdx.value){
+				lookupValue = valueOrIdx.value;
+			}else{
+				if (!dojo.some(this.options, function(o, idx){
+					if (o === lookupValue){
+						lookupValue = idx;
+						return true;
+					}
+					return false;
+				})){
+					lookupValue = -1;
+				}
+			}
 		}
 		if(typeof lookupValue == "string"){
 			for(var i=0; i<l; i++){
