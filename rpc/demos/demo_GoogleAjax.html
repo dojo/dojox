@@ -8,6 +8,9 @@
 			width:100%;
 			margin:0; padding:0;
 		}
+		.logo {
+			border:0; vertical-align:middle;
+		}
 		.summary {
 			color:#666;
 			font:8pt Arial,sans-serif;
@@ -21,8 +24,8 @@
 			top:3px;
 			left:3px;
 			visibility:hidden;
-			height:20px; 
-			width:20px;
+			height:50px; 
+			width:50px;
 			background:url("../../../dojox/image/resources/images/loading.gif") no-repeat center center;
 		}
 	</style>
@@ -58,9 +61,10 @@
 				});
 
 				var searchType = dojo.byId("searchType").value || "webSearch";
-				google[searchType]({ q: dojo.byId("test").value })
+				google[searchType]({ q: dojo.byId("test").value,  })
 					// generic succes handler:
 					.addCallback(function(returned){
+						var info = returned[1].cursor; 
 						var data = returned[1].results || [];
 						dojo.forEach(data,function(item){
 							var li = dojo.doc.createElement('li');
@@ -88,7 +92,7 @@
 <body>
 		<div id="loader"></div>
 		<div id="container">
-			<h2>Google Ajax API SMD</h2>
+			<h2><a href="http://google.com"><img class="logo" src="http://www.google.com/logos/Logo_40wht.gif" alt="Google" /></a> Ajax API SMD</h2>
 
 			<input id="test" name="test" type="text" size="30" value="The Dojo Toolkit"/> &nbsp;
 			<select id="searchType">

@@ -1,6 +1,8 @@
 {
 	// Google Ajax API SMD as defined by:
 	// http://code.google.com/apis/ajaxsearch/documentation/reference.html
+	// PLEASE Read the Google Terms of Service:
+	// http://code.google.com/apis/ajaxsearch/terms.html
 	
 	"SMDVersion": "2.0",
 	"id": "http://ajax.googleapis.com/ajax/services/search/", 
@@ -105,7 +107,7 @@
 				{ "name": "imgc", "type":"string", "optional": true },
 				// use "face" to limit to mugshots
 				{ "name": "imgtype", "type":"string", "optional": true },
-				// limit to file"type": jpg|png|gif|bmp
+				// limit to file "type": jpg|png|gif|bmp
 				{ "name": "as_filetype", "type": "string", "optional": true },
 				// limit results to domain:
 				{ "name": "as_sitesearch", "type": "string", "optional": true }
