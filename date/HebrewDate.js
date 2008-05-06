@@ -1,7 +1,9 @@
 dojo.provide("dojox.date.HebrewDate");
 dojo.experimental("dojox.date.HebrewDate");
+
 dojo.require("dojo.date.locale");
 dojo.requireLocalization("dojo.cldr", "hebrew");
+
 dojo.declare("dojox.date.HebrewDate", null, {
 	// summary: The component defines the Hebrew Calendar Object
 	//
@@ -30,15 +32,15 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		
 	// Hebrew date calculations are performed in terms of days, hours, and
 	// "parts" (or halakim), which are 1/1080 of an hour, or 3 1/3 seconds.
-	HOUR_PARTS: 1080,
-	DAY_PARTS: 24*1080,
+	_HOUR_PARTS: 1080,
+	_DAY_PARTS: 24*1080,
    
 	// An approximate value for the length of a lunar month.
 	// It is used to calculate the approximate year and month of a given
 	// absolute date.
-	MONTH_DAYS: 29,
-	MONTH_FRACT: 12*1080 + 793,
-	MONTH_PARTS: 29*24*1080 + 12*1080 + 793,
+	_MONTH_DAYS: 29,
+	_MONTH_FRACT: 12*1080 + 793,
+	_MONTH_PARTS: 29*24*1080 + 12*1080 + 793,
 	    
 	// The time of the new moon (in parts) on 1 Tishri, year 1 (the epoch)
 	// counting from noon on the day before.  BAHARAD is an abbreviation of
@@ -57,7 +59,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 	* different lengths, called "deficient", "normal", and "complete".
 	*/
 
-	MONTH_LENGTH:  [
+	_MONTH_LENGTH:  [
 		// Deficient  Normal     Complete
 		[   30,	    30,	    30	],		 //Tishri
 		[   29,	    29,	    30	],		 //Heshvan
@@ -79,7 +81,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 	* Although this can be calculated from the MONTH_LENGTH table,
 	* keeping it around separately makes some calculations a lot faster
 	*/
-	MONTH_START:  [
+	_MONTH_START:  [
 		// Deficient  Normal	Complete
 		[    0,		0,		0  ],		// (placeholder)
 		[   30,	    30,	    30  ],		// Tishri
@@ -138,6 +140,15 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// st2  days in year before month in leap year
 	],
 
+    _date: 0,
+	_month: 0,
+	_year: 0,
+	_hours: 0,
+	_minutes: 0,
+	_seconds: 0,
+	_milliseconds: 0,
+	_day: 0,
+	
 	constructor: function(){
 		// summary: This is the constructor
 		// description:
@@ -155,38 +166,38 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		if(arg_no==0){// use the current date value
 			var date = new Date();
    			var result =  this._computeHebrewFields(date);
-			this.Date = result[2];
-			this.Month = result[1];
-			this.Year = result[0];
-			this.Hours = date.getHours();
-			this.Minutes = date.getMinutes();
-			this.Seconds = date.getSeconds();
-			this.Milliseconds = date.getMilliseconds();
-			this.Day = date.getDay();
+			this._date = result[2];
+			this._month = result[1];
+			this._year = result[0];
+			this._hours = date.getHours();
+			this._minutes = date.getMinutes();
+			this._seconds = date.getSeconds();
+			this._milliseconds = date.getMilliseconds();
+			this._day = date.getDay();
 		}else if(arg_no ==1){
 			//date string or Hebrew date object passed
 			this.parse(arguments[0]);
 		}else if(arg_no >=3){
 			// YYYY MM DD arguments passed
-			this.Date = parseInt(arguments[2]);
-			this.Month = parseInt(arguments[1]);
-			this.Year = parseInt(arguments[0]);
-			this.Hours = (arguments[3]!=null )? parseInt(arguments[3]):0;
-			this.Minutes = (arguments[4]!=null )? parseInt(arguments[4]):0;
-			this.Seconds = (arguments[5]!=null )? parseInt(arguments[5]):0;
-			this.Milliseconds = (arguments[6]!=null )? parseInt(arguments[6]):0;
+			this._date = parseInt(arguments[2]);
+			this._month = parseInt(arguments[1]);
+			this._year = parseInt(arguments[0]);
+			this._hours = (arguments[3]!=null )? parseInt(arguments[3]):0;
+			this._minutes = (arguments[4]!=null )? parseInt(arguments[4]):0;
+			this._seconds = (arguments[5]!=null )? parseInt(arguments[5]):0;
+			this._milliseconds = (arguments[6]!=null )? parseInt(arguments[6]):0;
 		}
   
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 	},
 
 	getDate:function(){
@@ -196,7 +207,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
 		// |		document.writeln(date1.getDate);
-		return parseInt(this.Date);
+		return parseInt(this._date);
 	},
 		
 	getMonth:function(){
@@ -206,7 +217,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
 		// |		document.writeln(date1.getMonth()+1);
-		return parseInt(this.Month);
+		return parseInt(this._month);
 	},
 
 
@@ -217,29 +228,29 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
 		// |		document.writeln(date1.getFullYear());
-		return parseInt(this.Year);
+		return parseInt(this._year);
 	},
 			
 	getHours:function(){
  		//summary: returns the Hour value
-		return this.Hours;
+		return this._hours;
 	},
 		
 	getMinutes:function(){
 		//summary: returns the Minuites value
 
-		return this.Minutes;
+		return this._minutes;
 	},
 
 	getSeconds:function(){
 		//summary: returns the seconde value
-		return this.Seconds;
+		return this._seconds;
 	},
 
 	getMilliseconds:function(){
 		//summary: returns the Milliseconds value
 
-		return this.Milliseconds;
+		return this._milliseconds;
 	},
 
 	setDate: function(/*number*/date){	
@@ -250,38 +261,38 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		date = parseInt(date);
 		var mdays;
 		if(date>0){
-			for(mdays = this.getDaysInHebrewMonth(this.Month, this.Year);
-				date>mdays;
-					date-=mdays,mdays = this.getDaysInHebrewMonth(this.Month, this.Year)){
-				this.Month ++;
-				if(!this._isLeapYear(this.Year)&&(this.Month==5))  this.Month ++;
-				if(this.Month >= 13){this.Year++; this.Month -= 13;}
+			for(mdays = this.getDaysInHebrewMonth(this._month, this._year);
+					date > mdays;
+					date -= mdays,mdays = this.getDaysInHebrewMonth(this._month, this._year)){
+				this._month ++;
+				if(!this._isLeapYear(this._year)&&(this._month==5))  this._month ++;
+				if(this._month >= 13){this._year++; this._month -= 13;}
 			}
 			
-			this.Date = date;
+			this._date = date;
 		}else{
-			for(mdays = this.getDaysInHebrewMonth((this.Month-1)>=0 ? (this.Month-1) : 12 ,((this.Month-1)>=0)? this.Year : this.Year-1);
+			for(mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12 ,((this._month-1)>=0)? this._year : this._year-1);
 					date<=0;
-						mdays = this.getDaysInHebrewMonth((this.Month-1)>=0 ? (this.Month-1) : 12,((this.Month-1)>=0)? this.Year : this.Year-1) ){
-				this.Month --;
-				if(!this._isLeapYear(this.Year)&&(this.Month==5))  this.Month --;
-				if(this.Month < 0){this.Year--; this.Month += 13;}
+						mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12,((this._month-1)>=0)? this._year : this._year-1) ){
+				this._month --;
+				if(!this._isLeapYear(this._year) && this._month == 5){ this._month--; }
+				if(this._month < 0){this._year--; this._month += 13;}
 
 				date+=mdays;
 			} 
-			this.Date = date;
+			this._date = date;
 		}
 
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 
@@ -292,18 +303,18 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |		date1.setYear(5768);
 
-		this.Year = parseInt(year);
-		if(!this._isLeapYear(this.Year)&&(this.Month==5))  this.Month ++;
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		this._year = parseInt(year);
+		if(!this._isLeapYear(this._year) && this._month==5){ this._month++; }
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 			
@@ -315,136 +326,136 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		date1.setMonth(2);
 		month = parseInt(month);
 		if(month>=0){
-			this.Year += Math.floor(month / 13);
-			this.Month = Math.floor(month % 13);
+			this._year += Math.floor(month / 13);
+			this._month = Math.floor(month % 13);
 		}else{
-			this.Year += Math.floor(month/13);
-			this.Month = 13 - Math.floor(-1*month % 13);
+			this._year += Math.floor(month/13);
+			this._month = 13 - Math.floor(-1*month % 13);
 		}
-		if(!this._isLeapYear(this.Year)&&(this.Month==5)){ this.Month++; }
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		if(!this._isLeapYear(this._year)&&(this._month==5)){ this._month++; }
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
 	
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 			
 	setHours:function(){
 		//summary: set the Hours
 		var hours_arg_no = arguments.length;
+		var hours = 0;
 		if(hours_arg_no >= 1){
 			hours = parseInt(arguments[0]);
 		}
 
 		if(hours_arg_no >= 2){
-			this.Minutes = parseInt(arguments[1]);
+			this._minutes = parseInt(arguments[1]);
 		}
 
 		if(hours_arg_no >= 3){
-			this.Seconds = parseInt(arguments[2]);
+			this._seconds = parseInt(arguments[2]);
 		}
 
 		if(hours_arg_no == 4){
-			this.Milliseconds = parseInt(arguments[3]);
+			this._milliseconds = parseInt(arguments[3]);
 		}
 
 		while(hours >= 24){
-			this.Date++;
-			var mdays = this.getDaysInHebrewMonth(this.Month, this.Year);
-			if(this.Date > mdays)
+			this._date++;
+			var mdays = this.getDaysInHebrewMonth(this._month, this._year);
+			if(this._date > mdays)
 			{
-				this.Month++;
-				if(!this._isLeapYear(this.Year)&&(this.Month==5)){ this.Month++; }
-				if(this.Month >= 13){this.Year++; this.Month -= 13;}
-				this.Date -= mdays;
+				this._month++;
+				if(!this._isLeapYear(this._year)&&(this._month==5)){ this._month++; }
+				if(this._month >= 13){this._year++; this._month -= 13;}
+				this._date -= mdays;
 			}
 			hours -= 24;
 		}
-		this.Hours = hours;
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		this._hours = hours;
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 
 	setMinutes:function(/*number*/minutes){
 		//summary: set the Minutes 
 		while(minutes >= 60){
-			this.Hours++;
-			if(this.Hours >= 24){     
-				this.Date++;
-				this.Hours -= 24;
-				var mdays = this.getDaysInHebrewMonth(this.Month, this.Year);
-				if(this.Date > mdays){
-					this.Month ++;
-					if(!this._isLeapYear(this.Year)&&(this.Month==5)){ this.Month++; }
-					if(this.Month >= 13){this.Year++; this.Month -= 13;}
-					this.Date -= mdays;
+			this._hours++;
+			if(this._hours >= 24){     
+				this._date++;
+				this._hours -= 24;
+				var mdays = this.getDaysInHebrewMonth(this._month, this._year);
+				if(this._date > mdays){
+					this._month ++;
+					if(!this._isLeapYear(this._year)&&(this._month==5)){ this._month++; }
+					if(this._month >= 13){this._year++; this._month -= 13;}
+					this._date -= mdays;
 				}
 			}
 			minutes -= 60;
 		}
-		this.Minutes = minutes;
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		this._minutes = minutes;
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 
 	setSeconds:function(/*number*/seconds){
-
 		while(seconds >= 60){
-			this.Minutes++;
-			if(this.Minutes >= 60){
-				this.Hours++;
-				this.Minutes -= 60;
-				if(this.Hours >= 24){         
-					this.Date++;
-					this.Hours -= 24;
-					var mdays = this.getDaysInHebrewMonth(this.Month, this.Year);
-					if(this.Date > mdays){
-						this.Month++;
-						if(!this._isLeapYear(this.Year)&&(this.Month==5)){ this.Month++; }
-						if(this.Month >= 13){this.Year++; this.Month -= 13;}
+			this._minutes++;
+			if(this._minutes >= 60){
+				this._hours++;
+				this._minutes -= 60;
+				if(this._hours >= 24){         
+					this._date++;
+					this._hours -= 24;
+					var mdays = this.getDaysInHebrewMonth(this._month, this._year);
+					if(this._date > mdays){
+						this._month++;
+						if(!this._isLeapYear(this._year)&&(this._month==5)){ this._month++; }
+						if(this._month >= 13){this._year++; this._month -= 13;}
 							
-						this.Date -= mdays;
+						this._date -= mdays;
 					}
 				}
 			}
 			seconds -= 60;
 		}
-		this.Seconds = seconds;
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		this._seconds = seconds;
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 
@@ -452,38 +463,38 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		while(milliseconds >= 1000){
 			this.setSeconds++;
 			if(this.setSeconds >= 60){
-				this.Minutes++;
-				this.Seconds -= 60;
-				if(this.Minutes >= 60){
-					this.Hours++;
-					this.Minutes -= 60;
-					if(this.Hours >= 24){         
-						this.Date++;
-						this.Hours -= 24;
-						var mdays = this.getDaysInHebrewMonth(this.Month, this.Year);
-						if(this.Date > mdays)
+				this._minutes++;
+				this._seconds -= 60;
+				if(this._minutes >= 60){
+					this._hours++;
+					this._minutes -= 60;
+					if(this._hours >= 24){         
+						this._date++;
+						this._hours -= 24;
+						var mdays = this.getDaysInHebrewMonth(this._month, this._year);
+						if(this._date > mdays)
 						{
-							this.Month ++;
-							if(!this._isLeapYear(this.Year)&&(this.Month==5))  this.Month ++;
-							if(this.Month >= 13){this.Year++; this.Month -= 13;}
-							this.Date -= mdays;
+							this._month ++;
+							if(!this._isLeapYear(this._year)&&(this._month==5))  this._month ++;
+							if(this._month >= 13){this._year++; this._month -= 13;}
+							this._date -= mdays;
 						}
 					}
 				}
 			}
 			milliseconds -= 1000;
 		}
-		this.Milliseconds = milliseconds;
-		var day = this._startOfYear(this.Year);
-		if(this.Month != 0){
-			if(this._isLeapYear(this.Year)){
-				day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+		this._milliseconds = milliseconds;
+		var day = this._startOfYear(this._year);
+		if(this._month != 0){
+			if(this._isLeapYear(this._year)){
+				day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 			}else{
-				day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+				day += this._MONTH_START[this._month][this._yearType(this._year)];
 			}
 		}
-		day += (this.Date - 1);
-		this.Day = ((day+1) % 7);
+		day += (this._date - 1);
+		this._day = ((day+1) % 7);
 		return this;
 	},
 
@@ -494,12 +505,12 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		document.writeln(date1.toString());
 		//FIXME: TZ/DST issues?			     
 		var x = new Date();
-		x.setHours(this.Hours);
-		x.setMinutes(this.Minutes);
-		x.setSeconds(this.Seconds);
-		x.setMilliseconds(this.Milliseconds);
+		x.setHours(this._hours);
+		x.setMinutes(this._minutes);
+		x.setSeconds(this._seconds);
+		x.setMilliseconds(this._milliseconds);
 		var timeString = x.toTimeString();
-		return (dojox.date.HebrewDate.weekDays[this.Day] +" "+dojox.date.HebrewDate.months[this.Month]+" "+ this.Date + " " + this.Year+" "+timeString);
+		return dojox.date.HebrewDate.weekDays[this._day] +" "+dojox.date.HebrewDate.months[this._month]+" "+ this._date + " " + this._year+" "+timeString;
 	},
 		         
 //TODO i18n: factor out and use CLDR patterns?		 
@@ -510,15 +521,15 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var dateIslamic = new dojox.date.IslamicDate();
 		// |		dateIslamic.parse("Heshvan 2 5768");
  		var sDate = dateObject.toString();
-		var template = /\d{1,2}\D\d{1,2}\D\d{4}/
+		var template = /\d{1,2}\D\d{1,2}\D\d{4}/;
 		var mD = sDate.match(template);
 		if(mD!=null)
 		{
 			mD = mD.toString();
 			var sD = mD.split(/\D/);
-			this.Month = sD[0]-1;
-			this.Date = sD[1];
-			this.Year = sD[2];
+			this._month = sD[0]-1;
+			this._date = sD[1];
+			this._year = sD[2];
 		}else{
 			mD = sDate.match(/\D{3}\s\D{2,}\s\d{1,2}\s\d{4}/);
 			if(mD!=null)
@@ -531,21 +542,21 @@ dojo.declare("dojox.date.HebrewDate", null, {
 				//FIXME: redeclaration of mName
 				var mName = mName.replace(/\D{3}\s/,'');
 				mName = mName.toString();
-				this.Month = this._getIndex(dojox.date.HebrewDate.months,mName);
+				this._month = this._getIndex(dojox.date.HebrewDate.months, mName);
 				var sD = dayYear.split(/\s/);
-				this.Date = sD[0];
-				this.Year = sD[1];
-				var day = this._startOfYear(this.Year);
-				if(this.Month != 0){
-					if(this._isLeapYear(this.Year)){
-						day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+				this._date = sD[0];
+				this._year = sD[1];
+				var day = this._startOfYear(this._year);
+				if(this._month != 0){
+					if(this._isLeapYear(this._year)){
+						day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 					} 
 					else{
-						day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+						day += this._MONTH_START[this._month][this._yearType(this._year)];
 					}
 				}
-				day += (this.Date - 1);
-				this.Day = ((day+1) % 7);
+				day += (this._date - 1);
+				this._day = ((day+1) % 7);
        		}else{
 				mD = sDate.match(/\D{2,}\s\d{1,2}\s\d{4}/);
 				if(mD!=null)
@@ -555,20 +566,20 @@ dojo.declare("dojox.date.HebrewDate", null, {
 					dayYear = dayYear.toString();
 					var mName = mD.replace(/\s\d{1,2}\s\d{4}/,'');
 					mName = mName.toString();
-					this.Month = this._getIndex(dojox.date.HebrewDate.months,mName);
+					this._month = this._getIndex(dojox.date.HebrewDate.months, mName);
 					var sD = dayYear.split(/\s/);
-					this.Date = sD[0];
-					this.Year = sD[1];
-					var day = this._startOfYear(this.Year);
-					if(this.Month != 0){
-						if(this._isLeapYear(this.Year)){
-							day += this.LEAP_MONTH_START[this.Month][this._yearType(this.Year)];
+					this._date = sD[0];
+					this._year = sD[1];
+					var day = this._startOfYear(this._year);
+					if(this._month != 0){
+						if(this._isLeapYear(this._year)){
+							day += this.LEAP_MONTH_START[this._month][this._yearType(this._year)];
 						}else{
-							day += this.MONTH_START[this.Month][this._yearType(this.Year)];
+							day += this._MONTH_START[this._month][this._yearType(this._year)];
 						}
 					}
-					day += (this.Date - 1);
-					this.Day = ((day+1) % 7);
+					day += (this._date - 1);
+					this._day = ((day+1) % 7);
 				}                    
 			}
 		}
@@ -577,36 +588,35 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		if(sTime!=null){
 			sTime = sTime.toString();
 			var tArr=  sTime.split(':');
-			this.Hours = tArr[0];
+			this._hours = tArr[0];
 			sTime = sDate.match(/\d{2}:\d{2}/);
 			if(sTime){
 				sTime = sTime.toString();
 				tArr = sTime.split(':');
 			}
-			this.Minutes = tArr[1] != null ? tArr[1]:0;
+			this._minutes = tArr[1] != null ? tArr[1]:0;
 			sTime = sDate.match(/\d{2}:\d{2}:\d{2}/);
 			if(sTime){
 				sTime = sTime.toString();
 				tArr = sTime.split(':');
 			}
-			this.Seconds = tArr[2]!=null?tArr[2]:0;
+			this._seconds = tArr[2]!=null?tArr[2]:0;
 		}else{
-			this.Hours = 0;
-			this.Minutes = 0;
-			this.Seconds = 0;
+			this._hours = 0;
+			this._minutes = 0;
+			this._seconds = 0;
 		}
-		this.Milliseconds = 0;
+		this._milliseconds = 0;
 	},
 
 	valueOf:function(){
-	     
 		var gdate = this.toGregorian();
 		return gdate.valueOf();
 	},
 			
 	_getIndex:function(arr,str){
-		var i;
-		for(i=0;i<arr.length;i++){
+		//TODO: replace with dojo Array function
+		for(var i=0;i<arr.length;i++){
 			if(arr[i]==str){
 				return i;
 			}
@@ -620,10 +630,10 @@ dojo.declare("dojox.date.HebrewDate", null, {
 			case this.HESHVAN:
 			case this.KISLEV:
 				// These two month lengths can vary
-				return this.MONTH_LENGTH[month][this._yearType(year)];
+				return this._MONTH_LENGTH[month][this._yearType(year)];
 			default:
 				// The rest are a fixed length
-				return this.MONTH_LENGTH[month][0];
+				return this._MONTH_LENGTH[month][0];
 		}	
 	},
 
@@ -657,9 +667,9 @@ dojo.declare("dojox.date.HebrewDate", null, {
 				            
 		var months = Math.floor((235 * year - 234) / 19);           // # of months before year
 
-		var frac = months * this.MONTH_FRACT + this.BAHARAD;     // Fractional part of day #
-		var day  = months * 29 + Math.floor(frac / this.DAY_PARTS);        // Whole # part of calculation
-		frac = frac % this.DAY_PARTS;                        // Time of day
+		var frac = months * this._MONTH_FRACT + this.BAHARAD;     // Fractional part of day #
+		var day  = months * 29 + Math.floor(frac / this._DAY_PARTS);        // Whole # part of calculation
+		frac = frac % this._DAY_PARTS;                        // Time of day
 
 		var wd = day % 7;                        // Day of week (0 == Monday)
 
@@ -698,13 +708,13 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var dateGregorian = new Date(2008,10,12);
 		// |		dateHebrew.fromGregorian(dateGregorian);
 		var result =  this._computeHebrewFields(gdate);
-		this.Year = result[0];
-		this.Month=result[1];
-		this.Date=result[2];
-		this.Hours =gdate.getHours();
-		this.Milliseconds=gdate.getMilliseconds();
-		this.Minutes=gdate.getMinutes();
-		this.Seconds=gdate.getSeconds();
+		this._year = result[0];
+		this._month=result[1];
+		this._date=result[2];
+		this._hours =gdate.getHours();
+		this._milliseconds=gdate.getMilliseconds();
+		this._minutes=gdate.getMinutes();
+		this._seconds=gdate.getSeconds();
 		return this;
 	},
 
@@ -712,7 +722,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 
 		var julianDay = this._getJulianDayFromGregorianDate(gdate);
 		var d = julianDay - 347997;
-		var m = Math.floor((d * this.DAY_PARTS) / this.MONTH_PARTS);       // Months (approx)
+		var m = Math.floor((d * this._DAY_PARTS) / this._MONTH_PARTS);       // Months (approx)
 		var year = Math.floor((19 * m + 234) / 235) + 1;  // Years (approx)
 		var ys  = this._startOfYear(year);                 // 1st day of year
 		var dayOfYear = (d - ys);
@@ -726,7 +736,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// Now figure out which month we're in, and the date within that month
 
 		var typeofYear = this._yearType(year);
-		var monthStart = this._isLeapYear(year) ? this.LEAP_MONTH_START : this.MONTH_START;
+		var monthStart = this._isLeapYear(year) ? this.LEAP_MONTH_START : this._MONTH_START;
 		var month = 0;
 		while(dayOfYear > monthStart[month][typeofYear]){
 				month++;
@@ -745,15 +755,15 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// example:
 		// |		var dateHebrew = new dojox.date.HebrewDate(5768,11,20);
 		// |		var dateGregorian = dateHebrew.toGregorian();
-		var hYear = this.Year;
-		var hMonth = this.Month;
-		var hDate = this.Date;
+		var hYear = this._year;
+		var hMonth = this._month;
+		var hDate = this._date;
 		var day = this._startOfYear(hYear);
 		if(hMonth != 0){
 			if(this._isLeapYear(hYear)){
 				day += this.LEAP_MONTH_START[hMonth][this._yearType(hYear)];
 			} else{
-				day += this.MONTH_START[hMonth][this._yearType(hYear)];
+				day += this._MONTH_START[hMonth][this._yearType(hYear)];
 			}
 		}
 
@@ -793,10 +803,10 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		gdate.setFullYear(year);
 		gdate.setMonth(month);
 		gdate.setDate(dayOfMonth);
-		gdate.setHours(this.Hours);
-		gdate.setMilliseconds(this.Milliseconds);
-		gdate.setMinutes(this.Minutes);
-		gdate.setSeconds(this.Seconds);
+		gdate.setHours(this._hours);
+		gdate.setMilliseconds(this._milliseconds);
+		gdate.setMinutes(this._minutes);
+		gdate.setSeconds(this._seconds);
 		return gdate;
 	},
 
@@ -818,15 +828,15 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
 		// |		document.writeln(date1.getDay());
-		var hYear = this.Year;
-		var hMonth = this.Month;
-		var hDate = this.Date;
+		var hYear = this._year;
+		var hMonth = this._month;
+		var hDate = this._date;
 		var day = this._startOfYear(hYear);
 		if(hMonth != 0){
 			if(this._isLeapYear(hYear)){
 				day += this.LEAP_MONTH_START[hMonth][this._yearType(hYear)];
 			} else{
-				day += this.MONTH_START[hMonth][this._yearType(hYear)];
+				day += this._MONTH_START[hMonth][this._yearType(hYear)];
 			}
 		}
 
