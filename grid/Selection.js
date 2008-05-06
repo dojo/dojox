@@ -98,7 +98,7 @@ dojo.declare("dojox.grid.Selection", null, {
 
 	select: function(inIndex){
 		if(!this.multiSelect){
-			this.unselectAll(inIndex);
+			this.deselectAll(inIndex);
 		}
 		this.addToSelection(inIndex);
 	},
@@ -194,7 +194,7 @@ dojo.declare("dojox.grid.Selection", null, {
 		}else{
 			var lastSelected = this.selectedIndex;
 			if(!inCtrlKey){
-				this.unselectAll(inIndex);
+				this.deselectAll(inIndex);
 			}
 			if(inShiftKey){
 				this.selectRange(lastSelected, inIndex);
@@ -213,7 +213,7 @@ dojo.declare("dojox.grid.Selection", null, {
 
 	clear: function(){
 		this._beginUpdate();
-		this.unselectAll();
+		this.deselectAll();
 		this._endUpdate();
 	}
 });
