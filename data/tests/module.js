@@ -12,6 +12,7 @@ try{
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.AtomReadStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.jsonPathStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.GoogleSearchStore");
+	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.GoogleFeedStore");
 
 	//Load only if in a browser AND if the location is remote (not file.  As it needs a PHP server to work).
 	if(dojo.isBrowser){

@@ -8,7 +8,7 @@ Project state: stable
 -------------------------------------------------------------------------------
 Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
-	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore, GoogleSeachStore)
+	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore, GoogleSeachStore, GoogleFeedStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 	Russell Jones (KeyValueStore) (CLA)

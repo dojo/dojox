@@ -41,7 +41,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		//			<li>lang - The language locale to use. Defaults to the browser locale</li>
 		//		</ul>
 
-		if(args && args.label){
+		if(args){
 			if(args.label){
 				this.label = args.label;
 			}
@@ -71,10 +71,6 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	// _storeRef: String
 	// The internal reference added to each item pointing at the store which owns it.
 	_storeRef: "_S",
-	
-	// _cache: Object
-	// Stores previous and in-flight searches for faster retrieval.
-	_cache: {},
 
 	// _attributes: Array
 	// The list of attributes that this store supports
@@ -88,6 +84,8 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	// The type of search. Valid values are "web", "local", "video", "blogs", "news", "books", "images".
 	// This should not be set directly. Instead use one of the child classes.
 	_type: "web",
+
+	_queryAttr: "text",
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -184,13 +182,9 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		this._assertIsAttribute(attribute);
 		var val = item[attribute];
 		if(dojo.isArray(val)) {
-			var formattedVals = [];
-			dojo.forEach(val, function(item){
-				formattedVals.push(this._format(item), attribute);
-			});
-			return formattedVals;
+			return val;
 		}else{
-			return [this._format(val, attribute)];
+			return [val];
 		}
 	},
 
@@ -222,20 +216,21 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		//	errorHandler:
 		//		A function to call on error
 		request = request || {};
-			
-		var scope = request.scope || dojo.global; 
 
-		if(!request.query || !request.query.text){
+		var scope = request.scope || dojo.global;
+
+		if(!request.query || !request.query[this._queryAttr]){
 			if(request.onError){
-				request.onError.call(scope, new Error(this.declaredClass + ": A query must be specified, with a 'text' parameter."));
+				request.onError.call(scope, new Error(this.declaredClass +
+					": A query must be specified, with a '" + [this._queryAttr] + "' parameter."));
 				return;
 			}
 		}
-		//Make a copy of the request object, in case it is 
+		//Make a copy of the request object, in case it is
 		//modified outside the store in the middle of a request
+		var query = request.query[this._queryAttr];
 		request = {
 			query: {
-				text: request.query.text
 			},
 			onComplete: request.onComplete,
 			onError: request.onError,
@@ -244,6 +239,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 			start: request.start,
 			count: request.count
 		};
+		request.query[this._queryAttr] = query;
 
         //Google's web api will only return a max of 8 results per page.
 		var pageSize = 8;
@@ -253,13 +249,8 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 		//Build up the content to send the request for.
 		//rsz is the result size, "large" gives 8 results each time
-		var content = {	q: request.query.text, 
-						v:"1.0", 
-						rsz:"large",
-						callback: callbackFn,
-						key:this._key, 
-						hl: this._lang};
-		
+		var content = this._createContent(query, callbackFn, request);
+
 		var firstRequest;
 
 		if(typeof(request.start) === "undefined" || request.start === null){
@@ -307,12 +298,12 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		// Function to handle returned data.
 		var myHandler = function(start, data){
 			if(finished){return;}
-			var results = data ? data['results']: data;
+			var results = _this._getItems(data);
 			var cursor = data ? data['cursor']: null;
 			if(results){
 				//Process the results, adding the store reference to them
 				for(var i = 0; i < results.length && i + start < request.count + request.start; i++) {
-					results[i][_this._storeRef] = _this;
+					_this._processItem(results[i], data);
 					items[i + start] = results[i];
 				}
 				successfulReq ++;
@@ -325,7 +316,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 					//Call the onBegin method if it exists
 					if (request.onBegin){
 						var est = cursor ? cursor.estimatedResultCount : results.length;
-						var total =  est ? Math.min(est, firstStart + results.length) : firstStart + results.length; 
+						var total =  est ? Math.min(est, firstStart + results.length) : firstStart + results.length;
 						request.onBegin.call(scope, total, request);
 					}
 
@@ -370,7 +361,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 		var callbacks = [];
 		var lastCallback = firstRequest.start - 1;
-		
+
 		var sortFn = function(a,b){
 			if(a.start < b.start){return -1;}
 			if(b.start < a.start){return 1;}
@@ -402,7 +393,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 					}
 				}
 			}else{
-				callbacks.push({start:start, data: data});				
+				callbacks.push({start:start, data: data});
 			}
 		};
 
@@ -410,6 +401,25 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		// we will have a list of pages, which can then be
 		// gone through
 		doRequest(firstRequest);
+	},
+
+	_processItem: function(item, data) {
+		item[this._storeRef] = this;
+	},
+
+	_getItems: function(data){
+		return data['results'] || data;
+	},
+
+	_createContent: function(query, callback, request){
+		return {
+				q: query,
+				v:"1.0",
+				rsz:"large",
+				callback: callback,
+				key:this._key,
+				hl: this._lang
+			};
 	}
 });
 
@@ -449,7 +459,7 @@ dojo.declare("dojox.data.GoogleBlogSearchStore", dojox.data.GoogleSearchStore,{
 	_attributes: ["blogUrl", "postUrl", "title", "titleNoFormatting", "content", "author", "publishedDate"]
 });
 
-	
+
 dojo.declare("dojox.data.GoogleLocalSearchStore", dojox.data.GoogleSearchStore,{
 	// summary:
 	//	A data store for retrieving search results from Google.
@@ -514,8 +524,8 @@ dojo.declare("dojox.data.GoogleNewsSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>clusterUrl - A URL pointing to a page listing related storied.</li>
 	//			<li>location - The location of the news story.</li>
 	//			<li>publishedDate - The date of publication, in RFC-822 format.</li>
-	//			<li>relatedStories - An optional array of objects specifying related stories. 
-	//				Each object has the following subset of properties: 
+	//			<li>relatedStories - An optional array of objects specifying related stories.
+	//				Each object has the following subset of properties:
 	//				"title", "titleNoFormatting", "url", "unescapedUrl", "publisher", "location", "publishedDate".
 	//			</li>
 	//		</ul>
@@ -567,5 +577,5 @@ dojo.declare("dojox.data.GoogleImageSearchStore", dojox.data.GoogleSearchStore,{
 	//	The query accepts one parameter: text - The string to search for
 	_type: "images",
 	_attributes: ["title", "titleNoFormatting", "visibleUrl", "url", "unescapedUrl", "originalContextUrl",
-					"width", "height  ", "tbWidth", "tbHeight", "tbUrl", "content", "contentNoFormatting"]
+					"width", "height", "tbWidth", "tbHeight", "tbUrl", "content", "contentNoFormatting"]
 });
