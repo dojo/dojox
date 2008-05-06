@@ -585,7 +585,7 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 	_setRowId: function(item, offset, idx){
 		// FIXME: where else do we need to keep this in sync?
 		//Handle stores that implement identity and try to handle those that do not.
-		if (this._canIdentify) {
+		if(this._canIdentify){
 			this._rowIdentities[this.store.getIdentity(item)] = {rowId: offset+idx, item: item};
 		}else{
 			var identity = dojo.toJson(this.query) + ":start:" + offset + ":idx:" + idx + ":sort:" + dojo.toJson(this.sortFields);
@@ -628,8 +628,9 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		}
 	},
 	_storeDatumDelete: function(item){
-		if(dojo.indexOf(this._currentlyProcessing, item) != -1)
+		if(dojo.indexOf(this._currentlyProcessing, item) != -1){
 			return;
+		}
 		// the store has deleted some item under us, need to remove that item from
 		// the view if possible.  It may be the deleted item isn't even in the grid.
 		var rowId = this._getRowId(item, true);
@@ -638,8 +639,9 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		}
 	},
 	_storeDatumNew: function(item){
-		if(this._disableNew)
+		if(this._disableNew){
 			return;
+		}
 		// the store has added some item under us, need to add it to the view.
 		this._insertItem(item, this.data.length);
 	},
@@ -656,6 +658,12 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 			this._setupFields(storeItem);
 		}
 		var row = this._createRow(storeItem);
+		for(var i in this._rowIdentities){ //increment all the remaining row ids up one
+			var rowIdentity = this._rowIdentities[i];
+			if(rowIdentity.rowId >= index){
+				rowIdentity.rowId++;
+			}
+		}
 		this._setRowId(storeItem, 0, index);
 		dojox.grid._data.Dynamic.prototype.insert.apply(this, [row, index]);
 	},
@@ -737,7 +745,7 @@ dojo.declare("dojox.grid._data.DojoData", dojox.grid._data.Dynamic, {
 		this._rowIdentities = {};
 		this.pages = [];
 		this.bop = this.eop = -1;
-		this.setData((keepStore?this.store:[]));
+		this.setData(keepStore ? this.store : []);
 	},
 	processError: function(error, request){
 		//	summary:
