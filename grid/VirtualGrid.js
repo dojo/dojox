@@ -2,7 +2,7 @@ dojo.provide("dojox.grid.VirtualGrid");
 
 dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid._grid.lib");
-dojo.require("dojox.grid._grid.scroller");
+dojo.require("dojox.grid._Scroller");
 dojo.require("dojox.grid._View");
 dojo.require("dojox.grid._ViewManager");
 dojo.require("dojox.grid._Layout");
@@ -11,7 +11,7 @@ dojo.require("dojox.grid._grid.focus");
 dojo.require("dojox.grid.Selection");
 dojo.require("dojox.grid._grid.edit");
 dojo.require("dojox.grid._RowSelector");
-dojo.require("dojox.grid._grid.publicEvents");
+dojo.require("dojox.grid._Events");
 
 (function(){
 	var jobs = {
@@ -38,7 +38,7 @@ dojo.require("dojox.grid._grid.publicEvents");
 	};
 
 	dojo.declare('dojox.grid.VirtualGrid', 
-		[ dijit._Widget, dijit._Templated ], 
+		[ dijit._Widget, dijit._Templated, dojox.grid._Events ], 
 		{
 		// summary:
 		// 		A grid widget with virtual scrolling, cell editing, complex rows,
@@ -227,7 +227,7 @@ dojo.require("dojox.grid._grid.publicEvents");
 
 		createScroller: function(){
 			// summary: Creates a new virtual scroller
-			this.scroller = new dojox.grid._grid.ColumnScroller();
+			this.scroller = new dojox.grid._Scroller();
 			this.scroller._pageIdPrefix = this.id + '-';
 			this.scroller.renderRow = dojo.hitch(this, "renderRow");
 			this.scroller.removeRow = dojo.hitch(this, "rowRemoved");
@@ -785,6 +785,4 @@ dojo.require("dojox.grid._grid.publicEvents");
 		}
 
 	});
-
-	dojo.mixin(dojox.grid.VirtualGrid.prototype, dojox.grid.publicEvents);
 })();

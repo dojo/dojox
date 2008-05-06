@@ -1,6 +1,7 @@
-dojo.provide("dojox.grid._grid.publicEvents");
+dojo.provide("dojox.grid._Events");
 
-dojox.grid.publicEvents = {
+dojox.grid._Events = function(){};
+dojo.extend(dojox.grid._Events, {
 	// summary:
 	//		VirtualGrid mixin that provides default implementations for grid events.
 	// description: 
@@ -442,5 +443,4 @@ dojox.grid.publicEvents = {
 
 	onSelectionChanged: function(){
 	}
-
-}
+});

@@ -1,4 +1,6 @@
 // model that works with Yahoo Search API
+(function(){
+var nop = function(){};
 dojo.declare("dojox.grid._data.yahooSearch", dojox.grid._data.dynamic, 
 	function(inFields, inData) {
 		this.rowsPerPage = 20;
@@ -85,9 +87,9 @@ dojo.declare("dojox.grid._data.yahooSearch", dojox.grid._data.dynamic,
 		return (inColIndex == undefined ? row : (row ? row[field.name] : field.na));
 	},
 	// events
-	onInitializeData: turbo.nop,
-	onSend: turbo.nop,
-	onReceive: turbo.nop
+	onInitializeData: nop,
+	onSend: nop,
+	onReceive: nop
 });
 
 // report
@@ -129,3 +131,4 @@ formatDimensions = function(inData, inRowIndex) {
 		return '&nbsp;';
 	return inData[0] + ' x ' + inData[1];
 }
+})();

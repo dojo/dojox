@@ -4,25 +4,18 @@ dojo.mixin(dojox.grid,{
 
 	na: '...',
 
-	nop: function(){
-		// summary: a null function?
-	},
-
 	fire: function(ob, ev, args){
 		var fn = ob && ev && ob[ev];
 		return fn && (args ? fn.apply(ob, args) : ob[ev]());
 	},
 	
-	// from lib.js
-	setStyle: function(inElement, inStyle, inValue){
-		if(inElement && inElement.style[inStyle] != inValue){
-			inElement.style[inStyle] = inValue;
-		}
-	},
-	
 	setStyleHeightPx: function(inElement, inHeight){
 		if(inHeight >= 0){
-			dojox.grid.setStyle(inElement, 'height', inHeight + 'px');
+			var s = inElement.style;
+			var v = inHeight + 'px';
+			if(inElement && s['height'] != v){
+				s['height'] = v;
+			}
 		}
 	},
 	
@@ -41,62 +34,6 @@ dojo.mixin(dojox.grid,{
 		inNode = dojo.byId(inNode);
 		inNode && inNode.parentNode && inNode.parentNode.removeChild(inNode);
 		return inNode;
-	},
-	
-	indexInParent: function(inNode){
-		var i=0, n, p=inNode.parentNode;
-		while((n = p.childNodes[i++])){
-			if(n == inNode){
-				return i - 1;
-			}
-		}
-		return -1;
-	},
-	
-	cleanNode: function(inNode){
-		if(!inNode){
-			return;
-		}
-		var filter = function(inW){
-			return inW.domNode && dojo.isDescendant(inW.domNode, inNode, true);
-		}
-		var ws = dijit.registry.filter(filter);
-		for(var i=0, w; (w=ws[i]); i++){
-			w.destroy();
-		}
-		delete ws;
-	},
-	
-	getTagName: function(inNodeOrId){
-		var node = dojo.byId(inNodeOrId);
-		return (node && node.tagName ? node.tagName.toLowerCase() : '');
-	},
-	
-	nodeKids: function(inNode, inTag){
-		var result = [];
-		var i=0, n;
-		while((n = inNode.childNodes[i++])){
-			if(dojox.grid.getTagName(n) == inTag){
-				result.push(n);
-			}
-		}
-		return result;
-	},
-	
-	divkids: function(inNode){
-		return dojox.grid.nodeKids(inNode, 'div');
-	},
-	
-	focusSelectNode: function(inNode){
-		try{
-			dojox.grid.fire(inNode, "focus");
-			dojox.grid.fire(inNode, "select");
-		}catch(e){// IE sux bad
-		}
-	},
-	
-	whenIdle: function(/*inContext, inMethod, args ...*/){
-		setTimeout(dojo.hitch.apply(dojo, arguments), 0);
 	},
 	
 	arrayCompare: function(inA, inB){

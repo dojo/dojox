@@ -5,6 +5,8 @@ dojo.provide("dojox.grid._grid.drag");
 // begin closure
 (function(){
 
+var nop = function(){};
+
 var dgdrag = dojox.grid._grid.drag = {};
 
 dgdrag.dragging = false;
@@ -40,9 +42,9 @@ dgdrag.start = function(inElement, inOnDrag, inOnEnd, inEvent, inOnStart){
 	dgdrag.dragging = true;
 	dgdrag.elt = inElement;
 	dgdrag.events = {
-		drag: inOnDrag || dojox.grid.nop, 
-		end: inOnEnd || dojox.grid.nop, 
-		start: inOnStart || dojox.grid.nop, 
+		drag: inOnDrag || nop, 
+		end: inOnEnd || nop, 
+		start: inOnStart || nop, 
 		oldmove: inElement.onmousemove, 
 		oldup: inElement.onmouseup, 
 		oldclick: inElement.onclick 
