@@ -144,16 +144,23 @@ dojo.declare("dojox.grid._data.editors.Editor", dojox.grid._data.editors.Dijit, 
 	createEditor: function(inNode, inDatum, inRowIndex){
 		// editor needs its value set after creation
 		var editor = new this.editorClass(this.getEditorProps(inDatum), inNode);
-		editor.setValue(inDatum);
+		dojo.connect(editor, 'onLoad', dojo.hitch(this, 'populateEditor'));
 		return editor;
 	},
 	formatNode: function(inNode, inDatum, inRowIndex){
+		this.content = inDatum;
 		this.inherited(arguments);
-		// FIXME: seem to need to reopen the editor and display the toolbar
-		var e = this.editor;
-		e.open();
-		if(this.cell.editorToolbar){
-			dojo.place(e.toolbar.domNode, e.editingArea, "before");
+		if(dojo.isMoz){
+			// FIXME: seem to need to reopen the editor and display the toolbar
+			var e = this.editor;
+			e.open();
+			if(this.cell.editorToolbar){
+				dojo.place(e.toolbar.domNode, e.editingArea, "before");
+			}
 		}
+	},
+	populateEditor: function(){
+		this.editor.setValue(this.content);
+		this.editor.placeCursorAtEnd();
 	}
 });
