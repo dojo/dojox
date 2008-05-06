@@ -638,8 +638,9 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		}
 	},
 	_storeDatumNew: function(item){
-		if(this._disableNew)
+		if(this._disableNew){
 			return;
+		}
 		// the store has added some item under us, need to add it to the view.
 		this._insertItem(item, this.data.length);
 	},
@@ -656,6 +657,12 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			this._setupFields(storeItem);
 		}
 		var row = this._createRow(storeItem);
+		for(var i in this._rowIdentities){ //increment all the remaining row ids up one
+			var rowIdentity = this._rowIdentities[i];
+			if(rowIdentity.rowId >= index){
+				rowIdentity.rowId++;
+			}
+		}
 		this._setRowId(storeItem, 0, index);
 		dojox.grid.data.Dynamic.prototype.insert.apply(this, [row, index]);
 	},
