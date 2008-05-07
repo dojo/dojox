@@ -421,15 +421,15 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 				var dayYear = mD.match(/\d{1,2}\s\d{4}/);
   				dayYear = dayYear.toString();
-	 	
+
   				var mName = mD.replace(/\s\d{1,2}\s\d{4}/,'');
 
   				mName = mName.toString();
-  				this._month = this._getIndex(this._months,mName);
+  				this._month = dojo.indexOf(this._months, mName); //FIXME: check for -1?
   				sD = dayYear.split(/\s/);
-	 	
+
   				this._date = sD[0];
-  				this._year = sD[1]; 
+  				this._year = sD[1];
 
 				jd = this._islamic_to_jd(this._year, this._month+1, this._date);
 				this._day = this._jd_to_gregorian(jd).getDay();
@@ -446,14 +446,14 @@ dojo.declare("dojox.date.IslamicDate", null, {
 				sTime = sTime.toString();
 				tArr = sTime.split(':');
 			}
-			this._minutes = tArr[1] != null?tArr[1]:0;
+			this._minutes = tArr[1] != null ? tArr[1] : 0;
 			   
 			sTime = sDate.match(/\d{2}:\d{2}:\d{2}/);
 			if(sTime){
 				sTime = sTime.toString();
 				tArr = sTime.split(':');
 			}
-			this._seconds = tArr[2] != null?tArr[2]:0;
+			this._seconds = tArr[2] != null ? tArr[2]:0;
 		}else{
 			this._hours = 0;
 			this._minutes = 0;
@@ -471,21 +471,9 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		return gdate.valueOf();
 	},
 
-	_getIndex:function(arr,str){
-		//summary: returns the String str index in the array arr
-
-		//TODO: replace with dojo Array function
-		for(var i=0;i<arr.length;i++){
-			if(arr[i]==str){
-				return i;
-			}
-		}
-		return -1;
-	},
-
 	_yearStart:function(/*Number*/year){
 		//summary: return start of Islamic year
-		 return (year-1)*354 + Math.floor((3+11*year)/30.0);
+		return (year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
 	_monthStart:function(/*Number*/year, /*Number*/month){
@@ -503,8 +491,8 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		//summary: returns the number of days in the given Islamic Month
 		var length =0;
 		length = 29 + ((month+1) % 2);
-		if((month == 11)&& this._civilLeapYear(year)){
-				length++;
+		if(month == 11 && this._civilLeapYear(year)){
+			length++;
 		}
 		return length;
 	},
