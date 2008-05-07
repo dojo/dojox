@@ -4,8 +4,8 @@ dojo.provide("dojox.lang.aspect.timer");
 	var aop = dojox.lang.aspect,
 		uniqueNumber = 0;
 	
-	var Timer = function(){
-		this.name = "DojoAopTimer" + (++uniqueNumber);
+	var Timer = function(name){
+		this.name = name || ("DojoAopTimer #" + ++uniqueNumber);
 		this.inCall = 0;
 	};
 	dojo.extend(Timer, {
@@ -21,10 +21,13 @@ dojo.provide("dojox.lang.aspect.timer");
 		}
 	});
 	
-	aop.timer = function(){
+	aop.timer = function(/*String?*/ name){
 		// summary:
 		//		Returns an object, which can be used to time calls to methods.
-	
-		return new Timer;	// Object
+		//
+		// name:
+		//		The optional unique name of the timer.
+
+		return new Timer(name);	// Object
 	};
 })();
