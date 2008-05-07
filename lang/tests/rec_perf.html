@@ -1,0 +1,150 @@
+<html>
+	<head>
+		<title>Clocking recursion combinators</title>
+		<style type="text/css">
+			@import "../../../dojo/resources/dojo.css";
+		</style>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+		<script type="text/javascript" src="../functional.js"></script>
+		<script type="text/javascript" src="../functional/linrec.js"></script>
+		<script type="text/javascript" src="../functional/tailrec.js"></script>
+		<script type="text/javascript" src="../functional/numrec.js"></script>
+		<script type="text/javascript" src="../functional/binrec.js"></script>
+		<script type="text/javascript" src="../functional/multirec.js"></script>
+		<script type="text/javascript" src="../functional/sequence.js"></script>
+		<script type="text/javascript">
+			var clock = function(body){
+				var b = new Date();
+				body();
+				var e = new Date();
+				return e.getTime() - b.getTime();	// in ms
+			};
+			
+			var log = function(name, body){
+				var ms = clock(body);
+				console.log(name + ":", ms);
+			};
+
+			var LEN1 = 15, LEN2 = 10, ITER = 1000, tests = {},
+				df = dojox.lang.functional,
+				sample1 = df.repeat(LEN1, "+1", 0),
+				sample2 = df.repeat(LEN2, "+1", 0);
+				
+			var fact1 = function(n){
+				var ret = 1;
+				for(var i = 2; i <= n; ++i){
+					ret *= i;
+				}
+				return ret;
+			};
+			tests["factorial: raw loop"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample1, fact1);
+				}
+			};
+			
+			var fact2 = function(n){ return n ? n * arguments.callee.call(this, n - 1) : 1; };
+			tests["factorial: raw recursion"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample1, fact2);
+				}
+			};
+			
+			var fact3 = df.linrec("<= 1", "1", "{old: n, args: [n - 1]}", "a * b.old");
+			tests["factorial: linrec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample1, fact3);
+				}
+			};
+			
+			var fact4 = df.numrec(1, "*");
+			tests["factorial: numrec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample1, fact4);
+				}
+			};
+			
+			var fact5a = df.tailrec("<= 1", "n, acc -> acc", "[n - 1, n * acc]");
+			var fact5 = function(n){ return fact5a(n, 1); };
+			tests["factorial: tailrec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample1, fact5);
+				}
+			};
+			
+			var fact6 = df.multirec("<= 0", "1", "{old: n, args: [[n - 1]]}", "a[0] * b.old");
+			tests["factorial: multirec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample1, fact6);
+				}
+			};
+			
+			var fib1 = function(n){
+				var a = 1, b = 1;
+				for(var i = 2; i <= n; ++i){
+					var c = a + b;
+					b = a;
+					a = c;
+				}
+				return a;
+			};
+			tests["fibonacci: raw loop"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample2, fib1);
+				}
+			};
+			
+			var fib2 = function(n){ return n <= 1 ? 1 : arguments.callee.call(this, n - 1) + arguments.callee.call(this, n - 2); };
+			tests["fibonacci: raw recursion"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample2, fib2);
+				}
+			};
+			
+			var fib3 = df.binrec("<= 1", "1", "{args1: [n - 1], args2: [n - 2]}", "+");
+			tests["fibonacci: binrec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample2, fib3);
+				}
+			};
+			
+			var fib4a = df.tailrec("<= 0", "arguments[2]", "[n - 1, next + result, next]");
+			var fib4  = function(n){ return fib4a(n, 1, 1); };
+			tests["fibonacci: tailrec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample2, fib4);
+				}
+			};
+			
+			var fib5 = df.multirec("<= 1", "1", "{args: [[n - 1], [n - 2]]}", "a[0] + a[1]");
+			tests["fibonacci: multirec"] = function(){
+				for(var i = 0; i < ITER; ++i){
+					df.forEach(sample2, fib5);
+				}
+			};
+			
+			var keys = df.keys(tests), i = 0;
+			
+			var doTest = function(){
+				log(keys[i], tests[keys[i]]);
+				++i;
+				if(i < keys.length){
+					setTimeout(doTest, 20);
+				}else{
+					console.log("that's all");
+				}
+			};
+			
+			var test = function(){
+				i = 0;
+				setTimeout(doTest, 20);
+			};
+				
+			//dojo.addOnLoad(test);
+		</script>
+	</head>
+	<body>
+		<p>This test is meant to run with Firebug. Open the console to see the output.</p>
+		<p><button onclick="test()">Start</button></p>
+	</body>
+</html>
