@@ -66,7 +66,7 @@ dojo.provide("dojox.lang.functional.lambda");
 				});
 			}
 		}
-		return {args: args, body: "return (" + s + ");"};	// Object
+		return {args: args, body: s};	// Object
 	};
 
 	var compose = function(/*Array*/ a){
@@ -83,6 +83,14 @@ dojo.provide("dojox.lang.functional.lambda");
 
 	dojo.mixin(df, {
 		// lambda
+		rawLambda: function(/*String*/ s){
+			// summary: builds a function from a snippet, or array (composing), returns
+			//	an object describing the function; functions are passed through unmodified.
+			// description: This method is to normalize a functional representation
+			//	(a text snippet) to an object that contains an array of arguments,
+			//	and a body , which is used to calculate the returning value.
+			return lambda(s);	// Object
+		},
 		buildLambda: function(/*String*/ s){
 			// summary: builds a function from a snippet, returns a string, 
 			//	which represents the function.
@@ -90,7 +98,7 @@ dojo.provide("dojox.lang.functional.lambda");
 			//	built from the snippet. It is meant to be evaled in the proper context, 
 			//	so local variables can be pulled from the environment.
 			s = lambda(s);
-			return "function(" + s.args.join(",") + "){" + s.body + "}";	// String
+			return "function(" + s.args.join(",") + "){return (" + s.body + ");}";	// String
 		},
 		lambda: function(/*Function|String|Array*/ s){
 			// summary: builds a function from a snippet, or array (composing), returns 
@@ -100,7 +108,7 @@ dojo.provide("dojox.lang.functional.lambda");
 			if(typeof s == "function"){ return s; }
 			if(s instanceof Array){ return compose(s); }
 			s = lambda(s);
-			return new Function(s.args, s.body);	// Function
+			return new Function(s.args, "return (" + s.body + ");");	// Function
 		}
 	});
 })();
