@@ -22,7 +22,7 @@
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojo.data.ItemFileReadStore");
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
 	</script>
 	<!-- Debugging -->
@@ -53,7 +53,7 @@
 </head>
 <body class="tundra">
 	<div class="heading">dojox.grid.Grid Basic Test</div>
-	<span dojoType="dojo.data.ItemFileReadStore" 
+	<span dojoType="dojo.data.ItemFileWriteStore" 
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<table dojoType="dojox.grid.DataGrid"

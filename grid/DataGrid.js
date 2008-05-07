@@ -36,13 +36,30 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		}
 	},
 
+	_addItem: function(item, index){
+		var idty = this.model.getIdentity(item);
+		this._identity_map[idty] = {idx: index, item: item};
+		this._rows[index] = idty;
+		this.updateRow(index);
+	},
+
 	_onNew: function(item, parentInfo){
+		this.updateRowCount(this.rowCount+1);
+		this._addItem(item, this.rowCount-1);
 	},
 
 	_onDelete: function(item){
+		var idty = this.model.getIdentity(item);
+		var idx = this._identity_map[idty].idx;
+
+		this._rows.splice(idx, 1);
+		delete this._identity_map[idty];
+
+		this.updateRowCount(this.rowCount-1);
 	},
 
 	_onRevert: function(){
+		this._refresh();
 	},
 
 	setModel: function(model){
@@ -80,9 +97,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		if(!items || items.length == 0){ return; }
 		//console.log(items);
 		dojo.forEach(items, function(item, idx){
-			this._identity_map[this.model.getIdentity(item)] = { idx: req.start+idx, item: item };
-			this._rows[req.start+idx] = this.model.getIdentity(item);
-			this.updateRow(req.start+idx);
+			this._addItem(item, req.start+idx);
 		}, this);
 	},
 
