@@ -88,7 +88,7 @@ dojo.provide("dojox.lang.aspect");
 				// process around and after events
 				try{
 					// call the around advice or the original method
-					ret = aop.proceed.apply(null, arguments);
+					ret = (advices.prev_around == advices ? self.target : aop.proceed).apply(this, arguments);
 				}catch(e){
 					// process after throwing and after events
 					context.dynIndex = context.dynAdvices.length;
