@@ -50,14 +50,18 @@ dojo.declare("dojox.widget.FisheyeLite",
 	//	properties: Object
 	//			An object of "property":scale pairs
 	//			defaults to font-size with a scale of 2.75
-	properties: { 
-		fontSize: 2.75
-	},
+	properties: null,
 	
 	// unit: String
 	//		Sometimes, you need to specify a unit. Should be part of
 	//		properties attrib, but was trying to shorthand the logic there
 	unit:"px",
+	
+	constructor: function(props, node){
+		this.properties = props.properties || {
+			fontSize: 2.75
+		}
+	},
 	
 	postCreate: function(){
 		
@@ -127,5 +131,5 @@ dojo.declare("dojox.widget.FisheyeLite",
 		// summary: stub function fired when Fisheye Item is fully visible and
 		// 		hovered. connect or override use.
 	}
-		
+	
 });
