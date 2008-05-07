@@ -33,7 +33,7 @@ dojox.fx.addClass = function(/*dojox.fx._arg.StyleArgs*/ args){
 	// |	// animate to line-height:40px
 	// |	dojo.fx.addClass({ node:"test", cssClass:"foo" }).play();
 	// 
-	var node = (args.node = dojo.byId(args.node)); 
+	var node = args.node = dojo.byId(args.node); 
 
 	var pushClass = (function(n){
 		// summary: onEnd we want to add the class to the node 
@@ -193,7 +193,7 @@ dojox.fx._getCalculatedStyleChanges = function(/*dojox.fx._arg.StyleArgs*/ args,
 	// 	true to calculate what adding a class would do, 
 	// 	false to calculate what removing the class would do
 
-	var node = (args.node = dojo.byId(args.node)); 
+	var node = args.node = dojo.byId(args.node); 
 	var cs = dojo.getComputedStyle(node);
 
 	// take our snapShots
@@ -207,7 +207,7 @@ dojox.fx._getCalculatedStyleChanges = function(/*dojox.fx._arg.StyleArgs*/ args,
 	dojo.forEach(dojox.fx._allowedProperties,function(prop){
 		if(_before[i] != _after[i]){
 			// FIXME: the static unit: px is not good, either. need to parse unit from computed style?
-			calculated[prop] = { end: parseInt(_after[i]) /* start: parseInt(_before[i]), unit: 'px' */ }; 
+			calculated[prop] = parseInt(_after[i]) /* start: parseInt(_before[i]), unit: 'px' */ ; 
 		} 
 		i++;
 	});
