@@ -81,24 +81,21 @@ div.dojoxDialogNoTitle {
 }
 
 .dojoxDialogCloseIcon {
-	background : url("../../../dijit/themes/tundra/images/spriteRoundedIconsSmall.png") no-repeat right top;
-	float: right;
+	background : url("images/dialogCloseButton.png") no-repeat top right;
 	position: absolute;
 	vertical-align: middle;
-	right: 5px;
-	top: 3px;
-	height: 15px;
-	width: 15px;
+	left: -19px;
+	top: -19px;
+	height: 29px;
+	width: 29px;
 	cursor: pointer;
 	z-index: 999;
 }
+.dj_ie .dojoxDialogCloseIcon {
+	background-image: url("images/dialogCloseButton.gif");
+}
 
 .dojoxDialogNoTitle .dojoxDialogCloseIcon {
-	top: -7px;
+	top: -15px;
+	left: -15px;
 }
-
-.dj_ie6 .dojoxDialogCloseIcon {
-	background : url("../../../dijit/themes/tundra/images/spriteRoundedIconsSmall.gif") no-repeat right top;
-}
-
-
