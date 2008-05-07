@@ -15,13 +15,14 @@ dojo.require("dojox.lang.functional.lambda");
 			// lambda:
 			//		The String variable representing the lambda function.
 			// init:
-			//		Conveys how to initialize parameters. If it is a String, then the apply() method 
+			//		Conveys how to initialize parameters. If it is a String, then the apply() method
 			//		would be emulated treating "init" as a list of input parameters.
 			//		It it is an Array, then the call() method is emulated treating array members
 			//		as input parameters.
 			// add2dict:
 			//		The optional function, which is used to record names of lambda parameters.
 			//		If supplied, this function is called with a name of every parameter.
+
 			var s = df.rawLambda(lambda);
 			if(add2dict){
 				df.forEach(s.args, add2dict);

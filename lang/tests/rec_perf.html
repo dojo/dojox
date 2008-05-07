@@ -50,7 +50,7 @@
 				}
 			};
 			
-			var fact3 = df.linrec("<= 1", "1", "{old: n, args: [n - 1]}", "a * b.old");
+			var fact3 = df.linrec("<= 1", "1", "[n - 1]", "a * b[0]");
 			tests["factorial: linrec"] = function(){
 				for(var i = 0; i < ITER; ++i){
 					df.forEach(sample1, fact3);
@@ -64,7 +64,7 @@
 				}
 			};
 			
-			var fact5a = df.tailrec("<= 1", "n, acc -> acc", "[n - 1, n * acc]");
+			var fact5a = df.tailrec("<= 1", "arguments[1]", "[n - 1, n * acc]");
 			var fact5 = function(n){ return fact5a(n, 1); };
 			tests["factorial: tailrec"] = function(){
 				for(var i = 0; i < ITER; ++i){
@@ -72,7 +72,7 @@
 				}
 			};
 			
-			var fact6 = df.multirec("<= 0", "1", "{old: n, args: [[n - 1]]}", "a[0] * b.old");
+			var fact6 = df.multirec("<= 0", "1", "[[n - 1]]", "a[0] * b[0]");
 			tests["factorial: multirec"] = function(){
 				for(var i = 0; i < ITER; ++i){
 					df.forEach(sample1, fact6);
@@ -101,7 +101,7 @@
 				}
 			};
 			
-			var fib3 = df.binrec("<= 1", "1", "{args1: [n - 1], args2: [n - 2]}", "+");
+			var fib3 = df.binrec("<= 1", "1", "[[n - 1], [n - 2]]", "+");
 			tests["fibonacci: binrec"] = function(){
 				for(var i = 0; i < ITER; ++i){
 					df.forEach(sample2, fib3);
@@ -116,7 +116,7 @@
 				}
 			};
 			
-			var fib5 = df.multirec("<= 1", "1", "{args: [[n - 1], [n - 2]]}", "a[0] + a[1]");
+			var fib5 = df.multirec("<= 1", "1", "[[n - 1], [n - 2]]", "a[0] + a[1]");
 			tests["fibonacci: multirec"] = function(){
 				for(var i = 0; i < ITER; ++i){
 					df.forEach(sample2, fib5);

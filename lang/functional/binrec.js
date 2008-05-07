@@ -17,7 +17,7 @@ dojo.require("dojox.lang.functional.util");
 
 (function(){
 	var df = dojox.lang.functional, inline = df.inlineLambda,
-		_x ="_x", _z_r_r_z_e = ["_z.r", "_r", "_z.e"];
+		_x ="_x", _z_r_r_z_a = ["_z.r", "_r", "_z.a"];
 
 	df.binrec = function(
 					/*Function|String|Array*/ cond,
@@ -39,14 +39,12 @@ dojo.require("dojox.lang.functional.util");
 		// before:
 		//		The lambda expression, which is called before the recursive step.
 		//		It accepts the same parameter as the generated recursive function itself.
-		//		The returned value should be an object, which represents the "environment".
-		//		This object should have two Array members named "args1" and "args2",
-		//		which are used to call the generated function recursively twice in row
-		//		starting from "args1".
+		//		The returned value should be an array of two variable, which are used to call
+		//		the generated function recursively twice in row starting from the first item.
 		// above:
 		//		The lambda expression, which is called after the recursive step.
 		//		It accepts three parameters: two returned values from recursive steps, and
-		//		the "environment" object returned by the "before" function.
+		//		the original array of parameters used with all other functions.
 		//		The returned value will be returned as the value of the generated function.
 
 		var c, t, b, a, cs, ts, bs, as, dict1 = {}, dict2 = {},
@@ -72,10 +70,10 @@ dojo.require("dojox.lang.functional.util");
 			dict2["_b=_t.b"] = 1;
 		}
 		if(typeof after == "string"){
-			as = inline(after, _z_r_r_z_e, add2dict);
+			as = inline(after, _z_r_r_z_a, add2dict);
 		}else{
 			a = df.lambda(after);
-			as = "_a.call(this, _z.r, _r, _z.e)";
+			as = "_a.call(this, _z.r, _r, _z.a)";
 			dict2["_a=_t.a"] = 1;
 		}
 		var locals1 = df.keys(dict1), locals2 = df.keys(dict2),
@@ -87,15 +85,15 @@ dojo.require("dojox.lang.functional.util");
 				cs,
 				"){_r=",
 				bs,
-				";_y={p:_y,r:_r.args2};_z={p:_z,e:_r};_x=_r.args1}for(;;){do{_r=",
+				";_y={p:_y,a:_r[1]};_z={p:_z,a:_x};_x=_r[0]}for(;;){do{_r=",
 				ts,
 				";if(!_z)return _r;while(\"r\" in _z){_r=",
 				as,
-				";if(!(_z=_z.p))return _r}_z.r=_r;_x=_y.r;_y=_y.p}while(",
+				";if(!(_z=_z.p))return _r}_z.r=_r;_x=_y.a;_y=_y.p}while(",
 				cs,
 				");do{_r=",
 				bs,
-				";_y={p:_y,r:_r.args2};_z={p:_z,e:_r};_x=_r.args1}while(!",
+				";_y={p:_y,a:_r[1]};_z={p:_z,a:_x};_x=_r[0]}while(!",
 				cs,
 				")}"
 			));
@@ -121,10 +119,10 @@ var binrec1 = function(cond, then, before, after){
 		if(cond.apply(this, arguments)){
 			return then.apply(this, arguments);
 		}
-		var env  = before.apply(this, arguments);
-		var ret1 = arguments.callee.apply(this, env.args1);
-		var ret2 = arguments.callee.apply(this, env.args2);
-		return after.call(this, ret1, ret2, env);
+		var args = before.apply(this, arguments);
+		var ret1 = arguments.callee.apply(this, args[0]);
+		var ret2 = arguments.callee.apply(this, args[1]);
+		return after.call(this, ret1, ret2, arguments);
 	};
 };
 
@@ -140,9 +138,9 @@ var binrec2 = function(cond, then, before, after){
 		// first part: start the pump
 		while(!cond.apply(this, args)){
 			ret = before.apply(this, args);
-			top1 = {prev: top1, args: ret.args2};
-			top2 = {prev: top2, env: ret};
-			args = ret.args1;
+			top1 = {prev: top1, args: ret[1]};
+			top2 = {prev: top2, args: args};
+			args = ret[0];
 		}
 		for(;;){
 			// second part: mop up
@@ -152,7 +150,7 @@ var binrec2 = function(cond, then, before, after){
 					return ret;
 				}
 				while("ret" in top2){
-					ret = after.call(this, top2.ret, ret, top2.env);
+					ret = after.call(this, top2.ret, ret, top2.args);
 					if(!(top2 = top2.prev)){
 						return ret;
 					}
@@ -164,9 +162,9 @@ var binrec2 = function(cond, then, before, after){
 			// first part (encore)
 			do{
 				ret = before.apply(this, args);
-				top1 = {prev: top1, args: ret.args2};
-				top2 = {prev: top2, env: ret};
-				args = ret.args1;
+				top1 = {prev: top1, args: ret[1]};
+				top2 = {prev: top2, args: args};
+				args = ret[0];
 			}while(!cond.apply(this, args));
 		}
 	};

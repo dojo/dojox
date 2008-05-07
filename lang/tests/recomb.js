@@ -29,11 +29,11 @@ dojo.require("dojox.lang.functional.multirec");
 	
 	tests.register("dojox.lang.tests.recomb", [
 		function testFactLinrec1(t){
-			var fact = df.linrec("<= 1", "1", "{old: n, args: [n - 1]}", "a * b.old");
+			var fact = df.linrec("<= 1", "1", "[n - 1]", "a * b[0]");
 			t.assertEqual(df.map(seq, fact), factTable);
 		},
 		function testFactLinrec2(t){
-			var fact = df.linrec(df.lambda("<= 1"), df.lambda("1"), df.lambda("{old: n, args: [n - 1]}"), df.lambda("a * b.old"));
+			var fact = df.linrec(df.lambda("<= 1"), df.lambda("1"), df.lambda("[n - 1]"), df.lambda("a * b[0]"));
 			t.assertEqual(df.map(seq, fact), factTable);
 		},
 		function testFactNumrec1(t){
@@ -45,11 +45,11 @@ dojo.require("dojox.lang.functional.multirec");
 			t.assertEqual(df.map(seq, fact), factTable);
 		},
 		function testFactMultirec1(t){
-			var fact = df.multirec("<= 1", "1", "{old: n, args: [[n - 1]]}", "a[0] * b.old");
+			var fact = df.multirec("<= 1", "1", "[[n - 1]]", "a[0] * b[0]");
 			t.assertEqual(df.map(seq, fact), factTable);
 		},
 		function testFactMultirec2(t){
-			var fact = df.multirec(df.lambda("<= 1"), df.lambda("1"), df.lambda("{old: n, args: [[n - 1]]}"), df.lambda("a[0] * b.old"));
+			var fact = df.multirec(df.lambda("<= 1"), df.lambda("1"), df.lambda("[[n - 1]]"), df.lambda("a[0] * b[0]"));
 			t.assertEqual(df.map(seq, fact), factTable);
 		},
 		function testFactTailrec1(t){
@@ -63,11 +63,11 @@ dojo.require("dojox.lang.functional.multirec");
 			t.assertEqual(df.map(seq, fact), factTable);
 		},
 		function testFibBinrec1(t){
-			var fib = df.binrec("<= 1", "1", "{args1: [n - 1], args2: [n - 2]}", "+");
+			var fib = df.binrec("<= 1", "1", "[[n - 1], [n - 2]]", "+");
 			t.assertEqual(df.map(seq, fib), fibTable);
 		},
 		function testFibBinrec2(t){
-			var fib = df.binrec(df.lambda("<= 1"), df.lambda("1"), df.lambda("{args1: [n - 1], args2: [n - 2]}"), df.lambda("+"));
+			var fib = df.binrec(df.lambda("<= 1"), df.lambda("1"), df.lambda("[[n - 1], [n - 2]]"), df.lambda("+"));
 			t.assertEqual(df.map(seq, fib), fibTable);
 		},
 		function testFibTailrec1(t){
@@ -81,11 +81,11 @@ dojo.require("dojox.lang.functional.multirec");
 			t.assertEqual(df.map(seq, fib), fibTable);
 		},
 		function testFibMultirec1(t){
-			var fib = df.multirec("<= 1", "1", "{args: [[n - 1], [n - 2]]}", "a[0] + a[1]");
+			var fib = df.multirec("<= 1", "1", "[[n - 1], [n - 2]]", "a[0] + a[1]");
 			t.assertEqual(df.map(seq, fib), fibTable);
 		},
 		function testFibMultirec2(t){
-			var fib = df.multirec(df.lambda("<= 1"), df.lambda("1"), df.lambda("{args: [[n - 1], [n - 2]]}"), df.lambda("a[0] + a[1]"));
+			var fib = df.multirec(df.lambda("<= 1"), df.lambda("1"), df.lambda("[[n - 1], [n - 2]]"), df.lambda("a[0] + a[1]"));
 			t.assertEqual(df.map(seq, fib), fibTable);
 		}
 	]);

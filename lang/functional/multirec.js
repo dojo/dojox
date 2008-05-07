@@ -17,7 +17,7 @@ dojo.require("dojox.lang.functional.util");
 
 (function(){
 	var df = dojox.lang.functional, inline = df.inlineLambda,
-		_x ="_x", _y_r_y_e = ["_y.r", "_y.e"];
+		_x ="_x", _y_r_y_o = ["_y.r", "_y.o"];
 
 	df.multirec = function(
 					/*Function|String|Array*/ cond,
@@ -39,15 +39,14 @@ dojo.require("dojox.lang.functional.util");
 		// before:
 		//		The lambda expression, which is called before the recursive step.
 		//		It accepts the same parameter as the generated recursive function itself.
-		//		The returned value should be an object, which represents the "environment".
-		//		This object should have an Array member named "args", which is used to call
-		//		the generated function recursively. Each member of "args" should be
-		//		an array of parameters. The length of "args" defines how many times
+		//		The returned value should be an array, which is used to call
+		//		the generated function recursively. Each member of the array should be
+		//		an array of parameters. The length of it defines how many times
 		//		the generated function is called recursively.
 		// above:
 		//		The lambda expression, which is called after the recursive step.
 		//		It accepts two parameters: the array of returned values from recursive steps,
-		//		and the "environment" object returned by the "before" function.
+		//		and the original array of parameters used with all other functions.
 		//		The returned value will be returned as the value of the generated function.
 
 		var c, t, b, a, cs, ts, bs, as, dict1 = {}, dict2 = {},
@@ -73,26 +72,26 @@ dojo.require("dojox.lang.functional.util");
 			dict2["_b=_t.b"] = 1;
 		}
 		if(typeof after == "string"){
-			as = inline(after, _y_r_y_e, add2dict);
+			as = inline(after, _y_r_y_o, add2dict);
 		}else{
 			a = df.lambda(after);
-			as = "_a.call(this, _y.r, _y.e)";
+			as = "_a.call(this, _y.r, _y.o)";
 			dict2["_a=_t.a"] = 1;
 		}
 		var locals1 = df.keys(dict1), locals2 = df.keys(dict2),
-			f = new Function([], "var _y={x:arguments},_x,_r,_z,_i".concat(	// Function
+			f = new Function([], "var _y={a:arguments},_x,_r,_z,_i".concat(	// Function
 				locals1.length ? "," + locals1.join(",") : "",
 				locals2.length ? ",_t=arguments.callee," + locals2.join(",") : "",
 				t ? (locals2.length ? ",_t=_t.t" : "_t=arguments.callee.t") : "",
-				";for(;;){for(;;){if(_y.e){_r=",
+				";for(;;){for(;;){if(_y.o){_r=",
 				as,
-				";break}_x=_y.x;if(",
+				";break}_x=_y.a;if(",
 				cs,
 				"){_r=",
 				ts,
-				";break}_y.e=_r=",
+				";break}_y.o=_x;_x=",
 				bs,
-				";_y.r=[];_z=_y;_x=_r.args;for(_i=_x.length-1;_i>=0;--_i){_y={p:_y,x:_x[_i],z:_z}}}if(!(_z=_y.z)){return _r}_z.r.push(_r);_y=_y.p}"
+				";_y.r=[];_z=_y;for(_i=_x.length-1;_i>=0;--_i){_y={p:_y,a:_x[_i],z:_z}}}if(!(_z=_y.z)){return _r}_z.r.push(_r);_y=_y.p}"
 			));
 		if(c){ f.c = c; }
 		if(t){ f.t = t; }
@@ -116,12 +115,12 @@ var multirec1 = function(cond, then, before, after){
 		if(cond.apply(this, arguments)){
 			return then.apply(this, arguments);
 		}
-		var env = before.apply(this, arguments),
-			ret = new Array(env.args.length);
-		for(var i = 0; i < env.args.length; ++i){
-			ret[i] = arguments.callee.apply(this, env.args[i]);
+		var args = before.apply(this, arguments),
+			ret  = new Array(args.length);
+		for(var i = 0; i < args.length; ++i){
+			ret[i] = arguments.callee.apply(this, args[i]);
 		}
-		return after.call(this, ret, env);
+		return after.call(this, ret, arguments);
 	};
 };
 
@@ -136,8 +135,8 @@ var multirec2 = function(cond, then, before, after){
 		var top = {args: arguments}, args, ret, parent, i;
 		for(;;){
 			for(;;){
-				if(top.env){
-					ret = after.call(this, top.ret, top.env);
+				if(top.old){
+					ret = after.call(this, top.ret, top.old);
 					break;
 				}
 				args = top.args;
@@ -145,10 +144,10 @@ var multirec2 = function(cond, then, before, after){
 					ret = then.apply(this, args);
 					break;
 				}
-				top.env = ret = before.apply(this, args);
+				top.old = args;
+				args = before.apply(this, args);
 				top.ret = [];
 				parent = top;
-				args = ret.args;
 				for(i = args.length - 1; i >= 0; --i){
 					top = {prev: top, args: args[i], parent: parent};
 				}

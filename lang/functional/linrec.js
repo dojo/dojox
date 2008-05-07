@@ -17,7 +17,7 @@ dojo.require("dojox.lang.functional.util");
 
 (function(){
 	var df = dojox.lang.functional, inline = df.inlineLambda,
-		_x ="_x", _r_y_e = ["_r", "_y.e"];
+		_x ="_x", _r_y_a = ["_r", "_y.a"];
 
 	df.linrec = function(
 					/*Function|String|Array*/ cond,
@@ -39,13 +39,12 @@ dojo.require("dojox.lang.functional.util");
 		// before:
 		//		The lambda expression, which is called before the recursive step.
 		//		It accepts the same parameter as the generated recursive function itself.
-		//		The returned value should be an object, which represents the "environment".
-		//		This object should have an Array member named "args", which is used to call
+		//		The returned value should be an array, which is used to call
 		//		the generated function recursively.
 		// above:
 		//		The lambda expression, which is called after the recursive step.
 		//		It accepts two parameters: the returned value from the recursive step, and
-		//		the "environment" object returned by the "before" function.
+		//		the original array of parameters used with all other functions.
 		//		The returned value will be returned as the value of the generated function.
 
 		var c, t, b, a, cs, ts, bs, as, dict1 = {}, dict2 = {},
@@ -71,21 +70,21 @@ dojo.require("dojox.lang.functional.util");
 			dict2["_b=_t.b"] = 1;
 		}
 		if(typeof after == "string"){
-			as = inline(after, _r_y_e, add2dict);
+			as = inline(after, _r_y_a, add2dict);
 		}else{
 			a = df.lambda(after);
-			as = "_a.call(this, _r, _y.e)";
+			as = "_a.call(this, _r, _y.a)";
 			dict2["_a=_t.a"] = 1;
 		}
 		var locals1 = df.keys(dict1), locals2 = df.keys(dict2),
 			f = new Function([], "var _x=arguments,_y,_r".concat(	// Function
 				locals1.length ? "," + locals1.join(",") : "",
 				locals2.length ? ",_t=_x.callee," + locals2.join(",") : t ? ",_t=_x.callee" : "",
-				";while(!",
+				";for(;!",
 				cs,
-				"){_r=",
+				";_x=",
 				bs,
-				";_y={p:_y,e:_r};_x=_r.args}_r=",
+				"){_y={p:_y,a:_x}}_r=",
 				ts,
 				";for(;_y;_y=_y.p){_r=",
 				as,
@@ -113,9 +112,9 @@ var linrec1 = function(cond, then, before, after){
 		if(cond.apply(this, arguments)){
 			return then.apply(this, arguments);
 		}
-		var env = before.apply(this, arguments);
-		var ret = arguments.callee.apply(this, env.args);
-		return after.call(this, ret, env);
+		var args = before.apply(this, arguments);
+		var ret  = arguments.callee.apply(this, args);
+		return after.call(this, ret, arguments);
 	};
 };
 
@@ -129,15 +128,13 @@ var linrec2 = function(cond, then, before, after){
 	return function(){
 		var args = arguments, top, ret;
 		// 1st part
-		while(!cond.apply(this, args)){
-			ret = before.apply(this, args);
-			top = {prev: top, env: ret};
-			args = ret.args;
+		for(; !cond.apply(this, args); args = before.apply(this, args)){
+			top = {prev: top, args: args};
 		}
 		ret = then.apply(this, args);
 		//2nd part
 		for(; top; top = top.prev){
-			ret = after.call(this, ret, top.env);
+			ret = after.call(this, ret, top.args);
 		}
 		return ret;
 	};
