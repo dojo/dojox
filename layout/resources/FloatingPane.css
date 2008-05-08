@@ -38,7 +38,7 @@
 
 /* Icons */
 .dojoxFloatingCloseIcon {
-	background:url('icons/tabClose.png') no-repeat center center; 
+	background:url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center; 
 	width:16px;
 	height:16px; 
 	overflow:hidden;
@@ -165,7 +165,7 @@
 	height: 16px;
 	width: auto;
 	float: left;
-	background: #fafafa url("images/floatTitleBarBg.gif") repeat-x bottom left;
+	background: #fafafa url("../../../dijit/themes/tundra/images/titleBarBg.gif") repeat-x bottom left;
 }
 .soria .dojoxDockNode {
 	background:#b7cdee url("../../../dijit/themes/soria/images/titleBar.png") repeat-x;
