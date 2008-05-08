@@ -29,7 +29,7 @@
 	border-bottom:0;
 }
 .soria .sortListTitle {
-	background:#4f8ce5 url('../../../dijit/themes/soria/images/gradientTopBg.png') repeat-x top left;
+	background:#4f8ce5 url('../../../dijit/themes/soria/images/titleBar.png') repeat-x top left;
 	background-position:0px -1px; 
 	border:1px solid #333; 
 	border-bottom:0;
@@ -55,10 +55,9 @@
 
 .soria .sortListDesc .sortListIcon,
 .soria .sortListAsc .sortListIcon {
-	background:url('../../../dijit/themes/soria/images/arrows.png') no-repeat center center;
-	background-position:0px 0px; 
+	background:url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png') no-repeat -15px top;
 }
 
 .soria .sortListDesc .sortListIcon {
-	background-position:-32px 0px; 
+	background-position:-45px 0px; 
 }
