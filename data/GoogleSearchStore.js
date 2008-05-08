@@ -370,30 +370,34 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 		// Attach a callback function to the global namespace, where Google can call it.
 		dojo.global[callbackFn] = function(start, data, responseCode, errorMsg){
-			if(responseCode != 200){
-				if(request.onError){
-					request.onError.call(scope, new Error("Response from Google was: " + responseCode), request);
-				}
-				dojo.global[callbackFn] = function(){};//an error occurred, do not return anything else.
-				return;
-			}
-
-			if(start == lastCallback + 1){
-				myHandler(Number(start), data);
-				lastCallback += pageSize;
-
-				//make sure that the callbacks happen in the correct sequence
-				if(callbacks.length > 0){
-					callbacks.sort(sortFn);
-					//In case the requsts do not come back in order, sort the returned results.
-					while(callbacks[0].start == lastCallback + 1){
-						myHandler(Number(callbacks[0].start, callbacks[0].data));
-						callbacks.splice(0,1);
-						lastCallback += pageSize;
+			try {
+				if(responseCode != 200){
+					if(request.onError){
+						request.onError.call(scope, new Error("Response from Google was: " + responseCode), request);
 					}
+					dojo.global[callbackFn] = function(){};//an error occurred, do not return anything else.
+					return;
 				}
-			}else{
-				callbacks.push({start:start, data: data});
+	
+				if(start == lastCallback + 1){
+					myHandler(Number(start), data);
+					lastCallback += pageSize;
+	
+					//make sure that the callbacks happen in the correct sequence
+					if(callbacks.length > 0){
+						callbacks.sort(sortFn);
+						//In case the requsts do not come back in order, sort the returned results.
+						while(callbacks.length > 0 && callbacks[0].start == lastCallback + 1){
+							myHandler(Number(callbacks[0].start), callbacks[0].data);
+							callbacks.splice(0,1);
+							lastCallback += pageSize;
+						}
+					}
+				}else{
+					callbacks.push({start:start, data: data});
+				}
+			} catch (e) {
+				request.onError.call(scope, e, request);
 			}
 		};
 
