@@ -11,8 +11,7 @@ dojo.provide("dojox.embed.Quicktime");
 	var qtMarkup, qtVersion, installed, __def__={
 		width: 320,
 		height: 240,
-		redirect: null,
-		params: []
+		redirect: null
 	};
 	var keyBase="dojox-embed-quicktime-", keyCount=0;
 
@@ -63,8 +62,10 @@ dojo.provide("dojox.embed.Quicktime");
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '">'
 				+ '<param name="src" value="' + kwArgs.path + '" />';
-			for(var i=0, l=kwArgs.params.length; i<l; i++){
-				s += '<param name="' + kwArgs.params[i].key + '" value="' + kwArgs.params[i].value + '" />';
+			if(kwArgs.params){
+				for(var p in kwArgs.params){
+					s += '<param name="' + p + '" value="' + kwArgs.params[p] + '" />';
+				}
 			}
 			s += '</object>';
 			return { id: kwArgs.id, markup: s };
@@ -91,16 +92,44 @@ dojo.provide("dojox.embed.Quicktime");
 				+ 'enablejavascript="true" '
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '"';
-			for(var i=0, l=kwArgs.params.length; i<l; i++){
-				s += ' ' + kwArgs.params[i].key + '="' + kwArgs.params[i].value + '"';
+			if(kwArgs.params){
+				for(var p in kwArgs.params){
+					s += ' ' + p + '="' + kwArgs.params[p] + '"';
+				}
 			}
 			s += '></embed>';
 			return { id: kwArgs.id, markup: s };
 		}
 	}
 
-	//	*** The public interface. ****************************************************************
 	dojox.embed._quicktime={
+		//	summary:
+		//		A singleton object used internally to get information
+		//		about the QuickTime player available in a browser, and
+		//		as the factory for generating and placing markup in a
+		//		document.
+		//
+		//	minSupported: Number
+		//		The minimum supported version of the QuickTime Player, defaults to
+		//		6.
+		//	available: Boolean
+		//		Whether or not QuickTime is available.
+		//	supported: Boolean
+		//		Whether or not the QuickTime Player installed is supported by
+		//		dojox.embed.
+		//	version: Object
+		//		The version of the installed QuickTime Player; takes the form of
+		//		{ major, minor, rev }.  To get the major version, you'd do this:
+		//		var v=dojox.embed._quicktime.version.major;
+		//	initialized: Boolean
+		//		Whether or not the QuickTime engine is available for use.
+		//	onInitialize: Function
+		//		A stub you can connect to if you are looking to fire code when the 
+		//		engine becomes available.  A note: do NOT use this stub to embed
+		//		a movie in your document; this WILL be fired before DOMContentLoaded
+		//		is fired, and you will get an error.  You should use dojo.addOnLoad
+		//		to place your movie instead.
+
 		minSupported: 6,
 		available: installed,
 		supported: installed,
@@ -181,8 +210,53 @@ dojo.provide("dojox.embed.Quicktime");
 		dojox.embed._quicktime.onInitialize();
 	}
 
-	//	the real entry point
-	dojox.embed.Quicktime=function(/*  */kwArgs, /* DomNode */node){
+	/*=====
+	dojox.embed.__QTArgs = function(path, id, width, height, params, redirect){
+		//	path: String
+		//		The URL of the movie to embed.
+		//	id: String?
+		//		A unique key that will be used as the id of the created markup.  If you don't
+		//		provide this, a unique key will be generated.
+		//	width: Number?
+		//		The width of the embedded movie; the default value is 320px.
+		//	height: Number?
+		//		The height of the embedded movie; the default value is 240px
+		//	params: Object?
+		//		A set of key/value pairs that you want to define in the resultant markup.
+		//	redirect: String?
+		//		A url to redirect the browser to if the current QuickTime version is not supported.
+		this.id=id;
+		this.path=path;
+		this.width=width;
+		this.height=height;
+		this.params=params;
+		this.redirect=redirect;
+	}
+	=====*/
+
+	dojox.embed.Quicktime=function(/* dojox.embed.__QTArgs */kwArgs, /* DOMNode */node){
+		//	summary:
+		//		Returns a reference to the HTMLObject/HTMLEmbed that is created to 
+		//		place the movie in the document.  You can use this either with or
+		//		without the new operator.  Note that if the QuickTime engine isn't
+		//		available yet, this will throw an Error.
+		//
+		//	example:
+		//		Embed a QuickTime movie in a document using the new operator, and get a reference to it.
+		//	|	var movie = new dojox.embed.QuickTime({
+		//	|		path: "path/to/my/movie.mov",
+		//	|		width: 400,
+		//	|		height: 300
+		//	|	}, myWrapperNode);
+		//
+		//	example:
+		//		Embed a movie in a document without using the new operator.
+		//	|	var movie = dojox.embed.QuickTime({
+		//	|		path: "path/to/my/movie.mov",
+		//	|		width: 400,
+		//	|		height: 300
+		//	|	}, myWrapperNode);
+
 		if(dojox.embed._quicktime.initialized){
 			return dojox.embed._quicktime.place(kwArgs, node);	//	HTMLObject
 		}

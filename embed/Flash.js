@@ -18,8 +18,7 @@ dojo.provide("dojox.embed.Flash");
 			width: 320,
 			height: 240,
 			style: null,
-			redirect: null,
-			params: []
+			redirect: null
 		}, kwArgs||{});
 
 		if(!("path" in kwArgs)){
@@ -34,19 +33,29 @@ dojo.provide("dojox.embed.Flash");
 	}
 
 	if(dojo.isIE){
-		//	*** Internet Explorer branch ******************************************************************
 		fMarkup=function(kwArgs){
 			kwArgs=prep(kwArgs);
 			if(!kwArgs){ return null; }
+
+			var path=kwArgs.path;
+			if(kwArgs.vars){
+				var a=[];
+				for(var p in kwArgs.vars){
+					a.push(p+'='+kwArgs.vars[p]);
+				}
+				path += ((path.indexOf("?")==-1) ? "?":"&") + a.join("&");
+			}
 			var s='<object id="' + kwArgs.id + '" '
 				+ 'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" '
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '"'
 				+ ((kwArgs.style)?' style="' + kwArgs.style + '"':'')
 				+ '>'
-				+ '<param name="movie" value="' + kwArgs.path + '" />';
-			for(var i=0, l=kwArgs.params.length; i<l; i++){
-				s += '<param name="' + kwArgs.params[i].key + '" value="' + kwArgs.params[i].value + '" />';
+				+ '<param name="movie" value="' + path + '" />';
+			if(kwArgs.params){
+				for(var p in kwArgs.params){
+					s += '<param name="' + p + '" value="' + kwArgs.params[p] + '" />';
+				}
 			}
 			s += '</object>';
 			return { id: kwArgs.id, markup: s };
@@ -98,18 +107,28 @@ dojo.provide("dojox.embed.Flash");
 		fMarkup=function(kwArgs){
 			kwArgs=prep(kwArgs);
 			if(!kwArgs){ return null; }
+			var path=kwArgs.path;
+			if(kwArgs.vars){
+				var a=[];
+				for(var p in kwArgs.vars){
+					a.push(p+'='+kwArgs.vars[p]);
+				}
+				path += ((path.indexOf("?")==-1) ? "?":"&") + a.join("&");
+			}
 			var s = '<embed type="application/x-shockwave-flash" '
-				+ 'src="' + kwArgs.path + '" '
+				+ 'src="' + path + '" '
 				+ 'id="' + kwArgs.id + '" '
 				+ 'name="' + kwArgs.id + '" '
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '"'
-				+ (("style" in kwArgs)?' style="' + kwArgs.style + '"':'')
+				+ ((kwArgs.style)?' style="' + kwArgs.style + '" ':'')
 				+ 'swLiveConnect="true" '
 				+ 'allowScriptAccess="sameDomain" '
 				+ 'pluginspage="' + window.location.protocol + '//www.adobe.com/go/getflashplayer" ';
-			for(var i=0, l=kwArgs.params.length; i<l; i++){
-				s += ' ' + kwArgs.params[i].key + '="' + kwArgs.params[i].value + '"';
+			if(kwArgs.params){
+				for(var p in kwArgs.params){
+					s += ' ' + p + '="' + kwArgs.params[p] + '"';
+				}
 			}
 			s += ' />'
 			return { id: kwArgs.id, markup: s };
@@ -129,8 +148,31 @@ dojo.provide("dojox.embed.Flash");
 		})();
 	}
 
-	//	*** the static object for inserting Flash movies ******************************************************
 	dojox.embed._flash = {
+		//	summary:
+		//		A singleton object used internally to get information
+		//		about the Flash player available in a browser, and
+		//		as the factory for generating and placing markup in a
+		//		document.
+		//
+		//	minSupported: Number
+		//		The minimum supported version of the Flash Player, defaults to 8.
+		//	available: Number
+		//		Used as both a detection (i.e. if(dojox.embed._flash.available){ })
+		//		and as a variable holding the major version of the player installed.
+		//	supported: Boolean
+		//		Whether or not the Flash Player installed is supported by dojox.embed.
+		//	version: Object
+		//		The version of the installed Flash Player; takes the form of
+		//		{ major, minor, rev }.  To get the major version, you'd do this:
+		//		var v=dojox.embed._flash.version.major;
+		//	initialized: Boolean
+		//		Whether or not the Flash engine is available for use.
+		//	onInitialize: Function
+		//		A stub you can connect to if you are looking to fire code when the 
+		//		engine becomes available.  A note: DO NOT use this event to
+		//		place a movie in a document; it will usually fire before DOMContentLoaded
+		//		is fired, and you will get an error.  Use dojo.addOnLoad instead.
 		minSupported : 8,
 		available: fVersion.major,
 		supported: (fVersion.major >= 8),
@@ -174,10 +216,67 @@ dojo.provide("dojox.embed.Flash");
 		dojox.embed._flash.onInitialize();
 	}
 
+	/*=====
+	dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars, expressInstall, redirect){
+		//	path: String
+		//		The URL of the movie to embed.
+		//	id: String?
+		//		A unique key that will be used as the id of the created markup.  If you don't
+		//		provide this, a unique key will be generated.
+		//	width: Number?
+		//		The width of the embedded movie; the default value is 320px.
+		//	height: Number?
+		//		The height of the embedded movie; the default value is 240px
+		//	style: String?
+		//		Any CSS style information (i.e. style="background-color:transparent") you want
+		//		to define on the markup.
+		//	params: Object?
+		//		A set of key/value pairs that you want to define in the resultant markup.
+		//	vars: Object?
+		//		A set of key/value pairs that the Flash movie will interpret as FlashVars.
+		//	expressInstall: Boolean?
+		//		Whether or not to include any kind of expressInstall info. Default is false.
+		//	redirect: String?
+		//		A url to redirect the browser to if the current Flash version is not supported.
+		this.id=id;
+		this.path=path;
+		this.width=width;
+		this.height=height;
+		this.style=style;
+		this.params=params;
+		this.vars=vars;
+		this.expressInstall=expressInstall;
+		this.redirect=redirect;
+	}
+	=====*/
+
 	//	the main entry point
-	dojox.embed.Flash=function(kwArgs, node){
+	dojox.embed.Flash=function(/* dojox.embed.__flashArgs */kwArgs, /* DOMNode */node){
+		//	summary:
+		//		Returns a reference to the HTMLObject/HTMLEmbed that is created to 
+		//		place the movie in the document.  You can use this either with or
+		//		without the new operator.  Note that if the Flash engine isn't available
+		//		yet, this will throw an Error.
+		//
+		//	example:
+		//		Embed a flash movie in a document using the new operator, and get a reference to it.
+		//	|	var movie = new dojox.embed.Flash({
+		//	|		path: "path/to/my/movie.swf",
+		//	|		width: 400,
+		//	|		height: 300
+		//	|	}, myWrapperNode);
+		//
+		//	example:
+		//		Embed a flash movie in a document without using the new operator.
+		//	|	var movie = dojox.embed.Flash({
+		//	|		path: "path/to/my/movie.swf",
+		//	|		width: 400,
+		//	|		height: 300,
+		//	|		style: "position:absolute;top:0;left:0"
+		//	|	}, myWrapperNode);
+
 		if(dojox.embed._flash.initialized){
-			return dojox.embed._flash.place(kwArgs, node);
+			return dojox.embed._flash.place(kwArgs, node);	//	HTMLObject
 		}
 		throw new Error("dojox.embed.Flash:: you must wait for the Flash engine to be initialized.");
 	};

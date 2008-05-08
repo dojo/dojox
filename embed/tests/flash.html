@@ -20,6 +20,11 @@
 				but you should test intervals at your discretion.
 			********************************************************************/
 			var testMovieUrl=dojo.moduleUrl("dojox", "embed/tests/resources/hfp.swf"), movie;
+
+			dojo.addOnLoad(function(){
+				dojo.byId("results").innerHTML = dojo.toJson(dojox.embed._flash.version);
+				movie=new dojox.embed.Flash({ path: testMovieUrl }, "flashHolder");
+			});
 		</script>
 	</head>
 	<body>
@@ -31,9 +36,5 @@
 		<div id="flashHolder" style="border:1px solid black;">
 			A movie will be inserted here on load.
 		</div>
-		<script type="text/javascript">
-			dojo.byId("results").innerHTML = dojo.toJson(dojox.embed._flash.version);
-			movie=new dojox.embed.Flash({ path: testMovieUrl }, "flashHolder");
-		</script>
 	</body>
 </html>
