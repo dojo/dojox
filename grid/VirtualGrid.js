@@ -1,15 +1,15 @@
 dojo.provide("dojox.grid.VirtualGrid");
 
 dojo.require("dojox.html.metrics");
-dojo.require("dojox.grid._grid.lib");
+dojo.require("dojox.grid.util");
 dojo.require("dojox.grid._Scroller");
+dojo.require("dojox.grid._Layout");
 dojo.require("dojox.grid._View");
 dojo.require("dojox.grid._ViewManager");
-dojo.require("dojox.grid._Layout");
-dojo.require("dojox.grid._grid.rows");
-dojo.require("dojox.grid._grid.focus");
+dojo.require("dojox.grid._RowManager");
+dojo.require("dojox.grid._FocusManager");
+dojo.require("dojox.grid._EditManager");
 dojo.require("dojox.grid.Selection");
-dojo.require("dojox.grid._grid.edit");
 dojo.require("dojox.grid._RowSelector");
 dojo.require("dojox.grid._Events");
 
@@ -163,7 +163,7 @@ dojo.require("dojox.grid._Events");
 			this.createManagers();
 			dojox.html.metrics.initOnFontResize();
 			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
-			dojox.grid.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.keyEvents);
+			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.keyEvents);
 			this.connect(this, "onShow", "renderOnIdle");
 		},
 		postCreate: function(){
@@ -216,13 +216,13 @@ dojo.require("dojox.grid._Events");
 			//		create grid managers for various tasks including rows, focus, selection, editing
 			
 			// row manager
-			this.rows = new dojox.grid._grid.Rows(this);
+			this.rows = new dojox.grid._RowManager(this);
 			// focus manager
-			this.focus = new dojox.grid._grid.Focus(this);
+			this.focus = new dojox.grid._FocusManager(this);
 			// selection manager
 			this.selection = new dojox.grid.Selection(this);
 			// edit manager
-			this.edit = new dojox.grid._grid.Edit(this);
+			this.edit = new dojox.grid._EditManager(this);
 		},
 
 		createScroller: function(){

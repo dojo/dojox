@@ -1,5 +1,5 @@
 dojo.provide("dojox.grid._Layout");
-dojo.require("dojox.grid._grid.cell");
+dojo.require("dojox.grid._Cell");
 dojo.require("dojox.grid._RowSelector");
 
 dojo.declare("dojox.grid._Layout", null, {
@@ -96,7 +96,7 @@ dojo.declare("dojox.grid._Layout", null, {
 		if((inDef.field != undefined) || !inDef.get){
 			this.fieldIndex = (inDef.field > -1 ? inDef.field : this.fieldIndex) + 1; 
 		}
-		return new dojox.grid._grid.Cell(
+		return new dojox.grid._Cell(
 			dojo.mixin({}, this._defaultCellProps, inDef, {
 				grid: this.grid,
 				subrow: inRowIndex,

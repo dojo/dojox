@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid._grid.rows");
+dojo.provide("dojox.grid._RowManager");
 
 (function(){
 	var setStyleText = function(inNode, inStyleText){
@@ -9,7 +9,7 @@ dojo.provide("dojox.grid._grid.rows");
 		}
 	};
 
-	dojo.declare("dojox.grid._grid.Rows", null, {
+	dojo.declare("dojox.grid._RowManager", null, {
 		//	Stores information about grid rows. Owned by grid and used internally.
 		constructor: function(inGrid){
 			this.grid = inGrid;

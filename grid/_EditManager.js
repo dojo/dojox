@@ -1,6 +1,8 @@
-dojo.provide("dojox.grid._grid.edit");
+dojo.provide("dojox.grid._EditManager");
 
-dojo.declare("dojox.grid._grid.Edit", null, {
+dojo.require("dojox.grid.util");
+
+dojo.declare("dojox.grid._EditManager", null, {
 	// summary:
 	//		Controls grid cell editing process. Owned by grid and used internally for editing.
 	constructor: function(inGrid){
@@ -101,7 +103,7 @@ dojo.declare("dojox.grid._grid.Edit", null, {
 	},
 
 	_focusEditor: function(inCell, inRowIndex){
-		dojox.grid.fire(inCell.editor, "focus", [inRowIndex]);
+		dojox.grid.util.fire(inCell.editor, "focus", [inRowIndex]);
 	},
 
 	focusEditor: function(){

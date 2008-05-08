@@ -1,13 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Test dojox.grid.Grid Simple Structure</title>
+	<title>Test dojox.grid.DataGrid Large Data Set</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
-		@import "../resources/Grid.css";
-		@import "../resources/tundraGrid.css";
 		@import "../../../dojo/resources/dojo.css";
-		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../resources/tundraGrid.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -16,18 +14,17 @@
 			font-weight: bold;
 			padding-bottom: 0.25em;
 		}
-				
-		#grid {
-			border: 1px solid #333;
-			width: 35em;
-			height: 30em;
+		#grid, #grid2 {
+			width: 65em;
+			height: 25em;
+			padding: 1px;
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
-	<!--<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+	<script type="text/javascript">
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
-	</script>-->
+	</script>
 	<!-- Debugging -->
 	<script type="text/javascript" src="../util.js"></script>
 	<script type="text/javascript" src="../_Scroller.js"></script>
@@ -44,16 +41,38 @@
 	<script type="text/javascript" src="../_data/fields.js"></script>
 	<script type="text/javascript" src="../_data/model.js"></script>
 	<script type="text/javascript" src="../_data/editors.js"></script>
-	<script type="text/javascript" src="../Grid.js"></script>
-	<script type="text/javascript" src="support/test_data.js"></script>
+	<script type="text/javascript" src="../DataGrid.js"></script>
+	<script type="text/javascript" src="support/test_dojo_data.js"></script>
 	<script type="text/javascript">
+		// a grid layout is an array of views.
 		var layout = [
-			{name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'}, {name: 'Column 3', width: "150px"}, {name: 'Column 4'}
+			[
+				{ name: 'Column 0', dataAttr: 'id' },
+				{ name: 'Column 1', dataAttr: 'col1' },
+				{ name: 'Column 2', dataAttr: 'col2' },
+				{ name: 'Column 3', dataAttr: 'col3', width: '150px' },
+				{ name: 'Column 4', dataAttr: 'col4' }
+			],
+			[
+				{name: 'Column 5', dataAttr: 'col5' },
+				{name: 'Column 6', dataAttr: 'col6' },
+				{name: 'Column 7', dataAttr: 'col7' },
+				{name: 'Column 8', dataAttr: 'col3', colSpan: 2}
+			]
 		];
 </script>
 </head>
-<body>
-<div class="heading">dojox.grid.Grid Basic Test</div>
-<div jsid="grid" id="grid" dojoType="dojox.grid.Grid" model="model" structure="layout"></div>
+<body class="tundra">
+	<div class="heading">dojox.grid.Grid Basic Test</div>
+	<table dojoType="dojox.grid.DataGrid"
+		jsid="grid" id="grid" 
+		model="test_data" query="{ id: '*' }" rowsPerPage: "20" structure="layout" rowSelector="20px">
+		<thead>
+			<tr>
+				<th dataAttr="name" width="300px">Country/Continent Name</th>
+				<th dataAttr="type" width="auto">Type</th>
+			</tr>
+		</thead>
+	</table>
 </body>
 </html>

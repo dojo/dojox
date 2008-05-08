@@ -1,5 +1,7 @@
 dojo.provide("dojox.grid._data.dijitEditors");
+
 dojo.require("dojox.grid._data.editors");
+
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.TimeTextBox");
 dojo.require("dijit.form.ComboBox");
@@ -68,7 +70,7 @@ dojo.declare("dojox.grid._data.editors.Dijit", dojox.grid._data.editors.base, {
 	focus: function(inRowIndex, inNode){
 		if(this.editor){
 			setTimeout(dojo.hitch(this.editor, function(){
-				dojox.grid.fire(this, "focus");
+				dojox.grid.util.fire(this, "focus");
 			}), 0);
 		}
 	},

@@ -195,7 +195,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		destroyPage: function(inPageIndex){
 			for(var i=0; i<this.colCount; i++){
-				dojox.grid.removeNode(this.invalidatePageNode(inPageIndex, this.pageNodes[i]));
+				dojox.grid.util.removeNode(this.invalidatePageNode(inPageIndex, this.pageNodes[i]));
 			}
 		},
 		pacify: function(inShouldPacify){
@@ -227,7 +227,7 @@ dojo.provide("dojox.grid._Scroller");
 				this.windowHeight = this.scrollboxNode.clientHeight;
 			}
 			for(var i=0; i<this.colCount; i++){
-				dojox.grid.setStyleHeightPx(this.contentNodes[i], this.height);
+				dojox.grid.util.setStyleHeightPx(this.contentNodes[i], this.height);
 			}
 		},
 		calcLastPageHeight: function(){

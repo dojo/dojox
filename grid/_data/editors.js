@@ -1,10 +1,12 @@
 dojo.provide("dojox.grid._data.editors");
 
+dojo.require("dojox.grid.util");
+
 (function(){
 	var focusSelectNode = function(inNode){
 		try{
-			dojox.grid.fire(inNode, "focus");
-			dojox.grid.fire(inNode, "select");
+			dojox.grid.util.fire(inNode, "focus");
+			dojox.grid.util.fire(inNode, "select");
 		}catch(e){// IE sux bad
 		}
 	};
@@ -179,7 +181,7 @@ dojo.provide("dojox.grid._data.editors");
 			this.inherited(arguments);
 			var n = this.getNode(inRowIndex);
 			try{
-				dojox.grid.fire(n, "blur");
+				dojox.grid.util.fire(n, "blur");
 			}catch(e){}
 		}
 	});

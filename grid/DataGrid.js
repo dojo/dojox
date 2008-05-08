@@ -87,6 +87,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		this._model_connects = h;
 	},
 
+	canEdit: function(inCell, inRowIndex){
+		return this._canEdit;
+	},
+
 	_onFetchBegin: function(size, req){
 		if(this.rowCount != size){
 			this.updateRowCount(size);

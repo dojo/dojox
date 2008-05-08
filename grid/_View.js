@@ -3,7 +3,7 @@ dojo.provide("dojox.grid._View");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dojox.html.metrics");
-dojo.require("dojox.grid._grid.drag");
+dojo.require("dojox.grid.util");
 
 (function(){
 	// private
@@ -40,6 +40,112 @@ dojo.require("dojox.grid._grid.drag");
 	var getStyleText = function(inNode, inStyleText){
 		return (inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText);
 	};
+
+
+	// column resize functions
+	var nop = function(){};
+
+	var dragInfo = {
+		dragging: false,
+		hysteresis: 2
+	};
+	var dragEvents = {};
+
+	var captureDrag = function(inElement) {
+		//console.debug('dojox.grid._grid.drag.capture');
+		if (inElement.setCapture)
+			inElement.setCapture();
+		else {
+			document.addEventListener("mousemove", inElement.onmousemove, true);
+			document.addEventListener("mouseup", inElement.onmouseup, true);
+			document.addEventListener("click", inElement.onclick, true);
+		}
+	}
+
+	var releaseDrag = function(inElement) {
+		//console.debug('dojox.grid._grid.drag.release');
+		if(inElement.releaseCapture){
+			inElement.releaseCapture();
+		}else{
+			document.removeEventListener("click", inElement.onclick, true);
+			document.removeEventListener("mouseup", inElement.onmouseup, true);
+			document.removeEventListener("mousemove", inElement.onmousemove, true);
+		}
+	}
+
+	var startDrag = function(inElement, inOnDrag, inOnEnd, inEvent, inOnStart){
+		if(/*dragInfo.elt ||*/ !inElement || dragInfo.dragging){
+			console.debug('failed to start drag: bad input node or already dragging');
+			return;
+		}
+		dragInfo.dragging = true;
+		dragInfo.elt = inElement;
+		dragEvents = {
+			drag: inOnDrag || nop, 
+			end: inOnEnd || nop, 
+			start: inOnStart || nop, 
+			oldmove: inElement.onmousemove, 
+			oldup: inElement.onmouseup, 
+			oldclick: inElement.onclick 
+		};
+		dragInfo.positionX = (inEvent && ('screenX' in inEvent) ? inEvent.screenX : false);
+		dragInfo.positionY = (inEvent && ('screenY' in inEvent) ? inEvent.screenY : false);
+		dragInfo.started = (dragInfo.position === false);
+		inElement.onmousemove = mousemove;
+		inElement.onmouseup = mouseup;
+		inElement.onclick = click;
+		captureDrag(dragInfo.elt);
+	}
+
+	var endDrag = function(){
+		//console.debug("dojox.grid._grid.drag.end");
+		var elt = dragInfo.elt;
+		releaseDrag(elt);
+		elt.onmousemove = dragEvents.oldmove;
+		elt.onmouseup = dragEvents.oldup;
+		elt.onclick = dragEvents.oldclick;
+		elt = null;
+		try{
+			if(dragInfo.started){
+				dragEvents.end();
+			}
+		}finally{
+			dragInfo.dragging = false;
+		}
+	}
+
+	var calcDelta = function(inEvent){
+		inEvent.deltaX = inEvent.screenX - dragInfo.positionX;
+		inEvent.deltaY = inEvent.screenY - dragInfo.positionY;
+	}
+
+	var hasMoved = function(inEvent){
+		return Math.abs(inEvent.deltaX) + Math.abs(inEvent.deltaY) > dragInfo.hysteresis;
+	}
+
+	var mousemove = function(inEvent){
+		inEvent = dojo.fixEvent(inEvent);
+		dojo.stopEvent(inEvent);
+		calcDelta(inEvent);
+		if((!dragInfo.started)&&(hasMoved(inEvent))){
+			dragEvents.start(inEvent);
+			dragInfo.started = true;
+		}
+		if(dragInfo.started){
+			dragEvents.drag(inEvent);
+		}
+	}
+
+	var mouseup = function(inEvent){
+		//console.debug("dojox.grid._grid.drag.mouseup");
+		dojo.stopEvent(dojo.fixEvent(inEvent));
+		endDrag();
+	}
+
+	var click = function(inEvent){
+		dojo.stopEvent(dojo.fixEvent(inEvent));
+		//dgdrag.end();
+	}
 	
 
 	// base class for generating markup for the views
@@ -283,7 +389,7 @@ dojo.require("dojox.grid._grid.drag");
 				html.push([' style="width:', this.view.viewWidth, ';"'].join(''));
 			}
 			html.push('>');
-			dojox.grid.fire(this.view, "onBeforeRow", [-1, rows]);
+			dojox.grid.util.fire(this.view, "onBeforeRow", [-1, rows]);
 			for(var j=0, row; (row=rows[j]); j++){
 				if(row.hidden){
 					continue;
@@ -383,7 +489,7 @@ dojo.require("dojox.grid._grid.drag");
 		},
 
 		domousedown: function(e){
-			if(!dojox.grid._grid.drag.dragging){
+			if(!dragInfo.dragging){
 				if((this.overRightResizeArea(e) || this.overLeftResizeArea(e)) && this.canResize(e)){
 					this.beginColumnResize(e);
 				}else{
@@ -420,7 +526,7 @@ dojo.require("dojox.grid._grid.drag");
 				spanners: spanners
 			};
 			//console.log(drag.index, drag.w);
-			dojox.grid._grid.drag.start(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
+			startDrag(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
 		},
 
 		doResizeColumn: function(inDrag, inEvent){
@@ -576,8 +682,8 @@ dojo.require("dojox.grid._grid.drag");
 
 		postCreate: function(){
 			this.connect(this.scrollboxNode,"onscroll","doscroll");
-			dojox.grid.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
-			dojox.grid.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
+			dojox.grid.util.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
+			dojox.grid.util.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
 			this.content = new ContentBuilder(this);
 			this.header = new HeaderBuilder(this);
 			//BiDi: in RTL case, style width='9000em' causes scrolling problem in head node
@@ -587,7 +693,7 @@ dojo.require("dojox.grid._grid.drag");
 		},
 
 		destroy: function(){
-			dojox.grid.removeNode(this.headerNode);
+			dojox.grid.util.removeNode(this.headerNode);
 			this.inherited("destroy", arguments);
 		},
 
@@ -687,7 +793,7 @@ dojo.require("dojox.grid._grid.drag");
 				if(!this.hasScrollbar()){ // no scrollbar is rendered
 					h -= dojox.html.metrics.getScrollbar().w;
 				}
-				dojox.grid.setStyleHeightPx(this.scrollboxNode, h);
+				dojox.grid.util.setStyleHeightPx(this.scrollboxNode, h);
 			}
 		},
 
