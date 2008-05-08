@@ -263,7 +263,7 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 				var passed = false;
 				try{
-					var value = store.getValue("NotAnItem", foo);
+					var value = store.getValue("NotAnItem", "foo");
 				}catch(e){
 					passed = true;
 				}
@@ -320,7 +320,7 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 				var passed = false;
 				try{
-					var value = store.getValues("NotAnItem", foo);
+					var value = store.getValues("NotAnItem", "foo");
 				}catch(e){
 					passed = true;
 				}
