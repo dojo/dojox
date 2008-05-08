@@ -3,6 +3,8 @@ dojo.provide("dojox.data.tests.module");
 try{
 	dojo.require("dojox.data.tests.stores.CsvStore");
 	dojo.require("dojox.data.tests.stores.KeyValueStore");
+	dojo.require("dojox.data.tests.stores.AndOrReadStore"); 
+	dojo.require("dojox.data.tests.stores.AndOrWriteStore"); 
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.HtmlTableStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.HtmlStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.OpmlStore");

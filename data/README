@@ -14,6 +14,7 @@ Project authors
 	Russell Jones (KeyValueStore) (CLA)
 	Benjamin Schell (KeyValueStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
+	Frank Fortson (frank.fortson@equorum.com) (AndOrReadStore, AndOrWriteStore)
 
 -------------------------------------------------------------------------------
 Project description
@@ -87,7 +88,7 @@ Additional Notes:
 	file format.
 
 	dojox.data.SnapLogicStore - Store to interface to SnapLogic data services.
-        
+
 	dojox.data.GoogleSearchStore - Store to interface Google's AJAX search services.  
 		There are many subclasses of this store for particular types of searches:
 		dojox.data.GoogleWebSearchStore
@@ -97,3 +98,10 @@ Additional Notes:
 		dojox.data.GoogleNewsSearchStore
 		dojox.data.GoogleBookSearchStore
 		dojox.data.GoogleImageSearchStore
+
+	dojox.data.AndOrReadStore - Demonstrating a more complex query format allowing AND/OR.  
+	Based directly on dojo.data.ItemFileReadStore.
+
+	dojox.data.AndOrWriteStore - Demonstrating a more complex query format allowing AND/OR.  
+	Based directly on dojo.data.ItemFileWriteStore.
+
