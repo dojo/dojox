@@ -109,7 +109,7 @@
 	/*
 	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
 	*/
-	background: url(images/titleBar.png) #e9e9e9 repeat-y right;
+	background: url(../../../dijit/themes/nihilo/images/titleBar.png) #e9e9e9 repeat-y right;
 	border-right: 1px solid #cccccc;
 	padding: 0px;
 }
@@ -120,7 +120,7 @@
 }
 
 .nihilo .dojoxGrid-rowbar-over {
-	background: url(images/titleBarActive.png) #e9e9e9 repeat-y right;
+	background: url(../../../dijit/themes/nihilo/images/titleBarActive.png) #e9e9e9 repeat-y right;
 }
 
 .nihilo .dojoxGrid-rowbar-selected {
