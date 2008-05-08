@@ -1,4 +1,5 @@
 dojo.provide("dojox.av._base.flash");
+dojo.deprecated("dojox.av._base.flash", "DojoX A/V Flash has been moved to dojox.embed.Flash.", "1.2");
 
 (function(){
 	/*******************************************************

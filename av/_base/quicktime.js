@@ -1,4 +1,5 @@
 dojo.provide("dojox.av._base.quicktime");
+dojo.deprecated("dojox.av._base.quicktime", "DojoX A/V Quicktime has been moved to dojox.embed.Quicktime.", "1.2");
 
 (function(){
 	/*******************************************************
