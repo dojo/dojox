@@ -167,7 +167,6 @@ dojo.provide("dojox.embed.Quicktime");
 			var s='<div style="top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;" id="-qt-version-test">'
 				+ o.markup
 				+ '</div>';
-			console.log(s);
 			document.write(s);
 		} else {
 			var n = document.createElement("div");
