@@ -112,7 +112,7 @@ dojo.mixin(dojox._sql._crypto,{
 			this._employed["_" + workerID] = callback;
 		
 			// do the worke
-			this._manager.sendMessage(msg, workerID);
+			this._manager.sendMessage(msg, parseInt(workerID,10));
 		}else{
 			// we have to queue it up
 			this._handleMessage ={msg: msg, callback: callback};
