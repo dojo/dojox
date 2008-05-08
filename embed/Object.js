@@ -1,22 +1,22 @@
-dojo.provide("dojox.embed.Movie");
-dojo.experimental("dojox.embed.Movie");
+dojo.provide("dojox.embed.Object");
+dojo.experimental("dojox.embed.Object");
 
 dojo.require("dijit._Widget");
 dojo.require("dojox.embed.Flash");
 dojo.require("dojox.embed.Quicktime");
 
-dojo.declare("dojox.embed.Movie", dijit._Widget, {
+dojo.declare("dojox.embed.Object", dijit._Widget, {
 	//	summary:
 	//		A widget you can use to embed either a Flash or Quicktime
 	//		movie.
 	//
 	//	example:
 	//	From markup:
-	//	|	<div dojoType="dojox.embed.Movie" src="path/to/movie.swf"></div>
+	//	|	<div dojoType="dojox.embed.Object" src="path/to/movie.swf"></div>
 	//
 	//	example:
 	//	Programmatic:
-	//	|	var mov=new dojox.embed.Movie({
+	//	|	var mov=new dojox.embed.Object({
 	//	|		src: "path/to/movie.swf"
 	//	|	}, node);
 	//
