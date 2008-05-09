@@ -3,9 +3,9 @@
     font-family: tahoma, verdana, helvetica;
     font-size: 11px;
     padding: 4px;
-    position: absolute;
     text-align: center;
     width: 171px;
+	overflow: hidden;
 }
 
 .dojoxCalendarBody {
@@ -58,18 +58,20 @@
 
 .dojoxCalendarMonthLabel {
     cursor: pointer;
-    height: 45px;
+    height: 35px;
     width: 41px;
     overflow: hidden;
     text-align: center;
+	padding-top: 10px;
 }
 
 .dojoxCalendarYearLabel {
     cursor: pointer;
-    height: 45px;
+    height: 35px;
     width: 41px;
     overflow: hidden;
     text-align: center;
+	padding-top: 10px;
 }
 
 .dojoxCalendarTitle {
@@ -97,6 +99,11 @@
     background-color: white;
     border: 1px solid #656565;
     color: black;
+}
+
+.dojoxCalendar .dijitCalendarDisabledDate {
+	text-decoration:line-through !important;
+	cursor:default !important;
 }
 
 .dojoxCalendar .dojoxCalendarFooter {

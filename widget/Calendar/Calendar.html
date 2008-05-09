@@ -1,73 +1,24 @@
 <div class="dojoxCalendar">
-            <div tabindex="0" class="dojoxCalendarContainer" style="visibility: visible; width: 180px;" dojoAttachPoint="container">
-				<div style="display:none">
-					<div dojoAttachPoint="previousYearLabelNode"></div>
-					<div dojoAttachPoint="nextYearLabelNode"></div>
-					<div dojoAttachPoint="monthLabelSpacer"></div>
-				</div>
-                <div class="dojoxCalendarHeader">
-                    <div>
-                        <div class="dojoxCalendarDecrease" dojoAttachPoint="decrementMonth"></div>
-                    </div>
-                    <div class="">
-                        <div class="dojoxCalendarIncrease" dojoAttachPoint="incrementMonth"></div>
-                    </div>
-                    <div class="dojoxCalendarTitle" dojoAttachPoint="monthYearLabel">
-                    	<div dojoAttachPoint="monthAndYearHeader">
-	                        <span dojoAttachPoint="monthLabelNode" class="dojoxCalendarMonthLabelNode"></span>
-							<span dojoAttachPoint="headerComma" class="dojoxCalendarComma">,</span>
-							<span dojoAttachPoint="currentYearLabelNode"></span>
-						</div>
-						<div dojoAttachPoint="yearHeader" style="display:none" class="dojoxCalendarYearHeader"></div>
-						<div dojoAttachPoint="yearRangeHeader" style="display:none"></div>
-                    </div>
-                </div>
-                <div class="dojoxCalendarBody" dojoAttachPoint="calendarBody">
-                    <div class="dijitCalendarDayLabels" style="position: absolute; left: 0px; top: 0px;" dojoAttachPoint="dayContainer">
-                        <table cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
-                            <thead>
-                                <tr>
-                                    <td class="dijitCalendarDayLabelTemplate"><div class="dijitCalendarDayLabel"></div></td>
-                                </tr>
-                            </thead>
-                            <tbody dojoAttachEvent="onclick: _onDayClick">
-                                <tr class="dijitCalendarWeekTemplate">
-                                    <td class="dojoxCalendarNextMonth dijitCalendarDateTemplate">
-                                        <div class="dijitCalendarDateLabel"></div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="dojoxCalendarMonthLabels" style="visibility: visible; position: absolute; left: 0px; top: -139px;"  dojoAttachPoint="monthContainer">
-                        <table cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
-                            <tbody>
-                                <tr class="dojoxCalendarMonthGroupTemplate">
-                                    <td class="dojoxCalendarMonthTemplate">
-                                        <div class="dojoxCalendarMonthLabel"></div>
-                                    </td>
-                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="dojoxCalendarYearLabels" style="visibility: visible; position: absolute; left: 0px; top: -139px;" dojoAttachPoint="yearContainer">
-                        <table cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
-                            <tbody>
-                                <tr class="dojoxCalendarYearGroupTemplate">
-                                    <td class="dojoxCalendarNextMonth dojoxCalendarYearTemplate">
-                                        <div class="dojoxCalendarYearLabel">
-                                            
-                                            <span class="dojoxCalendarYearLabelValue"></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="dojoxCalendarFooter" dojoAttachPoint="footer">                        
-                    </div>
-                </div>
+    <div tabindex="0" class="dojoxCalendarContainer" style="visibility: visible; width: 180px; heightL 138px;" dojoAttachPoint="container">
+		<div style="display:none">
+			<div dojoAttachPoint="previousYearLabelNode"></div>
+			<div dojoAttachPoint="nextYearLabelNode"></div>
+			<div dojoAttachPoint="monthLabelSpacer"></div>
+		</div>
+        <div class="dojoxCalendarHeader">
+            <div>
+                <div class="dojoxCalendarDecrease" dojoAttachPoint="decrementMonth"></div>
+            </div>
+            <div class="">
+                <div class="dojoxCalendarIncrease" dojoAttachPoint="incrementMonth"></div>
+            </div>
+            <div class="dojoxCalendarTitle" dojoAttachPoint="header" dojoAttachEvent="onclick: onHeaderClick">
             </div>
         </div>
+        <div class="dojoxCalendarBody" dojoAttachPoint="containerNode"></div>
+        <div class="">
+            <div class="dojoxCalendarFooter" dojoAttachPoint="footer">                        
+            </div>
+        </div>
+    </div>
+</div>

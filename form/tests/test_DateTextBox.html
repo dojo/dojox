@@ -61,17 +61,19 @@
 				>
 				onChange:<input id="oc1" size="34" disabled value="not fired yet!" autocomplete="off">
 			</div>
+
 			<div class="testExample">
 				Month Only
-				<input id="q1Month" name="q1Month" type="text" dojoType="dojox.form.DateTextBox"
-				         onChange="dojo.byId('oc1month').value=arguments[0]" useMonthOnly="true"
+				<input id="q1Month" name="q1Month" type="text" dojoType="dojox.form.MonthTextBox"
+				         onChange="dojo.byId('oc1month').value=arguments[0]"
 				>
 				onChange:<input id="oc1month" size="34" disabled value="not fired yet!" autocomplete="off">
 			</div>
+
 			<div class="testExample">
 				Year Only
-				<input id="q1Year" name="q1Year" type="text" dojoType="dojox.form.DateTextBox"
-				         onChange="dojo.byId('oc1year').value=arguments[0]" useYearOnly="true"
+				<input id="q1Year" name="q1Year" type="text" dojoType="dojox.form.YearTextBox"
+				         onChange="dojo.byId('oc1year').value=arguments[0]"
 				>
 				onChange:<input id="oc1year" size="34" disabled value="not fired yet!" autocomplete="off">
 			</div>
@@ -169,6 +171,7 @@
 				<input type="submit" name="submit" />
 				<input type="reset" name="reset" />
 			</div>
+
 		</form>
 	</body>
 </html>
