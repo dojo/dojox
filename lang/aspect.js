@@ -212,10 +212,10 @@ dojo.provide("dojox.lang.aspect");
 						/*Array*/ advices
 						){
 		// summary:
-		//		Attach AOP-style advices to a method.
+		//		Attach AOP-style advices to methods.
 		//
 		// description:
-		//		Attaches AOP-style advices to a method. Can attach several
+		//		Attaches AOP-style advices to object's methods. Can attach several
 		//		advices at once and operate on several methods of the object.
 		//		The latter is achieved when a RegExp is specified as
 		//		a method name. In this case all functional methods that

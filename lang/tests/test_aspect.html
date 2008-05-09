@@ -11,6 +11,8 @@
 		<script type="text/javascript" src="../aspect/timer.js"></script>
 		<script type="text/javascript" src="../aspect/profiler.js"></script>
 		<script type="text/javascript" src="../aspect/counter.js"></script>
+		<script type="text/javascript" src="../aspect/memoizer.js"></script>
+		<script type="text/javascript" src="../aspect/memoizerGuard.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.lang.aspect");
 			dojo.require("dojox.lang.aspect.cflow");
@@ -18,7 +20,10 @@
 			dojo.require("dojox.lang.aspect.timer");
 			dojo.require("dojox.lang.aspect.profiler");
 			dojo.require("dojox.lang.aspect.counter");
+			dojo.require("dojox.lang.aspect.memoizer");
+			dojo.require("dojox.lang.aspect.memoizerGuard");
 			dojo.require("dojo.string");
+			dojo.require("dojox.lang.functional.listcomp");
 			
 			var test = function(){
 				// This is a test class, don't program like this!
@@ -54,7 +59,7 @@
 					}
 				});
 				
-				var aop = dojox.lang.aspect;
+				var aop = dojox.lang.aspect, df = dojox.lang.functional;
 				
 				// our simple advices
 				var TraceArguments = {
@@ -387,6 +392,81 @@
 				aop.unadvise(h1);
 				console.log("=================================");
 				*/
+				
+				var Fibonacci = function(order){
+					if(arguments.length == 1){
+						this.setOrder(order);
+					}else{
+						this.offset = 2;
+					}
+				}
+				dojo.extend(Fibonacci, {
+					setOrder: function(order){
+						this.offset = order + 1;
+					},
+					getOrder: function(){
+						return this.offset - 1;
+					},
+					calculate: function(n){
+						if(n < 0){ return 0; }
+						if(n == 0){ return 1; }
+						return this.calculate(n - 1) + this.calculate(n - this.offset);
+					},
+					calculateN: function(n, o){
+						if(n < 0){ return 0; }
+						if(n == 0){ return 1; }
+						return this.calculateN(n - 1, o) + this.calculateN(n - 1 - o, o);
+					}
+				});
+				var args = df.listcomp("i for(i = 0; i < 15; ++i)");
+
+				console.log("calculate Fibonacci numbers...");
+				var fib = new Fibonacci;
+				h1 = aop.advise(fib, /^calculate/, aop.timer("fib"));
+				
+				console.log("before memoization");
+				fib.setOrder(0);
+				console.log("0-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				fib.setOrder(1);
+				console.log("1-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				fib.setOrder(2);
+				console.log("2-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				fib.setOrder(3);
+				console.log("3-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				
+				console.log("after memoization");
+				h2 = aop.advise(fib, "calculate", aop.memoizer());
+				h3 = aop.advise(fib, /^set/, aop.memoizerGuard("calculate"));
+				fib.setOrder(0);
+				console.log("0-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				fib.setOrder(1);
+				console.log("1-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				fib.setOrder(2);
+				console.log("2-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				fib.setOrder(3);
+				console.log("3-order:", dojo.map(args, dojo.hitch(fib, "calculate")));
+				aop.unadvise(h3);
+				aop.unadvise(h2);
+				
+				console.log("before memoization");
+				console.log(fib.calculateN(15, 0));
+				console.log(fib.calculateN(15, 1));
+				console.log(fib.calculateN(15, 2));
+				console.log(fib.calculateN(15, 3));
+				
+				console.log("after memoization");
+				h2 = aop.advise(fib, "calculateN", aop.memoizer(function(a, b){ return a + "/" + b; }));
+				h3 = aop.advise(fib, /^set/, aop.memoizerGuard("calculate"));
+				console.log(fib.calculateN(15, 0));
+				console.log(fib.calculateN(15, 1));
+				console.log(fib.calculateN(15, 2));
+				console.log(fib.calculateN(15, 3));
+				aop.unadvise(h3);
+				aop.unadvise(h2);
+
+				aop.unadvise(h1);
+				
+				console.log("=================================");
 			};
 			//dojo.addOnLoad(test);
 		</script>
