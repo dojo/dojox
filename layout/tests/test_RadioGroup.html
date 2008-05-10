@@ -2,21 +2,31 @@
 <html>
 <head>
 
-	<title>RadioGroup Widget Test</title>
+	<title>RadioGroup (Animated StackContainer) Widget Test</title>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true"></script>
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+	<link rel="stylesheet" href="../resources/RadioGroup.css" />	
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
+	<!-- for debugging: -->
 	<script type="text/javascript" src="../RadioGroup.js"></script>
+
 	<script language="JavaScript" type="text/javascript">
+		dojo.require("dojox.layout.RadioGroup");
 		dojo.require("dojo.parser"); 
 		dojo.require("dijit.layout.ContentPane"); 
 	</script>
+
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-		@import "../../../dijit/themes/dijit.css";
-		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../resources/RadioGroup.css";
+
 		body { background:#a0a0a0 !important; }
 
 		.dojoPane {
@@ -36,7 +46,6 @@
 
 	<h1 class="testTitle">dojox.layout.RadioGroup test</h1>
 
-		
 	<div style="width:915px; margin:0 auto; height:300px;">
 		<div dojoType="dojox.layout.RadioGroup" style="width:300px; height:300px; float:left;">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>

@@ -10,9 +10,12 @@
 		@import "../../../dijit/tests/css/dijitTests.css"; 
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	
 	<script type="text/javascript">
 		dojo.require("dijit.layout.TabContainer");
 		dojo.require("dijit.layout.SplitContainer");
@@ -20,8 +23,9 @@
 		dojo.require("dojox.widget.Iterator"); 
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 	</script>
+	
 </head>
-<body>
+<body class="tundra">
 
 	<h1 class="testTitle">Dojox Iterator test</h1>
 

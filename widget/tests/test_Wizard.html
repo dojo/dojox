@@ -1,10 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Wizard Demo</title>
 
-	<script type="text/javascript" djConfig="isDebug:true,parseOnLoad:true"
-		src="../../../dojo/dojo.js"></script>
+	<title>Wizard Demo</title>
+
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+	<link rel="stylesheet" href="../Wizard/Wizard.css" />
+	
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	<!-- for debugging: -->
 	<script type="text/javascript" src="../Wizard.js"></script>
 
 	<script type="text/javascript">
@@ -20,16 +30,14 @@
 	</script>
 
 	<style type="text/css">
-		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
-		@import "../Wizard/Wizard.css";
 		body {
 			font-family : sans-serif;
 		}
 	</style>
 </head>
 
-<body>
+<body class="tundra">
 
 	<div style="width:800px; margin:0 auto">
 

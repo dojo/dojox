@@ -4,24 +4,26 @@
 <head>
 	<title>DojoX Dialog example</title>
 
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+	<link rel="stylesheet" href="../Dialog/Dialog.css" />
+
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../Dialog/Dialog.css";
 
 		/* this is how you style underlays */	
 		#thirdTest_underlay { background-color: #000 }
 		#fourthTest_underlay,
 		#secondTest_underlay { background-color: #369 }
-	
-		
-	
 	</style>		
 
-	<script type="text/javascript" djConfig="parseOnLoad: true, isDebug: true"
-			src="../../../dojo/dojo.js"></script>
-	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 
+	<!-- do not use! only for testing dynamic themes -->
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	
 	<script type="text/javascript">
 		dojo.require("dojox.widget.Dialog");
 		dojo.require("dojox.fx.easing");
@@ -51,7 +53,7 @@
 		});
 	</script>
 </head>
-<body>
+<body class="tundra">
 
 	<h1 class="testTitle">dojox.widget.Dialog tests</h1>
 	

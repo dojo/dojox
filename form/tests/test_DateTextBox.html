@@ -4,10 +4,13 @@
 	<head>
 		<title>Test DateTextBox Widget</title>
 
+		<!-- required: a default theme file -->
+		<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+		<link rel="stylesheet" href="../../widget/Calendar/Calendar.css" />
+
 		<style type="text/css">
 			@import "../../../dojo/resources/dojo.css";
-			@import "../css/dijitTests.css";
-			@import "../../widget/Calendar/Calendar.css";
+			@import "../../../dijit/tests/css/dijitTests.css";
 
 			.testExample {
 				background-color:#fbfbfb;
@@ -31,9 +34,13 @@
 			}
 		</style>
 
+		<!-- required: dojo.js -->
 		<script type="text/javascript" src="../../../dojo/dojo.js"
 			djConfig="isDebug: true, parseOnLoad: true, extraLocale: ['de-de', 'en-us']"></script>
+			
+		<!-- do not use, only for dynamic themes -->
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
 		<script type="text/javascript" src="../../../dijit/form/_DateTimeTextBox.js"></script>
 		<script type="text/javascript" src="../../widget/Calendar.js"></script>
 		<script type="text/javascript" src="../DateTextBox.js"></script>
@@ -46,7 +53,7 @@
 		</script>
 	</head>
 
-	<body>
+	<body class="tundra">
 		<h1 class="testTitle">Test DateTextBox Widget</h1>
 		<!--	to test form submission, you'll need to create an action handler similar to
 			http://www.utexas.edu/teamweb/cgi-bin/generic.cgi -->

@@ -3,11 +3,15 @@
 <html>
 <head>
 	<title>Dojox ColorPicker Test</title>
+	
+	
+	<!-- required: a default theme file, and ColorPicker css -->
+	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+	<link rel="stylesheet" href="../resources/_ColorPicker.css" />
+
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
-		@import "../resources/_ColorPicker.css"; 
 		#absolutey {
 			position:absolute;
 			top: 62px;
@@ -15,7 +19,10 @@
 		}
 	</style>
 
+	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 	
 	<!-- debugging include -->
@@ -31,7 +38,7 @@
 		
 	</script>
 </head>
-<body>
+<body class="tundra">
 
 	<h1 class="testTitle">Dojox ColorPicker test</h1>
 

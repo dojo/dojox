@@ -3,10 +3,20 @@
 <html>
 <head>
 	<title>dojox.layout.ExpandoPane</title>
+
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+	<!-- test file style rollup, you need resources/ExpandoPane.css exclusively -->
 	<link rel="stylesheet" href="_expando.css" />	
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug:true"></script>
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
 	<script type="text/javascript">
+		dojo.require("dojox.layout.ExpandoPane");
 		dojo.require("dijit.form.Button");
 		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dijit.layout.BorderContainer");
@@ -47,7 +57,7 @@
 		#pane0 { background:yellow; }
 	</style>
 </head>
-<body>
+<body class="tundra">
 		<div id="bc" style="width:100%; height:100%;" dojoType="dijit.layout.BorderContainer">
 			<div region="center" style="height:65px; border-bottom:1px solid #666">
 				<button dojoType="dijit.form.Button">

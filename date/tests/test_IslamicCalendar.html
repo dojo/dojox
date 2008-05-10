@@ -7,8 +7,16 @@
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/tests/css/dijitTests.css";
 		</style>
+
+		<!-- required: a default theme file -->
+		<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+
+		<!-- required: dojo.js -->		
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true, extraLocale: ['ar']"></script>
+
+		<!-- do not use! only or testing dynamic themes: -->
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
 		<script type="text/javascript">
 
 			dojo.require("dojo.parser"); // scan page for widgets
@@ -305,7 +313,7 @@ dojo.declare(
 			}
 		</script>
 	</head>
-	<body>
+	<body class="tundra">
 		<h1 class="testTitle">Islamic Calendar Test</h1>
 		before <span id="islamicCalendar1" dojoType="dojox.date._IslamicCalendar" onChange="myHandler(this.id,arguments[0])"></span><span id="gregorianCalendar1" dojoType="dijit._Calendar" onChange="myHandler(this.id,arguments[0])"></span>after
 		before <input id="islamicCalendarArabic1" dojoType="dojox.date._IslamicCalendar" onChange="myHandler(this.id,arguments[0])"

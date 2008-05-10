@@ -4,8 +4,18 @@
 
 	<title>ScrollPane layout widget Test</title>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:false, isDebug:true"></script>
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css" />
+	<link rel="stylesheet" href="../resources/ScrollPane.css" />	
+
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
+	<!-- for debugging: -->
 	<script type="text/javascript" src="../ScrollPane.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		dojo.require("dojo.parser");
@@ -23,8 +33,6 @@
 	</script>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-		@import "../../../dijit/themes/dijit.css";
-		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
 
 		.dojoxScrollWindow {
