@@ -66,12 +66,18 @@
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojox.widget.FisheyeLite");
-		dojo.addOnLoad(function(){
+
+		var beenDestroyed = false;
+		var hasInit = false;
+		var init = function(e){
+			
+			if(e && !beenDestroyed){ return; }
+			e && e.preventDefault();
 			
 			// turn li's in this page into fisheye items, presumtiously:	
 			dojo.query("li.bounce").instantiate(dojox.widget.FisheyeLite,{});
 
-			dojo.query("span.line")
+			var l = dojo.query("span.line")
 				.instantiate(dojox.widget.FisheyeLite,{
 				// make a widget from each of the lines in the lineHeightTest
 					properties: {
@@ -79,21 +85,25 @@
 					},
 					easeOut: dojox.fx.easing.backInOut,
 					durationOut: 500
-				})
-				.connect("onclick",function(e){
+				});
+				
+			if(!hasInit){
+				l.connect("onclick",function(e){
 				// you can still access the onclick of the real node
 					alert(e.target.innerHTML);
-				})
-			;
+				});
+			}
 
-			dojo.query("a").instantiate(dojox.widget.FisheyeLite,{
+			var lm = dojo.query("a").instantiate(dojox.widget.FisheyeLite,{
 				properties:{
 					fontSize:1.15,
 					letterSpacing:2.85
 				}
-			})
+			});
+			if(!hasInit){
 			// stop anchors from doing _anything_	
-			.connect("onclick",dojo,"stopEvent");
+				lm.connect("onclick",dojo,"stopEvent");
+			}
 
 			dojo.query(".imgBounce").instantiate(dojox.widget.FisheyeLite,{
 				// all the images need a width and a height (well, not need,
@@ -113,8 +123,29 @@
 			}
 			// a few in markup, mostly from the query()'ies:
 			console.log("fisheyes on this page: ", vv);
-
-		});		
+				
+			beenDestroyed = false;
+			hasInit = true;
+		};
+		dojo.addOnLoad(init);
+		
+		dojo.addOnLoad(function(){
+			dojo.query("#restore").connect("onclick",init);
+			dojo.query("#destroy").connect("onclick",destroyAll);
+		});
+		
+		var destroyAll = function(e){
+			e && e.preventDefault();
+			if(confirm("really?")){
+				dijit.registry.filter(function(w){
+					return w && w.declaredClass == "dojox.widget.FisheyeLite";
+				}).forEach(function(w){
+					w.destroy(true);
+				});
+				beenDestroyed = true;
+			}
+		};
+			
 	</script>
     </head>
     <body class="tundra">
@@ -162,6 +193,14 @@
 					<span class="line">pharetra in, viverra quis, tellus. Etiam purus.</span>
 				</div>
 
+				<div>
+					<div dojoType="dojox.widget.FisheyeLite" properties="{ fontSize:1.25 }" style="padding:3px"
+					><a id='destroy' href="#" class="fisheyeTarget">test destroy()</a></div>
+
+					<div dojoType="dojox.widget.FisheyeLite" properties="{ fontSize:1.25 }" style="padding:3px"
+					><a id='restore' href="#" class="fisheyeTarget">restore</a></div>
+				</div>
+
 				<p>
 				Lorem ipsum dolor sit amet, <a href="#">consectetuer</a> adipiscing elit. Aenean
 				semper sagittis velit. Cras in mi. Duis porta mauris ut ligula.
@@ -193,6 +232,7 @@
 				facilisi.  Maecenas luctus venenatis nulla. In sit amet dui non mi
 				semper iaculis.  Sed molestie tortor at ipsum. 
 				</p>
+				
 				<h3>another list: (no target, or ilk)</h3>
 				<div style="height:125px; position:relative;">
 					<div style="position:absolute; width:600px;">
@@ -247,7 +287,7 @@
 				</p>
 				
 				<p>the end</p>
-
+				
 		</div>	
     </body>
 </html>
