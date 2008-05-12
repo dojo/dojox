@@ -52,20 +52,6 @@
 
 /*
 **----------------------------------------------------------------------------
-**  Common stylings
-**----------------------------------------------------------------------------
-*/
-/* Cursor States */
-.tundra .dojoxDropDownSelectDisabled * {
-    cursor: not-allowed !important;
-}
-.tundra .dojoxDropDownSelectReadOnly * {
-    cursor: default !important;
-}
-
-
-/*
-**----------------------------------------------------------------------------
 **  Tundra stylings
 **----------------------------------------------------------------------------
 */
@@ -91,7 +77,6 @@
     border-color: #d5d5d5 #bdbdbd #bdbdbd #d5d5d5;
     /*color:#b4b4b4;*/
     background:#e4e4e4 url("../../../dijit/themes/tundra/images/buttonDisabled.png") top repeat-x;
-    opacity: 0.60; /* Safari, Opera and Mozilla */
 }
 
 .dj_ie .tundra .dojoxDropDownSelectDisabled * {
@@ -144,7 +129,6 @@
     border-color: #b9bbdd #b9bbdd #b9bbdd #b9bbdd;
     /*color:#b4b4b4;*/
     background:#c3d3e5 url("../../../dijit/themes/soria/images/buttonDisabled.png") top repeat-x;
-    opacity: 0.60; /* Safari, Opera and Mozilla */
 }
 
 .dj_ie .soria .dojoxDropDownSelectDisabled * {
@@ -193,7 +177,6 @@
     border-color: #dedede;
     /*color:#b4b4b4;*/
     background:#fafafa url("../../../dijit/themes/nihilo/images/buttonDisabled.png") top repeat-x;
-    opacity: 0.60; /* Safari, Opera and Mozilla */
 }
 
 .dj_ie .nihilo .dojoxDropDownSelectDisabled * {
