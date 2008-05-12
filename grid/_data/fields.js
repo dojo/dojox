@@ -66,7 +66,7 @@ dojo.declare("dojox.grid._data.Mixer", null, {
 		this.values.splice(inIndex, 1);
 	},
 	swap: function(inIndexA, inIndexB){
-		dojox.grid.arraySwap(this.values, inIndexA, inIndexB);
+		dojox.grid.util.arraySwap(this.values, inIndexA, inIndexB);
 	},
 	move: function(inFromIndex, inToIndex){
 		dojox.grid.arrayMove(this.values, inFromIndex, inToIndex);
@@ -82,7 +82,7 @@ dojo.declare('dojox.grid._data.Field', null, {
 		this.name = inName;
 		this.compare = dojox.grid._data.compare;
 	},
-	na: dojox.grid.na
+	na: dojox.grid.util.na
 });
 
 dojo.declare('dojox.grid._data.Fields', dojox.grid._data.Mixer, {

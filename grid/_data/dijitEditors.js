@@ -76,7 +76,7 @@ dojo.declare("dojox.grid._data.editors.Dijit", dojox.grid._data.editors.base, {
 	},
 	_finish: function(inRowIndex){
 		this.inherited(arguments);
-		dojox.grid.removeNode(this.editor.domNode);
+		dojox.grid.util.removeNode(this.editor.domNode);
 	}
 });
 

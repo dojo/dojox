@@ -130,7 +130,7 @@
 			function detachSubgrid(inRowIndex) {
 				var subGrid = dijit.byId(makeSubgridId(inRowIndex));
 				if (subGrid)
-					dojox.grid.removeNode(subGrid.domNode);
+					dojox.grid.util.removeNode(subGrid.domNode);
 			}
 			
 			// render a subgrid into inCell at inRowIndex

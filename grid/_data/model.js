@@ -139,7 +139,7 @@ dojo.declare("dojox.grid._data.Rows", dojox.grid._data.Model, {
 		var cache = this.cache[inRowIndex];
 		if(cache){
 			var data = this.getRow(inRowIndex);
-			if(!dojox.grid.arrayCompare(cache, data)){
+			if(!dojox.grid.util.arrayCompare(cache, data)){
 				this.update(cache, data, inRowIndex);
 			}
 			delete this.cache[inRowIndex];
@@ -225,14 +225,14 @@ dojo.declare("dojox.grid._data.Table", dojox.grid._data.Rows, {
 	},
 	// insert
 	_insert: function(inData, inRowIndex){
-		dojox.grid.arrayInsert(this.data, inRowIndex, inData);
+		dojox.grid.util.arrayInsert(this.data, inRowIndex, inData);
 		this.count++;
 		return true;
 	},
 	// remove
 	_remove: function(inKeys){
 		for(var i=inKeys.length-1; i>=0; i--){
-			dojox.grid.arrayRemove(this.data, inKeys[i]);
+			dojox.grid.util.arrayRemove(this.data, inKeys[i]);
 		}
 		this.count -= inKeys.length;
 		return true;
@@ -242,7 +242,7 @@ dojo.declare("dojox.grid._data.Table", dojox.grid._data.Rows, {
 		this.data.sort(this.makeComparator(arguments));
 	},
 	swap: function(inIndexA, inIndexB){
-		dojox.grid.arraySwap(this.data, inIndexA, inIndexB);
+		dojox.grid.util.arraySwap(this.data, inIndexA, inIndexB);
 		this.rowChange(this.getRow(inIndexA), inIndexA);
 		this.rowChange(this.getRow(inIndexB), inIndexB);
 		this.change();

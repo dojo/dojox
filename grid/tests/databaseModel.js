@@ -278,7 +278,7 @@ dojo.declare("dojox.grid._data.DbTable", dojox.grid._data.Dynamic, {
 		var m = false;
 		if(cache){
 			var data = this.getRow(inRowIndex);
-			if(!dojox.grid.arrayCompare(cache, data)){
+			if(!dojox.grid.util.arrayCompare(cache, data)){
 				m = true;
 				this.update(cache, data, inRowIndex);
 			}	
