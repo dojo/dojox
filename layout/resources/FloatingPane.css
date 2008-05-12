@@ -46,9 +46,9 @@
 }
 
 .dojoxFloatingMinimizeIcon {
-	background:url('../../../dijit/themes/tundra/images/arrowDown.png') no-repeat center center; 
-	width:16px;
-	height:16px; 
+	background:url('../../../dijit/themes/tundra/images/spriteArrows.png') no-repeat 0px center; 
+	width:7px;
+	margin: 0px 4px;
 	overflow:hidden;
 	float:right; 
 }
@@ -59,9 +59,9 @@
 
 .floatingPaneMaximized .dojoxFloatingMaximizeIcon { display:none; }
 .dojoxFloatingMaximizeIcon {
-	background:url('../../../dijit/themes/tundra/images/arrowUp.png') no-repeat center center;
-	width:16px;
-	height:16px;
+	background:url('../../../dijit/themes/tundra/images/spriteArrows.png') no-repeat -21px center;
+	width:7px;
+	margin: 0px 4px;
 	overflow:hidden;
 	float:right;	
 }
@@ -71,9 +71,9 @@
 
 .floatingPaneMaximized .dojoxFloatingRestoreIcon { display:inline; }
 .dojoxFloatingRestoreIcon {
-	background:url('../../../dijit/themes/tundra/images/arrowDown.png') no-repeat center center;
-	width:16px; height:16px;
-	overflow:hidden; 
+	background:url('../../../dijit/themes/tundra/images/spriteArrows.png') no-repeat 0px center; 
+	width:7px;
+	margin: 0px 4px;
 	float:right;
 	display:none;
 }

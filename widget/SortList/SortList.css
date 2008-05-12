@@ -43,14 +43,14 @@
 .soria .sortListIcon,
 .tundra .sortListIcon { 
 	float:right;
-	height:16px; 
-	width:16px;
+	background:url('../../../dijit/themes/tundra/images/spriteArrows.png') no-repeat;
+	width: 7px;
 }
 .tundra .sortListDesc .sortListIcon {
-	background:url('../../../dijit/themes/tundra/images/arrowDown.png') no-repeat center center;
+	background-position: 0px center;
 }
 .tundra .sortListAsc .sortListIcon {
-	background:url('../../../dijit/themes/tundra/images/arrowUp.png') no-repeat center center;
+	background-position: -21px center;
 }
 
 .soria .sortListDesc .sortListIcon,
