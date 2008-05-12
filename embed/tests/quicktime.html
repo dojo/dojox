@@ -10,15 +10,12 @@
 		<script type="text/javascript">
 			dojo.require("dojox.embed.Quicktime");
 			
-			var v=dojox.embed._quicktime.version;
-			console.log("while loading: ", v);
-
-			dojo.addOnLoad(function(){
+			function getVersion(){
 				var v=dojox.embed._quicktime.version || { major: 0, minor: 0, rev: 0 };
 				dojo.byId("results").innerHTML = v.major
 					+ '.' + v.minor
 					+ '.' + v.rev;
-			});
+			};
 		</script>
 	</head>
 	<body>
@@ -26,7 +23,7 @@
 		<p>
 			This page is testing the base QuickTime movie generator.  See the Firebug log for details.
 		</p>
-		<p>Note that at this time, version detection before load in Opera is not supported.</p>	
+		<input type="submit" value="Get Quicktime Version" onclick="getVersion()" />	
 		<p>Installed QuickTime version: <span id="results"></span></p>
 	</body>
 </html>

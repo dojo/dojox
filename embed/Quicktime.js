@@ -161,23 +161,45 @@ dojo.provide("dojox.embed.Quicktime");
 	
 	if(!dojo.isIE){
 		// FIXME: Opera does not like this at all for some reason, and of course there's no event references easily found.
-		qtVersion = { major: 0, minor: 0, rev: 0 };
+		qtVersion = dojox.embed._quicktime.version = { major: 0, minor: 0, rev: 0 };
 		var o = qtMarkup({ path: testMovieUrl, width:4, height:4 });
-		if(!dojo._initFired){
-			var s='<div style="top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;" id="-qt-version-test">'
-				+ o.markup
-				+ '</div>';
-			document.write(s);
-		} else {
-			var n = document.createElement("div");
-			n.id="-qt-version-test";
-			n.style.cssText = "top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;";
-			dojo.body().appendChild(n);
-			n.innerHTML = o.markup;
+
+		function qtInsert(){
+			if(!dojo._initFired){
+				var s='<div style="top:0;left:0;width:1px;height:1px;;overflow:hidden;position:absolute;" id="-qt-version-test">'
+					+ o.markup
+					+ '</div>';
+				document.write(s);
+			} else {
+				var n = document.createElement("div");
+				n.id="-qt-version-test";
+				n.style.cssText = "top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;";
+				dojo.body().appendChild(n);
+				n.innerHTML = o.markup;
+			}
 		}
 
-		function qtGetInfo(){
-			var qt=document[o.id], n=dojo.byId("-qt-version-test"), v = [ 0, 0, 0 ];
+		function qtGetInfo(mv){
+			var qt, n, v = [ 0, 0, 0 ];
+			if(mv){
+				qt=mv, n=qt.parentNode;
+			} else {
+				qtInsert();
+				if(!dojo.isOpera){
+					setTimeout(function(){ qtGetInfo(document[o.id]); }, 50);
+				} else {
+					var fn=function(){ 
+						setTimeout(function(){ qtGetInfo(document[o.id]) }, 50); 
+					};
+					if(!dojo._initFired){
+						dojo.addOnLoad(fn);
+					} else {
+						dojo.connect(document[o.id], "onload", fn);
+					}
+				}
+				return;
+			}
+
 			if(qt){
 				try {
 					v = qt.GetQuickTimeVersion().split(".");
@@ -195,17 +217,16 @@ dojo.provide("dojox.embed.Quicktime");
 				console.log("quicktime is not installed.");
 			}
 
-			// dojo.body().removeChild(n);
+			try {
+				if(!mv){
+					dojo.body().removeChild(n);
+				}
+			} catch(e){ }
 		}
 
-		if(dojo.isOpera){
-			setTimeout(qtGetInfo, 50);
-		} else {
-			qtGetInfo();
-		}
+		qtGetInfo();
 	}
-	
-	if(dojo.isIE && installed){
+	else if(dojo.isIE && installed){
 		dojox.embed._quicktime.onInitialize();
 	}
 
@@ -237,8 +258,9 @@ dojo.provide("dojox.embed.Quicktime");
 		//	summary:
 		//		Returns a reference to the HTMLObject/HTMLEmbed that is created to 
 		//		place the movie in the document.  You can use this either with or
-		//		without the new operator.  Note that if the QuickTime engine isn't
-		//		available yet, this will throw an Error.
+		//		without the new operator.  Note that with any other DOM manipulation,
+		//		you must wait until the document is finished loading before trying
+		//		to use this.
 		//
 		//	example:
 		//		Embed a QuickTime movie in a document using the new operator, and get a reference to it.
@@ -256,9 +278,6 @@ dojo.provide("dojox.embed.Quicktime");
 		//	|		height: 300
 		//	|	}, myWrapperNode);
 
-		if(dojox.embed._quicktime.initialized){
-			return dojox.embed._quicktime.place(kwArgs, node);	//	HTMLObject
-		}
-		throw new Error("dojox.embed.Quicktime:: you must wait for the Quicktime engine to be initialized.");
+		return dojox.embed._quicktime.place(kwArgs, node);	//	HTMLObject
 	};
 })();
