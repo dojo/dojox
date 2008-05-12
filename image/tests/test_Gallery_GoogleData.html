@@ -37,7 +37,12 @@
 				},
 				count: 32
 			};
-			dijit.byId('gallery1').setDataStore(googleImageStore, req);
+			// testCommon defers parsing by a little, so dijit's aren't ready
+			// in addOnLoad for soria/nihilo :(
+			setTimeout(function(){ 
+				dijit.byId('gallery1').setDataStore(googleImageStore, req);	
+			},250);
+			
 		});
 	</script>
 </head>

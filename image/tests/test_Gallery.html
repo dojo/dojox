@@ -49,7 +49,9 @@
 				},
 				count: 20
 			};
-			dijit.byId('gallery1').setDataStore(flickrRestStore, req);
+			setTimeout(function(){
+				dijit.byId('gallery1').setDataStore(flickrRestStore, req);				
+			},250);
 /*
 			dijit.byId('gallery2').setDataStore(imageItemStore,{ count:20 },{
 				imageThumbAttr: "thumb",

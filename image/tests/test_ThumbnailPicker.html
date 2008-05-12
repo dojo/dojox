@@ -13,7 +13,7 @@
 	</style>
 	
 	<!-- required: dojo.js -->
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: false"></script>
 
 	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -25,6 +25,7 @@
 		dojo.require("dojox.image.ThumbnailPicker");
 		dojo.require("dojox.data.FlickrRestStore"); 
 		dojo.require("dojo.data.ItemFileReadStore"); 
+		dojo.require("dojo.parser");
 		
 		/*
 			Initializes the ThumbnailPicker with a data store that
@@ -95,9 +96,13 @@
 			dojo.subscribe(dijit.byId('thumbPicker2').getClickTopicName(), updateDiv);
 		}
 		
-		dojo.addOnLoad(initFlickrGallery);
-		dojo.addOnLoad(initItemStoreGallery);
-		dojo.addOnLoad(doSubscribe);
+		dojo.addOnLoad(function(){
+			dojo.parser.parse();
+			initFlickrGallery();
+			initItemStoreGallery();
+			doSubscribe();
+		});
+
 	</script>
 </head>
 <body>
