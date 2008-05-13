@@ -40,11 +40,15 @@ var update = function(){
 		var scale  = axis.getWindowScale(),
 			offset = Math.round(axis.getWindowOffset() * axis.getScaler().bounds.scale);
 		if(axis.vertical){
-			dijit.byId("scaleYSlider").setValue(scale);
-			dijit.byId("offsetYSlider").setValue(offset);
+			setTimeout(function(){
+				dijit.byId("scaleYSlider").setValue(scale);
+				dijit.byId("offsetYSlider").setValue(offset);
+			}, 25);
 		}else{
-			dijit.byId("scaleXSlider").setValue(scale);
-			dijit.byId("offsetXSlider").setValue(offset);
+			setTimeout(function(){
+				dijit.byId("scaleXSlider").setValue(scale);
+				dijit.byId("offsetXSlider").setValue(offset);
+			}, 25);
 		}
 	});
 };
