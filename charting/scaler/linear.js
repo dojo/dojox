@@ -80,7 +80,9 @@ dojo.require("dojox.charting.scaler.common");
 			minorPerMajor:	minorPerMajor,
 			microPerMinor:	microPerMinor,
 			scale:			scale,
-			span:			span
+			span:			span,
+			min:			min,
+			max:			max
 		};
 	};
 	
@@ -93,6 +95,30 @@ dojo.require("dojox.charting.scaler.common");
 				if("natural"  in kwArgs){ h.natural  = Boolean(kwArgs.natural); }
 			}
 			
+			// update bounds, if needed
+			var includeZeroFlag = false;
+			if("from" in kwArgs){
+				min = kwArgs.from;
+				h.fixLower = "none";
+				h.natural = false;
+			}else{
+				if("min" in kwArgs){ min = kwArgs.min; }
+				includeZeroFlag = true;
+			}
+			if("to" in kwArgs){
+				max = kwArgs.from;
+				h.fixUpper = "none";
+				h.natural = false;
+			}else{
+				if("max" in kwArgs){ max = kwArgs.max; }
+				includeZeroFlag = true;
+			}
+			if(includeZeroFlag && kwArgs.includeZero){
+				if(min > 0){ min = 0; }
+				if(max < 0){ max = 0; }
+			}
+			
+			// check for erroneous condition
 			if(max <= min){
 				return calcTicks(min, max, h, 0, 0, 0, span);	// Object
 			}

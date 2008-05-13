@@ -5,6 +5,7 @@ dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.axis2d.Base");
 
 dojo.require("dojo.colors");
+dojo.require("dojo.string");
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
@@ -33,20 +34,22 @@ dojo.require("dojox.lang.utils");
 			htmlLabels:  true		// use HTML to draw labels
 		},
 		optionalParams: {
-			"min":           0,		// minimal value on this axis
-			"max":           1,		// maximal value on this axis
-			"majorTickStep": 4,		// major tick step
-			"minorTickStep": 2,		// minor tick step
-			"microTickStep": 1,		// micro tick step
-			"labels":        [],	// array of labels for major ticks
-									// with corresponding numeric values
-									// ordered by values
+			min:           0,	// minimal value on this axis
+			max:           1,	// maximal value on this axis
+			from:          0,	// visible from this value
+			to:            1,	// visible to this value
+			majorTickStep: 4,	// major tick step
+			minorTickStep: 2,	// minor tick step
+			microTickStep: 1,	// micro tick step
+			labels:        [],	// array of labels for major ticks
+								// with corresponding numeric values
+								// ordered by values
 			// theme components
-			"stroke":        {},	// stroke for an axis
-			"majorTick":     {},	// stroke + length for a tick
-			"minorTick":     {},	// stroke + length for a tick
-			"font":          "",	// font for labels
-			"fontColor":     ""		// color for labels as a string
+			stroke:        {},	// stroke for an axis
+			majorTick:     {},	// stroke + length for a tick
+			minorTick:     {},	// stroke + length for a tick
+			font:          "",	// font for labels
+			fontColor:     ""	// color for labels as a string
 		},
 
 		constructor: function(chart, kwArgs){
@@ -69,12 +72,7 @@ dojo.require("dojox.lang.utils");
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
 			this.labels = "labels" in this.opt ? this.opt.labels : labels;
-			if("min" in this.opt){ min = this.opt.min; }
-			if("max" in this.opt){ max = this.opt.max; }
-			if(this.opt.includeZero){
-				if(min > 0){ min = 0; }
-				if(max < 0){ max = 0; }
-			}
+			this.scaler = lin.buildScaler(min, max, span, this.opt);
 			var minMinorStep = 0, ta = this.chart.theme.axis, 
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
@@ -90,10 +88,12 @@ dojo.require("dojox.lang.utils");
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
 						}), "Math.max(a, b)", 0);
 					}else{
-						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10), t = [];
-						if(min < 0 || max < 0){ t.push("-"); }
-						for(i = 0; i < labelLength; ++i){ t.push("9"); }
-						var precision = Math.floor(Math.log(max - min) / Math.LN10);
+						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(this.scaler.min),
+								Math.abs(this.scaler.max))) / Math.LN10),
+							t = [];
+						if(this.scaler.min < 0 || this.scaler.max < 0){ t.push("-"); }
+						t.push(dojo.string.rep("9", labelLength));
+						var precision = Math.floor(Math.log(this.scaler.max - this.scaler.min) / Math.LN10);
 						if(precision > 0){
 							t.push(".");
 							for(i = 0; i < precision; ++i){ t.push("9"); }
@@ -103,7 +103,6 @@ dojo.require("dojox.lang.utils");
 					minMinorStep = labelWidth + labelGap;
 				}
 			}
-			this.scaler = lin.buildScaler(min, max, span, this.opt);
 			this.scaler.minMinorStep = minMinorStep;
 			this.ticks = lin.buildTicks(this.scaler, this.opt);
 			return this;
