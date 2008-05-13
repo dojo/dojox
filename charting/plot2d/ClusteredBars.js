@@ -19,10 +19,15 @@ dojo.require("dojox.lang.functional.reversed");
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, color, stroke, fill, f,
-				gap = this.opt.gap < this._vScaler.scale / 3 ? this.opt.gap : 0,
-				thickness = (this._vScaler.scale - 2 * gap) / this.series.length;
+				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
+				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+				gap = this.opt.gap < this._vScaler.bounds.scale / 3 ? this.opt.gap : 0,
+				thickness = (this._vScaler.bounds.scale - 2 * gap) / this.series.length,
+				baseline = Math.max(0, this._hScaler.bounds.lower),
+				baselineWidth = ht(baseline),
+				height = thickness;
 			for(var i = this.series.length - 1; i >= 0; --i){
-				var run = this.series[i];
+				var run = this.series[i], shift = thickness * (this.series.length - i - 1);
 				if(!this.dirty && !run.dirty){ continue; }
 				run.cleanGroup();
 				var s = run.group;
@@ -32,18 +37,15 @@ dojo.require("dojox.lang.functional.reversed");
 				}
 				stroke = run.stroke ? run.stroke : dc.augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
-				var baseline = Math.max(0, this._hScaler.bounds.lower),
-					xoff = offsets.l + this._hScaler.scale * (baseline - this._hScaler.bounds.lower),
-					yoff = dim.height - offsets.b - this._vScaler.scale * (1.5 - this._vScaler.bounds.lower) + 
-						gap + thickness * (this.series.length - i - 1);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j],
-						width  = this._hScaler.scale * (v - baseline),
-						height = thickness, w = Math.abs(width);
+						hv = ht(v),
+						width = hv - baselineWidth,
+						w = Math.abs(width);
 					if(w >= 1 && height >= 1){
 						var shape = s.createRect({
-							x: xoff + (width < 0 ? width : 0),
-							y: yoff - this._vScaler.scale * j,
+							x: offsets.l + (v < baseline ? hv : baselineWidth),
+							y: dim.height - offsets.b - vt(j + 1.5) + gap + shift,
 							width: w, height: height
 						}).setFill(fill).setStroke(stroke);
 						run.dyn.fill   = shape.getFill();

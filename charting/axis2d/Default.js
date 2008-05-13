@@ -69,13 +69,43 @@ dojo.require("dojox.lang.utils");
 		initialized: function(){
 			return "scaler" in this && !(this.dirty && this.dependOnData());
 		},
+		setWindow: function(scale, offset){
+			this.scale  = scale;
+			this.offset = offset;
+			return this.clear();
+		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
-			this.min = min;
-			this.max = max;
 			this.labels = "labels" in this.opt ? this.opt.labels : labels;
 			this.scaler = lin.buildScaler(min, max, span, this.opt);
-			var minMinorStep = 0, ta = this.chart.theme.axis, 
+			if("scale" in this){
+				// calculate new range
+				this.opt.from = this.scaler.bounds.lower + this.offset;
+				this.opt.to   = (this.scaler.bounds.upper - this.scaler.bounds.lower) / scale + this.opt.from;
+				// make sure that bounds are correct
+				if(isInfinite(this.opt.from) || isNaN(this.opt.from) || isInfinite(this.opt.to) || isNaN(this.opt.to) ||
+						this.opt.to - this.from.to >= this.scaler.bounds.upper - this.scaler.bounds.lower){
+					// any error --- remove from/to bounds
+					delete this.opt.from;
+					delete this.opt.to;
+					delete this.scale;
+					delete this.offset;
+				}else{
+					// shift the window, if we are out of bounds
+					if(this.opt.from < this.scaler.bounds.lower){
+						this.opt.to   += this.scaler.bounds.lower - this.opt.from;
+						this.opt.from  = this.scaler.bounds.lower;
+					}else if(this.opt.to > this.scaler.bounds.upper){
+						this.opt.from += this.scaler.bounds.upper - this.opt.to;
+						this.opt.to    = this.scaler.bounds.upper;
+					}
+					// update the offset
+					this.offset = this.opt.from - this.scaler.bounds.lower;
+				}
+				// re-calculate the scaler
+				this.scaler = lin.buildScaler(min, max, span, this.opt);
+			}
+			var minMinorStep = 0, ta = this.chart.theme.axis,
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){

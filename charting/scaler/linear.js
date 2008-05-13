@@ -64,7 +64,9 @@ dojo.require("dojox.charting.scaler.common");
 				lower:	lowerBound,
 				upper:	upperBound,
 				from:	min,
-				to:		max
+				to:		max,
+				scale:	scale,
+				span:	span
 			},
 			major: {
 				tick:	majorTick,
@@ -86,8 +88,7 @@ dojo.require("dojox.charting.scaler.common");
 			},
 			minorPerMajor:	minorPerMajor,
 			microPerMinor:	microPerMinor,
-			scale:			scale,
-			span:			span
+			scaler:			dcs.linear
 		};
 	};
 	
@@ -138,17 +139,17 @@ dojo.require("dojox.charting.scaler.common");
 					minor = major / 10;
 					if(!h.natural || minor > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, 0, span);
-						if(ticks.scale * ticks.minor.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.minor.tick > deltaLimit){ break; }
 					}
 					minor = major / 5;
 					if(!h.natural || minor > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, 0, span);
-						if(ticks.scale * ticks.minor.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.minor.tick > deltaLimit){ break; }
 					}
 					minor = major / 2;
 					if(!h.natural || minor > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, 0, span);
-						if(ticks.scale * ticks.minor.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.minor.tick > deltaLimit){ break; }
 					}
 					return calcTicks(min, max, h, major, 0, 0, span);	// Object
 				}while(false);
@@ -163,17 +164,17 @@ dojo.require("dojox.charting.scaler.common");
 					micro = minor / 10;
 					if(!h.natural || micro > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, micro, span);
-						if(ticks.scale * ticks.micro.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.micro.tick > deltaLimit){ break; }
 					}
 					micro = minor / 5;
 					if(!h.natural || micro > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, micro, span);
-						if(ticks.scale * ticks.micro.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.micro.tick > deltaLimit){ break; }
 					}
 					micro = minor / 2;
 					if(!h.natural || micro > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, micro, span);
-						if(ticks.scale * ticks.micro.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.micro.tick > deltaLimit){ break; }
 					}
 					micro = 0;
 				}while(false);
@@ -198,7 +199,7 @@ dojo.require("dojox.charting.scaler.common");
 			}
 			// loop over all ticks
 			var majorTicks = [], minorTicks = [], microTicks = [];
-			while(next <= scaler.bounds.to + 1/scaler.scale){
+			while(next <= scaler.bounds.to + 1/scaler.bounds.scale){
 				if(Math.abs(nextMajor - next) < step / 2){
 					// major tick
 					tick = {value: nextMajor};
@@ -213,7 +214,7 @@ dojo.require("dojox.charting.scaler.common");
 					// minor tick
 					if(kwArgs.minorTicks){
 						tick = {value: nextMinor};
-						if(kwArgs.minorLabels && (scaler.minMinorStep <= scaler.minor.tick * scaler.scale)){
+						if(kwArgs.minorLabels && (scaler.minMinorStep <= scaler.minor.tick * scaler.bounds.scale)){
 							tick.label = getLabel(nextMinor, scaler.minor.prec, kwArgs);
 						}
 						minorTicks.push(tick);
@@ -232,11 +233,11 @@ dojo.require("dojox.charting.scaler.common");
 			return {major: majorTicks, minor: minorTicks, micro: microTicks};	// Object
 		},
 		getTransformerFromModel: function(/*Object*/ scaler){
-			var offset = scaler.bounds.from, scale = scaler.scale;
+			var offset = scaler.bounds.from, scale = scaler.bounds.scale;
 			return function(x){ return (x - offset) * scale; };	// Function
 		},
 		getTransformerFromPlot: function(/*Object*/ scaler){
-			var offset = scaler.bounds.from, scale = scaler.scale;
+			var offset = scaler.bounds.from, scale = scaler.bounds.scale;
 			return function(x){ return x / scale + offset; };	// Function
 		}
 	});

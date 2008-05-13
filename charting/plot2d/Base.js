@@ -1,5 +1,6 @@
 dojo.provide("dojox.charting.plot2d.Base");
 
+dojo.require("dojox.charting.scaler.primitive");
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d.common");
 
@@ -40,8 +41,7 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			}
 			this._hScaler = this._hAxis.getScaler();
 		}else{
-			this._hScaler = {bounds: {lower: stats.hmin, upper: stats.hmax}, 
-				scale: dim.width / (stats.hmax - stats.hmin)};
+			this._hScaler = dojox.charting.scaler.primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
 		}
 		if(this._vAxis){
 			if(!this._vAxis.initialized()){
@@ -49,8 +49,7 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			}
 			this._vScaler = this._vAxis.getScaler();
 		}else{
-			this._vScaler = {bounds: {lower: stats.vmin, upper: stats.vmax}, 
-				scale: dim.height / (stats.vmax - stats.vmin)};
+			this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
 		}
 	}
 });

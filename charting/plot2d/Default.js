@@ -12,6 +12,16 @@ dojo.require("dojox.lang.functional.reversed");
 		dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
 
+	// function for translating polylines to curves with tension
+	var curve = function(arr, tension){
+		return dojo.map(arr, function(item, i){
+			if(i == 0){ return "M" + item.x + "," + item.y; }
+			var dx = item.x - arr[i - 1].x, dy = arr[i - 1].y;
+			return "C" + (item.x - (tension - 1) * (dx / tension)) + "," +
+				dy + " " + (item.x - (dx / tension)) + "," + item.y + " " + item.x + "," + item.y;
+		}).join(" ");
+	};
+	
 	dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
@@ -53,28 +63,21 @@ dojo.require("dojox.lang.functional.reversed");
 					continue;
 				}
 
-				//	inner function for translating polylines to curves with tension
-				function curve(arr, tension){
-					return dojo.map(arr, function(item, i){
-						if(i==0){ return "M" + item.x + "," + item.y; }
-						var dx=item.x-arr[i-1].x, dy=arr[i-1].y;
-						return "C"+(item.x-(tension-1)*(dx/tension))+","+dy+" "+(item.x-(dx/tension))+","+item.y+" "+item.x+","+item.y;
-					}).join(" ");
-				}
-				
-				var s = run.group, lpoly;
+				var s = run.group, lpoly, 
+					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
+					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 				if(typeof run.data[0] == "number"){
 					lpoly = dojo.map(run.data, function(v, i){
 						return {
-							x: this._hScaler.scale * (i + 1 - this._hScaler.bounds.lower) + offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower)
+							x: ht(i + 1) + offsets.l,
+							y: dim.height - offsets.b - vt(v)
 						};
 					}, this);
 				}else{
 					lpoly = dojo.map(run.data, function(v, i){
 						return {
-							x: this._hScaler.scale * (v.x - this._hScaler.bounds.lower) + offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (v.y - this._vScaler.bounds.lower)
+							x: ht(v.x) + offsets.l,
+							y: dim.height - offsets.b - vt(v.y)
 						};
 					}, this);
 				}
@@ -83,19 +86,16 @@ dojo.require("dojox.lang.functional.reversed");
 					color = run.dyn.color = new dojo.Color(t.next("color"));
 				}
 
-				var lpath="";
-				if(this.opt.tension){
-					var lpath=curve(lpoly, this.opt.tension);
-				}
+				var lpath = this.opt.tension ? curve(lpoly, this.opt.tension) : "";
 
 				if(this.opt.areas){
 					var fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
 					var apoly = dojo.clone(lpoly);
 					if(this.opt.tension){
-						var apath="L" + (apoly[apoly.length-1].x) + "," + (dim.height-offsets.b) + " "
-							+ "L"+apoly[0].x+","+(dim.height-offsets.b)+" "
-							+ "L"+apoly[0].x+","+apoly[0].y;
-						run.dyn.fill = s.createPath(lpath+" "+apath).setFill(fill).getFill();
+						var apath = "L" + apoly[apoly.length-1].x + "," + (dim.height - offsets.b) +
+							" L" + apoly[0].x + "," + (dim.height - offsets.b) +
+							" L" + apoly[0].x + "," + apoly[0].y;
+						run.dyn.fill = s.createPath(lpath + " " + apath).setFill(fill).getFill();
 					} else {
 						apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});
 						apoly.push({x: lpoly[0].x, y: dim.height - offsets.b});

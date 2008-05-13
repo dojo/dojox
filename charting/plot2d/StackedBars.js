@@ -40,7 +40,10 @@ dojo.require("dojox.lang.functional.reversed");
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, color, stroke, fill, f,
-				gap = this.opt.gap < this._vScaler.scale / 3 ? this.opt.gap : 0;
+				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
+				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+				gap = this.opt.gap < this._vScaler.bounds.scale / 3 ? this.opt.gap : 0,
+				height = this._vScaler.bounds.scale - 2 * gap;
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }
@@ -54,12 +57,11 @@ dojo.require("dojox.lang.functional.reversed");
 				fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
 				for(var j = 0; j < acc.length; ++j){
 					var v = acc[j],
-						width  = this._hScaler.scale * (v - this._hScaler.bounds.lower),
-						height = this._vScaler.scale - 2 * gap;
+						width  = ht(v);
 					if(width >= 1 && height >= 1){
 						var shape = s.createRect({
 							x: offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (j + 1.5 - this._vScaler.bounds.lower) + gap,
+							y: dim.height - offsets.b - vt(j + 1.5) + gap,
 							width: width, height: height
 						}).setFill(fill).setStroke(stroke);
 						run.dyn.fill   = shape.getFill();

@@ -38,13 +38,16 @@ dojo.require("dojox.lang.functional");
 					continue;
 				}
 				
-				var s = run.group, points = dojo.map(run.data, function(v, i){
-					return {
-						x: this._hScaler.scale * (v.x - this._hScaler.bounds.lower) + offsets.l,
-						y: dim.height - offsets.b - this._vScaler.scale * (v.y - this._vScaler.bounds.lower),
-						radius: this._vScaler.scale * (v.size / 2)
-					};
-				}, this);
+				var s = run.group,
+					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
+					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+					points = dojo.map(run.data, function(v, i){
+						return {
+							x: ht(v.x) + offsets.l,
+							y: dim.height - offsets.b - vt(v.y),
+							radius: this._vScaler.bounds.scale * (v.size / 2)
+						};
+					}, this);
 
 				if(run.fill){
 					color = run.fill;

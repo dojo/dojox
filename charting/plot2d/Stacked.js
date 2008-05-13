@@ -11,6 +11,16 @@ dojo.require("dojox.lang.functional.reversed");
 	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
 
+	//	inner function for translating polylines to curves with tension
+	var curve = function(arr, tension){
+		return dojo.map(arr, function(item, i){
+			if(i == 0){ return "M" + item.x + "," + item.y; }
+			var dx = item.x - arr[i - 1].x, dy = arr[i - 1].y;
+			return "C" + (item.x - (tension - 1) * (dx / tension)) + "," +
+				dy + " " + (item.x - (dx / tension)) + "," + item.y + " " + item.x + "," + item.y;
+		}).join(" ");
+	};
+
 	dojo.declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
 		calculateAxes: function(dim){
 			var stats = dc.collectStackedStats(this.series);
@@ -37,16 +47,9 @@ dojo.require("dojox.lang.functional.reversed");
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 
-			//	inner function for translating polylines to curves with tension
-			function curve(arr, tension){
-				return dojo.map(arr, function(item, i){
-					if(i==0){ return "M" + item.x + "," + item.y; }
-					var dx=item.x-arr[i-1].x, dy=arr[i-1].y;
-					return "C"+(item.x-(tension-1)*(dx/tension))+","+dy+" "+(item.x-(dx/tension))+","+item.y+" "+item.x+","+item.y;
-				}).join(" ");
-			}
-				
-			var t = this.chart.theme, stroke, outline, color, marker;
+			var t = this.chart.theme, stroke, outline, color, marker,
+				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
+				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }
@@ -54,8 +57,8 @@ dojo.require("dojox.lang.functional.reversed");
 				var s = run.group,
 					lpoly = dojo.map(acc, function(v, i){
 						return {
-							x: this._hScaler.scale * (i + 1 - this._hScaler.bounds.lower) + offsets.l,
-							y: dim.height - offsets.b - this._vScaler.scale * (v - this._vScaler.bounds.lower)
+							x: ht(i + 1) + offsets.l,
+							y: dim.height - offsets.b - vt(v)
 						};
 					}, this);
 				if(!run.fill || !run.stroke){
@@ -63,19 +66,16 @@ dojo.require("dojox.lang.functional.reversed");
 					color = new dojo.Color(t.next("color"));
 				}
 
-				var lpath="";
-				if(this.opt.tension){
-					lpath=curve(lpoly, this.opt.tension);
-				}
+				var lpath = this.opt.tension ? curve(lpoly, this.opt.tension) : "";
 				
 				if(this.opt.areas){
 					var apoly = dojo.clone(lpoly);
 					var fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
 					if(this.opt.tension){
 						var p=curve(apoly, this.opt.tension);
-						p += " L" + lpoly[lpoly.length-1].x + "," + (dim.height - offsets.b) + " "
-							+ "L" + lpoly[0].x + "," + (dim.height - offsets.b) + " "
-							+ "L" + lpoly[0].x + "," + lpoly[0].y;
+						p += " L" + lpoly[lpoly.length - 1].x + "," + (dim.height - offsets.b) +
+							" L" + lpoly[0].x + "," + (dim.height - offsets.b) +
+							" L" + lpoly[0].x + "," + lpoly[0].y;
 						s.createPath(p).setFill(fill);
 					} else {
 						apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});

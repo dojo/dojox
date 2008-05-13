@@ -93,6 +93,9 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this.dirty = true;
 			return this;
 		},
+		getAxis: function(name){
+			return this.axes[name];
+		},
 		addPlot: function(name, kwArgs){
 			var plot;
 			if(!kwArgs || !("type" in kwArgs)){
@@ -186,9 +189,48 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this.coords = null;
 			return this.render();
 		},
-		render: function(){
+		getGeometry: function(){
+			var ret = {};
+			df.forIn(this.axes, function(axis){
+				if(axis.initialized()){
+					ret[axis.name] = {
+						name:		axis.name,
+						vertical:	axis.vertical,
+						scaler:		axis.scaler,
+						ticks:		axis.ticks
+					};
+				}
+			});
+			return ret;
+		},
+		setAxisWindow: function(name, scale, offset){
+			var axis = this.axes[name];
+			if(axis){
+				axis.setWindow(scale, offset);
+			}
+			return this;
+		},
+		setWindow: function(sx, sy, dx, dy){
+			if(!("plotArea" in this)){
+				this.calculateGeometry();
+			}
+			df.forIn(this.axes, function(axis){
+				var scale, offset, bounds = axis.scaler.bounds,
+					s = bounds.span / (bounds.upper - bounds.lower);
+				if(axis.vertical){
+					scale  = sy;
+					offset = ("offset" in axis ? axis.offset : 0) + dy / s / scale;
+				}else{
+					scale  = sx;
+					offset = ("offset" in axis ? axis.offset : 0) + dx / s / scale;
+				}
+				axis.setWindow(scale, offset);
+			});
+			return this;
+		},
+		calculateGeometry: function(){
 			if(this.dirty){
-				return this.fullRender();
+				return this.fullGeometry();
 			}
 
 			// calculate geometry
@@ -198,32 +240,21 @@ dojo.require("dojox.charting.plot2d.Pie");
 					plot.calculateAxes(this.plotArea);
 				}
 			}, this);
-
-			// go over the stack backwards
-			df.forEachRev(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
-
-			// go over axes
-			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);
-
-			this._makeClean();
-
-			// BEGIN FOR HTML CANVAS 
-			if(this.surface.render){ this.surface.render(); };
-			// END FOR HTML CANVAS
-
+			
 			return this;
 		},
-		fullRender: function(){
+		fullGeometry: function(){
 			this._makeDirty();
 
 			// clear old values
 			dojo.forEach(this.stack,  clear);
-			dojo.forEach(this.series, purge);
-			df.forIn(this.axes, purge);
-			dojo.forEach(this.stack,  purge);
-			this.surface.clear();
 
 			// rebuild new connections, and add defaults
+
+			// set up a theme
+			if(!this.theme){
+				this.theme = new dojox.charting.Theme(dojox.charting._def);
+			}
 
 			// assign series
 			dojo.forEach(this.series, function(run){
@@ -244,12 +275,6 @@ dojo.require("dojox.charting.plot2d.Pie");
 					plot.setAxis(this.axes[plot.vAxis]);
 				}
 			}, this);
-			// set up a theme
-			if(!this.theme){
-				this.theme = new dojox.charting.Theme(dojox.charting._def);
-			}
-			var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
-			this.theme.defineColors({num: requiredColors, cache: false});
 
 			// calculate geometry
 
@@ -272,6 +297,44 @@ dojo.require("dojox.charting.plot2d.Pie");
 			this.plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(this.plotArea); }, this);
+			
+			return this;
+		},
+		render: function(){
+			if(this.dirty){
+				return this.fullRender();
+			}
+			
+			this.calculateGeometry();
+
+			// go over the stack backwards
+			df.forEachRev(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
+
+			// go over axes
+			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);
+
+			this._makeClean();
+
+			// BEGIN FOR HTML CANVAS
+			if(this.surface.render){ this.surface.render(); };
+			// END FOR HTML CANVAS
+
+			return this;
+		},
+		fullRender: function(){
+			// calculate geometry
+			this.fullGeometry();
+			var offsets = this.offsets, dim = this.dim;
+
+			// get required colors
+			var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
+			this.theme.defineColors({num: requiredColors, cache: false});
+
+			// clear old shapes
+			dojo.forEach(this.series, purge);
+			df.forIn(this.axes, purge);
+			dojo.forEach(this.stack,  purge);
+			this.surface.clear();
 
 			// generate shapes
 
@@ -304,27 +367,27 @@ dojo.require("dojox.charting.plot2d.Pie");
 				if(offsets.l){	// left
 					this.surface.createRect({
 						width:  offsets.l,
-						height: dim.height
+						height: dim.height + 1
 					}).setFill(fill);
 				}
 				if(offsets.r){	// right
 					this.surface.createRect({
 						x: dim.width - offsets.r,
-						width:  offsets.r,
-						height: dim.height
+						width:  offsets.r + 1,
+						height: dim.height + 1
 					}).setFill(fill);
 				}
 				if(offsets.t){	// top
 					this.surface.createRect({
-						width:  dim.width,
+						width:  dim.width + 1,
 						height: offsets.t
 					}).setFill(fill);
 				}
 				if(offsets.b){	// bottom
 					this.surface.createRect({
 						y: dim.height - offsets.b,
-						width:  dim.width,
-						height: offsets.b
+						width:  dim.width + 1,
+						height: offsets.b + 2
 					}).setFill(fill);
 				}
 			}
@@ -339,6 +402,10 @@ dojo.require("dojox.charting.plot2d.Pie");
 			df.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
 
 			this._makeClean();
+
+			// BEGIN FOR HTML CANVAS
+			if(this.surface.render){ this.surface.render(); };
+			// END FOR HTML CANVAS
 
 			return this;
 		},

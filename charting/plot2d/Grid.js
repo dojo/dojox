@@ -53,57 +53,55 @@ dojo.require("dojox.lang.functional");
 			// draw horizontal stripes and lines
 			if(!this.dirty){ return this; }
 			this.cleanGroup();
-			var s = this.group, ta = this.chart.theme.axis,
-				scaler = this._vAxis.getScaler();
-			if(this.opt.hMinorLines && scaler.minor.tick){
-				for(var i = 0; i < scaler.minor.count; ++i){
-					var y = dim.height - offsets.b - scaler.scale * 
-							(scaler.minor.start - scaler.bounds.lower + i * scaler.minor.tick);
+			var s = this.group, ta = this.chart.theme.axis, ticks = this._vAxis.getTicks(),
+				hScaler = this._hAxis.getScaler(), vScaler = this._vAxis.getScaler(),
+				ht = hScaler.scaler.getTransformerFromModel(hScaler),
+				vt = vScaler.scaler.getTransformerFromModel(vScaler);
+			if(this.opt.hMinorLines){
+				dojo.forEach(ticks.minor, function(tick){
+					var y = dim.height - offsets.b - vt(tick.value);
 					s.createLine({
 						x1: offsets.l,
 						y1: y,
 						x2: dim.width - offsets.r,
 						y2: y
 					}).setStroke(ta.minorTick);
-				}
+				});
 			}
-			if(this.opt.hMajorLines && scaler.major.tick){
-				for(var i = 0; i < scaler.major.count; ++i){
-					var y = dim.height - offsets.b - scaler.scale * 
-							(scaler.major.start - scaler.bounds.lower + i * scaler.major.tick);
+			if(this.opt.hMajorLines){
+				dojo.forEach(ticks.major, function(tick){
+					var y = dim.height - offsets.b - vt(tick.value);
 					s.createLine({
 						x1: offsets.l,
 						y1: y,
 						x2: dim.width - offsets.r,
 						y2: y
 					}).setStroke(ta.majorTick);
-				}
+				});
 			}
 			// draw vertical stripes and lines
-			scaler = this._hAxis.getScaler();
-			if(this.opt.vMinorLines && scaler.minor.tick){
-				for(var i = 0; i < scaler.minor.count; ++i){
-					var x = offsets.l + scaler.scale * 
-							(scaler.minor.start - scaler.bounds.lower + i * scaler.minor.tick);
+			ticks = this._hAxis.getTicks();
+			if(this.opt.vMinorLines){
+				dojo.forEach(ticks.minor, function(tick){
+					var x = offsets.l + ht(tick.value);
 					s.createLine({
 						x1: x,
 						y1: offsets.t,
 						x2: x,
 						y2: dim.height - offsets.b
 					}).setStroke(ta.minorTick);
-				}
+				});
 			}
-			if(this.opt.vMajorLines && scaler.major.tick){
-				for(var i = 0; i < scaler.major.count; ++i){
-					var x = offsets.l + scaler.scale * 
-							(scaler.major.start - scaler.bounds.lower + i * scaler.major.tick);
+			if(this.opt.vMajorLines){
+				dojo.forEach(ticks.major, function(tick){
+					var x = offsets.l + ht(tick.value);
 					s.createLine({
 						x1: x,
 						y1: offsets.t,
 						x2: x,
 						y2: dim.height - offsets.b
 					}).setStroke(ta.majorTick);
-				}
+				});
 			}
 			this.dirty = false;
 			return this;
