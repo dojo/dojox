@@ -21,15 +21,19 @@ dojo.declare("dojox.layout.RadioGroup",
 	//	onHover of the button
 	//
 
-	// duration: Int
+	// duration: Integer
 	//	used for Fade and Slide RadioGroup's, the duration to run the transition animation. does not affect anything
 	//	in default RadioGroup
 	duration: 750,
 
 	// hasButtons: Boolean
 	//	toggles internal button making on or off
-	hasButtons: true,
+	hasButtons: false,
 
+	// buttonClass: String
+	//		The full declared className of the Button widget to use for hasButtons
+	buttonClass: "dojox.layout._RadioButton",
+	
 	// templateString: String
 	//	the template for our container
 	templateString: '<div class="dojoxRadioGroup">'
@@ -41,7 +45,7 @@ dojo.declare("dojox.layout.RadioGroup",
 
 	startup: function(){
 		// summary: scan the container for children, and make "tab buttons" for them
-		this.inherited("startup",arguments);
+		this.inherited(arguments);
 		this._children = this.getChildren();
 		this._buttons = this._children.length;
 		this._size = dojo.coords(this.containerNode);
@@ -58,7 +62,8 @@ dojo.declare("dojox.layout.RadioGroup",
 		var tmp = document.createElement('td');
 		this.buttonNode.appendChild(tmp);
 		var tmpt = tmp.appendChild(document.createElement('div'));
-		var tmpw = new dojox.layout._RadioButton({
+		var _button = dojo.getObject(this.buttonClass);
+		var tmpw = new _button({
 			label: n.title,
 			page: n
 		},tmpt);
@@ -119,13 +124,13 @@ dojo.declare("dojox.layout.RadioGroupFade",
 		dojo.fadeOut({
 			node:page.domNode,
 			duration:this.duration,
-			onEnd: this.inherited("_hideChild",arguments)
+			onEnd: dojo.hitch(this,"inherited", arguments)
 		}).play();
 	},
 
 	_showChild: function(page){
 		// summary: show the specified child widget
-		this.inherited("_showChild",arguments);
+		this.inherited(arguments);
 		dojo.style(page.domNode,"opacity",0);
 		dojo.fadeIn({
 			node:page.domNode,
@@ -144,48 +149,87 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 	//		on each view
 	//		
 
-	// easing: dojo._Animation.easing
+	// easing: Function
 	//	A hook to override the default easing of the pane slides.
-	easing: dojox.fx.easing.easeOut,
+	easing: "dojox.fx.easing.backOut",
 
+	// zTop: Integer
+	//		A z-index to apply to the incoming pane
+	zTop: 99,
+	
+	constructor: function(){
+		if(dojo.isString(this.easing)){
+			this.easing = dojo.getObject(this.easing);
+		}
+	},
+	
 	startup: function(){
 		// summary: on startup, set each of the panes off-screen (_showChild is called later)
-		this.inherited("startup",arguments);
-		dojo.forEach(this._children,this._positionChild,this);
+		this.inherited(arguments);
+		dojo.forEach(this._children, this._positionChild, this);
 	},
 
 	_positionChild: function(page){
-		// summary: randomly set the child out of view
-		// description: 
-		var rA = Math.round(Math.random());
-		var rB = Math.round(Math.random());
-		dojo.style(page.domNode, rA? "top" : "left", (rB ? "-" : "") + this._size[rA?"h":"w"]+"px");
+		// summary: set the child out of view immediately after being hidden
+		var rA, rB;
+		switch(page.slideFrom){
+			// there should be a contest: obfuscate this function as best you can. 
+			case "bottom" : rA = true;  rB = false; break;
+			case "right" : 	rA = false; rB = false; break;
+			case "top" : 	rA = true;  rB = true;  break;
+			case "left" : 	rA = false; rB = true;  break;
+			default:
+				rA = Math.round(Math.random());
+				rB = Math.round(Math.random());			
+				break;
+		}
+		var prop = rA ? "top" : "left";
+		var val = (rB ? "-" : "") + this._size[rA ? "h" : "w" ] + "px";	
+		dojo.style(page.domNode, prop, val);
+		
 	},
 
 	_showChild: function(page){
 		// summary: Slide in the selected child widget
-		this.inherited("_showChild",arguments);
+		
+		var children = this.getChildren();
+		page.isFirstChild = (page == children[0]);
+		page.isLastChild = (page == children[children.length-1]);
+		page.selected = true;
+
+		dojo.style(page.domNode,{
+			display:"", zIndex: this.zTop
+		})
+
 		if(this._anim && this._anim.status()=="playing"){
 			this._anim.gotoPercent(100,true);
 		}
+		
 		this._anim = dojo.animateProperty({
 			node:page.domNode,
 			properties: {
-				// take a performance hit determinging one of these doesn't get modified
-				// but it's better this way than an extra call to mixin in think?
-				left: { end:0, unit:"px" },
-				top: { end:0, unit:"px" }
+				left: 0,
+				top: 0
 			},
-			duration:this.duration,	
-			easing:this.easing
+			duration: this.duration,	
+			easing: this.easing,
+			onEnd: dojo.hitch(page,function(){
+				if(this.onShow){ this.onShow(); }
+				if(this._loadCheck){ this._loadCheck(); }
+			})
 		});
 		this._anim.play();
 	},
 
 	_hideChild: function(page){
 		// summary: reset the position of the hidden pane out of sight
-		this.inherited("_hideChild",arguments);
-		this._positionChild(page);
+		if(this._tmpConnect){ dojo.disconnect(this._tmpConnect); }
+		page.selected=false;
+		page.domNode.style.zIndex = this.zTop - 1;
+		if(page.onHide){
+			page.onHide();
+		}
+		this._tmpConnect = dojo.connect(this._anim, "onEnd", dojo.hitch(this, "_positionChild", page));
 	}
 });
 
@@ -226,4 +270,14 @@ dojo.declare("dojox.layout._RadioButton",
 			dojo.removeClass(n,"dojoxRadioButtonSelected");
 		});
 	}
+	
 });
+
+dojo.extend(dijit._Widget,{
+	// slideFrom: String
+	//		A parameter needed by RadioGroupSlide only. An optional paramter to force
+	//		the ContentPane to slide in from a set direction. Defaults
+	//		to "random", or specify one of "top", "left", "right", "bottom"
+	//		to slideFrom top, left, right, or bottom.
+	slideFrom: "random"	
+})

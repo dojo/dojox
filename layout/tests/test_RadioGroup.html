@@ -47,22 +47,39 @@
 	<h1 class="testTitle">dojox.layout.RadioGroup test</h1>
 
 	<div style="width:915px; margin:0 auto; height:300px;">
-		<div dojoType="dojox.layout.RadioGroup" style="width:300px; height:300px; float:left;">
+		<div dojoType="dojox.layout.RadioGroup" style="width:300px; height:300px; float:left;" hasButtons="true">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
 		</div>
 	
-		<div dojoType="dojox.layout.RadioGroupFade" style="width:300px; height:300px; float:left">
+		<div dojoType="dojox.layout.RadioGroupFade" style="width:300px; height:300px; float:left" hasButtons="true">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
 		</div>
 	
-		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px;">
+		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px;" hasButtons="true">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
+		</div>
+	</div>
+
+	<br style="clear:both">
+	<br style="clear:both">
+
+	<div style="width:915px; margin:0 auto; height:300px;">
+		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px; float:left" hasButtons="true">
+			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
+		</div>
+	
+		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px;" hasButtons="true">
+			<div dojoType="dijit.layout.ContentPane" slideFrom="left" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="bottom" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="right" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
 		</div>
 	</div>
 
