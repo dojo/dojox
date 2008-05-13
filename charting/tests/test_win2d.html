@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Scrolling and scaling</title>
+<title>Scaling, scrolling, and panning.</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 	@import "../../../dojo/resources/dojo.css";
@@ -31,26 +31,31 @@ dojo.require("dojox.charting.themes.PlotKit.orange");
 dojo.require("dojox.lang.functional.object");
 
 var df = dojox.lang.functional;
-var chart, scaleX = 1, scaleY = 1, offsetX = 0, offsetY = 0;
+var chart, moveable, scaleX = 1, scaleY = 1, offsetX = 0, offsetY = 0;
 
-var update = function(){
-	chart.setWindow(scaleX, scaleY, offsetX, offsetY).render();
-
+var reflect = function(){
 	df.forIn(chart.axes, function(axis){
 		var scale  = axis.getWindowScale(),
 			offset = Math.round(axis.getWindowOffset() * axis.getScaler().bounds.scale);
 		if(axis.vertical){
-			setTimeout(function(){
-				dijit.byId("scaleYSlider").setValue(scale);
-				dijit.byId("offsetYSlider").setValue(offset);
-			}, 25);
+			scaleY  = scale;
+			offsetY = offset;
 		}else{
-			setTimeout(function(){
-				dijit.byId("scaleXSlider").setValue(scale);
-				dijit.byId("offsetXSlider").setValue(offset);
-			}, 25);
+			scaleX  = scale;
+			offsetX = offset;
 		}
 	});
+	setTimeout(function(){
+		dijit.byId("scaleXSlider").setValue(scaleX);
+		dijit.byId("offsetXSlider").setValue(offsetX);
+		dijit.byId("scaleYSlider").setValue(scaleY);
+		dijit.byId("offsetYSlider").setValue(offsetY);
+	}, 25);
+};
+
+var update = function(){
+	chart.setWindow(scaleX, scaleY, offsetX, offsetY).render();
+	reflect();
 };
 
 var scaleXEvent = function(value){
@@ -77,14 +82,46 @@ var offsetYEvent = function(value){
 	update();
 };
 
+var _init = null;
+var onMouseDown = function(e){
+	_init = {x: e.clientX, y: e.clientY, ox: offsetX, oy: offsetY};
+	dojo.stopEvent(e);
+};
+
+var onMouseUp = function(e){
+	if(_init){
+		_init = null;
+		reflect();
+		dojo.stopEvent(e);
+	}
+};
+
+var onMouseMove = function(e){
+	if(_init){
+		var dx = e.clientX - _init.x,
+			dy = e.clientY - _init.y;
+		offsetX = _init.ox - dx;
+		offsetY = _init.oy + dy;
+		chart.setWindow(scaleX, scaleY, offsetX, offsetY).render();
+		dojo.stopEvent(e);
+	}
+};
+
 makeObjects = function(){
 	chart = new dojox.charting.Chart2D("test");
 	chart.setTheme(dojox.charting.themes.PlotKit.orange);
-	chart.addAxis("x", {fixLower: "minor", natural: true});
-	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1});
+	chart.addAxis("x", {fixLower: "minor", natural: true, stroke: "grey",
+		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1, stroke: "grey",
+		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
 	chart.addPlot("default", {type: "Areas"});
 	chart.addSeries("Series A", [0, 25, 5, 20, 10, 15, 5, 20, 0, 25]);
-	chart.addSeries("Series B", [25, 0]);
+	chart.addAxis("x2", {fixLower: "minor", natural: true, leftBottom: false, stroke: "grey",
+		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+	chart.addAxis("y2", {vertical: true, min: 0, max: 20, leftBottom: false, stroke: "grey",
+		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+	chart.addPlot("plot2", {type: "Areas", hAxis: "x2", vAxis: "y2"});
+	chart.addSeries("Series B", [15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15], {plot: "plot2"});
 	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
 	chart.render();
 	
@@ -92,6 +129,10 @@ makeObjects = function(){
     dojo.connect(dijit.byId("scaleYSlider"), "onChange", scaleYEvent);
     dojo.connect(dijit.byId("offsetXSlider"), "onChange", offsetXEvent);
     dojo.connect(dijit.byId("offsetYSlider"), "onChange", offsetYEvent);
+
+    dojo.connect(dojo.byId("test"), "onmousedown", onMouseDown);
+    dojo.connect(dojo.byId("test"), "onmousemove", onMouseMove);
+    dojo.connect(dojo.byId("test"), "onmouseup",   onMouseUp);
 };
 
 dojo.addOnLoad(makeObjects);
@@ -99,7 +140,7 @@ dojo.addOnLoad(makeObjects);
 </script>
 </head>
 <body class="tundra">
-<h1>Scrolling and scaling</h1>
+<h1>Scaling, scrolling, and panning.</h1>
 <!--<p><button onclick="makeObjects();">Go</button></p>-->
 <!-- intermediateChanges="true" -->
 <table>
