@@ -22,42 +22,49 @@ dojo.require("dojox.charting.scaler.common");
 			if(kwArgs.fixLower == "micro"){ kwArgs.fixLower = "none"; }
 		}
 		var lowerBound = findString(kwArgs.fixLower, ["major"]) ?
-				Math.floor(min / majorTick) * majorTick :
+				Math.floor(kwArgs.min / majorTick) * majorTick :
 					findString(kwArgs.fixLower, ["minor"]) ?
-						Math.floor(min / minorTick) * minorTick :
+						Math.floor(kwArgs.min / minorTick) * minorTick :
 							findString(kwArgs.fixLower, ["micro"]) ?
-								Math.floor(min / microTick) * microTick : min,
+								Math.floor(kwArgs.min / microTick) * microTick : kwArgs.min,
 			upperBound = findString(kwArgs.fixUpper, ["major"]) ?
-				Math.ceil(max / majorTick) * majorTick :
+				Math.ceil(kwArgs.max / majorTick) * majorTick :
 					findString(kwArgs.fixUpper, ["minor"]) ?
-						Math.ceil(max / minorTick) * minorTick :
+						Math.ceil(kwArgs.max / minorTick) * minorTick :
 							findString(kwArgs.fixUpper, ["micro"]) ?
-								Math.ceil(max / microTick) * microTick : max,
-			majorStart = (findString(kwArgs.fixLower, ["major"]) || !majorTick) ?
-				lowerBound : Math.ceil(lowerBound / majorTick) * majorTick,
-			minorStart = (findString(kwArgs.fixLower, ["major", "minor"]) || !minorTick) ?
-				lowerBound : Math.ceil(lowerBound / minorTick) * minorTick,
-			microStart = (findString(kwArgs.fixLower, ["major", "minor", "micro"]) || ! microTick) ?
-				lowerBound : Math.ceil(lowerBound / microTick) * microTick,
-			majorCount = !majorTick ? 0 : (findString(kwArgs.fixUpper, ["major"]) ?
-				Math.round((upperBound - majorStart) / majorTick) :
-				Math.floor((upperBound - majorStart) / majorTick)) + 1,
-			minorCount = !minorTick ? 0 : (findString(kwArgs.fixUpper, ["major", "minor"]) ?
-				Math.round((upperBound - minorStart) / minorTick) :
-				Math.floor((upperBound - minorStart) / minorTick)) + 1,
-			microCount = !microTick ? 0 : (findString(kwArgs.fixUpper, ["major", "minor", "micro"]) ?
-				Math.round((upperBound - microStart) / microTick) :
-				Math.floor((upperBound - microStart) / microTick)) + 1,
+								Math.ceil(kwArgs.max / microTick) * microTick : kwArgs.max;
+								
+		if(kwArgs.useMin){ min = lowerBound; }
+		if(kwArgs.useMax){ max = upperBound; }
+		
+		var majorStart = (!majorTick || kwArgs.useMin && findString(kwArgs.fixLower, ["major"])) ?
+				min : Math.ceil(min / majorTick) * majorTick,
+			minorStart = (!minorTick || kwArgs.useMin && findString(kwArgs.fixLower, ["major", "minor"])) ?
+				min : Math.ceil(min / minorTick) * minorTick,
+			microStart = (! microTick || kwArgs.useMin && findString(kwArgs.fixLower, ["major", "minor", "micro"])) ?
+				min : Math.ceil(min / microTick) * microTick,
+			majorCount = !majorTick ? 0 : (kwArgs.useMax && findString(kwArgs.fixUpper, ["major"]) ?
+				Math.round((max - majorStart) / majorTick) :
+				Math.floor((max - majorStart) / majorTick)) + 1,
+			minorCount = !minorTick ? 0 : (kwArgs.useMax && findString(kwArgs.fixUpper, ["major", "minor"]) ?
+				Math.round((max - minorStart) / minorTick) :
+				Math.floor((max - minorStart) / minorTick)) + 1,
+			microCount = !microTick ? 0 : (kwArgs.useMax && findString(kwArgs.fixUpper, ["major", "minor", "micro"]) ?
+				Math.round((max - microStart) / microTick) :
+				Math.floor((max - microStart) / microTick)) + 1,
 			minorPerMajor  = minorTick ? Math.round(majorTick / minorTick) : 0,
 			microPerMinor  = microTick ? Math.round(minorTick / microTick) : 0,
 			majorPrecision = majorTick ? Math.floor(Math.log(majorTick) / Math.LN10) : 0,
 			minorPrecision = minorTick ? Math.floor(Math.log(minorTick) / Math.LN10) : 0,
-			scale = span / (upperBound - lowerBound);
+			scale = span / (max - min);	
 		if(!isFinite(scale)){ scale = 1; }
+		
 		return {
 			bounds: {
 				lower:	lowerBound,
-				upper:	upperBound
+				upper:	upperBound,
+				from:	min,
+				to:		max
 			},
 			major: {
 				tick:	majorTick,
@@ -80,9 +87,7 @@ dojo.require("dojox.charting.scaler.common");
 			minorPerMajor:	minorPerMajor,
 			microPerMinor:	microPerMinor,
 			scale:			scale,
-			span:			span,
-			min:			min,
-			max:			max
+			span:			span
 		};
 	};
 	
@@ -95,27 +100,25 @@ dojo.require("dojox.charting.scaler.common");
 				if("natural"  in kwArgs){ h.natural  = Boolean(kwArgs.natural); }
 			}
 			
-			// update bounds, if needed
-			var includeZeroFlag = false;
-			if("from" in kwArgs){
-				min = kwArgs.from;
-				h.fixLower = "none";
-				h.natural = false;
-			}else{
-				if("min" in kwArgs){ min = kwArgs.min; }
-				includeZeroFlag = true;
-			}
-			if("to" in kwArgs){
-				max = kwArgs.from;
-				h.fixUpper = "none";
-				h.natural = false;
-			}else{
-				if("max" in kwArgs){ max = kwArgs.max; }
-				includeZeroFlag = true;
-			}
-			if(includeZeroFlag && kwArgs.includeZero){
+			// update bounds
+			if("min" in kwArgs){ min = kwArgs.min; }
+			if("max" in kwArgs){ max = kwArgs.max; }
+			if(kwArgs.includeZero){
 				if(min > 0){ min = 0; }
 				if(max < 0){ max = 0; }
+			}
+			h.min = min;
+			h.useMin = true;
+			h.max = max;
+			h.useMax = true;
+			
+			if("from" in kwArgs){
+				min = kwArgs.from;
+				h.useMin = false;
+			}
+			if("to" in kwArgs){
+				max = kwArgs.to;
+				h.useMax = false;
 			}
 			
 			// check for erroneous condition
@@ -195,7 +198,7 @@ dojo.require("dojox.charting.scaler.common");
 			}
 			// loop over all ticks
 			var majorTicks = [], minorTicks = [], microTicks = [];
-			while(next <= scaler.bounds.upper + 1/scaler.scale){
+			while(next <= scaler.bounds.to + 1/scaler.scale){
 				if(Math.abs(nextMajor - next) < step / 2){
 					// major tick
 					tick = {value: nextMajor};
@@ -229,11 +232,11 @@ dojo.require("dojox.charting.scaler.common");
 			return {major: majorTicks, minor: minorTicks, micro: microTicks};	// Object
 		},
 		getTransformerFromModel: function(/*Object*/ scaler){
-			var offset = scaler.bounds.lower, scale = scaler.scale;
+			var offset = scaler.bounds.from, scale = scaler.scale;
 			return function(x){ return (x - offset) * scale; };	// Function
 		},
 		getTransformerFromPlot: function(/*Object*/ scaler){
-			var offset = scaler.bounds.lower, scale = scaler.scale;
+			var offset = scaler.bounds.from, scale = scaler.scale;
 			return function(x){ return x / scale + offset; };	// Function
 		}
 	});

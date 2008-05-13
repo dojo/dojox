@@ -71,6 +71,8 @@ dojo.require("dojox.lang.utils");
 		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
+			this.min = min;
+			this.max = max;
 			this.labels = "labels" in this.opt ? this.opt.labels : labels;
 			this.scaler = lin.buildScaler(min, max, span, this.opt);
 			var minMinorStep = 0, ta = this.chart.theme.axis, 
@@ -88,12 +90,12 @@ dojo.require("dojox.lang.utils");
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
 						}), "Math.max(a, b)", 0);
 					}else{
-						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(this.scaler.min),
-								Math.abs(this.scaler.max))) / Math.LN10),
+						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(this.scaler.bounds.from),
+								Math.abs(this.scaler.bounds.to))) / Math.LN10),
 							t = [];
-						if(this.scaler.min < 0 || this.scaler.max < 0){ t.push("-"); }
+						if(this.scaler.bounds.from < 0 || this.scaler.bounds.to < 0){ t.push("-"); }
 						t.push(dojo.string.rep("9", labelLength));
-						var precision = Math.floor(Math.log(this.scaler.max - this.scaler.min) / Math.LN10);
+						var precision = Math.floor(Math.log(this.scaler.bounds.to - this.scaler.bounds.from) / Math.LN10);
 						if(precision > 0){
 							t.push(".");
 							for(i = 0; i < precision; ++i){ t.push("9"); }
