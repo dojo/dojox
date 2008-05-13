@@ -3,17 +3,6 @@ dojo.provide("dojox.lang.aspect.memoizer");
 (function(){
 	var aop = dojox.lang.aspect;
 
-	var reset = function(/*String|Array?*/ method){
-		var that = aop.getContext().instance, t;
-		if(!(t = that.__memoizerCache)){ return; }
-		if(arguments.length == 0){
-			delete that.__memoizerCache;
-		}else if(dojo.isArray(method)){
-			dojo.forEach(method, function(m){ delete t[m]; });
-		}else{
-			delete t[method];
-		}
-	};
 	var memoize1 = {
 		around: function(key){
 			var ctx = aop.getContext(), self = ctx.joinPoint, that = ctx.instance, t, u, ret;
@@ -24,8 +13,7 @@ dojo.provide("dojox.lang.aspect.memoizer");
 			if(!(t = that.__memoizerCache)){ t = that.__memoizerCache = {}; }
 			if(!(u = t[self.targetName])){ u = t[self.targetName] = {}; }
 			return u[key] = ret;
-		},
-		reset: reset
+		}
 	};
 
 	var memoizeN = function(/*Function*/keyMaker){
@@ -40,8 +28,7 @@ dojo.provide("dojox.lang.aspect.memoizer");
 				if(!(t = that.__memoizerCache)){ t = that.__memoizerCache = {}; }
 				if(!(u = t[self.targetName])){ u = t[self.targetName] = {}; }
 				return u[key] = ret;
-			},
-			reset: reset
+			}
 		};
 	};
 
@@ -55,5 +42,4 @@ dojo.provide("dojox.lang.aspect.memoizer");
 
 		return arguments.length == 0 ? memoize1 : memoizeN(keyMaker);	// Object
 	};
-	aop.memoizer._reset = reset;
 })();

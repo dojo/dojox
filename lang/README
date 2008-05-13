@@ -12,8 +12,8 @@ Credits
 -------------------------------------------------------------------------------
 Project description
 
-Implementation of common functional operations, and provisions
-Later we can add other JS language-related helpers.
+Implementation of common functional operations, and provisions, aspect-oriented
+helpers. Later we can add other JS language-related helpers.
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -21,11 +21,16 @@ None.
 -------------------------------------------------------------------------------
 Documentation
 
+For now:
+
+dojox.lang.functional:
+http://lazutkin.com/blog/2008/jan/12/functional-fun-javascript-dojo/
+
 -------------------------------------------------------------------------------
 Installation instructions
 
 Grab the following from the Dojo SVN Repository:
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/lang/*
+http://svn.dojotoolkit.org/src/dojo/dojox/trunk/lang/*
 
 Install into the following directory structure:
 /dojox/lang/
@@ -35,3 +40,6 @@ Install into the following directory structure:
 Additional Notes
 
 See tests and the source for more details.
+
+LICENSE in this directory contains the MIT license by Oliver Steele for
+dojox.lang.functional.lambda, which was derived from his original implementation.

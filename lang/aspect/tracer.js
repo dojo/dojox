@@ -31,7 +31,7 @@ dojo.provide("dojox.lang.aspect.tracer");
 		}
 	});
 	
-	aop.tracer = function(/*Boolean*/ grouping, /*Boolean*/ suppressInstance){
+	aop.tracer = function(/*Boolean*/ grouping){
 		// summary:
 		//		Returns an object, which can be used to trace calls with Firebug's console.
 		//		Prints argument, a return value, or an exception.
