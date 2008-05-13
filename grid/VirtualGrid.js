@@ -178,7 +178,7 @@ dojo.require("dojox.grid._Events");
 			this.domNode.onSizeChange = null;
 			this.edit.destroy();
 			this.views.destroyViews();
-			this.inherited(arguments);
+			dijit._Widget.prototype.destroy.apply(this, arguments);
 		},
 		
 		styleChanged: function(){
