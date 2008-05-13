@@ -70,13 +70,8 @@ dojo.require("dojox.lang.utils");
 			return "scaler" in this && !(this.dirty && this.dependOnData());
 		},
 		setWindow: function(scale, offset){
-			if(scale == 1 && offset == 0){
-				delete this.scale;
-				delete this.offset;
-			}else{
-				this.scale  = scale;
-				this.offset = offset;
-			}
+			this.scale  = scale;
+			this.offset = offset;
 			return this.clear();
 		},
 		getWindowScale: function(){
@@ -115,6 +110,11 @@ dojo.require("dojox.lang.utils");
 				}
 				// re-calculate the scaler
 				this.scaler = lin.buildScaler(min, max, span, this.opt);
+				// cleanup
+				if(this.scale == 1 && this.offset == 0){
+					delete this.scale;
+					delete this.offset;
+				}
 			}
 			var minMinorStep = 0, ta = this.chart.theme.axis,
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
