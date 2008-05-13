@@ -70,9 +70,20 @@ dojo.require("dojox.lang.utils");
 			return "scaler" in this && !(this.dirty && this.dependOnData());
 		},
 		setWindow: function(scale, offset){
-			this.scale  = scale;
-			this.offset = offset;
+			if(scale == 1 && offset == 0){
+				delete this.scale;
+				delete this.offset;
+			}else{
+				this.scale  = scale;
+				this.offset = offset;
+			}
 			return this.clear();
+		},
+		getWindowScale: function(){
+			return "scale" in this ? this.scale : 1;
+		},
+		getWindowOffset: function(){
+			return "offset" in this ? this.offset : 0;
 		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
@@ -81,10 +92,10 @@ dojo.require("dojox.lang.utils");
 			if("scale" in this){
 				// calculate new range
 				this.opt.from = this.scaler.bounds.lower + this.offset;
-				this.opt.to   = (this.scaler.bounds.upper - this.scaler.bounds.lower) / scale + this.opt.from;
+				this.opt.to   = (this.scaler.bounds.upper - this.scaler.bounds.lower) / this.scale + this.opt.from;
 				// make sure that bounds are correct
-				if(isInfinite(this.opt.from) || isNaN(this.opt.from) || isInfinite(this.opt.to) || isNaN(this.opt.to) ||
-						this.opt.to - this.from.to >= this.scaler.bounds.upper - this.scaler.bounds.lower){
+				if(!isFinite(this.opt.from) || isNaN(this.opt.from) || !isFinite(this.opt.to) || isNaN(this.opt.to) ||
+						this.opt.to - this.opt.from >= this.scaler.bounds.upper - this.scaler.bounds.lower){
 					// any error --- remove from/to bounds
 					delete this.opt.from;
 					delete this.opt.to;

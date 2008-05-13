@@ -16,6 +16,7 @@ dojo.require("dojox.lang.functional");
 
 		//	override the render so that we are plotting only circles.
 		render: function(dim, offsets){
+			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
 				this.cleanGroup();

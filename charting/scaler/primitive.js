@@ -8,7 +8,8 @@ dojox.charting.scaler.primitive = {
 				upper: max,
 				from:  min,
 				to:    max,
-				scale: span / (max - min)
+				scale: span / (max - min),
+				span:  span
 			},
 			scaler: dojox.charting.scaler.primitive
 		};

@@ -25,6 +25,9 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 	calculateAxes: function(dim){
 		return this;
 	},
+	isDirty: function(){
+		return this.dirty || this._hAxis && this._hAxis.dirty || this._vAxis && this._vAxis.dirty;
+	},
 	render: function(dim, offsets){
 		return this;
 	},

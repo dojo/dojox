@@ -215,14 +215,14 @@ dojo.require("dojox.charting.plot2d.Pie");
 				this.calculateGeometry();
 			}
 			df.forIn(this.axes, function(axis){
-				var scale, offset, bounds = axis.scaler.bounds,
+				var scale, offset, bounds = axis.getScaler().bounds,
 					s = bounds.span / (bounds.upper - bounds.lower);
 				if(axis.vertical){
 					scale  = sy;
-					offset = ("offset" in axis ? axis.offset : 0) + dy / s / scale;
+					offset = dy / s / scale;
 				}else{
 					scale  = sx;
-					offset = ("offset" in axis ? axis.offset : 0) + dx / s / scale;
+					offset = dx / s / scale;
 				}
 				axis.setWindow(scale, offset);
 			});

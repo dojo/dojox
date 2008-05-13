@@ -1,0 +1,146 @@
+<html>
+<head>
+<title>Scrolling and scaling</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/themes/tundra/tundra.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
+<script type="text/javascript" src="Silverlight.js"></script>
+-->
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+<script type="text/javascript" src="../Theme.js"></script>
+<script type="text/javascript" src="../scaler/linear.js"></script>
+<script type="text/javascript" src="../axis2d/Default.js"></script>
+<script type="text/javascript" src="../plot2d/Default.js"></script>
+<script type="text/javascript" src="../plot2d/Grid.js"></script>
+<script type="text/javascript" src="../Chart2D.js"></script>
+<script type="text/javascript" src="../../lang/functional/object.js"></script>
+
+<script type="text/javascript">
+
+dojo.require("dijit.form.Slider");
+dojo.require("dojo.parser"); // scan page for widgets
+
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.orange");
+
+dojo.require("dojox.lang.functional.object");
+
+var df = dojox.lang.functional;
+var chart, scaleX = 1, scaleY = 1, offsetX = 0, offsetY = 0;
+
+var update = function(){
+	chart.setWindow(scaleX, scaleY, offsetX, offsetY).render();
+
+	df.forIn(chart.axes, function(axis){
+		var scale  = axis.getWindowScale(),
+			offset = Math.round(axis.getWindowOffset() * axis.getScaler().bounds.scale);
+		if(axis.vertical){
+			dijit.byId("scaleYSlider").setValue(scale);
+			dijit.byId("offsetYSlider").setValue(offset);
+		}else{
+			dijit.byId("scaleXSlider").setValue(scale);
+			dijit.byId("offsetXSlider").setValue(offset);
+		}
+	});
+};
+
+var scaleXEvent = function(value){
+	scaleX = value;
+	dojo.byId("scaleXValue").innerHTML = value;
+	update();
+};
+
+var scaleYEvent = function(value){
+	scaleY = value;
+	dojo.byId("scaleYValue").innerHTML = value;
+	update();
+};
+
+var offsetXEvent = function(value){
+	offsetX = value;
+	dojo.byId("offsetXValue").innerHTML = value;
+	update();
+};
+
+var offsetYEvent = function(value){
+	offsetY = value;
+	dojo.byId("offsetYValue").innerHTML = value;
+	update();
+};
+
+makeObjects = function(){
+	chart = new dojox.charting.Chart2D("test");
+	chart.setTheme(dojox.charting.themes.PlotKit.orange);
+	chart.addAxis("x", {fixLower: "minor", natural: true});
+	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1});
+	chart.addPlot("default", {type: "Areas"});
+	chart.addSeries("Series A", [0, 25, 5, 20, 10, 15, 5, 20, 0, 25]);
+	chart.addSeries("Series B", [25, 0]);
+	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
+	chart.render();
+	
+    dojo.connect(dijit.byId("scaleXSlider"), "onChange", scaleXEvent);
+    dojo.connect(dijit.byId("scaleYSlider"), "onChange", scaleYEvent);
+    dojo.connect(dijit.byId("offsetXSlider"), "onChange", offsetXEvent);
+    dojo.connect(dijit.byId("offsetYSlider"), "onChange", offsetYEvent);
+};
+
+dojo.addOnLoad(makeObjects);
+
+</script>
+</head>
+<body class="tundra">
+<h1>Scrolling and scaling</h1>
+<!--<p><button onclick="makeObjects();">Go</button></p>-->
+<!-- intermediateChanges="true" -->
+<table>
+	<tr><td align="center" class="pad">Scale X (<span id="scaleXValue">1</span>)</td></tr>
+	<tr><td>
+		<div id="scaleXSlider" dojoType="dijit.form.HorizontalSlider" 
+				value="1" minimum="1" maximum="10" discreteValues="10" showButtons="false"
+				style="width: 600px;">
+			<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="10" style="height:5px;"></div>
+			<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" minimum="1" maximum="10" count="10"
+				constraints="{pattern: '##'}" style="height:1.2em;font-size:75%;color:gray;"></div>
+		</div>
+	</td></tr>
+	<tr><td align="center" class="pad">Scale Y (<span id="scaleYValue">1</span>)</td></tr>
+	<tr><td>
+		<div id="scaleYSlider" dojoType="dijit.form.HorizontalSlider" 
+				value="1" minimum="1" maximum="10" discreteValues="10" showButtons="false"
+				style="width: 600px;">
+			<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="10" style="height:5px;"></div>
+			<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" minimum="1" maximum="10" count="10"
+				constraints="{pattern: '##'}" style="height:1.2em;font-size:75%;color:gray;"></div>
+		</div>
+	</td></tr>
+	<tr><td align="center" class="pad">Offset X (<span id="offsetXValue">0</span>)</td></tr>
+	<tr><td>
+		<div id="offsetXSlider" dojoType="dijit.form.HorizontalSlider" 
+				value="1" minimum="0" maximum="1000" discreteValues="1001" showButtons="false"
+				style="width: 600px;">
+			<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="11" style="height:5px;"></div>
+			<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" minimum="0" maximum="1000" count="11"
+				constraints="{pattern: '####'}" style="height:1.2em;font-size:75%;color:gray;"></div>
+		</div>
+	</td></tr>
+	<tr><td align="center" class="pad">Offset Y (<span id="offsetYValue">0</span>)</td></tr>
+	<tr><td>
+		<div id="offsetYSlider" dojoType="dijit.form.HorizontalSlider" 
+				value="1" minimum="0" maximum="1000" discreteValues="1001" showButtons="false"
+				style="width: 600px;">
+			<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count="11" style="height:5px;"></div>
+			<div dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration" minimum="0" maximum="1000" count="11"
+				constraints="{pattern: '####'}" style="height:1.2em;font-size:75%;color:gray;"></div>
+		</div>
+	</td></tr>
+</table>
+<div id="test" style="width: 500px; height: 300px;"></div>
+<p>That's all Folks!</p>
+</body>
+</html>

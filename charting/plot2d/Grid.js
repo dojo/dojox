@@ -25,6 +25,7 @@ dojo.require("dojox.lang.functional");
 			du.updateWithObject(this.opt, kwArgs);
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
+			this.dirty = true;
 		},
 		clear: function(){
 			this._hAxis = null;
@@ -46,11 +47,15 @@ dojo.require("dojox.lang.functional");
 			// nothing
 			return this;
 		},
+		isDirty: function(){
+			return this.dirty || this._hAxis && this._hAxis.dirty || this._vAxis && this._vAxis.dirty;
+		},
 		getRequiredColors: function(){
 			return 0;
 		},
 		render: function(dim, offsets){
 			// draw horizontal stripes and lines
+			this.dirty = this.isDirty();
 			if(!this.dirty){ return this; }
 			this.cleanGroup();
 			var s = this.group, ta = this.chart.theme.axis, ticks = this._vAxis.getTicks(),

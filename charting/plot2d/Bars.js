@@ -39,6 +39,7 @@ dojo.require("dojox.lang.functional.reversed");
 			return this;
 		},
 		render: function(dim, offsets){
+			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
 				this.cleanGroup();

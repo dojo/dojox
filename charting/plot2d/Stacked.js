@@ -40,6 +40,7 @@ dojo.require("dojox.lang.functional.reversed");
 				}
 			}
 			// draw runs in backwards
+			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
 				this.cleanGroup();
