@@ -86,7 +86,7 @@
 				field: 2,
 				name: 'Status',
 				styles: 'text-align: center;',
-				editor: dojox.grid._data.editors.Select,
+				type: dojox.grid.cells.Select,
 				options: [ "new", "read", "replied" ]
 			};
 
@@ -95,12 +95,12 @@
 					type: 'dojox.grid._RowSelector', width: '20px'
 				},
 				{
-					defaultCell: { width: 8, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;'  },
+					defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
 					rows: [
 						[
 							{ name: 'Id', width: 3, get: function(inRowIndex){ return inRowIndex+1;} },
-							{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid._data.editors.Select, options: ["normal", "note", "important"]},
-							{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid._data.editors.Bool },
+							{ name: 'Priority', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"]},
+							{ name: 'Mark', width: 3, styles: 'text-align: center;', type: dojox.grid.cells.Bool },
 							statusCell,
 							{ name: 'Message', styles: '', width: '100%' },
 							{ name: 'Amount', formatter: formatMoney }

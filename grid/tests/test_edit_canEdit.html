@@ -43,7 +43,7 @@
 	<!-- Debugging -->
 	<script type="text/javascript" src="../util.js"></script>
 	<script type="text/javascript" src="../_Scroller.js"></script>
-	<script type="text/javascript" src="../_Cell.js"></script>
+	<script type="text/javascript" src="../cells/_base.js"></script>
 	<script type="text/javascript" src="../_Layout.js"></script>
 	<script type="text/javascript" src="../_RowManager.js"></script>
 	<script type="text/javascript" src="../_FocusManager.js"></script>
@@ -55,7 +55,6 @@
 	<script type="text/javascript" src="../VirtualGrid.js"></script>
 	<script type="text/javascript" src="../_data/fields.js"></script>
 	<script type="text/javascript" src="../_data/model.js"></script>
-	<script type="text/javascript" src="../_data/editors.js"></script>
 	<script type="text/javascript" src="../Grid.js"></script>
 	<script type="text/javascript">
 	// ==========================================================================
@@ -91,24 +90,24 @@
 	// ==========================================================================
 	// Grid structure
 	// ==========================================================================
-	statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', editor: dojox.grid._data.editors.Select, options: [ "new", "read", "replied" ] };
+	statusCell = { field: 2, name: 'Status', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: [ "new", "read", "replied" ] };
 	gridLayout = [{
 		type: 'dojox.grid._RowSelector', width: '20px'
 	},{
-		defaultCell: { width: 8, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;'  },
+		defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
 		rows: [[
 			{ name: 'Id', width: 3, get: function(inRowIndex) { return inRowIndex+1;} },
-			{ name: 'Priority', styles: 'text-align: center;', editor: dojox.grid._data.editors.Select, options: ["normal", "note", "important"]},
-			{ name: 'Mark', width: 3, styles: 'text-align: center;', editor: dojox.grid._data.editors.Bool },
+			{ name: 'Priority', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"]},
+			{ name: 'Mark', width: 3, styles: 'text-align: center;', type: dojox.grid.cells.Bool },
 			statusCell,
 			{ name: 'Message', styles: '', width: '100%' },
 			{ name: 'Amount', formatter: formatMoney },
 			{ name: 'Amount', field: 4, formatter: formatMoney }
 		]]
 	},{
-		defaultCell: { width: 4, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;' },
+		defaultCell: { width: 4, editable: true, styles: 'text-align: right;' },
 		rows: [[
-			{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', editor: dojox.grid._data.editors.Bool}, 
+			{ name: 'Mark', width: 3, field: 1, styles: 'text-align: center;', type: dojox.grid.cells.Bool}, 
 			statusCell,
 			{ name: 'Amount', field: 4, formatter: formatMoney},
 			{ name: 'Detail', value: 'Detail'}

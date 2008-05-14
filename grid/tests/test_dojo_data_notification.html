@@ -29,17 +29,17 @@
 			return ' ' + inRowIndex;
 		}
 
-		var iEditor = dojox.grid._data.editors.Input;
 		var layoutMovies = [
 			// view 0
 			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
 			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
 			// view 2
-			{ cells: [[
-				{ field: "Title", editor: iEditor, width: 'auto' },
-				{ field: "Year",  editor: iEditor, width: 5 },
-				{ field: "Producer", editor: iEditor, width: 20 }
+			{ defaultCell: { editable: true },
+			  cells: [[
+				{ field: "Title", width: 'auto' },
+				{ field: "Year",  width: 5 },
+				{ field: "Producer", width: 20 }
 			]]}
 		];
 
@@ -51,7 +51,7 @@
 			// view 2
 			{ cells: [[
 				{ field: "name", name: "Name", width: 'auto' },
-				{ field: "type", name: "Type", editor: iEditor, width: 'auto' },
+				{ field: "type", name: "Type", editable: true, width: 'auto' },
 			]]}
 		];
 	</script>

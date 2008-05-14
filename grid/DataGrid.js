@@ -10,6 +10,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	_model_connects: null,
 	_identity_map: null,
 	_rows: null,
+	_cache: null,
 	_pages: null,
 	_bop: -1,
 	_eop: -1,
@@ -20,6 +21,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		this._pages = [];
 		this._model_connects = [];
 		this._rows = [];
+		this._cache = [];
 
 		this.setModel(this.model);
 		this.inherited(arguments);
@@ -85,10 +87,6 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		}
 
 		this._model_connects = h;
-	},
-
-	canEdit: function(inCell, inRowIndex){
-		return this._canEdit;
 	},
 
 	_onFetchBegin: function(size, req){
@@ -231,6 +229,56 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	onStyleRow: function(inRow){
 		this.styleRowState(inRow);
 		this.inherited(arguments);
+	},
+
+	// editing
+	canEdit: function(inCell, inRowIndex){
+		return this._canEdit;
+	},
+
+	_copyAttr: function(idx, attr){
+		var row = {};
+		var backstop = {};
+		var src = this._getItem(idx);
+		return this.model.getValue(src, attr);
+	},
+
+	doStartEdit: function(inCell, inRowIndex){
+		if(!this._cache[inRowIndex]){
+			this._cache[inRowIndex] = this._copyAttr(inRowIndex, inCell.dataAttr);
+		}
+		this.onStartEdit(inCell, inRowIndex);
+	},
+
+	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
+		this.model.fetchItemByIdentity({
+			identity: this._rows[inRowIndex],
+			onItem: dojo.hitch(this, function(item){
+				this.model.setValue(item, inAttrName, inValue);
+				this.onApplyCellEdit(inValue, inRowIndex, inAttrName);
+			})
+		});
+	},
+
+	doCancelEdit: function(inRowIndex){
+		var cache = this._cache[inRowIndex];
+		if(cache){
+			this.updateRow(inRowIndex);
+			delete this._cache[inRowIndex];
+		}
+		this.onCancelEdit.apply(this, arguments);
+	},
+
+	doApplyEdit: function(inRowIndex, inDataAttr){
+		var cache = this._cache[inRowIndex];
+		/*if(cache){
+			var data = this._getItem(inRowIndex);
+			if(this.model.getValue(data, inDataAttr) != cache){
+				this.update(cache, data, inRowIndex);
+			}
+			delete this._cache[inRowIndex];
+		}*/
+		this.onApplyEdit(inRowIndex);
 	}
 });
 
@@ -308,11 +356,20 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 				var cell = {
 					name: d.trim(d.attr(th, "name")||th.innerHTML),
 					dataAttr: d.trim(d.attr(th, "dataAttr")||""),
-					colSpan: parseInt(d.attr(th, "colspan")||1)
+					colSpan: parseInt(d.attr(th, "colspan")||1),
+					editable: !!(d.attr(th, "editable")),
+					type: d.trim(d.attr(th, "cellType")||"")
 				};
 				cellCount += cell.colSpan;
 				cell.dataAttr = cell.dataAttr||cell.name;
 				cell.width = widthFromAttr(th);
+
+				cell.type = cell.type ? dojo.getObject(cell.type) : undefined;
+
+				if(cell.type && cell.type.markupFactory){
+					cell.type.markupFactory(th, cell);
+				}
+
 				if(!cView.cells[tr_idx]){
 					cView.cells[tr_idx] = [];
 				}

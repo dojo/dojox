@@ -1,8 +1,7 @@
 dojo.provide("dojox.grid.Grid");
 dojo.require("dojox.grid.VirtualGrid");
 dojo.require("dojox.grid._data.model");
-dojo.require("dojox.grid._data.editors");
-dojo.require("dojox.grid._data.dijitEditors");
+dojo.require("dojox.grid.cells.dijit");
 
 // FIXME: 
 //		we are at the wrong location! 

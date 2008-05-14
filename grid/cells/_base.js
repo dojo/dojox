@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid._data.editors");
+dojo.provide("dojox.grid.cells._base");
 
 dojo.require("dojox.grid.util");
 
@@ -15,16 +15,41 @@ dojo.require("dojox.grid.util");
 		setTimeout(dojo.hitch.apply(dojo, arguments), 0);
 	};
 
-	dojo.declare("dojox.grid._data.editors.Base", null, {
+	var dgc = dojox.grid.cells;
+
+	dojo.declare("dojox.grid.cells._Base", null, {
 		// summary:
-		//	base grid editor class. Other grid editors should inherited from this class.
-		constructor: function(inCell){
-			this.cell = inCell;
-		},
+		//	Respresents a grid cell and contains information about column options and methods
+		//	for retrieving cell related information.
+		//	Each column in a grid layout has a cell object and most events and many methods
+		//	provide access to these objects.
+		styles: '',
+		editable: false,
+		alwaysEditing: false,
+		formatter: null,
 		//private
 		_valueProp: "value",
 		_formatPending: false,
-		format: function(inDatum, inRowIndex){
+
+		constructor: function(inProps){
+			dojo.mixin(this, inProps);
+			//if(this.editor){this.editor = new this.editor(this);}
+		},
+		// data source
+		format: function(inRowIndex){
+			// summary:
+			//	provides the html for a given grid cell.
+			// inRowIndex: int
+			// grid row index
+			// returns: html for a given grid cell
+			var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex) : this.value;
+			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
+				return this.formatEditing(d, inRowIndex);
+			}else{
+				return (f = this.formatter) ? f.call(this, d, inRowIndex) : d;
+			}
+		},
+		formatEditing: function(inDatum, inRowIndex){
 			// summary:
 			//	formats the cell for editing
 			// inDatum: anything
@@ -32,6 +57,45 @@ dojo.require("dojox.grid.util");
 			// inRowIndex: int
 			//	grid row index
 			// returns: string of html to place in grid cell
+		},
+		// utility
+		getNode: function(inRowIndex){
+			// summary:
+			//	gets the dom node for a given grid cell.
+			// inRowIndex: int
+			// grid row index
+			// returns: dom node for a given grid cell
+			var node = this.view.getCellNode(inRowIndex, this.index);
+			if(node){
+				return node.firstChild;
+			}else{
+				return 0;
+			}
+		},
+		isFlex: function(){
+			var uw = this.unitWidth;
+			return uw && (uw=='auto' || uw.slice(-1)=='%');
+		},
+		// edit support
+		applyEdit: function(inValue, inRowIndex){
+			this.grid.edit.applyCellEdit(inValue, this, inRowIndex);
+		},
+		cancelEdit: function(inRowIndex){
+			this.grid.doCancelEdit(inRowIndex);
+		},
+		_onEditBlur: function(inRowIndex){
+			if(this.grid.edit.isEditCell(inRowIndex, this.index)){
+				//console.log('editor onblur', e);
+				this.grid.edit.apply();
+			}
+		},
+		registerOnBlur: function(inNode, inRowIndex){
+			if(this.commitOnBlur){
+				dojo.connect(inNode, "onblur", function(e){
+					// hack: if editor still thinks this editor is current some ms after it blurs, assume we've focused away from grid
+					setTimeout(dojo.hitch(this, "_onEditBlur", inRowIndex), 250);
+				});
+			}
 		},
 		//protected
 		needFormatNode: function(inDatum, inRowIndex){
@@ -46,14 +110,11 @@ dojo.require("dojox.grid.util");
 			if(this._formatPending){
 				this._formatPending = false;
 				// make cell selectable
-				dojo.setSelectable(this.cell.grid.domNode, true);
+				dojo.setSelectable(this.grid.domNode, true);
 				this.formatNode(this.getNode(inRowIndex), inDatum, inRowIndex);
 			}
 		},
 		//protected
-		getNode: function(inRowIndex){
-			return (this.cell.getNode(inRowIndex) || 0).firstChild || 0;
-		},
 		formatNode: function(inNode, inDatum, inRowIndex){
 			// summary:
 			//	format the editing dom node. Use when editor is a widget.
@@ -128,8 +189,8 @@ dojo.require("dojox.grid.util");
 			//	called when editing is completed to clean up editor
 			// inRowIndex: int
 			// grid row index
-			dojo.setSelectable(this.cell.grid.domNode, false);
-			this.cancelFormatNode(this.cell);
+			dojo.setSelectable(this.grid.domNode, false);
+			this.cancelFormatNode();
 		},
 		//public
 		apply: function(inRowIndex){
@@ -137,7 +198,7 @@ dojo.require("dojox.grid.util");
 			//	apply edit from cell editor
 			// inRowIndex: int
 			// grid row index
-			this.cell.applyEdit(this.getValue(inRowIndex), inRowIndex);
+			this.applyEdit(this.getValue(inRowIndex), inRowIndex);
 			this._finish(inRowIndex);
 		},
 		cancel: function(inRowIndex){
@@ -145,29 +206,28 @@ dojo.require("dojox.grid.util");
 			//	cancel cell edit
 			// inRowIndex: int
 			// grid row index
-			this.cell.cancelEdit(inRowIndex);
+			this.cancelEdit(inRowIndex);
 			this._finish(inRowIndex);
 		}
 	});
-	dojox.grid._data.editors.base = dojox.grid._data.editors.Base; // back-compat
 
-	dojo.declare("dojox.grid._data.editors.Input", dojox.grid._data.editors.Base, {
+	dojo.declare("dojox.grid.cells.Cell", dgc._Base, {
 		// summary
-		// grid cell editor that provides a standard text input box
-		constructor: function(inCell){
-			this.keyFilter = this.keyFilter || this.cell.keyFilter;
+		// grid cell that provides a standard text input box upon editing
+		constructor: function(){
+			this.keyFilter = this.keyFilter;
 		},
 		// keyFilter: object
 		// optional regex for disallowing keypresses
 		keyFilter: null,
-		format: function(inDatum, inRowIndex){
+		formatEditing: function(inDatum, inRowIndex){
 			this.needFormatNode(inDatum, inRowIndex);
 			return '<input class="dojoxGrid-input" type="text" value="' + inDatum + '">';
 		},
 		formatNode: function(inNode, inDatum, inRowIndex){
 			this.inherited(arguments);
 			// FIXME: feels too specific for this interface
-			this.cell.registerOnBlur(inNode, inRowIndex);
+			this.registerOnBlur(inNode, inRowIndex);
 		},
 		doKey: function(e){
 			if(this.keyFilter){
@@ -185,19 +245,24 @@ dojo.require("dojox.grid.util");
 			}catch(e){}
 		}
 	});
-	dojox.grid._data.editors.input = dojox.grid._data.editors.Input; // back compat
+	dgc.Cell.markupFactory = function(node, cell){
+		var d = dojo;
+		var keyFilter = d.trim(d.attr(node, "keyFilter")||"");
+		if(keyFilter){
+			cell.keyFilter = new RegExp(keyFilter);
+		}
+	}
 
-	dojo.declare("dojox.grid._data.editors.Select", dojox.grid._data.editors.Input, {
+	dojo.declare("dojox.grid.cells.Select", dgc.Cell, {
 		// summary:
-		// grid cell editor that provides a standard select
+		// grid cell that provides a standard select for editing
 		// options: text of each item
 		// values: value for each item
 		// returnIndex: editor returns only the index of the selected option and not the value
 		constructor: function(inCell){
-			this.options = this.options || this.cell.options;
-			this.values = this.values || this.cell.values || this.options;
+			this.values = this.values || this.options;
 		},
-		format: function(inDatum, inRowIndex){
+		formatEditing: function(inDatum, inRowIndex){
 			this.needFormatNode(inDatum, inRowIndex);
 			var h = [ '<select class="dojoxGrid-select">' ];
 			for (var i=0, o, v; ((o=this.options[i]) !== undefined)&&((v=this.values[i]) !== undefined); i++){
@@ -210,34 +275,53 @@ dojo.require("dojox.grid.util");
 			var n = this.getNode(inRowIndex);
 			if(n){
 				var i = n.selectedIndex, o = n.options[i];
-				return this.cell.returnIndex ? i : o.value || o.innerHTML;
+				return this.returnIndex ? i : o.value || o.innerHTML;
 			}
 		}
 	});
-	dojox.grid._data.editors.select = dojox.grid._data.editors.Select; // back compat
+	dgc.Select.markupFactory = function(node, cell){
+		dgc.Cell.markupFactory(node, cell);
+		var d=dojo;
+		var options = d.trim(d.attr(node, "options")||"");
+		if(options){
+			var o = options.split(',');
+			if(o[0] != options){
+				cell.options = o;
+			}
+		}
+		var values = d.trim(d.attr(node, "values")||"");
+		if(values){
+			var v = values.split(',');
+			if(v[0] != values){
+				cell.values = v;
+			}
+		}
+	}
 
-	dojo.declare("dojox.grid._data.editors.AlwaysOn", dojox.grid._data.editors.Input, {
+	dojo.declare("dojox.grid.cells.AlwaysEdit", dgc.Cell, {
 		// summary:
-		// grid cell editor that is always on, regardless of grid editing state
+		// grid cell that is always in an editable state, regardless of grid editing state
 		// alwaysOn: boolean
 		// flag to use editor to format grid cell regardless of editing state.
-		alwaysOn: true,
+		alwaysEditing: true,
 		_formatNode: function(inDatum, inRowIndex){
 			this.formatNode(this.getNode(inRowIndex), inDatum, inRowIndex);
 		},
 		applyStaticValue: function(inRowIndex){
-			var e = this.cell.grid.edit;
-			e.applyCellEdit(this.getValue(inRowIndex), this.cell, inRowIndex);
-			e.start(this.cell, inRowIndex, true);
+			var e = this.grid.edit;
+			e.applyCellEdit(this.getValue(inRowIndex), this, inRowIndex);
+			e.start(this, inRowIndex, true);
 		}
 	});
-	dojox.grid._data.editors.alwaysOn = dojox.grid._data.editors.AlwaysOn; // back-compat
+	dgc.AlwaysEdit.markupFactory = function(node, cell){
+		dgc.Cell.markupFactory(node, cell);
+	}
 
-	dojo.declare("dojox.grid._data.editors.Bool", dojox.grid._data.editors.AlwaysOn, {
+	dojo.declare("dojox.grid.cells.Bool", dgc.AlwaysEdit, {
 		// summary:
-		// grid cell editor that provides a standard checkbox that is always on
+		// grid cell that provides a standard checkbox that is always on for editing
 		_valueProp: "checked",
-		format: function(inDatum, inRowIndex){
+		formatEditing: function(inDatum, inRowIndex){
 			return '<input class="dojoxGrid-input" type="checkbox"' + (inDatum ? ' checked="checked"' : '') + ' style="width: auto" />';
 		},
 		doclick: function(e){
@@ -246,5 +330,7 @@ dojo.require("dojox.grid.util");
 			}
 		}
 	});
-	dojox.grid._data.editors.bool = dojox.grid._data.editors.Bool; // back-compat
+	dgc.Bool.markupFactory = function(node, cell){
+		dgc.AlwaysEdit.markupFactory(node, cell);
+	}
 })();

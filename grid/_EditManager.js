@@ -36,7 +36,7 @@ dojo.declare("dojox.grid._EditManager", null, {
 			this.apply();
 		}
 		// if dynamic or static editing...
-		if(this.isEditing() || (inCell && (inCell.editor||0).alwaysOn)){
+		if(this.isEditing() || (inCell && inCell.editable && inCell.alwaysEditing)){
 			// let the editor focus itself as needed
 			this._focusEditor(inCell, inRowIndex);
 		}
@@ -55,7 +55,7 @@ dojo.declare("dojox.grid._EditManager", null, {
 	},
 
 	dispatchEvent: function(e){
-		var c = e.cell, ed = c && c.editor;
+		var c = e.cell, ed = (c && c["editable"]) ? c : 0;
 		return ed && ed.dispatchEvent(e.dispatch, e);
 	},
 
@@ -97,13 +97,13 @@ dojo.declare("dojox.grid._EditManager", null, {
 		//		Grid row index
 		// inCell: Object
 		//		Grid cell object
-		if(!this.isEditCell(inRowIndex, inCell.index) && this.grid.canEdit(inCell, inRowIndex)){
-			this.start(inCell, inRowIndex, this.isEditRow(inRowIndex) || inCell.editor);
+		if(!this.isEditCell(inRowIndex, inCell.index) && this.grid.canEdit && this.grid.canEdit(inCell, inRowIndex)){
+			this.start(inCell, inRowIndex, this.isEditRow(inRowIndex) || inCell.editable);
 		}
 	},
 
 	_focusEditor: function(inCell, inRowIndex){
-		dojox.grid.util.fire(inCell.editor, "focus", [inRowIndex]);
+		dojox.grid.util.fire(inCell, "focus", [inRowIndex]);
 	},
 
 	focusEditor: function(){
@@ -160,7 +160,7 @@ dojo.declare("dojox.grid._EditManager", null, {
 	_editorDo: function(inMethod){
 		var c = this.info.cell
 		//c && c.editor && c.editor[inMethod](c, this.info.rowIndex);
-		c && c.editor && c.editor[inMethod](this.info.rowIndex);
+		c && c.editable && c[inMethod](this.info.rowIndex);
 	},
 
 	editorApply: function(){
@@ -173,12 +173,16 @@ dojo.declare("dojox.grid._EditManager", null, {
 
 	applyCellEdit: function(inValue, inCell, inRowIndex){
 		if(this.grid.canEdit(inCell, inRowIndex)){
-			this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.fieldIndex);
+			if(inCell["dataAttr"]){
+				this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.dataAttr);
+			}else{
+				this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.fieldIndex);
+			}
 		}
 	},
 
 	applyRowEdit: function(){
-		this.grid.doApplyEdit(this.info.rowIndex);
+		this.grid.doApplyEdit(this.info.rowIndex, this.info.cell.dataAttr);
 	},
 
 	apply: function(){
@@ -216,8 +220,8 @@ dojo.declare("dojox.grid._EditManager", null, {
 		// inView: Object
 		//		Grid view
 		var c = this.info.cell;
-		if(this.isEditRow(inRowIndex) && (!inView || c.view==inView) && c.editor){
-			c.editor.save(c, this.info.rowIndex);
+		if(this.isEditRow(inRowIndex) && (!inView || c.view==inView) && c.editable){
+			c.save(c, this.info.rowIndex);
 		}
 	},
 
@@ -229,8 +233,8 @@ dojo.declare("dojox.grid._EditManager", null, {
 		// inView: Object
 		//		Grid view
 		var c = this.info.cell;
-		if(this.isEditRow(inRowIndex) && c.view == inView && c.editor){
-			c.editor.restore(c, this.info.rowIndex);
+		if(this.isEditRow(inRowIndex) && c.view == inView && c.editable){
+			c.restore(c, this.info.rowIndex);
 		}
 	}
 });

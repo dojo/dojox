@@ -73,35 +73,34 @@
 		statusCell = {
 			field: 2, name: 'Status', 
 			styles: 'text-align: center;', 
-			editor: dojox.grid._data.editors.Select, 
+			type: dojox.grid.cells.Select, 
 			options: [ "new", "read", "replied" ]
 		};
 
 		gridLayout = [{
 			type: 'dojox.grid._RowSelector', width: '20px'
 		},{
-			defaultCell: { width: 8, editor: dojox.grid._data.editors.Input, styles: 'text-align: right;'  },
+			defaultCell: { width: 8, editable: true, type: dojox.grid.cells._Widget, styles: 'text-align: right;'  },
 			rows: [[
 				{ name: 'Id', 
 					get: function(inRowIndex) { return inRowIndex+1;}, 
-					editor: dojox.grid._data.editors.Dijit,
-					editorClass: "dijit.form.NumberSpinner" },
+					widgetClass: "dijit.form.NumberSpinner" },
 				{ name: 'Date', width: 10, field: 7, 
-					editor: dojox.grid._data.editors.DateTextBox, 
+					type: dojox.grid.cells.DateTextBox, 
 					formatter: formatDate, 
 					constraint: {formatLength: 'long', selector: "date"}},
 				{ name: 'Priority', styles: 'text-align: center;', field: 0, 
-					editor: dojox.grid._data.editors.ComboBox, 
+					type: dojox.grid.cells.ComboBox, 
 					options: ["normal", "note", "important"], width: 10},
 				{ name: 'Mark', width: 3, styles: 'text-align: center;', 
-					editor: dojox.grid._data.editors.CheckBox},
+					type: dojox.grid.cells.CheckBox},
 				statusCell,
 				{ name: 'Message', styles: '', width: '100%', 
-					editor: dojox.grid._data.editors.Editor, editorToolbar: true },
+					type: dojox.grid.cells.Editor, editorToolbar: true },
 				{ name: 'Amount', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
-					editor: dojox.grid._data.editors.Dijit, editorClass: "dijit.form.CurrencyTextBox" },
+					widgetClass: "dijit.form.CurrencyTextBox" },
 				{ name: 'Amount', field: 4, formatter: formatCurrency, constraint: {currency: 'EUR'}, 
-					editor: dojox.grid._data.editors.Dijit, editorClass: "dijit.form.HorizontalSlider", width: 10}
+					widgetClass: "dijit.form.HorizontalSlider", width: 10}
 			]]
 		}];
 		// ==========================================================================
