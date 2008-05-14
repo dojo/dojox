@@ -142,7 +142,17 @@ dojo.addOnLoad(makeObjects);
 <body class="tundra">
 <h1>Scaling, scrolling, and panning.</h1>
 <!--<p><button onclick="makeObjects();">Go</button></p>-->
-<!-- intermediateChanges="true" -->
+<p>UI explained:</p>
+<ul>
+	<li>Use Scale X and Scale Y to zoom in the chart. You can scale the chart anisotropically.</li>
+	<li>Use Offset X and Offset Y to move the origin of the chart.</li>
+	<li>You cannot move the chart outside its boundaries.
+		<ul>
+			<li>Example: if both scale factors are 1, you cannot move the origin &mdash; you should zoom in first.</li>
+		</ul>
+	</li>
+	<li>After applying scale/offset to the chart, sliders' positions change to reflect actual values.</li>
+</ul>
 <table>
 	<tr><td align="center" class="pad">Scale X (<span id="scaleXValue">1</span>)</td></tr>
 	<tr><td>
