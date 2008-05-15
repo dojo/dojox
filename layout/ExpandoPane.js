@@ -45,9 +45,6 @@ dojo.declare("dojox.layout.ExpandoPane",
 
 		this._isHorizontal = true;
 		
-		this._container = this.getParent();
-		this._closedSize = this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
-	
 		if(dojo.isString(this.easeOut)){
 			this.easeOut = dojo.getObject(this.easeOut);
 		}
@@ -80,6 +77,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	startup: function(){
 		this.inherited(arguments);
+		
+		this._container = this.getParent();
+		this._closedSize = this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
+		
 		if(this.splitter){
 			// find our splitter and tie into it's drag logic
 			var myid = this.id;
@@ -89,6 +90,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 				this.connect(w,"_stopDrag","_afterResize");
 			}));
 		}
+		
 		this._currentSize = dojo.marginBox(this.domNode);
 		this._showSize = this._currentSize[(this._isHorizontal ? "h" : "w")];
 		this._setupAnims();
@@ -197,7 +199,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		// summary: we aren't a layout widget, but need to act like one:
 		var size = dojo.marginBox(this.domNode);
 		// FIXME: do i even need to do this query/forEach? why not just set the containerHeight always
-		dojo.query("[attachParent]",this.domNode).forEach(function(n){
+		dojo.query("[attachParent]", this.domNode).forEach(function(n){
 			if(dijit.byNode(n)){
 				var h = size.h - this._titleHeight;
 				dojo.style(this.containerNode,"height", h +"px");
