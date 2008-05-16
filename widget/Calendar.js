@@ -240,8 +240,6 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 	_adjustDisplay: function(/*String*/part, /*int*/amount, noSlide){
 		// summary: This function overrides the base function defined in dijit._Calendar.
 		//   It changes the displayed years, months and days depending on the inputs.
-		this.displayMonth = dojo.date.add(this.displayMonth, part, amount);
-
 		var child = this._children[this._currentChild];
 
 		var month = this.displayMonth = child.adjustDate(this.displayMonth, amount);

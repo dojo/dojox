@@ -26,6 +26,10 @@
     text-align: center;
 }
 
+.dojoxCalendar .dijitCalendarDateTemplate { 
+	padding: 0px; 
+}
+
 .dojoxCalendar .noPointer, .dojoxCalendar .noPointer * {
 	cursor: auto;
 }
