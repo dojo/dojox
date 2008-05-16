@@ -29,8 +29,8 @@ dojox.cometd = new function(){
 	this._connected = false;
 	this._polling = false;
 
-	this.expectedNetworkDelay = 5000; // expected max network delay
-	this.connectTimeout = 0;    // If set, used as ms to wait for a connect response and sent as the advised timeout
+	this.expectedNetworkDelay = 10000; // expected max network delay
+	this.connectTimeout = 0;	  // If set, used as ms to wait for a connect response and sent as the advised timeout
 
 	this.connectionTypes = new dojo.AdapterRegistry(true);
 
@@ -46,7 +46,7 @@ dojox.cometd = new function(){
 	this.url = null;
 	this.lastMessage = null;
 	this._messageQ = [];
-	this.handleAs = "json-comment-optional";
+	this.handleAs = "json";
 	this._advice = {};
 	this._backoffInterval = 0;
 	this._backoffIncrement = 1000;
@@ -122,13 +122,6 @@ dojox.cometd = new function(){
 		}
 
 		if(!this._isXD){
-			if(props.ext){
-				if(props.ext["json-comment-filtered"]!==true && props.ext["json-comment-filtered"]!==false){
-					props.ext["json-comment-filtered"] = true;
-				}
-			}else{
-				props.ext = { "json-comment-filtered": true };
-			}
 			props.supportedConnectionTypes = dojo.map(this.connectionTypes.pairs, "return item[0]");
 		}
 
@@ -144,6 +137,12 @@ dojox.cometd = new function(){
 			}),
 			error: dojo.hitch(this,function(e){
 				console.debug("handshake error!:",e);
+				this._backoff();
+				this._finishInit([{}]);
+			}),
+			timeoutSeconds: this.expectedNetworkDelay/1000,
+			timeout: dojo.hitch(this, function(){
+				console.debug("handshake timeout!");
 				this._backoff();
 				this._finishInit([{}]);
 			})
@@ -472,7 +471,9 @@ dojox.cometd = new function(){
 			this.currentTransport.startup(data);
 		}
 
-		dojo.publish("/cometd/meta", [{cometd:this,action:"handshook",successful:successful,state:this.state()}]);
+		dojo.publish("/cometd/meta", [{cometd:this,action:"handshake",successful:successful,reestablish:successful&&this._handshook,state:this.state()}]);
+		if (successful)
+			this._handshook=true;
 
 		// If there is a problem
 		if(!successful){
@@ -585,7 +586,7 @@ dojox.cometd = new function(){
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
 			try {
-                                var messages=[message];
+				var messages=[message];
 
 				// Determine target topic
 				var tname="/cometd"+message.channel;
@@ -681,7 +682,7 @@ cometd.blahTransport = new function(){
 		// summary:
 		//		determines whether or not this transport is suitable given a
 		//		list of transport types that the server supports
-		return dojo.lang.inArray(types, "blah");
+		return dojo.inArray(types, "blah");
 	}
 
 	this.startup = function(){
@@ -760,7 +761,6 @@ dojox.cometd.longPollTransport = new function(){
 			if (this._cometd.connectTimeout>this._cometd.expectedNetworkDelay){
 				message.advice={timeout:(this._cometd.connectTimeout-this._cometd.expectedNetworkDelay)};
 			}
-			                    
 			message=this._cometd._extendOut(message);
 			this.openTunnelWith({message: dojo.toJson([message])});
 		}
@@ -814,7 +814,14 @@ dojox.cometd.longPollTransport = new function(){
 			}),
 			content: {
 				message: dojo.toJson(messages)
-			}
+			},
+			error: dojo.hitch(this, function(err){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			}),
+			timeoutSeconds: this._cometd.expectedNetworkDelay/1000,
+			timeout: dojo.hitch(this, function(){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			})
 		});
 	}
 
@@ -916,7 +923,14 @@ dojox.cometd.callbackPollTransport = new function(){
 			url: this._cometd.url||dojo.config["cometdRoot"],
 			load: dojo.hitch(this._cometd, "deliver"),
 			callbackParamName: "jsonp",
-			content: { message: dojo.toJson( messages ) }
+			content: { message: dojo.toJson( messages ) },
+			error: dojo.hitch(this, function(err){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			}),
+			timeoutSeconds: this._cometd.expectedNetworkDelay/1000,
+			timeout: dojo.hitch(this, function(){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			})
 		};
 		return dojo.io.script.get(bindArgs);
 	}
