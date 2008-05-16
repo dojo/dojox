@@ -112,6 +112,14 @@
 				// limit results to domain:
 				{ "name": "as_sitesearch", "type": "string", "optional": true }
 			]
+		},
+		
+		"translate" : {
+			"target" : "http://ajax.googleapis.com/ajax/services/language/translate",
+			"parameters": [
+				// A String like "en|es" (for english -> spanish)
+				{ "name":"langpair", "type":"string" }
+			]
 		}
 		
 	}
