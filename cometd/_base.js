@@ -28,6 +28,7 @@ dojox.cometd = new function(){
 	this._initialized = false;
 	this._connected = false;
 	this._polling = false;
+	this._handshook = false;
 
 	this.expectedNetworkDelay = 10000; // expected max network delay
 	this.connectTimeout = 0;	  // If set, used as ms to wait for a connect response and sent as the advised timeout
@@ -87,7 +88,6 @@ dojox.cometd = new function(){
 		//	example:
 		//	|	dojox.cometd.init("/cometd");
 		//	|	dojox.cometd.init("http://xdHost/cometd",{ext:{user:"fred",pwd:"secret"}});
-
 
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
@@ -472,11 +472,10 @@ dojox.cometd = new function(){
 		}
 
 		dojo.publish("/cometd/meta", [{cometd:this,action:"handshake",successful:successful,reestablish:successful&&this._handshook,state:this.state()}]);
-		if (successful)
+		if (successful){
 			this._handshook=true;
-
-		// If there is a problem
-		if(!successful){
+		}else{
+			// If there is a problem
 			console.debug("cometd init failed");
 			// follow advice
 			if(this._advice && this._advice["reconnect"]=="none"){
@@ -542,7 +541,9 @@ dojox.cometd = new function(){
 					}else if(!this._initialized){
 						this._connected = false; // finish disconnect
 					}
-					dojo.publish("/cometd/meta",[{cometd:this,action:"connect",successful:message.successful,state:this.state()}]);
+					if(this._initialized){
+						dojo.publish("/cometd/meta",[{cometd:this,action:"connect",successful:message.successful,state:this.state()}]);
+					}
 					break;
 				case "/meta/subscribe":
 					deferred = this._deferredSubscribes[message.subscription];
@@ -644,16 +645,16 @@ dojox.cometd = new function(){
 	this._connectTimeout = function(){
 		// return the connect timeout in ms, calculated as the minimum of the advised timeout
 		// and the configured timeout.  Else 0 to indicate no client side timeout
-		var _advised=0;
+		var advised=0;
 		if (this._advice && this._advice.timeout && this.expectedNetworkDelay>0){
-			_advised=this._advice.timeout + this.expectedNetworkDelay;
+			advised=this._advice.timeout + this.expectedNetworkDelay;
 		}
 		
 		if (this.connectTimeout>0 && this.connectTimeout<_advised){
 			return this.connectTimeout;
 		}
 		
-		return 0;
+		return advised;
 	}
 }
 
