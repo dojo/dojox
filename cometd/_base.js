@@ -100,7 +100,7 @@ dojox.cometd = new function(){
 
 		this.url = root||dojo.config["cometdRoot"];
 		if(!this.url){
-			console.debug("no cometd root specified in djConfig and no root passed");
+			throw "no cometd root";
 			return null;
 		}
 
@@ -136,13 +136,11 @@ dojox.cometd = new function(){
 				this._finishInit(msg);
 			}),
 			error: dojo.hitch(this,function(e){
-				console.debug("handshake error!:",e);
 				this._backoff();
 				this._finishInit([{}]);
 			}),
 			timeoutSeconds: this.expectedNetworkDelay/1000,
 			timeout: dojo.hitch(this, function(){
-				console.debug("handshake timeout!");
 				this._backoff();
 				this._finishInit([{}]);
 			})
@@ -388,6 +386,7 @@ dojox.cometd = new function(){
 			dojo.publish("/cometd/meta", [{cometd:this,action:"connect",successful:false,state:this.state()}]);
 		}
 		this._initialized=false;
+		this._handshook=false;
 		dojo.publish("/cometd/meta", [{cometd:this,action:"disconnect",successful:true,state:this.state()}]);
 	}
 
@@ -428,7 +427,8 @@ dojox.cometd = new function(){
 	this._interval = function(){
 		var i=this._backoffInterval+(this._advice?(this._advice.interval?this._advice.interval:0):0);
 		if (i>0){
-			console.debug("Retry in interval+backoff="+this._advice.interval+"+"+this._backoffInterval+"="+i+"ms");
+			if (console.log)
+			    console.log("Retry in interval+backoff="+this._advice.interval+"+"+this._backoffInterval+"="+i+"ms");
 		}
 		return i;
 	}
@@ -449,7 +449,8 @@ dojox.cometd = new function(){
 		
 		// check version
 		if(data.version < this.minimumVersion){
-			console.debug("cometd protocol version mismatch. We wanted", this.minimumVersion, "but got", data.version);
+			if (console.log)
+			    console.log("cometd protocol version mismatch. We wanted", this.minimumVersion, "but got", data.version);
 			successful=false;
 			this._advice.reconnect="none";
 		}
@@ -476,11 +477,10 @@ dojox.cometd = new function(){
 			this._handshook=true;
 		}else{
 			// If there is a problem
-			console.debug("cometd init failed");
+			if (console.log)
+				console.log("cometd init failed");
 			// follow advice
-			if(this._advice && this._advice["reconnect"]=="none"){
-				console.debug("cometd reconnect: none");
-			}else{
+			if(!this._advice || this._advice["reconnect"]!="none"){
 				setTimeout(dojo.hitch(this, "init", this.url, this._props),this._interval());
 			}
 		}
@@ -517,7 +517,6 @@ dojox.cometd = new function(){
 
 		if(!message["channel"]){
 			if(message["success"] !== true){
-				console.debug("cometd error: no channel for message!", message);
 				return;
 			}
 		}
@@ -605,14 +604,13 @@ dojox.cometd = new function(){
 				// deliver to target topic
 				dojo.publish(tname,messages);
 			}catch(e){
-				console.debug(e);
+				if (console.log)
+					console.log(e);
 			}
 		}
 	}
 
 	this._sendMessage = function(/* object */ message){
-		// console.debug(this.currentTransport, this._connected, this.batch);
-		// if(this.currentTransport && this._connected && !this.batch){
 		if(this.currentTransport && !this.batch){
 			return this.currentTransport.sendMessages([message]);
 		}else{
@@ -735,7 +733,6 @@ dojox.cometd.longPollTransport = new function(){
 		if(!this._cometd._initialized){ return; }
 			
 		if(this._cometd._advice && this._cometd._advice["reconnect"]=="none"){
-			console.debug("cometd reconnect: none");
 			return;
 		}
 		setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._interval());
@@ -744,7 +741,6 @@ dojox.cometd.longPollTransport = new function(){
 	this._connect = function(){
 		if(!this._cometd._initialized){ return; }
 		if(this._cometd._polling) {
-			console.debug("wait for poll to complete or fail");
 			return;
 		}
 			
@@ -785,7 +781,6 @@ dojox.cometd.longPollTransport = new function(){
 			}),
 			error: dojo.hitch(this, function(err){
 				this._cometd._polling=false;
-				console.debug("tunnel opening failed:", err);
 				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
 				this._cometd._backoff();
 				this.tunnelCollapse();
@@ -810,9 +805,6 @@ dojox.cometd.longPollTransport = new function(){
 			url: this._cometd.url||dojo.config["cometdRoot"],
 			handleAs: this._cometd.handleAs,
 			load: dojo.hitch(this._cometd, "deliver"),
-			error: dojo.hitch(this, function(err){
-				console.debug('dropped messages: ',messages);
-			}),
 			content: {
 				message: dojo.toJson(messages)
 			},
@@ -898,7 +890,6 @@ dojox.cometd.callbackPollTransport = new function(){
 			}),
 			error: dojo.hitch(this, function(err){
 				this._cometd._polling=false;
-				console.debug("tunnel opening failed:", err);
 				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
 				this._cometd._backoff();
 				this.tunnelCollapse();
