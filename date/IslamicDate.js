@@ -2,6 +2,7 @@ dojo.provide("dojox.date.IslamicDate");
 dojo.experimental("dojox.date.IslamicDate");
 
 dojo.require("dojo.date.locale"); //TODO: move dependency to another module?
+dojo.require("dojo.date");
 dojo.requireLocalization("dojo.cldr", "islamic");
 
 dojo.declare("dojox.date.IslamicDate", null, {
@@ -17,7 +18,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 	// |	document.writeln(date.getFullYear()+'\'+date.getMonth()+'\'+date.getDate());
 
 
-    _date: 0,
+	_date: 0,
 	_month: 0,
 	_year: 0,
 	_hours: 0,
@@ -25,6 +26,8 @@ dojo.declare("dojox.date.IslamicDate", null, {
 	_seconds: 0,
 	_milliseconds: 0,
 	_day: 0,
+	_GREGORIAN_EPOCH : 1721425.5,
+	_ISLAMIC_EPOCH : 1948439.5,
 
 	constructor: function(){
 		// summary: This is the constructor
@@ -40,29 +43,13 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		// |
 		// |		var date4 = new dojox.date.IslamicDate(1429,2,12);
 
-		var jd, arg_no = arguments.length;
+		var arg_no = arguments.length;
 
 		if(arg_no == 0){
 			// use the current date value
 			var d = new Date();
 			this._day = d.getDay();
-			jd = this._gregorian_to_jd(d.getFullYear(),d.getMonth()+1,d.getDate())+
-			(Math.floor(d.getSeconds() + 60 * (d.getMinutes() + 60 * d.getHours()) + 0.5) / 86400.0);
-
-			jd = Math.floor(jd) + 0.5;
-			var year = Math.floor(((30 * (jd - this.ISLAMIC_EPOCH)) + 10646) / 10631);
-			var month = Math.min(12,
-						Math.ceil((jd - (29 + this._islamic_to_jd(year, 1, 1))) / 29.5) + 1);
-			var day = (jd - this._islamic_to_jd(year, month, 1)) + 1;
-
-
-			this._date = day;
-			this._month = month-1;
-			this._year = year;
-			this._hours = d.getHours();
-			this._minutes = d.getMinutes();
-			this._seconds = d.getSeconds();
-			this._milliseconds = d.getMilliseconds();
+			this.fromGregorian(d);
 		}else if(arg_no ==1){
 			//date string or Islamic date object passed
 			this.parse(arguments[0]);
@@ -75,9 +62,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			this._minutes = arguments[4] || 0;
 			this._seconds = arguments[5] || 0;
 			this._milliseconds = arguments[6] || 0;
-
-			jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-			this._day = this._jd_to_gregorian(jd).getDay();
 		}
 	},
 
@@ -121,8 +105,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		// |
 		// |		document.writeln(date1.getDay());
 
-		var jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-		var gd = this._jd_to_gregorian(jd);
+		var gd = this.toGregorian();
 		return gd.getDay();
 	},
 		
@@ -176,12 +159,9 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 					date+=mdays;
 				}
-				this._date = date;   
+				this._date = date;
 			}
 		}
-		var jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day = this._jd_to_gregorian(jd).getDay();
-
 		return this;
 	},
 
@@ -193,8 +173,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		// |		date1.setYear(1429);
 
 		this._year = parseInt(year);
-		var jd	  = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day  = this._jd_to_gregorian(jd).getDay();
 	},
 		
 		
@@ -207,8 +185,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 		this._year += Math.floor(month / 12);
 		this._month = Math.floor(month % 12);
-		var jd	 = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day   = this._jd_to_gregorian(jd).getDay();
 	},
 
 	setHours:function(){
@@ -242,8 +218,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			hours -= 24;
 		}
 		this._hours = hours;
-		var jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day = this._jd_to_gregorian(jd).getDay();
 	},
 
 	setMinutes:function(/*number*/minutes){
@@ -264,8 +238,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			minutes -= 60;
 		}
 		this._minutes = minutes;
-		var jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day = this._jd_to_gregorian(jd).getDay();
 	},
 		
 		
@@ -290,8 +262,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			seconds -= 60;
 		}
 		this._seconds = seconds;
-		var jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day = this._jd_to_gregorian(jd).getDay();
 	},
 		
 	setMilliseconds:function(/*number*/milliseconds){
@@ -319,8 +289,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			milliseconds -= 1000;
 		}
 		this._milliseconds = milliseconds;
-		var jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-		this._day = this._jd_to_gregorian(jd).getDay();
 	},
 		
 		
@@ -338,7 +306,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		x.setMilliseconds(this._milliseconds);
 		var timeString = x.toTimeString();  
 		//TODO : needs to be internationalized using dojo.date.format()?  or use separate module
-		return(this.weekDays[this._day] +" "+this._months[this._month]+" "+ this._date + " " + this._year+" "+timeString);
+		return(dojox.date.IslamicDate.weekDays[this.getDay()] +" "+dojox.date.IslamicDate.months[this._month]+" "+ this._date + " " + this._year+" "+timeString);
 	},
 		
 		
@@ -351,9 +319,43 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		var hYear = this._year;
 		var hMonth = this._month;
 		var hDate = this._date;
-		var jd = this._islamic_to_jd(hYear,hMonth+1,hDate);
+		var julianDay = hDate + Math.ceil(29.5 * hMonth) + (hYear - 1) * 354 
+						+ Math.floor((3 + (11 * hYear)) / 30) + this._ISLAMIC_EPOCH - 1;
 
-		var gdate = new Date(this._jd_to_gregorian(jd));
+		var wjd = Math.floor(julianDay - 0.5) + 0.5,
+			depoch = wjd - this._GREGORIAN_EPOCH,
+			quadricent = Math.floor(depoch / 146097),
+			dqc = this._mod(depoch, 146097),
+			cent = Math.floor(dqc / 36524),
+			dcent = this._mod(dqc, 36524),
+			quad = Math.floor(dcent / 1461),
+			dquad = this._mod(dcent, 1461),
+			yindex = Math.floor(dquad / 365),
+			year = (quadricent * 400) + (cent * 100) + (quad * 4) + yindex;
+		if(!(cent == 4 || yindex == 4)){
+			year++;
+		}
+		
+		var gYearStart = this._GREGORIAN_EPOCH + (365 * (year - 1)) + Math.floor((year - 1) / 4) 
+						- ( Math.floor((year - 1) / 100)) + Math.floor((year - 1) / 400);
+						
+		var yearday = wjd - gYearStart;
+		
+		var tjd = (this._GREGORIAN_EPOCH - 1) + (365 * (year - 1)) + Math.floor((year - 1) / 4) 
+				-( Math.floor((year - 1) / 100)) + Math.floor((year - 1) / 400) + Math.floor( (739 / 12) 
+				+ ( (dojo.date.isLeapYear(new Date(year,3,1)) ? -1 : -2)) + 1);
+			
+		var leapadj = ((wjd < tjd ) ? 0 : (dojo.date.isLeapYear(new Date(year,3,1)) ? 1 : 2));
+					
+		var month = Math.floor((((yearday + leapadj) * 12) + 373) / 367);
+		var tjd2 = (this._GREGORIAN_EPOCH - 1) + (365 * (year - 1)) 
+					+ Math.floor((year - 1) / 4) - (Math.floor((year - 1) / 100)) 
+					+ Math.floor((year - 1) / 400) + Math.floor((((367 * month) - 362) / 12) 
+					+ ((month <= 2) ? 0 : (dojo.date.isLeapYear(new Date(year,month,1)) ? -1 : -2)) + 1);
+					
+		var day = (wjd - tjd2);
+
+		var gdate = new Date(year, month-1, day);
 
 		gdate.setHours(this._hours);
 		gdate.setMilliseconds(this._milliseconds);
@@ -364,6 +366,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 	},
 
 	//TODO: would it make more sense to make this a constructor option? or a static?
+	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	fromGregorian:function(/*Date*/gdate){
 		// summary: This function returns the equivalent Islamic Date value for the Gregorian Date
 		// example:
@@ -372,21 +375,26 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		// |		dateIslamic.fromGregorian(dateGregorian);
 
 		var date = new Date(gdate);
-		  
-		var jd = this._gregorian_to_jd(date.getFullYear(),date.getMonth()+1,date.getDate())+
-			(Math.floor(date.getSeconds() + 60 * (date.getMinutes() + 60 * date.getHours()) + 0.5) / 86400.0);
-			   
-		var year, month, day;
+		var gYear = date.getFullYear(),
+			gMonth = date.getMonth(),
+			gDay = date.getDate();
+		
+		var julianDay = (this._GREGORIAN_EPOCH - 1) + (365 * (gYear - 1)) + Math.floor((gYear - 1) / 4)
+					+ (-Math.floor((gYear - 1) / 100)) + Math.floor((gYear - 1) / 400)
+					+ Math.floor((((367 * (gMonth+1)) - 362) / 12)
+					+ (((gMonth+1) <= 2) ? 0 : (dojo.date.isLeapYear(date) ? -1 : -2)) + gDay) 
+					+(Math.floor(date.getSeconds() + 60 * (date.getMinutes() + 60 * date.getHours()) + 0.5) / 86400.0);
+		julianDay = Math.floor(julianDay) + 0.5;
+		
+		var days = julianDay - 1948440;
+		var hYear  = Math.floor( (30 * days + 10646) / 10631.0 );
+		var hMonth = Math.ceil((days - 29 - this._yearStart(hYear)) / 29.5 );
+		hMonth = Math.min(hMonth, 11);
+		var hDay = Math.ceil(days - this._monthStart(hYear, hMonth)) + 1;
 
-		jd = Math.floor(jd) + 0.5;
-		year = Math.floor(((30 * (jd - this.ISLAMIC_EPOCH)) + 10646) / 10631);
-		month = Math.min(12,
-					Math.ceil((jd - (29 + this._islamic_to_jd(year, 1, 1))) / 29.5) + 1);
-		day = (jd - this._islamic_to_jd(year, month, 1)) + 1;
-
-		this._date = day;
-		this._month = month-1;
-		this._year = year;
+		this._date = hDay;
+		this._month = hMonth;
+		this._year = hYear;
 		this._hours = date.getHours();
 		this._minutes = date.getMinutes();
 		this._seconds = date.getSeconds();
@@ -412,8 +420,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 			this._month = sD[0]-1;
 			this._date = sD[1];
 			this._year = sD[2];
-			jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-			this._day = this._jd_to_gregorian(jd).getDay();
 		}else{								
 			mD = sDate.match(/\D{4,}\s\d{1,2}\s\d{4}/);
 			if(mD){
@@ -430,9 +436,6 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
   				this._date = sD[0];
   				this._year = sD[1];
-
-				jd = this._islamic_to_jd(this._year, this._month+1, this._date);
-				this._day = this._jd_to_gregorian(jd).getDay();
 			}
 		}
 								  
@@ -447,7 +450,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 				tArr = sTime.split(':');
 			}
 			this._minutes = tArr[1] != null ? tArr[1] : 0;
-			   
+
 			sTime = sDate.match(/\d{2}:\d{2}:\d{2}/);
 			if(sTime){
 				sTime = sTime.toString();
@@ -457,7 +460,7 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		}else{
 			this._hours = 0;
 			this._minutes = 0;
-			this._seconds = 0;	   
+			this._seconds = 0;
 		}
 		this._milliseconds = 0;
 	},
@@ -471,25 +474,29 @@ dojo.declare("dojox.date.IslamicDate", null, {
 		return gdate.valueOf();
 	},
 
+	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	_yearStart:function(/*Number*/year){
 		//summary: return start of Islamic year
 		return (year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
+	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	_monthStart:function(/*Number*/year, /*Number*/month){
 		//summary: return the start of Islamic Month
 		return Math.ceil(29.5*month) +
 			(year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
+	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	_civilLeapYear:function(/*Number*/year){
 		//summary: return Boolean value if Islamic leap year
 		return (14 + 11 * year) % 30 < 11;
 	},
 
+	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	getDaysInIslamicMonth:function(/*Number*/month, /*Number*/ year){
 		//summary: returns the number of days in the given Islamic Month
-		var length =0;
+		var length = 0;
 		length = 29 + ((month+1) % 2);
 		if(month == 11 && this._civilLeapYear(year)){
 			length++;
@@ -499,83 +506,8 @@ dojo.declare("dojox.date.IslamicDate", null, {
 
 	_mod:function(a, b){
 		return a - (b * Math.floor(a / b));
-	},
-
-
-	//FIXME: use dojo.date?
-	_leap_gregorian:function(/*Number*/year){
-		return (year % 4) == 0 &&
-			!((year % 100) == 0 && (year % 400) != 0);
-	},
-
-	GREGORIAN_EPOCH :1721425.5,
-
-	_gregorian_to_jd:function(year, month, day)
-	{
-		//summary: convert from Gregorian Date to JD
-		return (this.GREGORIAN_EPOCH - 1) +
-			(365 * (year - 1)) +
-			Math.floor((year - 1) / 4) +
-			(-Math.floor((year - 1) / 100)) +
-			Math.floor((year - 1) / 400) +
-			Math.floor((((367 * month) - 362) / 12) +
-			((month <= 2) ? 0 : (this._leap_gregorian(year) ? -1 : -2)) +
-			day);
-	},
-
-	_jd_to_gregorian:function(jd){
-		//summary: convert from JD to Gregorian date
-		var wjd, depoch, quadricent, dqc, cent, dcent, quad, dquad,
-			yindex, dyindex, year, yearday, leapadj;
-
-		wjd = Math.floor(jd - 0.5) + 0.5;
-		depoch = wjd - this.GREGORIAN_EPOCH;
-		quadricent = Math.floor(depoch / 146097);
-		dqc = this._mod(depoch, 146097);
-		cent = Math.floor(dqc / 36524);
-		dcent = this._mod(dqc, 36524);
-		quad = Math.floor(dcent / 1461);
-		dquad = this._mod(dcent, 1461);
-		yindex = Math.floor(dquad / 365);
-		year = (quadricent * 400) + (cent * 100) + (quad * 4) + yindex;
-		if(!(cent == 4 || yindex == 4)){
-			year++;
-		}
-		yearday = wjd -this._gregorian_to_jd(year, 1, 1);
-		leapadj = ((wjd < this._gregorian_to_jd(year, 3, 1)) ? 0 :
-					(this._leap_gregorian(year) ? 1 : 2));
-		var month = Math.floor((((yearday + leapadj) * 12) + 373) / 367);
-		var day = (wjd - this._gregorian_to_jd(year, month, 1)) + 1;
-
-		return new Date(year, month-1, day);
-	},
-
-	ISLAMIC_EPOCH : 1948439.5,
-
-	_islamic_to_jd:function(year, month, day){
-		//summary: convert from Islamic Date to JD
-		return (day +
-			Math.ceil(29.5 * (month - 1)) +
-			(year - 1) * 354 +
-			Math.floor((3 + (11 * year)) / 30) +
-			this.ISLAMIC_EPOCH) - 1;
-	},
-
-	GREGORIAN_EPOCH : 1721425.5,
-
-	_gregorian_to_jd:function(year, month, day)	{
-		//summary: convert from JD Date to Islamic Date
-		return (this.GREGORIAN_EPOCH - 1) +
-			(365 * (year - 1)) +
-			Math.floor((year - 1) / 4) +
-			(-Math.floor((year - 1) / 100)) +
-			Math.floor((year - 1) / 400) +
-			Math.floor((((367 * month) - 362) / 12) +
-			((month <= 2) ? 0 :
-								(this._leap_gregorian(year) ? -1 : -2)
-			) +
-			day);
 	}
+		
 });
 
 //TODOC
