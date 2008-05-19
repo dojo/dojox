@@ -308,7 +308,7 @@ dojo.provide("dojox.lang.aspect");
 		// summary:
 		//		Returns the context information for the advice in effect.
 		
-		return context;
+		return context;	// Object
 	};
 	
 	aop.getContextStack = function(){
@@ -346,11 +346,11 @@ dojo.provide("dojox.lang.aspect");
 })();
 
 /*
-Advice = {
+Aspect = {
 	before: function(arguments){...},
 	around: function(arguments){...returns value...},
 	afterReturning: function(ret){...},
-	afterThrowing: function(event){...},
+	afterThrowing: function(excp){...},
 	after: function(){...}
 };
 
