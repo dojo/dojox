@@ -92,15 +92,12 @@ dojo.declare("dojox.data.FlickrRestStore",
 		var primaryKey = [];
 		var secondaryKey = [];
 		
-		//Generate a unique function to be called back
-		var callbackFn = "FlickrRestStoreCallback_" + this._id + "_" + (++this._requestCount);
 		//Build up the content to send the request for.
 		var content = {
 			format: "json",
 			method: "flickr.photos.search",
 			api_key: this._apikey,
-			extras: "owner_name,date_upload,date_taken",
-			jsoncallback: callbackFn
+			extras: "owner_name,date_upload,date_taken"
 		};
 		var isRest = false;
 		if(query.userid){
@@ -346,14 +343,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 			doHandle(this._cache[primaryKey], null, thisHandler);
 			return;
 		}
-		
-		dojo.global[callbackFn] = function(data){
-			myHandler(data);
-			//Clean up the function, it should never be called again
-			dojo.global[callbackFn] = null;
-		};
 				
 		var deferred = dojo.io.script.get(getArgs);
+		deferred.addCallback(myHandler);
 		
 		//We only set up the errback, because the callback isn't ever really used because we have
 		//to link to the jsonFlickrFeed function....
