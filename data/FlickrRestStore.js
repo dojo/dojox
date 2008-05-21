@@ -384,9 +384,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 		}else if(attribute === "link"){
 			return ["http://www.flickr.com/photos/" + item.owner + "/" + item.id]; // String
 		}else if(attribute === "dateTaken"){
-			return item.datetaken;
+			return [item.datetaken];
 		}else if(attribute === "datePublished"){
-			return item.datepublished;
+			return [item.datepublished];
 		}
 		
 		return undefined;
