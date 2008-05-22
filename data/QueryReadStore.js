@@ -242,7 +242,7 @@ dojo.declare("dojox.data.QueryReadStore",
 				if(requestObject.onBegin){
 					requestObject.onBegin.call(scope, numRows, requestObject);
 				}
-				if(requestObject.sort && this.doClientSorting){
+				if(requestObject.sort && self.doClientSorting){
 					items.sort(dojo.data.util.sorter.createSortFunction(requestObject.sort, self));
 				}
 				if(requestObject.onItem){
