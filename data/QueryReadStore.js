@@ -291,6 +291,48 @@ dojo.declare("dojox.data.QueryReadStore",
 			return null; //null
 		},
 		
+		_xhrFetchHandler: function(data, request, fetchHandler, errorHandler){
+			data = this._filterResponse(data);
+			if (data.label){
+				this._labelAttr = data.label;
+			}
+			var numRows = data.numRows || -1;
+
+			this._items = [];
+			// Store a ref to "this" in each item, so we can simply check if an item
+			// really origins form here (idea is from ItemFileReadStore, I just don't know
+			// how efficient the real storage use, garbage collection effort, etc. is).
+			dojo.forEach(data.items,function(e){ 
+				this._items.push({i:e, r:this}); 
+			},this); 
+			
+			var identifier = data.identifier;
+			this._itemsByIdentity = {};
+			if(identifier){
+				this._identifier = identifier;
+				var i;
+				for(i = 0; i < this._items.length; ++i){
+					var item = this._items[i].i;
+					var identity = item[identifier];
+					if(!this._itemsByIdentity[identity]){
+						this._itemsByIdentity[identity] = item;
+					}else{
+						throw new Error(this._className+":  The json data as specified by: [" + this.url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
+					}
+				}
+			}else{
+				this._identifier = Number;
+				for(i = 0; i < this._items.length; ++i){
+					this._items[i].n = i;
+				}
+			}
+			
+			// TODO actually we should do the same as dojo.data.ItemFileReadStore._getItemsFromLoadedData() to sanitize
+			// (does it really sanititze them) and store the data optimal. should we? for security reasons???
+			numRows = (numRows === -1) ? this._items.length : numRows;
+			fetchHandler(this._items, request, numRows);		
+		},
+		
 		_fetchItems: function(request, fetchHandler, errorHandler){
 			//	summary:
 			// 		The request contains the data as defined in the Read-API.
@@ -351,45 +393,7 @@ dojo.declare("dojox.data.QueryReadStore",
 				var xhrFunc = this.requestMethod.toLowerCase()=="post" ? dojo.xhrPost : dojo.xhrGet;
 				var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
 				xhrHandler.addCallback(dojo.hitch(this, function(data){
-					data = this._filterResponse(data);
-					if (data.label){
-						this._labelAttr = data.label;
-					}
-					var numRows = data.numRows || -1;
-	
-					this._items = [];
-					// Store a ref to "this" in each item, so we can simply check if an item
-					// really origins form here (idea is from ItemFileReadStore, I just don't know
-					// how efficient the real storage use, garbage collection effort, etc. is).
-					dojo.forEach(data.items,function(e){ 
-						this._items.push({i:e, r:this}); 
-					},this); 
-					
-					var identifier = data.identifier;
-					this._itemsByIdentity = {};
-					if(identifier){
-						this._identifier = identifier;
-						var i;
-						for(i = 0; i < this._items.length; ++i){
-							var item = this._items[i].i;
-							var identity = item[identifier];
-							if(!this._itemsByIdentity[identity]){
-								this._itemsByIdentity[identity] = item;
-							}else{
-								throw new Error(this._className+":  The json data as specified by: [" + this.url + "] is malformed.  Items within the list have identifier: [" + identifier + "].  Value collided: [" + identity + "]");
-							}
-						}
-					}else{
-						this._identifier = Number;
-						for(i = 0; i < this._items.length; ++i){
-							this._items[i].n = i;
-						}
-					}
-					
-					// TODO actually we should do the same as dojo.data.ItemFileReadStore._getItemsFromLoadedData() to sanitize
-					// (does it really sanititze them) and store the data optimal. should we? for security reasons???
-					numRows = (numRows === -1) ? this._items.length : numRows;
-					fetchHandler(this._items, request, numRows);
+					this._xhrFetchHandler(data, request, fetchHandler, errorHandler);
 				}));
 				xhrHandler.addErrback(function(error){
 					errorHandler(error, request);
