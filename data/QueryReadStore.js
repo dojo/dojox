@@ -1,6 +1,7 @@
 dojo.provide("dojox.data.QueryReadStore");
 
 dojo.require("dojo.string");
+dojo.require("dojo.data.util.sorter");
 
 dojo.declare("dojox.data.QueryReadStore",
 	null,
