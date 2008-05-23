@@ -41,7 +41,7 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 			case "stores/movies3.csv":
 				var csvData = "";
 				csvData += "Title, Year, Producer\n";
-				csvData += "City of God, 2002, Katia Lund\n";
+				csvData += "\"City\n of God\", 2002, Katia Lund\n";
 				csvData += "Rain,\"\", Christine Jeffs\n";
 				csvData += "2001: A Space Odyssey, 1968, Stanley Kubrick\n";
 				csvData += '"This is a ""fake"" movie title", 1957, Sidney Lumet\n';
