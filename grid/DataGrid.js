@@ -51,11 +51,12 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onDelete: function(item){
-		var idty = this.model.getIdentity(item);
-		var idx = this._identity_map[idty].idx;
+		var idx = this.getItemIndex(item);
 
-		this._rows.splice(idx, 1);
-		delete this._identity_map[idty];
+		if(idx >= 0){
+			this._rows.splice(idx, 1);
+		}
+		delete this._identity_map[this.model.getIdentity(item)];
 
 		this.updateRowCount(this.rowCount-1);
 	},
@@ -142,6 +143,12 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		return item;
 	},
 
+	getItemIndex: function(item){
+		var idty = this.model.getIdentity(item);
+		var imap = this._identity_map[idty];
+		return (imap ? imap.idx : -1);
+	},
+	
 	_getItemAttr: function(idx, attr){
 		var item = this.getItem(idx);
 		return (!item ? this.fetchText : this.model.getValue(item, attr));
