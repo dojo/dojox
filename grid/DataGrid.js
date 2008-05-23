@@ -1,8 +1,8 @@
 dojo.provide("dojox.grid.DataGrid");
 
-dojo.require("dojox.grid.VirtualGrid");
+dojo.require("dojox.grid._Grid");
 
-dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
+dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	model: null,
 	query: { name: '*' },
 	fetchText: '...',
@@ -27,8 +27,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		this.inherited(arguments);
 	},
 
-	get: function(inRowIndex, inAttr){
-		return this.grid._getItemAttr.call(this.grid, inRowIndex, this.dataAttr);
+	get: function(inItem, inRowIndex){
+		return (!inItem ? this.defaultValue : this.grid.model.getValue(inItem, this.field));
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
@@ -130,7 +130,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		this._bop = this._eop = -1;
 	},
 
-	_getItem: function(idx){
+	getItem: function(idx){
 		var idty = this._rows[idx];
 		var item = this._identity_map[idty];
 		if(!item||(item&&!item.item)){
@@ -143,8 +143,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	},
 
 	_getItemAttr: function(idx, attr){
-		var item = this._getItem(idx);
+		var item = this.getItem(idx);
 		return (!item ? this.fetchText : this.model.getValue(item, attr));
+	},
+
+	// rendering
+	renderRows: function(inPageIndex, inRowsPerPage){
+		this.views.renderRows(inPageIndex, inRowsPerPage);
 	},
 
 	// paging
@@ -208,7 +213,14 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 		if(!c){
 			return null;
 		}else{
-			return [{ attribute: c.dataAttr, descending: !(this.sortInfo>0) }];
+			var desc = c["sortDesc"];
+			var si = !(this.sortInfo>0);
+			if(typeof desc == "undefined"){
+				desc = si;
+			}else{
+				desc = si ? !desc : desc;
+			}
+			return [{ attribute: c.field, descending: desc }];
 		}
 	},
 
@@ -239,13 +251,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	_copyAttr: function(idx, attr){
 		var row = {};
 		var backstop = {};
-		var src = this._getItem(idx);
+		var src = this.getItem(idx);
 		return this.model.getValue(src, attr);
 	},
 
 	doStartEdit: function(inCell, inRowIndex){
 		if(!this._cache[inRowIndex]){
-			this._cache[inRowIndex] = this._copyAttr(inRowIndex, inCell.dataAttr);
+			this._cache[inRowIndex] = this._copyAttr(inRowIndex, inCell.field);
 		}
 		this.onStartEdit(inCell, inRowIndex);
 	},
@@ -272,7 +284,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid.VirtualGrid, {
 	doApplyEdit: function(inRowIndex, inDataAttr){
 		var cache = this._cache[inRowIndex];
 		/*if(cache){
-			var data = this._getItem(inRowIndex);
+			var data = this.getItem(inRowIndex);
 			if(this.model.getValue(data, inDataAttr) != cache){
 				this.update(cache, data, inRowIndex);
 			}
@@ -355,16 +367,21 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 				// actually define the cell from what markup hands us
 				var cell = {
 					name: d.trim(d.attr(th, "name")||th.innerHTML),
-					dataAttr: d.trim(d.attr(th, "dataAttr")||""),
+					field: d.trim(d.attr(th, "field")||""),
 					colSpan: parseInt(d.attr(th, "colspan")||1),
-					editable: !!(d.attr(th, "editable")),
 					type: d.trim(d.attr(th, "cellType")||"")
 				};
 				cellCount += cell.colSpan;
-				cell.dataAttr = cell.dataAttr||cell.name;
-				cell.width = widthFromAttr(th);
+				var rowSpan = d.attr(th, "rowspan");
+				if(rowSpan){
+					cell.rowSpan = rowSpan;
+				}
+				cell.field = cell.field||cell.name;
+				if(d.hasAttr(th, "width")){
+					cell.width = widthFromAttr(th);
+				}
 
-				cell.type = cell.type ? dojo.getObject(cell.type) : undefined;
+				cell.type = cell.type ? dojo.getObject(cell.type) : dojox.grid.cells.Cell;
 
 				if(cell.type && cell.type.markupFactory){
 					cell.type.markupFactory(th, cell);

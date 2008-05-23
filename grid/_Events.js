@@ -1,11 +1,10 @@
 dojo.provide("dojox.grid._Events");
 
-dojox.grid._Events = function(){};
-dojo.extend(dojox.grid._Events, {
+dojo.declare("dojox.grid._Events", null, {
 	// summary:
-	//		VirtualGrid mixin that provides default implementations for grid events.
+	//		_Grid mixin that provides default implementations for grid events.
 	// description: 
-	//		Default ynthetic events dispatched for VirtualGrid. dojo.connect to events to
+	//		Default synthetic events dispatched for _Grid. dojo.connect to events to
 	//		retain default implementation or override them for custom handling.
 	
 	// cellOverClass: String

@@ -40,7 +40,7 @@
 	<script type="text/javascript" src="../_View.js"></script>
 	<script type="text/javascript" src="../_RowSelector.js"></script>
 	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../VirtualGrid.js"></script>
+	<script type="text/javascript" src="../_Grid.js"></script>
 	<script type="text/javascript" src="../_data/fields.js"></script>
 	<script type="text/javascript" src="../_data/model.js"></script>
 	<script type="text/javascript" src="../Grid.js"></script>
@@ -156,16 +156,16 @@
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container">
-		<div id="grid1" dojoType="dojox.grid.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid1" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 	</div>
 
 	<p> Grid is essentially hidden (height of zero) when parent container is unsized 
 		(nothing, including the header, should be displayed):</p>
 	<div id="unsizedContainer">
-		<div id="grid2" dojoType="dojox.grid.VirtualGrid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid2" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 	</div>
 
 	<p> Grid is autoHeight and autoWidth via markup</p>
-		<div id="grid3" dojoType="dojox.grid.VirtualGrid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid3" dojoType="dojox.grid._Grid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="10" elasticView="2"></div>
 </body>
 </html>

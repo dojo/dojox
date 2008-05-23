@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid.VirtualGrid");
+dojo.provide("dojox.grid._Grid");
 
 dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid.util");
@@ -37,7 +37,7 @@ dojo.require("dojox.grid._Events");
 		}
 	};
 
-	dojo.declare('dojox.grid.VirtualGrid', 
+	dojo.declare('dojox.grid._Grid', 
 		[ dijit._Widget, dijit._Templated, dojox.grid._Events ], 
 		{
 		// summary:
@@ -45,7 +45,7 @@ dojo.require("dojox.grid._Events");
 		// 		sorting, fixed columns, sizeable columns, etc.
 		//
 		//	description:
-		//		VirtualGrid provides the full set of grid features without any
+		//		_Grid provides the full set of grid features without any
 		//		direct connection to a data store.
 		//
 		//		The grid exposes a get function for the grid, or optionally
@@ -75,9 +75,9 @@ dojo.require("dojox.grid._Events");
 		//	|	<div id="grid" 
 		//	|		rowCount="100" get="get" 
 		//	|		structure="structure" 
-		//	|		dojoType="dojox.grid.VirtualGrid"></div>
+		//	|		dojoType="dojox.grid._Grid"></div>
 
-		templatePath: dojo.moduleUrl("dojox.grid","resources/VirtualGrid.html"),
+		templatePath: dojo.moduleUrl("dojox.grid","resources/_Grid.html"),
 		
 		// classTag: String
 		// 		CSS class applied to the grid's domNode
@@ -151,7 +151,7 @@ dojo.require("dojox.grid._Events");
 		buildRendering: function(){
 			this.inherited(arguments);
 			// reset get from blank function (needed for markup parsing) to null, if not changed
-			if(this.get == dojox.grid.VirtualGrid.prototype.get){
+			if(this.get == dojox.grid._Grid.prototype.get){
 				this.get = null;
 			}
 			if(!this.domNode.getAttribute('tabIndex')){
@@ -289,6 +289,11 @@ dojo.require("dojox.grid._Events");
 			}
 			this.layout.setStructure(this.structure);
 			this._structureChanged();
+
+			this._fetch(0);
+		},
+
+		_fetch: function(start){
 		},
 
 		_structureChanged: function() {
@@ -410,7 +415,7 @@ dojo.require("dojox.grid._Events");
 			this.update = this.defaultUpdate;
 			this.scroller.init(this.rowCount, this.keepRows, this.rowsPerPage);
 			this.prerender();
-			this.setScrollTop(0);
+			//this.setScrollTop(0);
 			this.postrender();
 		},
 

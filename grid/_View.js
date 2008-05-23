@@ -326,7 +326,8 @@ dojo.require("dojox.grid.util");
 				html = [ this._table ],
 				v = this.view,
 				obr = v.onBeforeRow,
-				rows = v.structure.rows;
+				rows = v.structure.rows,
+				item = this.grid.getItem(inRowIndex);
 
 			obr && obr(inRowIndex, rows);
 			for(var j=0, row; (row=rows[j]); j++){
@@ -337,7 +338,7 @@ dojo.require("dojox.grid.util");
 				for(var i=0, cell, m, cc, cs; (cell=row[i]); i++){
 					m = cell.markup, cc = cell.customClasses = [], cs = cell.customStyles = [];
 					// content (format can fill in cc and cs as side-effects)
-					m[5] = cell.format(inDataIndex);
+					m[5] = cell.format(item, inRowIndex);
 					// classes
 					m[1] = cc.join(' ');
 					// styles
@@ -917,7 +918,7 @@ dojo.require("dojox.grid.util");
 						this.headerNodeContainer.style.width = s.w - this.getScrollbarWidth() + 'px';
 						//this.headerNodeContainer.style.width = s.w + 'px';
 						//set scroll to right in FF
-						if(isLtr){
+						if(!isLtr){
 							this.scrollboxNode.scrollLeft = this.scrollboxNode.scrollWidth - this.scrollboxNode.clientWidth;
 						}else{
 							this.scrollboxNode.scrollLeft = this.scrollboxNode.clientWidth - this.scrollboxNode.scrollWidth;

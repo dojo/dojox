@@ -44,18 +44,20 @@ dojo.declare("dojox.grid._Layout", null, {
 		if(dojo.isArray(inStructure)){
 			if(inStructure.length){
 				if(!dojo.isArray(inStructure[0])){
-					if(inStructure[0] && ("cells" in inStructure[0] || "type" in inStructure[0])){
+					if(inStructure[0] &&
+					   ("cells" in inStructure[0] || "rows" in inStructure[0] || "type" in inStructure[0])){
 						for(var i=0, viewDef, rows; (viewDef=inStructure[i]); i++){
 							s.push(this.addViewDef(viewDef));
 						}
 					}else{
-						s.push(this.addViewDef({ cells: [inStructure] }));
+						s.push(this.addViewDef({ cells: inStructure }));
 					}
 				}else{
 					s.push(this.addViewDef({ cells: inStructure }));
 				}
 			}
-		}else if(inStructure != null && dojo.isObject(inStructure) && ("cells" in inStructure || "type" in inStructure)){
+		}else if(inStructure != null && dojo.isObject(inStructure) &&
+				 ("cells" in inStructure || "rows" in inStructure || "type" in inStructure)){
 			s.push(this.addViewDef(inStructure));
 		}
 
@@ -67,8 +69,14 @@ dojo.declare("dojox.grid._Layout", null, {
 	},
 	addRowsDef: function(inDef){
 		var result = [];
-		for(var i=0, row; inDef && (row=inDef[i]); i++){
-			result.push(this.addRowDef(i, row));
+		if(dojo.isArray(inDef)){
+			if(dojo.isArray(inDef[0])){
+				for(var i=0, row; inDef && (row=inDef[i]); i++){
+					result.push(this.addRowDef(i, row));
+				}
+			}else{
+				result.push(this.addRowDef(0, inDef));
+			}
 		}
 		return result;
 	},

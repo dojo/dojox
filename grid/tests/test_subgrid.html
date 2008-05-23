@@ -143,7 +143,7 @@
 				} else {
 					subGridProps.dataRow = inRowIndex;
 					subGridProps.widgetId = id;
-					subGrid = new dojox.grid.VirtualGrid(subGridProps, n);
+					subGrid = new dojox.grid._Grid(subGridProps, n);
 				}
 				if (subGrid) {
 					subGrid.render();
@@ -174,6 +174,6 @@
 </head>
 <body class="tundra">
 	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid showing sub-grid.</div>
-	<div id="grid" dojoType="dojox.grid.VirtualGrid" structure="gridCells" rowCount="100000" autoWidth="true"></div>
+	<div id="grid" dojoType="dojox.grid._Grid" structure="gridCells" rowCount="100000" autoWidth="true"></div>
 </body>
 </html>

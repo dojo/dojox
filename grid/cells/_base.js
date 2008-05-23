@@ -27,6 +27,8 @@ dojo.require("dojox.grid.util");
 		editable: false,
 		alwaysEditing: false,
 		formatter: null,
+		defaultValue: '...',
+		value: null,
 		//private
 		_valueProp: "value",
 		_formatPending: false,
@@ -35,18 +37,19 @@ dojo.require("dojox.grid.util");
 			dojo.mixin(this, inProps);
 			//if(this.editor){this.editor = new this.editor(this);}
 		},
+
 		// data source
-		format: function(inRowIndex){
+		format: function(inItem, inRowIndex){
 			// summary:
 			//	provides the html for a given grid cell.
 			// inRowIndex: int
 			// grid row index
 			// returns: html for a given grid cell
-			var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex) : this.value;
+			var f, i=this.grid.edit.info, d=this.get ? this.get(inItem, inRowIndex) : (this.value || this.defaultValue);
 			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
 				return this.formatEditing(d, inRowIndex);
 			}else{
-				return (f = this.formatter) ? f.call(this, d, inRowIndex) : d;
+				return (d != this.defaultValue && (f = this.formatter)) ? f.call(this, d, inRowIndex) : d;
 			}
 		},
 		formatEditing: function(inDatum, inRowIndex){
@@ -210,6 +213,29 @@ dojo.require("dojox.grid.util");
 			this._finish(inRowIndex);
 		}
 	});
+	dgc._Base.markupFactory = function(node, cellDef){
+		var d = dojo;
+		var formatter = d.trim(d.attr(node, "formatter")||"");
+		if(formatter){
+			cellDef.formatter = dojo.getObject(formatter);
+		}
+		var get = d.trim(d.attr(node, "get")||"");
+		if(get){
+			cellDef.get = dojo.getObject(get);
+		}
+		var sortDesc = d.trim(d.attr(node, "sortDesc")||"");
+		if(sortDesc){
+			cellDef.sortDesc = !(sortDesc.toLowerCase()=="false");
+		}
+		var value = d.trim(d.attr(node, "loadingText")||d.attr(node, "defaultValue")||"");
+		if(value){
+			cellDef.defaultValue = value;
+		}
+		var editable = d.trim(d.attr(node, "editable")||"");
+		if(editable){
+			cellDef.editable = !(editable.toLowerCase()=="false");
+		}
+	}
 
 	dojo.declare("dojox.grid.cells.Cell", dgc._Base, {
 		// summary
@@ -245,11 +271,12 @@ dojo.require("dojox.grid.util");
 			}catch(e){}
 		}
 	});
-	dgc.Cell.markupFactory = function(node, cell){
+	dgc.Cell.markupFactory = function(node, cellDef){
+		dgc._Base.markupFactory(node, cellDef);
 		var d = dojo;
 		var keyFilter = d.trim(d.attr(node, "keyFilter")||"");
 		if(keyFilter){
-			cell.keyFilter = new RegExp(keyFilter);
+			cellDef.keyFilter = new RegExp(keyFilter);
 		}
 	}
 

@@ -134,7 +134,7 @@
 			var makeEvent = function(inIndex, inName) {
 				return function(e) {
 					setEventData(inIndex, e);
-					dojox.grid.VirtualGrid.prototype[inName].apply(this, arguments);
+					dojox.grid._Grid.prototype[inName].apply(this, arguments);
 				}
 			}
 			for (var i=0, e; (e=eventRows[i]); i++)
@@ -168,7 +168,7 @@
 </head>
 <body>
 <h3>dojox.grid.Grid Event Tracking</h3>
-<div id="eventGrid" autoWidth="true" autoHeight="true" structure="eventLayout" dojoType="dojox.grid.VirtualGrid"></div>
-<div id="grid" rowCount="100" dojoType="dojox.grid.VirtualGrid"></div>
+<div id="eventGrid" autoWidth="true" autoHeight="true" structure="eventLayout" dojoType="dojox.grid._Grid"></div>
+<div id="grid" rowCount="100" dojoType="dojox.grid._Grid"></div>
 </body>
 </html>

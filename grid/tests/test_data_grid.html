@@ -37,24 +37,24 @@
 	<script type="text/javascript" src="../_View.js"></script>
 	<script type="text/javascript" src="../_RowSelector.js"></script>
 	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../VirtualGrid.js"></script>
+	<script type="text/javascript" src="../_Grid.js"></script>
 	<script type="text/javascript" src="../_data/fields.js"></script>
 	<script type="text/javascript" src="../_data/model.js"></script>
 	<script type="text/javascript" src="../DataGrid.js"></script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 </head>
 <body class="tundra">
-	<div class="heading">dojox.grid.Grid Basic Test</div>
+	<div class="heading">dojox.grid.DataGrid Basic Test</div>
 	<span dojoType="dojo.data.ItemFileWriteStore" 
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<table dojoType="dojox.grid.DataGrid"
 		jsid="grid" id="grid" 
-		model="jsonStore" query="{ name: '*' }" rowsPerPage: "20" rowSelector="20px">
+		model="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
-				<th dataAttr="name" width="300px">Country/Continent Name</th>
-				<th dataAttr="type" width="auto">Type</th>
+				<th field="name" width="300px">Country/Continent Name</th>
+				<th field="type" width="auto">Type</th>
 			</tr>
 		</thead>
 	</table>

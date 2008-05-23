@@ -1,17 +1,17 @@
 dojo.provide("dojox.grid.Grid");
-dojo.require("dojox.grid.VirtualGrid");
+dojo.require("dojox.grid._Grid");
 dojo.require("dojox.grid._data.model");
 dojo.require("dojox.grid.cells.dijit");
 
 // FIXME: 
 //		we are at the wrong location! 
 
-dojo.declare('dojox.grid.Grid', dojox.grid.VirtualGrid, {
+dojo.declare('dojox.grid.Grid', dojox.grid._Grid, {
 	//	summary:
 	//		A grid widget with virtual scrolling, cell editing, complex rows,
 	//		sorting, fixed columns, sizeable columns, etc.
 	//	description:
-	//		Grid is a subclass of VirtualGrid, providing binding to a data
+	//		Grid is a subclass of _Grid, providing binding to a data
 	//		store.
 	//	example:
 	//		define the grid structure:
@@ -28,7 +28,7 @@ dojo.declare('dojox.grid.Grid', dojox.grid.VirtualGrid, {
 	//	|	var model = new dojox.grid._data.Table(null, data);
 	//	|
 	//	|	<div id="grid" model="model" structure="structure" 
-	//	|		dojoType="dojox.grid.VirtualGrid"></div>
+	//	|		dojoType="dojox.grid._Grid"></div>
 	//	
 
 	//	model:
@@ -337,11 +337,24 @@ dojox.grid.Grid.markupFactory = function(props, node, ctor){
 				var cell = {
 					name: d.trim(d.attr(th, "name")||th.innerHTML),
 					field: d.trim(d.attr(th, "field")||""),
-					colSpan: parseInt(d.attr(th, "colspan")||1)
+					colSpan: parseInt(d.attr(th, "colspan")||1),
+					editable: !!(d.attr(th, "editable")),
+					type: d.trim(d.attr(th, "cellType")||"")
 				};
 				cellCount += cell.colSpan;
+				var rowSpan = d.attr(th, "rowspan");
+				if(rowSpan){
+					cell.rowSpan = rowSpan;
+				}
 				cell.field = cell.field||cell.name;
 				cell.width = widthFromAttr(th);
+
+				cell.type = cell.type ? dojo.getObject(cell.type) : dojox.grid.cells.Cell;
+
+				if(cell.type && cell.type.markupFactory){
+					cell.type.markupFactory(th, cell);
+				}
+
 				if(!cView.cells[tr_idx]){
 					cView.cells[tr_idx] = [];
 				}

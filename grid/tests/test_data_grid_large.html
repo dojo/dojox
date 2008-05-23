@@ -22,54 +22,39 @@
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
+		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
 	</script>
-	<!-- Debugging -->
-	<script type="text/javascript" src="../util.js"></script>
-	<script type="text/javascript" src="../_Scroller.js"></script>
-	<script type="text/javascript" src="../cells/_base.js"></script>
-	<script type="text/javascript" src="../_Layout.js"></script>
-	<script type="text/javascript" src="../_RowManager.js"></script>
-	<script type="text/javascript" src="../_FocusManager.js"></script>
-	<script type="text/javascript" src="../Selection.js"></script>
-	<script type="text/javascript" src="../_EditManager.js"></script>
-	<script type="text/javascript" src="../_View.js"></script>
-	<script type="text/javascript" src="../_RowSelector.js"></script>
-	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../VirtualGrid.js"></script>
-	<script type="text/javascript" src="../_data/fields.js"></script>
-	<script type="text/javascript" src="../_data/model.js"></script>
-	<script type="text/javascript" src="../DataGrid.js"></script>
 	<script type="text/javascript" src="support/test_dojo_data.js"></script>
 	<script type="text/javascript">
 		// a grid layout is an array of views.
 		var layout = [
 			[
-				{ name: 'Column 0', dataAttr: 'id' },
-				{ name: 'Column 1', dataAttr: 'col1' },
-				{ name: 'Column 2', dataAttr: 'col2' },
-				{ name: 'Column 3', dataAttr: 'col3', width: '150px' },
-				{ name: 'Column 4', dataAttr: 'col4' }
+				{ name: 'Column 0', field: 'id' },
+				{ name: 'Column 1', field: 'col1' },
+				{ name: 'Column 2', field: 'col2' },
+				{ name: 'Column 3', field: 'col3', width: '150px' },
+				{ name: 'Column 4', field: 'col4' }
 			],
 			[
-				{name: 'Column 5', dataAttr: 'col5' },
-				{name: 'Column 6', dataAttr: 'col6' },
-				{name: 'Column 7', dataAttr: 'col7' },
-				{name: 'Column 8', dataAttr: 'col3', colSpan: 2}
+				{name: 'Column 5', field: 'col5' },
+				{name: 'Column 6', field: 'col6' },
+				{name: 'Column 7', field: 'col7' },
+				{name: 'Column 8', field: 'col3', colSpan: 2}
 			]
 		];
 </script>
 </head>
 <body class="tundra">
-	<div class="heading">dojox.grid.Grid Basic Test</div>
+	<div class="heading">dojox.grid.DataGrid Large Data Set Test</div>
 	<table dojoType="dojox.grid.DataGrid"
 		jsid="grid" id="grid" 
-		model="test_data" query="{ id: '*' }" rowsPerPage: "20" structure="layout" rowSelector="20px">
+		model="test_data" query="{ id: '*' }" rowsPerPage="20" structure="layout" rowSelector="20px">
 		<thead>
 			<tr>
-				<th dataAttr="name" width="300px">Country/Continent Name</th>
-				<th dataAttr="type" width="auto">Type</th>
+				<th field="name" width="300px">Country/Continent Name</th>
+				<th field="type" width="auto">Type</th>
 			</tr>
 		</thead>
 	</table>
