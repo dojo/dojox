@@ -38,6 +38,17 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += '"The Sequel to ""Dances With Wolves.""", 1982, Ridley Scott\n';
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
+			case "stores/movies3.csv":
+				var csvData = "";
+				csvData += "Title, Year, Producer\n";
+				csvData += "City of God, 2002, Katia Lund\n";
+				csvData += "Rain,\"\", Christine Jeffs\n";
+				csvData += "2001: A Space Odyssey, 1968, Stanley Kubrick\n";
+				csvData += '"This is a ""fake"" movie title", 1957, Sidney Lumet\n';
+				csvData += "Alien, 1979   , Ridley Scott\n";
+				csvData += '"The Sequel to ""Dances With\n Wolves.""", 1982, Ridley Scott\n';
+				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
+				break;
 			case "stores/books.csv":
 				var csvData = "";
 				csvData += "Title, Author\n";
@@ -105,7 +116,26 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new doh.Deferred();
-		function completedAll(items){
+			function completedAll(items){
+				t.assertTrue((items.length === 7));
+				d.callback(true);
+			}
+
+			//Get everything...
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_withnewlinedCsv(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore loading a CSV file with quoted newlines.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore loading a CSV file with quoted newlines.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies3.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completedAll(items){
 				t.assertTrue((items.length === 7));
 				d.callback(true);
 			}
@@ -124,7 +154,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new doh.Deferred();
-		function completedAll(items){
+			function completedAll(items){
 				t.assertTrue((items.length === 7));
 				d.callback(true);
 			}

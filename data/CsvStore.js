@@ -116,7 +116,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		var itemData = this._dataArray[this.getIdentity(item)];
 		for(var i=0; i<itemData.length; i++){
 			// Check for empty string values. CsvStore treats empty strings as no value.
-			if(itemData[i] != ""){
+			if(itemData[i] !== ""){
 				attributes.push(this._attributes[i]);
 			}
 		}
@@ -134,7 +134,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		this._assertIsAttribute(attribute);
 		var attributeIndex = this._attributeIndexes[attribute];
 		var itemData = this._dataArray[this.getIdentity(item)];
-		return (typeof attributeIndex != "undefined" && attributeIndex < itemData.length && itemData[attributeIndex] != ""); //Boolean
+		return (typeof attributeIndex !== "undefined" && attributeIndex < itemData.length && itemData[attributeIndex] !== ""); //Boolean
 	},
 
 	containsValue: function(/* item */ item, 
@@ -373,7 +373,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 			var doubleQuotes = new RegExp('""','g');
 			var arrayOfOutputRecords = [];
 			
-			var arrayOfInputLines = csvFileContents.split(lineEndingCharacters);
+			var arrayOfInputLines = this._splitLines(csvFileContents);
 			for(var i = 0; i < arrayOfInputLines.length; ++i){
 				var singleLine = arrayOfInputLines[i];
 				if(singleLine.length > 0){
@@ -420,6 +420,51 @@ dojo.declare("dojox.data.CsvStore", null, {
 			}
 			this._dataArray = arrayOfOutputRecords; //Array
 		}
+	},
+
+	_splitLines: function(csvContent){
+		//	summary:
+		//		Function to split the CSV file contents into separate lines.
+		//		Since line breaks can occur inside quotes, a Regexp didn't
+		//		work as well.  A quick passover parse should be just as efficient.
+		var split = [];
+		var i;
+		var line = "";
+		var inQuotes = false;
+		for(i = 0; i < csvContent.length; i++){
+			var c = csvContent.charAt(i);
+			switch(c){
+				case '\"':
+					inQuotes = !inQuotes;
+					line += c;
+					break;
+				case '\r':
+					if(inQuotes){
+						line += c;
+					}else{
+						split.push(line);
+						line = "";
+						if (i < (csvContent.length - 1) && csvContent.charAt(i + 1) == '\n') {
+							i++; //Skip it, it's CRLF
+						}
+					}
+					break;
+				case '\n':
+					if(inQuotes){
+						line += c;
+					}else{
+						split.push(line);
+						line = "";
+					}
+					break;
+				default:
+					line +=c;
+			}
+		}
+		if(line !== ""){
+			split.push(line);
+		}
+		return split;
 	},
 	
 	_processData: function(/* String */ data){
