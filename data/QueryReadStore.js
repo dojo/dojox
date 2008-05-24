@@ -78,6 +78,8 @@ dojo.declare("dojox.data.QueryReadStore",
 		// (this also depends on other factors, such as is caching used, etc).
 		_lastServerQuery:null,
 		
+		// Store how many rows we have so that we can pass it to a clientPaging handler
+		_numRows:-1,
 		
 		// Store a hash of the last server request. Actually I introduced this
 		// for testing, so I can check if no unnecessary requests were issued for
@@ -330,8 +332,9 @@ dojo.declare("dojox.data.QueryReadStore",
 			
 			// TODO actually we should do the same as dojo.data.ItemFileReadStore._getItemsFromLoadedData() to sanitize
 			// (does it really sanititze them) and store the data optimal. should we? for security reasons???
-			numRows = (numRows === -1) ? this._items.length : numRows;
-			fetchHandler(this._items, request, numRows);		
+			numRows = this._numRows = (numRows === -1) ? this._items.length : numRows;
+			fetchHandler(this._items, request, numRows);
+			this._numRows = numRows;		
 		},
 		
 		_fetchItems: function(request, fetchHandler, errorHandler){
@@ -389,7 +392,8 @@ dojo.declare("dojox.data.QueryReadStore",
 			if(this.doClientPaging && this._lastServerQuery!==null &&
 				dojo.toJson(serverQuery)==dojo.toJson(this._lastServerQuery)
 				){
-				fetchHandler(this._items, request);
+				this._numRows = (this._numRows === -1) ? this._items.length : this._numRows;
+				fetchHandler(this._items, request, this._numRows);
 			}else{
 				var xhrFunc = this.requestMethod.toLowerCase()=="post" ? dojo.xhrPost : dojo.xhrGet;
 				var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
