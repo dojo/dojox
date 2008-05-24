@@ -5,6 +5,7 @@ dojo.require("dojox.grid._Grid");
 dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	model: null,
 	query: { name: '*' },
+	queryOptions: null,
 	fetchText: '...',
 
 	_model_connects: null,
@@ -23,7 +24,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._rows = [];
 		this._cache = [];
 
-		this.setModel(this.model);
+		this._setModel(this.model);
 		this.inherited(arguments);
 	},
 
@@ -66,6 +67,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	setModel: function(model){
+		this._setModel(model);
+		this._refresh();
+	},
+	
+	_setModel: function(model){
 		if(this.model&&this._model_connects){
 			dojo.forEach(this._model_connects,function(arr){
 				dojo.forEach(arr, dojo.disconnect);
@@ -73,21 +79,23 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		}
 		this.model = model;
 
-		var f = this.model.getFeatures();
-		var h = [];
+		if(this.model){
+			var f = this.model.getFeatures();
+			var h = [];
 
-		this._canEdit = !!f["dojo.data.api.Write"];
-		
-		if(!!f["dojo.data.api.Notification"]){
-			h.push(this.connect(this.model, "onSet", "_onSet"));
-			h.push(this.connect(this.model, "onNew", "_onNew"));
-			h.push(this.connect(this.model, "onDelete", "_onDelete"));
-		}
-		if(this._canEdit){
-			h.push(this.connect(this.model, "revert", "_onRevert"));
-		}
+			this._canEdit = !!f["dojo.data.api.Write"];
+			
+			if(!!f["dojo.data.api.Notification"]){
+				h.push(this.connect(this.model, "onSet", "_onSet"));
+				h.push(this.connect(this.model, "onNew", "_onNew"));
+				h.push(this.connect(this.model, "onDelete", "_onDelete"));
+			}
+			if(this._canEdit){
+				h.push(this.connect(this.model, "revert", "_onRevert"));
+			}
 
-		this._model_connects = h;
+			this._model_connects = h;
+		}
 	},
 
 	_onFetchBegin: function(size, req){
@@ -109,19 +117,21 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_fetch: function(start){
-		var start = start || 0;
-		//console.log("fetch: ", start);
-		this.model.fetch({
-			start: start,
-			count: this.rowsPerPage,
-			query: this.query,
-			sort: this.getSortProps(),
-			queryOptions: this.queryOptions,
-			onBegin: dojo.hitch(this, "_onFetchBegin"),
-			onComplete: dojo.hitch(this, "_onFetchComplete"),
-			onError: dojo.hitch(this, "_onFetchError"),
-			scope: this
-		});
+		if(this.model){
+			var start = start || 0;
+			//console.log("fetch: ", start);
+			this.model.fetch({
+				start: start,
+				count: this.rowsPerPage,
+				query: this.query,
+				sort: this.getSortProps(),
+				queryOptions: this.queryOptions,
+				onBegin: dojo.hitch(this, "_onFetchBegin"),
+				onComplete: dojo.hitch(this, "_onFetchComplete"),
+				onError: dojo.hitch(this, "_onFetchError"),
+				scope: this
+			});
+		}
 	},
 
 	_clearData: function(){
@@ -233,7 +243,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	styleRowState: function(inRow){
 		// summary: Perform row styling
-		if(this.model.getState){
+		if(this.model && this.model.getState){
 			var states=this.model.getState(inRow.index), c='';
 			for(var i=0, ss=["inflight", "error", "inserting"], s; s=ss[i]; i++){
 				if(states[s]){
