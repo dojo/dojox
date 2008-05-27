@@ -17,7 +17,6 @@
 	<script type="text/javascript" src="../Rating.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser"); // scan page for widgets and instantiate them
-
 	</script>
 	<style>
 		/* Use bigger stars and make the node wider than the star actually is,
@@ -87,5 +86,23 @@
 	Surrounded by text to see that it really takes all it's space
 	Surrounded by text to see that it really takes all it's space 
 	<br /><br />
+	
+	<h3>Inside a dojo form</h3>
+	<script type="text/javascript">
+		dojo.require("dijit.form.Form");
+		dojo.require("dijit.form.FilteringSelect");
+		dojo.require("dijit.form.Button");
+	</script>
+	<form dojoType="dijit.form.Form">
+		<select dojoType="dijit.form.FilteringSelect">
+			<option>Does</option>
+			<option>this</option>
+			<option>work?</option>
+		</select>
+		<br /><br />
+		<div dojoType="dojox.widget.Rating" numStars="5" value="1"></div>
+		<br /><br />
+		<button dojoType="dijit.form.Button">Click me</button>
+	</form>
 </body>
 </html>
