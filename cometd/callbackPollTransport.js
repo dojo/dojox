@@ -1,6 +1,7 @@
-dojo.provide("dojox.cometd._base");
-dojo.require("dojo.AdapterRegistry");
-
+dojo.provide("dojox.cometd.callbackPollTransport");
+dojo.require("dojox.cometd._base");
+dojo.require("dojox.cometd.longPollTransport");
+dojo.require("dojo.io.script");
 
 /*
  * this file defines Comet protocol client. Actual message transport is
@@ -12,11 +13,6 @@ dojo.require("dojo.AdapterRegistry");
  * extensions modules may be loaded (eg "dojox.cometd.timestamp", that use
  * the cometd._extendInList and cometd._extendOutList fields to provide functions
  * that extend and handling incoming and outgoing messages.
- * 
- * By default the long-polling and callback-polling transports will be required.
- * If specific or alternative transports are required, then they can be directly 
- * loaded. For example dojo.require('dojox.cometd.longPollTransportJsonEncoded')
- * will load cometd with only the json encoded variant of the long polling transport.
  */
 
 dojox.cometd = new function(){
@@ -711,5 +707,252 @@ cometd.blahTransport = new function(){
 }
 cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahTransport);
 */
+
+dojox.cometd.longPollTransport = new function(){
+	this._connectionType="long-polling";
+	this._cometd=null;
+
+	this.check = function(types, version, xdomain){
+		return ((!xdomain)&&(dojo.indexOf(types, "long-polling") >= 0));
+	}
+
+	this.tunnelInit = function(){
+		var message = {
+			channel:	"/meta/connect",
+			clientId:	this._cometd.clientId,
+			connectionType: this._connectionType,
+			id:	""+this._cometd.messageId++
+		};
+		message=this._cometd._extendOut(message);
+		this.openTunnelWith({message: dojo.toJson([message])});
+	}
+
+	this.tunnelCollapse = function(){
+		// TODO handle transport specific advice
+		
+		if(!this._cometd._initialized){ return; }
+			
+		if(this._cometd._advice && this._cometd._advice["reconnect"]=="none"){
+			return;
+		}
+		setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._interval());
+	}
+
+	this._connect = function(){
+		if(!this._cometd._initialized){ return; }
+		if(this._cometd._polling) {
+			return;
+		}
+			
+		if((this._cometd._advice) && (this._cometd._advice["reconnect"]=="handshake")){
+			this._cometd._connected=false;
+			this._initialized = false;
+			this._cometd.init(this._cometd.url,this._cometd._props);
+ 		}else if(this._cometd._connected){
+			var message={
+				channel:	"/meta/connect",
+				connectionType: this._connectionType,
+				clientId:	this._cometd.clientId,
+				id:	""+this._cometd.messageId++
+			};
+			if (this._cometd.connectTimeout>this._cometd.expectedNetworkDelay){
+				message.advice={timeout:(this._cometd.connectTimeout-this._cometd.expectedNetworkDelay)};
+			}
+			message=this._cometd._extendOut(message);
+			this.openTunnelWith({message: dojo.toJson([message])});
+		}
+	}
+
+	this.deliver = function(message){
+		// Nothing to do
+	}
+
+	this.openTunnelWith = function(content, url){
+		this._cometd._polling = true;
+		var post = {
+			url: (url||this._cometd.url),
+			content: content,
+			handleAs: this._cometd.handleAs,
+			load: dojo.hitch(this, function(data){
+				this._cometd._polling=false;
+				this._cometd.deliver(data);
+				this._cometd._backon();
+				this.tunnelCollapse();
+			}),
+			error: dojo.hitch(this, function(err){
+				this._cometd._polling=false;
+				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
+				this._cometd._backoff();
+				this.tunnelCollapse();
+			})
+		};
+
+		var connectTimeout=this._cometd._connectTimeout();
+		if (connectTimeout>0) {
+			post.timeout=connectTimeout;
+		}
+
+		this._poll = dojo.xhrPost(post);
+	}
+
+	this.sendMessages = function(messages){
+		for(var i=0; i<messages.length; i++){
+			messages[i].clientId = this._cometd.clientId;
+			messages[i].id = ""+this._cometd.messageId++;
+			messages[i]=this._cometd._extendOut(messages[i]);
+		}
+		return dojo.xhrPost({
+			url: this._cometd.url||dojo.config["cometdRoot"],
+			handleAs: this._cometd.handleAs,
+			load: dojo.hitch(this._cometd, "deliver"),
+			content: {
+				message: dojo.toJson(messages)
+			},
+			error: dojo.hitch(this, function(err){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			}),
+			timeoutSeconds: this._cometd.expectedNetworkDelay/1000,
+			timeout: dojo.hitch(this, function(){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			})
+		});
+	}
+
+	this.startup = function(handshakeData){
+		if(this._cometd._connected){ return; }
+		this.tunnelInit();
+	}
+
+	this.disconnect = function(){
+		var message={
+			channel:	"/meta/disconnect",
+			clientId:	this._cometd.clientId,
+			id:	""+this._cometd.messageId++
+		};
+		message=this._cometd._extendOut(message);
+		dojo.xhrPost({
+			url: this._cometd.url||dojo.config["cometdRoot"],
+			handleAs: this._cometd.handleAs,
+			content: {
+				message: dojo.toJson([message])
+			}
+		});
+	}
+
+	this.cancelConnect = function(){
+		if (this._poll) {
+			this._poll.cancel();
+			this._cometd._polling=false;
+			dojo.debug("tunnel opening cancelled");
+			dojo.event.topic.publish("/cometd/meta", {cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state(),cancel:true});
+			this._cometd._backoff();
+			this.disconnect();
+			this.tunnelCollapse();
+		}
+	}
+
+}
+
+dojox.cometd.callbackPollTransport = new function(){
+	this._connectionType = "callback-polling";
+	this._cometd = null;
+
+	this.check = function(types, version, xdomain){
+		// we handle x-domain!
+		return (dojo.indexOf(types, "callback-polling") >= 0);
+	}
+
+	this.tunnelInit = function(){
+		var message = {
+			channel:	"/meta/connect",
+			clientId:	this._cometd.clientId,
+			connectionType: this._connectionType,
+			id:	""+this._cometd.messageId++
+		};
+		message = this._cometd._extendOut(message);		
+		this.openTunnelWith({
+			message: dojo.toJson([message])
+		});
+	}
+
+	this.tunnelCollapse = dojox.cometd.longPollTransport.tunnelCollapse;
+	this._connect = dojox.cometd.longPollTransport._connect;
+	this.deliver = dojox.cometd.longPollTransport.deliver;
+
+	this.openTunnelWith = function(content, url){
+		this._cometd._polling = true;
+		var script = {
+			load: dojo.hitch(this, function(data){
+				this._cometd._polling=false;
+				this._cometd.deliver(data);
+				this._cometd._backon();
+				this.tunnelCollapse();
+			}),
+			error: dojo.hitch(this, function(err){
+				this._cometd._polling=false;
+				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
+				this._cometd._backoff();
+				this.tunnelCollapse();
+			}),
+			url: (url||this._cometd.url),
+			content: content,
+			callbackParamName: "jsonp"
+		};
+		var connectTimeout=this._cometd._connectTimeout();
+		if (connectTimeout>0) {
+			script.timeout=connectTimeout;
+		}
+		dojo.io.script.get(script);
+	}
+
+	this.sendMessages = function(/*array*/ messages){
+		for(var i=0; i<messages.length; i++){
+			messages[i].clientId = this._cometd.clientId;
+			messages[i].id = ""+this._cometd.messageId++;
+			messages[i]=this._cometd._extendOut(messages[i]);
+		}
+		var bindArgs = {
+			url: this._cometd.url||dojo.config["cometdRoot"],
+			load: dojo.hitch(this._cometd, "deliver"),
+			callbackParamName: "jsonp",
+			content: { message: dojo.toJson( messages ) },
+			error: dojo.hitch(this, function(err){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			}),
+			timeoutSeconds: this._cometd.expectedNetworkDelay/1000,
+			timeout: dojo.hitch(this, function(){
+				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+			})
+		};
+		return dojo.io.script.get(bindArgs);
+	}
+
+	this.startup = function(handshakeData){
+		if(this._cometd._connected){ return; }
+		this.tunnelInit();
+	}
+
+	this.disconnect = dojox.cometd.longPollTransport.disconnect;
+	
+	this.disconnect = function(){
+		var message={
+			channel:"/meta/disconnect",
+			clientId:this._cometd.clientId,
+			id:""+this._cometd.messageId++
+		};
+		message=this._cometd._extendOut(message);		
+		dojo.io.script.get({
+			url: this._cometd.url||dojo.config["cometdRoot"],
+			callbackParamName: "jsonp",
+			content: {
+				message: dojo.toJson([message])
+			}
+		});
+	}
+
+	this.cancelConnect = function(){}
+}
+dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransport);
+dojox.cometd.connectionTypes.register("callback-polling", dojox.cometd.callbackPollTransport.check, dojox.cometd.callbackPollTransport);
 
 dojo.addOnUnload(dojox.cometd,"_onUnload");

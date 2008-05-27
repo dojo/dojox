@@ -1,5 +1,5 @@
 dojo.provide("dojox.cometd.timesync");
-dojo.require("dojox.cometd");
+dojo.require("dojox.cometd._base");
 
 /**
  * this file provides the time synchronization extension to cometd.
