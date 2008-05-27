@@ -657,6 +657,8 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.shape.Creator);
 		onclick:		{name: "MouseLeftButtonUp", fix: mouseFix},
 		onmouseenter:	{name: "MouseEnter", fix: mouseFix},
 		onmouseleave:	{name: "MouseLeave", fix: mouseFix},
+		onmouseover:	{name: "MouseEnter", fix: mouseFix},
+		onmouseout:		{name: "MouseLeave", fix: mouseFix},
 		onmousedown:	{name: "MouseLeftButtonDown", fix: mouseFix},
 		onmouseup:		{name: "MouseLeftButtonUp", fix: mouseFix},
 		onmousemove:	{name: "MouseMove", fix: mouseFix},
