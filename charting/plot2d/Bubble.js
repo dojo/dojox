@@ -24,7 +24,11 @@ dojo.require("dojox.lang.functional");
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 		
-			var t = this.chart.theme, stroke, outline, color, shadowStroke, shadowColor;
+			var t = this.chart.theme, stroke, outline, color, shadowStroke, shadowColor,
+				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
+				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
+				events = this.events();
+
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }
@@ -40,8 +44,6 @@ dojo.require("dojox.lang.functional");
 				}
 				
 				var s = run.group,
-					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
-					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 					points = dojo.map(run.data, function(v, i){
 						return {
 							x: ht(v.x) + offsets.l,
@@ -62,23 +64,59 @@ dojo.require("dojox.lang.functional");
 
 				stroke = run.stroke ? dc.makeStroke(run.stroke) : dc.augmentStroke(t.series.stroke, color);
 
+				var frontCircles = null, outlineCircles = null, shadowCircles = null;
+
+				// make shadows if needed
 				if(this.opt.shadows && stroke){
 					var sh = this.opt.shadows, shadowColor = new dojo.Color([0, 0, 0, 0.2]),
 						shadowStroke = dojo.clone(outline ? outline : stroke);
 					shadowStroke.color = shadowColor;
 					shadowStroke.width += sh.dw ? sh.dw : 0;
+					shadowMarkers = dojo.map(points, function(item){
+						var sh = this.opt.shadows;
+						return s.createCircle({
+							cx: item.x + sh.dx, cy: item.y + sh.dy, r: item.radius
+						}).setStroke(shadowStroke).setFill(shadowColor);
+					}, this);
+				}
+
+				// make outlines if needed
+				if(run.outline || t.series.outline){
+					outline = dc.makeStroke(run.outline ? run.outline : t.series.outline);
+					outline.width = 2 * outline.width + stroke.width;
+					outlineCircles = dojo.map(points, function(item){
+						s.createCircle({ cx: item.x, cy: item.y, r: item.radius }).setStroke(outline);
+					}, this);
 				}
 
 				//	run through the data and add the circles.
-				dojo.forEach(points, function(item){
-					if(this.opt.shadows && stroke){
-						var sh=this.opt.shadows;
-						s.createCircle({ 
-							cx: item.x + sh.dx, cy: item.y + sh.dy, r: item.radius 
-						}).setStroke(shadowStroke).setFill(shadowColor);
-					}
-					s.createCircle({ cx: item.x, cy: item.y, r: item.radius }).setStroke(stroke).setFill(color);
+				frontCircles = dojo.map(points, function(item){
+					return s.createCircle({ cx: item.x, cy: item.y, r: item.radius }).setStroke(stroke).setFill(color);
 				}, this);
+				
+				if(events){
+					dojo.forEach(frontCircles, function(s, i){
+						var o = {
+							element: "circle",
+							index:   i,
+							run:     run,
+							plot:    this,
+							hAxis:   this.hAxis || null,
+							vAxis:   this.vAxis || null,
+							shape:   s,
+							outline: outlineCircles && outlineCircles[i] || null,
+							shadow:  shadowCircles && shadowCircles[i] || null,
+							x:       run.data[i].x,
+							y:       run.data[i].y,
+							r:       run.data[i].size / 2,
+							cx:      points[i].x,
+							cy:      points[i].y,
+							cr:      points[i].radius
+						};
+						this._connectEvents(s, o);
+					}, this);
+				}
+				
 				run.dirty = false;
 			}
 			this.dirty = false;

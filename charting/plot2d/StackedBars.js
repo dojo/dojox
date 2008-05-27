@@ -44,7 +44,8 @@ dojo.require("dojox.lang.functional.reversed");
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 				gap = this.opt.gap < this._vScaler.bounds.scale / 3 ? this.opt.gap : 0,
-				height = this._vScaler.bounds.scale - 2 * gap;
+				height = this._vScaler.bounds.scale - 2 * gap,
+				events = this.events();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }
@@ -67,6 +68,20 @@ dojo.require("dojox.lang.functional.reversed");
 						}).setFill(fill).setStroke(stroke);
 						run.dyn.fill   = shape.getFill();
 						run.dyn.stroke = shape.getStroke();
+						if(events){
+							var o = {
+								element: "bar",
+								index:   j,
+								run:     run,
+								plot:    this,
+								hAxis:   this.hAxis || null,
+								vAxis:   this.vAxis || null,
+								shape:   shape,
+								x:       v,
+								y:       j + 1.5
+							};
+							this._connectEvents(shape, o);
+						}
 					}
 				}
 				run.dirty = false;

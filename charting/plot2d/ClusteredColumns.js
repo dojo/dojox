@@ -26,7 +26,8 @@ dojo.require("dojox.lang.functional.reversed");
 				thickness = (this._hScaler.bounds.scale - 2 * gap) / this.series.length,
 				baseline = Math.max(0, this._vScaler.bounds.lower),
 				baselineHeight = vt(baseline),
-				width = thickness;
+				width = thickness,
+				events = this.events();
 			for(var i = 0; i < this.series.length; ++i){
 				var run = this.series[i], shift = thickness * i;
 				if(!this.dirty && !run.dirty){ continue; }
@@ -51,6 +52,20 @@ dojo.require("dojox.lang.functional.reversed");
 						}).setFill(fill).setStroke(stroke);
 						run.dyn.fill   = shape.getFill();
 						run.dyn.stroke = shape.getStroke();
+						if(events){
+							var o = {
+								element: "column",
+								index:   j,
+								run:     run,
+								plot:    this,
+								hAxis:   this.hAxis || null,
+								vAxis:   this.vAxis || null,
+								shape:   shape,
+								x:       j + 0.5,
+								y:       v
+							};
+							this._connectEvents(shape, o);
+						}
 					}
 				}
 				run.dirty = false;

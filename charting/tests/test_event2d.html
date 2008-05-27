@@ -1,0 +1,392 @@
+<html>
+<head>
+<title>Event 2D</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
+<script type="text/javascript" src="Silverlight.js"></script>
+-->
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript" src="../../../dojo/_base/connect.js"></script>
+<script type="text/javascript" src="../../../dojo/fx.js"></script>
+<script type="text/javascript" src="../../lang/functional.js"></script>
+<script type="text/javascript" src="../../lang/utils.js"></script>
+<script type="text/javascript" src="../../gfx/fx.js"></script>
+<script type="text/javascript" src="../Theme.js"></script>
+<script type="text/javascript" src="../scaler/primitive.js"></script>
+<script type="text/javascript" src="../scaler/linear.js"></script>
+<script type="text/javascript" src="../Element.js"></script>
+<script type="text/javascript" src="../axis2d/common.js"></script>
+<script type="text/javascript" src="../axis2d/Base.js"></script>
+<script type="text/javascript" src="../axis2d/Default.js"></script>
+<script type="text/javascript" src="../plot2d/common.js"></script>
+<script type="text/javascript" src="../plot2d/Base.js"></script>
+<script type="text/javascript" src="../plot2d/Default.js"></script>
+<script type="text/javascript" src="../plot2d/Lines.js"></script>
+<script type="text/javascript" src="../plot2d/Areas.js"></script>
+<script type="text/javascript" src="../plot2d/Markers.js"></script>
+<script type="text/javascript" src="../plot2d/MarkersOnly.js"></script>
+<script type="text/javascript" src="../plot2d/Scatter.js"></script>
+<script type="text/javascript" src="../plot2d/Stacked.js"></script>
+<script type="text/javascript" src="../plot2d/StackedLines.js"></script>
+<script type="text/javascript" src="../plot2d/StackedAreas.js"></script>
+<script type="text/javascript" src="../plot2d/Columns.js"></script>
+<script type="text/javascript" src="../plot2d/StackedColumns.js"></script>
+<script type="text/javascript" src="../plot2d/ClusteredColumns.js"></script>
+<script type="text/javascript" src="../plot2d/Bars.js"></script>
+<script type="text/javascript" src="../plot2d/StackedBars.js"></script>
+<script type="text/javascript" src="../plot2d/ClusteredBars.js"></script>
+<script type="text/javascript" src="../plot2d/Bubble.js"></script>
+<script type="text/javascript" src="../plot2d/Grid.js"></script>
+<script type="text/javascript" src="../plot2d/Pie.js"></script>
+<script type="text/javascript" src="../Chart2D.js"></script>
+<script type="text/javascript">
+
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.blue");
+dojo.require("dojox.charting.themes.PlotKit.cyan");
+dojo.require("dojox.charting.themes.PlotKit.green");
+dojo.require("dojox.charting.themes.PlotKit.orange");
+dojo.require("dojox.charting.themes.PlotKit.purple");
+dojo.require("dojox.charting.themes.PlotKit.red");
+dojo.require("dojox.charting.themes.ET.greys");
+
+dojo.require("dojox.gfx.fx");
+dojo.require("dojo.fx");
+dojo.require("dojo.colors");
+dojo.require("dojox.fx.easing");
+
+dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.scan");
+dojo.require("dojox.lang.functional.fold");
+
+var df = dojox.lang.functional, m = dojox.gfx.matrix;
+
+AnimateShapes = function(chart, plot){
+	if(!plot){ plot = "default"; }
+	
+	this.anim = {};
+	
+	chart.connectToPlot(plot, this, function(o){
+		if(o.type == "onclick"){
+			console.log("click:", o.run.name, " #" + o.index, " - ", o.x, " ", o.y);
+			return;
+		}
+		
+		if(o.run.name in this.anim){
+			var a = this.anim[o.run.name][o.index];
+			if(a){
+				a.stop(true);
+			}
+		}else{
+			this.anim[o.run.name] = {};
+		}
+		
+		var endZoom = o.type == "onmouseout" ? 0.5 : 2,
+			initMatrix = m.scaleAt(o.type == "onmouseout" ? 2 : 1, o.cx, o.cy),
+			vector = [];
+		if(o.shape){
+			vector.push(dojox.gfx.fx.animateTransform({
+				shape: o.shape,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				transform: [
+					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
+					initMatrix
+				]
+			}));
+		}
+		if(o.oultine){
+			vector.push(dojox.gfx.fx.animateTransform({
+				shape: o.outline,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				transform: [
+					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
+					initMatrix
+				]
+			}));
+		}
+		if(o.shadow){
+			vector.push(dojox.gfx.fx.animateTransform({
+				shape: o.shadow,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				transform: [
+					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
+					initMatrix
+				]
+			}));
+		}
+		
+		if(vector.length){
+			var a = this.anim[o.run.name][o.index] = dojo.fx.combine(vector);
+			a.play();
+		}else{
+			delete this.anim[o.run.name][o.index];
+		}
+	});
+};
+
+AnimateColor = function(chart, plot, colors){
+	if(!plot){ plot = "default"; }
+	
+	this.anim = {};
+	
+	chart.connectToPlot(plot, this, function(o){
+		if(o.type == "onclick"){
+			console.log("click:", o.run.name, " #" + o.index, " - ", o.x, " ", o.y);
+			return;
+		}
+		if(!o.shape){ return; }
+
+		if(o.run.name in this.anim){
+			var a = this.anim[o.run.name][o.index];
+			if(a){
+				a.stop(true);
+			}
+		}else{
+			this.anim[o.run.name] = {};
+		}
+
+		var startFill = colors[o.run.name], endFill = "gold",
+			startStroke = "black", endStroke = "yellow";
+		if(o.type == "onmouseout"){
+			var t = startFill;
+			startFill = endFill;
+			endFill = t;
+			t = startStroke;
+			startStroke = endStroke;
+			endStroke = t;
+		}
+		
+		var a = this.anim[o.run.name][o.index] = dojo.fx.combine([
+			dojox.gfx.fx.animateFill({
+				shape: o.shape,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				color: {start: startFill, end: endFill}
+			}),
+			dojox.gfx.fx.animateStroke({
+				shape: o.shape,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				color: {start: startStroke, end: endStroke}
+			})
+		]);
+		a.play();
+	});
+};
+
+AnimateSlices = function(chart, plot, colors){
+	if(!plot){ plot = "default"; }
+	
+	this.anim = {};
+	this.angles = null;
+	
+	chart.connectToPlot(plot, this, function(o){
+		if(o.type == "onclick"){
+			console.log("click:", o.run.name, " #" + o.index, " - ", o.x, " ", o.y);
+			return;
+		}
+		if(!o.shape){ return; }
+		
+		var a = this.anim[o.index];
+		if(a){
+			a.stop(true);
+		}
+
+		if(!this.angles){
+			this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0), "* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
+		}
+		
+		var angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2,
+			rotateTo0  = m.rotateAt(-angle, o.cx, o.cy),
+			rotateBack = m.rotateAt( angle, o.cx, o.cy);
+
+		var startFill = colors[o.index], endFill = "gold",
+			startStroke = "black", endStroke = "yellow",
+			startOffset = 0, endOffset = 10;
+		if(o.type == "onmouseout"){
+			var t = startFill;
+			startFill = endFill;
+			endFill = t;
+			t = startStroke;
+			startStroke = endStroke;
+			endStroke = t;
+			t = startOffset;
+			startOffset = endOffset;
+			endOffset = t;
+		}
+		
+		a = this.anim[o.index] = dojo.fx.combine([
+			dojox.gfx.fx.animateFill({
+				shape: o.shape,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				color: {start: startFill, end: endFill}
+			}),
+			dojox.gfx.fx.animateStroke({
+				shape: o.shape,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				color: {start: startStroke, end: endStroke}
+			}),
+			dojox.gfx.fx.animateTransform({
+				shape: o.shape,
+				duration: 250,
+				easing: dojox.fx.easing.elasticOut,
+				transform: [
+					rotateBack,
+					{name: "translate", start: [startOffset, 0], end:[endOffset, 0]},
+					rotateTo0
+				]
+			})
+		]);
+		a.play();
+	});
+};
+
+makeObjects = function(){
+	var chart1 = new dojox.charting.Chart2D("test1");
+	chart1.setTheme(dojox.charting.themes.PlotKit.green);
+	chart1.addPlot("default", {type: "Default", lines: true, markers: true, tension:2});
+	chart1.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart1.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart1.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
+	chart1.addSeries("Series B", [{x: 0.3, y: 8}, {x: 4, y: 6}, {x: 5.5, y: 2}]);
+	var anim1 = new AnimateShapes(chart1);
+	chart1.render();
+
+	var chart2 = new dojox.charting.Chart2D("test2");
+	chart2.setTheme(dojox.charting.themes.PlotKit.green);
+	chart2.addPlot("default", {type: "StackedLines", markers: true, tension:3, shadows: {dx: 2, dy: 2, dw: 2}});
+	chart2.addSeries("Series A", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "red", width: 2}, fill: "lightpink", marker: "m-3,-3 l0,6 6,0 0,-6 z"});
+	chart2.addSeries("Series B", [1, 1.6, 1.3, 1.4, 1.1, 1.5, 1.1], {stroke: {color: "blue", width: 2}, fill: "lightblue", marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
+	chart2.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen", marker: "m0,-3 l3,3 -3,3 -3,-3 z"});
+	var anim2 = new AnimateShapes(chart2);
+	chart2.render();
+
+	var chart3 = new dojox.charting.Chart2D("test3");
+	chart3.setTheme(dojox.charting.themes.PlotKit.green);
+	chart3.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
+	chart3.addPlot("default", {type: "Columns", gap: 2});
+	chart3.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
+	chart3.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
+	var anim3 = new AnimateColor(chart3, "default", {"Series A": "red", "Series B": "blue"});
+	chart3.render();
+
+	var chart4 = new dojox.charting.Chart2D("test4");
+	chart4.setTheme(dojox.charting.themes.PlotKit.green);
+	chart4.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
+	chart4.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true});
+	chart4.addPlot("default", {type: "Bars"});
+	chart4.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
+	chart4.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
+	var anim4 = new AnimateColor(chart4, "default", {"Series A": "red", "Series B": "blue"});
+	chart4.render();
+
+	var chart5 = new dojox.charting.Chart2D("test5");
+	chart5.setTheme(dojox.charting.themes.PlotKit.green);
+	chart5.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
+	chart5.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", natural: true});
+	chart5.addPlot("default", {type: "ClusteredBars", gap: 5});
+	chart5.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
+	chart5.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
+	var anim5 = new AnimateColor(chart5, "default", {"Series A": "red", "Series B": "blue"});
+	chart5.render();
+
+	var chart6 = new dojox.charting.Chart2D("test6");
+	chart6.setTheme(dojox.charting.themes.PlotKit.green);
+	chart6.addAxis("x");
+	chart6.addAxis("y", {vertical: true});
+	chart6.addPlot("default", {type: "ClusteredColumns", gap: 10});
+	chart6.addPlot("grid", {type: "Grid"});
+	chart6.addSeries("Series A", [2, 1, 0.5, -1, -2], {stroke: {color: "black"}, fill: "red"});
+	chart6.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "black"}, fill: "blue"});
+	chart6.addSeries("Series C", [1, 0.5, -1, -2, -3], {stroke: {color: "black"}, fill: "green"});
+	var anim6 = new AnimateColor(chart6, "default", {"Series A": "red", "Series B": "blue", "Series C": "green"});
+	chart6.render();
+
+	var chart7 = new dojox.charting.Chart2D("test7");
+	chart7.setTheme(dojox.charting.themes.PlotKit.green);
+	chart7.addPlot("default", {type: "StackedColumns"});
+	chart7.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
+	chart7.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "black"}, fill: "blue"});
+	var anim7 = new AnimateColor(chart7, "default", {"Series A": "red", "Series B": "blue"});
+	chart7.render();
+
+	var chart8 = new dojox.charting.Chart2D("test8");
+	chart8.setTheme(dojox.charting.themes.PlotKit.green);
+	chart8.addPlot("default", {type: "StackedBars"});
+	chart8.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
+	chart8.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "black"}, fill: "blue"});
+	var anim8 = new AnimateColor(chart8, "default", {"Series A": "red", "Series B": "blue"});
+	chart8.render();
+
+	var chart9 = new dojox.charting.Chart2D("test9");
+	chart9.setTheme(dojox.charting.themes.PlotKit.green);
+	chart9.addPlot("default", {type: "Bubble", shadows: {dx: 2, dy: 2, dw: 2}});
+	chart9.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart9.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+	chart9.addSeries("Series A", [{x: 0.5, y: 5, size: 1.4}, {x: 1.5, y: 1.5, size:4.5}, {x: 2, y: 9, size:1.5}, {x: 5, y: 0.3, size:0.8}],
+		{stroke: {color: "black"}, fill: "red"});
+	chart9.addSeries("Series B", [{x: 0.3, y: 8, size: 2.5}, {x: 4, y: 6, size:1.1}, {x: 5.5, y: 2, size: 3.2}],
+		{stroke: {color: "black"}, fill: "blue"});
+	var anim9 = new AnimateColor(chart9, "default", {"Series A": "red", "Series B": "blue"});
+	chart9.render();
+
+	var chart10 = new dojox.charting.Chart2D("test10");
+	chart10.setTheme(dojox.charting.themes.PlotKit.green);
+	chart10.addPlot("default", {
+		type: "Pie", 
+		font: "normal normal 11pt Tahoma", 
+		fontColor: "black", 
+		labelOffset: -30,
+		radius: 80
+	});
+	chart10.addSeries("Series A", [
+		{y: 4, text: "Red",   color: "red",   stroke: "black"},
+		{y: 2, text: "Green", color: "green", stroke: "black"},
+		{y: 1, text: "Blue",  color: "blue",  stroke: "black"},
+		{y: 1, text: "Other", color: "white", stroke: "black"}
+	]);
+	var anim10 = new AnimateSlices(chart10, "default", ["red", "green", "blue", "white"]);
+	chart10.render();
+};
+
+dojo.addOnLoad(makeObjects);
+
+</script>
+</head>
+<body>
+<h1>Event 2D</h1>
+<!--<p><button onclick="makeObjects();">Go</button></p>-->
+<p>Click and hover over markers, bars, columns, slices, and so on.</p>
+<p>1: Markers, lines, 2D data, custom axis.</p>
+<div id="test1" style="width: 400px; height: 200px;"></div>
+<p>2: Stacked lines, markers, shadows, no axes, custom strokes, fills, and markers.</p>
+<div id="test2" style="width: 400px; height: 200px;"></div>
+<p>3: Columns with gaps beetwen them, vertical axis aligned on major ticks, custom strokes, fills.</p>
+<div id="test3" style="width: 400px; height: 200px;"></div>
+<p>4: Bars, axes aligned on major ticks, no minor ticks, custom strokes and fills.</p>
+<div id="test4" style="width: 400px; height: 200px;"></div>
+<p>5: Clustered bars, custom axes, custom strokes, fills, and gap.</p>
+<div id="test5" style="width: 400px; height: 200px;"></div>
+<p>6: Clustered columns with positive and negative values, axes, and grid.</p>
+<div id="test6" style="width: 400px; height: 200px;"></div>
+<p>7: Stacked columns, no axes, custom strokes and fills.</p>
+<div id="test7" style="width: 400px; height: 200px;"></div>
+<p>8: Stacked bars, no axes, custom strokes and fills.</p>
+<div id="test8" style="width: 400px; height: 200px;"></div>
+<p>9: Bubble chart, axes.</p>
+<div id="test9" style="width: 400px; height: 300px;"></div>
+<p>10: Pie with internal custom labels and custom colors.</p>
+<div id="test10" style="width: 300px; height: 300px;"></div>
+<p>That's all Folks!</p>
+</body>
+</html>

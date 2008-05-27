@@ -54,7 +54,7 @@ dojo.require("dojox.lang.functional.reversed");
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, stroke, outline, color, marker;
+			var t = this.chart.theme, stroke, outline, color, marker, events = this.events();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }
@@ -116,6 +116,7 @@ dojo.require("dojox.lang.functional.reversed");
 					// need a marker
 					marker = run.dyn.marker = run.marker ? run.marker : t.next("marker");
 				}
+				var frontMarkers = null, outlineMarkers = null, shadowMarkers = null;
 				if(this.opt.shadows && stroke){
 					var sh = this.opt.shadows, shadowColor = new dojo.Color([0, 0, 0, 0.3]),
 						spoly = dojo.map(lpoly, function(c){
@@ -132,8 +133,9 @@ dojo.require("dojox.lang.functional.reversed");
 						}
 					}
 					if(this.opt.markers){
-						dojo.forEach(spoly, function(c){
-							s.createPath("M" + c.x + " " + c.y + " " + marker).setStroke(shadowStroke).setFill(shadowColor);
+						shadowMarkers = dojo.map(spoly, function(c){
+							return s.createPath("M" + c.x + " " + c.y + " " + marker).
+								setStroke(shadowStroke).setFill(shadowColor);
 						}, this);
 					}
 				}
@@ -152,13 +154,40 @@ dojo.require("dojox.lang.functional.reversed");
 					}
 				}
 				if(this.opt.markers){
-					dojo.forEach(lpoly, function(c){
+					frontMarkers = new Array(lpoly.length);
+					outlineMarkers = new Array(lpoly.length);
+					dojo.forEach(lpoly, function(c, i){
 						var path = "M" + c.x + " " + c.y + " " + marker;
 						if(outline){
-							s.createPath(path).setStroke(outline);
+							outlineMarkers[i] = s.createPath(path).setStroke(outline);
 						}
-						s.createPath(path).setStroke(stroke).setFill(stroke.color);
+						frontMarkers[i] = s.createPath(path).setStroke(stroke).setFill(stroke.color);
 					}, this);
+					if(events){
+						dojo.forEach(frontMarkers, function(s, i){
+							var o = {
+								element: "marker",
+								index:   i,
+								run:     run,
+								plot:    this,
+								hAxis:   this.hAxis || null,
+								vAxis:   this.vAxis || null,
+								shape:   s,
+								outline: outlineMarkers[i] || null,
+								shadow:  shadowMarkers && shadowMarkers[i] || null,
+								cx:      lpoly[i].x,
+								cy:      lpoly[i].y
+							};
+							if(typeof run.data[0] == "number"){
+								o.x = i + 1;
+								o.y = run.data[i];
+							}else{
+								o.x = run.data[i].x;
+								o.y = run.data[i].y;
+							}
+							this._connectEvents(s, o);
+						}, this);
+					}
 				}
 				run.dirty = false;
 			}

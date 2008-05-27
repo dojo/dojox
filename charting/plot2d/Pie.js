@@ -56,6 +56,43 @@ dojo.require("dojox.gfx");
 		getRequiredColors: function(){
 			return this.run ? this.run.data.length : 0;
 		},
+		
+		// events
+		plotEvent: function(o){
+			// intentionally empty --- used for events
+		},
+		connect: function(object, method){
+			this.dirty = true;
+			return dojo.connect(this, "plotEvent", object, method);
+		},
+		events: function(){
+			var ls = this.plotEvent._listeners;
+			if(!ls || !ls.length){ return false; }
+			for(var i in ls){
+				if(!(i in Array.prototype)){
+					return true;
+				}
+			}
+			return false;
+		},
+		_connectEvents: function(shape, o){
+			shape.connect("onmouseover", this, function(e){
+				o.type  = "onmouseover";
+				o.event = e;
+				this.plotEvent(o);
+			});
+			shape.connect("onmouseout", this, function(e){
+				o.type  = "onmouseout";
+				o.event = e;
+				this.plotEvent(o);
+			});
+			shape.connect("onclick", this, function(e){
+				o.type  = "onclick";
+				o.event = e;
+				this.plotEvent(o);
+			});
+		},
+		
 		render: function(dim, offsets){
 			if(!this.dirty){ return this; }
 			this.dirty = false;
@@ -70,7 +107,8 @@ dojo.require("dojox.gfx");
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
 				taFontColor = "fontColor" in this.opt ? this.opt.fontColor : t.axis.fontColor,
 				start = 0, step, sum, slices, labels, shift, labelR,
-				run = this.run.data;
+				run = this.run.data,
+				events = this.events();
 			if(typeof run[0] == "number"){
 				sum = df.foldl1(run, "+");
 				slices = dojo.map(run, function(x){ return x / sum; });
@@ -160,6 +198,23 @@ dojo.require("dojox.gfx");
 						setFill(fill).
 						setStroke(stroke);
 				this.dyn.push({color: color, fill: fill, stroke: stroke});
+				
+				if(events){
+					var o = {
+						element: "slice",
+						index:   i,
+						run:     this.run,
+						plot:    this,
+						shape:   shape,
+						x:       i,
+						y:       v,
+						cx:      circle.cx,
+						cy:      circle.cy,
+						cr:      r
+					};
+					this._connectEvents(shape, o);
+				}
+				
 				start = end;
 			}, this);
 			// draw labels

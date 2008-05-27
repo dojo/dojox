@@ -126,6 +126,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 				this.runs[name] = this.series.length;
 				this.series.push(run);
 			}
+			run.name = name;
 			this.dirty = true;
 			// fix min/max
 			if(!("ymin" in run) && "min" in run){ run.ymin = run.min; }
@@ -408,6 +409,9 @@ dojo.require("dojox.charting.plot2d.Pie");
 			// END FOR HTML CANVAS
 
 			return this;
+		},
+		connectToPlot: function(name, object, method){
+			return name in this.plots ? this.stack[this.plots[name]].connect(object, method) : null;
 		},
 		_makeClean: function(){
 			// reset dirty flags
