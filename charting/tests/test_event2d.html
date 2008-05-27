@@ -66,6 +66,8 @@ dojo.require("dojox.lang.functional.fold");
 
 var df = dojox.lang.functional, m = dojox.gfx.matrix;
 
+var dur = 450;
+
 AnimateShapes = function(chart, plot){
 	if(!plot){ plot = "default"; }
 	
@@ -92,7 +94,7 @@ AnimateShapes = function(chart, plot){
 		if(o.shape){
 			vector.push(dojox.gfx.fx.animateTransform({
 				shape: o.shape,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				transform: [
 					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
@@ -103,7 +105,7 @@ AnimateShapes = function(chart, plot){
 		if(o.oultine){
 			vector.push(dojox.gfx.fx.animateTransform({
 				shape: o.outline,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				transform: [
 					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
@@ -114,7 +116,7 @@ AnimateShapes = function(chart, plot){
 		if(o.shadow){
 			vector.push(dojox.gfx.fx.animateTransform({
 				shape: o.shadow,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				transform: [
 					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
@@ -167,13 +169,13 @@ AnimateColor = function(chart, plot, colors){
 		var a = this.anim[o.run.name][o.index] = dojo.fx.combine([
 			dojox.gfx.fx.animateFill({
 				shape: o.shape,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				color: {start: startFill, end: endFill}
 			}),
 			dojox.gfx.fx.animateStroke({
 				shape: o.shape,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				color: {start: startStroke, end: endStroke}
 			})
@@ -226,19 +228,19 @@ AnimateSlices = function(chart, plot, colors){
 		a = this.anim[o.index] = dojo.fx.combine([
 			dojox.gfx.fx.animateFill({
 				shape: o.shape,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				color: {start: startFill, end: endFill}
 			}),
 			dojox.gfx.fx.animateStroke({
 				shape: o.shape,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				color: {start: startStroke, end: endStroke}
 			}),
 			dojox.gfx.fx.animateTransform({
 				shape: o.shape,
-				duration: 250,
+				duration: dur,
 				easing: dojox.fx.easing.elasticOut,
 				transform: [
 					rotateBack,
