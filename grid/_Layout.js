@@ -41,25 +41,44 @@ dojo.declare("dojox.grid._Layout", null, {
 			}
 		}
 
+		var isCell = function(def){
+			return ("name" in def || "field" in def || "get" in def);
+		};
+
+		var isRowDef = function(def){
+			if(dojo.isArray(def)){
+				if(dojo.isArray(def[0]) || isCell(def[0])){
+					return true;
+				}
+			}
+			return false;
+		};
+
+		var isView = function(def){
+			return (def != null && dojo.isObject(def) &&
+					("cells" in def || "rows" in def || "type" in def));
+		};
+
 		if(dojo.isArray(inStructure)){
+			var hasViews = false;
 			for(var i=0, st; (st=inStructure[i]); i++){
-				if(dojo.isArray(st)){
-					// it's an array or array of arrays defining cells
-					s.push(this.addViewDef({ cells: inStructure }));
+				if(isView(st)){
+					hasViews = true;
 					break;
-				}else{
-					if("name" in st || "field" in st || "get" in st){
-						// it's a cell object
-						s.push(this.addViewDef({ cells: inStructure }));
-						break;
-					}else{
-						// it's a view object
+				}
+			}
+			if(!hasViews){
+				s.push(this.addViewDef({ cells: inStructure }));
+			}else{
+				for(var i=0, st; (st=inStructure[i]); i++){
+					if(isRowDef(st)){
+						s.push(this.addViewDef({ cells: st }));
+					}else if(isView(st)){
 						s.push(this.addViewDef(st));
 					}
 				}
 			}
-		}else if(inStructure != null && dojo.isObject(inStructure) &&
-				 ("cells" in inStructure || "rows" in inStructure || "type" in inStructure)){
+		}else if(isView(inStructure)){
 			// it's a view object
 			s.push(this.addViewDef(inStructure));
 		}
