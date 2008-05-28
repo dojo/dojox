@@ -41,27 +41,35 @@
 		dojo.require("dijit.layout.SplitContainer");
 		dojo.require("dijit.layout.TabContainer");
 		
-		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileWriteStore");
 		
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-			// a grid view is a group of columns
-			var view1 = {
-				cells: [[
-					{name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'}, {name: 'Column 3', width: "150px"}, {name: 'Column 4'}
-				],[
-					{name: 'Column 5'}, {name: 'Column 6'}, {name: 'Column 7'}, {name: 'Column 8', field: 3, colSpan: 2}
-				]]
-			};
-			// a grid layout is an array of views.
-			var layout = [ view1 ];
-			var layout2 = [ {
-				cells: [[
-					{name: 'Alpha'}, {name: 'Beta'}, {name: 'Gamma'}, {name: 'Delta', width: "150px"}, {name: 'Epsilon'}, {name: 'Nexilon'}, {name: 'Zeta'}, {name: 'Eta', field: 0}, {name: 'Omega' }
-				]]
-			} 
+		var layout = [[
+			{name: 'Column 1', field: 'col1'},
+			{name: 'Column 2', field: 'col2'},
+			{name: 'Column 3', field: 'col3'},
+			{name: 'Column 4', field: 'col4', width: "150px"},
+			{name: 'Column 5', field: 'col5'}
+		],[
+			{name: 'Column 6', field: 'col6'},
+			{name: 'Column 7', field: 'col7'},
+			{name: 'Column 8'},
+			{name: 'Column 9', field: 'col3', colSpan: 2}
+		]];
+		var layout2 = [
+			{name: 'Alpha', field: 'col1'},
+			{name: 'Beta', field: 'col2'},
+			{name: 'Gamma', field: 'col3'},
+			{name: 'Delta', field: 'col4', width: "150px"},
+			{name: 'Epsilon', field: 'col5'},
+			{name: 'Nexilon', field: 'col6'},
+			{name: 'Zeta', field: 'col7'},
+			{name: 'Eta', field: 'col1'},
+			{name: 'Omega', field: 'col8'}
 		];
 		//
 		dojo.addOnLoad(function(){
@@ -99,11 +107,11 @@
 				sizeMin="50" sizeShare="80"
 			>
 				<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" sizeMin="20" sizeShare="70">
-					<div id="grid1" dojoType="dojox.grid.Grid" model="model" title="Tab 1"></div>
-					<div id="grid2" dojoType="dojox.grid.Grid" model="model" structure="layout2" title="Tab 2"></div>
+					<div id="grid1" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout" title="Tab 1"></div>
+					<div id="grid2" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout2" title="Tab 2"></div>
 				</div>
 				<div id="bottomRight" dojoType="dijit.layout.ContentPane" sizeMin="20" sizeShare="30">
-					<div id="grid3" dojoType="dojox.grid.Grid" model="model" structure="layout2"></div>
+					<div id="grid3" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout2"></div>
 				</div>
 			</div>
 		</div>

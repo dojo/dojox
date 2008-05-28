@@ -21,62 +21,46 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
-	<!--<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+	<script type="text/javascript">
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
-	</script>-->
-	<!-- Debugging -->
-	<script type="text/javascript" src="../util.js"></script>
-	<script type="text/javascript" src="../_Scroller.js"></script>
-	<script type="text/javascript" src="../cells/_base.js"></script>
-	<script type="text/javascript" src="../_Layout.js"></script>
-	<script type="text/javascript" src="../_RowManager.js"></script>
-	<script type="text/javascript" src="../_FocusManager.js"></script>
-	<script type="text/javascript" src="../Selection.js"></script>
-	<script type="text/javascript" src="../_EditManager.js"></script>
-	<script type="text/javascript" src="../_View.js"></script>
-	<script type="text/javascript" src="../_RowSelector.js"></script>
-	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../_Grid.js"></script>
-	<script type="text/javascript" src="../_data/fields.js"></script>
-	<script type="text/javascript" src="../_data/model.js"></script>
-	<script type="text/javascript" src="../Grid.js"></script>
+	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-		// here is a custom compare function that can drive the sorting engine
-		// of course, this is only valid for client-side data sets
-		compare2ndLetter = function(inA, inB) {
-			// sort on the second letter
-			// return <0, 0, >0
-			return inA.charCodeAt(1) - inB.charCodeAt(1);
+		test_data.comparatorMap = {};
+		test_data.comparatorMap["col1"] = function(a, b){
+			var ret = 0;
+			// We want to map these by what the priority of these items are, not by alphabetical.
+			// So, custom comparator.
+			var enumMap = { "important": 0, "normal": 1, "note": 2 };
+			if (enumMap[a] > enumMap[b]) {
+				ret = 1;
+			}
+			if (enumMap[a] < enumMap[b]) {
+				ret = -1;
+			}
+			return ret;
 		}
-		
-		// custom compare functions for sorting belong to the data model
-		// data model keeps this kind of metadata in a object called 'fields'
-		
-		// you can install the custom compare function directly into fields
-		// model.fields.get(3).compare = compare2ndLetter;
-		
-		// or you could setup fields when instantiating the model
-		model = new dojox.grid._data.Table([{}, {}, {}, {compare: compare2ndLetter}], data);
-		
-		// a grid view is a group of columns
-		var view1 = {
-			cells: [[
-				{name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'}, {name: 'Column 3', width: "auto"}, {name: 'Column 4'}
-			],[
-				{name: 'Column 5'}, {name: 'Column 6'}, {name: 'Column 7'}, {name: 'Column 8', field: 3, colSpan: 2}
-			]]
-		};
-		// a grid layout is an array of views.
-		var layout = [ view1 ];
+		var layout = [[
+			{name: 'Column 1', field: 'col1'},
+			{name: 'Column 2', field: 'col2'},
+			{name: 'Column 3', field: 'col3'},
+			{name: 'Column 4', field: 'col4', width: "150px"},
+			{name: 'Column 5', field: 'col5'}
+		],[
+			{name: 'Column 6', field: 'col6'},
+			{name: 'Column 7', field: 'col7'},
+			{name: 'Column 8'},
+			{name: 'Column 9', field: 'col3', colSpan: 2}
+		]];
 </script>
 </head>
 <body>
 <div class="heading">dojox.grid.Grid Custom Sort Test</div>
 <br />
-<b>Column 3</b>'s data field has a custom sorter that sorts by the 2nd letter in the string.
+<b>Column 1</b>'s data field has a custom sorter that sorts by the status level rather than alphebetically
 <br /><br />
-<div id="grid" dojoType="dojox.grid.Grid" model="model" structure="layout"></div>
+<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout"></div>
 </body>
 </html>

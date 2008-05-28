@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Test dojox.grid.Grid Editing</title>
+		<title>Test dojox.grid.DataGrid Editing</title>
 		<style>
 			@import "../resources/tundraGrid.css";
 			@import "../../../dojo/resources/dojo.css";
@@ -42,36 +42,12 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js"
 			djConfig="isDebug:false, parseOnLoad: true"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.grid.Grid");
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojo.data.ItemFileWriteStore");
 			dojo.require("dojo.parser");
 		</script>
+		<script type="text/javascript" src="support/test_data.js"></script>
 		<script type="text/javascript">
-			// ==========================================================================
-			// Create a data model
-			// ==========================================================================
-			data = [ 
-				[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false ],
-				[ "important", false, "new", 'Because a % sign always indicates', 9.33, -5, false ],
-				[ "important", false, "read", 'Signs can be selectively', 19.34, 0, true ],
-				[ "note", false, "read", 'However the reserved characters', 15.63, 0, true ],
-				[ "normal", false, "replied", 'It is therefore necessary', 24.22, 5.50, true ],
-				[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
-				[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
-			];
-			var rows = 10000;
-			for(var i=0, l=data.length; i<rows-l; i++){
-				data.push(data[i%l].slice(0));
-			}
-			model = new dojox.grid._data.Table(null, data);
-
-			// ==========================================================================
-			// Tie some UI to the data model
-			// ==========================================================================
-			model.observer(this);
-			modelChange = function(){
-				dojo.byId("rowCount").innerHTML = 'Row count: ' + model.count; 
-			}
-
 			// ==========================================================================
 			// Custom formatter
 			// ==========================================================================
@@ -82,42 +58,47 @@
 			// ==========================================================================
 			// Grid structure
 			// ==========================================================================
-			statusCell = { 
-				field: 2,
-				name: 'Status',
+			selectCell = {
 				styles: 'text-align: center;',
-				type: dojox.grid.cells.Select,
-				options: [ "new", "read", "replied" ]
+				type: dojox.grid.cells.Select
 			};
 
-			gridLayout = [
-				{
-					type: 'dojox.grid._RowSelector', width: '20px'
-				},
-				{
-					defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
-					rows: [
-						[
-							{ name: 'Id', width: 3, get: function(inRowIndex){ return inRowIndex+1;} },
-							{ name: 'Priority', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"]},
-							{ name: 'Mark', width: 3, styles: 'text-align: center;', type: dojox.grid.cells.Bool },
-							statusCell,
-							{ name: 'Message', styles: '', width: '100%' },
-							{ name: 'Amount', formatter: formatMoney }
-						]
+			gridLayout = {
+				defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
+				rows: [
+					[
+						{ name: 'Id', width: 3, field: 'id' },
+						dojo.mixin({}, selectCell, {
+							name: 'Priority', field: 'col1', options: [ 'normal', 'note', 'important' ]
+						}),
+						{ name: 'Mark', width: 3, field: 'col2', styles: 'text-align: center;', type: dojox.grid.cells.Bool },
+						dojo.mixin({}, selectCell, {
+							name: 'Status', field: 'col3', options: [ 'new', 'read', 'replied' ]
+						}),
+						{ name: 'Message', field: 'col4', styles: '', width: '100%' },
+						{ name: 'Amount', field: 'col5', formatter: formatMoney }
 					]
-				}
-			];
+				]
+			};
 			// ==========================================================================
 			// UI Action
 			// ==========================================================================
 			addRow = function() {
-				grid.addRow([ "normal", false, "new", 'Now is the time for all good men to come to the aid of their party.', 99.99, 9.99, false ]);
+				test_data.newItem({
+					id: grid.rowCount,
+					col1: 'normal',
+					col2: false,
+					col3: 'new',
+					col4: 'Now is the time for all good men to come to the aid of their party.',
+					col5: 99.99,
+					col6: 9.99,
+					col7: false
+				});
 			}
 		</script>
 	</head>
 	<body class="tundra">
-	<h1>dojox.grid.Grid Basic Editing test</h1>
+	<h1>dojox.grid.DataGrid Basic Editing test</h1>
 	<br />
 	<div id="controls">
 		<button onclick="grid.refresh()">Refresh</button>
@@ -131,8 +112,8 @@
 	</div>
 	<br />
 	<div jsId="grid" class="myGrid" 
-		dojoType="dojox.grid.Grid" model="model" 
-		structure="gridLayout"></div>
+		dojoType="dojox.grid.DataGrid" model="test_data" 
+		structure="gridLayout" rowSelector="20px"></div>
 	<br />
 	<div id="rowCount"></div>
 	</body>

@@ -24,57 +24,52 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
-	<!--<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+	<script type="text/javascript">
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
-	</script>-->
-	<!-- Debugging -->
-	<script type="text/javascript" src="../util.js"></script>
-	<script type="text/javascript" src="../_Scroller.js"></script>
-	<script type="text/javascript" src="../cells/_base.js"></script>
-	<script type="text/javascript" src="../_Layout.js"></script>
-	<script type="text/javascript" src="../_RowManager.js"></script>
-	<script type="text/javascript" src="../_FocusManager.js"></script>
-	<script type="text/javascript" src="../Selection.js"></script>
-	<script type="text/javascript" src="../_EditManager.js"></script>
-	<script type="text/javascript" src="../_View.js"></script>
-	<script type="text/javascript" src="../_RowSelector.js"></script>
-	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../_Grid.js"></script>
-	<script type="text/javascript" src="../_data/fields.js"></script>
-	<script type="text/javascript" src="../_data/model.js"></script>
-	<script type="text/javascript" src="../Grid.js"></script>
+	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-		// a grid view is a group of columns
-		var view1 = {
+		var layout = [
+			{name: 'Column 1', field: 'col1'},
+			{name: 'Column 2', field: 'col2', width: "10em"},
+			{name: 'Column 3', field: 'col3', width:"100px"},
+			{name: 'Column 4 is 25%', field: 'col4', width: "25%"},
+			{name: 'Column 5 is 75% of the remaining space', field: 'col5', width: "75%"}
+		];
+
+		var layout2 = [{
+			noscroll: true,
 			cells: [[
-				{name: 'Column 0'}, {name: 'Column 1', width: "10em"}, {name: 'Column 2', width:"100px"}, {name: 'Column 3 is 25%', width: "25%"}, {name: 'Column 4 is 75% of the remaining space', width: "75%"}
+				{ name: "Alpha", value: '<input type="checkbox"></input>', rowSpan: 2, width: 6, styles: 'text-align:center;' },
+				{ name: "Alpha 2", value: "Alpha2" }
+			],[
+				{ name: "Alpha 3", value: "Alpha3" }
 			]]
-		};
-		// a grid layout is an array of views.
-		var layout = [ view1 ];
-		
-		
-		var layout2 = [// array of view objects
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
-			{ noscroll: true, cells: [// array of rows, a row is an array of cells
-					[{ name: "Alpha", value: '<input type="checkbox"></input>', rowSpan: 2, width: 6, styles: 'text-align:center;' }, { name: "Alpha 2", value: "Alpha2" }], 
-					[{ name: "Alpha 3", value: "Alpha3" }]
-			]},
-			{ cells: [
-					[{ name: "Beta", value: 'simple'}, { name: "Beta 2", value: "Beta 2" }, { name: "Beta 3", value: "Beta 3" }, { name: "Beta 4", value: "Beta 4", width: "auto" }, { name: "Beta 5 is good", value: "Beta 5", width: "auto" }], 
-				 	[{ name: "Summary", colSpan: 5, value: 'Summary' }]
-			]},
-			{	noscroll: true, cells: [
-					[{ name: "Gamma", value: "Gamma" }, { name: "Gamma2", value: "<button>Radiate</button>", styles: 'text-align:center;' }]]
-			}];
+		},{
+			cells: [[
+				{ name: "Beta", value: 'simple'},
+				{ name: "Beta 2", value: "Beta 2" },
+				{ name: "Beta 3", value: "Beta 3" },
+				{ name: "Beta 4", value: "Beta 4", width: "auto" },
+				{ name: "Beta 5 is good", value: "Beta 5", width: "auto" }
+			],[
+				{ name: "Summary", colSpan: 5, value: 'Summary' }
+			]]
+		},{
+			noscroll: true,
+			cells: [
+				{ name: "Gamma", value: "Gamma" },
+				{ name: "Gamma2", value: "<button>Radiate</button>", styles: 'text-align:center;' }
+			]
+		}];
 </script>
 </head>
 <body>
 <div class="heading">dojox.grid.Grid Basic Test</div>
-<div jsid="grid" id="grid" dojoType="dojox.grid.Grid" model="model" structure="layout"></div>
+<div jsid="grid" id="grid" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout"></div>
 <br /><br />
-<div jsid="grid2" id="grid2" dojoType="dojox.grid._Grid" model="model" structure="layout2" rowCount="50"></div>
+<div jsid="grid2" id="grid2" dojoType="dojox.grid._Grid" structure="layout2" rowCount="50" rowSelector="20px"></div>
 </body>
 </html>

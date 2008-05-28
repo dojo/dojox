@@ -24,37 +24,30 @@
 		<script type="text/javascript">
 			dojo.require("dijit.layout.TabContainer");
 			dojo.require("dijit.layout.ContentPane");
-			dojo.require("dojox.grid.Grid");
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojo.data.ItemFileWriteStore");
 			dojo.require("dojo.parser");
 		</script>
 		<script type="text/javascript" src="support/test_data.js"></script>
 		<script type="text/javascript">
 			dojo.addOnLoad(function(){
-				// a grid view is a group of columns
-				var view1 = {
-					cells: [
-						[
-							{name: 'Column 0'}, 
-							{name: 'Column 1'}, 
-							{name: 'Column 2'}, 
-							{name: 'Column 3', width: "150px"}, 
-							{name: 'Column 4'}
-						],
-						[
-							{name: 'Column 5'}, 
-							{name: 'Column 6'}, 
-							{name: 'Column 7'}, 
-							{name: 'Column 8', field: 3, colSpan: 2}
-						]
-					]
-				};
-				// a grid layout is an array of views.
-				var layout = [ view1 ];
+				var layout = [[
+					{name: 'Column 1', field: 'col1'},
+					{name: 'Column 2', field: 'col2'},
+					{name: 'Column 3', field: 'col3'},
+					{name: 'Column 4', field: 'col4', width: "150px"},
+					{name: 'Column 5', field: 'col5'}
+				],[
+					{name: 'Column 6', field: 'col6'},
+					{name: 'Column 7', field: 'col7'},
+					{name: 'Column 8'},
+					{name: 'Column 9', field: 'col3', colSpan: 2}
+				]];
 
-				var grid = new dojox.grid.Grid({
+				var grid = new dojox.grid.DataGrid({
 					title: "tab 1",
 					id: "grid",
-					model: model,
+					model: test_data,
 					structure: layout
 				});
 				dijit.byId("mainTabContainer").addChild(grid, 0);

@@ -23,41 +23,13 @@
 		djConfig="isDebug: true, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojox.grid.cells.dijit");
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
-
-		// ==========================================================================
-		// Create a data model
-		// ==========================================================================
-		
-		s = (new Date()).getTime();
-		
-		data = [ 
-			[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false, s],
-			[ "important", false, "new", 'Because a % sign always indicates', 9.33, -5, false, s ],
-			[ "important", false, "read", 'Signs can be selectively', 19.34, 0, true, s ],
-			[ "note", false, "read", 'However the reserved characters', 15.63, 0, true, s ],
-			[ "normal", false, "replied", 'It is therefore necessary', 24.22, 5.50, true, s ],
-			[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true, s ],
-			[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false, s ]
-		];
-		var rows = 100;
-		for(var i=0, l=data.length; i<rows; i++){
-			data.push(data[i%l].slice(0));
-		}
-		model = new dojox.grid._data.Table(null, data);
-		// ==========================================================================
-		// Tie some UI to the data model
-		// ==========================================================================
-		model.observer(this);
-		modelChange = function(){
-			dojo.byId("rowCount").innerHTML = 'Row count: ' + model.count; 
-		}
-		/*
-		modelInsertion = modelDatumChange = function(a1, a2, a3){
-			console.debug(a1, a2, a3);
-		}
-		*/
+	</script>
+	<script type="text/javascript" src="support/test_data_date.js"></script>
+	<script type="text/javascript">
 		// ==========================================================================
 		// Custom formatters
 		// ==========================================================================
@@ -71,52 +43,55 @@
 		// Grid structure
 		// ==========================================================================
 		statusCell = {
-			field: 2, name: 'Status', 
+			field: 'col3', name: 'Status', 
 			styles: 'text-align: center;', 
 			type: dojox.grid.cells.Select, 
 			options: [ "new", "read", "replied" ]
 		};
 
 		gridLayout = [{
-			type: 'dojox.grid._RowSelector', width: '20px'
-		},{
 			defaultCell: { width: 8, editable: true, type: dojox.grid.cells._Widget, styles: 'text-align: right;'  },
-			rows: [[
-				{ name: 'Id', 
-					get: function(inRowIndex) { return inRowIndex+1;}, 
+			rows: [
+				{ name: 'Id', field: 'id',
 					widgetClass: "dijit.form.NumberSpinner" },
-				{ name: 'Date', width: 10, field: 7, 
+				{ name: 'Date', field: 'col8', width: 10,
 					type: dojox.grid.cells.DateTextBox, 
 					formatter: formatDate, 
 					constraint: {formatLength: 'long', selector: "date"}},
-				{ name: 'Priority', styles: 'text-align: center;', field: 0, 
+				{ name: 'Priority', styles: 'text-align: center;', field: 'col1', 
 					type: dojox.grid.cells.ComboBox, 
 					options: ["normal", "note", "important"], width: 10},
-				{ name: 'Mark', width: 3, styles: 'text-align: center;', 
+				{ name: 'Mark', field: 'col2', width: 3, styles: 'text-align: center;', 
 					type: dojox.grid.cells.CheckBox},
 				statusCell,
-				{ name: 'Message', styles: '', width: '100%', 
+				{ name: 'Message', field: 'col4', styles: '', width: '100%', 
 					type: dojox.grid.cells.Editor, editorToolbar: true },
-				{ name: 'Amount', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
+				{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
 					widgetClass: "dijit.form.CurrencyTextBox" },
-				{ name: 'Amount', field: 4, formatter: formatCurrency, constraint: {currency: 'EUR'}, 
+				{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
 					widgetClass: "dijit.form.HorizontalSlider", width: 10}
-			]]
+			]
 		}];
 		// ==========================================================================
 		// UI Action
 		// ==========================================================================
 		addRow = function(){
-			grid.addRow([
-				"normal", false, "new", 
-				'Now is the time for all good men to come to the aid of their party.', 
-				99.99, 9.99, false 
-			]);
+			test_data.newItem({
+				id: grid.rowCount,
+				col1: 'normal',
+				col2: false,
+				col3: 'new',
+				col4: 'Now is the time for all good men to come to the aid of their party.',
+				col5: 99.99,
+				col6: 9.99,
+				col7: false,
+				col8: (new Date()).getTime()
+			});
 		}
 	</script>
 </head>
 <body class="tundra">
-	<h1>dojox.grid.Grid Basic Editing test</h1>
+	<h1>dojox.grid.DataGrid Basic Editing test</h1>
 	<br />
 	<div id="controls">
 		<button onclick="grid.refresh()">Refresh</button>
@@ -129,7 +104,7 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 	</div>
 	<br />
-	<div id="grid" jsId="grid" dojoType="dojox.grid.Grid" model="model" structure="gridLayout"></div>
+	<div id="grid" jsId="grid" dojoType="dojox.grid.DataGrid" model="test_data" rowSelector="20px" structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>
 </body>

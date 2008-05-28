@@ -2,22 +2,27 @@
 (function(){
 	// some sample data
 	// global var "data"
-	data = [ 
-		[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false ],
-		[ "important", false, "new", 'Because a % sign always indicates', 9.33, -5, false ],
-		[ "important", false, "read", 'Signs can be selectively', 19.34, 0, true ],
-		[ "note", false, "read", 'However the reserved characters', 15.63, 0, true ],
-		[ "normal", false, "replied", 'It is therefore necessary', 24.22, 5.50, true ],
-		[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
-		[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
+	data = {
+		identifier: 'id',
+		label: 'id',
+		items: []
+	};
+	data_list = [ 
+		{ col1: "normal", col2: false, col3: "new", col4: 'But are not followed by two hexadecimal', col5: 29.91, col6: 10, col7: false },
+		{ col1: "important", col2: false, col3: "new", col4: 'Because a % sign always indicates', col5: 9.33, col6: -5, col7: false },
+		{ col1: "important", col2: false, col3: "read", col4: 'Signs can be selectively', col5: 19.34, col6: 0, col7: true },
+		{ col1: "note", col2: false, col3: "read", col4: 'However the reserved characters', col5: 15.63, col6: 0, col7: true },
+		{ col1: "normal", col2: false, col3: "replied", col4: 'It is therefore necessary', col5: 24.22, col6: 5.50, col7: true },
+		{ col1: "important", col2: false, col3: "replied", col4: 'To problems of corruption by', col5: 9.12, col6: -3, col7: true },
+		{ col1: "note", col2: false, col3: "replied", col4: 'Which would simply be awkward in', col5: 12.15, col6: -4, col7: false },
 	];
 	var rows = 100;
-	for(var i=0, l=data.length; i<rows-l; i++){
-		data.push(data[i%l].slice(0));
+	for(var i=0, l=data_list.length; i<rows; i++){
+		data.items.push(dojo.mixin({ id: i }, data_list[i%l]));
 	}
 
-	// global var "model"
-	model = new dojox.grid._data.Table(null, data);
+	// global var "test_data"
+	test_data = new dojo.data.ItemFileWriteStore({data: data});
 
 	// simple display of row info; based on model observation
 	// global var "modelChange"

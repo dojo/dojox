@@ -73,34 +73,30 @@
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
 	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-		// grid structure
-		// a grid view is a group of columns
-		
-		// a view without scrollbars
-		var leftView = {
-			noscroll: true,
-			cells: [[
-				{name: 'Column 0', width: 5, headerStyles: 'padding-bottom: 2px;', styles: 'border-bottom: 1px dashed #333; border-right: 1px dashed #333; padding: 6px;'},
-				{name: 'Column 1', width: 5, headerStyles: 'padding-bottom: 2px;', styles: 'text-align: right; border-bottom: 1px dashed #333; border-right: 1px dashed #333; padding: 6px;'}
-		]]};
-		
-		var middleView = {
-			cells: [[
-				{name: 'Column 2'},
-				{name: 'Column 3', headerStyles: 'background-image: none; background-color: #003333;', classes: 'greenColumn'},
-				{name: 'Column 4', cellClasses: 'yellowColumnData', classes: 'yellowColumn', styles: 'text-align: center;' },
-				{name: 'Column 5', headerStyles: 'background-image: none; background-color: #003333;', classes: 'greenColumn'},
-				{name: 'Column 6'},
-				{name: 'Column 7'},
-		]]};
-		
-		// a grid structure is an array of views.
-		var structure = [ leftView, middleView ];
+		var structure = [
+			{
+				// a view without scrollbars
+				noscroll: true,
+				cells: [
+					{name: 'Column 1', field: 'col1', width: 5, headerStyles: 'padding-bottom: 2px;', styles: 'border-bottom: 1px dashed #333; border-right: 1px dashed #333; padding: 6px;'},
+					{name: 'Column 2', field: 'col2', width: 5, headerStyles: 'padding-bottom: 2px;', styles: 'text-align: right; border-bottom: 1px dashed #333; border-right: 1px dashed #333; padding: 6px;'}
+				]
+			},
+			[
+				{name: 'Column 3', field: 'col3'},
+				{name: 'Column 4', field: 'col4', headerStyles: 'background-image: none; background-color: #003333;', classes: 'greenColumn'},
+				{name: 'Column 5', field: 'col5', cellClasses: 'yellowColumnData', classes: 'yellowColumn', styles: 'text-align: center;' },
+				{name: 'Column 6', field: 'col6', headerStyles: 'background-image: none; background-color: #003333;', classes: 'greenColumn'},
+				{name: 'Column 7', field: 'col7'},
+				{name: 'Column 8', field: 'col8'},
+			]
+		];
 		
 		function onStyleRow(inRow) {
 			with (inRow) {
@@ -115,17 +111,13 @@
 				if (over)	
 					customClasses += ' overRow';
 				if (!over && !selected)
-					dojox.grid.Grid.prototype.onStyleRow.apply(this, arguments);
+					dojox.grid.DataGrid.prototype.onStyleRow.apply(this, arguments);
 			}	
 		}
-		
-		dojo.addOnLoad(function() {
-			window["grid"] = dijit.byId('grid');
-		});
 </script>
 </head>
 <body>
 <div class="heading">dojox.grid.Grid Styling Example</div>
-<div id="grid" dojoType="dojox.grid.Grid" onStyleRow="onStyleRow" model="model" structure="structure"></div>
+<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" onStyleRow="onStyleRow" model="test_data" structure="structure"></div>
 </body>
 </html>

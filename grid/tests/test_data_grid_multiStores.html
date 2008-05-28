@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>dojox.grid.Grid with Dojo.Data via binding.  Multiple Store implementations.</title>
+	<title>dojox.grid.DataGrid using multiple store implementations.</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../dijit/themes/tundra/tundra.css";
@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
 		djConfig="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileReadStore");
 		dojo.require("dojox.data.CsvStore");
 		dojo.require("dojox.data.XmlStore");
@@ -29,105 +29,88 @@
 	</script>
 
 	<script type="text/javascript">
-		function getRow(inRowIndex){
+		function getRow(inItem, inRowIndex){
 			return ' ' + inRowIndex;
 		}
 		
-		var formatHref = function(attribute, rowIndex) {
-			model = dataModel4;
-			if(!model)
-				return "?";
-			var value = model.getRow(rowIndex);
-			if(value && value[attribute])
-				return "<a href=\"" + value[attribute] + "\" target=\"_blank\">Image Link</a>";
-			return "";
+		var formatHref = function(value, rowIndex) {
+			return "<a href=\"" + value + "\" target=\"_blank\">Image Link</a>";
 		}
 
+		var rowView = { cells: [{ name: 'Row', get: getRow, width: 5 }], noscroll: true };
+
 		var layoutMovies = [
-			// view 0
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			rowView,
 			// view 2
-			{ cells: [[
+			[
 				{ field: "Title", width: 'auto' },
 				{ field: "Year", width: 5 },
 				{ field: "Producer", width: 20 }
-			]]}
+			]
 		];
 		
 		var layoutCountries = [
-			// view 0
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			rowView,
 			// view 2
-			{ cells: [[
-				{ field: 0, width: 'auto' },
-				{ width: 8 }
-			]]}
+			[
+				{ field: 'name', width: 'auto' },
+				{ field: 'type', width: 8 }
+			]
 		];
 
 		var layoutBooks = [
-			// view 0
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			rowView,
 			// view 2
-			{ cells: [[
+			[
 				{ field: "title", width: 'auto' },
 				{ field: "isbn", width: '8' }
-			]]}
+			]
 		];
 
 		//Lay out the Flickr data so one column is a URL.  This makes use of the
 		//get function of a cell.
 		var layoutFlickrData = [
-			// view 0
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			rowView,
 			// view 2
-			{ cells: [[
+			[
 				{ name: "Title", field: "title", width: 'auto' },
-				{ name: "Image URL", field: "imageUrl", width: '15', get: dojo.partial(formatHref, "imageUrl")}
-			]]}
+				{ name: "Image URL", field: "imageUrl", width: '15', formatter: formatHref}
+			]
 		];
 
 		var layoutOpmlData = [
-			// view 0
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			rowView,
 			// view 2
-			{ cells: [[
+			[
 				{ name: 'Name', field: 'text', width: 'auto'},
 				{ name: 'Type', field: 'type', width: '8' }
-			]]}
+			]
 		];
 
 		var layoutHtmlTable = [
-			// view 0
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			rowView,
 			// view 2
-			{ cells: [[
+			[
 				{ name: 'Column 1', field: 'Column 1', width: 'auto'},
 				{ name: 'Column 2', field: 'Column 2', width: 'auto'},
 				{ name: 'Column 3', field: 'Column 3', width: 'auto'},
 				{ name: 'Column 4', field: 'Column 4', width: 'auto'}
-			]]}
+			]
 		];
 	</script>
 </head>
 <body class="tundra">
-	<h1>dojox.grid.Grid using Dojo.Data stores via simple binding with multiple store implementations.</h1>
+	<h1>dojox.grid.DataGrid using multiple store implementations.</h1>
 	<p>
 		This page demonstrates the Grid can display data accessed by dojo.data implementing Datastores.  
 		Each of the datastores used stores data in a different format, and as this test and demonstration
-		page shows, the logic for rendering the data is virtually identical.  You define your source store,
-		you define the model for accessing the data, which is ij this case the dojox.grid._data.DojoData model
+		page shows, the logic for rendering the data is virtually identical.  You define your source store
 		and then you define the layout, which maps the data attribute names to columns in the grid.  You can 
 		even perform cusomization of what is displayed, as demonstrated in the dojox.data.FlickrStore layout.  
 		The image url is displayed as a clickable link that opens a new page.
@@ -141,8 +124,6 @@
 	<ul>
 		<li>dojo.data.ItemFileReadStore</li>
 		<li>dojox.data.CvsStore</li>
-		<li>dojox.data.XmlStore</li>
-		<li>dojox.data.FlickrStore</li>
 		<li>dojox.data.OpmlStore</li>
 		<li>dojox.data.HtmlTableStore</li>
 	</ul>
@@ -152,14 +133,8 @@
 	<span dojoType="dojo.data.ItemFileReadStore" 
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
-	<span dojoType="dojox.grid._data.DojoData" 
-		jsId="dataModel" 
-		rowsPerPage="20"
-		store="jsonStore" 
-		query="{ name : '*' }">
-	</span>
-	<div id="grid" dojoType="dojox.grid.Grid" elasticView="2" 
-		model="dataModel" structure="layoutCountries">
+	<div id="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ name: '*' }" rowsPerPage="20"
+		model="jsonStore" structure="layoutCountries" rowSelector="20px">
 	</div>
 
 
@@ -168,31 +143,17 @@
 	<span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore" url="support/movies.csv">
 	</span>
-	<span dojoType="dojox.grid._data.DojoData" 
-		jsId="dataModel2"
-		store="csvStore"
-		rowsPerPage="5"
-		query="{ Title: '*' }"
-		clientSort="true">
-	</span>
-	<div id="grid2" dojoType="dojox.grid.Grid" elasticView="2" 
-		model="dataModel2" structure="layoutMovies">
-
+	<div id="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ Title: '*' }" rowsPerPage="5"
+		model="csvStore" structure="layoutMovies" rowSelector="20px">
 	</div>
 
-	<h2>dojox.data.XmlStore:</h2>
+	<!--<h2>dojox.data.XmlStore:</h2>
 	<i>Displays a list of books that were stored in XML format.</i>
 	<span dojoType="dojox.data.XmlStore" 
 		jsId="xmlStore" url="support/books.xml">
 	</span>
-	<span dojoType="dojox.grid._data.DojoData" 
-		jsId="dataModel3" 
-		rowsPerPage="5"
-		store="xmlStore" 
-		query="{ title : '*' }">
-	</span>
-	<div id="grid3" dojoType="dojox.grid.Grid" elasticView="2" 
-		model="dataModel3" structure="layoutBooks">
+	<div id="grid3" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ title: '*' }" rowsPerPage="5"
+		model="xmlStore" structure="layoutBooks" rowSelector="20px">
 	</div>
 
 
@@ -201,50 +162,24 @@
 	<span dojoType="dojox.data.FlickrStore" 
 		jsId="flickrStore">
 	</span>
-	<span dojoType="dojox.grid._data.DojoData" 
-		jsId="dataModel4" 
+	<div id="grid4" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ tags: '3dny' }"
 		rowsPerPage="5"
-		store="flickrStore" 
-		query="{ tags : '3dny' }">
-	</span>
-	<div id="grid4" dojoType="dojox.grid.Grid" elasticView="2" 
-		model="dataModel4" structure="layoutFlickrData">
-	</div>
-
+		model="flickrStore" structure="layoutFlickrData" rowSelector="20px">
+	</div>-->
 
 	<h2>dojox.data.OpmlStore:</h2>
 	<i>Scans an Opml based document for all items of type 'country'</i> 
 	<span dojoType="dojox.data.OpmlStore" 
 		jsId="opmlStore" url="support/geography.xml">
 	</span>
-	<span dojoType="dojox.grid._data.DojoData" 
-		jsId="dataModel5" 
-		rowsPerPage="5"
-		store="opmlStore" 
-		query="{ type : 'country' }"
-		queryOptions="{deep: true}"
-		sortFields="[ { attribute : 'text' } ]">
-	</span>
-	<div id="grid5" dojoType="dojox.grid.Grid" elasticView="2" 
-		model="dataModel5" structure="layoutOpmlData">
+	<div id="grid5" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ type: 'country' }"
+		queryOptions="{ deep: true }" rowsPerPage="5"
+		model="opmlStore" structure="layoutOpmlData" rowSelector="20px">
 	</div>
 
 
 	<h2>dojox.data.HtmlStore:</h2>
 	<i>Loads the grid from an HTML Table.</i> 
-	<span dojoType="dojox.data.HtmlStore" 
-		jsId="htmlStore" dataId="tableExample">
-	</span>
-	<span dojoType="dojox.grid._data.DojoData" 
-		jsId="dataModel6" 
-		rowsPerPage="5"
-		store="htmlStore" 
-		query="{}">
-	</span>
-	<div id="grid6" dojoType="dojox.grid.Grid" elasticView="2" 
-		model="dataModel6" structure="layoutHtmlTable">
-	</div>
-
 	<!-- 
 		Inline data table to be displayed bu the grid! 
 		This is accessed via the dojox.data.HtmlTableStore
@@ -285,6 +220,13 @@
 			</tr>
 		</tbody>
 	</table>
+	<span dojoType="dojox.data.HtmlStore" 
+		jsId="htmlStore" dataId="tableExample">
+	</span>
+	<div id="grid6" dojoType="dojox.grid.DataGrid" elasticView="2" query="{}"
+		model="htmlStore" rowsPerPage="5" structure="layoutHtmlTable" rowSelector="20px">
+	</div>
+
 </body>
 </html>
 

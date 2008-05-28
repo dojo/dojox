@@ -77,7 +77,7 @@ dojo.provide("dojox.grid._Scroller");
 			}
 			this.defaultPageHeight = this.defaultRowHeight * this.rowsPerPage;
 			//this.defaultPageHeight = this.defaultRowHeight * Math.min(this.rowsPerPage, this.rowCount);
-			this.pageCount = Math.ceil(this.rowCount / this.rowsPerPage);
+			this.pageCount = Math.ceil(this.rowCount / this.rowsPerPage) || 1;
 			this.setKeepInfo(this.keepRows);
 			this.invalidate();
 			if(this.scrollboxNode){

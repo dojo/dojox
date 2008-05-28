@@ -289,11 +289,14 @@ dojo.require("dojox.grid._Events");
 			}
 			this.layout.setStructure(this.structure);
 			this._structureChanged();
-
-			this._fetch(0);
 		},
 
 		_fetch: function(start){
+			this.setScrollTop(0);
+		},
+
+		getItem: function(inRowIndex){
+			return null;
 		},
 
 		_structureChanged: function() {
@@ -413,9 +416,13 @@ dojo.require("dojox.grid._Events");
 			}
 			//
 			this.update = this.defaultUpdate;
+			this._render();
+		},
+
+		_render: function(){
 			this.scroller.init(this.rowCount, this.keepRows, this.rowsPerPage);
 			this.prerender();
-			//this.setScrollTop(0);
+			this.setScrollTop(0);
 			this.postrender();
 		},
 

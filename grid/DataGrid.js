@@ -4,7 +4,7 @@ dojo.require("dojox.grid._Grid");
 
 dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	model: null,
-	query: { name: '*' },
+	query: { id: '*' },
 	queryOptions: null,
 	fetchText: '...',
 
@@ -16,6 +16,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	_bop: -1,
 	_eop: -1,
 	_requests: 0,
+	rowCount: 0,
 
 	postCreate: function(){
 		this._identity_map = {};
@@ -29,7 +30,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	get: function(inItem, inRowIndex){
-		return (!inItem ? this.defaultValue : this.grid.model.getValue(inItem, this.field));
+		return (!inItem ? this.defaultValue : (!this.field ? this.value : this.grid.model.getValue(inItem, this.field)));
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
@@ -100,6 +101,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	_onFetchBegin: function(size, req){
 		if(this.rowCount != size){
+			if(req.isRender){
+				this.scroller.init(size, this.keepRows, this.rowsPerPage);
+				this.prerender();
+			}
 			this.updateRowCount(size);
 		}
 	},
@@ -110,13 +115,21 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		dojo.forEach(items, function(item, idx){
 			this._addItem(item, req.start+idx);
 		}, this);
+		if(req.isRender){
+			this.setScrollTop(0);
+			this.postrender();
+		}
 	},
 
 	_onFetchError: function(err, req){
 		console.log(err);
+		this.onFetchError(err, req);
 	},
 
-	_fetch: function(start){
+	onFetchError: function(err, req){
+	},
+
+	_fetch: function(start, isRender){
 		if(this.model){
 			var start = start || 0;
 			//console.log("fetch: ", start);
@@ -126,10 +139,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 				query: this.query,
 				sort: this.getSortProps(),
 				queryOptions: this.queryOptions,
+				isRender: isRender,
 				onBegin: dojo.hitch(this, "_onFetchBegin"),
 				onComplete: dojo.hitch(this, "_onFetchComplete"),
-				onError: dojo.hitch(this, "_onFetchError"),
-				scope: this
+				onError: dojo.hitch(this, "_onFetchError")
 			});
 		}
 	},
@@ -154,17 +167,28 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	getItemIndex: function(item){
+		if(!this.model.isItem(item)){
+			return -1;
+		}
 		var idty = this.model.getIdentity(item);
 		var imap = this._identity_map[idty];
 		return (imap ? imap.idx : -1);
 	},
-	
+
 	_getItemAttr: function(idx, attr){
 		var item = this.getItem(idx);
 		return (!item ? this.fetchText : this.model.getValue(item, attr));
 	},
 
 	// rendering
+	_render: function(){
+		if(this.domNode.parentNode){
+			this.scroller.init(this.rowCount, this.keepRows, this.rowsPerPage);
+			this.prerender();
+			this._fetch(0, true);
+		}
+	},
+
 	renderRows: function(inPageIndex, inRowsPerPage){
 		this.views.renderRows(inPageIndex, inRowsPerPage);
 	},
@@ -203,12 +227,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		if(count > 0){
 			this._requests++;
 			this._requestsPending(true);
-			setTimeout(dojo.hitch(this, "_fetch", row), 1);
+			setTimeout(dojo.hitch(this, "_fetch", row, false), 1);
 			//this.requestRows(row, count);
 		}
 	},
 
 	getCellName: function(inCell){
+		return inCell.field;
 		//console.log(inCell);
 	},
 

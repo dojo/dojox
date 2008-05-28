@@ -29,52 +29,29 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
 		djConfig="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		/*dojo.require("dojox.grid.Grid");
-		dojo.require("dojo.parser");*/
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileWriteStore");
+		dojo.require("dojo.parser");
 	</script>
-	<!-- Debugging -->
-	<script type="text/javascript" src="../util.js"></script>
-	<script type="text/javascript" src="../_Scroller.js"></script>
-	<script type="text/javascript" src="../cells/_base.js"></script>
-	<script type="text/javascript" src="../_Layout.js"></script>
-	<script type="text/javascript" src="../_RowManager.js"></script>
-	<script type="text/javascript" src="../_FocusManager.js"></script>
-	<script type="text/javascript" src="../Selection.js"></script>
-	<script type="text/javascript" src="../_EditManager.js"></script>
-	<script type="text/javascript" src="../_View.js"></script>
-	<script type="text/javascript" src="../_RowSelector.js"></script>
-	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../_Grid.js"></script>
-	<script type="text/javascript" src="../_data/fields.js"></script>
-	<script type="text/javascript" src="../_data/model.js"></script>
-	<script type="text/javascript" src="../Grid.js"></script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-		// grid structure
-		// a grid view is a group of columns
-		// a special view providing selection feedback
-		var rowBar = {type: 'dojox.grid._RowSelector', width: '20px'};
-		
-		// a view without scrollbars
-		var leftView = {
-			noscroll: true,
-			cells: [[
-				{name: 'Column 0'},
-				{name: 'Column 1'}
-		]]};
-		
-		var middleView = {
-			cells: [[
-				{name: 'Column 2'},
-				{name: 'Column 3'},
-				{name: 'Column 4'},
-				{name: 'Column 5'},
-				{name: 'Column 6'},
-		]]};
-		
-		// a grid structure is an array of views.
-		var structure = [ rowBar, leftView, middleView];
-		
+		var structure = [
+			{
+				noscroll: true,
+				cells: [
+					{name: 'Column 1', field: 'col1'},
+					{name: 'Column 2', field: 'col2'}
+				]
+			},
+			[
+				{name: 'Column 3', field: 'col3'},
+				{name: 'Column 4', field: 'col4'},
+				{name: 'Column 5', field: 'col5'},
+				{name: 'Column 6', field: 'col6'},
+				{name: 'Column 7', field: 'col7'}
+			]
+		];
+
 		// get can return data for each cell of the grid
 		function get(inRowIndex) {
 			return [this.index, inRowIndex].join(', ');
@@ -125,12 +102,10 @@
 		}
 		
 		dojo.addOnLoad(function() {
-			window["grid"] = dijit.byId("grid");
 			dojo.byId('gridWidth').value = 500;
 			dojo.byId('gridHeight').value = 200;
 			dojo.connect(grid, 'update', resizeInfo);
 			resizeGrid();
-			window["grid1"] = dijit.byId("grid1");
 		});
 		
 	
@@ -145,20 +120,20 @@
 	<button onclick="fitHeight()">Fit Data Height</button>&nbsp;
 	<button onclick="fitBoth()">Fit Data Width & Height</button>
 	<button onclick="sizeDefault()">DefaultSize</button><br><br>
-	<div id="grid" dojoType="dojox.grid.Grid" autoWidth="true" autoHeight="true" model="model" structure="structure" elasticView="2"></div>
+	<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" autoWidth="true" autoHeight="true" model="test_data" structure="structure" rowSelector="20px" elasticView="2"></div>
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container">
-		<div id="grid1" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid1" jsid="grid1" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="10" rowSelector="20px" elasticView="2"></div>
 	</div>
 
 	<p> Grid is essentially hidden (height of zero) when parent container is unsized 
 		(nothing, including the header, should be displayed):</p>
 	<div id="unsizedContainer">
-		<div id="grid2" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="10" elasticView="2"></div>
+		<div id="grid2" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="10" rowSelector="20px" elasticView="2"></div>
 	</div>
 
 	<p> Grid is autoHeight and autoWidth via markup</p>
-		<div id="grid3" dojoType="dojox.grid._Grid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="100" elasticView="2"></div>
+		<div id="grid3" dojoType="dojox.grid._Grid" autoWidth="true" autoHeight="true" get="get" structure="structure" rowCount="100" rowSelector="20px" elasticView="2"></div>
 </body>
 </html>

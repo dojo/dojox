@@ -173,12 +173,12 @@ dojo.declare("dojox.grid._EditManager", null, {
 
 	applyCellEdit: function(inValue, inCell, inRowIndex){
 		if(this.grid.canEdit(inCell, inRowIndex)){
-			this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.field||inCell.fieldIndex);
+			this.grid.doApplyCellEdit(inValue, inRowIndex, inCell.field);
 		}
 	},
 
 	applyRowEdit: function(){
-		this.grid.doApplyEdit(this.info.rowIndex, this.info.cell.field||this.info.cell.fieldIndex);
+		this.grid.doApplyEdit(this.info.rowIndex, this.info.cell.field);
 	},
 
 	apply: function(){

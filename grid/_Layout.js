@@ -42,22 +42,25 @@ dojo.declare("dojox.grid._Layout", null, {
 		}
 
 		if(dojo.isArray(inStructure)){
-			if(inStructure.length){
-				if(!dojo.isArray(inStructure[0])){
-					if(inStructure[0] &&
-					   ("cells" in inStructure[0] || "rows" in inStructure[0] || "type" in inStructure[0])){
-						for(var i=0, viewDef, rows; (viewDef=inStructure[i]); i++){
-							s.push(this.addViewDef(viewDef));
-						}
-					}else{
-						s.push(this.addViewDef({ cells: inStructure }));
-					}
-				}else{
+			for(var i=0, st; (st=inStructure[i]); i++){
+				if(dojo.isArray(st)){
+					// it's an array or array of arrays defining cells
 					s.push(this.addViewDef({ cells: inStructure }));
+					break;
+				}else{
+					if("name" in st || "field" in st || "get" in st){
+						// it's a cell object
+						s.push(this.addViewDef({ cells: inStructure }));
+						break;
+					}else{
+						// it's a view object
+						s.push(this.addViewDef(st));
+					}
 				}
 			}
 		}else if(inStructure != null && dojo.isObject(inStructure) &&
 				 ("cells" in inStructure || "rows" in inStructure || "type" in inStructure)){
+			// it's a view object
 			s.push(this.addViewDef(inStructure));
 		}
 
@@ -98,12 +101,6 @@ dojo.declare("dojox.grid._Layout", null, {
 		}else{
 			w = inDef.width || this.defaultWidth;
 		}
-		// fieldIndex progresses linearly from the last indexed field
-		// FIXME: support generating fieldIndex based a text field name (probably in Grid)
-		var fieldIndex = inDef.field != undefined ? inDef.field : (inDef.get ? -1 : this.fieldIndex);
-		if((inDef.field != undefined) || !inDef.get){
-			this.fieldIndex = (inDef.field > -1 ? inDef.field : this.fieldIndex) + 1; 
-		}
 		var cell_type = inDef.type || this._defaultCellProps.type || dojox.grid.cells.Cell;
 		return new cell_type(
 			dojo.mixin({}, this._defaultCellProps, inDef, {
@@ -111,7 +108,6 @@ dojo.declare("dojox.grid._Layout", null, {
 				subrow: inRowIndex,
 				layoutIndex: inCellIndex,
 				index: this.cells.length,
-				fieldIndex: fieldIndex,
 				unitWidth: w
 			}));
 	}

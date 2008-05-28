@@ -21,52 +21,29 @@
 			djConfig="isDebug:false, parseOnLoad: true"></script>
 
 		<script type="text/javascript">
-			dojo.require("dojox.grid.Grid");
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojo.data.ItemFileWriteStore");
 			dojo.require("dijit.layout.BorderContainer");
 			dojo.require("dijit.layout.ContentPane");
 			dojo.require("dojo.parser");
 		</script>
+		<script type="text/javascript" src="support/test_data.js"></script>
 
 		<script type="text/javascript">
 			// ==========================================================================
-			// Create a data model
-			// ==========================================================================
-			data = [ 
-				[ "normal", false, "new", 'But are not followed by two hexadecimal', 29.91, 10, false ],
-				[ "important", false, "new", 'Because a % sign always indicates', 9.33, -5, false ],
-				[ "important", false, "read", 'Signs can be selectively', 19.34, 0, true ],
-				[ "note", false, "read", 'However the reserved characters', 15.63, 0, true ],
-				[ "normal", false, "replied", 'It is therefore necessary', 24.22, 5.50, true ],
-				[ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
-				[ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
-			];
-			var rows = 10000;
-			for(var i=0, l=data.length; i<rows-l; i++){
-				data.push(data[i%l].slice(0));
-			}
-			model = new dojox.grid._data.Table(null, data);
-
-			// ==========================================================================
 			// Grid structure
 			// ==========================================================================
-			gridLayout = [
-				{
-					type: 'dojox.grid._RowSelector', width: '20px'
-				},
-				{
-					defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
-					rows: [
-						[
-							{ name: 'Id', width: 3, get: function(inRowIndex){ return inRowIndex+1;} },
-							{ name: 'Priority', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"]},
-							{ name: 'Mark', width: 3, styles: 'text-align: center;', type: dojox.grid.cells.Bool },
-							{ name: 'Status', field: 2, styles: 'text-align: center;', type: dojox.grid.cells.Select, options: [ "new", "read", "replied" ]},
-							{ name: 'Message', styles: '', width: '100%' },
-							{ name: 'Amount'}
-						]
-					]
-				}
-			];
+			gridLayout = {
+				defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
+				cells: [
+					{ name: 'Id', width: 3, field: 'id' },
+					{ name: 'Priority', field: 'col1', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"]},
+					{ name: 'Mark', field: 'col2', width: 3, styles: 'text-align: center;', type: dojox.grid.cells.Bool },
+					{ name: 'Status', field: 'col3', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: [ "new", "read", "replied" ]},
+					{ name: 'Message', field: 'col4', styles: '', width: '100%' },
+					{ name: 'Amount', field: 'col5'}
+				]
+			};
 		</script>
 	</head>
 	<body class="tundra">
@@ -89,9 +66,8 @@
   </div>
 
   <div dojoType="dijit.layout.ContentPane" id="gridContainer1" region="center" splitter="true" style="background: red;" > 
-	    <div jsId="grid" class="myGrid" 		dojoType="dojox.grid.Grid" model="model" 	structure="gridLayout"></div>
+	    <div jsId="grid" class="myGrid"	dojoType="dojox.grid.DataGrid" model="test_data" structure="gridLayout"></div>
   </div>
-
 </div>
 
 </body>

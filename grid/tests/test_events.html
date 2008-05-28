@@ -38,7 +38,7 @@
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid._Grid");
 		dojo.require("dojo.parser");
 	</script>
 	<script type="text/javascript">
@@ -70,11 +70,11 @@
 			{ name: 'onHeaderContextMenu', properties: ['rowIndex'] }
 		];	
 		
-		getEventName = function(inRowIndex) {
+		getEventName = function(inItem, inRowIndex) {
 			return eventRows[inRowIndex].name;
 		};
 		
-		getEventData = function(inRowIndex) {
+		getEventData = function(inItem, inRowIndex) {
 			var d = eventRows[inRowIndex].data;
 			var r = [];
 			if (d)
@@ -86,15 +86,14 @@
 		}
 		
 		// grid structure for event tracking grid.
-		var eventView = {
+		var eventLayout = {
 			noscroll: true,
-			cells: [[
+			cells: [
 				{ name: 'Event', get: getEventName, width: 12 },
 				{ name: 'Data', get: getEventData, width: 10 }
-			]]
+			]
 		}
-		var eventLayout = [	eventView	];
-		
+
 		var fade = function(inNode) {
 			if (!inNode || !inNode.style) return;
 			var c = 150, step = 5, delay = 20;
@@ -143,18 +142,34 @@
 				
 		// Grid structure
 		var layout = [// array of view objects
-			{ type: 'dojox.grid._RowSelector', width: '20px' },
-			{ noscroll: true, cells: [// array of rows, a row is an array of cells
-					[{ name: "Alpha", value: '<input type="checkbox"></input>', rowSpan: 2, width: 6, styles: 'text-align:center;' }, { name: "Alpha2", value: "Alpha2" }], 
-					[{ name: "Alpha3", value: "Alpha3" }]
-			]},
-			{ cells: [
-					[{ name: "Beta", value: 'simple'}, { name: "Beta2", value: "Beta2" }, { name: "Beta3", value: "Beta3" }, { name: "Beta4", value: "Beta4" }, { name: "Beta5", value: "Beta5" }], 
-				 	[{ name: "Summary", colSpan: 5, value: 'Summary' }]
-			]},
-			{	noscroll: true, cells: [
-					[{ name: "Gamma", value: "Gamma" }, { name: "Gamma2", value: "<button>Radiate</button>", styles: 'text-align:center;' }]]
-			}];
+			{
+				noscroll: true,
+				cells: [[
+					{ name: "Alpha", value: '<input type="checkbox"></input>', rowSpan: 2, width: 6, styles: 'text-align:center;' },
+					{ name: "Alpha2", value: "Alpha2" }
+				],[
+					{ name: "Alpha3", value: "Alpha3" }
+				]]
+			},
+			[
+				[
+					{ name: "Beta", value: 'simple'},
+					{ name: "Beta2", value: "Beta2" },
+					{ name: "Beta3", value: "Beta3" },
+					{ name: "Beta4", value: "Beta4" },
+					{ name: "Beta5", value: "Beta5" }
+				],[
+					{ name: "Summary", colSpan: 5, value: 'Summary' }
+				]
+			],
+			{
+				noscroll: true,
+				cells: [
+					{ name: "Gamma", value: "Gamma" },
+					{ name: "Gamma2", value: "<button>Radiate</button>", styles: 'text-align:center;' }
+				]
+			}
+		];
 		
 		dojo.addOnLoad(function() {
 			window["grid"] = dijit.byId("grid");
@@ -169,6 +184,6 @@
 <body>
 <h3>dojox.grid.Grid Event Tracking</h3>
 <div id="eventGrid" autoWidth="true" autoHeight="true" structure="eventLayout" dojoType="dojox.grid._Grid"></div>
-<div id="grid" rowCount="100" dojoType="dojox.grid._Grid"></div>
+<div id="grid" rowCount="100" structure="layout" rowSelector="20px" dojoType="dojox.grid._Grid"></div>
 </body>
 </html>
