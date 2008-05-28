@@ -207,7 +207,7 @@ dojo.require("dojox.gfx");
 						plot:    this,
 						shape:   shape,
 						x:       i,
-						y:       v,
+						y:       typeof v == "number" ? v : v.y,
 						cx:      circle.cx,
 						cy:      circle.cy,
 						cr:      r
