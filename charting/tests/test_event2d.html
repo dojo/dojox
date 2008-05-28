@@ -75,7 +75,7 @@ AnimateShapes = function(chart, plot){
 	
 	chart.connectToPlot(plot, this, function(o){
 		if(o.type == "onclick"){
-			alert("you clicked: " + o.run.name + " #" + o.index + " - x=" + o.x + " y=" + o.y);
+			alert("you clicked: " + o.run.name + " #" + o.index + " x=" + o.x + " y=" + o.y);
 			return;
 		}
 		
@@ -141,7 +141,7 @@ AnimateColor = function(chart, plot, colors){
 	
 	chart.connectToPlot(plot, this, function(o){
 		if(o.type == "onclick"){
-			alert("you clicked: " + o.run.name + " #" + o.index + " - x=" + o.x + " y=" + o.y);
+			alert("you clicked: " + o.run.name + " #" + o.index + " x=" + o.x + " y=" + o.y);
 			return;
 		}
 		if(!o.shape){ return; }
@@ -192,7 +192,7 @@ AnimateSlices = function(chart, plot, colors){
 	
 	chart.connectToPlot(plot, this, function(o){
 		if(o.type == "onclick"){
-			alert("you clicked: " + o.run.name + " #" + o.index + " - x=" + o.x + " y=" + o.y);
+			alert("you clicked: " + o.run.name + " #" + o.index + " x=" + o.x + " y=" + o.y);
 			return;
 		}
 		if(!o.shape){ return; }
