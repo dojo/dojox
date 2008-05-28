@@ -32,7 +32,11 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 		if(this._cometd._advice && this._cometd._advice["reconnect"]=="none"){
 			return;
 		}
-		setTimeout(dojo.hitch(this,function(){ this._connect(); }),this._cometd._interval());
+		if (this._cometd._connected) {
+			setTimeout(dojo.hitch(this,function(){this._connect();}),this._cometd._interval());
+		}else{
+			setTimeout(dojo.hitch(this._cometd,function(){this.init(this.url,this._props);}),this._cometd._interval());
+		}
 	}
 
 	this._connect = function(){
@@ -108,10 +112,7 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 			error: dojo.hitch(this, function(err){
 				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
 			}),
-			timeoutSeconds: this._cometd.expectedNetworkDelay/1000,
-			timeout: dojo.hitch(this, function(){
-				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
-			})
+			timeout: this._cometd.expectedNetworkDelay
 		});
 	}
 

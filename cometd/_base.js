@@ -143,11 +143,7 @@ dojox.cometd = new function(){
 				this._backoff();
 				this._finishInit([{}]);
 			}),
-			timeoutSeconds: this.expectedNetworkDelay/1000,
-			timeout: dojo.hitch(this, function(){
-				this._backoff();
-				this._finishInit([{}]);
-			})
+			timeout: this.expectedNetworkDelay
 		};
 
 		if(bargs){
