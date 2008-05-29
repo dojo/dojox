@@ -36,7 +36,7 @@
 	}
 </style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
+		djConfig="isDebug: true, debugAtAllCosts: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
@@ -59,9 +59,9 @@
 		];
 
 		removeItem = function() {
-			// Removes the first item in the model from the store
+			// Removes the first item in the store
 			// Grid should reflect removal of the first item and items should be re-indexed
-			jsonStore.deleteItem(dataModel.data[0].__dojo_data_item);
+			jsonStore.deleteItem(dataStore.data[0].__dojo_data_item);
 		}
 		
 		var i = 0;
@@ -95,10 +95,10 @@
 	 jsId="jsonStore" url="support/numbers.json">
 </span>
 <div id="grid" jsId="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ id: '*' }"
-	 rowsPerPage="20" model="jsonStore" structure="layoutNumbers" rowSelector="20px">
+	 rowsPerPage="20" store="jsonStore" structure="layoutNumbers" rowSelector="20px">
 </div>
 <div id="grid2" jsId="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ id: '*' }"
-	 rowsPerPage="20" model="jsonStore" structure="layoutNumbers" rowSelector="20px">
+	 rowsPerPage="20" store="jsonStore" structure="layoutNumbers" rowSelector="20px">
 </div>
 </body>
 </html>

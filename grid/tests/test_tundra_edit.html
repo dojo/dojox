@@ -84,7 +84,7 @@
 			// UI Action
 			// ==========================================================================
 			addRow = function() {
-				test_data.newItem({
+				test_store.newItem({
 					id: grid.rowCount,
 					col1: 'normal',
 					col2: false,
@@ -112,7 +112,7 @@
 	</div>
 	<br />
 	<div jsId="grid" class="myGrid" 
-		dojoType="dojox.grid.DataGrid" model="test_data" 
+		dojoType="dojox.grid.DataGrid" store="test_store" 
 		structure="gridLayout" rowSelector="20px"></div>
 	<br />
 	<div id="rowCount"></div>

@@ -29,22 +29,16 @@
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
+		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.parser");
 	</script>
 	<script type="text/javascript">
-		// grid structure
-		// a grid view is a group of columns
-		
-		// a special view providing selection feedback
-		var rowBar = {type: 'dojox.grid._RowSelector', width: '20px' };
-		
 		// inRow is an array of subRows. we hide the summary subRow except for every nth row
 		function onBeforeRow(inDataIndex, inRow) {
 			inRow[1].hidden = (!this.grid || !this.grid.expandedRows || !this.grid.expandedRows[inDataIndex]);
 		}
 		
-		var view = {
+		var structure = {
 			onBeforeRow: onBeforeRow,
 			cells: [
 				[
@@ -59,15 +53,12 @@
 			]
 		};
 		
-		// a grid structure is an array of views.
-		var structure = [ rowBar, view ];
-		
 		// get can return data for each cell of the grid
-		function get(inRowIndex) {
+		function get(inItem, inRowIndex) {
 			return [this.index, inRowIndex].join(', ');
 		}
 		
-		function getDetail(inRowIndex) {
+		function getDetail(inItem, inRowIndex) {
 			if (this.grid.expandedRows[inRowIndex]) {
 				var n = (inRowIndex % 2);
 				switch (n) {
@@ -85,23 +76,19 @@
 			grid.updateRow(inIndex);
 		}
 		
-		function getCheck(inRowIndex) {
+		function getCheck(inItem, inRowIndex) {
 			if (!this.grid.expandedRows)
 				this.grid.expandedRows = [ ];
 			var image = (this.grid.expandedRows[inRowIndex] ? 'open.gif' : 'closed.gif');
 			var show = (this.grid.expandedRows[inRowIndex] ? 'false' : 'true')
 			return '<img src="images/' + image + '" onclick="toggle(' + inRowIndex + ', ' + show + ')" height="11" width="11">';
 		}
-
-	dojo.addOnLoad(function() {
-		window["grid"] = dijit.byId("grid");
-	});
-</script>
+	</script>
 </head>
 <body>
 <div class="heading">dojox.grid.Grid Expand Row Example</div>
 
-<div id="grid" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="100000" autoWidth="true"></div>
+<div id="grid" jsid="grid" dojoType="dojox.grid._Grid" get="get" structure="structure" rowCount="100000" autoWidth="true" rowSelector="20px"></div>
 
 </body>
 </html>

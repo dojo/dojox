@@ -43,7 +43,7 @@
 				<h5>dojox.grid.DataGrid using initially-empty write stores and then adding an item.  Item should show up correctly (no "..."s) when added.</h5> 
 		<br>
 		<div id="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ name: '*' }" rowsPerPage="20"
-			model="jsonStore" structure="layoutCountries" rowSelector="20px"> 
+			store="jsonStore" structure="layoutCountries" rowSelector="20px"> 
 		</div> 
 		<button dojoType="dijit.form.Button"> 
 			<script type="dojo/method" event="onClick"> 

@@ -134,7 +134,7 @@
 		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<div id="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ name: '*' }" rowsPerPage="20"
-		model="jsonStore" structure="layoutCountries" rowSelector="20px">
+		store="jsonStore" structure="layoutCountries" rowSelector="20px">
 	</div>
 
 
@@ -144,7 +144,7 @@
 		jsId="csvStore" url="support/movies.csv">
 	</span>
 	<div id="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ Title: '*' }" rowsPerPage="5"
-		model="csvStore" structure="layoutMovies" rowSelector="20px">
+		store="csvStore" structure="layoutMovies" rowSelector="20px">
 	</div>
 
 	<!--<h2>dojox.data.XmlStore:</h2>
@@ -153,7 +153,7 @@
 		jsId="xmlStore" url="support/books.xml">
 	</span>
 	<div id="grid3" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ title: '*' }" rowsPerPage="5"
-		model="xmlStore" structure="layoutBooks" rowSelector="20px">
+		store="xmlStore" structure="layoutBooks" rowSelector="20px">
 	</div>
 
 
@@ -164,7 +164,7 @@
 	</span>
 	<div id="grid4" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ tags: '3dny' }"
 		rowsPerPage="5"
-		model="flickrStore" structure="layoutFlickrData" rowSelector="20px">
+		store="flickrStore" structure="layoutFlickrData" rowSelector="20px">
 	</div>-->
 
 	<h2>dojox.data.OpmlStore:</h2>
@@ -174,7 +174,7 @@
 	</span>
 	<div id="grid5" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ type: 'country' }"
 		queryOptions="{ deep: true }" rowsPerPage="5"
-		model="opmlStore" structure="layoutOpmlData" rowSelector="20px">
+		store="opmlStore" structure="layoutOpmlData" rowSelector="20px">
 	</div>
 
 
@@ -224,7 +224,7 @@
 		jsId="htmlStore" dataId="tableExample">
 	</span>
 	<div id="grid6" dojoType="dojox.grid.DataGrid" elasticView="2" query="{}"
-		model="htmlStore" rowsPerPage="5" structure="layoutHtmlTable" rowSelector="20px">
+		store="htmlStore" rowsPerPage="5" structure="layoutHtmlTable" rowSelector="20px">
 	</div>
 
 </body>

@@ -28,8 +28,8 @@
 	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-		test_data.comparatorMap = {};
-		test_data.comparatorMap["col1"] = function(a, b){
+		test_store.comparatorMap = {};
+		test_store.comparatorMap["col1"] = function(a, b){
 			var ret = 0;
 			// We want to map these by what the priority of these items are, not by alphabetical.
 			// So, custom comparator.
@@ -61,6 +61,6 @@
 <br />
 <b>Column 1</b>'s data field has a custom sorter that sorts by the status level rather than alphebetically
 <br /><br />
-<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout"></div>
+<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout"></div>
 </body>
 </html>

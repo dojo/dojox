@@ -15,31 +15,20 @@
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
-
-	<!--<script type="text/javascript">
-		dojo.require("dojox.grid.Grid");
-		dojo.require("dojox.grid.tests.databaseModel");
-		dojo.require("dojo.parser");
-	</script>-->
-	<!-- Debugging -->
-	<script type="text/javascript" src="../util.js"></script>
-	<script type="text/javascript" src="../_Scroller.js"></script>
-	<script type="text/javascript" src="../cells/_base.js"></script>
-	<script type="text/javascript" src="../_Layout.js"></script>
-	<script type="text/javascript" src="../_RowManager.js"></script>
-	<script type="text/javascript" src="../_FocusManager.js"></script>
-	<script type="text/javascript" src="../Selection.js"></script>
-	<script type="text/javascript" src="../_EditManager.js"></script>
-	<script type="text/javascript" src="../_View.js"></script>
-	<script type="text/javascript" src="../_RowSelector.js"></script>
-	<script type="text/javascript" src="../_Events.js"></script>
-	<script type="text/javascript" src="../_Grid.js"></script>
-	<script type="text/javascript" src="../_data/fields.js"></script>
-	<script type="text/javascript" src="../_data/model.js"></script>
-	<script type="text/javascript" src="../cells/dijit.js"></script>
-	<script type="text/javascript" src="../Grid.js"></script>
-	<script type="text/javascript" src="databaseModel.js"></script>
 	<script type="text/javascript">
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojox.data.QueryReadStore");
+		dojo.require("dojo.parser");
+	</script>
+	<script type="text/javascript">
+		dojo.declare("DbStore", dojox.data.QueryReadStore, {
+			fetch: function(request){
+				request.serverQuery = {
+					database: this.database || '',
+					table: this.table || ''
+				}
+			}
+		});
 		var model = new dojox.grid._data.DbTable(null, null, 'support/data.php', "test", "testtbl");
 		// simple display of row info; based on model observing.
 		modelChange = function() {
@@ -144,7 +133,7 @@
 	<button onclick="grid.edit.cancel()">Cancel Edit</button>&nbsp;&nbsp;
 	<button onclick="grid.refresh()">Refresh</button>
 	<br><br>
-	<div jsId="grid" class="grid" structure="gridLayout" dojoType="dojox.grid.Grid" model="model" singleClickEdit="true" autoWidth="true"></div>
+	<div jsId="grid" class="grid" structure="gridLayout" dojoType="dojox.grid.Grid" store="model" singleClickEdit="true" autoWidth="true"></div>
 	<div id="rowCount"></div>
 	<p>Note: This test requires MySql and PHP and works with the database table available in support/testtbl.sql.</p>
 </body>

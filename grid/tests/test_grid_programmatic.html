@@ -44,7 +44,7 @@
 
 				grid = new dojox.grid.DataGrid({
 					id: "grid",
-					model: test_data,
+					store: test_store,
 					structure: layout
 				});
 				dojo.byId("gridContainer").appendChild(grid.domNode);

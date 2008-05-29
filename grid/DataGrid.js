@@ -3,12 +3,12 @@ dojo.provide("dojox.grid.DataGrid");
 dojo.require("dojox.grid._Grid");
 
 dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
-	model: null,
+	store: null,
 	query: { id: '*' },
 	queryOptions: null,
 	fetchText: '...',
 
-	_model_connects: null,
+	_store_connects: null,
 	_identity_map: null,
 	_rows: null,
 	_cache: null,
@@ -21,27 +21,27 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	postCreate: function(){
 		this._identity_map = {};
 		this._pages = [];
-		this._model_connects = [];
+		this._store_connects = [];
 		this._rows = [];
 		this._cache = [];
 
-		this._setModel(this.model);
+		this._setStore(this.store);
 		this.inherited(arguments);
 	},
 
 	get: function(inItem, inRowIndex){
-		return (!inItem ? this.defaultValue : (!this.field ? this.value : this.grid.model.getValue(inItem, this.field)));
+		return (!inItem ? this.defaultValue : (!this.field ? this.value : this.grid.store.getValue(inItem, this.field)));
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
-		var info = this._identity_map[this.model.getIdentity(item)];
+		var info = this._identity_map[this.store.getIdentity(item)];
 		if(info){
 			this.updateRow(info.idx);
 		}
 	},
 
 	_addItem: function(item, index){
-		var idty = this.model.getIdentity(item);
+		var idty = this.store.getIdentity(item);
 		this._identity_map[idty] = {idx: index, item: item};
 		this._rows[index] = idty;
 		this.updateRow(index);
@@ -58,7 +58,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		if(idx >= 0){
 			this._rows.splice(idx, 1);
 		}
-		delete this._identity_map[this.model.getIdentity(item)];
+		delete this._identity_map[this.store.getIdentity(item)];
 
 		this.updateRowCount(this.rowCount-1);
 	},
@@ -67,35 +67,35 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._refresh();
 	},
 
-	setModel: function(model){
-		this._setModel(model);
+	setStore: function(store){
+		this._setStore(store);
 		this._refresh();
 	},
 	
-	_setModel: function(model){
-		if(this.model&&this._model_connects){
-			dojo.forEach(this._model_connects,function(arr){
+	_setStore: function(store){
+		if(this.store&&this._store_connects){
+			dojo.forEach(this._store_connects,function(arr){
 				dojo.forEach(arr, dojo.disconnect);
 			});
 		}
-		this.model = model;
+		this.store = store;
 
-		if(this.model){
-			var f = this.model.getFeatures();
+		if(this.store){
+			var f = this.store.getFeatures();
 			var h = [];
 
 			this._canEdit = !!f["dojo.data.api.Write"];
 			
 			if(!!f["dojo.data.api.Notification"]){
-				h.push(this.connect(this.model, "onSet", "_onSet"));
-				h.push(this.connect(this.model, "onNew", "_onNew"));
-				h.push(this.connect(this.model, "onDelete", "_onDelete"));
+				h.push(this.connect(this.store, "onSet", "_onSet"));
+				h.push(this.connect(this.store, "onNew", "_onNew"));
+				h.push(this.connect(this.store, "onDelete", "_onDelete"));
 			}
 			if(this._canEdit){
-				h.push(this.connect(this.model, "revert", "_onRevert"));
+				h.push(this.connect(this.store, "revert", "_onRevert"));
 			}
 
-			this._model_connects = h;
+			this._store_connects = h;
 		}
 	},
 
@@ -130,10 +130,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_fetch: function(start, isRender){
-		if(this.model){
+		if(this.store){
 			var start = start || 0;
 			//console.log("fetch: ", start);
-			this.model.fetch({
+			this.store.fetch({
 				start: start,
 				count: this.rowsPerPage,
 				query: this.query,
@@ -167,10 +167,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	getItemIndex: function(item){
-		if(!this.model.isItem(item)){
+		if(!this.store.isItem(item)){
 			return -1;
 		}
-		var idty = this.model.getIdentity(item);
+		var idty = this.store.getIdentity(item);
 		var imap = this._identity_map[idty];
 		return (imap ? imap.idx : -1);
 	},
@@ -182,7 +182,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	_getItemAttr: function(idx, attr){
 		var item = this.getItem(idx);
-		return (!item ? this.fetchText : this.model.getValue(item, attr));
+		return (!item ? this.fetchText : this.store.getValue(item, attr));
 	},
 
 	// rendering
@@ -273,8 +273,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	styleRowState: function(inRow){
 		// summary: Perform row styling
-		if(this.model && this.model.getState){
-			var states=this.model.getState(inRow.index), c='';
+		if(this.store && this.store.getState){
+			var states=this.store.getState(inRow.index), c='';
 			for(var i=0, ss=["inflight", "error", "inserting"], s; s=ss[i]; i++){
 				if(states[s]){
 					c = ' dojoxGrid-row-' + s;
@@ -299,7 +299,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		var row = {};
 		var backstop = {};
 		var src = this.getItem(idx);
-		return this.model.getValue(src, attr);
+		return this.store.getValue(src, attr);
 	},
 
 	doStartEdit: function(inCell, inRowIndex){
@@ -310,10 +310,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
-		this.model.fetchItemByIdentity({
+		this.store.fetchItemByIdentity({
 			identity: this._rows[inRowIndex],
 			onItem: dojo.hitch(this, function(item){
-				this.model.setValue(item, inAttrName, inValue);
+				this.store.setValue(item, inAttrName, inValue);
 				this.onApplyCellEdit(inValue, inRowIndex, inAttrName);
 			})
 		});
@@ -332,7 +332,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		var cache = this._cache[inRowIndex];
 		/*if(cache){
 			var data = this.getItem(inRowIndex);
-			if(this.model.getValue(data, inDataAttr) != cache){
+			if(this.store.getValue(data, inDataAttr) != cache){
 				this.update(cache, data, inRowIndex);
 			}
 			delete this._cache[inRowIndex];
@@ -342,7 +342,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 });
 
 dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
-	// handle setting up a data model for a store if one
+	// handle setting up a data store for a store if one
 	// isn't provided. There are some caveats:
 	//		* we only really handle dojo.data sources well. They're the future
 	//		  so it's no big deal, but it's something to be aware of.
@@ -357,7 +357,7 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 		}
 		return w;
 	}
-	// if(!props.model){ console.debug("no model!"); }
+	// if(!props.store){ console.debug("no store!"); }
 	// if a structure isn't referenced, do we have enough
 	// data to try to build one automatically?
 	if(	!props.structure && 

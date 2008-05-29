@@ -47,7 +47,7 @@
 
 					var st_time = new Date().getTime();
 					var grid = new dojox.grid.DataGrid({
-						model: test_data,
+						store: test_store,
 						structure: layout
 					});
 					dojo.body().appendChild(grid.domNode);
@@ -64,7 +64,7 @@
 						dojo.body().appendChild(node);
 						var st_time = new Date().getTime();
 						var grid = new dojox.grid.DataGrid({
-							model: test_data,
+							store: test_store,
 							structure: layout
 						}, node);
 						total_time += (new Date().getTime() - st_time);
@@ -74,7 +74,7 @@
 				}, 1000);
 			}, 1000);
 		}
-		var startModelReuseTests = function(){
+		var startStoreReuseTests = function(){
 			setTimeout(function(){
 				var total_time = 0;
 				for(var i=0; i<30; i++){
@@ -82,7 +82,7 @@
 					var st_time = new Date().getTime();
 					var mod = new dojo.data.ItemFileReadStore({data: data});
 					var grid = new dojox.grid.DataGrid({
-						model: mod,
+						store: mod,
 						structure: layout
 					});
 					dojo.body().appendChild(grid.domNode);
@@ -90,7 +90,7 @@
 					total_time += (new Date().getTime() - st_time);
 					dojo.body().removeChild(grid.domNode);
 				}
-				console.log("Total time to create 30 grids with separate models (including model creation time): ", total_time);
+				console.log("Total time to create 30 grids with separate stores (including store creation time): ", total_time);
 				setTimeout(function(){
 					total_time = 0;
 					var mod = new dojo.data.ItemFileReadStore({data: data});
@@ -99,7 +99,7 @@
 						dojo.body().appendChild(node);
 						var st_time = new Date().getTime();
 						var grid = new dojox.grid.DataGrid({
-							model: mod,
+							store: mod,
 							structure: layout
 						});
 						dojo.body().appendChild(grid.domNode);
@@ -107,7 +107,7 @@
 						total_time += (new Date().getTime() - st_time);
 						dojo.body().removeChild(grid.domNode);
 					}
-					console.log("Total time to create 30 grids with a shared model: ", total_time);
+					console.log("Total time to create 30 grids with a shared store: ", total_time);
 				}, 1000);
 			}, 1000);
 		}
@@ -116,6 +116,6 @@
 <body>
 <div class="heading">dojox.grid.DataGrid Performance Test</div>
 <button onclick="startCreationTests()">Start Creation Tests</button>
-<button onclick="startModelReuseTests()">Start Model Re-use Tests</button>
+<button onclick="startStoreReuseTests()">Start Store Re-use Tests</button>
 </body>
 </html>

@@ -40,7 +40,7 @@
 		jsId="csvStore" url="support/NoSuchMovieFile.csv">
 	</span>
 	<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ Title: '*' }"
-		rowsPerPage="5" model="csvStore" structure="layoutMovies" autoRender="false">
+		rowsPerPage="5" store="csvStore" structure="layoutMovies" autoRender="false">
 		<script type="dojo/connect" event="onFetchError" args="error">
 			alert("Error was encountered when store was queried: " + dojo.toJson(error, true));
 		</script>

@@ -107,11 +107,11 @@
 				sizeMin="50" sizeShare="80"
 			>
 				<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" sizeMin="20" sizeShare="70">
-					<div id="grid1" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout" title="Tab 1"></div>
-					<div id="grid2" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout2" title="Tab 2"></div>
+					<div id="grid1" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout" title="Tab 1"></div>
+					<div id="grid2" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout2" title="Tab 2"></div>
 				</div>
 				<div id="bottomRight" dojoType="dijit.layout.ContentPane" sizeMin="20" sizeShare="30">
-					<div id="grid3" dojoType="dojox.grid.DataGrid" model="test_data" structure="layout2"></div>
+					<div id="grid3" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout2"></div>
 				</div>
 			</div>
 		</div>

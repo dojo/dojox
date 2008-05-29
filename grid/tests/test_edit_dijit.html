@@ -76,7 +76,7 @@
 		// UI Action
 		// ==========================================================================
 		addRow = function(){
-			test_data.newItem({
+			test_store.newItem({
 				id: grid.rowCount,
 				col1: 'normal',
 				col2: false,
@@ -104,7 +104,7 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 	</div>
 	<br />
-	<div id="grid" jsId="grid" dojoType="dojox.grid.DataGrid" model="test_data" rowSelector="20px" structure="gridLayout"></div>
+	<div id="grid" jsId="grid" dojoType="dojox.grid.DataGrid" store="test_store" rowSelector="20px" structure="gridLayout"></div>
 	<br />
 	<div id="rowCount"></div>
 </body>

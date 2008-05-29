@@ -29,7 +29,7 @@
 	</span>
 
 	<table dojoType="dojox.grid.DataGrid"
-		model="csvStore"
+		store="csvStore"
 		query="{ Title: '*' }"
 		clientSort="true"
 		style="width: 800px; height: 300px;">
@@ -51,7 +51,7 @@
 	<h5>Locked views specified with tables and colgroups</h5>
 
 	<table dojoType="dojox.grid.DataGrid"
-		model="jsonStore"
+		store="jsonStore"
 		rowsPerPage="20"
 		query="{ name: '*' }"
 		style="width: 600px; height: 300px;"
@@ -92,7 +92,7 @@
 		];
 	</script>
 	<div id="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ name: '*' }"
-		rowsPerPage="20" model="jsonStore" structure="layoutCountries" rowSelector="20px">
+		rowsPerPage="20" store="jsonStore" structure="layoutCountries" rowSelector="20px">
 	</div>
 
 </body>

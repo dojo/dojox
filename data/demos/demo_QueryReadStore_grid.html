@@ -56,7 +56,7 @@
 				//formatter: phpr.grid.formatDate
 			}
 		];
-		// Connect the model and store AFTER the page is loaded, since we can only access
+		// Connect the store AFTER the page is loaded, since we can only access
 		// the widget then, since it will be created just before dojo.addOnLoad() is called.
 		var store = null;
 		dojo.addOnLoad(function() {
@@ -64,7 +64,7 @@
 				url:"../tests/stores/QueryReadStore.php",
 				requestMethod:"post"
 			});
-			grid1.setModel(store);
+			grid1.setStore(store);
 			grid1.setStructure(gridLayout);
 		});
 		
@@ -82,7 +82,7 @@
 
 	<h1 class="testTitle">Dojox QueryReadStore + Grid demo - paging, sortable and filterable all server-side</h1>
  
-	<h2>The grid is in HTML, store, model, etc. are JS, sorting is added by extending the model class</h2>
+	<h2>The grid is in HTML, store, etc. are JS, sorting is added by extending the model class</h2>
 	<b>Capabilities:</b> load data from server, show data, paging (30 rows at a time), sort, filter<br />
 	You can see that data are loaded upon demand by scrolling down in the grid below line #30,
 	open FireBug and you see a server request being issued, to retreive another 30 rows/items.<br />
@@ -103,7 +103,7 @@
 		rowsPerPage="30"></div>-->
 	<div dojoType="dojox.grid.DataGrid"
 		id="grid2" jsid="grid2"
-		model="store2"
+		store="store2"
 		query="{ name: '*' }"
 		rowsPerPage="30"
 		structure="gridLayout"

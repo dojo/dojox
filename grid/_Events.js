@@ -82,7 +82,7 @@ dojo.declare("dojox.grid._Events", null, {
 				}
 				break;
 			case dk.DOWN_ARROW:
-				if(!this.edit.isEditing() && this.focus.rowIndex+1 != this.model.count){
+				if(!this.edit.isEditing() && this.store && this.focus.rowIndex+1 != this.store.count){
 					dojo.stopEvent(e);
 					this.focus.move(1, 0);
 				}
@@ -99,7 +99,7 @@ dojo.declare("dojox.grid._Events", null, {
 				}
 				break;
 			case dk.PAGE_DOWN:
-				if(!this.edit.isEditing() && this.focus.rowIndex+1 != this.model.count){
+				if(!this.edit.isEditing() && this.store && this.focus.rowIndex+1 != this.store.count){
 					dojo.stopEvent(e);
 					if(this.focus.rowIndex != this.scroller.lastVisibleRow-1){
 						this.focus.move(this.scroller.lastVisibleRow-this.focus.rowIndex-1, 0);
@@ -387,7 +387,7 @@ dojo.declare("dojox.grid._Events", null, {
 		// inRowIndex: Integer
 		//		Index of the grid row
 		// inFieldIndex: Integer
-		//		Index in the grid's data model
+		//		Index in the grid's data store
 	},
 
 	onCancelEdit: function(inRowIndex){
