@@ -81,6 +81,7 @@ dojo.require("dijit.Editor");
 		}
 	});
 	dgc._Widget.markupFactory = function(node, cell){
+		dgc._Base.markupFactory(node, cell);
 		var d = dojo;
 		var widgetProps = d.trim(d.attr(node, "widgetProps")||"");
 		var constraint = d.trim(d.attr(node, "constraint")||"");

@@ -68,12 +68,10 @@ dojo.require("dojox.grid.util");
 			// inRowIndex: int
 			// grid row index
 			// returns: dom node for a given grid cell
-			var node = this.view.getCellNode(inRowIndex, this.index);
-			if(node){
-				return node.firstChild;
-			}else{
-				return 0;
-			}
+			return this.view.getCellNode(inRowIndex, this.index);
+		},
+		getEditNode: function(inRowIndex){
+			return (this.getNode(inRowIndex) || 0).firstChild || 0;
 		},
 		isFlex: function(){
 			var uw = this.unitWidth;
@@ -114,7 +112,7 @@ dojo.require("dojox.grid.util");
 				this._formatPending = false;
 				// make cell selectable
 				dojo.setSelectable(this.grid.domNode, true);
-				this.formatNode(this.getNode(inRowIndex), inDatum, inRowIndex);
+				this.formatNode(this.getEditNode(inRowIndex), inDatum, inRowIndex);
 			}
 		},
 		//protected
@@ -147,7 +145,7 @@ dojo.require("dojox.grid.util");
 			// grid row index
 			// returns:
 			//	value of editor
-			return this.getNode(inRowIndex)[this._valueProp];
+			return this.getEditNode(inRowIndex)[this._valueProp];
 		},
 		setValue: function(inRowIndex, inValue){
 			// summary:
@@ -156,7 +154,7 @@ dojo.require("dojox.grid.util");
 			// grid row index
 			// inValue: anything
 			//	value of editor
-			var n = this.getNode(inRowIndex);
+			var n = this.getEditNode(inRowIndex);
 			if(n){
 				n[this._valueProp] = inValue
 			};
@@ -168,7 +166,7 @@ dojo.require("dojox.grid.util");
 			// grid row index
 			// inNode: dom node
 			//	editor node
-			focusSelectNode(inNode || this.getNode(inRowIndex));
+			focusSelectNode(inNode || this.getEditNode(inRowIndex));
 		},
 		save: function(inRowIndex){
 			// summary:
@@ -265,7 +263,7 @@ dojo.require("dojox.grid.util");
 		},
 		_finish: function(inRowIndex){
 			this.inherited(arguments);
-			var n = this.getNode(inRowIndex);
+			var n = this.getEditNode(inRowIndex);
 			try{
 				dojox.grid.util.fire(n, "blur");
 			}catch(e){}
@@ -299,7 +297,7 @@ dojo.require("dojox.grid.util");
 			return h.join('');
 		},
 		getValue: function(inRowIndex){
-			var n = this.getNode(inRowIndex);
+			var n = this.getEditNode(inRowIndex);
 			if(n){
 				var i = n.selectedIndex, o = n.options[i];
 				return this.returnIndex ? i : o.value || o.innerHTML;
@@ -332,7 +330,7 @@ dojo.require("dojox.grid.util");
 		// flag to use editor to format grid cell regardless of editing state.
 		alwaysEditing: true,
 		_formatNode: function(inDatum, inRowIndex){
-			this.formatNode(this.getNode(inRowIndex), inDatum, inRowIndex);
+			this.formatNode(this.getEditNode(inRowIndex), inDatum, inRowIndex);
 		},
 		applyStaticValue: function(inRowIndex){
 			var e = this.grid.edit;
