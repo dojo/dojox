@@ -175,6 +175,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		return (imap ? imap.idx : -1);
 	},
 
+	filter: function(query){
+		this.query = query;
+		this._fetch(0, false);
+	},
+
 	_getItemAttr: function(idx, attr){
 		var item = this.getItem(idx);
 		return (!item ? this.fetchText : this.model.getValue(item, attr));

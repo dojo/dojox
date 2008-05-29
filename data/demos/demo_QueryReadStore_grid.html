@@ -11,7 +11,72 @@
 		@import "../../../dojox/grid/resources/tundraGrid.css";
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true, useCommentedJson: true"></script>
+	<script type="text/javascript">
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojox.data.QueryReadStore");
+		dojo.require("dojo.parser"); // scan page for widgets and instantiate them
+		var gridLayout = [
+			{
+				name: "row #",
+				width:5,
+				styles: "text-align:right;",
+				get:function(inItem, inRowIndex) { return inRowIndex+1;} // this auto generates a row num
+			} 
+			,{
+				name: "id",
+				field: "id",
+				styles: "text-align:right;",
+				width:5
+			} 
+			,{
+				name: "Name",
+				field: "name",
+				width:20
+				//formatter: rs.chunk.adminUser.grid.formatUser
+			}
+			,{
+				name: "Capital",
+				field: "capital",
+				width:20
+				//formatter: rs.chunk.adminUser.grid.formatUser
+			}
+			,{
+				name: "Label",
+				width:20,
+				//styles: "text-align:right;",
+				field: "label"
+				//formatter: phpr.grid.formatDate
+			}
+			,{
+				name: "Abbrev.",
+				width:5,
+				//styles: "text-align:right;",
+				field: "abbreviation"
+				//formatter: phpr.grid.formatDate
+			}
+		];
+		// Connect the model and store AFTER the page is loaded, since we can only access
+		// the widget then, since it will be created just before dojo.addOnLoad() is called.
+		var store = null;
+		dojo.addOnLoad(function() {
+			store = new dojox.data.QueryReadStore({
+				url:"../tests/stores/QueryReadStore.php",
+				requestMethod:"post"
+			});
+			grid1.setModel(store);
+			grid1.setStructure(gridLayout);
+		});
+		
+		var lastSearchValue = "";
+		function doSearch(el) {
+			if (el.value!=lastSearchValue) {
+				lastSearchValue = el.value;
+				grid1.filter({name:el.value});
+				grid2.filter({name:el.value});
+			}
+		}
+	</script>
 </head>
 <body class="tundra">
 
@@ -23,7 +88,7 @@
 	open FireBug and you see a server request being issued, to retreive another 30 rows/items.<br />
 	<br /><br />
 	<input type="text" onkeyup="doSearch(this)" />
-	<div id="grid1" dojoType="dojox.grid.Grid" style="height:300px; width:800px;"></div>
+	<div id="grid1" jsid="grid1" dojoType="dojox.grid.DataGrid" query="{ name: '*' }" rowsPerPage="30" style="height:300px; width:800px;"></div>
 
 	<h2>The store and grid are "generated" and connected in HTML, filtering is done via JS</h2>
 	This store is by default sorted descending by name (not as the one above, which is ascending).
@@ -31,99 +96,19 @@
 		jsId="store2"
 		url="../tests/stores/QueryReadStore.php"
 		requestMethod="post"></div>
-	<div dojoType="dojox.grid._data.DojoData"
+	<!--<div dojoType="dojox.grid._data.DojoData"
 		jsId="model2"
 		store="store2"
 		sortFields="[{attribute: 'capital', descending: true}]"
-		rowsPerPage="30"></div>
-	<div dojoType="dojox.grid.Grid" id="grid2"
-		model="model2"
+		rowsPerPage="30"></div>-->
+	<div dojoType="dojox.grid.DataGrid"
+		id="grid2" jsid="grid2"
+		model="store2"
+		query="{ name: '*' }"
+		rowsPerPage="30"
 		structure="gridLayout"
 		style="height:300px; width:800px;"></div>
 
-	<script type="text/javascript">
-		dojo.require("dojo.parser"); // scan page for widgets and instantiate them
-		dojo.require("dojox.grid.Grid");
-		dojo.require("dojox.grid._data.model"); // dojox.grid.data.DojoData is in there
-		dojo.require("dojox.data.QueryReadStore");
-		var gridLayout = [
-			{
-				cells: [[
-					{
-						name: "row #",
-						width:5,
-						styles: "text-align:right;",
-						get:function(inRowIndex) { return inRowIndex+1;} // this auto generates a row num
-					} 
-					,{
-						name: "id",
-						field: "id",
-						styles: "text-align:right;",
-						width:5
-					} 
-					,{
-						name: "Name",
-						field: "name",
-						width:20
-						//formatter: rs.chunk.adminUser.grid.formatUser
-					}
-					,{
-						name: "Capital",
-						field: "capital",
-						width:20
-						//formatter: rs.chunk.adminUser.grid.formatUser
-					}
-					,{
-						name: "Label",
-						width:20,
-						//styles: "text-align:right;",
-						field: "label"
-						//formatter: phpr.grid.formatDate
-					}
-					,{
-						name: "Abbrev.",
-						width:5,
-						//styles: "text-align:right;",
-						field: "abbreviation"
-						//formatter: phpr.grid.formatDate
-					}
-				]]
-			}
-		];
-		// Connect the model and store AFTER the page is loaded, since we can only access
-		// the widget then, since it will be created just before dojo.addOnLoad() is called.
-		var grid = null;
-		dojo.addOnLoad(function() {
-			// Instanciate the store, pass it to the model, connect them to the grid and add the layout ... just some hand work :-)
-			//var store = new dojox.data.QueryReadStore({url:"../tests/stores/QueryReadStore.php", requestMethod:"post", doClientPaging:false});
-			var store = new dojox.data.QueryReadStore({
-				url:"../tests/stores/QueryReadStore.php",
-				requestMethod:"post"
-			});
-			var model = new dojox.grid._data.DojoData(null, null, {
-				store:store,
-				rowsPerPage:30,
-				sortFields:[{attribute: 'name', descending: false}]
-			});
-			grid = dijit.byId("grid1");
-			grid.setModel(model);
-			grid.setStructure(gridLayout);
-			grid2 = dijit.byId("grid2");
-		});
-		
-		var lastSearchValue = "";
-		function doSearch(el) {
-			if (el.value!=lastSearchValue) {
-				grid.model.query = {name:el.value};
-				lastSearchValue = el.value;
-				grid.model.requestRows();
-				
-				// Filter the grid2 too.
-				grid2.model.query = {name:el.value};
-				grid2.model.requestRows();
-			}
-		}
-	</script>
 
 
 </body>
