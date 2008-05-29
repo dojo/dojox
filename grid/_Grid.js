@@ -163,7 +163,7 @@ dojo.require("dojox.grid._Events");
 			this.createManagers();
 			dojox.html.metrics.initOnFontResize();
 			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
-			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.keyEvents);
+			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);
 			this.connect(this, "onShow", "renderOnIdle");
 		},
 		postCreate: function(){
