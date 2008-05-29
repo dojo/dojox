@@ -12,6 +12,7 @@ Credits
 	Fredrik Johansson (fj.mumme@gmail.com)
 	Adam Peller (peller)
 	Bill Keese (bill)
+	Jeff Cunat (jfcunat)
 -------------------------------------------------------------------------------
 Project description
 
@@ -37,6 +38,9 @@ Project description
 	dojox.layout.DragPane - an experimental start of a simple Dragable pane 
 	(drag larger content around inside of a sized pane) Does not support borderContainer
 	LayoutContainer resizing yet. 
+	
+	dojox.layout.GridContainer - displays children in a definable grid-layout,
+	allowing children to optionally be repositioned with DnD
 
 -------------------------------------------------------------------------------
 Dependencies

@@ -1,0 +1,77 @@
+/**********************************oaf.widget.GridContainer************************************/
+.gridContainer *
+{
+	zoom:1;
+}
+.oafDndHandle {
+	cursor: move;
+}
+
+.gridContainer
+{
+	display:block;	
+	position: relative;
+	background:#FFF;	
+	margin:0px;	
+	padding:10px;
+	height:1%; /* Bug focus with IE6/7) */
+}	
+.gridContainer .dojoDndAvatarHeader	{display:none;}
+
+.gridContainerTable
+{
+	width:100%;	
+	border:1px solid #F60;
+	height: 100%;
+}
+
+.gridContainerPopup
+{
+	position: absolute;
+	top:40%;
+	left:40%;
+	width: 200px;
+	height: auto;	
+	border: 1px solid #F60;
+	background-color: #FFF;
+	text-align: center;
+	padding: 10px;
+}
+
+.gridContainerTable tbody, .gridContainerTable tr {
+	height: 100%;
+}
+
+
+.gridContainerZone
+{
+	vertical-align: top;	
+	padding:10px;	
+	background-color: #FDFDFD;	
+	height: 100%;
+}
+
+.gridContainerZone .serviceWidgetTitleText h2
+{
+	position: relative;
+}
+
+.gridContainerGrip 
+{
+	cursor:default;
+	position: absolute;	
+	width:4px;	
+	padding: 0px;	
+	margin:0px;
+	background-image: url(images/pixel.gif);
+}
+	
+.gridContainerGripShow, .gridContainerGrip:focus 
+{
+	cursor:e-resize;	
+	position: absolute;	
+	width:4px;	
+	padding: 0px;	
+	margin:0px;	
+	background-image: url(images/grip_bg.gif);
+}
