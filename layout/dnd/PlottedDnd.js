@@ -51,7 +51,7 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 		// summary: Checks if user clicked on "approved" items.
 		if(!this.withHandles){ return true; }
 		for(var node = (e.target); node && node != this.node; node = node.parentNode)
-			if(dojo.hasClass(node,this.defaultHandleClass))
+			if(dojo.hasClass(node, this.defaultHandleClass))
 				return true;	
 		return false;	// Boolean
 	},
@@ -85,7 +85,7 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 	},
 	
 	onDndStart:function(/*Object*/source, /*Array*/nodes, /*Object*/copy){
-	// summary: Called to initiate the DnD operation.
+		// summary: Called to initiate the DnD operation.
 		if (source == this)
 			this.firstIndicator = true;
 		else
@@ -108,9 +108,9 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 	},
 
 	onDndCancel:function(){
-	// summary: Called to cancel the DnD operation.	
-		var m= dojo.dnd.manager();
-		if(m.source== this && this.hideSource){
+		// summary: Called to cancel the DnD operation.	
+		var m = dojo.dnd.manager();
+		if(m.source == this && this.hideSource){
 			var nodes = this.getSelectedNodes();
 			for(var i=0; i<nodes.length; i++)
                 if(nodes[i]) 
@@ -396,29 +396,32 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 	
 });
 
-dojox.layout.dnd._setGcDndHandle=function(service,withHandles,handleClasses, first) {
-	if(!first)
+dojox.layout.dnd._setGcDndHandle = function(service,withHandles,handleClasses, first) {
+	if(!first){
 		dojo.query(".GcDndHandle", service.domNode).removeClass("GcDndHandle");
-	if (!withHandles)			
+	}
+	if(!withHandles){
 		dojo.addClass(service.domNode, "GcDndHandle");
-	else {
+	}else{
 		var _hasHandle = false;
-		for (var i = handleClasses.length - 1; i >= 0; i--) {
+		for(var i = handleClasses.length - 1; i >= 0; i--){
 			var _node = dojo.query("." + handleClasses[i], service.domNode)[0];
-			if (_node) {
+			if(_node){
 				_hasHandle = true;
-				if (handleClasses[i] != "GcDndHandle") {
+				if(handleClasses[i] != "GcDndHandle"){
 					var _gripNode = dojo.query(".GcDndHandle", service.domNode);
-					if (_gripNode.length == 0) 
+					if(_gripNode.length == 0){ 
 						dojo.removeClass(service.domNode, "GcDndHandle");
-					else				
+					}else{				
 						_gripNode.removeClass("GcDndHandle");
+					}
 					dojo.addClass(_node, "GcDndHandle");
 				}
 			}
 		}
-		if (!_hasHandle) 
+		if(!_hasHandle){ 
 			dojo.addClass(service.domNode, "GcDndHandle");
+		}
 	}
 };
 

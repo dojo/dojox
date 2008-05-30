@@ -29,7 +29,7 @@
 					padding:10px;
 					margin:0;
 				}
-				#lGC { height:100%; }
+				#lGC {  }
 				
 				#GC1{
 					margin:0;
@@ -81,28 +81,29 @@
 
 	<body class="soria">
 		<div id="layout" dojoType="dijit.layout.BorderContainer" liveSplitters="false" style="height:100%; width:100%">
-			<div id="expando" dojoType="dojox.layout.ExpandoPane" title="Left Region" splitter="true" style="width:200px" region="left">
-				<div id="lGC" dojoType="dojox.layout.GridContainer" attachParent="true"
-					acceptTypes="dijit.TitlePane"
-					hasResizableColumns="false"
-					opacity="0.3"
-					nbZones="1"
-					style="height:100%"
-					allowAutoScroll="true" 
-					withHandles="true"
-					isOffset="true"
-				>
-					<div dojoType="dijit.TitlePane" attachParent="true" title="Panel 1">
-						lorem ipsum
-					</div>	
-					<div dojoType="dijit.TitlePane" title="Panel 2">
-						lorem ipsum
-					</div>	
-					<div dojoType="dijit.TitlePane" title="Panel 3">
-						lorem ipsum
-					</div>	
-				</div>
+		
+			<div id="lGC" dojoType="dojox.layout.GridContainer"
+				acceptTypes="dijit.TitlePane"
+				hasResizableColumns="false"
+				opacity="0.3"
+				nbZones="1"
+				allowAutoScroll="true" 
+				withHandles="true"
+				region="right"
+				style="width:200px"
+				splitter="true"
+			>
+				<div dojoType="dijit.TitlePane" attachParent="true" title="Panel 1">
+					lorem ipsum
+				</div>	
+				<div dojoType="dijit.TitlePane" title="Panel 2">
+					lorem ipsum
+				</div>	
+				<div dojoType="dijit.TitlePane" title="Panel 3">
+					lorem ipsum
+				</div>	
 			</div>
+	
 			<div id="GC1" dojoType="dojox.layout.GridContainer" 
 				region="center"
 				nbZones="3"
@@ -136,9 +137,14 @@
 						</div>
 					</div-->
 			</div>
-			<div id="expandoR" dojoType="dojox.layout.ExpandoPane" title="Right Side" splitter="true" style="width:200px" region="right" easeIn="dojox.fx.easing.backOut" duration="600">
+			<div id="expandoR" dojoType="dojox.layout.ExpandoPane" 
+				title="Right Side" splitter="true" 
+				style="width:200px" 
+				region="left" 
+				easeIn="dojox.fx.easing.backOut" duration="600"
+			>
 				<div id="rGC" dojoType="dojox.layout.GridContainer"
-					acceptTypes="dijit.TitlePane, dijit.layout.AccordionContainer"
+					acceptTypes="dijit.TitlePane, dijit.layout.AccordionContainer, dijit._Calendar"
 					hasResizableColumns="false"
 					opacity="0.3"
 					nbZones="1"
