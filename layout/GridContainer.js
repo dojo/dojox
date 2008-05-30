@@ -5,8 +5,8 @@ dojo.require("dijit._base.focus");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 dojo.require("dojo.dnd.move");
+dojo.require("dojox.layout.dnd.PlottedDnd");
 
-dojo.require("dojox.layout.dnd.plottedDnD");
 dojo.requireLocalization("dojox.layout", "GridContainer");
 
 dojo.declare("dojox.layout.GridContainer", 
@@ -312,18 +312,16 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	_disconnectDnd: function(){
 		//summary: disconnect all events on insertNodes
-		for (var i = 0; i < this.handleDndInsertNodes.length; i++) {
-			dojo.disconnect(this.handleDndInsertNodes[i]);
-		}
-		setTimeout(dojo.hitch(this,  "onResized"), 0);
-//		setTimeout(dojo.hitch(this,function(){ this.onResized(); }), 0);
+
+		dojo.forEach(this.handleDndInsertNodes, dojo.disconnect);
+		setTimeout(dojo.hitch(this, "onResized"), 0);
 	},	
 	
 	_createZone: function(/*Object*/zone){
 		//summary: Create a DnD column.
 		var dz = null;
 		var _this = this;
-		dz = new dojox.layout.dnd.plottedDnD(zone.id, {
+		dz = new dojox.layout.dnd.PlottedDnd(zone.id, {
 			accept:this.acceptTypes,
 			withHandles:this.withHandles,
 			handleClasses: this.handleClasses, 

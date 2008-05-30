@@ -13,7 +13,7 @@
 	background:#FFF;	
 	margin:0px;	
 	padding:10px;
-	height:1%; /* Bug focus with IE6/7) */
+/*	height:1%; /* Bug focus with IE6/7) */
 }
 	
 /* MOW: dnd might change to make this easier? */
@@ -46,33 +46,44 @@
 /* default underlay for the container */
 .gridContainerZone {
 	vertical-align: top;	
-	padding:10px;	
+	padding:12px;	
 	background-color: #FDFDFD;	 
 	height: 100%;
 }
 
 
-.gridContainerZone .serviceWidgetTitleText h2
-{
+.gridContainerZone .serviceWidgetTitleText h2 {
 	position: relative;
 }
 
-.gridContainerGrip 
-{
+/* the "splitters" */
+.gridContainerGrip {
 	cursor:default;
-	position: absolute;	
-	width:4px;	
+	position:absolute;	
+	width:5px;	
 	padding: 0px;	
 	margin:0px;
 	background-image: url(images/pixel.gif);
+	background-color: #ededed;
 }
-	
-.gridContainerGripShow, .gridContainerGrip:focus 
-{
+
+.tundra .gridContainerGrip {
+	border-left:1px solid #a7a7a7;
+	border-right:1px solid #a7a7a7;
+}
+
+/* splitter selected state */	
+.gridContainerGripShow, .gridContainerGrip:focus {
 	cursor:e-resize;	
-	position: absolute;	
-	width:4px;	
-	padding: 0px;	
-	margin:0px;	
+	position:absolute;	
+	width:5px;	
+	padding:0px;	
+	margin:0px;
+	background-color: #a7a7a7;	
 	background-image: url(images/grip_bg.gif);
+}
+
+.tundra .gridContainerGripShow, .tundra .gridContainerGrid:focus ;
+	border-left:1px solid #aeaeae;
+	border-right:1px solid #aeaeae;
 }
