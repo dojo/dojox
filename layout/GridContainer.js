@@ -135,7 +135,7 @@ dojo.declare("dojox.layout.GridContainer",
 		while(i < this.nbZones){
 			var node = dojo.doc.createElement("td");
 			dojo.addClass(node, "gridContainerZone");
-			node.id = this.id+"_dz" + i;
+			node.id = this.id + "_dz" + i;
 			node.style.width = wCol + "%";	
 			var zone = this.gridNode.appendChild(node);
 			this.cell[i] = zone;
@@ -161,7 +161,7 @@ dojo.declare("dojox.layout.GridContainer",
 		this.connect(this, "onDndDrop", "_placeGrips");
 		this.dropHandler= dojo.subscribe("/dnd/drop", this, "_placeGrips");
 		this._oldwidth = this.domNode.offsetWidth;
-		if (this.hasResizableColumns) {
+		if(this.hasResizableColumns){
 			this._initPlaceGrips();
 			this._placeGrips();			
 		}
@@ -169,7 +169,7 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	destroy: function(){
 		// summary: destroy GridContainer Component.
-		for (var i = 0; i < this.handleDndStart; i++){
+		for(var i = 0; i < this.handleDndStart; i++){
 			dojo.disconnect(this.handleDndStart[i]);
 		}
 		dojo.unsubscribe(this.dropHandler);
@@ -203,7 +203,7 @@ dojo.declare("dojox.layout.GridContainer",
 					this._insertService(z, i++, 0, true);
 				}
 				catch (e) {
-					console.error("Unable to insert service in grid container",e,this.getChildren());
+					console.error("Unable to insert service in grid container", e, this.getChildren());
 				}
 				mod--;
 			}else if(res===0){ break; }
@@ -309,7 +309,7 @@ dojo.declare("dojox.layout.GridContainer",
 		for (var i = 0; i < this.handleDndInsertNodes.length; i++) {
 			dojo.disconnect(this.handleDndInsertNodes[i]);
 		}
-		setTimeout(dojo.hitch(this,"onResized"),0);
+		setTimeout(dojo.hitch(this,  "onResized"), 0);
 //		setTimeout(dojo.hitch(this,function(){ this.onResized(); }), 0);
 	},	
 	
@@ -331,12 +331,11 @@ dojo.declare("dojox.layout.GridContainer",
 		});
 		return dz; //plottedDnd Object
 	},
-	
-	
+
 	/************  grips methods***************/
 
 	_createGrip: function(/*Object*/dz){
-		//summary: Create a grip for a specific zone
+		// summary: Create a grip for a specific zone
 		var grip = document.createElement("div");
 		grip.className= "gridContainerGrip";
 		grip.setAttribute("tabIndex", "0");
@@ -346,7 +345,7 @@ dojo.declare("dojox.layout.GridContainer",
 				var gridContainerGripShow = false;
 				for(var i = 0; i < _this.grid.length - 1; i++){
 					if (dojo.hasClass(_this.grid[i].grip, "gridContainerGripShow")){
-						gridContainerGripShow=true;
+						gridContainerGripShow = true;
 						break;
 					}
 				}
@@ -358,7 +357,7 @@ dojo.declare("dojox.layout.GridContainer",
 		);
 
 		this.connect(grip,"onmouseout",function(e){
-				if (!_this._isResized){
+				if(!_this._isResized){
 					dojo.removeClass(e.target, "gridContainerGripShow");
 					dojo.addClass(e.target, "gridContainerGrip");
 				}
@@ -389,10 +388,11 @@ dojo.declare("dojox.layout.GridContainer",
 		this._topGrip += "px";
 
 		dojo.forEach(this.grid, function(zone){
-			if (zone.grip) {
+			if(zone.grip){
 				var grip = zone.grip;
-				if (!dojo.isIE) 
+				if (!dojo.isIE){ 
 					zone.pad = dojo._getPadBorderExtents(zone.node).w;
+				}
 				grip.style.top = this._topGrip;
 			}
 		}, this);
@@ -400,10 +400,11 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	_placeGrips: function(){
 		//summary: Define the position of a grip and place it on page.
+		var height;
 		if (this.allowAutoScroll){
-			var height = this.gridNode.scrollHeight + "px";
+			height = this.gridNode.scrollHeight;
 		}else{
-			var height = dojo.contentBox(this.gridNode).h + "px";
+			height = dojo.contentBox(this.gridNode).h;
 		}
 		var size = this._x;
 		
@@ -411,14 +412,10 @@ dojo.declare("dojox.layout.GridContainer",
 			if (zone.grip){
 				var grip = zone.grip;
 				// Bug margin : IE 
-				if (dojo.isIE){ 
-					size += dojo.marginBox(zone.node).w;
-				}else{
-					size += dojo.contentBox(zone.node).w + zone.pad;
-				}	
+				size += dojo[(dojo.isIE ? "marginBox" : "contentBox")](zone.node).w + (dojo.isIE ? 0 : zone.pad);
 				dojo.style(grip,{
-					left: size+"px",
-					height: height
+					left: size + "px",
+					height: height + "px"
 				});	
 			}
 		}, this);
@@ -426,14 +423,14 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	_getZoneByIndex : function(/*Integer*/n){
 		//summary: Return a DOM node containing a zone by given a index.
-		return (n >= 0 && n < this.grid.length) ? this.grid[n] : this.grid[0]; //number
+		return this.grid[(n >= 0 && n < this.grid.length ? n : 0 )]; //number
 	},
 	
 	getIndexZone : function(/*Node*/zone){
 		//summary: Return an integer by given a zone
 		for(var z = 0; z < this.grid.length; z++){
-			if(this.grid[z].domNode==zone){ 
-				return z; //number 
+			if(this.grid[z].domNode == zone){ 
+				return z; // number 
 			}
 		}
 		return -1; // number
@@ -441,50 +438,49 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	/***********miscellaneous methods******************/	
 	resizeColumnOn : function(/*Event*/e){
-		//summary: Connect events to listen the resize action.
-		//	Change the type of width columns (% to px) 
-		//	Calculate the minwidth according to the children	
+		// summary: Connect events to listen the resize action.
+		//		Change the type of width columns (% to px) 
+		//		Calculate the minwidth according to the children	
 		var k = dojo.keys;
 		if(this._a11yOn && e.keyCode != k.LEFT_ARROW && e.keyCode != k.RIGHT_ARROW){
 			return;
 		}
 		e.preventDefault();		
-		dojo.body().style.cursor="ew-resize";
-		this._isResized= true;		
+		dojo.body().style.cursor = "ew-resize";
+		this._isResized = true;		
 		this.initX = e.pageX;
 		var tabSize = [];
-		for (var i = 0; i < this.grid.length; i++){
+		for(var i = 0; i < this.grid.length; i++){
 			tabSize[i] = dojo.contentBox(this.grid[i].node).w;
 		}
-		this.oldTabSize=tabSize;
+		this.oldTabSize = tabSize;
 		
-		for(var i= 0; i< this.grid.length; i++){
+		for(var i = 0; i< this.grid.length; i++){
 			if(this._activeGrip == this.grid[i].grip) {
 				this.currentColumn = this.grid[i].node;
 				this.currentColumnWidth = tabSize[i];
 				this.nextColumn = this.currentColumn.nextSibling;
 				this.nextColumnWidth = tabSize[i+1];
 			}
-			this.grid[i].node.style.width=tabSize[i]+"px";
+			this.grid[i].node.style.width = tabSize[i] + "px";
 		}
 		
 		// calculate the minWidh of all children for current and next column
 		var calculateChildMinWidth = function(childNodes, minChild){
 			var width = 0;
-			var childMinWidth = 0;			
-			dojo.forEach(childNodes, function(child){				
-				if (child.nodeType == 1) {
-					var objectStyle = dojo.getComputedStyle(child);					
-					if (dojo.isIE) 
-						var minWidth = minChild;
-					else 
-						var minWidth = parseInt(objectStyle.minWidth);
-					childMinWidth=	minWidth+
+			var childMinWidth = 0;
+			dojo.forEach(childNodes, function(child){
+				if(child.nodeType == 1){
+					var objectStyle = dojo.getComputedStyle(child);
+					var minWidth = (dojo.isIE ? minChild : parseInt(objectStyle.minWidth));
+
+					childMinWidth = minWidth +
 									parseInt(objectStyle.marginLeft)+
 									parseInt(objectStyle.marginRight);
-					if (width < childMinWidth) {
-						width= childMinWidth;						
-					}					
+									
+					if(width < childMinWidth){
+						width = childMinWidth;
+					}
 				}
 			});
 			return width;
@@ -494,19 +490,19 @@ dojo.declare("dojox.layout.GridContainer",
 		var nextColumnMinWidth = calculateChildMinWidth(this.nextColumn.childNodes, this.minChildWidth);
 		
 		var minPix = Math.round((dojo.marginBox(this.gridContainerTable).w * this.minColWidth) / 100);
-		this.currentMinCol=currentColumnMinWidth;
-		this.nextMinCol=nextColumnMinWidth;
+		this.currentMinCol = currentColumnMinWidth;
+		this.nextMinCol = nextColumnMinWidth;
 
-		if(minPix>this.currentMinCol){
-			this.currentMinCol=minPix;
+		if(minPix > this.currentMinCol){
+			this.currentMinCol = minPix;
 		}
-		if(minPix>this.nextMinCol){
-			this.nextMinCol=minPix;
+		if(minPix > this.nextMinCol){
+			this.nextMinCol = minPix;
 		}
-		if (this._a11yOn){
-			this.connectResizeColumnMove = this.connect(document, "onkeypress", "resizeColumnMove");
+		if(this._a11yOn){
+			this.connectResizeColumnMove = this.connect(dojo.doc, "onkeypress", "resizeColumnMove");
 		}else{
-			this.connectResizeColumnMove = this.connect(document, "onmousemove", "resizeColumnMove");
+			this.connectResizeColumnMove = this.connect(dojo.doc, "onmousemove", "resizeColumnMove");
 			this.connectResizeColumnOff = this.connect(document, "onmouseup", "resizeColumnOff");
 		}
 		
@@ -517,7 +513,7 @@ dojo.declare("dojox.layout.GridContainer",
 		var d = 0;
 		if(this._a11yOn){
 			var k = dojo.keys;
-			switch (e.keyCode) {
+			switch (e.keyCode){
 				case k.LEFT_ARROW:
 					d = -10;
 					break;
@@ -561,11 +557,12 @@ dojo.declare("dojox.layout.GridContainer",
 		var tabWidth = this.gridContainerTable.clientWidth;
 		
 		for(var i = 0; i < this.grid.length; i++){
+			var _cb = dojo.contentBox(this.grid[i].node);
 			if(dojo.isIE){
 				tabSize[i] = dojo.marginBox(this.grid[i].node).w;
-				testSize[i] = dojo.contentBox(this.grid[i].node).w;
+				testSize[i] = _cb.w;
 			}else{
-				tabSize[i] = dojo.contentBox(this.grid[i].node).w;
+				tabSize[i] = _cb.w;
 				testSize = tabSize;
 			}
 		}
@@ -602,66 +599,63 @@ dojo.declare("dojox.layout.GridContainer",
 				/*Check if right or left columns are fixed*/
 				/*Columns are not taken in account and can't be deleted*/
 				if(this.mode == "right"){
-					if(this.isLeftFixed&&this.grid.length>0)
-						end=1;
-					else
-						end=0;
-					if(this.isRightFixed)
-						start=this.grid.length-2;
-					else
-						start=this.grid.length-1;
-    				for(var z=start;z>=end;z--){
-    					var nbChildren = 0;
-    					var zone = this.grid[z].node;
-    					for(var j = 0;j < zone.childNodes.length;j++){
-    						if(zone.childNodes[j].nodeType==1 && !(zone.childNodes[j].id == "")){ //1 = dojo.html.ELEMENT_NODE
-    							nbChildren++;
-    							break;
-    						}
-    					}
-    					if (nbChildren == 0) {
+					end = (this.isLeftFixed && this.grid.length > 0) ? 1 : 0;
+					start = this.grid.length - (this.isRightFixed ? 2 : 1);
+					for(var z = start; z >= end; z--){
+						var nbChildren = 0;
+						var zone = this.grid[z].node;
+						for(var j = 0;j < zone.childNodes.length; j++){
+							if(zone.childNodes[j].nodeType==1 && !(zone.childNodes[j].id == "")){ //1 = dojo.html.ELEMENT_NODE
+								nbChildren++;
+								break;
+							}
+						}
+						if(nbChildren == 0){
 							count[count.length] = z;
 						}
-    					if (count.length>=delta){					
-    						this._deleteColumn(count);	
-    						break;	
-    					}
-    				}
-    				if (count.length<delta)
-    					//Not enough empty columns
-    					alert(this.i18n.err_onSetNbColsRightMode);
-				}
-				else{ // mode="left"
-					if(this.isLeftFixed&&this.grid.length>0)
+						if(count.length>=delta){
+							this._deleteColumn(count);	
+							break;	
+						}
+					}
+					if(count.length < delta){
+						//Not enough empty columns
+						console.error(this.i18n.err_onSetNbColsRightMode);
+					}
+				}else{ // mode="left"
+					if(this.isLeftFixed&&this.grid.length>0){
 						start=1;
-					else
+					}else{
 						start=0;
-					if(this.isRightFixed)
+					}
+					if(this.isRightFixed){
 						end=this.grid.length-1;
-					else
+					}else{
 						end=this.grid.length;
-              		for(var z=start;z<end;z++){
-      					var nbChildren = 0;
-      					var zone = this.grid[z].node;
-      					for(var j = 0;j < zone.childNodes.length;j++){
-      						if(zone.childNodes[j].nodeType==1 && !(zone.childNodes[j].id == "")){ //1 = dojo.html.ELEMENT_NODE
-      							nbChildren++;
-      							break;
-      						}
-      					}
-      					if (nbChildren == 0) {
+					}
+					for(var z=start;z<end;z++){
+						var nbChildren = 0;
+						var zone = this.grid[z].node;
+						for(var j = 0;j < zone.childNodes.length;j++){
+							if(zone.childNodes[j].nodeType==1 && !(zone.childNodes[j].id == "")){ //1 = dojo.html.ELEMENT_NODE
+								nbChildren++;
+								break;
+							}
+						}
+						if(nbChildren == 0){
 							count[count.length] = z;
 						} 
-      					if(count.length>=delta){
-      						this._deleteColumn(count);
-							break;		
-      					}
-      				}
+						if(count.length>=delta){
+							this._deleteColumn(count);
+							break;
+						}
+					}
 					
-      				if (count.length<delta)
-      					//Not enough empty columns
-      					alert(this.i18n.err_onSetNbColsLeftMode);  
-                }
+					if (count.length<delta){
+						//Not enough empty columns
+						alert(this.i18n.err_onSetNbColsLeftMode);  
+					}
+				}
 			}else{
 				if(delta<0){ this._addColumn(Math.abs(delta)); }
 			}
@@ -685,36 +679,36 @@ dojo.declare("dojox.layout.GridContainer",
 			//to fix IE Bug Border with empty cells
 			node.id = this.id + "_dz" + this.nbZones;
 			var dz;
-            //MODIF MYS
-            if(this.mode == "right"){
-                if(this.isRightFixed){
-                    this.grid[this.grid.length-1].node.parentNode.insertBefore(node,this.grid[this.grid.length-1].node);
+			//MODIF MYS
+			if(this.mode == "right"){
+				if(this.isRightFixed){
+					this.grid[this.grid.length-1].node.parentNode.insertBefore(node,this.grid[this.grid.length-1].node);
 					dz = this._createZone(node);
 					this.tabDZ.splice(this.tabDZ.length-1,0,dz);
-                    this.grid.splice(this.grid.length-1,0,dz);
-                    this.cell.splice(this.cell.length-1,0,node); 
-            	}else{
-            		var zone = this.gridNode.appendChild(node);
-            		dz = this._createZone(node);
+					this.grid.splice(this.grid.length-1,0,dz);
+					this.cell.splice(this.cell.length-1,0,node); 
+				}else{
+					var zone = this.gridNode.appendChild(node);
+					dz = this._createZone(node);
 					this.tabDZ.push(dz);
-            		this.grid.push(dz);
-            		this.cell.push(node); 
-            	}
-            }else{
-                if(this.isLeftFixed){
-            	    (this.grid.length == 1) ? this.grid[0].node.parentNode.appendChild(node,this.grid[0].node) : this.grid[1].node.parentNode.insertBefore(node,this.grid[1].node);
-                    dz = this._createZone(node);
+					this.grid.push(dz);
+					this.cell.push(node); 
+				}
+			}else{
+				if(this.isLeftFixed){
+					(this.grid.length == 1) ? this.grid[0].node.parentNode.appendChild(node,this.grid[0].node) : this.grid[1].node.parentNode.insertBefore(node,this.grid[1].node);
+					dz = this._createZone(node);
 					this.tabDZ.splice(1,0,dz);
-                    this.grid.splice(1,0,dz);
-                    this.cell.splice(1,0,node); 
-                }else{
-            	    this.grid[this.grid.length-this.nbZones].node.parentNode.insertBefore(node,this.grid[this.grid.length-this.nbZones].node);
-            		dz = this._createZone(node);
+					this.grid.splice(1,0,dz);
+					this.cell.splice(1,0,node); 
+				}else{
+					this.grid[this.grid.length-this.nbZones].node.parentNode.insertBefore(node,this.grid[this.grid.length-this.nbZones].node);
+					dz = this._createZone(node);
 					this.tabDZ.splice(this.tabDZ.length-this.nbZones,0,dz);
-            		this.grid.splice(this.grid.length-this.nbZones,0,dz);
-            		this.cell.splice(this.cell.length-this.nbZones,0,node);
-            	}
-            }
+					this.grid.splice(this.grid.length-this.nbZones,0,dz);
+					this.cell.splice(this.cell.length-this.nbZones,0,node);
+				}
+			}
 			if(this.hasResizableColumns){
 				// add a OnDndStart connect for each added columns
 				var self = this;
@@ -752,42 +746,45 @@ dojo.declare("dojox.layout.GridContainer",
 	},
 	
 	_deleteColumn: function(/*Array*/indices){
-	//summary: Remove some columns with indices passed as an array
+		//summary: Remove some columns with indices passed as an array
 		var zone, child, nbDelZones;
 		nbDelZones = 0;
-		for(i = 0;i < indices.length;i++){
-			if(this.mode == "right")
-                zone = this.grid[indices[i]];
-            else
-                zone = this.grid[indices[i]-nbDelZones];
-			for(var j=0;j<zone.node.childNodes.length;j++){
-				if(zone.node.childNodes[j].nodeType != 1){ continue;} //1 = dojo.html.ELEMENT_NODE
+		for(var i = 0; i < indices.length; i++){
+			var idx = indicies[i];
+			if(this.mode == "right"){
+				zone = this.grid[idx];
+			}else{
+				zone = this.grid[idx - nbDelZones];
+			}
+			for(var j = 0; j < zone.node.childNodes.length; j++){
+				if(zone.node.childNodes[j].nodeType != 1){ continue; } //1 = dojo.html.ELEMENT_NODE
 				child = dijit.byId(zone.node.childNodes[j].id);
-				for(var x=0; x<this.getChildren().length; x++){
-			    	if(this.getChildren()[x] === child){
-				        this.getChildren().splice(x, 1);
-				        break;
-			   		}
-    			}
+				for(var x = 0; x < this.getChildren().length; x++){
+					if(this.getChildren()[x] === child){
+						this.getChildren().splice(x, 1);
+						break;
+					}
+				}
 			}
 			zone.node.parentNode.removeChild(zone.node);
-			if (this.mode == "right") {
-				if(this.hasResizableColumns)
-					dojo.disconnect(this.handleDndStart[indices[i]]);
-				this.grid.splice(indices[i], 1);
-				this.tabDZ.splice(indices[i], 1);
-				this.cell.splice(indices[i], 1);
-			}
-			else {
-				if(this.hasResizableColumns)
-					dojo.disconnect(this.handleDndStart[indices[i]- nbDelZones]);
-				this.grid.splice(indices[i] - nbDelZones, 1);
-				this.tabDZ.splice(indices[i] - nbDelZones, 1);
-				this.cell.splice(indices[i] - nbDelZones, 1);
+			if(this.mode == "right"){
+				if(this.hasResizableColumns){
+					dojo.disconnect(this.handleDndStart[idx]);
+				}
+				this.grid.splice(idx, 1);
+				this.tabDZ.splice(idx, 1);
+				this.cell.splice(idx, 1);
+			}else{
+				if(this.hasResizableColumns){
+					dojo.disconnect(this.handleDndStart[idx - nbDelZones]);
+				}
+				this.grid.splice(idx - nbDelZones, 1);
+				this.tabDZ.splice(idx - nbDelZones, 1);
+				this.cell.splice(idx - nbDelZones, 1);
 			}
 			this.nbZones--;
 			nbDelZones++;
-			if (zone.grip) {
+			if(zone.grip){
 				this.domNode.removeChild(zone.grip);
 			}
 		}
@@ -795,20 +792,20 @@ dojo.declare("dojox.layout.GridContainer",
 	},
 	
 	_updateColumnsWidth: function(){
-	//summary: Update the columns width.
-		var wCol = 100/this.nbZones;
+		//summary: Update the columns width.
+		var wCol = 100 / this.nbZones;
 		var zone;
-		for(var z=0;z<this.grid.length;z++){
+		for(var z = 0; z < this.grid.length; z++){
 			zone = this.grid[z].node;
-			zone.style.width = wCol+"%";
+			zone.style.width = wCol + "%";
 	 	}		
 	},
 	
 	_selectFocus: function(/*Event*/event){
-	//summary: 	Enable a11y into the GridContainer :
-	//		- Possibility to move focus into the GridContainer (TAB, LEFT ARROW, RIGHT ARROW, UP ARROW, DOWN ARROW).
-    // 		- Possibility to move GridContainer's children (Drag and Drop) with keyboard. (SHIFT +  ARROW). 
-    //		If the type of widget is not draggable, a popup is displayed. 
+		//summary: 	Enable a11y into the GridContainer :
+		//		- Possibility to move focus into the GridContainer (TAB, LEFT ARROW, RIGHT ARROW, UP ARROW, DOWN ARROW).
+	    //		- Possibility to move GridContainer's children (Drag and Drop) with keyboard. (SHIFT +  ARROW). 
+	    //		If the type of widget is not draggable, a popup is displayed. 
 		var e = event.keyCode;
 		var zone = null;
 		var focus = dijit.getFocus();
@@ -820,49 +817,46 @@ dojo.declare("dojox.layout.GridContainer",
 			switch (e) {
 				case k.DOWN_ARROW:
 				case k.RIGHT_ARROW:
-					for (var i = 0; i < this.gridNode.childNodes.length; i++) {
+					for(var i = 0; i < this.gridNode.childNodes.length; i++){
 						zone = this.gridNode.childNodes[i].firstChild;
 						var found = false;
 						while(!found){
-							if (zone != null) {
-								if (zone.style.display !== "none") {
+							if(zone != null){
+								if(zone.style.display !== "none"){
 									dijit.focus(zone);
 									dojo.stopEvent(event);
 									found = true;
-								}else
+								}else{
 									zone = zone[pos];
-							}else
-								break;
+								}	
+							}else{ break; }
 						}
-						if (found)
-							break;
+						if(found){ break; }
 					}
-				break;
+					break;
 				case k.UP_ARROW:
 				case k.LEFT_ARROW:
-					for (var i = this.gridNode.childNodes.length - 1; i >= 0; i--) {
+					for(var i = this.gridNode.childNodes.length - 1; i >= 0; i--){
 						zone = this.gridNode.childNodes[i].lastChild;
 						var found = false;
 						while(!found){
-							if (zone != null) {
-								if (zone.style.display !== "none") {
+							if(zone != null){
+								if(zone.style.display !== "none"){
 									dijit.focus(zone);
 									dojo.stopEvent(event);
 									found = true;
-								}else
+								}else{
 									zone = zone[pos];
-							}else
-								break;
+								}
+							}else{ break; }
 						}
-						if (found)
-							break;
+						if(found){ break; }
 					}
-				break;
+					break;
 			}
-		}
-		else {
-			if (focusNode.parentNode.parentNode == this.gridNode){
-				switch (e) {
+		}else{
+			if(focusNode.parentNode.parentNode == this.gridNode){
+				switch(e){
 					case k.UP_ARROW:
 					case k.DOWN_ARROW:
 						dojo.stopEvent(event);
@@ -904,11 +898,13 @@ dojo.declare("dojox.layout.GridContainer",
 								var parent = focusNode.parentNode;
 								var firstChild = parent.firstChild;
 								var lastChild = parent.lastChild;
-								while (firstChild.style.display == "none" || lastChild.style.display == "none"){
-									if (firstChild.style.display == "none")
+								while(firstChild.style.display == "none" || lastChild.style.display == "none"){
+									if(firstChild.style.display == "none"){
 										firstChild = firstChild.nextSibling;
-									if (lastChild.style.display == "none")
+									}
+									if(lastChild.style.display == "none"){
 										lastChild = lastChild.previousSibling;
+									}
 								}
 								if(e == k.UP_ARROW){
 									var r = parent.removeChild(focusNode);
@@ -925,8 +921,7 @@ dojo.declare("dojox.layout.GridContainer",
 										parent.insertBefore(r, zone);
 										r.setAttribute("tabIndex", "0");
 										dijit.focus(r);
-									} 							
-									else{ 
+									}else{ 
 										var r = parent.removeChild(zone);
 										parent.insertBefore(r, focusNode);
 										focusNode.setAttribute("tabIndex", "0");
@@ -936,53 +931,53 @@ dojo.declare("dojox.layout.GridContainer",
 							}else{
 								this._displayPopup();	
 							}
-						}
-						else
+						}else{
 							dijit.focus(zone);
-					break;
+						}
+						break;
 					case k.RIGHT_ARROW:
 					case k.LEFT_ARROW:
 						dojo.stopEvent(event);
-						if (event.shiftKey) {
-							if (dijit.byNode(focusNode).dragRestriction)
-								return;
-							if (focusNode.parentNode[pos] == null) {
+						if(event.shiftKey){
+							if(dijit.byNode(focusNode).dragRestriction){ return; }
+							if(focusNode.parentNode[pos] == null){
 								var z = 0;
-								if (e == k.LEFT_ARROW) 
-									var z = this.gridNode.childNodes.length - 1;
+								if (e == k.LEFT_ARROW){ var z = this.gridNode.childNodes.length - 1; }
+							// FIXME: what is supposed to happen here? the if(){ isn't closed, but
+							// the }else{ has it's own loop? i see what is happening, but is it a bug?
+							// also, z is defined three times here
 							}else  
 								if (focusNode.parentNode[pos].nodeType == 3){
 									var z = this.gridNode.childNodes.length - 2;
-															
-							}else {
+								
+							}else{
 								var z = 0;
-								for (var i=0; i<this.gridNode.childNodes.length;i++){
-									if (focusNode.parentNode[pos] == this.gridNode.childNodes[i])
-										break;
+								for(var i = 0; i < this.gridNode.childNodes.length; i++){
+									if(focusNode.parentNode[pos] == this.gridNode.childNodes[i]){ break; }
 									z++;
 								} 
-								/*if (dojo.isFF)
-									z--;*/
 							}
 							var _dndType = focusNode.getAttribute("dndtype");
 							var accept = false;
-							for (var i=0; i < this.acceptTypes.length;i++){
-								if (_dndType == this.acceptTypes[i]){
-									var accept = true;
+							for(var i = 0; i < this.acceptTypes.length; i++){
+								if(_dndType == this.acceptTypes[i]){
+									accept = true;
 									break;
 								}
 							}
-							if (accept) {
+							if(accept){
 								var parentSource = focusNode.parentNode;
 								var widget = dijit.byNode(focusNode);
 								var r = parentSource.removeChild(focusNode);
-								var place = ((e == k.RIGHT_ARROW) ? 0 : this.gridNode.childNodes[z].length);
+								var place = (e == k.RIGHT_ARROW ? 0 : this.gridNode.childNodes[z].length);
 								this.addService(widget, z, place);
 								r.setAttribute("tabIndex", "0");
 								dijit.focus(r);
 								this._placeGrips();
-							}else
+							}else{
 								this._displayPopup();
+							}
+							
 						}else{
 							var node = focusNode.parentNode;
 							
