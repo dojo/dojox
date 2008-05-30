@@ -1,32 +1,33 @@
-/**********************************oaf.widget.GridContainer************************************/
-.gridContainer *
-{
+
+.gridContainer * {
 	zoom:1;
 }
+
 .oafDndHandle {
 	cursor: move;
 }
 
-.gridContainer
-{
+.gridContainer {
 	display:block;	
 	position: relative;
 	background:#FFF;	
 	margin:0px;	
 	padding:10px;
 	height:1%; /* Bug focus with IE6/7) */
-}	
-.gridContainer .dojoDndAvatarHeader	{display:none;}
+}
+	
+/* MOW: dnd might change to make this easier? */
+.gridContainer .dojoDndAvatarHeader	{
+	display:none;
+}
 
-.gridContainerTable
-{
+.gridContainerTable {
 	width:100%;	
 	border:1px solid #F60;
 	height: 100%;
 }
 
-.gridContainerPopup
-{
+.gridContainerPopup {
 	position: absolute;
 	top:40%;
 	left:40%;
@@ -42,14 +43,14 @@
 	height: 100%;
 }
 
-
-.gridContainerZone
-{
+/* default underlay for the container */
+.gridContainerZone {
 	vertical-align: top;	
 	padding:10px;	
-	background-color: #FDFDFD;	
+	background-color: #FDFDFD;	 
 	height: 100%;
 }
+
 
 .gridContainerZone .serviceWidgetTitleText h2
 {

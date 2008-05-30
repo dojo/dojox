@@ -8,8 +8,6 @@
 			/* <![CDATA[ */
 				@import "../../../dojo/resources/dojo.css";
 				@import "../../../dijit/themes/tundra/tundra.css";
-				@import "../resources/GridContainer.css";
-				@import "../resources/DndGridContainer.css";
 				
 				html,body{
 					margin:0;
@@ -45,10 +43,13 @@
 				
 				#GC1 .gridContainerZone {
 					border-collapse:collapse;
-					border : 1px dashed #FF6600;
+					border : none;
 				}
 			/* ]]> */
 		</style>
+		
+		<link rel="stylesheet" href="../resources/GridContainer.css" />
+		<link rel="stylesheet" href="../resources/DndGridContainer.css" />
 		
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 		<script type="text/javascript" src="../GridContainer.js"></script>

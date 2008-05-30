@@ -176,6 +176,12 @@ dojo.declare("dojox.layout.GridContainer",
 		this.inherited(arguments);
 	},
 	
+/*	FIXME: implement resize / BorderContainer support
+	resize: function(){
+		console.log('resize',arguments)
+	},
+*/
+	
 	onResized: function(){
 		// summary: Callback method to resize the GridContainer widget and columns
 		if(this.hasResizableColumns){
@@ -206,7 +212,7 @@ dojo.declare("dojox.layout.GridContainer",
 					console.error("Unable to insert service in grid container", e, this.getChildren());
 				}
 				mod--;
-			}else if(res===0){ break; }
+			}else if(res === 0){ break; }
 		}
 	},
 	
@@ -337,7 +343,7 @@ dojo.declare("dojox.layout.GridContainer",
 	_createGrip: function(/*Object*/dz){
 		// summary: Create a grip for a specific zone
 		var grip = document.createElement("div");
-		grip.className= "gridContainerGrip";
+		grip.className = "gridContainerGrip";
 		grip.setAttribute("tabIndex", "0");
 
 		var _this= this;
@@ -750,7 +756,7 @@ dojo.declare("dojox.layout.GridContainer",
 		var zone, child, nbDelZones;
 		nbDelZones = 0;
 		for(var i = 0; i < indices.length; i++){
-			var idx = indicies[i];
+			var idx = indices[i];
 			if(this.mode == "right"){
 				zone = this.grid[idx];
 			}else{
@@ -940,18 +946,12 @@ dojo.declare("dojox.layout.GridContainer",
 						dojo.stopEvent(event);
 						if(event.shiftKey){
 							if(dijit.byNode(focusNode).dragRestriction){ return; }
+							var z = 0;
 							if(focusNode.parentNode[pos] == null){
-								var z = 0;
 								if (e == k.LEFT_ARROW){ var z = this.gridNode.childNodes.length - 1; }
-							// FIXME: what is supposed to happen here? the if(){ isn't closed, but
-							// the }else{ has it's own loop? i see what is happening, but is it a bug?
-							// also, z is defined three times here
-							}else  
-								if (focusNode.parentNode[pos].nodeType == 3){
-									var z = this.gridNode.childNodes.length - 2;
-								
+							}else if(focusNode.parentNode[pos].nodeType == 3){
+								z = this.gridNode.childNodes.length - 2;
 							}else{
-								var z = 0;
 								for(var i = 0; i < this.gridNode.childNodes.length; i++){
 									if(focusNode.parentNode[pos] == this.gridNode.childNodes[i]){ break; }
 									z++;
