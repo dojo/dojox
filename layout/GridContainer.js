@@ -44,29 +44,29 @@ dojo.declare("dojox.layout.GridContainer",
 	//	Allow or not resizing of columns by a grip handle.
 	hasResizableColumns:true,
 	
-	//nbZones: Integer
-	//	The number of dropped zones.
+	// nbZones: Integer
+	//		The number of dropped zones.
 	nbZones:1,
 
 	//opacity: Integer
-	//	Define the opacity of the DnD widget.
+	//		Define the opacity of the DnD Avatar.
 	opacity:1,
 
-	//minColWidth: Integer
-	//	Minimum column width in percentage.
+	// minColWidth: Integer
+	//		Minimum column width in percentage.
 	minColWidth: 20,
-
-	//minChildWidth: Integer
-	// 	Minimun children with in pixel (only used for IE6 that doesn't handle min-width css property */
+ 
+	// minChildWidth: Integer
+	// 		Minimun children with in pixel (only used for IE6 that doesn't handle min-width css property */
 	minChildWidth : 150,
 
-	//acceptTypes: Array
-	//	The gridcontainer will only accept the children that fit to the types.
-	//	In order to do that, the child must have a widgetType or a dndType attribute corresponding to the accepted type.*/
-	acceptTypes : ["dijit.layout.ContentPane"],
-
+	// acceptTypes: Array
+	//		The gridcontainer will only accept the children that fit to the types.
+	//		In order to do that, the child must have a widgetType or a dndType attribute corresponding to the accepted type.*/
+	acceptTypes: [], 
+	
 	//mode: String
-	// 	location to add columns, must be set to left or right(default)
+	// 		location to add columns, must be set to left or right(default)
 	mode: "right",
 
 	//allowAutoScroll: Boolean
@@ -84,7 +84,7 @@ dojo.declare("dojox.layout.GridContainer",
 
 	//offsetDrag: Object
 	//	 Allow to specify its own offset (x and y) onl when Parameter isOffset is true
-  	offsetDrag : {x:0,y:0},
+  	offsetDrag : {}, // 
 
 	//withHandles: Boolean
 	//	Specify if there is a specific drag handle on widgets	
@@ -117,6 +117,12 @@ dojo.declare("dojox.layout.GridContainer",
 
 	// can display a popup 
 	_canDisplayPopup : true,
+
+	constructor: function(props, node){
+		// FIXME: does this need a "scopeName"
+		this.acceptTypes = props["acceptTypes"] || ["dijit.layout.ContentPane"];
+		this.dragOffset = props["dragOffset"] || { x:0, y:0 };
+	},
 
 	postMixInProperties: function(){
 		this.i18n = dojo.i18n.getLocalization("dojox.layout", "GridContainer"); 
@@ -257,8 +263,9 @@ dojo.declare("dojox.layout.GridContainer",
 		return service.id; // String
 	},
 	
+	// FIXME: API change, rename to addChild
 	addService : function(/*Object*/service, /*Integer*/z, /*Integer*/p){
-		// summary: Add a service in a specific column of the GridContainer widget.
+		// summary: Add a service (child widget) in a specific column of the GridContainer widget.
 		// service: 
 		//	widget to insert
 		// z:
@@ -320,7 +327,6 @@ dojo.declare("dojox.layout.GridContainer",
 	_createZone: function(/*Object*/zone){
 		//summary: Create a DnD column.
 		var dz = null;
-		var _this = this;
 		dz = new dojox.layout.dnd.PlottedDnd(zone.id, {
 			accept:this.acceptTypes,
 			withHandles:this.withHandles,
@@ -348,7 +354,7 @@ dojo.declare("dojox.layout.GridContainer",
 		this.onMouseOver = this.connect(grip, "onmouseover", function(e){
 				var gridContainerGripShow = false;
 				for(var i = 0; i < _this.grid.length - 1; i++){
-					if (dojo.hasClass(_this.grid[i].grip, "gridContainerGripShow")){
+					if(dojo.hasClass(_this.grid[i].grip, "gridContainerGripShow")){
 						gridContainerGripShow = true;
 						break;
 					}
