@@ -1,3 +1,4 @@
+(window["http://localhost/dojox/rpc/tests/resources/test.smd"]||function(val){return val}) (
 {
 	transport: "POST",
 	envelope: "URL",
@@ -186,4 +187,4 @@
                         ]
                 }
 	}	
-}
+})

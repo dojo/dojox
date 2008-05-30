@@ -1,6 +1,9 @@
 <?php
+	// ensure that we don't try to send "html" down to the client
+	header("Content-Type: application/json");
+
 	require_once("./JSON.php");
-	
+
 	$json = new Services_JSON;
 	$method = $_REQUEST["method"];
 	$id = $_REQUEST["id"];
@@ -20,7 +23,7 @@
 		case "postJsonRpc12EchoNamed":
 		case "getJsonRpc12EchoNamed":
 			$p = $json->decode($params);
-		
+
 			if ($p->message){
 				$d = $p->message;
 			}else{
@@ -28,9 +31,9 @@
 			}
 			$result = "{id:" . $id . ", 'result':'" . $d . "'}";
 			break;
-		default: 
+		default:
 			$result = "{id:'1','error':'Unknown Method', 'result':'this result only here for this test, shouldnt be here in real code'}";
-			break;	
+			break;
 	}
 
 	print $result;

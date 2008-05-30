@@ -14,6 +14,10 @@
 
 	// FIXME: Quite a few of these APIs can take multiple entries for the same parameter, to behave
 	//        as multi-select options. How should we handle these?
+	
+	// ANSWER: JSON Schema defines this aspect of SMD, enumeration of possible values is handled
+	//	with an "options" attribute. For example:
+	//	{ name: "search_in", type: "string", optional: true, "default": "all", options:["all", "question", "best_answer"]}, // can be "all", "question", "best_answer"
 
 	services: {
 		//

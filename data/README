@@ -14,6 +14,7 @@ Project authors
 	Russell Jones (KeyValueStore) (CLA)
 	Benjamin Schell (KeyValueStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
+	Kris Zyp (kris@dojotoolkit.org) (JsonRestStore, PersevereStore, S3JsonRestStore, CouchDBRestStore)
 	Frank Fortson (frank.fortson@equorum.com) (AndOrReadStore, AndOrWriteStore)
 
 -------------------------------------------------------------------------------
@@ -89,6 +90,10 @@ Additional Notes:
 
 	dojox.data.SnapLogicStore - Store to interface to SnapLogic data services.
 
+	dojox.data.JsonRestStore - Store to interface with RESTful HTTP/JSON web services.
+	dojox.data.PersevereStore - Extension of JsonRestStore for Persevere
+	dojox.data.CouchDBRestStore - Extension of JsonRestStore for CouchDB
+	dojox.data.S3JsonRestStore - Extension of JsonRestStore for Amazon S3
 	dojox.data.GoogleSearchStore - Store to interface Google's AJAX search services.  
 		There are many subclasses of this store for particular types of searches:
 		dojox.data.GoogleWebSearchStore

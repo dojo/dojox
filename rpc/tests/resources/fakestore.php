@@ -1,8 +1,10 @@
 <?php
 	session_start();
-	$fn = preg_replace("/\W/","",$_REQUEST["location"]);	
+	header("Content-Type: " . $_SERVER["CONTENT_TYPE"]);
+
+	$fn = preg_replace("/\W/","",$_REQUEST["location"]);
 	switch ($_SERVER["REQUEST_METHOD"]) {
-		case "GET" : 
+		case "GET" :
 			if (isset($_SESSION[$fn])) {
 				print($_SESSION[$fn]);
 			}
@@ -12,12 +14,12 @@
 				fclose($fh);
 			}
 			break;
-		case "PUT" : 
+		case "PUT" :
 			$contents = file_get_contents('php://input');
 			print($contents);
 			$_SESSION[$fn]=$contents;
 			break;
-		case "POST" : 
+		case "POST" :
 			if (isset($_SESSION[$fn])) {
 				$old = $_SESSION[$fn];
 			}
@@ -29,7 +31,7 @@
 			$contents = file_get_contents('php://input');
 			$_SESSION[$fn]=$old . $contents;
 			break;
-		case "DELETE" : 
+		case "DELETE" :
 			$_SESSION[$fn]="deleted";
 			break;
 	}

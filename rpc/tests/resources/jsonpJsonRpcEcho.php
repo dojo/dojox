@@ -1,4 +1,7 @@
 <?php
+	// ensure that we don't try to send "html" down to the client
+	header("Content-Type: application/json");
+
         require_once("./JSON.php");
         $json = new Services_JSON;
 
@@ -23,7 +26,7 @@
 					case "jsonpJsonRpc11EchoNamed":
 						$res = "{'id': '$id', result: '$message'}";
 						break;
-					default: 
+					default:
 						$res = "{'id': '$id', result: '$message', 'error':''}";
 						break;
 				}

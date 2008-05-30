@@ -1,31 +1,27 @@
 dojo.provide("dojox.rpc.JsonRPC");
+dojo.require("dojox.rpc.Service");
 
-dojox.rpc.envelopeRegistry.register(
-	"JSON-RPC-1.0",
-	function(str){
-		return str == "JSON-RPC-1.0";
-	},
-	{
+(function(){
+	var jsonRpcEnvelope = {
 		serialize: function(smd, method, data, options){
 			//not converted to json it self. This  will be done, if
 			//appropriate, at the transport level
-			var d = dojox.rpc.toOrdered(method, data);
 
-			d = dojox.rpc.toJson({
+			var d = dojo.toJson({
 				id: this._requestId++,
 				method: method.name,
-				params: d
+				params: data
 			});
 
 			return {
 				data: d,
+				handleAs:'json',
 				contentType: 'application/json',
 				transport:"POST"
 			};
 		},
 
-		deserialize: function(results){
-			var obj = dojox.rpc.resolveJson(results);
+		deserialize: function(obj){
 			if(obj.error){
 				var e = new Error(obj.error);
 				e._rpcErrorObject = obj.error;
@@ -33,40 +29,20 @@ dojox.rpc.envelopeRegistry.register(
 			}
 			return obj.result || true;
 		}
-	}
-);
-
-dojox.rpc.envelopeRegistry.register(
-	"JSON-RPC-2.0",
-	function(str){
-		return str == "JSON-RPC-2.0";
-	},
-	{
-		serialize: function(smd, method, data, options){
-			var trans = method.transport || smd.transport || "POST";
-			var d = dojox.rpc.toNamed(method, data);
-	
-			d = dojox.rpc.toJson({
-				id: this._requestId++, 
-				method: method.name, 
-				params: data
-			});
-
-			return {
-				data: d,
-				contentType: 'application/json',
-				transport:"POST"
-			};
+	};
+	dojox.rpc.envelopeRegistry.register(
+		"JSON-RPC-1.0",
+		function(str){
+			return str == "JSON-RPC-1.0";
 		},
-	
-		deserialize: function(results){
-			var obj = dojox.rpc.resolveJson(results);
-			if(obj.error){
-				var e = new Error(obj.error.message);
-				e._rpcErrorObject = obj.error;
-				return e;
-			}
-			return obj.result || true;
-		}
-	}
-);
+		dojo.mixin({namedParams:false},jsonRpcEnvelope) // 1.0 will only work with ordered params
+	);
+
+	dojox.rpc.envelopeRegistry.register(
+		"JSON-RPC-2.0",
+		function(str){
+			return str == "JSON-RPC-2.0";
+		},
+		jsonRpcEnvelope
+	);
+})();

@@ -10,6 +10,7 @@ Service.js: beta - this will become dojo.rpc.Service eventually and replace
 			the existing rpc system
 JsonRPC.js: beta - plugins for json-rpc for the rpc system
 Rest.js: beta - plugins for REST style services for the rpc system
+ProxiedPath.js: beta - plugin for the PATH envelope to work with a simple PHP proxy
 
 Stores: CouchDBRestStore.js  JsonReferencing.js  PersevereRestStore.js
 These stores are fresh new and alpha. The will likely be moved to dojox.data 
@@ -50,4 +51,3 @@ The use of the actual utilities varies, but typically additional software
 will be included with dojo.require() and smd files for services can be loaded
 manually with an xhr request or can be provided by url to the service when created
 
-Test3
