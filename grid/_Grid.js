@@ -37,8 +37,8 @@ dojo.require("dojox.grid._Events");
 		}
 	};
 
-	dojo.declare('dojox.grid._Grid', 
-		[ dijit._Widget, dijit._Templated, dojox.grid._Events ], 
+	dojo.declare('dojox.grid._Grid',
+		[ dijit._Widget, dijit._Templated, dojox.grid._Events ],
 		{
 		// summary:
 		// 		A grid widget with virtual scrolling, cell editing, complex rows,
@@ -56,35 +56,35 @@ dojo.require("dojox.grid._Events");
 		//
 		//	example:
 		//		A quick sample:
-		//		
+		//
 		//		define a get function
 		//	|	function get(inRowIndex){ // called in cell context
 		//	|		return [this.index, inRowIndex].join(', ');
 		//	|	}
-		//		
+		//
 		//		define the grid structure:
 		//	|	var structure = [ // array of view objects
 		//	|		{ cells: [// array of rows, a row is an array of cells
 		//	|			[
-		//	|				{ name: "Alpha", width: 6 }, 
-		//	|				{ name: "Beta" }, 
+		//	|				{ name: "Alpha", width: 6 },
+		//	|				{ name: "Beta" },
 		//	|				{ name: "Gamma", get: get }]
 		//	|		]}
 		//	|	];
-		//		
-		//	|	<div id="grid" 
-		//	|		rowCount="100" get="get" 
-		//	|		structure="structure" 
+		//
+		//	|	<div id="grid"
+		//	|		rowCount="100" get="get"
+		//	|		structure="structure"
 		//	|		dojoType="dojox.grid._Grid"></div>
 
 		templatePath: dojo.moduleUrl("dojox.grid","resources/_Grid.html"),
-		
+
 		// classTag: String
 		// 		CSS class applied to the grid's domNode
 		classTag: 'dojoxGrid',
 
 		get: function(inRowIndex){
-			// summary: Default data getter. 
+			// summary: Default data getter.
 			// description:
 			//		Provides data to display in a grid cell. Called in grid cell context.
 			//		So this.cell.index is the column index.
@@ -93,16 +93,16 @@ dojo.require("dojox.grid._Events");
 			// returns:
 			//		Data to display for a given grid cell.
 		},
-		
+
 		// settings
 		// rowCount: Integer
-		//		Number of rows to display. 
+		//		Number of rows to display.
 		rowCount: 5,
 
 		// keepRows: Integer
 		//		Number of rows to keep in the rendering cache.
 		keepRows: 75,
-		
+
 		// rowsPerPage: Integer
 		//		Number of rows to render at a time.
 		rowsPerPage: 25,
@@ -110,11 +110,11 @@ dojo.require("dojox.grid._Events");
 		// autoWidth: Boolean
 		//		If autoWidth is true, grid width is automatically set to fit the data.
 		autoWidth: false,
-		
+
 		// autoHeight: Boolean
 		//		If autoHeight is true, grid height is automatically set to fit the data.
 		autoHeight: false,
-		
+
 		// autoRender: Boolean
 		//		If autoRender is true, grid will render itself after initialization.
 		autoRender: true,
@@ -130,7 +130,7 @@ dojo.require("dojox.grid._Events");
 		// elasticView: Integer
 		//	Override defaults and make the indexed grid view elastic, thus filling available horizontal space.
 		elasticView: -1,
-		
+
 		// singleClickEdit: boolean
 		//		Single-click starts editing. Default is double-click
 		singleClickEdit: false,
@@ -142,7 +142,7 @@ dojo.require("dojox.grid._Events");
 
 		// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
 		_click: null,
-		
+
 		// private
 		sortInfo: 0,
 		themeable: true,
@@ -161,6 +161,7 @@ dojo.require("dojox.grid._Events");
 			this.createLayout();
 			this.createViews();
 			this.createManagers();
+			this.createSelection();
 			dojox.html.metrics.initOnFontResize();
 			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
 			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);
@@ -172,7 +173,7 @@ dojo.require("dojox.grid._Events");
 			this.setStructure(this.structure);
 			this._click = [];
 		},
-		
+
 		destroy: function(){
 			this.domNode.onReveal = null;
 			this.domNode.onSizeChange = null;
@@ -180,20 +181,20 @@ dojo.require("dojox.grid._Events");
 			this.views.destroyViews();
 			dijit._Widget.prototype.destroy.apply(this, arguments);
 		},
-		
+
 		styleChanged: function(){
 			this.setStyledClass(this.domNode, '');
 		},
-		
+
 		_styleChanged: function(){
 			this.styleChanged();
 			this.update();
 		},
-		
+
 		textSizeChanged: function(){
 			setTimeout(dojo.hitch(this, "_textSizeChanged"), 1);
 		},
-		
+
 		_textSizeChanged: function(){
 			if(this.domNode){
 				this.views.forEach(function(v){
@@ -202,27 +203,30 @@ dojo.require("dojox.grid._Events");
 				this.render();
 			}
 		},
-		
+
 		sizeChange: function(){
 			jobs.job(this.id + 'SizeChange', 50, dojo.hitch(this, "update"));
 		},
-		
+
 		renderOnIdle: function() {
 			setTimeout(dojo.hitch(this, "render"), 1);
 		},
-		
+
 		createManagers: function(){
 			// summary:
 			//		create grid managers for various tasks including rows, focus, selection, editing
-			
+
 			// row manager
 			this.rows = new dojox.grid._RowManager(this);
 			// focus manager
 			this.focus = new dojox.grid._FocusManager(this);
-			// selection manager
-			this.selection = new dojox.grid.Selection(this);
 			// edit manager
 			this.edit = new dojox.grid._EditManager(this);
+		},
+
+		createSelection: function(){
+			// selection manager
+			this.selection = new dojox.grid.Selection(this);
 		},
 
 		createScroller: function(){
@@ -243,7 +247,7 @@ dojo.require("dojox.grid._Events");
 			this.views = new dojox.grid._ViewManager(this);
 			this.views.createView = dojo.hitch(this, "createView");
 		},
-		
+
 		createView: function(inClass){
 			var c = dojo.getObject(inClass);
 			var view = new c({ grid: this });
@@ -259,7 +263,7 @@ dojo.require("dojox.grid._Events");
 			}
 			this.scroller.setContentNodes(this.views.getContentNodes());
 		},
-		
+
 		setStructure: function(inStructure){
 			// summary:
 			//		Install a new structure and rebuild the grid.
@@ -316,20 +320,20 @@ dojo.require("dojox.grid._Events");
 			//		Update the grid's rendering dimensions and resize it
 			// sizeBox: Object?
 			//		{w: int, h: int, l: int, t: int}
-			
-			// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars 
+
+			// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars
 			// can appear in our container, which may require an extra call to 'resize'
 			// to sort out.
 			this._sizeBox = sizeBox;
 			this._resize();
 			this.sizeChange();
 		},
-		
+
 		_getPadBorder: function() {
 			this._padBorder = this._padBorder || dojo._getPadBorderExtents(this.domNode);
 			return this._padBorder;
 		},
-		
+
 		_resize: function(){
 			// if we have set up everything except the DOM, we cannot resize
 			if(!this.domNode.parentNode || this.domNode.parentNode.nodeType != 1 || !this.hasLayout()){
@@ -356,7 +360,7 @@ dojo.require("dojox.grid._Events");
 				var h = dojo._getContentBox(this.domNode.parentNode).h;
 				dojo.marginBox(this.domNode, { h: Math.max(0, h) });
 			}
-			
+
 			var h = dojo._getContentBox(this.domNode).h;
 			if(h == 0 && !this.autoHeight){
 				// We need to hide the header, since the Grid is essentially hidden.
@@ -365,15 +369,15 @@ dojo.require("dojox.grid._Events");
 				// Otherwise, show the header and give it an appropriate height.
 				this.viewsHeaderNode.style.display = "block";
 			}
-			
+
 			// NOTE: it is essential that width be applied before height
 			// Header height can only be calculated properly after view widths have been set.
 			// This is because flex column width is naturally 0 in Firefox.
-			// Therefore prior to width sizing flex columns with spaces are maximally wrapped 
+			// Therefore prior to width sizing flex columns with spaces are maximally wrapped
 			// and calculated to be too tall.
 			this.adaptWidth();
 			this.adaptHeight();
-			
+
 			// default row height (FIXME: use running average(?), remove magic #)
 			this.scroller.defaultRowHeight = this.rows.getDefaultHeightPx() + 1;
 			this.postresize();
@@ -399,17 +403,17 @@ dojo.require("dojox.grid._Events");
 			var h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 			this.views.onEach('setSize', [0, h]);
 			this.views.onEach('adaptHeight');
-			this.scroller.windowHeight = h; 
+			this.scroller.windowHeight = h;
 		},
 
-		// render 
+		// render
 		render: function(){
 			// summary:
-			//	Render the grid, headers, and views. Edit and scrolling states are reset. To retain edit and 
+			//	Render the grid, headers, and views. Edit and scrolling states are reset. To retain edit and
 			// scrolling states, see Update.
 
 			if(!this.domNode){return;}
-			
+
 			if(!this.hasLayout()) {
 				this.scroller.init(0, this.keepRows, this.rowsPerPage);
 				return;
@@ -524,7 +528,7 @@ dojo.require("dojox.grid._Events");
 		},
 
 		updateRowCount: function(inRowCount){
-			//summary: 
+			//summary:
 			//	Change the number of rows.
 			// inRowCount: int
 			//	Number of rows in the grid.
@@ -547,21 +551,21 @@ dojo.require("dojox.grid._Events");
 		},
 
 		rowHeightChanged: function(inRowIndex){
-			// summary: 
+			// summary:
 			//		Update grid when the height of a row has changed. Row height is handled automatically as rows
 			//		are rendered. Use this function only to update a row's height outside the normal rendering process.
 			// inRowIndex: Integer
 			// 		index of the row that has changed height
-			
+
 			this.views.renormalizeRow(inRowIndex);
 			this.scroller.rowHeightChanged(inRowIndex);
 		},
-		
+
 		// fastScroll: Boolean
-		//		flag modifies vertical scrolling behavior. Defaults to true but set to false for slower 
+		//		flag modifies vertical scrolling behavior. Defaults to true but set to false for slower
 		//		scroll performance but more immediate scrolling feedback
 		fastScroll: true,
-		
+
 		delayScroll: false,
 
 		// scrollRedrawThreshold: int
@@ -589,17 +593,17 @@ dojo.require("dojox.grid._Events");
 				this.setScrollTop(inTop);
 			}
 		},
-		
+
 		finishScrollJob: function(){
 			this.delayScroll = false;
 			this.setScrollTop(this.scrollTop);
 		},
-		
+
 		setScrollTop: function(inTop){
 			this.scrollTop = this.views.setScrollTop(inTop);
 			this.scroller.scroll(this.scrollTop);
 		},
-		
+
 		scrollToRow: function(inRowIndex){
 			// summary:
 			//		Scroll the grid to a specific row.
@@ -607,7 +611,7 @@ dojo.require("dojox.grid._Events");
 			// 		grid row index
 			this.setScrollTop(this.scroller.findScrollTop(inRowIndex) + 1);
 		},
-		
+
 		// styling (private, used internally to style individual parts of a row)
 		styleRowNode: function(inRowIndex, inRowNode){
 			if(inRowNode){
@@ -645,24 +649,24 @@ dojo.require("dojox.grid._Events");
 			// returns: Boolean
 			//		True if grid can be sorted on the given column in the given direction
 		},
-		
+
 		sort: function(){
 		},
-		
+
 		getSortAsc: function(inSortInfo){
 			// summary:
 			//		Returns true if grid is sorted in an ascending direction.
 			inSortInfo = inSortInfo == undefined ? this.sortInfo : inSortInfo;
 			return Boolean(inSortInfo > 0); // Boolean
 		},
-		
+
 		getSortIndex: function(inSortInfo){
 			// summary:
 			//		Returns the index of the column on which the grid is sorted
 			inSortInfo = inSortInfo == undefined ? this.sortInfo : inSortInfo;
 			return Math.abs(inSortInfo) - 1; // Integer
 		},
-		
+
 		setSortIndex: function(inIndex, inAsc){
 			// summary:
 			// 		Sort the grid on a column in a specified direction
@@ -678,7 +682,7 @@ dojo.require("dojox.grid._Events");
 			}
 			this.setSortInfo(si);
 		},
-		
+
 		setSortInfo: function(inSortInfo){
 			if(this.canSort(inSortInfo)){
 				this.sortInfo = inSortInfo;
@@ -686,7 +690,7 @@ dojo.require("dojox.grid._Events");
 				this.update();
 			}
 		},
-		
+
 		// DOM event handler
 		doKeyEvent: function(e){
 			e.dispatch = 'do' + e.type;
@@ -704,19 +708,19 @@ dojo.require("dojox.grid._Events");
 		dispatchKeyEvent: function(e){
 			this._dispatch(e.dispatch, e);
 		},
-		
+
 		dispatchContentEvent: function(e){
 			this.edit.dispatchEvent(e) || e.sourceView.dispatchContentEvent(e) || this._dispatch(e.dispatch, e);
 		},
-		
+
 		dispatchHeaderEvent: function(e){
 			e.sourceView.dispatchHeaderEvent(e) || this._dispatch('doheader' + e.type, e);
 		},
-		
+
 		dokeydown: function(e){
 			this.onKeyDown(e);
 		},
-		
+
 		doclick: function(e){
 			if(e.cellNode){
 				this.onCellClick(e);
@@ -724,7 +728,7 @@ dojo.require("dojox.grid._Events");
 				this.onRowClick(e);
 			}
 		},
-		
+
 		dodblclick: function(e){
 			if(e.cellNode){
 				this.onCellDblClick(e);
@@ -732,7 +736,7 @@ dojo.require("dojox.grid._Events");
 				this.onRowDblClick(e);
 			}
 		},
-		
+
 		docontextmenu: function(e){
 			if(e.cellNode){
 				this.onCellContextMenu(e);
@@ -740,7 +744,7 @@ dojo.require("dojox.grid._Events");
 				this.onRowContextMenu(e);
 			}
 		},
-		
+
 		doheaderclick: function(e){
 			if(e.cellNode){
 				this.onHeaderCellClick(e);
@@ -748,7 +752,7 @@ dojo.require("dojox.grid._Events");
 				this.onHeaderClick(e);
 			}
 		},
-		
+
 		doheaderdblclick: function(e){
 			if(e.cellNode){
 				this.onHeaderCellDblClick(e);
@@ -756,7 +760,7 @@ dojo.require("dojox.grid._Events");
 				this.onHeaderDblClick(e);
 			}
 		},
-		
+
 		doheadercontextmenu: function(e){
 			if(e.cellNode){
 				this.onHeaderCellContextMenu(e);
@@ -764,31 +768,31 @@ dojo.require("dojox.grid._Events");
 				this.onHeaderContextMenu(e);
 			}
 		},
-		
+
 		// override to modify editing process
 		doStartEdit: function(inCell, inRowIndex){
 			this.onStartEdit(inCell, inRowIndex);
 		},
-		
+
 		doApplyCellEdit: function(inValue, inRowIndex, inFieldIndex){
 			this.onApplyCellEdit(inValue, inRowIndex, inFieldIndex);
 		},
-		
+
 		doCancelEdit: function(inRowIndex){
 			this.onCancelEdit(inRowIndex);
 		},
-		
+
 		doApplyEdit: function(inRowIndex){
 			this.onApplyEdit(inRowIndex);
 		},
-		
+
 		// row editing
 		addRow: function(){
 			// summary:
 			//		Add a row to the grid.
 			this.updateRowCount(this.rowCount+1);
 		},
-		
+
 		removeSelectedRows: function(){
 			// summary:
 			//		Remove the selected rows from the grid.

@@ -1,6 +1,7 @@
 dojo.provide("dojox.grid.DataGrid");
 
 dojo.require("dojox.grid._Grid");
+dojo.require("dojox.grid.DataSelection");
 
 dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	store: null,
@@ -27,6 +28,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 		this._setStore(this.store);
 		this.inherited(arguments);
+	},
+
+	createSelection: function(){
+		this.selection = new dojox.grid.DataSelection(this);
 	},
 
 	get: function(inItem, inRowIndex){
@@ -71,7 +76,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._setStore(store);
 		this._refresh();
 	},
-	
+
 	_setStore: function(store){
 		if(this.store&&this._store_connects){
 			dojo.forEach(this._store_connects,function(arr){
@@ -85,7 +90,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			var h = [];
 
 			this._canEdit = !!f["dojo.data.api.Write"];
-			
+
 			if(!!f["dojo.data.api.Notification"]){
 				h.push(this.connect(this.store, "onSet", "_onSet"));
 				h.push(this.connect(this.store, "onNew", "_onNew"));
@@ -148,6 +153,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_clearData: function(){
+		this.rowCount = 0;
 		this._identity_map = {};
 		this._pages = [];
 		this._rows = [];
@@ -175,9 +181,12 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		return (imap ? imap.idx : -1);
 	},
 
-	filter: function(query){
+	filter: function(query, reRender){
 		this.query = query;
-		this._fetch(0, false);
+		if(reRender){
+			this._clearData();
+		}
+		this._fetch();
 	},
 
 	_getItemAttr: function(idx, attr){
@@ -347,7 +356,7 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 	//		* we only really handle dojo.data sources well. They're the future
 	//		  so it's no big deal, but it's something to be aware of.
 	//		* I'm pretty sure that colgroup introspection is missing some of
-	//		  the available settable properties. 
+	//		  the available settable properties.
 	//		* No handling of cell formatting and content getting is done
 	var d = dojo;
 	var widthFromAttr = function(n){
@@ -360,13 +369,13 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 	// if(!props.store){ console.debug("no store!"); }
 	// if a structure isn't referenced, do we have enough
 	// data to try to build one automatically?
-	if(	!props.structure && 
+	if(	!props.structure &&
 		node.nodeName.toLowerCase() == "table"){
 
 		// try to discover a structure
 		props.structure = d.query("> colgroup", node).map(function(cg){
 			var sv = d.attr(cg, "span");
-			var v = { 
+			var v = {
 				noscroll: (d.attr(cg, "noscroll") == "true") ? true : false,
 				__span: (!!sv ? parseInt(sv) : 1),
 				cells: []
@@ -380,10 +389,10 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 			props.structure.push({
 				__span: Infinity,
 				cells: [] // catch-all view
-			}); 
+			});
 		}
 		// check to see if we're gonna have more than one view
-		
+
 		// for each tr in our th, create a row of cells
 		d.query("thead > tr", node).forEach(function(tr, tr_idx){
 			var cellCount = 0;

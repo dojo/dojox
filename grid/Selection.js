@@ -2,14 +2,14 @@ dojo.provide('dojox.grid.Selection');
 
 dojo.declare("dojox.grid.Selection", null, {
 	// summary:
-	//		Manages row selection for grid. Owned by grid and used internally 
+	//		Manages row selection for grid. Owned by grid and used internally
 	//		for selection. Override to implement custom selection.
 
 	constructor: function(inGrid){
 		this.grid = inGrid;
 		this.selected = [];
 	},
-	
+
 	multiSelect: true,
 	selected: null,
 	updating: 0,
