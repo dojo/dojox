@@ -35,7 +35,6 @@ dojo.require("dojox.grid.util");
 
 		constructor: function(inProps){
 			dojo.mixin(this, inProps);
-			//if(this.editor){this.editor = new this.editor(this);}
 		},
 
 		// data source
@@ -276,6 +275,20 @@ dojo.require("dojox.grid.util");
 		if(keyFilter){
 			cellDef.keyFilter = new RegExp(keyFilter);
 		}
+	}
+
+	dojo.declare("dojox.grid.cells.RowIndex", dgc.Cell, {
+		name: 'Row',
+
+		postscript: function(){
+			this.editable = false;
+			this.get = function(inItem, inRowIndex){
+				return inRowIndex + 1;
+			};
+		}
+	});
+	dgc.RowIndex.markupFactory = function(node, cellDef){
+		dgc.Cell.markupFactory(node, cellDef);
 	}
 
 	dojo.declare("dojox.grid.cells.Select", dgc.Cell, {

@@ -29,15 +29,11 @@
 	</script>
 
 	<script type="text/javascript">
-		function getRow(inItem, inRowIndex){
-			return ' ' + inRowIndex;
-		}
-		
 		var formatHref = function(value, rowIndex) {
 			return "<a href=\"" + value + "\" target=\"_blank\">Image Link</a>";
 		}
 
-		var rowView = { cells: [{ name: 'Row', get: getRow, width: 5 }], noscroll: true };
+		var rowView = { cells: [{ type: dojox.grid.cells.RowIndex, width: 5 }], noscroll: true };
 
 		var layoutMovies = [
 			// view 1

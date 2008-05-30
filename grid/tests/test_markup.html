@@ -72,15 +72,11 @@
 	<h5>A "regular" Grid from markup (no table defintion)</h5>
 	<script type="text/javascript">
 		// helper functions and structure definitions for the old markup construction syntax
-		function getRow(inItem, inRowIndex){
-			return ' ' + inRowIndex;
-		}
-		
 		var layoutCountries = [
 			// view 1
 			{
 				cells: [
-					{ name: "Row", get: getRow, width: 5}
+					{ type: dojox.grid.cells.RowIndex }
 				],
 				noscroll: true
 			},

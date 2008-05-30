@@ -20,13 +20,9 @@
 					dojo.require("dijit.form.Button"); 
 	</script> 
 	<script type="text/javascript"> 
-		function getRow(inItem, inRowIndex){ 
-			return ' ' + inRowIndex; 
-		}
-
 		var layoutCountries = [ 
 			// view 1 
-			{ cells: [{ name: "Row", get: getRow, width: 5}], noscroll: true}, 
+			{ cells: [{ type: dojox.grid.cells.RowIndex, width: 5}], noscroll: true}, 
 			// view 2 
 			[ 
 				{ name: "field 0", field: 'name', width: 8 }, 

@@ -44,13 +44,9 @@
 	</script>
 
 	<script type="text/javascript">
-		function getRow(inItem, inRowIndex){
-			return ' ' + inRowIndex;
-		}
-
 		var layoutNumbers = [
 			// view 1
-			{ cells: [[{ name: "Row", get: getRow, width: 5}]], noscroll: true},
+			{ cells: [[{ type: dojox.grid.cells.RowIndex, width: 5}]], noscroll: true},
 			// view 2
 			[
 				{ field: 'id', width: 8 },
