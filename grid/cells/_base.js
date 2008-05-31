@@ -72,6 +72,10 @@ dojo.require("dojox.grid.util");
 		getEditNode: function(inRowIndex){
 			return (this.getNode(inRowIndex) || 0).firstChild || 0;
 		},
+		canResize: function(){
+			var uw = this.unitWidth;
+			return uw && (uw=='auto');
+		},
 		isFlex: function(){
 			var uw = this.unitWidth;
 			return uw && (uw=='auto' || uw.slice(-1)=='%');

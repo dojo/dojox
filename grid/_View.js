@@ -460,7 +460,7 @@ dojo.require("dojox.grid.util");
 				return false;
 			}
 			var cell = this.grid.getCell(e.cellIndex); 
-			return !cell.noresize && !cell.isFlex();
+			return !cell.noresize && !cell.canResize();
 		},
 
 		overLeftResizeArea: function(e){

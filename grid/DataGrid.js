@@ -361,7 +361,7 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 	var d = dojo;
 	var widthFromAttr = function(n){
 		var w = d.attr(n, "width")||"auto";
-		if((w != "auto")&&(w.substr(-2) != "em")){
+		if((w != "auto")&&(w.substr(-2) != "em")&&(w.substr(-1) != "%")){
 			w = parseInt(w)+"px";
 		}
 		return w;
