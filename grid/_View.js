@@ -338,7 +338,7 @@ dojo.require("dojox.grid.util");
 				for(var i=0, cell, m, cc, cs; (cell=row[i]); i++){
 					m = cell.markup, cc = cell.customClasses = [], cs = cell.customStyles = [];
 					// content (format can fill in cc and cs as side-effects)
-					m[5] = cell.format(item, inRowIndex);
+					m[5] = cell.format(inRowIndex, item);
 					// classes
 					m[1] = cc.join(' ');
 					// styles

@@ -27,7 +27,7 @@ var getCellData = function(item, field){
 	return grid.store.getValue(item, field);
 };
 
-var getLink = function(inItem, inRowIndex){
+var getLink = function(inRowIndex, inItem){
 	if(!inItem){ return '&nbsp;'; }
 	var text = getCellData(inItem, 'Title');
 	var link = getCellData(inItem, 'ClickUrl');
@@ -46,7 +46,7 @@ var formatDate = function(inDatum, inRowIndex){
 	);
 };
 
-var getImage = function(inItem, inRowIndex){
+var getImage = function(inRowIndex, inItem){
 	if(!inItem){ return '&nbsp;'; }
 	var thumb = getCellData(inItem, "Thumbnail");
 	var o = {
@@ -59,7 +59,7 @@ var getImage = function(inItem, inRowIndex){
 		'<a href="${href}" target="_blank"><img border=0 src="${src}" width="${width}" height="${height}"></a>', o);
 };
 
-var getDimensions = function(inItem, inRowIndex){
+var getDimensions = function(inRowIndex, inItem){
 	if(!inItem){ return '&nbsp;'; }
 	var w = getCellData(inItem, "Width");
 	var h = getCellData(inItem, "Height");

@@ -34,7 +34,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this.selection = new dojox.grid.DataSelection(this);
 	},
 
-	get: function(inItem, inRowIndex){
+	get: function(inRowIndex, inItem){
 		return (!inItem ? this.defaultValue : (!this.field ? this.value : this.grid.store.getValue(inItem, this.field)));
 	},
 

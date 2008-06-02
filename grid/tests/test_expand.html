@@ -54,11 +54,11 @@
 		};
 		
 		// get can return data for each cell of the grid
-		function get(inItem, inRowIndex) {
+		function get(inRowIndex) {
 			return [this.index, inRowIndex].join(', ');
 		}
 		
-		function getDetail(inItem, inRowIndex) {
+		function getDetail(inRowIndex) {
 			if (this.grid.expandedRows[inRowIndex]) {
 				var n = (inRowIndex % 2);
 				switch (n) {
@@ -76,7 +76,7 @@
 			grid.updateRow(inIndex);
 		}
 		
-		function getCheck(inItem, inRowIndex) {
+		function getCheck(inRowIndex) {
 			if (!this.grid.expandedRows)
 				this.grid.expandedRows = [ ];
 			var image = (this.grid.expandedRows[inRowIndex] ? 'open.gif' : 'closed.gif');

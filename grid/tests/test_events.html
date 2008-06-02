@@ -70,11 +70,11 @@
 			{ name: 'onHeaderContextMenu', properties: ['rowIndex'] }
 		];	
 		
-		getEventName = function(inItem, inRowIndex) {
+		getEventName = function(inRowIndex) {
 			return eventRows[inRowIndex].name;
 		};
 		
-		getEventData = function(inItem, inRowIndex) {
+		getEventData = function(inRowIndex) {
 			var d = eventRows[inRowIndex].data;
 			var r = [];
 			if (d)

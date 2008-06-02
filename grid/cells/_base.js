@@ -38,13 +38,13 @@ dojo.require("dojox.grid.util");
 		},
 
 		// data source
-		format: function(inItem, inRowIndex){
+		format: function(inRowIndex, inItem){
 			// summary:
 			//	provides the html for a given grid cell.
 			// inRowIndex: int
 			// grid row index
 			// returns: html for a given grid cell
-			var f, i=this.grid.edit.info, d=this.get ? this.get(inItem, inRowIndex) : (this.value || this.defaultValue);
+			var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex, inItem) : (this.value || this.defaultValue);
 			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
 				return this.formatEditing(d, inRowIndex);
 			}else{
@@ -286,7 +286,7 @@ dojo.require("dojox.grid.util");
 
 		postscript: function(){
 			this.editable = false;
-			this.get = function(inItem, inRowIndex){
+			this.get = function(inRowIndex){
 				return inRowIndex + 1;
 			};
 		}

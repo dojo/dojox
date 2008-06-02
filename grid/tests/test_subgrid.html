@@ -42,7 +42,7 @@
 		 	[ '5 stars', 'Ultimo', 'Ultimo', 4.59, "A rich sensation of delicious experience, brought to you by one of Europe's oldest brands. A pure indulgence. 8 T DISCS per package. $4.59 per package. #NJ0." ]
 		];		 
 
-		getDetailData = function(inItem, inRowIndex) {
+		getDetailData = function(inRowIndex) {
 			var row = data[this.grid.dataRow % data.length];
 			switch (this.index) {
 				case 0:
@@ -62,7 +62,7 @@
 			}
 		}		 
 		
-		getName = function(inItem, inRowIndex) {
+		getName = function(inRowIndex) {
 			var row = data[inRowIndex % data.length];
 			return row[2];
 		}		 
@@ -83,14 +83,14 @@
 		];
 		
 		// html for the +/- cell
-		function getCheck(inItem, inRowIndex) { 
+		function getCheck(inRowIndex) { 
 			var image = (detailRows[inRowIndex] ? 'open.gif' : 'closed.gif');
 			var show = (detailRows[inRowIndex] ? 'false' : 'true')
 			return '<img height="11" width="11" src="images/' + image + '" onclick="toggleDetail(' + inRowIndex + ', ' + show + ')">';
 		}
 		
 		// provide html for the Detail cell in the master grid		
-		function getDetail(inItem, inRowIndex) {
+		function getDetail(inRowIndex) {
 			var cell = this;
 			// we can affect styles and content here, but we have to wait to access actual nodes
 			setTimeout(function() { buildSubgrid(inRowIndex, cell); }, 1);
