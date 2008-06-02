@@ -5,7 +5,7 @@ dojo.require("dojox.grid.DataSelection");
 
 dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	store: null,
-	query: { id: '*' },
+	query: null,
 	queryOptions: null,
 	fetchText: '...',
 
