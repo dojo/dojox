@@ -109,6 +109,17 @@
 			testStore.fetch(request);
 		}
 	</script>
+
+	<style>
+	     fieldset {
+	         border:1px solid black;
+	         display:inline;
+	         padding:10px;
+	     }
+	     div.disabled {
+	         opacity:0.1;
+	     }
+	</style>
 </head>
 <body class="tundra" style="margin:20px;">
 	<div dojoType="ComboBoxReadStore" jsId="store" url="stores/QueryReadStore.php" requestMethod="get"></div>
@@ -151,16 +162,6 @@
 	
 	<hr />
 	
-	<style>
-	     fieldset {
-	         border:1px solid black;
-	         display:inline;
-	         padding:10px;
-	     }
-	     div.disabled {
-	         opacity:0.1;
-	     }
-	</style>
 	<form id="fetchForm">
 		<fieldset title="requestMethod">
 		    <legend>requestMethod</legend>
