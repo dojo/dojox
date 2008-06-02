@@ -49,7 +49,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 
 	deselectAll: function(inItemOrIndex){
 		var idx = null;
-		if(inItemOrIndex){
+		if(inItemOrIndex || typeof inItemOrIndex == "number"){
 			if(typeof inItemOrIndex == "number" || typeof inItemOrIndex == "string"){
 				idx = inItemOrIndex;
 			}else{
@@ -57,7 +57,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 			}
 			dojox.grid.Selection.prototype.deselectAll.call(this, idx);
 		}else{
-			this.inherited();
+			this.inherited(arguments);
 		}
 	}
 });
