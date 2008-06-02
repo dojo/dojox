@@ -535,6 +535,25 @@ dojo.require("dojox.grid.util");
 				spanners: spanners,
 				followers: followers
 			};
+			// Fix any percentage widths to be pixel values
+			var hasPct = false;
+			var cellNodes = dojo.query("th", view.headerContentNode);
+			var fixedWidths = dojo.map(cellNodes, function(c){
+				var w = c.style.width;
+				if(w && w.slice(-1) == "%"){
+					hasPct = true;
+					return dojo.contentBox(c).w;
+				}else if(w && w.slice(-2) == "px"){
+					return window.parseInt(w, 10);
+				}
+				return -1;
+			});
+			if(hasPct){
+				dojo.forEach(e.grid.layout.cells, function(cell, idx){
+					view.setColWidth(idx, fixedWidths[idx]);
+					cellNodes[idx].style.width = cell.unitWidth;
+				});
+			}
 			//console.log(drag.index, drag.w);
 			startDrag(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
 		},

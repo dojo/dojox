@@ -15,16 +15,21 @@
 			padding-bottom: 0.25em;
 		}
 		#grid, #grid2 {
-			width: 65em;
+			width: 85%;
 			height: 25em;
 			padding: 1px;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
+		dojo.addOnLoad(function(){
+			// A quick-and-dirty resize of the grid when the window resizes to
+			// test that percentages "stick" when they are supposed to.
+			dojo.connect(window, "resize", grid, "resize");
+		});
 	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 </head>
@@ -38,8 +43,9 @@
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
-				<th field="name" width="60%">Country/Continent Name</th>
-				<th field="type" width="40%">Type</th>
+				<th field="name" width="50%">Country/Continent Name</th>
+				<th field="type" width="20%">Type</th>
+				<th field="population" width="30%">Population</th>
 			</tr>
 		</thead>
 	</table>
