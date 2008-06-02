@@ -518,13 +518,22 @@ dojo.require("dojox.grid.util");
 				spanners.push({ node: cell, index: this.getCellNodeIndex(cell), width: cell.offsetWidth });
 				//console.log("spanner: " + this.getCellNodeIndex(cell));
 			}
+			var view = e.sourceView;
+			var adj = dojo._isBodyLtr() ? 1 : -1;
+			var views = e.grid.views.views;
+			var followers = [];
+			for(var i=view.idx+adj, cView; (cView=views[i]); i=i+adj){
+				followers.push({ node: cView.headerNode, left: window.parseInt(cView.headerNode.style.left) });
+			}
 			var drag = {
 				scrollLeft: e.sourceView.headerNode.scrollLeft,
-				view: e.sourceView,
+				view: view,
 				node: e.cellNode,
 				index: e.cellIndex,
-				w: e.cellNode.clientWidth,
-				spanners: spanners
+				w: dojo.contentBox(e.cellNode).w,
+				vw: dojo.contentBox(view.headerNode).w,
+				spanners: spanners,
+				followers: followers
 			};
 			//console.log(drag.index, drag.w);
 			startDrag(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
@@ -534,8 +543,10 @@ dojo.require("dojox.grid.util");
 			var isLtr = dojo._isBodyLtr();
 			if(isLtr){
 				var w = inDrag.w + inEvent.deltaX;
+				var vw = inDrag.vw + inEvent.deltaX;
 			}else{
 				var w = inDrag.w - inEvent.deltaX;
+				var vw = inDrag.vw - inEvent.deltaX;
 			}
 			if(w >= this.minColWidth){
 				for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
@@ -548,8 +559,17 @@ dojo.require("dojox.grid.util");
 					inDrag.view.setColWidth(s.index, sw);
 					//console.log('setColWidth', '#' + s.index, sw + 'px');
 				}
+				for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
+					if(isLtr){
+						fl = f.left + inEvent.deltaX;
+					}else{
+						fl = f.left - inEvent.deltaX;
+					}
+					f.node.style.left = fl + 'px';
+				}
 				inDrag.node.style.width = w + 'px';
 				inDrag.view.setColWidth(inDrag.index, w);
+				inDrag.view.headerNode.style.width = vw + 'px';
 				if(!isLtr){
 					inDrag.view.headerNode.scrollLeft = (inDrag.scrollLeft - inEvent.deltaX);
 				}
