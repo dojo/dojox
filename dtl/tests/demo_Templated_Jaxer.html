@@ -46,25 +46,25 @@
 							the ability for Dojo to auto-detect the base url as it can in other environments.
 							Therefore you must declare the base url with the djConfig global variable:
 							<pre>
-	&lt;script runat="server">
+	&lt;script runat="server"&gt;
 		djConfig = {baseUrl:"/dojo/", // use the base path of dojo here
 					usePlainJson: true, parseOnLoad: true};
-	&lt;/script>
+	&lt;/script&gt;
 							</pre>
 						</li>
 						<li>
 							Next, you must add the runat attribute with a value of "server" to all of the script
 							tags that you want executed on the server. Your script tags should look like:
 							<pre>
-	&lt;script runat="server" type="text/javascript" src="../../../dojo/dojo.js">&lt;/script>
+	&lt;script runat="server" type="text/javascript" src="../../../dojo/dojo.js"&gt;&lt;/script&gt;
 							</pre>
 						</li>
 						<li>
 							Last, you must dojo.require("dojo.jaxer") with a script tag. This should immediately 
 							follow the declaration of dojo.js:
 							<pre>
-	&lt;script runat="server" type="text/javascript" src="../../../dojo/dojo.js">&lt;/script>
-	&lt;script runat="server" type="text/javascript">dojo.require("dojo.jaxer");&lt;/script>
+	&lt;script runat="server" type="text/javascript" src="../../../dojo/dojo.js"&gt;&lt;/script&gt;
+	&lt;script runat="server" type="text/javascript"&gt;dojo.require("dojo.jaxer");&lt;/script&gt;
 							</pre>
 						</li>
 					</ul>
