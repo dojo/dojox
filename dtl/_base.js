@@ -311,6 +311,7 @@ dojo.require("dojox.string.tokenize");
 				for(var i = 1; i < parts.length; i++){
 					var part = parts[i];
 					if(current){
+						var base = current;
 						if(dojo.isObject(current) && part == "items" && typeof current[part] == "undefined"){
 							var items = [];
 							for(var key in current){
@@ -333,7 +334,7 @@ dojo.require("dojox.string.tokenize");
 							if(current.alters_data){
 								current = "";
 							}else{
-								current = current();
+								current = current.call(base);
 							}
 						}
 					}else{
