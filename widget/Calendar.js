@@ -93,8 +93,8 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 		var _this = this;
 
 		var typematic = function(nodeProp, dateProp, adj){
-			dijit.typematic.addMouseListener(_this[nodeProp], _this, function(count){
-				if(count >= 0){ _this._adjustDisplay(dateProp, adj); }
+			dijit.typematic.addMouseListener(_this[nodeProp], _this, function(count){				
+				if(count >= 0){	_this._adjustDisplay(dateProp, adj);}
 			}, 0.8, 500);
 		};
 		typematic("incrementMonth", "month", 1);

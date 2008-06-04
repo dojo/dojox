@@ -41,6 +41,7 @@
 		<!-- do not use, only for dynamic themes -->
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 
+		<script type="text/javascript" src="../../../dijit/form/ValidationTextBox.js"></script>
 		<script type="text/javascript" src="../../../dijit/form/_DateTimeTextBox.js"></script>
 		<script type="text/javascript" src="../../widget/Calendar.js"></script>
 		<script type="text/javascript" src="../DateTextBox.js"></script>
@@ -69,6 +70,13 @@
 				onChange:<input id="oc1" size="34" disabled value="not fired yet!" autocomplete="off">
 			</div>
 
+			<div class="testExample">
+				Day Only
+				<input id="q1Day" name="q1Day" type="text" dojoType="dojox.form.DayTextBox"
+				         onChange="dojo.byId('oc1day').value=arguments[0]"
+				>
+				onChange:<input id="oc1day" size="34" disabled value="not fired yet!" autocomplete="off">
+			</div>
 			<div class="testExample">
 				Month Only
 				<input id="q1Month" name="q1Month" type="text" dojoType="dojox.form.MonthTextBox"
