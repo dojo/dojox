@@ -1,5 +1,4 @@
 dojo.provide("dojox.cometd.longPollTransportJsonEncoded");
-dojo.provide("dojox.cometd.longPollTransport");
 dojo.require("dojox.cometd._base");
 
 dojox.cometd.longPollTransportJsonEncoded = new function(){

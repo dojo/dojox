@@ -1,5 +1,4 @@
 dojo.provide("dojox.cometd.longPollTransportFormEncoded");
-dojo.provide("dojox.cometd.longPollTransport");
 dojo.require("dojox.cometd._base");
 
 dojox.cometd.longPollTransportFormEncoded = new function(){
