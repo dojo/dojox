@@ -14,6 +14,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	_rows: null,
 	_cache: null,
 	_pages: null,
+	_pending_requests: null,
 	_bop: -1,
 	_eop: -1,
 	_requests: 0,
@@ -25,6 +26,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._store_connects = [];
 		this._rows = [];
 		this._cache = [];
+		this._pending_requests = {};
 
 		this._setStore(this.store);
 		this.inherited(arguments);
@@ -115,15 +117,17 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onFetchComplete: function(items, req){
-		if(!items || items.length == 0){ return; }
-		//console.log(items);
-		dojo.forEach(items, function(item, idx){
-			this._addItem(item, req.start+idx);
-		}, this);
-		if(req.isRender){
-			this.setScrollTop(0);
-			this.postrender();
+		if(items && items.length > 0){
+			//console.log(items);
+			dojo.forEach(items, function(item, idx){
+				this._addItem(item, req.start+idx);
+			}, this);
+			if(req.isRender){
+				this.setScrollTop(0);
+				this.postrender();
+			}
 		}
+		this._pending_requests[req.start] = false;
 	},
 
 	_onFetchError: function(err, req){
@@ -135,8 +139,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_fetch: function(start, isRender){
-		if(this.store){
-			var start = start || 0;
+		var start = start || 0;
+		if(this.store && !this._pending_requests[start]){
+			this._pending_requests[start] = true;
 			//console.log("fetch: ", start);
 			this.store.fetch({
 				start: start,
@@ -208,7 +213,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	// paging
-	_requestsPending: function(inBoolean){
+	_requestsPending: function(inRowIndex){
+		return this._pending_requests[inRowIndex];
 	},
 
 	_rowToPage: function(inRowIndex){
@@ -240,9 +246,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		var count = Math.min(this.rowsPerPage, this.rowCount - row);
 		if(count > 0){
 			this._requests++;
-			this._requestsPending(true);
-			setTimeout(dojo.hitch(this, "_fetch", row, false), 1);
-			//this.requestRows(row, count);
+			if(!this._requestsPending(row)){
+				setTimeout(dojo.hitch(this, "_fetch", row, false), 1);
+				//this.requestRows(row, count);
+			}
 		}
 	},
 
