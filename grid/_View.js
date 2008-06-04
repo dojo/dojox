@@ -681,7 +681,7 @@ dojo.require("dojox.grid.util");
 				if(j == m.j){ continue; }
 				var rw = row[m.i];
 				//console.log("overlaps: r: %d, c: %d", rw.r, rw.c);
-				var n = this.getNode(inTable, rw.r, rw.c);
+				var n = (rw?this.getNode(inTable, rw.r, rw.c):null);
 				if(n){ nodes.push(n); }
 			}
 			//console.log(nodes);
