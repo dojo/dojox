@@ -5,7 +5,7 @@ Version 0.1
 Release date: 4/7/2008
 -------------------------------------------------------------------------------
 Project state:
-experimental
+beta
 -------------------------------------------------------------------------------
 Credits
 	Tom Trenka (ttrenka AT gmail.com)
@@ -15,6 +15,14 @@ Project description
 A move/port of what was in dojox.av._base; the nominal purpose is to provide
 easy ways of including external objects that would normally require the use
 of either an OBJECT or an EMBED tag.
+
+The following constructors are considered beta (working tests and docs) as of
+2008-06-04:
+
+dojox.embed.Flash
+dojox.embed.FlashProxy
+dojox.embed.Quicktime
+dojox.embed.Object (a Dijit that can load anything there is an embed for here)
 -------------------------------------------------------------------------------
 Dependencies:
 

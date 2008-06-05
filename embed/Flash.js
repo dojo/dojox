@@ -280,4 +280,48 @@ dojo.provide("dojox.embed.Flash");
 		}
 		throw new Error("dojox.embed.Flash:: you must wait for the Flash engine to be initialized.");
 	};
+
+
+	//	A port of Brad's Communicator code (dojox.Flash)
+	//	in anticipation of removing that code at a later date.
+	dojox.embed.FlashProxy = function(/* HTMLObject */mov, /* Array | String */methods){
+		//	summary
+		//		Create a proxy object around the passed movie
+		//		that is then set up with any methods you plan
+		//		on using with the movie's ExternalInterface. On
+		//		creation, a set of methods are created on this object.
+		//
+		//	movie:	HTMLObject
+		//		The Flash movie this proxy is wrapping
+		//
+		//	example:
+		//		Create a proxy around a movie, define 2 methods, and use one.
+		//	|	var proxy = new dojox.embed.Flash.Proxy(myMovie, [ "foo", "bar" ]);
+		//	|	var someResults = proxy.foo("bar", "baz", "bop");
+
+		this.movie = mov;
+		dojo.forEach((dojo.isArray(methods) ? methods : [ methods ]), function(item){
+			this[item] = dojo.hitch(this, function(){
+				return this._exec(item, arguments);
+			});
+		}, this);
+	};
+	
+	dojo.extend(dojox.embed.FlashProxy, {
+		//	we will rely on the __flash__toXML method to encode things right.
+		_exec: function(/* String */method, /* Array? */args){
+			return (function(){
+				//	we require the eval because the return is actually a JSON string.
+				return eval(this.movie.CallFunction(
+					'<invoke name="' + method + '" returntype="javascript">'
+					+ '<arguments>'
+					+ dojo.map(args, function(item){
+						return __flash__toXML(item);
+					}).join("")
+					+ '</arguments>'
+					+ '</invoke>'
+				));
+			}).apply(this, args||[]);
+		}
+	});
 })();
