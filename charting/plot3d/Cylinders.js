@@ -63,3 +63,4 @@ dojo.require("dojox.charting.plot3d.Base");
 		}
 	});
 })();
+

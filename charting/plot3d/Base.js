@@ -17,3 +17,4 @@ dojo.declare("dojox.charting.plot3d.Base", null, {
 	generate: function(chart, creator){
 	}
 });
+
