@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>dojox.grid.Grid - Yahoo Search Test</title>
@@ -17,7 +18,8 @@
 			width: 700px;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" 
+		djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.io.script");
@@ -52,7 +54,8 @@
 			]
 		];
 		
-		// remove the height from the header image cell / row cells have a default height so there's less adjustment when thumb comes in.
+		// remove the height from the header image cell / row cells have a
+		// default height so there's less adjustment when thumb comes in.
 		beforeImageRow = function(inRowIndex, inSubRow) {
 			inSubRow[0][0].cellStyles = (inRowIndex == -1 ? '' : 'height: 100px;');
 			inSubRow[1][0].cellStyles = (inRowIndex == -1 ? '' : 'vertical-align: top; height: 75px;');
@@ -85,7 +88,7 @@
 		
 		// execute search
 		var lastLayoutType = webLayout;
-		doSearch = function() {
+		doSearch = function(){
 			var value = dojo.byId("searchInput").value;
 			var web = dojo.byId('webRb').checked;
 			store.service = (web ? service.webSearch : service.imageSearch);
@@ -95,7 +98,7 @@
 			grid.filter({ query: value }, true);
 		}
 		
-		dojo.addOnLoad(function() {
+		dojo.addOnLoad(function(){
 			dojo.byId('webRb').checked = "checked";
 			dojo.query("#searchInput").onkeypress(function(e){
 				if(e.keyCode == dojo.keys.ENTER){ doSearch(); }
@@ -105,23 +108,27 @@
 	</script>
 </head>
 <body>
-<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid - Yahoo Search Test</div>
-<div style="padding-bottom: 3px;">
-	<label><input id="webRb" type="radio" name="searchType" checked>Web</label>&nbsp;&nbsp;
-	<label><input id="imageRb" type="radio" name="searchType">Images</label>
-</div>	
-<input id="searchInput" type="text" value="apple">&nbsp;&nbsp;
-<button onclick="doSearch()">Search</button><br><br>
-<div id="grid" jsId="grid" class="grid" autoWidth="true" structure="webLayout" dojoType="dojox.grid.DataGrid" store="store" elasticView="1" query="{ query: 'apple' }" rowSelector="20px"></div>
-<br>
-<div id="info">
-	<div id="rowCount" style="float: left"></div>
-	<div style="float: right">
-		<div id="sendInfo" style="text-align: right"></div>
-		<div id="receiveInfo" style="text-align: right"></div>
+	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid - Yahoo Search Test</div>
+	<div style="padding-bottom: 3px;">
+		<label><input id="webRb" type="radio" name="searchType" checked>Web</label>&nbsp;&nbsp;
+		<label><input id="imageRb" type="radio" name="searchType">Images</label>
+	</div>	
+	<input id="searchInput" type="text" value="apple">&nbsp;&nbsp;
+	<button onclick="doSearch()">Search</button><br><br>
+	<div dojoType="dojox.grid.DataGrid" 
+		jsId="grid" class="grid" id="grid" 
+		autoWidth="true" structure="webLayout" 
+		store="store" elasticView="1" 
+		query="{ query: 'apple' }" 
+		rowSelector="20px">
 	</div>
-</div>
-<br /><br />
-<p>Note: requires PHP for proxy.</p>
+	<br>
+	<div id="info">
+		<div id="rowCount" style="float: left"></div>
+		<div style="float: right">
+			<div id="sendInfo" style="text-align: right"></div>
+			<div id="receiveInfo" style="text-align: right"></div>
+		</div>
+	</div>
 </body>
 </html>
