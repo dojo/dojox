@@ -28,7 +28,7 @@ dojo.provide("dojox.grid.util");
 	dgu.funnelEvents = function(inNode, inObject, inMethod, inEvents){
 		var evts = (inEvents ? inEvents : dgu.mouseEvents.concat(dgu.keyEvents));
 		for (var i=0, l=evts.length; i<l; i++){
-			dojo.connect(inNode, 'on' + evts[i], inObject, inMethod);
+			inObject.connect(inNode, 'on' + evts[i], inMethod);
 		}
 	},
 

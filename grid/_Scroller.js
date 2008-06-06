@@ -86,6 +86,12 @@ dojo.provide("dojox.grid._Scroller");
 				this.scrollboxNode.onscroll = dojo.hitch(this, 'onscroll');
 			}
 		},
+		destroy: function(){
+			this.invalidateNodes();
+			delete this.contentNodes;
+			delete this.contentNode;
+			delete this.scrollboxNode;
+		},
 		setKeepInfo: function(inKeepRows){
 			this.keepRows = inKeepRows;
 			this.keepPages = !this.keepRows ? this.keepRows : Math.max(Math.ceil(this.keepRows / this.rowsPerPage), 2);
@@ -195,7 +201,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		destroyPage: function(inPageIndex){
 			for(var i=0; i<this.colCount; i++){
-				dojox.grid.util.removeNode(this.invalidatePageNode(inPageIndex, this.pageNodes[i]));
+				dojo._destroyElement(this.invalidatePageNode(inPageIndex, this.pageNodes[i]));
 			}
 		},
 		pacify: function(inShouldPacify){

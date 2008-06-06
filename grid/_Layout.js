@@ -14,11 +14,117 @@ dojo.declare("dojox.grid._Layout", null, {
 	structure: null,
 	// default cell width
 	defaultWidth: '6em',
+
 	// methods
+	moveColumn: function(sourceViewIndex, destViewIndex, cellIndex, newColumnIndex){
+		var source_cells = this.structure[sourceViewIndex].cells[0];
+		var dest_cells = this.structure[destViewIndex].cells[0];
+
+		var cell = null;
+		var cellRealIndex = 0;
+		var newCol = null;
+		var newColRealIndex = 0;
+
+		for(var i=0, c; c=source_cells[i]; i++){
+			if(c.index == cellIndex){
+				cell = c;
+				cellRealIndex = i;
+				break;
+			}
+		}
+		for(i=0, c=null; c=dest_cells[i]; i++){
+			if(c.index == newColumnIndex){
+				newCol = c;
+				newColRealIndex = i;
+				break;
+			}
+		}
+
+		var cell_splice = source_cells.splice(cellRealIndex, 1)[0];
+		dest_cells.splice(newColRealIndex, 0, cell_splice);
+
+		this.cells = [];
+		var cellIndex = 0;
+		for(var i=0, v; v=this.structure[i]; i++){
+			for(var j=0, cs; cs=v.cells[j]; j++){
+				for(var k=0, c; c=cs[k]; k++){
+					c.index = cellIndex;
+					this.cells.push(c);
+					cellIndex++;
+				}
+			}
+		}
+		//this.grid.renderOnIdle();
+	},
+
 	setStructure: function(inStructure){
+		var self = this;
+
+		var getCellWidth = function(inDef){
+			var w = 0;
+			if(inDef.colSpan > 1){
+				w = 0;
+			}else if(!isNaN(inDef.width)){
+				w = inDef.width + "em";
+			}else{
+				w = inDef.width || self.defaultWidth;
+			}
+			return w;
+		};
+
+		var addCellDef = function(inRowIndex, inCellIndex, inDef){
+			var props = {
+				grid: self.grid,
+				subrow: inRowIndex,
+				layoutIndex: inCellIndex,
+				index: self.cells.length
+			};
+
+			if(inDef && inDef instanceof dojox.grid.cells._Base){
+				props.unitWidth = getCellWidth(inDef._props);
+				inDef = dojo.mixin(inDef, self._defaultCellProps, inDef._props, props);
+				return inDef;
+			}
+
+			var cell_type = inDef.type || self._defaultCellProps.type || dojox.grid.cells.Cell;
+
+			props.unitWidth = getCellWidth(inDef);
+			return new cell_type(dojo.mixin({}, self._defaultCellProps, inDef, props));
+		};
+
+		var addRowDef = function(inRowIndex, inDef){
+			var result = [];
+			for(var i=0, def, cell; (def=inDef[i]); i++){
+				cell = addCellDef(inRowIndex, i, def);
+				result.push(cell);
+				self.cells.push(cell);
+			}
+			return result;
+		};
+
+		var addRowsDef = function(inDef){
+			var result = [];
+			if(dojo.isArray(inDef)){
+				if(dojo.isArray(inDef[0])){
+					for(var i=0, row; inDef && (row=inDef[i]); i++){
+						result.push(addRowDef(i, row));
+					}
+				}else{
+					result.push(addRowDef(0, inDef));
+				}
+			}
+			return result;
+		};
+
+		var addViewDef = function(inDef){
+			self._defaultCellProps = inDef.defaultCell || {};
+			return dojo.mixin({}, inDef, {cells: addRowsDef(inDef.rows || inDef.cells)});
+		};
+
 		this.fieldIndex = 0;
 		this.cells = [];
 		var s = this.structure = [];
+
 		if(this.grid.rowSelector){
 			var sel = { type: dojox._scopeName + ".grid._RowSelector" };
 
@@ -37,7 +143,7 @@ dojo.declare("dojox.grid._Layout", null, {
 			}
 
 			if(sel){
-				s.push(this.addViewDef(sel));
+				s.push(addViewDef(sel));
 			}
 		}
 
@@ -68,66 +174,21 @@ dojo.declare("dojox.grid._Layout", null, {
 				}
 			}
 			if(!hasViews){
-				s.push(this.addViewDef({ cells: inStructure }));
+				s.push(addViewDef({ cells: inStructure }));
 			}else{
 				for(var i=0, st; (st=inStructure[i]); i++){
 					if(isRowDef(st)){
-						s.push(this.addViewDef({ cells: st }));
+						s.push(addViewDef({ cells: st }));
 					}else if(isView(st)){
-						s.push(this.addViewDef(st));
+						s.push(addViewDef(st));
 					}
 				}
 			}
 		}else if(isView(inStructure)){
 			// it's a view object
-			s.push(this.addViewDef(inStructure));
+			s.push(addViewDef(inStructure));
 		}
 
 		this.cellCount = this.cells.length;
-	},
-	addViewDef: function(inDef){
-		this._defaultCellProps = inDef.defaultCell || {};
-		return dojo.mixin({}, inDef, {rows: this.addRowsDef(inDef.rows || inDef.cells)});
-	},
-	addRowsDef: function(inDef){
-		var result = [];
-		if(dojo.isArray(inDef)){
-			if(dojo.isArray(inDef[0])){
-				for(var i=0, row; inDef && (row=inDef[i]); i++){
-					result.push(this.addRowDef(i, row));
-				}
-			}else{
-				result.push(this.addRowDef(0, inDef));
-			}
-		}
-		return result;
-	},
-	addRowDef: function(inRowIndex, inDef){
-		var result = [];
-		for(var i=0, def, cell; (def=inDef[i]); i++){
-			cell = this.addCellDef(inRowIndex, i, def);
-			result.push(cell);
-			this.cells.push(cell);
-		}
-		return result;
-	},
-	addCellDef: function(inRowIndex, inCellIndex, inDef){
-		var w = 0;
-		if(inDef.colSpan > 1){
-			w = 0;
-		}else if(!isNaN(inDef.width)){
-			w = inDef.width + "em";
-		}else{
-			w = inDef.width || this.defaultWidth;
-		}
-		var cell_type = inDef.type || this._defaultCellProps.type || dojox.grid.cells.Cell;
-		return new cell_type(
-			dojo.mixin({}, this._defaultCellProps, inDef, {
-				grid: this.grid,
-				subrow: inRowIndex,
-				layoutIndex: inCellIndex,
-				index: this.cells.length,
-				unitWidth: w
-			}));
 	}
 });

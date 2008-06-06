@@ -5,6 +5,9 @@ dojo.require("dijit._Templated");
 dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid.util");
 
+dojo.require("dojo.dnd.Moveable");
+dojo.require("dojo.dnd.Source");
+
 (function(){
 	// private
 	var rowIndexTag = "gridRowIndex";
@@ -41,112 +44,6 @@ dojo.require("dojox.grid.util");
 		return (inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText);
 	};
 
-
-	// column resize functions
-	var nop = function(){};
-
-	var dragInfo = {
-		dragging: false,
-		hysteresis: 2
-	};
-	var dragEvents = {};
-
-	var captureDrag = function(inElement) {
-		//console.debug('dojox.grid._grid.drag.capture');
-		if (inElement.setCapture)
-			inElement.setCapture();
-		else {
-			document.addEventListener("mousemove", inElement.onmousemove, true);
-			document.addEventListener("mouseup", inElement.onmouseup, true);
-			document.addEventListener("click", inElement.onclick, true);
-		}
-	}
-
-	var releaseDrag = function(inElement) {
-		//console.debug('dojox.grid._grid.drag.release');
-		if(inElement.releaseCapture){
-			inElement.releaseCapture();
-		}else{
-			document.removeEventListener("click", inElement.onclick, true);
-			document.removeEventListener("mouseup", inElement.onmouseup, true);
-			document.removeEventListener("mousemove", inElement.onmousemove, true);
-		}
-	}
-
-	var startDrag = function(inElement, inOnDrag, inOnEnd, inEvent, inOnStart){
-		if(/*dragInfo.elt ||*/ !inElement || dragInfo.dragging){
-			console.debug('failed to start drag: bad input node or already dragging');
-			return;
-		}
-		dragInfo.dragging = true;
-		dragInfo.elt = inElement;
-		dragEvents = {
-			drag: inOnDrag || nop, 
-			end: inOnEnd || nop, 
-			start: inOnStart || nop, 
-			oldmove: inElement.onmousemove, 
-			oldup: inElement.onmouseup, 
-			oldclick: inElement.onclick 
-		};
-		dragInfo.positionX = (inEvent && ('screenX' in inEvent) ? inEvent.screenX : false);
-		dragInfo.positionY = (inEvent && ('screenY' in inEvent) ? inEvent.screenY : false);
-		dragInfo.started = (dragInfo.position === false);
-		inElement.onmousemove = mousemove;
-		inElement.onmouseup = mouseup;
-		inElement.onclick = click;
-		captureDrag(dragInfo.elt);
-	}
-
-	var endDrag = function(){
-		//console.debug("dojox.grid._grid.drag.end");
-		var elt = dragInfo.elt;
-		releaseDrag(elt);
-		elt.onmousemove = dragEvents.oldmove;
-		elt.onmouseup = dragEvents.oldup;
-		elt.onclick = dragEvents.oldclick;
-		elt = null;
-		try{
-			if(dragInfo.started){
-				dragEvents.end();
-			}
-		}finally{
-			dragInfo.dragging = false;
-		}
-	}
-
-	var calcDelta = function(inEvent){
-		inEvent.deltaX = inEvent.screenX - dragInfo.positionX;
-		inEvent.deltaY = inEvent.screenY - dragInfo.positionY;
-	}
-
-	var hasMoved = function(inEvent){
-		return Math.abs(inEvent.deltaX) + Math.abs(inEvent.deltaY) > dragInfo.hysteresis;
-	}
-
-	var mousemove = function(inEvent){
-		inEvent = dojo.fixEvent(inEvent);
-		dojo.stopEvent(inEvent);
-		calcDelta(inEvent);
-		if((!dragInfo.started)&&(hasMoved(inEvent))){
-			dragEvents.start(inEvent);
-			dragInfo.started = true;
-		}
-		if(dragInfo.started){
-			dragEvents.drag(inEvent);
-		}
-	}
-
-	var mouseup = function(inEvent){
-		//console.debug("dojox.grid._grid.drag.mouseup");
-		dojo.stopEvent(dojo.fixEvent(inEvent));
-		endDrag();
-	}
-
-	var click = function(inEvent){
-		dojo.stopEvent(dojo.fixEvent(inEvent));
-		//dgdrag.end();
-	}
-	
 
 	// base class for generating markup for the views
 	var Builder = function(view){
@@ -311,8 +208,8 @@ dojo.require("dojox.grid.util");
 
 		// cache html for rendering data rows
 		prepareHtml: function(){
-			var defaultGet=this.grid.get, rows=this.view.structure.rows;
-			for(var j=0, row; (row=rows[j]); j++){
+			var defaultGet=this.grid.get, cells=this.view.structure.cells;
+			for(var j=0, row; (row=cells[j]); j++){
 				for(var i=0, cell; (cell=row[i]); i++){
 					cell.get = cell.get || (cell.value == undefined) && defaultGet;
 					cell.markup = this.generateCellMarkup(cell, cell.cellStyles, cell.cellClasses, false);
@@ -326,11 +223,11 @@ dojo.require("dojox.grid.util");
 				html = [ this._table ],
 				v = this.view,
 				obr = v.onBeforeRow,
-				rows = v.structure.rows,
+				cells = v.structure.cells,
 				item = this.grid.getItem(inRowIndex);
 
-			obr && obr(inRowIndex, rows);
-			for(var j=0, row; (row=rows[j]); j++){
+			obr && obr(inRowIndex, cells);
+			for(var j=0, row; (row=cells[j]); j++){
 				if(row.hidden || row.header){
 					continue;
 				}
@@ -362,6 +259,8 @@ dojo.require("dojox.grid.util");
 		}
 	});
 
+	var headerMoveable = null;
+
 	// Produces html for grid header content. Owned by grid and used internally 
 	// for rendering data. Override to implement custom rendering.
 	var HeaderBuilder = function(view){
@@ -379,19 +278,19 @@ dojo.require("dojox.grid.util");
 		_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
 
 		update: function(){
-			this.tableMap = new TableMap(this.view.structure.rows);
+			this.tableMap = new TableMap(this.view.structure.cells);
 		},
 
 		generateHtml: function(inGetValue, inValue){
-			var html = [this._table], rows = this.view.structure.rows;
+			var html = [this._table], cells = this.view.structure.cells;
 			
 			// render header with appropriate width, if possible so that views with flex columns are correct height
 			if(this.view.viewWidth){
 				html.push([' style="width:', this.view.viewWidth, ';"'].join(''));
 			}
 			html.push('>');
-			dojox.grid.util.fire(this.view, "onBeforeRow", [-1, rows]);
-			for(var j=0, row; (row=rows[j]); j++){
+			dojox.grid.util.fire(this.view, "onBeforeRow", [-1, cells]);
+			for(var j=0, row; (row=cells[j]); j++){
 				if(row.hidden){
 					continue;
 				}
@@ -399,6 +298,18 @@ dojo.require("dojox.grid.util");
 				for(var i=0, cell, markup; (cell=row[i]); i++){
 					cell.customClasses = [];
 					cell.customStyles = [];
+					if(this.view.simpleStructure){
+						if(cell.headerClasses && cell.headerClasses.indexOf('dojoDndItem') == -1){
+							cell.headerClasses += ' dojoDndItem';
+						}else{
+							cell.headerClasses = 'dojoDndItem';
+						}
+						if(cell.attrs && cell.attrs.indexOf("dndType='gridColumn'") == -1){
+							cell.attrs += " dndType='gridColumn_" + this.grid.id + "'";
+						}else{
+							cell.attrs = "dndType='gridColumn_" + this.grid.id + "'";
+						}
+					}
 					markup = this.generateCellMarkup(cell, cell.headerStyles, cell.headerClasses, true);
 					// content
 					markup[5] = (inValue != undefined ? inValue : inGetValue(cell));
@@ -490,7 +401,7 @@ dojo.require("dojox.grid.util");
 		},
 
 		domousedown: function(e){
-			if(!dragInfo.dragging){
+			if(!headerMoveable){
 				if((this.overRightResizeArea(e) || this.overLeftResizeArea(e)) && this.canResize(e)){
 					this.beginColumnResize(e);
 				}else{
@@ -512,12 +423,14 @@ dojo.require("dojox.grid.util");
 
 		// column resizing
 		beginColumnResize: function(e){
-			dojo.stopEvent(e);
+			var m = headerMoveable = new dojo.dnd.Moveable(document.createElement("div"));
+
 			var spanners = [], nodes = this.tableMap.findOverlappingNodes(e.cellNode);
 			for(var i=0, cell; (cell=nodes[i]); i++){
 				spanners.push({ node: cell, index: this.getCellNodeIndex(cell), width: cell.offsetWidth });
 				//console.log("spanner: " + this.getCellNodeIndex(cell));
 			}
+
 			var view = e.sourceView;
 			var adj = dojo._isBodyLtr() ? 1 : -1;
 			var views = e.grid.views.views;
@@ -525,6 +438,7 @@ dojo.require("dojox.grid.util");
 			for(var i=view.idx+adj, cView; (cView=views[i]); i=i+adj){
 				followers.push({ node: cView.headerNode, left: window.parseInt(cView.headerNode.style.left) });
 			}
+
 			var drag = {
 				scrollLeft: e.sourceView.headerNode.scrollLeft,
 				view: view,
@@ -535,6 +449,19 @@ dojo.require("dojox.grid.util");
 				spanners: spanners,
 				followers: followers
 			};
+
+			m.onMove = dojo.hitch(this, "doResizeColumn", drag);
+
+			dojo.connect(m, "onMoveStop", dojo.hitch(this, function(){
+				this.endResizeColumn(drag);
+				if(drag.node.releaseCapture){
+					drag.node.releaseCapture();
+				}
+				headerMoveable.destroy();
+				delete headerMoveable;
+				headerMoveable = null;
+			}));
+
 			// Fix any percentage widths to be pixel values
 			var hasPct = false;
 			var cellNodes = dojo.query("th", view.headerContentNode);
@@ -554,25 +481,28 @@ dojo.require("dojox.grid.util");
 					cellNodes[idx].style.width = cell.unitWidth;
 				});
 			}
-			//console.log(drag.index, drag.w);
-			startDrag(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
+
+			if(e.cellNode.setCapture){
+				e.cellNode.setCapture();
+			}
+			m.onMouseDown(e);
 		},
 
-		doResizeColumn: function(inDrag, inEvent){
+		doResizeColumn: function(inDrag, mover, leftTop){
 			var isLtr = dojo._isBodyLtr();
 			if(isLtr){
-				var w = inDrag.w + inEvent.deltaX;
-				var vw = inDrag.vw + inEvent.deltaX;
+				var w = inDrag.w + leftTop.l;
+				var vw = inDrag.vw + leftTop.l;
 			}else{
-				var w = inDrag.w - inEvent.deltaX;
-				var vw = inDrag.vw - inEvent.deltaX;
+				var w = inDrag.w - leftTop.l;
+				var vw = inDrag.vw - leftTop.l;
 			}
 			if(w >= this.minColWidth){
 				for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
 					if(isLtr){
-						sw = s.width + inEvent.deltaX;
+						sw = s.width + leftTop.l;
 					}else{
-						sw = s.width - inEvent.deltaX;
+						sw = s.width - leftTop.l;
 					}
 					s.node.style.width = sw + 'px';
 					inDrag.view.setColWidth(s.index, sw);
@@ -580,9 +510,9 @@ dojo.require("dojox.grid.util");
 				}
 				for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
 					if(isLtr){
-						fl = f.left + inEvent.deltaX;
+						fl = f.left + leftTop.l;
 					}else{
-						fl = f.left - inEvent.deltaX;
+						fl = f.left - leftTop.l;
 					}
 					f.node.style.left = fl + 'px';
 				}
@@ -590,7 +520,7 @@ dojo.require("dojox.grid.util");
 				inDrag.view.setColWidth(inDrag.index, w);
 				inDrag.view.headerNode.style.width = vw + 'px';
 				if(!isLtr){
-					inDrag.view.headerNode.scrollLeft = (inDrag.scrollLeft - inEvent.deltaX);
+					inDrag.view.headerNode.scrollLeft = (inDrag.scrollLeft - leftTop.l);
 				}
 			}
 			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
@@ -733,8 +663,18 @@ dojo.require("dojox.grid.util");
 		},
 
 		destroy: function(){
-			dojox.grid.util.removeNode(this.headerNode);
-			this.inherited("destroy", arguments);
+			dojo._destroyElement(this.headerNode);
+			delete this.headerNode;
+			dojo.forEach(this.rowNodes, dojo._destroyElement);
+			this.rowNodes = [];
+			delete this.content;
+			delete this.grid;
+			if(this.source){
+				dojo.disconnect(this._source_conn);
+				this.source.destroy();
+				delete this.source;
+			}
+			this.inherited(arguments);
 		},
 
 		// focus 
@@ -759,6 +699,7 @@ dojo.require("dojox.grid.util");
 			if(this.noscroll){
 				this.scrollboxNode.style.overflow = "hidden";
 			}
+			this.simpleStructure = Boolean(vs.cells.length == 1);
 			// bookkeeping
 			this.testFlexCells();
 			// accomodate new structure
@@ -768,7 +709,7 @@ dojo.require("dojox.grid.util");
 		testFlexCells: function(){
 			// FIXME: cheater, this function does double duty as initializer and tester
 			this.flexCells = false;
-			for(var j=0, row; (row=this.structure.rows[j]); j++){
+			for(var j=0, row; (row=this.structure.cells[j]); j++){
 				for(var i=0, cell; (cell=row[i]); i++){
 					cell.view = this;
 					this.flexCells = this.flexCells || cell.isFlex();
@@ -803,6 +744,53 @@ dojo.require("dojox.grid.util");
 		render: function(){
 			this.scrollboxNode.style.height = '';
 			this.renderHeader();
+
+			if(this.grid.columnReordering && this.simpleStructure){
+				if(this.source){
+					dojo.disconnect(this._source_conn);
+					this.source.destroy();
+				}
+				this.source = new dojo.dnd.Source(this.headerContentNode.firstChild.rows[0], {
+					horizontal: true,
+					accept: [ "gridColumn_" + this.grid.id ],
+					viewIndex: this.index,
+					onMouseDown: dojo.hitch(this, function(e){
+						this.header.decorateEvent(e);
+						if((this.header.overRightResizeArea(e) || this.header.overLeftResizeArea(e)) &&
+							this.header.canResize(e) && !headerMoveable){
+							this.header.beginColumnResize(e);
+						}else{
+							dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
+						}
+					})
+				});
+				this._source_conn = dojo.connect(this.source, "onDndDrop", this, "_onDndDrop");
+				this.source.startup();
+			}
+		},
+
+		_onDndDrop: function(source, nodes, copy){
+			if(dojo.dnd.manager().target !== this.source){
+				if(dojo.dnd.manager().source === this.source){
+					this._removingColumn = true;
+				}
+				return;
+			}
+
+			var getIdx = function(n){
+				return n ? dojo.attr(n, "idx") : null;
+			}
+			var node = nodes[0];
+			var prev_idx = getIdx(node.previousSibling);
+			var n_idx = getIdx(node);
+
+			var l = this.grid.layout;
+			if(prev_idx){
+				var i = n_idx<prev_idx?prev_idx:parseInt(prev_idx)+1;
+				l.moveColumn(source.viewIndex, this.index, n_idx, i);
+			}else{
+				l.moveColumn(source.viewIndex, this.index, n_idx, 0);
+			}
 		},
 
 		renderHeader: function(){
@@ -846,7 +834,12 @@ dojo.require("dojox.grid.util");
 			// FIXME: it should be easier to get w from this.scrollboxNode.clientWidth, 
 			// but clientWidth seemingly does not include scrollbar width in some cases
 			var w = this.scrollboxNode.offsetWidth - this.getScrollbarWidth();
-			w = Math.max(w, this.getColumnsWidth()) + 'px';
+			if(!this._removingColumn){
+				w = Math.max(w, this.getColumnsWidth()) + 'px';
+			}else{
+				w = Math.min(w, this.getColumnsWidth()) + 'px';
+				this._removingColumn = false;
+			}
 
 			var cn = this.contentNode;
 			cn.style.width = '';
@@ -907,6 +900,12 @@ dojo.require("dojox.grid.util");
 			var row = this.getRowNode(inRowIndex);
 			if(row){
 				return this.content.getCellNode(row, inCellIndex);
+			}
+		},
+
+		getHeaderCellNode: function(inCellIndex){
+			if(this.headerContentNode){
+				return this.header.getCellNode(this.headerContentNode, inCellIndex);
 			}
 		},
 

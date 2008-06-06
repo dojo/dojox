@@ -140,6 +140,10 @@ dojo.require("dojox.grid._Events");
 		// 		a row selector of that width to this grid.
 		rowSelector: '',
 
+		// columnReordering: Boolean
+		// 		If set to true, will add drag and drop reordering to views with one row of columns.
+		columnReordering: false,
+
 		// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
 		_click: null,
 
@@ -177,9 +181,20 @@ dojo.require("dojox.grid._Events");
 		destroy: function(){
 			this.domNode.onReveal = null;
 			this.domNode.onSizeChange = null;
+
 			this.edit.destroy();
+			delete this.edit;
+
 			this.views.destroyViews();
-			dijit._Widget.prototype.destroy.apply(this, arguments);
+			if(this.scroller){
+				this.scroller.destroy();
+				delete this.scroller;
+			}
+			if(this.focus){
+				this.focus.destroy();
+				delete this.focus;
+			}
+			this.inherited(arguments);
 		},
 
 		styleChanged: function(){
@@ -240,6 +255,12 @@ dojo.require("dojox.grid._Events");
 		createLayout: function(){
 			// summary: Creates a new Grid layout
 			this.layout = new dojox.grid._Layout(this);
+			this.connect(this.layout, "moveColumn", "onMoveColumn");
+		},
+
+		onMoveColumn: function(){
+			this.render();
+			this._resize();
 		},
 
 		// views
@@ -248,9 +269,9 @@ dojo.require("dojox.grid._Events");
 			this.views.createView = dojo.hitch(this, "createView");
 		},
 
-		createView: function(inClass){
+		createView: function(inClass, idx){
 			var c = dojo.getObject(inClass);
-			var view = new c({ grid: this });
+			var view = new c({ grid: this, index: idx });
 			this.viewsNode.appendChild(view.domNode);
 			this.viewsHeaderNode.appendChild(view.headerNode);
 			this.views.addView(view);
@@ -259,7 +280,7 @@ dojo.require("dojox.grid._Events");
 
 		buildViews: function(){
 			for(var i=0, vs; (vs=this.layout.structure[i]); i++){
-				this.createView(vs.type || dojox._scopeName + ".grid._View").setStructure(vs);
+				this.createView(vs.type || dojox._scopeName + ".grid._View", i).setStructure(vs);
 			}
 			this.scroller.setContentNodes(this.views.getContentNodes());
 		},
@@ -280,18 +301,21 @@ dojo.require("dojox.grid._Events");
 			//		width, value (default), get function to provide data, styles,
 			//		and span attributes (rowSpan, colSpan).
 
+			var s = inStructure;
+			if(s && dojo.isString(s)){
+				s=dojo.getObject(s);
+			}
+			if(!s){
+				if(this.layout.structure){
+					s = this.layout.structure;
+				}else{
+					return;
+				}
+			}
 			this.views.destroyViews();
-			this.structure = inStructure;
-			if((this.structure)&&(dojo.isString(this.structure))){
-				this.structure=dojo.getObject(this.structure);
+			if(s !== this.layout.structure){
+				this.layout.setStructure(s);
 			}
-			if(!this.structure){
-				this.structure=window["layout"];
-			}
-			if(!this.structure){
-				return;
-			}
-			this.layout.setStructure(this.structure);
 			this._structureChanged();
 		},
 
@@ -385,8 +409,7 @@ dojo.require("dojox.grid._Events");
 
 		adaptWidth: function() {
 			// private: sets width and position for views and update grid width if necessary
-			var
-				w = this.autoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w),
+			var w = this.autoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w),
 				vw = this.views.arrange(1, w);
 			this.views.onEach("adaptWidth");
 			if (this.autoWidth)

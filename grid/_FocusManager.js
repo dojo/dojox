@@ -11,7 +11,13 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		this.grid = inGrid;
 		this.cell = null;
 		this.rowIndex = -1;
-		dojo.connect(this.grid.domNode, "onfocus", this, "doFocus");
+		this._connects = [];
+		this._connects.push(dojo.connect(this.grid.domNode, "onfocus", this, "doFocus"));
+	},
+	destroy: function(){
+		dojo.forEach(this._connects, dojo.disconnect);
+		delete this.grid;
+		delete this.cell;
 	},
 	tabbingOut: false,
 	focusClass: "dojoxGrid-cell-focus",
