@@ -59,14 +59,17 @@
 				if(e.keyCode == dojo.keys.ENTER){ doSearch(); }
 			});
 		});
-		
 	</script>
 </head>
 <body>
 	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid - Image Search Test</div>
 	<input id="searchInput" type="text" value="apple">
 	<button onclick="doSearch()" style="clear: both;">Search</button>
-	<div id="grid" jsId="grid" class="grid" structure="imageLayout" dojoType="dojox.grid.DataGrid" store="store" elasticView="1" query="{ query: 'apple' }" rowSelector="20px"></div>
+	<div dojoType="dojox.grid.DataGrid" 
+		id="grid" jsId="grid" class="grid" structure="imageLayout" 
+		store="store" elasticView="1" query="{ query: 'apple' }" 
+		rowSelector="20px">
+	</div>
 	<br>
 	<div id="info">
 		<div id="rowCount" style="float: left"></div>
@@ -75,7 +78,5 @@
 			<div id="receiveInfo" style="text-align: right"></div>
 		</div>
 	</div>
-	<br /><br />
-	<p>Note: requires PHP for proxy.</p>
-	</body>
+</body>
 </html>
