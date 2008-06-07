@@ -18,6 +18,20 @@ tests.register("dojox.string.tests.Builder", [
 		}
 	},
 	{
+		name: "AppendArray",
+		runTest: function(t){
+			var b = new dojox.string.Builder();
+			b.appendArray([ "foo", "bar", "baz" ]);
+			t.is("foobarbaz", b.toString());
+			b.appendArray([ "bar", "baz" ]);
+			t.is("foobarbazbarbaz", b.toString());
+			b.appendArray(["ben","zoo"]).appendArray(["zoo","ben"]);
+			t.is("foobarbazbarbazbenzoozooben", b.toString());
+			b.appendArray([ 5, 8 ]);
+			t.is("foobarbazbarbazbenzoozooben58", b.toString());
+		}
+	},
+	{
 		name: "Construction",
 		runTest: function(t){
 			var b = new dojox.string.Builder();
@@ -81,7 +95,10 @@ tests.register("dojox.string.tests.Builder", [
 			b.remove(2, 100);
 			t.is("ba", b.toString());
 			b.remove(0,0);
-			t.is("ba", b.toString())
+			t.is("ba", b.toString());
+			b.append("zbarfoo");
+			b.remove(5);
+			t.is("bazba", b.toString());
 		}
 	}
 ]);
