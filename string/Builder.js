@@ -52,7 +52,7 @@ dojox.string.Builder = function(/*String?*/str){
 					break;
 				}
 				default: {
-					var i=0, tmp="";
+					var i=0;
 					while(i<arguments.length){
 						tmp += arguments[i++];
 					}
