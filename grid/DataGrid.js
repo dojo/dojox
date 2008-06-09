@@ -60,7 +60,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onDelete: function(item){
-		var idx = this.getItemIndex(item);
+		var idx = this._getItemIndex(item, true);
 
 		if(idx >= 0){
 			this._rows.splice(idx, 1);
@@ -178,7 +178,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	getItemIndex: function(item){
-		if(!this.store.isItem(item)){
+		return this._getItemIndex(item, false);
+	},
+	
+	_getItemIndex: function(item, isDeleted){
+		if(!isDeleted && !this.store.isItem(item)){
 			return -1;
 		}
 		var idty = this.store.getIdentity(item);
