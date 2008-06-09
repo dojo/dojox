@@ -62,7 +62,7 @@ dojo.declare("dojox.data.ServiceStore",
 			this.idAttribute = this.idAttribute || (this.schema && this.schema._idAttr) || 'id';
 		},
 
-		getSchema:function(){
+		getSchema: function(){
 			return this.schema; 
 		},
 		getValue: function(item, property, defaultValue, lazyCallback){
@@ -91,9 +91,9 @@ dojo.declare("dojox.data.ServiceStore",
 		},
 		getValues: function(item, property){
 			// summary:
-			//	Gets the value of an item's 'property' and returns
-			//	it.  If this value is an array it is just returned,
-			//	if not, the value is added to an array and that is returned.
+			//		Gets the value of an item's 'property' and returns
+			//		it.  If this value is an array it is just returned,
+			//		if not, the value is added to an array and that is returned.
 			//
 			//	item: /* object */
 			//	property: /* string */
@@ -119,7 +119,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 		hasAttribute: function(item,attribute){
 			// summary:
-			//	Checks to see if item has attribute
+			//		Checks to see if item has attribute
 			//
 			//	item: /* object */
 			//	attribute: /* string */
@@ -128,7 +128,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 		containsValue: function(item, attribute, value){
 			// summary:
-			//	Checks to see if 'item' has 'value' at 'attribute'
+			//		Checks to see if 'item' has 'value' at 'attribute'
 			//
 			//	item: /* object */
 			//	attribute: /* string */
@@ -139,12 +139,14 @@ dojo.declare("dojox.data.ServiceStore",
 
 		isItem: function(item){
 			// summary:
-			//	Checks to see if a passed 'item'
-			//	is really belongs to this ServiceStore.  
+			//		Checks to see if a passed 'item'
+			//		really belongs to this ServiceStore.  
 			//
 			//	item: /* object */
 			//	attribute: /* string */
 		
+			// we have no way of determining if it belongs, we just have object returned from
+			// 	service queries
 			return true; 
 		},
 
@@ -289,25 +291,26 @@ dojo.declare("dojox.data.ServiceStore",
 
 		getFeatures: function(){
 			// summary:
-			// 	return the store feature set
+			// 		return the store feature set
 
 			return { 
 				"dojo.data.api.Read": true,
 				"dojo.data.api.Identity": this.idAttribute, // this is dependent on 
-				"dojo.data.api.Request": true
+				"dojo.data.api.Request": true,
+				"dojo.data.api.Schema": this.schema
 			};
 		},
 
 		getLabel: function(item){
 			// summary
-			//	returns the label for an item. Just gets the "label" attribute.
+			//		returns the label for an item. Just gets the "label" attribute.
 			//	
 			return this.getValue(item,"label");
 		},
 
 		getLabelAttributes: function(item){
 			// summary:
-			//	returns an array of attributes that are used to create the label of an item
+			//		returns an array of attributes that are used to create the label of an item
 			return ["label"];
 		},
 

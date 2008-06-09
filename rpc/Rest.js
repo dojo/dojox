@@ -1,4 +1,4 @@
-dojo.provide("dojox.rpc.Rest");
+dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service, if you want it you must require it yourself
 // summary:
 // 		This provides a HTTP REST service with full range REST verbs include PUT,POST, and DELETE.
 // description:
@@ -27,6 +27,7 @@ dojo.provide("dojox.rpc.Rest");
 					return new dojox.rpc.Rest(
 						method.name,
 						(method.contentType||svc._smd.contentType||"").match(/json|javascript/), // isJson
+						null,
 						function(id){
 							var request = svc._getRequest(method,[id]);
 							request.url= request.target + (request.data ? '?'+  request.data : '');
@@ -46,18 +47,19 @@ dojo.provide("dojox.rpc.Rest");
 			}
 			if(range){
 				// try to record the total number of items from the range header
-				var range = deferred.ioArgs.xhr.getResponseHeader("Content-Range");
+				range = deferred.ioArgs.xhr.getResponseHeader("Content-Range");
 				deferred.fullLength = range && (range=range.match(/\/(.*)/)) && parseInt(range[1]);
 			}
-			return service.cache.intake(result,service._schema,id);
+			return service.cache.intake(result,id);
 		});
 		return deferred;
 	}
-	drr = dojox.rpc.Rest = function(/*String*/name, /*Boolean*/isJson, /*Function?*/getRequest){
+	drr = dojox.rpc.Rest = function(/*String*/path, /*Boolean?*/isJson, /*Object?*/schema, /*Function?*/getRequest){
+		// summary:
+		//		Creates a REST service using the provided path.
 		var service;
 		// it should be in the form /Table/
-		name = (name.charAt(0)!='/'?'/':'') + name + (name.charAt(name.length-1)!='/'?'/':'');
-		// the default XHR args creator:
+		path = path.match(/\/$/) ? path : (path + '/');
 		service = function(id){
 			// if caching is allowed, we look in the cache for the result
 			var result = !dontCache && drr._index[(service.servicePath || '') + id];
@@ -70,33 +72,42 @@ dojo.provide("dojox.rpc.Rest");
 			return drr._get(service,id);
 		};
 		service.isJson = isJson;
+		service._schema = schema;
 		// cache:
 		//		This is an object that provides indexing service
 		// 		This can be overriden to take advantage of more complex referencing/indexing
 		// 		schemes
 		service.cache = {
-			intake:function(result,schema,id){
+			intake:function(result,id){
 				// use json referencing if possible to do indexing when it is a JSON Rest service
 				if(isJson && dojox.json && dojox.json.ref && result){
-					return dojox.json.ref.resolveJson(result,result instanceof Array ? {items:service._schema} : schema,id);
+					return dojox.json.ref.resolveJson(result, {
+						defaultId: id,
+						index: drr._index,
+						idPrefix: path,
+						idAttribute: drr.getIdAttribute(service),
+						services: dojox.rpc.services
+					});
 				}
-				drr._index.onLoad && drr._index.onLoad(result,id);
-				drr._index[(schema._idPrefix || '') + id] = result;
+				if(drr._index.onLoad){
+					drr._index.onLoad(result, id);
+				}
+				drr._index[(path || '') + id] = result;
 				return result;
 			},
-			serialize:function(result){
-				return isJson ? ((dojox.json && dojox.json.ref) || dojo).toJson(result) : result;
+			serialize: isJson ? ((dojox.json && dojox.json.ref) || dojo).toJson : function(result){
+				return result;
 			}
 		};
 		service._rootQueries = [];// this is used by JsonRest and the stores
-		// This is the default REST handler, you can of course define your own as a parameter
+		// the default XHR args creator:
 		service._getRequest = getRequest || function(id){
-			return {url: name+id, handleAs: isJson?'json':'text', sync: dojox.rpc._sync};
+			return {url: path+id, handleAs: isJson?'json':'text', sync: dojox.rpc._sync};
 		};
 		// each calls the event handler
 		function makeRest(name){
 			service[name] = function(id,content){
-				return drr._change(name,service,id,content && service.cache.serialize(content,false,service._schema),content); // the last parameter is to let the OfflineRest know where to store the item
+				return drr._change(name,service,id,content && service.cache.serialize(content,false,name),content); // the last parameter is to let the OfflineRest know where to store the item
 			};
 		}
 		makeRest('put');
@@ -104,8 +115,8 @@ dojo.provide("dojox.rpc.Rest");
 		makeRest('delete');
 		// record the REST services for later lookup
 		dojox.rpc.services = dojox.rpc.services || {};
-		dojox.rpc.services[name] = service;
-		service.servicePath=name;
+		dojox.rpc.services[path] = service;
+		service.servicePath = path;
 		return service;
 	};
 	function restMethod(name){
@@ -113,7 +124,7 @@ dojo.provide("dojox.rpc.Rest");
 		// 		create a REST method for the given name
 		drr[name] = function(target,content){
 			// parse the id to find the service and the id to use
-			var parts = target.__id.match(/(\/.+\/)(.*)/);
+			var parts = target.__id.match(/^(.+\/)([^\/]*)$/);
 			// find the service and call it
 			var service = dojox.rpc.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
 			// // TODO: could go directly to the event handlers
@@ -132,10 +143,31 @@ dojo.provide("dojox.rpc.Rest");
 		request[method+"Data"] = content;
 		return index(dojo.xhr(method.toUpperCase(),request,true),service);
 	};
+	drr.getIdAttribute = function(service){
+		// summary:
+		//		Return the ids attribute used by this service (based on it's schema).
+		//		Defaults to "id", if not other id is defined
+		var schema = service._schema;
+		var idAttr;
+		if(schema){
+			if(!(idAttr = schema._idAttr)){
+				for(var i in schema.properties){
+					if(schema.properties[i].unique){
+						schema._idAttr = idAttr = i;
+					}
+				}
+			}
+		}
+		return idAttr || 'id';
+	};		
+	
 	drr.getServiceAndId = function(/*String*/absoluteId){
 		// summary:
-		//		This gets the REST service for the given absolute id
-		var parts = absoluteId.match(/(\/.+\/)(.*)/);
+		//		Returns the REST service and the local id for the given absolute id. The result 
+		// 		is returned as an object with a service property and an id property
+		//	absoluteId:
+		//		This is the absolute id of the object
+		var parts = absoluteId.match(/^(.+\/)([^\/]*)$/);
 		var svc = dojox.rpc.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
 		return { service: svc, id:parts[2] };
 	};
@@ -157,7 +189,7 @@ dojo.provide("dojox.rpc.Rest");
 	drr._get= function(service,id){
 		var req = dojo.mixin(service._getRequest(id), {
 			headers: {
-				Range: (start >= 0 || end >= 0) ?  "items=" + (start || '') + '-' + (end || '') : undefined
+				Range: (start >= 0 || end >= 0) ?  "items=" + (start || '') + '-' + ((end && (end-1)) || '') : undefined
 			}
 		});
 		// this is called to actually do the get

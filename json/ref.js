@@ -11,7 +11,7 @@ dojo.require("dojo._base.Deferred");
 // value and as soon as a callback is added to the Deferred object, the target
 // object will be loaded.
 
-dojox.json.ref.intake = dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ schema, /*Object?*/index, /*String?*/defaultId){
+dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	// summary:
 	// 		Indexes and resolves references in the JSON object.
 	// description:
@@ -19,70 +19,60 @@ dojox.json.ref.intake = dojox.json.ref.resolveJson = function(/*Object*/ root,/*
 	//
 	// root:
 	//		The root object of the object graph to be processed
+	// args:
+	//		Object with additional arguments:
 	//
-	// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
-	// 		Currently this provides a means for context based id handling
-	//
-	// index:
-	// 		The index map to use
-	//
+	// The *index* parameter.
+	//		This is the index object (map) to use to store an index of all the objects. 
+	// 		If you are using inter-message referencing, you must provide the same object for each call.
+	// The *defaultId* parameter.
+	//		This is the default id to use for the root object (if it doesn't define it's own id)
+	//	The *idPrefix* parameter.
+	//		This the prefix to use for the ids as they enter the index. This allows multiple tables 
+	// 		to use ids (that might otherwise collide) that enter the same global index. 
+	// 		idPrefix should be in the form "/Service/".  For example,
+	//		if the idPrefix is "/Table/", and object is encountered {id:"4",...}, this would go in the
+	//		index as "/Table/4".
+	//	The *idAttribute* parameter.
+	//		This indicates what property is the identity property. This defaults to "id"
+	// The *services* parameter
+	//		This provides a map of services, from which prototypes can be retrieved
 	// return:
 	//		An object, the result of the processing
-	index = index || (dojox.rpc && dojox.rpc.Rest && dojox.rpc.Rest._index) || {}; // create an index if one doesn't exist
+	args = args || {};
+	var idAttribute = args.idAttribute || 'id';
+	var prefix = args.idPrefix || '/'; 
+	var index = args.index || {}; // create an index if one doesn't exist
 	var ref,reWalk=[];
-	function makeIdInfo(schema){ // find out what attribute and what id prefix to use
-		if(schema){
-			var attr;
-			if(!(attr = schema._idAttr)){
-				for(var i in schema.properties){
-					if(schema.properties[i].unique){
-						schema._idAttr = attr = i;
-					}
-				}
-			}
-			if(attr || schema._idPrefix){
-				return {attr:attr || 'id',prefix:schema._idPrefix};
-			}
-		}
-	}
-	function idToIndex(prefix,id){
-		if(id){
-			id = prefix + id;
-	 		if(id.charAt()!='/'){
-	 			id = '/' + id;
-	 		}
-	 		return id.replace(/[^\/]+\/\.\.\//,''); // take care of relative paths
-	 	}
-	}
-	function walk(it,stop,schema,idInfo,defaultId){
+	var pathResolveRegex = /^.*\/(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
+	function walk(it,stop,defaultId){
 		// this walks the new graph, resolving references and making other changes
-	 	var val;
-	 	var id = it[idInfo.attr];
-	 	id = idToIndex(id ? idInfo.prefix : '',id || defaultId); // if there is an id, prefix it, otherwise inherit
-	 	// TODO: Find the schema based on the id
+	 	var update, val, id = it[idAttribute] || defaultId;
+	 	id = id && (prefix + id).replace(pathResolveRegex,'$1$2');
+	 	var proto = id && args.services && (val instanceof Array) && // won't try on arrays to do prototypes, plus it messes with queries 
+	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
+	 					(val = args.services[val[1]]) && val._schema && val._schema.prototype; // and if has a prototype
 	 	var target = it;
-	 	var update;
 		if(id){ // if there is an id available...
 			it.__id = id;
 			if(index[id]){ // if the id already exists in the system, we should use the existing object, and just update it
 				target = index[id];
 				delete target.$ref; // remove this artifact
 				update = true;
-			}else if(schema && schema.prototype){
+			}else if(proto){
 				// if the schema defines a prototype, that needs to be the prototype of the object
 				var F = function(){};
-				F.prototype = schema.prototype;
+				F.prototype = proto;
 				target = new F();
 			}
 			index[id] = target; // add the prefix, set _id, and index it
-			if(schema && dojox.validate && dojox.validate.jsonSchema){ // if json schema is activated, we can load it in the registry of instance schemas map
-				dojox.validate.jsonSchema._schemas[id] = schema;
-			}
 		}
 
 		function propertyChange(key,old,newValue){
 			setTimeout(function(){
-				index.onUpdate && index.onUpdate(target,key,old,newValue); // call the listener for each update
+				if(index.onUpdate){
+					index.onUpdate(target,key,old,newValue); // call the listener for each update
+				}
 			});
 		}
 
@@ -94,7 +84,7 @@ dojox.json.ref.intake = dojox.json.ref.resolveJson = function(/*Object*/ root,/*
 					if(/[\w\[\]\.\$ \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
 						// make sure it is a safe reference
 						var path = ref.match(/(^\.*[^\.\[]+)([\.\[].*)?/); // divide along the path
-						if((ref=(path[1]=='$' || path[1]=='this') ? root : index[idToIndex(idInfo.prefix,path[1])]) &&  // a $ indicates to start with the root, otherwise start with an id
+						if((ref = (path[1]=='$' || path[1]=='this') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$1$2')]) &&  // a $ indicates to start with the root, otherwise start with an id
 						// // starting point was found, use eval to resolve remaining property references
 						// // need to also make reserved words safe by replacing with index operator
 							(ref = path[2] ? eval('ref' + path[2].replace(/\.([^\.]+)/g,'["$1"]')) : ref)){
@@ -112,7 +102,7 @@ dojox.json.ref.intake = dojox.json.ref.resolveJson = function(/*Object*/ root,/*
 							}else{
 								ref = val.$ref;
 								val = new dojo.Deferred();
-								val.__id = idInfo.prefix + ref;
+								val.__id = (prefix + ref).replace(pathResolveRegex,'$1$2');
 								(function(val){
 									var connectId = dojo.connect(val,"addCallbacks",function(){
 										dojo.disconnect(connectId);
@@ -126,20 +116,9 @@ dojox.json.ref.intake = dojox.json.ref.resolveJson = function(/*Object*/ root,/*
 				}else{
 					if(!stop){ // if we are in stop, that means we are in the second loop, and we only need to check this current one,
 						// further walking may lead down circular loops
-						var valSchema = it instanceof Array ? (schema && schema.items) : // if it is an array, use the items from the schema
-							val.$schema || // a schema can be self-defined by the object,
-							(schema && schema.properties && schema.properties[i]);  // or it can from the schema sub-object definition
-						if(valSchema){
-							idInfo = makeIdInfo(valSchema)||idInfo;
-						}
-						val = walk(val,reWalk==it,valSchema,idInfo,id && (id + ('[' + dojo._escapeString(i) + ']')));
+						val = walk(val,reWalk==it,id && (id + ('[' + dojo._escapeString(i) + ']')));
 					}
 				}
-			}
-			if(typeof val == "string" && schema && schema.properties &&
-				schema.properties[i] && schema.properties[i].format=='date-time'){
-				// parse the date string
-				val = dojo.date.stamp.fromISOString(val); // create a date object
 			}
 			it[i] = val;
 			var old = target[i];
@@ -158,29 +137,27 @@ dojox.json.ref.intake = dojox.json.ref.resolveJson = function(/*Object*/ root,/*
 				}
 			}
 		}else{
-			index.onLoad && index.onLoad(target);
+			if(index.onLoad){
+				index.onLoad(target);
+			}
 		}
 		return target;
 	}
-	var idInfo = makeIdInfo(schema)||{attr:'id',prefix:''};
 	if(!root){ return root; }
-	root = walk(root,false,schema,idInfo,defaultId && (new dojo._Url(idInfo.prefix,defaultId) +'')); // do the main walk through
-	walk(reWalk,false,schema,idInfo); // re walk any parts that were not able to resolve references on the first round
+	root = walk(root,false,args.defaultId); // do the main walk through
+	walk(reWalk,false); // re walk any parts that were not able to resolve references on the first round
 	return root;
 };
 
 
-dojox.json.ref.fromJson = function(/*String*/ str,/*Object?*/ schema){
+dojox.json.ref.fromJson = function(/*String*/ str,/*Object?*/ args){
 // summary:
 // 		evaluates the passed string-form of a JSON object.
-// A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)
-// which may defined by setting dojox.currentSchema to the current schema you want to use for this evaluation
 //
-// json:
+// str:
 //		a string literal of a JSON item, for instance:
 //			'{ "foo": [ "bar", 1, { "baz": "thud" } ] }'
-// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
-// 		Currently this provides a means for context based id handling
+// args: See resolveJson
 //
 // return:
 //		An object, the result of the evaluation
@@ -189,12 +166,12 @@ dojox.json.ref.fromJson = function(/*String*/ str,/*Object?*/ schema){
 	}
 	root = eval('(' + str + ')'); // do the eval
 	if(root){
-		return this.resolveJson(root,schema);
+		return this.resolveJson(root, args);
 	}
 	return root;
 };
 
-dojox.json.ref.serialize = dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/ schema){
+dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/ idPrefix){
 	// summary:
 	//		Create a JSON serialization of an object.
 	//		This has support for referencing, including circular references, duplicate references, and out-of-message references
@@ -209,8 +186,7 @@ dojox.json.ref.serialize = dojox.json.ref.toJson = function(/*Object*/ it, /*Boo
 	//		-- to use something other than the default (tab),
 	//		change that variable before calling dojo.toJson().
 	//
-	// schema: A JSON Schema object that can be used to advise the parsing of the JSON (defining ids, date properties, urls, etc)	//
-	// 		Currently this provides a means for context based id handling
+	// idPrefix: The prefix that has been used for the absolute ids
 	//
 	// return:
 	//		a String representing the serialized version of the passed object.
@@ -218,7 +194,7 @@ dojox.json.ref.serialize = dojox.json.ref.toJson = function(/*Object*/ it, /*Boo
 	//	dojox.json.ref.useRefs:
 	// 		Indicates if the serializer should be encouraged to use references to existing objects.
 	// 		If this is not true, the serializer will only use references when necessary (for circular references).
-	var idPrefix = (schema && schema._idPrefix) || ''; // the id prefix for this context
+	idPrefix = idPrefix || ''; // the id prefix for this context
 	var paths={};
 	function serialize(it,path,_indentStr){
 		if(typeof it == 'object' && it){
@@ -297,4 +273,4 @@ dojox.json.ref.serialize = dojox.json.ref.toJson = function(/*Object*/ it, /*Boo
 	}*/
 	return json;
 };
-dojox.json.ref.index={};
+dojox.json.ref.useRefs=true;

@@ -18,7 +18,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Function?*/call
 	// return:
 	// 		A map/object of datastores. The name of each property is a the name of a store,
 	// 		and the value is the actual data store object.
-	path = path || '/';
+	path = (path && (path.match(/\/$/) ? path : (path + '/'))) || '/';
 	var rootService= dojox.rpc.Rest(path,true);
 	var lastSync = dojox.rpc._sync;
 	dojox.rpc._sync = !callback;

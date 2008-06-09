@@ -96,12 +96,9 @@ dojo.declare("dojox.data.JsonRestStore",
 
 			//setup a byId alias to the api call
 			if(this.target && !this.service){
-				if(!this.target.match(/\/$/)){
-					this.target = this.target + '/';
-				}
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
 				this.service._schema = this.schema || {};
-				this.schema._idPrefix = this.service.servicePath = this.target;
+				this.target = this.schema._idPrefix = this.service.servicePath;
 			}
 			/*else if(!(this.service.contentType + '').match(/application\/.*json/)){
 				throw new Error("A service must use a contentType of 'application/json' in order to be used in a JsonRestStore");
@@ -137,20 +134,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			store._doDelete(item);
 		},
 		_doDelete : function(item/*,array / parentInfo*/){
-			/*var parent = ((parentInfo || this.parentId) && this._getParent(parentInfo)) || dojox.rpc._index;
-			for(var i in parent){
-				if(parent[i] === item){ // find a reference to this object
-					if(this.isItem(parent)){
-						if(isNaN(i) || !parent.splice){ // remove a property
-							this.unsetAttribute(parent,i);
-							delete parent[i];
-						}
-						else {// remove an array entry
-							parent.splice(i,1);
-						}
-					}
-				}
-			}*/
 			this.onDelete(item);
 		},
 		changing: function(item,_deleting){
@@ -219,6 +202,20 @@ dojo.declare("dojox.data.JsonRestStore",
 		revert: function(){
 			// summary
 			//		returns any modified data to its original state prior to a save();
+			var dirtyObjects = dojox.rpc.JsonRest.getDirtyObjects().concat([]);
+			while (dirtyObjects.length>0){
+				var d = dirtyObjects.pop();
+				//TODO: Find the correct store for each one
+				if(!d.object){
+					// was a deletion, we will add it back
+					this.onNew(d.old);
+				}else if(!d.old){
+					// was an addition, remove it
+					this.onDelete(d.object);
+				}else{
+					//TODO: onSet
+				}
+			}
 			dojox.rpc.JsonRest.revert();
 		},
 
@@ -234,9 +231,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//
 			//	item: /* object */
 			//	attribute: /* string */
-			if(item && item.__id){
-				return this.service == dojox.rpc.Rest.getServiceAndId(item.__id).service;
-			}
+			return item && item.__id && this.service == dojox.rpc.Rest.getServiceAndId(item.__id).service;
 		},
 
 		fetch: function(args){
@@ -305,5 +300,5 @@ dojo.declare("dojox.data.JsonRestStore",
 );
  
 dojox.data._getStoreForItem = function(item){
-	return dojox.rpc.services[item.__id.match(/\/.+\//)[0]]._store;
+	return dojox.rpc.services[item.__id.match(/.*\//)[0]]._store;
 };

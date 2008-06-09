@@ -17,7 +17,9 @@ dojo.require("dojox.rpc.Rest");
 			function finishOne(value){
 				if(!(--left)){
 					dirtyObjects.splice(0,numDirty); // remove all the objects that were committed
-					kwArgs.onComplete && kwArgs.onComplete.call(kwArgs.scope);
+					if(kwArgs.onComplete){
+						kwArgs.onComplete.call(kwArgs.scope);
+					}
 				}
 				return value;
 			}
@@ -78,21 +80,22 @@ dojo.require("dojox.rpc.Rest");
 					numDirty = 0; // make sure this does't do anything if it is called again
 					self.revert(); // revert if there was an error
 					dirtyObjects = postCommitDirtyObjects;
-					kwArgs.onError && kwArgs.onError();
+					if(kwArgs.onError){
+						kwArgs.onError();
+					}
 				});
 			}
 			return actions;
 		},
+		getDirtyObjects: function(){
+			return dirtyObjects;
+		},
 		revert: function(){
+			// summary:
+			//		Reverts all the changes made to JSON/REST data
 			while (dirtyObjects.length>0){
 				var d = dirtyObjects.pop();
-				if(!d.object){
-					// was a deletion, we will add it back
-					this.onNew(d.old);
-				}else if(!d.old){
-					// was an addition, remove it
-					this.onDelete(d.object);
-				}else{
+				if(d.object && d.old){
 					// changed
 					for(var i in d.old){
 						d.object[i] = d.old[i];
@@ -152,9 +155,12 @@ dojo.require("dojox.rpc.Rest");
 
 			this.changing(object,true);
 		},
-		getConstructor: function(service){
+		getConstructor: function(/*Function|String*/service){
 			// summary:
 			// 		Creates or gets a constructor for objects from this service
+			if(typeof service == 'string'){
+				service = new dojox.rpc.Rest(service,true);
+			}
 			if(service._constructor){
 				return service._constructor;
 			}
@@ -165,20 +171,22 @@ dojo.require("dojox.rpc.Rest");
 				//	data:
 				//		object to mixed in
 				dojo.mixin(this,data);
-				data.__id = service.servicePath + (data[service._schema._idAttr] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14));
-				dirtyObjects.push({object:data});
+				Rest._index[this.__id = service.servicePath + (data[Rest.getIdAttribute(service)] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14))] = this;
+				dirtyObjects.push({object:this});
 	//			this._getParent(parentInfo).push(data); // append to this list
 				for(var i = 0; i < service._rootQueries.length;i++){
 					// add the new item to all the root queries
 					//TODO: If we create a mechanism to determine if the object belongs in this query, we could filter here
-					service._rootQueries[i].push(data);
+					service._rootQueries[i].push(this);
 				}
-			}
+			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});
 		},
-		fetch: function(absoluteId,query){
+		fetch: function(absoluteId){
+			// summary:
+			//		Fetches a resource by an absolute path/id and returns a dojo.Deferred.
 			var serviceAndId = Rest.getServiceAndId(absoluteId);
-			serviceAndId.service(serviceAndId.id, query);
+			return serviceAndId.service(serviceAndId.id);
 		},
 		isDirty: function(item){
 			// summary
@@ -186,6 +194,7 @@ dojo.require("dojox.rpc.Rest");
 			for(var i = 0, l = dirtyObjects.length; i < l; i++){
 				if(dirtyObjects[i]==item){return true;}
 			}
+			return false;
 		}
 	};
 })();
