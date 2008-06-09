@@ -5,7 +5,7 @@
 <head>
 
 	<link rel="stylesheet" href="../../dijit/tests/css/dijitTests.css" />
-	<link rel="stylesheet" href="../../dijit/themes/tundra/tundra.css" />
+	<link rel="stylesheet" href="../../dijit/themes/tundra/tundra.css">
 	<link rel="stylesheet" href="../../dojox/widget/Dialog/Dialog.css" />
 	<style type="text/css">
 		.innard {
