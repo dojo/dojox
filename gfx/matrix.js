@@ -118,7 +118,7 @@ dojo.provide("dojox.gfx.matrix");
 			// description: The resulting matrix is used to skew points in the x dimension
 			//		around the origin of coordinates (0, 0) by specified angle.
 			// angle: Number: an skewing angle in radians
-			return new m.Matrix2D({xy: -Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
+			return new m.Matrix2D({xy: Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
 		},
 		skewXg: function(degree){
 			// summary: forms an x skewing matrix
