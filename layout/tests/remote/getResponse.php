@@ -8,14 +8,14 @@
 				echo "<img src='../images/testImage.gif' id='imgTest'/>
 					<div id='inlineStyleTest' style='width:188px;height:125px;background-image:url(../images/testImage.gif)'></div>
 					<style>@import 'getResponse.php?mode=importCss';</style>
-					<link type='text/css' rel='stylesheet' href='getResponse.php?mode=linkCss'/>
+					<link type='text/css' rel='stylesheet' href='getResponse.php?mode=linkCss'>
 					<div id='importCssTest'></div>
 					<div id='linkCssTest'></div>
 					<div id='importMediaTest'></div>
 					<div id='linkMediaTest'></div>
 					<!-- these may download but not render -->
 					<style media='print'>@import 'getResponse.php?mode=importMediaPrint';</style>
-					<link media='print' type='text/css' rel='stylesheet' href='getResponse.php?mode=linkMediaPrint'/>
+					<link media='print' type='text/css' rel='stylesheet' href='getResponse.php?mode=linkMediaPrint'>
 					";
 				break;
 	
