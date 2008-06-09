@@ -34,9 +34,19 @@ dojo.require("dojox.color");
 		};
 	
 	dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.Base, {
-		constructor: function(chart, plot, kwargs){
+		// the data description block for the widget parser
+		defaultParams: {
+			duration: 400,	// duration of the action in ms
+			easing:   dojox.fx.easing.elasticOut	// easing for the action
+		},
+		optionalParams: {
+			highlight: "red"	// name for the highlight color
+								// programmatic instantiation can use functions and color objects
+		},
+		
+		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			var a = kwargs && kwargs.highlight;
+			var a = kwArgs && kwArgs.highlight;
 			this.colorFun = a ? (dojo.isFunction(a) ? a : cc(a)) : hl;
 			
 			this.connect();

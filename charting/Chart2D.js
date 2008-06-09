@@ -8,8 +8,10 @@ dojo.require("dojox.lang.functional.reversed");
 dojo.require("dojox.charting.Theme");
 dojo.require("dojox.charting.Series");
 
+// require all axes to support references by name
 dojo.require("dojox.charting.axis2d.Default");
 
+// require all plots to support references by name
 dojo.require("dojox.charting.plot2d.Default");
 dojo.require("dojox.charting.plot2d.Lines");
 dojo.require("dojox.charting.plot2d.Areas");
@@ -27,6 +29,7 @@ dojo.require("dojox.charting.plot2d.StackedBars");
 dojo.require("dojox.charting.plot2d.ClusteredBars");
 dojo.require("dojox.charting.plot2d.Grid");
 dojo.require("dojox.charting.plot2d.Pie");
+dojo.require("dojox.charting.plot2d.Bubble");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting, 

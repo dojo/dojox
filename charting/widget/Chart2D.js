@@ -4,8 +4,16 @@ dojo.require("dijit._Widget");
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.lang.functional");
 
+// require all actions to support references by name
+dojo.require("dojox.charting.action2d.Highlight");
+dojo.require("dojox.charting.action2d.Magnify");
+dojo.require("dojox.charting.action2d.MoveSlice");
+dojo.require("dojox.charting.action2d.Shake");
+dojo.require("dojox.charting.action2d.Tooltip");
+
 (function(){
-	var collectAxisParams, collectPlotParams, collectDataParams,
+	var collectParams, collectAxisParams, collectPlotParams,
+		collectActionParams, collectDataParams,
 		notNull = function(o){ return o; },
 		df = dojox.lang.functional,
 		du = dojox.lang.utils;
@@ -29,9 +37,10 @@ dojo.require("dojox.lang.functional");
 			var n = this.domNode = this.srcNodeRef;
 			
 			// collect chart parameters
-			var axes   = dojo.filter(dojo.query("> .axis",   n).map(collectAxisParams), notNull);
-			var plots  = dojo.filter(dojo.query("> .plot",   n).map(collectPlotParams), notNull);
-			var series = dojo.filter(dojo.query("> .series", n).map(collectDataParams), notNull);
+			var axes    = dojo.filter(dojo.query("> .axis",   n).map(collectAxisParams),   notNull),
+				plots   = dojo.filter(dojo.query("> .plot",   n).map(collectPlotParams),   notNull),
+				actions = dojo.filter(dojo.query("> .action", n).map(collectActionParams), notNull),
+				series  = dojo.filter(dojo.query("> .series", n).map(collectDataParams),   notNull);
 			
 			// build the chart
 			n.innerHTML = "";
@@ -51,6 +60,14 @@ dojo.require("dojox.lang.functional");
 			dojo.forEach(plots, function(plot){
 				c.addPlot(plot.name, plot.kwArgs);
 			});
+			
+			this.actions = [];
+			dojo.forEach(actions, function(action){
+				this.actions.push(
+					new action.action(c, action.plot, action.kwArgs)
+				);
+			}, this);
+			
 			var render = df.foldl(series, function(render, series){
 				if(series.type == "data"){
 					c.addSeries(series.name, series.data, series.kwArgs);
@@ -102,19 +119,7 @@ dojo.require("dojox.lang.functional");
 		}
 	});
 	
-	collectAxisParams = function(node){
-		var name = node.getAttribute("name"), type = node.getAttribute("type");
-		if(!name){ return null; }
-		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
-		if(type){
-			if(dojox.charting.axis2d[type]){
-				type = dojox._scopeName + ".charting.axis2d." + type;
-			}
-			var axis = eval("(" + type + ")");
-			if(axis){ kw.type = axis; } 
-		}else{
-			type = dojox._scopeName + ".charting.axis2d.Default";
-		}
+	collectParams = function(node, type, kw){
 		var dp = eval("(" + type + ".prototype.defaultParams)");
 		for(var x in dp){
 			if(x in kw){ continue; }
@@ -129,6 +134,22 @@ dojo.require("dojox.lang.functional");
 				kw[x] = du.coerceType(op[x], attr);
 			}
 		}
+	};
+	
+	collectAxisParams = function(node){
+		var name = node.getAttribute("name"), type = node.getAttribute("type");
+		if(!name){ return null; }
+		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
+		if(type){
+			if(dojox.charting.axis2d[type]){
+				type = dojox._scopeName + ".charting.axis2d." + type;
+			}
+			var axis = eval("(" + type + ")");
+			if(axis){ kw.type = axis; } 
+		}else{
+			type = dojox._scopeName + ".charting.axis2d.Default";
+		}
+		collectParams(node, type, kw);
 		return o;
 	};
 	
@@ -145,23 +166,28 @@ dojo.require("dojox.lang.functional");
 		}else{
 			type = dojox._scopeName + ".charting.plot2d.Default";
 		}
-		var dp = eval("(" + type + ".prototype.defaultParams)");
-		for(var x in dp){
-			if(x in kw){ continue; }
-			var attr = node.getAttribute(x);
-			kw[x] = du.coerceType(dp[x], attr == null ? dp[x] : attr);
-		}
-		var op = eval("(" + type + ".prototype.optionalParams)");
-		for(var x in op){
-			if(x in kw){ continue; }
-			var attr = node.getAttribute(x);
-			if(attr != null){
-				kw[x] = du.coerceType(op[x], attr);
-			}
-		}
+		collectParams(node, type, kw);
 		return o;
 	};
 	
+	collectActionParams = function(node){
+		var plot = node.getAttribute("plot"), type = node.getAttribute("type");
+		if(!plot){ plot = "default"; }
+		var o = {plot: plot, kwArgs: {}}, kw = o.kwArgs;
+		if(type){
+			if(dojox.charting.action2d[type]){
+				type = dojox._scopeName + ".charting.action2d." + type;
+			}
+			var action = eval("(" + type + ")");
+			if(!action){ return null; }
+			o.action = action;
+		}else{
+			return null;
+		}
+		collectParams(node, type, kw);
+		return o;
+	};
+
 	collectDataParams = function(node){
 		var name = node.getAttribute("name");
 		if(!name){ return null; }

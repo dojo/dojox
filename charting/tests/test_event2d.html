@@ -201,7 +201,6 @@ makeObjects = function(){
 		{y: 1, text: "Blue",  color: "blue",  stroke: "black", tooltip: "I am feeling Blue!"},
 		{y: 1, text: "Other", color: "white", stroke: "black", tooltip: "Mighty <strong>strong</strong><br>With two lines!"}
 	]);
-	// var anim10 = new AnimateSlices(chart10, "default", ["red", "green", "blue", "white"]);
 	var anim10a = new dc.action2d.MoveSlice(chart10, "default");
 	var anim10b = new dc.action2d.Highlight(chart10, "default");
 	var anim10c = new dc.action2d.Tooltip(chart10, "default");
@@ -215,26 +214,26 @@ dojo.addOnLoad(makeObjects);
 <body class="tundra">
 <h1>Event 2D</h1>
 <!--<p><button onclick="makeObjects();">Go</button></p>-->
-<p>Click and hover over markers, bars, columns, slices, and so on.</p>
-<p>1: Markers, lines, 2D data, custom axis.</p>
+<p>Hover over markers, bars, columns, slices, and so on.</p>
+<p>1: Markers, lines, 2D data, custom axis. Actions: Magnify, Tooltip.</p>
 <div id="test1" style="width: 400px; height: 200px;"></div>
-<p>2: Stacked lines, markers, shadows, no axes, custom strokes, fills, and markers.</p>
+<p>2: Stacked lines, markers, shadows, no axes, custom strokes, fills, and markers. Actions: Magnify, Highlight.</p>
 <div id="test2" style="width: 400px; height: 200px;"></div>
-<p>3: Columns with gaps beetwen them, vertical axis aligned on major ticks, custom strokes, fills.</p>
+<p>3: Columns with gaps beetwen them, vertical axis aligned on major ticks, custom strokes, fills. Actions: Highlight, Tooltip.</p>
 <div id="test3" style="width: 400px; height: 200px;"></div>
-<p>4: Bars, axes aligned on major ticks, no minor ticks, custom strokes and fills.</p>
+<p>4: Bars, axes aligned on major ticks, no minor ticks, custom strokes and fills. Actions: Highlight, Tooltip.</p>
 <div id="test4" style="width: 400px; height: 200px;"></div>
-<p>5: Clustered bars, custom axes, custom strokes, fills, and gap.</p>
+<p>5: Clustered bars, custom axes, custom strokes, fills, and gap. Actions: Highlight, Tooltip.</p>
 <div id="test5" style="width: 400px; height: 200px;"></div>
-<p>6: Clustered columns with positive and negative values, axes, and grid.</p>
+<p>6: Clustered columns with positive and negative values, axes, and grid. Actions: Highlight, Shake, Tooltip.</p>
 <div id="test6" style="width: 400px; height: 200px;"></div>
-<p>7: Stacked columns, no axes, custom strokes and fills.</p>
+<p>7: Stacked columns, no axes, custom strokes and fills. Actions: Highlight, Shake, Tooltip.</p>
 <div id="test7" style="width: 400px; height: 200px;"></div>
-<p>8: Stacked bars, no axes, custom strokes and fills.</p>
+<p>8: Stacked bars, no axes, custom strokes and fills. Actions: Highlight, Shake, Tooltip.</p>
 <div id="test8" style="width: 400px; height: 200px;"></div>
-<p>9: Bubble chart, axes.</p>
+<p>9: Bubble chart, axes. Actions: Magnify, Highlight, Tooltip.</p>
 <div id="test9" style="width: 400px; height: 300px;"></div>
-<p>10: Pie with internal custom labels, custom colors, and custom tooltips.</p>
+<p>10: Pie with internal custom labels, custom colors, and custom tooltips. Actions: MoveSlice, Highlight, Tooltip.</p>
 <div id="test10" style="width: 300px; height: 300px;"></div>
 <p>That's all Folks!</p>
 </body>

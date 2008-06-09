@@ -9,9 +9,17 @@ dojo.require("dojox.gfx.matrix");
 		gf = dojox.gfx.fx;
 	
 	dojo.declare("dojox.charting.action2d.Magnify", dojox.charting.action2d.Base, {
-		constructor: function(chart, plot, kwargs){
+		// the data description block for the widget parser
+		defaultParams: {
+			duration: 400,	// duration of the action in ms
+			easing:   dojox.fx.easing.elasticOut,	// easing for the action
+			scale:    DEFAULT_SCALE	// scale of magnification
+		},
+		optionalParams: {},	// no optional parameters
+		
+		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			this.scale = kwargs && "scale" in kwargs ? kwargs.scale : DEFAULT_SCALE;
+			this.scale = kwArgs && "scale" in kwArgs ? kwArgs.scale : DEFAULT_SCALE;
 			
 			this.connect();
 		},
@@ -42,7 +50,7 @@ dojo.require("dojox.gfx.matrix");
 				scale = 1 / this.scale;
 			}
 			
-			var kwargs = {
+			var kwArgs = {
 				shape:    o.shape,
 				duration: this.duration,
 				easing:   this.easing,
@@ -52,15 +60,15 @@ dojo.require("dojox.gfx.matrix");
 				]
 			};
 			if(o.shape){
-				vector.push(gf.animateTransform(kwargs));
+				vector.push(gf.animateTransform(kwArgs));
 			}
 			if(o.oultine){
-				kwargs.shape = o.outline;
-				vector.push(gf.animateTransform(kwargs));
+				kwArgs.shape = o.outline;
+				vector.push(gf.animateTransform(kwArgs));
 			}
 			if(o.shadow){
-				kwargs.shape = o.shadow;
-				vector.push(gf.animateTransform(kwargs));
+				kwArgs.shape = o.shadow;
+				vector.push(gf.animateTransform(kwArgs));
 			}
 			
 			if(!vector.length){

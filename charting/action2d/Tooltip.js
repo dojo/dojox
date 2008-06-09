@@ -55,12 +55,20 @@ dojo.require("dojox.lang.functional.fold");
 		return o.element == "bar" ? o.x : o.y;
 	};
 	
-	var df = dojox.lang.functional;
+	var df = dojox.lang.functional, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
 	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.Base, {
-		constructor: function(chart, plot, kwargs){
+		// the data description block for the widget parser
+		defaultParams: {
+			duration: 400,	// duration of the action in ms
+			easing:   dojox.fx.easing.elasticOut,	// easing for the action
+			text:     DEFAULT_TEXT	// the function to produce a tooltip from the object
+		},
+		optionalParams: {},	// no optional parameters
+
+		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			this.text = kwargs && "text" in kwargs ? kwargs.text : DEFAULT_TEXT;
+			this.text = kwArgs && "text" in kwArgs ? kwArgs.text : DEFAULT_TEXT;
 			
 			this.connect();
 		},
@@ -87,23 +95,43 @@ dojo.require("dojox.lang.functional.fold");
 					aroundRect.y = o.cy - o.cr;
 					aroundRect.width = aroundRect.height = 2 * o.cr;
 					break;
-				case "bar":
 				case "column":
+					position = ["above", "below"];
+				case "bar":
 					aroundRect = dojo.clone(o.shape.getShape());
 					break;
-				case "slice":
+				default:
+				//case "slice":
 					if(!this.angles){
 						// calculate the running total of slice angles
-						this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0), "* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
+						if(typeof o.run.data[0] == "number"){
+							this.angles = df.map(df.scanl(o.run.data, "+", 0),
+								"* 2 * Math.PI / this", df.foldl(o.run.data, "+", 0));
+						}else{
+							this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0),
+								"* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
+						}
 					}
 					var angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2;
 					aroundRect.x = o.cx + o.cr * Math.cos(angle);
 					aroundRect.y = o.cy + o.cr * Math.sin(angle);
 					aroundRect.width = aroundRect.height = 1;
+					// calculate the position
+					if(angle < pi4){
+						// do nothing: the position is right
+					}else if(angle < pi2 + pi4){
+						position = ["below", "above"];
+					}else if(angle < Math.PI + pi4){
+						position = ["before", "after"];
+					}else if(angle < 2 * Math.PI - pi4){
+						position = ["above", "below"];
+					}
+					/*
+					else{
+						// do nothing: the position is right
+					}
+					 */
 					break;
-			}
-			if(o.element == "column"){
-				position = ["above", "below"];
 			}
 			
 			// adjust relative coordinates to absolute, and remove fractions

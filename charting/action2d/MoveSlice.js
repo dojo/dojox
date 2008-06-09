@@ -15,11 +15,20 @@ dojo.require("dojox.lang.functional.fold");
 		df = dojox.lang.functional;
 	
 	dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.Base, {
-		constructor: function(chart, plot, kwargs){
+		// the data description block for the widget parser
+		defaultParams: {
+			duration: 400,	// duration of the action in ms
+			easing:   dojox.fx.easing.elasticOut,	// easing for the action
+			scale:    DEFAULT_SCALE,	// scale of magnification
+			shift:    DEFAULT_SHIFT		// shift of the slice
+		},
+		optionalParams: {},	// no optional parameters
+
+		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			if(!kwargs){ kwargs = {}; }
-			this.scale = "scale" in kwargs ? kwargs.scale : DEFAULT_SCALE;
-			this.shift = "shift" in kwargs ? kwargs.shift : DEFAULT_SHIFT;
+			if(!kwArgs){ kwArgs = {}; }
+			this.scale = "scale" in kwArgs ? kwArgs.scale : DEFAULT_SCALE;
+			this.shift = "shift" in kwArgs ? kwArgs.shift : DEFAULT_SHIFT;
 			
 			this.connect();
 		},
@@ -29,7 +38,13 @@ dojo.require("dojox.lang.functional.fold");
 			
 			if(!this.angles){
 				// calculate the running total of slice angles
-				this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0), "* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
+				if(typeof o.run.data[0] == "number"){
+					this.angles = df.map(df.scanl(o.run.data, "+", 0),
+						"* 2 * Math.PI / this", df.foldl(o.run.data, "+", 0));
+				}else{
+					this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0),
+						"* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
+				}
 			}
 
 			var index = o.index, anim, endScale, startOffset, endOffset,

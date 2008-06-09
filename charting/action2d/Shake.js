@@ -9,10 +9,19 @@ dojo.require("dojox.gfx.matrix");
 		gf = dojox.gfx.fx;
 	
 	dojo.declare("dojox.charting.action2d.Shake", dojox.charting.action2d.Base, {
-		constructor: function(chart, plot, kwargs){
+		// the data description block for the widget parser
+		defaultParams: {
+			duration: 400,	// duration of the action in ms
+			easing:   dojox.fx.easing.elasticOut,	// easing for the action
+			shiftX:   DEFAULT_SHIFT,	// shift of the element along the X axis
+			shiftY:   DEFAULT_SHIFT		// shift of the element along the Y axis
+		},
+		optionalParams: {},	// no optional parameters
+
+		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			this.shiftX = kwargs && "shiftX" in kwargs ? kwargs.shiftX : DEFAULT_SHIFT;
-			this.shiftY = kwargs && "shiftY" in kwargs ? kwargs.shiftY : DEFAULT_SHIFT;
+			this.shiftX = kwArgs && "shiftX" in kwArgs ? kwArgs.shiftX : DEFAULT_SHIFT;
+			this.shiftY = kwArgs && "shiftY" in kwArgs ? kwArgs.shiftY : DEFAULT_SHIFT;
 			
 			this.connect();
 		},
@@ -36,7 +45,7 @@ dojo.require("dojox.gfx.matrix");
 				this.anim[runName][index] = anim = {};
 			}
 			
-			var kwargs = {
+			var kwArgs = {
 				shape:     o.shape,
 				duration:  this.duration,
 				easing:    this.easing,
@@ -46,15 +55,15 @@ dojo.require("dojox.gfx.matrix");
 				]
 			};
 			if(o.shape){
-				vector.push(gf.animateTransform(kwargs));
+				vector.push(gf.animateTransform(kwArgs));
 			}
 			if(o.oultine){
-				kwargs.shape = o.outline;
-				vector.push(gf.animateTransform(kwargs));
+				kwArgs.shape = o.outline;
+				vector.push(gf.animateTransform(kwArgs));
 			}
 			if(o.shadow){
-				kwargs.shape = o.shadow;
-				vector.push(gf.animateTransform(kwargs));
+				kwArgs.shape = o.shadow;
+				vector.push(gf.animateTransform(kwArgs));
 			}
 			
 			if(!vector.length){
