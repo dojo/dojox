@@ -6,6 +6,8 @@
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
+<!-- required for Tooltip: a default dijit theme: -->
+<link rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css" />
 <!--
 The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
 <script type="text/javascript" src="Silverlight.js"></script>
@@ -44,266 +46,92 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../plot2d/Grid.js"></script>
 <script type="text/javascript" src="../plot2d/Pie.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
+<script type="text/javascript" src="../action2d/Highlight.js"></script>
+<script type="text/javascript" src="../action2d/Modify.js"></script>
+<script type="text/javascript" src="../action2d/MoveSlice.js"></script>
+<script type="text/javascript" src="../action2d/Shake.js"></script>
+<script type="text/javascript" src="../action2d/Tooltip.js"></script>
 <script type="text/javascript">
 
 dojo.require("dojox.charting.Chart2D");
-dojo.require("dojox.charting.themes.PlotKit.blue");
-dojo.require("dojox.charting.themes.PlotKit.cyan");
 dojo.require("dojox.charting.themes.PlotKit.green");
-dojo.require("dojox.charting.themes.PlotKit.orange");
-dojo.require("dojox.charting.themes.PlotKit.purple");
-dojo.require("dojox.charting.themes.PlotKit.red");
-dojo.require("dojox.charting.themes.ET.greys");
 
-dojo.require("dojox.gfx.fx");
-dojo.require("dojo.fx");
+dojo.require("dojox.charting.action2d.Highlight");
+dojo.require("dojox.charting.action2d.Magnify");
+dojo.require("dojox.charting.action2d.MoveSlice");
+dojo.require("dojox.charting.action2d.Shake");
+dojo.require("dojox.charting.action2d.Tooltip");
+
 dojo.require("dojo.colors");
 dojo.require("dojox.fx.easing");
 
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.scan");
-dojo.require("dojox.lang.functional.fold");
-
-var df = dojox.lang.functional, m = dojox.gfx.matrix;
+var dc = dojox.charting;
 
 var dur = 450;
 
-AnimateShapes = function(chart, plot){
-	if(!plot){ plot = "default"; }
-	
-	this.anim = {};
-	
-	chart.connectToPlot(plot, this, function(o){
-		if(o.type == "onclick"){
-			alert("you clicked: " + o.run.name + " #" + o.index + " x=" + o.x + " y=" + o.y);
-			return;
-		}
-		
-		if(o.run.name in this.anim){
-			var a = this.anim[o.run.name][o.index];
-			if(a){
-				a.stop(true);
-			}
-		}else{
-			this.anim[o.run.name] = {};
-		}
-		
-		var endZoom = o.type == "onmouseout" ? 0.5 : 2,
-			initMatrix = m.scaleAt(o.type == "onmouseout" ? 2 : 1, o.cx, o.cy),
-			vector = [];
-		if(o.shape){
-			vector.push(dojox.gfx.fx.animateTransform({
-				shape: o.shape,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				transform: [
-					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
-					initMatrix
-				]
-			}));
-		}
-		if(o.oultine){
-			vector.push(dojox.gfx.fx.animateTransform({
-				shape: o.outline,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				transform: [
-					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
-					initMatrix
-				]
-			}));
-		}
-		if(o.shadow){
-			vector.push(dojox.gfx.fx.animateTransform({
-				shape: o.shadow,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				transform: [
-					{name: "scaleAt", start: [1, o.cx, o.cy], end:[endZoom, o.cx, o.cy]},
-					initMatrix
-				]
-			}));
-		}
-		
-		if(vector.length){
-			var a = this.anim[o.run.name][o.index] = dojo.fx.combine(vector);
-			a.play();
-		}else{
-			delete this.anim[o.run.name][o.index];
-		}
-	});
-};
-
-AnimateColor = function(chart, plot, colors){
-	if(!plot){ plot = "default"; }
-	
-	this.anim = {};
-	
-	chart.connectToPlot(plot, this, function(o){
-		if(o.type == "onclick"){
-			alert("you clicked: " + o.run.name + " #" + o.index + " x=" + o.x + " y=" + o.y);
-			return;
-		}
-		if(!o.shape){ return; }
-
-		if(o.run.name in this.anim){
-			var a = this.anim[o.run.name][o.index];
-			if(a){
-				a.stop(true);
-			}
-		}else{
-			this.anim[o.run.name] = {};
-		}
-
-		var startFill = colors[o.run.name], endFill = "gold",
-			startStroke = "black", endStroke = "yellow";
-		if(o.type == "onmouseout"){
-			var t = startFill;
-			startFill = endFill;
-			endFill = t;
-			t = startStroke;
-			startStroke = endStroke;
-			endStroke = t;
-		}
-		
-		var a = this.anim[o.run.name][o.index] = dojo.fx.combine([
-			dojox.gfx.fx.animateFill({
-				shape: o.shape,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				color: {start: startFill, end: endFill}
-			}),
-			dojox.gfx.fx.animateStroke({
-				shape: o.shape,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				color: {start: startStroke, end: endStroke}
-			})
-		]);
-		a.play();
-	});
-};
-
-AnimateSlices = function(chart, plot, colors){
-	if(!plot){ plot = "default"; }
-	
-	this.anim = {};
-	this.angles = null;
-	
-	chart.connectToPlot(plot, this, function(o){
-		if(o.type == "onclick"){
-			alert("you clicked: " + o.run.name + " #" + o.index + " x=" + o.x + " y=" + o.y);
-			return;
-		}
-		if(!o.shape){ return; }
-		
-		var a = this.anim[o.index];
-		if(a){
-			a.stop(true);
-		}
-
-		if(!this.angles){
-			this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0), "* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
-		}
-		
-		var angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2,
-			rotateTo0  = m.rotateAt(-angle, o.cx, o.cy),
-			rotateBack = m.rotateAt( angle, o.cx, o.cy);
-
-		var startFill = colors[o.index], endFill = "gold",
-			startStroke = "black", endStroke = "yellow",
-			startOffset = 0, endOffset = 10;
-		if(o.type == "onmouseout"){
-			var t = startFill;
-			startFill = endFill;
-			endFill = t;
-			t = startStroke;
-			startStroke = endStroke;
-			endStroke = t;
-			t = startOffset;
-			startOffset = endOffset;
-			endOffset = t;
-		}
-		
-		a = this.anim[o.index] = dojo.fx.combine([
-			dojox.gfx.fx.animateFill({
-				shape: o.shape,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				color: {start: startFill, end: endFill}
-			}),
-			dojox.gfx.fx.animateStroke({
-				shape: o.shape,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				color: {start: startStroke, end: endStroke}
-			}),
-			dojox.gfx.fx.animateTransform({
-				shape: o.shape,
-				duration: dur,
-				easing: dojox.fx.easing.elasticOut,
-				transform: [
-					rotateBack,
-					{name: "translate", start: [startOffset, 0], end:[endOffset, 0]},
-					rotateTo0
-				]
-			})
-		]);
-		a.play();
-	});
-};
-
 makeObjects = function(){
-	var chart1 = new dojox.charting.Chart2D("test1");
-	chart1.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart1 = new dc.Chart2D("test1");
+	chart1.setTheme(dc.themes.PlotKit.green);
 	chart1.addPlot("default", {type: "Default", lines: true, markers: true, tension:2});
 	chart1.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart1.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart1.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
-	chart1.addSeries("Series B", [{x: 0.3, y: 8}, {x: 4, y: 6}, {x: 5.5, y: 2}]);
-	var anim1 = new AnimateShapes(chart1);
+	chart1.addSeries("Series B", [{x: 0.3, y: 8}, {x: 4, y: 6, tooltip: "Custom tooltip"}, {x: 5.5, y: 2}]);
+	var anim1a = new dc.action2d.Magnify(chart1, "default");
+	var anim1b = new dc.action2d.Tooltip(chart1, "default");
 	chart1.render();
 
-	var chart2 = new dojox.charting.Chart2D("test2");
-	chart2.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart2 = new dc.Chart2D("test2");
+	chart2.setTheme(dc.themes.PlotKit.green);
 	chart2.addPlot("default", {type: "StackedLines", markers: true, tension:3, shadows: {dx: 2, dy: 2, dw: 2}});
 	chart2.addSeries("Series A", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "red", width: 2}, fill: "lightpink", marker: "m-3,-3 l0,6 6,0 0,-6 z"});
 	chart2.addSeries("Series B", [1, 1.6, 1.3, 1.4, 1.1, 1.5, 1.1], {stroke: {color: "blue", width: 2}, fill: "lightblue", marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
 	chart2.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen", marker: "m0,-3 l3,3 -3,3 -3,-3 z"});
-	var anim2 = new AnimateShapes(chart2);
+	var anim2a = new dc.action2d.Magnify(chart2, "default", {
+		scale: 3
+	});
+	var anim2b = new dc.action2d.Highlight(chart2, "default");
 	chart2.render();
 
-	var chart3 = new dojox.charting.Chart2D("test3");
-	chart3.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart3 = new dc.Chart2D("test3");
+	chart3.setTheme(dc.themes.PlotKit.green);
 	chart3.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major"});
 	chart3.addPlot("default", {type: "Columns", gap: 2});
 	chart3.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
 	chart3.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
-	var anim3 = new AnimateColor(chart3, "default", {"Series A": "red", "Series B": "blue"});
+	var anim3a = new dc.action2d.Highlight(chart3, "default");
+	var anim3b = new dc.action2d.Tooltip(chart3, "default");
 	chart3.render();
 
-	var chart4 = new dojox.charting.Chart2D("test4");
-	chart4.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart4 = new dc.Chart2D("test4");
+	chart4.setTheme(dc.themes.PlotKit.green);
 	chart4.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
 	chart4.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true});
 	chart4.addPlot("default", {type: "Bars"});
 	chart4.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
 	chart4.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
-	var anim4 = new AnimateColor(chart4, "default", {"Series A": "red", "Series B": "blue"});
+	var anim4a = new dc.action2d.Highlight(chart4, "default", {
+		highlight: "gold"
+	});
+	var anim4b = new dc.action2d.Tooltip(chart4, "default");
 	chart4.render();
 
-	var chart5 = new dojox.charting.Chart2D("test5");
-	chart5.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart5 = new dc.Chart2D("test5");
+	chart5.setTheme(dc.themes.PlotKit.green);
 	chart5.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
 	chart5.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", natural: true});
 	chart5.addPlot("default", {type: "ClusteredBars", gap: 5});
 	chart5.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
 	chart5.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
-	var anim5 = new AnimateColor(chart5, "default", {"Series A": "red", "Series B": "blue"});
+	var anim5a = new dc.action2d.Highlight(chart5, "default", {
+		duration: dur,
+		easing:   dojox.fx.easing.bounceOut
+	});
+	var anim5b = new dc.action2d.Tooltip(chart5, "default");
 	chart5.render();
 
-	var chart6 = new dojox.charting.Chart2D("test6");
-	chart6.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart6 = new dc.Chart2D("test6");
+	chart6.setTheme(dc.themes.PlotKit.green);
 	chart6.addAxis("x");
 	chart6.addAxis("y", {vertical: true});
 	chart6.addPlot("default", {type: "ClusteredColumns", gap: 10});
@@ -311,27 +139,39 @@ makeObjects = function(){
 	chart6.addSeries("Series A", [2, 1, 0.5, -1, -2], {stroke: {color: "black"}, fill: "red"});
 	chart6.addSeries("Series B", [-2, -1, -0.5, 1, 2], {stroke: {color: "black"}, fill: "blue"});
 	chart6.addSeries("Series C", [1, 0.5, -1, -2, -3], {stroke: {color: "black"}, fill: "green"});
-	var anim6 = new AnimateColor(chart6, "default", {"Series A": "red", "Series B": "blue", "Series C": "green"});
+	var anim6a = new dc.action2d.Highlight(chart6, "default", {
+		duration: dur,
+		easing:   dojox.fx.easing.sineOut
+	});
+	var anim6b = new dc.action2d.Shake(chart6, "default");
+	var anim6c = new dc.action2d.Tooltip(chart6, "default");
 	chart6.render();
 
-	var chart7 = new dojox.charting.Chart2D("test7");
-	chart7.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart7 = new dc.Chart2D("test7");
+	chart7.setTheme(dc.themes.PlotKit.green);
 	chart7.addPlot("default", {type: "StackedColumns"});
 	chart7.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
 	chart7.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "black"}, fill: "blue"});
-	var anim7 = new AnimateColor(chart7, "default", {"Series A": "red", "Series B": "blue"});
+	var anim7a = new dc.action2d.Highlight(chart7, "default", {
+		duration: dur,
+		easing:   dojox.fx.easing.bounceOut
+	});
+	var anim7b = new dc.action2d.Shake(chart7, "default");
+	var anim7c = new dc.action2d.Tooltip(chart7, "default");
 	chart7.render();
 
-	var chart8 = new dojox.charting.Chart2D("test8");
-	chart8.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart8 = new dc.Chart2D("test8");
+	chart8.setTheme(dc.themes.PlotKit.green);
 	chart8.addPlot("default", {type: "StackedBars"});
 	chart8.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
 	chart8.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "black"}, fill: "blue"});
-	var anim8 = new AnimateColor(chart8, "default", {"Series A": "red", "Series B": "blue"});
+	var anim8a = new dc.action2d.Highlight(chart8, "default");
+	var anim8b = new dc.action2d.Shake(chart8, "default");
+	var anim8c = new dc.action2d.Tooltip(chart8, "default");
 	chart8.render();
 
-	var chart9 = new dojox.charting.Chart2D("test9");
-	chart9.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart9 = new dc.Chart2D("test9");
+	chart9.setTheme(dc.themes.PlotKit.green);
 	chart9.addPlot("default", {type: "Bubble", shadows: {dx: 2, dy: 2, dw: 2}});
 	chart9.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart9.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
@@ -339,11 +179,15 @@ makeObjects = function(){
 		{stroke: {color: "black"}, fill: "red"});
 	chart9.addSeries("Series B", [{x: 0.3, y: 8, size: 2.5}, {x: 4, y: 6, size:1.1}, {x: 5.5, y: 2, size: 3.2}],
 		{stroke: {color: "black"}, fill: "blue"});
-	var anim9 = new AnimateColor(chart9, "default", {"Series A": "red", "Series B": "blue"});
+	var anim9a = new dc.action2d.Magnify(chart9, "default", {
+		scale: 1.1
+	});
+	var anim9b = new dc.action2d.Highlight(chart9, "default");
+	var anim9c = new dc.action2d.Tooltip(chart9, "default");
 	chart9.render();
 
-	var chart10 = new dojox.charting.Chart2D("test10");
-	chart10.setTheme(dojox.charting.themes.PlotKit.green);
+	var chart10 = new dc.Chart2D("test10");
+	chart10.setTheme(dc.themes.PlotKit.green);
 	chart10.addPlot("default", {
 		type: "Pie", 
 		font: "normal normal 11pt Tahoma", 
@@ -352,12 +196,15 @@ makeObjects = function(){
 		radius: 80
 	});
 	chart10.addSeries("Series A", [
-		{y: 4, text: "Red",   color: "red",   stroke: "black"},
-		{y: 2, text: "Green", color: "green", stroke: "black"},
-		{y: 1, text: "Blue",  color: "blue",  stroke: "black"},
-		{y: 1, text: "Other", color: "white", stroke: "black"}
+		{y: 4, text: "Red",   color: "red",   stroke: "black", tooltip: "Red is 50%"},
+		{y: 2, text: "Green", color: "green", stroke: "black", tooltip: "Green is 25%"},
+		{y: 1, text: "Blue",  color: "blue",  stroke: "black", tooltip: "I am feeling Blue!"},
+		{y: 1, text: "Other", color: "white", stroke: "black", tooltip: "Mighty <strong>strong</strong><br>With two lines!"}
 	]);
-	var anim10 = new AnimateSlices(chart10, "default", ["red", "green", "blue", "white"]);
+	// var anim10 = new AnimateSlices(chart10, "default", ["red", "green", "blue", "white"]);
+	var anim10a = new dc.action2d.MoveSlice(chart10, "default");
+	var anim10b = new dc.action2d.Highlight(chart10, "default");
+	var anim10c = new dc.action2d.Tooltip(chart10, "default");
 	chart10.render();
 };
 
@@ -365,7 +212,7 @@ dojo.addOnLoad(makeObjects);
 
 </script>
 </head>
-<body>
+<body class="tundra">
 <h1>Event 2D</h1>
 <!--<p><button onclick="makeObjects();">Go</button></p>-->
 <p>Click and hover over markers, bars, columns, slices, and so on.</p>
@@ -387,7 +234,7 @@ dojo.addOnLoad(makeObjects);
 <div id="test8" style="width: 400px; height: 200px;"></div>
 <p>9: Bubble chart, axes.</p>
 <div id="test9" style="width: 400px; height: 300px;"></div>
-<p>10: Pie with internal custom labels and custom colors.</p>
+<p>10: Pie with internal custom labels, custom colors, and custom tooltips.</p>
 <div id="test10" style="width: 300px; height: 300px;"></div>
 <p>That's all Folks!</p>
 </body>
