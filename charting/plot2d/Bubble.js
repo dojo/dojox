@@ -1,17 +1,31 @@
 dojo.provide("dojox.charting.plot2d.Bubble");
 
-dojo.require("dojox.charting.plot2d.Default");
+dojo.require("dojox.charting.plot2d.Base");
 dojo.require("dojox.lang.functional");
 
 (function(){
-	var df = dojox.lang.functional,
+	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
 
-	dojo.declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Default, {
-		constructor: function(){
-			this.opt.lines	= false;
-			this.opt.markers= false;
+	dojo.declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Base, {
+		defaultParams: {
+			hAxis: "x",		// use a horizontal axis named "x"
+			vAxis: "y"		// use a vertical axis named "y"
+		},
+		optionalParams: {},	// no optional parameters
+
+		constructor: function(chart, kwArgs){
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
+			this.series = [];
+			this.hAxis = this.opt.hAxis;
+			this.vAxis = this.opt.vAxis;
+		},
+		
+		calculateAxes: function(dim){
+			this._calc(dim, dc.collectSimpleStats(this.series));
+			return this;
 		},
 
 		//	override the render so that we are plotting only circles.
