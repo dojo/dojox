@@ -8,6 +8,9 @@
 </style>
 <!-- required for Tooltip: a default dijit theme: -->
 <link rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css" />
+<style>
+.dojoxLegendNode {border: 1px solid gray; margin: 5px 10px; padding: 3px}
+</style>
 <!--
 The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
 <script type="text/javascript" src="Silverlight.js"></script>
@@ -18,9 +21,11 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../scaler/linear.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
 <script type="text/javascript" src="../widget/Chart2D.js"></script>
+<script type="text/javascript" src="../widget/Legend.js"></script>
 
 <script type="text/javascript">
 	dojo.require("dojox.charting.widget.Chart2D");
+	dojo.require("dojox.charting.widget.Legend");
 	dojo.require("dojox.charting.themes.PlotKit.orange");
 	dojo.require("dojox.charting.themes.PlotKit.blue");
 	dojo.require("dojox.charting.themes.PlotKit.green");
@@ -53,7 +58,7 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <table border="0" cellspacing="30">
 	<tr>
 		<td>
-			<div dojoType="dojox.charting.widget.Chart2D" style="width: 300px; height: 300px;">
+			<div dojoType="dojox.charting.widget.Chart2D" id="chart1" style="width: 300px; height: 300px;">
 				<div class="axis" name="x" font="italic normal normal 8pt Tahoma"></div>
 				<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
 					font="italic normal normal 8pt Tahoma"></div>
@@ -63,9 +68,10 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 				<div class="series" name="Series B" array="seriesB"></div>
 				<div class="series" name="Series C" store="tableStore" valueFn="Number(x)"></div>
 			</div>
+			<div dojoType="dojox.charting.widget.Legend" chartRef="chart1"></div>
 		</td>
 		<td>
-			<div dojoType="dojox.charting.widget.Chart2D" theme="dojox.charting.themes.PlotKit.orange" 
+			<div dojoType="dojox.charting.widget.Chart2D" id="chart2" theme="dojox.charting.themes.PlotKit.orange" 
 					fill="'lightgrey'" style="width: 300px; height: 300px;">
 				<div class="axis" name="x" font="italic normal bold 10pt Tahoma"></div>
 				<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
@@ -76,25 +82,28 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 				<div class="series" name="Series B" array="seriesB"></div>
 				<div class="series" name="Series C" store="tableStore" valueFn="Number(x)" stroke="'#666666'" fill="'#b3b3b3'"></div>
 			</div>
+			<div dojoType="dojox.charting.widget.Legend" chartRef="chart2"></div>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<div dojoType="dojox.charting.widget.Chart2D" theme="dojox.charting.themes.PlotKit.blue"
+			<div dojoType="dojox.charting.widget.Chart2D" id="chart3" theme="dojox.charting.themes.PlotKit.blue"
 					 style="width: 300px; height: 300px;">
 				<div class="plot" name="default" type="Pie" radius="100" fontColor="white"></div>
 				<div class="series" name="Series B" array="seriesB"></div>
 				<div class="action" type="Tooltip"></div>
 			</div>
+			<div dojoType="dojox.charting.widget.Legend" chartRef="chart3"></div>
 		</td>
 		<td>
-			<div dojoType="dojox.charting.widget.Chart2D" theme="dojox.charting.themes.PlotKit.green"
+			<div dojoType="dojox.charting.widget.Chart2D" id="chart4" theme="dojox.charting.themes.PlotKit.green"
 					 style="width: 300px; height: 300px;">
 				<div class="plot" name="default" type="Pie" radius="100" fontColor="black" labelOffset="-20"></div>
 				<div class="series" name="Series C" store="tableStore" valueFn="Number(x)"></div>
 				<div class="action" type="Tooltip"></div>
 				<div class="action" type="MoveSlice" shift="2"></div>
 			</div>
+			<div dojoType="dojox.charting.widget.Legend" chartRef="chart4"></div>
 		</td>
 	</tr>
 </table>
