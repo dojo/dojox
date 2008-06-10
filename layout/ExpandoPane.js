@@ -37,7 +37,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 	duration:420,
 	
 	startExpanded: true, 
-	
+
+	"class": "dijitExpandoPane",
+
 	postCreate:function(){
 
 		this.inherited(arguments);
