@@ -5,6 +5,9 @@ dojo.require("dojox.lang.functional.lambda");
 // This module adds high-level functions and related constructs:
 //	- sequence generators
 
+// If you want more general sequence builders check out listcomp.js and
+// unfold() (in fold.js).
+
 // Defined methods:
 //	- take any valid lambda argument as the functional argument
 
@@ -14,8 +17,8 @@ dojo.require("dojox.lang.functional.lambda");
 	d.mixin(df, {
 		// sequence generators
 		repeat: function(/*Number*/ n, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
-			// summary: builds an array by repeatedly applying a unary function N times 
-			//	with a seed value Z.
+			// summary: builds an array by repeatedly applying a unary function N times
+			//	with a seed value Z. N should be greater than 0.
 			o = o || d.global; f = df.lambda(f);
 			var t = new Array(n);
 			t[0] = z;
@@ -23,7 +26,7 @@ dojo.require("dojox.lang.functional.lambda");
 			return t;	// Array
 		},
 		until: function(/*Function|String|Array*/ pr, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
-			// summary: builds an array by repeatedly applying a unary function with 
+			// summary: builds an array by repeatedly applying a unary function with
 			//	a seed value Z until the predicate is satisfied.
 			o = o || d.global; f = df.lambda(f); pr = df.lambda(pr);
 			var t = [];

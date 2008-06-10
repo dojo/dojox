@@ -3,6 +3,8 @@
 dojo.require("dojox.lang.functional.fold");
 dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.curry");
+dojo.require("dojox.lang.functional.sequence");
+dojo.require("dojox.lang.functional.listcomp");
 
 (function(){
 	var df = dojox.lang.functional, a = df.arg;
@@ -37,6 +39,21 @@ dojo.require("dojox.lang.functional.curry");
 		function testFoldr3(t){ t.assertEqual(df.foldr1([1, 2, 3], "/"), 3/2); },
 		function testFoldr4(t){ t.assertEqual(df.foldr1([1, 2, 3], df.partial(Math.max, a, a)), 3); },
 		function testFoldr5(t){ t.assertEqual(df.foldr1([1, 2, 3], df.partial(Math.min, a, a)), 1); },
+		
+		function testUnfold1(t){
+			// simulate df.repeat()
+			t.assertEqual(
+				df.repeat(10, "2*", 1),
+				df.unfold("x[0] >= 10", "x[1]", "[x[0] + 1, 2 * x[1]]", [0, 1])
+			);
+		},
+		function testUnfold2(t){
+			// simulate df.until()
+			t.assertEqual(
+				df.until(">1024", "2*", 1),
+				df.unfold(">1024", "x", "2*", 1)
+			);
+		},
 		
 		function testScanl1(t){ t.assertEqual(df.scanl([1, 2, 3], "+", 0), [0, 1, 3, 6]); },
 		function testScanl2(t){ t.assertEqual(df.scanl1([1, 2, 3], "*"), [1, 2, 6]); },
