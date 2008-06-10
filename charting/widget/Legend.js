@@ -1,11 +1,12 @@
 dojo.provide("dojox.charting.widget.Legend");
-dojo.provide("dojox.charting.widget.LegendItem");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
-dojo.require("dijit._Container");
 
-dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated, dijit._Container], {
+dojo.require("dojox.lang.functional.array");
+dojo.require("dojox.lang.functional.fold");
+
+dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], {
 	// summary: A legend for a chart. A legend contains summary labels for 
 	// each series of data contained in the chart.
 	//
@@ -20,12 +21,13 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated, d
 	chartRef:   "",
 	horizontal: true,
 	
-	templateString: "<div dojoAttachPoint='legendNode' class='dojoxLegendNode'></div>",
+	templateString: "<table dojoAttachPoint='legendNode' class='dojoxLegendNode'><tbody dojoAttachPoint='legendBody'></tbody></table>",
 	
 	legendNode: null,
+	legendBody: null,
 	
 	postCreate: function(){
-		var s = null;
+		var s, df = dojox.lang.functional;
 		if(!this.chart){
 			if(!this.chartRef){ return; }
 			this.chart = dijit.byId(this.chartRef);
@@ -42,74 +44,84 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated, d
 		}else{
 			s = this.chart.series;
 		}
+		
+		if(this.horizontal){
+			dojo.addClass(this.legendNode, "dojoxLegendHorizontal");
+			// make a container <tr>
+			this._tr = dojo.doc.createElement("tr");
+			this.legendBody.appendChild(this._tr);
+		}
+		
 		if(s.length == 1 && s[0].chart.stack[0].declaredClass == "dojox.charting.plot2d.Pie"){
 			var t = s[0].chart.stack[0];
-			dojo.forEach(
-				s[0].data, 
-				typeof s[0].data[0] == "number" ?
-					function(x, i){
-						this._addLabel(t.dyn[i], x);
-					} :
-					function(x, i){
-						this._addLabel(t.dyn[i], x.text || x.y);
-					},
-				this);
+			if(typeof s[0].data[0] == "number"){
+				var slices = df.map(s[0].data, "/ this", df.foldl1(s[0].data, "+"));
+				dojo.forEach(slices, function(x, i){
+					this._addLabel(t.dyn[i], t._getLabel(x * 100) + "%");
+				}, this);
+			}else{
+				dojo.forEach(s[0].data, function(x, i){
+					this._addLabel(t.dyn[i], x.legend || x.text || x.y);
+				}, this);
+			}
 		}else{
 			dojo.forEach(s, function(x){
-				this._addLabel(x.dyn, x.name);
+				this._addLabel(x.dyn, x.legend || x.name);
 			}, this);
 		}	
 	},
 	_addLabel: function(dyn, label){
-		this.addChild(new dojox.charting.widget.LegendItem({horizontal: this.horizontal, dyn: dyn, label: String(label)}));
-	}
-});
-
-dojo.declare("dojox.charting.widget.LegendItem", [dijit._Widget, dijit._Templated], {
-	// summary: A legend item is a summary that describes a Series
-	// Ex.
-	// [  ] Label
-	// {Color} {Series Label}
-
-	horizontal: true,
-
-	templateString: "<div class='dojoxLegendItem' style='margin:2 2 2 2'>" +
-		"<span dojoAttachPoint='labelIcon' style='width:20px;height:20px'></span>&nbsp;" +
-		"<span dojoAttachPoint='labelText'></span>" +
-		"</div>",
-
-	labelIcon: null,
-	labelText: null,
-	
-	postCreate: function(){
-		var d = this.dyn;
-		this.labelText.innerHTML = this.label;
-		var mb = {h:14, w:14};
-		var surface = dojox.gfx.createSurface(this.labelIcon, mb.w, mb.h);
-		if (d.fill){
+		// create necessary elements
+		var icon = dojo.doc.createElement("td"),
+			text = dojo.doc.createElement("td"),
+			div  = dojo.doc.createElement("div");
+		dojo.addClass(icon, "dojoxLegendIcon");
+		dojo.addClass(text, "dojoxLegendText");
+		div.style.width  = "20px";
+		div.style.height = "20px";
+		icon.appendChild(div);
+		
+		// create a skeleton
+		if(this._tr){
+			// horizontal
+			this._tr.appendChild(icon);
+			this._tr.appendChild(text);
+		}else{
+			// vertical
+			var tr = dojo.doc.createElement("tr");
+			this.legendBody.appendChild(tr);
+			tr.appendChild(icon);
+			tr.appendChild(text);
+		}
+		
+		// populate the skeleton
+		this._makeIcon(div, dyn);
+		text.innerHTML = String(label);
+	},
+	_makeIcon: function(div, dyn){
+		var mb = {h: 14, w: 14};
+		var surface = dojox.gfx.createSurface(div, mb.w, mb.h);
+		if(dyn.fill){
 			// regions
 			surface.createRect({x: 2, y: 2, width: mb.w - 4, height: mb.h - 4}).
-				setFill(d.fill).setStroke(d.stroke);
+				setFill(dyn.fill).setStroke(dyn.stroke);
 		}else{
 			// draw line
 			var line = {x1: 0, y1: mb.h / 2, x2: mb.w, y2: mb.h / 2};
-			if(d.stroke){
-				surface.createLine(line).setStroke(d.stroke);
+			if(dyn.stroke){
+				surface.createLine(line).setStroke(dyn.stroke);
 			}
-			if(d.marker){
+			if(dyn.marker){
 				// draw marker on top
 				var c = {x: mb.w / 2, y: mb.h / 2};
-				if(d.stroke){
-					surface.createPath({path: "M" + c.x + " " + c.y + " " + d.marker}).
-						setFill(d.stroke.color).setStroke(d.stroke);
+				if(dyn.stroke){
+					surface.createPath({path: "M" + c.x + " " + c.y + " " + dyn.marker}).
+						setFill(dyn.stroke.color).setStroke(dyn.stroke);
 				}else{
-					surface.createPath({path: "M" + c.x + " " + c.y + " " + d.marker}).
-						setFill(d.color).setStroke(d.color);
+					surface.createPath({path: "M" + c.x + " " + c.y + " " + dyn.marker}).
+						setFill(dyn.color).setStroke(dyn.color);
 				}
 			}
-		}
-		if(this.horizontal){
-			this.domNode.style.display = "inline";
 		}
 	}
 });

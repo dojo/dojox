@@ -77,12 +77,12 @@ dojo.require("dojox.lang.functional.reversed");
 						p += " L" + lpoly[lpoly.length - 1].x + "," + (dim.height - offsets.b) +
 							" L" + lpoly[0].x + "," + (dim.height - offsets.b) +
 							" L" + lpoly[0].x + "," + lpoly[0].y;
-						s.createPath(p).setFill(fill);
+						run.dyn.fill = s.createPath(p).setFill(fill).getFill();
 					} else {
 						apoly.push({x: lpoly[lpoly.length - 1].x, y: dim.height - offsets.b});
 						apoly.push({x: lpoly[0].x, y: dim.height - offsets.b});
 						apoly.push(lpoly[0]);
-						s.createPolyline(apoly).setFill(fill);
+						run.dyn.fill = s.createPolyline(apoly).setFill(fill).getFill();
 					}
 				}
 				if(this.opt.lines || this.opt.markers){
@@ -95,7 +95,7 @@ dojo.require("dojox.lang.functional.reversed");
 				}
 				if(this.opt.markers){
 					// need a marker
-					marker = run.marker ? run.marker : t.next("marker");
+					marker = run.dyn.marker = run.marker ? run.marker : t.next("marker");
 				}
 				var frontMarkers, outlineMarkers, shadowMarkers;
 				if(this.opt.shadows && stroke){
@@ -108,9 +108,9 @@ dojo.require("dojox.lang.functional.reversed");
 					shadowStroke.width += sh.dw ? sh.dw : 0;
 					if(this.opt.lines){
 						if(this.opt.tension){
-							s.createPath(curve(spoly, this.opt.tension)).setStroke(shadowStroke);
+							run.dyn.shadow = s.createPath(curve(spoly, this.opt.tension)).setStroke(shadowStroke).getStroke();
 						} else {
-							s.createPolyline(spoly).setStroke(shadowStroke);
+							run.dyn.shadow = s.createPolyline(spoly).setStroke(shadowStroke).getStroke();
 						}
 					}
 					if(this.opt.markers){
@@ -123,15 +123,15 @@ dojo.require("dojox.lang.functional.reversed");
 				if(this.opt.lines){
 					if(outline){
 						if(this.opt.tension){
-							s.createPath(lpath).setStroke(outline);
+							run.dyn.outline = s.createPath(lpath).setStroke(outline).getStroke();
 						} else {
-							s.createPolyline(lpoly).setStroke(outline);
+							run.dyn.outline = s.createPolyline(lpoly).setStroke(outline).getStroke();
 						}
 					}
 					if(this.opt.tension){
-						s.createPath(lpath).setStroke(stroke);
+						run.dyn.stroke = s.createPath(lpath).setStroke(stroke).getStroke();
 					} else {
-						s.createPolyline(lpoly).setStroke(stroke);
+						run.dyn.stroke = s.createPolyline(lpoly).setStroke(stroke).getStroke();
 					}
 				}
 				if(this.opt.markers){

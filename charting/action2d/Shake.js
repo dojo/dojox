@@ -20,8 +20,9 @@ dojo.require("dojox.gfx.matrix");
 
 		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			this.shiftX = kwArgs && "shiftX" in kwArgs ? kwArgs.shiftX : DEFAULT_SHIFT;
-			this.shiftY = kwArgs && "shiftY" in kwArgs ? kwArgs.shiftY : DEFAULT_SHIFT;
+			if(!kwArgs){ kwArgs = {}; }
+			this.shiftX = typeof kwArgs.shiftX == "number" ? kwArgs.shiftX : DEFAULT_SHIFT;
+			this.shiftY = typeof kwArgs.shiftY == "number" ? kwArgs.shiftY : DEFAULT_SHIFT;
 			
 			this.connect();
 		},

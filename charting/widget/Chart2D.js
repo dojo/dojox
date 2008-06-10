@@ -124,7 +124,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		for(var x in dp){
 			if(x in kw){ continue; }
 			var attr = node.getAttribute(x);
-			kw[x] = du.coerceType(dp[x], attr == null ? dp[x] : attr);
+			kw[x] = du.coerceType(dp[x], attr == null || typeof attr == "undefined" ? dp[x] : attr);
 		}
 		var op = eval("(" + type + ".prototype.optionalParams)");
 		for(var x in op){
@@ -200,6 +200,8 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		if(t != null){ kw.stroke = eval("(" + t + ")"); }
 		t = node.getAttribute("fill");
 		if(t != null){ kw.fill = eval("(" + t + ")"); }
+		t = node.getAttribute("legend");
+		if(t != null){ kw.legend = t; }
 		t = node.getAttribute("data");
 		if(t != null){
 			o.type = "data";

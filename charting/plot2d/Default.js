@@ -127,9 +127,9 @@ dojo.require("dojox.lang.functional.reversed");
 					shadowStroke.width += sh.dw ? sh.dw : 0;
 					if(this.opt.lines){
 						if(this.opt.tension){
-							s.createPath(curve(spoly, this.opt.tension)).setStroke(shadowStroke);
+							run.dyn.shadow = s.createPath(curve(spoly, this.opt.tension)).setStroke(shadowStroke).getStroke();
 						} else {
-							s.createPolyline(spoly).setStroke(shadowStroke);
+							run.dyn.shadow = s.createPolyline(spoly).setStroke(shadowStroke).getStroke();
 						}
 					}
 					if(this.opt.markers){

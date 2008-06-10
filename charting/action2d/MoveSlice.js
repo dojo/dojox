@@ -27,8 +27,8 @@ dojo.require("dojox.lang.functional.fold");
 		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
 			if(!kwArgs){ kwArgs = {}; }
-			this.scale = "scale" in kwArgs ? kwArgs.scale : DEFAULT_SCALE;
-			this.shift = "shift" in kwArgs ? kwArgs.shift : DEFAULT_SHIFT;
+			this.scale = typeof kwArgs.scale == "number" ? kwArgs.scale : DEFAULT_SCALE;
+			this.shift = typeof kwArgs.shift == "number" ? kwArgs.shift : DEFAULT_SHIFT;
 			
 			this.connect();
 		},

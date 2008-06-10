@@ -68,7 +68,7 @@ dojo.require("dojox.lang.functional.fold");
 
 		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			this.text = kwArgs && "text" in kwArgs ? kwArgs.text : DEFAULT_TEXT;
+			this.text = kwArgs && kwArgs.test ? kwArgs.text : DEFAULT_TEXT;
 			
 			this.connect();
 		},

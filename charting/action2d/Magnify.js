@@ -19,7 +19,7 @@ dojo.require("dojox.gfx.matrix");
 		
 		constructor: function(chart, plot, kwArgs){
 			// process optional named parameters
-			this.scale = kwArgs && "scale" in kwArgs ? kwArgs.scale : DEFAULT_SCALE;
+			this.scale = kwArgs && typeof kwArgs.scale == "number" ? kwArgs.scale : DEFAULT_SCALE;
 			
 			this.connect();
 		},

@@ -68,15 +68,14 @@ dojo.require("dojox.lang.functional");
 
 				if(run.fill){
 					color = run.fill;
-				}
-				else if (run.stroke){
+				}else if(run.stroke){
 					color = run.stroke;
-				}
-				else {
+				}else{
 					color = run.dyn.color = new dojo.Color(t.next("color"));
 				}
+				run.dyn.fill = color;
 
-				stroke = run.stroke ? dc.makeStroke(run.stroke) : dc.augmentStroke(t.series.stroke, color);
+				stroke = run.dyn.stroke = run.stroke ? dc.makeStroke(run.stroke) : dc.augmentStroke(t.series.stroke, color);
 
 				var frontCircles = null, outlineCircles = null, shadowCircles = null;
 
@@ -86,6 +85,7 @@ dojo.require("dojox.lang.functional");
 						shadowStroke = dojo.clone(outline ? outline : stroke);
 					shadowStroke.color = shadowColor;
 					shadowStroke.width += sh.dw ? sh.dw : 0;
+					run.dyn.shadow = shadowStroke;
 					shadowMarkers = dojo.map(points, function(item){
 						var sh = this.opt.shadows;
 						return s.createCircle({
@@ -98,6 +98,7 @@ dojo.require("dojox.lang.functional");
 				if(run.outline || t.series.outline){
 					outline = dc.makeStroke(run.outline ? run.outline : t.series.outline);
 					outline.width = 2 * outline.width + stroke.width;
+					run.dyn.outline = outline;
 					outlineCircles = dojo.map(points, function(item){
 						s.createCircle({ cx: item.x, cy: item.y, r: item.radius }).setStroke(outline);
 					}, this);
