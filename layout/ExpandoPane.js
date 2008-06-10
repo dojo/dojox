@@ -71,7 +71,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 					thisClass = "Bottom"; 
 					break;
 			}
-			dojo.addClass(this.domNode,"dojoxExpando"+thisClass);
+			dojo.addClass(this.domNode,"dojoxExpando" + thisClass);
 			this._isHorizontal = /top|bottom/.test(this.region);
 		}
 		dojo.style(this.domNode,"overflow","hidden");
@@ -177,6 +177,8 @@ dojo.declare("dojox.layout.ExpandoPane",
 	},
 	
 	_hideWrapper:function(){
+		
+		dojo.addClass(this.domNode,"dojoxExpandoClosed");
 		dojo.style(this.cwrapper,{
 				visibility:"hidden",
 				opacity:"0",
@@ -188,12 +190,11 @@ dojo.declare("dojox.layout.ExpandoPane",
 		// summary: common animation onEnd code
 		dojo.style(this.cwrapper,{ opacity: 0, visibility:"visible" });		
 		dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
-		dojo.removeClass(this.domNode,"dojoxExpandoClosed");
+		dojo.removeClass(this.domNode, "dojoxExpandoClosed");
 		setTimeout(dojo.hitch(this._container, "layout"), 15);
 	},
 	
 	_hideEnd: function(){
-		dojo.addClass(this.domNode,"dojoxExpandoClosed");
 		setTimeout(dojo.hitch(this._container, "layout"), 15);
 	},
 	
