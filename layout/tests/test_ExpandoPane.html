@@ -184,8 +184,8 @@
 	</script>
 </head>
 <body class="tundra">
-		<div id="bc" style="width:100%; height:100%;" dojoType="dijit.layout.BorderContainer">
-			<div id="header" dojoType="dijit.layout.ContentPane" region="top">Dojo Expando Pane Test</div>
+		<div id="bc" style="width:100%; height:100%; padding: 5px;" dojoType="dijit.layout.BorderContainer">
+			<div id="header" dojoType="dijit.layout.ContentPane" region="top" splitter="true">Dojo Expando Pane Test</div>
 			<div dojoType="dojox.layout.ExpandoPane" 
 				splitter="true" 
 				duration="125" 
@@ -193,7 +193,7 @@
 				title="Left Section" 
 				id="leftPane" 
 				maxWidth="275" 
-				style="width: 275px; background: #fafafa;">
+				style="width: 275px;">
 				<div dojoType="dijit.layout.TabContainer" attachParent="true" tabPosition="bottom">
 					<div dojoType="dijit.layout.ContentPane" title="Search">
 						<div class="searchBar">
@@ -243,7 +243,7 @@
 				region="right" 
 				id="rightPane" 
 				maxWidth="275" 
-				style="background:#fafafa; width:275px" 
+				style="width:275px" 
 				easeIn="dojox.fx.easing.backOut" 
 				easeOut="dojox.fx.easing.backInOut">
 
@@ -310,6 +310,26 @@
 						</div>
 					</div>
 					<div dojoType="dijit.layout.AccordionPane" title="Acc 3">c</div>
+				</div>
+			</div>
+			<div dojoType="dojox.layout.ExpandoPane" 
+				splitter="true" 
+				duration="125" 
+				region="bottom" 
+				title="Bottom Section" 
+				id="bottomPane" 
+				maxWidth="275" 
+				style="height: 100px;">
+				<div dojoType="dijit.layout.TabContainer" attachParent="true" tabPosition="bottom">
+					<div dojoType="dijit.layout.ContentPane" title="Search">
+												
+					</div>
+					<div dojoType="dijit.layout.AccordionContainer" title="Panes" style="width:275px;" attachParent="true">
+						
+					</div>
+					<div dojoType="dijit.layout.ContentPane" title="Tree View">
+						
+					</div>
 				</div>
 			</div>
 		</div>

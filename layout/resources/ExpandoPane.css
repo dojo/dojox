@@ -2,12 +2,10 @@
 
 	.dojoxExpandoPane {
 		overflow:hidden;
-		margin-top:1px;
-		border-top:1px solid #ccc;
 		z-index:440;
 		background:#fff;
 	}
-
+	
 	.dojoxExpandoPane .dojoxExpandoWrapper {
 		overflow:hidden;
 	}
@@ -69,14 +67,31 @@
 	}
 
 	/* soria definitions */
+	
+	.soria .dijitBorderContainer-dijitExpandoPane {
+		border: 1px solid #B1BADF;
+		border-top: none;
+	}
+	
+	.soria .dojoxExpandoPane {
+		background: #F0F4FC;
+	}
+	
 	.soria .dojoxExpandoTitle {
 		height:16px;
 		font-size:0.9em;
 		font-weight:bold;
 		padding:3px;
-		padding-top:7px;
-		padding-bottom:7px;
-		background:#f0f4fc url("../../../dijit/themes/soria/images/tabStripe.gif") repeat-x left bottom; 
+		padding-top:6px;
+		padding-bottom:5px;
+		background:#F0F4FC url("../../../dijit/themes/soria/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
+		border-bottom: 1px solid #ccc;
+	}
+	.soria .dojoxExpandoClosed .dojoxExpandoTitle {
+		background: none;
+		background-color: #F0F4FC;
+		border-top: 1px solid #ccc;
+		border-bottom: none;
 	}
 	.dj_safari .soria .dojoxExpandoTitle {
 		height:18px;
@@ -97,40 +112,38 @@
 	.soria .dojoxExpandoLeft {
 		border-right:1px solid #b1badf;
 	}
-	.soria .dojoxExpandoPane {
-		border-top:1px solid #b1badf;
-	}
 	
 	/* tundra styles */
+	
+	.tundra .dijitBorderContainer-dijitExpandoPane {
+		border: 1px solid #ccc;
+		border-top: none;
+	}
+	
 	.tundra .dojoxExpandoTitle {
 		font-weight: bold;
 		padding: 3px;
 		padding-top: 6px;
-		padding-bottom: 7px;
-		background: #fafafa url("../../../dijit/themes/tundra/images/accordionItemActive.gif") repeat-x scroll left bottom;
+		padding-bottom: 4px;
+		background: #fafafa url("../../../dijit/themes/tundra/images/accordionItemActive.gif") repeat-x scroll left top;
+		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+	}
+	.tundra .dojoxExpandoClosed .dojoxExpandoTitle {
+		background: none;
+		background-color: #fafafa;
+		border-bottom: none;
 	}
 	.dj_ie7 .nihilo .dojoxExpandoTitle,
 	.dj_safari .nihilo .dojoxExpandoTitle {
 		height:18px;
 	}
 
-	/* override left and right with these. it works. god bless cascasind and inhertiance */
-	.tundra .dojoxExpandoRight .dojoxExpandoTitle {
-		border-left:1px solid #ccc;
-	}
-	.tundra .dojoxExpandoLeft .dojoxExpandoTitle {
-		border-right:1px solid #ccc;
-	}
-	
-
 	.tundra .dojoxExpandoRight .dojoxExpandoTitle,
 	.tundra .dojoxExpandoLeft .dojoxExpandoTitle,
 	.tundra .dojoxExpandoClosed .dojoxExpandoTitle,
 	.tundra .dojoxExpandoClosed {
 		background-color: #fafafa;
-		border-left:none;
-		border-right:none;
-		background-image: none;
 	}
 
 	/* open/closed states */
@@ -141,31 +154,40 @@
 	.tundra .dojoxExpandoClosed .dojoxExpandoIcon {
 		background: url('../../../dijit/themes/tundra/images/plusButton.gif') no-repeat;
 	}
-
-	/* specific embedded fixes: */	
-	/* tab as a first child, left aligned */
-	.tundra .dojoxExpandoLeft .dijitTabContainer {
-		border-right:1px solid #ccc;
-	}
-	/* tab as a first child, right aligned */
-	.tundra .dojoxExpandoRight .dijitAccordionContainer,
-	.tundra .dojoxExpandoRight .dijitTabContainer {
-		border-left:1px solid #ccc;
-	}
 	
 	/* nihilo theme styles */
+	
+	.nihilo .dijitBorderContainer-dijitExpandoPane {
+		border: 1px solid #ccc;
+		border-top: none;
+	}
+	
+	.nihilo .dojoxExpandoPane {
+		background: #fafafa;
+	}
+	
 	.nihilo .dojoxExpandoTitle {
 		height:16px;
 		font-size:0.9em;
 		font-weight:bold;
 		padding:3px;
-		padding-top:7px;
-		padding-bottom:7px;
-		background:#fafafa url("../../../dijit/themes/nihilo/images/tabStripe.gif") repeat-x left bottom;	
+		padding-top:6px;
+		padding-bottom:5px;
+		background:#fafafa url("../../../dijit/themes/nihilo/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
+		border-bottom: 1px solid #ccc;
+	}
+	.nihilo .dojoxExpandoClosed .dojoxExpandoTitle {
+		background: none;
+		background-color: #fafafa;
+		border-top: 1px solid #ccc;
+		border-bottom: none;
 	}
 	
 	.nihilo .dojoxExpandoLeft .dojoxExpandoIcon {
-		background: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.png') no-repeat center center;
+		background: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.png') no-repeat -0px center;
+	}
+	.nihilo .dojoxExpandoClosed .dojoxExpandoLeft .dojoxExpandoIcon {
+		background: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.png') no-repeat -30px center;
 	}
 	
 	.nihilo .dojoxExpandoRight .dojoxExpandoIcon {
