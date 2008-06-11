@@ -171,13 +171,13 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 
 	_positionChild: function(page){
 		// summary: set the child out of view immediately after being hidden
-		var rA, rB;
+		var rA = true, rB = true;
 		switch(page.slideFrom){
 			// there should be a contest: obfuscate this function as best you can. 
-			case "bottom" : rA = true;  rB = false; break;
-			case "right" : 	rA = false; rB = false; break;
-			case "top" : 	rA = true;  rB = true;  break;
-			case "left" : 	rA = false; rB = true;  break;
+			case "bottom" : rB = !rB; break;
+			case "right" : 	rA = !rA; rB = !rB; break;
+			case "top" : 	break;
+			case "left" : 	rA = !rA; break;
 			default:
 				rA = Math.round(Math.random());
 				rB = Math.round(Math.random());			
@@ -265,6 +265,7 @@ dojo.declare("dojox.layout._RadioButton",
 	_clearSelected: function(){
 		// summary: remove hover state class from sibling Buttons. This is easier (and more reliable)
 		//	than setting up an additional connection to onMouseOut
+		
 		// FIXME: this relies on the template being [div][span]node[/span][/div]
 		dojo.query(".dojoxRadioButtonSelected",this.domNode.parentNode.parentNode).forEach(function(n){
 			dojo.removeClass(n,"dojoxRadioButtonSelected");
