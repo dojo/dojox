@@ -256,3 +256,10 @@
 	margin-left: 0;
 	padding-left: 0;
 }
+
+.dojoxGrid .dojoDndItemBefore {
+	border-left-color: red;
+}
+.dojoxGrid .dojoDndItemAfter {
+	border-right-color: red;
+}

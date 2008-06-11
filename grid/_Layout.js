@@ -16,32 +16,32 @@ dojo.declare("dojox.grid._Layout", null, {
 	defaultWidth: '6em',
 
 	// methods
-	moveColumn: function(sourceViewIndex, destViewIndex, cellIndex, newColumnIndex){
+	moveColumn: function(sourceViewIndex, destViewIndex, cellIndex, targetIndex, before){
 		var source_cells = this.structure[sourceViewIndex].cells[0];
 		var dest_cells = this.structure[destViewIndex].cells[0];
 
 		var cell = null;
-		var cellRealIndex = 0;
-		var newCol = null;
-		var newColRealIndex = 0;
+		var cell_ri = 0;
+		var target_ri = 0;
 
 		for(var i=0, c; c=source_cells[i]; i++){
 			if(c.index == cellIndex){
-				cell = c;
-				cellRealIndex = i;
+				cell_ri = i;
 				break;
 			}
 		}
-		for(i=0, c=null; c=dest_cells[i]; i++){
-			if(c.index == newColumnIndex){
-				newCol = c;
-				newColRealIndex = i;
-				break;
-			}
-		}
+		cell = source_cells.splice(cell_ri, 1)[0];
 
-		var cell_splice = source_cells.splice(cellRealIndex, 1)[0];
-		dest_cells.splice(newColRealIndex, 0, cell_splice);
+		for(i=0, c=null; c=dest_cells[i]; i++){
+			if(c.index == targetIndex){
+				target_ri = i;
+				break;
+			}
+		}
+		if(!before){
+			target_ri += 1;
+		}
+		dest_cells.splice(target_ri, 0, cell);
 
 		this.cells = [];
 		var cellIndex = 0;

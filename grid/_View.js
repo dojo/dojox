@@ -299,13 +299,17 @@ dojo.require("dojo.dnd.Source");
 					cell.customClasses = [];
 					cell.customStyles = [];
 					if(this.view.simpleStructure){
-						if(cell.headerClasses && cell.headerClasses.indexOf('dojoDndItem') == -1){
-							cell.headerClasses += ' dojoDndItem';
+						if(cell.headerClasses){
+							if(cell.headerClasses.indexOf('dojoDndItem') == -1){
+								cell.headerClasses += ' dojoDndItem';
+							}
 						}else{
 							cell.headerClasses = 'dojoDndItem';
 						}
-						if(cell.attrs && cell.attrs.indexOf("dndType='gridColumn'") == -1){
-							cell.attrs += " dndType='gridColumn_" + this.grid.id + "'";
+						if(cell.attrs){
+							if(cell.attrs.indexOf("dndType='gridColumn'") == -1){
+								cell.attrs += " dndType='gridColumn_" + this.grid.id + "'";
+							}
 						}else{
 							cell.attrs = "dndType='gridColumn_" + this.grid.id + "'";
 						}
@@ -671,6 +675,7 @@ dojo.require("dojo.dnd.Source");
 			delete this.grid;
 			if(this.source){
 				dojo.disconnect(this._source_conn);
+				dojo.unsubscribe(this._source_sub);
 				this.source.destroy();
 				delete this.source;
 			}
@@ -748,6 +753,7 @@ dojo.require("dojo.dnd.Source");
 			if(this.grid.columnReordering && this.simpleStructure){
 				if(this.source){
 					dojo.disconnect(this._source_conn);
+					dojo.unsubscribe(this._source_sub);
 					this.source.destroy();
 				}
 				this.source = new dojo.dnd.Source(this.headerContentNode.firstChild.rows[0], {
@@ -765,8 +771,17 @@ dojo.require("dojo.dnd.Source");
 					})
 				});
 				this._source_conn = dojo.connect(this.source, "onDndDrop", this, "_onDndDrop");
+				this._source_sub = dojo.subscribe("/dnd/drop/before", this, "_onDndDropBefore");
 				this.source.startup();
 			}
+		},
+
+		_onDndDropBefore: function(source, nodes, copy){
+			if(dojo.dnd.manager().target !== this.source){
+				return;
+			}
+			this.source._targetNode = this.source.targetAnchor;
+			this.source._beforeTarget = this.source.before;
 		},
 
 		_onDndDrop: function(source, nodes, copy){
@@ -780,17 +795,16 @@ dojo.require("dojo.dnd.Source");
 			var getIdx = function(n){
 				return n ? dojo.attr(n, "idx") : null;
 			}
-			var node = nodes[0];
-			var prev_idx = getIdx(node.previousSibling);
-			var n_idx = getIdx(node);
 
-			var l = this.grid.layout;
-			if(prev_idx){
-				var i = n_idx<prev_idx?prev_idx:parseInt(prev_idx)+1;
-				l.moveColumn(source.viewIndex, this.index, n_idx, i);
-			}else{
-				l.moveColumn(source.viewIndex, this.index, n_idx, 0);
-			}
+			this.grid.layout.moveColumn(
+				source.viewIndex,
+				this.index,
+				getIdx(nodes[0]),
+				getIdx(this.source._targetNode),
+				this.source._beforeTarget
+			);
+			delete this.source._targetNode;
+			delete this.source._beforeTarget;
 		},
 
 		renderHeader: function(){
