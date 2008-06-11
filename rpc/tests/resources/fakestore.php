@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	header("Content-Type: " . $_SERVER["CONTENT_TYPE"]);
+	header("Content-Type: " . ($_SERVER["CONTENT_TYPE"] == 'application/json' ? 'application/json' : 'text/plain'));
 
 	$fn = preg_replace("/\W/","",$_REQUEST["location"]);
 	switch ($_SERVER["REQUEST_METHOD"]) {

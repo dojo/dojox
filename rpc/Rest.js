@@ -38,7 +38,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 			}
 		);
 	}
-	var drr, start, end, dontCache;
+	var drr, start, end;
 
 	function index(deferred, service, range, id){
 		deferred.addCallback(function(result){
@@ -62,8 +62,8 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		path = path.match(/\/$/) ? path : (path + '/');
 		service = function(id){
 			// if caching is allowed, we look in the cache for the result
-			var result = !dontCache && drr._index[(service.servicePath || '') + id];
-			dontCache=0; // reset it
+			var result = !drr._dontCache && drr._index[(service.servicePath || '') + id];
+			drr._dontCache=0; // reset it
 			if(result){// cache hit
 				var dfd = new dojo.Deferred();
 				dfd.callback(result);
@@ -107,7 +107,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		// each calls the event handler
 		function makeRest(name){
 			service[name] = function(id,content){
-				return drr._change(name,service,id,content && service.cache.serialize(content,false,name),content); // the last parameter is to let the OfflineRest know where to store the item
+				return drr._change(name,service,id,content && service.cache.serialize(content,false,path),content); // the last parameter is to let the OfflineRest know where to store the item
 			};
 		}
 		makeRest('put');
@@ -184,7 +184,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		//		This prevents the REST service from looking in it's own cache
 		start = args.start;
 		end = args.end;
-		dontCache = args.dontCache;
+		drr._dontCache = args.dontCache;
 	};
 	drr._get= function(service,id){
 		var req = dojo.mixin(service._getRequest(id), {
