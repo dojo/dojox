@@ -6,7 +6,8 @@ Using Amazon S3 with Dojo has the following prerequisites:
           o HTTP_Request
 
 
-To use S3 from Dojo, you first must enter your Amazon access key and secret access key
+To use S3 from Dojo, you need a proxy. You can use the provided proxy example file by renaming 
+proxy.example-php to proxy.php and then you must enter your Amazon access key and secret access key
 into the proxy.php file on line 3 and 4:
 
 $accessKey = "access key";

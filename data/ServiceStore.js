@@ -65,7 +65,7 @@ dojo.declare("dojox.data.ServiceStore",
 		getSchema: function(){
 			return this.schema; 
 		},
-		getValue: function(item, property, defaultValue, lazyCallback){
+		getValue: function(item, property, defaultValue){
 			// summary:
 			//	Gets the value of an item's 'property'
 			//
@@ -74,19 +74,16 @@ dojo.declare("dojox.data.ServiceStore",
 			//		property to look up value for	
 			//	defaultValue: /* string */
 			//		the default value	
-			// lazyCallback: /* function*/ 
-			// 		not part of the API, but if you are using lazy loading properties, you may provide a callback to resume, in order to have asynchronous loading
 			var value = item[property];
 			value = value === undefined ? defaultValue : value; 
 			if(value instanceof dojo.Deferred){
-				dojox.rpc._sync = !lazyCallback; // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)
+				dojox.rpc._sync = true; // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)
 				value.addCallback(function(returned){
 					value = returned;
-					if(lazyCallback){lazyCallback(value);}
 					return value;
 				});
 				delete dojox.rpc._sync; // revert to normal async behavior
-			}else if(lazyCallback){lazyCallback(value);}
+			}
 			return value;
 		},
 		getValues: function(item, property){
@@ -133,7 +130,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//	item: /* object */
 			//	attribute: /* string */
 			//	value: /* anything */
-			return getValue(item,attribute)==value;
+			return dojo.indexOf(getValues(item,attribute),value) > -1;
 		},
 
 
@@ -226,9 +223,6 @@ dojo.declare("dojox.data.ServiceStore",
 			//
 			// dontCache: /* boolean */
 			//
-			//
-			//	The following only apply to ASYNC requests (the default)
-			//
 			//	onBegin: /* function */
 			//		called before any results are returned. Parameters
 			//		will be the count and the original fetch request
@@ -244,26 +238,16 @@ dojo.declare("dojox.data.ServiceStore",
 			//	onError: /* function */
 			//		called in the event of an error
 
-/*			// we're not started yet, add this request to a queue and wait till we do	
-			if(!this._data){
-				this._fetchQueue.push(args);
-				return args;
-			}*/	
-			if(dojo.isString(args)){
-				args={query: args, mode: dojox.data.SYNC_MODE};
-			}
 			args = args || {};
 
 			var query=args.query;
 			if(!args.mode){args.mode = this.mode;}
 			var self = this;
 			dojox.rpc._sync = this.mode;
-			dojox._newId = query;
 			var scope = args.scope || self;
 			var defResult = this.service(query);
 			defResult.addCallback(function(results){
 				
-				delete dojox._newId; // cleanup				
 				var resultSet = self._processResults(results, defResult);
 				results = args.results = resultSet.items;
 				if(args.onBegin){
@@ -296,7 +280,6 @@ dojo.declare("dojox.data.ServiceStore",
 			return { 
 				"dojo.data.api.Read": true,
 				"dojo.data.api.Identity": this.idAttribute, // this is dependent on 
-				"dojo.data.api.Request": true,
 				"dojo.data.api.Schema": this.schema
 			};
 		},
@@ -316,7 +299,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 		//Identity API Support
 
-		getIdentity : function(item){
+		getIdentity: function(item){
 			return item[this.idAttribute];
 		},
 

@@ -43,19 +43,17 @@ dojox.data.SYNC_MODE = 1;
 dojo.declare("dojox.data.JsonRestStore",
 	dojox.data.ServiceStore,
 	{
-		mode: dojox.data.ASYNC_MODE,
 		constructor: function(options){
 			//summary:
-			//		JsonRestStore constructor, instantiate a new JsonRestStore
-			// 		A JsonRestStore can be configured from a JSON Schema. Queries are just
-			// 		passed through as URLs for XHR requests,
-			// 		so there is nothing to configure, just plug n play.
-			// 		Of course there are some options to fiddle with if you want:
-			//
-			// schema: /* object */
+			//		JsonRestStore is a Dojo Data store interface to JSON HTTP/REST web
+			//		storage services that support read and write through GET, PUT, POST, and DELETE. 
+			// options: 
+			// 		Keyword arguments
+			//	
+			// The *schema* parameter
 			//		This is a schema object for this store. This should be JSON Schema format.
 			//
-			// service: /* function */
+			// The *service* parameter
 			// 		This is the service object that is used to retrieve lazy data and save results
 			// 		The function should be directly callable with a single parameter of an object id to be loaded
 			// 		The function should also have the following methods:
@@ -63,19 +61,19 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 			post(id,value) - posts (appends) the value at the given id
 			// 			delete(id) - deletes the value corresponding to the given id
 			//
-			// target: /* string */
+			// The *target* parameter
 			// 		This is the target URL for this Service store. This may be used in place
 			// 		of a service parameter to connect directly to RESTful URL without
 			// 		using a dojox.rpc.Service object.
 			//
-			//	idAttribute: /* string */
+			// The *idAttribute* parameter
 			//		Defaults to 'id'. The name of the attribute that holds an objects id.
 			//		This can be a preexisting id provided by the server.
 			//		If an ID isn't already provided when an object
 			//		is fetched or added to the store, the autoIdentity system
 			//		will generate an id for it and add it to the index.
 
-			//	mode: dojox.data.ASYNC_MODE || dojox.data.SYNC_MODE
+			//	The *mode* parameter: dojox.data.ASYNC_MODE || dojox.data.SYNC_MODE
 			//		Defaults to ASYNC_MODE.  This option sets the default mode for this store.
 			//		Sync calls return their data immediately from the calling function
 			//		instead of calling the callback functions.  Functions such as
@@ -187,6 +185,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			var actions = dojox.rpc.JsonRest.commit(kwArgs);
 			for(var i = 0; i < actions.length; i++){
 				if(actions[i].method == 'post' && this.onPostCommit){
+					var self = this;
 					// some REST stores need to do some processing after a post has been committed
 					(function(object){
 						dfd.addCallback(function(value){
@@ -250,13 +249,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			dojox.rpc.Rest.setQueryInfo(queryInfo);
 			return dojox.data.ServiceStore.prototype.fetch.apply(this,arguments);
 		},
-		_processResults : function(results, deferred){
+		_processResults: function(results, deferred){
 			// index the results
 			return {totalCount:deferred.fullLength || results.length, items: results};
 		},
 
 		// support for relative referencing with ids
-		getIdentity : function(item){
+		getIdentity: function(item){
 			if(!item.__id){
 				throw new Error("Identity attribute not found");
 			}
@@ -273,7 +272,11 @@ dojo.declare("dojox.data.JsonRestStore",
 			// we can rely on the Rest service to provide the index/cache
 			return this.fetch(args);
 		},
-
+		getConstructor: function(){
+			// summary:
+			// 		Gets the constructor for objects from this store
+			return this._constructor;
+		},
 		//Notifcation Support
 
 		onSet: function(){

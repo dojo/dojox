@@ -10,30 +10,30 @@ dojox.data.restListener = function(message){
 	// 		dojox.restListener(data);
 	//	});
 	var channel = message.channel;
-	dojox._newId = message.event == 'put' && channel;// set the default id when appropriate
 	var service = dojox.rpc.Rest.getServiceAndId(channel).service;
-	var schema = service && service._schema;// get the schema if we can
-	var result = service.cache.intake(message.data, schema);
+	var result = service.cache.intake(message.data, message.event == 'put' && channel);
 	var target = dojox.rpc.Rest._index && dojox.rpc.Rest._index[channel];
 	var onEvent = 'on' + message.event.toLowerCase();
 	var store = service && service._store;
 	if(target){
 		if(target[onEvent]){
-			return target[onEvent](result); // call the REST handler if available
+			target[onEvent](result); // call the REST handler if available
+			return;
 		}
 	}
-			// this is how we respond to different events
-	switch(onEvent){
-		case 'onpost':
-			store && store.onNew(result); // call onNew for the store;
-			break;
-		case 'ondelete':
-	 		store && store.onDelete(target);
-	 		break;
-			 	// put is handled by JsonReferencing
-			 	//TODO: we may want to bring the JsonReferencing capability into here...
-			 	// that is really tricky though because JsonReferencing handles sub object,
-			 	// it would be expensive to do full object graph searches from here
+	// this is how we respond to different events
+	if(store){
+		switch(onEvent){
+			case 'onpost':
+				store.onNew(result); // call onNew for the store;
+				break;
+			case 'ondelete':
+		 		store.onDelete(target);
+		 		break;
+				 	// put is handled by JsonReferencing
+				 	//TODO: we may want to bring the JsonReferencing capability into here...
+				 	// that is really tricky though because JsonReferencing handles sub object,
+				 	// it would be expensive to do full object graph searches from here
+		}
 	}
-	delete dojox._newId;
 };
