@@ -48,12 +48,14 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	function walk(it,stop,defaultId){
 		// this walks the new graph, resolving references and making other changes
 	 	var update, val, id = it[idAttribute] || defaultId;
-	 	id = id && (prefix + id).replace(pathResolveRegex,'$1$2');
+	 	if(id !== undefined){
+	 		id = (prefix + id).replace(pathResolveRegex,'$1$2');
+	 	}
 	 	var proto = id && args.services && (val instanceof Array) && // won't try on arrays to do prototypes, plus it messes with queries 
 	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
 	 					(val = args.services[val[1]]) && val._schema && val._schema.prototype; // and if has a prototype
 	 	var target = it;
-		if(id){ // if there is an id available...
+		if(id !== undefined){ // if there is an id available...
 			it.__id = id;
 			if(index[id]){ // if the id already exists in the system, we should use the existing object, and just update it
 				target = index[id];
@@ -100,14 +102,13 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 								}
 								rewalking = true; // we only want to add it once
 							}else{
-								ref = val.$ref;
-								val = new dojo.Deferred();
-								val.__id = (prefix + ref).replace(pathResolveRegex,'$1$2');
+								val = dojo.mixin(new dojo.Deferred(),val); // mixin in the old properties for partially loaded objects
+								val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$1$2');
 								(function(val){
 									var connectId = dojo.connect(val,"addCallbacks",function(){
 										dojo.disconnect(connectId);
 										// call by looking up the service absolutely
-										dojox.rpc.Rest.get(val.__id).addCallback(dojo.hitch(val,val.callback));
+										dojox.rpc.Rest.get(val).addCallback(dojo.hitch(val,val.callback));
 									});
 								})(val);
 							}
@@ -164,7 +165,7 @@ dojox.json.ref.fromJson = function(/*String*/ str,/*Object?*/ args){
 	function ref(target){ // support call styles references as well
 		return {$ref:target};
 	}
-	root = eval('(' + str + ')'); // do the eval
+	var root = eval('(' + str + ')'); // do the eval
 	if(root){
 		return this.resolveJson(root, args);
 	}
@@ -204,7 +205,7 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 			}
 			var id = it.__id;
 			if(id){ // we found an identifiable object, we will just serialize a reference to it... unless it is the root
-				if(path != '$' && (useRefs || paths[path])){
+				if(path != '$' && (useRefs || paths[id])){
 					var ref = id; // a pure path based reference, leave it alone
 
 					if(id.charAt(0)!='$'){
@@ -273,4 +274,4 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 	}*/
 	return json;
 };
-dojox.json.ref.useRefs=true;
+dojox.json.ref.useRefs=false;

@@ -38,8 +38,6 @@ dojo.require("dojox.json.ref"); // this provides json indexing
 // When using a Rest store on a public network, it is important to implement proper security measures to
 // control access to resources
 
-dojox.data.ASYNC_MODE = 0;
-dojox.data.SYNC_MODE = 1;
 dojo.declare("dojox.data.JsonRestStore",
 	dojox.data.ServiceStore,
 	{
@@ -91,7 +89,7 @@ dojo.declare("dojox.data.JsonRestStore",
 					this.onSet(obj,attrName,oldValue,newValue);
 				}
 			});
-
+			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
 			//setup a byId alias to the api call
 			if(this.target && !this.service){
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
@@ -254,14 +252,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			return {totalCount:deferred.fullLength || results.length, items: results};
 		},
 
-		// support for relative referencing with ids
-		getIdentity: function(item){
-			if(!item.__id){
-				throw new Error("Identity attribute not found");
-			}
-			var prefix = this.service.servicePath;
-			return item.__id.substring(0,prefix.length) != prefix ?  item.__id : item.__id.substring(prefix.length); // String
-		},
 		fetchItemByIdentity: function(args){
 			// summary:
 			//		fetch an item by its identity. fetch and fetchItemByIdentity work the same
@@ -294,7 +284,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			var features = dojox.data.ServiceStore.prototype.getFeatures();
 			features["dojo.data.api.Write"] = true;
 			features["dojo.data.api.Notification"] = true;
-			features["dojo.data.api.Identity"] = true;
 			return features;
 		}
 

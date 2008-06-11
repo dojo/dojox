@@ -59,7 +59,7 @@ dojo.declare("dojox.data.ServiceStore",
 			if(options){
 				dojo.mixin(this,options);
 			}
-			this.idAttribute = this.idAttribute || (this.schema && this.schema._idAttr) || 'id';
+			this.idAttribute = this.idAttribute || (this.schema && this.schema._idAttr);
 		},
 
 		getSchema: function(){
@@ -73,7 +73,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//	property: /* string */
 			//		property to look up value for	
 			//	defaultValue: /* string */
-			//		the default value	
+			//		the default value
 			var value = item[property];
 			value = value === undefined ? defaultValue : value; 
 			if(value instanceof dojo.Deferred){
@@ -130,7 +130,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//	item: /* object */
 			//	attribute: /* string */
 			//	value: /* anything */
-			return dojo.indexOf(getValues(item,attribute),value) > -1;
+			return dojo.indexOf(this.getValues(item,attribute),value) > -1;
 		},
 
 
@@ -153,7 +153,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//
 			//		item: /* object */
 
-			return !(item instanceof Deferred && item.fired < 0);
+			return !(item instanceof dojo.Deferred && item.fired < 0);
 		},
 
 		loadItem: function(args){
@@ -162,7 +162,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// 		However, if you access a value directly through property access, you can use this to load
 			// 		a lazy (Deferred) value.
 			//
-			if(args.item instanceof Deferred && args.item.fired < 0){
+			if(args.item instanceof dojo.Deferred && args.item.fired < 0){
 				args.item.addCallback(function(result){
 					if(args.onItem){
 						args.onItem.call(args.scope,result);				
@@ -180,21 +180,25 @@ dojo.declare("dojox.data.ServiceStore",
 			// items (maybe more than currently in the result set).
 			// for example:
 			//	| {totalCount:10,[{id:1},{id:2}]}
-			var self = this;
-			// index the results, assigning ids as necessary
-			function assignId(obj){
-				if (!obj[self.idAttribute]){
-					var id = self._currentId++;
-					obj[self.idAttribute] = id;
-					self._index[id] = obj;
-					for (var i in obj){
-						var value = obj[i]; 
-						if (value && typeof value == 'object'){
-							assignId(value);						}
+
+			for (var i in results){
+				// index the results, assigning ids as necessary
+				var obj = results[i]; 
+				if (obj && typeof obj == 'object'){
+					var id = obj.__id;
+					if(!id){// if it hasn't been assigned yet
+						if(this.idAttribute){
+							// use the defined id if available
+							id = obj[this.idAttribute];
+						}else{
+							id = this._currentId++;
+						}
+						id = this.service.servicePath + id;
+						obj.__id = id;
+						this._index[id] = obj;
 					}
 				}
 			}
-			assignId(results);
 			return {totalCount:results.length, items: results};
 		},
 		close: function(request){
@@ -279,7 +283,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 			return { 
 				"dojo.data.api.Read": true,
-				"dojo.data.api.Identity": this.idAttribute, // this is dependent on 
+				"dojo.data.api.Identity": true, 
 				"dojo.data.api.Schema": this.schema
 			};
 		},
@@ -299,8 +303,14 @@ dojo.declare("dojox.data.ServiceStore",
 
 		//Identity API Support
 
+		
 		getIdentity: function(item){
-			return item[this.idAttribute];
+			if(!item.__id){
+				throw new Error("Identity attribute not found");
+			}
+			var prefix = this.service.servicePath;
+			// support for relative referencing with ids
+			return item.__id.substring(0,prefix.length) != prefix ?  item.__id : item.__id.substring(prefix.length); // String
 		},
 
 		getIdentityAttributes: function(item){
@@ -315,7 +325,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary: 
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			
-			args.onItem.call(args.scope,this._index[args.identity]);
+			args.onItem.call(args.scope,this._index[this.service.servicePath + args.identity]);
 		}
 	
 	}
