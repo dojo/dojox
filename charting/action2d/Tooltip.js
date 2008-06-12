@@ -60,9 +60,7 @@ dojo.require("dojox.lang.functional.fold");
 	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.Base, {
 		// the data description block for the widget parser
 		defaultParams: {
-			duration: 400,	// duration of the action in ms
-			easing:   dojox.fx.easing.elasticOut,	// easing for the action
-			text:     DEFAULT_TEXT	// the function to produce a tooltip from the object
+			text: DEFAULT_TEXT	// the function to produce a tooltip from the object
 		},
 		optionalParams: {},	// no optional parameters
 
