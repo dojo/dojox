@@ -70,16 +70,11 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		If an ID isn't already provided when an object
 			//		is fetched or added to the store, the autoIdentity system
 			//		will generate an id for it and add it to the index.
-
-			//	The *mode* parameter: dojox.data.ASYNC_MODE || dojox.data.SYNC_MODE
-			//		Defaults to ASYNC_MODE.  This option sets the default mode for this store.
-			//		Sync calls return their data immediately from the calling function
-			//		instead of calling the callback functions.  Functions such as
-			//		fetchItemByIdentity() and fetch() both accept a string parameter in addtion
-			//		to the normal keywordArgs parameter.  When passed this option, SYNC_MODE will
-			//		automatically be used even when the default mode of the system is ASYNC_MODE.
-			//		A normal request to fetch or fetchItemByIdentity (with kwArgs object) can also
-			//		include a mode property to override this setting for that one request.
+			//
+			// The *syncMode* parameter
+			//		Setting this to true will set the store to using synchronous calls by default.
+			//		Sync calls return their data immediately from the calling function, so
+			//		callbacks are unnecessary
 
 			dojo.connect(dojox.rpc.Rest._index,"onUpdate",this,function(obj,attrName,oldValue,newValue){
 				var prefix = this.service.servicePath;

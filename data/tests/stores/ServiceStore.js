@@ -49,6 +49,7 @@ doh.register("dojox.data.tests.stores.ServiceStore",
 						t.f(jsonStore.containsValue(item,"name","Something Else"));
 						t.is(jsonStore.getIdentity(item),0);
 						t.t(dojo.indexOf(jsonStore.getAttributes(item),"name")>-1);
+						t.is("default",jsonStore.getValue(item,"nothing","default"));
 						d.callback(true);
 					},
 					onError: dojo.partial(dojox.data.tests.stores.ServiceStore.error, doh, d)

@@ -45,15 +45,13 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	var index = args.index || {}; // create an index if one doesn't exist
 	var ref,reWalk=[];
 	var pathResolveRegex = /^.*\/(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
+	
 	function walk(it,stop,defaultId){
 		// this walks the new graph, resolving references and making other changes
 	 	var update, val, id = it[idAttribute] || defaultId;
 	 	if(id !== undefined){
 	 		id = (prefix + id).replace(pathResolveRegex,'$1$2');
 	 	}
-	 	var proto = id && args.services && (val instanceof Array) && // won't try on arrays to do prototypes, plus it messes with queries 
-	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
-	 					(val = args.services[val[1]]) && val._schema && val._schema.prototype; // and if has a prototype
 	 	var target = it;
 		if(id !== undefined){ // if there is an id available...
 			it.__id = id;
@@ -61,25 +59,23 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 				target = index[id];
 				delete target.$ref; // remove this artifact
 				update = true;
-			}else if(proto){
-				// if the schema defines a prototype, that needs to be the prototype of the object
-				var F = function(){};
-				F.prototype = proto;
-				target = new F();
+			}else{
+			 	var proto = args.services && (val instanceof Array) && // won't try on arrays to do prototypes, plus it messes with queries 
+	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
+	 					(val = args.services[val[1]]) && val._schema && val._schema.prototype; // and if has a prototype
+				if(proto){
+					// if the schema defines a prototype, that needs to be the prototype of the object
+					var F = function(){};
+					F.prototype = proto;
+					target = new F();
+				}
 			}
 			index[id] = target; // add the prefix, set _id, and index it
 		}
 
-		function propertyChange(key,old,newValue){
-			setTimeout(function(){
-				if(index.onUpdate){
-					index.onUpdate(target,key,old,newValue); // call the listener for each update
-				}
-			});
-		}
 
 		for(var i in it){
-			if(it.hasOwnProperty(i) && (typeof (val=it[i]) =='object') && val){
+			if((typeof (val=it[i]) =='object') && val){
 				ref=val.$ref;
 				if(ref){ // a reference was found
 					var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
@@ -122,10 +118,14 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 				}
 			}
 			it[i] = val;
-			var old = target[i];
-			target[i] = val; // update the target
-			if(update && val !== old){ // only update if it changed
-				propertyChange(i,old,val);
+			if(target!=it){// performance guard				
+				var old = target[i];
+				target[i] = val; // update the target
+				if(update && val !== old){ // only update if it changed
+					if(index.onUpdate){
+						index.onUpdate(target,i,old,val); // call the listener for each update
+					}
+				}
 			}
 		}
 
@@ -133,7 +133,9 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 			// this means we are updating, we need to remove deleted
 			for(i in target){
 				if(!it.hasOwnProperty(i) && i != '__id' && !(target instanceof Array && isNaN(i))){
-					propertyChange(i,target[i],undefined);
+					if(index.onUpdate){
+						index.onUpdate(target,i,target[i],undefined); // call the listener for each update
+					}
 					delete target[i];
 				}
 			}
@@ -269,9 +271,9 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 		return dojo.toJson(it); // use the default serializer for primitives
 	}
 	var json = serialize(it,'$','');
-	/*for(i in paths)  {// cleanup the temporary path-generated ids
+	for(i in paths)  {// cleanup the temporary path-generated ids
 		delete paths[i].__id;
-	}*/
+	}
 	return json;
 };
 dojox.json.ref.useRefs=false;

@@ -6,7 +6,7 @@
 	parameters: {
                 appId: {},
                 outputType: {
-                        default: "json"
+                        "default": "json"
                 },
 
                 ignoreErrors: {

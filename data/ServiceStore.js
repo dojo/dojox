@@ -15,12 +15,9 @@ dojo.provide("dojox.data.ServiceStore");
 // The object would automatically be requested from the server (with an object id of "obj2").
 //
 
-dojox.data.ASYNC_MODE = 0;
-dojox.data.SYNC_MODE = 1;
 dojo.declare("dojox.data.ServiceStore",
 	null,
 	{
-		mode: dojox.data.ASYNC_MODE,
 		constructor: function(options){
 			//summary:
 			//		ServiceStore constructor, instantiate a new ServiceStore 
@@ -28,30 +25,26 @@ dojo.declare("dojox.data.ServiceStore",
 			// 		passed through as URLs for XHR requests, 
 			// 		so there is nothing to configure, just plug n play.
 			// 		Of course there are some options to fiddle with if you want:
-			//  
-			// schema: /* object */
+			// options: 
+			// 		Keyword arguments
+			// The *schema* parameter
 			//		This is a schema object for this store. This should be JSON Schema format.
 			// 
-			// service: /* function */
+			// The *service* parameter
 			// 		This is the service object that is used to retrieve lazy data and save results 
 			// 		The function should be directly callable with a single parameter of an object id to be loaded
 			//
-			//	idAttribute: /* string */
+			// The *idAttribute* parameter
 			//		Defaults to 'id'. The name of the attribute that holds an objects id.
 			//		This can be a preexisting id provided by the server.  
 			//		If an ID isn't already provided when an object
 			//		is fetched or added to the store, the autoIdentity system
 			//		will generate an id for it and add it to the index. 
 			//
-			//	mode: dojox.data.ASYNC_MODE || dojox.data.SYNC_MODE
-			//		Defaults to ASYNC_MODE.  This option sets the default mode for this store.
-			//		Sync calls return their data immediately from the calling function
-			//		instead of calling the callback functions.  Functions such as 
-			//		fetch() both accept a string parameter in addtion
-			//		to the normal keywordArgs parameter.  When passed this option, SYNC_MODE will
-			//		automatically be used even when the default mode of the system is ASYNC_MODE.
-			//		A normal request to fetch or fetchItemByIdentity (with kwArgs object) can also 
-			//		include a mode property to override this setting for that one request.
+			// The *syncMode* parameter
+			//		Setting this to true will set the store to using synchronous calls by default.
+			//		Sync calls return their data immediately from the calling function, so
+			//		callbacks are unnecessary
 
 			//setup a byId alias to the api call	
 			this.byId=this.fetchItemByIdentity;
@@ -65,26 +58,35 @@ dojo.declare("dojox.data.ServiceStore",
 		getSchema: function(){
 			return this.schema; 
 		},
-		getValue: function(item, property, defaultValue){
-			// summary:
-			//	Gets the value of an item's 'property'
-			//
-			//	item: /* object */
-			//	property: /* string */
-			//		property to look up value for	
-			//	defaultValue: /* string */
-			//		the default value
-			var value = item[property];
-			value = value === undefined ? defaultValue : value; 
-			if(value instanceof dojo.Deferred){
-				dojox.rpc._sync = true; // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)
-				value.addCallback(function(returned){
-					value = returned;
-					return value;
-				});
-				delete dojox.rpc._sync; // revert to normal async behavior
-			}
-			return value;
+		getValue: dojo.isIE ? // we use different versions for optimum performance for 
+			// each browser, getValue is the work horse of Dojo Data, it must be as fast as possible 
+			function(item, property, defaultValue){
+				// summary:
+				//	Gets the value of an item's 'property'
+				//
+				//	item: /* object */
+				//	property: /* string */
+				//		property to look up value for	
+				//	defaultValue: /* string */
+				//		the default value
+				var value = item[property];
+				return value ? // performance guard against property in item check
+						(value.errback && // guarding the instanceof provides significant performance improvement on IE, IE has very slow instanceof performance
+						value instanceof dojo.Deferred) ? // check for the a Deferred to indicate it is not loaded 
+							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
+							dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
+							value : // return the plain value;
+							property in item ? value : defaultValue;// not in item -> return default value
+	
+			} : function(item,property, defaultValue){
+				var value = item[property];
+				return value ? // performance guard against property in item check
+						value instanceof dojo.Deferred ? // check for the a Deferred to indicate it is not loaded, all non-IE browsers have fast instanceof checks 
+							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
+							dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
+							value : // return the plain value;
+							property in item ? value : defaultValue; // not in item -> return default value;
+
 		},
 		getValues: function(item, property){
 			// summary:
@@ -97,7 +99,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//		property to look up value for	
 	
 			var val = this.getValue(item,property);
-			return dojo.isArray(val) ? val : [val];
+			return val instanceof Array ? val : [val];
 		},
 
 		getAttributes: function(item){
@@ -162,8 +164,10 @@ dojo.declare("dojox.data.ServiceStore",
 			// 		However, if you access a value directly through property access, you can use this to load
 			// 		a lazy (Deferred) value.
 			//
+			var item;
 			if(args.item instanceof dojo.Deferred && args.item.fired < 0){
 				args.item.addCallback(function(result){
+					item = result; // in synchronous mode this can allow loadItem to return the value
 					if(args.onItem){
 						args.onItem.call(args.scope,result);				
 					}
@@ -172,6 +176,7 @@ dojo.declare("dojox.data.ServiceStore",
 					args.item.addErrback(dojo.hitch(args.scope, args.onError));
 				}
 			}
+			return item;
 		},
 		_currentId : 0,
 		_index : {},
@@ -206,15 +211,8 @@ dojo.declare("dojox.data.ServiceStore",
 		},
 		_rootQueries:[],//objects that represent the result "root" queries			
 		fetch: function(args){
-			// summary
-			//	
-			//		fetch takes either a string argument or a keywordArgs
-			//		object containing the parameters for the search.
-			//		If passed a string, fetch will interpret this string
-			//		as the query to be performed and will do so in 
-			//		SYNC_MODE returning the results immediately.
-			//		If an object is supplied as 'args', its options will be 
-			// 		parsed and then contained query executed. 
+			// summary:
+			//		Standard fetch
 			//
 			//	query: /* string or object */
 			//		Defaults to "". This is basically passed to the XHR request as the URL to get the data
@@ -226,6 +224,9 @@ dojo.declare("dojox.data.ServiceStore",
 			//		Maximum number of items to return
 			//
 			// dontCache: /* boolean */
+			//
+			//	syncMode: /* boolean */
+			//		Indicates that the call should be fetch synchronously if possible (this is not always possible)
 			//
 			//	onBegin: /* function */
 			//		called before any results are returned. Parameters
@@ -245,9 +246,9 @@ dojo.declare("dojox.data.ServiceStore",
 			args = args || {};
 
 			var query=args.query;
-			if(!args.mode){args.mode = this.mode;}
+			if(!args.syncMode){args.syncMode = this.syncMode;}
 			var self = this;
-			dojox.rpc._sync = this.mode;
+			dojox.rpc._sync = this.syncMode;
 			var scope = args.scope || self;
 			var defResult = this.service(query);
 			defResult.addCallback(function(results){

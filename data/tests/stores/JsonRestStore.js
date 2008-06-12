@@ -8,8 +8,8 @@ dojox.data.tests.stores.JsonRestStore.error = function(t, d, errData){
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);	
 }
-var testServices = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.tests.resources", "test.smd"));
-var jsonStore = new dojox.data.JsonRestStore({service:testServices.jsonRestStore});
+testServices = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.tests.resources", "test.smd"));
+jsonStore = new dojox.data.JsonRestStore({service:testServices.jsonRestStore});
 
 doh.register("dojox.data.tests.stores.JsonRestStore", 
 	[
@@ -253,4 +253,43 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 		}
 	]
 );
+performanceTest = function (){
+	dojo.require("dojo.data.ItemFileReadStore");
+	jsonStore.fetch({query:"obj1", 
+		onComplete: function(item){
+			var now = new Date().getTime();
+			var result;
+			for(var i=0;i<100000;i++){
+			}
+			console.log("Just Loop",new Date().getTime()-now, result);
+			now = new Date().getTime();
+			for(i=0;i<100000;i++){
+				result = item.name;
+			}
+			console.log("Direct Access",new Date().getTime()-now, result);
+			
+			now = new Date().getTime();
+			for(i=0;i<100000;i++){
+				result = jsonStore.getValue(item,"name");
+			}
+			console.log("getValue",new Date().getTime()-now);
+			
+			var ifrs = new dojo.data.ItemFileReadStore({data:{ identifier:'id',items: [
+				{ id:'1',name:'Fozzie Bear', wears:['hat', 'tie']},
+				{ id:'2',name:'Miss Piggy', pets:'Foo-Foo'}
+			]}});
+			ifrs.fetchItemByIdentity({identity:'1',onItem:function(result){
+				item = result;
+			}});
+			
+			now = new Date().getTime();
+			for(i=0;i<100000;i++){
+				result = ifrs.getValue(item,"name");
+			}
+			console.log("ifrs.getValue",new Date().getTime()-now,result);
+			
+		}
+	});	
 
+}
+performanceTest();
