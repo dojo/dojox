@@ -427,7 +427,9 @@ dojo.require("dojo.dnd.Source");
 
 		// column resizing
 		beginColumnResize: function(e){
-			var m = headerMoveable = new dojo.dnd.Moveable(document.createElement("div"));
+			this.moverDiv = document.createElement("div");
+			dojo.body().appendChild(this.moverDiv);
+			var m = headerMoveable = new dojo.dnd.Moveable(this.moverDiv);
 
 			var spanners = [], nodes = this.tableMap.findOverlappingNodes(e.cellNode);
 			for(var i=0, cell; (cell=nodes[i]); i++){
@@ -442,7 +444,7 @@ dojo.require("dojo.dnd.Source");
 			for(var i=view.idx+adj, cView; (cView=views[i]); i=i+adj){
 				followers.push({ node: cView.headerNode, left: window.parseInt(cView.headerNode.style.left) });
 			}
-
+			var table = view.headerContentNode.firstChild;
 			var drag = {
 				scrollLeft: e.sourceView.headerNode.scrollLeft,
 				view: view,
@@ -450,6 +452,8 @@ dojo.require("dojo.dnd.Source");
 				index: e.cellIndex,
 				w: dojo.contentBox(e.cellNode).w,
 				vw: dojo.contentBox(view.headerNode).w,
+				table: table,
+				tw: dojo.contentBox(table).w,
 				spanners: spanners,
 				followers: followers
 			};
@@ -497,9 +501,11 @@ dojo.require("dojo.dnd.Source");
 			if(isLtr){
 				var w = inDrag.w + leftTop.l;
 				var vw = inDrag.vw + leftTop.l;
+				var tw = inDrag.tw + leftTop.l;
 			}else{
 				var w = inDrag.w - leftTop.l;
 				var vw = inDrag.vw - leftTop.l;
+				var tw = inDrag.tw - leftTop.l;
 			}
 			if(w >= this.minColWidth){
 				for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
@@ -523,6 +529,7 @@ dojo.require("dojo.dnd.Source");
 				inDrag.node.style.width = w + 'px';
 				inDrag.view.setColWidth(inDrag.index, w);
 				inDrag.view.headerNode.style.width = vw + 'px';
+				inDrag.view.setColumnsWidth(tw);
 				if(!isLtr){
 					inDrag.view.headerNode.scrollLeft = (inDrag.scrollLeft - leftTop.l);
 				}
@@ -534,6 +541,8 @@ dojo.require("dojo.dnd.Source");
 		},
 
 		endResizeColumn: function(inDrag){
+			dojo._destroyElement(this.moverDiv);
+			delete this.moverDiv;
 			this.bogusClickTime = new Date().getTime() + 30;
 			setTimeout(dojo.hitch(inDrag.view, "update"), 50);
 		}
@@ -671,13 +680,10 @@ dojo.require("dojo.dnd.Source");
 			delete this.headerNode;
 			dojo.forEach(this.rowNodes, dojo._destroyElement);
 			this.rowNodes = [];
-			delete this.content;
-			delete this.grid;
 			if(this.source){
 				dojo.disconnect(this._source_conn);
 				dojo.unsubscribe(this._source_sub);
 				this.source.destroy();
-				delete this.source;
 			}
 			this.inherited(arguments);
 		},
@@ -738,6 +744,13 @@ dojo.require("dojo.dnd.Source");
 			return this.headerContentNode.firstChild.offsetWidth; // Integer
 		},
 
+		setColumnsWidth: function(width){
+			this.headerContentNode.firstChild.style.width = width + 'px';
+			if(this.viewWidth){
+				this.viewWidth = width + 'px';
+			}
+		},
+
 		getWidth: function(){
 			return this.viewWidth || (this.getColumnsWidth()+this.getScrollbarWidth()) +'px'; // String
 		},
@@ -795,7 +808,18 @@ dojo.require("dojo.dnd.Source");
 			var getIdx = function(n){
 				return n ? dojo.attr(n, "idx") : null;
 			}
-
+			var w = dojo.marginBox(nodes[0]).w;
+			if(source.viewIndex !== this.index){
+				var views = this.grid.views.views;
+				var srcView = views[source.viewIndex];
+				var tgtView = views[this.index];
+				if(srcView.viewWidth && srcView.viewWidth != "auto"){
+					srcView.setColumnsWidth(srcView.getColumnsWidth() - w);
+				}
+				if(tgtView.viewWidth && tgtView.viewWidth != "auto"){
+					tgtView.setColumnsWidth(tgtView.getColumnsWidth());
+				}
+			}
 			this.grid.layout.moveColumn(
 				source.viewIndex,
 				this.index,
