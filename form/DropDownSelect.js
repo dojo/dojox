@@ -35,6 +35,10 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	//		Whether or not we have been loaded
 	_isLoaded: false,
 	
+	// _childrenLoaded: boolean
+	//		Whether or not our children have been loaded
+	_childrenLoaded: false,
+	
 	_fillContent: function(){
 		// summary:  
 		//		Set the value to be the first, or the selected index
@@ -84,10 +88,17 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		this.inherited(arguments);
 		var len = this.options.length;
 		this._isLoaded = false;
+		this._childrenLoaded = true;
 		
 		// Set our length attribute and our value
-		this.setAttribute("readOnly", (len === 1));
-		this.setAttribute("disabled", (len === 0));	
+		if(!this._iReadOnly){
+			this.setAttribute("readOnly", (len === 1));
+			delete this._iReadOnly;
+		}
+		if(!this._iDisabled){
+			this.setAttribute("disabled", (len === 0));
+			delete this._iDisabled;
+		}
 		this.setValue(this.value);
 	},
 	
@@ -137,6 +148,13 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		this.inherited(arguments);
 		this._missingMsg = dojo.i18n.getLocalization("dijit.form", "validate", 
 									this.lang).missingMessage;
+	},
+	
+	postCreate: function(){
+		this.inherited(arguments);
+		if(dojo.attr(this.srcNodeRef, "disabled")){
+			this.setAttribute("disabled", true);
+		}
 	},
 
 	startup: function(){
@@ -189,7 +207,21 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
         if(attr === "value"){
             this.setValue(value);
         }else{
-            this.inherited(arguments);
+			switch(attr){
+				case "readOnly":
+					this._iReadOnly = value;
+					if(!value && this._childrenLoaded && this.options.length === 1){
+						return;
+					}
+					break;
+				case "disabled":
+					this._iDisabled = value;
+					if(!value && this._childrenLoaded && this.options.length === 0){
+						return;
+					}
+					break;
+			}
+			this.inherited(arguments);
         }
     }
 });
