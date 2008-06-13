@@ -23,10 +23,12 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../action2d/Tooltip.js"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
 <script type="text/javascript" src="../widget/Chart2D.js"></script>
+<script type="text/javascript" src="../widget/Sparkline.js"></script>
 <script type="text/javascript" src="../widget/Legend.js"></script>
 
 <script type="text/javascript">
 	dojo.require("dojox.charting.widget.Chart2D");
+	dojo.require("dojox.charting.widget.Sparkline");
 	dojo.require("dojox.charting.widget.Legend");
 	dojo.require("dojox.charting.themes.PlotKit.orange");
 	dojo.require("dojox.charting.themes.PlotKit.blue");
@@ -104,6 +106,14 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 				<div class="action" type="Tooltip"></div>
 				<div class="action" type="MoveSlice" shift="2"></div>
 			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div dojoType="dojox.charting.widget.Sparkline"></div>
+		</td>
+		<td>
+			
 		</td>
 	</tr>
 </table>

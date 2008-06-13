@@ -16,7 +16,9 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		collectActionParams, collectDataParams,
 		notNull = function(o){ return o; },
 		df = dojox.lang.functional,
-		du = dojox.lang.utils;
+		du = dojox.lang.utils,
+		dc = dojox.charting,
+		d = dojo;
 	
 	dojo.declare("dojox.charting.widget.Chart2D", dijit._Widget, {
 		// parameters for the markup
@@ -37,14 +39,14 @@ dojo.require("dojox.charting.action2d.Tooltip");
 			var n = this.domNode = this.srcNodeRef;
 			
 			// collect chart parameters
-			var axes    = dojo.filter(dojo.query("> .axis",   n).map(collectAxisParams),   notNull),
-				plots   = dojo.filter(dojo.query("> .plot",   n).map(collectPlotParams),   notNull),
-				actions = dojo.filter(dojo.query("> .action", n).map(collectActionParams), notNull),
-				series  = dojo.filter(dojo.query("> .series", n).map(collectDataParams),   notNull);
+			var axes    = d.query("> .axis", n).map(collectAxisParams).filter(notNull),
+				plots   = d.query("> .plot", n).map(collectPlotParams).filter(notNull),
+				actions = d.query("> .action", n).map(collectActionParams).filter(notNull),
+				series  = d.query("> .series", n).map(collectDataParams).filter(notNull);
 			
 			// build the chart
 			n.innerHTML = "";
-			var c = this.chart = new dojox.charting.Chart2D(n, {
+			var c = this.chart = new dc.Chart2D(n, {
 				margins: this.margins, 
 				stroke:  this.stroke,
 				fill:    this.fill
@@ -54,19 +56,16 @@ dojo.require("dojox.charting.action2d.Tooltip");
 			if(this.theme){
 				c.setTheme(this.theme);
 			}
-			dojo.forEach(axes, function(axis){
+			axes.forEach(function(axis){
 				c.addAxis(axis.name, axis.kwArgs);
 			});
-			dojo.forEach(plots, function(plot){
+			plots.forEach(function(plot){
 				c.addPlot(plot.name, plot.kwArgs);
 			});
 			
-			this.actions = [];
-			dojo.forEach(actions, function(action){
-				this.actions.push(
-					new action.action(c, action.plot, action.kwArgs)
-				);
-			}, this);
+			this.actions = actions.map(function(action){
+				return new action.action(c, action.plot, action.kwArgs)
+			});
 			
 			var render = df.foldl(series, function(render, series){
 				if(series.type == "data"){
@@ -91,16 +90,16 @@ dojo.require("dojox.charting.action2d.Tooltip");
 						// sort is a complex object type and doesn't survive coercian
 						kw.sort = dojo.clone(series.kwArgs.sort);
 					}
-					dojo.mixin(kw, {
+					d.mixin(kw, {
 						onComplete: function(data){
 							var values;
 							if("valueFn" in series.kwArgs){
 								var fn = series.kwArgs.valueFn;
-								values = dojo.map(data, function(x){
+								values = d.map(data, function(x){
 									return fn(series.data.getValue(x, series.field, 0));
 								});
 							}else{
-								values = dojo.map(data, function(x){
+								values = d.map(data, function(x){
 									return series.data.getValue(x, series.field, 0);
 								});
 							}
@@ -121,15 +120,16 @@ dojo.require("dojox.charting.action2d.Tooltip");
 	
 	collectParams = function(node, type, kw){
 		var dp = eval("(" + type + ".prototype.defaultParams)");
-		for(var x in dp){
+		var x, attr;
+		for(x in dp){
 			if(x in kw){ continue; }
-			var attr = node.getAttribute(x);
+			attr = node.getAttribute(x);
 			kw[x] = du.coerceType(dp[x], attr == null || typeof attr == "undefined" ? dp[x] : attr);
 		}
 		var op = eval("(" + type + ".prototype.optionalParams)");
-		for(var x in op){
+		for(x in op){
 			if(x in kw){ continue; }
-			var attr = node.getAttribute(x);
+			attr = node.getAttribute(x);
 			if(attr != null){
 				kw[x] = du.coerceType(op[x], attr);
 			}
@@ -141,7 +141,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		if(!name){ return null; }
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
-			if(dojox.charting.axis2d[type]){
+			if(dc.axis2d[type]){
 				type = dojox._scopeName + ".charting.axis2d." + type;
 			}
 			var axis = eval("(" + type + ")");
@@ -154,11 +154,12 @@ dojo.require("dojox.charting.action2d.Tooltip");
 	};
 	
 	collectPlotParams = function(node){
+		// var name = d.attr(node, "name"), type = d.attr(node, "type");
 		var name = node.getAttribute("name"), type = node.getAttribute("type");
 		if(!name){ return null; }
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
-			if(dojox.charting.plot2d[type]){
+			if(dc.plot2d[type]){
 				type = dojox._scopeName + ".charting.plot2d." + type;
 			}
 			var plot = eval("(" + type + ")");
@@ -171,11 +172,12 @@ dojo.require("dojox.charting.action2d.Tooltip");
 	};
 	
 	collectActionParams = function(node){
+		// var plot = d.attr(node, "plot"), type = d.attr(node, "type");
 		var plot = node.getAttribute("plot"), type = node.getAttribute("type");
 		if(!plot){ plot = "default"; }
 		var o = {plot: plot, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
-			if(dojox.charting.action2d[type]){
+			if(dc.action2d[type]){
 				type = dojox._scopeName + ".charting.action2d." + type;
 			}
 			var action = eval("(" + type + ")");
@@ -189,48 +191,49 @@ dojo.require("dojox.charting.action2d.Tooltip");
 	};
 
 	collectDataParams = function(node){
-		var name = node.getAttribute("name");
+		var ga = d.partial(d.attr, node);
+		var name = ga("name");
 		if(!name){ return null; }
-		var o = {name: name, kwArgs: {}}, kw = o.kwArgs, t;
-		t = node.getAttribute("plot");
+		var o = { name: name, kwArgs: {} }, kw = o.kwArgs, t;
+		t = ga("plot");
 		if(t != null){ kw.plot = t; }
-		t = node.getAttribute("marker");
+		t = ga("marker");
 		if(t != null){ kw.marker = t; }
-		t = node.getAttribute("stroke");
+		t = ga("stroke");
 		if(t != null){ kw.stroke = eval("(" + t + ")"); }
-		t = node.getAttribute("fill");
+		t = ga("fill");
 		if(t != null){ kw.fill = eval("(" + t + ")"); }
-		t = node.getAttribute("legend");
+		t = ga("legend");
 		if(t != null){ kw.legend = t; }
-		t = node.getAttribute("data");
+		t = ga("data");
 		if(t != null){
 			o.type = "data";
 			o.data = dojo.map(String(t).split(','), Number);
 			return o;
 		}
-		t = node.getAttribute("array");
+		t = ga("array");
 		if(t != null){
 			o.type = "data";
 			o.data = eval("(" + t + ")");
 			return o;
 		}
-		t = node.getAttribute("store");
+		t = ga("store");
 		if(t != null){
 			o.type = "store";
 			o.data = eval("(" + t + ")");
-			t = node.getAttribute("field");
+			t = ga("field");
 			o.field = t != null ? t : "value";
-			t = node.getAttribute("query");
+			t = ga("query");
 			if(!!t){ kw.query = t; }
-			t = node.getAttribute("queryOptions");
+			t = ga("queryOptions");
 			if(!!t){ kw.queryOptions = eval("(" + t + ")"); }
-			t = node.getAttribute("start");
+			t = ga("start");
 			if(!!t){ kw.start = Number(t); }
-			t = node.getAttribute("count");
+			t = ga("count");
 			if(!!t){ kw.count = Number(t); }
-			t = node.getAttribute("sort");
+			t = ga("sort");
 			if(!!t){ kw.sort = eval("("+t+")"); }
-			t = node.getAttribute("valueFn");
+			t = ga("valueFn");
 			if(!!t){ kw.valueFn = df.lambda(t); }
 			return o;
 		}

@@ -15,6 +15,7 @@
 			djConfig="isDebug: false, parseOnLoad: true"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.charting.widget.Chart2D");
+			dojo.require("dojox.charting.widget.Sparkline");
 			dojo.require("dojox.charting.themes.ET.greys");
 			dojo.require("dojox.data.HtmlStore");
 			dojo.require("dojox.data.CsvStore");
@@ -172,6 +173,24 @@
 					
 				</td>
 				<td>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">
+					<a href="http://finance.google.com/finance?q=Microsoft">Microsoft</a> Closing Price:
+				</td>
+				<td>
+					<div dojoType="dojox.charting.widget.Sparkline" 
+						style="width: 100px; height: 15px;"
+						store="msftStore"
+						field="Close"
+						count="100"
+						sort="[{ attribute: 'Date', descending: false }]"
+						valueFn="Number(x)"
+					></div>
+				</td>
+				<td>
+					100 points using Sparkline widget
 				</td>
 			</tr>
 
