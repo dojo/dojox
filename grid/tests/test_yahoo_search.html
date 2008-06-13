@@ -35,11 +35,9 @@
 		var webLayout = [ 
 			{
 				noscroll: true,
-				cells: [{
-					type: dojox.grid.cells.RowIndex,
-					width: 3,
-					styles: 'text-align: center;'
-				}]
+				cells: [
+					new dojox.grid.cells.RowIndex({ width: 3, styles: 'text-align: center;' })
+				]
 			},
 			[
 				[
@@ -64,11 +62,9 @@
 		var imageLayout = [ 
 			{
 				noscroll: true,
-				cells: [{
-					type: dojox.grid.cells.RowIndex,
-					width: 3,
-					styles: 'text-align: center;'
-				}]
+				cells: [
+					new dojox.grid.cells.RowIndex({ width: 3, styles: 'text-align: center;' })
+				]
 			},
 			{
 				onBeforeRow: beforeImageRow,

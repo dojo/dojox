@@ -17,38 +17,33 @@
 		dojo.require("dojox.data.QueryReadStore");
 		dojo.require("dojo.parser"); // scan page for widgets and instantiate them
 		var gridLayout = [
+			new dojox.grid.cells.RowIndex({ name: "row #", width: 5, styles: "text-align: right;" }),
 			{
-				name: "row #",
-				width:5,
-				styles: "text-align:right;",
-				get:function(inItem, inRowIndex) { return inRowIndex+1;} // this auto generates a row num
-			} 
-			,{
 				name: "id",
 				field: "id",
 				styles: "text-align:right;",
 				width:5
-			} 
-			,{
+			},
+			{
 				name: "Name",
 				field: "name",
 				width:20
 				//formatter: rs.chunk.adminUser.grid.formatUser
-			}
-			,{
+			},
+			{
 				name: "Capital",
 				field: "capital",
 				width:20
 				//formatter: rs.chunk.adminUser.grid.formatUser
-			}
-			,{
+			},
+			{
 				name: "Label",
 				width:20,
 				//styles: "text-align:right;",
 				field: "label"
 				//formatter: phpr.grid.formatDate
-			}
-			,{
+			},
+			{
 				name: "Abbrev.",
 				width:5,
 				//styles: "text-align:right;",

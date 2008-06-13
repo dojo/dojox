@@ -33,7 +33,7 @@
 			return "<a href=\"" + value + "\" target=\"_blank\">Image Link</a>";
 		}
 
-		var rowView = { cells: [{ type: dojox.grid.cells.RowIndex, width: 5 }], noscroll: true };
+		var rowView = { cells: [ new dojox.grid.cells.RowIndex({ width: 5 }) ], noscroll: true };
 
 		var layoutMovies = [
 			// view 1

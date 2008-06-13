@@ -34,6 +34,7 @@ dojo.require("dojox.grid.util");
 		_formatPending: false,
 
 		constructor: function(inProps){
+			this._props = inProps;
 			dojo.mixin(this, inProps);
 		},
 
@@ -68,6 +69,9 @@ dojo.require("dojox.grid.util");
 			// grid row index
 			// returns: dom node for a given grid cell
 			return this.view.getCellNode(inRowIndex, this.index);
+		},
+		getHeaderNode: function(){
+			return this.view.getHeaderCellNode(this.index);
 		},
 		getEditNode: function(inRowIndex){
 			return (this.getNode(inRowIndex) || 0).firstChild || 0;
@@ -235,6 +239,10 @@ dojo.require("dojox.grid.util");
 		var editable = d.trim(d.attr(node, "editable")||"");
 		if(editable){
 			cellDef.editable = !(editable.toLowerCase()=="false");
+		}
+		var styles = d.trim(d.attr(node, "styles")||"");
+		if(styles){
+			cellDef.styles = styles;
 		}
 	}
 

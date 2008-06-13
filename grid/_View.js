@@ -96,11 +96,11 @@ dojo.require("dojo.dnd.Manager");
 
 		// cell finding
 		isCellNode: function(inNode){
-			return Boolean(inNode && inNode.getAttribute && inNode.getAttribute("idx"));
+			return Boolean(inNode && dojo.attr(inNode, "idx"));
 		},
 		
 		getCellNodeIndex: function(inCellNode){
-			return inCellNode ? Number(inCellNode.getAttribute("idx")) : -1;
+			return inCellNode ? Number(dojo.attr(inCellNode, "idx")) : -1;
 		},
 		
 		getCellNode: function(inRowNode, inCellIndex){
