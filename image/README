@@ -30,7 +30,9 @@ Dependencies:
 
 	Gallery: core, dojox.image.SlideShow, dojox.image.ThumbNailPicker
 
-	Magnifier: dojo core, dijit._Widget, dojox.gfx
+	Magnifier: (prototype) dojo core, dijit._Widget, dojox.gfx
+	
+	Badge: (prototype) dojo core, dijit._Widget + _Templated 
 
 -------------------------------------------------------------------------------
 Documentation
@@ -63,4 +65,7 @@ Additional Notes
 
 	Magnifier: Unobtrusive way to attach a hovering window window
 	when moving the mouse over an image. The window shows a a zoomed
-	version of the original source. (experimental)
+	version of the original source. (prototype)
+
+	Badge: (prototype) A Javascript version of a FlickrBadge thingr, 
+	which loops through and sizes children in a loop.

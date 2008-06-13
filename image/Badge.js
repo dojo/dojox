@@ -1,4 +1,5 @@
 dojo.provide("dojox.image.Badge");
+dojo.experimental("dojox.image.Badge");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
