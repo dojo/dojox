@@ -364,9 +364,9 @@ dojo.declare("dojox.image.SlideShow",
 	},
 	
 	_getTopPadding: function(){
-		if(!this.fixedHeight){return 0;}
 		// summary: Returns the padding to place at the top of the image to center it vertically.
-		return (this.imageHeight - this._currentImage.height)/2;
+		if(!this.fixedHeight){ return 0; }
+		return (this.imageHeight - this._currentImage.height) / 2;
 	},
 	
 	_loadNextImage: function(){
@@ -408,7 +408,8 @@ dojo.declare("dojox.image.SlideShow",
 			div._img = img;
 
 			var link = _this.imageStore.getValue(item,_this.linkAttr);
-			if(!link || _this.noLink){ div.appendChild(img); 
+			if(!link || _this.noLink){ 
+				div.appendChild(img); 
 			}else{
 				var a = document.createElement("a");
 				a.setAttribute("href", link);
@@ -420,8 +421,8 @@ dojo.declare("dojox.image.SlideShow",
 			div.setAttribute("id",_this.id + "_imageDiv" + index);
 			dojo.connect(img, "onload", function(){
 				_this._fitImage(img);
-				div.setAttribute("width",_this.imageWidth);
-				div.setAttribute("height",_this.imageHeight);				
+				div.setAttribute("width", _this.imageWidth);
+				div.setAttribute("height", _this.imageHeight);				
 				
 				dojo.publish(_this.getLoadTopicName(), [index]);
 				_this._loadNextImage();
@@ -436,8 +437,8 @@ dojo.declare("dojox.image.SlideShow",
 			_this.images[index] = div;
 			img.setAttribute("src", url);
 			
-			var title = _this.imageStore.getValue(item,_this.titleAttr);
-			if(title){ img.setAttribute("title",title); } 
+			var title = _this.imageStore.getValue(item, _this.titleAttr);
+			if(title){ img.setAttribute("title", title); } 
 		}
 		this.imageStore.fetch(this._request);
 	},
