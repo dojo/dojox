@@ -306,7 +306,7 @@ dojo.declare("dojox.image.SlideShow",
 			    var onEnd = function(a,b,c) {
 					var img = _this.images[index].firstChild;
 					if(img.tagName.toLowerCase() != "img"){img = img.firstChild;}
-					var title = img.getAttribute("title");
+					var title = img.getAttribute("title") || "";
 					
 					if(_this._navShowing){
 						_this._showNav(true);
