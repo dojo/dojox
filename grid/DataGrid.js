@@ -358,6 +358,19 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			delete this._cache[inRowIndex];
 		}*/
 		this.onApplyEdit(inRowIndex);
+	},
+
+	removeSelectedRows: function(){
+		// summary:
+		//		Remove the selected rows from the grid.
+		if(this._canEdit){
+			this.edit.apply();
+			var items = this.selection.getSelected();
+			if(items.length){
+				dojo.forEach(items, this.store.deleteItem);
+				this.selection.clear();
+			}
+		}
 	}
 });
 

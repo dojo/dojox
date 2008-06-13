@@ -7,6 +7,7 @@ dojo.require("dojox.grid.util");
 
 dojo.require("dojo.dnd.Moveable");
 dojo.require("dojo.dnd.Source");
+dojo.require("dojo.dnd.Manager");
 
 (function(){
 	// private
@@ -1053,4 +1054,76 @@ dojo.require("dojo.dnd.Source");
 			this.headerNode.scrollLeft = left;
 		}
 	});
+
+	dojo.declare("dojox.grid._GridAvatar", dojo.dnd.Avatar, {
+		construct: function(){
+			var dd = dojo.doc;
+
+			var a = dd.createElement("table");
+			a.cellPadding = a.cellSpacing = "0";
+			a.className = "dojoxGridDndAvatar";
+			a.style.position = "absolute";
+			a.style.zIndex = 1999;
+			a.style.margin = "0px"; // to avoid dojo.marginBox() problems with table's margins
+			var b = dd.createElement("tbody");
+			var tr = dd.createElement("tr");
+			var td = dd.createElement("td");
+			var img = dd.createElement("td");
+			tr.className = "dojoxGridDndAvatarItem";
+			img.className = "dojoxGridDndAvatarItemImage";
+			img.style.width = "16px";
+			var source = this.manager.source, node;
+			if(source.creator){
+				// create an avatar representation of the node
+				node = source._normailzedCreator(source.getItem(this.manager.nodes[0].id).data, "avatar").node;
+			}else{
+				// or just clone the node and hope it works
+				node = this.manager.nodes[0].cloneNode(true);
+				if(node.tagName.toLowerCase() == "tr"){
+					// insert extra table nodes
+					var table = dd.createElement("table"),
+						tbody = dd.createElement("tbody");
+					tbody.appendChild(node);
+					table.appendChild(tbody);
+					node = table;
+				}else if(node.tagName.toLowerCase() == "th"){
+					// insert extra table nodes
+					var table = dd.createElement("table"),
+						tbody = dd.createElement("tbody"),
+						r = dd.createElement("tr");
+					table.cellPadding = table.cellSpacing = "0";
+					r.appendChild(node);
+					tbody.appendChild(r);
+					table.appendChild(tbody);
+					node = table;
+				}
+			}
+			node.id = "";
+			td.appendChild(node);
+			tr.appendChild(img);
+			tr.appendChild(td);
+			dojo.style(tr, "opacity", 0.9);
+			b.appendChild(tr);
+
+			a.appendChild(b);
+			this.node = a;
+
+			var m = dojo.dnd.manager();
+			this.oldOffsetY = m.OFFSET_Y;
+			m.OFFSET_Y = 1;
+		},
+		destroy: function(){
+			dojo.dnd.manager().OFFSET_Y = this.oldOffsetY;
+			this.inherited(arguments);
+		}
+	});
+
+	var oldMakeAvatar = dojo.dnd.manager().makeAvatar;
+	dojo.dnd.manager().makeAvatar = function(){
+		var src = this.source;
+		if(typeof src.viewIndex != "undefined"){
+			return new dojox.grid._GridAvatar(this);
+		}
+		return oldMakeAvatar.call(dojo.dnd.manager());
+	}
 })();
