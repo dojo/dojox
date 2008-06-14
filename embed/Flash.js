@@ -148,73 +148,6 @@ dojo.provide("dojox.embed.Flash");
 		})();
 	}
 
-	dojox.embed._flash = {
-		//	summary:
-		//		A singleton object used internally to get information
-		//		about the Flash player available in a browser, and
-		//		as the factory for generating and placing markup in a
-		//		document.
-		//
-		//	minSupported: Number
-		//		The minimum supported version of the Flash Player, defaults to 8.
-		//	available: Number
-		//		Used as both a detection (i.e. if(dojox.embed._flash.available){ })
-		//		and as a variable holding the major version of the player installed.
-		//	supported: Boolean
-		//		Whether or not the Flash Player installed is supported by dojox.embed.
-		//	version: Object
-		//		The version of the installed Flash Player; takes the form of
-		//		{ major, minor, rev }.  To get the major version, you'd do this:
-		//		var v=dojox.embed._flash.version.major;
-		//	initialized: Boolean
-		//		Whether or not the Flash engine is available for use.
-		//	onInitialize: Function
-		//		A stub you can connect to if you are looking to fire code when the 
-		//		engine becomes available.  A note: DO NOT use this event to
-		//		place a movie in a document; it will usually fire before DOMContentLoaded
-		//		is fired, and you will get an error.  Use dojo.addOnLoad instead.
-		minSupported : 8,
-		available: fVersion.major,
-		supported: (fVersion.major >= 8),
-		version: fVersion,
-		initialized: false,
-		onInitialize: function(){
-			dojox.embed._flash.initialized=true;
-		},
-		__ie_markup__: function(kwArgs){
-			return fMarkup(kwArgs);
-		}
-	};
-
-	if(dojo.isIE){
-		//	Ugh!
-		if(dojo._initFired){
-			var e=document.createElement("script");
-			e.type="text/javascript";
-			e.src=dojo.moduleUrl("dojox", "embed/IE/flash.js");
-			document.getElementsByTagName("head")[0].appendChild(e);
-		} else {
-			//	we can use document.write.  What a kludge.
-			document.write('<scr'+'ipt type="text/javascript" src="' + dojo.moduleUrl("dojox", "embed/IE/flash.js") + '">'
-				+ '</scr'+'ipt>');
-		}
-	} else {
-		dojox.embed._flash.place = function(kwArgs, node){
-			var o=fMarkup(kwArgs);
-			node=dojo.byId(node);
-			if(!node){ 
-				node=dojo.doc.createElement("div");
-				node.id=o.id+"-container";
-				dojo.body().appendChild(node);
-			}
-			if(o){
-				node.innerHTML=o.markup;
-				return document[o.id];
-			}
-			return null;
-		}
-		dojox.embed._flash.onInitialize();
-	}
 
 	/*=====
 	dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars, expressInstall, redirect){
@@ -275,12 +208,80 @@ dojo.provide("dojox.embed.Flash");
 		//	|		style: "position:absolute;top:0;left:0"
 		//	|	}, myWrapperNode);
 
-		if(dojox.embed._flash.initialized){
-			return dojox.embed._flash.place(kwArgs, node);	//	HTMLObject
+		if(dojox.embed.Flash.initialized){
+			return dojox.embed.Flash.place(kwArgs, node);	//	HTMLObject
 		}
 		throw new Error("dojox.embed.Flash:: you must wait for the Flash engine to be initialized.");
 	};
 
+	//	expose information through the constructor function itself.
+	dojo.mixin(dojox.embed.Flash, {
+		//	summary:
+		//		A singleton object used internally to get information
+		//		about the Flash player available in a browser, and
+		//		as the factory for generating and placing markup in a
+		//		document.
+		//
+		//	minSupported: Number
+		//		The minimum supported version of the Flash Player, defaults to 8.
+		//	available: Number
+		//		Used as both a detection (i.e. if(dojox.embed.Flash.available){ })
+		//		and as a variable holding the major version of the player installed.
+		//	supported: Boolean
+		//		Whether or not the Flash Player installed is supported by dojox.embed.
+		//	version: Object
+		//		The version of the installed Flash Player; takes the form of
+		//		{ major, minor, rev }.  To get the major version, you'd do this:
+		//		var v=dojox.embed.Flash.version.major;
+		//	initialized: Boolean
+		//		Whether or not the Flash engine is available for use.
+		//	onInitialize: Function
+		//		A stub you can connect to if you are looking to fire code when the 
+		//		engine becomes available.  A note: DO NOT use this event to
+		//		place a movie in a document; it will usually fire before DOMContentLoaded
+		//		is fired, and you will get an error.  Use dojo.addOnLoad instead.
+		minSupported : 8,
+		available: fVersion.major,
+		supported: (fVersion.major >= 8),
+		version: fVersion,
+		initialized: false,
+		onInitialize: function(){
+			dojox.embed.Flash.initialized=true;
+		},
+		__ie_markup__: function(kwArgs){
+			return fMarkup(kwArgs);
+		}
+	});
+
+	if(dojo.isIE){
+		//	Ugh!
+		if(dojo._initFired){
+			var e=document.createElement("script");
+			e.type="text/javascript";
+			e.src=dojo.moduleUrl("dojox", "embed/IE/flash.js");
+			document.getElementsByTagName("head")[0].appendChild(e);
+		} else {
+			//	we can use document.write.  What a kludge.
+			document.write('<scr'+'ipt type="text/javascript" src="' + dojo.moduleUrl("dojox", "embed/IE/flash.js") + '">'
+				+ '</scr'+'ipt>');
+		}
+	} else {
+		dojox.embed.Flash.place = function(kwArgs, node){
+			var o=fMarkup(kwArgs);
+			node=dojo.byId(node);
+			if(!node){ 
+				node=dojo.doc.createElement("div");
+				node.id=o.id+"-container";
+				dojo.body().appendChild(node);
+			}
+			if(o){
+				node.innerHTML=o.markup;
+				return document[o.id];
+			}
+			return null;
+		}
+		dojox.embed.Flash.onInitialize();
+	}
 
 	//	A port of Brad's Communicator code (dojox.Flash)
 	//	in anticipation of removing that code at a later date.

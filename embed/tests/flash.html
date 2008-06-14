@@ -23,7 +23,7 @@
 			var proxyMovieUrl=dojo.moduleUrl("dojox", "embed/tests/resources/TestFlash.swf"), proxy;
 
 			dojo.addOnLoad(function(){
-				dojo.byId("results").innerHTML = dojo.toJson(dojox.embed._flash.version);
+				dojo.byId("results").innerHTML = dojo.toJson(dojox.embed.Flash.version);
 				movie=new dojox.embed.Flash({ path: testMovieUrl }, "flashHolder");
 				var p = dojox.embed.Flash({ path: proxyMovieUrl, width:4, height:4 }, "proxyHolder");
 				proxy = new dojox.embed.FlashProxy(

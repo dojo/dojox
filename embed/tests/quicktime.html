@@ -9,13 +9,25 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.embed.Quicktime");
-			
-			function getVersion(){
-				var v=dojox.embed._quicktime.version || { major: 0, minor: 0, rev: 0 };
-				dojo.byId("results").innerHTML = v.major
-					+ '.' + v.minor
-					+ '.' + v.rev;
-			};
+
+			//	what a pain.  We hate having to deal with async loading issues.
+			dojo.addOnLoad(function(){
+				console.log("getting the Quicktime version...");
+				var fn=function(){
+					var v=dojox.embed.Quicktime.version || { major: 0, minor: 0, rev: 0 };
+					dojo.byId("results").innerHTML = v.major
+						+ '.' + v.minor
+						+ '.' + v.rev;
+				}
+				if(dojox.embed.Quicktime.initialized){
+					fn();
+				} else {
+					var h=dojo.connect(dojox.embed.Quicktime, "onInitialize", function(){
+						fn();
+						dojo.disconnect(h);
+					});
+				}
+			});
 		</script>
 	</head>
 	<body>

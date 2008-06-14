@@ -22,7 +22,7 @@ dojo.provide("dojox.embed.Quicktime");
 	function prep(kwArgs){
 		kwArgs = dojo.mixin(dojo.clone(__def__), kwArgs || {});
 		if(!("path" in kwArgs)){
-			console.error("dojox.embed._quicktime(ctor):: no path reference to a QuickTime movie was provided.");
+			console.error("dojox.embed.Quicktime(ctor):: no path reference to a QuickTime movie was provided.");
 			return null;
 		}
 		if(!("id" in kwArgs)){
@@ -102,134 +102,6 @@ dojo.provide("dojox.embed.Quicktime");
 		}
 	}
 
-	dojox.embed._quicktime={
-		//	summary:
-		//		A singleton object used internally to get information
-		//		about the QuickTime player available in a browser, and
-		//		as the factory for generating and placing markup in a
-		//		document.
-		//
-		//	minSupported: Number
-		//		The minimum supported version of the QuickTime Player, defaults to
-		//		6.
-		//	available: Boolean
-		//		Whether or not QuickTime is available.
-		//	supported: Boolean
-		//		Whether or not the QuickTime Player installed is supported by
-		//		dojox.embed.
-		//	version: Object
-		//		The version of the installed QuickTime Player; takes the form of
-		//		{ major, minor, rev }.  To get the major version, you'd do this:
-		//		var v=dojox.embed._quicktime.version.major;
-		//	initialized: Boolean
-		//		Whether or not the QuickTime engine is available for use.
-		//	onInitialize: Function
-		//		A stub you can connect to if you are looking to fire code when the 
-		//		engine becomes available.  A note: do NOT use this stub to embed
-		//		a movie in your document; this WILL be fired before DOMContentLoaded
-		//		is fired, and you will get an error.  You should use dojo.addOnLoad
-		//		to place your movie instead.
-
-		minSupported: 6,
-		available: installed,
-		supported: installed,
-		version: qtVersion,
-		initialized: false,
-		onInitialize: function(){ 
-			dojox.embed._quicktime.initialized = true; 
-		},	//	stub function to let you know when this is ready
-
-		place: function(kwArgs, node){
-			var o = qtMarkup(kwArgs);
-
-			node = dojo.byId(node);
-			if(!node){
-				node=dojo.doc.createElement("div");
-				node.id=o.id+"-container";
-				dojo.body().appendChild(node);
-			}
-			
-			if(o){
-				node.innerHTML = o.markup;
-				if(o.id){
-					return (dojo.isIE)? dojo.byId(o.id) : document[o.id];	//	QuickTimeObject
-				}
-			}
-			return null;	//	QuickTimeObject
-		}
-	};
-	
-	if(!dojo.isIE){
-		// FIXME: Opera does not like this at all for some reason, and of course there's no event references easily found.
-		qtVersion = dojox.embed._quicktime.version = { major: 0, minor: 0, rev: 0 };
-		var o = qtMarkup({ path: testMovieUrl, width:4, height:4 });
-
-		function qtInsert(){
-			if(!dojo._initFired){
-				var s='<div style="top:0;left:0;width:1px;height:1px;;overflow:hidden;position:absolute;" id="-qt-version-test">'
-					+ o.markup
-					+ '</div>';
-				document.write(s);
-			} else {
-				var n = document.createElement("div");
-				n.id="-qt-version-test";
-				n.style.cssText = "top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;";
-				dojo.body().appendChild(n);
-				n.innerHTML = o.markup;
-			}
-		}
-
-		function qtGetInfo(mv){
-			var qt, n, v = [ 0, 0, 0 ];
-			if(mv){
-				qt=mv, n=qt.parentNode;
-			} else {
-				qtInsert();
-				if(!dojo.isOpera){
-					setTimeout(function(){ qtGetInfo(document[o.id]); }, 50);
-				} else {
-					var fn=function(){ 
-						setTimeout(function(){ qtGetInfo(document[o.id]) }, 50); 
-					};
-					if(!dojo._initFired){
-						dojo.addOnLoad(fn);
-					} else {
-						dojo.connect(document[o.id], "onload", fn);
-					}
-				}
-				return;
-			}
-
-			if(qt){
-				try {
-					v = qt.GetQuickTimeVersion().split(".");
-					qtVersion = { major: parseInt(v[0]||0), minor: parseInt(v[1]||0), rev: parseInt(v[2]||0) };
-				} catch(e){ 
-					qtVersion = { major: 0, minor: 0, rev: 0 };
-				}
-			}
-
-			dojox.embed._quicktime.supported = v[0];
-			dojox.embed._quicktime.version = qtVersion;
-			if(dojox.embed._quicktime.supported){
-				dojox.embed._quicktime.onInitialize();
-			} else {
-				console.log("quicktime is not installed.");
-			}
-
-			try {
-				if(!mv){
-					dojo.body().removeChild(n);
-				}
-			} catch(e){ }
-		}
-
-		qtGetInfo();
-	}
-	else if(dojo.isIE && installed){
-		dojox.embed._quicktime.onInitialize();
-	}
-
 	/*=====
 	dojox.embed.__QTArgs = function(path, id, width, height, params, redirect){
 		//	path: String
@@ -278,6 +150,135 @@ dojo.provide("dojox.embed.Quicktime");
 		//	|		height: 300
 		//	|	}, myWrapperNode);
 
-		return dojox.embed._quicktime.place(kwArgs, node);	//	HTMLObject
+		return dojox.embed.Quicktime.place(kwArgs, node);	//	HTMLObject
 	};
+
+	dojo.mixin(dojox.embed.Quicktime, {
+		//	summary:
+		//		A singleton object used internally to get information
+		//		about the QuickTime player available in a browser, and
+		//		as the factory for generating and placing markup in a
+		//		document.
+		//
+		//	minSupported: Number
+		//		The minimum supported version of the QuickTime Player, defaults to
+		//		6.
+		//	available: Boolean
+		//		Whether or not QuickTime is available.
+		//	supported: Boolean
+		//		Whether or not the QuickTime Player installed is supported by
+		//		dojox.embed.
+		//	version: Object
+		//		The version of the installed QuickTime Player; takes the form of
+		//		{ major, minor, rev }.  To get the major version, you'd do this:
+		//		var v=dojox.embed.Quicktime.version.major;
+		//	initialized: Boolean
+		//		Whether or not the QuickTime engine is available for use.
+		//	onInitialize: Function
+		//		A stub you can connect to if you are looking to fire code when the 
+		//		engine becomes available.  A note: do NOT use this stub to embed
+		//		a movie in your document; this WILL be fired before DOMContentLoaded
+		//		is fired, and you will get an error.  You should use dojo.addOnLoad
+		//		to place your movie instead.
+
+		minSupported: 6,
+		available: installed,
+		supported: installed,
+		version: qtVersion,
+		initialized: false,
+		onInitialize: function(){ 
+			dojox.embed.Quicktime.initialized = true; 
+		},	//	stub function to let you know when this is ready
+
+		place: function(kwArgs, node){
+			var o = qtMarkup(kwArgs);
+
+			node = dojo.byId(node);
+			if(!node){
+				node=dojo.doc.createElement("div");
+				node.id=o.id+"-container";
+				dojo.body().appendChild(node);
+			}
+			
+			if(o){
+				node.innerHTML = o.markup;
+				if(o.id){
+					return (dojo.isIE)? dojo.byId(o.id) : document[o.id];	//	QuickTimeObject
+				}
+			}
+			return null;	//	QuickTimeObject
+		}
+	});
+
+	//	go get the info
+	if(!dojo.isIE){
+		// FIXME: Opera does not like this at all for some reason, and of course there's no event references easily found.
+		qtVersion = dojox.embed.Quicktime.version = { major: 0, minor: 0, rev: 0 };
+		var o = qtMarkup({ path: testMovieUrl, width:4, height:4 });
+
+		function qtInsert(){
+			if(!dojo._initFired){
+				var s='<div style="top:0;left:0;width:1px;height:1px;;overflow:hidden;position:absolute;" id="-qt-version-test">'
+					+ o.markup
+					+ '</div>';
+				document.write(s);
+			} else {
+				var n = document.createElement("div");
+				n.id="-qt-version-test";
+				n.style.cssText = "top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;";
+				dojo.body().appendChild(n);
+				n.innerHTML = o.markup;
+			}
+		}
+
+		function qtGetInfo(mv){
+			var qt, n, v = [ 0, 0, 0 ];
+			if(mv){
+				qt=mv, n=qt.parentNode;
+			} else {
+				qtInsert();
+				if(!dojo.isOpera){
+					setTimeout(function(){ qtGetInfo(document[o.id]); }, 50);
+				} else {
+					var fn=function(){ 
+						setTimeout(function(){ qtGetInfo(document[o.id]) }, 50); 
+					};
+					if(!dojo._initFired){
+						dojo.addOnLoad(fn);
+					} else {
+						dojo.connect(document[o.id], "onload", fn);
+					}
+				}
+				return;
+			}
+
+			if(qt){
+				try {
+					v = qt.GetQuickTimeVersion().split(".");
+					qtVersion = { major: parseInt(v[0]||0), minor: parseInt(v[1]||0), rev: parseInt(v[2]||0) };
+				} catch(e){ 
+					qtVersion = { major: 0, minor: 0, rev: 0 };
+				}
+			}
+
+			dojox.embed.Quicktime.supported = v[0];
+			dojox.embed.Quicktime.version = qtVersion;
+			if(dojox.embed.Quicktime.supported){
+				dojox.embed.Quicktime.onInitialize();
+			} else {
+				console.log("quicktime is not installed.");
+			}
+
+			try {
+				if(!mv){
+					dojo.body().removeChild(n);
+				}
+			} catch(e){ }
+		}
+
+		qtGetInfo();
+	}
+	else if(dojo.isIE && installed){
+		dojox.embed.Quicktime.onInitialize();
+	}
 })();

@@ -1,6 +1,6 @@
 // *** Fricking Eolas.  This is here to get around the Eolas issue.  Sigh. ***************
-dojox.embed._flash.place = function(kwArgs, node){
-	var o = dojox.embed._flash.__ie_markup__(kwArgs);
+dojox.embed.Flash.place = function(kwArgs, node){
+	var o = dojox.embed.Flash.__ie_markup__(kwArgs);
 	node=dojo.byId(node);
 
 	if(!node){
@@ -15,4 +15,4 @@ dojox.embed._flash.place = function(kwArgs, node){
 	}
 	return null;
 }
-dojox.embed._flash.onInitialize();
+dojox.embed.Flash.onInitialize();
