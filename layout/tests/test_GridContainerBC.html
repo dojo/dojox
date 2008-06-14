@@ -67,13 +67,14 @@
 			dojo.require("dijit.layout.AccordionContainer");
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit._Calendar");
-			dojo.require("dojox.fx.easing");
+			dojo.require("dojo.fx.easing");
 			var GC1;
 			function setColumns(){
 				GC1 = dijit.byId("GC1");
-				nb= dojo.byId("nbCol").value;
-				if (nb> 0)
+				nb = dojo.byId("nbCol").value;
+				if(nb > 0){
 					GC1.setColumns(nb);
+				}
 			}
 		</script>
 
@@ -141,7 +142,7 @@
 				title="Right Side" splitter="true" 
 				style="width:200px" 
 				region="left" 
-				easeIn="dojox.fx.easing.backOut" duration="600"
+				easeIn="dojo.fx.easing.backOut" duration="600"
 			>
 				<div id="rGC" dojoType="dojox.layout.GridContainer"
 					acceptTypes="dijit.TitlePane, dijit.layout.AccordionContainer, dijit._Calendar"

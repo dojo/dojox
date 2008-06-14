@@ -2,7 +2,7 @@ dojo.provide("dojox.widget.FisheyeLite");
 dojo.experimental("dojox.widget.FisheyeLite");
 
 dojo.require("dijit._Widget");
-dojo.require("dojox.fx.easing");
+dojo.require("dojo.fx.easing");
 
 dojo.declare("dojox.widget.FisheyeLite",
 	dijit._Widget,
@@ -37,7 +37,7 @@ dojo.declare("dojox.widget.FisheyeLite",
 	
 	// easeIn: Function
 	//		An easing function to use for the show animation
-	easeIn: dojox.fx.easing.backOut,
+	easeIn: dojo.fx.easing.backOut,
 	
 	// durationOut: Integer
 	//		The Time (in ms) to run the hide animation
@@ -45,7 +45,7 @@ dojo.declare("dojox.widget.FisheyeLite",
 	
 	// easeOut: Function	
 	// 		An easing function to use for the hide animation
-	easeOut: dojox.fx.easing.elasticOut,
+	easeOut: dojo.fx.easing.elasticOut,
 
 	//	properties: Object
 	//			An object of "property":scale pairs
@@ -66,7 +66,7 @@ dojo.declare("dojox.widget.FisheyeLite",
 	postCreate: function(){
 		
 		this.inherited(arguments);
-		this._target = dojo.query(".fisheyeTarget",this.domNode)[0] || this.domNode;
+		this._target = dojo.query(".fisheyeTarget", this.domNode)[0] || this.domNode;
 		this._makeAnims();
 		
 		this.connect(this.domNode,"onmouseover","show");

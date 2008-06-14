@@ -10,7 +10,7 @@
 	</style>
 	<!-- <script type="text/javascript" src="../scroll.js"></script> -->
 	<script type="text/javascript">	
-		dojo.require("dojox.fx.easing"); 
+		dojo.require("dojo.fx.easing"); 
 		dojo.require("dojox.fx.scroll");
 
 		function gotoName(name){
@@ -21,7 +21,7 @@
 					node: node,
 					win:window,
 					duration:300,
-					easing:dojox.fx.easing.easeOut
+					easing:dojo.fx.easing.easeOut
 				}).play();
 				return;
 			});
@@ -38,13 +38,13 @@
 
 			dojo.connect(dojo.byId("goToHeader"), "onclick", function (e) {
 				var node = dojo.byId('targetHeader3');
-				var anim0 = dojox.fx.smoothScroll({ node: node, win: window, duration:500, easing:dojox.fx.easing.easeOut });
+				var anim0 = dojox.fx.smoothScroll({ node: node, win: window, duration:500, easing:dojo.fx.easing.easeOut });
 				anim0.play();
 			});
 
 			dojo.connect(dojo.byId("goToHeader1"), "onclick", function(/* Event */e){
 				var node = dojo.byId('targetHeader1');
-				var anim0 = dojox.fx.smoothScroll({ node: node, win: window, duration:1000, easing:dojox.fx.easing.easeOut });
+				var anim0 = dojox.fx.smoothScroll({ node: node, win: window, duration:1000, easing:dojo.fx.easing.easeOut });
 				anim0.play();
 			});
 		}); 

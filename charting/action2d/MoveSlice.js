@@ -18,7 +18,7 @@ dojo.require("dojox.lang.functional.fold");
 		// the data description block for the widget parser
 		defaultParams: {
 			duration: 400,	// duration of the action in ms
-			easing:   dojox.fx.easing.elasticOut,	// easing for the action
+			easing:   dojo.fx.easing.backOut,	// easing for the action
 			scale:    DEFAULT_SCALE,	// scale of magnification
 			shift:    DEFAULT_SHIFT		// shift of the slice
 		},

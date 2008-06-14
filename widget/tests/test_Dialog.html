@@ -26,7 +26,7 @@
 	
 	<script type="text/javascript">
 		dojo.require("dojox.widget.Dialog");
-		dojo.require("dojox.fx.easing");
+		dojo.require("dojo.fx.easing");
 		dojo.require("dijit.form.Button");
 		dojo.addOnLoad(function(){
 			
@@ -35,7 +35,7 @@
 				title:"foobar",
 				dimensions: [200,200],
 				draggable:false,
-				easing:dojox.fx.easing.elasticOut,
+				easing: dojo.fx.easing.elasticOut,
 				sizeDuration:900,
 				sizeMethod:"combine"
 			},"codeMade");
@@ -125,7 +125,7 @@
 
 		<button onclick="dijit.byId('anotherTest').show()">sizeDuration and easing</button>	
 		<div id="anotherTest" dojoType="dojox.widget.Dialog" fixedSize="true" 
-			viewportPadding="150" easing="dojox.fx.easing.backOut" sizeDuration="1400" 
+			viewportPadding="150" easing="dojo.fx.easing.backOut" sizeDuration="1400" 
 			title="A Dialog Thinger"
 		>
 			<h2 style="margin-top:0">Wow!</h2>
@@ -179,7 +179,7 @@
 	
 		<button onclick="dijit.byId('yetanotherTest3').show()">method = combine, easing</button>	
 		<div id="yetanotherTest3" dojoType="dojox.widget.Dialog" sizeMethod="combine"
-		 	easing="dojox.fx.easing.bounceOut" sizeDuration="600">
+		 	easing="dojo.fx.easing.bounceOut" sizeDuration="600">
 			<h2 style="margin-top:0">Wow!</h2>
 			<p style="margin-top:0">Vestibulum convallis eros ac justo. Proin dolor. Etiam aliquam. Nam
 			ornare elit vel augue. Suspendisse potenti. Etiam sed mauris eu neque

@@ -97,7 +97,7 @@
 		
 		// addons:
 		dojo.require("dojox.fx.style");
-		dojo.require("dojox.fx.easing");
+		dojo.require("dojo.fx.easing");
 		
 		// examples inline:
 		dojo.require("dojox.widget.FisheyeLite");
@@ -371,7 +371,7 @@
 		mmm, easing
 		<script type="dojo/method" event="onClick">
 			dojo.query(".odd","queryUl").animateProperty({
-				easing:dojox.fx.easing.backOut,
+				easing:dojo.fx.easing.backOut,
 				properties:{
 					marginLeft:{ end:34, unit:"px" }
 				},
@@ -380,7 +380,7 @@
 					dojo.query(".odd","queryUl").animateProperty({
 						delay: 300,
 						duration:1300,
-						easing:dojox.fx.easing.bounceOut,
+						easing:dojo.fx.easing.bounceOut,
 						properties:{
 							marginLeft:{ end:1, unit:"px" }
 						}
@@ -403,7 +403,7 @@
 					onClick:function(){
 						dojo.byId("clickAlert").innerHTML = "clicked: " + this.id;
 					},
-					easeIn:dojox.fx.easing.elasticOut,
+					easeIn:dojo.fx.easing.elasticOut,
 					durationIn:1700
 				},n).startup();
 			}).style("cursor","pointer");

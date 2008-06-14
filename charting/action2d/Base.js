@@ -1,12 +1,12 @@
 dojo.provide("dojox.charting.action2d.Base");
 
-dojo.require("dojox.fx.easing");
+dojo.require("dojo.fx.easing");
 dojo.require("dojox.lang.functional.object");
 dojo.require("dojox.gfx.fx");
 
 (function(){
 	var DEFAULT_DURATION = 400,	// ms
-		DEFAULT_EASING   = dojox.fx.easing.elasticOut,
+		DEFAULT_EASING   = dojo.fx.easing.backOut,
 
 		dfo = dojox.lang.functional.object;
 		

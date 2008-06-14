@@ -24,7 +24,7 @@
 		// one simple theme, and the charting engine:
 		dojo.require("dojox.charting.Chart2D");
 		// and easing functions:
-		dojo.require("dojox.fx.easing"); 
+		dojo.require("dojo.fx.easing"); 
 
 		var d=0;
 		var masterData = {};
@@ -102,7 +102,7 @@
 			var c = dojo.query(".clone")[0];	
 			opt = dojo.byId("select");
 			
-			for(var i in dojox.fx.easing){
+			for(var i in dojo.fx.easing){
 				var n = opt.appendChild(dojo.clone(c));
 				n.value = n.innerHTML = i
 				// n.innerHTML = i;
@@ -116,11 +116,11 @@
 					.forEach(function(n){
 						console.log(n);
 				    });
-				makeSeries(opt.value,dojox.fx.easing[opt.value]);
+				makeSeries(opt.value, dojo.fx.easing[opt.value]);
 			});
 				
 			dojo.query(".box").connect("onclick",function(e){
-				console.log(opt.value,dojox.fx.easing[opt.value]);	
+				console.log(opt.value, dojo.fx.easing[opt.value]);	
 			});
 			
 			makeSeries("visible",dojo._defaultEasing);	
@@ -131,7 +131,7 @@
 </head>
 <body class="tundra" style="padding:20px">
 
-	<h1>dojox.fx.easing</h1>
+	<h1>dojo.fx.easing</h1>
 	
 	<p>this chart shows time (x axis) vs. position (y axis) for a movement from 0px to 30px modified by easing functions</p>
 

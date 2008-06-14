@@ -34,7 +34,7 @@
 	</style>
 	<script type="text/javascript">
 		dojo.require("dojo.fx"); // chain and combine should be in core :) (when they work)
-		dojo.require("dojox.fx.easing"); 
+		dojo.require("dojo.fx.easing"); 
 
 
 		var allAnim = null; 
@@ -44,12 +44,12 @@
 			dojo.fadeOut({
 				node: 'easeIn',
 				duration:2000,
-				easing: dojox.fx.easing.easeIn
+				easing: dojo.fx.easing.easeIn
 			}),
 			dojo.fadeIn({	
 				node: 'easeIn',
 				duration:2000,
-				easing: dojox.fx.easing.easeIn
+				easing: dojo.fx.easing.easeIn
 			})
 		]);
 
@@ -58,12 +58,12 @@
 			dojo.fadeOut({
 				node: 'easeOut',
 				duration:2000,
-				easing: dojox.fx.easing.easeOut
+				easing: dojo.fx.easing.easeOut
 			}),
 			dojo.fadeIn({	
 				node: 'easeOut',
 				duration:2000,
-				easing: dojox.fx.easing.easeOut
+				easing: dojo.fx.easing.easeOut
 			})
 		]);
 
@@ -82,12 +82,12 @@
 			dojo.fadeOut({
 				node: 'linearEase',
 				duration:2000,
-				easing: dojox.fx.easing.linear
+				easing: dojo.fx.easing.linear
 			}),
 			dojo.fadeIn({
 				node: 'linearEase',
 				duration:2000,
-				easing: dojox.fx.easing.linear
+				easing: dojo.fx.easing.linear
 			})
 		]);
 
@@ -99,14 +99,11 @@
 			dojo.fx.slideTo({
 				node:"bounce",
 				top:e.pageY, left:e.pageX,
-				easing: dojox.fx.easing.easeOutBack
+				easing: dojo.fx.easing.easeOutBack
 			}).play();
 		});
 
-		// argh! FIXME: combine and chain are destructive to the animations. :(
-		// allAnim = dojo.fx.combine([easeInAnim,easeOutAnim,easeInOutAnim]);
 		allAnim = { play: function(){ 
-			console.log("can't do this via fx.combine - destructive"); 
 			easeInAnim.play();
 			easeOutAnim.play();
 			easeInOutAnim.play(); 
@@ -123,16 +120,16 @@
 
 	(click block to play animation, or <a href="#" onclick="allAnim.play()">here to do all three</a>)
 
-	<div id="easeIn" class="block">dojox.fx.easing.easeIn</div>
+	<div id="easeIn" class="block">dojo.fx.easing.easeIn</div>
 	<br><br>
-	<div id="easeOut" class="block">dojox.fx.easing.easeOut</div>
+	<div id="easeOut" class="block">dojo.fx.easing.easeOut</div>
 	<br><br>
-	<div id="linearEase" class="block">dojox.fx.easing.linear</div>
+	<div id="linearEase" class="block">dojo.fx.easing.linear</div>
 	<br><br>
 	<div id="easeInOut" class="block">dojo default easing</div>
 	
 	<p>
-	dojox.fx.easing is stand-alone, and does not require the dojox.fx base files. to see a chart
+	dojo.fx.easing is stand-alone, and does not require the dojox.fx base files. to see a chart
 	of these functions see <a href="example_easingChart2D.html">example_easingChart2D.html</a> 
 	</p>	
 

@@ -29,7 +29,7 @@
 		dojo.require("dijit.Tree");
 		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dijit.layout.BorderContainer");
-		dojo.require("dojox.fx.easing");
+		dojo.require("dojo.fx.easing");
 	</script>
 </head>
 <body class="tundra">
@@ -61,9 +61,9 @@
 		</div>
 	</div>
 
-	<h2>Top (easeIn="dojox.fx.easing.bounceOut" duration="1200"):</h2>
+	<h2>Top (easeIn="dojo.fx.easing.bounceOut" duration="1200"):</h2>
 	<div dojoType="dijit.layout.BorderContainer" style="height:275px">
-		<div easeIn="dojox.fx.easing.bounceOut" duration="1200" dojoType="dojox.layout.ExpandoPane" title="topTest" region="top" maxHeight="75" style="height:75px; background:red">
+		<div easeIn="dojo.fx.easing.bounceOut" duration="1200" dojoType="dojox.layout.ExpandoPane" title="topTest" region="top" maxHeight="75" style="height:75px; background:red">
 			foo
 		</div>
 		<div region="center" dojoType="dijit.layout.ContentPane" href="_lorem.html"></div>

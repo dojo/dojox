@@ -51,13 +51,6 @@ Documentation
 	- dojox.fx.removeClass - "   "    "    "   removing a class from a node
 	- dojox.fx.toggleClass - wrapper for addClass/removeClass
 
-	dojox.fx.easing: - a collection of easing functions to use
-		this is a "stand alone" class, and can be used via:
-		dojo.require("dojox.fx.easing"); 
-		to use in an _Animation easing: property	
-		ported/decoded by Bryan Forbes from Robert Penner's Flash easing
-		functions, contributed under CLA. 
-
 	dojox.fx.ext-dojo.NodeList - extensions to dojo.NodeList-fx wrapping the
 		relevant dojox.fx animations into dojo.NodeList 
 

@@ -12,7 +12,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 dojo.require("dijit.layout.StackContainer");
-dojo.require("dojox.fx.easing"); 
+dojo.require("dojo.fx.easing"); 
 
 dojo.declare("dojox.layout.RadioGroup",
 	[dijit.layout.StackContainer,dijit._Templated],
@@ -151,7 +151,7 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 
 	// easing: Function
 	//	A hook to override the default easing of the pane slides.
-	easing: "dojox.fx.easing.backOut",
+	easing: "dojo.fx.easing.backOut",
 
 	// zTop: Integer
 	//		A z-index to apply to the incoming pane

@@ -70,7 +70,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 dojo.require("dojox.charting.widget.Legend");
 
 dojo.require("dojo.colors");
-dojo.require("dojox.fx.easing");
+dojo.require("dojo.fx.easing");
 
 var dc = dojox.charting;
 
@@ -136,7 +136,7 @@ makeObjects = function(){
 	chart5.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
 	var anim5a = new dc.action2d.Highlight(chart5, "default", {
 		duration: dur,
-		easing:   dojox.fx.easing.bounceOut
+		easing:   dojo.fx.easing.bounceOut
 	});
 	var anim5b = new dc.action2d.Tooltip(chart5, "default");
 	chart5.render();
@@ -153,7 +153,7 @@ makeObjects = function(){
 	chart6.addSeries("Series C", [1, 0.5, -1, -2, -3], {stroke: {color: "black"}, fill: "green"});
 	var anim6a = new dc.action2d.Highlight(chart6, "default", {
 		duration: dur,
-		easing:   dojox.fx.easing.sineOut
+		easing:   dojo.fx.easing.sineOut
 	});
 	var anim6b = new dc.action2d.Shake(chart6, "default");
 	var anim6c = new dc.action2d.Tooltip(chart6, "default");
@@ -167,7 +167,7 @@ makeObjects = function(){
 	chart7.addSeries("Series B", [2, 1, 2, 1, 2], {stroke: {color: "black"}, fill: "blue"});
 	var anim7a = new dc.action2d.Highlight(chart7, "default", {
 		duration: dur,
-		easing:   dojox.fx.easing.bounceOut
+		easing:   dojo.fx.easing.bounceOut
 	});
 	var anim7b = new dc.action2d.Shake(chart7, "default");
 	var anim7c = new dc.action2d.Tooltip(chart7, "default");

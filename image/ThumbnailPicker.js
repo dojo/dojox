@@ -8,6 +8,9 @@ dojo.experimental("dojox.image.ThumbnailPicker");
 //
 //	document topics.
 
+dojo.require("dojox.fx.scroll"); // is optional, but don't want to dojo[require] it
+dojo.require("dojo.fx.easing"); 
+
 dojo.require("dojo.fx");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
@@ -143,11 +146,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 			});
 		}
 	
-		if(this.isScrollable) {
-			// FIXME: does this break builds or anything? 
-			dojo.require("dojox.fx.scroll");
-			dojo.require("dojox.fx.easing"); 
-		}
 		if(this.isClickable){
 			dojo.addClass(this.thumbsNode, "thumbClickable");
 		}

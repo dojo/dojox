@@ -18,7 +18,7 @@
 	<script src="../../dojo/dojo.js"></script>
 	<script type="text/javascript">
 		dojo.require('dojox.widget.Dialog');
-		dojo.require("dojox.fx.easing");
+		dojo.require("dojo.fx.easing");
 		dojo.addOnLoad(function(){
 			var dialog = new dojox.widget.Dialog({ title: "About", viewportPadding:100, fixedSize:true });
 			dialog.startup();

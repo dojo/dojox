@@ -3,7 +3,7 @@ dojo.experimental("dojox.image.Badge");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
-dojo.require("dojox.fx.easing");
+dojo.require("dojo.fx.easing");
 
 dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 	// summary: A simple grid of Images that loops through thumbnails
@@ -39,7 +39,7 @@ dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 	
 	// easing: Function|String
 	//		An easing function to use when showing the node (does not apply to shrinking)
-	easing: "dojox.fx.easing.backOut",
+	easing: "dojo.fx.easing.backOut",
 	
 	startup: function(){
 		if(this._started){ return; }

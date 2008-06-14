@@ -12,7 +12,7 @@ dojo.require("dojox.gfx.matrix");
 		// the data description block for the widget parser
 		defaultParams: {
 			duration: 400,	// duration of the action in ms
-			easing:   dojox.fx.easing.elasticOut,	// easing for the action
+			easing:   dojo.fx.easing.backOut,	// easing for the action
 			shiftX:   DEFAULT_SHIFT,	// shift of the element along the X axis
 			shiftY:   DEFAULT_SHIFT		// shift of the element along the Y axis
 		},
