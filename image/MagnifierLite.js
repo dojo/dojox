@@ -3,8 +3,8 @@ dojo.experimental("dojox.image.MagnifierLite");
 
 dojo.require("dijit._Widget");
 
-dojo.declare("dojox.image.MagnifierLite",
-	[dijit._Widget],{
+dojo.declare("dojox.image.MagnifierLite", dijit._Widget,
+	{
 	// summary:	Adds magnification on a portion of an image element
 	//
 	// description: An unobtrusive way to add an unstyled overlay
@@ -80,7 +80,7 @@ dojo.declare("dojox.image.MagnifierLite",
 	
 	_showGlass: function(e){
 		// summary: show the overlay
-		this._placeGlass(e);		
+		this._placeGlass(e);
 		dojo.style(this.glassNode, {
 			visibility: "visible",
 			display:""
@@ -100,9 +100,10 @@ dojo.declare("dojox.image.MagnifierLite",
 		// summary: position the overlay centered under the cursor
 
 		this._setImage(e);
+		var sub = Math.floor(this.glassSize / 2);
 		dojo.style(this.glassNode,{ 
-			top: Math.floor(e.pageY - (this.glassSize / 2)) + "px", 
-			left:Math.floor(e.pageX - (this.glassSize / 2)) + "px"
+			top: Math.floor(e.pageY - sub) + "px", 
+			left:Math.floor(e.pageX - sub) + "px"
 		});
 		
 	},
@@ -119,6 +120,11 @@ dojo.declare("dojox.image.MagnifierLite",
 			left: x + "px"
 		});
 
+	},
+	
+	destroy: function(finalize){
+		dojo._destroyElement(this.glassNode);
+		this.inherited(arguments);
 	}
 
 });
