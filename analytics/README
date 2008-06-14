@@ -7,7 +7,8 @@ Release date: 12/17/2007
 Project state: beta
 -------------------------------------------------------------------------------
 Project authors
-	Dustin Machi
+	Dustin Machi  (dmachi)
+	Peter Higgins (dante)
 -------------------------------------------------------------------------------
 Project description
 	analytics and client monitoring system.  Including the base analytics
@@ -21,6 +22,9 @@ back to the server.  Plugins included at this time:
 	idle - reports idle/activity 
 	consoleMessages - reports console.* messages to the server	
 
+	Additionally, a Google Ananlytics (Urchin tracker) helper is included
+	in this project, though is unrelated to the Core dojox.analytics 
+	project code. 
 
 -------------------------------------------------------------------------------
 Dependencies:
@@ -120,7 +124,6 @@ Note that the basic usage of this system simply serializes json with toJson() wh
 to the analytics addData() method.  If data is passed that has circular references
 it will die.  Take care not to do that or be surprised when it doens't work
 in those cases.
-		
 
 -------------------------------------------------------------------------------
 Installation instructions
