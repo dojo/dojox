@@ -32,8 +32,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 		}
 		
 		// get current domain
-		// see: https://bugzilla.mozilla.org/show_bug.cgi?id=357323
-		this._domain = (location.hostname == "localhost") ? "localhost.localdomain" : location.hostname;
+		this._domain = this._getDomain();
 		// console.debug(this._domain);
 		
 		// indicate that this storage provider is now loaded
@@ -43,8 +42,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 	
 	isAvailable: function(){
 		try{
-			// see: https://bugzilla.mozilla.org/show_bug.cgi?id=357323
-			var myStorage = globalStorage[((location.hostname == "localhost") ? "localhost.localdomain" : location.hostname)];
+			var myStorage = globalStorage[this._getDomain()]; 
 		}catch(e){
 			this._available = false;
 			return this._available;
@@ -267,6 +265,11 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 		}else{
 			return "__" + namespace + "_" + key;
 		}
+	},
+
+	_getDomain: function(){
+		// see: https://bugzilla.mozilla.org/show_bug.cgi?id=357323
+		return ((location.hostname == "localhost" && dojo.isFF && dojo.isFF < 3) ? "localhost.localdomain" : location.hostname);
 	}
 });
 
