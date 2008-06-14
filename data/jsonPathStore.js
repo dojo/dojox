@@ -607,7 +607,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//		reference to the object	 
 
 			var options = options || {};
-			var d=options.data || this._data;
+			var d = options.data || this._data;
 	
 			if (!options.suppressExportMeta && options.clone){
 				data = dojo.clone(d);
@@ -632,7 +632,7 @@ dojo.declare("dojox.data.jsonPathStore",
 					return data;
 				case "json":
 				default:
-					return dojo.toJson(data);
+					return dojo.toJson(data, options.pretty || false);
 			}
 		},	
 
