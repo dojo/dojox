@@ -23,10 +23,15 @@
 		.dj_ie .fixed {
 			display:none;
 		}
-		
+		img.thing { width:50px; height:50px; }
 		.noBorderWrapper .dojoxBadge {
 			border:none;
 		}
+		
+		.b1 { background:url('images/square.jpg') !important; }
+		.b2 { background-image:url('images/imageHoriz.jpg') !important; }
+		.b3 { background-image:url('images/imageVert.jpg') !important; }
+		.b4 { background-image:url('images/imageHoriz2.jpg') !important; }
 	</style>
 	
 	<!-- required: dojo.js -->
@@ -88,10 +93,10 @@
 		
 			<h3>[2x2] From IMG</h3>
 			<div dojoType="dojox.image.Badge" rows="2" cols="2" children="img.thing">
-				<img class="thing" alt="thingr" />
-				<img class="thing" alt="thingr" />
-				<img class="thing" alt="thingr" />
-				<img class="thing" alt="thingr" />			
+				<img src="images/square.jpg" class="thing" alt="thingr" />
+				<img src="images/square.jpg" class="thing" alt="thingr" />
+				<img src="images/square.jpg" class="thing" alt="thingr" />
+				<img src="images/square.jpg" class="thing" alt="thingr" />			
 			</div>
 		
 			<h3>[4x3]</h3>	
@@ -151,18 +156,12 @@
 				<div class="dojoxBadgeImage"></div>
 			</div>
 			
-			<h2>[9x2] But only 9 images</h2>
+			<h2>[3x2] But only 3 images</h2>
 			<div class="noBorderWrapper">
-				<div dojoType="dojox.image.Badge" cellSize="30" rows="2" cols="9">
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
-					<div class="dojoxBadgeImage"></div>
+				<div dojoType="dojox.image.Badge" cellSize="150" rows="2" cols="3">
+					<div class="dojoxBadgeImage b1"></div>
+					<div class="dojoxBadgeImage b2"></div>
+					<div class="dojoxBadgeImage b3"></div>
 				</div>
 			</div>
 			
