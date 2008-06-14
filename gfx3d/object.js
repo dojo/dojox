@@ -318,12 +318,12 @@ dojo.declare("dojox.gfx3d.Orbit", dojox.gfx3d.Object, {
 			zx: marks[2].x * marks[2].y, zy: marks[2].y * marks[2].y, zz: 1,
 			dx: 0, dy: 0, dz: 0
 		};
-		var b = dojo.map(marks, function(item){
+		var B = dojo.map(marks, function(item){
 			return -Math.pow(item.x, 2);
 		});
 
 		// X is 2b, c, f
-		var X = dojox.gfx3d.matrix.multiplyPoint(dojox.gfx3d.matrix.invert(A),b[0], b[1], b[2]);
+		var X = dojox.gfx3d.matrix.multiplyPoint(dojox.gfx3d.matrix.invert(A),B[0], B[1], B[2]);
 		var theta = Math.atan2(X.x, 1 - X.y) / 2;
 
 		// rotate the marks back to the canonical form
@@ -399,15 +399,15 @@ dojo.declare("dojox.gfx3d.Path3d", dojox.gfx3d.Object, {
 		// summary: adds a segment
 		// action: String: valid SVG code for a segment's type
 		// args: Array: a list of parameters for this segment
-		var group = this._validSegments[action.toLowerCase()];
+		var group = this._validSegments[action.toLowerCase()], segment;
 		if(typeof(group) == "number"){
 			if(group){
 				if(args.length >= group){
-					var segment = {action: action, args: args.slice(0, args.length - args.length % group)};
+					segment = {action: action, args: args.slice(0, args.length - args.length % group)};
 					this.segments.push(segment);
 				}
 			}else{
-				var segment = {action: action, args: []};
+				segment = {action: action, args: []};
 				this.segments.push(segment);
 			}
 		}
@@ -543,21 +543,21 @@ dojo.declare("dojox.gfx3d.Quads", dojox.gfx3d.Object, {
 		return this;
 	},
 	render: function(camera){
-		var m = dojox.gfx3d.matrix.multiply(camera, this.matrix);
+		var m = dojox.gfx3d.matrix.multiply(camera, this.matrix), i;
 		var c = dojo.map(this.object.points, function(item){
 			return dojox.gfx3d.matrix.multiplyPoint(m, item);
 		});
 		this.cache = [];
 		if(this.object.style == "strip"){
 			var pool = c.slice(0, 2);
-			for(var i = 2; i < c.length; ){
+			for(i = 2; i < c.length; ){
 				pool = pool.concat( [ c[i], c[i+1], pool[0] ] );
 				this.cache.push(pool);
 				pool = pool.slice(2,4);
 				i += 2;
 			}
 		}else{
-			for(var i = 0; i < c.length; ){
+			for(i = 0; i < c.length; ){
 				this.cache.push( [c[i], c[i+1], c[i+2], c[i+3], c[i] ] );
 				i += 4;
 			}
@@ -748,12 +748,12 @@ dojo.declare("dojox.gfx3d.Cylinder", dojox.gfx3d.Object, {
 			zx: marks[2].x * marks[2].y, zy: marks[2].y * marks[2].y, zz: 1,
 			dx: 0, dy: 0, dz: 0
 		};
-		var b = dojo.map(marks, function(item){
+		var B = dojo.map(marks, function(item){
 			return -Math.pow(item.x, 2);
 		});
 
 		// X is 2b, c, f
-		var X = dojox.gfx3d.matrix.multiplyPoint(dojox.gfx3d.matrix.invert(A), b[0], b[1], b[2]);
+		var X = dojox.gfx3d.matrix.multiplyPoint(dojox.gfx3d.matrix.invert(A), B[0], B[1], B[2]);
 		var theta = Math.atan2(X.x, 1 - X.y) / 2;
 
 		// rotate the marks back to the canonical form
@@ -937,9 +937,14 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 
 	setDimensions: function(dim){
 		if(dim){
+			var w = dojo.isString(dim.width) ? parseInt(dim.width)  : dim.width;
+			var h = dojo.isString(dim.height) ? parseInt(dim.height) : dim.height;
+			var trs = this.rawNode.style;
+			trs.height = h;
+			trs.width = w;
 			this.dimension = {
-				width:  dojo.isString(dim.width) ? parseInt(dim.width)  : dim.width,
-				height: dojo.isString(dim.height) ? parseInt(dim.height) : dim.height
+				width:  w,
+				height: h
 			};
 		}else{
 			this.dimension = null;
