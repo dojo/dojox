@@ -353,7 +353,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 				target: target,
 				win: this.thumbScroller,
 				duration:300,
-				easing:dojox.fx.easing.easeOut,
+				easing:dojo.fx.easing.easeOut,
 				onEnd: dojo.hitch(this, "_checkLoad", img, index)
 			}).play(10);
 		}else{
