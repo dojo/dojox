@@ -7,7 +7,7 @@ Release date: 03/18/2008
 Project state: stable
 -------------------------------------------------------------------------------
 Project authors
-	Jared Jurkiewicz (jared.jurkiewicz@gmail.com)
+	Jared Jurkiewicz (jared.jurkiewicz@gmail.com) (FileStore, HtmlStore, XmlStore, FlickrStore, others).
 	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore, GoogleSeachStore, GoogleFeedStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
@@ -109,4 +109,7 @@ Additional Notes:
 
 	dojox.data.AndOrWriteStore - Demonstrating a more complex query format allowing AND/OR.  
 	Based directly on dojo.data.ItemFileWriteStore.
+
+	dojox.data.FileStore - A lazy-loading store designed for searching filesystems with a provided
+		PHP back end.  Implements dojo.data.api.Read and dojo.data.api.Identity
 
