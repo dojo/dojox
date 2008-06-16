@@ -66,7 +66,10 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	getAttributes: function(item){
 		//	summary: 
 		//      See dojo.data.api.Read.getAttributes()
-		return ["title", "description", "author", "datePublished", "dateTaken", "imageUrl", "imageUrlSmall", "imageUrlMedium", "tags", "link"]; 
+		return [
+			"title", "description", "author", "datePublished", "dateTaken", 
+			"imageUrl", "imageUrlSmall", "imageUrlMedium", "tags", "link"
+		]; 
 	},
 
 	hasAttribute: function(item, attribute){
@@ -170,41 +173,41 @@ dojo.declare("dojox.data.FlickrStore", null, {
 		if(!request.query){
 			request.query={};
 		}
+		var rq = request.query;
 
 		//Build up the content to send the request for.
-		var content = {format: "json", tagmode:"any"};
-		if (request.query.tags) {
-			content.tags = request.query.tags;
+		var content = {
+			format: "json",
+			tagmode:"any"
+		};
+		dojo.forEach(
+			[ "tags", "tagmode", "lang", "id", "ids" ],
+			function(i){
+				if(rq[i]){ content[i] = rq[i]; }
+			}
+		);
+		if(rq.userid){
+			content.id = rq.userid;
 		}
-		if (request.query.tagmode) {
-			content.tagmode = request.query.tagmode;
-		}
-		if (request.query.userid) {
-			content.id = request.query.userid;
-		}
-		if (request.query.userids) {
-			content.ids = request.query.userids;
-		}
-		if (request.query.lang) {
-			content.lang = request.query.lang;
+		if(rq.userids){
+			content.ids = rq.userids;
 		}
 
 		//Linking this up to Flickr is a PAIN!
-		var self = this;
 		var handle = null;
 		var getArgs = {
 			url: this._flickrUrl,
 			preventCache: true,
 			content: content
 		};
-		var myHandler = function(data){
-			if(handle !== null){
+		var myHandler = dojo.hitch(this, function(data){
+			if(!!handle){
 				dojo.disconnect(handle);
 			}
 
 			//Process the items...
-			fetchHandler(self._processFlickrData(data), request);
-		};
+			fetchHandler(this._processFlickrData(data), request);
+		});
         handle = dojo.connect("jsonFlickrFeed", myHandler);
 		var deferred = dojo.io.script.get(getArgs);
 		
