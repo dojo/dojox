@@ -7,60 +7,30 @@
 <head>
 	<title>Demo of FlickrRestStore</title>
 	<style type="text/css">
-
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "./flickrDemo.css";
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" 
+		djConfig="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dijit.form.TextBox");
 		dojo.require("dijit.form.Button");
 		dojo.require("dijit.form.ComboBox");
 		dojo.require("dijit.form.NumberSpinner");
-		dojo.require("dijit.Tree");
 		dojo.require("dojox.data.FlickrStore");
 		dojo.require("dojox.data.FlickrRestStore");
 		dojo.require("dojox.data.demos.widgets.FlickrViewList");
-		dojo.require("dojox.data.demos.widgets.FlickrView");
 
 		function init(){
-			var fViewWidgets = [];
-
-			//Set up an onComplete handler for flickrData
-			function onComplete(items, request){
-				flickrViewsWidget.clearList();
-				if(items.length > 0){
-					for(var i = 0; i < items.length; i++){
-						var flickrData = {
-							title: flickrStore.getValue(items[i],"title"),
-							author: flickrStore.getValue(items[i],"author"),
-							iconUrl: flickrStore.getValue(items[i],"imageUrlSmall"),
-							imageUrl: flickrStore.getValue(items[i],"imageUrl")
-						}
-						flickrViewsWidget.addView(flickrData);
-					}
-				}
-				statusWidget.setValue("PROCESSING COMPLETE.");
-
-			}
-			//What to do if a search fails...
-			function onError(error, request){
-				flickrViewsWidget.clearList();
-				statusWidget.setValue("PROCESSING ERROR.");
-			}
-
 			//Function to invoke the search of the FlickrStore
 			function invokeSearch(){
-				var request = {
+				var request = { 
 					query: {
 					  apikey: "8c6803164dbc395fb7131c9d54843627"  
-					},
-					onComplete: onComplete,
-					onError: onError
+					}
 				};
 
 				if(idWidget){
@@ -70,24 +40,10 @@
 					}
 				}
 				if(tagsWidget){
-					var tags = tagsWidget.getValue();
-					if(tags && tags !== ""){
-						var tagsArray = tags.split(" ");
-						tags = "";
-						for(var i = 0; i < tagsArray.length; i++){
-							tags = tags + tagsArray[i];
-							if(i < (tagsArray.length - 1)){
-								tags += ","
-							}
-						}
-						request.query.tags = tags;
-					}
+					request.query.tags = (tagsWidget.getValue()||"").split(" ").join(",");
 				}
 				if(tagmodeWidget){
-					var tagmode = tagmodeWidget.getValue();
-					if(tagmode !== ""){
-						request.query.tagmode = tagmode;
-					}
+					request.query.tagmode = tagmodeWidget.getValue()||"";
 				}
 				
 				if(setIdWidget){
@@ -110,10 +66,10 @@
 					
 					if(sortType != "" && sortDirection != ""){
 						request.query.sort = [
-						  {
-							attribute: sortType,
-							descending: (sortDirection.toLowerCase() == "descending")
-						  }					  
+							{
+								attribute: sortType,
+								descending: (sortDirection.toLowerCase() == "descending")
+							}					  
 						];
 					}
 				}
@@ -129,7 +85,8 @@
 					statusWidget.setValue("PROCESSING REQUEST");
 				}
 
-				flickrStore.fetch(request);
+				// flickrStore.fetch(request);
+				flickrViewsWidget.fetch(request);
 			}
 
 			//Lastly, link up the search event.
@@ -270,7 +227,10 @@
 	<hr/>
 	</blockquote>
 	<div dojoType="dojox.data.FlickrRestStore" jsId="flickrStore" label="title"></div>
-	<div dojoType="dojox.data.demos.widgets.FlickrViewList" id="flickrViews" jsId="flickrViewsWidget"></div>
+	<div dojoType="dojox.data.demos.widgets.FlickrViewList" 
+		store="flickrStore"
+		id="flickrViews" 
+		jsId="flickrViewsWidget"></div>
 
 </body>
 </html>
