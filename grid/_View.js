@@ -738,7 +738,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		getScrollbarWidth: function(){
-			return (this.noscroll ? 0 : dojox.html.metrics.getScrollbar().w); // Integer
+			return (this.noscroll || !this.hasVScrollbar() ? 0 : dojox.html.metrics.getScrollbar().w); // Integer
 		},
 
 		getColumnsWidth: function(){
@@ -850,18 +850,26 @@ dojo.require("dojo.dnd.Manager");
 			this.adaptWidth();
 		},
 
-		hasScrollbar: function(){
-			return (this.scrollboxNode.clientHeight != this.scrollboxNode.offsetHeight); // Boolean
+		hasHScrollbar: function(reset){
+			if(this._hasHScroll == undefined || reset){
+				this._hasHScroll = (this.scrollboxNode.offsetWidth < this.contentNode.offsetWidth);
+			}
+			return this._hasHScroll; // Boolean
 		},
 
+		hasVScrollbar: function(reset){
+			if(this._hasVScroll == undefined || reset){
+				this._hasVScroll = (this.scrollboxNode.offsetHeight < this.contentNode.offsetHeight);
+			}
+			return this._hasVScroll; // Boolean
+		},
+		
 		adaptHeight: function(){
 			if(!this.grid.autoHeight){
 				var h = this.domNode.clientHeight;
-				if(!this.hasScrollbar()){ // no scrollbar is rendered
-					h -= dojox.html.metrics.getScrollbar().w;
-				}
 				dojox.grid.util.setStyleHeightPx(this.scrollboxNode, h);
 			}
+			this.hasVScrollbar(true);
 		},
 
 		adaptWidth: function(){
@@ -879,11 +887,9 @@ dojo.require("dojo.dnd.Manager");
 				w = Math.min(w, this.getColumnsWidth()) + 'px';
 				this._removingColumn = false;
 			}
-
 			var cn = this.contentNode;
-			cn.style.width = '';
-			cn.offsetWidth;
 			cn.style.width = w;
+			this.hasHScrollbar(true);
 		},
 
 		setSize: function(w, h){

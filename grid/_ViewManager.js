@@ -262,7 +262,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	getFirstScrollingView: function(){
 		// summary: Returns the first grid view with a scroll bar 
 		for(var i=0, v; (v=this.views[i]); i++){
-			if(v.hasScrollbar()){
+			if(v.hasHScrollbar() || v.hasVScrollbar()){
 				return v;
 			}
 		}

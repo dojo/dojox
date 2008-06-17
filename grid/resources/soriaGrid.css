@@ -90,7 +90,7 @@
 
 .soria .dojoxGrid-scrollbox {
 	position: relative;
-	overflow: scroll;
+	overflow: auto;
 	background-color: #fefefe;
 	width: 100%;
 }
