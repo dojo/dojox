@@ -13,7 +13,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//	access to all the services of Flickr.
 		//	This store cannot do * and ? filtering as the flickr service 
 		//	provides no interface for wildcards.
-		if(args && args.label){
+		if(args){
 			if(args.label) {
 				this.label = args.label;
 			}
@@ -112,6 +112,10 @@ dojo.declare("dojox.data.FlickrRestStore",
 			isRest = true;
 			content.api_key = request.query.apikey;
 			secondaryKey.push("api"+request.query.apikey);
+		}else if(content.api_key){
+			isRest = true;
+			request.query.apikey = content.api_key;
+			secondaryKey.push("api"+content.api_key);
 		}else{
 			throw Error("dojox.data.FlickrRestStore: An API key must be specified.");
 		}
@@ -172,8 +176,8 @@ dojo.declare("dojox.data.FlickrRestStore",
 		
 		if(query.setid){
 			content.method = "flickr.photosets.getPhotos";
-			content.photoset_id = request.query.set; 
-			primaryKey.push("set" + request.query.set);
+			content.photoset_id = request.query.setid; 
+			primaryKey.push("set" + request.query.setid);
 		}
 		
 		if(query.tags){
@@ -276,16 +280,20 @@ dojo.declare("dojox.data.FlickrRestStore",
 			//If the request contains an onBegin method, the total number
 			//of photos must be calculated.
 			if(onBegin){
-				if(data && typeof(data.photos.perpage) != "undefined" && typeof(data.photos.pages) != "undefined"){
-					if(data.photos.perpage * data.photos.pages <= handler.request.start + handler.request.count){
+				var photos = null;
+				if(data){
+					photos = (data.photoset ? data.photoset : data.photos);
+				}
+				if(photos && typeof(photos.per_page) != "undefined" && typeof(photos.pages) != "undefined"){
+					if(photos.per_page * photos.pages <= handler.request.start + handler.request.count){
 						//If the final page of results has been received, it is possible to 
 						//know exactly how many photos there are
-						maxPhotos = handler.request.start + data.photos.photo.length;                
+						maxPhotos = handler.request.start + photos.photo.length;                
 					}else{
 						//If the final page of results has not yet been received,
 						//it is not possible to tell exactly how many photos exist, so
 						//return the number of pages multiplied by the number of photos per page.
-						maxPhotos = data.photos.perpage * data.photos.pages;
+						maxPhotos = photos.per_page * photos.pages;
 					}
 					this._maxPhotosPerUser[primaryKey] = maxPhotos;
 					onBegin(maxPhotos, handler.request);
@@ -326,7 +334,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 				}
 				this._prevRequestRanges[primaryKey].push({
 					start: request.start,
-					end: request.start + data.photos.photo.length
+					end: request.start + (data.photoset ? data.photoset.photo.length : data.photos.photo.length)
 				});
 
 				//Iterate through the array of handlers, calling each one.
@@ -417,8 +425,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 		var template = ["http://farm", null, ".static.flickr.com/", null, "/", null, "_", null];
 		
 		var items = [];
-		if(data.stat == "ok" && data.photos && data.photos.photo){
-			items = data.photos.photo;
+		var photos = (data.photoset ? data.photoset : data.photos);
+		if(data.stat == "ok" && photos && photos.photo){
+			items = photos.photo;
 			
 			//Add on the store ref so that isItem can work.
 			for(var i = 0; i < items.length; i++){
@@ -437,6 +446,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 				 	l: base + ".jpg",
 				 	t: base + "_t.jpg"
 				};
+				if(!item.owner && data.photoset){
+					item.owner = data.photoset.owner;
+				}
 			}
 		}
 		var start = request.start ? request.start : 0;
