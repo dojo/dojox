@@ -91,12 +91,36 @@ dojo.declare("dojox.rpc.Service", null, {
 				args = args[0];
 			}else{
 				// they provided ordered, must convert
-				args = dojox.rpc.toNamed(method, args, method.strictParameters||smd.strictParameters);
+				var data={};
+			    for(var i=0;i<method.parameters.length;i++){
+			        if(typeof args[i] != "undefined" || !method.parameters[i].optional){
+			            data[method.parameters[i].name]=args[i];
+			        }
+			    }
+			    args = data;
 			}
-			if(smd.parameters && smd.parameters[0]){ // mixing the smd parameters
-				for(i=0; i< smd.parameters.length; i++){
-					if(smd.parameters[i].name && smd.parameters[i]["default"]){
-						args[smd.parameters[i].name] = smd.parameters[i]["default"];
+			var parameters = (method.parameters || []).concat(smd.parameters || []);
+			if(method.strictParameters||smd.strictParameters){
+				//remove any properties that were not defined
+				for(i in args){
+					var found=false;
+					for(j=0; j<parameters.length;j++){
+						if(parameters[i].name==i){ found=true; }
+					}
+					if(!found){
+						delete args[i];
+					}
+				}
+				
+			}
+			// setting default values
+			for(i=0; i< parameters.length; i++){
+				var param = parameters[i];
+				if(!param.optional && param.name){
+					if(param["default"]){
+						args[param.name] = param["default"];
+					}else if(!(param.name in args)){
+						throw new Error("Required parameter " + param.name + " was omitted");
 					}
 				}
 			}
@@ -158,40 +182,6 @@ dojox.rpc.getTarget = function(smd, method){
 		dest = new dojo._Url(dest,method.target) + '';
 	}
 	return dest;
-};
-
-dojox.rpc.toNamed=function(method, args, strictParams){
-	var i;
-	if(!dojo.isArray(args)){
-		if(strictParams){
-			//verify that all required parameters were supplied
-			for(i=0; i<method.parameters.length;i++){
-				if((!method.parameters[i].optional) && (!args[method.parameters[i].name])){
-					throw new Error("Optional Parameter '" + method.parameters[i].name + "' not supplied to " + method.name);
-				}
-			}
-
-			//remove any properties that were not defined
-			for(var x in args){
-				var found=false;
-				for(i=0; i<method.parameters.length;i++){
-					if(method.parameters[i].name==x){ found=true; }
-				}
-				if(!found){
-					delete args[x];
-				}
-			}
-		}
-		return args;
-	}
-
-	var data={};
-    for(i=0;i<method.parameters.length;i++){
-        if(typeof args[i] != "undefined" || !method.parameters[i].optional){
-            data[method.parameters[i].name]=args[i];
-        }
-    }
-	return data;
 };
 
 dojox.rpc.toOrdered=function(method, args){
