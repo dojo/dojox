@@ -233,13 +233,14 @@ dojox.xml.DomParser=new (function(){
 				if(obj.parentNode){
 					obj=obj.parentNode;
 				}
-				var text=res[3];
-				if(text.length>0)
+				var text=(res[3]||"").replace(trim, "");
+				if(text.length>0) {
 					obj.childNodes.push(_createTextNode(text));
-			}else
+				}
+			}
 
 			//	open tags.
-			if(res[1].length>0){
+			else if(res[1].length>0){
 				//	figure out the type of node.
 				if(res[1].charAt(0)=="?"){
 					//	processing instruction
