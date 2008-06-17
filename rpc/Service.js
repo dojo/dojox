@@ -26,9 +26,15 @@ dojo.declare("dojox.rpc.Service", null, {
 			self._smd = smd;
 
 			//generate the methods
-			for(var serviceName in self._smd.services){
-				self[serviceName]=self._generateService(serviceName, self._smd.services[serviceName]);
-			}
+ 			for(var serviceName in self._smd.services){
+				var pieces = serviceName.split("."); // handle "namespaced" services by breaking apart by .
+				var current = self;
+				for(var i=0; i< pieces.length-1; i++){
+					// create or reuse each object as we go down the chain
+					current = current[pieces[i]] || (current[pieces[i]] = {});
+				}
+				current[pieces[pieces.length-1]]=	self._generateService(serviceName, self._smd.services[serviceName]);
+ 			}
 		}
 		if(smd){
 			//ifthe arg is a string, we assume it is a url to retrieve an smd definition from

@@ -23,7 +23,15 @@
                 },
 
                 getEcho: {
-			transport: "GET",
+					transport: "GET",
+                        target: "echo.php",
+
+                        parameters: [
+                                {name: "message", type: "string", optional: true}
+                        ]
+                },
+	            "namespace.getEcho": {
+					transport: "GET",
                         target: "echo.php",
 
                         parameters: [

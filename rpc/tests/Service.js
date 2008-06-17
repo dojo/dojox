@@ -263,7 +263,7 @@ doh.register("dojox.rpc.tests.echo",
 		},
 
 		{
-			name: "#4 GET,URL,Ordered Parameters",
+			name: "#4.1 GET,URL,Ordered Parameters",
 			timeout: 4000,
 			setUp: function(){
 				//this.svc = new dojox.rpc.Service(dojox.rpc.tests.resources.testSmd);
@@ -280,6 +280,35 @@ doh.register("dojox.rpc.tests.echo",
 
 				//test when given named params
 				var td = this.svc.getEcho(this.name);
+				td.addCallback(this, function(result){
+					if (result==this.name){
+						d.callback(true);
+					}else{
+						d.errback(new Error("Unexpected Return Value: ", result));
+					}
+				});
+
+				return d;
+			}
+		},
+		{
+			name: "#4.2 Namespaced GET,URL,Ordered Parameters",
+			timeout: 4000,
+			setUp: function(){
+				//this.svc = new dojox.rpc.Service(dojox.rpc.tests.resources.testSmd);
+				this.svc = dojox.rpc.tests.service;
+			},
+			runTest: function(){
+				var d = new doh.Deferred();
+
+				if (window.location.protocol=="file:") {
+					var err= new Error("This Test requires a webserver and will fail intentionally if loaded from file://");
+					d.errback(err);
+					return d;
+				}
+
+				//test when given named params
+				var td = this.svc.namespace.getEcho(this.name);
 				td.addCallback(this, function(result){
 					if (result==this.name){
 						d.callback(true);
