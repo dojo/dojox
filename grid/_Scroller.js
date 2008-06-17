@@ -77,7 +77,7 @@ dojo.provide("dojox.grid._Scroller");
 			}
 			this.defaultPageHeight = this.defaultRowHeight * this.rowsPerPage;
 			//this.defaultPageHeight = this.defaultRowHeight * Math.min(this.rowsPerPage, this.rowCount);
-			this.pageCount = Math.ceil(this.rowCount / this.rowsPerPage) || 1;
+			this.pageCount = this._getPageCount(this.rowCount, this.rowsPerPage);
 			this.setKeepInfo(this.keepRows);
 			this.invalidate();
 			if(this.scrollboxNode){
@@ -85,6 +85,9 @@ dojo.provide("dojox.grid._Scroller");
 				this.scroll(0);
 				this.scrollboxNode.onscroll = dojo.hitch(this, 'onscroll');
 			}
+		},
+		_getPageCount: function(rowCount, rowsPerPage){
+			return rowCount ? (Math.ceil(rowCount / rowsPerPage) || 1) : 0;
 		},
 		destroy: function(){
 			this.invalidateNodes();
@@ -120,7 +123,7 @@ dojo.provide("dojox.grid._Scroller");
 			this.rowCount = inRowCount;
 			// update page count, adjust document height
 			var oldPageCount = this.pageCount;
-			this.pageCount = Math.ceil(this.rowCount / this.rowsPerPage);
+			this.pageCount = this._getPageCount(this.rowCount, this.rowsPerPage);
 			if(this.pageCount < oldPageCount){
 				for(var i=oldPageCount-1; i>=this.pageCount; i--){
 					this.height -= this.getPageHeight(i);
