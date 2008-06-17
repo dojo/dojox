@@ -235,7 +235,7 @@ dojox.xml.DomParser=new (function(){
 				}
 				var text=res[3];
 				if(text.length>0)
-					obj.appendChild(_createTextNode(text));
+					obj.childNodes.push(_createTextNode(text));
 			}else
 
 			//	open tags.
