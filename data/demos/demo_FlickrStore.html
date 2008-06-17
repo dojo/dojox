@@ -24,20 +24,22 @@
 		dojo.require("dojox.data.demos.widgets.FlickrViewList");
 
 		function init(){
-
 			//Function to invoke the search of the FlickrStore
 			var invokeSearch = function(){
 				var request = { query: {} };
-
+				
 				if(idWidget){
-					if(userid.length){
-						request.query.userid = userid;
+					var id = idWidget.getValue() || "";
+					if(id && id.length){
+						request.query.userid = id;
 					}
 				}
-
+                
 				if(tagsWidget){
 					request.query.tags = (tagsWidget.getValue()||"").split(" ").join(",");
 				}
+
+				
 				if(tagmodeWidget){
 					request.query.tagmode = tagmodeWidget.getValue()||"";
 				}
@@ -45,21 +47,20 @@
 				if(countWidget){
 					request.count = countWidget.getValue();
 				}
-
 				flickrViewsWidget.fetch(request);
 			}
-
-			dojo.connect(flickrViewsWidget, "fetch", 
-				dojo.hitch(statusWidget, "setValue", "PROCESSING REQUEST")
-			);
 			
-			dojo.connect(flickrViewsWidget, "onComplete", 
-				dojo.hitch(statusWidget, "setValue", "PROCESSING COMPLETE.")
-			);
+			dojo.connect(flickrViewsWidget, "fetch", function() {
+				statusWidget.setValue("PROCESSING REQUEST");
+			});
+			
+			dojo.connect(flickrViewsWidget, "onComplete", function() {
+                statusWidget.setValue("PROCESSING COMPLETE.");
+			});
 
-			dojo.connect(flickrViewsWidget, "onError", 
-				dojo.hitch(statusWidget, "setValue", "ERROR!!")
-			);
+			dojo.connect(flickrViewsWidget, "onError", function() {
+                statusWidget.setValue("ERROR!");
+			});
 
 			//Lastly, link up the search event.
 			var button = dijit.byId("searchButton");
