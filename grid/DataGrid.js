@@ -76,7 +76,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	setStore: function(store){
 		this._setStore(store);
-		this._refresh();
+		this._refresh(true);
 	},
 
 	_setStore: function(store){
@@ -262,9 +262,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		//console.log(inCell);
 	},
 
-	_refresh: function(){
+	_refresh: function(isRender){
 		this._clearData();
-		this._fetch();
+		this._fetch(0, isRender);
 	},
 
 	sort: function(){
