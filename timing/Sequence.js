@@ -1,7 +1,7 @@
 dojo.provide("dojox.timing.Sequence");
-dojo.experimental("dojox.timing.Sequence"); // in case it gets moved/renamed somewhere soon
+dojo.experimental("dojox.timing.Sequence"); 
 
-dojo.declare("dojox.timing.Sequence",null,{
+dojo.declare("dojox.timing.Sequence", null, {
 	// summary: 
 	//	This class provides functionality to really sequentialize 
 	//	function calls. You need to provide a list of functions and 
@@ -16,9 +16,11 @@ dojo.declare("dojox.timing.Sequence",null,{
 	// 	many extra cases. Also the doneFunction, if given is added at the
 	// 	end of the resolved-sequences.
 
+/*=====
 	// _defsResolved: Array
 	// 	The resolved sequence, for easier handling.
 	_defsResolved: [],
+=====*/
 
 	// This is the time to wait before goOn() calls _go(), which 
 	// mostly results from a pauseAfter for a function that returned
@@ -31,40 +33,43 @@ dojo.declare("dojox.timing.Sequence",null,{
 	_goOnPause: 0,
 
 	_running: false,
-	
-	go: function(/* Array */defs, /* function|Array? */doneFunction){
-		// summary:
+
+	constructor: function(){
+		this._defsResolved = [];
+	},
+
+	go: function(/* Array */defs, /* Function|Array? */doneFunction){
+		// summary: Run the passed sequence definition
 		//
 		// defs: Array
-		//	the sequence of actions
+		//		The sequence of actions
 		// doneFunction: Function|Array?
-		//	The function to call when done
+		//		The function to call when done
 		this._running = true;
-		var self = this;	
 		dojo.forEach(defs, function(cur){
 			if(cur.repeat > 1){
 				var repeat = cur.repeat;
-				for(var j=0; j<repeat ;j++){
+				for(var j = 0; j < repeat; j++){
 					cur.repeat = 1;
-					self._defsResolved.push(cur);
+					this._defsResolved.push(cur);
 				}
 			}else{
-				self._defsResolved.push(cur);				
+				this._defsResolved.push(cur);
 			}
-		});
-		var last = defs[defs.length-1];
-		if (doneFunction) {
-			self._defsResolved.push({func: doneFunction});
+		}, this);
+		var last = defs[defs.length - 1];
+		if(doneFunction){
+			this._defsResolved.push({ func: doneFunction });
 		}
 		// stop the sequence, this actually just sets this._running to false
-		self._defsResolved.push({func: [this.stop, this]});
+		this._defsResolved.push({ func: [this.stop, this] });
 		this._curId = 0;
 		this._go();
 	},
 
 	_go: function(){
 		// summary: Execute one task of this._defsResolved.
-		//
+
 		// if _running was set to false stop the sequence, this is the
 		// case when i.e. stop() was called.
 		if(!this._running){
@@ -95,22 +100,22 @@ dojo.declare("dojox.timing.Sequence",null,{
 			// don't go on and call this._go() again, we are done
 			return;
 		}
-		var self = this;
+
 		if(cur.pauseAfter){
-			if(resolveAndCallFunc(cur.func)!==false){
-				window.setTimeout(function() {self._go()}, cur.pauseAfter);
+			if(resolveAndCallFunc(cur.func) !== false){
+				setTimeout(dojo.hitch(this, "_go"), cur.pauseAfter);
 			}else{
 				this._goOnPause = cur.pauseAfter;
 			}
 		}else if(cur.pauseBefore){
-			var x = function(){
-				if(resolveAndCallFunc(cur.func)!==false){
-					self._go()
+			var x = dojo.hitch(this,function(){
+				if(resolveAndCallFunc(cur.func) !== false){
+					this._go()
 				}
-			};
-			window.setTimeout(x, cur.pauseBefore);
+			});
+			setTimeout(x, cur.pauseBefore);
 		}else{
-			if(resolveAndCallFunc(cur.func)!==false){
+			if(resolveAndCallFunc(cur.func) !== false){
 				this._go();
 			}
 		}
@@ -118,24 +123,25 @@ dojo.declare("dojox.timing.Sequence",null,{
 
 	goOn: function(){
 		// summary: This method just provides a hook from the outside, so that
-		// an interrupted sequence can be continued.
+		//		an interrupted sequence can be continued.
 		if(this._goOnPause){
-			var self = this;
-			setTimeout(function(){ self._go() }, this._goOnPause);
+			setTimeout(dojo.hitch(this, "_go"), this._goOnPause);
 			this._goOnPause = 0; // reset it, so if the next one doesnt set it we dont use the old pause
 		}else{ this._go(); }
 	},
-	
+
 	stop: function(){
 		// summary:  Stop the currently running sequence.
+		//
 		// description: 
-		//	This can only interrupt the sequence not the last function that
-		//	had been started. If the last function was i.e. a slideshow
-		//	that is handled inside a function that you have given as
-		//	one sequence item it cant be stopped, since it is not controlled
-		//	by this object here. In this case it would be smarter to 
-		//	run the slideshow using a sequence object so you can also stop 
-		//	it using this method.
+		//		This can only interrupt the sequence not the last function that
+		//		had been started. If the last function was i.e. a slideshow
+		//		that is handled inside a function that you have given as
+		//		one sequence item it cant be stopped, since it is not controlled
+		//		by this object here. In this case it would be smarter to 
+		//		run the slideshow using a sequence object so you can also stop 
+		//		it using this method.
 		this._running = false;
 	}
+
 }); 
