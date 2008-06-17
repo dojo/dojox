@@ -114,7 +114,20 @@
 	<span dojoType="demo.Table" store="continentStore"
 		query="{ query: { name: 'A*' } }"></span>
 	<span dojoType="demo.Table" store="flickrStore"
-		query="{ query: { tags: '3dny' } }">
+		query="{ query: { groupid: '27475260@N00' } }">
+		<script type="dojo/method" event="preamble">
+			this.columns = [
+				{	name: "", attribute: "imageUrlSmall", 
+					format: function(value, item, store){
+						return (value.length) ? "<img src='"+value+"'>" : "";
+					}
+				},
+				{ name: "Title", attribute: "title" }
+			];
+		</script>
+	</span>
+	<span dojoType="demo.Table" store="flickrStore"
+		query="{ query: { tags: 'dojotoolkit' } }">
 		<script type="dojo/method" event="preamble">
 			this.columns = [
 				{	name: "", attribute: "imageUrlSmall", 
