@@ -116,7 +116,7 @@ dojo.declare("dojox.rpc.Service", null, {
 			// setting default values
 			for(i=0; i< parameters.length; i++){
 				var param = parameters[i];
-				if(!param.optional && param.name){
+				if(!param.optional && param.name && !args[param.name]){
 					if(param["default"]){
 						args[param.name] = param["default"];
 					}else if(!(param.name in args)){
