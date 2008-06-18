@@ -107,6 +107,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		this.containerNode.innerHTML = '<div class=" ' + this.baseClass + 'Label">' +
 					(newDisplay || this.emptyLabel || "&nbsp;") +
 					'</div>';
+		this._layoutHack();
 	},
 
 	validate: function(/*Boolean*/ isFocused){
