@@ -398,13 +398,16 @@ dojo.require("dojo.dnd.Manager");
 
 		domousemove: function(e){
 			//console.log(e.cellIndex, e.cellX, e.cellNode.offsetWidth);
-			var c = (this.overRightResizeArea(e) ? 'e-resize' : (this.overLeftResizeArea(e) ? 'w-resize' : ''));
-			if(c && !this.canResize(e)){
-				c = 'not-allowed';
+			if(!headerMoveable){
+				var c = (this.overRightResizeArea(e) ? 'e-resize' : (this.overLeftResizeArea(e) ? 'w-resize' : ''));
+				if(c && !this.canResize(e)){
+					c = 'not-allowed';
+				}
+				e.sourceView.headerNode.style.cursor = c || ''; //'default';
+				if(c){
+					dojo.stopEvent(e);
+				}
 			}
-			e.sourceView.headerNode.style.cursor = c || ''; //'default';
-			if (c)
-				dojo.stopEvent(e);
 		},
 
 		domousedown: function(e){
