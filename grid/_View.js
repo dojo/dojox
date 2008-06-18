@@ -56,8 +56,18 @@ dojo.require("dojo.dnd.Manager");
 	dojo.extend(Builder, {
 		view: null,
 		// boilerplate HTML
-		_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation">',
+		_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
 
+		// Returns the table variable as an array - and with the view width, if specified
+		getTableArray: function(){
+			var html = [this._table];
+			if(this.view.viewWidth){
+				html.push([' style="width:', this.view.viewWidth, ';"'].join(''));
+			}
+			html.push('>');
+			return html;
+		},
+		
 		// generate starting tags for a cell
 		generateCellMarkup: function(inCell, inMoreStyles, inMoreClasses, isHeader){
 			var result = [], html;
@@ -221,7 +231,7 @@ dojo.require("dojo.dnd.Manager");
 		// time critical: generate html using cache and data source
 		generateHtml: function(inDataIndex, inRowIndex){
 			var
-				html = [ this._table ],
+				html = this.getTableArray(),
 				v = this.view,
 				obr = v.onBeforeRow,
 				cells = v.structure.cells,
@@ -275,21 +285,13 @@ dojo.require("dojo.dnd.Manager");
 		overResizeWidth: 4,
 		minColWidth: 1,
 		
-		// FIXME: isn't this getting mixed from dojox.grid._grid.Builder, -1 character?
-		_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
-
 		update: function(){
 			this.tableMap = new TableMap(this.view.structure.cells);
 		},
 
 		generateHtml: function(inGetValue, inValue){
-			var html = [this._table], cells = this.view.structure.cells;
+			var html = this.getTableArray(), cells = this.view.structure.cells;
 			
-			// render header with appropriate width, if possible so that views with flex columns are correct height
-			if(this.view.viewWidth){
-				html.push([' style="width:', this.view.viewWidth, ';"'].join(''));
-			}
-			html.push('>');
 			dojox.grid.util.fire(this.view, "onBeforeRow", [-1, cells]);
 			for(var j=0, row; (row=cells[j]); j++){
 				if(row.hidden){

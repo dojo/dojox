@@ -190,7 +190,11 @@ dojo.declare('dojox.grid._ViewManager', null, {
 			// process boxes
 			v.setSize(vw, 0);
 			setPosition(v, l);
-			vw = v.domNode.offsetWidth;
+			if(v.headerContentNode && v.headerContentNode.firstChild){
+				vw = v.getColumnsWidth()+v.getScrollbarWidth();
+			}else{
+				vw = v.domNode.offsetWidth;
+			}
 			// update position
 			l += vw;
 		}
