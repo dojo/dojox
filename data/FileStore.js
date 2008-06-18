@@ -64,7 +64,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		//	item: 
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){ 
-			throw new Error("examples.data.FileStore: a function was passed an item argument that was not an item");
+			throw new Error("dojox.data.FileStore: a function was passed an item argument that was not an item");
 		}
 	},
 
@@ -74,7 +74,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		//	attribute: 
 		//		The attribute to test for being contained by the store.
 		if(typeof attribute !== "string"){ 
-			throw new Error("examples.data.FileStore: a function was passed an attribute argument that was not an attribute name string");
+			throw new Error("dojox.data.FileStore: a function was passed an attribute argument that was not an attribute name string");
 		}
 	},
 
