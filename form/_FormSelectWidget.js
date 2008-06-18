@@ -216,9 +216,11 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		}
 		if(val && val[0]){
 			dojo.forEach(this._getChildren(), function(child){
-				dojo[dojo.some(val, function(v){
-					return child.option && (v === child.option.value) || false;
-				}) ? "addClass" : "removeClass"](child.domNode, this.baseClass + "SelectedOption");
+				var isSelected = dojo.some(val, function(v){
+					return child.option && (v === child.option.value);
+				});
+				dojo.toggleClass(child.domNode, this.baseClass + "SelectedOption", isSelected);
+				dijit.setWaiState(child.domNode, "selected", isSelected);
 			}, this);
 		}
 		this._handleOnChange(this.value);
