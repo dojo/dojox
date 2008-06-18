@@ -740,7 +740,14 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		getScrollbarWidth: function(){
-			return (this.noscroll || !this.hasVScrollbar() ? 0 : dojox.html.metrics.getScrollbar().w); // Integer
+			var hasScrollSpace = this.hasVScrollbar();
+			var overflow = dojo.style(this.scrollboxNode, "overflow");
+			if(this.noscroll || !overflow || overflow == "hidden"){
+				hasScrollSpace = false;
+			}else if(overflow == "scroll"){
+				hasScrollSpace = true;
+			}
+			return (hasScrollSpace ? dojox.html.metrics.getScrollbar().w : 0); // Integer
 		},
 
 		getColumnsWidth: function(){
