@@ -172,6 +172,10 @@
 	border-collapse: collapse;
 }
 
+.dj_ff2 .soria .dojoxGrid-row-table {
+	border-collapse: separate;
+}
+
 .soria .dojoxGrid-invisible {
 	visibility: hidden;
 }		
@@ -196,6 +200,11 @@
 	padding: 3px 3px 3px 3px;
 	text-align: left;
 	overflow: hidden;
+}
+
+.dj_ff2 .soria .dojoxGrid-cell {
+	border-left-width: 0px;
+	border-top-width: 0px;
 }
 
 .dj_ie6 .soria .dojoxGrid-cell {

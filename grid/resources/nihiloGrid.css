@@ -171,6 +171,10 @@
 	border-collapse: collapse;
 }
 
+.dj_ff2 .nihilo .dojoxGrid-row-table {
+	border-collapse: separate;
+}
+
 .nihilo .dojoxGrid-invisible {
 	visibility: hidden;
 }		
@@ -195,6 +199,11 @@
 	padding: 3px 3px 3px 3px;
 	text-align: left;
 	overflow: hidden;
+}
+
+.dj_ff2 .nihilo .dojoxGrid-cell {
+	border-left-width: 0px;
+	border-top-width: 0px;
 }
 
 .dj_ie6 .nihilo .dojoxGrid-cell {
