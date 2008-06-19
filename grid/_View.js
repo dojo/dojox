@@ -794,12 +794,14 @@ dojo.require("dojo.dnd.Manager");
 			var srcView = views[source.viewIndex];
 			var tgtView = views[this.index];
 			if(tgtView != srcView){
-				srcView.convertColPctToFixed();
-				tgtView.convertColPctToFixed();
-				setTimeout(function(){
-					srcView.update();
-					tgtView.update();
-				}, 50);
+				var s = srcView.convertColPctToFixed();
+				var t = tgtView.convertColPctToFixed();
+				if(s || t){
+					setTimeout(function(){
+						srcView.update();
+						tgtView.update();
+					}, 50);
+				}
 			}
 		},
 
