@@ -22,50 +22,53 @@ dojo.require("dojo.AdapterRegistry");
 dojox.cometd = new function(){
 	
 	// cometd states:
-
-	// alex; OMG, these "constants" need to die. Java truly is a degenerative disease.
- 	this.DISCONNECTED = "DISCONNECTED";		// _initialized==false 	&& _connected==false
- 	this.CONNECTING = "CONNECTING";			// _initialized==true	&& _connected==false (handshake sent)
- 	this.CONNECTED = "CONNECTED";			// _initialized==true	&& _connected==true (first successful connect)
- 	this.DISCONNECTING = "DISCONNECING";	// _initialized==false 	&& _connected==true (disconnect sent)
- 	
-	this._initialized = false;
-	this._connected = false;
-	this._polling = false;
-	this._handshook = false;
-
-	this.expectedNetworkDelay = 10000; // expected max network delay
-	this.connectTimeout = 0;	  // If set, used as ms to wait for a connect response and sent as the advised timeout
-
-	this.connectionTypes = new dojo.AdapterRegistry(true);
-
-	this.version =	"1.0";
-	this.minimumVersion = "0.9";
-	this.clientId = null;
-	this.messageId = 0;
-	this.batch = 0;
-
-	this._isXD = false;
-	this.handshakeReturn = null;
-	this.currentTransport = null;
-	this.url = null;
-	this.lastMessage = null;
-	this._messageQ = [];
-	this.handleAs = "json";
-	this._advice = {};
-	this._backoffInterval = 0;
-	this._backoffIncrement = 1000;
-	this._backoffMax = 60000;
-	this._deferredSubscribes = {};
-	this._deferredUnsubscribes = {};
-	this._subscriptions = [];
-	this._extendInList = [];	// List of functions invoked before delivering messages
-	this._extendOutList = [];	// List of functions invoked before sending messages
+	dojo.mixin(this, {
+		
+		// alex; OMG, these "constants" need to die. Java truly is a degenerative disease.
+	 	"DISCONNECTED": "DISCONNECTED",		// _initialized==false 	&& _connected==false
+	 	"CONNECTING": "CONNECTING",			// _initialized==true	&& _connected==false (handshake sent)
+	 	"CONNECTED": "CONNECTED",			// _initialized==true	&& _connected==true (first successful connect)
+	 	"DISCONNECTING": "DISCONNECING",	// _initialized==false 	&& _connected==true (disconnect sent)
+        
+		_initialized: false,
+		_connected: false,
+		_polling: false,
+		_handshook: false,
+        
+		expectedNetworkDelay: 10000, // expected max network delay
+		connectTimeout: 0,	  // If set, used as ms to wait for a connect response and sent as the advised timeout
+        
+		connectionTypes: new dojo.AdapterRegistry(true),
+        
+		version:	"1.0",
+		minimumVersion: "0.9",
+		clientId: null,
+		messageId: 0,
+		batch: 0,
+        
+		_isXD: false,
+		handshakeReturn: null,
+		currentTransport: null,
+		url: null,
+		lastMessage: null,
+		_messageQ: [],
+		handleAs: "json",
+		_advice: {},
+		_backoffInterval: 0,
+		_backoffIncrement: 1000,
+		_backoffMax: 60000,
+		_deferredSubscribes: {},
+		_deferredUnsubscribes: {},
+		_subscriptions: [],
+		_extendInList: [],	// List of functions invoked before delivering messages
+		_extendOutList: []	// List of functions invoked before sending messages
+		
+	});
 
 	this.state = function() {
 		return this._initialized ? 
 			(this._connected ? "CONNECTED" : "CONNECTING") : 
-			( this._connected ? "DISCONNECTING" : "DISCONNECTED");
+			(this._connected ? "DISCONNECTING" : "DISCONNECTED");
 	}
 
 	this.init = function(	/*String*/	root,
@@ -95,14 +98,14 @@ dojox.cometd = new function(){
 
 		// FIXME: if the root isn't from the same host, we should automatically
 		// try to select an XD-capable transport
-		props = props||{};
+		props = props || {};
 		// go ask the short bus server what we can support
 		props.version = this.version;
 		props.minimumVersion = this.minimumVersion;
 		props.channel = "/meta/handshake";
-		props.id = ""+this.messageId++;
+		props.id = "" + this.messageId++;
 
-		this.url = root||dojo.config["cometdRoot"];
+		this.url = root || dojo.config["cometdRoot"];
 		if(!this.url){
 			throw "no cometd root";
 			return null;
@@ -110,7 +113,7 @@ dojox.cometd = new function(){
 
 		// Are we x-domain? borrowed from dojo.uri.Uri in lieu of fixed host and port properties
 		var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
-		var parts = (""+window.location).match(new RegExp(regexp));
+		var parts = ("" + window.location).match(new RegExp(regexp));
 		if(parts[4]){
 			var tmp = parts[4].split(":");
 			var thisHost = tmp[0];
@@ -181,7 +184,6 @@ dojox.cometd = new function(){
 		]);
 		return r;
 	}
-	
 	
 	this.publish = function(/*String*/ channel, /*Object*/ data, /*Object?*/ props){
 		// summary:
@@ -260,9 +262,9 @@ dojox.cometd = new function(){
 
 		props = props||{};
 		if(objOrFunc){
-			var tname = "/cometd"+channel;
+			var tname = "/cometd" + channel;
 			var subs = this._subscriptions[tname];
-			if(!subs || subs.length==0){
+			if(!subs || subs.length == 0){
 				subs = [];
 				props.channel = "/meta/subscribe";
 				props.subscription = channel;
@@ -277,7 +279,7 @@ dojox.cometd = new function(){
 			}
 			
 			for(var i in subs){
-				if( subs[i].objOrFunc === objOrFunc && (!subs[i].funcName&&!funcName||subs[i].funcName==funcName) ){
+				if(subs[i].objOrFunc === objOrFunc && (!subs[i].funcName&&!funcName||subs[i].funcName==funcName) ){
 					return null;
 				}
 			}
@@ -290,12 +292,10 @@ dojox.cometd = new function(){
 			});
 			this._subscriptions[tname] = subs;
 		}
-		var ret = this._deferredSubscribes[channel]||{};
+		var ret = this._deferredSubscribes[channel] || {};
 		ret.args = dojo._toArray(arguments);
 		return ret; // dojo.Deferred
 	}
-
-
 
 	this.unsubscribe = function(	/*String*/	channel,
 					/*Object?*/ objOrFunc,
@@ -331,7 +331,7 @@ dojox.cometd = new function(){
 		var s=0;
 		for(var i in subs){
 			var sb = subs[i];
-			if( (!objOrFunc) ||
+			if((!objOrFunc) ||
 				(
 					sb.objOrFunc===objOrFunc &&
 					(!sb.funcName && !funcName || sb.funcName==funcName)
@@ -344,14 +344,14 @@ dojox.cometd = new function(){
 			}
 		}
 		
-		if(s==0){
-			props = props||{};
+		if(s == 0){
+			props = props || {};
 			props.channel = "/meta/unsubscribe";
 			props.subscription = channel;
 			delete this._subscriptions[tname];
 			this._sendMessage(props);
 			this._deferredUnsubscribes[channel] = new dojo.Deferred();
-			if (this._deferredSubscribes[channel]){
+			if(this._deferredSubscribes[channel]){
 				this._deferredSubscribes[channel].cancel();
 				delete this._deferredSubscribes[channel];
 			}
@@ -411,12 +411,12 @@ dojox.cometd = new function(){
 	this._backoff = function(){
 		if(!this._advice){
 			this._advice={reconnect:"retry",interval:0};
+		}else if(!this._advice.interval){
+			this._advice.interval = 0;
 		}
-		else if(!this._advice.interval){
-			this._advice.interval=0;
-		}
-		if(this._backoffInterval<this._backoffMax){
-			this._backoffInterval+=this._backoffIncrement;
+		
+		if(this._backoffInterval < this._backoffMax){
+			this._backoffInterval += this._backoffIncrement;
 		}
 	}
 	
@@ -425,10 +425,9 @@ dojox.cometd = new function(){
 	}
 
 	this._interval = function(){
-		var i=this._backoffInterval+(this._advice?(this._advice.interval?this._advice.interval:0):0);
+		var i = this._backoffInterval + (this._advice ? (this._advice.interval ? this._advice.interval : 0) : 0);
 		if (i>0){
-			if (console.log)
-			    console.log("Retry in interval+backoff="+this._advice.interval+"+"+this._backoffInterval+"="+i+"ms");
+			console.log("Retry in interval+backoff=" + this._advice.interval + "+" + this._backoffInterval+"="+i+"ms");
 		}
 		return i;
 	}
@@ -445,7 +444,7 @@ dojox.cometd = new function(){
 			this._advice = data.advice;
 		}
 
-		var successful=data.successful?data.successful:false;
+		var successful = data.successful ? data.successful : false;
 		
 		// check version
 		if(data.version < this.minimumVersion){
@@ -472,38 +471,41 @@ dojox.cometd = new function(){
 			this.currentTransport.startup(data);
 		}
 
-		dojo.publish("/cometd/meta", [{cometd:this,action:"handshake",successful:successful,reestablish:successful&&this._handshook,state:this.state()}]);
-		if (successful){
+		dojo.publish("/cometd/meta", [{ 
+			cometd: this, 
+			action: "handshake", 
+			successful: successful, 
+			reestablish: successful && this._handshook, 
+			state: this.state() 
+		}]);
+		if(successful){
 			this._handshook=true;
 		}else{
 			// If there is a problem
-			if (console.log)
-				console.log("cometd init failed");
+			console.log("cometd init failed");
 			// follow advice
-			if(!this._advice || this._advice["reconnect"]!="none"){
-				setTimeout(dojo.hitch(this, "init", this.url, this._props),this._interval());
+			if(!this._advice || this._advice["reconnect"] != "none"){
+				setTimeout(dojo.hitch(this, "init", this.url, this._props), this._interval());
 			}
 		}
 	}
 
-	// fixme: lots of repeated code...why?
-
+	// FIXME: lots of repeated code...why?
 	this._extendIn = function(message){
-		// Handle extensions for inbound messages
+		// summary: Handle extensions for inbound messages
 		dojo.forEach(dojox.cometd._extendInList, function(f){
-			message = f(message)||message;
+			message = f(message) || message;
 		});
 		return message;
 	}
 
 	this._extendOut = function(message){
-		// Handle extensions for inbound messages
+		// summary: Handle extensions for inbound messages
 		dojo.forEach(dojox.cometd._extendOutList, function(f){
-			message = f(message)||message;
+			message = f(message) || message;
 		});
 		return message;
 	}
-
 
 	this.deliver = function(messages){
 		dojo.forEach(messages, this._deliver, this);
@@ -513,7 +515,7 @@ dojox.cometd = new function(){
 	this._deliver = function(message){
 		// dipatch events along the specified path
 		
-		message=this._extendIn(message);
+		message = this._extendIn(message);
 
 		if(!message["channel"]){
 			if(message["success"] !== true){
@@ -529,7 +531,7 @@ dojox.cometd = new function(){
 		// check to see if we got a /meta channel message that we care about
 		var deferred=null;
 		if(	(message["channel"]) &&
-			(message.channel.length > 5)&&
+			(message.channel.length > 5) &&
 			(message.channel.substr(0, 5) == "/meta")){
 			// check for various meta topic actions that we need to respond to
 			switch(message.channel){
@@ -541,7 +543,12 @@ dojox.cometd = new function(){
 						this._connected = false; // finish disconnect
 					}
 					if(this._initialized){
-						dojo.publish("/cometd/meta",[{cometd:this,action:"connect",successful:message.successful,state:this.state()}]);
+						dojo.publish("/cometd/meta", [{
+							cometd: this,
+							action: "connect",
+							successful: message.successful,
+							state:this.state()
+						}]);
 					}
 					break;
 				case "/meta/subscribe":
@@ -585,27 +592,26 @@ dojox.cometd = new function(){
 
 		if(message.data){
 			// dispatch the message to any locally subscribed listeners
-			try {
-				var messages=[message];
+			try{
+				var messages = [message];
 
 				// Determine target topic
-				var tname="/cometd"+message.channel;
+				var tname = "/cometd" + message.channel;
 
 				// Deliver to globs that apply to target topic
-				var tnameParts=message.channel.split("/");
-				var tnameGlob="/cometd";
-				for (var i=1;i<tnameParts.length-1;i++) {
-					dojo.publish(tnameGlob+"/**",messages);
-					tnameGlob+="/"+tnameParts[i];
+				var tnameParts = message.channel.split("/");
+				var tnameGlob = "/cometd";
+				for (var i = 1; i < tnameParts.length - 1; i++){
+					dojo.publish(tnameGlob + "/**", messages);
+					tnameGlob += "/" + tnameParts[i];
 				}
-				dojo.publish(tnameGlob+"/**",messages);
-				dojo.publish(tnameGlob+"/*",messages);
+				dojo.publish(tnameGlob + "/**", messages);
+				dojo.publish(tnameGlob + "/*", messages);
 	
 				// deliver to target topic
 				dojo.publish(tname,messages);
 			}catch(e){
-				if (console.log)
-					console.log(e);
+				console.log(e);
 			}
 		}
 	}
@@ -625,11 +631,10 @@ dojox.cometd = new function(){
 
 	this.endBatch = function(){
 		if(--this.batch <= 0 && this.currentTransport && this._connected){
-			this.batch=0;
-
-			var messages=this._messageQ;
-			this._messageQ=[];
-			if(messages.length>0){
+			this.batch = 0;
+			var messages = this._messageQ;
+			this._messageQ = [];
+			if(messages.length > 0){
 				this.currentTransport.sendMessages(messages);
 			}
 		}
@@ -637,18 +642,18 @@ dojox.cometd = new function(){
 	
 	this._onUnload = function(){
 		// make this the last of the onUnload method
-		dojo.addOnUnload(dojox.cometd,"disconnect");
+		dojo.addOnUnload(dojox.cometd, "disconnect");
 	}
 
 	this._connectTimeout = function(){
-		// return the connect timeout in ms, calculated as the minimum of the advised timeout
+		// summary: Return the connect timeout in ms, calculated as the minimum of the advised timeout
 		// and the configured timeout.  Else 0 to indicate no client side timeout
 		var advised=0;
-		if (this._advice && this._advice.timeout && this.expectedNetworkDelay>0){
-			advised=this._advice.timeout + this.expectedNetworkDelay;
+		if(this._advice && this._advice.timeout && this.expectedNetworkDelay > 0){
+			advised = this._advice.timeout + this.expectedNetworkDelay;
 		}
 		
-		if (this.connectTimeout>0 && this.connectTimeout<_advised){
+		if(this.connectTimeout > 0 && this.connectTimeout < _advised){
 			return this.connectTimeout;
 		}
 		
@@ -657,6 +662,10 @@ dojox.cometd = new function(){
 }
 
 /*
+
+FIXME: TODOC: this info should be part of the relevant functions and/or overview so
+the parser can find it.
+
 transport objects MUST expose the following methods:
 	- check
 	- startup
@@ -708,4 +717,4 @@ cometd.blahTransport = new function(){
 cometd.connectionTypes.register("blah", cometd.blahTransport.check, cometd.blahTransport);
 */
 
-dojo.addOnUnload(dojox.cometd,"_onUnload");
+dojo.addOnUnload(dojox.cometd, "_onUnload");
