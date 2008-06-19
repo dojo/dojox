@@ -758,6 +758,15 @@ dojo.require("dojo.dnd.Manager");
 			this.scrollboxNode.style.height = '';
 			this.renderHeader();
 
+			var cells = this.grid.layout.cells;
+			var getSibling = dojo.hitch(this, function(node, before){
+				var idx = this.header.getCellNodeIndex(node) + (before ? -1 : 1);
+				var cell = cells[idx];
+				if(cell){
+					return cell.getHeaderNode();
+				}
+				return null;
+			});
 			if(this.grid.columnReordering && this.simpleStructure){
 				if(this.source){
 					dojo.disconnect(this._source_conn);
@@ -776,6 +785,25 @@ dojo.require("dojo.dnd.Manager");
 						}else{
 							dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
 						}
+					}),
+					_markTargetAnchor: dojo.hitch(this, function(before){
+						var src = this.source;
+						if(src.current == src.targetAnchor && src.before == before){ return; }
+						if(src.targetAnchor && getSibling(src.targetAnchor, src.before)){
+							src._removeItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
+						}
+						dojo.dnd.Source.prototype._markTargetAnchor.call(src, before);
+						if(src.targetAnchor && getSibling(src.targetAnchor, src.before)){
+							src._addItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
+						}						
+					}),
+					_unmarkTargetAnchor: dojo.hitch(this, function(){
+						var src = this.source;
+						if(!src.targetAnchor){ return; }
+						if(src.targetAnchor && getSibling(src.targetAnchor, src.before)){
+							src._removeItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
+						}
+						dojo.dnd.Source.prototype._unmarkTargetAnchor.call(src);
 					})
 				});
 				this._source_conn = dojo.connect(this.source, "onDndDrop", this, "_onDndDrop");
