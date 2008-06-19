@@ -476,28 +476,7 @@ dojo.require("dojo.dnd.Manager");
 				headerMoveable = null;
 			}));
 
-			// Fix any percentage widths to be pixel values
-			var hasPct = false;
-			var cellNodes = dojo.query("th", view.headerContentNode);
-			var fixedWidths = dojo.map(cellNodes, function(c){
-				var w = c.style.width;
-				if(w && w.slice(-1) == "%"){
-					hasPct = true;
-					return dojo.contentBox(c).w;
-				}else if(w && w.slice(-2) == "px"){
-					return window.parseInt(w, 10);
-				}
-				return -1;
-			});
-			if(hasPct){
-				dojo.forEach(e.grid.layout.cells, function(cell, idx){
-					if(cell.view == view){
-						var vIdx = cell.layoutIndex;
-						view.setColWidth(idx, fixedWidths[vIdx]);
-						cellNodes[vIdx].style.width = cell.unitWidth;
-					}
-				});
-			}
+			view.convertColPctToFixed();
 
 			if(e.cellNode.setCapture){
 				e.cellNode.setCapture();
@@ -811,6 +790,17 @@ dojo.require("dojo.dnd.Manager");
 			}
 			this.source._targetNode = this.source.targetAnchor;
 			this.source._beforeTarget = this.source.before;
+			var views = this.grid.views.views;
+			var srcView = views[source.viewIndex];
+			var tgtView = views[this.index];
+			if(tgtView != srcView){
+				srcView.convertColPctToFixed();
+				tgtView.convertColPctToFixed();
+				setTimeout(function(){
+					srcView.update();
+					tgtView.update();
+				}, 50);
+			}
 		},
 
 		_onDndDrop: function(source, nodes, copy){
@@ -879,6 +869,33 @@ dojo.require("dojo.dnd.Manager");
 			return this._hasVScroll; // Boolean
 		},
 		
+		convertColPctToFixed: function(){
+			// Fix any percentage widths to be pixel values
+			var hasPct = false;
+			var cellNodes = dojo.query("th", this.headerContentNode);
+			var fixedWidths = dojo.map(cellNodes, function(c){
+				var w = c.style.width;
+				if(w && w.slice(-1) == "%"){
+					hasPct = true;
+					return dojo.contentBox(c).w;
+				}else if(w && w.slice(-2) == "px"){
+					return window.parseInt(w, 10);
+				}
+				return -1;
+			});
+			if(hasPct){
+				dojo.forEach(this.grid.layout.cells, function(cell, idx){
+					if(cell.view == this){
+						var vIdx = cell.layoutIndex;
+						this.setColWidth(idx, fixedWidths[vIdx]);
+						cellNodes[vIdx].style.width = cell.unitWidth;
+					}
+				}, this);
+				return true;
+			}
+			return false;
+		},
+
 		adaptHeight: function(){
 			if(!this.grid.autoHeight){
 				var h = this.domNode.clientHeight;
