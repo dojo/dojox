@@ -10,7 +10,7 @@
 
 			dojo.declare("API", [dijit._Widget, dojox.dtl._Templated], {
 				constructor: function(params, node){
-					this.jsonp = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc", "documentation.smd"));
+					this.jsonp = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc", "SMDLibrary/dojo-api.smd"));
 				},
 				onSearch: function(e){
 					if(e.keyCode == dojo.keys.ENTER){

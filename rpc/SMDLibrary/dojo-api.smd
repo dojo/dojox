@@ -4,7 +4,7 @@
 	callbackParamName: "callback",
 	services: {
 		get: {
-			target: "http://redesign.dojotoolkit.org/jsdoc/jsonp",
+			target: "http://api.dojotoolkit.org/jsdoc/jsonp",
 			parameters: [
 				{ name: "name", type: "string", optional: false },
 				{ name: "exact", type: "boolean", optional: true },
@@ -16,7 +16,7 @@
 			]
 		},
 		batch: {
-			target: "http://redesign.dojotoolkit.org/jsdoc/jsonp/batch",
+			target: "http://api.dojotoolkit.org/jsdoc/jsonp/batch",
 			parameters: [
 				{ name: "names", type: "array", optional: false },
 				{ name: "exact", type: "boolean", optional: true },
