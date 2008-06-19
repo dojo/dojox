@@ -75,6 +75,15 @@
 	display:inline !important;
 }
 
+/* dnd */
+
+.tundra .dojoxGrid .dojoDndItemBefore {
+	border-left-color: #3559ac;
+}
+.tundra .dojoxGrid .dojoDndItemAfter {
+	border-right-color: #3559ac;
+}
+
 /* content */
 
 .tundra .dojoxGrid-scrollbox {
