@@ -491,8 +491,11 @@ dojo.require("dojo.dnd.Manager");
 			});
 			if(hasPct){
 				dojo.forEach(e.grid.layout.cells, function(cell, idx){
-					view.setColWidth(idx, fixedWidths[idx]);
-					cellNodes[idx].style.width = cell.unitWidth;
+					if(cell.view == view){
+						var vIdx = cell.layoutIndex;
+						view.setColWidth(idx, fixedWidths[vIdx]);
+						cellNodes[vIdx].style.width = cell.unitWidth;
+					}
 				});
 			}
 
