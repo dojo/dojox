@@ -23,7 +23,7 @@ dojo.declare("dojox.data.QueryReadStore",
 		//		has no way of knowing which field the server will declare as
 		//		identifier.
 		//
-		//	examples:
+		//	example:
 		// |	// The parameter "query" contains the data that are sent to the server.
 		// |	var store = new dojox.data.QueryReadStore({url:'/search.php'});
 		// |	store.fetch({query:{name:'a'}, queryOptions:{ignoreCase:false}});
