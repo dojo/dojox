@@ -10,8 +10,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	fetchText: '...',
 
 	_store_connects: null,
-	_identity_map: null,
-	_rows: null,
+	_by_idty: null,
+	_by_idx: null,
 	_cache: null,
 	_pages: null,
 	_pending_requests: null,
@@ -21,10 +21,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	rowCount: 0,
 
 	postCreate: function(){
-		this._identity_map = {};
 		this._pages = [];
 		this._store_connects = [];
-		this._rows = [];
+		this._by_idty = {};
+		this._by_idx = [];
 		this._cache = [];
 		this._pending_requests = {};
 
@@ -41,16 +41,16 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
-		var info = this._identity_map[this.store.getIdentity(item)];
-		if(info){
-			this.updateRow(info.idx);
+		var idx = this.getItemIndex(item);
+		if(idx>-1){
+			this.updateRow(idx);
 		}
 	},
 
 	_addItem: function(item, index){
 		var idty = this.store.getIdentity(item);
-		this._identity_map[idty] = {idx: index, item: item};
-		this._rows[index] = idty;
+		var o = { idty: idty, item: item };
+		this._by_idty[idty] = this._by_idx[index] = o;
 		this.updateRow(index);
 	},
 
@@ -63,11 +63,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		var idx = this._getItemIndex(item, true);
 
 		if(idx >= 0){
-			this._rows.splice(idx, 1);
+			var o = this._by_idx[idx];
+			this._by_idx.splice(idx, 1);
+			delete this._by_idty[o.idty];
+			this.updateRowCount(this.rowCount-1);
 		}
-		delete this._identity_map[this.store.getIdentity(item)];
-
-		this.updateRowCount(this.rowCount-1);
 	},
 
 	_onRevert: function(){
@@ -159,22 +159,19 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	_clearData: function(){
 		this.rowCount = 0;
-		this._identity_map = {};
+		this._by_idty = {};
+		this._by_idx = [];
 		this._pages = [];
-		this._rows = [];
 		this._bop = this._eop = -1;
 	},
 
 	getItem: function(idx){
-		var idty = this._rows[idx];
-		var item = this._identity_map[idty];
-		if(!item||(item&&!item.item)){
-			item = null;
+		var data = this._by_idx[idx];
+		if(!data||(data&&!data.item)){
 			this._preparePage(idx);
-		}else{
-			item = item.item;
+			return null;
 		}
-		return item;
+		return data.item;
 	},
 
 	getItemIndex: function(item){
@@ -185,9 +182,16 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		if(!isDeleted && !this.store.isItem(item)){
 			return -1;
 		}
+
 		var idty = this.store.getIdentity(item);
-		var imap = this._identity_map[idty];
-		return (imap ? imap.idx : -1);
+
+		for(var i=0, l=this._by_idx.length; i<l; i++){
+			var d = this._by_idx[i];
+			if(d && d.idty == idty){
+				return i;
+			}
+		}
+		return -1;
 	},
 
 	filter: function(query, reRender){
@@ -331,7 +335,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
 		this.store.fetchItemByIdentity({
-			identity: this._rows[inRowIndex],
+			identity: this._by_idx[inRowIndex].idty,
 			onItem: dojo.hitch(this, function(item){
 				this.store.setValue(item, inAttrName, inValue);
 				this.onApplyCellEdit(inValue, inRowIndex, inAttrName);
@@ -367,7 +371,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this.edit.apply();
 			var items = this.selection.getSelected();
 			if(items.length){
-				dojo.forEach(items, this.store.deleteItem);
+				dojo.forEach(items, this.store.deleteItem, this.store);
 				this.selection.clear();
 			}
 		}
