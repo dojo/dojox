@@ -31,7 +31,7 @@ dojo.declare("dojox.grid._Layout", null, {
 			}
 		}
 		cell = source_cells.splice(cell_ri, 1)[0];
-		cell.view = grid.views.views[destViewIndex];
+		cell.view = this.grid.views.views[destViewIndex];
 
 		for(i=0, c=null; c=dest_cells[i]; i++){
 			if(c.index == targetIndex){
