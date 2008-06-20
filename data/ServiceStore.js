@@ -53,7 +53,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// description:
 			//		When extending this class, if you would like to create lazy objects, you can follow
 			//		the example from dojox.data.tests.stores.ServiceStore:
-			//	|	var lazyItem = {
+			// |	var lazyItem = {
 			// |		_loadObject: function(callback){
 			// |			this.name="loaded";
 			// |			delete this._loadObject;
@@ -67,7 +67,7 @@ dojo.declare("dojox.data.ServiceStore",
 				dojo.mixin(this,options);
 			}
 			this.idAttribute = this.idAttribute || (this.schema && this.schema._idAttr);
-			
+			this.labelAttribute = this.labelAttribute || "label";
 		},
 
 		getSchema: function(){
@@ -248,7 +248,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 			args = args || {};
 
-			var query=args.query;
+			var query=args.queryStr || args.query;
 			if(!args.syncMode){args.syncMode = this.syncMode;}
 			var self = this;
 			dojox.rpc._sync = this.syncMode;
@@ -295,13 +295,13 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary
 			//		returns the label for an item. Just gets the "label" attribute.
 			//	
-			return this.getValue(item,"label");
+			return this.getValue(item,this.labelAttribute);
 		},
 
 		getLabelAttributes: function(item){
 			// summary:
 			//		returns an array of attributes that are used to create the label of an item
-			return ["label"];
+			return [this.labelAttribute];
 		},
 
 		//Identity API Support
