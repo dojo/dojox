@@ -77,12 +77,12 @@ dojo.require("dojox.dtl._base");
 			var var2 = this.var2.resolve(context);
 			if((this.negate && var1 != var2) || (!this.negate && var1 == var2)){
 				if(this.falses){
-					buffer = this.falses.unrender(context, buffer);
+					buffer = this.falses.unrender(context, buffer, this);
 				}
 				return (this.trues) ? this.trues.render(context, buffer, this) : buffer;
 			}
 			if(this.trues){
-				buffer = this.trues.unrender(context, buffer);
+				buffer = this.trues.unrender(context, buffer, this);
 			}
 			return (this.falses) ? this.falses.render(context, buffer, this) : buffer;
 		},
@@ -90,7 +90,9 @@ dojo.require("dojox.dtl._base");
 			return ddtl.IfNode.prototype.unrender.call(this, context, buffer);
 		},
 		clone: function(buffer){
-			return new this.constructor(this.var1.getExpression(), this.var2.getExpression(), this.trues.clone(buffer), this.falses.clone(buffer), this.negate);
+			var trues = this.trues ? this.trues.clone(buffer) : null;
+			var falses = this.falses ? this.falses.clone(buffer) : null;
+			return new this.constructor(this.var1.getExpression(), this.var2.getExpression(), trues, falses, this.negate);
 		}
 	});
 
@@ -114,10 +116,14 @@ dojo.require("dojox.dtl._base");
 					break;
 				}
 			}
+			if(!dirty && context.forloop){
+				dirty = true;
+				context.push();
+			}
 
 			var items = this.loop.resolve(context) || [];
 			for(i = items.length; i < this.pool.length; i++){
-				this.pool[i].unrender(context, buffer);
+				this.pool[i].unrender(context, buffer, this);
 			}
 			if(this.reversed){
 				items = items.slice(0).reverse();
@@ -134,7 +140,7 @@ dojo.require("dojox.dtl._base");
 			}
 
 			var forloop = context.forloop = {
-				parentloop: context.forloop || {}
+				parentloop: context.get("forloop", {})
 			};
 			var j = 0;
 			for(i = 0; i < arred.length; i++){
@@ -156,7 +162,7 @@ dojo.require("dojox.dtl._base");
 					for(k = 0; k < item.length && k < assign.length; k++){
 						zipped[assign[k]] = item[k];
 					}
-					context.update(zipped);
+					dojo.mixin(context, zipped);
 				}else{
 					context[assign[0]] = item;
 				}
@@ -164,16 +170,16 @@ dojo.require("dojox.dtl._base");
 				if(j + 1 > this.pool.length){
 					this.pool.push(this.nodelist.clone(buffer));
 				}
-				buffer = this.pool[j].render(context, buffer, this);
-				++j;
+				buffer = this.pool[j++].render(context, buffer, this);
 			}
 
 			delete context.forloop;
-			for(k = 0; k < assign.length; k++){
-				delete context[assign[k]];
-			}
 			if(dirty){
 				context.pop();
+			}else{
+				for(k = 0; k < assign.length; k++){
+					delete context[assign[k]];
+				}
 			}
 			return buffer;
 		},

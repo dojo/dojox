@@ -1,5 +1,6 @@
 dojo.provide("dojox.dtl.render.html");
 dojo.require("dojox.dtl.Context");
+dojo.require("dojox.dtl.html");
 
 dojox.dtl.render.html.sensitivity = {
 	// summary:
@@ -20,7 +21,7 @@ dojox.dtl.render.html.sensitivity = {
 }
 dojox.dtl.render.html.Render = function(/*DOMNode?*/ attachPoint, /*dojox.dtl.HtmlTemplate?*/ tpl){
 	this._tpl = tpl;
-	this.domNode = attachPoint;
+	this.domNode = dojo.byId(attachPoint);
 	this._swap = dojo.hitch(this, function(){
 		// summary: Swaps the node out the first time the DOM is changed
 		// description: Gets swapped back it at end of render

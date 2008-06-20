@@ -49,27 +49,32 @@ dojo.require("dojox.dtl._base");
 	{
 		parents: {},
 		getParent: function(context){
-			if(!this.parent){
-				this.parent = context.get(this.key, false);
-				if(!this.parent){
+			var parent = this.parent;
+			if(!parent){
+				var string;
+				parent = this.parent = context.get(this.key, false);
+				if(!parent){
 					throw new Error("extends tag used a variable that did not resolve");
 				}
-				if(typeof this.parent == "object"){
-					if(this.parent.url){
-						if(this.parent.shared){
-							this.shared = true;
-						}
-						this.parent = this.parent.url.toString();
+				if(typeof parent == "object"){
+					var url = parent.url || parent.templatePath;
+					if(parent.shared){
+						this.shared = true;
+					}
+					if(url){
+						parent = this.parent = url.toString();
+					}else if(parent.templateString){
+						string = parent.templateString;
+						parent = this.parent = " ";
 					}else{
-						this.parent = this.parent.toString();
+						parent = this.parent = this.parent.toString();
 					}
 				}
-				if(this.parent && this.parent.indexOf("shared:") == 0){
+				if(parent && parent.indexOf("shared:") == 0){
 					this.shared = true;
-					this.parent = this.parent.substring(7, parent.length);
+					parent = this.parent = parent.substring(7, parent.length);
 				}
 			}
-			var parent = this.parent;
 			if(!parent){
 				throw new Error("Invalid template name in 'extends' tag.");
 			}
@@ -79,7 +84,7 @@ dojo.require("dojox.dtl._base");
 			if(this.parents[parent]){
 				return this.parents[parent];
 			}
-			this.parent = this.getTemplate(dojox.dtl.text.getTemplateString(parent));
+			this.parent = this.getTemplate(string || dojox.dtl.text.getTemplateString(parent));
 			if(this.shared){
 				this.parents[parent] = this.parent;
 			}

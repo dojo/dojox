@@ -87,7 +87,7 @@ dojo.require("dojo.parser");
 					args = dojo.map(fn.split(" ").slice(1), function(item){
 						return new dd._Filter(item).resolve(context);
 					});
-					fn = fn[0];
+					fn = fn.split(" ", 2)[0];
 				}
 				if(!this._rendered[i]){
 					if(!this._object){

@@ -265,7 +265,7 @@ dojo.require("dojox.dtl.Context");
 		// summary: Use this object for HTML templating
 		if(!obj.nodes){
 			var node = dojo.byId(obj);
-			if(node){
+			if(node && node.nodeType == 1){
 				dojo.forEach(["class", "src", "href", "name", "value"], function(item){
 					ddh._attributes[item] = true;
 				});
@@ -295,16 +295,15 @@ dojo.require("dojox.dtl.Context");
 			this.getRootNode().className = str;
 		},
 		getRootNode: function(){
-			return this.rootNode;
+			return this.buffer.rootNode;
 		},
 		getBuffer: function(){
 			return new dd.HtmlBuffer();
 		},
 		render: function(context, buffer){
-			buffer = buffer || this.getBuffer();
+			buffer = this.buffer = buffer || this.getBuffer();
 			this.rootNode = null;
 			var output = this.nodelist.render(context || new dd.Context({}), buffer);
-			this.rootNode = buffer.getRootNode();
 			for(var i = 0, node; node = buffer._cache[i]; i++){
 				if(node._cache){
 					node._cache.length = 0;
@@ -553,10 +552,16 @@ dojo.require("dojox.dtl.Context");
 			var html = div.innerHTML;
 			return (dojo.isIE) ? html.replace(/\s*_(dirty|clone)="[^"]*"/g, "") : html;
 		},
-		unrender: function(context, buffer){
+		unrender: function(context, buffer, instance){
+			if(instance){
+				var parent = buffer.getParent();
+			}
 			for(var i = 0; i < this.contents.length; i++){
 				buffer = this.contents[i].unrender(context, buffer);
 				if(!buffer) throw new Error("Template node render functions must return their buffer");
+			}
+			if(parent){
+				buffer.setParent(parent);
 			}
 			return buffer;
 		},
@@ -621,7 +626,9 @@ dojo.require("dojox.dtl.Context");
 				if(!this._txt){
 					this._txt = document.createTextNode(str);
 				}
-				this._txt.data = str;
+				if(this._txt.data != str){
+					this._txt.data = str;
+				}
 				return buffer.concat(this._txt);
 			}
 		},
@@ -653,9 +660,6 @@ dojo.require("dojox.dtl.Context");
 			return buffer.setParent(this.contents, this.up, this.root);
 		},
 		unrender: function(context, buffer){
-			if(!this.contents.parentNode){
-				return buffer;
-			}
 			if(!buffer.getParent()){
 				return buffer;
 			}
@@ -691,6 +695,7 @@ dojo.require("dojox.dtl.Context");
 			return buffer;
 		},
 		unrender: function(context, buffer){
+			this._rendered = false;
 			return buffer.remove(this.key);
 		},
 		clone: function(buffer){

@@ -12,6 +12,7 @@ dojo.require("dojox.dtl.html");
 		this._lasts = [];
 	},
 	{
+		_cache: {},
 		render: function(context, buffer){
 			var text = this.contents.resolve(context);
 			if(text){

@@ -48,14 +48,17 @@ dojo.require("dojox.string.tokenize");
 	ddtl.IfChangedNode = dojo.extend(function(nodes, vars, shared){
 		this.nodes = nodes;
 		this._vars = vars;
-		this.shared = shared || {last: null};
+		this.shared = shared || {last: null, counter: 0};
 		this.vars = dojo.map(vars, function(item){
 			return new dojox.dtl._Filter(item);
 		});
 	}, {
 		render: function(context, buffer){
-			if(context.forloop && context.forloop.first){
-				this.shared.last = null;
+			if(context.forloop){
+				if(context.forloop.counter <= this.shared.counter){
+					this.shared.last = null;
+				}
+				this.shared.counter = context.forloop.counter;
 			}
 
 			var change;
@@ -74,11 +77,13 @@ dojo.require("dojox.string.tokenize");
 				context.ifchanged = {firstloop: firstloop}
 				buffer = this.nodes.render(context, buffer);
 				context.pop();
+			}else{
+				buffer = this.nodes.unrender(context, buffer);
 			}
 			return buffer;
 		},
 		unrender: function(context, buffer){
-			this.nodes.unrender(context, buffer);
+			return this.nodes.unrender(context, buffer);
 		},
 		clone: function(buffer){
 			return new this.constructor(this.nodes.clone(buffer), this._vars, this.shared);
