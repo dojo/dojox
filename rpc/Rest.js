@@ -42,9 +42,6 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 
 	function index(deferred, service, range, id){
 		deferred.addCallback(function(result){
-			if(id==""){
-				service._rootQueries.push(result);
-			}
 			if(range){
 				// try to record the total number of items from the range header
 				range = deferred.ioArgs.xhr.getResponseHeader("Content-Range");
@@ -64,7 +61,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 			// if caching is allowed, we look in the cache for the result
 			var result = !drr._dontCache && drr._index[(service.servicePath || '') + id];
 			drr._dontCache=0; // reset it
-			if(result){// cache hit
+			if(result && !result._loadObject){// cache hit
 				var dfd = new dojo.Deferred();
 				dfd.callback(result);
 				return dfd;
@@ -99,7 +96,6 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 				return result;
 			}
 		};
-		service._rootQueries = [];// this is used by JsonRest and the stores
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id){
 			return {url: path+id, handleAs: isJson?'json':'text', sync: dojox.rpc._sync};

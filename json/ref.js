@@ -45,7 +45,16 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	var index = args.index || {}; // create an index if one doesn't exist
 	var ref,reWalk=[];
 	var pathResolveRegex = /^.*\/(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
-	
+	function loader(callback){
+		// load a lazy object
+		dojox.rpc.Rest.get(this).addBoth(function(result){
+			// if they are the same this means an object was loaded, otherwise it 
+			// might be a primitive that was loaded or maybe an error
+			delete result.$ref;
+			delete result._loadObject;
+			callback(result);
+		});
+	}
 	function walk(it,stop,defaultId){
 		// this walks the new graph, resolving references and making other changes
 	 	var update, val, id = it[idAttribute] || defaultId;
@@ -55,12 +64,14 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	 	var target = it;
 		if(id !== undefined){ // if there is an id available...
 			it.__id = id;
-			if(index[id]){ // if the id already exists in the system, we should use the existing object, and just update it
+			// if the id already exists in the system, we should use the existing object, and just 
+			// update it... as long as the object is compatible
+			if(index[id] && ((it instanceof Array) == (index[id] instanceof Array))){ 
 				target = index[id];
 				delete target.$ref; // remove this artifact
 				update = true;
 			}else{
-			 	var proto = args.services && (val instanceof Array) && // won't try on arrays to do prototypes, plus it messes with queries 
+			 	var proto = args.services && (!(it instanceof Array)) && // won't try on arrays to do prototypes, plus it messes with queries 
 	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
 	 					(val = args.services[val[1]]) && val._schema && val._schema.prototype; // and if has a prototype
 				if(proto){
@@ -98,15 +109,9 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 								}
 								rewalking = true; // we only want to add it once
 							}else{
-								val = dojo.mixin(new dojo.Deferred(),val); // mixin in the old properties for partially loaded objects
-								val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$1$2');
-								(function(val){
-									var connectId = dojo.connect(val,"addCallbacks",function(){
-										dojo.disconnect(connectId);
-										// call by looking up the service absolutely
-										dojox.rpc.Rest.get(val).addCallback(dojo.hitch(val,val.callback));
-									});
-								})(val);
+								index[val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$1$2')] = val;
+								// create a lazy loaded object
+								val._loadObject = loader;
 							}
 						}
 					}
@@ -266,6 +271,8 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 				output.push(newLine + nextIndent + keyStr + ":" + sep + val);
 			}
 			return "{" + output.join("," + sep) + newLine + _indentStr + "}";
+		}else if(typeof it == "function" && dojox.json.ref.serializeFunctions){
+			return it.toString();
 		}
 
 		return dojo.toJson(it); // use the default serializer for primitives
@@ -277,3 +284,4 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 	return json;
 };
 dojox.json.ref.useRefs=false;
+dojox.json.ref.serializeFunctions=false;

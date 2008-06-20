@@ -5,6 +5,7 @@ dojo.require("dojox.rpc.Rest");
 (function(){
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
+	var jr = dojox.rpc.JsonRest;
 	dojox.rpc.JsonRest={
 		commit: function(kwArgs){
 			// summary:
@@ -12,7 +13,6 @@ dojo.require("dojox.rpc.Rest");
 			var data = [];
 
 			var left; // this is how many changes are remaining to be received from the server
-			var self = this;
 			kwArgs = kwArgs || {};
 			function finishOne(value){
 				if(!(--left)){
@@ -78,7 +78,7 @@ dojo.require("dojox.rpc.Rest");
 					left = -1; // first make sure that success isn't called
 					var postCommitDirtyObjects = dirtyObjects.splice(numDirty,dirtyObjects.length - numDirty);
 					numDirty = 0; // make sure this does't do anything if it is called again
-					self.revert(); // revert if there was an error
+					jr.revert(); // revert if there was an error
 					dirtyObjects = postCommitDirtyObjects;
 					if(kwArgs.onError){
 						kwArgs.onError();
@@ -134,24 +134,10 @@ dojo.require("dojox.rpc.Rest");
 		},
 		deleteObject: function(object){
 			// summary:
-			//		deletes object any references to that object from the store.
-			//
+			//		deletes an object 
 			//	object:
 			//  	object to delete
 			//
-
-			//	If the desire is to delete only one reference, unsetAttribute or
-			//	setValue is the way to go.
-			var service= Rest.getServiceAndId(object.__id).service;
-			for(var i = 0; i < service._rootQueries.length;i++){
-				// delete the object from all the root queries
-				var queryResult = service._rootQueries[i];
-				for(var j = 0; j < queryResult.length;j++){
-					if(queryResult[j]==object){
-						queryResult.splice(j--,1); // remove the entry
-					}
-				}
-			}
 
 			this.changing(object,true);
 		},
@@ -174,11 +160,7 @@ dojo.require("dojox.rpc.Rest");
 				Rest._index[this.__id = service.servicePath + (data[Rest.getIdAttribute(service)] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14))] = this;
 				dirtyObjects.push({object:this});
 	//			this._getParent(parentInfo).push(data); // append to this list
-				for(var i = 0; i < service._rootQueries.length;i++){
-					// add the new item to all the root queries
-					//TODO: If we create a mechanism to determine if the object belongs in this query, we could filter here
-					service._rootQueries[i].push(this);
-				}
+
 			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});
 		},

@@ -45,7 +45,21 @@ dojo.declare("dojox.data.ServiceStore",
 			//		Setting this to true will set the store to using synchronous calls by default.
 			//		Sync calls return their data immediately from the calling function, so
 			//		callbacks are unnecessary
-
+			//
+			// The *lazyLoadValues* parameter
+			//		Setting this to true will cause any getValue call to automatically load the value
+			// 		if the returned value is a lazy item. This defaults to true. 
+			//
+			// description:
+			//		When extending this class, if you would like to create lazy objects, you can follow
+			//		the example from dojox.data.tests.stores.ServiceStore:
+			//	|	var lazyItem = {
+			// |		_loadObject: function(callback){
+			// |			this.name="loaded";
+			// |			delete this._loadObject;
+			// |			callback(this);
+			// |		}
+			// |	};
 			//setup a byId alias to the api call	
 			this.byId=this.fetchItemByIdentity;
 			// if the advanced json parser is enabled, we can pass through object updates as onSet events
@@ -53,39 +67,31 @@ dojo.declare("dojox.data.ServiceStore",
 				dojo.mixin(this,options);
 			}
 			this.idAttribute = this.idAttribute || (this.schema && this.schema._idAttr);
+			
 		},
 
 		getSchema: function(){
 			return this.schema; 
 		},
-		getValue: dojo.isIE ? // we use different versions for optimum performance for 
-			// each browser, getValue is the work horse of Dojo Data, it must be as fast as possible 
-			function(item, property, defaultValue){
-				// summary:
-				//	Gets the value of an item's 'property'
-				//
-				//	item: /* object */
-				//	property: /* string */
-				//		property to look up value for	
-				//	defaultValue: /* string */
-				//		the default value
-				var value = item[property];
-				return value ? // performance guard against property in item check
-						(value.errback && // guarding the instanceof provides significant performance improvement on IE, IE has very slow instanceof performance
-						value instanceof dojo.Deferred) ? // check for the a Deferred to indicate it is not loaded 
+
+		loadLazyValues:true,
+
+		getValue: function(item, property, defaultValue){
+			// summary:
+			//	Gets the value of an item's 'property'
+			//
+			//	item: /* object */
+			//	property: /* string */
+			//		property to look up value for	
+			//	defaultValue: /* string */
+			//		the default value
+			var value = item[property];
+			return value ?
+						(value._loadObject && this.loadLazyValues) ? // check to see if it is not loaded 
 							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
 							dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
 							value : // return the plain value;
-							property in item ? value : defaultValue;// not in item -> return default value
-	
-			} : function(item,property, defaultValue){
-				var value = item[property];
-				return value ? // performance guard against property in item check
-						value instanceof dojo.Deferred ? // check for the a Deferred to indicate it is not loaded, all non-IE browsers have fast instanceof checks 
-							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
-							dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
-							value : // return the plain value;
-							property in item ? value : defaultValue; // not in item -> return default value;
+						property in item ? value : defaultValue;// not in item -> return default value
 
 		},
 		getValues: function(item, property){
@@ -138,43 +144,41 @@ dojo.declare("dojox.data.ServiceStore",
 
 		isItem: function(item){
 			// summary:
-			//		Checks to see if a passed 'item'
-			//		really belongs to this ServiceStore.  
+			//		Checks to see if the argument is an item 
 			//
 			//	item: /* object */
 			//	attribute: /* string */
 		
 			// we have no way of determining if it belongs, we just have object returned from
 			// 	service queries
-			return true; 
+			return typeof item == 'object'; 
 		},
 
 		isItemLoaded: function(item){
 			// summary:
-			//		returns isItem() :)
-			//
+			//		Checks to see if the item is loaded. 
+			// 
 			//		item: /* object */
 
-			return !(item instanceof dojo.Deferred && item.fired < 0);
+			return item && !item._loadObject;
 		},
 
 		loadItem: function(args){
 			// summary:
-			// 		Loads an item that has not been loaded yet. Lazy loading should happen through getValue. 
-			// 		However, if you access a value directly through property access, you can use this to load
+			// 		Loads an item that has not been loaded yet. 
+			// 		If you access a value directly through property access, you can use this to load
 			// 		a lazy (Deferred) value.
 			//
 			var item;
-			if(args.item instanceof dojo.Deferred && args.item.fired < 0){
-				args.item.addCallback(function(result){
+			if(args.item._loadObject){
+				args.item._loadObject(function(result){
 					item = result; // in synchronous mode this can allow loadItem to return the value
-					if(args.onItem){
-						args.onItem.call(args.scope,result);				
+					delete item._notLoaded;
+					var func = result instanceof Error ? args.onError : args.onItem;
+					if(func){
+						func.call(args.scope,result);				
 					}
 				});
-				if(args.onError){
-					args.item.addErrback(dojo.hitch(args.scope, args.onError));
-				}
 			}
 			return item;
 		},
@@ -209,7 +213,6 @@ dojo.declare("dojox.data.ServiceStore",
 		close: function(request){
 			return request && request.abort && request.abort();
 		},
-		_rootQueries:[],//objects that represent the result "root" queries			
 		fetch: function(args){
 			// summary:
 			//		Standard fetch
@@ -277,7 +280,6 @@ dojo.declare("dojox.data.ServiceStore",
 			return args;
 		},
 		
-
 		getFeatures: function(){
 			// summary:
 			// 		return the store feature set
@@ -325,8 +327,9 @@ dojo.declare("dojox.data.ServiceStore",
 		fetchItemByIdentity: function(args){
 			// summary: 
 			//		fetch an item by its identity, by looking in our index of what we have loaded
-			
-			args.onItem.call(args.scope,this._index[this.service.servicePath + args.identity]);
+			var item = this._index[this.service.servicePath + args.identity];
+			args.onItem.call(args.scope, item);
+			return item;
 		}
 	
 	}

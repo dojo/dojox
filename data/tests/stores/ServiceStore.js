@@ -58,6 +58,29 @@ doh.register("dojox.data.tests.stores.ServiceStore",
 			}
 		},
 		{
+			name: "createLazyItem",
+			timeout:	10000, //10 seconds.
+			runTest: function(t) {
+				//	summary: 
+				//		Simple test of a basic fetch on ServiceStore of a single item.
+				var d = new doh.Deferred();
+				var lazyItem = {
+					_loadObject: function(callback){
+						this.name="loaded";
+						delete this._loadObject;
+						callback(this);
+					}
+				};
+				t.f(jsonStore.isItemLoaded(lazyItem));
+				jsonStore.loadItem({item:lazyItem,onItem:function(){
+					t.t(jsonStore.isItemLoaded(lazyItem));
+					t.is(lazyItem.name,"loaded");
+					d.callback(true);
+				}});
+				return d; //Object
+			}
+		},
+		{
 			name: "ReadAPI:  Fetch_20_Streaming",
 			timeout:	10000, //10 seconds.  Json can sometimes be slow.
 			runTest: function(t) {

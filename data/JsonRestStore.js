@@ -37,7 +37,6 @@ dojo.require("dojox.json.ref"); // this provides json indexing
 //
 // When using a Rest store on a public network, it is important to implement proper security measures to
 // control access to resources
-
 dojo.declare("dojox.data.JsonRestStore",
 	dojox.data.ServiceStore,
 	{
@@ -75,6 +74,10 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		Setting this to true will set the store to using synchronous calls by default.
 			//		Sync calls return their data immediately from the calling function, so
 			//		callbacks are unnecessary
+			//
+			// The *lazyLoadValues* parameter
+			//		Setting this to true will cause any getValue call to automatically load the value
+			// 		if the returned value is a lazy item. This defaults to true. 
 
 			dojo.connect(dojox.rpc.Rest._index,"onUpdate",this,function(obj,attrName,oldValue,newValue){
 				var prefix = this.service.servicePath;
@@ -91,15 +94,18 @@ dojo.declare("dojox.data.JsonRestStore",
 				this.service._schema = this.schema || {};
 				this.target = this.schema._idPrefix = this.service.servicePath;
 			}
+			dojox.rpc.services = dojox.rpc.services || {};
+			dojox.rpc.services[this.service.servicePath] = this.service;
 			/*else if(!(this.service.contentType + '').match(/application\/.*json/)){
 				throw new Error("A service must use a contentType of 'application/json' in order to be used in a JsonRestStore");
 			}*/
 			this.service._store = this;
 			this._constructor = dojox.rpc.JsonRest.getConstructor(this.service);
+			this._liveRequests = []; // a list of the "live" requests
 			//given a url, load json data from as the store
 		},
 		//Write API Support
-		newItem: function(data/*, parentInfo*/){
+		newItem: function(data, parentInfo){
 			// summary:
 			//		adds a new item to the store at the specified point.
 			//		Takes two parameters, data, and options.
@@ -107,7 +113,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	data: /* object */
 			//		The data to be added in as an item.
 			data = new this._constructor(data);
-			this.onNew(data);
+			if(parentInfo){
+				// get the previous value or any empty array
+				var values = this.getValue(parentInfo.parent,parentInfo.attribute,[]);
+				// set the new value
+				this.setValue(parentInfo.parent,parentInfo.attribute,values.concat([data]));
+			}
+			this.onNew(data); // should this go before the set?
 			return data;
 		},
 		deleteItem: function(item){
@@ -124,7 +136,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			var store = dojox.data._getStoreForItem(item);
 			store._doDelete(item);
 		},
-		_doDelete : function(item/*,array / parentInfo*/){
+		_doDelete : function(item){
 			this.onDelete(item);
 		},
 		changing: function(item,_deleting){
@@ -255,7 +267,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			args.query = args.identity;
 			args.onComplete = args.onItem;
 			// we can rely on the Rest service to provide the index/cache
-			return this.fetch(args);
+			return this.fetch(args).results;
 		},
 		getConstructor: function(){
 			// summary:
@@ -264,14 +276,9 @@ dojo.declare("dojox.data.JsonRestStore",
 		},
 		//Notifcation Support
 
-		onSet: function(){
-		},
-
-		onNew: function(){
-		},
-
-		onDelete: function(){
-		},
+		onSet: function(){},
+		onNew: function(){},
+		onDelete: 	function(){},
 
 		getFeatures: function(){
 			// summary:
@@ -285,7 +292,6 @@ dojo.declare("dojox.data.JsonRestStore",
 
 	}
 );
- 
 dojox.data._getStoreForItem = function(item){
 	return dojox.rpc.services[item.__id.match(/.*\//)[0]]._store;
 };

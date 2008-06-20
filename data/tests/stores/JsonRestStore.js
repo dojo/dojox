@@ -141,7 +141,7 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 					onComplete: function(items, request){
 						t.f(jsonStore.isItemLoaded(items[2]));
 						var item = jsonStore.getValue(items,2);
-						
+						t.is(items[2],item);
 						t.is(item.name,'Object 3');
 						d.callback(true);
 					},
@@ -161,6 +161,8 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 					onComplete: function(items, request){
 						t.f(jsonStore.isItemLoaded(items[3]));
 						jsonStore.loadItem({item:items[3],onItem:function(item){
+							t.t(jsonStore.isItemLoaded(items[3]));
+							t.is(item,items[3]);
 							t.is(item.name,'Object 4');
 							d.callback(true);
 						}});
@@ -292,4 +294,3 @@ performanceTest = function (){
 	});	
 
 }
-performanceTest();

@@ -2,13 +2,14 @@ dojo.provide("dojox.data.restListener");
 dojo.require("dojox.rpc.Rest");
 
 dojox.data.restListener = function(message){
-	// Summary
-	// this function can be used to receive REST notifications, from Comet or from another frame
-	// Example usage:
-	// dojo.connect(window,"onMessage",null,function(event) {
-	//		var data = dojo.fromJson(event.data);
-	// 		dojox.restListener(data);
-	//	});
+	// summary:
+	// 		this function can be used to receive REST notifications, from Comet or from another frame
+	// description:
+	//		Example:
+	// |	dojo.connect(window,"onMessage",null,function(event) {
+	//	|		var data = dojo.fromJson(event.data);
+	// 	|		dojox.restListener(data);
+	//	|	});
 	var channel = message.channel;
 	var service = dojox.rpc.Rest.getServiceAndId(channel).service;
 	var result = service.cache.intake(message.data, message.event == 'put' && channel);

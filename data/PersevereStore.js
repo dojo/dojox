@@ -5,8 +5,28 @@ dojo.require("dojox.rpc.Client"); // this isn't necessary, but it improves relia
 // PersevereStore is an extension of JsonRestStore to handle Persevere's special features
 
 dojox.json.ref.useRefs = true; // Persevere supports referencing
+dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functions
 
-dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{});
+dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
+	fetch: function(args){
+		if(typeof args.query == "object"){
+			// convert Dojo Data query objects to JSONPath
+			args.queryObj = args.query; // queryObj can be used by LiveResultSets to do comparisons		
+			var jsonPathQuery = "[?(", first = true;
+			for(var i in args.query){
+				jsonPathQuery += (first ? "" : "&") + "@[" + dojo._escapeString(i) + "]=" + dojox.json.ref.toJson(args.query[i]);
+				first = false;
+			}
+			//FIXME: Add sorting
+			if(!first){
+				args.query = jsonPathQuery.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t}) + ")]"; // use ' instead of " for quoting in JSONPath
+			}else{
+				args.query = args.query || ""; 
+			}
+		}
+		return dojox.data.JsonRestStore.prototype.fetch.apply(this,arguments);
+	}
+});
 dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Function?*/callback){
 	// summary:
 	//		Creates Dojo data stores for all the table/classes on a Persevere server
