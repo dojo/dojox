@@ -464,6 +464,9 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
 				if(d.hasAttr(th, "width")){
 					cell.width = widthFromAttr(th);
 				}
+				if(d.hasAttr(th, "relWidth")){
+					cell.relWidth = window.parseInt(dojo.attr(th, "relWidth"), 10);
+				}
 
 				cell.type = cell.type ? dojo.getObject(cell.type) : dojox.grid.cells.Cell;
 

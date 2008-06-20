@@ -95,10 +95,33 @@ dojo.declare("dojox.grid._Layout", null, {
 
 		var addRowDef = function(inRowIndex, inDef){
 			var result = [];
+			var relSum = 0, pctSum = 0, doRel = true;
 			for(var i=0, def, cell; (def=inDef[i]); i++){
 				cell = addCellDef(inRowIndex, i, def);
 				result.push(cell);
 				self.cells.push(cell);
+				// Check and calculate the sum of all relative widths
+				if(doRel && cell.relWidth){
+					relSum += cell.relWidth;
+				}else if (cell.width){
+					var w = cell.width;
+					if(typeof w == "string" && w.slice(-1) == "%"){
+						pctSum += window.parseInt(w, 10);
+					}else if(w == "auto"){
+						// relative widths doesn't play nice with auto - since we
+						// don't have a way of knowing how much space the auto is 
+						// supposed to take up.
+						doRel = false;
+					}
+				}
+			}
+			if(relSum && doRel){
+				// We have some kind of relWidths specified - so change them to %
+				dojo.forEach(result, function(cell){
+					if(cell.relWidth){
+						cell.width = cell.unitWidth = ((cell.relWidth / relSum) * (100 - pctSum)) + "%";
+					}
+				});
 			}
 			return result;
 		};
