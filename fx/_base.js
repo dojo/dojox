@@ -211,10 +211,11 @@ dojox.fx.highlight = function(/*Object*/ args){
 	var node = args.node = dojo.byId(args.node);
 
 	args.duration = args.duration || 400;
+	
 	// Assign default color light yellow
 	var startColor = args.color || '#ffff99';
 	var endColor = dojo.style(node, "backgroundColor");
-	var wasTransparent = (endColor == "transparent" || endColor == "rgba(0, 0, 0, 0)");
+	var wasTransparent = (endColor == "transparent" || endColor == "rgba(0, 0, 0, 0)") ? endColor : false;
 
 	var anim = dojo.animateProperty(dojo.mixin({
 		properties: {
@@ -222,11 +223,11 @@ dojox.fx.highlight = function(/*Object*/ args){
 		}
 	}, args));
 
-	dojo.connect(anim, "onEnd", anim, function(){
-		if(wasTransparent){
-			node.style.backgroundColor = "transparent";
-		}
-	});
+	if(wasTransparent){
+		dojo.connect(anim, "onEnd", anim, function(){
+			node.style.backgroundColor = wasTransparent;
+		});
+	}
 
 	return anim; // dojo._Animation
 };
