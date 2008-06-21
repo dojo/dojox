@@ -48,7 +48,7 @@ dojo.declare("dojox.image.FlickrBadge", dojox.image.Badge, {
 				callbackParamName: "jsoncallback"
 			});
 			def.addCallback(this, function(data){
-				if(data.user&&data.user.nsid){
+				if(data.user && data.user.nsid){
 					this.userid = data.user.nsid;
 					if(!this._started){
 						this.startup();
