@@ -10,7 +10,7 @@ dojo.requireLocalization("dojox.widget", "Wizard");
 
 dojo.declare(
 	"dojox.widget.WizardContainer",
-	[dijit.layout.StackContainer,dijit._Templated],
+	[dijit.layout.StackContainer, dijit._Templated],
 	{
 	// summary:
 	//		A set of panels that display sequentially, typically notating a step-by-step
@@ -59,6 +59,7 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ console.log('started'); return; }
 		this.inherited(arguments);
 		
 		this.connect(this.nextButton, "onClick", "_forward");
@@ -76,6 +77,8 @@ dojo.declare(
 
 		this._subscription = dojo.subscribe(this.id + "-selectChild", dojo.hitch(this,"_checkButtons"));
 		this._checkButtons();
+		this._started = true;
+		
 	},
 
 	_checkButtons: function(){
@@ -119,6 +122,7 @@ dojo.declare(
 		dojo.unsubscribe(this._subscription);
 		this.inherited(arguments);
 	}
+	
 });
 
 dojo.declare(

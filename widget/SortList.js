@@ -41,7 +41,7 @@ dojo.declare("dojox.widget.SortList",
 
 	_addItem: function(item){
 		var node = dojo.doc.createElement("li");
-		var text = this.store.getValue(item,this.key);
+		var text = this.store.getValue(item, this.key);
 		node.innerHTML = text;
 		this.containerNode.appendChild(node);
 	},
@@ -50,8 +50,8 @@ dojo.declare("dojox.widget.SortList",
 		if(this.store){
 			this.store = dojo.getObject(this.store);
 			var props = {
-				onItem: dojo.hitch(this,"_addItem"),
-				onComplete: dojo.hitch(this,"onSort")
+				onItem: dojo.hitch(this, "_addItem"),
+				onComplete: dojo.hitch(this, "onSort")
 			};
 			this.store.fetch(props);	
 		}else{ this.onSort(); }
@@ -61,11 +61,12 @@ dojo.declare("dojox.widget.SortList",
 	startup: function(){
 		this.inherited(arguments);
 		if(this.heading){ 
-			this.setTitle(this.heading); this.title=this.heading; 
+			this.setTitle(this.heading); 
+			this.title = this.heading; 
 		}
 		// we cheat, and give the browser just enough time so we know our height
-		setTimeout(dojo.hitch(this,"resize"),5);
-		if (this.sortable){ this.connect(this.titleNode,"onclick", "onSort"); }
+		setTimeout(dojo.hitch(this,"resize"), 5);
+		if(this.sortable){ this.connect(this.titleNode,"onclick", "onSort"); }
 	},
 
 	resize: function(){
@@ -93,7 +94,7 @@ dojo.declare("dojox.widget.SortList",
 		}
 		var i=0;
 		dojo.forEach(arr,function(item){
-			dojo[(i++)%2 === 0 ? "addClass" : "removeClass"](item,"sortListItemOdd");
+			dojo[(i++) % 2 === 0 ? "addClass" : "removeClass"](item,"sortListItemOdd");
 			this.containerNode.appendChild(item); 
 		},this);
 	},
@@ -119,11 +120,11 @@ dojo.declare("dojox.widget.SortList",
 	},
 
 	_updateValues: function(){
-		this._selected = dojo.query("li.sortListItemSelected",this.containerNode);
+		this._selected = dojo.query("li.sortListItemSelected", this.containerNode);
 		this.selected = [];
-		dojo.forEach(this._selected,function(node){
+		dojo.forEach(this._selected, function(node){
 			this.selected.push(node.innerHTML);
-		},this);
+		}, this);
 		this.onChanged(arguments);
 	},
 
@@ -144,4 +145,5 @@ dojo.declare("dojox.widget.SortList",
 	onChanged: function(){
 		// summary: stub function, passes the last changed item, and is fired after current state 
 	}
+	
 });
