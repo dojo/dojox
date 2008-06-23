@@ -89,9 +89,13 @@ dojo.declare("dojox.data.ServiceStore",
 			return value ?
 						(value._loadObject && this.loadLazyValues) ? // check to see if it is not loaded 
 							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
-							dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
-							value : // return the plain value;
-						property in item ? value : defaultValue;// not in item -> return default value
+								dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
+							value : // return the plain value since it was found;
+						// a truthy value was not found, see if we actually have it 
+						property in item ? value : // we do, so we can return it
+							item._loadObject ? (dojox.rpc._sync = true) && // the item is not loaded, we should load it 
+									arguments.callee.call(this,dojox.data.ServiceStore.prototype.loadItem({item:item}), property, defaultValue) : // load the item and run getValue again 
+								defaultValue;// not in item -> return default value
 
 		},
 		getValues: function(item, property){
@@ -189,22 +193,33 @@ dojo.declare("dojox.data.ServiceStore",
 			// items (maybe more than currently in the result set).
 			// for example:
 			//	| {totalCount:10,[{id:1},{id:2}]}
-
-			for (var i in results){
+			if(results instanceof Array){
+				for (var i in results){
+					this._processResults(results[i]);
+				}
+			}
+			else{
 				// index the results, assigning ids as necessary
-				var obj = results[i]; 
-				if (obj && typeof obj == 'object'){
-					var id = obj.__id;
+
+				if (results && typeof results == 'object'){
+					var id = results.__id;
 					if(!id){// if it hasn't been assigned yet
 						if(this.idAttribute){
 							// use the defined id if available
-							id = obj[this.idAttribute];
+							id = results[this.idAttribute];
 						}else{
 							id = this._currentId++;
 						}
 						id = this.service.servicePath + id;
-						obj.__id = id;
-						this._index[id] = obj;
+						var existingObj = this._index[id];
+						if(existingObj){
+							for(var j in existingObj){
+								delete existingObj[j]; // clear it so we can mixin
+							}
+							results = dojo.mixin(existingObj,results);
+						}
+						results.__id = id;
+						this._index[id] = results;
 					}
 				}
 			}
@@ -249,9 +264,11 @@ dojo.declare("dojox.data.ServiceStore",
 			args = args || {};
 
 			var query=args.queryStr || args.query;
-			if(!args.syncMode){args.syncMode = this.syncMode;}
+			if("syncMode" in args ? args.syncMode : this.syncMode){
+				dojox.rpc._sync = true;	
+			}
 			var self = this;
-			dojox.rpc._sync = this.syncMode;
+			
 			var scope = args.scope || self;
 			var defResult = this.service(query);
 			defResult.addCallback(function(results){

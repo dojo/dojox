@@ -81,6 +81,25 @@ doh.register("dojox.data.tests.stores.ServiceStore",
 			}
 		},
 		{
+			name: "lazyItem With Fetch",
+			timeout:	10000, //10 seconds.
+			runTest: function(t) {
+				var d = new doh.Deferred();
+				jsonStore.idAttribute = "id";
+				jsonStore.fetch({query:"query", 
+					onComplete: function(items, request){
+						items[0]._loadObject = function(callback){							
+							jsonStore.fetch({query:this.id,onComplete:callback});
+						}
+						t.t(jsonStore.getValue(items[0],"testArray").length);
+						d.callback(true);
+					},
+					onError: dojo.partial(dojox.data.tests.stores.ServiceStore.error, doh, d)
+				});
+				return d;
+			}
+		},
+		{
 			name: "ReadAPI:  Fetch_20_Streaming",
 			timeout:	10000, //10 seconds.  Json can sometimes be slow.
 			runTest: function(t) {
