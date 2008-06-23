@@ -23,7 +23,7 @@
 				doh.register("tests",
 					[
 						function test_setValue(t){
-							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s6:"", s7:"NY"}, form.getValues());
+							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY"}, form.getValues());
 							s1.setValue("WA");
 							t.is("WA", s1.value);
 							s1.setValue("UT");
