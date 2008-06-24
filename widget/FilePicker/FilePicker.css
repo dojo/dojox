@@ -11,7 +11,16 @@
 	overflow: scroll;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	height: 100%;
+}
+
+.dojoxPickerPane .dijitMenuItemLabel {
+	position: static;
+}
+
+.dj_safari .dojoxPickerPane,
+.dj_ie .dojoxPickerPane,
+.dj_opera .dojoxPickerPane {
+	padding-right: 15px; /* Account for scroll bar */
 }
 
 .dojoxPickerPane .dijitMenu {

@@ -6,6 +6,7 @@ dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.Menu");
+dojo.require("dojox.html.metrics");
 
 dojo.require("dojo.i18n"); 
 dojo.requireLocalization("dojox.widget", "FilePicker"); 
@@ -102,7 +103,7 @@ dojo.declare("dojox.widget._FilePickerPane",
 	
 	// templateString: string
 	//	our template
-	templateString: '<div class="dojoxPickerPane" dojoAttachPoint="containerNode"></div>',
+	templateString: '<div class="dojoxPickerPane"><div dojoAttachPoint="containerNode"></div><div dojoAttachPoint="menuContainer"><div dojoAttachPoint="menuNode"></div></div></div>',
 	
 	// store: dojo.data.api.Read
 	//  the read store we must use
@@ -205,7 +206,9 @@ dojo.declare("dojox.widget._FilePickerPane",
 	blurAll: function(){
 		if(this.menu){
 			dojo.forEach(this.menu.getChildren(), function(i){
-				i.blur();
+				if(i.blur){
+					i.blur();
+				}
 				dojo.removeClass(i.domNode, "dojoxPickerItemSelected");
 			}, this);
 		}
@@ -216,7 +219,7 @@ dojo.declare("dojox.widget._FilePickerPane",
 		var self = this;
 		var menu = this.menu = new dijit.Menu({
 			onItemUnhover: function(/*MenuItem*/ item){item.blur();}
-		});
+		}, this.menuNode);
 		var store = this.store;
 		if(this.items.length){
 			dojo.forEach(this.items, function(item){
@@ -238,11 +241,12 @@ dojo.declare("dojox.widget._FilePickerPane",
 			menu.addChild(c);
 		}
 		this.connect(menu, "onItemClick", "onItemClick");
-		this.setContent(menu.domNode);
 		if(!menu.started){
 			menu.startup();
 		}
-		this.isLoaded = true;
+		this.containerNode.innerHTML = "";
+		this.containerNode.appendChild(menu.domNode);
+		this._onLoadHandler();
 	}
 });
 
@@ -283,9 +287,23 @@ dojo.declare("dojox.widget.FilePicker",
 		if(!child._started){
 			child.startup();
 		}
+		this.layout();
 		dijit.scrollIntoView(child.domNode);
 	},
 	
+	resize: function(args){
+		dijit.layout._LayoutWidget.prototype.resize.call(this, args);
+	},
+	
+	layout: function(){
+		if(this._contentBox){
+			var height = this._contentBox.h - dojox.html.metrics.getScrollbar().h;
+			dojo.forEach(this.getChildren(), function(c){
+				dojo.marginBox(c.domNode, {h: height});
+			});
+		}
+	},
+
 	setStore: function(/* dojo.data.api.Read */ store){
 		// summary: sets the store for this widget */
 		if(store === this.store && this._started){ return; }
@@ -297,6 +315,11 @@ dojo.declare("dojox.widget.FilePicker",
 	},
 	
 	startup: function(){
+		if(this._started){ return; }
+		if(!this.getParent || !this.getParent()){
+			this.resize();
+			this.connect(dojo.global, "onresize", "resize");
+		}
 		this.setStore(this.store);
 		this.inherited(arguments);
 	}
