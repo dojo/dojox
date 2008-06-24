@@ -9,6 +9,7 @@ try{
 	dojo.require("dojox.lang.tests.misc");
 	dojo.require("dojox.lang.tests.array");
 	dojo.require("dojox.lang.tests.recomb");
+	dojo.require("dojox.lang.tests.observable");
 }catch(e){
 	doh.debug(e);
 }
