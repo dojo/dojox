@@ -62,6 +62,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// |	};
 			//setup a byId alias to the api call	
 			this.byId=this.fetchItemByIdentity;
+			this._index = {};			
 			// if the advanced json parser is enabled, we can pass through object updates as onSet events
 			if(options){
 				dojo.mixin(this,options);
@@ -187,7 +188,6 @@ dojo.declare("dojox.data.ServiceStore",
 			return item;
 		},
 		_currentId : 0,
-		_index : {},
 		_processResults : function(results){
 			// this should return an object with the items as an array and the total count of 
 			// items (maybe more than currently in the result set).
