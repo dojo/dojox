@@ -86,6 +86,7 @@ doh.register("dojox.data.tests.stores.ServiceStore",
 			runTest: function(t) {
 				var d = new doh.Deferred();
 				jsonStore.idAttribute = "id";
+				jsonStore.syncMode = true;
 				jsonStore.fetch({query:"query", 
 					onComplete: function(items, request){
 						items[0]._loadObject = function(callback){							

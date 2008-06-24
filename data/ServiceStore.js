@@ -87,13 +87,13 @@ dojo.declare("dojox.data.ServiceStore",
 			//		the default value
 			var value = item[property];
 			return value ?
-						(value._loadObject && this.loadLazyValues) ? // check to see if it is not loaded 
+						(value._loadObject && this.loadLazyValues !== false) ? // check to see if it is not loaded 
 							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
 								dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
 							value : // return the plain value since it was found;
 						// a truthy value was not found, see if we actually have it 
 						property in item ? value : // we do, so we can return it
-							item._loadObject ? (dojox.rpc._sync = true) && // the item is not loaded, we should load it 
+							(item._loadObject && this.syncMode) ? // the item is not loaded and we can load it synchronously, we should load it 
 									arguments.callee.call(this,dojox.data.ServiceStore.prototype.loadItem({item:item}), property, defaultValue) : // load the item and run getValue again 
 								defaultValue;// not in item -> return default value
 
@@ -177,7 +177,7 @@ dojo.declare("dojox.data.ServiceStore",
 			if(args.item._loadObject){
 				args.item._loadObject(function(result){
 					item = result; // in synchronous mode this can allow loadItem to return the value
-					delete item._notLoaded;
+					delete item._loadObject;
 					var func = result instanceof Error ? args.onError : args.onItem;
 					if(func){
 						func.call(args.scope,result);				
@@ -194,8 +194,8 @@ dojo.declare("dojox.data.ServiceStore",
 			// for example:
 			//	| {totalCount:10,[{id:1},{id:2}]}
 			if(results instanceof Array){
-				for (var i in results){
-					this._processResults(results[i]);
+				for (var i = 0; i < results.length; i++){
+					results[i] = this._processResults(results[i]).items;
 				}
 			}
 			else{
