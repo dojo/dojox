@@ -55,6 +55,9 @@ Other Notes (Brief widget list):
 
 	* FileInputAuto/Blind - extension to FileInput for 
 		added flair/automation
+		
+	* FilePicker - a widget for browsing server-side file systems (can use
+		dojox.data.FileStore as backend store)
 
 	* FisheyeList - the classic FishEye Picker
 
