@@ -60,7 +60,11 @@ makeObjects = function(){
 	var chart2 = new dojox.charting.Chart2D("test2");
 	chart2.addAxis("x", {
 		fixLower: "major", fixUpper: "major", includeZero: true, 
-		labels: [{value: 0, text: "zero"}, {value: 2, text: "two"}, {value: 4, text: "four"}]
+		labels: [
+			//{value: 0, text: "zero"},
+			{value: 2, text: "two"},
+			{value: 4, text: "four"}
+		]
 	});
 	chart2.addAxis("y", {
 		vertical: true, fixLower: "major", fixUpper: "major", natural: true,

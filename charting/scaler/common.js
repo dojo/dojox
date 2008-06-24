@@ -31,7 +31,7 @@ dojo.provide("dojox.charting.scaler.common");
 					return l[lo].text;
 				}
 				--lo;
-				if(lo < l.length && eq(l[lo].value, number)){
+				if(lo >= 0 && lo < l.length && eq(l[lo].value, number)){
 					return l[lo].text;
 				}
 				lo += 2;
