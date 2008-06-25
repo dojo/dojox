@@ -1,5 +1,4 @@
 dojo.provide("dojox.widget.FilePicker");
-dojo.experimental("dojox.widget.FilePicker");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
@@ -128,6 +127,10 @@ dojo.declare("dojox.widget._FilePickerPane",
 	//  Our parent widget
 	parentWidget: null,
 	
+	// parentMenu: dijit.Menu
+	//  Our menu's parent menu
+	parentMenu: null,
+	
 	// class: string
 	//  We override this to dijitInline so things display correctly
 	"class": "dijitInline",
@@ -178,7 +181,8 @@ dojo.declare("dojox.widget._FilePickerPane",
 		if(item.type == "Directory" && !item._paneWidget){
 			item._paneWidget = new dojox.widget._FilePickerPane({store: store,
 																items: store.getValues(item.item, "children"),
-																parentWidget: this.parentWidget});
+																parentWidget: this.parentWidget,
+																parentMenu: this.menu});
 		}else if(item.type == "File" && !item._paneWidget){
 			item._paneWidget = new dojox.widget._FileInfoPane({store: store, item: item.item, parentWidget: this.parentWidget});
 		}
@@ -217,8 +221,16 @@ dojo.declare("dojox.widget._FilePickerPane",
 	_createItems: function(){
 		// summary: Creates the menu widget and the items to place within it.
 		var self = this;
+		var savedFocus = dijit.getFocus(this);
 		var menu = this.menu = new dijit.Menu({
-			onItemUnhover: function(/*MenuItem*/ item){item.blur();}
+			parentMenu: this.parentMenu,
+			onItemUnhover: function(/*MenuItem*/ item){item.blur();},
+			onCancel: function(/*Boolean*/ closeAll){ dijit.focus(savedFocus); },
+			_moveToPopup: function(/*Event*/ evt){
+				if(this.focusedChild && !this.focusedChild.disabled){
+					this.focusedChild._onClick(evt);
+				}
+			}
 		}, this.menuNode);
 		var store = this.store;
 		if(this.items.length){
@@ -351,6 +363,18 @@ dojo.declare("dojox.widget.FilePicker",
 											query: this.query, 
 											queryOptions: this.queryOptions,
 											parentWidget: this}), null, false);
+	},
+	
+	_onFocus: function(){
+		var children = this.getChildren();
+		if(children.length){
+			var last = children[children.length - 1];
+			if(last.focus){
+				last.focus();
+			}
+		}else{
+			this.inherited(arguments);
+		}
 	},
 	
 	startup: function(){
