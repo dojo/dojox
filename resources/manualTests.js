@@ -43,6 +43,7 @@ if(dojo.isBrowser){
 	doh.registerUrl("dojox/encoding/tests/compression/test.html", dojo.moduleUrl("dojox","encoding/tests/compression/test.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/encoding/tests/compression/vq.html", dojo.moduleUrl("dojox","encoding/tests/compression/vq.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/flash/tests/test_flash.html", dojo.moduleUrl("dojox","flash/tests/test_flash.html"+userArgs), 99999999);
+	doh.registerUrl("dojox/form/tests/test_FileInput.html", dojo.moduleUrl("dojox","form/tests/test_FileInput.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/fx/tests/example_backgroundPosition.html", dojo.moduleUrl("dojox","fx/tests/example_backgroundPosition.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/fx/tests/example_dojoAnimations.html", dojo.moduleUrl("dojox","fx/tests/example_dojoAnimations.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/fx/tests/example_easingChart2D.html", dojo.moduleUrl("dojox","fx/tests/example_easingChart2D.html"+userArgs), 99999999);
@@ -182,7 +183,6 @@ if(dojo.isBrowser){
 	doh.registerUrl("dojox/widget/tests/demo_FisheyeList.html", dojo.moduleUrl("dojox","widget/tests/demo_FisheyeList.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/widget/tests/demo_FisheyeLite.html", dojo.moduleUrl("dojox","widget/tests/demo_FisheyeLite.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/widget/tests/test_ColorPicker.html", dojo.moduleUrl("dojox","widget/tests/test_ColorPicker.html"+userArgs), 99999999);
-	doh.registerUrl("dojox/widget/tests/test_FileInput.html", dojo.moduleUrl("dojox","widget/tests/test_FileInput.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/widget/tests/test_FisheyeList.html", dojo.moduleUrl("dojox","widget/tests/test_FisheyeList.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/widget/tests/test_FisheyeLite.html", dojo.moduleUrl("dojox","widget/tests/test_FisheyeLite.html"+userArgs), 99999999);
 	doh.registerUrl("dojox/widget/tests/test_Iterator.html", dojo.moduleUrl("dojox","widget/tests/test_Iterator.html"+userArgs), 99999999);
