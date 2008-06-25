@@ -57,7 +57,7 @@
 .nihilo .dojoxGrid-header .dojoxGrid-cell { 
 	border: 1px solid transparent;
 	/* border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB; */
-	border-color: white #ACA899 #919191 white;
+	border-color: transparent #ACA899 #919191 transparent;
 	background: url(../../../dijit/themes/nihilo/images/titleBar.png) #e9e9e9 repeat-x top;
 	padding-bottom: 2px;
 	color: #000 !important;
@@ -174,14 +174,10 @@
 	background-color: #aec7e3;
 }
 
-.nihilo .dojoxGrid-row-table {
+.nihilo .dojoxGrid-row-table,
+.nihilo .dojoxGrid-rowbar-table {
 	table-layout: fixed;
 	width: 0;
-	border-collapse: collapse;
-}
-
-.dj_ff2 .nihilo .dojoxGrid-row-table {
-	border-collapse: separate;
 }
 
 .nihilo .dojoxGrid-invisible {
@@ -205,6 +201,8 @@
 
 .nihilo .dojoxGrid-cell {
 	border: 1px dotted #D5CDB5;
+	border-left-color: transparent;
+	border-top-color: transparent;
 	padding: 3px 3px 3px 3px;
 	text-align: left;
 	overflow: hidden;

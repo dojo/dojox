@@ -73,15 +73,13 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	normalizeRowNodeHeights: function(inRowNodes){
 		var h = 0; 
 		for(var i=0, n, o; (n=inRowNodes[i]); i++){
-			h = Math.max(h, (n.firstChild.clientHeight)||(n.firstChild.offsetHeight));
+			h = Math.max(h, dojo.marginBox(n.firstChild).h);
 		}
 		h = (h >= 0 ? h : 0);
 		//
-		var hpx = h + 'px';
+		//
 		for(var i=0, n; (n=inRowNodes[i]); i++){
-			if(n.firstChild.clientHeight!=h){
-				n.firstChild.style.height = hpx;
-			}
+			dojo.marginBox(n.firstChild, {h:h});
 		}
 		//
 		//console.log('normalizeRowNodeHeights ', h);
