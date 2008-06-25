@@ -50,11 +50,6 @@ Installation instructions
 -------------------------------------------------------------------------------
 Other Notes (Brief widget list):
 
-	* FileInput - experimental dijit-like input type="file"
-
-	* FileInputAuto/Blind - extension to FileInput for 
-		added flair/automation
-		
 	* FilePicker - a widget for browsing server-side file systems (can use
 		dojox.data.FileStore as backend store)
 

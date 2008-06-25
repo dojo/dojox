@@ -1,10 +1,10 @@
-dojo.provide("dojox.widget.FileInput");
-dojo.experimental("dojox.widget.FileInput"); 
+dojo.provide("dojox.form.FileInput");
+dojo.experimental("dojox.form.FileInput"); 
 
 dojo.require("dijit.form._FormWidget");
 dojo.require("dijit._Templated"); 
 
-dojo.declare("dojox.widget.FileInput",
+dojo.declare("dojox.form.FileInput",
 	dijit.form._FormWidget,
 	{
 	// summary: A styled input type="file"
@@ -25,7 +25,7 @@ dojo.declare("dojox.widget.FileInput",
 	//	ugh, this should be pulled from this.domNode
 	name: "uploadFile",
 
-	templatePath: dojo.moduleUrl("dojox.widget","FileInput/FileInput.html"),
+	templatePath: dojo.moduleUrl("dojox.form","resources/FileInput.html"),
 	
 	startup: function(){
 		// summary: listen for changes on our real file input

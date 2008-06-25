@@ -1,12 +1,12 @@
-dojo.provide("dojox.widget.FileInputAuto");
+dojo.provide("dojox.form.FileInputAuto");
 
-dojo.require("dojox.widget.FileInput");
+dojo.require("dojox.form.FileInput");
 dojo.require("dojo.io.iframe"); 
 
-dojo.declare("dojox.widget.FileInputAuto",
-	dojox.widget.FileInput,
+dojo.declare("dojox.form.FileInputAuto",
+	dojox.form.FileInput,
 	{
-	// summary: An extension on dojox.widget.FileInput providing background upload progress
+	// summary: An extension on dojox.form.FileInput providing background upload progress
 	//
 	// description: An extended version of FileInput - when the user focuses away from the input
 	//	the selected file is posted via dojo.io.iframe to the url. example implementation
@@ -17,7 +17,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 	//	
 	//	results = { size: "1024", filename: "file.txt" }
 	//	
-	//	all the parameters allowed to dojox.widget.FileInput apply
+	//	all the parameters allowed to dojox.form.FileInput apply
 
 	// url: String
 	// 	the URL where our background FileUpload will be sent
@@ -41,7 +41,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 	_sent: false,
 
 	// small template changes, new attachpoint: overlay
-	templatePath: dojo.moduleUrl("dojox.widget","FileInput/FileInputAuto.html"),
+	templatePath: dojo.moduleUrl("dojox.form","resources/FileInputAuto.html"),
 
 	startup: function(){
 		// summary: add our extra blur listeners
@@ -160,10 +160,10 @@ dojo.declare("dojox.widget.FileInputAuto",
 	}
 });
 
-dojo.declare("dojox.widget.FileInputBlind",
-	dojox.widget.FileInputAuto,
+dojo.declare("dojox.form.FileInputBlind",
+	dojox.form.FileInputAuto,
 	{
-	// summary: An extended version of dojox.widget.FileInputAuto
+	// summary: An extended version of dojox.form.FileInputAuto
 	//	that does not display an input node, but rather only a button
 	// 	and otherwise behaves just like FileInputAuto
 	

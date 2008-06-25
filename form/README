@@ -38,3 +38,9 @@ Additional Notes (Brief widget list):
  						meant to mirror the html <select> drop down
 
 	* _ColorPicker - An HSV ColorPicker intended to be a drop down
+
+	* FileInput - experimental dijit-like input type="file"
+
+	* FileInputAuto/Blind - extension to FileInput for 
+		added flair/automation
+		
