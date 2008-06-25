@@ -98,10 +98,6 @@ dojo.declare("dojox.image.SlideShow",
 	
 	templatePath: dojo.moduleUrl("dojox.image", "resources/SlideShow.html"),
 	
-	// _tempImgPath: URL
-	//	URL to the image to display when an image is not yet fully loaded.
-	_tempImgPath: dojo.moduleUrl("dojo", "resources/blank.gif"),
-
 	// _imageCounter: Number
 	//	A counter to keep track of which index image is to be loaded next
 	_imageCounter: 0,
@@ -137,7 +133,7 @@ dojo.declare("dojox.image.SlideShow",
 		
 		this.outerNode.style.width = this.imageWidth + "px";
 
-		img.setAttribute("src", this._tempImgPath);
+		img.setAttribute("src", this._blankGif);
 		var _this = this;
 		
 		this.largeNode.appendChild(img);

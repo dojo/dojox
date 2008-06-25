@@ -167,7 +167,7 @@ dojo.require("dojo.fx");
 			//	of this widget: the underlay. 
 			if(dojo.isIE && dojo.isIE<7){ 
 				this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
-				this.colorUnderlay.src = dojo.moduleUrl("dojo","resources/blank.gif").toString();
+				this.colorUnderlay.src = this._blankGif.toString();
 			}
 			// hide toggle-able nodes:
 			if(!this.showRgb){ this.rgbNode.style.display = "none"; }

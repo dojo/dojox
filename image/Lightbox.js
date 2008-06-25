@@ -156,7 +156,6 @@ dojo.declare("dojox.image._LightboxDialog",
 
 	// privates:
 	_imageReady: false,
-	_blankImg: dojo.moduleUrl("dojo","resources/blank.gif"),
 	_clone: null, // the "untained" image
 	_wasStyled: null, // indicating taint on the imgNode
 
@@ -341,7 +340,7 @@ dojo.declare("dojox.image._LightboxDialog",
 		dojo.fadeOut({node:this.titleNode, duration:200,
 			onEnd: dojo.hitch(this,function(){
 				// refs #5112 - if you _don't_ change the .src, safari will _never_ fire onload for this image
-				this.imgNode.src = this._blankImg; 
+				this.imgNode.src = this._blankGif; 
 			}) 
 		}).play(5); 
 		this.inherited(arguments);

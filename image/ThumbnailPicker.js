@@ -93,7 +93,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	titleAttr: "title",
 	
 	templatePath: dojo.moduleUrl("dojox.image", "resources/ThumbnailPicker.html"), 
-	tempImgPath: dojo.moduleUrl("dojo", "resources/blank.gif"),
 	
 	// thumbs: Array
 	// Stores the image nodes for the thumbnails.
@@ -165,8 +164,8 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		dojo.addClass(this.thumbsNode, "thumb"+classExt);
 		dojo.addClass(this.outerNode, "thumb"+classExt);
 	
-		this.navNextImg.setAttribute("src", this.tempImgPath);
-		this.navPrevImg.setAttribute("src", this.tempImgPath);
+		this.navNextImg.setAttribute("src", this._blankGif);
+		this.navPrevImg.setAttribute("src", this._blankGif);
 		
 		this.connect(this.navPrev, "onclick", "_prev");
 		this.connect(this.navNext, "onclick", "_next");

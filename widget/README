@@ -38,7 +38,6 @@ Installation instructions
 
 	eg: FisheyeList:
 	/dojox/widget/FisheyeList.js
-	/dojox/widget/FisheyeList/blank.gif
 	/dojox/widget/FisheyeList/FisheyeList.css
 
 	should be all you need to use the Fisheye widget.	
