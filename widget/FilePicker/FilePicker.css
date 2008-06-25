@@ -18,8 +18,7 @@
 }
 
 .dj_safari .dojoxPickerPane,
-.dj_ie .dojoxPickerPane,
-.dj_opera .dojoxPickerPane {
+.dj_ie .dojoxPickerPane {
 	padding-right: 15px; /* Account for scroll bar */
 }
 

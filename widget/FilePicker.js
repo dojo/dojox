@@ -93,6 +93,7 @@ dojo.declare("dojox.widget._FileInfoPane",
 		this.nameNode.innerHTML = store.getLabel(item);
 		this.pathNode.innerHTML = store.getIdentity(item);
 		this.sizeNode.innerHTML = store.getValue(item, "size");
+		this.parentWidget.scrollIntoView(this);
 	}
 });
 
@@ -143,6 +144,7 @@ dojo.declare("dojox.widget._FilePickerPane",
 		// summary: either runs the query or loads potentially not-yet-loaded items.
 		this.isLoaded = false;
 		this._setContent(this.loadingMessage);
+		this.parentWidget.scrollIntoView(this);
 		if(this.items){
 			var _waitCount = 0, store = this.store, items = this.items;
 			dojo.forEach(items, function(item){ if(!store.isItemLoaded(item)){ _waitCount++; }});
@@ -178,13 +180,11 @@ dojo.declare("dojox.widget._FilePickerPane",
 																items: store.getValues(item.item, "children"),
 																parentWidget: this.parentWidget});
 		}else if(item.type == "File" && !item._paneWidget){
-			item._paneWidget = new dojox.widget._FileInfoPane({store: store, item: item.item});
+			item._paneWidget = new dojox.widget._FileInfoPane({store: store, item: item.item, parentWidget: this.parentWidget});
 		}
 		if(item._paneWidget){
-			this.parentWidget.pushChild(item._paneWidget, this);
-			if(item._paneWidget.focus){
-				item._paneWidget.focus();
-			}
+			this.parentWidget.pushChild(item._paneWidget, this, true);
+			this.parentWidget.onItemClick(item.item);
 		}
 		dojo.forEach(this.menu.getChildren(), function(i){
 			dojo.toggleClass(i.domNode, "dojoxPickerItemSelected", i == item);
@@ -246,6 +246,7 @@ dojo.declare("dojox.widget._FilePickerPane",
 		}
 		this.containerNode.innerHTML = "";
 		this.containerNode.appendChild(menu.domNode);
+		this.parentWidget.scrollIntoView(this);
 		this._onLoadHandler();
 	}
 });
@@ -270,8 +271,12 @@ dojo.declare("dojox.widget.FilePicker",
 	// queryOptions: object
 	//  query options to be passed to the datastore
 	queryOptions: null,
+	
+	// scrollDuration: integer
+	//  time (in millis) to animate the smooth scroll across
+	scrollDuration: 150,
 
-	pushChild: function(/* dijit._Container */ child, /* dijit._Container? */ popUntil){
+	pushChild: function(/* dijit._Container */ child, /* dijit._Container? */ popUntil, /* Boolean? */ doFocus){
 		// summary: pushes the given child to the end of the container.  It pops
 		//  off any children from the end until the given popUntil is encountered.
 		//  If popUntil is null, then nothing is popped off the end.
@@ -288,7 +293,41 @@ dojo.declare("dojox.widget.FilePicker",
 			child.startup();
 		}
 		this.layout();
-		dijit.scrollIntoView(child.domNode);
+		this.scrollIntoView(child, doFocus||false);
+	},
+	
+	onItemClick: function(/* item */ item){
+		// summary: called when an item is clicked - it receives the store item
+	},
+	
+	scrollIntoView: function(/* Widget */ childWidget, /* Boolean? */ doFocus){
+		// summary: smoothly scrolls the given widget into view, and (optionally)
+		//  focuses it.
+		window.setTimeout(dojo.hitch(this, function(){
+			var node = this.domNode;
+			if(this._currentAnim && this._currentAnim.status() == "playing"){
+				this._currentAnim.stop();
+			}
+			delete this._currentAnim;
+			var tgt = node.scrollWidth - node.clientWidth;
+			var _doFocus = function(){
+				if(doFocus && childWidget.focus){
+					childWidget.focus();
+				}
+			};
+			if(node.scrollLeft != tgt){
+				this._currentAnim = new dojo._Animation({
+					curve: new dojo._Line(node.scrollLeft, tgt),
+					onAnimate: function(val){
+						node.scrollLeft = val;
+					},
+					duration: this.scrollDuration,
+					onEnd: _doFocus
+				}).play();
+			}else{
+				_doFocus();
+			}
+		}), 1);
 	},
 	
 	resize: function(args){
@@ -311,7 +350,7 @@ dojo.declare("dojox.widget.FilePicker",
 		this.pushChild(new dojox.widget._FilePickerPane({store: this.store, 
 											query: this.query, 
 											queryOptions: this.queryOptions,
-											parentWidget: this}));
+											parentWidget: this}), null, false);
 	},
 	
 	startup: function(){
