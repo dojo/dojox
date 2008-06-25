@@ -40,7 +40,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			}),
 			error: dojo.hitch(this, function(err){
 				this._cometd._polling=false;
-				dojo.publish("/cometd/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
+				dojo.publish(this._cometd.prefix + "/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
 				this._cometd._backoff();
 				this.tunnelCollapse();
 			}),
@@ -67,7 +67,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			callbackParamName: "jsonp",
 			content: { message: dojo.toJson( messages ) },
 			error: dojo.hitch(this, function(err){
-				dojo.event.topic.publish("/cometd/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+				dojo.event.topic.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
 			}),
 			timeout: this._cometd.expectedNetworkDelay
 		};
