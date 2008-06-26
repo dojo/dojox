@@ -1,6 +1,9 @@
 dojo.provide("dojox.data.PersevereStore");
 dojo.require("dojox.data.JsonRestStore");
-dojo.require("dojox.rpc.Client"); // this isn't necessary, but it improves reliability
+dojo.require("dojox.rpc.Client"); // Persevere supports this and it improves reliability
+if(dojox.rpc.LocalStorageRest){
+	dojo.require("dojox.json.query"); // this is so we can do perform queries locally 
+}
 
 // PersevereStore is an extension of JsonRestStore to handle Persevere's special features
 
@@ -9,22 +12,56 @@ dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functi
 
 dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 	fetch: function(args){
+
+		// performs conversion of Dojo Data query objects and sort arrays to JSONQuery strings
 		if(typeof args.query == "object"){
-			// convert Dojo Data query objects to JSONPath
-			args.queryObj = args.query; // queryObj can be used by LiveResultSets to do comparisons		
-			var jsonPathQuery = "[?(", first = true;
+			// convert Dojo Data query objects to JSONQuery
+			var jsonQuery = "[?(", first = true;
 			for(var i in args.query){
-				jsonPathQuery += (first ? "" : "&") + "@[" + dojo._escapeString(i) + "]=" + dojox.json.ref.toJson(args.query[i]);
-				first = false;
+				if(args.query[i]!="*"){ // full wildcards can be ommitted
+					jsonQuery += (first ? "" : "&") + "@[" + dojo._escapeString(i) + "]=" + dojox.json.ref.toJson(args.query[i]);
+					first = false;
+				}
 			}
-			//FIXME: Add sorting
 			if(!first){
-				args.query = jsonPathQuery.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t}) + ")]"; // use ' instead of " for quoting in JSONPath
+				// use ' instead of " for quoting in JSONQuery, and end with ]
+				jsonQuery += ")]"; 
 			}else{
-				args.query = args.query || ""; 
+				jsonQuery = "";
+			}
+			args.queryStr = jsonQuery.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t;});
+		}else if(!args.query){
+			args.query = "";
+		}
+		
+		var sort = args.sort;
+		if(sort){
+			// if we have a sort order, add that to the JSONQuery expression
+			args.queryStr = args.queryStr || args.query || ""; 
+			first = true;
+			for(i = 0; i < sort.length; i++){
+				args.queryStr += (first ? '[' : ',') + (sort[i].descending ? '\\' : '/') + "@[" + dojo._escapeString(sort[i].attribute) + "]";
+				first = false; 
+			}
+			if(!first){
+				args.queryStr += ']';
 			}
 		}
-		return dojox.data.JsonRestStore.prototype.fetch.apply(this,arguments);
+		if(args.queryStr){
+			args.queryStr = args.queryStr.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t;});
+		}
+		var index = dojox.rpc.Rest._index;
+		if(dojox.json.query && !args.dontCache && index[this.target] && !index[this.target]._loadObject){
+			// we can do the query locally
+			jsonQuery = args.queryStr || args.query;
+			// do the query locally with dojox.json.query and then sneak the results in the cache, so the 
+			//	inherited fetch can handle it
+			index[this.target + jsonQuery] = dojox.json.query(jsonQuery,index[this.target]);
+			// there is no point in using range if everything is local, and it disables caching, so we eliminate it.
+			args.start = 0;
+			delete args.count;
+		}
+		return this.inherited(arguments);
 	}
 });
 dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Function?*/callback){

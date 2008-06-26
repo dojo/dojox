@@ -263,7 +263,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 			args = args || {};
 
-			var query=args.queryStr || args.query;
+			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
 			if("syncMode" in args ? args.syncMode : this.syncMode){
 				dojox.rpc._sync = true;	
 			}
@@ -284,7 +284,7 @@ dojo.declare("dojox.data.ServiceStore",
 					}
 				}					
 				if(args.onComplete){
-					args.onComplete.call(scope, results, args);
+					args.onComplete.call(scope, args.onItem ? null : results, args);
 				}
 				return results;
 			});
