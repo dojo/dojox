@@ -236,17 +236,19 @@ dojo.provide("dojox.embed.Quicktime");
 			if(mv){
 				qt=mv, n=qt.parentNode;
 			} else {
-				qtInsert();
-				if(!dojo.isOpera){
-					setTimeout(function(){ qtGetInfo(document[o.id]); }, 50);
-				} else {
-					var fn=function(){ 
-						setTimeout(function(){ qtGetInfo(document[o.id]) }, 50); 
-					};
-					if(!dojo._initFired){
-						dojo.addOnLoad(fn);
+				if(o.id) {
+					qtInsert();
+					if(!dojo.isOpera){
+						setTimeout(function(){ qtGetInfo(document[o.id]); }, 50);
 					} else {
-						dojo.connect(document[o.id], "onload", fn);
+						var fn=function(){ 
+							setTimeout(function(){ qtGetInfo(document[o.id]) }, 50); 
+						};
+						if(!dojo._initFired){
+							dojo.addOnLoad(fn);
+						} else {
+							dojo.connect(document[o.id], "onload", fn);
+						}
 					}
 				}
 				return;
