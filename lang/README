@@ -9,11 +9,16 @@ Project state:
 -------------------------------------------------------------------------------
 Credits
 	Eugene Lazutkin (eugene.lazutkin@gmail.com)
+	Kris Zyp (kris@sitepen.com)
 -------------------------------------------------------------------------------
 Project description
 
 Implementation of common functional operations, and provisions, aspect-oriented
 helpers. Later we can add other JS language-related helpers.
+
+dojox.lang.observable - Provides construction of objects that such that 
+property access and modification can be controlled, i.e. provides a form of
+getters/setters.
 -------------------------------------------------------------------------------
 Dependencies:
 
