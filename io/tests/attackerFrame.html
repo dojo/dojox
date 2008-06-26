@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Attacker Frame Test</title>
+	<script type="text/javascript">
+	var switchedLocation;
+	var intervalId = setInterval(function(){
+		try{
+			if(!switchedLocation){
+				console.log("changing to "+ (parent.frames[1].location = "http://127.0.0.1/dojox/io/tests/"));
+				switchedLocation = true;
+			}
+			console.log("snooping for "+ parent.frames[1].name);
+			clearInterval(intervalId);
+		}
+		catch(e){}
+	},10);
+	function check(){
+		if(switchedLocation){
+		alert("other " + parent.frames[1].name);
+		}
+		(parent.frames[1].location = "http://127.0.0.1/dojox/io/tests/");
+		switchedLocation = true;
+		alert("changed ");
+		
+	}
+	</script>
+</head>
+<body class="tundra">
+<div onclick="check()">fire</div>
+</body>
+</html>

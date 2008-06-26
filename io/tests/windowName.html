@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Window Name Test</title>
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+	</style>
+
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+	<script type="text/javascript" src="../xhrWindowNamePlugin.js"></script>
+	<script type="text/javascript">
+	dojox.io.xhrWindowNamePlugin("http://localhost");
+function test() {
+	var dfd = dojo.xhr("GET",{url:
+			prompt("Enter an address to retrieve data from",
+						"http://localhost:8080/Customer/4"),
+				timeout:10000,
+				handleAs:"text"});
+	dfd.addCallback(function(result){alert(result)});		
+	dfd.addErrback(function(result){alert(result)});
+}
+function testPost() {
+	var dfd = dojox.io.windowName.send("POST",{url:
+			prompt("Enter an address to post data to",
+						"http://persevere.sitepen.com:9080/Customer/"),
+						content:{foo:"bar"}
+			},true);
+	dfd.addCallback(function(result){alert(result)});		
+	dfd.addErrback(function(result){alert(result)});
+}
+	</script>
+</head>
+<body class="tundra">
+	<h1>Window Name Test</h1>
+	<!--  <iframe src="http://127.0.0.1/dojox/io/tests/attackerFrame.html"></iframe>-->
+	<p>Run this test from a web server, not from local disk.</p>
+	<button onclick="test()">get data</button>
+</body>
+</html>
