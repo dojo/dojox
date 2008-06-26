@@ -67,7 +67,7 @@ dojox.cometd.callbackPollTransport = new function(){
 			callbackParamName: "jsonp",
 			content: { message: dojo.toJson( messages ) },
 			error: dojo.hitch(this, function(err){
-				dojo.event.topic.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+				dojo.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
 			}),
 			timeout: this._cometd.expectedNetworkDelay
 		};
