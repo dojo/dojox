@@ -90,8 +90,14 @@ dojo.extend(dijit.Menu, {
 		children.forEach(function(child){ 
 			if(child._isPlaceholder && (!label || child.label == label)){
 				r.push(child); 
-			}else if(child.popup && child.popup.getPlaceholders){
+			}else if(child._started && child.popup && child.popup.getPlaceholders){
 				r = r.concat(child.popup.getPlaceholders(label));
+			}else if(!child._started && child.dropDownContainer){
+				var node = dojo.query("[widgetId]", child.dropDownContainer)[0];
+				var menu = dijit.byNode(node);
+				if(menu.getPlaceholders){
+					r = r.concat(menu.getPlaceholders(label));
+				}
 			}
 		}, this); 
 		return r; // dojox.widget.PlaceholderMenuItem[]
