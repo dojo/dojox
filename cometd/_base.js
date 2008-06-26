@@ -451,7 +451,6 @@ dojox.cometd = {
 			//		connection if all is OK
 			data = data[0];
 			this.handshakeReturn = data;
-			
 			// remember any advice
 			if(data["advice"]){
 				this._advice = data.advice;

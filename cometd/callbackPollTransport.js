@@ -4,6 +4,7 @@ dojo.require("dojox.cometd.longPollTransport");
 dojo.require("dojo.io.script");
 
 dojox.cometd.callbackPollTransport = new function(){
+
 	this._connectionType = "callback-polling";
 	this._cometd = null;
 
@@ -17,12 +18,10 @@ dojox.cometd.callbackPollTransport = new function(){
 			channel:	"/meta/connect",
 			clientId:	this._cometd.clientId,
 			connectionType: this._connectionType,
-			id:	""+this._cometd.messageId++
+			id:	"" + this._cometd.messageId++
 		};
 		message = this._cometd._extendOut(message);		
-		this.openTunnelWith({
-			message: dojo.toJson([message])
-		});
+		this.openTunnelWith([message]);
 	}
 
 	this.tunnelCollapse = dojox.cometd.longPollTransport.tunnelCollapse;
@@ -39,35 +38,47 @@ dojox.cometd.callbackPollTransport = new function(){
 				this.tunnelCollapse();
 			}),
 			error: dojo.hitch(this, function(err){
-				this._cometd._polling=false;
-				dojo.publish(this._cometd.prefix + "/meta", [{cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state()}]);
+				this._cometd._polling = false;
+				dojo.publish(this._cometd.prefix + "/meta", [{
+					cometd: this._cometd,
+					action: "connect",
+					successful: false,
+					state: this._cometd.state()
+				}]);
 				this._cometd._backoff();
 				this.tunnelCollapse();
 			}),
-			url: (url||this._cometd.url),
-			content: content,
+			url: (url || this._cometd.url),
+			content: { message: dojo.toJson(content) },
 			callbackParamName: "jsonp"
 		};
-		var connectTimeout=this._cometd._connectTimeout();
-		if (connectTimeout>0) {
+		var connectTimeout = this._cometd._connectTimeout();
+		if(connectTimeout > 0){
 			script.timeout=connectTimeout;
 		}
 		dojo.io.script.get(script);
 	}
 
 	this.sendMessages = function(/*array*/ messages){
-		for(var i=0; i<messages.length; i++){
+		for(var i = 0; i < messages.length; i++){
 			messages[i].clientId = this._cometd.clientId;
 			messages[i].id = ""+this._cometd.messageId++;
 			messages[i]=this._cometd._extendOut(messages[i]);
 		}
+
 		var bindArgs = {
-			url: this._cometd.url||dojo.config["cometdRoot"],
+			url: this._cometd.url || dojo.config["cometdRoot"],
 			load: dojo.hitch(this._cometd, "deliver"),
 			callbackParamName: "jsonp",
 			content: { message: dojo.toJson( messages ) },
 			error: dojo.hitch(this, function(err){
-				dojo.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+				dojo.publish(this._cometd.prefix + "/meta",{ 
+					cometd:this._cometd,
+					action:"publish",
+					successful:false,
+					state:this._cometd.state(),
+					messages:messages
+				});
 			}),
 			timeout: this._cometd.expectedNetworkDelay
 		};
@@ -79,21 +90,19 @@ dojox.cometd.callbackPollTransport = new function(){
 		this.tunnelInit();
 	}
 
-	this.disconnect = dojox.cometd.longPollTransport.disconnect;
-	
+	// FIXME: what is this supposed to do? ;)
+	this.disconnect = dojox.cometd.longPollTransport.disconnect;	
 	this.disconnect = function(){
-		var message={
-			channel:"/meta/disconnect",
-			clientId:this._cometd.clientId,
-			id:""+this._cometd.messageId++
+		var message = {
+			channel: "/meta/disconnect",
+			clientId: this._cometd.clientId,
+			id: "" + this._cometd.messageId++
 		};
-		message=this._cometd._extendOut(message);		
+		message = this._cometd._extendOut(message);		
 		dojo.io.script.get({
-			url: this._cometd.url||dojo.config["cometdRoot"],
+			url: this._cometd.url || dojo.config["cometdRoot"],
 			callbackParamName: "jsonp",
-			content: {
-				message: dojo.toJson([message])
-			}
+			content: { message: dojo.toJson([message]) }
 		});
 	}
 
