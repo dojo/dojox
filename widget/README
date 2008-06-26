@@ -67,6 +67,9 @@ Other Notes (Brief widget list):
 	* SortList - a degradable UL with a fixed header, scrolling,
 		and sorting. Can be the direct descendat of a
 		LayoutContainer and will size to fit.
+		
+	* PlaceholderMenuItem - a menu item that can be used to inject other menu
+		items at a given location.
 
 	* TimeSpinner - a number spinner that revolves through
 		time constrainsts
