@@ -51,7 +51,9 @@ doh.register("dojox.json.tests.query",
 		{
 			name: "$.store.book[=author]",
 			runTest: function(t) {
-				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
+				var result = dojox.json.query(this.name,dojox.json.tests.testData);
+				console.log("result",result);
+				result = dojo.toJson(result);
 				var success =  '["Nigel Rees","Evelyn Waugh","Herman Melville","J. R. R. Tolkien"]';
 				doh.assertEqual(success,result);
 			}
@@ -275,13 +277,14 @@ doh.register("dojox.json.tests.query",
 function performanceTest(){
 	dojo.require("dojox.jsonPath");
 	var data = [];
-	for(var i = 0; i < 100000;i++){
+	for(var i = 0; i < 20000;i++){
 		data.push({foo:Math.random()});
 	}
 	var now = new Date().getTime();
 	var results = dojox.jsonPath.query(data,"$[?(@.foo<0.01)]");
-	console.log("JSONPath" + (new Date().getTime()-now) + " " + results.length);
+	alert("JSONPath" + (new Date().getTime()-now) + " " + results.length);
 	now = new Date().getTime();
 	results = dojox.json.query("$[?(@.foo<0.01)]",data);
-	console.log("JSONQuery" + (new Date().getTime()-now) + " " + results.length);
+	alert("JSONQuery" + (new Date().getTime()-now) + " " + results.length);
 }
+

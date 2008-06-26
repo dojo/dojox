@@ -84,7 +84,8 @@ dojo.provide("dojox.json.query");
 		// 		without brackets.
 		// 		* [/expression], [\expression], [/expression, /expression] - This performs a sort 
 		// 		operation on an array, with sort based on the provide expression. Multiple comma delimited sort
-		// 		expressions can be provided for multiple sort orders (first being highest priority).
+		// 		expressions can be provided for multiple sort orders (first being highest priority). /
+		//		indicates ascending order and \ indicates descending order
 		// 		* [=expression] - This performs a map operation on an array, creating a new array
 		//		with each item being the evaluation of the expression for each item in the source array.
 		//		* [start:end:step] - This performs an array slice/range operation, returning the elements
@@ -154,25 +155,26 @@ dojo.provide("dojox.json.query");
 		query.replace(/(\]|\)|push|pop|shift|splice|sort|reverse)\s*\(/,function(){
 			throw new Error("Unsafe function call");
 		});
+		
 		query = query.replace(/([^=]=)([^=])/g,"$1=$2"). // change the equals to comparisons
 			replace(/@|(\.\s*)?[a-zA-Z\$_]+(\s*:)?/g,function(t){
 				return t.charAt(0) == '.' ? t : // leave .prop alone 
-					t == '@' ? "_obj" :// the reference to the current object 
-					(t.match(/:|^(\$|Math)$/) ? "" : "_obj.") + t; // plain names should be properties of root... unless they are a label in object initializer
+					t == '@' ? "$obj" :// the reference to the current object 
+					(t.match(/:|^(\$|Math)$/) ? "" : "$obj.") + t; // plain names should be properties of root... unless they are a label in object initializer
 			}).
 			replace(/\[(`\]|[^\]])*\]|\?.*|\.\.([\w\$_]+)|\.\*/g,function(t,a,b){
 				var oper = t.match(/^(\[\s*\?|\?|\[\s*==)(.*?)\]?$/); // [?expr] and ?expr and [=expr and =expr
 				if(oper){
 					call(oper[1].match(/\=/) ? "dojo.map" : "dojo.filter");
-					return ",function(_obj){return " + oper[2] + "})"; 
+					return ",function($obj){return " + oper[2] + "})"; 
 				}
 				oper = t.match(/^\[\s*([\/\\].*)\]/); // [/sortexpr,\sortexpr]
 				if(oper){
 					// make a copy of the array and then sort it using the sorting expression
 					return ".concat().sort(function(a,b){" + oper[1].replace(/\s*,?\s*([\/\\])\s*([^,\\\/]+)/g,function(t,a,b){
-							return "var av= " + b.replace(/\_obj\./,"a.") + ",bv= " + b.replace(/\_obj\./,"b.") +
-									";if(av>bv){return " + (a== "/" ? 1 : -1) +";}\n" +
-									"if(bv>av){return " + (a== "/" ? -1 : 1) +";}\n";
+							return "var av= " + b.replace(/\$obj/,"a") + ",bv= " + b.replace(/\$obj/,"b") + // FIXME: Should check to make sure the $obj token isn't followed by characters
+									";if(av>bv||bv==null){return " + (a== "/" ? 1 : -1) +";}\n" +
+									"if(bv>av||av==null){return " + (a== "/" ? -1 : 1) +";}\n";
 					}) + "})";
 				}
 				oper = t.match(/^\[(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)\]/); // slice [0:3]
@@ -190,15 +192,16 @@ dojo.provide("dojox.json.query");
 				}
 				return t;
 			}).
-			replace(/(\_obj\s*(\.\s*[\w_$]+\s*)*)==\s*`([0-9]+)/g,makeRegex). // create regex matching
-			replace(/`([0-9]+)\s*==\s*(\_obj(\s*\.\s*[\w_$]+)*)/g,function(t,a,b,c){ // and do it for reverse =
+			replace(/(\$obj\s*(\.\s*[\w_$]+\s*)*)==\s*`([0-9]+)/g,makeRegex). // create regex matching
+			replace(/`([0-9]+)\s*==\s*(\$obj(\s*\.\s*[\w_$]+)*)/g,function(t,a,b,c){ // and do it for reverse =
 				return makeRegex(t,b,c,a);
 			});
 		query = prefix + (query.charAt(0) == '$' ? "" : "$") + query.replace(/`([0-9]+|\])/g,function(t,a){
 			//restore the strings
 			return a == ']' ? ']' : str[a];
 		});
-		var executor = eval("(function($){var _obj=$;return " + query + "})");
+		// create a function within this scope (so it can use expand and slice)
+		var executor = eval("1&&function($){var $obj=$;return " + query + "}");
 		return obj ? executor(obj) : executor;
 	};
 	
