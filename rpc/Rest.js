@@ -59,7 +59,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		path = path.match(/\/$/) ? path : (path + '/');
 		service = function(id){
 			// if caching is allowed, we look in the cache for the result
-			var result = !drr._dontCache && drr._index[(service.servicePath || '') + id];
+			var result = !drr._dontCache && !start && !end && drr._index[(service.servicePath || '') + id];
 			drr._dontCache=0; // reset it
 			if(result && !result._loadObject){// cache hit
 				var dfd = new dojo.Deferred();
