@@ -109,7 +109,7 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 				message: dojo.toJson(messages)
 			},
 			error: dojo.hitch(this, function(err){
-				dojo.event.topic.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+				dojo.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
 			}),
 			timeout: this._cometd.expectedNetworkDelay
 		});
@@ -141,7 +141,7 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 			this._poll.cancel();
 			this._cometd._polling=false;
 			dojo.debug("tunnel opening cancelled");
-			dojo.event.topic.publish(this._cometd.prefix + "/meta", {cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state(),cancel:true});
+			dojo.publish(this._cometd.prefix + "/meta", {cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state(),cancel:true});
 			this._cometd._backoff();
 			this.disconnect();
 			this.tunnelCollapse();
