@@ -17,9 +17,14 @@ dojo.provide("dojox.json.query");
 		// name can be a property to search for, undefined for full recursive, or an array for picking by index
 		var results = [];
 		function walk(obj){
-			if(name && obj[name]){
-				// found the name, add to our results
-				results.push(obj[name]);
+			if(name){
+				if(name===true){
+					//recursive object search
+					results.push(obj);
+				}else if(obj[name]){
+					// found the name, add to our results
+					results.push(obj[name]);
+				}
 			}
 			for(var i in obj){
 				var val = obj[i];
@@ -102,7 +107,11 @@ dojo.provide("dojox.json.query");
 		// 		an array of all values with such a property name in the current object and any subobjects
 		// 		* expr = expr - Performs a comparison (like JS's ==). When comparing to
 		// 		a string, the comparison string may contain wildcards * (matches any number of 
-		// 		characters) and ? (matches any single character). 
+		// 		characters) and ? (matches any single character).
+		// 		* expr ~ expr - Performs a string comparison with case insensitivity.
+		//		* ..[?expression] - This will perform a deep search filter operation on all the objects and 
+		// 		subobjects of the current data. Rather than only searching an array, this will search 
+		// 		property values, arrays, and their children.
 		//		* +, -, /, *, &, |, %, (, ), <, >, <=, >=, != - These operators behave just as they do
 		// 		in JavaScript.
 		//		
@@ -146,10 +155,10 @@ dojo.provide("dojox.json.query");
 			// creates a function call and puts the expression so far in a parameter for a call 
 			prefix = name + "(" + prefix;
 		}
-		function makeRegex(t,a,b,c){
+		function makeRegex(t,a,b,c,d){
 			// creates a regular expression matcher for when wildcards and ignore case is used 
-			return str[c].match(/[\*\?]/) ?
-					"/" + str[c].substring(1,str[c].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + "/.test(" + a + ")" :
+			return str[d].match(/[\*\?]/) ?
+					"/" + str[d].substring(1,str[d].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + (c == '~' ? '/i' : '/') + ".test(" + a + ")" :
 					t;
 		}
 		query.replace(/(\]|\)|push|pop|shift|splice|sort|reverse)\s*\(/,function(){
@@ -162,11 +171,17 @@ dojo.provide("dojox.json.query");
 					t == '@' ? "$obj" :// the reference to the current object 
 					(t.match(/:|^(\$|Math)$/) ? "" : "$obj.") + t; // plain names should be properties of root... unless they are a label in object initializer
 			}).
-			replace(/\[(`\]|[^\]])*\]|\?.*|\.\.([\w\$_]+)|\.\*/g,function(t,a,b){
-				var oper = t.match(/^(\[\s*\?|\?|\[\s*==)(.*?)\]?$/); // [?expr] and ?expr and [=expr and =expr
+			replace(/\.?\.?\[(`\]|[^\]])*\]|\?.*|\.\.([\w\$_]+)|\.\*/g,function(t,a,b){
+				var oper = t.match(/^\.?\.?(\[\s*\?|\?|\[\s*==)(.*?)\]?$/); // [?expr] and ?expr and [=expr and =expr
 				if(oper){
+					var prefix = '';
+					if(t.match(/^\./)){
+						// recursive object search
+						call("expand");
+						prefix = ",true)";
+					}
 					call(oper[1].match(/\=/) ? "dojo.map" : "dojo.filter");
-					return ",function($obj){return " + oper[2] + "})"; 
+					return prefix + ",function($obj){return " + oper[2] + "})"; 
 				}
 				oper = t.match(/^\[\s*([\/\\].*)\]/); // [/sortexpr,\sortexpr]
 				if(oper){
@@ -192,17 +207,21 @@ dojo.provide("dojox.json.query");
 				}
 				return t;
 			}).
-			replace(/(\$obj\s*(\.\s*[\w_$]+\s*)*)==\s*`([0-9]+)/g,makeRegex). // create regex matching
-			replace(/`([0-9]+)\s*==\s*(\$obj(\s*\.\s*[\w_$]+)*)/g,function(t,a,b,c){ // and do it for reverse =
-				return makeRegex(t,b,c,a);
+			replace(/(\$obj\s*(\.\s*[\w_$]+\s*)*)(==|~)\s*`([0-9]+)/g,makeRegex). // create regex matching
+			replace(/`([0-9]+)\s*(==|~)\s*(\$obj(\s*\.\s*[\w_$]+)*)/g,function(t,a,b,c,d){ // and do it for reverse =
+				return makeRegex(t,c,d,b,a);
 			});
 		query = prefix + (query.charAt(0) == '$' ? "" : "$") + query.replace(/`([0-9]+|\])/g,function(t,a){
 			//restore the strings
 			return a == ']' ? ']' : str[a];
 		});
 		// create a function within this scope (so it can use expand and slice)
-		var executor = eval("1&&function($){var $obj=$;return " + query + "}");
-		return obj ? executor(obj) : executor;
+		
+		var executor = eval("1&&function($,$1,$2,$3,$4,$5,$6,$7,$8,$9){var $obj=$;return " + query + "}");
+		for(var i = 0;i<arguments.length-1;i++){
+			arguments[i] = arguments[i+1];
+		}
+		return obj ? executor.apply(this,arguments) : executor;
 	};
 	
 })();

@@ -132,9 +132,36 @@ doh.register("dojox.json.tests.query",
 			}
 		},
 		{
+			name: "$..book[0]?author=$1&price=$2",
+			runTest: function(t) {
+				var query = dojox.json.query(this.name);
+				var result = dojo.toJson(query(dojox.json.tests.testData,"Nigel Rees",8.95));
+				var success =  '[{"category":"reference","author":"Nigel Rees","title":"Sayings of the Century","price":8.95}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
+			name: "$..book[0]?author=$1&price=$2",
+			runTest: function(t) {
+				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData,"Herman Melville",8.99));
+				var success =  '[{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
 			name: "$..book[0][?(@['price']<10)]",
 			runTest: function(t) {
 				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
+				var success =  '[{"category":"reference","author":"Nigel Rees","title":"Sayings of the Century","price":8.95},{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
+			name: "$..[?price<10]",
+			runTest: function(t) {
+				var query = dojox.json.query(this.name);
+				console.log("recursive object search",query.toString());
+				var result = dojo.toJson(query(dojox.json.tests.testData));
 				var success =  '[{"category":"reference","author":"Nigel Rees","title":"Sayings of the Century","price":8.95},{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
 				doh.assertEqual(success,result);
 			}
@@ -165,6 +192,14 @@ doh.register("dojox.json.tests.query",
 		},
 		{
 			name: "$.store.book[?'?iction'=category][=price]",
+			runTest: function(t) {
+				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
+				var success =  '[12.99,8.99,22.99]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
+			name: "$.store.book[?'?ICTion'~category][=price]",
 			runTest: function(t) {
 				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
 				var success =  '[12.99,8.99,22.99]';
