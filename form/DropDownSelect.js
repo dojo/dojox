@@ -66,7 +66,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 				option: option,
 				label: option.label,
 				onClick: click,
-				disabled: option.disabled || false,
+				disabled: option.disabled || false
 			});
 		}
 	},
@@ -132,7 +132,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 
 	isValid: function(/*Boolean*/ isFocused){
 		// summary: Whether or not this is a valid value
-		return (!this.required || !/^\s*$/.test(this.value));
+		return (!this.required || !(/^\s*$/.test(this.value)));
 	},
 	
 	reset: function(){
