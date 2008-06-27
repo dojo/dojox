@@ -119,7 +119,9 @@
 	<p><b>Stores used:</b></p>
 	<ul>
 		<li>dojo.data.ItemFileReadStore</li>
-		<li>dojox.data.CvsStore</li>
+		<li>dojox.data.CsvStore</li>
+		<li>dojox.data.XmlStore</li>
+		<li>dojox.data.FlickrStore</li>
 		<li>dojox.data.OpmlStore</li>
 		<li>dojox.data.HtmlTableStore</li>
 	</ul>
@@ -143,7 +145,7 @@
 		store="csvStore" structure="layoutMovies" rowSelector="20px">
 	</div>
 
-	<!--<h2>dojox.data.XmlStore:</h2>
+	<h2>dojox.data.XmlStore:</h2>
 	<i>Displays a list of books that were stored in XML format.</i>
 	<span dojoType="dojox.data.XmlStore" 
 		jsId="xmlStore" url="support/books.xml">
@@ -161,7 +163,7 @@
 	<div id="grid4" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ tags: '3dny' }"
 		rowsPerPage="5"
 		store="flickrStore" structure="layoutFlickrData" rowSelector="20px">
-	</div>-->
+	</div>
 
 	<h2>dojox.data.OpmlStore:</h2>
 	<i>Scans an Opml based document for all items of type 'country'</i> 

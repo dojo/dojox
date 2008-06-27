@@ -48,7 +48,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_addItem: function(item, index){
-		var idty = this.store.getIdentity(item);
+		var idty = this._hasIdentity ? this.store.getIdentity(item) : dojo.toJson(this.query) + ":idx:" + index + ":sort:" + dojo.toJson(this.getSortProps());
 		var o = { idty: idty, item: item };
 		this._by_idty[idty] = this._by_idx[index] = o;
 		this.updateRow(index);
@@ -91,7 +91,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			var f = this.store.getFeatures();
 			var h = [];
 
-			this._canEdit = !!f["dojo.data.api.Write"];
+			this._canEdit = !!f["dojo.data.api.Write"] && !!f["dojo.data.api.Identity"];
+			this._hasIdentity = !!f["dojo.data.api.Identity"];
 
 			if(!!f["dojo.data.api.Notification"]){
 				h.push(this.connect(this.store, "onSet", "_onSet"));
@@ -183,11 +184,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			return -1;
 		}
 
-		var idty = this.store.getIdentity(item);
+		var idty = this._hasIdentity ? this.store.getIdentity(item) : null;
 
 		for(var i=0, l=this._by_idx.length; i<l; i++){
 			var d = this._by_idx[i];
-			if(d && d.idty == idty){
+			if(d && ((idty && d.idty == idty) || (d.item === item))){
 				return i;
 			}
 		}
