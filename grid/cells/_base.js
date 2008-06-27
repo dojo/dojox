@@ -29,6 +29,7 @@ dojo.require("dojox.grid.util");
 		formatter: null,
 		defaultValue: '...',
 		value: null,
+		hidden: false,
 		//private
 		_valueProp: "value",
 		_formatPending: false,

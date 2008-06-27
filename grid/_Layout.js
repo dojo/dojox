@@ -55,9 +55,26 @@ dojo.declare("dojox.grid._Layout", null, {
 				}
 			}
 		}
+		this.grid.setupHeaderMenu();
 		//this.grid.renderOnIdle();
 	},
 
+	setColumnVisibility: function(columnIndex, visible){
+		var cell = this.cells[columnIndex];
+		if(cell.hidden == visible){
+			cell.hidden = !visible;
+			var v = cell.view, w = v.viewWidth;
+			v.convertColPctToFixed();
+			if(w && w != "auto"){
+				v._togglingColumn = dojo.marginBox(cell.getHeaderNode()).w || 0;
+			}
+			v.update();
+			return true;
+		}else{
+			return false;
+		}
+	},
+	
 	setStructure: function(inStructure){
 		var self = this;
 
@@ -214,5 +231,6 @@ dojo.declare("dojox.grid._Layout", null, {
 		}
 
 		this.cellCount = this.cells.length;
+		this.grid.setupHeaderMenu();
 	}
 });

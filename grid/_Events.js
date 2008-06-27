@@ -366,7 +366,9 @@ dojo.declare("dojox.grid._Events", null, {
 		//		Event fired when the grid header context menu is accessed via mouse right click.
 		// e: Event
 		//		Decorated event object which contains reference to grid, cell, and rowIndex
-		dojo.stopEvent(e);
+		if(!this.headerMenu){
+			dojo.stopEvent(e);
+		}
 	},
 
 	// editing

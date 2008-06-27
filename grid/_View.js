@@ -86,7 +86,7 @@ dojo.require("dojo.dnd.Manager");
 			// SLOT: result[1] => td classes 
 			result.push('');
 			html = ['" idx="', inCell.index, '" style="'];
-			html.push(inCell.styles, inMoreStyles||'');
+			html.push(inCell.styles, inMoreStyles||'', inCell.hidden?'display:none;':'');
 			inCell.unitWidth && html.push('width:', inCell.unitWidth, ';');
 			// result[2] => markup
 			result.push(html.join(''));
@@ -367,9 +367,11 @@ dojo.require("dojo.dnd.Manager");
 		// event handlers
 		// resizing
 		prepareResize: function(e, mod){
-			var i = getTdIndex(e.cellNode);
-			e.cellNode = (i ? e.cellNode.parentNode.cells[i+mod] : null);
-			e.cellIndex = (e.cellNode ? this.getCellNodeIndex(e.cellNode) : -1);
+			do{
+				var i = getTdIndex(e.cellNode);
+				e.cellNode = (i ? e.cellNode.parentNode.cells[i+mod] : null);
+				e.cellIndex = (e.cellNode ? this.getCellNodeIndex(e.cellNode) : -1);
+			}while(e.cellNode && e.cellNode.style.display == "none");
 			return Boolean(e.cellNode);
 		},
 
@@ -647,6 +649,10 @@ dojo.require("dojo.dnd.Manager");
 		marginBottom: 0,
 		rowPad: 2,
 
+		// _togglingColumn: int
+		//		Width of the column being toggled (-1 for none)
+		_togglingColumn: -1,
+		
 		postMixInProperties: function(){
 			this.rowNodes = [];
 		},
@@ -757,11 +763,19 @@ dojo.require("dojo.dnd.Manager");
 		render: function(){
 			this.scrollboxNode.style.height = '';
 			this.renderHeader();
-
+			if(this._togglingColumn >= 0){
+				this.setColumnsWidth(this.getColumnsWidth() - this._togglingColumn);
+				this._togglingColumn = -1;
+			}
 			var cells = this.grid.layout.cells;
 			var getSibling = dojo.hitch(this, function(node, before){
-				var idx = this.header.getCellNodeIndex(node) + (before ? -1 : 1);
+				var inc = before?-1:1;
+				var idx = this.header.getCellNodeIndex(node) + inc;
 				var cell = cells[idx];
+				while(cell && cell.getHeaderNode() && cell.getHeaderNode().style.display == "none"){
+					idx += inc;
+					cell = cells[idx];
+				}
 				if(cell){
 					return cell.getHeaderNode();
 				}
@@ -783,7 +797,12 @@ dojo.require("dojo.dnd.Manager");
 							this.header.canResize(e) && !headerMoveable){
 							this.header.beginColumnResize(e);
 						}else{
-							dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
+							if(this.grid.headerMenu){
+								this.grid.headerMenu.onCancel(true);
+							}
+							if(e.button === 0){
+								dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
+							}
 						}
 					}),
 					_markTargetAnchor: dojo.hitch(this, function(before){
