@@ -15,6 +15,9 @@ dojo.require("dojox.grid._Events");
 
 dojo.require("dijit.Menu");
 
+dojo.requireLocalization("dijit", "loading");
+dojo.requireLocalization("dojox.grid", "grid");
+
 (function(){
 	var jobs = {
 		cancel: function(inHandle){
@@ -157,6 +160,18 @@ dojo.require("dijit.Menu");
 		
 		// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
 		_click: null,
+		
+		// loadingMessage: String
+		//  Message that shows while the grid is loading
+		loadingMessage: "<span class='dojoxGridLoading'>${loadingState}</span>",
+
+		// errorMessage: String
+		//  Message that shows when the grid encounters an error loading
+		errorMessage: "<span class='dojoxGridError'>${errorState}</span>",
+
+		// noDataMessage: String
+		//  Message that shows if the grid has no data
+		noDataMessage: "<span class='dojoxGridNoData'>${noData}</span>",
 
 		// private
 		sortInfo: 0,
@@ -183,6 +198,16 @@ dojo.require("dijit.Menu");
 			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);
 			this.connect(this, "onShow", "renderOnIdle");
 		},
+		
+		postMixInProperties: function(){
+			this.inherited(arguments);
+			var messages = dojo.mixin(dojo.i18n.getLocalization("dijit", "loading", this.lang),
+								dojo.i18n.getLocalization("dojox.grid", "grid", this.lang));
+			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
+			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
+			this.noDataMessage = dojo.string.substitute(this.noDataMessage, messages);
+		},
+		
 		postCreate: function(){
 			// replace stock styleChanged with one that triggers an update
 			this.styleChanged = this._styleChanged;
@@ -420,6 +445,16 @@ dojo.require("dijit.Menu");
 		getItem: function(inRowIndex){
 			return null;
 		},
+		
+		showMessage: function(message){
+			if(message){
+				this.messagesNode.innerHTML = message;
+				this.messagesNode.style.display = "";
+			}else{
+				this.messagesNode.innerHTML = "";
+				this.messagesNode.style.display = "none";
+			}
+		},
 
 		_structureChanged: function() {
 			this.buildViews();
@@ -565,7 +600,8 @@ dojo.require("dijit.Menu");
 		postresize: function(){
 			// views are position absolute, so they do not inflate the parent
 			if(this.autoHeight){
-				this.viewsNode.style.height = this.views.measureContent() + 'px';
+				var size = Math.max(this.views.measureContent(), dojo.marginBox(this.messagesNode).h) + 'px';
+				this.viewsNode.style.height = size;
 			}
 		},
 

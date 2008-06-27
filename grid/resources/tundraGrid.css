@@ -28,6 +28,38 @@
 	position: relative;
 }
 
+/* master messages */
+
+.tundra .dojoxGrid-master-messages {
+	position: relative;
+	padding: 1em;
+	text-align: center;
+	background-color: #fefefe;
+}
+
+.tundra .dojoxGridLoading, 
+.tundra .dojoxGridError {
+	background-position:left center;
+	background-repeat: no-repeat;
+	padding-left:25px;
+}
+
+.dijitRtl .tundra .dojoxGridLoading, 
+.dijitRtl .tundra .dojoxGridError,
+.dijitRtl .tundra .dojoxGridNoData {
+	background-position:right;
+	padding-right:25px;
+	padding-left:0px;
+}
+
+.tundra .dojoxGridLoading {
+	background-image: url('../../../dijit/themes/tundra/images/loading.gif');
+}
+
+.tundra .dojoxGridError {
+	background-image: url('../../../dijit/themes/tundra/images/warning.png');
+}
+
 /* views */
 
 .tundra .dojoxGrid-view {

@@ -28,6 +28,15 @@
 	position: relative;
 }
 
+/* master messages */
+
+.dojoxGrid-master-messages {
+	position: relative;
+	padding: 1em;
+	text-align: center;
+	background-color: white;
+}
+
 /* views */
 
 .dojoxGrid-view {

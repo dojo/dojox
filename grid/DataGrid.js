@@ -20,6 +20,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	_requests: 0,
 	rowCount: 0,
 
+	_isLoaded: false,
+	_isLoading: false,
+	
 	postCreate: function(){
 		this._pages = [];
 		this._store_connects = [];
@@ -128,11 +131,25 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 				this.postrender();
 			}
 		}
+		if(!this._isLoaded){
+			this._isLoading = false;
+			this._isLoaded = true;
+			if(!items || !items.length){
+				this.showMessage(this.noDataMessage);
+			}else{
+				this.showMessage();
+			}
+		}
 		this._pending_requests[req.start] = false;
 	},
 
 	_onFetchError: function(err, req){
 		console.log(err);
+		if(!this._isLoaded){
+			this._isLoading = false;
+			this._isLoaded = true;
+			this.showMessage(this.errorMessage);
+		}
 		this.onFetchError(err, req);
 	},
 
@@ -142,6 +159,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	_fetch: function(start, isRender){
 		var start = start || 0;
 		if(this.store && !this._pending_requests[start]){
+			if(!this._isLoaded && !this._isLoading){
+				this._isLoading = true;
+				this.showMessage(this.loadingMessage);
+			}
 			this._pending_requests[start] = true;
 			//console.log("fetch: ", start);
 			this.store.fetch({
