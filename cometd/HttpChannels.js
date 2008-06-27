@@ -42,22 +42,27 @@ dojox.cometd.HttpChannels = dojox.cometd.BaseChannels({
 		// data:
 		//		data to publish
 		headers={};
-		dojo.rawXhrPost({url:channel,postData:dojo.toJson(data),headers:headers,	contentType : 'application/json'});
-		
+		dojo.rawXhrPost({
+			url: channel,
+			postData: dojo.toJson(data),
+			headers:headers,
+			contentType : 'application/json'
+		});
 	},
+	
 	_processMessage: function(message){
-		console.log("process message ",message);
+//		console.log("process message ",message);
 		message.event = message.getResponseHeader('X-Event');
-		if(message.event=="connection-conflict"){
+		if(message.event == "connection-conflict"){
 			return "conflict"; // indicate an error
 		}
 		try{
 			message.data = dojo.fromJson(message.responseText);
-		}
-		catch(e){}
+		}catch(e){ /* squelch */}
+
 		var self = this;	
 		message.channel = message.getResponseHeader('Content-Location');//for cometd
-		var loc = new dojo._Url(location.href,message.channel); // TODO: more robust URL matching
+		var loc = new dojo._Url(location.href, message.channel); // TODO: more robust URL matching
 		if(loc in this.subscriptions){
 			this.subscriptions[loc] = message.getResponseHeader('Last-Modified'); 
 		}
@@ -69,6 +74,7 @@ dojox.cometd.HttpChannels = dojox.cometd.BaseChannels({
 		this.receive(message);
 		return null;		
 	},
+	
 	onprogress : function(xhr,xdr,data,contentType){
 		// internal XHR progress handler
 		if(contentType.match(/application\/http/)){
@@ -102,8 +108,9 @@ dojox.cometd.HttpChannels = dojox.cometd.BaseChannels({
 					status : parseInt(httpParts[1],10),
 					statusText : httpParts[2],
 					readyState : 4,
-					getAllResponseHeaders : function(){ return headerStr;},
-					getResponseHeader : function(name){ return headers[name];}}; 
+					getAllResponseHeaders : function(){ return headerStr; },
+					getResponseHeader : function(name){ return headers[name]; }
+				}; 
 				
 				var contentLength = headers['Content-Length']; 
 				if(contentLength){
@@ -128,7 +135,7 @@ dojox.cometd.HttpChannels = dojox.cometd.BaseChannels({
 		}
 		
 		if(xhr.__proto__){// firefox uses this property, so we create an instance to shadow this property
-			xhr = {channel:"channel",__proto__:xhr};
+			xhr = { channel:"channel", __proto__:xhr };
 		}
 		return this._processMessage(xhr);
 	

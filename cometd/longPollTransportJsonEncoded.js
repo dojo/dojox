@@ -109,7 +109,13 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 			postData: dojo.toJson(messages),
 			contentType: "text/json;charset=UTF-8",
 			error: dojo.hitch(this, function(err){
-				dojo.publish(this._cometd.prefix + "/meta",{cometd:this,action:"publish",successful:false,state:this.state(),messages:messages});
+				dojo.publish(this._cometd.prefix + "/meta",{
+					cometd: this._cometd,
+					action: "publish",
+					successful:false,
+					state:this._cometd.state(),
+					messages:messages
+				});
 			}),
 			timeout: this._cometd.expectedNetworkDelay
 		});
@@ -121,14 +127,14 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 	}
 
 	this.disconnect = function(){
-		var message={
-			channel:	"/meta/disconnect",
-			clientId:	this._cometd.clientId,
-			id:	""+this._cometd.messageId++
+		var message = {
+			channel: "/meta/disconnect",
+			clientId: this._cometd.clientId,
+			id:	"" + this._cometd.messageId++
 		};
-		message=this._cometd._extendOut(message);
+		message = this._cometd._extendOut(message);
 		dojo.rawXhrPost({
-			url: this._cometd.url||dojo.config["cometdRoot"],
+			url: this._cometd.url || dojo.config["cometdRoot"],
 			handleAs: this._cometd.handleAs,
 			postData: dojo.toJson([message]),
 			contentType: "text/json;charset=UTF-8"
@@ -136,11 +142,16 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 	}
 
 	this.cancelConnect = function(){
-		if (this._poll) {
+		if(this._poll){
 			this._poll.cancel();
 			this._cometd._polling=false;
-			dojo.debug("tunnel opening cancelled");
-			dojo.publish(this._cometd.prefix + "/meta", {cometd:this._cometd,action:"connect",successful:false,state:this._cometd.state(),cancel:true});
+			dojo.publish(this._cometd.prefix + "/meta", {
+				cometd: this._cometd,
+				action: "connect",
+				successful: false,
+				state: this._cometd.state(),
+				cancel: true
+			});
 			this._cometd._backoff();
 			this.disconnect();
 			this.tunnelCollapse();
@@ -148,7 +159,7 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 	}
 }
 
-dojox.cometd.longPollTransport=dojox.cometd.longPollTransportJsonEncoded;
+dojox.cometd.longPollTransport = dojox.cometd.longPollTransportJsonEncoded;
 
 dojox.cometd.connectionTypes.register("long-polling", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransportJsonEncoded);
 dojox.cometd.connectionTypes.register("long-polling-json-encoded", dojox.cometd.longPollTransport.check, dojox.cometd.longPollTransportJsonEncoded);

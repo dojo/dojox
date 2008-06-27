@@ -29,30 +29,30 @@ dojo.require("dojox.cometd._base");
  * average of the offsets received. By default this is over 10 messages, but this can
  * be changed with the dojox.cometd.timesync._window element.
  */
-dojox.cometd.timesync= new function(){
+dojox.cometd.timesync = new function(){
 
-	this._window=10;// The window size for the sliding average of offset samples.
-	this._minWindow=4;// The window size for the sliding average of offset samples.
-	this._offsets=new Array(); // The samples used to calculate the average offset.
-	this.offset=0;	// The offset in ms between the clients clock and the servers clock. Add this to the local
+	this._window = 10;// The window size for the sliding average of offset samples.
+	this._minWindow = 4;// The window size for the sliding average of offset samples.
+	this._offsets = []; // new Array(); // The samples used to calculate the average offset.
+	this.offset = 0;	// The offset in ms between the clients clock and the servers clock. Add this to the local
 			// time epoch to obtain server time.
-	this.samples=0; // The number of samples used to calculate the offset. If 0, the offset is not valid.
+	this.samples = 0; // The number of samples used to calculate the offset. If 0, the offset is not valid.
 	
-	this.getServerTime=function(){ // return: long
+	this.getServerTime = function(){ // return: long
 		// Summary:
 		//	Calculate the current time on the server
 		// 
 		return new Date().getTime()+this.offset;
 	}
 	
-	this.getServerDate=function(){ // return: Date
+	this.getServerDate = function(){ // return: Date
 		// Summary:
 		//	Calculate the current time on the server
 		// 
 		return new Date(this.getServerTime());
 	}
 	
-	this.setTimeout=function(/*function*/call,/*long|Date*/atTimeOrDate){
+	this.setTimeout = function(/*function*/call, /*long|Date*/atTimeOrDate){
 		// Summary:
 		//	Set a timeout function relative to server time
 		// call:
@@ -61,15 +61,16 @@ dojox.cometd.timesync= new function(){
 		//	a long timestamp or a Date representing the server time at
 		//	which the timeout should occur.
 		
-		var ts=(atTimeOrDate instanceof Date)?atTimeOrDate.getTime():(0+atTimeOrDate);
-		var tc=ts-this.offset;
-		var interval=tc-new Date().getTime();
-		if (interval<=0)
-			interval=1;
+		var ts = (atTimeOrDate instanceof Date) ? atTimeOrDate.getTime() : (0 + atTimeOrDate);
+		var tc = ts - this.offset;
+		var interval = tc - new Date().getTime();
+		if(interval <= 0){
+			interval = 1;
+		}
 		return setTimeout(call,interval);
 	}
 
-	this._in=function(/*Object*/msg){
+	this._in = function(/*Object*/msg){
 		// Summary:
 		//	Handle incoming messages for the timesync extension.
 		// description:
@@ -77,29 +78,32 @@ dojox.cometd.timesync= new function(){
 		// msg: 
 		//	The incoming bayeux message
 		
-		var channel=msg.channel;
-		if (channel &&  channel.indexOf('/meta/')==0){
-			if (msg.ext && msg.ext.timesync){
-				var sync=msg.ext.timesync;
-				var now=new Date().getTime();
+		var channel = msg.channel;
+		if(channel && channel.indexOf('/meta/') == 0){
+			if(msg.ext && msg.ext.timesync){
+				var sync = msg.ext.timesync;
+				var now = new Date().getTime();
 				
-				this._offsets.push(sync.ts-sync.tc-(now-sync.tc-sync.p)/2);
-				if (this._offsets.length>this._window)
-					this._offsets.shift();		
+				this._offsets.push(sync.ts - sync.tc - (now - sync.tc - sync.p) / 2);
+				if(this._offsets.length > this._window){
+					this._offsets.shift();
+				}
 				this.samples++;
-				var total=0;
-				for (var i in this._offsets)
+				var total = 0;
+				for(var i in this._offsets){
 					total+=this._offsets[i];
-				this.offset=parseInt((total/this._offsets.length).toFixed());
+				}
+				this.offset = parseInt((total / this._offsets.length).toFixed());
 				
-				if (this.samples<this._minWindow)
-					setTimeout(dojox._scopeName + ".cometd.publish('/meta/ping',null)",100);
+				if(this.samples < this._minWindow){
+					setTimeout(dojox._scopeName + ".cometd.publish('/meta/ping',null)", 100);
+				}
 			}
 		}
 		return msg;
 	}
 
-	this._out=function(msg){
+	this._out = function(msg){
 		// Summary:
 		//	Handle outgoing messages for the timesync extension.
 		// description:
@@ -107,16 +111,17 @@ dojox.cometd.timesync= new function(){
 		// msg: 
 		//	The outgoing bayeux message
 		
-		var channel=msg.channel;
-		if (channel &&  channel.indexOf('/meta/')==0){
-			var now=new Date().getTime();
-			if (!msg.ext)
-				msg.ext={};
-			msg.ext.timesync={tc: now};
+		var channel = msg.channel;
+		if(channel && channel.indexOf('/meta/') == 0){
+			var now = new Date().getTime();
+			if(!msg.ext){
+				msg.ext = {};
+			}
+			msg.ext.timesync = { tc: now };
 		}
 		return msg;
 	}
 };
 
-dojox.cometd._extendInList.push(dojo.hitch(dojox.cometd.timesync,"_in"));
-dojox.cometd._extendOutList.push(dojo.hitch(dojox.cometd.timesync,"_out"));
+dojox.cometd._extendInList.push(dojo.hitch(dojox.cometd.timesync, "_in"));
+dojox.cometd._extendOutList.push(dojo.hitch(dojox.cometd.timesync, "_out"));
