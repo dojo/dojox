@@ -120,7 +120,7 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 		this.deleteDashedZone();
 	},
 	
-	onDndDrop: function(source,nodes,copy) {
+	onDndDrop: function(source,nodes,copy,target) {
 	// summary: Called to finish the DnD operation	
 		try {
 			if (!this.isAccepted(nodes[0])) 
@@ -128,7 +128,7 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 			else {
 				if (source == this && this._over && this.dropObject) 
 					this.current = this.dropObject.c;
-				dojox.layout.dnd.PlottedDnd.superclass.onDndDrop.call(this, source, nodes, false);
+				dojox.layout.dnd.PlottedDnd.superclass.onDndDrop.call(this, source, nodes, false, target);
 				this._calculateCoords(true);
 			}
 		}
