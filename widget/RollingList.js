@@ -25,24 +25,6 @@ dojo.declare("dojox.widget._RollingListPane",
 	//  The pane that immediately precedes ours
 	parentPane: null,
 			
-	_setContentAndScroll: function(cont){
-		// summary: sets the value of the content and scrolls it into view
-		this._setContent(cont);
-		this.parentWidget.scrollIntoView(this);
-	},
-
-	postCreate: function(){
-		this.inherited(arguments);
-		this.parentWidget._updateClass(this.domNode, "Pane");
-	}
-	
-});
-
-dojo.declare("dojox.widget._StoreBasedRollingListPane",
-	dojox.widget._RollingListPane, {
-	// summary: a pane that is store-based.  It handles the connections to the
-	//  store and provides some utility functions.
-	
 	// store: store
 	//  the store we must use
 	store: null,
@@ -63,6 +45,28 @@ dojo.declare("dojox.widget._StoreBasedRollingListPane",
 	//  query options to be passed to the datastore
 	queryOptions: null,
 	
+	_setContentAndScroll: function(cont){
+		// summary: sets the value of the content and scrolls it into view
+		this._setContent(cont);
+		this.parentWidget.scrollIntoView(this);
+	},
+
+	startup: function(){
+		if(this._started){ return; }
+		if(this.store && this.store.getFeatures()["dojo.data.api.Notification"]){
+			window.setTimeout(dojo.hitch(this, function(){
+				// Set connections after a slight timeout to avoid getting in the
+				// condition where we are setting them while events are still 
+				// being fired
+				this.connect(this.store, "onSet", "_onSetItem");
+				this.connect(this.store, "onNew", "_onNewItem");
+				this.connect(this.store, "onDelete", "_onDeleteItem");
+			}), 1);
+		}
+		this.parentWidget._updateClass(this.domNode, "Pane");
+		this.inherited(arguments);
+	},
+
 	_loadCheck: function(/* Boolean? */ forceLoad){
 		if(!this._started){
 			var c = this.connect(this, "startup", function(){
@@ -115,20 +119,6 @@ dojo.declare("dojox.widget._StoreBasedRollingListPane",
 		}
 	},
 
-	postCreate: function(){
-		if(this.store && this.store.getFeatures()["dojo.data.api.Notification"]){
-			window.setTimeout(dojo.hitch(this, function(){
-				// Set connections after a slight timeout to avoid getting in the
-				// condition where we are setting them while events are still 
-				// being fired
-				this.connect(this.store, "onSet", "_onSetItem");
-				this.connect(this.store, "onNew", "_onNewItem");
-				this.connect(this.store, "onDelete", "_onDeleteItem");
-			}), 1);
-		}
-		this.inherited(arguments);
-	},
-	
 	_hasItem: function(/* item */ item){
 		// summary: returns whether or not the given item is handled by this 
 		//  pane
@@ -145,12 +135,14 @@ dojo.declare("dojox.widget._StoreBasedRollingListPane",
 					/* attribute-name-string */ attribute, 
 					/* object | array */ oldValue,
 					/* object | array */ newValue){	
+		// Summary: called when an item in the store has changed
 		if(this._hasItem(item)){
 			this._loadCheck(true);
 		}
 	},
 	
 	_onNewItem: function(/* item */ newItem, /*object?*/ parentInfo){
+		// Summary: called when an item is added to the store
 		var sel;
 		if((!parentInfo && !this.parentPane) ||
 			(parentInfo && this.parentPane && this.parentPane._hasItem(parentInfo.item) &&
@@ -163,6 +155,7 @@ dojo.declare("dojox.widget._StoreBasedRollingListPane",
 	},
 	
 	_onDeleteItem: function(/* item */ deletedItem){
+		// Summary: called when an item is removed from the store
 		if(this._hasItem(deletedItem)){
 			this.items = dojo.filter(this.items, function(i){
 				return (i != deletedItem);
@@ -205,7 +198,7 @@ dojo.declare("dojox.widget._StoreBasedRollingListPane",
 });
 
 dojo.declare("dojox.widget._RollingListGroupPane",
-	[dojox.widget._StoreBasedRollingListPane, dijit._Templated], {
+	[dojox.widget._RollingListPane, dijit._Templated], {
 	// summary: a pane that will handle groups (treats them as menu items)
 	
 	// templateString: string
@@ -240,7 +233,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		var child, selectMenuItem;
 		if(this.items.length){
 			dojo.forEach(this.items, function(item){
-				child = this._getMenuItemForItem(item);
+				child = this.parentWidget._getMenuItemForItem(item, this);
 				if(child){
 					if(selectItem && child.item == selectItem.item){
 						selectMenuItem = child;
@@ -249,7 +242,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 				}
 			}, this);
 		}else{
-			child = this._getMenuItemForItem(null);
+			child = this.parentWidget._getMenuItemForItem(null, this);
 			if(child){
 				this._menu.addChild(child);
 			}
@@ -258,7 +251,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			this._setSelected(selectMenuItem);
 			if((selectItem && !selectItem.children && selectMenuItem.children) ||
 				(selectItem && selectItem.children && !selectMenuItem.children)){
-				var itemPane = this.parentWidget.getPaneForItem(selectMenuItem.item, this, selectMenuItem.children);
+				var itemPane = this.parentWidget._getPaneForItem(selectMenuItem.item, this, selectMenuItem.children);
 				if(itemPane){
 					this.parentWidget.addChild(itemPane, this.getIndexInParent() + 1);
 				}else{
@@ -275,7 +268,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		this.inherited(arguments);
 	},
 	
-	postCreate: function(){
+	startup: function(){
 		this.inherited(arguments);
 		this.parentWidget._updateClass(this.domNode, "GroupPane");
 	},
@@ -315,6 +308,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			}
 		}, this.menuNode);
 		this.connect(menu, "onItemClick", function(/*dijit.MenuItem*/ item, /*Event*/ evt){
+			if(item.disabled){ return; }
 			evt.alreadySelected = dojo.hasClass(item.domNode, "dojoxRollingListItemSelected");
 			if(evt.alreadySelected && evt.type == "keypress"){
 				var p = this.parentWidget.getChildren()[this.getIndexInParent() + 1];
@@ -357,78 +351,6 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 				this.parentWidget._updateClass(i.domNode, "Item", {"Selected": (item && (i == item && !i.disabled))});
 			}, this);
 		}
-	},
-	
-	_getMenuItemForItem: function(/*item*/ item){
-		// summary: returns a widget for the given store item.  The returned
-		//  item will be added to this widget's container widget.  null will
-		//  be passed in for an "empty" item.
-		var store = this.store;
-		if(!item || !store && !store.isItem(item)){
-			return this.getEmptyMenuItem();
-		}else{
-			var childItems = this.parentWidget.getChildItems(item);
-			var widgetItem;
-			if(childItems){
-				widgetItem = this.getPopupMenuItem(item, childItems);
-				widgetItem.children = childItems;
-				this.parentWidget._updateClass(widgetItem.domNode, "Item", {"Expanding": true});
-			}else{
-				widgetItem = this.getMenuItem(item);
-				this.parentWidget._updateClass(widgetItem.domNode, "Item", {"Single": true});
-			}
-			widgetItem.store = this.store;
-			widgetItem.item = item;
-			if(widgetItem.focusNode){
-				var self = this;
-				widgetItem.connect(widgetItem.focusNode, "blur", function(){
-					self.parentWidget._updateClass(this.domNode, "Item", {"Hover": false});
-				});
-				widgetItem.connect(widgetItem.focusNode, "focus", function(){
-					self.parentWidget._updateClass(this.domNode, "Item", {"Hover": true});
-				});
-			}
-			return widgetItem;
-		}
-	},
-	
-	getEmptyMenuItem: function(){
-		// summary: user overridable function to return an "empty" menu item
-		var i = new dijit.MenuItem({
-			label: dojo.i18n.getLocalization("dojox.widget", "RollingList", this.lang).empty,
-			disabled: true,
-			focus: function(){
-				// Do nothing on focus of this guy...
-			}
-		});	
-		this.parentWidget._updateClass(i.domNode, "Item");
-		return i;
-	},
-	
-	getPopupMenuItem: function(/*item*/ item, /*item[]*/ children){
-		// summary: user overridable function to return a widget for an item with
-		//  children (children may or may not be loaded yet)
-		return new dijit.MenuItem({
-			label: this.store.getLabel(item),
-			startup: function(){
-				this.inherited("startup", arguments);
-				dojo.style(this.arrowWrapper, "display", "");
-			},
-			focus: function(){
-				try{dijit.focus(this.focusNode);}catch(e){}
-			}
-		});
-	},
-	
-	getMenuItem: function(/*item*/ item){
-		// summary: user overridable function to return a widget for an item with
-		//  no children
-		return new dijit.MenuItem({
-			label: this.store.getLabel(item),
-			focus: function(){
-				try{dijit.focus(this.focusNode);}catch(e){}
-			}
-		});
 	}
 });
 
@@ -559,7 +481,7 @@ dojo.declare("dojox.widget.RollingList",
 	
 	_onItemClick: function(/* Event */ evt, /* dijit._Contained */ pane, /* item */ item, /* item[]? */ children){
 		// summary: internally called when a widget should pop up its child
-		var itemPane = this.getPaneForItem(item, pane, children);
+		var itemPane = this._getPaneForItem(item, pane, children);
 		var alreadySelected = (evt.type == "click" && evt.alreadySelected);
 
 		if(alreadySelected && itemPane){
@@ -578,11 +500,87 @@ dojo.declare("dojox.widget.RollingList",
 		this.onItemClick(item, pane, children);
 	},
 	
+	_getPaneForItem: function(/* item? */ item, /* dijit._Contained? */ parentPane, /* item[]? */ children){		// summary: gets the pane for the given item, and mixes in our needed parts
+		// Returns the pane for the given item (null if the root pane) - after mixing in
+		// its stuff.
+		var ret = this.getPaneForItem(item, parentPane, children);
+		ret.store = this.store;
+		ret.parentWidget = this;
+		ret.parentPane = parentPane||null;
+		if(!item){
+			ret.query = this.query;
+			ret.queryOptions = this.queryOptions;
+		}else if(children){
+			ret.items = children;
+		}else{
+			ret.items = [item];
+		}
+		return ret;
+	},
+	
+	_getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane){
+		// summary: returns a widget for the given store item.  The returned
+		//  item will be added to this widget's container widget.  null will
+		//  be passed in for an "empty" item.
+		var store = this.store;
+		if(!item || !store && !store.isItem(item)){
+			var i = new dijit.MenuItem({
+				label: dojo.i18n.getLocalization("dojox.widget", "RollingList", this.lang).empty,
+				disabled: true,
+				iconClass: "dojoxEmpty",
+				focus: function(){
+					// Do nothing on focus of this guy...
+				}
+			});	
+			this._updateClass(i.domNode, "Item");
+			return i;
+		}else{
+			var childItems = this.getChildItems(item);
+			var widgetItem;
+			if(childItems){
+				widgetItem = this.getMenuItemForItem(item, parentPane, childItems);
+				widgetItem.children = childItems;
+				this._updateClass(widgetItem.domNode, "Item", {"Expanding": true});
+				if(!widgetItem._started){
+					var c = widgetItem.connect(widgetItem, "startup", function(){
+						this.disconnect(c);
+						dojo.style(this.arrowWrapper, "display", "");
+					});
+				}else{
+					dojo.style(widgetItem.arrowWrapper, "display", "");
+				}
+			}else{
+				widgetItem = this.getMenuItemForItem(item, parentPane, null);
+				this._updateClass(widgetItem.domNode, "Item", {"Single": true});
+			}
+			widgetItem.store = this.store;
+			widgetItem.item = item;
+			if(!widgetItem.label){
+				widgetItem.setLabel(this.store.getLabel(item));
+			}
+			if(widgetItem.focusNode){
+				var self = this;
+				widgetItem.focus = function(){
+					// Don't set our class
+					if(!this.disabled){try{dijit.focus(this.focusNode);}catch(e){}}
+				};
+				widgetItem.connect(widgetItem.focusNode, "blur", function(){
+					self._updateClass(this.domNode, "Item", {"Hover": false});
+				});
+				widgetItem.connect(widgetItem.focusNode, "focus", function(){
+					self._updateClass(this.domNode, "Item", {"Hover": true});
+				});
+			}
+			return widgetItem;
+		}
+	},
+	
 	_setStore: function(/* dojo.data.api.Read */ store){
 		// summary: sets the store for this widget */
 		if(store === this.store && this._started){ return; }
 		this.store = store;
-		this.addChild(this.getRootPane(), 0);
+		var rootPane = this._getPaneForItem();
+		this.addChild(rootPane, 0);
 	},
 	
 	startup: function(){
@@ -595,7 +593,8 @@ dojo.declare("dojox.widget.RollingList",
 		this.inherited(arguments);
 	},
 	
-	getChildItems: function(item){
+	getChildItems: function(/*item*/ item){
+		// summary: Returns the child items for the given store item
 		var childItems, store = this.store;
 		dojo.forEach(this.childrenAttrs, function(attr){
 			var vals = store.getValues(item, attr);
@@ -606,24 +605,20 @@ dojo.declare("dojox.widget.RollingList",
 		return childItems;
 	},
 	
-	getRootPane: function(){
-		// summary: user-overridable function to return a pane that corresponds
-		//  to the given root of the store.
-		return new dojox.widget._RollingListGroupPane({store: this.store,
-													query: this.query,
-													queryOptions: this.queryOptions,
-													parentWidget: this});
+	getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
+		// summary: user overridable function to return a widget for the given item
+		//  and its children.
+		return new dijit.MenuItem({});
 	},
-	
-	getPaneForItem: function(/* item */ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
+
+	getPaneForItem: function(/* item? */ item, /* dijit._Contained? */ parentPane, /* item[]? */ children){
 		// summary: user-overridable function to return a pane that corresponds
 		//  to the given item in the store.  It can return null to not add a new pane
 		//  (ie, you are planning on doing something else with it in onItemClick)
-		if(children){
-			return new dojox.widget._RollingListGroupPane({store: this.store,
-													items: children,
-													parentWidget: this,
-													parentPane: parentPane});
+		//
+		//  Item is undefined for the root pane, children is undefined for non-group panes 
+		if(!item || children){
+			return new dojox.widget._RollingListGroupPane({});
 		}else{
 			return null;
 		}

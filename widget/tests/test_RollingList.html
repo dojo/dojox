@@ -147,10 +147,7 @@
 			var ret = this.inherited("getPaneForItem", arguments);
 
 			if(!ret){
-				ret = new dojox.widget._StoreBasedRollingListPane({parentWidget: this,
-									store: this.store,
-									items: [item],
-									parentPane: parentPane,
+				ret = new dojox.widget._RollingListPane({
 									onItems: function(){
 										this._setContentAndScroll("Details for " + this.store.getLabel(this.items[0]));
 										this._onLoadHandler();

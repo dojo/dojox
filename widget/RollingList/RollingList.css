@@ -13,8 +13,9 @@
 	overflow-y: scroll;
 }
 
-.dojoxRollingListPane .dijitMenuItemLabel {
-	position: static;
+.dojoxRollingListPane .dijitMenuItemLabel,
+.dojoxRollingListPane .dijitMenuItemIcon {
+	position: static !important;
 }
 
 .dj_safari .dojoxRollingListPane,

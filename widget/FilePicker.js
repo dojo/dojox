@@ -6,7 +6,7 @@ dojo.require("dojo.i18n");
 dojo.requireLocalization("dojox.widget", "FilePicker"); 
 
 dojo.declare("dojox.widget._FileInfoPane", 
-	[dojox.widget._StoreBasedRollingListPane, dijit._Templated], {
+	[dojox.widget._RollingListPane, dijit._Templated], {
 	// summary: a pane to display the information for the currently-selected
 	//	file
 	
@@ -40,6 +40,8 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	// summary: a specialized version of RollingList that handles file information
 	//  in a store
 	
+	className: "dojoxFilePicker",
+	
 	getChildItems: function(item){
 		var ret = this.inherited(arguments);
 		if(!ret && this.store.getValue(item, "directory")){
@@ -49,14 +51,27 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		return ret;
 	},
 	
-	getPaneForItem: function(item, parentPane, children){
-		var ret = this.inherited(arguments);
-		if(!ret && this.store.isItem(item) && !this.store.getValue(item, "directory")){
-			// return back a file info pane
-			ret = new dojox.widget._FileInfoPane({store: this.store,
-											items: [item],
-											parentWidget: this,
-											parentPane: parentPane});
+	getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
+		var iconClass = "dojoxDirectoryItemIcon";
+		if(!this.store.getValue(item, "directory")){
+			iconClass = "dojoxFileItemIcon";
+			var l = this.store.getLabel(item), idx = l.lastIndexOf(".");
+			if(idx >= 0){
+				iconClass += " dojoxFileItemIcon_" + l.substring(idx + 1);
+			}
+		}
+		var ret = new dijit.MenuItem({
+			iconClass: iconClass
+		});
+		return ret;
+	},
+	
+	getPaneForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
+		var ret = null;
+		if(!item || (this.store.isItem(item) && this.store.getValue(item, "directory"))){
+			ret = new dojox.widget._RollingListGroupPane({});
+		}else if(this.store.isItem(item) && !this.store.getValue(item, "directory")){
+			ret = new dojox.widget._FileInfoPane({});
 		}
 		return ret;
 	}
