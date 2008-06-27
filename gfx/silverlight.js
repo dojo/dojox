@@ -632,16 +632,20 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.shape.Creator);
 		var ev = {target: s, currentTarget: s, 
 			preventDefault: function(){}, stopPropagation: function(){}};
 		if(a){
-			ev.ctrlKey = a.ctrl;
-			ev.shiftKey = a.shift;
-			var p = a.getPosition(null);
-			ev.x = ev.offsetX = ev.layerX = p.x;
-			ev.y = ev.offsetY = ev.layerY = p.y;
-			// calculate clientX and clientY
-			var parent = surfaces[s.getHost().content.root.name];
-			var t = dojo._abs(parent);
-			ev.clientX = t.x + p.x;
-			ev.clientY = t.y + p.y;
+			try{
+				ev.ctrlKey = a.ctrl;
+				ev.shiftKey = a.shift;
+				var p = a.getPosition(null);
+				ev.x = ev.offsetX = ev.layerX = p.x;
+				ev.y = ev.offsetY = ev.layerY = p.y;
+				// calculate clientX and clientY
+				var parent = surfaces[s.getHost().content.root.name];
+				var t = dojo._abs(parent);
+				ev.clientX = t.x + p.x;
+				ev.clientY = t.y + p.y;
+			}catch(e){
+				// squelch bugs in MouseLeave's implementation
+			}
 		}
 		return ev;
 	};
