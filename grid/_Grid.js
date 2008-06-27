@@ -390,7 +390,9 @@ dojo.require("dijit.Menu");
 				});
 				this._placeholders = [];
 			}
-			this.headerMenu.unBindDomNode(this.viewsHeaderNode);
+			if(this.headerMenu){
+				this.headerMenu.unBindDomNode(this.viewsHeaderNode);
+			}
 			this.headerMenu = menu;
 			if(!menu){ return; }
 
