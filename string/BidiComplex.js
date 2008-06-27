@@ -7,16 +7,12 @@ dojo.experimental("dojox.string.BidiComplex");
 //		this module adds property listeners to the text fields to correct the text representation
 //		in both static text and dynamic text during user input. 
 
-dojox.string.BidiComplex.attachInput = function(/*Object*/field,/*String*/pattern){
+dojox.string.BidiComplex.attachInput = function(/*DOMNode*/field, /*String*/pattern){
 	// summary:
-	//		Add Object listeners to the Text contianer Object for Dynamic Complex text 
-	// field: Object reference
-	// pattern: Complex Expression Pattern type 
-	// example:
-	//		dojo.require("dojox.string.BidiComplex");
-	//		var obj = document.getElementById("com");
-	//		dojox.string.BidiComplex.attachInput(obj,"FILE_PATH");
-	
+	//		Attach key listeners to the INPUT field to accomodate dynamic complex BiDi expressions 
+	// field: INPUT DOM node
+	// pattern: Complex Expression Pattern type. One of "FILE_PATH", "URL", "EMAIL", "XPATH"
+
 	dojox.string.BidiComplex._ce_type = pattern; //FIXME: shared ref
 	field.alt = dojox.string.BidiComplex._ce_type;
 	if((document.dir == "rtl")||(document.body.dir == "rtl")){ //FIXME: use !dojo._isBodyLtr()?
@@ -31,8 +27,8 @@ dojox.string.BidiComplex.attachInput = function(/*Object*/field,/*String*/patter
 		field.onkeydown = dojox.string.BidiComplex._ceKeyDown;        
 	}
 
-	field.oncut=dojox.string.BidiComplex._fOnCut;
-	field.oncopy=dojox.string.BidiComplex._fOnCopy;
+	field.oncut = dojox.string.BidiComplex._fOnCut;
+	field.oncopy = dojox.string.BidiComplex._fOnCopy;
 
 	field.value = dojox.string.BidiComplex._insertMarkers(field.value, field.alt);    
 };
@@ -46,38 +42,11 @@ dojox.string.BidiComplex.createDisplayString = function(/*String*/str, /*String*
 	return dojox.string.BidiComplex._insertMarkers(str, pattern);
 };
 
-(function(){
-// Unicode Bidirectional Characters
-var LRO = '\u202D',
-	RLO = '\u202E',
-	PDF = '\u202C',
-	LRE = '\u202A',
-	RLE = '\u202B',
-	LRM = '\u200E',
-	RLM = '\u200F';
-
 dojox.string.BidiComplex.stripSpecialCharacters = function(str){
-		// summary:
-		//		removes all Unicode directional markers from the string
-		// Example :
-		//		var originalString = dojox.string.BidiComplex.stripSpecialCharacters(displayString);
-		//       
-	if(!str){
-		return str;        
-	}
+	// summary:
+	//		removes all Unicode directional markers from the string
 
-	var buf = "", character;
-	for(var i = 0; i < str.length; i++){ // FIXME: dojo.forEach
-		character = str.charAt(i);
-		if((character != LRE) && (character != RLE) 
-			&& (character != LRM) && (character != RLM)
-			&& (character != LRO) && (character != RLO) &&
-			(character != PDF)){
-			buf+=character;
-		}
-	}
-
-	return buf;       
+	return str.replace(/[\u200E\u200F\u202A-\u202E]/g, ""); // String
 };
 
 //FIXME: these statics are worrysome
@@ -91,11 +60,14 @@ dojox.string.BidiComplex._fOnCopy = new Function("dojox.string.BidiComplex._ceCo
 
 	
 dojox.string.BidiComplex._ceKeyDown = function(event){
+//FIXME: global references: obj and str0
 	obj = dojo.isIE ? event.srcElement : event.target;        
 	str0 = obj.value;
 };
 			
 dojox.string.BidiComplex._ceKeyUp = function(event){
+	var LRM = '\u200E';
+	//FIXME: str0 global reference
 	obj = dojo.isIE ? event.srcElement : event.target;
 	str1 = obj.value;
 
@@ -164,17 +136,18 @@ dojox.string.BidiComplex._ceKeyUp = function(event){
 		obj.value = str2;
 
 		if((ieKey == dojo.keys.DELETE) && (str2.charAt(cursorEnd)==LRM)){
-			obj.value = str2.substring(0,cursorEnd) + str2.substring(cursorEnd+2, str2.length);
+			obj.value = str2.substring(0, cursorEnd) + str2.substring(cursorEnd+2, str2.length);
 		}
 
 		if(ieKey == dojo.keys.DELETE){
 			setSelectedRange(obj,cursorStart,cursorEnd);
-		}else if(ieKey == dojo.keys.BACKSPACE){ 
-				if(str0.charAt(cursorEnd-1)==LRM){
-					dojox.string.BidiComplex._setSelectedRange(obj, cursorStart - 1, cursorEnd - 1);
-				}else{
-					dojox.string.BidiComplex._setSelectedRange(obj, cursorStart, cursorEnd);
-				}
+		}else if(ieKey == dojo.keys.BACKSPACE){
+			//FIXME: str0 global reference
+			if(str0.charAt(cursorEnd-1)==LRM){
+				dojox.string.BidiComplex._setSelectedRange(obj, cursorStart - 1, cursorEnd - 1);
+			}else{
+				dojox.string.BidiComplex._setSelectedRange(obj, cursorStart, cursorEnd);
+			}
 		}else if(obj.value.charAt(cursorEnd) != LRM){
 			dojox.string.BidiComplex._setSelectedRange(obj, cursorStart + 1, cursorEnd + 1);
 		}
@@ -233,7 +206,6 @@ dojox.string.BidiComplex._ceCutText = function(obj){
 };
 
 dojox.string.BidiComplex._getCaretPos = function(event,obj){
-
 	if(!dojo.isIE){
 		return [event.target.selectionStart, event.target.selectionEnd];    
 	}else{
@@ -394,7 +366,7 @@ dojox.string.BidiComplex._insertMarkers = function(/*String*/str,/*String*/patte
 	
 	dojox.string.BidiComplex._segmentsPointers = dojox.string.BidiComplex._parse(str, pattern); // FIXME: shared ref
 	
-	var buf = LRE + str;
+	var buf = '\u202A'/*LRE*/ + str;
 	var shift = 1;                                           
 	var n;
 	for(i = 0; i< dojox.string.BidiComplex._segmentsPointers.length; i++){  //FIXME: dojo.forEach
@@ -402,10 +374,9 @@ dojox.string.BidiComplex._insertMarkers = function(/*String*/str,/*String*/patte
 		if(n != null){
 			preStr = buf.substring(0, n + shift);
 			postStr = buf.substring(n + shift, buf.length);
-			buf = preStr + LRM + postStr;
+			buf = preStr + '\u200E'/*LRM*/ + postStr;
 			shift++;
 		}                                  
 	}
 	return buf;        
 };
-})();
