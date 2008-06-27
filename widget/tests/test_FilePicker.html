@@ -5,31 +5,28 @@
 
 	<title>File Picker Demo</title>
 
-	<!-- required: a default theme file -->
 	<style type="text/css">
-		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../FilePicker/FilePicker.css";
 	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css">
+	
+	<!-- the additional styles for the widget -->
+	<link id="widgetStyle" rel="stylesheet" href="../FilePicker/FilePicker.css">
 	
 	<!-- required: dojo.js -->
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true, useCommentedJson: true"></script>
-
-	<!-- for debugging: -->
-	<script type="text/javascript" src="../FilePicker.js"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+	
+	<!-- not needed, for testing alternate themes -->
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 
 	<script type="text/javascript">
 		dojo.require("dojox.widget.FilePicker");
 		dojo.require("dojox.data.FileStore");
 	</script>
-
-	<style type="text/css">
-		@import "../../../dijit/tests/css/dijitTests.css"; 
-		body, .tundra .dojoxPickerItem {
-			font-family : sans-serif;
-		}
-	</style>
 </head>
 
 <body class="tundra">

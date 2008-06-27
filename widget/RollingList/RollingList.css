@@ -1,0 +1,79 @@
+.dojoxRollingList {
+	border: 1px solid #000;
+	height: 20em;
+	overflow: scroll;
+	overflow-y: hidden;
+	overflow-x: scroll;
+	white-space: nowrap;
+}
+
+.dojoxRollingListPane {
+	overflow: scroll;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.dojoxRollingListPane .dijitMenuItemLabel {
+	position: static;
+}
+
+.dj_safari .dojoxRollingListPane,
+.dj_ie .dojoxRollingListPane {
+	padding-right: 15px; /* Account for scroll bar */
+}
+
+.dojoxRollingListPane .dijitMenu {
+	border: none !important;
+}
+
+.dojoxRollingListItem {
+	cursor: default;
+}
+
+/* Background colors to match menus */
+.tundra .dojoxRollingListPane {
+	background-color: #f7f7f7;
+}
+.tundra .dojoxRollingListPane .dojoxRollingListItemHover {
+	background-color: #e3e3e3;
+}
+.tundra .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #fff;
+	background-color: #3559ac;
+	font-weight: bold;
+}
+.tundra .dojoxRollingListItem {
+	font-family: inherit;
+}
+
+.soria .dojoxRollingListPane {
+	background-color: #fff;
+}
+.soria .dojoxRollingListPane .dojoxRollingListItemHover {
+	background-color: #e3e3e3;
+}
+.soria .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #243C5F;
+	background-color: #d9e6f9;
+	font-weight: bold;
+}
+.soria .dojoxRollingListItem {
+	font-family: inherit;
+}
+
+
+.nihilo .dojoxRollingListPane {
+	background-color: #fff;
+}
+.nihilo .dojoxRollingListPane .dojoxRollingListItemHover {
+	background-color: #e3e3e3;
+}
+.nihilo .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #243C5F;
+	background-color: #ffe284;
+	font-weight: bold;
+}
+.nihilo .dojoxRollingListItem {
+	font-family: inherit;
+}
+
