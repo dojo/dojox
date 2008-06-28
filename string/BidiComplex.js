@@ -19,6 +19,7 @@ dojox.string.BidiComplex.attachInput = function(/*DOMNode*/field, /*String*/patt
 		field.style.textAlign = "right";
 	}
 
+//FIXME: use dojo.connect
 	if(dojo.isIE){
 		field.onkeydown = new Function("dojox.string.BidiComplex._ceKeyDown(event);");
 		field.onkeyup = new Function("dojox.string.BidiComplex._ceKeyUp(event);");
@@ -27,6 +28,7 @@ dojox.string.BidiComplex.attachInput = function(/*DOMNode*/field, /*String*/patt
 		field.onkeydown = dojox.string.BidiComplex._ceKeyDown;        
 	}
 
+//FIXME: use dojo.connect
 	field.oncut = dojox.string.BidiComplex._fOnCut;
 	field.oncopy = dojox.string.BidiComplex._fOnCopy;
 
@@ -34,11 +36,11 @@ dojox.string.BidiComplex.attachInput = function(/*DOMNode*/field, /*String*/patt
 };
 	
 dojox.string.BidiComplex.createDisplayString = function(/*String*/str, /*String*/pattern){
-		// summary:
-		//		Create the Display string by adding the Unicode direction Markers 
-		// Example :
-		//		var displayString = dojox.string.BidiComplex.createDisplayString(originalString,"FILE_PATH");
-		//   
+	// summary:
+	//		Create the display string by adding the Unicode direction Markers 
+	// pattern: Complex Expression Pattern type. One of "FILE_PATH", "URL", "EMAIL", "XPATH"
+
+//FIXME: inline _insertMarkers
 	return dojox.string.BidiComplex._insertMarkers(str, pattern);
 };
 
@@ -167,7 +169,7 @@ dojox.string.BidiComplex._processCopy = function(obj, text, isReverse){
 		}
 	}
 
-	textToClipboard = dojox.string.BidiComplex.stripSpecialCharacters(text);
+	var textToClipboard = dojox.string.BidiComplex.stripSpecialCharacters(text);
 
 	if(dojo.isIE){
 		window.clipboardData.setData("Text", textToClipboard);
@@ -194,10 +196,10 @@ dojox.string.BidiComplex._ceCutText = function(obj){
 	}
 
 	if(dojo.isIE){
-		curPos = obj.selectionStart; 
+//		curPos = obj.selectionStart; 
 		range = document.selection.clear();
 	}else{
-		curPos = obj.selectionStart;
+		var curPos = obj.selectionStart;
 		obj.value = obj.value.substring(0, curPos) + obj.value.substring(obj.selectionEnd);
 		obj.setSelectionRange(curPos, curPos);
 	}
@@ -205,10 +207,9 @@ dojox.string.BidiComplex._ceCutText = function(obj){
 	return true;
 };
 
-dojox.string.BidiComplex._getCaretPos = function(event,obj){
-	if(!dojo.isIE){
-		return [event.target.selectionStart, event.target.selectionEnd];    
-	}else{
+// is there dijit code to do this?
+dojox.string.BidiComplex._getCaretPos = function(event, obj){
+	if(dojo.isIE){
 		var position = 0,
 			range = document.selection.createRange().duplicate(),
 			range2 = range.duplicate(),
@@ -224,11 +225,14 @@ dojox.string.BidiComplex._getCaretPos = function(event,obj){
 			range.moveStart('character', -1);
 			++position;
 		}
+
+		return [position, position + rangeLength];
 	}
 
-	return [position, position + rangeLength];
+	return [event.target.selectionStart, event.target.selectionEnd];
 };
 
+// is there dijit code to do this?
 dojox.string.BidiComplex._setSelectedRange = function(obj,selectionStart,selectionEnd){
 	if(dojo.isIE){
 		var range = obj.createTextRange();
@@ -294,20 +298,19 @@ dojox.string.BidiComplex._parse = function(/*String*/str, /*String*/pattern){
 	var sp_len = 0;
 
 	if(pattern == "FILE_PATH"){
-		delimiters = "/\\:.";         
+		delimiters = "/\\:."; // FIXME: use split?
 		for(i = 0; i < str.length; i++){ //FIXME: dojo.forEach
 			if((delimiters.indexOf(str.charAt(i)) >= 0) &&
 					dojox.string.BidiComplex._isCharBeforeBiDiChar(str, i, previous)){
 				previous = i;
-				dojox.string.BidiComplex._segmentsPointers[sp_len] = i;
-				sp_len++;
+				dojox.string.BidiComplex._segmentsPointers[sp_len++] = i;
 			}
 		}
 	}else if(pattern == "URL"){
 		var buffer_length = str.length;
 			            
 		// parse protocol, host, path
-		delimiters = "/:.?=&#";
+		delimiters = "/:.?=&#"; // FIXME: use split?
 		for(i = 0; i < buffer_length; i++){ //FIXME: dojo.forEach
 			if((delimiters.indexOf(str.charAt(i))  >= 0)  &&
 					dojox.string.BidiComplex._isCharBeforeBiDiChar(str, i, previous)){
@@ -317,7 +320,7 @@ dojox.string.BidiComplex._parse = function(/*String*/str, /*String*/pattern){
 			}
 		}               
 	}else if(pattern == "EMAIL"){
-		delimiters = "<>@.,;";         
+		delimiters = "<>@.,;"; // FIXME: use split?         
 		var inQuotes = false;    
 		
 		for(i = 0; i < str.length; i++){ //FIXME: dojo.forEach         
