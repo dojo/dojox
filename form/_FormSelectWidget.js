@@ -178,6 +178,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		
 		this.value = this._multiValue ? val : val[0];
 		this._setDisplay(this._multiValue ? disp : disp[0]);
+		this._updateSelection();
 		this._handleOnChange(this.value, priorityChange);
 	},
 	
