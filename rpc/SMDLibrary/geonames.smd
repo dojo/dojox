@@ -16,6 +16,18 @@
 	],
 
 	"services":{
+		getCountryInfo:{
+			// Result : returns info about a country such as name, population, etc.
+			// If country parameter is not specified, that information is returned for
+			// every country
+			"target": "countryInfoJSON",
+			"parameters": [
+				{ name: "country", type:"STRING", optional: true },
+				{ name: "lang", type:"STRING"}, // default: "en"
+				{ name: "maxRows", type:"INTEGER", optional: true } // default: 10
+			]	
+		},
+
 		getCities:{
 			// Result : returns a list of cities and placenames in the bounding box,
 			// ordered by relevancy (capital/population). Placenames close together
