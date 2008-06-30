@@ -60,6 +60,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	_onNew: function(item, parentInfo){
 		this.updateRowCount(this.rowCount+1);
 		this._addItem(item, this.rowCount-1);
+		this.showMessage();
 	},
 
 	_onDelete: function(item){
@@ -70,6 +71,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this._by_idx.splice(idx, 1);
 			delete this._by_idty[o.idty];
 			this.updateRowCount(this.rowCount-1);
+			if(this.rowCount === 0){
+				this.showMessage(this.noDataMessage);
+			}
 		}
 	},
 
