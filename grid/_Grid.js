@@ -600,7 +600,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 		postresize: function(){
 			// views are position absolute, so they do not inflate the parent
 			if(this.autoHeight){
-				var size = Math.max(this.views.measureContent(), dojo.marginBox(this.messagesNode).h) + 'px';
+				var size = Math.max(this.views.measureContent()) + 'px';
 				this.viewsNode.style.height = size;
 			}
 		},
