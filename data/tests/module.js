@@ -25,6 +25,8 @@ try{
 			dojo.require("dojox.data.tests.stores.FileStore");
 		}
 	}
+	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.CssRuleStore");
+	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.CssClassStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.dom");
 }catch(e){
 	doh.debug(e);

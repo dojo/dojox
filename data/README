@@ -7,12 +7,12 @@ Release date: 03/18/2008
 Project state: stable
 -------------------------------------------------------------------------------
 Project authors
-	Jared Jurkiewicz (jared.jurkiewicz@gmail.com) (FileStore, HtmlStore, XmlStore, FlickrStore, others).
+	Jared Jurkiewicz (jared.jurkiewicz@gmail.com) (FileStore, HtmlStore, XmlStore, FlickrStore, CssRuleStore, CssClassStore, others).
 	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore, GoogleSeachStore, GoogleFeedStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 	Russell Jones (KeyValueStore) (CLA)
-	Benjamin Schell (KeyValueStore) (Corporate CLA)
+	Benjamin Schell (KeyValueStore, CssRuleStore, CssClassStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
 	Kris Zyp (kris@dojotoolkit.org) (JsonRestStore, PersevereStore, S3JsonRestStore, CouchDBRestStore)
 	Frank Fortson (frank.fortson@equorum.com) (AndOrReadStore, AndOrWriteStore)
@@ -111,5 +111,12 @@ Additional Notes:
 	Based directly on dojo.data.ItemFileWriteStore.
 
 	dojox.data.FileStore - A lazy-loading store designed for searching filesystems with a provided
-		PHP back end.  Implements dojo.data.api.Read and dojo.data.api.Identity
+	PHP back end.  Implements dojo.data.api.Read and dojo.data.api.Identity
+
+	dojox.data.CssRuleStore - A store that allows searching/querying over Css rules loaded in the page in
+	the browser.
+
+	dojox.data.CssClassStore - A store that allows searching/querying over what classes are defined in the page in
+	the browser.
+
 
