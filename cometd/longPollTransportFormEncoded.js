@@ -55,7 +55,7 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 				clientId: this._cometd.clientId,
 				id:	"" + this._cometd.messageId++
 			};
-			if(this._cometd.connectTimeout>this._cometd.expectedNetworkDelay){
+			if(this._cometd.connectTimeout>=this._cometd.expectedNetworkDelay){
 				message.advice = { 
 					timeout: this._cometd.connectTimeout - this._cometd.expectedNetworkDelay
 				};
