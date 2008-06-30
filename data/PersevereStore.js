@@ -30,7 +30,7 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 				jsonQuery = "";
 			}
 			args.queryStr = jsonQuery.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t;});
-		}else if(!args.query){
+		}else if(!args.query || args.query == '*'){
 			args.query = "";
 		}
 		
@@ -53,7 +53,7 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 		var index = dojox.rpc.Rest._index;
 		if(dojox.json.query && !args.dontCache && index[this.target] && !index[this.target]._loadObject){
 			// we can do the query locally
-			jsonQuery = args.queryStr || args.query;
+			jsonQuery = typeof args.queryStr == 'string' ? args.queryStr : args.query;
 			// do the query locally with dojox.json.query and then sneak the results in the cache, so the 
 			//	inherited fetch can handle it
 			index[this.target + jsonQuery] = dojox.json.query(jsonQuery,index[this.target]);
