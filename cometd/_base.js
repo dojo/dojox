@@ -51,7 +51,7 @@ dojox.cometd = {
 			_handshook: false,
 	        
 			expectedNetworkDelay: 10000, // expected max network delay
-			connectTimeout: 0,	  // If set, used as ms to wait for a connect response and sent as the advised timeout
+			connectTimeout: 0,	     // If set, used as ms to wait for a connect response and sent as the advised timeout
 	        
 			version:	"1.0",
 			minimumVersion: "0.9",
@@ -659,7 +659,7 @@ dojox.cometd = {
 				advised = this._advice.timeout + this.expectedNetworkDelay;
 			}
 			
-			if(this.connectTimeout > 0 && this.connectTimeout < _advised){
+			if(this.connectTimeout > 0 && this.connectTimeout < advised){
 				return this.connectTimeout;
 			}
 			
