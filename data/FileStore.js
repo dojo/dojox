@@ -320,7 +320,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		
 		deferred.addCallback(function(data){
 			var item = self._processItem(data);
-			if (keywordArgs.onItem){
+			if (item && keywordArgs.onItem){
 				keywordArgs.onItem.call(scope, item);
 			}
 		});
@@ -370,6 +370,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		//		Internal function for processing an item returned from the store.
 		//		It sets up the store ref as well as sets up the attributes necessary
 		//		to invoke a lazy load on a child, if there are any.
+		if(!item){return null;}
 		item[this._storeRef] = this;
 		if(item.children && item.directory){
 			if(dojo.isArray(item.children)){
