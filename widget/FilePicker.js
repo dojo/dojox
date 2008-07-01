@@ -42,6 +42,10 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	
 	className: "dojoxFilePicker",
 	
+	// parentAttr: string
+	//	the attribute to read for finding our parent directory
+	parentAttr: "parentDir",
+	
 	getChildItems: function(item){
 		var ret = this.inherited(arguments);
 		if(!ret && this.store.getValue(item, "directory")){
@@ -74,5 +78,12 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 			ret = new dojox.widget._FileInfoPane({});
 		}
 		return ret;
+	},
+	
+	setValueFromString: function(/*string*/ path){
+		// Summary: sets the value of this widget based off the given path
+		this.store.fetchItemByIdentity({identity: path,
+										onItem: this.setValue,
+										scope: this});
 	}
 });

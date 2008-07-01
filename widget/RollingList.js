@@ -124,7 +124,7 @@ dojo.declare("dojox.widget._RollingListPane",
 		//  pane
 		var items = this.items || [];
 		for(var i = 0, myItem; (myItem = items[i]); i++){
-			if(myItem == item){
+			if(this.parentWidget._itemsMatch(myItem, item)){
 				return true;
 			}
 		}
@@ -146,7 +146,7 @@ dojo.declare("dojox.widget._RollingListPane",
 		var sel;
 		if((!parentInfo && !this.parentPane) ||
 			(parentInfo && this.parentPane && this.parentPane._hasItem(parentInfo.item) &&
-			(sel = this.parentPane._getSelected()) && sel.item == parentInfo.item)){
+			(sel = this.parentPane._getSelected()) && this.parentWidget._itemsMatch(sel.item, parentInfo.item))){
 			this.items.push(newItem);
 			this._loadCheck(true);
 		}else if(parentInfo && this.parentPane && this._hasItem(parentInfo.item)){
@@ -220,6 +220,13 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		}
 	},
 	
+	_setContent: function(cont){
+		if(!this._menu){
+			// Only set the content if we don't already have a menu
+			this.inherited(arguments);
+		}
+	},
+
 	onItems: function(){
 		// summary:
 		//	called after a fetch or load - at this point, this.items should be
@@ -235,7 +242,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			dojo.forEach(this.items, function(item){
 				child = this.parentWidget._getMenuItemForItem(item, this);
 				if(child){
-					if(selectItem && child.item == selectItem.item){
+					if(selectItem && this.parentWidget._itemsMatch(child.item, selectItem.item)){
 						selectMenuItem = child;
 					}
 					this._menu.addChild(child);
@@ -256,7 +263,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 					this.parentWidget.addChild(itemPane, this.getIndexInParent() + 1);
 				}else{
 					this.parentWidget._removeAfter(this);
-					this.parentWidget.onItemClick(selectMenuItem.item, this, selectMenuItem.children);
+					this.parentWidget._onItemClick(null, this, selectMenuItem.item, selectMenuItem.children);
 				}
 			}
 		}else if(selectItem){
@@ -382,10 +389,30 @@ dojo.declare("dojox.widget.RollingList",
 	//		one ore more attributes that holds children of a node
 	childrenAttrs: ["children"],
 
+	// parentAttr: string
+	//	the attribute to read for finding our parent item (if any)
+	parentAttr: "",
+	
 	// scrollDuration: integer
 	//  time (in millis) to animate the smooth scroll across
 	scrollDuration: 150,
+	
+	// value: item
+	//		The value that has been selected
+	value: null,
 
+	_itemsMatch: function(/*item*/ item1, /*item*/ item2){
+		// Summary: returns whether or not the two items match - checks ID if
+		//  they aren't the exact same object
+		if(!item1 && !item2){ 
+			return true;
+		}else if(!item1 || !item2){
+			return false;
+		}
+		return (item1 == item2 || 
+			(this._isIdentity && this.store.getIdentity(item1) == this.store.getIdentity(item2)));
+	},
+	
 	_removeAfter: function(/*Widget or int*/ idx){
 		// summary: removes all widgets after the given widget (or index)
 		if(typeof idx != "number"){
@@ -398,6 +425,18 @@ dojo.declare("dojox.widget.RollingList",
 					c.destroyRecursive();
 				}
 			}, this);
+		}
+		var children = this.getChildren(), child = children[children.length - 1];
+		var selItem = null;
+		while(child && !selItem){
+			var val = child._getSelected();
+			if(val){
+				selItem = val.item;
+			}
+			child = child.parentPane;
+		}
+		if(!this._setInProgress){
+			this._setValue(selItem);
 		}
 	},
 	
@@ -479,25 +518,153 @@ dojo.declare("dojox.widget.RollingList",
 		this.scrollIntoView(children[children.length-1]);
 	},
 	
+	_setValue: function(/* item */ value){
+		// summary: internally sets the value and fires onchange
+		delete this._setInProgress;
+		if(!this._itemsMatch(this.value, value)){
+			this.value = value;
+			this.onChange(value);
+		}
+	},
+	
+	setValue: function(/* item */ value){
+		// summary: sets the value of this widget to the given store item
+		if(this._itemsMatch(this.value, value)){ return; }
+		if(this._setInProgress && this._setInProgress === value){ return; }
+		this._setInProgress = value;
+		if(!value || !this.store.isItem(value)){
+			var pane = this.getChildren()[0];
+			pane._setSelected(null);
+			this._onItemClick(null, pane, null, null);
+			return;
+		}
+		
+		var fetchParentItems = dojo.hitch(this, function(/*item*/ item, /*function*/callback){
+			// Summary: Fetchs the parent items for the given item
+			var store = this.store, id;
+			if(this.parentAttr && store.getFeatures()["dojo.data.api.Identity"] &&
+				(id = this.store.getValue(item, this.parentAttr))){
+				// Fetch by parent attribute
+				var cb = function(i){
+					if(store.getIdentity(i) == store.getIdentity(item)){
+						callback(null);
+					}else{
+						callback([i]);
+					}
+				};
+				if(typeof id == "string"){
+					store.fetchItemByIdentity({identity: id, onItem: cb});
+				}else if(store.isItem(id)){
+					cb(id);
+				}
+			}else{
+				// Fetch by finding children
+				var numCheck = this.childrenAttrs.length;
+				var parents = [];
+				dojo.forEach(this.childrenAttrs, function(attr){
+					var q = {};
+					q[attr] = item;
+					store.fetch({query: q, scope: this, 
+						onComplete: function(items){
+							if(this._setInProgress !== value){
+								return;
+							}
+							parents = parents.concat(items);
+							numCheck--;
+							if(numCheck === 0){
+								callback(parents);
+							}
+						}
+					});
+				}, this);
+			}
+		});
+		
+		var setFromChain = dojo.hitch(this, function(/*item[]*/itemChain, /*integer*/idx){
+			// Summary: Sets the value of the widget at the given index in the chain - onchanges are not 
+			// fired here
+			var set = itemChain[idx];
+			var child = this.getChildren()[idx];
+			var conn;
+			if(set && child){
+				var fx = dojo.hitch(this, function(){
+					if(conn){
+						this.disconnect(conn);
+					}
+					delete conn;
+					if(this._setInProgress !== value){
+						return;
+					}
+					var selOpt = dojo.filter(child._menu.getChildren(), function(i){
+						return this._itemsMatch(i.item, set);
+					}, this)[0];
+					if(selOpt){
+						idx++;
+						child._menu.onItemClick(selOpt, {type: "internal",
+													stopPropagation: function(){},
+													preventDefault: function(){}});
+						if(itemChain[idx]){
+							setFromChain(itemChain, idx);
+						}else{
+							this._setValue(set);
+							this.onItemClick(set, child, this.getChildItems(set));
+						}
+					}
+				});
+				if(!child.isLoaded){
+					conn = this.connect(child, "onLoad", fx);
+				}else{
+					fx();
+				}
+			}else if(idx === 0){
+				this.setValue(null);
+			}
+		});
+		
+		var parentChain = [];
+		var onParents = dojo.hitch(this, function(/*item[]*/ parents){
+			// Summary: recursively grabs the parents - only the first one is followed
+			if(parents && parents.length){
+				parentChain.push(parents[0]);
+				fetchParentItems(parents[0], onParents);
+			}else{
+				if(!parents){
+					parentChain.pop();
+				}
+				parentChain.reverse();
+				setFromChain(parentChain, 0);
+			}
+		});
+		onParents([value]);
+	},
+	
 	_onItemClick: function(/* Event */ evt, /* dijit._Contained */ pane, /* item */ item, /* item[]? */ children){
 		// summary: internally called when a widget should pop up its child
-		var itemPane = this._getPaneForItem(item, pane, children);
-		var alreadySelected = (evt.type == "click" && evt.alreadySelected);
+		
+		if(evt){
+			var itemPane = this._getPaneForItem(item, pane, children);
+			var alreadySelected = (evt.type == "click" && evt.alreadySelected);
 
-		if(alreadySelected && itemPane){
-			this._removeAfter(pane.getIndexInParent() + 1);
-			var next = pane.getNextSibling();
-			if(next && next._setSelected){
-				next._setSelected(null);
+			if(alreadySelected && itemPane){
+				this._removeAfter(pane.getIndexInParent() + 1);
+				var next = pane.getNextSibling();
+				if(next && next._setSelected){
+					next._setSelected(null);
+				}
+				this.scrollIntoView(next);
+			}else if(itemPane){
+				this.addChild(itemPane, pane.getIndexInParent() + 1);
+			}else{
+				this._removeAfter(pane);
+				this.scrollIntoView(pane);
 			}
-			this.scrollIntoView(next);
-		}else if(itemPane){
-			this.addChild(itemPane, pane.getIndexInParent() + 1);
-		}else{
+		}else if(pane){
 			this._removeAfter(pane);
-			this.scrollIntoView(pane);
 		}
-		this.onItemClick(item, pane, children);
+		if(!evt || evt.type != "internal"){
+			this._setValue(item);
+			this.onItemClick(item, pane, children);
+		}
 	},
 	
 	_getPaneForItem: function(/* item? */ item, /* dijit._Contained? */ parentPane, /* item[]? */ children){		// summary: gets the pane for the given item, and mixes in our needed parts
@@ -579,6 +746,7 @@ dojo.declare("dojox.widget.RollingList",
 		// summary: sets the store for this widget */
 		if(store === this.store && this._started){ return; }
 		this.store = store;
+		this._isIdentity = store.getFeatures()["dojo.data.api.Identity"];
 		var rootPane = this._getPaneForItem();
 		this.addChild(rootPane, 0);
 	},
@@ -626,6 +794,10 @@ dojo.declare("dojox.widget.RollingList",
 
 	onItemClick: function(/* item */ item, /* dijit._Contained */ pane, /* item[]? */ children){
 		// summary: called when an item is clicked - it receives the store item
+	},
+	
+	onChange: function(/* item */ value){
+		// summary: called when the value of this widget has changed
 	}
 	
 });

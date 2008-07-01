@@ -26,6 +26,7 @@
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojox.widget.RollingList");
 		dojo.require("dijit.form.Button");
+		dojo.require("dijit.form.TextBox");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 		
 		dojo.declare("dojox.widget.RollingStore", dojo.data.ItemFileWriteStore, {
@@ -38,6 +39,7 @@
 		addedD = false;
 		addedA = false;
 		removedC = false;
+		removedE = false;
 		changedD = false;
 		isBig = true;
 		
@@ -94,6 +96,16 @@
 				continentStore.deleteItem(i);
 			}});
 		}
+		removeEurope = function(){
+			if(removedE){ 
+				console.log("Europe is already removed");
+				return; 
+			}			
+			removedE = true;
+			continentStore.fetchItemByIdentity({identity: "Europe", onItem: function(i){
+				continentStore.deleteItem(i);
+			}});
+		}
 		changeDC = function(){
 			if(!addedD){ 
 				console.log("Washington DC is not yet added");
@@ -126,6 +138,15 @@
 			dijit.byId("myList").resize(newSize);
 			isBig = !isBig;
 		}
+		setValue = function(id){
+			if(id){
+				continentStore.fetchItemByIdentity({identity: id, onItem: function(i){
+					dijit.byId("myList").setValue(i);
+				}});
+			}else{
+				dijit.byId("myList").setValue(null);
+			}
+		}
 	</script>
 
 </head>
@@ -137,11 +158,16 @@
 		url="../../../dijit/tests/_data/countries.json">
 	</div>
 	
-	<h3>Rolling List - <input type="text" id="clickWatch" disabled value="clicked item..."></h3>
+	<h3>Rolling List - <input dojoType="dijit.form.TextBox" type="text" id="clickWatch" disabled value="None Selected..."></h3>
 	<div dojoType="dojox.widget.RollingList" id="myList" store="continentStore"
 		query="{type:'continent'}">
-		<script type="dojo/method" event="onItemClick" args="item,pane,children">
-			dojo.byId("clickWatch").value = this.store.getIdentity(item);
+		<script type="dojo/method" event="onChange" args="value">
+			console.debug("Set Value:", value);
+			if(value){
+				dijit.byId("clickWatch").setValue(this.store.getIdentity(value));
+			}else{
+				dijit.byId("clickWatch").setValue("None Selected...");
+			}
 		</script>
 		<script type="dojo/method" event="getPaneForItem" args="item,parentPane,children">
 			var ret = this.inherited("getPaneForItem", arguments);
@@ -159,6 +185,10 @@
 	<hr>
 	<button dojoType="dijit.form.Button" onClick="doResize()">Resize widget</button>
 	<hr>
+	<button dojoType="dijit.form.Button" onClick="setValue('Guadalajara')">Set Value to Guadalajara</button>
+	<button dojoType="dijit.form.Button" onClick="setValue('Africa')">Set Value to Africa</button>
+	<button dojoType="dijit.form.Button" onClick="setValue('')">Set No Value</button>
+	<hr>
 	<button dojoType="dijit.form.Button" onClick="addTijuana()">Add Item To Mexico (Tijuana)</button>
 	<button dojoType="dijit.form.Button" onClick="removeTijuana()">Remove Tijuana</button><br>
 	<button dojoType="dijit.form.Button" onClick="addDC()">Add Item To USA (Washington DC)</button>
@@ -166,5 +196,6 @@
 	<button dojoType="dijit.form.Button" onClick="removeDC()">Remove Washington DC</button><br>
 	<button dojoType="dijit.form.Button" onClick="addAntarctica()">Add Item To Top-level (Antarctica)</button><br>
 	<button dojoType="dijit.form.Button" onClick="removeCanada()">Remove Canada</button>
+	<button dojoType="dijit.form.Button" onClick="removeEurope()">Remove Europe</button>
 </body>
 </html>
