@@ -64,7 +64,7 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 		return this.inherited(arguments);
 	}
 });
-dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Function?*/callback){
+dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync){
 	// summary:
 	//		Creates Dojo data stores for all the table/classes on a Persevere server
 	// target:
@@ -78,25 +78,19 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Function?*/call
 	path = (path && (path.match(/\/$/) ? path : (path + '/'))) || '/';
 	var rootService= dojox.rpc.Rest(path,true);
 	var lastSync = dojox.rpc._sync;
-	dojox.rpc._sync = !callback;
+	dojox.rpc._sync = sync;
 	var dfd = rootService("root");//dojo.xhrGet({url: target, sync:!callback, handleAs:'json'});
 	var results;
-	dfd.addCallback(function(schemas){
+	dfd.addBoth(function(schemas){
 		for(var i in schemas){
 			if(typeof schemas[i] == 'object'){
 				schemas[i] = new dojox.data.PersevereStore({target:new dojo._Url(path,i+'/') + '',schema:schemas[i]});
 			}
 		}
-		if(callback){
-			callback(schemas);
-		}
 		return (results = schemas);
 	});
-	dfd.addErrback(function(error){
-		console.log(error);
-	});
 	dojox.rpc._sync = lastSync;
-	return results;
+	return sync ? results : dfd;
 };
 dojox.data.PersevereStore.addProxy = function(){
 	// summary:

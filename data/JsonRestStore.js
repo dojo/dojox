@@ -1,4 +1,5 @@
 dojo.provide("dojox.data.JsonRestStore");
+
 dojo.require("dojox.data.ServiceStore");
 dojo.require("dojox.rpc.JsonRest");
 dojo.require("dojox.json.ref"); // this provides json indexing
@@ -91,9 +92,9 @@ dojo.declare("dojox.data.JsonRestStore",
 			//setup a byId alias to the api call
 			if(this.target && !this.service){
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
-				this.service._schema = this.schema || {};
-				this.target = this.schema._idPrefix = this.service.servicePath;
+				this.target = this.service.servicePath;
 			}
+			this.service._schema = this.schema || this.service._schema || {};
 			dojox.rpc.services = dojox.rpc.services || {};
 			dojox.rpc.services[this.service.servicePath] = this.service;
 			/*else if(!(this.service.contentType + '').match(/application\/.*json/)){
@@ -252,7 +253,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			}
 			queryInfo.dontCache = args.dontCache; // TODO: Add TTL maybe?
 			dojox.rpc.Rest.setQueryInfo(queryInfo);
-			return dojox.data.ServiceStore.prototype.fetch.apply(this,arguments);
+			return this.inherited(arguments);
 		},
 		_processResults: function(results, deferred){
 			// index the results
@@ -266,6 +267,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			// convert the different spellings
 			args.query = args.identity;
 			args.onComplete = args.onItem;
+			delete args.onItem;
 			// we can rely on the Rest service to provide the index/cache
 			return this.fetch(args).results;
 		},
