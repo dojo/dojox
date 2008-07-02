@@ -21,6 +21,7 @@
 		dojo.require("dojox.layout.RadioGroup");
 		dojo.require("dojo.parser"); 
 		dojo.require("dijit.layout.ContentPane"); 
+		dojo.require("dijit.form.Button");
 	</script>
 
 	<style type="text/css">
@@ -47,19 +48,19 @@
 	<h1 class="testTitle">dojox.layout.RadioGroup test</h1>
 
 	<div style="width:915px; margin:0 auto; height:300px;">
-		<div dojoType="dojox.layout.RadioGroup" style="width:300px; height:300px; float:left;" hasButtons="true">
+		<div id="firstGroup" dojoType="dojox.layout.RadioGroup" style="width:300px; height:300px; float:left;" hasButtons="true">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
 		</div>
 	
-		<div dojoType="dojox.layout.RadioGroupFade" style="width:300px; height:300px; float:left" hasButtons="true">
+		<div id="firstFade" dojoType="dojox.layout.RadioGroupFade" style="width:300px; height:300px; float:left" hasButtons="true">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
 		</div>
 	
-		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px;" hasButtons="true">
+		<div id="firstSlide" dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px;" hasButtons="true">
 			<div dojoType="dijit.layout.ContentPane" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
 			<div dojoType="dijit.layout.ContentPane" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
@@ -68,6 +69,34 @@
 
 	<br style="clear:both">
 	<br style="clear:both">
+	<div>
+		<button dojoType="dijit.form.Button">add children
+			<script type="dojo/method" event="onClick">
+				dojo.forEach(["firstGroup","firstFade","firstSlide"], function(id){
+					var w = dijit.byId(id);
+					w.addChild(
+						new dijit.layout.ContentPane({
+							title:"Added", href:"_lorem.html",
+							style:"padding:8px; background-color:#fff"
+						})
+					);
+				})
+			</script>
+		</button>
+		
+		<button dojoType="dijit.form.Button">remove one from each
+			<script type="dojo/method" event="onClick">
+				dijit.registry.filter(function(w){
+					return w.declaredClass.match(/dojox\.layout\.RadioGroup/);
+				}).forEach(function(w){
+					var child = w.selectedChildWidget;
+					if(child){
+						w.removeChild(child);
+					}
+				});
+			</script>
+		</button>
+	</div>
 
 	<div style="width:915px; margin:0 auto; height:300px;">
 		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px; float:left" hasButtons="true">

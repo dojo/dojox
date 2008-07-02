@@ -56,20 +56,41 @@ dojo.declare("dojox.layout.RadioGroup",
 	},
 
 	// private:
-	_makeButton: function(/* DomNode */n){
-		// summary: creates a hover button for a child node of the RadioGroup
-		dojo.style(n.domNode,"position","absolute");
-		var tmp = document.createElement('td');
+	_makeButton: function(/* dijit._Widget */child){
+		// summary: Creates a hover button for a child node of the RadioGroup
+		dojo.style(child.domNode,"position","absolute");
+
+		var tmp = dojo.doc.createElement('td');
 		this.buttonNode.appendChild(tmp);
-		var tmpt = tmp.appendChild(document.createElement('div'));
-		var _button = dojo.getObject(this.buttonClass);
-		var tmpw = new _button({
-			label: n.title,
-			page: n
+		var tmpt = tmp.appendChild(dojo.doc.createElement('div'));
+		var _Button = dojo.getObject(this.buttonClass);
+		var tmpw = new _Button({
+			label: child.title,
+			page: child
 		},tmpt);
+
+		dojo.mixin(child, { _radioButton: tmpw });
 		tmpw.startup();
+
 	},
 
+	addChild: function(/* dijit._Widget */child){
+		// summary: Add a child to this Group and create a button if necessary
+		this.inherited(arguments);
+		if(this.hasButtons){
+			this._makeButton(child);
+		}
+		
+	},
+	
+	removeChild: function(child){
+		if(this.hasButtons && child._radioButton){
+			child._radioButton.destroy();
+			delete child._radioButton;
+		}
+		this.inherited(arguments);
+	},
+	
 	// FIXME: shouldn't have to rewriting these, need to take styling out of _showChild and _hideChild
 	//		and use classes on the domNode in _transition or something similar (in StackContainer)
 	_transition: function(/*Widget*/newWidget, /*Widget*/oldWidget){
@@ -230,7 +251,13 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 			page.onHide();
 		}
 		this._tmpConnect = dojo.connect(this._anim, "onEnd", dojo.hitch(this, "_positionChild", page));
+	},
+	
+	addChild: function(child){
+		this.inherited(arguments);
+		this._positionChild(child);
 	}
+	
 });
 
 dojo.declare("dojox.layout._RadioButton",
