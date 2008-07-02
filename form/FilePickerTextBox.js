@@ -22,11 +22,15 @@ dojo.declare(
 		//		Set to false since we want to handle our own click events
 		_stopClickEvents: false,
 		
+		// valueItem: item
+		//		The item, in our store, of the directory relating to our value
+		valueItem: null,
+		
 		postCreate: function(){
 			this.dropDown = new dojox.widget.FilePicker(this.constraints);
 			this.inherited(arguments);
 			// Make our connections we want
-			this.connect(this.dropDown, "onPathChange", this._onPathChange);
+			this.connect(this.dropDown, "onChange", this._onWidgetChange);
 			this.connect(this.focusNode, "onblur", "_focusBlur");
 			this.connect(this.focusNode, "onfocus", "_focusFocus");
 			this.connect(this.focusNode, "ondblclick", function(){
@@ -41,8 +45,10 @@ dojo.declare(
 			}
 		},
 		
-		_onPathChange: function(/*string*/value){
+		_onWidgetChange: function(/*item*/item){
 			// summary: called when the path gets changed in the dropdown
+			this.valueItem = item;
+			var value = this.dropDown.getPathValue(item);
 			if(value || !this._skipInvalidSet){
 				if(value){
 					this._hasValidPath = true;

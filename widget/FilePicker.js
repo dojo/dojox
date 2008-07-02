@@ -103,11 +103,6 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		return ret;
 	},
 	
-	_onChange: function(/*item*/val){
-		this.onChange();
-		this.onPathChange(this.getPathValue(val));
-	},
-	
 	getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
 		var iconClass = "dojoxDirectoryItemIcon";
 		if(!this.store.getValue(item, "directory")){
@@ -131,10 +126,6 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 			ret = new dojox.widget._FileInfoPane({});
 		}
 		return ret;
-	},
-	
-	onPathChange: function(/*string*/ newPath){
-		// Summary: called with the new path whenever a path has been changed
 	},
 	
 	setValueFromString: function(/*string*/ path){
