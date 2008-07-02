@@ -1,0 +1,5 @@
+@import url("../../widget/FilePicker/FilePicker.css");
+
+.dojoxFilePickerTextBox {
+	width: 30em;
+}

@@ -78,7 +78,10 @@ dojo.declare("dojox.widget._RollingListPane",
 
 	_focusKey: function(/*Event*/e){
 		// summary: called when a keypress happens on the widget
-		if(e.charOrCode == dojo.keys.LEFT_ARROW && this.parentPane){
+		if(e.charOrCode == dojo.keys.BACKSPACE){
+			dojo.stopEvent(e);
+			return;
+		}else if(e.charOrCode == dojo.keys.LEFT_ARROW && this.parentPane){
 			this.parentPane.focus();
 			this.parentWidget.scrollIntoView(this.parentPane);
 		}else if(e.charOrCode == dojo.keys.ENTER){
@@ -86,13 +89,13 @@ dojo.declare("dojox.widget._RollingListPane",
 		}
 	},
 	
-	focus: function(){
+	focus: function(/*boolean*/force){
 		// summary: sets the focus to this current widget
 		if(this.parentWidget._focusedPane != this){
 			this.parentWidget._focusedPane = this;
 			this.parentWidget.scrollIntoView(this);
-			if(this._focusByNode){
-				try{dijit.focus(this.focusNode||this.domNode);}catch(e){}
+			if(this._focusByNode && (!this.parentWidget._savedFocus || force)){
+				try{(this.focusNode||this.domNode).focus();}catch(e){}
 			}
 		}
 	},
@@ -310,7 +313,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		this.parentWidget._updateClass(this.domNode, "GroupPane");
 	},
 	
-	focus: function(){
+	focus: function(/*boolean*/force){
 		// summary: sets the focus to this current widget
 		if(this._menu){
 			if(this._pendingFocus){
@@ -333,9 +336,16 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			}
 			this._focusByNode = false;
 			if(focusWidget.focusNode){
-				try{dijit.focus(focusWidget.focusNode);}catch(e){}
+				if(!this.parentWidget._savedFocus || force){
+					try{focusWidget.focusNode.focus();}catch(e){}
+				}
+				window.setTimeout(function(){
+					dijit.scrollIntoView(focusWidget.focusNode);
+				}, 1);
 			}else if(focusWidget.focus){
-				focusWidget.focus();
+				if(!this.parentWidget._savedFocus || force){
+					focusWidget.focus();
+				}
 			}else{
 				this._focusByNode = true;
 			}
@@ -352,7 +362,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			parentMenu: this.parentPane ? this.parentPane._menu : null,
 			onCancel: function(/*Boolean*/ closeAll){ 
 				if(self.parentPane){
-					self.parentPane.focus();
+					self.parentPane.focus(true);
 				}
 			},
 			_moveToPopup: function(/*Event*/ evt){
@@ -369,7 +379,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 				(evt.type == "internal"))){
 				var p = this.parentWidget.getChildren()[this.getIndexInParent() + 1];
 				if(p){
-					p.focus();
+					p.focus(true);
 					this.parentWidget.scrollIntoView(p);
 				}
 			}else{
@@ -500,7 +510,9 @@ dojo.declare("dojox.widget.RollingList",
 			widget.startup();
 		}
 		this.layout();
-		widget.focus();
+		if(!this._savedFocus){
+			widget.focus();
+		}
 	},
 	
 	_updateClass: function(/* Node */ node, /* String */ type, /* Object? */ options){
@@ -556,9 +568,13 @@ dojo.declare("dojox.widget.RollingList",
 		if(this._focusedPane){
 			var foc = this._focusedPane;
 			delete this._focusedPane;
-			foc.focus();
+			if(!this._savedFocus){
+				foc.focus();
+			}
 		}else if(children && children.length){
-			children[0].focus();
+			if(!this._savedFocus){
+				children[0].focus();
+			}
 		}
 	},
 	
@@ -702,6 +718,9 @@ dojo.declare("dojox.widget.RollingList",
 				this.scrollIntoView(next);
 			}else if(itemPane){
 				this.addChild(itemPane, pane.getIndexInParent() + 1);
+				if(this._savedFocus){
+					itemPane.focus(true);
+				}
 			}else{
 				this._removeAfter(pane);
 				this.scrollIntoView(pane);
@@ -778,7 +797,7 @@ dojo.declare("dojox.widget.RollingList",
 				var self = this;
 				widgetItem.focus = function(){
 					// Don't set our class
-					if(!this.disabled){try{dijit.focus(this.focusNode);}catch(e){}}
+					if(!this.disabled){try{this.focusNode.focus();}catch(e){}}
 				};
 				widgetItem.connect(widgetItem.focusNode, "onmouseenter", function(){
 					self._updateClass(this.domNode, "Item", {"Hover": true});
@@ -812,16 +831,39 @@ dojo.declare("dojox.widget.RollingList",
 	
 	_onKey: function(/*Event*/ e){
 		// summary: called when a keypress event happens on this widget
-		if(e.charOrCode == dojo.keys.ESCAPE && this._savedFocus){
-			try{dijit.focus(this._savedFocus);}catch(e){}
-			delete this._savedFocus;
+		if(e.charOrCode == dojo.keys.BACKSPACE){
 			dojo.stopEvent(e);
 			return;
-		}
-		if(e.charOrCode == dojo.keys.LEFT_ARROW || 
+		}else if(e.charOrCode == dojo.keys.ESCAPE && this._savedFocus){
+			try{dijit.focus(this._savedFocus);}catch(e){}
+			dojo.stopEvent(e);
+			return;
+		}else if(e.charOrCode == dojo.keys.LEFT_ARROW || 
 			e.charOrCode == dojo.keys.RIGHT_ARROW){
 			dojo.stopEvent(e);
 			return;
+		}
+	},
+	
+	focus: function(){
+		// summary: sets the focus state of this widget
+		var wasSaved = this._savedFocus;
+		this._savedFocus = dijit.getFocus(this);
+		if(!this._savedFocus.node){
+			delete this._savedFocus;
+		}
+		if(!this._focusedPane){
+			var child = this.getChildren()[0];
+			if(child && !wasSaved){
+				child.focus(true);
+			}
+		}else{
+			this._savedFocus = dijit.getFocus(this);
+			var foc = this._focusedPane;
+			delete this._focusedPane;
+			if(!wasSaved){
+				foc.focus(true);
+			}
 		}
 	},
 	
@@ -829,18 +871,8 @@ dojo.declare("dojox.widget.RollingList",
 		// summary: handle the key for the given event - called by dropdown
 		//	widgets
 		if(e.charOrCode == dojo.keys.DOWN_ARROW){
-			if(!this._focusedPane){
-				var child = this.getChildren()[0];
-				if(child){
-					this._savedFocus = dijit.getFocus(this);
-					child.focus();
-				}
-			}else{
-				this._savedFocus = dijit.getFocus(this);
-				var foc = this._focusedPane;
-				delete this._focusedPane;
-				foc.focus();
-			}
+			delete this._savedFocus;
+			this.focus();
 			return false;
 		}else if(e.charOrCode == dojo.keys.ESCAPE){
 			this.onCancel();

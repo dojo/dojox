@@ -43,6 +43,9 @@ Additional Notes (Brief widget list):
 
 	* FileInputAuto/Blind - extension to FileInput for 
 						added flair/automation
+						
+	* FilePickerTextBox - a validating text box that can browser server-side
+						files using a dojox.data.FileStore
 	
 	* DropDownStack/RadioStack - a widget that can toggle parts of a form as
 						"on" or "off" - to allow for different options based on 

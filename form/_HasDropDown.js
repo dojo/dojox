@@ -35,6 +35,11 @@ dojo.declare("dojox.form._HasDropDown",
 		//		default width
 		autoWidth: true,
 		
+		//	_stopClickEvents: Boolean
+		//		When set to false, the click events will not be stopped, in
+		//		case you want to use them in your subwidget
+		_stopClickEvents: true,
+		
 		_onMenuMouseup: function(/*Event*/ e){
 			// summary: called with the mouseup event if the mouseup occurred
 			//			over the menu.  You can try and use this event in
@@ -58,7 +63,9 @@ dojo.declare("dojox.form._HasDropDown",
 				this._docHandler = this.connect(dojo.doc, "onmouseup", "_onDropDownMouseup");
 			}
 			if(this.disabled || this.readOnly){ return; }
-			dojo.stopEvent(e);
+			if(this._stopClickEvents){
+				dojo.stopEvent(e);
+			}
 			this.toggleDropDown();
 
 			// If we are a click, then we'll pretend we did a mouse up
@@ -142,6 +149,15 @@ dojo.declare("dojox.form._HasDropDown",
 		_onDropDownKeydown: function(/*Event*/ e){
 			this._seenKeydown = true;
 		},
+		
+		_onKeyPress: function(/*Event*/ e){
+			if(this._opened && e.charOrCode == dojo.keys.ESCAPE && !e.shiftKey && !e.ctrlKey && !e.altKey){
+				this.toggleDropDown();
+				dojo.stopEvent(e);
+				return;
+			}
+			this.inherited(arguments);
+		},
 
 		_onDropDownBlur: function(/*Event*/ e){
 			this._seenKeydown = false;
@@ -150,6 +166,14 @@ dojo.declare("dojox.form._HasDropDown",
 		_onKey: function(/*Event*/ e){
 			// summary: callback when the user presses a key on menu popup node
 			if(this.disabled || this.readOnly){ return; }
+			var d = this.dropDown;
+			if(d && this._opened && d.handleKey){
+				if(d.handleKey(e) === false){ return; }
+			}
+			if(d && this._opened && e.keyCode == dojo.keys.ESCAPE){
+				this.toggleDropDown();
+				return;
+			}
 			if(e.keyCode == dojo.keys.DOWN_ARROW){
 				this._onDropDownMouse(e);
 			}
@@ -228,7 +252,11 @@ dojo.declare("dojox.form._HasDropDown",
 					var oldRight = adjustNode.offsetLeft + adjustNode.offsetWidth;
 				}
 				// make menu at least as wide as the node
-				dojo.marginBox(dropDown.domNode, {w: this.domNode.offsetWidth});
+				if(dropDown.resize){
+					dropDown.resize({w: this.domNode.offsetWidth});
+				}else{
+					dojo.marginBox(dropDown.domNode, {w: this.domNode.offsetWidth});
+				}
 				if(adjustNode){
 					adjustNode.style.left = oldRight - this.domNode.offsetWidth + "px";
 				}

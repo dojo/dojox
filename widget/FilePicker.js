@@ -10,6 +10,10 @@ dojo.declare("dojox.widget._FileInfoPane",
 	// summary: a pane to display the information for the currently-selected
 	//	file
 	
+	// templateString: string
+	//	delete our template string
+	templateString: "",
+	
 	// templatePath: string
 	//	Our template path
 	templatePath: dojo.moduleUrl("dojox.widget", "FilePicker/_FileInfoPane.html"),
@@ -77,7 +81,7 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 					this.fileSeparator = path.substring(parent.length, parent.length + 1);
 				}
 				if(!this.topDir){
-					this.topDir = parent;
+					this.topDir = parent + this.fileSeparator;
 				}
 			}
 		});
@@ -101,11 +105,7 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	
 	_onChange: function(/*item*/val){
 		this.onChange();
-		if(this.store.isItem(val)){
-			this.onPathChange(this.store.getValue(val, this.pathAttr));
-		}else{
-			this.onPathChange("");
-		}
+		this.onPathChange(this.getPathValue(val));
 	},
 	
 	getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
@@ -142,5 +142,18 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		this.store.fetchItemByIdentity({identity: path,
 										onItem: this.setValue,
 										scope: this});
+	},
+	
+	getPathValue: function(/*item?*/val){
+		// summary: returns the path value of the given value (or current value
+		//  if not passed a value)
+		if(!val){
+			val = this.value;
+		}
+		if(val && this.store.isItem(val)){
+			return this.store.getValue(val, this.pathAttr);
+		}else{
+			return "";
+		}
 	}
 });
