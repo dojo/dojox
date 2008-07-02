@@ -199,14 +199,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	resize: function(){
 		// summary: we aren't a layout widget, but need to act like one:
-		var size = dojo.marginBox(this.domNode);
-		// FIXME: do i even need to do this query/forEach? why not just set the containerHeight always
-		dojo.query("[attachParent]", this.domNode).forEach(function(n){
-			if(dijit.byNode(n)){
-				var h = size.h - this._titleHeight;
-				dojo.style(this.containerNode, "height", h + "px");
-			}
-		}, this);
+		var size = dojo.marginBox(this.domNode),
+			h = size.h - this._titleHeight;
+			
+		dojo.style(this.containerNode, "height", h + "px");
 		this.inherited(arguments);
 	},
 	

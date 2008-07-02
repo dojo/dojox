@@ -172,7 +172,7 @@
 		var _clone = null;
 		var searchCode = function(){
 			_clone = dojo.query(".cloneLoading")[0];
-			api = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc", "documentation.smd"));
+			api = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc", "SMDLibrary/dojo-api.smd"));
 			dojo.connect(dojo.byId("searchBox"),"onchange",runSearch);
 			dojo.connect(dojo.byId("runSearchIcon"),"onclick",runSearch);
 			dojo.connect(dojo.byId("searchResults"),"onclick",searchInteract);
@@ -262,27 +262,6 @@
 						<div class="wrap">
 							<p>This is a BorderContainer (the window). Each of the panes is set to one of
 							"left", "right", or "center". The left and right panes are ExpandoPanes (they collapse).
-							</p>
-							<p>
-							We can add other panes programatically:
-							<br>
-							<button dojoType="dijit.form.Button">
-								Add "Bottom"
-								<script type="dojo/method" event="onClick">
-									// create and startup a new ContentPane
-									var cp = new dijit.layout.ContentPane({
-										region:"bottom",
-										style:"height:65px",
-										splitter:"true"
-									});
-									cp.startup();
-									this.setAttribute("disabled",true);
-									cp.setHref("_bottomPane.html");
-									// add to our borderContainer
-									var bc = dijit.byId("bc");
-									bc.addChild(cp);
-								</script>
-							</button>
 							</p>
 							<p>What does a FloatingPane look like here?<br>
 							<button dojoType="dijit.form.Button">
