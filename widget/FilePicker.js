@@ -6,7 +6,7 @@ dojo.require("dojo.i18n");
 dojo.requireLocalization("dojox.widget", "FilePicker"); 
 
 dojo.declare("dojox.widget._FileInfoPane", 
-	[dojox.widget._RollingListPane, dijit._Templated], {
+	[dojox.widget._RollingListPane], {
 	// summary: a pane to display the information for the currently-selected
 	//	file
 	
@@ -42,9 +42,53 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	
 	className: "dojoxFilePicker",
 	
+	// fileSeparator: string
+	//  Our file separator - it will be guessed if not set
+	fileSeparator: "",
+	
+	// topDir: string
+	//	The top directory string - it will be guessed if not set
+	topDir: "",
+		
 	// parentAttr: string
 	//	the attribute to read for finding our parent directory
 	parentAttr: "parentDir",
+	
+	// pathAttr: string
+	//  the attribute to read for getting the full path of our file
+	pathAttr: "path",
+	
+	startup: function(){
+		if(this._started){ return; }
+		this.inherited(arguments);
+		// Figure out our file separator if we don't have it yet
+		var conn, child = this.getChildren()[0];
+		var setSeparator = dojo.hitch(this, function(){
+			if(conn){
+				this.disconnect(conn);
+			}
+			delete conn;
+			var item = child.items[0];
+			if(item){
+				var store = this.store;
+				var parent = store.getValue(item, this.parentAttr);
+				var path = store.getValue(item, this.pathAttr);
+				if(!this.fileSeparator){
+					this.fileSeparator = path.substring(parent.length, parent.length + 1);
+				}
+				if(!this.topDir){
+					this.topDir = parent;
+				}
+			}
+		});
+		if(!this.fileSeparator || !this.topDir){
+			if(!child.items){
+				conn = this.connect(child, "onItems", setSeparator);
+			}else{
+				setSeparator();
+			}
+		}
+	},
 	
 	getChildItems: function(item){
 		var ret = this.inherited(arguments);
@@ -53,6 +97,15 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 			ret = [];
 		}
 		return ret;
+	},
+	
+	_onChange: function(/*item*/val){
+		this.onChange();
+		if(this.store.isItem(val)){
+			this.onPathChange(this.store.getValue(val, this.pathAttr));
+		}else{
+			this.onPathChange("");
+		}
 	},
 	
 	getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
@@ -78,6 +131,10 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 			ret = new dojox.widget._FileInfoPane({});
 		}
 		return ret;
+	},
+	
+	onPathChange: function(/*string*/ newPath){
+		// Summary: called with the new path whenever a path has been changed
 	},
 	
 	setValueFromString: function(/*string*/ path){

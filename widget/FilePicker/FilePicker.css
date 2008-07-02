@@ -1,7 +1,16 @@
 @import url("../RollingList/RollingList.css");
 
+.dojoxFileInfoPane *{
+	white-space: normal;
+}
+
 .dojoxFileInfoLabel {
 	font-weight: bold;
+	white-space: nowrap;
+}
+
+.dojoxFileInfoPane {
+	width: 20em;
 }
 
 .tundra .dojoxFilePickerItem .dijitMenuItemIcon {

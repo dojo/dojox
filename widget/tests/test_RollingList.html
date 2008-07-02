@@ -135,16 +135,16 @@
 		}
 		doResize = function(){
 			var newSize = isBig ? {w: 340, h: 100} : {w: 500, h: 300};
-			dijit.byId("myList").resize(newSize);
+			myList.resize(newSize);
 			isBig = !isBig;
 		}
 		setValue = function(id){
 			if(id){
 				continentStore.fetchItemByIdentity({identity: id, onItem: function(i){
-					dijit.byId("myList").setValue(i);
+					myList.setValue(i);
 				}});
 			}else{
-				dijit.byId("myList").setValue(null);
+				myList.setValue(null);
 			}
 		}
 	</script>
@@ -159,7 +159,7 @@
 	</div>
 	
 	<h3>Rolling List - <input dojoType="dijit.form.TextBox" type="text" id="clickWatch" disabled value="None Selected..."></h3>
-	<div dojoType="dojox.widget.RollingList" id="myList" store="continentStore"
+	<div dojoType="dojox.widget.RollingList" jsId="myList" id="myList" store="continentStore"
 		query="{type:'continent'}">
 		<script type="dojo/method" event="onChange" args="value">
 			console.debug("Set Value:", value);
@@ -187,6 +187,7 @@
 	<hr>
 	<button dojoType="dijit.form.Button" onClick="setValue('Guadalajara')">Set Value to Guadalajara</button>
 	<button dojoType="dijit.form.Button" onClick="setValue('Africa')">Set Value to Africa</button>
+	<button dojoType="dijit.form.Button" onClick="setValue('Toronto')">Set Value to Toronto</button>
 	<button dojoType="dijit.form.Button" onClick="setValue('')">Set No Value</button>
 	<hr>
 	<button dojoType="dijit.form.Button" onClick="addTijuana()">Add Item To Mexico (Tijuana)</button>
