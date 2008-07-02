@@ -5,6 +5,7 @@
 	overflow-y: hidden;
 	overflow-x: scroll;
 	white-space: nowrap;
+	background-color: #FFF;
 }
 
 .dojoxRollingListPane {
