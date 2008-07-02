@@ -320,7 +320,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		
 		deferred.addCallback(function(data){
 			var item = self._processItem(data);
-			if (item && keywordArgs.onItem){
+			if (keywordArgs.onItem){
 				keywordArgs.onItem.call(scope, item);
 			}
 		});
