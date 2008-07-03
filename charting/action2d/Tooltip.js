@@ -8,45 +8,6 @@ dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.fold");
 
 (function(){
-	// TODO: merge to dijit._base.place eventually
-	var old = dijit.placeOnScreenAroundElement,
-		placeOnScreenAroundElement = function(
-		/* DomNode */			node,
-		/* DomNode|Object */	aroundNode,
-		/* Object */			aroundCorners,
-		/* Function */			layoutNode){
-	
-		// allows a rect object instead of aroundNode
-		if(!aroundNode || typeof aroundNode != "object" || aroundNode.type !== "rect"){
-			// old processing
-			return old(node, aroundNode, aroundCorners, layoutNode);
-		}
-
-		// new processing
-		var aroundNodeW = aroundNode.width,
-			aroundNodeH = aroundNode.height,
-			aroundNodePos = {x: aroundNode.x, y: aroundNode.y};
-		
-		// the rest is unchanged code of the original dijit.placeOnScreenAroundElement()
-	
-		// Generate list of possible positions for node
-		var choices = [];
-		for(var nodeCorner in aroundCorners){
-			choices.push( {
-				aroundCorner: nodeCorner,
-				corner: aroundCorners[nodeCorner],
-				pos: {
-					x: aroundNodePos.x + (nodeCorner.charAt(1) == 'L' ? 0 : aroundNodeW),
-					y: aroundNodePos.y + (nodeCorner.charAt(0) == 'T' ? 0 : aroundNodeH)
-				}
-			});
-		}
-	
-		return dijit._place(node, choices, layoutNode);
-	};
-	// replace the original function to support our case
-	dijit.placeOnScreenAroundElement = placeOnScreenAroundElement;
-	
 	var DEFAULT_TEXT = function(o){
 		var t = o.run && o.run.data && o.run.data[o.index];
 		if(t && typeof t == "object" && t.tooltip){
