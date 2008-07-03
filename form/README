@@ -29,8 +29,6 @@ Installation instructions
 -------------------------------------------------------------------------------
 Additional Notes (Brief widget list):
 
-	* _ColorPicker - An HSV ColorPicker intended to be a drop down
-
 	* CheckedMultiSelect - an extension to dijit.form.MultiSelect which
 						uses check boxes instead of ctrl-click
 

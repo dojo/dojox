@@ -49,6 +49,8 @@ Installation instructions
 -------------------------------------------------------------------------------
 Other Notes (Brief widget list):
 
+    * ColorPicker - An HSV ColorPicker intended to be a drop down
+
 	* FilePicker - a widget for browsing server-side file systems (can use
 		dojox.data.FileStore as backend store)
 

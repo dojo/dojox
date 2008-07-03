@@ -7,7 +7,7 @@
 	
 	<!-- required: a default theme file, and ColorPicker css -->
 	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css">
-	<link rel="stylesheet" href="../resources/_ColorPicker.css">
+	<link rel="stylesheet" href="../ColorPicker/ColorPicker.css">
 
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
@@ -26,9 +26,9 @@
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 	
 	<!-- debugging include -->
-	<script type="text/javascript" src="../_ColorPicker.js"></script>
+	<script type="text/javascript" src="../ColorPicker.js"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.form._ColorPicker");
+		dojo.require("dojox.widget.ColorPicker");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 
 		// generic onChange handler:
@@ -43,13 +43,13 @@
 	<h1 class="testTitle">Dojox ColorPicker test</h1>
 
 	<h3>defaults:</h3>
-	<div id="picker" dojoType="dojox.form._ColorPicker"
+	<div id="picker" dojoType="dojox.widget.ColorPicker"
 		onChange="handler(arguments[0],'onchangeOne')"
 	></div>
 	<p>Current value: <input readonly="true" id="onchangeOne" value="???" /></p>
 	
 	<h3>no animation, no hsv, no rgb, no webSafe info:</h3>
-	<div id="pickerToo" dojoType="dojox.form._ColorPicker"
+	<div id="pickerToo" dojoType="dojox.widget.ColorPicker"
 		animatePoint="false"
 		showHsv="false"
 		showRgb="false"	
@@ -59,7 +59,7 @@
 	<p>Current value: <input readonly="true" id="onchangeTwo" value="???" /></p>
 	
 	<h3>Fires onChange a lot:</h3>
-	<div id="pickerLive" dojoType="dojox.form._ColorPicker"
+	<div id="pickerLive" dojoType="dojox.widget.ColorPicker"
 		webSafe="false"
 		liveUpdate="true"
 		onChange="handler(arguments[0],'onchangeThree')"
@@ -68,7 +68,7 @@
 	
 	<div id="absolutey">
 		<h3>To See how it positions in an absolute node (editor plugin, input popup)</h3>
-		<div dojoType="dojox.form._ColorPicker"></div>
+		<div dojoType="dojox.widget.ColorPicker"></div>
 		
 	</div>
 	

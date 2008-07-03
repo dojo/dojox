@@ -1,5 +1,5 @@
-dojo.provide("dojox.form._ColorPicker");
-dojo.experimental("dojox.form._ColorPicker"); // level: beta
+dojo.provide("dojox.widget.ColorPicker");
+dojo.experimental("dojox.widget.ColorPicker"); // level: beta
 
 dojo.require("dijit.form._FormWidget");
 dojo.require("dojo.dnd.move"); 
@@ -106,7 +106,7 @@ dojo.require("dojo.fx");
 		return hex;
 	}
 		
-	dojo.declare("dojox.form._ColorPicker",
+	dojo.declare("dojox.widget.ColorPicker",
 		dijit.form._FormWidget,
 		{
 		// summary: a HSV color picker - similar to Photoshop picker
@@ -158,8 +158,8 @@ dojo.require("dojo.fx");
 		//		Set to true to fire onChange in an indeterminate way
 		liveUpdate: false, 
 
-		_underlay: dojo.moduleUrl("dojox.form","resources/images/underlay.png"),
-		templatePath: dojo.moduleUrl("dojox.form","resources/_ColorPicker.html") + "?" + new Date().toString(),
+		_underlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
+		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html") + "?" + new Date().toString(),
 
 		postCreate: function(){
 			// summary: As quickly as we can, set up ie6 alpha-filter support for our
