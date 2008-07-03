@@ -55,8 +55,32 @@ dojox.color.Generator = new (function(){
 		return ret.slice(0, limit);
 	};
 
-	//	the color generator
-	this.analogous= function(/* Object */kwArgs){
+	/*=====
+	dojox.color.__AnalogousArgs = function(){
+		//	base: String | dojox.Color
+		//		The base color from which to derive all other colors.
+		//	series: Number
+		//		The number of lines to generate
+		//	num: Number
+		//		The number of colors to generate
+		//	angleHigh: Number
+		//		The high hue angle of difference from the base color, subtracted
+		//	angleLow: Number
+		//		The low hue angle of difference from the base color, added
+		//	high: Float
+		//		The high part of the range to generate tints and shades
+		//	low: Float
+		//		The low part of the range to generate tints and shades
+		this.base = base;
+		this.series = series;
+		this.num = num;
+		this.angleHigh = angleHigh;
+		this.angleLow = angleLow;
+		this.high = high;
+		this.low = low;
+	}
+	=====*/
+	this.analogous= function(/* dojox.color.__AnalogousArgs */kwArgs){
 		//	summary
 		//	generates n colors based on a base color, based on a fixed hue angle delta
 		//	(relative to the base hue) with slight variations in saturation.
@@ -99,7 +123,23 @@ dojox.color.Generator = new (function(){
 		return flatten(m, num);	//	Array
 	};
 	
-	this.monochromatic = function(/* Object */kwArgs){
+	/*=====
+	dojox.color.__GeneratorArgs = function(){
+		//	base: String | dojox.Color
+		//		The base color from which to derive all other colors.
+		//	num: Number
+		//		The number of colors to generate
+		//	high: Float
+		//		The high part of the range to generate tints and shades
+		//	low: Float
+		//		The low part of the range to generate tints and shades
+		this.base = base;
+		this.num = num;
+		this.high = high;
+		this.low = low;
+	}
+	=====*/
+	this.monochromatic = function(/* dojox.color.__GeneratorArgs */kwArgs){
 		//	summary
 		//	generates n colors based on a base color, using alterations to the RGB model only.
 		kwArgs=dojo.mixin({
@@ -116,7 +156,7 @@ dojox.color.Generator = new (function(){
 		return a;	// Array
 	};
 	
-	this.triadic = function(/* Object */kwArgs){
+	this.triadic = function(/* dojox.color.__GeneratorArgs */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using the triadic rules, rough
 		//	approximation from kuler.adobe.com.
@@ -150,7 +190,7 @@ dojox.color.Generator = new (function(){
 		return flatten(m, num);	//	Array
 	};
 	
-	this.complementary = function(/* Object */kwArgs){
+	this.complementary = function(/* dojox.color.__GeneratorArgs */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using complimentary rules.
 		kwArgs=dojo.mixin({
@@ -170,7 +210,26 @@ dojox.color.Generator = new (function(){
 		return flatten(m, num);	//	Array
 	};
 	
-	this.splitComplementary = function(/* Object */kwArgs){
+	/*=====
+	dojox.color.__GeneratorAngleArgs = function(){
+		//	base: String | dojox.Color
+		//		The base color from which to derive all other colors.
+		//	num: Number
+		//		The number of colors to generate
+		//	angle: Number
+		//		The angle of hue difference from the base color to use
+		//	high: Float
+		//		The high part of the range to generate tints and shades
+		//	low: Float
+		//		The low part of the range to generate tints and shades
+		this.base = base;
+		this.num = num;
+		this.angle = angle;
+		this.high = high;
+		this.low = low;
+	}
+	=====*/
+	this.splitComplementary = function(/* dojox.color.__GeneratorAngleArgs */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using split complimentary rules.
 		kwArgs=dojo.mixin({
@@ -195,7 +254,7 @@ dojox.color.Generator = new (function(){
 		return flatten(m, num);	//	Array
 	};
 	
-	this.compound = function(/* Object */kwArgs){
+	this.compound = function(/* dojox.color.__GeneratorAngleArgs */kwArgs){
 		//	summary
 		//	generates n colors from a base color, using a *very* rough approximation
 		//	of the Compound rules at http://kuler.adobe.com
@@ -233,7 +292,7 @@ dojox.color.Generator = new (function(){
 		return flatten(m, num);	//	Array
 	};
 	
-	this.shades = function(/* Object */kwArgs){
+	this.shades = function(/* dojox.color.__GeneratorArgs */kwArgs){
 		//	summary
 		//	generates n colors based on a base color using only changes
 		//	in value.  Similar to monochromatic but a bit more linear.
