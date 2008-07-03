@@ -7,7 +7,7 @@ dojo.loadInit(function(){
 	//Since loaderInit can be fired before any dojo.provide/require calls,
 	//make sure the dojox.gfx object exists and only run this logic if dojox.gfx.renderer
 	//has not been defined yet.
-	var gfx = dojo.getObject("dojox.gfx", true);
+	var gfx = dojo.getObject("dojox.gfx", true), sl, flag;
 	if(!gfx.renderer){
 		var renderers = (typeof dojo.config["gfxRenderer"] == "string" ?
 			dojo.config["gfxRenderer"] : "svg,vml,silverlight,canvas").split(",");
@@ -21,8 +21,23 @@ dojo.loadInit(function(){
 					if(dojo.isIE != 0){ dojox.gfx.renderer = "vml"; }
 					break;
 				case "silverlight":
-					//TODO: need more comprehensive test for Silverlight
-					if(window.Silverlight){ dojox.gfx.renderer = "silverlight"; }
+					try{
+						if(dojo.isIE){
+							sl = new ActiveXObject("AgControl.AgControl");
+							if(sl && sl.IsVersionSupported("1.0")){
+								flag = true;
+							}
+						}else{
+							if(navigator.plugins["Silverlight Plug-In"]){
+								flag = true;
+							}
+						}
+					}catch(e){
+						flag = false;
+					}finally{
+						sl = null;
+					}
+					if(flag){ dojox.gfx.renderer = "silverlight"; }
 					break;
 				case "canvas":
 					//TODO: need more comprehensive test for Canvas
