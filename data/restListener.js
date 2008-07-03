@@ -1,5 +1,5 @@
 dojo.provide("dojox.data.restListener");
-dojo.require("dojox.rpc.Rest");
+dojo.require("dojox.rpc.JsonRest");
 
 dojox.data.restListener = function(message){
 	// summary:
@@ -11,8 +11,16 @@ dojox.data.restListener = function(message){
 	// 	|		dojox.restListener(data);
 	//	|	});
 	var channel = message.channel;
-	var service = dojox.rpc.Rest.getServiceAndId(channel).service;
-	var result = service.cache.intake(message.data, message.event == 'put' && channel);
+	var jr = dojox.rpc.JsonRest;
+	var service = jr.getServiceAndId(channel).service;
+	var result = dojox.json.ref.resolveJson(message.data, {
+					defaultId: message.event == 'put' && channel,
+					index: dojox.rpc.Rest._index,
+					idPrefix: service.servicePath,
+					idAttribute: jr.getIdAttribute(service),
+					schemas: jr.schemas,
+					loader: jr._loader
+				});
 	var target = dojox.rpc.Rest._index && dojox.rpc.Rest._index[channel];
 	var onEvent = 'on' + message.event.toLowerCase();
 	var store = service && service._store;

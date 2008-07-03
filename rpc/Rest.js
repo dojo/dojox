@@ -47,7 +47,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 				range = deferred.ioArgs.xhr.getResponseHeader("Content-Range");
 				deferred.fullLength = range && (range=range.match(/\/(.*)/)) && parseInt(range[1]);
 			}
-			return service.cache.intake(result,id);
+			return result;
 		});
 		return deferred;
 	}
@@ -58,14 +58,6 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		// it should be in the form /Table/
 		path = path.match(/\/$/) ? path : (path + '/');
 		service = function(id){
-			// if caching is allowed, we look in the cache for the result
-			var result = !drr._dontCache && !start && !end && drr._index[(service.servicePath || '') + id];
-			drr._dontCache=0; // reset it
-			if(result && !result._loadObject){// cache hit
-				var dfd = new dojo.Deferred();
-				dfd.callback(result);
-				return dfd;
-			}
 			return drr._get(service,id);
 		};
 		service.isJson = isJson;
@@ -75,23 +67,6 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		// 		This can be overriden to take advantage of more complex referencing/indexing
 		// 		schemes
 		service.cache = {
-			intake:function(result,id){
-				// use json referencing if possible to do indexing when it is a JSON Rest service
-				if(isJson && dojox.json && dojox.json.ref && result){
-					return dojox.json.ref.resolveJson(result, {
-						defaultId: id,
-						index: drr._index,
-						idPrefix: path,
-						idAttribute: drr.getIdAttribute(service),
-						services: dojox.rpc.services
-					});
-				}
-				if(drr._index.onLoad){
-					drr._index.onLoad(result, id);
-				}
-				drr._index[(path || '') + id] = result;
-				return result;
-			},
 			serialize: isJson ? ((dojox.json && dojox.json.ref) || dojo).toJson : function(result){
 				return result;
 			}
@@ -103,7 +78,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		// each calls the event handler
 		function makeRest(name){
 			service[name] = function(id,content){
-				return drr._change(name,service,id,content && service.cache.serialize(content,false,path),content); // the last parameter is to let the OfflineRest know where to store the item
+				return drr._change(name,service,id,content); // the last parameter is to let the OfflineRest know where to store the item
 			};
 		}
 		makeRest('put');
@@ -139,34 +114,6 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		request[method+"Data"] = content;
 		return index(dojo.xhr(method.toUpperCase(),request,true),service);
 	};
-	drr.getIdAttribute = function(service){
-		// summary:
-		//		Return the ids attribute used by this service (based on it's schema).
-		//		Defaults to "id", if not other id is defined
-		var schema = service._schema;
-		var idAttr;
-		if(schema){
-			if(!(idAttr = schema._idAttr)){
-				for(var i in schema.properties){
-					if(schema.properties[i].unique){
-						schema._idAttr = idAttr = i;
-					}
-				}
-			}
-		}
-		return idAttr || 'id';
-	};		
-	
-	drr.getServiceAndId = function(/*String*/absoluteId){
-		// summary:
-		//		Returns the REST service and the local id for the given absolute id. The result 
-		// 		is returned as an object with a service property and an id property
-		//	absoluteId:
-		//		This is the absolute id of the object
-		var parts = absoluteId.match(/^(.+\/)([^\/]*)$/);
-		var svc = dojox.rpc.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
-		return { service: svc, id:parts[2] };
-	};
 	drr.setQueryInfo = function(/*Object*/args){
 		// summary:
 		//		Sets extra meta-information prior to a query, to assist in querying
@@ -182,6 +129,9 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		end = args.end;
 		drr._dontCache = args.dontCache;
 	};
+	drr._isCacheable = function(){
+		return !drr._dontCache && !start && !end; 
+	} 
 	drr._get= function(service,id){
 		var req = dojo.mixin(service._getRequest(id), {
 			headers: {

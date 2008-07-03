@@ -1,12 +1,13 @@
 dojo.provide("dojox.rpc.JsonRest");
+
+dojo.require("dojox.json.ref"); // this provides json indexing
 dojo.require("dojox.rpc.Rest");
 // summary:
 // 		Provides JSON/REST utility functions
 (function(){
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
-	var jr = dojox.rpc.JsonRest;
-	dojox.rpc.JsonRest={
+	var jr = dojox.rpc.JsonRest={
 		commit: function(kwArgs){
 			// summary:
 			//		Saves the dirty data using REST Ajax methods
@@ -15,6 +16,7 @@ dojo.require("dojox.rpc.Rest");
 			var left; // this is how many changes are remaining to be received from the server
 			kwArgs = kwArgs || {};
 			function finishOne(value){
+				
 				if(!(--left)){
 					dirtyObjects.splice(0,numDirty); // remove all the objects that were committed
 					if(kwArgs.onComplete){
@@ -26,13 +28,14 @@ dojo.require("dojox.rpc.Rest");
 			var actions = [];
 			var numDirty = dirtyObjects.length;
 			var alreadyRecorded = {};
+			
 			for(var i = 0; i < numDirty; i++){
 				var dirty = dirtyObjects[i];
 				var object = dirty.object;
 				var append = false;
 				if(object && !dirty.old){
 					// new object
-					actions.push({method:"post",target:{__id:Rest.getServiceAndId(object.__id).service.servicePath},
+					actions.push({method:"post",target:{__id:jr.getServiceAndId(object.__id).service.servicePath},
 											content:object});
 				}else if(!object && dirty.old){
 					// deleted object
@@ -71,9 +74,14 @@ dojo.require("dojox.rpc.Rest");
 					// the last one should disconnect, so no transaction header is sent and thus commit the transaction
 					dojo.xhr = plainXhr;
 				}
-				var dfd = Rest[action.method](action.target,action.content);
+				dojox.rpc.JsonRest._contentId = action.content && action.content.__id; // this is used by LocalStorageRest
+				var dfd = Rest[action.method](
+									action.target,
+									dojox.json.ref.toJson(action.content,false,jr.getServiceAndId(action.target.__id).service.servicePath)
+								);
 				dfd.addCallback(finishOne);
 				dfd.addErrback(function(value){
+					
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
 					left = -1; // first make sure that success isn't called
 					var postCommitDirtyObjects = dirtyObjects.splice(numDirty,dirtyObjects.length - numDirty);
@@ -85,6 +93,7 @@ dojo.require("dojox.rpc.Rest");
 					}
 				});
 			}
+			
 			return actions;
 		},
 		getDirtyObjects: function(){
@@ -98,7 +107,9 @@ dojo.require("dojox.rpc.Rest");
 				if(d.object && d.old){
 					// changed
 					for(var i in d.old){
-						d.object[i] = d.old[i];
+						if(d.old.hasOwnProperty(i)){
+							d.object[i] = d.old[i];
+						}
 					}
 					for(i in d.object){
 						if(!d.old.hasOwnProperty(i)){
@@ -156,8 +167,10 @@ dojo.require("dojox.rpc.Rest");
 				//
 				//	data:
 				//		object to mixed in
-				dojo.mixin(this,data);
-				Rest._index[this.__id = service.servicePath + (data[Rest.getIdAttribute(service)] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14))] = this;
+				if(data){
+					dojo.mixin(this,data);
+				}
+				Rest._index[this.__id = service.servicePath + (data[jr.getIdAttribute(service)] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14))] = this;
 				dirtyObjects.push({object:this});
 	//			this._getParent(parentInfo).push(data); // append to this list
 
@@ -167,8 +180,78 @@ dojo.require("dojox.rpc.Rest");
 		fetch: function(absoluteId){
 			// summary:
 			//		Fetches a resource by an absolute path/id and returns a dojo.Deferred.
-			var serviceAndId = Rest.getServiceAndId(absoluteId);
-			return serviceAndId.service(serviceAndId.id);
+			var serviceAndId = jr.getServiceAndId(absoluteId);
+			return this.get(serviceAndId.service,serviceAndId.id);
+		},
+		getIdAttribute: function(service){
+			// summary:
+			//		Return the ids attribute used by this service (based on it's schema).
+			//		Defaults to "id", if not other id is defined
+			var schema = service._schema;
+			var idAttr;
+			if(schema){
+				if(!(idAttr = schema._idAttr)){
+					for(var i in schema.properties){
+						if(schema.properties[i].unique){
+							schema._idAttr = idAttr = i;
+						}
+					}
+				}
+			}
+			return idAttr || 'id';
+		},
+		getServiceAndId: function(/*String*/absoluteId){
+			// summary:
+			//		Returns the REST service and the local id for the given absolute id. The result 
+			// 		is returned as an object with a service property and an id property
+			//	absoluteId:
+			//		This is the absolute id of the object
+			var parts = absoluteId.match(/^(.+\/)([^\/]*)$/);
+			var svc = jr.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
+			return { service: svc, id:parts[2] };
+		},
+		services:{},
+		schemas:{},
+		registerService: function(/*Function*/ service, /*String*/ servicePath, /*Object?*/ schema){
+			//	summary:
+			//		Registers a service for as a JsonRest service, mapping it to a path and schema
+			service.servicePath = servicePath || service.servicePath;
+			jr.schemas[service.servicePath] = schema || service._schema || {};
+			jr.services[service.servicePath] = service;
+		},
+		get: function(service, id){
+			// if caching is allowed, we look in the cache for the result
+			var deferred, result = Rest._isCacheable() && Rest._index[(service.servicePath || '') + id];
+			Rest._dontCache=0; // reset it
+			if(result && !result._loadObject){// cache hit
+				deferred = new dojo.Deferred();
+				deferred.callback(result);
+				return deferred;
+			}
+			
+			deferred = service(id);
+			deferred.addCallback(function(result){
+				return dojox.json.ref.resolveJson(result, {
+					defaultId: id,
+					index: Rest._index,
+					idPrefix: service.servicePath,
+					idAttribute: jr.getIdAttribute(service),
+					schemas: jr.schemas,
+					loader:	jr._loader
+				});
+			});
+			return deferred;			
+		},
+		_loader: function(callback){
+			// load a lazy object
+			var serviceAndId = jr.getServiceAndId(this.__id);
+			jr.get(serviceAndId.service, serviceAndId.id).addBoth(function(result){
+				// if they are the same this means an object was loaded, otherwise it 
+				// might be a primitive that was loaded or maybe an error
+				delete result.$ref;
+				delete result._loadObject;
+				callback(result);
+			});
 		},
 		isDirty: function(item){
 			// summary

@@ -38,7 +38,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 		absoluteUrl: function(relativeUrl){
 			return new dojo._Url(location.href,relativeUrl)+'';
 		},
-		acceptType: "application/http+json,application/http;q=0.9,*/*;q=0.7",
+		acceptType: "x-application/http+json,application/http;q=0.9,*/*;q=0.7",
 		subscriptions: {},
 		subCallbacks: {},
 		autoReconnectTime: 30000,

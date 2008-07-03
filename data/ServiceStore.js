@@ -270,7 +270,7 @@ dojo.declare("dojox.data.ServiceStore",
 			var self = this;
 			
 			var scope = args.scope || self;
-			var defResult = this.service(query);
+			var defResult = this._doQuery(query);
 			defResult.addCallback(function(results){
 				
 				var resultSet = self._processResults(results, defResult);
@@ -296,7 +296,9 @@ dojo.declare("dojox.data.ServiceStore",
 			args.store = this;
 			return args;
 		},
-		
+		_doQuery: function(query){
+			return this.service(query);
+		},
 		getFeatures: function(){
 			// summary:
 			// 		return the store feature set

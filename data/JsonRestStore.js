@@ -2,7 +2,6 @@ dojo.provide("dojox.data.JsonRestStore");
 
 dojo.require("dojox.data.ServiceStore");
 dojo.require("dojox.rpc.JsonRest");
-dojo.require("dojox.json.ref"); // this provides json indexing
 
 
 // A JsonRestStore takes a REST service or a URL and uses it the remote communication for a
@@ -39,7 +38,7 @@ dojo.require("dojox.json.ref"); // this provides json indexing
 // When using a Rest store on a public network, it is important to implement proper security measures to
 // control access to resources
 dojo.declare("dojox.data.JsonRestStore",
-	dojox.data.ServiceStore,
+	dojox.data.LiveResultSets ? [dojox.data.ServiceStore, dojox.data.LiveResultSets] : dojox.data.ServiceStore, // use live result sets if available
 	{
 		constructor: function(options){
 			//summary:
@@ -92,11 +91,16 @@ dojo.declare("dojox.data.JsonRestStore",
 			//setup a byId alias to the api call
 			if(this.target && !this.service){
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
-				this.target = this.service.servicePath;
 			}
-			this.service._schema = this.schema || this.service._schema || {};
+			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
+			// wrap the service with so it goes through JsonRest manager 
+			/*this.service = function(id){
+				return dojox.rpc.JsonRest.get(rawService,id);
+			}
+			dojo.mixin(this.service,rawService); // copy all the properties to our wrapper
+			this.service._schema = this.schema || rawService._schema || {};
 			dojox.rpc.services = dojox.rpc.services || {};
-			dojox.rpc.services[this.service.servicePath] = this.service;
+			dojox.rpc.services[this.service.servicePath] = this.service;*/
 			/*else if(!(this.service.contentType + '').match(/application\/.*json/)){
 				throw new Error("A service must use a contentType of 'application/json' in order to be used in a JsonRestStore");
 			}*/
@@ -236,7 +240,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//
 			//	item: /* object */
 			//	attribute: /* string */
-			return item && item.__id && this.service == dojox.rpc.Rest.getServiceAndId(item.__id).service;
+			return item && item.__id && this.service == dojox.rpc.JsonRest.getServiceAndId(item.__id).service;
 		},
 
 		fetch: function(args){
@@ -254,6 +258,9 @@ dojo.declare("dojox.data.JsonRestStore",
 			queryInfo.dontCache = args.dontCache; // TODO: Add TTL maybe?
 			dojox.rpc.Rest.setQueryInfo(queryInfo);
 			return this.inherited(arguments);
+		},
+		_doQuery: function(query){
+			return dojox.rpc.JsonRest.get(this.service,query);
 		},
 		_processResults: function(results, deferred){
 			// index the results
@@ -295,5 +302,5 @@ dojo.declare("dojox.data.JsonRestStore",
 	}
 );
 dojox.data._getStoreForItem = function(item){
-	return dojox.rpc.services[item.__id.match(/.*\//)[0]]._store;
+	return dojox.rpc.JsonRest.services[item.__id.match(/.*\//)[0]]._store;
 };
