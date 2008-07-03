@@ -54,4 +54,7 @@ Additional Notes (Brief widget list):
     * MultiComboBox - an experimental ComboBox that allows
 						multiple entries bases on a separator character.
 
+    * TimeSpinner - a number spinner that revolves through
+						time constrainsts
+
 

@@ -1,4 +1,4 @@
-dojo.provide("dojox.widget.TimeSpinner");
+dojo.provide("dojox.form.TimeSpinner");
 
 dojo.require("dijit.form._Spinner");
 dojo.require("dijit.form.NumberTextBox");
@@ -7,7 +7,7 @@ dojo.require("dojo.date.locale");
 dojo.require("dojo.date.stamp");
 
 dojo.declare(
-"dojox.widget.TimeSpinner",
+"dojox.form.TimeSpinner",
 [dijit.form._Spinner],
 {
 	// summary: Time Spinner

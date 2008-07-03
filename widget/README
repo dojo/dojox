@@ -68,9 +68,6 @@ Other Notes (Brief widget list):
 	* PlaceholderMenuItem - a menu item that can be used to inject other menu
 		items at a given location.
 
-	* TimeSpinner - a number spinner that revolves through
-		time constrainsts
-
 	* Toaster - a messaging system to display non-obstrusive 
 		alerts on screen.
 
