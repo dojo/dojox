@@ -555,6 +555,19 @@ dojo.requireLocalization("dojox.grid", "grid");
 			var h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 			this.views.onEach('setSize', [0, h]);
 			this.views.onEach('adaptHeight');
+			if(!this.autoHeight){
+				var numScroll = 0, numNoScroll = 0;
+				var noScrolls = dojo.filter(this.views.views, function(v){
+					var has = v.hasHScrollbar();
+					if(has){ numScroll++; }else{ numNoScroll++; }
+					return (!has);
+				});
+				if(numScroll > 0 && numNoScroll > 0){
+					dojo.forEach(noScrolls, function(v){
+						v.adaptHeight(true);
+					});
+				}
+			}
 			this.scroller.windowHeight = h;
 		},
 

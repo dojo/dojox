@@ -945,9 +945,12 @@ dojo.require("dojo.dnd.Manager");
 			return false;
 		},
 
-		adaptHeight: function(){
+		adaptHeight: function(minusScroll){
 			if(!this.grid.autoHeight){
 				var h = this.domNode.clientHeight;
+				if(minusScroll){
+					h -= dojox.html.metrics.getScrollbar().h;
+				}
 				dojox.grid.util.setStyleHeightPx(this.scrollboxNode, h);
 			}
 			this.hasVScrollbar(true);
