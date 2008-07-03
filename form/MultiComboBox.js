@@ -1,9 +1,9 @@
-dojo.provide("dojox.widget.MultiComboBox");
-dojo.experimental("dojox.widget.MultiComboBox"); 
+dojo.provide("dojox.form.MultiComboBox");
+dojo.experimental("dojox.form.MultiComboBox"); 
 dojo.require("dijit.form.ComboBox");
 dojo.require("dijit.form.ValidationTextBox");
 
-dojo.declare("dojox.widget.MultiComboBox",
+dojo.declare("dojox.form.MultiComboBox",
 	[dijit.form.ValidationTextBox, dijit.form.ComboBoxMixin],{
 	//
 	// summary: A ComboBox that accpets multiple inputs on a single line?
@@ -49,7 +49,7 @@ dojo.declare("dojox.widget.MultiComboBox",
 		text = this._cleanupDelimiters(text);
 		var re = new RegExp("^.*"+this.delimiter+" *");
 		
-		if(this._previousMatches = text.match(re)){
+		if((this._previousMatches = text.match(re))){
 			arguments[0] = text.replace(re, "");
 		}
 		this.inherited(arguments);

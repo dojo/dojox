@@ -61,9 +61,6 @@ Other Notes (Brief widget list):
 		connections in the background, and displays 
 		a loading indicator.
 
-	* MultiComboBox - an experimental ComboBox that allows
-		multiple entries bases on a separator character.
-
 	* SortList - a degradable UL with a fixed header, scrolling,
 		and sorting. Can be the direct descendat of a
 		LayoutContainer and will size to fit.

@@ -17,14 +17,14 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js"
 			djConfig="isDebug: true, parseOnLoad: true"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.widget.MultiComboBox"); 
+			dojo.require("dojox.form.MultiComboBox"); 
 			dojo.require("dojo.data.ItemFileReadStore"); 
 			dojo.require("dijit.form.Button"); 
 		</script>
 	</head>
 	<body class="tundra">
 		
-		<h1 class="testTitle">dojox.widget.MultiComboBox</h1>
+		<h1 class="testTitle">dojox.form.MultiComboBox</h1>
 		<p>
 		This widget is an extension to ComboBox to allow "tag" style input using a datastore. Start typing
 		into the box, and your options will be presented. The default delimiter is a comma, which can be over-ridden
@@ -35,14 +35,14 @@
 			url="_tags.json"></div>
 		
 		<h3>Default:</h3>		
-		<input dojoType="dojox.widget.MultiComboBox" id="frogin"
+		<input dojoType="dojox.form.MultiComboBox" id="frogin"
 			store="memberTagStore"
 			value=""
 			searchAttr="tag"
 			name="tags" />
 
 		<h3>Alternate delimiter (:)</h3>
-		<input dojoType="dojox.widget.MultiComboBox" id="frogin2"
+		<input dojoType="dojox.form.MultiComboBox" id="frogin2"
 			store="memberTagStore"
 			value=""
 			delimiter=":"
@@ -53,7 +53,7 @@
 		<button dojoType="dijit.form.Button">
 			Make it.
 			<script type="dojo/method" event="onClick">
-				var widget = new dojox.widget.MultiComboBox({
+				var widget = new dojox.form.MultiComboBox({
 					store:memberTagStore,
 					searchAttr:"tag"
 				},"frogin3");

@@ -50,3 +50,8 @@ Additional Notes (Brief widget list):
 	* DropDownStack/RadioStack - a widget that can toggle parts of a form as
 						"on" or "off" - to allow for different options based on 
 						the value selected.
+
+    * MultiComboBox - an experimental ComboBox that allows
+						multiple entries bases on a separator character.
+
+
