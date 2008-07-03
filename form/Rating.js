@@ -1,8 +1,8 @@
-dojo.provide("dojox.widget.Rating");
+dojo.provide("dojox.form.Rating");
 
 dojo.require("dijit.form._FormWidget");
 
-dojo.declare("dojox.widget.Rating",
+dojo.declare("dojox.form.Rating",
 	dijit.form._FormWidget,{
 	// summary:
 	//		A widget for rating using stars.

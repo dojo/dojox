@@ -10,6 +10,7 @@ experimental
 Credits
 	Nathan Toone (nathan)
 	Peter Higgins	(dante)
+    Wolfram Kriesing (http://wolfram.kriesing.de/blog/): Rating
 -------------------------------------------------------------------------------
 Project description
 
@@ -28,16 +29,17 @@ Installation instructions
 -------------------------------------------------------------------------------
 Additional Notes (Brief widget list):
 
+	* _ColorPicker - An HSV ColorPicker intended to be a drop down
+
 	* CheckedMultiSelect - an extension to dijit.form.MultiSelect which
 						uses check boxes instead of ctrl-click
 
-	* PasswordValidator - a widget which simplifies the common "old/new/verify" 
-						mechanism of specifying passwords
- 	
  	* DropDownSelect - an extension to dijit.form.DropDownButton which is
  						meant to mirror the html <select> drop down
 
-	* _ColorPicker - An HSV ColorPicker intended to be a drop down
+	* DropDownStack/RadioStack - a widget that can toggle parts of a form as
+						"on" or "off" - to allow for different options based on 
+						the value selected.
 
 	* FileInput - experimental dijit-like input type="file"
 
@@ -47,14 +49,13 @@ Additional Notes (Brief widget list):
 	* FilePickerTextBox - a validating text box that can browser server-side
 						files using a dojox.data.FileStore
 	
-	* DropDownStack/RadioStack - a widget that can toggle parts of a form as
-						"on" or "off" - to allow for different options based on 
-						the value selected.
-
     * MultiComboBox - an experimental ComboBox that allows
 						multiple entries bases on a separator character.
 
+	* PasswordValidator - a widget which simplifies the common "old/new/verify" 
+						mechanism of specifying passwords
+
+	* Rating - a star-based rating widget
+ 	
     * TimeSpinner - a number spinner that revolves through
 						time constrainsts
-
-

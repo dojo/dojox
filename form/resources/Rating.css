@@ -5,7 +5,7 @@
 
 .dojoxRatingStar {
 	display:inline-block;
-	background-image:url(rating_empty.gif);
+	background-image:url(images/rating_empty.gif);
 	background-position:left center;
 	position:relative;
 	height:15px;
@@ -14,11 +14,11 @@
 }
 
 .dojoxRatingStarChecked {
-	background-image:url(rating_full.gif);
+	background-image:url(images/rating_full.gif);
 }
 
 .dojoxRatingStarHover {
-	background-image:url(rating_full.gif);
+	background-image:url(images/rating_full.gif);
 	opacity:.5;
 }
 

@@ -7,7 +7,7 @@
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
-		@import "../Rating/Rating.css"; 
+		@import "../resources/Rating.css"; 
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
@@ -46,13 +46,13 @@
 
 	<h3>default usage:</h3>
 	The attribute "numStars" is not given, so the default 3 stars are shown.<br />
-	<span id="rating0" dojoType="dojox.widget.Rating" onChange="dojo.query('#rating0Value')[0].innerHTML = this.value"></span>
+	<span id="rating0" dojoType="dojox.form.Rating" onChange="dojo.query('#rating0Value')[0].innerHTML = this.value"></span>
 	The value is: <b><span id="rating0Value">0</span></b>
 	<br /><br />
 
 	<h3>5 stars:</h3>
 	The attribute "numStars" is given and set to 5, the initial value is 3.<br />
-	<span dojoType="dojox.widget.Rating" numStars="5" value="3"></span>
+	<span dojoType="dojox.form.Rating" numStars="5" value="3"></span>
 	<br /><br />
 
 	<h3>Customized, "my big stars":</h3>
@@ -61,7 +61,7 @@
 	<br />
 	The attribute "numStars" is set to 10, so we see ten stars.
 	<div id="rating1Box">
-		<span id="rating1" dojoType="dojox.widget.Rating" numStars="10">
+		<span id="rating1" dojoType="dojox.form.Rating" numStars="10">
 			<script type="dojo/event" event="onChange">
 				dojo.query('#rating1Value')[0].innerHTML = this.value;
 			</script>
@@ -80,7 +80,7 @@
 	Surrounded by text to see that it really takes all it's space 
 	Surrounded by text to see that it really takes all it's space
 	Surrounded by text to see that it really takes all it's space 
-	Surrounded by text to see that it really takes all it's space<div dojoType="dojox.widget.Rating" numStars="5" value="1"></div>
+	Surrounded by text to see that it really takes all it's space<div dojoType="dojox.form.Rating" numStars="5" value="1"></div>
 	Surrounded by text to see that it really takes all it's space
 	Surrounded by text to see that it really takes all it's space 
 	Surrounded by text to see that it really takes all it's space
@@ -100,7 +100,7 @@
 			<option>work?</option>
 		</select>
 		<br /><br />
-		<div dojoType="dojox.widget.Rating" numStars="5" value="1"></div>
+		<div dojoType="dojox.form.Rating" numStars="5" value="1"></div>
 		<br /><br />
 		<button dojoType="dijit.form.Button">Click me</button>
 	</form>
