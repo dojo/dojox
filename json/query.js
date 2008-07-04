@@ -112,6 +112,8 @@ dojo.provide("dojox.json.query");
 		//		* ..[?expression] - This will perform a deep search filter operation on all the objects and 
 		// 		subobjects of the current data. Rather than only searching an array, this will search 
 		// 		property values, arrays, and their children.
+		//		* $1,$2,$3, etc. - These are references to extra parameters passed to the query
+		//		function or the evaluator function.
 		//		* +, -, /, *, &, |, %, (, ), <, >, <=, >=, != - These operators behave just as they do
 		// 		in JavaScript.
 		//		
