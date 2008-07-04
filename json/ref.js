@@ -35,8 +35,10 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	//		index as "/Table/4".
 	//	The *idAttribute* parameter.
 	//		This indicates what property is the identity property. This defaults to "id"
-	// The *services* parameter
-	//		This provides a map of services, from which prototypes can be retrieved
+	// The *schemas* parameter
+	//		This provides a map of schemas, from which prototypes can be retrieved
+	// The *loader* parameter
+	//		This is a function that is called added to the reference objects that can't be resolved (lazy objects)
 	// return:
 	//		An object, the result of the processing
 	args = args || {};
@@ -45,16 +47,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	var index = args.index || {}; // create an index if one doesn't exist
 	var ref,reWalk=[];
 	var pathResolveRegex = /^.*\/(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
-	function loader(callback){
-		// load a lazy object
-		dojox.rpc.Rest.get(this).addBoth(function(result){
-			// if they are the same this means an object was loaded, otherwise it 
-			// might be a primitive that was loaded or maybe an error
-			delete result.$ref;
-			delete result._loadObject;
-			callback(result);
-		});
-	}
+
 	function walk(it,stop,defaultId){
 		// this walks the new graph, resolving references and making other changes
 	 	var update, val, id = it[idAttribute] || defaultId;
@@ -71,9 +64,9 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 				delete target.$ref; // remove this artifact
 				update = true;
 			}else{
-			 	var proto = args.services && (!(it instanceof Array)) && // won't try on arrays to do prototypes, plus it messes with queries 
+			 	var proto = args.schemas && (!(it instanceof Array)) && // won't try on arrays to do prototypes, plus it messes with queries 
 	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
-	 					(val = args.services[val[1]]) && val._schema && val._schema.prototype; // and if has a prototype
+	 					(val = args.schemas[val[1]]) && val.prototype; // and if has a prototype
 				if(proto){
 					// if the schema defines a prototype, that needs to be the prototype of the object
 					var F = function(){};
@@ -111,7 +104,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 							}else{
 								index[val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$1$2')] = val;
 								// create a lazy loaded object
-								val._loadObject = loader;
+								val._loadObject = args.loader;
 							}
 						}
 					}
@@ -252,23 +245,25 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 
 			var output = [];
 			for(var i in it){
-				var keyStr;
-				if(typeof i == "number"){
-					keyStr = '"' + i + '"';
-				}else if(typeof i == "string" && i.charAt(0) != '_'){
-					keyStr = dojo._escapeString(i);
-				}else{
-					// skip non-string or number keys
-					continue;
+				if(it.hasOwnProperty(i)){
+					var keyStr;
+					if(typeof i == "number"){
+						keyStr = '"' + i + '"';
+					}else if(typeof i == "string" && i.charAt(0) != '_'){
+						keyStr = dojo._escapeString(i);
+					}else{
+						// skip non-string or number keys
+						continue;
+					}
+					var val = serialize(it[i],path+(i.match(/^[a-zA-Z]\w*$/) ? // can we use simple .property syntax?
+														('.' + i) : // yes, otherwise we have to escape it
+														('[' + dojo._escapeString(i) + ']')),nextIndent);
+					if(typeof val != "string"){
+						// skip non-serializable values
+						continue;
+					}
+					output.push(newLine + nextIndent + keyStr + ":" + sep + val);
 				}
-				var val = serialize(it[i],path+(i.match(/^[a-zA-Z]\w*$/) ? // can we use simple .property syntax?
-													('.' + i) : // yes, otherwise we have to escape it
-													('[' + dojo._escapeString(i) + ']')),nextIndent);
-				if(typeof val != "string"){
-					// skip non-serializable values
-					continue;
-				}
-				output.push(newLine + nextIndent + keyStr + ":" + sep + val);
 			}
 			return "{" + output.join("," + sep) + newLine + _indentStr + "}";
 		}else if(typeof it == "function" && dojox.json.ref.serializeFunctions){

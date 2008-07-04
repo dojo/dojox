@@ -215,13 +215,16 @@ dojo.require("dojox.rpc.Rest");
 		registerService: function(/*Function*/ service, /*String*/ servicePath, /*Object?*/ schema){
 			//	summary:
 			//		Registers a service for as a JsonRest service, mapping it to a path and schema
-			service.servicePath = servicePath || service.servicePath;
-			jr.schemas[service.servicePath] = schema || service._schema || {};
-			jr.services[service.servicePath] = service;
+			
+			servicePath = service.servicePath = servicePath || service.servicePath;
+			servicePath = servicePath.match(/\/$/) ? servicePath : (servicePath + '/'); // add a trailing / if needed
+			jr.schemas[servicePath] = schema || service._schema || {};
+			jr.services[servicePath] = service;
 		},
 		get: function(service, id){
 			// if caching is allowed, we look in the cache for the result
-			var deferred, result = Rest._isCacheable() && Rest._index[(service.servicePath || '') + id];
+			var cacheable = Rest._isCacheable();
+			var deferred, result = cacheable && Rest._index[(service.servicePath || '') + id];
 			Rest._dontCache=0; // reset it
 			if(result && !result._loadObject){// cache hit
 				deferred = new dojo.Deferred();
@@ -232,7 +235,7 @@ dojo.require("dojox.rpc.Rest");
 			deferred = service(id);
 			deferred.addCallback(function(result){
 				return dojox.json.ref.resolveJson(result, {
-					defaultId: id,
+					defaultId: cacheable ? id : undefined, // FIXME: id should only not be omitted when ranges are used 
 					index: Rest._index,
 					idPrefix: service.servicePath,
 					idAttribute: jr.getIdAttribute(service),
