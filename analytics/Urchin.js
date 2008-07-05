@@ -1,5 +1,4 @@
 dojo.provide("dojox.analytics.Urchin");
-dojo.require("dojox.analytics._base");
 
 /*=====
 dojo.mixin(djConfig,{
@@ -26,6 +25,11 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	//		`acct:` parameter, or via Markup / dojoType and defining a djConfig 
 	//		parameter `urchin:`
 	//
+	//		IMPORTANT: 
+	//		This module will not work simultaneously with the core dojox.analytics 
+	//		package. If you need the ability to run Google Analytics AND your own local
+	//		analytics system, you MUST include dojox.analytics._base BEFORE dojox.analytics.Urchin
+	//
 	//	example:
 	//	|	// create the tracker programatically:
 	//	|	var tracker = new dojox.analytics.Urchin({ acct:"UA-123456-7" });
@@ -35,7 +39,6 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	//	|	var djConfig = { urchin: "UA-123456-7" };
 	//	|	// and in markup:
 	//	|	<div dojoType="dojox.analytics.Urchin"></div>
-	//
 	//
 	// acct: String
 	//		your GA urchin tracker account number. 
