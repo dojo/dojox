@@ -1,0 +1,33 @@
+-------------------------------------------------------------------------------
+DojoX RPC
+-------------------------------------------------------------------------------
+Version .9
+Release date: 07/05/2008
+-------------------------------------------------------------------------------
+Project state:
+Initial check of XMPP Service infrastructure. 
+
+SMDLibrary contains smd files representing external services
+-------------------------------------------------------------------------------
+Project authors
+	Dustin Machi
+	Jason Cline
+	Revin Guillen
+-------------------------------------------------------------------------------
+Project description
+
+XMPP Service implementation in pure javascript. Uses BOSH and works cross
+domain
+-------------------------------------------------------------------------------
+Dependencies:
+
+Dojo Core 
+-------------------------------------------------------------------------------
+Documentation
+
+FIXME
+
+-------------------------------------------------------------------------------
+Installation instructions
+
+FIXME
