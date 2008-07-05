@@ -70,9 +70,8 @@
 			dojo.parser.parse();
 
 			initItemStoreGallery();
-			
-			lightbox = new dojox.image._LightboxDialog();
-			lightbox.startup();
+			// WARNING: LightboxDialog might be the _only_ widget with "return this;" coming out of .startup()
+			lightbox = new dojox.image.LightboxDialog().startup();
 			
 			dojo.subscribe(dijit.byId('thumbPicker2').getClickTopicName(), lightboxShow);
 

@@ -5,7 +5,7 @@ dojo.require("dijit.Dialog");
 dojo.require("dojox.fx._base");
 
 dojo.declare("dojox.image.Lightbox",
-	dijit._Widget,{
+	dijit._Widget, {
 	// summary:
 	//	A dojo-based Lightbox implementation. 
 	//
@@ -64,7 +64,7 @@ dojo.declare("dojox.image.Lightbox",
 			this._attachedDialog = tmp;
 		}else{
 			// this is the first instance to start, so we make the masterDialog
-			this._attachedDialog = new dojox.image._LightboxDialog({ id: "dojoxLightboxDialog" });
+			this._attachedDialog = new dojox.image.LightboxDialog({ id: "dojoxLightboxDialog" });
 			this._attachedDialog.startup();
 		}
 		if(!this.store){
@@ -72,6 +72,7 @@ dojo.declare("dojox.image.Lightbox",
 			this._addSelf();
 			this.connect(this.domNode, "onclick", "_handleClick");
 		}
+
 	},
 
 	_addSelf: function(){
@@ -106,21 +107,28 @@ dojo.declare("dojox.image.Lightbox",
 
 });
 
-dojo.declare("dojox.image._LightboxDialog",
-	dijit.Dialog,{
+dojo.declare("dojox.image.LightboxDialog",
+	dijit.Dialog, {
 	// summary:
-	//		The "dialog" shared  between any Lightbox instances on the page
+	//		The "dialog" shared  between any Lightbox instances on the page, publically available
+	//		for programatic manipulation.
 	//
 	// description:
 	//	
 	//		A widget that intercepts anchor links (typically around images) 	
 	//		and displays a modal Dialog. this is the actual Dialog, which you can
 	//		create and populate manually, though should use simple Lightbox's
-	//		unless you need to direct access.
+	//		unless you need the direct access.
 	//
 	//		There should only be one of these on a page, so all dojox.image.Lightbox's will us it
 	//		(the first instance of a Lightbox to be show()'n will create me If i do not exist)
-	// 
+	//	
+	//	example: 
+	//	|	// show a single image from a url
+	//	|	var url = "http://dojotoolkit.org/logo.png";
+	//	|	var dialog = new dojox.image.LightboxDialog().startup();
+	//	|	dialog.show({ href: url, title:"My Remote Image"});
+	//	
 	// title: String
 	// 		The current title, read from object passed to show() 
 	title: "",
@@ -152,8 +160,9 @@ dojo.declare("dojox.image._LightboxDialog",
 
 	// errorImg: Url
 	//		Path to the image used when a 404 is encountered
-	errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),		
+	errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),
 
+/*
 	// privates:
 	_imageReady: false,
 	_clone: null, // the "untained" image
@@ -164,6 +173,7 @@ dojo.declare("dojox.image._LightboxDialog",
 	_showImageAnim: null,
 	_showNavAnim: null,
 	_animConnects: [],
+*/
 	
 	templatePath: dojo.moduleUrl("dojox.image","resources/Lightbox.html"),
 
@@ -171,7 +181,9 @@ dojo.declare("dojox.image._LightboxDialog",
 		// summary: Add some extra event handlers, and startup our superclass.
 
 		this.inherited(arguments);
+		this._animConnects = [];
 		this._clone = dojo.clone(this.imgNode);
+		// FIXME: this looks these will always listen and run. move to _modalConnects
 		this.connect(document.documentElement,"onkeypress","_handleKey");
 		this.connect(window,"onresize","_position"); 
 		this.connect(this.nextNode, "onclick", "_nextImage");
@@ -179,7 +191,7 @@ dojo.declare("dojox.image._LightboxDialog",
 		this.connect(this.closeNode, "onclick", "hide");
 		this._makeAnims();
 		this._vp = dijit.getViewport();
-		
+		return this;
 	},
 
 	show: function(/* Object */groupData){
@@ -273,7 +285,7 @@ dojo.declare("dojox.image._LightboxDialog",
 	_nextImage: function(){
 		// summary: Load next image in group
 		if(!this.inGroup){ return; }
-		if(this._positionIndex+1<this.inGroup.length){
+		if(this._positionIndex + 1 < this.inGroup.length){
 			this._positionIndex++;
 		}else{
 			this._positionIndex = 0;
@@ -311,15 +323,18 @@ dojo.declare("dojox.image._LightboxDialog",
 	resizeTo: function(/* Object */size){
 		// summary: Resize our dialog container, and fire _showImage
 		
-		if(this.adjust && (size.h + 80 > this._vp.h || size.w + 50 > this._vp.w)){
+		// 22 == current styled margins or paddings, can calculate programatically if needed
+		var adjustSize = ((dojo.boxModel == "border-box")) ? 22 : 0;
+		
+		if(this.adjust && (size.h + adjustSize + 80 > this._vp.h || size.w + adjustSize + 50 > this._vp.w)){
 			size = this._scaleToFit(size);
 		}
 		
 		var _sizeAnim = dojox.fx.sizeTo({ 
 			node: this.containerNode,
 			duration: size.duration||this.duration,
-			width: size.w, 
-			height: size.h + 30
+			width: size.w + adjustSize, 
+			height: size.h + 30 + adjustSize
 		});
 		this.connect(_sizeAnim,"onEnd","_showImage");
 		_sizeAnim.play(15);
@@ -429,7 +444,7 @@ dojo.declare("dojox.image._LightboxDialog",
 	_makeAnims: function(){
 		// summary: make and cleanup animation and animation connections
 		
-		dojo.forEach(this._animConnects,dojo.disconnect);
+		dojo.forEach(this._animConnects, dojo.disconnect);
 		this._animConnects = [];
 		this._showImageAnim = dojo.fadeIn({
 				node: this.imgNode,
