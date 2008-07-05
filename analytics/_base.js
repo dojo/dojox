@@ -77,7 +77,6 @@ dojo.extend(dojox.analytics, {
 					break;
 				case "xhrPost":
 				default:
-					console.info("post send: ", this._inTransit);
 					def = dojo.xhrPost({url:this.dataUrl, content: {id: this._id++, data: dojo.toJson(this._inTransit)}});
 					break;
 			}
@@ -97,7 +96,6 @@ dojo.extend(dojox.analytics, {
 				this._data.unshift(this._inTransit.pop());	
 				this._split=1;
 			}else{
-				//console.log("script send: ", this._inTransit, " Remaining in queue: ", this._data.length);
 				return query;
 			}	
 		}
