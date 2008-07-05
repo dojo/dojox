@@ -94,6 +94,7 @@ dojo.declare("dojox.data.JsonRestStore",
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
 			}
 			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
+			this.schema = this.service._schema;
 			// wrap the service with so it goes through JsonRest manager 
 			this.service._store = this;
 			this._constructor = dojox.rpc.JsonRest.getConstructor(this.service);
@@ -150,6 +151,13 @@ dojo.declare("dojox.data.JsonRestStore",
 
 			var old = item[attribute];
 			var store = dojox.data._getStoreForItem(item);
+			if(dojox.json.schema && store.schema && store.schema.properties){
+				// if we have a schema and schema validator available we will validate the property change
+				var result = dojox.json.schema.checkPropertyChange(value,store.schema.properties[attribute]);
+				if(!result.valid){
+					throw new Error(dojo.map(result.errors,function(error){return error.message;}).join(","));
+				}
+			}
 			if(old != value){
 				store.changing(item);
 				item[attribute]=value;
@@ -165,10 +173,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			if(!dojo.isArray(values)){
 				throw new Error("setValues expects to be passed an Array object as its value");
 			}
-			this.changing(item);
-			var old = item[attribute];
-			item[attribute]=values;
-			this.onSet(item,attribute,old,values);
+			this.setValue(item,attribute,values);
 		},
 
 		unsetAttribute: function(item, attribute){

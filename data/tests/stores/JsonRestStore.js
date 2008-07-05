@@ -1,6 +1,7 @@
 dojo.provide("dojox.data.tests.stores.JsonRestStore");
 dojo.require("dojox.rpc.Service");
 dojo.require("dojox.data.JsonRestStore");
+dojo.require("dojox.json.schema");
 dojo.require("dojo.data.api.Read");
 
 dojox.data.tests.stores.JsonRestStore.error = function(t, d, errData){
@@ -200,6 +201,29 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 				});
 				return d; //Object
 			}
+		},
+		function testSchema(t){
+			var d = new doh.Deferred();
+			jsonStore.fetchItemByIdentity({identity:"obj3", 
+				onItem: function(item, request){
+					var set = false;
+					try{
+						jsonStore.setValue(item,"name",333); // should only take a string, so it should throw an exception
+						set = true;
+					}catch(e){
+						console.log("Correctly blocked invalid property change by schema:",e);
+					}
+					try{
+						jsonStore.setValue(item,"name","a"); // should be at least three character, so it should throw an execption
+						set = true;
+					}catch(e){
+						console.log("Correctly blocked invalid property change by schema:",e);
+					}
+					t.f(set);
+					d.callback(true);
+				}
+			});
+			
 		},
 		function testReadAPI_functionConformance(t){
 			//	summary: 

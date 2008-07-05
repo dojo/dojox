@@ -117,10 +117,10 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 				if(schema.pattern && typeof value == 'string' && !value.match(schema.pattern)){
 					addError("does not match the regex pattern " + schema.pattern);
 				}
-				if(schema.maxLength && typeof value == 'string' && value.maxLength > schema.maxLength){
+				if(schema.maxLength && typeof value == 'string' && value.length > schema.maxLength){
 					addError("may only be " + schema.maxLength + " characters long");
 				}
-				if(schema.minLength && typeof value == 'string' && value.minLength < schema.minLength){
+				if(schema.minLength && typeof value == 'string' && value.length < schema.minLength){
 					addError("must be at least " + schema.minLength + " characters long");
 				}
 				if(typeof schema.minimum !== undefined && typeof value == typeof schema.minimum && 
