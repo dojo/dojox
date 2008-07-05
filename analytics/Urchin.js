@@ -1,4 +1,5 @@
 dojo.provide("dojox.analytics.Urchin");
+dojo.require("dojox.analytics._base");
 
 /*=====
 dojo.mixin(djConfig,{
