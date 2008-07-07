@@ -284,8 +284,8 @@ dojo.declare("dojox.data.FlickrRestStore",
 				if(data){
 					photos = (data.photoset ? data.photoset : data.photos);
 				}
-				if(photos && typeof(photos.per_page) != "undefined" && typeof(photos.pages) != "undefined"){
-					if(photos.per_page * photos.pages <= handler.request.start + handler.request.count){
+				if(photos && typeof(photos.perpage) != "undefined" && typeof(photos.pages) != "undefined"){
+					if(photos.perpage * photos.pages <= handler.request.start + handler.request.count){
 						//If the final page of results has been received, it is possible to 
 						//know exactly how many photos there are
 						maxPhotos = handler.request.start + photos.photo.length;                
@@ -293,7 +293,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 						//If the final page of results has not yet been received,
 						//it is not possible to tell exactly how many photos exist, so
 						//return the number of pages multiplied by the number of photos per page.
-						maxPhotos = photos.per_page * photos.pages;
+						maxPhotos = photos.perpage * photos.pages;
 					}
 					this._maxPhotosPerUser[primaryKey] = maxPhotos;
 					onBegin(maxPhotos, handler.request);
