@@ -477,8 +477,8 @@ dojox.flash.Embed.prototype = {
 		// go into page if we use it)
 		dojo.connect(dojo, "loaded", dojo.hitch(this, function(){
 			var div = document.createElement("div");
-			div.setAttribute("id", this.id + "Container");
-			div.setAttribute("style", containerStyle);
+			div.id = this.id + "Container";
+			div.style = containerStyle;
 			div.innerHTML = objectHTML;
 	
 			var body = document.getElementsByTagName("body");
