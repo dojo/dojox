@@ -1,5 +1,6 @@
 dojo.provide("dojox.off._common");
 
+dojo.require("dojo.gears");
 dojo.require("dojox.storage");
 dojo.require("dojox.sql");
 dojo.require("dojox.off.sync");
@@ -259,7 +260,7 @@ dojo.mixin(dojox.off, {
 	
 	_checkOfflineCacheAvailable: function(callback){
 		// is a true, offline cache running on this machine?
-		this.hasOfflineCache = dojo.isGears;
+		this.hasOfflineCache = dojo.gears.available;
 		
 		callback();
 	},
