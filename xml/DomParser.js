@@ -30,7 +30,8 @@ dojox.xml.DomParser=new (function(){
 
 	//	compile the regular expressions once.
 	var reTags=/<([^>\/\s+]*)([^>]*)>([^<]*)/g;
-	var reAttr=/([^=]*)="([^"]*)"/g;
+//	var reAttr=/([^=]*)="([^"]*)"/g;
+	var reAttr=/([^=]*)=("([^"]*)"|'([^']*)')/g;	//	patch from tdedischew AT gmail
 	var reEntity=/<!ENTITY\s+([^"]*)\s+"([^"]*)">/g;
 	var reCData=/<!\[CDATA\[([\u0001-\uFFFF]*?)\]\]>/g;
 	var reComments=/<!--([\u0001-\uFFFF]*?)-->/g;
