@@ -7,18 +7,20 @@
 	var intervalId = setInterval(function(){
 		try{
 			if(!switchedLocation){
-				console.log("changing to "+ (parent.frames[1].location = "http://127.0.0.1/dojox/io/tests/"));
+				parent.frames[1].name='malicious data';
+				alert("changing to "+ (parent.frames[1][0][0].location = "http://127.0.0.1/dojox/io/tests/"));
 				switchedLocation = true;
 			}
-			console.log("snooping for "+ parent.frames[1].name);
+			alert("snooping for "+ parent.frames[1].name);
 			clearInterval(intervalId);
 		}
 		catch(e){}
 	},10);
 	function check(){
 		if(switchedLocation){
-		alert("other " + parent.frames[1].name);
+		alert("other " + parent.frames[1][0][0].name);
 		}
+		alert("trying to delete"+parent['protectedFrame']);
 		(parent.frames[1].location = "http://127.0.0.1/dojox/io/tests/");
 		switchedLocation = true;
 		alert("changed ");

@@ -27,15 +27,13 @@ dojox.io.windowName = {
 		// |	</script></html>
 		// 		One can provide XML or JSON data by simply quoting the data as a string, and parsing the data
 		// 		on the client.
-		if(dojo.isMoz && ![].reduce && parent.length && !this.allowMultiFramesInFF2){
-			//FIXME: This fix for this is probably to create nested frames with getters and setters on 
-			//	the top window to protect from frame navigation
-			throw new Error("It is unsafe to use window.name transport with multiple frames in FF2 because they" +
-					"can read each other's data. Set dojox.io.windowName.allowMultiFramesInFF2 to true if you wish to use this anyway.");
-		}
 		args.url += (args.url.match(/\?/) ? '&' : '?') + "windowname=" + (args.windowName || true); // indicate our desire for window.name communication
 		var cleanup = function(result){
-			dojo.body().removeChild(frame); // clean up
+			var innerDoc = frame.contentWindow.document;
+			// we have to do this to stop the wait cursor in FF 
+			innerDoc.write(" ");
+			innerDoc.close();
+			dojo.body().removeChild(frame1); // clean up
 			return result;
 		}
 		var dfd = dojo._ioSetArgs(args,cleanup,cleanup,cleanup);
@@ -52,9 +50,30 @@ dojox.io.windowName = {
 		var startName = "__starting__";
 		var frameName = "dojox.io.windowName" + Math.random();
 		var frameNum = dojox.io.windowName._frameNum++;
+		var doc = dojo.doc;
+		var body = dojo.body();
+		if(dojo.isMoz && ![].reduce){
+			// FF2 allows unsafe sibling frame modification,
+			// the fix for this is to create nested frames with getters and setters to protect access
+			var frame1 = doc.createElement("iframe");
+			frame1.style.display='none';
+			body.appendChild(frame1);
+			var firstWindow = frame1.contentWindow;
+			doc = firstWindow.document;
+			doc.write("<html><body>first frame<iframe name='protectedFrame'></iframe></body></html>");
+			doc.close();
+			var secondWindow = firstWindow[0]; 
+			firstWindow.__defineGetter__(0,function(){});
+			firstWindow.__defineGetter__("protectedFrame",function(){});
+			doc = secondWindow.document;
+			doc.write("<html><body>second frame</body></html>");
+			doc.close();
+			body = doc.body;
+		}
 
-		frame = dojo.doc.createElement(dojo.isIE ? '<iframe name="' + frameName + '" onload="dojox.io.windowName['+frameNum+']()">' : 'iframe');
-		frame.style.display='none';
+		frame = doc.createElement(dojo.isIE ? '<iframe name="' + frameName + '" onload="dojox.io.windowName['+frameNum+']()">' : 'iframe');
+		frame1 = frame1 || frame; 
+		frame1.style.display='none';
 		var state = 0;
 		function getData(){
 			var data = frame.contentWindow.name;
@@ -67,7 +86,6 @@ dojox.io.windowName = {
 			}
 		}
 		dojox.io.windowName[frameNum] = frame.onload = function(){
-			
 			try{
 				if(frame.contentWindow.location =='about:blank'){
 					// opera and safari will do an onload for about:blank first, we can ignore this first onload 
@@ -83,7 +101,7 @@ dojox.io.windowName = {
 			if(!state){
 				// we have loaded the target resource, now time to navigate back to our domain so we can read the frame name
 				state=1;
-				var sameDomainUrl = (dojo.config["dojoBlankHtmlUrl"]||dojo.moduleUrl("dojo", "/test/validity.html"));
+				var sameDomainUrl = dojo.config["dojoBlankHtmlUrl"]||dojo.moduleUrl("dojo", "resources/blank.html");
 				frame.contentWindow.location = sameDomainUrl;
 				try{
 					getData();
@@ -93,7 +111,7 @@ dojox.io.windowName = {
 			}
 		};
 		frame.name = frameName;
-		dojo.body().appendChild(frame);
+		body.appendChild(frame);
 		if(method.match(/GET/i)){
 			// if it is a GET we can just the iframe our src url
 			dojo._ioAddQueryToUrl(ioArgs);
@@ -108,7 +126,7 @@ dojox.io.windowName = {
 				values = values instanceof Array ? values : [values];
 				for(j = 0; j < values.length; j++){
 					// create hidden inputs for all the parameters
-					var input = dojo.doc.createElement("input");
+					var input = doc.createElement("input");
 					input.type = 'hidden';
 					input.name = i;
 					input.value = values[j];				
@@ -128,9 +146,6 @@ dojox.io.windowName = {
 		}
 		return dfd;
 	},
-	_frameNum: 0,
-	// Different frames can read each other's window.name and compromise security in FF2 (this 
-	//	is fixed in FF3).
-	allowMultiFramesInFF2: false 
+	_frameNum: 0 
 	
 }
