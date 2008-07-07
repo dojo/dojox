@@ -46,13 +46,13 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	var prefix = args.idPrefix || '/'; 
 	var index = args.index || {}; // create an index if one doesn't exist
 	var ref,reWalk=[];
-	var pathResolveRegex = /^.*\/(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
+	var pathResolveRegex = /^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
 
 	function walk(it,stop,defaultId){
 		// this walks the new graph, resolving references and making other changes
 	 	var update, val, id = it[idAttribute] || defaultId;
 	 	if(id !== undefined){
-	 		id = (prefix + id).replace(pathResolveRegex,'$1$2');
+	 		id = (prefix + id).replace(pathResolveRegex,'$2$3');
 	 	}
 	 	var target = it;
 		if(id !== undefined){ // if there is an id available...
@@ -86,7 +86,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 					if(/[\w\[\]\.\$ \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
 						// make sure it is a safe reference
 						var path = ref.match(/(^\.*[^\.\[]+)([\.\[].*)?/); // divide along the path
-						if((ref = (path[1]=='$' || path[1]=='this') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$1$2')]) &&  // a $ indicates to start with the root, otherwise start with an id
+						if((ref = (path[1]=='$' || path[1]=='this') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')]) &&  // a $ indicates to start with the root, otherwise start with an id
 						// // starting point was found, use eval to resolve remaining property references
 						// // need to also make reserved words safe by replacing with index operator
 							(ref = path[2] ? eval('ref' + path[2].replace(/\.([^\.]+)/g,'["$1"]')) : ref)){
@@ -102,7 +102,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 								}
 								rewalking = true; // we only want to add it once
 							}else{
-								index[val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$1$2')] = val;
+								index[val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$2$3')] = val;
 								// create a lazy loaded object
 								val._loadObject = args.loader;
 							}
@@ -214,7 +214,7 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 							ref = id.substring(idPrefix.length);
 						}else{
 							// a reference to a different context, assume relative url based referencing
-							ref = '..' + id;
+							ref = id;
 						}
 					}
 					return serialize({
