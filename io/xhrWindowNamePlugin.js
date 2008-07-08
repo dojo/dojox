@@ -39,7 +39,8 @@ dojox.io.xhrWindowNamePlugin = function(/*String*/url, /*Boolean?*/asHttp){
 				// use the XHR content handlers for handling
 				if(ioArgs.handleAs == 'json'){
 					// use a secure json verifier, using object capability validator for now
-					return dojox.secure.capability.validate(result,[],{}); 
+					dojox.secure.capability.validate(result,["Date"],{});
+					return dojo.fromJson(result); 
 				}
 				return dojo._contentHandlers[ioArgs.handleAs || "text"](ioArgs.xhr); 
 			});

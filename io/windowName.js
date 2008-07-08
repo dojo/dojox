@@ -31,8 +31,10 @@ dojox.io.windowName = {
 		var cleanup = function(result){
 			var innerDoc = frame.contentWindow.document;
 			// we have to do this to stop the wait cursor in FF 
-			innerDoc.write(" ");
-			innerDoc.close();
+			try{
+				innerDoc.write(" ");
+				innerDoc.close();
+			}catch(e){}
 			dojo.body().removeChild(frame1); // clean up
 			return result;
 		}
@@ -88,7 +90,7 @@ dojox.io.windowName = {
 		dojox.io.windowName[frameNum] = frame.onload = function(){
 			try{
 				if(frame.contentWindow.location =='about:blank'){
-					// opera and safari will do an onload for about:blank first, we can ignore this first onload 
+					// opera and safari will do an onload for about:blank first, we can ignore this first onload
 					return;
 				}
 			}catch(e){
@@ -111,13 +113,14 @@ dojox.io.windowName = {
 			}
 		};
 		frame.name = frameName;
-		body.appendChild(frame);
 		if(method.match(/GET/i)){
 			// if it is a GET we can just the iframe our src url
 			dojo._ioAddQueryToUrl(ioArgs);
 			frame.src = ioArgs.url;
+			body.appendChild(frame);
 		}else if(method.match(/POST/i)){
 			// if it is a POST we will build a form to post it
+			body.appendChild(frame);
 			var form = dojo.doc.createElement("form");
 			dojo.body().appendChild(form);
 			var query = dojo.queryToObject(ioArgs.query);
@@ -136,6 +139,7 @@ dojox.io.windowName = {
 			form.method = 'POST';
 			form.action = args.url;
 			form.target = frameName;// connect the form to the iframe
+			
 			form.submit();
 			form.parentNode.removeChild(form);
 		}else{
