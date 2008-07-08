@@ -40,24 +40,28 @@ dojo.declare("dojox.layout.ScrollPane",
 	templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
 	
 	layout: function(){
-		// summary: calculates required sizes. call this if we add/remove content manually, or reload the content.
-	
-		dojo.style(this.wrapper,this._dir,this.domNode.style[this._dir]);
-		this._lo = dojo.coords(this.wrapper,true);
-		this._size = Math.max(0,(this._vertical ?
-			(this.containerNode.scrollHeight - this._lo.h)  :
-			(this.containerNode.scrollWidth - this._lo.w)     
-		));
-		this._line = new dojo._Line(0-this._offset,this._size+(this._offset*2));
+		// summary: calculates required sizes. Call this if you add/remove content manually, or reload the content.
+
+		var dir = this._dir,
+			vert = this._vertical,
+			val = this.containerNode[(vert ? "scrollHeight" : "scrollWidth")];
+		
+		dojo.style(this.wrapper, dir, this.domNode.style[dir]);
+		
+		this._lo = dojo.coords(this.wrapper, true);
+		this._size = Math.max(0, val - this._lo[(vert ? "h" : "w")]);
+		this._line = new dojo._Line(0 - this._offset, this._size + (this._offset * 2));
 	
 		// share a relative position w the scroll offset via a line
-		var u = this._lo[(this._vertical?"h":"w")]
-		var size = u * (u / Math.max(1,this._size));
-		var center = Math.floor(u - size);        
-		this._helpLine = new dojo._Line(0,center);
+		var u = this._lo[(vert ? "h" : "w")],
+			r = Math.min(1, u / val), // ratio
+			s = u * r, // size
+			c = Math.floor(u - (u * r)); // center
+			  
+		this._helpLine = new dojo._Line(0, c);
 	
 		// size the helper
-		dojo.style(this.helper,this._dir,Math.floor(size)+"px");
+		dojo.style(this.helper, dir, Math.floor(s) + "px");
 		
 	},
 	
@@ -72,8 +76,8 @@ dojo.declare("dojox.layout.ScrollPane",
 		this._vertical = (this.orientation == "vertical");
 		if(!this._vertical){
 			dojo.addClass(this.containerNode,"dijitInline");
-			this._edge = "left";
 			this._dir = "width";
+			this._edge = "left";
 		}else{
 			this._dir = "height";
 			this._edge = "top";
@@ -87,24 +91,26 @@ dojo.declare("dojox.layout.ScrollPane",
 	_set: function(/* Float */n){
 		// summary: set the pane's scroll offset, and position the virtual scroll helper 
 		this.wrapper[(this._vertical ? "scrollTop" : "scrollLeft")] = Math.floor(this._line.getValue(n));
-		dojo.style(this.helper,this._edge,Math.floor(this._helpLine.getValue(n))+"px");    
+		dojo.style(this.helper, this._edge, Math.floor(this._helpLine.getValue(n)) + "px");    
 	},
 	
 	_calc: function(/* Event */e){
 		// summary: calculate the relative offset of the cursor over the node, and call _set
 		this._set(this._vertical ? 
-			((e.pageY-(this._lo.y))/this._lo.h) :
-			((e.pageX-(this._lo.x))/this._lo.w)
+			((e.pageY - this._lo.y) / this._lo.h) :
+			((e.pageX - this._lo.x) / this._lo.w)
 		);
 	},
 	
 	_enter: function(e){
-		if(this._hideAnim && this._hideAnim.status()=="playing"){ this._hideAnim.stop(); }
+		if(this._hideAnim && this._hideAnim.status() == "playing"){ 
+			this._hideAnim.stop(); 
+		}
 		this._showAnim.play();
 	},
 	
 	_leave: function(e){
-		this._hideAnim.play();    
+		this._hideAnim.play();
 	}
     
 });
