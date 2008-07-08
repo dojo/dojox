@@ -520,6 +520,8 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	document.body.appendChild(t);
 	// create a plugin
 	var pluginName = dojox.gfx._base._getUniqueId();
+	
+	/*
 	Silverlight.createObject(
 		"#" + t.id,	// none
 		parentNode,
@@ -539,12 +541,50 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		null,
 		null
 	);
-	s.rawNode = dojo.byId(pluginName).content.root;
+	*/
+	
+	// build the object
+	var obj = "<object type='application/x-silverlight' data='data:application/x-silverlight,' id='" +
+		pluginName + "' width='" + width + "' height='" + height + "'>" +
+		"<param name='background' value='transparent' />" +
+		"<param name='source' value='#" + t.id + "' />" +
+		"<param name='windowless' value='true' />" +
+		"<param name='maxFramerate' value='60' />" +
+		"<param name='onError' value='__dojoSilverligthError' />" +
+		"<param name='version' value='1.0' />" +
+		"</object>";
+	parentNode.innerHTML = obj;
+	
+	var pluginNode = dojo.byId(pluginName);
+	s.rawNode = pluginNode.content.root;
 	// register the plugin with its parent node
 	dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
 	s.width  = dojox.gfx.normalizedLength(width);	// in pixels
 	s.height = dojox.gfx.normalizedLength(height);	// in pixels
 	return s;	// dojox.gfx.Surface
+};
+
+__dojoSilverligthError = function(e, err){
+	var t = "Silverlight Error:\n" +
+		"Code: " + err.ErrorCode + "\n" +
+		"Type: " + err.ErrorType + "\n" +
+		"Message: " + err.ErrorMessage + "\n";
+	switch(err.ErrorType){
+		case "ParserError":
+			t += "XamlFile: " + err.xamlFile + "\n" +
+				"Line: " + err.lineNumber + "\n" +
+				"Position: " + err.charPosition + "\n";
+			break;
+		case "RuntimeError":
+			t += "MethodName: " + err.methodName + "\n";
+			if(err.lineNumber != 0){
+				t +=
+					"Line: " + err.lineNumber + "\n" +
+					"Position: " + err.charPosition + "\n";
+			}
+			break;
+	}
+	console.error(t);
 };
 
 // Extenders
@@ -568,7 +608,7 @@ dojox.gfx.silverlight.Container = {
 	},
 	add: function(shape){
 		// summary: adds a shape to a group/surface
-		// shape: dojox.gfx.Shape: an VML shape object
+		// shape: dojox.gfx.Shape: a Silverlight shape object
 		if(this != shape.getParent()){
 			//dojox.gfx.Group.superclass.add.apply(this, arguments);
 			//this.inherited(arguments);
@@ -579,7 +619,7 @@ dojox.gfx.silverlight.Container = {
 	},
 	remove: function(shape, silently){
 		// summary: remove a shape from a group/surface
-		// shape: dojox.gfx.Shape: an VML shape object
+		// shape: dojox.gfx.Shape: a Silverlight shape object
 		// silently: Boolean?: if true, regenerate a picture
 		if(this == shape.getParent()){
 			var parent = shape.rawNode.getParent();
