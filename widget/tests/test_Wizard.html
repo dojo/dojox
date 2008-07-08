@@ -5,7 +5,7 @@
 
 	<title>Wizard Demo</title>
 
-	<!-- required: a default theme file -->
+	<!-- required: a default theme file, and Wizard styles -->
 	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css">
 	<link rel="stylesheet" href="../Wizard/Wizard.css">
 	
@@ -32,6 +32,31 @@
 		function done() {
 			alert("Wizard Done!");
 		}
+		
+		var programatic_Example = function(){
+			
+			var wizard = new dojox.widget.Wizard({
+				style:"width:300px; height:300px"
+			});
+			dojo.body().appendChild(wizard.domNode);
+			
+			var contents = [
+				"Pane 1 content", "Pane 2 content", "<h3>Done!</h3>"
+			];
+			
+			dojo.forEach(contents, function(term){
+			
+				var pane = new dojox.widget.WizardPane({ });
+				pane.setContent(term);
+				wizard.addChild(pane);
+				
+			});
+			
+			wizard.startup();
+			
+		}
+		
+		dojo.addOnLoad(programatic_Example)
 	</script>
 
 	<style type="text/css">
@@ -50,7 +75,7 @@
 
 		<p>This example shows a wizard with customized button labels.</p>
 
-		<div id="wizard1" dojoType="dojox.widget.WizardContainer"
+		<div id="wizard1" dojoType="dojox.widget.Wizard"
 			 style="width: 640px; height: 200px;"
 			 nextButtonLabel="Go on"
 			 >
@@ -87,7 +112,7 @@
 	
 		<p>The next shows the option to hide the inactive buttons, with a smaller width...</p>
 	
-		<div id="wizard2" dojoType="dojox.widget.WizardContainer" hideDisabled="true" style="width: 50%; height: 200px;">
+		<div id="wizard2" dojoType="dojox.widget.Wizard" hideDisabled="true" style="width: 50%; height: 200px;">
 			<div dojoType="dojox.widget.WizardPane">
 				<h1>Step 1 of 3</h1>
 				<p>Lorem ipsum dolor sit amet</p>
@@ -103,7 +128,7 @@
 		</div>
 
 		<p>Layout Children</p>
-		<div id="wizard2lay" dojoType="dojox.widget.WizardContainer" hideDisabled="true" style="width: 50%; height: 240px;">
+		<div id="wizard2lay" dojoType="dojox.widget.Wizard" hideDisabled="true" style="width: 50%; height: 240px;">
 			<div dojoType="dojox.widget.WizardPane">
 				<p>The next two (hidden) children container AccordionContainers. You'll have to be
 					more careful about the styling / sizing, as the child wants to take 100% of
@@ -163,7 +188,7 @@
 				}
 			}
 		</script>
-		<div id="wizard3" dojoType="dojox.widget.WizardContainer" style="width: 600px; height: 400px; margin:0 auto;">
+		<div id="wizard3" dojoType="dojox.widget.Wizard" style="width: 600px; height: 400px; margin:0 auto;">
 			<div dojoType="dojox.widget.WizardPane" id="Agreement1" passFunction="checkAgreement">
 				<h1>Agreement Terms</h1>
 	
@@ -183,7 +208,7 @@
 		</div>
 
 			<h2>Another like above, but with dojo/method passFunction</h2>
-			<div id="wizard4" dojoType="dojox.widget.WizardContainer" style="width: 600px; height: 400px; margin:0 auto;">
+			<div id="wizard4" dojoType="dojox.widget.Wizard" style="width: 600px; height: 400px; margin:0 auto;">
 				<div dojoType="dojox.widget.WizardPane" id="Agreement12">
 					<script type="dojo/method" event="passFunction">
 						return "cant do that yet";

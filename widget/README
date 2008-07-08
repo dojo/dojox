@@ -5,17 +5,47 @@ Version 1.0
 Release date: 10/31/2007
 -------------------------------------------------------------------------------
 Project state:
-experimental | beta
+
+[Calendar] experimental
+[CalendarFx] experimental
+[ColorPicker] beta
+[Dialog] experimental
+[FilePicker] experimental
+[FisheyeList] experimental
+[FisheyeLite] beta
+[Iterator] experimental
+[Loader] experimental
+[PlaceholderMenuItem] experimental
+[RollingList] experimental
+[SortList] experimental
+[Toaster] experimental
+[Wizard] experimental
+
 -------------------------------------------------------------------------------
-Credits
-	Peter Higgins (dante)
-	Karl Tiedt (ktiedt@gmail.com)
+Credits:
+
+[Calendar] Shane O'Sullivan
+[CalendarFx] Shane O'Sullivan
+[ColorPicker] Peter Higgins (dante)
+[Dialog] Peter Higgins (dante)
+[FilePicker] Nathan Toone (toonetown)
+[FisheyeList] Karl Tiedt (kteidt)
+[FisheyeLite] Peter Higgins (dante)
+[Iterator] Alex Russell (slightlyoff)
+[Loader] Peter Higgins (dante)
+[PlaceholderMenuItem] Nathan Toone (toonetown)
+[RollingList] Nathan Toone (toonetown)
+[SortList] Peter Higgins (dante)
+[Toaster] Adam Peller (peller)
+[Wizard] Peter Higgins (dante)
+
 -------------------------------------------------------------------------------
 Project description
 
 	This is a collection of standalone widgets for use in
-	your website.  Each individual widget is independant
+	your website.  Each individual widget is independent
 	of the others.
+	
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -23,10 +53,32 @@ Dependencies:
 	Most inherit from dijit base-classes such as dijit._Widget,
 	dijit._Templated, etc ... So we will assume the availablility
 	of dojo (core), and dijit packages.
+	
+	Each individual component stores resources in a folder that shares 
+	a name with the Widget. For instance:
+	
+	the Dialog lives in 
+	dojox/widget/Dialog.js ... 
+
+	and the folder:
+	dojox/widget/Dialog/ 	contains a 'Dialog.css', the required 
+	styles for that particular widget. All required templates and 
+	images reside in the folder. 
+	
+	This differs slightly from the rest of DojoX in that each other
+	project uses a shared resources/ folder in the project folder,
+	though uses the same naming convention for stylesheets and templates.
+
+	eg:
+	dojox/layout/resources/ExpandoPane.css
+	dojox.layout.ExpandoPane
+	
 -------------------------------------------------------------------------------
 Documentation
 
-	Please refer to the API-tool, or in-line documentation. 
+	Please refer to the API-tool, or in-line documentation. All of these
+	widgets are of varying use, quality, and documentation completion.
+	
 -------------------------------------------------------------------------------
 Installation instructions
 
@@ -51,25 +103,36 @@ Other Notes (Brief widget list):
 
     * ColorPicker - An HSV ColorPicker intended to be a drop down
 
+	* Calendar - An extension on the dijit._Calendar providing a different UI
+	* CalendarFx - additional mixable FX for transitions in dojox.widget.Calendar
+
+	* Dialog - An extended version of dijit.Dialog with man options and transition.
+
 	* FilePicker - a widget for browsing server-side file systems (can use
 		dojox.data.FileStore as backend store)
 
-	* FisheyeList - the classic FishEye Picker
+	* FisheyeList - the classic FishEye Picker (abandoned)
 
-	* Iterator - Basic array and datastore iterator class
+	* FisheyeLite - A partial replacement for the FisheyeList - serious performance
+		gains, and entirely more extensible in that it simply animates defined
+		properties, relying on the natural styling as a foundation.
+
+	* Iterator - Basic array and data store iterator class
 	
 	* Loader - an experimental Class that listens to XHR 
 		connections in the background, and displays 
-		a loading indicator.
+		a loading indicator. Loader will be removed in 1.3, and is (abandoned).
+
+	* PlaceholderMenuItem - a menu item that can be used to inject other menu
+		items at a given location. Extends dijit.Menu directly. 
+
+	* RollingList - A component of the FilePicker widget
 
 	* SortList - a degradable UL with a fixed header, scrolling,
-		and sorting. Can be the direct descendat of a
+		and sorting. Can be the direct descendant of a
 		LayoutContainer and will size to fit.
-		
-	* PlaceholderMenuItem - a menu item that can be used to inject other menu
-		items at a given location.
 
-	* Toaster - a messaging system to display non-obstrusive 
+	* Toaster - a messaging system to display unobtrusive 
 		alerts on screen.
 
 	* Wizard - a StackContainer with built-in navigation to

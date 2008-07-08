@@ -9,7 +9,7 @@ dojo.requireLocalization("dijit", "common");
 dojo.requireLocalization("dojox.widget", "Wizard"); 
 
 dojo.declare(
-	"dojox.widget.WizardContainer",
+	"dojox.widget.Wizard",
 	[dijit.layout.StackContainer, dijit._Templated],
 	{
 	// summary:
@@ -125,8 +125,7 @@ dojo.declare(
 	
 });
 
-dojo.declare(
-	"dojox.widget.WizardPane",
+dojo.declare("dojox.widget.WizardPane",
 	dijit.layout.ContentPane,
 	{
 	// summary: a panel in a WizardContainer

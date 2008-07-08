@@ -1,4 +1,5 @@
 dojo.provide("dojox.widget.RollingList");
+dojo.experimental("dojox.widget.RollingList");
 
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.ContentPane");
