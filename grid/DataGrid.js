@@ -81,9 +81,20 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._refresh();
 	},
 
-	setStore: function(store){
+	setStore: function(store, query, queryOptions){
+		this._setQuery(query, queryOptions);
 		this._setStore(store);
 		this._refresh(true);
+	},
+	
+	setQuery: function(query, queryOptions){
+		this._setQuery(query, queryOptions);
+		this._refresh(true);
+	},
+	
+	_setQuery: function(query, queryOptions){
+		this.query = query || this.query;
+		this.queryOptions = queryOptions || this.queryOptions;		
 	},
 
 	_setStore: function(store){
@@ -184,11 +195,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_clearData: function(){
-		this.rowCount = 0;
+		this.updateRowCount(0);
 		this._by_idty = {};
 		this._by_idx = [];
 		this._pages = [];
 		this._bop = this._eop = -1;
+		this._isLoaded = false;
+		this._isLoading = false;
 	},
 
 	getItem: function(idx){
