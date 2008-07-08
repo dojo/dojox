@@ -4,7 +4,9 @@ dojox.analytics
 Version 1.0
 Release date: 12/17/2007
 -------------------------------------------------------------------------------
-Project state: beta
+Project state: 
+[base]: alpha
+[Urchin]: alpha
 -------------------------------------------------------------------------------
 Project authors
 	Dustin Machi  (dmachi)
