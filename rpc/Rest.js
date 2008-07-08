@@ -73,7 +73,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		};
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id){
-			return {url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id), handleAs: isJson?'json':'text', sync: dojox.rpc._sync};
+			return {url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), handleAs: isJson?'json':'text', sync: dojox.rpc._sync};
 		};
 		// each calls the event handler
 		function makeRest(name){

@@ -234,6 +234,9 @@ dojo.require("dojox.rpc.Rest");
 			
 			deferred = service(id);
 			deferred.addCallback(function(result){
+				if(result.nodeType && result.cloneNode){
+					return result;
+				}
 				return dojox.json.ref.resolveJson(result, {
 					defaultId: cacheable ? id : undefined, // FIXME: id should only not be omitted when ranges are used 
 					index: Rest._index,

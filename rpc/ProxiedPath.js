@@ -8,7 +8,7 @@ dojox.rpc.envelopeRegistry.register(
 			var target = dojox.rpc.getTarget(smd, method);
 			if(dojo.isArray(data)){
 				for(i = 0; i < data.length;i++){
-					target += '/' + data[i];
+					target += '/' + (data[i] == null ? "" : data[i]);
 				}
 			}else{
 				for(i in data){
