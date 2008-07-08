@@ -125,7 +125,7 @@ dojo.require("dojo.dnd.Manager");
 		
 		findCellTarget: function(inSourceNode, inTopNode){
 			var n = inSourceNode;
-			while(n && (!this.isCellNode(n) || (gridViewTag in n.offsetParent.parentNode && n.offsetParent.parentNode[gridViewTag] != this.view.id)) && (n!=inTopNode)){
+			while(n && (!this.isCellNode(n) || (n.offsetParent && gridViewTag in n.offsetParent.parentNode && n.offsetParent.parentNode[gridViewTag] != this.view.id)) && (n!=inTopNode)){
 				n = n.parentNode;
 			}
 			return n!=inTopNode ? n : null 
