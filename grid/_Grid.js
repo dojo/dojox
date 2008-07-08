@@ -784,7 +784,12 @@ dojo.requireLocalization("dojox.grid", "grid");
 				this.rows.styleRowNode(inRowIndex, inRowNode);
 			}
 		},
-
+		
+		// called when the mouse leaves the grid so we can deselect all hover rows
+		_mouseOut: function(e){
+			this.rows.setOverRow(-2);
+		},
+	
 		// cells
 		getCell: function(inIndex){
 			// summary:
