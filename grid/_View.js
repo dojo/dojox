@@ -893,10 +893,19 @@ dojo.require("dojo.dnd.Manager");
 		// note: not called in 'view' context
 		_getHeaderContent: function(inCell){
 			var n = inCell.name || inCell.grid.getCellName(inCell);
+			var ret = [ '<div class="dojoxGrid-sort-node' ];
+			
 			if(inCell.index != inCell.grid.getSortIndex()){
-				return n;
+				ret.push('">');
+			}else{
+				ret = ret.concat([ ' ',
+							inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-up' : 'dojoxGrid-sort-down',
+							'"><div class="gridArrowButtonChar">',
+							inCell.grid.sortInfo > 0 ? '&#9650;' : '&#9660;',
+							'</div><div class="gridArrowButtonNode"></div>' ]);
 			}
-			return [ '<div class="', inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-down' : 'dojoxGrid-sort-up', '"><div class="gridArrowButtonChar">', inCell.grid.sortInfo > 0 ? '&#9660;' : '&#9650;', '</div>', n, '</div>' ].join('');
+			ret = ret.concat([n, '</div>']);
+			return ret.join('');
 		},
 
 		resize: function(){

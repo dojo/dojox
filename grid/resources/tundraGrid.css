@@ -102,9 +102,30 @@
 
 .tundra .gridArrowButtonChar {
 	display:none !important;
+	float: right;
 }
 .dijit_a11y .gridArrowButtonChar {
 	display:inline !important;
+}
+.tundra .gridArrowButtonNode {
+	display: block !important;
+	float: right;
+	background-image:url("../../../dijit/themes/tundra/images/spriteArrows.png");
+	background-position: left center;
+	background-repeat: no-repeat;
+	width: 7px;
+	height: 1em;
+	margin: 0px 4px 0px 5px;
+}
+.dj_ie6 .tundra .gridArrowButtonNode {
+	background-image:url("../../../dijit/themes/tundra/images/spriteArrows.gif");
+}
+
+.tundra .dojoxGrid-sort-up .gridArrowButtonNode {
+	background-position: -21px;
+}
+.dijit_a11y .gridArrowButtonNode {
+	display: none !important;
 }
 
 /* dnd */

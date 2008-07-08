@@ -76,23 +76,31 @@
 	background: url(../../../dijit/themes/nihilo/images/titleBarActive.png) #e9e9e9 repeat-x top;
 }
 
-.nihilo .dojoxGrid-sort-down {
-	background: url(images/grid_sort_down.gif) right no-repeat;
-	padding-left: 0px;
-	margin-left: 0px;
-}
-
-.nihilo .dojoxGrid-sort-up {
-	background: url(images/grid_sort_up.gif) right no-repeat;
-	padding-left: 0px;
-	margin-left: 0px;
-}
-
 .nihilo .gridArrowButtonChar {
 	display:none !important;
+	float: right;
 }
 .dijit_a11y .gridArrowButtonChar {
 	display:inline !important;
+}
+.nihilo .gridArrowButtonNode {
+	display: block !important;
+	float: right;
+	background-image:url("../../../dijit/themes/nihilo/images/spriteArrows.png");
+	background-position: left center;
+	background-repeat: no-repeat;
+	width: 11px;
+	height: 1em;
+}
+.dj_ie6 .nihilo .gridArrowButtonNode {
+	background-image:url("../../../dijit/themes/nihilo/images/spriteArrows.gif");
+}
+
+.nihilo .dojoxGrid-sort-up .gridArrowButtonNode {
+	background-position: -21px;
+}
+.dijit_a11y .gridArrowButtonNode {
+	display: none !important;
 }
 
 /* dnd */
