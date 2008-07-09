@@ -175,7 +175,7 @@ dojox.help = {
 		return item;
 	},
 	_namespaces: ["dojo", "dojox", "dijit", "djConfig"],
-	_rpc: new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc", "documentation.smd")),
+	_rpc: new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.SMDLibrary", "dojo-api.smd")),
 	_attributes: ["summary", "type", "returns", "parameters"],
 	_clean: function(self){
 		var obj = {};
