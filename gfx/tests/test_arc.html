@@ -7,12 +7,10 @@
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
-<!--
 <script type="text/javascript" src="../_base.js"></script>
 <script type="text/javascript" src="../shape.js"></script>
 <script type="text/javascript" src="../path.js"></script>
 <script type="text/javascript" src="../arc.js"></script>
--->
 <!--<script type="text/javascript" src="../vml.js"></script>-->
 <!--<script type="text/javascript" src="../svg.js"></script>-->
 <!--<script type="text/javascript" src="../canvas.js"></script>-->
@@ -20,9 +18,12 @@
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 
-makeShapes = function(){
+createSurface = function(){
 	var surface = dojox.gfx.createSurface("test", 500, 500);
-	
+	surface.continueWhenLoaded(makeShapes);
+};
+
+makeShapes = function(surface){
 	var m = dojox.gfx.matrix;
     var g1 = surface.createGroup();
     var g2 = g1.createGroup();
@@ -56,13 +57,13 @@ makeShapes = function(){
 	g2.setTransform({dx: 10,  dy: 10});
 };
 
-dojo.addOnLoad(makeShapes);
+dojo.addOnLoad(createSurface);
 
 </script>
 </head>
 <body>
 <h1>Testing arc</h1>
-<!--<p><button onclick="makeShapes();">Go</button></p>-->
+<!--<p><button onclick="createSurface();">Go</button></p>-->
 <div id="test" style="width: 500px; height: 500px;"></div>
 <p>That's all Folks!</p>
 </body>
