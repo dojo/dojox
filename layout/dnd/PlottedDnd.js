@@ -495,7 +495,7 @@ if (dojo.isIE){
 			document.body.onselectstart = IEonselectstart;
 		})
 	];
-	dojo.addOnUnload(function(){
+	dojo.addOnWindowUnload(function(){
 		dojo.forEach(dojox.layout.dnd.handdleIE, dojo.unsubscribe);
 	});
 }
