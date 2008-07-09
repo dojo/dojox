@@ -521,30 +521,20 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// create a plugin
 	var pluginName = dojox.gfx._base._getUniqueId();
 	
-	/*
-	Silverlight.createObject(
-		"#" + t.id,	// none
-		parentNode,
-		pluginName,
-		{										// Plugin properties.
-			width:	String(width),				// Width of rectangular region of plugin in pixels.
-			height:	String(height),				// Height of rectangular region of plugin in pixels.
-			inplaceInstallPrompt:	"false",	// Determines whether to display in-place install prompt if invalid version detected.
-			//background:		"white",		// Background color of plugin.
-			//isWindowless:	"false",			// Determines whether to display plugin in Windowless mode.
-			background:		"transparent",		// Background color of plugin.
-			isWindowless:	"true",				// Determines whether to display plugin in Windowless mode.
-			framerate:		"24",				// MaxFrameRate property value.
-			version:		"1.0"				// Silverlight version.
-		},
-		{},
-		null,
-		null
-	);
-	*/
-	
 	// build the object
-	var obj = "<object type='application/x-silverlight' data='data:application/x-silverlight,' id='" +
+	var obj;
+	if(dojo.isSafari){
+		obj = "<embed type='application/x-silverlight' id='" +
+		pluginName + "' width='" + width + "' height='" + height + 
+		" background='transparent'" +
+		" source='#" + t.id + "'" +
+		" windowless='true'" +
+		" maxFramerate='60'" +
+		" onError='__dojoSilverligthError'" +
+		" version='1.0'" +
+		" /><iframe style='visibility:hidden;height:0;width:0'/>";
+	}else{
+		obj = "<object type='application/x-silverlight' data='data:application/x-silverlight,' id='" +
 		pluginName + "' width='" + width + "' height='" + height + "'>" +
 		"<param name='background' value='transparent' />" +
 		"<param name='source' value='#" + t.id + "' />" +
@@ -553,6 +543,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		"<param name='onError' value='__dojoSilverligthError' />" +
 		"<param name='version' value='1.0' />" +
 		"</object>";
+	}
 	parentNode.innerHTML = obj;
 	
 	var pluginNode = dojo.byId(pluginName);
@@ -564,7 +555,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	return s;	// dojox.gfx.Surface
 };
 
-__dojoSilverligthError = function(e, err){
+__dojoSilverligthError = function(sender, err){
 	var t = "Silverlight Error:\n" +
 		"Code: " + err.ErrorCode + "\n" +
 		"Type: " + err.ErrorType + "\n" +
