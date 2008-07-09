@@ -424,6 +424,26 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 	_getRealMatrix: function(){
 		// summary: always returns the identity matrix
 		return null;	// dojox.gfx.Matrix2D
+	},
+	isLoaded: true,
+	onLoad: function(/*dojox.gfx.Surface*/ surface){
+		// summary: local event, fired once when the surface is created
+		// asynchronously, used only when isLoaded is false, required
+		// only for Silverlight.
+	},
+	continueWhenLoaded: function(
+		/*Object?*/ context, 
+		/*Function|String*/ method
+	){
+		var f = dojo.hitch(context, method);
+		if(this.isLoaded){
+			f(this);
+		}else{
+			var h = dojo.connect(this, "onLoad", function(surface){
+				dojo.disconnect(h);
+				f(surface);
+			});
+		}
 	}
 });
 
