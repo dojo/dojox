@@ -124,7 +124,7 @@
 
 .tundra .dijitButtonNode .dijitArrowButtonInner{
 	/* fixing the dijit drop arrows - can't figure why they broke */
-	background:url(../../dijit/themes/tundra/images/spriteArrows.png) no-repeat left top;
+	background:url(../../../dijit/themes/tundra/images/spriteArrows.png) no-repeat left top;
 	width:7px;
 }
 
