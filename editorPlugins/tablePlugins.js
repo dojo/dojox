@@ -818,7 +818,7 @@ dojo.declare("dojox.editorPlugins.EditorTableDialog", [dijit.Dialog], {
 	title:"Insert Table",
 				
 	widgetsInTemplate:true,
-	templatePath: dojo.moduleUrl("dojox", "editorPlugins/templates/InsertTable.html"),
+	templatePath: dojo.moduleUrl("dojox", "editorPlugins/resources/InsertTable.html"),
 	
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
@@ -872,7 +872,7 @@ dojo.declare("dojox.editorPlugins.EditorModifyTableDialog", [dijit.Dialog], {
 	widgetsInTemplate:true,
 	table:null, //html table to be modified
 	tableAtts:{},
-	templatePath: dojo.moduleUrl("dojox", "editorPlugins/templates/ModifyTable.html"),
+	templatePath: dojo.moduleUrl("dojox", "editorPlugins/resources/ModifyTable.html"),
 	
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog acceoting the baseClass?
