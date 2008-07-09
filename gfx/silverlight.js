@@ -512,17 +512,28 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 
 	var s = new dojox.gfx.Surface();
 	parentNode = dojo.byId(parentNode);
+	
 	// create an empty canvas
 	var t = parentNode.ownerDocument.createElement("script");
 	t.type = "text/xaml";
 	t.id = dojox.gfx._base._getUniqueId();
-	t.text = "<Canvas xmlns='http://schemas.microsoft.com/client/2007' Name='" + dojox.gfx._base._getUniqueId() + "'/>";
-	document.body.appendChild(t);
-	// create a plugin
-	var pluginName = dojox.gfx._base._getUniqueId();
+	t.text = "<?xml version='1.0'?><Canvas xmlns='http://schemas.microsoft.com/client/2007' Name='" + 
+		dojox.gfx._base._getUniqueId() + "'/>";
+	parentNode.parentNode.insertBefore(t, parentNode);
 	
 	// build the object
-	var obj;
+	var obj, pluginName = dojox.gfx._base._getUniqueId(),
+		onLoadName = "__" + dojox.gfx._base._getUniqueId() + "_onLoad";
+	window[onLoadName] = function(sender){
+		console.log("loaded");
+		if(!s.rawNode){
+			s.rawNode = dojo.byId(pluginName).content.root;
+			// register the plugin with its parent node
+			dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
+			s.onLoad(s);
+			console.log("assigned");
+		}
+	};
 	if(dojo.isSafari){
 		obj = "<embed type='application/x-silverlight' id='" +
 		pluginName + "' width='" + width + "' height='" + height + 
@@ -530,8 +541,8 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		" source='#" + t.id + "'" +
 		" windowless='true'" +
 		" maxFramerate='60'" +
+		" onLoad='" + onLoadName + "'" +
 		" onError='__dojoSilverligthError'" +
-		" version='1.0'" +
 		" /><iframe style='visibility:hidden;height:0;width:0'/>";
 	}else{
 		obj = "<object type='application/x-silverlight' data='data:application/x-silverlight,' id='" +
@@ -540,18 +551,27 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		"<param name='source' value='#" + t.id + "' />" +
 		"<param name='windowless' value='true' />" +
 		"<param name='maxFramerate' value='60' />" +
+		"<param name='onLoad' value='" + onLoadName + "' />" +
 		"<param name='onError' value='__dojoSilverligthError' />" +
-		"<param name='version' value='1.0' />" +
 		"</object>";
 	}
 	parentNode.innerHTML = obj;
 	
 	var pluginNode = dojo.byId(pluginName);
-	s.rawNode = pluginNode.content.root;
-	// register the plugin with its parent node
-	dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
+	if(pluginNode.content && pluginNode.content.root){
+		// the plugin was created synchronously
+		s.rawNode = pluginNode.content.root;
+		// register the plugin with its parent node
+		dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
+	}else{
+		// the plugin is being created asynchronously
+		s.rawNode = null;
+		s.isLoaded = false;
+	}
+	
 	s.width  = dojox.gfx.normalizedLength(width);	// in pixels
 	s.height = dojox.gfx.normalizedLength(height);	// in pixels
+	
 	return s;	// dojox.gfx.Surface
 };
 
