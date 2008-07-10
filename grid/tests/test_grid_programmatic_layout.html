@@ -31,6 +31,14 @@
 		<script type="text/javascript" src="support/test_data.js"></script>
 		<script type="text/javascript">
 			dojo.addOnLoad(function(){
+
+				var tc = new dijit.layout.TabContainer({
+					style:"height: 300px; width: 100%;"
+				}, "mainTabContainer");
+				var cp = new dijit.layout.ContentPane({ title:"Tab 2" }, "cp");
+				tc.addChild(cp);
+				tc.startup();
+				
 				var layout = [[
 					{name: 'Column 1', field: 'col1'},
 					{name: 'Column 2', field: 'col2'},
@@ -50,16 +58,15 @@
 					store: test_store,
 					structure: layout
 				});
-				dijit.byId("mainTabContainer").addChild(grid, 0);
+				tc.addChild(grid, 0);
 				grid.render();
 			});
 		</script>
 	</head>
 	<body class="tundra">
 		<div class="heading">dojox.grid.Grid Programmatic Instantiation Test</div>
-		<div id="mainTabContainer" dojoType="dijit.layout.TabContainer"
-			style="height: 300px; width: 100%;">
-			<div dojoType="dijit.layout.ContentPane" title="Tab 2">
+		<div id="mainTabContainer">
+			<div id="cp">
 				... stuff ...
 			</div>
 		</div>
