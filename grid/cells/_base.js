@@ -253,8 +253,8 @@ dojo.require("dojox.grid.util");
 		constructor: function(){
 			this.keyFilter = this.keyFilter;
 		},
-		// keyFilter: object
-		// optional regex for disallowing keypresses
+		// keyFilter: RegExp
+		//		optional regex for disallowing keypresses
 		keyFilter: null,
 		formatEditing: function(inDatum, inRowIndex){
 			this.needFormatNode(inDatum, inRowIndex);
@@ -307,9 +307,19 @@ dojo.require("dojox.grid.util");
 	dojo.declare("dojox.grid.cells.Select", dgc.Cell, {
 		// summary:
 		// grid cell that provides a standard select for editing
-		// options: text of each item
-		// values: value for each item
-		// returnIndex: editor returns only the index of the selected option and not the value
+
+		// options: Array
+		// 		text of each item
+		options: null,
+
+		// values: Array
+		//		value for each item
+		values: null,
+
+		// returnIndex: Integer
+		// 		editor returns only the index of the selected option and not the value
+		returnIndex: -1,
+
 		constructor: function(inCell){
 			this.values = this.values || this.options;
 		},
@@ -326,7 +336,7 @@ dojo.require("dojox.grid.util");
 			var n = this.getEditNode(inRowIndex);
 			if(n){
 				var i = n.selectedIndex, o = n.options[i];
-				return this.returnIndex ? i : o.value || o.innerHTML;
+				return this.returnIndex > -1 ? i : o.value || o.innerHTML;
 			}
 		}
 	});
@@ -352,8 +362,6 @@ dojo.require("dojox.grid.util");
 	dojo.declare("dojox.grid.cells.AlwaysEdit", dgc.Cell, {
 		// summary:
 		// grid cell that is always in an editable state, regardless of grid editing state
-		// alwaysOn: boolean
-		// flag to use editor to format grid cell regardless of editing state.
 		alwaysEditing: true,
 		_formatNode: function(inDatum, inRowIndex){
 			this.formatNode(this.getEditNode(inRowIndex), inDatum, inRowIndex);

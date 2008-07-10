@@ -180,17 +180,21 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			}
 			this._pending_requests[start] = true;
 			//console.log("fetch: ", start);
-			this.store.fetch({
-				start: start,
-				count: this.rowsPerPage,
-				query: this.query,
-				sort: this.getSortProps(),
-				queryOptions: this.queryOptions,
-				isRender: isRender,
-				onBegin: dojo.hitch(this, "_onFetchBegin"),
-				onComplete: dojo.hitch(this, "_onFetchComplete"),
-				onError: dojo.hitch(this, "_onFetchError")
-			});
+			try{
+				this.store.fetch({
+					start: start,
+					count: this.rowsPerPage,
+					query: this.query,
+					sort: this.getSortProps(),
+					queryOptions: this.queryOptions,
+					isRender: isRender,
+					onBegin: dojo.hitch(this, "_onFetchBegin"),
+					onComplete: dojo.hitch(this, "_onFetchComplete"),
+					onError: dojo.hitch(this, "_onFetchError")
+				});
+			}catch(e){
+				this._onFetchError(e);
+			}
 		}
 	},
 

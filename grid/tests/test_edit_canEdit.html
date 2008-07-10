@@ -57,7 +57,7 @@
 		defaultCell: { width: 8, editable: true, styles: 'text-align: right;'  },
 		cells: [
 			{ name: 'Id', field: 'id', width: 3 },
-			{ name: 'Priority', field: 'col1', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"] },
+			{ name: 'Priority', field: 'col1', styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["Normal", "Note", "Important"], values: ["normal", "note", "important"]},
 			{ name: 'Mark', width: 3, field: 'col2', styles: 'text-align: center;', type: dojox.grid.cells.Bool },
 			statusCell,
 			{ name: 'Message', field: 'col4', styles: '', width: '100%' },

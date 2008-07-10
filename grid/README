@@ -20,7 +20,9 @@ TurboGrid has been made available in Dojo and is now the dojox.grid!
 Dependencies:
 
 Dojo Core
+Dojo Base (dnd)
 Dijit Templated Widget
+dojox.html (metrics)
 -------------------------------------------------------------------------------
 Documentation
 
@@ -32,9 +34,11 @@ Installation instructions
 
 Grab the following from the Dojo SVN Repository:
 http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/grid/*
+http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/html/*
 
 Install into the following directory structure:
 /dojox/grid/
+/dojox/html/
 
 ...which should be at the same level as your Dojo checkout.
 -------------------------------------------------------------------------------
