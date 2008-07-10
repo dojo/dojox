@@ -2,7 +2,8 @@ dojo.provide("dojox.editorPlugins.TablePlugins");
 dojo.require("dijit._editor._Plugin");
 dojo.require("dijit._editor.selection");
 dojo.require("dijit.Menu");
-
+dojo.require("dojo.i18n");
+dojo.requireLocalization("dojox.editorPlugins", "TableDialog");
 
 //	summary
 //		A series of plugins that give the Editor the ability to create and edit 
@@ -380,7 +381,7 @@ dojo.declare("dojox.editorPlugins.GlobalTableHandler", dijit._editor._Plugin,{
 	}
 });
 // global:
-tablePluginHandler = new dojox.editorPlugins.GlobalTableHandler();
+tablePluginHandler = new dojox.editorPlugins.GlobalTableHandler(); //FIXME: no globals.
 
 dojo.declare("dojox.editorPlugins.TablePlugins",
 	dijit._editor._Plugin,
@@ -448,7 +449,7 @@ dojo.declare("dojox.editorPlugins.TablePlugins",
 		},
 		
 		setEditor: function(){
-			this.inherited("setEditor", arguments);
+			this.inherited(arguments);
 			this.onEditorLoaded();
 		},
 		onEditorLoaded: function(){
@@ -578,7 +579,7 @@ dojo.declare("dojox.editorPlugins.TablePlugins",
 			
 			this.label = this.editor.commands[this.command] = this._makeTitle(this.command);
 			
-			this.inherited("_initButton", arguments);
+			this.inherited(arguments);
 			delete this.command;
 			
 			if(this.commandName != "colorTableCell") this.connect(this.button.domNode, "click", "modTable");
@@ -815,16 +816,21 @@ dojo.declare("dojox.editorPlugins.EditorTableDialog", [dijit.Dialog], {
 	//	Dialog box with options for table creation
 	//
 	baseClass:"EditorTableDialog",
-	title:"Insert Table",
 				
 	widgetsInTemplate:true,
 	templatePath: dojo.moduleUrl("dojox", "editorPlugins/resources/insertTable.html"),
-	
+
+	postMixInProperties: function(){
+		var messages = dojo.i18n.getLocalization("dojox.editorPlugins", "TableDialog", this.lang);
+		dojo.mixin(this, messages);
+		this.inherited(arguments);
+	},
+
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
-		this.inherited("postCreate", arguments);
+		this.inherited(arguments);
 	},
-	
+
 	onInsert: function(){
 		console.log("insert");
 		
@@ -867,16 +873,21 @@ dojo.declare("dojox.editorPlugins.EditorModifyTableDialog", [dijit.Dialog], {
 	//
 	
 	baseClass:"EditorTableDialog",
-	title:"Modify Table",
-	
+
 	widgetsInTemplate:true,
 	table:null, //html table to be modified
 	tableAtts:{},
 	templatePath: dojo.moduleUrl("dojox", "editorPlugins/resources/modifyTable.html"),
-	
+
+	postMixInProperties: function(){
+		var messages = dojo.i18n.getLocalization("dojox.editorPlugins", "TableDialog", this.lang);
+		dojo.mixin(this, messages);
+		this.inherited(arguments);
+	},
+
 	postCreate: function(){
-		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog acceoting the baseClass?
-		this.inherited("postCreate", arguments);
+		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
+		this.inherited(arguments);
 		
 		this.connect(this.borderCol, "click", function(){
 			var div = document.createElement("div");
