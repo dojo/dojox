@@ -127,13 +127,3 @@
 	background:url(../../../dijit/themes/tundra/images/spriteArrows.png) no-repeat left top;
 	width:7px;
 }
-
-/* Editor Upload Image Plugin */
-.uploadImageReal {
-	position:absolute;
-	z-index:2;
-	/**/opacity:0;
-	filter:alpha(opacity:0);
-	cursor:pointer;
-	
-}
