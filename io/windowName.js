@@ -29,25 +29,39 @@ dojox.io.windowName = {
 		// 		on the client.
 		args.url += (args.url.match(/\?/) ? '&' : '?') + "windowname=" + (args.windowName || true); // indicate our desire for window.name communication
 		var cleanup = function(result){
-			var innerDoc = frame.contentWindow.document;
+			var innerDoc = dfd.ioArgs.frame.contentWindow.document;
 			// we have to do this to stop the wait cursor in FF 
 			try{
 				innerDoc.write(" ");
 				innerDoc.close();
 			}catch(e){}
-			dojo.body().removeChild(frame1); // clean up
+			dojo.body().removeChild(dfd.ioArgs.frame1); // clean up
 			return result;
 		}
 		var dfd = dojo._ioSetArgs(args,cleanup,cleanup,cleanup);
 		if(args.timeout){
-				setTimeout(function(){
-					if(state!=2){
+			setTimeout(function(){
+					if(dfd.fired == -1){
 						dfd.callback(new Error("Timeout"));
 					}
 				},
 				args.timeout
 			);
 		}
+		var self = dojox.io.windowName;
+		if(dojo.body()){
+			// the DOM is ready
+			self._send(dfd, method);
+		}else{
+			// we will wait for the DOM to be ready to proceed
+			dojo.addOnLoad(function(){
+				self._send(dfd, method);
+			});
+		}
+		return dfd;
+	},
+	_send: function(dfd, method){
+
 		var ioArgs = dfd.ioArgs;
 		var startName = "__starting__";
 		var frameName = "dojox.io.windowName" + Math.random();
@@ -73,8 +87,8 @@ dojox.io.windowName = {
 			body = doc.body;
 		}
 
-		frame = doc.createElement(dojo.isIE ? '<iframe name="' + frameName + '" onload="dojox.io.windowName['+frameNum+']()">' : 'iframe');
-		frame1 = frame1 || frame; 
+		var frame = ioArgs.frame = frame = doc.createElement(dojo.isIE ? '<iframe name="' + frameName + '" onload="dojox.io.windowName['+frameNum+']()">' : 'iframe');
+		ioArgs.frame1 = frame1 = frame1 || frame; 
 		frame1.style.display='none';
 		var state = 0;
 		function getData(){
@@ -89,6 +103,10 @@ dojox.io.windowName = {
 		}
 		dojox.io.windowName[frameNum] = frame.onload = function(){
 			try{
+				if(frame.contentWindow.location.toString() == location.toString()){
+					frame.contentWindow.location = ioArgs.url;
+					return;
+				}
 				if(frame.contentWindow.location =='about:blank'){
 					// opera and safari will do an onload for about:blank first, we can ignore this first onload
 					return;
@@ -97,7 +115,7 @@ dojox.io.windowName = {
 				// if we are in the target domain, frame.contentWindow.location will throw an ignorable error 
 			}
 			if(state == 1){
-				// back to our domain, we should be able to access the frame name now				
+				// back to our domain, we should be able to access the frame name now
 				getData();
 			}
 			if(!state){
@@ -137,7 +155,7 @@ dojox.io.windowName = {
 				}
 			}
 			form.method = 'POST';
-			form.action = args.url;
+			form.action = ioArgs.url;
 			form.target = frameName;// connect the form to the iframe
 			
 			form.submit();
@@ -148,7 +166,6 @@ dojox.io.windowName = {
 		if(frame.contentWindow){
 			frame.contentWindow.name = startName; // IE likes it afterwards
 		}
-		return dfd;
 	},
 	_frameNum: 0 
 	
