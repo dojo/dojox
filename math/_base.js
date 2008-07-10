@@ -12,9 +12,9 @@ dojo.mixin(dojox.math, {
 		return (n*180)/Math.PI;	//	Number
 	},
 
-	factoral: function(/* Number */n){
+	factorial: function(/* Number */n){
 		//	summary
-		//	Return the factoral of n.
+		//	Return the factorial of n
 		if(n<1){ 
 			return 0;	// Number
 		}
@@ -24,27 +24,31 @@ dojo.mixin(dojox.math, {
 		}
 		return ret;	// Number
 	},
+
 	permutations: function(/* Number */n, /* Number */k){
 		//	summary
 		//	TODO
 		if(n==0 || k==0){ 
 			return 1; 	// Number
 		}
-		return (this.factoral(n)/this.factoral(n-k));
+		return this.factoral(n) / this.factoral(n-k);
 	},
+
 	combinations: function(/* Number */n, /* Number */r){
 		//	summary
 		//	TODO
 		if(n==0 || r==0){ 
 			return 1; 	//	Number
 		}
-		return (this.factoral(n)/(this.factoral(n-r)*this.factoral(r)));	// Number
+		return this.factoral(n) / (this.factoral(n-r) * this.factoral(r));	// Number
 	},
+
 	bernstein: function(/* Number */t, /* Number */n, /* Number */ i){
 		//	summary
 		//	TODO
-		return (this.combinations(n, i)*Math.pow(t, i)*Math.pow(1-t, n-i));	//	Number
+		return this.combinations(n, i) * Math.pow(t, i) * Math.pow(1-t, n-i);	//	Number
 	},
+
 	gaussian: function(){
 		//	summary
 		//	Return a random number based on the Gaussian algo.
@@ -54,7 +58,7 @@ dojo.mixin(dojox.math, {
 			var j=2*Math.random()-1;
 			k = i*i+j*j;
 		}while(k>=1);
-		return (i * Math.sqrt((-2*Math.log(k))/k));	//	Number
+		return i * Math.sqrt((-2*Math.log(k))/k);	//	Number
 	},
 
 	//	basic statistics
@@ -63,6 +67,7 @@ dojo.mixin(dojox.math, {
 		//	Returns the standard deviation of the passed arguments.
 		return Math.sqrt(this.variance(a));	//	Number
 	},
+
 	variance: function(/* Array */a){
 		//	summary
 		//	Find the variance in the passed array of numbers.
@@ -81,15 +86,14 @@ dojo.mixin(dojox.math, {
 		if(arguments.length<2){
 			b=a,a=0;
 		}
-		var s=step||1;
-		var range=[];
+		var range=[], s=step||1, i;
 		if(s>0){
-			for(var i=a; i<b; i+=s){
+			for(i=a; i<b; i+=s){
 				range.push(i);
 			}
 		}else{
 			if(s<0){
-				for(var i=a; i>b; i+=s){
+				for(i=a; i>b; i+=s){
 					range.push(i);
 				}
 			}else{
@@ -98,11 +102,13 @@ dojo.mixin(dojox.math, {
 		}
 		return range; 	// Array
 	},
+
 	distance: function(/* Array */a, /* Array */b){
 		//	summary
 		//	Calculate the distance between point A and point B
 		return Math.sqrt(Math.pow(b[0]-a[0],2)+Math.pow(b[1]-a[1],2));	//	Number
 	},
+
 	midpoint: function(/* Array */a, /* Array */b){
 		//	summary
 		//	Calculate the midpoint between points A and B.  A and B may be multidimensional.
