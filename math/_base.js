@@ -15,12 +15,15 @@ dojo.mixin(dojox.math, {
 	factorial: function(/* Number */n){
 		//	summary
 		//	Return the factorial of n
-		if(n<1){ 
-			return 0;	// Number
+		if(n === 0){ 
+			return 1;	// Number
+		}else if(n < 0 || Math.floor(n) != n){
+			return NaN; // NaN
 		}
-		var ret=1;
-		for(var i=1; i<=n; i++){
-			ret*=i;
+
+		var ret = 1;
+		for(var i = 1; i <= n; i++){
+			ret *= i;
 		}
 		return ret;	// Number
 	},
@@ -31,7 +34,7 @@ dojo.mixin(dojox.math, {
 		if(n==0 || k==0){ 
 			return 1; 	// Number
 		}
-		return this.factoral(n) / this.factoral(n-k);
+		return this.factorial(n) / this.factorial(n-k);
 	},
 
 	combinations: function(/* Number */n, /* Number */r){
@@ -40,7 +43,7 @@ dojo.mixin(dojox.math, {
 		if(n==0 || r==0){ 
 			return 1; 	//	Number
 		}
-		return this.factoral(n) / (this.factoral(n-r) * this.factoral(r));	// Number
+		return this.factorial(n) / (this.factorial(n-r) * this.factorial(r));	// Number
 	},
 
 	bernstein: function(/* Number */t, /* Number */n, /* Number */ i){
