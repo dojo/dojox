@@ -4,12 +4,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Editor Table Plugins</title>
 <style type="text/css">
-		@import "../../../dojo/resources/dojo.css";
-		@import "../../../dijit/themes/tundra/tundra.css";
-		@import "../../../dijit/themes/dijit.css";
+		@import "../../../../dojo/resources/dojo.css";
+		@import "../../../../dijit/themes/tundra/tundra.css";
+		@import "../../../../dijit/themes/dijit.css";
 	</style>
     
-    <link href="../resources/editorPlugin.css" type="text/css" rel="stylesheet" />
+    <link href="../resources/editorPlugins.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
 var djConfig = {
@@ -21,11 +21,11 @@ var djConfig = {
 };
 </script>
 
-<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+<script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 <script>
 	dojo.require("dojo.parser");
 	dojo.require("dijit.Editor");
-	dojo.require("dojox.editorPlugins.tablePlugins");
+	dojo.require("dojox.editor.plugins.TablePlugins");
 	
 	dojo.addOnLoad(function(){
 		console.log(dojo.version.toString())
@@ -46,16 +46,16 @@ margin:20px 100px;
 <div id="main">
 	<div dojoType="dijit.Editor" plugins="[
                         'undo', 'redo', 'bold','italic','underline','|', 'copy', 'cut', 'paste','|',
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'insertTable'},
-                       	{name: 'dojox.editorPlugins.TablePlugins', command: 'modifyTable'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'InsertTableRowBefore'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'InsertTableRowAfter'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'insertTableColumnBefore'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'insertTableColumnAfter'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'deleteTableRow'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'deleteTableColumn'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'colorTableCell'},
-                        {name: 'dojox.editorPlugins.TablePlugins', command: 'tableContextMenu'}
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
+                       	{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'InsertTableRowBefore'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'InsertTableRowAfter'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'insertTableColumnBefore'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'insertTableColumnAfter'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'deleteTableRow'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'deleteTableColumn'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'colorTableCell'},
+                        {name: 'dojox.editor.plugins.TablePlugins', command: 'tableContextMenu'}
                     ]">
          Dojo Rocks
        <table width="200" border="2" align="center" 

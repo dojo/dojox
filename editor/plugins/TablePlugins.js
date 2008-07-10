@@ -1,9 +1,9 @@
-dojo.provide("dojox.editorPlugins.TablePlugins");
+dojo.provide("dojox.editor.plugins.TablePlugins");
 dojo.require("dijit._editor._Plugin");
 dojo.require("dijit._editor.selection");
 dojo.require("dijit.Menu");
 dojo.require("dojo.i18n");
-dojo.requireLocalization("dojox.editorPlugins", "TableDialog");
+dojo.requireLocalization("dojox.editor.plugins", "TableDialog");
 
 //	summary
 //		A series of plugins that give the Editor the ability to create and edit 
@@ -13,8 +13,8 @@ dojo.requireLocalization("dojox.editorPlugins", "TableDialog");
 //  USAGE
 //	<div dojoType="dijit.Editor" plugins="[
 //			'bold','italic','|',
-//			{name: 'dojox.editorPlugins.TablePlugins', command: 'insertTable'},
-//			{name: 'dojox.editorPlugins.TablePlugins', command: 'modifyTable'}
+//			{name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
+//			{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'}
 //		]">
 //         Editor text is here
 //	</div>
@@ -50,7 +50,7 @@ dijit.Editor.prototype.query = function(arg, scope, returnArray){
 }
 
 
-dojo.declare("dojox.editorPlugins.GlobalTableHandler", dijit._editor._Plugin,{
+dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 	// summary
 	//		A global object that handles common tasks for all the plugins. Since 
 	//		there are several plugins that are all calling common methods, it's preferable
@@ -381,9 +381,9 @@ dojo.declare("dojox.editorPlugins.GlobalTableHandler", dijit._editor._Plugin,{
 	}
 });
 // global:
-tablePluginHandler = new dojox.editorPlugins.GlobalTableHandler(); //FIXME: no globals.
+tablePluginHandler = new dojox.editor.plugins.GlobalTableHandler(); //FIXME: no globals.
 
-dojo.declare("dojox.editorPlugins.TablePlugins",
+dojo.declare("dojox.editor.plugins.TablePlugins",
 	dijit._editor._Plugin,
 	{
 		//summary: 
@@ -549,7 +549,7 @@ dojo.declare("dojox.editorPlugins.TablePlugins",
 			dojo.withGlobal(this.editor.window, "selectElement",dijit._editor.selection, [o.tbl]);
 		},
 		launchInsertDialog: function(){
-			var w = new dojox.editorPlugins.EditorTableDialog({});
+			var w = new dojox.editor.plugins.EditorTableDialog({});
 			w.show();
 			this.connect(w, "onBuildTable", function(obj){
 				var e = this.editor;
@@ -564,7 +564,7 @@ dojo.declare("dojox.editorPlugins.TablePlugins",
 		launchModifyDialog: function(){
 			var o = this.getTableInfo();
 			console.log("LAUNCH DIALOG")
-			var w = new dojox.editorPlugins.EditorModifyTableDialog({table:o.tbl});
+			var w = new dojox.editor.plugins.EditorModifyTableDialog({table:o.tbl});
 			w.show();
 			this.connect(w, "onSetTable", function(color){
 				// uhm... not sure whats going on here...
@@ -805,23 +805,23 @@ dojo.declare("dojox.editorPlugins.TablePlugins",
 	}
 );
 
-dojo.provide("dojox.editorPlugins.EditorTableDialog");
+dojo.provide("dojox.editor.plugins.EditorTableDialog");
 dojo.require("dijit.Dialog");
 dojo.require("dijit.form.TextBox");
 dojo.require("dijit.form.FilteringSelect");
 dojo.require("dijit.form.Button");
 
-dojo.declare("dojox.editorPlugins.EditorTableDialog", [dijit.Dialog], {
+dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 	// summary
 	//	Dialog box with options for table creation
 	//
 	baseClass:"EditorTableDialog",
 				
 	widgetsInTemplate:true,
-	templatePath: dojo.moduleUrl("dojox", "editorPlugins/resources/insertTable.html"),
+	templatePath: dojo.moduleUrl("dojox", "editor.plugins/resources/insertTable.html"),
 
 	postMixInProperties: function(){
-		var messages = dojo.i18n.getLocalization("dojox.editorPlugins", "TableDialog", this.lang);
+		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
 		dojo.mixin(this, messages);
 		this.inherited(arguments);
 	},
@@ -863,10 +863,10 @@ dojo.declare("dojox.editorPlugins.EditorTableDialog", [dijit.Dialog], {
 });
 
 
-dojo.provide("dojox.editorPlugins.EditorModifyTableDialog");
+dojo.provide("dojox.editor.plugins.EditorModifyTableDialog");
 dojo.require("dijit.ColorPalette");
 
-dojo.declare("dojox.editorPlugins.EditorModifyTableDialog", [dijit.Dialog], {
+dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	
 	// summary
 	//	Dialog box with options for editing a table
@@ -877,10 +877,10 @@ dojo.declare("dojox.editorPlugins.EditorModifyTableDialog", [dijit.Dialog], {
 	widgetsInTemplate:true,
 	table:null, //html table to be modified
 	tableAtts:{},
-	templatePath: dojo.moduleUrl("dojox", "editorPlugins/resources/modifyTable.html"),
+	templatePath: dojo.moduleUrl("dojox", "editor.plugins/resources/modifyTable.html"),
 
 	postMixInProperties: function(){
-		var messages = dojo.i18n.getLocalization("dojox.editorPlugins", "TableDialog", this.lang);
+		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
 		dojo.mixin(this, messages);
 		this.inherited(arguments);
 	},
@@ -971,7 +971,7 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 		case "insertTable":
 		case "tableContextMenu":
 		
-			o.plugin = new dojox.editorPlugins.TablePlugins({commandName: cmd});
+			o.plugin = new dojox.editor.plugins.TablePlugins({commandName: cmd});
 			break;
 	}
 });

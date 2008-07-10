@@ -1,0 +1,39 @@
+-------------------------------------------------------------------------------
+dojox.editor
+-------------------------------------------------------------------------------
+Version 0.5
+Release date: 7/10/2008
+-------------------------------------------------------------------------------
+Project state:
+experimental
+-------------------------------------------------------------------------------
+Credits
+	Mike Wilcox 	- Author
+    Dustin Machi 	- Techincal Assistance
+	Adam Peller 	- Internationalization
+-------------------------------------------------------------------------------
+Project description
+
+Space for extensions and additional plugins for dijit.Editor 
+-------------------------------------------------------------------------------
+Dependencies:
+
+dijit.Editor
+dijit.Menu
+-------------------------------------------------------------------------------
+Documentation
+
+-------------------------------------------------------------------------------
+Plugin Installation instructions
+
+Get the dojox/editor folder (and dojox/editor/plugins) from the 
+dojox SVN repository. Include the Editor and plugins in your page:
+
+dojo.require("dijit.Editor");
+dojo.require("dojox.editor.plugins.TablePlugins");
+
+And the style sheet:
+
+<link href="[path]dojox/editor/plugins/resources/editorPlugins.css" type="text/css" rel="stylesheet" />
+
+See dojox/editor/plugins/tests/editorTablePlugs.html for a markup example
