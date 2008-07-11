@@ -203,7 +203,7 @@ dojo.declare("dojox.grid._Layout", null, {
 
 		var isView = function(def){
 			return (def != null && dojo.isObject(def) &&
-					("cells" in def || "rows" in def || "type" in def));
+					("cells" in def || "rows" in def || ("type" in def && !isCell(def))));
 		};
 
 		if(dojo.isArray(inStructure)){
