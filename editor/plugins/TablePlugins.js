@@ -89,11 +89,12 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		this.connectDraggable();
 	},
 	
-	getTableInfo: function(){
+	getTableInfo: function(forceNewData){
 		// summary
 		//	Gets the table in focus
 		//	Collects info on the table - see return params
 		//
+		if(forceNewData) this._tempStoreTableData(false);
 		if(this.tableData){
 			// tableData is set for a short amount of time, so that all 
 			// plugins get the same return without doing the method over
@@ -600,6 +601,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			var o = this.getTableInfo();
 			var sw = (dojo.isString(cmd))?cmd : this.commandName;
 			var r, c, i;
+			var adjustColWidth = false;
 			//console.log("modTable:", sw)
 			
 			switch(sw){
@@ -622,12 +624,14 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 						c = r.insertCell(o.colIndex);
 						c.innerHTML = "&nbsp;";
 					});
+					adjustColWidth = true;
 					break;
 				case "insertTableColumnAfter":
 					o.trs.forEach(function(r){
 						c = r.insertCell(o.colIndex+1);
 						c.innerHTML = "&nbsp;";
 					});
+					adjustColWidth = true;
 					break;
 				case "deleteTableRow":
 					o.tbl.deleteRow(o.trIndex);
@@ -637,6 +641,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 					o.trs.forEach(function(tr){
 						tr.deleteCell(o.colIndex);
 					});
+					adjustColWidth = true;
 					break;
 				case "colorTableCell":
 					// The one plugin that really needs use of the very verbose
@@ -652,6 +657,9 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 				case "insertTable":
 					break
 				
+			}
+			if(adjustColWidth){
+				this.makeColumnsEven();
 			}
 			this.endEdit();
 		},
@@ -688,13 +696,27 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			}
 		},
 		
+		makeColumnsEven: function(){
+			//summary 
+			//	After changing column amount, change widths to
+			//	keep columns even
+			//
+			// the timeout helps prevent an occasional snafu
+			setTimeout(dojo.hitch(this, function(){
+				var o = this.getTableInfo(true);
+				var w = Math.floor(100/o.cols);
+				o.tds.forEach(function(d){
+					dojo.attr(d, "width", w+"%");
+				});
+			}), 10);
+		},
 		
-		getTableInfo: function(){
+		getTableInfo: function(forceNewData){
 			// summary
 			//	Gets the table in focus
 			//	Collects info on the table - see return params
 			//
-			return tablePluginHandler.getTableInfo();
+			return tablePluginHandler.getTableInfo(forceNewData);
 		},
 		_makeTitle: function(str){
 			// Parses the commandName into a Title
@@ -818,7 +840,7 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 	baseClass:"EditorTableDialog",
 				
 	widgetsInTemplate:true,
-	templatePath: dojo.moduleUrl("dojox", "editor.plugins/resources/insertTable.html"),
+	templatePath: dojo.moduleUrl("dojox.editor.plugins", "resources/insertTable.html"),
 
 	postMixInProperties: function(){
 		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
@@ -847,7 +869,7 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 		for(var r=0;r<rows;r++){
 			t += '\t<tr>\n';
 			for(var c=0;c<cols;c++){
-				t += '\t\t<td>&nbsp;</td>\n';
+				t += '\t\t<td width="'+(Math.floor(100/cols))+'%">&nbsp;</td>\n';
 			}
 			t += '\t</tr>\n';
 		}
@@ -877,7 +899,7 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	widgetsInTemplate:true,
 	table:null, //html table to be modified
 	tableAtts:{},
-	templatePath: dojo.moduleUrl("dojox", "editor.plugins/resources/modifyTable.html"),
+	templatePath: dojo.moduleUrl("dojox.editor.plugins", "resources/modifyTable.html"),
 
 	postMixInProperties: function(){
 		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
