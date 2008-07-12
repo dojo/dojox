@@ -1,7 +1,7 @@
 dojo.provide("dojox.rpc.Client");
 // Provide extra headers for robust client and server communication
 (function() {
-	var plainXhr = dojo.xhr;
+	dojo._defaultXhr = dojo.xhr;
 	dojo.xhr = function(method,args){
 		var headers = args.headers = args.headers || {};
 		// set the client id, this can be used by servers to maintain state information with the
@@ -14,7 +14,7 @@ dojo.provide("dojox.rpc.Client");
 		// can be properly sequenced deterministically. This applies a sequency id to each
 		// XHR request so that the server can order them.
 		headers["X-Seq-Id"] = dojox._reqSeqId = (dojox._reqSeqId||0)+1;
-		return plainXhr.apply(dojo,arguments);
+		return dojo._defaultXhr.apply(dojo,arguments);
 	}
 })();
 // initiate the client id to a good random number

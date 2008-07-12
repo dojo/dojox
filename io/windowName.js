@@ -103,11 +103,7 @@ dojox.io.windowName = {
 		}
 		dojox.io.windowName[frameNum] = frame.onload = function(){
 			try{
-				if(frame.contentWindow.location.toString() == location.toString()){
-					frame.contentWindow.location = ioArgs.url;
-					return;
-				}
-				if(frame.contentWindow.location =='about:blank'){
+				if(!dojo.isMoz && frame.contentWindow.location =='about:blank'){
 					// opera and safari will do an onload for about:blank first, we can ignore this first onload
 					return;
 				}
@@ -124,7 +120,9 @@ dojox.io.windowName = {
 				var sameDomainUrl = dojo.config["dojoBlankHtmlUrl"]||dojo.moduleUrl("dojo", "resources/blank.html");
 				frame.contentWindow.location = sameDomainUrl;
 				try{
-					getData();
+					if(!dojo.isMoz){
+						getData();
+					}
 				}
 				catch(e){
 				}
@@ -136,6 +134,9 @@ dojox.io.windowName = {
 			dojo._ioAddQueryToUrl(ioArgs);
 			frame.src = ioArgs.url;
 			body.appendChild(frame);
+			if(frame.contentWindow){
+				frame.contentWindow.location.replace(ioArgs.url);
+			}
 		}else if(method.match(/POST/i)){
 			// if it is a POST we will build a form to post it
 			body.appendChild(frame);

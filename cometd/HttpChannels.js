@@ -34,9 +34,47 @@ if(dojox.data && dojox.data.JsonRestStore){
 //
 
 (function(){
-	var Channels = dojox.cometd.HttpChannels = {
-		absoluteUrl: function(relativeUrl){
-			return new dojo._Url(location.href,relativeUrl)+'';
+	dojo.declare("dojox.cometd.HttpChannels", null, {
+		constructor: function(options){
+			// summary:
+			//		Initiates the HTTP Channels protocol
+			//	options:
+			//		Keyword arguments:
+			//	The *autoSubscribeRoot* parameter:
+			//		When this is set, all REST service requests that have this
+			// 		prefix will be auto-subscribed. The default is '/' (all REST requests).
+			//  The *url* parameter:
+			//		This is the url to connect to for server-sent messages. The default
+			//		is "/channels".
+			//	The *autoReconnectTime* parameter:
+			// 		This is amount time to wait to reconnect with a connection is broken	
+			dojo.mixin(this,options);
+			// If we have a Rest service available and we are auto subscribing, we will augment the Rest service 
+			if(dojox.rpc.Rest && this.autoSubscribeRoot){
+				// override the default Rest handler so we can add subscription requests
+				var defaultGet = dojox.rpc.Rest._get;
+				var self = this;
+				dojox.rpc.Rest._get = function(service, id){
+					// when there is a REST get, we will intercept and add our own xhr handler
+					var defaultXhrGet = dojo.xhrGet;
+					dojo.xhrGet = function(r){
+						var autoSubscribeRoot = self.autoSubscribeRoot;
+						return (autoSubscribeRoot && r.url.substring(0, autoSubscribeRoot.length) == autoSubscribeRoot) ?
+							self.get(r.url,r) : // auto-subscribe 
+							defaultXhrGet(r); // plain XHR request
+					};
+		
+					var result = defaultGet.apply(this,arguments);
+					dojo.xhrGet = defaultXhrGet;
+					return result;
+				};
+			}
+			if(dojox.data && dojox.data.restListener){
+				this.receive = dojox.data.restListener;
+			}
+		},
+		absoluteUrl: function(baseUrl,relativeUrl){
+			return new dojo._Url(baseUrl,relativeUrl)+'';
 		},
 		acceptType: "x-application/http+json,application/http;q=0.9,*/*;q=0.7",
 		subscriptions: {},
@@ -44,6 +82,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 		autoReconnectTime: 30000,
 		sendAsJson: false,
 		url: '/channels',
+		autoSubscribeRoot: '/',
 		open: function(){
 			// summary:
 			// 		Startup the transport (connect to the "channels" resource to receive updates from the server).
@@ -53,84 +92,69 @@ if(dojox.data && dojox.data.JsonRestStore){
 			// 		it is often not necessary to call this
 			//
 			if(!this.connected){
-				var xdr = dojox.cometd.useXDR && window.XDomainRequest;
-				// we are currently directly using the XHR or XDR object, because Dojo's XHR wrapper is not architected for progress events. If that changes, we can use Dojo's XHR here.
-				this.xhr = (window.XMLHttpRequest && new (xdr || XMLHttpRequest)) || new ActiveXObject("Microsoft.XMLHTTP");
-				var xhr = this.xhr;
 				this.connectionId = dojox._clientId;
-				var clientIdHeader = this.started ? 'Client-Id' : 'Create-Client-Id';
-				// post to our channel url
-				if(xdr){
-					xhr.open("POST",this.absoluteUrl(this.url + "?http-Accept=" + this.acceptType + "&http-" + clientIdHeader + "=" + this.connectionId)); 
-				}else{// xdr doesn't have setRequestHeader, and it must have an absolute url
-					xhr.open("POST",this.url,true);
-					xhr.setRequestHeader('X-' + clientIdHeader,this.connectionId); 
-	  				// let the server know what type of response we can accept
-			  		xhr.setRequestHeader('Accept',this.acceptType);
-				}
+				var clientIdHeader = this.started ? 'X-Client-Id' : 'X-Create-Client-Id';
+
+				var headers = {Accept:this.acceptType};
+				headers[clientIdHeader] = this.connectionId;
+				var dfd = dojo.xhrPost({headers:headers, url: this.url, noStatus: true});
 		  		var self = this;
 		  		this.lastIndex = 0; 
-				var onstatechange = function(){ // get all the possible event handlers
-					var error,loaded,data;
-			        try{
-						if(!xhr.readyState || xhr.readyState > 2){// only if"OK" (xdr doesn't have a readyState)
-							self.readyState = xhr.readyState;
-							error = xhr.status > 300;		
-							data = xhr.responseText.substring(self.lastIndex);
-				        	loaded = !error && typeof data=='string';//firefox can throw an exception right here
-						}
-			        } catch(e){
-			        	error = xhr.readyState == 4; // an error in ready state 3 is common with IE's old API. But in ready state 4, it is an indication of a real error in firefox 
-			        }
-			        if(typeof dojo == 'undefined'){
-			        	return;// this can be called after dojo is unloaded, just do nothing in that case
-			        }
-			        if(loaded){ 
-			        	var contentType = xhr.contentType || xhr.getResponseHeader("Content-Type");
-			        	self.started = true;
-						try{			        	
-			        		error = self.onprogress(xhr,xdr,data,contentType);
-						}
-				        finally {
-							if(xhr.readyState==4){
-					        	xhr = null;
-					        	if(self.connected){
-					        		self.connected = false;
-					        		self.open();
-					        	}
-							}
-				        }
-			        }
-			        if(error){ // an error has occurred
-			        
-			        	if(self.started){ // this means we need to reconnect
-			        		self.started = false;
+				var onerror, onprogress = function(data){ // get all the possible event handlers
+					if(typeof dojo == 'undefined'){
+						return null;// this can be called after dojo is unloaded, just do nothing in that case
+					}
+					data = data.substring(self.lastIndex);
+					var contentType = xhr && (xhr.contentType || xhr.getResponseHeader("Content-Type"));
+					self.started = true;
+					var error = self.onprogress(xhr,data,contentType);
+					if(error){
+						onerror();
+						return new Error(error);
+					}
+					if(!xhr || xhr.readyState==4){
+						xhr = null;
+						if(self.connected){
 							self.connected = false;
-			        		var subscriptions = self.subscriptions;
-			        		self.subscriptions = {};
-							for(var i in subscriptions){
-								self.subscribe(i,{since:subscriptions[i]});
-							}
-			        	}else{
-			        		self.disconnected();
-			        	}
-			        }
+							self.open();
+						}
+					}
+					return data;
+				};
+				onerror = function(error){
+					if(self.started){ // this means we need to reconnect
+						self.started = false;
+						self.connected = false;
+						var subscriptions = self.subscriptions;
+						self.subscriptions = {};
+						for(var i in subscriptions){
+							self.subscribe(i,{since:subscriptions[i]});
+						}
+					}else{
+						self.disconnected();
+					}
+					return error;
 			  	};
-	  			xhr.onreadystatechange = onstatechange;
-		  		if(xdr){
-			  		xhr.onerror = function(){
-			  			xhr.readyState = 4;
-			  			xhr.status = 404; // this is so that we can restartup ifnecessary
-			  			onstatechange();
-			  		};
-			  		xhr.onload = function(){
-			  			xhr.readyState = 4;
-			  			onstatechange();
-			  		};
-		  			xhr.onprogress = onstatechange;
-		  		}
+			  	dfd.addCallbacks(onprogress,onerror);
+			  	var xhr = dfd.ioArgs.xhr; // this may not exist if we are not using XHR, but an alternate XHR plugin
+			  	if(xhr){
+			  		// if we are doing a monitorable XHR, we want to listen to streaming events
+	  				xhr.onreadystatechange = function(){
+	  					var responseText;
+						try{
+							if(xhr.readyState == 3){// only for progress, the deferred object will handle the finished responses
+								self.readyState = 3;
+								responseText = xhr.responseText;
+							}
+						} catch(e){
+						}
+	  					if(typeof data=='string'){
+	  						onprogress(responseText);
+	  					}
+	  				} 
+			  	}
+			  	
 	  			 
-				xhr.send(null);
 				if(window.attachEvent){// IE needs a little help with cleanup
 					attachEvent("onunload",function(){
 						self.connected= false;
@@ -189,7 +213,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 			// 		data : The response body as JSON
 			// 		channel : The channel/url of the response
 			args = args || {};
-			args.url = this.absoluteUrl(channel);
+			args.url = this.absoluteUrl(this.url, channel);
 			if(args.headers){ 
 				// FIXME: combining Ranges with notifications is very complicated, we will save that for a future version
 				delete args.headers.Range;
@@ -222,26 +246,25 @@ if(dojox.data && dojox.data.JsonRestStore){
 				var self = this;
 				dfd.addBoth(function(result){					
 					var xhr = dfd.ioArgs.xhr;
-					if(xhr.status < 400){
+					if(!(result instanceof Error)){
 						if(args.confirmation){
 							args.confirmation();
 						}
 					}
-					if(xhr.getResponseHeader("X-Subscribed")  == "OK"){
+					if(xhr && xhr.getResponseHeader("X-Subscribed")  == "OK"){
 						var lastMod = xhr.getResponseHeader('Last-Modified');
-//							log("lastMod " + lastMod);
 						
 						if(xhr.responseText){ 
 							self.subscriptions[channel] = lastMod || new Date().toUTCString();
 						}else{
 							return null; // don't process the response, the response will be received in the main channels response
 						}
-					}else{ // ifit is not a 202 response, that means it is did not accept the subscription
+					}else if(xhr){ // ifit is not a 202 response, that means it is did not accept the subscription
 						delete self.subscriptions[channel];
 					}
-					if(xhr.status < 300){
+					if(!(result instanceof Error)){
 						var message = {
-							responseText:xhr.responseText,
+							responseText:xhr && xhr.responseText,
 							channel:channel,
 							getResponseHeader:function(name){
 								return xhr.getResponseHeader(name);
@@ -251,7 +274,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 							}
 						};
 						try{
-							message.data = dojo.fromJson(message.responseText);
+							message.data = result;
 						}
 						catch (e){}
 						if(self.subCallbacks[channel]){
@@ -281,7 +304,6 @@ if(dojox.data && dojox.data.JsonRestStore){
 			return this._send("POST",{url:channel,contentType : 'application/json'},data);
 		},
 		_processMessage: function(message){
-//			console.log("process message ",message);
 			message.event = message.event || message.getResponseHeader('X-Event');
 			if(message.event=="connection-conflict"){
 				return "conflict"; // indicate an error
@@ -291,8 +313,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 			}
 			catch(e){}
 			var self = this;	
-			message.channel = message.target || message.getResponseHeader('Content-Location');//for cometd
-			var loc = new dojo._Url(location.href,message.channel); // TODO: more robust URL matching
+			var loc = message.channel = new dojo._Url(this.url, message.target || message.getResponseHeader('Content-Location'))+'';//for cometd
 			if(loc in this.subscriptions){
 				this.subscriptions[loc] = message.getResponseHeader('Last-Modified'); 
 			}
@@ -304,9 +325,9 @@ if(dojox.data && dojox.data.JsonRestStore){
 			this.receive(message);
 			return null;		
 		},
-		onprogress: function(xhr,xdr,data,contentType){
+		onprogress: function(xhr,data,contentType){
 			// internal XHR progress handler
-			if(contentType.match(/application\/http\+json/)){
+			if(!contentType || contentType.match(/application\/http\+json/)){
 				var size = data.length;
 				data = data.replace(/^\s*[,\[]?/,'['). // must start with a opening bracket
 					replace(/[,\]]?\s*$/,']'); // and end with a closing bracket
@@ -321,9 +342,9 @@ if(dojox.data && dojox.data.JsonRestStore){
 			else if(contentType.match(/application\/http/)){
 				// do HTTP tunnel parsing
 				var topHeaders = '';
-				if(!xdr){
+				if(xhr && xhr.getAllResponseHeaders){
 					// mixin/inherit headers from the container response
-		    		topHeaders = xhr.getAllResponseHeaders();
+					topHeaders = xhr.getAllResponseHeaders();
 				}
 				xhrs = dojox.io.httpParse(data,topHeaders,xhr.readyState != 4);
 			}
@@ -334,6 +355,10 @@ if(dojox.data && dojox.data.JsonRestStore){
 					}
 				}
 				return null;
+			}
+			if(!xhr){
+				//no streaming and we didn't get any message, must be an error
+				return "error";
 			}
 			if(xhr.readyState != 4){ // we only want finished responses here if we are not streaming 
 				return null;
@@ -384,7 +409,8 @@ if(dojox.data && dojox.data.JsonRestStore){
 			this.connected = false;
 			this.xhr.abort();
 		}
-	};
+	});
+	var Channels = new dojox.cometd.HttpChannels();
 	if(dojox.cometd.connectionTypes){ 
 		// register as a dojox.cometd transport and wire everything for cometd handling
 		// below are the necessary adaptions for cometd
@@ -404,9 +430,9 @@ if(dojox.data && dojox.data.JsonRestStore){
 		Channels.deliver = function(message){ 
 			// nothing to do
 		};
-		Channels.receive = function(message){
+		dojo.connect(this,"receive",null,function(message){
 			this._cometd._deliver(message);
-		}
+		});
 		Channels.sendMessages = function(messages){
 			for(var i = 0; i < messages.length; i++){
 				var message = messages[i];
@@ -432,23 +458,5 @@ if(dojox.data && dojox.data.JsonRestStore){
 			}
 		};
 		dojox.cometd.connectionTypes.register("http-channels", Channels.check, Channels,false,true);
-	}
-	if(dojox.rpc.Rest){
-		// override the default Rest handler so we can add subscription requests
-		var defaultGet = dojox.rpc.Rest._get;
-		dojox.rpc.Rest._get = function(){
-			// when there is a REST get, we will intercept and add our own xhr handler
-			var defaultXhrGet = dojo.xhrGet;  
-			dojo.xhrGet = function(r){
-				return Channels.get(r.url,r);
-			};
-
-			var result = defaultGet.apply(this,arguments);
-			dojo.xhrGet = defaultXhrGet;
-			return result;
-		};
-	}
-	if(dojox.data && dojox.data.restListener){
-		dojo.connect(Channels,"receive",null,dojox.data.restListener);
 	}
 })();

@@ -11,9 +11,9 @@ dojo.require("dojo._base.xhr");
 		// 		xhr handlers
 		if(!registry){
 			registry = new dojo.AdapterRegistry();
-			plainXhr = dojox.io.xhrPlugins.plainXhr = dojo.xhr;
+			plainXhr = dojox.io.xhrPlugins.plainXhr = dojo._defaultXhr || dojo.xhr;
 			// replaces the default xhr() method. Can we just use connect() instead?
-			dojo.xhr = function(/*String*/ method, /*dojo.__XhrArgs*/ args, /*Boolean?*/ hasBody){
+			dojo[dojo._defaultXhr ? "_defaultXhr" : "xhr"] = function(/*String*/ method, /*dojo.__XhrArgs*/ args, /*Boolean?*/ hasBody){
 				return registry.match.apply(registry,arguments);						
 			};
 			registry.register(
@@ -81,16 +81,15 @@ dojo.require("dojo._base.xhr");
 			plainXhr
 		);
 	};
-	dojox.io.xhrPlugins.addXdr = function(url){
+	dojox.io.xhrPlugins.addXdr = function(url,httpAdapter){
 		//	summary:
 		//		adds XDomainRequest handling for the given URL prefix This can be
 		//		used for servers that support XDomainRequest.
 		//
 		// 	url: Requests that start with this URL will be considered for using XDomainRequest
 		//
-		// 	allowHeadersAndMethodsInURLParameters: (Experimental) This would indicate that the server
-		// 		will allow methods and headers that can't be otherwise sent with XDR to be 
-		// 		included in the URL parameters.
+		// 	httpAdapter: This allows for adapting HTTP requests that could not otherwise be 
+		// 		sent with XDR, so you can use a convention for headers and PUT/DELETE methods.
 		//
 		//	description:
 		//		In order for a server to support XDomainRequest, when it receives a
@@ -107,12 +106,11 @@ dojo.require("dojo._base.xhr");
 				return (
 					window.XDomainRequest && 
 					args.sync !== true && 
-					(method == "GET" || method == "POST" /*|| allowHeadersAndMethodsInURLParameters*/) && 
+					(method == "GET" || method == "POST" || httpAdapter) && 
 					(args.url.substring(0,url.length) == url)
 				);
 			},
 			function(){
-				// TODO: may want to support putting methods in the URL
 				var normalXhrObj = dojo._xhrObj;
 				// we will just substitute this in temporarily so we can use XDomainRequest instead of XMLHttpRequest
 				dojo._xhrObj = function(){
@@ -132,16 +130,51 @@ dojo.require("dojo._base.xhr");
 					}
 					xdr.onload = handler(200, 4);
 					xdr.onprogress = handler(200, 3);
-					xdr.onerror = handler(500, 4); // an error, who knows what the real status is
+					xdr.onerror = handler(404, 4); // an error, who knows what the real status is
 					return xdr;
 				};
-				var dfd = plainXhr.apply(dojo,arguments);
+				var dfd = (httpAdapter ? httpAdapter(plainXhr) : plainXhr).apply(dojo,arguments);
 				dojo._xhrObj = normalXhrObj;
 				return dfd; 
 			}
 		);
 	};
-
+	dojox.io.xhrPlugins.fullHttpAdapter = function(plainXhr,noRawBody){
+		// summary:
+		// 		Provides a HTTP adaption.
+		// description:
+		// 		The following convention is used:
+		// 		method name -> ?http-method=PUT
+		// 		Header -> http-Header-Name=header-value
+		//		X-Header -> header_name=header-value
+		//	example:
+		//		dojox.io.xhrPlugins.addXdr("http://somesite.com", dojox.io.xhrPlugins.fullHttpAdapter);
+		return function(method,args,hasBody){
+			var content = {};
+			var parameters = {};
+			if(!(method == "GET" || method == "POST")){
+				parameters["http-method"] = method;
+				method = "POST";
+				if(args.putData && noRawBody){
+					content["http-content"] = args.putData;
+					delete args.putData;
+					hasBody = false;
+				}
+			}else if(method=="POST" && args.postData && noRawBody){
+				content["http-content"] = args.postData;
+				delete args.postData;
+				hasBody = false;
+			}
+			for(var i in args.headers){
+				var parameterName = i.match(/^X-/) ? i.substring(2).replace(/-/g,'_').toLowerCase() : ("http-" + i);
+				parameters[parameterName] = args.headers[i];
+			}
+			args.query = dojo.objectToQuery(parameters);
+			dojo._ioAddQueryToUrl(args);
+			args.content = dojo.mixin(args.content || {},content);
+			return plainXhr.call(dojo,method,args,hasBody);
+		};
+	};
 })();
 
 

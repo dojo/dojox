@@ -44,7 +44,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		deferred.addCallback(function(result){
 			if(range){
 				// try to record the total number of items from the range header
-				range = deferred.ioArgs.xhr.getResponseHeader("Content-Range");
+				range = deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Content-Range");
 				deferred.fullLength = range && (range=range.match(/\/(.*)/)) && parseInt(range[1]);
 			}
 			return result;
@@ -73,7 +73,12 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		};
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id){
-			return {url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), handleAs: isJson?'json':'text', sync: dojox.rpc._sync};
+			return {
+				url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), 
+				handleAs: isJson?'json':'text', 
+				contentType: isJson?'application/json':'text/plain',
+				sync: dojox.rpc._sync
+			};
 		};
 		// each calls the event handler
 		function makeRest(name){
