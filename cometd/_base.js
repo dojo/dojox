@@ -389,11 +389,11 @@ dojox.cometd = {
 			}
 			if(!this._polling) {
 				this._connected=false;
-				dojo.publish(prefix + "/meta", [{cometd:this,action:"connect",successful:false,state:this.state()}]);
+				this._publishMeta("connect",false);
 			}
 			this._initialized=false;
 			this._handshook=false;
-			dojo.publish(prefix + "/meta", [{cometd:this,action:"disconnect",successful:true,state:this.state()}]);
+			this._publishMeta("disconnect",true);
 		}
 	
 		
@@ -437,6 +437,18 @@ dojox.cometd = {
 			}
 			return i;
 		}
+		
+		this._publishMeta = function(action,successful,props){
+			try {
+				var meta = {cometd:this,action:action,successful:successful,state:this.state()};
+				if (props){
+					dojo.mixin(meta, props);
+				}
+				dojo.publish(this.prefix + "/meta", [meta]);
+			} catch(e) {
+				console.log(e);
+			}
+		}
 	
 		this._finishInit = function(data){
 			//	summary:
@@ -477,13 +489,7 @@ dojox.cometd = {
 				transport.startup(data);
 			}
 	
-			dojo.publish(prefix + "/meta", [{ 
-				cometd: this, 
-				action: "handshake", 
-				successful: successful, 
-				reestablish: successful && this._handshook, 
-				state: this.state() 
-			}]);
+			this._publishMeta("handshake",successful,{reestablish: successful && this._handshook});
 			if(successful){
 				this._handshook=true;
 			}else{
@@ -549,40 +555,45 @@ dojox.cometd = {
 							this._connected = false; // finish disconnect
 						}
 						if(this._initialized){
-							dojo.publish(prefix + "/meta", [{
-								cometd: this,
-								action: "connect",
-								successful: message.successful,
-								state:this.state()
-							}]);
+							this._publishMeta("connect",message.successful);
 						}
 						break;
 					case "/meta/subscribe":
 						deferred = this._deferredSubscribes[message.subscription];
-						if(!message.successful){
-							if(deferred){
-								deferred.errback(new Error(message.error));
+						try
+						{
+							if(!message.successful){
+								if(deferred){
+									deferred.errback(new Error(message.error));
+								}
+								this.currentTransport.cancelConnect();
+								return;
 							}
-							this.currentTransport.cancelConnect();
-							return;
-						}
-						dojox.cometd.subscribed(message.subscription, message);
-						if(deferred){
-							deferred.callback(true);
+							if(deferred){
+								deferred.callback(true);
+							}
+							this.subscribed(message.subscription, message);
+						} catch(e)	{
+							log.warn(e);
 						}
 						break;
 					case "/meta/unsubscribe":
 						deferred = this._deferredUnsubscribes[message.subscription];
-						if(!message.successful){
-							if(deferred){
-								deferred.errback(new Error(message.error));
+						try
+						{
+							if(!message.successful){
+								if(deferred){
+									deferred.errback(new Error(message.error));
+								}
+								this.currentTransport.cancelConnect();
+								return;
 							}
-							this.currentTransport.cancelConnect();
-							return;
-						}
-						this.unsubscribed(message.subscription, message);
-						if(deferred){
-							deferred.callback(true);
+							if(deferred){
+								deferred.callback(true);
+							}
+							this.unsubscribed(message.subscription, message);
+						} catch(e)	{
+							log.warn(e);
 						}
 						break;
 					default:
