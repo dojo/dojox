@@ -244,23 +244,24 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		See dojo.data.Read
 
 			// add in the REST capabilities for paged fetching and cache control
-			var queryInfo={};
+			var queryInfo={dontCache:!args.useIndexCache};
 			if(args.start || args.count){
 				queryInfo.start=args.start;
 				if(args.count){
 					queryInfo.end=(args.start||0)+args.count;
 				}
 			}
-			queryInfo.dontCache = args.dontCache; // TODO: Add TTL maybe?
 			dojox.rpc.Rest.setQueryInfo(queryInfo);
 			return this.inherited(arguments);
 		},
-		_doQuery: function(query){
+		_doQuery: function(args){
+			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
 			return dojox.rpc.JsonRest.get(this.service,query);
 		},
 		_processResults: function(results, deferred){
 			// index the results
-			return {totalCount:deferred.fullLength || results.length, items: results};
+			var count = results.length;
+			return {totalCount:deferred.fullLength || (deferred.request.count == count ? count * 2 : count), items: results};
 		},
 
 		fetchItemByIdentity: function(args){
@@ -270,6 +271,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			// convert the different spellings
 			args.query = args.identity;
 			args.onComplete = args.onItem;
+			args.useIndexCache = true;
 			delete args.onItem;
 			// we can rely on the Rest service to provide the index/cache
 			return this.fetch(args).results;

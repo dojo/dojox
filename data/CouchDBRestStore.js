@@ -47,7 +47,7 @@ dojo.declare("dojox.data.CouchDBRestStore",
 					oldOnComplete.apply(this,arguments);
 				}
 			};
-			return dojox.data.JsonRestStore.prototype.fetch.call(this,args);
+			return this.inherited(arguments);
 		}
 	}
 );

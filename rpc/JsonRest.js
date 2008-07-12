@@ -235,6 +235,7 @@ dojo.require("dojox.rpc.Rest");
 			deferred = service(id);
 			deferred.addCallback(function(result){
 				if(result.nodeType && result.cloneNode){
+					// return immediately if it is an XML document
 					return result;
 				}
 				return dojox.json.ref.resolveJson(result, {

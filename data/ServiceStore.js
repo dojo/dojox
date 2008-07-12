@@ -62,7 +62,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// |	};
 			//setup a byId alias to the api call	
 			this.byId=this.fetchItemByIdentity;
-			this._index = {};			
+			this._index = {};
 			// if the advanced json parser is enabled, we can pass through object updates as onSet events
 			if(options){
 				dojo.mixin(this,options);
@@ -188,14 +188,14 @@ dojo.declare("dojox.data.ServiceStore",
 			return item;
 		},
 		_currentId : 0,
-		_processResults : function(results){
+		_processResults : function(results, deferred){
 			// this should return an object with the items as an array and the total count of 
 			// items (maybe more than currently in the result set).
 			// for example:
 			//	| {totalCount:10,[{id:1},{id:2}]}
 			if(results instanceof Array){
 				for (var i = 0; i < results.length; i++){
-					results[i] = this._processResults(results[i]).items;
+					results[i] = this._processResults(results[i], deferred).items;
 				}
 			}
 			else{
@@ -223,56 +223,30 @@ dojo.declare("dojox.data.ServiceStore",
 					}
 				}
 			}
-			return {totalCount:results.length, items: results};
+			var count = results.length;
+			return {totalCount: deferred.request.count == count ? count * 2 : count, items: results};
 		},
 		close: function(request){
 			return request && request.abort && request.abort();
 		},
 		fetch: function(args){
 			// summary:
-			//		Standard fetch
-			//
-			//	query: /* string or object */
-			//		Defaults to "". This is basically passed to the XHR request as the URL to get the data
-			//
-			//	start: /* int */
-			//		Starting item in result set
-			//
-			//	count: /* int */
-			//		Maximum number of items to return
-			//
-			// dontCache: /* boolean */
+			//		See dojo.data.api.Read.fetch
 			//
 			//	syncMode: /* boolean */
 			//		Indicates that the call should be fetch synchronously if possible (this is not always possible)
-			//
-			//	onBegin: /* function */
-			//		called before any results are returned. Parameters
-			//		will be the count and the original fetch request
-			//	
-			//	onItem: /*function*/
-			//		called for each returned item.  Parameters will be
-			//		the item and the fetch request
-			//
-			//	onComplete: /* function */
-			//		called on completion of the request.  Parameters will	
-			//		be the complete result set and the request
-			//
-			//	onError: /* function */
-			//		called in the event of an error
-
+			
 			args = args || {};
 
-			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
 			if("syncMode" in args ? args.syncMode : this.syncMode){
 				dojox.rpc._sync = true;	
 			}
 			var self = this;
 			
 			var scope = args.scope || self;
-			var defResult = this._doQuery(query);
+			var defResult = this._doQuery(args);
+			defResult.request = args; 
 			defResult.addCallback(function(results){
-				
 				var resultSet = self._processResults(results, defResult);
 				results = args.results = resultSet.items;
 				if(args.onBegin){
@@ -296,7 +270,8 @@ dojo.declare("dojox.data.ServiceStore",
 			args.store = this;
 			return args;
 		},
-		_doQuery: function(query){
+		_doQuery: function(args){
+			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
 			return this.service(query);
 		},
 		getFeatures: function(){
