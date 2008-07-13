@@ -13,14 +13,14 @@ dojo.declare("dojox.form.Rating",
 
 	templateString: null,
 	
-	// numStars: Integer
+	// numStars: Integer/Float
 	//		The number of stars to show, default is 3.
 	numStars: 3,
-	// value: Integer
+	// value: Integer/Float
 	//		The current value of the Rating
 	value: 0,
 
-	constructor:function(params){
+	constructor:function(/*Object*/params){
 		// Build the templateString. The number of stars is given by this.numStars,
 		// which is normally an attribute to the widget node.
 		dojo.mixin(this, params);
@@ -34,7 +34,7 @@ dojo.declare("dojox.form.Rating",
 		var tpl = '<div dojoAttachPoint="domNode" class="dojoxRating dijitInline">' +
 					'<input type="hidden" value="0" dojoAttachPoint="focusNode" /><ul>${stars}</ul>' +
 				'</div>';
-		// the value-attribute is used to "read" the value for processing in the widget class -->
+		// The value-attribute is used to "read" the value for processing in the widget class
 		var starTpl = '<li class="dojoxRatingStar dijitInline" dojoAttachEvent="onclick:onStarClick,onmouseover:_onMouse,onmouseout:_onMouse" value="${value}"></li>';
 		var rendered = "";
 		for(var i = 0; i < this.numStars; i++){
@@ -73,7 +73,8 @@ dojo.declare("dojox.form.Rating",
 	},
 
 	onStarClick:function(/* Event */evt){
-// TODOC: needs summary
+		// summary: Connect on this method to get noticed when a star was clicked.
+		// example: dojo.connect(widget, "onStarClick", function(event){ ... })
 		var newVal = +dojo.attr(evt.target, "value");
 		this.setAttribute("value", newVal == this.value ? 0 : newVal);
 		this._renderStars(this.value);
@@ -81,6 +82,15 @@ dojo.declare("dojox.form.Rating",
 	},
 	
 	onMouseOver: function(/*evt, value*/){
-		// summary: connect here if you like to, the value is passed to this function as the second parameter!
+		// summary: Connect here, the value is passed to this function as the second parameter!
+	},
+	
+	setAttribute: function(/*String*/key, /**/value){
+		// summary: When calling setAttribute("value", 4), set the value and render the stars accordingly.
+		this.inherited("setAttribute", arguments);
+		if (key=="value"){
+			this._renderStars(this.value);
+			this.onChange(this.value); // Do I really have to call this by hand? :-(
+		}
 	}
 });
