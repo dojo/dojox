@@ -56,7 +56,7 @@ dojo.require("dojox.xml.DomParser");
 			var id=ann?ann.id:'';
 			//var bbox=ann?ann.getBBox():{};
 			var after=ann?ann.serialize():"";
-			if(cmd==ta.CommandTypes.Delete) after="";
+			if(cmd==ta.CommandTypes.Delete){ after=""; }
 			
 			/*if(ann){
 				//	fix the bbox x/y coords

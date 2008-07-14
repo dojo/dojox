@@ -45,7 +45,8 @@
 					url:"annotation.svg",
 					preventCache:true,
 					load:function(data, ioArgs){
-						f.load(dojox.xml.DomParser.parse(data), dojo.byId("canvas"));
+						var svg=dojox.xml.DomParser.parse(data);
+						f.load(svg, dojo.byId("canvas"));
 						dojo.byId("output").value=f.serialize();
 					}
 				});

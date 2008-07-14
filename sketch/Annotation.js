@@ -10,14 +10,14 @@ dojo.require("dojox.sketch._Plugin");
 ////			this.annotation=ta.tools[this.shape];
 //		},
 		onMouseMove: function(e,rect){
-				if(this._cshape){ 
-					this._cshape.setShape(rect);
-				} else {
-					this._cshape=this.figure.surface.createRect(rect)
-						.setStroke({color:"#999", width:1, style:"ShortDot"})
-						.setFill([255,255,255,0.7]);
-					this._cshape.getEventSource().setAttribute("shape-rendering","crispEdges");
-				}
+			if(this._cshape){ 
+				this._cshape.setShape(rect);
+			} else {
+				this._cshape=this.figure.surface.createRect(rect)
+					.setStroke({color:"#999", width:1, style:"ShortDot"})
+					.setFill([255,255,255,0.7]);
+				this._cshape.getEventSource().setAttribute("shape-rendering","crispEdges");
+			}
 		},
 		onMouseUp: function(e){
 			var f=this.figure;
@@ -35,7 +35,9 @@ dojo.require("dojox.sketch._Plugin");
 					}
 				}
 			}
-			if(this._cshape) f.surface.remove(this._cshape);
+			if(this._cshape){ 
+				f.surface.remove(this._cshape); 
+			}
 		},
 		_create: function(start,end){
 			//	create a new shape, needs to be accessible from the
@@ -43,10 +45,19 @@ dojo.require("dojox.sketch._Plugin");
 			var f=this.figure;
 			var _=f.nextKey();
 			var a=new (this.annotation)(f, "annotation-"+_);
-			a.transform={dx:start.x/f.zoomFactor, dy:start.y/f.zoomFactor};
-			a.end={ x:end.x/f.zoomFactor, y:end.y/f.zoomFactor };
+			a.transform={
+				dx:start.x/f.zoomFactor, 
+				dy:start.y/f.zoomFactor
+			};
+			a.end={ 
+				x:end.x/f.zoomFactor, 
+				y:end.y/f.zoomFactor 
+			};
 			if(a.control){
-				a.control={ x:Math.round((end.x/2)/f.zoomFactor),y:Math.round((end.y/2)/f.zoomFactor) };
+				a.control={ 
+					x:Math.round((end.x/2)/f.zoomFactor),
+					y:Math.round((end.y/2)/f.zoomFactor) 
+				};
 			}
 			f.onBeforeCreateShape(a);
 			a.initialize();
@@ -55,6 +66,7 @@ dojo.require("dojox.sketch._Plugin");
 			f.history.add(ta.CommandTypes.Create,a);
 		}
 	});
+
 	ta.Annotation=function(figure, id){
 		//	for editing stuff.
 		this.id=this._key=id;
@@ -70,13 +82,15 @@ dojo.require("dojox.sketch._Plugin");
 			'label': ""
 		};
 
-		if(this.figure) this.figure.add(this);
+		if(this.figure){ 
+			this.figure.add(this); 
+		}
 	};
+
 	var p=ta.Annotation.prototype;
 	p.constructor=ta.Annotation;
 	p.type=function(){ return ''; };
 	p.getType=function(){ return ta.Annotation; };
-
 	p.remove=function(){
 		this.figure.history.add(ta.CommandTypes.Delete, this, this.serialize());
 	};
@@ -98,7 +112,7 @@ dojo.require("dojox.sketch._Plugin");
 	p.onCreate=function(){
 		this.figure.history.add(ta.CommandTypes.Create,this);
 	}
-	p.onDblClick=function(event){
+	p.onDblClick=function(e){
 		var l=prompt('Set new text:',this.property('label'));
 		if(l!==false){
 			this.beginEdit(ta.CommandTypes.Modify);
@@ -132,15 +146,17 @@ dojo.require("dojox.sketch._Plugin");
 	};
 	p.calculate={
 		slope:function(p1, p2){
-			if(!(p1.x-p2.x)) return 0;
+			if(!(p1.x-p2.x)){ return 0; }
 			return ((p1.y-p2.y)/(p1.x-p2.x));
 		},
 		dx:function(p1, p2, dy){
 			var s=this.slope(p1,p2);
-			if(s==0) return s;
+			if(s==0){ return s; }
 			return dy/s; 
 		},
-		dy:function(p1, p2, dx){ return this.slope(p1,p2)*dx; }
+		dy:function(p1, p2, dx){ 
+			return this.slope(p1,p2)*dx; 
+		}
 	};
 	p.drawBBox=function(){
 		var r=this.getBBox();
@@ -152,7 +168,9 @@ dojo.require("dojox.sketch._Plugin");
 			this.boundingBox.getEventSource().setAttribute("id",this.id+"-boundingBox");
 			this.boundingBox.getEventSource().setAttribute("shape-rendering","crispEdges");
 			this.figure._add(this);
-		} else this.boundingBox.setShape(r);
+		} else { 
+			this.boundingBox.setShape(r); 
+		}
 	};
 	p.setBinding=function(pt){
 		this.transform.dx+=pt.dx;
@@ -164,21 +182,23 @@ dojo.require("dojox.sketch._Plugin");
 		return dojox.gfx._base._getTextBox(this.property('label'),ta.Annotation.labelFont);
 	};
 	p.setMode=function(m){
-		if(this.mode==m) return;
+		if(this.mode==m){ return; }
 		this.mode=m;
 		var method="disable";
-		if(m==ta.Annotation.Modes.Edit) method="enable";
+		if(m==ta.Annotation.Modes.Edit){ method="enable"; }
 		if(method=="enable"){
 			//	draw the bounding box
 			this.drawBBox();
 			this.figure._add(this);
 		} else {
 			if(this.boundingBox){
-				if(this.shape) this.shape.remove(this.boundingBox);
+				if(this.shape){ this.shape.remove(this.boundingBox); }
 				this.boundingBox=null;
 			}
 		}
-		for(var p in this.anchors){ this.anchors[p][method](); }
+		for(var p in this.anchors){ 
+			this.anchors[p][method](); 
+		}
 	};
 //	p.writeProperties=function(){
 //		var ps=this._properties;
@@ -214,6 +234,12 @@ dojo.require("dojox.sketch._Plugin");
 	ta.Annotation.labelFont={family:"Arial", size:"16px", weight:"bold"};
 	ta.Annotation.register=function(name){
 		var cls=ta[name+'Annotation'];
-		ta.registerTool(name, function(p){dojo.mixin(p,{shape: name,annotation:cls});return new ta.AnnotationTool(p)});
+		ta.registerTool(name, function(p){
+			dojo.mixin(p, {
+				shape: name,
+				annotation:cls
+			});
+			return new ta.AnnotationTool(p);
+		});
 	};
 })();

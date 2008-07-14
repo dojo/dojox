@@ -34,7 +34,7 @@ dojo.require("dojox.sketch.UndoStack");
 		this.hasSelections=function(){ return this.selected.length>0 };
 		this.isSelected=function(obj){
 			for(var i=0; i<self.selected.length; i++){
-				if(self.selected[i]==obj) return true;
+				if(self.selected[i]==obj){ return true; }
 			}
 			return false;
 		};
@@ -64,8 +64,9 @@ dojo.require("dojox.sketch.UndoStack");
 			return obj;
 		};
 		this.clearSelections=function(){
-			for(var i=0; i<self.selected.length; i++) 
+			for(var i=0; i<self.selected.length; i++){ 
 				self.selected[i].setMode(ta.Annotation.Modes.View);
+			}
 			self.selected=[]; 
 		};
 		this.replaceSelection=function(n, o){
@@ -76,7 +77,8 @@ dojo.require("dojox.sketch.UndoStack");
 			var idx=-1;
 			for(var i=0; i<self.selected.length; i++){
 				if(self.selected[i]==o){
-					idx=i; break;
+					idx=i; 
+					break;
 				}
 			}
 			if(idx>-1){
@@ -110,8 +112,11 @@ dojo.require("dojox.sketch.UndoStack");
 				dojo.stopEvent(e);
 			} else if(!o.setMode){
 				//	skip me.
-			} else self.select(o);
+			} else { 
+				self.select(o); 
+			}
 		};
+
 		this._dblclick=function(e){
 			var o=self._fromEvt(e);
 			if(o){
@@ -122,13 +127,14 @@ dojo.require("dojox.sketch.UndoStack");
 		this._keydown=function(e){
 			var prevent=false;
 			if(e.ctrlKey){
-					if(e.keyCode==90){ //ctrl+z
-						self.undo();
-						prevent = true;
-					}else if(e.keyCode==89){ //ctrl+y
-						self.redo();
-						prevent = true;
-					}
+				if(e.keyCode==90){ //ctrl+z
+					self.undo();
+					prevent = true;
+				}
+				else if(e.keyCode==89){ //ctrl+y
+					self.redo();
+					prevent = true;
+				}
 			}
 
 			if(e.keyCode==46 || e.keyCode==8){ //delete or backspace
@@ -146,6 +152,7 @@ dojo.require("dojox.sketch.UndoStack");
 			var o=self._fromEvt(e);
 			self._startPoint={ x:e.pageX, y:e.pageY };
 			var win = dijit.getDocumentWindow(self.node.ownerDocument);
+
 			//	figure out the coordinates within the iframe
 			self._ctr=dojo._abs(self.node);
 			var scroll=dojo.withGlobal(win,dojo._docScroll);
@@ -169,7 +176,7 @@ dojo.require("dojox.sketch.UndoStack");
 			}
 		};
 		this._mm=function(e){
-			if(!self._ctr) return;
+			if(!self._ctr){ return; }
 			var x=e.clientX-self._ctr.x;
 			var y=e.clientY-self._ctr.y;
 			var dx=x-self._lp.x;
@@ -179,8 +186,7 @@ dojo.require("dojox.sketch.UndoStack");
 				self._c.doChange({dx:Math.round(dx/self.zoomFactor), dy:Math.round(dy/self.zoomFactor)});
 				self._c.setBinding({dx:Math.round(dx/self.zoomFactor), dy:Math.round(dy/self.zoomFactor)});
 				self._lp={x:x, y:y};
-			}
-			else {
+			} else {
 				self._end={x:dx, y:dy};
 				var rect={
 					x:Math.min(self._start.x,self._absEnd.x),
@@ -221,7 +227,7 @@ dojo.require("dojox.sketch.UndoStack");
 
 	var p=ta.Figure.prototype;
 	p.initUndoStack=function(){
-			this.history=new ta.UndoStack(this);
+		this.history=new ta.UndoStack(this);
 	};
 	p.setTool=function(/*dojox.sketch._Plugin*/t){
 		this._ctool=t;
@@ -254,22 +260,21 @@ dojo.require("dojox.sketch.UndoStack");
 		this._cons.push(dojo.connect(this.surface.getEventSource(), 'ondblclick', this._dblclick));
 		this._cons.push(dojo.connect(this.surface.getEventSource().ownerDocument, 'onkeydown', this._keydown));
 		
-		//	rect hack.  Fcuking VML>
+		//	rect hack.  Fcuking VML.
 		this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
 		this.image=this.group.createImage({ width:this.size.w, height:this.size.h, src:this.imageSrc });
 	};
+
 	p.destroy=function(isLoading){
-		if(!this.node){
-			return;
-		}
+		if(!this.node){ return; }
 		if(!isLoading){
-			if(this.history) this.history.destroy();
+			if(this.history){ this.history.destroy(); }
 			if(this._subscribed){
 				dojo.unsubscribe(this._subscribed);
 				delete this._subscribed;
 			}
 		}
-		dojo.forEach(this._cons,dojo.disconnect);
+		dojo.forEach(this._cons, dojo.disconnect);
 		this._cons=[];
 
 		this.node.removeChild(this.surface.getEventSource());
@@ -277,6 +282,7 @@ dojo.require("dojox.sketch.UndoStack");
 		this.obj={};
 		this.shapes=[];
 	};
+
 	p.draw=function(){ };
 	p.zoom=function(pct){
 		//	first get the new dimensions
@@ -315,7 +321,9 @@ dojo.require("dojox.sketch.UndoStack");
 		}
 	};
 	p._get=function(key){
-		if(key&&key.indexOf("bounding")>-1) key=key.replace("-boundingBox","");
+		if(key&&key.indexOf("bounding")>-1){ 
+			key=key.replace("-boundingBox","");
+		}
 		return this.obj[key];
 	};
 	p._fromEvt=function(e){
@@ -347,7 +355,7 @@ dojo.require("dojox.sketch.UndoStack");
 				break;
 			}
 		}
-		if(idx>-1) this.shapes.splice(idx, 1);
+		if(idx>-1){ this.shapes.splice(idx, 1); }
 		return annotation;
 	};
 	p.get=function(id){
@@ -362,9 +370,8 @@ dojo.require("dojox.sketch.UndoStack");
 	p.convert=function(ann, t){
 		//	convert an existing annotation to a different kind of annotation
 		var ctor=t+"Annotation";
-		if(!ta[ctor]) return;
-		var type=ann.type(), id=ann.id, label=ann.label, mode=ann.mode,
-			tokenId=ann.tokenId;
+		if(!ta[ctor]){ return; }
+		var type=ann.type(), id=ann.id, label=ann.label, mode=ann.mode, tokenId=ann.tokenId;
 		var start, end, control, transform;
 		switch(type){
 			case "Preexisting":
@@ -400,11 +407,11 @@ dojo.require("dojox.sketch.UndoStack");
 			//	special handling, since we never move the start point.
 			n.transform={dx:transform.dx+start.x, dy:transform.dy+start.y };
 		} else {
-			if(n.transform) n.transform=transform;
-			if(n.start) n.start=start;
+			if(n.transform){ n.transform=transform; }
+			if(n.start){ n.start=start; }
 		}
-		if(n.end) n.end=end;
-		if(n.control) n.control=control;
+		if(n.end){ n.end=end; }
+		if(n.control){ n.control=control; }
 		n.label=label;
 		n.token=dojo.lang.shallowCopy(ann.token);
 		n.initialize();
@@ -427,7 +434,10 @@ dojo.require("dojox.sketch.UndoStack");
 		//	create from pseudo-DOM
 		if(this.surface){ this.destroy(true); }
 		var node=obj.documentElement;	//	should be either the document or the docElement
-		this.size={ w:parseFloat(node.getAttribute('width'),10), h:parseFloat(node.getAttribute('height'),10) };
+		this.size={ 
+			w:parseFloat(node.getAttribute('width'),10), 
+			h:parseFloat(node.getAttribute('height'),10) 
+		};
 		var g=node.childrenByName("g")[0];
 		var img=g.childrenByName("image")[0];
 		this.imageSrc=img.getAttribute("xlink:href");
@@ -435,7 +445,7 @@ dojo.require("dojox.sketch.UndoStack");
 
 		//	now let's do the annotations.
 		var ann=g.childrenByName("g");
-		for(var i=0; i<ann.length; i++) this._loadAnnotation(ann[i]);
+		for(var i=0; i<ann.length; i++){ this._loadAnnotation(ann[i]); }
 		if(this._loadDeferred){
 			this._loadDeferred.callback(this);
 			this._loadDeferred=null;
@@ -482,7 +492,7 @@ dojo.require("dojox.sketch.UndoStack");
 			+ '<g>'
 			+ '<image xlink:href="' + this.imageSrc + '" x="0" y="0" width="' 
 			+ this.size.w + '" height="' + this.size.h + '" />';
-		for(var i=0; i<this.shapes.length; i++) s+= this.shapes[i].serialize();
+		for(var i=0; i<this.shapes.length; i++){ s+= this.shapes[i].serialize(); }
 		s += '</g></svg>';
 		return s;
 	};

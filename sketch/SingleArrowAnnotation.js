@@ -39,7 +39,7 @@ dojo.require("dojox.sketch.Anchor");
 		//	arrowhead rotation
 		var opp=this.start.y-this.control.y;
 		var adj=this.start.x-this.control.x;
-		if(!adj) adj=1;
+		if(!adj){ adj=1; }
 		this.rotation=Math.atan(opp/adj);
 	};
 	p._pos=function(){
@@ -48,8 +48,8 @@ dojo.require("dojox.sketch.Anchor");
 		var slope=this.calculate.slope(this.control, this.end);
 		if(Math.abs(slope)>=1){
 			x=this.end.x+this.calculate.dx(this.control, this.end, offset);
-			if(this.control.y>this.end.y) y=this.end.y-offset;
-			else y=this.end.y+offset+this.textYOffset;
+			if(this.control.y>this.end.y){ y=this.end.y-offset; }
+			else{ y=this.end.y+offset+this.textYOffset; }
 		} else if(slope==0){
 			x=this.end.x+offset;
 			y=this.end.y+this.textYOffset;
@@ -61,20 +61,25 @@ dojo.require("dojox.sketch.Anchor");
 				x=this.end.x+offset;
 				this.textAlign="start";
 			}
-			if(this.start.y<this.end.y) y=this.end.y+this.calculate.dy(this.control, this.end, offset)+this.textYOffset;
-			else y=this.end.y+this.calculate.dy(this.control, this.end, -offset);
+			if(this.start.y<this.end.y){
+				y=this.end.y+this.calculate.dy(this.control, this.end, offset)+this.textYOffset;
+			} else { 
+				y=this.end.y+this.calculate.dy(this.control, this.end, -offset);
+			}
 		}
 		this.textPosition={ x:x, y:y };
 	};
 	
 	p.apply=function(obj){
-		if(!obj) return;
-		if(obj.documentElement) obj=obj.documentElement;
+		if(!obj){ return; }
+		if(obj.documentElement){ obj=obj.documentElement; }
 		this.readCommonAttrs(obj);
 		
 		for(var i=0; i<obj.childNodes.length; i++){
 			var c=obj.childNodes[i];
-			if(c.localName=="text") this.property('label',c.childNodes.length?c.childNodes[0].nodeValue:'');
+			if(c.localName=="text"){ 
+				this.property('label',c.childNodes.length?c.childNodes[0].nodeValue:'');
+			}
 			else if(c.localName=="path"){
 				//	the line
 				var d=c.getAttribute('d').split(" ");
@@ -101,24 +106,32 @@ dojo.require("dojox.sketch.Anchor");
 
 		//	rotation matrix
 		var rot=this.rotation;
-		if(this.control.x>=this.end.x&&this.control.x<this.start.x) rot+=Math.PI;
+		if(this.control.x>=this.end.x&&this.control.x<this.start.x){ rot+=Math.PI; }
 		var tRot=dojox.gfx.matrix.rotate(rot);
 
 		//	draw the shapes
 		this.shape=this.figure.group.createGroup();
 		this.shape.getEventSource().setAttribute("id", this.id);
-		if(this.transform.dx||this.transform.dy) this.shape.setTransform(this.transform);
-		this.pathShape=this.shape.createPath(
-			"M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0"
-		).setStroke(this.property('stroke'));
+		if(this.transform.dx||this.transform.dy){ this.shape.setTransform(this.transform); }
+
+		this.pathShape=this.shape.createPath("M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0")
+			.setStroke(this.property('stroke'));
+
 		this.arrowheadGroup=this.shape.createGroup().setTransform({ dx:this.start.x, dy:this.start.y }).applyTransform(tRot);
 		this.arrowhead=this.arrowheadGroup.createPath("M0,0 l20,-5 -3,5 3,5 Z").setFill(this.property('fill'));
+
 		this.labelShape=this.shape.createText({
-			x:this.textPosition.x, y:this.textPosition.y, text:this.property('label'), align:this.textAlign
-		}).setFont(font).setFill(this.property('fill'));
+				x:this.textPosition.x, 
+				y:this.textPosition.y, 
+				text:this.property('label'), 
+				align:this.textAlign
+			})
+			.setFont(font)
+			.setFill(this.property('fill'));
 	};
+
 	p.destroy=function(){
-		if(!this.shape) return;
+		if(!this.shape){ return; }
 		this.arrowheadGroup.remove(this.arrowhead);
 		this.shape.remove(this.arrowheadGroup);
 		this.shape.remove(this.pathShape);
@@ -126,6 +139,7 @@ dojo.require("dojox.sketch.Anchor");
 		this.figure.group.remove(this.shape);
 		this.shape=this.pathShape=this.labelShape=this.arrowheadGroup=this.arrowhead=null;
 	};
+
 	p.draw=function(obj){
 		this.apply(obj);
 		this._rot();
@@ -133,18 +147,25 @@ dojo.require("dojox.sketch.Anchor");
 
 		//	rotation matrix
 		var rot=this.rotation;
-		if(this.control.x<this.start.x) rot+=Math.PI;
+		if(this.control.x<this.start.x){ rot+=Math.PI; }
 		var tRot=dojox.gfx.matrix.rotate(rot);
 
 		this.shape.setTransform(this.transform);
-		this.pathShape.setShape(
-				"M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0"
-			).setStroke(this.property('stroke'));
+		this.pathShape.setShape("M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0")
+			.setStroke(this.property('stroke'));
+
 		this.arrowheadGroup.setTransform({dx:this.start.x,dy:this.start.y}).applyTransform(tRot);
 		this.arrowhead.setFill(this.property('fill'));
-		this.labelShape.setShape({x:this.textPosition.x, y:this.textPosition.y, text:this.property('label'), align:this.textAlign})
+
+		this.labelShape.setShape({
+				x:this.textPosition.x, 
+				y:this.textPosition.y, 
+				text:this.property('label'), 
+				align:this.textAlign
+			})
 			.setFill(this.property('fill'));
 	};
+
 	p.getBBox=function(){
 		var x=Math.min(this.start.x, this.control.x, this.end.x);
 		var y=Math.min(this.start.y, this.control.y, this.end.y);
@@ -152,10 +173,11 @@ dojo.require("dojox.sketch.Anchor");
 		var h=Math.max(this.start.y, this.control.y, this.end.y)-y;
 		return { x:x, y:y, width:w, height:h };
 	};
+
 	p.serialize=function(){
 		var s=this.property('stroke');
 		var r=this.rotation*(180/Math.PI);
-		if(this.start.x>this.end.x) r-=180;
+		if(this.start.x>this.end.x){ r-=180; }
 		r=Math.round(r*Math.pow(10,4))/Math.pow(10,4);
 		return '<g '+this.writeCommonAttrs()+'>'
 			+ '<path style="stroke:'+s.color+';stroke-width:'+s.width+';fill:none;" d="'

@@ -39,19 +39,21 @@ dojo.require("dojox.sketch.Anchor");
 		this.textPosition={ x:this.end.x-this.textOffset, y:this.end.y-this.textOffset };
 	};
 	p.apply=function(obj){
-		if(!obj) return;
-		if(obj.documentElement) obj=obj.documentElement;
+		if(!obj){ return; }
+		if(obj.documentElement){ obj=obj.documentElement; }
 		this.readCommonAttrs(obj);
 		
 		for(var i=0; i<obj.childNodes.length; i++){
 			var c=obj.childNodes[i];
-			if(c.localName=="text") this.property('label',c.childNodes.length?c.childNodes[0].nodeValue:'');
+			if(c.localName=="text"){ 
+				this.property('label',c.childNodes.length?c.childNodes[0].nodeValue:'');
+			}
 			else if(c.localName=="rect"){
-				if(c.getAttribute('x')!==null) this.start.x=parseFloat(c.getAttribute('x'), 10);
-				if(c.getAttribute('width')!==null) this.end.x=parseFloat(c.getAttribute('width'), 10)+parseFloat(c.getAttribute('x'), 10);
-				if(c.getAttribute('y')!==null) this.start.y=parseFloat(c.getAttribute('y'), 10);
-				if(c.getAttribute('height')!==null) this.end.y=parseFloat(c.getAttribute('height'), 10)+parseFloat(c.getAttribute('y'), 10);
-				if(c.getAttribute('r')!==null) this.radius=parseFloat(c.getAttribute('r'),10);
+				if(c.getAttribute('x')!==null){ this.start.x=parseFloat(c.getAttribute('x'), 10); }
+				if(c.getAttribute('width')!==null){ this.end.x=parseFloat(c.getAttribute('width'), 10)+parseFloat(c.getAttribute('x'), 10); }
+				if(c.getAttribute('y')!==null){ this.start.y=parseFloat(c.getAttribute('y'), 10); }
+				if(c.getAttribute('height')!==null){ this.end.y=parseFloat(c.getAttribute('height'), 10)+parseFloat(c.getAttribute('y'), 10); }
+				if(c.getAttribute('r')!==null){ this.radius=parseFloat(c.getAttribute('r'),10); }
 			}
 		}
 	};
@@ -63,17 +65,28 @@ dojo.require("dojox.sketch.Anchor");
 		//	create either from scratch or based on the passed node
 		this.shape=this.figure.group.createGroup();
 		this.shape.getEventSource().setAttribute("id", this.id);
-		if(this.transform.dx || this.transform.dy) this.shape.setTransform(this.transform);
+		if(this.transform.dx || this.transform.dy){ this.shape.setTransform(this.transform); }
 		this.rectShape=this.shape.createRect({
-			x:this.start.x, y: this.start.y, width: this.end.x-this.start.x, height:this.end.y-this.start.y, r:this.radius
-		}).setStroke({color:this.property('fill'), width:1}).setFill([255,255,255,0.1]);
+				x:this.start.x, 
+				y: this.start.y, 
+				width: this.end.x-this.start.x, 
+				height:this.end.y-this.start.y, 
+				r:this.radius
+			})
+			.setStroke({color:this.property('fill'), width:1})
+			.setFill([255,255,255,0.1]);
 		this.rectShape.getEventSource().setAttribute("shape-rendering","crispEdges");
 		this.labelShape=this.shape.createText({
-			x:this.textPosition.x, y:this.textPosition.y, text:this.property('label'), align:this.textAlign
-		}).setFont(font).setFill(this.property('fill'));
+				x:this.textPosition.x, 
+				y:this.textPosition.y, 
+				text:this.property('label'), 
+				align:this.textAlign
+			})
+			.setFont(font)
+			.setFill(this.property('fill'));
 	};
 	p.destroy=function(){
-		if(!this.shape) return;
+		if(!this.shape){ return; }
 		this.shape.remove(this.rectShape);
 		this.shape.remove(this.labelShape);
 		this.figure.group.remove(this.shape);
@@ -90,9 +103,22 @@ dojo.require("dojox.sketch.Anchor");
 		this.apply(obj);
 		this._pos();
 		this.shape.setTransform(this.transform);
-		this.rectShape.setShape({x:this.start.x, y: this.start.y, width: this.end.x-this.start.x, height:this.end.y-this.start.y, r:this.radius})
-			.setStroke({ color:this.property('fill'), width:1 }).setFill([255,255,255,0.1]);
-		this.labelShape.setShape({ x:this.textPosition.x, y:this.textPosition.y, text:this.property('label') }).setFill(this.property('fill'));
+		this.rectShape.setShape({
+				x:this.start.x, 
+				y: this.start.y, 
+				width: this.end.x-this.start.x, 
+				height:this.end.y-this.start.y, 
+				r:this.radius
+			})
+			.setStroke({ color:this.property('fill'), width:1 })
+			.setFill([255,255,255,0.1]);
+
+		this.labelShape.setShape({ 
+				x:this.textPosition.x, 
+				y:this.textPosition.y, 
+				text:this.property('label') 
+			})
+			.setFill(this.property('fill'));
 	};
 	p.serialize=function(){
 		var s=this.property('stroke');

@@ -23,8 +23,9 @@ dojo.require("dojox.gfx");
 			this.annotation.endEdit();
 		};
 		this.doChange=function(pt){
-			if(this.isControl) this.shape.applyTransform(pt);
-			else{
+			if(this.isControl){
+				this.shape.applyTransform(pt);
+			} else{
 				an.transform.dx+=pt.dx;
 				an.transform.dy+=pt.dy;
 			}
@@ -37,7 +38,7 @@ dojo.require("dojox.gfx");
 		this.setUndo=function(){ an.setUndo(); };
 
 		this.enable=function(){
-			if(!an.shape) return;
+			if(!an.shape){ return; }
 			an.figure._add(this);
 			rect={ x:an[id].x-size, y:an[id].y-size, width:size*2, height:size*2 };
 			this.shape=an.shape.createRect(rect)
@@ -48,7 +49,7 @@ dojo.require("dojox.gfx");
 		};
 		this.disable=function(){
 			an.figure._remove(this);
-			if(an.shape) an.shape.remove(this.shape);
+			if(an.shape){ an.shape.remove(this.shape); }
 			this.shape=null;
 			rect=null;
 		};
