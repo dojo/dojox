@@ -165,7 +165,7 @@ dojo.require("dojo.fx");
 			// summary: As quickly as we can, set up ie6 alpha-filter support for our
 			// 	underlay.  we don't do image handles (done in css), just the 'core' 
 			//	of this widget: the underlay. 
-			if(dojo.isIE && dojo.isIE<7){ 
+			if(dojo.isIE<7){ 
 				this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
 				this.colorUnderlay.src = this._blankGif.toString();
 			}

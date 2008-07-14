@@ -68,7 +68,7 @@ dojo.declare("dojox.fx.Shadow",
 		// summary: append a shadow pieces to the node, and position it
 		var img;
 		var url = this.shadowPng + name.toUpperCase() + ".png";
-		if((dojo.isIE)&&(dojo.isIE<7)){
+		if(dojo.isIE<7){
 			img=document.createElement("div");
 			img.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+url+"'"+
 				(sizing?", sizingMethod='"+sizing+"'":"") + ")";
