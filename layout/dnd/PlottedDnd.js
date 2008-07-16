@@ -4,7 +4,7 @@ dojo.require("dojo.dnd.Source");
 dojo.require("dojo.dnd.Manager");
 dojo.require("dojox.layout.dnd.Avatar");
 
-dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
+dojo.declare("dojox.layout.dnd.PlottedDnd", [dojo.dnd.Source], {
 	// summary:
 	//		dnd source handling plotted zone to show the dropping area
 	GC_OFFSET_X: dojo.dnd.manager().OFFSET_X,
@@ -128,7 +128,7 @@ dojo.declare("dojox.layout.dnd.PlottedDnd",[dojo.dnd.Source], {
 			else {
 				if (source == this && this._over && this.dropObject) 
 					this.current = this.dropObject.c;
-				dojox.layout.dnd.PlottedDnd.superclass.onDndDrop.call(this, source, nodes, false, target);
+				dojox.layout.dnd.PlottedDnd.superclass.onDndDrop.call(this, source, nodes, copy, target);
 				this._calculateCoords(true);
 			}
 		}
