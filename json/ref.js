@@ -1,15 +1,13 @@
 dojo.provide("dojox.json.ref");
 dojo.require("dojo.date.stamp");
-dojo.require("dojo._base.Deferred");
 
 // summary:
 // Adds advanced JSON {de}serialization capabilities to the base json library.
 // This enhances the capabilities of dojo.toJson and dojo.fromJson,
 // adding referencing support, date handling, and other extra format handling.
 // On parsing, references are resolved. When references are made to
-// ids/objects that have been loaded yet, a Deferred object will be used as the
-// value and as soon as a callback is added to the Deferred object, the target
-// object will be loaded.
+// ids/objects that have been loaded yet, the loader function will be set to
+// _loadObject to denote a lazy loading (not loaded yet) object. 
 
 dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	// summary:
@@ -85,6 +83,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 					var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
 					if(/[\w\[\]\.\$ \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
 						// make sure it is a safe reference
+						delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
 						var path = ref.match(/(^\.*[^\.\[]+)([\.\[].*)?/); // divide along the path
 						if((ref = (path[1]=='$' || path[1]=='this') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')]) &&  // a $ indicates to start with the root, otherwise start with an id
 						// // starting point was found, use eval to resolve remaining property references
@@ -135,6 +134,10 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 						index.onUpdate(target,i,target[i],undefined); // call the listener for each update
 					}
 					delete target[i];
+					while(target instanceof Array && target.length && target[target.length-1] === undefined){
+						// shorten the target if necessary
+						target.length--;
+					}
 				}
 			}
 		}else{
@@ -144,9 +147,10 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 		}
 		return target;
 	}
-	if(!root){ return root; }
-	root = walk(root,false,args.defaultId); // do the main walk through
-	walk(reWalk,false); // re walk any parts that were not able to resolve references on the first round
+	if(root && typeof root == 'object'){
+		root = walk(root,false,args.defaultId); // do the main walk through
+		walk(reWalk,false); // re walk any parts that were not able to resolve references on the first round
+	}
 	return root;
 };
 

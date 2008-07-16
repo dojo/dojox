@@ -1,6 +1,7 @@
 dojo.provide("dojox.data.tests.stores.ServiceStore");
 dojo.require("dojox.rpc.Service");
 dojo.require("dojox.rpc.Rest");
+//dojo.require("dojox.data.ClientFilter");
 dojo.require("dojox.data.ServiceStore");
 dojo.require("dojo.data.api.Read");
 dojox.data.tests.stores.ServiceStore.error = function(t, d, errData){

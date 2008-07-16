@@ -2,7 +2,7 @@ dojo.provide("dojox.data.PersevereStore");
 dojo.require("dojox.data.JsonRestStore");
 dojo.require("dojox.rpc.Client"); // Persevere supports this and it improves reliability
 if(dojox.rpc.LocalStorageRest){
-	dojo.require("dojox.json.query"); // this is so we can do perform queries locally 
+	dojo.require("dojox.json.query"); // this is so we can perform queries locally 
 }
 
 // PersevereStore is an extension of JsonRestStore to handle Persevere's special features
@@ -11,7 +11,7 @@ dojox.json.ref.useRefs = true; // Persevere supports referencing
 dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functions
 
 dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
-	fetch: function(args){
+	_toJsonQuery: function(args){
 
 		// performs conversion of Dojo Data query objects and sort arrays to JSONQuery strings
 		if(typeof args.query == "object"){
@@ -47,27 +47,51 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 				args.queryStr += ']';
 			}
 		}
-		if(args.queryStr){
+		if(typeof args.queryStr == 'string'){
 			args.queryStr = args.queryStr.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t;});
+			return args.queryStr;
 		}
-		var index = dojox.rpc.Rest._index;
-		if(dojox.json.query && !args.dontCache && index[this.target] && !index[this.target]._loadObject){
-			// we can do the query locally
-			jsonQuery = typeof args.queryStr == 'string' ? args.queryStr : args.query;
-			// do the query locally with dojox.json.query and then sneak the results in the cache, so the 
-			//	inherited fetch can handle it
-			index[this.target + jsonQuery] = dojox.json.query(jsonQuery,index[this.target]);
-			// there is no point in using range if everything is local, and it disables caching, so we eliminate it.
-			args.start = 0;
-			delete args.count;
+		return args.query;
+	},
+	fetch: function(args){
+		this._toJsonQuery(args);
+		return this.inherited(arguments);
+	},
+	isUpdateable: function(){
+		if(!dojox.json.query){
+			return this.inherited(arguments);
+		}
+		return true;
+	},
+	matchesQuery: function(item,request){
+		if(!dojox.json.query){
+			return this.inherited(arguments);
+		}
+		request._jsonQuery = request._jsonQuery || dojox.json.query(this._toJsonQuery(request)); 
+		return request._jsonQuery([item]).length;
+	},
+	clientSideQuery: function(/*Object*/ request,/*Array*/ baseResults){
+		if(!dojox.json.query){
+			return this.inherited(arguments);
+		}
+		request._jsonQuery = request._jsonQuery || dojox.json.query(this._toJsonQuery(request)); 
+		return request._jsonQuery(baseResults);
+	},
+	querySuperSet: function(argsSuper,argsSub){
+		if(!dojox.json.query){
+			return this.inherited(arguments);
+		}
+		if(!argsSuper.query){
+			return argsSub.query;
 		}
 		return this.inherited(arguments);
 	}
+	
 });
 dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync){
 	// summary:
 	//		Creates Dojo data stores for all the table/classes on a Persevere server
-	// target:
+	// path:
 	// 		URL of the Persevere server's root, this normally just "/"
 	// 		which is the default value if the target is not provided
 	// callback:
@@ -76,6 +100,11 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 	// 		A map/object of datastores. The name of each property is a the name of a store,
 	// 		and the value is the actual data store object.
 	path = (path && (path.match(/\/$/) ? path : (path + '/'))) || '/';
+	if(path.match(/^\w*:\/\//)){
+		// if it is cross-domain, we will use window.name for communication
+		dojo.require("dojox.io.xhrWindowNamePlugin");
+		dojox.io.xhrWindowNamePlugin(path, dojox.io.xhrPlugins.fullHttpAdapter, true);
+	}
 	var rootService= dojox.rpc.Rest(path,true);
 	var lastSync = dojox.rpc._sync;
 	dojox.rpc._sync = sync;

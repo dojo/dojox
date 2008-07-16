@@ -1,5 +1,6 @@
 dojo.provide("dojox.data.tests.stores.JsonRestStore");
 dojo.require("dojox.rpc.Service");
+//dojo.require("dojox.data.ClientFilter");
 dojo.require("dojox.data.JsonRestStore");
 dojo.require("dojox.json.schema");
 dojo.require("dojo.data.api.Read");
@@ -146,6 +147,27 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 							d.callback(true);
 						}});
 						
+					},
+					onError: dojo.partial(dojox.data.tests.stores.JsonRestStore.error, doh, d)
+				});
+				return d; //Object
+			}
+		},
+		{
+			name: "Load Lazy Value",
+			timeout:	10000, //10 seconds.
+			runTest: function(t) {
+				//	summary: 
+				//		Simple test of a basic fetch on ServiceStore of a single item.
+				var d = new doh.Deferred();
+				jsonStore.fetchItemByIdentity({identity:"obj1", 
+					onItem: function(item, request){
+						t.is("Object 1", item.name);
+						t.f(jsonStore.isItemLoaded(item.lazyValue));
+						var lazyValue = jsonStore.getValue(item,"lazyValue");
+						t.is("Finally loaded",lazyValue);
+						lazyValue = jsonStore.getValue(item,"lazyValue");
+						d.callback(true);
 					},
 					onError: dojo.partial(dojox.data.tests.stores.JsonRestStore.error, doh, d)
 				});

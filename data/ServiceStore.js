@@ -16,15 +16,14 @@ dojo.provide("dojox.data.ServiceStore");
 //
 
 dojo.declare("dojox.data.ServiceStore",
-	null,
+	dojox.data.ClientFilter,
 	{
 		constructor: function(options){
 			//summary:
 			//		ServiceStore constructor, instantiate a new ServiceStore 
 			// 		A ServiceStore can be configured from a JSON Schema. Queries are just 
-			// 		passed through as URLs for XHR requests, 
-			// 		so there is nothing to configure, just plug n play.
-			// 		Of course there are some options to fiddle with if you want:
+			// 		passed through to the underlying services
+			//
 			// options: 
 			// 		Keyword arguments
 			// The *schema* parameter
@@ -46,11 +45,15 @@ dojo.declare("dojox.data.ServiceStore",
 			//		Sync calls return their data immediately from the calling function, so
 			//		callbacks are unnecessary
 			//
-			// The *lazyLoadValues* parameter
+			// The *loadLazyValues* parameter
 			//		Setting this to true will cause any getValue call to automatically load the value
 			// 		if the returned value is a lazy item. This defaults to true. 
 			//
 			// description:
+			//		ServiceStore can do client side caching and result set updating if 
+			// 		dojox.data.ClientFilter is loaded. Do this add:
+			//	|	dojo.require("dojox.data.ClientFilter")
+			//		prior to loading the ServiceStore (ClientFilter must be loaded before ServiceStore).
 			//		When extending this class, if you would like to create lazy objects, you can follow
 			//		the example from dojox.data.tests.stores.ServiceStore:
 			// |	var lazyItem = {
@@ -77,14 +80,15 @@ dojo.declare("dojox.data.ServiceStore",
 
 		loadLazyValues:true,
 
-		getValue: function(item, property, defaultValue){
+		getValue: function(/*Object*/ item, /*String*/property, /*value?*/defaultValue){
 			// summary:
 			//	Gets the value of an item's 'property'
 			//
-			//	item: /* object */
-			//	property: /* string */
+			//	item: 
+			//		The item to get the value from
+			//	property: 
 			//		property to look up value for	
-			//	defaultValue: /* string */
+			//	defaultValue: 
 			//		the default value
 			var value = item[property];
 			return value ?
@@ -233,8 +237,14 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			//		See dojo.data.api.Read.fetch
 			//
-			//	syncMode: /* boolean */
+			// The *cache* parameter 
+			//		If true, indicates that the query result should be cached for future use
+			//
+			//	The *syncMode* parameter
 			//		Indicates that the call should be fetch synchronously if possible (this is not always possible)
+			//
+			// The *clientFetch* parameter
+			//		This is a fetch keyword argument for explicitly doing client side filtering, querying, and paging
 			
 			args = args || {};
 
@@ -244,9 +254,12 @@ dojo.declare("dojox.data.ServiceStore",
 			var self = this;
 			
 			var scope = args.scope || self;
-			var defResult = this._doQuery(args);
+			var defResult = this.cachingFetch ? this.cachingFetch(args) : this._doQuery(args);
 			defResult.request = args; 
 			defResult.addCallback(function(results){
+				if(args.clientQuery){
+					results = self.clientSideFetch({query:args.clientFetch,sort:args.sort,start:args.start,count:args.count},results);
+				}
 				var resultSet = self._processResults(results, defResult);
 				results = args.results = resultSet.items;
 				if(args.onBegin){

@@ -221,25 +221,23 @@ dojo.require("dojox.rpc.Rest");
 			jr.schemas[servicePath] = schema || service._schema || {};
 			jr.services[servicePath] = service;
 		},
-		get: function(service, id){
+		get: function(service, id, args){
 			// if caching is allowed, we look in the cache for the result
-			var cacheable = Rest._isCacheable();
-			var deferred, result = cacheable && Rest._index[(service.servicePath || '') + id];
-			Rest._dontCache=0; // reset it
+			var deferred, result = args && args.useIndexCache && Rest._index[(service.servicePath || '') + id];
 			if(result && !result._loadObject){// cache hit
 				deferred = new dojo.Deferred();
 				deferred.callback(result);
 				return deferred;
 			}
 			
-			deferred = service(id);
+			deferred = service(id, args);
 			deferred.addCallback(function(result){
 				if(result.nodeType && result.cloneNode){
 					// return immediately if it is an XML document
 					return result;
 				}
 				return dojox.json.ref.resolveJson(result, {
-					defaultId: cacheable ? id : undefined, // FIXME: id should only not be omitted when ranges are used 
+					defaultId: typeof id != 'string' || (args && (args.start || args.count)) ? undefined: id, 
 					index: Rest._index,
 					idPrefix: service.servicePath,
 					idAttribute: jr.getIdAttribute(service),
@@ -252,11 +250,22 @@ dojo.require("dojox.rpc.Rest");
 		_loader: function(callback){
 			// load a lazy object
 			var serviceAndId = jr.getServiceAndId(this.__id);
+			var self = this;
 			jr.get(serviceAndId.service, serviceAndId.id).addBoth(function(result){
 				// if they are the same this means an object was loaded, otherwise it 
 				// might be a primitive that was loaded or maybe an error
-				delete result.$ref;
-				delete result._loadObject;
+				if(result == self){
+					// we can clear the flag, so it is a loaded object
+					delete result.$ref;
+					delete result._loadObject;
+				}else{
+					// it is probably a primitive value, we can't change the identity of an object to
+					//	the loaded value, so we will keep it lazy, but define the lazy loader to always
+					//	return the loaded value
+					self._loadObject = function(callback){
+						callback(result);
+					};
+				}
 				callback(result);
 			});
 		},

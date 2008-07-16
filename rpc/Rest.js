@@ -28,8 +28,8 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 						method.name,
 						(method.contentType||svc._smd.contentType||"").match(/json|javascript/), // isJson
 						null,
-						function(id){
-							var request = svc._getRequest(method,[id]);
+						function(id, args){
+							var request = svc._getRequest(method,[id, args]);
 							request.url= request.target + (request.data ? '?'+  request.data : '');
 							return request;
 						}
@@ -38,7 +38,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 			}
 		);
 	}
-	var drr, start, end;
+	var drr;
 
 	function index(deferred, service, range, id){
 		deferred.addCallback(function(result){
@@ -57,8 +57,8 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		var service;
 		// it should be in the form /Table/
 		path = path.match(/\/$/) ? path : (path + '/');
-		service = function(id){
-			return drr._get(service,id);
+		service = function(id, args){
+			return drr._get(service, id, args);
 		};
 		service.isJson = isJson;
 		service._schema = schema;
@@ -72,12 +72,15 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 			}
 		};
 		// the default XHR args creator:
-		service._getRequest = getRequest || function(id){
+		service._getRequest = getRequest || function(id, args){
 			return {
 				url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), 
 				handleAs: isJson?'json':'text', 
 				contentType: isJson?'application/json':'text/plain',
-				sync: dojox.rpc._sync
+				sync: dojox.rpc._sync,
+				headers: {
+					Range: args && (args.start >= 0 || args.count >= 0) ?  "items=" + (args.start || '') + '-' + ((args.count && (args.count + (args.start || 0) - 1)) || '') : undefined
+				}
 			};
 		};
 		// each calls the event handler
@@ -119,34 +122,10 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		request[method+"Data"] = content;
 		return index(dojo.xhr(method.toUpperCase(),request,true),service);
 	};
-	drr.setQueryInfo = function(/*Object*/args){
-		// summary:
-		//		Sets extra meta-information prior to a query, to assist in querying
-		//	args:
-		//		The extra query information
-		//	The *start* parameter.
-		//		The starting index of the query
-		//	The *end* parameter
-		//		The ending index of the query
-		//	The *dontCache* parameter
-		//		This prevents the REST service from looking in it's own cache
-		start = args.start;
-		end = args.end;
-		drr._dontCache = args.dontCache;
-	};
-	drr._isCacheable = function(){
-		return !drr._dontCache && !start && !end; 
-	} 
-	drr._get= function(service,id){
-		var req = dojo.mixin(service._getRequest(id), {
-			headers: {
-				Range: (start >= 0 || end >= 0) ?  "items=" + (start || '') + '-' + ((end && (end-1)) || '') : undefined
-			}
-		});
+
+	drr._get= function(service,id, args){
+		args = args || {};
 		// this is called to actually do the get
-		var dfd = index(dojo.xhrGet(req), service, (start >= 0 || end >= 0), id);
-		start = -1; // reset them
-		end = -1;
-		return dfd;
+		return index(dojo.xhrGet(service._getRequest(id, args)), service, (args.start >= 0 || args.count >= 0), id);
 	};
 })();

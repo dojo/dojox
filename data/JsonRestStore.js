@@ -5,7 +5,7 @@ dojo.require("dojox.rpc.JsonRest");
 
 
 dojo.declare("dojox.data.JsonRestStore",
-	dojox.rpc.LocalStorageRest ? [dojox.data.ServiceStore, dojox.rpc.LocalStorageRest.LiveResultSets] : dojox.data.ServiceStore, // use live result sets if available
+	dojox.data.ServiceStore,
 	{
 		constructor: function(options){
 			//summary:
@@ -42,7 +42,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		Sync calls return their data immediately from the calling function, so
 			//		callbacks are unnecessary
 			//
-			// The *lazyLoadValues* parameter
+			// The *loadLazyValues* parameter
 			//		Setting this to true will cause any getValue call to automatically load the value
 			// 		if the returned value is a lazy item. This defaults to true.
 			//	description:
@@ -94,11 +94,10 @@ dojo.declare("dojox.data.JsonRestStore",
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
 			}
 			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
-			this.schema = this.service._schema;
+			this.schema = this.schema || this.service._schema;
 			// wrap the service with so it goes through JsonRest manager 
 			this.service._store = this;
 			this._constructor = dojox.rpc.JsonRest.getConstructor(this.service);
-			this._liveRequests = []; // a list of the "live" requests
 			//given a url, load json data from as the store
 		},
 		//Write API Support
@@ -189,6 +188,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			// summary:
 			//		Saves the dirty data using REST Ajax methods
 			var actions = dojox.rpc.JsonRest.commit(kwArgs);
+			this.serverVersion = this._updates && this._updates.length;
 			for(var i = 0; i < actions.length; i++){
 				if(actions[i].method == 'post' && this.onPostCommit){
 					var self = this;
@@ -238,25 +238,9 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	attribute: /* string */
 			return item && item.__id && this.service == dojox.rpc.JsonRest.getServiceAndId(item.__id).service;
 		},
-
-		fetch: function(args){
-			// summary:
-			//		See dojo.data.Read
-
-			// add in the REST capabilities for paged fetching and cache control
-			var queryInfo={dontCache:!args.useIndexCache};
-			if(args.start || args.count){
-				queryInfo.start=args.start;
-				if(args.count){
-					queryInfo.end=(args.start||0)+args.count;
-				}
-			}
-			dojox.rpc.Rest.setQueryInfo(queryInfo);
-			return this.inherited(arguments);
-		},
 		_doQuery: function(args){
 			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
-			return dojox.rpc.JsonRest.get(this.service,query);
+			return dojox.rpc.JsonRest.get(this.service,query, args);
 		},
 		_processResults: function(results, deferred){
 			// index the results
