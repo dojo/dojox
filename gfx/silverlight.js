@@ -183,7 +183,7 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 	
 	_applyTransform: function() {
-		var tm = this.matrix, r = this.rawNode;
+		var tm = this._getRealMatrix(), r = this.rawNode;
 		if(tm){
 			var p = this.rawNode.getHost().content,
 				m = p.createFromXaml("<MatrixTransform/>"),
@@ -227,6 +227,11 @@ dojo.extend(dojox.gfx.Shape, {
 		c.remove(r);
 		c.insert(0, r);
 		return this;	// self
+	},
+	
+	_getRealMatrix: function(){
+		// summary: returns the adjusted ("real") transformation matrix
+		return this.matrix;	// dojox.gfx.Matrix2D
 	}
 });
 
@@ -252,12 +257,15 @@ dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
 		this.bbox = null;
 		var r = this.rawNode, n = this.shape;
-		r["Canvas.Left"] = n.x;
-		r["Canvas.Top"]  = n.y;
 		r.width   = n.width;
 		r.height  = n.height;
 		r.radiusX = r.radiusY = n.r;
-		return this;	// self
+		return this._applyTransform();	// self
+	},
+	_getRealMatrix: function(){
+		// summary: returns the adjusted ("real") transformation matrix
+		var m = this.matrix, s = this.shape, d = {dx: s.x, dy: s.y};
+		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
 	}
 });
 dojox.gfx.Rect.nodeType = "Rectangle";
@@ -270,11 +278,14 @@ dojo.declare("dojox.gfx.Ellipse", dojox.gfx.shape.Ellipse, {
 		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
 		this.bbox = null;
 		var r = this.rawNode, n = this.shape;
-		r["Canvas.Left"] = n.cx - n.rx;
-		r["Canvas.Top"]  = n.cy - n.ry;
 		r.width  = 2 * n.rx;
 		r.height = 2 * n.ry;
-		return this;	// self
+		return this._applyTransform();	// self
+	},
+	_getRealMatrix: function(){
+		// summary: returns the adjusted ("real") transformation matrix
+		var m = this.matrix, s = this.shape, d = {dx: s.cx - s.rx, dy: s.cy - s.ry};
+		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
 	}
 });
 dojox.gfx.Ellipse.nodeType = "Ellipse";
@@ -287,10 +298,13 @@ dojo.declare("dojox.gfx.Circle", dojox.gfx.shape.Circle, {
 		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
 		this.bbox = null;
 		var r = this.rawNode, n = this.shape;
-		r["Canvas.Left"] = n.cx - n.r;
-		r["Canvas.Top"]  = n.cy - n.r;
 		r.width = r.height = 2 * n.r;
-		return this;	// self
+		return this._applyTransform();	// self
+	},
+	_getRealMatrix: function(){
+		// summary: returns the adjusted ("real") transformation matrix
+		var m = this.matrix, s = this.shape, d = {dx: s.cx - s.r, dy: s.cy - s.r};
+		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
 	}
 });
 dojox.gfx.Circle.nodeType = "Ellipse";
@@ -347,12 +361,15 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		this.shape = dojox.gfx.makeParameters(this.shape, newShape);
 		this.bbox = null;
 		var r = this.rawNode, n = this.shape;
-		r["Canvas.Left"] = n.x;
-		r["Canvas.Top"]  = n.y;
 		r.width  = n.width;
 		r.height = n.height;
 		r.source = n.src;
-		return this;	// self
+		return this._applyTransform();	// self
+	},
+	_getRealMatrix: function(){
+		// summary: returns the adjusted ("real") transformation matrix
+		var m = this.matrix, s = this.shape, d = {dx: s.x, dy: s.y};
+		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
 	},
 	setRawNode: function(rawNode){
 		// summary:
@@ -373,10 +390,10 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		this.bbox = null;
 		var r = this.rawNode, s = this.shape;
 		r.text = s.text;
-		r.textDecorations = s.decoration == "underline" ? "Underline" : "None";
+		r.textDecorations = s.decoration === "underline" ? "Underline" : "None";
 		r["Canvas.Left"] = -10000;
 		r["Canvas.Top"]  = -10000;
-		window.setTimeout(dojo.hitch(this, "_delayAlignment"), 0);
+		window.setTimeout(dojo.hitch(this, "_delayAlignment"), 10);
 		return this;	// self
 	},
 	_delayAlignment: function(){
@@ -391,9 +408,20 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 				x -= w;
 				break;
 		}
-		var a = this.matrix ? dojox.gfx.matrix.multiplyPoint(this.matrix, x, y) : {x: x, y: y};
-		r["Canvas.Left"] = a.x;
-		r["Canvas.Top"]  = a.y;
+		this._delta = {dx: x, dy: y};
+		r["Canvas.Left"] = 0;
+		r["Canvas.Top"]  = 0;
+		this._applyTransform();
+	},
+	_getRealMatrix: function(){
+		// summary: returns the adjusted ("real") transformation matrix
+		var m = this.matrix, d = this._delta, x;
+		if(m){
+			x = d ? [m, d] : m;
+		}else{
+			x = d ? d : {};
+		}
+		return new dojox.gfx.Matrix2D(x);
 	},
 	setStroke: function(){
 		// summary: ignore setting a stroke style
@@ -410,10 +438,8 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		this.rawNode = rawNode;
 	},
 	_applyTransform: function() {
-		var tm = this.matrix, r = this.rawNode;
+		var tm = this._getRealMatrix(), r = this.rawNode;
 		if(tm){
-			// the next line is pure magic :-(
-			tm = dojox.gfx.matrix.normalize([1/100, tm, 100]);
 			var p = this.rawNode.getHost().content,
 				m = p.createFromXaml("<MatrixTransform/>"),
 				mm = p.createFromXaml("<Matrix/>");

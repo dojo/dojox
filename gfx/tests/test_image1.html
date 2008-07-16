@@ -13,9 +13,8 @@
 <script type="text/javascript">
 dojo.require("dojox.gfx");
 
-var image = null;
-var grid_size = 500;
-var grid_step = 50;
+var image = null, grid_size = 500, grid_step = 50,
+	m = dojox.gfx.matrix;
 
 makeShapes = function(){
 	var surface = dojox.gfx.createSurface("test", 800, 600);
@@ -24,7 +23,6 @@ makeShapes = function(){
 		surface.createLine({y1: 0, y2: grid_size, x1: i, x2: i}).setStroke("black");
 	}
     image = surface.createImage({width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
-    //dojo.connect(image.getEventSource(), "onclick", function(){ alert("You didn't expect a download, did you?"); });
     image.connect("onclick", function(){ alert("You didn't expect a download, did you?"); });
 };
 
@@ -33,19 +31,22 @@ transformImage = function(){
 	if(radio[0].checked){
         image.setTransform({});
 	}else if(radio[1].checked){
-        image.setTransform(dojox.gfx.matrix.translate(100,100));
+        image.setTransform({dx: 100, dy: 50});
 	}else if(radio[2].checked){
-        image.setTransform([dojox.gfx.matrix.translate(100,0), dojox.gfx.matrix.rotateg(45)]);
+        image.setTransform(m.rotateg(15));
 	}else if(radio[3].checked){
-        image.setTransform([dojox.gfx.matrix.translate(70,90), dojox.gfx.matrix.scale({x:1.5, y:0.5})]);
+        image.setTransform([{dx: 70, dy: 90}, {xx: 1.5, yy: 0.5}]);
 	}else if(radio[4].checked){
-        image.setTransform([dojox.gfx.matrix.rotateg(15), dojox.gfx.matrix.skewXg(-30)]);
+        image.setTransform([m.rotateg(15), m.skewXg(30)]);
 	}
-	var cb = document.getElementById("r2");
-	if(cb.checked && !image.getShape().x){
-		image.setShape({x: 100, y: 50});
-	}else if(!cb.checked && image.getShape().x){
+	var shift = document.getElementsByName("shift");
+	if(shift[0].checked){
 		image.setShape({x: 0, y: 0});
+	}else if(shift[1].checked){
+		image.setShape({x: 100, y: 50});
+	}else if(shift[2].checked){
+		image.setShape({x: 0, y: 0});
+		image.applyRightTransform({dx: 100, dy: 50});
 	}
 };
 
@@ -63,7 +64,11 @@ dojo.addOnLoad(makeShapes);
 <input type="radio" name="switch" id="r1_scale" onclick="transformImage()" /><label for="r1_scale">Scale Image</label><br />
 <input type="radio" name="switch" id="r1_skew" onclick="transformImage()" /><label for="r1_skew">Skew Image</label><br />
 </p>
-<p><input type="checkbox" id="r2" onclick="transformImage()" /><label for="r2">Offset image by (100, 50)</label></p>
+<p>
+<input type="radio" name="shift" id="r2_none" checked onclick="transformImage()" /><label for="r2_none">Place image at (0, 0)</label><br />
+<input type="radio" name="shift" id="r2_origin" onclick="transformImage()" /><label for="r2_origin">Place image at (100, 50)</label><br />
+<input type="radio" name="shift" id="r2_shift" onclick="transformImage()" /><label for="r2_shift">Shift image by (100, 50)</label>
+</p>
 <div id="test"></div>
 <p>That's all Folks!</p>
 </body>
