@@ -11,6 +11,7 @@ Credits
 	Nathan Toone (nathan)
 	Peter Higgins	(dante)
     Wolfram Kriesing (http://wolfram.kriesing.de/blog/): Rating
+    Mike Wilcox
 -------------------------------------------------------------------------------
 Project description
 
@@ -43,6 +44,8 @@ Additional Notes (Brief widget list):
 
 	* FileInputAuto/Blind - extension to FileInput for 
 						added flair/automation
+                        
+    * FileInputOverlay - Convert (almost) any button into a file input
 						
 	* FilePickerTextBox - a validating text box that can browser server-side
 						files using a dojox.data.FileStore

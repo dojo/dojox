@@ -9,6 +9,7 @@
 	z-index:2;
 	opacity:0;
 	filter:alpha(opacity:0);
+	cursor:pointer;
 }
 .dijitFileInputRealBlind {
 	right:0;
