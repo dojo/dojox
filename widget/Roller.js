@@ -77,8 +77,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 	makeAnims: function(){
 		// summary: Animation creator function. Need to create an 'in' and 'out'
 		// 		_Animation stored in _anim Object, which the rest of the widget
-		//		will reuse.
-		var n = null; 
+		//		will reuse. 
 		var n = this.domNode;
 		dojo.mixin(this, {
 			_anim: {
