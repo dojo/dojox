@@ -437,25 +437,6 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		//	(no fill & stroke by default)
 		this.rawNode = rawNode;
 	},
-	_applyTransform: function() {
-		var tm = this._getRealMatrix(), r = this.rawNode;
-		if(tm){
-			var p = this.rawNode.getHost().content,
-				m = p.createFromXaml("<MatrixTransform/>"),
-				mm = p.createFromXaml("<Matrix/>");
-			mm.m11 = tm.xx;
-			mm.m21 = tm.xy;
-			mm.m12 = tm.yx;
-			mm.m22 = tm.yy;
-			mm.offsetX = tm.dx;
-			mm.offsetY = tm.dy;
-			m.matrix = mm;
-			r.renderTransform = m;
-		}else{
-			r.renderTransform = null;
-		}
-		return this;
-	},
 	getTextWidth: function(){ 
 		// summary: get the text width in pixels 
 		return this.rawNode.actualWidth; 
