@@ -6,20 +6,22 @@ Release date: 10/31/2007
 -------------------------------------------------------------------------------
 Project state:
 
-[Calendar] experimental
-[CalendarFx] experimental
-[ColorPicker] beta
-[Dialog] experimental
-[FilePicker] experimental
-[FisheyeList] experimental
-[FisheyeLite] beta
-[Iterator] experimental
-[Loader] experimental
-[PlaceholderMenuItem] experimental
-[RollingList] experimental
-[SortList] experimental
-[Toaster] experimental
-[Wizard] experimental
+[Calendar]	experimental
+[CalendarFx]	experimental
+[ColorPicker]	beta
+[Dialog]	experimental
+[FilePicker]	experimental
+[FisheyeList]	experimental
+[FisheyeLite]	beta
+[Iterator]	experimental
+[Loader]	experimental
+[Pager]		experimental
+[PlaceholderMenuItem]	experimental
+[Roller]	experimental
+[RollingList]	experimental
+[SortList]	experimental
+[Toaster]	experimental
+[Wizard]	experimental
 
 -------------------------------------------------------------------------------
 Credits:
@@ -33,7 +35,9 @@ Credits:
 [FisheyeLite] Peter Higgins (dante)
 [Iterator] Alex Russell (slightlyoff)
 [Loader] Peter Higgins (dante)
+[Pager] Nikolai Onken (nonken), Peter Higgins (dante);
 [PlaceholderMenuItem] Nathan Toone (toonetown)
+[Roller] Peter Higgins (dante)
 [RollingList] Nathan Toone (toonetown)
 [SortList] Peter Higgins (dante)
 [Toaster] Adam Peller (peller)
@@ -125,6 +129,10 @@ Other Notes (Brief widget list):
 
 	* PlaceholderMenuItem - a menu item that can be used to inject other menu
 		items at a given location. Extends dijit.Menu directly. 
+
+	* Roller - A component to show many lines of text in a single area, rotating
+		through the options available. Also provides RollerSlide, an extension
+		to the stock fading roller to add a slide animation to the transition.
 
 	* RollingList - A component of the FilePicker widget
 

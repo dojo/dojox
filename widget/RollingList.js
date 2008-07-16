@@ -325,8 +325,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			// We focus the right widget - either the focusedChild, the
 			//   selected node, the first menu item, or the menu itself
 			var focusWidget = this._menu.focusedChild;
-			if(!focusWidget)
-			{
+			if(!focusWidget){
 				var focusNode = dojo.query(".dojoxRollingListItemSelected", this.domNode)[0];
 				if(focusNode){
 					focusWidget = dijit.byNode(focusNode);
