@@ -35,7 +35,7 @@ doh.register("dojox.data.tests.ClientFilter",
 			//	summary: 
 			//		Simple test of a basic fetch on JsonRestStore of a simple query.
 			var d = new doh.Deferred();
-			jsonStore.fetch({cache:true,query:{lastName:"Smith",firstName:"*"},sort:[{attribute:"firstName",descending:true}], 
+			jsonStore.fetch({queryOptions:{cache:true},query:{lastName:"Smith",firstName:"*"},sort:[{attribute:"firstName",descending:true}], 
 				onComplete: function(items, request){
 					t.is(5, items.length); // make sure it was added
 					t.is(newJack,items[4]); // make sure it is in the right location

@@ -237,8 +237,9 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			//		See dojo.data.api.Read.fetch
 			//
-			// The *cache* parameter 
-			//		If true, indicates that the query result should be cached for future use
+			// The *queryOptions.cache* parameter 
+			//		If true, indicates that the query result should be cached for future use. This is only available 
+			// 		if dojox.data.ClientFilter has been loaded before the ServiceStore 
 			//
 			//	The *syncMode* parameter
 			//		Indicates that the call should be fetch synchronously if possible (this is not always possible)

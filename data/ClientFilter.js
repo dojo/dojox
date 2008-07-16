@@ -39,6 +39,10 @@ dojo.require("dojo.data.util.filter");
 				// 		matchesQuery(item,request) - item is the item to test, and request is the value arguments object
 				//				for the fetch function.
 				//
+				//		You can define a property on this object instance "cacheByDefault" to a value of true that will 
+				// 		cause all queries to be cached by default unless the cache queryOption is explicitly set to false.
+				// 		This can be defined in the constructor options for ServiceStore/JsonRestStore and subtypes. 
+				//
 				// example:
 				//		to make a live-result-set data store from an existing data store:
 				//	|	dojo.declare("dojox.data.MyLiveDataStore",
@@ -135,7 +139,7 @@ dojo.require("dojo.data.util.filter");
 						var defResult = cachedArgs._loading;
 						if(!defResult){
 							defResult = new dojo.Deferred();
-							defResult.callback(cachedArgs.results);
+							defResult.callback(cachedArgs.cacheResults);
 						}
 						defResult.addCallback(function(results){
 							return self.clientSideFetch({query:clientQuery,sort:args.sort,start:args.start,count:args.count}, results);
@@ -143,13 +147,22 @@ dojo.require("dojo.data.util.filter");
 					}
 				}
 				if(!defResult){
-					defResult= args._loading = this._doQuery(args);
-					if(args.cache){
+					var serverArgs = dojo.mixin({}, args);
+					var putInCache = (args.queryOptions || 0).cache;
+					if(putInCache === undefined ? this.cacheByDefault : putInCache){
+						// we are caching this request, so we want to get all the data, and page on the client side
 						if(args.start || args.count){
-							throw new Error("Can not cache queries with start or count parameters");
+							delete serverArgs.start;
+							delete serverArgs.count;
+							args.clientQuery = dojo.mixin(args.clientQuery || {}, {
+								start: args.start,
+								count: args.count
+							});
 						}
+						args = serverArgs;
 						this._fetchCache.push(args);
 					}
+					defResult= args._loading = this._doQuery(args);
 				}
 				var version = this.serverVersion;
 				
@@ -157,8 +170,9 @@ dojo.require("dojo.data.util.filter");
 					delete args._loading;
 					// update the result set in case anything changed while we were waiting for the fetch
 					if(results){
-						results._version = version;
+						args._version = version;
 						self.updateResultSet(results,args);
+						args.cacheResults = results;
 					}
 					return results;
 				});

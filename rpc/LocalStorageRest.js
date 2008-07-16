@@ -76,7 +76,7 @@ dojo.require("dojox.storage");
 			//		the store. Generally you want to load all the items that should be
 			//		available when offline.
 			lsr.stores.push(store);
-			store.fetch({cache:true,query:baseQuery,onComplete:function(results,args){
+			store.fetch({queryOptions:{cache:true},query:baseQuery,onComplete:function(results,args){
 				store._localBaseResults = results;
 				store._localBaseFetch = args;
 			}});
