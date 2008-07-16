@@ -27,13 +27,14 @@ dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 	//		cross-browser implementation of creating an XML document object.
 	//
 	//	str:
-	//		Optional text to create the document from.  If not provided, an empty XML document will be created.
+	//		Optional text to create the document from.  If not provided, an empty XML document will be created.  
+	//		If str is empty string "", then a new empty document will be created.
 	//	mimetype:
 	//		Optional mimetype of the text.  Typically, this is text/xml.  Will be defaulted to text/xml if not provided.
 	var _document = dojo.doc;
 
 	if(!mimetype){ mimetype = "text/xml"; }
-	if(str && (typeof dojo.global["DOMParser"]) !== "undefined"){
+	if(str && dojo.trim(str) !== "" && (typeof dojo.global["DOMParser"]) !== "undefined"){
 		var parser = new DOMParser();
 		return parser.parseFromString(str, mimetype);	//	DOMDocument
 	}else if((typeof dojo.global["ActiveXObject"]) !== "undefined"){
@@ -58,7 +59,7 @@ dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 		}
 	}else if((_document.implementation)&&
 		(_document.implementation.createDocument)){
-		if(str){
+		if(str && dojo.trim(str) !== ""){
 			if(_document.createElement){
 				// FIXME: this may change all tags to uppercase!
 				var tmp = _document.createElement("xml");
