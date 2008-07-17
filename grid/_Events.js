@@ -174,7 +174,9 @@ dojo.declare("dojox.grid._Events", null, {
 		//		Event fired when mouse is over a cell.
 		// e: Event
 		//		Decorated event object contains reference to grid, cell, and rowIndex
-		dojo.addClass(e.cellNode, this.cellOverClass);
+		if(e.cellNode){
+			dojo.addClass(e.cellNode, this.cellOverClass);
+		}
 	},
 	
 	onCellMouseOut: function(e){
@@ -182,7 +184,9 @@ dojo.declare("dojox.grid._Events", null, {
 		//		Event fired when mouse moves out of a cell.
 		// e: Event
 		//		Decorated event object which contains reference to grid, cell, and rowIndex
-		dojo.removeClass(e.cellNode, this.cellOverClass);
+		if(e.cellNode){
+			dojo.removeClass(e.cellNode, this.cellOverClass);
+		}
 	},
 	
 	onCellMouseDown: function(e){
@@ -304,7 +308,9 @@ dojo.declare("dojox.grid._Events", null, {
 		//		Event fired when mouse moves over a header cell.
 		// e: Event
 		// 		Decorated event object which contains reference to grid, cell, and rowIndex
-		dojo.addClass(e.cellNode, this.cellOverClass);
+		if(e.cellNode){
+			dojo.addClass(e.cellNode, this.cellOverClass);
+		}
 	},
 
 	onHeaderCellMouseOut: function(e){
@@ -312,7 +318,9 @@ dojo.declare("dojox.grid._Events", null, {
 		//		Event fired when mouse moves out of a header cell.
 		// e: Event
 		// 		Decorated event object which contains reference to grid, cell, and rowIndex
-		dojo.removeClass(e.cellNode, this.cellOverClass);
+		if(e.cellNode){
+			dojo.removeClass(e.cellNode, this.cellOverClass);
+		}
 	},
 	
 	onHeaderCellMouseDown: function(e) {
