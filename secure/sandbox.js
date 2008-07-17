@@ -239,9 +239,7 @@ dojo.require("dojo.NodeList-fx");
 			}
 			wrap.evaluate = eval('('+arguments.callee.toString()+')'); // yeah, recursive scoping;
 		};
-		return {
-			/*=====
-			dojo.declare("dojox.secure.__Sandbox", null, {*/
+		return /*===== dojo.declare("dojox.secure.__Sandbox", null, =====*/ { // dojox.secure.__Sandbox
 			loadJS : function(url){
 				//	summary:
 				// 		Loads the script from the given URL using XHR (assuming 
@@ -276,12 +274,8 @@ dojo.require("dojo.NodeList-fx");
 				//		The JavaScript text to evaluate
 				return wrap.evaluate(script);
 			}
-			/*	});
-			=====*/
-			
 			// TODO: could add something for pre-validated scripts
-		};
-		
+		}/*===== ) =====*/;
 	};
 })(); 
 dojox.secure._safeDojoFunctions = function(element,wrap) {
