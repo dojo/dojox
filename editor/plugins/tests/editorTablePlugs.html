@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 var djConfig = {
-	isDebug: false,
+	isDebug: true,
 	parseOnLoad: true,
 	debugAtAllCosts:false
 	//popup:true,
@@ -29,7 +29,9 @@ var djConfig = {
 	
 	dojo.addOnLoad(function(){
 		console.log(dojo.version.toString())
-		
+		var div = dojo.byId("test");
+		var div = div.cloneNode(true);
+		console.log("DIV:", div)
 	});
 		
 
@@ -57,7 +59,7 @@ margin:20px 100px;
                         {name: 'dojox.editor.plugins.TablePlugins', command: 'colorTableCell'},
                         {name: 'dojox.editor.plugins.TablePlugins', command: 'tableContextMenu'}
                     ]">
-         Dojo Rocks
+         Dojo Rocks with a fox in socks. Red socks.
        <table width="200" border="2" align="center" 
             cellpadding="2" cellspacing="2" bordercolor="#00FFFF" bgcolor="#FF0000" id="myTable">
           <tr>
@@ -78,5 +80,6 @@ margin:20px 100px;
         </table> 
     </div>
 </div>
+<div id="test">test</div>
 </body>
 </html>
