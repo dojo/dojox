@@ -44,9 +44,9 @@ dojo.declare("dojox.grid._Events", null, {
 	
 	onKeyDown: function(e){
 		// summary:
-		// 		Grid key event handler. By default enter begins editing and applies edits, escape cancels and edit,
+		// 		Grid key event handler. By default enter begins editing and applies edits, escape cancels an edit,
 		// 		tab, shift-tab, and arrow keys move grid cell focus.
-		if(e.altKey || e.ctrlKey || e.metaKey){
+		if(e.altKey || e.metaKey){
 			return;
 		}
 		var dk = dojo.keys;
@@ -61,6 +61,11 @@ dojo.declare("dojox.grid._Events", null, {
 					if(!isEditing){
 						this.edit.setEditCell(this.focus.cell, this.focus.rowIndex);
 					}
+				}
+				break;
+			case dk.SPACE:
+				if(!this.edit.isEditing()){
+					this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
 				}
 				break;
 			case dk.TAB:
