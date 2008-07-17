@@ -42,19 +42,29 @@ dojo.declare(
 			// summary: sets the value of this widget
 			if(!this._searchInProgress){
 				this.inherited(arguments);
+				this._skip = true;
+				this.dropDown.setValueFromString(value);
 			}
 		},
 		
 		_onWidgetChange: function(/*item*/item){
 			// summary: called when the path gets changed in the dropdown
-			this.valueItem = item;
-			var value = this.dropDown.getPathValue(item);
-			if(value || !this._skipInvalidSet){
-				if(value){
-					this._hasValidPath = true;
+			if(!item && this.focusNode.value){
+				this._hasValidPath = false;
+			}else{
+				this.valueItem = item;
+				var value = this.dropDown.getPathValue(item);
+				if(value || !this._skipInvalidSet){
+					if(value){
+						this._hasValidPath = true;
+					}
+					if(!this._skip){
+						this.setValue(value);
+					}
+					delete this._skip;
 				}
-				this.setValue(value);
 			}
+			this.validate();
 		},
 		
 		startup: function(){
@@ -63,11 +73,11 @@ dojo.declare(
 			}
 			this.inherited(arguments);
 		},
-		
-		closeDropDown: function(){
-			this.inherited(arguments);
-			// set it back to 0 so that it will resize automatically again
+
+		openDropDown: function(){
+			// set width to 0 so that it will resize automatically
 			this.dropDown.domNode.style.width="0px";
+			this.inherited(arguments);
 		},
 		
 		toggleDropDown: function(){
@@ -118,8 +128,7 @@ dojo.declare(
 		_setBlurValue: function(){
 			// summary: sets the value of the widget once focus has left
 			if(this.dropDown){
-				this._skipInvalidSet = true;
-				this.dropDown.setValueFromString(this.focusNode.value);
+				this.setValue(this.focusNode.value);
 			}
 			this.inherited(arguments);
 		},
@@ -131,7 +140,7 @@ dojo.declare(
 			if(this._hasValidPath || this._hasSelection){
 				return value;
 			}
-			var dd = this.dropDown, topDir = dd.topDir, sep = dd.fileSeparator;
+			var dd = this.dropDown, topDir = dd.topDir, sep = dd.pathSeparator;
 			var ddVal = dd.getPathValue();
 			var norm = function(v){
 				if(topDir.length && v.indexOf(topDir) === 0){
@@ -161,7 +170,7 @@ dojo.declare(
 			if(topDir.length && val.indexOf(topDir) === 0){
 				val = val.substring(topDir.length);
 			}
-			var dirs = val.split(dd.fileSeparator);
+			var dirs = val.split(dd.pathSeparator);
 			var setFromChain = dojo.hitch(this, function(idx){
 				var dir = dirs[idx];
 				var child = dd.getChildren()[idx];
@@ -206,7 +215,7 @@ dojo.declare(
 								delete dd._setInProgress;
 								var targetString = first.label;
 								if(first.children){
-									targetString += dd.fileSeparator;
+									targetString += dd.pathSeparator;
 								}
 								targetString = targetString.substring(dir.length);
 								window.setTimeout(function(){

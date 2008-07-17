@@ -46,9 +46,9 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	
 	className: "dojoxFilePicker",
 	
-	// fileSeparator: string
+	// pathSeparator: string
 	//  Our file separator - it will be guessed if not set
-	fileSeparator: "",
+	pathSeparator: "",
 	
 	// topDir: string
 	//	The top directory string - it will be guessed if not set
@@ -61,6 +61,28 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	// pathAttr: string
 	//  the attribute to read for getting the full path of our file
 	pathAttr: "path",
+	
+	_itemsMatch: function(/*item*/ item1, /*item*/ item2){
+		// Summary: returns whether or not the two items match - checks ID if
+		//  they aren't the exact same object - ignoring trailing slashes
+		if(!item1 && !item2){ 
+			return true;
+		}else if(!item1 || !item2){
+			return false;
+		}else if(item1 == item2){
+			return true;
+		}else if (this._isIdentity){
+			var iArr = [ this.store.getIdentity(item1), i2 = this.store.getIdentity(item2) ];
+			dojo.forEach(iArr, function(i, idx){
+				if(i.lastIndexOf(this.pathSeparator) == (i.length - 1)){
+					iArr[idx] = i.substring(0, i.length - 1); 
+				}else{
+				}
+			}, this);
+			return (iArr[0] == iArr[1]);
+		}
+		return false;
+	},
 	
 	startup: function(){
 		if(this._started){ return; }
@@ -77,15 +99,19 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 				var store = this.store;
 				var parent = store.getValue(item, this.parentAttr);
 				var path = store.getValue(item, this.pathAttr);
-				if(!this.fileSeparator){
-					this.fileSeparator = path.substring(parent.length, parent.length + 1);
+				this.pathSeparator = this.pathSeparator || store.pathSeparator;
+				if(!this.pathSeparator){
+					this.pathSeparator = path.substring(parent.length, parent.length + 1);
 				}
 				if(!this.topDir){
-					this.topDir = parent + this.fileSeparator;
+					this.topDir = parent;
+					if(this.topDir.lastIndexOf(this.pathSeparator) != (this.topDir.length - 1)){
+						this.topDir += this.pathSeparator;
+					}
 				}
 			}
 		});
-		if(!this.fileSeparator || !this.topDir){
+		if(!this.pathSeparator || !this.topDir){
 			if(!child.items){
 				conn = this.connect(child, "onItems", setSeparator);
 			}else{
@@ -130,6 +156,13 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	
 	setValueFromString: function(/*string*/ path){
 		// Summary: sets the value of this widget based off the given path
+		if(!path){
+			this.setValue(null);
+			return;
+		}
+		if(path.lastIndexOf(this.pathSeparator) == (path.length - 1)){
+			path = path.substring(0, path.length - 1);
+		}
 		this.store.fetchItemByIdentity({identity: path,
 										onItem: this.setValue,
 										scope: this});

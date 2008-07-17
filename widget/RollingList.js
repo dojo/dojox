@@ -340,7 +340,9 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 					try{focusWidget.focusNode.focus();}catch(e){}
 				}
 				window.setTimeout(function(){
-					dijit.scrollIntoView(focusWidget.focusNode);
+					try{
+						dijit.scrollIntoView(focusWidget.focusNode);
+					}catch(e){}
 				}, 1);
 			}else if(focusWidget.focus){
 				if(!this.parentWidget._savedFocus || force){
@@ -607,7 +609,7 @@ dojo.declare("dojox.widget.RollingList",
 			// Summary: Fetchs the parent items for the given item
 			var store = this.store, id;
 			if(this.parentAttr && store.getFeatures()["dojo.data.api.Identity"] &&
-				(id = this.store.getValue(item, this.parentAttr))){
+				((id = this.store.getValue(item, this.parentAttr)) || id === "")){
 				// Fetch by parent attribute
 				var cb = function(i){
 					if(store.getIdentity(i) == store.getIdentity(item)){
@@ -616,7 +618,9 @@ dojo.declare("dojox.widget.RollingList",
 						callback([i]);
 					}
 				};
-				if(typeof id == "string"){
+				if(id === ""){
+					callback(null);
+				}else if(typeof id == "string"){
 					store.fetchItemByIdentity({identity: id, onItem: cb});
 				}else if(store.isItem(id)){
 					cb(id);
