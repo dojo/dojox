@@ -421,12 +421,15 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	}
 });
 
-dojox.grid.DataGrid.markupFactory = function(props, node, ctor){
+dojox.grid.DataGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return dojox.grid._Grid.markupFactory(props, node, ctor, function(node, cellDef){
 		var field = dojo.trim(dojo.attr(node, "field")||"");
 		if(field){
 			cellDef.field = field;
 		}
 		cellDef.field = cellDef.field||cellDef.name;
+		if(cellFunc){
+			cellFunc(node, cellDef);
+		}
 	});
 }
