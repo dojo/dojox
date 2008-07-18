@@ -6,6 +6,7 @@ var __p__, palette=function(){
 	__p__=document.createElement("div");
 	var s=__p__.style;
 	s.overflow="auto";
+	s.padding="0 6px";
 	//	drop it in the test thing
 	var body=dojo.query("#testListContainer table tbody")[0];
 	if(body){
