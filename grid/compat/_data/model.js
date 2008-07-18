@@ -591,7 +591,12 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		var rowId = null;
 		//Handle identity and nonidentity capable stores.
 		if(this._canIdentify && !isNotItem){
-			rowId = this._rowIdentities[this.store.getIdentity(item)].rowId;
+			//Make sure the row in question is actually in our data view.  If it isn't,
+			//should just return null.
+			var _rowId = this._rowIdentities[this.store.getIdentity(item)];
+			if(_rowId){
+				rowId = _rowId.rowId;
+			}
 		}else{
 			//Not efficient, but without identity support, 
 			//not a better way to do it.  Basically, do our best to locate it
