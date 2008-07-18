@@ -1,6 +1,24 @@
 dojo.provide("dojox.color.tests.Generator");
 dojo.require("dojox.color.Generator");
 
+var __p__, palette=function(){
+	if(__p__) return __p__;
+	__p__=document.createElement("div");
+	var s=__p__.style;
+	s.overflow="auto";
+	//	drop it in the test thing
+	var body=dojo.query("#testListContainer table tbody")[0];
+	if(body){
+		var tr=document.createElement("tr");
+		var td=document.createElement("td");
+		td.colSpan=4;
+		td.appendChild(__p__);
+		tr.appendChild(td);
+		body.appendChild(tr);
+	}
+	return __p__;
+}
+
 tests.register("dojox.color.tests.Generator", [
 	function testAnalogous(t){
 		//	test the defaults
@@ -17,7 +35,8 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+//		t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
 	},
 
 	function testMonochromatic(t){
@@ -34,7 +53,8 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+	//	t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
 	},
 
 	function testTriadic(t){
@@ -51,7 +71,8 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+	//	t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
 	},
 
 	function testComplementary(t){
@@ -68,7 +89,8 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+	//	t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
 	},
 
 	function testSplitComplementary(t){
@@ -85,7 +107,8 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+	//	t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
 	},
 
 	function testCompound(t){
@@ -102,13 +125,14 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+	//	t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
 	},
 
 	function testShades(t){
 		//	test the defaults
 		var a=dojox.color.Generator.shades({ base:new dojox.color.Color({r:128, g:0, b:0}) });
-		var s='<table cellpadding="0" cellspacing="1" border="0"><tr>';
+		var s='<h3>dojox.color.Generator.shades</h3><table cellpadding="0" cellspacing="1" border="0"><tr>';
 		var cols=8, c=0;
 		dojo.forEach(a, function(item){
 			if(c++%cols==0){ s+="</tr><tr>"; }
@@ -119,6 +143,7 @@ tests.register("dojox.color.tests.Generator", [
 				s+='<td width="32">&nbsp;</td>';
 			}
 		}
-		t.debug(s+'</tr></table>');
+		palette().innerHTML += s+'</tr></table>';
+//		t.debug(s+'</tr></table>');
 	}
 ]);
