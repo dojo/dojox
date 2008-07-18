@@ -315,7 +315,29 @@ dojo.declare('dojox.grid.scroller', dojox.grid.scroller.base, {
 		return Boolean(this.getDefaultPageNode(inPageIndex));
 	},
 	measurePage: function(inPageIndex){
-		return this.getDefaultPageNode(inPageIndex).offsetHeight;
+		var p = this.getDefaultPageNode(inPageIndex);
+		var h = p.offsetHeight;
+		if(!this._defaultRowHeight){
+			//The default sizes tend to vary, particularly on IE, so we
+			//need to calculate a basic default size for a row.  Putting
+			//a text character and using it to calculate a default row padding
+			//in the div seems to handle this okay.  It keeps IE
+			//from loading too much data.
+			if(p){
+				this._defaultRowHeight = 8;
+				var fr = p.firstChild;
+				if(fr){
+					var text = dojo.doc.createTextNode("T");
+					fr.appendChild(text);
+					this._defaultRowHeight = fr.offsetHeight;
+					fr.removeChild(text);
+				}
+			}
+		}
+		//If page height isn't very accurate (empty rows because data hasn't 
+		//been populated yet and the size is far too small) we need to adjust 
+		//it via the _defaultRowSize.
+		return (this.rowsPerPage == h)?(h*this._defaultRowHeight):h;
 	},
 	positionPage: function(inPageIndex, inPos){
 		this.positionPageNode(this.getDefaultPageNode(inPageIndex), inPos);
