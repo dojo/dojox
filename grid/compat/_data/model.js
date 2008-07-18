@@ -28,12 +28,10 @@ dojo.declare("dojox.grid.data.Model", null, {
 		}
 	},
 	notify: function(inMsg, inArgs){
-		if(!this.isUpdating()){
-			var a = inArgs || [];
-			for(var i=0, m, o; (o=this.observers[i]); i++){
-				m = o.p + inMsg; o = o.o;
-				(m in o)&&(o[m].apply(o, a));
-			}
+		var a = inArgs || [];
+		for(var i=0, m, o; (o=this.observers[i]); i++){
+			m = o.p + inMsg; o = o.o;
+			(m in o)&&(o[m].apply(o, a));
 		}
 	},
 	// updates
@@ -42,21 +40,10 @@ dojo.declare("dojox.grid.data.Model", null, {
 		this.clearData();
 	},
 	beginUpdate: function(){
-		this.updating++;
+		this.notify("BeginUpdate", arguments);
 	},
 	endUpdate: function(){
-		if(this.updating){
-			this.updating--;
-		}
-		/*if(this.updating){
-			if(!(--this.updating)){
-				this.change();
-			}
-		}
-		}*/
-	},
-	isUpdating: function(){
-		return Boolean(this.updating);
+		this.notify("EndUpdate", arguments);
 	},
 	// data
 	clearData: function(){
@@ -509,6 +496,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 			this._setRowId(item, request.start, idx);
 			this.setRow(row, request.start+idx);
 		}, this);
+		this.endUpdate();
 		// FIXME: 
 		//	Q: scott, steve, how the hell do we actually get this to update
 		//		the visible UI for these rows?
@@ -517,6 +505,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 	},
 	// request data 
 	requestRows: function(inRowIndex, inCount){
+		this.beginUpdate();
 		var row  = inRowIndex || 0;
 		var params = { 
 			start: row,

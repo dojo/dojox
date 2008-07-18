@@ -95,6 +95,14 @@ dojo.declare('dojox.Grid', dojox.VirtualGrid, {
 		this.updateRowCount(this.rowCount);
 	},
 
+	modelBeginUpdate: function(){
+		this.beginUpdate();
+	},
+
+	modelEndUpdate: function(){
+		this.endUpdate();
+	},
+
 	modelRowChange: function(inData, inRowIndex){
 		this.updateRow(inRowIndex);
 	},

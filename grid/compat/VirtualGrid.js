@@ -439,26 +439,35 @@ dojo.declare('dojox.VirtualGrid',
 	beginUpdate: function(){
 		// summary:
 		//		Use to make multiple changes to rows while queueing row updating.
-		// NOTE: not currently supporting nested begin/endUpdate calls
-		this.invalidated = [];
+		if(this.invalidated == null){
+			this.invalidated = {rows: [], count: 1, all: false, rowCount: undefined};
+		}else{
+			this.invalidated.count++;
+		}
 		this.updating = true;
 	},
 
 	endUpdate: function(){
 		// summary:
 		//		Use after calling beginUpdate to render any changes made to rows.
-		this.updating = false;
 		var i = this.invalidated;
-		if(i.all){
-			this.update();
-		}else if(i.rowCount != undefined){
-			this.updateRowCount(i.rowCount);
-		}else{
-			for(r in i){
-				this.updateRow(Number(r));
+		if(--i.count === 0){
+			this.updating = false;
+			if(i.rows.length > 0){
+				for(r in i.rows){
+					this.updateRow(Number(r));
+				}
+				this.invalidated.rows = [];
+			}
+			if(i.rowCount != undefined){
+				this.updateRowCount(i.rowCount);
+				i.rowCount = undefined;
+			}
+			if(i.all){
+				this.update();
+				i.all = false;
 			}
 		}
-		this.invalidated = null;
 	},
 
 	// update
@@ -490,7 +499,7 @@ dojo.declare('dojox.VirtualGrid',
 		//		Index of the row to render
 		inRowIndex = Number(inRowIndex);
 		if(this.updating){
-			this.invalidated[inRowIndex]=true;
+			this.invalidated.rows[inRowIndex]=true;
 		}else{
 			this.views.updateRow(inRowIndex, this.rows.getHeight(inRowIndex));
 			this.scroller.rowHeightChanged(inRowIndex);
