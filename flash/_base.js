@@ -101,16 +101,17 @@ dojox.flash = {
 	_installingListeners: [],
 	
 	setSwf: function(/* String */ url, /* boolean? */ visible){
-		//console.debug("setSwf, url="+url);
 		// summary: Sets the SWF files and versions we are using.
 		// url: String
 		//	The URL to this Flash file.
 		// visible: boolean?
-		//	Whether the Flash file is visible or not. If it is not visible we hide it off the
-		//	screen. This defaults to true (i.e. the Flash file is visible).
+		//	Whether the Flash file is visible or not. If it is not visible we hide 
+		//	it off the screen. This defaults to true (i.e. the Flash file is
+		//	visible).
 		this.url = url;
 		
-		if(typeof visible != "undefined"){
+		this._visible = true;
+		if(visible !== null && typeof visible !== "undefined"){
 			this._visible = visible;
 		}
 		

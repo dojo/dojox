@@ -151,5 +151,5 @@ function assert(correct, actual, msg){
 
 console.debug("adding listeners...");
 dojox.flash.addLoadedListener(flashReady);
-dojox.flash.setSwf("TestFlash.swf", true);
+dojox.flash.setSwf("TestFlash.swf", false);
 dojo.connect(dojo, "loaded", pageReady);
