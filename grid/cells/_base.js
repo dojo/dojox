@@ -24,6 +24,7 @@ dojo.require("dojox.grid.util");
 		//	Each column in a grid layout has a cell object and most events and many methods
 		//	provide access to these objects.
 		styles: '',
+		classes: '',
 		editable: false,
 		alwaysEditing: false,
 		formatter: null,
@@ -244,6 +245,10 @@ dojo.require("dojox.grid.util");
 		var styles = d.trim(d.attr(node, "styles")||"");
 		if(styles){
 			cellDef.styles = styles;
+		}
+		var classes = d.trim(d.attr(node, "classes")||"");
+		if(classes){
+			cellDef.classes = classes;
 		}
 	}
 
