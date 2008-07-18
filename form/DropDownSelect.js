@@ -61,14 +61,13 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			return new dijit.MenuSeparator();
 		}else{
 			// Just a regular menu option
-			var mi = new dijit.MenuItem({
+			var click = dojo.hitch(this, "setValue", option);
+			return new dijit.MenuItem({
 				option: option,
 				label: option.label,
+				onClick: click,
 				disabled: option.disabled || false
 			});
-			this.connect(mi, "onClick", dojo.hitch(this, "setValue", option));
-			return mi;
-			
 		}
 	},
 
