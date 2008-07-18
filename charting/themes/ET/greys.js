@@ -43,11 +43,7 @@ dojo.require("dojox.charting.Theme");
 			font:"normal normal normal 7pt Tahoma",	//	label
 			fontColor:"#000"
 		},
-		colors:[]
-	});
-	dxc.themes.ET.greys.defineColors({
-		colors: [
-			// dojo.colorFromHex("#c3c3c3"), 
+		colors:[
 			dojo.colorFromHex("#8a8c8f"), 
 			dojo.colorFromHex("#4b4b4b"),
 			dojo.colorFromHex("#3b444b"), 
@@ -56,4 +52,3 @@ dojo.require("dojox.charting.Theme");
 		]
 	});
 })();
-
