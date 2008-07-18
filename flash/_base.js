@@ -101,6 +101,7 @@ dojox.flash = {
 	_installingListeners: [],
 	
 	setSwf: function(/* String */ url, /* boolean? */ visible){
+		//console.debug("setSwf, url="+url);
 		// summary: Sets the SWF files and versions we are using.
 		// url: String
 		//	The URL to this Flash file.
@@ -393,14 +394,6 @@ dojox.flash.Embed.prototype = {
 		//	Whether to write out Express Install
 		//	information. Optional value; defaults to false.
 		
-		// determine our container div's styling
-		var containerStyle = "";
-		containerStyle += ("width: " + this.width + "px; ");
-		containerStyle += ("height: " + this.height + "px; ");
-		if(!this._visible){
-			containerStyle += "position: absolute; z-index: 10000; top: -1000px; left: -1000px; "; //FIXME: avoid horizontal positioning off-page for BiDi
-		}
-
 		// figure out the SWF file to get and how to write out the correct HTML
 		// for this Flash version
 		var objectHTML;
@@ -478,9 +471,19 @@ dojox.flash.Embed.prototype = {
 		dojo.connect(dojo, "loaded", dojo.hitch(this, function(){
 			var div = document.createElement("div");
 			div.id = this.id + "Container";
-			div.style = containerStyle;
+			
+			div.style.width = this.width + "px";
+			div.style.height = this.height + "px";
+			if(!this._visible){
+				div.style.position = "absolute";
+				div.style.zIndex = "10000";
+				div.style.top = "-1000px";
+				div.style.left = "-1000px";
+				//FIXME: avoid horizontal positioning off-page for BiDi
+			}
+
 			div.innerHTML = objectHTML;
-	
+
 			var body = document.getElementsByTagName("body");
 			if(!body || !body.length){
 				throw new Error("No body tag for this page");
@@ -507,7 +510,7 @@ dojox.flash.Embed.prototype = {
 	},
 	
 	setVisible: function(/* Boolean */ visible){
-	  //console.debug("setVisible, visible="+visible);
+		//console.debug("setVisible, visible="+visible);
 		
 		// summary: Sets the visibility of this Flash object.		
 		var container = dojo.byId(this.id + "Container");
@@ -555,6 +558,7 @@ dojox.flash.Communicator.prototype = {
 	// Registers the existence of a Flash method that we can call with
 	// JavaScript, using Flash 8's ExternalInterface. 
 	_addExternalInterfaceCallback: function(methodName){
+		//console.debug("addExternalInterfaceCallback, methodName="+methodName);
 		var wrapperCall = dojo.hitch(this, function(){
 			// some browsers don't like us changing values in the 'arguments' array, so
 			// make a fresh copy of it
@@ -575,6 +579,7 @@ dojox.flash.Communicator.prototype = {
 	// Encodes our data to get around ExternalInterface bugs that are still
 	// present even in Flash 9.
 	_encodeData: function(data){
+		//console.debug("encodeData, data=", data);
 		if(!data || typeof data != "string"){
 			return data;
 		}
@@ -601,6 +606,7 @@ dojox.flash.Communicator.prototype = {
 	// Decodes our data to get around ExternalInterface bugs that are still
 	// present even in Flash 9.
 	_decodeData: function(data){
+		//console.debug("decodeData, data=", data);
 		// wierdly enough, Flash sometimes returns the result as an
 		// 'object' that is actually an array, rather than as a String;
 		// detect this by looking for a length property; for IE
@@ -633,6 +639,7 @@ dojox.flash.Communicator.prototype = {
 	// Executes a Flash method; called from the JavaScript wrapper proxy we
 	// create on dojox.flash.comm.
 	_execFlash: function(methodName, methodArgs){
+		//console.debug("execFlash, methodName="+methodName+", methodArgs=", methodArgs);
 		var plugin = dojox.flash.obj.get();
 		methodArgs = (methodArgs) ? methodArgs : [];
 		
