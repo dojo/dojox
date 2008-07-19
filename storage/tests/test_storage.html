@@ -1,55 +1,55 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"> 
+				"http://www.w3.org/TR/html4/strict.dtd"> 
 
 <html>
 
 <head>
 	<title>Dojo Storage Test</title>
-	
+
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
-    </style>
-    
-    <!--
-  		// 'forceStorageProvider' is a flag to force a particular storage type. 
-  		// Example:
-  		//
-  		//var djConfig = { 
-  		//					isDebug: false, 
-  		//					forceStorageProvider: "dojox.storage.FlashStorageProvider" 
-  		//				  };
-  	-->
+	</style>
+		
+		<!--
+			// 'forceStorageProvider' is a flag to force a particular storage type. 
+			// Example:
+			//
+			//var djConfig = { 
+			//					isDebug: false, 
+			//					forceStorageProvider: "dojox.storage.FlashStorageProvider" 
+			//					};
+		-->
 
-    <script>
-      // most storage providers have to be loaded when the page first loads;
-      // the code below is so that we can use the storage provider pulldown,
-      // select a provider, change the URL to force this provider, and then
-      // reload the page to force this new provider
-      var loc = window.location;
-      var forceStorageProvider = undefined;
-      // does the URL have a storage provider for us to force using?
-      if(loc && loc.search && loc.search.indexOf("forceStorageProvider") != -1){
-        var m = loc.search.match(/forceStorageProvider=([a-zA-Z0-9_\.]*)/g);
-        if(m && m.length){
-          // forceStorageProvider can repeat as a query parameter if the
-          // page has been reloaded several times, so just grab the last
-          // one
-          forceStorageProvider = m[m.length - 1];
-          if(forceStorageProvider.indexOf("=") != -1){
-            forceStorageProvider = forceStorageProvider.split("=");
-            forceStorageProvider = forceStorageProvider[1];
-          }
-        }
-      }
-      
-      var djConfig = { 
-  							isDebug: false, 
-  							forceStorageProvider: forceStorageProvider
-  		};
-    </script>
+		<script>
+			// most storage providers have to be loaded when the page first loads;
+			// the code below is so that we can use the storage provider pulldown,
+			// select a provider, change the URL to force this provider, and then
+			// reload the page to force this new provider
+			var loc = window.location;
+			var forceStorageProvider = undefined;
+			// does the URL have a storage provider for us to force using?
+			if(loc && loc.search && loc.search.indexOf("forceStorageProvider") != -1){
+				var m = loc.search.match(/forceStorageProvider=([a-zA-Z0-9_\.]*)/g);
+				if(m && m.length){
+					// forceStorageProvider can repeat as a query parameter if the
+					// page has been reloaded several times, so just grab the last
+					// one
+					forceStorageProvider = m[m.length - 1];
+					if(forceStorageProvider.indexOf("=") != -1){
+						forceStorageProvider = forceStorageProvider.split("=");
+						forceStorageProvider = forceStorageProvider[1];
+					}
+				}
+			}
+			
+			var djConfig = { 
+								isDebug: false, 
+								forceStorageProvider: forceStorageProvider
+			};
+		</script>
 
-    <script type="text/javascript" 
-            src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" 
+						src="../../../dojo/dojo.js"></script>
 	
 	<script type="text/javascript" src="test_storage.js"></script>
 	
