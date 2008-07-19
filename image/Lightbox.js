@@ -377,7 +377,7 @@ dojo.declare("dojox.image.LightboxDialog",
 		if(!child.href){ return; }
 		if(g){ 	
 			if(!this._groups[g]){
-				this._groups[g] = [];				
+				this._groups[g] = [];
 			}
 			this._groups[g].push(child); 
 		}else{ this._groups["XnoGroupX"].push(child); }

@@ -1,15 +1,32 @@
 -------------------------------------------------------------------------------
-dojox.image
+dojox.image - Image Related Widgets and Components
 -------------------------------------------------------------------------------
 Version 1.0
 Release date: 10/31/07
 -------------------------------------------------------------------------------
 Project state:
-prototype | experimental
+
+[Badge] experimental
+[FlickrBadge] experimental
+[Gallery] experimental
+[Lightbox] beta
+[Magnifier] experimental
+[MagnifierLite] experimental
+[SlideShow] experimental
+[ThumbnailPicker] experimental
+
 -------------------------------------------------------------------------------
 Credits
-	Peter Higgins (dante)
-	Shane O'Sullivan (shaneosullivan1@gmail.com)
+
+[Badge] Peter Higgins (dante)
+[FlickrBadge] Bryan Forbes (BryanForbes)
+[Gallery] Shane O'Sullivan (sos)
+[Lightbox] Peter Higgins (dante)
+[Magnifier] Peter Higgins (dante)
+[MagnifierLite] Peter Higgins (dante)
+[SlideShow] Shane O'Sullivan (sos)
+[ThumbnailPicker] Shane O'Sullivan (sos)
+
 -------------------------------------------------------------------------------
 Project description 
 
