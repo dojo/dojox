@@ -34,7 +34,7 @@ dojo.declare("dojox.layout.DragPane",
 		if ((this._x < t.offsetLeft + t.clientWidth) &&
 			(this._y < t.offsetTop + t.clientHeight)) {
 			dojo.setSelectable(t,false);
-			this._mover = dojo.connect(t,"onmousemove",this,"_move");		
+			this._mover = this.connect(t,"onmousemove","_move");
 		}
 	},
 	
@@ -43,7 +43,7 @@ dojo.declare("dojox.layout.DragPane",
 		
 		dojo.setSelectable(this.domNode,true);
 		dojo.style(this.domNode,"cursor","pointer");
-		dojo.disconnect(this._mover);
+		this.disconnect(this._mover);
 	},
 	
 	_move: function(e){
