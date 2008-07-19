@@ -1,4 +1,4 @@
-dojo.declare("dojox.widget.Roller");
+dojo.provide("dojox.widget.Roller");
 dojo.require("dijit._Widget");
 
 dojo.declare("dojox.widget.Roller", dijit._Widget, {
@@ -21,7 +21,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 	//
 	//	example:
 	//	|	// create a scroller from a fixed array:
-	//	|	new dojox.widget.Roller.Roller({ items:["one","two","three"] });
+	//	|	new dojox.widget.Roller({ items:["one","two","three"] });
 	//
 	//	example:
 	//	|	// add an item:
@@ -54,7 +54,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 		}
 		this._idx = -1;
 		
-		dojo.addClass(this.domNode,"dojocRoller");
+		dojo.addClass(this.domNode,"dojoxRoller");
 		
 		// find all the items in this list, and popuplate 
 		dojo.query("li", this.domNode).forEach(function(item){
