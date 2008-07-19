@@ -38,6 +38,12 @@ dojo.declare("dojox.form.FileInputAuto",
 	//	FIXME: i18n somehow?
 	uploadMessage: "Uploading ...", 
 	
+	// triggerEvent: String
+	//		Event which triggers the upload. Defaults to onblur, sending the file selected
+	//		'blurDelay' milliseconds after losing focus. Set to "onchange" with a low blurDelay
+	// 		to send files immediately after uploading.
+	triggerEvent: "onblur",
+	
 	_sent: false,
 
 	// small template changes, new attachpoint: overlay
@@ -45,8 +51,8 @@ dojo.declare("dojox.form.FileInputAuto",
 
 	startup: function(){
 		// summary: add our extra blur listeners
-		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
-		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
+		this._blurListener = this.connect(this.fileInput, this.triggerEvent, "_onBlur");
+		this._focusListener = this.connect(this.fileInput, "onfocus", "_onFocus"); 
 		this.inherited(arguments);
 	},
 
@@ -62,7 +68,6 @@ dojo.declare("dojox.form.FileInputAuto",
 			this._blurTimer = setTimeout(dojo.hitch(this,"_sendFile"),this.blurDelay);		
 		}
 	},
-
 
 	setMessage: function(/*String*/title){
 		// summary: set the text of the progressbar
@@ -80,8 +85,10 @@ dojo.declare("dojox.form.FileInputAuto",
 		this._sending = true;
 
 		dojo.style(this.fakeNodeHolder,"display","none");
-		dojo.style(this.overlay,"opacity","0");
-		dojo.style(this.overlay,"display","block");
+		dojo.style(this.overlay,{
+			opacity:0,
+			display:"block"
+		});
 
 		this.setMessage(this.uploadMessage);
 
@@ -117,17 +124,19 @@ dojo.declare("dojox.form.FileInputAuto",
 		
 		this._sent = true;
 		this._sending = false;
-		dojo.style(this.overlay,"opacity","0");
-		dojo.style(this.overlay,"border","none");
-		dojo.style(this.overlay,"background","none"); 
+		dojo.style(this.overlay,{
+			opacity:0,
+			border:"none",
+			background:"none"
+		}); 
 
 		this.overlay.style.backgroundImage = "none";
 		this.fileInput.style.display = "none";
 		this.fakeNodeHolder.style.display = "none";
 		dojo.fadeIn({ node:this.overlay, duration:this.duration }).play(250);
 
-		dojo.disconnect(this._blurListener);
-		dojo.disconnect(this._focusListener);
+		this.disconnect(this._blurListener);
+		this.disconnect(this._focusListener);
 
 		//remove the form used to send the request
 		dojo.body().removeChild(ioArgs.args.form);
@@ -140,16 +149,16 @@ dojo.declare("dojox.form.FileInputAuto",
 		// summary: accomodate our extra focusListeners
 		if(this._blurTimer){ clearTimeout(this._blurTimer); }
 
-		dojo.disconnect(this._blurListener);
-		dojo.disconnect(this._focusListener);
+		this.disconnect(this._blurListener);
+		this.disconnect(this._focusListener);
 
 		this.overlay.style.display = "none";
 		this.fakeNodeHolder.style.display = "";
 		this.inherited(arguments);
 		this._sent = false;
 		this._sending = false;
-		this._blurListener = dojo.connect(this.fileInput,"onblur",this,"_onBlur");
-		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
+		this._blurListener = this.connect(this.fileInput, this.triggerEvent,"_onBlur");
+		this._focusListener = this.connect(this.fileInput,"onfocus","_onFocus"); 
 	},
 
 	onComplete: function(data,ioArgs,widgetRef){

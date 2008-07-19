@@ -29,8 +29,8 @@ dojo.declare("dojox.form.FileInput",
 	
 	startup: function(){
 		// summary: listen for changes on our real file input
-		this._listener = dojo.connect(this.fileInput,"onchange",this,"_matchValue");
-		this._keyListener = dojo.connect(this.fileInput,"onkeyup",this,"_matchValue");
+		this._listener = this.connect(this.fileInput,"onchange","_matchValue");
+		this._keyListener = this.connect(this.fileInput,"onkeyup","_matchValue");
 	},
 
 	_matchValue: function(){
@@ -50,8 +50,8 @@ dojo.declare("dojox.form.FileInput",
 	reset: function(/* Event */e){
 		// summary: on click of cancel button, since we can't clear the input because of
 		// 	security reasons, we destroy it, and add a new one in it's place.
-		dojo.disconnect(this._listener);
-		dojo.disconnect(this._keyListener);
+		this.disconnect(this._listener);
+		this.disconnect(this._keyListener);
 		if(this.fileInput){
 			this.domNode.removeChild(this.fileInput);
 		}
@@ -59,14 +59,17 @@ dojo.declare("dojox.form.FileInput",
 
 		// should we use cloneNode()? can we?
 		this.fileInput = document.createElement('input');
+		// dojo.attr(this.fileInput,{
+		//	"type":"file", "id":this.id, "name": this.name	
+		//});
 		this.fileInput.setAttribute("type","file");
-		this.fileInput.setAttribute("id",this.id);
-		this.fileInput.setAttribute("name",this.name);
+		this.fileInput.setAttribute("id", this.id);
+		this.fileInput.setAttribute("name", this.name);
 		dojo.addClass(this.fileInput,"dijitFileInputReal");
 		this.domNode.appendChild(this.fileInput);
 
-		this._keyListener = dojo.connect(this.fileInput,"onkeyup",this,"_matchValue");
-		this._listener = dojo.connect(this.fileInput,"onchange",this,"_matchValue"); 
+		this._keyListener = this.connect(this.fileInput, "onkeyup", "_matchValue");
+		this._listener = this.connect(this.fileInput, "onchange", "_matchValue"); 
 		this.inputNode.value = ""; 
 	}
 
