@@ -59,7 +59,10 @@ dojo.declare(
 	},
 
 	startup: function(){
-		if(this._started){ console.log('started'); return; }
+		if(this._started){ 
+			//console.log('started'); 
+			return; 
+		}
 		this.inherited(arguments);
 		
 		this.connect(this.nextButton, "onClick", "_forward");
@@ -89,7 +92,7 @@ dojo.declare(
 		this.nextButton.setAttribute("disabled", lastStep);
 		this._setButtonClass(this.nextButton);
 		if(sw.doneFunction){
-			console.log(sw.doneFunction);
+			//console.log(sw.doneFunction);
 			this.doneButton.domNode.style.display = "";
 			if(lastStep){
 				this.nextButton.domNode.style.display = "none";
