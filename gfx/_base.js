@@ -266,8 +266,8 @@ dojo.mixin(dojox.gfx, {
 				case "pt": return val * px_in_pt;
 				case "in": return val * 72 * px_in_pt;
 				case "pc": return val * 12 * px_in_pt;
-				case "mm": return val / dojox.gfx.mm_in_pt * px_in_pt;
-				case "cm": return val / dojox.gfx.cm_in_pt * px_in_pt;
+				case "mm": return val * dojox.gfx.mm_in_pt * px_in_pt;
+				case "cm": return val * dojox.gfx.cm_in_pt * px_in_pt;
 			}
 		}
 		return parseFloat(len);	// Number
