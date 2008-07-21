@@ -13,8 +13,6 @@ dojo.require("dojox.lang.functional.object");
 		
 		function testForIn(t){ t.assertEqual(show(x), "[a] = 1, [b] = 2, [c] = 3"); },
 		function testFilterIn(t){ t.assertEqual(show(df.filterIn(x, "%2")), "[a] = 1, [c] = 3"); },
-		function testMapIn(t){ t.assertEqual(show(df.mapIn(x, "+3")), "[a] = 4, [b] = 5, [c] = 6"); },
-		function testEveryIn(t){ t.assertFalse(df.everyIn(x, "%2")); },
-		function testSomeIn(t){ t.assertTrue(df.someIn(x, "%2")); }
+		function testMapIn(t){ t.assertEqual(show(df.mapIn(x, "+3")), "[a] = 4, [b] = 5, [c] = 6"); }
 	]);
 })();

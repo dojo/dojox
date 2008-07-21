@@ -5,9 +5,10 @@ dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.curry");
 dojo.require("dojox.lang.functional.sequence");
 dojo.require("dojox.lang.functional.listcomp");
+dojo.require("dojox.lang.functional.object");
 
 (function(){
-	var df = dojox.lang.functional, a = df.arg;
+	var df = dojox.lang.functional, a = df.arg, x = {a: 1, b: 2, c: 3};
 
 	var revArrayIter = function(array){
 		this.array    = array;
@@ -33,6 +34,9 @@ dojo.require("dojox.lang.functional.listcomp");
 			var iter = new revArrayIter([1, 2, 3]);
 			t.assertEqual(df.foldl1(iter, "/"), 3/2);
 		},
+
+		function testFoldlObj(t){ t.assertEqual(df.foldl(x, "*", 2), 12); },
+		function testFoldl1Obj(t){ t.assertEqual(df.foldl1(x, "+"), 6); },
 		
 		function testFoldr1(t){ t.assertEqual(df.foldr([1, 2, 3], "+", 0), 6); },
 		function testFoldr2(t){ t.assertEqual(df.foldr1([1, 2, 3], "*"), 6); },
@@ -69,6 +73,9 @@ dojo.require("dojox.lang.functional.listcomp");
 			t.assertEqual(df.scanl1(iter, "*"), [3, 6, 6]);
 		},
 		
+		function testScanlObj(t){ t.assertEqual(df.scanl(x, "+", 0), df.scanl(df.values(x), "+", 0)); },
+		function testScanl1Obj(t){ t.assertEqual(df.scanl1(x, "*"), df.scanl1(df.values(x), "*")); },
+
 		function testScanr1(t){ t.assertEqual(df.scanr([1, 2, 3], "+", 0), [6, 5, 3, 0]); },
 		function testScanr2(t){ t.assertEqual(df.scanr1([1, 2, 3], "*"), [6, 6, 3]); },
 		function testScanr3(t){ t.assertEqual(df.scanr1([1, 2, 3], df.partial(Math.max, a, a)), [3, 3, 3]); },

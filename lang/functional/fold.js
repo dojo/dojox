@@ -19,7 +19,7 @@ dojo.require("dojox.lang.functional.lambda");
 //	- take an iterator objects as the array argument (only foldl, foldl1, and reduce)
 
 (function(){
-	var d = dojo, df = dojox.lang.functional;
+	var d = dojo, df = dojox.lang.functional, empty = {};
 
 	d.mixin(df, {
 		// classic reduce-class functions
@@ -30,9 +30,17 @@ dojo.require("dojox.lang.functional.lambda");
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
 			if(d.isArray(a)){
+				// array
 				for(var i = 0, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
+				// iterator
+				for(var i = 0; a.hasNext(); z = f.call(o, z, a.next(), i++, a));
 			}else{
-				for(var i = 0; a.hasNext(); z = f.call(o, z, a.next(), i++));
+				// object/dictionary
+				for(var i in a){
+					if(i in empty){ continue; }
+					z = f.call(o, z, a[i], i, a);
+				}
 			}
 			return z;	// Object
 		},
@@ -43,11 +51,27 @@ dojo.require("dojox.lang.functional.lambda");
 			o = o || d.global; f = df.lambda(f);
 			var z;
 			if(d.isArray(a)){
+				// array
 				z = a[0];
 				for(var i = 1, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
-			}else if(a.hasNext()){
-				z = a.next();
-				for(var i = 1; a.hasNext(); z = f.call(o, z, a.next(), i++));
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
+				// iterator
+				if(a.hasNext()){
+					z = a.next();
+					for(var i = 1; a.hasNext(); z = f.call(o, z, a.next(), i++, a));
+				}
+			}else{
+				// object/dictionary
+				var first = true;
+				for(var i in a){
+					if(i in empty){ continue; }
+					if(first){
+						z = a[i];
+						first = false;
+					}else{
+						z = f.call(o, z, a[i], i, a);
+					}
+				}
 			}
 			return z;	// Object
 		},

@@ -5,7 +5,7 @@ dojo.require("dojox.lang.functional.fold");
 dojo.require("dojox.lang.functional.reversed");
 
 (function(){
-	var df = dojox.lang.functional, v, isOdd = "%2";
+	var df = dojox.lang.functional, v, isOdd = "%2", x = {a: 1, b: 2, c: 3};
 	
 	var revArrayIter = function(array){
 		this.array    = array;
@@ -55,6 +55,7 @@ dojo.require("dojox.lang.functional.reversed");
 			var iter = new revArrayIter([1, 3, 5]);
 			t.assertTrue(df.every(iter, isOdd));
 		},
+		function testEveryObj(t){ t.assertFalse(df.every(x, "%2")); },
 		function testEveryRev1(t){ t.assertFalse(df.everyRev([1, 2, 3], isOdd)); },
 		function testEveryRev2(t){ t.assertTrue(df.everyRev([1, 3, 5], isOdd)); },
 
@@ -64,6 +65,7 @@ dojo.require("dojox.lang.functional.reversed");
 			var iter = new revArrayIter([1, 2, 3]);
 			t.assertTrue(df.some(iter, isOdd));
 		},
+		function testSomeObj(t){ t.assertTrue(df.some(x, "%2")); },
 		function testSomeRev1(t){ t.assertFalse(df.someRev([2, 4, 6], isOdd)); },
 		function testSomeRev2(t){ t.assertTrue(df.someRev([1, 2, 3], isOdd)); },
 

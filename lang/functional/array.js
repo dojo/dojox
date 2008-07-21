@@ -16,7 +16,7 @@ dojo.require("dojox.lang.functional.lambda");
 //	- take an iterator objects as the array argument
 
 (function(){
-	var d = dojo, df = dojox.lang.functional;
+	var d = dojo, df = dojox.lang.functional, empty = {};
 
 	d.mixin(df, {
 		// JS 1.6 standard array functions, which can take a lambda as a parameter.
@@ -28,14 +28,16 @@ dojo.require("dojox.lang.functional.lambda");
 			o = o || d.global; f = df.lambda(f);
 			var t = [], v;
 			if(d.isArray(a)){
+				// array
 				for(var i = 0, n = a.length; i < n; ++i){
 					v = a[i];
 					if(f.call(o, v, i, a)){ t.push(v); }
 				}
 			}else{
+				// iterator
 				for(var i = 0; a.hasNext();){
 					v = a.next();
-					if(f.call(o, v, i++)){ t.push(v); }
+					if(f.call(o, v, i++, a)){ t.push(v); }
 				}
 			}
 			return t;	// Array
@@ -45,9 +47,17 @@ dojo.require("dojox.lang.functional.lambda");
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
 			if(d.isArray(a)){
+				// array
 				for(var i = 0, n = a.length; i < n; f.call(o, a[i], i, a), ++i);
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
+				// iterator
+				for(var i = 0; a.hasNext(); f.call(o, a.next(), i++, a));
 			}else{
-				for(var i = 0; a.hasNext(); f.call(o, a.next(), i++));
+				// object/dictionary
+				for(var i in a){
+					if(i in empty){ continue; }
+					f.call(o, a[i], i, a);
+				}
 			}
 			return o;	// Object
 		},
@@ -58,11 +68,13 @@ dojo.require("dojox.lang.functional.lambda");
 			o = o || d.global; f = df.lambda(f);
 			var t, n;
 			if(d.isArray(a)){
+				// array
 				t = new Array(n = a.length);
 				for(var i = 0; i < n; t[i] = f.call(o, a[i], i, a), ++i);
 			}else{
+				// iterator
 				t = [];
-				for(var i = 0; a.hasNext(); t.push(f.call(o, a.next(), i++)));
+				for(var i = 0; a.hasNext(); t.push(f.call(o, a.next(), i++, a)));
 			}
 			return t;	// Array
 		},
@@ -72,14 +84,24 @@ dojo.require("dojox.lang.functional.lambda");
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
 			if(d.isArray(a)){
+				// array
 				for(var i = 0, n = a.length; i < n; ++i){
 					if(!f.call(o, a[i], i, a)){
 						return false;	// Boolean
 					}
 				}
-			}else{
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
+				// iterator
 				for(var i = 0; a.hasNext();){
-					if(!f.call(o, a.next(), i++)){
+					if(!f.call(o, a.next(), i++, a)){
+						return false;	// Boolean
+					}
+				}
+			}else{
+				// object/dictionary
+				for(var i in a){
+					if(i in empty){ continue; }
+					if(!f.call(o, a[i], i, a)){
 						return false;	// Boolean
 					}
 				}
@@ -92,14 +114,24 @@ dojo.require("dojox.lang.functional.lambda");
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
 			if(d.isArray(a)){
+				// array
 				for(var i = 0, n = a.length; i < n; ++i){
 					if(f.call(o, a[i], i, a)){
 						return true;	// Boolean
 					}
 				}
-			}else{
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
+				// iterator
 				for(var i = 0; a.hasNext();){
-					if(f.call(o, a.next(), i++)){
+					if(f.call(o, a.next(), i++, a)){
+						return true;	// Boolean
+					}
+				}
+			}else{
+				// object/dictionary
+				for(var i in a){
+					if(i in empty){ continue; }
+					if(f.call(o, a[i], i, a)){
 						return true;	// Boolean
 					}
 				}

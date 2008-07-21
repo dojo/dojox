@@ -64,31 +64,6 @@ dojo.require("dojox.lang.functional.lambda");
 				t[i] = f.call(o, obj[i], i, obj);
 			}
 			return t;	// Object
-		},
-		everyIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
-			// summary: tests whether all attributes in the array pass the test 
-			//	implemented by the provided function.
-			o = o || d.global; f = df.lambda(f);
-			for(var i in obj){
-				if(i in empty){ continue; }
-				if(!f.call(o, obj[i], i, obj)){
-					return false;	// Boolean
-				}
-			}
-			return true;	// Boolean
-		},
-		someIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
-			// summary: tests whether some attribute in the array passes the test 
-			//	implemented by the provided function.
-			if(typeof a == "string"){ a = a.split(""); }
-			o = o || d.global; f = df.lambda(f);
-			for(var i in obj){
-				if(i in empty){ continue; }
-				if(f.call(o, obj[i], i, obj)){
-					return true;	// Boolean
-				}
-			}
-			return false;	// Boolean
 		}
 	});
 })();
