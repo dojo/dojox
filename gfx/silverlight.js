@@ -183,7 +183,7 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 	
 	_applyTransform: function() {
-		var tm = this._getRealMatrix(), r = this.rawNode;
+		var tm = this._getAdjustedMatrix(), r = this.rawNode;
 		if(tm){
 			var p = this.rawNode.getHost().content,
 				m = p.createFromXaml("<MatrixTransform/>"),
@@ -229,7 +229,7 @@ dojo.extend(dojox.gfx.Shape, {
 		return this;	// self
 	},
 	
-	_getRealMatrix: function(){
+	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
 		return this.matrix;	// dojox.gfx.Matrix2D
 	}
@@ -262,7 +262,7 @@ dojo.declare("dojox.gfx.Rect", dojox.gfx.shape.Rect, {
 		r.radiusX = r.radiusY = n.r;
 		return this._applyTransform();	// self
 	},
-	_getRealMatrix: function(){
+	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
 		var m = this.matrix, s = this.shape, d = {dx: s.x, dy: s.y};
 		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
@@ -282,7 +282,7 @@ dojo.declare("dojox.gfx.Ellipse", dojox.gfx.shape.Ellipse, {
 		r.height = 2 * n.ry;
 		return this._applyTransform();	// self
 	},
-	_getRealMatrix: function(){
+	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
 		var m = this.matrix, s = this.shape, d = {dx: s.cx - s.rx, dy: s.cy - s.ry};
 		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
@@ -301,7 +301,7 @@ dojo.declare("dojox.gfx.Circle", dojox.gfx.shape.Circle, {
 		r.width = r.height = 2 * n.r;
 		return this._applyTransform();	// self
 	},
-	_getRealMatrix: function(){
+	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
 		var m = this.matrix, s = this.shape, d = {dx: s.cx - s.r, dy: s.cy - s.r};
 		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
@@ -366,7 +366,7 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		r.source = n.src;
 		return this._applyTransform();	// self
 	},
-	_getRealMatrix: function(){
+	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
 		var m = this.matrix, s = this.shape, d = {dx: s.x, dy: s.y};
 		return new dojox.gfx.Matrix2D(m ? [m, d] : d);	// dojox.gfx.Matrix2D
@@ -413,7 +413,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		r["Canvas.Top"]  = 0;
 		this._applyTransform();
 	},
-	_getRealMatrix: function(){
+	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
 		var m = this.matrix, d = this._delta, x;
 		if(m){
