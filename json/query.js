@@ -18,7 +18,7 @@ dojo.provide("dojox.json.query");
 		var results = [];
 		function walk(obj){
 			if(name){
-				if(name===true){
+				if(name===true && !(obj instanceof Array)){
 					//recursive object search
 					results.push(obj);
 				}else if(obj[name]){
