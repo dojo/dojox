@@ -49,6 +49,7 @@ dojo.require("dojox.lang.functional.lambda");
 			}else{
 				for(var i = 0; a.hasNext(); f.call(o, a.next(), i++));
 			}
+			return o;	// Object
 		},
 		map: function(/*Array|String|Object*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: creates a new array with the results of calling 
