@@ -238,8 +238,8 @@ dojo.mixin(dojox.gfx, {
 		return font;	// Object
 	},
 	// length operations
-	cm_in_pt: 72 / 2.54,	// Number: centimeters per inch
-	mm_in_pt: 7.2 / 2.54,	// Number: millimeters per inch
+	cm_in_pt: 72 / 2.54,	// Number: points per centimeter
+	mm_in_pt: 7.2 / 2.54,	// Number: points per millimeter
 	px_in_pt: function(){
 		// summary: returns a number of pixels per point
 		return dojox.gfx._base._getCachedFontMeasurements()["12pt"] / 12;	// Number
