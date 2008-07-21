@@ -79,6 +79,19 @@
 	border-bottom-width: 3px;
 }
 
+.dojoxGrid-header .dojoxGrid-cell-focus {
+	border: 1px dashed blue;
+}
+
+.dojoxGrid-header.dojoxGrid-cell-focus.dojoxGrid-cell-over {
+	background-image: none;
+	background-color: white;
+	border-bottom-color: #FEBE47;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom-width: 3px;
+}
+
 .dojoxGrid-sort-down {
 	background: url(images/grid_sort_down.gif) left no-repeat; 
 	padding-left:16px;

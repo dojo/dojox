@@ -65,7 +65,13 @@ dojo.declare("dojox.grid._Events", null, {
 				break;
 			case dk.SPACE:
 				if(!this.edit.isEditing()){
-					this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+					var colIdx = this.focus.getHeaderIndex();
+					if(colIdx >= 0) {
+						this.setSortIndex(colIdx);
+					}else {
+						this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+					}
+					dojo.stopEvent(e);
 				}
 				break;
 			case dk.TAB:
