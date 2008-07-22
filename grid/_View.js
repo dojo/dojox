@@ -405,7 +405,13 @@ dojo.require("dojo.dnd.Manager");
 				if(c && !this.canResize(e)){
 					c = 'not-allowed';
 				}
-				e.sourceView.headerNode.style.cursor = c || ''; //'default';
+				if(dojo.isIE){
+					var t = e.sourceView.headerNode.scrollLeft;
+					e.sourceView.headerNode.style.cursor = c || ''; //'default';
+					e.sourceView.headerNode.scrollLeft = t;
+				}else{
+					e.sourceView.headerNode.style.cursor = c || ''; //'default';
+				}
 				if(c){
 					dojo.stopEvent(e);
 				}
