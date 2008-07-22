@@ -157,7 +157,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 			var values = [], ec=element.childNodes;
 			for(var i = 0; i < ec.length; i++){
 				var node = ec[i];
-				if(node.nodeType === 3){
+				if(node.nodeType === 3 || node.nodeType === 4){
 					values.push(node.nodeValue);
 				}
 			}
@@ -1125,7 +1125,7 @@ dojo.declare("dojox.data.XmlItem", null, {
 		if (this.element) {
 			for (var i = 0; i < this.element.childNodes.length; i++) {
 				var node = this.element.childNodes[i];
-				if (node.nodeType === 3) {
+				if (node.nodeType === 3 || node.nodeType === 4) {
 					str = node.nodeValue;
 					break;
 				}

@@ -12,6 +12,10 @@ dojox.data.tests.stores.XmlStore.getBooksStore = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books.xml").toString(), label: "title"});
 };
 
+dojox.data.tests.stores.XmlStore.getCDataTestStore = function(){
+	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/cdata_test.xml").toString(), label: "title"});
+};
+
 doh.register("dojox.data.tests.stores.XmlStore", 
 	[
 		function testReadAPI_fetch_all(t){
@@ -358,26 +362,115 @@ doh.register("dojox.data.tests.stores.XmlStore",
 		},
 
 		function testReadAPI_getValue(t){
-			 //	summary: 
-			 //		Simple test of the getValue API
-			 //	description:
-			 //		Simple test of the getValue API
-			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			//	summary: 
+			//		Simple test of the getValue API
+			//	description:
+			//		Simple test of the getValue API
+			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
 
-			 var d = new doh.Deferred();
-			 function onComplete(items, request) {
-				 t.assertEqual(1, items.length);
-				 var item = items[0];
-				 t.assertTrue(store.hasAttribute(item,"isbn"));
-				 t.assertEqual(store.getValue(item,"isbn"), "A9B574");
-				 d.callback(true);
-			 }
-			 function onError(error, request) {
-				 d.errback(error);
-			 }
-			 store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
-			 return d; //Object
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				var item = items[0];
+				t.assertTrue(store.hasAttribute(item,"isbn"));
+				t.assertEqual(store.getValue(item,"isbn"), "A9B574");
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
+			return d; //Object
 		},
+		function testReadAPI_getValue_cdata(t) {
+			//	summary:
+			//		Simple test of the getValue text() special attribute.
+			//	description:
+			//      Simple test of the getValue text() special attribute.
+			var store = dojox.data.tests.stores.XmlStore.getCDataTestStore();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				var item = items[0];
+				try{
+					t.assertTrue(store.hasAttribute(item,"ids"));
+					t.assertEqual(store.getValue(item,"ids"), "{68d3c190-4b83-11dd-c204-000000000001}17");
+					var title = store.getValue(item, "title");
+					t.assertTrue(store.isItem(title));
+					var titleValue = store.getValue(title, "text()");
+					t.assertEqual("<b>First</b> 3", dojo.trim(titleValue));
+					d.callback(true);
+				} catch (e) {
+					d.errback(e);
+				}
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{ids:"{68d3c190-4b83-11dd-c204-000000000001}17"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+
+		function testReadAPI_getValues_cdata(t) {
+			//	summary:
+			//		Simple test of the getValues text() special attribute.
+			//	description:
+			//      Simple test of the getValues text() special attribute.
+			var store = dojox.data.tests.stores.XmlStore.getCDataTestStore();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				var item = items[0];
+				try{
+					t.assertTrue(store.hasAttribute(item,"ids"));
+					t.assertEqual(store.getValue(item,"ids"), "{68d3c190-4b83-11dd-c204-000000000001}17");
+					var title = store.getValue(item, "title");
+					t.assertTrue(store.isItem(title));
+					var titleValue = store.getValues(title, "text()");
+					t.assertEqual("<b>First</b> 3", dojo.trim(titleValue[0]));
+					d.callback(true);
+				} catch (e) {
+					d.errback(e);
+				}
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{ids:"{68d3c190-4b83-11dd-c204-000000000001}17"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_getValue_cdata_toString(t) {
+			//	summary:
+			//		Simple test of the getValue and toString of the resulting 'XmlItem' API
+			//	description:
+			//      Simple test of the getValue and toString of the resulting 'XmlItem' API
+			var store = dojox.data.tests.stores.XmlStore.getCDataTestStore();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				var item = items[0];
+				try{
+					t.assertTrue(store.hasAttribute(item,"ids"));
+					t.assertEqual(store.getValue(item,"ids"), "{68d3c190-4b83-11dd-c204-000000000001}17");
+					var title = store.getValue(item, "title");
+					t.assertTrue(store.isItem(title));
+					var firstText = title.toString();
+					t.assertEqual("<b>First</b> 3", dojo.trim(firstText));
+					d.callback(true);
+				} catch (e) {
+					d.errback(e);
+				}
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{ids:"{68d3c190-4b83-11dd-c204-000000000001}17"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+
 		function testReadAPI_getValues(t){
 			 //	summary: 
 			 //		Simple test of the getValues API
