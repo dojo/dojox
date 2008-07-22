@@ -142,7 +142,7 @@ dojo.declare("dojox.widget.Pager",
 			}else{
 				var addonHeight = statusH;
 				var widthSub = this.pagerIconNext.width;
-				var containerWidth = dojo.style(pcv, 'width');
+				var containerWidth = style(pcv, 'width');
 				var newWidth = containerWidth-(2*widthSub);
 				style(pcv, {
 					width: newWidth+'px',
@@ -162,7 +162,7 @@ dojo.declare("dojox.widget.Pager",
 			}else{
 				style(pcv, 'marginTop', statusH+'px');
 				if (this.pagerPos != 'center'){
-					style(pcv, 'marginBottom', pagerH+'px');
+					style(pcv, 'marginTop', pagerH+'px');
 				}
 			}
 			
@@ -361,37 +361,28 @@ dojo.declare("dojox.widget.Pager",
 			return;
 		}else{
 			// calculate whether to go left or right, take shortest way
+			var distanceP; var distanceN;
 			if (page < this._currentPage){
-				var distanceP = this._currentPage-page;
-				var distanceN = (this._totalPages+page)-this._currentPage;
+				distanceP = this._currentPage - page;
+				distanceN = (this._totalPages + page) - this._currentPage;
 			}else{
-				var distanceP = (this._totalPages+this._currentPage)-page;
-				var distanceN = page-this._currentPage;
+				distanceP = (this._totalPages + this._currentPage) - page;
+				distanceN = page - this._currentPage;
 			}
 			
-			if (distanceN > distanceP) {
-				this._toScroll = distanceP;
-				var connect = dojo.connect(this, 'onScrollEnd', dojo.hitch(this,function(){
-					this._toScroll--;
-					if (this._toScroll < 1) {
-						dojo.disconnect(connect);
-					}else{
-						this._pagerPrevious();
-					}
-				}));
-				this._pagerPrevious();
-			}else{
-				this._toScroll = distanceN;
-				var connect = dojo.connect(this, 'onScrollEnd', dojo.hitch(this,function(){
-					this._toScroll--;
-					if (this._toScroll < 1) {
-						dojo.disconnect(connect);
-					}else{
-						this._pagerNext();
-					}
-				}));
-				this._pagerNext();
-			}
+			var b = (distanceN > distanceP);
+			this._toScroll = (b ? distanceP : distanceN);
+			var cmd = (b ? "_pagerPrevious" : "_pagerNext");
+			var connect = this.connect(this, "onScrollEnd", function(){
+				this._toScroll--;
+				if(this._toScroll < 1){ 
+					this.disconnect(connect); 
+				}else{
+					this[cmd]();
+				}
+			});
+			this[cmd]();
+			
 		}
 	},
 	
@@ -460,85 +451,80 @@ dojo.declare("dojox.widget.Pager",
 		dojo.byId(this.id+'-status-'+previousPage).src = this.iconPage;
 		dojo.byId(this.id+'-status-'+this._currentPage).src = this.iconPageActive;
 	},
-	
-	_pagerPrevious: function(){
-		
-		if(this._anim){ return; }
-		var _h = (this.orientation == "horizontal");
+
+    _pagerPrevious: function(){
+		if(this._anim) return;
+   
 		var _anims = [];
-		
-		var ip = this.itemsPage;
-		var prop = (_h ? "left" : "top")
-
-		for (var i = this._currentPage * ip; i > (this._currentPage - 1) * ip; i--){
-			var ci = dojo.byId(this.id + '-item-' + i);			
-			if(ci){ 
-				var marginBox = dojo.marginBox(ci);
-				var p = {};
-				p[prop] = dojo.style(ci, prop) + (ip * marginBox[(_h ? "w" : "h")]);
-				_anims.push(dojo.fx.slideTo(dojo.mixin({
-					node: ci,
-					duration: this.duration
-				}, p)));
-			}
-
+		for (var i=this._currentPage*this.itemsPage; i>(this._currentPage-1)*this.itemsPage; i--){
+				if (!dojo.byId(this.id+'-item-'+i)) continue;
+		   
+				var currentItem = dojo.byId(this.id+'-item-'+i);
+				var marginBox = dojo.marginBox(currentItem);
+				if (this.orientation == "horizontal") {
+						var move = dojo.style(currentItem, 'left')+(this.itemsPage*marginBox.w);
+						_anims.push(dojo.fx.slideTo({node: currentItem, left: move, duration: this.duration}));
+				}else{
+						var move = dojo.style(currentItem, 'top')+(this.itemsPage*marginBox.h);
+						_anims.push(dojo.fx.slideTo({node: currentItem, top: move, duration: this.duration}));
+				}
 		}
 
 		var previousPage = this._currentPage;
-//		this._currentPage = (previousPage == 1 ? this._totalPages : this._currentPage--);
 		if (this._currentPage == 1){
-			this._currentPage = this._totalPages;
+				this._currentPage = this._totalPages;
 		}else{
-			this._currentPage--;
+				this._currentPage--;
 		}
-		
-		var cnt = ip,
-			j = 1;
-			
-		for (var i = this._currentPage * ip; i > (this._currentPage - 1) * ip; i--){
-			var ci = dojo.byId(this.id+'-item-'+i);
-			if(ci){
-
-				var marginBox = dojo.marginBox(ci);
-				var size = marginBox[(_h ? "w" : "h")];
-				var prop = (_h ? "left" : "top"),
-					p = {},
-					pa = {};
-
-				p[prop] = (-1 * (j * size) + 1) + "px";
-				p[(_h ? "top" : "left")] = "0px";
-				
-				pa[prop] = (_h ? (newPos + (ip * size)) : ((cnt - 1) * size));
-				dojo.style(ci, p);
-				_anims.push(
-					dojo.fx.slideTo(dojo.mixin({
-						node: ci, 
-						duration:this.duration
-					}, pa))
-				);
-
+   
+		cnt = this.itemsPage;
+		var j=1;
+		for (var i=this._currentPage*this.itemsPage; i>(this._currentPage-1)*this.itemsPage; i--){
+			if(dojo.byId(this.id+'-item-'+i)){
+				var currentItem = dojo.byId(this.id+'-item-'+i);
+				var marginBox = dojo.marginBox(currentItem);
+   
+				if (this.orientation == "horizontal") {
+					newPos = -(j * marginBox.w) + 1;
+					dojo.style(currentItem, 'left', newPos+'px');
+					dojo.style(currentItem, 'top', '0px');
+			   
+					var move = ((cnt - 1) * marginBox.w);
+					_anims.push(dojo.fx.slideTo({node: currentItem, left: move, duration: this.duration}));
+			   
+					var move = newPos+(this.itemsPage * marginBox.w);
+					_anims.push(dojo.fx.slideTo({node: currentItem, left: move, duration: this.duration}));
+				}else{
+					newPos = -((j * marginBox.h) + 1);
+					dojo.style(currentItem, 'top', newPos+'px');
+					dojo.style(currentItem, 'left', '0px');
+			   
+					var move = ((cnt - 1) * marginBox.h);
+					_anims.push(dojo.fx.slideTo({node: currentItem, top: move, duration: this.duration}));
+				}
+		   
 			}
 			cnt--;
 			j++;
 		}
-		
+   
 		this._anim = dojo.fx.combine(_anims);
-		var animConnect = this.connect(this._anim, "onEnd", function(){ 
-			delete this._anim; 
+		var animConnect = dojo.connect(this._anim, "onEnd", dojo.hitch(this, function(){
+			delete this._anim;
 			this.onScrollEnd();
-			this.disconnect(animConnect);
-		});
+			dojo.disconnect(animConnect);
+		}));
 		this._anim.play();
-		
+   
 		// set pager icons
 		dojo.byId(this.id + '-status-' + previousPage).src = this.iconPage;
-		dojo.byId(this.id + '-status-' + this._currentPage).src = this.iconPageActive;	
-
+		dojo.byId(this.id + '-status-' + this._currentPage).src = this.iconPageActive; 
 	},
 	
 	onScrollEnd: function(){
 		// summary: Stub Function. Fired after the slide is complete. Override or connect.
 	}
+
 });
 
 dojo.declare("dojox.widget._PagerItem",
