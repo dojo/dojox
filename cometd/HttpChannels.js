@@ -410,7 +410,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 			this.xhr.abort();
 		}
 	});
-	var Channels = new dojox.cometd.HttpChannels();
+	var Channels = dojox.cometd.HttpChannels.defaultInstance = new dojox.cometd.HttpChannels();
 	if(dojox.cometd.connectionTypes){ 
 		// register as a dojox.cometd transport and wire everything for cometd handling
 		// below are the necessary adaptions for cometd
