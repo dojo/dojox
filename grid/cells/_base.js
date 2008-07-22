@@ -51,7 +51,8 @@ dojo.require("dojox.grid.util");
 			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
 				return this.formatEditing(d, inRowIndex);
 			}else{
-				return (d != this.defaultValue && (f = this.formatter)) ? f.call(this, d, inRowIndex) : d;
+				var v = (d != this.defaultValue && (f = this.formatter)) ? f.call(this, d, inRowIndex) : d;
+				return (typeof v == "undefined" ? this.defaultValue : v);
 			}
 		},
 		formatEditing: function(inDatum, inRowIndex){
