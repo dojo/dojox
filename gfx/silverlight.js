@@ -393,7 +393,9 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		r.textDecorations = s.decoration === "underline" ? "Underline" : "None";
 		r["Canvas.Left"] = -10000;
 		r["Canvas.Top"]  = -10000;
-		window.setTimeout(dojo.hitch(this, "_delayAlignment"), 10);
+		if(!this._delay){
+			this._delay = window.setTimeout(dojo.hitch(this, "_delayAlignment"), 10);
+		}
 		return this;	// self
 	},
 	_delayAlignment: function(){
@@ -412,6 +414,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		r["Canvas.Left"] = 0;
 		r["Canvas.Top"]  = 0;
 		this._applyTransform();
+		delete this._delay;
 	},
 	_getAdjustedMatrix: function(){
 		// summary: returns the adjusted ("real") transformation matrix
@@ -617,6 +620,11 @@ dojox.gfx.silverlight.Font = {
 		r.fontWeight = f.weight in fw ? fw[f.weight] : f.weight;
 		r.fontSize = dojox.gfx.normalizedLength(f.size);
 		r.fontFamily = t in fo ? fo[t] : f.family;
+		
+		// update the transform
+		if(!this._delay){
+			this._delay = window.setTimeout(dojo.hitch(this, "_delayAlignment"), 10);
+		}
 	}
 };
 
