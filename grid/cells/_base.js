@@ -243,6 +243,10 @@ dojo.require("dojox.grid.util");
 		if(editable){
 			cellDef.editable = !(editable.toLowerCase()=="false");
 		}
+		var alwaysEditing = d.trim(d.attr(node, "alwaysEditing")||"");
+		if(alwaysEditing){
+			cellDef.alwaysEditing = !(alwaysEditing.toLowerCase()=="false");
+		}
 		var styles = d.trim(d.attr(node, "styles")||"");
 		if(styles){
 			cellDef.styles = styles;
