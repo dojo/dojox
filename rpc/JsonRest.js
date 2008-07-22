@@ -216,8 +216,8 @@ dojo.require("dojox.rpc.Rest");
 			//	summary:
 			//		Registers a service for as a JsonRest service, mapping it to a path and schema
 			
-			servicePath = service.servicePath = servicePath || service.servicePath;
-			servicePath = servicePath.match(/\/$/) ? servicePath : (servicePath + '/'); // add a trailing / if needed
+			servicePath = servicePath || service.servicePath;
+			servicePath = service.servicePath = servicePath.match(/\/$/) ? servicePath : (servicePath + '/'); // add a trailing / if needed
 			jr.schemas[servicePath] = schema || service._schema || {};
 			jr.services[servicePath] = service;
 		},
