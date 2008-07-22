@@ -20,7 +20,7 @@ dojo.require("dojox.gfx");
 
 createSurface = function(){
 	var surface = dojox.gfx.createSurface("test", 500, 500);
-	surface.continueWhenLoaded(makeShapes);
+	surface.whenLoaded(makeShapes);
 };
 
 makeShapes = function(surface){

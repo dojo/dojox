@@ -431,7 +431,7 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 		// asynchronously, used only when isLoaded is false, required
 		// only for Silverlight.
 	},
-	continueWhenLoaded: function(
+	whenLoaded: function(
 		/*Object?*/ context, 
 		/*Function|String*/ method
 	){
