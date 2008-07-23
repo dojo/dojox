@@ -26,6 +26,9 @@ class DojoExternalInterface{
 		
 		// set whether communication is available
 		DojoExternalInterface.available = ExternalInterface.available;
+		
+		// make sure we can play nice in XD settings
+		System.security.allowDomain(_root.xdomain);
 	}
 	
 	/** Called when we are finished adding methods through addCallback. */

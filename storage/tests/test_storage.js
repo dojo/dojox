@@ -2,7 +2,7 @@ dojo.require("dojox.storage");
 
 var TestStorage = {
 	currentProvider: "default",
-	currentNamespace: dojox.storage.DEFAULT_NAMESPACE,
+	currentNamespace: null,
 	
 	initialize: function(){
 		//console.debug("test_storage.initialize()");
@@ -55,7 +55,7 @@ var TestStorage = {
 		var keyNameField = dojo.byId("storageKey");
 		dojo.connect(keyNameField, "onfocus", function(evt){
 			directory.selectedIndex = -1;
-		}); 		
+		});			
 											 
 		// add onclick listeners to all of our buttons
 		var buttonContainer = dojo.byId("buttonContainer");
@@ -76,22 +76,22 @@ var TestStorage = {
 		
 		// disable the configuration button if none is supported for this provider
 		if(dojox.storage.hasSettingsUI() == false){
-			dojo.byId("configureButton").disabled = true;	
+			dojo.byId("configureButton").disabled = true; 
 		}
 	},
 	
 	providerChange: function(evt){
-	  var provider = evt.target.value;
-	  
-	  // reload the page with this provider
-	  var query = "";
-	  if(window.location.href.indexOf("forceStorageProvider") == -1){
-	    query = "?";
-	  }else{
-	    query = "&";
-	  }
-	  
-	  window.location.href += query + "forceStorageProvider=" + provider;
+		var provider = evt.target.value;
+		
+		// reload the page with this provider
+		var query = "";
+		if(window.location.href.indexOf("forceStorageProvider") == -1){
+			query = "?";
+		}else{
+			query = "&";
+		}
+		
+		window.location.href += query + "forceStorageProvider=" + provider;
 	},
 	
 	namespaceChange: function(evt){
@@ -308,10 +308,10 @@ var TestStorage = {
 		this._printStatus("Saving '" + key + "'...");
 		var self = this;
 		var saveHandler = function(status, keyName){
-		  //console.debug("saveHandler, status="+status+", keyName="+keyName);
+			//console.debug("saveHandler, status="+status+", keyName="+keyName);
 			if(status == dojox.storage.FAILED){
 				alert("You do not have permission to store data for this web site. "
-			        + "Press the Configure button to grant permission.");
+							+ "Press the Configure button to grant permission.");
 			}else if(status == dojox.storage.SUCCESS){
 				// clear out the old value
 				dojo.byId("storageKey").value = "";
@@ -323,7 +323,7 @@ var TestStorage = {
 					self.currentNamespace = namespace;
 				}		
 				
-			  self._printAvailableKeys();
+				self._printAvailableKeys();
 				self._printAvailableNamespaces();
 			}
 		};
@@ -375,7 +375,7 @@ var TestStorage = {
 			optionNode.appendChild(document.createTextNode(availableNamespaces[i]));
 			optionNode.value = availableNamespaces[i];
 			if(this.currentNamespace == availableNamespaces[i]){
-			  optionNode.selected = true;
+				optionNode.selected = true;
 			}
 			namespacesDir.appendChild(optionNode);
 		}
@@ -444,50 +444,55 @@ var TestStorage = {
 	},
 	
 	_determineCurrentNamespace: function(){
-	  // what is current namespace?
+		this.currentNamespace = dojox.storage.DEFAULT_NAMESPACE;
+		
+		// what is current namespace?
 		var availableNamespaces = dojox.storage.getNamespaces();
 		if(this.currentNamespace == dojox.storage.DEFAULT_NAMESPACE){
-		  // do we even have the default namespace in our available namespaces?
-		  var defaultPresent = false;
-		  for(var i = 0; i < availableNamespaces.length; i++){
-		    if(availableNamespaces[i] == dojox.storage.DEFAULT_NAMESPACE){
-		      defaultPresent = true;
-		    }
-		  }
-		  
-		  if(!defaultPresent && availableNamespaces.length){
-		    this.currentNamespace = availableNamespaces[0];
-		  }
+			// do we even have the default namespace in our available namespaces?
+			var defaultPresent = false;
+			for(var i = 0; i < availableNamespaces.length; i++){
+				if(availableNamespaces[i] == dojox.storage.DEFAULT_NAMESPACE){
+					defaultPresent = true;
+				}
+			}
+			
+			if(!defaultPresent && availableNamespaces.length){
+				this.currentNamespace = availableNamespaces[0];
+			}
 		}
 	},
 	
 	_printAvailableProviders: function(){
-	  // it is scary that this timeout is needed; if it is not present,
+		// it is scary that this timeout is needed; if it is not present,
 		// the options don't appear on Firefox and Safari, even though the
 		// page is finished loading! it might have to do with some strange
 		// interaction where our initialize method is called from ExternalInterface,
 		// which originated inside of Flash. -- Brad Neuberg
 		window.setTimeout(function(){
-  	  var selector = dojo.byId("currentStorageProvider");
-  	  var p = dojox.storage.manager.providers;
-  	  for(var i = 0; i < p.length; i++){
-  	    var name = p[i].declaredClass;
-  	    var o = document.createElement("option");
-  			o.appendChild(document.createTextNode(name));
-  			o.value = name;
-  			if(dojox.storage.manager.currentProvider == p[i]){
-  			  o.selected = true;
-  			}
+			var selector = dojo.byId("currentStorageProvider");
+			var p = dojox.storage.manager.providers;
+			for(var i = 0; i < p.length; i++){
+				var name = p[i].declaredClass;
+				var o = document.createElement("option");
+				o.appendChild(document.createTextNode(name));
+				o.value = name;
+				if(dojox.storage.manager.currentProvider == p[i]){
+					o.selected = true;
+				}
 			
-  			selector.appendChild(o);
-  		}
-  	}, 1);
+				selector.appendChild(o);
+			}
+		}, 1);
 	}
 };
 
 // wait until the storage system is finished loading
-if(dojox.storage.manager.isInitialized() == false){ // storage might already be loaded when we get here
-	dojo.connect(dojox.storage.manager, "loaded", TestStorage, TestStorage.initialize);
-}else{
-	dojo.connect(dojo, "loaded", TestStorage, TestStorage.initialize);
-}
+dojo.addOnLoad(function(){
+	// is the storage already loaded?
+	if(dojox.storage.manager.isInitialized() == false){ 
+		dojo.connect(dojox.storage.manager, "loaded", TestStorage, TestStorage.initialize);
+	}else{
+		dojo.connect(dojo, "loaded", TestStorage, TestStorage.initialize);
+	}
+});
