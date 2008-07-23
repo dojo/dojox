@@ -63,7 +63,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 				update = true;
 			}else{
 			 	var proto = args.schemas && (!(it instanceof Array)) && // won't try on arrays to do prototypes, plus it messes with queries 
-	 					(val = id.match(/(\/.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
+	 					(val = id.match(/^(.+\/)[^\.\[]*$/)) && // if it has a direct table id (no paths)
 	 					(val = args.schemas[val[1]]) && val.prototype; // and if has a prototype
 				if(proto){
 					// if the schema defines a prototype, that needs to be the prototype of the object
