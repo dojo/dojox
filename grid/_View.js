@@ -921,14 +921,28 @@ dojo.require("dojo.dnd.Manager");
 
 		hasHScrollbar: function(reset){
 			if(this._hasHScroll == undefined || reset){
-				this._hasHScroll = (this.scrollboxNode.offsetWidth < this.contentNode.offsetWidth);
+				var style = dojo.style(this.scrollboxNode, "overflow");
+				if(style == "hidden"){
+					this._hasHScroll = false;
+				}else if(style == "scroll"){
+					this._hasHScroll = true;
+				}else{
+					this._hasHScroll = (this.scrollboxNode.offsetWidth < this.contentNode.offsetWidth);
+				}
 			}
 			return this._hasHScroll; // Boolean
 		},
 
 		hasVScrollbar: function(reset){
 			if(this._hasVScroll == undefined || reset){
-				this._hasVScroll = (this.scrollboxNode.offsetHeight < this.contentNode.offsetHeight);
+				var style = dojo.style(this.scrollboxNode, "overflow");
+				if(style == "hidden"){
+					this._hasVScroll = false;
+				}else if(style == "scroll"){
+					this._hasVScroll = true;
+				}else{
+					this._hasVScroll = (this.scrollboxNode.offsetHeight < this.contentNode.offsetHeight);
+				}
 			}
 			return this._hasVScroll; // Boolean
 		},
