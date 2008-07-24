@@ -58,7 +58,6 @@
 .tundra .LightboxClose {
 	background:url('images/close.png') no-repeat center center;
 }
-
 .di_ie6 .nihilo .LightboxClose,
 .dj_ie6 .tundra .LightboxClose {
 	background:url('images/close.gif') no-repeat center center;
@@ -79,7 +78,6 @@
 .dj_ie6 .tundra .LightboxPrev {
 	background:url('images/left.gif') no-repeat center center;
 }
-
 
 /* dojox.image.Lightbox:soria */
 .soria .LightboxClose,
