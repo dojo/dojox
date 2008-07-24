@@ -54,6 +54,15 @@ dojo.declare("dojox.data.ServiceStore",
 			// 		dojox.data.ClientFilter is loaded. Do this add:
 			//	|	dojo.require("dojox.data.ClientFilter")
 			//		prior to loading the ServiceStore (ClientFilter must be loaded before ServiceStore).
+			//		To utilize client side filtering with a subclass, you can break queries into
+			//		client side and server side components by putting client side actions in
+			//		clientFilter property in fetch calls. For example you could override fetch:
+			//	|	fetch: function(args){
+  			//	|		// do the sorting and paging on the client side
+   			//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
+   			//	|		// args.query will be passed to the service object for the server side handling
+   			//	|		return this.inherited(arguments);
+			//	|	}
 			//		When extending this class, if you would like to create lazy objects, you can follow
 			//		the example from dojox.data.tests.stores.ServiceStore:
 			// |	var lazyItem = {

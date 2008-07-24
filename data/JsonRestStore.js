@@ -90,7 +90,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			});
 			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
 			//setup a byId alias to the api call
-			if(this.target && !this.service){
+			if(typeof this.target == 'string' && !this.service){
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
 			}
 			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
