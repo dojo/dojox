@@ -92,16 +92,25 @@
 	border-bottom-width: 3px;
 }
 
-.dojoxGrid-sort-down {
-	background: url(images/grid_sort_down.gif) left no-repeat; 
-	padding-left:16px;
-	margin-left:4px;
+.gridArrowButtonChar {
+	display:none !important;
+}
+.gridArrowButtonNode {
+	display: inline !important;
+	padding-left: 16px;
+}
+.dojoxGrid-sort-down .gridArrowButtonNode {
+	background: url(images/grid_sort_down.gif) center no-repeat;
+}
+.dojoxGrid-sort-up .gridArrowButtonNode {
+	background: url(images/grid_sort_up.gif) center no-repeat;
 }
 
-.dojoxGrid-sort-up {
-	background: url(images/grid_sort_up.gif) left no-repeat; 
-	padding-left:16px;
-	margin-left:4px;
+.dijit_a11y .gridArrowButtonChar {
+	display:inline !important;
+}
+.dijit_a11y .gridArrowButtonNode {
+	display: none !important;
 }
 
 /* content */
@@ -142,10 +151,6 @@
 
 .dojoxGrid-rowbar-selected {
 	background-color: #D9E8F9;
-	background-image: none;
-	/*background-image: url(images/grid_green_dot.gif);*/
-	background-position: center;
-	background-repeat: no-repeat;
 }
 
 /* rows */
@@ -268,15 +273,20 @@
 	height: 0px, width: 0px;
 }
 
-.gridArrowButtonChar {
-	display:none !important;
+.dijit_a11y .dojoxGrid-rowbar-selected { 
+	border-top: 1px solid white;
+	border-bottom: 1px dashed black;
+	border-top: 0;
+	background: none;
 }
-.dijit_a11y .gridArrowButtonChar {
-	display:inline !important;
+
+.dijit_a11y .dojoxGrid-rowbar-selected .dojoxGrid-rowbar-inner {
+	border: 0;
+	border-top: 1px solid white;
 }
-.dijit_a11y .dojoxGrid-sort-down, .dijit_a11y .dojoxGrid-sort-up {
-	margin-left: 0;
-	padding-left: 0;
+
+.dijit_a11y .dojoxGrid-row-selected {
+	border-bottom: 1px dashed black;
 }
 
 /* Drag and Drop */
