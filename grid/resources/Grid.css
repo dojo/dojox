@@ -18,19 +18,19 @@
 
 /* master header */
 
-.dojoxGrid-master-header {
+.dojoxGridMasterHeader {
 	position: relative;
 }
 
 /* master view */
 
-.dojoxGrid-master-view  {
+.dojoxGridMasterView  {
 	position: relative;
 }
 
 /* master messages */
 
-.dojoxGrid-master-messages {
+.dojoxGridMasterMessages {
 	position: relative;
 	padding: 1em;
 	text-align: center;
@@ -39,38 +39,34 @@
 
 /* views */
 
-.dojoxGrid-view {
+.dojoxGridView {
 	position: absolute;
 	overflow: hidden;
 }
 
 /* header */
 
-.dojoxGrid-header {
+.dojoxGridHeader {
 	position: absolute;
 	overflow: hidden;
 }
 
-.dojoxGrid-header {
+.dojoxGridHeader {
 	background-color: #E8E1CF;
 }
 
-.dojoxGrid-header table {
+.dojoxGridHeader table {
 	text-align: center;
 }
 
-.dojoxGrid-header .dojoxGrid-cell-content {
-	text-align: center;
-}
-
-.dojoxGrid-header .dojoxGrid-cell { 
+.dojoxGridHeader .dojoxGridCell { 
 	border: 1px solid;
 	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
 	background: url(images/grid_dx_gradient.gif) #E8E1CF top repeat-x;
 	padding-bottom: 2px;
 }
 
-.dojoxGrid-header .dojoxGrid-cell-over {
+.dojoxGridHeader .dojoxGridCellOver {
 	background-image: none;
 	background-color: white;
 	border-bottom-color: #FEBE47;
@@ -79,11 +75,11 @@
 	border-bottom-width: 3px;
 }
 
-.dojoxGrid-header .dojoxGrid-cell-focus {
+.dojoxGridHeader .dojoxGridCellFocus {
 	border: 1px dashed blue;
 }
 
-.dojoxGrid-header.dojoxGrid-cell-focus.dojoxGrid-cell-over {
+.dojoxGridHeader.dojoxGridCellFocus.dojoxGridCellOver {
 	background-image: none;
 	background-color: white;
 	border-bottom-color: #FEBE47;
@@ -92,37 +88,37 @@
 	border-bottom-width: 3px;
 }
 
-.gridArrowButtonChar {
+.dojoxGridArrowButtonChar {
 	display:none !important;
 }
-.gridArrowButtonNode {
+.dojoxGridArrowButtonNode {
 	display: inline !important;
 	padding-left: 16px;
 }
-.dojoxGrid-sort-down .gridArrowButtonNode {
+.dojoxGridSortDown .dojoxGridArrowButtonNode {
 	background: url(images/grid_sort_down.gif) center no-repeat;
 }
-.dojoxGrid-sort-up .gridArrowButtonNode {
+.dojoxGridSortUp .dojoxGridArrowButtonNode {
 	background: url(images/grid_sort_up.gif) center no-repeat;
 }
 
-.dijit_a11y .gridArrowButtonChar {
+.dijit_a11y .dojoxGridArrowButtonChar {
 	display:inline !important;
 }
-.dijit_a11y .gridArrowButtonNode {
+.dijit_a11y .dojoxGridArrowButtonNode {
 	display: none !important;
 }
 
 /* content */
 
-.dojoxGrid-scrollbox {
+.dojoxGridScrollbox {
 	position: relative;
 	overflow: auto;
 	background-color: white;
 	width: 100%;
 }
 
-.dojoxGrid-content {
+.dojoxGridContent {
 	position: relative;
 	overflow: hidden;
 	 -moz-outline-style: none;
@@ -131,36 +127,36 @@
 
 /* rowbar */
 
-.dojoxGrid-rowbar { 
+.dojoxGridRowbar { 
 	border: 1px solid;
 	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
 	border-top: none;
 	background: url(images/grid_dx_gradient.gif) #E8E1CF top repeat-x;
 }
 
-.dojoxGrid-rowbar-inner {
+.dojoxGridRowbarInner {
 	border-top: 1px solid #F6F4EB;
 }
 
-.dojoxGrid-rowbar-over {
+.dojoxGridRowbarOver {
 	background-image: none;
 	background-color: white;
 	border-top-color: #FEBE47;
 	border-bottom-color: #FEBE47;
 }
 
-.dojoxGrid-rowbar-selected {
+.dojoxGridRowbarSelected {
 	background-color: #D9E8F9;
 }
 
 /* rows */
 
-.dojoxGrid-row {
+.dojoxGridRow {
 	position: relative;
 	width: 9000em;
 }
 
-.dojoxGrid-row {
+.dojoxGridRow {
 	/*border: 1px solid #E8E4D8;*/
 	border: 1px solid #E8E4D8;
 	border-color: #F8F7F1;
@@ -171,7 +167,7 @@
 	border-top: none;
 }
 
-.dojoxGrid-row-over {
+.dojoxGridRowOver {
 	border-top-color: #FEBE47;
 	border-bottom-color: #FEBE47;
 	/*border-bottom-width: 2px;
@@ -180,29 +176,29 @@
 	/*background-color: #FDFDFD;*/
 }
 
-.dojoxGrid-row-odd {
+.dojoxGridRowOdd {
 	background-color: #FFFDF3;
 	/*background-color: #F9F7E8;*/
 }
 
-.dojoxGrid-row-selected {
+.dojoxGridRowSelected {
 	background-color: #D9E8F9;
 }
 
-.dojoxGrid-row-table {
+.dojoxGridRowTable {
 	table-layout: fixed;
 	width: 0;
 }
 
-.dojoxGrid-invisible {
+.dojoxGridInvisible {
 	visibility: hidden;
 }		
 
-.Xdojo-ie .dojoxGrid-invisible {
+.Xdojo-ie .dojoxGridInvisible {
 	display: none;
 }		
 
-.dojoxGrid-invisible td, .dojoxGrid-header .dojoxGrid-invisible td {
+.dojoxGridInvisible td, .dojoxGridHeader .dojoxGridInvisible td {
 	border-top-width: 0;
 	border-bottom-width: 0;
 	padding-top: 0;
@@ -213,7 +209,7 @@
 
 /* cells */
 
-.dojoxGrid-cell {
+.dojoxGridCell {
 	border: 1px solid;
 	border-color: #EBEADB;
 	border-right-color: #D5CDB5;
@@ -222,42 +218,35 @@
 	overflow: hidden;
 }
 
-.dojoxGrid-cell-focus {
+.dojoxGridCellFocus {
 	border: 1px dashed blue;
 }
 
-.dojoxGrid-cell-over {
+.dojoxGridCellOver {
 	border: 1px dotted #FEBE47;
 }
 
-.dojoxGrid-cell-focus.dojoxGrid-cell-over {
+.dojoxGridCellFocus.dojoxGridCellOver {
 	border: 1px dotted green;
-}
-
-.dojoxGrid-cell-clip {
-	width: 100%;
-	overflow: hidden;
-	white-space:nowrap;
-	text-overflow: ellipsis;
 }
 
 /* editing */
 
-.dojoxGrid-row-editing td {
+.dojoxGridRowEditing td {
 	background-color: #F4FFF4;
 }
 
-.dojoxGrid-row-inserting td {
+.dojoxGridRow-inserting td {
 	background-color: #F4FFF4;
 }
-.dojoxGrid-row-inflight td {
+.dojoxGridRow-inflight td {
 	background-color: #F2F7B7;
 }
-.dojoxGrid-row-error td {
+.dojoxGridRow-error td {
 	background-color: #F8B8B6;
 }
 
-.dojoxGrid-input, .dojoxGrid-select, .dojoxGrid-textarea {
+.dojoxGridInput, .dojoxGridSelect, .dojoxGridTextarea {
 	margin: 0;
 	padding: 0;
 	border-style: none;
@@ -266,26 +255,26 @@
 	font-family: inherit;
 }
 
-.dojoxGrid-hidden-focus {
+.dojoxGridHiddenFocus {
 	position: absolute;
 	left: -1000px;
 	top: -1000px;
 	height: 0px, width: 0px;
 }
 
-.dijit_a11y .dojoxGrid-rowbar-selected { 
+.dijit_a11y .dojoxGridRowbarSelected { 
 	border-top: 1px solid white;
 	border-bottom: 1px dashed black;
 	border-top: 0;
 	background: none;
 }
 
-.dijit_a11y .dojoxGrid-rowbar-selected .dojoxGrid-rowbar-inner {
+.dijit_a11y .dojoxGridRowbarSelected .dojoxGridRowbarInner {
 	border: 0;
 	border-top: 1px solid white;
 }
 
-.dijit_a11y .dojoxGrid-row-selected {
+.dijit_a11y .dojoxGridRowSelected {
 	border-bottom: 1px dashed black;
 }
 

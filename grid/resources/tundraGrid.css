@@ -7,7 +7,7 @@
 
 /* master messages */
 
-.tundra .dojoxGrid-master-messages {
+.tundra .dojoxGridMasterMessages {
 	background-color: #fefefe;
 }
 
@@ -36,11 +36,11 @@
 
 /* header */
 
-.tundra .dojoxGrid-header {
+.tundra .dojoxGridHeader {
 	background-color:  #e9e9e9;
 }
 
-.tundra .dojoxGrid-header .dojoxGrid-cell { 
+.tundra .dojoxGridHeader .dojoxGridCell { 
 	border-width: 1px;
 	padding-bottom: 0px;
 	border-color: transparent #ACA899 #919191 transparent;
@@ -48,15 +48,15 @@
 	color: #000 !important;
 }
 
-.tundra .dojoxGrid-header .dojoxGrid-cell-over {
+.tundra .dojoxGridHeader .dojoxGridCellOver {
 	background: url(../../../dijit/themes/tundra/images/tabHover.png) #e9e9e9 repeat-x top;
 	color: #000 !important;
 }
 
-.tundra .gridArrowButtonChar {
+.tundra .dojoxGridArrowButtonChar {
 	float: right;
 }
-.tundra .gridArrowButtonNode {
+.tundra .dojoxGridArrowButtonNode {
 	display: block !important;
 	padding-left: 0px;
 	float: right;
@@ -65,117 +65,117 @@
 	height: 1em;
 	margin: 2px 4px 0px 5px;
 }
-.dj_ie6 .tundra .gridArrowButtonNode {
+.dj_ie6 .tundra .dojoxGridArrowButtonNode {
 	background-image:url("../../../dijit/themes/tundra/images/spriteArrows.gif");
 }
 
-.tundra .dojoxGrid-sort-up .gridArrowButtonNode {
+.tundra .dojoxGridSortUp .dojoxGridArrowButtonNode {
 	background-position: -21px;
 }
-.dijit_a11y .gridArrowButtonNode {
+.dijit_a11y .dojoxGridArrowButtonNode {
 	display: none !important;
 }
 
 /* content */
 
-.tundra .dojoxGrid-scrollbox {
+.tundra .dojoxGridScrollbox {
 	background-color: #fefefe;
 }
 
 /* rowbar */
 
-.tundra .dojoxGrid-rowbar { 
+.tundra .dojoxGridRowbar { 
 	border: none;
 	background: url(images/tabEnabled_rotated.png) #e9e9e9 repeat-y right;
 	border-right: 1px solid #cccccc;
 	padding: 0px;
 }
 
-.tundra .dojoxGrid-rowbar-inner {
+.tundra .dojoxGridRowbarInner {
 	border: none;
 	border-bottom: 1px solid #cccccc;
 }
 
-.tundra .dojoxGrid-rowbar-over {
+.tundra .dojoxGridRowbarOver {
 	background: url(images/tabHover_rotated.png) #e9e9e9 repeat-y right;
 }
 
-.tundra .dojoxGrid-rowbar-selected {
+.tundra .dojoxGridRowbarSelected {
 	background: #D8E8F9 url(../../../dijit/themes/tundra/images/tabDisabled.png) #dddddd no-repeat center;
 	border-right: 1px solid #cccccc;
 }
 
 /* rows */
 
-.tundra .dojoxGrid-row {
+.tundra .dojoxGridRow {
 	border: none;
 	background-color: white;
 }
 
-.tundra .dojoxGrid-row-over {
+.tundra .dojoxGridRowOver {
 	border-top-color: #cccccc;
 	border-bottom-color: #cccccc;
 }
 
-.tundra .dojoxGrid-row-over .dojoxGrid-cell {
+.tundra .dojoxGridRowOver .dojoxGridCell {
 	background-color: #60a1ea; 
 	color:#fff;
 }
 
-.tundra .dojoxGrid-row-odd {
+.tundra .dojoxGridRowOdd {
 	background-color: #f2f5f9;
 }
 
-.tundra .dojoxGrid-row-selected {
+.tundra .dojoxGridRowSelected {
 	background-color: #aec7e3;
 }
 
 /* cells */
 
-.tundra .dojoxGrid-cell {
+.tundra .dojoxGridCell {
 	border: 1px dotted #D5CDB5;
 	border-left-color: transparent;
 	border-top-color: transparent;
 }
 
-.dj_ff2 .tundra .dojoxGrid-cell {
+.dj_ff2 .tundra .dojoxGridCell {
 	border-left-width: 0px;
 	border-top-width: 0px;
 }
 
-.dj_ie6 .tundra .dojoxGrid-cell {
+.dj_ie6 .tundra .dojoxGridCell {
 	border: 1px solid white;
 	border-right: 1px solid #D5CDB5;
 }
 
-.tundra .dojoxGrid-cell-focus {
+.tundra .dojoxGridCellFocus {
 	border: 1px dotted #a6a6a6;
 }
 
-.tundra .dojoxGrid-cell-over {
+.tundra .dojoxGridCellOver {
 	border: 1px dotted #a6a6a6;
 }
 
-.tundra .dojoxGrid-cell-focus.dojoxGrid-cell-over {
+.tundra .dojoxGridCellFocus.dojoxGridCellOver {
 	border: 1px dotted #595959;
 }
 
 /* editing */
 
 /* FIXME: these colors are off! */
-.tundra .dojoxGrid-row-editing td {
+.tundra .dojoxGridRowEditing td {
 	/* background-color: #F4FFF4; */
 	background-color: #60a1ea; 
 	/* padding: 0px 3px 0px 3px; */
 }
 
-.tundra .dojoxGrid-row-inserting td {
+.tundra .dojoxGridRow-inserting td {
 	background-color: #F4FFF4;
 }
-.tundra .dojoxGrid-row-inflight td {
+.tundra .dojoxGridRow-inflight td {
 	background-color: #F2F7B7;
 }
-.tundra .dojoxGrid-row-error td {
+.tundra .dojoxGridRow-error td {
 	background-color: #F8B8B6;
 }
 

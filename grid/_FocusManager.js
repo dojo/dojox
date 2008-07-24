@@ -24,7 +24,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	_colHeadNode: null,
 	tabbingOut: false,
-	focusClass: "dojoxGrid-cell-focus",
+	focusClass: "dojoxGridCellFocus",
 	focusView: null,
 	initFocusView: function(){
 		this.focusView = this.grid.views.getFirstScrollingView();

@@ -17,7 +17,7 @@ dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 	},
 	buildRowContent: function(inRowIndex, inRowNode){
 		var w = this.contentNode.offsetWidth - this.padBorderWidth 
-		inRowNode.innerHTML = '<table class="dojoxGrid-rowbar-table" style="width:' + w + 'px;" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"><tr><td class="dojoxGrid-rowbar-inner">&nbsp;</td></tr></table>';
+		inRowNode.innerHTML = '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"><tr><td class="dojoxGridRowbarInner">&nbsp;</td></tr></table>';
 	},
 	renderHeader: function(){
 	},
@@ -28,12 +28,12 @@ dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 	},
 	// styling
 	doStyleRowNode: function(inRowIndex, inRowNode){
-		var n = [ "dojoxGrid-rowbar" ];
+		var n = [ "dojoxGridRowbar" ];
 		if(this.grid.rows.isOver(inRowIndex)){
-			n.push("dojoxGrid-rowbar-over");
+			n.push("dojoxGridRowbarOver");
 		}
 		if(this.grid.selection.isSelected(inRowIndex)){
-			n.push("dojoxGrid-rowbar-selected");
+			n.push("dojoxGridRowbarSelected");
 		}
 		inRowNode.className = n.join(" ");
 	},

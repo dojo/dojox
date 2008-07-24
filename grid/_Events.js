@@ -9,7 +9,7 @@ dojo.declare("dojox.grid._Events", null, {
 	
 	// cellOverClass: String
 	// 		css class to apply to grid cells over which the cursor is placed.
-	cellOverClass: "dojoxGrid-cell-over",
+	cellOverClass: "dojoxGridCellOver",
 	
 	onKeyEvent: function(e){
 		// summary: top level handler for Key Events
@@ -37,7 +37,7 @@ dojo.declare("dojox.grid._Events", null, {
 		//
 		// example: onStyleRow({ selected: true, over:true, odd:false })
 		var i = inRow;
-			i.customClasses += (i.odd?" dojoxGrid-row-odd":"") + (i.selected?" dojoxGrid-row-selected":"") + (i.over?" dojoxGrid-row-over":"");
+			i.customClasses += (i.odd?" dojoxGridRowOdd":"") + (i.selected?" dojoxGridRowSelected":"") + (i.over?" dojoxGridRowOver":"");
 		this.focus.styleRow(inRow);
 		this.edit.styleRow(inRow);
 	},

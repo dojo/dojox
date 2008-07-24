@@ -754,7 +754,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 				this.delayScroll = true;
 				this.scrollTop = inTop;
 				this.views.setScrollTop(inTop);
-				jobs.job('dojoxGrid-scroll', 200, dojo.hitch(this, "finishScrollJob"));
+				jobs.job('dojoxGridScroll', 200, dojo.hitch(this, "finishScrollJob"));
 			}else{
 				this.setScrollTop(inTop);
 			}

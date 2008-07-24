@@ -50,7 +50,7 @@ dojo.declare("dojox.grid._EditManager", null, {
 
 	styleRow: function(inRow){
 		if(inRow.index == this.info.rowIndex){
-			inRow.customClasses += ' dojoxGrid-row-editing';
+			inRow.customClasses += ' dojoxGridRowEditing';
 		}
 	},
 

@@ -37,7 +37,7 @@ dojo.provide("dojox.grid._RowManager");
 				selected: this.grid.selection.isSelected(inRowIndex),
 				over: this.isOver(inRowIndex),
 				customStyles: "",
-				customClasses: "dojoxGrid-row"
+				customClasses: "dojoxGridRow"
 			}
 		},
 		styleRowNode: function(inRowIndex, inRowNode){

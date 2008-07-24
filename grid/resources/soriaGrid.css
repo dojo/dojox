@@ -7,17 +7,17 @@
 
 /* master messages */
 
-.soria .dojoxGrid-master-messages {
+.soria .dojoxGridMasterMessages {
 	background-color: #fefefe;
 }
 
 /* header */
 
-.soria .dojoxGrid-header {
+.soria .dojoxGridHeader {
 	background-color:  #e9e9e9;
 }
 
-.soria .dojoxGrid-header .dojoxGrid-cell { 
+.soria .dojoxGridHeader .dojoxGridCell { 
 	border-width: 1px;
 	padding-bottom: 0px;
 	border-color: transparent #ACA899 #919191 transparent;
@@ -25,14 +25,14 @@
 	color: #000 !important;
 }
 
-.soria .dojoxGrid-header .dojoxGrid-cell-over {
+.soria .dojoxGridHeader .dojoxGridCellOver {
 	background: url(../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-x top;
 }
 
-.soria .gridArrowButtonChar {
+.soria .dojoxGridArrowButtonChar {
 	float: right;
 }
-.soria .gridArrowButtonNode {
+.soria .dojoxGridArrowButtonNode {
 	display: block !important;
 	padding-left: 0px;
 	float: right;
@@ -41,117 +41,117 @@
 	width: 11px;
 	height: 1em;
 }
-.dj_ie6 .soria .gridArrowButtonNode {
+.dj_ie6 .soria .dojoxGridArrowButtonNode {
 	background-image:url("../../../dijit/themes/soria/images/spriteArrows.gif");
 }
 
-.soria .dojoxGrid-sort-up .gridArrowButtonNode {
+.soria .dojoxGridSortUp .dojoxGridArrowButtonNode {
 	background-position: -21px;
 }
-.dijit_a11y .gridArrowButtonNode {
+.dijit_a11y .dojoxGridArrowButtonNode {
 	display: none !important;
 }
 
 /* content */
 
-.soria .dojoxGrid-scrollbox {
+.soria .dojoxGridScrollbox {
 	background-color: #fefefe;
 }
 
 /* rowbar */
 
-.soria .dojoxGrid-rowbar { 
+.soria .dojoxGridRowbar { 
 	border: none;
 	background: url(../../../dijit/themes/soria/images/titleBar.png) #e9e9e9 repeat-y right;
 	border-right: 1px solid #cccccc;
 	padding: 0px;
 }
 
-.soria .dojoxGrid-rowbar-inner {
+.soria .dojoxGridRowbarInner {
 	border: none;
 	border-bottom: 1px solid #cccccc;
 }
 
-.soria .dojoxGrid-rowbar-over {
+.soria .dojoxGridRowbarOver {
 	background: url(../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-y right;
 }
 
-.soria .dojoxGrid-rowbar-selected {
+.soria .dojoxGridRowbarSelected {
 	background: #D9E8F9 url(../../../dijit/themes/soria/images/titleBar.png) #dddddd no-repeat center;
 	border-right: 1px solid #cccccc;
 }
 
 /* rows */
 
-.soria .dojoxGrid-row {
+.soria .dojoxGridRow {
 	border: none;
 	background-color: white;
 }
 
-.soria .dojoxGrid-row-over {
+.soria .dojoxGridRowOver {
 	border-top-color: #cccccc;
 	border-bottom-color: #cccccc;
 }
 
-.soria .dojoxGrid-row-over .dojoxGrid-cell {
+.soria .dojoxGridRowOver .dojoxGridCell {
 	background-color: #60a1ea; 
 	color:#fff;
 }
 
-.soria .dojoxGrid-row-odd {
+.soria .dojoxGridRowOdd {
 	background-color: #f2f5f9;
 }
 
-.soria .dojoxGrid-row-selected {
+.soria .dojoxGridRowSelected {
 	background-color: #aec7e3;
 }
 
 /* cells */
 
-.soria .dojoxGrid-cell {
+.soria .dojoxGridCell {
 	border: 1px dotted #D5CDB5;
 	border-left-color: transparent;
 	border-top-color: transparent;
 }
 
-.dj_ff2 .soria .dojoxGrid-cell {
+.dj_ff2 .soria .dojoxGridCell {
 	border-left-width: 0px;
 	border-top-width: 0px;
 }
 
-.dj_ie6 .soria .dojoxGrid-cell {
+.dj_ie6 .soria .dojoxGridCell {
 	border: 1px solid white;
 	border-right: 1px solid #D5CDB5;
 }
 
-.soria .dojoxGrid-cell-focus {
+.soria .dojoxGridCellFocus {
 	border: 1px dotted #a6a6a6;
 }
 
-.soria .dojoxGrid-cell-over {
+.soria .dojoxGridCellOver {
 	border: 1px dotted #a6a6a6;
 }
 
-.soria .dojoxGrid-cell-focus.dojoxGrid-cell-over {
+.soria .dojoxGridCellFocus.dojoxGridCellOver {
 	border: 1px dotted #595959;
 }
 
 /* editing */
 
 /* FIXME: these colors are off! */
-.soria .dojoxGrid-row-editing td {
+.soria .dojoxGridRowEditing td {
 	/* background-color: #F4FFF4; */
 	background-color: #60a1ea; 
 	/* padding: 0px 3px 0px 3px; */
 }
 
-.soria .dojoxGrid-row-inserting td {
+.soria .dojoxGridRow-inserting td {
 	background-color: #F4FFF4;
 }
-.soria .dojoxGrid-row-inflight td {
+.soria .dojoxGridRow-inflight td {
 	background-color: #F2F7B7;
 }
-.soria .dojoxGrid-row-error td {
+.soria .dojoxGridRow-error td {
 	background-color: #F8B8B6;
 }
 

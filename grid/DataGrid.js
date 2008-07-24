@@ -344,7 +344,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			var states=this.store.getState(inRow.index), c='';
 			for(var i=0, ss=["inflight", "error", "inserting"], s; s=ss[i]; i++){
 				if(states[s]){
-					c = ' dojoxGrid-row-' + s;
+					c = ' dojoxGridRow-' + s;
 					break;
 				}
 			}

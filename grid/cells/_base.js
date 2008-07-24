@@ -268,7 +268,7 @@ dojo.require("dojox.grid.util");
 		keyFilter: null,
 		formatEditing: function(inDatum, inRowIndex){
 			this.needFormatNode(inDatum, inRowIndex);
-			return '<input class="dojoxGrid-input" type="text" value="' + inDatum + '">';
+			return '<input class="dojoxGridInput" type="text" value="' + inDatum + '">';
 		},
 		formatNode: function(inNode, inDatum, inRowIndex){
 			this.inherited(arguments);
@@ -335,7 +335,7 @@ dojo.require("dojox.grid.util");
 		},
 		formatEditing: function(inDatum, inRowIndex){
 			this.needFormatNode(inDatum, inRowIndex);
-			var h = [ '<select class="dojoxGrid-select">' ];
+			var h = [ '<select class="dojoxGridSelect">' ];
 			for (var i=0, o, v; ((o=this.options[i]) !== undefined)&&((v=this.values[i]) !== undefined); i++){
 				h.push("<option", (inDatum==v ? ' selected' : ''), ' value="' + v + '"', ">", o, "</option>");
 			}
@@ -391,7 +391,7 @@ dojo.require("dojox.grid.util");
 		// grid cell that provides a standard checkbox that is always on for editing
 		_valueProp: "checked",
 		formatEditing: function(inDatum, inRowIndex){
-			return '<input class="dojoxGrid-input" type="checkbox"' + (inDatum ? ' checked="checked"' : '') + ' style="width: auto" />';
+			return '<input class="dojoxGridInput" type="checkbox"' + (inDatum ? ' checked="checked"' : '') + ' style="width: auto" />';
 		},
 		doclick: function(e){
 			if(e.target.tagName == 'INPUT'){

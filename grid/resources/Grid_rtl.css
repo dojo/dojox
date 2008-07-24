@@ -1,10 +1,10 @@
-.dijitRtl .dojoxGrid-header table {
+.dijitRtl .dojoxGridHeader table {
 }
 
-.dj_ie .dijitRtl .dojoxGrid-header table {
+.dj_ie .dijitRtl .dojoxGridHeader table {
 	float:none;
 }
 
-.dijitRtl .dojoxGrid-content {
+.dijitRtl .dojoxGridContent {
 	float:left;
 }

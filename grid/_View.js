@@ -56,7 +56,7 @@ dojo.require("dojo.dnd.Manager");
 	dojo.extend(Builder, {
 		view: null,
 		// boilerplate HTML
-		_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
+		_table: '<table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
 
 		// Returns the table variable as an array - and with the view width, if specified
 		getTableArray: function(){
@@ -78,7 +78,7 @@ dojo.require("dojo.dnd.Manager");
 			}
 			inCell.colSpan && html.push(' colspan="', inCell.colSpan, '"');
 			inCell.rowSpan && html.push(' rowspan="', inCell.rowSpan, '"');
-			html.push(' class="dojoxGrid-cell ');
+			html.push(' class="dojoxGridCell ');
 			inCell.classes && html.push(inCell.classes, ' ');
 			inMoreClasses && html.push(inMoreClasses, ' ');
 			// result[0] => td opener, style
@@ -242,7 +242,7 @@ dojo.require("dojo.dnd.Manager");
 				if(row.hidden || row.header){
 					continue;
 				}
-				html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGrid-invisible">');
+				html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGridInvisible">');
 				for(var i=0, cell, m, cc, cs; (cell=row[i]); i++){
 					m = cell.markup, cc = cell.customClasses = [], cs = cell.customStyles = [];
 					// content (format can fill in cc and cs as side-effects)
@@ -297,7 +297,7 @@ dojo.require("dojo.dnd.Manager");
 				if(row.hidden){
 					continue;
 				}
-				html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGrid-invisible">');
+				html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGridInvisible">');
 				for(var i=0, cell, markup; (cell=row[i]); i++){
 					cell.customClasses = [];
 					cell.customStyles = [];
@@ -899,16 +899,16 @@ dojo.require("dojo.dnd.Manager");
 		// note: not called in 'view' context
 		_getHeaderContent: function(inCell){
 			var n = inCell.name || inCell.grid.getCellName(inCell);
-			var ret = [ '<div class="dojoxGrid-sort-node' ];
+			var ret = [ '<div class="dojoxGridSortNode' ];
 			
 			if(inCell.index != inCell.grid.getSortIndex()){
 				ret.push('">');
 			}else{
 				ret = ret.concat([ ' ',
-							inCell.grid.sortInfo > 0 ? 'dojoxGrid-sort-up' : 'dojoxGrid-sort-down',
-							'"><div class="gridArrowButtonChar">',
+							inCell.grid.sortInfo > 0 ? 'dojoxGridSortUp' : 'dojoxGridSortDown',
+							'"><div class="dojoxGridArrowButtonChar">',
 							inCell.grid.sortInfo > 0 ? '&#9650;' : '&#9660;',
-							'</div><div class="gridArrowButtonNode"></div>' ]);
+							'</div><div class="dojoxGridArrowButtonNode"></div>' ]);
 			}
 			ret = ret.concat([n, '</div>']);
 			return ret.join('');
@@ -1025,7 +1025,7 @@ dojo.require("dojo.dnd.Manager");
 
 		createRowNode: function(inRowIndex){
 			var node = document.createElement("div");
-			node.className = this.classTag + '-row';
+			node.className = this.classTag + 'Row';
 			node[gridViewTag] = this.id;
 			node[rowIndexTag] = inRowIndex;
 			this.rowNodes[inRowIndex] = node;
