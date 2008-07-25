@@ -332,7 +332,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", dojox.storage.Provider, {
 			}
 			
 			if(ds._statusHandler){
-				ds._statusHandler.call(null, statusResult, key, namespace);		
+				ds._statusHandler.call(null, statusResult, key, null, namespace);		
 			}
 		}
 	}

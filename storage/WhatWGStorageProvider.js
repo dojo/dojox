@@ -84,7 +84,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 			
 			// indicate we succeeded
 			if(resultsHandler){
-				resultsHandler.call(null, this.SUCCESS, key);
+				resultsHandler.call(null, this.SUCCESS, key, null, namespace);
 			}
 		});
 		
@@ -96,7 +96,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 			myStorage.setItem(key, value);
 		}catch(e){
 			// indicate we failed
-			this._statusHandler.call(null, this.FAILED, key, e.toString());
+			this._statusHandler.call(null, this.FAILED, key, e.toString(), namespace);
 		}
 	},
 

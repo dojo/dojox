@@ -94,12 +94,12 @@ if(dojo.gears.available){
 				}catch(e){
 					// indicate we failed
 					console.debug("dojox.storage.GearsStorageProvider.put:", e);
-					resultsHandler(this.FAILED, key, e.toString());
+					resultsHandler(this.FAILED, key, e.toString(), namespace);
 					return;
 				}
 				
 				if(resultsHandler){
-					resultsHandler(dojox.storage.SUCCESS, key, null);
+					resultsHandler(dojox.storage.SUCCESS, key, null, namespace);
 				}
 			},
 
@@ -227,13 +227,13 @@ if(dojo.gears.available){
 					// indicate we failed
 					console.debug("dojox.storage.GearsStorageProvider.putMultiple:", e);
 					if(resultsHandler){
-						resultsHandler(this.FAILED, keys, e.toString());
+						resultsHandler(this.FAILED, keys, e.toString(), namespace);
 					}
 					return;
 				}
 				
 				if(resultsHandler){
-					resultsHandler(dojox.storage.SUCCESS, keys, null);
+					resultsHandler(dojox.storage.SUCCESS, keys, null, namespace);
 				}
 			},
 

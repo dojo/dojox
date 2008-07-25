@@ -90,7 +90,7 @@ if (dojo.isAIR) {
 				}
 				
 				if(resultsHandler){
-					resultsHandler(this.SUCCESS, key, null);
+					resultsHandler(this.SUCCESS, key, null, namespace);
 				}
 			},
 			
@@ -183,7 +183,7 @@ if (dojo.isAIR) {
 					// indicate we failed
 					console.debug("dojox.storage.AirDBStorageProvider.putMultiple:", e);
 					if(resultsHandler){
-						resultsHandler(this.FAILED, keys, e.toString());
+						resultsHandler(this.FAILED, keys, e.toString(), namespace);
 					}
 					return;
 				}

@@ -68,12 +68,12 @@ if (dojo.isAIR) {
 				}catch(e){
 					// indicate we failed
 					console.debug("dojox.storage.AirFileStorageProvider.put:", e);
-					resultsHandler(this.FAILED, key, e.toString());
+					resultsHandler(this.FAILED, key, e.toString(), namespace);
 					return;
 				}
 				
 				if(resultsHandler){
-					resultsHandler(this.SUCCESS, key, null);
+					resultsHandler(this.SUCCESS, key, null, namespace);
 				}
 			},
 			
@@ -169,13 +169,13 @@ if (dojo.isAIR) {
 					// indicate we failed
 					console.debug("dojox.storage.AirFileStorageProvider.putMultiple:", e);
 					if(resultsHandler){
-						resultsHandler(this.FAILED, keys, e.toString());
+						resultsHandler(this.FAILED, keys, e.toString(), namespace);
 					}
 					return;
 				}
 				
 				if(resultsHandler){
-					resultsHandler(this.SUCCESS, keys, null);
+					resultsHandler(this.SUCCESS, keys, null, namespace);
 				}
 			},
 
