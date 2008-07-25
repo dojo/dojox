@@ -36,7 +36,8 @@ class Storage{
 		// preload the System Settings finished button movie for offline
 		// access so it is in the cache
 		_root.createEmptyMovieClip("_settingsBackground", 1);
-		_root._settingsBackground.loadMovie(DojoExternalInterface.dojoPath + "storage_dialog.swf");
+		_root._settingsBackground.loadMovie(DojoExternalInterface.dojoPath 
+																				+ "../dojox/storage/storage_dialog.swf");
 	}
 
   //  FIXME: Whoever added this Flush code did not document why it
@@ -214,7 +215,8 @@ class Storage{
 		// to hide the Flash dialog. Instead, we need to load a movie in the
 		// background that we can show a close button on.
 		_root.createEmptyMovieClip("_settingsBackground", 1);
-		_root._settingsBackground.loadMovie(DojoExternalInterface.dojoPath + "storage_dialog.swf");
+		_root._settingsBackground.loadMovie(DojoExternalInterface.dojoPath 
+																				+ "../dojox/storage/storage_dialog.swf");
 	}
 	
 	public function clear(namespace){
