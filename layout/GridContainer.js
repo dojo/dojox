@@ -339,6 +339,8 @@ dojo.declare("dojox.layout.GridContainer",
 			isOffset:this.isOffset,
 			offsetDrag : this.offsetDrag
 		});
+		this.connect(dz, "insertDashedZone", "_placeGrips");
+		this.connect(dz, "deleteDashedZone", "_placeGrips");
 		return dz; //plottedDnd Object
 	},
 
@@ -410,6 +412,7 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	_placeGrips: function(){
 		//summary: Define the position of a grip and place it on page.
+		console.log('placegrips');
 		var height;
 		if (this.allowAutoScroll){
 			height = this.gridNode.scrollHeight;
