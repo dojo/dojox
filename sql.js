@@ -1,2 +1,2 @@
-dojo.require("dojox._sql.common");
-dojo.provide("dojox.sql");
+dojo.provide("dojox.sql"); 
+dojo.require("dojox.sql._base");

@@ -1,46 +1,44 @@
-dojo.provide("dojox._sql.common");
-
-dojo.require("dojox._sql._crypto");
-
-// summary:
-//	Executes a SQL expression.
-// description:
-// 	There are four ways to call this:
-// 	1) Straight SQL: dojox.sql("SELECT * FROM FOOBAR");
-// 	2) SQL with parameters: dojox.sql("INSERT INTO FOOBAR VALUES (?)", someParam)
-// 	3) Encrypting particular values: 
-//			dojox.sql("INSERT INTO FOOBAR VALUES (ENCRYPT(?))", someParam, "somePassword", callback)
-// 	4) Decrypting particular values:
-//			dojox.sql("SELECT DECRYPT(SOMECOL1), DECRYPT(SOMECOL2) FROM
-//					FOOBAR WHERE SOMECOL3 = ?", someParam,
-//					"somePassword", callback)
-//
-// 	For encryption and decryption the last two values should be the the password for
-// 	encryption/decryption, and the callback function that gets the result set.
-//
-// 	Note: We only support ENCRYPT(?) statements, and
-// 	and DECRYPT(*) statements for now -- you can not have a literal string
-// 	inside of these, such as ENCRYPT('foobar')
-//
-// 	Note: If you have multiple columns to encrypt and decrypt, you can use the following
-// 	convenience form to not have to type ENCRYPT(?)/DECRYPT(*) many times:
-//
-// 	dojox.sql("INSERT INTO FOOBAR VALUES (ENCRYPT(?, ?, ?))", 
-//					someParam1, someParam2, someParam3, 
-//					"somePassword", callback)
-//
-// 	dojox.sql("SELECT DECRYPT(SOMECOL1, SOMECOL2) FROM
-//					FOOBAR WHERE SOMECOL3 = ?", someParam,
-//					"somePassword", callback)
-dojox.sql = new Function("return dojox.sql._exec(arguments);");
+dojo.provide("dojox.sql._base");
+dojo.require("dojox.sql._crypto");
 
 dojo.mixin(dojox.sql, {
+	// summary:
+	//	Executes a SQL expression.
+	// description:
+	// 	There are four ways to call this:
+	// 	1) Straight SQL: dojox.sql("SELECT * FROM FOOBAR");
+	// 	2) SQL with parameters: dojox.sql("INSERT INTO FOOBAR VALUES (?)", someParam)
+	// 	3) Encrypting particular values: 
+	//			dojox.sql("INSERT INTO FOOBAR VALUES (ENCRYPT(?))", someParam, "somePassword", callback)
+	// 	4) Decrypting particular values:
+	//			dojox.sql("SELECT DECRYPT(SOMECOL1), DECRYPT(SOMECOL2) FROM
+	//					FOOBAR WHERE SOMECOL3 = ?", someParam,
+	//					"somePassword", callback)
+	//
+	// 	For encryption and decryption the last two values should be the the password for
+	// 	encryption/decryption, and the callback function that gets the result set.
+	//
+	// 	Note: We only support ENCRYPT(?) statements, and
+	// 	and DECRYPT(*) statements for now -- you can not have a literal string
+	// 	inside of these, such as ENCRYPT('foobar')
+	//
+	// 	Note: If you have multiple columns to encrypt and decrypt, you can use the following
+	// 	convenience form to not have to type ENCRYPT(?)/DECRYPT(*) many times:
+	//
+	// 	dojox.sql("INSERT INTO FOOBAR VALUES (ENCRYPT(?, ?, ?))", 
+	//					someParam1, someParam2, someParam3, 
+	//					"somePassword", callback)
+	//
+	// 	dojox.sql("SELECT DECRYPT(SOMECOL1, SOMECOL2) FROM
+	//					FOOBAR WHERE SOMECOL3 = ?", someParam,
+	//					"somePassword", callback)
+
 	dbName: null,
 	
 	// summary:
 	//	If true, then we print out any SQL that is executed
 	//	to the debug window
-	debug: (dojo.exists("dojox.sql.debug")?dojox.sql.debug:false),
+	debug: (dojo.exists("dojox.sql.debug") ? dojox.sql.debug:false),
 
 	open: function(dbName){
 		if(this._dbOpen && (!dbName || dbName == this.dbName)){
@@ -236,12 +234,12 @@ dojo.mixin(dojox.sql, {
 	}
 });
 
-// summary:
-//	A private class encapsulating any cryptography that must be done
-// 	on a SQL statement. We instantiate this class and have it hold
-//	it's state so that we can potentially have several encryption
-//	operations happening at the same time by different SQL statements.
 dojo.declare("dojox.sql._SQLCrypto", null, {
+	// summary:
+	//	A private class encapsulating any cryptography that must be done
+	// 	on a SQL statement. We instantiate this class and have it hold
+	//	it's state so that we can potentially have several encryption
+	//	operations happening at the same time by different SQL statements.	
 	constructor: function(action, sql, password, args, callback){
 		if(action == "encrypt"){
 			this._execEncryptSQL(sql, password, args, callback);
@@ -380,7 +378,7 @@ dojo.declare("dojox.sql._SQLCrypto", null, {
 				// a Google Gears Worker Pool
 			
 				// do the actual encryption now, asychronously on a Gears worker thread
-				dojox._sql._crypto.encrypt(sqlParam, password, dojo.hitch(this, function(results){
+				dojox.sql._crypto.encrypt(sqlParam, password, dojo.hitch(this, function(results){
 					// set the new encrypted value
 					this._finalArgs[paramIndex] = results;
 					this._finishedCrypto++;
@@ -518,7 +516,7 @@ dojo.declare("dojox.sql._SQLCrypto", null, {
 	_decryptSingleColumn: function(columnName, columnValue, password, currentRowIndex,
 											callback){
 		//console.debug("decryptSingleColumn, columnName="+columnName+", columnValue="+columnValue+", currentRowIndex="+currentRowIndex)
-		dojox._sql._crypto.decrypt(columnValue, password, dojo.hitch(this, function(results){
+		dojox.sql._crypto.decrypt(columnValue, password, dojo.hitch(this, function(results){
 			// set the new decrypted value
 			this._finalResultSet[currentRowIndex][columnName] = results;
 			this._finishedCrypto++;
@@ -532,3 +530,11 @@ dojo.declare("dojox.sql._SQLCrypto", null, {
 		}));
 	}
 });
+
+(function(){
+
+	var orig_sql = dojox.sql;
+	dojox.sql = new Function("return dojox.sql._exec(arguments);");
+	dojo.mixin(dojox.sql, orig_sql);
+	
+})();

@@ -1,25 +1,26 @@
-// Taken from http://www.movable-type.co.uk/scripts/aes.html by
-// Chris Veness (CLA signed); adapted for Dojo and Google Gears Worker Pool
-// by Brad Neuberg, bkn3@columbia.edu
-
-dojo.provide("dojox._sql._crypto");
-
-dojo.mixin(dojox._sql._crypto,{
+dojo.provide("dojox.sql._crypto");
+dojo.mixin(dojox.sql._crypto, {
+	// summary: dojox.sql cryptography code
+	// description: 
+	//	Taken from http://www.movable-type.co.uk/scripts/aes.html by
+	// 	Chris Veness (CLA signed); adapted for Dojo and Google Gears Worker Pool
+	// 	by Brad Neuberg, bkn3@columbia.edu
+	//
 	// _POOL_SIZE:
 	//	Size of worker pool to create to help with crypto
 	_POOL_SIZE: 100,
-	
+
 	encrypt: function(plaintext, password, callback){
 		// summary:
 		//	Use Corrected Block TEA to encrypt plaintext using password
 		//	(note plaintext & password must be strings not string objects).
 		//	Results will be returned to the 'callback' asychronously.	
 		this._initWorkerPool();
-	
+
 		var msg ={plaintext: plaintext, password: password};
 		msg = dojo.toJson(msg);
 		msg = "encr:" + String(msg);
-	
+
 		this._assignWork(msg, callback);
 	},
 
@@ -29,21 +30,21 @@ dojo.mixin(dojox._sql._crypto,{
 		//	(note ciphertext & password must be strings not string objects).
 		//	Results will be returned to the 'callback' asychronously.
 		this._initWorkerPool();
-	
-		var msg ={ciphertext: ciphertext, password: password};
+
+		var msg = {ciphertext: ciphertext, password: password};
 		msg = dojo.toJson(msg);
 		msg = "decr:" + String(msg);
-	
+
 		this._assignWork(msg, callback);
 	},
-	
+
 	_initWorkerPool: function(){
 		// bugs in Google Gears prevents us from dynamically creating
 		// and destroying workers as we need them -- the worker
 		// pool functionality stops working after a number of crypto
 		// cycles (probably related to a memory leak in Google Gears).
 		// this is too bad, since it results in much simpler code.
-	
+
 		// instead, we have to create a pool of workers and reuse them. we
 		// keep a stack of 'unemployed' Worker IDs that are currently not working.
 		// if a work request comes in, we pop off the 'unemployed' stack
@@ -56,42 +57,42 @@ dojo.mixin(dojox._sql._crypto,{
 		// more work needed to be done (i.e. it's a tight labor pool ;) 
 		// then the work messages are pushed onto
 		// a 'handleMessage' queue as an object tuple{msg: msg, callback: callback}
-	
+
 		if(!this._manager){
 			try{
 				this._manager = google.gears.factory.create("beta.workerpool", "1.0");
 				this._unemployed = [];
 				this._employed ={};
 				this._handleMessage = [];
-			
+		
 				var self = this;
 				this._manager.onmessage = function(msg, sender){
 					// get the callback necessary to serve this result
 					var callback = self._employed["_" + sender];
-				
+			
 					// make this worker unemployed
 					self._employed["_" + sender] = undefined;
 					self._unemployed.push("_" + sender);
-				
+			
 					// see if we need to assign new work
 					// that was queued up needing to be done
 					if(self._handleMessage.length){
 						var handleMe = self._handleMessage.shift();
 						self._assignWork(handleMe.msg, handleMe.callback);
 					}
-				
+			
 					// return results
 					callback(msg);
 				}
-				
+			
 				var workerInit = "function _workerInit(){"
 									+ "gearsWorkerPool.onmessage = "
 										+ String(this._workerHandler)
 									+ ";"
 								+ "}";
-			
+		
 				var code = workerInit + " _workerInit();";
-	
+
 				// create our worker pool
 				for(var i = 0; i < this._POOL_SIZE; i++){
 					this._unemployed.push("_" + this._manager.createWorker(code));
@@ -107,10 +108,10 @@ dojo.mixin(dojox._sql._crypto,{
 		if(!this._handleMessage.length && this._unemployed.length){
 			// get an unemployed worker
 			var workerID = this._unemployed.shift().substring(1); // remove _
-		
+	
 			// list this worker as employed
 			this._employed["_" + workerID] = callback;
-		
+	
 			// do the worke
 			this._manager.sendMessage(msg, parseInt(workerID,10));
 		}else{
@@ -120,11 +121,11 @@ dojo.mixin(dojox._sql._crypto,{
 	},
 
 	_workerHandler: function(msg, sender){
-		
+	
 		/* Begin AES Implementation */
-		
+	
 		/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-		
+	
 		// Sbox is pre-computed multiplicative inverse in GF(2^8) used in SubBytes and KeyExpansion [§5.1.1]
 		var Sbox =	[0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
 					 0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
@@ -286,7 +287,7 @@ dojo.mixin(dojox._sql._crypto,{
 		 */
 		function AESEncryptCtr(plaintext, password, nBits) {
 		  if (!(nBits==128 || nBits==192 || nBits==256)) return '';	 // standard allows 128/192/256 bit keys
-	
+
 		  // for this example script, generate the key by applying Cipher to 1st 16/24/32 chars of password; 
 		  // for real-world applications, a more secure approach would be to hash the password e.g. with SHA-1
 		  var nBytes = nBits/8;	 // no bytes in key
@@ -312,7 +313,7 @@ dojo.mixin(dojox._sql._crypto,{
 
 		  var blockCount = Math.ceil(plaintext.length/blockSize);
 		  var ciphertext = new Array(blockCount);  // ciphertext as array of strings
-  
+ 
 		  for (var b=0; b<blockCount; b++) {
 			// set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
 			// again done in two stages for 32-bit ops
@@ -320,7 +321,7 @@ dojo.mixin(dojox._sql._crypto,{
 			for (var c=0; c<4; c++) counterBlock[15-c-4] = (b/0x100000000 >>> c*8)
 
 			var cipherCntr = Cipher(counterBlock, keySchedule);	 // -- encrypt counter block --
-	
+
 			// calculate length of final block:
 			var blockLength = b<blockCount-1 ? blockSize : (plaintext.length-1)%blockSize+1;
 
@@ -409,7 +410,7 @@ dojo.mixin(dojox._sql._crypto,{
 		}
 
 		/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-		
+	
 		function encrypt(plaintext, password){
 			return AESEncryptCtr(plaintext, password, 256);
 		}
@@ -417,9 +418,9 @@ dojo.mixin(dojox._sql._crypto,{
 		function decrypt(ciphertext, password){	
 			return AESDecryptCtr(ciphertext, password, 256);
 		}
-		
+	
 		/* End AES Implementation */
-		
+	
 		var cmd = msg.substr(0,4);
 		var arg = msg.substr(5);
 		if(cmd == "encr"){
