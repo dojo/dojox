@@ -258,9 +258,23 @@ dojo.declare("dojox.image.SlideShow",
 		}else{
 			dojo.toggleClass(this.domNode,"slideShowPaused");
 			this._timerCancelled = false;
-			var success = this.showNextImage(true, true);
-			if(!success){
-				this._stop();
+			if(this.images[this.imageIndex] && this.images[this.imageIndex].complete){
+				var success = this.showNextImage(true, true);
+				if(!success){
+			  	this._stop();
+			  }
+			}else{
+				var idx = this.imageIndex;
+				var handle = dojo.subscribe(this.getShowTopicName(), dojo.hitch(this,function(info){
+					setTimeout(dojo.hitch(this,function(){
+					if(info.index == idx){
+						var success = this.showNextImage(true, true);
+						if(!success){
+							this._stop();
+						}
+						dojo.unsubscribe(handle);
+					}}),this.slideshowInterval * 1000);
+				}));
 			}
 		}
 	},
