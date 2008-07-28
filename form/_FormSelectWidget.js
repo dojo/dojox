@@ -158,6 +158,9 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 			newValue = [newValue];
 		}
 		dojo.forEach(newValue, function(i, idx){
+			if(!dojo.isObject(i)){
+				i = i + "";
+			}
 			if(typeof i === "string"){
 				newValue[idx] = dojo.filter(opts, function(node){
 					return node.value === i;
