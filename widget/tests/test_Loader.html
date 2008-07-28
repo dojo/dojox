@@ -20,7 +20,7 @@
 		function getHoney(){
 			// simple xhrGet example
 			var foo = dojo.xhrGet({
-				url: '../Loader/honey.php?delay=0',
+				url: 'honey.php?delay=0',
 				handleAs: 'text',
 				load: function(result){
 					content.innerHTML = result; 
@@ -31,7 +31,7 @@
 		function postHoney(){
 			// simple xhrPost example
 			var foo = dojo.xhrPost({
-				url: '../Loader/honey.php?delay=0',
+				url: 'honey.php?delay=0',
 				handleAs: 'text',
 				load: function(result){
 					content.innerHTML = result; 

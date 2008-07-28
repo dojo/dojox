@@ -1,4 +1,4 @@
-<? 
+<?php
 /* honey.php - sample fake delay script to push data
    - should use ob_flush() to send chunks rather than 
    just take a long time ...

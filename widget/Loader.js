@@ -59,8 +59,8 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 
 		// FIXME: create our connections.  would be easier, and this might be redundant
 		// if Deferred published something
-		this._xhrStart = dojo.connect(dojo,"_ioSetArgs",this,"_show"); 
-		this._xhrEnd = dojo.connect(dojo.Deferred.prototype,"_fire",this,"_hide"); 
+		this._xhrStart = this.connect(dojo,"_ioSetArgs","_show"); 
+		this._xhrEnd = this.connect(dojo.Deferred.prototype,"_fire","_hide"); 
 
 	},
 
@@ -79,8 +79,11 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 		dojo.publish("Loader",[{ message: 'started' }]);
 		if(this.hasVisuals){ 
 			if(this.attachToPointer){
-				this._pointerConnect = dojo.connect(document,"onmousemove",this,"_putLoader");
+				this._pointerConnect = this.connect(document,"onmousemove","_putLoader");
 			}
+			dojo.style(this.loadNode, {
+				opacity:0, display:""
+			});
 			dojo.fadeIn({ node: this.loadNode, duration:this.duration }).play(); 
 		}
 	},
@@ -90,9 +93,13 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 		dojo.publish("Loader",[{ message: 'ended' }]);
 		if(this.hasVisuals){ 
 			if(this.attachToPointer){
-				dojo.disconnect(this._pointerConnect); 
+				this.disconnect(this._pointerConnect); 
 			}
-			dojo.fadeOut({ node: this.loadNode, duration:this.duration }).play();
+			dojo.fadeOut({ 
+				node: this.loadNode, 
+				duration:this.duration,
+				onEnd: dojo.partial(dojo.style, this.loadNode, "display", "none")
+			}).play();
 		}
 	}
 
