@@ -113,6 +113,12 @@
 				{ "name": "as_sitesearch", "type": "string", "optional": true }
 			]
 		},
+
+		"getFeed": {
+			"target": "http://ajax.googleapis.com/ajax/services/feed/load",
+			// pass a feed URL in the q parameter
+			"parameters": []
+		},
 		
 		"translate" : {
 			"target" : "http://ajax.googleapis.com/ajax/services/language/translate",
