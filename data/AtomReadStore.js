@@ -90,7 +90,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 				item["_"+attribute+"Escaped"] = true;
 			}
 		}
-		return retVal ? dojo.isArray(retVal) ? retVal[0]: retVal : undefined;
+		return retVal ? dojo.isArray(retVal) ? retVal[0]: retVal : defaultValue;
 	},
 
 	getValues: function(/* item */ item, /* attribute || attribute-name-string */ attribute){
@@ -104,8 +104,6 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		//		An item returned by a call to the 'fetch' method.
 		//	attribute:
 		//		A attribute of the Atom Entry
-		//	defaultValue:
-		//		A default value
 		//	returns:
 		//		An array of values for the attribute value found, otherwise 'defaultValue'
 		this._assertIsItem(item);

@@ -69,10 +69,16 @@ dojo.declare("dojox.data.KeyValueStore", null, {
 		//		See dojo.data.api.Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(item, attribute);
+		var value;
 		if(attribute == this._keyAttribute){ // Looking for key
-			return item[this._keyAttribute];
+			value = item[this._keyAttribute];
+		}else{
+			value = item[this._valueAttribute]; // Otherwise, attribute == ('value' || the actual key )
 		}
-		return item[this._valueAttribute]; // Otherwise, attribute == ('value' || the actual key )
+		if(value === undefined){
+			value = defaultValue;
+		}
+		return value;
 	},
 
 	getValues: function(/* item */ item,

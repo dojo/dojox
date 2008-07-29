@@ -31,14 +31,14 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 		return ['class', 'classSans'];
 	},
 
-	getValue: function(item, attribute){
+	getValue: function(item, attribute, defaultValue){
 		//	summary: 
 		//		See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
-		if(values){
+		if(values && values.length > 0){
 			return values[0];
 		}
-		return undefined;
+		return defaultValue;
 	},
 
 	getValues: function(item, attribute){
@@ -46,7 +46,7 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 		//		See dojo.data.api.Read.getValues()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
-		var value = null;
+		var value = [];
 		if(attribute === "class"){
 			value = [item.className];
 		}else if(attribute === "classSans"){

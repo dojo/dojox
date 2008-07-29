@@ -115,14 +115,14 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		};
 	},
 
-	getValue: function(item, attribute){
+	getValue: function(item, attribute, defaultValue){
 		//	summary:
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
-		if(values){
+		if(values && values.length > 0){
 			return values[0];
 		}
-		return undefined;
+		return defaultValue;
 	},
 
 	getAttributes: function(item){
@@ -183,8 +183,10 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		var val = item[attribute];
 		if(dojo.isArray(val)) {
 			return val;
-		}else{
+		}else if(val !== undefined){
 			return [val];
+		}else{
+			return [];
 		}
 	},
 

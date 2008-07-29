@@ -470,7 +470,7 @@ doh.register("dojox.data.tests.stores.GoogleFeedStore",
 
 					// This is the only way to test the results, as we cannot depend on the search
 					// result with a hard coded value.
-					t.assertTrue(googleStore.containsValue(items[0], "url", items[0].url));
+					t.assertTrue(googleStore.containsValue(items[0], "link", items[0].link));
 
 					d.callback(true);
 				}

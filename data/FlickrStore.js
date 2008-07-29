@@ -55,14 +55,14 @@ dojo.require("dojo.AdapterRegistry");
 			};
 		},
 
-		getValue: function(item, attribute){
+		getValue: function(item, attribute, defaultValue){
 			//	summary: 
 			//      See dojo.data.api.Read.getValue()
 			var values = this.getValues(item, attribute);
-			if(values){
+			if(values && values.length > 0){
 				return values[0];
 			}
-			return undefined;
+			return defaultValue;
 		},
 
 		getAttributes: function(item){
@@ -148,7 +148,7 @@ dojo.require("dojo.AdapterRegistry");
 				case "description":
 					return [ u(item.description) ];
 				default:
-					return undefined;
+					return [];
 			}
 		},
 

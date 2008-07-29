@@ -58,7 +58,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		};
 	},
 
-	getValue: function(item, attribute){
+	getValue: function(item, attribute, defaultValue){
 		//	summary: 
 		//		See dojo.data.api.Read.getValue()
 		this._assertIsItem(item);
@@ -67,7 +67,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		if(i !== -1){
 			return item.values[i];
 		}
-		return undefined;
+		return defaultValue;
 	},
 
 	getAttributes: function(item){
@@ -128,7 +128,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		if(i !== -1){
 			return [item.values[i]];	// Array
 		}
-		return undefined;
+		return [];
 	},
 
 	isItem: function(item){

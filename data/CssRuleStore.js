@@ -115,14 +115,15 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 		return attrs;
 	},
 
-	getValue: function(item, attribute){
+	getValue: function(item, attribute, defaultValue){
 		//	summary: 
 		//		See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
-		if(values){
+		var value = defaultValue;
+		if(values && values.length > 0){
 			return values[0];
 		}
-		return undefined;
+		return defaultValue;
 	},
 
 	getValues: function(item, attribute){
@@ -167,6 +168,8 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 		}else if(attribute.indexOf("style.") === 0){
 			var attr = attribute.substring(attribute.indexOf("."), attribute.length);
 			value = item.rule.style[attr];
+		}else{
+			value = [];
 		}
 		if(value !== undefined){
 			if(!dojo.isArray(value)){

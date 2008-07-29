@@ -90,14 +90,15 @@ dojo.declare("dojox.data.FileStore", null, {
 		};
 	},
 
-	getValue: function(item, attribute){
+	getValue: function(item, attribute, defaultValue){
 		//	summary: 
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
-		if(values){
-			return values[0];
+		var value =  defaultValue;
+		if(values && values.length > 0){
+			value = values[0];
 		}
-		return undefined;
+		return value;
 	},
 
 	getAttributes: function(item){
@@ -212,7 +213,9 @@ dojo.declare("dojox.data.FileStore", null, {
 		var value = item[attribute];
 		if(typeof value !== "undefined" && !dojo.isArray(value)){
 			value = [value];
-		} 
+		}else if (typeof value === "undefined"){	
+			value = [];
+		}
 		return value;
 	},
 
