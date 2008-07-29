@@ -4,6 +4,7 @@
 <head>
 	<title>Demo of Google SMD</title>
 	<style type="text/css">
+		@import "../../image/resources/image.css";
 		body, html {
 			width:100%;
 			margin:0; padding:0;
@@ -34,24 +35,17 @@
 	<script type="text/javascript">
 		dojo.require("dojox.rpc.Service");
 		dojo.require("dojo.io.script");
-
-		// FIXME: we do this because Google API passes a list of params instead of just an object
-		// this affects other io.script transports
-		dojo.mixin(dojo.io.script,{
-			_jsonpCallback:function(json){
-				this.ioArgs.json = arguments.length > 0 ? arguments : json;
-			}
-		});
+		dojo.require("dojox.image.Lightbox");
 
 		var google, showLoader, hideLoader = null;
 		function init(){
 
 			google = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc","SMDLibrary/google.smd")); 
-			
+						
 			showLoader = dojo.hitch(dojo,"style","loader","visibility","visible");
 			hideLoader = dojo.hitch(dojo,"style","loader","visibility","hidden");
 
-			dojo.connect(dojo.byId("doit"),"onclick", function(e){
+			var getResults = function(e){
 
 				showLoader();
 				dojo.style("loader","visibility","visible");
@@ -60,12 +54,13 @@
 					dojo.byId("archive").appendChild(item);
 				});
 
-				var searchType = dojo.byId("searchType").value || "webSearch";
-				google[searchType]({ q: dojo.byId("test").value,  })
+                var searchType = dojo.byId("searchType").value || "webSearch";
+                google[searchType]({ q: dojo.byId("test").value,  })
 					// generic succes handler:
 					.addCallback(function(returned){
-						var info = returned[1].cursor; 
-						var data = returned[1].results || [];
+						var ret = returned.responseData;
+						var info = ret.cursor; 
+						var data = ret.results || [];
 						dojo.forEach(data,function(item){
 							var li = dojo.doc.createElement('li');
 							li.innerHTML = "<a target='_new' hr"+"ef='"+ (item.unescapedUrl || item.url) +"'>" + item.title + "</a><br />" +
@@ -74,14 +69,15 @@
 							console.log(item);
 							dojo.byId("top").appendChild(li);
 						});
-						hideLoader();
 					})
 					// something bad happened:
 					.addErrback(function(err){
 						console.warn('ooops', err);
 						hideLoader();
 					});
-			});
+			};
+
+			dojo.connect(dojo.byId("doit"), "onclick", getResults);
 
 		}
 		dojo.addOnLoad(init);
