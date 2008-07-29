@@ -75,9 +75,8 @@ dojo.declare("dojox.grid._Layout", null, {
 		}
 	},
 	
-	setStructure: function(inStructure){
+	addCellDef: function(inRowIndex, inCellIndex, inDef){
 		var self = this;
-
 		var getCellWidth = function(inDef){
 			var w = 0;
 			if(inDef.colSpan > 1){
@@ -90,78 +89,79 @@ dojo.declare("dojox.grid._Layout", null, {
 			return w;
 		};
 
-		var addCellDef = function(inRowIndex, inCellIndex, inDef){
-			var props = {
-				grid: self.grid,
-				subrow: inRowIndex,
-				layoutIndex: inCellIndex,
-				index: self.cells.length
-			};
-
-			if(inDef && inDef instanceof dojox.grid.cells._Base){
-				props.unitWidth = getCellWidth(inDef._props);
-				inDef = dojo.mixin(inDef, self._defaultCellProps, inDef._props, props);
-				return inDef;
-			}
-
-			var cell_type = inDef.type || self._defaultCellProps.type || dojox.grid.cells.Cell;
-
-			props.unitWidth = getCellWidth(inDef);
-			return new cell_type(dojo.mixin({}, self._defaultCellProps, inDef, props));
+		var props = {
+			grid: this.grid,
+			subrow: inRowIndex,
+			layoutIndex: inCellIndex,
+			index: this.cells.length
 		};
 
-		var addRowDef = function(inRowIndex, inDef){
-			var result = [];
-			var relSum = 0, pctSum = 0, doRel = true;
-			for(var i=0, def, cell; (def=inDef[i]); i++){
-				cell = addCellDef(inRowIndex, i, def);
-				result.push(cell);
-				self.cells.push(cell);
-				// Check and calculate the sum of all relative widths
-				if(doRel && cell.relWidth){
-					relSum += cell.relWidth;
-				}else if (cell.width){
-					var w = cell.width;
-					if(typeof w == "string" && w.slice(-1) == "%"){
-						pctSum += window.parseInt(w, 10);
-					}else if(w == "auto"){
-						// relative widths doesn't play nice with auto - since we
-						// don't have a way of knowing how much space the auto is 
-						// supposed to take up.
-						doRel = false;
-					}
+		if(inDef && inDef instanceof dojox.grid.cells._Base){
+			props.unitWidth = getCellWidth(inDef._props);
+			inDef = dojo.mixin(inDef, this._defaultCellProps, inDef._props, props);
+			return inDef;
+		}
+
+		var cell_type = inDef.type || this._defaultCellProps.type || dojox.grid.cells.Cell;
+
+		props.unitWidth = getCellWidth(inDef);
+		return new cell_type(dojo.mixin({}, this._defaultCellProps, inDef, props));	
+	},
+	
+	addRowDef: function(inRowIndex, inDef){
+		var result = [];
+		var relSum = 0, pctSum = 0, doRel = true;
+		for(var i=0, def, cell; (def=inDef[i]); i++){
+			cell = this.addCellDef(inRowIndex, i, def);
+			result.push(cell);
+			this.cells.push(cell);
+			// Check and calculate the sum of all relative widths
+			if(doRel && cell.relWidth){
+				relSum += cell.relWidth;
+			}else if (cell.width){
+				var w = cell.width;
+				if(typeof w == "string" && w.slice(-1) == "%"){
+					pctSum += window.parseInt(w, 10);
+				}else if(w == "auto"){
+					// relative widths doesn't play nice with auto - since we
+					// don't have a way of knowing how much space the auto is 
+					// supposed to take up.
+					doRel = false;
 				}
 			}
-			if(relSum && doRel){
-				// We have some kind of relWidths specified - so change them to %
-				dojo.forEach(result, function(cell){
-					if(cell.relWidth){
-						cell.width = cell.unitWidth = ((cell.relWidth / relSum) * (100 - pctSum)) + "%";
-					}
-				});
-			}
-			return result;
-		};
-
-		var addRowsDef = function(inDef){
-			var result = [];
-			if(dojo.isArray(inDef)){
-				if(dojo.isArray(inDef[0])){
-					for(var i=0, row; inDef && (row=inDef[i]); i++){
-						result.push(addRowDef(i, row));
-					}
-				}else{
-					result.push(addRowDef(0, inDef));
+		}
+		if(relSum && doRel){
+			// We have some kind of relWidths specified - so change them to %
+			dojo.forEach(result, function(cell){
+				if(cell.relWidth){
+					cell.width = cell.unitWidth = ((cell.relWidth / relSum) * (100 - pctSum)) + "%";
 				}
+			});
+		}
+		return result;
+	
+	},
+
+	addRowsDef: function(inDef){
+		var result = [];
+		if(dojo.isArray(inDef)){
+			if(dojo.isArray(inDef[0])){
+				for(var i=0, row; inDef && (row=inDef[i]); i++){
+					result.push(this.addRowDef(i, row));
+				}
+			}else{
+				result.push(this.addRowDef(0, inDef));
 			}
-			return result;
-		};
-
-		var addViewDef = function(inDef){
-			self._defaultCellProps = inDef.defaultCell || {};
-			return dojo.mixin({}, inDef, {cells: addRowsDef(inDef.rows || inDef.cells)});
-		};
-
+		}
+		return result;	
+	},
+	
+	addViewDef: function(inDef){
+		this._defaultCellProps = inDef.defaultCell || {};
+		return dojo.mixin({}, inDef, {cells: this.addRowsDef(inDef.rows || inDef.cells)});
+	},
+	
+	setStructure: function(inStructure){
 		this.fieldIndex = 0;
 		this.cells = [];
 		var s = this.structure = [];
@@ -184,7 +184,7 @@ dojo.declare("dojox.grid._Layout", null, {
 			}
 
 			if(sel){
-				s.push(addViewDef(sel));
+				s.push(this.addViewDef(sel));
 			}
 		}
 
@@ -215,19 +215,19 @@ dojo.declare("dojox.grid._Layout", null, {
 				}
 			}
 			if(!hasViews){
-				s.push(addViewDef({ cells: inStructure }));
+				s.push(this.addViewDef({ cells: inStructure }));
 			}else{
 				for(var i=0, st; (st=inStructure[i]); i++){
 					if(isRowDef(st)){
-						s.push(addViewDef({ cells: st }));
+						s.push(this.addViewDef({ cells: st }));
 					}else if(isView(st)){
-						s.push(addViewDef(st));
+						s.push(this.addViewDef(st));
 					}
 				}
 			}
 		}else if(isView(inStructure)){
 			// it's a view object
-			s.push(addViewDef(inStructure));
+			s.push(this.addViewDef(inStructure));
 		}
 
 		this.cellCount = this.cells.length;
