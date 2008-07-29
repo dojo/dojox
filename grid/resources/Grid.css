@@ -188,6 +188,10 @@
 .dojoxGridRowTable {
 	table-layout: fixed;
 	width: 0;
+	empty-cells: show;
+}
+.dj_ie .dojoxGridRowTable {
+	border-collapse: collapse;
 }
 
 .dojoxGridInvisible {
