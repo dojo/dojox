@@ -419,7 +419,7 @@ dojo.declare("dojox.image.SlideShow",
 		var _this = this;	
 		var loadIt = function(item){			
 			var url = _this.imageStore.getValue(item, _this.imageLargeAttr);
-			var img = document.createElement("img");
+			var img = new Image();	// when creating img with "createElement" IE doesnt has width and height, so use the Image object
 			var div = document.createElement("div");
 			div._img = img;
 
@@ -441,7 +441,7 @@ dojo.declare("dojox.image.SlideShow",
 				div.setAttribute("height", _this.imageHeight);				
 				
 				dojo.publish(_this.getLoadTopicName(), [index]);
-				_this._loadNextImage();
+				setTimeout(_this._loadNextImage, 1);	// make a short timeout to prevent IE6/7 stack overflow at line 0 ~ still occuring though for first image 
 				if(callbackFn){ callbackFn(); }
 			});
 			_this.hiddenNode.appendChild(div);
@@ -528,13 +528,13 @@ dojo.declare("dojox.image.SlideShow",
 		
 		if(width > this.imageWidth){
 			height = Math.floor(height * (this.imageWidth / width));
-			img.setAttribute("height", height + "px");
-			img.setAttribute("width", this.imageWidth + "px");
+			img.height = height;
+			img.width = this.imageWidth;
 		}
 		if(height > this.imageHeight){
 			width = Math.floor(width * (this.imageHeight / height));
-			img.setAttribute("height", this.imageHeight + "px");
-			img.setAttribute("width", width + "px");
+			img.height = this.imageHeight;
+			img.width = width;
 		}
 	},
 	
