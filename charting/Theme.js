@@ -1,6 +1,6 @@
 dojo.provide("dojox.charting.Theme");
 dojo.require("dojox.color");
-dojo.require("dojox.color.Generator");
+dojo.require("dojox.color.Palette");
 
 (function(){
 	var dxc=dojox.charting;
@@ -126,16 +126,14 @@ dojo.require("dojox.color.Generator");
 				var st=kwArgs.low||30;
 				var end=kwArgs.high||90;
 				//	we'd like it to be a little on the darker side.
-				var l=(end+st)/3;
+				var l=(end+st)/2;
 
-				this.colors = dojox.color.Generator.shades({
-					base: dojox.color.fromHsl(kwArgs.hue, s, l),
-					num: n
-				});
+				this.colors = dojox.color.Palette.generate(
+					dojox.color.fromHsv(kwArgs.hue, s, l), "monochromatic"
+				).colors;
 			}else if(kwArgs.generator){
-				//	pass a reference to the generator function, and run it
-				//	using the arguments passed.
-				this.colors=kwArgs.generator(kwArgs);
+				//	pass a base color and the name of a generator
+				this.colors=dojox.color.Palette.generate(kwArgs.base, kwArgs.generator).colors;
 			}
 		},
 	
