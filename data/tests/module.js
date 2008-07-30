@@ -1,6 +1,7 @@
 dojo.provide("dojox.data.tests.module");
 
 try{
+	dojo.require("dojox.data.tests.ClientFilter");
 	dojo.require("dojox.data.tests.stores.CsvStore");
 	dojo.require("dojox.data.tests.stores.KeyValueStore");
 	dojo.require("dojox.data.tests.stores.AndOrReadStore"); 
