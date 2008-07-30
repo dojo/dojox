@@ -48,9 +48,9 @@ dojo.require("dojox.charting.themes.Shrooms");
 dojo.require("dojox.charting.themes.PlotKit.blue");
 dojo.require("dojox.charting.themes.PlotKit.cyan");
 dojo.require("dojox.charting.themes.PlotKit.green");
-dojo.require("dojox.charting.themes.PlotKit.orange");
-dojo.require("dojox.charting.themes.PlotKit.purple");
-dojo.require("dojox.charting.themes.PlotKit.red");
+dojo.require("dojox.charting.themes.Ireland");
+dojo.require("dojox.charting.themes.SageToLime");
+dojo.require("dojox.charting.themes.Minty");
 dojo.require("dojox.charting.themes.ET.greys");
 
 makeObjects = function(){
@@ -103,7 +103,7 @@ makeObjects = function(){
 	chart7.render();
 
 	var chart8 = new dojox.charting.Chart2D("test8");
-	chart8.setTheme(dojox.charting.themes.PlotKit.purple);
+	chart8.setTheme(dojox.charting.themes.SageToLime);
 	chart8.addPlot("default", {type: "Markers"});
 	chart8.addSeries("Series A", [1, 2, 1, 2, 1, 2, 1], {min: 0, max: 3});
 	chart8.addSeries("Series B", [2, 1, 2, 1, 2, 1, 2]);
@@ -248,7 +248,7 @@ makeObjects = function(){
 	chart25.render();
 
 	var chart26 = new dojox.charting.Chart2D("test26");
-	chart26.setTheme(dojox.charting.themes.PlotKit.red);
+	chart26.setTheme(dojox.charting.themes.Minty);
 	chart26.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart26.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart26.addSeries("Series A", [{x: 0.5, y: 5}, {x: 1.5, y: 1.5}, {x: 2, y: 9}, {x: 5, y: 0.3}]);
@@ -256,7 +256,7 @@ makeObjects = function(){
 	chart26.render();
 
 	var chart27 = new dojox.charting.Chart2D("test27");
-	chart27.setTheme(dojox.charting.themes.PlotKit.purple);
+	chart27.setTheme(dojox.charting.themes.Ireland);
 	chart27.addPlot("default", {type: "Scatter"});
 	chart27.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart27.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
@@ -285,7 +285,7 @@ makeObjects = function(){
 	chart29.render();
 
 	var chart30 = new dojox.charting.Chart2D("test30");
-	chart30.setTheme(dojox.charting.themes.PlotKit.green);
+	chart30.setTheme(dojox.charting.themes.SageToLime);
 	chart30.addPlot("default", {type: "Bubble", shadows: {dx: 2, dy: 2, dw: 2}});
 	chart30.addAxis("x", {min: 0, max: 6, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
 	chart30.addAxis("y", {vertical: true, min: 0, max: 10, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
