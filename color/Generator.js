@@ -1,4 +1,5 @@
 dojo.provide("dojox.color.Generator");
+dojo.deprecated("dojox.color.Generator", 1.3);
 
 dojox.color.Generator = new (function(){
 	var dxc=dojox.color;
