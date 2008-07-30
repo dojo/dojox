@@ -91,6 +91,32 @@ doh.register("dojox.data.tests.ClientFilter",
 			});
 			t.t(finished); // this should finish synchronously, because we should have it in the cache
 			return d;
+		},
+		function sorting(t) {
+			var d = new doh.Deferred();
+			var finished;
+			// test sorting. Descending order should be John,Jim,Jill,Jerry,Jack
+			jsonStore.fetch({query:{lastName:"Smith",firstName:"*"},sort:[{attribute:"firstName",descending:true}], 
+				onComplete: function(items, request){
+					var last = jsonStore.getValue(items[0], "firstName");
+					console.log("last name: ",last, items[0]);
+
+					t.is("John", last); // make sure we get the correct number of items
+
+					jsonStore.fetch({query:{lastName:"Smith",firstName:"*"},sort:[{attribute:"firstName",descending:false}], 
+						onComplete: function(items, request){
+							var first = jsonStore.getValue(items[0], "firstName");
+							console.log("first name",first, items[0]);
+							finished = true;
+							t.is("Jack", first); // make sure we get the correct number of items
+
+							d.callback(true);
+						}
+					});
+				}
+			});
+			t.t(finished); // this should finish synchronously, because we should have it in the cache
+			return d;
 		}
 		
 	]

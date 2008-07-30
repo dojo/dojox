@@ -247,7 +247,7 @@ dojo.require("dojo.data.util.filter");
 					var av = store.getValue(a,attribute);
 					var bv = store.getValue(b,attribute);
 					if(av != bv){
-						return av < bv == descending;
+						return av < bv == descending ? 1 : -1;
 					}
 					return next(a,b); 
 				}; 
