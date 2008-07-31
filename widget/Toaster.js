@@ -54,7 +54,9 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 		postCreate: function(){
 			this.inherited(arguments);
 			this.hide();
-
+			
+			dojo.body().appendChild(this.clipNode);
+			
 			this.clipNode.className = "dijitToasterClip";
 			this.containerNode.className += " dijitToasterContainer";
 			this.contentNode.className = "dijitToasterContent";
