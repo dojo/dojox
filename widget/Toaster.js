@@ -55,7 +55,8 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 			this.inherited(arguments);
 			this.hide();
 			
-			dojo.body().appendChild(this.clipNode);
+			// place node as a child of body for positioning
+			dojo.body().appendChild(this.domNode);
 			
 			this.clipNode.className = "dijitToasterClip";
 			this.containerNode.className += " dijitToasterContainer";
