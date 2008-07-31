@@ -23,6 +23,10 @@ dojo.declare("dojox.form.FileInputOverlay", null, {
 		//		mess up the placement - or for that matter, some simple, but not expected
 		//		CSS can mess up the placement. Being near the botton of a complex document
 		//		can throw off the positioning.
+		//
+		//	OPERA USERS:
+		//		Not much love from Opera on FileInput hacks.
+		//
 		//	ALSO: 
 		//		Only works programmatically. Does not work in markup. Use the other
 		//		other FileInput files for markup solutions.

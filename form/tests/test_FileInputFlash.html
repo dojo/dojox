@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>dojox.form.FileInputFlash</title>
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/dijit.css";
+		@import "../../../dijit/themes/tundra/form/Button.css";
+		@import "../../../dijit/tests/css/dijitTests.css"; 
+		
+		@import "../resources/FileInput.css"; 
+	</style>
+	<script>
+		forceNoFlash = false;
+		var qs = window.location.href.split("?");
+		if(qs.length>1){
+		 	if(qs[1] == "forceNoFlash"){
+				forceNoFlash = true;
+			}
+		 }
+    </script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript">
+		dojo.require("dojox.form.FileInputFlash");
+		dojo.require("dijit.form.Button"); 
+		dojo.require("dojo.parser");
+		
+		//using this early for the forceNoFlash test:
+		dojo.require("dojox.embed.Flash");
+		
+		dojo.addOnLoad(function(){
+			if(forceNoFlash){
+				dojox.embed.Flash.available = 0;
+			}
+			dojo.byId("uploadedFiles").value = "";
+			dojo.byId("fileToUpload").value = "";
+			var uploadUrl = "../resources/UploadFile.php";
+			if(dijit.byId("btn0")){
+				var f0 = new dojox.form.FileInputFlash({button:dijit.byId("btn0"), uploadUrl:uploadUrl, uploadOnChange:false});
+				doUpload = function(){
+					dojo.byId("fileToUpload").innerHTML = "uploading..."
+					f0.upload();
+				}
+				dojo.connect(f0, "onChange", function(data){
+					console.log("DATA:", data);
+					dojo.forEach(data, function(file){
+						//file.type no workie
+						dojo.byId("fileToUpload").value += file.name+" "+Math.ceil(file.size*.001)+"kb \n";
+					});
+				});
+				dojo.connect(f0, "onComplete", function(data){
+					dojo.byId("fileToUpload").innerHTML = "";
+					dojo.forEach(data, function(file){
+						dojo.byId("uploadedFiles").value += file.file+" \n";
+					});
+				});
+				
+			}
+		});
+		
+		passthrough = function(msg){
+			if(window.console){
+				console.log(msg);	
+			}
+		}
+
+	</script>
+    <style>
+		#wrapper{
+			width:100%;
+		}
+		
+		.browse{
+		width:100px;
+		height:25px;
+		}
+		#uploadBtn{
+		width:100px;
+		height:20px;
+		margin-top:-2px;
+		}
+		.uploadBtn{
+		float:left;
+		}
+		#fileToUpload{
+		border:#CCCCCC 1px solid;
+		float:left;
+		overflow-y:auto;
+		overflow-x:hidden;
+		}
+		.uploadedFilesLabel{
+		margin-top:60px;
+		}
+		#uploadedFiles{
+		border:#CCCC00 1px solid;
+		background:#FFFFCC;
+		}
+	</style>
+</head>
+<body class="tundra">
+<h1>FileInputFlash Test</h1>
+
+<p>The following is an example of how FileInputFlash act's with the same APIs as FileInputOverlay, so you can build your own file input. For the file to actually upload, you'll need to have PHP enabled. </p>
+<div id="btn0" class="browse" dojoType="dijit.form.Button">Browse...</div>
+<textarea cols="50" rows="4" id="fileToUpload"></textarea>
+<div id="uploadBtn" class="uploadBtn" onClick="doUpload();" dojoType="dijit.form.Button">Upload</div>
+<div class="uploadedFilesLabel">Uploaded Files:</div>
+<textarea cols="50" rows="4" id="uploadedFiles"></textarea>
+<div id="flashNode"></div>
+
+<br><br><br><br><br><br><br>
+</body>
+</html>
