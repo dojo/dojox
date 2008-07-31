@@ -59,58 +59,43 @@ dojo.require("dojo._base.xhr");
 				return plainXhr.call(dojo, method, args, hasBody);
 			});
 	};
-	dojox.io.xhrPlugins.addCrossSiteXhr = function(url){
+	var csXhrSupport;
+	dojox.io.xhrPlugins.addCrossSiteXhr = function(url, httpAdapter){
 		//	summary:
-		// 		adds Cross site XHR handling for the given URL prefix
+		// 		Adds W3C Cross site XHR or XDomainRequest handling for the given URL prefix
 		//
 		// 	url: 
-		//		Requests that start with this URL will be considered for using cross-site XHR.
+		//		Requests that start with this URL will be considered for using 
+		// 		cross-site XHR.
+		//
+		// 	httpAdapter: This allows for adapting HTTP requests that could not otherwise be 
+		// 		sent with XDR, so you can use a convention for headers and PUT/DELETE methods.
+		//
 		//	description:
 		// 		This can be used for servers that support W3C cross-site XHR. In order for 
 		// 		a server to allow a client to make cross-site XHR requests, 
 		// 		it should respond with the header like:
 		//	|	Access-Control: allow <*>
 		//		see: http://www.w3.org/TR/access-control/
-		
+		if(csXhrSupport === undefined && window.XMLHttpRequest){
+			// just run this once to see if we have cross-site support
+			try{
+				var xhr = new XMLHttpRequest();
+				xhr.open("GET","http://fnadkfna.com",true);
+				csXhrSupport = true;
+			}catch(e){
+				csXhrSupport = false;
+			}
+		}
 		dojox.io.xhrPlugins.register(
-			"xhr",
+			"cs-xhr",
 			function(method,args){ 
-				// the best clue I can think of is the presence of JS1.9 as an indicator for cross-site XHR support
-				return Object.defineProperty && (args.url.substring(0,url.length) == url);
+				return (csXhrSupport || 
+						(window.XDomainRequest && args.sync !== true && 
+							(method == "GET" || method == "POST" || httpAdapter))) &&
+					(args.url.substring(0,url.length) == url); 
 			},
-			plainXhr
-		);
-	};
-	dojox.io.xhrPlugins.addXdr = function(url,httpAdapter){
-		//	summary:
-		//		adds XDomainRequest handling for the given URL prefix This can be
-		//		used for servers that support XDomainRequest.
-		//
-		// 	url: Requests that start with this URL will be considered for using XDomainRequest
-		//
-		// 	httpAdapter: This allows for adapting HTTP requests that could not otherwise be 
-		// 		sent with XDR, so you can use a convention for headers and PUT/DELETE methods.
-		//
-		//	description:
-		//		In order for a server to support XDomainRequest, when it receives a
-		//		request with a XDomainRequest header it should respond with the
-		//		header:
-		//	|	XDomainRequestAllowed: 1
-		//		For example if you call:
-		//	|	dojox.io.xhrPlugins.addXdr("http://microsoftlovers.com/")
-		// 		Then all requests to microsoftlovers.com would use XDomainRequest
-		
-		dojox.io.xhrPlugins.register(
-			"xdr",
-			function(method,args){
-				return (
-					window.XDomainRequest && 
-					args.sync !== true && 
-					(method == "GET" || method == "POST" || httpAdapter) && 
-					(args.url.substring(0,url.length) == url)
-				);
-			},
-			function(){
+			csXhrSupport ? plainXhr : function(){
 				var normalXhrObj = dojo._xhrObj;
 				// we will just substitute this in temporarily so we can use XDomainRequest instead of XMLHttpRequest
 				dojo._xhrObj = function(){
