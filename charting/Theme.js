@@ -128,6 +128,7 @@ dojo.require("dojox.color.Palette");
 				//	we'd like it to be a little on the darker side.
 				var l=(end+st)/2;
 
+				//	alternately, use "shades"
 				this.colors = dojox.color.Palette.generate(
 					dojox.color.fromHsv(kwArgs.hue, s, l), "monochromatic"
 				).colors;
