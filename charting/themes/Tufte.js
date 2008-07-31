@@ -1,10 +1,13 @@
-dojo.provide("dojox.charting.themes.ET.greys");
+dojo.provide("dojox.charting.themes.Tufte");
 dojo.require("dojox.charting.Theme");
-dojo.deprecated("dojox.charting.themes.ET.greys", "1.3");
 
+/*
+	A charting theme based on the principles championed by
+	Edward Tufte.  By Alex Russell, Dojo Project Lead.
+*/
 (function(){
 	var dxc=dojox.charting;
-	dxc.themes.ET.greys = new dxc.Theme({
+	dxc.themes.Tufte = new dxc.Theme({
 		antiAlias: false,
 		chart: {
 			stroke: null,
