@@ -119,7 +119,6 @@ doh.register("dojox.rpc.tests.echo",
 				//test when given named params				
 				var td = this.svc.restStore.put({location: "res"},res);
 				td.addCallback(this, function(result){
-					dojox.rpc.Rest.setQueryInfo({dontCache:true});
 					var td = this.svc.restStore({location: "res"});
 					td.addCallback(this, function(result){
 						if (result==res){
@@ -154,7 +153,6 @@ doh.register("dojox.rpc.tests.echo",
 				//test when given named params
 				var td = this.svc.restStore.post({location: "res"},newRes);
 				td.addCallback(this, function(result){
-					dojox.rpc.Rest.setQueryInfo({dontCache:true});
 					var td = this.svc.restStore({location: "res"});
 					td.addCallback(this, function(result){
 						if (result==res){
@@ -188,7 +186,6 @@ doh.register("dojox.rpc.tests.echo",
 				//test when given named params
 				var td = this.svc.restStore['delete']({location: "res"});
 				td.addCallback(this, function(result){
-					dojox.rpc.Rest.setQueryInfo({dontCache:true});
 					var td = this.svc.restStore({location: "res"});
 					td.addCallback(this, function(result){
 						if (result=="deleted"){
