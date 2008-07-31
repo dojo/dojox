@@ -73,7 +73,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 			dojo.addClass(this.domNode, "dojoxExpando" + thisClass);
 			this._isHorizontal = /top|bottom/.test(this.region);
 		}
-		dojo.style(this.domNode, "overflow", "hidden");
+		dojo.style(this.domNode, {
+			overflow: "hidden",
+			padding:0,
+		});
 	},
 	
 	startup: function(){
