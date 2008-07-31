@@ -458,7 +458,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 
 		_structureChanged: function() {
 			this.buildViews();
-			if(this.autoRender){
+			if(this.autoRender && this._started){
 				this.render();
 			}
 		},
@@ -571,6 +571,15 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.scroller.windowHeight = h;
 		},
 
+		// startup
+		startup: function(){
+			if(this._started){return;}
+			
+			this.inherited(arguments);
+
+			this.render();
+		},
+
 		// render
 		render: function(){
 			// summary:
@@ -578,6 +587,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 			// scrolling states, see Update.
 
 			if(!this.domNode){return;}
+			if(!this._started){return;}
 
 			if(!this.hasLayout()) {
 				this.scroller.init(0, this.keepRows, this.rowsPerPage);

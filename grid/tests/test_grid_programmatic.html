@@ -47,9 +47,9 @@
 					id: "grid",
 					store: test_store,
 					structure: layout
-				});
+				}, document.createElement('div'));
 				dojo.byId("gridContainer").appendChild(grid.domNode);
-				grid.render();
+				grid.startup();
 			});
 		</script>
 	</head>

@@ -36,7 +36,7 @@ dojo.require("dojox.grid.util");
 		_formatPending: false,
 
 		constructor: function(inProps){
-			this._props = inProps;
+			this._props = inProps || {};
 			dojo.mixin(this, inProps);
 		},
 

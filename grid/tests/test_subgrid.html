@@ -142,13 +142,14 @@
 				var subGrid = dijit.byId(id);
 				if (subGrid) {
 					n.appendChild(subGrid.domNode);
+					subGrid.render();
 				} else {
 					subGridProps.dataRow = inRowIndex;
 					subGridProps.widgetId = id;
 					subGrid = new dojox.grid._Grid(subGridProps, n);
+					subGrid.startup();
 				}
 				if (subGrid) {
-					subGrid.render();
 					subGrid.cacheHeight = subGrid.domNode.offsetHeight;
 					inCell.grid.rowHeightChanged(inRowIndex);
 				}	

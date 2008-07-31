@@ -51,7 +51,7 @@
 						structure: layout
 					});
 					dojo.body().appendChild(grid.domNode);
-					grid.render();
+					grid.startup();
 					total_time += (new Date().getTime() - st_time);
 					dojo.body().removeChild(grid.domNode);
 				}
@@ -86,7 +86,7 @@
 						structure: layout
 					});
 					dojo.body().appendChild(grid.domNode);
-					grid.render();
+					grid.startup();
 					total_time += (new Date().getTime() - st_time);
 					dojo.body().removeChild(grid.domNode);
 				}
@@ -103,7 +103,7 @@
 							structure: layout
 						});
 						dojo.body().appendChild(grid.domNode);
-						grid.render();
+						grid.startup();
 						total_time += (new Date().getTime() - st_time);
 						dojo.body().removeChild(grid.domNode);
 					}
