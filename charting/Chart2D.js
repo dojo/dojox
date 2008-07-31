@@ -367,6 +367,17 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			// pseudo-clipping: matting
 			fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill);
 			stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
+
+			//	TRT: support for "inherit" as a named value in a theme.
+			if(fill == "inherit"){
+				//	find the background color of the nearest ancestor node, and use that explicitly.
+				var node = this.node, fill = new dojo.Color(dojo.style(node, "backgroundColor"));
+				while(fill.a==0 && node!=document.documentElement){
+					fill = new dojo.Color(dojo.style(node, "backgroundColor"));
+					node = node.parentNode;
+				}
+			}
+
 			if(fill){
 				if(offsets.l){	// left
 					this.surface.createRect({

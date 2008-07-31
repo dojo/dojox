@@ -7,7 +7,7 @@ dojo.require("dojox.charting.Theme");
 		antiAlias: false,
 		chart: {
 			stroke: null,
-			fill: "white"
+			fill: "inherit"
 		},
 		plotarea: {
 			// stroke: { width: 0.2, color: "#666666" },
