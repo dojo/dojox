@@ -281,7 +281,7 @@ dojo.require("dojo.dnd.Manager");
 
 	dojo.extend(HeaderBuilder, {
 
-		bogusClickTime: 0,
+		_skipBogusClicks: false,
 		overResizeWidth: 4,
 		minColWidth: 1,
 		
@@ -433,7 +433,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		doclick: function(e) {
-			if (new Date().getTime() < this.bogusClickTime) {
+			if(this._skipBogusClicks){
 				dojo.stopEvent(e);
 				return true;
 			}
@@ -539,7 +539,11 @@ dojo.require("dojo.dnd.Manager");
 		endResizeColumn: function(inDrag){
 			dojo._destroyElement(this.moverDiv);
 			delete this.moverDiv;
-			this.bogusClickTime = new Date().getTime() + 30;
+			this._skipBogusClicks = true;
+			var conn = dojo.connect(inDrag.view, "update", this, function(){
+				dojo.disconnect(conn);
+				this._skipBogusClicks = false;
+			});
 			setTimeout(dojo.hitch(inDrag.view, "update"), 50);
 		}
 	});
