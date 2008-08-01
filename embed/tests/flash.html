@@ -22,21 +22,24 @@
 			var testMovieUrl=dojo.moduleUrl("dojox", "embed/tests/resources/hfp.swf"), movie;
 			var proxyMovieUrl=dojo.moduleUrl("dojox", "embed/tests/resources/TestFlash.swf"), proxy;
 
+			function log(msg){
+				dojo.byId("fakeconsole").innerHTML += "<div>"+msg+"</div>";
+			}
+			
 			dojo.addOnLoad(function(){
 				dojo.byId("results").innerHTML = dojo.toJson(dojox.embed.Flash.version);
 				movie=new dojox.embed.Flash({ path: testMovieUrl }, "flashHolder");
-				var p = dojox.embed.Flash({ path: proxyMovieUrl, width:4, height:4 }, "proxyHolder");
-				proxy = new dojox.embed.FlashProxy(
-					p,
-					[ "setMessage", "getMessage" ]
-				);
-
-				//	give the movie a few milliseconds to init before consuming it.
-				setTimeout(function(){
+				dojo.connect(movie, "onReady", function(mv){
+					console.log("The test movie loaded.");
+				});
+				
+				proxy = new dojox.embed.Flash({ path: proxyMovieUrl, width:4, height:4 }, "proxyHolder");
+				dojo.connect(proxy, "onLoad", function(m){
+					dojox.embed.Flash.proxy(proxy, [ "setMessage", "getMessage" ]);
 					console.log("Setting the message on the proxy to 'we love dojox.embed!'");
 					proxy.setMessage("we love dojox.embed");
 					console.log("The message stored in the test movie is: '", proxy.getMessage(), "'");
-				}, 50);
+				});
 			});
 		</script>
 	</head>
@@ -45,6 +48,7 @@
 		<p>
 			This page is testing the base Flash movie generator.
 		</p>
+		<div id="fakeconsole"></div>	
 		<p>Installed Flash version: <span id="results"></span>.</p>
 		<div id="flashHolder" style="border:1px solid black;">
 			A movie will be inserted here on load.

@@ -11,7 +11,8 @@ dojox.embed.Flash.place = function(kwArgs, node){
 	
 	if(o){
 		node.innerHTML = o.markup;
-		return window[o.id];
+		//return window[o.id];
+		return o.id;
 	}
 	return null;
 }

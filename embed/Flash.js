@@ -186,10 +186,22 @@ dojo.provide("dojox.embed.Flash");
 	//	the main entry point
 	dojox.embed.Flash=function(/* dojox.embed.__flashArgs */kwArgs, /* DOMNode */node){
 		//	summary:
-		//		Returns a reference to the HTMLObject/HTMLEmbed that is created to 
-		//		place the movie in the document.  You can use this either with or
-		//		without the new operator.  Note that if the Flash engine isn't available
-		//		yet, this will throw an Error.
+		//		Creates a wrapper object around a Flash movie.  Wrapper object will
+		//		insert the movie reference in node; when the browser first starts
+		//		grabbing the movie, onReady will be fired; when the movie has finished
+		//		loading, it will fire onLoad.
+		//
+		//		If your movie uses ExternalInterface, you should use the onLoad event
+		//		to do any kind of proxy setup (see dojox.embed.Flash.proxy); this seems
+		//		to be the only consistent time calling EI methods are stable (since the
+		//		Flash movie will shoot several methods into the window object before
+		//		EI callbacks can be used properly).
+		//
+		//	id: String
+		//		The ID of the internal embed/object tag.  Can be used to get a reference to
+		//		the movie itself.
+		//	movie: HTMLObject
+		//		A reference to the Flash movie itself.
 		//
 		//	example:
 		//		Embed a flash movie in a document using the new operator, and get a reference to it.
@@ -207,11 +219,38 @@ dojo.provide("dojox.embed.Flash");
 		//	|		height: 300,
 		//	|		style: "position:absolute;top:0;left:0"
 		//	|	}, myWrapperNode);
+		this.id = null;
+		this.movie = null;
+		this.onReady = function(/* HTMLObject */movie){
+			//	summary:
+			//		An empty stub function that you can use to find out
+			//		when this object has an actual movie reference in it.
+		};
+		this.onLoad = function(/* HTMLObject */movie){ 
+			//	summary:
+			//		An empty stub function that you can use to find out when
+			//		the movie has finished loading in full.
+		};
 
+		this._poller = null;
+		this._pollCount = 0, this._pollMax = 250;
 		if(dojox.embed.Flash.initialized){
-			return dojox.embed.Flash.place(kwArgs, node);	//	HTMLObject
+			this.id = dojox.embed.Flash.place(kwArgs, node);
+			setTimeout(dojo.hitch(this, function(){
+				this.movie = (dojo.isIE)?dojo.byId(this.id):document[this.id];
+				this.onReady(this.movie);
+
+				this._poller = setInterval(dojo.hitch(this, function(){
+					if(this.movie.PercentLoaded() == 100 || this._pollCount++ > this._pollMax){
+						clearInterval(this._poller);
+						delete this._poller;
+						delete this._pollCount;
+						delete this._pollMax;
+						this.onLoad(this.movie);
+					}
+				}), 10);
+			}), 1);
 		}
-		throw new Error("dojox.embed.Flash:: you must wait for the Flash engine to be initialized.");
 	};
 
 	//	expose information through the constructor function itself.
@@ -250,6 +289,37 @@ dojo.provide("dojox.embed.Flash");
 		},
 		__ie_markup__: function(kwArgs){
 			return fMarkup(kwArgs);
+		},
+		proxy: function(/* dojox.embed.Flash */obj, /* Array | String */methods){
+			//	summary:
+			//		Create the set of passed methods on the dojox.embed.Flash object
+			//		so that you can call that object directly, as opposed to having to
+			//		delve into the internal movie to do this.  Intended to make working
+			//		with Flash movies that use ExternalInterface much easier to use.
+			//
+			//	example:
+			//		Create "setMessage" and "getMessage" methods on foo.
+			//	|	var foo = new dojox.embed.Flash(args, someNode);
+			//	|	dojo.connect(foo, "onLoad", dojo.hitch(foo, function(){
+			//	|		dojox.embed.Flash.proxy(this, [ "setMessage", "getMessage" ]);
+			//	|		this.setMessage("dojox.embed.Flash.proxy is pretty cool...");
+			//	|		console.log(this.getMessage());
+			//	|	}));
+			dojo.forEach((dojo.isArray(methods) ? methods : [ methods ]), function(item){
+				this[item] = dojo.hitch(this, function(){
+					return (function(){
+						return eval(this.movie.CallFunction(
+							'<invoke name="' + item + '" returntype="javascript">'
+							+ '<arguments>'
+							+ dojo.map(arguments, function(item){
+								return __flash__toXML(item);
+							}).join("")
+							+ '</arguments>'
+							+ '</invoke>'
+						));
+					}).apply(this, arguments||[]);
+				});
+			}, obj);
 		}
 	});
 
@@ -276,53 +346,11 @@ dojo.provide("dojox.embed.Flash");
 			}
 			if(o){
 				node.innerHTML=o.markup;
-				return document[o.id];
+			//	return document[o.id];
+				return o.id;
 			}
 			return null;
 		}
 		dojox.embed.Flash.onInitialize();
 	}
-
-	//	A port of Brad's Communicator code (dojox.Flash)
-	//	in anticipation of removing that code at a later date.
-	dojox.embed.FlashProxy = function(/* HTMLObject */mov, /* Array | String */methods){
-		//	summary
-		//		Create a proxy object around the passed movie
-		//		that is then set up with any methods you plan
-		//		on using with the movie's ExternalInterface. On
-		//		creation, a set of methods are created on this object.
-		//
-		//	movie:	HTMLObject
-		//		The Flash movie this proxy is wrapping
-		//
-		//	example:
-		//		Create a proxy around a movie, define 2 methods, and use one.
-		//	|	var proxy = new dojox.embed.Flash.Proxy(myMovie, [ "foo", "bar" ]);
-		//	|	var someResults = proxy.foo("bar", "baz", "bop");
-
-		this.movie = mov;
-		dojo.forEach((dojo.isArray(methods) ? methods : [ methods ]), function(item){
-			this[item] = dojo.hitch(this, function(){
-				return this._exec(item, arguments);
-			});
-		}, this);
-	};
-	
-	dojo.extend(dojox.embed.FlashProxy, {
-		//	we will rely on the __flash__toXML method to encode things right.
-		_exec: function(/* String */method, /* Array? */args){
-			return (function(){
-				//	we require the eval because the return is actually a JSON string.
-				return eval(this.movie.CallFunction(
-					'<invoke name="' + method + '" returntype="javascript">'
-					+ '<arguments>'
-					+ dojo.map(args, function(item){
-						return __flash__toXML(item);
-					}).join("")
-					+ '</arguments>'
-					+ '</invoke>'
-				));
-			}).apply(this, args||[]);
-		}
-	});
 })();
