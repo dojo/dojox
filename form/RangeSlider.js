@@ -306,6 +306,7 @@ dojo.declare("dijit.form._SliderMoverMax",
     destroy: function(e){
         dojo.dnd.Mover.prototype.destroy.apply(this, arguments);
         var widget = this.widget;
+        widget._abspos = null;
         widget.setValue(widget.value, true);
     }
 });
