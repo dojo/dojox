@@ -73,12 +73,12 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		//
 		
 		// 		All plugins will attempt initialization. We only need to do so once.
-		if(this.initialized) return;
+		if(this.initialized){ return; }
 		
 		this.initialized = true;
 		this.editor = editor;
 		
-		this.editorDomNode = (this.editor.iframe) ? this.editor.document : this.editor.editNode;
+		this.editorDomNode = this.editor.iframe ? this.editor.document : this.editor.editNode;
 		
 		// RichText should have a mouseup connection to recognize drag-selections
 		// Example would be selecting multiple table cells
@@ -94,28 +94,27 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		//	Gets the table in focus
 		//	Collects info on the table - see return params
 		//
-		if(forceNewData) this._tempStoreTableData(false);
+		if(forceNewData){ this._tempStoreTableData(false); }
 		if(this.tableData){
 			// tableData is set for a short amount of time, so that all 
 			// plugins get the same return without doing the method over
 			return this.tableData;	
 		}
 		var tr, trs, td, tds, tbl, cols, tdIndex, trIndex;
-		
-		
+
 		td = this.editor.getAncestorElement("td");
-		if(td) tr = td.parentNode;
+		if(td){ tr = td.parentNode; }
 		
 		tbl = this.editor.getAncestorElement("table");
 		//console.log("td:", td);console.log("tr:", tr);console.log("tbl:", tbl)
 		
 		tds = dojo.query("td", tbl);
 		tds.forEach(function(d, i){
-			if(td==d) {tdIndex = i}
+			if(td==d){tdIndex = i}
 		});
 		trs = dojo.query("tr", tbl);
 		trs.forEach(function(r, i){
-			if(tr==r) {trIndex = i}
+			if(tr==r){trIndex = i}
 		});
 		cols = tds.length/trs.length;
 		var o = {
@@ -223,7 +222,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 			// availableCurrentlySet is set for a short amount of time, so that all 
 			// plugins get the same return without doing the method over
 			//console.log("availableCurrentlySet:", this.availableCurrentlySet, "currentlyAvailable:", this.currentlyAvailable)
-			return this.currentlyAvailable
+			return this.currentlyAvailable;
 		}
 		//console.log("G - checkAvailable...");
 		
@@ -269,7 +268,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 	},
 	
 	getTimeStamp: function(){
-		return Math.floor(new Date().getTime() * .00000001);
+		return Math.floor(new Date().getTime() * 0.00000001);
 	},
 	
 	_tempStoreTableData: function(type){
@@ -316,7 +315,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		//	Mainly checking for the TAB key so user can tab 
 		//	through a table (blocking the browser's desire to
 		//	tab away from teh editor completely)
-		if( this.tablesConnected) return;
+		if(this.tablesConnected){ return; }
 		this.tablesConnected = true;
 		var node = (this.editor.iframe) ? this.editor.document : this.editor.editNode;
 		this.cnKeyDn = dojo.connect(node, "onkeydown", this, "onKeyDown"); 
@@ -463,28 +462,29 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary
 			//		Building context menu for right-click shortcuts within a table
 			//
-			var node = (dojo.isFF) ? this.editor.editNode : this.editor.document.firstChild;
+			var node = dojo.isFF ? this.editor.editNode : this.editor.document.firstChild;
 			
 			pMenu = new dijit.Menu({targetNodeIds:[node], id:"progMenu", contextMenuForWindow:dojo.isIE});
 			var _M = dijit.MenuItem;
-			pMenu.addChild(new _M({label:"Select Table", onClick: dojo.hitch(this, "selectTable")}));
+			var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
+			pMenu.addChild(new _M({label: messages.selectTableLabel, onClick: dojo.hitch(this, "selectTable")}));
 			pMenu.addChild(new dijit.MenuSeparator());
 			
-			pMenu.addChild(new _M({label:"Add Row Before", onClick: dojo.hitch(this, "modTable", "insertTableRowBefore" )}));
-			pMenu.addChild(new _M({label:"Add Row After", onClick: dojo.hitch(this, "modTable", "insertTableRowAfter" )}));
-			pMenu.addChild(new _M({label:"Add Column Before", onClick: dojo.hitch(this, "modTable", "insertTableColumnBefore" )}));
-			pMenu.addChild(new _M({label:"Add Column After", onClick: dojo.hitch(this, "modTable", "insertTableColumnAfter" )}));
+			pMenu.addChild(new _M({label: messages.insertTableRowBeforeLabel, onClick: dojo.hitch(this, "modTable", "insertTableRowBefore" )}));
+			pMenu.addChild(new _M({label: messages.insertTableRowAfterLabel, onClick: dojo.hitch(this, "modTable", "insertTableRowAfter" )}));
+			pMenu.addChild(new _M({label: messages.insertTableColumnBeforeLabel, onClick: dojo.hitch(this, "modTable", "insertTableColumnBefore" )}));
+			pMenu.addChild(new _M({label: messages.insertTableColumnAfterLabel, onClick: dojo.hitch(this, "modTable", "insertTableColumnAfter" )}));
 			pMenu.addChild(new dijit.MenuSeparator());
-			pMenu.addChild(new _M({label:"Delete Row", onClick: dojo.hitch(this, "modTable", "deleteTableRow" )}));
-			pMenu.addChild(new _M({label:"Delete Column", onClick: dojo.hitch(this, "modTable", "deleteTableColumn" )}));
+			pMenu.addChild(new _M({label: messages.deleteTableRowLabel, onClick: dojo.hitch(this, "modTable", "deleteTableRow" )}));
+			pMenu.addChild(new _M({label: messages.deleteTableColumnLabel, onClick: dojo.hitch(this, "modTable", "deleteTableColumn" )}));
 			
 			// overwriting this method, as the menu's coordinates
 			// are not accurate in the editor's iframe
 			// FIXME: Works well in IE - all others, sometimes inaccurate.
 			pMenu._openMyself = function(e){ 
 					
-				if(!tablePluginHandler.checkAvailable()) return;
-				
+				if(!tablePluginHandler.checkAvailable()){ return; }
+
 				if(this.leftClickToOpen && e.button>0){
 					return;
 				}

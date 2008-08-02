@@ -18,5 +18,13 @@
 	center: "center",
 	right: "right",
 	buttonSet: "Set", // translated elsewhere?
-	buttonInsert: "Insert"
+	buttonInsert: "Insert",
+
+	selectTableLabel: "Select Table",
+	insertTableRowBeforeLabel: "Add Row Before",
+	insertTableRowAfterLabel: "Add Row After",
+	insertTableColumnBeforeLabel: "Add Column Before",
+	insertTableColumnAfterLabel: "Add Column After",
+	deleteTableRowLabel: "Delete Row",
+	deleteTableColumnLabel: "Delete Column"
 })
