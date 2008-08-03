@@ -21,7 +21,21 @@ doh.register("dojox.json.tests.ref", [
 		t.assertEqual(mirrorObj.b.g, mirrorObj.a);
 		t.assertEqual(mirrorObj.b.c.f, mirrorObj.b);
 		t.assertEqual(mirrorObj.b.h, mirrorObj.a);
-	}/*,
+	},
+	function usingSchemas(t) {
+		var testStr = '{id:"/dog/1",eats:{$ref:"/cat/2"}}';
+		var schemas = {
+			"/dog/":{prototype:{barks:true}},
+			"/cat/":{prototype:{meows:true}}
+		}
+		var testObj = dojox.json.ref.fromJson(testStr,{
+			schemas:schemas
+		});
+		t.t(testObj.barks);
+		t.t(testObj.eats.meows);
+	}
+	
+	/*,
 	function performanceTest(t) {
 		var normalishJson= '[{"id":"1",	"created":"2007-10-23T14:40:18Z","address":"somewhere","phoneNumber":"555-5555","comment":"this is great",	"firstName":"Jim",	"lastName":"Jones"},{"id":"20","created":"2008-06-03T19:45:12Z",	"firstName":"Kristopher",	"lastName":"dddddd"	},{"id":"23",	"foo":"ba=sr",	"firstName":"Jennika",	"lastName":"Zyp"	}]';
 		var now = new Date().getTime();

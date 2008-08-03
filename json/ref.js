@@ -101,7 +101,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 								}
 								rewalking = true; // we only want to add it once
 							}else{
-								index[val.__id = (prefix + val.$ref).replace(pathResolveRegex,'$2$3')] = val;
+								val = walk(val, false, val.$ref);
 								// create a lazy loaded object
 								val._loadObject = args.loader;
 							}
