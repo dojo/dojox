@@ -8,34 +8,48 @@
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
-	<script type="text/javascript" src="../xhrWindowNamePlugin.js"></script>
+	<script type="text/javascript" src="../windowName.js"></script>
 	<script type="text/javascript">
-	dojox.io.xhrWindowNamePlugin("http://localhost");
-function test() {
-	var dfd = dojo.xhr("GET",{url:
-			prompt("Enter an address to retrieve data from",
-						"http://localhost:8080/Customer/4"),
-				timeout:10000,
-				handleAs:"text"});
-	dfd.addCallback(function(result){alert(result)});		
-	dfd.addErrback(function(result){alert(result)});
+	//dojox.io.xhrWindowNamePlugin("http://localhost");
+function test(auth) {
+	var authTarget = auth && document.getElementById("authTarget");
+	var dfd = dojox.io.windowName.send("GET",{
+				url: prompt("Enter an address to retrieve data from",
+						"http://192.168.0.66/Customer/4"),
+				handleAs:"text", 
+				authElement: authTarget,
+				onAuthLoad: auth && function(){
+					authTarget.style.display='block';
+				}});
+	dfd.addBoth(function(result){
+		auth && (authTarget.style.display='none');
+		alert(result)
+	});		
 }
-function testPost() {
-	var dfd = dojox.io.windowName.send("POST",{url:
-			prompt("Enter an address to post data to",
-						"http://persevere.sitepen.com:9080/Customer/"),
-						content:{foo:"bar"}
-			},true);
-	dfd.addCallback(function(result){alert(result)});		
-	dfd.addErrback(function(result){alert(result)});
+function testPost(auth) {
+	var authTarget = auth && document.getElementById("authTarget");
+	var dfd = dojox.io.windowName.send("POST",{
+				url: prompt("Enter an address to post data to",
+						"http://192.168.0.66/Customer/"),
+				content:{foo:"bar"},
+				authElement: authTarget,
+				onAuthLoad: auth && function(){
+					authTarget.style.display='block';
+				}});
+	dfd.addBoth(function(result){
+		auth && (authTarget.style.display='none');
+		alert(result)
+	});		
 }
 	</script>
 </head>
 <body class="tundra">
 	<h1>Window Name Test</h1>
-	<iframe src="http://127.0.0.1/dojox/io/tests/attackerFrame.html"></iframe>
-	<p>Run this test from a web server, not from local disk.</p>
-	<button onclick="test()">get data</button>
-	<button onclick="testPost()">post data</button>
+	<div id="authTarget" style="display:none; border: 3px solid blue; width: 300px; height:200px;"></div>
+	<p>This page allows you try getting and posting data cross-site and get the response using the window.name protocol.</p>
+	<button onclick="test()">get data direct</button>
+	<button onclick="testPost()">post data direct</button>
+	<button onclick="test(true)">get data with authorization</button>
+	<button onclick="testPost(true)">post data with authorization</button>
 	</body>
 </html>
