@@ -233,11 +233,10 @@ dojo.require("dojo.dnd.Manager");
 			var
 				html = this.getTableArray(),
 				v = this.view,
-				obr = v.onBeforeRow,
 				cells = v.structure.cells,
 				item = this.grid.getItem(inRowIndex);
 
-			obr && obr(inRowIndex, cells);
+			dojox.grid.util.fire(this.view, "onBeforeRow", [inRowIndex, cells]);
 			for(var j=0, row; (row=cells[j]); j++){
 				if(row.hidden || row.header){
 					continue;
