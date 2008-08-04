@@ -75,7 +75,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		}
 		dojo.style(this.domNode, {
 			overflow: "hidden",
-			padding:0,
+			padding:0
 		});
 	},
 	
@@ -129,7 +129,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	_setupAnims: function(){
 		// summary: Create the show and hide animations
-		dojo.forEach(this._animConnects, dojo.disconnect);
+		dojo.forEach(this._animConnects, this.disconnect);
 		
 		var _common = {
 			node:this.domNode,
@@ -160,8 +160,8 @@ dojo.declare("dojox.layout.ExpandoPane",
 		}));
 
 		this._animConnects = [
-			dojo.connect(this._showAnim,"onEnd",this,"_showEnd"),
-			dojo.connect(this._hideAnim,"onEnd",this,"_hideEnd")
+			this.connect(this._showAnim,"onEnd","_showEnd"),
+			this.connect(this._hideAnim,"onEnd","_hideEnd")
 		];
 	},
 	
