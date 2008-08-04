@@ -2,15 +2,24 @@ dojo.provide("dojox.form.BusyButton");
 
 dojo.require("dijit.form.Button");
 
+dojo.requireLocalization("dojox.form", "BusyButton");
+
 dojo.declare("dojox.form.BusyButton",
 	[dijit.form.Button], 
 	{
 		
 	isBusy: false,	
-	busyLabel: "Loading...", // text while button is busy
+	busyLabel: "", // text while button is busy
 	timeout: null, // timeout, should be controlled by xhr call
 	useIcon: true, // use a busy icon
  
+	postMixInProperties: function(){
+		this.inherited(arguments);
+		if(!this.busyLabel){
+			this.busyLabel = dojo.i18n.getLocalization("dojox.form", "BusyButton", this.lang).loading;
+		}
+	},
+	
 	postCreate: function(){
 		// summary:
 		//	stores initial label and timeout for reference
