@@ -11,8 +11,6 @@ dojo.declare("dojox.form.BusyButton",
 	timeout: null, // timeout, should be controlled by xhr call
 	useIcon: true, // use a busy icon
  
-	iconSrc: dojo.moduleUrl("dojox.form.resources", "loading.gif"),
-		
 	postCreate: function(){
 		// summary:
 		//	stores initial label and timeout for reference
@@ -91,7 +89,7 @@ dojo.declare("dojox.form.BusyButton",
 		// create optional busy image
 		if (this.useIcon && this.isBusy){
 			var node = new Image();
-			node.src = this.iconSrc;
+			node.src = this._blankGif;
 			dojo.attr(node, "id", this.id+"_icon");
 			dojo.addClass(node, "dojoxBusyButtonIcon");
 			this.containerNode.appendChild(node);
