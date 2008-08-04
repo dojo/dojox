@@ -1023,6 +1023,14 @@ dojo.require("dojo.dnd.Manager");
 			var rowNode = this.createRowNode(inRowIndex);
 			this.buildRow(inRowIndex, rowNode, inHeightPx);
 			this.grid.edit.restore(this, inRowIndex);
+			if(this._pendingUpdate){
+				window.clearTimeout(this._pendingUpdate);
+			}
+			this._pendingUpdate = window.setTimeout(dojo.hitch(this, function(){
+				window.clearTimeout(this._pendingUpdate);
+				delete this._pendingUpdate;
+				this.grid._resize();
+			}), 50);
 			return rowNode;
 		},
 
