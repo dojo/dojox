@@ -29,6 +29,7 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 	_swfPath: dojo.moduleUrl("dojox.form", "resources/uploader.swf"),
 	
 	flashObject:null,
+	flashMovie:null,
 	
 	constructor: function(options){
 		this.button = options.button;
@@ -45,8 +46,6 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 			vars:{
 				uploadUrl:this.uploadUrl, 
 				uploadOnSelect:this.uploadOnChange, 
-				onSelectFiles:this._registerCallback("onChange"),
-				onComplete:this._registerCallback("onComplete"),
 				id:dijit.getUniqueId("flash")
 			}
 		}
@@ -56,7 +55,12 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 		dojo.style(flashDiv, "top", "0");
 		dojo.style(flashDiv, "left", "0");
 		
-		this.flashObject =  dojox.embed.Flash(args, flashDiv);
+		dojo.subscribe("filesSelected", this, "onChange")
+		dojo.subscribe("filesUploaded", this, "onComplete")
+		this.flashObject = new dojox.embed.Flash(args, flashDiv);
+		this.flashObject.onLoad = dojo.hitch(this, function(mov){
+			this.flashMovie = mov;													
+		})
 		dojo.connect(this.button, "onClick", this, "openDialog");
 	},
 	
@@ -65,13 +69,13 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 	},
 	
 	openDialog: function(evt){
-		this.flashObject.openDialog();
+		this.flashMovie.openDialog();
 	},
 	
 	upload: function(){
 		console.log("upload", (!this.uploadOnChange));
 		if(!this.uploadOnChange){
-			this.flashObject.doUpload();
+			this.flashMovie.doUpload();
 		}
 	},
 	
