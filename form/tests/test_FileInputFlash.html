@@ -35,9 +35,27 @@
 			}
 			dojo.byId("uploadedFiles").value = "";
 			dojo.byId("fileToUpload").value = "";
+			
 			var uploadUrl = "../resources/UploadFile.php";
+			var selectMultipleFiles = true;
+			
+			var fileMask = [
+				["Jpeg File", 	"*.jpg;*.jpeg"],
+				["GIF File", 	"*.gif"],
+				["PNG File", 	"*.png"],
+				["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"]
+			];
+			var fileMask = 	["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"];
+			var fileMask = 	["PNG File", 	"*.png"];
+			
 			if(dijit.byId("btn0")){
-				var f0 = new dojox.form.FileInputFlash({button:dijit.byId("btn0"), uploadUrl:uploadUrl, uploadOnChange:false});
+				var f0 = new dojox.form.FileInputFlash({
+					button:dijit.byId("btn0"), 
+					uploadUrl:uploadUrl, 
+					uploadOnChange:false, 
+					selectMultipleFiles:selectMultipleFiles,
+					fileMask:fileMask
+				});
 				doUpload = function(){
 					dojo.byId("fileToUpload").innerHTML = "uploading..."
 					f0.upload();
