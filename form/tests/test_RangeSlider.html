@@ -44,8 +44,8 @@
     </div>
     Horizontal Slider Min Value:<input readonly id="minValue" size="10" value="20.0%"/><br/>
     Horizontal Slider Max Value:<input readonly id="maxValue" size="10" value="80.0%"/><br/>
-    <button id="disableButton" dojoType="dijit.form.Button" onClick="dijit.byId('hrSlider').setAttribute('disabled', true);dijit.byId('disableButton').setAttribute('disabled',true);dijit.byId('enableButton').setAttribute('disabled',false);">Disable previous slider</button>
-    <button id="enableButton"  dojoType="dijit.form.Button" onClick="dijit.byId('hrSlider').setAttribute('disabled', false);dijit.byId('disableButton').setAttribute('disabled',false);dijit.byId('enableButton').setAttribute('disabled', true);" disabled>Enable previous slider</button>
+    <button id="disableButton" dojoType="dijit.form.Button" onClick="dijit.byId('hrSlider').attr('disabled', true);dijit.byId('disableButton').attr('disabled',true);dijit.byId('enableButton').attr('disabled',false);">Disable previous slider</button>
+    <button id="enableButton"  dojoType="dijit.form.Button" onClick="dijit.byId('hrSlider').attr('disabled', false);dijit.byId('disableButton').attr('disabled',false);dijit.byId('enableButton').attr('disabled', true);" disabled>Enable previous slider</button>
     
     <h2>A customized horizontal slider</h2>
     <div 
