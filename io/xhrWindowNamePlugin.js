@@ -24,6 +24,12 @@ dojox.io.xhrWindowNamePlugin = function(/*String*/url, /*Function?*/httpAdapter,
 			var dfd = (httpAdapter ? httpAdapter(send, true) : send)(method, args, hasBody); // use the windowName transport
 			dfd.addCallback(function(result){
 				var ioArgs = dfd.ioArgs;
+				ioArgs.xhr = {
+					getResponseHeader: function(name){
+						// convert the hash to an object to act like response headers
+						return dojo.queryToObject(ioArgs.hash.match(/[^#]*$/)[0])[name];
+					}
+				}
 				// use the XHR content handlers for handling
 				if(ioArgs.handleAs == 'json'){
 					// use a secure json verifier, using object capability validator for now

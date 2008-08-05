@@ -137,6 +137,7 @@ dojox.io.windowName = {
 			if(typeof data == 'string'){
 				if(data != frameName){
 					state = 2; // we are done now
+					dfd.ioArgs.hash = frame.contentWindow.location.hash;
 					dfd.callback(data);
 				}
 			}
