@@ -42,9 +42,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		Sync calls return their data immediately from the calling function, so
 			//		callbacks are unnecessary
 			//
-			// The *loadLazyValues* parameter
-			//		Setting this to true will cause any getValue call to automatically load the value
-			// 		if the returned value is a lazy item. This defaults to true.
 			//	description:
 			//		The JsonRestStore will then cause all saved modifications to be server using Rest commands (PUT, POST, or DELETE).
 			// 		When using a Rest store on a public network, it is important to implement proper security measures to
@@ -94,9 +91,10 @@ dojo.declare("dojox.data.JsonRestStore",
 				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
 			}
 			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
-			this.schema = this.schema || this.service._schema;
+			this.schema = this.service._schema = this.schema || this.service._schema || {};
 			// wrap the service with so it goes through JsonRest manager 
 			this.service._store = this;
+			this.schema._idAttr = this.idAttribute;
 			this._constructor = dojox.rpc.JsonRest.getConstructor(this.service);
 			//given a url, load json data from as the store
 		},
@@ -187,22 +185,11 @@ dojo.declare("dojox.data.JsonRestStore",
 		save: function(kwArgs){
 			// summary:
 			//		Saves the dirty data using REST Ajax methods
+			
 			var actions = dojox.rpc.JsonRest.commit(kwArgs);
 			this.serverVersion = this._updates && this._updates.length;
-			for(var i = 0; i < actions.length; i++){
-				if(actions[i].method == 'post' && this.onPostCommit){
-					var self = this;
-					// some REST stores need to do some processing after a post has been committed
-					(function(object){
-						dfd.addCallback(function(value){
-							self.onPostCommit(object);
-							return value;
-						});
-					})(actions[i].content);
-				}
-			}
+			return actions;
 		},
-
 
 		revert: function(){
 			// summary

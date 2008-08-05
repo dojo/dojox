@@ -10,21 +10,27 @@ dojo.require("dojox.data.JsonRestStore");
 dojo.declare("dojox.data.CouchDBRestStore",
 	dojox.data.JsonRestStore,
 	{
-		onPostCommit: function(item){
-			var prefix = this.service.serviceName + '/';
-			item.__id = prefix + result.id; // update the object with the results of the post
-			item._rev = result.rev;
-			return result;
+		save: function(kwArgs) {
+			var actions = this.inherited(arguments); // do the default save and then update for version numbers
+			var prefix = this.service.servicePath;
+			for(var i = 0; i < actions.length; i++){
+				// need to update the item's version number after it has been committed
+				(function(item,dfd){
+					dfd.addCallback(function(result){
+						if(result){
+							item.__assignedId = prefix + result.id; // update the object with the results of the post
+							item._rev = result.rev;
+						}
+						return result;
+					});
+				})(actions[i].content,actions[i].deferred);
+			}
 		},
 		fetch: function(args){
 			// summary:
 			// 		This only differs from JsonRestStore in that it, will put the query string the query part of the URL and it handles start and count
-			if(typeof args == 'string'){
-				args = {query: '_all_docs?' + args};
-			}else if(typeof args.query == 'string'){
-				args.query = '_all_docs?' + args.query;
-			}else{
-				args.query =  '_all_docs?';
+			if(!args.useIndexCache){
+				args.query = '_all_docs?' + (args.query || '');
 			}
 			if(args.start){
 				args.query = (args.query ? (args.query + '&') : '') + 'skip=' + args.start;
@@ -34,46 +40,48 @@ dojo.declare("dojox.data.CouchDBRestStore",
 				args.query = (args.query ? (args.query + '&') : '') + 'count=' + args.count;
 				delete args.count;
 			}
-			var prefix = this.service.serviceName + '/';
-			var oldOnComplete = args.onComplete;
-			args.onComplete=function(results){
-				if(results.rows){
-					for(var i = 0; i < results.rows.length; i++){
-						var row = results.rows[i];  // make it into a reference
-						row.__id = prefix + (row.$ref = row.id);
-					}
-				}
-				if(oldOnComplete){
-					oldOnComplete.apply(this,arguments);
-				}
-			};
 			return this.inherited(arguments);
+		},
+		_processResults: function(results){
+			var rows = results.rows;
+			if(rows){
+				var prefix = this.service.servicePath;
+				var self = this;
+				for(var i = 0; i < rows.length;i++){
+					rows[i] = {
+						__id: prefix + rows[i].id, 
+						_id: rows[i].id,
+						_loadObject: function(callback){
+							self.fetchItemByIdentity({
+								identity: this._id,
+								onItem: callback
+							});
+							delete this._loadObject;
+						}
+					};
+				}
+				return {totalCount:results.total_rows, items:results.rows};
+			}else{
+				return {items:results};
+			}
+						
 		}
 	}
 );
 
-//TODO:, it is not ncessary to generate an SMD, this should be changed to
 // create a set of stores
-dojox.data.CouchDBRestStore.generateSMD = function(couchServerUrl){
-	var couchSMD = {contentType:"application/json",
-		transport:"REST",
-		envelope:"PATH",
-		services:{},
-		target: couchServerUrl
-	};
-	var def = dojo.xhrGet({
+dojox.data.CouchDBRestStore.getStores = function(couchServerUrl){
+	var dfd = dojo.xhrGet({
 		url: couchServerUrl+"_all_dbs",
 		handleAs: "json",
 		sync: true
 	});
-	def.addCallback(function(dbs){
+	var stores = {};
+	dfd.addBoth(function(dbs){
 		for(var i = 0; i < dbs.length; i++){
-			couchSMD.services[dbs[i]] = {
-				target:dbs[i],
-				returns:{},
-				parameters:[{type:"string"}]
-			};
+			stores[dbs[i]] = new dojox.data.CouchDBRestStore({target:couchServerUrl + dbs[i],idAttribute:"_id"});
 		}
+		return stores;
 	});
-	return couchSMD;
+	return stores;
 };

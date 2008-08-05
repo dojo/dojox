@@ -113,7 +113,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 	dfd.addBoth(function(schemas){
 		for(var i in schemas){
 			if(typeof schemas[i] == 'object'){
-				schemas[i] = new dojox.data.PersevereStore({target:new dojo._Url(path,i+'/') + '',schema:schemas[i]});
+				schemas[i] = new dojox.data.PersevereStore({target:new dojo._Url(path,i) + '',schema:schemas[i]});
 			}
 		}
 		return (results = schemas);

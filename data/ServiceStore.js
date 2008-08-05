@@ -45,10 +45,6 @@ dojo.declare("dojox.data.ServiceStore",
 			//		Sync calls return their data immediately from the calling function, so
 			//		callbacks are unnecessary
 			//
-			// The *loadLazyValues* parameter
-			//		Setting this to true will cause any getValue call to automatically load the value
-			// 		if the returned value is a lazy item. This defaults to true. 
-			//
 			// description:
 			//		ServiceStore can do client side caching and result set updating if 
 			// 		dojox.data.ClientFilter is loaded. Do this add:
@@ -100,17 +96,12 @@ dojo.declare("dojox.data.ServiceStore",
 			//	defaultValue: 
 			//		the default value
 			var value = item[property];
-			return value ?
-						(value._loadObject && this.loadLazyValues !== false) ? // check to see if it is not loaded 
-							(dojox.rpc._sync = true) &&  // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)loadItem()
-								dojox.data.ServiceStore.prototype.loadItem({item:value}) : 
-							value : // return the plain value since it was found;
-						// a truthy value was not found, see if we actually have it 
-						property in item ? value : // we do, so we can return it
-							(item._loadObject && this.syncMode) ? // the item is not loaded and we can load it synchronously, we should load it 
-									arguments.callee.call(this,dojox.data.ServiceStore.prototype.loadItem({item:item}), property, defaultValue) : // load the item and run getValue again 
-								defaultValue;// not in item -> return default value
-
+			return value || // return the plain value since it was found;
+						(property in item ? // a truthy value was not found, see if we actually have it 
+							value : // we do, so we can return it
+							item._loadObject ? // property was not found, maybe because the item is not loaded, we will try to load it synchronously so we can get the property 
+								(dojox.rpc._sync = true) && arguments.callee.call(this,dojox.data.ServiceStore.prototype.loadItem({item:item}) || {}, property, defaultValue) : // load the item and run getValue again 
+								defaultValue);// not in item -> return default value
 		},
 		getValues: function(item, property){
 			// summary:

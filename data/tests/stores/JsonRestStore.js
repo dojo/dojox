@@ -119,8 +119,9 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"query", 
 					onComplete: function(items, request){
-						t.f(jsonStore.isItemLoaded(items[2]));
-						var item = jsonStore.getValue(items,2);
+						var item = items[2];
+						t.f(jsonStore.isItemLoaded(item));
+						jsonStore.getValue(item,"name"); // this should trigger the load
 						t.is(items[2],item);
 						t.is(item.name,'Object 3');
 						d.callback(true);
@@ -153,7 +154,7 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 				return d; //Object
 			}
 		},
-		{
+		/*{
 			name: "Load Lazy Value",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
@@ -173,7 +174,7 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 				});
 				return d; //Object
 			}
-		},
+		},*/
 		
 		{
 			name: "IdentityAPI: fetchItemByIdentity and getIdentity",
