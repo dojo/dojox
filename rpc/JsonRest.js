@@ -15,16 +15,6 @@ dojo.require("dojox.rpc.Rest");
 
 			var left; // this is how many changes are remaining to be received from the server
 			kwArgs = kwArgs || {};
-			function finishOne(value){
-				
-				if(!(--left)){
-					dirtyObjects.splice(0,numDirty); // remove all the objects that were committed
-					if(kwArgs.onComplete){
-						kwArgs.onComplete.call(kwArgs.scope);
-					}
-				}
-				return value;
-			}
 			var actions = [];
 			var numDirty = dirtyObjects.length;
 			var alreadyRecorded = {};
@@ -60,26 +50,44 @@ dojo.require("dojox.rpc.Rest");
 			var xhrSendId;
 			var plainXhr = dojo.xhr;
 			left = actions.length;
-			if(left){
-				dojo.xhr = function(method,args){
-					// keep the transaction open as we send requests
-					args.headers = args.headers || {};
-					args.headers['X-Transaction'] = "open";
-					return plainXhr.apply(dojo,arguments);
-				};
-			}
+			var contentLocation;
+			// add headers for extra information
+			dojo.xhr = function(method,args){
+				// keep the transaction open as we send requests
+				args.headers = args.headers || {};
+				// the last one should commit the transaction
+				args.headers['X-Transaction'] = actions.length - 1 == i ? "commit" : "open";
+				if(contentLocation){
+					args.headers['Content-Location'] = contentLocation;
+				}
+				return plainXhr.apply(dojo,arguments);
+			};			
 			for(i =0; i < actions.length;i++){ // iterate through the actions to execute
 				var action = actions[i];
-				if(actions.length - 1 == i){
-					// the last one should disconnect, so no transaction header is sent and thus commit the transaction
-					dojo.xhr = plainXhr;
-				}
 				dojox.rpc.JsonRest._contentId = action.content && action.content.__id; // this is used by LocalStorageRest
-				var dfd = Rest[action.method](
+				var isPost = action.method == 'post';
+				// send the content location to the server
+				contentLocation = isPost && dojox.rpc.JsonRest._contentId;
+				var dfd = action.deferred = Rest[action.method](
 									action.target,
 									dojox.json.ref.toJson(action.content,false,jr.getServiceAndId(action.target.__id).service.servicePath)
 								);
-				dfd.addCallback(finishOne);
+				(function(object,dfd){
+					dfd.addCallback(function(value){
+						try{
+							// Implements id assignment per the HTTP specification
+							object.__assignedId = dfd.ioArgs.xhr.getResponseHeader("Location");
+						}catch(e){}
+						if(!(--left)){
+							dirtyObjects.splice(0,numDirty); // remove all the objects that were committed
+							if(kwArgs.onComplete){
+								kwArgs.onComplete.call(kwArgs.scope);
+							}
+						}
+						return value;
+					});
+				})(isPost && action.content,dfd);
+								
 				dfd.addErrback(function(value){
 					
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
@@ -91,8 +99,11 @@ dojo.require("dojox.rpc.Rest");
 					if(kwArgs.onError){
 						kwArgs.onError();
 					}
+					return value;
 				});
 			}
+			// revert back to the normal XHR handler
+			dojo.xhr = plainXhr;
 			
 			return actions;
 		},
@@ -170,7 +181,8 @@ dojo.require("dojox.rpc.Rest");
 				if(data){
 					dojo.mixin(this,data);
 				}
-				Rest._index[this.__id = service.servicePath + (data[jr.getIdAttribute(service)] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14))] = this;
+				var idAttribute = jr.getIdAttribute(service);
+				Rest._index[this.__id = service.servicePath + (data[idAttribute] || (data[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
 				dirtyObjects.push({object:this});
 	//			this._getParent(parentInfo).push(data); // append to this list
 

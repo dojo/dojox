@@ -1,4 +1,7 @@
-dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service, if you want it you must require it yourself
+dojo.provide("dojox.rpc.Rest"); 
+// Note: This doesn't require dojox.rpc.Service, and if you want it you must require it 
+// yourself, and you must load it prior to dojox.rpc.Rest.
+
 // summary:
 // 		This provides a HTTP REST service with full range REST verbs include PUT,POST, and DELETE.
 // description:
@@ -103,7 +106,7 @@ dojo.provide("dojox.rpc.Rest"); // Note: This doesn't require dojox.rpc.Service,
 		// 		create a REST method for the given name
 		drr[name] = function(target,content){
 			// parse the id to find the service and the id to use
-			var parts = target.__id.match(/^(.*\/)([^\/]*)$/);
+			var parts = (target.__assignedId || target.__id).match(/^(.*\/)([^\/]*)$/);
 			// find the service and call it
 			var service = dojox.rpc.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
 			// // TODO: could go directly to the event handlers
