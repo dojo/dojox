@@ -64,6 +64,8 @@ dojo.declare("dojox.form.BusyButton",
 			this._timeout = setTimeout(dojo.hitch(this, function(){
 				this.cancel();
 			}), timeout);			
+		}else if(timeout == undefined || timeout === 0){
+			this.cancel();
 		}
 	},
 	
