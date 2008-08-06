@@ -285,7 +285,7 @@ dojo.require("dojox.rpc.Rest");
 			// summary
 			//		returns true if the item is marked as dirty.
 			for(var i = 0, l = dirtyObjects.length; i < l; i++){
-				if(dirtyObjects[i]==item){return true;}
+				if(dirtyObjects[i].object==item){return true;}
 			}
 			return false;
 		}
