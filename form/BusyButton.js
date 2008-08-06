@@ -105,11 +105,11 @@ dojo.declare("dojox.form.BusyButton",
 		}
 	},
 	
-	_onClick: function(){
+	_clicked: function(e){
 		// summary:
 		//	on button click the button state gets changed 
 		
-		// only do somethin gif button is not busy
+		// only do something if button is not busy
 		if(!this.isBusy){ 
 			this.makeBusy();
 		}
