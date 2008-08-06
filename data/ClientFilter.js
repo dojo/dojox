@@ -240,7 +240,7 @@ dojo.require("dojo.data.util.filter");
 					return function(){}; // keep the order unchanged
 				}
 				var attribute = current.attribute;
-				var descending = current.descending;
+				var descending = !!current.descending;
 				var next = this.makeComparator(sort);
 				var store = this;
 				return function(a,b){

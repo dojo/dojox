@@ -45,7 +45,24 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	description:
 			//		The JsonRestStore will then cause all saved modifications to be server using Rest commands (PUT, POST, or DELETE).
 			// 		When using a Rest store on a public network, it is important to implement proper security measures to
-			//		control access to resources
+			//		control access to resources.
+			//		On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.
+			//		GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a 
+			// 			query (like /table/?name=foo). 
+			//		PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will 
+			// 			provide the modified object
+			//		POST - This should create a new object. The URL will correspond to the target store (like /table/)
+			// 			and the body should be the properties of the new object. The server's response should include a
+			// 			Location header that indicates the id of the newly created object. This id will be used for subsequent
+			// 			PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
+			//			the temporary randomly generated id used by client, and this location is used for subsequent 
+			// 			PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior 
+			// 			to receiving a response from the server. 
+			// 		DELETE - This should delete an object by id.
+			// 		These articles include more detailed information on using the JsonRestStore:
+			//		http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/
+			//		http://blog.medryx.org/2008/07/24/jsonreststore-overview/
+			//		
 			//	example:
 			// 		A JsonRestStore takes a REST service or a URL and uses it the remote communication for a
 			// 		read/write dojo.data implementation. A JsonRestStore can be created with a simple URL like:
@@ -76,6 +93,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 		And this object has accessed using the dojo.data API:
 			//	|	var obj = jsonStore.getValue(myObject,"lazyLoadedObject");
 			//		The object would automatically be requested from the server (with an object id of "obj2").
+			//	
 
 			dojo.connect(dojox.rpc.Rest._index,"onUpdate",this,function(obj,attrName,oldValue,newValue){
 				var prefix = this.service.servicePath;

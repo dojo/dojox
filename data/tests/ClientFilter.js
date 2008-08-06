@@ -103,7 +103,7 @@ doh.register("dojox.data.tests.ClientFilter",
 
 					t.is("John", last); // make sure we get the correct number of items
 
-					jsonStore.fetch({query:{lastName:"Smith",firstName:"*"},sort:[{attribute:"firstName",descending:false}], 
+					jsonStore.fetch({query:{lastName:"Smith",firstName:"*"},sort:[{attribute:"firstName"}], 
 						onComplete: function(items, request){
 							var first = jsonStore.getValue(items[0], "firstName");
 							console.log("first name",first, items[0]);
