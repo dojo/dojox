@@ -291,14 +291,12 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 		//		displayed within the ContentPane
 	},
 
-	setContent: function(data){
-		// summary: set data as new content, sort of like innerHTML
-		// data: String|DomNode|NodeList|dojo.NodeList
+	_attrSetContent: function(data){
 		if(!this._isDownloaded){
 			var defObj = this._setUpDeferreds();
 		}
 
-		dijit.layout.ContentPane.prototype.setContent.apply(this, arguments);
+		this.inherited(arguments);
 		return defObj; // dojox.layout.ContentPane.DeferredHandle
 	},
 

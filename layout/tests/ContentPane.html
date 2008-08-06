@@ -69,7 +69,7 @@
 						name: 'setContent',
 						runTest: function(t){
 							var msg = "Simple Test";
-							pane1.setContent(msg);
+							pane1.attr('content', msg);
 							t.assertEqual(msg, pane1.domNode.innerHTML);
 						}
 					},
@@ -78,7 +78,7 @@
 						timeout: 1800,
 						runTest: function(t){
 							var msg = "simple remote Test"
-							pane1.setHref(dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?message='+encodeURI(msg)));
+							pane1.attr('href', dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?message='+encodeURI(msg)));
 
 							var d = new t.Deferred();
 							setTimeout(d.getTestCallback(function(){
@@ -91,7 +91,7 @@
 						name: 'setContent_with_Widgets',
 						runTest: function(t){
 							var cont = "<div dojoType='dojox.TestWidget'>Test</div>";
-							pane1.setContent(cont);
+							pane1.attr('content', cont);
 							t.assertFalse(cont.toLowerCase() == pane1.domNode.innerHTML.toLowerCase());
 							t.assertEqual(1, dijit._Container.prototype.getChildren.call(pane1).length);
 						}
@@ -102,7 +102,7 @@
 							var trHead = dojo.query('table#tableTest > thead > tr')[0];
 							pane2 = new dojox.layout.ContentPane({} , trHead);
 							var html = "<td><div>This</div>Should<u>Work</u></td>";
-							pane2.setContent(html);
+							pane2.attr('content', html);
 							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
 							t.assertEqual(html.toLowerCase(), res);
 						},
@@ -116,7 +116,7 @@
 							var tHead = dojo.query('table#tableTest > thead')[0];
 							pane2 = new dojox.layout.ContentPane({}, tHead);
 							var html = "<tr><td><div>This</div>Should<u>Work</u></td></tr>";
-							pane2.setContent(html);
+							pane2.attr('content', html);
 							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
 							t.assertEqual(html.toLowerCase(), res);
 						},
@@ -130,7 +130,7 @@
 							var trBody = dojo.query('table#tableTest > tbody > tr')[0];
 							pane2 = new dojox.layout.ContentPane({}, trBody);
 							var html = "<td><div>This</div>Should<u>Work</u></td>";
-							pane2.setContent(html);
+							pane2.attr('content', html);
 							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
 							t.assertEqual(html.toLowerCase(), res);
 						},
@@ -144,7 +144,7 @@
 							var tBody = dojo.query('table#tableTest > tbody')[0];
 							pane2 = new dojox.layout.ContentPane({}, tBody);
 							var html = "<tr><td><div>This</div>Should<u>Work</u></td></tr>";
-							pane2.setContent(html);
+							pane2.attr('content', html);
 							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
 							t.assertEqual(html.toLowerCase(), res);
 						},
@@ -158,7 +158,7 @@
 							var table = dojo.query('table#tableTest')[0];
 							pane2 = new dojox.layout.ContentPane({}, table);
 							var html = "<tbody><tr><td><div>This</div>Should<u>Work</u></td></tr></tbody>";
-							pane2.setContent(html);
+							pane2.attr('content', html);
 							var res = ieTrimSpaceBetweenTags(pane2.domNode.innerHTML.toLowerCase());
 							t.assertEqual(html.toLowerCase(), res);
 						},
@@ -171,7 +171,7 @@
 						timeout: 1500,
 						runTest: function(t){
 							pane1.ioArgs.sync = true;
-							pane1.setHref(dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=sync'));
+							pane1.attr('href', dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=sync'));
 
 							// since it was a sync fetch it should be loaded here
 							t.assertEqual('sync', pane1.domNode.innerHTML);
@@ -186,7 +186,7 @@
 						runTest: function(t){
 							// test if we can set a custom header on every request
 							pane1.ioArgs.headers = {'X-TestHeader': 'Testing'};
-							pane1.setHref('remote/getResponse.php?mode=bounceHeaders');
+							pane1.attr('href', 'remote/getResponse.php?mode=bounceHeaders');
 
 							var d = new t.Deferred();
 							setTimeout(d.getTestCallback(function(){
@@ -208,7 +208,7 @@
 							// test to post some content on each request
 							pane1.ioMethod = dojo.xhrPost;
 							pane1.ioArgs.content = {test:'it should work'};
-							pane1.setHref('remote/getResponse.php?mode=bounceInput');
+							pane1.attr('href', 'remote/getResponse.php?mode=bounceInput');
 
 							var d = new t.Deferred();
 							setTimeout(d.getTestCallback(function(){
@@ -226,7 +226,7 @@
 						name: 'handleFrom_setContent',
 						runTest: function(t){
 							var unLoadCalled, loadCalled;
-							var handle = pane1.setContent("test 'var handle = setContent()'");
+							var handle = pane1.attr('content', "test 'var handle = attr('content', '')'");
 							testHandle(t, handle);
 
 							handle.addOnLoad(function(){
@@ -240,7 +240,7 @@
 							});
 
 							// test unLoad callback above
-							handle = pane1.setContent("testing 'addOnUnload(callback)'");
+							handle = pane1.attr('content', "testing 'addOnUnload(callback)'");
 							t.assertTrue(unLoadCalled);
 							testHandle(t, handle);
 						}
@@ -253,7 +253,7 @@
 							var r_unloadCalled, r_loadCalled;
 							var r_handle, href = dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=test');
 
-							var handle = pane1.setHref(href);
+							var handle = pane1.attr('href', href);
 							testHandle(t, handle);
 							handle.addOnLoad(function(){
 								loadCalled = 'loadCalled';
@@ -271,7 +271,7 @@
 								r_handle = 'refreshHandle ok';
 								handle.addOnLoad(function(){
 									r_loadCalled = 'refresh loadCalled';
-									pane1.setContent(); // trigger unload
+									pane1.attr('content', ''); // trigger unload
 								});
 								handle.addOnUnload(function(){
 									r_unloadCalled = 'refresh unloadCalled';
@@ -306,11 +306,11 @@
 							function next(){
 								if(!isNaN(count.u) && !isNaN(count.l)){
 									if(count.u < 4 && count.l < 4){
-										pane1.setHref(href);
+										pane1.attr('href', href);
 										pane1.onLoadDeferred.addCallback(makeCallback('l', 'u', 1));
 										pane1.onUnloadDeferred.addCallback(makeCallback('u', 'l', 0));
 									}else{
-										pane1.setContent(); // unload to get even
+										pane1.attr('content', ''); // unload to get even
 									}
 								}
 							}
@@ -458,7 +458,7 @@
 							), 1500);
 
 							pane1.adjustPaths = 1;pane1.renderStyles = 1;
-							pane1.setHref('remote/getResponse.php?mode=htmlPaths');
+							pane1.attr('href', 'remote/getResponse.php?mode=htmlPaths');
 							return d;
 						},
 						tearDown: function(){
@@ -489,7 +489,7 @@
 								}
 							), 1500);
 							pane1.adjustPaths = 1;
-							pane1.setHref('remote/getResponse.php?mode=htmlPaths');
+							pane1.attr('href', 'remote/getResponse.php?mode=htmlPaths');
 							return d;
 						},
 						tearDown: function(){
@@ -505,7 +505,7 @@
 					{
 						name: 'leaveDojoMethodScriptsAsIs',
 						runTest: function(t){
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script type='dojo/method'>unTypedVarInDocScope = 'failure';<"
 								+"/script>");
 
@@ -523,7 +523,7 @@
 						name: 'scripts_evals_in_global_scope',
 						timeout: 1800, // grabing remote js, wait for that
 						runTest: function(t){
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script>function scriptsInGlobalClicked(){ documentCallback(); }<"
 								+"/script><"+"script src='remote/getResponse.php?mode=remoteJsTrue'></"
 								+"script>"+"<a href='javascript:scriptsInGlobalClicked()' "
@@ -545,7 +545,7 @@
 						name:'scriptsEvalsInOrder',
 						timeout: 1800,// grabing remote js, wait for that
 						runTest: function(t){
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script src='remote/getResponse.php?mode=remoteJsFalse'><"
 								+"/script><"+"script>unTypedVarInDocScope = 1;<"
 								+"/script>"); // scripts only test
@@ -562,7 +562,7 @@
 					{
 						name: 'scriptsWithTypeTextJavascript',
 						runTest: function(t){
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script type='text/javascript'> unTypedVarInDocScope = 'text/javascript'; <"
 								+"/script>");
 
@@ -578,7 +578,7 @@
 						name:'scriptsWithHtmlComments',
 						runTest: function(t){
 							pane1.cleanContent = 1;
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script><!-- unTypedVarInDocScope = 2; --><"
 								+"/script>");
 
@@ -599,7 +599,7 @@
 						name:'scriptsWithCData',
 						runTest: function(t){
 							pane1.cleanContent = 1;
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script><![CDATA[ unTypedVarInDocScope = 3; ]]><"
 								+"/script>");
 
@@ -621,7 +621,7 @@
 						runTest: function(t){
 							unTypedVarInDocScope = 'failure';
 							pane1.scriptHasHooks = true;
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 							+"script>function testReplace(){"
 							+	"if(typeof _container_ != 'object'){return 'not replaced 1';}\n"
 							+	"if(_container_ != pane1){ return 'not replaced 2';}\n"
@@ -650,7 +650,7 @@
 						name:'_container_onLoadDeferred|onUnloadDeferred',
 						runTest: function(t){
 							pane1.scriptHasHooks = true;
-							pane1.setContent("<"
+							pane1.attr('content', "<"
 								+"script>"
 								+"var testConn;"
 								+"_container_.onLoadDeferred.addCallback(function(){"
@@ -677,7 +677,7 @@
 						},
 						tearDown: function(){
 							delete pane1.scriptHasHooks; // get back to default
-							pane1.setContent();
+							pane1.attr('content', '');
 						}
 					},
 					"t.assertEqual('unloaded', unTypedVarInDocScope)"
@@ -1003,7 +1003,7 @@
 
 				pane1.executeScripts = 1;
 				pane1.renderStyles = 1;
-				pane1.setContent(html+showHowHtml);
+				pane1.attr('content', html+showHowHtml);
 				
 
 				}
