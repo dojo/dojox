@@ -684,8 +684,6 @@ dojo.require("dojo.dnd.Manager");
 			dojo.forEach(this.rowNodes, dojo._destroyElement);
 			this.rowNodes = [];
 			if(this.source){
-				dojo.disconnect(this._source_conn);
-				dojo.unsubscribe(this._source_sub);
 				this.source.destroy();
 			}
 			this.inherited(arguments);
@@ -792,8 +790,6 @@ dojo.require("dojo.dnd.Manager");
 			});
 			if(this.grid.columnReordering && this.simpleStructure){
 				if(this.source){
-					dojo.disconnect(this._source_conn);
-					dojo.unsubscribe(this._source_sub);
 					this.source.destroy();
 				}
 				this.source = new dojo.dnd.Source(this.headerContentNode.firstChild.rows[0], {
@@ -832,6 +828,11 @@ dojo.require("dojo.dnd.Manager");
 							src._removeItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
 						}
 						dojo.dnd.Source.prototype._unmarkTargetAnchor.call(src);
+					}),
+					destroy: dojo.hitch(this, function(){
+						dojo.disconnect(this._source_conn);
+						dojo.unsubscribe(this._source_sub);
+						dojo.dnd.Source.prototype.destroy.call(this.source);
 					})
 				});
 				this._source_conn = dojo.connect(this.source, "onDndDrop", this, "_onDndDrop");
@@ -884,15 +885,22 @@ dojo.require("dojo.dnd.Manager");
 					tgtView.setColumnsWidth(tgtView.getColumnsWidth());
 				}
 			}
-			this.grid.layout.moveColumn(
-				source.viewIndex,
-				this.index,
-				getIdx(nodes[0]),
-				getIdx(this.source._targetNode),
-				this.source._beforeTarget
-			);
+			var stn = this.source._targetNode;
+			var stb = this.source._beforeTarget;
+			var layout = this.grid.layout;
+			var idx = this.index;
 			delete this.source._targetNode;
 			delete this.source._beforeTarget;
+			
+			window.setTimeout(function(){
+				layout.moveColumn(
+					source.viewIndex,
+					idx,
+					getIdx(nodes[0]),
+					getIdx(stn),
+					stb
+				);
+			}, 1);
 		},
 
 		renderHeader: function(){
