@@ -32,7 +32,7 @@ dojo.provide("dojox.rpc.Rest");
 						(method.contentType||svc._smd.contentType||"").match(/json|javascript/), // isJson
 						null,
 						function(id, args){
-							var request = svc._getRequest(method,[id, args]);
+							var request = svc._getRequest(method,[id]);
 							request.url= request.target + (request.data ? '?'+  request.data : '');
 							return request;
 						}

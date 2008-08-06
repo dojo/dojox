@@ -95,12 +95,12 @@ dojo.declare("dojox.rpc.Service", null, {
 			}else{
 				// they provided ordered, must convert
 				var data={};
-			    for(var i=0;i<method.parameters.length;i++){
-			        if(typeof args[i] != "undefined" || !method.parameters[i].optional){
-			            data[method.parameters[i].name]=args[i];
-			        }
-			    }
-			    args = data;
+				for(var i=0;i<method.parameters.length;i++){
+					if(typeof args[i] != "undefined" || !method.parameters[i].optional){
+						data[method.parameters[i].name]=args[i];
+					}
+				}
+				args = data;
 			}
 			var parameters = (method.parameters || []).concat(smd.parameters || []);
 			if(method.strictParameters||smd.strictParameters){
@@ -209,7 +209,7 @@ dojox.rpc.envelopeRegistry.register(
 
 			return {
 				data: d,
-                transport:"POST"
+				transport:"POST"
 			};
 		},
 		deserialize:function(results){
