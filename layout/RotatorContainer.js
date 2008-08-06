@@ -435,7 +435,7 @@ dojo.declare("dojox.layout.RotatorPager", [dijit._Widget, dijit._Templated, diji
 			}
 			if(this.playPause){
 				dojo.connect(this.playPause, "onClick", function(){
-					this.setLabel(this.checked ? "Pause" : "Play");
+					this.attr('label', this.checked ? "Pause" : "Play");
 					dojo.publish(p.id+"-state", [this.checked]);
 				});
 			}
@@ -455,7 +455,7 @@ dojo.declare("dojox.layout.RotatorPager", [dijit._Widget, dijit._Templated, diji
 	_state: function(/*boolean*/playing){
 		// summary: Updates the display of the play/pause button
 		if(this.playPause && this.playPause.checked != playing){
-			this.playPause.setLabel(playing ? "Pause" : "Play");
+			this.playPause.attr('label', playing ? "Pause" : "Play");
 			this.playPause.setAttribute("checked", playing);
 		}
 	},
