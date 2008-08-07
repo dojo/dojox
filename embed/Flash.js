@@ -221,37 +221,80 @@ dojo.provide("dojox.embed.Flash");
 		//	|	}, myWrapperNode);
 		this.id = null;
 		this.movie = null;
-		this.onReady = function(/* HTMLObject */movie){
-			//	summary:
-			//		An empty stub function that you can use to find out
-			//		when this object has an actual movie reference in it.
-		};
-		this.onLoad = function(/* HTMLObject */movie){ 
-			//	summary:
-			//		An empty stub function that you can use to find out when
-			//		the movie has finished loading in full.
-		};
-
-		this._poller = null;
-		this._pollCount = 0, this._pollMax = 250;
-		if(dojox.embed.Flash.initialized){
-			this.id = dojox.embed.Flash.place(kwArgs, node);
-			setTimeout(dojo.hitch(this, function(){
-				this.movie = (dojo.isIE)?dojo.byId(this.id):document[this.id];
-				this.onReady(this.movie);
-
-				this._poller = setInterval(dojo.hitch(this, function(){
-					if(this.movie.PercentLoaded() == 100 || this._pollCount++ > this._pollMax){
-						clearInterval(this._poller);
-						delete this._poller;
-						delete this._pollCount;
-						delete this._pollMax;
-						this.onLoad(this.movie);
-					}
-				}), 10);
-			}), 1);
+		this.domNode = null;
+		if(kwArgs && node){
+			this.init(kwArgs, node);
 		}
 	};
+
+	dojo.extend(dojox.embed.Flash, {
+		onReady: function(/* HTMLObject */movie){
+			//	summary
+			//		Stub function for you to attach to when the movie reference is first
+			//		pushed into the document.
+		},
+		onLoad: function(/* HTMLObject */movie){
+			//	summary
+			//		Stub function for you to attach to when the movie has finished downloading
+			//		and is ready to be manipulated.
+		},
+		init: function(/* dojox.embed.__flashArgs */kwArgs, /* DOMNode? */node){
+			//	summary
+			//		Initialize (i.e. place and load) the movie based on kwArgs.
+			this.destroy();		//	ensure we are clean first.
+			node = node || this.domNode;
+			if(!node){ throw new Error("dojox.embed.Flash: no domNode reference has been passed."); }
+
+			this._poller = null;
+			this._pollCount = 0, this._pollMax = 250;
+			if(dojox.embed.Flash.initialized){
+				this.id = dojox.embed.Flash.place(kwArgs, node);
+				this.domNode = node;
+				setTimeout(dojo.hitch(this, function(){
+					this.movie = (dojo.isIE)?dojo.byId(this.id):document[this.id];
+					this.onReady(this.movie);
+
+					this._poller = setInterval(dojo.hitch(this, function(){
+						if(this.movie.PercentLoaded() == 100 || this._pollCount++ > this._pollMax){
+							clearInterval(this._poller);
+							delete this._poller;
+							delete this._pollCount;
+							delete this._pollMax;
+							this.onLoad(this.movie);
+						}
+					}), 10);
+				}), 1);
+			}
+		},
+		_destroy: function(){
+			//	summary
+			//		Kill the movie and reset all the properties of this object.
+			this.domNode.removeChild(this.movie);
+			this.id = this.movie = this.domNode = null;
+		},
+		destroy: function(){
+			//	summary
+			//		Public interface for destroying all the properties in this object.
+			//		Will also clean all proxied methods.
+			if(!this.movie){ return; }
+			
+			//	remove any proxy functions
+			var test = dojo.mixin({}, { id:true, movie:true, domNode:true, onReady:true, onLoad:true });
+			for(var p in this){
+				if(!test[p]){
+					delete this[p];
+				}
+			}
+
+			//	pull the movie
+			if(this._poller){
+				//	wait until onLoad to destroy
+				dojo.connect(this, "onLoad", this, "_destroy");
+			} else {
+				this._destroy();
+			}
+		}
+	});
 
 	//	expose information through the constructor function itself.
 	dojo.mixin(dojox.embed.Flash, {
