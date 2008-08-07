@@ -309,7 +309,7 @@ dojox.xml.DomParser=new (function(){
 					while((attr=reAttr.exec(res[2]))!=null){
 						if(attr.length>0){
 							var name=attr[1].replace(trim,"");
-							var val=(attr[4]||attr[6]).replace(normalize," ")
+							var val=(attr[4]||attr[6]||"").replace(normalize," ")
 								.replace(egt,">")
 								.replace(elt,"<")
 								.replace(eapos,"'")
