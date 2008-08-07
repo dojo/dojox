@@ -14,7 +14,7 @@
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojox.form.FileInputOverlay");
+		dojo.require("dojox.form.FileUploader");
 		dojo.require("dijit.form.Button"); 
 		dojo.require("dojo.parser");
 		
@@ -139,9 +139,10 @@
 	</style>
 </head>
 <body class="tundra">
-<h1>FileInputOverlay</h1>
+<h1>dojox.form.FileUploader / FileInputOverlay</h1>
 
 <p>The following is an example of how FileInputOverlay's simple APIs can be tapped into, so you can build your own file input. For the file to actually upload, you'll need to have PHP enabled. </p>
+<p>NOTE: FileInputOverlay is intended to be a fallback from FileInputFlash in FileUploader. This test remains because of the layout complexity. It can of course be called directly if no Flash is desired.</p>
 <div id="btn4" class="browse" dojoType="dijit.form.Button">Browse...</div>
 <div id="fileToUpload"></div><div id="uploadBtn" class="uploadBtn" onClick="doUpload();" dojoType="dijit.form.Button">Upload</div>
 <div class="uploadedFilesLabel">Uploaded Files:</div>
