@@ -644,7 +644,7 @@ dojo.require("dojo.dnd.Manager");
 		//		Users should typically not need to access individual views directly.
 		//
 		// defaultWidth: String
-		//		Default widget of the view
+		//		Default width of the view
 		defaultWidth: "18em",
 
 		// viewWidth: String
@@ -704,7 +704,7 @@ dojo.require("dojo.dnd.Manager");
 			if(vs.width && !isNaN(vs.width)){
 				this.viewWidth = vs.width + 'em';
 			}else{
-				this.viewWidth = vs.width || this.viewWidth; //|| this.defaultWidth;
+				this.viewWidth = vs.width || (vs.noscroll ? 'auto' : this.viewWidth); //|| this.defaultWidth;
 			}
 			this.onBeforeRow = vs.onBeforeRow;
 			this.noscroll = vs.noscroll;

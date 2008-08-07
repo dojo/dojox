@@ -4,7 +4,7 @@ dojo.require("dojox.grid._View");
 dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 	// summary:
 	//	Custom grid view. If used in a grid structure, provides a small selectable region for grid rows.
-	defaultWidth: "3em",
+	defaultWidth: "2em",
 	noscroll: true,
 	padBorderWidth: 2,
 	buildRendering: function(){

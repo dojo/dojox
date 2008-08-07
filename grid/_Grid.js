@@ -385,14 +385,14 @@ dojo.requireLocalization("dojox.grid", "grid");
 							}
 							var checked = dojo.filter(self.layout.cells, function(c){
 								if(c.menuItems.length > 1){
-									dojo.forEach(c.menuItems, "item.setDisabled(false);");
+									dojo.forEach(c.menuItems, "item.attr('disabled', false);");
 								}else{
-									c.menuItems[0].setDisabled(false);
+									c.menuItems[0].attr('disabled', false);
 								}
 								return !c.hidden;
 							});
 							if(checked.length == 1){
-								dojo.forEach(checked[0].menuItems, "item.setDisabled(true);");
+								dojo.forEach(checked[0].menuItems, "item.attr('disabled', true);");
 							}
 						}
 					},
