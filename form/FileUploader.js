@@ -2,6 +2,7 @@ dojo.provide("dojox.form.FileUploader");
 dojo.experimental("dojox.form.FileUploader");
 
 dojox.form.FileUploader = function(options){
+	
 	//summary: 
 	// 		Handles File Uploading to a server (PHP script included for testing)
 	//		Does *NOT* create a button, it transforms a button into an uploader. 
@@ -155,7 +156,7 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 				uploadOnSelect:this.uploadOnChange,
 				selectMultipleFiles:this.selectMultipleFiles,
 				id:this.id,
-				isDebug:false
+				isDebug:options.isDebug
 			}
 		};
 		//console.log("VARS:", args.vars)
