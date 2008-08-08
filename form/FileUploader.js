@@ -143,6 +143,19 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 		this.uploadUrl = options.uploadUrl;
 		this.uploadOnChange = options.uploadOnChange;
 		
+		if(this.uploadUrl.toLowerCase().indexOf("http")<0){
+			// Appears to be a relative path. Attempt to 
+			//	convert it to absolute, so it will better 
+			//target the SWF.
+			//
+			var loc = window.location.href.split("/");
+			loc.pop();
+			loc = loc.join("/")+"/";
+			
+			this.uploadUrl = loc+this.uploadUrl;
+			console.log("Relative loc:", loc, " abs loc:", this.uploadUrl);
+		}
+		
 		this.selectMultipleFiles = (options.selectMultipleFiles===undefined)?this.selectMultipleFiles:options.selectMultipleFiles;
 		this.fileMask = options.fileMask || this.fileMask;
 		

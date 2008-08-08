@@ -25,7 +25,7 @@ function trace($txt){
 	// this is helpful on a remote server if you don't
 	//have access to the log files
 	//
-	echo($txt."<br/>");
+	//echo($txt."<br/>");
 	$log = new cLOG("../resources/upload.txt", false);
 	//$log->clear();
 	$log->write($txt);
