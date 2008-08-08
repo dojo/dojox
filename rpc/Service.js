@@ -81,7 +81,7 @@ dojo.declare("dojox.rpc.Service", null, {
 		schema._service = func;
 		func.servicePath = servicePath;
 		func._schema = schema;
-
+		func.id = dojox.rpc.Service._nextId++;
 		return func;
 	},
 	_getRequest: function(method,args){
@@ -305,6 +305,7 @@ dojox.rpc.transportRegistry.register(
 	}
 );
 dojox.rpc.services={};
+dojox.rpc.Service._nextId = 1;
 
 dojo._contentHandlers.auto = function(xhr){
 	// automatically choose the right handler based on the returned content type
