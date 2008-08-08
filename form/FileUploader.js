@@ -60,7 +60,8 @@ dojox.form.FileUploader = function(options){
 			id:options.id,
 			selectMultipleFiles:options.selectMultipleFiles,
 			// Flash specifc arguments:
-			fileMask:options.fileMask
+			fileMask:options.fileMask,
+			isDebug:options.isDebug
 		});
 	}
 }
@@ -169,6 +170,7 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 		this._subs.push(dojo.subscribe(this.id+"/filesSelected", this, "_change"));
 		this._subs.push(dojo.subscribe(this.id+"/filesUploaded", this, "_complete"));
 		this._subs.push(dojo.subscribe(this.id+"/filesProgress", this, "_progress"));
+		this._subs.push(dojo.subscribe(this.id+"/filesError", this, "_error"));
 		this.flashObject = new dojox.embed.Flash(args, this.flashDiv);
 		this.flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.flashMovie = mov;
@@ -199,12 +201,19 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 		// Event is an array of all files
 	},
 	
+	onError: function(evtObject){
+		console.warn("FLASH/ERROR "+evtObject.type.toUpperCase()+":", evtObject); 	
+	},
+	
 	upload: function(){
 		// summary
 		// When called, begins file upload 
 		this.flashMovie.doUpload();
 	},
 	
+	_error: function(evt){
+		this.onError(evt);
+	},
 	
 	_openDialog: function(evt){
 		// opens the system dialog

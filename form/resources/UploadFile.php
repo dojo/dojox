@@ -10,13 +10,22 @@
 //				standard PHP build. 
 //
 require("cLOG.php");
-
+function findTempDirectory()
+  {
+    if(isset($_ENV["TMP"]) && is_writable($_ENV["TMP"])) return $_ENV["TMP"];
+    elseif( is_writable(ini_get('upload_tmp_dir'))) return ini_get('upload_tmp_dir');
+    elseif(isset($_ENV["TEMP"]) && is_writable($_ENV["TEMP"])) return $_ENV["TEMP"];
+    elseif(is_writable("/tmp")) return "/tmp";
+    elseif(is_writable("/windows/temp")) return "/windows/temp";
+    elseif(is_writable("/winnt/temp")) return "/winnt/temp";
+    else return null;
+  }
 function trace($txt){
 	//creating a text file that we can log to
 	// this is helpful on a remote server if you don't
 	//have access to the log files
 	//
-	error_log($txt);
+	echo($txt."<br/>");
 	$log = new cLOG("../resources/upload.txt", false);
 	//$log->clear();
 	$log->write($txt);
@@ -25,6 +34,7 @@ function getImageType($filename){
 	return strtolower(substr(strrchr($filename,"."),1));
 }
 trace("---------------------------------------------------------");
+trace("TmpDir:".findTempDirectory());
 //
 //
 //	EDIT ME: According to your local directory structure.
@@ -65,7 +75,9 @@ if( isset($_FILES['Filedata'])){
 	// 	If the data passed has 'uploadedfile', then it's HTML. 
 	//	There may be better ways to check this, but this is just a test file.$returnFlashdata = false;
 	//
-	move_uploaded_file($_FILES['uploadedfile']['tmp_name'],  $upload_path . $_FILES['uploadedfile']['name']);
+	$m = move_uploaded_file($_FILES['uploadedfile']['tmp_name'],  $upload_path . $_FILES['uploadedfile']['name']);
+	trace("moved:".$m);
+	trace("Temp:".$_FILES['uploadedfile']['tmp_name']);
 	$file = $upload_path . $_FILES['uploadedfile']['name'];
 	$type = getImageType($file);
 	list($width, $height) = getimagesize($file);

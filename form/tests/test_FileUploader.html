@@ -65,7 +65,7 @@
 		//using this early for the forceNoFlash test:
 		dojo.require("dojox.embed.Flash");
 		
-		var uploadUrl = "../resources/UploadFile.php";
+		var uploadUrl = "../XXXXresources/UploadFile.php";
 		var rmFiles = "";
 		var fileMask = [
 			["Jpeg File", 	"*.jpg;*.jpeg"],
@@ -114,7 +114,8 @@
 				uploadUrl:uploadUrl, 
 				uploadOnChange:false, 
 				selectMultipleFiles:selectMultipleFiles,
-				fileMask:fileMask
+				fileMask:fileMask,
+				isDebug:true
 			});
 			
 			doUpload = function(){
