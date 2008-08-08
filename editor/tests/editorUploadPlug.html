@@ -13,6 +13,12 @@
     <link href="../plugins/resources/editorPlugins.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
+passthrough = function(msg){
+	//for catching messages from Flash
+	if(window.console){
+		console.log(msg);	
+	}
+}
 var djConfig = {
 	isDebug: false,
 	parseOnLoad: true,
@@ -21,7 +27,6 @@ var djConfig = {
 	//forceFirebugLite:true
 };
 </script>
-
 <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 <script>
 	dojo.require("dojo.parser");
@@ -35,7 +40,7 @@ dojo.require("dijit._editor.plugins.FontChoice");
 dojo.require("dijit._editor.plugins.TextColor");
 	
 	dojo.addOnLoad(function(){
-		console.log(dojo.version.toString())
+		//
 	});
 		
 
@@ -51,8 +56,11 @@ margin:20px 100px;
 <body class="tundra">
 <div id="main">
 	<div dojoType="dijit.Editor" plugins="[
-                       'undo', 'redo', 'bold','italic','underline','|', 'copy', 'cut', 'paste','|','createLink','foreColor','hiliteColor','formatBlock',
-                        {name: 'dojox.editor.plugins.UploadImage', command: 'uploadImage', uploadUrl:'../plugins/resources/UploadFile.php', tempImageUrl:'../images/busy.gif'}
+                       'undo', 'redo', 'bold','italic','underline','|', 'copy', 'cut', 				
+                       'paste','|','createLink','foreColor','hiliteColor','formatBlock',
+                        {name: 'dojox.editor.plugins.UploadImage', command: 'uploadImage',
+                        uploadUrl:'../../form/resources/UploadFile.php', 
+                        downloadPath:'../../form/resources/', tempImageUrl:'../images/busy.gif'}
                     ]">
          <p>Click the upload icon to open a system dialog. Note that this will need to call a server script for the upload to work.</p>
          <p> 

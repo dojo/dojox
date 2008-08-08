@@ -1,6 +1,6 @@
 dojo.provide("dojox.editor.plugins.UploadImage");
 dojo.require("dijit._editor._Plugin");
-dojo.require("dojox.form.FileInputOverlay");
+dojo.require("dojox.form.FileUploader");
 
 dojo.experimental("dojox.editor.plugins.UploadImage");
 
@@ -28,23 +28,37 @@ dojo.declare("dojox.editor.plugins.UploadImage",
 		},
 		
 		createFileInput: function(){
-			this.fileInput = new dojox.form.FileInputOverlay({button:this.button, uploadUrl:this.uploadUrl, uploadOnChange:true});
+			var fileMask = [
+			["Jpeg File", 	"*.jpg;*.jpeg"],
+			["GIF File", 	"*.gif"],
+			["PNG File", 	"*.png"],
+			["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"]
+		];
+			console.warn("downloadPath:", this.downloadPath);
+			this.fileInput = new dojox.form.FileUploader({isDebug:true,button:this.button, uploadUrl:this.uploadUrl, uploadOnChange:true, selectMultipleFiles:false, fileMask:fileMask});
 			
 			dojo.connect(this.fileInput, "onChange", this, "insertTempImage");
 			dojo.connect(this.fileInput, "onComplete", this, "onComplete");
 		},
 		
 		onComplete: function(data,ioArgs,widgetRef){
+			data = data[0];
 			// Image is ready to insert
 			var tmpImgNode = dojo.withGlobal(this.editor.window, "byId", dojo, [this.currentImageId]);
-			var file = data.downloadfile;
-			
-			console.log("image uploaded:", data, "File:", file);
+			var file;
+			// download path is mainly used so we can access a PHP script
+			// not relative to this file. The server *should* return a qualified path.
+			if(this.downloadPath){
+				file = this.downloadPath+data.name
+			}else{
+				file = data.file;
+			}
 			
 			tmpImgNode.src = file;
-			tmpImgNode.width = data.width;
-			tmpImgNode.height = data.height;
-			
+			if(data.width){
+				tmpImgNode.width = data.width;
+				tmpImgNode.height = data.height;
+			}
 		},
 		
 		insertTempImage: function(){

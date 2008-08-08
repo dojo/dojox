@@ -5,6 +5,8 @@ dojo.require("dijit.Menu");
 dojo.require("dojo.i18n");
 dojo.requireLocalization("dojox.editor.plugins", "TableDialog");
 
+dojo.experimental("dojox.editor.plugins.TablePlugins");
+
 //	summary
 //		A series of plugins that give the Editor the ability to create and edit 
 //		HTML tables. See the end of this document for all avaiable plugins
@@ -579,7 +581,6 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			this.command = this.commandName;
 			
 			this.label = this.editor.commands[this.command] = this._makeTitle(this.command);
-			
 			this.inherited(arguments);
 			delete this.command;
 			
@@ -979,21 +980,23 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	// make first charcter lower case
-	var cmd = o.args.command.charAt(0).toLowerCase()+o.args.command.substring(1,o.args.command.length);
-	
-	switch(cmd){
-		case "insertTableRowBefore":
-		case "insertTableRowAfter":
-		case "insertTableColumnBefore":
-		case "insertTableColumnAfter":
-		case "deleteTableRow":
-		case "deleteTableColumn":
-		case "colorTableCell":
-		case "modifyTable":
-		case "insertTable":
-		case "tableContextMenu":
+	if(o.args && o.args.command){
+		var cmd = o.args.command.charAt(0).toLowerCase()+o.args.command.substring(1,o.args.command.length);
 		
-			o.plugin = new dojox.editor.plugins.TablePlugins({commandName: cmd});
-			break;
+		switch(cmd){
+			case "insertTableRowBefore":
+			case "insertTableRowAfter":
+			case "insertTableColumnBefore":
+			case "insertTableColumnAfter":
+			case "deleteTableRow":
+			case "deleteTableColumn":
+			case "colorTableCell":
+			case "modifyTable":
+			case "insertTable":
+			case "tableContextMenu":
+			
+				o.plugin = new dojox.editor.plugins.TablePlugins({commandName: cmd});
+				break;
+		}
 	}
 });

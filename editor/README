@@ -30,9 +30,13 @@ dojox SVN repository. Include the Editor and plugins in your page:
 
 dojo.require("dijit.Editor");
 dojo.require("dojox.editor.plugins.TablePlugins");
+dojo.require("dojox.editor.plugins.UploadImage");
 
 And the style sheet:
 
 <link href="[path]dojox/editor/plugins/resources/editorPlugins.css" type="text/css" rel="stylesheet" />
+<link href="[path]dojox/form/resources/FileInput.css" type="text/css" rel="stylesheet" />
 
-See dojox/editor/plugins/tests/editorTablePlugs.html for a markup example
+See tests for examples:
+dojox/editor/plugins/tests/editorTablePlugs.html
+dojox/editor/plugins/tests/editorUploadPlug.html
