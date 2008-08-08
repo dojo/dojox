@@ -44,11 +44,14 @@ if( isset($_FILES['Filedata'])){
 	//
 	// If the data passed has 'Filedata', then it's Flash. That's the default fieldname used.
 	//
+	trace("returnFlashdata.... ");
 	$returnFlashdata = true;
-	move_uploaded_file($_FILES['Filedata']['tmp_name'],  $upload_path . $_FILES['Filedata']['name']);
+	$m = move_uploaded_file($_FILES['Filedata']['tmp_name'],  $upload_path . $_FILES['Filedata']['name']);
+	trace("moved:" . $m);
 	$file = $upload_path . $_FILES['Filedata']['name'];
+	list($width, $height) = getimagesize($file);
 	$type = getImageType($file);
-	trace("file: " . $file );
+	trace("file: " . $file ."  ".$type." ".$width);
 	// 		Flash gets a string back:
 	$data ='file='.$file.',width='.$width.',height='.$height.',type='.$type;
 	if($returnFlashdata){
