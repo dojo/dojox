@@ -9,6 +9,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	queryOptions: null,
 	fetchText: '...',
 
+	// You can specify items instead of a query, if you like.  They do not need
+	// to be loaded - but the must be items in the store
+	items: null,
+	
 	_store_connects: null,
 	_by_idty: null,
 	_by_idx: null,
@@ -92,6 +96,12 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._refresh(true);
 	},
 	
+	setItems: function(items){
+		this.items = items;
+		this._setStore(this.store);
+		this._refresh(true);
+	},
+	
 	_setQuery: function(query, queryOptions){
 		this.query = query || this.query;
 		this.queryOptions = queryOptions || this.queryOptions;		
@@ -112,7 +122,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this._canEdit = !!f["dojo.data.api.Write"] && !!f["dojo.data.api.Identity"];
 			this._hasIdentity = !!f["dojo.data.api.Identity"];
 
-			if(!!f["dojo.data.api.Notification"]){
+			if(!!f["dojo.data.api.Notification"] && !this.items){
 				h.push(this.connect(this.store, "onSet", "_onSet"));
 				h.push(this.connect(this.store, "onNew", "_onNew"));
 				h.push(this.connect(this.store, "onDelete", "_onDelete"));
@@ -181,17 +191,50 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this._pending_requests[start] = true;
 			//console.log("fetch: ", start);
 			try{
-				this.store.fetch({
-					start: start,
-					count: this.rowsPerPage,
-					query: this.query,
-					sort: this.getSortProps(),
-					queryOptions: this.queryOptions,
-					isRender: isRender,
-					onBegin: dojo.hitch(this, "_onFetchBegin"),
-					onComplete: dojo.hitch(this, "_onFetchComplete"),
-					onError: dojo.hitch(this, "_onFetchError")
-				});
+				if(this.items){
+					var items = this.items;
+					var store = this.store;
+					this.rowsPerPage = items.length
+					var req = {
+						start: start,
+						count: this.rowsPerPage,
+						isRender: isRender
+					};
+					this._onFetchBegin(items.length, req);
+					
+					// Load them if we need to
+					var waitCount = 0;
+					dojo.forEach(items, function(i){
+						if(!store.isItemLoaded(i)){ waitCount++; }
+					});
+					if(waitCount === 0){
+						this._onFetchComplete(items, req);
+					}else{
+						var onItem = function(item){
+							waitCount--;
+							if(waitCount === 0){
+								this._onFetchComplete(items, req);
+							}
+						};
+						dojo.forEach(items, function(i){
+							if(!store.isItemLoaded(i)){
+								store.loadItem({item: i, onItem: onItem, scope: this});
+							}
+						}, this);
+					}
+				}else{
+					this.store.fetch({
+						start: start,
+						count: this.rowsPerPage,
+						query: this.query,
+						sort: this.getSortProps(),
+						queryOptions: this.queryOptions,
+						isRender: isRender,
+						onBegin: dojo.hitch(this, "_onFetchBegin"),
+						onComplete: dojo.hitch(this, "_onFetchComplete"),
+						onError: dojo.hitch(this, "_onFetchError")
+					});
+				}
 			}catch(e){
 				this._onFetchError(e);
 			}
