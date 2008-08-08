@@ -114,6 +114,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			this.service._store = this;
 			this.schema._idAttr = this.idAttribute;
 			this._constructor = dojox.rpc.JsonRest.getConstructor(this.service);
+			this._index = dojox.rpc.Rest._index;
 			//given a url, load json data from as the store
 		},
 		//Write API Support
@@ -245,7 +246,7 @@ dojo.declare("dojox.data.JsonRestStore",
 		},
 		_doQuery: function(args){
 			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
-			return dojox.rpc.JsonRest.get(this.service,query, args);
+			return dojox.rpc.JsonRest.query(this.service,query, args);
 		},
 		_processResults: function(results, deferred){
 			// index the results
@@ -253,18 +254,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			return {totalCount:deferred.fullLength || (deferred.request.count == count ? count * 2 : count), items: results};
 		},
 
-		fetchItemByIdentity: function(args){
-			// summary:
-			//		fetch an item by its identity. fetch and fetchItemByIdentity work the same
-
-			// convert the different spellings
-			args.query = args.identity;
-			args.onComplete = args.onItem;
-			args.useIndexCache = true;
-			delete args.onItem;
-			// we can rely on the Rest service to provide the index/cache
-			return this.fetch(args).results;
-		},
 		getConstructor: function(){
 			// summary:
 			// 		Gets the constructor for objects from this store

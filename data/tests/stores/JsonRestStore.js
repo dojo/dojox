@@ -67,8 +67,8 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 						jsonStore.setValue(items[0],"obj dup",items[0].obj);
 						jsonStore.setValue(items[0],"testArray",[1,2,3,4]);
 						jsonStore.save({onComplete:function(){
-							jsonStore.fetch({query:"obj1",
-								onComplete: function(item, request){
+							jsonStore.fetchItemByIdentity({identity:"obj1",
+								onItem: function(item, request){
 									t.is("Object 1", item.name);
 									t.is(now, item.updated);
 									t.is("bar", item.obj.foo);

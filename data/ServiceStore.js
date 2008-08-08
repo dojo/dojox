@@ -336,7 +336,16 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary: 
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			var item = this._index[this.service.servicePath + args.identity];
-			args.onItem.call(args.scope, item);
+			if(item){
+				args.onItem.call(args.scope, item);
+			}else{
+				// convert the different spellings
+				return this.fetch({
+						query: args.identity,
+						onComplete: args.onItem,
+						useIndexCache: true 
+					}).results;
+			}
 			return item;
 		}
 	

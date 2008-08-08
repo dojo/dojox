@@ -76,7 +76,9 @@ dojo.require("dojox.rpc.Rest");
 					dfd.addCallback(function(value){
 						try{
 							// Implements id assignment per the HTTP specification
-							object.__assignedId = dfd.ioArgs.xhr.getResponseHeader("Location");
+							var newId = dfd.ioArgs.xhr.getResponseHeader("Location");
+							object.__assignedId = newId;
+							Rest._index[newId] = object; 
 						}catch(e){}
 						if(!(--left)){
 							dirtyObjects.splice(0,numDirty); // remove all the objects that were committed
@@ -84,7 +86,6 @@ dojo.require("dojox.rpc.Rest");
 								kwArgs.onComplete.call(kwArgs.scope);
 							}
 						}
-						return value;
 					});
 				})(isPost && action.content,dfd);
 								
@@ -193,7 +194,7 @@ dojo.require("dojox.rpc.Rest");
 			// summary:
 			//		Fetches a resource by an absolute path/id and returns a dojo.Deferred.
 			var serviceAndId = jr.getServiceAndId(absoluteId);
-			return this.get(serviceAndId.service,serviceAndId.id);
+			return this.byId(serviceAndId.service,serviceAndId.id);
 		},
 		getIdAttribute: function(service){
 			// summary:
@@ -233,16 +234,18 @@ dojo.require("dojox.rpc.Rest");
 			jr.schemas[servicePath] = schema || service._schema || {};
 			jr.services[servicePath] = service;
 		},
-		get: function(service, id, args){
+		byId: function(service, id){
 			// if caching is allowed, we look in the cache for the result
-			var deferred, result = args && args.useIndexCache && Rest._index[(service.servicePath || '') + id];
+			var deferred, result = Rest._index[(service.servicePath || '') + id];
 			if(result && !result._loadObject){// cache hit
 				deferred = new dojo.Deferred();
 				deferred.callback(result);
 				return deferred;
 			}
-			
-			deferred = service(id, args);
+			return this.query(service, id);
+		},
+		query: function(service, id, args){
+			var deferred = service(id, args);
 			deferred.addCallback(function(result){
 				if(result.nodeType && result.cloneNode){
 					// return immediately if it is an XML document
@@ -263,7 +266,7 @@ dojo.require("dojox.rpc.Rest");
 			// load a lazy object
 			var serviceAndId = jr.getServiceAndId(this.__id);
 			var self = this;
-			jr.get(serviceAndId.service, serviceAndId.id).addBoth(function(result){
+			jr.query(serviceAndId.service, serviceAndId.id).addBoth(function(result){
 				// if they are the same this means an object was loaded, otherwise it 
 				// might be a primitive that was loaded or maybe an error
 				if(result == self){
