@@ -195,14 +195,14 @@ dojo.require("dojox.dtl._base");
 	});
 
 	dojo.mixin(ddtl, {
-		if_: function(parser, text){
-			var i, part, type, bools = [], parts = ddt.pySplit(text);
+		if_: function(parser, token){
+			var i, part, type, bools = [], parts = token.contents.split();
 			parts.shift();
-			text = parts.join(" ");
-			parts = text.split(" and ");
+			token = parts.join(" ");
+			parts = token.split(" and ");
 			if(parts.length == 1){
 				type = "or";
-				parts = text.split(" or ");
+				parts = token.split(" or ");
 			}else{
 				type = "and";
 				for(i = 0; i < parts.length; i++){
@@ -222,52 +222,52 @@ dojo.require("dojox.dtl._base");
 			}
 			var trues = parser.parse(["else", "endif"]);
 			var falses = false;
-			var token = parser.next();
-			if(token.text == "else"){
+			var token = parser.next_token();
+			if(token.contents == "else"){
 				falses = parser.parse(["endif"]);
-				parser.next();
+				parser.next_token();
 			}
 			return new ddtl.IfNode(bools, trues, falses, type);
 		},
-		_ifequal: function(parser, text, negate){
-			var parts = ddt.pySplit(text);
+		_ifequal: function(parser, token, negate){
+			var parts = token.split_contents();
 			if(parts.length != 3){
 				throw new Error(parts[0] + " takes two arguments");
 			}
 			var end = 'end' + parts[0];
 			var trues = parser.parse(["else", end]);
 			var falses = false;
-			var token = parser.next();
-			if(token.text == "else"){
+			var token = parser.next_token();
+			if(token.contents == "else"){
 				falses = parser.parse([end]);
-				parser.next();
+				parser.next_token();
 			}
 			return new ddtl.IfEqualNode(parts[1], parts[2], trues, falses, negate);
 		},
-		ifequal: function(parser, text){
-			return ddtl._ifequal(parser, text);
+		ifequal: function(parser, token){
+			return ddtl._ifequal(parser, token);
 		},
-		ifnotequal: function(parser, text){
-			return ddtl._ifequal(parser, text, true);
+		ifnotequal: function(parser, token){
+			return ddtl._ifequal(parser, token, true);
 		},
-		for_: function(parser, text){
-			var parts = ddt.pySplit(text);
+		for_: function(parser, token){
+			var parts = token.contents.split();
 			if(parts.length < 4){
-				throw new Error("'for' statements should have at least four words: " + text);
+				throw new Error("'for' statements should have at least four words: " + token.contents);
 			}
 			var reversed = parts[parts.length - 1] == "reversed";
 			var index = (reversed) ? -3 : -2;
 			if(parts[parts.length + index] != "in"){
-				throw new Error("'for' tag received an invalid argument: " + text);
+				throw new Error("'for' tag received an invalid argument: " + token.contents);
 			}
 			var loopvars = parts.slice(1, index).join(" ").split(/ *, */);
 			for(var i = 0; i < loopvars.length; i++){
 				if(!loopvars[i] || loopvars[i].indexOf(" ") != -1){
-					throw new Error("'for' tag received an invalid argument: " + text);
+					throw new Error("'for' tag received an invalid argument: " + token.contents);
 				}
 			}
 			var nodelist = parser.parse(["endfor"]);
-			parser.next();
+			parser.next_token();
 			return new ddtl.ForNode(loopvars, parts[parts.length + index + 1], reversed, nodelist);
 		}
 	});

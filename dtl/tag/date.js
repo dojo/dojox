@@ -3,23 +3,29 @@ dojo.provide("dojox.dtl.tag.date");
 dojo.require("dojox.dtl._base");
 dojo.require("dojox.dtl.utils.date");
 
-dojox.dtl.tag.date.NowNode = function(format, TextNode){
+dojox.dtl.tag.date.NowNode = function(format, node){
+	this._format = format;
 	this.format = new dojox.dtl.utils.date.DateFormat(format);
-	this.contents = new TextNode("");
+	this.contents = node;
 }
 dojo.extend(dojox.dtl.tag.date.NowNode, {
 	render: function(context, buffer){
 		this.contents.set(this.format.format(new Date()));
 		return this.contents.render(context, buffer);
+	},
+	unrender: function(context, buffer){
+		return this.contents.unrender(context, buffer);
+	},
+	clone: function(buffer){
+		return new this.constructor(this._format, this.contents.clone(buffer));
 	}
 });
 
-dojox.dtl.tag.date.now = function(parser, text){
+dojox.dtl.tag.date.now = function(parser, token){
 	// Split by either :" or :'
-	var parts = text.split((text.substring(0, 5) == "now '") ? "'" : '"');
-	if(parts.length != 3){
+	var parts = token.split_contents();
+	if(parts.length != 2){
 		throw new Error("'now' statement takes one argument");
 	}
-	var format = parts[1];
-	return new dojox.dtl.tag.date.NowNode(format, parser.getTextNodeConstructor());
+	return new dojox.dtl.tag.date.NowNode(parts[1].slice(1, -1), parser.create_text_node());
 }

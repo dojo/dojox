@@ -5,8 +5,8 @@ dojo.require("dojox.dtl._base");
 	var dd = dojox.dtl;
 	var ddtm = dd.tag.misc;
 
-	ddtm.DebugNode = dojo.extend(function(TextNode){
-		this._TextNode = TextNode;
+	ddtm.DebugNode = dojo.extend(function(text){
+		this.text = text;
 	},
 	{
 		render: function(context, buffer){
@@ -16,13 +16,13 @@ dojo.require("dojox.dtl._base");
 				console.debug("DEBUG", key, ":", context[key]);
 				debug += key + ": " + dojo.toJson(context[key]) + "\n\n";
 			}
-			return new this._TextNode(debug).render(context, buffer, this);
+			return this.text.set(debug).render(context, buffer, this);
 		},
 		unrender: function(context, buffer){
 			return buffer;
 		},
 		clone: function(buffer){
-			return new this.constructor(this._TextNode);
+			return new this.constructor(this.text.clone(buffer));
 		},
 		toString: function(){ return "ddtm.DebugNode"; }
 	});
@@ -48,12 +48,12 @@ dojo.require("dojox.dtl._base");
 		}
 	});
 
-	ddtm.FirstOfNode = dojo.extend(function(vars, TextNode){
+	ddtm.FirstOfNode = dojo.extend(function(vars, text){
 		this._vars = vars;
 		this.vars = dojo.map(vars, function(item){
 			return new dojox.dtl._Filter(item);
 		});
-		this.contents = new TextNode("");
+		this.contents = text;
 	},
 	{
 		render: function(context, buffer){
@@ -73,13 +73,13 @@ dojo.require("dojox.dtl._base");
 			return this.contents.unrender(context, buffer);
 		},
 		clone: function(buffer){
-			return new this.constructor(this._vars, this.contents.constructor);
+			return new this.constructor(this._vars, this.contents.clone(buffer));
 		}
 	});
 
-	ddtm.SpacelessNode = dojo.extend(function(nodelist, TextNode){
+	ddtm.SpacelessNode = dojo.extend(function(nodelist, text){
 		this.nodelist = nodelist;
-		this.TextNode = TextNode;
+		this.contents = text;
 	},
 	{
 		render: function(context, buffer){
@@ -93,9 +93,6 @@ dojo.require("dojox.dtl._base");
 				dojo.disconnect(watch[0]);
 				dojo.disconnect(watch[1]);
 			}else{
-				if(!this.contents){
-					this.contents = new this.TextNode("");
-				}
 				var value = this.nodelist.dummyRender(context);
 				this.contents.set(value.replace(/>\s+</g, '><'));
 				buffer = this.contents.render(context, buffer);
@@ -106,7 +103,7 @@ dojo.require("dojox.dtl._base");
 			return this.nodelist.unrender(context, buffer);
 		},
 		clone: function(buffer){
-			return new this.constructor(this.nodelist.clone(buffer));
+			return new this.constructor(this.nodelist.clone(buffer), this.contents.clone(buffer));
 		},
 		_isEmpty: function(node){
 			return (node.nodeType == 3 && !node.data.match(/[^\s\n]/));
@@ -143,9 +140,9 @@ dojo.require("dojox.dtl._base");
 		}
 	});
 
-	ddtm.TemplateTagNode = dojo.extend(function(tag, TextNode){
+	ddtm.TemplateTagNode = dojo.extend(function(tag, text){
 		this.tag = tag;
-		this.contents = new TextNode("");
+		this.contents = text;
 	},
 	{
 		mapping: {
@@ -166,15 +163,15 @@ dojo.require("dojox.dtl._base");
 			return this.contents.unrender(context, buffer);
 		},
 		clone: function(buffer){
-			return new this.constructor(this.tag, this.contents.constructor);
+			return new this.constructor(this.tag, this.contents.clone(buffer));
 		}
 	});
 
-	ddtm.WidthRatioNode = dojo.extend(function(current, max, width, TextNode){
+	ddtm.WidthRatioNode = dojo.extend(function(current, max, width, text){
 		this.current = new dd._Filter(current);
 		this.max = new dd._Filter(max);
 		this.width = width;
-		this.contents = new TextNode("");
+		this.contents = text;
 	},
 	{
 		render: function(context, buffer){
@@ -191,7 +188,7 @@ dojo.require("dojox.dtl._base");
 			return this.contents.unrender(context, buffer);
 		},
 		clone: function(buffer){
-			return new this.constructor(this.current.getExpression(), this.max.getExpression(), this.width, this.contents.constructor);
+			return new this.constructor(this.current.getExpression(), this.max.getExpression(), this.width, this.contents.clone(buffer));
 		}
 	});
 
@@ -218,37 +215,37 @@ dojo.require("dojox.dtl._base");
 	});
 
 	dojo.mixin(ddtm, {
-		comment: function(parser, text){
+		comment: function(parser, token){
 			// summary: Ignore everything between {% comment %} and {% endcomment %}
-			parser.skipPast("endcomment");
+			parser.skip_past("endcomment");
 			return dd._noOpNode;
 		},
-		debug: function(parser, text){
+		debug: function(parser, token){
 			// summary: Output the current context, maybe add more stuff later.
-			return new ddtm.DebugNode(parser.getTextNodeConstructor());
+			return new ddtm.DebugNode(parser.create_text_node());
 		},
-		filter: function(parser, text){
+		filter: function(parser, token){
 			// summary: Filter the contents of the blog through variable filters.
-			var parts = text.split(" ", 2);
-			var varnode = new (parser.getVarNodeConstructor())("var|" + parts[1]);
+			var rest = token.contents.split(null, 1)[1];
+			var varnode = parser.create_variable_node("var|" + rest);
 			var nodelist = parser.parse(["endfilter"]);
-			parser.next();
+			parser.next_token();
 			return new ddtm.FilterNode(varnode, nodelist);
 		},
-		firstof: function(parser, text){
-			var parts = dojox.dtl.text.pySplit(text).slice(1);
+		firstof: function(parser, token){
+			var parts = token.split_contents().slice(1);
 			if(!parts.length){
 				throw new Error("'firstof' statement requires at least one argument");
 			}
-			return new ddtm.FirstOfNode(parts, parser.getTextNodeConstructor());
+			return new ddtm.FirstOfNode(parts, parser.create_text_node());
 		},
-		spaceless: function(parser, text){
+		spaceless: function(parser, token){
 			var nodelist = parser.parse(["endspaceless"]);
-			parser.next();
-			return new ddtm.SpacelessNode(nodelist, parser.getTextNodeConstructor());
+			parser.delete_first_token();
+			return new ddtm.SpacelessNode(nodelist, parser.create_text_node());
 		},
-		templatetag: function(parser, text){
-			var parts = dd.text.pySplit(text);
+		templatetag: function(parser, token){
+			var parts = token.contents.split();
 			if(parts.length != 2){
 				throw new Error("'templatetag' statement takes one argument");
 			}
@@ -261,10 +258,10 @@ dojo.require("dojox.dtl._base");
 				}
 				throw new Error("Invalid templatetag argument: '" + tag + "'. Must be one of: " + keys.join(", "));
 			}
-			return new ddtm.TemplateTagNode(tag, parser.getTextNodeConstructor());
+			return new ddtm.TemplateTagNode(tag, parser.create_text_node());
 		},
-		widthratio: function(parser, text){
-			var parts = dd.text.pySplit(text);
+		widthratio: function(parser, token){
+			var parts = token.contents.split();
 			if(parts.length != 4){
 				throw new Error("widthratio takes three arguments");
 			}
@@ -272,15 +269,15 @@ dojo.require("dojox.dtl._base");
 			if(typeof width != "number"){
 				throw new Error("widthratio final argument must be an integer");
 			}
-			return new ddtm.WidthRatioNode(parts[1], parts[2], width, parser.getTextNodeConstructor());
+			return new ddtm.WidthRatioNode(parts[1], parts[2], width, parser.create_text_node());
 		},
-		with_: function(parser, text){
-			var parts = dd.text.pySplit(text);
+		with_: function(parser, token){
+			var parts = token.split_contents();
 			if(parts.length != 4 || parts[2] != "as"){
 				throw new Error("do_width expected format as 'with value as name'");
 			}
 			var nodelist = parser.parse(["endwith"]);
-			parser.next();
+			parser.next_token();
 			return new ddtm.WithNode(parts[1], parts[3], nodelist);
 		}
 	});

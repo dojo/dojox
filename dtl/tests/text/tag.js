@@ -43,6 +43,17 @@ doh.register("dojox.dtl.text.tag",
 			var template = new dd.Template("{% extends parent %}{% block pocket %}My {{ item }}{% endblock %}");
 			t.is("(My apple) (My banana) (My lemon) Pocket", template.render(context));
 		},
+		function test_tag_block_super(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				parent: dojo.moduleUrl("dojox.dtl.tests.templates", "pocket2.html"),
+				items: ["apple", "banana", "lemon" ]
+			});
+
+			var template = new dd.Template("{% extends parent %}{% block pocket %}My {{ item }} {{ block.super }}{% endblock %}");
+			t.is("(My apple Hot) (My banana Hot) (My lemon Hot) Pocket", template.render(context));
+		},
 		function test_tag_comment(t){
 			var dd = dojox.dtl;
 

@@ -51,7 +51,7 @@ dojo.require("dojo.parser");
 					// oh, if only JS had tuple assignment
 					var funcNameArr = type.split(":");
 					type = trim(funcNameArr[0]);
-					fn = trim(funcNameArr[1]);
+					fn = trim(funcNameArr.slice(1).join(":"));
 				}else{
 					type = trim(type);
 				}
@@ -185,27 +185,27 @@ dojo.require("dojo.parser");
 
 	dojo.mixin(ddcd, {
 		widgetsInTemplate: true,
-		dojoAttachPoint: function(parser, text){
-			return new ddcd.AttachNode(dojo.trim(text).slice(16).split(/\s*,\s*/));
+		dojoAttachPoint: function(parser, token){
+			return new ddcd.AttachNode(token.contents.slice(16).split(/\s*,\s*/));
 		},
-		dojoAttachEvent: function(parser, text){
-			return new ddcd.EventNode(text.slice(16));
+		dojoAttachEvent: function(parser, token){
+			return new ddcd.EventNode(token.contents.slice(16));
 		},
-		dojoType: function(parser, text){
+		dojoType: function(parser, token){
 			if(ddcd.widgetsInTemplate){
 				var node = parser.swallowNode();
 				var parsed = false;
-				if(text.slice(-7) == " parsed"){
+				if(token.contents.slice(-7) == " parsed"){
 					parsed = true;
-					node.setAttribute("dojoType", dojo.trim(text).slice(0, -7));
+					node.setAttribute("dojoType", token.contents.slice(0, -7));
 				}
 				return new ddcd.DojoTypeNode(node, parsed);
 			}
 			return dd._noOpNode;
 		},
-		on: function(parser, text){
+		on: function(parser, token){
 			// summary: Associates an event type to a function (on the current widget) by name
-			var parts = text.split(" ");
+			var parts = token.contents.split();
 			return new ddcd.EventNode(parts[0] + ":" + parts.slice(1).join(" "));
 		}
 	});

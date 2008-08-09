@@ -84,8 +84,30 @@ doh.register("dojox.dtl.html.tag",
 				]
 			});
 
-			var template = new dd.HtmlTemplate('<div><ul>I {% for action in actions %}{% if not forloop.first %}, {% endif %}{{action}}{% endfor %} the following:<ul>{% for item in items %}<li>{{ item.name }}{% if item.date %} at {{ item.date|date:"P" }}{% endif %}</li>{% endfor %}</ul></ul></div>');
+			var template = new dd.HtmlTemplate('<div><ul>I {% for action in actions %}{% if not forloop.first %}, {% endif %}{{ action }}{% endfor %} the following:<ul>{% for item in items %}<li>{{ item.name }}{% if item.date %} at {{ item.date|date:"P" }}{% endif %}</li>{% endfor %}</ul></ul></div>');
 			t.is('<div><ul>I ate, picked the following:<ul><li>apple</li><li>banana at 2:30 pm</li><li>orange at noon</li></ul></ul></div>', dd.tests.html.util.render(template, context));
+		},
+		function test_tag_attributes(){
+			var dd = dojox.dtl;
+
+			var template = new dd.HtmlTemplate('<div>{% for item in items %}<a index="{{forloop.counter0}}" id="id_{{item.param}}">{{item.param}}</a>{% endfor %}</div>');
+			var context = new dd.Context({
+				items: [
+					{
+						name: "apple",
+						param: "appleparam"
+					},
+					{
+						name: "banana",
+						param: "bananaparam"
+					},
+					{
+						name: "orange",
+						param: "orangeparam"
+					}
+				]
+			});
+			doh.is('<div><a index="0" id="id_appleparam">appleparam</a><a index="1" id="id_bananaparam">bananaparam</a><a index="2" id="id_orangeparam">orangeparam</a></div>', dd.tests.html.util.render(template, context));
 		},
 		function test_tag_extend(t){
 			// Problems to look for:

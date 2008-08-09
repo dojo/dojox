@@ -32,12 +32,15 @@ dojox.dtl._HtmlTemplated = {
 			}
 			this.render(context);
 		},
-		render: function(/*dojox.dtl.Context?*/ context){
+		render: function(/*dojox.dtl.Context?*/ context, /*dojox.dtl.HtmlTemplate?*/ tpl){
 			if(this._rendering){
 				clearTimeout(this._rendering);
 				delete this._rendering;
 			}
-			this._render.render(this._getContext(context));
+			if(tpl){
+				this._template = tpl;
+			}
+			this._render.render(this._getContext(context), this._template);
 		},
 		_getContext: function(context){
 			if (!(context instanceof dojox.dtl.Context)) {

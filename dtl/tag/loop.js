@@ -7,10 +7,10 @@ dojo.require("dojox.string.tokenize");
 	var dd = dojox.dtl;
 	var ddtl = dd.tag.loop;
 
-	ddtl.CycleNode = dojo.extend(function(cyclevars, name, TextNode, shared){
+	ddtl.CycleNode = dojo.extend(function(cyclevars, name, text, shared){
 		this.cyclevars = cyclevars;
 		this.name = name;
-		this.TextNode = TextNode;
+		this.contents = text;
 		this.shared = shared || {counter: -1, map: {}};
 	},
 	{
@@ -31,17 +31,14 @@ dojo.require("dojox.string.tokenize");
 			if(this.name){
 				context[this.name] = value;
 			}
-			if(!this.contents){
-				this.contents = new this.TextNode("");
-			}
 			this.contents.set(value);
 			return this.contents.render(context, buffer);
 		},
 		unrender: function(context, buffer){
 			return this.contents.unrender(context, buffer);
 		},
-		clone: function(){
-			return new this.constructor(this.cyclevars, this.name, this.TextNode, this.shared);
+		clone: function(buffer){
+			return new this.constructor(this.cyclevars, this.name, this.contents.clone(buffer), this.shared);
 		}
 	});
 
@@ -131,9 +128,9 @@ dojo.require("dojox.string.tokenize");
 	});
 
 	dojo.mixin(ddtl, {
-		cycle: function(parser, text){
+		cycle: function(parser, token){
 			// summary: Cycle among the given strings each time this tag is encountered
-			var args = text.split(" ");
+			var args = token.split_contents();
 
 			if(args.length < 2){
 				throw new Error("'cycle' tag requires at least two arguments");
@@ -163,26 +160,26 @@ dojo.require("dojox.string.tokenize");
 			if(args.length > 4 && args[args.length - 2] == "as"){
 				var name = args[args.length - 1];
 
-				var node = new ddtl.CycleNode(args.slice(1, args.length - 2), name, parser.getTextNodeConstructor());
+				var node = new ddtl.CycleNode(args.slice(1, args.length - 2), name, parser.create_text_node());
 
 				if(!parser._namedCycleNodes){
 					parser._namedCycleNodes = {};
 				}
 				parser._namedCycleNodes[name] = node;
 			}else{
-				node = new ddtl.CycleNode(args.slice(1), null, parser.getTextNodeConstructor());
+				node = new ddtl.CycleNode(args.slice(1), null, parser.create_text_node());
 			}
 
 			return node;
 		},
-		ifchanged: function(parser, text){
-			var parts = dojox.dtl.text.pySplit(text);
+		ifchanged: function(parser, token){
+			var parts = token.contents.split();
 			var nodes = parser.parse(["endifchanged"]);
-			parser.next();
+			parser.next_token();
 			return new ddtl.IfChangedNode(nodes, parts.slice(1));
 		},
-		regroup: function(parser, text){
-			var tokens = dojox.string.tokenize(dojo.trim(text), /(\s+)/g, function(spaces){
+		regroup: function(parser, token){
+			var tokens = dojox.string.tokenize(token.contents, /(\s+)/g, function(spaces){
 				return spaces;
 			});
 			if(tokens.length < 11 || tokens[tokens.length - 3] != "as" || tokens[tokens.length - 7] != "by"){

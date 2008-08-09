@@ -287,13 +287,13 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		}).join("");
 	},
 	wordcount: function(value){
-		return dojox.dtl.text.pySplit(value).length;
+		return dojo.trim(value).split(/\s+/g).length;
 	},
 	wordwrap: function(value, arg){
 		arg = parseInt(arg);
 		// summary: Wraps words at specified line length
 		var output = [];
-		var parts = value.split(/ /g);
+		var parts = value.split(/\s+/g);
 		if(parts.length){
 			var word = parts.shift();
 			output.push(word);

@@ -87,7 +87,7 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 		output.append("<").append(name);
 
 		var attributes = dojo.filter(tokens, function(token){
-			if(token[0] == types.attr){
+			if(token[0] == dojox.dtl.TOKEN_ATTR){
 				for(var i = 0, group; group = clones[i]; i++){
 					// group is any set of nodes that were originally the sam
 					var count = 0;
@@ -114,6 +114,9 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 				value = node.htmlFor || value;
 			}else if(node.getAttribute){
 				value = node.getAttribute(attribute[2], 2) || value;
+				if(attribute[2] == "type" && node.tagName == "TEXTAREA"){
+					continue;
+				}
 				if(dojo.isIE && (attribute[2] == "href" || attribute[2] == "src")){
 					if(dojo.isIE){
 						var hash = location.href.lastIndexOf(location.hash);

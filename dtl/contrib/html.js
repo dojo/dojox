@@ -6,55 +6,6 @@ dojo.require("dojox.dtl.html");
 	var dd = dojox.dtl;
 	var ddch = dd.contrib.html;
 
-	ddch.HtmlNode = dojo.extend(function(name){
-		this.contents = new dd._Filter(name);
-		this._div = document.createElement("div");
-		this._lasts = [];
-	},
-	{
-		_cache: {},
-		render: function(context, buffer){
-			var text = this.contents.resolve(context);
-			if(text){
-				text = text.replace(/<(\/?script)/ig, '&lt;$1').replace(/\bon[a-z]+\s*=/ig, '');
-				if(this._rendered && this._last != text){
-					buffer = this.unrender(context, buffer);
-				}
-				this._last = text;
-
-				// This can get reset in the above tag
-				if(!this._rendered){
-					this._rendered = true;
-					var div = this._div;
-					div.innerHTML = text;
-					var children = div.childNodes;
-					while(children.length){
-						var removed = div.removeChild(children[0]);
-						this._lasts.push(removed);
-						buffer = buffer.concat(removed);
-					}
-				}
-			}
-
-			return buffer;
-		},
-		unrender: function(context, buffer){
-			if(this._rendered){
-				this._rendered = false;
-				this._last = "";
-				for(var i = 0, node; node = this._lasts[i++];){
-					buffer = buffer.remove(node);
-					dojo._destroyElement(node);
-				}
-				this._lasts = [];
-			}
-			return buffer;
-		},
-		clone: function(buffer){
-			return new this.constructor(this.contents.getExpression());
-		}
-	});
-
 	ddch.StyleNode = dojo.extend(function(styles){
 		this.contents = {};
 		this._styles = styles;
@@ -77,15 +28,56 @@ dojo.require("dojox.dtl.html");
 		}
 	});
 
-	dojo.mixin(ddch, {
-		html: function(parser, text){
-			var parts = text.split(" ", 2);
-			return new ddch.HtmlNode(parts[1]);
+	ddch.BufferNode = dojo.extend(function(nodelist){
+		this.nodelist = nodelist;
+	},
+	{
+		_swap: function(){
+			if(!this.swapped && this.parent.parentNode){
+				dojo.disconnect(this.onAddNode);
+				dojo.disconnect(this.onRemoveNode);
+				this.swapped = this.parent.cloneNode(true);
+				this.parent.parentNode.replaceChild(this.swapped, this.parent);
+			}
 		},
-		tstyle: function(parser, text){
+		render: function(context, buffer){
+			this.parent = buffer.getParent();
+			this.onAddNode = dojo.connect(buffer, "onAddNode", this, "_swap");
+			this.onRemoveNode = dojo.connect(buffer, "onRemoveNode", this, "_swap");
+			buffer = this.nodelist.render(context, buffer);
+			if(this.swapped){
+				this.swapped.parentNode.replaceChild(this.parent, this.swapped);
+				dojo._destroyElement(this.swapped);
+			}else{
+				dojo.disconnect(this.onAddNode);
+				dojo.disconnect(this.onRemoveNode);
+			}
+			delete this.parent;
+			delete this.swapped;
+			return buffer;
+		},
+		unrender: function(context, buffer){
+			return this.nodelist.unrender(context, buffer);
+		},
+		clone: function(buffer){
+			return new this.constructor(this.nodelist.clone(buffer));
+		}
+	});
+
+	dojo.mixin(ddch, {
+		buffer: function(parser, token){
+			var nodelist = parser.parse(["endbuffer"]);
+			parser.next_token();
+			return new ddch.BufferNode(nodelist);
+		},
+		html: function(parser, token){
+			dojo.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead")
+			return parser.create_variable_node(token.contents.slice(5) + "|safe");
+		},
+		tstyle: function(parser, token){
 			var styles = {};
-			text = text.replace(/^tstyle\s+/, "");
-			var rules = text.split(/\s*;\s*/g);
+			token = token.contents.replace(/^tstyle\s+/, "");
+			var rules = token.split(/\s*;\s*/g);
 			for(var i = 0, rule; rule = rules[i]; i++){
 				var parts = rule.split(/\s*:\s*/g);
 				var key = parts[0];
@@ -99,6 +91,6 @@ dojo.require("dojox.dtl.html");
 	});
 
 	dd.register.tags("dojox.dtl.contrib", {
-		"html": ["html", "attr:tstyle"]
+		"html": ["html", "attr:tstyle", "buffer"]
 	});
 })();

@@ -11,30 +11,47 @@ dojo.require("dojox.dtl._base");
 		this.nodelist = nodelist; // Can be overridden
 	},
 	{
+		"super": function(){
+			if(this.parent){
+				var html = this.parent.nodelist.dummyRender(this.context);
+				if(typeof html == "string"){
+					html = new String(html);
+				}
+				html.safe = true;
+				return html;
+			}
+			return '';
+		},
 		render: function(context, buffer){
 			var name = this.name;
 			var nodelist = this.nodelist;
+			var parent;
 			if(buffer.blocks){
 				var block = buffer.blocks[name];
 				if(block){
+					parent = block.parent;
 					nodelist = block.nodelist;
 					block.used = true;
 				}
 			}
 			this.rendered = nodelist;
-			return nodelist.render(context, buffer, this);
+
+			context.push();
+			this.context = context;
+			this.parent = null;
+			if(nodelist != this.nodelist){
+				this.parent = this;
+			}
+			context["block"] = this;
+			buffer = nodelist.render(context, buffer, this);
+			context.pop();
+			return buffer;
 		},
 		unrender: function(context, buffer){
 			return this.rendered.unrender(context, buffer);
 		},
 		clone: function(buffer){
 			return new this.constructor(this.name, this.nodelist.clone(buffer));
-		},
-		setOverride: function(nodelist){
-			// summary: In a shared parent, we override, not overwrite
-			if(!this.override){
-				this.override = nodelist;
-			}
 		},
 		toString: function(){ return "dojox.dtl.tag.loader.BlockNode"; }
 	});
@@ -64,6 +81,7 @@ dojo.require("dojox.dtl._base");
 					if(url){
 						parent = this.parent = url.toString();
 					}else if(parent.templateString){
+						// Allow the builder's string interning to work
 						string = parent.templateString;
 						parent = this.parent = " ";
 					}else{
@@ -93,12 +111,17 @@ dojo.require("dojox.dtl._base");
 		render: function(context, buffer){
 			var parent = this.getParent(context);
 
+			parent.blocks = parent.blocks || {};
 			buffer.blocks = buffer.blocks || {};
 
-			// The parent won't always be in the default parent's nodelist
 			for(var i = 0, node; node = this.nodelist.contents[i]; i++){
 				if(node instanceof dojox.dtl.tag.loader.BlockNode){
-					buffer.blocks[node.name] = {
+					var old = parent.blocks[node.name];
+					if(old && old.nodelist != node.nodelist){
+						// In a shared template, the individual blocks might change
+						buffer = old.nodelist.unrender(context, buffer);
+					}
+					parent.blocks[node.name] = buffer.blocks[node.name] = {
 						shared: this.shared,
 						nodelist: node.nodelist,
 						used: false
@@ -107,22 +130,7 @@ dojo.require("dojox.dtl._base");
 			}
 
 			this.rendered = parent;
-			buffer = parent.nodelist.render(context, buffer, this);
-
-			var rerender = false;
-			for(var name in buffer.blocks){
-				var block = buffer.blocks[name];
-				if(!block.used){
-					rerender = true;
-					parent.nodelist[0].nodelist.append(block.nodelist);
-				}
-			}
-
-			if(rerender){
-				buffer = parent.nodelist.render(context, buffer, this);
-			}
-
-			return buffer;
+			return parent.nodelist.render(context, buffer, this);
 		},
 		unrender: function(context, buffer){
 			return this.rendered.unrender(context, buffer, this);
@@ -130,12 +138,12 @@ dojo.require("dojox.dtl._base");
 		toString: function(){ return "dojox.dtl.block.ExtendsNode"; }
 	});
 
-	ddtl.IncludeNode = dojo.extend(function(path, constant, getTemplate, TextNode, parsed){
+	ddtl.IncludeNode = dojo.extend(function(path, constant, getTemplate, text, parsed){
 		this._path = path;
 		this.constant = constant;
 		this.path = (constant) ? path : new dd._Filter(path);
 		this.getTemplate = getTemplate;
-		this.TextNode = TextNode;
+		this.text = text;
 		this.parsed = (arguments.length == 5) ? parsed : true;
 	},
 	{
@@ -164,9 +172,9 @@ dojo.require("dojox.dtl._base");
 				}
 				return this.rendered.render(context, buffer, this);
 			}else{
-				if(this.TextNode == dd._TextNode){
+				if(this.text instanceof dd._TextNode){
 					if(dirty){
-						this.rendered = new this.TextNode("");
+						this.rendered = this.text;
 						this.rendered.set(dd.text._resolveTemplateArg(location, true));
 					}
 					return this.rendered.render(context, buffer);
@@ -208,13 +216,13 @@ dojo.require("dojox.dtl._base");
 			return buffer;
 		},
 		clone: function(buffer){
-			return new this.constructor(this._path, this.constant, this.getTemplate, this.TextNode, this.parsed);
+			return new this.constructor(this._path, this.constant, this.getTemplate, this.text.clone(buffer), this.parsed);
 		}
 	});
 
 	dojo.mixin(ddtl, {
-		block: function(parser, text){
-			var parts = text.split(" ");
+		block: function(parser, token){
+			var parts = token.contents.split();
 			var name = parts[1];
 
 			parser._blocks = parser._blocks || {};
@@ -222,11 +230,11 @@ dojo.require("dojox.dtl._base");
 			parser._blocks[name].push(name);
 
 			var nodelist = parser.parse(["endblock", "endblock " + name]);
-			parser.next();
+			parser.next_token();
 			return new dojox.dtl.tag.loader.BlockNode(name, nodelist);
 		},
-		extends_: function(parser, text){
-			var parts = text.split(" ");
+		extends_: function(parser, token){
+			var parts = token.contents.split();
 			var shared = false;
 			var parent = null;
 			var key = null;
@@ -243,7 +251,7 @@ dojo.require("dojox.dtl._base");
 			return new dojox.dtl.tag.loader.ExtendsNode(parser.getTemplate, nodelist, shared, parent, key);
 		},
 		include: function(parser, token){
-			var parts = dd.text.pySplit(token);
+			var parts = token.contents.split();
 			if(parts.length != 2){
 				throw new Error(parts[0] + " tag takes one argument: the name of the template to be included");
 			}
@@ -253,7 +261,7 @@ dojo.require("dojox.dtl._base");
 				path = path.slice(1, -1);
 				constant = true;
 			}
-			return new ddtl.IncludeNode(path, constant, parser.getTemplate, parser.getTextNodeConstructor());
+			return new ddtl.IncludeNode(path, constant, parser.getTemplate, parser.create_text_node());
 		},
 		ssi: function(parser, token){
 			// We're going to treat things a little differently here.
@@ -262,7 +270,7 @@ dojo.require("dojox.dtl._base");
 
 			// Instead, we'll just replicate the include tag, but with that
 			// optional "parsed" parameter.
-			var parts = dd.text.pySplit(token);
+			var parts = token.contents.split();
 			var parsed = false;
 			if(parts.length == 3){
 				parsed = (parts.pop() == "parsed");
@@ -270,7 +278,7 @@ dojo.require("dojox.dtl._base");
 					throw new Error("Second (optional) argument to ssi tag must be 'parsed'");
 				}
 			}
-			var node = ddtl.include(parser, parts.join(" "));
+			var node = ddtl.include(parser, new dd.Token(token.token_type, parts.join(" ")));
 			node.parsed = parsed;
 			return node;
 		}

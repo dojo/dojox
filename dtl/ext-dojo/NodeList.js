@@ -3,7 +3,7 @@ dojo.require("dojox.dtl._base");
 
 dojo.extend(dojo.NodeList, {
 	dtl: function(template, context){
-		// args: dojox.dtl.__StringArgs|String
+		// template: dojox.dtl.__StringArgs|String
 		//		The template string or location
 		// context: dojox.dtl.__ObjectArgs|Object
 		//		The context object or location

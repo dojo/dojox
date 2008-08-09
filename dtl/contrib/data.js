@@ -92,13 +92,12 @@ dojo.require("dojox.dtl._base");
 
 	dojo.mixin(ddcd, {
 		_get: function(key){
-			console.debug(key);
 			if(this.length){
 				return this[0].get(key);
 			}
 		},
-		bind_data: function(parser, text){
-			var parts = dd.text.pySplit(text);
+		bind_data: function(parser, token){
+			var parts = token.contents.split();
 
 			if(parts[2] != 'to' || parts[4] != 'as' || !parts[5]){
 				throw new Error("data_bind expects the format: 'data_bind items to store as varName'");

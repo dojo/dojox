@@ -6,6 +6,11 @@ dojo.require("dojox.string.tokenize");
 (function(){
 	var dd = dojox.dtl;
 
+	dd.TOKEN_BLOCK = -1;
+	dd.TOKEN_VAR = -2;
+	dd.TOKEN_COMMENT = -3;
+	dd.TOKEN_TEXT = 3;
+
 	dd._Context = dojo.extend(function(dict){
 		// summary: Pass one of these when rendering a template to tell the template what values to use.
 		dojo.mixin(this, dict || {});
@@ -71,13 +76,55 @@ dojo.require("dojox.string.tokenize");
 		}
 	});
 
+	var smart_split_re = /("(?:[^"\\]*(?:\\.[^"\\]*)*)"|'(?:[^'\\]*(?:\\.[^'\\]*)*)'|[^\s]+)/g;           
+	var split_re = /\s+/g;
+	var split = function(/*String|RegExp?*/ splitter, /*Integer?*/ limit){
+		splitter = splitter || split_re;
+		if(!(splitter instanceof RegExp)){
+			splitter = new RegExp(splitter, "g");
+		}
+		if(!splitter.global){
+			throw new Error("You must use a globally flagged RegExp with split " + splitter);
+		}
+		splitter.exec(""); // Reset the global
+
+		var part, parts = [], lastIndex = 0, i = 0;
+		while(part = splitter.exec(this)){
+			parts.push(this.slice(lastIndex, splitter.lastIndex - part[0].length));
+			lastIndex = splitter.lastIndex;
+			if(limit && (++i > limit - 1)){
+				break;
+			}
+		}
+		parts.push(this.slice(lastIndex));
+		return parts;
+	}
+
+	dd.Token = function(token_type, contents){
+		this.token_type = token_type;
+		this.contents = new String(dojo.trim(contents));
+		this.contents.split = split;
+		this.split = function(){
+			return String.prototype.split.apply(this.contents, arguments);
+		}
+	}
+	dd.Token.prototype.split_contents = function(/*Integer?*/ limit){
+		var bit, bits = [], i = 0;
+		limit = limit || 999;
+		while(i++ < limit && (bit = smart_split_re.exec(this.contents))){
+			bit = bit[0];
+			if(bit.charAt(0) == '"' && bit.slice(-1) == '"'){
+				bits.push('"' + bit.slice(1, -1).replace('\\"', '"').replace('\\\\', '\\') + '"');
+			}else if(bit.charAt(0) == "'" && bit.slice(-1) == "'"){
+				bits.push("'" + bit.slice(1, -1).replace("\\'", "'").replace('\\\\', '\\') + "'");
+			}else{
+				bits.push(bit);
+			}
+		}
+		return bits;
+	}
+
 	var ddt = dd.text = {
-		types: {tag: -1, varr: -2, text: 3},
-		pySplit: function(str){
-			// summary: Split a string according to Python's split function
-			str = dojo.trim(str);
-			return (!str.length) ? [] : str.split(/\s+/g);
-		},
 		_get: function(module, name, errorless){
 			// summary: Used to find both tags and filters
 			var params = dd.register.get(module, name.toLowerCase(), errorless);
@@ -110,7 +157,7 @@ dojo.require("dojox.string.tokenize");
 			return ddt._get("filter", name, errorless);
 		},
 		getTemplate: function(file){
-			return new dd.Template(dd.getTemplateString(file));
+			return new dd.Template(ddt.getTemplateString(file));
 		},
 		getTemplateString: function(file){
 			return dojo._getText(file.toString()) || "";
@@ -141,7 +188,7 @@ dojo.require("dojox.string.tokenize");
 			return ddt._resolveLazy(arg, sync);
 		},
 		_isTemplate: function(arg){
-			return (typeof arg == "undefined") || (dojo.isString(arg) && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
+			return (typeof arg == "undefined") || (typeof arg == "string" && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
 		},
 		_resolveContextArg: function(arg, sync){
 			if(arg.constructor == Object){
@@ -159,25 +206,24 @@ dojo.require("dojox.string.tokenize");
 			return dojox.string.tokenize(str, ddt._re, ddt._parseDelims);
 		},
 		_parseDelims: function(varr, load, tag){
-			var types = ddt.types;
 			if(varr){
-				return [types.varr, varr];
+				return [dd.TOKEN_VAR, varr];
 			}else if(load){
-				var parts = dd.text.pySplit(tag);
+				var parts = dojo.trim(tag).split(/\s+/g);
 				for(var i = 0, part; part = parts[i]; i++){
 					dojo["require"](part);
 				}
 			}else{
-				return [types.tag, tag];
+				return [dd.TOKEN_BLOCK, tag];
 			}
 		}
 	}
 
-	dd.Template = dojo.extend(function(/*String|dojo._Url*/ template){
+	dd.Template = dojo.extend(function(/*String|dojo._Url*/ template, /*Boolean*/ isString){
 		// template:
 		//		The string or location of the string to
 		//		use as a template
-		var str = ddt._resolveTemplateArg(template, true) || "";
+		var str = isString ? template : ddt._resolveTemplateArg(template, true) || "";
 		var tokens = ddt.tokenize(str);
 		var parser = new dd._Parser(tokens);
 		this.nodelist = parser.parse();
@@ -245,7 +291,7 @@ dojo.require("dojox.string.tokenize");
 			var pos, arg;
 
 			for(var i = 0, has = []; i < arguments.length; i++){
-				has[i] = (typeof arguments[i] != "undefined" && dojo.isString(arguments[i]) && arguments[i]);
+				has[i] = (typeof arguments[i] != "undefined" && typeof arguments[i] == "string" && arguments[i]);
 			}
 
 			if(!this.key){
@@ -279,6 +325,7 @@ dojo.require("dojox.string.tokenize");
 		},
 		resolve: function(context){
 			var str = this.resolvePath(this.key, context);
+
 			for(var i = 0, filter; filter = this.filters[i]; i++){
 				// Each filter has the function in [0], a boolean in [1][0] of whether it's a variable or a string
 				// and [1][1] is either the variable name of the string content.
@@ -353,11 +400,13 @@ dojo.require("dojox.string.tokenize");
 	{
 		set: function(data){
 			this.contents = data;
+			return this;
 		},
 		render: function(context, buffer){
 			// summary: Adds content onto the buffer
 			return buffer.concat(this.contents);
-		}
+		},
+		clone: function(){ return this; }
 	});
 
 	dd._NodeList = dojo.extend(function(/*Node[]*/ nodes){
@@ -413,7 +462,6 @@ dojo.require("dojox.string.tokenize");
 			// description: Steps into tags are they're found. Blocks use the parse object
 			//		to find their closing tag (the stop_at array). stop_at is inclusive, it
 			//		returns the node that matched.
-			var types = ddt.types;
 			var terminators = {};
 			stop_at = stop_at || [];
 			for(var i = 0; i < stop_at.length; i++){
@@ -423,14 +471,14 @@ dojo.require("dojox.string.tokenize");
 			var nodelist = new dd._NodeList();
 			while(this.i < this.contents.length){
 				token = this.contents[this.i++];
-				if(dojo.isString(token)){
+				if(typeof token == "string"){
 					nodelist.push(new dd._TextNode(token));
 				}else{
 					var type = token[0];
 					var text = token[1];
-					if(type == types.varr){
+					if(type == dd.TOKEN_VAR){
 						nodelist.push(new dd._VarNode(text));
-					}else if(type == types.tag){
+					}else if(type == dd.TOKEN_BLOCK){
 						if(terminators[text]){
 							--this.i;
 							return nodelist;
@@ -440,7 +488,7 @@ dojo.require("dojox.string.tokenize");
 							cmd = cmd[0];
 							var fn = ddt.getTag(cmd);
 							if(fn){
-								nodelist.push(fn(this, text));
+								nodelist.push(fn(this, new dd.Token(type, text)));
 							}
 						}
 					}
@@ -454,26 +502,28 @@ dojo.require("dojox.string.tokenize");
 			this.contents.length = 0;
 			return nodelist;
 		},
-		next: function(){
+		next_token: function(){
 			// summary: Returns the next token in the list.
 			var token = this.contents[this.i++];
-			return {type: token[0], text: token[1]};
+			return new dd.Token(token[0], token[1]);
 		},
-		skipPast: function(endtag){
-			var types = ddt.types;
+		delete_first_token: function(){
+			this.i++;
+		},
+		skip_past: function(endtag){
 			while(this.i < this.contents.length){
 				var token = this.contents[this.i++];
-				if(token[0] == types.tag && token[1] == endtag){
+				if(token[0] == dd.TOKEN_BLOCK && token[1] == endtag){
 					return;
 				}
 			}
 			throw new Error("Unclosed tag found when looking for " + endtag);
 		},
-		getVarNodeConstructor: function(){
-			return dd._VarNode;
+		create_variable_node: function(expr){
+			return new dd._VarNode(expr);
 		},
-		getTextNodeConstructor: function(){
-			return dd._TextNode;
+		create_text_node: function(expr){
+			return new dd._TextNode(expr || "");
 		},
 		getTemplate: function(file){
 			return new dd.Template(file);
@@ -489,7 +539,7 @@ dojo.require("dojox.string.tokenize");
 		get: function(/*String*/ module, /*String*/ name){
 			var registry = dd.register._registry[module + "s"];
 			for(var i = 0, entry; entry = registry[i]; i++){
-				if(dojo.isString(entry[0])){
+				if(typeof entry[0] == "string"){
 					if(entry[0] == name){
 						return entry;
 					}
@@ -522,7 +572,7 @@ dojo.require("dojox.string.tokenize");
 						key = fn[0];
 						fn = fn[1];
 					}
-					if(dojo.isString(key)){
+					if(typeof key == "string"){
 						if(key.substr(0, 5) == "attr:"){
 							var attr = fn;
 							if(attr.substr(0, 5) == "attr:"){
@@ -548,6 +598,16 @@ dojo.require("dojox.string.tokenize");
 		}
 	}
 
+	dojox.dtl._base.safe = function(value){
+		if(typeof value == "string"){
+			value = new String(value);
+		}
+		if(typeof value == "object"){
+			value.safe = true;
+		}
+		return value;
+	}
+
 	dd.register.tags("dojox.dtl.tag", {
 		"date": ["now"],
 		"logic": ["if", "for", "ifequal", "ifnotequal"],
@@ -563,5 +623,8 @@ dojo.require("dojox.string.tokenize");
 		"logic": ["default", "default_if_none", "divisibleby", "yesno"],
 		"misc": ["filesizeformat", "pluralize", "phone2numeric", "pprint"],
 		"strings": ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "iriencode", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "stringformat", "title", "truncatewords", "truncatewords_html", "upper", "urlencode", "urlize", "urlizetrunc", "wordcount", "wordwrap"]
+	});
+	dd.register.filters("dojox.dtl", {
+		"_base": ["safe"]
 	});
 })();
