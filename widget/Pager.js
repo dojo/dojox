@@ -518,7 +518,8 @@ dojo.declare("dojox.widget.Pager",
    
 		// set pager icons
 		dojo.byId(this.id + '-status-' + previousPage).src = this.iconPage;
-		dojo.byId(this.id + '-status-' + this._currentPage).src = this.iconPageActive; 
+		dojo.byId(this.id + '-status-' + this._currentPage).src = this.iconPageActive;
+
 	},
 	
 	onScrollEnd: function(){
