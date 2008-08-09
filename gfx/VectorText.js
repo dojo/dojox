@@ -380,7 +380,6 @@ dojo.require("dojox.html.metrics");
 				height=this.viewbox.height,
 				f=metrics["1em"], 
 				unit=parseFloat(size, 10);	//	the default.
-console.log(metrics);
 			if(size.indexOf("em")>-1){
 				return this._round((metrics["1em"]*unit)/height);
 			}
@@ -484,6 +483,11 @@ console.log(metrics);
 			//	start by creating the overall group.  This is the INNER group (the caller
 			//	should be the outer).
 			var g = group.createGroup();
+
+			//	do the x/y translation on the parent group
+			if(textArgs.x || textArgs.y){
+				group.applyTransform({ dx: textArgs.x||0, dy: textArgs.y||0 });
+			}
 
 			//	go get the glyph array.
 			var text = dojo.map(this._normalize(textArgs.text).split(""), function(char){
