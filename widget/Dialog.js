@@ -83,7 +83,7 @@ dojo.declare('dojox.widget.Dialog',
 		this._vp = dijit.getViewport();
 		var tc = this.containerNode;
 		var fixed = this.fixedSize;
-		this._size = {
+		this._displaysize = {
 			w: fixed ? tc.scrollWidth : this.dimensions[0],
 			h: fixed ? tc.scrollHeight : this.dimensions[1]
 		};
@@ -171,7 +171,7 @@ dojo.declare('dojox.widget.Dialog',
 		
 		this.inherited(arguments);
 		
-		if(!this.open){ dojo.style(this.containerNode,"opacity",0); }
+		if(!this.open){ dojo.style(this.containerNode, "opacity", 0); }
 		var pad = this.viewportPadding * 2; 
 		
 		var props = {
@@ -181,11 +181,12 @@ dojo.declare('dojox.widget.Dialog',
 			method: this.sizeMethod
 		};
 
-		props['width'] = this._size.w = (this._size.w + pad >= this._vp.w || this.fixedSize) 
-			? this._vp.w - pad : this._size.w;
+		var ds = this._displaysize;
+		props['width'] = ds.w = (ds.w + pad >= this._vp.w || this.fixedSize) 
+			? this._vp.w - pad : ds.w;
 			
-		props['height'] = this._size.h = (this._size.h + pad >= this._vp.h || this.fixedSize) 
-			? this._vp.h - pad : this._size.h;
+		props['height'] = ds.h = (ds.h + pad >= this._vp.h || this.fixedSize) 
+			? this._vp.h - pad : ds.h;
 
 		this._sizing = dojox.fx.sizeTo(props);
 		this._sizingConnect = this.connect(this._sizing,"onEnd","_showContent");
@@ -199,8 +200,8 @@ dojo.declare('dojox.widget.Dialog',
 		var container = this.containerNode;
 		dojo.style(this.domNode,"overflow","visible");
 		dojo.style(container, {
-			height: this._size.h + "px",
-			width: this._size.w + "px",
+			height: this._displaysize.h + "px",
+			width: this._displaysize.w + "px",
 			overflow:"auto"
 		});
 		dojo.anim(container, { opacity:1 });
