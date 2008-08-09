@@ -329,9 +329,12 @@ dojo.require("dojox.html.metrics");
 		_trim: function(lines){
 			var fn = function(arr){
 				//	check if the first or last character is a space and if so, remove it.
+				if(!arr.length){ return; }
 				if(arr[arr.length-1].code == " "){ arr.splice(arr.length-1, 1); }
+				if(!arr.length){ return; }
 				if(arr[0].code == " "){ arr.splice(0, 1); }
 			};
+
 			if(dojo.isArray(lines[0])){
 				//	more than one line.
 				dojo.forEach(lines, fn);
@@ -485,6 +488,7 @@ dojo.require("dojox.html.metrics");
 			var g = group.createGroup();
 
 			//	do the x/y translation on the parent group
+			//	FIXME: this is probably not the best way of doing this.
 			if(textArgs.x || textArgs.y){
 				group.applyTransform({ dx: textArgs.x||0, dy: textArgs.y||0 });
 			}
@@ -532,6 +536,10 @@ dojo.require("dojox.html.metrics");
 				}
 			}
 
+			//	make sure lines doesn't have any empty lines.
+			lines = dojo.filter(lines, function(item){
+				return item.length>0;
+			});
 
 			//	let's start drawing.
 			var cy = 0, maxw = this._getLongestLine(lines).width;
