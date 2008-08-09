@@ -37,8 +37,7 @@
 			
 			var wizard = new dojox.widget.Wizard({
 				style:"width:300px; height:300px"
-			});
-			dojo.body().appendChild(wizard.domNode);
+			}).placeAt(dojo.body(),"last");
 			
 			var contents = [
 				"Pane 1 content", "Pane 2 content", "<h3>Done!</h3>"
@@ -46,12 +45,11 @@
 			
 			dojo.forEach(contents, function(term){
 			
-				var pane = new dojox.widget.WizardPane({ });
-				pane.setContent(term);
-				wizard.addChild(pane);
-				
+				new dojox.widget.WizardPane({})
+					.placeAt(wizard)
+					.attr("content", term)
+				;
 			});
-			
 			wizard.startup();
 			
 		}
