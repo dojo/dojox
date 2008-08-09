@@ -6,34 +6,19 @@ dojox.dtl.Context = dojo.extend(function(dict){
 	dojox.dtl._Context.call(this, dict);
 }, dojox.dtl._Context.prototype,
 {
-	extend: function(/*dojox.dtl.Context|Object*/ obj){
-		// summary: Returns a clone of this context object, with the items from the
-		//		passed objecct mixed in.
-		var context = new dojox.dtl.Context();
-		var keys = this.getKeys();
-		var i, key;
-		for(i = 0; key = keys[i]; i++){
-			if(typeof obj[key] != "undefined"){
-				context[key] = obj[key];
-			}else{
-				context[key] = this[key];
-			}
-		}
-
-		if(obj instanceof dojox.dtl.Context){
-			keys = obj.getKeys();
-		}else if(typeof obj == "object"){
-			keys = [];
-			for(key in obj){
+	getKeys: function(){
+		var keys = [];
+		for(var key in this){
+			if(this.hasOwnProperty(key) && key != "_dicts" && key != "_this"){
 				keys.push(key);
 			}
 		}
-
-		for(i = 0; key = keys[i]; i++){
-			context[key] = obj[key];
-		}
-
-		return context;
+		return keys;
+	},
+	extend: function(/*dojox.dtl.Context|Object*/ obj){
+		// summary: Returns a clone of this context object, with the items from the
+		//		passed objecct mixed in.
+		return  dojo.delegate(this, obj);
 	},
 	filter: function(/*dojox.dtl.Context|Object|String...*/ filter){
 		// summary: Returns a clone of this context, only containing the items

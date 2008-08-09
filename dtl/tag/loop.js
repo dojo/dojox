@@ -70,10 +70,10 @@ dojo.require("dojox.string.tokenize");
 			if(change != this.shared.last){
 				var firstloop = (this.shared.last === null);
 				this.shared.last = change;
-				context.push();
+				context = context.push();
 				context.ifchanged = {firstloop: firstloop}
 				buffer = this.nodes.render(context, buffer);
-				context.pop();
+				context = context.pop();
 			}else{
 				buffer = this.nodes.unrender(context, buffer);
 			}

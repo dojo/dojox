@@ -3,22 +3,12 @@ dojo.provide("dojox.dtl.filter.htmlstrings");
 dojo.require("dojox.dtl._base");
 
 dojo.mixin(dojox.dtl.filter.htmlstrings, {
-	_escapeamp: /&/g,
-	_escapelt: /</g,
-	_escapegt: />/g,
-	_escapeqt: /'/g,
-	_escapedblqt: /"/g,
 	_linebreaksrn: /(\r\n|\n\r)/g,
 	_linebreaksn: /\n{2,}/g,
 	_linebreakss: /(^\s+|\s+$)/g,
 	_linebreaksbr: /\n/g,
 	_removetagsfind: /[a-z0-9]+/g,
 	_striptags: /<[^>]*?>/g,
-	escape: function(value){
-		// summary: Escapes a string's HTML
-		var dh = dojox.dtl.filter.htmlstrings;
-		return value.replace(dh._escapeamp, '&amp;').replace(dh._escapelt, '&lt;').replace(dh._escapegt, '&gt;').replace(dh._escapedblqt, '&quot;').replace(dh._escapeqt, '&#39;');
-	},
 	linebreaks: function(value){
 		// summary: Converts newlines into <p> and <br />s
 		var output = [];

@@ -13,34 +13,18 @@ dojo.require("dojox.string.tokenize");
 
 	dd._Context = dojo.extend(function(dict){
 		// summary: Pass one of these when rendering a template to tell the template what values to use.
-		dojo.mixin(this, dict || {});
+		dojo._mixin(this, dict || {});
 		this._dicts = [];
 	},
 	{
 		push: function(){
-			var dict = {};
-			var keys = this.getKeys();
-			for(var i = 0, key; key = keys[i]; i++){
-				dict[key] = this[key];
-				delete this[key];
-			}
-			this._dicts.unshift(dict);
+			var last = this;
+			var context = dojo.delegate(this);
+			context.pop = function(){ return last; }
+			return context;
 		},
 		pop: function(){
-			if(!this._dicts.length){
-				throw new Error("pop() called on empty Context");
-			}
-			var dict = this._dicts.shift();
-			dojo.mixin(this, dict);
-		},
-		getKeys: function(){
-			var keys = [];
-			for(var key in this){
-				if(this.hasOwnProperty(key) && key != "_dicts" && key != "_this"){
-					keys.push(key);
-				}
-			}
-			return keys;
+			throw new Error("pop() called on empty Context");
 		},
 		get: function(key, otherwise){
 			if(typeof this[key] != "undefined"){
@@ -69,10 +53,11 @@ dojo.require("dojox.string.tokenize");
 			return value;
 		},
 		update: function(dict){
-			this.push();
+			var context = this.push();
 			if(dict){
-				dojo.mixin(this, dict);
+				dojo._mixin(this, dict);
 			}
+			return context;
 		}
 	});
 
@@ -257,6 +242,37 @@ dojo.require("dojox.string.tokenize");
 		}
 	});
 
+	var qfRe = /\{\{\s*(.+?)\s*\}\}/g;
+	dd.quickFilter = function(str){
+		if(!str){
+			return new dd._NodeList();
+		}
+
+		if(str.indexOf("{%") == -1){
+			return new dd._QuickNodeList(dojox.string.tokenize(str, qfRe, function(token){
+				return new dd._Filter(token);
+			}));
+		}
+	}
+
+	dd._QuickNodeList = dojo.extend(function(contents){
+		this.contents = contents;
+	},
+	{
+		render: function(context, buffer){
+			for(var i=0, l=this.contents.length; i<l; i++){
+				if(this.contents[i].resolve){
+					buffer = buffer.concat(this.contents[i].resolve(context));
+				}else{
+					buffer = buffer.concat(this.contents[i]);
+				}
+			}
+			return buffer;
+		},
+		dummyRender: function(context){ return this.render(context, dd.Template.prototype.getBuffer()).toString(); },
+		clone: function(buffer){ return this; }
+	});
+
 	dd._Filter = dojo.extend(function(token){
 		// summary: Uses a string to find (and manipulate) a variable
 		if(!token) throw new Error("Filter must be called with variable name");
@@ -339,6 +355,7 @@ dojo.require("dojox.string.tokenize");
 					str = filter[0](str);
 				}
 			}
+
 			return str;
 		},
 		resolvePath: function(path, context){
@@ -418,6 +435,11 @@ dojo.require("dojox.string.tokenize");
 		push: function(node){
 			// summary: Add a new node to the list
 			this.contents.push(node);
+			return this;
+		},
+		concat: function(nodes){
+			this.contents = this.contents.concat(nodes);
+			return this;
 		},
 		render: function(context, buffer){
 			// summary: Adds all content onto the buffer
@@ -441,6 +463,9 @@ dojo.require("dojox.string.tokenize");
 	{
 		render: function(context, buffer){
 			var str = this.contents.resolve(context);
+			if(!str.safe){
+				str = dd._base.escape("" + str);
+			}
 			return buffer.concat(str);
 		}
 	});
@@ -598,7 +623,17 @@ dojo.require("dojox.string.tokenize");
 		}
 	}
 
-	dojox.dtl._base.safe = function(value){
+	var escapeamp = /&/g;
+	var escapelt = /</g;
+	var escapegt = />/g;
+	var escapeqt = /'/g;
+	var escapedblqt = /"/g;
+	dd._base.escape = function(value){
+		// summary: Escapes a string's HTML
+		return value.replace(escapeamp, '&amp;').replace(escapelt, '&lt;').replace(escapegt, '&gt;').replace(escapedblqt, '&quot;').replace(escapeqt, '&#39;');
+	}
+
+	dd._base.safe = function(value){
 		if(typeof value == "string"){
 			value = new String(value);
 		}
@@ -625,6 +660,6 @@ dojo.require("dojox.string.tokenize");
 		"strings": ["addslashes", "capfirst", "center", "cut", "fix_ampersands", "floatformat", "iriencode", "linenumbers", "ljust", "lower", "make_list", "rjust", "slugify", "stringformat", "title", "truncatewords", "truncatewords_html", "upper", "urlencode", "urlize", "urlizetrunc", "wordcount", "wordwrap"]
 	});
 	dd.register.filters("dojox.dtl", {
-		"_base": ["safe"]
+		"_base": ["escape", "safe"]
 	});
 })();

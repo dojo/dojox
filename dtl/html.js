@@ -355,9 +355,9 @@ dojo.require("dojox.dtl.Context");
 					var caches = parent._cache;
 					if(caches){
 						for(var i = 0, cache; cache = caches[i]; i++){
-							this.onAddNode(cache);
+							this.onAddNode && this.onAddNode(cache);
 							parent.insertBefore(cache, node);
-							this.onAddNodeComplete(cache);
+							this.onAddNodeComplete && this.onAddNodeComplete(cache);
 						}
 						caches.length = 0;
 					}
@@ -383,7 +383,7 @@ dojo.require("dojox.dtl.Context");
 					return this;
 				}
 				if(obj.parentNode){
-					this.onRemoveNode();
+					this.onRemoveNode && this.onRemoveNode(obj);
 					if(obj.parentNode){
 						obj.parentNode.removeChild(obj);
 					}
@@ -392,18 +392,16 @@ dojo.require("dojox.dtl.Context");
 			return this;
 		},
 		setAttribute: function(key, value){
-			if(key == "class"){
-				this._parent.className = value;
-			}else if(key == "for"){
-				this._parent.htmlFor = value;
-			}else if(this._parent.setAttribute){
-				this._parent.setAttribute(key, value);
+			var old = dojo.attr(this._parent, key);
+			if(this.onChangeAttribute && old != value){
+				this.onChangeAttribute(this._parent, key, old, value);
 			}
+			dojo.attr(this._parent, key, value);
 			return this;
 		},
 		addEvent: function(context, type, fn, /*Array|Function*/ args){
 			if(!context.getThis()){ throw new Error("You must use Context.setObject(instance)"); }
-			this.onAddEvent(this.getParent(), type, fn);
+			this.onAddEvent && this.onAddEvent(this.getParent(), type, fn);
 			var resolved = fn;
 			if(dojo.isArray(args)){
 				resolved = function(e){
@@ -430,13 +428,13 @@ dojo.require("dojox.dtl.Context");
 					var caches = parent._cache;
 					for(var i = 0, cache; cache = caches[i]; i++){
 						if(cache !== parent){
-							this.onAddNode(cache);
+							this.onAddNode && this.onAddNode(cache);
 							if(ie){
 								script += cache.data;
 							}else{
 								parent.appendChild(cache);
 							}
-							this.onAddNodeComplete(cache);
+							this.onAddNodeComplete && this.onAddNodeComplete(cache);
 						}
 					}
 					caches.length = 0;
@@ -447,7 +445,7 @@ dojo.require("dojox.dtl.Context");
 				}
 			}
 
-			this.onSetParent(node, up);
+			this.onSetParent && this.onSetParent(node, up);
 			this._parent = node;
 			return this;
 		},
@@ -456,7 +454,9 @@ dojo.require("dojox.dtl.Context");
 		},
 		getRootNode: function(){
 			return this.rootNode;
-		},
+		}
+		/*=====
+		,
 		onSetParent: function(node, up){
 			// summary: Stub called when setParent is used.
 		},
@@ -469,12 +469,21 @@ dojo.require("dojox.dtl.Context");
 		onRemoveNode: function(node){
 			// summary: Stub called when nodes are removed
 		},
-		onClone: function(/*DOMNode*/ from, /*DOMNode*/ to){
-			// summary: Stub called when a node is duplicated
+		onChangeAttribute: function(node, attribute, old, new){
+			// summary: Stub called when an attribute is changed
 		},
-		onAddEvent: function(/*DOMNode*/ node, /*String*/ type, /*String*/ description){
+		onClone: function(from, to){
+			// summary: Stub called when a node is duplicated
+			// from: DOMNode
+			// to: DOMNode
+		},
+		onAddEvent: function(node, type, description){
 			// summary: Stub to call when you're adding an event
+			// node: DOMNode
+			// type: String
+			// description: String
 		}
+		=====*/
 	});
 
 	dd._HtmlNode = dojo.extend(function(node){
@@ -587,7 +596,7 @@ dojo.require("dojox.dtl.Context");
 					}else if(parent != clone.contents && clone instanceof dd._HtmlNode){
 						var node = clone.contents;
 						clone.contents = clone.contents.cloneNode(false);
-						buffer.onClone(node, clone.contents);
+						buffer.onClone && buffer.onClone(node, clone.contents);
 						cloned.push(node);
 						node._clone = clone.contents;
 					}
@@ -735,15 +744,23 @@ dojo.require("dojox.dtl.Context");
 		}
 	});
 
-	dd.AttributeNode = dojo.extend(function(key, value, nodelist){
+	dd.AttributeNode = dojo.extend(function(key, value){
 		// summary: Works on attributes
 		this.key = key;
 		this.value = value;
-		this.nodelist = nodelist || (new dd.Template(value, true)).nodelist;
+		if(this._pool[value]){
+			this.nodelist = this._pool[value];
+		}else{
+			if(!(this.nodelist = dd.quickFilter(value))){
+				this.nodelist = (new dd.Template(value, true)).nodelist;
+			}
+			this._pool[value] = this.nodelist;
+		}
 
 		this.contents = "";
 	},
 	{
+		_pool: {},
 		render: function(context, buffer){
 			var key = this.key;
 			var value = this.nodelist.dummyRender(context);
@@ -764,7 +781,7 @@ dojo.require("dojox.dtl.Context");
 			return buffer.remove(this.key);
 		},
 		clone: function(buffer){
-			return new this.constructor(this.key, this.value, this.nodelist.clone(buffer));
+			return new this.constructor(this.key, this.value);
 		}
 	});
 

@@ -12,24 +12,24 @@ doh.register("dojox.dtl.context",
 		},
 		function test_context_push(t){
 			var context = new dojox.dtl.Context({ foo: "foo", bar: "bar" });
-			context.push();
+			context = context.push();
 			for(var key in context._dicts[0]){
 				t.t(key == "foo" || key == "bar");
 			}
 		},
 		function test_context_pop(t){
 			var context = new dojox.dtl.Context({ foo: "foo", bar: "bar" });
-			context.push();
+			context = context.push();
 			t.is("undefined", typeof context.foo);
 			t.is("undefined", typeof context.bar);
-			context.pop();
+			context = context.pop();
 			t.is("foo", context.foo);
 			t.is("bar", context.bar);
 		},
 		function test_context_overpop(t){
 			var context = new dojox.dtl.Context();
 			try{
-				context.pop();
+				context = context.pop();
 				t.t(false);
 			}catch(e){
 				t.is("pop() called on empty Context", e.message);

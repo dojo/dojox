@@ -112,13 +112,13 @@ dojo.require("dojox.dtl._base");
 			for(k = 0; k < assign.length; k++){
 				if(typeof context[assign[k]] != "undefined"){
 					dirty = true;
-					context.push();
+					context = context.push();
 					break;
 				}
 			}
 			if(!dirty && context.forloop){
 				dirty = true;
-				context.push();
+				context = context.push();
 			}
 
 			var items = this.loop.resolve(context) || [];
@@ -156,7 +156,7 @@ dojo.require("dojox.dtl._base");
 				if(assign.length > 1 && dojo.isArrayLike(item)){
 					if(!dirty){
 						dirty = true;
-						context.push();
+						context = context.push();
 					}
 					var zipped = {};
 					for(k = 0; k < item.length && k < assign.length; k++){
@@ -175,7 +175,7 @@ dojo.require("dojox.dtl._base");
 
 			delete context.forloop;
 			if(dirty){
-				context.pop();
+				context = context.pop();
 			}else{
 				for(k = 0; k < assign.length; k++){
 					delete context[assign[k]];

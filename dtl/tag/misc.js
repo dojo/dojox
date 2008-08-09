@@ -35,9 +35,9 @@ dojo.require("dojox.dtl._base");
 		render: function(context, buffer){
 			// Doing this in HTML requires a different buffer with a fake root node
 			var output = this._nodelist.render(context, new dojox.string.Builder());
-			context.update({ "var": output.toString() });
+			context = context.update({ "var": output.toString() });
 			var filtered = this._varnode.render(context, buffer);
-			context.pop();
+			context = context.pop();
 			return buffer;
 		},
 		unrender: function(context, buffer){
@@ -83,7 +83,7 @@ dojo.require("dojox.dtl._base");
 	},
 	{
 		render: function(context, buffer){
-			if(buffer.onAddNodeComplete){
+			if(buffer.getParent){
 				// Unfortunately, we have to branch here
 				var watch = [
 					dojo.connect(buffer, "onAddNodeComplete", this, "_watch"),
@@ -200,10 +200,10 @@ dojo.require("dojox.dtl._base");
 	{
 		render: function(context, buffer){
 			var target = this.target.resolve(context);
-			context.push();
+			context = context.push();
 			context[this.alias] = target;
 			buffer = this.nodelist.render(context, buffer);
-			context.pop();
+			context = context.pop();
 			return buffer;
 		},
 		unrender: function(context, buffer){

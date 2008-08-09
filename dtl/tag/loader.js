@@ -36,7 +36,7 @@ dojo.require("dojox.dtl._base");
 			}
 			this.rendered = nodelist;
 
-			context.push();
+			context = context.push();
 			this.context = context;
 			this.parent = null;
 			if(nodelist != this.nodelist){
@@ -44,7 +44,7 @@ dojo.require("dojox.dtl._base");
 			}
 			context["block"] = this;
 			buffer = nodelist.render(context, buffer, this);
-			context.pop();
+			context = context.pop();
 			return buffer;
 		},
 		unrender: function(context, buffer){
