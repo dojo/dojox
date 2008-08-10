@@ -13,7 +13,7 @@ dojo.require("dojox.dtl._base");
 	{
 		"super": function(){
 			if(this.parent){
-				var html = this.parent.nodelist.dummyRender(this.context);
+				var html = this.parent.nodelist.dummyRender(this.context, null, true);
 				if(typeof html == "string"){
 					html = new String(html);
 				}

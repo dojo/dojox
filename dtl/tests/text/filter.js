@@ -26,7 +26,7 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ unslashed: "Test back slashes \\, double quotes \" and single quotes '" })
-			var tpl = new dd.Template('{{ unslashed|addslashes }}');
+			var tpl = new dd.Template('{{ unslashed|addslashes|safe }}');
 			t.is("Test back slashes \\\\, double quotes \\\" and single quotes \\'", tpl.render(context));
 		},
 		function test_filter_capfirst(t){
@@ -270,7 +270,7 @@ doh.register("dojox.dtl.text.filter",
 		function test_filter_fix_ampersands(t){
 			var dd = dojox.dtl;
 
-			var tpl = new dd.Template('{{ "One & Two"|fix_ampersands }}');
+			var tpl = new dd.Template('{{ "One & Two"|fix_ampersands|safe }}');
 			t.is("One &amp; Two", tpl.render());
 		},
 		function test_filter_floatformat(t){
@@ -355,14 +355,14 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ unbroken: "This is just\r\n\n\ra bunch\nof text\n\n\nand such" });
-			tpl = new dd.Template('{{ unbroken|linebreaks }}');
+			tpl = new dd.Template('{{ unbroken|linebreaks|safe }}');
 			t.is("<p>This is just</p>\n\n<p>a bunch<br />of text</p>\n\n<p>and such</p>", tpl.render(context));
 		},
 		function test_filter_linebreaksbr(t){
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ unbroken: "This is just\r\n\n\ra bunch\nof text\n\n\nand such" });
-			tpl = new dd.Template('{{ unbroken|linebreaksbr }}');
+			tpl = new dd.Template('{{ unbroken|linebreaksbr|safe }}');
 			t.is("This is just<br /><br />a bunch<br />of text<br /><br /><br />and such", tpl.render(context));
 		},
 		function test_filter_linenumbers(t){
@@ -435,7 +435,7 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ animals: ["bear", "cougar", "aardvark"] });
-			tpl = new dd.Template("{{ animals|pprint }}");
+			tpl = new dd.Template("{{ animals|pprint|safe }}");
 			t.is('["bear","cougar","aardvark"]', tpl.render(context));
 		},
 		function test_filter_random(t){
@@ -465,7 +465,7 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ tagged: "I'm gonna do something <script>evil</script> with the <html>filter" });
-			tpl = new dd.Template('{{ tagged|removetags:"script <html>" }}');
+			tpl = new dd.Template('{{ tagged|removetags:"script <html>"|safe }}');
 			t.is("I'm gonna do something evil with the filter", tpl.render(context));
 		},
 		function test_filter_rjust(t){
@@ -535,7 +535,7 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ tagged: "I'm gonna do something <script>evil</script> with the <html>filter" });
-			tpl = new dd.Template('{{ tagged|striptags }}');
+			tpl = new dd.Template('{{ tagged|striptags|safe }}');
 			t.is("I'm gonna do something evil with the filter", tpl.render(context));
 		},
 		function test_filter_time(t){
@@ -575,7 +575,7 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ name: "potted meat" });
-			var tpl = new dd.Template("{{ name|title }}");
+			var tpl = new dd.Template("{{ name|title|safe }}");
 			t.is("Potted Meat", tpl.render(context));
 
 			context.name = "What's going on?";
@@ -611,7 +611,7 @@ doh.register("dojox.dtl.text.filter",
 				body: "Test a string <em>that ends <i>inside a</i> tag</em> with different args",
 				size: 2
 			})
-			var tpl = new dd.Template('{{ body|truncatewords_html:size }}');
+			var tpl = new dd.Template('{{ body|truncatewords_html:size|safe }}');
 			t.is("Test a ...", tpl.render(context));
 			context.size = 4;
 			t.is("Test a string <em>that ...</em>", tpl.render(context));
@@ -622,7 +622,7 @@ doh.register("dojox.dtl.text.filter",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context({ states: ["States", [["Kansas", [["Lawrence", []], ["Topeka", []]]], ["Illinois", []]]] });
-			tpl = new dd.Template('{{ states|unordered_list }}');
+			tpl = new dd.Template('{{ states|unordered_list|safe }}');
 			t.is("\t<li>States\n\t<ul>\n\t\t<li>Kansas\n\t\t<ul>\n\t\t\t<li>Lawrence</li>\n\t\t\t<li>Topeka</li>\n\t\t</ul>\n\t\t</li>\n\t\t<li>Illinois</li>\n\t</ul>\n\t</li>", tpl.render(context));
 		},
 		function test_filter_upper(t){
@@ -644,7 +644,7 @@ doh.register("dojox.dtl.text.filter",
 			var context = new dd.Context({
 				body: "My favorite websites are www.televisionwithoutpity.com, http://daringfireball.net and you can email me at pottedmeat@sitepen.com"
 			});
-			var tpl = new dd.Template("{{ body|urlize }}");
+			var tpl = new dd.Template("{{ body|urlize|safe }}");
 			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.televisionwithoutpity.com</a> <a href="http://daringfireball.net" rel="nofollow">http://daringfireball.net</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
 		},
 		function test_filter_urlizetrunc(t){
@@ -653,11 +653,11 @@ doh.register("dojox.dtl.text.filter",
 			var context = new dd.Context({
 				body: "My favorite websites are www.televisionwithoutpity.com, http://daringfireball.net and you can email me at pottedmeat@sitepen.com"
 			});
-			var tpl = new dd.Template("{{ body|urlizetrunc }}");
+			var tpl = new dd.Template("{{ body|urlizetrunc|safe }}");
 			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.televisionwithoutpity.com</a> <a href="http://daringfireball.net" rel="nofollow">http://daringfireball.net</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
-			tpl = new dd.Template('{{ body|urlizetrunc:"2" }}');
+			tpl = new dd.Template('{{ body|urlizetrunc:"2"|safe }}');
 			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.televisionwithoutpity.com</a> <a href="http://daringfireball.net" rel="nofollow">http://daringfireball.net</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
-			tpl = new dd.Template('{{ body|urlizetrunc:"10" }}');
+			tpl = new dd.Template('{{ body|urlizetrunc:"10"|safe }}');
 			t.is('My favorite websites are <a href="http://www.televisionwithoutpity.com" rel="nofollow">www.tel...</a> <a href="http://daringfireball.net" rel="nofollow">http://...</a> and you can email me at <a href="mailto:pottedmeat@sitepen.com">pottedmeat@sitepen.com</a>', tpl.render(context));
 		},
 		function test_filter_wordcount(t){

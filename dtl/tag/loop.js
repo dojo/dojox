@@ -175,7 +175,7 @@ dojo.require("dojox.string.tokenize");
 		ifchanged: function(parser, token){
 			var parts = token.contents.split();
 			var nodes = parser.parse(["endifchanged"]);
-			parser.next_token();
+			parser.delete_first_token();
 			return new ddtl.IfChangedNode(nodes, parts.slice(1));
 		},
 		regroup: function(parser, token){

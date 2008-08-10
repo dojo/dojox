@@ -645,7 +645,7 @@ dojo.require("dojox.string.tokenize");
 	var escapedblqt = /"/g;
 	dd._base.escape = function(value){
 		// summary: Escapes a string's HTML
-		return value.replace(escapeamp, '&amp;').replace(escapelt, '&lt;').replace(escapegt, '&gt;').replace(escapedblqt, '&quot;').replace(escapeqt, '&#39;');
+		return dd.mark_safe(value.replace(escapeamp, '&amp;').replace(escapelt, '&lt;').replace(escapegt, '&gt;').replace(escapedblqt, '&quot;').replace(escapeqt, '&#39;'));
 	}
 
 	dd._base.safe = function(value){
@@ -657,6 +657,7 @@ dojo.require("dojox.string.tokenize");
 		}
 		return value;
 	}
+	dd.mark_safe = dd._base.safe;
 
 	dd.register.tags("dojox.dtl.tag", {
 		"date": ["now"],
@@ -667,7 +668,7 @@ dojo.require("dojox.string.tokenize");
 	});
 	dd.register.filters("dojox.dtl.filter", {
 		"dates": ["date", "time", "timesince", "timeuntil"],
-		"htmlstrings": ["escape", "linebreaks", "linebreaksbr", "removetags", "striptags"],
+		"htmlstrings": ["linebreaks", "linebreaksbr", "removetags", "striptags"],
 		"integers": ["add", "get_digit"],
 		"lists": ["dictsort", "dictsortreversed", "first", "join", "length", "length_is", "random", "slice", "unordered_list"],
 		"logic": ["default", "default_if_none", "divisibleby", "yesno"],

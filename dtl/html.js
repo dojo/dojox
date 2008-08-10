@@ -561,6 +561,7 @@ dojo.require("dojox.dtl.Context");
 
 			buffer = dd.HtmlTemplate.prototype.getBuffer();
 			nodelist.unshift(new dd.ChangeNode(div));
+			nodelist.unshift(new dd._HtmlNode(div));
 			nodelist.push(new dd.ChangeNode(div, true));
 			nodelist.render(context, buffer);
 

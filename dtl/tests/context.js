@@ -20,8 +20,8 @@ doh.register("dojox.dtl.context",
 		function test_context_pop(t){
 			var context = new dojox.dtl.Context({ foo: "foo", bar: "bar" });
 			context = context.push();
-			t.is("undefined", typeof context.foo);
-			t.is("undefined", typeof context.bar);
+			t.f(context.hasOwnProperty("foo"));
+			t.f(context.hasOwnProperty("bar"));
 			context = context.pop();
 			t.is("foo", context.foo);
 			t.is("bar", context.bar);
