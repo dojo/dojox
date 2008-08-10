@@ -61,7 +61,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			return new dijit.MenuSeparator();
 		}else{
 			// Just a regular menu option
-			var click = dojo.hitch(this, "setValue", option);
+			var click = dojo.hitch(this, "_setValueAttr", option);
 			return new dijit.MenuItem({
 				option: option,
 				label: option.label,
@@ -99,7 +99,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			this.setAttribute("disabled", (len === 0));
 			delete this._iDisabled;
 		}
-		this.setValue(this.value);
+		this._setValueAttr(this.value);
 	},
 	
 	_setDisplay: function(/*String*/ newDisplay){
@@ -203,10 +203,10 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	
 	setAttribute: function(/*string*/ attr, /* anything */ value){
         // summary: sometime we get called to set our value - we need to
-        //          make sure and route those requests through _setValue()
+        //          make sure and route those requests through __setValueAttr()
         //          instead.
         if(attr === "value"){
-            this.setValue(value);
+            this._setValueAttr(value);
         }else{
 			switch(attr){
 				case "readOnly":

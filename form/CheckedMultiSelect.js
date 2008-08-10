@@ -46,12 +46,12 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	_changeBox: function(){
 		// summary:
 		//		Called to force the select to match the state of the check box
-		//		(only on click of the checkbox)  Radio-based calls setValue
+		//		(only on click of the checkbox)  Radio-based calls _setValueAttr
 		//		instead.
 		if(this.parent._multiValue){
 			this.option.selected = this.checkBox.getValue() && true;
 		}else{
-			this.parent.setValue(this.option.value);
+			this.parent.attr('value', this.option.value);
 		}
 		// fire the parent's change
 		this.parent._updateSelection();
@@ -76,7 +76,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	_updateBox: function(){
 		// summary:
 		//		Called to force the box to match the state of the select
-		this.checkBox.setValue(this.option.selected);
+		this.checkBox.attr('value', this.option.selected);
 	},
 	
 	setAttribute: function(attr, value){

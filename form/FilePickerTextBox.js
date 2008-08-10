@@ -38,7 +38,7 @@ dojo.declare(
 			});
 		},
 		
-		setValue: function(/*string*/value){
+		_setValueAttr: function(/*string*/value){
 			// summary: sets the value of this widget
 			if(!this._searchInProgress){
 				this.inherited(arguments);
@@ -59,7 +59,7 @@ dojo.declare(
 						this._hasValidPath = true;
 					}
 					if(!this._skip){
-						this.setValue(value);
+						this._setValueAttr(value);
 					}
 					delete this._skip;
 				}
@@ -128,7 +128,7 @@ dojo.declare(
 		_setBlurValue: function(){
 			// summary: sets the value of the widget once focus has left
 			if(this.dropDown){
-				this.setValue(this.focusNode.value);
+				this._setValueAttr(this.focusNode.value);
 			}
 			this.inherited(arguments);
 		},

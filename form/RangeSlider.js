@@ -67,10 +67,10 @@ dojo.declare(
         }
         switch(e.keyCode){
             case dojo.keys.HOME:
-                this.setValue(this.minimum, true, maxSelected);
+                this._setValueAttr(this.minimum, true, maxSelected);
                 break;
             case dojo.keys.END:
-                this.setValue(this.maximum, true, maxSelected);
+                this._setValueAttr(this.maximum, true, maxSelected);
                 break;
             // this._descending === false: if ascending vertical (min on top)
             // (this._descending || this.isLeftToRight()): if left-to-right horizontal or descending vertical
@@ -125,11 +125,11 @@ dojo.declare(
     },
     
     _onClkIncBumper: function(){
-        this.setValue(this._descending === false ? this.minimum : this.maximum, true, true);
+        this._setValueAttr(this._descending === false ? this.minimum : this.maximum, true, true);
     },
     
     _bumpValue: function(signedChange, useMaxValue){
-        // we pass an array to setValue when signedChange is an array
+        // we pass an array to _setValueAttr when signedChange is an array
         if(!dojo.isArray(signedChange)){
             value = this._getBumpValue(signedChange, useMaxValue);
         }
@@ -138,7 +138,7 @@ dojo.declare(
             value[0] = this._getBumpValue(signedChange[0]['change'], signedChange[0]['useMaxValue']);
             value[1] = this._getBumpValue(signedChange[1]['change'], signedChange[1]['useMaxValue']);
         }
-        this.setValue(value, true, !dojo.isArray(signedChange) && ((signedChange > 0 && !useMaxValue) || (useMaxValue && signedChange < 0)));
+        this._setValueAttr(value, true, !dojo.isArray(signedChange) && ((signedChange > 0 && !useMaxValue) || (useMaxValue && signedChange < 0)));
     },
     
     _getBumpValue: function(signedChange, useMaxValue){
@@ -188,7 +188,7 @@ dojo.declare(
     _setPixelValue: function(/*Number*/ pixelValue, /*Number*/ maxPixels, /*Boolean*/ priorityChange, /*Boolean*/ isMaxVal){
         if(this.disabled || this.readOnly){ return; }
         var myValue = this._getValueByPixelValue(pixelValue, maxPixels);
-        this.setValue(myValue, priorityChange, isMaxVal);
+        this._setValueAttr(myValue, priorityChange, isMaxVal);
     },
     
     _getValueByPixelValue: function(/*Number*/ pixelValue, /*Number*/ maxPixels){
@@ -201,7 +201,7 @@ dojo.declare(
         return (this.maximum-this.minimum)*wholeIncrements/count + this.minimum;
     },
     
-    setValue: function(/*Array or Number*/ value, /*Boolean, optional*/ priorityChange, /*Boolean, optional*/ isMaxVal){
+    _setValueAttr: function(/*Array or Number*/ value, /*Boolean, optional*/ priorityChange, /*Boolean, optional*/ isMaxVal){
         // we pass an array, when we move the slider with the bar
         var actValue = this.value;
         if(!dojo.isArray(value)){
@@ -240,8 +240,8 @@ dojo.declare(
                 return a-b;
             });
         }
-        // not calling the setValue-function of dijit.form.Slider, but the super-super-class (needed for the onchange-event!)
-        dijit.form._FormValueWidget.prototype.setValue.apply(this, arguments);
+        // not calling the _setValueAttr-function of dijit.form.Slider, but the super-super-class (needed for the onchange-event!)
+        dijit.form._FormValueWidget.prototype._setValueAttr.apply(this, arguments);
         this._printSliderBar(priorityChange, isMaxVal);
     },
     
@@ -307,7 +307,7 @@ dojo.declare("dijit.form._SliderMoverMax",
         dojo.dnd.Mover.prototype.destroy.apply(this, arguments);
         var widget = this.widget;
         widget._abspos = null;
-        widget.setValue(widget.value, true);
+        widget._setValueAttr(widget.value, true);
     }
 });
 
@@ -352,7 +352,7 @@ dojo.declare("dijit.form._SliderBarMover",
         var myValues = [widget._getValueByPixelValue(widget._isReversed_ ? (abspos[widget._pixelCount] - pixelValues[0]) : pixelValues[0], abspos[widget._pixelCount]), 
                         widget._getValueByPixelValue(widget._isReversed_ ? (abspos[widget._pixelCount] - pixelValues[1]) : pixelValues[1], abspos[widget._pixelCount])];
         // and setting the value of the widget
-        widget.setValue(myValues, false, false);
+        widget._setValueAttr(myValues, false, false);
     },
     
     destroy: function(e){
@@ -361,7 +361,7 @@ dojo.declare("dijit.form._SliderBarMover",
         widget._abspos = null;
         widget._bar = null;
         widget._mouseOffset = null;
-        widget.setValue(widget.value, true);
+        widget._setValueAttr(widget.value, true);
     }
 });
 

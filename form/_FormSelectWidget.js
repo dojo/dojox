@@ -150,7 +150,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		this._loadChildren();
 	},
 
-	setValue: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
+	_setValueAttr: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
 		// summary: set the value of the widget.
 		// If a string is passed, then we set our value from looking it up.
 		var opts = this.getOptions() || [];
@@ -193,7 +193,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 
 	undo: function(){
 		// summary: restore the value to the last value passed to onChange
-		this.setValue(this._lastValueReported, false);
+		this._setValueAttr(this._lastValueReported, false);
 	},
 
 	_loadChildren: function(){
@@ -297,7 +297,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
 		this.connect(this, "onChange", "_updateSelection");
 		this.connect(this, "startup", "_loadChildren");
 		
-		this.setValue(this.value, null);
+		this._setValueAttr(this.value, null);
 	},
 	
 	_addOptionItem: function(/* dojox.form.__SelectOption */ option){

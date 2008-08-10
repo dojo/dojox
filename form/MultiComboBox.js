@@ -13,7 +13,7 @@ dojo.declare("dojox.form.MultiComboBox",
 	delimiter: ",",
 	_previousMatches: false,
 
-	setValue: function(value){
+	_setValueAttr: function(value){
 		if (this.delimiter && value.length != 0){
 			value = value+this.delimiter+" ";
 			arguments[0] = this._addPreviousMatches(value);

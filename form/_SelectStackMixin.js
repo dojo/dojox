@@ -95,7 +95,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	
 	onSelectChild: function(/*Widget*/ pane){
 		// summary: Called when the stack container selects a new pane
-		this.setValue(this._optionValFromPane(pane.id));
+		this._setValueAttr(this._optionValFromPane(pane.id));
 	},
 	
 	onStartup: function(/*Object*/ info){

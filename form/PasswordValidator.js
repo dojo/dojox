@@ -21,9 +21,9 @@ dojo.declare("dojox.form._ChildTextBox", dijit.form.ValidationTextBox, {
 	reset: function(){
 		// summary:
 		//		Force-set to empty string (we don't save passwords EVER)...and 
-		//		since _OldPWBox overrides setValue to check for empty string, 
+		//		since _OldPWBox overrides _setValueAttr to check for empty string, 
 		//		call our parent class directly (not this.inherited())
-		dijit.form.ValidationTextBox.prototype.setValue.call(this, "", true);
+		dijit.form.ValidationTextBox.prototype._setValueAttr.call(this, "", true);
 		this._hasBeenBlurred = false;
 	}
 });
@@ -38,7 +38,7 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 	//		Whether or not the password is valid
 	_isPWValid: false,
 	
-	setValue: function(/* anything */ newVal, /* boolean? */ priority){
+	_setValueAttr: function(/* anything */ newVal, /* boolean? */ priority){
 		// summary:
 		//		Updates _isPWValid if this isn't our initial update by calling
 		//		our PasswordValidator's pwCheck function
@@ -50,7 +50,7 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 			//	update (not initially set).  We want to check our password now.
 			this._isPWValid = this.containerWidget.pwCheck(newVal);
 		}
-		this.inherited("setValue", arguments);
+		this.inherited(arguments);
 	},
 
 	isValid: function(/* boolean */ isFocused){

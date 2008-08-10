@@ -46,7 +46,7 @@ dojo.declare(
 			this._picker.onValueSelected = dojo.hitch(this, function(value){
 				this.focus(); // focus the textbox before the popup closes to avoid reopening the popup
 				setTimeout(dojo.hitch(this, "_close"), 1); // allow focus time to take
-				dijit.form.TextBox.prototype.setValue.call(this,value.getDate(), true, value.getDate());
+				dijit.form.TextBox.prototype._setValueAttr.call(this,value.getDate(), true, value.getDate());
 			});			
 		}
 	}
@@ -74,7 +74,7 @@ dojo.declare(
 			this._picker.onValueSelected = dojo.hitch(this, function(value){
 				this.focus(); // focus the textbox before the popup closes to avoid reopening the popup
 				setTimeout(dojo.hitch(this, "_close"), 1); // allow focus time to take
-				dijit.form.TextBox.prototype.setValue.call(this,value + 1, true, value + 1);
+				dijit.form.TextBox.prototype._setValueAttr.call(this,value + 1, true, value + 1);
 			});			
 		}
 	}
@@ -100,7 +100,7 @@ dojo.declare(
 			this._picker.onValueSelected = dojo.hitch(this, function(value){
 				this.focus(); // focus the textbox before the popup closes to avoid reopening the popup
 				setTimeout(dojo.hitch(this, "_close"), 1); // allow focus time to take
-				dijit.form.TextBox.prototype.setValue.call(this,value, true, value);
+				dijit.form.TextBox.prototype._setValueAttr.call(this,value, true, value);
 			});						
 		}
 	}
