@@ -291,7 +291,7 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 		//		displayed within the ContentPane
 	},
 
-	_attrSetContent: function(data){
+	_setContentAttr: function(data){
 		if(!this._isDownloaded){
 			var defObj = this._setUpDeferreds();
 		}
