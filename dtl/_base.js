@@ -400,6 +400,8 @@ dojo.require("dojox.string.tokenize");
 							}else{
 								current = current.call(base);
 							}
+						}else if(current instanceof Date){
+							current = dd._Context.prototype._normalize(current);
 						}
 					}else{
 						return "";
