@@ -469,8 +469,11 @@ dojo.require("dojox.dtl.Context");
 		onRemoveNode: function(node){
 			// summary: Stub called when nodes are removed
 		},
-		onChangeAttribute: function(node, attribute, old, new){
+		onChangeAttribute: function(node, attribute, old, updated){
 			// summary: Stub called when an attribute is changed
+		},
+		onChangeData: function(node, old, updated){
+			// summary: Stub called when a data in a node is changed
 		},
 		onClone: function(from, to){
 			// summary: Stub called when a node is duplicated
@@ -648,7 +651,11 @@ dojo.require("dojox.dtl.Context");
 			case "text":
 				this._rendered = true;
 				this._txt = this._txt || document.createTextNode(str);
-				this._txt._data != str && (this._txt.data = str);
+				if(this._txt.data != str){
+					var old = this._txt.data;
+					this._txt.data = str;
+					buffer.onChangeData && buffer.onChangeData(this._txt, old, this._txt.data);
+				}
 				return buffer.concat(this._txt);
 			case "injection":
 				var root = str.getRootNode();
@@ -788,13 +795,19 @@ dojo.require("dojox.dtl.Context");
 	dd._HtmlTextNode = dojo.extend(function(str){
 		// summary: Adds a straight text node without any processing
 		this.contents = document.createTextNode(str);
+		this.upcoming = str;
 	},
 	{
 		set: function(data){
-			this.contents.data = data;
+			this.upcoming = data;
 			return this;
 		},
 		render: function(context, buffer){
+			if(this.contents.data != this.upcoming){
+				var old = this.contents.data;
+				this.contents.data = this.upcoming;
+				buffer.onChangeData && buffer.onChangeData(this.contents, old, this.upcoming);
+			}
 			return buffer.concat(this.contents);
 		},
 		unrender: function(context, buffer){

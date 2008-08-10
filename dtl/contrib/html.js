@@ -48,6 +48,7 @@ dojo.require("dojox.dtl.html");
 				this.onAddNode && dojo.disconnect(this.onAddNode);
 				this.onRemoveNode && dojo.disconnect(this.onRemoveNode);
 				this.onChangeAttribute && dojo.disconnect(this.onChangeAttribute);
+				this.onChangeData && dojo.disconnect(this.onChangeData);
 
 				this.swapped = this.parent.cloneNode(true);
 				this.parent.parentNode.replaceChild(this.swapped, this.parent);
@@ -55,9 +56,12 @@ dojo.require("dojox.dtl.html");
 		},
 		render: function(context, buffer){
 			this.parent = buffer.getParent();
-			if(this.options.node || this.options.text){
+			if(this.options.node){
 				this.onAddNode = dojo.connect(buffer, "onAddNode", dojo.hitch(this, "_swap", "node"));
 				this.onRemoveNode = dojo.connect(buffer, "onRemoveNode", dojo.hitch(this, "_swap", "node"));
+			}
+			if(this.options.text){
+				this.onChangeData = dojo.connect(buffer, "onChangeData", dojo.hitch(this, "_swap", "node"));
 			}
 			if(this.options["class"]){
 				this.onChangeAttribute = dojo.connect(buffer, "onChangeAttribute", dojo.hitch(this, "_swap", "class"));
@@ -72,6 +76,7 @@ dojo.require("dojox.dtl.html");
 				this.onAddNode && dojo.disconnect(this.onAddNode);
 				this.onRemoveNode && dojo.disconnect(this.onRemoveNode);
 				this.onChangeAttribute && dojo.disconnect(this.onChangeAttribute);
+				this.onChangeData && dojo.disconnect(this.onChangeData);
 			}
 
 			delete this.parent;
