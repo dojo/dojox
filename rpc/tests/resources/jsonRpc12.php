@@ -42,6 +42,7 @@
 			$results['error']=array();
 			$results['error']['code']=-32601;
 			$results['error']["message"]="The requested remote-procedure does not exist / is not available.";
+			header('HTTP/1.1 500 Server Error');
 			break;
 	}
 

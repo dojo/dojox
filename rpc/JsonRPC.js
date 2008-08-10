@@ -25,12 +25,15 @@ dojo.require("dojox.rpc.Service");
 			},
 	
 			deserialize: function(obj){
-				if(obj.error){
-					var e = new Error(obj.error);
+				if ('Error' == obj.name){
+					obj = dojo.fromJson(obj.responseText);
+				}
+				if(obj.error) {
+					var e = new Error(obj.error.message || obj.error);
 					e._rpcErrorObject = obj.error;
 					return e;
 				}
-				return obj.result || true;
+				return obj.result;
 			}
 		};
 	}

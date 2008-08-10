@@ -58,6 +58,7 @@
 		restStore: {
 			transport: "REST",
 			contentType:"text/plain",
+			preventCache: true,
 			target: "fakestore.php", 
                         parameters: [
                                 {name: "location", type: "string", optional: true}
