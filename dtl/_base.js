@@ -423,6 +423,9 @@ dojo.require("dojox.string.tokenize");
 			// summary: Adds content onto the buffer
 			return buffer.concat(this.contents);
 		},
+		isEmpty: function(){
+			return !dojo.trim(this.contents);
+		},
 		clone: function(){ return this; }
 	});
 
@@ -453,7 +456,19 @@ dojo.require("dojox.string.tokenize");
 			return this.render(context, dd.Template.prototype.getBuffer()).toString();
 		},
 		unrender: function(){ return arguments[1]; },
-		clone: function(){ return this; }
+		clone: function(){ return this; },
+		rtrim: function(){
+			while(1){
+				i = this.contents.length - 1;
+				if(this.contents[i] instanceof dd._TextNode && this.contents[i].isEmpty()){
+					this.contents.pop();
+				}else{
+					break;
+				}
+			}
+
+			return this;
+		}
 	});
 
 	dd._VarNode = dojo.extend(function(str){
