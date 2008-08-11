@@ -79,17 +79,11 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		this.checkBox.attr('value', this.option.selected);
 	},
 	
-	setAttribute: function(attr, value){
+	_setDisabledAttr: function(value){
 		// summary:
 		//		Disables (or enables) all the children as well
-		this.inherited(arguments);
-		switch(attr){
-			case "disabled":
-				this.checkBox.setAttribute(attr, value);
-				break;
-			default:
-				break;
-		}
+		this.checkBox.attr("disabled", value);
+		this.disabled = value;
 	}
 });
 
@@ -137,20 +131,14 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 		this._updateSelection();
 	},
 
-	setAttribute: function(attr, value){
+	_setDisabledAttr: function(value){
 		// summary:
 		//		Disable (or enable) all the children as well
 		this.inherited(arguments);
-		switch(attr){
-			case "disabled":
-				dojo.forEach(this._getChildren(), function(node){
-					if(node && node.setAttribute){
-						node.setAttribute(attr, value);
-					}
-				});
-				break;
-			default:
-				break;
-		}
+		dojo.forEach(this._getChildren(), function(node){
+			if(node && node.attr){
+				node.attr("disabled", value);
+			}
+		});
 	}
 });

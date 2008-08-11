@@ -92,11 +92,11 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		
 		// Set our length attribute and our value
 		if(!this._iReadOnly){
-			this.setAttribute("readOnly", (len === 1));
+			this.attr("readOnly", (len === 1));
 			delete this._iReadOnly;
 		}
 		if(!this._iDisabled){
-			this.setAttribute("disabled", (len === 0));
+			this.attr("disabled", (len === 0));
 			delete this._iDisabled;
 		}
 		this._setValueAttr(this.value);
@@ -154,7 +154,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	postCreate: function(){
 		this.inherited(arguments);
 		if(dojo.attr(this.srcNodeRef, "disabled")){
-			this.setAttribute("disabled", true);
+			this.attr("disabled", true);
 		}
 	},
 
@@ -201,28 +201,19 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		loadCallback();
 	},
 	
-	setAttribute: function(/*string*/ attr, /* anything */ value){
-        // summary: sometime we get called to set our value - we need to
-        //          make sure and route those requests through __setValueAttr()
-        //          instead.
-        if(attr === "value"){
-            this._setValueAttr(value);
-        }else{
-			switch(attr){
-				case "readOnly":
-					this._iReadOnly = value;
-					if(!value && this._childrenLoaded && this.options.length === 1){
-						return;
-					}
-					break;
-				case "disabled":
-					this._iDisabled = value;
-					if(!value && this._childrenLoaded && this.options.length === 0){
-						return;
-					}
-					break;
-			}
-			this.inherited(arguments);
-        }
-    }
+	_setReadOnlyAttr: function(value){
+		this._iReadOnly = value;
+		if(!value && this._childrenLoaded && this.options.length === 1){
+			return;
+		}
+		this.readOnly = value;
+	},
+	
+	_setDisabledAttr: function(value){
+		this._iDisabled = value;
+		if(!value && this._childrenLoaded && this.options.length === 0){
+			return;
+		}
+		this.inherited(arguments);
+	}
 });

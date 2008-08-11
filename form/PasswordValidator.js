@@ -43,7 +43,7 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 		//		Updates _isPWValid if this isn't our initial update by calling
 		//		our PasswordValidator's pwCheck function
 		if(newVal === ""){
-			newVal = dojox.form._OldPWBox.superclass.getValue.call(this);
+			newVal = dojox.form._OldPWBox.superclass.attr.call(this, "value");
 		}
 		if(priority !== null){
 			//  Priority is passed in as null, explicitly when this is an 
@@ -65,15 +65,11 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 		this._onMouse(e);
 	},
 
-	getValue: function(){
-		// summary:
-		//		Only returns a value if our container widget is valid.  This
-		//		is to prevent exposure of "oldPW" too early.
-		if(this.containerWidget.isValid()){
-			return this.inherited("getValue", arguments);
-		}else{
-			return "";
+	_getValueAttr: function(){
+		if(this.containerWidget._started && this.containerWidget.isValid()){
+			return this.inherited(arguments);
 		}
+		return "";
 	}
 });
 
@@ -103,7 +99,7 @@ dojo.declare("dojox.form._VerifyPWBox", dojox.form._ChildTextBox, {
 		// summary:
 		//		Validates that we match the "real" password
 		return this.inherited("isValid", arguments) &&
-			(this.getValue() == this.containerWidget._inputWidgets[1].getValue());
+			(this.attr("value") == this.containerWidget._inputWidgets[1].attr("value"));
 	}
 });
 
@@ -233,33 +229,31 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 		}
 		this._createSubWidgets();
 	},
-
-	setAttribute: function(/* string */ attr, /* anything */ value){
+	
+	_setDisabledAttr: function(value){
 		this.inherited(arguments);
-		
-		// Disabling (or enabling) the container disables (or enables) all
-		// the subwidgets as well - same for requiring
-		switch(attr){
-			case "disabled":
-			case "required":
-				dojo.forEach(this._inputWidgets, function(i){
-					if(i && i.setAttribute){ i.setAttribute(attr, value);}
-				});
-				break;
-			default:
-				break;
-		}
+		dojo.forEach(this._inputWidgets, function(i){
+			if(i && i.attr){ i.attr("disabled", value);}
+		});
 	},
 	
-	getValue: function(){
-		// summary: overridden to return an empty string if we aren't valid.
-		if (this.isValid()){
-			return this._inputWidgets[1].getValue();
-		}else{
-			return "";
-		}
+	_setRequiredAttribute: function(value){
+		this.required = value;
+		dojo.attr(this.focusNode, "required", value);
+		dijit.setWaiState(this.focusNode, "required", value);
+		this._refreshState();
+		dojo.forEach(this._inputWidgets, function(i){
+			if(i && i.attr){ i.attr("required", value);}
+		});
 	},
 
+	_getValueAttr: function(){
+		if(this.isValid()){
+			return this._inputWidgets[1].attr("value");
+		}
+		return "";
+	},
+	
 	focus: function(){
 		// summary: 
 		//		places focus on the first invalid input widget - if all

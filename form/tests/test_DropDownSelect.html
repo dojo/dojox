@@ -24,9 +24,9 @@
 					[
 						function test_setValue(t){
 							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY"}, form.getValues());
-							s1.setValue("WA");
+							s1.attr("value", "WA");
 							t.is("WA", s1.value);
-							s1.setValue("UT");
+							s1.attr("value", "UT");
 							t.is("TN", s1.value);
 							t.is(2, numChanges);
 						},
@@ -134,7 +134,7 @@
 			</button>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
-					s4.setAttribute("disabled", !s4.disabled);
+					s4.attr("disabled", !s4.disabled);
 				</script>
 				Toggle Disabled
 			</button>
