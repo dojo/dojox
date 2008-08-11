@@ -2,7 +2,7 @@ dojo.provide("dojox.form._FormSelectWidget");
 
 dojo.require("dijit.form._FormWidget");
 
-dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormWidget, {
+dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 	// multiple: Boolean
 	//		Matches the select's "multiple=" value
 	multiple: "",
