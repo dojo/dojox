@@ -47,7 +47,13 @@ dojo.require("dojox.html.metrics");
 			type:"vectorfont", size: "10pt", family: null
 		},
 		_vectorFontCache: {},
-		_svgFontCache: {}
+		_svgFontCache: {},
+		getVectorFont: function(/* String */url){
+			if(dojox.gfx._vectorFontCache[url]){
+				return dojox.gfx._vectorFontCache[url];
+			}
+			return new dojox.gfx.VectorFont(url);
+		}
 	});
 
 	dojo.declare("dojox.gfx.VectorFont", null, {
@@ -233,6 +239,7 @@ dojo.require("dojox.html.metrics");
 
 			//	cache the parsed font
 			dojox.gfx._vectorFontCache[name] = this;
+			dojox.gfx._vectorFontCache[url] = this;
 			if(name!=family && !dojox.gfx._vectorFontCache[family]){
 				dojox.gfx._vectorFontCache[family] = this;
 			}
