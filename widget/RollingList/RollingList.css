@@ -12,6 +12,14 @@
 	overflow: scroll;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	display:-moz-inline-box;		/* FF2 */
+	display:inline-block;			/* webkit and FF3 */
+	#zoom: 1; /* set hasLayout:true to mimic inline-block */
+	#display:inline; /* don't use .dj_ie since that increases the priority */
+	border:0;
+	padding:0;
+	vertical-align:middle;
+	#vertical-align: auto;	/* makes TextBox,Button line up w/native counterparts on IE6 */
 }
 
 .dojoxRollingListPane .dijitMenuItemLabel,

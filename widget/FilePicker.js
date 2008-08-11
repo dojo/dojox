@@ -157,14 +157,14 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	setValueFromString: function(/*string*/ path){
 		// Summary: sets the value of this widget based off the given path
 		if(!path){
-			this.setValue(null);
+			this.attr("value", null);
 			return;
 		}
 		if(path.lastIndexOf(this.pathSeparator) == (path.length - 1)){
 			path = path.substring(0, path.length - 1);
 		}
 		this.store.fetchItemByIdentity({identity: path,
-										onItem: this.setValue,
+										onItem: dojo.hitch(this, "attr", "value"),
 										scope: this});
 	},
 	

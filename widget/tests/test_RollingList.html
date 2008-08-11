@@ -141,10 +141,10 @@
 		setValue = function(id){
 			if(id){
 				continentStore.fetchItemByIdentity({identity: id, onItem: function(i){
-					myList.setValue(i);
+					myList.attr("value", i);
 				}});
 			}else{
-				myList.setValue(null);
+				myList.attr("value", null);
 			}
 		}
 	</script>
@@ -164,9 +164,9 @@
 		<script type="dojo/method" event="onChange" args="value">
 			console.debug("Set Value:", value);
 			if(value){
-				dijit.byId("clickWatch").setValue(this.store.getIdentity(value));
+				dijit.byId("clickWatch").attr("value", this.store.getIdentity(value));
 			}else{
-				dijit.byId("clickWatch").setValue("None Selected...");
+				dijit.byId("clickWatch").attr("value", "None Selected...");
 			}
 		</script>
 		<script type="dojo/method" event="getPaneForItem" args="item,parentPane,children">

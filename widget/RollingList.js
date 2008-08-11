@@ -18,10 +18,6 @@ dojo.declare("dojox.widget._RollingListPane",
 	//	our template
 	templateString: '<div class="dojoxRollingListPane"><table><tbody><tr><td dojoAttachPoint="containerNode"></td></tr></tbody></div>',
 
-	// class: string
-	//  We override this to dijitInline so things display correctly
-	"class": "dijitInline",
-
 	// parentWidget: dojox.widget.RollingList
 	//  Our rolling list widget
 	parentWidget: null,
@@ -109,7 +105,7 @@ dojo.declare("dojox.widget._RollingListPane",
 				this._loadCheck(forceLoad);
 			});
 		}
-		var displayState = this._isShown();
+		var displayState = this.domNode && this._isShown();
 		if((this.store || this.items) && (forceLoad || (this.refreshOnShow && displayState) || (!this.isLoaded && displayState))){
 			this._doQuery();
 		}
@@ -593,7 +589,7 @@ dojo.declare("dojox.widget.RollingList",
 		}
 	},
 	
-	setValue: function(/* item */ value){
+	_setValueAttr: function(/* item */ value){
 		// summary: sets the value of this widget to the given store item
 		if(this._itemsMatch(this.value, value)){ return; }
 		if(this._setInProgress && this._setInProgress === value){ return; }
@@ -685,7 +681,7 @@ dojo.declare("dojox.widget.RollingList",
 					fx();
 				}
 			}else if(idx === 0){
-				this.setValue(null);
+				this.attr("value", null);
 			}
 		});
 		
@@ -795,7 +791,7 @@ dojo.declare("dojox.widget.RollingList",
 			widgetItem.store = this.store;
 			widgetItem.item = item;
 			if(!widgetItem.label){
-				widgetItem.setLabel(this.store.getLabel(item));
+				widgetItem.attr("label", this.store.getLabel(item));
 			}
 			if(widgetItem.focusNode){
 				var self = this;

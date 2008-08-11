@@ -261,7 +261,7 @@ dojo.declare("dojox.form._HasDropDown",
 					adjustNode.style.left = oldRight - this.domNode.offsetWidth + "px";
 				}
 			}
-			this.popupStateNode.attr("popupActive", "true");
+			this.popupStateNode.setAttribute("popupActive", "true");
 			this._opened=true;
 			this.state="Opened";
 			if(dropDown.focus){
