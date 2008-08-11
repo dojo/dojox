@@ -240,6 +240,7 @@ dojo.declare("dojox.form._HasDropDown",
 				},
 				onClose: function(){
 					dropDown.domNode.style.width = oldWidth;
+					dojo.attr(self.popupStateNode, "popupActive", false);
 					self.popupStateNode.removeAttribute("popupActive");
 					self._opened = false;
 					self.state = "";
@@ -261,7 +262,7 @@ dojo.declare("dojox.form._HasDropDown",
 					adjustNode.style.left = oldRight - this.domNode.offsetWidth + "px";
 				}
 			}
-			this.popupStateNode.setAttribute("popupActive", "true");
+			dojo.attr(this.popupStateNode, "popupActive", "true");
 			this._opened=true;
 			this.state="Opened";
 			if(dropDown.focus){
