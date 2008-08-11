@@ -468,7 +468,7 @@ dojo.require("dojox.html.metrics");
 		},
 
 		getBaseline: function(/* Float? */scale){
-			return (scale||1) * (this.viewbox.height-this.descent);
+			return (scale||1) * (this.viewbox.height+this.descent);
 		},
 
 		draw: function(
