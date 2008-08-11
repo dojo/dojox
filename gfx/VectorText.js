@@ -467,6 +467,10 @@ dojo.require("dojox.html.metrics");
 			return this._trim(lines);
 		},
 
+		getBaseline: function(/* Float? */scale){
+			return (scale||1) * (this.viewbox.height-this.descent);
+		},
+
 		draw: function(
 			/* dojox.gfx.Container */group, 
 			/* dojox.gfx.__TextArgs */textArgs,
