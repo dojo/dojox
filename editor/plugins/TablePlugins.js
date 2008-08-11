@@ -144,7 +144,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		//	DOES NOT WORK IN FF - it could - but FF's drag detection is a monster
 		//
 		if(!dojo.isIE){
-			console.warn("Drag and Drop is currently only detectable in IE.");
+			//console.warn("Drag and Drop is currently only detectable in IE.");
 			return
 		}
 		
@@ -446,7 +446,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			//console.log("onDisplayChanged", this.commandName);
 			if(!this.alwaysAvailable){
 				this.available = withinTable;
-				this.button.setAttribute('disabled', !this.available);
+				this.button.attr('disabled', !this.available);
 			}
 		},
 		
