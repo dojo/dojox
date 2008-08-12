@@ -427,6 +427,7 @@ dojo.require("dojox.dtl.Context");
 				}
 				if(parent._dirty){
 					var caches = parent._cache;
+					var select = (parent.tagName == "SELECT" && !parent.options.length);
 					for(var i = 0, cache; cache = caches[i]; i++){
 						if(cache !== parent){
 							this.onAddNode && this.onAddNode(cache);
@@ -434,9 +435,15 @@ dojo.require("dojox.dtl.Context");
 								script += cache.data;
 							}else{
 								parent.appendChild(cache);
+								if(select && cache.defaultSelected && i){
+									select = i;
+								}
 							}
 							this.onAddNodeComplete && this.onAddNodeComplete(cache);
 						}
+					}
+					if(select){
+						parent.options.selectedIndex = (typeof select == "number") ? select : 0;
 					}
 					caches.length = 0;
 					parent._dirty = false;
