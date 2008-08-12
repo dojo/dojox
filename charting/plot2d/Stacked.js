@@ -11,16 +11,6 @@ dojo.require("dojox.lang.functional.reversed");
 	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
 
-	//	inner function for translating polylines to curves with tension
-	var curve = function(arr, tension){
-		return dojo.map(arr, function(item, i){
-			if(i == 0){ return "M" + item.x + "," + item.y; }
-			var dx = item.x - arr[i - 1].x, dy = arr[i - 1].y;
-			return "C" + (item.x - (tension - 1) * (dx / tension)) + "," +
-				dy + " " + (item.x - (dx / tension)) + "," + item.y + " " + item.x + "," + item.y;
-		}).join(" ");
-	};
-
 	dojo.declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
 		calculateAxes: function(dim){
 			var stats = dc.collectStackedStats(this.series);
@@ -67,13 +57,13 @@ dojo.require("dojox.lang.functional.reversed");
 					color = new dojo.Color(t.next("color"));
 				}
 
-				var lpath = this.opt.tension ? curve(lpoly, this.opt.tension) : "";
+				var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 				
 				if(this.opt.areas){
 					var apoly = dojo.clone(lpoly);
 					var fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
 					if(this.opt.tension){
-						var p=curve(apoly, this.opt.tension);
+						var p=dc.curve(apoly, this.opt.tension);
 						p += " L" + lpoly[lpoly.length - 1].x + "," + (dim.height - offsets.b) +
 							" L" + lpoly[0].x + "," + (dim.height - offsets.b) +
 							" L" + lpoly[0].x + "," + lpoly[0].y;
@@ -108,7 +98,7 @@ dojo.require("dojox.lang.functional.reversed");
 					shadowStroke.width += sh.dw ? sh.dw : 0;
 					if(this.opt.lines){
 						if(this.opt.tension){
-							run.dyn.shadow = s.createPath(curve(spoly, this.opt.tension)).setStroke(shadowStroke).getStroke();
+							run.dyn.shadow = s.createPath(dc.curve(spoly, this.opt.tension)).setStroke(shadowStroke).getStroke();
 						} else {
 							run.dyn.shadow = s.createPolyline(spoly).setStroke(shadowStroke).getStroke();
 						}

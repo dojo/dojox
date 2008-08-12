@@ -12,16 +12,6 @@ dojo.require("dojox.lang.functional.reversed");
 		dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
 
-	// function for translating polylines to curves with tension
-	var curve = function(arr, tension){
-		return dojo.map(arr, function(item, i){
-			if(i == 0){ return "M" + item.x + "," + item.y; }
-			var dx = item.x - arr[i - 1].x, dy = arr[i - 1].y;
-			return "C" + (item.x - (tension - 1) * (dx / tension)) + "," +
-				dy + " " + (item.x - (dx / tension)) + "," + item.y + " " + item.x + "," + item.y;
-		}).join(" ");
-	};
-	
 	dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
@@ -87,7 +77,7 @@ dojo.require("dojox.lang.functional.reversed");
 					color = run.dyn.color = new dojo.Color(t.next("color"));
 				}
 
-				var lpath = this.opt.tension ? curve(lpoly, this.opt.tension) : "";
+				var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 
 				if(this.opt.areas){
 					var fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
@@ -127,7 +117,7 @@ dojo.require("dojox.lang.functional.reversed");
 					shadowStroke.width += sh.dw ? sh.dw : 0;
 					if(this.opt.lines){
 						if(this.opt.tension){
-							run.dyn.shadow = s.createPath(curve(spoly, this.opt.tension)).setStroke(shadowStroke).getStroke();
+							run.dyn.shadow = s.createPath(dc.curve(spoly, this.opt.tension)).setStroke(shadowStroke).getStroke();
 						} else {
 							run.dyn.shadow = s.createPolyline(spoly).setStroke(shadowStroke).getStroke();
 						}

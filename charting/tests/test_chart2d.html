@@ -51,7 +51,7 @@ dojo.require("dojox.charting.themes.PlotKit.green");
 dojo.require("dojox.charting.themes.Ireland");
 dojo.require("dojox.charting.themes.SageToLime");
 dojo.require("dojox.charting.themes.Minty");
-dojo.require("dojox.charting.themes.ET.greys");
+dojo.require("dojox.charting.themes.Tufte");
 
 makeObjects = function(){
 	var chart1 = new dojox.charting.Chart2D("test1");
@@ -65,7 +65,7 @@ makeObjects = function(){
 	chart2.render();
 
 	var chart3 = new dojox.charting.Chart2D("test3");
-	chart3.addPlot("default", {type: "Areas", tension:2.5});
+	chart3.addPlot("default", {type: "Areas", tension:"X"});
 	chart3.setTheme(dojox.charting.themes.Shrooms);
 	chart3.addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4]);
 	chart3.addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2]);
@@ -122,7 +122,7 @@ makeObjects = function(){
 	chart10.render();
 
 	var chart11 = new dojox.charting.Chart2D("test11");
-	chart11.addPlot("default", {type: "StackedLines", markers: true, tension:3, shadows: {dx: 2, dy: 2, dw: 2}});
+	chart11.addPlot("default", {type: "StackedLines", markers: true, tension:"S", shadows: {dx: 2, dy: 2, dw: 2}});
 	chart11.addSeries("Series A", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "red", width: 2}, fill: "lightpink", marker: "m-3,-3 l0,6 6,0 0,-6 z"});
 	chart11.addSeries("Series B", [1, 1.6, 1.3, 1.4, 1.1, 1.5, 1.1], {stroke: {color: "blue", width: 2}, fill: "lightblue", marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"});
 	chart11.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen", marker: "m0,-3 l3,3 -3,3 -3,-3 z"});
@@ -131,7 +131,7 @@ makeObjects = function(){
 	var chart12 = new dojox.charting.Chart2D("test12");
 	chart12.addAxis("x", {fixLower: "major", fixUpper: "major"});
 	chart12.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0});
-	chart12.addPlot("default", {type: "StackedAreas", tension:3});
+	chart12.addPlot("default", {type: "StackedAreas", tension:"S"});
 	chart12.addSeries("Series A", [-2, 1.1, 1.2, 1.3, 1.4, 1.5, -1.6], {stroke: {color: "red", width: 2}, fill: "lightpink"});
 	chart12.addSeries("Series B", [1, 1.6, 1.3, 1.4, 1.1, 1.5, 1.1], {stroke: {color: "blue", width: 2}, fill: "lightblue"});
 	chart12.addSeries("Series C", [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6], {stroke: {color: "green", width: 2}, fill: "lightgreen"});
@@ -274,7 +274,7 @@ makeObjects = function(){
 	chart28.render();
 
 	var chart29 = new dojox.charting.Chart2D("test29");
-	chart29.setTheme(dojox.charting.themes.ET.greys);
+	chart29.setTheme(dojox.charting.themes.Tufte);
 	chart29.addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true});
 	chart29.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true});
 	chart29.addPlot("default", {type: "ClusteredColumns", gap: 10});
