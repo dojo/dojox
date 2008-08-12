@@ -68,9 +68,11 @@ dojo.require("dojox.rpc.Rest");
 				var isPost = action.method == 'post';
 				// send the content location to the server
 				contentLocation = isPost && dojox.rpc.JsonRest._contentId;
-				var dfd = action.deferred = Rest[action.method](
-									action.target,
-									dojox.json.ref.toJson(action.content,false,jr.getServiceAndId(action.target.__id).service.servicePath)
+				var serviceAndId = jr.getServiceAndId(action.target.__assignedId || action.target.__id);
+				var service = serviceAndId.service; 
+				var dfd = action.deferred = service[action.method](
+									serviceAndId.id,
+									dojox.json.ref.toJson(action.content, false, service.servicePath, true)
 								);
 				(function(object,dfd){
 					dfd.addCallback(function(value){

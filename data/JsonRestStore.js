@@ -251,6 +251,7 @@ dojo.declare("dojox.data.JsonRestStore",
 		_processResults: function(results, deferred){
 			// index the results
 			var count = results.length;
+			// if we don't know the length, and it is partial result, we will guess that it is twice as big, that will work for most widgets
 			return {totalCount:deferred.fullLength || (deferred.request.count == count ? count * 2 : count), items: results};
 		},
 
@@ -258,6 +259,27 @@ dojo.declare("dojox.data.JsonRestStore",
 			// summary:
 			// 		Gets the constructor for objects from this store
 			return this._constructor;
+		},
+		getIdentity: function(item){
+			var id = item.__id;
+			if(!id){
+				this.inherited(arguments); // let service store throw the error
+			}
+			var prefix = this.service.servicePath;
+			// support for relative or absolute referencing with ids 
+			return id.substring(0,prefix.length) != prefix ?  id : id.substring(prefix.length); // String
+		},
+		fetchItemByIdentity: function(args){
+			var id = args.identity;
+			var store = this;
+			// if it is an absolute id, we want to find the right store to query
+			if(id.match(/^(\w*:)?\//)){
+				var serviceAndId = dojox.rpc.JsonRest.getServiceAndId(id);
+				store = serviceAndId.service._store;
+				args.identity = serviceAndId.id; 
+			}
+			args._prefix = store.service.servicePath;
+			store.inherited(arguments);
 		},
 		//Notifcation Support
 
@@ -268,7 +290,7 @@ dojo.declare("dojox.data.JsonRestStore",
 		getFeatures: function(){
 			// summary:
 			// 		return the store feature set
-			var features = dojox.data.ServiceStore.prototype.getFeatures();
+			var features = this.inherited(arguments);
 			features["dojo.data.api.Write"] = true;
 			features["dojo.data.api.Notification"] = true;
 			return features;

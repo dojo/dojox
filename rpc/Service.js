@@ -77,7 +77,6 @@ dojo.declare("dojox.rpc.Service", null, {
 		var schema = method.returns || (method._schema = {}); // define the schema
 		var servicePath = '/' + serviceName +'/';
 		// schemas are minimally used to track the id prefixes for the different services
-		dojox.rpc.services[servicePath] = func; // register the service
 		schema._service = func;
 		func.servicePath = servicePath;
 		func._schema = schema;
@@ -304,7 +303,6 @@ dojox.rpc.transportRegistry.register(
 		}
 	}
 );
-dojox.rpc.services={};
 dojox.rpc.Service._nextId = 1;
 
 dojo._contentHandlers.auto = function(xhr){

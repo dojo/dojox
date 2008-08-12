@@ -176,7 +176,7 @@ dojox.json.ref.fromJson = function(/*String*/ str,/*Object?*/ args){
 	return root;
 };
 
-dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/ idPrefix){
+dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Object?*/ idPrefix, /*Boolean?*/ assignPaths){
 	// summary:
 	//		Create a JSON serialization of an object.
 	//		This has support for referencing, including circular references, duplicate references, and out-of-message references
@@ -277,8 +277,10 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 		return dojo.toJson(it); // use the default serializer for primitives
 	}
 	var json = serialize(it,'$','');
-	for(i in paths)  {// cleanup the temporary path-generated ids
-		delete paths[i].__id;
+	if(!assignPaths){
+		for(i in paths)  {// cleanup the temporary path-generated ids
+			delete paths[i].__id;
+		}
 	}
 	return json;
 };

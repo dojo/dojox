@@ -96,27 +96,10 @@ dojo.provide("dojox.rpc.Rest");
 		makeRest('post');
 		makeRest('delete');
 		// record the REST services for later lookup
-		dojox.rpc.services = dojox.rpc.services || {};
-		dojox.rpc.services[path] = service;
 		service.servicePath = path;
 		return service;
 	};
-	function restMethod(name){
-		// summary:
-		// 		create a REST method for the given name
-		drr[name] = function(target,content){
-			// parse the id to find the service and the id to use
-			var parts = (target.__assignedId || target.__id).match(/^(.*\/)([^\/]*)$/);
-			// find the service and call it
-			var service = dojox.rpc.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
-			// // TODO: could go directly to the event handlers
-			return name == 'get' ? service(parts[2],content) : service[name](parts[2],content);
-		};
-	}
-	restMethod("get");
-	restMethod("put");
-	restMethod("post");
-	restMethod("delete");
+
 	drr._index={};// the map of all indexed objects that have gone through REST processing
 	// these do the actual requests
 	drr._change = function(method,service,id,content){

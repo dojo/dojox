@@ -214,7 +214,6 @@ dojo.declare("dojox.data.ServiceStore",
 						}else{
 							id = this._currentId++;
 						}
-						id = this.service.servicePath + id;
 						var existingObj = this._index[id];
 						if(existingObj){
 							for(var j in existingObj){
@@ -316,12 +315,10 @@ dojo.declare("dojox.data.ServiceStore",
 
 		
 		getIdentity: function(item){
-			if(!item.__id){
+			if(!("__id" in item)){
 				throw new Error("Identity attribute not found");
 			}
-			var prefix = this.service.servicePath;
-			// support for relative referencing with ids
-			return item.__id.substring(0,prefix.length) != prefix ?  item.__id : item.__id.substring(prefix.length); // String
+			return item.__id;
 		},
 
 		getIdentityAttributes: function(item){
@@ -335,7 +332,7 @@ dojo.declare("dojox.data.ServiceStore",
 		fetchItemByIdentity: function(args){
 			// summary: 
 			//		fetch an item by its identity, by looking in our index of what we have loaded
-			var item = this._index[this.service.servicePath + args.identity];
+			var item = this._index[(args._prefix || '') + args.identity];
 			if(item){
 				args.onItem.call(args.scope, item);
 			}else{
