@@ -12,7 +12,7 @@ dojo.declare(
 		//		A doctest looks as if it was copied from the shell (which it mostly is).
 		//		A doctest is executed when the following conditions match:
 		//		1) all lines are comments
-		//		2) the line always starts with any number of spaces followed by "//"
+		//		2) the line always starts with spaces/tabs followed by "//"
 		//		   and at least one space
 		//		3) the line(s) of the test to execute starts with ">>>"
 		//		   preceeded by what is described in 2)
@@ -39,7 +39,7 @@ dojo.declare(
 		//
 		//		DocTests are great for inline documenting a class or method, they also
 		//		are very helpful in understanding what the class/method actually does.
-		//		The don't make sense in every place, but sometimes they are really handy.
+		//		They don't make sense everywhere, but sometimes they are really handy.
 
 
 		//	TODO:
@@ -56,19 +56,33 @@ dojo.declare(
 		
 		errors: [],
 		
-		getTests:function(moduleName){
+		getTests:function(/*String*/moduleName){
+			// summary: Extract the tests from the given module or string.
+			// examples:
+			// 		>>> dojo.isArray(new dojox.testing.DocTest().getTests("dojox.testing.DocTest")) // Use the module name to extract the tests from.
+			//		true
 			var path = dojo.moduleUrl(moduleName).path;
-			var trim = dojo.hitch(dojo.string, "trim");
-
 			// TODO:
 			//		this needs to be done better, this is pretty simple and
 			//		surely not dummy proof
-	
 			var file = path.substring(0, path.length-1)+".js";
 			var xhr = dojo.xhrGet({url:file, handleAs:"text"});
 			// Make loading synchronously, mainly so we can use it in doh.
 			var data = dojo._getText(file);
-				
+			return this._getTestsFromString(data, true);
+		},
+		
+		getTestsFromString:function(/*String*/data){
+			// examples:
+			//		>>> (new dojox.testing.DocTest().getTestsFromString(">>> 1+1\n2\n>>> 2+2\n4")).length // Do tests from strings get detected properly?
+			//		2
+			return this._getTestsFromString(data, false);
+		},
+		
+		_getTestsFromString:function(/*String*/data, /*Boolean*/insideComments){
+			// summary: Parse the given string for tests.
+			// insideComments: Boolean, if false "data" contains only the pure tests, comments already stripped.
+			var trim = dojo.hitch(dojo.string, "trim");
 			var lines = data.split("\n");
 			var len = lines.length;
 			var tests = [];
@@ -77,16 +91,16 @@ dojo.declare(
 				expectedResult: [],
 				line: null
 			};
-			for(var i=0; i<len; i++){
+			for(var i=0; i<len+1; i++){
 				// Trim the line, so we don't have to worry about leading
 				// spaces or tabs, bla bla ...
-				var l = trim(lines[i]);
+				var l = trim(lines[i] || ""); // The '|| ""' makes sure tests that have no preceeding \n are taken into account too.
 				// TODO:
 				//		detect tests that dont match the condition: commands,
 				//		result, empty line. esp the empty line might be missing
 				//		or be tolerant and accept a new test starting on the
 				//		next line, which would allow to omit the empty line!?
-				if(l.match(/^\/\/\s+>>>\s.*/)){
+				if((insideComments && l.match(/^\/\/\s+>>>\s.*/)) || l.match(/^\s*>>>\s.*/)){
 					if(!test.line){
 						test.line = i+1;
 					}
@@ -101,15 +115,15 @@ dojo.declare(
 						});
 						test = {commands:[], expectedResult:[], line:i+1};
 					}
-					l = trim(l).substring(2, l.length); // Remove the leading slashes.
+					l = insideComments ? trim(l).substring(2, l.length) : l; // Remove the leading slashes.
 					l = trim(l).substring(3, l.length); // Remove the ">>>".
 					test.commands.push(trim(l));
-				}else if(l.match(/^\/\/\s+.*/) && test.commands.length){
+				}else if((!insideComments || l.match(/^\/\/\s+.*/)) && test.commands.length && test.expectedResult.length==0){
 					// Detect the lines after the ">>>"-lines, the exptected result.
-					l = trim(l).substring(3, l.length); // Remove the leading slashes.
+					l = insideComments ? trim(l).substring(3, l.length) : l; // Remove the leading slashes.
 					test.expectedResult.push(trim(l));
 				}else if(test.commands.length>0 && test.expectedResult.length){
-					if(l.match(/^\/\/\s*$/)){
+					if(!insideComments || l.match(/^\/\/\s*$/)){
 						// Detect the empty line.
 						tests.push({
 							commands: test.commands,
@@ -117,8 +131,8 @@ dojo.declare(
 							line: test.line
 						});
 					}
-					if(!l.match(/^\/\//)){
-						// If the next line is not a comment at all (doesnt start with "//").
+					if(insideComments && !l.match(/^\/\//)){
+						// If the next line is not a comment at all (doesn't start with "//").
 						tests.push({
 							commands: test.commands,
 							expectedResult: test.expectedResult.join("\n"),
