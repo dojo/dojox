@@ -24,7 +24,7 @@
 	<script type="text/javascript">
 		dojo.require("dojox.widget.SortList");
 		dojo.require("dijit.layout.TabContainer");
-		dojo.require("dijit.layout.SplitContainer");
+		dojo.require("dijit.layout.BorderContainer");
 		dojo.require("dojo.data.ItemFileReadStore"); 
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 	</script>
@@ -47,10 +47,10 @@
 	</div>
 
 	<h3>Child of a SplitContainer</h3>
-	<div dojoType="dijit.layout.SplitContainer" sizerWidth="7" activeSizing="false" orientaton="vertical" style="width:600px; height:200px;">
-		<div dojoType="dojox.widget.SortList" store="stateStore" title="list 1" layoutAlign="left" sizeShare="33"></div>
-		<div dojoType="dojox.widget.SortList" store="stateStore" title="list 2" layoutAlign="client" sizeShare="33"></div>
-		<div dojoType="dojox.widget.SortList" store="stateStore" title="closable" layoutAlign="right" sizeShare="33"></div>
+	<div dojoType="dijit.layout.BorderContainer" design="sidebar" gutters="true" liveSplitters="true" style="border: 1px solid #ccc; width:600px; height:200px;">
+		<div dojoType="dojox.widget.SortList" splitter="true" store="stateStore" title="list 1" region="leading" style="width: 33%"></div>
+		<div dojoType="dojox.widget.SortList" splitter="true" store="stateStore" title="list 2" region="center"></div>
+		<div dojoType="dojox.widget.SortList" splitter="true" store="stateStore" title="closable" region="trailing" style="width: 33%"></div>
 	</div>
 	
 	<br>

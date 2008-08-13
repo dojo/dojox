@@ -9,7 +9,12 @@
 	cursor:pointer; 
 	padding:4px 4px 3px 4px;
 }
+
 .sortList { height:100%; width:100%; }
+
+/* for nested layout elements */
+.dijitBorderContainer .dojoxSortList { width: auto; height: auto;}
+
 .sortListBodyWrapper { 
 	border:1px solid #b7b7b7; 
 	overflow:auto; 

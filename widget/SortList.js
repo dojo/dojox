@@ -36,6 +36,8 @@ dojo.declare("dojox.widget.SortList",
 	// FIXME: this is really simple store support
 	store: "",
 	key: "name",
+	
+	baseClass: "dojoxSortList",
 
 	templatePath: dojo.moduleUrl("dojox.widget","SortList/SortList.html"),
 
