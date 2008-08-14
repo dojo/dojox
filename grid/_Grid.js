@@ -127,6 +127,11 @@ dojo.requireLocalization("dojox.grid", "grid");
 		// defaultHeight: String
 		//		default height of the grid, measured in any valid css unit.
 		defaultHeight: '15em',
+		
+		// height: String
+		//		explicit height of the grid, measured in any valid css unit.  This will be populated (and overridden)
+		//		if the height: css attribute exists on the source node.
+		height: '',
 
 		// structure: Object|String
 		//		View layout defintion. Can be set to a layout object, or to the (string) name of a layout object.
@@ -206,6 +211,9 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
 			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
 			this.noDataMessage = dojo.string.substitute(this.noDataMessage, messages);
+			if(this.srcNodeRef.style.height){
+				this.height = this.srcNodeRef.style.height;
+			}
 		},
 		
 		postCreate: function(){
@@ -502,6 +510,8 @@ dojo.requireLocalization("dojox.grid", "grid");
 			}else if(this.domNode.clientHeight <= padBorder.h){
 				if(this.domNode.parentNode == document.body){
 					this.domNode.style.height = this.defaultHeight;
+				}else if(this.height){
+					this.domNode.style.height = this.height;
 				}else{
 					this.fitTo = "parent";
 				}
