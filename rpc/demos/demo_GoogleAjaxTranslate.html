@@ -40,15 +40,6 @@
 		dojo.require("dojox.rpc.Service");
 		dojo.require("dojo.io.script");
 
-		// FIXME: we do this because Google API passes a list of params instead of just an object
-		// this affects other io.script transports
-		// UPDATE: they send raw JSON if you omit the callback param?
-		dojo.mixin(dojo.io.script,{
-			_jsonpCallback:function(json){
-				this.ioArgs.json = arguments.length > 0 ? arguments : json;
-			}
-		});
-
 		var google, showLoader, hideLoader = null;
 		function init(){
 
@@ -84,7 +75,7 @@
 				var pair = dojo.byId("fromLang").value + "|" + dojo.byId("toLang").value;
 				google.translate({ q: dojo.byId("test").value, langpair:pair })
 					.addBoth(function(response){
-						var r = response[1];
+						var r = response.responseData;
 						if(r && r.translatedText){
 							dojo.byId("response").value = r.translatedText;
 						}
@@ -101,7 +92,7 @@
 				var resp = dojo.byId("response");
 				var trans = resp.value;
 
-				resp.value = "";				
+				resp.value = "";
 				input.value = trans;
 				
 				var cur = dojo.byId("fromLang").selectedIndex;
