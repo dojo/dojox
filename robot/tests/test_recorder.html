@@ -31,13 +31,12 @@
 				timeout: 5100,
 				runTest: function(){
 					var d = new doh.Deferred();
-					var s = new Function('return window');
 					// start the recorder and close the alert
 					dojo.byId('textbox').value="";
-					doh.robot.mouseMoveAt(s,'safeclick');
-					doh.robot.mouseClick(s,{left:true, middle:false, right:false},3);
-					doh.robot.keyPress(s,dojo.keys.ENTER,3000,null,true);
-					doh.robot.keyPress(s,dojo.keys.ENTER,1000,{ctrl:true,alt:true});
+					doh.robot.mouseMoveAt('safeclick');
+					doh.robot.mouseClick({left:true, middle:false, right:false}, 3);
+					doh.robot.keyPress(dojo.keys.ENTER, 3000,null,true);
+					doh.robot.keyPress(dojo.keys.ENTER, 1000,{ctrl:true,alt:true});
 					setTimeout(function(){
 						d.callback(true);
 					},5000);
@@ -49,25 +48,24 @@
 				timeout: 8879,
 				runTest: function(){
 					var d = new doh.Deferred();
-					var s = new Function('return window');
 					// Safari/Mac stops listening to mouse movement after the alert pops up in the runner
 					// click to wake it up
-					doh.robot.mouseMoveAt(s,'safeclick');
-					doh.robot.mouseClick(s,{left:true, middle:false, right:false});
-					doh.robot.mouseMove(s,196,124,353,true);
+					doh.robot.mouseMoveAt('safeclick');
+					doh.robot.mouseClick({left:true, middle:false, right:false});
+					doh.robot.mouseMove(196, 124, 353,true);
 					doh.robot._scrollIntoView('widget_combo');
-					doh.robot.mouseMoveAt(s,dijit.byId('combo').downArrowNode,18,1,7);
-					doh.robot.mouseClick(s,{left:true, middle:false, right:false},1);
-					doh.robot.mouseMove(s,195,124,546,true);
-					doh.robot.mouseMove(s,174,165,16,true);
-					doh.robot.mouseMoveAt(s,'combo_popup2',483,148,5);
-					doh.robot.mouseClick(s,{left:true, middle:false, right:false},1);
-					doh.robot.mouseMove(s,155,195,334,true);
-					doh.robot.mouseMoveAt(s,'textbox',331,131,11);
-					doh.robot.mouseClick(s,{left:true, middle:false, right:false},1);
-					doh.robot.typeKeys(s,'test me',602,226);
-					doh.robot.keyPress(s,dojo.keys.ENTER,0,{ctrl:true,alt:true});
-					setTimeout(function(){
+					doh.robot.mouseMoveAt(dijit.byId('combo').downArrowNode, 18, 1, 7);
+					doh.robot.mouseClick({left:true, middle:false, right:false}, 1);
+					doh.robot.mouseMove(195, 124, 546,true);
+					doh.robot.mouseMove(174, 165, 16,true);
+					doh.robot.mouseMoveAt('combo_popup2', 483, 148, 5);
+					doh.robot.mouseClick({left:true, middle:false, right:false}, 1);
+					doh.robot.mouseMove(155, 195, 334,true);
+					doh.robot.mouseMoveAt('textbox', 331, 131, 11);
+					doh.robot.mouseClick({left:true, middle:false, right:false}, 1);
+					doh.robot.typeKeys('test me', 602, 1500);
+					doh.robot.keyPress(dojo.keys.ENTER, 500,{ctrl:true,alt:true});
+					doh.robot.sequence(function(){
 						var div=dojo.byId('dojox.robot.recorder');
 						var text;
 						if(div["innerText"] !== undefined){
@@ -82,11 +80,10 @@
 						}else{
 							d.errback(new Error('We got a failure'));
 						}
-					}, 7879);
+					}, 1000);
 					return d;
 				}
 			});
-
 
 			doh.run();
 		});
