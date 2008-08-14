@@ -302,10 +302,6 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		}
 	},
 
-	renderRows: function(inPageIndex, inRowsPerPage){
-		this.views.renderRows(inPageIndex, inRowsPerPage);
-	},
-
 	// paging
 	_requestsPending: function(inRowIndex){
 		return this._pending_requests[inRowIndex];

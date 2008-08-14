@@ -994,7 +994,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		adaptHeight: function(minusScroll){
-			if(!this.grid.autoHeight){
+			if(!this.grid._autoHeight){
 				var h = this.domNode.clientHeight;
 				if(minusScroll){
 					h -= dojox.html.metrics.getScrollbar().h;
@@ -1035,9 +1035,9 @@ dojo.require("dojo.dnd.Manager");
 			ds.height = (h >= 0 ? h + 'px' : '');
 		},
 
-		renderRow: function(inRowIndex, inHeightPx){
+		renderRow: function(inRowIndex){
 			var rowNode = this.createRowNode(inRowIndex);
-			this.buildRow(inRowIndex, rowNode, inHeightPx);
+			this.buildRow(inRowIndex, rowNode);
 			this.grid.edit.restore(this, inRowIndex);
 			if(this._pendingUpdate){
 				window.clearTimeout(this._pendingUpdate);
@@ -1111,7 +1111,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		// updating
-		updateRow: function(inRowIndex, inHeightPx, inPageNode){
+		updateRow: function(inRowIndex){
 			var rowNode = this.getRowNode(inRowIndex);
 			if(rowNode){
 				rowNode.style.height = '';

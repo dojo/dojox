@@ -240,9 +240,9 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	},
 	
 	// updating
-	updateRow: function(inRowIndex, inHeight){
+	updateRow: function(inRowIndex){
 		for(var i=0, v; v=this.views[i]; i++){
-			v.updateRow(inRowIndex, inHeight);
+			v.updateRow(inRowIndex);
 		}
 		this.renormalizeRow(inRowIndex);
 	},

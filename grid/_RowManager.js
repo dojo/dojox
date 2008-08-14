@@ -15,19 +15,7 @@ dojo.provide("dojox.grid._RowManager");
 			this.grid = inGrid;
 		},
 		linesToEms: 2,
-		defaultRowHeight: 1, // lines
 		overRow: -2,
-		// metrics
-		getHeight: function(inRowIndex){
-			return '';
-		},
-		getDefaultHeightPx: function(){
-			// summmary:
-			// retrieves the default row height
-			// returns: int, default row height
-			return 32;
-			//return Math.round(this.defaultRowHeight * this.linesToEms * this.grid.contentPixelToEmRatio);
-		},
 		// styles
 		prepareStylingRow: function(inRowIndex, inRowNode){
 			return {

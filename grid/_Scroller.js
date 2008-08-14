@@ -54,7 +54,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		// specified
 		rowCount: 0, // total number of rows to manage
-		defaultRowHeight: 10, // default height of a row
+		defaultRowHeight: 32, // default height of a row
 		keepRows: 100, // maximum number of rows that should exist at one time
 		contentNode: null, // node to contain pages
 		scrollboxNode: null, // node that controls scrolling
@@ -65,6 +65,7 @@ dojo.provide("dojox.grid._Scroller");
 		windowHeight: 0,
 		firstVisibleRow: 0,
 		lastVisibleRow: 0,
+		averageRowHeight: 0, // the average height of a row
 		// private
 		page: 0,
 		pageTop: 0,
@@ -76,7 +77,6 @@ dojo.provide("dojox.grid._Scroller");
 				case 1: this.rowCount = inRowCount;
 			}
 			this.defaultPageHeight = this.defaultRowHeight * this.rowsPerPage;
-			//this.defaultPageHeight = this.defaultRowHeight * Math.min(this.rowsPerPage, this.rowCount);
 			this.pageCount = this._getPageCount(this.rowCount, this.rowsPerPage);
 			this.setKeepInfo(this.keepRows);
 			this.invalidate();
@@ -192,7 +192,6 @@ dojo.provide("dojox.grid._Scroller");
 			for(var i=0; i<this.colCount; i++){
 				nodes[i] = this.pageNodes[i][inPageIndex];
 			}
-			//this.renderRows(inPageIndex*this.rowsPerPage, this.rowsPerPage, nodes);
 			for(var i=0, j=inPageIndex*this.rowsPerPage; (i<this.rowsPerPage)&&(j<this.rowCount); i++, j++){
 				this.renderRow(j, nodes);
 			}
@@ -238,6 +237,14 @@ dojo.provide("dojox.grid._Scroller");
 			for(var i=0; i<this.colCount; i++){
 				dojox.grid.util.setStyleHeightPx(this.contentNodes[i], this.height);
 			}
+			
+			// Calculate the average row height and update the defaults (row and page).
+			this.needPage(this.page, this.pageTop);
+			var rowsOnPage = (this.page < this.pageCount - 1) ? this.rowsPerPage : (this.rowCount % this.rowsPerPage);
+			var pageHeight = this.getPageHeight(this.page);
+			this.averageRowHeight = (pageHeight > 0 && rowsOnPage > 0) ? (pageHeight / rowsOnPage) : 0;
+			this.defaultRowHeight = this.averageRowHeight || dojox.grid._Scroller.prototype.defaultRowHeight;
+			this.defaultPageHeight = this.defaultRowHeight * this.rowsPerPage;
 		},
 		calcLastPageHeight: function(){
 			if(!this.pageCount){

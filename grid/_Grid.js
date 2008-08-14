@@ -116,9 +116,12 @@ dojo.requireLocalization("dojox.grid", "grid");
 		//		If autoWidth is true, grid width is automatically set to fit the data.
 		autoWidth: false,
 
-		// autoHeight: Boolean
+		// autoHeight: Boolean|Integer
 		//		If autoHeight is true, grid height is automatically set to fit the data.
-		autoHeight: false,
+		//		If it is an integer, the height will be automatically set to fit the data
+		//		if there are fewer than that many rows - and the height will be set to show
+		//		that many rows if there are more
+		autoHeight: '',
 
 		// autoRender: Boolean
 		//		If autoRender is true, grid will render itself after initialization.
@@ -211,9 +214,9 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
 			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
 			this.noDataMessage = dojo.string.substitute(this.noDataMessage, messages);
-			if(this.srcNodeRef.style.height){
-				this.height = this.srcNodeRef.style.height;
-			}
+			
+			// Call this to update our autoheight to start out
+			this._setAutoHeightAttr(this.autoHeight, true);
 		},
 		
 		postCreate: function(){
@@ -248,6 +251,42 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.inherited(arguments);
 		},
 
+		_setAutoHeightAttr: function(ah, skipRender){
+			// Calculate our autoheight - turn it into a boolean or an integer
+			if(typeof ah == "string"){
+				if(!ah || ah == "false"){
+					ah = false;
+				}else if (ah == "true"){
+					ah = true;
+				}else{
+					ah = window.parseInt(ah, 10);
+					if(isNaN(ah)){
+						ah = false;
+					}
+					// Autoheight must be at least 1, if it's a number.  If it's
+					// less than 0, we'll take that to mean "all" rows (same as 
+					// autoHeight=true - if it is equal to zero, we'll take that
+					// to mean autoHeight=false
+					if(ah < 0){
+						ah = true;
+					}else if (ah === 0){
+						ah = false;
+					}
+				}
+			}
+			this.autoHeight = ah;
+			if(typeof ah == "boolean"){
+				this._autoHeight = ah;
+			}else if(typeof ah == "number"){
+				this._autoHeight = (ah >= this.rowCount);
+			}else{
+				this._autoHeight = false;
+			}
+			if(this._started && !skipRender){
+				this.render();
+			}
+		},
+		
 		styleChanged: function(){
 			this.setStyledClass(this.domNode, '');
 		},
@@ -503,9 +542,13 @@ dojo.requireLocalization("dojox.grid", "grid");
 			// useful measurement
 			var padBorder = this._getPadBorder();
 			// grid height
-			if(this.autoHeight){
+			if(this._autoHeight){
 				this.domNode.style.height = 'auto';
 				this.viewsNode.style.height = '';
+			}else if(typeof this.autoHeight == "number"){
+				var vns = this.viewsHeaderNode.style, t = vns.display == "none" ? 0 : this.views.measureHeader();
+				t += (this.scroller.averageRowHeight * this.autoHeight);
+				this.domNode.style.height = t + "px";
 			}else if(this.flex > 0){
 			}else if(this.domNode.clientHeight <= padBorder.h){
 				if(this.domNode.parentNode == document.body){
@@ -525,7 +568,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 			}
 
 			var h = dojo._getContentBox(this.domNode).h;
-			if(h == 0 && !this.autoHeight){
+			if(h == 0 && !this._autoHeight){
 				// We need to hide the header, since the Grid is essentially hidden.
 				this.viewsHeaderNode.style.display = "none";
 			}else{
@@ -541,8 +584,6 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.adaptWidth();
 			this.adaptHeight();
 
-			// default row height (FIXME: use running average(?), remove magic #)
-			this.scroller.defaultRowHeight = this.rows.getDefaultHeightPx() + 1;
 			this.postresize();
 		},
 
@@ -562,10 +603,10 @@ dojo.requireLocalization("dojox.grid", "grid");
 			// header heights are reset during measuring so must be normalized after measuring.
 			this.views.normalizeHeaderNodeHeight();
 			// content extent
-			var h = (this.autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
+			var h = (this._autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 			this.views.onEach('setSize', [0, h]);
 			this.views.onEach('adaptHeight');
-			if(!this.autoHeight){
+			if(!this._autoHeight){
 				var numScroll = 0, numNoScroll = 0;
 				var noScrolls = dojo.filter(this.views.views, function(v){
 					var has = v.hasHScrollbar();
@@ -617,7 +658,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 
 		prerender: function(){
 			// if autoHeight, make sure scroller knows not to virtualize; everything must be rendered.
-			this.keepRows = this.autoHeight ? 0 : this.constructor.prototype.keepRows;
+			this.keepRows = this._autoHeight ? 0 : this.constructor.prototype.keepRows;
 			this.scroller.setKeepInfo(this.keepRows);
 			this.views.render();
 			this._resize();
@@ -632,7 +673,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 
 		postresize: function(){
 			// views are position absolute, so they do not inflate the parent
-			if(this.autoHeight){
+			if(this._autoHeight){
 				var size = Math.max(this.views.measureContent()) + 'px';
 				this.viewsNode.style.height = size;
 			}
@@ -708,7 +749,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 			if(this.updating){
 				this.invalidated[inRowIndex]=true;
 			}else{
-				this.views.updateRow(inRowIndex, this.rows.getHeight(inRowIndex));
+				this.views.updateRow(inRowIndex);
 				this.scroller.rowHeightChanged(inRowIndex);
 			}
 		},
@@ -726,6 +767,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 					this.scroller.updateRowCount(inRowCount);
 					this.setScrollTop(this.scrollTop);
 				}
+				this._setAutoHeightAttr(this.autoHeight, true);
 				this._resize();
 			}
 		},
