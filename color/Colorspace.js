@@ -284,7 +284,7 @@ dojox.color.Colorspace=new (function(){
 			"Luv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](obj, kwArgs); },
 			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs); },
 			"XYZ":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs); },
+			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs); }
 		},
 		"Luv":{ 
 			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs).toCmy(); },
@@ -296,7 +296,7 @@ dojox.color.Colorspace=new (function(){
 			"LCHuv":function(obj, kwArgs){ return cMaps["Luv"]["LCHuv"](obj, kwArgs); },
 			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs); },
 			"XYZ":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](obj, kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs); },
+			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs); }
 		},
 		"RGB":{ 
 			"CMY":function(obj, kwArgs){ return obj.toCmy(); },
