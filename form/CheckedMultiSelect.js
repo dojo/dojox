@@ -49,7 +49,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		//		(only on click of the checkbox)  Radio-based calls _setValueAttr
 		//		instead.
 		if(this.parent._multiValue){
-			this.option.selected = this.checkBox.getValue() && true;
+			this.option.selected = this.checkBox.attr('value') && true;
 		}else{
 			this.parent.attr('value', this.option.value);
 		}
