@@ -9,6 +9,7 @@ experimental
 -------------------------------------------------------------------------------
 Credits
 	Tom Trenka (ttrenka AT gmail.com)
+    Mike Wilcox (AnM8tR AT Yahoo.com)
 -------------------------------------------------------------------------------
 Project description
 
@@ -47,4 +48,5 @@ Change history
 
 2008-01-15	Initial checkin, with basic movie embedding code.
 2008-06-04	Removed the base code, after moving it into dojox.embed and modifying it.
+2008-08-14  IMplemented FLVideo for Flash Video 
 
