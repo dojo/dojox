@@ -358,7 +358,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	canSort: function(){
-		return true;
+		return (!this._isLoading);
 	},
 
 	getSortProps: function(){
