@@ -88,25 +88,15 @@
 	border-bottom-width: 3px;
 }
 
-.dojoxGridArrowButtonChar {
-	display:none !important;
-}
 .dojoxGridArrowButtonNode {
-	display: inline !important;
+	display: none;
 	padding-left: 16px;
 }
-.dojoxGridSortDown .dojoxGridArrowButtonNode {
-	background: url(images/grid_sort_down.gif) center no-repeat;
+.dojoxGridArrowButtonChar {
+	display:inline;
 }
-.dojoxGridSortUp .dojoxGridArrowButtonNode {
-	background: url(images/grid_sort_up.gif) center no-repeat;
-}
-
 .dijit_a11y .dojoxGridArrowButtonChar {
 	display:inline !important;
-}
-.dijit_a11y .dojoxGridArrowButtonNode {
-	display: none !important;
 }
 
 /* content */

@@ -55,6 +55,7 @@
 
 .tundra .dojoxGridArrowButtonChar {
 	float: right;
+	display: none;
 }
 .tundra .dojoxGridArrowButtonNode {
 	display: block !important;
@@ -72,7 +73,7 @@
 .tundra .dojoxGridSortUp .dojoxGridArrowButtonNode {
 	background-position: -21px;
 }
-.dijit_a11y .dojoxGridArrowButtonNode {
+.dijit_a11y .tundra .dojoxGridArrowButtonNode {
 	display: none !important;
 }
 

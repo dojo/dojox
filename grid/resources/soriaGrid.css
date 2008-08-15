@@ -31,6 +31,7 @@
 
 .soria .dojoxGridArrowButtonChar {
 	float: right;
+	display: none;
 }
 .soria .dojoxGridArrowButtonNode {
 	display: block !important;
@@ -48,7 +49,7 @@
 .soria .dojoxGridSortUp .dojoxGridArrowButtonNode {
 	background-position: -21px;
 }
-.dijit_a11y .dojoxGridArrowButtonNode {
+.dijit_a11y .soria .dojoxGridArrowButtonNode {
 	display: none !important;
 }
 
