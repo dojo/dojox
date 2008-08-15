@@ -60,8 +60,8 @@ dojo.declare("dojox.rpc.Service", null, {
 			}
 		}
 
-		if(options){this._options = options;}
-		this._requestId=0;
+		this._options = (options ? options : {});
+		this._requestId = 0;
 	},
 
 	_generateService: function(serviceName, method){
@@ -136,10 +136,11 @@ dojo.declare("dojox.rpc.Service", null, {
 				args = args[0];
 			}
 		}
+		
 		if(dojo.isObject(this._options)){
 			args = dojo.mixin(args, this._options);
 		}
-
+		
 		var schema = method._schema || method.returns; // serialize with the right schema for the context;
 		var request = envDef.serialize.apply(this, [smd, method, args]);
 		request._envDef = envDef;// save this for executeMethod
@@ -157,7 +158,8 @@ dojo.declare("dojox.rpc.Service", null, {
 			callbackParamName: method.callbackParamName || smd.callbackParamName,
 			schema: schema,
 			handleAs: request.handleAs || "auto",
-			preventCache: method.preventCache || smd.preventCache
+			preventCache: method.preventCache || smd.preventCache,
+			frameDoc: this._options.frameDoc || undefined
 		});
 	},
 	_executeMethod: function(method){
@@ -168,6 +170,7 @@ dojo.declare("dojox.rpc.Service", null, {
 		}
 		var request = this._getRequest(method,args);
 		var deferred = dojox.rpc.transportRegistry.match(request.transport).fire(request);
+		
 		deferred.addBoth(function(results){
 			return request._envDef.deserialize.call(this,results);
 		});
@@ -205,7 +208,6 @@ dojox.rpc.envelopeRegistry.register(
 	{
 		serialize:function(smd, method, data ){
 			var d = dojo.objectToQuery(data);
-
 			return {
 				data: d,
 				transport:"POST"

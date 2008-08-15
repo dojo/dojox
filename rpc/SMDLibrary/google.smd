@@ -14,28 +14,25 @@
 	
 	"parameters": [
 		// the most important param, the search query:
-		{ "name": "q", "optional": false, "default":"" },
+		{ "name": "q", optional: false, "default":"" },
 		
 		// Google doesn't require, but appreciates, you using an API key
 		// see: http://code.google.com/apis/ajaxsearch/signup.html
-		// { "name": "key", "optional": true, "default": "[enter your key]" },
+		// { "name": "key", optional: true, "default": "[enter your key]" },
 
 		// result size: large | small (8 or 4 per page)
-		{ "name": "rsz", "optional":true, "default": "small" },
+		{ "name": "rsz", optional:true, "default": "small" },
 
 		// language selection:
-		{ "name": "hl", "optional":true, "default": "en" },
+		{ "name": "hl", optional:true, "default": "en" },
 
 		// starting offset
-		{ "name": "start", "optional":true, "default": 0 },
+		{ "name": "start", optional:true, "default": 0 },
 
-		{ "name": "alt", "optional": false, "default": "json" },
+		{ "name": "alt", optional:false, "default": "json" },
 
 		// API version: only 1.0 supported 
-		{ "name": "v", "optional":false, "default": "1.0" },
-
-		// Google wants this, but I'm not sure why.
-		// { "name": "context", "optional":false, "default": "myContext" }
+		{ "name": "v", optional:false, "default": "1.0" }
 	],
 
 	"services": {
@@ -82,7 +79,7 @@
 				{ "name": "scoring", "type": "string", "optional": true },
 				// geo: scope search to location. supply city, state, country, or zipcode
 				// using geo makes "q" param optional
-				{ "name": "geo", "type":"string", "optional":true }
+				{ "name": "geo", "type":"string", optional:true }
 			]
 		},
 
@@ -124,7 +121,7 @@
 			"target" : "http://ajax.googleapis.com/ajax/services/language/translate",
 			"parameters": [
 				// A String like "en|es" (for english -> spanish)
-				{ "name":"langpair", "type":"string" }
+				{ "name":"langpair", "type":"string", optional:false }
 			]
 		}
 		
