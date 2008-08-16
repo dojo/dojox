@@ -13,7 +13,9 @@
 	background-color:#FFC3C3;
 }
 
-
+.dojoxDocTester pre.even{
+        background-color:#F3F3F3;
+}
 .dojoxDocTester pre.even.resultOk{
 	background-color:#DFFFDF;
 }
