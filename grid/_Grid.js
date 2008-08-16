@@ -535,15 +535,12 @@ dojo.requireLocalization("dojox.grid", "grid");
 			return this._padBorder;
 		},
 
-		_getHeaderHeight: function(recalc){
-			if(!this._headerHeight || recalc){
-				var vns = this.viewsHeaderNode.style, t = vns.display == "none" ? 0 : this.views.measureHeader();
-				vns.height = t + 'px';
-				// header heights are reset during measuring so must be normalized after measuring.
-				this.views.normalizeHeaderNodeHeight();
-				this._headerHeight = t;
-			}
-			return this._headerHeight;
+		_getHeaderHeight: function(){
+			var vns = this.viewsHeaderNode.style, t = vns.display == "none" ? 0 : this.views.measureHeader();
+			vns.height = t + 'px';
+			// header heights are reset during measuring so must be normalized after measuring.
+			this.views.normalizeHeaderNodeHeight();
+			return t;
 		},
 		
 		_resize: function(){
@@ -558,7 +555,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 				this.domNode.style.height = 'auto';
 				this.viewsNode.style.height = '';
 			}else if(typeof this.autoHeight == "number"){
-				var h = this._getHeaderHeight(true);
+				var h = this._getHeaderHeight();
 				h += (this.scroller.averageRowHeight * this.autoHeight);
 				this.domNode.style.height = h + "px";
 			}else if(this.flex > 0){
@@ -611,7 +608,8 @@ dojo.requireLocalization("dojox.grid", "grid");
 		adaptHeight: function(){
 			// private: measures and normalizes header height, then sets view heights, and then updates scroller
 			// content extent
-			var h = (this._autoHeight ? -1 : Math.max(this.domNode.clientHeight - this._getHeaderHeight(false), 0) || 0);
+			var t = this._getHeaderHeight();
+			var h = (this._autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 			this.views.onEach('setSize', [0, h]);
 			this.views.onEach('adaptHeight');
 			if(!this._autoHeight){
