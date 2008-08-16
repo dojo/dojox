@@ -335,6 +335,7 @@ dojo.provide("dojox.grid._Scroller");
 			this.scroll(this.scrollboxNode.scrollTop);
 		},
 		scroll: function(inTop){
+			this.grid.scrollTop = inTop;
 			if(this.colCount){
 				this.startPacify();
 				this.findPage(inTop);

@@ -337,6 +337,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 		createScroller: function(){
 			// summary: Creates a new virtual scroller
 			this.scroller = new dojox.grid._Scroller();
+			this.scroller.grid = this;
 			this.scroller._pageIdPrefix = this.id + '-';
 			this.scroller.renderRow = dojo.hitch(this, "renderRow");
 			this.scroller.removeRow = dojo.hitch(this, "rowRemoved");
@@ -727,9 +728,10 @@ dojo.requireLocalization("dojox.grid", "grid");
 				return;
 			}
 			//this.edit.saveState(inRowIndex);
+			var lastScrollTop = this.scrollTop;
 			this.prerender();
 			this.scroller.invalidateNodes();
-			this.setScrollTop(this.scrollTop);
+			this.setScrollTop(lastScrollTop);
 			this.postrender();
 			//this.edit.restoreState(inRowIndex);
 		},
@@ -828,8 +830,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 		},
 
 		setScrollTop: function(inTop){
-			this.scrollTop = this.views.setScrollTop(inTop);
-			this.scroller.scroll(this.scrollTop);
+			this.scroller.scroll(this.views.setScrollTop(inTop));
 		},
 
 		scrollToRow: function(inRowIndex){

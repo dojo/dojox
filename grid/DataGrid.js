@@ -154,8 +154,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			if(req.isRender){
 				this.setScrollTop(0);
 				this.postrender();
+			}else if(this._lastScrollTop){
+				this.setScrollTop(this._lastScrollTop);
 			}
 		}
+		delete this._lastScrollTop;
 		if(!this._isLoaded){
 			this._isLoading = false;
 			this._isLoaded = true;
@@ -170,6 +173,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	_onFetchError: function(err, req){
 		console.log(err);
+		delete this._lastScrollTop;
 		if(!this._isLoaded){
 			this._isLoading = false;
 			this._isLoaded = true;
@@ -354,6 +358,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	sort: function(){
+		this._lastScrollTop = this.scrollTop;
 		this._refresh();
 	},
 
