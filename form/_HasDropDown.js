@@ -103,7 +103,7 @@ dojo.declare("dojox.form._HasDropDown",
 				// delay so that we don't steal our own focus.
 				window.setTimeout(dojo.hitch(dropDown, "focus"), 1);
 			}else{
-				dijit.focus(this.popupStateNode);
+				dijit.focus(this.focusNode);
 			}
 		},
 		
@@ -241,7 +241,7 @@ dojo.declare("dojox.form._HasDropDown",
 				onClose: function(){
 					dropDown.domNode.style.width = oldWidth;
 					dojo.attr(self.popupStateNode, "popupActive", false);
-					self.popupStateNode.removeAttribute("popupActive");
+					dojo.removeClass(self.popupStateNode, "dojoxHasDropDownOpen");
 					self._opened = false;
 					self.state = "";
 				}
@@ -263,6 +263,7 @@ dojo.declare("dojox.form._HasDropDown",
 				}
 			}
 			dojo.attr(this.popupStateNode, "popupActive", "true");
+			dojo.addClass(self.popupStateNode, "dojoxHasDropDownOpen");
 			this._opened=true;
 			this.state="Opened";
 			if(dropDown.focus){

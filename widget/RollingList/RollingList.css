@@ -41,6 +41,12 @@
 }
 
 /* Background colors to match menus */
+.tundra .dojoxRollingList {
+	border-color: #b3b3b3;
+}
+.tundra .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
 .tundra .dojoxRollingListPane {
 	background-color: #f7f7f7;
 }
@@ -61,6 +67,12 @@
 	font-family: inherit;
 }
 
+.soria .dojoxRollingList {
+	border-color: #8ba0bd;
+}
+.soria .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
 .soria .dojoxRollingListPane {
 	background-color: #fff;
 }
@@ -82,6 +94,12 @@
 }
 
 
+.nihilo .dojoxRollingList {
+	border-color: #d3d3d3;
+}
+.nihilo .dijitPopup .dojoxRollingList {
+	border-color: #b3b3b3;
+}
 .nihilo .dojoxRollingListPane {
 	background-color: #fff;
 }

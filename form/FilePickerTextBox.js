@@ -11,7 +11,9 @@ dojo.declare(
 		// summary:
 		//		A validating text box tied to a file picker popup
 		
-		baseClass: "dijitTextBox dojoxFilePickerTextBox",
+		baseClass: "dojoxFilePickerTextBox",
+		
+		templatePath: dojo.moduleUrl("dojox.form", "resources/FilePickerTextBox.html"),
 		
 		// searchDelay: Integer
 		//		Delay in milliseconds between when user types something and we start
@@ -81,10 +83,11 @@ dojo.declare(
 		},
 		
 		toggleDropDown: function(){
-			if(this._opened){ return; }
 			this.inherited(arguments);
 			// Make sure our display is up-to-date with our value
-			this.dropDown.attr("pathValue", this.attr("value"));
+			if(this._opened){ 
+				this.dropDown.attr("pathValue", this.attr("value"));
+			}
 		},
 		
 		_focusBlur: function(/*Event*/ e){
