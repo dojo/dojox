@@ -591,7 +591,7 @@ dojo.declare("dojox.widget.RollingList",
 	
 	_setValueAttr: function(/* item */ value){
 		// summary: sets the value of this widget to the given store item
-		if(this._itemsMatch(this.value, value)){ return; }
+		if(this._itemsMatch(this.value, value) && !value){ return; }
 		if(this._setInProgress && this._setInProgress === value){ return; }
 		this._setInProgress = value;
 		if(!value || !this.store.isItem(value)){
@@ -699,7 +699,16 @@ dojo.declare("dojox.widget.RollingList",
 				setFromChain(parentChain, 0);
 			}
 		});
-		onParents([value]);
+		
+		// Only set the value in display if we are shown - if we are in a dropdown, 
+		// and are hidden, don't actually do the scrolling in the display (it can
+		// mess up layouts)
+		var ns = this.domNode.style;
+		if(ns.display == "none" || ns.visibility == "hidden"){
+			this._setValue(value);
+		}else if(!this._itemsMatch(value, this._visibleItem)){
+			onParents([value]);
+		}
 	},
 	
 	_onItemClick: function(/* Event */ evt, /* dijit._Contained */ pane, /* item */ item, /* item[]? */ children){
@@ -733,6 +742,7 @@ dojo.declare("dojox.widget.RollingList",
 			this._setValue(item);
 			this.onItemClick(item, pane, children);
 		}
+		this._visibleItem = item;
 	},
 	
 	_getPaneForItem: function(/* item? */ item, /* dijit._Contained? */ parentPane, /* item[]? */ children){		// summary: gets the pane for the given item, and mixes in our needed parts

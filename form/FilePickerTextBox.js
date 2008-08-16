@@ -43,7 +43,7 @@ dojo.declare(
 			if(!this._searchInProgress){
 				this.inherited(arguments);
 				this._skip = true;
-				this.dropDown.setValueFromString(value);
+				this.dropDown.attr("pathValue", value);
 			}
 		},
 		
@@ -53,13 +53,13 @@ dojo.declare(
 				this._hasValidPath = false;
 			}else{
 				this.valueItem = item;
-				var value = this.dropDown.getPathValue(item);
+				var value = this.dropDown._getPathValueAttr(item);
 				if(value || !this._skipInvalidSet){
 					if(value){
 						this._hasValidPath = true;
 					}
 					if(!this._skip){
-						this._setValueAttr(value);
+						this.attr("value", value);
 					}
 					delete this._skip;
 				}
@@ -83,6 +83,8 @@ dojo.declare(
 		toggleDropDown: function(){
 			if(this._opened){ return; }
 			this.inherited(arguments);
+			// Make sure our display is up-to-date with our value
+			this.dropDown.attr("pathValue", this.attr("value"));
 		},
 		
 		_focusBlur: function(/*Event*/ e){
@@ -128,7 +130,7 @@ dojo.declare(
 		_setBlurValue: function(){
 			// summary: sets the value of the widget once focus has left
 			if(this.dropDown){
-				this._setValueAttr(this.focusNode.value);
+				this.attr("value", this.focusNode.value);
 			}
 			this.inherited(arguments);
 		},
@@ -141,7 +143,7 @@ dojo.declare(
 				return value;
 			}
 			var dd = this.dropDown, topDir = dd.topDir, sep = dd.pathSeparator;
-			var ddVal = dd.getPathValue();
+			var ddVal = dd.attr("pathValue");
 			var norm = function(v){
 				if(topDir.length && v.indexOf(topDir) === 0){
 					v = v.substring(topDir.length);

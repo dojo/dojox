@@ -154,7 +154,7 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		return ret;
 	},
 	
-	setValueFromString: function(/*string*/ path){
+	_setPathValueAttr: function(/*string*/ path){
 		// Summary: sets the value of this widget based off the given path
 		if(!path){
 			this.attr("value", null);
@@ -168,7 +168,7 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 										scope: this});
 	},
 	
-	getPathValue: function(/*item?*/val){
+	_getPathValueAttr: function(/*item?*/val){
 		// summary: returns the path value of the given value (or current value
 		//  if not passed a value)
 		if(!val){
