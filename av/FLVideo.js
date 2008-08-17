@@ -29,6 +29,10 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	//		The initial volume setting of the player. Acccepts between 0 and 1.
 	initialVolume:1,
 	//
+	//  autoPlay: /* Boolean */
+	//		Whether the video plays on load or not.
+	autoPlay: false,
+	//
 	//  id /* String */
 	//		The id of this widget and the id of the SWF movie.
 	id:"",
@@ -73,7 +77,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 			vars:{
 				videoUrl:this.videoUrl, 
 				id:this.id,
-				autoPlay:true,
+				autoPlay:this.autoPlay,
 				volume:this.initialVolume,
 				isDebug:this.isDebug
 			}
@@ -99,6 +103,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	
 	togglePause: function(){
 		// Toggles between play and pause
+		console.log("TOGGLE")
 		this._flashMovie.togglePause();
 	},
 	play: function(newUrl /* Optional */){
@@ -111,6 +116,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	},
 	seek: function(time /* Float */){
 		// Goes to the time passed in the argument
+		console.log("seek:", time)
 		this._flashMovie.seek(time);
 	},
 	setVolume: function(vol){
@@ -163,6 +169,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		// Could be used to toggle play/pause, or 
 		// do an external activity, like opening a new
 		//window.
+		console.log("CLICK")
 	},
 	onSwfSized: function(data){
 		// Fired on SWF resize, or when its
@@ -175,9 +182,12 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		//console.warn("STATUS:", data, evt);
 	},
 	onMetaData: function(data, evt){
-		// Returns the video properties
-		//	Width, height, duration, etc.
-		//console.warn("META:", data, evt);
+		// Returns the video properties. Width, height, duration, etc.
+		// NOTE: if data is empty, this is an older FLV with no meta data.
+		// Duration cannot be determined. In original FLVs, duration could
+		// only be obtained with Flash Media Server.
+		// TODO: Older FLVs can still return width and height
+		console.warn("META:", data, evt);
 	},
 	onVideoStart: function(data){
 		// Fires when video starts
