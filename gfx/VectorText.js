@@ -61,14 +61,17 @@ dojo.require("dojox.html.metrics");
 		_decodeEntitySequence: function(str){
 			//	unescape the unicode sequences
 			if(!str.match(this._entityRe)){ return; }	//	nothing to decode.
+			var xmlEntityMap = {
+				amp:"&", apos:"'", quot:'"', lt:"<", gt:">"
+			};
 
 			//	we have at least one encoded entity.
 			var r, tmp="";
-			while((r=this._entityRe.exec(str))!=null){
+			while((r=this._entityRe.exec(str))!==null){
 				if(r[1].charAt(1)=="x"){
 					tmp+=String.fromCharCode(r[1].slice(2), 16);
 				}
-				else if(!isNaN(parseInt(r[1].slice(1)))){
+				else if(!isNaN(parseInt(r[1].slice(1),10))){
 					tmp+=String.fromCharCode(r[1].slice(1));
 				}
 				else {
@@ -82,11 +85,8 @@ dojo.require("dojox.html.metrics");
 			//		Take the loaded SVG Font definition file and convert the info
 			//		into things we can use. The SVG Font definition must follow
 			//		the SVG 1.1 Font specification.
-			var doc = dojox.gfx._svgFontCache[url]||dojox.xml.DomParser.parse(svg), 
-				xmlEntityMap={
-					amp:"&", apos:"'", quot:'"', lt:"<", gt:">"
-				};
-
+			var doc = dojox.gfx._svgFontCache[url]||dojox.xml.DomParser.parse(svg);
+ 
 			//	font information
 			var f = doc.documentElement.byName("font")[0], face = doc.documentElement.byName("font-face")[0];
 			var unitsPerEm = parseFloat(face.getAttribute("units-per-em")||1000, 10);
@@ -136,7 +136,7 @@ dojo.require("dojox.html.metrics");
 			//	get any provided baseline alignment offsets.
 			dojo.forEach(["alphabetic", "ideographic", "mathematical", "hanging" ], function(attr){
 				var a = face.getAttribute(attr);
-				if(a != null /* be explicit, might be 0 */){
+				if(a !== null /* be explicit, might be 0 */){
 					baseline[attr] = parseFloat(a, 10);
 				}
 			});
@@ -180,7 +180,7 @@ dojo.require("dojox.html.metrics");
 			//	now the fun part: look for kerning pairs.
 			var hkern=doc.documentElement.byName("hkern");
 			dojo.forEach(hkern, function(node, i){
-				var k = -(parseInt(node.getAttribute("k")));
+				var k = -parseInt(node.getAttribute("k"),10);
 				//	look for either a code or a name
 				var u1=node.getAttribute("u1"),
 					g1=node.getAttribute("g1"),
@@ -292,7 +292,7 @@ dojo.require("dojox.html.metrics");
 		initialized: function(){
 			//	summary:
 			//		Return if we've loaded a font def, and the parsing was successful.
-			return (this.glyphs!=null);	//	Boolean
+			return (this.glyphs!==null);	//	Boolean
 		},
 
 		//	preset round to 3 places.
@@ -369,11 +369,14 @@ dojo.require("dojox.html.metrics");
 				}
 
 				if(cw>=limit){
-					var char=chars[i];
-					while(found && char.code != " " && i>=0){
-						char = c.pop(); i--;
+					var chr=chars[i];
+					while(found && chr.code != " " && i>=0){
+						chr = c.pop(); i--;
 					}
-					lines.push(c), c=[], cw=0, found=false;
+					lines.push(c); 
+					c=[]; 
+					cw=0; 
+					found=false;
 				}
 				c.push(chars[i]);
 			}
@@ -406,7 +409,7 @@ dojo.require("dojox.html.metrics");
 				return this._round((metrics["1em"]*(unit / 100)) / height);
 			}
 			else {
-				f=metrics[size]||metrics["medium"];
+				f=metrics[size]||metrics.medium;
 				return this._round(f/height);
 			}
 		},
@@ -432,7 +435,8 @@ dojo.require("dojox.html.metrics");
 			while(limit>0){
 				var f=this._getFitFactor(this._split(chars, limit), w, h, ldng);
 				if(f>factor){
-					factor = f, lines=limit;
+					factor = f;
+					lines=limit;
 				}
 				limit--;
 			}
@@ -455,11 +459,14 @@ dojo.require("dojox.html.metrics");
 				cw += scale*tw;
 
 				if(cw>=w){
-					var char=chars[i];
-					while(found && char.code != " " && i>=0){
-						char = c.pop(); i--;
+					var chr=chars[i];
+					while(found && chr.code != " " && i>=0){
+						chr = c.pop(); i--;
 					}
-					lines.push(c), c=[], cw=0, found=false;
+					lines.push(c);
+					c=[];
+					cw=0;
+					found=false;
 				}
 				c.push(chars[i]);
 			}
@@ -496,13 +503,7 @@ dojo.require("dojox.html.metrics");
 			return (scale||1) * (this.viewbox.height+this.descent);	//	Float
 		},
 
-		draw: function(
-			/* dojox.gfx.Container */group, 
-			/* dojox.gfx.__TextArgs */textArgs,
-			/* dojox.gfx.__FontArgs */fontArgs,
-			/* dojox.gfx.__FillArgs */fillArgs,
-			/* dojox.gfx.__StrokeArgs? */strokeArgs
-		){
+		draw: function(/* dojox.gfx.Container */group, /* dojox.gfx.__TextArgs */textArgs, /* dojox.gfx.__FontArgs */fontArgs, /* dojox.gfx.__FillArgs */fillArgs, /* dojox.gfx.__StrokeArgs? */strokeArgs){
 			//	summary
 			//		based on the passed parameters, draw the given text using paths
 			//		defined by this font.
@@ -601,8 +602,8 @@ dojo.require("dojox.html.metrics");
 			}
 
 			//	go get the glyph array.
-			var text = dojo.map(this._normalize(textArgs.text).split(""), function(char){
-				return this.glyphs[char] || { path:null, xAdvance: this.advance.missing.x };
+			var text = dojo.map(this._normalize(textArgs.text).split(""), function(chr){
+				return this.glyphs[chr] || { path:null, xAdvance: this.advance.missing.x };
 			}, this);
 
 			//	determine the font style info, ignore decoration.
@@ -616,10 +617,7 @@ dojo.require("dojox.html.metrics");
 			//	figure out if we have to do fitting at all.
 			if(fitting){
 				//	more than zero.
-				if(
-					(fitting==dojox.gfx.vectorFontFitting.FLOW && !width)
-					|| (fitting==dojox.gfx.vectorFontFitting.FIT && (!width || !height))
-				){
+				if((fitting==dojox.gfx.vectorFontFitting.FLOW && !width) || (fitting==dojox.gfx.vectorFontFitting.FIT && (!width || !height))){
 					//	reset the fitting if we don't have everything we need.
 					fitting = dojox.gfx.vectorFontFitting.NONE;
 				}
@@ -628,19 +626,21 @@ dojo.require("dojox.html.metrics");
 			//	set up the lines array and the scaling factor.
 			var lines, scale;
 			switch(fitting){
-				case dojox.gfx.vectorFontFitting.FIT: {
+				case dojox.gfx.vectorFontFitting.FIT: 
 					var o=this._getBestFit(text, width, height, leading);
-					scale = o.scale, lines = o.lines;
+					scale = o.scale; 
+					lines = o.lines;
 					break;
-				}
-				case dojox.gfx.vectorFontFitting.FLOW: {
-					scale = this._getSizeFactor(size),
+				
+				case dojox.gfx.vectorFontFitting.FLOW: 
+					scale = this._getSizeFactor(size);
 					lines = this._getBestFlow(text, width, scale);
 					break;
-				}
-				default: {
-					scale = this._getSizeFactor(size), lines = [ text ];
-				}
+				
+				default: 
+					scale = this._getSizeFactor(size);
+					lines = [ text ];
+				
 			}
 
 			//	make sure lines doesn't have any empty lines.
@@ -649,14 +649,19 @@ dojo.require("dojox.html.metrics");
 			});
 
 			//	let's start drawing.
-			var cy = 0, maxw = this._getLongestLine(lines).width;
+			var cy = 0, 
+				maxw = this._getLongestLine(lines).width;
 
 			for(var i=0, l=lines.length; i<l; i++){
-				var cx = 0, line=lines[i], linew = this._getWidth(line), lg=g.createGroup();
+				var cx = 0, 
+					line=lines[i], 
+					linew = this._getWidth(line), 
+					lg=g.createGroup();
 				
 				//	loop through the glyphs and add them to the line group (lg)
 				for (var j=0; j<line.length; j++){
-					var glyph=line[j], p = lg.createPath(glyph.path).setFill(fillArgs);
+					var glyph=line[j], 
+						p = lg.createPath(glyph.path).setFill(fillArgs);
 					if(strokeArgs){ p.setStroke(strokeArgs); }
 					p.setTransform([
 						dojox.gfx.matrix.flipY,
@@ -687,6 +692,9 @@ dojo.require("dojox.html.metrics");
 		onLoadBegin: function(/* String */url){ },
 		onLoad: function(/* dojox.gfx.VectorFont */font){ }
 	});
+
+	//	TODO: dojox.gfx integration
+/*
 
 	//	Inherit from Group but attach Text properties to it.
 	dojo.declare("dojox.gfx.VectorText", dojox.gfx.Group, {
@@ -761,4 +769,5 @@ dojo.require("dojox.html.metrics");
 	dojox.gfx.shape.Creator.createVectorText = function(text){
 		return this.createObject(dojox.gfx.VectorText, text);
 	}
+*/
 })();
