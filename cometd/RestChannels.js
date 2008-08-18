@@ -9,9 +9,9 @@ if(dojox.data && dojox.data.JsonRestStore){
 // MUST be loaded prior to RestChannels ifyou use it.
 
 // summary:
-// 		HTTP Channels - An HTTP Based approach to Comet transport with full HTTP messaging 
-// 		semantics including REST
-// 		HTTP Channels is a efficient, reliable duplex transport for Comet
+// 		REST Channels - An HTTP/REST Based approach to Comet transport with full REST messaging 
+// 		semantics
+// 		REST Channels is a efficient, reliable duplex transport for Comet
 
 // description:
 // 		This can be used:
@@ -36,7 +36,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 	dojo.declare("dojox.cometd.RestChannels", null, {
 		constructor: function(options){
 			// summary:
-			//		Initiates the HTTP Channels protocol
+			//		Initiates the REST Channels protocol
 			//	options:
 			//		Keyword arguments:
 			//	The *autoSubscribeRoot* parameter:
@@ -147,7 +147,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 							}
 						} catch(e){
 						}
-	  					if(typeof data=='string'){
+	  					if(typeof responseText=='string'){
 	  						onprogress(responseText);
 	  					}
 	  				} 

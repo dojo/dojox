@@ -166,11 +166,13 @@ dojo.require("dojox.rpc.Rest");
 
 			this.changing(object,true);
 		},
-		getConstructor: function(/*Function|String*/service){
+		getConstructor: function(/*Function|String*/service, schema){
 			// summary:
 			// 		Creates or gets a constructor for objects from this service
 			if(typeof service == 'string'){
+				var servicePath = service;
 				service = new dojox.rpc.Rest(service,true);
+				this.registerService(service, servicePath, schema);
 			}
 			if(service._constructor){
 				return service._constructor;
@@ -230,7 +232,12 @@ dojo.require("dojox.rpc.Rest");
 		registerService: function(/*Function*/ service, /*String*/ servicePath, /*Object?*/ schema){
 			//	summary:
 			//		Registers a service for as a JsonRest service, mapping it to a path and schema
-			
+			//	service:
+			//		This is the service to register
+			//	servicePath:
+			//		This is the path that is used for all the ids for the objects returned by service
+			//	schema:
+			//		This is a JSON Schema object to associate with objects returned by this service
 			servicePath = servicePath || service.servicePath;
 			servicePath = service.servicePath = servicePath.match(/\/$/) ? servicePath : (servicePath + '/'); // add a trailing / if needed
 			jr.schemas[servicePath] = schema || service._schema || {};

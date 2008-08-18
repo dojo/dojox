@@ -1,5 +1,4 @@
 dojo.provide("dojox.data.restListener");
-dojo.require("dojox.rpc.JsonRest");
 
 dojox.data.restListener = function(message){
 	// summary:
