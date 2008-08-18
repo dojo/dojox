@@ -99,7 +99,7 @@ function runTest_debug(testName)
       return null; // the success condition
 }
 
-var runTest = djConfig.isDebug ? runTest_debug : runTest_nodebug;
+var runTest = dojo.config.isDebug ? runTest_debug : runTest_nodebug;
 
 dojo.addOnLoad(function() 
 {
