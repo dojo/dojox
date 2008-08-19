@@ -325,6 +325,12 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		// summary: Overridable function to return the children that this widget
 		//			contains.
 		return [];
+	},
+	
+	_getSelectedOptionsAttr: function(){
+		// summary: hooks into this.attr to provide a mechanism for getting the
+		//			option items for the current value of the widget.
+		return this.getOptions(this.attr("value"));
 	}
 
 });
