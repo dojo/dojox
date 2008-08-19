@@ -37,10 +37,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	startExpanded: true, 
 
-	"class": "dijitExpandoPane",
+	baseClass: "dijitExpandoPane",
 
 	postCreate: function(){
-
 		this.inherited(arguments);
 		this._animConnects = [];
 
