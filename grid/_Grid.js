@@ -625,7 +625,11 @@ dojo.requireLocalization("dojox.grid", "grid");
 					});
 				}
 			}
-			this.scroller.windowHeight = h;
+			if(this.autoHeight === true || h != -1 || (typeof this.autoHeight == "number" && this.autoHeight >= this.rowCount)){
+				this.scroller.windowHeight = h;
+			}else{
+				this.scroller.windowHeight = Math.max(this.domNode.clientHeight - t, 0);
+			}
 		},
 
 		// startup
@@ -770,12 +774,14 @@ dojo.requireLocalization("dojox.grid", "grid");
 				this.invalidated.rowCount = inRowCount;
 			}else{
 				this.rowCount = inRowCount;
+				this._setAutoHeightAttr(this.autoHeight, true);
 				if(this.layout.cells.length){
 					this.scroller.updateRowCount(inRowCount);
+				}
+				this._resize();				
+				if(this.layout.cells.length){
 					this.setScrollTop(this.scrollTop);
 				}
-				this._setAutoHeightAttr(this.autoHeight, true);
-				this._resize();
 			}
 		},
 
