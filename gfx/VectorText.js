@@ -660,13 +660,15 @@ dojo.require("dojox.html.metrics");
 				
 				//	loop through the glyphs and add them to the line group (lg)
 				for (var j=0; j<line.length; j++){
-					var glyph=line[j], 
-						p = lg.createPath(glyph.path).setFill(fillArgs);
-					if(strokeArgs){ p.setStroke(strokeArgs); }
-					p.setTransform([
-						dojox.gfx.matrix.flipY,
-						dojox.gfx.matrix.translate(cx, -this.viewbox.height-this.descent)
-					]);
+					var glyph=line[j];
+					if(glyph.path!==null){
+						var p = lg.createPath(glyph.path).setFill(fillArgs);
+						if(strokeArgs){ p.setStroke(strokeArgs); }
+						p.setTransform([
+							dojox.gfx.matrix.flipY,
+							dojox.gfx.matrix.translate(cx, -this.viewbox.height-this.descent)
+						]);
+					}
 					cx += glyph.xAdvance;
 					if(j+1<line.length && glyph.kern && glyph.kern[line[j+1].code]){
 						cx += glyph.kern[line[j+1].code].x;
