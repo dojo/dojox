@@ -583,6 +583,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 			}else{
 				// Otherwise, show the header and give it an appropriate height.
 				this.viewsHeaderNode.style.display = "block";
+				this._getHeaderHeight();
 			}
 
 			// NOTE: it is essential that width be applied before height
