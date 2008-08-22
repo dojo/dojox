@@ -15,10 +15,15 @@ dojo.loadInit(function(){
 			switch(renderers[i]){
 				case "svg":
 					//TODO: need more comprehensive test for SVG
-					if(!dojo.isIE && (navigator.userAgent.indexOf("iPhone") < 0) && (navigator.userAgent.indexOf("iPod") < 0)){ dojox.gfx.renderer = "svg"; }
+					if(!dojo.isIE && (navigator.userAgent.indexOf("iPhone") < 0) && (navigator.userAgent.indexOf("iPod") < 0)){ 
+						// FIXME: on latest iphone svg should work fine!
+						dojox.gfx.renderer = "svg";
+					}
 					break;
 				case "vml":
-					if(dojo.isIE != 0){ dojox.gfx.renderer = "vml"; }
+					if(dojo.isIE){
+						dojox.gfx.renderer = "vml";
+					}
 					break;
 				case "silverlight":
 					try{
@@ -41,7 +46,9 @@ dojo.loadInit(function(){
 					break;
 				case "canvas":
 					//TODO: need more comprehensive test for Canvas
-					if(dojo.isIE == 0){ dojox.gfx.renderer = "canvas"; }
+					if(!dojo.isIE){ 
+						dojox.gfx.renderer = "canvas";
+					}
 					break;
 			}
 			if(dojox.gfx.renderer){ break; }
