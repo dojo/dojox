@@ -159,7 +159,7 @@ dojo.require("dojo.fx");
 		liveUpdate: false, 
 
 		_underlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
-		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html") + "?" + new Date().toString(),
+		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html"),
 
 		postCreate: function(){
 			// summary: As quickly as we can, set up ie6 alpha-filter support for our
