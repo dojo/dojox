@@ -3,7 +3,7 @@ dojo.provide("dojox.lang.utils");
 (function(){
 	var empty = {}, du = dojox.lang.utils;
 	
-	dojo.mixin(dojox.lang.utils, {
+	dojo.mixin(du, {
 		coerceType: function(target, source){
 			switch(typeof target){
 				case "number":	return Number(eval("(" + source + ")"));
