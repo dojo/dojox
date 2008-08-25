@@ -141,7 +141,7 @@ dojo.require("dojox.gfx.matrix");
 	
 	g.fx.animateStroke = function(/*Object*/ args){
 		// summary:
-		//	returns the animation, which will change stroke properties over time
+		//	Returns an animation which will change stroke properties over time
 		// example:
 		//	|	dojox.gfx.fx.animateStroke{{
 		//	|		shape: shape,
@@ -185,13 +185,13 @@ dojo.require("dojox.gfx.matrix");
 			this.curve = new InterpolObject(values, stroke);
 		});
 		d.connect(anim, "onAnimate", shape, "setStroke");
-		return anim;
+		return anim; // dojo._Animation
 	};
 
 	g.fx.animateFill = function(/*Object*/ args){
 		// summary:
-		//	returns the animation, which will change fill color over time,
-		//	only solid fill color is supported at the moment
+		//	Returns an animation which will change fill color over time.
+		//	Only solid fill color is supported at the moment
 		// example:
 		//	|	dojox.gfx.fx.animateFill{{
 		//	|		shape: shape,
@@ -208,12 +208,12 @@ dojo.require("dojox.gfx.matrix");
 			}
 		});
 		d.connect(anim, "onAnimate", shape, "setFill");
-		return anim;
+		return anim; // dojo._Animation
 	};
 
 	g.fx.animateFont = function(/*Object*/ args){
 		// summary:
-		//	returns the animation, which will change font properties over time
+		//	Returns an animation which will change font properties over time
 		// example:
 		//	|	dojox.gfx.fx.animateFont{{
 		//	|		shape: shape,
@@ -250,12 +250,12 @@ dojo.require("dojox.gfx.matrix");
 			this.curve = new InterpolObject(values, font);
 		});
 		d.connect(anim, "onAnimate", shape, "setFont");
-		return anim;
+		return anim; // dojo._Animation
 	};
 
 	g.fx.animateTransform = function(/*Object*/ args){
 		// summary:
-		//	returns the animation, which will change transformation over time
+		//	Returns an animation which will change transformation over time
 		// example:
 		//	|	dojox.gfx.fx.animateTransform{{
 		//	|		shape: shape,
@@ -272,6 +272,6 @@ dojo.require("dojox.gfx.matrix");
 			this.curve = new InterpolTransform(args.transform, original);
 		});
 		d.connect(anim, "onAnimate", shape, "setTransform");
-		return anim;
+		return anim; // dojo._Animation
 	};
 })();
