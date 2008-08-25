@@ -127,7 +127,7 @@ var _optimize = function(){
 				next = c[i+1];
 			}
 			// make the total delay the duration
-			c[i].args[4]=nextdt;
+			c[i].args[3]=nextdt;
 		}else if(c[i+1] 
 			&& c[i].name=="doh.robot.mouseWheel" 
 			&& c[i+1].name==c[i].name 
@@ -205,7 +205,7 @@ var _optimize = function(){
 			//	c[i+1]: mouseMove
 
 			// insert new mouseMoveAt, 1px to the right
-			var cmd={name:"doh.robot.mouseMoveAt",args:[c[i-1].args[0], 1,c[i-1].args[2]+1,c[i-1].args[3]]};
+			var cmd={name:"doh.robot.mouseMoveAt",args:[c[i-1].args[0], 1, 100, c[i-1].args[3]+1,c[i-1].args[4]]};
 			c.splice(i+1,0,cmd);
 		}else if(c[i + 1]
 			&& ((c[i].name=="doh.robot.keyPress"
@@ -406,7 +406,7 @@ var onmousedown = function(e){
 	lastEvent={type:e.type, button:e.button};
 	var selector = getSelector(e.target);
 	var coords = dojo.coords(e.target);
-	addCommand("doh.robot.mouseMoveAt",[selector, 0,e.clientX - coords.x,e.clientY-coords.y]);
+	addCommand("doh.robot.mouseMoveAt",[selector, 0, 100, e.clientX - coords.x, e.clientY-coords.y]);
 	addCommand("doh.robot.mousePress",[getMouseButtonObject(e.button-(dojo.isIE?1:0)), 0]);
 };
 
@@ -432,7 +432,7 @@ var onmousemove = function(e){
 	// handler for mouse move
 	if(!e || lastEvent.type==e.type && lastEvent.pageX==e.pageX && lastEvent.pageY==e.pageY){ return; }
 	lastEvent={type:e.type, pageX:e.pageX, pageY:e.pageY};
-	addCommand("doh.robot.mouseMove",[e.pageX,e.pageY, 0,true]);
+	addCommand("doh.robot.mouseMove",[e.pageX, e.pageY, 0, 100, true]);
 };
 
 var onmousewheel = function(e){
