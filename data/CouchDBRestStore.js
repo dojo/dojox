@@ -29,9 +29,7 @@ dojo.declare("dojox.data.CouchDBRestStore",
 		fetch: function(args){
 			// summary:
 			// 		This only differs from JsonRestStore in that it, will put the query string the query part of the URL and it handles start and count
-			if(!args.useIndexCache){
-				args.query = '_all_docs?' + (args.query || '');
-			}
+			args.query = args.query || '_all_docs?';
 			if(args.start){
 				args.query = (args.query ? (args.query + '&') : '') + 'skip=' + args.start;
 				delete args.start;

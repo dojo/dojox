@@ -24,6 +24,10 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 			put(id,value) - puts the value at the given id
 			// 			post(id,value) - posts (appends) the value at the given id
 			// 			delete(id) - deletes the value corresponding to the given id
+			//		Note that it is critical that the service parses responses as JSON.
+			//		If you are using dojox.rpc.Service, the easiest way to make sure this 
+			// 		happens is to make the responses have a content type of 
+			// 		application/json.
 			//
 			// The *target* parameter
 			// 		This is the target URL for this Service store. This may be used in place

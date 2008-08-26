@@ -14,7 +14,7 @@ Project authors
 	Russell Jones (KeyValueStore) (CLA)
 	Benjamin Schell (KeyValueStore, CssRuleStore, CssClassStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
-	Kris Zyp (kris@dojotoolkit.org) (JsonRestStore, PersevereStore, S3JsonRestStore, CouchDBRestStore)
+	Kris Zyp (kzyp@dojotoolkit.org) (JsonRestStore, PersevereStore, S3JsonRestStore, CouchDBRestStore)
 	Frank Fortson (frank.fortson@equorum.com) (AndOrReadStore, AndOrWriteStore)
 
 -------------------------------------------------------------------------------

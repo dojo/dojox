@@ -339,8 +339,7 @@ dojo.declare("dojox.data.ServiceStore",
 				// convert the different spellings
 				return this.fetch({
 						query: args.identity,
-						onComplete: args.onItem,
-						useIndexCache: true 
+						onComplete: args.onItem
 					}).results;
 			}
 			return item;
