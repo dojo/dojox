@@ -170,7 +170,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		sets 'attribute' on 'item' to 'value'
 
 			var old = item[attribute];
-			var store = dojox.data._getStoreForItem(item);
+			var store = item.__id ? dojox.data._getStoreForItem(item) : this;
 			if(dojox.json.schema && store.schema && store.schema.properties){
 				// if we have a schema and schema validator available we will validate the property change
 				var result = dojox.json.schema.checkPropertyChange(value,store.schema.properties[attribute]);
@@ -207,8 +207,15 @@ dojo.declare("dojox.data.JsonRestStore",
 		},
 		save: function(kwArgs){
 			// summary:
-			//		Saves the dirty data using REST Ajax methods
-			
+			//		Saves the dirty data using REST Ajax methods. See dojo.data.api.Write for API.
+			//
+			//	kwArgs.global:
+			//		This will cause the save to commit the dirty data for all 
+			// 		JsonRestStores as a single transaction.
+
+			if(!(kwArgs && kwArgs.global)){
+				(kwArgs = kwArgs || {}).service = this.service;
+			} 
 			var actions = dojox.rpc.JsonRest.commit(kwArgs);
 			this.serverVersion = this._updates && this._updates.length;
 			return actions;
@@ -220,15 +227,20 @@ dojo.declare("dojox.data.JsonRestStore",
 			var dirtyObjects = dojox.rpc.JsonRest.getDirtyObjects().concat([]);
 			while (dirtyObjects.length>0){
 				var d = dirtyObjects.pop();
-				//TODO: Find the correct store for each one
+				var store = dojox.data._getStoreForItem(d.object || d.old);
 				if(!d.object){
 					// was a deletion, we will add it back
-					this.onNew(d.old);
+					store.onNew(d.old);
 				}else if(!d.old){
 					// was an addition, remove it
-					this.onDelete(d.object);
+					store.onDelete(d.object);
 				}else{
-					//TODO: onSet
+					// find all the properties that were modified
+					for(var i in d.object){
+						if(d.object[i] != d.old[i]){
+							store.onSet(d.object, i, d.object[i], d.old[i]);
+						}
+					}
 				}
 			}
 			dojox.rpc.JsonRest.revert();

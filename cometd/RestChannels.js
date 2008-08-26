@@ -78,7 +78,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 		acceptType: "x-application/rest+json,application/http;q=0.9,*/*;q=0.7",
 		subscriptions: {},
 		subCallbacks: {},
-		autoReconnectTime: 30000,
+		autoReconnectTime: 3000,
 		sendAsJson: false,
 		url: '/channels',
 		autoSubscribeRoot: '/',
@@ -93,13 +93,14 @@ if(dojox.data && dojox.data.JsonRestStore){
 			if(!this.connected){
 				this.connectionId = dojox._clientId;
 				var clientIdHeader = this.started ? 'X-Client-Id' : 'X-Create-Client-Id';
-
+				console.log("opening connection");
 				var headers = {Accept:this.acceptType};
 				headers[clientIdHeader] = this.connectionId;
 				var dfd = dojo.xhrPost({headers:headers, url: this.url, noStatus: true});
 		  		var self = this;
 		  		this.lastIndex = 0; 
 				var onerror, onprogress = function(data){ // get all the possible event handlers
+					console.log("xhr.status", xhr.status);
 					if(typeof dojo == 'undefined'){
 						return null;// this can be called after dojo is unloaded, just do nothing in that case
 					}
@@ -108,8 +109,9 @@ if(dojox.data && dojox.data.JsonRestStore){
 					self.started = true;
 					var error = self.onprogress(xhr,data,contentType);
 					if(error){
-						onerror();
-						return new Error(error);
+						if(onerror()){
+							return new Error(error);
+						}
 					}
 					if(!xhr || xhr.readyState==4){
 						xhr = null;
@@ -121,6 +123,12 @@ if(dojox.data && dojox.data.JsonRestStore){
 					return data;
 				};
 				onerror = function(error){
+					if(xhr && xhr.status == 409){
+						// a 409 indicates that there is a multiple connections, and we need to poll
+						console.log("multiple tabs/windows open, polling");
+						self.disconnected();
+						return null;
+					}
 					if(self.started){ // this means we need to reconnect
 						self.started = false;
 						self.connected = false;
@@ -308,7 +316,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 				return "conflict"; // indicate an error
 			}
 			try{
-				message.data = message.content || dojo.fromJson(message.responseText);
+				message.data = message.data || dojo.fromJson(message.responseText);
 			}
 			catch(e){}
 			var self = this;	
@@ -338,7 +346,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 				catch(e){
 				}
 			}
-			else if(dojox.io.httpParse && contentType.match(/application\/http/)){
+			else if(dojox.io && dojox.io.httpParse && contentType.match(/application\/http/)){
 				// do HTTP tunnel parsing
 				var topHeaders = '';
 				if(xhr && xhr.getAllResponseHeaders){

@@ -11,41 +11,42 @@ dojo.require("dojox.rpc.Rest");
 		commit: function(kwArgs){
 			// summary:
 			//		Saves the dirty data using REST Ajax methods
-			var data = [];
 
 			var left; // this is how many changes are remaining to be received from the server
 			kwArgs = kwArgs || {};
 			var actions = [];
-			var numDirty = dirtyObjects.length;
 			var alreadyRecorded = {};
-			
-			for(var i = 0; i < numDirty; i++){
+			var savingObjects = [];
+			for(var i = 0; i < dirtyObjects.length; i++){
 				var dirty = dirtyObjects[i];
 				var object = dirty.object;
 				var append = false;
-				if(object && !dirty.old){
-					// new object
-					actions.push({method:"post",target:{__id:jr.getServiceAndId(object.__id).service.servicePath},
-											content:object});
-				}else if(!object && dirty.old){
-					// deleted object
-					actions.push({method:"delete",target:dirty.old});
-				}else{
-					// changed object
-					while(!(dojox.json && dojox.json.ref && dojox.json.ref.useRefs) && object.__id.match(/[\[\.]/)){ // it is a path reference
-						// this means it is a sub object and the server doesn't support directly putting to
-						// this object by path, we must go to the parent object and save it
-						var parentId = object.__id.match(/^[^\[\.]*/)[0];
-						if(parentId in alreadyRecorded){// if it has already been saved, we don't want to repeat it
-							continue;
+				if(!(kwArgs.service && (object || dirty.old).__id.indexOf(kwArgs.service.servicePath))){
+					if(object && !dirty.old){
+						// new object
+						actions.push({method:"post",target:{__id:jr.getServiceAndId(object.__id).service.servicePath},
+												content:object});
+					}else if(!object && dirty.old){
+						// deleted object
+						actions.push({method:"delete",target:dirty.old});
+					}else{
+						// changed object
+						while(!(dojox.json && dojox.json.ref && dojox.json.ref.useRefs) && object.__id.match(/[\[\.]/)){ // it is a path reference
+							// this means it is a sub object and the server doesn't support directly putting to
+							// this object by path, we must go to the parent object and save it
+							var parentId = object.__id.match(/^[^\[\.]*/)[0];
+							// record that we are saving
+							object = alreadyRecorded[parentId] = Rest._index[parentId];
 						}
-						// record that we are saving
-						object = alreadyRecorded[parentId] = Rest._index[parentId];
+						if(!(object.__id in alreadyRecorded)){// if it has already been saved, we don't want to repeat it
+							alreadyRecorded[object.__id] = object;
+							actions.push({method:"put",target:object,content:object});
+						}
+						
 					}
-					actions.push({method:"put",target:object,content:object});
+					savingObjects.push(dirty);
+					dirtyObjects.splice(i--,1);
 				}
-
-				data.push(object);
 			}
 			var xhrSendId;
 			var plainXhr = dojo.xhr;
@@ -83,7 +84,6 @@ dojo.require("dojox.rpc.Rest");
 							Rest._index[newId] = object; 
 						}catch(e){}
 						if(!(--left)){
-							dirtyObjects.splice(0,numDirty); // remove all the objects that were committed
 							if(kwArgs.onComplete){
 								kwArgs.onComplete.call(kwArgs.scope);
 							}
@@ -95,7 +95,8 @@ dojo.require("dojox.rpc.Rest");
 					
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
 					left = -1; // first make sure that success isn't called
-					var postCommitDirtyObjects = dirtyObjects.splice(numDirty,dirtyObjects.length - numDirty);
+					var postCommitDirtyObjects = dirtyObjects;
+					dirtyObject = savingObjects;
 					numDirty = 0; // make sure this does't do anything if it is called again
 					jr.revert(); // revert if there was an error
 					dirtyObjects = postCommitDirtyObjects;
@@ -187,7 +188,7 @@ dojo.require("dojox.rpc.Rest");
 					dojo.mixin(this,data);
 				}
 				var idAttribute = jr.getIdAttribute(service);
-				Rest._index[this.__id = service.servicePath + (data[idAttribute] || (data[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
+				Rest._index[this.__id = service.servicePath + (this[idAttribute] || (this[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
 				dirtyObjects.push({object:this});
 	//			this._getParent(parentInfo).push(data); // append to this list
 

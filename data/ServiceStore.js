@@ -333,7 +333,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary: 
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			var item = this._index[(args._prefix || '') + args.identity];
-			if(item){
+			if(item && args.onItem){
 				args.onItem.call(args.scope, item);
 			}else{
 				// convert the different spellings
