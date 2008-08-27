@@ -130,6 +130,7 @@ dojo.provide("dojox.highlight._base");
 			if(e == 'Illegal'){
 				this.relevance = 0;
 				this.keywordCount = 0;
+				this.partialResult = this.result.join("");
 				this.result = esc(textBlock);
 			}else{
 				throw e;
@@ -351,15 +352,19 @@ dojo.provide("dojox.highlight._base");
 			node.innerHTML = text;
 		}
 	}
-
-	function highlightLanguage(block, lang){
-		var highlight = new Highlighter(lang, blockText(block));
-		replaceText(block, block.className, highlight.result);
+	function highlightStringLanguage(lang, str){
+		var highlight = new Highlighter(lang, str);
+		return {result:highlight.result, langName:lang, partialResult:highlight.partialResult};		
 	}
 
-	function highlightAuto(block){
+	function highlightLanguage(block, lang){
+		var result = highlightStringLanguage(lang, blockText(block));
+		replaceText(block, block.className, result.result);
+	}
+
+	function highlightStringAuto(str){
 		var result = "", langName = "", bestRelevance = 2,
-			textBlock = blockText(block);
+			textBlock = str;
 		for(var key in dh.languages){
 			if(!dh.languages[key].defaultMode){ continue; }	// skip internal members
 			var highlight = new Highlighter(key, textBlock),
@@ -370,16 +375,31 @@ dojo.provide("dojox.highlight._base");
 				langName = highlight.langName;
 			}
 		}
-		if(result){
-			replaceText(block, langName, result);
+		return {result:result, langName:langName};
+	}
+	
+	function highlightAuto(block){
+		var result = highlightStringAuto(blockText(block));
+		if(result.result){
+			replaceText(block, result.langName, result.result);
 		}
 	}
 	
 	// the public API
 
+	dh.processString = function(/* String */ str, /* String? */lang){
+		// summary: highlight a string of text
+		// returns: An object containing:
+		//         result - string of html with spans to apply formatting
+		//         partialResult - if the formating failed: string of html
+		//                 up to the point of the failure, otherwise: undefined
+		//         langName - the language used to do the formatting
+		return lang ? highlightStringLanguage(lang, str) : highlightStringAuto(str);
+	};
+
 	dh.init = function(/* DomNode */ block){
 		// summary: the main (only required) public API. highlight a node.
-		if(dojo.hasClass(block,"no-highlight")){ return; }
+		if(dojo.hasClass(block, "no-highlight")){ return; }
 		if(!verifyText(block)){ return; }
 	
 		var classes = block.className.split(/\s+/),
