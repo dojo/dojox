@@ -172,7 +172,9 @@ dojo.declare("dojox.layout.FloatingPane",
 		// summary: Close and destroy this widget
 		if(!this.closable){ return; }
 		dojo.unsubscribe(this._listener);
-		this.hide(dojo.hitch(this,"destroyRecursive",arguments)); 
+		this.hide(dojo.hitch(this,function(){
+			this.destroyRecursive();
+		})); 
 	},
 
 	hide: function(/* Function? */ callback){
