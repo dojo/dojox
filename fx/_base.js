@@ -330,8 +330,9 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 			hs = null, 
 			pn = null,
 			lightColor = args.lightColor || "#dddddd", 
-			darkColor = args.darkColor || "#555555", 
-			endColor = args.endColor || s.backgroundColor,
+			darkColor = args.darkColor || "#555555",
+			bgColor = dojo.style(args.node, "backgroundColor"), 
+			endColor = args.endColor || bgColor,
 			staticProps = {}, 
 			anims = [],
 			duration = args.duration ? args.duration / 2 : 250,
@@ -348,6 +349,7 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 			endColor = convertColor(endColor);
 			lightColor = convertColor(lightColor);
 			darkColor = convertColor(darkColor);
+			bgColor = convertColor(bgColor);
 			transparentColor = "black";
 			helperNode.style.filter = "chroma(color='#000000')";
 		}
@@ -396,7 +398,7 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 		staticProps[pn[5].toLowerCase()] = dims[pn[5].toLowerCase()] + "px";
 		staticProps[pn[4].toLowerCase()] = "0";
 		staticProps[borderConst + pn[1] + widthConst] = dims[pn[4].toLowerCase()] + "px";
-		staticProps[borderConst + pn[1] + "Color"] = s.backgroundColor;
+		staticProps[borderConst + pn[1] + "Color"] = bgColor;
 
 		var p0 = props[0];
 		p0[borderConst + pn[1] + widthConst] = 0; 
