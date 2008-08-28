@@ -24,7 +24,7 @@ var djConfig = {
 <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 <script>
 	dojo.require("dojo.parser");
-	dojo.require("dijit.Editor");
+	dojo.require("dojox.editor.Editor");
 	dojo.require("dojox.editor.plugins.TablePlugins");
 	
 	dojo.addOnLoad(function(){
@@ -43,7 +43,7 @@ margin:20px 100px;
 </head>
 <body class="tundra">
 <div id="main">
-	<div dojoType="dijit.Editor" plugins="[
+	<div dojoType="dojox.editor.Editor" plugins="[
                         'undo', 'redo', 'bold','italic','underline','|', 'copy', 'cut', 'paste','|',
                         {name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
                        	{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'},

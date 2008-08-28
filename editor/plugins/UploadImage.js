@@ -1,11 +1,11 @@
 dojo.provide("dojox.editor.plugins.UploadImage");
-dojo.require("dijit._editor._Plugin");
+dojo.require("dojox.editor._Plugin");
 dojo.require("dojox.form.FileUploader");
 
 dojo.experimental("dojox.editor.plugins.UploadImage");
 
 dojo.declare("dojox.editor.plugins.UploadImage",
-	dijit._editor._Plugin,
+	dojox.editor._Plugin,
 	{
 		//summary: 
 		// 	Adds an icon to the Editor toolbar that when clicked, opens a system dialog

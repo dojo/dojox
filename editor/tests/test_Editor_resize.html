@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Editor Test</title>
+
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css">
+	
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true"></script>
+	
+	<!-- not needed, for testing alternate themes -->
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
+	<script type="text/javascript">
+		dojo.require("dijit.layout.BorderContainer");
+		dojo.require("dijit.layout.ContentPane");
+		dojo.require("dojox.editor.Editor");
+		dojo.require("dojox.editor.plugins.AlwaysShowToolbar");
+		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+	</script>
+</head>
+<body class="tundra">
+	<div dojoType="dijit.layout.BorderContainer" style="height: 500px;border:1px solid black;">
+		<div dojoType="dijit.layout.ContentPane" region="top" splitter="true" style="height: 100px">
+			Some Content
+		</div>
+		<div dojoType="dojox.editor.Editor" id="editor1" region="center" height="100%"></div>
+	</div>
+</body>
+</html>

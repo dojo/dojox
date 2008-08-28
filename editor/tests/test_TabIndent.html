@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Editor TabIndent Plugin Test</title>
+
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css">
+	
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true"></script>
+	
+	<!-- not needed, for testing alternate themes -->
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	
+	<script type="text/javascript">
+		dojo.require("dijit.dijit"); // optimize: load dijit layer
+		dojo.require("dojox.editor.Editor");
+		dojo.require("dojox.editor.plugins.TabIndent");
+		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+	</script>
+</head>
+<body class="tundra">
+	<div style="border: 1px dotted black;">
+		<div dojoType="dojox.editor.Editor" 
+			extraPlugins="['tabIndent','|','dojox.editor.plugins.TabIndent','|',{name:'dojox.editor.plugins.TabIndent'}]">
+			<ol>
+				<li>the tabIndent plugin allows the use of the tab and shift-tab keys to
+indent list items.</li>
+			</ol>
+		</div>
+	</div>
+</body>
+</html>
