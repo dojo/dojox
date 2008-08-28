@@ -76,8 +76,8 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 			this.showNav.style.display = "none"; 
 		} 
 
-		this.connect(document,'onclick', '_onEvent');
-		this.connect(document,'onkeypress', '_onEvent');
+		this.connect(dojo.doc,'onclick', '_onEvent');
+		this.connect(dojo.doc,'onkeypress', '_onEvent');
 		
 		// only if this.fullScreen == true?
 		this.connect(window, 'onresize', '_resizeWindow');
@@ -93,12 +93,12 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		// summary: jump to slide based on param
 		var slideIndex = number - 1; 
 		
-		if(slideIndex < 0)
+		if(slideIndex < 0){
 			slideIndex = 0;
-		
-		if(slideIndex > this._slides.length - 1)
+		}
+		if(slideIndex > this._slides.length - 1){
 			slideIndex = this._slides.length - 1; 
-		
+		}
 		this._gotoSlide(slideIndex);
 	},
 
@@ -108,25 +108,23 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	
 	nextSlide: function(/*Event*/ evt){
 		// summary: transition to the next slide.
-		if (!this.selectedChildWidget.isLastChild) {
-			this._gotoSlide(this._slideIndex+1);
+		if(this.selectedChildWidget && !this.selectedChildWidget.isLastChild){
+			this._gotoSlide(this._slideIndex + 1);
 		}
-		if (evt) { evt.stopPropagation(); }
+		if(evt){ evt.stopPropagation(); }
 	},
 
 	previousSlide: function(/*Event*/ evt){
 		// summary: transition to the previous slide
-		if (!this.selectedChildWidget.isFirstChild) {
-			
+		if(this.selectedChildWidget && !this.selectedChildWidget.isFirstChild){
 			this._gotoSlide(this._slideIndex-1);
-			
-		} else { this.selectedChildWidget._reset(); } 
-		if (evt) { evt.stopPropagation();}
+		}else{ this.selectedChildWidget && this.selectedChildWidget._reset(); } 
+		if(evt){ evt.stopPropagation();}
 	},
 
 	getHash: function(id){
 		// summary: get the current hash to set in localtion
-		return this.id+"_SlideNo_"+id;
+		return this.id + "_SlideNo_" + id;
 	},
 	
 	_hideNav: function(evt){
@@ -136,7 +134,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 			node:this.showNav, 
 			duration:this.navDuration, 
 			properties: {
-				opacity: { end:this._navOpacMin } 
+				opacity: this._navOpacMin
 			}
 		}).play();
 	},
@@ -145,10 +143,10 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		// summary: shows navigation
 		if(this._navAnim){ this._navAnim.stop(); }
 		this._navAnim = dojo.animateProperty({
-			node:this.showNav, 
-			duration:this.navDuration, 
-			properties: { 
-				opacity: { end:this._navOpacMax }
+			node:this.showNav,
+			duration:this.navDuration,
+			properties:{
+				opacity: this._navOpacMax
 			}
 		}).play();
 	},
@@ -165,11 +163,9 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		this._slides = this.getChildren(); 
 		if(this.useNav){
 			// populate the select box with top-level slides
-			var i=0;
-			dojo.forEach(this._slides,dojo.hitch(this,function(slide){
-				i++;
+			dojo.forEach(this._slides,dojo.hitch(this,function(slide,i){
 				var tmp = this._option.cloneNode(true);
-				tmp.text = slide.title+" ("+i+") ";
+				tmp.text = slide.title+" (" + i + ") ";
 				this._option.parentNode.insertBefore(tmp,this._option);
 			}));
 			if(this._option.parentNode){
@@ -183,8 +179,9 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		// summary: 
 		//		main presentation function, determines next 'best action' for a
 		//		specified event.
-		var _node = evt.target;
-		var _type = evt.type;
+		var _node = evt.target,
+			_type = evt.type, 
+			keys = dojo.keys;
 
 		if(_type == "click" || _type == "change"){
 			if(_node.index && _node.parentNode == this.select){ 
@@ -198,28 +195,26 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		}else if(_type=="keydown" || _type == "keypress"){
 			
 			// FIXME: safari doesn't report keydown/keypress?
-			
-			var key = (evt.charCode == dojo.keys.SPACE ? dojo.keys.SPACE : evt.keyCode);
-			switch(key){
-				case dojo.keys.DELETE:
-				case dojo.keys.BACKSPACE:
-				case dojo.keys.LEFT_ARROW:
-				case dojo.keys.UP_ARROW:
-				case dojo.keys.PAGE_UP:
+			switch(evt.charOrCode){
+				case keys.DELETE:
+				case keys.BACKSPACE:
+				case keys.LEFT_ARROW:
+				case keys.UP_ARROW:
+				case keys.PAGE_UP:
 				case 80:	// key 'p'
 					this.previousSlide(evt);
 					break;
 
-				case dojo.keys.ENTER:
-				case dojo.keys.SPACE:
-				case dojo.keys.RIGHT_ARROW:
-				case dojo.keys.DOWN_ARROW:
-				case dojo.keys.PAGE_DOWN: 
+				case keys.ENTER:
+				case keys.SPACE:
+				case keys.RIGHT_ARROW:
+				case keys.DOWN_ARROW:
+				case keys.PAGE_DOWN: 
 				case 78:	// key 'n'
 					this.selectedChildWidget._nextAction(evt); 
 					break;
 
-				case dojo.keys.HOME:	this._gotoSlide(0);
+				case keys.HOME:	this._gotoSlide(0);
 			}
 		}
 		this._resizeWindow();
@@ -258,10 +253,10 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 
 	_readHash: function(){
 		var th = window.location.hash;
-		if (th.length && this.setHash) {
-			var parts = (""+window.location).split(this.getHash(''));
-			if(parts.length>1){
-				this._gotoSlide(parseInt(parts[1])-1);
+		if(th.length && this.setHash){
+			var parts = ("" + window.location).split(this.getHash(''));
+			if(parts.length > 1){
+				this._gotoSlide(parseInt(parts[1]) - 1);
 			}
 		}
 	},
@@ -270,7 +265,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		// summary: sets url #mark to direct slide access
 		if(this.setHash){
 			var slideNo = this._slideIndex+1;
-			window.location.href = "#"+this.getHash(slideNo);	
+			window.location.href = "#" + this.getHash(slideNo);	
 		}
 	},
 
@@ -281,11 +276,13 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		dojo.body().style.height = "auto";
 		var wh = dijit.getViewport(); 
 		var h = Math.max(
-			document.documentElement.scrollHeight || dojo.body().scrollHeight,
+			dojo.doc.documentElement.scrollHeight || dojo.body().scrollHeight,
 			wh.h);
-		var w = wh.w; 
-		this.selectedChildWidget.domNode.style.height = h +'px';
-		this.selectedChildWidget.domNode.style.width = w +'px';
+		var w = wh.w;
+		dojo.style(this.selectedChildWidget.domNode,{
+			height: h + "px",
+			width: w + "px"
+		});
 	},
 
 	_transition: function(newWidget,oldWidget){ 
@@ -384,7 +381,7 @@ dojo.declare(
 				this._runningDelay = setTimeout(
 					dojo.hitch(tmpAction,"_runAction"),tmpAction.delay
 					);
-				console.debug('started delay action',this._runningDelay); 
+				// console.debug('started delay action',this._runningDelay); 
 			}else{
 				tmpAction._runAction();
 			}
@@ -398,8 +395,8 @@ dojo.declare(
 			if(tmpNext.on == "delay"){
 				// FIXME: yeah it looks like _runAction() onend should report
 				// _actionIndex++
-				console.debug('started delay action',this._runningDelay); 
-				setTimeout(dojo.hitch(tmpNext,"_runAction"),tmpNext.delay);
+				//console.log('started delay action', this._runningDelay); 
+				setTimeout(dojo.hitch(tmpNext,"_runAction"), tmpNext.delay);
 			}
 		}else{
 			// no more actions in this slide
@@ -417,7 +414,7 @@ dojo.declare(
 		this._actionIndex = [0];
 		dojo.forEach(this._parts,function(part){
 			part._reset();
-		},this);
+		}, this);
 	}
 });
 
@@ -456,20 +453,25 @@ dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 	_quickToggle: function(){
 		// summary: ugly [unworking] fix to test setting state of component
 		//	before/after an animation. display:none prevents fadeIns?
+		var style = dojo.partial(dojo.style, this.domNode);
 		if(this._isShowing){
-			dojo.style(this.domNode,'display','none');	
-			dojo.style(this.domNode,'visibility','hidden');
-			dojo.style(this.domNode,'opacity',0);
+			style({
+				display:'none',
+				visibility:"hidden",
+				opacity:0
+			});	
 		}else{
-                        dojo.style(this.domNode,'display',''); 
-			dojo.style(this.domNode,'visibility','visible'); 
-			dojo.style(this.domNode,'opacity',1);
+            style({
+				display:"",
+				visibility:"visible",
+				opacity:1
+			});
 		}
 		this._isShowing =! this._isShowing; 
 	}
 });
 
-dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
+dojo.declare("dojox.presentation.Action", [dijit._Widget, dijit._Contained], {
 	// summary:	
 	//	a widget to attach to a dojox.presentation.Part to control
 	//	it's properties based on an inherited chain of events ...
@@ -508,7 +510,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 		// executes the action for each attached 'Part' 
 		dojo.forEach(this._attached,function(node){
 			// FIXME: this is ugly, and where is toggle class? :(
-			var dir = (node._isShowing) ? "Out" : "In";
+//			var dir = (node._isShowing) ? "Out" : "In";
 			// node._isShowing =! node._isShowing; 
 			//var _anim = dojox.fx[ this.toggle ? this.toggle+dir : "fade"+dir]({ 
 			var _anim = dojo.fadeIn({
@@ -517,7 +519,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 				beforeBegin: dojo.hitch(node,"_quickToggle")
 			});
 			anims.push(_anim);
-		},this);
+		}, this);
 		var _anim = dojo.fx.combine(anims);
 		if(_anim){ _anim.play(); }
 	},
@@ -527,8 +529,8 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 		// a child here ... so it's getSiblings. courtesy bill in #dojo 
 		// could be moved into parent, and just call this.getChildren(),
 		// which makes more sense.
-		var siblings = dojo.filter( this.getParent().getChildren(), function(widget){ 
-			return widget.declaredClass==declaredClass;
+		var siblings = dojo.filter(this.getParent().getChildren(), function(widget){ 
+			return widget.declaredClass == declaredClass;
 			} 
 		);
 		return siblings; // dijit._Widget
@@ -539,7 +541,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 
 		this.inherited(arguments);
 		// prevent actions from being visible, _always_
-		dojo.style(this.domNode,"display","none"); 
+		dojo.style(this.domNode, "display", "none"); 
  		var parents = this._getSiblingsByType('dojox.presentation.Part');
 		// create a list of "parts" we are attached to via forSlide/as 
 		this._attached = [];
@@ -547,7 +549,7 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 			if(this.forSlide == parentPart.as){ 
 				this._attached.push(parentPart); 
 			}
-		},this);
+		}, this);
 	}	
 
 });

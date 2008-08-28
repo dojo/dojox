@@ -1,13 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	
 	<title>dojox.presentation - Presentation Mechanism</title>
 
-	<script type="text/javascript"> djConfig = { isDebug: true, parseOnLoad: true }; </script>
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../resources/Show.css";
+	</style>
+
+	<script type="text/javascript"> djConfig = { isDebug: true, parseOnLoad: true, popup:true }; </script>
 	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
 	<script type="text/javascript" src="../../../dijit/form/Button.js"></script>
-	
-		
+			
 	<script type="text/javascript">
 		dojo.require("dojox.presentation");
 		dojo.require("dijit._Calendar"); 
@@ -16,13 +23,6 @@
 		dojo.require("dojo.fx");
 		dojo.require("dojo.dnd.move");
 	</script>
-
-	<style type="text/css">
-		@import "../../../dojo/resources/dojo.css";
-	        @import "../../../dijit/themes/tundra/tundra.css";
-        	@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../resources/Show.css"; 		
-	</style>
 
 	<script type="text/javascript">
 		var externalAnimation = null;
@@ -138,7 +138,7 @@
 
 		<div dojoType="dojox.presentation.Slide" title="Widgets in Slide" noClick="true" id="wdijit">
 			<p>There is a widget in this page:</p>
-			<p>clicking has been stopped on this page to demonstrate the usage ..</p>
+			<!--p>clicking has been stopped on this page to demonstrate the usage ..</p>
 			<div dojoType="dojox.presentation.Part" as="foo" startVisible="true">
 				There _should_ be a _Calendar widget here<br>
 				<div dojoType="dijit._Calendar"></div>
@@ -152,6 +152,7 @@
 			<p>... so I'm providing a next button: <button dojoType="dijit.form.Button" value="Next" onClick="dijit.byId('testPresentation').nextSlide();">Next</button></p>
 			</div>
 			<input type="dojox.presentation.Action" forSlide="foo" toggle="slide">
+		-->
 		</div>
 
 		<div dojoType="dojox.presentation.Slide" title="The End">
