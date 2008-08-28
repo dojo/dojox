@@ -41,20 +41,20 @@
 			dojo.byId("execute").onclick= function () {
 				var input = document.getElementById("input").value;
 				try{
-				sandbox.evaluate(input);
+					sandbox.evaluate(input);
 				}catch(e){
-					alert(e);
+					alert(e.message || e);
 				}
 			}
 			dojo.byId("executeJs").onclick= function () {
 				var input = document.getElementById("jsFile").value;
-				sandbox.sandboxJS(input).addErrback(function(result){
+				sandbox.loadJS(input).addErrback(function(result){
 					alert(result);
 				});
 			}
 			dojo.byId("executeHtml").onclick= function () {
 				var input = document.getElementById("htmlFile").value;
-				sandbox.sandboxHTML(input).addErrback(function(result){
+				sandbox.loadHTML(input).addErrback(function(result){
 					alert(result);
 				});
 			}
