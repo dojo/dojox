@@ -210,7 +210,7 @@ dojo.require("dojox.rpc.Rest");
 			if(schema){
 				if(!(idAttr = schema._idAttr)){
 					for(var i in schema.properties){
-						if(schema.properties[i].unique){
+						if(schema.properties[i].identity){
 							schema._idAttr = idAttr = i;
 						}
 					}
