@@ -29,28 +29,30 @@ dojox.fx._Line = function(start, end){
 	//
 	this.start = start;
 	this.end = end;
-	if(dojo.isArray(start)){
+	
+	var isArray = dojo.isArray(start), 
+		d = (isArray ? [] : end - start);
+	
+	if(isArray){
 		// multi-dimensional branch
-		var diff = [];
-		dojo.forEach(this.start, function(s,i){
-			diff[i] = this.end[i] - s;
+		dojo.forEach(this.start, function(s, i){
+			d[i] = this.end[i] - s;
 		}, this);
 		
 		this.getValue = function(/*float*/ n){
 			var res = [];
 			dojo.forEach(this.start, function(s, i){
-				res[i] = (diff[i] * n) + s;
+				res[i] = (d[i] * n) + s;
 			}, this);
 			return res; // Array
 		}
 	}else{
 		// single value branch, document here for both branches:
-		var diff = end - start;
 		this.getValue = function(/*float*/ n){
 			// summary: Returns the point on the line, or an array of points
 			// n: a floating point number greater than 0 and less than 1
 			// returns: Mixed 
-			return (diff * n) + this.start; // Decimal
+			return (d * n) + this.start; // Decimal
 		}
 	}
 };
