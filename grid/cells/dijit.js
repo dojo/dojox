@@ -27,7 +27,7 @@ dojo.require("dijit.Editor");
 			return "<div></div>";
 		},
 		getValue: function(inRowIndex){
-			return this.widget.getValue();
+			return this.widget.attr('value');
 		},
 		setValue: function(inRowIndex, inValue){
 			if(this.widget&&this.widget.setValue){
@@ -114,7 +114,7 @@ dojo.require("dijit.Editor");
 			var e = this.widget;
 			// make sure to apply the displayed value
 			e.setDisplayedValue(e.getDisplayedValue());
-			return e.getValue();
+			return e.attr('value');
 		}
 	});
 	dgc.ComboBox.markupFactory = function(node, cell){
