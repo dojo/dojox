@@ -96,10 +96,11 @@ dojo.declare("dojox.grid._Layout", null, {
 			index: this.cells.length
 		};
 
-		if(inDef && inDef instanceof dojox.grid.cells._Base){
-			props.unitWidth = getCellWidth(inDef._props);
-			inDef = dojo.mixin(inDef, this._defaultCellProps, inDef._props, props);
-			return inDef;
+		if(inDef && inDef._props){
+			var new_cell = dojo.clone(inDef);
+			props.unitWidth = getCellWidth(new_cell._props);
+			new_cell = dojo.mixin(new_cell, this._defaultCellProps, inDef._props, props);
+			return new_cell;
 		}
 
 		var cell_type = inDef.type || this._defaultCellProps.type || dojox.grid.cells.Cell;

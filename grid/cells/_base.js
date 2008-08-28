@@ -305,9 +305,9 @@ dojo.require("dojox.grid.util");
 
 		postscript: function(){
 			this.editable = false;
-			this.get = function(inRowIndex){
-				return inRowIndex + 1;
-			};
+		},
+		get: function(inRowIndex){
+			return inRowIndex + 1;
 		}
 	});
 	dgc.RowIndex.markupFactory = function(node, cellDef){
