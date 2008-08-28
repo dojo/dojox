@@ -37,7 +37,7 @@ dojo.declare("dojox.grid._Events", null, {
 		//
 		// example: onStyleRow({ selected: true, over:true, odd:false })
 		var i = inRow;
-			i.customClasses += (i.odd?" dojoxGridRowOdd":"") + (i.selected?" dojoxGridRowSelected":"") + (i.over?" dojoxGridRowOver":"");
+		i.customClasses += (i.odd?" dojoxGridRowOdd":"") + (i.selected?" dojoxGridRowSelected":"") + (i.over?" dojoxGridRowOver":"");
 		this.focus.styleRow(inRow);
 		this.edit.styleRow(inRow);
 	},

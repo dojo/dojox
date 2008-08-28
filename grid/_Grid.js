@@ -148,6 +148,11 @@ dojo.requireLocalization("dojox.grid", "grid");
 		//		Single-click starts editing. Default is double-click
 		singleClickEdit: false,
 
+		// selectionMode: String
+		//		Set the selection mode of grid's Selection.  Value must be 'single', 'multiple',
+		//		or 'extended'.  Default is 'extended'.
+		selectionMode: 'extended',
+
 		// rowSelector: Boolean|String
 		// 		If set to true, will add a row selector view to this grid.  If set to a CSS width, will add
 		// 		a row selector of that width to this grid.
@@ -200,7 +205,13 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.createLayout();
 			this.createViews();
 			this.createManagers();
+
 			this.createSelection();
+
+			this.connect(this.selection, "onSelected", "onSelected");
+			this.connect(this.selection, "onDeselected", "onDeselected");
+			this.connect(this.selection, "onChanged", "onSelectionChanged");
+
 			dojox.html.metrics.initOnFontResize();
 			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
 			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);

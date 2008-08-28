@@ -28,6 +28,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 	},
 
 	addToSelection: function(inItemOrIndex){
+		if(this.mode == 'none'){ return; }
 		var idx = null;
 		if(typeof inItemOrIndex == "number" || typeof inItemOrIndex == "string"){
 			idx = inItemOrIndex;
@@ -38,6 +39,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 	},
 
 	deselect: function(inItemOrIndex){
+		if(this.mode == 'none'){ return; }
 		var idx = null;
 		if(typeof inItemOrIndex == "number" || typeof inItemOrIndex == "string"){
 			idx = inItemOrIndex;

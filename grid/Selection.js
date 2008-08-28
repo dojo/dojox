@@ -8,12 +8,26 @@ dojo.declare("dojox.grid.Selection", null, {
 	constructor: function(inGrid){
 		this.grid = inGrid;
 		this.selected = [];
+
+		this.setMode(inGrid.selectionMode);
 	},
 
-	multiSelect: true,
+	mode: 'extended',
+
 	selected: null,
 	updating: 0,
 	selectedIndex: -1,
+
+	setMode: function(mode){
+		if(this.selected.length){
+			this.deselectAll();
+		}
+		if(mode != 'extended' && mode != 'multiple' && mode != 'single' && mode != 'none'){
+			this.mode = 'extended';
+		}else{
+			this.mode = mode;
+		}
+	},
 
 	onCanSelect: function(inIndex){
 		return this.grid.onCanSelect(inIndex);
@@ -24,11 +38,9 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	onSelected: function(inIndex){
-		return this.grid.onSelected(inIndex);
 	},
 
 	onDeselected: function(inIndex){
-		return this.grid.onDeselected(inIndex);
 	},
 
 	//onSetSelected: function(inIndex, inSelect) { };
@@ -36,15 +48,17 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	onChanged: function(){
-		return this.grid.onSelectionChanged();
 	},
 
 	isSelected: function(inIndex){
+		if(this.mode == 'none'){
+			return false;
+		}
 		return this.selected[inIndex];
 	},
 
 	getFirstSelected: function(){
-		if(!this.selected.length){ return -1; }
+		if(!this.selected.length||this.mode == 'none'){ return -1; }
 		for(var i=0, l=this.selected.length; i<l; i++){
 			if(this.selected[i]){
 				return i;
@@ -54,6 +68,7 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	getNextSelected: function(inPrev){
+		if(this.mode == 'none'){ return -1; }
 		for(var i=inPrev+1, l=this.selected.length; i<l; i++){
 			if(this.selected[i]){
 				return i;
@@ -97,13 +112,17 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	select: function(inIndex){
-		if(!this.multiSelect){
+		if(this.mode == 'none'){ return; }
+		if(this.mode != 'multiple'){
 			this.deselectAll(inIndex);
+			this.addToSelection(inIndex);
+		}else{
+			this.toggleSelect(inIndex);
 		}
-		this.addToSelection(inIndex);
 	},
 
 	addToSelection: function(inIndex){
+		if(this.mode == 'none'){ return; }
 		inIndex = Number(inIndex);
 		if(this.selected[inIndex]){
 			this.selectedIndex = inIndex;
@@ -112,8 +131,8 @@ dojo.declare("dojox.grid.Selection", null, {
 				this.selectedIndex = inIndex;
 				this._beginUpdate();
 				this.selected[inIndex] = true;
-				this.grid.onSelected(inIndex);
-				//this.onSelected(inIndex);
+				//this.grid.onSelected(inIndex);
+				this.onSelected(inIndex);
 				//this.onSetSelected(inIndex, true);
 				this._endUpdate();
 			}
@@ -121,6 +140,7 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	deselect: function(inIndex){
+		if(this.mode == 'none'){ return; }
 		inIndex = Number(inIndex);
 		if(this.selectedIndex == inIndex){
 			this.selectedIndex = -1;
@@ -131,8 +151,8 @@ dojo.declare("dojox.grid.Selection", null, {
 			}
 			this._beginUpdate();
 			delete this.selected[inIndex];
-			this.grid.onDeselected(inIndex);
-			//this.onDeselected(inIndex);
+			//this.grid.onDeselected(inIndex);
+			this.onDeselected(inIndex);
 			//this.onSetSelected(inIndex, false);
 			this._endUpdate();
 		}
@@ -188,8 +208,9 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	clickSelect: function(inIndex, inCtrlKey, inShiftKey){
+		if(this.mode == 'none'){ return; }
 		this._beginUpdate();
-		if(!this.multiSelect){
+		if(this.mode != 'extended'){
 			this.select(inIndex);
 		}else{
 			var lastSelected = this.selectedIndex;
