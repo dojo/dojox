@@ -229,7 +229,7 @@ dojox.xml.DomParser=new (function(){
 		var res, obj=root;
 		while((res=reTags.exec(str))!=null){
 			//	closing tags.
-			if(res[2].charAt(0)=="/"){
+			if(res[2].charAt(0)=="/" && res[2].replace(trim, "").length>1){
 				if(obj.parentNode){
 					obj=obj.parentNode;
 				}
