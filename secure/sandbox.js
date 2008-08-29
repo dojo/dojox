@@ -237,7 +237,7 @@ dojo.require("dojo.NodeList-fx");
 			else {
 				eval(script);
 			}
-			//wrap.evaluate = eval('('+arguments.callee.toString()+')'); // yeah, recursive scoping;
+			//eval('wrap.evaluate=('+arguments.callee.toString()+')'); // yeah, recursive scoping;
 		};
 		return /*===== dojo.declare("dojox.secure.__Sandbox", null, =====*/ { // dojox.secure.__Sandbox
 			loadJS : function(url){

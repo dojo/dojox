@@ -52,11 +52,11 @@ dojox.secure.capability = {
 				}
 				return (prefix && (prefix + "0:")) || '~'; // replace literal keys with 0: and replace properties with the innocuous ~
 			});
-		if((i=script.match(/((\Wreturn|\S)\s*\[)|([^=!][=!]=[^=])/g))) {// check for illegal operator usages
-			if(!i[0].match(/(\Wreturn|[=\&\|\:\?\,])\s*\[/)){ // the whitelist for [ operator for array initializer context
-				throw new Error("Illegal operator " + i[0].substring(1));
+		script.replace(/([^\[][\]\}]\s*=)|((\Wreturn|\S)\s*\[)|([^=!][=!]=[^=])/g,function(oper) {// check for illegal operator usages
+			if(!oper.match(/(\Wreturn|[=\&\|\:\?\,])\s*\[/)){ // the whitelist for [ operator for array initializer context
+				throw new Error("Illegal operator " + oper.substring(1));
 			}
-		}
+		});
 		script = script.replace(new RegExp("(" + safeLibraries.join("|") + ")[\\s~]*\\(","g"),function(call) { // find library calls and make them look safe
 			return "new("; // turn into a known safe call 
 		});
