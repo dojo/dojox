@@ -278,12 +278,9 @@ if(dojox.data && dojox.data.JsonRestStore){
 							},
 							getAllResponseHeaders:function(){
 								return xhr.getAllResponseHeaders();
-							}
+							},
+							result: result
 						};
-						try{
-							message.data = result;
-						}
-						catch (e){}
 						if(self.subCallbacks[channel]){
 							self.subCallbacks[channel](message); // call with the fake xhr object
 						}
@@ -316,7 +313,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 				return "conflict"; // indicate an error
 			}
 			try{
-				message.data = message.data || dojo.fromJson(message.responseText);
+				message.result = message.result || dojo.fromJson(message.responseText);
 			}
 			catch(e){}
 			var self = this;	
@@ -438,6 +435,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 			// nothing to do
 		};
 		dojo.connect(this,"receive",null,function(message){
+			message.data = message.result;
 			this._cometd._deliver(message);
 		});
 		Channels.sendMessages = function(messages){
