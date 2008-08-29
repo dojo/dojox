@@ -164,6 +164,8 @@ dojox.secure.DOM = function(element){
 	}
 	function safeHTML(html){
 		var div = document.createElement("div");
+		if(html.match(/<object/i))
+			throw new Error("The object tag is not allowed");
 		div.innerHTML = html; // this is safe with an unattached node
 		safeElement(div);
 		return div;
