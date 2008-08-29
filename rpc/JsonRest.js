@@ -69,7 +69,7 @@ dojo.require("dojox.rpc.Rest");
 				var isPost = action.method == 'post';
 				// send the content location to the server
 				contentLocation = isPost && dojox.rpc.JsonRest._contentId;
-				var serviceAndId = jr.getServiceAndId(action.target.__assignedId || action.target.__id);
+				var serviceAndId = jr.getServiceAndId(action.target.__id);
 				var service = serviceAndId.service; 
 				var dfd = action.deferred = service[action.method](
 									serviceAndId.id,
@@ -80,7 +80,8 @@ dojo.require("dojox.rpc.Rest");
 						try{
 							// Implements id assignment per the HTTP specification
 							var newId = dfd.ioArgs.xhr.getResponseHeader("Location");
-							object.__assignedId = newId;
+							//TODO: Do correct relative URL calculation and do idAttribute assignment 
+							object.__id = newId;
 							Rest._index[newId] = object; 
 						}catch(e){}
 						if(!(--left)){
@@ -188,7 +189,7 @@ dojo.require("dojox.rpc.Rest");
 					dojo.mixin(this,data);
 				}
 				var idAttribute = jr.getIdAttribute(service);
-				Rest._index[this.__id = service.servicePath + (this[idAttribute] || (this[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
+				Rest._index[this.__id = this.__clientId = service.servicePath + (this[idAttribute] || (this[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
 				dirtyObjects.push({object:this});
 	//			this._getParent(parentInfo).push(data); // append to this list
 

@@ -277,7 +277,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			return this._constructor;
 		},
 		getIdentity: function(item){
-			var id = item.__id;
+			var id = item.__clientId || item.__id;
 			if(!id){
 				this.inherited(arguments); // let service store throw the error
 			}

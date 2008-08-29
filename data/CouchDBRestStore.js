@@ -18,7 +18,7 @@ dojo.declare("dojox.data.CouchDBRestStore",
 				(function(item,dfd){
 					dfd.addCallback(function(result){
 						if(result){
-							item.__assignedId = prefix + result.id; // update the object with the results of the post
+							item.__id = prefix + result.id; // update the object with the results of the post
 							item._rev = result.rev;
 						}
 						return result;
