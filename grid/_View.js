@@ -86,6 +86,9 @@ dojo.require("dojo.dnd.Manager");
 			// SLOT: result[1] => td classes 
 			result.push('');
 			html = ['" idx="', inCell.index, '" style="'];
+			if(inMoreStyles && inMoreStyles[inMoreStyles.length-1] != ';'){
+				inMoreStyles += ';';
+			}
 			html.push(inCell.styles, inMoreStyles||'', inCell.hidden?'display:none;':'');
 			inCell.unitWidth && html.push('width:', inCell.unitWidth, ';');
 			// result[2] => markup
@@ -591,7 +594,7 @@ dojo.require("dojo.dnd.Manager");
 				for(var i=0, cell; (cell=row[i]); i++){
 					h += cell.r + ',' + cell.c + '   ';
 				}
-				console.log(h);
+				//console.log(h);
 			}
 		},
 
