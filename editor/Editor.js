@@ -2,6 +2,7 @@ dojo.provide("dojox.editor.Editor");
 dojo.require("dojox.editor.RichText");
 dojo.require("dijit.Toolbar");
 dojo.require("dojox.editor._Plugin");
+dojo.require("dojox.editor.plugins.EnterKeyHandling");
 dojo.require("dojox.editor.range");
 dojo.require("dijit._Container");
 dojo.require("dojo.i18n");
@@ -35,7 +36,8 @@ dojo.declare(
 		constructor: function(){
 			if(!dojo.isArray(this.plugins)){
 				this.plugins=["undo","redo","|","cut","copy","paste","|","bold","italic","underline","strikethrough","|",
-				"insertOrderedList","insertUnorderedList","indent","outdent","|","justifyLeft","justifyRight","justifyCenter","justifyFull"/*"createLink"*/];
+				"insertOrderedList","insertUnorderedList","indent","outdent","|","justifyLeft","justifyRight","justifyCenter","justifyFull",
+				"dojox.editor.plugins.EnterKeyHandling" /*, "createLink"*/];
 			}
 
 			this._plugins=[];
