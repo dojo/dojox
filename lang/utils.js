@@ -23,7 +23,7 @@ dojo.provide("dojox.lang.utils");
 				if(x in source && !(x in empty)){
 					var t = target[x];
 					if(t && typeof t == "object"){
-						du.updateObject(t, source[x]);
+						du.updateWithObject(t, source[x], conv);
 					}else{
 						target[x] = conv ? du.coerceType(t, source[x]) : dojo.clone(source[x]);
 					}
