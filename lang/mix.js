@@ -186,21 +186,9 @@ dojo.provide("dojox.lang.mix");
 				dcr = null;
 			}
 		}
-		return target;
+		return target;	// Object
 	};
 
-	mix.cloneProps = function(props, rename, skip){
-		// summary: creates new object by copying, renaming, and skipping properties as needed,
-		//			only own properties are processed.
-		// description: properties are filtered by "skip" parameter, then renamed,
-		//			then added.
-		// props: Object: the source object, whose properties to be clone
-		// rename: Object?: the dictionary for renaming
-		// skip: Array?|Object?: the source of properties to be skipped
-		
-		return mix.mixer({}, props, rename, skip);	// Object
-	};
-	
 	mix.makeFilter = function(mixin){
 		// summary: subclasses Filter and returns new class
 		// mixin: Object: new methods
