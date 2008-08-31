@@ -63,7 +63,7 @@ dojo.declare("dojox.editor.plugins.LinkDialog",
 		},
 
 		_setContent: function(staticPanel){
-			this.dropDown.setContent(staticPanel);
+			this.dropDown.attr('content', staticPanel);
 		},
 
 		setValue: function(args){
