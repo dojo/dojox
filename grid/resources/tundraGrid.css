@@ -123,6 +123,10 @@
 	color:#fff;
 }
 
+.tundra .dojoxGridRowOver .dojoxGridCell .dijit {
+	color: #000;
+}
+
 .tundra .dojoxGridRowOdd {
 	background-color: #f2f5f9;
 }
