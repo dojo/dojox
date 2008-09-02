@@ -54,11 +54,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		}
 	},
 
-	_addItem: function(item, index){
+	_addItem: function(item, index, noUpdate){
 		var idty = this._hasIdentity ? this.store.getIdentity(item) : dojo.toJson(this.query) + ":idx:" + index + ":sort:" + dojo.toJson(this.getSortProps());
 		var o = { idty: idty, item: item };
 		this._by_idty[idty] = this._by_idx[index] = o;
-		this.updateRow(index);
+		if(!noUpdate){
+			this.updateRow(index);
+		}
 	},
 
 	_onNew: function(item, parentInfo){
@@ -149,8 +151,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		if(items && items.length > 0){
 			//console.log(items);
 			dojo.forEach(items, function(item, idx){
-				this._addItem(item, req.start+idx);
+				this._addItem(item, req.start+idx, true);
 			}, this);
+			this.updateRows(req.start, items.length);
 			if(req.isRender){
 				this.setScrollTop(0);
 				this.postrender();

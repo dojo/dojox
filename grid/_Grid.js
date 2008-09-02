@@ -777,6 +777,27 @@ dojo.requireLocalization("dojox.grid", "grid");
 			}
 		},
 
+		updateRows: function(startIndex, howMany){
+			// summary:
+			//		Render consecutive rows at once.
+			// startIndex: Integer
+			//		Index of the starting row to render
+			// howMany: Integer
+			//		How many rows to update.
+			start = Number(start);
+			howMany = Number(howMany);
+			if(this.updating){
+				for(var i=0; i<howMany; i++){
+					this.invalidated[i+start]=true;
+				}
+			}else{
+				for(var i=0; i<howMany; i++){
+					this.views.updateRow(i+start);
+				}
+				this.scroller.rowHeightChanged(start);
+			}
+		},
+
 		updateRowCount: function(inRowCount){
 			//summary:
 			//	Change the number of rows.
