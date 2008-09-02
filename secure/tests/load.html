@@ -84,7 +84,7 @@ query("em").style("color","blue"); // you can use query to find and modify
 //query(".intro").style("opacity",0).fadeIn().play();
 style(byId("more"),"color","red");
 var limitations = ["No access to |this| keyword",
-	"The [] index operator is not allowed",
+	"The [] index operator is only allowed if in the opening bracket is followed by a +",
 	"Global variables are not allowed except element and document",
 	"You can not access most of the relationship properties on elements (parentNode, firstSibling, nextSibling, etc.)"];
 // you can also use other standard DOM features as well
@@ -125,7 +125,9 @@ var copy = mixin({},limitations);
 	<div id="instructions">
 		<p>The JavaScript in the sandbox generally follows the rules of ADsafe:</p>
 		<ul>
-		<li>Use of <em>eval</em>, <em>with</em>, ==, !=, and the subscript operator [] are not allowed.</li>
+		<li>Use of <em>eval</em>, <em>with</em>, ==, and != are not allowed.</li>
+		<li>the subscript operator [] may only be used be used if the opening bracket is followed by a +.</li>
+		 
 		<li>Limited access to <em>this</em> and global variables.</li>
 		<li>These properties may not be used: apply arguments call callee caller constructor eval prototype 
 				this unwatch valueOf watch and anything beginning or ending with __.</li>

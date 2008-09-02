@@ -52,8 +52,8 @@ dojox.secure.capability = {
 				}
 				return (prefix && (prefix + "0:")) || '~'; // replace literal keys with 0: and replace properties with the innocuous ~
 			});
-		script.replace(/([^\[][\]\}]\s*=)|((\Wreturn|\S)\s*\[)|([^=!][=!]=[^=])/g,function(oper) {// check for illegal operator usages
-			if(!oper.match(/(\Wreturn|[=\&\|\:\?\,])\s*\[/)){ // the whitelist for [ operator for array initializer context
+		script.replace(/([^\[][\]\}]\s*=)|((\Wreturn|\S)\s*\[\s*\+?)|([^=!][=!]=[^=])/g,function(oper) {// check for illegal operator usages
+			if(!oper.match(/((\Wreturn|[=\&\|\:\?\,])\s*\[)|\[\s*\+$/)){ // the whitelist for [ operator for array initializer context or [+num] syntax
 				throw new Error("Illegal operator " + oper.substring(1));
 			}
 		});
