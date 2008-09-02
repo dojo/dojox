@@ -908,6 +908,10 @@ dojo.require("dojo.dnd.Manager");
 
 		renderHeader: function(){
 			this.headerContentNode.innerHTML = this.header.generateHtml(this._getHeaderContent);
+			if(this.flexCells){
+				this.contentWidth = this.getContentWidth();
+				this.headerContentNode.firstChild.style.width = this.contentWidth;
+			}
 		},
 
 		// note: not called in 'view' context

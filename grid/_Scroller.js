@@ -243,8 +243,6 @@ dojo.provide("dojox.grid._Scroller");
 			var rowsOnPage = (this.page < this.pageCount - 1) ? this.rowsPerPage : (this.rowCount % this.rowsPerPage);
 			var pageHeight = this.getPageHeight(this.page);
 			this.averageRowHeight = (pageHeight > 0 && rowsOnPage > 0) ? (pageHeight / rowsOnPage) : 0;
-			this.defaultRowHeight = this.averageRowHeight || dojox.grid._Scroller.prototype.defaultRowHeight;
-			this.defaultPageHeight = this.defaultRowHeight * this.rowsPerPage;
 		},
 		calcLastPageHeight: function(){
 			if(!this.pageCount){
