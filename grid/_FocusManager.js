@@ -72,11 +72,13 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		var n = this.cell && this.cell.getNode(this.rowIndex);
 		if(n){
 			dojo.toggleClass(n, this.focusClass, inBork);
-			if (inBork){
-				this.scrollIntoView();
+			if(inBork){
+				var sl = this.scrollIntoView();
 				try{
-					if(!this.grid.edit.isEditing())
+					if(!this.grid.edit.isEditing()){
 						dojox.grid.util.fire(n, "focus");
+						if(sl){ this.cell.view.scrollboxNode.scrollLeft = sl; }
+					}
 				}catch(e){}
 			}
 		}
@@ -108,7 +110,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	scrollIntoView: function(){
 		var info = (this.cell ? this._scrollInfo(this.cell) : null);
 		if(!info){
-			return;
+			return null;
 		}
 		var rt = this.grid.scroller.findScrollTop(this.rowIndex);
 		// place cell within horizontal view
@@ -123,6 +125,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		}else if(rt < info.sr.t){
 			this.grid.setScrollTop(rt);
 		}
+
+		return info.s.scrollLeft;
 	},
 	_scrollInfo: function(cell, domNode){
 		if(cell){
@@ -143,8 +147,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 				r: rn
 			};
 		}
-		else
-			return null;
+		return null;
 	},
 	_scrollHeader: function(currentIdx){
 		var info = null;
@@ -242,11 +245,9 @@ dojo.declare("dojox.grid._FocusManager", null, {
 				this._colHeadNode.focus();
 				this._scrollHeader(currentIdx);
 			}
-		}
+		}else{
 		// Handle grid proper.
-		else{
-			var
-				rc = this.grid.rowCount-1,
+			var rc = this.grid.rowCount-1,
 				cc = this.grid.layout.cellCount-1,
 				r = this.rowIndex,
 				i = this.cell.index,
