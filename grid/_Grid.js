@@ -784,17 +784,17 @@ dojo.requireLocalization("dojox.grid", "grid");
 			//		Index of the starting row to render
 			// howMany: Integer
 			//		How many rows to update.
-			start = Number(start);
+			startIndex = Number(startIndex);
 			howMany = Number(howMany);
 			if(this.updating){
 				for(var i=0; i<howMany; i++){
-					this.invalidated[i+start]=true;
+					this.invalidated[i+startIndex]=true;
 				}
 			}else{
 				for(var i=0; i<howMany; i++){
-					this.views.updateRow(i+start);
+					this.views.updateRow(i+startIndex);
 				}
-				this.scroller.rowHeightChanged(start);
+				this.scroller.rowHeightChanged(startIndex);
 			}
 		},
 
