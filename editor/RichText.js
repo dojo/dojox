@@ -849,7 +849,7 @@ dojo.declare("dojox.editor.RichText", dijit._Widget, {
 	onKeyPress: function(e){
 		// handle the various key events
 		//console.debug("keyup char:", e.keyChar, e.ctrlKey);
-		var c = e.keyChar.toLowerCase() || e.keyCode
+		var c = (e.keyChar && e.keyChar.toLowerCase()) || e.keyCode
 		var handlers = this._keyHandlers[c];
 		//console.debug("handler:", handlers);
 		var args = arguments;
