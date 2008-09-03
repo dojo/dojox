@@ -71,7 +71,8 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 			width:"100%",
 			height:"100%",
 			params:{
-				allowFullScreen:true
+				allowFullScreen:true,
+				wmode:"transparent"
 			},
 			// only pass in simple variables - no deep objects
 			vars:{
@@ -92,7 +93,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		this._sub("mediaError",  "onVideoError");
 		this._sub("mediaStart",  "onVideoStart");
 		this._sub("mediaEnd",    "onVideoEnd");
-	
+		
 		this._flashObject = new dojox.embed.Flash(args, this.domNode);
 		this._flashObject.onLoad = dojo.hitch(this, "onLoad");
 	},
@@ -108,7 +109,8 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	},
 	play: function(newUrl /* Optional */){
 		// Plays the video. If an url is passed in, plays the new link.
-		this._flashMovie.play(this._normalizeUrl(newUrl));
+		// NOTE: instance.play() causes IE error
+		this._flashMovie.doPlay(this._normalizeUrl(newUrl));
 	},
 	pause: function(){
 		// Pauses the video
@@ -138,6 +140,22 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		this._flashMovie.fullscreen();
 	},*/
 	
+	//  ==============  //
+	//  Playlist Stuff  //
+	//  ==============  //
+	
+	loadPlaylist: function(pathArray){
+		this._flashMovie.loadPlaylist(pathArray);
+	},
+	addVideo: function(path){
+		this._flashMovie.addVideo(path);
+	},
+	removeVideo: function(path){
+		//this._flashMovie.removeVideo(path);
+	},
+	toggleMode: function(mode){
+		this._flashMovie.toggleMode(mode);	
+	},
 	//  ==============  //
 	//  Player Getters  //
 	//  ==============  //
