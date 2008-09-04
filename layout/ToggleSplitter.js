@@ -80,6 +80,25 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 		this._setOpenAttr(this.open, true);
 		return;
 	},
+	_onMouseUp: function(evt) {
+		dojo.disconnect(this._onMoveHandle);
+		dojo.disconnect(this._onUpHandle);
+		delete this._onMoveHandle; 
+		delete this._onUpHandle;
+		delete this._startPosn; 
+	},
+	_onPrelimMouseMove: function(evt){
+		// only start dragging when a mouse down AND a significant mousemove occurs
+		var startPosn = this._startPosn || 0;
+		// allow a little fudging in a click before we consider a drag started
+		var dragThreshold = 3; 
+		var offset = Math.abs( startPosn - (this.horizontal ? evt.clientY : evt.clientX) );
+		if(offset >= dragThreshold) {
+			// treat as a drag and dismantle this preliminary handlers
+			dojo.disconnect(this._onMoveHandle);
+			this._startDrag(evt);
+		}
+	},
 	_onMouseDown: function(evt) {
 		// summary: 
 		// 	handle mousedown events from the domNode
@@ -88,27 +107,16 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 			// - this has the effect of preventing dragging while closed, which is the prefered behavior (for now)
 			return; 
 		}
-		var startPosn = this.horizontal ? evt.clientY : evt.clientX; 
-
-		// allow a little fudging in a click before we consider a drag started
-		var dragThreshold = 3; 
-
-		var onUpHandle = dojo.connect(dojo.body(), "onmouseup", this, function(evt) {
-			dojo.disconnect(onDownHandle);
-			dojo.disconnect(onUpHandle);
-		});
-
-		// start listening for mousemove
-		var onDownHandle = dojo.connect(dojo.body(), "onmousemove", this, function(evt) {
-			// only start dragging when a mouse down AND a significant mousemove occurs
-			var offset = Math.abs( startPosn - (this.horizontal ? evt.clientY : evt.clientX) );
-			if(offset >= dragThreshold) {
-				// treat as a drag and dismantle these preliminary handlers
-				dojo.disconnect(onDownHandle);
-				dojo.disconnect(onUpHandle);
-				this._startDrag(evt);
-			}
-		});
+		// Mousedown can fire more than once (!)
+		// ..so check before connecting
+		if(!this._onUpHandle) {
+			this._onUpHandle = dojo.connect(dojo.body(), "onmouseup", this, "_onMouseUp");
+		}
+		if(!this._onMoveHandle){
+			this._startPosn = this.horizontal ? evt.clientY : evt.clientX; 
+			// start listening for mousemove
+			this._onMoveHandle = dojo.connect(dojo.body(), "onmousemove", this, "_onPrelimMouseMove");
+		}
 	}, 
 	_handleOnChange: function() {
 		// summary
