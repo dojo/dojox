@@ -38,6 +38,8 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 	templateString: '<div class="dijitSplitter dojoxToggleSplitter" dojoAttachEvent="onkeypress:_onKeyPress,onmousedown:_onMouseDown" tabIndex="0" waiRole="separator"><div dojoAttachPoint="toggleNode" class="dijitSplitterThumb dojoxToggleSplitterIcon"></div></div>',
 
 	postCreate: function(){
+		this._started = false; 
+
 		this.inherited(arguments);
 		
 		// add a region css hook
@@ -48,7 +50,7 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 		this.connect(this, "onDblClick", "_toggleMe");
 
 	}, 
-	startup: function() {
+	startup: function(){
 		this.inherited(arguments);
 
 		// we have to wait until startup to be sure the child exists in the dom
@@ -59,28 +61,30 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 		// creation of splitters is an opaque process in BorderContainer, 
 		// so if we want to get init params, we have to retrieve them from the attached BC child
 		// NOTE: for this to work we have to extend the prototype of dijit._Widget (some more)
-		dojo.forEach(["toggleSplitterOpen", "toggleSplitterClosedThreshold", "toggleSplitterOpenSize"], function(name) {
+		dojo.forEach(["toggleSplitterOpen", "toggleSplitterClosedThreshold", "toggleSplitterOpenSize"], function(name){
 			var pname = name.substring("toggleSplitter".length);
 			pname = pname.charAt(0).toLowerCase() + pname.substring(1);
-			if(name in this.child) {
+			if(name in this.child){
 				this[pname] = this.child[name];
 			}
 		}, this);
 
-		if(!this.openSize) {
+		if(!this.openSize){
 			// store the current size as the openSize if none was provided
 
 			// dojo.style always returns a integer (pixel) value for height/width
 			// use an arbirary default if a pane was initalized closed and no openSize provided
 			this.openSize = (this.open) ? intPaneSize + "px" : "75px";
 		}
-		// console.log("openSize is: ", this.openSize);
 		this._openStyleProps = this._getStyleProps(paneNode, true);
 
-		this._setOpenAttr(this.open, true);
-		return;
+		// update state
+		this._started = true; 
+		this.attr("open", this.open);
+
+		return this;
 	},
-	_onMouseUp: function(evt) {
+	_onMouseUp: function(evt){
 		dojo.disconnect(this._onMoveHandle);
 		dojo.disconnect(this._onUpHandle);
 		delete this._onMoveHandle; 
@@ -93,23 +97,23 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 		// allow a little fudging in a click before we consider a drag started
 		var dragThreshold = 3; 
 		var offset = Math.abs( startPosn - (this.horizontal ? evt.clientY : evt.clientX) );
-		if(offset >= dragThreshold) {
+		if(offset >= dragThreshold){
 			// treat as a drag and dismantle this preliminary handlers
 			dojo.disconnect(this._onMoveHandle);
 			this._startDrag(evt);
 		}
 	},
-	_onMouseDown: function(evt) {
+	_onMouseDown: function(evt){
 		// summary: 
 		// 	handle mousedown events from the domNode
-		if(!this.open) {
+		if(!this.open){
 			// ignore mousedown while closed 
 			// - this has the effect of preventing dragging while closed, which is the prefered behavior (for now)
 			return; 
 		}
 		// Mousedown can fire more than once (!)
 		// ..so check before connecting
-		if(!this._onUpHandle) {
+		if(!this._onUpHandle){
 			this._onUpHandle = dojo.connect(dojo.body(), "onmouseup", this, "_onMouseUp");
 		}
 		if(!this._onMoveHandle){
@@ -118,7 +122,7 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 			this._onMoveHandle = dojo.connect(dojo.body(), "onmousemove", this, "_onPrelimMouseMove");
 		}
 	}, 
-	_handleOnChange: function() {
+	_handleOnChange: function(){
 		// summary
 		// 	effect the state change with the new value of this.open
 
@@ -128,8 +132,7 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 			openProps,
 			dim = this.horizontal ? "height" : "width"; 
 
-		if(this.open) {
-			// console.log("#"+this.id + " " + this.region + " changing to open state");
+		if(this.open){
 			// change to open state
 			var styleProps = dojo.mixin({
 				display: "block", 
@@ -137,14 +140,13 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 				visibility: "visible"
 			}, this._openStyleProps);
 
-			styleProps[dim] = this._openStyleProps[dim] || this.openSize;
+			styleProps[dim] = (this._openStyleProps && this._openStyleProps[dim]) ? this._openStyleProps[dim] : this.openSize;
 			dojo.style(paneNode, styleProps);
 			
 			// and re-hook up the mouse event handler
 			this.connect(this.domNode, "onmousedown", "_onMouseDown");
 
 		} else {
-			//console.log("#"+this.id + " " + this.region + " changing to closed state");
 			// change to closed state
 			// FIXME: this wont work in a drag-to-closed scenario
 			var paneStyle  = dojo.getComputedStyle(paneNode); 
@@ -155,18 +157,17 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 			this._openStyleProps = openProps;
 			dojo.style(paneNode, closedProps);
 		}
-		
 		this._setStateClass();
-		if(this.container._started) {
+		if(this.container._started){
 			this.container._layoutChildren(this.region);
 		}
 	},
 	
-	_getStyleProps: function(paneNode, open, paneStyle) {
+	_getStyleProps: function(paneNode, open, paneStyle){
 		// summary: 
 		//	create an object with the style property name: values 
 		// 	that will need to be applied to the child pane render the given state
-		if(!paneStyle) {
+		if(!paneStyle){
 			paneStyle  = dojo.getComputedStyle(paneNode);
 		}
 		var styleProps = {}, 
@@ -181,13 +182,13 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 
 		// We include the padding,border,margin width values for restoring on open
 		var edgeNames = ["Top", "Right", "Bottom", "Left"];
-		dojo.forEach(["padding","margin","border"], function(pname) {
+		dojo.forEach(["padding","margin","border"], function(pname){
 			for(var i=0; i<edgeNames.length; i++){
 				var fullname = pname+edgeNames[i]; 
-				if(pname=="border") {
+				if(pname=="border"){
 					pname+="Width";
 				}
-				if(undefined !== paneStyle[fullname]) {
+				if(undefined !== paneStyle[fullname]){
 					styleProps[fullname] = (open) ? 
 						paneStyle[fullname] : 0;
 				}
@@ -196,10 +197,10 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 		return styleProps;
 	},
 	
-	_setStateClass: function() {
+	_setStateClass: function(){
 		// sumamry: 
 		//	apply the appropriate classes for the current open state
-		if(this.open) {
+		if(this.open){
 			dojo.removeClass(this.domNode, "dojoxToggleSplitterClosed");
 			dojo.addClass(this.domNode, "dojoxToggleSplitterOpen");
 			dojo.removeClass(this.toggleNode, "dojoxToggleSplitterIconClosed");
@@ -211,19 +212,28 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 			dojo.removeClass(this.toggleNode, "dojoxToggleSplitterIconOpen");
 		}
 	},
-	_setOpenAttr: function(/*Boolean*/ value, /* Boolean */ force){
+	_setOpenAttr: function(/*Boolean*/ value){
 		// summary: 
 		// 	setter for the open property
-		if(force || value != this.open) {
-			this.open = value;
-			this._handleOnChange(value, true);
+		if(!this._started) {
+			return; 
 		}
+		this.open = value;
+		this._handleOnChange(value, true);
+		var evt = this.open ? "onOpen" : "onClose";
+		this[evt](this.child);
+	},
+	onOpen: function(){
+		// stub
+	},
+	onClose: function(){
+		// stub
 	},
 
-	_toggleMe: function(evt) {
+	_toggleMe: function(evt){
 		// summary: 
 		// 	event handle, toggle the open state
-		if(evt) {
+		if(evt){
 			dojo.stopEvent(evt);
 		}
 		this.attr("open", !this.open);

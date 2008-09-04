@@ -34,6 +34,41 @@
 		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dojox.layout.ToggleSplitter");
 
+		function watchSplitters(bc) {
+
+			var out = dojo.byId("watchedOutput");
+			var moveConnects = {};
+			dojo.forEach(["top", "left"], function(region) {
+				var spl = bc.getSplitter(region); 
+
+				dojo.connect(spl, "_startDrag", function() {
+
+					dojo.style(spl.child.domNode, "opacity", "0.4");
+					moveConnects[spl.widgetId] = dojo.connect(spl.domNode, "onmousemove", function(evt) {
+
+						out.innerHTML = spl.region + ": " + dojo.toJson({
+							x: !spl.horizontal ? spl.domNode.style[spl.region] : 0,
+							y: spl.horizontal ? spl.domNode.style[spl.region] : 0
+						});
+					})
+					
+				});
+				dojo.connect(spl, "_stopDrag", function(evt) {
+					dojo.style(spl.child.domNode, "opacity", 1);
+					dojo.disconnect(moveConnects[spl.widgetId]); 
+					delete moveConnects[spl.widgetId];
+				});
+				dojo.connect(spl, "onOpen", function() {
+					out.innerHTML = spl.region + ": open";
+				});
+				dojo.connect(spl, "onClose", function() {
+					out.innerHTML = spl.region + ": closed";
+				});
+			})
+		}
+		dojo.addOnLoad(function() {
+			watchSplitters( dijit.byId("watchedBC") );
+		})
 	</script>
 </head>
 <body class="tundra" id="testpage">
@@ -77,6 +112,21 @@
 			bottom bar (resizable)
 		</div>
 	</div>
+	
+	<br />
+	<p>Watching the splitter events</p>
+	<div dojoType="dijit.layout.BorderContainer" id="watchedBC" persist="false" style="height: 200px; width: 100%">
+		<script type="dojo/method">
+			this._splitterClass="dojox.layout.ToggleSplitter";
+		</script>
+		<div dojoType="dijit.layout.ContentPane" region="top" splitter="true" style="background-color: #ccffcc; height: 50px;">Top:</div>
+		<div dojoType="dijit.layout.ContentPane" region="left" style="background-color: #ccccff; width: 40px" splitter="true"><span>Bottom</span></div>
+		<div dojoType="dijit.layout.ContentPane" region="center" style="background-color: #ffffcc"><span>Center</span></div>
+	</div>
+	
+	<p>
+	Splitter coords output: 
+	<div id="watchedOutput" style="border: 1px solid #999">nothing moving</div></p>
 
 
 </body>

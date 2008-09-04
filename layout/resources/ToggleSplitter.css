@@ -10,13 +10,13 @@
 .dijitBorderContainer .dijitSplitterH .dojoxToggleSplitterIcon {
 	width:16px;
 	height:16px;
-	top: -1px;
+	top: 0;
 	cursor: pointer;
 }
 .dijitBorderContainer .dijitSplitterV .dojoxToggleSplitterIcon {
 	width:16px;
 	height:16px;
-	left: -1px;
+	left: 0;
 	cursor: pointer;
 }
 
