@@ -2,8 +2,9 @@ dojo.provide("dojox.av.FLVideo");
 dojo.experimental("dojox.av.FLVideo");
 dojo.require("dijit._Widget");
 dojo.require("dojox.embed.Flash");
+dojo.require("dojox.av.mediaStatus");
 
-dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
+dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 			 
 	// summary
 	//		Inserts one or more Flash FLV videos into the HTML page and provides methods
@@ -13,17 +14,17 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	// USAGE:
 	//
 	//		markup:
-	//			<div id="vid" initialVolume=".7", videoUrl="../resources/Grog.flv" dojoType="dojox.av.FLVideo"></div>
+	//			<div id="vid" initialVolume=".7", mediaUrl="../resources/Grog.flv" dojoType="dojox.av.FLVideo"></div>
 	//		programmatic:
-	//			new dojox.av.FLVideo({initialVolume:.7, videoUrl:"../resources/Grog.flv"}, "vid");
+	//			new dojox.av.FLVideo({initialVolume:.7, mediaUrl:"../resources/Grog.flv"}, "vid");
 	//
 	// arguments:
 	//
-	//  videoUrl /* String */
+	//  mediaUrl /* String */
 	// 		REQUIRED: The Url of the video file that will be played. 
 	//		NOTE: Must be either an absolute URL or relative to the HTML file. Relative
 	//		paths will be converted to abslute paths
-	videoUrl:"",
+	mediaUrl:"",
 	//
 	// initialVolume /* Float */
 	//		The initial volume setting of the player. Acccepts between 0 and 1.
@@ -32,6 +33,10 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	//  autoPlay: /* Boolean */
 	//		Whether the video plays on load or not.
 	autoPlay: false,
+	//
+	// updateTime: /* Number */,
+	//		How often, in milliseconds to get an update of the vide position
+	updateTime: 100,
 	//
 	//  id /* String */
 	//		The id of this widget and the id of the SWF movie.
@@ -42,6 +47,9 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	isDebug: false,
 	//
 	// private vars
+	//
+	// statusReturnTime: how often status is figured
+	statusReturnTime: 200, // NOTE: Too small of a time will toggle between play and pause
 	//
 	// domNode: The node that holds the SWF's embed/object tag
 	domNode:null,
@@ -61,7 +69,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		
 		this._subs = [];
 		this._cons = [];
-		this.videoUrl = this._normalizeUrl(this.videoUrl);
+		this.mediaUrl = this._normalizeUrl(this.mediaUrl);
 		this.initialVolume = this._normalizeVolume(this.initialVolume);	
 	},
 	
@@ -71,12 +79,11 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 			width:"100%",
 			height:"100%",
 			params:{
-				allowFullScreen:true,
-				wmode:"transparent"
+				allowFullScreen:true
 			},
 			// only pass in simple variables - no deep objects
 			vars:{
-				videoUrl:this.videoUrl, 
+				videoUrl:this.mediaUrl, 
 				id:this.id,
 				autoPlay:this.autoPlay,
 				volume:this.initialVolume,
@@ -88,12 +95,12 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		//	from the player
 		this._sub("stageClick",  "onClick");
 		this._sub("stageSized",  "onSwfSized");
-		this._sub("mediaStatus", "onStatus");
+		//this._sub("mediaStatus", "onStatus");
 		this._sub("mediaMeta",   "onMetaData");
-		this._sub("mediaError",  "onVideoError");
-		this._sub("mediaStart",  "onVideoStart");
-		this._sub("mediaEnd",    "onVideoEnd");
-		
+		this._sub("mediaError",  "onError");
+		this._sub("mediaStart",  "onStart");
+		this._sub("mediaEnd",    "onEnd");
+	
 		this._flashObject = new dojox.embed.Flash(args, this.domNode);
 		this._flashObject.onLoad = dojo.hitch(this, "onLoad");
 	},
@@ -103,29 +110,53 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	//  =============================  //
 	
 	togglePause: function(){
+		// DEPRECATED
 		// Toggles between play and pause
 		console.log("TOGGLE")
 		this._flashMovie.togglePause();
 	},
+	
 	play: function(newUrl /* Optional */){
 		// Plays the video. If an url is passed in, plays the new link.
-		// NOTE: instance.play() causes IE error
+		this.isPlaying = true;
+		this.isStopped = false;
 		this._flashMovie.doPlay(this._normalizeUrl(newUrl));
 	},
+	
 	pause: function(){
 		// Pauses the video
+		this.isPlaying = false;
+		this.isStopped = false;
+		this.onPause();
 		this._flashMovie.pause();
 	},
+	
 	seek: function(time /* Float */){
 		// Goes to the time passed in the argument
 		console.log("seek:", time)
 		this._flashMovie.seek(time);
 	},
-	setVolume: function(vol){
-		//	Sets the volume of teh video to the time in the
+	
+	
+	//  =====================  //
+	//  Player Getter/Setters  //
+	//  =====================  //
+	
+	volume: function(vol){
+		//	Sets the volume of the video to the time in the
 		//	argument - between 0 - 1.
-		this._flashMovie.setVolume(this._normalizeVolume(vol));
+		if(vol){
+			if(!this._flashMovie) {
+				this.initialVolume = vol;	
+			}
+			this._flashMovie.setVolume(this._normalizeVolume(vol));
+		}
+		if(!this._flashMovie) {
+			return this.initialVolume;
+		}
+		return this._flashMovie.getVolume();	
 	},
+	
 	/*
 	
 	Due to security restriction, fullscreen can't be trigger without
@@ -141,22 +172,6 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 	},*/
 	
 	//  ==============  //
-	//  Playlist Stuff  //
-	//  ==============  //
-	
-	loadPlaylist: function(pathArray){
-		this._flashMovie.loadPlaylist(pathArray);
-	},
-	addVideo: function(path){
-		this._flashMovie.addVideo(path);
-	},
-	removeVideo: function(path){
-		//this._flashMovie.removeVideo(path);
-	},
-	toggleMode: function(mode){
-		this._flashMovie.toggleMode(mode);	
-	},
-	//  ==============  //
 	//  Player Getters  //
 	//  ==============  //
 	
@@ -164,23 +179,25 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		// Returns the current time of the video
 		return this._flashMovie.getTime();
 	},
+	
 	getLoaded: function(){
 		// Returns status of load
 		return this._flashMovie.getLoaded();
-	},
-	getVolume: function(){
-		// Returns current volume of video
-		return this._flashMovie.getVolume();
 	},
 	
 	//  =============  //
 	//  Player Events  //
 	//  =============  //
 	
+	
 	onLoad: function(mov){
 		// Fired when the SWF player has loaded
 		// NOT when the video has loaded
 		this._flashMovie = mov;
+		this.isPlaying = false;
+		this.isStopped = true;
+		this._initStatus();
+		this._updatePosition();
 	},
 	onClick: function(evt){ //FIXME: Return x/y of click
 		// Fires when the player is clicked
@@ -194,11 +211,6 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		// toggled between fullscreen.
 		//console.warn("onSwfSized:", data);
 	},
-	onStatus: function(data, evt){
-		// Returns the status of the video
-		// playing, stopped, bufering, etc.
-		//console.warn("STATUS:", data, evt);
-	},
 	onMetaData: function(data, evt){
 		// Returns the video properties. Width, height, duration, etc.
 		// NOTE: if data is empty, this is an older FLV with no meta data.
@@ -207,22 +219,91 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget], {
 		// TODO: Older FLVs can still return width and height
 		console.warn("META:", data, evt);
 	},
-	onVideoStart: function(data){
+	
+	
+	onPosition: function(time){
+		//console.log("POS:", time)
+	},
+	
+	onStart: function(data){
 		// Fires when video starts
 		// Good for setting the play button to pause
 		// during an autoPlay for example
-		console.warn("onVideoStart:", data);
+		console.warn("onStart:", data);
 	},
-	onVideoEnd: function(data){
+	
+	onPlay: function(data){
+		// Fires when video starts and resumes
+	},
+	
+	onPause: function(data){
+		// Fires when teh pause button is clicked
+	},
+	
+	onEnd: function(data){
 		// Fires when vdieo ends
 		// Could be used to change pause button to play
 		// or show a post video graphic, like YouTube
-		console.warn("onVideoEnd:", data);
+		console.warn("onEnd:", data);
 	},
-	onVideoError: function(data, url){
+	
+	onError: function(data, url){
 		// Fired when the player encounters an error
 		console.warn("ERROR-"+data.type.toUpperCase()+":", data.info.code, " - URL:", url);
 	},
+	
+	
+	
+	onStatus: function(data){
+		return;
+		
+		// Returns the status of the video
+		// playing, stopped, bufering, etc.
+		// UGH - Such fishy, swimmy stuff. Very inconsistant.
+		// Need to do this manually, like in dAIR.Sound
+		var msg = data.status || data.info.code;
+		console.warn("STATUS:", msg);
+		
+		// NOTE Fall-throughs?
+		switch(msg){
+			case "NetConnection.Connect.Success":
+				this.onLoad(msg);
+			break;
+			
+			case "NetStream.Play.Start":
+				this.isPlaying = true;
+				this.isStopped = false;
+				this.onPlay(msg);
+			break;
+			
+			case "NetStream.Buffer.Full":
+				this.isPlaying = true;
+				this.isStopped = false;
+				this.onPlay(msg);
+			break;
+			
+			case "NetStream.Play.Stop":
+				this.isPlaying = false;
+				this.isStopped = true;
+				this.onStop();
+				this.onEnd();
+			break;
+			
+			case "NetStream.Buffer.Empty":
+			case "NetStream.Buffer.Flush":
+			default:
+			break;
+			
+		}
+	},
+	
+	_updatePosition: function(){
+		
+		var time = this.getTime() || 0;
+		this.onPosition(time);
+		setTimeout(dojo.hitch(this, "_updatePosition"), this.updateTime);
+	},
+	
 	
 	
 	_normalizeUrl: function(_url){
