@@ -24,7 +24,7 @@ doh.register("dojox.secure.tests.secure.good",
 		function docWrite(t){
 			dojox.secure.evaluate("document.write(\"<div style='color:red'>written</div>\");",container);
 			t.t(container.innerHTML.match(/written/));
-		},
+		}
 	]);
 
 function violater(func) {

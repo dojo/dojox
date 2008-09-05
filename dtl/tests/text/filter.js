@@ -720,7 +720,7 @@ doh.register("dojox.dtl.text.filter",
 				items: [
 					{
 						action: "eat",
-						type: "apple",
+						type: "apple"
 					},
 					{
 						action: "mash",

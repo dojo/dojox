@@ -220,12 +220,8 @@ doh.register("dojox.rpc.tests.geonames",
                         runTest: dojox.rpc.tests._testMethod({
                                 name: "postalCodeSearch",
                                 parameters:{placename: "blacksburg"},
-				expectedResult: dojo.toJson({}),
+				expectedResult: dojo.toJson({})
                         })
-                },
- 
-
-
-
+                }
 	]
 );

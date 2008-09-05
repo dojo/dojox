@@ -32,7 +32,7 @@ dojo.require("dojox.highlight._base");
             begin: '\\bclass ', end: ':',
             illegal: '[${]',
             keywords: {'class': 1},
-            contains: ['title', 'params',],
+            contains: ['title', 'params'],
             relevance: 10
           },
           {

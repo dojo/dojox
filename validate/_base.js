@@ -144,7 +144,7 @@ dojox.validate.isValidLuhn = function(/*String*/value){
 			// At present only textbox, password, and textarea fields are supported.
 			dependencies:	{
 				cc_exp: "cc_no",	
-				cc_type: "cc_no",	
+				cc_type: "cc_no"	
 			},
 
 			// Fields can be validated using any boolean valued function.  
@@ -154,7 +154,7 @@ dojox.validate.isValidLuhn = function(/*String*/value){
 				field_name2: dojo.validate.isInteger,
 				field_name3: [myValidationFunction, additional parameters],
 				field_name4: [dojo.validate.isValidDate, "YYYY.MM.DD"],
-				field_name5: [dojo.validate.isEmailAddress, false, true],
+				field_name5: [dojo.validate.isEmailAddress, false, true]
 			},
 
 			// Confirm is a sort of conditional validation.
@@ -162,7 +162,7 @@ dojox.validate.isValidLuhn = function(/*String*/value){
 			// If the values are not equal, the field in the property list is reported as Invalid. Unless the target field is blank.
 			confirm: {
 				email_confirm: "email",	
-				pw2: "pw1",	
+				pw2: "pw1"
 			}
 		};
 

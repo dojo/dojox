@@ -200,8 +200,7 @@ doh.register("dojox.jsonPath.tests.jsonPath",
 				var success = '["reference","fiction","fiction","fiction"]';
 				doh.assertEqual(success,result);
 			}
-		},
-
+		}
 	]
 );
 

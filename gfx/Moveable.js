@@ -14,10 +14,10 @@ dojo.declare("dojox.gfx.Moveable", null, {
 		this.delay = (params && params.delay > 0) ? params.delay : 0;
 		this.mover = (params && params.mover) ? params.mover : dojox.gfx.Mover;
 		this.events = [
-			this.shape.connect("onmousedown", this, "onMouseDown"),
+			this.shape.connect("onmousedown", this, "onMouseDown")
 			// cancel text selection and text dragging
-			//dojo.connect(this.handle, "ondragstart",   dojo, "stopEvent"),
-			//dojo.connect(this.handle, "onselectstart", dojo, "stopEvent")
+			//, dojo.connect(this.handle, "ondragstart",   dojo, "stopEvent")
+			//, dojo.connect(this.handle, "onselectstart", dojo, "stopEvent")
 		];
 	},
 	

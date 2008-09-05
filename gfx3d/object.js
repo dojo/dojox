@@ -962,7 +962,7 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 			this.todos[x].render(dojox.gfx3d.matrix.normalize([
 				m.cameraRotateXg(180),
 				m.cameraTranslate(0, this.dimension.height, 0),
-				this.camera,
+				this.camera
 			]), this.deep);
 		}
 

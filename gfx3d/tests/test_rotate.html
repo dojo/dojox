@@ -31,7 +31,7 @@ rotate = function(){
 	var t = m.normalize([
 		m.cameraRotateXg(angles.x), 
 		m.cameraRotateYg(angles.y), 
-		m.cameraRotateZg(angles.z), 
+		m.cameraRotateZg(angles.z)
 	]);
 	cube.setTransform(t);
 	cube.invalidate();
