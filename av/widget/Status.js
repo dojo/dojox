@@ -3,15 +3,23 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 
 dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
-	
-	// playerId: String
-	//	The dijit id of the player component to control
-	playerId:"",
+	// summary:
+	//		A Status widget to use with dojox.av.widget.Player
+	//
+	//	description:
+	//		Displays the name of the media file, and it's current status
+	//		(playing, paused, buffering, etc.) in the middle. Displays
+	//		the playhead time on the left and the duration on the right.
+	//
 	templatePath: dojo.moduleUrl("dojox.av.widget","resources/Status.html"),
-	postCreate: function(){
-	},
+	//
+	postCreate: function(){},
 	
-	setMedia: function(med){
+	setMedia: function(/* Object */med){
+		// summary:
+		//		A common method to set the media in all Player widgets.
+		//		May do connections and initializations.
+		//
 		this.media = med;
 		dojo.connect(this.media, "onMetaData", this, function(data){
 			this.duration = data.duration;
@@ -21,7 +29,7 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 			this.timeNode.innerHTML = this.toSeconds(time);													  
 		});
 		
-		var cons = ["onMetaData", "onPosition", "onStart", "onPlay", "onPause", "onStop", "onEnd", "onError", "onLoad"];
+		var cons = ["onMetaData", "onPosition", "onStart", "onBuffer", "onPlay", "onPause", "onStop", "onEnd", "onError", "onLoad"];
 		dojo.forEach(cons, function(c){
 			dojo.connect(this.media, c, this, c);							
 		}, this);
@@ -36,6 +44,15 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 			var a = this.media.mediaUrl.split("/");
 			var b = a[a.length-1].split(".")[0];
 			this.title = b;
+		}
+	},
+	onBuffer: function(isBuffering){
+		this.isBuffering = isBuffering;
+		console.warn("status onBuffer", this.isBuffering);
+		if(this.isBuffering){
+			this.setStatus("buffering...");	
+		}else{
+			this.setStatus("Playing");
 		}
 	},
 	onPosition:function(time){
@@ -72,9 +89,12 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 		if(isError){
 			dojo.addClass(this.titleNode, "statusError");		
 		}else{
-			dojo.removeClass(this.titleNode, "statusError");
+			dojo.removeClass(this.titleNode, "statusError");	
+			if(this.isBuffering){
+				str = "buffering...";	
+			}
 		}
-		this.titleNode.innerHTML = this.title+" "+str;
+		this.titleNode.innerHTML = '<span class="statusTitle">'+this.title+'</span> <span class="statusInfo">'+str+'</span>';
 	},
 	
 	toSeconds: function(time){

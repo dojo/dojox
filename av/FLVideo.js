@@ -6,74 +6,90 @@ dojo.require("dojox.av.mediaStatus");
 
 dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 			 
-	// summary
-	//		Inserts one or more Flash FLV videos into the HTML page and provides methods
-	//		and events for controlling the video. Also plays the H264/M4V codec with a 
-	//		little trickery: change the ".M4V" extension to ".flv".
+	// summary:
+	//		Inserts a Flash FLV video into the HTML page and provides methods
+	//		and events for controlling the video. Also plays the H264/M4V codec 
+	//		with a little trickery: change the '.M4V' extension to '.flv'.
 	//
-	// USAGE:
+	// example:
 	//
 	//		markup:
-	//			<div id="vid" initialVolume=".7", mediaUrl="../resources/Grog.flv" dojoType="dojox.av.FLVideo"></div>
+	//		|	<div id="vid" initialVolume=".7", 
+	//		|		mediaUrl="../resources/Grog.flv" 
+	//		|		dojoType="dojox.av.FLVideo"></div>
 	//		programmatic:
-	//			new dojox.av.FLVideo({initialVolume:.7, mediaUrl:"../resources/Grog.flv"}, "vid");
+	//		|	new dojox.av.FLVideo({
+	//		|		initialVolume:.7, 
+	//		|		mediaUrl:"../resources/Grog.flv"
+	//		|	}, "vid");
 	//
-	// arguments:
-	//
-	//  mediaUrl /* String */
+	//  mediaUrl: String
 	// 		REQUIRED: The Url of the video file that will be played. 
-	//		NOTE: Must be either an absolute URL or relative to the HTML file. Relative
-	//		paths will be converted to abslute paths
+	//		NOTE: Must be either an absolute URL or relative to the HTML file. 
+	//		Relative paths will be converted to abslute paths
 	mediaUrl:"",
 	//
-	// initialVolume /* Float */
+	// initialVolume: Float?
 	//		The initial volume setting of the player. Acccepts between 0 and 1.
 	initialVolume:1,
 	//
-	//  autoPlay: /* Boolean */
-	//		Whether the video plays on load or not.
+	//  autoPlay:Boolean?
+	//		Whether the video automatically plays on load or not.
 	autoPlay: false,
 	//
-	// updateTime: /* Number */,
-	//		How often, in milliseconds to get an update of the vide position
+	//	bufferTime: Number?
+	//		Time in milliseconds that the video should be loaded before it will 
+	//		play. May pause and resume to build up buffer. Prevents stuttering.
+	//	Note:
+	//		Older FLVs, without a duration, cannot be buffered.
+	bufferTime: 2000,
+	//
+	//	minBufferTime: Number
+	//		Time in milliseconds bwteen the playhead time and loaded time that
+	//		will trigger the buffer. When buffer is triggered, video will pause
+	//		until the bufferTime amount is buffered.
+	//		Note: Should be a small number, greater than zero.
+	minBufferTime:300,
+	//
+	// updateTime: Number
+	//		How often, in milliseconds to get an update of the video position.
 	updateTime: 100,
 	//
-	//  id /* String */
+	//  id: String?
 	//		The id of this widget and the id of the SWF movie.
 	id:"",
 	//
-	// isDebug /* Boolean */
-	//		Setting to true tells the SWF to output log messages to Firebug
-	isDebug: false,
+	// isDebug: Boolean?
+	//		Setting to true tells the SWF to output log messages to Firebug.
+	isDebug: false, 
 	//
-	// private vars
 	//
-	// statusReturnTime: how often status is figured
-	statusReturnTime: 200, // NOTE: Too small of a time will toggle between play and pause
+	// percentDownloaded: read-only-Number
+	//		The percentage the media has downloaded; from 0-100
+	percentDownloaded:0,
 	//
-	// domNode: The node that holds the SWF's embed/object tag
-	domNode:null,
-	//
-	// _flashObject: the dojox.embed object
+	// _flashObject: read-only-Object
+	//	The dojox.embed object
 	_flashObject:null,
 	//
-	// _flashMovie: the SWF object. Methods are passed to this.
+	// _flashMovie: read-only-SWF 
+	//		The SWF object. Methods are passed to this.
 	_flashMovie:null,
 	//
-	// _swfPath: The path to the video player SWF resource
+	// _swfPath: Uri
+	//		The path to the video player SWF resource
 	_swfPath: dojo.moduleUrl("dojox.av", "resources/video.swf"),
 	//
 	//
-	postMixInProperties: function(){
-		console.log("Flash version detected:", dojox.embed.Flash.available);
-		
+	postCreate: function(){
+		// summary:
+		// Initialize the media.
+		//
 		this._subs = [];
 		this._cons = [];
 		this.mediaUrl = this._normalizeUrl(this.mediaUrl);
 		this.initialVolume = this._normalizeVolume(this.initialVolume);	
-	},
-	
-	postCreate: function(){
+		
 		var args = {
 			path:this._swfPath.uri,
 			width:"100%",
@@ -95,7 +111,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 		//	from the player
 		this._sub("stageClick",  "onClick");
 		this._sub("stageSized",  "onSwfSized");
-		//this._sub("mediaStatus", "onStatus");
+		this._sub("mediaStatus", "onPlayerStatus");
 		this._sub("mediaMeta",   "onMetaData");
 		this._sub("mediaError",  "onError");
 		this._sub("mediaStart",  "onStart");
@@ -109,31 +125,26 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 	//  Methods to control the player  //
 	//  =============================  //
 	
-	togglePause: function(){
-		// DEPRECATED
-		// Toggles between play and pause
-		console.log("TOGGLE")
-		this._flashMovie.togglePause();
-	},
-	
-	play: function(newUrl /* Optional */){
-		// Plays the video. If an url is passed in, plays the new link.
+	play: function(/* String? */newUrl){
+		// summary:
+		//		Plays the video. If an url is passed in, plays the new link.
 		this.isPlaying = true;
 		this.isStopped = false;
 		this._flashMovie.doPlay(this._normalizeUrl(newUrl));
 	},
 	
 	pause: function(){
-		// Pauses the video
+		// summary:
+		// 		Pauses the video
 		this.isPlaying = false;
 		this.isStopped = false;
-		this.onPause();
+		//this.onPause();
 		this._flashMovie.pause();
 	},
 	
-	seek: function(time /* Float */){
-		// Goes to the time passed in the argument
-		console.log("seek:", time)
+	seek: function(/* Float */ time ){
+		// summary:
+		// 		Goes to the time passed in the argument
 		this._flashMovie.seek(time);
 	},
 	
@@ -142,9 +153,11 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 	//  Player Getter/Setters  //
 	//  =====================  //
 	
-	volume: function(vol){
-		//	Sets the volume of the video to the time in the
-		//	argument - between 0 - 1.
+	volume: function(/* Float */ vol){
+		// summary:
+		//		Sets the volume of the video to the time in the
+		// argument - between 0 - 1.
+		//
 		if(vol){
 			if(!this._flashMovie) {
 				this.initialVolume = vol;	
@@ -154,7 +167,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 		if(!this._flashMovie) {
 			return this.initialVolume;
 		}
-		return this._flashMovie.getVolume();	
+		return this._flashMovie.getVolume(); // Float	
 	},
 	
 	/*
@@ -176,13 +189,13 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 	//  ==============  //
 	
 	getTime: function(){
-		// Returns the current time of the video
-		return this._flashMovie.getTime();
-	},
-	
-	getLoaded: function(){
-		// Returns status of load
-		return this._flashMovie.getLoaded();
+		// summary:
+		// 		Returns the current time of the video
+		//	Note:
+		//		Consider the onPosition event, which returns
+		//		the time at a set interval. Too many trips to 
+		//		the SWF could impact performance.
+		return this._flashMovie.getTime(); // Float
 	},
 	
 	//  =============  //
@@ -190,123 +203,166 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 	//  =============  //
 	
 	
-	onLoad: function(mov){
-		// Fired when the SWF player has loaded
-		// NOT when the video has loaded
+	onLoad: function(/* SWF */ mov){
+		// summary:
+		// 		Fired when the SWF player has loaded
+		// 		NOT when the video has loaded
+		//
 		this._flashMovie = mov;
-		this.isPlaying = false;
-		this.isStopped = true;
+		this.isPlaying = this.autoPlay;
+		this.isStopped = !this.autoPlay;
 		this._initStatus();
-		this._updatePosition();
+		this._update();
 	},
-	onClick: function(evt){ //FIXME: Return x/y of click
-		// Fires when the player is clicked
-		// Could be used to toggle play/pause, or 
-		// do an external activity, like opening a new
-		//window.
-		console.log("CLICK")
+	onDownloaded: function(/* Number */percent){
+		// summary:
+		//		Fires the amount of that the media has been 
+		//		downloaded. Number, 0-100
+		this.percentDownloaded = percent;
 	},
-	onSwfSized: function(data){
-		// Fired on SWF resize, or when its
-		// toggled between fullscreen.
-		//console.warn("onSwfSized:", data);
+	onClick: function(/* Object */ evt){ 
+		// summary:
+		// 		TODO: Return x/y of click
+		// 		Fires when the player is clicked
+		// 		Could be used to toggle play/pause, or 
+		// 		do an external activity, like opening a new
+		//		window.
 	},
-	onMetaData: function(data, evt){
-		// Returns the video properties. Width, height, duration, etc.
-		// NOTE: if data is empty, this is an older FLV with no meta data.
-		// Duration cannot be determined. In original FLVs, duration could
-		// only be obtained with Flash Media Server.
-		// TODO: Older FLVs can still return width and height
-		console.warn("META:", data, evt);
+	onSwfSized: function(/* Object */ data){
+		// summary:
+		// 		Fired on SWF resize, or when its
+		// 		toggled between fullscreen.
+	},
+	onMetaData: function(/* Object */ data, /* Object */ evt){
+		// summary:
+		// 		The video properties. Width, height, duration, etc.
+		// 		NOTE: 	if data is empty, this is an older FLV with no meta data.
+		// 				Duration cannot be determined. In original FLVs, duration 
+		//				could only be obtained with Flash Media Server.
+		// 		NOTE: 	Older FLVs can still return width and height
+		//				and will do so on a second event call
+		this.duration = data.duration;
+	},
+	
+	
+	onPosition: function(/* Float */ time){
+		// summary:
+		//		The position of the playhead in seconds 
+	},
+	
+	onStart: function(/* Object */ data){
+		// summary:
+		// 		Fires when video starts
+		// 		Good for setting the play button to pause
+		// 		during an autoPlay for example
+	},
+	
+	onPlay: function(/* Object */ data){
+		// summary:
+		// 		Fires when video starts and resumes
+	},
+	
+	onPause: function(/* Object */ data){
+		// summary:
+		// 		Fires when teh pause button is clicked
+	},
+	
+	onEnd: function(/* Object */ data){
+		// summary:
+		// 		Fires when vdieo ends
+		// 		Could be used to change pause button to play
+		// 		or show a post video graphic, like YouTube
+		this.percentDownloaded = 0;
 	},
 	
 	
-	onPosition: function(time){
-		//console.log("POS:", time)
+	onBuffer: function(/* Boolean */ isBuffering){
+		// summary:
+		//		Fires a boolean to tell if media
+		//		is paused for buffering or if buffering
+		//		has finished
+		this.isBuffering = isBuffering;
 	},
 	
-	onStart: function(data){
-		// Fires when video starts
-		// Good for setting the play button to pause
-		// during an autoPlay for example
-		console.warn("onStart:", data);
-	},
-	
-	onPlay: function(data){
-		// Fires when video starts and resumes
-	},
-	
-	onPause: function(data){
-		// Fires when teh pause button is clicked
-	},
-	
-	onEnd: function(data){
-		// Fires when vdieo ends
-		// Could be used to change pause button to play
-		// or show a post video graphic, like YouTube
-		console.warn("onEnd:", data);
-	},
-	
-	onError: function(data, url){
-		// Fired when the player encounters an error
+	onError: function(/* Object */ data, /* String */ url){
+		// summary:
+		// 		Fired when the player encounters an error
+		// example:
+		//		| console.warn("ERROR-"+data.type.toUpperCase()+":", 
+		//		|		data.info.code, " - URL:", url);
 		console.warn("ERROR-"+data.type.toUpperCase()+":", data.info.code, " - URL:", url);
 	},
 	
+	onStatus: function(/* Object */data){
+		// summary:
+		// 		Simple status, compiled in dojox.av.mediaStatus
+	},
+	
+	onPlayerStatus: function(/* Object */data){
+		// summary:
+		// 		The status of the video from the SWF
+		// 		playing, stopped, bufering, etc.
+	},
 	
 	
-	onStatus: function(data){
-		return;
-		
-		// Returns the status of the video
-		// playing, stopped, bufering, etc.
-		// UGH - Such fishy, swimmy stuff. Very inconsistant.
-		// Need to do this manually, like in dAIR.Sound
-		var msg = data.status || data.info.code;
-		console.warn("STATUS:", msg);
-		
-		// NOTE Fall-throughs?
-		switch(msg){
-			case "NetConnection.Connect.Success":
-				this.onLoad(msg);
-			break;
-			
-			case "NetStream.Play.Start":
-				this.isPlaying = true;
-				this.isStopped = false;
-				this.onPlay(msg);
-			break;
-			
-			case "NetStream.Buffer.Full":
-				this.isPlaying = true;
-				this.isStopped = false;
-				this.onPlay(msg);
-			break;
-			
-			case "NetStream.Play.Stop":
-				this.isPlaying = false;
-				this.isStopped = true;
-				this.onStop();
-				this.onEnd();
-			break;
-			
-			case "NetStream.Buffer.Empty":
-			case "NetStream.Buffer.Flush":
-			default:
-			break;
-			
+	//  ===============  //
+	//  Private Methods  //
+	//  ===============  //
+	
+	_checkBuffer: function(/* Float */time, /* Float */bufferLength){
+		// summary:
+		//		Checks that there is a proper buffer time between
+		//		current playhead time and the amount of data loaded.
+		//		Works only on FLVs with a duration (not older). Pauses
+		//		the video while continuing download.
+		//
+		if(this.percentDownloaded == 100){
+			if(this.isBuffering){
+				this.onBuffer(false);
+				this._flashMovie.doPlay();
+			}
+			return;
 		}
-	},
-	
-	_updatePosition: function(){
 		
-		var time = this.getTime() || 0;
-		this.onPosition(time);
-		setTimeout(dojo.hitch(this, "_updatePosition"), this.updateTime);
+		if(!this.isBuffering && bufferLength<.1){
+			this.onBuffer(true);
+			this._flashMovie.pause();
+			return;
+		}
+		
+		var timePercentLoad = this.percentDownloaded*.01*this.duration;
+		
+		// check if start buffer needed
+		if(!this.isBuffering && time+this.minBufferTime*.001>timePercentLoad){
+			this.onBuffer(true);
+			this._flashMovie.pause();
+		
+		// check if end buffer needed
+		}else if(this.isBuffering && time+this.bufferTime*.001<=timePercentLoad){
+			this.onBuffer(false);
+			this._flashMovie.doPlay();
+		}
+		
 	},
-	
-	
+	_update: function(){
+		// summary:
+		//		Helper function to fire onPosition, check download progress,
+		//		and check buffer.
+		var time = Math.min(this.getTime() || 0, this.duration);
+		var dObj = this._flashMovie.getLoaded();
+		this.onDownloaded(Math.ceil(dObj.bytesLoaded/dObj.bytesTotal*100));
+		this.onPosition(time);
+		if(this.duration){
+			this._checkBuffer(time, dObj.buffer);	
+		}
+		setTimeout(dojo.hitch(this, "_update"), this.updateTime);
+	},
 	
 	_normalizeUrl: function(_url){
+		// summary:
+		//		Checks that path is relative to HTML file or
+		//		convertes it to an absolute path. 
+		//
 		if(_url && _url.toLowerCase().indexOf("http")<0){
 			//
 			// Appears to be a relative path. Attempt to  convert it to absolute, 
@@ -320,6 +376,9 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 		return _url;
 	},
 	_normalizeVolume: function(vol){
+		// summary:
+		//		Ensures volume is less than one
+		//
 		if(vol>1){
 			while(vol>1){
 				vol*=.1	
@@ -328,10 +387,13 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av.mediaStatus], {
 		return vol;
 	},
 	_sub: function(topic, method){
+		// summary:
+		// helper for subscribing to topics
 		dojo.subscribe(this.id+"/"+topic, this, method);
 	},
 	destroy: function(){
-		//destroys flash
+		// summary:
+		// 		destroys flash
 		if(!this._flashMovie){
 			this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));	
 			return;

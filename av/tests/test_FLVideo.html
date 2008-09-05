@@ -35,35 +35,44 @@
 			
 			w = new dojox.av.FLVideo({initialVolume:.1, mediaUrl:"video/Grog.flv", autoPlay:true, isDebug:false}, "vid");
 			
+			toggle = function(){
+				if(w.isPlaying){
+					w.pause();
+				}else{
+					w.play();
+				}
+			}
 			
 			dojo.connect(w, "onMetaData", function(data){
 				durNode.value = data.duration;
 			});
+			
 			dojo.connect(w, "onSwfSized", function(){
 				prgDim = dojo.coords(progressNode);
 				volDim = dojo.coords(volumeNode);
 			});
 			
+			dojo.connect(w, "onPosition", function(time){
+				setSlider(time);
+				timeNode.value = time;
+			});
+			
+			dojo.connect(w, "onLoad", function(){
+				prgDim = dojo.coords(progressNode);
+			});
 			// progress silder
 			var cmove, cup;
 			setSlider = function(time){
 				if(!seeking){
 					var dur = durNode.value;
-					var w = prgDim.w - 12; //slider width * 2
+					var w = dojo.marginBox(progressNode).w - 12; //slider width * 2
 					var p = time/dur;
 					var x = p*w
 					dojo.style(sliderNode, "left", x+"px");
 				}
 			};
-			watchtime= function(){
-				var time = w.getTime()
-				setSlider(time);
-				timeNode.value = time;
-			}
-			dojo.connect(w, "onLoad", function(){
-				prgDim = dojo.coords(progressNode);
-				setInterval(watchtime, 100);
-			});
+			
+			
 			
 			dragSlider = function(evt){
 				var x = evt.clientX - prgDim.x;
@@ -91,7 +100,7 @@
 			var vmove, vup;
 			dojo.connect(w, "onLoad", function(){
 				volDim = dojo.coords(volumeNode);
-				var v = w.initialVolume; // returns 0 - 1
+				var v = w.volume(); // returns 0 - 1
 				console.log("init vol:", volDim.w, v, volDim.w*v);
 				dojo.style(volsliderNode, "left", volDim.w*v+"px");
 			});
@@ -101,7 +110,7 @@
 				if(x<0) x = 0;
 				if(x+6>volDim.w) x = volDim.w-6;
 				var p = x/volDim.w;
-				w.setVolume(p);
+				w.volume(p);
 				dojo.style(volsliderNode, "left", x+"px");
 			}
 			begVolDrag= function(){
@@ -182,7 +191,7 @@
      </tr>
   	<td>
         
-        <button onclick="w.togglePause();">Play/Pause</button>
+        <button onclick="toggle();">Play/Pause</button>
         <button onclick="w.play('video/Grog.flv');">Play Grog</button>
         <button onclick="w.play('video/OldMan.flv');">Play Old Man</button>
     </td>

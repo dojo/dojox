@@ -3,7 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>dojox.av.widget.Player</title>
-<link href="../widget/resources/Player.css" rel="stylesheet" type="text/css"></link>
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<link href="../widget/resources/Player.css" rel="stylesheet" type="text/css" />
 
 <script>
 	djConfig={
@@ -24,9 +28,9 @@ dojo.require("dojox.av.widget.Status");
 
 </head>
 <body>
-
+<h1>dojox.av.widget.Player</h1>
     <div dojoType="dojox.av.widget.Player" playerWidth="100%">
-        
+        <!--testing download progress: "https://user.sitepen.com/~mwilcox/dojotoolkit/dojox/av/tests/video/Grog.flv" -->
         <div controlType="video" initialVolume=".1"
 			mediaUrl="video/Grog.flv" autoPlay="true" isDebug="false" dojoType="dojox.av.FLVideo"></div>
         

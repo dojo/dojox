@@ -53,18 +53,22 @@
 	text-align:right;
 }
 .StatusContainer{
-padding:0;
-border-collapse:collapse;
-
+	padding:0;
+	border-collapse:collapse;
 }
 .Status{
-	color:#00FFFF;
 }
-
-.Status.statusError{
+.Status.statusError .statusTitle, .Status.statusError .statusInfo{
 	color:#FF0000;
 }
-
+.Status .statusTitle{
+	font-weight:bold;
+	color:#A5B3E9;
+}
+.Status .statusInfo{
+	font-weight:normal;
+	color:#3770D6;
+}
 
 .Time, .Duration, .Status{
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -127,13 +131,16 @@ border-collapse:collapse;
 
 
 .Progress{
-	background:url(images/progressLoadedBk.png) repeat-x;
+	
 }
 .Progress, .ProgressLoaded, .ProgressPosition, .ProgressHandle{
 	height:10px;
 }
 .ProgressLoaded, .ProgressPosition, .ProgressHandle{
 	position:absolute;
+}
+.ProgressLoaded{
+background:url(images/progressLoadedBk.png) repeat-x;
 }
 .ProgressHandle{
 	background-image:url(images/sliderHandleSprite.png);
