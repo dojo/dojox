@@ -51,6 +51,5 @@ dojo.declare("dojox.av.widget.PlayButton", [dijit._Widget, dijit._Templated], {
 		this.mode = "pause";
 		dojo.addClass(this.domNode, "Pause");
 		dojo.removeClass(this.domNode, "Play");
-	},
-	
+	}
 });

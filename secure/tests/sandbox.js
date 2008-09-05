@@ -50,7 +50,7 @@ doh.register("dojox.secure.tests.secure.bad",
 				dojox.secure.evaluate("bad = true",container);
 			}catch(e){}
 				t.t(typeof bad == 'undefined');
-		},
+		}
 		/*function innerHTMLScript2(t){
 			try{
 				securedElement.innerHTML = '</script><script>bad=true;//';
@@ -110,11 +110,11 @@ doh.register("dojox.secure.tests.secure.bad",
 				
 			}
 		},
-		/*violater(function addStyleTag(t) {
+		violater(function addStyleTag(t) {
 			securedElement.innerHTML = "<style>div {color:expression(alert(\"hello\")}</style><div>test</div>";		
 		}),
 		violater(function addStyleTag2(t) {
 			securedElement.innerHTML = "<style>@import 'unsafe.css'</style><div>unsafe css</div>";		
-		}),*/
+		})*/
 	]);
 	
