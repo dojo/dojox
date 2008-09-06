@@ -82,11 +82,14 @@ dojo.extend(dojox.gfx.Shape, {
 					break;
 				case "radial":
 					this.fillStyle = f = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
-					var rgb = p.createFromXaml("<RadialGradientBrush/>"), w = r.width, h = r.height,
-						l = this.rawNode["Canvas.Left"], t = this.rawNode["Canvas.Top"];
-					rgb.center = (f.cx - l) / w + "," + (f.cy - t) / h;
-					rgb.radiusX = f.r / w;
-					rgb.radiusY = f.r / h;
+					var rgb = p.createFromXaml("<RadialGradientBrush/>"),
+						c = dojox.gfx.matrix.multiplyPoint(
+								dojox.gfx.matrix.invert(this._getAdjustedMatrix()), f.cx, f.cy),
+						pt = c.x + "," + c.y;
+					rgb.mappingMode = "Absolute";
+					rgb.gradientOrigin = pt;
+					rgb.center = pt;
+					rgb.radiusX = rgb.radiusY = f.r;
 					dojo.forEach(f.colors, function(c){
 						var t = p.createFromXaml("<GradientStop/>");
 						t.offset = c.offset;
