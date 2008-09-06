@@ -7,7 +7,7 @@
 			@import "../../../dijit/tests/css/dijitTests.css";
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" 
-			djConfig="isDebug: false, gfxRenderer: 'svg,vml,silverlight,canvas'"></script>
+			djConfig="isDebug: false, gfxRenderer: 'svg,silverlight,vml,canvas'"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.gfx");
 			dojo.require("dojox.gfx.VectorText");
@@ -61,7 +61,7 @@
 					var xpos = i*minor, y2 = padding*2+factor*f.viewbox.height, y1 = (xpos%major==0)?y2-yMajor:y2-yMinor;
 					axis.createLine({ x1: xpos, x2: xpos, y1: y1, y2: y2 }).setStroke(s);
 					if(xpos%major==0){
-						axis.createText({ x: xpos, y: y1-4, text: xpos, align: "middle" })
+						axis.createText({ x: xpos, y: y1-4, text: xpos.toString(), align: "middle" })
 							.setFont({ family: "sans-serif", size:"8pt"})
 							.setFill(s);
 					}
