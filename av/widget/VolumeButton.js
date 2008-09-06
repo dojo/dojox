@@ -37,7 +37,6 @@ dojo.declare("dojox.av.widget.VolumeButton", [dijit._Widget, dijit._Templated], 
 		//		Changes the icon on the button according to volume level.
 		//
 		vol = (vol===undefined) ? this.media.volume() : vol;
-		console.log("icon VOL:", vol)
 		if(vol===0){
 			dojo.attr(this.domNode, "class", "Volume mute");
 		}else if(vol<.334){
