@@ -47,7 +47,7 @@ var animateStroke = function(){
 		shape: 		rect,
 		color:		{start: "green", end: "red"},
 		width:		{start: 5, end: 15},
-		join:		{values: ["miter", "bevel", "round"]}
+		join:		{values: ["bevel", "round"]}
 	});
 	dojo.byId("stroke").disabled = "disabled";
 	dojo.connect(anim, "onEnd", function(){ dojo.byId("stroke").disabled = ""; });
