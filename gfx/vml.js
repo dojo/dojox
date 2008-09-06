@@ -977,7 +977,7 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 			bs = this.bgNode.style;
 		cs.width  = width;
 		cs.height = height;
-		cs.clip = "rect(0 " + width + " " + height + " 0)";
+		cs.clip = "rect(0px " + width + "px " + height + "px 0px)";
 		rs.width = width;
 		rs.height = height;
 		r.coordsize = width + " " + height;
@@ -1015,7 +1015,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	cs.position = "absolute";
 	cs.width  = width;
 	cs.height = height;
-	cs.clip = "rect(0 " + width + " " + height + " 0)";
+	cs.clip = "rect(0px " + width + "px " + height + "px 0px)";
 	rs.position = "absolute";
 	rs.width  = width;
 	rs.height = height;
