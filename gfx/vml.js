@@ -617,7 +617,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		// summary: forms a path using a shape (VML)
 		// newShape: Object: an VML path string or a path object (see dojox.gfx.defaultPath)
 		this.vmlPath = [];
-		this.lastControl = {};
+		this.lastControl.type = "";	// no prior control point
 		dojox.gfx.Path.superclass.setShape.apply(this, arguments);
 		this.vmlPath = this.vmlPath.join("");
 		this.rawNode.path.v = this.vmlPath + " r0,0 e";
@@ -637,225 +637,177 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 		A: "_arcTo", a: "_arcTo",
 		Z: "_closePath", z: "_closePath"
 	},
-	_addArgs: function(path, args, from, upto){
-		if(typeof upto == "undefined"){
-			upto = args.length;
-		}
-		if(typeof from == "undefined"){
-			from = 0;
-		}
+	_addArgs: function(path, segment, from, upto){
+		var n = segment instanceof Array ? segment : segment.args;
 		for(var i = from; i < upto; ++i){
-			path.push(" ");
-			path.push(args[i].toFixed());
+			path.push(" ", n[i].toFixed());
 		}
 	},
-	_addArgsAdjusted: function(path, last, args, from, upto){
-		if(typeof upto == "undefined"){
-			upto = args.length;
+	_adjustRelCrd: function(last, segment, step){
+		var n = segment instanceof Array ? segment : segment.args, l = n.length,
+			result = new Array(l), i = 0, x = last.x, y = last.y;
+		if(typeof x != "number"){
+			// there is no last coordinate =>
+			// treat the first pair as an absolute coordinate
+			result[0] = x = n[0];
+			result[1] = y = n[1];
+			i = 2;
 		}
-		if(typeof from == "undefined"){
-			from = 0;
+		if(typeof step == "number" && step != 2){
+			var j = step;
+			while(j <= l){
+				for(; i < j; i += 2){
+					result[i] = x + n[i];
+					result[i + 1] = y + n[i + 1];
+				}
+				x = result[j - 2];
+				y = result[j - 1];
+				j += step;
+			}
+		}else{
+			for(; i < l; i += 2){
+				result[i] = (x += n[i]);
+				result[i + 1] = (y += n[i + 1]);
+			}
 		}
-		for(var i = from; i < upto; i += 2){
-			path.push(" ");
-			path.push((last.x + args[i]).toFixed());
-			path.push(" ");
-			path.push((last.y + args[i + 1]).toFixed());
+		return result;
+	},
+	_adjustRelPos: function(last, segment){
+		var n = segment instanceof Array ? segment : segment.args, l = n.length,
+			result = new Array(l);
+		for(var i = 0; i < l; ++i){
+			result[i] = (last += n[i]);
 		}
+		return result;
 	},
 	_moveToA: function(segment){
-		var p = [" m"], n = segment.args, l = n.length;
-		if(l == 2){
-			this._addArgs(p, n);
-		}else{
-			this._addArgs(p, n, 0, 2);
+		var p = [" m"], n = segment instanceof Array ? segment : segment.args, l = n.length;
+		this._addArgs(p, n, 0, 2);
+		if(l > 2){
 			p.push(" l");
-			this._addArgs(p, n, 2);
+			this._addArgs(p, n, 2, l);
 		}
-		this.lastControl = {};
+		this.lastControl.type = "";	// no control point after this primitive
 		return p;
 	},
 	_moveToR: function(segment, last){
-		var p = ["x" in last ? " t" : " m"], n = segment.args, l = n.length;
-		if(l == 2){
-			this._addArgs(p, n);
-		}else{
-			this._addArgs(p, n, 0, 2);
-			p.push(" r");
-			this._addArgs(p, n, 2);
-		}
-		this.lastControl = {};
-		return p;
+		return this._moveToA(this._adjustRelCrd(last, segment));
 	},
 	_lineToA: function(segment){
-		var p = [" l"];
-		this._addArgs(p, segment.args);
-		this.lastControl = {};
+		var p = [" l"], n = segment instanceof Array ? segment : segment.args;
+		this._addArgs(p, n, 0, n.length);
+		this.lastControl.type = "";	// no control point after this primitive
 		return p;
 	},
-	_lineToR: function(segment){
-		var p = [" r"];
-		this._addArgs(p, segment.args);
-		this.lastControl = {};
-		return p;
+	_lineToR: function(segment, last){
+		return this._lineToA(this._adjustRelCrd(last, segment));
 	},
 	_hLineToA: function(segment, last){
-		var p = [" l"], n = segment.args, l = n.length, y = " " + last.y.toFixed();
+		var p = [" l"], y = " " + last.y.toFixed(),
+			n = segment instanceof Array ? segment : segment.args, l = n.length;
 		for(var i = 0; i < l; ++i){
-			p.push(" ");
-			p.push(n[i].toFixed());
-			p.push(y);
+			p.push(" ", n[i].toFixed(), y);
 		}
-		this.lastControl = {};
+		this.lastControl.type = "";	// no control point after this primitive
 		return p;
 	},
-	_hLineToR: function(segment){
-		var p = [" r"], n = segment.args, l = n.length;
-		for(var i = 0; i < l; ++i){
-			p.push(" ");
-			p.push(n[i].toFixed());
-			p.push(" 0");
-		}
-		this.lastControl = {};
-		return p;
+	_hLineToR: function(segment, last){
+		return this._hLineToA(this._adjustRelPos(last.x, segment), last);
 	},
 	_vLineToA: function(segment, last){
-		var p = [" l"], n = segment.args, l = n.length, x = " " + last.x.toFixed();
+		var p = [" l"], x = " " + last.x.toFixed(),
+			n = segment instanceof Array ? segment : segment.args, l = n.length;
 		for(var i = 0; i < l; ++i){
-			p.push(x);
-			p.push(" ");
-			p.push(n[i].toFixed());
+			p.push(x, " ", n[i].toFixed());
 		}
-		this.lastControl = {};
+		this.lastControl.type = "";	// no control point after this primitive
 		return p;
 	},
-	_vLineToR: function(segment){
-		var p = [" r"], n = segment.args, l = n.length;
-		for(var i = 0; i < l; ++i){
-			p.push(" 0 ");
-			p.push(n[i].toFixed());
-		}
-		this.lastControl = {};
-		return p;
+	_vLineToR: function(segment, last){
+		return this._vLineToA(this._adjustRelPos(last.y, segment), last);
 	},
 	_curveToA: function(segment){
-		var p = [], n = segment.args, l = n.length;
+		var p = [], n = segment instanceof Array ? segment : segment.args, l = n.length,
+			lc = this.lastControl;
 		for(var i = 0; i < l; i += 6){
 			p.push(" c");
 			this._addArgs(p, n, i, i + 6);
 		}
-		this.lastControl = {x: n[l - 4], y: n[l - 3], type: "C"};
+		lc.x = n[l - 4];
+		lc.y = n[l - 3];
+		lc.type = "C";
 		return p;
 	},
 	_curveToR: function(segment, last){
-		var p = [], n = segment.args, l = n.length;
-		for(var i = 0; i < l; i += 6){
-			p.push(" v");
-			this._addArgs(p, n, i, i + 6);
-			this.lastControl = {x: last.x + n[i + 2], y: last.y + n[i + 3]};
-			last.x += n[i + 4];
-			last.y += n[i + 5];
-		}
-		this.lastControl.type = "C";
-		return p;
+		return this._curveToA(this._adjustRelCrd(last, segment, 6));
 	},
 	_smoothCurveToA: function(segment, last){
-		var p = [], n = segment.args, l = n.length;
-		for(var i = 0; i < l; i += 4){
+		var p = [], n = segment instanceof Array ? segment : segment.args, l = n.length,
+			lc = this.lastControl, i = 0;
+		if(lc.type != "C"){
 			p.push(" c");
-			if(this.lastControl.type == "C"){
-				this._addArgs(p, [
-					2 * last.x - this.lastControl.x,
-					2 * last.y - this.lastControl.y
-				]);
-			}else{
-				this._addArgs(p, [last.x, last.y]);
-			}
-			this._addArgs(p, n, i, i + 4);
+			this._addArgs(p, [last.x, last.y], 0, 2);
+			this._addArgs(p, n, 0, 4);
+			lc.x = n[0];
+			lc.y = n[1];
+			lc.type = "C";
+			i = 4;
 		}
-		this.lastControl = {x: n[l - 4], y: n[l - 3], type: "C"};
+		for(; i < l; i += 4){
+			p.push(" c");
+			this._addArgs(p, [
+				2 * last.x - lc.x,
+				2 * last.y - lc.y
+			], 0, 2);
+			this._addArgs(p, n, i, i + 4);
+			lc.x = n[i];
+			lc.y = n[i + 1];
+		}
 		return p;
 	},
 	_smoothCurveToR: function(segment, last){
-		var p = [], n = segment.args, l = n.length;
-		for(var i = 0; i < l; i += 4){
-			p.push(" v");
-			if(this.lastControl.type == "C"){
-				this._addArgs(p, [
-					last.x - this.lastControl.x,
-					last.y - this.lastControl.y
-				]);
-			}else{
-				this._addArgs(p, [0, 0]);
-			}
-			this._addArgs(p, n, i, i + 4);
-			this.lastControl = {x: last.x + n[i], y: last.y + n[i + 1]};
-			last.x += n[i + 2];
-			last.y += n[i + 3];
-		}
-		this.lastControl.type = "C";
-		return p;
+		return this._smoothCurveToA(this._adjustRelCrd(last, segment, 4), last);
 	},
 	_qCurveToA: function(segment){
-		var p = [], n = segment.args, l = n.length;
+		var p = [], n = segment instanceof Array ? segment : segment.args, l = n.length,
+			lc = this.lastControl;
 		for(var i = 0; i < l; i += 4){
 			p.push(" qb");
 			this._addArgs(p, n, i, i + 4);
 		}
-		this.lastControl = {x: n[l - 4], y: n[l - 3], type: "Q"};
+		lc.x = n[l - 4];
+		lc.y = n[l - 3];
+		lc.type = "Q";
 		return p;
 	},
 	_qCurveToR: function(segment, last){
-		var p = [], n = segment.args, l = n.length;
-		for(var i = 0; i < l; i += 4){
-			p.push(" qb");
-			this._addArgsAdjusted(p, last, n, i, i + 4);
-			this.lastControl = {x: last.x + n[i], y: last.y + n[i + 1]};
-			last.x += n[i + 2];
-			last.y += n[i + 3];
-		}
-		this.lastControl.type = "Q";
-		return p;
+		return this._qCurveToA(this._adjustRelCrd(last, segment, 4));
 	},
 	_qSmoothCurveToA: function(segment, last){
-		var p = [], n = segment.args, l = n.length;
-		for(var i = 0; i < l; i += 2){
+		var p = [], n = segment instanceof Array ? segment : segment.args, l = n.length,
+			lc = this.lastControl, i = 0;
+		if(lc.type != "Q"){
 			p.push(" qb");
-			if(this.lastControl.type == "Q"){
-				this._addArgs(p, [
-					this.lastControl.x = 2 * last.x - this.lastControl.x,
-					this.lastControl.y = 2 * last.y - this.lastControl.y
-				]);
-			}else{
-				this._addArgs(p, [
-					this.lastControl.x = last.x,
-					this.lastControl.y = last.y
-				]);
-			}
+			this._addArgs(p, [
+				lc.x = last.x,
+				lc.y = last.y
+			], 0, 2);
+			lc.type = "Q";
+			this._addArgs(p, n, 0, 2);
+			i = 2;
+		}
+		for(; i < l; i += 2){
+			p.push(" qb");
+			this._addArgs(p, [
+				lc.x = 2 * last.x - lc.x,
+				lc.y = 2 * last.y - lc.y
+			], 0, 2);
 			this._addArgs(p, n, i, i + 2);
 		}
-		this.lastControl.type = "Q";
 		return p;
 	},
 	_qSmoothCurveToR: function(segment, last){
-		var p = [], n = segment.args, l = n.length;
-		for(var i = 0; i < l; i += 2){
-			p.push(" qb");
-			if(this.lastControl.type == "Q"){
-				this._addArgs(p, [
-					this.lastControl.x = 2 * last.x - this.lastControl.x,
-					this.lastControl.y = 2 * last.y - this.lastControl.y
-				]);
-			}else{
-				this._addArgs(p, [
-					this.lastControl.x = last.x,
-					this.lastControl.y = last.y
-				]);
-			}
-			this._addArgsAdjusted(p, last, n, i, i + 2);
-		}
-		this.lastControl.type = "Q";
-		return p;
+		return this._qSmoothCurveToA(this._adjustRelCrd(last, segment, 2), last);
 	},
 	_arcTo: function(segment, last){
 		var p = [], n = segment.args, l = n.length, relative = segment.action == "a";
@@ -872,15 +824,17 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			);
 			for(var j = 0; j < result.length; ++j){
 				p.push(" c");
-				this._addArgs(p, result[j]);
+				var t = result[j];
+				this._addArgs(p, t, 0, t.length);
 			}
-			last = {x: x1, y: y1};
+			last.x = x1;
+			last.y = y1;
 		}
-		this.lastControl = {};
+		this.lastControl.type = "";	// no control point after this primitive
 		return p;
 	},
 	_closePath: function(){
-		this.lastControl = {};
+		this.lastControl.type = "";	// no control point after this primitive
 		return ["x"];
 	}
 });
