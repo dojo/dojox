@@ -4,7 +4,7 @@ dojo.require("dojox.gfx.shape");
 
 dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	// summary: a generalized path shape
-	
+
 	constructor: function(rawNode){
 		// summary: a path constructor
 		// rawNode: Node: a DOM node to be used by this path object
@@ -14,7 +14,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this.last = {};
 		this.rawNode = rawNode;
 	},
-	
+
 	// mode manipulations
 	setAbsoluteMode: function(mode){
 		// summary: sets an absolute or relative mode for path points
@@ -26,23 +26,23 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// summary: returns a current value of the absolute mode
 		return this.absolute; // Boolean
 	},
-	
+
 	getBoundingBox: function(){
 		// summary: returns the bounding box {x, y, width, height} or null
 		return (this.bbox && ("l" in this.bbox)) ? {x: this.bbox.l, y: this.bbox.t, width: this.bbox.r - this.bbox.l, height: this.bbox.b - this.bbox.t} : null; // dojox.gfx.Rectangle
 	},
-	
+
 	getLastPosition: function(){
 		// summary: returns the last point in the path, or null
 		return "x" in this.last ? this.last : null; // Object
 	},
-	
+
 	// segment interpretation
 	_updateBBox: function(x, y){
 		// summary: updates the bounding box of path with new point
 		// x: Number: an x coordinate
 		// y: Number: a y coordinate
-		
+
 		// we use {l, b, r, t} representation of a bbox
 		if(this.bbox && ("l" in this.bbox)){
 			if(this.bbox.l > x) this.bbox.l = x;
@@ -155,16 +155,13 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		if(typeof this.shape.path == "string"){
 			this.shape.path += path.join("");
 		}else{
-			var l = path.length, a = this.shape.path;
-			for(var i = 0; i < l; ++i){
-				a.push(path[i]);
-			}
+			Array.prototype.push.apply(this.shape.path, path);
 		}
 	},
-	
+
 	// a dictionary, which maps segment type codes to a number of their argemnts
 	_validSegments: {m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0},
-	
+
 	_pushSegment: function(action, args){
 		// summary: adds a segment
 		// action: String: valid SVG code for a segment's type
@@ -184,7 +181,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 			}
 		}
 	},
-	
+
 	_collectArgs: function(array, args){
 		// summary: converts an array of arguments to plain numeric values
 		// array: Array: an output argument (array of numbers)
@@ -203,7 +200,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		}
 	},
 
-	// segments	
+	// segments
 	moveTo: function(){
 		// summary: formes a move segment
 		var args = [];
@@ -272,7 +269,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this._pushSegment("Z", []);
 		return this; // self
 	},
-	
+
 	// setShape
 	_setPath: function(path){
 		// summary: forms a path using an SVG path string
@@ -313,7 +310,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this.shape.path = this.shape.path.join("");
 		return this; // self
 	},
-	
+
 	// useful constant for descendants
 	_2PI: Math.PI * 2
 });
@@ -337,7 +334,7 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 	},
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
-		this.text = dojox.gfx.makeParameters(this.text, 
+		this.text = dojox.gfx.makeParameters(this.text,
 			typeof newText == "string" ? {text: newText} : newText);
 		this._setText();
 		return this;	// self
@@ -348,7 +345,7 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 	},
 	setFont: function(newFont){
 		// summary: sets a font for text
-		this.fontStyle = typeof newFont == "string" ? 
+		this.fontStyle = typeof newFont == "string" ?
 			dojox.gfx.splitFontString(newFont) :
 			dojox.gfx.makeParameters(dojox.gfx.defaultFont, newFont);
 		this._setFont();

@@ -4,9 +4,9 @@ dojo.require("dojox.gfx.matrix");
 
 (function(){
 	var d = dojo, g = dojox.gfx, m = g.matrix;
-	
+
 	// Generic interpolators. Should they be moved to dojox.fx?
-	
+
 	var InterpolNumber = function(start, end){
 		this.start = start, this.end = end;
 	};
@@ -15,7 +15,7 @@ dojo.require("dojox.gfx.matrix");
 			return (this.end - this.start) * r + this.start;
 		}
 	});
-	
+
 	var InterpolUnit = function(start, end, unit){
 		this.start = start, this.end = end;
 		this.unit = unit;
@@ -25,7 +25,7 @@ dojo.require("dojox.gfx.matrix");
 			return (this.end - this.start) * r + this.start + this.unit;
 		}
 	});
-	
+
 	var InterpolColor = function(start, end){
 		this.start = start, this.end = end;
 		this.temp = new dojo.Color();
@@ -35,7 +35,7 @@ dojo.require("dojox.gfx.matrix");
 			return d.blendColors(this.start, this.end, r, this.temp);
 		}
 	});
-	
+
 	var InterpolValues = function(values){
 		this.values = values;
 		this.length = values.length;
@@ -59,7 +59,7 @@ dojo.require("dojox.gfx.matrix");
 			return ret;
 		}
 	});
-	
+
 	var InterpolTransform = function(stack, original){
 		this.stack = stack;
 		this.original = original;
@@ -94,9 +94,9 @@ dojo.require("dojox.gfx.matrix");
 			return ret;
 		}
 	});
-	
+
 	var transparent = new d.Color(0, 0, 0, 0);
-	
+
 	var getColorInterpol = function(prop, obj, name, def){
 		if(prop.values){
 			return new InterpolValues(prop.values);
@@ -117,7 +117,7 @@ dojo.require("dojox.gfx.matrix");
 		}
 		return new InterpolColor(start, end);
 	};
-	
+
 	var getNumberInterpol = function(prop, obj, name, def){
 		if(prop.values){
 			return new InterpolValues(prop.values);
@@ -138,7 +138,7 @@ dojo.require("dojox.gfx.matrix");
 		}
 		return new InterpolNumber(start, end);
 	};
-	
+
 	g.fx.animateStroke = function(/*Object*/ args){
 		// summary:
 		//	Returns an animation which will change stroke properties over time

@@ -25,9 +25,9 @@ dojo.extend(dojox.gfx.Shape, {
 	setFill: function(fill){
 		// summary: sets a fill object (VML)
 		// fill: Object: a fill object
-		//	(see dojox.gfx.defaultLinearGradient, 
-		//	dojox.gfx.defaultRadialGradient, 
-		//	dojox.gfx.defaultPattern, 
+		//	(see dojox.gfx.defaultLinearGradient,
+		//	dojox.gfx.defaultRadialGradient,
+		//	dojox.gfx.defaultPattern,
 		//	or dojo.Color)
 
 		if(!fill){
@@ -149,8 +149,8 @@ dojo.extend(dojox.gfx.Shape, {
 	setStroke: function(stroke){
 		// summary: sets a stroke object (VML)
 		// stroke: Object: a stroke object
-		//	(see dojox.gfx.defaultStroke) 
-	
+		//	(see dojox.gfx.defaultStroke)
+
 		if(!stroke){
 			// don't stroke
 			this.strokeStyle = null;
@@ -182,14 +182,14 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		return this;	// self
 	},
-	
+
 	_capMap: { butt: 'flat' },
 	_capMapReversed: { flat: 'butt' },
-	
+
 	_translate: function(dict, value) {
 		return (value in dict) ? dict[value] : value;
 	},
-	
+
 	_applyTransform: function() {
 		if(this.fillStyle && this.fillStyle.type == "linear"){
 			this.setFill(this.fillStyle);
@@ -207,7 +207,7 @@ dojo.extend(dojox.gfx.Shape, {
 		}
 		if(skew){
 			skew.on = "f";
-			var mt = matrix.xx.toFixed(8) + " " + matrix.xy.toFixed(8) + " " + 
+			var mt = matrix.xx.toFixed(8) + " " + matrix.xy.toFixed(8) + " " +
 				matrix.yx.toFixed(8) + " " + matrix.yy.toFixed(8) + " 0 0",
 				offset = Math.floor(matrix.dx).toFixed() + "px " + Math.floor(matrix.dy).toFixed() + "px",
 				s = this.rawNode.style,
@@ -237,7 +237,7 @@ dojo.extend(dojox.gfx.Shape, {
 		rawNode.filled  = "f";
 		this.rawNode = rawNode;
 	},
-	
+
 	// move family
 
 	_moveToFront: function(){
@@ -264,7 +264,7 @@ dojo.extend(dojox.gfx.Shape, {
 });
 
 dojo.declare("dojox.gfx.Group", dojox.gfx.Shape, {
-	// summary: a group shape (VML), which can be used 
+	// summary: a group shape (VML), which can be used
 	//	to logically group shapes (e.g, to propagate matricies)
 	constructor: function(){
 		dojox.gfx.vml.Container._init.call(this);
@@ -427,7 +427,7 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		if(rawNode) rawNode.setAttribute("dojoGfxType", "image");
 	},
 	getEventSource: function() {
-		// summary: returns a Node, which is used as 
+		// summary: returns a Node, which is used as
 		//	a source of events for this shape
 		return this.rawNode ? this.rawNode.firstChild : null;	// Node
 	},
@@ -479,8 +479,8 @@ dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 				f.Dx = matrix.dx;
 				f.Dy = matrix.dy;
 			}else{
-				this.rawNode.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx + 
-					", M12=" + matrix.xy + ", M21=" + matrix.yx + ", M22=" + matrix.yy + 
+				this.rawNode.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx +
+					", M12=" + matrix.xy + ", M21=" + matrix.yx + ", M22=" + matrix.yy +
 					", Dx=" + matrix.dx + ", Dy=" + matrix.dy + ")";
 			}
 		}
@@ -510,7 +510,7 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 				x -= 10;
 				break;
 		}
-		this.rawNode.path.v = "m" + x.toFixed() + "," + y + 
+		this.rawNode.path.v = "m" + x.toFixed() + "," + y +
 			"l" + (x + 10).toFixed() + "," + y + "e";
 		// find path and text path
 		var p = null, t = null, c = r.childNodes;
@@ -559,22 +559,22 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		//	it makes a correction for a font size
 		var matrix = dojox.gfx.Shape.prototype._getRealMatrix.call(this);
 		// It appears that text is always aligned vertically at a middle of x-height (???).
-		// It is impossible to obtain these metrics from VML => I try to approximate it with 
+		// It is impossible to obtain these metrics from VML => I try to approximate it with
 		// more-or-less util value of 0.7 * FontSize, which is typical for European fonts.
 		if(matrix){
-			matrix = dojox.gfx.matrix.multiply(matrix, 
+			matrix = dojox.gfx.matrix.multiply(matrix,
 				{dy: -dojox.gfx.normalizedLength(this.fontStyle ? this.fontStyle.size : "10pt") * 0.35});
 		}
 		return matrix;	// dojox.gfx.Matrix2D
 	},
-	getTextWidth: function(){ 
-		// summary: get the text width, in px 
-		var rawNode = this.rawNode, _display = rawNode.style.display; 
-		rawNode.style.display = "inline"; 
-		var _width = dojox.gfx.pt2px(parseFloat(rawNode.currentStyle.width)); 
-		rawNode.style.display = _display; 
-		return _width; 
-	} 
+	getTextWidth: function(){
+		// summary: get the text width, in px
+		var rawNode = this.rawNode, _display = rawNode.style.display;
+		rawNode.style.display = "inline";
+		var _width = dojox.gfx.pt2px(parseFloat(rawNode.currentStyle.width));
+		rawNode.style.display = _display;
+		return _width;
+	}
 });
 dojox.gfx.Text.nodeType = "shape";
 
@@ -610,7 +610,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			this.vmlPath += path.join("");
 			this.rawNode.path.v = this.vmlPath + " r0,0 e";
 		}else{
-			this.vmlPath = this.vmlPath.concat(path);
+			Array.prototype.push.apply(this.vmlPath, path);
 		}
 	},
 	setShape: function(newShape){
@@ -626,15 +626,15 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 	_pathVmlToSvgMap: {m: "M", l: "L", t: "m", r: "l", c: "C", v: "c", qb: "Q", x: "z", e: ""},
 	// VML-specific segment renderers
 	renderers: {
-		M: "_moveToA", m: "_moveToR", 
-		L: "_lineToA", l: "_lineToR", 
-		H: "_hLineToA", h: "_hLineToR", 
-		V: "_vLineToA", v: "_vLineToR", 
-		C: "_curveToA", c: "_curveToR", 
-		S: "_smoothCurveToA", s: "_smoothCurveToR", 
-		Q: "_qCurveToA", q: "_qCurveToR", 
-		T: "_qSmoothCurveToA", t: "_qSmoothCurveToR", 
-		A: "_arcTo", a: "_arcTo", 
+		M: "_moveToA", m: "_moveToR",
+		L: "_lineToA", l: "_lineToR",
+		H: "_hLineToA", h: "_hLineToR",
+		V: "_vLineToA", v: "_vLineToR",
+		C: "_curveToA", c: "_curveToR",
+		S: "_smoothCurveToA", s: "_smoothCurveToR",
+		Q: "_qCurveToA", q: "_qCurveToR",
+		T: "_qSmoothCurveToA", t: "_qSmoothCurveToR",
+		A: "_arcTo", a: "_arcTo",
 		Z: "_closePath", z: "_closePath"
 	},
 	_addArgs: function(path, args, from, upto){
@@ -765,7 +765,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			p.push(" c");
 			if(this.lastControl.type == "C"){
 				this._addArgs(p, [
-					2 * last.x - this.lastControl.x, 
+					2 * last.x - this.lastControl.x,
 					2 * last.y - this.lastControl.y
 				]);
 			}else{
@@ -782,7 +782,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			p.push(" v");
 			if(this.lastControl.type == "C"){
 				this._addArgs(p, [
-					last.x - this.lastControl.x, 
+					last.x - this.lastControl.x,
 					last.y - this.lastControl.y
 				]);
 			}else{
@@ -823,12 +823,12 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			p.push(" qb");
 			if(this.lastControl.type == "Q"){
 				this._addArgs(p, [
-					this.lastControl.x = 2 * last.x - this.lastControl.x, 
+					this.lastControl.x = 2 * last.x - this.lastControl.x,
 					this.lastControl.y = 2 * last.y - this.lastControl.y
 				]);
 			}else{
 				this._addArgs(p, [
-					this.lastControl.x = last.x, 
+					this.lastControl.x = last.x,
 					this.lastControl.y = last.y
 				]);
 			}
@@ -843,12 +843,12 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 			p.push(" qb");
 			if(this.lastControl.type == "Q"){
 				this._addArgs(p, [
-					this.lastControl.x = 2 * last.x - this.lastControl.x, 
+					this.lastControl.x = 2 * last.x - this.lastControl.x,
 					this.lastControl.y = 2 * last.y - this.lastControl.y
 				]);
 			}else{
 				this._addArgs(p, [
-					this.lastControl.x = last.x, 
+					this.lastControl.x = last.x,
 					this.lastControl.y = last.y
 				]);
 			}
@@ -866,7 +866,7 @@ dojo.declare("dojox.gfx.Path", dojox.gfx.path.Path, {
 				y1 += last.y;
 			}
 			var result = dojox.gfx.arc.arcAsBezier(
-				last, n[i], n[i + 1], n[i + 2], 
+				last, n[i], n[i + 1], n[i + 2],
 				n[i + 3] ? 1 : 0, n[i + 4] ? 1 : 0,
 				x1, y1
 			);
@@ -900,14 +900,14 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.Path, {
 	},
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
-		this.text = dojox.gfx.makeParameters(this.text, 
+		this.text = dojox.gfx.makeParameters(this.text,
 			typeof newText == "string" ? {text: newText} : newText);
 		this._setText();
 		return this;	// self
 	},
 	setFont: function(newFont){
 		// summary: sets a font for text
-		this.fontStyle = typeof newFont == "string" ? 
+		this.fontStyle = typeof newFont == "string" ?
 			dojox.gfx.splitFontString(newFont) :
 			dojox.gfx.makeParameters(dojox.gfx.defaultFont, newFont);
 		this._setFont();
@@ -972,7 +972,7 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 		this.width  = dojox.gfx.normalizedLength(width);	// in pixels
 		this.height = dojox.gfx.normalizedLength(height);	// in pixels
 		if(!this.rawNode) return this;
-		var cs = this.clipNode.style, 
+		var cs = this.clipNode.style,
 			r = this.rawNode, rs = r.style,
 			bs = this.bgNode.style;
 		cs.width  = width;
@@ -988,7 +988,7 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	getDimensions: function(){
 		// summary: returns an object with properties "width" and "height"
 		var t = this.rawNode ? {
-			width:  dojox.gfx.normalizedLength(this.rawNode.style.width), 
+			width:  dojox.gfx.normalizedLength(this.rawNode.style.width),
 			height: dojox.gfx.normalizedLength(this.rawNode.style.height)} : null;
 		if(t.width  <= 0){ t.width  = this.width; }
 		if(t.height <= 0){ t.height = this.height; }
@@ -1008,10 +1008,10 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		c = s.clipNode = p.ownerDocument.createElement("div"),
 		r = s.rawNode = p.ownerDocument.createElement("v:group"),
 		cs = c.style, rs = r.style;
-		
+
 	p.style.width  = width;
 	p.style.height = height;
-		
+
 	cs.position = "absolute";
 	cs.width  = width;
 	cs.height = height;
@@ -1022,7 +1022,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	r.coordsize = (width == "100%" ? width : parseFloat(width)) + " " +
 		(height == "100%" ? height : parseFloat(height));
 	r.coordorigin = "0 0";
-	
+
 	// create a background rectangle, which is required to show all other shapes
 	var b = s.bgNode = r.ownerDocument.createElement("v:rect"), bs = b.style;
 	bs.left = bs.top = 0;
@@ -1033,7 +1033,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	r.appendChild(b);
 	c.appendChild(r);
 	p.appendChild(c);
-	
+
 	s.width  = dojox.gfx.normalizedLength(width);	// in pixels
 	s.height = dojox.gfx.normalizedLength(height);	// in pixels
 

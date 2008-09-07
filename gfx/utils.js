@@ -5,46 +5,46 @@ dojo.require("dojox.gfx");
 dojox.gfx.utils.serialize = function(
 	/* dojox.gfx.Surface || dojox.gfx.Shape */ object
 ){
-	var t = {}, v, isSurface = object instanceof dojox.gfx.Surface;	
+	var t = {}, v, isSurface = object instanceof dojox.gfx.Surface;
 	if(isSurface || object instanceof dojox.gfx.Group){
-		t.children = [];		
-		for(var i = 0; i < object.children.length; ++i){		
-			t.children.push(dojox.gfx.utils.serialize(object.children[i]));			
-		}		
+		t.children = [];
+		for(var i = 0; i < object.children.length; ++i){
+			t.children.push(dojox.gfx.utils.serialize(object.children[i]));
+		}
 		if(isSurface){
-			return t.children;	// Array			
-		}		
-	}else{	
-		t.shape = object.getShape();		
-	}	
-	if(object.getTransform){	
-		v = object.getTransform();		
-		if(v){ t.transform = v; }		
-	}	
-	if(object.getStroke){	
-		v = object.getStroke();		
-		if(v){ t.stroke = v; }		
-	}	
-	if(object.getFill){	
-		v = object.getFill();		
-		if(v){ t.fill = v; }		
-	}	
-	if(object.getFont){	
-		v = object.getFont();		 
-		if(v){ t.font = v; }		
-	}	
-	return t;	// Object	
+			return t.children;	// Array
+		}
+	}else{
+		t.shape = object.getShape();
+	}
+	if(object.getTransform){
+		v = object.getTransform();
+		if(v){ t.transform = v; }
+	}
+	if(object.getStroke){
+		v = object.getStroke();
+		if(v){ t.stroke = v; }
+	}
+	if(object.getFill){
+		v = object.getFill();
+		if(v){ t.fill = v; }
+	}
+	if(object.getFont){
+		v = object.getFont();
+		if(v){ t.font = v; }
+	}
+	return t;	// Object
 };
 
 dojox.gfx.utils.toJson = function(
-	/* dojox.gfx.Surface || dojox.gfx.Shape */ object, 
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ object,
 	/* Boolean? */ prettyPrint
 ){
 	return dojo.toJson(dojox.gfx.utils.serialize(object), prettyPrint);	// String
 };
 
 dojox.gfx.utils.deserialize = function(
-	/* dojox.gfx.Surface || dojox.gfx.Shape */ parent, 
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ parent,
 	/* dojox.gfx.Shape || Array */ object
 ){
 	if(object instanceof Array){
@@ -76,7 +76,7 @@ dojox.gfx.utils.deserialize = function(
 };
 
 dojox.gfx.utils.fromJson = function(
-	/* dojox.gfx.Surface || dojox.gfx.Shape */ parent, 
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ parent,
 	/* String */ json
 ){
 	return dojox.gfx.utils.deserialize(parent, dojo.fromJson(json));	// Array || dojox.gfx.Shape

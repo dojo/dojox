@@ -20,14 +20,14 @@ dojo.declare("dojox.gfx.Moveable", null, {
 			//, dojo.connect(this.handle, "onselectstart", dojo, "stopEvent")
 		];
 	},
-	
+
 	// methods
 	destroy: function(){
 		// summary: stops watching for possible move, deletes all references, so the object can be garbage-collected
 		dojo.forEach(this.events, this.shape.disconnect, this.shape);
 		this.events = this.shape = null;
 	},
-	
+
 	// mouse event processors
 	onMouseDown: function(e){
 		// summary: event processor for onmousedown, creates a Mover for the shape
@@ -62,7 +62,7 @@ dojo.declare("dojox.gfx.Moveable", null, {
 	onMoveStart: function(/* dojox.gfx.Mover */ mover){
 		// summary: called before every move operation
 		dojo.publish("/gfx/move/start", [mover]);
-		dojo.addClass(dojo.body(), "dojoMove"); 
+		dojo.addClass(dojo.body(), "dojoMove");
 	},
 	onMoveStop: function(/* dojox.gfx.Mover */ mover){
 		// summary: called after every move operation
@@ -72,7 +72,7 @@ dojo.declare("dojox.gfx.Moveable", null, {
 	onFirstMove: function(/* dojox.gfx.Mover */ mover){
 		// summary: called during the very first move notification,
 		//	can be used to initialize coordinates, can be overwritten.
-		
+
 		// default implementation does nothing
 	},
 	onMove: function(/* dojox.gfx.Mover */ mover, /* Object */ shift){
@@ -85,13 +85,13 @@ dojo.declare("dojox.gfx.Moveable", null, {
 	onMoving: function(/* dojox.gfx.Mover */ mover, /* Object */ shift){
 		// summary: called before every incremental move,
 		//	can be overwritten.
-		
+
 		// default implementation does nothing
 	},
 	onMoved: function(/* dojox.gfx.Mover */ mover, /* Object */ shift){
 		// summary: called after every incremental move,
 		//	can be overwritten.
-		
+
 		// default implementation does nothing
 	}
 });

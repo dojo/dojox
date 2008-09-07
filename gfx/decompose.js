@@ -9,7 +9,7 @@ dojo.require("dojox.gfx.matrix");
 		// summary: compare two FP numbers for equality
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
 	};
-	
+
 	var calcFromValues = function(/* Number */ r1, /* Number */ m1, /* Number */ r2, /* Number */ m2){
 		// summary: uses two close FP ration and their original magnitudes to approximate the result
 		if(!isFinite(r1)){
@@ -20,17 +20,17 @@ dojo.require("dojox.gfx.matrix");
 		m1 = Math.abs(m1), m2 = Math.abs(m2);
 		return (m1 * r1 + m2 * r2) / (m1 + m2);	// Number
 	};
-	
+
 	var transpose = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
 		// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object
 		var M = new m.Matrix2D(matrix);
 		return dojo.mixin(M, {dx: 0, dy: 0, xy: M.yx, yx: M.xy});	// dojox.gfx.matrix.Matrix2D
 	};
-	
+
 	var scaleSign = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
 		return (matrix.xx * matrix.yy < 0 || matrix.xy * matrix.yx > 0) ? -1 : 1;	// Number
 	};
-	
+
 	var eigenvalueDecomposition = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
 		// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object
 		var M = m.normalize(matrix),
@@ -75,7 +75,7 @@ dojo.require("dojox.gfx.matrix");
 			vector2: {x: vx2, y: vy2}
 		};
 	};
-	
+
 	var decomposeSR = function(/* dojox.gfx.matrix.Matrix2D */ M, /* Object */ result){
 		// summary: decomposes a matrix into [scale, rotate]; no checks are done.
 		var sign = scaleSign(M),
@@ -85,7 +85,7 @@ dojo.require("dojox.gfx.matrix");
 		result.sy = calcFromValues(M.yy / cos, cos,  M.yx / sin, sin);
 		return result;	// Object
 	};
-	
+
 	var decomposeRS = function(/* dojox.gfx.matrix.Matrix2D */ M, /* Object */ result){
 		// summary: decomposes a matrix into [rotate, scale]; no checks are done
 		var sign = scaleSign(M),
@@ -95,15 +95,15 @@ dojo.require("dojox.gfx.matrix");
 		result.sy = calcFromValues(M.yy / cos, cos, -M.xy / sin, sin);
 		return result;	// Object
 	};
-	
+
 	dojox.gfx.decompose = function(matrix){
 		// summary: decompose a 2D matrix into translation, scaling, and rotation components
-		// description: this function decompose a matrix into four logical components: 
+		// description: this function decompose a matrix into four logical components:
 		//	translation, rotation, scaling, and one more rotation using SVD.
 		//	The components should be applied in following order:
 		//	| [translate, rotate(angle2), scale, rotate(angle1)]
 		// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object
-		var M = m.normalize(matrix), 
+		var M = m.normalize(matrix),
 			result = {dx: M.dx, dy: M.dy, sx: 1, sy: 1, angle1: 0, angle2: 0};
 		// detect case: [scale]
 		if(eq(M.xy, 0) && eq(M.yx, 0)){

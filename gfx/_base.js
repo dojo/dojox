@@ -2,12 +2,12 @@ dojo.provide("dojox.gfx._base");
 
 (function(){
 	var g = dojox.gfx, b = g._base;
-	
+
 	// candidates for dojox.style (work on VML and SVG nodes)
 	g._hasClass = function(/*DomNode*/node, /*String*/classStr){
 		//	summary:
 		//		Returns whether or not the specified classes are a portion of the
-		//		class list currently applied to the node. 
+		//		class list currently applied to the node.
 		// return (new RegExp('(^|\\s+)'+classStr+'(\\s+|$)')).test(node.className)	// Boolean
 		return ((" "+node.getAttribute("className")+" ").indexOf(" "+classStr+" ") >= 0);  // Boolean
 	}
@@ -24,10 +24,10 @@ dojo.provide("dojox.gfx._base");
 		//	summary: Removes classes from node.
 		node.setAttribute("className", node.getAttribute("className").replace(new RegExp('(^|\\s+)'+classStr+'(\\s+|$)'), "$1$2"));
 	}
-	
-	
+
+
 	// candidate for dojox.html.metrics (dynamic font resize handler is not implemented here)
-	
+
 	//	derived from Morris John's emResized measurer
 	b._getFontMeasurements = function(){
 		//	summary
@@ -36,13 +36,13 @@ dojo.provide("dojox.gfx._base");
 			'1em':0, '1ex':0, '100%':0, '12pt':0, '16px':0, 'xx-small':0, 'x-small':0,
 			'small':0, 'medium':0, 'large':0, 'x-large':0, 'xx-large':0
 		};
-	
+
 		if(dojo.isIE){
 			//	we do a font-size fix if and only if one isn't applied already.
 			//	NOTE: If someone set the fontSize on the HTML Element, this will kill it.
 			dojo.doc.documentElement.style.fontSize="100%";
 		}
-	
+
 		//	set up the measuring node.
 		var div=dojo.doc.createElement("div");
 		div.style.position="absolute";
@@ -57,29 +57,29 @@ dojo.provide("dojox.gfx._base");
 		div.style.lineHeight="1";
 		div.style.overflow="hidden";
 		dojo.body().appendChild(div);
-	
+
 		//	do the measurements.
 		for(var p in heights){
 			div.style.fontSize = p;
 			heights[p] = Math.round(div.offsetHeight * 12/16) * 16/12 / 1000;
 		}
-		
+
 		dojo.body().removeChild(div);
 		div = null;
 		return heights; 	//	object
 	};
-	
+
 	var fontMeasurements = null;
-	
+
 	b._getCachedFontMeasurements = function(recalculate){
 		if(recalculate || !fontMeasurements){
 			fontMeasurements = b._getFontMeasurements();
 		}
 		return fontMeasurements;
 	};
-	
+
 	// candidate for dojox.html.metrics
-	
+
 	var measuringNode = null, empty = {};
 	b._getTextBox = function(/* String */ text, /* Object */ style, /* String? */ className){
 		var m;
@@ -113,9 +113,9 @@ dojo.provide("dojox.gfx._base");
 		m.innerHTML = text;
 		return dojo.marginBox(m);
 	};
-	
+
 	// candidate for dojo.dom
-	
+
 	var uniqueId = 0;
 	b._getUniqueId = function(){
 		// summary: returns a unique string for use with any DOM element
@@ -129,7 +129,7 @@ dojo.provide("dojox.gfx._base");
 
 dojo.mixin(dojox.gfx, {
 	// summary: defines constants, prototypes, and utility functions
-	
+
 	// default shapes, which are used to fill in missing parameters
 	defaultPath:     {type: "path",     path: ""},
 	defaultPolyline: {type: "polyline", points: []},
@@ -145,12 +145,12 @@ dojo.mixin(dojox.gfx, {
 
 	// default geometric attributes
 	defaultStroke: {type: "stroke", color: "black", style: "solid", width: 1, cap: "butt", join: 4},
-	defaultLinearGradient: {type: "linear", x1: 0, y1: 0, x2: 100, y2: 100, 
+	defaultLinearGradient: {type: "linear", x1: 0, y1: 0, x2: 100, y2: 100,
 		colors: [{offset: 0, color: "black"}, {offset: 1, color: "white"}]},
-	defaultRadialGradient: {type: "radial", cx: 0, cy: 0, r: 100, 
+	defaultRadialGradient: {type: "radial", cx: 0, cy: 0, r: 100,
 		colors: [{offset: 0, color: "black"}, {offset: 1, color: "white"}]},
 	defaultPattern: {type: "pattern", x: 0, y: 0, width: 0, height: 0, src: ""},
-	defaultFont: {type: "font", style: "normal", variant: "normal", weight: "normal", 
+	defaultFont: {type: "font", style: "normal", variant: "normal", weight: "normal",
 		size: "10pt", family: "serif"},
 
 	normalizeColor: function(/*Color*/ color){
@@ -272,11 +272,11 @@ dojo.mixin(dojox.gfx, {
 		}
 		return parseFloat(len);	// Number
 	},
-	
+
 	// a constant used to split a SVG/VML path into primitive components
 	pathVmlRegExp: /([A-Za-z]+)|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
 	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
-	
+
 	equalSources: function(a, b){
 		// summary: compares event sources, returns true if they are equal
 		return a && b && a == b;

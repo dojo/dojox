@@ -2,14 +2,14 @@ dojo.provide("dojox.gfx.matrix");
 
 (function(){
 	var m = dojox.gfx.matrix;
-	
+
 	// candidates for dojox.math:
 	m._degToRad = function(degree){ return Math.PI * degree / 180; };
 	m._radToDeg = function(radian){ return radian / Math.PI * 180; };
 
 	m.Matrix2D = function(arg){
 		// summary: a 2D matrix object
-		// description: Normalizes a 2D matrix-like object. If arrays is passed, 
+		// description: Normalizes a 2D matrix-like object. If arrays is passed,
 		//		all objects of the array are normalized and multiplied sequentially.
 		// arg: Object
 		//		a 2D matrix-like object, a number, or an array of such objects
@@ -43,27 +43,27 @@ dojo.provide("dojox.gfx.matrix");
 
 	dojo.mixin(m, {
 		// summary: class constants, and methods of dojox.gfx.matrix
-		
+
 		// matrix constants
-		
+
 		// identity: dojox.gfx.matrix.Matrix2D
 		//		an identity matrix constant: identity * (x, y) == (x, y)
 		identity: new m.Matrix2D(),
-		
+
 		// flipX: dojox.gfx.matrix.Matrix2D
 		//		a matrix, which reflects points at x = 0 line: flipX * (x, y) == (-x, y)
 		flipX:    new m.Matrix2D({xx: -1}),
-		
+
 		// flipY: dojox.gfx.matrix.Matrix2D
 		//		a matrix, which reflects points at y = 0 line: flipY * (x, y) == (x, -y)
 		flipY:    new m.Matrix2D({yy: -1}),
-		
+
 		// flipXY: dojox.gfx.matrix.Matrix2D
 		//		a matrix, which reflects points at the origin of coordinates: flipXY * (x, y) == (-x, -y)
 		flipXY:   new m.Matrix2D({xx: -1, yy: -1}),
-		
+
 		// matrix creators
-		
+
 		translate: function(a, b){
 			// summary: forms a translation matrix
 			// description: The resulting matrix is used to translate (move) points by specified offsets.
@@ -98,7 +98,7 @@ dojo.provide("dojox.gfx.matrix");
 		},
 		rotate: function(angle){
 			// summary: forms a rotating matrix
-			// description: The resulting matrix is used to rotate points 
+			// description: The resulting matrix is used to rotate points
 			//		around the origin of coordinates (0, 0) by specified angle.
 			// angle: Number: an angle of rotation in radians (>0 for CW)
 			var c = Math.cos(angle);
@@ -145,7 +145,7 @@ dojo.provide("dojox.gfx.matrix");
 		},
 		reflect: function(a, b){
 			// summary: forms a reflection matrix
-			// description: The resulting matrix is used to reflect points around a vector, 
+			// description: The resulting matrix is used to reflect points around a vector,
 			//		which goes through the origin.
 			// a: dojox.gfx.Point: a point-like object, which specifies a vector of reflection
 			// b: null
@@ -156,14 +156,14 @@ dojo.provide("dojox.gfx.matrix");
 			// branch
 			// a: Number: an x coordinate value
 			// b: Number: a y coordinate value
-			
+
 			// make a unit vector
 			var a2 = a * a, b2 = b * b, n2 = a2 + b2, xy = 2 * a * b / n2;
 			return new m.Matrix2D({xx: 2 * a2 / n2 - 1, xy: xy, yx: xy, yy: 2 * b2 / n2 - 1}); // dojox.gfx.matrix.Matrix2D
 		},
 		project: function(a, b){
 			// summary: forms an orthogonal projection matrix
-			// description: The resulting matrix is used to project points orthogonally on a vector, 
+			// description: The resulting matrix is used to project points orthogonally on a vector,
 			//		which goes through the origin.
 			// a: dojox.gfx.Point: a point-like object, which specifies a vector of projection
 			// b: null
@@ -174,12 +174,12 @@ dojo.provide("dojox.gfx.matrix");
 			// branch
 			// a: Number: an x coordinate value
 			// b: Number: a y coordinate value
-			
+
 			// make a unit vector
 			var a2 = a * a, b2 = b * b, n2 = a2 + b2, xy = a * b / n2;
 			return new m.Matrix2D({xx: a2 / n2, xy: xy, yx: xy, yy: b2 / n2}); // dojox.gfx.matrix.Matrix2D
 		},
-		
+
 		// ensure matrix 2D conformance
 		normalize: function(matrix){
 			// summary: converts an object to a matrix, if necessary
@@ -188,9 +188,9 @@ dojo.provide("dojox.gfx.matrix");
 			// matrix: Object: an object, which is converted to a matrix, if necessary
 			return (matrix instanceof m.Matrix2D) ? matrix : new m.Matrix2D(matrix); // dojox.gfx.matrix.Matrix2D
 		},
-		
+
 		// common operations
-		
+
 		clone: function(matrix){
 			// summary: creates a copy of a 2D matrix
 			// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object to be cloned
@@ -206,9 +206,9 @@ dojo.provide("dojox.gfx.matrix");
 			var M = m.normalize(matrix),
 				D = M.xx * M.yy - M.xy * M.yx,
 				M = new m.Matrix2D({
-					xx: M.yy/D, xy: -M.xy/D, 
-					yx: -M.yx/D, yy: M.xx/D, 
-					dx: (M.xy * M.dy - M.yy * M.dx) / D, 
+					xx: M.yy/D, xy: -M.xy/D,
+					yx: -M.yx/D, yy: M.xx/D,
+					dx: (M.xy * M.dy - M.yy * M.dx) / D,
 					dy: (M.yx * M.dx - M.xx * M.dy) / D
 				});
 			return M; // dojox.gfx.matrix.Matrix2D
@@ -237,7 +237,7 @@ dojo.provide("dojox.gfx.matrix");
 		},
 		multiply: function(matrix){
 			// summary: combines matrices by multiplying them sequentially in the given order
-			// matrix: dojox.gfx.matrix.Matrix2D...: a 2D matrix-like object, 
+			// matrix: dojox.gfx.matrix.Matrix2D...: a 2D matrix-like object,
 			//		all subsequent arguments are matrix-like objects too
 			var M = m.normalize(matrix);
 			// combine matrices
@@ -253,9 +253,9 @@ dojo.provide("dojox.gfx.matrix");
 			}
 			return M; // dojox.gfx.matrix.Matrix2D
 		},
-		
+
 		// high level operations
-		
+
 		_sandwich: function(matrix, x, y){
 			// summary: applies a matrix at a centrtal point
 			// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object, which is applied at a central point
@@ -270,13 +270,13 @@ dojo.provide("dojox.gfx.matrix");
 			// b: Number: a scaling factor used for the y coordinate
 			// c: Number: an x component of a central point
 			// d: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) uniform scale factor, Point
 			//	2) uniform scale factor, x, y
 			//	3) x scale, y scale, Point
 			//	4) x scale, y scale, x, y
-			
+
 			switch(arguments.length){
 				case 4:
 					// a and b are scale factor components, c and d are components of a point
@@ -310,15 +310,15 @@ dojo.provide("dojox.gfx.matrix");
 			// angle: Number: an angle of rotation in radians (>0 for CW)
 			// a: Number: an x component of a central point
 			// b: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) rotation angle in radians, Point
 			//	2) rotation angle in radians, x, y
-			
+
 			if(arguments.length > 2){
 				return m._sandwich(m.rotate(angle), a, b); // dojox.gfx.matrix.Matrix2D
 			}
-			
+
 			// branch
 			// angle: Number: an angle of rotation in radians (>0 for CCW)
 			// a: dojox.gfx.Point: a central point
@@ -331,11 +331,11 @@ dojo.provide("dojox.gfx.matrix");
 			// degree: Number: an angle of rotation in degrees (>0 for CW)
 			// a: Number: an x component of a central point
 			// b: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) rotation angle in degrees, Point
 			//	2) rotation angle in degrees, x, y
-			
+
 			if(arguments.length > 2){
 				return m._sandwich(m.rotateg(degree), a, b); // dojox.gfx.matrix.Matrix2D
 			}
@@ -352,11 +352,11 @@ dojo.provide("dojox.gfx.matrix");
 			// angle: Number: an skewing angle in radians
 			// a: Number: an x component of a central point
 			// b: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) skew angle in radians, Point
 			//	2) skew angle in radians, x, y
-			
+
 			if(arguments.length > 2){
 				return m._sandwich(m.skewX(angle), a, b); // dojox.gfx.matrix.Matrix2D
 			}
@@ -373,7 +373,7 @@ dojo.provide("dojox.gfx.matrix");
 			// degree: Number: an skewing angle in degrees
 			// a: Number: an x component of a central point
 			// b: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) skew angle in degrees, Point
 			//	2) skew angle in degrees, x, y
@@ -394,11 +394,11 @@ dojo.provide("dojox.gfx.matrix");
 			// angle: Number: an skewing angle in radians
 			// a: Number: an x component of a central point
 			// b: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) skew angle in radians, Point
 			//	2) skew angle in radians, x, y
-			
+
 			if(arguments.length > 2){
 				return m._sandwich(m.skewY(angle), a, b); // dojox.gfx.matrix.Matrix2D
 			}
@@ -415,7 +415,7 @@ dojo.provide("dojox.gfx.matrix");
 			// degree: Number: an skewing angle in degrees
 			// a: Number: an x component of a central point
 			// b: Number: a y component of a central point
-			
+
 			// accepts several signatures:
 			//	1) skew angle in degrees, Point
 			//	2) skew angle in degrees, x, y
@@ -430,9 +430,9 @@ dojo.provide("dojox.gfx.matrix");
 			// b: null
 			return m._sandwich(m.skewYg(degree), a.x, a.y); // dojox.gfx.matrix.Matrix2D
 		}
-		
+
 		//TODO: rect-to-rect mapping, scale-to-fit (isotropic and anisotropic versions)
-		
+
 	});
 })();
 

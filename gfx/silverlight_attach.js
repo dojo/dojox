@@ -60,7 +60,7 @@ dojo.experimental("dojox.gfx.silverlight_attach");
 		// rawNode: Node: an Silverlight node
 		return null;	// Object
 	};
-	
+
 	var attachStroke = function(rawNode){
 		// summary: deduces a stroke style from a Node.
 		// rawNode: Node: an SVG node
@@ -72,13 +72,13 @@ dojo.experimental("dojox.gfx.silverlight_attach");
 		// rawNode: Node: an Silverlight node
 		return null;	// dojox.gfx.matrix.Matrix
 	};
-	
+
 	var attachFont = function(rawNode){
 		// summary: deduces a font style from a Node.
 		// rawNode: Node: an Silverlight node
 		return null;	// Object
 	};
-	
+
 	var attachShape = function(rawNode){
 		// summary: builds a shape from a Node.
 		// rawNode: Node: an Silverlight node

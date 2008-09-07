@@ -9,9 +9,9 @@ dojo.require("dojox.gfx.decompose");
 dojo.experimental("dojox.gfx.canvas");
 
 (function(){
-	var g = dojox.gfx, gs = g.shape, ga = g.arc, 
+	var g = dojox.gfx, gs = g.shape, ga = g.arc,
 		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2;
-	
+
 	dojo.extend(g.Shape, {
 		_render: function(/* Object */ ctx){
 			// summary: render the shape
@@ -66,13 +66,13 @@ dojo.experimental("dojox.gfx.canvas");
 				ctx.strokeStyle = "rgba(0,0,0,0.0)";
 			}
 		},
-		
+
 		// events are not implemented
 		getEventSource: function(){ return null; },
 		connect:		function(){},
 		disconnect:		function(){}
 	});
-	
+
 	var modifyMethod = function(shape, method, extra){
 			var old = shape.prototype[method];
 			shape.prototype[method] = extra ?
@@ -88,7 +88,7 @@ dojo.experimental("dojox.gfx.canvas");
 				};
 		};
 
-	modifyMethod(g.Shape, "setTransform", 		
+	modifyMethod(g.Shape, "setTransform",
 		function(){
 			// prepare Canvas-specific structures
 			if(this.matrix){
@@ -108,7 +108,7 @@ dojo.experimental("dojox.gfx.canvas");
 					switch(fs.type){
 						case "linear":
 						case "radial":
-							f = fs.type == "linear" ? 
+							f = fs.type == "linear" ?
 								ctx.createLinearGradient(fs.x1, fs.y1, fs.x2, fs.y2) :
 								ctx.createRadialGradient(fs.cx, fs.cy, 0, fs.cx, fs.cy, fs.r);
 							dojo.forEach(fs.colors, function(step){
@@ -129,12 +129,12 @@ dojo.experimental("dojox.gfx.canvas");
 				delete this.canvasFill;
 			}
 		});
-	
+
 	modifyMethod(g.Shape, "setStroke");
 	modifyMethod(g.Shape, "setShape");
-		
+
 	dojo.declare("dojox.gfx.Group", g.Shape, {
-		// summary: a group shape (Canvas), which can be used 
+		// summary: a group shape (Canvas), which can be used
 		//	to logically group shapes (e.g, to propagate matricies)
 		constructor: function(){
 			gs.Container._init.call(this);
@@ -174,7 +174,7 @@ dojo.experimental("dojox.gfx.canvas");
 	 		ctx.closePath();
 		}
 	});
-	
+
 	var bezierCircle = [];
 	(function(){
 		var u = ga.curvePI4;
@@ -184,7 +184,7 @@ dojo.experimental("dojox.gfx.canvas");
 			bezierCircle.push(mp(r, u.c1), mp(r, u.c2), mp(r, u.e));
 		}
 	})();
-	
+
 	dojo.declare("dojox.gfx.Ellipse", gs.Ellipse, {
 		// summary: an ellipse shape (Canvas)
 		setShape: function(){
@@ -272,7 +272,7 @@ dojo.experimental("dojox.gfx.canvas");
 			}
 		}
 	});
-	
+
 	dojo.declare("dojox.gfx.Image", gs.Image, {
 		// summary: an image shape (Canvas)
 		setShape: function(){
@@ -288,7 +288,7 @@ dojo.experimental("dojox.gfx.canvas");
 			ctx.drawImage(this.canvasImage, s.x, s.y, s.width, s.height);
 		}
 	});
-	
+
 	dojo.declare("dojox.gfx.Text", gs.Text, {
 		// summary: a text shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
@@ -297,24 +297,23 @@ dojo.experimental("dojox.gfx.canvas");
 		}
 	});
 	modifyMethod(g.Text, "setFont");
-	
+
 	var pathRenderers = {
-		M: "_moveToA", m: "_moveToR", 
-		L: "_lineToA", l: "_lineToR", 
-		H: "_hLineToA", h: "_hLineToR", 
-		V: "_vLineToA", v: "_vLineToR", 
-		C: "_curveToA", c: "_curveToR", 
-		S: "_smoothCurveToA", s: "_smoothCurveToR", 
-		Q: "_qCurveToA", q: "_qCurveToR", 
-		T: "_qSmoothCurveToA", t: "_qSmoothCurveToR", 
-		A: "_arcTo", a: "_arcTo", 
+		M: "_moveToA", m: "_moveToR",
+		L: "_lineToA", l: "_lineToR",
+		H: "_hLineToA", h: "_hLineToR",
+		V: "_vLineToA", v: "_vLineToR",
+		C: "_curveToA", c: "_curveToR",
+		S: "_smoothCurveToA", s: "_smoothCurveToR",
+		Q: "_qCurveToA", q: "_qCurveToR",
+		T: "_qSmoothCurveToA", t: "_qSmoothCurveToR",
+		A: "_arcTo", a: "_arcTo",
 		Z: "_closePath", z: "_closePath"
 	};
-	
+
 	dojo.declare("dojox.gfx.Path", g.path.Path, {
 		// summary: a path shape (Canvas)
 		constructor: function(){
-			this.last = {};
 			this.lastControl = {};
 		},
 		setShape: function(){
@@ -407,11 +406,11 @@ dojo.experimental("dojox.gfx.canvas");
 		_curveToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 6){
 				result.push("bezierCurveTo", [
-					this.last.x + args[i], 
-					this.last.y + args[i + 1], 
-					this.lastControl.x = this.last.x + args[i + 2], 
-					this.lastControl.y = this.last.y + args[i + 3], 
-					this.last.x + args[i + 4], 
+					this.last.x + args[i],
+					this.last.y + args[i + 1],
+					this.lastControl.x = this.last.x + args[i + 2],
+					this.lastControl.y = this.last.y + args[i + 3],
+					this.last.x + args[i + 4],
 					this.last.y + args[i + 5]
 				]);
 				this.last.x += args[i + 4];
@@ -423,11 +422,11 @@ dojo.experimental("dojox.gfx.canvas");
 			for(var i = 0; i < args.length; i += 4){
 				var valid = this.lastControl.type == "C";
 				result.push("bezierCurveTo", [
-					valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
-					valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
-					args[i], 
-					args[i + 1], 
-					args[i + 2], 
+					valid ? 2 * this.last.x - this.lastControl.x : this.last.x,
+					valid ? 2 * this.last.y - this.lastControl.y : this.last.y,
+					args[i],
+					args[i + 1],
+					args[i + 2],
 					args[i + 3]
 				]);
 				this.lastControl.x = args[i];
@@ -441,11 +440,11 @@ dojo.experimental("dojox.gfx.canvas");
 			for(var i = 0; i < args.length; i += 4){
 				var valid = this.lastControl.type == "C";
 				result.push("bezierCurveTo", [
-					valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
-					valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
-					this.last.x + args[i], 
-					this.last.y + args[i + 1], 
-					this.last.x + args[i + 2], 
+					valid ? 2 * this.last.x - this.lastControl.x : this.last.x,
+					valid ? 2 * this.last.y - this.lastControl.y : this.last.y,
+					this.last.x + args[i],
+					this.last.y + args[i + 1],
+					this.last.x + args[i + 2],
 					this.last.y + args[i + 3]
 				]);
 				this.lastControl.x = this.last.x + args[i];
@@ -468,9 +467,9 @@ dojo.experimental("dojox.gfx.canvas");
 		_qCurveToR: function(result, action, args){
 			for(var i = 0; i < args.length; i += 4){
 				result.push("quadraticCurveTo", [
-					this.lastControl.x = this.last.x + args[i], 
-					this.lastControl.y = this.last.y + args[i + 1], 
-					this.last.x + args[i + 2], 
+					this.lastControl.x = this.last.x + args[i],
+					this.lastControl.y = this.last.y + args[i + 1],
+					this.last.x + args[i + 2],
 					this.last.y + args[i + 3]
 				]);
 				this.last.x += args[i + 2];
@@ -482,9 +481,9 @@ dojo.experimental("dojox.gfx.canvas");
 			for(var i = 0; i < args.length; i += 2){
 				var valid = this.lastControl.type == "Q";
 				result.push("quadraticCurveTo", [
-					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
-					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
-					args[i], 
+					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x,
+					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y,
+					args[i],
 					args[i + 1]
 				]);
 				this.lastControl.type = "Q";
@@ -496,9 +495,9 @@ dojo.experimental("dojox.gfx.canvas");
 			for(var i = 0; i < args.length; i += 2){
 				var valid = this.lastControl.type == "Q";
 				result.push("quadraticCurveTo", [
-					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
-					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
-					this.last.x + args[i], 
+					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x,
+					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y,
+					this.last.x + args[i],
 					this.last.y + args[i + 1]
 				]);
 				this.lastControl.type = "Q";
@@ -515,7 +514,7 @@ dojo.experimental("dojox.gfx.canvas");
 					y1 += this.last.y;
 				}
 				var arcs = ga.arcAsBezier(
-					this.last, args[i], args[i + 1], args[i + 2], 
+					this.last, args[i], args[i + 1], args[i + 2],
 					args[i + 3] ? 1 : 0, args[i + 4] ? 1 : 0,
 					x1, y1
 				);
@@ -532,8 +531,8 @@ dojo.experimental("dojox.gfx.canvas");
 			this.lastControl = {};
 		}
 	});
-	dojo.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo", 
-		"smoothCurveTo", "qCurveTo", "qSmoothCurveTo", "arcTo", "closePath"], 
+	dojo.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo",
+		"smoothCurveTo", "qCurveTo", "qSmoothCurveTo", "arcTo", "closePath"],
 		function(method){ modifyMethod(g.Path, method); }
 	);
 
@@ -544,7 +543,7 @@ dojo.experimental("dojox.gfx.canvas");
 			// nothing for the moment
 		}
 	});
-	
+
 	dojo.declare("dojox.gfx.Surface", gs.Surface, {
 		// summary: a surface object to be used for drawings (Canvas)
 		constructor: function(){
@@ -590,7 +589,7 @@ dojo.experimental("dojox.gfx.canvas");
 			}
 		},
 		downloadImage: function(img, url){
-			// summary: 
+			// summary:
 			//		internal method, which starts an image download and renders, when it is ready
 			// img: Image:
 			//		the image object
@@ -634,9 +633,9 @@ dojo.experimental("dojox.gfx.canvas");
 		s.surface = s;
 		return s;	// dojox.gfx.Surface
 	};
-	
+
 	// Extenders
-	
+
 	var C = gs.Container, Container = {
 		add: function(shape){
 			this.surface.makeDirty();

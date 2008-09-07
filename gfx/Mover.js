@@ -2,7 +2,7 @@ dojo.provide("dojox.gfx.Mover");
 
 dojo.declare("dojox.gfx.Mover", null, {
 	constructor: function(shape, e, host){
-		// summary: an object, which makes a shape follow the mouse, 
+		// summary: an object, which makes a shape follow the mouse,
 		//	used as a default mover, and as a base class for custom movers
 		// shape: dojox.gfx.Shape: a shape object to be moved
 		// e: Event: a mouse event, which started the move;

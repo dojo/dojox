@@ -169,7 +169,7 @@ dojo.experimental("dojox.gfx.vml_attach");
 		// attach the background
 		object.bgNode = object.rawNode.firstChild;	// TODO: check it first
 	};
-	
+
 	var attachRect = function(object){
 		// summary: builds a rectangle shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
@@ -190,8 +190,8 @@ dojo.experimental("dojox.gfx.vml_attach");
 	var attachEllipse = function(object){
 		// summary: builds an ellipse shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var style = object.rawNode.style, 
-			rx = parseInt(style.width ) / 2, 
+		var style = object.rawNode.style,
+			rx = parseInt(style.width ) / 2,
 			ry = parseInt(style.height) / 2;
 		object.shape = dojox.gfx.makeParameters(dojox.gfx.defaultEllipse, {
 			cx: parseInt(style.left) + rx,
@@ -270,7 +270,7 @@ dojo.experimental("dojox.gfx.vml_attach");
 	var attachText = function(object){
 		// summary: builds a text shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var shape = object.shape = dojo.clone(dojox.gfx.defaultText), 
+		var shape = object.shape = dojo.clone(dojox.gfx.defaultText),
 			r = object.rawNode, p = r.path.v.match(dojox.gfx.pathVmlRegExp);
 		do{
 			if(!p || p.length != 7){ break; }
@@ -319,7 +319,7 @@ dojo.experimental("dojox.gfx.vml_attach");
 		fontStyle.size = s.fontsize;
 		fontStyle.family = s.fontfamily;
 	};
-	
+
 	var attachTextTransform = function(object) {
 		// summary: deduces a transformation matrix from a node.
 		// object: dojox.gfx.Shape: an VML shape

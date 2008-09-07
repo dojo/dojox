@@ -21,14 +21,14 @@ dojo.require("dojox.html.metrics");
 		of dojox.gfx.Group.
 
 		Note also that the "defaultText" object is slightly different:
-		{ type:"vectortext", x:0, y:0, width:null, height: null, 
+		{ type:"vectortext", x:0, y:0, width:null, height: null,
 			text: "", align: "start", decoration: "none" }
 
 		...as well as the "defaultVectorFont" object:
 		{ type:"vectorfont", size:"10pt" }
 
 		The reason for this should be obvious: most of the style for the font is defined
-		by the font object itself. 
+		by the font object itself.
 
 		Note that this will only render IF and WHEN you set the font.
 	 */
@@ -86,7 +86,7 @@ dojo.require("dojox.html.metrics");
 			//		into things we can use. The SVG Font definition must follow
 			//		the SVG 1.1 Font specification.
 			var doc = dojox.gfx._svgFontCache[url]||dojox.xml.DomParser.parse(svg);
- 
+
 			//	font information
 			var f = doc.documentElement.byName("font")[0], face = doc.documentElement.byName("font-face")[0];
 			var unitsPerEm = parseFloat(face.getAttribute("units-per-em")||1000, 10);
@@ -150,7 +150,7 @@ dojo.require("dojox.html.metrics");
 				}
 			});
 		*/
-	
+
 			//	missing glyph info
 			var missing = parseFloat(doc.documentElement.byName("missing-glyph")[0].getAttribute("horiz-adv-x")||advance.x, 10);
 
@@ -170,7 +170,7 @@ dojo.require("dojox.html.metrics");
 				if(code.match(this._entityRe)){
 					code = this._decodeEntitySequence(code);
 				}
-				
+
 				// build our glyph objects
 				var o = { code: code, name: name, xAdvance: xAdv, path: path };
 				glyphs[code]=o;
@@ -373,9 +373,9 @@ dojo.require("dojox.html.metrics");
 					while(found && chr.code != " " && i>=0){
 						chr = c.pop(); i--;
 					}
-					lines.push(c); 
-					c=[]; 
-					cw=0; 
+					lines.push(c);
+					c=[];
+					cw=0;
 					found=false;
 				}
 				c.push(chars[i]);
@@ -391,7 +391,7 @@ dojo.require("dojox.html.metrics");
 			size += "";	//	force the string cast.
 			var metrics = dojox.html.metrics.getCachedFontMeasurements(),
 				height=this.viewbox.height,
-				f=metrics["1em"], 
+				f=metrics["1em"],
 				unit=parseFloat(size, 10);	//	the default.
 			if(size.indexOf("em")>-1){
 				return this._round((metrics["1em"]*unit)/height);
@@ -564,7 +564,7 @@ dojo.require("dojox.html.metrics");
 			//		`Flow fitting`
 			//		Flow fitting requires both a passed size (in the fontArgs object) and a
 			//		width (passed with the textArgs object).  draw() will attempt to split the
-			//		passed text up into lines, at the closest whitespace according to the 
+			//		passed text up into lines, at the closest whitespace according to the
 			//		passed width.  If a width is missing, it will revert to NONE.
 			//
 			//		`Best fit fitting`
@@ -579,13 +579,13 @@ dojo.require("dojox.html.metrics");
 			//		`a11y`
 			//		Since the results of this method are rendering using pure paths (think
 			//		"convert to outlines" in Adobe Illustrator), any text rendered by this
-			//		code is NOT considered a11y-friendly.  If a11y is a requirement, we 
+			//		code is NOT considered a11y-friendly.  If a11y is a requirement, we
 			//		suggest using other, more a11y-friendly methods.
 			//
 			//		`Font sources`
 			//		Always make sure that you are legally allowed to use any fonts that you
 			//		convert to SVG format; we claim no responsibility for any licensing
-			//		infractions that may be caused by the use of this code. 
+			//		infractions that may be caused by the use of this code.
 			if(!this.initialized()){
 				throw new Error("dojox.gfx.VectorFont.draw(): we have not been initialized yet.");
 			}
@@ -626,21 +626,21 @@ dojo.require("dojox.html.metrics");
 			//	set up the lines array and the scaling factor.
 			var lines, scale;
 			switch(fitting){
-				case dojox.gfx.vectorFontFitting.FIT: 
+				case dojox.gfx.vectorFontFitting.FIT:
 					var o=this._getBestFit(text, width, height, leading);
-					scale = o.scale; 
+					scale = o.scale;
 					lines = o.lines;
 					break;
-				
-				case dojox.gfx.vectorFontFitting.FLOW: 
+
+				case dojox.gfx.vectorFontFitting.FLOW:
 					scale = this._getSizeFactor(size);
 					lines = this._getBestFlow(text, width, scale);
 					break;
-				
-				default: 
+
+				default:
 					scale = this._getSizeFactor(size);
 					lines = [ text ];
-				
+
 			}
 
 			//	make sure lines doesn't have any empty lines.
@@ -649,15 +649,15 @@ dojo.require("dojox.html.metrics");
 			});
 
 			//	let's start drawing.
-			var cy = 0, 
+			var cy = 0,
 				maxw = this._getLongestLine(lines).width;
 
 			for(var i=0, l=lines.length; i<l; i++){
-				var cx = 0, 
-					line=lines[i], 
-					linew = this._getWidth(line), 
+				var cx = 0,
+					line=lines[i],
+					linew = this._getWidth(line),
 					lg=g.createGroup();
-				
+
 				//	loop through the glyphs and add them to the line group (lg)
 				for (var j=0; j<line.length; j++){
 					var glyph=line[j];

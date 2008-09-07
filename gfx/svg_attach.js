@@ -60,7 +60,7 @@ dojo.experimental("dojox.gfx.svg_attach");
 		attachTransform(s);
 		return s;	// dojox.gfx.Shape
 	};
-	
+
 	dojox.gfx.attachSurface = function(node){
 		// summary: creates a surface from a Node
 		// node: Node: an SVG node
@@ -115,7 +115,7 @@ dojo.experimental("dojox.gfx.svg_attach");
 		}
 		object.fillStyle = fillStyle;
 	};
-	
+
 	var _getGradient = function(defaultGradient, gradient){
 		var fillStyle = dojo.clone(defaultGradient);
 		fillStyle.colors = [];
@@ -158,19 +158,19 @@ dojo.experimental("dojox.gfx.svg_attach");
 		if(matrix.match(/^matrix\(.+\)$/)){
 			var t = matrix.slice(7, -1).split(",");
 			object.matrix = dojox.gfx.matrix.normalize({
-				xx: parseFloat(t[0]), xy: parseFloat(t[2]), 
-				yx: parseFloat(t[1]), yy: parseFloat(t[3]), 
+				xx: parseFloat(t[0]), xy: parseFloat(t[2]),
+				yx: parseFloat(t[1]), yy: parseFloat(t[3]),
 				dx: parseFloat(t[4]), dy: parseFloat(t[5])
 			});
 		}else{
 			object.matrix = null;
 		}
 	};
-	
+
 	var attachFont = function(object){
 		// summary: deduces a font style from a Node.
 		// object: dojox.gfx.Shape: an SVG shape
-		var fontStyle = object.fontStyle = dojo.clone(dojox.gfx.defaultFont), 
+		var fontStyle = object.fontStyle = dojo.clone(dojox.gfx.defaultFont),
 			r = object.rawNode;
 		fontStyle.style = r.getAttribute("font-style");
 		fontStyle.variant = r.getAttribute("font-variant");
@@ -188,7 +188,7 @@ dojo.experimental("dojox.gfx.svg_attach");
 			shape[i] = r.getAttribute(i);
 		}
 	};
-	
+
 	var attachRect = function(object){
 		// summary: builds a rectangle shape from a node.
 		// object: dojox.gfx.Shape: an SVG shape
