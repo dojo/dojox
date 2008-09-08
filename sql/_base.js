@@ -131,16 +131,17 @@ dojo.mixin(dojox.sql, {
 
 			// handle SQL that needs encryption/decryption differently
 			// do we have an ENCRYPT SQL statement? if so, handle that first
+			var crypto;
 			if(this._needsEncrypt(sql)){
-				var crypto = new dojox.sql._SQLCrypto("encrypt", sql, 
+				crypto = new dojox.sql._SQLCrypto("encrypt", sql, 
 													password, args, 
 													callback);
-				return; // encrypted results will arrive asynchronously
+				return null; // encrypted results will arrive asynchronously
 			}else if(this._needsDecrypt(sql)){ // otherwise we have a DECRYPT statement
-				var crypto = new dojox.sql._SQLCrypto("decrypt", sql, 
+				crypto = new dojox.sql._SQLCrypto("decrypt", sql, 
 													password, args, 
 													callback);
-				return; // decrypted results will arrive asynchronously
+				return null; // decrypted results will arrive asynchronously
 			}
 
 			// execute the SQL and get the results
@@ -174,6 +175,8 @@ dojo.mixin(dojox.sql, {
 		
 			throw exp;
 		}
+		
+		return null;
 	},
 
 	_initDb: function(){
@@ -182,7 +185,9 @@ dojo.mixin(dojox.sql, {
 				this.db = google.gears.factory.create('beta.database', '1.0');
 			}catch(exp){
 				dojo.setObject("google.gears.denied", true);
-				dojox.off.onFrameworkEvent("coreOperationFailed");
+				if(dojox.off){
+				  dojox.off.onFrameworkEvent("coreOperationFailed");
+				}
 				throw "Google Gears must be allowed to run";
 			}
 		}
@@ -448,7 +453,7 @@ dojo.declare("dojox.sql._SQLCrypto", null, {
 		// in the middle
 		matches = sql.match(/DECRYPT\([^\)]*\)/ig);
 		if(matches != null){
-			for(var i = 0; i < matches.length; i++){
+			for(i = 0; i < matches.length; i++){
 				var decryptStatement = matches[i];
 				var decryptValue = decryptStatement.match(/DECRYPT\(([^\)]*)\)/i)[1];
 				sql = sql.replace(decryptStatement, decryptValue);
@@ -495,8 +500,8 @@ dojo.declare("dojox.sql._SQLCrypto", null, {
 			results = "*";
 		}else{
 			var tester = /DECRYPT\((?:\s*\w*\s*\,?)*\)/ig;
-			var matches;
-			while(matches = tester.exec(sql)){
+			var matches = tester.exec(sql);
+			while(matches){
 				var lastMatch = new String(RegExp.lastMatch);
 				var columnNames = lastMatch.replace(/DECRYPT\(/i, "");
 				columnNames = columnNames.replace(/\)/, "");
@@ -507,6 +512,8 @@ dojo.declare("dojox.sql._SQLCrypto", null, {
 					}
 					results[column] = true;
 				});
+				
+				matches = tester.exec(sql)
 			}
 		}
 
