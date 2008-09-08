@@ -226,7 +226,7 @@ dojo.require("dojox.rpc.Rest");
 			//	absoluteId:
 			//		This is the absolute id of the object
 			var parts = absoluteId.match(/^(.*\/)([^\/]*)$/);
-			var svc = jr.services[parts[1]] || new dojox.rpc.Rest(parts[1]); // use an existing or create one
+			var svc = jr.services[parts[1]] || new dojox.rpc.Rest(parts[1], true); // use an existing or create one
 			return { service: svc, id:parts[2] };
 		},
 		services:{},
@@ -268,7 +268,8 @@ dojo.require("dojox.rpc.Rest");
 					idPrefix: service.servicePath,
 					idAttribute: jr.getIdAttribute(service),
 					schemas: jr.schemas,
-					loader:	jr._loader
+					loader:	jr._loader,
+					assignAbsoluteIds: true
 				});
 			});
 			return deferred;			

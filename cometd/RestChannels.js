@@ -93,14 +93,12 @@ if(dojox.data && dojox.data.JsonRestStore){
 			if(!this.connected){
 				this.connectionId = dojox._clientId;
 				var clientIdHeader = this.started ? 'X-Client-Id' : 'X-Create-Client-Id';
-				console.log("opening connection");
 				var headers = {Accept:this.acceptType};
 				headers[clientIdHeader] = this.connectionId;
 				var dfd = dojo.xhrPost({headers:headers, url: this.url, noStatus: true});
 		  		var self = this;
 		  		this.lastIndex = 0; 
 				var onerror, onprogress = function(data){ // get all the possible event handlers
-					console.log("xhr.status", xhr.status);
 					if(typeof dojo == 'undefined'){
 						return null;// this can be called after dojo is unloaded, just do nothing in that case
 					}

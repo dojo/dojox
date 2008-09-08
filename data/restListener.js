@@ -18,7 +18,8 @@ dojox.data.restListener = function(message){
 					idPrefix: service.servicePath,
 					idAttribute: jr.getIdAttribute(service),
 					schemas: jr.schemas,
-					loader: jr._loader
+					loader: jr._loader,
+					assignAbsoluteIds: true
 				});
 	var target = dojox.rpc.Rest._index && dojox.rpc.Rest._index[channel];
 	var onEvent = 'on' + message.event.toLowerCase();

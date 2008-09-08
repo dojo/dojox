@@ -33,6 +33,9 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	//		index as "/Table/4".
 	//	The *idAttribute* parameter.
 	//		This indicates what property is the identity property. This defaults to "id"
+	//	The *assignAbsoluteIds* parameter.
+	//		This indicates that the resolveJson should assign absolute ids (__id) as the objects are being parsed.
+	//  
 	// The *schemas* parameter
 	//		This provides a map of schemas, from which prototypes can be retrieved
 	// The *loader* parameter
@@ -42,6 +45,7 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	args = args || {};
 	var idAttribute = args.idAttribute || 'id';
 	var prefix = args.idPrefix || '/'; 
+	var assignAbsoluteIds = args.assignAbsoluteIds;
 	var index = args.index || {}; // create an index if one doesn't exist
 	var ref,reWalk=[];
 	var pathResolveRegex = /^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
@@ -54,7 +58,9 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 	 	}
 	 	var target = it;
 		if(id !== undefined){ // if there is an id available...
-			it.__id = id;
+			if(assignAbsoluteIds){
+				it.__id = id;
+			}
 			// if the id already exists in the system, we should use the existing object, and just 
 			// update it... as long as the object is compatible
 			if(index[id] && ((it instanceof Array) == (index[id] instanceof Array))){ 
@@ -81,14 +87,14 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 				ref=val.$ref;
 				if(ref){ // a reference was found
 					var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
-					if(/[\w\[\]\.\$ \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
+					if(/[\w\[\]\.\$# \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
 						// make sure it is a safe reference
 						delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
-						var path = ref.match(/(^\.*[^\.\[]+)([\.\[].*)?/); // divide along the path
-						if((ref = (path[1]=='$' || path[1]=='this') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')]) &&  // a $ indicates to start with the root, otherwise start with an id
+						var path = ref.match(/(^([^\[]*\/)?[^\.\[]*)([\.\[].*)?/); // divide along the path
+						if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='#') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')]) &&  // a $ indicates to start with the root, otherwise start with an id
 						// // starting point was found, use eval to resolve remaining property references
 						// // need to also make reserved words safe by replacing with index operator
-							(ref = path[2] ? eval('ref' + path[2].replace(/\.([^\.]+)/g,'["$1"]')) : ref)){
+							(ref = path[3] ? eval('ref' + path[3].replace(/^#/,'').replace(/\.([^\.]+)/g,'["$1"]')) : ref)){
 							// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have
 							// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet,
 							// we will wait for the second loop
@@ -209,10 +215,10 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 			}
 			var id = it.__id;
 			if(id){ // we found an identifiable object, we will just serialize a reference to it... unless it is the root
-				if(path != '$' && (useRefs || paths[id])){
+				if(path != '#' && (useRefs || paths[id])){
 					var ref = id; // a pure path based reference, leave it alone
 
-					if(id.charAt(0)!='$'){
+					if(id.charAt(0)!='#'){
 						if(id.substring(0, idPrefix.length) == idPrefix){ // see if the reference is in the current context
 							// a reference with a prefix matching the current context, the prefix should be removed
 							ref = id.substring(idPrefix.length);
@@ -248,6 +254,9 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 			}
 
 			var output = [];
+			if(path && !path.match(/#/)){
+				path += '#';
+			}
 			for(var i in it){
 				if(it.hasOwnProperty(i)){
 					var keyStr;
@@ -276,7 +285,7 @@ dojox.json.ref.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*Obje
 
 		return dojo.toJson(it); // use the default serializer for primitives
 	}
-	var json = serialize(it,'$','');
+	var json = serialize(it,'#','');
 	if(!assignPaths){
 		for(i in paths)  {// cleanup the temporary path-generated ids
 			delete paths[i].__id;

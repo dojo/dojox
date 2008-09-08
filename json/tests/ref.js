@@ -3,7 +3,7 @@ dojo.require("dojox.json.ref");
 
 doh.register("dojox.json.tests.ref", [
 	function fromRefJson(t) {
-		var testStr = '{a:{$ref:"$"},id:"root",c:{d:"e",f:{$ref:"root.c"}},b:{$ref:"$.c"}}';
+		var testStr = '{a:{$ref:"#"},id:"root",c:{d:"e",f:{$ref:"root.c"}},b:{$ref:"#.c"}}';
 
 		var mirrorObj = dojox.json.ref.fromJson(testStr);
 		t.assertEqual(mirrorObj, mirrorObj.a);
