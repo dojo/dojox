@@ -86,6 +86,7 @@ function run(){
 		dojox.flash.comm.setMessage(correct);
 		actual = dojox.flash.comm.getMessage();
 		assert(correct, actual, "Setting/getting simple message did not work");
+		chop(correct);
 	
 		console.debug("Setting message with evil characters...");
 		// our correct and actual values get tricky when we have double back
@@ -93,16 +94,21 @@ function run(){
 		var doubleSlash = "\\";
 		doubleSlash = doubleSlash.charAt(0);
 		correct = "hello world\n\n\nasdfasdf!@#$@#%^[]{}&amp;<xml>" + doubleSlash 
-					+ "<div>$%^&%^&*^&()<><><>,./;\0\r\f\'][`~=\"+-]MORE!\n\rLESS";
+						+ "<div>$%^&%^&*^&()<><><>,./;\0\r\f\'][`~=\"+-]\\0MORE!\n\rLESS"; 
+		var putSize = dojox.flash.comm.setMessage(correct); 
+		assert(putSize, correct.length, "Failed putting. Correct length = " 
+						+ correct.length + ", Flash length = " + putSize);
 		dojox.flash.comm.setMessage(correct);
 		actual = dojox.flash.comm.getMessage();
 		assert(correct, actual, "Setting/getting message with evil characters did not work");
+		chop(correct);
 	
 		console.debug("Setting testXML...");
 		correct = testXML;
 		dojox.flash.comm.setMessage(correct);
 		actual = dojox.flash.comm.getMessage();
 		assert(correct, actual, "Setting/getting testXML did not work");
+		chop(correct);
 		
 		console.debug("Setting testBook(~300K)...");
 		correct = testBook;
@@ -123,6 +129,7 @@ function run(){
 		dojox.flash.comm.setMessage(correct);
 		actual = dojox.flash.comm.getMessage();
 		assert(correct, actual, "Setting/getting JSON did not work");
+		chop(correct);
 		
 		console.debug("Calling method that takes multiple values...");
 		actual = dojox.flash.comm.multipleValues("key", "value", "namespace");
@@ -140,6 +147,27 @@ function run(){
 	}
 }
 
+function chop(testString){ 
+	console.debug("chopping '" + testString + "'"); 
+	for(var i = 0; i < Math.min(testString.length, 100); i++){ 
+		//console.debug("index = " + i); 
+		testSlice(testString, 0, i+1); 
+	} 
+} 
+ 
+function testSlice( testString, from, to){ 
+	var putSize = dojox.flash.comm.setMessageSlice( testString, from, to); 
+	var actual = dojox.flash.comm.getMessage(); 
+	var correct = testString.slice(from, to);
+	
+	var msg = "Put a string with " + testString.length 
+					+ " chars, but it got with " + putSize + " chars in the Flash layer";
+	assert(putSize, testString.length, msg);
+	
+	msg = "I got '" + actual + "' instead of '" + correct +"'";
+	assert(correct, actual, msg); 
+} 
+
 function assert(correct, actual, msg){
 	//alert("correct="+correct+",\n\nactual="+actual);
 	if(correct != actual){
@@ -153,7 +181,7 @@ function assert(correct, actual, msg){
 		
 		throw new Error("ASSERTION FAILED: " + msg);
 	}else{
-		console.debug("Assertion passed");
+		//console.debug("Assertion passed");
 	}
 }
 
