@@ -131,7 +131,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", dojox.storage.Provider, {
 			var metaValue = values.join("");
 			var metaLengths = lengths.join(",");
 			
-			dojox.flash.comm.putMultiple(metaKey, metaValue, metaLengths, this.namespace);
+			dojox.flash.comm.putMultiple(metaKey, metaValue, metaLengths, namespace);
 		},
 
 		get: function(key, namespace){
@@ -170,7 +170,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", dojox.storage.Provider, {
 			}
 			
 			var metaKey = keys.join(",");
-			var metaResults = dojox.flash.comm.getMultiple(metaKey, this.namespace);
+			var metaResults = dojox.flash.comm.getMultiple(metaKey, namespace);
 			var results = eval("(" + metaResults + ")");
 			
 			//	destringify each entry back into a real JS object
@@ -268,7 +268,7 @@ dojo.declare("dojox.storage.FlashStorageProvider", dojox.storage.Provider, {
 			}
 			
 			var metaKey = keys.join(",");
-			dojox.flash.comm.removeMultiple(metaKey, this.namespace);
+			dojox.flash.comm.removeMultiple(metaKey, namespace);
 		},
 
 		isPermanent: function(){

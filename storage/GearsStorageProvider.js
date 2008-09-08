@@ -266,8 +266,8 @@ if(dojo.gears.available){
 					throw new Error("Invalid namespace given: " + namespace);
 				}
 		
-				var _stmt = "SELECT * FROM " + this.TABLE_NAME	+ 
-					" WHERE namespace = ? AND "	+ " key = ?";
+				var _stmt = "SELECT * FROM " + this.TABLE_NAME 
+					+ " WHERE namespace = ? AND "	+ " key = ?";
 				
 				var results = [];
 				for(var i=0;i<keys.length;i++){
@@ -309,7 +309,8 @@ if(dojo.gears.available){
 				
 				dojox.sql.open();
 				dojox.sql.db.execute("BEGIN TRANSACTION");
-				var _stmt = "DELETE FROM " + this.TABLE_NAME + " WHERE namespace = ? AND key = ?";
+				var _stmt = "DELETE FROM " + this.TABLE_NAME 
+										+ " WHERE namespace = ? AND key = ?";
 
 				for(var i=0;i<keys.length;i++){
 					dojox.sql.db.execute( _stmt,

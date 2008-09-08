@@ -133,6 +133,32 @@ var TestStorage = {
 		this._handleLoad(key);
 	},
 	
+	loadMultiple: function(evt){ 
+		// cancel the button's default behavior 
+		evt.preventDefault(); 
+		evt.stopPropagation(); 
+           
+		// get the keys to load 
+		var dir = dojo.byId("directory"); 
+		if(dir.selectedIndex < 0){ 
+			alert("Please select a key from the 'All Keys' list"); 
+			return; 
+		} 
+                 
+		var keyArray = [dir.value], i; 
+  
+		for(i = dir.options.selectedIndex + 1; i < dir.options.length 
+									&& keyArray.length < 10; i++){ 
+										keyArray.push(dir.options[i].value); 
+		} 
+
+		for(i = dir.options.selectedIndex - 1; i >= 0 && keyArray.length < 10; i--){ 
+			keyArray.push(dir.options[i].value); 
+		} 
+                                 
+		this._handleLoadMultiple(keyArray); 
+	},
+	
 	save: function(evt){
 		// cancel the button's default behavior
 		evt.preventDefault();
@@ -160,6 +186,38 @@ var TestStorage = {
 		this._save(key, value, namespace);
 	},
 	
+	saveMultiple: function(evt) { 
+		// cancel the button's default behavior 
+		evt.preventDefault(); 
+		evt.stopPropagation(); 
+                
+		// get the new values 
+		var key = dojo.byId("storageKey").value; 
+		var value = dojo.byId("storageValue").value; 
+		var namespace = dojo.byId("storageNamespace").value; 
+          
+		if(key == null || typeof key == "undefined" || key == ""){ 
+			alert("Please enter a key name"); 
+			return; 
+		} 
+     
+		if(value == null || typeof value == "undefined" || value == ""){ 
+			alert("Please enter a key value"); 
+			return; 
+		} 
+                 
+		// print out the size of the value 
+		this.printValueSize();  
+                 
+		// do the save 
+		var keyArray = [], valueArray = []; 
+		for(var i = 0; i < 10; i++) { 
+			keyArray.push(key+i); 
+			valueArray.push(i + ") " + value); 
+		} 
+		this._saveMultiple(keyArray, valueArray, namespace); 
+	},
+	
 	clearNamespace: function(evt){
 		// cancel the button's default behavior
 		evt.preventDefault();
@@ -170,6 +228,41 @@ var TestStorage = {
 		this._printAvailableNamespaces();
 		this._printAvailableKeys();
 	},
+	
+	_saveMultiple: function(keyArray, valueArray, namespace) {
+		this._printStatus("Saving 10 keys, starting with '" + keyArray[0] + "'..."); 
+		var self = this; 
+		var saveHandler = function(status, keyName){ 
+			//console.debug("saveHandler, status="+status+", keyName="+keyName); 
+			if(status == dojox.storage.FAILED){ 
+				alert("You do not have permission to store data for this web site. " 
+							+ "Press the Configure button to grant permission."); 
+			}else if(status == dojox.storage.SUCCESS){ 
+				// clear out the old value 
+				dojo.byId("storageKey").value = ""; 
+				dojo.byId("storageValue").value = ""; 
+ 				self._printStatus("Saved '" + keyArray[0] + "' and " 
+													+ (keyArray.length - 1) + " others"); 
+              
+				if(typeof namespace != "undefined" && namespace != null){ 
+					self.currentNamespace = namespace; 
+				}
+             
+				self._printAvailableKeys(); 
+				self._printAvailableNamespaces(); 
+			} 
+		}; 
+             
+		try{ 
+			if(namespace == dojox.storage.DEFAULT_NAMESPACE){ 
+				dojox.storage.putMultiple(keyArray, valueArray, saveHandler); 
+			}else{ 
+				dojox.storage.putMultiple(keyArray, valueArray, saveHandler, namespace); 
+			} 
+		}catch(exp){ 
+			alert(exp); 
+		} 
+	},	
 	
 	configure: function(evt){
 		// cancel the button's default behavior
@@ -361,6 +454,36 @@ var TestStorage = {
 		}
 	},
 	
+	_handleLoadMultiple: function(keyArray){ 
+		this._printStatus("Loading '" + keyArray + "'..."); 
+              
+		// get the value 
+		var resultArray; 
+		if(this.currentNamespace == dojox.storage.DEFAULT_NAMESPACE){ 
+			resultArray = dojox.storage.getMultiple(keyArray); 
+		}else{ 
+			resultArray = dojox.storage.getMultiple(keyArray, this.currentNamespace); 
+		} 
+               
+		// jsonify it if it is a JavaScript object 
+		for(var i = 0; i < resultArray.length; i++) { 
+			if(typeof resultArray[i] != "string"){ 
+				resultArray[i] = dojo.toJson(resultArray[i]); 
+			} 
+		} 
+                
+		// print out its value 
+		this._printStatus("Loaded '" + keyArray[0] + "' and " 
+											+ (keyArray.length - 1) + " others"); 
+		dojo.byId("storageValue").value = ""; 
+		for(i = 0; i < resultArray.length; i++){ 
+			dojo.byId("storageValue").value += resultArray[i] + "\n----\n"; 
+		} 
+	                 
+		// print out the size of the value 
+		this.printValueSize();  
+	},
+	
 	_printAvailableNamespaces: function(){
 		var namespacesDir = dojo.byId("namespaceDirectory");
 		
@@ -369,7 +492,6 @@ var TestStorage = {
 		
 		// add new ones
 		var availableNamespaces = dojox.storage.getNamespaces();
-		
 		for (var i = 0; i < availableNamespaces.length; i++){
 			var optionNode = document.createElement("option");
 			optionNode.appendChild(document.createTextNode(availableNamespaces[i]));
