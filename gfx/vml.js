@@ -158,7 +158,7 @@ dojo.extend(dojox.gfx.Shape, {
 			return this;
 		}
 		// normalize the stroke
-		if(typeof stroke == "string" || dojo.isArray(stroke)){
+		if(typeof stroke == "string" || dojo.isArray(stroke) || stroke instanceof dojo.Color){
 			stroke = {color: stroke};
 		}
 		var s = this.strokeStyle = dojox.gfx.makeParameters(dojox.gfx.defaultStroke, stroke);
