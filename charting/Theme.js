@@ -60,19 +60,21 @@ dojo.require("dojox.color.Palette");
 				color:"#333",
 				width:1
 			},
-			line:	{ //	gridlines
+			/*
+			line:	{ //	in the future can be used for gridlines
 				color:"#ccc",
 				width:1,
 				style:"Dot",
 				cap:"round"
 			},
-			majorTick:	{ //	major ticks on axis
+			*/
+			majorTick:	{ //	major ticks on axis, and used for major gridlines
 				color:"#666",
 				width:1, 
 				length:6, 
 				position:"center"
 			},
-			minorTick:	{ //	minor ticks on axis
+			minorTick:	{ //	minor ticks on axis, and used for minor gridlines
 				color:"#666", 
 				width:0.8, 
 				length:3, 
