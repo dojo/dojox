@@ -47,7 +47,8 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			width:"100%",
 			height:"100%",
 			params:{
-				allowFullScreen:true
+				allowFullScreen:true,
+				wmode:"transparent"
 			},
 			// only pass in simple variables - no deep objects
 			vars:{
