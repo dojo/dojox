@@ -268,8 +268,6 @@ dojo.require("dojo.html");
 			//		It provides an opportunity for post-processing before handing back the node to the caller
 			//		This implementation extends that of dojo.html._ContentSetter
 			
-			this.inherited("onEnd", arguments);
-			
 			var code = this._code, 
 				styles = this._styles;
 				
@@ -305,7 +303,7 @@ dojo.require("dojo.html");
 					this._onError('Exec', 'Error eval script in '+this.id+', '+e.message, e);
 				}
 			}
-
+			this.inherited("onEnd", arguments);
 		},
 		tearDown: function() {
 			this.inherited(arguments);

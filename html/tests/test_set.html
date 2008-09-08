@@ -459,7 +459,41 @@
 							unTypedVarInDocScope = "done";
 						}
 					},
-					"t.assertEqual('done', unTypedVarInDocScope)"
+					
+					"t.assertEqual('done', unTypedVarInDocScope)",
+					
+					{
+						name: 'evalThenParse',
+						runTest: function(t){
+							dojo.global._evalThenParseResult = "";
+							// test the executeScripts / parse sequence
+							// by declaring a class that when instantiated returns true
+							dojox.html.set(node1, 
+								"<"+"script>"
+								+"_evalThenParseResult+='a';\n"
+								+"dojo.provide('dojox.html.tests.TestThinger');"
+								+"dojo.declare('dojox.html.tests.TestThinger', null, {"
+								+"  constructor: function() {"
+								+"	 _evalThenParseResult +='b';"
+								+"  }"
+								+"});"
+								+"</"+"script>\n"
+								+""
+								+"<div dojoType='dojox.html.tests.TestThinger'>\n"
+									+"<"+"script type='dojo/method'>dojo.global._evalThenParseResult +='c';</"+"script>\n"
+								+"</div>\n"
+								, {
+									executeScripts: 1, 
+									scriptHasHooks: false,
+									parseContent: true
+							});
+							
+							t.assertEqual('abc', dojo.global._evalThenParseResult);
+						},
+						tearDown: function(){
+							delete dojo.global._evalThenParseResult;
+						}
+					}
 				]
 			);
 
