@@ -10,17 +10,27 @@ dojo.require("dojo.NodeList-fx");
 		// mozilla has unsafe methods on array	
 		var fixMozArrayFunction = function (name) {
 			var method = Array.prototype[name];
-			Array.prototype[name] = function () {
-				if (this == window) {
-					throw new TypeError("Called with wrong this");
-				}
-				return method.apply(this, arguments);
-			};
+			if(method && !method.fixed){
+				(Array.prototype[name] = function () {
+					if (this == window) {
+						throw new TypeError("Called with wrong this");
+					}
+					return method.apply(this, arguments);
+				}).fixed = true;
+			}
 		};
 		// these are not safe in mozilla
 		fixMozArrayFunction('concat');
 		fixMozArrayFunction('reverse');
 		fixMozArrayFunction('sort');
+		fixMozArrayFunction("slice");
+		fixMozArrayFunction("forEach");
+		fixMozArrayFunction("filter");
+		fixMozArrayFunction("reduce");
+		fixMozArrayFunction("reduceRight");
+		fixMozArrayFunction("every");
+		fixMozArrayFunction("map");
+		fixMozArrayFunction("some");
 	}
 	var xhrGet = function(){
 		return dojo.xhrGet.apply(dojo,arguments);
