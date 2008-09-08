@@ -28,7 +28,7 @@ class DojoExternalInterface{
 		DojoExternalInterface.available = ExternalInterface.available;
 		
 		// make sure we can play nice in XD settings
-		System.security.allowDomain(_root.xdomain);
+		System.security.allowDomain(unescape(_root.xdomain));
 	}
 	
 	/** Called when we are finished adding methods through addCallback. */
@@ -166,6 +166,6 @@ class DojoExternalInterface{
 		if(path.indexOf("'%20'%20quality=") != -1){
 			path = path.substring(0, path.indexOf("'%20'%20quality="));
 		}
-		return path;
+		return unescape(path);
 	}
 }

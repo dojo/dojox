@@ -421,6 +421,7 @@ dojox.flash.Embed.prototype = {
 			// simply invalidates the Flash object in the cache all the time to
 			// keep it loading fresh. -- Brad Neuberg
 			swflocObject += "?cachebust=" + new Date().getTime();
+			swflocObject += "&baseUrl=" + escape(dojoUrl);
 			swflocObject += "&xdomain=" + escape(xdomainBase);
 		}
 
