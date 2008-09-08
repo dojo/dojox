@@ -25,14 +25,16 @@ dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.PlotKit.blue");
 dojo.require("dojox.charting.themes.PlotKit.green");
 dojo.require("dojox.charting.themes.PlotKit.red");
+dojo.require("dojox.charting.themes.Adobebricks");
+dojo.require("dojox.charting.themes.Algae");
 
 makeObjects = function(){
 	var chart1 = new dojox.charting.Chart2D("test1");
 	chart1.setTheme(dojox.charting.themes.PlotKit.blue);
 	chart1.addPlot("default", {
-		type: "Pie", 
-		font: "normal normal bold 12pt Tahoma", 
-		fontColor: "white", 
+		type: "Pie",
+		font: "normal normal bold 12pt Tahoma",
+		fontColor: "white",
 		labelOffset: 40
 	});
 	chart1.addSeries("Series A", [4, 2, 1, 1]);
@@ -41,9 +43,9 @@ makeObjects = function(){
 	var chart2 = new dojox.charting.Chart2D("test2");
 	chart2.setTheme(dojox.charting.themes.PlotKit.blue);
 	chart2.addPlot("default", {
-		type: "Pie", 
-		font: "normal normal bold 12pt Tahoma", 
-		fontColor: "black", 
+		type: "Pie",
+		font: "normal normal bold 12pt Tahoma",
+		fontColor: "black",
 		labelOffset: -25,
 		precision: 0
 	});
@@ -53,10 +55,10 @@ makeObjects = function(){
 	var chart3 = new dojox.charting.Chart2D("test3");
 	chart3.setTheme(dojox.charting.themes.PlotKit.green);
 	chart3.addPlot("default", {
-		type: "Pie", 
-		font: "normal normal bold 10pt Tahoma", 
-		fontColor: "white", 
-		labelOffset: 25, 
+		type: "Pie",
+		font: "normal normal bold 10pt Tahoma",
+		fontColor: "white",
+		labelOffset: 25,
 		radius: 90
 	});
 	chart3.addSeries("Series A", [4, 2, 1, 1]);
@@ -65,10 +67,10 @@ makeObjects = function(){
 	var chart4 = new dojox.charting.Chart2D("test4");
 	chart4.setTheme(dojox.charting.themes.PlotKit.green);
 	chart4.addPlot("default", {
-		type: "Pie", 
-		font: "normal normal bold 10pt Tahoma", 
-		fontColor: "black", 
-		labelOffset: -25, 
+		type: "Pie",
+		font: "normal normal bold 10pt Tahoma",
+		fontColor: "black",
+		labelOffset: -25,
 		radius: 90
 	});
 	chart4.addSeries("Series A", [4, 2, 1, 1]);
@@ -77,9 +79,9 @@ makeObjects = function(){
 	var chart5 = new dojox.charting.Chart2D("test5");
 	chart5.setTheme(dojox.charting.themes.PlotKit.red);
 	chart5.addPlot("default", {
-		type: "Pie", 
-		font: "normal normal bold 14pt Tahoma", 
-		fontColor: "white", 
+		type: "Pie",
+		font: "normal normal bold 14pt Tahoma",
+		fontColor: "white",
 		labelOffset: 40
 	});
 	chart5.addSeries("Series A", [{y: 4, text: "Red"}, {y: 2, text: "Green"}, {y: 1, text: "Blue"}, {y: 1, text: "Other"}]);
@@ -88,9 +90,9 @@ makeObjects = function(){
 	var chart6 = new dojox.charting.Chart2D("test6");
 	chart6.setTheme(dojox.charting.themes.PlotKit.red);
 	chart6.addPlot("default", {
-		type: "Pie", 
-		font: "normal normal bold 14pt Tahoma", 
-		fontColor: "white", 
+		type: "Pie",
+		font: "normal normal bold 14pt Tahoma",
+		fontColor: "white",
 		labelOffset: 40
 	});
 	chart6.addSeries("Series A", [
@@ -100,6 +102,33 @@ makeObjects = function(){
 		{y: 1, text: "Other", color: "white", fontColor: "black"}
 	]);
 	chart6.render();
+
+	var chart7 = new dojox.charting.Chart2D("test7");
+	chart7.setTheme(dojox.charting.themes.Adobebricks);
+	chart7.addPlot("default", {
+		type: "Pie",
+		font: "normal normal bold 12pt Tahoma",
+		fontColor: "white",
+		radius: 80
+	});
+	chart7.addSeries("Series A", [4]);
+	chart7.render();
+
+	var chart8 = new dojox.charting.Chart2D("test8");
+	chart8.setTheme(dojox.charting.themes.Algae);
+	chart8.addPlot("default", {
+		type: "Pie",
+		font: "normal normal bold 12pt Tahoma",
+		fontColor: "white",
+		radius: 80
+	});
+	chart8.addSeries("Series A", [
+		{y: -1, text: "Red", color: "red"},
+		{y: 5, text: "Green", color: "green"},
+		{y: 0, text: "Blue", color: "blue"},
+		{y: 0, text: "Other", color: "white", fontColor: "black"}
+	]);
+	chart8.render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -123,6 +152,10 @@ dojo.addOnLoad(makeObjects);
 	<td><div id="test5" style="width: 300px; height: 300px;"></div></td>
 	<td><div id="test6" style="width: 300px; height: 300px;"></div></td>
 </tr></table>
+<p>7: Degenerated pie with 1 element.</p>
+<div id="test7" style="width: 200px; height: 200px;"></div>
+<p>8: Degenerated pie with 1 positive elements (out of 5).</p>
+<div id="test8" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>
