@@ -1005,6 +1005,11 @@ dojox.gfx.vml.Container = {
 		// shape: dojox.gfx.Shape: an VML shape object
 		if(this != shape.getParent()){
 			this.rawNode.appendChild(shape.rawNode);
+			if(!shape.getParent()){
+				// reapply visual attributes
+				shape.setFill(shape.getFill());
+				shape.setStroke(shape.getStroke());
+			}
 			//dojox.gfx.Group.superclass.add.apply(this, arguments);
 			//this.inherited(arguments);
 			dojox.gfx.shape.Container.add.apply(this, arguments);
