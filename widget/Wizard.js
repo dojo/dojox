@@ -131,7 +131,7 @@ dojo.declare(
 dojo.declare("dojox.widget.WizardPane",
 	dijit.layout.ContentPane,
 	{
-	// summary: a panel in a WizardContainer
+	// summary: A panel in a `dojox.widget.Wizard`
 	//
 	// description:
 	//	An extended ContentPane with additional hooks for passing named
