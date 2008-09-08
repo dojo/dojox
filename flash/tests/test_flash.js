@@ -8,6 +8,10 @@ var testXML = testBook = null;
 
 function flashReady(){
 	console.debug("flashReady");
+	if (flashLoaded) {
+	  return; // prevent double loads
+	}
+	
 	flashLoaded = true;
 	
 	if(isReady()){
@@ -17,6 +21,10 @@ function flashReady(){
 
 function pageReady(){
 	console.debug("pageReady");
+	if (pageLoaded) { 
+	  return; // prevent double loads
+	}
+	
 	pageLoaded = true;
 	
 	loadResources();
