@@ -14,7 +14,7 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 	_toJsonQuery: function(args){
 
 		// performs conversion of Dojo Data query objects and sort arrays to JSONQuery strings
-		if(typeof args.query == "object"){
+		if(args.query && typeof args.query == "object"){
 			// convert Dojo Data query objects to JSONQuery
 			var jsonQuery = "[?(", first = true;
 			for(var i in args.query){
@@ -37,7 +37,7 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 		var sort = args.sort;
 		if(sort){
 			// if we have a sort order, add that to the JSONQuery expression
-			args.queryStr = args.queryStr || args.query || ""; 
+			args.queryStr = args.queryStr || (typeof args.query == 'string' ? args.query : ""); 
 			first = true;
 			for(i = 0; i < sort.length; i++){
 				args.queryStr += (first ? '[' : ',') + (sort[i].descending ? '\\' : '/') + "@[" + dojo._escapeString(sort[i].attribute) + "]";
@@ -70,11 +70,11 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{
 		request._jsonQuery = request._jsonQuery || dojox.json.query(this._toJsonQuery(request)); 
 		return request._jsonQuery([item]).length;
 	},
-	clientSideQuery: function(/*Object*/ request,/*Array*/ baseResults){
+	clientSideFetch: function(/*Object*/ request,/*Array*/ baseResults){
 		if(!dojox.json.query){
 			return this.inherited(arguments);
 		}
-		request._jsonQuery = request._jsonQuery || dojox.json.query(this._toJsonQuery(request)); 
+		request._jsonQuery = request._jsonQuery || dojox.json.query(this._toJsonQuery(request));
 		return request._jsonQuery(baseResults);
 	},
 	querySuperSet: function(argsSuper,argsSub){
