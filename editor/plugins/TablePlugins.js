@@ -7,21 +7,22 @@ dojo.requireLocalization("dojox.editor.plugins", "TableDialog");
 
 dojo.experimental("dojox.editor.plugins.TablePlugins");
 
-//	summary
+//	summary:
 //		A series of plugins that give the Editor the ability to create and edit 
 //		HTML tables. See the end of this document for all avaiable plugins
 // 		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
 //
-//  USAGE
-//	<div dojoType="dojox.editor.Editor" plugins="[
-//			'bold','italic','|',
-//			{name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
-//			{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'}
-//		]">
-//         Editor text is here
-//	</div>
+//  example:
+//		|	<div dojoType="dojox.editor.Editor" plugins="[
+//		|			'bold','italic','|',
+//		|			{name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
+//		|			{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'}
+//		|		]">
+//    	| 	   Editor text is here
+//		|	</div>
 //
-//	TODO:	Currently not supporting merging or splitting cells
+//	TODO:	
+//		Currently not supporting merging or splitting cells
 //
 //	FIXME: 	Undo is very buggy, and therefore unimeplented in all browsers 
 //			except IE - which itself has only been lightly tested.
@@ -32,27 +33,9 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 
 
 
-// Shortcuts for the Editor, so that elements can be accessed easily within scope
-dojox.editor.Editor.prototype.getAncestorElement = function(tagName){
-	return dojo.withGlobal(this.window, 	"getAncestorElement",dojox.editor.selection, [tagName]);
-}
-dojox.editor.Editor.prototype.hasAncestorElement = function(tagName){
-	return dojo.withGlobal(this.window, 	"hasAncestorElement",dojox.editor.selection, [tagName]);
-}
-dojox.editor.Editor.prototype.selectElement = function(elem){
-	dojo.withGlobal(this.window, 			"selectElement",dojox.editor.selection, [elem]);
-}
-dojox.editor.Editor.prototype.byId = function(id){
-	return dojo.withGlobal(this.window, 	"byId", dojo, [id]);
-}
-dojox.editor.Editor.prototype.query = function(arg, scope, returnArray){
-	// this shortcut is dubious - not sure scoping is necessary
-	var ar = dojo.withGlobal(this.window, 	"query", dojo, [arg, scope]);
-	return (returnArray) ? ar : ar[0];
-}
 
 dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
-	// summary
+	// summary:
 	//		A global object that handles common tasks for all the plugins. Since 
 	//		there are several plugins that are all calling common methods, it's preferable
 	//		that they call a centralized location that either has a set variable or a 
@@ -83,16 +66,16 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 			byId: function(id){
 				return dojo.withGlobal(this.window, "byId", dojo, [id]);
 			},
-			query: function(arg, scope, returnArray){
+			query: function(arg, scope, returnFirstOnly){
 				// this shortcut is dubious - not sure scoping is necessary
 				var ar = dojo.withGlobal(this.window, "query", dojo, [arg, scope]);
-				return (returnArray) ? ar : ar[0];
+				return (returnFirstOnly) ? ar[0] : ar;
 			}
 		});
 
 	},
 	initialize: function(editor){
-		// summary
+		// summary:
 		//		Initialize the global handler upon a plugin's first instance of setEditor
 		//
 		
@@ -124,6 +107,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		if(this.tableData){
 			// tableData is set for a short amount of time, so that all 
 			// plugins get the same return without doing the method over
+			console.log("returning current tableData:", this.tableData);
 			return this.tableData;	
 		}
 		var tr, trs, td, tds, tbl, cols, tdIndex, trIndex;
@@ -155,7 +139,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 			trIndex:trIndex,	// index of focused row
 			colIndex:tdIndex%cols
 		};
-		//console.log("tableData:",o);
+	console.log("NEW tableData:",o);
 		this.tableData = o;
 		this._tempStoreTableData(500);	
 		return this.tableData;
@@ -261,9 +245,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 			return true;
 		}
 		
-		console.warn("editor:", this.editor, "foo:", this.editor.doFoo, "hasA:", this.editor.getAncestorElement);
 		this.currentlyAvailable = this.editor.hasAncestorElement("table");
-		//console.log("checkAvailable - result:", this.currentlyAvailable);
 		
 		if(this.currentlyAvailable){
 			this.connectTableKeys();
@@ -273,7 +255,6 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		
 		this._tempAvailability(500);
 		
-		//console.log("G - checkAvailable...   avail", this.currentlyAvailable);
 		dojo.publish("available", [ this.currentlyAvailable ]);
 		return this.currentlyAvailable;
 	},
@@ -282,7 +263,8 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		// 	For IE's sake, we are adding IDs to the TDs if none is there
 		//	We go ahead and use it for other code for convenience
 		//	
-		var tds = dojo.query("td", tbl);
+		var tds = this.editor.query("td", tbl);
+		console.log("prep:", tds, tbl)
 		if(!tds[0].id){
 			tds.forEach(function(td, i){
 				if(!td.id){
@@ -766,8 +748,8 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			//
 			
 			var cells = [];
-			var tbl = this.getTableInfo.tbl;
-			var tds = tablePluginHandler._prepareTable();
+			var tbl = this.getTableInfo().tbl;
+			var tds = tablePluginHandler._prepareTable(tbl);
 			var e = this.editor;
 			var r;
 			
@@ -881,13 +863,13 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 	onInsert: function(){
 		console.log("insert");
 		
-		var rows = 		this.selectRow.getValue() || 1,
-			cols = 		this.selectCol.getValue() || 1,
-			width = 	this.selectWidth.getValue(),
-			widthType = this.selectWidthType.getValue(),
-			border = 	this.selectBorder.getValue(),
-			pad = 		this.selectPad.getValue(),
-			space = 	this.selectSpace.getValue(),
+		var rows = 		this.selectRow.attr("value") || 1,
+			cols = 		this.selectCol.attr("value") || 1,
+			width = 	this.selectWidth.attr("value"),
+			widthType = this.selectWidthType.attr("value"),
+			border = 	this.selectBorder.attr("value"),
+			pad = 		this.selectPad.attr("value"),
+			space = 	this.selectSpace.attr("value"),
 			_id =		"tbl_"+(new Date().getTime()),
 			t = '<table id="'+_id+'"width="'+width+((widthType=="percent")?'%':'')+'" border="'+border+'" cellspacing="'+space+'" cellpadding="'+pad+'">\n';
 		
@@ -964,13 +946,13 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 			w = w.replace(/%/, "");
 		}
 		
-		this.selectWidth.setValue(w);
-		this.selectWidthType.setValue(p);
+		this.selectWidth.attr("value", w);
+		this.selectWidthType.attr("value", p);
 		
-		this.selectBorder.setValue(dojo.attr(this.table, "border"));
-		this.selectPad.setValue(dojo.attr(this.table, "cellpadding"));
-		this.selectSpace.setValue(dojo.attr(this.table, "cellspacing"));
-		this.selectAlign.setValue(dojo.attr(this.table, "align"));
+		this.selectBorder.attr("value", dojo.attr(this.table, "border"));
+		this.selectPad.attr("value", dojo.attr(this.table, "cellpadding"));
+		this.selectSpace.attr("value", dojo.attr(this.table, "cellspacing"));
+		this.selectAlign.attr("value", dojo.attr(this.table, "align"));
 	},
 	
 	setBrdColor: function(color){
@@ -985,11 +967,11 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	onSet: function(){
 		dojo.attr(this.table, "bordercolor", this.brdColor);
 		dojo.attr(this.table, "bgcolor", this.bkColor);
-		dojo.attr(this.table, "width", (this.selectWidth.getValue() + ((this.selectWidthType.getValue()=="pixels")?"":"%") ));
-		dojo.attr(this.table, "border", this.selectBorder.getValue());
-		dojo.attr(this.table, "cellpadding", this.selectPad.getValue());
-		dojo.attr(this.table, "cellspacing", this.selectSpace.getValue());
-		dojo.attr(this.table, "align", this.selectAlign.getValue());
+		dojo.attr(this.table, "width", (this.selectWidth.attr("value") + ((this.selectWidthType.attr("value")=="pixels")?"":"%") ));
+		dojo.attr(this.table, "border", this.selectBorder.attr("value"));
+		dojo.attr(this.table, "cellpadding", this.selectPad.attr("value"));
+		dojo.attr(this.table, "cellspacing", this.selectSpace.attr("value"));
+		dojo.attr(this.table, "align", this.selectAlign.attr("value"));
 		
 		this.hide();
 	},
