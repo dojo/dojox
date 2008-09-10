@@ -32,7 +32,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 
 
 
-// Shortcuts for the Editor, so that elements can be accessed easilly within scope
+// Shortcuts for the Editor, so that elements can be accessed easily within scope
 dojox.editor.Editor.prototype.getAncestorElement = function(tagName){
 	return dojo.withGlobal(this.window, 	"getAncestorElement",dojox.editor.selection, [tagName]);
 }
@@ -51,7 +51,6 @@ dojox.editor.Editor.prototype.query = function(arg, scope, returnArray){
 	return (returnArray) ? ar : ar[0];
 }
 
-
 dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 	// summary
 	//		A global object that handles common tasks for all the plugins. Since 
@@ -69,6 +68,29 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 	editorDomNode: null,
 	undoEnabled: dojo.isIE, //FIXME: 
 	
+	doMixins: function(){
+		
+		dojo.mixin(this.editor,{
+			getAncestorElement: function(tagName){
+				return dojo.withGlobal(this.window, "getAncestorElement",dojox.editor.selection, [tagName]);
+			},
+			hasAncestorElement: function(tagName){
+				return dojo.withGlobal(this.window, "hasAncestorElement",dojox.editor.selection, [tagName]);
+			},
+			selectElement: function(elem){
+				dojo.withGlobal(this.window, "selectElement",dojox.editor.selection, [elem]);
+			},
+			byId: function(id){
+				return dojo.withGlobal(this.window, "byId", dojo, [id]);
+			},
+			query: function(arg, scope, returnArray){
+				// this shortcut is dubious - not sure scoping is necessary
+				var ar = dojo.withGlobal(this.window, "query", dojo, [arg, scope]);
+				return (returnArray) ? ar : ar[0];
+			}
+		});
+
+	},
 	initialize: function(editor){
 		// summary
 		//		Initialize the global handler upon a plugin's first instance of setEditor
@@ -80,6 +102,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		this.initialized = true;
 		this.editor = editor;
 		
+		
 		this.editorDomNode = this.editor.iframe ? this.editor.document : this.editor.editNode;
 		
 		// RichText should have a mouseup connection to recognize drag-selections
@@ -88,6 +111,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		
 		dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable");
 		
+		this.doMixins();
 		this.connectDraggable();
 	},
 	
@@ -237,7 +261,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 			return true;
 		}
 		
-		
+		console.warn("editor:", this.editor, "foo:", this.editor.doFoo, "hasA:", this.editor.getAncestorElement);
 		this.currentlyAvailable = this.editor.hasAncestorElement("table");
 		//console.log("checkAvailable - result:", this.currentlyAvailable);
 		
