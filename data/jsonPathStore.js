@@ -8,6 +8,10 @@ dojox.data.ASYNC_MODE = 0;
 dojox.data.SYNC_MODE = 1;
 
 dojo.declare("dojox.data.jsonPathStore",
+        //      summary:
+        //              The jsonPathStore implements dojo.data.read, write, notify, and identity api's.  It is a local (in memory) store
+	//		and can take a javascript object with any arbitrary format and attach to it to provide a dojo.data interface to that object
+	//		data.  It uses jsonPath as the query language to search agains this store.
 	null,
 	{
 		mode: dojox.data.ASYNC_MODE,
@@ -192,6 +196,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			path += "[*]";
 			var data = this.fetch({query: path,mode: dojox.data.SYNC_MODE});
 			for(var i=0; i<data.length;i++){
+				var parts, attribute;
 				if(dojo.isObject(data[i])){
 					var newPath = data[i][this.metaLabel]["path"];
 					if (origPath){
@@ -199,8 +204,8 @@ dojo.declare("dojox.data.jsonPathStore",
 						//console.log("origPath: ", origPath);
 						//console.log("path: ", path);
 						//console.log("data[i]: ", data[i]);
-						var parts = origPath.split("\[\'");
-						var attribute = parts[parts.length-1].replace(this._replaceRegex,'');
+						parts = origPath.split("\[\'");
+						attribute = parts[parts.length-1].replace(this._replaceRegex,'');
 						//console.log("attribute: ", attribute);
 						//console.log("ParentItem: ", item, attribute);
 						if (!dojo.isArray(data[i])){
@@ -210,8 +215,8 @@ dojo.declare("dojox.data.jsonPathStore",
 							this.buildIndex(newPath,item);
 						}
 					}else{
-						var parts = newPath.split("\[\'");
-						var attribute = parts[parts.length-1].replace(this._replaceRegex,'');
+						parts = newPath.split("\[\'");
+						attribute = parts[parts.length-1].replace(this._replaceRegex,'');
 						this._addReference(data[i], {parent: this._data, attribute:attribute});
 						this.buildIndex(newPath, data[i]);
 					}
@@ -1033,6 +1038,7 @@ dojo.declare("dojox.data.jsonPathStore",
 		_mixin: function(target, data){
 			// summary:
 			//	specialized mixin that hooks up objects in the store where references are identified.
+			var mix;
 
 			if (dojo.isObject(data)){
 				if (dojo.isArray(data)){
@@ -1040,9 +1046,9 @@ dojo.declare("dojox.data.jsonPathStore",
 					for (var i=0; i<data.length;i++){
 						if (dojo.isObject(data[i])){
 							if (dojo.isArray(data[i])){
-								var mix=[];
+								mix=[];
 							}else{
-								var mix={};
+								mix={};
 								if (data[i][this.metaLabel] && data[i][this.metaLabel]["type"] && data[i][this.metaLabel]["type"]=='reference'){
 									target[i]=this.index[data[i][this.idAttribute]];
 									continue;
@@ -1064,14 +1070,14 @@ dojo.declare("dojox.data.jsonPathStore",
 					for (var i in data){
 						if (dojo.isObject(data[i])){
 							if (dojo.isArray(data[i])){
-								var mix=[];
+								mix=[];
 							}else{
 								if (data[i][this.metaLabel] && data[i][this.metaLabel]["type"] && data[i][this.metaLabel]["type"]=='reference'){
 									target[i]=this.index[data[i][this.idAttribute]];
 									continue;
 								}
 
-								var mix={};
+								mix={};
 							}
 							this._mixin(mix, data[i]);
 							target[i]=mix;
