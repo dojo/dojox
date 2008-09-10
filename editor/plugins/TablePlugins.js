@@ -560,13 +560,16 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		launchInsertDialog: function(){
 			var w = new dojox.editor.plugins.EditorTableDialog({});
 			w.show();
-			this.connect(w, "onBuildTable", function(obj){
-				var e = this.editor;
-				var res = this.editor.execCommand('inserthtml', obj.htmlText);
-				var tbl =  this.editor.byId(obj.id);
-				var td = this.editor.query("td", tbl);
+			var c = dojo.connect(w, "onBuildTable", this, function(obj){
+				dojo.disconnect(c);
 				
-				this.editor.selectElement(td);
+				var res = this.editor.execCommand('inserthtml', obj.htmlText);
+				
+				// commenting this line, due to msg below
+				//var td = this.editor.query("td", this.editor.byId(obj.id));
+				
+				//HMMMM.... This throws a security error now. didn't used to.
+				//this.editor.selectElement(td);
 			});
 		},
 		
