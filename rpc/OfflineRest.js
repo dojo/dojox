@@ -16,13 +16,13 @@ dojox.rpc.OfflineRest = dojo.mixin({
 		dojox.off.files.slurp();
 		dojox.off.initialize();
 	
-		var lsr = dojox.rpc.LocalStorageRest;
+		var self = this;
 		dojo.connect(dojox.off.sync, "onSync", this, function(type){
 			if(type == "upload"){
-				lsr.sendChanges();
+				self.sendChanges();
 			}
 			if(type == "download"){
-				lsr.downloadChanges(); // FIXME: Do this async?
+				self.downloadChanges(); // FIXME: Do this async?
 				dojox.off.sync.finishedDownloading();
 			}
 		});

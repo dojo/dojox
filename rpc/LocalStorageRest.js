@@ -91,6 +91,10 @@ dojo.require("dojox.storage");
 		// but an offline app wants the opposite, as much data as possible transferred to
 		// the client side
 		try{
+			// if we are reloading the application with local dirty data in an online environment
+			//	we want to make sure we save the changes first, so that we get up-to-date
+			//	information from the server
+			sendChanges();
 			var dfd = defaultGet(service, id);
 		}catch(e){
 			dfd = new dojo.Deferred();
