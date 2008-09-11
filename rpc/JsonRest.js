@@ -7,6 +7,7 @@ dojo.require("dojox.rpc.Rest");
 (function(){
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
+	var parentIdRegex = /(.*?)((\.\w+)|(\[.+))+$/;
 	var jr = dojox.rpc.JsonRest={
 		commit: function(kwArgs){
 			// summary:
@@ -31,10 +32,10 @@ dojo.require("dojox.rpc.Rest");
 						actions.push({method:"delete",target:dirty.old});
 					}else{
 						// changed object
-						while(!(dojox.json && dojox.json.ref && dojox.json.ref.useRefs) && object.__id.match(/[\[\.]/)){ // it is a path reference
+						while(!(dojox.json && dojox.json.ref && dojox.json.ref.useRefs) && object.__id.match(parentIdRegex)){ // it is a path reference
 							// this means it is a sub object and the server doesn't support directly putting to
 							// this object by path, we must go to the parent object and save it
-							var parentId = object.__id.match(/^[^\[\.]*/)[0];
+							var parentId = object.__id.match(parentIdRegex)[1];
 							// record that we are saving
 							object = alreadyRecorded[parentId] = Rest._index[parentId];
 						}

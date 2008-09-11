@@ -83,50 +83,58 @@ dojox.json.ref.resolveJson = function(/*Object*/ root,/*Object?*/ args){
 
 
 		for(var i in it){
-			if((typeof (val=it[i]) =='object') && val){
-				ref=val.$ref;
-				if(ref){ // a reference was found
-					var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
-					if(/[\w\[\]\.\$# \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
-						// make sure it is a safe reference
-						delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
-						var path = ref.match(/(^([^\[]*\/)?[^\.\[]*)([\.\[].*)?/); // divide along the path
-						if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='#') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')]) &&  // a $ indicates to start with the root, otherwise start with an id
-						// // starting point was found, use eval to resolve remaining property references
-						// // need to also make reserved words safe by replacing with index operator
-							(ref = path[3] ? eval('ref' + path[3].replace(/^#/,'').replace(/\.([^\.]+)/g,'["$1"]')) : ref)){
-							// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have
-							// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet,
-							// we will wait for the second loop
-							val = ref;
-						}else{
-							if(!stop){
-								var rewalking;
-								if(!rewalking){
-									reWalk.push(target); // we need to rewalk it to resolve references
+			if(it.hasOwnProperty(i)){
+				if((typeof (val=it[i]) =='object') && val){
+					ref=val.$ref;
+					if(ref){ // a reference was found
+						var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
+						if(/[\w\[\]\.\$# \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
+							// make sure it is a safe reference
+							delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
+							var path = ref.match(/(^([^\[]*\/)?[^\.\[]*)([\.\[].*)?/); // divide along the path
+							if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='#') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')])){  // a $ indicates to start with the root, otherwise start with an id
+								// // starting point was found, use eval to resolve remaining property references
+								// // need to also make reserved words safe by replacing with index operator
+								try{
+									ref = path[3] ? eval('ref' + path[3].replace(/^#/,'').replace(/\.([^\.]+)/g,'["$1"]')) : ref;
+								}catch(e){
+									ref = null;
 								}
-								rewalking = true; // we only want to add it once
+							}
+							if(ref){
+								// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have
+								// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet,
+								// we will wait for the second loop
+								val = ref;
 							}else{
-								val = walk(val, false, val.$ref);
-								// create a lazy loaded object
-								val._loadObject = args.loader;
+								if(!stop){
+									var rewalking;
+									if(!rewalking){
+										reWalk.push(target); // we need to rewalk it to resolve references
+									}
+									rewalking = true; // we only want to add it once
+								}else{
+									val = walk(val, false, val.$ref);
+									// create a lazy loaded object
+									val._loadObject = args.loader;
+								}
 							}
 						}
-					}
-				}else{
-					if(!stop){ // if we are in stop, that means we are in the second loop, and we only need to check this current one,
-						// further walking may lead down circular loops
-						val = walk(val,reWalk==it,id && (id + ('[' + dojo._escapeString(i) + ']')));
+					}else{
+						if(!stop){ // if we are in stop, that means we are in the second loop, and we only need to check this current one,
+							// further walking may lead down circular loops
+							val = walk(val,reWalk==it,id && (id + ('[' + dojo._escapeString(i) + ']')));
+						}
 					}
 				}
-			}
-			it[i] = val;
-			if(target!=it){// performance guard				
-				var old = target[i];
-				target[i] = val; // update the target
-				if(update && val !== old){ // only update if it changed
-					if(index.onUpdate){
-						index.onUpdate(target,i,old,val); // call the listener for each update
+				it[i] = val;
+				if(target!=it){// performance guard				
+					var old = target[i];
+					target[i] = val; // update the target
+					if(update && val !== old){ // only update if it changed
+						if(index.onUpdate){
+							index.onUpdate(target,i,old,val); // call the listener for each update
+						}
 					}
 				}
 			}

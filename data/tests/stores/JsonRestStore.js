@@ -11,6 +11,7 @@ dojox.data.tests.stores.JsonRestStore.error = function(t, d, errData){
 	d.errback(errData);	
 }
 testServices = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.tests.resources", "test.smd"));
+testServices.jsonRestStore.servicePath = "/jsonRest.Store/"; // this makes the regex more challenging
 jsonStore = new dojox.data.JsonRestStore({service:testServices.jsonRestStore});
 
 doh.register("dojox.data.tests.stores.JsonRestStore", 
