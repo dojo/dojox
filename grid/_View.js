@@ -1073,7 +1073,7 @@ dojo.require("dojo.dnd.Manager");
 
 		buildRowContent: function(inRowIndex, inRowNode){
 			inRowNode.innerHTML = this.content.generateHtml(inRowIndex, inRowIndex); 
-			if(this.flexCells){
+			if(this.flexCells && this.contentWidth){
 				// FIXME: accessing firstChild here breaks encapsulation
 				inRowNode.firstChild.style.width = this.contentWidth;
 			}
