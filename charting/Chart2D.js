@@ -257,7 +257,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 
 			// set up a theme
 			if(!this.theme){
-				this.theme = (new dojox.charting.Theme(dojox.charting._def)).clone();
+				this.setTheme(new dojox.charting.Theme(dojox.charting._def));
 			}
 
 			// assign series
