@@ -74,7 +74,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			return this.coords;
 		},
 		setTheme: function(theme){
-			this.theme = theme;
+			this.theme = theme._clone();
 			this.dirty = true;
 			return this;
 		},
@@ -305,6 +305,10 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			return this;
 		},
 		render: function(){
+			if(this.theme){
+				this.theme.clear();
+			}
+
 			if(this.dirty){
 				return this.fullRender();
 			}

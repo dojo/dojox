@@ -147,6 +147,22 @@ dojo.require("dojox.color.Palette");
 			this._current.marker=0;
 		},
 
+		_clone: function(){
+			//	summary:
+			//		Return a clone of this theme, with the position vars reset to 0.
+			return new dxc.Theme({
+				chart: this.chart,
+				plotarea: this.plotarea,
+				axis: this.axis,
+				series: this.series,
+				marker: this.marker,
+				antiAlias: this.antiAlias,
+				assignColors: this.assignColors,
+				assignMarkers: this.assigneMarkers,
+				colors: dojo.clone(this.colors)
+			});
+		},
+
 		addMarker:function(/*String*/ name, /*String*/ segment){
 			//	summary:
 			//		Add a custom marker to this theme.
