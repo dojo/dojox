@@ -191,6 +191,12 @@
 				dojo.connect(tr, "onclick", this, function(){ this.onClick(item); });
 				]]>
 			</html:script>
+			<html:script type="dojo/method" event="onClick" args="item">
+			<![CDATA[
+				// user should override
+				console.log("click on item " + item);
+			]]>
+			</html:script>
 		</table>
 		</ui>
 	</script>
