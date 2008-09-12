@@ -17,7 +17,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	
 	// attributeMap: Object
 	//		Add in our style to be applied to the focus node
-	attributeMap: dojo.mixin(dojo.clone(dojox.form._FormSelectWidget.prototype.attributeMap),{style:"focusNode"}),
+	attributeMap: dojo.mixin(dojo.clone(dojox.form._FormSelectWidget.prototype.attributeMap),{style:"tableNode"}),
 	
 	// required: Boolean
 	//		Can be true or false, default is false.
@@ -54,6 +54,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		
 		// Create the dropDown widget
 		this.dropDown = new dijit.Menu();
+		dojo.addClass(this.dropDown.domNode, this.baseClass + "Menu");
 	},
 
 	_getMenuItemForOption: function(/* dojox.form.__SelectOption */ option){
@@ -108,9 +109,9 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	
 	_setDisplay: function(/*String*/ newDisplay){
 		// summary: sets the display for the given value (or values)
-		this.containerNode.innerHTML = '<div class=" ' + this.baseClass + 'Label">' +
+		this.containerNode.innerHTML = '<span class=" ' + this.baseClass + 'Label">' +
 					(newDisplay || this.emptyLabel || "&nbsp;") +
-					'</div>';
+					'</span>';
 		this._layoutHack();
 	},
 
@@ -200,7 +201,6 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	loadDropDown: function(/* Function */ loadCallback){
 		// summary: populates the menu
 		this._loadChildren();
-		dojo.addClass(this.dropDown.domNode, this.baseClass + "Menu");
 		this._isLoaded = true;
 		loadCallback();
 	},
