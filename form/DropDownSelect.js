@@ -15,6 +15,10 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	
 	templatePath: dojo.moduleUrl("dojox.form", "resources/DropDownSelect.html"),
 	
+	// attributeMap: Object
+	//		Add in our style to be applied to the focus node
+	attributeMap: dojo.mixin(dojo.clone(dojox.form._FormSelectWidget.prototype.attributeMap),{style:"focusNode"}),
+	
 	// required: Boolean
 	//		Can be true or false, default is false.
 	required: false,
