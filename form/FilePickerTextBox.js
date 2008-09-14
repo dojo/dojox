@@ -28,8 +28,12 @@ dojo.declare(
 		//		The item, in our store, of the directory relating to our value
 		valueItem: null,
 		
-		postCreate: function(){
+		postMixInProperties: function(){
+			this.inherited(arguments);
 			this.dropDown = new dojox.widget.FilePicker(this.constraints);
+		},
+
+		postCreate: function(){
 			this.inherited(arguments);
 			// Make our connections we want
 			this.connect(this.dropDown, "onChange", this._onWidgetChange);
