@@ -75,10 +75,14 @@ dojo.declare("dojox.data.ServiceStore",
 			if(options){
 				dojo.mixin(this,options);
 			}
-			this.idAttribute = this.idAttribute || (this.schema && this.schema._idAttr);
+			// We supply a default idAttribute for parser driven construction, but if no id attribute
+			//	is supplied, it should be null so that auto identification takes place properly
+			this.idAttribute = (options && options.idAttribute) || (this.schema && this.schema._idAttr);
 			this.labelAttribute = this.labelAttribute || "label";
 		},
-
+		schema: null,
+		idAttribute: "id",
+		syncMode: false,
 		getSchema: function(){
 			return this.schema; 
 		},
