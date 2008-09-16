@@ -1,7 +1,7 @@
 dojo.provide("dojox.data.PersevereStore");
 dojo.require("dojox.data.JsonRestStore");
 dojo.require("dojox.rpc.Client"); // Persevere supports this and it improves reliability
-if(dojox.rpc.LocalStorageRest){
+if(dojox.rpc.OfflineRest){
 	dojo.require("dojox.json.query"); // this is so we can perform queries locally 
 }
 

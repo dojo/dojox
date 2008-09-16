@@ -66,7 +66,7 @@ dojo.require("dojox.rpc.Rest");
 			};			
 			for(i =0; i < actions.length;i++){ // iterate through the actions to execute
 				var action = actions[i];
-				dojox.rpc.JsonRest._contentId = action.content && action.content.__id; // this is used by LocalStorageRest
+				dojox.rpc.JsonRest._contentId = action.content && action.content.__id; // this is used by OfflineRest
 				var isPost = action.method == 'post';
 				// send the content location to the server
 				contentLocation = isPost && dojox.rpc.JsonRest._contentId;
