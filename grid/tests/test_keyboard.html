@@ -5,6 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../resources/Grid.css";
+		@import "../resources/tundraGrid.css";
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/tundra/tundra.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -64,7 +67,7 @@
 		}
 </script>
 </head>
-<body>
+<body class="tundra">
 <div class="heading" tabindex="0">dojox.grid.Grid Basic Test</div>
 <div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout">
 	<script type="dojo/connect" event="onKeyDown" args="e">
