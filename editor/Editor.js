@@ -1,4 +1,5 @@
 dojo.provide("dojox.editor.Editor");
+dojo.experimental("dojox.editor.Editor");
 dojo.require("dojox.editor.RichText");
 dojo.require("dijit.Toolbar");
 dojo.require("dojox.editor._Plugin");
@@ -23,7 +24,7 @@ dojo.declare(
 		//	browsers, and clipboard operations may have different results, to name
 		//	a few limitations.  Note: this widget should not be used with the HTML
 		//	&lt;TEXTAREA&gt; tag -- see dojox.editor.RichText for details.
-
+		//
 		// plugins: Array
 		//		a list of plugin names (as strings) or instances (as objects)
 		//		for this widget.
