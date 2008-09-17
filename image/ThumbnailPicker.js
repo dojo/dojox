@@ -483,7 +483,10 @@ dojo.declare("dojox.image.ThumbnailPicker",
 			this._totalSize += (Number(realSize) + 4);
 			dojo.style(this.thumbsNode, this._sizeProperty, this._totalSize + "px");
 	
-			if(this.useLoadNotifier){dojo.style(loadingDiv, "width", (img.width - 4) + "px"); }
+			if(this.useLoadNotifier){
+				dojo.style(loadingDiv, "width", (img.width - 4) + "px"); 
+			}
+			dojo.style(imgContainer, "width", img.width + "px");
 			callback();
 			return false;
 		});
