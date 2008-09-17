@@ -76,14 +76,21 @@ dojo.require("dojox.rpc.Rest");
 									serviceAndId.id,
 									dojox.json.ref.toJson(action.content, false, service.servicePath, true)
 								);
-				(function(object,dfd){
+				var schema = jr.schemas[service.servicePath];								
+				(function(object, dfd, idAttr){
 					dfd.addCallback(function(value){
 						try{
 							// Implements id assignment per the HTTP specification
 							var newId = dfd.ioArgs.xhr.getResponseHeader("Location");
-							//TODO: Do correct relative URL calculation and do idAttribute assignment 
-							object.__id = newId;
-							Rest._index[newId] = object; 
+							//TODO: match URLs if the servicePath is relative...
+							if(newId){
+								object.__id = newId;
+								var objectId = newId.match(/\/([^\/]*)$/);
+								if(idAttr && objectId){
+									object[idAttr] = objectId[1];
+								}
+								Rest._index[newId] = object;
+							} 
 						}catch(e){}
 						if(!(--left)){
 							if(kwArgs.onComplete){
@@ -91,7 +98,7 @@ dojo.require("dojox.rpc.Rest");
 							}
 						}
 					});
-				})(isPost && action.content,dfd);
+				})(isPost && action.content, dfd, schema && schema._idAttr);
 								
 				dfd.addErrback(function(value){
 					
