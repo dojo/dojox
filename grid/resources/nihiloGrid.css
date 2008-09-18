@@ -125,7 +125,7 @@
 }
 
 .nihilo .dojoxGridCellFocus {
-	border: 1px dotted #a6a6a6;
+	border: 1px dashed darkblue;
 }
 
 .nihilo .dojoxGridCellOver {
@@ -133,7 +133,7 @@
 }
 
 .nihilo .dojoxGridCellFocus.dojoxGridCellOver {
-	border: 1px dotted #595959;
+	border: 1px dashed darkblue;
 }
 
 /* editing */
