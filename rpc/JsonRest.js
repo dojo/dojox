@@ -250,7 +250,7 @@ dojo.require("dojox.rpc.Rest");
 			//		This is a JSON Schema object to associate with objects returned by this service
 			servicePath = servicePath || service.servicePath;
 			servicePath = service.servicePath = servicePath.match(/\/$/) ? servicePath : (servicePath + '/'); // add a trailing / if needed
-			jr.schemas[servicePath] = schema || service._schema || {};
+			service._schema = jr.schemas[servicePath] = schema || service._schema || {};
 			jr.services[servicePath] = service;
 		},
 		byId: function(service, id){
