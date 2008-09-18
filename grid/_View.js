@@ -27,12 +27,12 @@ dojo.require("dojo.dnd.Manager");
 	};
 
 	var findTable = function(node){
-		for (var n=node; n && n.tagName!='TABLE'; n=n.parentNode);
+		for(var n=node; n && n.tagName!='TABLE'; n=n.parentNode);
 		return n;
 	};
 	
 	var ascendDom = function(inNode, inWhile){
-		for (var n=inNode; n && inWhile(n); n=n.parentNode);
+		for(var n=inNode; n && inWhile(n); n=n.parentNode);
 		return n;
 	};
 	
@@ -42,7 +42,7 @@ dojo.require("dojo.dnd.Manager");
 	};
 
 	var getStyleText = function(inNode, inStyleText){
-		return (inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText);
+		return inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText;
 	};
 
 
@@ -444,6 +444,7 @@ dojo.require("dojo.dnd.Manager");
 		// column resizing
 		beginColumnResize: function(e){
 			this.moverDiv = document.createElement("div");
+			dojo.style(this.moverDiv,{left:0}); // to make DnD work with dir=rtl
 			dojo.body().appendChild(this.moverDiv);
 			var m = headerMoveable = new dojo.dnd.Moveable(this.moverDiv);
 
@@ -496,32 +497,19 @@ dojo.require("dojo.dnd.Manager");
 
 		doResizeColumn: function(inDrag, mover, leftTop){
 			var isLtr = dojo._isBodyLtr();
-			if(isLtr){
-				var w = inDrag.w + leftTop.l;
-				var vw = inDrag.vw + leftTop.l;
-				var tw = inDrag.tw + leftTop.l;
-			}else{
-				var w = inDrag.w - leftTop.l;
-				var vw = inDrag.vw - leftTop.l;
-				var tw = inDrag.tw - leftTop.l;
-			}
+			var deltaX = isLtr ? leftTop.l : -leftTop.l;
+			var w = inDrag.w + deltaX;
+			var vw = inDrag.vw + deltaX;
+			var tw = inDrag.tw + deltaX;
 			if(w >= this.minColWidth){
 				for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
-					if(isLtr){
-						sw = s.width + leftTop.l;
-					}else{
-						sw = s.width - leftTop.l;
-					}
+					sw = s.width + deltaX;
 					s.node.style.width = sw + 'px';
 					inDrag.view.setColWidth(s.index, sw);
 					//console.log('setColWidth', '#' + s.index, sw + 'px');
 				}
 				for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
-					if(isLtr){
-						fl = f.left + leftTop.l;
-					}else{
-						fl = f.left - leftTop.l;
-					}
+					fl = f.left + deltaX;
 					f.node.style.left = fl + 'px';
 				}
 				inDrag.node.style.width = w + 'px';
@@ -529,7 +517,7 @@ dojo.require("dojo.dnd.Manager");
 				inDrag.view.headerNode.style.width = vw + 'px';
 				inDrag.view.setColumnsWidth(tw);
 				if(!isLtr){
-					inDrag.view.headerNode.scrollLeft = (inDrag.scrollLeft - leftTop.l);
+					inDrag.view.headerNode.scrollLeft = inDrag.scrollLeft + deltaX;
 				}
 			}
 			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
@@ -1148,11 +1136,9 @@ dojo.require("dojo.dnd.Manager");
 						this.headerNodeContainer.style.width = s.w - this.getScrollbarWidth() + 'px';
 						//this.headerNodeContainer.style.width = s.w + 'px';
 						//set scroll to right in FF
-						if(!isLtr){
-							this.scrollboxNode.scrollLeft = this.scrollboxNode.scrollWidth - this.scrollboxNode.clientWidth;
-						}else{
-							this.scrollboxNode.scrollLeft = this.scrollboxNode.clientWidth - this.scrollboxNode.scrollWidth;
-						}
+						this.scrollboxNode.scrollLeft = isLtr ?
+							this.scrollboxNode.clientWidth - this.scrollboxNode.scrollWidth :
+							this.scrollboxNode.scrollWidth - this.scrollboxNode.clientWidth;
 					}
 				}
 				this.firstScroll++;
@@ -1274,7 +1260,7 @@ dojo.require("dojo.dnd.Manager");
 	var oldMakeAvatar = dojo.dnd.manager().makeAvatar;
 	dojo.dnd.manager().makeAvatar = function(){
 		var src = this.source;
-		if(typeof src.viewIndex != "undefined"){
+		if(src.viewIndex !== undefined){
 			return new dojox.grid._GridAvatar(this);
 		}
 		return oldMakeAvatar.call(dojo.dnd.manager());
