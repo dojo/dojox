@@ -221,7 +221,7 @@
 }
 
 .dojoxGridCellFocus.dojoxGridCellOver {
-	border: 1px dotted green;
+	border: 1px dashed green;
 }
 
 /* editing */
@@ -251,9 +251,9 @@
 
 .dojoxGridHiddenFocus {
 	position: absolute;
-	left: -1000px;
 	top: -1000px;
-	height: 0px, width: 0px;
+	height: 0;
+	width: 0;
 }
 
 .dijit_a11y .dojoxGridRowbarSelected { 
@@ -295,7 +295,7 @@
 	background-color: transparent;
 	padding: 3px;
 	padding-bottom: 2px;
-	margin: 0pt;
+	margin: 0;
 }
 .dojoDndMove .dojoxGridDndAvatarItem .dojoxGridDndAvatarItemImage {
 	background-image: url(../../../dojo/resources/images/dndNoMove.png);

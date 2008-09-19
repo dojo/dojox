@@ -64,13 +64,13 @@
 .nihilo .dojoxGridRowbar { 
 	border: none;
 	background: url(../../../dijit/themes/nihilo/images/titleBar.png) #e9e9e9 repeat-y right;
-	border-right: 1px solid #cccccc;
+	border-right: 1px solid #ccc;
 	padding: 0px;
 }
 
 .nihilo .dojoxGridRowbarInner {
 	border: none;
-	border-bottom: 1px solid #cccccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .nihilo .dojoxGridRowbarOver {
@@ -78,8 +78,8 @@
 }
 
 .nihilo .dojoxGridRowbarSelected {
-	background: #D9E8F9 url(../../../dijit/themes/nihilo/images/titleBar.png) #dddddd no-repeat center;
-	border-right: 1px solid #cccccc;
+	background: #D9E8F9 url(../../../dijit/themes/nihilo/images/titleBar.png) #ddd no-repeat center;
+	border-right: 1px solid #ccc;
 }
 
 /* rows */
@@ -90,8 +90,8 @@
 }
 
 .nihilo .dojoxGridRowOver {
-	border-top-color: #cccccc;
-	border-bottom-color: #cccccc;
+	border-top-color: #ccc;
+	border-bottom-color: #ccc;
 }
 
 .nihilo .dojoxGridRowOver .dojoxGridCell {

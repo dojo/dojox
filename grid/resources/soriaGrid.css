@@ -64,13 +64,13 @@
 .soria .dojoxGridRowbar { 
 	border: none;
 	background: url(../../../dijit/themes/soria/images/titleBar.png) #e9e9e9 repeat-y right;
-	border-right: 1px solid #cccccc;
+	border-right: 1px solid #ccc;
 	padding: 0px;
 }
 
 .soria .dojoxGridRowbarInner {
 	border: none;
-	border-bottom: 1px solid #cccccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .soria .dojoxGridRowbarOver {
@@ -78,8 +78,8 @@
 }
 
 .soria .dojoxGridRowbarSelected {
-	background: #D9E8F9 url(../../../dijit/themes/soria/images/titleBar.png) #dddddd no-repeat center;
-	border-right: 1px solid #cccccc;
+	background: #D9E8F9 url(../../../dijit/themes/soria/images/titleBar.png) #ddd no-repeat center;
+	border-right: 1px solid #ccc;
 }
 
 /* rows */
@@ -90,8 +90,8 @@
 }
 
 .soria .dojoxGridRowOver {
-	border-top-color: #cccccc;
-	border-bottom-color: #cccccc;
+	border-top-color: #ccc;
+	border-bottom-color: #ccc;
 }
 
 .soria .dojoxGridRowOver .dojoxGridCell {
@@ -164,4 +164,3 @@
 .soria .dojoxGrid .dojoDndItemAfter {
 	border-right-color: #4B5AAA;
 }
-
