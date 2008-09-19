@@ -11,12 +11,25 @@ dojo.loadInit(function(){
 	if(!gfx.renderer){
 		var renderers = (typeof dojo.config["gfxRenderer"] == "string" ?
 			dojo.config["gfxRenderer"] : "svg,vml,silverlight,canvas").split(",");
+
+		//	comprehensive iPhone test.  Have to figure out whether it's SVG or Canvas based on the build.
+		//	iPhone OS build numbers from en.wikipedia.org.
+		var ua = navigator.userAgent, iPhoneOSBuild=0;
+		if(ua.indexOf("iPhone")>-1 || ua.indexOf("iPod")>-1){
+			//	grab the build out of this.  Expression is a little nasty because we want 
+			//		to be sure we have the whole version string.
+			var match = ua.match(/Version\/(\d(\.\d)?(\.\d)?)\sMobile\/([^\s]*)\s?/);
+			if(match){
+				//	grab the build out of the match.  Only use the first three because of specific builds.
+				iPhoneOSBuild = parseInt(match[4].substr(0,3), 16);
+			}
+		}
+
 		for(var i = 0; i < renderers.length; ++i){
 			switch(renderers[i]){
 				case "svg":
-					//TODO: need more comprehensive test for SVG
-					if(!dojo.isIE && (navigator.userAgent.indexOf("iPhone") < 0) && (navigator.userAgent.indexOf("iPod") < 0)){ 
-						// FIXME: on latest iphone svg should work fine!
+					//	iPhone OS builds greater than 5F1 should have SVG.
+					if(!dojo.isIE && (!iPhoneOSBuild || iPhoneOSBuild >= 0x5f1)){ 
 						dojox.gfx.renderer = "svg";
 					}
 					break;
