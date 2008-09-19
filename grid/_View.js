@@ -444,7 +444,7 @@ dojo.require("dojo.dnd.Manager");
 		// column resizing
 		beginColumnResize: function(e){
 			this.moverDiv = document.createElement("div");
-			dojo.style(this.moverDiv,{left:0}); // to make DnD work with dir=rtl
+			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
 			dojo.body().appendChild(this.moverDiv);
 			var m = headerMoveable = new dojo.dnd.Moveable(this.moverDiv);
 
