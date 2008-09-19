@@ -7,7 +7,7 @@ if(dojox.rpc.OfflineRest){
 
 // PersevereStore is an extension of JsonRestStore to handle Persevere's special features
 
-dojox.json.ref.useRefs = true; // Persevere supports referencing
+dojox.json.ref._useRefs = true; // Persevere supports referencing
 dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functions
 
 dojo.declare("dojox.data.PersevereStore",dojox.data.JsonRestStore,{

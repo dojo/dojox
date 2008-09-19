@@ -7,7 +7,7 @@ dojo.require("dojox.rpc.Rest");
 (function(){
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
-	var parentIdRegex = /(.*?)((\.\w+)|(\[.+))+$/;
+	var parentIdRegex = /(.*?)(#?(\.\w+)|(\[.+))+$/;
 	var jr = dojox.rpc.JsonRest={
 		commit: function(kwArgs){
 			// summary:
@@ -21,30 +21,33 @@ dojo.require("dojox.rpc.Rest");
 			for(var i = 0; i < dirtyObjects.length; i++){
 				var dirty = dirtyObjects[i];
 				var object = dirty.object;
+				var old = dirty.old;
 				var append = false;
-				if(!(kwArgs.service && (object || dirty.old).__id.indexOf(kwArgs.service.servicePath))){
-					if(object && !dirty.old){
-						// new object
-						actions.push({method:"post",target:{__id:jr.getServiceAndId(object.__id).service.servicePath},
-												content:object});
-					}else if(!object && dirty.old){
+				if(!(kwArgs.service && (object || old) && (object || old).__id.indexOf(kwArgs.service.servicePath))){
+					if(object){
+						if(old){
+							// changed object
+							while(!(dojox.json && dojox.json.ref && dojox.json.ref._useRefs) && object.__id.match(parentIdRegex)){ // it is a path reference
+								// this means it is a sub object and the server doesn't support directly putting to
+								// this object by path, we must go to the parent object and save it
+								var parentId = object.__id.match(parentIdRegex)[1];
+								// record that we are saving
+								object = Rest._index[parentId];
+							}
+							if(!(object.__id in alreadyRecorded)){// if it has already been saved, we don't want to repeat it
+								alreadyRecorded[object.__id] = object;
+								actions.push({method:"put",target:object,content:object});
+							}
+						}else{
+							// new object
+							
+							actions.push({method:"post",target:{__id:jr.getServiceAndId(object.__id).service.servicePath},
+													content:object});
+						}
+					}else if(old){
 						// deleted object
-						actions.push({method:"delete",target:dirty.old});
-					}else{
-						// changed object
-						while(!(dojox.json && dojox.json.ref && dojox.json.ref.useRefs) && object.__id.match(parentIdRegex)){ // it is a path reference
-							// this means it is a sub object and the server doesn't support directly putting to
-							// this object by path, we must go to the parent object and save it
-							var parentId = object.__id.match(parentIdRegex)[1];
-							// record that we are saving
-							object = alreadyRecorded[parentId] = Rest._index[parentId];
-						}
-						if(!(object.__id in alreadyRecorded)){// if it has already been saved, we don't want to repeat it
-							alreadyRecorded[object.__id] = object;
-							actions.push({method:"put",target:object,content:object});
-						}
-						
-					}
+						actions.push({method:"delete",target:old});
+					}//else{ this would happen if an object is created and then deleted, don't do anything
 					savingObjects.push(dirty);
 					dirtyObjects.splice(i--,1);
 				}
@@ -73,11 +76,10 @@ dojo.require("dojox.rpc.Rest");
 				var serviceAndId = jr.getServiceAndId(action.target.__id);
 				var service = serviceAndId.service; 
 				var dfd = action.deferred = service[action.method](
-									serviceAndId.id,
+									serviceAndId.id.replace(/#/,''), // if we are using references, we need eliminate #
 									dojox.json.ref.toJson(action.content, false, service.servicePath, true)
 								);
-				var schema = jr.schemas[service.servicePath];								
-				(function(object, dfd, idAttr){
+				(function(object, dfd, service){
 					dfd.addCallback(function(value){
 						try{
 							// Implements id assignment per the HTTP specification
@@ -85,20 +87,25 @@ dojo.require("dojox.rpc.Rest");
 							//TODO: match URLs if the servicePath is relative...
 							if(newId){
 								object.__id = newId;
-								var objectId = newId.match(/\/([^\/]*)$/);
-								if(idAttr && objectId){
-									object[idAttr] = objectId[1];
-								}
 								Rest._index[newId] = object;
-							} 
+							}
+							value = value && dojox.json.ref.resolveJson(value, {
+								index: Rest._index,
+								idPrefix: service.servicePath,
+								idAttribute: jr.getIdAttribute(service),
+								schemas: jr.schemas,
+								loader:	jr._loader,
+								assignAbsoluteIds: true
+							});
 						}catch(e){}
 						if(!(--left)){
 							if(kwArgs.onComplete){
 								kwArgs.onComplete.call(kwArgs.scope);
 							}
 						}
+						return value;
 					});
-				})(isPost && action.content, dfd, schema && schema._idAttr);
+				})(isPost && action.content, dfd, service);
 								
 				dfd.addErrback(function(value){
 					
@@ -156,6 +163,10 @@ dojo.require("dojox.rpc.Rest");
 			//or it will overwrite the premodification data set.
 			for(var i=0; i<dirtyObjects.length; i++){
 				if(object==dirtyObjects[i].object){
+					if(_deleting){
+						// we are deleting, no object is an indicator of deletiong
+						dirtyObjects[i].object = false;
+					}
 					return;
 				}
 			}

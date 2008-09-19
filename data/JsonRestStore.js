@@ -152,10 +152,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	setValue is the way to go.
 			dojox.rpc.JsonRest.deleteObject(item);
 			var store = dojox.data._getStoreForItem(item);
-			store._doDelete(item);
-		},
-		_doDelete : function(item){
-			this.onDelete(item);
+			store.onDelete(item);
 		},
 		changing: function(item,_deleting){
 			// summary:
@@ -179,7 +176,7 @@ dojo.declare("dojox.data.JsonRestStore",
 					throw new Error(dojo.map(result.errors,function(error){return error.message;}).join(","));
 				}
 			}
-			if(old != value){
+			if(old !== value){
 				store.changing(item);
 				item[attribute]=value;
 				store.onSet(item,attribute,old,value);

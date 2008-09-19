@@ -160,7 +160,7 @@ dojo.require("dojox.storage");
 				// we are not loaded, so we need to defer until we are loaded
 				dfd = new dojo.Deferred();
 				dfd.addCallback(arguments.callee);
-				dojo.connect(dojox.storage.manager,"loaded", function(){
+				dojox.storage.manager.addOnLoad(function(){
 					dfd.callback();
 				});
 				return dfd;
