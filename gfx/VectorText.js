@@ -83,7 +83,7 @@ dojo.require("dojox.html.metrics");
 			return tmp;	//	String
 		},
 		_parse: function(/* String */svg, /* String */url){
-			//	summary::
+			//	summary:
 			//		Take the loaded SVG Font definition file and convert the info
 			//		into things we can use. The SVG Font definition must follow
 			//		the SVG 1.1 Font specification.
