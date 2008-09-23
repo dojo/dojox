@@ -60,7 +60,9 @@ dojo.require("dojox.html.metrics");
 		_entityRe: /&(quot|apos|lt|gt|amp|#x[^;]+|#\d+);/g,
 		_decodeEntitySequence: function(str){
 			//	unescape the unicode sequences
-			if(!str.match(this._entityRe)){ return; }	//	nothing to decode.
+
+			//	nothing to decode
+			if(!str.match(this._entityRe)){ return; }  // undefined
 			var xmlEntityMap = {
 				amp:"&", apos:"'", quot:'"', lt:"<", gt:">"
 			};
@@ -81,7 +83,7 @@ dojo.require("dojox.html.metrics");
 			return tmp;	//	String
 		},
 		_parse: function(/* String */svg, /* String */url){
-			//	summary:
+			//	summary::
 			//		Take the loaded SVG Font definition file and convert the info
 			//		into things we can use. The SVG Font definition must follow
 			//		the SVG 1.1 Font specification.
@@ -250,7 +252,7 @@ dojo.require("dojox.html.metrics");
 			}
 		},
 		_clean: function(){
-			//	summary
+			//	summary:
 			//		Clean off all of the given mixin parameters.
 			var name = this.name, family = this.family;
 			dojo.forEach(["family","name","style","variant",
@@ -271,7 +273,7 @@ dojo.require("dojox.html.metrics");
 		},
 
 		constructor: function(/* String|dojo._Url */url){
-			//	summary:
+			//	summary::
 			//		Create this font object based on the SVG Font definition at url.
 			this._defaultLeading = 1.5;
 			if(url!==undefined){
@@ -279,7 +281,7 @@ dojo.require("dojox.html.metrics");
 			}
 		},
 		load: function(/* String|dojo._Url */url){
-			//	summary:
+			//	summary::
 			//		Load the passed SVG and send it to the parser for parsing.
 			this.onLoadBegin(url.toString());
 			this._parse(
@@ -290,7 +292,7 @@ dojo.require("dojox.html.metrics");
 			return this;	//	dojox.gfx.VectorFont
 		},
 		initialized: function(){
-			//	summary:
+			//	summary::
 			//		Return if we've loaded a font def, and the parsing was successful.
 			return (this.glyphs!==null);	//	Boolean
 		},
@@ -352,7 +354,7 @@ dojo.require("dojox.html.metrics");
 		},
 
 		_split: function(chars, nLines){
-			//	summary
+			//	summary:
 			//		split passed chars into nLines by finding the closest whitespace.
 			var w = this._getWidth(chars),
 				limit = Math.floor(w/nLines),
@@ -415,7 +417,7 @@ dojo.require("dojox.html.metrics");
 		},
 
 		_getFitFactor: function(lines, w, h, l){
-			//	summary
+			//	summary:
 			//		Find the scaling factor for the given phrase set.
 			if(!h){
 				//	if no height was passed, we assume an array of glyphs instead of lines.
@@ -427,7 +429,7 @@ dojo.require("dojox.html.metrics");
 			}
 		},
 		_getBestFit: function(chars, w, h, ldng){
-			//	summary
+			//	summary:
 			//		Get the best number of lines to return given w and h.
 			var limit=32,
 				factor=0,
@@ -444,7 +446,7 @@ dojo.require("dojox.html.metrics");
 		},
 
 		_getBestFlow: function(chars, w, scale){
-			//	summary
+			//	summary:
 			//		Based on the given scale, do the best line splitting possible.
 			var lines = [],
 				cw = 0,
@@ -476,14 +478,14 @@ dojo.require("dojox.html.metrics");
 
 		//	public functions
 		getWidth: function(/* String */text, /* Float? */scale){
-			//	summary
+			//	summary:
 			//		Get the width of the rendered text without actually rendering it.
 			return this._getWidth(dojo.map(this._normalize(text).split(""), function(chr){
 				return this.glyphs[chr] || { xAdvance: this.advance.missing.x };
 			}, this)) * (scale || 1);	//	Float
 		},
 		getLineHeight: function(/* Float? */scale){
-			//	summary
+			//	summary:
 			//		return the height of a single line, sans leading, based on scale.
 			return this.viewbox.height * (scale || 1);	//	Float
 		},
@@ -493,22 +495,22 @@ dojo.require("dojox.html.metrics");
 		//		and other coords that may help alignment.  We can calc the baseline and
 		//		we can get a mean line (i.e. center alignment) but that's about all, reliably.
 		getCenterline: function(/* Float? */scale){
-			//	summary
+			//	summary:
 			//		return the y coordinate that is the center of the viewbox.
 			return (scale||1) * (this.viewbox.height/2);
 		},
 		getBaseline: function(/* Float? */scale){
-			//	summary
+			//	summary:
 			//		Find the baseline coord for alignment; adjust for scale if passed.
 			return (scale||1) * (this.viewbox.height+this.descent);	//	Float
 		},
 
 		draw: function(/* dojox.gfx.Container */group, /* dojox.gfx.__TextArgs */textArgs, /* dojox.gfx.__FontArgs */fontArgs, /* dojox.gfx.__FillArgs */fillArgs, /* dojox.gfx.__StrokeArgs? */strokeArgs){
-			//	summary
+			//	summary:
 			//		based on the passed parameters, draw the given text using paths
 			//		defined by this font.
 			//
-			//	description
+			//	description:
 			//		The main method of a VectorFont, draw() will take a text fragment
 			//		and render it in a set of groups and paths based on the parameters
 			//		passed.
