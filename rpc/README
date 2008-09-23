@@ -5,7 +5,7 @@ Version 1.0
 Release date: 07/01/2007
 -------------------------------------------------------------------------------
 Project state:
-yahoo.smd: stable (but for old dojo.rpc, not the dojox.service.Rpc)
+yahoo.smd: production (but for old dojo.rpc, not the dojox.service.Rpc)
 Service.js: beta - this will become dojo.rpc.Service eventually and replace
 			the existing rpc system
 JsonRPC.js: beta - plugins for json-rpc for the rpc system

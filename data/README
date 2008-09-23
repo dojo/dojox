@@ -4,7 +4,7 @@ DojoX Data
 Version 1.1
 Release date: 03/18/2008
 -------------------------------------------------------------------------------
-Project state: stable
+Project state: production
 -------------------------------------------------------------------------------
 Project authors
 	Jared Jurkiewicz (jared.jurkiewicz@gmail.com) (FileStore, HtmlStore, XmlStore, FlickrStore, CssRuleStore, CssClassStore, others).

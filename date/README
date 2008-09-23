@@ -34,4 +34,7 @@ Install into the following directory structure:
 /dojox/date/
 
 ...which should be at the same level as your Dojo checkout.
+
+To use the non-Gregorian calendars, you must do a complete build of dojo.cldr.
+See util/buildscripts/cldr/README for details.
 -------------------------------------------------------------------------------
