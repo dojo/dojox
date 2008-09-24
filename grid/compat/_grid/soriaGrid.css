@@ -58,13 +58,13 @@
 	border: 1px solid transparent;
 	/* border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB; */
 	border-color: white #ACA899 #919191 white;
-	background: url(../../../dijit/themes/soria/images/titleBar.png) #e9e9e9 repeat-x top;
+	background: url(../../../../dijit/themes/soria/images/titleBar.png) #e9e9e9 repeat-x top;
 	padding-bottom: 2px;
 	color: #000 !important;
 }
 
 .soria .dojoxGrid-header .dojoxGrid-cell-over {
-	background: url(../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-x top;
+	background: url(../../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-x top;
 }
 
 .soria .dojoxGrid-sort-down {
@@ -126,7 +126,7 @@
 .soria .dojoxGrid-rowbar-selected {
 	background-color: #D9E8F9;
 	background-image: none;
-	background: url(../../../dijit/themes/soria/images/titleBar.png) #dddddd repeat-x top;
+	background: url(../../../../dijit/themes/soria/images/titleBar.png) #dddddd repeat-x top;
 	border-right: 1px solid #cccccc;
 	background-position: center;
 	background-repeat: no-repeat;
