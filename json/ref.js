@@ -97,7 +97,7 @@ dojox.json.ref = {
 									// // starting point was found, use eval to resolve remaining property references
 									// // need to also make reserved words safe by replacing with index operator
 									try{
-										ref = path[3] ? eval('ref' + path[3].replace(/^#/,'').replace(/\.([^\.]+)/g,'["$1"]')) : ref;
+										ref = path[3] ? eval('ref' + path[3].replace(/^#/,'').replace(/^([^\[\.])/,'.$1').replace(/\.([\w$_]+)/g,'["$1"]')) : ref;
 									}catch(e){
 										ref = null;
 									}
