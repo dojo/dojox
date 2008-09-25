@@ -44,7 +44,7 @@ dojox.form.FileUploader = function(options){
 	//
 	//	upload()
 	//
-	if(dojox.embed.Flash.available<9 && options.degradable && !dojo.isOpera){
+	if(dojox.embed.Flash.available > 9 && options.degradable && !dojo.isOpera){
 		return new dojox.form.FileInputOverlay({
 			button:options.button, 
 			uploadOnChange:options.uploadOnChange, 
@@ -578,7 +578,11 @@ dojo.declare("dojox.form.FileInputOverlay", null, {
 				this._formNode.setAttribute("enctype","multipart/form-data");
 			}
 			this._formNode.id = dijit.getUniqueId("form");
-			domNode.appendChild(this._formNode);
+			if (domNode && dojo.style(domNode, "display").indexOf("inline") > -1) {
+				document.body.appendChild(this._formNode);
+			}else{
+				domNode.appendChild(this._formNode);
+			}
 			this._setFormStyle();
 		},
 		
