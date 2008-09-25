@@ -32,11 +32,11 @@ dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
 dojox.validate._isInRangeCache = {};
 dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	// summary:
-	//	Validates whether a string denoting an integer, 
-	//	real number, or monetary value is between a max and min. 
+	//	Validates whether a string denoting a number
+	//	is between a max and min. 
 	//
 	// value: A string
-	// flags: {max:Number, min:Number, decimal:String}
+	// flags: {max:Number, min:Number, decimal:String, type:String}
 	//    flags.max  A number, which the value must be less than or equal to for the validation to be true.
 	//    flags.min  A number, which the value must be greater than or equal to for the validation to be true.
 	//    flags.decimal  The character used for the decimal point.  Default is ".".
