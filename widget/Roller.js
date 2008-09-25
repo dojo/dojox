@@ -124,7 +124,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 		var m = this._anim, 
 			t = this._timeout;
 
-		if(t){ cleartTimeout(t); }
+		if(t){ clearTimeout(t); }
 		m["in"].stop();
 		m["out"].stop();
 	},

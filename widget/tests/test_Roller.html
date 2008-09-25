@@ -82,7 +82,9 @@
 	
 	dojo.addOnLoad(function(){
 		
-		new dojox.widget.Roller({ delay: 3000 }, "dasroller");
+		var dasroller = new dojox.widget.Roller({ delay: 3000 }, "dasroller");
+		dojo.connect(dasroller.domNode, "onmouseenter", dasroller, "stop");
+		dojo.connect(dasroller.domNode, "onmouseleave", dasroller, "start");
 		
 		var items = ["one","two","three","four","five"];
 		new dojox.widget.Roller({ delay: 1000, items: items }, "roller2");
@@ -133,7 +135,7 @@
 	</div>
 
 	<h2>A Simple UL: (progressive)</h2>
-	
+	<p>start/stop onhover</p>
 	<div id="ex1" style="background:#ededed; width:175px;">
 		<ul id="dasroller">
 			<li>First Item</li>			
