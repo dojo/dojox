@@ -17,23 +17,18 @@ Space for extensions and additional plugins for dijit.Editor
 -------------------------------------------------------------------------------
 Dependencies:
 
-dijit.Editor
-dijit.Menu
+dijit
+dojox.form
+
 -------------------------------------------------------------------------------
 Documentation
 
-Editor.js, html.js, range.js, RichText.js, selection.js are all part of
-an experimental rewrite of the dijit.Editor which is known to have serious
-regressions.  See #6582, #5707.  This code may be merged back to dijit or abandoned.
-
-plugins
-Unrelated to the editor rewrite.  Plugins which work with dijit.Editor.
+The plugins directory contains extensions which work with dijit.Editor.
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
 
-Get the dojox/editor folder (and dojox/editor/plugins) from the 
-dojox SVN repository. Include the Editor and plugins in your page:
+Get dojo and dijit from svn. Include the Editor and plugins in your page:
 
 dojo.require("dijit.Editor");
 dojo.require("dojox.editor.plugins.TablePlugins");

@@ -30,14 +30,8 @@ var djConfig = {
 <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 <script>
 	dojo.require("dojo.parser");
-	dojo.require("dojox.editor.Editor");
+	dojo.require("dijit.Editor");
 	dojo.require("dojox.editor.plugins.UploadImage");
-	
-dojo.require("dojox.editor.plugins.AlwaysShowToolbar");
-dojo.require("dojox.editor.plugins.EnterKeyHandling");
-dojo.require("dojox.editor.plugins.LinkDialog");
-dojo.require("dojox.editor.plugins.FontChoice");
-dojo.require("dojox.editor.plugins.TextColor");
 	
 	dojo.addOnLoad(function(){
 		//
@@ -55,9 +49,9 @@ margin:20px 100px;
 </head>
 <body class="tundra">
 <div id="main">
-	<div dojoType="dojox.editor.Editor" plugins="[
+	<div dojoType="dijit.Editor" plugins="[
                        'undo', 'redo', 'bold','italic','underline','|', 'copy', 'cut', 				
-                       'paste','|','createLink','foreColor','hiliteColor','formatBlock',
+                       'paste','|',
                         {name: 'dojox.editor.plugins.UploadImage', command: 'uploadImage',
                         uploadUrl:'../../form/resources/UploadFile.php', 
                         downloadPath:'../../form/resources/', tempImageUrl:'../images/busy.gif'}

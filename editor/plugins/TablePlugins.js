@@ -1,6 +1,6 @@
 dojo.provide("dojox.editor.plugins.TablePlugins");
-dojo.require("dojox.editor._Plugin");
-dojo.require("dojox.editor.selection");
+dojo.require("dijit._editor._Plugin");
+dojo.require("dijit._editor.selection");
 dojo.require("dijit.Menu");
 dojo.require("dojo.i18n");
 dojo.requireLocalization("dojox.editor.plugins", "TableDialog");
@@ -13,7 +13,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 // 		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
 //
 //  example:
-//		|	<div dojoType="dojox.editor.Editor" plugins="[
+//		|	<div dojoType="dijit.Editor" plugins="[
 //		|			'bold','italic','|',
 //		|			{name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
 //		|			{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'}
@@ -34,7 +34,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 
 
 
-dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
+dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 	// summary:
 	//		A global object that handles common tasks for all the plugins. Since 
 	//		there are several plugins that are all calling common methods, it's preferable
@@ -55,13 +55,13 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		
 		dojo.mixin(this.editor,{
 			getAncestorElement: function(tagName){
-				return dojo.withGlobal(this.window, "getAncestorElement",dojox.editor.selection, [tagName]);
+				return dojo.withGlobal(this.window, "getAncestorElement",dijit._editor.selection, [tagName]);
 			},
 			hasAncestorElement: function(tagName){
-				return dojo.withGlobal(this.window, "hasAncestorElement",dojox.editor.selection, [tagName]);
+				return dojo.withGlobal(this.window, "hasAncestorElement",dijit._editor.selection, [tagName]);
 			},
 			selectElement: function(elem){
-				dojo.withGlobal(this.window, "selectElement",dojox.editor.selection, [elem]);
+				dojo.withGlobal(this.window, "selectElement",dijit._editor.selection, [elem]);
 			},
 			byId: function(id){
 				return dojo.withGlobal(this.window, "byId", dojo, [id]);
@@ -173,7 +173,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 		tbl.addEventListener("drag", dojo.hitch(this, "onDragStart2"), false);
 		tbl.addEventListener("dragend", dojo.hitch(this, "onDragStart3"), false);
 	
-		dojo.withGlobal(this.editor.window, "selectElement",dojox.editor.selection, [tbl]);
+		dojo.withGlobal(this.editor.window, "selectElement",dijit._editor.selection, [tbl]);
 		
 		tbl.ondragstart = function(){
 			console.log	("ondragstart");									
@@ -392,7 +392,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dojox.editor._Plugin,{
 tablePluginHandler = new dojox.editor.plugins.GlobalTableHandler(); //FIXME: no globals.
 
 dojo.declare("dojox.editor.plugins.TablePlugins",
-	dojox.editor._Plugin,
+	dijit._editor._Plugin,
 	{
 		//summary: 
 		// A collection of Plugins for inserting and modifying tables in the Editor
@@ -555,7 +555,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		selectTable: function(){
 			// selects table that is in focus 
 			var o = this.getTableInfo();
-			dojo.withGlobal(this.editor.window, "selectElement",dojox.editor.selection, [o.tbl]);
+			dojo.withGlobal(this.editor.window, "selectElement",dijit._editor.selection, [o.tbl]);
 		},
 		launchInsertDialog: function(){
 			var w = new dojox.editor.plugins.EditorTableDialog({});
