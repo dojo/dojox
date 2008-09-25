@@ -86,6 +86,11 @@ dojo.require("dojox.rpc.Rest");
 							var newId = dfd.ioArgs.xhr.getResponseHeader("Location");
 							//TODO: match URLs if the servicePath is relative...
 							if(newId){
+								// if the path starts in the middle of an absolute URL for Location, we will use the just the path part 
+								var startIndex = newId.match(/(^\w+:\/\/)/) && newId.indexOf(service.servicePath);
+								newId = startIndex > 0 ? newId.substring(startIndex) : (service.servicePath + newId).
+										// now do simple relative URL resolution in case of a relative URL. 
+										replace(/^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/,'$2$3');
 								object.__id = newId;
 								Rest._index[newId] = object;
 							}
