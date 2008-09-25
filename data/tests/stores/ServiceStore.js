@@ -38,7 +38,7 @@ doh.register("dojox.data.tests.stores.ServiceStore",
 				//	summary: 
 				//		Simple test of a basic fetch on ServiceStore of a single item.
 				var d = new doh.Deferred();
-				jsonStore.fetchItemByIdentity({identity:0, 
+				jsonStore.fetchItemByIdentity({identity:1, 
 					onItem: function(item, request){
 						t.is("Object 1", item.name);
 						t.is("Object 1",jsonStore.getValue(item,"name"));
@@ -48,7 +48,7 @@ doh.register("dojox.data.tests.stores.ServiceStore",
 						t.t(jsonStore.isItemLoaded(item));
 						t.t(jsonStore.containsValue(item,"name","Object 1"));
 						t.f(jsonStore.containsValue(item,"name","Something Else"));
-						t.is(jsonStore.getIdentity(item),0);
+						t.is(jsonStore.getIdentity(item),1);
 						t.t(dojo.indexOf(jsonStore.getAttributes(item),"name")>-1);
 						t.is("default",jsonStore.getValue(item,"nothing","default"));
 						d.callback(true);

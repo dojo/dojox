@@ -118,7 +118,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//		property to look up value for	
 	
 			var val = this.getValue(item,property);
-			return val instanceof Array ? val : [val];
+			return val instanceof Array ? val : val === undefined ? [] : [val];
 		},
 
 		getAttributes: function(item){
