@@ -293,7 +293,7 @@ dojo.declare("dojox.data.JsonRestStore",
 				args.identity = serviceAndId.id; 
 			}
 			args._prefix = store.service.servicePath;
-			store.inherited(arguments);
+			return store.inherited(arguments);
 		},
 		//Notifcation Support
 
