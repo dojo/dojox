@@ -82,6 +82,7 @@ dojo.provide("dojox.rpc.Rest");
 				contentType: isJson?'application/json':'text/plain',
 				sync: dojox.rpc._sync,
 				headers: {
+					Accept: isJson?'application/json,application/javascript':'*/*',
 					Range: args && (args.start >= 0 || args.count >= 0) ?  "items=" + (args.start || '') + '-' + ((args.count && (args.count + (args.start || 0) - 1)) || '') : undefined
 				}
 			};
