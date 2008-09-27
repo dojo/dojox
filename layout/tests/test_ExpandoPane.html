@@ -263,10 +263,11 @@
 							<p>This is a BorderContainer (the window). Each of the panes is set to one of
 							"left", "right", or "center". The left and right panes are ExpandoPanes (they collapse).
 							</p>
-							<p>What does a FloatingPane look like here?<br>
+							<p>What does a FloatingPane look like here?</p>
+							<p>
 							<button dojoType="dijit.form.Button">
 								Make Floater
-								<script type="dojo/method" event="onClick">
+								<script type="dojo/connect" event="onClick">
 									var div = dojo.doc.createElement('div');
 									dojo.body().appendChild(div);
 									var fp = new dojox.layout.FloatingPane({
@@ -286,6 +287,7 @@
 								</script>
 							</button>
 							</p>
+							<p>the end</p>
 						</div>
 					</div>
 					<div dojoType="dijit.layout.AccordionPane" title="Acc 3">c</div>

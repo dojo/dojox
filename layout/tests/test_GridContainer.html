@@ -3,55 +3,60 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 		<title>Demo GridContainer</title>
+
 		<style type="text/css" title="text/css">
-			/* <![CDATA[ */
-				@import "../../../dojo/resources/dojo.css";
-				@import "../../../dijit/themes/tundra/tundra.css";
-				
-				html,body{
-					margin:0;
-					padding:1%;
-				}
-				.dijitTitlePane .gripNode {
-				 	cursor: move;
-				}
-				
-				.dijitTitlePane .gripNode span {
-				 	cursor: pointer;
-				}
-				.cpane{
-					border:1px solid #666;
-					font:bold 12px Arial;
-					color:#F60;
-					background:#FFF;
-					padding:10px;
-					margin:5px;
-				}
-				
-				#GC1{
-					height:300px;
-					margin:10px;
-					padding:5px;
-					border : 1px dashed #333;
-					overflow-x:hidden;
-					overflow-y:scroll;
-				}
-				#GC1 .gridContainerTable {
-					border-collapse:collapse;
-				}
-				
-				#GC1 .gridContainerZone {
-					border-collapse:collapse;
-					border : 2px solid #ededed;
-				}
-			/* ]]> */
+			@import "../../../dojo/resources/dojo.css";
+			@import "../../../dijit/themes/tundra/tundra.css";
+			
+			html, body{
+				margin:0;
+				padding:1%;
+			}
+			.dijitTitlePane .gripNode {
+			 	cursor: move;
+			}
+			
+			.dijitTitlePane .gripNode span {
+			 	cursor: pointer;
+			}
+			.cpane{
+				border:1px solid #666;
+				font:bold 12px Arial;
+				color:#666;
+				background:#FFF;
+				padding:10px;
+				margin:2px;
+			}
+			
+			#GC1{
+				height:300px;
+				margin:10px;
+				padding:2px;
+				border:1px solid #ededed;
+				overflow-x:hidden;
+				overflow-y:auto;
+			}
+			
+			#GC1 .gridContainerTable {
+				border-collapse:collapse;
+			}
+			
+			#GC1 .gridContainerZone {
+				border-collapse:collapse;
+				border : 1px solid #ededed;
+			}
+			#GC2 {
+				border:1px solid #333;
+			}
 		</style>
 		
 		<link rel="stylesheet" href="../resources/GridContainer.css">
 		<link rel="stylesheet" href="../resources/DndGridContainer.css">
 		
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 		<script type="text/javascript" src="../GridContainer.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
@@ -64,20 +69,20 @@
 			var GC1;
 			function setColumns(){
 				GC1 = dijit.byId("GC1");
-				nb= dojo.byId("nbCol").value;
-				if (nb> 0)
+				var nb = dojo.byId("nbCol").value;
+				if(nb > 0){
 					GC1.setColumns(nb);
+				}
 			}
 		</script>
 
 	</head>
 
 	<body class="tundra">
-		<h1>Grid Container</h1>
 		
-		<h2>
-		   Grid Container (allowAutoScroll="true", hasResizableColumns="false")
-		</h2>
+		<h1 class="testTitle">Grid Container</h1>
+		
+		<h2>Grid Container (allowAutoScroll="true", hasResizableColumns="false")</h2>
 			
 			<h5>Add / remove dynamically columns :</h5>
 			<input value="5" name="col" id="nbCol"/>
@@ -88,7 +93,7 @@
 				nbZones="3"
 				opacity="0.7" 
 				allowAutoScroll="true" 
-				hasResizableColumns="false"				
+				hasResizableColumns="false"
 				withHandles="true"
 				acceptTypes="dijit.layout.ContentPane, dijit.TitlePane, dijit.ColorPalette, dijit._Calendar">
 					<div dojoType="dijit.layout.ContentPane" class="cpane" label="Content Pane">Content Pane n°1 !</div>
