@@ -96,7 +96,7 @@ dojo.declare("dojox.grid._Layout", null, {
 			index: this.cells.length
 		};
 
-		if(inDef && inDef._props){
+		if(inDef && inDef instanceof dojox.grid.cells._Base){
 			var new_cell = dojo.clone(inDef);
 			props.unitWidth = getCellWidth(new_cell._props);
 			new_cell = dojo.mixin(new_cell, this._defaultCellProps, inDef._props, props);

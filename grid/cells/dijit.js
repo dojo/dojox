@@ -113,7 +113,7 @@ dojo.require("dijit.Editor");
 		getValue: function(){
 			var e = this.widget;
 			// make sure to apply the displayed value
-			e.setDisplayedValue(e.getDisplayedValue());
+			e.attr('displayedValue', e.attr('displayedValue'));
 			return e.attr('value');
 		}
 	});
