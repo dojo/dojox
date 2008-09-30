@@ -225,7 +225,9 @@ dojo.requireLocalization("dojox.grid", "grid");
 			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
 			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
 			this.noDataMessage = dojo.string.substitute(this.noDataMessage, messages);
-			
+			if(this.srcNodeRef && this.srcNodeRef.style.height){
+				this.height = this.srcNodeRef.style.height;
+			}
 			// Call this to update our autoheight to start out
 			this._setAutoHeightAttr(this.autoHeight, true);
 		},
