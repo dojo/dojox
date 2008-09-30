@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Test dojox.grid.Grid Editing</title>
+		<title>Test dojox.grid.Grid layout in a BorderContainer</title>
 		<style>
 			@import "../resources/Grid.css";
 			@import "../resources/tundraGrid.css";
@@ -19,7 +19,7 @@
 			}
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js"
-			djConfig="isDebug:false, parseOnLoad: true"></script>
+			djConfig="isDebug: false, parseOnLoad: true"></script>
 
 		<script type="text/javascript">
 			dojo.require("dojox.grid.DataGrid");
@@ -48,11 +48,11 @@
 		</script>
 	</head>
 	<body class="tundra">
-		<div dojoType="dijit.layout.BorderContainer"  liveSplitters="false" persist="true"
+		<div dojoType="dijit.layout.BorderContainer" liveSplitters="false" persist="true"
 		          id="verticalSplitParam" design="headline" style="width: 100%; height: 100%;">
-		
+
 		  <div dojoType="dijit.layout.ContentPane" id="mybuttons"
-		             region="top" splitter="true">  
+		             region="top" splitter="false">  
 		     <button onclick="grid.render()">Refresh</button>
 		     <button onclick="grid.edit.focusEditor()">Focus Editor</button>
 		     <button onclick="grid.focus.next()">Next Focus</button>
@@ -63,14 +63,14 @@
 		     <button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 		  </div>
 		
-		  <div jsId="grid" class="myGrid"	dojoType="dojox.grid.DataGrid" store="test_store" structure="gridLayout"
+		  <div jsId="grid" class="myGrid" dojoType="dojox.grid.DataGrid" store="test_store" structure="gridLayout"
 		  	region="center">
 		  </div>
 
 		  <div jsId="gridBottom" class="myGrid"	dojoType="dojox.grid.DataGrid" store="test_store" structure="gridLayout"
 		  	region="bottom" splitter="true" style="height: 100px;">
 		  </div>
-		   		  
+		   
 		</div>
 
 	</body>
