@@ -95,13 +95,6 @@
 		dojo.connect(dojo.byId('easeOut'),"onclick",easeOutAnim,"play");
 		dojo.connect(dojo.byId('easeInOut'),"onclick",easeInOutAnim,"play");
 		dojo.connect(dojo.byId('linearEase'),"onclick",linearEaseAnim,"play");
-		dojo.connect(window,"onclick",function(e){
-			dojo.fx.slideTo({
-				node:"bounce",
-				top:e.pageY, left:e.pageX,
-				easing: dojo.fx.easing.easeOutBack
-			}).play();
-		});
 
 		allAnim = { play: function(){ 
 			easeInAnim.play();
@@ -132,8 +125,6 @@
 	dojo.fx.easing is stand-alone, and does not require the dojox.fx base files. to see a chart
 	of these functions see <a href="example_easingChart2D.html">example_easingChart2D.html</a> 
 	</p>	
-
-	<div id="bounce" class="bounce">bounce</div>
 
 </body>
 </html>

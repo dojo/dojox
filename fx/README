@@ -12,6 +12,7 @@ Credits
 	Jonathan Bond-Caron (jbondc@gmail.com)
 	Shane O'Sullivan (shaneosullivan1@gmail.com)
 	Bryan Forbes (bforbes)
+	Nicola Rizzo (nic)
 
 -------------------------------------------------------------------------------
 Project description
@@ -24,6 +25,7 @@ Dependencies:
 
 	dojox.fx requires dojo (core) and the dojo.fx package
 	dojox.fx.easing requires only dojo core. 
+	dojox.fx.flip requires dojo.fx
 	dojox.fx.scroll requires dojox.fx._core and dojo.fx
 
 -------------------------------------------------------------------------------
@@ -41,7 +43,7 @@ Documentation
 	(all use standard _Animation properties, like duration, easing, node, etc)
 
 	dojox.fx._core:
-	- dojox.fx._Line - a 2-d _Line implementation, backwards compatible with
+	- dojox.fx._Line - a multi-dimensional _Line implementation, backwards compatible with
 		dojo._Line ... you might could safely do something akin to
 		dojo._Line.prototype = dojox.fx._Line.prototype;
 		and enable this for all dojo _Animations?
@@ -55,6 +57,9 @@ Documentation
 		relevant dojox.fx animations into dojo.NodeList 
 
 	dojox.fx.Shadow - Class to add drop shadows to a node
+
+	dojox.fx.flip - a Module providing pseudo-3d flip animations for nodes.
+		Currently experimental. 
 
 -------------------------------------------------------------------------------
 Installation instructions
