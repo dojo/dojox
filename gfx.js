@@ -7,21 +7,37 @@ dojo.loadInit(function(){
 	//Since loaderInit can be fired before any dojo.provide/require calls,
 	//make sure the dojox.gfx object exists and only run this logic if dojox.gfx.renderer
 	//has not been defined yet.
-	var gfx = dojo.getObject("dojox.gfx", true), sl, flag;
+	var gfx = dojo.getObject("dojox.gfx", true), sl, flag, match;
 	if(!gfx.renderer){
-		var renderers = (typeof dojo.config["gfxRenderer"] == "string" ?
-			dojo.config["gfxRenderer"] : "svg,vml,silverlight,canvas").split(",");
+		var renderers = (typeof dojo.config.gfxRenderer == "string" ?
+			dojo.config.gfxRenderer : "svg,vml,silverlight,canvas").split(",");
 
-		//	comprehensive iPhone test.  Have to figure out whether it's SVG or Canvas based on the build.
-		//	iPhone OS build numbers from en.wikipedia.org.
-		var ua = navigator.userAgent, iPhoneOSBuild=0;
-		if(ua.indexOf("iPhone")>-1 || ua.indexOf("iPod")>-1){
-			//	grab the build out of this.  Expression is a little nasty because we want 
-			//		to be sure we have the whole version string.
-			var match = ua.match(/Version\/(\d(\.\d)?(\.\d)?)\sMobile\/([^\s]*)\s?/);
-			if(match){
-				//	grab the build out of the match.  Only use the first three because of specific builds.
-				iPhoneOSBuild = parseInt(match[4].substr(0,3), 16);
+		// mobile platform detection
+		// TODO: move to the base?
+
+		var ua = navigator.userAgent, iPhoneOsBuild = 0, androidVersion = 0;
+		if(dojo.isSafari >= 3){
+			// detect mobile version of WebKit starting with "version 3"
+
+			//	comprehensive iPhone test.  Have to figure out whether it's SVG or Canvas based on the build.
+			//	iPhone OS build numbers from en.wikipedia.org.
+			if(ua.indexOf("iPhone") >= 0 || ua.indexOf("iPod") >= 0){
+				//	grab the build out of this.  Expression is a little nasty because we want
+				//		to be sure we have the whole version string.
+				match = ua.match(/Version\/(\d(\.\d)?(\.\d)?)\sMobile\/([^\s]*)\s?/);
+				if(match){
+					//	grab the build out of the match.  Only use the first three because of specific builds.
+					iPhoneOsBuild = parseInt(match[4].substr(0,3), 16);
+				}
+			}
+
+			// Android detection
+			if(!iPhoneOsBuild){
+				match = ua.match(/Android\s+(\d+\.\d+)/);
+				if(match){
+					androidVersion = parseFloat(match[1]);
+					// Android 1.0 doesn't support SVG but supports Canvas
+				}
 			}
 		}
 
@@ -29,7 +45,7 @@ dojo.loadInit(function(){
 			switch(renderers[i]){
 				case "svg":
 					//	iPhone OS builds greater than 5F1 should have SVG.
-					if(!dojo.isIE && (!iPhoneOSBuild || iPhoneOSBuild >= 0x5f1)){ 
+					if(!dojo.isIE && (!iPhoneOsBuild || iPhoneOsBuild >= 0x5f1) && !androidVersion){
 						dojox.gfx.renderer = "svg";
 					}
 					break;
@@ -59,14 +75,16 @@ dojo.loadInit(function(){
 					break;
 				case "canvas":
 					//TODO: need more comprehensive test for Canvas
-					if(!dojo.isIE){ 
+					if(!dojo.isIE){
 						dojox.gfx.renderer = "canvas";
 					}
 					break;
 			}
 			if(dojox.gfx.renderer){ break; }
 		}
-		console.log("gfx renderer = " + dojox.gfx.renderer);
+		if(dojo.config.isDebug){
+			console.log("gfx renderer = " + dojox.gfx.renderer);
+		}
 	}
 });
 
