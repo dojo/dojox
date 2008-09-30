@@ -52,26 +52,25 @@
 		          id="verticalSplitParam" design="headline" style="width: 100%; height: 100%;">
 		
 		  <div dojoType="dijit.layout.ContentPane" id="mybuttons"
-		             region="top" splitter="true"  style="height: 10%;">  
-		
-			    <div id="controls">
-				     <button onclick="grid.render()">Refresh</button>
-				     <button onclick="grid.edit.focusEditor()">Focus Editor</button>
-				     <button onclick="grid.focus.next()">Next Focus</button>
-				     <button onclick="addRow()">Add Row</button>
-				     <button onclick="grid.removeSelectedRows()">Remove</button>
-				     <button onclick="grid.edit.apply()">Apply</button>
-				     <button onclick="grid.edit.cancel()">Cancel</button>
-				     <button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
-			    </div>
+		             region="top" splitter="true">  
+		     <button onclick="grid.render()">Refresh</button>
+		     <button onclick="grid.edit.focusEditor()">Focus Editor</button>
+		     <button onclick="grid.focus.next()">Next Focus</button>
+		     <button onclick="addRow()">Add Row</button>
+		     <button onclick="grid.removeSelectedRows()">Remove</button>
+		     <button onclick="grid.edit.apply()">Apply</button>
+		     <button onclick="grid.edit.cancel()">Cancel</button>
+		     <button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 		  </div>
 		
-		  <div jsId="grid" class="myGrid"	dojoType="dojox.grid.DataGrid" store="test_store" structure="gridLayout"
-		  	region="center"></div>
-		  
 		  <div jsId="gridBottom" class="myGrid"	dojoType="dojox.grid.DataGrid" store="test_store" structure="gridLayout"
-		  	region="bottom" splitter="true" style="height: 100px;"></div>
+		  	region="bottom" splitter="true" style="height: 100px;">
+		  </div>
 		   
+		  <div jsId="grid" class="myGrid"	dojoType="dojox.grid.DataGrid" store="test_store" structure="gridLayout"
+		  	region="center">
+		  </div>
+		  
 		</div>
 
 	</body>
