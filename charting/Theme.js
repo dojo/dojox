@@ -96,12 +96,7 @@ dojo.require("dojox.color.Palette");
 			font: "normal normal normal 7pt Tahoma",					//	label
 			fontColor: "#000"
 		},
-		colors:[
-			"#000","#111","#222","#333",
-			"#444","#555","#666","#777",
-			"#888","#999","#aaa","#bbb",
-			"#ccc"
-		]
+		colors:[ "#54544c","#858e94","#6e767a","#948585","#474747" ]
 	};
 	
 	//	prototype methods
