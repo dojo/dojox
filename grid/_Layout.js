@@ -68,7 +68,6 @@ dojo.declare("dojox.grid._Layout", null, {
 				v._togglingColumn = dojo.marginBox(cell.getHeaderNode()).w || 0;
 			}
 			v.update();
-			v.convertColPctToFixed();
 			return true;
 		}else{
 			return false;
