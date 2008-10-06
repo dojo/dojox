@@ -165,7 +165,7 @@ dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
 		return (this.data && this.data.length ? this.data[0].length : this.fields.count());
 	},
 	badIndex: function(inCaller, inDescriptor){
-		console.debug('dojox.grid.data.Table: badIndex');
+		console.error('dojox.grid.data.Table: badIndex');
 	},
 	isGoodIndex: function(inRowIndex, inColIndex){
 		return (inRowIndex >= 0 && inRowIndex < this.count && (arguments.length < 2 || (inColIndex >= 0 && inColIndex < this.colCount)));
@@ -373,7 +373,7 @@ dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
 			row[inColIndex] = inDatum;
 			this.datumChange(inDatum, inRowIndex, inColIndex);
 		}else{
-			console.debug('[' + this.declaredClass + '] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row');
+			console.error('[' + this.declaredClass + '] dojox.grid.data.dynamic.set: cannot set data on a non-loaded row');
 		}
 	},
 	// sort
@@ -675,12 +675,10 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		}
 	},
 	insertion: function(/* index */){
-		console.debug("Insertion", arguments);
 		this.notify("Insertion", arguments);
 		this.notify("Change", arguments);
 	},
 	removal: function(/* keys */){
-		console.debug("Removal", arguments);
 		this.notify("Removal", arguments);
 		this.notify("Change", arguments);
 	},
