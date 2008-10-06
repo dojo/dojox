@@ -675,12 +675,10 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		}
 	},
 	insertion: function(/* index */){
-		console.debug("Insertion", arguments);
 		this.notify("Insertion", arguments);
 		this.notify("Change", arguments);
 	},
 	removal: function(/* keys */){
-		console.debug("Removal", arguments);
 		this.notify("Removal", arguments);
 		this.notify("Change", arguments);
 	},
