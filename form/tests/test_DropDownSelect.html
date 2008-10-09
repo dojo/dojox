@@ -62,7 +62,7 @@
 	<body class="tundra">
 		<h1 class="testTitle">Test: dojox.form.DropDownSelect</h1>
 		<h2>Automated test</h2>
-		<form dojoType="dijit.form.Form" jsId="form">
+		<form dojoType="dijit.form.Form" jsId="form" method="get">
 			<h4 class="testSubtitle">Setting Defaults</h4>
 			<select jsId="s1" name="s1" dojoType="dojox.form.DropDownSelect">
 				<option value="TN">Tennessee</option>
@@ -138,6 +138,7 @@
 				</script>
 				Toggle Disabled
 			</button>
+			<button dojoType="dijit.form.Button" type="submit">Submit</button>
 		</form>
 	</body>
 </html>

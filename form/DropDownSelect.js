@@ -7,6 +7,7 @@ dojo.require("dijit.Menu");
 dojo.requireLocalization("dijit.form", "validate");
 
 dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.form._HasDropDown], {
+	attributeMap: dojo.mixin(dojo.clone(dojox.form._FormSelectWidget.prototype.attributeMap),{value:"valueNode",name:"valueNode"}),
 	// summary:
 	//		This is a "Styleable" select box - it is basically a DropDownButton which
 	//		can take as its input a <select>.
@@ -105,6 +106,11 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			delete this._iDisabled;
 		}
 		this._setValueAttr(this.value);
+	},
+	
+	_setValueAttr: function(value){
+		this.inherited(arguments);
+		dojo.attr(this.valueNode, "value", this.attr("value"));
 	},
 	
 	_setDisplay: function(/*String*/ newDisplay){
