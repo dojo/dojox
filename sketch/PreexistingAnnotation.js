@@ -54,6 +54,18 @@ dojo.require("dojox.sketch.Anchor");
 				if(c.getAttribute('y')!==null){ this.start.y=parseFloat(c.getAttribute('y'), 10); }
 				if(c.getAttribute('height')!==null){ this.end.y=parseFloat(c.getAttribute('height'), 10)+parseFloat(c.getAttribute('y'), 10); }
 				if(c.getAttribute('r')!==null){ this.radius=parseFloat(c.getAttribute('r'),10); }
+				var stroke=this.property('stroke');
+				var style=c.getAttribute('style');
+				var m=style.match(/stroke:([^;]+);/)[1];
+				if(m){
+					stroke.color=m;
+					this.property('fill',m);
+				}
+				m=style.match(/stroke-width:([^;]+);/)[1];
+				if(m){
+					stroke.width=m;
+				}
+				this.property('stroke',stroke);
 			}
 		}
 	};

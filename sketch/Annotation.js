@@ -5,11 +5,13 @@ dojo.require("dojox.sketch._Plugin");
 (function(){
 	var ta=dojox.sketch;
 	dojo.declare("dojox.sketch.AnnotationTool", ta._Plugin, {
-//		constructor: function(){
-////			console.log('this.shape',this.shape);
-////			this.annotation=ta.tools[this.shape];
-//		},
+		onMouseDown: function(e){
+			this._omd=true;
+		},
 		onMouseMove: function(e,rect){
+			if(!this._omd){
+				return;
+			}
 			if(this._cshape){ 
 				this._cshape.setShape(rect);
 			} else {
@@ -20,23 +22,23 @@ dojo.require("dojox.sketch._Plugin");
 			}
 		},
 		onMouseUp: function(e){
+			this._omd=false;
 			var f=this.figure;
-			if(!(f._startPoint.x==e.pageX&&f._startPoint.y==e.pageY)){
-				if(this._cshape){
-					//	The minimum number of pixels one has to travel before a shape
-					//		gets drawn.
-					var limit=40;
-					if(Math.max(
-						limit, 
-						Math.abs(f._absEnd.x-f._start.x), 
-						Math.abs(f._absEnd.y-f._start.y)
-					)>limit){
-						this._create(f._start, f._end);
-					}
-				}
-			}
 			if(this._cshape){ 
-				f.surface.remove(this._cshape); 
+				f.surface.remove(this._cshape);
+				delete this._cshape;
+			}
+			if(!(f._startPoint.x==e.pageX&&f._startPoint.y==e.pageY)){
+				//	The minimum number of pixels one has to travel before a shape
+				//		gets drawn.
+				var limit=40;
+				if(Math.max(
+					limit, 
+					Math.abs(f._absEnd.x-f._start.x), 
+					Math.abs(f._absEnd.y-f._start.y)
+				)>limit){
+					this._create(f._start, f._end);
+				}
 			}
 		},
 		_create: function(start,end){
@@ -91,7 +93,8 @@ dojo.require("dojox.sketch._Plugin");
 	p.constructor=ta.Annotation;
 	p.type=function(){ return ''; };
 	p.getType=function(){ return ta.Annotation; };
-	p.remove=function(){
+	p.onRemove=function(noundo){
+		//this.figure._delete([this],noundo);
 		this.figure.history.add(ta.CommandTypes.Delete, this, this.serialize());
 	};
 	p.property=function(name,/*?*/value){
@@ -102,9 +105,9 @@ dojo.require("dojox.sketch._Plugin");
 		}
 		if(arguments.length>1){
 			this._properties[name]=value;
-		}
-		if(r!=value){
-			this.onPropertyChange(name,r);
+			if(r!=value){
+				this.onPropertyChange(name,r);
+			}
 		}
 		return r;
 	};

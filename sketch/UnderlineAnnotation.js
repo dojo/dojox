@@ -29,6 +29,19 @@ dojo.require("dojox.sketch.Anchor");
 			var c=obj.childNodes[i];
 			if(c.localName=="text"){ 
 				this.property('label',c.childNodes[0].nodeValue);
+			}else if(c.localName=="line"){
+				var stroke=this.property('stroke');
+				var style=c.getAttribute('style');
+				var m=style.match(/stroke:([^;]+);/)[1];
+				if(m){
+					stroke.color=m;
+					this.property('fill',m);
+				}
+				m=style.match(/stroke-width:([^;]+);/)[1];
+				if(m){
+					stroke.width=m;
+				}
+				this.property('stroke',stroke);
 			}
 		}
 	};

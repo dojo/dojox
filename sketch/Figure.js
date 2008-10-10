@@ -8,7 +8,7 @@ dojo.require("dojox.sketch.UndoStack");
 	var ta=dojox.sketch;
 	ta.tools={};
 	ta.registerTool=function(type, fn){ ta.tools[type]=fn; };
-	ta.Figure = function(){
+	ta.Figure = function(mixin){
 		var self=this;
 		var annCounter=1;
 
@@ -27,7 +27,7 @@ dojo.require("dojox.sketch.UndoStack");
 
 		this.obj={};		//	lookup table for shapes.  Not keen on this solution.
 
-		this.initUndoStack();
+		dojo.mixin(this,mixin);
 
 		//	what is selected.
 		this.selected=[];
@@ -127,17 +127,17 @@ dojo.require("dojox.sketch.UndoStack");
 		this._keydown=function(e){
 			var prevent=false;
 			if(e.ctrlKey){
-				if(e.keyCode==90){ //ctrl+z
+				if(e.keyCode===90){ //ctrl+z
 					self.undo();
 					prevent = true;
 				}
-				else if(e.keyCode==89){ //ctrl+y
+				else if(e.keyCode===89){ //ctrl+y
 					self.redo();
 					prevent = true;
 				}
 			}
 
-			if(e.keyCode==46 || e.keyCode==8){ //delete or backspace
+			if(e.keyCode===46 || e.keyCode===8){ //delete or backspace
 				self._delete(self.selected);
 				prevent = true;
 			}
@@ -214,15 +214,17 @@ dojo.require("dojox.sketch.UndoStack");
 			for(var i=0; i<arr.length; i++){
 				//var before=arr[i].serialize();
 				if(!noundo){
-					arr[i].remove();
+					arr[i].onRemove();
 				}
 				arr[i].setMode(ta.Annotation.Modes.View);
-				arr[i].destroy();
+				arr[i].destroy(noundo);
 				self.remove(arr[i]);
 				self._remove(arr[i]);
 			}
 			arr.splice(0,arr.length);
 		};
+
+		this.initUndoStack();
 	};
 
 	var p=ta.Figure.prototype;

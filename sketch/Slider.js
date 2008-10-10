@@ -8,7 +8,8 @@ dojo.declare("dojox.sketch.Slider",dojox.sketch._Plugin,{
 		this.connect(this.slider.sliderHandle,'ondblclick','_zoomToFit');
 	},
 	_zoomToFit: function(){
-		this.slider.setValue(this.figure.getFit(),true);
+		var r=this.figure.getFit();
+		this.slider.setValue(this.slider.maximum<r?this.slider.maximum:(this.slider.minimum>r?this.slider.minimum:r),true);
 	},
 	_setZoom: function(v){
 		if(this.figure){
