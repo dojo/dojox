@@ -263,6 +263,7 @@ dojo.require("dojo.fx");
 		var d = dims[args.dir || "left"],
 			p = d.args
 		;
+		args.duration = args.duration ? args.duration * 2 : 500; 
 		
 		for(var i = p.length - 1; i >= 0; i--){
 			dojo.mixin(args, p[i]);
