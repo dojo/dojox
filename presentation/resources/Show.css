@@ -28,7 +28,7 @@
 			text-align: center;
 			z-index:420; 
 			padding:0; 
-			margin-bttom:5px; height:34px; 
+			margin-bottom:5px; height:34px; 
 		}
 
 		.dojoShowNav img { cursor:pointer; } 
@@ -37,7 +37,7 @@
 			/* width:100%; height:100%; */
 		}
 
-		.dojoShowNav option { font:6pt; color:#333; }
+		.dojoShowNav option { font-size:6pt; color:#333; }
 		.dojoShowNav select {
 			margin: 0px;
 			color: #999; 

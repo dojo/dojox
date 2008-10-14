@@ -11,7 +11,7 @@ dojo.require("dojo.fx");
 dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Templated ], {
 	// summary:
 	//	dojox.presentation class
-	//	basic powerpoint esque engine for handling transitons and control
+	//	basic presentation engine for handling transitons and control
 	//	in a page-by-page and part-by-part way
 	//	
 	// 	FIXME: parsing part(s)/widget(s) in href="" Slides not working
@@ -118,8 +118,12 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		// summary: transition to the previous slide
 		if(this.selectedChildWidget && !this.selectedChildWidget.isFirstChild){
 			this._gotoSlide(this._slideIndex-1);
-		}else{ this.selectedChildWidget && this.selectedChildWidget._reset(); } 
-		if(evt){ evt.stopPropagation();}
+		}else if(this.selectedChildWidget){
+			this.selectedChildWidget._reset();
+		} 
+		if(evt){
+			evt.stopPropagation();
+		}
 	},
 
 	getHash: function(id){
@@ -327,7 +331,7 @@ dojo.declare(
 	[dijit.layout.ContentPane,dijit._Contained,dijit._Container,dijit._Templated],
 	{
 	// summary:
-	//	a Comonent of a dojox.presentation, and container for each 'Slide'
+	//	a Component of a dojox.presentation, and container for each 'Slide'
 	//	made up of direct HTML (no part/action relationship), and dojox.presentation.Part(s),
 	//	and their attached Actions.
 
@@ -474,7 +478,7 @@ dojo.declare("dojox.presentation.Part", [dijit._Widget,dijit._Contained], {
 dojo.declare("dojox.presentation.Action", [dijit._Widget, dijit._Contained], {
 	// summary:	
 	//	a widget to attach to a dojox.presentation.Part to control
-	//	it's properties based on an inherited chain of events ...
+	//	its properties based on an inherited chain of events ...
 	//
 	//
 	// on: String
