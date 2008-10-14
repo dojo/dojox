@@ -258,7 +258,7 @@ dojo.declare("dojox.image.SlideShow",
 		}else{
 			dojo.toggleClass(this.domNode,"slideShowPaused");
 			this._timerCancelled = false;
-			if(this.images[this.imageIndex] && this.images[this.imageIndex].complete){
+			if(this.images[this.imageIndex] && this.images[this.imageIndex]._img.complete){
 				var success = this.showNextImage(true, true);
 				if(!success){
 			  	this._stop();
