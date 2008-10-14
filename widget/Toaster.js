@@ -17,8 +17,6 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 		//		{message: "hello word", type: "error", duration: 500}
 		messageTopic: "",
 
-		_uniqueId: 0,
-
 		// messageTypes: Enumeration
 		//		Possible message types.
 		messageTypes: {
@@ -240,7 +238,7 @@ dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
 			style.clip = "rect(0px, " + nodeSize.w + "px, " + nodeSize.h + "px, 0px)";
 			if(dojo.isIE){
 				if(!this.bgIframe){
-					this.clipNode.id = "__dojoXToaster_"+this._uniqueId++;
+					this.clipNode.id = dijit.getUniqueId("dojox_widget_Toaster_clipNode");
 					this.bgIframe = new dijit.BackgroundIframe(this.clipNode);
 				}
 				var iframe = this.bgIframe.iframe;
