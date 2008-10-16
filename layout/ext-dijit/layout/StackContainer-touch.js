@@ -2,6 +2,10 @@ dojo.provide("dojox.layout.ext-dijit.layout.StackContainer-touch");
 dojo.experimental("dojox.layout.ext-dijit.layout.StackContainer-touch");
 dojo.require("dijit.layout.StackContainer");
 
+// To support "flick" actions on iPhone, iPod Touch, etc.
+// Implemented as a mixin to work with StackContainer (horizontal) and AccordionContainer (vertical)
+// TODO: use native CSS animations for fx, provide live tracking of touch and perhaps a 'bounce' effect.
+
 dojo.connect(dijit.layout.StackContainer.prototype, "postCreate", function(){
 	this.axis = (this.baseClass == "dijitAccordionContainer") ? "Y" : "X";
 	dojo.forEach(
