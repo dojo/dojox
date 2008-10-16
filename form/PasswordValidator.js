@@ -25,6 +25,17 @@ dojo.declare("dojox.form._ChildTextBox", dijit.form.ValidationTextBox, {
 		//		call our parent class directly (not this.inherited())
 		dijit.form.ValidationTextBox.prototype._setValueAttr.call(this, "", true);
 		this._hasBeenBlurred = false;
+	},
+	
+	postCreate: function(){
+		// summary:
+		//		We want to remove the "name" attribute from our focus node if
+		//		we don't have one set - this prevents all our extra values
+		//		from being posted on submit
+		this.inherited(arguments);
+		if(!this.name){
+			dojo.removeAttr(this.focusNode, "name");
+		}
 	}
 });
 
@@ -51,6 +62,8 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 			this._isPWValid = this.containerWidget.pwCheck(newVal);
 		}
 		this.inherited(arguments);
+		// Trigger the containerWidget to recheck its value, if needed
+		this.containerWidget._childValueAttr(this.containerWidget._inputWidgets[1].attr("value"));
 	},
 
 	isValid: function(/* boolean */ isFocused){
@@ -228,6 +241,12 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 			throw new Error("Need to specify pwType=\"old\" if using oldName");
 		}
 		this._createSubWidgets();
+		this.connect(this._inputWidgets[1], "_setValueAttr", "_childValueAttr");
+		this.connect(this._inputWidgets[2], "_setValueAttr", "_childValueAttr");		
+	},
+	
+	_childValueAttr: function(v){
+		this.attr("value", this.isValid() ? v : "");
 	},
 	
 	_setDisabledAttr: function(value){
@@ -247,11 +266,14 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 		});
 	},
 
+	_setValueAttr: function(v){
+		this.inherited(arguments);
+		dojo.attr(this.focusNode, "value", v);
+	},
+	
 	_getValueAttr: function(){
-		if(this.isValid()){
-			return this._inputWidgets[1].attr("value");
-		}
-		return "";
+		// Make sure we don't return undefined....
+		return this.inherited(arguments)||"";
 	},
 	
 	focus: function(){
