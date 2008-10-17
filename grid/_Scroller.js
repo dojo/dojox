@@ -140,7 +140,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		measurePage: function(inPageIndex){
 			var n = this.getDefaultPageNode(inPageIndex);
-			return n.innerHTML ? n.offsetHeight : 0;
+			return (n&&n.innerHTML) ? n.offsetHeight : 0;
 		},
 		positionPage: function(inPageIndex, inPos){
 			for(var i=0; i<this.colCount; i++){
