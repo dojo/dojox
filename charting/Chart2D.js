@@ -128,6 +128,15 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			this.dirty = true;
 			return this;
 		},
+		removePlot: function(name){
+			if(name in this.plots){
+				var index = this.plots[name];
+				this.stack[index].destroy();
+				this.stack.splice(index, 1);
+			}
+			this.dirty = true;
+			return this;
+		},
 		addSeries: function(name, data, kwArgs){
 			var run = new dc.Series(this, data, kwArgs);
 			if(name in this.runs){
