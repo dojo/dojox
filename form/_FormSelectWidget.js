@@ -185,6 +185,23 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		this._handleOnChange(this.value, priorityChange);
 	},
 	
+	_getDisplayedValueAttr: function(){
+		// summary: returns the displayed value of the widget
+		var val = this.attr("value");
+		if(!dojo.isArray(val)){
+			val = [val];
+		}
+		var ret = dojo.map(this.getOptions(val), function(v){
+			if(v && "label" in v){
+				return v.label;
+			}else if(v){
+				return v.value;
+			}
+			return null;
+		}, this);
+		return this._multiValue ? ret : ret[0];
+	},
+	
 	_getValueDeprecated: false, // remove when _FormWidget:getValue is removed
 	getValue: function(){
 		// summary: get the value of the widget.

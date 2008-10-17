@@ -139,6 +139,12 @@
 				Toggle Disabled
 			</button>
 			<button dojoType="dijit.form.Button" type="submit">Submit</button>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					console.log(s1.attr("displayedValue"));
+				</script>
+				Get Displayed Value
+			</button>
 		</form>
 	</body>
 </html>

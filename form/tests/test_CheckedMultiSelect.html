@@ -18,21 +18,21 @@
 				doh.register("tests",
 					[
 						function test_setValue(t){
-							t.is(["VA","WA"], form.getValues().ms1);
-							t.is(["TX","GA"], form.getValues().ms2);
+							t.is(["VA","WA"], form.attr("value").ms1);
+							t.is(["TX","GA"], form.attr("value").ms2);
 							ms1.attr("value", ["TN","CA"]);
-							t.is(["TN","CA"], form.getValues().ms1);
+							t.is(["TN","CA"], form.attr("value").ms1);
 							ms1.invertSelection();
-							t.is(["VA","WA","FL"], form.getValues().ms1);							
+							t.is(["VA","WA","FL"], form.attr("value").ms1);							
 						},
 						function test_addSelected(t){
 							dojo.forEach(ms2.getOptions(ms2.getValue()), function(i){
 								ms2.removeOption(i);
 								ms1.addOption(i);
 							});
-							t.is([], form.getValues().ms2);
+							t.is([], form.attr("value").ms2);
 							ms1.invertSelection();
-							t.is(["TN","CA"], form.getValues().ms1);
+							t.is(["TN","CA"], form.attr("value").ms1);
 						},
 						function test_performance(t){
 							var i, start, add, del, opts = [];
@@ -126,7 +126,7 @@
 		<hr>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
-					console.dir(form.getValues());
+					console.dir(form.attr("value"));
 				</script>
 				Get Values
 			</button>
@@ -155,6 +155,12 @@
 					ms1.invertSelection(true);
 				</script>
 				Invert Selection
+			</button>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					console.log(ms1.attr("displayedValue"));
+				</script>
+				Get Displayed Value
 			</button>
 		</form>
 	</body>
