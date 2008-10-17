@@ -103,8 +103,8 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(name in this.axes){
 				this.axes[name].destroy();
 				delete this.axes[name];
+				this.dirty = true;
 			}
-			this.dirty = true;
 			return this;
 		},
 		addPlot: function(name, kwArgs){
@@ -133,8 +133,8 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				var index = this.plots[name];
 				this.stack[index].destroy();
 				this.stack.splice(index, 1);
+				this.dirty = true;
 			}
-			this.dirty = true;
 			return this;
 		},
 		addSeries: function(name, data, kwArgs){
