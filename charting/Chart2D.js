@@ -153,6 +153,15 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(!("ymax" in run) && "max" in run){ run.ymax = run.max; }
 			return this;
 		},
+		removeSeries: function(name){
+			if(name in this.runs){
+				var index = this.runs[name];
+				this.series[index].destroy();
+				this.series.splice(index, 1);
+				this.dirty = true;
+			}
+			return this;
+		},
 		updateSeries: function(name, data){
 			if(name in this.runs){
 				var run = this.series[this.runs[name]],
