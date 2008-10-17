@@ -64,7 +64,6 @@ dojo.declare("dojox.grid._Layout", null, {
 		if(cell.hidden == visible){
 			cell.hidden = !visible;
 			var v = cell.view, w = v.viewWidth;
-			v.convertColPctToFixed();
 			if(w && w != "auto"){
 				v._togglingColumn = dojo.marginBox(cell.getHeaderNode()).w || 0;
 			}
