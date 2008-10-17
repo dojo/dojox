@@ -169,7 +169,8 @@ dojo.require("dojox.charting.plot2d.Bubble");
 		removeSeries: function(name){
 			if(name in this.runs){
 				// get the index and remove the name
-				var index = this.runs[name];
+				var index = this.runs[name],
+					plotName = this.series[index].plot;
 				delete this.runs[name];
 				// destroy the run
 				this.series[index].destroy();
@@ -181,46 +182,19 @@ dojo.require("dojox.charting.plot2d.Bubble");
 						runs[name] = idx - 1;
 					}
 				});
-				// mark the chart as dirty
-				this.dirty = true;
+				// mark dependent plots as dirty
+				this._invalidateDependentPlots(plot, false);
+				this._invalidateDependentPlots(plot, true);
 			}
 			return this;	// self
 		},
 		updateSeries: function(name, data){
 			if(name in this.runs){
-				var run = this.series[this.runs[name]],
-					plot = this.stack[this.plots[run.plot]], axis;
+				var run = this.series[this.runs[name]];
 				run.data = data;
 				run.dirty = true;
-				// check to see if axes and plot should be updated
-				if(plot.hAxis){
-					axis = this.axes[plot.hAxis];
-					if(axis.dependOnData()){
-						axis.dirty = true;
-						// find all plots and mark them dirty
-						dojo.forEach(this.stack, function(p){
-							if(p.hAxis && p.hAxis == plot.hAxis){
-								p.dirty = true;
-							}
-						});
-					}
-				}else{
-					plot.dirty = true;
-				}
-				if(plot.vAxis){
-					axis = this.axes[plot.vAxis];
-					if(axis.dependOnData()){
-						axis.dirty = true;
-						// find all plots and mark them dirty
-						dojo.forEach(this.stack, function(p){
-							if(p.vAxis && p.vAxis == plot.vAxis){
-								p.dirty = true;
-							}
-						});
-					}
-				}else{
-					plot.dirty = true;
-				}
+				this._invalidateDependentPlots(run.plot, false);
+				this._invalidateDependentPlots(run.plot, true);
 			}
 			return this;
 		},
@@ -494,6 +468,26 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			dojo.forEach(this.stack,  makeDirty);
 			dojo.forEach(this.series, makeDirty);
 			this.dirty = true;
+		},
+		_invalidateDependentPlots: function(plotName, /* Boolean */ verticalAxis){
+			if(plotName in this.plots){
+				var plot = this.stack[this.plots[plotName]], axis,
+					axisName = verticalAxis ? "vAxis" : "hAxis";
+				if(plot[axisName]){
+					axis = this.axes[plot[axisName]];
+					if(axis.dependOnData()){
+						axis.dirty = true;
+						// find all plots and mark them dirty
+						dojo.forEach(this.stack, function(p){
+							if(p[axisName] && p[axisName] == plot[axisName]){
+								p.dirty = true;
+							}
+						});
+					}
+				}else{
+					plot.dirty = true;
+				}
+			}
 		}
 	});
 })();
