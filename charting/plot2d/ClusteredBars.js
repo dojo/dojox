@@ -28,6 +28,7 @@ dojo.require("dojox.lang.functional.reversed");
 				baselineWidth = ht(baseline),
 				height = thickness,
 				events = this.events();
+			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i], shift = thickness * (this.series.length - i - 1);
 				if(!this.dirty && !run.dirty){ continue; }

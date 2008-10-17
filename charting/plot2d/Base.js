@@ -5,6 +5,10 @@ dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d.common");
 
 dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
+	destroy: function(){
+		this.resetEvents();
+		this.inherited(arguments);
+	},
 	clear: function(){
 		this.series = [];
 		this._hAxis = null;
@@ -52,6 +56,9 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			}
 		}
 		return false;
+	},
+	resetEvents: function(){
+		this.plotEvent({type: "onplotreset", plot: this});
 	},
 	
 	// utilities

@@ -54,6 +54,7 @@ dojo.require("dojox.lang.functional.reversed");
 				yoff = dim.height - offsets.b - this._vScaler.bounds.scale * (baseline - this._vScaler.bounds.lower),
 				width  = this._hScaler.bounds.scale - 2 * gap,
 				events = this.events();
+			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }

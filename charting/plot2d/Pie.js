@@ -36,6 +36,10 @@ dojo.require("dojox.gfx");
 			this.run = null;
 			this.dyn = [];
 		},
+		destroy: function(){
+			this.resetEvents();
+			this.inherited(arguments);
+		},
 		clear: function(){
 			this.dirty = true;
 			this.dyn = [];
@@ -75,6 +79,9 @@ dojo.require("dojox.gfx");
 			}
 			return false;
 		},
+		resetEvents: function(){
+			this.plotEvent({type: "onplotreset", plot: this});
+		},
 		_connectEvents: function(shape, o){
 			shape.connect("onmouseover", this, function(e){
 				o.type  = "onmouseover";
@@ -113,6 +120,7 @@ dojo.require("dojox.gfx");
 				start = 0, step, filteredRun, slices, labels, shift, labelR,
 				run = this.run.data,
 				events = this.events();
+			this.resetEvents();
 			if(typeof run[0] == "number"){
 				filteredRun = df.map(run, "Math.max(x, 0)");
 				if(df.every(filteredRun, "<= 0")){

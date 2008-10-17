@@ -46,6 +46,7 @@ dojo.require("dojox.lang.functional.reversed");
 				gap = this.opt.gap < this._vScaler.bounds.scale / 3 ? this.opt.gap : 0,
 				height = this._vScaler.bounds.scale - 2 * gap,
 				events = this.events();
+			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }
