@@ -221,11 +221,9 @@ dojo.requireLocalization("dijit", "loading");
 		
 		postMixInProperties: function(){
 			this.inherited(arguments);
-			var messages = dojo.mixin(dojo.i18n.getLocalization("dijit", "loading", this.lang),
-								dojo.i18n.getLocalization("dojox.grid", "grid", this.lang));
+			var messages = dojo.i18n.getLocalization("dijit", "loading", this.lang);
 			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
 			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
-			this.noDataMessage = dojo.string.substitute(this.noDataMessage, messages);
 			if(this.srcNodeRef && this.srcNodeRef.style.height){
 				this.height = this.srcNodeRef.style.height;
 			}
