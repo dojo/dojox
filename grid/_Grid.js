@@ -183,8 +183,10 @@ dojo.requireLocalization("dojox.grid", "grid");
 		errorMessage: "<span class='dojoxGridError'>${errorState}</span>",
 
 		// noDataMessage: String
-		//  Message that shows if the grid has no data
-		noDataMessage: "<span class='dojoxGridNoData'>${noData}</span>",
+		//  Message that shows if the grid has no data - wrap it in a 
+		//  span with class 'dojoxGridNoData' if you want it to be
+		//  styled similar to the loading and error messages
+		noDataMessage: "",
 
 		// private
 		sortInfo: 0,
