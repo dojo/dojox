@@ -99,6 +99,14 @@ dojo.require("dojox.charting.plot2d.Bubble");
 		getAxis: function(name){
 			return this.axes[name];
 		},
+		removeAxis: function(name){
+			if(name in this.axes){
+				this.axes[name].destroy();
+				delete this.axes[name];
+			}
+			this.dirty = true;
+			return this;
+		},
 		addPlot: function(name, kwArgs){
 			var plot;
 			if(!kwArgs || !("type" in kwArgs)){
