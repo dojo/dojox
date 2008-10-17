@@ -101,11 +101,13 @@ dojo.require("dojox.charting.plot2d.Bubble");
 		},
 		removeAxis: function(name){
 			if(name in this.axes){
+				// destroy the axis
 				this.axes[name].destroy();
 				delete this.axes[name];
+				// mark the chart as dirty
 				this.dirty = true;
 			}
-			return this;
+			return this;	// self
 		},
 		addPlot: function(name, kwArgs){
 			var plot;
@@ -130,12 +132,23 @@ dojo.require("dojox.charting.plot2d.Bubble");
 		},
 		removePlot: function(name){
 			if(name in this.plots){
+				// get the index and remove the name
 				var index = this.plots[name];
+				delete this.plots[name];
+				// destroy the plot
 				this.stack[index].destroy();
+				// remove the plot from the stack
 				this.stack.splice(index, 1);
+				// update indices to reflect the shift
+				dojo.forEach(this.plots, function(idx, name, plots){
+					if(idx > index){
+						plots[name] = idx - 1;
+					}
+				});
+				// mark the chart as dirty
 				this.dirty = true;
 			}
-			return this;
+			return this;	// self
 		},
 		addSeries: function(name, data, kwArgs){
 			var run = new dc.Series(this, data, kwArgs);
@@ -155,12 +168,23 @@ dojo.require("dojox.charting.plot2d.Bubble");
 		},
 		removeSeries: function(name){
 			if(name in this.runs){
+				// get the index and remove the name
 				var index = this.runs[name];
+				delete this.runs[name];
+				// destroy the run
 				this.series[index].destroy();
+				// remove the run from the stack of series
 				this.series.splice(index, 1);
+				// update indices to reflect the shift
+				dojo.forEach(this.runs, function(idx, name, runs){
+					if(idx > index){
+						runs[name] = idx - 1;
+					}
+				});
+				// mark the chart as dirty
 				this.dirty = true;
 			}
-			return this;
+			return this;	// self
 		},
 		updateSeries: function(name, data){
 			if(name in this.runs){
@@ -277,7 +301,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			this._makeDirty();
 
 			// clear old values
-			dojo.forEach(this.stack,  clear);
+			dojo.forEach(this.stack, clear);
 
 			// rebuild new connections, and add defaults
 
