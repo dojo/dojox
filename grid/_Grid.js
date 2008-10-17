@@ -16,7 +16,6 @@ dojo.require("dojox.grid._Events");
 dojo.require("dijit.Menu");
 
 dojo.requireLocalization("dijit", "loading");
-dojo.requireLocalization("dojox.grid", "grid");
 
 (function(){
 	var jobs = {
