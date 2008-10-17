@@ -16,7 +16,6 @@ dojo.require("dojox.grid._Events");
 dojo.require("dijit.Menu");
 
 dojo.requireLocalization("dijit", "loading");
-dojo.requireLocalization("dojox.grid", "grid");
 
 (function(){
 	var jobs = {
@@ -31,6 +30,7 @@ dojo.requireLocalization("dojox.grid", "grid");
 		job: function(inName, inDelay, inJob){
 			jobs.cancelJob(inName);
 			var job = function(){
+
 				delete jobs.jobs[inName];
 				inJob();
 			}
@@ -183,8 +183,10 @@ dojo.requireLocalization("dojox.grid", "grid");
 		errorMessage: "<span class='dojoxGridError'>${errorState}</span>",
 
 		// noDataMessage: String
-		//  Message that shows if the grid has no data
-		noDataMessage: "<span class='dojoxGridNoData'>${noData}</span>",
+		//  Message that shows if the grid has no data - wrap it in a
+		//  span with class 'dojoxGridNoData' if you want it to be
+		//  styled similar to the loading and error messages
+		noDataMessage: "",
 
 		// private
 		sortInfo: 0,
@@ -220,11 +222,9 @@ dojo.requireLocalization("dojox.grid", "grid");
 		
 		postMixInProperties: function(){
 			this.inherited(arguments);
-			var messages = dojo.mixin(dojo.i18n.getLocalization("dijit", "loading", this.lang),
-								dojo.i18n.getLocalization("dojox.grid", "grid", this.lang));
+			var messages = dojo.i18n.getLocalization("dijit", "loading", this.lang);
 			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
 			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
-			this.noDataMessage = dojo.string.substitute(this.noDataMessage, messages);
 			if(this.srcNodeRef && this.srcNodeRef.style.height){
 				this.height = this.srcNodeRef.style.height;
 			}

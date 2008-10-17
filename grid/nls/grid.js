@@ -1,3 +1,0 @@
-({
-	noData: "No Data"
-})
