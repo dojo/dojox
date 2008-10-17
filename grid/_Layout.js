@@ -44,6 +44,11 @@ dojo.declare("dojox.grid._Layout", null, {
 		}
 		dest_cells.splice(target_ri, 0, cell);
 
+		var sortedCell = this.grid.getCell(this.grid.getSortIndex());
+		if(sortedCell){
+			sortedCell._currentlySorted = this.grid.getSortAsc();
+		}
+
 		this.cells = [];
 		var cellIndex = 0;
 		for(var i=0, v; v=this.structure[i]; i++){
@@ -51,6 +56,12 @@ dojo.declare("dojox.grid._Layout", null, {
 				for(var k=0, c; c=cs[k]; k++){
 					c.index = cellIndex;
 					this.cells.push(c);
+					if("_currentlySorted" in c){
+						var si = cellIndex + 1;
+						si *= c._currentlySorted ? 1 : -1;
+						this.grid.sortInfo = si;
+						delete c._currentlySorted;
+					}
 					cellIndex++;
 				}
 			}
