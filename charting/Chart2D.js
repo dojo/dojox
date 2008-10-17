@@ -32,8 +32,8 @@ dojo.require("dojox.charting.plot2d.Pie");
 dojo.require("dojox.charting.plot2d.Bubble");
 
 (function(){
-	var df = dojox.lang.functional, dc = dojox.charting, 
-		clear = df.lambda("item.clear()"), 
+	var df = dojox.lang.functional, dc = dojox.charting,
+		clear = df.lambda("item.clear()"),
 		purge = df.lambda("item.purgeGroup()"),
 		destroy = df.lambda("item.destroy()"),
 		makeClean = df.lambda("item.dirty = false"),
@@ -140,7 +140,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				// remove the plot from the stack
 				this.stack.splice(index, 1);
 				// update indices to reflect the shift
-				df.forEach(this.plots, function(idx, name, plots){
+				df.forIn(this.plots, function(idx, name, plots){
 					if(idx > index){
 						plots[name] = idx - 1;
 					}
@@ -177,7 +177,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				// remove the run from the stack of series
 				this.series.splice(index, 1);
 				// update indices to reflect the shift
-				df.forEach(this.runs, function(idx, name, runs){
+				df.forIn(this.runs, function(idx, name, runs){
 					if(idx > index){
 						runs[name] = idx - 1;
 					}
@@ -202,7 +202,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				case 0:
 					box = dojo.marginBox(this.node);
 					break;
-				case 1: 
+				case 1:
 					box = width;
 					break;
 				default:
@@ -266,7 +266,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 					plot.calculateAxes(this.plotArea);
 				}
 			}, this);
-			
+
 			return this;
 		},
 		fullGeometry: function(){
@@ -323,7 +323,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			this.plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(this.plotArea); }, this);
-			
+
 			return this;
 		},
 		render: function(){
@@ -334,7 +334,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(this.dirty){
 				return this.fullRender();
 			}
-			
+
 			this.calculateGeometry();
 
 			// go over the stack backwards
@@ -375,14 +375,14 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(fill){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r, 
+					width:  dim.width  - offsets.l - offsets.r,
 					height: dim.height - offsets.t - offsets.b
 				}).setFill(fill);
 			}
 			if(stroke){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r - 1, 
+					width:  dim.width  - offsets.l - offsets.r - 1,
 					height: dim.height - offsets.t - offsets.b - 1
 				}).setStroke(stroke);
 			}

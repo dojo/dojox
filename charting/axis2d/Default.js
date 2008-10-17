@@ -11,13 +11,13 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
 
 (function(){
-	var dc = dojox.charting, 
-		df = dojox.lang.functional, 
-		du = dojox.lang.utils, 
+	var dc = dojox.charting,
+		df = dojox.lang.functional,
+		du = dojox.lang.utils,
 		g = dojox.gfx,
 		lin = dc.scaler.linear,
 		labelGap = 4;	// in pixels
-		
+
 	dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Base, {
 		 defaultParams: {
 			vertical:    false,		// true for vertical axis
@@ -157,16 +157,19 @@ dojo.require("dojox.lang.utils");
 			return this.ticks;
 		},
 		getOffsets: function(){
-			var offsets = {l: 0, r: 0, t: 0, b: 0}, s, labelWidth, a, b, c, d,
+			var offsets = {l: 0, r: 0, t: 0, b: 0}, labelWidth, a, b, c, d,
 				gtb = dojox.gfx._base._getTextBox, gl = dc.scaler.common.getNumericLabel,
 				offset = 0, ta = this.chart.theme.axis,
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
 				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
 				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
-				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
+				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
+				s = this.scaler;
+			if(!s){
+				return offsets;
+			}
 			if(this.vertical){
 				if(size){
-					s = this.scaler;
 					if(this.labels){
 						labelWidth = df.foldl(df.map(this.labels, function(label){
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
@@ -190,7 +193,6 @@ dojo.require("dojox.lang.utils");
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
 				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
 				if(size){
-					s = this.scaler;
 					if(this.labels){
 						labelWidth = df.foldl(df.map(this.labels, function(label){
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
@@ -211,7 +213,7 @@ dojo.require("dojox.lang.utils");
 			if(!this.dirty){ return this; }
 			// prepare variable
 			var start, stop, axisVector, tickVector, labelOffset, labelAlign,
-				ta = this.chart.theme.axis, 
+				ta = this.chart.theme.axis,
 				taStroke = "stroke" in this.opt ? this.opt.stroke : ta.stroke,
 				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
 				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
@@ -249,71 +251,75 @@ dojo.require("dojox.lang.utils");
 				}
 				labelOffset.x = 0;
 			}
-			
+
 			// render shapes
-			
+
 			this.cleanGroup();
-			
-			var s = this.group, c = this.scaler, t = this.ticks, canLabel,
-				f = lin.getTransformerFromModel(this.scaler),
-				forceHtmlLabels = dojox.gfx.renderer == "canvas",
-				labelType = forceHtmlLabels || this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
-				dx = tickVector.x * taMajorTick.length,
-				dy = tickVector.y * taMajorTick.length;
-				
-			s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(taStroke);
-			
-			dojo.forEach(t.major, function(tick){
-				var offset = f(tick.value), elem,
-					x = start.x + axisVector.x * offset,
-					y = start.y + axisVector.y * offset;
-					s.createLine({
-						x1: x, y1: y,
-						x2: x + dx,
-						y2: y + dy
-					}).setStroke(taMajorTick);
-					if(tick.label){
-						elem = dc.axis2d.common.createText[labelType]
-										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
-											tick.label, taFont, taFontColor);
-						if(labelType == "html"){ this.htmlElements.push(elem); }
-					}
-			}, this);
 
-			dx = tickVector.x * taMinorTick.length;
-			dy = tickVector.y * taMinorTick.length;
-			canLabel = c.minMinorStep <= c.minor.tick * c.scale;
-			dojo.forEach(t.minor, function(tick){
-				var offset = f(tick.value), elem,
-					x = start.x + axisVector.x * offset,
-					y = start.y + axisVector.y * offset;
-					s.createLine({
-						x1: x, y1: y,
-						x2: x + dx,
-						y2: y + dy
-					}).setStroke(taMinorTick);
-					if(canLabel && tick.label){
-						elem = dc.axis2d.common.createText[labelType]
-										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
-											tick.label, taFont, taFontColor);
-						if(labelType == "html"){ this.htmlElements.push(elem); }
-					}
-			}, this);
+			try{
+				var s = this.group, c = this.scaler, t = this.ticks, canLabel,
+					f = lin.getTransformerFromModel(this.scaler),
+					forceHtmlLabels = dojox.gfx.renderer == "canvas",
+					labelType = forceHtmlLabels || this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
+					dx = tickVector.x * taMajorTick.length,
+					dy = tickVector.y * taMajorTick.length;
 
-			// use minor ticks for now
-			//dx = tickVector.x * taMicroTick.length;
-			//dy = tickVector.y * taMicroTick.length;
-			dojo.forEach(t.micro, function(tick){
-				var offset = f(tick.value), elem,
-					x = start.x + axisVector.x * offset,
-					y = start.y + axisVector.y * offset;
-					s.createLine({
-						x1: x, y1: y,
-						x2: x + dx,
-						y2: y + dy
-					}).setStroke(taMinorTick);	// use minor tick for now
-			}, this);
-			
+				s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(taStroke);
+
+				dojo.forEach(t.major, function(tick){
+					var offset = f(tick.value), elem,
+						x = start.x + axisVector.x * offset,
+						y = start.y + axisVector.y * offset;
+						s.createLine({
+							x1: x, y1: y,
+							x2: x + dx,
+							y2: y + dy
+						}).setStroke(taMajorTick);
+						if(tick.label){
+							elem = dc.axis2d.common.createText[labelType]
+											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
+												tick.label, taFont, taFontColor);
+							if(labelType == "html"){ this.htmlElements.push(elem); }
+						}
+				}, this);
+
+				dx = tickVector.x * taMinorTick.length;
+				dy = tickVector.y * taMinorTick.length;
+				canLabel = c.minMinorStep <= c.minor.tick * c.scale;
+				dojo.forEach(t.minor, function(tick){
+					var offset = f(tick.value), elem,
+						x = start.x + axisVector.x * offset,
+						y = start.y + axisVector.y * offset;
+						s.createLine({
+							x1: x, y1: y,
+							x2: x + dx,
+							y2: y + dy
+						}).setStroke(taMinorTick);
+						if(canLabel && tick.label){
+							elem = dc.axis2d.common.createText[labelType]
+											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
+												tick.label, taFont, taFontColor);
+							if(labelType == "html"){ this.htmlElements.push(elem); }
+						}
+				}, this);
+
+				// use minor ticks for now
+				//dx = tickVector.x * taMicroTick.length;
+				//dy = tickVector.y * taMicroTick.length;
+				dojo.forEach(t.micro, function(tick){
+					var offset = f(tick.value), elem,
+						x = start.x + axisVector.x * offset,
+						y = start.y + axisVector.y * offset;
+						s.createLine({
+							x1: x, y1: y,
+							x2: x + dx,
+							y2: y + dy
+						}).setStroke(taMinorTick);	// use minor tick for now
+				}, this);
+			}catch(e){
+				// squelch
+			}
+
 			this.dirty = false;
 			return this;
 		}

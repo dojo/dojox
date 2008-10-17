@@ -26,7 +26,7 @@ var getData = function(){
 	}
 	return data;
 };
-	
+
 var makeObjects = function(){
 	chart = new dojox.charting.Chart2D("test");
 	chart.setTheme(dojox.charting.themes.CubanShirts);
@@ -34,23 +34,23 @@ var makeObjects = function(){
 	if(dijit.byId("hAxis").attr("checked")){
 		chart.addAxis("x", {natural: true, includeZero: true, fixUpper: "minor"});
 	}
-	
+
 	if(dijit.byId("vAxis").attr("checked")){
 		chart.addAxis("y", {vertical: true, natural: true, includeZero: true, fixUpper: "minor"});
 	}
-	
+
 	chart.addPlot("default", {type: dijit.byId("plot").attr("value"), gap: 2});
 
 	if(dijit.byId("grid").attr("checked")){
 		chart.addPlot("grid", {type: "Grid", hMinorLines: true, vMinorLines: true});
 	}
 
-	for(var i = 1; i <= 5; ++i){	
+	for(var i = 1; i <= 5; ++i){
 		if(dijit.byId("s" + i).attr("checked")){
 			chart.addSeries("Series " + i, getData(), {stroke: {color: "black", width: 1}});
 		}
 	}
-	
+
 	chart.render();
 };
 
@@ -58,19 +58,6 @@ dojo.addOnLoad(makeObjects);
 
 changePlot = function(){
 	var type = dijit.byId("plot").attr("value");
-	// for the pie chart we need to disable grid and axes
-	if(type == "Pie"){
-		chart.removePlot("grid");
-		dijit.byId("grid").attr("checked", false).attr("disabled", true);
-		chart.removeAxis("x");
-		dijit.byId("hAxis").attr("checked", false).attr("disabled", true);
-		chart.removeAxis("y");
-		dijit.byId("vAxis").attr("checked", false).attr("disabled", true);
-	}else{
-		dijit.byId("hAxis").attr("disabled", false);
-		dijit.byId("vAxis").attr("disabled", false);
-	}
-	// switch plot type 
 	chart.addPlot("default", {type: type, gap: 2});
 	chart.render();
 };
@@ -87,15 +74,7 @@ changeGrid = function(){
 changeX = function(){
 	if(dijit.byId("hAxis").attr("checked")){
 		chart.addAxis("x", {natural: true, includeZero: true, fixUpper: "minor"});
-		// see if we can enable grid
-		if(dijit.byId("vAxis").attr("checked")){
-			dijit.byId("grid").attr("disabled", false);
-		}
 	}else{
-		// disable grid
-		chart.removePlot("grid");
-		dijit.byId("grid").attr("checked", false).attr("disabled", true);
-		// remove axis
 		chart.removeAxis("x");
 	}
 	chart.render();
@@ -104,15 +83,7 @@ changeX = function(){
 changeY = function(){
 	if(dijit.byId("vAxis").attr("checked")){
 		chart.addAxis("y", {vertical: true, natural: true, includeZero: true, fixUpper: "minor"});
-		// see if we can enable grid
-		if(dijit.byId("hAxis").attr("checked")){
-			dijit.byId("grid").attr("disabled", false);
-		}
 	}else{
-		// disable grid
-		chart.removePlot("grid");
-		dijit.byId("grid").attr("checked", false).attr("disabled", true);
-		// remove axis
 		chart.removeAxis("y");
 	}
 	chart.render();
