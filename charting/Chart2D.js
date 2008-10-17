@@ -140,7 +140,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				// remove the plot from the stack
 				this.stack.splice(index, 1);
 				// update indices to reflect the shift
-				dojo.forEach(this.plots, function(idx, name, plots){
+				df.forEach(this.plots, function(idx, name, plots){
 					if(idx > index){
 						plots[name] = idx - 1;
 					}
@@ -177,14 +177,12 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				// remove the run from the stack of series
 				this.series.splice(index, 1);
 				// update indices to reflect the shift
-				dojo.forEach(this.runs, function(idx, name, runs){
+				df.forEach(this.runs, function(idx, name, runs){
 					if(idx > index){
 						runs[name] = idx - 1;
 					}
 				});
-				// mark dependent plots as dirty
-				this._invalidateDependentPlots(plot, false);
-				this._invalidateDependentPlots(plot, true);
+				this.dirty = true;
 			}
 			return this;	// self
 		},
