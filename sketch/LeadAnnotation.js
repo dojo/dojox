@@ -116,6 +116,7 @@ dojo.require("dojox.sketch.Anchor");
 			})
 			.setFont(font)
 			.setFill(this.property('fill'));
+		this.labelShape.getEventSource().setAttribute('id',this.id+"-labelShape");
 	};
 	p.destroy=function(){
 		if(!this.shape){ return; }

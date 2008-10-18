@@ -100,22 +100,6 @@ dojo.require("dojox.sketch.UndoStack");
 		this._end=null;
 		this._absEnd=null;
 		this._cshape=null;
-		
-		this._click=function(e){
-			if(self._c){
-				dojo.stopEvent(e);
-				return;
-			}
-			var o=self._fromEvt(e);
-			if(!o){
-				self.clearSelections();
-				dojo.stopEvent(e);
-			} else if(!o.setMode){
-				//	skip me.
-			} else { 
-				self.select(o); 
-			}
-		};
 
 		this._dblclick=function(e){
 			var o=self._fromEvt(e);
@@ -169,7 +153,12 @@ dojo.require("dojox.sketch.UndoStack");
 				self._ctool.onMouseDown(e);
 			}else{
 				if(o.type && o.type()!="Anchor"){
-					self.select(o);
+					if(!self.isSelected(o)){
+						self.select(o);
+						self._sameShapeSelected=false;
+					}else{
+						self._sameShapeSelected=true;
+					}
 				}
 				o.beginEdit();
 				self._c=o;
@@ -213,13 +202,13 @@ dojo.require("dojox.sketch.UndoStack");
 		this._delete=function(arr,noundo){
 			for(var i=0; i<arr.length; i++){
 				//var before=arr[i].serialize();
-				if(!noundo){
-					arr[i].onRemove();
-				}
 				arr[i].setMode(ta.Annotation.Modes.View);
 				arr[i].destroy(noundo);
 				self.remove(arr[i]);
 				self._remove(arr[i]);
+				if(!noundo){
+					arr[i].onRemove();
+				}
 			}
 			arr.splice(0,arr.length);
 		};
@@ -255,12 +244,14 @@ dojo.require("dojox.sketch.UndoStack");
 		this._cons.push(dojo.connect(this.node, "onselectstart", dojo, "stopEvent"));
 
 		//	hook up the drag system.
-		this._cons.push(dojo.connect(this.surface.getEventSource(), 'onmousedown', this._md));
-		this._cons.push(dojo.connect(this.surface.getEventSource(), 'onmousemove', this._mm));
-		this._cons.push(dojo.connect(this.surface.getEventSource(), 'onmouseup', this._mu));
+		var es=this.surface.getEventSource();
+		this._cons.push(dojo.connect(es, 'onmousedown', this._md));
+		this._cons.push(dojo.connect(es, 'onmousemove', this._mm));
+		this._cons.push(dojo.connect(es, 'onmouseup', this._mu));
 
-		this._cons.push(dojo.connect(this.surface.getEventSource(), 'ondblclick', this._dblclick));
-		this._cons.push(dojo.connect(this.surface.getEventSource().ownerDocument, 'onkeydown', this._keydown));
+		this._cons.push(dojo.connect(es, 'onclick', this, 'onClick'));
+		this._cons.push(dojo.connect(es, 'ondblclick', this._dblclick));
+		this._cons.push(dojo.connect(es.ownerDocument, 'onkeydown', this._keydown));
 		
 		//	rect hack.  Fcuking VML.
 		this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
@@ -325,10 +316,12 @@ dojo.require("dojox.sketch.UndoStack");
 	p._get=function(key){
 		if(key&&key.indexOf("bounding")>-1){ 
 			key=key.replace("-boundingBox","");
+		}else if(key&&key.indexOf("-labelShape")>-1){
+			key=key.replace("-labelShape","");
 		}
 		return this.obj[key];
 	};
-	p._fromEvt=function(e){
+	p._keyFromEvt=function(e){
 		var key=e.target.id+"";
 		if(key.length==0){
 			//	ancestor tree until you get to the end (meaning this.surface)
@@ -339,7 +332,10 @@ dojo.require("dojox.sketch.UndoStack");
 			}
 			key=p.id;
 		}
-		return this._get(key);
+		return key;
+	};
+	p._fromEvt=function(e){
+		return this._get(this._keyFromEvt(e));
 	};
 
 	p.add=function(annotation){
@@ -455,6 +451,7 @@ dojo.require("dojox.sketch.UndoStack");
 		this.onLoad();
 	};
 	p.onLoad=function(){};
+	p.onClick=function(){};
 	p._loadAnnotation=function(obj){
 		var ctor=obj.getAttribute('dojoxsketch:type')+"Annotation";
 		if(ta[ctor]){

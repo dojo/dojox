@@ -135,14 +135,7 @@ dojo.require("dojox.sketch._Plugin");
 		this._prevState=this.serialize();
 	};
 	p.endEdit=function(){
-		var newstep=true;
-		if(this._type==ta.CommandTypes.Move){
-			var f=this.figure;
-			if(f._absEnd.x==f._start.x&&f._absEnd.y==f._start.y){
-				newstep=false;
-			}
-		}
-		if(newstep){
+		if(this._prevState!=this.serialize()){
 			this.figure.history.add(this._type,this,this._prevState);
 		}
 		this._type=this._prevState='';

@@ -63,6 +63,7 @@ dojo.require("dojox.sketch.Anchor");
 			})
 			.setFont(font)
 			.setFill(this.property('fill'));
+		this.labelShape.getEventSource().setAttribute('id',this.id+"-labelShape");
 
 		this.lineShape=this.shape.createLine({ 
 				x1:1, 
