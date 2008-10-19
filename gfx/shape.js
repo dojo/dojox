@@ -431,7 +431,13 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 		dojo.forEach(this._events, dojo.disconnect);
 		this._events = [];
 		this.rawNode = null;	// recycle it in _nodes, if it needs to be recycled
-		this._parent.innerHTML = "";
+		if(dojo.isIE){
+			while(this._parent.lastChild){
+				dojo._destroyElement(this._parent.lastChild);
+			}
+		}else{
+			this._parent.innerHTML = "";
+		}
 		this._parent = null;
 	},
 	getEventSource: function(){
