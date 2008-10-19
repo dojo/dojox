@@ -66,6 +66,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			dojo.forEach(this.series, destroy);
 			dojo.forEach(this.stack,  destroy);
 			df.forIn(this.axes, destroy);
+			this.surface.destroy();
 		},
 		getCoords: function(){
 			if(!this.coords){
