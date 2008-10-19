@@ -43,6 +43,7 @@ dojo.require("dojox.gfx");
 		clear: function(){
 			this.dirty = true;
 			this.dyn = [];
+			this.run = null;
 			return this;
 		},
 		setAxis: function(axis){
@@ -105,6 +106,7 @@ dojo.require("dojox.gfx");
 			this.dirty = false;
 			this.cleanGroup();
 			var s = this.group, color, t = this.chart.theme;
+			this.resetEvents();
 
 			if(!this.run || !this.run.data.length){
 				return this;
@@ -120,7 +122,6 @@ dojo.require("dojox.gfx");
 				start = 0, step, filteredRun, slices, labels, shift, labelR,
 				run = this.run.data,
 				events = this.events();
-			this.resetEvents();
 			if(typeof run[0] == "number"){
 				filteredRun = df.map(run, "Math.max(x, 0)");
 				if(df.every(filteredRun, "<= 0")){
