@@ -6,6 +6,9 @@
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
 	@import "../../../dijit/themes/tundra/tundra.css";
+
+	.dojoxLegendNode {border: 1px solid #ccc; margin: 5px 10px 5px 10px; padding: 3px}
+	.dojoxLegendText {vertical-align: text-top; padding-right: 10px}
 </style>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript" src="../Chart2D.js"></script>
@@ -16,8 +19,9 @@ dojo.require("dijit.form.ComboBox");
 
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.CubanShirts");
+dojo.require("dojox.charting.widget.Legend");
 
-var chart, size = 10, magnitude = 30;
+var chart, legend, size = 10, magnitude = 30;
 
 var getData = function(){
 	var data = new Array(size);
@@ -52,6 +56,8 @@ var makeObjects = function(){
 	}
 
 	chart.render();
+	
+	legend = new dojox.charting.widget.Legend({chart: chart}, "legend");
 };
 
 dojo.addOnLoad(makeObjects);
@@ -60,6 +66,7 @@ changePlot = function(){
 	var type = dijit.byId("plot").attr("value");
 	chart.addPlot("default", {type: type, gap: 2});
 	chart.render();
+	legend.refresh();
 };
 
 changeGrid = function(){
@@ -98,11 +105,13 @@ changeSeries = function(n){
 		dijit.byId("sb" + n).attr("disabled", true);
 	}
 	chart.render();
+	legend.refresh();
 };
 
 addSeries = function(n){
 	chart.addSeries("Series " + n, getData(), {stroke: {color: "black", width: 1}});
 	chart.render();
+	legend.refresh();
 };
 
 </script>
@@ -194,5 +203,6 @@ addSeries = function(n){
 	</tr>
 </table>
 <div id="test" style="width: 600px; height: 400px;"></div>
+<div id="legend"></div>
 </body>
 </html>

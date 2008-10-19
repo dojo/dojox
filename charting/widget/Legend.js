@@ -27,7 +27,6 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	legendBody: null,
 	
 	postCreate: function(){
-		var s, df = dojox.lang.functional;
 		if(!this.chart){
 			if(!this.chartRef){ return; }
 			this.chart = dijit.byId(this.chartRef);
@@ -40,11 +39,29 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 					return;
 				}
 			}
-			s = this.chart.chart.series;
+			this.series = this.chart.chart.series;
 		}else{
-			s = this.chart.series;
+			this.series = this.chart.series;
 		}
 		
+		this.refresh();
+	},
+	refresh: function(){
+		// summary: regenerates the legend to reflect changes to the chart
+		
+		var df = dojox.lang.functional;
+
+		// cleanup
+		if(this._surfaces){
+			dojo.forEach(this._surfaces, function(surface){
+				surface.destroy();
+			});
+		}
+		this._surfaces = [];
+		while(this.legendBody.lastChild){
+			dojo._destroyElement(this.legendBody.lastChild);
+		}
+
 		if(this.horizontal){
 			dojo.addClass(this.legendNode, "dojoxLegendHorizontal");
 			// make a container <tr>
@@ -52,15 +69,20 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 			this.legendBody.appendChild(this._tr);
 		}
 		
-		if(s.length == 1 && s[0].chart.stack[0].declaredClass == "dojox.charting.plot2d.Pie"){
+		var s = this.series;
+		if(s[0].chart.stack[0].declaredClass == "dojox.charting.plot2d.Pie"){
 			var t = s[0].chart.stack[0];
-			if(typeof s[0].data[0] == "number"){
-				var slices = df.map(s[0].data, "/ this", df.foldl1(s[0].data, "+"));
+			if(typeof t.run.data[0] == "number"){
+				var filteredRun = df.map(t.run.data, "Math.max(x, 0)");
+				if(df.every(filteredRun, "<= 0")){
+					return;
+				}
+				var slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
 				dojo.forEach(slices, function(x, i){
 					this._addLabel(t.dyn[i], t._getLabel(x * 100) + "%");
 				}, this);
 			}else{
-				dojo.forEach(s[0].data, function(x, i){
+				dojo.forEach(t.run.data, function(x, i){
 					this._addLabel(t.dyn[i], x.legend || x.text || x.y);
 				}, this);
 			}
@@ -68,7 +90,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 			dojo.forEach(s, function(x){
 				this._addLabel(x.dyn, x.legend || x.name);
 			}, this);
-		}	
+		}
 	},
 	_addLabel: function(dyn, label){
 		// create necessary elements
@@ -101,6 +123,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	_makeIcon: function(div, dyn){
 		var mb = {h: 14, w: 14};
 		var surface = dojox.gfx.createSurface(div, mb.w, mb.h);
+		this._surfaces.push(surface);
 		if(dyn.fill){
 			// regions
 			surface.createRect({x: 2, y: 2, width: mb.w - 4, height: mb.h - 4}).
