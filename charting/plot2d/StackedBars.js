@@ -22,6 +22,10 @@ dojo.require("dojox.lang.functional.reversed");
 			return this;
 		},
 		render: function(dim, offsets){
+			if(this._maxRunLength <= 0){
+				return this;
+			}
+
 			// stack all values
 			var acc = df.repeat(this._maxRunLength, "-> 0", 0);
 			for(var i = 0; i < this.series.length; ++i){
