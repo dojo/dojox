@@ -329,7 +329,7 @@ dojo.require("dojox.dtl.Context");
 	{
 		concat: function(/*DOMNode*/ node){
 			var parent = this._parent;
-			if(node.parentNode && node.parentNode.tagName && parent && !parent._dirty){
+			if(parent && node.parentNode && node.parentNode === parent && !parent._dirty){
 				return this;
 			}
 
@@ -697,6 +697,9 @@ dojo.require("dojox.dtl.Context");
 				return injected.render(context, buffer);
 			case "node":
 				this._rendered = true;
+				if(this._node && this._node != str && this._node.parentNode && this._node.parentNode === buffer.getParent()){
+					this._node.parentNode.removeChild(this._node);
+				}
 				this._node = str;
 				return buffer.concat(str);
 			case "html":
@@ -720,7 +723,7 @@ dojo.require("dojox.dtl.Context");
 				}
 
 				return buffer;
-			defaul:
+			default:
 				return buffer;
 			}
 		},
