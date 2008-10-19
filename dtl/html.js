@@ -740,7 +740,10 @@ dojo.require("dojox.dtl.Context");
 			case "injection":
 				return this._injection.unrender(context, buffer);
 			case "node":
-				return buffer.remove(this._node);
+				if(this._node.parentNode === buffer.getParent()){
+					return buffer.remove(this._node);
+				}
+				return buffer;
 			case "html":
 				for(var i=0, l=this._html.length; i<l; i++){
 					buffer = buffer.remove(this._html[i]);
