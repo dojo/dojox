@@ -487,10 +487,18 @@ dojo.declare("dojox.gfx.TextPath", dojox.gfx.path.TextPath, {
 });
 dojox.gfx.TextPath.nodeType = "text";
 
+dojox.gfx.silverlight.surfaces = {};
+dojox.gfx.silverlight.nullFunc = function(){};
+
 dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	// summary: a surface object to be used for drawings (Silverlight)
 	constructor: function(){
 		dojox.gfx.silverlight.Container._init.call(this);
+	},
+	destroy: function(){
+		window[this._onLoadName] = dojox.gfx.silverlight.nullFunc;
+		delete dojox.gfx.silverlight.surfaces[this.rawNode.name];
+		this.inherited(arguments);
 	},
 	setDimensions: function(width, height){
 		// summary: sets the width and height of the rawNode
@@ -515,8 +523,6 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	}
 });
 
-dojox.gfx.silverlight.surfaces = {};
-
 dojox.gfx.createSurface = function(parentNode, width, height){
 	// summary: creates a surface (Silverlight)
 	// parentNode: Node: a parent node
@@ -525,6 +531,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 
 	var s = new dojox.gfx.Surface();
 	parentNode = dojo.byId(parentNode);
+	s._parent = parentNode;
 
 	// create an empty canvas
 	var t = parentNode.ownerDocument.createElement("script");
@@ -533,18 +540,20 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	t.text = "<?xml version='1.0'?><Canvas xmlns='http://schemas.microsoft.com/client/2007' Name='" +
 		dojox.gfx._base._getUniqueId() + "'/>";
 	parentNode.parentNode.insertBefore(t, parentNode);
+	s._nodes.push(t);
 
 	// build the object
 	var obj, pluginName = dojox.gfx._base._getUniqueId(),
 		onLoadName = "__" + dojox.gfx._base._getUniqueId() + "_onLoad";
+	s._onLoadName = onLoadName;
 	window[onLoadName] = function(sender){
-		console.log("loaded");
+		console.log("Silverlight: loaded");
 		if(!s.rawNode){
 			s.rawNode = dojo.byId(pluginName).content.root;
 			// register the plugin with its parent node
 			dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
 			s.onLoad(s);
-			console.log("assigned");
+			console.log("Silverlight: assigned");
 		}
 	};
 	if(dojo.isSafari){
@@ -581,6 +590,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		s.rawNode = null;
 		s.isLoaded = false;
 	}
+	s._nodes.push(pluginNode);
 
 	s.width  = dojox.gfx.normalizedLength(width);	// in pixels
 	s.height = dojox.gfx.normalizedLength(height);	// in pixels

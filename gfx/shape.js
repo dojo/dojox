@@ -416,6 +416,23 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 	constructor: function(){
 		// underlying node
 		this.rawNode = null;
+		// the parent node
+		this._parent = null;
+		// the list of DOM nodes to be deleted in the case of destruction
+		this._nodes = [];
+		// the list of events to be detached in the case of destruction
+		this._events = [];
+	},
+	destroy: function(){
+		// summary: destroy all relevant external resources and release all
+		//	external references to make this object garbage-collectible
+		dojo.forEach(this._nodes, dojo._destroyElement);
+		this._nodes = [];
+		dojo.forEach(this._events, dojo.disconnect);
+		this._events = [];
+		this.rawNode = null;	// recycle it in _nodes, if it needs to be recycled
+		this._parent.innerHTML = "";
+		this._parent = null;
 	},
 	getEventSource: function(){
 		// summary: returns a node, which can be used to attach event listeners
