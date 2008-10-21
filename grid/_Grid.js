@@ -1174,7 +1174,7 @@ dojo.requireLocalization("dijit", "loading");
 						cell.relWidth = window.parseInt(dojo.attr(th, "relWidth"), 10);
 					}
 					if(d.hasAttr(th, "hidden")){
-						cell.hidden = d.getAttr(th, "hidden") == "true";
+						cell.hidden = d.attr(th, "hidden") == "true";
 					}
 
 					if(cellFunc){
