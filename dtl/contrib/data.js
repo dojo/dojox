@@ -58,6 +58,7 @@ dojo.require("dojox.dtl._base");
 			}
 		}
 	});
+	ddcd._BoundItem.prototype.get.safe = true;
 
 	ddcd.BindDataNode = dojo.extend(function(items, store, alias){
 		this.items = new dd._Filter(items);

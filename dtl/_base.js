@@ -385,7 +385,7 @@ dojo.require("dojox.string.tokenize");
 							continue;
 						}
 
-						if(current.get && dojo.isFunction(current.get)){
+						if(current.get && dojo.isFunction(current.get) && current.get.safe){
 							current = current.get(part);
 						}else if(typeof current[part] == "undefined"){
 							current = current[part];
