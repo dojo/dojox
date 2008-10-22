@@ -20,7 +20,9 @@ dojo.require("dijit.Editor");
 		widgetClass: "dijit.form.TextBox",
 		constructor: function(inCell){
 			this.widget = null;
-			this.widgetClass = dojo.getObject(this.widgetClass);
+			if(typeof this.widgetClass == "string"){
+				this.widgetClass = dojo.getObject(this.widgetClass);
+			}
 		},
 		formatEditing: function(inDatum, inRowIndex){
 			this.needFormatNode(inDatum, inRowIndex);
