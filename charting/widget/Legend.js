@@ -131,7 +131,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 			// regions
 			surface.createRect({x: 2, y: 2, width: mb.w - 4, height: mb.h - 4}).
 				setFill(dyn.fill).setStroke(dyn.stroke);
-		}else{
+		}else if(dyn.stroke || dyn.marker){
 			// draw line
 			var line = {x1: 0, y1: mb.h / 2, x2: mb.w, y2: mb.h / 2};
 			if(dyn.stroke){
@@ -148,6 +148,12 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 						setFill(dyn.color).setStroke(dyn.color);
 				}
 			}
+		}else{
+			// nothing
+			surface.createRect({x: 2, y: 2, width: mb.w - 4, height: mb.h - 4}).
+				setStroke("black");
+			surface.createLine({x1: 2, y1: 2, x2: mb.w - 2, y2: mb.h - 2}).setStroke("black");
+			surface.createLine({x1: 2, y1: mb.h - 2, x2: mb.w - 2, y2: 2}).setStroke("black");
 		}
 	}
 });

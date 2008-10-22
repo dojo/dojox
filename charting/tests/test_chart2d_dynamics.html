@@ -21,6 +21,8 @@ dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.CubanShirts");
 dojo.require("dojox.charting.widget.Legend");
 
+dojo.require("dojox.lang.functional.sequence");
+
 var chart, legend, size = 10, magnitude = 30;
 
 var getData = function(){
@@ -29,6 +31,10 @@ var getData = function(){
 		data[i] = Math.random() * magnitude;
 	}
 	return data;
+};
+
+var getZeroes = function(){
+	return dojox.lang.functional.repeat(size, "-> 0", 0);
 };
 
 var makeObjects = function(){
@@ -53,6 +59,9 @@ var makeObjects = function(){
 		if(dijit.byId("s" + i).attr("checked")){
 			chart.addSeries("Series " + i, getData(), {stroke: {color: "black", width: 1}});
 		}
+	}
+	if(dijit.byId("s6").attr("checked")){
+		chart.addSeries("Series 6", getZeroes(), {stroke: {color: "black", width: 1}});
 	}
 
 	chart.render();
@@ -97,12 +106,21 @@ changeY = function(){
 };
 
 changeSeries = function(n){
-	if(dijit.byId("s" + n).attr("checked")){
-		chart.addSeries("Series " + n, getData(), {stroke: {color: "black", width: 1}});
-		dijit.byId("sb" + n).attr("disabled", false);
+	if(n == 6){
+		// special case
+		if(dijit.byId("s6").attr("checked")){
+			chart.addSeries("Series 6", getZeroes(), {stroke: {color: "black", width: 1}});
+		}else{
+			chart.removeSeries("Series 6");
+		}
 	}else{
-		chart.removeSeries("Series " + n);
-		dijit.byId("sb" + n).attr("disabled", true);
+		if(dijit.byId("s" + n).attr("checked")){
+			chart.addSeries("Series " + n, getData(), {stroke: {color: "black", width: 1}});
+			dijit.byId("sb" + n).attr("disabled", false);
+		}else{
+			chart.removeSeries("Series " + n);
+			dijit.byId("sb" + n).attr("disabled", true);
+		}
 	}
 	chart.render();
 	legend.refresh();
@@ -199,6 +217,14 @@ addSeries = function(n){
 			<label for="s5">include</label>
 			&nbsp;
 			<button dojoType="dijit.form.Button" id="sb5" onClick="addSeries(5)">Randomize</button>
+		</td>
+	</tr>
+	<tr>
+		<td>Series 6:</td>
+		<td>
+			<input type="checkbox" dojoType="dijit.form.CheckBox" checked="true" id="s6" onChange="changeSeries(6)">
+			<label for="s6">include</label>
+			&nbsp;this series contains all 0 values
 		</td>
 	</tr>
 </table>

@@ -197,9 +197,16 @@ dojo.require("dojox.charting.scaler.common");
 				// no ticks
 				return null;
 			}
+			// make sure that we have finite bounds
+			var revScale = 1 / scaler.bounds.scale;
+			if(scaler.bounds.to <= scaler.bounds.from || isNaN(revScale) || !isFinite(revScale) ||
+					step <= 0 || isNaN(step) || !isFinite(step)){
+				// no ticks
+				return null;
+			}
 			// loop over all ticks
 			var majorTicks = [], minorTicks = [], microTicks = [];
-			while(next <= scaler.bounds.to + 1/scaler.bounds.scale){
+			while(next <= scaler.bounds.to + revScale){
 				if(Math.abs(nextMajor - next) < step / 2){
 					// major tick
 					tick = {value: nextMajor};
