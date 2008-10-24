@@ -28,7 +28,7 @@ dojox.regexp.tld = function(/*Object?*/flags){
 
 	// Generic top-level domains RE.
 	var genericRE = 
-		"aero|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|xxx|jobs|mobi|post";
+		"aero|asia|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|xxx|jobs|mobi|post";
 	
 	// Country Code top-level domains RE
 	// after 2009-Sept-30, .yu will be invalid
