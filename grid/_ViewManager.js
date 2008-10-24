@@ -85,7 +85,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 		//console.log('normalizeRowNodeHeights ', h);
 		//
 		// querying the height here seems to help scroller measure the page on IE
-		if(inRowNodes&&inRowNodes[0]){
+		if(inRowNodes&&inRowNodes[0]&&inRowNodes[0].parentNode){
 			inRowNodes[0].parentNode.offsetHeight;
 		}
 	},
