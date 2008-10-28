@@ -796,7 +796,8 @@ dojo.require("dojo.dnd.Manager");
 							if(this.grid.headerMenu){
 								this.grid.headerMenu.onCancel(true);
 							}
-							if(e.button === 0){
+							// IE reports a left click as 1, where everything else reports 0
+							if(e.button === (dojo.isIE ? 1 : 0)){
 								dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
 							}
 						}
