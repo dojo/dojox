@@ -54,7 +54,7 @@ dojo.require("dojo.fx");
 			anims = [],
 			duration = args.duration ? args.duration / 2 : 250,
 			dir = args.dir || "left", 
-			pConst = 0.6, 
+			pConst = .8,
 			transparentColor = "transparent",
 			whichAnim = args.whichAnim,
 			mConst = 1
@@ -86,10 +86,6 @@ dojo.require("dojo.fx");
 			}
 		})(node);
 		init();
-		if(whichAnim){
-			pConst = .5;//.6875;
-			mConst = 0;
-		}
 		// helperNode initialization
 		hs = {
 			position: "absolute",
@@ -102,8 +98,6 @@ dojo.require("dojo.fx");
 			fontSize: "0",
 			visibility: "hidden"
 		};
-		dims["endHeight"] = dims["height"] * pConst; 
-		dims["endWidth"] = dims["width"] * pConst; 
 		var props = [ {}, 
 			{
 				top: dims["top"],
@@ -111,13 +105,25 @@ dojo.require("dojo.fx");
 			}
 		];
 		var dynProperties = {
-			left: [leftConst, rightConst, topConst, bottomConst, widthConst, heightConst, "end" + heightConst, leftConst],
-			right: [rightConst, leftConst, topConst, bottomConst, widthConst, heightConst, "end" + heightConst, leftConst],
-			top: [topConst, bottomConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst, topConst],
-			bottom: [bottomConst, topConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst, topConst] 
+			left: [leftConst, rightConst, topConst, bottomConst, widthConst, heightConst, "end" + heightConst + "Min", leftConst, "end" + heightConst + "Max"],
+			right: [rightConst, leftConst, topConst, bottomConst, widthConst, heightConst, "end" + heightConst + "Min", leftConst, "end" + heightConst + "Max"],
+			top: [topConst, bottomConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst + "Min", topConst, "end" + widthConst + "Max"],
+			bottom: [bottomConst, topConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst + "Min", topConst, "end" + widthConst + "Max"] 
 		};
 		// property names
 		pn = dynProperties[dir];
+
+		pConst = Math.min(.8, Math.max(.3, dims[pn[5].toLowerCase()] / dims[pn[4].toLowerCase()]));
+		if(whichAnim){
+			pConst = .5;
+			mConst = 0;
+		}
+		
+		for(var i = 5; i < 7; i++){
+			dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst; 
+			dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst; 
+			dims[pn[i].toLowerCase() + "Diff"] = dims["end" + pn[i] +  "Max"] - dims["end" + pn[i] + "Min"];  
+		}
 
 		staticProps[pn[5].toLowerCase()] = dims[pn[5].toLowerCase()] + "px";
 		staticProps[pn[4].toLowerCase()] = "0";
@@ -127,9 +133,8 @@ dojo.require("dojo.fx");
 		var p0 = props[0];
 		p0[borderConst + pn[1] + widthConst] = 0; 
 		p0[borderConst + pn[1] + "Color"] = darkColor; 
-		p0[borderConst + pn[2] + widthConst] = dims[pn[6]] / 2;
-		p0[borderConst + pn[3] + widthConst] = dims[pn[6]] / 2;
-		p0[pn[2].toLowerCase()] = dims[pn[2].toLowerCase()] - mConst * (dims[pn[6]] / 8);
+		p0[borderConst + pn[2] + widthConst] = p0[borderConst + pn[3] + widthConst] = whichAnim ? dims[pn[6]] / 2 : dims[pn[5].toLowerCase() + "Diff"] / 2;  
+		p0[pn[2].toLowerCase()] = dims[pn[2].toLowerCase()] - mConst * (dims[pn[8]] - dims[pn[6]]) / 4;
 		p0[pn[7].toLowerCase()] = dims[pn[7].toLowerCase()] + dims[pn[4].toLowerCase()] / 2 + (args.shift || 0);
 		p0[pn[5].toLowerCase()] = dims[pn[6]];
 
@@ -145,7 +150,8 @@ dojo.require("dojo.fx");
 		dojo.body().appendChild(helperNode);
 
 		var finalize = function(){
-			helperNode.parentNode.removeChild(helperNode);
+//			helperNode.parentNode.removeChild(helperNode);
+			dojo._destroyElement(helperNode);
 			// fixes a flicker when the animation ends
 			s.backgroundColor = endColor;
 			s.visibility = "visible";
