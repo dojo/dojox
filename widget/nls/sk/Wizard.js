@@ -1,6 +1,6 @@
 ({
 next: "Ďalej",
-previous: "Predchádzajúci",
+previous: "Späť",
 done: "Hotovo"
 })
 
