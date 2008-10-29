@@ -112,6 +112,29 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 			}
 		},
 		{
+			name: "Delete",
+			timeout:	10000, //10 seconds.
+			runTest: function(t) {
+				//	summary: 
+				//		append/post an item, delete it, sort the lists, resort the list, saving each time.
+				var d = new doh.Deferred();
+				jsonStore.fetchItemByIdentity({identity:"obj1", 
+					onItem: function(item, request){
+						var newItem = jsonStore.newItem({directRef: item});
+						jsonStore.setValue(newItem, "arrayRef", [1,{subobject:item},item]);
+						jsonStore.deleteItem(item);
+						t.is(jsonStore.getValue(newItem, "directRef"), undefined);
+						t.is(jsonStore.getValue(newItem, "arrayRef").length, 2);
+						t.is(jsonStore.getValue(newItem, "arrayRef")[1].subobject, undefined);
+						jsonStore.revert();
+						d.callback(true);
+					},
+					onError: dojo.partial(dojox.data.tests.stores.JsonRestStore.error, doh, d)
+				});
+				return d; //Object
+			}
+		},
+		{
 			name: "Lazy loading",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {

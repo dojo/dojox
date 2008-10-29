@@ -76,7 +76,7 @@ dojo.provide("dojox.rpc.Rest");
 		};
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id, args){
-			return {
+			var request = {
 				url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), 
 				handleAs: isJson?'json':'text', 
 				contentType: isJson?'application/json':'text/plain',
@@ -86,6 +86,8 @@ dojo.provide("dojox.rpc.Rest");
 					Range: args && (args.start >= 0 || args.count >= 0) ?  "items=" + (args.start || '0') + '-' + ((args.count && (args.count + (args.start || 0) - 1)) || '') : undefined
 				}
 			};
+			dojox.rpc._sync = false;
+			return request;
 		};
 		// each calls the event handler
 		function makeRest(name){

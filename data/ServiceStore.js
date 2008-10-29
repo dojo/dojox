@@ -43,7 +43,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// The *syncMode* parameter
 			//		Setting this to true will set the store to using synchronous calls by default.
 			//		Sync calls return their data immediately from the calling function, so
-			//		callbacks are unnecessary
+			//		callbacks are unnecessary. This will only work with a synchronous capable service.
 			//
 			// description:
 			//		ServiceStore can do client side caching and result set updating if 

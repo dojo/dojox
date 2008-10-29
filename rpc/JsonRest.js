@@ -23,7 +23,8 @@ dojo.require("dojox.rpc.Rest");
 				var object = dirty.object;
 				var old = dirty.old;
 				var append = false;
-				if(!(kwArgs.service && (object || old) && (object || old).__id.indexOf(kwArgs.service.servicePath))){
+				if(!(kwArgs.service && (object || old) && 
+						(object || old).__id.indexOf(kwArgs.service.servicePath)) && dirty.save){
 					if(object){
 						if(old){
 							// changed object
@@ -135,23 +136,31 @@ dojo.require("dojox.rpc.Rest");
 		getDirtyObjects: function(){
 			return dirtyObjects;
 		},
-		revert: function(){
+		revert: function(service){
 			// summary:
 			//		Reverts all the changes made to JSON/REST data
-			while (dirtyObjects.length>0){
-				var d = dirtyObjects.pop();
-				if(d.object && d.old){
-					// changed
-					for(var i in d.old){
-						if(d.old.hasOwnProperty(i)){
-							d.object[i] = d.old[i];
+			for(var i = dirtyObjects.length; i > 0;){
+				i--;
+				var dirty = dirtyObjects[i];
+				var object = dirty.object;
+				var old = dirty.old;
+				if(!(service && (object || old) && 
+					(object || old).__id.indexOf(kwArgs.service.servicePath))){
+					// if we are in the specified store or if this is a global revert
+					if(object && old){
+						// changed
+						for(var j in old){
+							if(old.hasOwnProperty(j)){
+								object[j] = old[j];
+							}
+						}
+						for(j in object){
+							if(!old.hasOwnProperty(j)){
+								delete object[j];
+							}
 						}
 					}
-					for(i in d.object){
-						if(!d.old.hasOwnProperty(i)){
-							delete d.object[i];
-						}
-					}
+					dirtyObjects.splice(i, 1);
 				}
 			}
 		},
@@ -167,10 +176,14 @@ dojo.require("dojox.rpc.Rest");
 			//if an object is already in the list of dirty objects, don't add it again
 			//or it will overwrite the premodification data set.
 			for(var i=0; i<dirtyObjects.length; i++){
-				if(object==dirtyObjects[i].object){
+				var dirty = dirtyObjects[i];
+				if(object==dirty.object){
 					if(_deleting){
 						// we are deleting, no object is an indicator of deletiong
-						dirtyObjects[i].object = false;
+						dirty.object = false;
+						if(!this._saveNotNeeded){
+							dirty.save = true;
+						}
 					}
 					return;
 				}
@@ -181,15 +194,13 @@ dojo.require("dojox.rpc.Rest");
 					old[i] = object[i];
 				}
 			}
-			dirtyObjects.push({object: !_deleting && object, old: old});
+			dirtyObjects.push({object: !_deleting && object, old: old, save: !this._saveNotNeeded});
 		},
 		deleteObject: function(object){
 			// summary:
 			//		deletes an object 
 			//	object:
 			//  	object to delete
-			//
-
 			this.changing(object,true);
 		},
 		getConstructor: function(/*Function|String*/service, schema){
@@ -328,6 +339,7 @@ dojo.require("dojox.rpc.Rest");
 			}
 			return false;
 		}
+		
 	};
 })();
 

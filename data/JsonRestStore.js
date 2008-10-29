@@ -27,7 +27,8 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		Note that it is critical that the service parses responses as JSON.
 			//		If you are using dojox.rpc.Service, the easiest way to make sure this 
 			// 		happens is to make the responses have a content type of 
-			// 		application/json.
+			// 		application/json. If you are creating your own service, make sure you
+			//		use handleAs: "json" with your XHR requests.
 			//
 			// The *target* parameter
 			// 		This is the target URL for this Service store. This may be used in place
@@ -121,6 +122,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			this._index = dojox.rpc.Rest._index;
 			//given a url, load json data from as the store
 		},
+		referenceIntegrity: true,
 		target:"",
 		//Write API Support
 		newItem: function(data, parentInfo){
@@ -142,7 +144,7 @@ dojo.declare("dojox.data.JsonRestStore",
 		},
 		deleteItem: function(item){
 			// summary:
-			//		deletes item any references to that item from the store.
+			//		deletes item and any references to that item from the store.
 			//
 			//	item:
 			//  	item to delete
@@ -150,8 +152,65 @@ dojo.declare("dojox.data.JsonRestStore",
 
 			//	If the desire is to delete only one reference, unsetAttribute or
 			//	setValue is the way to go.
+			var checked = [];
+			var store = dojox.data._getStoreForItem(item) || this;
+			if(this.referenceIntegrity){
+				// cleanup all references
+				dojox.rpc.JsonRest._saveNotNeeded = true;
+				var index = dojox.rpc.Rest._index;
+				var fixReferences = function(parent){
+					var toSplice;
+					// keep track of the checked ones
+					checked.push(parent);
+					// mark it checked so we don't run into circular loops when encountering cycles
+					parent.__checked = 1;
+					for(var i in parent){
+						var value = parent[i];
+						if(value == item){
+							if(parent != index){ // make sure we are just operating on real objects 
+								if(parent instanceof Array){
+									// mark it as needing to be spliced, don't do it now or it will mess up the index into the array
+									(toSplice = toSplice || []).push(i);	
+								}else{
+									// property, just delete it.
+									(dojox.data._getStoreForItem(parent) || store).unsetAttribute(parent, i);
+								}
+							}
+						}else{
+							if((typeof value == 'object') && value){
+								if(!value.__checked){
+									// recursively search
+									fixReferences(value);
+								}
+								if(typeof value.__checked == 'object' && parent != index){
+									// if it is a modified array, we will replace it
+									(dojox.data._getStoreForItem(parent) || store).setValue(parent, i, value.__checked);
+								}
+							}
+						}
+					}
+					if(toSplice){
+						// we need to splice the deleted item out of these arrays
+						i = toSplice.length;
+						parent = parent.__checked = parent.concat(); // indicates that the array is modified
+						while(i--){
+							parent.splice(toSplice[i], 1);
+						}
+						return parent;
+					}
+					return null;
+				};
+				// start with the index
+				fixReferences(index);
+				dojox.rpc.JsonRest._saveNotNeeded = false;
+				var i = 0;
+				while(checked[i]){
+					// remove the checked marker
+					delete checked[i++].__checked;
+				}
+			}			
 			dojox.rpc.JsonRest.deleteObject(item);
-			var store = dojox.data._getStoreForItem(item);
+
 			store.onDelete(item);
 		},
 		changing: function(item,_deleting){
@@ -219,9 +278,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			return actions;
 		},
 
-		revert: function(){
+		revert: function(kwArgs){
 			// summary
 			//		returns any modified data to its original state prior to a save();
+			//
+			//	kwArgs.global:
+			//		This will cause the revert to undo all the changes for all 
+			// 		JsonRestStores in a single operation.
 			var dirtyObjects = dojox.rpc.JsonRest.getDirtyObjects().concat([]);
 			while (dirtyObjects.length>0){
 				var d = dirtyObjects.pop();
@@ -241,7 +304,7 @@ dojo.declare("dojox.data.JsonRestStore",
 					}
 				}
 			}
-			dojox.rpc.JsonRest.revert();
+			dojox.rpc.JsonRest.revert(kwArgs && kwArgs.global && this.service);
 		},
 
 		isDirty: function(item){
@@ -314,5 +377,5 @@ dojo.declare("dojox.data.JsonRestStore",
 	}
 );
 dojox.data._getStoreForItem = function(item){
-	return dojox.rpc.JsonRest.services[item.__id.match(/.*\//)[0]]._store;
+	return item.__id && dojox.rpc.JsonRest.services[item.__id.match(/.*\//)[0]]._store;
 };
