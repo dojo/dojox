@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="locale:'he', parseOnLoad: true, isDebug: true, extraLocale: ['ru','root']"></script>
+		<script language="javascript" type="text/javascript">
+			dojo.require("dojox.date.HebrewDate");
+			dojo.require("dojox.date.HebrewLocale");
+			dojo.require("dijit.form.Button");
+		</script>
+	</head>
+	<body>
+		Date in Hebrew calendar:
+		&nbsp;&nbsp;&nbsp;
+		<br>
+		<script type="text/javascript">
+			var date = new dojox.date.HebrewDate();
+			var options = {datePattern:'EEEE dd MMMM yyyy', selector:'date'};
+			document.writeln("  Hebrew date  :    " + dojox.date.HebrewLocale.format(date,options));
+			document.writeln("  Hebrew date  :    " + date.toString());
+		</script>
+		<br>
+		<label for="list_input">Date input Hebrew calendar</label>
+		<input type="text" id="list_input" NAME="list_input" style="width: 400px;">
+			<script type="text/javascript">
+
+			function onButtonClickH(){ //from hebrew, use pattern
+					var str = dojo.trim(document.getElementById('list_input').value);
+					var options = {datePattern:'dd MMMM yyyy', selector:'date'};
+					var dateH = dojox.date.HebrewLocale.parse (str,  options);
+					document.getElementById('list_output').value =  dateH.toGregorian();
+				}	
+			</script>
+		</input>
+		<label for="Text2">Type Pattern for input: "dd MMMM yyyy"</label> 
+		<br>
+		<input type="text" id="list_output" NAME="list_output" style="width: 400px;">
+		<br>
+<button onclick="onButtonClickH()" type="button" ID="Button3"> Convert from input to Greg</button>
+<br>
+	<script type="text/javascript">
+			document.writeln("   Hebrew name of month Tishri:    " + dojox.date.HebrewLocale.getNames( 'months', 'wide', 'format', 'he')[0] + "<br>");
+			document.writeln("   Russian name of month Tishri:  " + dojox.date.HebrewLocale.getNames( 'months', 'wide', 'format', 'ru')[0]+"<br>");
+			document.writeln("   English (root)name of month Tishri:  " + dojox.date.HebrewLocale.getNames( 'months', 'wide', 'format', 'root')[0]+ "<br>");
+	</script>
+</body>
+</html>

@@ -23,6 +23,7 @@
 //			dojo.require("dojo.date");
 			dojo.require("dojo.date.locale");
 			dojo.require("dojox.date.HebrewDate");
+			dojo.require("dojox.date.HebrewLocale");
 //			dojo.requireLocalization("dojo.cldr", "hebrew");
 			dojo.require("dijit._Calendar");
 
@@ -89,9 +90,10 @@ dojo.declare(
 
 			month.setDate(1);
 			var firstDay = month.getDay();
-			var daysInMonth = dojox.date.HebrewDate.getDaysInHebrewMonth(month);
-			var preMonth = new dojox.date.HebrewDate(month.getFullYear(),(month.getMonth()-1), month.getDate());
-			var daysInPreviousMonth = dojox.date.HebrewDate.getDaysInHebrewMonth(preMonth);
+			var daysInMonth = month.getDaysInHebrewMonth(month.getMonth(), month.getFullYear());
+			//var preMonth = new dojox.date.HebrewDate(month.getFullYear(),(month.getMonth()-1), month.getDate());
+			var preMonth = dojox.date.HebrewDate.add(month, "month", -1);
+			var daysInPreviousMonth = preMonth.getDaysInHebrewMonth(preMonth.getMonth(), preMonth.getFullYear());
 			var today = new dojox.date.HebrewDate();
 			today.setHours(0,0,0,0);
 			var selected = this.value;
@@ -143,11 +145,15 @@ dojo.declare(
 				template.className =  clazz + "Month dijitCalendarDateTemplate";
 				template.dijitDateValue = date.valueOf();
 				var label = dojo.query(".dijitCalendarDateLabel", template)[0];
-				this._setText(label, date.getDate());
+				if (this.lang == "he")	{
+					this._setText(label, dojox.date.HebrewNumerals.getDayHebrewLetters(date.getDate()));
+				}else{					
+					this._setText(label, date.getDate());
+				}	
 			}, this);
 
 			// Fill in localized month name
-			var monthNames = dojox.date.HebrewDate._getNames('months', 'wide', 'format',this.lang);
+			var monthNames = dojox.date.HebrewLocale.getNames('months', 'wide', 'format',this.lang);
 			this._setText(this.monthLabelNode, monthNames[month.getMonth()]);
 
 			// Fill in localized prev/current/next years
@@ -156,7 +162,8 @@ dojo.declare(
 			dojo.forEach(["previous", "current", "next"], function(name){
 				d.setYear(y++);
 				this._setText(this[name+"YearLabelNode"],
-					dojo.date.locale.format(d, {selector:'year', locale:this.lang}));
+//					dojo.date.locale.format(d, {selector:'year', locale:this.lang}));
+					dojox.date.HebrewLocale.format(d, {datePattern:'yyyy', selector:'date', locale:this.lang}));
 			}, this);
 
 			// Set up repeating mouse behavior
@@ -194,14 +201,14 @@ dojo.declare(
 			cloneClass(".dijitCalendarWeekTemplate", 5);
 
 			// insert localized day names in the header
-			var dayNames = dojox.date.HebrewDate._getNames('days', this.dayWidth, 'standAlone', this.lang);
+			var dayNames = dojox.date.HebrewLocale.getNames('days', this.dayWidth, 'standAlone', this.lang);
 			var dayOffset = dojo.cldr.supplemental.getFirstDayOfWeek(this.lang);
 			dojo.query(".dijitCalendarDayLabel", this.domNode).forEach(function(label, i){
 				this._setText(label, dayNames[(i + dayOffset) % 7]);
 			}, this);
 
 			// Fill in spacer element with all the month names (invisible) so that the maximum width will affect layout
-			var monthNames = dojox.date.HebrewDate._getNames('months', 'wide', 'format', this.lang);
+			var monthNames = dojox.date.HebrewLocale.getNames('months', 'wide', 'format', this.lang);
 
 			dojo.forEach(monthNames, function(name){
 				var monthSpacer = dojo.doc.createElement("div");
@@ -311,7 +318,7 @@ dojo.declare(
 			}
 		</script>
 	</head>
-	<body>
+	<body class="tundra">
 		<h1 class="testTitle">Hebrew Calendar Test</h1>
 		before <span id="hebrewCalendar1" dojoType="dojox.date._HebrewCalendar" onChange="myHandler(this.id,arguments[0])"></span><span id="gregorianCalendar1" dojoType="dijit._Calendar" onChange="myHandler(this.id,arguments[0])"></span>after
 		before <input id="hebrewCalendarArabic1" dojoType="dojox.date._HebrewCalendar" onChange="myHandler(this.id,arguments[0])"

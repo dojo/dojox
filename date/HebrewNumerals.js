@@ -19,7 +19,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		// example:
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
-		// |		document.writeln(date1.getYearHebrewLetters(date1.getFullYear());	
+		// |		document.writeln(dojox.date.HebrewNumerals.getYearHebrewLetters(date1.getFullYear());	
 		var str  = "", str2 = "";
 	
 		year = year%1000;
@@ -69,7 +69,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		//                   
 		// example:
 		// |		var date = new dojox.date.HebrewDate();
-		// |        	date.setYear(date.parseYearHebrewLetters('תשס"ח'));	
+		// |        	date.setYear(dojox.date.HebrewNumerals.parseYearHebrewLetters('תשס"ח'));	
 		// |		
 	
 		var nYear = 0, i=0, j=0;
@@ -101,7 +101,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		// example:
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
-		// |		document.writeln(date1.getDayHebrewLetters(date1.getDay());
+		// |		document.writeln(dojox.date.HebrewNumerals.getDayHebrewLetters(date1.getDay());
 		var str = "";
 		var j=3;
 		while(day){ 
@@ -143,7 +143,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		// example:
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
-		// |		date1.setDate(parseDayHebrewLetters('א'));	
+		// |		date1.setDate(dojox.date.HebrewNumerals.parseDayHebrewLetters('א'));	
 		var nDay = 0, i=0;
 		for (var j=0; j < day.length; j++){
 			for(i=1; i <= 9; i++){
@@ -170,7 +170,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		// example:
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |
-		// |		document.writeln(date1.getMonthHebrewLetters(date1.getMonth());
+		// |		document.writeln(dojox.date.HebrewNumerals.getMonthHebrewLetters(date1.getMonth());
 		return _MONTHS[monthNum];
 	};	
 	
@@ -179,7 +179,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		//                   the return number is index in month name array, to use it for setMont, do correction for leap year
 		// example:
 		// |		var date = new dojox.date.HebrewDate();
-		// |            var number = date.parseMonthHebrewLetters("תמוז");
+		// |            var number = dojox.date.HebrewNumerals.parseMonthHebrewLetters("תמוז");
 		// |		if ( !date.isLeapYear(date.getFullYear())  &&  number >5) {number--;}
 		// |		date.setMonth(number);	
 		// |		
