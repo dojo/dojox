@@ -118,7 +118,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			// wrap the service with so it goes through JsonRest manager 
 			this.service._store = this;
 			this.schema._idAttr = this.idAttribute;
-			this._constructor = dojox.rpc.JsonRest.getConstructor(this.service);
+			var constructor = dojox.rpc.JsonRest.getConstructor(this.service);
+			var self = this;
+			this._constructor = function(data){
+				constructor.call(this, data);
+				self.onNew(this);
+			}
+			this._constructor.prototype = constructor.prototype;
 			this._index = dojox.rpc.Rest._index;
 			//given a url, load json data from as the store
 		},
@@ -139,7 +145,6 @@ dojo.declare("dojox.data.JsonRestStore",
 				// set the new value
 				this.setValue(parentInfo.parent,parentInfo.attribute,values.concat([data]));
 			}
-			this.onNew(data); // should this go before the set?
 			return data;
 		},
 		deleteItem: function(item){

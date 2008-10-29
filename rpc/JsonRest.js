@@ -225,9 +225,7 @@ dojo.require("dojox.rpc.Rest");
 				}
 				var idAttribute = jr.getIdAttribute(service);
 				Rest._index[this.__id = this.__clientId = service.servicePath + (this[idAttribute] || (this[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
-				dirtyObjects.push({object:this});
-	//			this._getParent(parentInfo).push(data); // append to this list
-
+				dirtyObjects.push({object:this, save: true});
 			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});
 		},
