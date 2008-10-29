@@ -28,7 +28,7 @@ dojo.require("dojox.rpc.Rest");
 					if(object){
 						if(old){
 							// changed object
-							while(!(dojox.json && dojox.json.ref && dojox.json.ref._useRefs) && object.__id.match(parentIdRegex)){ // it is a path reference
+							while(object.__id.match(parentIdRegex)){ // it is a path reference
 								// this means it is a sub object and the server doesn't support directly putting to
 								// this object by path, we must go to the parent object and save it
 								var parentId = object.__id.match(parentIdRegex)[1];

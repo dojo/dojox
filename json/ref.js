@@ -45,7 +45,7 @@ dojox.json.ref = {
 		//		An object, the result of the processing
 		args = args || {};
 		var idAttribute = args.idAttribute || 'id';
-		var prefix = args.idPrefix || '/'; 
+		var prefix = args.idPrefix || ''; 
 		var assignAbsoluteIds = args.assignAbsoluteIds;
 		var index = args.index || {}; // create an index if one doesn't exist
 		var ref,reWalk=[];
@@ -220,7 +220,7 @@ dojox.json.ref = {
 		var useRefs = this._useRefs;
 		var addProp = this._addProp;
 		idPrefix = idPrefix || ''; // the id prefix for this context
-		var paths=indexSubObjects || {};
+		var paths={};
 		function serialize(it,path,_indentStr){
 			if(typeof it == 'object' && it){
 				var value;
@@ -229,7 +229,7 @@ dojox.json.ref = {
 				}
 				var id = it.__id;
 				if(id){ // we found an identifiable object, we will just serialize a reference to it... unless it is the root
-					if(path != '#' && (useRefs || paths[id])){
+					if(path != '#' && ((useRefs && !id.match(/#/)) || paths[id])){
 						var ref = id; // a pure path based reference, leave it alone
 	
 						if(id.charAt(0)!='#'){
