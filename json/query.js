@@ -160,7 +160,7 @@ dojo.provide("dojox.json.query");
 		function makeRegex(t,a,b,c,d){
 			// creates a regular expression matcher for when wildcards and ignore case is used 
 			return str[d].match(/[\*\?]/) ?
-					"/" + str[d].substring(1,str[d].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + (c == '~' ? '/i' : '/') + ".test(" + a + ")" :
+					"/^" + str[d].substring(1,str[d].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + (c == '~' ? '$/i' : '$/') + ".test(" + a + ")" :
 					t;
 		}
 		query.replace(/(\]|\)|push|pop|shift|splice|sort|reverse)\s*\(/,function(){
@@ -171,7 +171,7 @@ dojo.provide("dojox.json.query");
 			replace(/@|(\.\s*)?[a-zA-Z\$_]+(\s*:)?/g,function(t){
 				return t.charAt(0) == '.' ? t : // leave .prop alone 
 					t == '@' ? "$obj" :// the reference to the current object 
-					(t.match(/:|^(\$|Math)$/) ? "" : "$obj.") + t; // plain names should be properties of root... unless they are a label in object initializer
+					(t.match(/:|^(\$|Math|true|false|null)$/) ? "" : "$obj.") + t; // plain names should be properties of root... unless they are a label in object initializer
 			}).
 			replace(/\.?\.?\[(`\]|[^\]])*\]|\?.*|\.\.([\w\$_]+)|\.\*/g,function(t,a,b){
 				var oper = t.match(/^\.?\.?(\[\s*\?|\?|\[\s*==)(.*?)\]?$/); // [?expr] and ?expr and [=expr and =expr
