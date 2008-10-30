@@ -536,11 +536,9 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		// |		var date1 = new dojox.date.HebrewDate();
 		// |		document.writeln(date1.toString());
 
-		var dateString = (this._date+1) + ", " + ((!this.isLeapYear(this._year)&&(this._month>5)) ?this._month:(this._month+1)) + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds;
-		return dateString;
+		return this._date + ", " + ((!this.isLeapYear(this._year) && this._month>5) ? this._month : (this._month+1)) + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
 	},
-		         
-	        
+
 	valueOf: function(){
 		return this.toGregorian().valueOf();
 	},

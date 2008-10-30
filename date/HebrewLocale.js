@@ -12,7 +12,6 @@ dojo.require("dojo.i18n");
 //Load the bundles containing localization information for
 // names and formats 
 dojo.requireLocalization("dojo.cldr", "hebrew");
-dojo.requireLocalization("dojo.cldr", "gregorian"); 
 
 (function(){
 	// Format a pattern without literals
@@ -108,8 +107,7 @@ dojo.requireLocalization("dojo.cldr", "gregorian");
 		});
 	}	
 	
-	
-	dojox.date.HebrewLocale.format = function(/*HebrewDate*/dateObject, /*object?*/options){
+dojox.date.HebrewLocale.format = function(/*HebrewDate*/dateObject, /*object?*/options){
 	// based on and similar to dojo.date.locale.format
 	//summary:
 	//		Format a Date object as a String, using  settings.
@@ -200,7 +198,7 @@ dojox.date.HebrewLocale.parse= function(/*String*/value, /*object?*/options){
 		// |  	
 		// |    h, H, k, K, m, s, S,  -  time format  
 
-	if (!options){options={};}
+	if(!options){options={};}
 	var info = dojox.date.HebrewLocale._parseInfo(options);
 	
 	var tokens = info.tokens, bundle = info.bundle;
@@ -464,7 +462,6 @@ dojox.date.HebrewLocale._getHebrewBundle = function(/*String*/locale){
 };
 })();
 
-dojox.date.HebrewLocale.addCustomFormats("dojo.cldr","gregorian");
 dojox.date.HebrewLocale.addCustomFormats("dojo.cldr","hebrew");
 
 dojox.date.HebrewLocale.getNames = function(/*String*/item, /*String*/type, /*String?*/context, /*String?*/locale){
