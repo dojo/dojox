@@ -1,8 +1,7 @@
 dojo.provide("dojox.form.Manager");
 
 dojo.require("dijit._Widget");
-
-dojo.require("dojo.parser");
+dojo.require("dijit._Templated");
 
 (function(){
 	var aa = dojox.form.Manager.actionAdapter = function(/* Function */ action){
@@ -35,7 +34,7 @@ dojo.require("dojo.parser");
 	};
 
 	var skipNames = {domNode: 1, containerNode: 1, srcNodeRef: 1, bgIframe: 1},
-		_w = dijit._Widget,
+		_w = dijit._Widget, _atn = dijit._Templated.prototype._attachTemplateNodes,
 
 		registerWidget = function(widget){
 			if(widget instanceof _w){
@@ -103,14 +102,19 @@ dojo.require("dojo.parser");
 				// all widgets with descendants must set containerNode
    				this.containerNode = this.domNode;
 			}
+			// process attachment points and events on nodes
+			_atn.call(this, this.domNode);
 		},
-
+		
 		startup: function(){
 			// summary:
 			//		Called after all the widgets have been instantiated and their
 			//		dom nodes have been inserted somewhere under dojo.doc.body.
 
 			if(this._started){ return; }
+
+			// process attachment points and events on widgets
+			_atn.call(this, this.getDescendants(), function(n, p){ return n[p]; });
 
 			// build the map of widgets
 			this._widgets = {};
@@ -119,7 +123,7 @@ dojo.require("dojo.parser");
 			// build the map of nodes
 			this._nodes = {};
 			dojo.query("input, select, textarea, button", this.domNode).forEach(registerNode, this);
-
+			
 			// process observers for widgets
 			for(var name in this._widgets){
 				var widget = this._widgets[name], observer = null;
@@ -431,10 +435,13 @@ dojo.require("dojo.parser");
 			//		Optional. The default state (true, if omitted).
 
 			var result = this.inspectFormWidgets(function(name, widget, value){
+				if(dojo.isArray(widget)){
+					return inspector.call(this, name, dojo.map(widget, function(w){ return w.domNode; }), value);
+				}
 				return inspector.call(this, name, widget.domNode, value);
 			}, state, defaultValue);
 			dojo.mixin(result, this.inspectFormElements(inspector, state, defaultValue));
-			return dojo.mixin(result, this.inspectAttachPoints(inspector, state, defaultValue));	// Object
+			return dojo.mixin(result, this.inspectAttachedPoints(inspector, state, defaultValue));	// Object
 		},
 
 		_formWidgetValue: function(/* Object|Array */ elem, /* Object? */ value){
@@ -661,7 +668,7 @@ dojo.require("dojo.parser");
 				return !widget.attr("disabled");
 			}), names);
 
-			dojo.mixin(result, this.inspectFormWidgets(ia(function(name, node){
+			dojo.mixin(result, this.inspectFormElements(ia(function(name, node){
 				return !dojo.attr(node, "disabled");
 			}), names));
 
@@ -689,7 +696,7 @@ dojo.require("dojo.parser");
 				widget.attr("disabled", value);
 			}), state, defaultValue);
 
-			this.inspectFormWidgets(aa(function(name, node, value){
+			this.inspectFormElements(aa(function(name, node, value){
 				dojo.attr(node, "disabled", value);
 			}), state, defaultValue);
 
@@ -717,7 +724,7 @@ dojo.require("dojo.parser");
 			//		If it is an object, dictionary keys are names to be processed.
 			//		If it is omitted, all known attach point nodes are to be processed.
 
-			var result = this.inspectAttachPoints(function(name, node){
+			var result = this.inspectAttachedPoints(function(name, node){
 				return dojo.style(node, "display") != "none";
 			}, names);
 
@@ -739,7 +746,7 @@ dojo.require("dojo.parser");
 				defaultState = true;
 			}
 
-			this.inspectAttachPoints(function(name, node, value){
+			this.inspectAttachedPoints(function(name, node, value){
 				dojo.style(node, "display", value ? "" : "none");
 			}, state, defaultState);
 

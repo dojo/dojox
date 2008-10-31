@@ -14,6 +14,8 @@
 		#result			{ background-color: white; }
 		#result th		{ font-weight: bolder; }
 		#result .hilite	{ background-color: #fd8; }
+
+		.makeYellow		{ background-color: #ff8; }
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../Manager.js"></script>
@@ -52,7 +54,8 @@
 		</div>
 		<div dojoType="dijit.layout.ContentPane" region="center" splitter="true" style="width: 50em;">
 			<form dojoType="dojox.form.Manager" id="form">
-				<fieldset><legend>HTML form elements</legend>
+				<fieldset dojoAttachPoint="part1">
+					<legend>HTML form elements</legend>
 					<div>
 						<input type="checkbox" id="e01" name="e01" value="e01" observer="showValues">
 						&nbsp;<label for="e01">e01 input/checkbox</label>
@@ -95,7 +98,8 @@
 						<input type="submit" name="e11" value="e11 input/submit">
 					</div>
 				</fieldset>
-				<fieldset><legend>Dijit form widgets</legend>
+				<fieldset dojoAttachPoint="part2">
+					<legend>Dijit form widgets</legend>
 					<div>
 						<input type="checkbox" dojoType="dijit.form.CheckBox" id="w01" name="w01" value="w01" observer="showValues">
 						&nbsp;<label for="w01">w01 input/checkbox dijit.form.CheckBox</label>
@@ -168,5 +172,22 @@
 		</div>
 	</div>
 
+	<p>
+		<input type="checkbox" id="c01" name="c01" value="c01" checked="checked"
+			onclick="dijit.byId('form')[this.checked ? 'enable' : 'disable']()">
+		&nbsp;<label for="c01">enable the form elements and widgets</label>
+		<br>
+		<input type="checkbox" id="c02" name="c02" value="c02"
+			onclick="dijit.byId('form')[this.checked ? 'addClass' : 'removeClass']('makeYellow', ['part1', 'part2'])">
+		&nbsp;<label for="c02">add/remove yellow background</label>
+		<br>
+		<input type="checkbox" id="c03" name="c03" value="c03" checked="checked"
+			onclick="dijit.byId('form')[this.checked ? 'show' : 'hide'](['part1'])">
+		&nbsp;<label for="c03">show form elements</label>
+		<br>
+		<input type="checkbox" id="c04" name="c04" value="c04" checked="checked"
+			onclick="dijit.byId('form')[this.checked ? 'show' : 'hide'](['part2'])">
+		&nbsp;<label for="c04">show form widgets</label>
+	</p>
 </body>
 </html>
