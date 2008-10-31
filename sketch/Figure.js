@@ -172,7 +172,7 @@ dojo.require("dojox.sketch.UndoStack");
 			var dy=y-self._lp.y;
 			self._absEnd={x:x, y:y};
 			if(self._c){
-				self._c.doChange({dx:Math.round(dx/self.zoomFactor), dy:Math.round(dy/self.zoomFactor)});
+				//self._c.doChange({dx:dx, dy:dy});
 				self._c.setBinding({dx:Math.round(dx/self.zoomFactor), dy:Math.round(dy/self.zoomFactor)});
 				self._lp={x:x, y:y};
 			} else {
@@ -238,20 +238,22 @@ dojo.require("dojox.sketch.UndoStack");
 			.setFill("white");
 		this.group=this.surface.createGroup();
 
-		//	kill any dragging events.
+		
 		this._cons=[];
-		this._cons.push(dojo.connect(this.node, "ondragstart",   dojo, "stopEvent"));
-		this._cons.push(dojo.connect(this.node, "onselectstart", dojo, "stopEvent"));
 
-		//	hook up the drag system.
 		var es=this.surface.getEventSource();
-		this._cons.push(dojo.connect(es, 'onmousedown', this._md));
-		this._cons.push(dojo.connect(es, 'onmousemove', this._mm));
-		this._cons.push(dojo.connect(es, 'onmouseup', this._mu));
-
-		this._cons.push(dojo.connect(es, 'onclick', this, 'onClick'));
-		this._cons.push(dojo.connect(es, 'ondblclick', this._dblclick));
-		this._cons.push(dojo.connect(es.ownerDocument, 'onkeydown', this._keydown));
+		this._cons.push(
+			//	kill any dragging events.
+			dojo.connect(es, "ondragstart",   dojo.stopEvent),
+			dojo.connect(es, "onselectstart", dojo.stopEvent),
+			//	hook up the drag system.
+			dojo.connect(es, 'onmousedown', this._md),
+			dojo.connect(es, 'onmousemove', this._mm),
+			dojo.connect(es, 'onmouseup', this._mu),
+			// misc hooks
+			dojo.connect(es, 'onclick', this, 'onClick'),
+			dojo.connect(es, 'ondblclick', this._dblclick),
+			dojo.connect(es.ownerDocument, 'onkeydown', this._keydown));
 		
 		//	rect hack.  Fcuking VML.
 		this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
@@ -288,6 +290,9 @@ dojo.require("dojox.sketch.UndoStack");
 		if(dojo.isIE){
 			this.image.rawNode.style.width=Math.max(w,this.size.w);
 			this.image.rawNode.style.height=Math.max(h,this.size.h);
+		}
+		for(var i=0; i<this.shapes.length; i++){
+			this.shapes[i].zoom(this.zoomFactor);
 		}
 		//this.rect.setShape({width:w,height:h});
 	};

@@ -126,20 +126,17 @@ dojo.require("dojox.sketch.Anchor");
 		//	draw the shapes
 		this.shape=this.figure.group.createGroup();
 		this.shape.getEventSource().setAttribute("id", this.id);
-		if(this.transform.dx||this.transform.dy){ this.shape.setTransform(this.transform); }
+		//if(this.transform.dx||this.transform.dy){ this.shape.setTransform(this.transform); }
 
 		this.pathShape=this.shape.createPath("M"+this.start.x+" "+this.start.y+"Q"+this.control.x+" "+this.control.y+" "+this.end.x+" "+this.end.y + " l0,0")
-			.setStroke(this.property('stroke'));
+			//.setStroke(this.property('stroke'));
 		
 		this.startArrowGroup=this.shape.createGroup().setTransform({ dx:this.start.x, dy:this.start.y });
 		this.startArrowGroup.applyTransform(startRot);
-//		console.log('startArrow',this.property('fill'));
-		this.startArrow=this.startArrowGroup.createPath("M0,0 l20,-5 -3,5 3,5 Z")
-			.setFill(this.property('fill'));
+		this.startArrow=this.startArrowGroup.createPath();//"M0,0 l20,-5 -3,5 3,5 Z").setFill(this.property('fill'));
 		
 		this.endArrowGroup=this.shape.createGroup().setTransform(endRot);
-		this.endArrow=this.endArrowGroup.createPath("M" + this.end.x + "," + this.end.y + " l-20,-5 3,5 -3,5 Z")
-			.setFill(this.property('fill'));
+		this.endArrow=this.endArrowGroup.createPath();//("M" + this.end.x + "," + this.end.y + " l-20,-5 3,5 -3,5 Z").setFill(this.property('fill'));
 
 		this.labelShape=this.shape.createText({
 				x:this.textPosition.x, 
@@ -147,9 +144,10 @@ dojo.require("dojox.sketch.Anchor");
 				text:this.property('label'), 
 				align:this.textAlign
 			})
-			.setFont(font)
+			//.setFont(font)
 			.setFill(this.property('fill'));
 		this.labelShape.getEventSource().setAttribute('id',this.id+"-labelShape");
+		this.draw();
 	};
 	p.destroy=function(){
 		if(!this.shape){ return; }
@@ -177,22 +175,32 @@ dojo.require("dojox.sketch.Anchor");
 
 		this.shape.setTransform(this.transform);
 		this.pathShape.setShape("M"+this.start.x+" "+this.start.y+" Q"+this.control.x+" "+this.control.y+" "+this.end.x+" "+this.end.y + " l0,0")
-			.setStroke(this.property('stroke'));
-		this.startArrowGroup.setTransform({ dx:this.start.x, dy:this.start.y });
-		this.startArrowGroup.applyTransform(startRot);
+			//.setStroke(this.property('stroke'));
+		this.startArrowGroup.setTransform({ dx:this.start.x, dy:this.start.y }).applyTransform(startRot);
 		this.startArrow.setFill(this.property('fill'));
 		
 		this.endArrowGroup.setTransform(endRot);
-		this.endArrow.setShape("M" + this.end.x + "," + this.end.y + " l-20,-5 3,5 -3,5 Z")
-			.setFill(this.property('fill'));
+		this.endArrow.setFill(this.property('fill'));
 		this.labelShape.setShape({
 				x:this.textPosition.x, 
 				y:this.textPosition.y, 
 				text:this.property('label')
 			})
 			.setFill(this.property('fill'));
+		this.zoom();
 	};
 
+	p.zoom=function(pct){
+		pct = pct || this.figure.zoomFactor;
+		if(this._curPct!==pct){
+			this._curPct=pct;
+			var l=Math.floor(20/pct), w=Math.floor(5/pct),h=Math.floor(3/pct);
+			this.startArrow.setShape("M0,0 l"+l+",-"+w+" -"+h+","+w+" "+h+","+w+" Z");//.setFill(this.property('fill'));
+			this.endArrow.setShape("M" + this.end.x + "," + this.end.y + " l-"+l+",-"+w+" "+h+","+w+" -"+h+","+w+" Z");
+		}
+		ta.Annotation.prototype.zoom.call(this,pct);
+	};
+	
 	p.getBBox=function(){
 		var x=Math.min(this.start.x, this.control.x, this.end.x);
 		var y=Math.min(this.start.y, this.control.y, this.end.y);

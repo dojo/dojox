@@ -98,25 +98,21 @@ dojo.require("dojox.sketch.Anchor");
 	};
 
 	p.initialize=function(obj){
-		var font=(ta.Annotation.labelFont)?ta.Annotation.labelFont:{family:"Times", size:"16px"};
 		this.apply(obj);
 		this._pos();
 
 		//	create either from scratch or based on the passed node
 		this.shape=this.figure.group.createGroup();
 		this.shape.getEventSource().setAttribute("id", this.id);
-		if(this.transform.dx || this.transform.dy){ this.shape.setTransform(this.transform); }
-		this.pathShape=this.shape.createPath("M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0")
-			.setStroke(this.property('stroke'));
+		this.pathShape=this.shape.createPath("M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0");
 		this.labelShape=this.shape.createText({
 				x:this.textPosition.x, 
 				y:this.textPosition.y, 
 				text:this.property('label'), 
 				align:this.textAlign
-			})
-			.setFont(font)
-			.setFill(this.property('fill'));
+			});
 		this.labelShape.getEventSource().setAttribute('id',this.id+"-labelShape");
+		this.draw();
 	};
 	p.destroy=function(){
 		if(!this.shape){ return; }
@@ -136,14 +132,14 @@ dojo.require("dojox.sketch.Anchor");
 		this.apply(obj);
 		this._pos();
 		this.shape.setTransform(this.transform);
-		this.pathShape.setShape("M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0")
-			.setStroke(this.property('stroke'));
+		this.pathShape.setShape("M"+this.start.x+","+this.start.y+" Q"+this.control.x+","+this.control.y+" "+this.end.x+","+this.end.y+" l0,0");
 		this.labelShape.setShape({ 
 				x:this.textPosition.x, 
 				y:this.textPosition.y, 
 				text:this.property('label') 
 			})
 			.setFill(this.property('fill'));
+		this.zoom();
 	};
 	p.serialize=function(){
 		var stroke=this.property('stroke');

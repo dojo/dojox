@@ -80,6 +80,7 @@ dojo.require("dojox.sketch._Plugin");
 		this.anchors={};	//	ta.Anchor
 		this._properties={
 			'stroke':{ color:"blue", width:2 },
+			'font': {family:"Arial", size:16, weight:"bold"},
 			'fill': "blue",
 			'label': ""
 		};
@@ -173,9 +174,15 @@ dojo.require("dojox.sketch._Plugin");
 		this.transform.dy+=pt.dy;
 		this.draw();
 	};
-	p.doChange=function(pt){ };
-	p.getTextBox=function(){
-		return dojox.gfx._base._getTextBox(this.property('label'),ta.Annotation.labelFont);
+	//p.doChange=function(pt){ };
+	p.getTextBox=function(zoomfactor){
+		var fp=this.property('font');
+		//_getTextBox expect style camlCase properties, do it manually here
+		var f = {fontFamily:fp.family,fontSize:fp.size,fontWeight:fp.weight};
+		if(zoomfactor){
+			f.fontSize = Math.floor(f.fontSize/zoomfactor);
+		}
+		return dojox.gfx._base._getTextBox(this.property('label'),f);
 	};
 	p.setMode=function(m){
 		if(this.mode==m){ return; }
@@ -196,10 +203,22 @@ dojo.require("dojox.sketch._Plugin");
 			this.anchors[p][method](); 
 		}
 	};
-//	p.writeProperties=function(){
-//		var ps=this._properties;
-//		return "<!CDATA[properties:"+dojo.toJson(ps)+"]]>";
-//	};
+	p.zoom=function(pct){
+		pct = pct || this.figure.zoomFactor;
+		if(this.pathShape){
+			var s=dojo.clone(this.property('stroke'));
+			s.width=Math.floor(s.width/pct)+"px";
+			this.pathShape.setStroke(s);
+		}
+		if(this.labelShape){
+			var f=dojo.clone(this.property('font'));
+			f.size=Math.floor(f.size/pct)+"px";
+			this.labelShape.setFont(f);
+		}
+		for(var n in this.anchors){
+			this.anchors[n].zoom(pct);
+		}
+	};
 	p.writeCommonAttrs=function(){
 		return 'id="' + this.id + '" dojoxsketch:type="' + this.type() + '"'
 			+ ' transform="translate('+ this.transform.dx + "," + this.transform.dy + ')"'
@@ -227,7 +246,6 @@ dojo.require("dojox.sketch._Plugin");
 		}
 	};
 	ta.Annotation.Modes={ View:0, Edit:1 };
-	ta.Annotation.labelFont={family:"Arial", size:"16px", weight:"bold"};
 	ta.Annotation.register=function(name){
 		var cls=ta[name+'Annotation'];
 		ta.registerTool(name, function(p){

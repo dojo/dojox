@@ -15,7 +15,7 @@ dojo.require("dojox.sketch.Anchor");
 		this.textOffset=4;
 		this.textAlign="end";
 
-		this.property('label',this.id);
+		//this.property('label',this.id);
 		this.rectShape=null;
 		this.labelShape=null;
 
@@ -70,14 +70,13 @@ dojo.require("dojox.sketch.Anchor");
 		}
 	};
 	p.initialize=function(obj){
-		var font=(ta.Annotation.labelFont)?ta.Annotation.labelFont:{family:"Times", size:"16px"};
 		this.apply(obj);
 		this._pos();
 
 		//	create either from scratch or based on the passed node
 		this.shape=this.figure.group.createGroup();
 		this.shape.getEventSource().setAttribute("id", this.id);
-		if(this.transform.dx || this.transform.dy){ this.shape.setTransform(this.transform); }
+		//if(this.transform.dx || this.transform.dy){ this.shape.setTransform(this.transform); }
 		this.rectShape=this.shape.createRect({
 				x:this.start.x, 
 				y: this.start.y, 
@@ -85,7 +84,7 @@ dojo.require("dojox.sketch.Anchor");
 				height:this.end.y-this.start.y, 
 				r:this.radius
 			})
-			.setStroke({color:this.property('fill'), width:1})
+			//.setStroke({color:this.property('fill'), width:1})
 			.setFill([255,255,255,0.1]);
 		this.rectShape.getEventSource().setAttribute("shape-rendering","crispEdges");
 		this.labelShape=this.shape.createText({
@@ -94,9 +93,10 @@ dojo.require("dojox.sketch.Anchor");
 				text:this.property('label'), 
 				align:this.textAlign
 			})
-			.setFont(font)
+			//.setFont(font)
 			.setFill(this.property('fill'));
 		this.labelShape.getEventSource().setAttribute('id',this.id+"-labelShape");
+		this.draw();
 	};
 	p.destroy=function(){
 		if(!this.shape){ return; }
@@ -123,7 +123,7 @@ dojo.require("dojox.sketch.Anchor");
 				height:this.end.y-this.start.y, 
 				r:this.radius
 			})
-			.setStroke({ color:this.property('fill'), width:1 })
+			//.setStroke({ color:this.property('fill'), width:1 })
 			.setFill([255,255,255,0.1]);
 
 		this.labelShape.setShape({ 
@@ -132,11 +132,17 @@ dojo.require("dojox.sketch.Anchor");
 				text:this.property('label') 
 			})
 			.setFill(this.property('fill'));
+		this.zoom();
+	};
+	p.zoom=function(pct){
+		pct = pct || this.figure.zoomFactor;
+		this.rectShape.setStroke({color:this.property('fill'), width:1/pct});
+		ta.Annotation.prototype.zoom.call(this,pct);
 	};
 	p.serialize=function(){
 		var s=this.property('stroke');
 		return '<g '+this.writeCommonAttrs()+'>'
-			+ '<rect style="stroke:'+s.color+';stroke-weight:1;fill:none;" '
+			+ '<rect style="stroke:'+s.color+';stroke-width:1;fill:none;" '
 			+ 'x="' + this.start.x + '" '
 			+ 'width="' + (this.end.x-this.start.x) + '" '
 			+ 'y="' + this.start.y + '" '
