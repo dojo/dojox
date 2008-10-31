@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>dojox.form.FileUploader</title>
+	<title>dojox.form.Manager (test #1)</title>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/dijit.css";
@@ -57,7 +57,7 @@
 				<fieldset dojoAttachPoint="part1">
 					<legend>HTML form elements</legend>
 					<div>
-						<input type="checkbox" id="e01" name="e01" value="e01" observer="showValues">
+						<input type="checkbox" id="e01" name="e01" value="e01" observer="showValues, logRadio">
 						&nbsp;<label for="e01">e01 input/checkbox</label>
 					</div>
 					<div>
@@ -108,7 +108,7 @@
 						<input type="radio" dojoType="dijit.form.RadioButton" id="w021" name="w02" value="w02-1" observer="showValues">
 						&nbsp;<label for="w021">w02-1 input/radio dijit.form.RadioButton</label>
 						&nbsp;
-						<input type="radio" dojoType="dijit.form.RadioButton" id="w022" name="w02" value="w02-2" checked="checked">
+						<input type="radio" dojoType="dijit.form.RadioButton" id="w022" name="w02" value="w02-2" checked="checked" observer="logRadio">
 						&nbsp;<label for="w022">w02-2 input/radio dijit.form.RadioButton</label>
 					</div>
 					<div>
@@ -138,6 +138,11 @@
 				<script type="dojo/method" event="onSubmit">
 					// do not submit this form
 					return false;
+				</script>
+				<script type="dojo/method" event="logRadio">
+					// sample observer: logs radio buttons by name
+					var values = this.gatherFormValues(["e02", "w02"]);
+					console.log("e02: " + values.e02 + ", w02: " + values.w02);
 				</script>
 				<script type="dojo/method" event="showValues">
 					var values = this.gatherFormValues(),

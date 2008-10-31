@@ -105,7 +105,7 @@ dojo.require("dijit._Templated");
 			// process attachment points and events on nodes
 			_atn.call(this, this.domNode);
 		},
-		
+
 		startup: function(){
 			// summary:
 			//		Called after all the widgets have been instantiated and their
@@ -123,76 +123,88 @@ dojo.require("dijit._Templated");
 			// build the map of nodes
 			this._nodes = {};
 			dojo.query("input, select, textarea, button", this.domNode).forEach(registerNode, this);
-			
+
 			// process observers for widgets
 			for(var name in this._widgets){
-				var widget = this._widgets[name], observer = null;
+				var widget = this._widgets[name], observers = [];
 				if(dojo.isArray(widget)){
-					dojo.some(widget, function(w){
+					dojo.forEach(widget, function(w){
 						var o = w.attr("observer");
-						if(o){
-							observer = o;
-							return true;
+						if(o && typeof o == "string"){
+							observers = observers.concat(o.split(","));
 						}
-						return false;
 					});
-					if(observer && this[observer] && dojo.isFunction(this[observer])){
-						dojo.forEach(widget, function(w){
-							this.connect(w, "onChange", observer);
+					dojo.forEach(widget, function(w){
+						dojo.forEach(observers, function(o){
+							o = dojo.trim(o);
+							if(o && this[o] && dojo.isFunction(this[o])){
+								this.connect(w, "onChange", o);
+							}
+						}, this);
+					}, this);
+				}else{
+					var o = widget.attr("observer");
+					if(o && typeof o == "string"){
+						dojo.forEach(o.split(","), function(o){
+							o = dojo.trim(o);
+							if(o && this[o] && dojo.isFunction(this[o])){
+								this.connect(widget, "onChange", o);
+							}
 						}, this);
 					}
-					continue;
-				}
-				observer = widget.attr("observer");
-				if(observer && this[observer] && dojo.isFunction(this[observer])){
-					this.connect(widget, "onChange", observer);
 				}
 			}
 
 			// process observers for nodes
 			for(var name in this._nodes){
 				if(name in this._widgets){ continue; }
-				var node = this._nodes[name], observer = null;
+				var node = this._nodes[name], observers = [];
 				if(dojo.isArray(node)){
 					// input/radio array
-					dojo.some(node, function(n){
+					dojo.forEach(node, function(n){
 						var o = dojo.attr(n, "observer");
-						if(o){
-							observer = o;
-							return true;
+						if(o && typeof o == "string"){
+							observers = observers.concat(o.split(","));
 						}
-						return false;
 					});
-					if(observer && this[observer] && dojo.isFunction(this[observer])){
-						dojo.forEach(node, function(n){
-							this.connect(n, "onclick", observer);
+					dojo.forEach(node, function(n){
+						dojo.forEach(observers, function(o){
+							o = dojo.trim(o);
+							if(o && this[o] && dojo.isFunction(this[o])){
+								this.connect(n, "onclick", o);
+							}
+						}, this);
+					}, this);
+				}else{
+					var o = dojo.attr(node, "observer");
+					if(o && typeof o == "string"){
+						var eventName = "onclick";
+						switch(node.tagName.toLowerCase()){
+							case "textarea":
+								eventName = "onkeyup";
+								break;
+							case "select":
+								eventName = "onchange";
+								break;
+							case "input":
+								switch(node.type.toLowerCase()){
+									case "text":
+									case "password":
+										eventName = "onkeyup";
+										break;
+									// input/radio was already processed separately
+								}
+								break;
+							// button, input/button, input/checkbox, input/file, input/image,
+							// input/submit, input/reset use "onclick" (the default)
+						}
+						dojo.forEach(o.split(","), function(o){
+							o = dojo.trim(o);
+							if(o && this[o] && dojo.isFunction(this[o])){
+								this.connect(node, eventName, o);
+							}
 						}, this);
 					}
-					continue;
-				}
-				var observer = dojo.attr(node, "observer");
-				if(observer && this[observer] && dojo.isFunction(this[observer])){
-					var eventName = "onclick";
-					switch(node.tagName.toLowerCase()){
-						case "textarea":
-							eventName = "onkeyup";
-							break;
-						case "select":
-							eventName = "onchange";
-							break;
-						case "input":
-							switch(node.type.toLowerCase()){
-								case "text":
-								case "password":
-									eventName = "onkeyup";
-									break;
-								// input/radio was already processed separately
-							}
-							break;
-						// button, input/button, input/checkbox, input/file, input/image,
-						// input/submit, input/reset use "onclick" (the default)
-					}
-					this.connect(node, eventName, observer);
 				}
 			}
 
