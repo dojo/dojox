@@ -18,13 +18,14 @@ if(!dojo.config["useXDomain"] || dojo.config["allowXdRichTextSave"]){
 		(function(){
 			var savetextarea = dojo.doc.createElement('textarea');
 			savetextarea.id = dijit._scopeName + "._editor.RichText.savedContent";
-			var s = savetextarea.style;
-			s.display='none';
-			s.position='absolute';
-			s.top="-100px";
-			s.left="-100px";
-			s.height="3px";
-			s.width="3px";
+			dojo.style(savetextarea, {
+				display: "none",
+				position: "absolute",
+				top: "-100px",
+				left: "-100px",
+				height: "3px",
+				width: "3px"
+			});
 			dojo.body().appendChild(savetextarea);
 		})();
 	}else{
@@ -420,6 +421,12 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		if(this.useIframe){
 			dojo.mixin(this, dojox.editor.refactor.RichTextIframeMixin);
 		}
+		
+		this.onLoadDeferred.addCallback(this, function(data){
+			this.connect(this.editNode, "onblur", "_customOnBlur");
+			this.connect(this.editNode, "onfocus", "_customOnFocus");
+			return data;
+		});
 	},
 
 	// inheritWidth: Boolean
@@ -919,30 +926,49 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 			bookmark: this._getBookmark(nodes)
 		};
 		console.debug("saving selection:", this._savedSelection);
-		// console.debug(this._savedSelection.bookmark);
 
 	},
-	_onBlur: function(e){
-		console.debug("RichText _onBlur")
-
+	_onBlur: function(e){ },
+	_customOnBlur: function(e){
+		// console.debug("_customOnBlur");
 		this._saveSelection();
-		this.inherited(arguments);
+		// this.inherited(arguments);
 		var _c = this.getValue(true);
 		
-		if(_c!=this.savedContent){
+		if( _c != this.savedContent){
 			this.onChange(_c);
-			this.savedContent=_c;
+			this.savedContent = _c;
 		}
 		if(dojo.isMoz && this.iframe){
 			this.iframe.contentDocument.title = this._localizedIframeTitles.iframeEditTitle;
 		} 
-
+		e.stopPropagation();
 	},
 	_initialFocus: true,
-	_onFocus: function(/*Event*/e){
+	_customOnFocus: function(/*Event*/e){
+		setTimeout(dojo.hitch(this, "_doOnFocus"), 10)
+	},
+	_doOnFocus: function(/*Event*/e){
 		// summary: Fired on focus
 
-		console.debug("RichText _onFocus");
+		/*
+		if(dojo.isSafari){
+			try{
+				console.debug(e);
+				e.preventDefault();
+				// e.stopPropagation();
+				this.editNode.focus();
+				// console.dir(s);
+				// s.collapseToStart();
+				var s = this.window.getSelection();
+				s.collapseToStart();
+				console.dir(s);
+			}catch(e){ console.debug(e); }
+			return;
+			// this.window.getSelection().getRangeAt(0).collapse();
+		}
+		*/
+		// console.debug("RichText _onFocus", e);
 		if(dojo.isMoz && this._initialFocus){
 			this._initialFocus = false;
 			if(this.editNode.innerHTML.replace(/^\s+|\s+$/g, "") == "&nbsp;"){
@@ -951,16 +977,14 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 				// this.window.getSelection().collapseToStart();
 			}
 		}
-		this.inherited(arguments);
+		// this.inherited(arguments);
 
-		/*
 		console.debug("_onFocus");
 		if(this._savedSelection){
 			console.debug("restoring selection from:", this._savedSelection);
 			this._moveToBookmark(this._savedSelection.bookmark);
 		}
 		this._savedSelection = null;
-		*/
 
 	},
 
@@ -1918,13 +1942,13 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		console.debug("_moveToBookmark", start, end);
 
 		if(dojo.isIE){
-			// gigantic hack! Outlined briefly, we're specting the passed
+			// gigantic hack! Outlined briefly, we're expecting the passed
 			// start/end cap elements to have some unique strings in them.
 			// Since IE's selection and range APIs aren't DOM-oriented, we use
 			// this unique text as a way to position the range correctly so
 			// that when we remove the caps, the selection that's left
-			// encompasses the parts of the document that we care about. 
-			// What a fracking hack for what can only be described as a shitty API.
+			// encompasses the parts of the document that we care about. What
+			// a fracking hack for what can only be described as a shitty API.
 			var r = this.document.createTextRange();
 			var r2 = r.duplicate();
 
