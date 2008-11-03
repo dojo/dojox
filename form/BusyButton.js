@@ -4,7 +4,7 @@ dojo.require("dijit.form.Button");
 
 dojo.requireLocalization("dijit", "loading");
 
-dojo.declare("dojox.form.BusyButtonMixin",
+dojo.declare("dojox.form._BusyButtonMixin",
 	null, 
 	{
 		
@@ -118,6 +118,6 @@ dojo.declare("dojox.form.BusyButtonMixin",
 	}
 });
 
-dojo.declare("dojox.form.BusyButton", [dijit.form.Button, dojox.form.BusyButtonMixin], {});
-dojo.declare("dojox.form.BusyComboButton", [dijit.form.ComboButton, dojox.form.BusyButtonMixin], {});
-dojo.declare("dojox.form.BusyDropDownButton", [dijit.form.DropDownButton, dojox.form.BusyButtonMixin], {});
+dojo.declare("dojox.form.BusyButton", [dijit.form.Button, dojox.form._BusyButtonMixin], {});
+dojo.declare("dojox.form.BusyComboButton", [dijit.form.ComboButton, dojox.form._BusyButtonMixin], {});
+dojo.declare("dojox.form.BusyDropDownButton", [dijit.form.DropDownButton, dojox.form._BusyButtonMixin], {});
