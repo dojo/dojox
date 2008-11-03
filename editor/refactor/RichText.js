@@ -918,7 +918,8 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 
 	_savedSelection: null,
 	_saveSelection: function(){
-		var r = this.window.getSelection().getRangeAt(0);
+		// var r = this.window.getSelection().getRangeAt(0);
+		var r = dijit.range.getSelection(this.window).getRangeAt(0);
 		var nodes = this._getRangeNodes(r);
 		this._savedSelection = {
 			range: ((dojo.isIE) ? r.duplicate() : r.cloneRange()),
@@ -948,44 +949,30 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 	_customOnFocus: function(/*Event*/e){
 		setTimeout(dojo.hitch(this, "_doOnFocus"), 10)
 	},
-	_doOnFocus: function(/*Event*/e){
+	_doOnFocus: function(){
 		// summary: Fired on focus
 
-		/*
-		if(dojo.isSafari){
-			try{
-				console.debug(e);
-				e.preventDefault();
-				// e.stopPropagation();
-				this.editNode.focus();
-				// console.dir(s);
-				// s.collapseToStart();
-				var s = this.window.getSelection();
-				s.collapseToStart();
-				console.dir(s);
-			}catch(e){ console.debug(e); }
-			return;
-			// this.window.getSelection().getRangeAt(0).collapse();
-		}
-		*/
 		// console.debug("RichText _onFocus", e);
-		if(dojo.isMoz && this._initialFocus){
+		if(this._initialFocus){
 			this._initialFocus = false;
-			if(this.editNode.innerHTML.replace(/^\s+|\s+$/g, "") == "&nbsp;"){
-				this.placeCursorAtStart();
-				// this.execCommand("selectall");
-				// this.window.getSelection().collapseToStart();
+			if(dojo.isMoz){
+				if(this.editNode.innerHTML.replace(/^\s+|\s+$/g, "") == "&nbsp;"){
+					this.placeCursorAtStart();
+					// this.execCommand("selectall");
+					// this.window.getSelection().collapseToStart();
+				}
 			}
 		}
-		// this.inherited(arguments);
+		if(dojo.isSafari){
+			this.placeCursorAtStart();
+		}
 
 		console.debug("_onFocus");
 		if(this._savedSelection){
-			console.debug("restoring selection from:", this._savedSelection);
+			// console.debug("restoring selection from:", this._savedSelection);
 			this._moveToBookmark(this._savedSelection.bookmark);
 		}
 		this._savedSelection = null;
-
 	},
 
 	blur: function(){
@@ -1172,11 +1159,12 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		//the command, the editor receives the focus as expected
 		this.focus();
 
-		console.debug("trying:", command, "with arg:", argument);
+		// console.debug("trying:", command, "with arg:", argument);
+
 		var c = dojox.editor.refactor.RichText._commands;
 		var handler;
 		if(handler = c.match(command.toLowerCase())){
-			console.debug("applying:", handler.name, "with arg:", argument);
+			console.debug("applying custom handler for:", handler.name, "with arg:", argument);
 			this.editNode.normalize();
 
 			// var selection = dijit.range.getSelection(this.window);
@@ -1184,16 +1172,19 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 			// console.debug(selection.anchorNode, selection.anchorOffset);
 			// console.debug(selection.focusNode, selection.focusOffset);
 			try{
-				var r = selection.getRangeAt(0);
-				console.debug(r.startContainer, r.startOffset);
-				console.debug(r.endContainer, r.endOffset);
+				if(selection.rangeCount){
+					// console.dir(selection);
+					var r = selection.getRangeAt(0);
+					// console.dir(r);
+
+					// console.debug(r.startContainer, r.startOffset);
+					// console.debug(r.endContainer, r.endOffset);
+				}
 			}catch(e){
 				console.debug(e);
 			}
 
 			// console.dir(r);
-			return;
-
 			return handler.applyCommand(this, argument);
 		}
 
@@ -1805,12 +1796,13 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 			}
 			return r;
 		}
+		// console.debug("not the same node!, ", sc.nodeType, sc, so, sc.parentNode == commonAncestor);
 		if(3 == sc.nodeType){
 			var l = String(sc.value).length;
 			if(0 == so){
 				// console.debug("at the start of a node:", sc.outerHTML);
 
-				if(sc.parentNode != commonAncestor){
+				if(sc.parentNode != commonAncestor && !sc.previousSibling){
 					// we're at the beginning, so all the contents are
 					// selected. Just put the parent elements in and move
 					// on.
@@ -1939,7 +1931,7 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		}
 		// create a new selection based on our markers
 
-		console.debug("_moveToBookmark", start, end);
+		// console.debug("_moveToBookmark", start, end);
 
 		if(dojo.isIE){
 			// gigantic hack! Outlined briefly, we're expecting the passed
@@ -2117,9 +2109,9 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		console.dir(r);
 
 		var rangeNodes = rt._getRangeNodes(r);
-		console.debug(rangeNodes);
+		// console.debug(rangeNodes);
 		var bookmark = rt._getBookmark(rangeNodes);
-		console.debug(bookmark);
+		// console.debug(bookmark);
 
 		// selections across browsers aren't necessarialy stable or
 		// DOM-oriented. Creating "marker" elements allows us to mutate the
@@ -2298,7 +2290,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		dojo.query("["+this._nameAttr+"]", node).forEach(this._singleRemoveFromNode, this);
 
 		// FIXME: we should prune here too
-	},
+	}
 });
 
 
