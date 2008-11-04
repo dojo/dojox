@@ -109,9 +109,14 @@ dojo.require("dojo.data.util.filter");
 				// argsSuper:
 				// 		Dojo Data Fetch arguments 
 				// argsSub:
-				// 		Dojo Data Fetch arguments 
+				// 		Dojo Data Fetch arguments
 				if(argsSuper.query == argsSub.query){
 					return {};
+				}
+				if(!(argsSub.query instanceof Object && // sub query must be an object
+						// super query must be non-existent or an object
+						(!argsSuper.query || typeof argsSuper.query == 'object'))){
+					return false;
 				}
 				var clientQuery = dojo.mixin({},argsSub.query);
 				for(var i in argsSuper.query){
