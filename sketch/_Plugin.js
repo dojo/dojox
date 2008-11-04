@@ -40,11 +40,7 @@ dojo.declare("dojox.sketch._Plugin", null, {
 		}
 	},
 	attr: function(name,/*?*/value){
-		if(arguments.length>1){
-			this.button.setAttribute(name,value);
-		}else{
-			this.button.getAttribute(name);
-		}
+		return this.button.attr(name,value);
 	},
 	onActivate: function(){},
 	activate: function(/*?*/e){

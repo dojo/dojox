@@ -240,11 +240,16 @@ dojo.require("dojox.sketch.UndoStack");
 
 		
 		this._cons=[];
-
 		var es=this.surface.getEventSource();
 		this._cons.push(
 			//	kill any dragging events.
-			dojo.connect(es, "ondragstart",   dojo.stopEvent),
+			//		for FF
+			dojo.connect(es, "ondraggesture", dojo.stopEvent),
+			dojo.connect(es, "ondragenter", dojo.stopEvent),
+			dojo.connect(es, "ondragover", dojo.stopEvent),
+			dojo.connect(es, "ondragexit", dojo.stopEvent),
+			dojo.connect(es, "ondragstart", dojo.stopEvent),
+			//		for IE
 			dojo.connect(es, "onselectstart", dojo.stopEvent),
 			//	hook up the drag system.
 			dojo.connect(es, 'onmousedown', this._md),
