@@ -285,7 +285,7 @@ dojo.require("dojox.lang.utils");
 
 				dx = tickVector.x * taMinorTick.length;
 				dy = tickVector.y * taMinorTick.length;
-				canLabel = c.minMinorStep <= c.minor.tick * c.scale;
+				canLabel = c.minMinorStep <= c.minor.tick * c.bounds.scale;
 				dojo.forEach(t.minor, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
