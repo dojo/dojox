@@ -1,13 +1,13 @@
-dojo.provide("dojox.form.manager.EnableMixin");
+dojo.provide("dojox.form.manager._EnableMixin");
 
-dojo.require("dojox.form.manager.Mixin");
+dojo.require("dojox.form.manager._Mixin");
 
 (function(){
 	var fm = dojox.form.manager,
 		aa = fm.actionAdapter,
 		ia = fm.inspectorAdapter;
 
-	dojo.declare("dojox.form.manager.EnableMixin", null, {
+	dojo.declare("dojox.form.manager._EnableMixin", null, {
 		// summary:
 		//		Form manager's mixin for controlling enable/disable state of
 		//		form elements. 
@@ -71,9 +71,9 @@ dojo.require("dojox.form.manager.Mixin");
 			//		Optional. If a name-value dictionary, the value is true
 			//		to enable and false to disable. If an array, all names in the
 			//		array will be disabled. If omitted, disables all.
-			var state = this.gatherEnableState();
+			var oldState = this.gatherEnableState();
 			this.enable(state, false);
-			return state;	// Object
+			return oldState;	// Object
 		}
 	});
 })();

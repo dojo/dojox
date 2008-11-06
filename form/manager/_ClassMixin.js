@@ -1,13 +1,13 @@
-dojo.provide("dojox.form.manager.ClassMixin");
+dojo.provide("dojox.form.manager._ClassMixin");
 
-dojo.require("dojox.form.manager.Mixin");
+dojo.require("dojox.form.manager._Mixin");
 
 (function(){
 	var fm = dojox.form.manager,
 		aa = fm.actionAdapter,
 		ia = fm.inspectorAdapter;
 
-	dojo.declare("dojox.form.manager.ClassMixin", null, {
+	dojo.declare("dojox.form.manager._ClassMixin", null, {
 		// summary:
 		//		Form manager's mixin for testing/assigning/removing
 		//		classes of controlled elements. 

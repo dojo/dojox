@@ -1,6 +1,6 @@
-dojo.provide("dojox.form.manager.ValueMixin");
+dojo.provide("dojox.form.manager._ValueMixin");
 
-dojo.declare("dojox.form.manager.ValueMixin", null, {
+dojo.declare("dojox.form.manager._ValueMixin", null, {
 	// summary:
 	//		Form manager's mixin for getting/setting form values in the unified manner.
 	// description:
@@ -17,6 +17,10 @@ dojo.declare("dojox.form.manager.ValueMixin", null, {
 		//		Optional. The value to set.
 
 		var isSetter = arguments.length == 2 && value !== undefined, result;
+		
+		if(typeof elem == "string"){
+			elem = this._widgets[elem];
+		}
 
 		if(dojo.isArray(elem)){
 			// input/radio array of widgets
@@ -56,6 +60,10 @@ dojo.declare("dojox.form.manager.ValueMixin", null, {
 		//		Optional. The value to set.
 
 		var isSetter = arguments.length == 2 && value !== undefined, result;
+
+		if(typeof elem == "string"){
+			elem = this._nodes[elem];
+		}
 
 		if(dojo.isArray(elem)){
 			// input/radio array
@@ -156,6 +164,31 @@ dojo.declare("dojox.form.manager.ValueMixin", null, {
 		return elem.value;
 	},
 
+	_formPointValue: function(/* Object|Array */ elem, /* Object? */ value){
+		// summary:
+		//		Set or get a node context by name (using dojoAttachPoint).
+		// elem:
+		//		A node.
+		// value:
+		//		Optional. The value to set.
+		
+		if(elem && typeof elem == "string"){
+			elem = this[elem];
+		}
+
+		if(!elem || !elem.tagName || !elem.cloneNode || !dojo.hasClass(elem, "dojoFormValue")){
+			return null;	// Object
+		}
+
+		if(arguments.length == 2 && value !== undefined){
+			// setter
+			elem.innerHTML = value;
+			return this;	// self
+		}
+		// getter
+		return elem.innerHTML;	// String
+	},
+
 	elementValue: function(/* String */ name, /* Object? */ value){
 		// summary:
 		//		Set or get a form widget/element or an attached point node by name.
@@ -165,25 +198,15 @@ dojo.declare("dojox.form.manager.ValueMixin", null, {
 		//		Optional. The value to set.
 
 		if(name in this._widgets){
-			return this._formWidgetValue.apply(this, arguments);	// Object
+			return this._formWidgetValue(this._widgets[name], value);	// Object
 		}
 
 		if(name in this._nodes){
-			return this._formElementValue.apply(this, arguments);	// Object
+			return this._formElementValue(this._nodes[name], value);	// Object
 		}
 
 		var elem = this[name];
-		if(elem && elem.tagName && elem.cloneNode){
-			if(arguments.length == 2 || value !== undefined){
-				// setter
-				elem.innerHTML = value;
-				return this;	// self
-			}
-			// getter
-			return elem.innerHTML;	// String
-		}
-
-		return null;	// Object
+		return this._formPointValue(elem, value);	// Object
 	},
 
 	gatherFormValues: function(/* Object? */ names){
@@ -202,6 +225,10 @@ dojo.declare("dojox.form.manager.ValueMixin", null, {
 			return this._formElementValue(node);
 		}, names));
 
+		dojo.mixin(result, this.inspectAttachedPoints(function(name, node){
+			return this._formPointValue(node);
+		}, names));
+
 		return result;	// Object
 	},
 
@@ -209,12 +236,16 @@ dojo.declare("dojox.form.manager.ValueMixin", null, {
 		// summary:
 		//		Set values to form elements
 		if(values){
-			inspectFormWidgets(function(name, widget, value){
+			this.inspectFormWidgets(function(name, widget, value){
 				this._formWidgetValue(widget, value);
 			}, values);
 
-			inspectFormElements(function(name, node, value){
+			this.inspectFormElements(function(name, node, value){
 				this._formElementValue(node, value);
+			}, values);
+
+			this.inspectAttachedPoints(function(name, node, value){
+				this._formPointValue(node, value);
 			}, values);
 		}
 		return this;

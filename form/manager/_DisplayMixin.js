@@ -1,6 +1,6 @@
-dojo.provide("dojox.form.manager.DisplayMixin");
+dojo.provide("dojox.form.manager._DisplayMixin");
 
-dojo.declare("dojox.form.manager.DisplayMixin", null, {
+dojo.declare("dojox.form.manager._DisplayMixin", null, {
 	// summary:
 	//		Form manager's mixin for controlling show/hide state of
 	//		controlled elements (defined by dojoAttachPoint attributes).

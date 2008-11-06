@@ -1,4 +1,4 @@
-dojo.provide("dojox.form.manager.Mixin");
+dojo.provide("dojox.form.manager._Mixin");
 
 dojo.require("dijit._Widget");
 
@@ -67,7 +67,7 @@ dojo.require("dijit._Widget");
 
 		registerWidget = function(widget){
 			var name = widget.attr("name");
-			if(name){
+			if(name && widget instanceof dijit.form._FormWidget){
 				if(name in this._widgets){
 					var a = this._widgets[name];
 					if(dojo.isArray(a)){
@@ -83,10 +83,10 @@ dojo.require("dijit._Widget");
 
 		registerNode = function(node){
 			var name = dojo.attr(node, "name");
-			if(name){
+			if(name && !(name in this._widgets)){
 				// verify that it is not part of any widget
 				for(var n = node; n !== this.domNode; n = n.parentNode){
-					if(dojo.attr(n, "widgetId")){
+					if(dojo.attr(n, "widgetId") && dijit.byNode(n) instanceof dijit.form._FormWidget){
 						// this is a child of some widget --- bail out
 						return;
 					}
@@ -105,7 +105,7 @@ dojo.require("dijit._Widget");
 			}
 		};
 
-	dojo.declare("dojox.form.manager.Mixin", null, {
+	dojo.declare("dojox.form.manager._Mixin", null, {
 		// summary:
 		//		Mixin to orchestrate dynamic forms.
 		// description:
@@ -155,6 +155,7 @@ dojo.require("dijit._Widget");
 						dojo.forEach(o.split(","), function(o){
 							o = dojo.trim(o);
 							if(o && this[o] && dojo.isFunction(this[o])){
+								// TODO: dijit.form.Button doesn't fire onChange but uses onClick?
 								this.connect(widget, "onChange", o);
 							}
 						}, this);

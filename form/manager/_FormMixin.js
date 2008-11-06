@@ -1,6 +1,6 @@
-dojo.provide("dojox.form.manager.FormMixin");
+dojo.provide("dojox.form.manager._FormMixin");
 
-dojo.declare("dojox.form.manager.FormMixin", null, {
+dojo.declare("dojox.form.manager._FormMixin", null, {
 	// summary:
 	//		Form manager's mixin for form-specific functionality.
 	// description:
