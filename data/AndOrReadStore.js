@@ -74,7 +74,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		}
 	},
 	
-	url: "",	// use "" rather than undefined for the benefit of the parser (#3539)
+	url: "",  // use "" rather than undefined for the benefit of the parser (#3539)
 
 	data: null,     //Make this parser settable.
 
@@ -254,10 +254,40 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		var filter = function(requestArgs, arrayOfItems){
 			var items = [];
 			if(requestArgs.query){
+				//Complete copy, we may have to mess with it.
+				//Safer than clone, which does a shallow copy, I believe.
+				var query = dojo.fromJson(dojo.toJson(requestArgs.query));
+				//Okay, object form query, we have to check to see if someone mixed query methods (such as using FilteringSelect
+				//with a complexQuery).  In that case, the params need to be anded to the complex query statement.
+				//See defect #7980
+				if(typeof query == "object" ){
+					var count = 0;
+					var p;
+					for(p in query){
+						count++;
+					}
+					if(count > 1 && query.complexQuery){
+						var cq = query.complexQuery;
+						var wrapped = false;
+						for(p in query){
+							if(p !== "complexQuery"){ 
+								//We should wrap this in () as it should and with the entire complex query
+								//Not just part of it.
+								if(!wrapped){
+									cq = "( " + cq + " )";
+									wrapped = true;
+								}
+								cq += " AND " + p + ":" + requestArgs.query[p];
+								delete query[p];
+							}
+						}
+						query.complexQuery = cq;
+					}
+				}
+
 				var ignoreCase = requestArgs.queryOptions ? requestArgs.queryOptions.ignoreCase : false; 
 				//for complex queries only:  pattern = query[:|=]"NOT id:23* AND (type:'test*' OR dept:'bob') && !filed:true"
 				//logical operators are case insensitive:  , NOT AND OR ( ) ! && ||  // "," included for quoted/string legacy queries.
-				var query = requestArgs.query;
 				if(typeof query != "string"){
 					query = dojo.toJson(query);	
 					query = query.replace(/\\\\/g,"\\"); //counter toJson expansion of backslashes, e.g., foo\\*bar test.

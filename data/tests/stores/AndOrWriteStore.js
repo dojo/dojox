@@ -468,9 +468,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() all",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore.
+				//		Simple test of a basic fetch on AndOrWriteStore.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore.
+				//		Simple test of a basic fetch on AndOrWriteStore.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
@@ -492,9 +492,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() one",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
@@ -517,9 +517,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() one, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
@@ -542,9 +542,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() shallow",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of only toplevel items
+				//		Simple test of a basic fetch on AndOrWriteStore of only toplevel items
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of only toplevel items.
+				//		Simple test of a basic fetch on AndOrWriteStore of only toplevel items.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("geography_hierarchy_small"));
 				
 				var d = new doh.Deferred();
@@ -568,9 +568,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() shallow, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of only toplevel items
+				//		Simple test of a basic fetch on AndOrWriteStore of only toplevel items
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of only toplevel items.
+				//		Simple test of a basic fetch on AndOrWriteStore of only toplevel items.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("geography_hierarchy_small"));
 				
 				var d = new doh.Deferred();
@@ -772,9 +772,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() deep",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of all items (including children (nested))
+				//		Simple test of a basic fetch on AndOrWriteStore of all items (including children (nested))
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of all items (including children (nested))
+				//		Simple test of a basic fetch on AndOrWriteStore of all items (including children (nested))
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("geography_hierarchy_small"));
 				
 				var d = new doh.Deferred();
@@ -799,9 +799,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() deep, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of all items (including children (nested))
+				//		Simple test of a basic fetch on AndOrWriteStore of all items (including children (nested))
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of all items (including children (nested))
+				//		Simple test of a basic fetch on AndOrWriteStore of all items (including children (nested))
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("geography_hierarchy_small"));
 				
 				var d = new doh.Deferred();
@@ -826,9 +826,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() one_commentFilteredJson",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//		This tests loading a comment-filtered json file so that people using secure
 				//		data with this store can bypass the JavaSceipt hijack noted in Fortify's
 				//		paper.
@@ -856,9 +856,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() one_commentFilteredJson, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//		This tests loading a comment-filtered json file so that people using secure
 				//		data with this store can bypass the JavaSceipt hijack noted in Fortify's
 				//		paper.
@@ -886,9 +886,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() withNull",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item where some attributes are null.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item where some attributes are null.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item where some attributes are null.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item where some attributes are null.
 				//		Introduced because of tracker: #3153
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries_withNull"));
 				
@@ -912,9 +912,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() withNull, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item where some attributes are null.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item where some attributes are null.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item where some attributes are null.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item where some attributes are null.
 				//		Introduced because of tracker: #3153
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries_withNull"));
 				
@@ -938,9 +938,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() all_streaming",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore.
+				//		Simple test of a basic fetch on AndOrWriteStore.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore.
+				//		Simple test of a basic fetch on AndOrWriteStore.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 	
 				var d = new doh.Deferred();
@@ -2850,9 +2850,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() multiple, OR, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
@@ -2875,9 +2875,9 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			name: "Read API: fetch() multiple, AND(OR, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
@@ -2897,12 +2897,12 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			}
 		},
 		{
-			name: "Read API: fetch() multiple, AND(OR, as json object, complex",
+			name: "Read API: fetch() multiple, AND/OR, as json object, complex",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
@@ -2922,12 +2922,37 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			}
 		},
 		{
-			name: "Read API: fetch() multiple, AND(OR, as quoted json object, complex",
+			name: "Read API: fetch() multiple, AND/OR, as json object, complex, with extra attrs",
 	 		runTest: function(t){
 				//	summary: 
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				//	description:
-				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
+				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
+				
+				var d = new doh.Deferred();
+				var onComplete = function(items, request){
+					t.assertEqual(items.length, 1);
+					d.callback(true);
+				};
+				var onError = function(errData, request){
+					t.assertTrue(false);
+					d.errback(errData);
+				};
+				store.fetch({ 	query: {complexQuery:'abbr: "e*" AND (capital:"A*" or capital: "Q*")', name: "Ec*"}, 
+										onComplete: onComplete, 
+										onError: onError
+									});
+				return d;
+			}
+		},
+		{
+			name: "Read API: fetch() multiple, AND/OR, as quoted json object, complex",
+	 		runTest: function(t){
+				//	summary: 
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
+				//	description:
+				//		Simple test of a basic fetch on AndOrWriteStore of a single item.
 				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
 				
 				var d = new doh.Deferred();
