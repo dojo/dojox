@@ -34,6 +34,7 @@
 		dojo.require("dijit.form.TextBox");
 		dojo.require("dijit.form.ComboBox");
 		dojo.require("dijit.form.SimpleTextarea");
+		dojo.require("dojox.form.DropDownSelect");
 
 		dojo.require("dijit.layout.BorderContainer");
 		dojo.require("dijit.layout.ContentPane");
@@ -98,10 +99,10 @@
 							rows="3" cols="15" style="width: 15em;">e07</textarea>
 					</div>
 					<div>
-						<button name="e08">e08 button</button>&nbsp;
+						<button name="e08" observer="showValues">e08 button</button>&nbsp;
 						<input type="button" name="e09" value="e09 input/button" observer="showValues">&nbsp;
-						<input type="reset" name="e10" value="e10 input/reset">&nbsp;
-						<input type="submit" name="e11" value="e11 input/submit">
+						<input type="reset" name="e10" value="e10 input/reset" observer="showValues">&nbsp;
+						<input type="submit" name="e11" value="e11 input/submit" observer="showValues">
 					</div>
 				</fieldset>
 				<fieldset dojoAttachPoint="part2">
@@ -118,24 +119,24 @@
 						&nbsp;<label for="w022">w02-2 input/radio dijit.form.RadioButton</label>
 					</div>
 					<div>
-						<input type="text" dojoType="dijit.form.TextBox" id="w03" name="w03" value="w03" observer="showValues">
-						&nbsp;<label for="w03">w03 input/text dijit.form.TextBox</label>
+						<input type="text" dojoType="dijit.form.TextBox" id="w03" name="w03" value="w03" observer="showValues" intermediateChanges="true">
+						&nbsp;<label for="w03">w03 input/text dijit.form.TextBox with intermediateChanges="true"</label>
 					</div>
 					<div>
 						<input type="password" dojoType="dijit.form.TextBox" id="w04" name="w04" value="w04" observer="showValues">
 						&nbsp;<label for="w04">w04 input/password dijit.form.TextBox</label>
 					</div>
 					<div>
-						<select dojoType="dijit.form.ComboBox" id="w06" name="w06" observer="showValues">
+						<select dojoType="dojox.form.DropDownSelect" id="w06" name="w06" observer="showValues">
 							<option value="w06-1">w06-1 first</option>
 							<option value="w06-2" selected="selected">w06-2 second</option>
 						</select>
-						&nbsp;<label for="w06">w06 select dijit.form.ComboBox</label>
+						&nbsp;<label for="w06">w06 select dojox.form.DropDownSelect</label>
 					</div>
 					<div>
-						<label for="w07">w07 textarea dijit.form.SimpleTextarea</label><br>
+						<label for="w07">w07 textarea dijit.form.SimpleTextarea with intermediateChanges="true"</label><br>
 						<textarea dojoType="dijit.form.SimpleTextarea" id="w07" name="w07" observer="showValues"
-							rows="3" cols="15" style="width: 15em;">w07</textarea>
+							rows="3" cols="15" style="width: 15em;" intermediateChanges="true">w07</textarea>
 					</div>
 					<div>
 						<button dojoType="dijit.form.Button" name="w08" observer="showValues">w08 button dijit.form.Button</button>&nbsp;
