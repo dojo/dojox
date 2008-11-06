@@ -24,6 +24,7 @@ dojo.declare("dojox.data.jsonPathStore",
 		labelAttribute: "",
 		url: "",
 		_replaceRegex: /\'\]/gi,
+		noRevert : false,
 		
 		constructor: function(options){
 			//summary:
@@ -231,7 +232,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	item in the store and if it is the same, returns itself, otherwise
 			//	it returns the item from the store.
 		
-			if (this.index[item[this.idAttribute]][this.metaLabel]===item[this.metaLabel]){
+			if(this.index[item[this.idAttribute]] && (this.index[item[this.idAttribute]][this.metaLabel]===item[this.metaLabel])){
 				return this.index[item[this.idAttribute]];
 			}
 			return item;	
@@ -347,7 +348,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//make sure there werent props on a that aren't on b, if there aren't, then
 			//the previous section will have already evaluated things.
 
-			for (var i in a){
+			for (i in a){
 				if (!b[i]){return false}
 			}
 			
@@ -409,22 +410,24 @@ dojo.declare("dojox.data.jsonPathStore",
 
 			data = data || this._data;
 
-			if (data[this.metaLabel]){
-				if(data[this.metaLabel]["autoId"]){
+			if(data[this.metaLabel]){
+				if(data[this.metaLabel].autoId){
 					delete data[this.idAttribute];
 				}
 				delete data[this.metaLabel];
 			}
 
-			if (dojo.isArray(data)){
+			if(dojo.isArray(data)){
 				for(var i=0; i<data.length;i++){
 					if(dojo.isObject(data[i]) || dojo.isArray(data[i]) ){
 						this.cleanMeta(data[i]);
 					}
 				}
-			} else if (dojo.isObject(data)){
-				for (var i in data){
-					this.cleanMeta(data[i]);
+			}else if(dojo.isObject(data)){
+				for(i in data){
+					if(dojo.isObject(data[i])){
+						this.cleanMeta(data[i]);
+					}
 				}
 			}
 		}, 
@@ -541,7 +544,7 @@ dojo.declare("dojox.data.jsonPathStore",
 				if(this.autoIdentity && !item[this.idAttribute]){
 					var newId = this.autoIdPrefix + this._autoId++;
 					item[this.idAttribute]=newId;
-					item[this.metaLabel]["autoId"]=true;
+					item[this.metaLabel].autoId=true;
 				}
 
 				//add item to the item index if appropriate
@@ -772,6 +775,54 @@ dojo.declare("dojox.data.jsonPathStore",
 			return args;
 		},
 
+		_makeItAnItem: function(data, pInfo){
+			// Summary:
+			//	add the meta data to the item and descendants
+			
+			var meta={};
+			
+			if(this.idAttribute && !data[this.idAttribute]){
+				if(this.requireId){
+					throw new Error("requireId is enabled, new items must have an id defined to be added");
+				}
+				if(this.autoIdentity){
+					var newId = this.autoIdPrefix + this._autoId++;
+					data[this.idAttribute]=newId;
+					meta.autoId=true;
+				}
+			}
+
+			if(!pInfo && !pInfo.attribute && !this.idAttribute && !data[this.idAttribute]){
+				throw new Error("Adding a new item requires, at a minimum, either the pInfo information, including the pInfo.attribute, or an id on the item in the field identified by idAttribute");
+			}
+			
+			if(!pInfo.attribute){
+				pInfo.attribute = data[this.idAttribute];
+			}
+			
+			//add this item to the index
+			if(data[this.idAttribute]){
+				this.index[data[this.idAttribute]]=data;
+			}
+
+			this._updateMeta(data, meta)
+
+			//keep track of all references in the store so we can delete them as necessary
+			this._addReference(data, {parent: pInfo.item, attribute: pInfo.attribute});
+
+			//mark this new item as dirty
+			this._setDirty(data);
+			
+			//Itemize the children the children if any
+			if(data[pInfo.attribute] && dojo.isArray(data[pInfo.attribute])){
+				for(var i=0; i<data[pInfo.attribute].length; i++){
+					this._makeItAnItem(data[pInfo.attribute][i], {item: data, attribute: pInfo.attribute});
+				}
+			}
+			
+			return data;
+		},
+		
 		//Write API Support
 		newItem: function(data, options){
 			// summary:
@@ -798,8 +849,6 @@ dojo.declare("dojox.data.jsonPathStore",
 			//		oldValue: /* old value of item[attribute]
 			//		newValue: new value item[attribute]
 
-			var meta={};
-
 			//default parent to the store root;
 			var pInfo ={item:this._data};
 
@@ -811,49 +860,27 @@ dojo.declare("dojox.data.jsonPathStore",
 				dojo.mixin(pInfo, options);
 			}
 
-			if (this.idAttribute && !data[this.idAttribute]){
-				if (this.requireId){throw new Error("requireId is enabled, new items must have an id defined to be added");}
-				if (this.autoIdentity){
-					var newId = this.autoIdPrefix + this._autoId++;
-					data[this.idAttribute]=newId;
-					meta["autoId"]=true;
-				}
-			}	
-
-			if (!pInfo && !pInfo.attribute && !this.idAttribute && !data[this.idAttribute]){
-				throw new Error("Adding a new item requires, at a minumum, either the pInfo information, including the pInfo.attribute, or an id on the item in the field identified by idAttribute");
-			}
-
-			//pInfo.parent = this._correctReference(pInfo.parent);
-			//if there is no parent info supplied, default to the store root
-			//and add to the pInfo.attribute or if that doestn' exist create an
-			//attribute with the same name as the new items ID 
-			if(!pInfo.attribute){pInfo.attribute = data[this.idAttribute]}
+			this._makeItAnItem(data, pInfo);
 
 			pInfo.oldValue = this._trimItem(pInfo.item[pInfo.attribute]);
-			if (dojo.isArray(pInfo.item[pInfo.attribute])){
-				this._setDirty(pInfo.item);
+			this._setDirty(pInfo.item);
+			if(dojo.isArray(pInfo.item[pInfo.attribute])){
 				pInfo.item[pInfo.attribute].push(data);
 			}else{
-				this._setDirty(pInfo.item);
 				pInfo.item[pInfo.attribute]=data;
 			}
 
 			pInfo.newValue = pInfo.item[pInfo.attribute];
 
-			//add this item to the index
-			if(data[this.idAttribute]){this.index[data[this.idAttribute]]=data}
-
-			this._updateMeta(data, meta)
-
-			//keep track of all references in the store so we can delete them as necessary
-			this._addReference(data, pInfo);
-
-			//mark this new item as dirty
-			this._setDirty(data);
-
 			//Notification API
 			this.onNew(data, pInfo);
+
+			//Notification API for the children 
+			if(data[pInfo.attribute] && dojo.isArray(data[pInfo.attribute])){
+				for(var i=0; i<data[pInfo.attribute].length; i++){
+					this.onNew(data[pInfo.attribute][i], {item: data, attribute: pInfo.attribute});
+				}
+			}
 
 			//returns the original item, now decorated with some meta info
 			return data;
@@ -924,6 +951,8 @@ dojo.declare("dojox.data.jsonPathStore",
 				}
 				this.onDelete(item);		
 				delete item;
+				this.index[id] = null;
+				delete this.index[id]
 			}
 		},
 
@@ -936,14 +965,20 @@ dojo.declare("dojox.data.jsonPathStore",
 
 			//if an item is already in the list of dirty items, don't add it again
 			//or it will overwrite the premodification data set.
-			for (var i=0; i<this._dirtyItems.length; i++){
-				if (item[this.idAttribute]==this._dirtyItems[i][this.idAttribute]){
+
+			if(this.noRevert){ // improve loading time since every new Item is dirty
+				return;
+			}
+			for(var i=0; i<this._dirtyItems.length; i++){
+				if(item[this.idAttribute]==this._dirtyItems[i][this.idAttribute]){
 					return; 
 				}	
 			}
 
+
 			this._dirtyItems.push({item: item, old: this._trimItem(item)});
 			this._updateMeta(item, {isDirty: true});
+			
 		},
 
 		setValue: function(item, attribute, value){
@@ -1160,17 +1195,29 @@ dojo.declare("dojox.data.jsonPathStore",
 			}
 		},
 
-		//Notifcation Support
+		/* dojo.data.api.Notification */
+		onSet: function(/* item */ item,
+		                /*attribute-name-string*/ attribute,
+		                /*object | array*/ oldValue,
+		                /*object | array*/ newValue){
+			// summary: See dojo.data.api.Notification.onSet()
 
-		onSet: function(){
+			// No need to do anything. This method is here just so that the 
+			// client code can connect observers to it. 
+		},
+	
+		onNew: function(/* item */ newItem, /*object?*/ parentInfo){
+			// summary: See dojo.data.api.Notification.onNew()
+
+			// No need to do anything. This method is here just so that the 
+			// client code can connect observers to it. 
 		},
 
-		onNew: function(){
+		onDelete: function(/* item */ deletedItem){
+			// summary: See dojo.data.api.Notification.onDelete()
 
-		},
-
-		onDelete: function(){
-
+			// No need to do anything. This method is here just so that the 
+			// client code can connect observers to it. 
 		},	
 	
 		onSave: function(items){
