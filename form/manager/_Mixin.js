@@ -152,11 +152,12 @@ dojo.require("dijit._Widget");
 				}else{
 					var o = widget.attr("observer");
 					if(o && typeof o == "string"){
+						// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
+						var eventName = widget.declaredClass == "dijit.form.Button" ? "onClick" : "onChange";
 						dojo.forEach(o.split(","), function(o){
 							o = dojo.trim(o);
 							if(o && this[o] && dojo.isFunction(this[o])){
-								// TODO: dijit.form.Button doesn't fire onChange but uses onClick?
-								this.connect(widget, "onChange", o);
+								this.connect(widget, eventName, o);
 							}
 						}, this);
 					}
