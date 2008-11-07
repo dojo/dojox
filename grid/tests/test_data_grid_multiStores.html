@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>dojox.grid.DataGrid using multiple store implementations.</title>
@@ -19,6 +20,7 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
 		djConfig="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
 	<script type="text/javascript">
+		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileReadStore");
 		dojo.require("dojox.data.CsvStore");
@@ -105,17 +107,21 @@
 <body class="tundra">
 	<h1>dojox.grid.DataGrid using multiple store implementations.</h1>
 	<p>
-		This page demonstrates the Grid can display data accessed by dojo.data implementing Datastores.  
-		Each of the datastores used stores data in a different format, and as this test and demonstration
-		page shows, the logic for rendering the data is virtually identical.  You define your source store
-		and then you define the layout, which maps the data attribute names to columns in the grid.  You can 
-		even perform cusomization of what is displayed, as demonstrated in the dojox.data.FlickrStore layout.  
-		The image url is displayed as a clickable link that opens a new page.
+		This page demonstrates the Grid can display data accessed by dojo.data
+		implementing Datastores.  Each of the datastores used stores data in a
+		different format, and as this test and demonstration page shows, the
+		logic for rendering the data is virtually identical.  You define your
+		source store and then you define the layout, which maps the data
+		attribute names to columns in the grid.  You can even perform
+		cusomization of what is displayed, as demonstrated in the
+		dojox.data.FlickrStore layout.  The image url is displayed as a
+		clickable link that opens a new page.
 	</p>
 	<p>
-		The choice of stores used were ones that did not require back end services to function for sake of 
-		simplicity.  There is no reason that dojox.data.QueryReadStore could not be used with grid as well,
-		it just requires a back end service to send it the query results.
+		The choice of stores used were ones that did not require back end
+		services to function for sake of simplicity.  There is no reason that
+		dojox.data.QueryReadStore could not be used with grid as well, it just
+		requires a back end service to send it the query results.
 	</p>
 	<p><b>Stores used:</b></p>
 	<ul>
