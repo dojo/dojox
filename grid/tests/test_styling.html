@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>dojox.grid.Grid Styling Test</title>
@@ -71,8 +72,10 @@
 			text-decoration: underline;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" 
+		djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
+		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
@@ -117,7 +120,8 @@
 </script>
 </head>
 <body>
-<div class="heading">dojox.grid.Grid Styling Example</div>
-<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" onStyleRow="onStyleRow" store="test_store" structure="structure"></div>
+	<div class="heading">dojox.grid.Grid Styling Example</div>
+	<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" 
+		onStyleRow="onStyleRow" store="test_store" structure="structure"></div>
 </body>
 </html>

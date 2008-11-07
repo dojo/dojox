@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>Test dojox.grid.Grid Selection Models</title>
@@ -23,14 +24,14 @@
 			height: 30em;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" 
+		djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
+		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
-	</script>
-	<script type="text/javascript" src="support/test_data.js"></script>
-	<script type="text/javascript">
+
 		var layout = [[
 			new dojox.grid.cells.RowIndex({ width: 5 }),
 			{name: 'Column 1', field: 'col1'},
@@ -45,6 +46,7 @@
 			{name: 'Column 9', field: 'col3', colSpan: 2}
 		]];
 	</script>
+	<script type="text/javascript" src="support/test_data.js"></script>
 </head>
 <body class="tundra">
 	<h2>dojox.grid.Grid Selection Models Test</h2>

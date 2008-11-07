@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>Test dojox.grid.DataGrid Basic</title>
@@ -19,9 +20,9 @@
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false"></script>
 	<script type="text/javascript">
+		dojo.require("dijit.dijit"); // optimize: load dijit layer
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
-		dojo.require("dojo.parser");
 	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
@@ -114,8 +115,8 @@
 	</script>
 </head>
 <body>
-<div class="heading">dojox.grid.DataGrid Performance Test</div>
-<button onclick="startCreationTests()">Start Creation Tests</button>
-<button onclick="startStoreReuseTests()">Start Store Re-use Tests</button>
+	<div class="heading">dojox.grid.DataGrid Performance Test</div>
+	<button onclick="startCreationTests()">Start Creation Tests</button>
+	<button onclick="startStoreReuseTests()">Start Store Re-use Tests</button>
 </body>
 </html>

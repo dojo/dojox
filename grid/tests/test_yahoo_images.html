@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>dojox.grid.Grid - Image Search Test</title>
@@ -20,6 +21,7 @@
 		djConfig="debugAtAllCosts: false, isDebug:false, parseOnLoad: true">
 	</script>
 	<script type="text/javascript">
+		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.io.script");
 		dojo.require("dojox.rpc.Service");
@@ -62,7 +64,7 @@
 	</script>
 </head>
 <body>
-	<div style="font-weight: bold; padding-bottom: 0.25em;">dojox.grid.Grid - Image Search Test</div>
+	<h3>dojox.grid.Grid - Image Search Test</h3>
 	<input id="searchInput" type="text" value="apple">
 	<button onclick="doSearch()" style="clear: both;">Search</button>
 	<div dojoType="dojox.grid.DataGrid" 

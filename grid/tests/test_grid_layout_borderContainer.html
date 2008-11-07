@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Test dojox.grid.Grid layout in a BorderContainer</title>
@@ -22,15 +23,14 @@
 			djConfig="isDebug: false, parseOnLoad: true"></script>
 
 		<script type="text/javascript">
+			dojo.require("dijit.dijit"); // optimize: load dijit layer
 			dojo.require("dojox.grid.DataGrid");
 			dojo.require("dojo.data.ItemFileWriteStore");
 			dojo.require("dijit.layout.BorderContainer");
 			dojo.require("dijit.layout.ContentPane");
 			dojo.require("dojo.parser");
-		</script>
-		<script type="text/javascript" src="support/test_data.js"></script>
 
-		<script type="text/javascript">
+
 			// ==========================================================================
 			// Grid structure
 			// ==========================================================================
@@ -46,6 +46,7 @@
 				]
 			};
 		</script>
+		<script type="text/javascript" src="support/test_data.js"></script>
 	</head>
 	<body class="tundra">
 		<div dojoType="dijit.layout.BorderContainer" liveSplitters="false" persist="true"

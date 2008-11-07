@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>dojox.grid.DataGrid Sizing Example</title>
@@ -29,6 +30,7 @@
 			overflow: scroll;
 		}
 	</style>
+
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
 		djConfig="isDebug:false, parseOnLoad: true"></script>
 
@@ -74,19 +76,26 @@
 	</script>
 </head>
 <body class="tundra">
-<div class="heading">dojox.grid.DataGrid Sizing Test w/ the experimental dojox.layout.ResizeHandle</div>
-	
+	<div class="heading">
+		dojox.grid.DataGrid Sizing Test w/ the experimental dojox.layout.ResizeHandle
+	</div>
 	<p>While this test should work, dojox.layout.ResizeHandle is experimental.</p>
 	
 	<div id="bar" style="position:relative">
-		<div jsId="aGrid" id="grid" dojoType="dojox.grid.DataGrid" store="test_store" rowSelector="20px" structure="structure" elasticView="2"></div>
+		<div jsId="aGrid" id="grid" dojoType="dojox.grid.DataGrid" 
+			store="test_store" rowSelector="20px" 
+			structure="structure" elasticView="2"></div>
 		<div id="hand0"></div>
 	</div>
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container" style="position:relative">
-		<div jsId="theGrid" id="grid1" dojoType="dojox.grid._Grid" get="get" rowSelector="20px" structure="structure" rowCount="75" elasticView="2"></div>
-		<div id="hand1" dojoType="dojox.layout.ResizeHandle" targetId="container" onResize="setTimeout(dojo.hitch(theGrid,'update'),50)" animateSizing="false"></div>
+		<div jsId="theGrid" id="grid1" dojoType="dojox.grid._Grid" 
+			get="get" rowSelector="20px" structure="structure" 
+			rowCount="75" elasticView="2"></div>
+		<div id="hand1" dojoType="dojox.layout.ResizeHandle" 
+			targetId="container" onResize="setTimeout(dojo.hitch(theGrid,'update'),50)" 
+			animateSizing="false"></div>
 	</div>
 	
 	<p>I am here to take up</p>

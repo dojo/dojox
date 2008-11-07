@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Test dojox.grid.DataGrid Editing</title>
-		<style>
-		@import "../resources/Grid.css";
-		@import "../resources/tundraGrid.css";
+		<style type="text/css">
+			@import "../resources/Grid.css";
+			@import "../resources/tundraGrid.css";
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/tundra/tundra.css";
 			@import "../../../dijit/tests/css/dijitTests.css";
@@ -21,12 +21,9 @@
 				font-size: 100%;
 				font-family: inherit;
 			}
-			.dojoxGrid input {
-			}
-			.dojoxGrid select {
-			}
-			.dojoxGrid textarea {
-			}
+			.dojoxGrid input { }
+			.dojoxGrid select { }
+			.dojoxGrid textarea { }
 
 			#controls {
 				padding: 6px 0;
@@ -43,6 +40,7 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js"
 			djConfig="isDebug:false, parseOnLoad: true"></script>
 		<script type="text/javascript">
+			dojo.require("dijit.dijit");
 			dojo.require("dojox.grid.DataGrid");
 			dojo.require("dojo.data.ItemFileWriteStore");
 			dojo.require("dojo.parser");
@@ -99,23 +97,23 @@
 		</script>
 	</head>
 	<body class="tundra">
-	<h1>dojox.grid.DataGrid Basic Editing test</h1>
-	<br />
-	<div id="controls">
-		<button onclick="grid.render()">Refresh</button>
-		<button onclick="grid.edit.focusEditor()">Focus Editor</button>
-		<button onclick="grid.focus.next()">Next Focus</button>
-		<button onclick="addRow()">Add Row</button>
-		<button onclick="grid.removeSelectedRows()">Remove</button>
-		<button onclick="grid.edit.apply()">Apply</button>
-		<button onclick="grid.edit.cancel()">Cancel</button>
-		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
-	</div>
-	<br />
-	<div jsId="grid" class="myGrid" 
-		dojoType="dojox.grid.DataGrid" store="test_store" 
-		structure="gridLayout" rowSelector="20px"></div>
-	<br />
-	<div id="rowCount"></div>
+		<h1>dojox.grid.DataGrid Basic Editing test</h1>
+		<br />
+		<div id="controls">
+			<button onclick="grid.render()">Refresh</button>
+			<button onclick="grid.edit.focusEditor()">Focus Editor</button>
+			<button onclick="grid.focus.next()">Next Focus</button>
+			<button onclick="addRow()">Add Row</button>
+			<button onclick="grid.removeSelectedRows()">Remove</button>
+			<button onclick="grid.edit.apply()">Apply</button>
+			<button onclick="grid.edit.cancel()">Cancel</button>
+			<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
+		</div>
+		<br />
+		<div jsId="grid" class="myGrid" 
+			dojoType="dojox.grid.DataGrid" store="test_store" 
+			structure="gridLayout" rowSelector="20px"></div>
+		<br />
+		<div id="rowCount"></div>
 	</body>
 </html>

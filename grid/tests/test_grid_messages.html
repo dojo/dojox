@@ -20,15 +20,19 @@
 			padding: 1px;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" 
+		djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
+		dojo.require("dijit.dijit"); // optimize: load dijit layer
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
 		
 		dojo.declare("dojox.grid.SlowFileWriteStore", dojo.data.ItemFileWriteStore, {
-			_fetchItems: function(	/* Object */ keywordArgs, /* Function */ findCallback, /* Function */ errorCallback){
-				window.setTimeout(dojo.hitch(this, function(){
+			_fetchItems: function(	/*Object*/ keywordArgs, 
+									/*Function*/ findCallback, 
+									/*Function*/ errorCallback){
+				setTimeout(dojo.hitch(this, function(){
 					dojo.data.ItemFileWriteStore.prototype._fetchItems.call(this, keywordArgs, findCallback, errorCallback);
 				}), 10000);
 			}
