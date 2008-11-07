@@ -1,5 +1,8 @@
 dojo.provide("dojox.grid._Grid");
 
+dojo.require("dijit.dijit");
+dojo.require("dijit.Menu");
+
 dojo.require("dojox.html.metrics");
 dojo.require("dojox.grid.util");
 dojo.require("dojox.grid._Scroller");
@@ -13,7 +16,6 @@ dojo.require("dojox.grid.Selection");
 dojo.require("dojox.grid._RowSelector");
 dojo.require("dojox.grid._Events");
 
-dojo.require("dijit.Menu");
 
 dojo.requireLocalization("dijit", "loading");
 
