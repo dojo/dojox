@@ -54,6 +54,35 @@ dojo.provide("dojox.json.query");
 		}
 		return results;
 	}
+	
+	function distinctFilter(array, callback){
+		// does the filter with removal of duplicates in O(n)
+		var outArr = [];
+		var primitives = {};
+		for(var i=0,l=array.length; i<l; ++i){
+			var value = array[i];
+			if(callback(value, i, array)){
+				if((typeof value == 'object') && value){
+					// with objects we prevent duplicates with a marker property
+					if(!value.__included){
+						value.__included = true;
+						outArr.push(value);
+					}
+				}else if(!primitives[value + typeof value]){
+					// with primitives we prevent duplicates by putting it in a map 
+					primitives[value + typeof value] = true;
+					outArr.push(value);
+				}
+			}
+		}
+		for(i=0,l=outArr.length; i<l; ++i){
+			// cleanup the marker properties
+			if(outArr[i]){
+				delete outArr[i].__included;
+			}
+		}
+		return outArr;
+	}
 	dojox.json.query = function(/*String*/query,/*Object?*/obj){
 		// summary:
 		// 		Performs a JSONQuery on the provided object and returns the results. 
@@ -87,6 +116,9 @@ dojo.provide("dojox.json.query");
 		//		need to be in brackets, you can simply use ?expression, but since it does not
 		//		have any containment, no operators can be used afterwards when used 
 		// 		without brackets.
+		//		* [^?expression] - This will perform a distinct filter operation on an array. This behaves
+		//		as [?expression] except that it will remove any duplicate values/objects from the 
+		//		result set.
 		// 		* [/expression], [\expression], [/expression, /expression] - This performs a sort 
 		// 		operation on an array, with sort based on the provide expression. Multiple comma delimited sort
 		// 		expressions can be provided for multiple sort orders (first being highest priority). /
@@ -159,7 +191,7 @@ dojo.provide("dojox.json.query");
 		}
 		function makeRegex(t,a,b,c,d){
 			// creates a regular expression matcher for when wildcards and ignore case is used 
-			return str[d].match(/[\*\?]/) ?
+			return str[d].match(/[\*\?]/) || c == '~' ?
 					"/^" + str[d].substring(1,str[d].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + (c == '~' ? '$/i' : '$/') + ".test(" + a + ")" :
 					t;
 		}
@@ -174,7 +206,7 @@ dojo.provide("dojox.json.query");
 					(t.match(/:|^(\$|Math|true|false|null)$/) ? "" : "$obj.") + t; // plain names should be properties of root... unless they are a label in object initializer
 			}).
 			replace(/\.?\.?\[(`\]|[^\]])*\]|\?.*|\.\.([\w\$_]+)|\.\*/g,function(t,a,b){
-				var oper = t.match(/^\.?\.?(\[\s*\?|\?|\[\s*==)(.*?)\]?$/); // [?expr] and ?expr and [=expr and =expr
+				var oper = t.match(/^\.?\.?(\[\s*\^?\?|\^?\?|\[\s*==)(.*?)\]?$/); // [?expr] and ?expr and [=expr and =expr
 				if(oper){
 					var prefix = '';
 					if(t.match(/^\./)){
@@ -182,7 +214,7 @@ dojo.provide("dojox.json.query");
 						call("expand");
 						prefix = ",true)";
 					}
-					call(oper[1].match(/\=/) ? "dojo.map" : "dojo.filter");
+					call(oper[1].match(/\=/) ? "dojo.map" : oper[1].match(/\^/) ? "distinctFilter" : "dojo.filter");
 					return prefix + ",function($obj){return " + oper[2] + "})"; 
 				}
 				oper = t.match(/^\[\s*([\/\\].*)\]/); // [/sortexpr,\sortexpr]

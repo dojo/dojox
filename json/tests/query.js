@@ -116,6 +116,30 @@ doh.register("dojox.json.tests.query",
 			}
 		},
 		{
+			name: "$.store.book[=category][^?true]",
+			runTest: function(t) {
+				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
+				var success =  '["reference","fiction"]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
+			name: "$..[^?author~'herman melville']",
+			runTest: function(t) {
+				var result = dojo.toJson(dojox.json.query(this.name,[dojox.json.tests.testData,dojox.json.tests.testData]));
+				var success =  '[{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
+			name: "$..[^?author='Herman*']",
+			runTest: function(t) {
+				var result = dojo.toJson(dojox.json.query(this.name,[dojox.json.tests.testData,dojox.json.tests.testData]));
+				var success =  '[{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
 			name: "$..book[0][?(@.isbn)]",
 			runTest: function(t) {
 				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
