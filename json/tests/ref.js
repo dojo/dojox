@@ -23,15 +23,16 @@ doh.register("dojox.json.tests.ref", [
 		t.assertEqual(mirrorObj.b.h, mirrorObj.a);
 	},
 	function usingSchemas(t) {
-		var testStr = '{id:"/dog/1",eats:{$ref:"/cat/2"}}';
+		var testStr = '{id:"/dog/1",eats:{$ref:"/cat/2"},aTime:"2008-11-07T20:26:17-07:00"}';
 		var schemas = {
-			"/dog/":{prototype:{barks:true}},
+			"/dog/":{prototype:{barks:true},properties:{aTime:{format:'date-time'}}},
 			"/cat/":{prototype:{meows:true}}
 		}
 		var testObj = dojox.json.ref.fromJson(testStr,{
 			schemas:schemas
 		});
 		t.t(testObj.barks);
+		t.t(testObj.aTime instanceof Date);
 		t.t(testObj.eats.meows);
 	}
 	
