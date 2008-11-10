@@ -371,7 +371,8 @@ dojox.gfx.shape.Container = {
 				if(silently){
 					// skip for now
 				}else{
-					shape._setParent(null, null);
+					shape.parent = null;
+					shape.parentMatrix = null;
 				}
 				this.children.splice(i, 1);
 				break;
