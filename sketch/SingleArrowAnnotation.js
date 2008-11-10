@@ -185,7 +185,7 @@ dojo.require("dojox.sketch.Anchor");
 		pct = pct || this.figure.zoomFactor;
 		if(this._curPct!==pct){
 			this._curPct=pct;
-			var l=Math.floor(20/pct), w=Math.floor(5/pct),h=Math.floor(3/pct);
+			var l=pct>1?20:Math.floor(20/pct), w=pct>1?5:Math.floor(5/pct),h=pct>1?3:Math.floor(3/pct);
 			this.arrowhead.setShape("M0,0 l"+l+",-"+w+" -"+h+","+w+" "+h+","+w+" Z");
 		}
 		ta.Annotation.prototype.zoom.call(this,pct);

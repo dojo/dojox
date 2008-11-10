@@ -207,12 +207,12 @@ dojo.require("dojox.sketch._Plugin");
 		pct = pct || this.figure.zoomFactor;
 		if(this.pathShape){
 			var s=dojo.clone(this.property('stroke'));
-			s.width=Math.floor(s.width/pct)+"px";
+			s.width=pct>1?s.width:Math.ceil(s.width/pct)+"px";
 			this.pathShape.setStroke(s);
 		}
 		if(this.labelShape){
 			var f=dojo.clone(this.property('font'));
-			f.size=Math.floor(f.size/pct)+"px";
+			f.size=Math.ceil(f.size/pct)+"px";
 			this.labelShape.setFont(f);
 		}
 		for(var n in this.anchors){
