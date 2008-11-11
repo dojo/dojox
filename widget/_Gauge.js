@@ -7,6 +7,8 @@ dojo.require("dijit.Tooltip");
 dojo.require("dojo.fx.easing");
 dojo.require("dojox.gfx");
 
+dojo.experimental("dojox.widgets._Gauge");
+
 dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Container],{
 	// summary:
 	//		a gauge built using the dojox.gfx package.

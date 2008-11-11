@@ -3,6 +3,8 @@ dojo.provide("dojox.widget.AnalogGauge");
 dojo.require("dojox.gfx");
 dojo.require("dojox.widget._Gauge");
 
+dojo.experimental("dojox.widgets.AnalogGauge");
+
 dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 	getShapes: function(){
 		var shapes = new Array();
