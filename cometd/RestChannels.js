@@ -29,7 +29,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 // 	|		// this is called when the resource is changed in the future
 // 	|	});
 // 		Channels HTTP can be configured to a different delays:
-// 	|	dojox.cometd.RestChannels.autoReconnectTime = 60000; // reconnect after one minute
+// 	|	dojox.cometd.RestChannels.defaultInstance.autoReconnectTime = 60000; // reconnect after one minute
 //
 
 (function(){
@@ -46,7 +46,12 @@ if(dojox.data && dojox.data.JsonRestStore){
 			//		This is the url to connect to for server-sent messages. The default
 			//		is "/channels".
 			//	The *autoReconnectTime* parameter:
-			// 		This is amount time to wait to reconnect with a connection is broken	
+			// 		This is amount time to wait to reconnect with a connection is broken
+			// The *reloadDataOnReconnect* parameter:
+			// 		This indicates whether RestChannels should re-download data when a connection
+			// 		is restored (value of true), or if it should re-subscribe with retroactive subscriptions
+			// 		(X-Subscribe-Since header) using HEAD requests (value of false). The 
+			// 		default is true.	
 			dojo.mixin(this,options);
 			// If we have a Rest service available and we are auto subscribing, we will augment the Rest service 
 			if(dojox.rpc.Rest && this.autoSubscribeRoot){
@@ -79,6 +84,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 		subscriptions: {},
 		subCallbacks: {},
 		autoReconnectTime: 3000,
+		reloadDataOnReconnect: true,
 		sendAsJson: false,
 		url: '/channels',
 		autoSubscribeRoot: '/',
@@ -90,9 +96,11 @@ if(dojox.data && dojox.data.JsonRestStore){
 			//		Note that if there is no connection open, this is automatically called when you do a subscription,
 			// 		it is often not necessary to call this
 			//
+			this.started = true;
 			if(!this.connected){
-				this.connectionId = dojox._clientId;
-				var clientIdHeader = this.started ? 'X-Client-Id' : 'X-Create-Client-Id';
+				this.connectionId = dojox.rpc.Client.clientId;
+				var clientIdHeader = this.createdClientId ? 'X-Client-Id' : 'X-Create-Client-Id';
+				this.createdClientId = true;
 				var headers = {Accept:this.acceptType};
 				headers[clientIdHeader] = this.connectionId;
 				var dfd = dojo.xhrPost({headers:headers, url: this.url, noStatus: true});
@@ -102,9 +110,11 @@ if(dojox.data && dojox.data.JsonRestStore){
 					if(typeof dojo == 'undefined'){
 						return null;// this can be called after dojo is unloaded, just do nothing in that case
 					}
+					if(xhr && xhr.status > 400){
+						return onerror(true);
+					}
 					data = data.substring(self.lastIndex);
 					var contentType = xhr && (xhr.contentType || xhr.getResponseHeader("Content-Type"));
-					self.started = true;
 					var error = self.onprogress(xhr,data,contentType);
 					if(error){
 						if(onerror()){
@@ -127,17 +137,8 @@ if(dojox.data && dojox.data.JsonRestStore){
 						self.disconnected();
 						return null;
 					}
-					if(self.started){ // this means we need to reconnect
-						self.started = false;
-						self.connected = false;
-						var subscriptions = self.subscriptions;
-						self.subscriptions = {};
-						for(var i in subscriptions){
-							self.subscribe(i,{since:subscriptions[i]});
-						}
-					}else{
-						self.disconnected();
-					}
+					self.createdClientId = false;
+					self.disconnected();
 					return error;
 			  	};
 			  	dfd.addCallbacks(onprogress,onerror);
@@ -264,7 +265,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 						}else{
 							return null; // don't process the response, the response will be received in the main channels response
 						}
-					}else if(xhr){ // ifit is not a 202 response, that means it is did not accept the subscription
+					}else if(xhr && !(result instanceof Error)){ // if the server response was successful and we have access to headers but it does indicate a subcription was successful, that means it is did not accept the subscription
 						delete self.subscriptions[channel];
 					}
 					if(!(result instanceof Error)){
@@ -389,12 +390,26 @@ if(dojox.data && dojox.data.JsonRestStore){
 			// summary:
 			// 		called when our channel gets disconnected
 			var self = this;
-			if(this.connected){ // ifwe are connected, we shall tryto reconnect 
-				setTimeout(function(){ // auto reconnect
-					self.open();
-				},this.autoReconnectTime);
+			if(this.connected){ 
+				this.connected = false;
+				if(this.started){ // if we are started, we shall try to reconnect
+					setTimeout(function(){ // auto reconnect
+						// resubscribe to our current subscriptions
+						var subscriptions = self.subscriptions;
+						self.subscriptions = {};
+						for(var i in subscriptions){
+							if(self.reloadDataOnReconnect && dojox.rpc.JsonRest){
+								// do a reload of the resource
+								delete dojox.rpc.Rest._index[i];
+								dojox.rpc.JsonRest.fetch(i);
+							}else{
+								self.subscribe(i,{since:subscriptions[i]});
+							}
+						}
+						self.open();
+					}, this.autoReconnectTime);
+				}
 			}
-			this.connected = false;
 		},
 		unsubscribe: function(/*String*/channel, /*dojo.__XhrArgs?*/args){
 			// summary:
@@ -408,7 +423,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 		disconnect: function(){
 			// summary:
 			// 		disconnect from the server  
-			this.connected = false;
+			this.started = false;
 			this.xhr.abort();
 		}
 	});
