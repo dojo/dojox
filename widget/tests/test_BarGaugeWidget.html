@@ -1,0 +1,402 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Bar Gauge Widget</title>
+<style>
+	@import "../Gauge/_Gauge.css";
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/themes/tundra/tundra.css";
+</style>
+<script type="text/javascript">
+	djConfig = {
+		parseOnLoad: true,
+		isDebug: true
+	};
+</script>
+<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+<script language="JavaScript" type="text/javascript">
+	dojo.require('dojox.widget.BarGauge');
+	dojo.require('dijit.form.Button');
+	dojo.require('dojo.parser');
+
+	dojo.addOnLoad(init);
+
+	var gauge, valueIndicator, targetIndicator, handle;
+	var ranges1 = [ {low:5, high:10, hover:'5 - 10'},
+				   {low:10, high:20, hover:'10 - 20'},
+				   {low:20, high:30, hover:'20 - 30'},
+				   {low:30, high:40, hover:'30 - 40'},
+				   {low:40, high:50, hover:'40 - 50'},
+				   {low:50, high:60, hover:'50 - 60'},
+				   {low:60, high:70, hover:'60 - 70'},
+				   {low:70, high:75, hover:'70 - 75'}
+				 ];
+	var ranges2 = [ {low:5, high:10, hover:'5 - 10'},
+				   {low:10, high:20, hover:'10 - 20'},
+				   {low:20, high:30, hover:'20 - 30'},
+				   {low:30, high:40, hover:'30 - 40'},
+				   {low:40, high:50, hover:'40 - 50'},
+				   {low:50, high:60, hover:'50 - 60'},
+				   {low:60, high:70, hover:'60 - 70'},
+				   {low:70, high:75, hover:'70 - 75'}
+				 ];
+	
+	function init() {
+		gauge = dojo.byId("defaultGauge");
+		gauge = new dojox.widget.BarGauge({
+			id: "defaultGauge",
+			width: 300,
+			height: 55,
+			dataHeight: 25,
+			dataWidth: 275,
+			dataY: 25,
+			dataX: 10,
+			ranges: ranges1,
+			majorTicks: {
+				length: 5,
+				width: 1,
+				offset: -5,
+				interval: 5
+			},
+			indicators: [
+				new dojox.widget.BarIndicator({
+					value:17,
+					width: 7,
+					hover:'Value: 17',
+					title: 'Value'
+				}),
+				new dojox.widget.BarLineIndicator({
+					value:6,
+					color:'#D00000',
+					hover:'Target: 6',
+					title: 'Target'
+				})
+			]
+		}, gauge);
+		gauge.startup();
+
+		gauge = dojo.byId("programmaticGauge");
+		gauge = new dojox.widget.BarGauge({
+			id: "programmaticGauge",
+			width: 300,
+			height: 55,
+			dataHeight: 25,
+			dataWidth: 275,
+			dataX: 10,
+			dataY: 25,
+			useRangeStyles: 8
+		}, gauge);
+		gauge.startup();
+
+		var fill = new Object();
+		fill.type = "linear";
+		fill.x1 = 0;
+		fill.x2 = 0;
+		fill.y2 = 0;
+		fill.y1 = gauge.height;
+		fill.colors = [{offset: 0, color: "#ECECEC"}, {offset: 1, color: "white"}];
+		gauge.gaugeBackground = fill;
+		
+		gauge.addRanges(ranges2);
+		gauge.setMinorTicks({interval: 1,
+							 length:2,
+							 offset:-2,
+							 width: 1});
+		gauge.setMajorTicks({interval: 5,
+							 length:5,
+							 offset:-5,
+							 width: 1});
+		valueIndicator = new dojox.widget.BarIndicator({
+			value:17,
+			width: 7,
+			hover:'Value: 17', 
+			title: 'Value',
+			easing: dojo.fx.easing.bounceOut
+		});
+		targetIndicator = new dojox.widget.BarLineIndicator({
+			value:6,
+			color:'#D00000',
+			hover:'Target: 6',
+			title: 'Target',
+			// Can use string to indicate easing function (just like in declarative)
+			easing: 'dojo.fx.easing.linear'
+		});
+		gauge.addIndicator(targetIndicator);
+		gauge.addIndicator(valueIndicator);
+		//targetIndicator.update(Math.floor(Math.random() * 70) + 5);
+		handle = setInterval((function(t, v){
+			return (function(){
+				t.update(Math.floor(Math.random() * 70) + 5);
+				v.update(Math.floor(Math.random() * 70) + 5);
+			});
+		})(valueIndicator, targetIndicator), 3000);
+		dojo.connect(dijit.byId('stop'), 'onClick', function(){
+			clearInterval(handle);
+		});
+	}
+	dojo.addOnUnload(function(){
+		clearInterval(handle);
+	});
+</script>
+</head>
+<body class="tundra">
+<h1>Bar Gauge Widget</h1>
+<h2>Default Colored Gauge</h2>
+<div id="defaultGauge"></div>
+<h2>CSS Themed Ranges, Image Overlay, Gradient Background, Updating to Random Values on 3s Timer</h2>
+<div id="programmaticGauge"></div>
+<button dojoType="dijit.form.Button" id="stop">Stop Timer</button>
+<h2>Declarative, Gradient Ranges, Gradient Background, No Indicator Boxes</h2>
+<div	dojoType="dojox.widget.BarGauge"
+		id="declarativeGauge"
+		width="300"
+		height="55"
+		dataHeight="25"
+		dataWidth="275"
+		dataX="10"
+		dataY="25"
+		useRangeStyles="0"
+		hideValues="true"
+		majorTicks="{length: 5, width: 1, offset: -5, interval: 5}">
+	<div	dojoType="dojox.widget.Gradient"
+			id="gradient"
+			type="linear"
+			x1="0"
+			x2="0"
+			y2="0">
+		<div	dojoType="dojox.widget.GradientColor"
+				id="gradientColor0"
+				offset="0"
+				color="#ECECEC">
+		</div>
+		<div	dojoType="dojox.widget.GradientColor"
+				id="gradientColor1"
+				offset="1"
+				color="white">
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="5"
+			high="10"
+			hover="5 - 10">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#606060">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#707070">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range1"
+			low="10"
+			high="20"
+			hover="10 - 20">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#707070">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#808080">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range2"
+			low="20"
+			high="30"
+			hover="20 - 30">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#808080">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#909090">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range3"
+			low="30"
+			high="40"
+			hover="30 - 40">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#909090">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#A0A0A0">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range4"
+			low="40"
+			high="50"
+			hover="40 - 50">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#A0A0A0">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#B0B0B0">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range5"
+			low="50"
+			high="60"
+			hover="50 - 60">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#B0B0B0">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#C0C0C0">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range6"
+			low="60"
+			high="70"
+			hover="60 - 70">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#C0C0C0">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#D0D0D0">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			id="range7"
+			low="70"
+			high="75"
+			hover="70 - 75">
+		<div	dojoType="dojox.widget.Gradient"
+				type="linear">
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="0"
+					color="#D0D0D0">
+			</div>
+			<div	dojoType="dojox.widget.GradientColor"
+					offset="1"
+					color="#E0E0E0">
+			</div>
+		</div>
+	</div>
+	<div	dojoType="dojox.widget.BarLineIndicator"
+			id="target"
+			value="6"
+			color="#D00000"
+			width="3"
+			hover="Target: 6"
+			title="Target">
+	</div>
+	<div 	dojoType="dojox.widget.BarIndicator"
+			id="value"
+			value="17"
+			length="135"
+			width="3"
+			hover="Value: 17"
+			title="Value">
+	</div>
+</div>
+<h2>Declarative, (Ugly) Colored Ranges, No Numbers, No Indicator Boxes</h2>
+<div	dojoType="dojox.widget.BarGauge"
+		id="declarativeGauge2"
+		width="300"
+		height="35"
+		dataHeight="25"
+		dataWidth="290"
+		useRangeStyles="0"
+		hideValues="true"
+		gaugeBackground="green">
+	<div	dojoType="dojox.widget.Range"
+			low="5"
+			high="10"
+			hover="5 - 10"
+			color="red">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="10"
+			high="20"
+			hover="10 - 20"
+			color="#FFA500">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="20"
+			high="30"
+			hover="20 - 30"
+			color="yellow">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="30"
+			high="40"
+			hover="30 - 40"
+			color="#7FFF00">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="40"
+			high="50"
+			hover="40 - 50"
+			color="#00FFFF">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="50"
+			high="60"
+			hover="50 - 60"
+			color="blue">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="60"
+			high="70"
+			hover="60 - 70"
+			color="#191970">
+	</div>
+	<div	dojoType="dojox.widget.Range"
+			low="70"
+			high="75"
+			hover="70 - 75"
+			color="purple">
+	</div>
+	<div	dojoType="dojox.widget.BarLineIndicator"
+			value="6"
+			color="#D00000"
+			hover="Target: 6"
+			title="Target">
+	</div>
+	<div 	dojoType="dojox.widget.BarIndicator"
+			value="55"
+			width="7"
+			hover="Value: 55"
+			title="Value">
+	</div>
+</div>
+</body>
+</html>

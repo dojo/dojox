@@ -22,7 +22,8 @@ Project state:
 [SortList]	experimental
 [Toaster]	experimental
 [Wizard]	experimental
-
+[AnalogGauge]   experimental
+[BarGauge]      experimental
 -------------------------------------------------------------------------------
 Credits:
 
@@ -42,6 +43,8 @@ Credits:
 [SortList] Peter Higgins (dante)
 [Toaster] Adam Peller (peller)
 [Wizard] Peter Higgins (dante)
+[AnalogGauge] Benjamin Schell (bmschell) CCLA
+[BarGauge] Benjamin Schell (bmschell) CCLA 
 
 -------------------------------------------------------------------------------
 Project description
@@ -146,3 +149,14 @@ Other Notes (Brief widget list):
 	* Wizard - a StackContainer with built-in navigation to
 		ease in the creation of 'step-based' content.
 		Requires dojo >= 1.1 
+                
+	* AnalogGauge - an analog style customizable gauge for displaying values in an
+                animated fashion and with multiple indicators.  Supports easings for 
+                indicator animations, transparent overlays, etc.  Very flexible.
+                Requires dojo >= 1.2
+	
+        * BarGauge - a bar style gauge for displaying values in an animated fashion 
+                and with multiple indicators.  Supports easings for indicator animations,
+                etc.  Very flexible.
+                Requires dojo >= 1.2
+
