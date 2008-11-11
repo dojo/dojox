@@ -8,7 +8,7 @@ dojo.provide("dojox.rpc.Client");
 		// a specific client. Many servers rely on sessions for this, but sessions are shared
 		// between tabs/windows, so this is not appropriate for application state, it
 		// really only useful for storing user authentication
-		headers["X-Client-Id"] = dojox._clientId;
+		headers["X-Client-Id"] = dojox.rpc.Client.clientId;
 		// set the sequence id. HTTP is non-deterministic, message can arrive at the server
 		// out of order. In complex Ajax applications, it may be more to ensure that messages
 		// can be properly sequenced deterministically. This applies a sequency id to each
@@ -18,4 +18,4 @@ dojo.provide("dojox.rpc.Client");
 	}
 })();
 // initiate the client id to a good random number
-dojox._clientId = (Math.random() + '').substring(2,14) + (Math.random() + '').substring(2,14);
+dojox.rpc.Client.clientId = (Math.random() + '').substring(2,14);
