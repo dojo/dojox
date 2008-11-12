@@ -19,11 +19,15 @@ dojo.require("dojox.lang.functional.reversed");
 			gap:	0,		// gap between columns in pixels
 			shadows: null	// draw shadows
 		},
-		optionalParams: {},	// no optional parameters
+		optionalParams: {
+			minBarSize: 1,	// minimal bar size in pixels
+			maxBarSize: 1	// maximal bar size in pixels		
+		},
 		
 		constructor: function(chart, kwArgs){
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
+			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
@@ -46,14 +50,15 @@ dojo.require("dojox.lang.functional.reversed");
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, color, stroke, fill, f,
+			var t = this.chart.theme, color, stroke, fill, f, gap, height,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
-				gap = this.opt.gap < this._vScaler.bounds.scale / 3 ? this.opt.gap : 0,
 				baseline = Math.max(0, this._hScaler.bounds.lower),
 				baselineWidth = ht(baseline),
-				height = this._vScaler.bounds.scale - 2 * gap,
 				events = this.events();
+			f = dc.calculateBarSize(this._vScaler.bounds.scale, this.opt);
+			gap = f.gap;
+			height = f.size;
 			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];

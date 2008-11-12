@@ -42,12 +42,13 @@ dojo.require("dojox.lang.functional.reversed");
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, color, stroke, fill, f,
+			var t = this.chart.theme, color, stroke, fill, f, gap, width,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
-				gap = this.opt.gap < this._hScaler.bounds.scale / 3 ? this.opt.gap : 0,
-				width  = this._hScaler.bounds.scale - 2 * gap,
 				events = this.events();
+			f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
+			gap = f.gap;
+			width = f.size;
 			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
