@@ -2,7 +2,12 @@ dojo.provide("dojox.data.tests.stores.XmlStore");
 dojo.require("dojox.data.XmlStore");
 dojo.require("dojo.data.api.Read");
 dojo.require("dojo.data.api.Write");
+dojo.require("dojo.data.api.Identity");
 
+
+dojox.data.tests.stores.XmlStore.getBooks3Store = function(){
+	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString(), label: "title", keyAttribute: "isbn"});
+};
 
 dojox.data.tests.stores.XmlStore.getBooks2Store = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString(), label: "title"});
@@ -64,63 +69,65 @@ doh.register("dojox.data.tests.stores.XmlStore",
 				//		Simple test of fetching one xml items through an XML element called isbn
 				var store = dojox.data.tests.stores.XmlStore.getBooksStore();
 				var d = new doh.Deferred();
-				function dumpFirstFetch(items, request){
-					t.assertEqual(5, items.length);
-					request.start = 3;
-					request.count = 1;
-					request.onComplete = dumpSecondFetch;
-					store.fetch(request);
-				}
 	
-				function dumpSecondFetch(items, request){
-					t.assertEqual(1, items.length);
-					request.start = 0;
-					request.count = 5;
-					request.onComplete = dumpThirdFetch;
-					store.fetch(request);
-				}
-	
-				function dumpThirdFetch(items, request){
-					t.assertEqual(5, items.length);
-					request.start = 2;
-					request.count = 20;
-					request.onComplete = dumpFourthFetch;
-					store.fetch(request);
-				 }
-	
-				function dumpFourthFetch(items, request){
+				var dumpSixthFetch = function(items, request){
 					t.assertEqual(18, items.length);
-					request.start = 9;
-					request.count = 100;
-					request.onComplete = dumpFifthFetch;
-					store.fetch(request);
-				}
-	
-				function dumpFifthFetch(items, request){
+					d.callback(true);
+				};
+
+				var dumpFifthFetch = function(items, request){
 					t.assertEqual(11, items.length);
 					request.start = 2;
 					request.count = 20;
 					request.onComplete = dumpSixthFetch;
 					store.fetch(request);
-				}
-	
-				function dumpSixthFetch(items, request){
+				};
+
+				var dumpFourthFetch = function(items, request){
 					t.assertEqual(18, items.length);
-					d.callback(true);
-				}
-	
-				function completed(items, request){
+					request.start = 9;
+					request.count = 100;
+					request.onComplete = dumpFifthFetch;
+					store.fetch(request);
+				};
+
+				var dumpThirdFetch = function (items, request){
+					t.assertEqual(5, items.length);
+					request.start = 2;
+					request.count = 20;
+					request.onComplete = dumpFourthFetch;
+					store.fetch(request);
+				};
+
+				var dumpSecondFetch = function(items, request){
+					t.assertEqual(1, items.length);
+					request.start = 0;
+					request.count = 5;
+					request.onComplete = dumpThirdFetch;
+					store.fetch(request);
+				};
+
+				var dumpFirstFetch = function(items, request){
+					t.assertEqual(5, items.length);
+					request.start = 3;
+					request.count = 1;
+					request.onComplete = dumpSecondFetch;
+					store.fetch(request);
+				};
+
+				var completed = function(items, request){
 					t.assertEqual(20, items.length);
 					request.start = 1;
 					request.count = 5;
 					request.onComplete = dumpFirstFetch;
 					store.fetch(request);
-				}
+				};
 	
+
 				function error(errData, request){
 					 d.errback(errData);
 				}
-	
+
 				store.fetch({onComplete: completed, onError: error});
 				return d; //Object
 			}
@@ -524,26 +531,27 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			//		Simple test of the isItem API across multiple store instances.
 			var store1 = dojox.data.tests.stores.XmlStore.getBooks2Store();
 			var store2 = dojox.data.tests.stores.XmlStore.getBooks2Store();
-
 			var d = new doh.Deferred();
-			function onComplete1(items, request) {
+
+			var onError = function(error, request) {
+				d.errback(error);
+			};
+
+			var onComplete1 = function(items, request) {
 				t.assertEqual(1, items.length);
 				var item1 = items[0];
 				t.assertTrue(store1.isItem(item1));
 
-				function onComplete2(items, request) {
+				var onComplete2 = function(items, request) {
 					t.assertEqual(1, items.length);
 					var item2 = items[0];
 					t.assertTrue(store2.isItem(item2));
 					t.assertTrue(!store1.isItem(item2));
 					t.assertTrue(!store2.isItem(item1));
 					d.callback(true);
-				}
+				};
 				store2.fetch({query:{isbn:"A9B574"}, onComplete: onComplete2, onError: onError});
-			}
-			function onError(error, request) {
-				d.errback(error);
-			}
+			};
 			store1.fetch({query:{isbn:"A9B574"}, onComplete: onComplete1, onError: onError});
 			return d; //Object
 		},
@@ -657,9 +665,9 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			store.comparatorMap = {};
 			store.comparatorMap["isbn"] = function(a, b){
 				var ret = 0;
-				if(parseInt(a.toString()) > parseInt(b.toString())){
+				if(parseInt(a.toString(), 10) > parseInt(b.toString(), 10)){
 					ret = 1;
-				}else if(parseInt(a.toString()) < parseInt(b.toString())){
+				}else if(parseInt(a.toString(), 10) < parseInt(b.toString(), 10)){
 					ret = -1;
 				}
 				return ret; //int, {-1,0,1}
@@ -694,9 +702,9 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			store.comparatorMap = {};
 			store.comparatorMap["isbn"] = function(a, b){
 				var ret = 0;
-				if(parseInt(a.toString()) > parseInt(b.toString())){
+				if(parseInt(a.toString(), 10) > parseInt(b.toString(), 10)){
 					ret = 1;
-				}else if(parseInt(a.toString()) < parseInt(b.toString())){
+				}else if(parseInt(a.toString(), 10) < parseInt(b.toString(), 10)){
 					ret = -1;
 				}
 				return ret; //int, {-1,0,1}
@@ -749,11 +757,12 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
 			var features = store.getFeatures(); 
 			var count = 0;
+			var i;
 			for(i in features){
-				t.assertTrue((i === "dojo.data.api.Read" || i === "dojo.data.api.Write"));
+				t.assertTrue((i === "dojo.data.api.Read" || i === "dojo.data.api.Write" || "dojo.data.api.Identity"));
 				count++;
 			}
-			t.assertEqual(2, count);
+			t.assertEqual(3, count);
 		},
 		function testReadAPI_getAttributes(t){
 			//	summary: 
@@ -884,13 +893,16 @@ doh.register("dojox.data.tests.stores.XmlStore",
 		},
 		function testWriteAPI_revert(t){
 			//	summary: 
-			//		Simple test of the isDirty API
+			//		Simple test of the write revert API
 			//	description:
-			//		Simple test of the isDirty API
+			//		Simple test of the write revert API
 			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
 
 			var d = new doh.Deferred();
-			function onComplete(items, request) {
+			var onError = function(error, request) {
+				d.errback(error);
+			};
+			var onComplete = function(items, request) {
 				t.assertEqual(1, items.length);
 				var item = items[0];
 				t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
@@ -901,20 +913,327 @@ doh.register("dojox.data.tests.stores.XmlStore",
 				store.revert();
 				
 				//Fetch again to see if it reset the state.
-				function onComplete1(items, request) {
+				var onComplete1 = function(items, request) {
 					t.assertEqual(1, items.length);
 					var item = items[0];
 					t.assertTrue(store.containsValue(item,"isbn", "A9B574"));
 					d.callback(true);
-				}
+				};
 				store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete1, onError: onError});
-			}
-			function onError(error, request) {
-				d.errback(error);
-			}
+			};
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
+
+		function testIdentityAPI_getIdentity(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API
+			 //	description:
+			 //		Simple test of the Identity getIdentity API
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onComplete(items, request) {
+				 t.assertEqual(1, items.length);
+				 var item = items[0];
+				 try {
+					 t.assertTrue(store.containsValue(item,"isbn", "A9B5CC"));
+					 t.assertTrue(store.getIdentity(item) !== null);
+					 d.callback(true);
+				 } catch (e) {
+					 d.errback(e);
+				 }
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetch({query:{isbn:"A9B5CC"}, onComplete: onComplete, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_getIdentityAttributes(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentityAttributes API where it defaults to internal xpath (no keyAttribute)
+			 //	description:
+			 //		Simple test of the Identity getIdentityAttributes API where it defaults to internal xpath (no keyAttribute)
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					var idAttrs = store.getIdentityAttributes(item);
+					t.assertTrue(idAttrs === null);
+					t.assertEqual("/books[0]/book[4]", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "/books[0]/book[4]", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_getIdentityAttributes_usingKeyAttributeIdentity(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentityAttributes API where identity is specified by the keyAttribute param
+			 //	description:
+			 //		Simple test of the Identity getIdentityAttributes API where identity is specified by the keyAttribute param
+			 var store = dojox.data.tests.stores.XmlStore.getBooks3Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					var idAttrs = store.getIdentityAttributes(item);
+					t.assertTrue(idAttrs !== null);
+					t.assertTrue(idAttrs.length === 1);
+					t.assertTrue(idAttrs[0] === "isbn");
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "A9B574", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where the store defaults the identity to a xpathlike lookup.
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where the store defaults the identity to a xpathlike lookup.
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("/books[0]/book[4]", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "/books[0]/book[4]", onItem: onItem, onError: onError});
+			 return d; //Object
+		
+		},
+
+		function testIdentityAPI_fetchItemByIdentity2(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where the store defaults the identity to a xpathlike lookup.
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where the store defaults the identity to a xpathlike lookup.
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("/books[0]/book[0]", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "/books[0]/book[0]", onItem: onItem, onError: onError});
+			 return d; //Object
+		
+		},
+
+		function testIdentityAPI_fetchItemByIdentity3(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where the store defaults the identity to a xpathlike lookup.
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where the store defaults the identity to a xpathlike lookup.
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("/books[0]/book[2]", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "/books[0]/book[2]", onItem: onItem, onError: onError});
+			 return d; //Object
+		
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_usingKeyAttributeIdentity(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 var store = dojox.data.tests.stores.XmlStore.getBooks3Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("A9B574", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "A9B574", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_usingKeyAttributeIdentity2(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 var store = dojox.data.tests.stores.XmlStore.getBooks3Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("A9B57C", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "A9B57C", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_usingKeyAttributeIdentity3(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 var store = dojox.data.tests.stores.XmlStore.getBooks3Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("A9B5CC", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "A9B5CC", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_fails(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API
+			 //	description:
+			 //		Simple test of the Identity getIdentity API
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				 t.assertTrue(item === null);
+				 d.callback(true);
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 //In memory stores use dojo query syntax for the identifier.
+			 store.fetchItemByIdentity({identity: "/books[0]/book[200]", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_fails2(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API
+			 //	description:
+			 //		Simple test of the Identity getIdentity API
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				 t.assertTrue(item === null);
+				 d.callback(true);
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 //In memory stores use dojo query syntax for the identifier.
+			 store.fetchItemByIdentity({identity: "/books[1]/book[4]", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_fails3(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API
+			 //	description:
+			 //		Simple test of the Identity getIdentity API
+			 var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				 t.assertTrue(item === null);
+				 d.callback(true);
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 //In memory stores use dojo query syntax for the identifier.
+			 store.fetchItemByIdentity({identity: "/books[1]/book[200]", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_usingKeyAttributeIdentity_fails(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 var store = dojox.data.tests.stores.XmlStore.getBooks3Store();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item === null);
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "A9B574_NONEXISTANT", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
 		function testReadAPI_functionConformance(t){
 			//	summary: 
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
@@ -924,7 +1243,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			var testStore = dojox.data.tests.stores.XmlStore.getBooksStore();
 			var readApi = new dojo.data.api.Read();
 			var passed = true;
-
+			var i;
 			for(i in readApi){
 				var member = readApi[i];
 				//Check that all the 'Read' defined functions exist on the test store.
@@ -948,9 +1267,32 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			var testStore = dojox.data.tests.stores.XmlStore.getBooksStore();
 			var writeApi = new dojo.data.api.Write();
 			var passed = true;
-
+			var i;
 			for(i in writeApi){
 				var member = writeApi[i];
+				//Check that all the 'Write' defined functions exist on the test store.
+				if(typeof member === "function"){
+					var testStoreMember = testStore[i];
+					if(!(typeof testStoreMember === "function")){
+						passed = false;
+						break;
+					}
+				}
+			}
+			t.assertTrue(passed);
+		},
+		function testIdentityAPI_functionConformance(t){
+			//	summary: 
+			//		Simple test write API conformance.  Checks to see all declared functions are actual functions on the instances.
+			//	description:
+			//		Simple test write API conformance.  Checks to see all declared functions are actual functions on the instances.
+
+			var testStore = dojox.data.tests.stores.XmlStore.getBooksStore();
+			var identityApi = new dojo.data.api.Identity();
+			var passed = true;
+			var i;
+			for(i in identityApi){
+				var member = identityApi[i];
 				//Check that all the 'Write' defined functions exist on the test store.
 				if(typeof member === "function"){
 					var testStoreMember = testStore[i];
@@ -964,7 +1306,3 @@ doh.register("dojox.data.tests.stores.XmlStore",
 		}
 	]
 );
-
-
-
-

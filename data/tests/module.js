@@ -24,6 +24,7 @@ try{
 			dojo.require("dojox.data.tests.stores.QueryReadStore");
 			dojo.require("dojox.data.tests.stores.SnapLogicStore");
 			dojo.require("dojox.data.tests.stores.FileStore");
+			dojo.require("dojox.data.tests.stores.XmlStoreRemoteTests");
 		}
 	}
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.CssRuleStore");
