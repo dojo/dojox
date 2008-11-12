@@ -135,12 +135,12 @@ dojo.require("dojox.sketch.UndoStack");
 		this._md=function(e){
 			var o=self._fromEvt(e);
 			self._startPoint={ x:e.pageX, y:e.pageY };
-			var win = dijit.getDocumentWindow(self.node.ownerDocument);
 
 			//	figure out the coordinates within the iframe
 			self._ctr=dojo._abs(self.node);
-			var scroll=dojo.withGlobal(win,dojo._docScroll);
-			self._ctr={x:self._ctr.x-scroll.x, y:self._ctr.y-scroll.y};
+			//var win = dijit.getDocumentWindow(self.node.ownerDocument);
+			//var scroll=dojo.withGlobal(win,dojo._docScroll);
+			self._ctr={x:self._ctr.x, y:self._ctr.y}; //-scroll.x -scroll.y
 			var X=e.clientX-self._ctr.x, Y=e.clientY-self._ctr.y;
 			self._lp={ x:X, y:Y };
 

@@ -5,7 +5,7 @@ dojo.require("dojox.gfx");
 	var ta=dojox.sketch;
 	ta.Anchor=function(an, id, isControl){
 		var self=this;
-		var size=6;	//	.5 * size of anchor.
+		var size=4;	//	.5 * size of anchor.
 		var rect=null;
 
 		this.type=function(){ return "Anchor"; };
