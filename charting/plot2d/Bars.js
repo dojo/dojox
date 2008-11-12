@@ -21,9 +21,9 @@ dojo.require("dojox.lang.functional.reversed");
 		},
 		optionalParams: {
 			minBarSize: 1,	// minimal bar size in pixels
-			maxBarSize: 1	// maximal bar size in pixels		
+			maxBarSize: 1	// maximal bar size in pixels
 		},
-		
+
 		constructor: function(chart, kwArgs){
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -32,7 +32,7 @@ dojo.require("dojox.lang.functional.reversed");
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
 		},
-		
+
 		calculateAxes: function(dim){
 			var stats = dc.collectSimpleStats(this.series), t;
 			stats.hmin -= 0.5;

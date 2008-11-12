@@ -11,7 +11,7 @@ dojo.require("dojox.lang.functional.reversed");
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
-	
+
 	dojo.declare("dojox.charting.plot2d.Columns", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
@@ -21,9 +21,9 @@ dojo.require("dojox.lang.functional.reversed");
 		},
 		optionalParams: {
 			minBarSize: 1,	// minimal bar size in pixels
-			maxBarSize: 1	// maximal bar size in pixels		
+			maxBarSize: 1	// maximal bar size in pixels
 		},
-		
+
 		constructor: function(chart, kwArgs){
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -32,7 +32,7 @@ dojo.require("dojox.lang.functional.reversed");
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
 		},
-		
+
 		calculateAxes: function(dim){
 			var stats = dc.collectSimpleStats(this.series);
 			stats.hmin -= 0.5;
@@ -70,7 +70,7 @@ dojo.require("dojox.lang.functional.reversed");
 				stroke = run.stroke ? run.stroke : dc.augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j], 
+					var v = run.data[j],
 						vv = vt(v),
 						height = vv - baselineHeight,
 						h = Math.abs(height);

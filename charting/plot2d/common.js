@@ -6,7 +6,7 @@ dojo.require("dojox.lang.functional");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common;
-	
+
 	dojo.mixin(dojox.charting.plot2d.common, {
 		makeStroke: function(stroke){
 			if(!stroke){ return stroke; }
@@ -35,10 +35,10 @@ dojo.require("dojox.lang.functional");
 			}
 			return fill;
 		},
-		
-		defaultStats: {hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY, 
+
+		defaultStats: {hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY,
 			vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY},
-		
+
 		collectSimpleStats: function(series){
 			var stats = dojo.clone(dc.defaultStats);
 			for(var i = 0; i < series.length; ++i){
@@ -82,7 +82,7 @@ dojo.require("dojox.lang.functional");
 			}
 			return stats;
 		},
-		
+
 		calculateBarSize: function(/* Number */ availableSize, /* Object */ opt, /* Number? */ clusterSize){
 			if(!clusterSize){
 				clusterSize = 1;
@@ -98,7 +98,7 @@ dojo.require("dojox.lang.functional");
 			gap = (availableSize - size * clusterSize) / 2;
 			return {size: size, gap: gap};	// Object
 		},
-		
+
 		collectStackedStats: function(series){
 			// collect statistics
 			var stats = dojo.clone(dc.defaultStats);
@@ -135,7 +135,7 @@ dojo.require("dojox.lang.functional");
 				if(!isNaN(tension)) { // use standard Dojo smoothing in tension is numeric
 					var dx=item.x-arr[i-1].x, dy=arr[i-1].y;
 					return "C"+(item.x-(tension-1)*(dx/tension))+","+dy+" "+(item.x-(dx/tension))+","+item.y+" "+item.x+","+item.y;
-				} else if(tension == "X" || tension == "x" || tension == "S") { 
+				} else if(tension == "X" || tension == "x" || tension == "S") {
 					// use Excel "line smoothing" algorithm (http://xlrotor.com/resources/files.shtml)
 					var p0, p1 = arr[i-1], p2 = arr[i], p3;
 					var bz1x, bz1y, bz2x, bz2y;
@@ -170,10 +170,10 @@ dojo.require("dojox.lang.functional");
 					if(p0p2f > p1p2/2 && p1p3f > p1p2/2) {
 						p0p2f = p1p2/2;
 						p1p3f = p1p2/2;
-					} else if(p0p2f > p1p2/2) { 
+					} else if(p0p2f > p1p2/2) {
 						p0p2f = p1p2/2;
 						p1p3f = p1p2/2 * p1p3/p0p2;
-					} else if(p1p3f > p1p2/2) { 
+					} else if(p1p3f > p1p2/2) {
 						p1p3f = p1p2/2;
 						p0p2f = p1p2/2 * p0p2/p1p3;
 					}
@@ -182,11 +182,11 @@ dojo.require("dojox.lang.functional");
 						if(p0 == p1) { p0p2f = 0; }
 						if(p2 == p3) { p1p3f = 0; }
 					}
-					
-					bz1x = p1.x + p0p2f*(p2.x - p0.x)/p0p2;            
-					bz1y = p1.y + p0p2f*(p2.y - p0.y)/p0p2;            
-					bz2x = p2.x - p1p3f*(p3.x - p1.x)/p1p3;            
-					bz2y = p2.y - p1p3f*(p3.y - p1.y)/p1p3;     
+
+					bz1x = p1.x + p0p2f*(p2.x - p0.x)/p0p2;
+					bz1y = p1.y + p0p2f*(p2.y - p0.y)/p0p2;
+					bz2x = p2.x - p1p3f*(p3.x - p1.x)/p1p3;
+					bz2y = p2.y - p1p3f*(p3.y - p1.y)/p1p3;
 				}
 				return "C"+(bz1x+","+bz1y+" "+bz2x+","+bz2y+" "+p2.x+","+p2.y);
 			});
