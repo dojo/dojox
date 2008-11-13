@@ -508,6 +508,10 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	constructor: function(){
 		dojox.gfx.svg.Container._init.call(this);
 	},
+	destroy: function(){
+		this.defNode = null;	// release the external reference
+		this.inherited(arguments);
+	},
 	setDimensions: function(width, height){
 		// summary: sets the width and height of the rawNode
 		// width: String: width of surface, e.g., "100px"
@@ -534,11 +538,13 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	s.rawNode.setAttribute("width",  width);
 	s.rawNode.setAttribute("height", height);
 
-	var node = document.createElementNS(dojox.gfx.svg.xmlns.svg, "defs");
-	s.rawNode.appendChild(node);
-	s.defNode = node;
-
-	dojo.byId(parentNode).appendChild(s.rawNode);
+	var defNode = document.createElementNS(dojox.gfx.svg.xmlns.svg, "defs");
+	s.rawNode.appendChild(defNode);
+	s.defNode = defNode;
+	
+	s._parent = dojo.byId(parentNode); 
+	s._parent.appendChild(s.rawNode);
+	
 	return s;	// dojox.gfx.Surface
 };
 

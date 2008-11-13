@@ -371,7 +371,8 @@ dojox.gfx.shape.Container = {
 				if(silently){
 					// skip for now
 				}else{
-					shape._setParent(null, null);
+					shape.parent = null;
+					shape.parentMatrix = null;
 				}
 				this.children.splice(i, 1);
 				break;
@@ -416,6 +417,29 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 	constructor: function(){
 		// underlying node
 		this.rawNode = null;
+		// the parent node
+		this._parent = null;
+		// the list of DOM nodes to be deleted in the case of destruction
+		this._nodes = [];
+		// the list of events to be detached in the case of destruction
+		this._events = [];
+	},
+	destroy: function(){
+		// summary: destroy all relevant external resources and release all
+		//	external references to make this object garbage-collectible
+		dojo.forEach(this._nodes, dojo._destroyElement);
+		this._nodes = [];
+		dojo.forEach(this._events, dojo.disconnect);
+		this._events = [];
+		this.rawNode = null;	// recycle it in _nodes, if it needs to be recycled
+		if(dojo.isIE){
+			while(this._parent.lastChild){
+				dojo._destroyElement(this._parent.lastChild);
+			}
+		}else{
+			this._parent.innerHTML = "";
+		}
+		this._parent = null;
 	},
 	getEventSource: function(){
 		// summary: returns a node, which can be used to attach event listeners

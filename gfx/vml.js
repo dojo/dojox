@@ -962,6 +962,9 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		c = s.clipNode = p.ownerDocument.createElement("div"),
 		r = s.rawNode = p.ownerDocument.createElement("v:group"),
 		cs = c.style, rs = r.style;
+		
+	s._parent = p;
+	s._nodes.push(c);	// other elements will be deleted as parts of "c"
 
 	p.style.width  = width;
 	p.style.height = height;
