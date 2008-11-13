@@ -11,7 +11,7 @@ dojox.io.xhrWindowNamePlugin = function(/*String*/url, /*Function?*/httpAdapter,
 	//	url:
 	//		Url prefix of the site which can handle windowName requests.
 	// 	httpAdapter: This allows for adapting HTTP requests that could not otherwise be 
-	// 		sent with XDR, so you can use a convention for headers and PUT/DELETE methods.
+	// 		sent with window.name, so you can use a convention for headers and PUT/DELETE methods.
 	dojox.io.xhrPlugins.register(
 		"windowName",
 		function(method,args){
