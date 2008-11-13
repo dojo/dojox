@@ -64,7 +64,7 @@ dojo.require("dojox.rpc.Rest");
 				// the last one should commit the transaction
 				args.headers['X-Transaction'] = actions.length - 1 == i ? "commit" : "open";
 				if(contentLocation){
-					args.headers['Content-Location'] = contentLocation;
+					args.headers['Content-ID'] = '<' + contentLocation + '>';
 				}
 				return plainXhr.apply(dojo,arguments);
 			};			
@@ -224,7 +224,9 @@ dojo.require("dojox.rpc.Rest");
 					dojo.mixin(this,data);
 				}
 				var idAttribute = jr.getIdAttribute(service);
-				Rest._index[this.__id = this.__clientId = service.servicePath + (this[idAttribute] || (this[idAttribute] = Math.random().toString(16).substring(2,14)+Math.random().toString(16).substring(2,14)))] = this;
+				Rest._index[this.__id = this.__clientId = 
+						service.servicePath + (this[idAttribute] || 
+							Math.random().toString(16).substring(2,14) + '@' + ((dojox.rpc.Client && dojox.rpc.Client.clientId) || "client"))] = this;
 				dirtyObjects.push({object:this, save: true});
 			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});

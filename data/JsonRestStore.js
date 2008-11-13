@@ -48,7 +48,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		callbacks are unnecessary
 			//
 			//	description:
-			//		The JsonRestStore will then cause all saved modifications to be server using Rest commands (PUT, POST, or DELETE).
+			//		The JsonRestStore will cause all saved modifications to be sent to the server using Rest commands (PUT, POST, or DELETE).
 			// 		When using a Rest store on a public network, it is important to implement proper security measures to
 			//		control access to resources.
 			//		On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.

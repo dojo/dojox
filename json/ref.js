@@ -84,8 +84,11 @@ dojox.json.ref = {
 				index[id] = target; // add the prefix, set _id, and index it
 			}
 			var properties = schema && schema.properties; 
-	
+			var length = it.length;
 			for(var i in it){
+				if(i==length){
+					break;		
+				}
 				if(it.hasOwnProperty(i)){
 					val=it[i];
 					var propertyDefinition = properties && properties[i];
@@ -237,10 +240,11 @@ dojox.json.ref = {
 				var id = it.__id;
 				if(id){ // we found an identifiable object, we will just serialize a reference to it... unless it is the root
 					if(path != '#' && ((useRefs && !id.match(/#/)) || paths[id])){
-						var ref = id; // a pure path based reference, leave it alone
-	
+						var ref = id;	
 						if(id.charAt(0)!='#'){
-							if(id.substring(0, idPrefix.length) == idPrefix){ // see if the reference is in the current context
+							if(it.__clientId == id){
+								ref = "cid:" + id;
+							}else if(id.substring(0, idPrefix.length) == idPrefix){ // see if the reference is in the current context
 								// a reference with a prefix matching the current context, the prefix should be removed
 								ref = id.substring(idPrefix.length);
 							}else{
