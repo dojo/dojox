@@ -19,6 +19,10 @@ dojo.require("dojox.lang.functional.reversed");
 			return this;
 		},
 		render: function(dim, offsets){
+			if(this._maxRunLength <= 0){
+				return this;
+			}
+
 			// stack all values
 			var acc = df.repeat(this._maxRunLength, "-> 0", 0);
 			for(var i = 0; i < this.series.length; ++i){
@@ -41,6 +45,8 @@ dojo.require("dojox.lang.functional.reversed");
 			var t = this.chart.theme, stroke, outline, color, marker, events = this.events(),
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+			this.resetEvents();
+
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){ continue; }

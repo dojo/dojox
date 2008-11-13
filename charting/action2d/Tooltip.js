@@ -33,13 +33,13 @@ dojo.require("dojox.lang.functional.fold");
 		},
 		
 		process: function(o){
-			if(!o.shape || !(o.type in this.overOutEvents)){ return; }
-			
-			if(o.type == "onmouseout"){
+			if(o.type === "onplotreset" || o.type === "onmouseout"){
 				dijit.hideTooltip(this.aroundRect);
 				this.aroundRect = null;
 				return;
 			}
+			
+			if(!o.shape || o.type !== "onmouseover"){ return; }
 			
 			// calculate relative coordinates and the position
 			var aroundRect = {type: "rect"}, position = ["after", "before"];

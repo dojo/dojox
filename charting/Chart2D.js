@@ -32,8 +32,8 @@ dojo.require("dojox.charting.plot2d.Pie");
 dojo.require("dojox.charting.plot2d.Bubble");
 
 (function(){
-	var df = dojox.lang.functional, dc = dojox.charting, 
-		clear = df.lambda("item.clear()"), 
+	var df = dojox.lang.functional, dc = dojox.charting,
+		clear = df.lambda("item.clear()"),
 		purge = df.lambda("item.purgeGroup()"),
 		destroy = df.lambda("item.destroy()"),
 		makeClean = df.lambda("item.dirty = false"),
@@ -66,6 +66,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			dojo.forEach(this.series, destroy);
 			dojo.forEach(this.stack,  destroy);
 			df.forIn(this.axes, destroy);
+			this.surface.destroy();
 		},
 		getCoords: function(){
 			if(!this.coords){
@@ -99,6 +100,16 @@ dojo.require("dojox.charting.plot2d.Bubble");
 		getAxis: function(name){
 			return this.axes[name];
 		},
+		removeAxis: function(name){
+			if(name in this.axes){
+				// destroy the axis
+				this.axes[name].destroy();
+				delete this.axes[name];
+				// mark the chart as dirty
+				this.dirty = true;
+			}
+			return this;	// self
+		},
 		addPlot: function(name, kwArgs){
 			var plot;
 			if(!kwArgs || !("type" in kwArgs)){
@@ -120,6 +131,26 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			this.dirty = true;
 			return this;
 		},
+		removePlot: function(name){
+			if(name in this.plots){
+				// get the index and remove the name
+				var index = this.plots[name];
+				delete this.plots[name];
+				// destroy the plot
+				this.stack[index].destroy();
+				// remove the plot from the stack
+				this.stack.splice(index, 1);
+				// update indices to reflect the shift
+				df.forIn(this.plots, function(idx, name, plots){
+					if(idx > index){
+						plots[name] = idx - 1;
+					}
+				});
+				// mark the chart as dirty
+				this.dirty = true;
+			}
+			return this;	// self
+		},
 		addSeries: function(name, data, kwArgs){
 			var run = new dc.Series(this, data, kwArgs);
 			if(name in this.runs){
@@ -136,41 +167,33 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(!("ymax" in run) && "max" in run){ run.ymax = run.max; }
 			return this;
 		},
+		removeSeries: function(name){
+			if(name in this.runs){
+				// get the index and remove the name
+				var index = this.runs[name],
+					plotName = this.series[index].plot;
+				delete this.runs[name];
+				// destroy the run
+				this.series[index].destroy();
+				// remove the run from the stack of series
+				this.series.splice(index, 1);
+				// update indices to reflect the shift
+				df.forIn(this.runs, function(idx, name, runs){
+					if(idx > index){
+						runs[name] = idx - 1;
+					}
+				});
+				this.dirty = true;
+			}
+			return this;	// self
+		},
 		updateSeries: function(name, data){
 			if(name in this.runs){
-				var run = this.series[this.runs[name]],
-					plot = this.stack[this.plots[run.plot]], axis;
+				var run = this.series[this.runs[name]];
 				run.data = data;
 				run.dirty = true;
-				// check to see if axes and plot should be updated
-				if(plot.hAxis){
-					axis = this.axes[plot.hAxis];
-					if(axis.dependOnData()){
-						axis.dirty = true;
-						// find all plots and mark them dirty
-						dojo.forEach(this.stack, function(p){
-							if(p.hAxis && p.hAxis == plot.hAxis){
-								p.dirty = true;
-							}
-						});
-					}
-				}else{
-					plot.dirty = true;
-				}
-				if(plot.vAxis){
-					axis = this.axes[plot.vAxis];
-					if(axis.dependOnData()){
-						axis.dirty = true;
-						// find all plots and mark them dirty
-						dojo.forEach(this.stack, function(p){
-							if(p.vAxis && p.vAxis == plot.vAxis){
-								p.dirty = true;
-							}
-						});
-					}
-				}else{
-					plot.dirty = true;
-				}
+				this._invalidateDependentPlots(run.plot, false);
+				this._invalidateDependentPlots(run.plot, true);
 			}
 			return this;
 		},
@@ -180,7 +203,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 				case 0:
 					box = dojo.marginBox(this.node);
 					break;
-				case 1: 
+				case 1:
 					box = width;
 					break;
 				default:
@@ -244,14 +267,14 @@ dojo.require("dojox.charting.plot2d.Bubble");
 					plot.calculateAxes(this.plotArea);
 				}
 			}, this);
-			
+
 			return this;
 		},
 		fullGeometry: function(){
 			this._makeDirty();
 
 			// clear old values
-			dojo.forEach(this.stack,  clear);
+			dojo.forEach(this.stack, clear);
 
 			// rebuild new connections, and add defaults
 
@@ -301,7 +324,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			this.plotArea = {width: dim.width - offsets.l - offsets.r, height: dim.height - offsets.t - offsets.b};
 			df.forIn(this.axes, clear);
 			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(this.plotArea); }, this);
-			
+
 			return this;
 		},
 		render: function(){
@@ -312,7 +335,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(this.dirty){
 				return this.fullRender();
 			}
-			
+
 			this.calculateGeometry();
 
 			// go over the stack backwards
@@ -353,14 +376,14 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			if(fill){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r, 
+					width:  dim.width  - offsets.l - offsets.r,
 					height: dim.height - offsets.t - offsets.b
 				}).setFill(fill);
 			}
 			if(stroke){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r - 1, 
+					width:  dim.width  - offsets.l - offsets.r - 1,
 					height: dim.height - offsets.t - offsets.b - 1
 				}).setStroke(stroke);
 			}
@@ -444,6 +467,26 @@ dojo.require("dojox.charting.plot2d.Bubble");
 			dojo.forEach(this.stack,  makeDirty);
 			dojo.forEach(this.series, makeDirty);
 			this.dirty = true;
+		},
+		_invalidateDependentPlots: function(plotName, /* Boolean */ verticalAxis){
+			if(plotName in this.plots){
+				var plot = this.stack[this.plots[plotName]], axis,
+					axisName = verticalAxis ? "vAxis" : "hAxis";
+				if(plot[axisName]){
+					axis = this.axes[plot[axisName]];
+					if(axis.dependOnData()){
+						axis.dirty = true;
+						// find all plots and mark them dirty
+						dojo.forEach(this.stack, function(p){
+							if(p[axisName] && p[axisName] == plot[axisName]){
+								p.dirty = true;
+							}
+						});
+					}
+				}else{
+					plot.dirty = true;
+				}
+			}
 		}
 	});
 })();
