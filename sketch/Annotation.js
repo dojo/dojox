@@ -46,7 +46,7 @@ dojo.require("dojox.sketch._Plugin");
 			//		dragging functions.
 			var f=this.figure;
 			var _=f.nextKey();
-			var a=new (this.annotation)(f, "annotation-"+_);
+			var a=new (this.annotation)(f, _);
 			a.transform={
 				dx:start.x/f.zoomFactor, 
 				dy:start.y/f.zoomFactor

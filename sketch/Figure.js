@@ -23,7 +23,6 @@ dojo.require("dojox.sketch.UndoStack");
 		this.zoomFactor=1;	//	multiplier for zooming.
 		
 		this.tools=null;	//	toolbar reference.
-		this.nextKey=function(){ return annCounter++; };
 
 		this.obj={};		//	lookup table for shapes.  Not keen on this solution.
 
@@ -282,7 +281,7 @@ dojo.require("dojox.sketch.UndoStack");
 		this.obj={};
 		this.shapes=[];
 	};
-
+	p.nextKey=function(){ return "annotation-"+annCounter++; };
 	p.draw=function(){ };
 	p.zoom=function(pct){
 		//	first get the new dimensions
