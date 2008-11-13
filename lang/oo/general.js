@@ -24,4 +24,9 @@ dojo.require("dojox.lang.oo.Decorator");
 				return oldValue.apply(this, newValue.apply(this, arguments));
 			} : oldValue;
 	});
+
+	oog.wrap = md(function(name, newValue, oldValue){
+		// summary: wraps the old values with a supplied function
+		return function(){ return newValue.call(this, oldValue, arguments); };
+	});
 })();

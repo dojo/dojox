@@ -31,6 +31,20 @@ dojo.require("dojox.lang.oo.Decorator");
 
 	// two standard decorators for method chaining
 
+	/*=====
+	ooc.before = md(function(name, newValue, oldValue){
+		// summary: chains new function before the old one
+
+		// dummy body
+	});
+
+	ooc.after = md(function(name, newValue, oldValue){
+		// summary: chains new function after the old one
+
+		// dummy body
+	});
+	=====*/
+
 	ooc.before = md(cb);
 	ooc.after  = md(ca);
 })();

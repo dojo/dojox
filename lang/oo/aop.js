@@ -2,21 +2,33 @@ dojo.provide("dojox.lang.oo.aop");
 
 dojo.require("dojox.lang.oo.Decorator");
 dojo.require("dojox.lang.oo.chain");
+dojo.require("dojox.lang.oo.general");
 
 (function(){
 	var oo = dojox.lang.oo, md = oo.makeDecorator, ooa = oo.aop;
 
 	// five decorators implementing light-weight AOP weaving
 
-	ooa.before = oo.chain.before;	// reuse one decorator
+	/*=====
+	ooa.before = md(function(name, newValue, oldValue){
+		// summary: creates a "before" advise, by calling new function
+		// before the old one
+
+		// dummy body
+	});
 
 	ooa.around = md(function(name, newValue, oldValue){
 		// summary: creates an "around" advise,
 		// the previous value is passed as a first argument and can be null,
 		// arguments are passed as a second argument
-		oldValue = typeof oldValue == "function" ? oldValue : null;
-		return function(){ return newValue.call(this, oldValue, arguments); };
+
+		// dummy body
 	});
+	=====*/
+
+	// reuse existing decorators
+	ooa.before = oo.chain.before;
+	ooa.around = oo.general.wrap;
 
 	ooa.afterReturning = md(function(name, newValue, oldValue){
 		// summary: creates an "afterReturning" advise,

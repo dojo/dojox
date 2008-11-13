@@ -12,7 +12,7 @@ dojo.require("dojox.lang.oo.chain");
 
 		defaultFilter = function(name){ return name; },
 
-		useChainAfter = {"init": 1}, useChainBefore = {"destroy": 1},
+		useChainAfter = {init: 1}, useChainBefore = {destroy: 1},
 
 		defaultDecorator = oo.defaultDecorator = function(name, newValue, oldValue){
 			//	summary:
@@ -65,7 +65,8 @@ dojo.require("dojox.lang.oo.chain");
 		// returns: Object:
 		//		target
 
-		var decorator, filter, i, l = arguments.length, name, targetName, prop;
+		var decorator, filter, i, l = arguments.length, name, targetName,
+			prop, newValue, oldValue;
 
 		for(i = 1; i < l; ++i){
 			// set up the new mixin cycle

@@ -24,7 +24,7 @@ dojo.provide("dojox.lang.oo.Decorator");
 	oo.makeDecorator = function(decorator){
 		//	summary:
 		//		creates new custom decorator creator
-		//	decorator: Function:
+		//	decorator: Function|Object:
 		//		a function to handle the custom assignment,
 		//		or an object with exec() method
 		//	returns: Function:
