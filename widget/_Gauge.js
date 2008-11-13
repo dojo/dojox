@@ -44,7 +44,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 
 	// image: String
 	// background image for gauge (default is no image)
-	image: '',
+	image: null,
 
 	// imageX: Number
 	// position of background image x coordinate (default is 0)
@@ -116,6 +116,9 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		if(this.imageY != -1){this.imageY = Number(this.imageY)};
 		if(this.imageWidth){this.imageWidth = Number(this.imageWidth)};
 		if(this.imageHeight){this.imageHeight = Number(this.imageHeight)};*/
+		if(this.image === null){
+			this.image={};
+		}
 
 		this.connect(this.gaugeContent, 'onmousemove', this.handleMouseMove);
 		this.connect(this.gaugeContent, 'onmouseover', this.handleMouseOver);
