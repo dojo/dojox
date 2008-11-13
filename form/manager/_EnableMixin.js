@@ -50,15 +50,13 @@ dojo.require("dojox.form.manager._Mixin");
 				defaultState = true;
 			}
 
-			var defaultValue = !defaultState;
-
 			this.inspectFormWidgets(aa(function(name, widget, value){
-				widget.attr("disabled", value);
-			}), state, defaultValue);
+				widget.attr("disabled", !value);
+			}), state, defaultState);
 
 			this.inspectFormElements(aa(function(name, node, value){
-				dojo.attr(node, "disabled", value);
-			}), state, defaultValue);
+				dojo.attr(node, "disabled", !value);
+			}), state, defaultState);
 
 			return this;	// self
 		},
