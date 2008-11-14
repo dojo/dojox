@@ -26,7 +26,8 @@
 	cursor:default;
 }
 
-.dojoxMultiSelectDisabled * {
+.dojoxMultiSelectDisabled *,
+.dojoxMultiSelectReadOnly * {
 	color:gray !important;
 }
 
