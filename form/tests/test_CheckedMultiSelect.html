@@ -147,8 +147,16 @@
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					ms3.attr("disabled", !ms3.disabled);
+					ss3.attr("disabled", !ss3.disabled);
 				</script>
 				Toggle Disabled
+			</button>
+			<button dojoType="dijit.form.Button">
+				<script type="dojo/method" event="onClick">
+					ms2.attr("readOnly", !ms2.readOnly);
+					ss2.attr("readOnly", !ss2.readOnly);
+				</script>
+				Toggle Read Only
 			</button>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">

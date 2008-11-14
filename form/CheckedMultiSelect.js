@@ -23,6 +23,10 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	//		Whether or not this widget is disabled
 	disabled: false,
 
+	// readOnly: boolean
+	//		Whether or not this widget is readOnly
+	readOnly: false,
+
 	postMixInProperties: function(){
 		// summary:
 		//		Set the appropriate _subClass value - based on if we are multi-
@@ -64,13 +68,21 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		// summary:
 		//		Sets the hover state depending on mouse state (passes through
 		//		to the check box)
-		this.checkBox._onMouse(e);
+		if(this.attr("disabled") || this.attr("readOnly")){
+			dojo.stopEvent(e);
+		}else{
+			this.checkBox._onMouse(e);
+		}
 	},
 	
 	_onClick: function(e){
 		// summary:
 		//		Sets the click state (passes through to the check box)
-		this.checkBox._onClick(e);
+		if(this.attr("disabled") || this.attr("readOnly")){
+			dojo.stopEvent(e);
+		}else{
+			this.checkBox._onClick(e);
+		}
 	},
 	
 	_updateBox: function(){
@@ -84,6 +96,14 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		//		Disables (or enables) all the children as well
 		this.checkBox.attr("disabled", value);
 		this.disabled = value;
+	},
+	
+	_setReadOnlyAttr: function(value){
+		// summary:
+		//		Sets read only (or unsets) all the children as well
+		this.checkBox.attr("readOnly", value);
+		this.checkBox._setStateClass();
+		this.readOnly = value;
 	}
 });
 
@@ -140,5 +160,20 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 				node.attr("disabled", value);
 			}
 		});
+	},
+	
+	_setReadOnlyAttr: function(value){
+		// summary:
+		//		Sets read only (or unsets) all the children as well
+		if("readOnly" in this.attributeMap){
+			this._attrToDom("readOnly", value);
+		}
+		this.readOnly = value;
+		dojo.forEach(this._getChildren(), function(node){
+			if(node && node.attr){
+				node.attr("readOnly", value);
+			}
+		});
+		this._setStateClass();
 	}
 });
