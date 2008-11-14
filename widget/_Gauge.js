@@ -835,7 +835,7 @@ dojo.declare("dojox.widget._Indicator",[dijit._Widget, dijit._Contained, dijit._
 
 	_update: function(event){
 		var value = this.valueNode.value;
-		if(value == ''){
+		if(value === ''){
 			this.value = null;
 		}else{
 			this.value = Number(value);
