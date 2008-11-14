@@ -7,7 +7,7 @@ dojo.experimental("dojox.widgets.AnalogGauge");
 
 dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 	getShapes: function(){
-		var shapes = new Array();
+		var shapes = [];
 		shapes[0] = this._gauge.surface.createLine({x1: 0, y1: -this.offset, 
 													x2: 0, y2: -this.length-this.offset})
 					.setStroke({color: this.color, width: this.width});
@@ -93,8 +93,8 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 			}
 		}else{
 			if(c!=v){
-				var anim = new d._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-				d.connect(anim, "onAnimate", d.hitch(this, function(step){
+				var anim = new dojo._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+				dojo.connect(anim, "onAnimate", dojo.hitch(this, function(step){
 					for(var i in this.shapes){
 						this.shapes[i].setTransform([{dx:this._gauge.cx,dy:this._gauge.cy}, dojox.gfx.matrix.rotateg(this._gauge._getAngle(step))]);
 						if(this.hover){
@@ -116,7 +116,7 @@ dojo.declare("dojox.widget.ArrowIndicator",[dojox.widget.AnalogLineIndicator],{
 		var x = Math.floor(this.width/2);
 		var head = this.width * 5;
 		var odd = (this.width & 1);
-		var shapes = new Array();
+		var shapes = [];
 		var points = [{x:-x,	 y:0},
 					  {x:-x,	 y:-this.length+head},
 					  {x:-2*x,	 y:-this.length+head},
@@ -146,7 +146,7 @@ dojo.declare("dojox.widget.NeedleIndicator",[dojox.widget.AnalogLineIndicator],{
 		var x = Math.floor(this.width/2);
 		var head = this.width * 5;
 		var odd = (this.width & 1);
-		var shapes = new Array();
+		var shapes = [];
 		var stroke = {color: this.color, width: 1};
 		if(this.color.type){
 			stroke.color = this.color.colors[0].color;
@@ -175,7 +175,7 @@ dojo.declare("dojox.widget.ArcIndicator",[dojox.widget.AnalogLineIndicator],{
 			var cossa = Math.cos(sa);
 			var sinsa = Math.sin(sa);
 			var off = this.offset + this.width;
-			var p = new Array('M');
+			var p = ['M'];
 			p.push(this._gauge.cx+this.offset*sinsa);
 			p.push(this._gauge.cy-this.offset*cossa);
 			p.push('A', this.offset, this.offset, 0, ((a-sa)>Math.PI)?1:0, 1);
@@ -199,8 +199,8 @@ dojo.declare("dojox.widget.ArcIndicator",[dojox.widget.AnalogLineIndicator],{
 			if(dontAnimate){
 				this._createArc(v);
 			}else{
-				var anim = new d._Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
-				d.connect(anim, "onAnimate", dojo.hitch(this, this._createArc));
+				var anim = new dojo._Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
+				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createArc));
 				anim.play();
 			}
 		}else{
@@ -361,6 +361,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 		// range:
 		//		A range is a dojox.widget.Range or an object
 		//		with similar parameters (low, high, hover, etc.).
+		var path;
 		if(range.shape) {
 			this.surface.remove(range.shape);
 			range.shape = null;

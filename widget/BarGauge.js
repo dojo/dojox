@@ -15,7 +15,7 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 		if(v < this._gauge.min){v = this._gauge.min;}
 		if(v > this._gauge.max){v = this._gauge.max;}
 		var pos = this._gauge._getPosition(v);
-		shapes = new Array();
+		var shapes = [];
 		if(this.width > 1){
 			shapes[0] = this._gauge.surface.createRect({
 				x:pos, 
@@ -105,8 +105,8 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 		if(dontAnimate){
 			this.shapes[0].applyTransform(dojox.gfx.matrix.translate(v-(this.shapes[0].matrix?this.shapes[0].matrix.dx:0),0));
 		}else{
-			var anim = new d._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-			d.connect(anim, "onAnimate", dojo.hitch(this, function(jump){
+			var anim = new dojo._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+			dojo.connect(anim, "onAnimate", dojo.hitch(this, function(jump){
 				this.shapes[0].applyTransform(dojox.gfx.matrix.translate(jump-(this.shapes[0].matrix?this.shapes[0].matrix.dx:0),0));
 			}));
 			anim.play();
@@ -125,7 +125,7 @@ dojo.declare("dojox.widget.BarIndicator",[dojox.widget.BarLineIndicator],{
 		if(pos == this.dataX){pos = this.dataX+1;}
 		var y = this._gauge.dataY + Math.floor((this._gauge.dataHeight - this.width)/2) + this.offset;
 
-		shapes = new Array();
+		var shapes = [];
 		shapes[0] = this._gauge.surface.createRect({x:this._gauge.dataX, y:y, width:pos - this._gauge.dataX, height:this.width});
 		shapes[0].setStroke({color: this.color});
 		shapes[0].setFill(this.color);
@@ -142,7 +142,7 @@ dojo.declare("dojox.widget.BarIndicator",[dojox.widget.BarLineIndicator],{
 	_createShapes: function(val){
 		for (var i in this.shapes) {
 			i = this.shapes[i];
-			var newShape = new Object()
+			var newShape = {};
 			for(var j in i){
 				newShape[j] = i[j];
 			}
@@ -167,22 +167,8 @@ dojo.declare("dojox.widget.BarIndicator",[dojox.widget.BarLineIndicator],{
 			this._createShapes(v);
 		}else{
 			if(c!=v){
-				var anim = new d._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-				d.connect(anim, "onAnimate", dojo.hitch(this, this._createShapes)); /*function(jump){
-					for (var i in this.shapes) {
-						i = this.shapes[i];
-						var newShape = new Object()
-						for(var j in i){
-							newShape[j] = i[j];
-						}
-						if(i.shape.type == "line"){
-							newShape.shape.x2 = jump+newShape.shape.x1;
-						}else if(i.shape.type == "rect"){
-							newShape.width = jump;
-						}
-						i.setShape(newShape);
-					}
-				}));*/
+				var anim = new dojo._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createShapes)); 
 				anim.play();
 			}
 		}
@@ -269,7 +255,7 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 		// description:
 		//		Draws the bar graph by drawing the surface, the ranges, and the indicators.
 
-		if (!this.surface) this.createSurface();
+		if(!this.surface){this.createSurface();}
 
 		var i;
 		if(this.rangeData){
@@ -303,10 +289,10 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 
 		var x1 = this._getPosition(range.low);
 		var x2 = this._getPosition(range.high);
-		path = this.surface.createRect({x:x1, 
-										y:this.dataY, 
-										width:x2-x1, 
-										height:this.dataHeight});
+		var path = this.surface.createRect({x:x1, 
+											y:this.dataY, 
+											width:x2-x1, 
+											height:this.dataHeight});
 		if(dojo.isArray(range.color) || dojo.isString(range.color)){
 			path.setStroke({color: range.color});
 			path.setFill(range.color);
@@ -339,7 +325,7 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 		var range = null;
 		var pos = dojo.coords(this.gaugeContent);
 		var x = event.clientX - pos.x;
-		var value = widget._getValueForPosition(x);
+		var value = this._getValueForPosition(x);
 		for(var i=0; (i<this.rangeData.length) && !range; i++) {
 			if((Number(this.rangeData[i].low) <= value) && (Number(this.rangeData[i].high) >= value)){
 				range = this.rangeData[i];
