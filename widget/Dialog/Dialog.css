@@ -91,7 +91,7 @@ div.dojoxDialogNoTitle {
 	cursor: pointer;
 	z-index: 999;
 }
-.dj_ie .dojoxDialogCloseIcon {
+.dj_ie6 .dojoxDialogCloseIcon {
 	background-image: url("images/dialogCloseButton.gif");
 }
 
