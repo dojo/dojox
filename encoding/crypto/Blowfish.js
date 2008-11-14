@@ -278,7 +278,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 		switch(out){
 			case dojox.encoding.crypto.outputTypes.Hex:{
 				return dojo.map(iv, function(item){
-					return item.toString(16);
+					return (item<=0xf?'0':'')+item.toString(16);
 				}).join("");			//	string
 			}
 			case dojox.encoding.crypto.outputTypes.String:{
@@ -331,7 +331,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 		//	summary
 		//	encrypts plaintext using key; allows user to specify output type and cipher mode via keyword object "ao"
 		var out=dojox.encoding.crypto.outputTypes.Base64;
-		var mode=dojox.encoding.crypto.cipherModes.EBC;
+		var mode=dojox.encoding.crypto.cipherModes.ECB;
 		if (ao){
 			if (ao.outputType) out=ao.outputType;
 			if (ao.cipherMode) mode=ao.cipherMode;
@@ -378,7 +378,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 		switch(out){
 			case dojox.encoding.crypto.outputTypes.Hex:{
 				return dojo.map(cipher, function(item){
-					return item.toString(16);
+					return (item<=0xf?'0':'')+item.toString(16);
 				}).join("");	//	string
 			}
 			case dojox.encoding.crypto.outputTypes.String:{
@@ -397,7 +397,7 @@ dojox.encoding.crypto.Blowfish = new function(){
 		//	summary
 		//	decrypts ciphertext using key; allows specification of how ciphertext is encoded via ao.
 		var ip=dojox.encoding.crypto.outputTypes.Base64;
-		var mode=dojox.encoding.crypto.cipherModes.EBC;
+		var mode=dojox.encoding.crypto.cipherModes.ECB;
 		if (ao){
 			if (ao.outputType) ip=ao.outputType;
 			if (ao.cipherMode) mode=ao.cipherMode;
