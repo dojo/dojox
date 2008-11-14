@@ -172,7 +172,7 @@ dojo.require("dojox.sketch.UndoStack");
 			self._absEnd={x:x, y:y};
 			if(self._c){
 				//self._c.doChange({dx:dx, dy:dy});
-				self._c.setBinding({dx:Math.round(dx/self.zoomFactor), dy:Math.round(dy/self.zoomFactor)});
+				self._c.setBinding({dx:dx/self.zoomFactor, dy:dy/self.zoomFactor});
 				self._lp={x:x, y:y};
 			} else {
 				self._end={x:dx, y:dy};

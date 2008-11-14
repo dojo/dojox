@@ -27,9 +27,17 @@ dojo.require("dojox.sketch.Anchor");
 		
 		for(var i=0; i<obj.childNodes.length; i++){
 			var c=obj.childNodes[i];
-			if(c.localName=="text"){ 
+			if(c.localName=="text"){
 				this.property('label',c.childNodes[0].nodeValue);
-			}else if(c.localName=="line"){
+				var style=c.getAttribute('style');
+				var m=style.match(/fill:([^;]+);/);
+				if(m){
+					var stroke=this.property('stroke');
+					stroke.collor=m[1];
+					this.property('stroke',stroke);
+					this.property('fill',stroke.collor);
+				}
+			}/*else if(c.localName=="line"){
 				var stroke=this.property('stroke');
 				var style=c.getAttribute('style');
 				var m=style.match(/stroke:([^;]+);/)[1];
@@ -42,7 +50,7 @@ dojo.require("dojox.sketch.Anchor");
 					stroke.width=m;
 				}
 				this.property('stroke',stroke);
-			}
+			}*/
 		}
 	};
 	
@@ -106,8 +114,8 @@ dojo.require("dojox.sketch.Anchor");
 	p.serialize=function(){
 		var s=this.property('stroke');
 		return '<g '+this.writeCommonAttrs()+'>'
-			+ '<line x1="1" x2="'+this.labelShape.getTextWidth()+1+'" y1="5" y2="5" style="stroke:'+s.color+';stroke-width:'+s.width+';" />'
-			+ '<text style="fill:'+this.property('fill')+';" font-weight="bold" '
+			//+ '<line x1="1" x2="'+this.labelShape.getTextWidth()+1+'" y1="5" y2="5" style="stroke:'+s.color+';stroke-width:'+s.width+';" />'
+			+ '<text style="fill:'+this.property('fill')+';" font-weight="bold" text-decoration="underline" '
 			+ 'x="0" y="0">'
 			+ this.property('label')
 			+ '</text>'
