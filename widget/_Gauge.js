@@ -170,6 +170,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 	},
 	
 	_setTicks: function(/*Object*/ oldTicks, /*Object*/ newTicks, /*Boolean*/ label){
+		var i;
 		if(oldTicks && dojo.isArray(oldTicks._ticks)){
 			for(i=0; i<oldTicks._ticks.length; i++){
 				this.removeIndicator(oldTicks._ticks[i]);
@@ -180,7 +181,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 				  noChange: true};
 		if(newTicks.color){ t.color = newTicks.color; }
 		newTicks._ticks = [];
-		for(var i=this.min; i<=this.max; i+=newTicks.interval){
+		for(i=this.min; i<=this.max; i+=newTicks.interval){
 			t.value = i;
 			if(label){t.label = ''+i;}
 			newTicks._ticks.push(this.addIndicator(t));
@@ -259,12 +260,14 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		// range:
 		//		A range is either a dojox.widget.Range object, or a object 
 		//		with similar parameters (low, high, hover, etc.).
-		if (!this.rangeData) this.rangeData = new Array();
+		if(!this.rangeData){ 
+			this.rangeData = [];
+		}
 		var range;
 		for(var i=0; i<ranges.length; i++){
 			range = ranges[i];
-			if((this.min == null) || (range.low < this.min)){this.min = range.low;}
-			if((this.max == null) || (range.high > this.max)){this.max = range.high;}
+			if((this.min === null) || (range.low < this.min)){this.min = range.low;}
+			if((this.max === null) || (range.high > this.max)){this.max = range.high;}
 
 			if(!range.color){
 				var colorIndex = this.rangeData.length % this.defaultColors.length;
@@ -299,7 +302,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		if(!indicator.hideValues){
 			this.containerNode.appendChild(indicator.domNode);
 		}
-		if(!this.indicatorData){this.indicatorData = new Array();}
+		if(!this.indicatorData){this.indicatorData = [];}
 		this.indicatorData[this.indicatorData.length] = indicator;
 		indicator.draw();
 		return indicator;
@@ -372,7 +375,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		// txt:		String
 		//			The text to put in the tooltip.
 		if(this.lastHover != txt){
-			if(txt != ''){ 
+			if(txt !== ''){ 
 				dijit.hideTooltip(this.mouseNode);
 				dijit.showTooltip(txt,this.mouseNode);
 			}else{
@@ -625,7 +628,7 @@ dojo.declare("dojox.widget.Gradient",[dijit._Widget, dijit._Templated, dijit._Co
 			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
 		}
 
-		this.colors = new Array();
+		this.colors = [];
 
 		if(this.hasChildren()){
 			var children = this.getChildren();
@@ -816,8 +819,9 @@ dojo.declare("dojox.widget._Indicator",[dijit._Widget, dijit._Contained, dijit._
 	templatePath: dojo.moduleUrl("dojox.widget", "Gauge/Indicator.html"),
 
 	startup: function() {
-		if( this.onDragMove )
+		if(this.onDragMove){
 			this.onDragMove = dojo.hitch(this.onDragMove);
+		}
 	},
 
 	postCreate: function() {
