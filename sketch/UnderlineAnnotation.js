@@ -83,9 +83,9 @@ dojo.require("dojox.sketch.Anchor");
 		this.shape=this.lineShape=this.labelShape=null;
 	};
 	p.getBBox=function(){
-		var b=this.getTextBox(this.figure.zoomFactor);
+		var b=this.getTextBox();
 //		console.log('getBBox',b,this.getLabel());
-		return { x:0, y:b.h*-1+4, width:b.w+2, height:b.h };
+		return { x:0, y:(b.h*-1+4)/this.figure.zoomFactor, width:(b.w+2)/this.figure.zoomFactor, height:b.h/this.figure.zoomFactor };
 	};
 	p.draw=function(obj){
 		this.apply(obj);

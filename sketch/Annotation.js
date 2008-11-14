@@ -22,6 +22,9 @@ dojo.require("dojox.sketch._Plugin");
 			}
 		},
 		onMouseUp: function(e){
+			if(!this._omd){
+				return;
+			}
 			this._omd=false;
 			var f=this.figure;
 			if(this._cshape){ 
@@ -246,14 +249,14 @@ dojo.require("dojox.sketch._Plugin");
 		}
 	};
 	ta.Annotation.Modes={ View:0, Edit:1 };
-	ta.Annotation.register=function(name){
+	ta.Annotation.register=function(name,toolclass){
 		var cls=ta[name+'Annotation'];
 		ta.registerTool(name, function(p){
 			dojo.mixin(p, {
 				shape: name,
 				annotation:cls
 			});
-			return new ta.AnnotationTool(p);
+			return new (toolclass || ta.AnnotationTool)(p);
 		});
 	};
 })();
