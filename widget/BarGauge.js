@@ -7,7 +7,10 @@ dojo.experimental("dojox.widgets.BarGauge");
 
 dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 	width: 1,
-	getShapes: function(){
+	_getShapes: function(){
+		// summary:
+		//		Private function for generating the shapes for this indicator. An indicator that behaves the 
+		//		same might override this one and simply replace the shapes (such as BarIndicator).
 		if(!this._gauge){
 			return null;
 		}
@@ -37,9 +40,13 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 		return shapes;
 	},
 	draw: function(/*Boolean?*/ dontAnimate){
+		// summary: 
+		//		Override of dojox.widget._Indicator.draw
+		// dontAnimate: Boolean
+		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
 		var i;
 		if(this.shapes){
-			this.move(dontAnimate);
+			this._move(dontAnimate);
 		}else{
 			if(this.shapes){
 				for(i=0; i<this.shapes.length; i++){
@@ -52,22 +59,14 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 				this.text = null;
 			}
 	
-			// save original settings
-			var iColor = this.color;
-			var iLength = this.length;
-			var iWidth = this.width;
-			var iOffset = this.offset;
-			var iHighlight = this.highlight;
+			this.color = this.color || '#000000';
+			this.length = this.length || this._gauge.dataHeight;
+			this.width = this.width || 3;
+			this.offset = this.offset || 0;
+			this.highlight = this.highlight || '#4D4D4D';
+			this.highlight2 = this.highlight2 || '#A3A3A3';
 	
-			// modify this with defaults 
-			if(!this.color){this.color = '#000000';}
-			if(!this.length){this.length = this._gauge.dataHeight;}
-			if(!this.width){this.width = 3;}
-			if(!this.offset){this.offset = 0;}
-			if(!this.highlight){this.highlight = '#4d4d4d';}
-			if(!this.highlight2){this.highlight2 = '#a3a3a3';}
-	
-			this.shapes = this.getShapes(this._gauge, this);
+			this.shapes = this._getShapes(this._gauge, this);
 			if(this.label){
 				var v = this.value;
 				if(v < this._gauge.min){v = this._gauge.min;}
@@ -75,13 +74,6 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 				var pos = this._gauge._getPosition(v);
 				this.text = this._gauge.drawText(''+this.label, pos, this._gauge.dataY + this.offset - 5, 'middle','top', this.color, this.font);
 			}
-	
-			// restore original settings after callback
-			this.color = iColor;
-			this.length = iLength;
-			this.width = iWidth;
-			this.offset = iOffset;
-			this.highlight = iHighlight;
 	
 			for(i=0; i<this.shapes.length; i++){
 				if(this.hover){
@@ -95,7 +87,11 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 			this.currentValue = this.value;
 		}
 	},
-	move: function(/*Boolean?*/ dontAnimate){
+	_move: function(/*Boolean?*/ dontAnimate){
+		// summary: 
+		//		Moves this indicator (since it's already been drawn once)
+		// dontAnimate: Boolean
+		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
 		var v = this.value ;
 		if(v < this.min){v = this.min;}
 		if(v > this.max){v = this.max;}
@@ -114,7 +110,9 @@ dojo.declare("dojox.widget.BarLineIndicator",[dojox.widget._Indicator],{
 	}
 });
 dojo.declare("dojox.widget.BarIndicator",[dojox.widget.BarLineIndicator],{
-	getShapes: function(){
+	_getShapes: function(){
+		// summary:
+		//		Override of dojox.widget.BarLineIndicator._getShapes
 		if(!this._gauge){
 			return null;
 		}
@@ -140,6 +138,8 @@ dojo.declare("dojox.widget.BarIndicator",[dojox.widget.BarLineIndicator],{
 		return shapes;
 	},
 	_createShapes: function(val){
+		// summary:
+		//		Creates a shallow copy of the current shapes while adjusting for the new value
 		for (var i in this.shapes) {
 			i = this.shapes[i];
 			var newShape = {};
@@ -154,7 +154,9 @@ dojo.declare("dojox.widget.BarIndicator",[dojox.widget.BarLineIndicator],{
 			i.setShape(newShape);
 		}
 	},
-	move: function(/*Boolean?*/ dontAnimate){
+	_move: function(/*Boolean?*/ dontAnimate){
+		// summary:
+		//		Override of dojox.widget.BarLineIndicator._move to resize the bar (rather than moving it)
 		var changed = false;
 		var c;
 		var v = this.value ;
@@ -212,6 +214,7 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 	// height of data area (default is bar graph width - 10)
 	dataHeight: 0,
 
+	// _defaultIndicator: override of dojox.widget._Gauge._defaultIndicator
 	_defaultIndicator: dojox.widget.BarLineIndicator,
 
 	startup: function(){
@@ -258,17 +261,17 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 		if(!this.surface){this.createSurface();}
 
 		var i;
-		if(this.rangeData){
-			for(i=0; i<this.rangeData.length; i++){
-				this.drawRange(this.rangeData[i]);
+		if(this._rangeData){
+			for(i=0; i<this._rangeData.length; i++){
+				this.drawRange(this._rangeData[i]);
 			}
-			if(this.img && this.imageOverlay){
-				this.img.moveToFront();
+			if(this._img && this.image.overlay){
+				this._img.moveToFront();
 			}
 		}
-		if(this.indicatorData){
-			for(i=0; i<this.indicatorData.length; i++){
-				this.indicatorData[i].draw();
+		if(this._indicatorData){
+			for(i=0; i<this._indicatorData.length; i++){
+				this._indicatorData[i].draw();
 			}
 		}
 	},
@@ -326,15 +329,17 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 		var pos = dojo.coords(this.gaugeContent);
 		var x = event.clientX - pos.x;
 		var value = this._getValueForPosition(x);
-		for(var i=0; (i<this.rangeData.length) && !range; i++) {
-			if((Number(this.rangeData[i].low) <= value) && (Number(this.rangeData[i].high) >= value)){
-				range = this.rangeData[i];
+		for(var i=0; (i<this._rangeData.length) && !range; i++) {
+			if((Number(this._rangeData[i].low) <= value) && (Number(this._rangeData[i].high) >= value)){
+				range = this._rangeData[i];
 			}
 		}
 		return range;
 	},
 
 	_dragIndicator: function(/*Object*/ widget, /*Object*/ event){
+		// summary:
+		//		Handles the dragging of an indicator, including moving/re-drawing
 		// get new value based on mouse position
 		var pos = dojo.coords(widget.gaugeContent);
 		var x = event.clientX - pos.x;
@@ -342,11 +347,11 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget._Gauge,{
 		if(value < widget.min){value = widget.min;}
 		if(value > widget.max){value = widget.max;}
 		// update the indicator
-		widget.drag.value = value;
+		widget._drag.value = value;
 		// callback
-		widget.drag.onDragMove(widget.drag);
+		widget._drag.onDragMove(widget._drag);
 		// redraw/move indicator(s)
-		widget.drag.draw(true);
+		widget._drag.draw(true);
 		dojo.stopEvent(event);
 	}
 });

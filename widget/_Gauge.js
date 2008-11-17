@@ -46,26 +46,6 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 	// background image for gauge (default is no image)
 	image: null,
 
-	// imageX: Number
-	// position of background image x coordinate (default is 0)
-	imageX: -1,
-
-	// imageY: Number
-	// position of background image y coordinate (default is 0)
-	imageY: -1,
-
-	// imageWidth: Number
-	// width of background image (default is gauge width)
-	imageWidth: 0,
-
-	// imageHeight: Number
-	// height of background image (default is gauge width)
-	imageHeight: 0,
-
-	// imageOverlay: Boolean
-	// indicates background image is overlay (default is false)
-	imageOverlay: false,
-
 	// useRangeStyles: Number
 	// indicates whether to use given css classes (dojoxGaugeRangeXX)
 	// to determine the color (and other style attributes?) of the ranges
@@ -78,14 +58,28 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 	// indicates whether tooltips should be displayed for ranges, indicators, etc.
 	useTooltip: true,
 	
-	majorTicks: {},
-	minorTicks: {},
-//	image: {},
+	// majorTicks: Object
+	// An object representing the tick marks that should be added to the gauge. Major tick marks have a text label
+	// indicating the value.  The object can have the following attributes (required are marked with a *):
+	//		offset: the distance from the 'center' of the gauge.  Used differently for Analog vs. Bar
+	//		width: The width of the mark
+	//		length: The length of the mark
+	//		interval: The interval the ticks should be added on
+	//		color: The color of the mark and text
+	majorTicks: null,
+	
+	// minorTicks: Object
+	// An object of the same format as majorTicks, indicating where the minor (label-less) marks should be placed
+	minorTicks: null,
 
-	// internal data
-	gaugeContent: undefined,
-	templatePath: dojo.moduleUrl("dojox.widget", "Gauge/_Gauge.html"),
+	// _defaultIndicator: Objection
+	// Should be overridden by any extending classes and used to indicate what the 'default' indicator is.
+	// This object is used as the indicator when creating tick marks or when an anonmyous object is passed into 
+	// addIndicator.
+	_defaultIndicator: null,
 
+	// defaultColors: Array
+	// Set of default colors to color ranges with.
 	defaultColors: [[0x00,0x54,0xAA,1],
 					[0x44,0x77,0xBB,1],
 					[0x66,0x99,0xCC,1],
@@ -93,29 +87,35 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 					[0x99,0xCC,0xFF,1],
 					[0xCC,0xEE,0xFF,1],
 					[0xDD,0xEE,0xFF,1]],
+	
+	// min: Number
+	// The minimum value of the gauge.  Normally not set explicitly, as it will be determined by
+	// the ranges that are added.
 	min: null,
+	
+	// max: Number
+	// The maximum value of the gauge.  Normally not set explicitly, as it will be determined by
+	// the ranges that are added.
 	max: null,
+	
+	// surface: Object
+	// The SVG/VML surface that the shapes are drawn on.  Can be accessed/used by indicators to draw themselves
 	surface: null,
-	rangeData: null,
-	indicatorData: null,
-	drag: null,
-	img: null,
-	overOverlay: false,
-	lastHover: '',
+
+	// internal data
+	gaugeContent: undefined,
+	templatePath: dojo.moduleUrl("dojox.widget", "Gauge/_Gauge.html"),
+	_rangeData: null,
+	_indicatorData: null,
+	_drag: null,
+	_img: null,
+	_overOverlay: false,
+	_lastHover: '',
 
 	startup: function(){
 		// handle settings from HTML by making sure all the options are
 		// converted correctly to numbers and that we calculate defaults
 		// for cx, cy and radius
-		/*this.width = Number(this.width);
-		this.height = Number(this.height);
-		if(this.min){this.min = Number(this.min)};
-		if(this.max){this.max = Number(this.max)};
-
-		if(this.imageX != -1){this.imageX = Number(this.imageX)};
-		if(this.imageY != -1){this.imageY = Number(this.imageY)};
-		if(this.imageWidth){this.imageWidth = Number(this.imageWidth)};
-		if(this.imageHeight){this.imageHeight = Number(this.imageHeight)};*/
 		if(this.image === null){
 			this.image={};
 		}
@@ -140,7 +140,6 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 				switch(children[i].declaredClass){
 					case "dojox.widget.Range":
 						ranges.push(children[i]);
-						/*this.addRange(children[i]);*/
 						break;
 					case "dojox.widget.Gradient":
 						var tmp = children[i].getFillObject();
@@ -158,18 +157,20 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		if (!this.surface){this.createSurface();}
 
 		this.addRanges(this.ranges);
-		if(this.minorTicks.interval){
+		if(this.minorTicks && this.minorTicks.interval){
 			this.setMinorTicks(this.minorTicks);
 		}
-		if(this.majorTicks.interval){
+		if(this.majorTicks && this.majorTicks.interval){
 			this.setMajorTicks(this.majorTicks);
 		}
 		for(i=0; i<this.indicators.length; i++){
 			this.addIndicator(this.indicators[i]);
 		}
 	},
-	
+
 	_setTicks: function(/*Object*/ oldTicks, /*Object*/ newTicks, /*Boolean*/ label){
+		// summary: 
+		//		internal method used to clear existing tick marks, then add new ones
 		var i;
 		if(oldTicks && dojo.isArray(oldTicks._ticks)){
 			for(i=0; i<oldTicks._ticks.length; i++){
@@ -190,10 +191,16 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 	},
 	
 	setMinorTicks: function(/*Object*/ ticks){
+		// summary:
+		//		Creates and draws the minor tick marks based on the passed object (expecting the same format
+		//		as the minorTicks object documented above)
 		this.minorTicks = this._setTicks(this.minorTicks, ticks, false);
 	},
 
 	setMajorTicks: function(/*Object*/ ticks){
+		// summary:
+		//		Creates and draws the major tick marks based on the passed object (expecting the same format
+		//		as the majorTicks object documented above)
 		this.majorTicks = this._setTicks(this.majorTicks, ticks, true);
 	},
 
@@ -221,20 +228,20 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		background.setFill(this.gaugeBackground);
 
 		if(this.image.url){
-			this.img = this.surface.createImage({width: this.image.width || this.width, height: this.image.height || this.height, src: this.image.url});
+			this._img = this.surface.createImage({width: this.image.width || this.width, height: this.image.height || this.height, src: this.image.url});
 			if(this.image.overlay){
-				this.img.getEventSource().setAttribute('overlay',true);
+				this._img.getEventSource().setAttribute('overlay',true);
 			}
 			if(dojox.gfx.vml && dojo.isIE < 7){
 				var end = this.image.substring(this.image.url.length - 3);
 				if((end == 'png') || (end == 'PNG')){
 					// use DirectX filter to correctly handle PNG transparency
-					this.img.rawNode.firstChild.src = dojo.moduleUrl('dojo.resources', 'blank.gif');
-					this.img.rawNode.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this.image.url+"',sizingMethod='scale');";
+					this._img.rawNode.firstChild.src = dojo.moduleUrl('dojo.resources', 'blank.gif');
+					this._img.rawNode.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this.image.url+"',sizingMethod='scale');";
 				}
 			}
 			if(this.image.x || this.image.y){
-				this.img.setTransform({dx: this.image.x || 0, dy: this.image.y || 0});
+				this._img.setTransform({dx: this.image.x || 0, dy: this.image.y || 0});
 			}
 		}
 	},
@@ -260,8 +267,8 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		// range:
 		//		A range is either a dojox.widget.Range object, or a object 
 		//		with similar parameters (low, high, hover, etc.).
-		if(!this.rangeData){ 
-			this.rangeData = [];
+		if(!this._rangeData){ 
+			this._rangeData = [];
 		}
 		var range;
 		for(var i=0; i<ranges.length; i++){
@@ -270,16 +277,16 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 			if((this.max === null) || (range.high > this.max)){this.max = range.high;}
 
 			if(!range.color){
-				var colorIndex = this.rangeData.length % this.defaultColors.length;
+				var colorIndex = this._rangeData.length % this.defaultColors.length;
 				if(dojox.gfx.svg && this.useRangeStyles > 0){
-					colorIndex = (this.rangeData.length % this.useRangeStyles)+1;
+					colorIndex = (this._rangeData.length % this.useRangeStyles)+1;
 					range.color = {style: "dojoxGaugeRange"+colorIndex};
 				}else{
-					colorIndex = this.rangeData.length % this.defaultColors.length;
+					colorIndex = this._rangeData.length % this.defaultColors.length;
 					range.color = this.defaultColors[colorIndex];
 				}
 			}
-			this.rangeData[this.rangeData.length] = range;
+			this._rangeData[this._rangeData.length] = range;
 		}
 		this.draw();
 	},
@@ -302,16 +309,19 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		if(!indicator.hideValues){
 			this.containerNode.appendChild(indicator.domNode);
 		}
-		if(!this.indicatorData){this.indicatorData = [];}
-		this.indicatorData[this.indicatorData.length] = indicator;
+		if(!this._indicatorData){this._indicatorData = [];}
+		this._indicatorData[this._indicatorData.length] = indicator;
 		indicator.draw();
 		return indicator;
 	},
 
 	removeIndicator: function(/*Object*/indicator){
-		for(var i=0; i<this.indicatorData.length; i++){
-			if(this.indicatorData[i] === indicator){
-				this.indicatorData.splice(i, 1);
+		// summary:
+		//		Removes the given indicator from the gauge by calling it's remove function 
+		//		and removing it from the local cache.
+		for(var i=0; i<this._indicatorData.length; i++){
+			if(this._indicatorData[i] === indicator){
+				this._indicatorData.splice(i, 1);
 				indicator.remove();
 				break;
 			}
@@ -374,14 +384,14 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		//		Updates the tooltip for the gauge to display the given text.
 		// txt:		String
 		//			The text to put in the tooltip.
-		if(this.lastHover != txt){
+		if(this._lastHover != txt){
 			if(txt !== ''){ 
 				dijit.hideTooltip(this.mouseNode);
 				dijit.showTooltip(txt,this.mouseNode);
 			}else{
 				dijit.hideTooltip(this.mouseNode);
 			}
-			this.lastHover = txt;
+			this._lastHover = txt;
 		}
 	},
 
@@ -393,13 +403,13 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		//			The event object
 		var hover = event.target.getAttribute('hover');
 		if(event.target.getAttribute('overlay')){
-			this.overOverlay = true;
+			this._overOverlay = true;
 			var r = this.getRangeUnderMouse(event);
 			if(r && r.hover){
 				hover = r.hover;
 			}
 		}
-		if(this.useTooltip && !this.drag){
+		if(this.useTooltip && !this._drag){
 			if(hover){
 				this.updateTooltip(hover, event);
 			}else{
@@ -415,7 +425,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		// event:	Object
 		//			The event object
 		if(event.target.getAttribute('overlay')){
-			this.overOverlay = false;
+			this._overOverlay = false;
 		}
 		if(this.useTooltip && this.mouseNode){
 			dijit.hideTooltip(this.mouseNode);
@@ -430,13 +440,13 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		//			The event object
 
 		// find the indicator being dragged
-		for(var i=0; i<this.indicatorData.length; i++){
-			var shapes = this.indicatorData[i].shapes;
+		for(var i=0; i<this._indicatorData.length; i++){
+			var shapes = this._indicatorData[i].shapes;
 			for(var s=0; s<shapes.length; s++){
 				if(shapes[s].getEventSource() == event.target){
-					 this.drag = this.indicatorData[i];
+					 this._drag = this._indicatorData[i];
 					 s = shapes.length;
-					 i = this.indicatorData.length;
+					 i = this._indicatorData.length;
 				}
 			}
 		}
@@ -449,7 +459,7 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 		//		the mouse to drag an indicator to modify it's value
 		// event:	Object
 		//			The event object
-		this.drag = null;
+		this._drag = null;
 		dojo.stopEvent(event);
 	},
 
@@ -463,10 +473,10 @@ dojo.declare("dojox.widget._Gauge",[dijit._Widget, dijit._Templated, dijit._Cont
 			dojo.style(this.mouseNode, 'left', event.pageX+1+'px');
 			dojo.style(this.mouseNode, 'top', event.pageY+1+'px');
 		}
-		if(this.drag){
+		if(this._drag){
 			this._dragIndicator(this, event);
 		}else{
-			if(this.useTooltip && this.overOverlay){
+			if(this.useTooltip && this._overOverlay){
 				var r = this.getRangeUnderMouse(event);
 				if(r && r.hover){
 					this.updateTooltip(r.hover, event);
@@ -641,6 +651,8 @@ dojo.declare("dojox.widget.Gradient",[dijit._Widget, dijit._Templated, dijit._Co
 	},
 
 	getFillObject: function(){
+		// summary:
+		//		Gets the fill object that this widget represents.
 		var fill = {
 			'type': this.type,
 			'x1': this.x1,
@@ -706,6 +718,8 @@ dojo.declare("dojox.widget.GradientColor",[dijit._Widget, dijit._Contained],{
 	color: "white",
 
 	getColorObject: function(){
+		// summary:
+		//		Gets the color object that this widget represents.
 		return {offset: this.offset, color: this.color};
 	}
 });
@@ -814,6 +828,9 @@ dojo.declare("dojox.widget._Indicator",[dijit._Widget, dijit._Contained, dijit._
 	noChange: false,
 
 	_gauge: null,
+	
+	// title: String
+	// The title of the indicator, to be displayed next to it's input box for the text-representation.
 	title: "",
 
 	templatePath: dojo.moduleUrl("dojox.widget", "Gauge/Indicator.html"),
@@ -834,6 +851,8 @@ dojo.declare("dojox.widget._Indicator",[dijit._Widget, dijit._Contained, dijit._
 	},
 
 	_update: function(event){
+		// summary:
+		//		A private function, handling the updating of the gauge
 		var value = this.valueNode.value;
 		if(value === ''){
 			this.value = null;
@@ -852,6 +871,9 @@ dojo.declare("dojox.widget._Indicator",[dijit._Widget, dijit._Contained, dijit._
 	},
 
 	update: function(value){
+		// summary:
+		//		Updates the value of the indicator, including moving/re-drawing at it's new location and 
+		//		updating the text box
 		if(!this.noChange){
 			this.valueNode.value = value;
 			this._update();
@@ -859,16 +881,23 @@ dojo.declare("dojox.widget._Indicator",[dijit._Widget, dijit._Contained, dijit._
 	},
 
 	onDragMove: function(){
+		// summary:
+		//		Handles updating the text box and the hover text while dragging an indicator
 		this.value = Math.floor(this.value);
 		this.valueNode.value = this.value;
 		this.hover = this.title+': '+this.value;
 	},
 
-	// draw: function
-	//	performs the initial drawing of the indicator.
-	draw: function(){},
+	draw: function(/* Boolean? */ dontAnimate){
+		// summary:
+		//		Performs the initial drawing of the indicator.
+		// dontAnimate:
+		//		Indicates if the drawing should not be animated (rather than teh default, to animate)
+	},
 
 	remove: function(){
+		// summary:
+		//		Removes the indicator's shapes from the gauge surface.
 		for(var i=0; i<this.shapes.length; i++){
 			this._gauge.surface.remove(this.shapes[i]);
 		}

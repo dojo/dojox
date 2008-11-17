@@ -6,7 +6,10 @@ dojo.require("dojox.widget._Gauge");
 dojo.experimental("dojox.widgets.AnalogGauge");
 
 dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
-	getShapes: function(){
+	_getShapes: function(){
+		// summary:
+		//		Private function for generating the shapes for this indicator. An indicator that behaves the 
+		//		same might override this one and simply replace the shapes (such as ArrowIndicator).
 		var shapes = [];
 		shapes[0] = this._gauge.surface.createLine({x1: 0, y1: -this.offset, 
 													x2: 0, y2: -this.length-this.offset})
@@ -14,42 +17,31 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 		return shapes;
 	},
 	draw: function(/*Boolean?*/ dontAnimate){
+		// summary: 
+		//		Override of dojox.widget._Indicator.draw
+		// dontAnimate: Boolean
+		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
 		if(this.shapes){
-			this.move(dontAnimate);
+			this._move(dontAnimate);
 		}else{
 			if(this.text){
 				this._gauge.surface.rawNode.removeChild(this.text);
 				this.text = null;
 			}
-	
+
 			var v = this.value;
 			if(v < this._gauge.min){v = this._gauge.min;}
 			if(v > this._gauge.max){v = this._gauge.max;}
 			var a = this._gauge._getAngle(v);
-	
-			// save original settings
-			var iColor = this.color;
-			var iLength = this.length;
-			var iWidth = this.width;
-			var iOffset = this.offset;
-			var iHighlight = this.highlight;
-	
-			// modify this with defaults 
-			if(!this.color){this.color = '#000000';}
-			if(!this.length){this.length = this._gauge.radius;}
-			if(!this.width){this.width = 1;}
-			if(!this.offset){this.offset = 0;}
-			if(!this.highlight){this.highlight = '#d0d0d0';}
-	
-			this.shapes = this.getShapes(this._gauge, this);
-	
-			// restore original settings after callback
-			this.color = iColor;
-			this.length = iLength;
-			this.width = iWidth;
-			this.offset = iOffset;
-			this.highlight = iHighlight;
-	
+
+			this.color = this.color || '#000000';
+			this.length = this.length || this._gauge.radius;
+			this.width = this.width || 1;
+			this.offset = this.offset || 0;
+			this.highlight = this.highlight || '#D0D0D0';
+
+			this.shapes = this._getShapes(this._gauge, this);
+
 			if(this.shapes){
 				for(var s = 0; s < this.shapes.length; s++){
 					this.shapes[s].setTransform([{dx:this._gauge.cx,dy:this._gauge.cy}, dojox.gfx.matrix.rotateg(a)]);
@@ -69,7 +61,7 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 				var x=this._gauge.cx+(len+5)*Math.sin(this._gauge._getRadians(a));
 				var y=this._gauge.cy-(len+5)*Math.cos(this._gauge._getRadians(a));
 				var align = 'start';
-				if(a < -30){align = 'end';}
+				if(a <= -30){align = 'end';}
 				if(a > -30 && a < 30){align='middle';}
 				var vAlign = 'bottom';
 				if((a < -90) || (a > 90)){vAlign = 'top';}
@@ -78,7 +70,11 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 			this.currentValue = this.value;
 		}
 	},
-	move: function(/*Boolean?*/ dontAnimate){
+	_move: function(/*Boolean?*/ dontAnimate){
+		// summary: 
+		//		Moves this indicator (since it's already been drawn once)
+		// dontAnimate: Boolean
+		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
 		var v = this.value;
 		if(v < this._gauge.min){v = this._gauge.min;}
 		if(v > this._gauge.max){v = this._gauge.max;}
@@ -109,7 +105,9 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 	}
 });
 dojo.declare("dojox.widget.ArrowIndicator",[dojox.widget.AnalogLineIndicator],{
-	getShapes: function(){
+	_getShapes: function(){
+		// summary: 
+		//		Override of dojox.widget.AnalogLineIndicator._getShapes
 		if(!this._gauge){
 			return null;
 		}
@@ -139,7 +137,9 @@ dojo.declare("dojox.widget.ArrowIndicator",[dojox.widget.AnalogLineIndicator],{
 	}
 });
 dojo.declare("dojox.widget.NeedleIndicator",[dojox.widget.AnalogLineIndicator],{
-	getShapes: function(){
+	_getShapes: function(){
+		// summary: 
+		//		Override of dojox.widget.AnalogLineIndicator._getShapes
 		if(!this._gauge){
 			return null;
 		}
@@ -192,6 +192,8 @@ dojo.declare("dojox.widget.ArcIndicator",[dojox.widget.AnalogLineIndicator],{
 		}
 	},
 	draw: function(/*Boolean?*/ dontAnimate){
+		// summary: 
+		//		Override of dojox.widget._Indicator.draw
 		var v = this.value;
 		if(v < this._gauge.min){v = this._gauge.min;}
 		if(v > this._gauge.max){v = this._gauge.max;}
@@ -270,6 +272,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 	// radius of gauge (default is smaller of cx-25 or cy-25)
 	radius: 0,
 
+	// _defaultIndicator: override of dojox.widget._Gauge._defaultIndicator
 	_defaultIndicator: dojox.widget.AnalogLineIndicator,
 
 	startup: function(){
@@ -337,17 +340,17 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 		// description:
 		//		Draws the gauge by drawing the surface, the ranges, and the indicators.
 		var i;
-		if (this.rangeData){
-			for(i=0; i<this.rangeData.length; i++){
-				this.drawRange(this.rangeData[i]);
+		if (this._rangeData){
+			for(i=0; i<this._rangeData.length; i++){
+				this.drawRange(this._rangeData[i]);
 			}
-			if(this.img && this.image.overlay){
-				this.img.moveToFront();
+			if(this._img && this.image.overlay){
+				this._img.moveToFront();
 			}
 		}
-		if(this.indicatorData){
-			for(i=0; i<this.indicatorData.length; i++){
-				this.indicatorData[i].draw();
+		if(this._indicatorData){
+			for(i=0; i<this._indicatorData.length; i++){
+				this._indicatorData[i].draw();
 			}
 		}
 	},
@@ -438,9 +441,9 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 			var angle = this._getDegrees(Math.atan2(y - this.cy, x - this.cx) + Math.PI/2);
 			//if(angle > this.endAngle){angle = angle - 360;}
 			var value = this._getValueForAngle(angle);
-			for(var i=0; (i<this.rangeData.length) && !range; i++){
-				if((Number(this.rangeData[i].low) <= value) && (Number(this.rangeData[i].high) >= value)){
-					range = this.rangeData[i];
+			for(var i=0; (i<this._rangeData.length) && !range; i++){
+				if((Number(this._rangeData[i].low) <= value) && (Number(this._rangeData[i].high) >= value)){
+					range = this._rangeData[i];
 				}
 			}
 		}
@@ -448,6 +451,8 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 	},
 
 	_dragIndicator: function(/*Object*/ widget, /*Object*/ event){
+		// summary:
+		//		Handles the dragging of an indicator, including moving/re-drawing
 		// get angle for mouse position
 		var pos = dojo.coords(widget.gaugeContent);
 		var x = event.clientX - pos.x;
@@ -459,12 +464,12 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 		if(value < widget.min){value = widget.min;}
 		if(value > widget.max){value = widget.max;}
 		// update the indicator
-		widget.drag.value = value;
-		widget.drag.currentValue = value;
+		widget._drag.value = value;
+		widget._drag.currentValue = value;
 		// callback
-		widget.drag.onDragMove(widget.drag);
+		widget._drag.onDragMove(widget._drag);
 		// rotate indicator
-		widget.drag.draw(true);
+		widget._drag.draw(true);
 		dojo.stopEvent(event);
 	}
 });
