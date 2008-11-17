@@ -103,12 +103,14 @@ dojo.require("dojox.sketch.Anchor");
 		this.zoom();
 	};
 	p.zoom=function(pct){
-		pct = pct || this.figure.zoomFactor;
-		ta.Annotation.prototype.zoom.call(this,pct);
-		this.lineShape.setShape({ x1:1, x2:this.labelShape.getTextWidth()+1, y1:2, y2:2 })
-			.setStroke({ color:this.property('fill'), width:1/pct });
-		if(this.mode==ta.Annotation.Modes.Edit){
-			this.drawBBox(); //the bbox is dependent on the size of the text, so need to update it here
+		if(this.lineShape){
+			pct = pct || this.figure.zoomFactor;
+			ta.Annotation.prototype.zoom.call(this,pct);
+			this.lineShape.setShape({ x1:1, x2:this.labelShape.getTextWidth()+1, y1:2, y2:2 })
+				.setStroke({ color:this.property('fill'), width:1/pct });
+			if(this.mode==ta.Annotation.Modes.Edit){
+				this.drawBBox(); //the bbox is dependent on the size of the text, so need to update it here
+			}
 		}
 	};
 	p.serialize=function(){

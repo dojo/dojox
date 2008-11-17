@@ -56,14 +56,14 @@ dojo.require("dojox.sketch.Anchor");
 				if(c.getAttribute('r')!==null){ this.radius=parseFloat(c.getAttribute('r'),10); }
 				var stroke=this.property('stroke');
 				var style=c.getAttribute('style');
-				var m=style.match(/stroke:([^;]+);/)[1];
+				var m=style.match(/stroke:([^;]+);/);
 				if(m){
-					stroke.color=m;
-					this.property('fill',m);
+					stroke.color=m[1];
+					this.property('fill',m[1]);
 				}
-				m=style.match(/stroke-width:([^;]+);/)[1];
+				m=style.match(/stroke-width:([^;]+);/);
 				if(m){
-					stroke.width=m;
+					stroke.width=m[1];
 				}
 				this.property('stroke',stroke);
 			}
@@ -135,9 +135,11 @@ dojo.require("dojox.sketch.Anchor");
 		this.zoom();
 	};
 	p.zoom=function(pct){
-		pct = pct || this.figure.zoomFactor;
-		this.rectShape.setStroke({color:this.property('fill'), width:1/pct});
-		ta.Annotation.prototype.zoom.call(this,pct);
+		if(this.rectShape){
+			pct = pct || this.figure.zoomFactor;
+			this.rectShape.setStroke({color:this.property('fill'), width:1/pct});
+			ta.Annotation.prototype.zoom.call(this,pct);
+		}
 	};
 	p.serialize=function(){
 		var s=this.property('stroke');

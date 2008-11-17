@@ -10,7 +10,7 @@ dojo.require("dojox.sketch.UndoStack");
 	ta.registerTool=function(type, fn){ ta.tools[type]=fn; };
 	ta.Figure = function(mixin){
 		var self=this;
-		var annCounter=1;
+		this.annCounter=1;
 
 		this.shapes=[];
 		this.image=null;
@@ -281,7 +281,7 @@ dojo.require("dojox.sketch.UndoStack");
 		this.obj={};
 		this.shapes=[];
 	};
-	p.nextKey=function(){ return "annotation-"+annCounter++; };
+	p.nextKey=function(){ return "annotation-"+this.annCounter++; };
 	p.draw=function(){ };
 	p.zoom=function(pct){
 		//	first get the new dimensions
