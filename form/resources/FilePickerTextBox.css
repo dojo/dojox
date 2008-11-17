@@ -45,7 +45,7 @@
 .tundra .dojoxFilePickerTextBoxDisabled {
 	color: gray;
 }
-.dj_safari .tundra .dojoxFilePickerTextBoxDisabled {
+.dj_webkit .tundra .dojoxFilePickerTextBoxDisabled {
 	color: #eee;
 }
 .tundra .dojoxFilePickerTextBox .dijitInputField {

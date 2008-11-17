@@ -9,7 +9,7 @@
 .dijitToolbar .dojoxDropDownSelect {
 	margin: 0;
 }
-.dj_safari .dijitToolbar .dojoxDropDownSelect {
+.dj_webkit .dijitToolbar .dojoxDropDownSelect {
 	padding-left: 0.3em;
 }
 .dijit_a11y .dojoxDropDownSelectDisabled .dijitButtonNode {

@@ -15,7 +15,7 @@
 }
 
 .dj_ie .dojoxMultiSelect,
-.dj_safari .dojoxMultiSelect {
+.dj_webkit .dojoxMultiSelect {
 	/* So that the scroll bar doesn't cover stuff up */
 	padding-right: 15px;
 }

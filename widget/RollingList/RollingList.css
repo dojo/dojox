@@ -27,7 +27,7 @@
 	position: static !important;
 }
 
-.dj_safari .dojoxRollingListPane,
+.dj_webkit .dojoxRollingListPane,
 .dj_ie .dojoxRollingListPane {
 	padding-right: 15px; /* Account for scroll bar */
 }
