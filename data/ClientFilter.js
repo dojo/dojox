@@ -2,7 +2,7 @@ dojo.provide("dojox.data.ClientFilter");
 dojo.require("dojo.data.util.filter"); 
 // This is an abstract data store module for adding updateable result set functionality to an existing data store class
 (function(){
-	var lrs;
+	var cf;
 	var addUpdate = function(store,create,remove){
 		// create a handler that adds to the list of notifications
 		return function(item){
@@ -10,10 +10,10 @@ dojo.require("dojo.data.util.filter");
 					create:create && item,
 					remove:remove && item
 				});
-			lrs.onUpdate();
+			cf.onUpdate();
 		}
 	};
-	lrs = dojo.declare("dojox.data.ClientFilter",
+	cf = dojo.declare("dojox.data.ClientFilter",
 		null,
 		{
 			constructor: function(){
@@ -44,9 +44,9 @@ dojo.require("dojo.data.util.filter");
 				// 		This can be defined in the constructor options for ServiceStore/JsonRestStore and subtypes. 
 				//
 				// example:
-				//		to make a live-result-set data store from an existing data store:
+				//		to make a updated-result-set data store from an existing data store:
 				//	|	dojo.declare("dojox.data.MyLiveDataStore",
-				//	|		dojox.data.MyDataStore,dojox.data.LiveResultSets], // subclass LiveResultSets if available
+				//	|		dojox.data.MyDataStore,dojox.data.ClientFilter], // subclass LiveResultSets if available
 				//	|		{}
 				//	|	);
 				this.onSet = addUpdate(this,true,true);
@@ -259,5 +259,5 @@ dojo.require("dojo.data.util.filter");
 			}
 		}
 	);
-	lrs.onUpdate = function(){};
+	cf.onUpdate = function(){};
 })();
