@@ -68,6 +68,16 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	//	all at once.
 	preloadItems: 50,
 
+	// selectDirectories: boolean
+	//  whether or not we allow selection of directories - that is, whether or
+	//  our value can be set to a directory.
+	selectDirectories: true,
+
+	// selectFiles: boolean
+	//  whether or not we allow selection of files - that is, we will disable
+	//  the file entries.
+	selectFiles: true,
+
 	_itemsMatch: function(/*item*/ item1, /*item*/ item2){
 		// Summary: returns whether or not the two items match - checks ID if
 		//  they aren't the exact same object - ignoring trailing slashes
@@ -136,17 +146,18 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	},
 	
 	getMenuItemForItem: function(/*item*/ item, /* dijit._Contained */ parentPane, /* item[]? */ children){
-		var iconClass = "dojoxDirectoryItemIcon";
+		var menuOptions = {iconClass: "dojoxDirectoryItemIcon"};
 		if(!this.store.getValue(item, "directory")){
-			iconClass = "dojoxFileItemIcon";
+			menuOptions.iconClass = "dojoxFileItemIcon";
 			var l = this.store.getLabel(item), idx = l.lastIndexOf(".");
 			if(idx >= 0){
-				iconClass += " dojoxFileItemIcon_" + l.substring(idx + 1);
+				menuOptions.iconClass += " dojoxFileItemIcon_" + l.substring(idx + 1);
+			}
+			if(!this.selectFiles){
+				menuOptions.disabled = true;
 			}
 		}
-		var ret = new dijit.MenuItem({
-			iconClass: iconClass
-		});
+		var ret = new dijit.MenuItem(menuOptions);
 		return ret;
 	},
 	
@@ -185,5 +196,15 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		}else{
 			return "";
 		}
-	}
+	},
+	
+	_setValue: function(/* item */ value){
+		// summary: internally sets the value and fires onchange
+		delete this._setInProgress;
+		if(this.store.getValue(value, "directory") && !this.selectDirectories){ return; }
+		if(!this._itemsMatch(this.value, value)){
+			this.value = value;
+			this._onChange(value);
+		}
+	}	
 });
