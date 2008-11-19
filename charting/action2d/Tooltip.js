@@ -57,7 +57,7 @@ dojo.require("dojox.lang.functional.fold");
 				case "column":
 					position = ["above", "below"];
 				case "bar":
-					aroundRect = dojo.delegate(o.shape.getShape());
+					aroundRect = dojo.clone(o.shape.getShape());
 					break;
 				default:
 				//case "slice":

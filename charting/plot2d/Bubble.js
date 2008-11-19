@@ -16,7 +16,7 @@ dojo.require("dojox.lang.functional");
 		optionalParams: {},	// no optional parameters
 
 		constructor: function(chart, kwArgs){
-			this.opt = dojo.delegate(this.defaultParams);
+			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			this.series = [];
 			this.hAxis = this.opt.hAxis;

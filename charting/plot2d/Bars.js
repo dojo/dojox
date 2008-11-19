@@ -25,7 +25,7 @@ dojo.require("dojox.lang.functional.reversed");
 		},
 
 		constructor: function(chart, kwArgs){
-			this.opt = dojo.delegate(this.defaultParams);
+			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.series = [];
