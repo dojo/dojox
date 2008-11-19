@@ -36,11 +36,15 @@ dojo.require("dojox.lang.functional");
 			return fill;
 		},
 
-		defaultStats: {hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY,
-			vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY},
+		defaultStats: {
+			hmin: Number.POSITIVE_INFINITY, 
+			hmax: Number.NEGATIVE_INFINITY,
+			vmin: Number.POSITIVE_INFINITY, 
+			vmax: Number.NEGATIVE_INFINITY
+		},
 
 		collectSimpleStats: function(series){
-			var stats = dojo.clone(dc.defaultStats);
+			var stats = dojo.delegate(dc.defaultStats);
 			for(var i = 0; i < series.length; ++i){
 				var run = series[i];
 				if(!run.data.length){ continue; }
@@ -101,7 +105,7 @@ dojo.require("dojox.lang.functional");
 
 		collectStackedStats: function(series){
 			// collect statistics
-			var stats = dojo.clone(dc.defaultStats);
+			var stats = dojo.delegate(dc.defaultStats);
 			if(series.length){
 				// 1st pass: find the maximal length of runs
 				stats.hmin = Math.min(stats.hmin, 1);
