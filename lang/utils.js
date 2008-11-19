@@ -7,7 +7,7 @@ dojo.provide("dojox.lang.utils");
 		if(dojo.isArray(o)){
 			return dojo._toArray(o);
 		}
-		if(!dojo.isObject(o)){
+		if(!dojo.isObject(o) || dojo.isFunction(o)){
 			return o;
 		}
 		return dojo.delegate(o);
