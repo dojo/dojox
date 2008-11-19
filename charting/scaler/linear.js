@@ -8,7 +8,7 @@ dojo.require("dojox.charting.scaler.common");
 		getLabel = dcsc.getNumericLabel;
 	
 	var calcTicks = function(min, max, kwArgs, majorTick, minorTick, microTick, span){
-		kwArgs = dojo.clone(kwArgs);
+		kwArgs = dojo.delegate(kwArgs);
 		if(!majorTick){
 			if(kwArgs.fixUpper == "major"){ kwArgs.fixUpper = "minor"; }
 			if(kwArgs.fixLower == "major"){ kwArgs.fixLower = "minor"; }
