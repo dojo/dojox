@@ -34,28 +34,34 @@ dojo.require("dojox.lang.utils");
 			htmlLabels:  true		// use HTML to draw labels
 		},
 		optionalParams: {
-			min:           0,	// minimal value on this axis
-			max:           1,	// maximal value on this axis
-			from:          0,	// visible from this value
-			to:            1,	// visible to this value
-			majorTickStep: 4,	// major tick step
-			minorTickStep: 2,	// minor tick step
-			microTickStep: 1,	// micro tick step
-			labels:        [],	// array of labels for major ticks
+			min:			0,	// minimal value on this axis
+			max:			1,	// maximal value on this axis
+			from:			0,	// visible from this value
+			to:				1,	// visible to this value
+			majorTickStep:	4,	// major tick step
+			minorTickStep:	2,	// minor tick step
+			microTickStep:	1,	// micro tick step
+			labels:			[],	// array of labels for major ticks
 								// with corresponding numeric values
 								// ordered by values
+			labelFunc:		null, // function to compute label values
+			maxLabelSize:	0,	// size in px. For use with labelFunc
+
+			// TODO: add support for minRange!
+			// minRange:		1,	// smallest distance from min allowed on the axis
+
 			// theme components
-			stroke:        {},	// stroke for an axis
-			majorTick:     {},	// stroke + length for a tick
-			minorTick:     {},	// stroke + length for a tick
-			microTick:     {},	// stroke + length for a tick
-			font:          "",	// font for labels
-			fontColor:     ""	// color for labels as a string
+			stroke:			{},	// stroke for an axis
+			majorTick:		{},	// stroke + length for a tick
+			minorTick:		{},	// stroke + length for a tick
+			microTick:		{},	// stroke + length for a tick
+			font:			"",	// font for labels
+			fontColor:		""	// color for labels as a string
 		},
 
 		constructor: function(chart, kwArgs){
-			this.opt = dojo.clone(this.defaultParams);
-			du.updateWithObject(this.opt, kwArgs);
+			this.opt = dojo.delegate(this.defaultParams, kwArgs);
+			// du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 		},
 		dependOnData: function(){
@@ -127,7 +133,9 @@ dojo.require("dojox.lang.utils");
 			}else{
 				if(size){
 					var labelWidth, i;
-					if(this.labels){
+					if(this.opt.labelFunc && this.opt.maxLabelSize){
+						labelWidth = this.opt.maxLabelSize;
+					}else if(this.labels){
 						labelWidth = df.foldl(df.map(this.labels, function(label){
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
 						}), "Math.max(a, b)", 0);
@@ -171,7 +179,9 @@ dojo.require("dojox.lang.utils");
 			}
 			if(this.vertical){
 				if(size){
-					if(this.labels){
+					if(this.opt.labelFunc && this.opt.maxLabelSize){
+						labelWidth = this.opt.maxLabelSize;
+					}else if(this.labels){
 						labelWidth = df.foldl(df.map(this.labels, function(label){
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
 						}), "Math.max(a, b)", 0);
@@ -194,7 +204,9 @@ dojo.require("dojox.lang.utils");
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
 				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
 				if(size){
-					if(this.labels){
+					if(this.opt.labelFunc && this.opt.maxLabelSize){
+						labelWidth = this.opt.maxLabelSize;
+					}else if(this.labels){
 						labelWidth = df.foldl(df.map(this.labels, function(label){
 							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
 						}), "Math.max(a, b)", 0);

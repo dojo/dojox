@@ -102,6 +102,43 @@
 				}
 			},
 			{
+				description: "Lines, custom labels",
+				makeChart: function(node){
+					(new dojox.charting.Chart2D(node)).
+						addAxis("x", {
+							majorLabels: true, 
+							minorLabels: true, 
+							includeZero: true, 
+							minorTicks: false, 
+							microTicks: false,
+							majorTickStep: 2,
+							labels: [
+								{ value: 0, text: "nada" },
+								{ value: 2, text: "2 units" },
+								{ value: 4, text: "4 units" },
+								{ value: 8, text: "2*4 units" }
+							],
+							htmlLabels: true,                                                                    
+							fixUpper: "major", fixLower: "major",                                                
+							majorTick: { length: 3 }
+						}).
+						addAxis("y", {
+							labelFunc: function(value){
+								return value + " thingers";
+							},
+							maxLabelSize: 30,
+							vertical: true,
+							// htmlLabels: false,
+							microTicks: true,
+							minorTicks: true, 
+							majorTick: { stroke: "black", length: 3 },
+						}).
+						addSeries("Series A", [ 1, 2, 1, 2, 1, 2, 1 ]).
+						addSeries("Series B", [ 2, 1, 2, 1, 2, 1, 2 ]).
+						render();
+				}
+			},
+			{
 				description: "Defaults: lines, no axes.",
 				makeChart: function(node){
 					(new dojox.charting.Chart2D(node)).
@@ -650,6 +687,11 @@
 				}
 			}
 		];
+		var now = function(){
+			return (new Date()).getTime();
+		};
+
+
 		dojo.addOnLoad(function(){
 			var defaultStyle = { width: "400px", height: "200px" };
 			var tmpl = new dojox.dtl.Template(dojo.byId("template").value);
@@ -657,9 +699,11 @@
 			dojo.byId("charts").innerHTML = tmpl.render(context);
 
 			dojo.forEach(charts, function(item, idx){
+				var start = now();
 				var n = dojo.byId("chart_"+idx);
 				dojo.style(n, item.style||defaultStyle);
 				item.makeChart(n);
+				console.debug((now()-start), "ms to create:", (idx+1)+":", item.description);
 			});
 		});
 
