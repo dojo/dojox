@@ -2,6 +2,16 @@ dojo.provide("dojox.lang.utils");
 
 (function(){
 	var empty = {}, du = dojox.lang.utils;
+
+	var clone = function(o){
+		if(dojo.isArray(o)){
+			return dojo._toArray(o);
+		}
+		if(!dojo.isObject(o)){
+			return o;
+		}
+		return dojo.delegate(o);
+	}
 	
 	dojo.mixin(du, {
 		coerceType: function(target, source){
@@ -25,7 +35,7 @@ dojo.provide("dojox.lang.utils");
 					if(t && typeof t == "object"){
 						du.updateWithObject(t, source[x], conv);
 					}else{
-						target[x] = conv ? du.coerceType(t, source[x]) : dojo.clone(source[x]);
+						target[x] = conv ? du.coerceType(t, source[x]) : clone(source[x]);
 					}
 				}
 			}
@@ -41,7 +51,7 @@ dojo.provide("dojox.lang.utils");
 			if(!source || !pattern){ return target; }
 			for(var x in pattern){
 				if(x in source && !(x in empty)){
-					target[x] = conv ? du.coerceType(pattern[x], source[x]) : dojo.clone(source[x]);
+					target[x] = conv ? du.coerceType(pattern[x], source[x]) : clone(source[x]);
 				}
 			}
 			return target;	// Object
