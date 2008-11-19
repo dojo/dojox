@@ -62,6 +62,12 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	//  the attribute to read for getting the full path of our file
 	pathAttr: "path",
 	
+	// preloadItems: boolean or int
+	//  Set this to a sane number - since we expect to mostly be using the 
+	//	dojox.data.FileStore - which doesn't like loading lots of items
+	//	all at once.
+	preloadItems: 50,
+
 	_itemsMatch: function(/*item*/ item1, /*item*/ item2){
 		// Summary: returns whether or not the two items match - checks ID if
 		//  they aren't the exact same object - ignoring trailing slashes
