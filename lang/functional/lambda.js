@@ -81,34 +81,48 @@ dojo.provide("dojox.lang.functional.lambda");
 					function(x){ return x; };
 	};
 
+	var _lcache = {};
+
 	dojo.mixin(df, {
 		// lambda
 		rawLambda: function(/*String*/ s){
-			// summary: builds a function from a snippet, or array (composing), returns
-			//	an object describing the function; functions are passed through unmodified.
-			// description: This method is to normalize a functional representation
-			//	(a text snippet) to an object that contains an array of arguments,
-			//	and a body , which is used to calculate the returning value.
+			// summary:
+			//		builds a function from a snippet, or array (composing),
+			//		returns an object describing the function; functions are
+			//		passed through unmodified.
+			// description:
+			//		This method is to normalize a functional representation (a
+			//		text snippet) to an object that contains an array of
+			//		arguments, and a body , which is used to calculate the
+			//		returning value.
 			return lambda(s);	// Object
 		},
 		buildLambda: function(/*String*/ s){
-			// summary: builds a function from a snippet, returns a string, 
-			//	which represents the function.
-			// description: This method returns a textual representation of a function 
-			//	built from the snippet. It is meant to be evaled in the proper context, 
-			//	so local variables can be pulled from the environment.
+			// summary:
+			//		builds a function from a snippet, returns a string, which
+			//		represents the function.
+			// description:
+			//		This method returns a textual representation of a function
+			//		built from the snippet. It is meant to be evaled in the
+			//		proper context, so local variables can be pulled from the
+			//		environment.
 			s = lambda(s);
 			return "function(" + s.args.join(",") + "){return (" + s.body + ");}";	// String
 		},
 		lambda: function(/*Function|String|Array*/ s){
-			// summary: builds a function from a snippet, or array (composing), returns 
-			//	a function object; functions are passed through unmodified.
-			// description: This method is used to normalize a functional representation
-			//	(a text snippet, an array, or a function) to a function object.
+			// summary:
+			//		builds a function from a snippet, or array (composing),
+			//		returns a function object; functions are passed through
+			//		unmodified.
+			// description:
+			//		This method is used to normalize a functional
+			//		representation (a text snippet, an array, or a function) to
+			//		a function object.
 			if(typeof s == "function"){ return s; }
 			if(s instanceof Array){ return compose(s); }
+			if(_lcache[s]){ return _lcache[s]; }
 			s = lambda(s);
-			return new Function(s.args, "return (" + s.body + ");");	// Function
+			return _lcache[s] = (new Function(s.args, "return (" + s.body + ");"));	// Function
 		}
 	});
 })();
