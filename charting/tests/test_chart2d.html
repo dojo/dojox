@@ -102,7 +102,42 @@
 				}
 			},
 			{
-				description: "Lines, custom labels",
+				description: "Lines, calculated labels",
+				makeChart: function(node){
+					(new dojox.charting.Chart2D(node)).
+						addAxis("x", {
+							majorLabels: true, 
+							minorLabels: true, 
+							includeZero: true, 
+							minorTicks: false, 
+							microTicks: false,
+							majorTickStep: 2,
+							htmlLabels: true,                                                                    
+							labelFunc: function(value){
+								return value + " s";
+							},
+							maxLabelSize: 30,
+							fixUpper: "major", fixLower: "major",                                                
+							majorTick: { length: 3 }
+						}).
+						addAxis("y", {
+							labelFunc: function(value){
+								return value + " thingers";
+							},
+							maxLabelSize: 30,
+							vertical: true,
+							// htmlLabels: false,
+							microTicks: true,
+							minorTicks: true, 
+							majorTick: { stroke: "black", length: 3 },
+						}).
+						addSeries("Series A", [ 1, 2, 1, 2, 1, 2, 1 ]).
+						addSeries("Series B", [ 2, 1, 2, 1, 2, 1, 2 ]).
+						render();
+				}
+			},
+			{
+				description: "Lines, pre-computed labels",
 				makeChart: function(node){
 					(new dojox.charting.Chart2D(node)).
 						addAxis("x", {
@@ -123,10 +158,12 @@
 							majorTick: { length: 3 }
 						}).
 						addAxis("y", {
-							labelFunc: function(value){
-								return value + " thingers";
-							},
-							maxLabelSize: 30,
+							labels: [
+								{ value: 0, text: "nada" },
+								{ value: 1.1, text: "hrmm" },
+								{ value: 1.2, text: "?" },
+								{ value: 2, text: "2!" }
+							],
 							vertical: true,
 							// htmlLabels: false,
 							microTicks: true,
