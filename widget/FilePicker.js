@@ -201,9 +201,14 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 	_setValue: function(/* item */ value){
 		// summary: internally sets the value and fires onchange
 		delete this._setInProgress;
-		var isDirectory = this.store.getValue(value, "directory");
-		if((isDirectory && !this.selectDirectories) ||
-			(!isDirectory && !this.selectFiles)){ return; }
+		var store = this.store;
+		if(value && store.isItem(value)){
+			var isDirectory = this.store.getValue(value, "directory");
+			if((isDirectory && !this.selectDirectories) ||
+				(!isDirectory && !this.selectFiles)){ return; }
+		}else{
+			value = null;
+		}
 		if(!this._itemsMatch(this.value, value)){
 			this.value = value;
 			this._onChange(value);
