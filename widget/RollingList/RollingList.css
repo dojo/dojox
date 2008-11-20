@@ -1,11 +1,29 @@
 .dojoxRollingList {
 	border: 1px solid #000;
 	height: 20em;
+	background-color: #FFF;
+	position: relative;
+}
+
+.dijitPopup .dojoxRollingList {
+	position: static;
+}
+
+.dojoxRollingListContainer {
 	overflow: scroll;
 	overflow-y: hidden;
 	overflow-x: scroll;
 	white-space: nowrap;
-	background-color: #FFF;
+}
+
+.dojoxRollingListButtons {
+	position: absolute;
+	right: 5px;
+	padding: 5px 0px;
+}
+
+.dojoxRollingListButtonsHidden .dojoxRollingListButtons {
+	display: none;
 }
 
 .dojoxRollingListPane {

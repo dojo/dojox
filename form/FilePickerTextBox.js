@@ -57,6 +57,7 @@ dojo.declare(
 			// summary: called when the path gets changed in the dropdown
 			if(!item && this.focusNode.value){
 				this._hasValidPath = false;
+				this.focusNode.value = "";
 			}else{
 				this.valueItem = item;
 				var value = this.dropDown._getPathValueAttr(item);
