@@ -7,15 +7,16 @@ Release date: 03/18/2008
 Project state: production
 -------------------------------------------------------------------------------
 Project authors
-	Jared Jurkiewicz (jared.jurkiewicz@gmail.com) (FileStore, HtmlStore, XmlStore, FlickrStore, CssRuleStore, CssClassStore, others).
+	Jared Jurkiewicz (jared.jurkiewicz@gmail.com) (FileStore, HtmlStore, XmlStore, FlickrStore, CssRuleStore, CssClassStore, AppStore, others).
 	Shane O'Sullivan (shaneosullivan1@gmail.com) (FlickrRestStore, AtomReadStore, GoogleSeachStore, GoogleFeedStore)
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 	Russell Jones (KeyValueStore) (CLA)
-	Benjamin Schell (KeyValueStore, CssRuleStore, CssClassStore) (Corporate CLA)
+	Benjamin Schell (KeyValueStore, CssRuleStore, CssClassStore, AppStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
 	Kris Zyp (kzyp@dojotoolkit.org) (JsonRestStore, PersevereStore, S3JsonRestStore, CouchDBRestStore)
 	Frank Fortson (frank.fortson@equorum.com) (AndOrReadStore, AndOrWriteStore)
+
 
 -------------------------------------------------------------------------------
 Project description
@@ -119,4 +120,5 @@ Additional Notes:
 	dojox.data.CssClassStore - A store that allows searching/querying over what classes are defined in the page in
 	the browser.
 
-
+	dojox.data.AppStore - A store that implements full read, write, and identity APIs for working with ATOM documents.
+	The store uses the full APP protocol.
