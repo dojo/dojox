@@ -38,12 +38,18 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 				args.queryStr += ']';
 			}
 		}
+		if(this.jsonQueryPagination && (args.start || args.count)){
+			// pagination
+			args.queryStr = (args.queryStr || (typeof args.query == 'string' ? args.query : "")) +
+				'[' + (args.start || '') + ':' + (args.count ? (args.start || 0) + args.count : '') + ']'; 
+		}
 		if(typeof args.queryStr == 'string'){
 			args.queryStr = args.queryStr.replace(/\\"|"/g,function(t){return t == '"' ? "'" : t;});
 			return args.queryStr;
 		}
 		return args.query;
 	},
+	jsonQueryPagination: true,
 	fetch: function(args){
 		this._toJsonQuery(args);
 		return this.inherited(arguments);

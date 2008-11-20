@@ -153,6 +153,28 @@ doh.register("dojox.data.tests.stores.JsonQueryRestStore",
 				});
 				return d; //Object
 			}
+		},
+		{
+			name: "Sorting + Paging",
+			timeout:	10000, //10 seconds.
+			runTest: function(t) {
+				//	summary: 
+				//		Simple test of a basic fetch on JsonQueryRestStore of a simple query.
+				jsonStore.jsonQueryPagination = true;
+				var d = new doh.Deferred();
+				lastQuery = null;
+				jsonStore.fetch({sort:[{attribute:"name", descending: true}],start:1, count:2, 
+					onComplete: function(items, request){
+						t.is("Hula Hoop", items[0].name);
+						t.is("Car", items[1].name);
+						t.is(items.length, 2);
+						t.is(lastQuery, null); // should not be sent to the service
+						d.callback(true);
+					},
+					onError: dojo.partial(dojox.data.tests.stores.JsonQueryRestStore.error, doh, d)
+				});
+				return d; //Object
+			}
 		}
 	]
 );
