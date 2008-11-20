@@ -320,7 +320,7 @@
 						timeout: 6200,
 						runTest: function(t){
 							console.log("basicChecks: " + this.name);
-							pane1.preventCache = 1;
+							pane1.preventCache = true;
 							var count = {u: 0, l: 0}; // need a object for the ref in closures
 							var href = dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=test').toString();
 		
@@ -355,8 +355,8 @@
 	
 							var d = new t.Deferred();
 							setTimeout(d.getTestCallback(function(){
-								t.assertEqual(4, count.l);
-								t.assertEqual(4, count.u)
+								t.assertEqual(4, count.l, "4 loads");
+								t.assertEqual(4, count.u, "4 unloads")
 							}), 6000); // 1.5 sec max on each load should be enough
 							return d;
 						},
@@ -400,9 +400,9 @@
 							+' @import url(/did/you/now.css);'+"\n"
 							+' @import "yes.i.did";';
 
-							pane1.href = "deep/nested/file";
-							pane1.adjustPaths = 1;
-							pane1.renderStyles = 1;
+							pane1.referencePath = "deep/nested/file";	// hook for testing to trigger path adjustment on an attr('content', ...)
+							pane1.adjustPaths = true;
+							pane1.renderStyles = true;
 							var adjustedCss;
 
 							// hijack internals to snatch the styles before they are inserted to DOM (DOM messes formating)
@@ -442,6 +442,7 @@
 						tearDown: function(){
 							delete pane1.adjustPaths; // get back to defaults
 							delete pane1.renderStyles;
+							delete pane1.referencePath;
 						}
 					},
 					{
@@ -497,7 +498,7 @@
 								}
 							), 1500);
 
-							pane1.adjustPaths=1; pane1.renderStyles=1;
+							pane1.adjustPaths=true; pane1.renderStyles=true;
 							pane1.attr('href', 'remote/getResponse.php?mode=htmlPaths');
 							return d;
 						},
@@ -529,7 +530,7 @@
 									t.assertFalse(110 == mb.h);
 								}
 							), 1500);
-							pane1.adjustPaths=1;
+							pane1.adjustPaths=true;
 							pane1.attr('href', 'remote/getResponse.php?mode=htmlPaths');
 							return d;
 						},
@@ -623,7 +624,7 @@
 						name:'scriptsWithHtmlComments',
 						runTest: function(t){
 							console.log("scriptTests: " + this.name);
-							pane1.cleanContent = 1;
+							pane1.cleanContent = true;
 							pane1.attr('content', "<"
 								+"script><!-- unTypedVarInDocScope = 2; --><"
 								+"/script>");
@@ -645,7 +646,7 @@
 						name:'scriptsWithCData',
 						runTest: function(t){
 							console.log("scriptTests: " + this.name);
-							pane1.cleanContent = 1;
+							pane1.cleanContent = true;
 							pane1.attr('content', "<"
 								+"script><![CDATA[ unTypedVarInDocScope = 3; ]]><"
 								+"/script>");
@@ -777,9 +778,9 @@
 
 						expectedCss = expectedCss.split("\n");
 
-						pane1.href = "deep/nested/file";
-						pane1.adjustPaths = 1;
-						pane1.renderStyles = 1;
+						pane1.referencePath = "deep/nested/file";	// hook for testing to trigger path adjustment on an attr('content', ...)
+						pane1.adjustPaths = true;
+						pane1.renderStyles = true;
 						var adjustedCss;
 
 						// hijack internals to snatch the styles before they are inserted to DOM (DOM messes formating)
@@ -812,7 +813,7 @@
 					tearDown: function(){
 						delete pane1.adjustPaths; // get back to defaults
 						delete pane1.renderStyles;
-						pane1.href = "";
+						delete pane1.referencePath;
 					}
 				}
 				,
@@ -881,10 +882,10 @@
 						}
 
 
-						pane1.href = "deep/nested/file";
-						pane1.adjustPaths = 1;
-						pane1.renderStyles = 1;
-						pane1.cleanContent = 1;
+						pane1.referencePath = "deep/nested/file";	// hook for testing to trigger path adjustment on an attr('content', ...)
+						pane1.adjustPaths = true;
+						pane1.renderStyles = true;
+						pane1.cleanContent = true;
 						var adjustedCss, adjustedHtml;
 
 
@@ -893,7 +894,7 @@
 
 						pane1._contentSetter._renderStyles = function(styles){
 							adjustedCss = styles;
-							pane1._contentSetter.executeScripts = 0;
+							pane1._contentSetter.executeScripts = false;
 						}
 
 						// we want to inspect the string without actually inserting it into the DOM 
@@ -946,6 +947,7 @@
 					tearDown: function(){
 						delete pane1.cleanContent;
 						delete pane1.adjustPaths;
+						delete pane1.referencePath;
 						delete pane1.renderStyles;
 						delete pane1.executeScripts;
 					}
@@ -959,10 +961,11 @@
 							return;
 						}
 
-						pane1.adjustPaths = 1;
-						pane1.renderStyles = 1;
+						pane1.adjustPaths = true;
+						pane1.renderStyles = true;
 
 						pane1.href = "deep/";
+						pane1.referencePath = "deep/";	// hook for testing to trigger path adjustment on an attr('content', ...)
 
 						var html = "<div style='width:10px;height:10px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=\"scale\", src=\"images/alpha(1).png\", nextProperty=\"useless\");'><!-- \n"
 						+" alpha png in IE 6 --></div>\n"
@@ -1037,6 +1040,7 @@
 					tearDown: function(){
 						delete pane1.renderStyles;
 						delete pane1.adjustPaths;
+						delete pane1.referencePath;
 					}
 				}
 			]);
@@ -1063,8 +1067,8 @@
 							+"&lt;/style&gt;\n\n...\n\nHtml feeded to ContentPane (or your main page):\n"
 							+"&lt;img src='images/dojoLogo.png' class='run_png_fix'/&gt;\n</pre>";
 
-				pane1.executeScripts = 1;
-				pane1.renderStyles = 1;
+				pane1.executeScripts = true;
+				pane1.renderStyles = true;
 				pane1.attr('content', html+showHowHtml);
 				
 

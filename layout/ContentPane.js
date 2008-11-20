@@ -208,8 +208,8 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 
 		// stash the params for the contentSetter to allow inheritance to work for _setContent
 		this._contentSetterParams = {
-			adjustPaths: Boolean(this.adjustPaths && this.href),
-			referencePath: this.href,
+			adjustPaths: Boolean(this.adjustPaths && (this.href||this.referencePath)),
+			referencePath: this.href || this.referencePath,
 			renderStyles: this.renderStyles,
 			executeScripts: this.executeScripts,
 			scriptHasHooks: this.scriptHasHooks,
