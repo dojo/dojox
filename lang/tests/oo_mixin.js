@@ -13,11 +13,11 @@ dojo.require("dojox.lang.oo.rearrange");
 		p = dojo.clone(y),
 		print = function(v, i){ this.push("[" + i + "] = " + v); },
 		show = function(o){ return df.forIn(o, print, []).sort().join(", "); };
-		
+
 	oo.mixin(q, y);
 	oo.mixin(p, x);
 	oo.rearrange(y, {d: "a", e: "b", f: ""});
-	
+
 	tests.register("dojox.lang.tests.oo_mixin", [
 		function testMixin1(t){ t.assertEqual(df.keys(q).sort(), df.keys(p).sort()); },
 		function testMixin2(t){ t.assertEqual(df.keys(x).sort(), df.keys(z).sort()); },

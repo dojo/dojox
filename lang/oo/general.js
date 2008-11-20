@@ -19,7 +19,7 @@ dojo.require("dojox.lang.oo.Decorator");
 
 	oog.shuffle = md(function(name, newValue, oldValue){
 		// summary: replaces arguments for an old method
-		return typeof oldValue == "function" ?
+		return dojo.isFunction(oldValue) ?
 			function(){
 				return oldValue.apply(this, newValue.apply(this, arguments));
 			} : oldValue;
@@ -28,5 +28,27 @@ dojo.require("dojox.lang.oo.Decorator");
 	oog.wrap = md(function(name, newValue, oldValue){
 		// summary: wraps the old values with a supplied function
 		return function(){ return newValue.call(this, oldValue, arguments); };
+	});
+
+	oog.before = md(function(name, newValue, oldValue){
+		//	summary:
+		//		creates a chain of calls where the new method is called
+		//		before the old method
+		return dojo.isFunction(oldValue) ?
+			function(){
+				newValue.apply(this, arguments);
+				return oldValue.apply(this, arguments);
+			} : newValue;
+	});
+
+	oog.after = md(function(name, newValue, oldValue){
+		//	summary:
+		//		creates a chain of calls where the new method is called
+		//		after the old method
+		return dojo.isFunction(oldValue) ?
+			function(){
+				oldValue.apply(this, arguments);
+				return newValue.apply(this, arguments);
+			} : newValue;
 	});
 })();

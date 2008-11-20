@@ -33,7 +33,7 @@ dojo.require("dojox.lang.oo.general");
 	ooa.afterReturning = md(function(name, newValue, oldValue){
 		// summary: creates an "afterReturning" advise,
 		// the returned value is passed as the only argument
-		return typeof oldValue == "function" ?
+		return dojo.isFunction(oldValue) ?
 			function(){
 				var ret = oldValue.apply(this, arguments);
 				newValue.call(this, ret);
@@ -44,7 +44,7 @@ dojo.require("dojox.lang.oo.general");
 	ooa.afterThrowing = md(function(name, newValue, oldValue){
 		// summary: creates an "afterThrowing" advise,
 		// the exception is passed as the only argument
-		return typeof oldValue == "function" ?
+		return dojo.isFunction(oldValue) ?
 			function(){
 				var ret;
 				try{
@@ -60,7 +60,7 @@ dojo.require("dojox.lang.oo.general");
 	ooa.after = md(function(name, newValue, oldValue){
 		// summary: creates an "after" advise,
 		// it takes no arguments
-		return typeof oldValue == "function" ?
+		return dojo.isFunction(oldValue) ?
 			function(){
 				var ret;
 				try{

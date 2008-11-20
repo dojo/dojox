@@ -7,7 +7,6 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.lang.oo.mixin");
-			dojo.require("dojox.lang.oo.chain");
 			dojo.require("dojox.lang.oo.general");
 			dojo.require("dojox.lang.oo.aop");
 
@@ -66,8 +65,8 @@
 
 				console.log("=== test default mixin: a + 'abc2'/after + 'abc3'/before");
 				var t = oo.mixin({}, a,
-							oo.chain.after(oo.filter(b, {init: "", destroy: ""})),
-							oo.chain.before(oo.filter(c, {init: "", destroy: ""}))
+							oo.general.after(oo.filter(b, {init: "", destroy: ""})),
+							oo.general.before(oo.filter(c, {init: "", destroy: ""}))
 						);
 				t.init();
 				t.abc(42);
@@ -93,9 +92,9 @@
 				t.def(42);
 				t.destroy();
 
-				console.log("=== test augment and chain.after (no chaining for existing functions)");
+				console.log("=== test augment and general.after (no chaining for existing functions)");
 				var t = oo.mixin({}, a, {
-					abc: oo.general.augment(oo.chain.after(
+					abc: oo.general.augment(oo.general.after(
 							function(){ console.log("overidden"); }
 					))
 				});
@@ -103,9 +102,9 @@
 				t.abc(42);
 				t.destroy();
 
-				console.log("=== test override and chain.after (chaining only for existing functions)");
+				console.log("=== test override and general.after (chaining only for existing functions)");
 				var t = oo.mixin({}, a, {
-					abc: oo.general.override(oo.chain.after(
+					abc: oo.general.override(oo.general.after(
 							function(){ console.log("overidden? not really"); }
 					))
 				});
@@ -114,7 +113,7 @@
 				t.destroy();
 
 				console.log("=== test decorated objects");
-				var t = oo.mixin({}, a, oo.chain.after({
+				var t = oo.mixin({}, a, oo.general.after({
 					abc: function(){ console.log("added after abc"); },
 					def: function(){ console.log("added after def"); }
 				}));

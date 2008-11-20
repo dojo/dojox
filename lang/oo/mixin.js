@@ -4,35 +4,12 @@ dojo.experimental("dojox.lang.oo.mixin");
 
 dojo.require("dojox.lang.oo.Filter");
 dojo.require("dojox.lang.oo.Decorator");
-dojo.require("dojox.lang.oo.chain");
 
 (function(){
 	var oo = dojox.lang.oo, Filter = oo.Filter, Decorator = oo.Decorator,
-		oc = oo.chain, cb = oc._before, ca = oc._after,
-
 		defaultFilter = function(name){ return name; },
-
-		useChainAfter = {init: 1}, useChainBefore = {destroy: 1},
-
-		defaultDecorator = oo.defaultDecorator = function(name, newValue, oldValue){
-			//	summary:
-			//		the default decorator
-			//	name: String:
-			//		name of the property
-			//	newValue: Object:
-			//		new value of the property
-			//	oldValue: Object:
-			//		old value of the property
-			//	returns: Object:
-			//		returns the final value of the property
-			if(name in useChainBefore){
-				return cb(name, newValue, oldValue);
-			}
-			if(name in useChainAfter){
-				return ca(name, newValue, oldValue);
-			}
-			return newValue;
-		},
+		defaultDecorator = function(name, newValue, oldValue){ return newValue; },
+		defaultMixer = function(target, name, newValue, oldValue){ target[name] = newValue; },
 
 		applyDecorator = oo.applyDecorator = function(decorator, name, newValue, oldValue){
 			//	summary:
@@ -55,69 +32,89 @@ dojo.require("dojox.lang.oo.chain");
 			return decorator(name, newValue, oldValue);
 		};
 
-	oo.mixin = function(target, source){
-		// summary:
-		//		mixes in two or more objects processing decorators and filters
-		// target: Object:
+	/*=====
+	dojox.lang.oo.__MixinDefaults = function(){
+		//	summary:
+		//		a dict of default parameters for dojox.lang.oo._mixin
+		//	decorator: Function:
+		//		a decorator function to be used in absence of other decorators
+		//	filter: Function:
+		//		a filter function to be used in absence of other filters
+		//	mixer: Function:
+		//		a mixer function to be used to mix in new properties
+		this.decorator = decorator;
+		this.filter = filter;
+		this.mixer = mixer;
+	};
+	=====*/
+
+	oo._mixin = function(target, source, defaults){
+		//	summary:
+		//		mixes in two objects processing decorators and filters
+		//	target: Object:
 		//		target to receive new/updated properties
-		// source: Object...:
-		//		source of properties, more than one source is allowed
-		// returns: Object:
+		//	source: Object:
+		//		source of properties
+		//	defaults: dojox.lang.oo.__MixinDefaults?:
+		//		default functions for various aspects of mixing
+		//	returns: Object:
 		//		target
 
-		var decorator, filter, i, l = arguments.length, name, targetName,
-			prop, newValue, oldValue;
-
-		for(i = 1; i < l; ++i){
-			// set up the new mixin cycle
-			source = arguments[i];
-			decorator = defaultDecorator;
-			filter = defaultFilter;
-			// process object decorator/filter
-			if(source instanceof Decorator){
-				// use this decorator as a default for all attributes
-				decorator = source.decorator;
-				source = source.value;
-			}
-			if(source instanceof Filter){
-				filter = source.filter;
-				source = source.bag;
-			}
-			if(typeof source == "function"){
-				// switch to prototype for functions
-				source = source.prototype;
-			}
-			// start mixing in properties
-			for(name in source){
-				if(source.hasOwnProperty(name)){
-					prop = source[name];
-					targetName = filter(name);
-					if(targetName){
-						// name is accepted
-						oldValue = target[targetName];
-						newValue = applyDecorator(decorator, targetName, prop, oldValue);
-						if(oldValue !== newValue){
-							target[targetName] = newValue;
-						}
+		var name, targetName, prop, newValue, oldValue, 
+			decorator = defaultDecorator, filter = defaultFilter, mixer = defaultMixer;
+			
+		// change defaults conditionally
+		if(defaults){
+			decorator = defaults.decorator || decorator,
+			filter = defaults.filter || filter,
+			mixer = defaults.mixer || mixer;
+		}
+		
+		// process object decorator/filter
+		if(source instanceof Decorator){
+			// use this decorator as a default for all attributes
+			decorator = source.decorator;
+			source = source.value;
+		}
+		if(source instanceof Filter){
+			filter = source.filter;
+			source = source.bag;
+		}
+		
+		// start mixing in properties
+		for(name in source){
+			if(source.hasOwnProperty(name)){
+				prop = source[name];
+				targetName = filter(name);
+				if(targetName){
+					// name is accepted
+					oldValue = target[targetName];
+					newValue = applyDecorator(decorator, targetName, prop, oldValue);
+					if(oldValue !== newValue){
+						mixer(target, targetName, newValue, oldValue);
 					}
 				}
 			}
 		}
-
+		
 		return target;	// Object
 	};
 
-	oo.extend = function(target, source){
+	oo.mixin = function(target, source){
 		// summary:
-		//		extends a prototype of a target by mixing in two or more objects
-		//		processing decorators and filters
+		//		mixes in two or more objects processing decorators and filters
+		//		using defaults as a fallback
 		// target: Object:
 		//		target to receive new/updated properties
 		// source: Object...:
 		//		source of properties, more than one source is allowed
 		// returns: Object:
 		//		target
-		return oo.mixin.apply(oo, typeof target == "function" ?
-			[target.prototype].concat(Array.prototype.slice.call(arguments, 1)) : arguments);
+
+		for(var i = 1, l = arguments.length; i < l; ++i){
+			oo._mixin(target, arguments[i]);
+		}
+
+		return target;	// Object
 	};
 })();
