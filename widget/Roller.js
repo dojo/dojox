@@ -2,7 +2,7 @@ dojo.provide("dojox.widget.Roller");
 dojo.require("dijit._Widget");
 
 dojo.declare("dojox.widget.Roller", dijit._Widget, {
-	// summary: A simple widget to take an unorder-list of Text and roll through them
+	// summary: A simple widget to take an unorder-list of Text and rolls through them
 	// 
 	// description: 
 	//		The Roller widget takes an unordered-list of items, and converts
@@ -31,6 +31,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 	//	|	// stop a roller from rolling:
 	//	|	dijit.byId("roller").stop();
 	//
+	//
 	// delay: Integer
 	//		Interval between rolls
 	delay: 2000,
@@ -39,6 +40,12 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 	//		Toggle to control starup behavior. Call .start() manually
 	//		if set to `false`
 	autoStart: true,
+	
+	// itemSelector: String
+	//		A CSS selector to be used by `dojo.query` to find the children
+	//		items in this widget. Defaults to "> li", finding only first-children
+	//		list-items in the list, allowing for embedded lists to occur.
+	itemSelector: "> li",
 	
 /*=====
 	// items: Array
@@ -57,7 +64,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 		dojo.addClass(this.domNode,"dojoxRoller");
 		
 		// find all the items in this list, and popuplate 
-		dojo.query("li", this.domNode).forEach(function(item){
+		dojo.query(this.itemSelector, this.domNode).forEach(function(item){
 			this.items.push(item.innerHTML);
 			dojo._destroyElement(item);
 		}, this);
@@ -142,7 +149,8 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 
 dojo.declare("dojox.widget.RollerSlide", dojox.widget.Roller, {
 	// summary: An add-on to the Roller to modify animations. This produces 
-	//		a slide-from-bottom like effect
+	//		a slide-from-bottom like effect. See `dojox.widget.Roller` for
+	//		full API information.
 	
 	makeAnims: function(){
 		// summary: Animation creator function. Need to create an 'in' and 'out'
