@@ -48,8 +48,12 @@ dojo.declare(
 			// summary: sets the value of this widget
 			if(!this._searchInProgress){
 				this.inherited(arguments);
-				this._skip = true;
-				this.dropDown.attr("pathValue", value);
+				value = value||"";
+				var tVal = this.dropDown.attr("pathValue")||"";
+				if(value !== tVal){
+					this._skip = true;
+					this.dropDown.attr("pathValue", value);
+				}
 			}
 		},
 		
@@ -61,15 +65,13 @@ dojo.declare(
 			}else{
 				this.valueItem = item;
 				var value = this.dropDown._getPathValueAttr(item);
-				if(value || !this._skipInvalidSet){
-					if(value){
-						this._hasValidPath = true;
-					}
-					if(!this._skip){
-						this.attr("value", value);
-					}
-					delete this._skip;
+				if(value){
+					this._hasValidPath = true;
 				}
+				if(!this._skip){
+					this.attr("value", value);
+				}
+				delete this._skip;
 			}
 			this.validate();
 		},
