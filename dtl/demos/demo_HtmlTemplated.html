@@ -32,7 +32,7 @@
 							}
 						},
 						// Note, the load tag here is superfluous, since _HtmlTemplate has a dojo.require for it.
-						templateString: '<!--{% load dojox.dtl.contrib.dijit %}--><div><input dojoAttachEvent="onkeyup: keyUp" dojoAttachPoint="input"> <button dojoType="dijit.form.Button" dojoAttachPoint="button" dojoAttachEvent="onClick: keyUp">Add/Remove Item</button><div id="pane" dojoType="dijit.layout.ContentPane parsed"><ul><!--{% for item in items %}--><li><button dojoType="dijit.form.Button parsed" title="Fruit: {{ item }}"><!--{{ item }}--><script type="dojo/connect" event="onClick" args="e">console.debug("You clicked", this.containerNode.innerHTML);</' + 'script></button></li><!--{% endfor %}--></ul></div></div>'
+						templateString: '<!--{% load dojox.dtl.contrib.dijit %}--><div><input dojoAttachEvent="onkeyup: keyUp" dojoAttachPoint="input"> <button dojoType="dijit.form.Button" dojoAttachPoint="button" dojoAttachEvent="onClick: keyUp">Add/Remove Item</button><div id="pane" dojoType="dijit.layout.ContentPane parsed"><ul><!--{% for item in items %}--><li><button dojoType="dijit.form.Button parsed" title="Fruit: {{ item }}" otherAttr2="x_{{item}}"><!--{{ item }}--><script type="dojo/connect" event="onClick" args="e">console.debug("You clicked", this.containerNode.innerHTML);</' + 'script></button></li><!--{% endfor %}--></ul></div></div>'
 					});
 
 	        dojo.require("dojo.parser");
