@@ -414,7 +414,7 @@
 								adjustedCss = styles.join();
 							}
 							console.log("in cssPathAdjustments, calling set");
-							pane1._setContent.call(pane1, '<style>'+cssText+'</style>');
+							pane1.attr('content', '<style>'+cssText+'</style>');
 							console.log("in cssPathAdjustments, done calling set");
 							pane1._contentSetter._renderStyles = oldFunc;
 
@@ -792,7 +792,7 @@
 						}
 
 						var start = new Date();
-						pane1._setContent.call(pane1, '<style>'+cssText+'</style>');
+						pane1.attr('content', '<style>'+cssText+'</style>');
 						var end = new Date();
 						pane1._contentSetter._renderStyles = oldFunc;
 
@@ -907,7 +907,7 @@
 						dojo.xhrGet = function(){}; // kill script download
 
 						var start = new Date();
-						pane1._setContent.call(pane1, htmlText);
+						pane1.attr('content', htmlText);
 						var end = new Date();
 
 						// reset back to the way it was
@@ -1008,7 +1008,7 @@
 						}
 
 						var start = new Date();
-						pane1._setContent.call(pane1, html);
+						pane1.attr('content', html);
 						var end = new Date();
 
 						console.info('Time used to replace AlphaImageLoader(src="...") '
