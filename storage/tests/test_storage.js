@@ -324,6 +324,41 @@ var TestStorage = {
 		this._printStatus("Removed '" + key);
 	},
 	
+	removeMultiple: function(evt){
+		// cancel the button's default behavior
+		evt.preventDefault();
+		evt.stopPropagation();
+
+		//	Try to help the user understands what she's doing
+		if(confirm("Are you sure you want to delete the entry for the selected key and up to 10 more entries?")){
+
+			// get the keys for entries to remove 
+			var dir = dojo.byId("directory"); 
+			if(dir.selectedIndex < 0){ 
+				alert("Please select a key from the 'All Keys' list"); 
+				return; 
+			}
+	                 
+			var keyArray = []; 
+			for(var i = dir.options.selectedIndex; i < dir.options.length && keyArray.length < 10; i++){ 
+				keyArray.push( dir.options[i].value); 
+			}
+
+			this._printStatus("Removing '" + (dir.options.selectedIndex - i) + "' keys starting with '" + dir.options[dir.options.selectedIndex].value + "' ...");
+			if(this.currentNamespace == dojox.storage.DEFAULT_NAMESPACE){
+				dojox.storage.removeMultiple(keyArray);
+			}else{
+				dojox.storage.removeMultiple(keyArray, this.currentNamespace);
+			}
+				
+			//	Remove the entries from the option list
+			var options = directory.childNodes;
+			for(i = dir.options.selectedIndex; i < dir.options.length && (i - dir.options.selectedIndex) < 10; i++){ 
+				directory.removeChild(options[i]);
+			}
+		}
+	},
+	
 	printValueSize: function(){
 		var storageValue = dojo.byId("storageValue").value;
 		var size = 0;
