@@ -578,6 +578,12 @@ dojo.declare("dojox.widget.RollingList",
 	//		The value that has been selected
 	value: null,
 	
+	// executeOnDblClick: boolean
+	//		Set to true if you want to call onExecute when an item is
+	//		double-clicked, false if you want to call onExecute yourself. (mainly
+	//		used for popups to control how they want to be handled)
+	executeOnDblClick: true,
+	
 	// preloadItems: boolean or int
 	//		if set to true, then onItems will be called only *after* all items have
 	//		been loaded (ie store.isLoaded will return true for all of them).  If 
@@ -962,9 +968,11 @@ dojo.declare("dojox.widget.RollingList",
 					self._updateClass(this.domNode, "Item", {"Focus": true});
 					self._focusedPane = parentPane;
 				});
-				widgetItem.connect(widgetItem.focusNode, "ondblclick", function(){
-					self.onExecute();
-				});
+				if(this.executeOnDblClick){
+					widgetItem.connect(widgetItem.focusNode, "ondblclick", function(){
+						self.onExecute();
+					});
+				}
 			}
 			return widgetItem;
 		}
