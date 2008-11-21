@@ -40,6 +40,13 @@
 	#vertical-align: auto;	/* makes TextBox,Button line up w/native counterparts on IE6 */
 }
 
+.dojoxRollingListPane .dijitMenuItem td {
+	width: 1px;
+}
+.dojoxRollingListPane .dijitMenuItem td.dijitMenuItemLabel {
+	width: auto;
+}
+
 .dojoxRollingListPane .dijitMenuItemLabel,
 .dojoxRollingListPane .dijitMenuItemIcon {
 	position: static !important;

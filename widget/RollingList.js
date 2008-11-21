@@ -52,12 +52,37 @@ dojo.declare("dojox.widget._RollingListPane",
 	//  set to false if the subclass will handle its own node focusing
 	_focusByNode: true,
 	
+	// minWidth: integer
+	//	the width (in px) for this pane
+	minWidth: 0,
+	
 	_setContentAndScroll: function(/*String|DomNode|Nodelist*/cont, isFakeContent){
 		// summary: sets the value of the content and scrolls it into view
 		this._setContent(cont, isFakeContent);
 		this.parentWidget.scrollIntoView(this);
 	},
 
+	_updateNodeWidth: function(n, min){
+		// summary: updates the min width of the pane to be minPaneWidth
+		n.style.width = "";
+		var nWidth = dojo.marginBox(n).w;
+		if(nWidth < min){
+			dojo.marginBox(n, {w: min});
+		}
+	},
+	
+	_onMinWidthChange: function(v){
+		// Called when the min width of a pane has changed
+		this._updateNodeWidth(this.domNode, v);
+	},
+	
+	_setMinWidthAttr: function(v){
+		if(v !== this.minWidth){
+			this.minWidth = v;
+			this._onMinWidthChange(v);
+		}
+	},
+	
 	startup: function(){
 		if(this._started){ return; }
 		if(this.store && this.store.getFeatures()["dojo.data.api.Notification"]){
@@ -73,6 +98,7 @@ dojo.declare("dojox.widget._RollingListPane",
 		this.connect(this.focusNode||this.domNode, "onkeypress", "_focusKey");
 		this.parentWidget._updateClass(this.domNode, "Pane");
 		this.inherited(arguments);
+		this._onMinWidthChange(this.minWidth);
 	},
 
 	_focusKey: function(/*Event*/e){
@@ -278,6 +304,14 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		}
 	},
 
+	_onMinWidthChange: function(v){
+		// override and resize the menu instead
+		if(!this._menu){ return; }
+		var dWidth = dojo.marginBox(this.domNode).w;
+		var mWidth = dojo.marginBox(this._menu.domNode).w;
+		this._updateNodeWidth(this._menu.domNode, v - (dWidth - mWidth));
+	},
+
 	onItems: function(){
 		// summary:
 		//	called after a fetch or load
@@ -324,6 +358,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		this.parentWidget.scrollIntoView(this);
 		this._checkScrollConnection(true);
 		this.inherited(arguments);
+		this._onMinWidthChange(this.minWidth);
 	},
 	
 	_checkScrollConnection: function(doLoad){
@@ -610,6 +645,11 @@ dojo.declare("dojox.widget.RollingList",
 	//		"Cancel" string if not set
 	cancelButtonLabel: "",
 
+	// minPaneWidth: integer
+	//	the minimum pane width (in px) for all child panes.  If they are narrower,
+	//  the width will be increased to this value.
+	minPaneWidth: 0,
+	
 	postMixInProperties: function(){
 		// summary: Mix in our labels, if they are not set
 		this.inherited(arguments);
@@ -686,9 +726,21 @@ dojo.declare("dojox.widget.RollingList",
 		if(!widget._started){
 			widget.startup();
 		}
+		widget.attr("minWidth", this.minPaneWidth);
 		this.layout();
 		if(!this._savedFocus){
 			widget.focus();
+		}
+	},
+	
+	_setMinPaneWidthAttr: function(value){
+		// summary:
+		//		Sets the min pane width of all children
+		if(value !== this.minPaneWidth){
+			this.minPaneWidth = value;
+			dojo.forEach(this.getChildren(), function(c){
+				c.attr("minWidth", value);
+			});
 		}
 	},
 	

@@ -28,6 +28,11 @@ dojo.declare(
 		//		The item, in our store, of the directory relating to our value
 		valueItem: null,
 		
+		// numPanes: number
+		//	The number of panes to display in our box (if we don't have any
+		//	minPaneWidth specified by our constraints)
+		numPanes: 2.25,
+		
 		postMixInProperties: function(){
 			this.inherited(arguments);
 			this.dropDown = new dojox.widget.FilePicker(this.constraints);
@@ -88,6 +93,9 @@ dojo.declare(
 		openDropDown: function(){
 			// set width to 0 so that it will resize automatically
 			this.dropDown.domNode.style.width="0px";
+			if(!("minPaneWidth" in (this.constraints||{}))){
+				this.dropDown.attr("minPaneWidth", (this.domNode.offsetWidth / this.numPanes));
+			}
 			this.inherited(arguments);
 		},
 		
