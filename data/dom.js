@@ -39,7 +39,7 @@ dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 		return parser.parseFromString(str, mimetype);	//	DOMDocument
 	}else if((typeof dojo.global["ActiveXObject"]) !== "undefined"){
 		var sf = [".DOMDocument", "XMLDOM"];
-		var dp = ["MSXML6"+sf[0], "MSXML4"+sf[0], "MSXML3"+sf[0], "MSXML2"+sf[0], "Microsoft"+sf[1]];
+		var dp = ["Microsoft"+sf[1], "MSXML6"+sf[0], "MSXML4"+sf[0], "MSXML3"+sf[0], "MSXML2"+sf[0]];
 		var doc;
 		dojo.some(dp, function(p){
 			try{
