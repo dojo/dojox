@@ -21,7 +21,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 		}
 
 		if(name in this.formNodes){
-			return this.formElementValue(name, value);	// Object
+			return this.formNodeValue(name, value);	// Object
 		}
 
 		return this.formPointValue(name, value);	// Object
@@ -40,7 +40,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 		}, names);
 
 		dojo.mixin(result, this.inspectFormNodes(function(name){
-			return this.formElementValue(name);
+			return this.formNodeValue(name);
 		}, names));
 
 		dojo.mixin(result, this.inspectAttachedPoints(function(name){
@@ -59,7 +59,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 			}, values);
 
 			this.inspectFormNodes(function(name, node, value){
-				this.formElementValue(name, value);
+				this.formNodeValue(name, value);
 			}, values);
 
 			this.inspectAttachedPoints(function(name, node, value){

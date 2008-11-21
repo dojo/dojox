@@ -64,6 +64,17 @@ dojo.require("dijit._Widget");
 		},
 
 		skipNames = {domNode: 1, containerNode: 1, srcNodeRef: 1, bgIframe: 1},
+		
+		keys = function(o){
+			// similar to dojox.lang.functional.keys
+			var list = [], key;
+			for(key in o){
+				if(o.hasOwnProperty(key)){
+					list.push(key);
+				}
+			}
+			return list;
+		},
 
 		registerWidget = function(widget){
 			var name = widget.attr("name");
@@ -78,7 +89,45 @@ dojo.require("dijit._Widget");
 				}else{
 					this.formWidgets[name] = {widget: widget, connections: []};
 				}
+			}else{
+				name = null;
 			}
+			return name;
+		},
+		
+		getObserversFromWidget = function(name){
+			var observers = {};
+			aa(function(_, w){
+				var o = w.attr("observer");
+				if(o && typeof o == "string"){
+					dojo.forEach(o.split(","), function(o){
+						o = dojo.trim(o);
+						if(o && dojo.isFunction(this[o])){
+							observers[o] = 1;
+						}
+					}, this);
+				}
+			}).call(this, null, this.formWidgets[name].widget);
+			return keys(observers);
+		},
+		
+		connectWidget = function(name, observers){
+			var t = this.formWidgets[name], c = t.connections;
+			if(c.length){
+				dojo.forEach(c, dojo.disconnect);
+				c = t.connections = [];
+			}
+			aa(function(_, w){
+				// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
+				var eventName = w.declaredClass == "dijit.form.Button" ? "onClick" : "onChange";
+				dojo.forEach(observers, function(o){
+					c.push(dojo.connect(w, eventName, this, function(evt){
+						if(this.watch){
+							this[o](this.formWidgetValue(name), name, w, evt);
+						}
+					}));
+				}, this);
+			}).call(this, null, t.widget);
 		},
 
 		registerNode = function(node){
@@ -88,7 +137,7 @@ dojo.require("dijit._Widget");
 				for(var n = node; n !== this.domNode; n = n.parentNode){
 					if(dojo.attr(n, "widgetId") && dijit.byNode(n) instanceof dijit.form._FormWidget){
 						// this is a child of some widget --- bail out
-						return;
+						return null;
 					}
 				}
 				// register the node
@@ -103,7 +152,45 @@ dojo.require("dijit._Widget");
 				}else{
 					this.formNodes[name] = {node: node, connections: []};
 				}
+			}else{
+				name = null;
 			}
+			return name;
+		},
+		
+		getObserversFromNode = function(name){
+			var observers = {};
+			aa(function(_, n){
+				var o = dojo.attr(n, "observer");
+				if(o && typeof o == "string"){
+					dojo.forEach(o.split(","), function(o){
+						o = dojo.trim(o);
+						if(o && dojo.isFunction(this[o])){
+							observers[o] = 1;
+						}
+					}, this);
+				}
+			}).call(this, null, this.formNodes[name].node);
+			return keys(observers);
+		},
+		
+		connectNode = function(name, observers){
+			var t = this.formNodes[name], c = t.connections;
+			if(c.length){
+				dojo.forEach(c, dojo.disconnect);
+				c = t.connections = [];
+			}
+			aa(function(_, n){
+				// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
+				var eventName = ce(n);
+				dojo.forEach(observers, function(o){
+					c.push(dojo.connect(n, eventName, this, function(evt){
+						if(this.watch){
+							this[o](this.formNodeValue(name), name, n, evt);
+						}
+					}));
+				}, this);
+			}).call(this, null, t.node);
 		};
 
 	dojo.declare("dojox.form.manager._Mixin", null, {
@@ -116,6 +203,8 @@ dojo.require("dijit._Widget");
 		//		processing, I/O orchestration, and common form-related
 		//		functionality. See additional mixins in dojox.form.manager
 		//		namespace.
+		
+		watch: true,
 
 		startup: function(){
 			// summary:
@@ -134,74 +223,102 @@ dojo.require("dijit._Widget");
 
 			// process observers for widgets
 			for(var name in this.formWidgets){
-				var t = this.formWidgets[name], observers = [];
-				if(dojo.isArray(t.widget)){
-					dojo.forEach(t.widget, function(w){
-						var o = w.attr("observer");
-						if(o && typeof o == "string"){
-							observers = observers.concat(o.split(","));
-						}
-					});
-					dojo.forEach(t.widget, function(w){
-						dojo.forEach(observers, function(o){
-							o = dojo.trim(o);
-							if(o && this[o] && dojo.isFunction(this[o])){
-								t.connections.push(this.connect(w, "onChange", o));
-							}
-						}, this);
-					}, this);
-				}else{
-					var widget = t.widget, o = widget.attr("observer");
-					if(o && typeof o == "string"){
-						// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
-						var eventName = widget.declaredClass == "dijit.form.Button" ? "onClick" : "onChange";
-						dojo.forEach(o.split(","), function(o){
-							o = dojo.trim(o);
-							if(o && this[o] && dojo.isFunction(this[o])){
-								t.connections.push(this.connect(widget, eventName, o));
-							}
-						}, this);
-					}
-				}
+				connectWidget.call(this, name, getObserversFromWidget.call(this, name));
 			}
 
 			// process observers for nodes
 			for(var name in this.formNodes){
-				if(name in this.formWidgets){ continue; }
-				var t = this.formNodes[name], observers = [];
-				if(dojo.isArray(t.node)){
-					// input/radio array
-					dojo.forEach(t.node, function(n){
-						var o = dojo.attr(n, "observer");
-						if(o && typeof o == "string"){
-							observers = observers.concat(o.split(","));
-						}
-					});
-					dojo.forEach(t.node, function(n){
-						dojo.forEach(observers, function(o){
-							o = dojo.trim(o);
-							if(o && this[o] && dojo.isFunction(this[o])){
-								t.connections.push(this.connect(n, "onclick", o));
-							}
-						}, this);
-					}, this);
-				}else{
-					var node = t.node, o = dojo.attr(node, "observer");
-					if(o && typeof o == "string"){
-						var eventName = ce(node);
-						dojo.forEach(o.split(","), function(o){
-							o = dojo.trim(o);
-							if(o && this[o] && dojo.isFunction(this[o])){
-								t.connections.push(this.connect(node, eventName, o));
-							}
-						}, this);
-					}
-				}
+				connectNode.call(this, name, getObserversFromNode.call(this, name));
 			}
 
 			this.inherited(arguments);
 		},
+		
+		destroy: function(){
+			// summary:
+			//		Called when the widget is being destroyed
+			
+			for(var name in this.formWidgets){
+				dojo.forEach(this.formWidgets[name].connections, dojo.disconnect);
+			}
+			this.formWidgets = {};
+			
+			for(var name in this.formNodes){
+				dojo.forEach(this.formNodes[name].connections, dojo.disconnect);
+			}
+			this.formWidgets = {};
 
+			this.inherited(arguments);
+		},
+		
+		// register/unregister widgets and nodes
+		
+		registerWidget: function(widget){
+			// summary:
+			//		Register a widget with the form manager
+			// widget: String|Node|dijit.form._FormWidget:
+			//		A widget, or its widgetId, or its DOM node
+			// returns: Object:
+			//		Returns self
+			if(typeof widget == "string"){
+				widget = dijit.byId(widget);
+			}else if(widget.tagName && widget.cloneNode){
+				widget = dijit.byNode(widget);
+			}
+			var name = registerWidget.call(this, widget);
+			if(name){
+				connectWidget.call(this, name, getObserversFromWidget.call(this, name));
+			}
+			return this;
+		},
+		
+		unregisterWidget: function(name){
+			// summary:
+			//		Removes the widget by name from internal tables unregistering
+			//		connected observers
+			// name: String:
+			//		Name of the to unregister
+			// returns: Object:
+			//		Returns self
+			if(name in this.formWidgets){
+				dojo.forEach(this.formWidgets[name].connections, this.disconnect, this);
+				delete this.formWidgets[name];
+			}
+			return this;
+		},
+
+		registerNode: function(node){
+			// summary:
+			//		Register a node with the form manager
+			// node: String|Node:
+			//		A node, or its id
+			// returns: Object:
+			//		Returns self
+			if(typeof node == "string"){
+				node = dojo.byId(node);
+			}
+			var name = registerNode.call(this, node);
+			if(name){
+				connectNode.call(this, name, getObserversFromNode.call(this, name));
+			}
+			return this;
+		},
+		
+		unregisterNode: function(name){
+			// summary:
+			//		Removes the node by name from internal tables unregistering
+			//		connected observers
+			// name: String:
+			//		Name of the to unregister
+			// returns: Object:
+			//		Returns self
+			if(name in this.formNodes){
+				dojo.forEach(this.formNodes[name].connections, this.disconnect, this);
+				delete this.formNodes[name];
+			}
+			return this;
+		},
+		
 		// value accessors
 
 		formWidgetValue: function(elem, value){
@@ -257,7 +374,7 @@ dojo.require("dijit._Widget");
 			return elem.attr("value");	// Object
 		},
 
-		formElementValue: function(elem, value){
+		formNodeValue: function(elem, value){
 			// summary:
 			//		Set or get a form element by name.
 			// elem: String|Node|Array:
