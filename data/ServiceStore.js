@@ -132,7 +132,9 @@ dojo.declare("dojox.data.ServiceStore",
 
 			var res = [];
 			for(var i in item){
-				res.push(i);
+				if(item.hasOwnProperty(i) && i != '__id' && i != '__clientId'){
+					res.push(i);
+				}
 			}
 			return res;
 		},
@@ -166,7 +168,7 @@ dojo.declare("dojox.data.ServiceStore",
 		
 			// we have no way of determining if it belongs, we just have object returned from
 			// 	service queries
-			return typeof item == 'object'; 
+			return (typeof item == 'object') && item; 
 		},
 
 		isItemLoaded: function(item){
