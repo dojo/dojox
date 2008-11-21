@@ -8,8 +8,8 @@ dojo.declare("dojox.form.manager._DisplayMixin", null, {
 	//		This mixin provides unified show/hide functionality for
 	//		controlled elements (indicated by dojoAttachPoint attribute).
 	//		Essentially it provides a way to change "style.display"
-	//		parameter of controlled nodes. 
-	//		It should be used together with dojox.form.manager.Mixin. 
+	//		parameter of controlled nodes.
+	//		It should be used together with dojox.form.manager.Mixin.
 
 	gatherDisplayState: function(/* Object? */ names){
 		// summary:

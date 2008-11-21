@@ -6,7 +6,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 	// description:
 	//		This mixin adds unified access to form widgets and form elements
 	//		in terms of name-value regardless of the underlying type of
-	//		an element. It should be used together with dojox.form.manager.Mixin. 
+	//		an element. It should be used together with dojox.form.manager.Mixin.
 
 	elementValue: function(/* String */ name, /* Object? */ value){
 		// summary:

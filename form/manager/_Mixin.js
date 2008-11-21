@@ -4,7 +4,7 @@ dojo.require("dijit._Widget");
 
 (function(){
 	var fm = dojox.form.manager,
-	 
+
 		aa = fm.actionAdapter = function(/* Function */ action){
 			// summary:
 			//		Adapter that automates application of actions to arrays.
@@ -33,13 +33,13 @@ dojo.require("dijit._Widget");
 				return inspector.call(this, name, dojo.isArray(elem) ? elem[0] : elem, value);
 			};
 		},
-	
+
 		ce = fm.changeEvent = function(/* Node */ node){
 			// summary:
 			//		Function that returns a valid "onchange" event for a given form node.
 			// node:
 			//		Form node.
-			 
+
 			var eventName = "onclick";
 			switch(node.tagName.toLowerCase()){
 				case "textarea":
@@ -197,12 +197,12 @@ dojo.require("dijit._Widget");
 					}
 				}
 			}
-			
+
 			this.inherited(arguments);
 		},
-		
+
 		// value accessors
-		
+
 		formWidgetValue: function(elem, value){
 			// summary:
 			//		Set or get a form widget by name.
@@ -213,13 +213,13 @@ dojo.require("dijit._Widget");
 			// returns: Object:
 			//		For a getter it returns the value, for a setter it returns
 			//		self. If the elem is not valid, null will be returned.
-	
+
 			var isSetter = arguments.length == 2 && value !== undefined, result;
-			
+
 			if(typeof elem == "string"){
 				elem = this._widgets[elem];
 			}
-	
+
 			if(!elem){
 				return null;	// Object
 			}
@@ -252,7 +252,7 @@ dojo.require("dijit._Widget");
 			}
 			return elem.attr("value");	// Object
 		},
-	
+
 		formElementValue: function(elem, value){
 			// summary:
 			//		Set or get a form element by name.
@@ -263,13 +263,13 @@ dojo.require("dijit._Widget");
 			// returns: Object:
 			//		For a getter it returns the value, for a setter it returns
 			//		self. If the elem is not valid, null will be returned.
-	
+
 			var isSetter = arguments.length == 2 && value !== undefined, result;
-	
+
 			if(typeof elem == "string"){
 				elem = this._nodes[elem];
 			}
-	
+
 			if(!elem){
 				return null;	// Object
 			}
@@ -372,7 +372,7 @@ dojo.require("dijit._Widget");
 			// getter
 			return elem.value;
 		},
-	
+
 		formPointValue: function(elem, value){
 			// summary:
 			//		Set or get a node context by name (using dojoAttachPoint).
@@ -383,20 +383,20 @@ dojo.require("dijit._Widget");
 			// returns: Object:
 			//		For a getter it returns the value, for a setter it returns
 			//		self. If the elem is not valid, null will be returned.
-			
+
 			if(elem && typeof elem == "string"){
 				elem = this[elem];
 			}
-	
+
 			if(!elem || !elem.tagName || !elem.cloneNode){
 				return null;	// Object
 			}
-			
+
 			if(!dojo.hasClass(elem, "dojoFormValue")){
 				// accessing the value of the attached point not marked with CSS class 'dojoFormValue'
 				return null;
 			}
-	
+
 			if(arguments.length == 2 && value !== undefined){
 				// setter
 				elem.innerHTML = value;

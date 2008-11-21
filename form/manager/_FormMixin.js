@@ -7,7 +7,7 @@ dojo.declare("dojox.form.manager._FormMixin", null, {
 	//		This mixin adds automated "onreset", and "onsubmit" event processing
 	//		if we are based on a form node, defines onReset(), onSubmit(),
 	//		reset(), submit(), and isValid() methods like dijit.form.Form.
-	//		It should be used together with dojox.form.manager.Mixin. 
+	//		It should be used together with dojox.form.manager.Mixin.
 
 	// HTML <FORM> attributes (if we are based on the form element)
 	name: "",

@@ -10,11 +10,11 @@ dojo.require("dojox.form.manager._Mixin");
 	dojo.declare("dojox.form.manager._ClassMixin", null, {
 		// summary:
 		//		Form manager's mixin for testing/assigning/removing
-		//		classes of controlled elements. 
+		//		classes of controlled elements.
 		// description:
 		//		This mixin provides unified way to check/add/remove a class
 		//		of controlled elements.
-		//		It should be used together with dojox.form.manager.Mixin. 
+		//		It should be used together with dojox.form.manager.Mixin.
 
 		gatherClassState: function(/* String */ className, /* Object? */ names){
 			// summary:
