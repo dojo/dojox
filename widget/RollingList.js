@@ -1007,7 +1007,7 @@ dojo.declare("dojox.widget.RollingList",
 					}
 				});
 				widgetItem.connect(widgetItem.focusNode, "blur", function(){
-					self._updateClass(this.domNode, "Item", {"Focus": false});
+					self._updateClass(this.domNode, "Item", {"Focus": false, "Hover": false});
 				});
 				widgetItem.connect(widgetItem.focusNode, "focus", function(){
 					self._updateClass(this.domNode, "Item", {"Focus": true});
@@ -1102,6 +1102,18 @@ dojo.declare("dojox.widget.RollingList",
 		}
 		return true;
 	},
+	
+	_updateChildClasses: function(){
+		// summary: Called when a child is added or removed - so that we can 
+		//	update the classes for styling the "current" one differently than
+		//	the others
+		var children = this.getChildren();
+		var length = children.length;
+		dojo.forEach(children, function(c, idx){
+			dojo.toggleClass(c.domNode, "dojoxRollingListPaneCurrentChild", (idx == (length - 1)));
+			dojo.toggleClass(c.domNode, "dojoxRollingListPaneCurrentSelected", (idx == (length - 2)));
+		});
+	},
 
 	startup: function(){
 		if(this._started){ return; }
@@ -1109,6 +1121,8 @@ dojo.declare("dojox.widget.RollingList",
 			this.resize();
 			this.connect(dojo.global, "onresize", "resize");
 		}
+		this.connect(this, "addChild", "_updateChildClasses");
+		this.connect(this, "removeChild", "_updateChildClasses");
 		this._setStore(this.store);
 		this.attr("showButtons", this.showButtons);	
 		this.inherited(arguments);
