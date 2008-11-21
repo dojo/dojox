@@ -83,7 +83,7 @@ dojo.provide("dojox.rpc.Rest");
 				sync: dojox.rpc._sync,
 				headers: {
 					Accept: isJson?'application/json,application/javascript':'*/*',
-					Range: args && (args.start >= 0 || args.count >= 0) ?  "items=" + (args.start || '0') + '-' + ((args.count && (args.count + (args.start || 0) - 1)) || '') : undefined
+					Range: args && (args.start >= 0 || args.count >= 0) ?  "items=" + (args.start || '0') + '-' + ((args.count && args.count != Infinity && (args.count + (args.start || 0) - 1)) || '') : undefined
 				}
 			};
 			dojox.rpc._sync = false;
@@ -104,6 +104,7 @@ dojo.provide("dojox.rpc.Rest");
 	};
 
 	drr._index={};// the map of all indexed objects that have gone through REST processing
+	drr._timeStamps={};
 	// these do the actual requests
 	drr._change = function(method,service,id,content){
 		// this is called to actually do the put, post, and delete

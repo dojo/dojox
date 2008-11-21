@@ -48,9 +48,11 @@ dojox.json.ref = {
 		var prefix = args.idPrefix || ''; 
 		var assignAbsoluteIds = args.assignAbsoluteIds;
 		var index = args.index || {}; // create an index if one doesn't exist
+		var timeStamps = args.timeStamps;
 		var ref,reWalk=[];
 		var pathResolveRegex = /^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
 		var addProp = this._addProp;
+		var F = function(){};
 		function walk(it, stop, defaultId, schema, defaultObject){
 			// this walks the new graph, resolving references and making other changes
 		 	var update, val, id = it[idAttribute] || defaultId;
@@ -76,12 +78,14 @@ dojox.json.ref = {
 				 	var proto = schema && schema.prototype; // and if has a prototype
 					if(proto){
 						// if the schema defines a prototype, that needs to be the prototype of the object
-						var F = function(){};
 						F.prototype = proto;
 						target = new F();
 					}
 				}
 				index[id] = target; // add the prefix, set _id, and index it
+				if(timeStamps){
+					timeStamps[id] = args.time;
+				}
 			}
 			var properties = schema && schema.properties; 
 			var length = it.length;

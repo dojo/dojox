@@ -8,7 +8,24 @@ dojo.require("dojox.rpc.Rest");
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
 	var parentIdRegex = /(.*?)(#?(\.\w+)|(\[.+))+$/;
-	var jr = dojox.rpc.JsonRest={
+	var jr;
+	function resolveJson(service, deferred, value, defaultId){
+		var timeStamp = deferred.ioArgs && deferred.ioArgs.xhr.getResponseHeader("Last-Modified");
+		return value && dojox.json.ref.resolveJson(value, {
+			defaultId: defaultId, 
+			index: Rest._index,
+			timeStamps: timeStamp && Rest._timeStamps,
+			time: timeStamp,
+			idPrefix: service.servicePath,
+			idAttribute: jr.getIdAttribute(service),
+			schemas: jr.schemas,
+			loader:	jr._loader,
+			assignAbsoluteIds: true
+		});
+		
+	}
+	jr = dojox.rpc.JsonRest={
+		conflictDateHeader: "If-Unmodified-Since",
 		commit: function(kwArgs){
 			// summary:
 			//		Saves the dirty data using REST Ajax methods
@@ -57,12 +74,17 @@ dojo.require("dojox.rpc.Rest");
 			var plainXhr = dojo.xhr;
 			left = actions.length;
 			var contentLocation;
+			var timeStamp;
+			var conflictDateHeader = this.conflictDateHeader;
 			// add headers for extra information
 			dojo.xhr = function(method,args){
 				// keep the transaction open as we send requests
 				args.headers = args.headers || {};
 				// the last one should commit the transaction
 				args.headers['X-Transaction'] = actions.length - 1 == i ? "commit" : "open";
+				if(conflictDateHeader && timeStamp){
+					args.headers[conflictDateHeader] = timeStamp; 
+				}
 				if(contentLocation){
 					args.headers['Content-ID'] = '<' + contentLocation + '>';
 				}
@@ -72,6 +94,11 @@ dojo.require("dojox.rpc.Rest");
 				var action = actions[i];
 				dojox.rpc.JsonRest._contentId = action.content && action.content.__id; // this is used by OfflineRest
 				var isPost = action.method == 'post';
+				timeStamp = action.method == 'put' && Rest._timeStamps[action.content.__id];
+				if(timeStamp){
+					// update it now
+					Rest._timeStamps[action.content.__id] = (new Date()) + '';
+				}
 				// send the content location to the server
 				contentLocation = isPost && dojox.rpc.JsonRest._contentId;
 				var serviceAndId = jr.getServiceAndId(action.target.__id);
@@ -95,14 +122,7 @@ dojo.require("dojox.rpc.Rest");
 								object.__id = newId;
 								Rest._index[newId] = object;
 							}
-							value = value && dojox.json.ref.resolveJson(value, {
-								index: Rest._index,
-								idPrefix: service.servicePath,
-								idAttribute: jr.getIdAttribute(service),
-								schemas: jr.schemas,
-								loader:	jr._loader,
-								assignAbsoluteIds: true
-							});
+							value = resolveJson(service, dfd, value);
 						}catch(e){}
 						if(!(--left)){
 							if(kwArgs.onComplete){
@@ -297,15 +317,7 @@ dojo.require("dojox.rpc.Rest");
 					// return immediately if it is an XML document
 					return result;
 				}
-				return dojox.json.ref.resolveJson(result, {
-					defaultId: typeof id != 'string' || (args && (args.start || args.count)) ? undefined: id, 
-					index: Rest._index,
-					idPrefix: service.servicePath,
-					idAttribute: jr.getIdAttribute(service),
-					schemas: jr.schemas,
-					loader:	jr._loader,
-					assignAbsoluteIds: true
-				});
+				return resolveJson(service, deferred, result, typeof id != 'string' || (args && (args.start || args.count)) ? undefined: id);
 			});
 			return deferred;			
 		},
@@ -333,7 +345,10 @@ dojo.require("dojox.rpc.Rest");
 		},
 		isDirty: function(item){
 			// summary
-			//		returns true if the item is marked as dirty.
+			//		returns true if the item is marked as dirty or true if there are any dirty items
+			if(!item){
+				return !!dirtyObjects.length;
+			}
 			for(var i = 0, l = dirtyObjects.length; i < l; i++){
 				if(dirtyObjects[i].object==item){return true;}
 			}
