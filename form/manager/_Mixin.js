@@ -200,6 +200,211 @@ dojo.require("dijit._Widget");
 			
 			this.inherited(arguments);
 		},
+		
+		// value accessors
+		
+		formWidgetValue: function(elem, value){
+			// summary:
+			//		Set or get a form widget by name.
+			// elem: String|Object|Array:
+			//		Form element's name, widget object, or array or radio widgets.
+			// value: Object?:
+			//		Optional. The value to set.
+			// returns: Object:
+			//		For a getter it returns the value, for a setter it returns
+			//		self. If the elem is not valid, null will be returned.
+	
+			var isSetter = arguments.length == 2 && value !== undefined, result;
+			
+			if(typeof elem == "string"){
+				elem = this._widgets[elem];
+			}
+	
+			if(!elem){
+				return null;	// Object
+			}
+
+			if(dojo.isArray(elem)){
+				// input/radio array of widgets
+				if(isSetter){
+					dojo.forEach(elem, function(widget){
+						widget.attr("checked", false);
+					});
+					dojo.forEach(elem, function(widget){
+						widget.attr("checked", widget.attr("value") === value);
+					});
+					return this;	// self
+				}
+				// getter
+				dojo.some(elem, function(widget){
+					if(widget.attr("checked")){
+						result = widget;
+						return true;
+					}
+					return false;
+				});
+				return result ? result.attr("value") : "";	// String
+			}
+			// all other elements
+			if(isSetter){
+				elem.attr("value", value);
+				return this;	// self
+			}
+			return elem.attr("value");	// Object
+		},
+	
+		formElementValue: function(elem, value){
+			// summary:
+			//		Set or get a form element by name.
+			// elem: String|Node|Array:
+			//		Form element's name, DOM node, or array or radio nodes.
+			// value: Object?:
+			//		Optional. The value to set.
+			// returns: Object:
+			//		For a getter it returns the value, for a setter it returns
+			//		self. If the elem is not valid, null will be returned.
+	
+			var isSetter = arguments.length == 2 && value !== undefined, result;
+	
+			if(typeof elem == "string"){
+				elem = this._nodes[elem];
+			}
+	
+			if(!elem){
+				return null;	// Object
+			}
+
+			if(dojo.isArray(elem)){
+				// input/radio array
+				if(isSetter){
+					dojo.forEach(elem, function(node){
+						node.checked = "";
+					});
+					dojo.forEach(elem, function(node){
+						node.checked = node.value === value ? "checked" : "";
+					});
+					return this;	// self
+				}
+				// getter
+				dojo.some(elem, function(node){
+					if(node.checked){
+						result = node;
+						return true;
+					}
+					return false;
+				});
+				return result ? result.value : "";	// String
+			}
+			// all other elements
+			switch(elem.tagName.toLowerCase()){
+				case "select":
+					if(elem.multiple){
+						// multiple is allowed
+						if(isSetter){
+							if(dojo.isArray(value)){
+								var dict = {};
+								dojo.forEach(value, function(v){
+									dict[v] = 1;
+								});
+								dojo.query("> option", elem).forEach(function(opt){
+									opt.selected = opt.value in dict;
+								});
+								return this;	// self
+							}
+							// singular property
+							dojo.query("> option", elem).forEach(function(opt){
+								opt.selected = opt.value === value;
+							});
+							return this;	// self
+						}
+						// getter
+						var result = dojo.query("> option", elem).filter(function(opt){
+							return opt.selected;
+						}).map(function(opt){
+							return opt.value;
+						});
+						return result.length == 1 ? result[0] : result;	// Object
+					}
+					// singular
+					if(isSetter){
+						dojo.query("> option", elem).forEach(function(opt){
+							opt.selected = opt.value === value;
+						});
+						return this;	// self
+					}
+					// getter
+					var result = dojo.query("> option", elem).filter(function(opt){
+						return opt.selected;
+					}).map(function(opt){
+						return opt.value;
+					});
+					return result.length == 1 ? result[0] : "";	// String
+				case "textarea":
+					if(isSetter){
+						elem.value = "" + value;
+						return this;
+					}
+					// getter
+					return elem.value;
+				case "button":
+					if(isSetter){
+						elem.innerHTML = "" + value;
+						return this;
+					}
+					// getter
+					return elem.innerHTML;
+				case "input":
+					if(elem.type.toLowerCase() == "checkbox"){
+						// input/checkbox element
+						if(isSetter){
+							elem.checked = value ? "checked" : "";
+							return this;
+						}
+						// getter
+						return Boolean(elem.checked);
+					}
+			}
+			// the rest of inputs
+			if(isSetter){
+				elem.value = "" + value;
+				return this;
+			}
+			// getter
+			return elem.value;
+		},
+	
+		formPointValue: function(elem, value){
+			// summary:
+			//		Set or get a node context by name (using dojoAttachPoint).
+			// elem: String|Object|Array:
+			//		A node.
+			// value: Object?:
+			//		Optional. The value to set.
+			// returns: Object:
+			//		For a getter it returns the value, for a setter it returns
+			//		self. If the elem is not valid, null will be returned.
+			
+			if(elem && typeof elem == "string"){
+				elem = this[elem];
+			}
+	
+			if(!elem || !elem.tagName || !elem.cloneNode){
+				return null;	// Object
+			}
+			
+			if(!dojo.hasClass(elem, "dojoFormValue")){
+				// accessing the value of the attached point not marked with CSS class 'dojoFormValue'
+				return null;
+			}
+	
+			if(arguments.length == 2 && value !== undefined){
+				// setter
+				elem.innerHTML = value;
+				return this;	// self
+			}
+			// getter
+			return elem.innerHTML;	// String
+		},
 
 		// inspectors
 
