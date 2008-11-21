@@ -213,23 +213,9 @@ dojo.require("dijit._Widget");
 
 			if(this._started){ return; }
 
-			// build the map of widgets
 			this.formWidgets = {};
-			dojo.forEach(this.getDescendants(), registerWidget, this);
-
-			// build the map of nodes
 			this.formNodes = {};
-			dojo.query("input, select, textarea, button", this.domNode).forEach(registerNode, this);
-
-			// process observers for widgets
-			for(var name in this.formWidgets){
-				connectWidget.call(this, name, getObserversFromWidget.call(this, name));
-			}
-
-			// process observers for nodes
-			for(var name in this.formNodes){
-				connectNode.call(this, name, getObserversFromNode.call(this, name));
-			}
+			this.registerWidgetDescendants(this);
 
 			this.inherited(arguments);
 		},
@@ -287,6 +273,70 @@ dojo.require("dijit._Widget");
 			return this;
 		},
 
+		registerWidgetDescendants: function(widget){
+			// summary:
+			//		Register widget's descendants with the form manager
+			// widget: String|Node|dijit._Widget:
+			//		A widget, or its widgetId, or its DOM node
+			// returns: Object:
+			//		Returns self
+
+			// convert to widget, if required
+			if(typeof widget == "string"){
+				widget = dijit.byId(widget);
+			}else if(widget.tagName && widget.cloneNode){
+				widget = dijit.byNode(widget);
+			}
+
+			// build the map of widgets
+			var widgets = dojo.map(widget.getDescendants(), registerWidget, this);
+
+			// process observers for widgets
+			dojo.forEach(widgets, function(name){
+				if(name){
+					connectWidget.call(this, name, getObserversFromWidget.call(this, name));
+				}
+			}, this);
+
+			// do the same with nodes
+			return this.registerNodeDescendants(widget.domNode);
+		},
+		
+		unregisterWidgetDescendants: function(widget){
+			// summary:
+			//		Unregister widget's descendants with the form manager
+			// widget: String|Node|dijit._Widget:
+			//		A widget, or its widgetId, or its DOM node
+			// returns: Object:
+			//		Returns self
+
+			// convert to widget, if required
+			if(typeof widget == "string"){
+				widget = dijit.byId(widget);
+			}else if(widget.tagName && widget.cloneNode){
+				widget = dijit.byNode(widget);
+			}
+
+			// unregister widgets by names
+			dojo.forEach(
+				dojo.map(
+					widget.getDescendants(),
+					function(w){
+						return w instanceof dijit.form._FormWidget && w.attr("name") || null;
+					}
+				),
+				function(name){
+					if(name){
+						this.unregisterNode(name);
+					}
+				},
+				this
+			);
+
+			// do the same with nodes
+			return this.unregisterNodeDescendants(widget.domNode);
+		},
+		
 		registerNode: function(node){
 			// summary:
 			//		Register a node with the form manager
@@ -319,6 +369,52 @@ dojo.require("dijit._Widget");
 			return this;
 		},
 		
+		registerNodeDescendants: function(node){
+			// summary:
+			//		Register node's descendants (form nodes) with the form manager
+			// node: String|Node:
+			//		A widget, or its widgetId, or its DOM node
+			// returns: Object:
+			//		Returns self
+
+			if(typeof node == "string"){
+				node = dojo.byId(node);
+			}
+
+			dojo.query("input, select, textarea, button", node).
+				map(registerNode, this).
+				forEach(function(name){
+					if(name){
+						connectNode.call(this, name, getObserversFromNode.call(this, name));
+					}
+				}, this);
+
+			return this;
+		},
+		
+		unregisterNodeDescendants: function(node){
+			// summary:
+			//		Unregister node's descendants (form nodes) with the form manager
+			// node: String|Node:
+			//		A widget, or its widgetId, or its DOM node
+			// returns: Object:
+			//		Returns self
+
+			if(typeof node == "string"){
+				node = dojo.byId(node);
+			}
+
+			dojo.query("input, select, textarea, button", node).
+				map(function(n){ return dojo.attr(node, "name") || null; }).
+				forEach(function(name){
+					if(name){
+						this.unregisterNode(name);
+					}
+				}, this);
+
+			return this;
+		},
+
 		// value accessors
 
 		formWidgetValue: function(elem, value){
