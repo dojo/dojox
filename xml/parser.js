@@ -10,7 +10,7 @@ dojox.xml.parser.parse = function(/*String*/ str){
 	//		returns a new native XML document from the string provided as the
 	//		single argument to parse(). Parsing errors throw exceptions.
 	if(dojo.isIE){
-		var sf = [".DOMDocument", "XMLDOM"];
+		var sf = [".DOMDocument", ".XMLDOM"];
 		var dp = ["Microsoft"+sf[1], "MSXML6"+sf[0], "MSXML4"+sf[0], "MSXML3"+sf[0], "MSXML2"+sf[0]];
 		var nativeDoc;
 		dojo.some(dp, function(p){
