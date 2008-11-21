@@ -13,21 +13,25 @@ dojo.declare('dojox.widget.Dialog',
 	//		An HTML 
 	templatePath: dojo.moduleUrl('dojox.widget','Dialog/Dialog.html'),
 	
-	// fixedSize: Boolean
-	//		If false, fix the size of the dialog to the Viewport based on 
+	// sizeToViewport: Boolean
+	//		If true, fix the size of the dialog to the Viewport based on 
 	//		viewportPadding value rather than the calculated or natural 
-	//		stlye. If true, base the size on a passed dimension attribute.
+	//		stlye. If false, base the size on a passed dimension attribute.
 	//		Eitherway, the viewportPadding value is used if the the content
 	//		extends beyond the viewport size for whatever reason.
-	fixedSize: false,
+	sizeToViewport: false,
 	
 	// viewportPadding: Integer
-	//		If fixedSize="true", this is the value  or used when fixed="false" and dimensions exceed) to use
+	//		If sizeToViewport="true", this is the amount of padding in pixels to leave 
+	//    between the dialog border and the viewport edge.
+	//    This value is also used when sizeToViewport="false" and dimensions exceeded
+	//    by dialog content to ensure dialog does not go outside viewport boundary
 	//		 
 	viewportPadding: 35,
 	
 	// dimensions: Array
-	//		A two-element array of [widht,height] to animate the Dialog to. Defaults to [300,300]
+	//		A two-element array of [widht,height] to animate the Dialog to if sizeToViewport="false"
+	//    Defaults to [300,300]
 	dimensions: null, 
 	
 	// easing: Function?|String?
@@ -82,10 +86,10 @@ dojo.declare('dojox.widget.Dialog',
 		// summary: cache and set our desired end position 
 		this._vp = dijit.getViewport();
 		var tc = this.containerNode;
-		var fixed = this.fixedSize;
+		var vpSized = this.sizeToViewport;
 		this._displaysize = {
-			w: fixed ? tc.scrollWidth : this.dimensions[0],
-			h: fixed ? tc.scrollHeight : this.dimensions[1]
+			w: vpSized ? tc.scrollWidth : this.dimensions[0],
+			h: vpSized ? tc.scrollHeight : this.dimensions[1]
 		};
 	},
 	
@@ -182,10 +186,10 @@ dojo.declare('dojox.widget.Dialog',
 		};
 
 		var ds = this._displaysize;
-		props['width'] = ds.w = (ds.w + pad >= this._vp.w || this.fixedSize) 
+		props['width'] = ds.w = (ds.w + pad >= this._vp.w || this.sizeToViewport) 
 			? this._vp.w - pad : ds.w;
 			
-		props['height'] = ds.h = (ds.h + pad >= this._vp.h || this.fixedSize) 
+		props['height'] = ds.h = (ds.h + pad >= this._vp.h || this.sizeToViewport) 
 			? this._vp.h - pad : ds.h;
 
 		this._sizing = dojox.fx.sizeTo(props);
