@@ -202,8 +202,8 @@ dojo.declare("dojox.widget.Pager",
 		}
 		
 		var _PagerItem = dojo.getObject(this.itemClass);
-		var paddingLead = (_h ? "paddingLeft" : "paddingTop");
-		var paddingTrail = (_h ? "paddingRight" : "paddingBottom");
+		var paddingLead = "padding" + (_h ? "Left" : "Top");
+		var paddingTrail = "padding" + (_h ? "Right" : "Bottom");
 			
 		dojo.forEach(this.items, function(item, cnt){
 			
@@ -283,7 +283,7 @@ dojo.declare("dojox.widget.Pager",
 		this.iconsLoaded = 0;
 		this._iconConnects = [];
 		
-		for (var i=1; i<=this._totalPages; i++){
+		for (var i = 1; i <= this._totalPages; i++){
 			var icon = new Image();
 			
 			var pointer = i;
