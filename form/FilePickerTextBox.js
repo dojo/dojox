@@ -44,7 +44,7 @@ dojo.declare(
 			});
 		},
 		
-		_setValueAttr: function(/*string*/value){
+		_setValueAttr: function(/*string*/value, priorityChange, fromWidget){
 			// summary: sets the value of this widget
 			if(!this._searchInProgress){
 				this.inherited(arguments);
@@ -52,7 +52,9 @@ dojo.declare(
 				var tVal = this.dropDown.attr("pathValue")||"";
 				if(value !== tVal){
 					this._skip = true;
-					this.dropDown.attr("pathValue", value);
+					var fx = dojo.hitch(this, "_setBlurValue");
+					this.dropDown._setPathValueAttr(value, !fromWidget, 
+											this._settingBlurValue ? fx : null);
 				}
 			}
 		},
@@ -69,7 +71,7 @@ dojo.declare(
 					this._hasValidPath = true;
 				}
 				if(!this._skip){
-					this.attr("value", value);
+					this._setValueAttr(value, undefined, true);
 				}
 				delete this._skip;
 			}
@@ -139,10 +141,13 @@ dojo.declare(
 		
 		_setBlurValue: function(){
 			// summary: sets the value of the widget once focus has left
-			if(this.dropDown){
+			if(this.dropDown && !this._settingBlurValue){
+				this._settingBlurValue = true;
 				this.attr("value", this.focusNode.value);
+			}else{
+				delete this._settingBlurValue;
+				this.inherited(arguments);
 			}
-			this.inherited(arguments);
 		},
 		
 		parse: function(/* String */ value, /* Object */ constraints){

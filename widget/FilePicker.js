@@ -171,7 +171,7 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		return ret;
 	},
 	
-	_setPathValueAttr: function(/*string*/ path){
+	_setPathValueAttr: function(/*string*/ path, /*boolean?*/ resetLastExec, /*function?*/ onSet){
 		// Summary: sets the value of this widget based off the given path
 		if(!path){
 			this.attr("value", null);
@@ -181,7 +181,13 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 			path = path.substring(0, path.length - 1);
 		}
 		this.store.fetchItemByIdentity({identity: path,
-										onItem: dojo.hitch(this, "attr", "value"),
+										onItem: function(v){
+											if(resetLastExec){ 
+												this._lastExecutedValue = v;
+											}
+											this.attr("value", v);
+											if(onSet){ onSet(); }
+										},
 										scope: this});
 	},
 	
