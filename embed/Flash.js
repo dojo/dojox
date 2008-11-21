@@ -91,7 +91,11 @@ dojo.provide("dojox.embed.Flash");
 				objs[i].style.display="none";
 				for(var p in objs[i]){
 					if(p!="FlashVars" && dojo.isFunction(objs[i][p])){
-						objs[i][p]=function(){ };
+						try {
+							if(p!="FlashVars" && dojo.isFunction(objs[i][p])){
+								objs[i][p] = function(){};		
+							}
+						}catch(e){}
 					}
 				}
 			}
