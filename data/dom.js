@@ -38,25 +38,28 @@ dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 		var parser = new DOMParser();
 		return parser.parseFromString(str, mimetype);	//	DOMDocument
 	}else if((typeof dojo.global["ActiveXObject"]) !== "undefined"){
-		var prefixes = [ "MSXML2", "Microsoft", "MSXML", "MSXML3" ];
-		for(var i = 0; i<prefixes.length; i++){
+		var sf = [".DOMDocument", "XMLDOM"];
+		var dp = ["MSXML6"+sf[0], "MSXML4"+sf[0], "MSXML3"+sf[0], "MSXML2"+sf[0], "Microsoft"+sf[1]];
+		var doc;
+		dojo.some(dp, function(p){
 			try{
-				var doc = new ActiveXObject(prefixes[i]+".XMLDOM");
-				if(str){
-					if(doc){
-						doc.async = false;
-						doc.loadXML(str);
-						return doc;	//	DOMDocument
-					}else{
-						console.log("loadXML didn't work?");
-					}
-				}else{
-					if(doc){ 
-						return doc; //DOMDocument
-					}
+				doc = new ActiveXObject(p);
+			}catch(e){ return false; }
+			return true;
+		});
+		try{
+			if(str){
+				if(doc){
+					doc.async = false;
+					doc.loadXML(str);
+					return doc;	//	DOMDocument
 				}
-			}catch(e){ /* squelch */ };
-		}
+			}else{
+				if(doc){
+					return doc; //DOMDocument
+				}
+			}
+		}catch(e){ /* squelch */};
 	}else if((_document.implementation)&&
 		(_document.implementation.createDocument)){
 		if(str && dojo.trim(str) !== ""){
@@ -132,22 +135,23 @@ dojox.data.dom.replaceChildren = function(/*Element*/node, /*Node || array*/ new
 	//		The children to add to the node.  It can either be a single Node or an
 	//		array of Nodes.
 	var nodes = [];
+	var i;
 	
 	if(dojo.isIE){
-		for(var i=0;i<node.childNodes.length;i++){
+		for(i=0;i<node.childNodes.length;i++){
 			nodes.push(node.childNodes[i]);
 		}
 	}
 
 	dojox.data.dom.removeChildren(node);
-	for(var i=0;i<nodes.length;i++){
+	for(i=0;i<nodes.length;i++){
 		dojo._destroyElement(nodes[i]);
 	}
 
 	if(!dojo.isArray(newChildren)){
 		node.appendChild(newChildren);
 	}else{
-		for(var i=0;i<newChildren.length;i++){
+		for(i=0;i<newChildren.length;i++){
 			node.appendChild(newChildren[i]);
 		}
 	}
@@ -180,5 +184,6 @@ dojox.data.dom.innerXML = function(/*Node*/node){
 	}else if(typeof XMLSerializer != "undefined"){
 		return (new XMLSerializer()).serializeToString(node);	//	string
 	}
+	return null;
 }
 
