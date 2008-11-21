@@ -20,15 +20,18 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 				var url = target;
 				var query;
 				var ident;
-
+				
 				if(dojo.isObject(id)){
 					ident = '';
 					query = '?' + dojo.objectToQuery(id);
-				}else if(args.query && args.query.indexOf('?') != -1){
+				}else if(args.queryStr && args.queryStr.indexOf('?') != -1){
+					ident = args.queryStr.replace(/\?.*/, '');
+					query = args.queryStr.replace(/[^?]*\?/g, '?');
+				}else if(dojo.isString(args.query) && args.query.indexOf('?') != -1){
 					ident = args.query.replace(/\?.*/, '');
 					query = args.query.replace(/[^?]*\?/g, '?');
 				}else{
-					ident = id || '';
+					ident = id ? id.toString() : '';
 					query = '';
 				}
 				
@@ -42,14 +45,24 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 				}else{
 					url = url + '.json' + query;
 				}
+				
+				var isSync = dojox.rpc._sync;
+				dojox.rpc._sync = false;
 
 				return {
 					url : url,
 					handleAs : 'json',
 					contentType : 'application/json',
-					sync : dojox.rpc._sync,
+					sync : isSync,
 					headers : {
-						Accept : 'application/json,application/javascript'
+						Accept : 'application/json,application/javascript',
+						Range : args && (args.start >= 0 || args.count >= 0)
+								? "items="
+										+ (args.start || '0')
+										+ '-'
+										+ ((args.count && (args.count
+												+ (args.start || 0) - 1)) || '')
+								: undefined
 					}
 				};
 			};
@@ -60,26 +73,37 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 	},
 	fetch: function(args){
 		args = args || {};
-		
-		function addToQuery(obj) {
-			if(args.query == null){
-				args.query = '?';
-			}else if (dojo.isObject(args.query)){
-				args.query = '?' + dojo.objectToQuery(args.query) + '&';
-			}else if (args.query.indexOf('?') == -1){
-				args.query = args.query + '?';
+		function addToQueryStr(obj){
+			function buildInitialQueryString(){
+				if(args.queryStr == null){
+					args.queryStr = '';
+				}
+				if(dojo.isObject(args.query)){
+					args.queryStr = '?' + dojo.objectToQuery(args.query);
+				}else if(dojo.isString(args.query)){
+					args.queryStr = args.query;
+				}
 			}
-
-			args.query = args.query + dojo.objectToQuery(obj);
+			function separator(){
+				if(args.queryStr.indexOf('?') == -1){
+					return '?';
+				}else{
+					return '&';
+				}
+			}
+			if (args.queryStr == null){
+				buildInitialQueryString();
+			}
+			args.queryStr = args.queryStr + separator() + dojo.objectToQuery(obj);
 		}
 		if(args.start || args.count){
 			// in addition to the content range headers, also provide query parameters for use
 			// with the will_paginate plugin if so desired.
 			if((args.start || 0) % args.count){
-				throw new Error("The start parameter must be a multiple of a the count parameter");
+				throw new Error("The start parameter must be a multiple of the count parameter");
 			}
-			addToQuery({
-				page: (args.start || 0) / args.count,
+			addToQueryStr({
+				page: ((args.start || 0) / args.count) + 1,
 				per_page: args.count 
 			});
 		}
@@ -90,12 +114,12 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 				sortDir : []
 			};
 
-			dojo.forEach(args.sort, function(item) {
+			dojo.forEach(args.sort, function(item){
 				queryObj.sortBy.push(item.attribute);
 				queryObj.sortDir.push(!!item.descending ? 'DESC' : 'ASC');
 			});
 
-			addToQuery(queryObj);
+			addToQueryStr(queryObj);
 			delete args.sort;
 		}
 
