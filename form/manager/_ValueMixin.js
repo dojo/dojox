@@ -16,11 +16,11 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 		// value:
 		//		Optional. The value to set.
 
-		if(name in this._widgets){
+		if(name in this.formWidgets){
 			return this.formWidgetValue(name, value);	// Object
 		}
 
-		if(name in this._nodes){
+		if(name in this.formNodes){
 			return this.formElementValue(name, value);	// Object
 		}
 
