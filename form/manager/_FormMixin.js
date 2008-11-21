@@ -65,7 +65,7 @@ dojo.declare("dojox.form.manager._FormMixin", null, {
 			this.domNode.reset();
 		}
 		for(var name in this.formWidgets){
-			var widget = this.formWidgets[name];
+			var widget = this.formWidgets[name].widget;
 			if(widget.reset){
 				widget.reset();
 			}
@@ -108,7 +108,7 @@ dojo.declare("dojox.form.manager._FormMixin", null, {
  		// summary:
 		//		Make sure that every widget that has a validator function returns true.
 		for(var name in this.formWidgets){
-			var widget = this.formWidgets[name];
+			var widget = this.formWidgets[name].widget;
 			if(!widget.attr("disabled") && widget.isValid && !widget.isValid()){
 				return false;
 			}

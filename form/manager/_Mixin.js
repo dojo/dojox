@@ -69,14 +69,14 @@ dojo.require("dijit._Widget");
 			var name = widget.attr("name");
 			if(name && widget instanceof dijit.form._FormWidget){
 				if(name in this.formWidgets){
-					var a = this.formWidgets[name];
+					var a = this.formWidgets[name].widget;
 					if(dojo.isArray(a)){
 						a.push(widget);
 					}else{
-						this.formWidgets[name] = [a, widget];
+						this.formWidgets[name].widget = [a, widget];
 					}
 				}else{
-					this.formWidgets[name] = widget;
+					this.formWidgets[name] = {widget: widget, connections: []};
 				}
 			}
 		},
@@ -94,13 +94,14 @@ dojo.require("dijit._Widget");
 				// register the node
 				if(node.tagName.toLowerCase() == "input" && node.type.toLowerCase() == "radio"){
 					var a = this.formNodes[name];
+					a = a && a.node;
 					if(a && dojo.isArray(a)){
 						a.push(node);
 					}else{
-						this.formNodes[name] = [node];
+						this.formNodes[name] = {node: [node], connections: []};
 					}
 				}else{
-					this.formNodes[name] = node;
+					this.formNodes[name] = {node: node, connections: []};
 				}
 			}
 		};
@@ -133,31 +134,31 @@ dojo.require("dijit._Widget");
 
 			// process observers for widgets
 			for(var name in this.formWidgets){
-				var widget = this.formWidgets[name], observers = [];
-				if(dojo.isArray(widget)){
-					dojo.forEach(widget, function(w){
+				var t = this.formWidgets[name], observers = [];
+				if(dojo.isArray(t.widget)){
+					dojo.forEach(t.widget, function(w){
 						var o = w.attr("observer");
 						if(o && typeof o == "string"){
 							observers = observers.concat(o.split(","));
 						}
 					});
-					dojo.forEach(widget, function(w){
+					dojo.forEach(t.widget, function(w){
 						dojo.forEach(observers, function(o){
 							o = dojo.trim(o);
 							if(o && this[o] && dojo.isFunction(this[o])){
-								this.connect(w, "onChange", o);
+								t.connections.push(this.connect(w, "onChange", o));
 							}
 						}, this);
 					}, this);
 				}else{
-					var o = widget.attr("observer");
+					var widget = t.widget, o = widget.attr("observer");
 					if(o && typeof o == "string"){
 						// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
 						var eventName = widget.declaredClass == "dijit.form.Button" ? "onClick" : "onChange";
 						dojo.forEach(o.split(","), function(o){
 							o = dojo.trim(o);
 							if(o && this[o] && dojo.isFunction(this[o])){
-								this.connect(widget, eventName, o);
+								t.connections.push(this.connect(widget, eventName, o));
 							}
 						}, this);
 					}
@@ -167,31 +168,31 @@ dojo.require("dijit._Widget");
 			// process observers for nodes
 			for(var name in this.formNodes){
 				if(name in this.formWidgets){ continue; }
-				var node = this.formNodes[name], observers = [];
-				if(dojo.isArray(node)){
+				var t = this.formNodes[name], observers = [];
+				if(dojo.isArray(t.node)){
 					// input/radio array
-					dojo.forEach(node, function(n){
+					dojo.forEach(t.node, function(n){
 						var o = dojo.attr(n, "observer");
 						if(o && typeof o == "string"){
 							observers = observers.concat(o.split(","));
 						}
 					});
-					dojo.forEach(node, function(n){
+					dojo.forEach(t.node, function(n){
 						dojo.forEach(observers, function(o){
 							o = dojo.trim(o);
 							if(o && this[o] && dojo.isFunction(this[o])){
-								this.connect(n, "onclick", o);
+								t.connections.push(this.connect(n, "onclick", o));
 							}
 						}, this);
 					}, this);
 				}else{
-					var o = dojo.attr(node, "observer");
+					var node = t.node, o = dojo.attr(node, "observer");
 					if(o && typeof o == "string"){
 						var eventName = ce(node);
 						dojo.forEach(o.split(","), function(o){
 							o = dojo.trim(o);
 							if(o && this[o] && dojo.isFunction(this[o])){
-								this.connect(node, eventName, o);
+								t.connections.push(this.connect(node, eventName, o));
 							}
 						}, this);
 					}
@@ -218,6 +219,9 @@ dojo.require("dijit._Widget");
 
 			if(typeof elem == "string"){
 				elem = this.formWidgets[elem];
+				if(elem){
+					elem = elem.widget;
+				}
 			}
 
 			if(!elem){
@@ -268,6 +272,9 @@ dojo.require("dijit._Widget");
 
 			if(typeof elem == "string"){
 				elem = this.formNodes[elem];
+				if(elem){
+					elem = elem.node;
+				}
 			}
 
 			if(!elem){
@@ -428,26 +435,26 @@ dojo.require("dijit._Widget");
 				if(dojo.isArray(state)){
 					dojo.forEach(state, function(name){
 						if(name in this.formWidgets){
-							result[name] = inspector.call(this, name, this.formWidgets[name], defaultValue);
+							result[name] = inspector.call(this, name, this.formWidgets[name].widget, defaultValue);
 						}
 					}, this);
 				}else{
 					for(name in state){
 						if(name in this.formWidgets){
-							result[name] = inspector.call(this, name, this.formWidgets[name], state[name]);
+							result[name] = inspector.call(this, name, this.formWidgets[name].widget, state[name]);
 						}
 					}
 				}
 			}else{
 				for(name in this.formWidgets){
-					result[name] = inspector.call(this, name, this.formWidgets[name], defaultValue);
+					result[name] = inspector.call(this, name, this.formWidgets[name].widget, defaultValue);
 				}
 			}
 
 			return result;	// Object
 		},
 
-		inspectFormElements: function(/* Function */ inspector, /* Object? */ state, /* Object? */ defaultValue){
+		inspectFormNodes: function(/* Function */ inspector, /* Object? */ state, /* Object? */ defaultValue){
 			// summary:
 			//		Run an inspector function on controlled form elements returning a result object.
 			// inspector:
@@ -467,19 +474,19 @@ dojo.require("dijit._Widget");
 				if(dojo.isArray(state)){
 					dojo.forEach(state, function(name){
 						if(name in this.formNodes){
-							result[name] = inspector.call(this, name, this.formNodes[name], defaultValue);
+							result[name] = inspector.call(this, name, this.formNodes[name].node, defaultValue);
 						}
 					}, this);
 				}else{
 					for(name in state){
 						if(name in this.formNodes){
-							result[name] = inspector.call(this, name, this.formNodes[name], state[name]);
+							result[name] = inspector.call(this, name, this.formNodes[name].node, state[name]);
 						}
 					}
 				}
 			}else{
 				for(name in this.formNodes){
-					result[name] = inspector.call(this, name, this.formNodes[name], defaultValue);
+					result[name] = inspector.call(this, name, this.formNodes[name].node, defaultValue);
 				}
 			}
 
@@ -553,7 +560,7 @@ dojo.require("dijit._Widget");
 				}
 				return inspector.call(this, name, widget.domNode, value);
 			}, state, defaultValue);
-			dojo.mixin(result, this.inspectFormElements(inspector, state, defaultValue));
+			dojo.mixin(result, this.inspectFormNodes(inspector, state, defaultValue));
 			return dojo.mixin(result, this.inspectAttachedPoints(inspector, state, defaultValue));	// Object
 		}
 	});

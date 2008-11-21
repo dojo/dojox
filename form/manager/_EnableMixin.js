@@ -28,7 +28,7 @@ dojo.require("dojox.form.manager._Mixin");
 				return !widget.attr("disabled");
 			}), names);
 
-			dojo.mixin(result, this.inspectFormElements(ia(function(name, node){
+			dojo.mixin(result, this.inspectFormNodes(ia(function(name, node){
 				return !dojo.attr(node, "disabled");
 			}), names));
 
@@ -54,7 +54,7 @@ dojo.require("dojox.form.manager._Mixin");
 				widget.attr("disabled", !value);
 			}), state, defaultState);
 
-			this.inspectFormElements(aa(function(name, node, value){
+			this.inspectFormNodes(aa(function(name, node, value){
 				dojo.attr(node, "disabled", !value);
 			}), state, defaultState);
 

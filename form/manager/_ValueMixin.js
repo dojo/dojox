@@ -39,7 +39,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 			return this.formWidgetValue(name);
 		}, names);
 
-		dojo.mixin(result, this.inspectFormElements(function(name){
+		dojo.mixin(result, this.inspectFormNodes(function(name){
 			return this.formElementValue(name);
 		}, names));
 
@@ -58,7 +58,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 				this.formWidgetValue(name, value);
 			}, values);
 
-			this.inspectFormElements(function(name, node, value){
+			this.inspectFormNodes(function(name, node, value){
 				this.formElementValue(name, value);
 			}, values);
 
