@@ -64,7 +64,7 @@ dojo.require("dijit._Widget");
 		},
 
 		skipNames = {domNode: 1, containerNode: 1, srcNodeRef: 1, bgIframe: 1},
-		
+
 		keys = function(o){
 			// similar to dojox.lang.functional.keys
 			var list = [], key;
@@ -94,7 +94,7 @@ dojo.require("dijit._Widget");
 			}
 			return name;
 		},
-		
+
 		getObserversFromWidget = function(name){
 			var observers = {};
 			aa(function(_, w){
@@ -110,7 +110,7 @@ dojo.require("dijit._Widget");
 			}).call(this, null, this.formWidgets[name].widget);
 			return keys(observers);
 		},
-		
+
 		connectWidget = function(name, observers){
 			var t = this.formWidgets[name], c = t.connections;
 			if(c.length){
@@ -157,7 +157,7 @@ dojo.require("dijit._Widget");
 			}
 			return name;
 		},
-		
+
 		getObserversFromNode = function(name){
 			var observers = {};
 			aa(function(_, n){
@@ -173,7 +173,7 @@ dojo.require("dijit._Widget");
 			}).call(this, null, this.formNodes[name].node);
 			return keys(observers);
 		},
-		
+
 		connectNode = function(name, observers){
 			var t = this.formNodes[name], c = t.connections;
 			if(c.length){
@@ -203,7 +203,7 @@ dojo.require("dijit._Widget");
 		//		processing, I/O orchestration, and common form-related
 		//		functionality. See additional mixins in dojox.form.manager
 		//		namespace.
-		
+
 		watch: true,
 
 		startup: function(){
@@ -219,16 +219,16 @@ dojo.require("dijit._Widget");
 
 			this.inherited(arguments);
 		},
-		
+
 		destroy: function(){
 			// summary:
 			//		Called when the widget is being destroyed
-			
+
 			for(var name in this.formWidgets){
 				dojo.forEach(this.formWidgets[name].connections, dojo.disconnect);
 			}
 			this.formWidgets = {};
-			
+
 			for(var name in this.formNodes){
 				dojo.forEach(this.formNodes[name].connections, dojo.disconnect);
 			}
@@ -236,9 +236,9 @@ dojo.require("dijit._Widget");
 
 			this.inherited(arguments);
 		},
-		
+
 		// register/unregister widgets and nodes
-		
+
 		registerWidget: function(widget){
 			// summary:
 			//		Register a widget with the form manager
@@ -257,7 +257,7 @@ dojo.require("dijit._Widget");
 			}
 			return this;
 		},
-		
+
 		unregisterWidget: function(name){
 			// summary:
 			//		Removes the widget by name from internal tables unregistering
@@ -301,7 +301,7 @@ dojo.require("dijit._Widget");
 			// do the same with nodes
 			return this.registerNodeDescendants(widget.domNode);
 		},
-		
+
 		unregisterWidgetDescendants: function(widget){
 			// summary:
 			//		Unregister widget's descendants with the form manager
@@ -336,7 +336,7 @@ dojo.require("dijit._Widget");
 			// do the same with nodes
 			return this.unregisterNodeDescendants(widget.domNode);
 		},
-		
+
 		registerNode: function(node){
 			// summary:
 			//		Register a node with the form manager
@@ -353,7 +353,7 @@ dojo.require("dijit._Widget");
 			}
 			return this;
 		},
-		
+
 		unregisterNode: function(name){
 			// summary:
 			//		Removes the node by name from internal tables unregistering
@@ -368,7 +368,7 @@ dojo.require("dijit._Widget");
 			}
 			return this;
 		},
-		
+
 		registerNodeDescendants: function(node){
 			// summary:
 			//		Register node's descendants (form nodes) with the form manager
@@ -391,7 +391,7 @@ dojo.require("dijit._Widget");
 
 			return this;
 		},
-		
+
 		unregisterNodeDescendants: function(node){
 			// summary:
 			//		Unregister node's descendants (form nodes) with the form manager
