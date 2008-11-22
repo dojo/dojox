@@ -189,7 +189,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	_showEnd: function(){
 		// summary: Common animation onEnd code - "unclose"
-		dojo.style(this.cwrapper, { opacity: 0, visibility:"visible" });		
+		dojo.style(this.cwrapper, { opacity: 0, visibility:"visible" });
 		dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
 		dojo.removeClass(this.domNode, "dojoxExpandoClosed");
 		setTimeout(dojo.hitch(this._container, "layout"), 15);
@@ -205,7 +205,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 			h = size.h - this._titleHeight;
 			
 		dojo.style(this.containerNode, "height", h + "px");
-		this.inherited(arguments);
+		if(this._singleChild && this._singleChild.resize){
+			this._singleChild.resize({ w: size.w, h: h });
+		}
 	},
 	
 	_trap: function(e){
