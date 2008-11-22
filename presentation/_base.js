@@ -91,15 +91,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 
 	moveTo: function(/* Integer */ number){
 		// summary: jump to slide based on param
-		var slideIndex = number - 1; 
-		
-		if(slideIndex < 0){
-			slideIndex = 0;
-		}
-		if(slideIndex > this._slides.length - 1){
-			slideIndex = this._slides.length - 1; 
-		}
-		this._gotoSlide(slideIndex);
+		this._gotoSlide(Math.min(this._slides.length - 1, Math.max(number - 1, 0)));
 	},
 
 	onMove: function (number){
