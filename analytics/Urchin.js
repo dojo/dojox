@@ -40,8 +40,12 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	//	|	// and in markup:
 	//	|	<div dojoType="dojox.analytics.Urchin"></div>
 	//
+	//	example:
+	//	|	// create and define all analytics with one tag. 
+	//	|	<div dojoType="dojox.analytics.Urchin" acct="UA-12345-67"></div>
+	//
 	// acct: String
-	//		your GA urchin tracker account number. 
+	//		your GA urchin tracker account number. Overrides `djConfig.urchin`
 	acct: dojo.config.urchin,
 
 	// loadInterval: Integer
