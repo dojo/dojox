@@ -28,6 +28,24 @@ dojo.require("dojo.fx");
 		//		darkColor: the darkest color reached during the animation 
 		//		lightColor: the brightest color
 		//		endColor: the final backgroundColor for the node
+        //
+        //		depth: Float
+		//			 0 <= depth <= 1 overrides the computed "depth"
+        //          (0: min distorsion, 1: max distorsion)
+        //
+        //      whichAnim: String
+        //          "first"          : the first half animation
+        //          "last"           : the second one
+        //          "both" (default) : both
+        //
+        //      axis: String
+        //          "center" (default)    : the node is flipped around his center
+        //          "shortside"           : the node is flipped around his "short" (in perspective) side
+        //          "longside"            : the node is flipped around his "long" (in perspective) side
+        //          "cube"                : the node flips around the central axis of the cube
+        //
+        //      shift: Integer
+        //          node translation, perpendicular to the rotation axis
 		//
 		//	example:
 		//	|	var anim = dojox.fx.flip({ 
@@ -36,6 +54,8 @@ dojo.require("dojo.fx");
 		//	|		darkColor: "#555555",
 		//	|		lightColor: "#dddddd",
 		//	|		endColor: "#666666",
+		//	|		depth: .5,
+		//	|		shift: 50,
 		//	|		duration:300
 		//	|	  });
 
@@ -54,12 +74,12 @@ dojo.require("dojo.fx");
 			anims = [],
 			duration = args.duration ? args.duration / 2 : 250,
 			dir = args.dir || "left", 
-			pConst = .8,
+			pConst = .9,
 			transparentColor = "transparent",
 			whichAnim = args.whichAnim,
-			mConst = 1
+			axis = args.axis || "center",
+			depth = args.depth
 		;
-
 		// IE6 workaround: IE6 doesn't support transparent borders
 		var convertColor = function(color){
 			return ((new dojo.Color(color)).toHex() === "#000000") ? "#000001" : color;
@@ -113,16 +133,30 @@ dojo.require("dojo.fx");
 		// property names
 		pn = dynProperties[dir];
 
-		pConst = Math.min(.8, Math.max(.3, dims[pn[5].toLowerCase()] / dims[pn[4].toLowerCase()]));
-		if(whichAnim){
-			pConst = .5;
-			mConst = 0;
+		// .4 <= pConst <= .9
+		if(typeof depth != "undefined"){
+			depth = Math.max(0, Math.min(1, depth)) / 2;
+			pConst = .4 + (.5 - depth);
+		}else{
+			pConst = Math.min(.9, Math.max(.4, dims[pn[5].toLowerCase()] / dims[pn[4].toLowerCase()]));
 		}
-		
-		for(var i = 5; i < 7; i++){
-			dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst; 
-			dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst; 
-			dims[pn[i].toLowerCase() + "Diff"] = dims["end" + pn[i] +  "Max"] - dims["end" + pn[i] + "Min"];  
+		var p0 = props[0];
+		for(var i = 4; i < 6; i++){
+			if(axis == "center" || axis == "cube"){ // find a better name for "cube" 
+				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst; 
+				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst; 
+			}else if(axis == "shortside"){
+				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()];
+				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst; 
+			}else if(axis == "longside"){
+				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst;
+				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()];  
+			}
+		}
+		if(axis == "center"){
+			p0[pn[2].toLowerCase()] = dims[pn[2].toLowerCase()] - (dims[pn[8]] - dims[pn[6]]) / 4;
+		}else if(axis == "shortside"){
+			p0[pn[2].toLowerCase()] = dims[pn[2].toLowerCase()] - (dims[pn[8]] - dims[pn[6]]) / 2;
 		}
 
 		staticProps[pn[5].toLowerCase()] = dims[pn[5].toLowerCase()] + "px";
@@ -130,11 +164,12 @@ dojo.require("dojo.fx");
 		staticProps[borderConst + pn[1] + widthConst] = dims[pn[4].toLowerCase()] + "px";
 		staticProps[borderConst + pn[1] + "Color"] = bgColor;
 
-		var p0 = props[0];
 		p0[borderConst + pn[1] + widthConst] = 0; 
 		p0[borderConst + pn[1] + "Color"] = darkColor; 
-		p0[borderConst + pn[2] + widthConst] = p0[borderConst + pn[3] + widthConst] = whichAnim ? dims[pn[6]] / 2 : dims[pn[5].toLowerCase() + "Diff"] / 2;  
-		p0[pn[2].toLowerCase()] = dims[pn[2].toLowerCase()] - mConst * (dims[pn[8]] - dims[pn[6]]) / 4;
+		p0[borderConst + pn[2] + widthConst] = p0[borderConst + pn[3] + widthConst] = axis != "cube" 
+			? (dims["end" + pn[5] +  "Max"] - dims["end" + pn[5] + "Min"]) / 2
+			: dims[pn[6]] / 2
+		;
 		p0[pn[7].toLowerCase()] = dims[pn[7].toLowerCase()] + dims[pn[4].toLowerCase()] / 2 + (args.shift || 0);
 		p0[pn[5].toLowerCase()] = dims[pn[6]];
 
@@ -157,7 +192,7 @@ dojo.require("dojo.fx");
 			s.visibility = "visible";
 		};
 		if(whichAnim == "last"){
-			for(var i in p0){
+			for(i in p0){
 				p0[i] = { start: p0[i] };
 			}
 			p0[borderConst + pn[1] + "Color"] = { start: darkColor, end: endColor }; 
@@ -270,13 +305,200 @@ dojo.require("dojo.fx");
 			p = d.args
 		;
 		args.duration = args.duration ? args.duration * 2 : 500; 
-		
+		args.depth = .8;
+		args.axis = "cube";
 		for(var i = p.length - 1; i >= 0; i--){
 			dojo.mixin(args, p[i]);
 			anims.push(dojox.fx.flip(args));
 		}
 		return dojo.fx.combine(anims);
 	};
-
-		
+	
+	dojox.fx.flipPage = function(/*Object*/ args){
+		// summary: An extension to `dojox.fx.flip` providing a page flip like animation.
+		//
+		// description:
+		//		An extension to `dojox.fx.flip` providing a page flip effect.
+		//		Behaves the same as `dojox.fx.flip`, using the same attributes and
+		//		other standard `dojo._Animation` properties.
+		//
+		//	example:
+		//		See `dojox.fx.flip`
+		var n = args.node,
+			coords = dojo.coords(n, true),
+			x = coords.x,
+			y = coords.y,
+			w = coords.w,
+			h = coords.h,
+			bgColor = dojo.style(n, "backgroundColor"), 
+			lightColor = args.lightColor || "#dddddd",
+			darkColor = args.darkColor, 
+			helperNode = dojo.doc.createElement("div"),
+			anims = [],
+			hn = [],
+			dir = args.dir || "right",
+			pn = {
+				left: ["left", "right", "x", "w"],
+				top: ["top", "bottom", "y", "h"],
+				right: ["left", "left", "x", "w"],
+				bottom: ["top", "top", "y", "h"]
+			},
+			shiftMultiplier = {
+				right: [1, -1],
+				left: [-1, 1],
+				top: [-1, 1],
+				bottom: [1, -1]
+			}
+		;
+		dojo.style(helperNode, {
+			position: "absolute",
+			width  : w + "px",
+			height : h + "px",
+			top    : y + "px",
+			left   : x + "px",
+			visibility: "hidden"
+		});
+		var hs = [];
+		for(var i = 0; i < 2; i++){
+			var r = i % 2,
+				d = r ? pn[dir][1] : dir,
+				wa = r ? "last" : "first",
+				endColor = r ? bgColor : lightColor,
+				startColor = r ? endColor : args.startColor || n.style.backgroundColor
+			;
+			hn[i] = dojo.clone(helperNode);
+			var	finalize = function(x){
+					return function(){
+						dojo._destroyElement(hn[x]);
+					}
+				}(i)
+			;
+			dojo.body().appendChild(hn[i]);
+			hs[i] = {
+				backgroundColor: r ? startColor : bgColor
+			};
+			
+			hs[i][pn[dir][0]] = coords[pn[dir][2]] + shiftMultiplier[dir][0] * i * coords[pn[dir][3]] + "px";
+			dojo.style(hn[i], hs[i]);
+			anims.push(dojox.fx.flip({
+			    node: hn[i],
+			    dir: d,
+			    axis: "shortside",
+			    depth: args.depth,
+			    duration: args.duration / 2,
+			    shift: shiftMultiplier[dir][i] * coords[pn[dir][3]] / 2,
+				darkColor: darkColor,
+				lightColor: lightColor,
+			    whichAnim: wa,
+			    endColor: endColor
+			}));
+			dojo.connect(anims[i], "onEnd", finalize);
+		}
+		return dojo.fx.chain(anims);
+	};
+	
+	
+	dojox.fx.flipGrid = function(/*Object*/ args){
+		// summary: An extension to `dojox.fx.flip` providing a decomposition in rows * cols flipping elements
+		//
+		// description:
+		//		An extension to `dojox.fx.flip` providing a page flip effect.
+		//		Behaves the same as `dojox.fx.flip`, using the same attributes and
+		//		other standard `dojo._Animation` properties and
+		//
+        //      cols: Integer columns
+        //      rows: Integer rows
+		//
+		//      duration: the single flip duration
+		//
+		//	example:
+		//		See `dojox.fx.flip`
+		var rows = args.rows || 4,
+			cols = args.cols || 4,
+			anims = [],
+			helperNode = dojo.doc.createElement("div"),
+			n = args.node,
+			coords = dojo.coords(n, true),
+			x = coords.x,
+			y = coords.y,
+			nw = coords.w,
+			nh = coords.h,
+			w = coords.w / cols,
+			h = coords.h / rows,
+			cAnims = []
+		;
+		dojo.style(helperNode, {
+			position: "absolute",
+			width: w + "px",
+			height: h + "px",
+			backgroundColor: dojo.style(n, "backgroundColor")
+		});
+		for(var i = 0; i < rows; i++){
+			var r = i % 2,
+				d = r ? "right" : "left",
+				signum = r ? 1 : -1
+			;
+			// cloning
+			var cn = dojo.clone(n);
+			dojo.style(cn, {
+				position: "absolute",
+				width: nw + "px",
+				height: nh + "px",
+				top: y + "px",
+				left: x + "px",
+				clip: "rect(" + i * h + "px," + nw + "px," + nh + "px,0)"	
+			});
+	     	dojo.body().appendChild(cn);
+			anims[i] = [];
+			for(var j = 0; j < cols; j++){
+				var hn = dojo.clone(helperNode),
+					l = r ? j : cols - (j + 1)
+				; 
+				var adjustClip = function(xn, yCounter, xCounter){
+					return function(){
+						if(!(yCounter % 2)){
+							dojo.style(xn, {
+								clip: "rect(" + yCounter * h + "px," + (nw - (xCounter + 1) * w ) + "px," + ((yCounter + 1) * h) + "px,0px)"
+							});
+						}else{
+							dojo.style(xn, {
+								clip: "rect(" + yCounter * h + "px," + nw + "px," + ((yCounter + 1) * h) + "px," + ((xCounter + 1) * w) + "px)"
+							});
+						}
+					}
+				}(cn, i, j);
+	     		dojo.body().appendChild(hn);
+	     		dojo.style(hn, {
+	     		    left: x + l * w + "px",
+	     		    top: y + i * h + "px",
+					visibility: "hidden"
+	     		});
+				var a = dojox.fx.flipPage({
+				   node: hn,
+				   dir: d,
+				   duration: args.duration || 900,
+				   shift: signum * w/2,
+				   depth: .2,
+				   darkColor: args.darkColor,
+				   lightColor: args.lightColor,
+				   startColor: args.startColor || args.node.style.backgroundColor
+				}),
+				removeHelper = function(xn){
+					return function(){
+						dojo._destroyElement(xn);
+					}
+				}(hn)
+				;
+				dojo.connect(a, "play", this, adjustClip);
+				dojo.connect(a, "play", this, removeHelper);
+				anims[i].push(a);
+			}
+			cAnims.push(dojo.fx.chain(anims[i]));
+			
+		}
+		dojo.connect(cAnims[0], "play", function(){
+			dojo.style(n, {visibility: "hidden"});
+		});
+		return dojo.fx.combine(cAnims);
+	};
 })();
