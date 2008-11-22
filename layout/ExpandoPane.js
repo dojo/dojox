@@ -101,6 +101,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		if(this.startExpanded){
 			this._showing = true;
 		}else{
+			this._showing = false;
 			this._hideWrapper();
 			this._hideAnim.gotoPercent(99,true);
 		}
@@ -201,6 +202,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	resize: function(){
 		// summary: we aren't a layout widget, but need to act like one:
+		
+		// FIXME: this feels like I'm mis-interpreting what resize() is 
+		// possibly going to send to us, if anything at all. might be able
+		// to omit this check as we're always in a bordercontainer. 
 		var size = dojo.marginBox(this.domNode),
 			h = size.h - this._titleHeight;
 			
