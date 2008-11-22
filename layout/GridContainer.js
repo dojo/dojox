@@ -169,7 +169,7 @@ dojo.declare("dojox.layout.GridContainer",
 		this._oldwidth = this.domNode.offsetWidth;
 		if(this.hasResizableColumns){
 			this._initPlaceGrips();
-			this._placeGrips();			
+			this._placeGrips();
 		}
 	},
 	
@@ -412,7 +412,7 @@ dojo.declare("dojox.layout.GridContainer",
 	
 	_placeGrips: function(){
 		//summary: Define the position of a grip and place it on page.
-		console.log('placegrips');
+
 		var height;
 		if (this.allowAutoScroll){
 			height = this.gridNode.scrollHeight;

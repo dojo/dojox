@@ -232,9 +232,9 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 				left: 0,
 				top: 0
 			},
-			duration: this.duration,	
+			duration: this.duration,
 			easing: this.easing,
-			onEnd: dojo.hitch(page,function(){
+			onEnd: dojo.hitch(page, function(){
 				if(this.onShow){ this.onShow(); }
 				if(this._loadCheck){ this._loadCheck(); }
 			})
