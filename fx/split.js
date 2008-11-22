@@ -124,7 +124,6 @@ dojo.mixin(dojox.fx,{
 		//							 (default is true)
 
 		var node = args.node = dojo.byId(args.node);
-		var s = node.style;
 
 		args.rows = args.rows || 3;
 		args.columns = args.columns || 3;
@@ -246,7 +245,6 @@ dojo.mixin(dojox.fx,{
 		//		args.unhide: Boolean - If true, the peices fall from above and land in place
 
 		var node = args.node = dojo.byId(args.node);
-		var s = node.style;
 
 		args.rows = args.rows || 5;
 		args.columns = args.columns || 5;
@@ -263,8 +261,6 @@ dojo.mixin(dojox.fx,{
 
 		// Returns the animation object for each piece
 		args.pieceAnimation = function(piece, x, y, coords){
-			var pieceHeight = coords.h / args.rows;
-			var pieceWidth = coords.w / args.columns;
 
 			var randomDelay = Math.random() * (args.rows + args.columns) * args.interval;
 			// If distance is negative, start from the top right instead of bottom left
@@ -360,8 +356,6 @@ dojo.mixin(dojox.fx,{
 
 		// Returns the animation object for each piece
 		args.pieceAnimation = function(piece, x, y, coords){
-			var pieceHeight = coords.h / args.rows;
-			var pieceWidth = coords.w / args.columns;
 
 			// Since x an y start at 0, the opposite is true...
 			var colIsOdd = !(x % 2);
@@ -462,7 +456,6 @@ dojo.mixin(dojox.fx,{
 		//		args.unhide: Boolean - If true, the animation is reversed
 
 		var node = args.node = dojo.byId(args.node);
-		var s = node.style;
 
 		args.rows = args.rows || 4;
 		args.columns = args.columns || 4;
@@ -473,8 +466,6 @@ dojo.mixin(dojox.fx,{
 		if(typeof(args.fade) == "undefined"){
 			args.fade = true;
 		}
-		var random = Math.abs(args.random);
-
 		var duration = (args.duration - (args.rows + args.columns) * Math.abs(args.interval));
 
 		// Returns the animation object for each piece
