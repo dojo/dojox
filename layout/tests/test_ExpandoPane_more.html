@@ -130,6 +130,20 @@
 		<div region="center" startExpanded="false" dojoType="dijit.layout.ContentPane" href="_lorem.html"></div>
 	</div>	
 
+	<h2>Same, Leading / Trailing</h2>
+	<div dojoType="dijit.layout.BorderContainer" style="height:375px; border:8px solid #333;" design="sidebar">
+		<div splitter="true" startExpanded="false" dojoType="dojox.layout.ExpandoPane" title="leftTest" region="leading" maxWidth="175" style="width:175px; background:yellow;">
+			foo
+		</div>
+		<div splitter="true" startExpanded="false" dojoType="dojox.layout.ExpandoPane" title="rightTest" region="trailing" maxWidth="175" style="width:175px; background:yellow;">
+			foo
+		</div>
+		<div splitter="true" startExpanded="false" dojoType="dojox.layout.ExpandoPane" title="topTest" region="top" maxHeight="75" style="height:75px; background:yellow;">
+			foo
+		</div>
+		<div region="center" startExpanded="false" dojoType="dijit.layout.ContentPane" href="_lorem.html"></div>
+	</div>	
+
 
 </body>
 </html>
