@@ -575,12 +575,13 @@ dojo.requireLocalization("dijit", "loading");
 			}
 			// useful measurement
 			var padBorder = this._getPadBorder();
+			var hh = 0;
 			// grid height
 			if(this._autoHeight){
 				this.domNode.style.height = 'auto';
 				this.viewsNode.style.height = '';
 			}else if(typeof this.autoHeight == "number"){
-				var h = this._getHeaderHeight();
+				var h = hh = this._getHeaderHeight();
 				h += (this.scroller.averageRowHeight * this.autoHeight);
 				this.domNode.style.height = h + "px";
 			}else if(this.flex > 0){
@@ -608,7 +609,7 @@ dojo.requireLocalization("dijit", "loading");
 			}else{
 				// Otherwise, show the header and give it an appropriate height.
 				this.viewsHeaderNode.style.display = "block";
-				this._getHeaderHeight();
+				hh = this._getHeaderHeight();
 			}
 
 			// NOTE: it is essential that width be applied before height
@@ -617,7 +618,7 @@ dojo.requireLocalization("dijit", "loading");
 			// Therefore prior to width sizing flex columns with spaces are maximally wrapped
 			// and calculated to be too tall.
 			this.adaptWidth();
-			this.adaptHeight();
+			this.adaptHeight(hh);
 
 			this.postresize();
 		},
@@ -631,10 +632,10 @@ dojo.requireLocalization("dijit", "loading");
 				this.domNode.style.width = vw + "px";
 		},
 
-		adaptHeight: function(){
+		adaptHeight: function(inHeaderHeight){
 			// private: measures and normalizes header height, then sets view heights, and then updates scroller
 			// content extent
-			var t = this._getHeaderHeight();
+			var t = inHeaderHeight || this._getHeaderHeight();
 			var h = (this._autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 			this.views.onEach('setSize', [0, h]);
 			this.views.onEach('adaptHeight');
