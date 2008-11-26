@@ -310,7 +310,7 @@ dojox.json.ref = {
 		}
 		var json = serialize(it,'#','');
 		if(!indexSubObjects){
-			for(i in paths)  {// cleanup the temporary path-generated ids
+			for(var i in paths)  {// cleanup the temporary path-generated ids
 				delete paths[i].__id;
 			}
 		}

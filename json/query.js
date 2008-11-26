@@ -175,7 +175,7 @@ dojo.provide("dojox.json.query");
 		// 	 	This finds objects in array with a price less than 15.00 and sorts then
 		// 		by rating, highest rated first, and returns the first ten items in from this
 		// 		filtered and sorted list.
-		tokens = [];
+		var tokens = [];
 		var depth = 0;	
 		var str = [];
 		query = query.replace(/"(\\.|[^"\\])*"|'(\\.|[^'\\])*'|[\[\]]/g,function(t){

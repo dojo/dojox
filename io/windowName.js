@@ -191,13 +191,13 @@ dojox.io.windowName = {
 			for(var i in query){
 				var values = query[i];
 				values = values instanceof Array ? values : [values];
-				for(j = 0; j < values.length; j++){
+				for(var j = 0; j < values.length; j++){
 					// create hidden inputs for all the parameters
 					var input = doc.createElement("input");
 					input.type = 'hidden';
 					input.name = i;
-					input.value = values[j];				
-					form.appendChild(input);	
+					input.value = values[j];
+					form.appendChild(input);
 				}
 			}
 			form.method = 'POST';
