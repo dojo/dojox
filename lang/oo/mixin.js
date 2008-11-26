@@ -10,6 +10,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		defaultFilter = function(name){ return name; },
 		defaultDecorator = function(name, newValue, oldValue){ return newValue; },
 		defaultMixer = function(target, name, newValue, oldValue){ target[name] = newValue; },
+		defaults = {},	// for the internal use in the mixin()
 
 		applyDecorator = oo.applyDecorator = function(decorator, name, newValue, oldValue){
 			//	summary:
@@ -70,17 +71,6 @@ dojo.require("dojox.lang.oo.Decorator");
 			mixer = defaults.mixer || mixer;
 		}
 		
-		// process object decorator/filter
-		if(source instanceof Decorator){
-			// use this decorator as a default for all attributes
-			decorator = source.decorator;
-			source = source.value;
-		}
-		if(source instanceof Filter){
-			filter = source.filter;
-			source = source.bag;
-		}
-		
 		// start mixing in properties
 		for(name in source){
 			if(source.hasOwnProperty(name)){
@@ -110,9 +100,22 @@ dojo.require("dojox.lang.oo.Decorator");
 		//		source of properties, more than one source is allowed
 		// returns: Object:
 		//		target
-
+		
 		for(var i = 1, l = arguments.length; i < l; ++i){
-			oo._mixin(target, arguments[i]);
+			source = arguments[i];
+			if(source instanceof Decorator){
+				defaults.decorator = source.decorator;
+				source = source.value;
+			}else{
+				defaults.decorator = defaultDecorator;
+			}
+			if(source instanceof Filter){
+				defaults.filter = source.filter;
+				source = source.bag;
+			}else{
+				defaults.filter = defaultFilter;
+			}
+			oo._mixin(target, source, defaults);
 		}
 
 		return target;	// Object
