@@ -44,7 +44,7 @@ dojo.require("dojox.lang.functional.reversed");
 			}
 			var t = this.chart.theme, color, stroke, fill, f, gap, width,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
-				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				events = this.events();
 			f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
 			gap = f.gap;

@@ -21,7 +21,7 @@ dojo.require("dojox.lang.functional.reversed");
 			}
 			var t = this.chart.theme, color, stroke, fill, f, gap, height, thickness,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
-				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				baseline = Math.max(0, this._hScaler.bounds.lower),
 				baselineWidth = ht(baseline),
 				events = this.events();

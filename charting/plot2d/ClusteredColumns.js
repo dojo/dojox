@@ -19,7 +19,7 @@ dojo.require("dojox.lang.functional.reversed");
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, color, stroke, fill, f, gap, width, thickness
+			var t = this.chart.theme, color, stroke, fill, f, gap, width, thickness,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				baseline = Math.max(0, this._vScaler.bounds.lower),

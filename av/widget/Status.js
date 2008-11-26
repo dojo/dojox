@@ -98,7 +98,7 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 	},
 	
 	toSeconds: function(time){
-		ts = time.toString()
+		var ts = time.toString()
 
 		if(ts.indexOf(".")<0){
 			ts += ".00"

@@ -88,7 +88,7 @@ dojo.require("dojox.lang.functional");
 					shadowStroke.color = shadowColor;
 					shadowStroke.width += sh.dw ? sh.dw : 0;
 					run.dyn.shadow = shadowStroke;
-					shadowMarkers = dojo.map(points, function(item){
+					var shadowMarkers = dojo.map(points, function(item){
 						var sh = this.opt.shadows;
 						return s.createCircle({
 							cx: item.x + sh.dx, cy: item.y + sh.dy, r: item.radius

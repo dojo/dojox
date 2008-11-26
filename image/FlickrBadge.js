@@ -31,7 +31,7 @@ dojo.declare("dojox.image.FlickrBadge", dojox.image.Badge, {
 	// 		of the A tag.
 	target: "",
 
-	apikey: "8c6803164dbc395fb7131c9d54843627",
+	apikey: "e86ac45071ff90a167c347a365f32187",
 	_store: null,
 
 	postCreate: function(){
