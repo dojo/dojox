@@ -209,7 +209,7 @@ dojo.declare("dojox.data.ServiceStore",
 			}else if(args.onItem){
 				// even if it is already loaded, we will use call the callback, this makes it easier to 
 				// use when it is not known if the item is loaded (you can always safely call loadItem). 
-				args.onItem.call(args.scope, result);
+				args.onItem.call(args.scope, args.item);
 			}
 			return item;
 		},
