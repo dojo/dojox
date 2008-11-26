@@ -26,7 +26,7 @@ dojo.provide("dojox.lang.mix");
 						delete props[remove[j]];
 					}
 				}else{
-					for(var i in remove){
+					for(i in remove){
 						if(remove.hasOwnProperty(i)){
 							delete props[i];
 						}
@@ -59,7 +59,7 @@ dojo.provide("dojox.lang.mix");
 		this.rename = rename || empty;
 		if(skip && dojo.isArray(skip)){
 			var p = {};
-			for(j = 0, l = skip.length; j < l; ++j){
+			for(var j=0, l=skip.length; j<l; ++j){
 				p[skip[j]] = 1;
 			}
 			this.skip = p;
