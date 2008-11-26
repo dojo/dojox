@@ -5,6 +5,7 @@ dojo.require("dijit._Calendar");
 dojo.require("dijit._Container");
 
 dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dijit._Container], {
+	// summary: The Root class for all _Calendar extensions
 
 	// templatePath: URL
 	//  the path to the template to be used to construct the widget.
