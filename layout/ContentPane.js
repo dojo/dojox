@@ -175,11 +175,12 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 		}
 	},
 
-	_prepareLoad: function(forceLoad){
+	_loadCheck: function(forceLoad){
+		// summary:
 		// sets up for a xhrLoad, load is deferred until widget is showing
 		var defObj = this._setUpDeferreds();
 
-		dijit.layout.ContentPane.prototype._prepareLoad.apply(this, arguments);
+		dijit.layout.ContentPane.prototype._loadCheck.apply(this, arguments);
 
 		return defObj;
 	},
