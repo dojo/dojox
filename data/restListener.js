@@ -15,7 +15,6 @@ dojox.data.restListener = function(message){
 	var result = dojox.json.ref.resolveJson(message.result, {
 					defaultId: message.event == 'put' && channel,
 					index: dojox.rpc.Rest._index,
-					index: dojox.rpc.Rest._timeStamps,
 					idPrefix: service.servicePath,
 					idAttribute: jr.getIdAttribute(service),
 					schemas: jr.schemas,
