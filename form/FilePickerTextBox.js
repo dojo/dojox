@@ -177,7 +177,7 @@ dojo.declare(
 				return v;
 			};
 			ddVal = norm(ddVal);
-			val = norm(value);
+			var val = norm(value);
 			if(val == ddVal){
 				return value;
 			}
