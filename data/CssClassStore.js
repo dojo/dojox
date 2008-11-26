@@ -61,7 +61,7 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 		//		parsing out all available class names.
 		var obj = {};
 		var s = rule['selectorText'].split(" ");
-		for(j = 0; j < s.length; j++){
+		for(var j=0; j<s.length; j++){
 			var tmp = s[j];
 			var first = tmp.indexOf('.');
 			if(tmp && tmp.length > 0 && first !== -1){

@@ -182,7 +182,7 @@ if(dojox.data && dojox.data.JsonRestStore){
 					method:method,
 					content: data,
 					params:args.content,
-					subscribe:headers["X-Subscribe"]
+					subscribe:args.headers["X-Subscribe"]
 				});
 				args.url = this.url;
 				method = "POST";

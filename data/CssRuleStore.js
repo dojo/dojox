@@ -264,7 +264,7 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 		var selector = rule['selectorText'];
 		var s = selector.split(" ");
 		var classes = [];
-		for(j = 0; j < s.length; j++){
+		for(var j=0; j<s.length; j++){
 			var tmp = s[j];
 			var first = tmp.indexOf('.');
 			if(tmp && tmp.length > 0 && first !== -1){
