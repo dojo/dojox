@@ -624,7 +624,7 @@ dojo.require("dojox.dtl.Context");
 		},
 		rtrim: function(){
 			while(1){
-				i = this.contents.length - 1;
+				var i = this.contents.length - 1;
 				if(this.contents[i] instanceof dd._HtmlTextNode && this.contents[i].isEmpty()){
 					this.contents.pop();
 				}else{

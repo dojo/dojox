@@ -269,7 +269,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		date = parseInt(date);
 
 		if(date>0){
-			for(mdays = this.getDaysInHebrewMonth(this._month, this._year);
+			for(var mdays = this.getDaysInHebrewMonth(this._month, this._year);
 					date > mdays;
 					date -= mdays,mdays = this.getDaysInHebrewMonth(this._month, this._year)){
 				this._month ++;

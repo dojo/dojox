@@ -15,7 +15,7 @@ dojo.mixin(dojox.dtl.filter.lists, {
 		if(!dojo.isArray(value)){
 			var obj = value, value = [];
 			for(var key in obj){
-				value.push(obj[k]);
+				value.push(obj[key]);
 			}
 		}
 		for(i = 0; i < value.length; i++){
