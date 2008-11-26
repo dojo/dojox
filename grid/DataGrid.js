@@ -141,9 +141,12 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		if(this.rowCount != size){
 			if(req.isRender){
 				this.scroller.init(size, this.keepRows, this.rowsPerPage);
+				this.rowCount = size;
+				this._setAutoHeightAttr(this.autoHeight, true);
 				this.prerender();
+			}else{
+				this.updateRowCount(size);
 			}
-			this.updateRowCount(size);
 		}
 	},
 
