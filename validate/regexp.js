@@ -9,53 +9,6 @@ dojo.require("dojo.regexp");
 // others would say it's a spare tire. 
 dojox.regexp = { ca: {}, us: {} }; 
 
-dojox.regexp.tld = function(/*Object?*/flags){
-	// summary: Builds a RE that matches a top-level domain
-	//
-	// flags:
-	//    flags.allowCC  Include 2 letter country code domains.  Default is true.
-	//    flags.allowGeneric  Include the generic domains.  Default is true.
-	//    flags.allowInfra  Include infrastructure domains.  Default is true.
-
-	// assign default values to missing paramters
-	flags = (typeof flags == "object") ? flags : {};
-	if(typeof flags.allowCC != "boolean"){ flags.allowCC = true; }
-	if(typeof flags.allowInfra != "boolean"){ flags.allowInfra = true; }
-	if(typeof flags.allowGeneric != "boolean"){ flags.allowGeneric = true; }
-
-	// Infrastructure top-level domain - only one at present
-	var infraRE = "arpa";
-
-	// Generic top-level domains RE.
-	var genericRE = 
-		"aero|asia|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|xxx|jobs|mobi|post";
-	
-	// Country Code top-level domains RE
-	// after 2009-Sept-30, .yu will be invalid
-	var ccRE = 
-		"ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|" +
-		"bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|" +
-		"ec|ee|eg|er|eu|es|et|fi|fj|fk|fm|fo|fr|ga|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|" +
-		"gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|" +
-		"la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|" +
-		"my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|" +
-		"re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sk|sl|sm|sn|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tm|" +
-		"tn|to|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw";
-
-	// Build top-level domain RE
-	var a = [];
-	if(flags.allowInfra){ a.push(infraRE); }
-	if(flags.allowGeneric){ a.push(genericRE); }
-	if(flags.allowCC){ a.push(ccRE); }
-
-	var tldRE = "";
-	if (a.length > 0) {
-		tldRE = "(" + a.join("|") + ")";
-	}
-
-	return tldRE; // String
-}
-
 dojox.regexp.ipAddress = function(/*Object?*/flags){
 	// summary: Builds a RE that matches an IP Address
 	//
@@ -142,23 +95,25 @@ dojox.regexp.host = function(/*Object?*/flags){
 	//    flags.allowLocal  Allow the host to be "localhost".  Default is false.
 	//    flags.allowPort  Allow a port number to be present.  Default is true.
 	//    flags in regexp.ipAddress can be applied.
-	//    flags in regexp.tld can be applied.
 
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};
+
 	if(typeof flags.allowIP != "boolean"){ flags.allowIP = true; }
 	if(typeof flags.allowLocal != "boolean"){ flags.allowLocal = false; }
 	if(typeof flags.allowPort != "boolean"){ flags.allowPort = true; }
 	if(typeof flags.allowNamed != "boolean"){ flags.allowNamed = false; }
 
-	// Domain names can not end with a dash.
-	var domainNameRE = "([0-9a-zA-Z]([-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?\\.)+" + dojox.regexp.tld(flags);
+	//TODO: support unicode hostnames?
+	// Domain name labels can not end with a dash.
+	var domainLabelRE = "(?:[\\da-zA-Z](?:[-\\da-zA-Z]{0,61}[\\da-zA-Z])?)";
+	var domainNameRE = "(?:[a-zA-Z](?:[-\\da-zA-Z]{0,6}[\\da-zA-Z])?)"; // restricted version to allow backwards compatibility with allowLocal, allowIP
 
 	// port number RE
 	var portRE = flags.allowPort ? "(\\:\\d+)?" : "";
 
 	// build host RE
-	var hostNameRE = domainNameRE;
+	var hostNameRE = "((?:" + domainLabelRE + "\\.)*" + domainNameRE + "\\.?)";
 	if(flags.allowIP){ hostNameRE += "|" +  dojox.regexp.ipAddress(flags); }
 	if(flags.allowLocal){ hostNameRE += "|localhost"; }
 	if(flags.allowNamed){ hostNameRE += "|^[^-][a-zA-Z0-9_-]*"; }
@@ -173,7 +128,6 @@ dojox.regexp.url = function(/*Object?*/flags){
 	//      This means: required, not allowed, or match either one.
 	//    flags in regexp.host can be applied.
 	//    flags in regexp.ipAddress can be applied.
-	//    flags in regexp.tld can be applied.
 
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};
@@ -185,7 +139,7 @@ dojox.regexp.url = function(/*Object?*/flags){
 	);
 
 	// Path and query and anchor RE
-	var pathRE = "(/([^?#\\s/]+/)*)?([^?#\\s/]+(\\?[^?#\\s/]*)?(#[A-Za-z][\\w.:-]*)?)?";
+	var pathRE = "(/(?:[^?#\\s/]+/)*(?:[^?#\\s/]+(?:\\?[^?#\\s/]*)?(?:#[A-Za-z][\\w.:-]*)?)?)?";
 
 	return protocolRE + dojox.regexp.host(flags) + pathRE;
 }
@@ -198,7 +152,6 @@ dojox.regexp.emailAddress = function(/*Object?*/flags){
 	//    flags.allowCruft  Allow address like <mailto:foo@yahoo.com>.  Default is false.
 	//    flags in regexp.host can be applied.
 	//    flags in regexp.ipAddress can be applied.
-	//    flags in regexp.tld can be applied.
 
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};
@@ -227,7 +180,6 @@ dojox.regexp.emailAddressList = function(/*Object?*/flags){
 	//    flags in regexp.emailAddress can be applied.
 	//    flags in regexp.host can be applied.
 	//    flags in regexp.ipAddress can be applied.
-	//    flags in regexp.tld can be applied.
 
 	// assign default values to missing paramters
 	flags = (typeof flags == "object") ? flags : {};

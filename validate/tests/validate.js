@@ -134,7 +134,7 @@ tests.register("dojox.validate.tests.validate",
 			tests.t(dojox.validate.isUrl('localhost:8080', {allowLocal: true} ));
 			tests.f(dojox.validate.isUrl('localhost:8080', {} ));
 			tests.t(dojox.validate.isUrl('http://www.yahoo.com/index.html?a=12&b=hello%20world#anchor'));
-			tests.f(dojox.validate.isUrl('http://www.yahoo.xyz'));
+			tests.t(dojox.validate.isUrl('http://www.yahoo.xyz'));
 			tests.t(dojox.validate.isUrl('http://www.yahoo.com/index.html#anchor'));
 			tests.t(dojox.validate.isUrl('http://cocoon.apache.org/2.1/'));
 		}
@@ -147,7 +147,7 @@ tests.register("dojox.validate.tests.validate",
 			tests.f(dojox.validate.isEmailAddress('x..y.z.w@yahoo.com'));
 			tests.f(dojox.validate.isEmailAddress('x.@yahoo.com'));
 			tests.t(dojox.validate.isEmailAddress('x@z.com'));
-			tests.f(dojox.validate.isEmailAddress('x@yahoo.x'));
+			tests.t(dojox.validate.isEmailAddress('x@yahoo.x'));
 			tests.t(dojox.validate.isEmailAddress('x@yahoo.museum'));
 			tests.t(dojox.validate.isEmailAddress("o'mally@yahoo.com"));
 			tests.f(dojox.validate.isEmailAddress("'mally@yahoo.com"));
@@ -163,7 +163,7 @@ tests.register("dojox.validate.tests.validate",
 			tests.t(dojox.validate.isEmailAddress("<fred&barney@stonehenge.com>", {allowCruft: true} ));
 			tests.f(dojox.validate.isEmailAddress("mailto:fred&barney@stonehenge.com"));
 			tests.f(dojox.validate.isEmailAddress("<fred&barney@stonehenge.com>"));
-		
+	
 			// local addresses with cruft
 			tests.t(dojox.validate.isEmailAddress("<mailto:fred&barney@localhost>", {allowLocal: true, allowCruft: true} ));
 			tests.f(dojox.validate.isEmailAddress("<mailto:fred&barney@localhost>", {allowCruft: true} ));
