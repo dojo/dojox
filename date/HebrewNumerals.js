@@ -52,7 +52,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		if(ind > -1){
 			str = str1.concat(str.substr(str[0], ind), _REP[2], str.substr(str[ind+2], str.length-ind-2));
 		}else if( ( ind=str.indexOf(_REP[1]) ) > -1){
-			str = str1.concat(str.substr(str[0], ind), _rep[3], str.substr(str[ind+2], str.length-ind-2));
+			str = str1.concat(str.substr(str[0], ind), _REP[3], str.substr(str[ind+2], str.length-ind-2));
 		}
 	
 		if(str.length > 1){
