@@ -85,15 +85,16 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 		this.footer.innerHTML = "Today: " + dojo.date.locale.format(today, {formatLength:'full',selector:'date', locale:this.lang});
 		dojo.connect(this.footer, "onclick", this, "goToToday");
 
-		dojo.style(this._children[0].domNode, "top", "0px");
-		dojo.style(this._children[0].domNode, "visibility", "visible");
-//		
-		dojo.style(this._children[0].getHeader(), "display", "");
+		var first = this._children[0];
+		dojo.style(first.domNode, "top", "0px");
+		dojo.style(first.domNode, "visibility", "visible");
+		dojo.style(first.getHeader(), "display", "");
+		first.onDisplay();
 
 		var _this = this;
 
 		var typematic = function(nodeProp, dateProp, adj){
-			dijit.typematic.addMouseListener(_this[nodeProp], _this, function(count){				
+			dijit.typematic.addMouseListener(_this[nodeProp], _this, function(count){
 				if(count >= 0){	_this._adjustDisplay(dateProp, adj);}
 			}, 0.8, 500);
 		};
@@ -170,7 +171,7 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 		var curWidget = this._children[this._currentChild];
 		var nextWidget = this._children[this._currentChild + direction];
 		if(!nextWidget){return false;}
-		
+
 		var height = dojo.style(this.containerNode, "height");
 		nextWidget.setValue(this.displayMonth);
 
@@ -187,7 +188,9 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 
 		// summary: Slides two nodes vertically.
 		var anim1 = dojo.animateProperty({node: curWidget.domNode, properties: {top: height1}});
-		var anim2 = dojo.animateProperty({node: nextWidget.domNode, properties: {top: height2}});
+		var anim2 = dojo.animateProperty({node: nextWidget.domNode, properties: {top: height2}, onEnd: function(){
+			nextWidget.onDisplay();
+		}});
 
 		anim1.play();
 		anim2.play();
@@ -291,6 +294,10 @@ dojo.declare("dojox.widget._CalendarView", dijit._Widget, {
 		//   specified in the "datePart" property of the
 		//   calendar view mixin.
 		return dojo.date.add(date, this.datePart, amount);
+	},
+
+	onDisplay: function(){
+		// summary: Stub function that can be used to tell a view when it is shown.
 	}
 });
 
@@ -340,8 +347,14 @@ dojo.declare("dojox.widget._CalendarDayView", [dojox.widget._CalendarView, dijit
 			this._setText(label, dayNames[(i + dayOffset) % 7]);
 		}, this);
 
+	},
+
+	onDisplay: function(){
+		if(!this._addedFx) {
 		// Add visual effects to the view, if any has been specified.
-		this.addFx(".dijitCalendarDateTemplate div", this.domNode);
+			this._addedFx = true;
+			this.addFx(".dijitCalendarDateTemplate div", this.domNode);
+		}
 	},
 
 	_onDayClick: function(e) {
