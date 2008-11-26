@@ -338,7 +338,7 @@ dojox.Grid.markupFactory = function(props, node, ctor){
 					viewIdx++;
 					// move to allocating things into the next view
 					lastViewIdx += cView.__span;
-					lastView = cView;
+					var lastView = cView;
 					cView = props.structure[viewIdx];
 				}
 

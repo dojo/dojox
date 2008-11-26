@@ -1154,7 +1154,7 @@ dojo.requireLocalization("dijit", "loading");
 						viewIdx++;
 						// move to allocating things into the next view
 						lastViewIdx += cView.__span;
-						lastView = cView;
+						var lastView = cView;
 						cView = props.structure[viewIdx];
 					}
 

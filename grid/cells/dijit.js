@@ -206,7 +206,7 @@ dojo.require("dijit.Editor");
 		var h = dojo.trim(dojo.attr(node, "widgetHeight")||"");
 		if(h){
 			if((h != "auto")&&(h.substr(-2) != "em")){
-				h = parseInt(w)+"px";
+				h = parseInt(h)+"px";
 			}
 			cell.widgetHeight = h;
 		}

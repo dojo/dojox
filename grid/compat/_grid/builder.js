@@ -321,7 +321,8 @@ dojo.declare("dojox.grid.headerBuilder",
 		if(dojo._isBodyLtr()){
 			return (e.cellIndex>0) && (e.cellX < this.overResizeWidth) && this.prepareResize(e, -1);
 		}
-		return t = e.cellNode && (e.cellX < this.overResizeWidth);
+		var t = e.cellNode && (e.cellX < this.overResizeWidth);
+		return;
 	},
 
 	overRightResizeArea: function(e){

@@ -482,7 +482,7 @@ dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
 		var row = {}; 
 		row.__dojo_data_item = item;
 		dojo.forEach(this.fields.values, function(a){
-			value = this.store.getValue(item, a.name);
+			var value = this.store.getValue(item, a.name);
 			row[a.name] = (value === undefined || value === null)?"":value;
 		}, this);
 		return row;
