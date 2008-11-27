@@ -106,7 +106,7 @@ dojo.declare("dojox.rpc.Service", null, {
 				//remove any properties that were not defined
 				for(i in args){
 					var found=false;
-					for(j=0; j<parameters.length;j++){
+					for(var j=0; j<parameters.length;j++){
 						if(parameters[i].name==i){ found=true; }
 					}
 					if(!found){
@@ -311,7 +311,7 @@ dojo._contentHandlers.auto = function(xhr){
 	// automatically choose the right handler based on the returned content type
 	var handlers = dojo._contentHandlers;
 	var retContentType = xhr.getResponseHeader("Content-Type");
-	results = !retContentType ? handlers.text(xhr) :
+	var results = !retContentType ? handlers.text(xhr) :
 		retContentType.match(/\/.*json/) ? handlers.json(xhr) :
 		retContentType.match(/\/javascript/) ? handlers.javascript(xhr) :
 		retContentType.match(/\/xml/) ? handlers.xml(xhr) : handlers.text(xhr);

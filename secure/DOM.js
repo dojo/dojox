@@ -157,7 +157,7 @@ dojox.secure.DOM = function(element){
 				}
 			}		
 			var children = el.childNodes;
-			for (i =0, l = children.length; i < l; i++){
+			for (var i =0, l = children.length; i < l; i++){
 				safeElement(children[i]);
 			}
 		}

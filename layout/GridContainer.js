@@ -686,7 +686,7 @@ dojo.declare("dojox.layout.GridContainer",
 			this._createGrip(node);			
 		}
 		
-		for(i = 0;i < nbColumns; i++){
+		for(var i=0; i<nbColumns; i++){
 			node = dojo.doc.createElement("td");
 			dojo.addClass(node,"gridContainerZone");
 			//to fix IE Bug Border with empty cells

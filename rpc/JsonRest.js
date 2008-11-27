@@ -138,8 +138,8 @@ dojo.require("dojox.rpc.Rest");
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
 					left = -1; // first make sure that success isn't called
 					var postCommitDirtyObjects = dirtyObjects;
-					dirtyObject = savingObjects;
-					numDirty = 0; // make sure this does't do anything if it is called again
+					var dirtyObject = savingObjects;
+					var numDirty = 0; // make sure this does't do anything if it is called again
 					jr.revert(); // revert if there was an error
 					dirtyObjects = postCommitDirtyObjects;
 					if(kwArgs.onError){
