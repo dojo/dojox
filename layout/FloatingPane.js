@@ -14,7 +14,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	//		A non-modal Floating window.
 	//
 	// description:
-	// 		Makes a dijit.ContentPane float and draggable by it's title [similar to TitlePane]
+	// 		Makes a `dojox.layout.ContentPane` float and draggable by it's title [similar to TitlePane]
 	// 		and over-rides onClick to onDblClick for wipeIn/Out of containerNode
 	// 		provides minimize(dock) / show() and hide() methods, and resize [almost] 
 	//
@@ -98,6 +98,9 @@ dojo.declare("dojox.layout.FloatingPane",
 		}		
 		this._allFPs.push(this);
 		this.domNode.style.position = "absolute";
+		
+		this.bgIframe = new dijit.BackgroundIframe(this.domNode);
+		
 	},
 	
 	startup: function(){

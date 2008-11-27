@@ -130,9 +130,20 @@
 		
 		<div dojoType="dojox.layout.FloatingPane" 
 			resizeable="false" style="width:100px; 100px; top:200px; left:200px; position:absolute; " title="foobar" 
-			closable="false" dockable="false"><p style="padding:12px;">
-		This is just a pane. You cannot close me, you cannot resize me, you cannot minimize me.
-		</p>
+			closable="false" dockable="false">
+			
+			<p style="padding:12px;">
+				This is just a pane. You cannot close me, you cannot resize me, you cannot minimize me. I have a 
+				select to test bleed:
+			</p>
+			
+			<select name="foo">
+				<option value="bleeeeed">bleed?<option>
+				<option value="bleeeeed1">bleed?<option>
+				<option value="bleeeeed2">bleed?<option>
+				<option value="bleeeeed3">bleed?<option>
+			</select>
+			
 		</div> 
 
 		<div dojoType="dojox.layout.FloatingPane"  id="remotePane"
@@ -169,6 +180,7 @@
 					</div>
 				</div>
 			</div>
-		</div>		
+		</div>	
+			
 </body>
 </html>
