@@ -41,10 +41,11 @@ dojo.provide("dojox.html.styles");
 		//
 		var ss = dojox.html.getDynamicStyleSheet(styleSheetName);
 		var styleText = selector + " {" + declaration + "}";
-		
+		console.log("insertRule:", styleText)
 		if(dojo.isIE){
 			// Note: check for if(ss.cssText) does not work
 			ss.cssText+=styleText;
+			console.log("ss.cssText:", ss.cssText)
 		}else if(ss.sheet){
 			ss.sheet.insertRule(styleText, ss._indicies.length);
 		}else{
@@ -121,7 +122,7 @@ dojo.provide("dojox.html.styles");
 		//		A title or an href to a style sheet. Title can be 
 		//		an attribute in a tag, or a dynamic style sheet 
 		//		reference. Href can be the name of the file.
-		//		If no argument, the assumed crated dynamic style 
+		//		If no argument, the assumed created dynamic style 
 		//		sheet is used.
 		
 		// try dynamic sheets first 
@@ -166,8 +167,10 @@ dojo.provide("dojox.html.styles");
 		
 		if(!dynamicStyleMap[styleSheetName]){
 			if(dojo.doc.createStyleSheet){ //IE
-				dynamicStyleMap[styleSheetName] = dojo.doc.createStyleSheet(styleSheetName);
+			
+				dynamicStyleMap[styleSheetName] = dojo.doc.createStyleSheet();
 				dynamicStyleMap[styleSheetName].title = styleSheetName;
+
 			}else{
 				dynamicStyleMap[styleSheetName] = dojo.doc.createElement("style");
 				dynamicStyleMap[styleSheetName].setAttribute("type", "text/css");
