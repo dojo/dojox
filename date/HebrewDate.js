@@ -587,7 +587,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 
 		var frac = months * this._MONTH_FRACT + this.BAHARAD;     // Fractional part of day #
 		var day  = months * 29 + Math.floor(frac / this._DAY_PARTS);        // Whole # part of calculation
-		frac = frac % this._DAY_PARTS;                        // Time of day
+		frac %= this._DAY_PARTS;                        // Time of day
 
 		var wd = day % 7;                        // Day of week (0 == Monday)
 
@@ -596,18 +596,17 @@ dojo.declare("dojox.date.HebrewDate", null, {
 			day += 1;
 			wd = day % 7;
 		}
-		if(wd == 1 && frac > 15*this.HOUR_PARTS+204 && !this.isLeapYear(year) ){
+		if(wd == 1 && frac > 15 * this._HOUR_PARTS + 204 && !this.isLeapYear(year)){
 			// If the new moon falls after 3:11:20am (15h204p from the previous noon)
 			// on a Tuesday and it is not a leap year, postpone by 2 days.
 			// This prevents 356-day years.
 			day += 2;
-		}
-		else if(wd == 0 && frac > 21*this.HOUR_PARTS+589 && this.isLeapYear(year-1) ){
+		}else if(wd == 0 && frac > 21 * this._HOUR_PARTS + 589 && this.isLeapYear(year-1)){
 			// If the new moon falls after 9:32:43 1/3am (21h589p from yesterday noon)
 			// on a Monday and *last* year was a leap year, postpone by 1 day.
 			// Prevents 382-day years.
 			day += 1;
-		}            
+		}
 				
 		return day;
 	},
@@ -650,10 +649,10 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		var ys  = this._startOfYear(year);                 // 1st day of year
 		var dayOfYear = (d - ys);
 		// Because of the postponement rules, it's possible to guess wrong.  Fix it.
-		while (dayOfYear < 1){
+		while(dayOfYear < 1){
 			year--;
 			ys  = this._startOfYear(year);
-			dayOfYear = (d - ys);
+			dayOfYear = d - ys;
 		}
 
 		// Now figure out which month we're in, and the date within that month
@@ -666,11 +665,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		}
 		month--;
 		var dayOfMonth = dayOfYear - monthStart[month][typeofYear];
-		var result = new Array(3);
-		result[0] = year;
-		result[1] = month;
-		result[2] = dayOfMonth;
-		return result;
+		return [year, month, dayOfMonth];
 	},
 
 	// ported from the Java class com.ibm.icu.util.Calendar.computeGregorianFields from ICU4J v3.6.1 at http://www.icu-project.org/
@@ -714,8 +709,8 @@ dojo.declare("dojox.date.HebrewDate", null, {
 			++year;
 		}
 
-		var isLeap = (year%4 == 0) && // equiv. to (year%4 == 0)
-				(year%100 != 0 || year%400 == 0);
+		var isLeap = !(year%4) && // equiv. to (year%4 == 0)
+				(year%100 || !(year%400));
 		var correction = 0;
 		var march1 = isLeap ? 60 : 59; // zero-based DOY for March 1
 		if(dayOfYear >= march1){ correction = isLeap ? 1 : 2; }
@@ -756,8 +751,8 @@ dojo.declare("dojox.date.HebrewDate", null, {
 			}
 		}
 
-		day += (hDate - 1);
-		return ((day+1) % 7);
+		day += hDate - 1;
+		return (day+1) % 7;
 	},
 
 	// ported from the Java class com.ibm.icu.util.Calendar.computeGregorianMonthStart from ICU4J v3.6.1 at http://www.icu-project.org/
@@ -767,7 +762,7 @@ dojo.declare("dojox.date.HebrewDate", null, {
 		var year = gdate.getFullYear();
 		var month = gdate.getMonth();
 		var d = gdate.getDate();
-		var isLeap = (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
+		var isLeap = !(year%4) && (year%100 || !(year%400)); //TODO: dup
 		var y = year - 1;
 		// This computation is actually ... + (JAN_1_1_JULIAN_DAY - 3) + 2.
 		// Add 2 because Gregorian calendar starts 2 days after Julian
