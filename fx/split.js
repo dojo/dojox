@@ -4,7 +4,6 @@ dojo.require("dojo.fx");
 dojo.require("dojo.fx.easing");
 
 dojo.mixin(dojox.fx,{
-
 	_split: function(/*Object*/ args){
 		// summary: Split a node into rectangular pieces and animate them.
 		//
@@ -20,61 +19,61 @@ dojo.mixin(dojox.fx,{
 		//		or an array of dojo._Animation objects for the piece at location (x, y) in the node's grid;
 		//		coords is the result of dojo.coords(args.node, true);
 
-		var node = args.node = dojo.byId(args.node),
-			s = node.style,
-			coords = dojo.coords(node, true);
-
 		args.rows = args.rows || 3;
 		args.columns = args.columns || 3;
 		args.duration = args.duration || 1000;
-
-		var pieceHeight = coords.h / args.rows;
-		var pieceWidth = coords.w / args.columns;
-		var container = dojo.doc.createElement("div");
-		
+		var node = args.node = dojo.byId(args.node),
+			coords = dojo.coords(node, true),
+			pieceHeight = Math.ceil(coords.h / args.rows),
+			pieceWidth = Math.ceil(coords.w / args.columns),
+			container = dojo.doc.createElement(node.tagName),
+			animations = [],
+			pieceHelper = dojo.doc.createElement(node.tagName),
+			piece
+		;
+		// Create the pieces and their animations
 		dojo.style(container, {
 			position: "absolute",
-			top: parseFloat(coords.t) + "px",
-			left: parseFloat(coords.l) + "px",
-			border: "none",
-			height: parseFloat(coords.h) + "px",
-			width: parseFloat(coords.w) + "px",
+			padding: "0",
+			margin: "0",
+			border:"none",
+			top: coords.y + "px",
+			left: coords.x + "px",
+			height: coords.h + "px",
+			width: coords.w + "px",
+			background: "none",
 			overflow: args.crop ? "hidden" : "visible"
 		});
 		node.parentNode.appendChild(container);
-
-		var animations = [];
-
-		// Create the pieces and their animations
+		dojo.style(pieceHelper, {
+			position: "absolute",
+			border: "none",
+			padding: '0',
+			margin: '0',
+			height: pieceHeight + "px",
+			width: pieceWidth + "px",
+			overflow: "hidden"
+		});
 		for(var y = 0; y < args.rows; y++){
 			for(var x = 0; x < args.columns; x++){
 				// Create the piece
-				var piece = document.createElement("DIV");
-				var pieceContents = node.cloneNode(true);
-				var duration = args.duration;
+				piece = dojo.clone(pieceHelper);
+				pieceContents = dojo.clone(node);
+
+				// IE hack
+				pieceContents.style.filter = "";
 
 				dojo.style(piece, {
-					position: "absolute",
-					top: (pieceHeight * y) + "px",
-					left: (pieceWidth * x) + "px",
-					padding: '0',
-					margin: '0',
 					border: "none",
 					overflow: "hidden",
-					height: pieceHeight + "px",
-					width: pieceWidth + "px"
+					top: (pieceHeight * y) + "px",
+					left: (pieceWidth * x) + "px"
 				});
-				piece.onmouseover = undefined;
-				piece.onmouseout = undefined;
-				piece.onclick = undefined;
-				piece.ondblclick = undefined;
-				piece.oncontextmenu = undefined;
-
 				dojo.style(pieceContents, {
-					opacity: "",
-					position: "relative",
-					top: 0 - (y * pieceHeight) + "px",
-					left: 0 - (x * pieceWidth) + "px"
+					position: "static",
+					opacity: "1",
+					marginTop: (-y * pieceHeight) + "px",
+					marginLeft: (-x * pieceWidth) + "px"
 				});
 				piece.appendChild(pieceContents);
 				container.appendChild(piece);
@@ -85,14 +84,13 @@ dojo.mixin(dojox.fx,{
 					animations = animations.concat(pieceAnimation);
 				}else{
 					// otherwise, append it
-					animations[animations.length] = pieceAnimation;
+					animations.push(pieceAnimation);
 				}
 			}
 		}
-
 		var anim = dojo.fx.combine(animations);
 		dojo.connect(anim, "onEnd", anim, function(){
-			node.parentNode.removeChild(container);
+			container.parentNode.removeChild(container);
 		});
 		if(args.onPlay){
 			dojo.connect(anim, "onPlay", anim, args.onPlay);
@@ -124,7 +122,6 @@ dojo.mixin(dojox.fx,{
 		//							 (default is true)
 
 		var node = args.node = dojo.byId(args.node);
-
 		args.rows = args.rows || 3;
 		args.columns = args.columns || 3;
 		args.distance = args.distance || 1;
@@ -133,7 +130,7 @@ dojo.mixin(dojox.fx,{
 		if(!args.fade){
 			args.fade = true;
 		}
-		if(typeof(args.sync) == "undefined"){
+		if(typeof args.sync == "undefined"){
 			args.sync = true;
 		}
 		args.random = Math.abs(args.random);
@@ -144,29 +141,29 @@ dojo.mixin(dojox.fx,{
 				pieceWidth = coords.w / args.columns,
 				distance = args.distance * 2,
 				duration = args.duration,
-				startTop = parseFloat(piece.style.top),
-				startLeft = parseFloat(piece.style.left),
+				ps = piece.style,
+				startTop = parseInt(ps.top),
+				startLeft = parseInt(ps.left),
 				delay = 0,
 				randomX = 0,
 				randomY = 0;
-			
+
 			if(args.random){
 				var seed = (Math.random() * args.random) + Math.max(1 - args.random, 0);
 				distance *= seed;
 				duration *= seed;
 				// To syncronize, give each piece an appropriate delay so they end together
 				delay = ((args.unhide && args.sync) || (!args.unhide && !args.sync)) ? (args.duration - duration) : 0;
-
 				// Slightly randomize the direction of each piece
 				randomX = Math.random() - 0.5;
 				randomY = Math.random() - 0.5;
 			}
-			
+
 			var distanceY = ((coords.h - pieceHeight) / 2 - pieceHeight * y),
 				distanceX = ((coords.w - pieceWidth) / 2 - pieceWidth * x),
 				distanceXY = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2)),
-				endTop = startTop - distanceY * distance + distanceXY * randomY,
-				endLeft = startLeft - distanceX * distance + distanceXY * randomX
+				endTop = parseInt(startTop - distanceY * distance + distanceXY * randomY),
+				endLeft = parseInt(startLeft - distanceX * distance + distanceXY * randomX)
 			;
 
 			// Create the animation objects for the piece
@@ -178,17 +175,16 @@ dojo.mixin(dojox.fx,{
 				easing: (args.easing || (args.unhide ? dojo.fx.easing.sinOut : dojo.fx.easing.circOut)),
 				beforeBegin: (args.unhide ? function(){
 						if(args.fade){
-							piece.style.opacity = 0;
+							dojo.style(piece, { opacity: "0"});
 						}
-						piece.style.top = endTop + "px";
-						piece.style.left = endLeft + "px";
+						ps.top = endTop + "px";
+						ps.left = endLeft + "px";
 					} : undefined),
 				properties: {
 					top: (args.unhide ? { start: endTop, end: startTop } : { start: startTop, end: endTop }),
 					left: (args.unhide ? { start: endLeft, end: startLeft } : { start: startLeft, end: endLeft })
 				}
 			});
-
 			if(args.fade){
 				var pieceFade = dojo.animateProperty({
 					node: piece,
@@ -196,7 +192,7 @@ dojo.mixin(dojox.fx,{
 					delay: delay,
 					easing: (args.fadeEasing || dojo.fx.easing.quadOut),
 					properties: {
-						opacity: (args.unhide ? {start: 0, end: 1} : {end: 0})
+						opacity: (args.unhide ? { start: "0", end: "1" } : { start: "1", end: "0" })
 					}
 				});
 
@@ -210,12 +206,12 @@ dojo.mixin(dojox.fx,{
 
 		var anim = dojox.fx._split(args);
 		if(args.unhide){
-			dojo.connect(anim, "onEnd", anim, function(){
-				 dojo.style(node,"opacity", 1);
+			dojo.connect(anim, "onEnd", null, function(){
+				dojo.style(node, {opacity: "1" });
 			});
 		}else{
-			dojo.connect(anim, "onPlay", anim, function(){
-				dojo.style(node,"opacity", 0);
+			dojo.connect(anim, "onPlay", null, function(){
+				dojo.style(node, { opacity: "0" });
 			});
 		}
 		return anim; // dojo._Animation
@@ -243,7 +239,6 @@ dojo.mixin(dojox.fx,{
 		//							   randomness is introduced.
 		//		args.reverseOrder: Boolean - If true, pieces animate in reversed order
 		//		args.unhide: Boolean - If true, the peices fall from above and land in place
-
 		var node = args.node = dojo.byId(args.node);
 
 		args.rows = args.rows || 5;
@@ -252,37 +247,39 @@ dojo.mixin(dojox.fx,{
 		args.interval = args.interval || args.duration / (args.rows + args.columns * 2);
 		args.distance = args.distance || 1.5;
 		args.random = args.random || 0;
-		var random = Math.abs(args.random);
-		if(typeof(args.fade) == "undefined"){
+		if(typeof args.fade == "undefined"){
 			args.fade = true;
 		}
-
-		var duration = args.duration - (args.rows + args.columns) * args.interval;
+		
+		var random = Math.abs(args.random),
+			duration = args.duration - (args.rows + args.columns) * args.interval;
 
 		// Returns the animation object for each piece
 		args.pieceAnimation = function(piece, x, y, coords){
 
-			var randomDelay = Math.random() * (args.rows + args.columns) * args.interval;
+			var randomDelay = Math.random() * (args.rows + args.columns) * args.interval,
+				ps = piece.style,
+			
 			// If distance is negative, start from the top right instead of bottom left
-			var uniformDelay = (args.reverseOrder || args.distance < 0) ?
-				((x + y) * args.interval) :
-				(((args.rows + args.columns) - (x + y)) * args.interval);
-			var delay = randomDelay * random + Math.max(1 - random, 0) * uniformDelay;
-
+				uniformDelay = (args.reverseOrder || args.distance < 0) ?
+					((x + y) * args.interval) :
+					(((args.rows + args.columns) - (x + y)) * args.interval),
+				delay = randomDelay * random + Math.max(1 - random, 0) * uniformDelay,
 			// Create the animation object for the piece
-			var properties = {};
+				properties = {}
+			;
 			if(args.unhide){
 				properties.top = {
-					start: (parseFloat(piece.style.top) - coords.h * args.distance),
-					end: parseFloat(piece.style.top)
+					start: (parseInt(ps.top) - coords.h * args.distance),
+					end: parseInt(ps.top)
 				};
 				if(args.fade){
-					properties.opacity = {start: 0, end: 1};
+					properties.opacity = {start: "0", end: "1"};
 				}
 			}else{
-				properties.top = {end: (parseFloat(piece.style.top) + coords.h * args.distance)};
+				properties.top = {end: (parseInt(ps.top) + coords.h * args.distance)};
 				if(args.fade){
-					properties.opacity = {end: 0};
+					properties.opacity = {end: "0"};
 				}
 			}
 			var pieceAnimation = dojo.animateProperty({
@@ -293,9 +290,9 @@ dojo.mixin(dojox.fx,{
 				properties: properties,
 				beforeBegin: (args.unhide ? function(){
 					if(args.fade){
-						dojo.style(piece,"opacity",0);
+						dojo.style(piece, { opacity: "0" });
 					}
-					piece.style.top = properties.top.start + "px";
+					ps.top = properties.top.start + "px";
 				} : undefined)
 			});
 
@@ -305,11 +302,11 @@ dojo.mixin(dojox.fx,{
 		var anim = dojox.fx._split(args);
 		if(args.unhide){
 			dojo.connect(anim, "onEnd", anim, function(){
-				dojo.style(node,"opacity", 1);
+				dojo.style(node, { opacity: "1" });
 			});
 		}else{
 			dojo.connect(anim, "onPlay", anim, function(){
-				dojo.style(node,"opacity", 0);
+				dojo.style(node, { opacity: "0" });
 			});
 		}
 		return anim; // dojo._Animation
@@ -339,7 +336,6 @@ dojo.mixin(dojox.fx,{
 		//		args.unhide: Boolean - If true, the animation is reversed
 
 		var node = args.node = dojo.byId(args.node);
-		var s = node.style;
 
 		args.rows = args.rows || 6;
 		args.columns = args.columns || 6;
@@ -350,26 +346,27 @@ dojo.mixin(dojox.fx,{
 		if(typeof(args.fade) == "undefined"){
 			args.fade = true;
 		}
-		var random = Math.abs(args.random);
-
-		var duration = (args.duration - (args.rows + args.columns) * Math.abs(args.interval));
+		var random = Math.abs(args.random),
+			duration = (args.duration - (args.rows + args.columns) * Math.abs(args.interval))
+		;
 
 		// Returns the animation object for each piece
 		args.pieceAnimation = function(piece, x, y, coords){
 
 			// Since x an y start at 0, the opposite is true...
-			var colIsOdd = !(x % 2);
-			var rowIsOdd = !(y % 2);
+			var colIsOdd = !(x % 2),
+				rowIsOdd = !(y % 2),
+				randomDelay = Math.random() * duration,
+				uniformDelay = (args.reverseOrder) ?
+					(((args.rows + args.columns) - (x + y)) * args.interval) :
+					((x + y) * args.interval),
+				delay = randomDelay * random + Math.max(1 - random, 0) * uniformDelay,
+				properties = {},
+				ps = piece.style
+			;
 
-			var randomDelay = Math.random() * duration;
-			var uniformDelay = (args.reverseOrder) ?
-				(((args.rows + args.columns) - (x + y)) * args.interval) :
-				((x + y) * args.interval);
-			var delay = randomDelay * random + Math.max(1 - random, 0) * uniformDelay;
-
-			var properties = {};
 			if(args.fade){
-				properties.opacity = (args.unhide ? {start: 0, end: 1} : {end:0});
+				properties.opacity = (args.unhide ? { start: "0", end: "1" } : { end: "0" });
 			}
 
 			// If we have only rows or columns, ignore the other dimension
@@ -380,10 +377,11 @@ dojo.mixin(dojox.fx,{
 			}
 
 			// Determine the piece's direction
-			var left = parseFloat(piece.style.left);
-			var top = parseFloat(piece.style.top);
-			var distanceX = args.distance*coords.w;
-			var distanceY = args.distance*coords.h;
+			var left = parseInt(ps.left),
+				top = parseInt(ps.top),
+				distanceX = args.distance*coords.w,
+				distanceY = args.distance*coords.h
+			;
 			if(args.unhide){
 				if(colIsOdd == rowIsOdd){
 					properties.left = colIsOdd ? {start: (left - distanceX), end: left} : {start: (left + distanceX), end: left};
@@ -407,12 +405,12 @@ dojo.mixin(dojox.fx,{
 				properties: properties,
 				beforeBegin: (args.unhide ? function(){
 					if(args.fade){
-						piece.style.opacity = 0;
+						ps.opacity = "0";
 					}
 					if(colIsOdd == rowIsOdd){
-						piece.style.left = properties.left.start + "px";
+						ps.left = properties.left.start + "px";
 					}else{
-						piece.style.top = properties.top.start + "px";
+						ps.top = properties.top.start + "px";
 					}
 				} : undefined)
 			});
@@ -423,16 +421,16 @@ dojo.mixin(dojox.fx,{
 		var anim = dojox.fx._split(args);
 		if(args.unhide){
 			dojo.connect(anim, "onEnd", anim, function(){
-				dojo.style(node,"opacity", 1);
+				dojo.style(node, { opacity: "1" });
 			});
 		}else{
 			dojo.connect(anim, "onPlay", anim, function(){
-				dojo.style(node,"opacity", 0);
+				dojo.style(node, { opacity: "0" });
 			});
 		}
 		return anim; // dojo._Animation
 	},
-
+	
 	unShear: function(/*Object*/ args){
 		args.unhide = true;
 		return dojox.fx.shear(args);
@@ -463,7 +461,7 @@ dojo.mixin(dojox.fx,{
 		args.interval = args.interval || 0;
 		args.distance = args.distance || 1;
 		args.random = args.random || 0;
-		if(typeof(args.fade) == "undefined"){
+		if(typeof args.fade == "undefined"){
 			args.fade = true;
 		}
 		var duration = (args.duration - (args.rows + args.columns) * Math.abs(args.interval));
@@ -476,15 +474,16 @@ dojo.mixin(dojox.fx,{
 				// because x an y start at 0, the opposite is true...
 				colIsOdd = !(x % 2),
 				rowIsOdd = !(y % 2),
-            	
+
 				randomDelay = Math.random() * duration,
-				uniformDelay = (args.interval < 0) ? 
-					(((args.rows + args.columns) - (x + y)) * args.interval * -1) : 
+				uniformDelay = (args.interval < 0) ?
+					(((args.rows + args.columns) - (x + y)) * args.interval * -1) :
 					((x + y) * args.interval),
-				delay = randomDelay * args.random + Math.max(1 - args.random, 0) * uniformDelay,	
-				properties = {}
+				delay = randomDelay * args.random + Math.max(1 - args.random, 0) * uniformDelay,
+				properties = {},
+				ps = piece.style
 			;
-			
+
 			if(args.fade){
 				properties.opacity = (args.unhide ? {start: 0, end: 1} : {end:0});
 			}
@@ -497,26 +496,27 @@ dojo.mixin(dojox.fx,{
 			}
 
 			// Determine the piece's direction
-			var left = parseFloat(piece.style.left);
-			var top = parseFloat(piece.style.top);
+			var left = parseInt(ps.left),
+				top = parseInt(ps.top)
+			;
 			if(colIsOdd){
 				if(rowIsOdd){
-					properties.top = args.unhide ? 
-						{ start: top + pieceHeight * args.distance, end: top} : 
+					properties.top = args.unhide ?
+						{ start: top + pieceHeight * args.distance, end: top} :
 						{ start: top, end: top + pieceHeight * args.distance} ;
 				}else{
-					properties.left = args.unhide ? 
-						{ start: left + pieceWidth * args.distance, end: left } : 
+					properties.left = args.unhide ?
+						{ start: left + pieceWidth * args.distance, end: left } :
 						{ start: left, end: left + pieceWidth * args.distance } ;
 				}
 			}
 			if(colIsOdd != rowIsOdd){
-				properties.width = args.unhide ? 
-					{ start: pieceWidth * (1 - args.distance), end: pieceWidth } : 
+				properties.width = args.unhide ?
+					{ start: pieceWidth * (1 - args.distance), end: pieceWidth } :
 					{ start: pieceWidth, end: pieceWidth * (1 - args.distance) } ;
 			}else{
-				properties.height = args.unhide ? 
-					{ start: pieceHeight * (1 - args.distance), end: pieceHeight } : 
+				properties.height = args.unhide ?
+					{ start: pieceHeight * (1 - args.distance), end: pieceHeight } :
 					{ start: pieceHeight, end: pieceHeight * (1 - args.distance) } ;
 			}
 
@@ -533,18 +533,18 @@ dojo.mixin(dojox.fx,{
 					}
 					if(colIsOdd){
 						if(rowIsOdd){
-							piece.style.top = (top + pieceHeight * (1 - args.distance)) + "px";
+							ps.top = (top + pieceHeight * (1 - args.distance)) + "px";
 						}else{
-							piece.style.left = (left + pieceWidth * (1 - args.distance)) + "px";
+							ps.left = (left + pieceWidth * (1 - args.distance)) + "px";
 						}
 					}else{
-						piece.style.left = left + "px";
-						piece.style.top = top + "px";
+						ps.left = left + "px";
+						ps.top = top + "px";
 					}
 					if(colIsOdd != rowIsOdd){
-						piece.style.width = (pieceWidth * (1 - args.distance)) + "px";
+						ps.width = (pieceWidth * (1 - args.distance)) + "px";
 					}else{
-						piece.style.height = (pieceHeight * (1 - args.distance)) + "px";
+						ps.height = (pieceHeight * (1 - args.distance)) + "px";
 					}
 				} : undefined)
 			});
@@ -555,11 +555,11 @@ dojo.mixin(dojox.fx,{
 		var anim = dojox.fx._split(args);
 		if(args.unhide){
 			dojo.connect(anim, "onEnd", anim, function(){
-				dojo.style(node, "opacity", 1);
+				dojo.style(node, { opacity: "1" });
 			});
 		}else{
-			dojo.connect(anim, "onPlay", anim, function(){
-				dojo.style(node, "opacity", 0);
+			dojo.connect(anim, "play", anim, function(){
+				dojo.style(node, { opacity: "0" });
 			});
 		}
 		return anim; // dojo._Animation
@@ -587,46 +587,45 @@ dojo.mixin(dojox.fx,{
 		//		args.unhide: Boolean - If true, the animation is reversed
 
 		var node = args.node = dojo.byId(args.node);
-		var s = node.style;
 
 		args.rows = args.rows || 5;
 		args.columns = args.columns || 5;
 		args.duration = args.duration || 1000;
 		args.interval = args.interval || args.duration / (args.rows + args.columns * 2);
 		args.random = args.random || 0;
-		var random = Math.abs(args.random);
-		var duration = args.duration - (args.rows + args.columns) * args.interval;
+		var random = Math.abs(args.random),
+			duration = args.duration - (args.rows + args.columns) * args.interval
+		;
 
 		// Returns the animation object for each piece
 		args.pieceAnimation = function(piece, x, y, coords){
-			var randomDelay = Math.random() * args.duration;
-			var uniformDelay = (args.reverseOrder) ?
-				(((args.rows + args.columns) - (x + y)) * Math.abs(args.interval)) :
-				((x + y) * args.interval);
-			var delay = randomDelay * random + Math.max(1 - random, 0) * uniformDelay;
+			var randomDelay = Math.random() * args.duration,
+				uniformDelay = (args.reverseOrder) ?
+					(((args.rows + args.columns) - (x + y)) * Math.abs(args.interval)) :
+					((x + y) * args.interval),
+				delay = randomDelay * random + Math.max(1 - random, 0) * uniformDelay,
 			// Create the animation object for the piece
-			var pieceAnimation = dojo.animateProperty({
-				node: piece,
-				duration: duration,
-				delay: delay,
-				easing: (args.easing || dojo.fx.easing.sinInOut),
-				properties: {
-					opacity: (args.unhide ? {start: 0, end: 1} : {end:0})
-				},
-				beforeBegin: (args.unhide ? function(){ dojo.style(piece,"opacity", 0); } : undefined)
-			});
+				pieceAnimation = dojo.animateProperty({
+					node: piece,
+					duration: duration,
+					delay: delay,
+					easing: (args.easing || dojo.fx.easing.sinInOut),
+					properties: {
+						opacity: (args.unhide ? {start: "0", end: "1"} : {start: "1", end: "0"})
+					},
+					beforeBegin: (args.unhide ? function(){ dojo.style(piece, { opacity: "0" });} : function(){ piece.style.filter = ""; })
+				});
 
 			return pieceAnimation;
 		};
-
 		var anim = dojox.fx._split(args);
 		if(args.unhide){
 			dojo.connect(anim, "onEnd", anim, function(){
-				dojo.style(node, "opacity", 1);
+				dojo.style(node, { opacity: "1" });
 			});
 		}else{
 			dojo.connect(anim, "onPlay", anim, function(){
-				dojo.style(node, "opacity", 0);
+				dojo.style(node, { opacity: "0" });
 			});
 		}
 		return anim; // dojo._Animation

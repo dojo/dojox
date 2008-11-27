@@ -1,6 +1,10 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<title>Gruppler's Effect Demos</title>
+
+	<link rel="stylesheet" href="../../../dijit/tests/css/dijitTests.css" />
 
 	<script type="text/javascript" src="../../../dojo/dojo.js"
 		djConfig="parseOnLoad:true, isDebug:false"></script>
@@ -9,14 +13,7 @@
 		dojo.require("dojox.fx.split");
 
 		var intro1, intro2;
-
-		var blockfade_1, blockfade_2;
-		var disintegrate_1, disintegrate_2
-		var explode_1, explode_2;
-		var shear_1, shear_2;
-		var pinwheel_1, pinwheel_2;
 		var currentAnimation;
-
 		var originalText;
 
 		var init = function(){
@@ -32,225 +29,245 @@
 			});
 
 			intro1.play();
-		}
+			// Split Effects //
+			dojo.connect(dojo.byId("box_blockfade_1"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_blockfade_1");
+					if(parseFloat(node.style.opacity) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						rows: 1,
+						columns: 10
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.blockFadeIn(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.blockFadeOut(properties);
+					currentAnimation.play();
 
-		// Split Effects //
+					/*
+					// This is how we /should/ be able to do it...
+					dojo.fx.chain([
+						dojox.fx.blockFadeOut(properties),
+						dojox.fx.blockFadeIn(properties)
+					]).play();
+					*/
+				}
+			);
+			dojo.connect(dojo.byId("box_blockfade_2"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_blockfade_2");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						random: 0.25,
+						reverseOrder: true
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.blockFadeIn(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.blockFadeOut(properties);
+					currentAnimation.play();
+				}
+			);
 
-		blockfade_1 = function(node){
-			if(parseFloat(node.style.opacity) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				rows: 1,
-				columns: 10
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.blockFadeIn(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.blockFadeOut(properties);
-			currentAnimation.play();
+			dojo.connect(dojo.byId("box_disintegrate_1"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_disintegrate_1");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						distance: 1,
+						crop: true,
+						fade: false
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.build(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.disintegrate(properties);
+					currentAnimation.play();
+				}
+			);
 
-			/*
-			// This is how we /should/ be able to do it...
-			dojo.fx.chain([
-				dojox.fx.blockFadeOut(properties),
-				dojox.fx.blockFadeIn(properties)
-			]).play();
-			*/
-		};
-		blockfade_2 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				random: 0.25,
-				reverseOrder: true
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.blockFadeIn(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.blockFadeOut(properties);
-			currentAnimation.play();
-		};
+			dojo.connect(dojo.byId("box_disintegrate_2"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_disintegrate_2");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						random: 0.5,
+						distance: 2.5
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.build(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.disintegrate(properties);
+					currentAnimation.play();
+				}
+			);
 
-		disintegrate_1 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				distance: 1,
-				crop: true,
-				fade: false
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.build(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.disintegrate(properties);
-			currentAnimation.play();
-		};
-		disintegrate_2 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				random: 0.5,
-				distance: 2.5
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.build(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.disintegrate(properties);
-			currentAnimation.play();
-		};
+			dojo.connect(dojo.byId("box_explode_1"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_explode_1");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						rows: 2,
+						columns: 2,
+						distance: 0.75,
+						easing: dojo.fx.easing.elasticOut,
+						fade: false,
+						crop: true
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.converge(dojo.mixin(properties,
+						{
+							onEnd: undefined,
+							easing: dojo.fx.easing.bounceOut
+						}));
+						currentAnimation.play()
+					};
+					currentAnimation = dojox.fx.explode(properties);
+					currentAnimation.play();
+				}
+			);
 
-		explode_1 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				rows: 2,
-				columns: 2,
-				distance: 0.75,
-				easing: dojo.fx.easing.elasticOut,
-				fade: false,
-				crop: true
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.converge(dojo.mixin(properties,
-				{
-					onEnd: undefined,
-					easing: dojo.fx.easing.bounceOut
-				}));
-				currentAnimation.play()
-			};
-			currentAnimation = dojox.fx.explode(properties);
-			currentAnimation.play();
-		};
-		explode_2 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				rows: 5,
-				columns: 5,
-				distance: 1.5,
-				duration: 1500,
-				random: 0.75
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.converge(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.explode(properties);
-			currentAnimation.play();
-		};
+			dojo.connect(dojo.byId("box_explode_2"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_explode_2");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						rows: 5,
+						columns: 5,
+						distance: 1.5,
+						duration: 1500,
+						random: 0.75
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.converge(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.explode(properties);
+					currentAnimation.play();
+				}
+			);
 
-		shear_1 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				interval: 50,
-				distance: 0.95,
-				rows: 10,
-				columns: 1,
-				fade: false,
-				crop: true,
-				reverseOrder: true
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.unShear(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.shear(properties);
-			currentAnimation.play();
-		};
-		shear_2 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				random: 1
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.unShear(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.shear(properties);
-			currentAnimation.play();
-		};
+			dojo.connect(dojo.byId("box_shear_1"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_shear_1");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						interval: 50,
+						distance: 0.95,
+						rows: 10,
+						columns: 1,
+						fade: false,
+						crop: true,
+						reverseOrder: true
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.unShear(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.shear(properties);
+					currentAnimation.play();
+				}
+			);
 
-		pinwheel_1 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				fade: false
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.unPinwheel(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.pinwheel(properties);
-			currentAnimation.play();
-		};
-		
-		pinwheel_2 = function(node){
-			if(parseFloat(dojo.style(node,"opacity")) < 1){
-				return false;
-			}
-			var properties = {
-				node: node,
-				random: 1,
-				rows: 5,
-				columns: 5
-			};
-			properties.onEnd = function(){
-				currentAnimation = dojox.fx.unPinwheel(dojo.mixin(properties, {onEnd: undefined}));
-				currentAnimation.play();
-			};
-			currentAnimation = dojox.fx.pinwheel(properties);
-			currentAnimation.play();
-		};
+			dojo.connect(dojo.byId("box_shear_2"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_shear_2");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						random: 1
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.unShear(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.shear(properties);
+					currentAnimation.play();
+				}
+			);
 
+			dojo.connect(dojo.byId("box_pinwheel_1"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_pinwheel_1");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						fade: false
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.unPinwheel(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.pinwheel(properties);
+					currentAnimation.play();
+				}
+			);
+
+			dojo.connect(dojo.byId("box_pinwheel_2"), "onclick", null,
+				function(){
+					var node = dojo.byId("box_pinwheel_2");
+					if(parseFloat(dojo.style(node,"opacity")) < 1){
+						return false;
+					}
+					var properties = {
+						node: node,
+						random: 1,
+						rows: 5,
+						columns: 5
+					};
+					properties.onEnd = function(){
+						currentAnimation = dojox.fx.unPinwheel(dojo.mixin(properties, {onEnd: undefined}));
+						currentAnimation.play();
+					};
+					currentAnimation = dojox.fx.pinwheel(properties);
+					currentAnimation.play();
+				}
+			);
+		} // end init
 		dojo.addOnLoad(init);
 	</script>
 
 	<style type="text/css">
-		body {
-			font-family: verdana, arial;
-			margin: 3em;
-		}
-
 		h1 {
 			margin: 0;
 	  	}
 
 		hr {
-			clear: both;
-			border: 0px solid #999;
-			border-top-width: 1px;
-			margin: 0;
 		}
 
 	  hr.thick {
-		border-top-width: 5px;
 	  }
 
-	  .box, .boxContainer {
+	  .box {
 		height: 100px;
 		width: 100px;
 		overflow: visible;
@@ -286,6 +303,7 @@
 
 	  .effectList li {
 		float: left;
+		display:block;
 		padding: 1em;
 	  }
 
@@ -303,7 +321,6 @@
 	</style>
 </head>
 <body>
-
 	<h1 id="header1">dojox.fx.split</h1>
 	<p>
 		Each effect is highly configurable.	 Here is a general list of the options available in each effect:
@@ -321,7 +338,7 @@
 	<hr />
 	<ul class="effectList">
 	  <li>BlockFadeOut,<br />BlockFadeIn uniformly
-		<div id='box_blockfade_1' class="box" onclick="blockfade_1(this)">
+		<div id='box_blockfade_1' class="box">
 		  <code>
 			rows: 1<br />
 			columns: 10
@@ -330,7 +347,7 @@
 		</div>
 	  </li>
 	  <li class="vr">BlockFadeOut,<br />BlockFadeIn randomly
-		<div id='box_blockfade_2' class="box" onclick="blockfade_2(this)">
+		<div id='box_blockfade_2' class="box">
 		  <code>
 			random: 0.25<br />
 			reverseOrder: true
@@ -339,7 +356,7 @@
 		</div>
 	  </li>
 	  <li>Disintegrate, Build<br />uniformly (cropped)
-		<div id='box_disintegrate_1' class="box" onclick="disintegrate_1(this)">
+		<div id='box_disintegrate_1' class="box">
 		  <code>
 			distance: 1<br />
 			crop: true<br />
@@ -349,7 +366,7 @@
 		</div>
 	  </li>
 	  <li class="vr">Disintegrate, Build<br />randomly
-		<div id='box_disintegrate_2' class="box" onclick="disintegrate_2(this)">
+		<div id='box_disintegrate_2' class="box">
 		  <code>
 			random: 0.5<br />
 			distance: 2.5
@@ -358,7 +375,7 @@
 		</div>
 	  </li>
 	  <li>Explode, Converge<br />uniformly (cropped)
-		<div id='box_explode_1' class="box" onclick="explode_1(this)">
+		<div id='box_explode_1' class="box">
 		  <code>
 			rows: 2<br />
 			columns: 2<br />
@@ -371,7 +388,7 @@
 		</div>
 	  </li>
 	  <li class="vr">Explode, Converge<br />randomly
-		<div id='box_explode_2' class="box" onclick="explode_2(this)">
+		<div id='box_explode_2' class="box">
 		  <code>
 			rows: 5<br />
 			columns: 5<br />
@@ -383,7 +400,7 @@
 		</div>
 	  </li>
 	  <li>Shear, UnShear<br />rows (cropped)
-		<div id='box_shear_1' class="box" onclick="shear_1(this)">
+		<div id='box_shear_1' class="box">
 		  <code>
 			interval: 50<br />
 			distance: 0.95<br />
@@ -397,7 +414,7 @@
 		</div>
 	  </li>
 	  <li class="vr">Shear, UnShear<br />rows and columns
-		<div id='box_shear_2' class="box" onclick="shear_2(this)">
+		<div id='box_shear_2' class="box">
 		  <code>
 			random: 1
 		  </code><hr />
@@ -405,7 +422,7 @@
 		</div>
 	  </li>
 	  <li>Pinwheel, UnPinwheel<br />uniformly
-		<div id='box_pinwheel_1' class="box" onclick="pinwheel_1(this)">
+		<div id='box_pinwheel_1' class="box">
 		  <code>
 			fade: false
 		  </code><hr />
@@ -413,7 +430,7 @@
 		</div>
 	  </li>
 		<li>Pinwheel, UnPinwheel<br />randomly
-		<div id='box_pinwheel_2' class="box" onclick="pinwheel_2(this)">
+		<div id='box_pinwheel_2' class="box">
 		  <code>
 			random: 1<br />
 			rows: 5<br />
