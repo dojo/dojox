@@ -88,7 +88,7 @@ dojo.declare("dojox.widget.FilePicker", dojox.widget.RollingList, {
 		}else if(item1 == item2){
 			return true;
 		}else if (this._isIdentity){
-			var iArr = [ this.store.getIdentity(item1), i2 = this.store.getIdentity(item2) ];
+			var iArr = [ this.store.getIdentity(item1), this.store.getIdentity(item2) ];
 			dojo.forEach(iArr, function(i, idx){
 				if(i.lastIndexOf(this.pathSeparator) == (i.length - 1)){
 					iArr[idx] = i.substring(0, i.length - 1); 

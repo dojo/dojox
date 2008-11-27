@@ -56,7 +56,7 @@ dojo.declare("dojox.xmpp.UserService", null, {
 
 	_onGetPersonalProfile: function(profile){
 		if (profile.getAttribute('type')=='result'){
-			props = {};
+			var props = {};
 
 			if (profile.hasChildNodes()){
 				var queryNode = profile.firstChild;

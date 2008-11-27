@@ -415,13 +415,13 @@ dojo.declare("dojox.widget.Pager",
 			this._currentPage++;
 		}
 		
-		cnt = this.itemsPage;
+		var cnt = this.itemsPage;
 		for (var i=this._currentPage*this.itemsPage; i>(this._currentPage-1)*this.itemsPage; i--){
 			if (dojo.byId(this.id+'-item-'+i)){
 				var currentItem = dojo.byId(this.id+'-item-'+i);
 				var marginBox = dojo.marginBox(currentItem);
 				if (this.orientation == "horizontal") {
-					newPos = (dojo.style(this.pagerContainerView, 'width')+((cnt-1)*marginBox.w))-1;
+					var newPos = (dojo.style(this.pagerContainerView, 'width')+((cnt-1)*marginBox.w))-1;
 					dojo.style(currentItem, 'left', newPos+'px');
 					dojo.style(currentItem, 'top', '0px');
 					
@@ -477,7 +477,7 @@ dojo.declare("dojox.widget.Pager",
 				this._currentPage--;
 		}
    
-		cnt = this.itemsPage;
+		var cnt = this.itemsPage;
 		var j=1;
 		for (var i=this._currentPage*this.itemsPage; i>(this._currentPage-1)*this.itemsPage; i--){
 			if(dojo.byId(this.id+'-item-'+i)){
@@ -485,7 +485,7 @@ dojo.declare("dojox.widget.Pager",
 				var marginBox = dojo.marginBox(currentItem);
    
 				if (this.orientation == "horizontal") {
-					newPos = -(j * marginBox.w) + 1;
+					var newPos = -(j * marginBox.w) + 1;
 					dojo.style(currentItem, 'left', newPos+'px');
 					dojo.style(currentItem, 'top', '0px');
 			   
