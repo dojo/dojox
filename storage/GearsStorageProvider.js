@@ -295,8 +295,7 @@ if(dojo.gears.available){
 			removeMultiple: function(keys, namespace){
 				this._initStorage();
 				
-				if(!this.isValidKeyArray(keys) 
-						|| ! values instanceof Array){
+				if(!this.isValidKeyArray(keys)){
 					throw new Error("Invalid arguments: keys = [" + keys + "]");
 				}
 				
