@@ -10,7 +10,14 @@ dojo.declare('dojox.widget.Dialog',
 	// summary: A Lightbox-like Modal-dialog for HTML Content
 	//
 	// description:
-	//		An HTML 
+	//		An HTML-capable Dialog widget with advanced sizing 
+	//		options, animated show/hide and other useful options.
+	//		
+	//		This Dialog is also very easy to apply custom styles to.
+	//		
+	//		It works identically to a `dijit.Dialog` with several 
+	//		additional parameters.
+	
 	templatePath: dojo.moduleUrl('dojox.widget','Dialog/Dialog.html'),
 	
 	// sizeToViewport: Boolean
@@ -55,6 +62,12 @@ dojo.declare('dojox.widget.Dialog',
 	//		Make the pane draggable. Differs from dijit.Dialog by setting default to false
 	draggable: false, // simply over-ride the default from dijit.Dialog 
 	
+	// modal: Boolean
+	// 		If true, this Dialog instance will be truly modal and prevent closing until
+	//		explicitly told to by calling hide() - Defaults to false to preserve previous
+	// 		behaviors.
+	modal: false,
+	
 	constructor: function(props, node){
 		this.easing = props.easing || dojo._defaultEasing; 
 		this.dimensions = props.dimensions || [300, 300];
@@ -65,8 +78,9 @@ dojo.declare('dojox.widget.Dialog',
 		//		
 		this.inherited(arguments);
 		if(!this._alreadyInitialized){
-			// FIXME: should this be optional, too?
-			this.connect(this._underlay.domNode,"onclick","onCancel");
+			if(!this.modal){
+				this.connect(this._underlay.domNode,"onclick","onCancel");
+			}
 			
 			this._navIn = dojo.fadeIn({ node: this.closeButtonNode });
 			this._navOut = dojo.fadeOut({ node: this.closeButtonNode }); 
@@ -85,8 +99,9 @@ dojo.declare('dojox.widget.Dialog',
 	_setSize: function(){
 		// summary: cache and set our desired end position 
 		this._vp = dijit.getViewport();
-		var tc = this.containerNode;
-		var vpSized = this.sizeToViewport;
+		var tc = this.containerNode,
+			vpSized = this.sizeToViewport
+		;
 		this._displaysize = {
 			w: vpSized ? tc.scrollWidth : this.dimensions[0],
 			h: vpSized ? tc.scrollHeight : this.dimensions[1]
@@ -110,6 +125,15 @@ dojo.declare('dojox.widget.Dialog',
 		
 		this.inherited(arguments);
 
+		if(this.modal){
+			// connect to body to trap this event from the Dialog a11y code, and stop escape key
+			// from doing anything in the modal:true case:
+			this._modalconnects.push(dojo.connect(dojo.body(), "onkeypress", function(e){
+				if(e.charOrCode == dojo.keys.ESCAPE){
+					dojo.stopEvent(e);
+				}
+			}));
+		}
 		this._modalconnects.push(dojo.connect(this.domNode,"onmouseenter",this,"_handleNav"));
 		this._modalconnects.push(dojo.connect(this.domNode,"onmouseleave",this,"_handleNav"));
 		
@@ -118,11 +142,11 @@ dojo.declare('dojox.widget.Dialog',
 	_handleNav: function(e){
 		// summary: Handle's showing or hiding the close icon
 
-		var navou = "_navOut"; 
-		var navin = "_navIn";
-
-		var animou = (e.type == "mouseout" ? navin : navou);
-		var animin = (e.type == "mouseout" ? navou : navin);
+		var navou = "_navOut", 
+			navin = "_navIn",
+			animou = (e.type == "mouseout" ? navin : navou),
+			animin = (e.type == "mouseout" ? navou : navin)
+		;
 		
 		this[animou].stop();
 		this[animin].play();
