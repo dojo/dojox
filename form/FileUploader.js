@@ -1,108 +1,124 @@
 dojo.provide("dojox.form.FileUploader");
 dojo.experimental("dojox.form.FileUploader");
+var swfPath = dojo.config.uploaderPath || dojo.moduleUrl("dojox.form", "resources/uploader.swf");
 
-dojox.form.FileUploader = function(options){
-	
-	//summary: 
+
+dojo.require("dojox.embed.Flash");
+dojo.require("dojo.io.iframe");
+dojo.require("dojox.html.styles");
+
+dojo.declare("dojox.form.FileUploader", null, {
+	// summary: 
 	// 		Handles File Uploading to a server (PHP script included for testing)
 	//		Does *NOT* create a button, it transforms a button into an uploader. 
 	//		This can be used for toolbar buttons for example.
 	//
-	//		FileUploader is a wrapper class. If the correct version of Flash 
-	//		Player is available, FileInputFlash is used. If degradable is true,
-	//		and Flash Player is not installed or is outdated, FileInputOverlay
-	//		is used.
+	// description:
+	//		If the correct version of Flash Player is available (> 9.0) , a SWF
+	//		is used. If Flash Player is not installed or is outdated, a typical
+	//		html fileInput is used. This process can be overridden with
+	//		force:"flash" or force:"html".
+	//
+	//		FileUploader now works with Flash 10, but it comes with consequences.
+	//		Instead of calling to open the browse dialog with script, we HAVE to
+	//		click a Flash button. Therefore, we are floating a SWF over the 'fake'
+	//		button just like we do with the fileInput. As a result, the Flash 
+	//		uploader will have the same CSS problems as the fileInput.
+	//
+	//	NEW FEATURES - 
+	//		You can now pass in POST data that will be posted to the server along
+	//		with the Flash uploaded files. Also, you can now specify the field name
+	//		that the server expects the files to be in.
+	//
+	//	CDN USERS - 
+	//		FileUpload now works with the CDN but with limitations. The SWF must 
+	//		be from the same domain as the HTML page. 'swfPath' has been exposed
+	//		so that you may link to that file (could of course be the same SWF in 
+	//		dojox resource folder). The SWF will *NOT* work from the
+	//		CDN server. This would require a special XML file that would allow 
+	//		acces to your server, and the logistics to that is impossible.
+	//		
+	// LIMITATIONS -
+	//		Because of the nature of this "hack" - floating a zero-opacity fileInput
+	//		over a "fake" button - this won't work in all circumstances. For instance
+	//		you couldn't put a fileInput in a scrolling div. Some complicated CSS can 
+	//		mess up the placement - or for that matter, some simple, but not expected
+	//		CSS can mess up the placement. Being near the botton of a complex document
+	//		can throw off the positioning. The positioning methods have been exposed
+	//		for over-writing in these cases.
+	//
+	//	OPERA USERS -
+	//		Not much love from Opera on FileInput hacks. Should still work with 
+	//		the Flash 10 hack though.
+	//
+	//	ALSO - 
+	//		Only works programmatically. Does not work in markup. Use the other
+	//		other FileInput files for markup solutions.
+	//
+	//	example:
+	//		|	var f1 = new dojox.form.FileUploader({
+	//		|		id:"upload_1",
+	//		|		devMode:false,
+	//		|		isDebug:false,
+	//		|		button:dijit.byId("btn1"), 
+	//		|		uploadUrl:"www.absolutelUrl.com/upload.php", 
+	//		|		uploadOnChange:true
+	//		|	});
+	//		|	dojo.connect(f1, "onChange", "handleChange");
+	//		|	dojo.connect(f1, "onComplete", "onComplete");
 	//
 	// arguments:
 	//
-	// degradable: /* ? Boolean */
-	//		If true, will check if user has the correct version of the 
-	//		Flash Player installed, and if not, will cancel FileInputFlash
-	//		and install FileInputOverlay instead.
-	//		If false and user does not have the correct version of Flash,
-	//		(or if user has Opera) FileInputFlash will install regardless,
-	//		hopefully triggering the browser update mechanism.
-	this.degradable = false;
+	// degradable: REMOVED
 	//
-	//	uploadUrl: /* String */
-	// 		REQUIRED: The Url the file will be uploaded
-	this.uploadUrl = "";			
+	//	isDebug: Boolean
+	//		If true, outputs traces from the SWF to console. What exactly gets passed
+	//		is very relative, and depends upon what traces have been left in the DEFT SWF.
+	isDebug:false,
 	//
-	//	button: /* dijit.form.Button or a domNode */
-	// 		REQUIRED: The button that when clicked, launches the Flash Upload dialog
-	this.button = null;
+	//	devMode: Boolean.
+	//		If true, gives a red overlay to the Flash button and the HTML fileInput button's
+	//		opcaity is set to 1.0. Since this code uses some crazy CSS to get the uploaders 
+	//		to hover over the 'fake' button, there is no garuantee that it will work in all 
+	//		cases. Set this param to true to see if the button is properly positioned.
+	//		Methods may be called over over-written to help in this case.
+	devMode:false,
 	//
-	// NOTE: 	See FileInputFlash for Flash-specifc options (which will not affect
-	//			FileInputOverlay)
+	//	id: String
+	//		The object id, just like any other widget in Dojo. However, this id
+	//		is also used as a reference for the SWF
+	id:"",
 	//
-	// stubs:
+	//	uploadUrl: String
+	// 		REQUIRED: The Url to where the file will be uploaded
+	uploadUrl: "",
 	//
-	// 	onChange: function(dataArray){}		// Fired after a file(s) is selected
-	// 	onComplete: function(dataArray){}	// Fired after upload complete
-	// 
-	//	public method(s):
+	//	button: dijit.form.Button or a domNode
+	// 		REQUIRED: The button that when clicked, launches the upload dialog
+	button: null,
 	//
-	//	upload()
+	//	uploadOnChange: Boolean
+	//		If true, uploads imeediately after a file has been selected. If false,
+	//		waits for upload() to be called.
+	uploadOnChange: false,
+	//	selectMultipleFiles: Boolean
+	//		If true and flash mode, multiple files may be selected from the dialog.
+	//		If html mode, files are not uploaded until upload() is called. The references
+	//		to each file is incremented:uploadedfile0, uploadedfile1, uploadedfile2... etc.
+	selectMultipleFiles: true,
 	//
-	if(dojox.embed.Flash.available > 9 && options.degradable && !dojo.isOpera){
-		return new dojox.form.FileInputOverlay({
-			button:options.button, 
-			uploadOnChange:options.uploadOnChange, 
-			uploadUrl:options.uploadUrl,
-			selectMultipleFiles:options.selectMultipleFiles,
-			id:options.id
-		});	
-	}else{
-		return new dojox.form.FileInputFlash({
-			button:options.button, 
-			uploadOnChange:options.uploadOnChange, 
-			uploadUrl:options.uploadUrl,
-			id:options.id,
-			selectMultipleFiles:options.selectMultipleFiles,
-			// Flash specifc arguments:
-			fileMask:options.fileMask,
-			isDebug:options.isDebug
-		});
-	}
-}
-
-
-
-dojo.require("dojox.embed.Flash");
-
-dojo.declare("dojox.form.FileInputFlash", null, {
-	//summary: 
-	
-	//	uploadUrl: /* String */
-	// 		The Url the file will be uploaded
-	uploadUrl: "",			
-	
-	//	button: /* dijit.form.Button or a domNode */
-	// REQUIRED: The button that when clicked, launches the Flash Upload dialog
-	button:null,			
-	
-	// uploadOnChange: /* Boolean */
-	// 		if true, begins upload immediately
-	// 		leave false if you wish to display the text of the selection
-	//		and present an "upload" button
-	uploadOnChange: false, 	
-	
-	//	fieldName: /* String */
-	//			The form field attribute. This will be needed by the server to get the value.
-	//			If using the ReceiveFile.php test, leave this as-is.
-	// TODO:fieldName:"uploadedfile",
-	
-	//selectMultipleFiles: /* Boolean */
-	// 		Option to restrict to single-file upload, or allow
-	// 		multi-file uploader
-	selectMultipleFiles:true,
-	
-	// fileMask: /* Array[ Array[Description, FileTypes], Array[...]...] */
+	//	htmlFieldName: String
+	//		The name of the field of the fileInput that the server is expecting
+	htmlFieldName:"uploadedfile",
+	//
+	//	flashFieldName: String
+	//		The name of the field of the flash uploaded files that the server is expecting
+	flashFieldName:"flashUploadFiles",
+	// fileMask:  Array[ Array[Description, FileTypes], Array[...]...] 
 	// 		(an array, or an array of arrays)
 	//		Restrict file selection to certain file types
-	// Empty array defaults to "All Files"
-	//
-	// Usage:
+	// 		Empty array defaults to "All Files"
+	// example:
 	//	fileMask = ["Images", "*.jpg;*.jpeg;*.gif;*.png"]
 	//	or
 	//	fileMask = [
@@ -113,98 +129,154 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 	//	]
 	//	NOTE: MacType is not supported, as it does not work very well.
 	//			fileMask will work on a Mac, but differently than 
-	//			Windows. The second example above in Windows will mask
-	//			All but the selected file type, shown in a drop-down at
-	//			the bottom of the system dialog. In Mac, all types in 
-	//			all arrays will be shown and non-types masked.
-	fileMask:[],
-	
-	// degradable: /* Boolean *?
-	//		If true, will check if user has the correct version of the 
-	//		Flash Player installed, and if not, will cancel FileInputFlash
-	//		and install FileInputOverlay instead.
-	//		If false and user does not have the correct version of Flash,
-	//		(or if user has Opera) FileInputFlash will install regardless,
-	//		hopefully triggering the browser update mechanism.
-	degradable: false,
-	
-	_swfPath: dojo.moduleUrl("dojox.form", "resources/uploader.swf"),
-	
-	flashObject:null,
-	flashMovie:null,
-	flashDiv:null,
+	//			Windows.
+	fileMask: [],
+	//
+	//	force: String
+	//			options:
+	//				"flash" forces Flash Uploader
+	//				"html" forces HTML fileInput
+	//				"" checks availability of the proper Flash player
+	force:"",
+	//
+	//	postData: Object
+	//		FLASH ONLY - In HTML, append the vars to the uploadUrl
+	//		Sends data via POST to the server along with the uploaded
+	//		files.
+	postData:null,
+	//
+	//	swfPath: String
+	// 		optional: pass in a path to your own SWF file uploader. defaults to the one in dojox.
+	//		CDN USERS NOTE: For the Flash Uploader to work via CDN, the SWF must be from the 
+	//		same server as the HTML page. Pass the link to that file here.
+	swfPath: swfPath,
+	//
+	//	minFlashVersion: Number
+	//		Internal. Version of Flash Player to check for. Thi may be over-written
+	//		for testing.
+	minFlashVersion: 9,
+	//
+	//	uploaderType: String
+	//		Internal.
+	uploaderType:"",
+	//
+	//	flashObject: dojox.embed.Flash 
+	//		The object that creates the SWF embed object. Mostly Internal.
+	flashObject: null,
+	//
+	//	flashMovie: Function
+	//		The SWF. Mostly Internal.
+	flashMovie: null,
+	//
+	//	flashDiv: HTMLNode
+	//		The div that holds the SWF. While mostly internal, ccould be accessed 
+	//		for advanced positioning.
+	flashDiv: null,
+	//
+	//	domNode: HTMLNode
+	//either flash div or fileInput, depending on type
+	domNode:null, 
 	
 	constructor: function(options){
-		console.log("Flash version detected:", dojox.embed.Flash.available);
+		// summary:
+		//		Calling init function instead of doing operations in 
+		//		constructor, to allow for patches and over-writes.
+		this.init(options);
+	},
+	
+	log: function(){
+		//	summary:
+		//		Due to the excessive logging necessary to make this code happen,
+		//		It's easier to turn it on and off here in one place.
+		//		Also helpful if there are multiple uploaders on one page.
+		if (this.isDebug) {
+			console.log.apply(console, arguments);
+		}
+	},
+	
+	init: function(options){
+		//	summary:
+		//		Determine which uploader to use and initialize it.
+		//
+		dojo.mixin(this, options);
+		console.warn("isdebug:", this.isDebug, options.isDebug, this.id)
+		this.id = this.id || dijit.getUniqueId("uploader");
+		dijit.registry.add(this);
+		this.log("init Flash:", (dojox.embed.Flash.available >= this.minFlashVersion || this.force=="flash"), dojox.embed.Flash.available >= this.minFlashVersion, this.force=="flash")
+		
 		this.fileList = [];
 		this._subs = [];
 		this._cons = [];
-		this.button = options.button;
-		this.uploadUrl = options.uploadUrl;
-		this.uploadOnChange = options.uploadOnChange;
 		
-		if(this.uploadUrl.toLowerCase().indexOf("http")<0){
-			// Appears to be a relative path. Attempt to 
-			//	convert it to absolute, so it will better 
-			//target the SWF.
-			//
-			var loc = window.location.href.split("/");
-			loc.pop();
-			loc = loc.join("/")+"/";
+		if((dojox.embed.Flash.available >= this.minFlashVersion || this.force=="flash") && this.force!="html"){
+			this.uploaderType = "flash";
+			this.createFlashUploader();
+		}else{
+			this.uploaderType = "html";
 			
-			this.uploadUrl = loc+this.uploadUrl;
-			console.log("Relative loc:", loc, " abs loc:", this.uploadUrl);
-		}
-		
-		this.selectMultipleFiles = (options.selectMultipleFiles===undefined)?this.selectMultipleFiles:options.selectMultipleFiles;
-		this.fileMask = options.fileMask || this.fileMask;
-		
-		this.id = options.id || dijit.getUniqueId("flashuploader");
-		var args = {
-			path:this._swfPath.uri,
-			width:1,
-			height:1,
-			// only pass in simple variables - no deep objects
-			vars:{
-				uploadUrl:this.uploadUrl, 
-				uploadOnSelect:this.uploadOnChange,
-				selectMultipleFiles:this.selectMultipleFiles,
-				id:this.id,
-				isDebug:options.isDebug
+			this.fileInputs = [];
+			this.fileCount = 0;
+			
+			if (dojo.isIE && dojo.isIE<7) { //PATCH
+				// if we are create more than one FileInputOverlay,
+				// IE6 needs a breather or it locks up
+				setTimeout(dojo.hitch(this, "createHtmlUploader"), 1);
 			}
-		};
-		//console.log("VARS:", args.vars)
-		this.flashDiv = dojo.doc.createElement("div");
-		dojo.body().appendChild(this.flashDiv);
-		dojo.style(this.flashDiv, "position", "absolute");
-		dojo.style(this.flashDiv, "top", "0");
-		dojo.style(this.flashDiv, "left", "0");
-		
-		this._subs.push(dojo.subscribe(this.id+"/filesSelected", this, "_change"));
-		this._subs.push(dojo.subscribe(this.id+"/filesUploaded", this, "_complete"));
-		this._subs.push(dojo.subscribe(this.id+"/filesProgress", this, "_progress"));
-		this._subs.push(dojo.subscribe(this.id+"/filesError", this, "_error"));
-		this.flashObject = new dojox.embed.Flash(args, this.flashDiv);
-		this.flashObject.onLoad = dojo.hitch(this, function(mov){
-			this.flashMovie = mov;
-			this.flashMovie.setFileMask(this.fileMask);
-		})
-		this._cons.push(dojo.connect(this.button, "onClick", this, "_openDialog"));
+			else {
+				this.createHtmlUploader();
+			}
+		}
 	},
 	
+	onMouseDown: function(evt){
+		// summary:
+		//		Fired when upload button is down
+		//		Stub to which user can connect
+	},
+	
+	onMouseUp: function(evt){
+		// summary:
+		//		Fired when upload button is up
+		//		Stub to which user can connect
+	},
+	
+	onMouseOver: function(evt){
+		// summary:
+		//		Fired when upload button is over
+		// 		Can be connected to for manipulating hover state
+		if (this.button.domNode) {
+			dojo.addClass(this.button.domNode, "dijitButtonHover dijitHover");
+		}
+	},
+	
+	onMouseOut: function(evt){
+		// summary:
+		//		Fired when upload button is off
+		// Can be connected to for manipulating hover state
+		if (this.button.domNode) {
+			dojo.removeClass(this.button.domNode, "dijitButtonHover dijitHover");
+		}
+	},
+	/*onClick: function(){
+		// summary:
+		//		Fired when upload button is up
+		//		Stub to which user can connect
+	},*/
 	
 	onChange: function(dataArray){
-		// summary
-		// stub to connect 
-		// Fires when files are selected
-		// Event is an array of last files selected
+		//	summary:
+		// 		stub to connect 
+		// 		Fires when files are selected
+		// 		Event is an array of last files selected
 	},
 	
 	onProgress: function(dataArray){
-		// summary
-		// stub to connect 
-		// Fires as progress returns from SWF
-		// Event is an array of all files uploading
+		// summary:
+		// 		Stub to connect 
+		// 		Fires as progress returns from SWF
+		// 		Event is an array of all files uploading
+		//		Can be connected to for HTML uploader,
+		//		but will not return anything.
 	},
 	
 	onComplete: function(dataArray){
@@ -214,54 +286,352 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 		// Event is an array of all files
 	},
 	
+	onCancel: function(){
+		// summary:
+		// 		Stub to connect 
+		// 		Fires when dialog box has been closed 
+		//		without a file selection
+		this.log("Upload Canceled")
+	},
+	
 	onError: function(evtObject){
-		console.warn("FLASH/ERROR "+evtObject.type.toUpperCase()+":", evtObject); 	
+		console.warn("FLASH/ERROR " + evtObject.type.toUpperCase() + ":", evtObject);
 	},
 	
 	upload: function(){
-		// summary
-		// When called, begins file upload 
-		this.flashMovie.doUpload();
+		// summary:
+		// 		When called, begins file upload 
+		this.log("UPLOAD.TYPE:", this.uploaderType)
+		if (this.uploaderType == "flash") {
+			this.flashMovie.doUpload();
+		}else{
+			//this.log("POST FORM")
+			//this.log("FORM:", this._formNode)
+			//this.log("FILE:")
+			dojo.io.iframe.send({
+				url: this.uploadUrl,
+				form: this._formNode,
+				handleAs: "json",
+				handle: dojo.hitch(this, function(data, ioArgs, widgetRef){
+					this._complete([data]);
+					//this._complete(this.selectMultipleFiles ? data : [data]);
+				})
+			});
+		}
+	},
+	
+	setPosition: function(){
+		//	summary:
+		//		Positions the upload button over the 'fake' button.
+		//		This method is called on init, and may be called 
+		//		for various other reasons, for example, when the browser 
+		//		window is resized. Also, this code detects if the 
+		//		upload button is within a Dijit Dialog, and calls
+		//		this method when the Dialog is dragged. Whenever the 
+		//		DOM has been redrawn, you should call this method.
+		if (this.uploaderType == "flash") {
+			this.setFlashPosition();
+		}else{
+			this.setHtmlPosition();
+		}
+	},
+
+	hide: function(){
+		//	summary:
+		//		Hides the upload button. This is called
+		//		when within a dialog.
+		dojo.style(this.domNode, "display", "none");
+	},
+	
+	show: function(){
+		//	summary:
+		//		Shows the upload button. This is called
+		//		when within a dialog.
+		dojo.style(this.domNode, "display", "");
+	},
+	
+	destroyAll: function(){
+		//	summary:
+		// 		Destroys everything including 'fake' button
+		if (this.button.destroy) {
+			this.button.destroy();
+		}else{
+			dojo._destroyElement(this.button);
+		}
+		this.destroy();
+	},
+	
+	destroy: function(){
+		//	summary:
+		//		Destroys flash
+		//		TODO: This doesn't look complete. HTML?
+		if (this.uploaderType == "flash" && !this.flashMovie) {
+			this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));
+			return;
+		}
+		dojo.forEach(this._subs, function(s){
+			dojo.unsubscribe(s);
+		});
+		dojo.forEach(this._cons, function(c){
+			dojo.disconnect(c);
+		});
+		
+		if (this.uploaderType == "flash") {
+			this.flashObject.destroy();
+			dojo._destroyElement(this.flashDiv);
+		}
+	},
+	
+	
+	
+	
+	createFlashUploader: function(){
+		//	summary
+		//		Create embedded SWF
+		this.log("FLASH")
+		var uurl = this.uploadUrl.toLowerCase();
+		if(uurl.indexOf("http")<0 && uurl.indexOf("/")!=0){
+			// Appears to be a relative path. Attempt to 
+			//	convert it to absolute, so it will better 
+			//target the SWF.
+			//
+			var loc = window.location.href.split("/");
+			loc.pop();
+			loc = loc.join("/")+"/";
+			//this.log("Fix Relative url:", this.uploadUrl);
+			this.uploadUrl = loc+this.uploadUrl;
+			//this.log("SWF Fixed - Relative loc:", loc, " abs loc:", this.uploadUrl);
+		}else{
+			//this.log("SWF did not fix upload URL");
+		}
+		
+		
+		var dim = this.getFakeButtonSize();
+		
+		// the size of the embedded SWF, not it's containing DIV 
+		var w = "100%";
+		var h = "100%";
+		var args = {
+			path: this.swfPath.uri || this.swfPath,
+			width: w,
+			height: h,
+				allowScriptAccess:"always",
+				allowNetworking:"all",
+			// only pass in simple variables - no deep objects
+			vars: {
+				uploadDataFieldName: this.flashFieldName,
+				uploadUrl: this.uploadUrl,
+				uploadOnSelect: this.uploadOnChange,
+				selectMultipleFiles: this.selectMultipleFiles,
+				id: this.id,
+				//width:w, ///   width and height mess up the embed query string. very strange.
+				//height:h,
+				isDebug: this.isDebug,
+				devMode:this.devMode
+			},
+			params: {
+				wmode:"transparent"
+			}
+		};
+		if(args.vars.isDebug && window.console && window.console.dir){
+			
+			window.passthrough = function(){
+				console.log.apply(console, arguments);
+			}
+			window.passthrough("Flash trace enabled.")
+		}else{
+			window.passthrough = function(){}
+		}
+		//this.log("ARG VARS:", args.vars)
+		this.flashDiv = dojo.doc.createElement("div");
+		this.domNode = this.flashDiv;
+		dojo.body().appendChild(this.flashDiv);
+		
+		this._connectFlash();
+		
+		// F10 BUG
+		// Must set the position before creating the embed object
+		//	or it will get created twice - seems okay after
+		this.setPosition();
+		
+		this.flashObject = new dojox.embed.Flash(args, this.flashDiv);
+		this.flashObject.onLoad = dojo.hitch(this, function(mov){
+			this.log("ONLOAD")
+			this.flashMovie = mov;
+			this.flashMovie.setFileMask(this.fileMask);
+			if(this.postData){
+				this.flashMovie.setPostData(this.postData);
+			}
+			//
+		});
+		
+		
+	},
+		
+	
+	createHtmlUploader: function(){
+		// summary:
+		// 		Create the fileInput overlay
+		//
+		if (!this.button.id) {
+			this.button.id = dijit.getUniqueId("btn");
+		}
+		var node;
+		if (this.button.domNode) {
+			//this.log(this.button.domNode);this.log(this.button.id);this.log(dojo.byId(this.button.id))
+			node = dojo.byId(this.button.id).parentNode.parentNode;
+			// killing this event on the dijit button - it takes over the FileInput
+			node.parentNode.onmousedown = function(){}
+		}else {
+			node = this.button.parentNode;
+		}
+		
+		this._buildForm(node);
+		
+		this._buildFileInput(node);
+		
+		this.setPosition();
+		
+		this._connectInput();
+		
+		// in some cases, mainly due to scrollbars, the buttons
+		//	are initially misplaced
+		setTimeout(dojo.hitch(this, "setPosition"), 500);
+	},
+	
+	setFlashPosition: function(){
+		//	summary:
+		//		Get size and location of the 'fake' node (the button)
+		//		Resize, set position of teh SWF
+		var dim = this.getFakeButtonSize();
+		dojo.style(this.flashDiv, "position", "absolute");
+		dojo.style(this.flashDiv, "top", dim.y + "px");
+		dojo.style(this.flashDiv, "left", dim.x + "px");
+		dojo.style(this.flashDiv, "width", dim.w + "px");
+		dojo.style(this.flashDiv, "height", dim.h + "px");
+		dojo.style(this.flashDiv, "zIndex", 2001);
+	},
+	
+	setHtmlPosition: function(){
+		// summary:
+		//		Get size and location of the 'fake' node (the button)
+		//		Resize, set position, and clip the 'real' button (the fileInput)	
+		// 		setPosition will fire on browser resize. The button may wrap to a different position
+		//		and sometimes it just shifts slightly in the html, maybe because of the scrollbar.
+		//
+		var fake = this.getFakeButtonSize();
+		
+		// could memoize this, but it at 2-5ms, doesn't seem quite worth it.
+		var real = dojo.marginBox(this._fileInput);
+		// Now we have an extremely large fileInput button and field.
+		//	We mask the areas that extend passed the boundaries of the button.
+		//	Thanks to quirksmode for this hack.
+		var clip = "rect(0px " + real.w + "px " + fake.h + "px " + (real.w - fake.w) + "px)";
+		this._fileInput.style.clip = clip;
+		
+		// absolutely position the fileInput.
+		this._fileInput.style.left = (fake.x + fake.w - real.w) + "px";
+		this._fileInput.style.top = fake.y + "px";
+		
+		//PATCH
+		this._fileInput.style.zIndex = 2001;
+	},
+	
+	_connectFlash: function(){
+		// 	summary:
+		//		Subscribing to published topics coming from the
+		//		Flash uploader.
+		// 	description:
+		//		Sacrificing some readbilty for compactness. this.id
+		//		will be on the beginning of the topic, so more than
+		//		one uploader can be on a page and can have unique calls.
+		//
+		this._doSub("/filesSelected", "_change");
+		this._doSub("/filesUploaded", "_complete");
+		this._doSub("/filesProgress", "_progress");
+		this._doSub("/filesError", "_error");
+		this._doSub("/filesCanceled", "onCancel");
+		
+		this._doSub("/up", "onMouseUp");
+		this._doSub("/down", "onMouseDown");
+		this._doSub("/over", "onMouseOver");
+		this._doSub("/out", "onMouseOut");
+		this._connectCommon();
+	},
+	
+	_doSub: function(subStr, funcStr){
+		this._subs.push(dojo.subscribe(this.id + subStr, this, funcStr));
+	},
+	
+	_connectInput: function(){
+		this._disconnect();
+		this._cons.push(dojo.connect(this._fileInput, "mouseover", this, function(evt){
+			this.onMouseOver(evt);
+		}));
+		this._cons.push(dojo.connect(this._fileInput, "mouseout", this, function(evt){
+			this.onMouseOut(evt);
+		}));
+		this._cons.push(dojo.connect(this._fileInput, "change", this, function(){
+			this._change([{
+				name: this._fileInput.value,
+				type: "",
+				size: 0
+			}]);
+		}));
+		this._connectCommon();
+		
+	},
+	
+	_connectCommon: function(){
+		this._cons.push(dojo.connect(window, "resize", this, "setPosition"));
+		
+		var dialog = this._dialogParent();
+		if(dialog){
+			this._cons.push(dojo.connect(dialog, "show", this, function(){
+				this.show();
+				this.setPosition();
+			}));	
+			this._cons.push(dojo.connect(dialog, "hide", this, "hide"));
+			this._cons.push(dojo.connect(dialog, "destroy", this, "destroy")); // this one may not be needed
+			this._subs.push(dojo.subscribe("/dnd/move/stop",this,"setPosition"));
+		}
+		
 	},
 	
 	_error: function(evt){
 		this.onError(evt);
 	},
-	
-	_openDialog: function(evt){
-		// opens the system dialog
-		this.flashMovie.openDialog();
-	},
-	
+		
 	_change: function(dataArray){
 		this.fileList = this.fileList.concat(dataArray);
 		this.onChange(dataArray);
-		if(this.uploadOnChange){
+		if (this.uploadOnChange) {
 			this.upload();
 		}
 	},
 	
 	_complete: function(dataArray){
-		for(var i=0;i<this.fileList.length;i++){
-			this.fileList[i].percent = 100;	
+		for (var i = 0; i < this.fileList.length; i++) {
+			this.fileList[i].percent = 100;
 		}
-		this.onProgress(this.fileList);
+		this._progress(this.fileList);
 		this.fileList = [];
 		this.onComplete(dataArray);
 	},
 	
 	_progress: function(dataObject){
-		for(var i=0;i<this.fileList.length;i++){
+		for (var i = 0; i < this.fileList.length; i++) {
 			var f = this.fileList[i];
-			if(f.name == dataObject.name){
+			if (f.name == dataObject.name) {
 				f.bytesLoaded = dataObject.bytesLoaded;
 				f.bytesTotal = dataObject.bytesTotal;
-				f.percent = Math.ceil(f.bytesLoaded/f.bytesTotal*100);
-			}else{
-				if(!f.percent){
+				f.percent = Math.ceil(f.bytesLoaded / f.bytesTotal * 100);
+			}
+			else {
+				if (!f.percent) {
 					f.bytesLoaded = 0;
 					f.bytesTotal = 0;
-					f.percent = 0;					
+					f.percent = 0;
 				}
 			}
 		}
@@ -269,398 +639,185 @@ dojo.declare("dojox.form.FileInputFlash", null, {
 		
 	},
 	
-	destroyAll: function(){
-		// Destroys everything including button
-		this.button.destroy();
-		this.destroy();
+	_dialogParent: function(){
+		var dialog;
+		var node = this.button.domNode || this.button;
+		for(var i=0;i<50;i++){
+			if(node.tagName.toLowerCase()=="body"){
+				node = null;
+				break;
+			}
+			if(node.tagName && node.tagName.toLowerCase()=="div" && (dojo.attr(node, "widgetId") || dojo.attr(node, "widgetid"))){
+				dialog = dijit.byNode(node);
+				if(dialog.titleBar && dialog.titleNode){
+					break;	
+				}else{
+					dialog = null; // keep looking
+				}
+				
+			}
+			node = node.parentNode;
+		}
+		//console.warn("INNA DIALOG:", i, dialog)
+		return dialog;
+	},
+	_disconnect: function(){
+		dojo.forEach(this._cons, function(c){
+			dojo.disconnect(c);
+		});
 	},
 	
-	destroy: function(){
-		//destroys flash
-		if(!this.flashMovie){
-			this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));	
-			return;
+	_buildFileInput: function(node){
+		// summary
+		//	Build the fileInput field
+		//
+		if (this._fileInput) {
+			//this._formNode.removeChild(this._fileInput);
+			this._disconnect();
+			dojo.style(this._fileInput, "display", "none");
 		}
-		dojo.forEach(this._subs, function(s){
-			dojo.unsubscribe(s);								  
+		this._fileInput = document.createElement('input');
+		this.domNode = this._fileInput;
+		this._fileInput.setAttribute("type", "file");
+		this.fileInputs.push(this._fileInput);
+		// server will need to know this variable:
+		var nm = this.htmlFieldName;
+		var _id = this.id;
+		if (this.selectMultipleFiles) {
+			nm += this.fileCount;
+			_id += this.fileCount;
+			this.fileCount++;
+		}
+		this.log("NAME:", nm, this.htmlFieldName, this.fileCount);
+		this._fileInput.setAttribute("id", this.id);
+		this._fileInput.setAttribute("name", nm);
+		dojo.addClass(this._fileInput, "dijitFileInputReal");
+		
+		if(this.devMode){
+			dojo.style(this._fileInput, "opacity", 1)
+		}
+		
+		this._formNode.appendChild(this._fileInput);
+		
+	},
+	
+	_removeFileInput: function(){
+		dojo.forEach(this.fileInputs, function(inp){
+			inp.parentNode.removeChild(inp);
 		});
-		dojo.forEach(this._cons, function(c){
-			dojo.disconnect(c);								  
-		});
-		this.flashObject.destroy();
-		dojo._destroyElement(this.flashDiv);
-		
-	}
+		this.fileInputs = [];
+		this.fileCount = 0;
+	},
 	
-});
-
-
-dojo.require("dojo.io.iframe"); 
-dojo.require("dojox.html.styles"); 
-
-dojo.experimental("dojox.form.FileInputOverlay");
-
-dojo.declare("dojox.form.FileInputOverlay", null, {
-		//summary: 
-		// 		Handles the basic tasks of a fileInput...
-		//		Does NOT create a button, it transparently overlays a button passed to it. 
-		//		This can be used for toolbar buttons for example.
-		// 		Handles the file upload. Use an example PHP script included in resources.
+	_buildForm: function(node){
+		// summary:
+		//		Build the form that holds the fileInput
+		//		This form also holds the class that targets
+		//		the input to change its size
 		//
-		// NOTE:
-		//		This looks like it is duplicating efforts of the other FileInput files,
-		//		but its actually seperating the lower-level functionality, and allowing
-		//		for custom buttons.
-		//
-		// LIMITATIONS:
-		//		Because of the nature of this "hack" - floating a zero-opacity fileInput
-		//		over a "fake" button - this won't work in all circumstances. For instance
-		//		you couldn't put a fileInput in a scrolling div. Some complicated CSS can 
-		//		mess up the placement - or for that matter, some simple, but not expected
-		//		CSS can mess up the placement. Being near the botton of a complex document
-		//		can throw off the positioning.
-		//
-		//	OPERA USERS:
-		//		Not much love from Opera on FileInput hacks.
-		//
-		//	ALSO: 
-		//		Only works programmatically. Does not work in markup. Use the other
-		//		other FileInput files for markup solutions.
-		//
-		//	USAGE:
-		//		this.fileInput = new dojox.form.FileInputOverlay({button:this.button, uploadUrl:this.uploadUrl, uploadOnChange:true});
-		//		dojo.connect(this.fileInput, "onChange", this, "handleChange");
-		//		dojo.connect(this.fileInput, "onComplete", this, "onComplete");
+		if (this._formNode) return;
+		
+		if (dojo.isIE) {
+			// just to reiterate, IE is a steaming pile of code. 
+			this._formNode = document.createElement('<form enctype="multipart/form-data" method="post">');
+			this._formNode.encoding = "multipart/form-data";
+			
+		}
+		else {
+			// this is how all other sane browsers do it
+			this._formNode = document.createElement('form');
+			this._formNode.setAttribute("enctype", "multipart/form-data");
+		}
+		this._formNode.id = dijit.getUniqueId("form");
+		if (node && dojo.style(node, "display").indexOf("inline") > -1) {
+			document.body.appendChild(this._formNode);
+		}
+		else {
+			node.appendChild(this._formNode);
+		}
+		this._setFormStyle();
+	},
 	
 	
-		//	_fileInput: /* node */ 
-		//	the fileInput form node (do not set)
-		_fileInput:null,
-		
-		//	_fileInput: /* node */ 
-		//	the form node (do not set)
-		_formNode:null,
-		
-		//	uploadUrl: /* String */
-		// The Url the file will be uploaded
-		uploadUrl: "",			
-		
-		//	button: /* dijit.form.Button or a domNode */
-		// REQUIRED: The button that will get the FileInput overlay
-		button:null,			
-		
-		// uploadOnChange: /* Boolean */
-		// if true, begins upload immediately
-		// leave false if you wish to display the text of the selection
-		//	and present an "upload" button
-		uploadOnChange: false, 	
-		
-		//	fieldName: /* String */
-		//	The form field attribute. This will be needed by the server to get the value.
-		//	If using the ReceiveFile.php test, leave this as-is.
-		fieldName:"uploadedfile",
-		
-		// id: /* String */
-		// The attribute of the form field. Also accesses this object.
-		id:"",
-		
-		selectMultipleFiles:false,
-								
-		constructor: function(options){
-			this.button = options.button;
-			
-			this.uploadUrl = options.uploadUrl;
-			this.uploadOnChange = options.uploadOnChange;
-			this.selectMultipleFiles = options.selectMultipleFiles,
-			this.id = options.id || dijit.getUniqueId("fileInput");
-			this.fileCount = 0;
-			this._cons = [];
-			this.fileInputs = [];
-			if(dojo.isIE==6){
-				// if we are create more than one FileInputOverlay,
-				// IE6 needs a breather or it locks up
-				setTimeout(dojo.hitch(this, "createFileInput"), 1);
-			}else{
-				this.createFileInput();
-			}
-			
-		},
-		
-		onChange: function(dataArray){
-			// summary
-			//	Called after a system dialog selection has been made
-			// stub to connect
-			if(this.uploadOnChange) { 
-				this.upload(); 
-			}else if(this.selectMultipleFiles){
-				this.createFileInput();	
-			}
-		},
-		
-		onProgress: function(dataArray){
-			// blank stub
-			// This won't fire unless you configure the server to 
-			//	return a progress. It will fire onComplete at 100%.
-		},
-		
-		onComplete: function(dataArray){
-			//
-			//stub to connect
-			//
-			for(var i=0;i<dataArray.length;i++){
-				dataArray[i].percent = 100;	
-				dataArray[i].name = dataArray[i].file.split("/")[dataArray[i].file.split("/").length-1];
-			}
-			this.onProgress(dataArray);
-			this._removeFileInput();
-			this.createFileInput();
-		},
-		
-		upload: function(){
-			// summary
-			//	Tell form to upload
-			dojo.io.iframe.send({
-				url: this.uploadUrl,
-				form: this._formNode,
-				handleAs: "json",
-				handle: dojo.hitch(this,function(data,ioArgs,widgetRef){
-					this.onComplete(this.selectMultipleFiles?data:[data]);								 
-				})
-			});
-		},
-		
+	
+	_setFormStyle: function(){
+		// summary:
+		//		Apply a dynamic style to the form and input
+		//	description:
+		// 		YAY! IE makes us jump through more hoops!
+		//		We want to make the fileInput's button large enough to cover our
+		//		fake button, and we do this with fontSize=(x)em.
+		// 		It seems that after you build a fileInput, it's too late to style it. IE 
+		//		styles the input field, but not the button. 
+		//		To style the button, we'll create a class that fits, apply it to the form, 
+		//		then it will cascade down properly. Geez.
 		//
-		//	File Input Build
-		//		
+		// 		If the fake button is bigger than the fileInput, we need to resize
+		//		the fileInput. Due to browser security, the only consistent sizing 
+		//		method is font EMs. We're using a rough formula here to determine 
+		//		if the fake button is very tall or very wide, and resizing based
+		//		on the result.
+		// 		We want a minimum of 2em, because on a Mac, system buttons have 
+		//		rounded corners. The larger size moves that corner out of position
+		var fake = this.getFakeButtonSize();
+		var size = Math.max(2, Math.max(Math.ceil(fake.w / 60), Math.ceil(fake.h / 15)));
 		
-		createFileInput: function(){
-			// summary
-			// Create the fileInput overlay
+		// Now create a style associated with the form ID
+		dojox.html.insertCssRule("#" + this._formNode.id + " input", "font-size:" + size + "em");
+	},
+	
+
+	getFakeButtonSize: function(){
+			// summary:
+			//		Get the size and position of the Dijit Button or DOM node.
+			//	description:
+			//		This isn't easy. An awful lot has been accounted for, but a page full
+			//		of cascading styles can be simply impossible to predict.
+			// 		In these cases, it's reccomended that this function be 
+			//		overwritten with more precise paramters
 			//
-			
-			if(!this.button.id) { this.button.id = dijit.getUniqueId("btn"); }
-			var domNode;
-			if(this.button.domNode){
-				domNode = dojo.byId(this.button.id).parentNode.parentNode;
-				// killing this event on the dijit button - it takes over the FileInput
-				domNode.parentNode.onmousedown= function(){}
-			}else{
-				domNode = this.button.parentNode;
+			var fakeNode = (this.button.domNode) ? dojo.byId(this.button.id).parentNode : dojo.byId(this.button.id) || this.button;
+			this.log(this.id, "fakeNode", fakeNode)
+			//PATCH
+			// This should be tested - or allow an ability to overwrite the settings
+			if (fakeNode.tagName.toLowerCase() == "span") {
+				fakeNode = dojo.byId(this.button.id)
 			}
-			
-			this._buildForm(domNode);
-			
-			this._buildFileInput(domNode);
-			
-			this.setPosition();	
-			
-			this._connectInput();
-			
-			// in some cases, mainly due to scrollbars, the buttons
-			//	are initially misplaced
-			setTimeout(dojo.hitch(this, "setPosition"), 500);
-		},
-		
-		
-		
-		setPosition: function(){
-			// summary
-			//	Get size and location of the 'fake' node (the button)
-			//	Resize, set position, and clip the 'real' button (the fileInput)	
-			// 	setPosition will  fire on browser resize. The button may wrap to a different position
-			//	and sometimes it just shifts slightly in the html, maybe because of the scrollbar.
-			// May also call this externally, if there is a change in button positioning.
-			//
-			
-			var fake = this._getFakeButtonSize();
-			
-			// could memoize this, but it at 2-5ms, doesn't seem quite worth it.
-			var real = dojo.marginBox(this._fileInput);
-			// Now we have an extremely large fileInput button and field.
-			//	We mask the areas that extend passed the boundaries of the button.
-			//	Thanks to quirksmode for this hack.
-			var clip = "rect(0px "+real.w+"px "+fake.h+"px "+(real.w-fake.w)+"px)";
-			this._fileInput.style.clip = clip;
-			
-			// absolutely position the fileInput.
-			this._fileInput.style.left = (fake.x + fake.w - real.w) + "px";
-			this._fileInput.style.top = fake.y + "px";
-		},
-		_getFakeButtonSize: function(){
-			// summary
-			//	Get the size and position of the Dijit Button or DOM node.
-			//	This isn't easy. An awful lot has been accounted for, but a page full
-			//	of cascading styles can be simply impossible to predict.
-			// In these cases, it's reccomended that this function be 
-			//	overwritten with more precise paramters
-			//
-			var fakeNode = (this.button.domNode) ? dojo.byId(this.button.id).parentNode : dojo.byId(this.button.id);
-			
 			// can't memoize this, because we need the location. And the size could possibly change anyway.
 			var fake = dojo.coords(fakeNode, true);
 			// if block, get the width from the style
-			fake.w = (dojo.style(fakeNode, "display")=="block")? dojo.style(fakeNode, "width"): fake.w;
-			
+			fake.w = (dojo.style(fakeNode, "display") == "block") ? dojo.style(fakeNode, "width") : fake.w;
 			//relative and absolute positioning are totally different
 			var p = fakeNode.parentNode.parentNode;
-			if(p && dojo.style(p, "position")=="relative"){
+			if (p && dojo.style(p, "position") == "relative") {
 				fake.x = dojo.style(p, "left");
 				fake.y = dojo.style(p, "top");
 			}
-			if(p && dojo.style(p, "position")=="absolute"){
+			if (p && dojo.style(p, "position") == "absolute") {
 				fake.x = 0;
 				fake.y = 0;
 			}
 			
 			//Tweaking the size of the fileInput to be just a little bigger
 			var s = 3;
-			fake.x -=s;
+			fake.x -= s;
 			fake.y -= s;
-			fake.w+=s*2;
-			fake.h+=s*2;
-			
+			fake.w += s * 2;
+			fake.h += s * 2;
 			return fake;
-		},
-		
-		
-		
-		_buildFileInput: function(domNode){
-			// summary
-			//	Build the fileInput field
-			//
-			if(this._fileInput){
-				//this._formNode.removeChild(this._fileInput);
-				this._disconnectInput();
-				dojo.style(this._fileInput, "display", "none");
-			}
-			this._fileInput = document.createElement('input');
-			this._fileInput.setAttribute("type","file");
-			this.fileInputs.push(this._fileInput);
-			// server will need to know this variable:
-			var nm = this.fieldName;
-			var _id = this.id;
-			if(this.selectMultipleFiles){
-				nm += this.fileCount;
-				_id+=this.fileCount;
-				this.fileCount++;
-			}
-			this._fileInput.setAttribute("id", this.id);
-			this._fileInput.setAttribute("name",nm);
-			dojo.addClass(this._fileInput,"dijitFileInputReal");
-			this._formNode.appendChild(this._fileInput);
-			
-		},
-		
-		_removeFileInput: function(){
-			dojo.forEach(this.fileInputs, function(inp){
-				inp.parentNode.removeChild(inp);									   
-			});
-			this.fileInputs = [];
-			this.fileCount = 0;
-		},
-		
-		_buildForm: function(domNode){
-			// summary
-			//	Build the form that holds the fileInput
-			//	This form also holds the class that targets
-			//	the input to change its size
-			//
-			if(this._formNode) return;
-
-			if(dojo.isIE){
-				// just to reiterate, IE is a steaming pile of code. 
-				this._formNode = document.createElement('<form enctype="multipart/form-data" method="post">');
-				this._formNode.encoding = "multipart/form-data";
-				
-			}else{
-				// this is how all other sane browsers do it
-				this._formNode = document.createElement('form');
-				this._formNode.setAttribute("enctype","multipart/form-data");
-			}
-			this._formNode.id = dijit.getUniqueId("form");
-			if (domNode && dojo.style(domNode, "display").indexOf("inline") > -1) {
-				document.body.appendChild(this._formNode);
-			}else{
-				domNode.appendChild(this._formNode);
-			}
-			this._setFormStyle();
-		},
-		
-		_connectInput: function(){
-			this._disconnectInput();
-			this._cons.push(dojo.connect(this._fileInput, "mouseover", this, function(evt){
-				this.onMouseOver(evt);
-			}));
-			this._cons.push(dojo.connect(this._fileInput, "mouseout", this, function(evt){
-				this.onMouseOut(evt);
-			}));
-			this._cons.push(dojo.connect(this._fileInput, "change", this, function(){
-				this.onChange([{name:this._fileInput.value, type:"", size:0}]);
-			}));
-			
-			this._cons.push(dojo.connect(window, "resize", this, "setPosition"));
-		},
-		
-		_disconnectInput: function(){
-			dojo.forEach(this._cons, function(c){
-				dojo.disconnect(c);									  
-			});
-		},
-		
-		_setFormStyle: function(){
-			// summary
-			//	Apply a dynamic style to the form and input
-			//
-			// YAY! IE makes us jump through more hoops!
-			//	We want to make the fileInput's button large enough to cover our
-			//	fake button, and we do this with fontSize=(x)em.
-			// 	It seems that after you build a fileInput, it's too late to style it. IE 
-			//	styles the input field, but not the button. 
-			//	To style the button, we'll create a class that fits, apply it to the form, 
-			//	then it will cascade down properly. Geez.
-			//
-			// If the fake button is bigger than the fileInput, we need to resize
-			//	the fileInput. Due to browser security, the only consistent sizing 
-			//	method is font EMs. We're using a rough formula here to determine 
-			//	if the fake button is very tall or very wide, and resizing based
-			//	on the result.
-			// We want a minimum of 2em, because on a Mac, system buttons have 
-			//	rounded corners. The larger size moves that corner out of position
-			var fake = this._getFakeButtonSize();
-			var size = Math.max(2,Math.max(Math.ceil(fake.w/60),Math.ceil(fake.h/15)));
-			
-			// Now create a style associated with the form ID
-			dojox.html.insertCssRule("#"+this._formNode.id+" input", "font-size:"+size+"em");
-		},
-		
-		onMouseOver: function(evt){
-			// Can be connected to for manipulating hover state
-			if(this.button.domNode){
-				dojo.addClass(this.button.domNode, "dijitButtonHover dijitHover");
-			}
-		},
-		
-		onMouseOut: function(evt){
-			// Can be connected to for manipulating hover state
-			if(this.button.domNode){
-				dojo.removeClass(this.button.domNode, "dijitButtonHover dijitHover");
-			}
-		},
-		
-		destroyAll: function(){
-			// Destroys everything including button
-			this.button.destroy();
-			this.destroy();
-		},
-		
-		destroy: function(){
-			// summary
-			//	Destroys the FileInputOverlay
-			//	NOTE: Does not destroy the button or node to which it was 
-			//	"attached". That will need to be destroyed seperately.
-			this._disconnectInput();
-			dojo._destroyElement(this._formNode);
 		}
 		
+});
+//
+// Messages to be removed post 1.3.0
+//
+dojo.declare("dojox.form.FileInputOverlay", null, {
+	constructor: function(){
+		console.warn("dojox.form.FileInputOverlay has been removed. Use dojox.form.FileUploader directly, with the param force:'html'");
 	}
-);
+});
+dojo.declare("dojox.form.FileInputFlash", null, {
+	constructor: function(){
+		console.warn("dojox.form.FileInputFlash has been removed. Use dojox.form.FileUploader directly, with the param force:'flash'");
+	}
+});

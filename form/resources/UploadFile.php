@@ -20,7 +20,7 @@ function findTempDirectory()
     elseif(is_writable("/winnt/temp")) return "/winnt/temp";
     else return null;
   }
-function trace($txt){
+function trace($txt, $isArray=false){
 	//creating a text file that we can log to
 	// this is helpful on a remote server if you don't
 	//have access to the log files
@@ -28,7 +28,11 @@ function trace($txt){
 	//echo($txt."<br/>");
 	$log = new cLOG("../resources/upload.txt", false);
 	//$log->clear();
-	$log->write($txt);
+	if($isArray){
+		$log->printr($txt);
+	}else{
+		$log->write($txt);
+	}
 }
 function getImageType($filename){
 	return strtolower(substr(strrchr($filename,"."),1));
@@ -49,23 +53,56 @@ $download_path = "../resources/";	// same folder as above, but relative to the H
 require("../../../dojo/tests/resources/JSON.php");
 $json = new Services_JSON();
 
+//
+// 	Determine if this is a Flash upload, or an HTML upload
+//	
+//
 
-if( isset($_FILES['Filedata'])){
+$fieldName = "flashUploadFiles";//Filedata";
+
+if( isset($_FILES[$fieldName])){
 	//
-	// If the data passed has 'Filedata', then it's Flash. That's the default fieldname used.
+	// If the data passed has $fieldName, then it's Flash. That's the default fieldname used.
 	//
 	trace("returnFlashdata.... ");
+	
+	trace("");
+	trace("ID:");
+	trace($_POST['testId']);
+	
+	trace("POST:");
+	trace($_POST, true);
+	
+	trace("GET:");
+	trace($_GET, true);
+	
+	trace("FILES:");
+	trace($_FILES[$fieldName], true);
+	
+	trace("REQUEST:");
+	trace($_REQUEST, true);
+	
+	
+	
+	
+	
 	$returnFlashdata = true;
-	$m = move_uploaded_file($_FILES['Filedata']['tmp_name'],  $upload_path . $_FILES['Filedata']['name']);
-	trace("moved:" . $m);
-	$file = $upload_path . $_FILES['Filedata']['name'];
+	$m = move_uploaded_file($_FILES[$fieldName]['tmp_name'],  $upload_path . $_FILES[$fieldName]['name']);
+	$name = $_FILES[$fieldName]['name'];
+	$file = $upload_path . $name;
 	list($width, $height) = getimagesize($file);
 	$type = getImageType($file);
 	trace("file: " . $file ."  ".$type." ".$width);
 	// 		Flash gets a string back:
-	$data ='file='.$file.',width='.$width.',height='.$height.',type='.$type;
+	//		First combine relavant postVars
+	$data = "";
+	foreach ($_POST as $nm => $val) {
+		$data .= $nm ."=" . $val . ",";
+	}
+	$data .='file='.$file.',name='.$name.',width='.$width.',height='.$height.',type='.$type;
 	if($returnFlashdata){
 		trace("returnFlashdata");
+		trace($data, true);
 		echo($data);
 		return $data;
 	}
@@ -78,12 +115,14 @@ if( isset($_FILES['Filedata'])){
 	$m = move_uploaded_file($_FILES['uploadedfile']['tmp_name'],  $upload_path . $_FILES['uploadedfile']['name']);
 	trace("moved:".$m);
 	trace("Temp:".$_FILES['uploadedfile']['tmp_name']);
-	$file = $upload_path . $_FILES['uploadedfile']['name'];
+	$name = $_FILES['uploadedfile']['name'];
+	$file = $upload_path . $name;
 	$type = getImageType($file);
 	list($width, $height) = getimagesize($file);
 	trace("file: " . $file );
 	$ar = array(
 		'file' => $file,
+		'name' => $name,
 		'width' => $width,
 		'height' => $height,
 		'type'=> $type
@@ -98,12 +137,14 @@ if( isset($_FILES['Filedata'])){
 	while(isset($_FILES['uploadedfile'.$cnt])){
 		$moved = move_uploaded_file($_FILES['uploadedfile'.$cnt]['tmp_name'],  $upload_path . $_FILES['uploadedfile'.$cnt]['name']);
 		if($moved){
-			$file = $upload_path . $_FILES['uploadedfile'.$cnt]['name'];
+			$name = $_FILES['uploadedfile'.$cnt]['name'];
+			$file = $upload_path . $name;
 			$type = getImageType($file);
 			list($width, $height) = getimagesize($file);
 			trace("file: " . $file );
 			$ar[] = array(
 				'file' => $file,
+				'name' => $name,
 				'width' => $width,
 				'height' => $height,
 				'type'=> $type
@@ -112,10 +153,7 @@ if( isset($_FILES['Filedata'])){
 		$cnt++;
 	}
 	
-}else{
-	//
-	//	deleting files
-	//
+}elseif(isset($_GET['rmFiles'])){
 	trace("DELETING FILES" . $_GET['rmFiles']);
 	$rmFiles = explode(";", $_GET['rmFiles']);
 	foreach($rmFiles as $f){
@@ -123,7 +161,10 @@ if( isset($_FILES['Filedata'])){
 			trace("deleted:" . $f. ":" .unlink($f));
 		}
 	}
-	return;
+
+}else{
+	trace("IMROPER DATA SENT... $FILES:");
+	trace($_FILES);
 }
 
 //HTML gets a json array back:
