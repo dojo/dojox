@@ -5,10 +5,10 @@ dojo.require("dijit._Widget");
 (function(){
 	var fm = dojox.form.manager,
 
-		aa = fm.actionAdapter = function(/* Function */ action){
+		aa = fm.actionAdapter = function(action){
 			// summary:
 			//		Adapter that automates application of actions to arrays.
-			// action:
+			// action: Function:
 			//		Function that takes three parameters: a name, an object
 			//		(usually node or widget), and a value. This action will
 			//		be applied to all elements of array.
@@ -23,10 +23,10 @@ dojo.require("dijit._Widget");
 			};
 		},
 
-		ia = fm.inspectorAdapter = function(/* Function */ inspector){
+		ia = fm.inspectorAdapter = function(inspector){
 			// summary:
 			//		Adapter that applies an inspector only to the first item of the array.
-			// inspector:
+			// inspector: Function:
 			//		Function that takes three parameters: a name, an object
 			//		(usually node or widget), and a value.
 			return function(name, elem, value){
@@ -332,18 +332,18 @@ dojo.require("dijit._Widget");
 
 		// inspectors
 
-		inspectFormWidgets: function(/* Function */ inspector, /* Object? */ state, /* Object? */ defaultValue){
+		inspectFormWidgets: function(inspector, state, defaultValue){
 			// summary:
 			//		Run an inspector function on controlled widgets returning a result object.
-			// inspector:
+			// inspector: Function:
 			//		A function to be called on a widget. Takes three arguments: a name, a widget object
 			//		or an array of widget objects, and a supplied value. Runs in the context of
 			//		the form manager. Returns a value that will be collected and returned as a state.
-			// state:
+			// state: Object?:
 			//		Optional. If a name-value dictionary --- only listed names will be processed.
 			//		If an array, all names in the array will be processed with defaultValue.
 			//		If omitted or null, all widgets will be processed with defaultValue.
-			// defaultValue:
+			// defaultValue: Object?:
 			//		Optional. The default state (true, if omitted).
 
 			var name, result = {};
@@ -371,18 +371,18 @@ dojo.require("dijit._Widget");
 			return result;	// Object
 		},
 
-		inspectAttachedPoints: function(/* Function */ inspector, /* Object? */ state, /* Object? */ defaultValue){
+		inspectAttachedPoints: function(inspector, state, defaultValue){
 			// summary:
 			//		Run an inspector function on "dojoAttachPoint" nodes returning a result object.
-			// inspector:
+			// inspector: Function:
 			//		A function to be called on a node. Takes three arguments: a name, a node or
 			//		an array of nodes, and a supplied value. Runs in the context of the form manager.
 			//		Returns a value that will be collected and returned as a state.
-			// state:
+			// state: Object?:
 			//		Optional. If a name-value dictionary --- only listed names will be processed.
 			//		If an array, all names in the array will be processed with defaultValue.
 			//		If omitted or null, all attached point nodes will be processed with defaultValue.
-			// defaultValue:
+			// defaultValue: Object?:
 			//		Optional. The default state (true, if omitted).
 
 			var name, result = {};
@@ -417,19 +417,19 @@ dojo.require("dijit._Widget");
 			return result;	// Object
 		},
 
-		inspect: function(/* Function */ inspector, /* Object? */ state, /* Object? */ defaultValue){
+		inspect: function(inspector, state, defaultValue){
 			// summary:
 			//		Run an inspector function on controlled elements returning a result object.
-			// inspector:
+			// inspector: Function:
 			//		A function to be called on a widget, form element, and an attached node.
 			//		Takes three arguments: a name, a node (domNode in the case of widget) or
 			//		an array of such objects, and a supplied value. Runs in the context of
 			//		the form manager. Returns a value that will be collected and returned as a state.
-			// state:
+			// state: Object?:
 			//		Optional. If a name-value dictionary --- only listed names will be processed.
 			//		If an array, all names in the array will be processed with defaultValue.
 			//		If omitted or null, all controlled elements will be processed with defaultValue.
-			// defaultValue:
+			// defaultValue: Object?:
 			//		Optional. The default state (true, if omitted).
 
 			var result = this.inspectFormWidgets(function(name, widget, value){

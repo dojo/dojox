@@ -35,7 +35,7 @@ dojo.require("dojox.form.manager._Mixin");
 
 		// form-specific functionality
 
-		_onReset: function(e){
+		_onReset: function(evt){
 			// NOTE: this function is taken from dijit.formForm, it works only
 			// for form-based managers.
 
@@ -45,17 +45,17 @@ dojo.require("dojox.form.manager._Mixin");
 				preventDefault: function(){  // not IE
 							this.returnValue = false;
 						},
-				stopPropagation: function(){}, currentTarget: e.currentTarget, target: e.target
+				stopPropagation: function(){}, currentTarget: evt.currentTarget, target: evt.target
 			};
 			// if return value is not exactly false, and haven't called preventDefault(), then reset
 			if(!(this.onReset(faux) === false) && faux.returnValue){
 				this.reset();
 			}
-			dojo.stopEvent(e);
+			dojo.stopEvent(evt);
 			return false;
 		},
 
-		onReset: function(/*Event?*/e){
+		onReset: function(){
 			//	summary:
 			//		Callback when user resets the form. This method is intended
 			//		to be over-ridden. When the `reset` method is called
@@ -78,16 +78,16 @@ dojo.require("dojox.form.manager._Mixin");
 			return this;
 		},
 
-		_onSubmit: function(e){
+		_onSubmit: function(evt){
 			// NOTE: this function is taken from dijit.formForm, it works only
 			// for form-based managers.
 
-			if(this.onSubmit(e) === false){ // only exactly false stops submit
-				dojo.stopEvent(e);
+			if(this.onSubmit(evt) === false){ // only exactly false stops submit
+				dojo.stopEvent(evt);
 			}
 		},
 
-		onSubmit: function(/*Event?*/e){
+		onSubmit: function(){
 			//	summary:
 			//		Callback when user submits the form. This method is
 			//		intended to be over-ridden, but by default it checks and

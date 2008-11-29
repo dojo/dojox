@@ -7,10 +7,10 @@ dojo.require("dojox.form.manager._Mixin");
 		aa = fm.actionAdapter,
 		keys = fm._keys,
 
-		ce = fm.changeEvent = function(/* Node */ node){
+		ce = fm.changeEvent = function(node){
 			// summary:
 			//		Function that returns a valid "onchange" event for a given form node.
-			// node:
+			// node: Node:
 			//		Form node.
 
 			var eventName = "onclick";

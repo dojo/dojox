@@ -8,12 +8,12 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 	//		in terms of name-value regardless of the underlying type of
 	//		an element. It should be used together with dojox.form.manager.Mixin.
 
-	elementValue: function(/* String */ name, /* Object? */ value){
+	elementValue: function(name, value){
 		// summary:
 		//		Set or get a form widget/element or an attached point node by name.
-		// name:
+		// name: String:
 		//		The name.
-		// value:
+		// value: Object?:
 		//		Optional. The value to set.
 
 		if(name in this.formWidgets){
@@ -27,10 +27,10 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 		return this.formPointValue(name, value);	// Object
 	},
 
-	gatherFormValues: function(/* Object? */ names){
+	gatherFormValues: function(names){
 		// summary:
 		//		Collect form values.
-		// names:
+		// names: Object?:
 		//		If it is an array, it is a list of names of form elements to be collected.
 		//		If it is an object, dictionary keys are names to be collected.
 		//		If it is omitted, all known form elements are to be collected.
@@ -52,9 +52,11 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 		return result;	// Object
 	},
 
-	setFormValues: function(/* Object */ values){
+	setFormValues: function(values){
 		// summary:
 		//		Set values to form elements
+		// values: Object:
+		//		A dictionary of key-value pairs.
 		if(values){
 			this.inspectFormWidgets(function(name, widget, value){
 				this.formWidgetValue(name, value);

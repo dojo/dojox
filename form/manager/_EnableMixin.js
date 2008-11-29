@@ -16,10 +16,10 @@ dojo.require("dojox.form.manager._Mixin");
 		//		form widgets and form elements. It should be used together
 		//		with dojox.form.manager.Mixin.
 
-		gatherEnableState: function(/* Object? */ names){
+		gatherEnableState: function(names){
 			// summary:
 			//		Gather enable state of all form elements and return as a dictionary.
-			// names:
+			// names: Object?:
 			//		If it is an array, it is a list of names to be processed.
 			//		If it is an object, dictionary keys are names to be processed.
 			//		If it is omitted, all known form elements are to be processed.
@@ -37,15 +37,15 @@ dojo.require("dojox.form.manager._Mixin");
 			return result;	// Object
 		},
 
-		enable: function(/* Object? */ state, /* Boolean */ defaultState){
+		enable: function(state, defaultState){
 			// summary:
 			//		Enable form controls according to the supplied state object.
-			// state:
+			// state: Object?:
 			//		Optional. If a name-value dictionary, the value is true
 			//		to enable and false to disable. If an array, all names in the
 			//		array will be set to defaultState. If omitted, all form
 			//		elements will be set to defaultState.
-			// defaultState:
+			// defaultState: Boolean:
 			//		The default state (true, if omitted).
 
 			if(arguments.length < 2 || defaultState === undefined){
@@ -65,11 +65,11 @@ dojo.require("dojox.form.manager._Mixin");
 			return this;	// self
 		},
 
-		disable: function(/* Object? */ state){
+		disable: function(state){
 			// summary:
 			//		Disable form controls according to the supplied state object
 			//		returning the previous state.
-			// state:
+			// state: Object?:
 			//		Optional. If a name-value dictionary, the value is true
 			//		to enable and false to disable. If an array, all names in the
 			//		array will be disabled. If omitted, disables all.
