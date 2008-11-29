@@ -58,6 +58,14 @@ $json = new Services_JSON();
 //	
 //
 
+//		First combine relavant postVars
+$postdata = array();
+$data = "";
+foreach ($_POST as $nm => $val) {
+	$data .= $nm ."=" . $val . ",";
+	$postdata[$nm] = $val;
+}
+
 $fieldName = "flashUploadFiles";//Filedata";
 
 if( isset($_FILES[$fieldName])){
@@ -70,7 +78,7 @@ if( isset($_FILES[$fieldName])){
 	trace("ID:");
 	trace($_POST['testId']);
 	
-	trace("POST:");
+	trace("Flash POST:");
 	trace($_POST, true);
 	
 	trace("GET:");
@@ -94,11 +102,7 @@ if( isset($_FILES[$fieldName])){
 	$type = getImageType($file);
 	trace("file: " . $file ."  ".$type." ".$width);
 	// 		Flash gets a string back:
-	//		First combine relavant postVars
-	$data = "";
-	foreach ($_POST as $nm => $val) {
-		$data .= $nm ."=" . $val . ",";
-	}
+	
 	$data .='file='.$file.',name='.$name.',width='.$width.',height='.$height.',type='.$type;
 	if($returnFlashdata){
 		trace("returnFlashdata");
@@ -115,6 +119,10 @@ if( isset($_FILES[$fieldName])){
 	$m = move_uploaded_file($_FILES['uploadedfile']['tmp_name'],  $upload_path . $_FILES['uploadedfile']['name']);
 	trace("moved:".$m);
 	trace("Temp:".$_FILES['uploadedfile']['tmp_name']);
+	
+	trace("HTML single POST:");
+	trace($_POST, true);
+	
 	$name = $_FILES['uploadedfile']['name'];
 	$file = $upload_path . $name;
 	$type = getImageType($file);
@@ -127,6 +135,11 @@ if( isset($_FILES[$fieldName])){
 		'height' => $height,
 		'type'=> $type
 	);
+	$postdata['file'] = $file;
+	$postdata['name'] = $name;
+	$postdata['width'] = $width;
+	$postdata['height'] = $height;
+	$postdata['type'] = $type;
 
 }elseif( isset($_FILES['uploadedfile0']) ){
 	//
@@ -134,6 +147,9 @@ if( isset($_FILES[$fieldName])){
 	//
 	$cnt = 0;
 	$ar = array();
+	trace("HTML multiple POST:");
+	trace($_POST, true);
+
 	while(isset($_FILES['uploadedfile'.$cnt])){
 		$moved = move_uploaded_file($_FILES['uploadedfile'.$cnt]['tmp_name'],  $upload_path . $_FILES['uploadedfile'.$cnt]['name']);
 		if($moved){
@@ -149,6 +165,12 @@ if( isset($_FILES[$fieldName])){
 				'height' => $height,
 				'type'=> $type
 			);
+					
+			$postdata['file'] = $file;
+			$postdata['name'] = $name;
+			$postdata['width'] = $width;
+			$postdata['height'] = $height;
+			$postdata['type'] = $type;
 		}
 		$cnt++;
 	}
@@ -168,7 +190,8 @@ if( isset($_FILES[$fieldName])){
 }
 
 //HTML gets a json array back:
-$data = $json->encode($ar);
+//$data = $json->encode($ar);
+$data = $json->encode($postdata);
 trace($data);
 // in a text field:
 ?>

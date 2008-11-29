@@ -36,7 +36,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 	//		so that you may link to that file (could of course be the same SWF in 
 	//		dojox resource folder). The SWF will *NOT* work from the
 	//		CDN server. This would require a special XML file that would allow 
-	//		acces to your server, and the logistics to that is impossible.
+	//		access to your server, and the logistics to that is impossible.
 	//		
 	// LIMITATIONS -
 	//		Because of the nature of this "hack" - floating a zero-opacity fileInput
@@ -735,9 +735,20 @@ dojo.declare("dojox.form.FileUploader", null, {
 		else {
 			node.appendChild(this._formNode);
 		}
+		this._setHtmlPostData();
 		this._setFormStyle();
 	},
-	
+	_setHtmlPostData: function(){
+		if(this.postData){
+			for (var nm in this.postData) {
+				var f = document.createElement('input');
+				dojo.attr(f, "type", "hidden");
+				dojo.attr(f, "name", nm);
+				dojo.attr(f, "value", this.postData[nm]);
+				this._formNode.appendChild(f);
+			}
+		}
+	},
 	
 	
 	_setFormStyle: function(){
