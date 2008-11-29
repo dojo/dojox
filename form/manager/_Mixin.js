@@ -110,7 +110,7 @@ dojo.require("dijit._Widget");
 				dojo.forEach(observers, function(o){
 					c.push(dojo.connect(w, eventName, this, function(evt){
 						if(this.watch){
-							this[o](this.formWidgetValue(name), name, w, evt);
+							this[o](w.attr("value"), name, w, evt);
 						}
 					}));
 				}, this);
