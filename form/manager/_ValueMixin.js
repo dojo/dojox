@@ -20,7 +20,7 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 			return this.formWidgetValue(name, value);	// Object
 		}
 
-		if(name in this.formNodes){
+		if(this.formNodes && name in this.formNodes){
 			return this.formNodeValue(name, value);	// Object
 		}
 
@@ -39,9 +39,11 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 			return this.formWidgetValue(name);
 		}, names);
 
-		dojo.mixin(result, this.inspectFormNodes(function(name){
-			return this.formNodeValue(name);
-		}, names));
+		if(this.inspectFormNodes){
+			dojo.mixin(result, this.inspectFormNodes(function(name){
+				return this.formNodeValue(name);
+			}, names));
+		}
 
 		dojo.mixin(result, this.inspectAttachedPoints(function(name){
 			return this.formPointValue(name);
@@ -58,9 +60,11 @@ dojo.declare("dojox.form.manager._ValueMixin", null, {
 				this.formWidgetValue(name, value);
 			}, values);
 
-			this.inspectFormNodes(function(name, node, value){
-				this.formNodeValue(name, value);
-			}, values);
+			if(this.inspectFormNodes){
+				this.inspectFormNodes(function(name, node, value){
+					this.formNodeValue(name, value);
+				}, values);
+			}
 
 			this.inspectAttachedPoints(function(name, node, value){
 				this.formPointValue(name, value);
