@@ -83,14 +83,30 @@ dojo.require("dijit._Widget");
 		},
 
 		connectWidget = function(name, observers){
-			var t = this.formWidgets[name], c = t.connections;
+			var t = this.formWidgets[name], w = t.widget, c = t.connections;
 			if(c.length){
 				dojo.forEach(c, dojo.disconnect);
 				c = t.connections = [];
 			}
-			aa(function(_, w){
+			if(dojo.isArray(w)){
+				// radio buttons
+				dojo.forEach(w, function(w){
+					dojo.forEach(observers, function(o){
+						c.push(dojo.connect(w, "onChange", this, function(evt){
+							// TODO: for some reason for radio button widgets
+							// w.checked != w.focusNode.checked when value changes.
+							// We test the underlying value to be 100% sure.
+							if(this.watch && dojo.attr(w.focusNode, "checked")){
+								this[o](w.attr("value"), name, w, evt);
+							}
+						}));
+					}, this);
+				}, this);
+			}else{
+				// the rest
 				// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
-				var eventName = w.declaredClass == "dijit.form.Button" ? "onClick" : "onChange";
+				var eventName = w.declaredClass == "dijit.form.Button" ?
+						"onClick" : "onChange";
 				dojo.forEach(observers, function(o){
 					c.push(dojo.connect(w, eventName, this, function(evt){
 						if(this.watch){
@@ -98,7 +114,7 @@ dojo.require("dijit._Widget");
 						}
 					}));
 				}, this);
-			}).call(this, null, t.widget);
+			}
 		};
 
 	dojo.declare("dojox.form.manager._Mixin", null, {
@@ -281,7 +297,11 @@ dojo.require("dijit._Widget");
 				}
 				// getter
 				dojo.some(elem, function(widget){
-					if(widget.attr("checked")){
+					// TODO: for some reason for radio button widgets
+					// w.checked != w.focusNode.checked when value changes.
+					// We test the underlying value to be 100% sure.
+					if(dojo.attr(widget.focusNode, "checked")){
+					//if(widget.attr("checked")){
 						result = widget;
 						return true;
 					}

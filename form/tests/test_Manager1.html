@@ -154,7 +154,12 @@
 					var values = this.gatherFormValues(["e02", "w02"]);
 					console.log("e02: " + values.e02 + ", w02: " + values.w02);
 				</script>
-				<script type="dojo/method" event="showValues">
+				<script type="dojo/method" event="showValues" args="value,name">
+					if(name){
+						// first time this method is called with no parameters
+						// show the name and the value otherwise
+						console.log("name = ", name, " value = ", value);
+					}
 					var values = this.gatherFormValues(),
 						table = dojo.byId("table"), names = [];
 					// clear the table
