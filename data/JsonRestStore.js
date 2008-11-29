@@ -334,7 +334,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			// index the results
 			var count = results.length;
 			// if we don't know the length, and it is partial result, we will guess that it is twice as big, that will work for most widgets
-			return {totalCount:deferred.fullLength || (deferred.request.count == count ? count * 2 : count), items: results};
+			return {totalCount:deferred.fullLength || (deferred.request.count == count ? (deferred.request.start || 0) + count * 2 : count), items: results};
 		},
 
 		getConstructor: function(){

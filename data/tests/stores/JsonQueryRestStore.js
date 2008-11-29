@@ -163,7 +163,10 @@ doh.register("dojox.data.tests.stores.JsonQueryRestStore",
 				jsonStore.jsonQueryPagination = true;
 				var d = new doh.Deferred();
 				lastQuery = null;
-				jsonStore.fetch({sort:[{attribute:"name", descending: true}],start:1, count:2, 
+				jsonStore.fetch({sort:[{attribute:"name", descending: true}],start:1, count:2,
+					onBegin: function(count){
+						t.is(count,4);
+					},
 					onComplete: function(items, request){
 						t.is("Hula Hoop", items[0].name);
 						t.is("Car", items[1].name);

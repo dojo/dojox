@@ -147,7 +147,9 @@ dojo.require("dojo.data.util.filter");
 							defResult.callback(cachedArgs.cacheResults);
 						}
 						defResult.addCallback(function(results){
-							return self.clientSideFetch({query:clientQuery,sort:args.sort,start:args.start,count:args.count}, results);
+							results = self.clientSideFetch({query:clientQuery,sort:args.sort,start:args.start,count:args.count}, results);
+							defResult.fullLength = results._fullLength;
+							return results;
 						});
 					}
 				}
@@ -216,8 +218,13 @@ dojo.require("dojo.data.util.filter");
 					// do the sort if needed
 					results.sort(this.makeComparator(request.sort.concat()));
 				}
+				return this.clientSidePaging(request, results);
+			},
+			clientSidePaging: function(/*Object*/ request,/*Array*/ baseResults){
 				var start = request.start || 0;
-				return (start || request.count) ? results.slice(start,start + (request.count || results.length)) : results;
+				var finalResults = (start || request.count) ? baseResults.slice(start,start + (request.count || baseResults.length)) : baseResults;
+				finalResults._fullLength = baseResults.length;
+				return finalResults; 
 			},
 			matchesQuery: function(item,request){
 				var query = request.query; 

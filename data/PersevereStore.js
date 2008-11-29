@@ -6,7 +6,8 @@ dojo.require("dojox.rpc.Client"); // Persevere supports this and it improves rel
 
 dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functions
 
-dojo.declare("dojox.data.PersevereStore",dojox.data.JsonQueryRestStore,{	
+dojo.declare("dojox.data.PersevereStore",dojox.data.JsonQueryRestStore,{
+	jsonQueryPagination: false // use the Range headers instead	
 });
 dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync){
 	// summary:

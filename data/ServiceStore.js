@@ -248,7 +248,7 @@ dojo.declare("dojox.data.ServiceStore",
 				}
 			}
 			var count = results.length;
-			return {totalCount: deferred.request.count == count ? count * 2 : count, items: results};
+			return {totalCount: deferred.request.count == count ? (deferred.request.start || 0) + count * 2 : count, items: results};
 		},
 		close: function(request){
 			return request && request.abort && request.abort();

@@ -2,7 +2,7 @@ dojo.provide("dojox.data.util.JsonQuery");
 // this is a mixin to convert object attribute queries to 
 // JSONQuery/JSONPath syntax to be sent to the server.
 dojo.declare("dojox.data.util.JsonQuery", null, {
-	_toJsonQuery: function(args){
+	_toJsonQuery: function(args, jsonQueryPagination){
 
 		// performs conversion of Dojo Data query objects and sort arrays to JSONQuery strings
 		if(args.query && typeof args.query == "object"){
@@ -38,7 +38,8 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 				args.queryStr += ']';
 			}
 		}
-		if(this.jsonQueryPagination && (args.start || args.count)){
+		// this is optional because with client side paging JSONQuery doesn't yield the total count
+		if(jsonQueryPagination && (args.start || args.count)){
 			// pagination
 			args.queryStr = (args.queryStr || (typeof args.query == 'string' ? args.query : "")) +
 				'[' + (args.start || '') + ':' + (args.count ? (args.start || 0) + args.count : '') + ']'; 
@@ -51,7 +52,7 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 	},
 	jsonQueryPagination: true,
 	fetch: function(args){
-		this._toJsonQuery(args);
+		this._toJsonQuery(args, this.jsonQueryPagination);
 		return this.inherited(arguments);
 	},
 	isUpdateable: function(){
@@ -63,7 +64,8 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 	},
 	clientSideFetch: function(/*Object*/ request,/*Array*/ baseResults){
 		request._jsonQuery = request._jsonQuery || dojox.json.query(this._toJsonQuery(request));
-		return request._jsonQuery(baseResults);
+		// we use client side paging function here instead of JSON Query because we must also determine the total count
+		return this.clientSidePaging(request, request._jsonQuery(baseResults));
 	},
 	querySuperSet: function(argsSuper,argsSub){
 		if(!argsSuper.query){
