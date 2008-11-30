@@ -570,8 +570,19 @@ dojo.declare("dojox.form.FileUploader", null, {
 		}));
 		this._cons.push(dojo.connect(this._fileInput, "mouseout", this, function(evt){
 			this.onMouseOut(evt);
+			this._checkHtmlCancel("off");
 		}));
+		this._cons.push(dojo.connect(this._fileInput, "mousedown", this, function(evt){
+			this.onMouseDown(evt);
+		}));
+		this._cons.push(dojo.connect(this._fileInput, "mouseup", this, function(evt){
+			this.onMouseUp(evt);
+			this._checkHtmlCancel("up");
+		}));
+		
 		this._cons.push(dojo.connect(this._fileInput, "change", this, function(){
+			console.log("html change")
+			this._checkHtmlCancel("change");
 			this._change([{
 				name: this._fileInput.value,
 				type: "",
@@ -581,7 +592,18 @@ dojo.declare("dojox.form.FileUploader", null, {
 		this._connectCommon();
 		
 	},
-	
+	_checkHtmlCancel: function(mouseType){
+		if(mouseType=="change"){
+			this.dialogIsOpen = false;
+		}
+		if(mouseType=="up"){
+			this.dialogIsOpen = true;
+		}
+		if(mouseType=="off"){
+			this.dialogIsOpen = false;
+			this.onCancel();
+		}
+	},
 	_connectCommon: function(){
 		this._cons.push(dojo.connect(window, "resize", this, "setPosition"));
 		
