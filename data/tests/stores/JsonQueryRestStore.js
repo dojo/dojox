@@ -14,7 +14,7 @@ testService = function(query){
 		{id:1, name:"Ball", price: 5},
 		{id:2, name:"Car", price: 15},
 		{id:3, name:"Truck", price: 25},
-		{id:4, name:"Hula Hoop", price: 55},
+		{id:4, name:"Hula Hoop", price: 55}
 	]);
 	return deferred;
 	
@@ -68,6 +68,8 @@ doh.register("dojox.data.tests.stores.JsonQueryRestStore",
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"", 
 					onComplete: function(items, request){
+						testItems = items;
+						console.log(items.length, items);
 						t.is(4, items.length);
 						d.callback(true);
 					},
