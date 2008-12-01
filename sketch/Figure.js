@@ -198,20 +198,6 @@ dojo.require("dojox.sketch.UndoStack");
 			self._cshape=self._start=self._end=self._absEnd=null;
 		};
 
-		this._delete=function(arr,noundo){
-			for(var i=0; i<arr.length; i++){
-				//var before=arr[i].serialize();
-				arr[i].setMode(ta.Annotation.Modes.View);
-				arr[i].destroy(noundo);
-				self.remove(arr[i]);
-				self._remove(arr[i]);
-				if(!noundo){
-					arr[i].onRemove();
-				}
-			}
-			arr.splice(0,arr.length);
-		};
-
 		this.initUndoStack();
 	};
 
@@ -221,6 +207,19 @@ dojo.require("dojox.sketch.UndoStack");
 	};
 	p.setTool=function(/*dojox.sketch._Plugin*/t){
 		this._ctool=t;
+	};
+	p._delete=function(arr,noundo){
+		for(var i=0; i<arr.length; i++){
+			//var before=arr[i].serialize();
+			arr[i].setMode(ta.Annotation.Modes.View);
+			arr[i].destroy(noundo);
+			this.remove(arr[i]);
+			this._remove(arr[i]);
+			if(!noundo){
+				arr[i].onRemove();
+			}
+		}
+		arr.splice(0,arr.length);
 	};
 	p.onDblClickShape=function(shape,e){
 		if(shape['onDblClick']){
@@ -233,7 +232,7 @@ dojo.require("dojox.sketch.UndoStack");
 	p.initialize=function(node){
 		this.node=node;
 		this.surface=dojox.gfx.createSurface(node, this.size.w, this.size.h);
-		this.surface.createRect({ x:0, y:0, width:this.size.w, height:this.size.h })
+		this.backgroundRect=this.surface.createRect({ x:0, y:0, width:this.size.w, height:this.size.h })
 			.setFill("white");
 		this.group=this.surface.createGroup();
 
@@ -260,7 +259,7 @@ dojo.require("dojox.sketch.UndoStack");
 			dojo.connect(es.ownerDocument, 'onkeydown', this._keydown));
 		
 		//	rect hack.  Fcuking VML.
-		this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
+		this.groupBackground=this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
 		this.image=this.group.createImage({ width:this.size.w, height:this.size.h, src:this.imageSrc });
 	};
 
