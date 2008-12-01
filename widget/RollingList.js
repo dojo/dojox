@@ -125,16 +125,16 @@ dojo.declare("dojox.widget._RollingListPane",
 		}
 	},
 	
-	_loadCheck: function(/* Boolean? */ forceLoad){
+	_loadCheck: function(){
 		// summary: checks that the store is loaded
 		if(!this._started){
 			var c = this.connect(this, "startup", function(){
 				this.disconnect(c);
-				this._loadCheck(forceLoad);
+				this._loadCheck();
 			});
 		}
 		var displayState = this.domNode && this._isShown();
-		if((this.store || this.items) && (forceLoad || (this.refreshOnShow && displayState) || (!this.isLoaded && displayState))){
+		if((this.store || this.items) && ((this.refreshOnShow && displayState) || (!this.isLoaded && displayState))){
 			this._loadQuery();
 		}
 	},
@@ -289,10 +289,10 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 	//  The menu that we will call addChild() on for adding items
 	_menu: null,
 	
-	_loadCheck: function(/* Boolean? */ forceLoad){
+	_loadCheck: function(){
 		// summary: checks that the store is loaded
 		var displayState = this._isShown();
-		if((this.store || this.items) && (forceLoad || (this.refreshOnShow && displayState) || (!this.isLoaded && displayState))){
+		if((this.store || this.items) && ((this.refreshOnShow && displayState) || (!this.isLoaded && displayState))){
 			this._loadQuery();
 		}
 	},
