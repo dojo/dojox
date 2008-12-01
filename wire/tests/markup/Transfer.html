@@ -7,7 +7,7 @@ dojo.provide("dojox.wire.ml.tests.markup.Transfer");
 
 dojo.require("dojo.parser");
 dojo.require("doh.runner");
-dojo.require("dojox.data.dom");
+dojo.require("dojox.xml.parser");
 dojo.require("dojox.data.XmlStore");
 dojo.require("dojox.wire.ml.Action");
 dojo.require("dojox.wire.ml.Transfer");
@@ -31,7 +31,7 @@ dojo.addOnLoad(function(){
 		},
 
 		function test_Transfer_path(t){
-			dojox.wire.ml.tests.markup.Transfer.element = dojox.data.dom.createDocument().createElement("x");
+			dojox.wire.ml.tests.markup.Transfer.element = dojox.xml.parser.parse().createElement("x");
 			dojox.wire.ml.tests.markup.Transfer.target = {};
 			dojo.publish("transferXml");
 			t.assertEqual(dojox.wire.ml.tests.markup.Transfer.source.a, dojox.wire.ml.tests.markup.Transfer.target.a);

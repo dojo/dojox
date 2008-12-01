@@ -28,8 +28,8 @@ working with specific types of data.
 -------------------------------------------------------------------------------
 Dependencies:
 
-DojoX Data has dependencies on core dojo (dojo.data) and the D.O.H. unit test 
-framework.
+DojoX Data has dependencies on core dojo (dojo.data), dojox.xml for XmlStore 
+and dojox.data.dom(deprecated) and the D.O.H. unit test framework
 -------------------------------------------------------------------------------
 Documentation:
 

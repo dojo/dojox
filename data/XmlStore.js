@@ -3,7 +3,7 @@ dojo.provide("dojox.data.XmlItem");
 
 dojo.require("dojo.data.util.simpleFetch");
 dojo.require("dojo.data.util.filter");
-dojo.require("dojox.data.dom");
+dojo.require("dojox.xml.parser");
 
 dojo.declare("dojox.data.XmlStore", null, {
 	//	summary:
@@ -1063,7 +1063,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		A post content
 		var element = item.element;
 		var declaration = "<?xml version=\"1.0\"?>"; // FIXME: encoding?
-		return declaration + dojox.data.dom.innerXML(element); //XML string
+		return declaration + dojox.xml.parser.innerXML(element); //XML string
 	},
 
 	_getPutContent: function(item){
@@ -1080,7 +1080,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		A post content
 		var element = item.element;
 		var declaration = "<?xml version=\"1.0\"?>"; // FIXME: encoding?
-		return declaration + dojox.data.dom.innerXML(element); //XML string
+		return declaration + dojox.xml.parser.innerXML(element); //XML string
 	},
 
 /* internal API */
@@ -1167,7 +1167,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		if(element){
 			return element.ownerDocument;  //DOMDocument
 		}else if(!this._document){
-			return dojox.data.dom.createDocument(); // DOMDocument
+			return dojox.xml.parser.parse(); // DOMDocument
 		}
 		return null; //null
 	},

@@ -25,7 +25,8 @@ patterns in the client.
 Dependencies:
 
 DojoX Wire has dependencies on core dojo, the dijit widget system (for classes 
-in the dojox.wire.ml package), dojox.data, and the D.O.H. unit test framework.
+in the dojox.wire.ml package), dojox.data, dojox.xml, and the D.O.H. unit test 
+framework.
 -------------------------------------------------------------------------------
 Documentation:
 

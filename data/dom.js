@@ -1,4 +1,5 @@
 dojo.provide("dojox.data.dom");
+dojo.require("dojox.xml.parser");
 
 //DOM type to int value for reference.
 //Ints make for more compact code than full constant names.
@@ -15,12 +16,9 @@ dojo.provide("dojox.data.dom");
 //DOCUMENT_FRAGMENT_NODE        = 11;
 //NOTATION_NODE                 = 12;
 
-//FIXME:  Remove this file when possible.
-//This file contains internal/helper APIs as holders until the true DOM apis of Dojo 0.9 are finalized.
-//Therefore, these should not be generally used, they are present only for the use by XmlStore and the
-//wires project until proper dojo replacements are available.  When such exist, XmlStore and the like
-//will be ported off these and this file will be deleted.
-dojo.experimental("dojox.data.dom");
+//This file contains internal/helper APIs as holders for people who used them.  They have been migrated to
+//a better project, dojox.xml and experimental has been removed there.  Please update usage to the new package.
+dojo.deprecated("dojox.data.dom", "Use dojox.xml.parser instead.", "2.0");
 
 dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 	//	summary:
@@ -31,54 +29,14 @@ dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 	//		If str is empty string "", then a new empty document will be created.
 	//	mimetype:
 	//		Optional mimetype of the text.  Typically, this is text/xml.  Will be defaulted to text/xml if not provided.
-	var _document = dojo.doc;
-
-	if(!mimetype){ mimetype = "text/xml"; }
-	if(str && dojo.trim(str) !== "" && (typeof dojo.global["DOMParser"]) !== "undefined"){
-		var parser = new DOMParser();
-		return parser.parseFromString(str, mimetype);	//	DOMDocument
-	}else if((typeof dojo.global["ActiveXObject"]) !== "undefined"){
-		var sf = [".DOMDocument", ".XMLDOM"];
-		var dp = ["Microsoft"+sf[1], "MSXML6"+sf[0], "MSXML4"+sf[0], "MSXML3"+sf[0], "MSXML2"+sf[0]];
-		var doc;
-		dojo.some(dp, function(p){
-			try{
-				doc = new ActiveXObject(p);
-			}catch(e){ return false; }
-			return true;
-		});
-		try{
-			if(str){
-				if(doc){
-					doc.async = false;
-					doc.loadXML(str);
-					return doc;	//	DOMDocument
-				}
-			}else{
-				if(doc){
-					return doc; //DOMDocument
-				}
-			}
-		}catch(e){ /* squelch */};
-	}else if((_document.implementation)&&
-		(_document.implementation.createDocument)){
-		if(str && dojo.trim(str) !== ""){
-			if(_document.createElement){
-				// FIXME: this may change all tags to uppercase!
-				var tmp = _document.createElement("xml");
-				tmp.innerHTML = str;
-				var xmlDoc = _document.implementation.createDocument("foo", "", null);
-				for(var i = 0; i < tmp.childNodes.length; i++) {
-					xmlDoc.importNode(tmp.childNodes.item(i), true);
-				}
-				return xmlDoc;	//	DOMDocument
-			}
-		}else{
-			return _document.implementation.createDocument("", "", null); // DOMDocument
-		}
+	dojo.deprecated("dojox.data.dom.createDocument()", "Use dojox.xml.parser.parse() instead.", "2.0");
+	try{
+		return dojox.xml.parser.parse(str,mimetype); //DOMDocument.
+	}catch(e){
+		/*Squeltch errors like the old parser did.*/
+		return null;
 	}
-	return null;	//	DOMDocument
-}
+};
 
 dojox.data.dom.textContent = function(/*Node*/node, /*string?*/text){
 	//	summary:
@@ -91,36 +49,13 @@ dojox.data.dom.textContent = function(/*Node*/node, /*string?*/text){
 	//		The node to get the text off of or set the text on.
 	//	text:
 	//		Optional argument of the text to apply to the node.
-	if(arguments.length>1){
-		var _document = node.ownerDocument || dojo.doc;  //Preference is to get the node owning doc first or it may fail
-		dojox.data.dom.replaceChildren(node, _document.createTextNode(text));
-		return text;	//	string
-	} else {
-		if(node.textContent !== undefined){ //FF 1.5
-			return node.textContent;	//	string
-		}
-		var _result = "";
-		if(node == null){
-			return _result; //empty string.
-		}
-		for(var i = 0; i < node.childNodes.length; i++){
-			switch(node.childNodes[i].nodeType){
-				case 1: // ELEMENT_NODE
-				case 5: // ENTITY_REFERENCE_NODE
-					_result += dojox.data.dom.textContent(node.childNodes[i]);
-					break;
-				case 3: // TEXT_NODE
-				case 2: // ATTRIBUTE_NODE
-				case 4: // CDATA_SECTION_NODE
-					_result += node.childNodes[i].nodeValue;
-					break;
-				default:
-					break;
-			}
-		}
-		return _result;	//	string
+	dojo.deprecated("dojox.data.dom.textContent()", "Use dojox.xml.parser.textContent() instead.", "2.0");
+	if(arguments.length> 1){
+		return dojox.xml.parser.textContent(node, text); //string
+	}else{
+		return dojox.xml.parser.textContent(node); //string
 	}
-}
+};
 
 dojox.data.dom.replaceChildren = function(/*Element*/node, /*Node || array*/ newChildren){
 	//	summary:
@@ -134,28 +69,9 @@ dojox.data.dom.replaceChildren = function(/*Element*/node, /*Node || array*/ new
 	//	newChildren:
 	//		The children to add to the node.  It can either be a single Node or an
 	//		array of Nodes.
-	var nodes = [];
-	var i;
-	
-	if(dojo.isIE){
-		for(i=0;i<node.childNodes.length;i++){
-			nodes.push(node.childNodes[i]);
-		}
-	}
-
-	dojox.data.dom.removeChildren(node);
-	for(i=0;i<nodes.length;i++){
-		dojo._destroyElement(nodes[i]);
-	}
-
-	if(!dojo.isArray(newChildren)){
-		node.appendChild(newChildren);
-	}else{
-		for(i=0;i<newChildren.length;i++){
-			node.appendChild(newChildren[i]);
-		}
-	}
-}
+	dojo.deprecated("dojox.data.dom.replaceChildren()", "Use dojox.xml.parser.replaceChildren() instead.", "2.0");
+	dojox.xml.parser.replaceChildren(node, newChildren);
+};
 
 dojox.data.dom.removeChildren = function(/*Element*/node){
 	//	summary:
@@ -164,26 +80,16 @@ dojox.data.dom.removeChildren = function(/*Element*/node){
 	//		after they are not used anymore.
 	//	node:
 	//		The node to remove all the children from.
-	var count = node.childNodes.length;
-	while(node.hasChildNodes()){
-		node.removeChild(node.firstChild);
-	}
-	return count; // int
-}
-
+	dojo.deprecated("dojox.data.dom.removeChildren()", "Use dojox.xml.parser.removeChildren() instead.", "2.0");
+	return dojox.xml.parser.removeChildren(node); //int
+};
 
 dojox.data.dom.innerXML = function(/*Node*/node){
 	//	summary:
 	//		Implementation of MS's innerXML function.
 	//	node:
 	//		The node from which to generate the XML text representation.
-	if(node.innerXML){
-		return node.innerXML;	//	string
-	}else if (node.xml){
-		return node.xml;		//	string
-	}else if(typeof XMLSerializer != "undefined"){
-		return (new XMLSerializer()).serializeToString(node);	//	string
-	}
-	return null;
-}
+	dojo.deprecated("dojox.data.dom.innerXML()", "Use dojox.xml.parser.innerXML() instead.", "2.0");
+	return dojox.xml.parser.innerXML(node); //string||null
+};
 
