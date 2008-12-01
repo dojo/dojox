@@ -28,7 +28,7 @@ dojox.xml.parser.parse = function(/*string?*/ str, /*string?*/ mimetype){
 	var doc;
 
 	if(!mimetype){ mimetype = "text/xml"; }
-	if(str && dojo.trim(str) !== "" && (typeof dojo.global["DOMParser"]) !== "undefined"){
+	if(str && dojo.trim(str) !== "" && "DOMParser" in dojo.global){
 		//Handle parsing the text on Mozilla based browsers etc..
 		var parser = new DOMParser();
 		doc = parser.parseFromString(str, mimetype);
@@ -43,7 +43,7 @@ dojox.xml.parser.parse = function(/*string?*/ str, /*string?*/ mimetype){
 		}
 		return doc;
 
-	}else if((typeof dojo.global["ActiveXObject"]) !== "undefined"){
+	}else if("ActiveXObject" in dojo.global){
 		//Handle IE.
 		var ms = function(n){ return "MSXML" + n + ".DOMDocument"; };
 		var dp = ["Microsoft.XMLDOM", ms(6), ms(4), ms(3), ms(2)];
@@ -72,8 +72,7 @@ dojox.xml.parser.parse = function(/*string?*/ str, /*string?*/ mimetype){
 				return doc; //DOMDocument
 			}
 		}
-	}else if((_document.implementation)&&
-		(_document.implementation.createDocument)){
+	}else if(_document.implementation && _document.implementation.createDocument){
 		if(str && dojo.trim(str) !== ""){
 			if(_document.createElement){
 				//Everyone else that we couldn't get to work.  Fallback case.
@@ -93,7 +92,7 @@ dojox.xml.parser.parse = function(/*string?*/ str, /*string?*/ mimetype){
 	return null;	//	DOMDocument
 }
 
-dojox.xml.parser.textContent = function(/*Node*/node, /*string?*/text){
+dojox.xml.parser.textContent = function(/*Node*/node, /*String?*/text){
 	//	summary:
 	//		Implementation of the DOM Level 3 attribute; scan node for text
 	//	description:
@@ -108,30 +107,26 @@ dojox.xml.parser.textContent = function(/*Node*/node, /*string?*/text){
 		var _document = node.ownerDocument || dojo.doc;  //Preference is to get the node owning doc first or it may fail
 		dojox.xml.parser.replaceChildren(node, _document.createTextNode(text));
 		return text;	//	string
-	} else {
-		if(node.textContent !== undefined){ //FF 1.5
+	}else{
+		if(node.textContent !== undefined){ //FF 1.5 -- remove?
 			return node.textContent;	//	string
 		}
 		var _result = "";
-		if(node == null){
-			return _result; //empty string.
+		if(node){
+			dojo.forEach(node.childNodes, function(child){
+				switch(child.nodeType){
+					case 1: // ELEMENT_NODE
+					case 5: // ENTITY_REFERENCE_NODE
+						_result += dojox.xml.parser.textContent(child);
+						break;
+					case 3: // TEXT_NODE
+					case 2: // ATTRIBUTE_NODE
+					case 4: // CDATA_SECTION_NODE
+						_result += child.nodeValue;
+				}
+			});
 		}
-		for(var i = 0; i < node.childNodes.length; i++){
-			switch(node.childNodes[i].nodeType){
-				case 1: // ELEMENT_NODE
-				case 5: // ENTITY_REFERENCE_NODE
-					_result += dojox.xml.parser.textContent(node.childNodes[i]);
-					break;
-				case 3: // TEXT_NODE
-				case 2: // ATTRIBUTE_NODE
-				case 4: // CDATA_SECTION_NODE
-					_result += node.childNodes[i].nodeValue;
-					break;
-				default:
-					break;
-			}
-		}
-		return _result;	//	string
+		return _result;	//	String
 	}
 }
 
@@ -148,25 +143,24 @@ dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || array*/ n
 	//		The children to add to the node.  It can either be a single Node or an
 	//		array of Nodes.
 	var nodes = [];
-	var i;
 	
 	if(dojo.isIE){
-		for(i=0;i<node.childNodes.length;i++){
-			nodes.push(node.childNodes[i]);
-		}
+		dojo.forEach(node.childNodes, function(child){
+			nodes.push(child);
+		});
 	}
 
 	dojox.xml.parser.removeChildren(node);
-	for(i=0;i<nodes.length;i++){
-		dojo._destroyElement(nodes[i]);
-	}
+	dojo.forEach(nodes.length, function(child){
+		dojo._destroyElement(child);
+	});
 
 	if(!dojo.isArray(newChildren)){
 		node.appendChild(newChildren);
 	}else{
-		for(i=0;i<newChildren.length;i++){
-			node.appendChild(newChildren[i]);
-		}
+		dojo.forEach(newChildren.length, function(child){
+			node.appendChild(child);
+		});
 	}
 }
 
@@ -191,12 +185,11 @@ dojox.xml.parser.innerXML = function(/*Node*/node){
 	//	node:
 	//		The node from which to generate the XML text representation.
 	if(node.innerXML){
-		return node.innerXML;	//	string
-	}else if (node.xml){
-		return node.xml;		//	string
+		return node.innerXML;	//	String
+	}else if(node.xml){
+		return node.xml;		//	String
 	}else if(typeof XMLSerializer != "undefined"){
-		return (new XMLSerializer()).serializeToString(node);	//	string
+		return (new XMLSerializer()).serializeToString(node);	//	String
 	}
 	return null;
 }
-
