@@ -140,6 +140,14 @@ doh.register("dojox.json.tests.query",
 			}
 		},
 		{
+			name: "$..[^?@['author']='Herman*']",
+			runTest: function(t) {
+				var result = dojo.toJson(dojox.json.query(this.name,[dojox.json.tests.testData,dojox.json.tests.testData]));
+				var success =  '[{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
 			name: "$..book[0][?(@.isbn)]",
 			runTest: function(t) {
 				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
@@ -182,6 +190,16 @@ doh.register("dojox.json.tests.query",
 		},
 		{
 			name: "$..[?price<10]",
+			runTest: function(t) {
+				var query = dojox.json.query(this.name);
+				console.log("recursive object search",query.toString());
+				var result = dojo.toJson(query(dojox.json.tests.testData));
+				var success =  '[{"category":"reference","author":"Nigel Rees","title":"Sayings of the Century","price":8.95},{"category":"fiction","author":"Herman Melville","title":"Moby Dick","isbn":"0-553-21311-3","price":8.99}]';
+				doh.assertEqual(success,result);
+			}
+		},
+		{
+			name: "$.store..[?price<10]",
 			runTest: function(t) {
 				var query = dojox.json.query(this.name);
 				console.log("recursive object search",query.toString());

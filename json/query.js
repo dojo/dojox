@@ -175,7 +175,6 @@ dojo.provide("dojox.json.query");
 		// 	 	This finds objects in array with a price less than 15.00 and sorts then
 		// 		by rating, highest rated first, and returns the first ten items in from this
 		// 		filtered and sorted list.
-		var tokens = [];
 		var depth = 0;	
 		var str = [];
 		query = query.replace(/"(\\.|[^"\\])*"|'(\\.|[^'\\])*'|[\[\]]/g,function(t){
@@ -189,10 +188,10 @@ dojo.provide("dojox.json.query");
 			// creates a function call and puts the expression so far in a parameter for a call 
 			prefix = name + "(" + prefix;
 		}
-		function makeRegex(t,a,b,c,d){
+		function makeRegex(t,a,b,c,d,e,f,g){
 			// creates a regular expression matcher for when wildcards and ignore case is used 
-			return str[d].match(/[\*\?]/) || c == '~' ?
-					"/^" + str[d].substring(1,str[d].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + (c == '~' ? '$/i' : '$/') + ".test(" + a + ")" :
+			return str[g].match(/[\*\?]/) || f == '~' ?
+					"/^" + str[g].substring(1,str[g].length-1).replace(/\\([btnfr\\"'])|([^\w\*\?])/g,"\\$1$2").replace(/([\*\?])/g,".$1") + (f == '~' ? '$/i' : '$/') + ".test(" + a + ")" :
 					t;
 		}
 		query.replace(/(\]|\)|push|pop|shift|splice|sort|reverse)\s*\(/,function(){
@@ -241,9 +240,9 @@ dojo.provide("dojox.json.query");
 				}
 				return t;
 			}).
-			replace(/(\$obj\s*(\.\s*[\w_$]+\s*)*)(==|~)\s*`([0-9]+)/g,makeRegex). // create regex matching
-			replace(/`([0-9]+)\s*(==|~)\s*(\$obj(\s*\.\s*[\w_$]+)*)/g,function(t,a,b,c,d){ // and do it for reverse =
-				return makeRegex(t,c,d,b,a);
+			replace(/(\$obj\s*((\.\s*[\w_$]+\s*)|(\[\s*`([0-9]+)\s*`\]))*)(==|~)\s*`([0-9]+)/g,makeRegex). // create regex matching
+			replace(/`([0-9]+)\s*(==|~)\s*(\$obj\s*((\.\s*[\w_$]+)|(\[\s*`([0-9]+)\s*`\]))*)/g,function(t,a,b,c,d,e,f,g){ // and do it for reverse =
+				return makeRegex(t,c,d,e,f,g,b,a);
 			});
 		query = prefix + (query.charAt(0) == '$' ? "" : "$") + query.replace(/`([0-9]+|\])/g,function(t,a){
 			//restore the strings
