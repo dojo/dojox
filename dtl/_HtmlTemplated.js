@@ -8,6 +8,10 @@ dojox.dtl._HtmlTemplated = {
 	prototype: {
 		_dijitTemplateCompat: false,
 		buildRendering: function(){
+			//	summary:
+			//		Construct the UI for this widget, setting this.domNode.
+
+			//render needs a domNode to work with
 			this.domNode = this.srcNodeRef;
 
 			if(!this._render){
@@ -18,9 +22,18 @@ dojox.dtl._HtmlTemplated = {
 				this._render = new dojox.dtl.render.html.Render(this.domNode, this._template);
 				ddcd.widgetsInTemplate = old;
 			}
-
-			var self = this;
-			this._rendering = setTimeout(function(){ self.render(); }, 10);
+			this.preCreate();
+			
+			this.render();
+			this.domNode = this._template.getRootNode();
+ 			if(this.srcNodeRef && this.srcNodeRef.parentNode){
+ 				dojo._destoryElement(this.srcNodeRef);
+ 			}
+		},
+		preCreate: function(){
+			// summary:
+			//		Stub function to setup any data required for rendering of this widget. This 
+			//		is called before the first render call when the widget initializes
 		},
 		setTemplate: function(/*String|dojo._Url*/ template, /*dojox.dtl.Context?*/ context){
 			// summary:
@@ -33,10 +46,6 @@ dojox.dtl._HtmlTemplated = {
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context, /*dojox.dtl.HtmlTemplate?*/ tpl){
-			if(this._rendering){
-				clearTimeout(this._rendering);
-				delete this._rendering;
-			}
 			if(tpl){
 				this._template = tpl;
 			}
