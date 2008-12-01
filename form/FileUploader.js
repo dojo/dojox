@@ -494,9 +494,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 		
 		this._connectInput();
 		
-		// in some cases, mainly due to scrollbars, the buttons
-		//	are initially misplaced
-		setTimeout(dojo.hitch(this, "setPosition"), 500);
+		
 	},
 	
 	setFlashPosition: function(){
@@ -617,7 +615,9 @@ dojo.declare("dojox.form.FileUploader", null, {
 			this._cons.push(dojo.connect(dialog, "destroy", this, "destroy")); // this one may not be needed
 			this._subs.push(dojo.subscribe("/dnd/move/stop",this,"setPosition"));
 		}
-		
+		// in some cases, mainly due to scrollbars, the buttons
+		//	are initially misplaced
+		setTimeout(dojo.hitch(this, "setPosition"), 500);
 	},
 	
 	_error: function(evt){
