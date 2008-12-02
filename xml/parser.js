@@ -15,7 +15,7 @@ dojo.provide("dojox.xml.parser");
 //DOCUMENT_FRAGMENT_NODE        = 11;
 //NOTATION_NODE                 = 12;
 
-dojox.xml.parser.parse = function(/*string?*/ str, /*string?*/ mimetype){
+dojox.xml.parser.parse = function(/*String?*/ str, /*String?*/ mimetype){
 	//	summary:
 	//		cross-browser implementation of creating an XML document object from null, empty string, and XML text..
 	//
@@ -27,7 +27,7 @@ dojox.xml.parser.parse = function(/*string?*/ str, /*string?*/ mimetype){
 	var _document = dojo.doc;
 	var doc;
 
-	if(!mimetype){ mimetype = "text/xml"; }
+	mimetype = mimetype || "text/xml";
 	if(str && dojo.trim(str) !== "" && "DOMParser" in dojo.global){
 		//Handle parsing the text on Mozilla based browsers etc..
 		var parser = new DOMParser();
@@ -106,10 +106,10 @@ dojox.xml.parser.textContent = function(/*Node*/node, /*String?*/text){
 	if(arguments.length>1){
 		var _document = node.ownerDocument || dojo.doc;  //Preference is to get the node owning doc first or it may fail
 		dojox.xml.parser.replaceChildren(node, _document.createTextNode(text));
-		return text;	//	string
+		return text;	//	String
 	}else{
 		if(node.textContent !== undefined){ //FF 1.5 -- remove?
-			return node.textContent;	//	string
+			return node.textContent;	//	String
 		}
 		var _result = "";
 		if(node){
@@ -130,7 +130,7 @@ dojox.xml.parser.textContent = function(/*Node*/node, /*String?*/text){
 	}
 }
 
-dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || array*/ newChildren){
+dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ newChildren){
 	//	summary:
 	//		Removes all children of node and appends newChild. All the existing
 	//		children will be destroyed.
