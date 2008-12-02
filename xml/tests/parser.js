@@ -95,9 +95,9 @@ tests.register("dojox.xml.tests.parser",
 			}
 			dojox.xml.parser.removeChildren(topNode2);
 			dojox.xml.parser.replaceChildren(topNode1,newChildren);
-			t.assertTrue(topNode1.childNodes.length === 4);
-			t.assertTrue(topNode1.firstChild.tagName === "child4");
-			t.assertTrue(topNode1.lastChild.tagName === "child7");
+			t.assertEqual(4, topNode1.childNodes.length);
+			t.assertEqual("child4", topNode1.firstChild.tagName);
+			t.assertEqual("child7", topNode1.lastChild.tagName);
 
 		},
 		function testReplaceChildrenSingle(t){

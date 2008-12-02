@@ -137,7 +137,7 @@ dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ n
 	//		The children to add to the node.  It can either be a single Node or an
 	//		array of Nodes.
 	var nodes = [];
-	
+
 	if(dojo.isIE){
 		dojo.forEach(node.childNodes, function(child){
 			nodes.push(child);
@@ -145,14 +145,14 @@ dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ n
 	}
 
 	dojox.xml.parser.removeChildren(node);
-	dojo.forEach(nodes.length, function(child){
-		dojo._destroyElement(child);
+	dojo.forEach(nodes, function(n){
+		dojo._destroyElement(n);
 	});
 
 	if(!dojo.isArray(newChildren)){
 		node.appendChild(newChildren);
 	}else{
-		dojo.forEach(newChildren.length, function(child){
+		dojo.forEach(newChildren, function(child){
 			node.appendChild(child);
 		});
 	}
