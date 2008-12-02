@@ -10,7 +10,7 @@ dojo.require("dojox.rpc.Rest");
 	var parentIdRegex = /(.*?)(#?(\.\w+)|(\[.+))+$/;
 	var jr;
 	function resolveJson(service, deferred, value, defaultId){
-		var timeStamp = deferred.ioArgs && deferred.ioArgs.xhr.getResponseHeader("Last-Modified");
+		var timeStamp = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Last-Modified");
 		return value && dojox.json.ref.resolveJson(value, {
 			defaultId: defaultId, 
 			index: Rest._index,
