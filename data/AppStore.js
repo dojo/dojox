@@ -1,7 +1,6 @@
 dojo.provide("dojox.data.AppStore");
 
 dojo.require("dojox.atom.io.Connection");
-dojo.require("dojox.data.dom");
 dojo.require("dojo.data.util.simpleFetch");
 dojo.require("dojo.data.util.filter");
 dojo.requireLocalization("dojox.data", "AppStore");
