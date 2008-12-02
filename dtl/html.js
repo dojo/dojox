@@ -932,7 +932,7 @@ dojo.require("dojox.dtl.Context");
 			this.i++;
 		},
 		skip_past: function(endtag){
-			return dd.Parser.prototype.skip_past.call(this, endtag);
+			return dd._Parser.prototype.skip_past.call(this, endtag);
 		},
 		create_variable_node: function(expr){
 			return new dd._HtmlVarNode(expr);

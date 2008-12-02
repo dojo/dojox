@@ -246,6 +246,14 @@ doh.register("dojox.dtl.html.tag",
 
 			template = new dd.HtmlTemplate('<div>{% for person in people %}{% ssi hello parsed %} {% endfor %}</div>');
 			t.is("<div>Hello, <span>Charles</span> Hello, <span>Ralph</span> Hello, <span>Julia</span> </div>", dd.tests.html.util.render(template, context));
+		},
+		function test_tag_comment(t){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({});
+
+			var template = new dd.HtmlTemplate("<div>abc{% comment %}{% endif %}<div>{% ssi hello parsed %}</div>{% for item in items %}{% endcomment %}xyz</div>");
+			t.is("<div>abcxyz</div>", dd.tests.html.util.render(template, context));
 		}
 	]
 );
