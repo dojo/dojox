@@ -28,7 +28,7 @@ dojox.xml.parser.parse = function(/*String?*/ str, /*String?*/ mimetype){
 	var doc;
 
 	mimetype = mimetype || "text/xml";
-	if(str && dojo.trim(str) !== "" && "DOMParser" in dojo.global){
+	if(str && dojo.trim(str) && "DOMParser" in dojo.global){
 		//Handle parsing the text on Mozilla based browsers etc..
 		var parser = new DOMParser();
 		doc = parser.parseFromString(str, mimetype);
@@ -53,43 +53,37 @@ dojox.xml.parser.parse = function(/*String?*/ str, /*String?*/ mimetype){
 			}catch(e){ return false; }
 			return true;
 		});
-		if(str){
-			if(doc){
-				doc.async = false;
-				doc.loadXML(str);
-				var pe = doc.parseError;
-				if(pe.errorCode !== 0){
-					throw new Error("Line: " + pe.line + "\n" +
-						"Col: " + pe.linepos + "\n" +
-						"Reason: " + pe.reason + "\n" + 
-						"Error Code: " + pe.errorCode + "\n" +
-						"Source: " + pe.srcText);
-				}
-				return doc;	//	DOMDocument
-			}
-		}else{
-			if(doc){
-				return doc; //DOMDocument
+		if(str && doc){
+			doc.async = false;
+			doc.loadXML(str);
+			var pe = doc.parseError;
+			if(pe.errorCode !== 0){
+				throw new Error("Line: " + pe.line + "\n" +
+					"Col: " + pe.linepos + "\n" +
+					"Reason: " + pe.reason + "\n" + 
+					"Error Code: " + pe.errorCode + "\n" +
+					"Source: " + pe.srcText);
 			}
 		}
+		if(doc){
+			return doc; //DOMDocument
+		}
 	}else if(_document.implementation && _document.implementation.createDocument){
-		if(str && dojo.trim(str) !== ""){
-			if(_document.createElement){
-				//Everyone else that we couldn't get to work.  Fallback case.
-				// FIXME: this may change all tags to uppercase!
-				var tmp = _document.createElement("xml");
-				tmp.innerHTML = str;
-				var xmlDoc = _document.implementation.createDocument("foo", "", null);
-				for(var i = 0; i < tmp.childNodes.length; i++) {
-					xmlDoc.importNode(tmp.childNodes.item(i), true);
-				}
-				return xmlDoc;	//	DOMDocument
-			}
+		if(str && dojo.trim(str) && _document.createElement){
+			//Everyone else that we couldn't get to work.  Fallback case.
+			// FIXME: this may change all tags to uppercase!
+			var tmp = _document.createElement("xml");
+			tmp.innerHTML = str;
+			var xmlDoc = _document.implementation.createDocument("foo", "", null);
+			dojo.forEach(tmp.childNodes, function(child){
+				xmlDoc.importNode(child, true);
+			});
+			return xmlDoc;	//	DOMDocument
 		}else{
 			return _document.implementation.createDocument("", "", null); // DOMDocument
 		}
 	}
-	return null;	//	DOMDocument
+	return null;	//	null
 }
 
 dojox.xml.parser.textContent = function(/*Node*/node, /*String?*/text){
