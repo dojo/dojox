@@ -209,7 +209,7 @@ doh.register("dojox.json.tests.query",
 			}
 		},
 		{
-			name: "$.store.book[/price][=price]",
+			name: "$.store.book[/category][/price][=price]",
 			runTest: function(t) {
 				var result = dojo.toJson(dojox.json.query(this.name,dojox.json.tests.testData));
 				var success =  '[8.95,8.99,12.99,22.99]';

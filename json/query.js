@@ -223,7 +223,7 @@ dojo.provide("dojox.json.query");
 							return "var av= " + b.replace(/\$obj/,"a") + ",bv= " + b.replace(/\$obj/,"b") + // FIXME: Should check to make sure the $obj token isn't followed by characters
 									";if(av>bv||bv==null){return " + (a== "/" ? 1 : -1) +";}\n" +
 									"if(bv>av||av==null){return " + (a== "/" ? -1 : 1) +";}\n";
-					}) + "})";
+					}) + "return 0;})";
 				}
 				oper = t.match(/^\[(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)\]/); // slice [0:3]
 				if(oper){
