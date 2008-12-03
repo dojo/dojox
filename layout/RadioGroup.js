@@ -116,10 +116,9 @@ dojo.declare("dojox.layout.RadioGroup",
 
 		page.domNode.style.display="";
 
-		if(page._loadCheck){
-			page._loadCheck(); // trigger load in ContentPane
-		}
-		if(page.onShow){
+		if(page._onShow){
+			page._onShow(); // trigger load in ContentPane
+		}else if(page.onShow){
 			page.onShow();
 		}
 	},
@@ -236,7 +235,7 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 			easing: this.easing,
 			onEnd: dojo.hitch(page, function(){
 				if(this.onShow){ this.onShow(); }
-				if(this._loadCheck){ this._loadCheck(); }
+				if(this._onShow){ this._onShow(); }
 			})
 		});
 		this._anim.play();
