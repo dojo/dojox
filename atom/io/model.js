@@ -1,6 +1,6 @@
 dojo.provide("dojox.atom.io.model");
 
-dojo.require("dojox.data.dom");
+dojo.require("dojox.xml.parser");
 dojo.require("dojo.string");
 dojo.require("dojo.date.stamp");
 dojo.requireLocalization("dojox.atom.io", "messages");
@@ -51,13 +51,13 @@ dojox.atom.io.model._actions = {
 		obj.categories.push(cat);
 	},
 	"icon": function(obj,node){
-		obj.icon = dojox.data.dom.textContent(node);
+		obj.icon = dojox.xml.parser.textContent(node);
 	},
 	"id": function(obj,node){
-		obj.id = dojox.data.dom.textContent(node);
+		obj.id = dojox.xml.parser.textContent(node);
 	},
 	"rights": function(obj,node){
-		obj.rights = dojox.data.dom.textContent(node);
+		obj.rights = dojox.xml.parser.textContent(node);
 	},
 	"subtitle": function(obj,node){
 		var cnt = new dojox.atom.io.model.Content("subtitle");
@@ -102,13 +102,13 @@ dojox.atom.io.model._actions = {
 	}, 
 
 	"name": function(obj,node){
-		obj.name = dojox.data.dom.textContent(node);
+		obj.name = dojox.xml.parser.textContent(node);
 	},
 	"email" : function(obj,node){
-		obj.email = dojox.data.dom.textContent(node);
+		obj.email = dojox.xml.parser.textContent(node);
 	},
 	"uri" : function(obj,node){
-		obj.uri = dojox.data.dom.textContent(node);
+		obj.uri = dojox.xml.parser.textContent(node);
 	},
 	"generator" : function(obj,node){
 		obj.generator = new dojox.atom.io.model.Generator();
@@ -127,7 +127,7 @@ dojox.atom.io.model.util = {
 		//		The DOM node to inspect.
 		//	returns: 
 		//		Date object from a DOM Node containing a ISO-8610 string.
-		var textContent = dojox.data.dom.textContent(node);
+		var textContent = dojox.xml.parser.textContent(node);
 		if(textContent){
 			return dojo.date.stamp.fromISOString(dojo.trim(textContent));
 		}
@@ -221,7 +221,7 @@ dojo.declare('dojox.atom.io.model.Node', null, {
 				this.content.push(c.nodeValue);
 			}
 		}
-		this.textContent = dojox.data.dom.textContent(node);
+		this.textContent = dojox.xml.parser.textContent(node);
 	},
 	_saveAttributes: function(node){
 		if(!this.attributes){this.attributes = [];}
@@ -637,7 +637,7 @@ dojo.declare("dojox.atom.io.model.Content",dojox.atom.io.model.Node,{
 		if(node.innerHTML){
 			this.value = node.innerHTML;
 		}else{
-			this.value = dojox.data.dom.textContent(node);
+			this.value = dojox.xml.parser.textContent(node);
 		}
 
 		this._saveAttributes(node);
@@ -814,7 +814,7 @@ dojo.declare("dojox.atom.io.model.Generator",dojox.atom.io.model.Node,{
 		//	node: 
 		//		The DOM node to process for link data.
 
-		this.value = dojox.data.dom.textContent(node);
+		this.value = dojox.xml.parser.textContent(node);
 		this._saveAttributes(node);
 
 		this.uri = this.attributes.uri; 
@@ -1130,7 +1130,7 @@ dojo.declare("dojox.atom.io.model.Service",dojox.atom.io.model.AtomItem,{
 		this.workspaces = [];
 		if(node.tagName != "service"){
 			// FIXME: Need 0.9 DOM util...
-			//node = dojox.data.dom.firstElement(node,"service");
+			//node = dojox.xml.parser.firstElement(node,"service");
 			//if(!node){return;}
 			return;
 		}
@@ -1216,7 +1216,7 @@ dojo.declare("dojox.atom.io.model.Workspace",dojox.atom.io.model.AtomItem,{
 					}
 				}else if(child.namespaceURI === dojox.atom.io.model._Constants.ATOM_NS){
 					if(name === "title"){
-						this.title = dojox.data.dom.textContent(child);
+						this.title = dojox.xml.parser.textContent(child);
 					}
 				}else{/*Only accept the PURL name_space for now */
 					var _nlsResources = dojo.i18n.getLocalization("dojox.atom.io", "messages");
@@ -1258,7 +1258,7 @@ dojo.declare("dojox.atom.io.model.Collection",dojox.atom.io.model.AtomItem,{
 				var name = dojox.atom.io.model.util.getNodename(child);
 				if(child.namespaceURI == dojox.atom.io.model._Constants.PURL_NS || child.namespaceURI == dojox.atom.io.model._Constants.APP_NS){
 					if(name === "member-type"){
-						this.memberType = dojox.data.dom.textContent(child);
+						this.memberType = dojox.xml.parser.textContent(child);
 					}else if(name == "feature"){//this IF stmt might need some more work
 						if(child.getAttribute("id")){this.features.push(child.getAttribute("id"));}
 					}else{
@@ -1268,9 +1268,9 @@ dojo.declare("dojox.atom.io.model.Collection",dojox.atom.io.model.AtomItem,{
 					}
 				}else if(child.namespaceURI === dojox.atom.io.model._Constants.ATOM_NS){
 					if(name === "id"){
-						this.id = dojox.data.dom.textContent(child);
+						this.id = dojox.xml.parser.textContent(child);
 					}else if(name === "title"){
-						this.title = dojox.data.dom.textContent(child);
+						this.title = dojox.xml.parser.textContent(child);
 					}
 				}
 			}
