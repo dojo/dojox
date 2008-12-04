@@ -1,11 +1,11 @@
 dojo.provide("dojox.widget.AnalogGauge");
 
 dojo.require("dojox.gfx");
-dojo.require("dojox.widget._Gauge");
+dojo.require("dojox.widget.gauge._Gauge");
 
 dojo.experimental("dojox.widgets.AnalogGauge");
 
-dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
+dojo.declare("dojox.widget.gauge.AnalogLineIndicator",[dojox.widget.gauge._Indicator],{
 	_getShapes: function(){
 		// summary:
 		//		Private function for generating the shapes for this indicator. An indicator that behaves the 
@@ -18,7 +18,7 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 	},
 	draw: function(/*Boolean?*/ dontAnimate){
 		// summary: 
-		//		Override of dojox.widget._Indicator.draw
+		//		Override of dojox.widget.gauge._Indicator.draw
 		// dontAnimate: Boolean
 		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
 		if(this.shapes){
@@ -104,126 +104,7 @@ dojo.declare("dojox.widget.AnalogLineIndicator",[dojox.widget._Indicator],{
 		}
 	}
 });
-dojo.declare("dojox.widget.ArrowIndicator",[dojox.widget.AnalogLineIndicator],{
-	_getShapes: function(){
-		// summary: 
-		//		Override of dojox.widget.AnalogLineIndicator._getShapes
-		if(!this._gauge){
-			return null;
-		}
-		var x = Math.floor(this.width/2);
-		var head = this.width * 5;
-		var odd = (this.width & 1);
-		var shapes = [];
-		var points = [{x:-x,	 y:0},
-					  {x:-x,	 y:-this.length+head},
-					  {x:-2*x,	 y:-this.length+head},
-					  {x:0,		 y:-this.length},
-					  {x:2*x+odd,y:-this.length+head},
-					  {x:x+odd,	 y:-this.length+head},
-					  {x:x+odd,	 y:0},
-					  {x:-x,	 y:0}];
-		shapes[0] = this._gauge.surface.createPolyline(points)
-					.setStroke({color: this.color})
-					.setFill(this.color);
-		shapes[1] = this._gauge.surface.createLine({ x1:-x, y1: 0, x2: -x, y2:-this.length+head })
-					.setStroke({color: this.highlight});
-		shapes[2] = this._gauge.surface.createLine({ x1:-x-3, y1: -this.length+head, x2: 0, y2:-this.length })
-					.setStroke({color: this.highlight});
-		shapes[3] = this._gauge.surface.createCircle({cx: 0, cy: 0, r: this.width})
-					.setStroke({color: this.color})
-					.setFill(this.color);
-		return shapes;
-	}
-});
-dojo.declare("dojox.widget.NeedleIndicator",[dojox.widget.AnalogLineIndicator],{
-	_getShapes: function(){
-		// summary: 
-		//		Override of dojox.widget.AnalogLineIndicator._getShapes
-		if(!this._gauge){
-			return null;
-		}
-		var x = Math.floor(this.width/2);
-		var head = this.width * 5;
-		var odd = (this.width & 1);
-		var shapes = [];
-		var stroke = {color: this.color, width: 1};
-		if(this.color.type){
-			stroke.color = this.color.colors[0].color;
-		}
-		var xy = (Math.sqrt(2) * (x));
-		shapes[0] = this._gauge.surface.createPath()
-					.setStroke(stroke).setFill(this.color)
-					.moveTo(xy, -xy).arcTo((2*x), (2*x), 0, 0, 0, -xy, -xy)
-					.lineTo(0, -this.length).closePath();
-		shapes[1] = this._gauge.surface.createCircle({cx: 0, cy: 0, r: this.width})
-					.setStroke({color: this.color})
-					.setFill(this.color);
-		return shapes;
-	}
-});
-dojo.declare("dojox.widget.ArcIndicator",[dojox.widget.AnalogLineIndicator],{
-	_createArc: function(val){
-		// Creating the Arc Path string manually.  This is instead of creating new dojox.gfx.Path object
-		// each time since we really just need the Path string (to use with setShape) and we don't want to 
-		// have to redo the connects, etc.
-		if(this.shapes[0]){
-			var a = this._gauge._getRadians(this._gauge._getAngle(val));
-			var cosa = Math.cos(a);
-			var sina = Math.sin(a);
-			var sa = this._gauge._getRadians(this._gauge.startAngle);
-			var cossa = Math.cos(sa);
-			var sinsa = Math.sin(sa);
-			var off = this.offset + this.width;
-			var p = ['M'];
-			p.push(this._gauge.cx+this.offset*sinsa);
-			p.push(this._gauge.cy-this.offset*cossa);
-			p.push('A', this.offset, this.offset, 0, ((a-sa)>Math.PI)?1:0, 1);
-			p.push(this._gauge.cx+this.offset*sina);
-			p.push(this._gauge.cy-this.offset*cosa);
-			p.push('L');
-			p.push(this._gauge.cx+off*sina);
-			p.push(this._gauge.cy-off*cosa);
-			p.push('A', off, off, 0, ((a-sa)>Math.PI)?1:0, 0);
-			p.push(this._gauge.cx+off*sinsa);
-			p.push(this._gauge.cy-off*cossa);
-			this.shapes[0].setShape(p.join(' '));
-			this.currentValue = val;
-		}
-	},
-	draw: function(/*Boolean?*/ dontAnimate){
-		// summary: 
-		//		Override of dojox.widget._Indicator.draw
-		var v = this.value;
-		if(v < this._gauge.min){v = this._gauge.min;}
-		if(v > this._gauge.max){v = this._gauge.max;}
-		if(this.shapes){
-			if(dontAnimate){
-				this._createArc(v);
-			}else{
-				var anim = new dojo._Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
-				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createArc));
-				anim.play();
-			}
-		}else{
-			var stroke = {color: this.color, width: 1};
-			if(this.color.type){
-				stroke.color = this.color.colors[0].color;
-			}
-			this.shapes = [this._gauge.surface.createPath()
-							.setStroke(stroke).setFill(this.color)];
-			this._createArc(v);
-			if(this.hover){
-				this.shapes[0].getEventSource().setAttribute('hover',this.hover);
-			}
-			if(this.onDragMove && !this.noChange){
-				this._gauge.connect(this.shapes[0].getEventSource(), 'onmousedown', this._gauge.handleMouseDown);
-				this.shapes[0].getEventSource().style.cursor = 'pointer';
-			}
-		}
-	}
-});
-dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
+dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 	// summary:
 	//		a gauge built using the dojox.gfx package.
 	//
@@ -273,7 +154,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 	radius: 0,
 
 	// _defaultIndicator: override of dojox.widget._Gauge._defaultIndicator
-	_defaultIndicator: dojox.widget.AnalogLineIndicator,
+	_defaultIndicator: dojox.widget.gauge.AnalogLineIndicator,
 
 	startup: function(){
 		// handle settings from HTML by making sure all the options are
@@ -362,7 +243,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget._Gauge,{
 		//		Draws a range (colored area on the background of the gauge) 
 		//		based on the given arguments.
 		// range:
-		//		A range is a dojox.widget.Range or an object
+		//		A range is a dojox.widget.gauge.Range or an object
 		//		with similar parameters (low, high, hover, etc.).
 		var path;
 		if(range.shape) {
