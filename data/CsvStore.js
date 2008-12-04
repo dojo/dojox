@@ -29,6 +29,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		// keywordParameters: {url: String}
 		// keywordParameters: {data: String}
 		// keywordParameters: {label: String} The column label for the column to use for the label returned by getLabel.
+		// keywordParameters: {identifier: String} The column label for the column to use for the identity.  Optional.  If not set, the identity is the row number.
 		
 		this._attributes = [];			// e.g. ["Title", "Year", "Producer"]
 		this._attributeIndexes = {};	// e.g. {Title: 0, Year: 1, Producer: 2}
@@ -52,19 +53,27 @@ dojo.declare("dojox.data.CsvStore", null, {
 		};
 		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
 		this._queuedFetches = [];
+		this.identifier = keywordParameters.identifier;
+		if (this.identifier === "") {
+			delete this.identifier;
+		}else{
+			this._idMap = {};
+		}
 	},
 
 	url: "", //Declarative hook for setting Csv source url.
 
 	label: "", //Declarative hook for setting the label attribute. 
-	
+
+	identifier: "", //Declarative hook for setting the identifier.
+
 	_assertIsItem: function(/* item */ item){
 		//	summary:
 		//      This function tests whether the item passed in is indeed an item in the store.
 		//	item: 
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){ 
-			throw new Error("dojox.data.CsvStore: a function was passed an item argument that was not an item");
+			throw new Error(this.declaredClass + ": a function was passed an item argument that was not an item");
 		}
 	},
 	
@@ -74,8 +83,20 @@ dojo.declare("dojox.data.CsvStore", null, {
 		//	attribute: 
 		//		The attribute to test for being contained by the store.
 		if(!dojo.isString(attribute)){ 
-			throw new Error("dojox.data.CsvStore: a function was passed an attribute argument that was not an attribute object nor an attribute name string");
+			throw new Error(this.declaredClass + ": a function was passed an attribute argument that was not an attribute object nor an attribute name string");
 		}
+	},
+
+	_getIndex: function(item){
+		//	summary:
+		//		Internal function to get the internal index to the item data from the item handle
+		//	item:
+		//		The idem handle to get the index for.
+		var idx = this.getIdentity(item);
+		if(this.identifier){
+			idx = this._idMap[idx];
+		}
+		return idx;
 	},
 
 /***************************************
@@ -92,11 +113,12 @@ dojo.declare("dojox.data.CsvStore", null, {
 		this._assertIsAttribute(attribute);
 		var itemValue = defaultValue;
 		if(this.hasAttribute(item, attribute)){
-			var itemData = this._dataArray[this.getIdentity(item)];
+			var itemData = this._dataArray[this._getIndex(item)];
 			itemValue = itemData[this._attributeIndexes[attribute]];
 		}
 		return itemValue; //String
 	},
+
 
 	getValues: function(/* item */ item, 
 						/* attribute || attribute-name-string */ attribute){
@@ -113,7 +135,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		//		See dojo.data.api.Read.getAttributes()
 		this._assertIsItem(item);
 		var attributes = [];
-		var itemData = this._dataArray[this.getIdentity(item)];
+		var itemData = this._dataArray[this._getIndex(item)];
 		for(var i=0; i<itemData.length; i++){
 			// Check for empty string values. CsvStore treats empty strings as no value.
 			if(itemData[i] !== ""){
@@ -133,7 +155,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 		var attributeIndex = this._attributeIndexes[attribute];
-		var itemData = this._dataArray[this.getIdentity(item)];
+		var itemData = this._dataArray[this._getIndex(item)];
 		return (typeof attributeIndex !== "undefined" && attributeIndex < itemData.length && itemData[attributeIndex] !== ""); //Boolean
 	},
 
@@ -189,8 +211,17 @@ dojo.declare("dojox.data.CsvStore", null, {
 		//		See dojo.data.api.Read.isItem()
 		if(something && something[this._storeProp] === this){
 			var identity = something[this._idProp];
-			if(identity >= 0 && identity < this._dataArray.length){
-				return true; //Boolean
+			//If an identifier was specified, we have to look it up via that and the mapping,
+			//otherwise, just use row number.
+			if(this.identifier){
+				var data = this._dataArray[this._idMap[identity]];
+				if(data){
+					return true;
+				}
+			}else{
+				if(identity >= 0 && identity < this._dataArray.length){
+					return true; //Boolean
+				}
 			}
 		}
 		return false; //Boolean
@@ -253,14 +284,15 @@ dojo.declare("dojox.data.CsvStore", null, {
 		var filter = function(requestArgs, arrayOfAllItems){
 			var items = null;
 			if(requestArgs.query){
+				var key, value;
 				items = [];
 				var ignoreCase = requestArgs.queryOptions ? requestArgs.queryOptions.ignoreCase : false; 
 
 				//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
 				//same value for each item examined.  Much more efficient.
 				var regexpList = {};
-				for(var key in requestArgs.query){
-					var value = requestArgs.query[key];
+				for(key in requestArgs.query){
+					value = requestArgs.query[key];
 					if(typeof value === "string"){
 						regexpList[key] = dojo.data.util.filter.patternToRegExp(value, ignoreCase);
 					}
@@ -269,8 +301,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 				for(var i = 0; i < arrayOfAllItems.length; ++i){
 					var match = true;
 					var candidateItem = arrayOfAllItems[i];
-					for(var key in requestArgs.query){
-						var value = requestArgs.query[key];
+					for(key in requestArgs.query){
+						value = requestArgs.query[key];
 						if(!self._containsValue(candidateItem, key, value, regexpList[key])){
 							match = false;
 						}
@@ -306,9 +338,13 @@ dojo.declare("dojox.data.CsvStore", null, {
 						};
 					var getHandler = dojo.xhrGet(getArgs);
 					getHandler.addCallback(function(data){
-						self._processData(data);
-						filter(keywordArgs, self._arrayOfAllItems);
-						self._handleQueuedFetches();
+						try{
+							self._processData(data);
+							filter(keywordArgs, self._arrayOfAllItems);
+							self._handleQueuedFetches();
+						}catch(e){
+							errorCallback(e, keywordArgs);
+						}
 					});
 					getHandler.addErrback(function(error){
 						self._loadInProgress = false;
@@ -320,11 +356,15 @@ dojo.declare("dojox.data.CsvStore", null, {
 					});
 				}
 			}else if(this._csvData){
-				this._processData(this._csvData);
-				this._csvData = null;
-				filter(keywordArgs, this._arrayOfAllItems);
+				try{
+					this._processData(this._csvData);
+					this._csvData = null;
+					filter(keywordArgs, this._arrayOfAllItems);
+				}catch(e){
+					errorCallback(e, keywordArgs);
+				}
 			}else{
-				var error = new Error("dojox.data.CsvStore: No CSV source data was provided as either URL or String data input.");
+				var error = new Error(this.declaredClass + ": No CSV source data was provided as either URL or String data input.");
 				if(errorCallback){
 					errorCallback(error, keywordArgs);
 				}else{
@@ -372,9 +412,10 @@ dojo.declare("dojox.data.CsvStore", null, {
 			var trailingWhiteSpaceCharacters = new RegExp("\\s+$",'g');
 			var doubleQuotes = new RegExp('""','g');
 			var arrayOfOutputRecords = [];
+			var i;
 			
 			var arrayOfInputLines = this._splitLines(csvFileContents);
-			for(var i = 0; i < arrayOfInputLines.length; ++i){
+			for(i = 0; i < arrayOfInputLines.length; ++i){
 				var singleLine = arrayOfInputLines[i];
 				if(singleLine.length > 0){
 					var listOfFields = singleLine.split(',');
@@ -414,7 +455,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 			
 			// The first item of the array must be the header row with attribute names.
 			this._attributes = arrayOfOutputRecords.shift();
-			for(var i=0; i<this._attributes.length; i++){
+			for(i = 0; i<this._attributes.length; i++){
 				// Store the index of each attribute 
 				this._attributeIndexes[this._attributes[i]] = i;
 			}
@@ -470,8 +511,24 @@ dojo.declare("dojox.data.CsvStore", null, {
 	_processData: function(/* String */ data){
 		this._getArrayOfArraysFromCsvFileContents(data);
 		this._arrayOfAllItems = [];
+
+		//Check that the specified Identifier is actually a column title, if provided.
+		if(this.identifier){
+			if(this._attributeIndexes[this.identifier] === undefined){
+				throw new Error(this.declaredClass + ": Identity specified is not a column header in the data set.")
+			}
+		}
+
 		for(var i=0; i<this._dataArray.length; i++){
-			this._arrayOfAllItems.push(this._createItemFromIdentity(i));
+			var id = i;
+			//Associate the identifier to a row in this case
+			//for o(1) lookup.
+			if(this.identifier){
+				var iData = this._dataArray[i];
+				id = iData[this._attributeIndexes[this.identifier]];
+				this._idMap[id] = i;
+			}
+			this._arrayOfAllItems.push(this._createItemFromIdentity(id));
 		}
 		this._loadFinished = true;
 		this._loadInProgress = false;
@@ -500,10 +557,9 @@ dojo.declare("dojox.data.CsvStore", null, {
 	fetchItemByIdentity: function(/* Object */ keywordArgs){
 		//	summary: 
 		//		See dojo.data.api.Identity.fetchItemByIdentity()
-
+		var item;
+		var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
 		//Hasn't loaded yet, we have to trigger the load.
-		
-
 		if(!this._loadFinished){
 			var self = this;
 			if(this.url !== ""){
@@ -520,7 +576,6 @@ dojo.declare("dojox.data.CsvStore", null, {
 						};
 					var getHandler = dojo.xhrGet(getArgs);
 					getHandler.addCallback(function(data){
-						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
 						try{
 							self._processData(data);
 							var item = self._createItemFromIdentity(keywordArgs.identity);
@@ -540,43 +595,50 @@ dojo.declare("dojox.data.CsvStore", null, {
 					getHandler.addErrback(function(error){
 						this._loadInProgress = false;
 						if(keywordArgs.onError){
-							var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
 							keywordArgs.onError.call(scope, error);
 						}
 					});
 				}
 			}else if(this._csvData){
-				self._processData(self._csvData);
-				self._csvData = null;
-				var item = self._createItemFromIdentity(keywordArgs.identity);
-				if(!self.isItem(item)){
-					item = null;
-				}
-				if(keywordArgs.onItem){
-					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
-					keywordArgs.onItem.call(scope, item);
+				try{
+					self._processData(self._csvData);
+					self._csvData = null;
+					item = self._createItemFromIdentity(keywordArgs.identity);
+					if(!self.isItem(item)){
+						item = null;
+					}
+					if(keywordArgs.onItem){
+						keywordArgs.onItem.call(scope, item);
+					}
+				}catch(e){
+					if(keywordArgs.onError){
+						keywordArgs.onError.call(scope, e);
+					}
 				}
 			}
 		}else{
 			//Already loaded.  We can just look it up and call back.
-			var item = this._createItemFromIdentity(keywordArgs.identity);
+			item = this._createItemFromIdentity(keywordArgs.identity);
 			if(!this.isItem(item)){
 				item = null;
 			}
 			if(keywordArgs.onItem){
-				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
 				keywordArgs.onItem.call(scope, item);
 			}
 		}
 	},
 
 	getIdentityAttributes: function(/* item */ item){
-		 //	summary: 
-		 //		See dojo.data.api.Identity.getIdentifierAttributes()
+		//	summary: 
+		//		See dojo.data.api.Identity.getIdentifierAttributes()
 		 
-		 //Identity isn't a public attribute in the item, it's the row position index.
-		 //So, return null.
-		 return null;
+		//Identity isn't a public attribute in the item, it's the row position index.
+		//So, return null.
+		if(this.identifier){
+			return [this.identifier];
+		}else{
+			return null;
+		}
 	},
 
 	_handleQueuedFetches: function(){

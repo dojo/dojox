@@ -15,9 +15,9 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 	}else{
 		// When running tests in Rhino, xhrGet is not available,
 		// so we have the file data in the code below.
+		var csvData;
 		switch(filepath){
 			case "stores/movies.csv":
-				var csvData = "";
 				csvData += "Title, Year, Producer\n";
 				csvData += "City of God, 2002, Katia Lund\n";
 				csvData += "Rain,, Christine Jeffs\n";
@@ -28,7 +28,6 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
 			case "stores/movies2.csv":
-				var csvData = "";
 				csvData += "Title, Year, Producer\n";
 				csvData += "City of God, 2002, Katia Lund\n";
 				csvData += "Rain,\"\", Christine Jeffs\n";
@@ -39,7 +38,6 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
 			case "stores/movies3.csv":
-				var csvData = "";
 				csvData += "Title, Year, Producer\n";
 				csvData += "\"City\n of God\", 2002, Katia Lund\n";
 				csvData += "Rain,\"\", Christine Jeffs\n";
@@ -50,7 +48,6 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
 			case "stores/books.csv":
-				var csvData = "";
 				csvData += "Title, Author\n";
 				csvData += "The Transparent Society, David Brin\n";
 				csvData += "The First Measured Century, Theodore Caplow\n";
@@ -63,7 +60,6 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += "News from Tartary, Peter Fleming\n";
 				break;
 			case "stores/patterns.csv":
-				var csvData = "";
 				csvData += "uniqueId, value\n";
 				csvData += "9, jfq4@#!$!@Rf14r14i5u\n";
 				csvData += "6, BaBaMaSaRa***Foo\n";
@@ -74,13 +70,13 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += "10, 123abcdefg\n";
 				csvData += "1, foo*bar\n";
 				csvData += "7, \n";
-				csvData += "5, 123abc\n"
+				csvData += "5, 123abc\n";
 				break;
 		}
 		dataSource.data = csvData;
 	}
 	return dataSource; //Object
-}
+};
 
 dojox.data.tests.stores.CsvStore.verifyItems = function(csvStore, items, attribute, compareArray){
 	//  summary:
@@ -93,16 +89,16 @@ dojox.data.tests.stores.CsvStore.verifyItems = function(csvStore, items, attribu
 		}
 	}
 	return true; //Boolean
-}
+};
 
 dojox.data.tests.stores.CsvStore.error = function(t, d, errData){
 	//  summary:
 	//		The error callback function to be used for all of the tests.
-	for (i in errData) {
+	for (var i in errData) {
 		console.log(errData[i]);
 	}
 	d.errback(errData);	
-}
+};
 
 doh.register("dojox.data.tests.stores.CsvStore", 
 	[
@@ -225,7 +221,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			}
 			catch(e)
 			{
-				for (i in e) {
+				for (var i in e) {
 					console.log(e[i]);
 				}
 			}
@@ -280,7 +276,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var csvStore = new dojox.data.CsvStore(args);
 
 			var d = new doh.Deferred();
-			count = 0;
+			var count = 0;
 
 			function onBegin(size, requestObj){
 				t.assertTrue(size === 7);
@@ -313,27 +309,17 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var csvStore = new dojox.data.CsvStore(args);
 			
 			var d = new doh.Deferred();
-			function dumpFirstFetch(items, request){
+
+			function dumpSixthFetch(items, request){
 				t.is(5, items.length);
-				request.start = 3;
-				request.count = 1;
-				request.onComplete = dumpSecondFetch;
-				csvStore.fetch(request);
+			    d.callback(true);
 			}
 
-			function dumpSecondFetch(items, request){
-				t.is(1, items.length);
-				request.start = 0;
-				request.count = 5;
-				request.onComplete = dumpThirdFetch;
-				csvStore.fetch(request);
-			}
-
-			function dumpThirdFetch(items, request){
-				t.is(5, items.length);
+			function dumpFifthFetch(items, request){
+				t.is(0, items.length);
 				request.start = 2;
 				request.count = 20;
-				request.onComplete = dumpFourthFetch;
+				request.onComplete = dumpSixthFetch;
 				csvStore.fetch(request);
 			}
 
@@ -345,17 +331,28 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				csvStore.fetch(request);
 			}
 
-			function dumpFifthFetch(items, request){
-				t.is(0, items.length);
+			function dumpThirdFetch(items, request){
+				t.is(5, items.length);
 				request.start = 2;
 				request.count = 20;
-				request.onComplete = dumpSixthFetch;
+				request.onComplete = dumpFourthFetch;
 				csvStore.fetch(request);
 			}
 
-			function dumpSixthFetch(items, request){
+			function dumpSecondFetch(items, request){
+				t.is(1, items.length);
+				request.start = 0;
+				request.count = 5;
+				request.onComplete = dumpThirdFetch;
+				csvStore.fetch(request);
+			}
+
+			function dumpFirstFetch(items, request){
 				t.is(5, items.length);
-			    d.callback(true);
+				request.start = 3;
+				request.count = 1;
+				request.onComplete = dumpSecondFetch;
+				csvStore.fetch(request);
 			}
 
 			function completed(items, request){
@@ -368,7 +365,6 @@ doh.register("dojox.data.tests.stores.CsvStore",
 
 			csvStore.fetch({onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
-
 		},
 		
 		function testReadAPI_getLabel(t){
@@ -535,6 +531,44 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			return d;
 		},
 
+		function testIdentityAPI_fetchItemByIdentity_withDefinedIdentifier(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			args.identifier = "Title";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function onItem(item){
+				t.assertTrue(item !== null);
+				d.callback(true);	
+			}
+			csvStore.fetchItemByIdentity({identity: "City of God", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},
+
+		function testIdentityAPI_fetchItemByIdentity_withDefinedIdentifier_bad1(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			args.identifier = "Title";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function onItem(item){
+				t.assertTrue(item === null);
+				d.callback(true);	
+			}
+			csvStore.fetchItemByIdentity({identity: "No Such Title", onItem: onItem, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d;
+		},
+
 		function testIdentityAPI_fetchItemByIdentity_bad1(t){
 			//	summary: 
 			//		Simple test of the fetchItemByIdentity function of the store.
@@ -611,6 +645,59 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			csvStore.fetch({ onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
+
+		function testIdentityAPI_getIdentity_withDefinedIdentifier(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			args.identifier = "Title";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completed(items, request){
+				t.is(7, items.length);
+				var passed = true;
+				for(var i = 0; i < items.length; i++){
+					if(!csvStore.getIdentity(items[i])){
+                        passed=false;
+						break;
+					}
+				}
+				t.assertTrue(passed);
+				d.callback(true);
+			}
+			
+			//Get everything...
+			csvStore.fetch({ onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+
+		function testIdentityAPI_getIdentity_withBadDefinedIdentifier(t){
+			//	summary: 
+			//		Simple test of the fetchItemByIdentity function of the store.
+			//	description:
+			//		Simple test of the fetchItemByIdentity function of the store.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			args.identifier = "Not Column";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completed(items, request){
+				d.errback(new Error("Unexpected callback of success in failure case."));
+			}
+			function error(err){
+				d.callback(true);
+			}
+			
+			//Get everything...
+			csvStore.fetch({onComplete: completed, onError: error});
+			return d; //Object
+		},
+
 		function testIdentityAPI_getIdentityAttributes(t){
 			//	summary: 
 			//		Simple test of the getIdentityAttributes
@@ -774,7 +861,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 
 			var features = csvStore.getFeatures(); 
 			var count = 0;
-			for(i in features){
+			for(var i in features){
 				t.assertTrue((i === "dojo.data.api.Read" || i === "dojo.data.api.Identity"));
 				count++;
 			}
@@ -836,7 +923,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				d.callback(true);
 			}
 			
-			csvStore.fetch({query: {value: "bar\*foo"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			csvStore.fetch({query: {value: "bar\\*foo"}, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
 		function testReadAPI_fetch_patternMatch_caseInsensitive(t){
@@ -1103,7 +1190,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var readApi = new dojo.data.api.Read();
 			var passed = true;
 
-			for(i in readApi){
+			for(var i in readApi){
 				if(i.toString().charAt(0) !== '_')
 				{
 					var member = readApi[i];
@@ -1131,7 +1218,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var identityApi = new dojo.data.api.Identity();
 			var passed = true;
 
-			for(i in identityApi){
+			for(var i in identityApi){
 				if(i.toString().charAt(0) !== '_')
 				{
 					var member = identityApi[i];
