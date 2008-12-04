@@ -7,7 +7,7 @@ dojo.require("dijit.Tooltip");
 dojo.require("dojo.fx.easing");
 dojo.require("dojox.gfx");
 
-dojo.experimental("dojox.widgets.gauge._Gauge");
+dojo.experimental("dojox.widget.gauge._Gauge");
 
 dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit._Container],{
 	// summary:

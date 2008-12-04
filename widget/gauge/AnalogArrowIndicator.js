@@ -1,6 +1,8 @@
 dojo.provide('dojox.widget.gauge.AnalogArrowIndicator');
 dojo.require('dojox.widget.AnalogGauge');
 
+dojo.experimental("dojox.widget.gauge.AnalogArrowIndicator");
+
 dojo.declare("dojox.widget.gauge.AnalogArrowIndicator",[dojox.widget.gauge.AnalogLineIndicator],{
 	_getShapes: function(){
 		// summary: 

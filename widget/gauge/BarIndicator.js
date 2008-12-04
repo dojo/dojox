@@ -1,6 +1,8 @@
 dojo.provide('dojox.widget.gauge.BarIndicator');
 dojo.require('dojox.widget.BarGauge');
 
+dojo.experimental("dojox.widget.gauge.BarIndicator");
+
 dojo.declare("dojox.widget.gauge.BarIndicator",[dojox.widget.gauge.BarLineIndicator],{
 	_getShapes: function(){
 		// summary:

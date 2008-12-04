@@ -3,7 +3,7 @@ dojo.provide("dojox.widget.AnalogGauge");
 dojo.require("dojox.gfx");
 dojo.require("dojox.widget.gauge._Gauge");
 
-dojo.experimental("dojox.widgets.AnalogGauge");
+dojo.experimental("dojox.widget.AnalogGauge");
 
 dojo.declare("dojox.widget.gauge.AnalogLineIndicator",[dojox.widget.gauge._Indicator],{
 	_getShapes: function(){

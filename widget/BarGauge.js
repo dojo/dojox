@@ -3,7 +3,7 @@ dojo.provide("dojox.widget.BarGauge");
 dojo.require("dojox.gfx");
 dojo.require("dojox.widget.gauge._Gauge");
 
-dojo.experimental("dojox.widgets.BarGauge");
+dojo.experimental("dojox.widget.BarGauge");
 
 dojo.declare("dojox.widget.gauge.BarLineIndicator",[dojox.widget.gauge._Indicator],{
 	width: 1,

@@ -1,6 +1,8 @@
 dojo.provide('dojox.widget.gauge.AnalogNeedleIndicator');
 dojo.require('dojox.widget.AnalogGauge');
 
+dojo.experimental("dojox.widget.gauge.AnalogNeedleIndicator");
+
 dojo.declare("dojox.widget.gauge.AnalogNeedleIndicator",[dojox.widget.gauge.AnalogLineIndicator],{
 	_getShapes: function(){
 		// summary: 

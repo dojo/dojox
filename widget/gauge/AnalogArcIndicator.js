@@ -1,6 +1,8 @@
 dojo.provide('dojox.widget.gauge.AnalogArcIndicator');
 dojo.require('dojox.widget.AnalogGauge');
 
+dojo.experimental("dojox.widget.gauge.AnalogArcIndicator");
+
 dojo.declare("dojox.widget.gauge.AnalogArcIndicator",[dojox.widget.gauge.AnalogLineIndicator],{
 	_createArc: function(val){
 		// Creating the Arc Path string manually.  This is instead of creating new dojox.gfx.Path object
