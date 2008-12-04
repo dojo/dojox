@@ -29,6 +29,7 @@ try{
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.CssRuleStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.CssClassStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.AppStore");
+	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.stores.OpenSearchStore");
 	dojo.requireIf(dojo.isBrowser, "dojox.data.tests.dom");
 }catch(e){
 	doh.debug(e);

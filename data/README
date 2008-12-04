@@ -12,7 +12,7 @@ Project authors
 	Wolfram Kriesing (wolfram@kriesing.de) (QueryReadStore)
 	Dustin Machi (dmachi@dojotolkit.org) (jsonPathStore);
 	Russell Jones (KeyValueStore) (CLA)
-	Benjamin Schell (KeyValueStore, CssRuleStore, CssClassStore, AppStore) (Corporate CLA)
+	Benjamin Schell (KeyValueStore, CssRuleStore, CssClassStore, AppStore, OpenSearchStore) (Corporate CLA)
 	Kurt Stutsman (kurt@snaplogic.org) (SnapLogicStore)
 	Kris Zyp (kzyp@dojotoolkit.org) (JsonRestStore, PersevereStore, S3JsonRestStore, CouchDBRestStore)
 	Frank Fortson (frank.fortson@equorum.com) (AndOrReadStore, AndOrWriteStore)
@@ -122,3 +122,6 @@ Additional Notes:
 
 	dojox.data.AppStore - A store that implements full read, write, and identity APIs for working with ATOM documents.
 	The store uses the full APP protocol.
+        
+	dojox.data.OpenSearchStore - A store that implements OpenSearch provider search capability.
+
