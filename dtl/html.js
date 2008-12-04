@@ -779,6 +779,7 @@ dojo.require("dojox.dtl.Context");
 		}
 	});
 
+	var bools = {checked: 1, disabled: 1, readonly: 1};
 	dd.AttributeNode = dojo.extend(function(key, value){
 		// summary: Works on attributes
 		this.key = key;
@@ -799,6 +800,9 @@ dojo.require("dojox.dtl.Context");
 		render: function(context, buffer){
 			var key = this.key;
 			var value = this.nodelist.dummyRender(context);
+			if(bools[key]){
+				value = !(value == "false" || value == "undefined" || !value);
+			}
 			if(this._rendered){
 				if(value != this.contents){
 					this.contents = value;
