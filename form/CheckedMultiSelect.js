@@ -176,5 +176,12 @@ dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
 			}
 		});
 		this._setStateClass();
+	},
+
+	uninitialize: function(){
+		// Make sure these children are destroyed
+		dojo.forEach(this._getChildren(), function(child){
+			child.destroyRecursive();
+		});
 	}
 });
