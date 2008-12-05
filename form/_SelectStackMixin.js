@@ -137,6 +137,8 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	
 	destroy: function(){
 		dojo.forEach(this._subscriptions, dojo.unsubscribe);
+		delete this._panes; // Fixes memory leak in IE
+		this.inherited("destroy", arguments);
 	},
 	
 	onChange: function(/*String*/ val){
