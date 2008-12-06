@@ -48,7 +48,7 @@ dojo.require("dojox.encoding.digests._base");
 	}
 
 	function hmac(data, key){
-		var wa=dxd.stringToWord(key);
+		var wa=toWord(key);
 		if(wa.length>16){ wa=core(wa, key.length*chrsz); }
 
 		var ipad=new Array(16), opad=new Array(16);
@@ -57,7 +57,7 @@ dojo.require("dojox.encoding.digests._base");
 			opad[i]=wa[i]^0x5c5c5c5c;
 		}
 
-		var hash=core(ipad.concat(dxd.stringToWord(data)),512+data.length*chrsz);
+		var hash=core(ipad.concat(toWord(data)),512+data.length*chrsz);
 		return core(opad.concat(hash), 512+160);
 	}
 
