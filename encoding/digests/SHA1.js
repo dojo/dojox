@@ -44,7 +44,6 @@ dojo.require("dojox.encoding.digests._base");
 			d=dxd.addWords(d,oldd);
 			e=dxd.addWords(e,olde);
 		}
-		console.log("SHA1: ", a, b, c, d, e);
 		return [a, b, c, d, e];
 	}
 
@@ -67,7 +66,6 @@ dojo.require("dojox.encoding.digests._base");
 		for(var i=0, l=s.length*chrsz; i<l; i+=chrsz){
 			wa[i>>5]|=(s.charCodeAt(i/chrsz)&mask)<<(32-chrsz-i%32);
 		}
-		console.log("SHA1: ", s, wa);
 		return wa;	//	word[]
 	}
 
