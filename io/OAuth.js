@@ -247,7 +247,7 @@ dojox.io.OAuth = new (function(){
 		//	|		}
 		//	|	};
 		//	|
-		//	|	var args = dojox.io.OAuth.sign(myAjaxKwArgs);
+		//	|	var args = dojox.io.OAuth.sign("GET", myAjaxKwArgs, oaa);
 		//	|	dojo.xhrGet(args);
 		return sign(method, args, oaa);
 	};
