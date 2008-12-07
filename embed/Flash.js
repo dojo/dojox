@@ -199,7 +199,7 @@ dojo.provide("dojox.embed.Flash");
 	=====*/
 
 	//	the main entry point
-	dojox.embed.Flash = function(/* dojox.embed.__flashArgs */kwArgs, /* DOMNode */node){
+	dojox.embed.Flash = function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode*/ node){
 		//	summary:
 		//		Creates a wrapper object around a Flash movie.  Wrapper object will
 		//		insert the movie reference in node; when the browser first starts
@@ -243,21 +243,21 @@ dojo.provide("dojox.embed.Flash");
 	};
 
 	dojo.extend(dojox.embed.Flash, {
-		onReady: function(/* HTMLObject */movie){
+		onReady: function(/*HTMLObject*/ movie){
 			//	summary
 			//		Stub function for you to attach to when the movie reference is first
 			//		pushed into the document.
 		},
-		onLoad: function(/* HTMLObject */movie){
+		onLoad: function(/*HTMLObject*/ movie){
 			//	summary
 			//		Stub function for you to attach to when the movie has finished downloading
 			//		and is ready to be manipulated.
 		},
-		init: function(/* dojox.embed.__flashArgs */kwArgs, /* DOMNode? */node){
+		init: function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode?*/ node){
 			//	summary
 			//		Initialize (i.e. place and load) the movie based on kwArgs.
 			this.destroy();		//	ensure we are clean first.
-			node = node || this.domNode;
+			node = dojo.byId(node || this.domNode);
 			if(!node){ throw new Error("dojox.embed.Flash: no domNode reference has been passed."); }
 
 			this._poller = null;
