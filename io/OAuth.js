@@ -97,10 +97,10 @@ dojox.io.OAuth = new (function(){
 
 	function key(args){
 		//	summary:
-		//		return the key used to sign a message based on the accessor object.
+		//		return the key used to sign a message based on the token object.
 		return encode(args.consumer.secret) 
 			+ "&" 
-			+ (args.accessor && args.accessor.secret ? encode(args.accessor.secret) : "");
+			+ (args.token && args.token.secret ? encode(args.token.secret) : "");
 	}
 
 	function addOAuth(/* dojo.__XhrArgs */args, /* dojox.io.__OAuthArgs */oaa){
@@ -113,8 +113,8 @@ dojox.io.OAuth = new (function(){
 			oauth_timestamp: timestamp(),
 			oauth_version: "1.0"
 		}
-		if(oaa.accessor){
-			o.oauth_token = oaa.accessor.key;
+		if(oaa.token){
+			o.oauth_token = oaa.token.key;
 		}
 		args.content = dojo.mixin(args.content||{}, o);
 	}
@@ -201,6 +201,7 @@ dojox.io.OAuth = new (function(){
 			message = baseString(method, args, oaa),
 			s = signature(message, k, oaa.sig_method || "HMAC-SHA1");
 		args.content["oauth_signature"] = s;
+		return args;
 	}
 	
 	/*=====
@@ -212,16 +213,16 @@ dojox.io.OAuth = new (function(){
 			this.key = key;
 			this.secret = secret;
 		};
-		dojox.io.OAuth.__OAuthArgs = function(consumer, sig_method, accessor){
+		dojox.io.OAuth.__OAuthArgs = function(consumer, sig_method, token){
 			//	consumer: dojox.io.OAuth.__AccessorArgs
 			//		The consumer information issued to your OpenAuth application.
 			//	sig_method: String
 			//		The method used to create the signature.  Should be PLAINTEXT or HMAC-SHA1.
-			//	accessor: dojox.io.OAuth.__AccessorArgs?
+			//	token: dojox.io.OAuth.__AccessorArgs?
 			//		The request token and secret issued by the OAuth service.  If not
 			//		issued yet, this should be null.
 			this.consumer = consumer;
-			this.accessor = accessor;
+			this.token = token;
 		}
 	=====*/
 
@@ -232,6 +233,25 @@ dojox.io.OAuth = new (function(){
 	 *	3. create the signature based on the base string and the key
 	 *	4. send the request using dojo.xhr[METHOD].
 	 */
+
+	this.sign = function(/* String*/method, /* dojo.__XhrArgs */args, /* dojox.io.OAuth.__OAuthArgs */oaa){
+		//	summary:
+		//		Given the OAuth access arguments, sign the kwArgs that you would pass
+		//		to any dojo Ajax method (dojo.xhr*, dojo.io.iframe, dojo.io.script).
+		//	example:
+		//		Sign the kwArgs object for use with dojo.xhrGet:
+		//	|	var oaa = {
+		//	|		consumer: {
+		//	|			key: "foobar",
+		//	|			secret: "barbaz"
+		//	|		}
+		//	|	};
+		//	|
+		//	|	var args = dojox.io.OAuth.sign(myAjaxKwArgs);
+		//	|	dojo.xhrGet(args);
+		return sign(method, args, oaa);
+	};
+
 
 	//	TODO: handle redirect requests?
 	this.xhr = function(/* String */method, /* dojo.__XhrArgs */args, /* dojox.io.OAuth.__OAuthArgs */oaa, /* Boolean? */hasBody){
