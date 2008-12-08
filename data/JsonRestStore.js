@@ -240,6 +240,9 @@ dojo.declare("dojox.data.JsonRestStore",
 					throw new Error(dojo.map(result.errors,function(error){return error.message;}).join(","));
 				}
 			}
+			if(attribute == store.idAttribute){
+				throw new Error("Can not change the identity attribute for an item");
+			}
 			if(old !== value){
 				store.changing(item);
 				item[attribute]=value;
@@ -345,7 +348,7 @@ dojo.declare("dojox.data.JsonRestStore",
 		getIdentity: function(item){
 			var id = item.__clientId || item.__id;
 			if(!id){
-				this.inherited(arguments); // let service store throw the error
+				return id;
 			}
 			var prefix = this.service.servicePath;
 			// support for relative or absolute referencing with ids 

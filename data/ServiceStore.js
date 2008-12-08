@@ -168,7 +168,7 @@ dojo.declare("dojox.data.ServiceStore",
 		
 			// we have no way of determining if it belongs, we just have object returned from
 			// 	service queries
-			return (typeof item == 'object') && item; 
+			return (typeof item == 'object') && item && !(item instanceof Date); 
 		},
 
 		isItemLoaded: function(item){
@@ -336,9 +336,6 @@ dojo.declare("dojox.data.ServiceStore",
 
 		
 		getIdentity: function(item){
-			if(!("__id" in item)){
-				throw new Error("Identity attribute not found");
-			}
 			return item.__id;
 		},
 
