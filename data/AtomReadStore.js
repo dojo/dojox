@@ -400,7 +400,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		nodes = dojo.filter(feedNodes[0].childNodes, "return item.tagName && item.tagName.toLowerCase() == 'entry'");
 
 		if(request.onBegin){
-			request.onBegin(nodes.length);
+			request.onBegin(nodes.length, this.sendQuery ? request : {});
 		}
 
 		for(var i = 0; i < nodes.length; i++){
