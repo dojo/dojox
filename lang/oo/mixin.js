@@ -6,7 +6,7 @@ dojo.require("dojox.lang.oo.Filter");
 dojo.require("dojox.lang.oo.Decorator");
 
 (function(){
-	var oo = dojox.lang.oo, Filter = oo.Filter, Decorator = oo.Decorator,
+	var oo = dojox.lang.oo, Filter = oo.Filter, Decorator = oo.Decorator, empty = {},
 		defaultFilter = function(name){ return name; },
 		defaultDecorator = function(name, newValue, oldValue){ return newValue; },
 		defaultMixer = function(target, name, newValue, oldValue){ target[name] = newValue; },
@@ -73,7 +73,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		
 		// start mixing in properties
 		for(name in source){
-			if(source.hasOwnProperty(name)){
+			if(!(name in empty)){
 				prop = source[name];
 				targetName = filter(name);
 				if(targetName){
@@ -103,21 +103,20 @@ dojo.require("dojox.lang.oo.Decorator");
 		
 		for(var i = 1, l = arguments.length; i < l; ++i){
 			source = arguments[i];
-			if(source instanceof Decorator){
-				defaults.decorator = source.decorator;
-				source = source.value;
-			}else{
-				defaults.decorator = defaultDecorator;
-			}
 			if(source instanceof Filter){
 				defaults.filter = source.filter;
 				source = source.bag;
 			}else{
 				defaults.filter = defaultFilter;
 			}
+			if(source instanceof Decorator){
+				defaults.decorator = source.decorator;
+				source = source.value;
+			}else{
+				defaults.decorator = defaultDecorator;
+			}
 			oo._mixin(target, source, defaults);
 		}
-
 		return target;	// Object
 	};
 })();
