@@ -30,6 +30,11 @@ dojo.require("dojox.lang.oo.Decorator");
 		return function(){ return newValue.call(this, oldValue, arguments); };
 	});
 
+	oog.tap = md(function(name, newValue, oldValue){
+		// summary: always returns "this" ignoring the actual return
+		return function(){ newValue.apply(this, arguments); return this; };
+	});
+
 	oog.before = md(function(name, newValue, oldValue){
 		//	summary:
 		//		creates a chain of calls where the new method is called
