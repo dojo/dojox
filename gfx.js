@@ -45,7 +45,7 @@ dojo.loadInit(function(){
 			switch(renderers[i]){
 				case "svg":
 					//	iPhone OS builds greater than 5F1 should have SVG.
-					if(!dojo.isIE && (!iPhoneOsBuild || iPhoneOsBuild >= 0x5f1) && !androidVersion){
+					if(!dojo.isIE && (!iPhoneOsBuild || iPhoneOsBuild >= 0x5f1) && !androidVersion && !dojo.isAIR){
 						dojox.gfx.renderer = "svg";
 					}
 					break;
