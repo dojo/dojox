@@ -126,11 +126,12 @@ dojo.provide("dojox.html.metrics");
 		// destroy our font resize iframe if we have one
 		var f = dhm._fontResizeNode;
 		if(f){
-			f.onresize = null;
-			if(f.contentWindow){
+			if(dojo.isIE && f.onresize){
+				f.onresize = null;
+			}else if(f.contentWindow && f.contentWindow.onresize){
 				f.contentWindow.onresize = null;
 			}
-			dojo._destroyElement(dhm._fontResizeNode);
+			dhm._fontResizeNode = null;
 		}
 	});
 
