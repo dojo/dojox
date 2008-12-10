@@ -26,7 +26,6 @@ dojo.extend(dojox.dtl.render.html.Render, {
 
 		if(this.domNode !== frag){
 			this.domNode.parentNode.replaceChild(frag, this.domNode);
-			dojo._destroyElement(this.domNode);
 			this.domNode = frag;
 		}
 	}
