@@ -201,7 +201,6 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_ignore: function(event){
-		 console.log("Ignoring.");
 		 if(event){
 			 event.preventDefault();
 			 event.stopPropagation();
