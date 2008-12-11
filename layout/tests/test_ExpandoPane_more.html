@@ -37,32 +37,32 @@
 	<h1>Basic ExpandoPane tests</h1>
 
 	<h2>Left:</h2>
-	<div dojoType="dijit.layout.BorderContainer" style="height:275px">
+	<div dojoType="dijit.layout.BorderContainer" style="height:275px; border: solid #ccc 1px;">
 		<div dojoType="dojox.layout.ExpandoPane" title="leftTest" region="left" maxWidth="175" style="width:175px; background:red">
 			foo
 		</div>
-		<div dojoType="dijit.layout.TabContainer" region="center">
+		<div dojoType="dijit.layout.TabContainer" region="center" tabStrip="true">
 			<div dojoType="dijit.layout.ContentPane" title="tab 1" href="_lorem.html"></div>
 			<div dojoType="dijit.layout.ContentPane" title="tab 2" href="_lorem.html"></div>
 		</div>
 	</div>
 
 	<h2>Right:</h2>
-	<div dojoType="dijit.layout.BorderContainer" style="height:275px">
+	<div dojoType="dijit.layout.BorderContainer" style="height:275px; border: solid #ccc 1px;">
 		<div dojoType="dojox.layout.ExpandoPane" title="rightTest" region="right" maxWidth="175" style="width:175px; background:red">
-			<div dojoType="dijit.layout.TabContainer" tabPosition="bottom" attachParent="true">
+			<div dojoType="dijit.layout.TabContainer" tabPosition="bottom" attachParent="true" tabStrip="true">
 				<div dojoType="dijit.layout.ContentPane" attachParent="true" title="tab 1" href="_lorem.html"></div>
 				<div dojoType="dijit.layout.ContentPane" title="tab 2" href="_lorem.html"></div>
 			</div>
 		</div>
-		<div dojoType="dijit.layout.TabContainer" region="center">
+		<div dojoType="dijit.layout.TabContainer" region="center" tabStrip="true">
 			<div dojoType="dijit.layout.ContentPane" title="tab 1" href="_lorem.html"></div>
 			<div dojoType="dijit.layout.ContentPane" title="tab 2" href="_lorem.html"></div>
 		</div>
 	</div>
 
 	<h2>Top (easeIn="dojo.fx.easing.bounceOut" duration="1200"):</h2>
-	<div dojoType="dijit.layout.BorderContainer" style="height:275px">
+	<div dojoType="dijit.layout.BorderContainer" style="height:275px; border: solid #ccc 1px;">
 		<div easeIn="dojo.fx.easing.bounceOut" duration="1200" dojoType="dojox.layout.ExpandoPane" title="topTest" region="top" maxHeight="75" style="height:75px; background:red">
 			foo
 		</div>
