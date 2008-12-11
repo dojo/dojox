@@ -50,17 +50,17 @@ dojo.declare("dojox.layout.ExpandoPane",
 			this.easeIn = dojo.getObject(this.easeIn); 
 		}
 	
-		var thisClass = "", ltr = !this.isLeftToRight();
+		var thisClass = "", rtl = !this.isLeftToRight();
 		if(this.region){
 			// FIXME: add suport for alternate region types?
 			switch(this.region){
 				case "trailing" : 
 				case "right" :
-					thisClass = ltr ? "Left" : "Right";
+					thisClass = rtl ? "Left" : "Right";
 					break;
 				case "leading" : 
 				case "left" :
-					thisClass = ltr ? "Right" : "Left";
+					thisClass = rtl ? "Right" : "Left";
 					break;
 				case "top" :
 					thisClass = "Top";
