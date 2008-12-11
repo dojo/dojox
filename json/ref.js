@@ -98,15 +98,15 @@ dojox.json.ref = {
 					var propertyDefinition = properties && properties[i];
 					if(propertyDefinition && propertyDefinition.format == 'date-time' && typeof val == 'string'){
 						val = dojo.date.stamp.fromISOString(val);
-					}else if((typeof val =='object') && val){
+					}else if((typeof val =='object') && val && !(val instanceof Date)){
 						ref=val.$ref;
 						if(ref){ // a reference was found
 							var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
 							if(/[\w\[\]\.\$# \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
 								// make sure it is a safe reference
 								delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
-								var path = ref.match(/(^([^\[]*\/)?[^\.\[]*)([\.\[].*)?/); // divide along the path
-								if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='#') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')])){  // a $ indicates to start with the root, otherwise start with an id
+								var path = ref.replace(/(#)([^\.\[])/,'$1.$2').match(/(^([^\[]*\/)?[^#\.\[]*)#?([\.\[].*)?/); // divide along the path
+								if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')])){  // a $ indicates to start with the root, otherwise start with an id
 									// // starting point was found, use eval to resolve remaining property references
 									// // need to also make reserved words safe by replacing with index operator
 									try{
@@ -235,6 +235,7 @@ dojox.json.ref = {
 		var addProp = this._addProp;
 		idPrefix = idPrefix || ''; // the id prefix for this context
 		var paths={};
+		var generated = {};
 		function serialize(it,path,_indentStr){
 			if(typeof it == 'object' && it){
 				var value;
@@ -263,8 +264,9 @@ dojox.json.ref = {
 					path = id;
 				}else{
 					it.__id = path; // we will create path ids for other objects in case they are circular
-					paths[path] = it;// save it here so they can be deleted at the end
+					generated[path] = it;
 				}
+				paths[path] = it;// save it here so they can be deleted at the end
 				_indentStr = _indentStr || "";
 				var nextIndent = prettyPrint ? _indentStr + dojo.toJsonIndentStr : "";
 				var newLine = prettyPrint ? "\n" : "";
@@ -310,8 +312,8 @@ dojox.json.ref = {
 		}
 		var json = serialize(it,'#','');
 		if(!indexSubObjects){
-			for(var i in paths)  {// cleanup the temporary path-generated ids
-				delete paths[i].__id;
+			for(var i in generated)  {// cleanup the temporary path-generated ids
+				delete generated[i].__id;
 			}
 		}
 		return json;
