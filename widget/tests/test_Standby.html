@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Testing the Standby widget</title>
+	<style type="text/css">
+		@import "../../../dijit/themes/soria/soria.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../Standby/Standby.css";
+		@import "../../../dojox/grid/resources/soriaGrid.css";
+
+		.curvedClass {
+			background-color: darkblue;
+			width: 250px;
+			height: 250px;
+			-moz-border-radius: 15px 15px 15px 15px; 
+			-webkit-border-radius: 15px;"        
+		}
+	</style>
+	
+	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:true, isDebug: true"></script>
+
+	<script type="text/javascript">
+		dojo.require("dojox.widget.Standby");
+		dojo.require("dijit.form.Button");
+		dojo.require("dijit.Tree");
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileReadStore");
+
+		function init() {
+			var button1 = dijit.byId("overlay1Button1");
+			var button2 = dijit.byId("overlay1Button2");
+			var overlay1= dijit.byId("standby1");
+			dojo.connect(button1, "onClick", function(){overlay1.show()});
+			dojo.connect(button2, "onClick", function(){overlay1.hide()});
+
+			var button3 = dijit.byId("overlay2Button1");
+			var button4 = dijit.byId("overlay2Button2");
+			var overlay2= dijit.byId("standby2");
+			dojo.connect(button3, "onClick", function(){overlay2.show()});
+			dojo.connect(button4, "onClick", function(){overlay2.hide()});
+
+			var button5 = dijit.byId("overlay3Button1");
+			var button6 = dijit.byId("overlay3Button2");
+			var overlay3= dijit.byId("standby3");
+			dojo.connect(button5, "onClick", function(){overlay3.show()});
+			dojo.connect(button6, "onClick", function(){overlay3.hide()});
+
+			var button7 = dijit.byId("overlay4Button1");
+			var button8 = dijit.byId("overlay4Button2");
+			var overlay4= dijit.byId("standby4");
+			dojo.connect(button7, "onClick", function(){overlay4.show()});
+			dojo.connect(button8, "onClick", function(){overlay4.hide()});
+
+			var button9 = dijit.byId("overlay5Button1");
+			var button10 = dijit.byId("overlay5Button2");
+			var overlay5= dijit.byId("standby5");
+			dojo.connect(button9, "onClick", function(){overlay5.show()});
+			dojo.connect(button10, "onClick", function(){overlay5.hide()});
+
+			var button11 = dijit.byId("overlay6Button1");
+			var button12 = dijit.byId("overlay6Button2");
+			var overlay6= dijit.byId("standby6");
+			dojo.connect(button11, "onClick", function(){overlay6.show()});
+			dojo.connect(button12, "onClick", function(){overlay6.hide()});
+
+			var button13 = dijit.byId("overlay7Button1");
+			var button14 = dijit.byId("overlay7Button2");
+			var overlay7= dijit.byId("standby7");
+			dojo.connect(button13, "onClick", function(){overlay7.show()});
+			dojo.connect(button14, "onClick", function(){overlay7.hide()});
+
+			var button15 = dijit.byId("overlay8Button1");
+			var button16 = dijit.byId("overlay8Button2");
+			var overlay8= dijit.byId("standby8");
+			dojo.connect(button15, "onClick", function(){overlay8.show()});
+			dojo.connect(button16, "onClick", function(){overlay8.hide()});
+
+			var button17 = dijit.byId("overlay9Button1");
+			var button18 = dijit.byId("overlay9Button2");
+			var overlay9= dijit.byId("standby9");
+			dojo.connect(button17, "onClick", function(){overlay9.show()});
+			dojo.connect(button18, "onClick", function(){overlay9.hide()});
+
+			var button19 = dijit.byId("overlay10Button1");
+			var button20 = dijit.byId("overlay10Button2");
+			var overlay10= dijit.byId("standby10");
+			dojo.connect(button19, "onClick", function(){
+				overlay10.show();
+				var moveDiv = dojo.byId("overlayTarget10");
+				var moveAnim = dojo.animateProperty({node: moveDiv, properties: {marginLeft: {start: 0, end: 300}}});
+				moveAnim.play();
+			});
+			dojo.connect(button20, "onClick", function(){
+				var moveDiv = dojo.byId("overlayTarget10");
+				var moveAnim = dojo.animateProperty({node: moveDiv, properties: {marginLeft: {start: 300, end: 0}}, onEnd: function(){overlay10.hide()}});
+				moveAnim.play();
+			});
+
+			var button21 = dijit.byId("overlay11Button1");
+			var button22 = dijit.byId("overlay11Button2");
+			var overlay11= dijit.byId("standby11");
+			dojo.connect(button21, "onClick", function(){overlay11.show()});
+			dojo.connect(button22, "onClick", function(){overlay11.hide()});
+
+		}
+		dojo.addOnLoad(init);
+
+	</script>
+	
+</head>
+<body class="soria">
+	
+	<h1 class="testTitle">dojox.widget.Standby</h1>
+	<hr>
+	<h3>Testing a basic overlay</h3>
+	<button id ="overlay1Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay1Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="overlayTarget1" style="width: 200px; height: 100px; background-color: darkblue;"></div>
+	<div id ="standby1" target="overlayTarget1" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+
+	<h3>Testing a basic overlay on a positioned div</h3>
+	<button id ="overlay2Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay2Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="overlayTarget2" style="position: absolute; width: 200px; height: 100px; background-color: darkblue; top: 500px; left: 500px;"></div>
+	<div id ="standby2" target="overlayTarget2" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+	<h3>Testing a basic overlay on a dijit</h3>
+	<button id ="overlay3Button1" dojoType="dijit.form.Button">Really long button!!!!!  Click to show the standby overlay on the button.</button>
+	<br>
+	<button id ="overlay3Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="standby3" target="overlay3Button1" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+	<h3>Testing a basic on a nested div</h3>
+	<button id ="overlay4Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay4Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div><div><div><div id ="overlayTarget4" style="width: 200px; height: 100px; background-color: darkblue;"></div></div></div></div>
+	<div id ="standby4" target="overlayTarget4" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+	<h3>Testing a different image</h3>
+	<button id ="overlay5Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay5Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="overlayTarget5" style="width: 500px; height: 500px; background-color: darkgrey;"></div>
+	<div id ="standby5" target="overlayTarget5" dojoType="dojox.widget.Standby" image="images/busy.gif"></div>
+	<hr>
+
+	<h3>Testing an overlay on a div that has curved borders (CSS styles, Firefox and Webkit (Safari), only)</h3>
+	<button id ="overlay6Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay6Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="overlayTarget6" style="width: 200px; height: 100px; background-color: darkblue; -moz-border-radius: 15px; -webkit-border-radius: 15px;"></div>
+	<div id ="standby6" target="overlayTarget6" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+	<h3>Testing an overlay on a div that has curved borders (CSS styles, Firefox and Webkit (Safari), only, margined to the center) and a different color for the overlay</h3>
+	<button id ="overlay7Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay7Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="overlayTarget7" style="width: 200px; height: 100px; background-color: darkblue; -moz-border-radius: 15px; -webkit-border-radius: 15px; margin: auto"></div>
+	<div id ="standby7" target="overlayTarget7" dojoType="dojox.widget.Standby" color="lightblue"></div>
+	<hr>
+
+
+	<h3>Testing an overlay on a grid</h3>
+	<button id ="overlay8Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay8Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div jsId="ifsStore" dojoType="dojo.data.ItemFileReadStore", url="../../../dijit/tests/_data/countries.json"></div>
+	<table id ="overlayTarget8" dojoType="dojox.grid.DataGrid", style="width: 500px; height: 300px; margin: auto" store="ifsStore", query="{}">
+		<thead>
+			<tr>
+				<th field="name" width="300px">Country/Continent Name</th>
+				<th field="type" width="auto">Type</th>
+			</tr>
+		</thead>
+	</table>
+	<div id ="standby8" target="overlayTarget8" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+
+	<h3>Testing an overlay on a dijit.Tree</h3>
+	<button id ="overlay9Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay9Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div jsId="ifsStore2" dojoType="dojo.data.ItemFileReadStore", url="../../../dijit/tests/_data/countries.json"></div>
+	<div dojoType="dijit.tree.ForestStoreModel" jsId="continentModel" store="ifsStore2" query="{type:'continent'}" rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
+	<div id ="overlayTarget9" dojoType="dijit.Tree", style="width: 30%" model="continentModel", query="{}"></div>
+	<div id ="standby9" target="overlayTarget9" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+	<h3>Testing overlay following a div as it moves (And with some whacky margins that need to be accounted for)</h3>
+	<button id ="overlay10Button1" dojoType="dijit.form.Button">Click to show the standby overlay and move the overlayed div.</button>
+	<br>
+	<button id ="overlay10Button2" dojoType="dijit.form.Button">Click to scoot the div back and hide the standby overlay.</button>
+	<div style="width: 100%;"><div id ="overlayTarget10" style="width: 200px; height: 100px; background-color: darkblue; margin-right: 100px; margin-top: 100px; margin-bottom: 100px;"></div></div>
+	<div id ="standby10" target="overlayTarget10" dojoType="dojox.widget.Standby"></div>
+	<hr>
+
+	<h3>Testing an overlay with class set styles for curves (Firefox, safari only).</h3>
+	<button id ="overlay11Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay11Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div id ="overlayTarget11" class="curvedClass"></div>
+	<div id ="standby11" target="overlayTarget11" dojoType="dojox.widget.Standby"></div>
+	<hr>
+</body>
+</html>
