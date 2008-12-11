@@ -50,7 +50,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			this.easeIn = dojo.getObject(this.easeIn); 
 		}
 	
-		var thisClass = "", ltr = this.isLeftToRight();
+		var thisClass = "", ltr = !this.isLeftToRight();
 		if(this.region){
 			// FIXME: add suport for alternate region types?
 			switch(this.region){
