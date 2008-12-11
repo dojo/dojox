@@ -52,7 +52,6 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 		var thisClass = "", rtl = !this.isLeftToRight();
 		if(this.region){
-			// FIXME: add suport for alternate region types?
 			switch(this.region){
 				case "trailing" : 
 				case "right" :
