@@ -77,11 +77,7 @@ dojo.declare('dojox.widget.Dialog',
 		// summary: Piggyback on dijit.Dialog's _setup for load-time options, deferred to 
 		//		
 		this.inherited(arguments);
-		if(!this._alreadyInitialized){
-			if(!this.modal){
-				this.connect(dijit._underlay.domNode,"onclick","onCancel");
-			}
-			
+		if(!this._alreadyInitialized){			
 			this._navIn = dojo.fadeIn({ node: this.closeButtonNode });
 			this._navOut = dojo.fadeOut({ node: this.closeButtonNode }); 
 			if(!this.showTitle){
@@ -125,6 +121,7 @@ dojo.declare('dojox.widget.Dialog',
 		this.inherited(arguments);
 
 		if(this.modal){
+			// prevent escape key from closing dialog
 			// connect to body to trap this event from the Dialog a11y code, and stop escape key
 			// from doing anything in the modal:true case:
 			this._modalconnects.push(dojo.connect(dojo.body(), "onkeypress", function(e){
@@ -132,6 +129,9 @@ dojo.declare('dojox.widget.Dialog',
 					dojo.stopEvent(e);
 				}
 			}));
+		}else{
+			// otherwise, allow clicking on the underlay to close
+			this._modalconnects.push(dojo.connect(dijit._underlay.domNode, "onclick", this, "onCancel"));
 		}
 		this._modalconnects.push(dojo.connect(this.domNode,"onmouseenter",this,"_handleNav"));
 		this._modalconnects.push(dojo.connect(this.domNode,"onmouseleave",this,"_handleNav"));
