@@ -102,6 +102,12 @@
 			var overlay11= dijit.byId("standby11");
 			dojo.connect(button21, "onClick", function(){overlay11.show()});
 			dojo.connect(button22, "onClick", function(){overlay11.hide()});
+			
+			var button23 = dijit.byId("overlay12Button1");
+			var button24 = dijit.byId("overlay12Button2");
+			var overlay12= dijit.byId("standby12");
+			dojo.connect(button23, "onClick", function(){overlay12.show()});
+			dojo.connect(button24, "onClick", function(){overlay12.hide()});
 
 		}
 		dojo.addOnLoad(init);
@@ -212,5 +218,14 @@
 	<div id ="overlayTarget11" class="curvedClass"></div>
 	<div id ="standby11" target="overlayTarget11" dojoType="dojox.widget.Standby"></div>
 	<hr>
+    
+	<h3>Testing the widget in a relatively positioned block.  This has caused problems, verifying the fix of reparenting to document.body works.</h3>
+	<button id ="overlay12Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+	<br>
+	<button id ="overlay12Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+	<div style="position: relative; top: 50px; left: 50px;">
+		<div id ="overlayTarget12" class="curvedClass"></div>
+		<div id ="standby12" target="overlayTarget12" dojoType="dojox.widget.Standby"></div>
+	</div>        
 </body>
 </html>
