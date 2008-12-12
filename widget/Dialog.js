@@ -79,7 +79,7 @@ dojo.declare('dojox.widget.Dialog',
 		this.inherited(arguments);
 		if(!this._alreadyInitialized){
 			if(!this.modal){
-				this.connect(this._underlay.domNode,"onclick","onCancel");
+				this.connect(dijit._underlay.domNode,"onclick","onCancel");
 			}
 			
 			this._navIn = dojo.fadeIn({ node: this.closeButtonNode });
@@ -91,7 +91,6 @@ dojo.declare('dojox.widget.Dialog',
 	},
 	
 	layout: function(e){
-		
 		this._setSize();
 		this.inherited(arguments);
 	},
@@ -195,6 +194,7 @@ dojo.declare('dojox.widget.Dialog',
 		if(this._sizing){
 			this._sizing.stop();	
 			this.disconnect(this._sizingConnect);
+			delete this._sizing; 
 		}
 		
 		this.inherited(arguments);
@@ -215,7 +215,7 @@ dojo.declare('dojox.widget.Dialog',
 			
 		props['height'] = ds.h = (ds.h + pad >= this._vp.h || this.sizeToViewport) 
 			? this._vp.h - pad : ds.h;
-
+		
 		this._sizing = dojox.fx.sizeTo(props);
 		this._sizingConnect = this.connect(this._sizing,"onEnd","_showContent");
 		this._sizing.play();
