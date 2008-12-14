@@ -10,7 +10,7 @@ dojo.extend(dojo.NodeList, {
 		var d = dojox.dtl;
 
 		var self = this;
-		var render = function(data){
+		var render = function(template, context){
 			var content = template.render(new d._Context(context));
 			self.forEach(function(node){
 				node.innerHTML = content;
@@ -19,8 +19,8 @@ dojo.extend(dojo.NodeList, {
 
 		d.text._resolveTemplateArg(template).addCallback(function(templateString){
 			template = new d.Template(templateString);
-			d.text._resolveContextArg(context).addCallback(function(contextObject){
-				render(contextObject);
+			d.text._resolveContextArg(context).addCallback(function(context){
+				render(template, context);
 			});
 		});
 

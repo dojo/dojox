@@ -94,7 +94,7 @@ dojo.require("dojox.dtl._base");
 	dojo.mixin(ddcd, {
 		_get: function(key){
 			if(this.length){
-				return this[0].get(key);
+				return (this[0] instanceof ddcd._BoundItem) ? this[0].get(key) : this[0][key];
 			}
 		},
 		bind_data: function(parser, token){
@@ -107,6 +107,7 @@ dojo.require("dojox.dtl._base");
 			return new ddcd.BindDataNode(parts[1], parts[3], parts[5]);
 		}
 	});
+	ddcd._get.safe = true;
 
 	dd.register.tags("dojox.dtl.contrib", {
 		"data": ["bind_data"]
