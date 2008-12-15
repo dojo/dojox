@@ -225,5 +225,13 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			return;
 		}
 		this.inherited(arguments);
+	},
+
+	uninitialize: function(preserveDom){
+		if(this.dropDown){
+			this.dropDown.destroyRecursive(preserveDom);
+			delete this.dropDown;
+		}
+		this.inherited(arguments);
 	}
 });
