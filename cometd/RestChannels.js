@@ -1,9 +1,8 @@
 dojo.provide("dojox.cometd.RestChannels");
  
 dojo.require("dojox.rpc.Client");
-if(dojox.data && dojox.data.JsonRestStore){
-	dojo.require("dojox.data.restListener");
-}
+dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener");
+
 // Note that cometd _base is _not_ required, this can run standalone, but ifyou want 
 // cometd functionality, you must explicitly load/require it elsewhere, and cometd._base
 // MUST be loaded prior to RestChannels ifyou use it.
@@ -113,8 +112,10 @@ if(dojox.data && dojox.data.JsonRestStore){
 					if(xhr && xhr.status > 400){
 						return onerror(true);
 					}
-					data = data.substring(self.lastIndex);
-					var contentType = xhr && (xhr.contentType || xhr.getResponseHeader("Content-Type"));
+					if(typeof data == 'string'){
+						data = data.substring(self.lastIndex);
+					}
+					var contentType = xhr && (xhr.contentType || xhr.getResponseHeader("Content-Type")) || (typeof data != 'string' && "already json");
 					var error = self.onprogress(xhr,data,contentType);
 					if(error){
 						if(onerror()){
