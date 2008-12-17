@@ -105,7 +105,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 	
 	_setQuery: function(query, queryOptions){
-		this.query = query || this.query;
+		this.query = query;
 		this.queryOptions = queryOptions || this.queryOptions;		
 	},
 
@@ -430,6 +430,15 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this.store.fetchItemByIdentity({
 			identity: this._by_idx[inRowIndex].idty,
 			onItem: dojo.hitch(this, function(item){
+				var oldValue = this.store.getValue(item, inAttrName);
+				if(typeof oldValue == 'number'){
+					inValue = isNaN(inValue) ? inValue : parseFloat(inValue);
+				}else if(typeof oldValue == 'boolean'){
+					inValue = inValue == 'true' ? true : inValue == 'false' ? false : inValue;
+				}else if(oldValue instanceof Date){
+					var asDate = new Date(inValue);
+					inValue = isNaN(asDate.getTime()) ? inValue : asDate;
+				}
 				this.store.setValue(item, inAttrName, inValue);
 				this.onApplyCellEdit(inValue, inRowIndex, inAttrName);
 			})
