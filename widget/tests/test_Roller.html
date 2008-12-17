@@ -182,8 +182,26 @@
 			<li>one: <ul><li>inner</li><li>inner</li></ul></li>
 			<li>one: <ul><li>inner</li><li>inner</li></ul></li>
 		</ul>
-		
 	</div>
+	
+	<h2>Customer RollerHover</h2>
+	<div>
+		<ul id="customType">
+			<li>test 1</li>
+			<li>test 2</li>
+			<li>test 3</li>
+			<li>test 4</li>
+		</ul>
+	</div>
+
+	<script type="text/javascript">
+		dojo.addOnLoad(function(){
+			// taking advantage of the _RollerHover mixin:
+			dojo.declare("a.custom.Roller", [dojox.widget.RollerSlide, dojox.widget._RollerHover], {});
+			new a.custom.Roller({}, "customType");
+		});
+	</script>
+	
 	<!-- disabled because of styling mishaps :)
 	<h2>programatic Exploder:</h2>
 	<div id="ex1" style="background:#ededed; width:175px;">
