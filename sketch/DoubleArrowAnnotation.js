@@ -39,15 +39,13 @@ dojo.require("dojox.sketch.Anchor");
 
 	p._rot=function(){
 		//	arrowhead rotation
-		var opp=this.start.y-this.control.y;
-		var adj=this.start.x-this.control.x;
-		if(!adj){ adj=1; }
-		this.startRotation=Math.atan(opp/adj);
+		var opp=this.control.y-this.start.y;
+		var adj=this.control.x-this.start.x;
+		this.startRotation=Math.atan2(opp,adj);
 
-		opp=this.control.y-this.end.y;
-		adj=this.control.x-this.end.x;
-		if(!adj){ adj=1; }
-		this.endRotation=Math.atan(opp/adj);
+		opp=this.end.y-this.control.y;
+		adj=this.end.x-this.control.x;
+		this.endRotation=Math.atan2(opp,adj);
 	};
 	p._pos=function(){
 		//	text position
@@ -116,11 +114,9 @@ dojo.require("dojox.sketch.Anchor");
 
 		//	rotation matrix
 		var rot=this.startRotation;
-		if(this.control.x<this.start.x){ rot+=Math.PI; }
 		var startRot=dojox.gfx.matrix.rotate(rot);
 
 		rot=this.endRotation;
-		if(this.control.x>=this.end.x){ rot+=Math.PI; }
 		var endRot=dojox.gfx.matrix.rotateAt(rot, this.end.x, this.end.y);
 
 		//	draw the shapes
@@ -167,10 +163,8 @@ dojo.require("dojox.sketch.Anchor");
 
 		//	rotation matrix
 		var rot=this.startRotation;
-		if(this.control.x<this.start.x){ rot+=Math.PI; }
 		var startRot=dojox.gfx.matrix.rotate(rot);
 		rot=this.endRotation;
-		if(this.control.x>=this.end.x){ rot+=Math.PI; }
 		var endRot=dojox.gfx.matrix.rotateAt(rot, this.end.x, this.end.y);
 
 		this.shape.setTransform(this.transform);
