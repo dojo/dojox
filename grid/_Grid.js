@@ -246,6 +246,9 @@ dojo.requireLocalization("dijit", "loading");
 			this.domNode.onReveal = null;
 			this.domNode.onSizeChange = null;
 
+			// Fixes IE domNode leak
+			delete this._click;
+
 			this.edit.destroy();
 			delete this.edit;
 
