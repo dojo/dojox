@@ -78,14 +78,16 @@ dojo.provide("dojox.rpc.Rest");
 		service._getRequest = getRequest || function(id, args){
 			var request = {
 				url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), 
-				handleAs: isJson?'json':'text', 
-				contentType: isJson?'application/json':'text/plain',
+				handleAs: isJson ? 'json' : 'text', 
+				contentType: isJson ? 'application/json' : 'text/plain',
 				sync: dojox.rpc._sync,
 				headers: {
-					Accept: isJson?'application/json,application/javascript':'*/*',
-					Range: args && (args.start >= 0 || args.count >= 0) ?  "items=" + (args.start || '0') + '-' + ((args.count && args.count != Infinity && (args.count + (args.start || 0) - 1)) || '') : undefined
+					Accept: isJson ? 'application/json,application/javascript' : '*/*'
 				}
 			};
+			if(args && (args.start >= 0 || args.count >= 0)){
+				request.headers.Range = "items=" + (args.start || '0') + '-' + ((args.count && args.count != Infinity && (args.count + (args.start || 0) - 1)) || '');
+			}
 			dojox.rpc._sync = false;
 			return request;
 		};
