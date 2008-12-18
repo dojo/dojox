@@ -58,6 +58,9 @@ dojo.declare("dojox.data.tests.ItemExplorer", dijit.Tree, {
 				onComplete(children);
 			},
 			getIdentity: function(modelNode){
+				if(modelNode.addNew){
+					modelNode.property = "--addNew";
+				}
 				var identity = modelNode === root ? "root" : 
 						(modelNode.value && self.store.isItem(modelNode.value) && self.store.getIdentity(modelNode.value)) || 
 							(((self.store && self.store.getIdentity(modelNode.parent)) || Math.random()) + "." + modelNode.property);
@@ -116,15 +119,18 @@ dojo.declare("dojox.data.tests.ItemExplorer", dijit.Tree, {
 		var self = this;
 		dojo.connect(store, "onSet", function(item, attribute, oldValue, newValue){
 			var propertyNode, identity = self.store.getIdentity(item);
-			if(oldValue === undefined || newValue === undefined){
-				propertyNode = self._modelNodeIndex[identity];
-				if(propertyNode){
-					self.model.onChildrenChange(self._modelNodeIndex[identity]);
-				}
-			}
 			propertyNode = self._modelNodeIndex[identity + "." + attribute];
-			if(propertyNode){
+			if(oldValue === undefined || newValue === undefined || propertyNode === undefined){
+				var root = self.rootModelNode;
+				propertyNode = ((root.value == item) && root) || self._modelNodeIndex[identity];
+				if(propertyNode){
+					self.model.getChildren(propertyNode, function(children){
+						self.model.onChildrenChange(propertyNode, children);
+					});
+				}
+			}else if(propertyNode){
 				propertyNode.value = newValue;
+				delete propertyNode.jsonVal
 				if(oldValue instanceof Array || newValue instanceof Array){
 					self.model.getChildren(propertyNode, function(children){
 						self.model.onChildrenChange(propertyNode, children);
@@ -291,10 +297,10 @@ dojo.declare("dojox.data.tests.ItemExplorer", dijit.Tree, {
         switch(selection){
             case "reference":
                 dojo.query(".value [widgetId]", this._editDialog.containerNode).map(dijit.byNode).attr("disabled","disabled");
-                dojo.query(".reference [widgetId]", this._editDialog.containerNode).map(dijit.byNode).attr("disabled","");
+                dojo.query(".reference [widgetId]", this._editDialog.containerNode).map(dijit.byNode).attr("disabled",false);
                 break;
             case "value":
-                dojo.query(".value [widgetId]", this._editDialog.containerNode).map(dijit.byNode).attr("disabled","");
+                dojo.query(".value [widgetId]", this._editDialog.containerNode).map(dijit.byNode).attr("disabled",false);
                 dojo.query(".reference [widgetId]", this._editDialog.containerNode).map(dijit.byNode).attr("disabled","disabled");
                 break;
         }
@@ -355,6 +361,7 @@ dojo.declare("dojox.data.tests.ItemExplorer", dijit.Tree, {
                     this.store.setValue(item.parent, item.property, itemVal);
                 }              
             }else{
+            	propPath = dojo.query("input[name='property']", this._editDialog.containerNode)[0].value;
                 // adding a property
                 if(this.store.isItem(item.value) && !(item.value instanceof Array)) {
                     // adding a top-level property to an item
@@ -391,6 +398,18 @@ dojo.declare("dojox.data.tests.ItemExplorer", dijit.Tree, {
         }
         var editingItem = dojo.query("input[name='property']", this._editDialog.containerNode).map(dijit.getEnclosingWidget)[0].attr("disabled");
         if(editingItem){
+        	// reset these
+        	delete item.jsonVal;
+        	// TODO: for some reason the item loses it's value, it would be great to get that fixed so we don't have to do that
+			if(this.store.isItem(item.parent)){
+				var value = this.store.getValues(item.parent, item.property);
+				if(value.length < 2){
+					value = this.store.getValue(item.parent, item.property);
+				}
+			}else{
+				value = item.parent[item.property];
+			}
+        	item.value = value;  
             // not allowed to edit an item's id - so check for that and stop it.
             if(dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
                 alert("Cannot Edit an Identifier!");
