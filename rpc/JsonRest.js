@@ -30,7 +30,6 @@ dojo.require("dojox.rpc.Rest");
 			// summary:
 			//		Saves the dirty data using REST Ajax methods
 
-			var left; // this is how many changes are remaining to be received from the server
 			kwArgs = kwArgs || {};
 			var actions = [];
 			var alreadyRecorded = {};
@@ -42,6 +41,7 @@ dojo.require("dojox.rpc.Rest");
 				var append = false;
 				if(!(kwArgs.service && (object || old) && 
 						(object || old).__id.indexOf(kwArgs.service.servicePath)) && dirty.save){
+					delete object.__isDirty;
 					if(object){
 						if(old){
 							// changed object
@@ -70,9 +70,20 @@ dojo.require("dojox.rpc.Rest");
 					dirtyObjects.splice(i--,1);
 				}
 			}
+			dojo.connect(kwArgs,"onError",function(){
+				var postCommitDirtyObjects = dirtyObjects;
+				var dirtyObject = savingObjects;
+				var numDirty = 0; // make sure this does't do anything if it is called again
+				jr.revert(); // revert if there was an error
+				dirtyObjects = postCommitDirtyObjects;
+			});
+			jr.sendToServer(actions, kwArgs);
+			return actions;
+		},
+		sendToServer: function(actions, kwArgs){
 			var xhrSendId;
 			var plainXhr = dojo.xhr;
-			left = actions.length;
+			var left = actions.length;// this is how many changes are remaining to be received from the server
 			var contentLocation;
 			var timeStamp;
 			var conflictDateHeader = this.conflictDateHeader;
@@ -137,21 +148,12 @@ dojo.require("dojox.rpc.Rest");
 					
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
 					left = -1; // first make sure that success isn't called
-					var postCommitDirtyObjects = dirtyObjects;
-					var dirtyObject = savingObjects;
-					var numDirty = 0; // make sure this does't do anything if it is called again
-					jr.revert(); // revert if there was an error
-					dirtyObjects = postCommitDirtyObjects;
-					if(kwArgs.onError){
-						kwArgs.onError();
-					}
-					return value;
+					kwArgs.onError();
 				});
 			}
 			// revert back to the normal XHR handler
 			dojo.xhr = plainXhr;
 			
-			return actions;
 		},
 		getDirtyObjects: function(){
 			return dirtyObjects;
@@ -193,6 +195,7 @@ dojo.require("dojox.rpc.Rest");
 			if(!object.__id){
 				return;
 			}
+			object.__isDirty = true;
 			//if an object is already in the list of dirty objects, don't add it again
 			//or it will overwrite the premodification data set.
 			for(var i=0; i<dirtyObjects.length; i++){
@@ -349,10 +352,7 @@ dojo.require("dojox.rpc.Rest");
 			if(!item){
 				return !!dirtyObjects.length;
 			}
-			for(var i = 0, l = dirtyObjects.length; i < l; i++){
-				if(dirtyObjects[i].object==item){return true;}
-			}
-			return false;
+			return item.__isDirty;
 		}
 		
 	};
