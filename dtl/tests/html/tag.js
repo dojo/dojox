@@ -110,8 +110,14 @@ doh.register("dojox.dtl.html.tag",
 			doh.is('<div><a index="0" id="id_appleparam">appleparam</a><a index="1" id="id_bananaparam">bananaparam</a><a index="2" id="id_orangeparam">orangeparam</a></div>', dd.tests.html.util.render(template, context));
 		},
 		function test_tag_extend(t){
-			// Problems to look for:
-			//	* Content outside of blocks
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({
+				base: dojo.moduleUrl("dojox.dtl.tests.templates", "base.html")
+			});
+
+			var template = new dd.HtmlTemplate("{% extends base %}{% block base %}<p>1</p><p>2</p>{% endblock %}");
+			t.is("<div>BaseBefore<p>1</p><p>2</p>BaseAfter</div>", dd.tests.html.util.render(template, context));
 		},
 		function test_tag_for(t){
 			var dd = dojox.dtl;

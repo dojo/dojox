@@ -44,7 +44,19 @@ dojo.require("dojox.dtl._base");
 				this.parent = this;
 			}
 			context["block"] = this;
+
+			if(buffer.getParent){
+				var depth = 0;
+				var bufferParent = buffer.getParent();
+				var setParent = dojo.connect(buffer, "onSetParent", function(node, up){
+					depth += (up) ? -1 : 1;
+					if(!depth){
+						buffer.setParent(bufferParent);
+					}
+				});
+			}
 			buffer = nodelist.render(context, buffer, this);
+			setParent && dojo.disconnect(setParent);
 			context = context.pop();
 			return buffer;
 		},
