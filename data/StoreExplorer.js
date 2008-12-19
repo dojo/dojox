@@ -1,10 +1,10 @@
-dojo.provide("dojox.data.tests.StoreExplorer");
+dojo.provide("dojox.data.StoreExplorer");
 dojo.require("dojox.grid.DataGrid");
-dojo.require("dojox.data.tests.ItemExplorer");
+dojo.require("dojox.data.ItemExplorer");
 dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.ContentPane");
 
-dojo.declare("dojox.data.tests.StoreExplorer", dijit.layout.BorderContainer, {
+dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 	constructor: function(options){
 		dojo.mixin(this, options);
 	},
@@ -23,7 +23,7 @@ dojo.declare("dojox.data.tests.StoreExplorer", dijit.layout.BorderContainer, {
 			return button;
 		}
 		var queryText = contentPane.domNode.appendChild(document.createElement("span"));
-		queryText.innerHTML = "Enter query:&nbsp;";
+		queryText.innerHTML = "Enter query: &nbsp;";
 		queryText.id = "queryText";
 		var queryTextBox = contentPane.domNode.appendChild(document.createElement("input"));
 		queryTextBox.type = "text";
@@ -73,7 +73,7 @@ dojo.declare("dojox.data.tests.StoreExplorer", dijit.layout.BorderContainer, {
 		this.addChild(grid);
 		grid.startup();
 		
-		var tree = this.tree = new dojox.data.tests.ItemExplorer({
+		var tree = this.tree = new dojox.data.ItemExplorer({
 			region: 'trailing', 
 			splitter: true, 
 			style: "width: 300px",

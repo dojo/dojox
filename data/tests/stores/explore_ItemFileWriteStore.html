@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
     <script type="text/javascript">
     	dojo.require("dojo.data.ItemFileWriteStore");
-    	dojo.require("dojox.data.tests.StoreExplorer");
+    	dojo.require("dojox.data.StoreExplorer");
     	dojo.require("dojo.parser");		gridLayout = [{
 			defaultCell: { width: 8, editable: true, type: dojox.grid.cells._Widget, styles: 'text-align: right;'  },
 			rows: [
@@ -78,6 +78,6 @@
     </script>
     <body class="tundra">
     	<h2>ItemFileWriteStore Explorer</h2>
-		<div dojoType="dojox.data.tests.StoreExplorer" store="store" style="height:500px;width:100%;border:1px solid black" structure="gridLayout"/>
+		<div dojoType="dojox.data.StoreExplorer" store="store" style="height:500px;width:100%;border:1px solid black" structure="gridLayout"/>
     </body>
 </html> 
