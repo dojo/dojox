@@ -49,9 +49,11 @@ dojo.require("dojox.dtl._base");
 				var depth = 0;
 				var bufferParent = buffer.getParent();
 				var setParent = dojo.connect(buffer, "onSetParent", function(node, up){
-					depth += (up) ? -1 : 1;
-					if(!depth){
-						buffer.setParent(bufferParent);
+					if(node !== bufferParent){
+						depth += (up) ? -1 : 1;
+						if(!depth){
+							buffer.setParent(bufferParent);
+						}
 					}
 				});
 			}
