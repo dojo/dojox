@@ -150,13 +150,14 @@ dojox.json.ref = {
 						}
 					}
 					it[i] = val;
-					if(target!=it){// performance guard				
+					if(target!=it && !target.__isDirty){// do updates if we are updating an existing object and it's not dirty				
 						var old = target[i];
-						target[i] = val; // update the target
-						if(update && val !== old){ // only update if it changed
-							if(index.onUpdate){
-								index.onUpdate(target,i,old,val); // call the listener for each update
-							}
+						target[i] = val; // only update if it changed
+						if(update && val !== old && // see if it is different 
+								!target._loadObject && // no updates if we are just lazy loading 
+								!(val instanceof Date && old instanceof Date && val.getTime() == old.getTime()) && // make sure it isn't an identical date
+								index.onUpdate){
+							index.onUpdate(target,i,old,val); // call the listener for each update
 						}
 					}
 				}
@@ -165,8 +166,8 @@ dojox.json.ref = {
 			if(update){
 				// this means we are updating, we need to remove deleted
 				for(i in target){
-					if(!it.hasOwnProperty(i) && i != '__id' && i != '__clientId' && !(target instanceof Array && isNaN(i))){
-						if(index.onUpdate){
+					if(target.hasOwnProperty(i) && !it.hasOwnProperty(i) && i != '__id' && i != '__clientId' && !(target instanceof Array && isNaN(i))){
+						if(index.onUpdate && i != "_loadObject"){
 							index.onUpdate(target,i,target[i],undefined); // call the listener for each update
 						}
 						delete target[i];
