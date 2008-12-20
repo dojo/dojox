@@ -9,7 +9,10 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.FilteringSelect");
 
 dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
+    useSelect: false,
+    refSelectSearchAttr: null,
 	constructor: function(options){
+        dojo.mixin(this, options);
 		var self = this;
 		var initialRootValue = {};
 		var root = this.rootModelNode = {value:initialRootValue};
@@ -68,7 +71,6 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 					modelNode.property = "--addNew";
 				}
 				var identity = modelNode === root ? "root" : 
-						(modelNode.value && self.store.isItem(modelNode.value) && self.store.getIdentity(modelNode.value)) || 
 							(((self.store && self.store.getIdentity(modelNode.parent)) || Math.random()) + "." + modelNode.property);
 				modelNodeIndex[identity] = modelNode;
 				return identity;
@@ -107,7 +109,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 	setStore: function(store){
 		this.store = store;
 		var self = this;
-		if(this._editDialog){
+		if(this._editDialog && this.useSelect){
 			dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
 	            dijit.getEnclosingWidget(node).attr("store", store);
 	        });
@@ -217,16 +219,27 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
         var refDiv = dojo.doc.createElement("div");
         dojo.addClass(refDiv, "reference");
         
-        // filteringselect
-        // TODO: see if there is a way to sort the items in this list
-        var refSelect = new dijit.form.FilteringSelect({
-            name: "_reference",
-            store: this.store,
-            searchAttr: this.store.getIdentityAttributes()[0],
-            required: false,
-            value: null,        // need to file a ticket about the fetch that happens when declared with value: null
-            pageSize: 10
-        }).placeAt(refDiv);
+        if (this.useSelect){
+            // filteringselect
+            // TODO: see if there is a way to sort the items in this list
+            var refSelect = new dijit.form.FilteringSelect({
+                name: "_reference",
+                store: this.store,
+                searchAttr: this.refSelectSearchAttr || this.store.getIdentityAttributes()[0],
+                required: false,
+                value: null,        // need to file a ticket about the fetch that happens when declared with value: null
+                pageSize: 10
+            }).placeAt(refDiv);
+        }else{
+            var refTextbox = new dijit.form.ValidationTextBox({
+                name: "_reference",
+                value: "",
+                isValid: dojo.hitch(this, function(isFocused){
+                    // don't validate while it's focused
+                    return true;//isFocused || this.store.getItemByIdentity(this._editDialog.attr("value")._reference);
+                })
+            }).placeAt(refDiv);
+        }
         pane.appendChild(refDiv);
         pane.appendChild(dojo.doc.createElement("br"));
         pane.appendChild(dojo.doc.createElement("br"));
@@ -305,39 +318,19 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
         }
     },
     _updateItem: function(vals){
+    	
         // a single execute function that handles adding and editing of values and references.
-        var itemVal,editingItem = dijit.getEnclosingWidget(dojo.query("input[name='property']", this._editDialog.containerNode)[0]).attr("disabled");
-        if(this._editDialog.validate()){
-            var node = this.lastFocused;
-            if(node.item.addNew && !(node.item.parent instanceof Array)) {
-                // when the dialog closed it refocused the Add new Property node!  an inconvenient "feature" of the dialog.
-                // except we don't refocus when the parent is an array (not sure why it is refocused otherwise)
-                node = node.getParent();
-            }
-            var item = dojo.delegate(node.item);
-            var val = null;
-            switch(vals.itemType){
-                case "reference":
-                    val = this.store._getItemByIdentity(vals._reference);
-                    break;
-                case "value":
-                	var jsonVal = vals.jsonVal;
-                    val = dojo.fromJson(jsonVal);
-                    // if it is a function we want to preserve the source (comments, et al)
-                    if(typeof val == 'function'){
-                    	val.toString = function(){
-                    		return jsonVal;
-                    	}
-                    }
-                    break;
-            }   
+        var node, item, val, itemVal,editingItem = dijit.getEnclosingWidget(dojo.query("input[name='property']", this._editDialog.containerNode)[0]).attr("disabled");
+		var editDialog = this._editDialog;
+		var store = this.store;
+        function setValue(){
             var propPath;
             if(editingItem){
                 // the while loop below is also used in _destroyProperty and
                 // it might be tempting to put this in a _getPropPath but the rest of
                 // the code depends on the item being changed and so this would need
                 // to be taken into account if this is moved to a separate function
-                while(!this.store.isItem(item.parent)  || item.parent instanceof Array){
+                while(!store.isItem(item.parent)  || item.parent instanceof Array){
                     node = node.getParent();
                     if(propPath){
                         propPath = item.property + '[' + propPath + ']';
@@ -348,26 +341,26 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
                 }
                 if(!propPath){
                     // working with an item attribute already
-                    this.store.setValue(item.parent, item.property, val);
+                    store.setValue(item.parent, item.property, val);
                 }else{
                     // need to work back down the item to the property
-                    itemVal = this.store.getValues(item.parent, item.property);
+                    itemVal = store.getValues(item.parent, item.property);
                     if(itemVal instanceof Array){
                     	// create a copy for modification
                     	itemVal = itemVal.concat();
                     }
                     itemVal[propPath] = val;
-                    this.store.setValue(item.parent, item.property, itemVal);
+                    store.setValue(item.parent, item.property, itemVal);
                 }              
             }else{
                 propPath = vals.property;
                 // adding a property
-                if(this.store.isItem(item.value) && !(item.value instanceof Array)) {
+                if(store.isItem(item.value) && !(item.value instanceof Array)) {
                     // adding a top-level property to an item
-                    this.store.setValue(item.value, propPath, val);
+                    store.setValue(item.value, propPath, val);
                 }else{
                     // adding a property to a lower level in an item
-                    while(!this.store.isItem(item.parent)  || (item.parent instanceof Array)){
+                    while(!store.isItem(item.parent)  || (item.parent instanceof Array)){
                         node = node.getParent();
                         if(propPath){
                             propPath = item.property + '[' + propPath + ']';
@@ -376,15 +369,51 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
                         }
                         item = dojo.delegate(node.item);
                     }
-                    itemVal = this.store.getValues(item.parent, item.property);
+                    itemVal = store.getValues(item.parent, item.property);
                     itemVal[propPath] = val;
-                    this.store.setValue(item.parent, item.property, itemVal);
+                    store.setValue(item.parent, item.property, itemVal);
                 }
             }
-            dijit.getEnclosingWidget(dojo.query("input[name='property']", this._editDialog.containerNode)[0]).attr("disabled", true);
+            dijit.getEnclosingWidget(dojo.query("input[name='property']", editDialog.containerNode)[0]).attr("disabled", true);
+        }
+    	
+
+        if(editDialog.validate()){
+            node = this.lastFocused;
+            if(node.item.addNew && !(node.item.parent instanceof Array)) {
+                // when the dialog closed it refocused the Add new Property node!  an inconvenient "feature" of the dialog.
+                // except we don't refocus when the parent is an array (not sure why it is refocused otherwise)
+                node = node.getParent();
+            }
+            item = dojo.delegate(node.item);
+            val = null;
+            switch(vals.itemType){
+                case "reference":
+                    this.store.fetchItemByIdentity({identity:vals._reference,
+                    	onItem:function(item){
+                    		val = item;
+                    		setValue();
+                    	},
+                    	onError:function(){
+                    		alert("The id could not be found");
+                    	}
+                	});
+                    break;
+                case "value":
+                	var jsonVal = vals.jsonVal;
+                    val = dojo.fromJson(jsonVal);
+                    // if it is a function we want to preserve the source (comments, et al)
+                    if(typeof val == 'function'){
+                    	val.toString = function(){
+                    		return jsonVal;
+                    	}
+                    }
+                    setValue();
+                    break;
+            }
         }else{
             // the form didn't validate - show it again.
-            this._editDialog.show();
+            editDialog.show();
         }
     },
     _editProperty: function(){
