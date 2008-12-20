@@ -116,8 +116,8 @@ doh.register("dojox.dtl.html.tag",
 				base: dojo.moduleUrl("dojox.dtl.tests.templates", "base.html")
 			});
 
-			var template = new dd.HtmlTemplate("{% extends base %}{% block base %}<p>1</p><p>2</p><p>3</p>{% endblock %}");
-			t.is("<div>BaseBefore<p>1</p><p>2</p><p>3</p>BaseAfter</div>", dd.tests.html.util.render(template, context));
+			var template = new dd.HtmlTemplate("{% extends base %}{% block base %}<p>1</p><p>2</p><ul><li>2a</li><li>2b</li><li>2c</li></ul><p>3</p><ul><li>3a</li><li>3b</li><li>3c</li></ul><p>4</p><ul><li>4a</li><li>4b</li><li>4c</li></ul><p>5</p>{% endblock %}");
+			t.is("<div>BaseBefore<p>1</p><p>2</p><ul><li>2a</li><li>2b</li><li>2c</li></ul><p>3</p><ul><li>3a</li><li>3b</li><li>3c</li></ul><p>4</p><ul><li>4a</li><li>4b</li><li>4c</li></ul><p>5</p>BaseAfter</div>", dd.tests.html.util.render(template, context));
 		},
 		function test_tag_for(t){
 			var dd = dojox.dtl;

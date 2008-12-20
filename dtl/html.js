@@ -454,7 +454,7 @@ dojo.require("dojox.dtl.Context");
 			}
 
 			this._parent = node;
-			this.onSetParent && this.onSetParent(node, up);
+			this.onSetParent && this.onSetParent(node, up, root);
 			return this;
 		},
 		getParent: function(){

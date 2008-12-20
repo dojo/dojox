@@ -46,14 +46,10 @@ dojo.require("dojox.dtl._base");
 			context["block"] = this;
 
 			if(buffer.getParent){
-				var depth = 0;
 				var bufferParent = buffer.getParent();
-				var setParent = dojo.connect(buffer, "onSetParent", function(node, up){
-					if(node !== bufferParent){
-						depth += (up) ? -1 : 1;
-						if(!depth){
-							buffer.setParent(bufferParent);
-						}
+				var setParent = dojo.connect(buffer, "onSetParent", function(node, up, root){
+					if(up && root){
+						buffer.setParent(bufferParent);
 					}
 				});
 			}
