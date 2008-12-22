@@ -1,48 +1,51 @@
 <html>
 	<head>
 		<title>Demo using dojox.dtl._HtmlTemplated inline in DOM</title>
-    <script type="text/javascript" src="../../../dojo/dojo.js"
-			djConfig="isDebug: true"></script>
+		<script type="text/javascript" src="../../../dojo/dojo.js"
+			djConfig="isDebug: true, parseOnLoad: true"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.dtl.html");
-			dojo.require("dojox.dtl.Context");
+			dojo.require("dojo.parser");
+			dojo.require("dojox.dtl.Inline");
+			dojo.require("dojox.dtl.HtmlInline");
+
+			gContext = {items: ["apple", "banana", "orange"]};
 
 			dojo.addOnLoad(function(){
-				// Create a template from our first node (still in DOM)
-				var template = new dojox.dtl.HtmlTemplate("template");
-				var context = new dojox.dtl.Context({
-					items: ["apple", "banana", "orange"]
-				});
-				// Render it first without initial item list
-				template.render(context);
-
-				// Create a template with our second node (removed from DOM)
-				var node = dojo.byId("template2");
-				node.parentNode.removeChild(node);
-				var template2 = new dojox.dtl.HtmlTemplate(node);
-				// The render function returns a buffer, which has the getRootNode function
-				dojo.body().appendChild(template2.render(context).getRootNode());
-
-				// The re-render each with a new item
+				// The Re-render each with a new item
 				setTimeout(function(){
-					context.items.push("guava");
-					template.render(context);
-					template2.render(context);
+					var inline = dijit.byId("inline");
+					inline.context.items.push("guava");
+					inline.render();
+					var htmlinline = dijit.byId("htmlinline");
+					htmlinline.context.items.push("pineapple");
+					htmlinline.render();
+
+					setTimeout(function(){
+						// You can define an altogether new context in either of the following ways
+						inline.context = {items: ["lions", "tigers", "bears"]};
+						inline.render();
+						htmlinline.render({items: ["duck", "chicken", "turkey"]});
+					}, 3000);
 				}, 3000);
 			});
 		</script>
 	</head>
 	<body>
-		<ul id="template">
-			{% for item in items %}
-				<li>{{ item }}</li>
-			{% endfor %}
-		</ul>
+		<script type="text/html" dojoType="dojox.dtl.Inline" id="inline" context="{items: ['apple', 'banana', 'orange']}">
+			<ul>
+				{% for item in items %}
+					<li>{{ item }}</li>
+				{% endfor %}
+			</ul>
+		</script>
 
-		<ul id="template2">
-			{% for item in items reversed %}
-				<li>{{ item }}</li>
-			{% endfor %}
-		</ul>
+		<!-- Use the DOM-based version with an external context -->
+		<script type="text/html" dojoType="dojox.dtl.HtmlInline" id="htmlinline" context="gContext">
+			<ul>
+				{% for item in items %}
+					<li>{{ item }}</li>
+				{% endfor %}
+			</ul>
+		</script>
 	</body>
 </html>
