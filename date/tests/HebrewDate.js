@@ -15,10 +15,29 @@ tests.register("dojox.date.tests.HebrewDate",
 		{
 			name: "toGregorian",
 			runTest: function(t){
-				var dateHebrew = new dojox.date.HebrewDate(5769, 2, 22); // Dec 19, 2008 -- is this right??
+				var dateHebrew = new dojox.date.HebrewDate(5769, 2, 22); //HebrewDate month 0-12
 				var dateGregorian = dateHebrew.toGregorian();
-				t.is(0, dojo.date.compare(new Date(2008, 11, 19), dateGregorian, "date"));
-				// add exhaustive tests here
+				t.is(0, dojo.date.compare(new Date(2008, 11, 19), dateGregorian, "date"));//Date month 0-11
+				
+				dateHebrew = new dojox.date.HebrewDate(5765, 7, 9); 
+				dateGregorian = dateHebrew.toGregorian();
+				t.is(0, dojo.date.compare(new Date(2005, 3, 18), dateGregorian, "date"));
+				
+				dateHebrew = new dojox.date.HebrewDate(5767, 10, 26); 
+				dateGregorian = dateHebrew.toGregorian();
+				t.is(0, dojo.date.compare(new Date(2007, 7, 10), dateGregorian, "date"));
+				
+				dateHebrew = new dojox.date.HebrewDate(5769, 7, 26); 
+				dateGregorian = dateHebrew.toGregorian();
+				t.is(0, dojo.date.compare(new Date(2009, 4, 20), dateGregorian, "date"));
+				
+				dateHebrew = new dojox.date.HebrewDate(5770, 10, 20); 
+				dateGregorian = dateHebrew.toGregorian();
+				t.is(0, dojo.date.compare(new Date(2010, 6, 31), dateGregorian, "date"));
+				
+				dateHebrew = new dojox.date.HebrewDate(5772, 0, 3); 
+				dateGregorian = dateHebrew.toGregorian();
+				t.is(0, dojo.date.compare(new Date(2011, 9, 1), dateGregorian, "date"));				
 			}
 		},
 		{
@@ -28,6 +47,30 @@ tests.register("dojox.date.tests.HebrewDate",
 				var dateHebrewFromGreg= dojox.date.HebrewDate.fromGregorian(dateGregorian);
 				t.is(0, dojo.date.compare( dateHebrewFromGreg.toGregorian(), dateGregorian, "date"));
 				t.is(0, dojo.date.compare( dateHebrewFromGreg.toGregorian(), dateGregorian));
+				
+				dateGregorian = new Date(2008, 11, 18);  //Date month 0-11
+				dateHebrewFromGreg = dojox.date.HebrewDate.fromGregorian(dateGregorian);
+				t.is(0, dojo.date.compare(new dojox.date.HebrewDate(5769, 2, 21), dateHebrewFromGreg, "date")); //HebrewDate month 0-12
+	
+				dateGregorian = new Date(2005, 3, 18);
+				dateHebrewFromGreg = dojox.date.HebrewDate.fromGregorian(dateGregorian);
+				t.is(0, dojo.date.compare(new dojox.date.HebrewDate(5765, 7, 9), dateHebrewFromGreg, "date"));
+				
+				dateGregorian = new Date(2007, 7, 10);
+				dateHebrewFromGreg = dojox.date.HebrewDate.fromGregorian(dateGregorian);
+				t.is(0, dojo.date.compare(new dojox.date.HebrewDate(5767, 10, 26), dateHebrewFromGreg, "date"));					
+				
+				dateGregorian = new Date(2009, 4, 20);
+				dateHebrewFromGreg = dojox.date.HebrewDate.fromGregorian(dateGregorian);
+				t.is(0, dojo.date.compare(new dojox.date.HebrewDate(5769, 7, 26), dateHebrewFromGreg, "date"));				
+				
+				dateGregorian = new Date(2010, 6, 31);
+				dateHebrewFromGreg = dojox.date.HebrewDate.fromGregorian(dateGregorian);
+				t.is(0, dojo.date.compare(new dojox.date.HebrewDate(5770, 10, 20), dateHebrewFromGreg, "date"));	
+				
+				dateGregorian = new Date(2011, 9, 1);
+				dateHebrewFromGreg = dojox.date.HebrewDate.fromGregorian(dateGregorian);
+				t.is(0, dojo.date.compare(new dojox.date.HebrewDate(5772, 0, 3), dateHebrewFromGreg, "date"));					
 			}
 		},
 		{
