@@ -22,6 +22,7 @@ dojo.provide("dojox.embed.Flash");
 		style: null,
 		redirect: null
 	};
+
 	function prep(kwArgs){
 		// console.warn("KWARGS:", kwArgs)
 		kwArgs = dojo.delegate(_baseKwArgs, kwArgs);
@@ -32,7 +33,7 @@ dojo.provide("dojox.embed.Flash");
 		}
 
 		if(!("id" in kwArgs)){
-			kwArgs.id = keyBase + (keyCount++);
+			kwArgs.id = (keyBase + keyCount++);
 		}
 		return kwArgs;
 	}
@@ -237,6 +238,9 @@ dojo.provide("dojox.embed.Flash");
 		this.id = null;
 		this.movie = null;
 		this.domNode = null;
+		if(node){
+			node = dojo.byId(node);
+		}
 		if(kwArgs && node){
 			this.init(kwArgs, node);
 		}
