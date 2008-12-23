@@ -243,11 +243,9 @@ dojo.declare("dojox.data.JsonRestStore",
 			if(attribute == store.idAttribute){
 				throw new Error("Can not change the identity attribute for an item");
 			}
-			if(old !== value){
-				store.changing(item);
-				item[attribute]=value;
-				store.onSet(item,attribute,old,value);
-			}
+			store.changing(item);
+			item[attribute]=value;
+			store.onSet(item,attribute,old,value);
 		},
 		setValues: function(item, attribute, values){
 			// summary:

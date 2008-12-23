@@ -132,7 +132,7 @@ dojo.declare("dojox.data.ServiceStore",
 
 			var res = [];
 			for(var i in item){
-				if(item.hasOwnProperty(i) && i != '__id' && i != '__clientId'){
+				if(item.hasOwnProperty(i) && !(i.charAt(0) == '_' && i.charAt(1) == '_')){
 					res.push(i);
 				}
 			}
