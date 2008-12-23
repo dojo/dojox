@@ -20,7 +20,7 @@ dojox.validate.isIpAddress = function(/*String*/value, /*Object?*/flags) {
 	//    flags.allowHybrid   IPv6 address written as six groups of four hexadecimal digits
 	//      followed by the usual 4 dotted decimal digit notation of IPv4. x:x:x:x:x:x:d.d.d.d
 
-	var re = new RegExp("^" + dojox.regexp.ipAddress(flags) + "$", "i");
+	var re = new RegExp("^" + dojox.validate.regexp.ipAddress(flags) + "$", "i");
 	return re.test(value); // Boolean
 }
 
@@ -35,7 +35,7 @@ dojox.validate.isUrl = function(/*String*/value, /*Object?*/flags) {
 	//    flags in regexp.ipAddress can be applied.
 	//    flags in regexp.tld can be applied.
 
-	var re = new RegExp("^" + dojox.regexp.url(flags) + "$", "i");
+	var re = new RegExp("^" + dojox.validate.regexp.url(flags) + "$", "i");
 	return re.test(value); // Boolean
 }
 
@@ -49,7 +49,7 @@ dojox.validate.isEmailAddress = function(/*String*/value, /*Object?*/flags) {
 	//    flags in regexp.ipAddress can be applied.
 	//    flags in regexp.tld can be applied.
 
-	var re = new RegExp("^" + dojox.regexp.emailAddress(flags) + "$", "i");
+	var re = new RegExp("^" + dojox.validate.regexp.emailAddress(flags) + "$", "i");
 	return re.test(value); // Boolean
 }
 
@@ -64,7 +64,7 @@ dojox.validate.isEmailAddressList = function(/*String*/value, /*Object?*/flags) 
 	//    flags in regexp.ipAddress can be applied.
 	//    flags in regexp.tld can be applied.
 
-	var re = new RegExp("^" + dojox.regexp.emailAddressList(flags) + "$", "i");
+	var re = new RegExp("^" + dojox.validate.regexp.emailAddressList(flags) + "$", "i");
 	return re.test(value); // Boolean
 }
 

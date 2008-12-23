@@ -1,6 +1,7 @@
 dojo.provide("dojox.validate.us");
 dojo.require("dojox.validate._base");
 
+
 dojox.validate.us.isState = function(/*String*/value, /*Object?*/flags){
 	// summary: Validates US state and territory abbreviations.
 	//
@@ -9,7 +10,7 @@ dojox.validate.us.isState = function(/*String*/value, /*Object?*/flags){
 	//    flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
 	//    flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
 
-	var re = new RegExp("^" + dojox.regexp.us.state(flags) + "$", "i");
+	var re = new RegExp("^" + dojox.validate.regexp.us.state(flags) + "$", "i");
 	return re.test(value); // Boolean
 }
 

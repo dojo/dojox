@@ -1,6 +1,73 @@
 dojo.provide("dojox.validate.check");
-
+dojo.experimental
 dojo.require("dojox.validate._base");
+
+/**
+	FIXME: How much does this overlap with dojox.form.Manager and friends?
+
+	Procedural API Description
+
+		The main aim is to make input validation expressible in a simple format.
+		You define profiles which declare the required and optional fields and any constraints they might have.
+		The results are provided as an object that makes it easy to handle missing and invalid input.
+
+	Usage
+
+		var results = dojox.validate.check(form, profile);
+
+	Profile Object
+
+		var profile = {
+			// filters change the field value and are applied before validation.
+			trim: ["tx1", "tx2"],
+			uppercase: ["tx9"],
+			lowercase: ["tx5", "tx6", "tx7"],
+			ucfirst: ["tx10"],
+			digit: ["tx11"],
+
+			// required input fields that are blank will be reported missing.
+			// required radio button groups and drop-down lists with no selection will be reported missing.
+			// checkbox groups and selectboxes can be required to have more than one value selected.
+			// List required fields by name and use this notation to require more than one value: {checkboxgroup: 2}, {selectboxname: 3}.
+			required: ["tx7", "tx8", "pw1", "ta1", "rb1", "rb2", "cb3", "s1", {"doubledip":2}, {"tripledip":3}],
+
+			// dependant/conditional fields are required if the target field is present and not blank.
+			// At present only textbox, password, and textarea fields are supported.
+			dependencies:	{
+				cc_exp: "cc_no",	
+				cc_type: "cc_no"	
+			},
+
+			// Fields can be validated using any boolean valued function.  
+			// Use arrays to specify parameters in addition to the field value.
+			constraints: {
+				field_name1: myValidationFunction,
+				field_name2: dojox.validate.isInteger,
+				field_name3: [myValidationFunction, additional parameters],
+				field_name4: [dojox.validate.isValidDate, "YYYY.MM.DD"],
+				field_name5: [dojox.validate.isEmailAddress, false, true]
+			},
+
+			// Confirm is a sort of conditional validation.
+			// It associates each field in its property list with another field whose value should be equal.
+			// If the values are not equal, the field in the property list is reported as Invalid. Unless the target field is blank.
+			confirm: {
+				email_confirm: "email",	
+				pw2: "pw1"
+			}
+		};
+
+	Results Object
+
+		isSuccessful(): Returns true if there were no invalid or missing fields, else it returns false.
+		hasMissing():  Returns true if the results contain any missing fields.
+		getMissing():  Returns a list of required fields that have values missing.
+		isMissing(field):  Returns true if the field is required and the value is missing.
+		hasInvalid():  Returns true if the results contain fields with invalid data.
+		getInvalid():  Returns a list of fields that have invalid values.
+		isInvalid(field):  Returns true if the field has an invalid value.
+
+*/
 
 dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 	// summary: validates user input of an HTML form based on input profile

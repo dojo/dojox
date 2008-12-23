@@ -4,7 +4,7 @@ dojo.require("dojox.validate.creditCard");
 tests.register("dojox.validate.tests.creditcard",
 	[{
 		name:"isValidLuhn",
-		runTests: function(tests) { 
+		runTest: function(tests) { 
 			tests.t(dojox.validate.isValidLuhn('5105105105105100')); //test string input
 			tests.t(dojox.validate.isValidLuhn('5105-1051 0510-5100')); //test string input with dashes and spaces (commonly used when entering card #'s)
 			tests.t(dojox.validate.isValidLuhn(38520000023237)); //test numerical input as well
@@ -15,7 +15,7 @@ tests.register("dojox.validate.tests.creditcard",
 	},
 	{
 		name:"isValidCvv", 
-		runTests: function(tests) {
+		runTest: function(tests) {
 			tests.t(dojox.validate.isValidCvv('123','mc')); //string is ok
 			tests.f(dojox.validate.isValidCvv('5AA','ec')); //invalid characters are not ok
 			tests.t(dojox.validate.isValidCvv(723,'mc')); //numbers are ok too
@@ -31,7 +31,7 @@ tests.register("dojox.validate.tests.creditcard",
 	},
 	{
 		name:"isValidCreditCard",
-		runTests: function(tests) {
+		runTest: function(tests) {
 			//misc checks
 			tests.t(dojox.validate.isValidCreditCard('5105105105105100','mc')); //test string input
 			tests.t(dojox.validate.isValidCreditCard('5105-1051 0510-5100','mc')); //test string input with dashes and spaces (commonly used when entering card #'s)
@@ -72,7 +72,7 @@ tests.register("dojox.validate.tests.creditcard",
 	},
 	{
 		name:"isValidCreditCardNumber",
-		runTests: function(tests) {
+		runTest: function(tests) {
 			//misc checks
 			tests.t(dojox.validate.isValidCreditCardNumber('5105105105105100','mc')); //test string input
 			tests.t(dojox.validate.isValidCreditCardNumber('5105-1051 0510-5100','mc')); //test string input with dashes and spaces (commonly used when entering card #'s)
