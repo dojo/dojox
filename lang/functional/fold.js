@@ -29,17 +29,19 @@ dojo.require("dojox.lang.functional.lambda");
 			//	value.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
+			var i, n;
 			if(d.isArray(a)){
 				// array
-				for(var i = 0, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
+				for(i = 0, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
-				for(var i = 0; a.hasNext(); z = f.call(o, z, a.next(), i++, a));
+				for(i = 0; a.hasNext(); z = f.call(o, z, a.next(), i++, a));
 			}else{
 				// object/dictionary
-				for(var i in a){
-					if(i in empty){ continue; }
-					z = f.call(o, z, a[i], i, a);
+				for(i in a){
+					if(!(i in empty)){
+						z = f.call(o, z, a[i], i, a);
+					}
 				}
 			}
 			return z;	// Object
@@ -49,27 +51,28 @@ dojo.require("dojox.lang.functional.lambda");
 			//	to right; returns the final value.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var z;
+			var z, i, n;
 			if(d.isArray(a)){
 				// array
 				z = a[0];
-				for(var i = 1, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
+				for(i = 1, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
 				if(a.hasNext()){
 					z = a.next();
-					for(var i = 1; a.hasNext(); z = f.call(o, z, a.next(), i++, a));
+					for(i = 1; a.hasNext(); z = f.call(o, z, a.next(), i++, a));
 				}
 			}else{
 				// object/dictionary
 				var first = true;
-				for(var i in a){
-					if(i in empty){ continue; }
-					if(first){
-						z = a[i];
-						first = false;
-					}else{
-						z = f.call(o, z, a[i], i, a);
+				for(i in a){
+					if(!(i in empty)){
+						if(first){
+							z = a[i];
+							first = false;
+						}else{
+							z = f.call(o, z, a[i], i, a);
+						}
 					}
 				}
 			}
@@ -89,8 +92,8 @@ dojo.require("dojox.lang.functional.lambda");
 			//	to left; returns the final value.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var n = a.length, z = a[n - 1];
-			for(var i = n - 1; i > 0; --i, z = f.call(o, z, a[i], i, a));
+			var n = a.length, z = a[n - 1], i = n - 1;
+			for(; i > 0; --i, z = f.call(o, z, a[i], i, a));
 			return z;	// Object
 		},
 		// JS 1.8 standard array functions, which can take a lambda as a parameter.

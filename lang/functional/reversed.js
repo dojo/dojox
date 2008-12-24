@@ -25,8 +25,8 @@ dojo.require("dojox.lang.functional.lambda");
 			//	implemented by the provided function.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var t = [], v;
-			for(var i = a.length - 1; i >= 0; --i){
+			var t = [], v, i = a.length - 1;
+			for(; i >= 0; --i){
 				v = a[i];
 				if(f.call(o, v, i, a)){ t.push(v); }
 			}
@@ -43,8 +43,8 @@ dojo.require("dojox.lang.functional.lambda");
 			//	a provided function on every element in this array.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var n = a.length, t = new Array(n);
-			for(var i = n - 1, j = 0; i >= 0; t[j++] = f.call(o, a[i], i, a), --i);
+			var n = a.length, t = new Array(n), i = n - 1, j = 0;
+			for(; i >= 0; t[j++] = f.call(o, a[i], i, a), --i);
 			return t;	// Array
 		},
 		everyRev: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){

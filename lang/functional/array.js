@@ -26,18 +26,26 @@ dojo.require("dojox.lang.functional.lambda");
 			//	implemented by the provided function.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var t = [], v;
+			var t = [], v, i, n;
 			if(d.isArray(a)){
 				// array
-				for(var i = 0, n = a.length; i < n; ++i){
+				for(i = 0, n = a.length; i < n; ++i){
 					v = a[i];
 					if(f.call(o, v, i, a)){ t.push(v); }
 				}
-			}else{
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
-				for(var i = 0; a.hasNext();){
+				for(i = 0; a.hasNext();){
 					v = a.next();
 					if(f.call(o, v, i++, a)){ t.push(v); }
+				}
+			}else{
+				// object/dictionary
+				for(i in a){
+					if(!(i in empty)){
+						v = a[i];
+						if(f.call(o, v, i, a)){ t.push(v); }
+					}
 				}
 			}
 			return t;	// Array
@@ -46,17 +54,19 @@ dojo.require("dojox.lang.functional.lambda");
 			// summary: executes a provided function once per array element.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
+			var i, n;
 			if(d.isArray(a)){
 				// array
-				for(var i = 0, n = a.length; i < n; f.call(o, a[i], i, a), ++i);
+				for(i = 0, n = a.length; i < n; f.call(o, a[i], i, a), ++i);
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
-				for(var i = 0; a.hasNext(); f.call(o, a.next(), i++, a));
+				for(i = 0; a.hasNext(); f.call(o, a.next(), i++, a));
 			}else{
 				// object/dictionary
-				for(var i in a){
-					if(i in empty){ continue; }
-					f.call(o, a[i], i, a);
+				for(i in a){
+					if(!(i in empty)){
+						f.call(o, a[i], i, a);
+					}
 				}
 			}
 			return o;	// Object
@@ -66,15 +76,23 @@ dojo.require("dojox.lang.functional.lambda");
 			//	a provided function on every element in this array.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var t, n;
+			var t, n, i;
 			if(d.isArray(a)){
 				// array
 				t = new Array(n = a.length);
-				for(var i = 0; i < n; t[i] = f.call(o, a[i], i, a), ++i);
-			}else{
+				for(i = 0; i < n; t[i] = f.call(o, a[i], i, a), ++i);
+			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
 				t = [];
-				for(var i = 0; a.hasNext(); t.push(f.call(o, a.next(), i++, a)));
+				for(i = 0; a.hasNext(); t.push(f.call(o, a.next(), i++, a)));
+			}else{
+				// object/dictionary
+				t = [];
+				for(i in a){
+					if(!(i in empty)){
+						t.push(f.call(o, a[i], i, a));
+					}
+				}
 			}
 			return t;	// Array
 		},
@@ -83,26 +101,28 @@ dojo.require("dojox.lang.functional.lambda");
 			//	implemented by the provided function.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
+			var i, n;
 			if(d.isArray(a)){
 				// array
-				for(var i = 0, n = a.length; i < n; ++i){
+				for(i = 0, n = a.length; i < n; ++i){
 					if(!f.call(o, a[i], i, a)){
 						return false;	// Boolean
 					}
 				}
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
-				for(var i = 0; a.hasNext();){
+				for(i = 0; a.hasNext();){
 					if(!f.call(o, a.next(), i++, a)){
 						return false;	// Boolean
 					}
 				}
 			}else{
 				// object/dictionary
-				for(var i in a){
-					if(i in empty){ continue; }
-					if(!f.call(o, a[i], i, a)){
-						return false;	// Boolean
+				for(i in a){
+					if(!(i in empty)){
+						if(!f.call(o, a[i], i, a)){
+							return false;	// Boolean
+						}
 					}
 				}
 			}
@@ -113,26 +133,28 @@ dojo.require("dojox.lang.functional.lambda");
 			//	implemented by the provided function.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
+			var i, n;
 			if(d.isArray(a)){
 				// array
-				for(var i = 0, n = a.length; i < n; ++i){
+				for(i = 0, n = a.length; i < n; ++i){
 					if(f.call(o, a[i], i, a)){
 						return true;	// Boolean
 					}
 				}
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
-				for(var i = 0; a.hasNext();){
+				for(i = 0; a.hasNext();){
 					if(f.call(o, a.next(), i++, a)){
 						return true;	// Boolean
 					}
 				}
 			}else{
 				// object/dictionary
-				for(var i in a){
-					if(i in empty){ continue; }
-					if(f.call(o, a[i], i, a)){
-						return true;	// Boolean
+				for(i in a){
+					if(!(i in empty)){
+						if(f.call(o, a[i], i, a)){
+							return true;	// Boolean
+						}
 					}
 				}
 			}

@@ -20,9 +20,9 @@ dojo.require("dojox.lang.functional.lambda");
 			// summary: builds an array by repeatedly applying a unary function N times
 			//	with a seed value Z. N should be greater than 0.
 			o = o || d.global; f = df.lambda(f);
-			var t = new Array(n);
+			var t = new Array(n), i = 1;
 			t[0] = z;
-			for(var i = 1; i < n; t[i] = z = f.call(o, z), ++i);
+			for(; i < n; t[i] = z = f.call(o, z), ++i);
 			return t;	// Array
 		},
 		until: function(/*Function|String|Array*/ pr, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){

@@ -26,22 +26,23 @@ dojo.require("dojox.lang.functional.lambda");
 			//	of values produced by foldl() at that point.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var t, n;
+			var t, n, i;
 			if(d.isArray(a)){
 				// array
 				t = new Array((n = a.length) + 1);
 				t[0] = z;
-				for(var i = 0; i < n; z = f.call(o, z, a[i], i, a), t[++i] = z);
+				for(i = 0; i < n; z = f.call(o, z, a[i], i, a), t[++i] = z);
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
 				// iterator
 				t = [z];
-				for(var i = 0; a.hasNext(); t.push(z = f.call(o, z, a.next(), i++, a)));
+				for(i = 0; a.hasNext(); t.push(z = f.call(o, z, a.next(), i++, a)));
 			}else{
 				// object/dictionary
 				t = [z];
-				for(var i in a){
-					if(i in empty){ continue; }
-					t.push(z = f.call(o, z, a[i], i, a));
+				for(i in a){
+					if(!(i in empty)){
+						t.push(z = f.call(o, z, a[i], i, a));
+					}
 				}
 			}
 			return t;	// Array
@@ -52,7 +53,7 @@ dojo.require("dojox.lang.functional.lambda");
 			//	point.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var t, n, z;
+			var t, n, z, first = true;
 			if(d.isArray(a)){
 				// array
 				t = new Array(n = a.length);
@@ -66,14 +67,14 @@ dojo.require("dojox.lang.functional.lambda");
 				}
 			}else{
 				// object/dictionary
-				var first = true;
 				for(var i in a){
-					if(i in empty){ continue; }
-					if(first){
-						t = [z = a[i]];
-						first = false;
-					}else{
-						t.push(z = f.call(o, z, a[i], i, a));
+					if(!(i in empty)){
+						if(first){
+							t = [z = a[i]];
+							first = false;
+						}else{
+							t.push(z = f.call(o, z, a[i], i, a));
+						}
 					}
 				}
 			}
@@ -85,9 +86,9 @@ dojo.require("dojox.lang.functional.lambda");
 			//	of values produced by foldr() at that point.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var n = a.length, t = new Array(n + 1);
+			var n = a.length, t = new Array(n + 1), i = n;
 			t[n] = z;
-			for(var i = n; i > 0; --i, z = f.call(o, z, a[i], i, a), t[i] = z);
+			for(; i > 0; --i, z = f.call(o, z, a[i], i, a), t[i] = z);
 			return t;	// Array
 		},
 		scanr1: function(/*Array|String*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -96,9 +97,9 @@ dojo.require("dojox.lang.functional.lambda");
 			//	point.
 			if(typeof a == "string"){ a = a.split(""); }
 			o = o || d.global; f = df.lambda(f);
-			var n = a.length, t = new Array(n), z = a[n - 1];
-			t[n - 1] = z;
-			for(var i = n - 1; i > 0; --i, z = f.call(o, z, a[i], i, a), t[i] = z);
+			var n = a.length, t = new Array(n), z = a[n - 1], i = n - 1;
+			t[i] = z;
+			for(; i > 0; --i, z = f.call(o, z, a[i], i, a), t[i] = z);
 			return t;	// Array
 		}
 	});

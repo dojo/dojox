@@ -19,11 +19,11 @@ dojo.require("dojox.lang.functional.lambda");
 
 	var currying = function(/*Object*/ info){
 		return function(){	// Function
+			var args = info.args.concat(ap.slice.call(arguments, 0));
 			if(arguments.length + info.args.length < info.arity){
-				return currying({func: info.func, arity: info.arity, 
-					args: ap.concat.apply(info.args, arguments)});
+				return currying({func: info.func, arity: info.arity, args: args});
 			}
-			return info.func.apply(this, ap.concat.apply(info.args, arguments));
+			return info.func.apply(this, args);
 		};
 	};
 
@@ -44,18 +44,19 @@ dojo.require("dojox.lang.functional.lambda");
 			// description: This method is used to produce partially bound 
 			//	functions. If you want to change the order of arguments, use
 			//	dojox.lang.functional.mixer() or dojox.lang.functional.flip().
-			var a = arguments, args = new Array(a.length - 1), p = [];
+			var a = arguments, l = a.length, args = new Array(l - 1), p = [], i = 1, t;
 			f = df.lambda(f);
-			for(var i = 1; i < a.length; ++i){
-				var t = a[i];
+			for(; i < l; ++i){
+				t = a[i];
 				args[i - 1] = t;
-				if(t == df.arg){
+				if(t === df.arg){
 					p.push(i - 1);
 				}
 			}
 			return function(){	// Function
-				var t = ap.slice.call(args, 0); // clone the array
-				for(var i = 0; i < p.length; ++i){
+				var t = ap.slice.call(args, 0), // clone the array
+					i = 0, l = p.length;
+				for(; i < l; ++i){
 					t[p[i]] = arguments[i];
 				}
 				return f.apply(this, t);
@@ -68,8 +69,8 @@ dojo.require("dojox.lang.functional.lambda");
 			//	of supplied arguments.
 			f = df.lambda(f);
 			return function(){	// Function
-				var t = new Array(mix.length);
-				for(var i = 0; i < mix.length; ++i){
+				var t = new Array(mix.length), i = 0, l = mix.length;
+				for(; i < l; ++i){
 					t[i] = arguments[mix[i]];
 				}
 				return f.apply(this, t);
@@ -81,8 +82,8 @@ dojo.require("dojox.lang.functional.lambda");
 			f = df.lambda(f);
 			return function(){	// Function
 				// reverse arguments
-				var a = arguments, l = a.length - 1, t = new Array(l + 1), i;
-				for(i = 0; i <= l; ++i){
+				var a = arguments, l = a.length - 1, t = new Array(l + 1), i = 0;
+				for(; i <= l; ++i){
 					t[l - i] = a[i];
 				}
 				return f.apply(this, t);
