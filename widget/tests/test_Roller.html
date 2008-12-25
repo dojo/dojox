@@ -22,8 +22,8 @@
 		var store = new dojox.data.GoogleFeedStore();
 		// then the widget
 		var roller = new dojox.widget.Roller({
-			autoStart:false,
-			delay:6000
+			autoStart: false,
+			delay: 6000
 		});
 		// and put it in the dom somewhere
 		dojo.byId("wrapper").appendChild(roller.domNode);
@@ -63,8 +63,8 @@
 				
 				var s = source();
 				if(s){
-					request.query.url = s +"";
-					setTimeout(dojo.hitch(store,"fetch", request), 5000);
+					request.query.url = s + "";
+					setTimeout(dojo.hitch(store, "fetch", request), 5000);
 				}
 				
 				// make sure she's running:
@@ -100,18 +100,18 @@
 		body {
 			font-family: Arial;
 		}
-		.dojocRoller {
+		.dojoxRoller {
 			list-style:none;
 			margin:0; padding:7px;
 		}
-		.dj_ie6 ul.dojocRoller li {
+		.dj_ie6 ul.dojoxRoller li {
 			float:left;
 		}
-		div ul.dojocRoller li {
+		div ul.dojoxRoller li {
 			padding:4px;
 			text-align:center;
 		}
-		#wrapper .dojocRoller {
+		#wrapper .dojoxRoller {
 			padding:0; margin:0;
 		}
 		#wrapper .exSummary,
