@@ -9,6 +9,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 	[dijit._Widget, dijit._Templated],
 	{
 	// summary: A dragable handle used to resize an attached node.
+	//
 	// description:
 	//	The handle on the bottom-right corner of FloatingPane or other widgets that allows
 	//	the widget to be resized.
@@ -69,14 +70,11 @@ dojo.declare("dojox.layout.ResizeHandle",
 			// resizes something. Since there is only one mouse pointer he
 			// can't at once resize multiple things interactively.
 			this._resizeHelper = dijit.byId('dojoxGlobalResizeHelper');
-
 			if (!this._resizeHelper){
-				var tmpNode = document.createElement('div');
-				tmpNode.style.display = "none";
-				dojo.body().appendChild(tmpNode);
-				dojo.addClass(tmpNode,this.activeResizeClass);
 				this._resizeHelper = new dojox.layout._ResizeHelper({ 
-						id: 'dojoxGlobalResizeHelper'},tmpNode);
+						id: 'dojoxGlobalResizeHelper'
+				}).placeAt(dojo.body());
+				dojo.addClass(this._resizeHelper.domNode, this.activeResizeClass);
 				this._resizeHelper.startup();
 			}
 		}else{ this.animateSizing = false; } 	
@@ -142,7 +140,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 		if(this.activeResize){
 			this._changeSizing(e);
 		}else{
-			var tmp = this._getNewCoords(e);	
+			var tmp = this._getNewCoords(e);
 			if(tmp === false){ return; }
 			this._resizeHelper.resize(tmp);
 		}
@@ -161,12 +159,12 @@ dojo.declare("dojox.layout.ResizeHandle",
 		}
 		this._activeResizeLastEvent = e; 
 
-		var dx = this.startPoint.x - e.clientX;
-		var dy = this.startPoint.y - e.clientY;
+		var dx = this.startPoint.x - e.clientX,
+			dy = this.startPoint.y - e.clientY,
+			newW = (this._resizeX) ? this.startSize.w - dx : this.startSize.w,
+			newH = (this._resizeY) ? this.startSize.h - dy : this.startSize.h
+		;
 		
-		var newW = (this._resizeX) ? this.startSize.w - dx : this.startSize.w;
-		var newH = (this._resizeY) ? this.startSize.h - dy : this.startSize.h;
-
 		// minimum size check
 		if(this.minSize){
 			//var mb = dojo.marginBox(this.targetDomNode);
@@ -177,15 +175,15 @@ dojo.declare("dojox.layout.ResizeHandle",
 				newH = this.minSize.h;
 			}
 		}
-		return {w:newW, h:newH};  // Object
+		return { w:newW, h:newH };  // Object
 	},
 	
 	_changeSizing: function(/*Event*/ e){
 		// summary: apply sizing information based on information in (e) to attached node
 		var tmp = this._getNewCoords(e);
-		if(tmp===false){ return; }
+		if(tmp === false){ return; }
 
-		if(this.targetWidget && typeof this.targetWidget.resize == "function"){ 
+		if(this.targetWidget && dojo.isFunction(this.targetWidget.resize)){ 
 			this.targetWidget.resize(tmp);
 		}else{
 			if(this.animateSizing){
@@ -207,15 +205,17 @@ dojo.declare("dojox.layout.ResizeHandle",
 				]);
 				anim.play();
 			}else{
-				dojo.style(this.targetDomNode,"width",tmp.w+"px"); 
-				dojo.style(this.targetDomNode,"height",tmp.h+"px");
+				dojo.style(this.targetDomNode,{
+					width: tmp.w + "px",
+					height: tmp.h + "px"	
+				});
 			}
 		}	
 	},
 
 	_endSizing: function(/*Event*/ e){
 		// summary: disconnect listenrs and cleanup sizing
-		dojo.forEach(this._pconnects,dojo.disconnect);
+		dojo.forEach(this._pconnects, dojo.disconnect);
 		if(!this.activeResize){
 			this._resizeHelper.hide();
 			this._changeSizing(e);
@@ -235,26 +235,21 @@ dojo.declare("dojox.layout._ResizeHelper",
 	{
 	// summary: A global private resize helper shared between any resizeHandle with activeSizing='false;
 	
-	startup: function(){
-		if(this._started){ return; }	
-		this.inherited(arguments);
-	},
-
 	show: function(){
 		// summary: show helper to start resizing
-		dojo.fadeIn({ node: this.domNode, duration:120, 
-			beforeBegin: dojo.hitch(this,function(){
-				this.domNode.style.display=''; 
-			})
+		dojo.fadeIn({ 
+			node: this.domNode, 
+			duration: 120, 
+			beforeBegin: dojo.partial(dojo.style, this.domNode, "display", "")
 		}).play();
 	},
 
 	hide: function(){
 		// summary: hide helper after resizing is complete
-		dojo.fadeOut({ node:this.domNode, duration:250,
-			onEnd: dojo.hitch(this,function(){
-				this.domNode.style.display="none";
-			})
+		dojo.fadeOut({ 
+			node: this.domNode, 
+			duration: 250,
+			onEnd: dojo.partial(dojo.style, this.domNode, "display", "none")
 		}).play();
 	},
 	
