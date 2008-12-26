@@ -31,6 +31,15 @@ dojo.declare("dojox.widget.FisheyeLite",
 	// 	|		new dojox.widget.FisheyeLite({},n);
 	//	|	});
 	//
+	//
+	// example:
+	//	|	new dojox.widget.FisheyeLite({ 
+	//	|		properties:{
+	//	|			// height is literal, width is multiplied
+	//	|			height:{ end: 200 }, width:2.3
+	//	|		}
+	//	|	}, "someNode");
+	//
 	// duationIn: Integer
 	//		The time (in ms) the run the show animation
 	durationIn: 350,
@@ -48,8 +57,11 @@ dojo.declare("dojox.widget.FisheyeLite",
 	easeOut: dojo.fx.easing.elasticOut,
 
 	//	properties: Object
-	//			An object of "property":scale pairs
+	//			An object of "property":scale pairs, or "property":{} pairs.
 	//			defaults to font-size with a scale of 2.75
+	//			If a named property is an integer or float, the "scale multiplier"
+	//			is used. If the named property is an object, that object is mixed
+	//			into the animation directly. eg: height:{ end:20, unit:"em" }
 	properties: null,
 	
 	// unit: String
@@ -69,9 +81,9 @@ dojo.declare("dojox.widget.FisheyeLite",
 		this._target = dojo.query(".fisheyeTarget", this.domNode)[0] || this.domNode;
 		this._makeAnims();
 		
-		this.connect(this.domNode,"onmouseover","show");
-		this.connect(this.domNode,"onmouseout","hide");
-		this.connect(this._target,"onclick","onClick");
+		this.connect(this.domNode, "onmouseover", "show");
+		this.connect(this.domNode, "onmouseout", "hide");
+		this.connect(this._target, "onclick", "onClick");
 
 	},
 	
@@ -94,17 +106,19 @@ dojo.declare("dojox.widget.FisheyeLite",
 		//		Pre-generate the animations
 
 		// create two properties: objects, one for each "state"
-		var _in = {};
-		var _out = {};
-		var cs = dojo.getComputedStyle(this._target);		
+		var _in = {}, _out = {}, cs = dojo.getComputedStyle(this._target);
 		for(var p in this.properties){
-			var v = parseInt(cs[p]);
+			var prop = this.properties[p],
+				deep = dojo.isObject(prop),
+				v = parseInt(cs[p])
+			;
 			// note: do not set negative scale for [a list of properties] for IE support
 			// note: filter:'s are your own issue, too ;)
+			// FIXME: this.unit here is bad, likely. d._toPixelValue ?
 			_out[p] = { end: v, unit:this.unit };
-			_in[p] = {	end: (this.properties[p]*v), unit:this.unit };
+			_in[p] = deep ? prop : { end: prop * v, unit:this.unit };
 		}
-									
+		
 		this._runningIn = dojo.animateProperty({
 			node: this._target,
 			easing: this.easeIn,
@@ -119,7 +133,7 @@ dojo.declare("dojox.widget.FisheyeLite",
 			properties: _out
 		});
 		
-		this.connect(this._runningIn,"onEnd",dojo.hitch(this,"onSelected",this));
+		this.connect(this._runningIn, "onEnd", dojo.hitch(this, "onSelected", this));
 	},
 	
 	onClick: function(/* Event */e){

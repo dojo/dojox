@@ -114,13 +114,22 @@
 				}
 			});
 			
-
+			// show the new non-numeric multiplier version of fisheyelite
+			dojo.query(".advancedProps").instantiate(dojox.widget.FisheyeLite,{
+				properties:{
+					height: {
+						end: 100, unit:"px"
+					}
+				}
+			})
+			
 			// 
 			var vv = 0;
 			var r = dijit.registry.byClass("dojox.widget.FisheyeLite")._hash;
 			for(var l in r){
 				vv++;
 			}
+			
 			// a few in markup, mostly from the query()'ies:
 			console.log("fisheyes on this page: ", vv);
 				
@@ -286,7 +295,25 @@
 				Suspendisse pulvinar.
 				</p>
 				
+				<p class="advancedProps" style="height:25px; background:#000">Lorem</p>
+				
 				<p>the end</p>
+				
+				<p>Aliquam vitae enim. Duis scelerisque metus auctor est venenatis
+				imperdiet. Fusce dignissim porta augue. Nulla vestibulum. Integer
+				lorem nunc, ullamcorper a, commodo ac, malesuada sed, dolor. Aenean
+				id mi in massa bibendum suscipit. Integer eros. Nullam suscipit
+				mauris. In pellentesque. Mauris ipsum est, pharetra semper,
+				pharetra in, viverra quis, tellus. Etiam purus. Quisque egestas,
+				tortor ac cursus lacinia, felis leo adipiscing nisi, et rhoncus
+				elit dolor eget eros. Fusce ut quam. Suspendisse eleifend leo vitae
+				ligula. Nulla facilisi. Nulla rutrum, erat vitae lacinia dictum,
+				pede purus imperdiet lacus, ut semper velit ante id metus. Praesent
+				massa dolor, porttitor sed, pulvinar in, consequat ut, leo. Nullam
+				nec est. Aenean id risus blandit tortor pharetra congue.
+				Suspendisse pulvinar.
+				</p>
+				
 				
 		</div>	
     </body>
