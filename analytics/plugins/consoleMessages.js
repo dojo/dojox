@@ -7,11 +7,11 @@ dojox.analytics.plugins.consoleMessages = new (function(){
 
 	var lvls = dojo.config["consoleLogFuncs"] || ["error", "warn", "info", "rlog"];
 	if(!console){
-		console={};
+		console = {};
 	}
 
-	for(var i=0; i<lvls.length;i++){
-		if (console[lvls[i]]){
+	for(var i=0; i < lvls.length; i++){
+		if(console[lvls[i]]){
 			dojo.connect(console, lvls[i], dojo.hitch(this, "addData", lvls[i]));
 		}else{
 			console[lvls[i]] = dojo.hitch(this, "addData", lvls[i]);	
