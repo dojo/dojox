@@ -48,19 +48,29 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 	//		list-items in the list, allowing for embedded lists to occur.
 	itemSelector: "> li",
 	
+	// durationIn: Integer
+	// 		Speed (in ms) to apply to the "in" animation (show the node)
+	durationIn: 400,
+	
+	// durationOut: Integer
+	//		Speed (in ms) to apply to the "out" animation (hide the showing node)
+	durationOut: 275,
 /*=====
 	// items: Array
 	//		If populated prior to instantiation, is used as the Items over the children
 	items: []
 =====*/	
 
+	// _idx: Integer
+	//		Index of the the currently visible item in the list of items[]
+	_idx: -1,
+	
 	postCreate: function(){
 
 		// add some instance vars:
 		if(!this["items"]){ 
 			this.items = [];
 		}
-		this._idx = -1;
 		
 		dojo.addClass(this.domNode,"dojoxRoller");
 		
@@ -71,11 +81,12 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 			if(i == 0){ 
 				this._roller = item; 
 				this._idx = 0; 
-			}else{ dojo._destroyElement(item); }
+			}else{ dojo.destroyElement(item); }
 		}, this);
 		
 		// handle the case where items[] were passed, and no srcNodeRef exists
 		if(!this._roller){
+		//	this._roller = dojo.element('li', null, this.domNode);
 			this._roller = this.domNode.appendChild(dojo.doc.createElement('li'));
 		}
 		// stub out animation creation (for overloading maybe later)
@@ -93,8 +104,8 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 		var n = this.domNode;
 		dojo.mixin(this, {
 			_anim: {
-				"in": dojo.fadeIn({ node:n, duration: 400 }),
-				"out": dojo.fadeOut({ node:n, duration: 275 })
+				"in": dojo.fadeIn({ node:n, duration: this.durationIn }),
+				"out": dojo.fadeOut({ node:n, duration: this.durationOut })
 			}
 		});
 		this._setupConnects();
@@ -157,31 +168,33 @@ dojo.declare("dojox.widget.RollerSlide", dojox.widget.Roller, {
 	//		a slide-from-bottom like effect. See `dojox.widget.Roller` for
 	//		full API information.
 	
+	durationOut: 175, // slightly faster than default
+	
 	makeAnims: function(){
 		// summary: Animation creator function. Need to create an 'in' and 'out'
 		// 		_Animation stored in _anim Object, which the rest of the widget
 		//		will reuse.
-		var n = this.domNode;
 
-		var pos = "position";
+		var n = this.domNode, pos = "position", 
+			props = {
+				top: { end: 0, start: 25 },
+				opacity: 1
+			}
+		;
+		
 		dojo.style(n, pos, "relative");
 		dojo.style(this._roller, pos, "absolute");
-
-		var props = {
-			top: { end: 0, start: 25 },
-			opacity: 1
-		};
 
 		dojo.mixin(this, {
 			_anim: {
 				
 				"in": dojo.animateProperty({ 
 					node: n, 
-					duration: 400,
+					duration: this.durationIn,
 					properties: props
 				}),
 				
-				"out": dojo.fadeOut({ node: n, duration: 175 })
+				"out": dojo.fadeOut({ node: n, duration: this.durationOut })
 			}
 		});
 		// don't forget to do this in the class. override if necessary.
