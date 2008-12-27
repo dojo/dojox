@@ -1036,7 +1036,7 @@ dojo.declare("dojox.layout.GridContainer",
 			this._canDisplayPopup = false;
 			setTimeout(dojo.hitch(this, function(){
 				this.containerNode.removeChild(attachPopup);
-				dojo._destroyElement(attachPopup);
+				dojo.destroy(attachPopup);
 				this._canDisplayPopup = true;
 			}), this.timeDisplayPopup);
 		}

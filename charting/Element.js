@@ -37,7 +37,7 @@ dojo.declare("dojox.charting.Element", null, {
 	},
 	destroyHtmlElements: function(){
 		if(this.htmlElements.length){
-			dojo.forEach(this.htmlElements, dojo._destroyElement);
+			dojo.forEach(this.htmlElements, dojo.destroy);
 			this.htmlElements = [];
 		}
 	},

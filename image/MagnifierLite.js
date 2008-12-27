@@ -123,7 +123,7 @@ dojo.declare("dojox.image.MagnifierLite", dijit._Widget,
 	},
 	
 	destroy: function(finalize){
-		dojo._destroyElement(this.glassNode);
+		dojo.destroy(this.glassNode);
 		this.inherited(arguments);
 	}
 

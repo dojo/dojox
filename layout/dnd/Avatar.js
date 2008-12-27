@@ -31,7 +31,7 @@ dojo.extend(dojox.layout.dnd.Avatar, {
 	},
 	destroy: function(){
 		// summary: Destroy this avatar instance
-		dojo._destroyElement(this.node);
+		dojo.destroy(this.node);
 		this.node = false;
 	},
 	/*Function: update

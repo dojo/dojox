@@ -427,14 +427,14 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 	destroy: function(){
 		// summary: destroy all relevant external resources and release all
 		//	external references to make this object garbage-collectible
-		dojo.forEach(this._nodes, dojo._destroyElement);
+		dojo.forEach(this._nodes, dojo.destroy);
 		this._nodes = [];
 		dojo.forEach(this._events, dojo.disconnect);
 		this._events = [];
 		this.rawNode = null;	// recycle it in _nodes, if it needs to be recycled
 		if(dojo.isIE){
 			while(this._parent.lastChild){
-				dojo._destroyElement(this._parent.lastChild);
+				dojo.destroy(this._parent.lastChild);
 			}
 		}else{
 			this._parent.innerHTML = "";

@@ -146,7 +146,7 @@ d.declare("dojox.image.LightboxNano", null, {
 		var a = this._connects || [];
 		a.push(this._onClickEvt);
 		d.forEach(a, function(e){ d.disconnect(e); });
-		d._destroyElement(this._node);
+		d.destroy(this._node);
 	},
 
 	_createDiv: function(/*String*/cssClass, /*boolean*/display){
@@ -319,7 +319,7 @@ d.declare("dojox.image.LightboxNano", null, {
 		// summary: Destroys the lightbox
 		d.style(this._node, "visibility", "visible");
 		d.forEach([this._img, this._bg], function(n){
-			d._destroyElement(n);
+			d.destroy(n);
 			n = null;
 		});
 		this._node.focus();

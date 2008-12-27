@@ -59,7 +59,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 		}
 		this._surfaces = [];
 		while(this.legendBody.lastChild){
-			dojo._destroyElement(this.legendBody.lastChild);
+			dojo.destroy(this.legendBody.lastChild);
 		}
 
 		if(this.horizontal){

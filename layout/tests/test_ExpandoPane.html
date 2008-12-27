@@ -86,7 +86,7 @@
 		};
 
 		var _clearSearch = function(){
-			dojo.query("li","searchResults").forEach(dojo._destroyElement);
+			dojo.query("li","searchResults").forEach(dojo.destroy);
 		};
 		
 		var shifter = function(input){

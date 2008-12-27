@@ -186,7 +186,7 @@ dojo.require("dojo.fx");
 
 		var finalize = function(){
 //			helperNode.parentNode.removeChild(helperNode);
-			dojo._destroyElement(helperNode);
+			dojo.destroy(helperNode);
 			// fixes a flicker when the animation ends
 			s.backgroundColor = endColor;
 			s.visibility = "visible";
@@ -369,7 +369,7 @@ dojo.require("dojo.fx");
 			hn[i] = dojo.clone(helperNode);
 			var	finalize = function(x){
 					return function(){
-						dojo._destroyElement(hn[x]);
+						dojo.destroy(hn[x]);
 					}
 				}(i)
 			;
@@ -485,7 +485,7 @@ dojo.require("dojo.fx");
 				}),
 				removeHelper = function(xn){
 					return function(){
-						dojo._destroyElement(xn);
+						dojo.destroy(xn);
 					}
 				}(hn)
 				;

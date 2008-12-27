@@ -209,7 +209,7 @@ dojo.declare("dojox.image.LightboxDialog",
 
 		if(this._wasStyled){
 			// ugly fix for IE being stupid:
-			dojo._destroyElement(_t.imgNode);
+			dojo.destroy(_t.imgNode);
 			_t.imgNode = dojo.clone(_t._clone);
 			dojo.place(_t.imgNode,_t.imageContainer,"first");
 			_t._makeAnims();
