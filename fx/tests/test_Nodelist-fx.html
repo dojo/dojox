@@ -20,25 +20,25 @@
 			border-bottom:1px dashed #b7b7b7;
 		}
 
-                .testBox {
-                        position:absolute;
-                        top:0; left:0;
-                        width:50px;
-                        height:50px;
-                        background:#ededed;
-                        border:1px solid #b7b7b7;
-                        -moz-border-radius:6pt;
-                        -webkit-border-radius:5pt;
-                        overflow:hidden; 
-                }
-                .rowOne { top:0; }
-                .rowTwo { top:60px; }
-                .rowThree { top:120px; }
+		.testBox {
+			position:absolute;
+			top:0; left:0;
+			width:50px;
+			height:50px;
+			background:#ededed;
+			border:1px solid #b7b7b7;
+			-moz-border-radius:6pt;
+			-webkit-border-radius:5pt;
+			overflow:hidden; 
+		}
+		.rowOne { top:0; }
+		.rowTwo { top:60px; }
+		.rowThree { top:120px; }
 		.rowFour { top:180px; }
 		
-                .iOne { left:0; }
-                .iTwo { left:60px; }
-                .iThree { left:120px; }
+		.iOne { left:0; }
+		.iTwo { left:60px; }
+		.iThree { left:120px; }
 		.iFour { left:180px; }
 		.iFive { left:240px; }
 		.iSix { left:300px; }
@@ -69,7 +69,7 @@
 							top:20, left:20,
 							duration:500
 						}).play(700);
-					}					
+					}
 				}).play(300);	
 			}
 		});
@@ -134,7 +134,7 @@
 			end: 0.35
 		},
 		slideBy: {
-			top:55, left: 55			
+			top:55, left: 55
 		},
 		
 		// mix these into every 'custom query animation'
@@ -211,7 +211,7 @@
 				var str = dojo.byId("customStr").value;
 				var animType;
 				dojo.query('.dijitRadioChecked').forEach(function(n){
-					animType = dijit.byNode(n).getValue();
+					animType = dijit.byNode(n).attr("value");
 				});
 				if(str && animType){
 					var theseArgs = animArgs[animType] || {};

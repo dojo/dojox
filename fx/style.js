@@ -51,8 +51,7 @@ dojo.require("dojo.fx");
 		var _after = _getStyleSnapshot(cs);
 		d[(addClass ? "removeClass" : "addClass")](node, args.cssClass); 
 
-		var calculated = {};
-		var i = 0;
+		var calculated = {}, i = 0;
 		d.forEach(dojox.fx._allowedProperties,function(prop){
 			if(_before[i] != _after[i]){
 				// FIXME: the static unit: px is not good, either. need to parse unit from computed style?
