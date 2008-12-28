@@ -164,7 +164,7 @@
 						table = dojo.byId("table"), names = [];
 					// clear the table
 					while(table.lastChild){
-						dojo._destroyElement(table.lastChild);
+						dojo.destroy(table.lastChild);
 					}
 					// show gathered values
 					for(var name in values){

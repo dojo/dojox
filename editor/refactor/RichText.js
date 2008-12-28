@@ -245,7 +245,7 @@ dojox.editor.refactor.RichTextIframeMixin = {
 					contentDoc.write(this._getIframeDocTxt(html));
 					contentDoc.close();
 					
-					dojo._destroyElement(tmpContent);
+					dojo.destroy(tmpContent);
 				}
 
 				// Wait for body to be available
@@ -259,7 +259,7 @@ dojox.editor.refactor.RichTextIframeMixin = {
 				this.onLoad();
 			}else{
 				// Iframe is already loaded, we are just switching the content
-				dojo._destroyElement(tmpContent);
+				dojo.destroy(tmpContent);
 				this.editNode.innerHTML = html;
 				this.onDisplayChanged();
 			}
@@ -1640,7 +1640,7 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 				}
 			}
 			this.textarea.value = save ? this._content : this.savedContent;
-			dojo._destroyElement(this.domNode);
+			dojo.destroy(this.domNode);
 			this.domNode = this.textarea;
 		}else{
 			// if(save){
