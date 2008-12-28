@@ -27,7 +27,7 @@ dojox.dtl._HtmlTemplated = {
 			this.render();
 			this.domNode = this._template.getRootNode();
  			if(this.srcNodeRef && this.srcNodeRef.parentNode){
- 				dojo._destroyElement(this.srcNodeRef);
+ 				dojo.destroy(this.srcNodeRef);
  			}
 		},
 		preCreate: function(){

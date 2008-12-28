@@ -52,7 +52,7 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 		if(this.domNode){
 			dojo.place(node, this.domNode, "before");
 			this.destroyDescendants();
-			dojo._destroyElement(this.domNode);
+			dojo.destroy(this.domNode);
 		}
 		this.domNode = node;
 

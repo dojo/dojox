@@ -71,7 +71,7 @@ dojo.require("dojox.dtl.html");
 
 			if(this.swapped){
 				this.swapped.parentNode.replaceChild(this.parent, this.swapped);
-				dojo._destroyElement(this.swapped);
+				dojo.destroy(this.swapped);
 			}else{
 				this.onAddNode && dojo.disconnect(this.onAddNode);
 				this.onRemoveNode && dojo.disconnect(this.onRemoveNode);
