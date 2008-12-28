@@ -44,11 +44,11 @@ Additional Notes (Brief widget list):
 
 	* FileInputAuto/Blind - extension to FileInput for 
 						added flair/automation
-                        
-    * FileInputOverlay - Convert (almost) any button into a file input
 						
 	* FilePickerTextBox - a validating text box that can browser server-side
 						files using a dojox.data.FileStore
+	* FileUploader - Convert (almost) any button into a file input. Multi-file
+						uploads supported
 	
     * MultiComboBox - an experimental ComboBox that allows
 						multiple entries bases on a separator character.
@@ -60,3 +60,6 @@ Additional Notes (Brief widget list):
  	
     * TimeSpinner - a number spinner that revolves through
 						time constrainsts
+	
+	* ValidationTextarea - Extends dijit.Textarea, enabling validation and 
+						maxLength
