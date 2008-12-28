@@ -59,9 +59,8 @@ dojo.require("dojo.fx");
 		//	|		duration:300
 		//	|	  });
 
-		var helperNode = dojo.doc.createElement("div");
-
-		var node = args.node = dojo.byId(args.node), 
+		var helperNode = dojo.create("div"),
+			node = args.node = dojo.byId(args.node), 
 			s = node.style,
 			dims = null, 
 			hs = null, 
@@ -333,7 +332,7 @@ dojo.require("dojo.fx");
 			bgColor = dojo.style(n, "backgroundColor"), 
 			lightColor = args.lightColor || "#dddddd",
 			darkColor = args.darkColor, 
-			helperNode = dojo.doc.createElement("div"),
+			helperNode = dojo.create("div"),
 			anims = [],
 			hn = [],
 			dir = args.dir || "right",
@@ -416,7 +415,7 @@ dojo.require("dojo.fx");
 		var rows = args.rows || 4,
 			cols = args.cols || 4,
 			anims = [],
-			helperNode = dojo.doc.createElement("div"),
+			helperNode = dojo.create("div"),
 			n = args.node,
 			coords = dojo.coords(n, true),
 			x = coords.x,

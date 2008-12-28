@@ -26,9 +26,9 @@ dojo.mixin(dojox.fx,{
 			coords = dojo.coords(node, true),
 			pieceHeight = Math.ceil(coords.h / args.rows),
 			pieceWidth = Math.ceil(coords.w / args.columns),
-			container = dojo.doc.createElement(node.tagName),
+			container = dojo.create(node.tagName),
 			animations = [],
-			pieceHelper = dojo.doc.createElement(node.tagName),
+			pieceHelper = dojo.create(node.tagName),
 			piece
 		;
 		// Create the pieces and their animations
