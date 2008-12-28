@@ -206,7 +206,7 @@ dojo.provide("dojox.grid._Scroller");
 			for(var i=0; i<this.colCount; i++){
 				var n = this.invalidatePageNode(inPageIndex, this.pageNodes[i]);
 				if(n){
-					dojo._destroyElement(n);
+					dojo.destroy(n);
 				}
 			}
 		},

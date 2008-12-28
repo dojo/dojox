@@ -527,7 +527,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		endResizeColumn: function(inDrag){
-			dojo._destroyElement(this.moverDiv);
+			dojo.destroy(this.moverDiv);
 			delete this.moverDiv;
 			this._skipBogusClicks = true;
 			var conn = dojo.connect(inDrag.view, "update", this, function(){
@@ -670,9 +670,9 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		destroy: function(){
-			dojo._destroyElement(this.headerNode);
+			dojo.destroy(this.headerNode);
 			delete this.headerNode;
-			dojo.forEach(this.rowNodes, dojo._destroyElement);
+			dojo.forEach(this.rowNodes, dojo.destroy);
 			this.rowNodes = [];
 			if(this.source){
 				this.source.destroy();
