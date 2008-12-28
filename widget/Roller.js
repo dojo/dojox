@@ -86,8 +86,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 		
 		// handle the case where items[] were passed, and no srcNodeRef exists
 		if(!this._roller){
-		//	this._roller = dojo.element('li', null, this.domNode);
-			this._roller = this.domNode.appendChild(dojo.doc.createElement('li'));
+			this._roller = dojo.create('li', null, this.domNode);
 		}
 		// stub out animation creation (for overloading maybe later)
 		this.makeAnims();

@@ -207,8 +207,10 @@ dojo.declare("dojox.widget.Pager",
 			
 		dojo.forEach(this.items, function(item, cnt){
 			
-			var contentContainer = dojo.doc.createElement('div');
-			contentContainer.innerHTML = item.content;
+			var contentContainer = dojo.create('div', {
+				innerHTML: item.content
+			});
+
 			var pagerItem = new _PagerItem({
 				id: this.id + '-item-' + (cnt + 1)
 			}, contentContainer);

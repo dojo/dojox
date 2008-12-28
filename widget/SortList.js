@@ -42,10 +42,9 @@ dojo.declare("dojox.widget.SortList",
 	templatePath: dojo.moduleUrl("dojox.widget","SortList/SortList.html"),
 
 	_addItem: function(item){
-		var node = dojo.doc.createElement("li");
-		var text = this.store.getValue(item, this.key);
-		node.innerHTML = text;
-		this.containerNode.appendChild(node);
+		dojo.create("li", {
+			innerHTML: this.store.getValue(item, this.key)
+		}, this.containerNode);
 	},
 
 	postCreate: function(){

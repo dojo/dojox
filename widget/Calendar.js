@@ -51,8 +51,7 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 
 		//Add the mixed in views.
 		dojo.forEach(this._views, function(widgetType){
-			var div = document.createElement("div");
-			var widget = new widgetType(mixin, div);
+			var widget = new widgetType(mixin, dojo.create('div'));
 			this.addChild(widget);
 
 			//place the views's header node in the header of the main widget
@@ -275,12 +274,11 @@ dojo.declare("dojox.widget._CalendarView", dijit._Widget, {
 		node.appendChild(dojo.doc.createTextNode(text));
 	},
 
-	getHeader: function() {
-		// summary: returns the header node of a view. If none exists,
+	getHeader: function(){
+		// summary: Returns the header node of a view. If none exists,
 		//   an empty DIV is created and returned.
-		if (!this.header) {
-			this.header = document.createElement("div");
-			dojo.addClass(this.header, this.headerClass);
+		if(!this.header){
+			this.header = dojo.create("div", { "class":this.headerClass });
 		}
 		return this.header;
 	},
