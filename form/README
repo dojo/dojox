@@ -60,6 +60,4 @@ Additional Notes (Brief widget list):
  	
     * TimeSpinner - a number spinner that revolves through
 						time constrainsts
-	
-	* ValidationTextarea - Extends dijit.Textarea, enabling validation and 
-						maxLength
+
