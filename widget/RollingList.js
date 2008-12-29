@@ -12,7 +12,7 @@ dojo.requireLocalization("dojox.widget", "RollingList");
 dojo.requireLocalization("dijit", "common");
 
 dojo.declare("dojox.widget._RollingListPane",
-	[dijit.layout.ContentPane, dijit._Templated, dijit._Contained], {
+	[dijit.layout.ContentPane, dijit._Templated], {
 	// summary: a core pane that can be attached to a RollingList.  All panes
 	//  should extend this one
 
