@@ -320,7 +320,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 
 dojo.declare(
 	"dojox.presentation.Slide",
-	[dijit.layout.ContentPane,dijit._Contained,dijit._Container,dijit._Templated],
+	[dijit.layout.ContentPane,dijit._Templated],
 	{
 	// summary:
 	//	a Component of a dojox.presentation, and container for each 'Slide'
