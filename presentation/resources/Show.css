@@ -16,7 +16,22 @@
 		p, li {
 			font-size: 17pt;
 		}
-
+		.dojoShowProgressIndicatorContainer {
+			overflow: hidden;
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			width: 100%;
+			text-align: center;
+			z-index:400; 
+			padding:0; 
+			height:34px;
+		}
+		.dojoShowProgressIndicatorContainer .dojoShowProgressBarWrapper{
+			width:200px;
+			margin:auto;
+		}
+		
 		.dojoShowNav {
 			border-top:1px solid #ccc; 
 			background: #ededed;
@@ -28,7 +43,8 @@
 			text-align: center;
 			z-index:420; 
 			padding:0; 
-			margin-bottom:5px; height:34px; 
+			margin-bottom:5px;
+			height:34px; 
 		}
 
 		.dojoShowNav img { cursor:pointer; } 

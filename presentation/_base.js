@@ -6,6 +6,7 @@ dojo.require("dijit._Container");
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.StackContainer"); 
 dojo.require("dijit.layout.ContentPane"); 
+dojo.require("dijit.ProgressBar");
 dojo.require("dojo.fx"); 
 
 dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Templated ], {
@@ -25,6 +26,17 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	//	styled container, like StackContainer ... theoretically possible.
 	//	[and may not need this variable?]
 	fullScreen: true,
+
+	// showProgress: Boolean
+	//	true to show a progress indicator, false to hide
+	useProgressIndicator: true,
+	
+	// progressLabel: String
+	//  eg [ Slide ${0} of ${1} ]
+	progressLabel: "",
+	
+	// progressIndicator: dijit.ProgressBar
+	progressIndicator: null,
 
 	// useNav: Boolean
 	//	true to allow navigation popup, false to disallow
@@ -69,7 +81,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 	startup: function(){
 		// summary: connect to the various handlers and controls for this presention
 		this.inherited(arguments);
-
+		
 		if(this.useNav){ 
 			this._hideNav(); 
 		}else{ 
@@ -84,6 +96,19 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		this._resizeWindow();
 		
 		this._updateSlides(); 
+		
+		var self = this;
+		this.progressIndicator = new dijit.ProgressBar({
+			id: this.id + "ProgressIndicator", 
+			width: 200, 
+			progress: 1, 
+			maximum: self._slides.length, 
+			duration: 2000,
+			report:function(percent){
+				return dojo.string.substitute(self.progressLabel, [this.progress, self._slides.length]);
+			}
+		}, this.showProgressBar);
+		this.progressIndicator.domNode.style.display = this.useProgressIndicator ? "block" : "none";
 		
 		this._readHash();
 		this._setHash();
@@ -231,6 +256,10 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 		if(this.setHash){ 
 			this._setHash(); 
 		}
+		
+		this.progressIndicator.progress = slideIndex + 1;
+		this.progressIndicator.update();
+		
 		this.onMove(this._slideIndex+1);
 	},
 
