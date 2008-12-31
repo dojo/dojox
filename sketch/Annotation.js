@@ -135,8 +135,10 @@ dojo.require("dojox.sketch._Plugin");
 	p.serialize=function(){ };
 	p.getBBox=function(){ };
 	p.beginEdit=function(type){
-		this._type=type||ta.CommandTypes.Move;
-		this._prevState=this.serialize();
+		if(!this._type){
+			this._type=type||ta.CommandTypes.Move;
+			this._prevState=this.serialize();
+		}
 	};
 	p.endEdit=function(){
 		if(this._prevState!=this.serialize()){
