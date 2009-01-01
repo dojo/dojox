@@ -318,14 +318,17 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		returns true if the item is marked as dirty.
 			return dojox.rpc.JsonRest.isDirty(item);
 		},
-		isItem: function(item){
-			// summary:
-			//	Checks to see if a passed 'item'
-			//	is really belongs to this JsonRestStore.
+		isItem: function(item, anyStore){
+			//	summary:
+			//		Checks to see if a passed 'item'
+			//		really belongs to this JsonRestStore.
 			//
 			//	item: /* object */
-			//	attribute: /* string */
-			return item && item.__id && this.service == dojox.rpc.JsonRest.getServiceAndId(item.__id).service;
+			//		The value to test for being an item
+			//	anyStore: /* boolean*/
+			//		If true, this will return true if the value is an item for any JsonRestStore,
+			//		not just this instance
+			return item && item.__id && (anyStore || this.service == dojox.rpc.JsonRest.getServiceAndId(item.__id).service);
 		},
 		_doQuery: function(args){
 			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;

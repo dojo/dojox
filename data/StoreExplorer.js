@@ -15,24 +15,23 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		this.inherited(arguments);
 		var contentPane = new dijit.layout.ContentPane({
 			region:'top'			
-		});
-		this.addChild(contentPane);
+		}).placeAt(this);
 		function addButton(name, action){
-			var button = new dijit.form.Button({label: name}).placeAt(contentPane.domNode);
+			var button = new dijit.form.Button({label: name}).placeAt(contentPane);
 			button.onClick = action;
 			return button;
 		}
-		var queryText = contentPane.domNode.appendChild(document.createElement("span"));
+		var queryText = contentPane.containerNode.appendChild(document.createElement("span"));
 		queryText.innerHTML = "Enter query: &nbsp;";
 		queryText.id = "queryText";
-		var queryTextBox = contentPane.domNode.appendChild(document.createElement("input"));
+		var queryTextBox = contentPane.containerNode.appendChild(document.createElement("input"));
 		queryTextBox.type = "text";
 		queryTextBox.id = "queryTextBox";
 		addButton("Query",function(){
 			var query = queryTextBox.value;
 			self.setQuery(self.stringQueries ? query : dojo.fromJson(query));
 		});
-		contentPane.domNode.appendChild(document.createElement("span")).innerHTML = "&nbsp;&nbsp;&nbsp;";
+		contentPane.containerNode.appendChild(document.createElement("span")).innerHTML = "&nbsp;&nbsp;&nbsp;";
 		var createNewButton = addButton("Create New", dojo.hitch(this, "createNew"));
 		var deleteButton = addButton("Delete",function(){
 			var items = grid.selection.getSelected();
@@ -63,23 +62,23 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 			}
 		});
 		var grid = this.grid = new dojox.grid.DataGrid(
-				{store: this.store, region: 'center', splitter: true}, 
-				this.domNode.appendChild(document.createElement("div"))
-			);
+				{store: this.store, region: 'center', splitter: true}
+			).placeAt(this);
 		grid.canEdit = function(inCell, inRowIndex){
 			var value = this._copyAttr(inRowIndex, inCell.field);
 			return !(value && typeof value == 'object') || value instanceof Date; 
 		}
-		this.addChild(grid);
 		grid.startup();
 		
-		var tree = this.tree = new dojox.data.ItemExplorer({
+		var trailingCP = new dijit.layout.ContentPane({
 			region: 'trailing', 
 			splitter: true, 
 			style: "width: 300px",
-			store: this.store},
-				this.domNode.appendChild(document.createElement("div"))
-			);
+        }).placeAt(this);
+        
+        var tree = this.tree = new dojox.data.ItemExplorer({
+			store: this.store}
+			).placeAt(trailingCP);
 		
 		dojo.connect(grid, "onCellClick", function(){
 			var selected = grid.selection.getSelected()[0];
@@ -87,7 +86,6 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		});
 
 		this.gridOnFetchComplete = grid._onFetchComplete;
-		this.addChild(tree);
 		this.setStore(this.store);
 		tree.startup();
 	},
