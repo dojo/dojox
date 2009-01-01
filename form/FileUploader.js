@@ -356,7 +356,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 		if (this.button.destroy) {
 			this.button.destroy();
 		}else{
-			dojo._destroyElement(this.button);
+			dojo.destroy(this.button);
 		}
 		this.destroy();
 	},
@@ -378,7 +378,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 		
 		if (this.uploaderType == "flash") {
 			this.flashObject.destroy();
-			dojo._destroyElement(this.flashDiv);
+			dojo.destroy(this.flashDiv);
 		}
 	},
 	
