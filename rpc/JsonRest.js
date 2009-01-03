@@ -258,7 +258,6 @@ dojo.require("dojox.rpc.Rest");
 						}
 					}
 				}
-				if(schema && schema.properties)
 				dirtyObjects.push({object:this, save: true});
 			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});
