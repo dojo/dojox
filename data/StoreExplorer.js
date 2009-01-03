@@ -45,6 +45,8 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		}
 		addButton("Save",function(){
 			self.store.save();
+			//refresh the tree
+			self.tree.refreshItem();
 		});
 		addButton("Revert",function(){
 			self.store.revert();

@@ -222,6 +222,9 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		});
 		
 	},
+	refreshItem: function(){
+		this.setItem(this.rootModelNode.value);
+	},
     _createEditDialog: function(){
     	this._editDialog = new dijit.Dialog({
            title: "Edit Property",
