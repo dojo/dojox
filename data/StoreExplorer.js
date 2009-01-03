@@ -161,10 +161,13 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 			
 		}
  		grid.setStore(store);
+ 		this.queryOptions = {cache:true};
 		this.tree.setStore(store);
 	},
 	createNew: function(){
-		this.store.newItem(dojo.fromJson(
-				prompt("Enter any properties to put in the new item (in JSON literal form):","{ }")));
+		var props = prompt("Enter any properties to put in the new item (in JSON literal form):","{ }");
+		if(props){
+			this.store.newItem(dojo.fromJson(props));
+		}
 	}
 });

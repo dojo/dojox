@@ -250,6 +250,15 @@ dojo.require("dojox.rpc.Rest");
 				Rest._index[this.__id = this.__clientId = 
 						service.servicePath + (this[idAttribute] || 
 							Math.random().toString(16).substring(2,14) + '@' + ((dojox.rpc.Client && dojox.rpc.Client.clientId) || "client"))] = this;
+				if(service._schema){
+					var properties = service._schema.properties;
+					for(var i in properties){
+						if("default" in properties[i]){
+							this[i] = properties[i]["default"];
+						}
+					}
+				}
+				if(schema && schema.properties)
 				dirtyObjects.push({object:this, save: true});
 			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});

@@ -28,19 +28,59 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 		dojo.require("dojox.io.xhrScriptPlugin");
 		dojox.io.xhrScriptPlugin(path, "callback", dojox.io.xhrPlugins.fullHttpAdapter);
 	}
+	var plainXhr = dojo.xhr;
+	dojo.xhr = function(method,args){
+		(args.headers = args.headers || {})['X-Server-Methods'] = false;
+		return plainXhr.apply(dojo,arguments);
+	}
 	var rootService= dojox.rpc.Rest(path,true);
 	dojox.rpc._sync = sync;
 	var dfd = rootService("Class/");//dojo.xhrGet({url: target, sync:!callback, handleAs:'json'});
 	var results;
 	var stores = {};
-	dfd.addBoth(function(schemas){
+	var callId = 0;
+	dfd.addCallback(function(schemas){
 		for(var i in schemas){
 			if(typeof schemas[i] == 'object'){
-				stores[schemas[i].id] = new dojox.data.PersevereStore({target:new dojo._Url(path,schemas[i].id) + '',schema:schemas[i]});
+				var schema = schemas[i];
+				if(schema.methods){
+					for(var j in schema.methods){
+						var methodDef = schema.methods[j];
+						// if any method definitions indicate that the method should run on the server, than add 
+						// it to the prototype as a JSON-RPC method
+						if(methodDef.runAt == "server" && !schema.prototype[j]){
+							schema.prototype = schema.prototype || {};
+							schema.prototype[j] = (function(methodName){
+								return function(){
+									// execute a JSON-RPC call
+									var deferred = dojo.rawXhrPost({
+										url: this.__id,
+										// the JSON-RPC call
+										postData: dojo.toJson({
+											method: methodName,
+											id: callId++,
+											params: arguments
+										}),
+										handleAs: "json"
+									});
+									deferred.addCallback(function(response){
+										// handle the response
+										return response.error ?
+											new Error(response.error) :
+											response.result;
+									});
+									return deferred;
+								}
+							})(j);	
+						}
+					}
+				}
+				stores[schemas[i].id] = new dojox.data.PersevereStore({target:new dojo._Url(path,schemas[i].id) + '',schema:schema});
 			}
 		}
 		return (results = stores);
 	});
+	dojo.xhr = plainXhr;
 	return sync ? results : dfd;
 };
 dojox.data.PersevereStore.addProxy = function(){
