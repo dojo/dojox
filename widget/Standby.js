@@ -96,7 +96,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			var box = dojo.coords(this.target);
 			var img = dojo.marginBox(this._imageNode);
 			dojo.style(this._imageNode, "display", curStyle);
- 			dojo.style(this._imageNode, "zIndex", "1000");
+			dojo.style(this._imageNode, "zIndex", "10000");
 
 			//Need scroll positions as it needs to alter ABS positioning.
 			var sVal = dojo._docScroll();
