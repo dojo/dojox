@@ -57,7 +57,7 @@ tests.register("dojox.data.tests.dom",
 			t.assertTrue(topNode !== null);
 			t.assertTrue(topNode.tagName === "parentNode");
 			t.assertTrue(text === dojox.data.dom.textContent(topNode));
-			dojo._destroyElement(topNode);
+			dojo.destroy(topNode);
 			t.assertTrue(document.firstChild === null);
 		},
 		function testSetTextContent(t){
@@ -72,7 +72,7 @@ tests.register("dojox.data.tests.dom",
 			t.assertTrue(text === dojox.data.dom.textContent(topNode));
 			dojox.data.dom.textContent(topNode, text2);
 			t.assertTrue(text2 === dojox.data.dom.textContent(topNode));
-			dojo._destroyElement(topNode);
+			dojo.destroy(topNode);
 			t.assertTrue(document.firstChild === null);
 
 		},
