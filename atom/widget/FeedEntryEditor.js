@@ -506,7 +506,7 @@ dojo.declare("dojox.atom.widget.FeedEntryEditor",dojox.atom.widget.FeedEntryView
 				editor.close(false,true);
 				editor.destroy();
 				while(parent.firstChild){
-					dojo._destroyElement(parent.firstChild);
+					dojo.destroy(parent.firstChild);
 				}
 				newEditor = this._createEditor(parent, {value: value}, true, false);
 				this._editors[type] = newEditor;
@@ -518,7 +518,7 @@ dojo.declare("dojox.atom.widget.FeedEntryEditor",dojox.atom.widget.FeedEntryView
 				value = editor.attr('value');
 				editor.destroy();
 				while(parent.firstChild){
-					dojo._destroyElement(parent.firstChild);
+					dojo.destroy(parent.firstChild);
 				}
 				newEditor = this._createEditor(parent, {value: value}, true, true);
 				newEditor = dojo.hitch(newEditor, newEditor.generateEditor)();
@@ -797,10 +797,7 @@ dojo.declare("dojox.atom.widget.FeedEntryEditor",dojox.atom.widget.FeedEntryView
 		if(this._contentEditor){
 			// Note that the superclass clear destroys the widget since it's in the child widget list, 
 			// so this is just ref clearing.
-			this._contentEditor = null;
-			this._setObject = null;
-			this._oldContent = null;
-			this._contentEditorCreator = null;
+			this._contentEditor = this._setObject = this._oldContent = this._contentEditorCreator = null;
 			this._editors = {};
 		}
 	},
