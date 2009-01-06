@@ -94,7 +94,7 @@ dojo.declare("dojox.grid._Layout", null, {
 			}else if(!isNaN(inDef.width)){
 				w = inDef.width + "em";
 			}else{
-				w = inDef.width || self.defaultWidth;
+				w = inDef.width || self._defaultCellProps.width || self.defaultWidth;
 			}
 			return w;
 		};
@@ -129,7 +129,7 @@ dojo.declare("dojox.grid._Layout", null, {
 			// Check and calculate the sum of all relative widths
 			if(doRel && cell.relWidth){
 				relSum += cell.relWidth;
-			}else if (cell.width){
+			}else if(cell.width){
 				var w = cell.width;
 				if(typeof w == "string" && w.slice(-1) == "%"){
 					pctSum += window.parseInt(w, 10);
@@ -169,6 +169,9 @@ dojo.declare("dojox.grid._Layout", null, {
 	
 	addViewDef: function(inDef){
 		this._defaultCellProps = inDef.defaultCell || {};
+		if(inDef.width && inDef.width == "auto"){
+			delete inDef.width;
+		}
 		return dojo.mixin({}, inDef, {cells: this.addRowsDef(inDef.rows || inDef.cells)});
 	},
 	
