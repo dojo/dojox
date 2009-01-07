@@ -145,9 +145,7 @@ dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ n
 	}
 
 	dojox.xml.parser.removeChildren(node);
-	dojo.forEach(nodes, function(n){
-		dojo._destroyElement(n);
-	});
+	dojo.forEach(nodes, dojo.destroy);
 
 	if(!dojo.isArray(newChildren)){
 		node.appendChild(newChildren);
@@ -161,7 +159,7 @@ dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ n
 dojox.xml.parser.removeChildren = function(/*Element*/node){
 	//	summary:
 	//		removes all children from node and returns the count of children removed.
-	//		The children nodes are not destroyed. Be sure to call dojo._destroyElement on them
+	//		The children nodes are not destroyed. Be sure to call dojo.destroy on them
 	//		after they are not used anymore.
 	//	node:
 	//		The node to remove all the children from.
