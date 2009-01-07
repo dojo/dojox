@@ -461,7 +461,6 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 					});
 					getHandler.addErrback(function(error){
 						self._loadInProgress = false;
-						console.log("This is called!");
 						errorCallback(error, keywordArgs);
 					});
 					
