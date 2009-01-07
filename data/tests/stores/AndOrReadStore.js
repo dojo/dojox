@@ -462,6 +462,33 @@ dojox.data.tests.stores.AndOrReadStore.getTests = function(){
 			}
 		},
 		{
+			name: "Read API: fetch() abort",
+			runTest: function(t){
+				//	summary: 
+				//		Simple test of a basic fetch abort on AndOrReadStore.
+				//	description:
+				//		Simple test of a basic fetch abort on AndOrReadStore.
+				var d = new doh.Deferred();
+				var store = new dojox.data.AndOrReadStore(dojox.data.tests.stores.AndOrReadStore.getTestData("countries"));
+				function completedAll(items, request){
+					t.is(7, items.length);
+					d.errback(new Error("Should not be here."));
+				}
+				var error = function(errData, request){
+					console.log("In error handler for AndOrReadStore");
+					//An abort should throw a cancel error, so we should
+					//reach this.
+					t.assertTrue(true);
+					d.callback(true);
+				};
+
+				//Get everything...
+				var req = store.fetch({ onComplete: completedAll, onError: error});
+				req.abort();
+				return d;
+			}
+		},
+		{
 			name: "Read API: fetch() one",
 	 		runTest: function(t){
 				//	summary: 

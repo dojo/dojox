@@ -461,8 +461,28 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 					});
 					getHandler.addErrback(function(error){
 						self._loadInProgress = false;
+						console.log("This is called!");
 						errorCallback(error, keywordArgs);
 					});
+					
+					//Wire up the cancel to abort of the request
+					//This call cancel on the deferred if it hasn't been called
+					//yet and then will chain to the simple abort of the
+					//simpleFetch keywordArgs
+					var oldAbort = null;
+					if(keywordArgs.abort){
+						oldAbort = keywordArgs.abort;
+					}
+					keywordArgs.abort = function(){
+						var df = getHandler;
+						if (df && df.fired === -1){
+							df.cancel();
+							df = null;
+						}
+						if(oldAbort){
+							oldAbort.call(keywordArgs);
+						}
+					};
 				}
 			}else if(this._jsonData){
 				try{
