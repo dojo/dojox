@@ -34,7 +34,7 @@ dojo.require("dojox.sketch._Plugin");
 			if(!(f._startPoint.x==e.pageX&&f._startPoint.y==e.pageY)){
 				//	The minimum number of pixels one has to travel before a shape
 				//		gets drawn.
-				var limit=40;
+				var limit=10;
 				if(Math.max(
 					limit, 
 					Math.abs(f._absEnd.x-f._start.x), 
