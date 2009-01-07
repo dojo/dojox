@@ -4,6 +4,7 @@ dojo.experimental("dojox.layout.GridContainer");
 dojo.require("dijit._base.focus");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
+dojo.require("dijit._Contained");
 dojo.require("dojo.dnd.move");
 dojo.require("dojox.layout.dnd.PlottedDnd");
 

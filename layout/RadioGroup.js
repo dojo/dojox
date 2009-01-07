@@ -10,7 +10,7 @@ dojo.experimental("dojox.layout.RadioGroup");
 //
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
-dojo.require("dijit._Container");
+dojo.require("dijit._Contained");
 dojo.require("dijit.layout.StackContainer");
 dojo.require("dojo.fx.easing"); 
 
