@@ -36,6 +36,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		}else{
 			this._type = {type: "radio", baseClass: "dijitRadio"};
 		}
+		this.disabled = this.option.disabled||false;
 		this.inherited(arguments);
 	},
 
@@ -95,8 +96,9 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	_setDisabledAttr: function(value){
 		// summary:
 		//		Disables (or enables) all the children as well
-		this.checkBox.attr("disabled", value);
-		this.disabled = value;
+		this.disabled = value||this.option.disabled;
+		this.checkBox.attr("disabled", this.disabled);
+		dojo.toggleClass(this.domNode, "dojoxMultiSelectDisabled", this.disabled);
 	},
 	
 	_setReadOnlyAttr: function(value){
