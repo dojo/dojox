@@ -1,5 +1,6 @@
 dojo.provide("dojox.form.RangeSlider");
-dojo.require("dijit.form.Slider");
+dojo.require("dijit.form.HorizontalSlider");
+dojo.require("dijit.form.VerticalSlider");
 dojo.require("dojox.fx");
 
 dojo.declare(

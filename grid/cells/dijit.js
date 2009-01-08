@@ -2,6 +2,9 @@ dojo.provide("dojox.grid.cells.dijit");
 
 dojo.require("dojox.grid.cells");
 
+// TODO: shouldn't it be the test file's job to require these modules,
+// if it is using them?  Most of these modules aren't referenced by this file.
+
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.TimeTextBox");
 dojo.require("dijit.form.ComboBox");
@@ -11,7 +14,7 @@ dojo.require("dijit.form.TextBox");
 dojo.require("dijit.form.NumberSpinner");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.CurrencyTextBox");
-dojo.require("dijit.form.Slider");
+dojo.require("dijit.form.HorizontalSlider");
 dojo.require("dijit.Editor");
 
 (function(){

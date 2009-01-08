@@ -3,7 +3,6 @@ dojo.provide("dojox.sketch.Toolbar");
 dojo.require("dojox.sketch.Annotation");
 dojo.require("dijit.Toolbar");
 dojo.require("dijit.form.Button");
-dojo.require("dijit.form.Slider");
 
 dojo.declare("dojox.sketch.ButtonGroup", null, {
 	constructor: function(){

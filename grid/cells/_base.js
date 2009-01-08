@@ -85,7 +85,7 @@ dojo.require("dojox.grid.util");
 		},
 		isFlex: function(){
 			var uw = this.unitWidth;
-			return uw && (uw=='auto' || uw.slice(-1)=='%');
+			return uw && dojo.isString(uw) && (uw=='auto' || uw.slice(-1)=='%');
 		},
 		// edit support
 		applyEdit: function(inValue, inRowIndex){
