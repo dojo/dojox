@@ -119,6 +119,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		this.inherited(arguments);
 		// handle the clicking on the "add new property item"
 		dojo.connect(this, "onClick", function(modelNode, treeNode){
+			this.lastFocused = treeNode;
 			if(modelNode.addNew){
                 //this.focusNode(treeNode.getParent());
                 this._addProperty();
@@ -474,6 +475,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
     },
     _editProperty: function(){
         // this mixin stops us polluting the tree item with jsonVal etc.
+        // FIXME: if a store identifies items by instanceof checks, this will fail
         var item = dojo.mixin({}, this.lastFocused.item);
         // create the dialog or reset it if it already exists
         if(!this._editDialog){
