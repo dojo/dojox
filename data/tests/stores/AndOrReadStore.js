@@ -468,24 +468,34 @@ dojox.data.tests.stores.AndOrReadStore.getTests = function(){
 				//		Simple test of a basic fetch abort on AndOrReadStore.
 				//	description:
 				//		Simple test of a basic fetch abort on AndOrReadStore.
-				var d = new doh.Deferred();
-				var store = new dojox.data.AndOrReadStore(dojox.data.tests.stores.AndOrReadStore.getTestData("countries"));
-				function completedAll(items, request){
-					t.is(7, items.length);
-					d.errback(new Error("Should not be here."));
+				if(dojo.isBrowser){
+					var store = new dojox.data.AndOrReadStore(dojox.data.tests.stores.AndOrReadStore.getTestData("countries"));
+					var d = new doh.Deferred();
+					var abortCalled = false;
+					function completedAll(items, request){
+						t.is(7, items.length);
+						if(abortCalled){
+							console.log("Made it to complete callback and abort was called.  Problem.");
+							d.errback(new Error("Should not be here."));
+						}else{
+							//We beat out calling abort, so this is okay.  Timing.
+							console.log("in onComplete and abort has not been called.  Timing.  This is okay.");
+							d.callback(true);
+						}
+					}
+					function error(errData, request){
+						//An abort should throw a cancel error, so we should
+						//reach this.
+						t.assertTrue(true);
+						d.callback(true);
+					}
+					//Get everything...
+					var req = store.fetch({ onComplete: completedAll, onError: error});
+					abortCalled=true;
+					console.log("Calling abort.");
+					req.abort();
+					return d;
 				}
-				var error = function(errData, request){
-					console.log("In error handler for AndOrReadStore");
-					//An abort should throw a cancel error, so we should
-					//reach this.
-					t.assertTrue(true);
-					d.callback(true);
-				};
-
-				//Get everything...
-				var req = store.fetch({ onComplete: completedAll, onError: error});
-				req.abort();
-				return d;
 			}
 		},
 		{
