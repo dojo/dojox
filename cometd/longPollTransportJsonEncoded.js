@@ -2,7 +2,7 @@ dojo.provide("dojox.cometd.longPollTransportJsonEncoded");
 dojo.require("dojox.cometd._base");
 
 dojox.cometd.longPollTransportJsonEncoded = new function(){
-        // This is an alternative implementation to that provided in logPollTransportFormEncoded.js 
+	// This is an alternative implementation to that provided in logPollTransportFormEncoded.js 
 	// that sends messages as text/json rather than form encoding them. 
 	
 	this._connectionType="long-polling";
@@ -31,7 +31,7 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 		if(this._cometd._advice && this._cometd._advice["reconnect"]=="none"){
 			return;
 		}
-		if (this._cometd._connected) {
+		if (this._cometd._status=="connected") {
 			setTimeout(dojo.hitch(this,function(){this._connect();}),this._cometd._interval());
 		}else{
 			setTimeout(dojo.hitch(this._cometd,function(){this.init(this.url,this._props);}),this._cometd._interval());
@@ -45,10 +45,10 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 		}
 			
 		if((this._cometd._advice) && (this._cometd._advice["reconnect"]=="handshake")){
-			this._cometd._connected=false;
+			this._cometd._status="unconnected";
 			this._initialized = false;
 			this._cometd.init(this._cometd.url,this._cometd._props);
- 		}else if(this._cometd._connected){
+ 		}else if(this._cometd._status=="connected"){
 			var message={
 				channel:	"/meta/connect",
 				connectionType: this._connectionType,
@@ -82,7 +82,12 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 			}),
 			error: dojo.hitch(this, function(err){
 				this._cometd._polling=false;
-				this._cometd._publishMeta("connect",false);
+				var metaMsg = {
+					failure: true,
+					error: err,
+					advice: this._cometd._advice
+				};
+				this._cometd._publishMeta("connect",false, metaMsg);
 				this._cometd._backoff();
 				this.tunnelCollapse();
 			})
@@ -116,7 +121,7 @@ dojox.cometd.longPollTransportJsonEncoded = new function(){
 	}
 
 	this.startup = function(handshakeData){
-		if(this._cometd._connected){ return; }
+		if(this._cometd._status=="connected"){ return; }
 		this.tunnelInit();
 	}
 

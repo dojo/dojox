@@ -31,7 +31,7 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 			return;
 		}
 		var interval = this._cometd._interval();
-		if (this._cometd._connected) {
+		if (this._cometd._status=="connected") {
 			setTimeout(dojo.hitch(this, "_connect"), interval);
 		}else{
 			setTimeout(dojo.hitch(this._cometd, function(){
@@ -45,10 +45,10 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 		if(this._cometd._polling) { return; }
 			
 		if((this._cometd._advice) && (this._cometd._advice["reconnect"]=="handshake")){
-			this._cometd._connected = false;
+			this._cometd._status="unconnected"; //?
 			this._initialized = false;
 			this._cometd.init(this._cometd.url, this._cometd._props);
- 		}else if(this._cometd._connected){
+ 		}else if(this._cometd._status=="connected"){
 			var message = {
 				channel: "/meta/connect",
 				connectionType: this._connectionType,
@@ -82,8 +82,13 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 				this.tunnelCollapse();
 			}),
 			error: dojo.hitch(this, function(err){
+				var metaMsg = {
+					failure: true,
+					error: err,
+					advice: this._cometd._advice
+				};
 				this._cometd._polling=false;
-				this._cometd._publishMeta("connect",false);
+				this._cometd._publishMeta("connect",false, metaMsg);
 				this._cometd._backoff();
 				this.tunnelCollapse();
 			})
@@ -116,7 +121,7 @@ dojox.cometd.longPollTransportFormEncoded = new function(){
 	}
 
 	this.startup = function(handshakeData){
-		if(this._cometd._connected){ return; }
+		if(this._cometd._status=="connected"){ return; }
 		this.tunnelInit();
 	}
 
