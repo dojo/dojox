@@ -159,7 +159,7 @@ dojox.cometd = {
 			for(var tname in this._subscriptions){
 				for(var sub in this._subscriptions[tname]){
 					if(this._subscriptions[tname][sub].topic){
-			 			dojo.unsubscribe(this._subscriptions[tname][sub].topic);
+						dojo.unsubscribe(this._subscriptions[tname][sub].topic);
 					}
 				}
 			}
@@ -441,43 +441,43 @@ dojox.cometd = {
 		}
 	
 		this._finishInit = function(data){
-  			//	summary:
-  			//		Handle the handshake return from the server and initialize
-  			//		connection if all is OK
+			//	summary:
+			//		Handle the handshake return from the server and initialize
+			//		connection if all is OK
 
 			if(this._status!="handshaking") {return;}
 
+
+			var wasHandshook = this._handshook;
 			var successful = false;	
-			var metaMsg = {
-				   reestablish: successful && wasHandshook
-			};
+			var metaMsg = {};
 
 			if (data instanceof Error) {
 				dojo.mixin(metaMsg,{
+					reestablish:false,
 					failure: true,
 					error: data,
 					advice: this._advice
 				});
 			} else {
-				var wasHandshook = this._handshook;
 				data = data[0];
 				data = this._extendIn(data);
 				this.handshakeReturn = data;
 				// remember any advice
 				if(data["advice"]){
-  					this._advice = data.advice;
+					this._advice = data.advice;
 				}
-  	
+
 				successful = data.successful ? data.successful : false;
-  			
+
 				// check version
 				if(data.version < this.minimumVersion){
-  					if (console.log)
-	  					console.log("cometd protocol version mismatch. We wanted", this.minimumVersion, "but got", data.version);
-  					successful=false;
-  					this._advice.reconnect="none";
+					if (console.log)
+						console.log("cometd protocol version mismatch. We wanted", this.minimumVersion, "but got", data.version);
+					successful=false;
+					this._advice.reconnect="none";
 				}
-				dojo.mixin(metaMsg,{response:data});
+				dojo.mixin(metaMsg,{reestablish: successful && wasHandshook, response:data});
 			} 
 
 			this._publishMeta("handshake",successful,metaMsg);
@@ -485,13 +485,13 @@ dojox.cometd = {
 			//prevent resends or continuing with initializing the protocol
 			if(this._status!="handshaking") {return;}
 
-  			// If all OK
-  			if(successful){
+			// If all OK
+			if(successful){
 				this._status = "connecting";
 				this._handshook = true;
-  				// pick a transport
-  				this.currentTransport = dojox.cometd.connectionTypes.match(
-  					data.supportedConnectionTypes,
+				// pick a transport
+				this.currentTransport = dojox.cometd.connectionTypes.match(
+					data.supportedConnectionTypes,
 					data.version,
 					this._isXD
 				);
@@ -503,13 +503,13 @@ dojox.cometd = {
 				this.tunnelInit = transport.tunnelInit && dojo.hitch(transport, "tunnelInit");
 				this.tunnelCollapse = transport.tunnelCollapse && dojo.hitch(transport, "tunnelCollapse");
 				transport.startup(data);
-  			}else{
+			}else{
 				// If there is a problem follow advice
 				if(!this._advice || this._advice["reconnect"] != "none"){
-				   setTimeout(dojo.hitch(this, "init", this.url, this._props), this._interval());
+					setTimeout(dojo.hitch(this, "init", this.url, this._props), this._interval());
 				}
-  			}
-  		}
+			}
+		}
 	
 		// FIXME: lots of repeated code...why?
 		this._extendIn = function(message){
@@ -675,7 +675,7 @@ dojox.cometd = {
 	
 		this._connectTimeout = function(){
 			// summary: Return the connect timeout in ms, calculated as the minimum of the advised timeout
-			// and the configured timeout.  Else 0 to indicate no client side timeout
+			// and the configured timeout. Else 0 to indicate no client side timeout
 			var advised=0;
 			if(this._advice && this._advice.timeout && this.expectedNetworkDelay > 0){
 				advised = this._advice.timeout + this.expectedNetworkDelay;
@@ -693,7 +693,7 @@ dojox.cometd = {
 }
 
 // create the default instance
-dojox.cometd.Connection.call(dojox.cometd,"/cometd");  
+dojox.cometd.Connection.call(dojox.cometd,"/cometd"); 
 
 /*
 
