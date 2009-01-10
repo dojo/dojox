@@ -24,14 +24,22 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 			}
 		}
 		if(!node){
-			var nodes = dijit._Templated._createNodesFromText(
+			var nodes = dojo._toDom(
 				this._template.render(new dojox.dtl._Context(this))
 			);
-			for(var i = 0; i < nodes.length; i++){
-				if(nodes[i].nodeType == 1){
-					node = nodes[i];
-					break;
+			// TODO: is it really necessary to look for the first node?
+			if(nodes.nodeType !== 1 && nodes.nodeType !== 3){
+				// nodes.nodeType === 11
+				// the node is a document fragment
+				for(var i = 0, l = nodes.childNodes.length; i < l; ++i){
+					node = nodes.childNodes[i];
+					if(node.nodeType == 1){
+						break;
+					}
 				}
+			}else{
+				// the node is an element or a text
+				node = nodes;
 			}
 		}
 
@@ -78,9 +86,9 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 
 		// If we always use a string, or find no variables, just store it as a node
 		if(alwaysUseString || !templateString.match(/\{[{%]([^\}]+)[%}]\}/g)){
-			return (tmplts[key] = dijit._Templated._createNodesFromText(templateString)[0]);
+			return tmplts[key] = dojo._toDom(templateString);
 		}else{
-			return (tmplts[key] = new dojox.dtl.Template(templateString));
+			return tmplts[key] = new dojox.dtl.Template(templateString);
 		}
 	},
 	render: function(){
