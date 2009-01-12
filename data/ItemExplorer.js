@@ -63,7 +63,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 						keys = self.store.getAttributes(item);
 	                    parent = item;
 					}else if(item && typeof item == 'object'){
-	                    parent = parentModelNode.value;  // ***
+	                    parent = parentModelNode.value;
 						keys = [];
 						// also we want to be able to drill down into plain JS objects/arrays
 						for(var i in item){
@@ -107,7 +107,8 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 				return modelNode === root ?
 						"Object Properties" : 
 							modelNode.addNew ? (modelNode.parent instanceof Array ? "Add new value" : "Add new property") : 
-								modelNode.property + ": " + modelNode.value;
+								modelNode.property + ": " + 
+                                    (modelNode.value instanceof Array ? "(" + modelNode.value.length + " elements)" : modelNode.value);
 			},
 			onChildrenChange: function(modelNode){
 			},
@@ -276,7 +277,8 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
         // textarea
         var textarea = new dijit.form.Textarea({
             name: "jsonVal",
-            value: null
+            // this is a hack until http://bugs.dojotoolkit.org/ticket/8392 is fixed
+            value: ' '
         }).placeAt(valueDiv);
         pane.appendChild(valueDiv);
         
@@ -522,10 +524,6 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
         }
     },
     _destroyProperty: function(){
-        // *** check on this...
-        // using explore_ItemFileWriteStore.html if you select "Africa" in the grid and delete the
-        // "type" property of "Egypt" (ie the "type" property of Africa's children[0] element)
-        // this is not deleted in the tree. the store is correct but the tree is out of sync.
         var node = this.lastFocused;
         var item = node.item;
         var propPath = [];
