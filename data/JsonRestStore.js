@@ -386,6 +386,11 @@ dojo.declare("dojox.data.JsonRestStore",
 	}
 );
 dojox.data._getStoreForItem = function(item){
-	return item.__id && dojox.rpc.JsonRest.services[item.__id.match(/.*\//)[0]]._store;
+	if(item.__id){
+		var servicePath = item.__id.match(/.*\//)[0];
+		var service = dojox.rpc.JsonRest.services[servicePath];
+		return service ? service._store : new dojox.data.JsonRestStore(servicePath);
+	}
+	return null;
 };
 dojox.json.ref._useRefs = true; // Use referencing when identifiable objects are referenced
