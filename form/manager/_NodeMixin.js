@@ -36,11 +36,12 @@ dojo.require("dojox.form.manager._Mixin");
 			return eventName;	// String
 		},
 
-		registerNode = function(node){
+		registerNode = function(node, groupNode){
 			var name = dojo.attr(node, "name");
+			groupNode = groupNode || this.domNode;
 			if(name && !(name in this.formWidgets)){
 				// verify that it is not part of any widget
-				for(var n = node; n !== this.domNode; n = n.parentNode){
+				for(var n = node; n && n !== groupNode; n = n.parentNode){
 					if(dojo.attr(n, "widgetId") && dijit.byNode(n) instanceof dijit.form._FormWidget){
 						// this is a child of some widget --- bail out
 						return null;
@@ -167,7 +168,9 @@ dojo.require("dojox.form.manager._Mixin");
 			}
 
 			dojo.query("input, select, textarea, button", node).
-				map(registerNode, this).
+				map(function(n){
+					return registerNode.call(this, n, node);
+				}, this).
 				forEach(function(name){
 					if(name){
 						connectNode.call(this, name, getObserversFromNode.call(this, name));
