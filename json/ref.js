@@ -166,7 +166,7 @@ dojox.json.ref = {
 			if(update){
 				// this means we are updating, we need to remove deleted
 				for(i in target){
-					if(target.hasOwnProperty(i) && !it.hasOwnProperty(i) && i != '__id' && i != '__clientId' && !(target instanceof Array && isNaN(i))){
+					if(!target.__isDirty && target.hasOwnProperty(i) && !it.hasOwnProperty(i) && i != '__id' && i != '__clientId' && !(target instanceof Array && isNaN(i))){
 						if(index.onUpdate && i != "_loadObject"){
 							index.onUpdate(target,i,target[i],undefined); // call the listener for each update
 						}
