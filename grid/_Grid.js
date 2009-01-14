@@ -172,6 +172,10 @@ dojo.requireLocalization("dijit", "loading");
 		// 		menu items.
 		placeholderLabel: "GridColumns",
 		
+		// selectable: Boolean
+		//		Set to true if you want to be able to select the text within the grid.
+		selectable: false,
+		
 		// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
 		_click: null,
 		
@@ -708,7 +712,7 @@ dojo.requireLocalization("dijit", "loading");
 			this.postresize();
 			this.focus.initFocusView();
 			// make rows unselectable
-			dojo.setSelectable(this.domNode, false);
+			dojo.setSelectable(this.domNode, this.selectable);
 		},
 
 		postresize: function(){
