@@ -17,16 +17,16 @@ dojo.declare("dojox.layout.ResizeHandle",
 	//
 	// targetId: String
 	//	id of the Widget OR DomNode that I will size
-	targetId: '',
-
+	targetId: "",
+	
 	// targetContainer: DomNode
 	//	over-ride targetId and attch this handle directly to a reference of a DomNode
 	targetContainer: null, 
-
+	
 	// resizeAxis: String
 	//	one of: x|y|xy limit resizing to a single axis, default to xy ... 
 	resizeAxis: "xy",
-
+	
 	// activeResize: Boolean
 	// 	if true, node will size realtime with mouse movement, 
 	//	if false, node will create virtual node, and only resize target on mouseUp
@@ -34,8 +34,8 @@ dojo.declare("dojox.layout.ResizeHandle",
 	
 	// activeResizeClass: String
 	//	css class applied to virtual resize node. 
-	activeResizeClass: 'dojoxResizeHandleClone',
-
+	activeResizeClass: "dojoxResizeHandleClone",
+	
 	// animateSizing: Boolean
 	//	only applicable if activeResize = false. onMouseup, animate the node to the
 	//	new size
@@ -44,7 +44,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 	// animateMethod: String
 	// 	one of "chain" or "combine" ... visual effect only. combine will "scale" 
 	// 	node to size, "chain" will alter width, then height
-	animateMethod: 'chain',
+	animateMethod: "chain",
 
 	// animateDuration: Integer
 	//	time in MS to run sizing animation. if animateMethod="chain", total animation 
@@ -59,6 +59,31 @@ dojo.declare("dojox.layout.ResizeHandle",
 	//	smallest width in px resize node can be
 	minWidth: 100,
 
+	// constrainMax: Boolean
+	//	Toggle if this widget cares about the maxHeight and maxWidth 
+	//	parameters. 
+	constrainMax: false,
+
+	// maxHeight: Integer
+	//	Largest height size in px the resize node can become. 
+	maxHeight:0, 
+	
+	// maxWidth: Integer
+	//	Largest width size in px the reize node can become.
+	maxWidth:0,
+
+	// fixedAspect: Boolean
+	//		Toggle to enable this widget to maintain the aspect 
+	//		ratio of the attached node. 
+	fixedAspect: false,
+
+	// intermediateChanges: Boolean
+	//		Toggle to enable/disable this widget from firing onResize
+	//		events at every step of a resize. If `activeResize` is true,
+	//		and this is false, onResize only fires _after_ the drop 
+	//		operation. Animated resizing is not affected by this setting.
+	intermediateChanges: false,
+
 	templateString: '<div dojoAttachPoint="resizeHandle" class="dojoxResizeHandle"><div></div></div>',
 
 	postCreate: function(){
@@ -70,67 +95,85 @@ dojo.declare("dojox.layout.ResizeHandle",
 			// resizes something. Since there is only one mouse pointer he
 			// can't at once resize multiple things interactively.
 			this._resizeHelper = dijit.byId('dojoxGlobalResizeHelper');
-			if (!this._resizeHelper){
+			if(!this._resizeHelper){
 				this._resizeHelper = new dojox.layout._ResizeHelper({ 
 						id: 'dojoxGlobalResizeHelper'
 				}).placeAt(dojo.body());
 				dojo.addClass(this._resizeHelper.domNode, this.activeResizeClass);
-				this._resizeHelper.startup();
 			}
 		}else{ this.animateSizing = false; } 	
 
-		if (!this.minSize) { 
+		if(!this.minSize){ 
 			this.minSize = { w: this.minWidth, h: this.minHeight };
 		}
+		
+		if(this.constrainMax){
+			this.maxSize = { w: this.maxWidth, h: this.maxHeight }
+		}
+		
 		// should we modify the css for the cursor hover to n-resize nw-resize and w-resize?
-		this._resizeX = this._resizeY = false; 
-		switch (this.resizeAxis.toLowerCase()) {
-		case "xy" : 
-			this._resizeX = this._resizeY = true; 
-			// FIXME: need logic to determine NW or NE class to see
-			// based on which [todo] corner is clicked
-			dojo.addClass(this.resizeHandle,"dojoxResizeNW"); 
-			break; 
-		case "x" : 
-			this._resizeX = true; 
-			dojo.addClass(this.resizeHandle,"dojoxResizeW");
-			break;
-		case "y" : 
-			this._resizeY = true; 
-			dojo.addClass(this.resizeHandle,"dojoxResizeN");
-			break;
+		this._resizeX = this._resizeY = false;
+		var addClass = dojo.partial(dojo.addClass, this.resizeHandle); 
+		switch(this.resizeAxis.toLowerCase()){
+			case "xy" : 
+				this._resizeX = this._resizeY = true; 
+				// FIXME: need logic to determine NW or NE class to see
+				// based on which [todo] corner is clicked
+				addClass("dojoxResizeNW"); 
+				break; 
+			case "x" : 
+				this._resizeX = true; 
+				addClass("dojoxResizeW");
+				break;
+			case "y" : 
+				this._resizeY = true; 
+				addClass("dojoxResizeN");
+				break;
 		}
 	},
 
 	_beginSizing: function(/*Event*/ e){
 		// summary: setup movement listeners and calculate initial size
 		
-		if (this._isSizing){ return false; }
+		if(this._isSizing){ return false; }
 
 		this.targetWidget = dijit.byId(this.targetId);
 
 		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : dojo.byId(this.targetId);
-		if (this.targetContainer) { this.targetDomNode = this.targetContainer; } 
-		if (!this.targetDomNode){ return false; }
+		if(this.targetContainer){ this.targetDomNode = this.targetContainer; }
+		if(!this.targetDomNode){ return false; }
 
-		if (!this.activeResize) {
+		if(!this.activeResize){
 			var c = dojo.coords(this.targetDomNode, true);
 			this._resizeHelper.resize({l: c.x, t: c.y, w: c.w, h: c.h});
 			this._resizeHelper.show();
 		}
 
 		this._isSizing = true;
-		this.startPoint  = {'x':e.clientX, 'y':e.clientY};
+		this.startPoint  = { x:e.clientX, y:e.clientY};
 
 		// FIXME: this is funky: marginBox adds height, contentBox ignores padding (expected, but foo!)
-		var mb = (this.targetWidget) ? dojo.marginBox(this.targetDomNode) : dojo.contentBox(this.targetDomNode);  
-		this.startSize  = { 'w':mb.w, 'h':mb.h };
+		var mb = this.targetWidget ? dojo.marginBox(this.targetDomNode) : dojo.contentBox(this.targetDomNode);  
+		this.startSize  = { w:mb.w, h:mb.h };
+		
+		if(this.fixedAspect){
+			var max, val;
+			if(mb.w > mb.h){
+				max = "w";
+				val = mb.w / mb.h
+			}else{
+				max = "h";
+				val = mb.h / mb.w
+			}
+			this._aspect = { prop: max };
+			this._aspect[max] = val;
+		}
 
 		this._pconnects = []; 
-		this._pconnects.push(dojo.connect(document,"onmousemove",this,"_updateSizing")); 
-		this._pconnects.push(dojo.connect(document,"onmouseup", this, "_endSizing"));
-
-		e.preventDefault();
+		this._pconnects.push(dojo.connect(dojo.doc,"onmousemove",this,"_updateSizing")); 
+		this._pconnects.push(dojo.connect(dojo.doc,"onmouseup", this, "_endSizing"));
+		
+		dojo.stopEvent(e); 
 	},
 
 	_updateSizing: function(/*Event*/ e){
@@ -161,23 +204,50 @@ dojo.declare("dojox.layout.ResizeHandle",
 
 		var dx = this.startPoint.x - e.clientX,
 			dy = this.startPoint.y - e.clientY,
-			newW = (this._resizeX) ? this.startSize.w - dx : this.startSize.w,
-			newH = (this._resizeY) ? this.startSize.h - dy : this.startSize.h
+			newW = this.startSize.w - (this._resizeX ? dx : 0),
+			newH = this.startSize.h - (this._resizeY ? dy : 0)
 		;
-		
-		// minimum size check
-		if(this.minSize){
-			//var mb = dojo.marginBox(this.targetDomNode);
-			if(newW < this.minSize.w){
-				newW = this.minSize.w;
-			}
-			if(newH < this.minSize.h){
-				newH = this.minSize.h;
-			}
-		}
-		return { w:newW, h:newH };  // Object
+			
+		return this._checkConstraints(newW, newH); // Object
 	},
 	
+	_checkConstraints: function(newW, newH){
+		// summary: filter through the various possible constaint possibilities.
+				
+		// minimum size check
+		if(this.minSize){
+			var tm = this.minSize;
+			if(newW < tm.w){
+				newW = tm.w;
+			}
+			if(newH < tm.h){
+				newH = tm.h;
+			}
+		}
+		
+		// maximum size check:
+		if(this.constrainMax && this.maxSize){
+			var ms = this.maxSize;
+			if(newW > ms.w){
+				newW = ms.w;
+			}
+			if(newH > ms.h){
+				newH = ms.h;
+			}
+		}
+		
+		if(this.fixedAspect){
+			var ta = this._aspect[this._aspect.prop];
+			if(newW < newH){
+				newH = newW * ta;
+			}else if(newH < newW){
+				newW = newH * ta;
+			}
+		}
+		
+		return { w: newW, h: newH }; // Object
+	},
+		
 	_changeSizing: function(/*Event*/ e){
 		// summary: apply sizing information based on information in (e) to attached node
 		var tmp = this._getNewCoords(e);
@@ -210,6 +280,9 @@ dojo.declare("dojox.layout.ResizeHandle",
 					height: tmp.h + "px"	
 				});
 			}
+		}
+		if(this.intermediateChanges){
+			this.onResize(e);
 		}	
 	},
 
@@ -225,7 +298,9 @@ dojo.declare("dojox.layout.ResizeHandle",
 	},
 	
 	onResize: function(e){
-		// summary: Stub fired when sizing is done, for things like Grid
+		// summary: Stub fired when sizing is done. Fired once 
+		//	after resize, or often when `intermediateChanges` is 
+		//	set to true. 
 	}
 	
 });
@@ -233,7 +308,8 @@ dojo.declare("dojox.layout.ResizeHandle",
 dojo.declare("dojox.layout._ResizeHelper",
 	dijit._Widget,
 	{
-	// summary: A global private resize helper shared between any resizeHandle with activeSizing='false;
+	// summary: A global private resize helper shared between any 
+	//		`dojox.layout.ResizeHandle` with activeSizing off.
 	
 	show: function(){
 		// summary: show helper to start resizing
@@ -243,7 +319,7 @@ dojo.declare("dojox.layout._ResizeHelper",
 			beforeBegin: dojo.partial(dojo.style, this.domNode, "display", "")
 		}).play();
 	},
-
+	
 	hide: function(){
 		// summary: hide helper after resizing is complete
 		dojo.fadeOut({ 
@@ -259,4 +335,5 @@ dojo.declare("dojox.layout._ResizeHelper",
 		// FIXME: this is off when padding present
 		dojo.marginBox(this.domNode, dim);
 	}
+	
 });

@@ -38,6 +38,9 @@
 			position:relative;
 		}
 		
+		#handler, #handler2, #minMax {
+			position:relative; float:left;
+		}
 	</style>
 
 </head>
@@ -128,7 +131,43 @@
 
 	<p>Fusce rutrum pede eget quam. Praesent purus. Aenean at elit in sem volutpat facilisis. Nunc est augue, commodo at, pretium a, fermentum at, quam. Nam sit amet enim. Suspendisse potenti. Cras hendrerit rhoncus justo. Integer libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat volutpat. Sed adipiscing mi vel ipsum.</p>
 
+	<br style="clear:both;">
+	
+	<h2>Experimental Settings:</h2>
+
+	<div id="handler" style="height:200px; width:200px; border:2px solid #ededed">
+		<p>Plain div with fixed aspect and 1:1</p>
+		<div dojoType="dojox.layout.ResizeHandle" targetId="handler" fixedAspect="true" style="bottom: 2px; right: 2px; position: absolute;"></div>
+	</div>
+
+	<p>known issue: fixed aspect only works with 1:1 aspect ratio</p>
+	<div id="handler2" style="height:100px; width:300px; border:red">
+		<p>Plain div with fixed aspect and 4:3</p>
+		<div dojoType="dojox.layout.ResizeHandle" targetId="handler2" fixedAspect="true" style="bottom: 2px; right: 2px; position: absolute;"></div>
+	</div>
+
+	<div id="minMax" style="width:150px; height:150px; border:1px solid #000">
+		<p>Min/Max set to 25x25 and 200x200, constrainMax = true</p>
+		<div dojoType="dojox.layout.ResizeHandle" targetId="minMax"
+			constrainMax="true" maxWidth="200" maxHeight="200"
+			minWidth="25" minHeight="25" style="bottom: 2px; right: 2px; position: absolute;"
+		></div>
+	</div>
+
+	<div id="minMax2" style="width:150px; float:left; position:relative; height:150px; border:1px solid #000">
+		<p>Min/Max set to 25x25 and 200x200, constrainMax = true, fixed 1:1 aspect</p>
+		<div dojoType="dojox.layout.ResizeHandle" targetId="minMax2"
+			constrainMax="true" maxWidth="200" maxHeight="200" fixedAspect="true"
+			minWidth="25" minHeight="25" style="bottom: 2px; right: 2px; position: absolute;"
+		></div>
+	</div>
+
+	<br style="clear:both;">
+
 	<p>Sed aliquam, quam consectetuer condimentum bibendum, neque libero commodo metus, non consectetuer magna risus vitae eros. Pellentesque mollis augue id libero. Morbi nonummy hendrerit dui. Morbi nisi felis, fringilla ac, euismod vitae, dictum mollis, pede. Integer suscipit, est sed posuere ullamcorper, ipsum lectus interdum nunc, quis blandit erat eros hendrerit pede. Vestibulum varius, elit id mattis mattis, nulla est feugiat ante, eget vestibulum augue eros ut odio. Maecenas euismod purus quis felis. Ut hendrerit tincidunt est. Fusce euismod, nunc eu tempus tempor, purus ligula volutpat tellus, nec lacinia sapien enim id risus. Aliquam orci turpis, condimentum sed, sollicitudin vel, placerat in, purus. Proin tortor nisl, blandit quis, imperdiet quis, scelerisque at, nisl. Maecenas suscipit fringilla erat. Curabitur consequat, dui blandit suscipit dictum, felis lectus imperdiet tellus, sit amet ornare risus mauris non ipsum. Fusce a purus. Vestibulum sodales. Sed porta ultrices nibh. Vestibulum metus.</p>
+
+	<p>Sed aliquam, quam consectetuer condimentum bibendum, neque libero commodo metus, non consectetuer magna risus vitae eros. Pellentesque mollis augue id libero. Morbi nonummy hendrerit dui. Morbi nisi felis, fringilla ac, euismod vitae, dictum mollis, pede. Integer suscipit, est sed posuere ullamcorper, ipsum lectus interdum nunc, quis blandit erat eros hendrerit pede. Vestibulum varius, elit id mattis mattis, nulla est feugiat ante, eget vestibulum augue eros ut odio. Maecenas euismod purus quis felis. Ut hendrerit tincidunt est. Fusce euismod, nunc eu tempus tempor, purus ligula volutpat tellus, nec lacinia sapien enim id risus. Aliquam orci turpis, condimentum sed, sollicitudin vel, placerat in, purus. Proin tortor nisl, blandit quis, imperdiet quis, scelerisque at, nisl. Maecenas suscipit fringilla erat. Curabitur consequat, dui blandit suscipit dictum, felis lectus imperdiet tellus, sit amet ornare risus mauris non ipsum. Fusce a purus. Vestibulum sodales. Sed porta ultrices nibh. Vestibulum metus.</p>
+
 
 </body>
 </html>
