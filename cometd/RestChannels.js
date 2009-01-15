@@ -342,8 +342,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 				}
 				catch(e){
 				}
-			}
-			else if(dojox.io && dojox.io.httpParse && contentType.match(/application\/http/)){
+			}else if(dojox.io && dojox.io.httpParse && contentType.match(/application\/http/)){
 				// do HTTP tunnel parsing
 				var topHeaders = '';
 				if(xhr && xhr.getAllResponseHeaders){
@@ -351,6 +350,8 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 					topHeaders = xhr.getAllResponseHeaders();
 				}
 				xhrs = dojox.io.httpParse(data,topHeaders,xhr.readyState != 4);
+			}else if(typeof data == "object"){
+				xhrs = data;
 			}
 			if(xhrs){
 				for(var i = 0;i < xhrs.length;i++){
