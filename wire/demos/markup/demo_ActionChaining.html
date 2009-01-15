@@ -75,6 +75,10 @@
 			name="tempData"
 			value="">
 		</div>
+		<div dojoType="dojox.wire.ml.DataProperty"
+			name="value"
+			value="value">
+		</div>
 	</div>
 
 	<!-- 
@@ -85,8 +89,8 @@
 		id="action1"
 		trigger="inputField"
 		triggerEvent="onChange">
-		<div dojoType="dojox.wire.ml.Invocation" object="inputField"    method="getValue" result="data.tempData"></div>
-		<div dojoType="dojox.wire.ml.Invocation" id="targetCopy" object="targetField1"  method="setValue" parameters="data.tempData"></div>
+		<div dojoType="dojox.wire.ml.Transfer" source="inputField.value" target="data.tempData"></div>
+		<div dojoType="dojox.wire.ml.Invocation" id="targetCopy" object="targetField1"  method="attr" parameters="data.value, data.tempData"></div>
 	</div>    
 
 	<!-- 

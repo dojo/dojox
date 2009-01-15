@@ -14,16 +14,15 @@
 	<title>Sample declarative data binding</title>
 	<style type="text/css">
 
-		@import "../../../../dijit/themes/tundra/tundra.css";
 		@import "../../../../dojo/resources/dojo.css";
+		@import "../../../../dijit/themes/soria/soria.css";
 		@import "../../../../dijit/tests/css/dijitTests.css";
 		@import "../TableContainer.css";
 
 		.splitView {
 			width: 90%;
 			height: 90%;
-			border: 1px solid #bfbfbf;
-			border-collapse: separate;
+			overflow: hidden;
 		}
 	</style>
 
@@ -34,8 +33,7 @@
 		dojo.require("dojox.wire.ml.DataStore");
 		dojo.require("dojox.wire.ml.Transfer");
 
-		dojo.require("dijit.layout.SplitContainer");
-		dojo.require("dijit.layout.LayoutContainer");
+		dojo.require("dijit.layout.BorderContainer");
 		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dijit.form.Button");
 		dojo.require("dijit.form.TextBox");
@@ -56,15 +54,14 @@
 	</script>
 </head>
 
-<body class="tundra">
+<body class="soria">
 
 	<!-- The following is the basic layout.  A split container with a button and a text field.  Data will be displayed on the right. -->
-	<div dojoType="dijit.layout.SplitContainer"
-		orientation="horizontal"
-		sizerWidth="7"
-		activeSizing="true"
+	<div dojoType="dijit.layout.BorderContainer"
+		gutters="true"
+		design="sidebar"
 		class="splitView">
-		<div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
+		<div dojoType="dijit.layout.ContentPane" region="left" style="width: 50%; overflow: auto;">
 			<font size="3"><b>Demo Searcher (Searches on Attribute 'name'):</b></font><br/><br/>
 			<b>Usage:</b><br/>
 			Enter the name you want to search the store for.  Wildcards * (multiple character), and ? (single character), are allowed.
@@ -81,11 +78,10 @@
 				</tr>
 			</table>
 		</div>
-		<div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
+		<div dojoType="dijit.layout.ContentPane" region="right" style="width: 50%; overflow: auto;">
 			<div class="dataTable" dojoType="dojox.wire.demos.TableContainer" jsId="dataTable" headers="Name,Location Type"></div>
 		</div>
 	</div>
-
 
 	<!-------------------------------- Using dojox.wire, declaratively wire up the widgets. --------------------------->
 

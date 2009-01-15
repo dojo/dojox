@@ -71,8 +71,14 @@
 	</div>    
 
 	<!-- 
-		Whenever a value is published to a topic, set it as the value of the textbox by calling the setValue function.
+		Whenever a value is published to a topic, set it as the value of the textbox by using Transfer to transfer the value from the
+		topic publish to the target property.  The underlying wire code will invoke the proper setter for the target, in this case
+		it will invoke the dijit 'attr' function.
 	-->
-	<div dojoType="dojox.wire.ml.Invocation" triggerTopic="sampleTopic" object="targetField1"    method="setValue" parameters="arguments[0]"></div>
+	<div dojoType="dojox.wire.ml.Action"
+		id="action2"
+		triggerTopic="sampleTopic">
+		<div dojoType="dojox.wire.ml.Transfer" target="targetField1.value"  source="arguments[0]"></div>
+	</div>    
 </body>
 </html>
