@@ -4,108 +4,15 @@ dojo.experimental("dojox.widget.ColorPicker"); // level: beta
 dojo.require("dijit.form._FormWidget");
 dojo.require("dojo.dnd.move"); 
 dojo.require("dojo.fx"); 
+dojo.require("dojox.color");
 
-(function(){
-
-	// this ported directly from 0.4 dojo.gfx.colors.hsv, with bugs :)
-	// FIXME: use ttrenka's HSB ?
-	var _hsv2rgb = function(/* int || Array */h, /* int */s, /* int */v, /* Object? */options){
-		//	summary
-		//	converts an HSV value set to RGB, ranges depending on optional options object.
-		//	patch for options by Matthew Eernisse 	
-		if (dojo.isArray(h)) {
-			if(s){
-				options = s;
-			}
-			v = h[2] || 0;
-			s = h[1] || 0;
-			h = h[0] || 0;
-		}
-
-		var opt = {
-			inputRange:  (options && options.inputRange)  ? options.inputRange : [255, 255, 255],
-			outputRange: (options && options.outputRange) ? options.outputRange : 255
-		};
-
-	    switch(opt.inputRange[0]) { 
-			// 0.0-1.0 
-			case 1: h = h * 360; break; 
-			// 0-100 
-			case 100: h = (h / 100) * 360; break; 
-			// 0-360 
-			case 360: h = h; break; 
-			// 0-255 
-			default: h = (h / 255) * 360; 
-		} 
-		if (h == 360){ h = 0;}
-
-		//	no need to alter if inputRange[1] = 1
-		switch(opt.inputRange[1]){
-			case 100: s /= 100; break;
-			case 255: s /= 255;
-		}
-
-		//	no need to alter if inputRange[1] = 1
-		switch(opt.inputRange[2]){
-			case 100: v /= 100; break;
-			case 255: v /= 255;
-		}
-
-		var r = null;
-		var g = null;
-		var b = null;
-
-		if (s == 0){
-			// color is on black-and-white center line
-			// achromatic: shades of gray
-			r = v;
-			g = v;
-			b = v;
-		}else{
-			// chromatic color
-			var hTemp = h / 60;		// h is now IN [0,6]
-			var i = Math.floor(hTemp);	// largest integer <= h
-			var f = hTemp - i;		// fractional part of h
-
-			var p = v * (1 - s);
-			var q = v * (1 - (s * f));
-			var t = v * (1 - (s * (1 - f)));
-
-			switch(i){
-				case 0: r = v; g = t; b = p; break;
-				case 1: r = q; g = v; b = p; break;
-				case 2: r = p; g = v; b = t; break;
-				case 3: r = p; g = q; b = v; break;
-				case 4: r = t; g = p; b = v; break;
-				case 5: r = v; g = p; b = q; break;
-			}
-		}
-
-		switch(opt.outputRange){
-			case 1:
-				r = dojo.math.round(r, 2);
-				g = dojo.math.round(g, 2);
-				b = dojo.math.round(b, 2);
-				break;
-			case 100:
-				r = Math.round(r * 100);
-				g = Math.round(g * 100);
-				b = Math.round(b * 100);
-				break;
-			default:
-				r = Math.round(r * 255);
-				g = Math.round(g * 255);
-				b = Math.round(b * 255);
-		}
-		return [r, g, b];
-
-	};
+;(function(d){
 	
 	var webSafeFromHex = function(hex){
 		// stub, this is planned later:
 		return hex;
 	}
-		
+	
 	dojo.declare("dojox.widget.ColorPicker",
 		dijit.form._FormWidget,
 		{
@@ -116,6 +23,7 @@ dojo.require("dojo.fx");
 		//		PhotoShop's color selction tool. This is an enhanced 
 		//		version of the default dijit.ColorPalette, though provides
 		//		no accessibility.
+		//
 		// example:
 		// |	var picker = new dojox.widget.ColorPicker({
 		// |		// a couple of example toggles:
@@ -128,7 +36,6 @@ dojo.require("dojo.fx");
 		// example: 
 		// | 	<!-- markup: -->
 		// | 	<div dojoType="dojox.widget.ColorPicker"></div>
-		//
 		//
 		// showRgb: Boolean
 		//	show/update RGB input nodes
@@ -158,14 +65,35 @@ dojo.require("dojo.fx");
 		//		Set to true to fire onChange in an indeterminate way
 		liveUpdate: false, 
 
-		_underlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
+		// PICKER_HUE_H: int
+		//     Height of the hue picker, used to calculate positions    
+		PICKER_HUE_H: 150,
+		
+		// PICKER_SAT_VAL_H: int
+		//     Height of the 2d picker, used to calculate positions    
+		PICKER_SAT_VAL_H: 150,
+		
+		// PICKER_SAT_VAL_W: int
+		//     Width of the 2d picker, used to calculate positions    
+		PICKER_SAT_VAL_W: 150,
+		
+		// value: String
+		//	Default color for this component. Only hex values are accepted as incoming/returned
+		//	values. Adjust this value with `.attr`, eg: dijit.byId("myPicker").attr("value", "#ededed");
+		//	to cause the points to adjust and the values to reflect the current color. 
+		value: "#ffffff",
+		
+		_underlay: d.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
+		// don't change to d.moduleUrl, build won't intern it.
 		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html"),
+		
+		buildRendering: function(){
+			this.inherited(arguments);
 
-		postCreate: function(){
 			// summary: As quickly as we can, set up ie6 alpha-filter support for our
 			// 	underlay.  we don't do image handles (done in css), just the 'core' 
 			//	of this widget: the underlay. 
-			if(dojo.isIE<7){ 
+			if(d.isIE < 7){ 
 				this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
 				this.colorUnderlay.src = this._blankGif.toString();
 			}
@@ -174,161 +102,264 @@ dojo.require("dojo.fx");
 			if(!this.showHsv){ this.hsvNode.style.display = "none"; }
 			if(!this.showHex){ this.hexNode.style.display = "none"; } 
 			if(!this.webSafe){ this.safePreviewNode.style.visibility = "hidden"; } 
-		},
-
-		startup: function(){
-
-			// this._offset = ((dojo.marginBox(this.cursorNode).w)/2); 
+			
+			// this._offset = ((d.marginBox(this.cursorNode).w)/2); 
 			this._offset = 0; 
-			var cmb = dojo.marginBox(this.cursorNode);
-			var hmb = dojo.marginBox(this.hueCursorNode);
+			var cmb = d.marginBox(this.cursorNode);
+			var hmb = d.marginBox(this.hueCursorNode);
 			this._shift = {
 				hue: {
-					x: Math.round(hmb.w/2)-1,
-					y: Math.round(hmb.h/2)-1
+					x: Math.round(hmb.w / 2) - 1,
+					y: Math.round(hmb.h / 2) - 1
 				},
 				picker: {
 					x: Math.floor(cmb.w / 2),
 					y: Math.floor(cmb.h / 2)
 				}
 			};
-
+			
+			//setup constants
+			this.PICKER_HUE_H = d.coords(this.hueNode).h;
+			var cu = d.coords(this.colorUnderlay);
+			this.PICKER_SAT_VAL_H = cu.h;
+			this.PICKER_SAT_VAL_W = cu.w;
+			
 			var ox = this._shift.picker.x;
 			var oy = this._shift.picker.y;
-			this._mover = new dojo.dnd.Moveable(this.cursorNode, {
-				mover: dojo.dnd.boxConstrainedMover({ 
-					t:0 - oy, 
-					l:0 - ox, 
-					w:151, h:151
-				})
-			}); 
-			
-			this._hueMover = new dojo.dnd.Moveable(this.hueCursorNode, {
-				mover: dojo.dnd.boxConstrainedMover({ 
-					t:0 - this._shift.hue.y, 
-					l:0, w:0, h:150 
-				})
+			this._mover = new d.dnd.move.boxConstrainedMoveable(this.cursorNode, {
+				box: {
+					t:0 - oy,
+					l:0 - ox,
+					w:this.PICKER_SAT_VAL_W,
+					h:this.PICKER_SAT_VAL_H
+				}
 			});
-
-			// no dnd/move/move published ... use a timer:
-			dojo.subscribe("/dnd/move/stop", dojo.hitch(this, "_clearTimer"));
-			dojo.subscribe("/dnd/move/start", dojo.hitch(this, "_setTimer"));
-
-			// ugly scaling calculator.  need a XYslider badly
-			this._sc = (1 / dojo.coords(this.colorUnderlay).w);  
-			this._hueSc = 255/150;
 			
-			// initial color
-			this._updateColor(); 
-		
+			this._hueMover = new d.dnd.move.boxConstrainedMoveable(this.hueCursorNode, {
+				box: {
+					t:0 - this._shift.hue.y,
+					l:0,
+					w:0,
+					h:this.PICKER_HUE_H
+				}
+			});
+			
+			// no dnd/move/move published ... use a timer:
+			d.subscribe("/dnd/move/stop", d.hitch(this, "_clearTimer"));
+			d.subscribe("/dnd/move/start", d.hitch(this, "_setTimer"));
+			
 		},
-
-		_setTimer: function(/* dojo.dnd.Mover */mover){
+		
+		_setValueAttr: function(value){
+			this.setColor(value, true);
+		},
+		
+		setColor: function(/* String */color, force){
+			// summary: Set a color on a picker. Usually used to set
+			//          initial color as an alternative to passing defaultColor option
+			//          to the constructor. 
+			var col = dojox.color.fromString(color);
+			
+			this._updatePickerLocations(col);
+			this._updateColorInputs(col);
+			this._updateValue(col, force);
+		},
+		
+		_setTimer: function(/* d.dnd.Mover */mover){
 			// FIXME: should I assume this? focus on mouse down so on mouse up
 			dijit.focus(mover.node);
-			dojo.setSelectable(this.domNode,false);
-			this._timer = setInterval(dojo.hitch(this, "_updateColor"), 45);	
+			d.setSelectable(this.domNode,false);
+			this._timer = setInterval(d.hitch(this, "_updateColor"), 45);	
 		},
-	
-		_clearTimer: function(/* dojo.dnd.Mover */mover){
+		
+		_clearTimer: function(/* d.dnd.Mover */mover){
 			clearInterval(this._timer);
 			this._timer = null;
 			this.onChange(this.value);
-			dojo.setSelectable(this.domNode,true);
+			d.setSelectable(this.domNode,true);
 		},
-
+		
 		_setHue: function(/* Decimal */h){
 			// summary: sets a natural color background for the 
 			// 	underlay image against closest hue value (full saturation) 
-			// h: 0..255 
-
-			// this is not a pretty conversion:
-			var hue = dojo.colorFromArray(_hsv2rgb(h, 1, 1, { inputRange: 1 })).toHex();
-			dojo.style(this.colorUnderlay, "backgroundColor", hue);
-
+			// h: 0..360 
+			d.style(this.colorUnderlay, "backgroundColor", dojox.color.fromHsv(h,100,100).toHex());
+			
 		},
-
+		
 		_updateColor: function(){
 			// summary: update the previewNode color, and input values [optional]
 			
-			// all these should be in the [0..150] range
-			var _huetop = dojo.style(this.hueCursorNode,"top") + this._shift.hue.y; 
-			var _pickertop = dojo.style(this.cursorNode,"top") + this._shift.picker.y;
-			var _pickerleft = dojo.style(this.cursorNode,"left") + this._shift.picker.x;
+			var _huetop = d.style(this.hueCursorNode,"top") + this._shift.hue.y, 
+				_pickertop = d.style(this.cursorNode,"top") + this._shift.picker.y,
+				_pickerleft = d.style(this.cursorNode,"left") + this._shift.picker.x,
 			
-			var h = Math.round(255 - (_huetop * this._hueSc));
-			var s = Math.round(_pickerleft * this._sc * 100); 
-			var v = Math.round(100 - (_pickertop * this._sc ) *100);
-
-			// limit hue calculations to only when it changes
-			if(h != this._hue){ this._setHue(h); }
-
-			var rgb = _hsv2rgb(h, s/100, v/100,{ inputRange: 1 }); 
-			var hex = dojo.colorFromArray(rgb).toHex();
-
-			this.previewNode.style.backgroundColor = hex;	
-			if(this.webSafe){ this.safePreviewNode.style.backgroundColor = webSafeFromHex(hex); }
-			if(this.showHex){ this.hexCode.value = hex; }
-			if(this.showRgb){
-				this.Rval.value = rgb[0];
-				this.Gval.value = rgb[1];	
-				this.Bval.value = rgb[2];
+				h = Math.round(360 - (_huetop / this.PICKER_HUE_H * 360)),
+				col = dojox.color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
+			;
+			
+			this._updateColorInputs(col);
+			this._updateValue(col, true);
+			
+			// update hue, not all the pickers
+			if (h!=this._hue) {
+				this._setHue(h);
 			}
-			if(this.showHsv){
-				this.Hval.value = Math.round((h * 360) / 255); // convert to 0..360
-				this.Sval.value = s;
-				this.Vval.value = v;
-			}
-			this.value = hex;
+		},
+		
+		_colorInputChange: function(e){
+			//summary: updates picker position and inputs 
+			//         according to rgb, hex or hsv input changes
 
+			var col, hasit = false;
+			switch (e.target) {
+				//transform to hsv to pixels
+
+				case this.hexCode:
+					col = dojox.color.fromString(e.target.value);
+					hasit = true;
+					
+					break;
+				case this.Rval:
+				case this.Gval:
+				case this.Bval:
+					col = dojox.color.fromArray([this.Rval.value, this.Gval.value, this.Bval.value]);
+					hasit = true;
+					break;
+				case this.Hval:
+				case this.Sval:
+				case this.Vval:
+					col = dojox.color.fromHsv(this.Hval.value, this.Sval.value, this.Vval.value);
+					hasit = true;
+					break
+			}
+			
+			if(hasit){
+				this._updatePickerLocations(col);
+				this._updateColorInputs(col);
+				this._updateValue(col, true);
+			}
+			
+		},
+		
+		_updateValue: function(/* dojox.color.Color */col, /* Boolean */fireChange){
+			// summary: updates the value of the widget
+			//          can cancel reverse onChange by specifying second param
+			var hex = col.toHex();
+			
+			this.value = this.valueNode.value = hex;
+			
 			// anytime we muck with the color, fire onChange?
-			if ((!this._timer && !arguments[1]) || this.liveUpdate){
-				this.setAttribute("value", hex);	
+			if(fireChange && (!this._timer || this.liveUpdate)) {
 				this.onChange(hex);
 			}
 		},
-
-		_updatePoints: function(e){
-//			update all other values and move points on picker to reflect next values
-//			entered in the HEX:
-//			console.log('changed? set points to:', e.target.value);
-			// not looking forward to the hex->hsv->pixel coordinate reverse calculation
+		
+		_updatePickerLocations: function(/* dojox.color.Color */col){
+			//summary: update handles on the pickers acording to color values
+			//  
+			var hsv = col.toHsv(),
+				ypos = Math.round(this.PICKER_HUE_H - hsv.h / 360 * this.PICKER_HUE_H - this._shift.hue.y),
+				newLeft = Math.round(hsv.s / 100 * this.PICKER_SAT_VAL_W - this._shift.picker.x),
+				newTop = Math.round(this.PICKER_SAT_VAL_H - hsv.v / 100 * this.PICKER_SAT_VAL_H - this._shift.picker.y)
+			;
+			
+			if (this.animatePoint) {
+				d.fx.slideTo({
+					node: this.hueCursorNode,
+					duration: this.slideDuration,
+					top: ypos,
+					left: 0
+				}).play();
+				
+				d.fx.slideTo({
+					node: this.cursorNode,
+					duration: this.slideDuration,
+					top: newTop,
+					left: newLeft
+				}).play();
+				
+			}
+			else {
+				d.style(this.hueCursorNode, "top", ypos + "px");
+				d.style(this.cursorNode, {
+					left: newLeft + "px",
+					top: newTop + "px"
+				});
+			}
+			
+			// limit hue calculations to only when it changes
+			if (hsv.h != this._hue) {
+				this._setHue(hsv.h);
+			}
+			
 		},
-
+		
+		_updateColorInputs: function(/* dojox.color.Color */col){
+			//summary: updates color inputs that were changed through other inputs
+			//or by clicking on the picker
+			
+			var hex = col.toHex();
+			
+			if (this.showRgb) {
+				this.Rval.value = col.r;
+				this.Gval.value = col.g;
+				this.Bval.value = col.b;
+			}
+			
+			if (this.showHsv) {
+				var hsv = col.toHsv();
+				this.Hval.value = Math.round((hsv.h)); // convert to 0..360
+				this.Sval.value = Math.round(hsv.s);
+				this.Vval.value = Math.round(hsv.v);
+			}
+			
+			if (this.showHex) {
+				this.hexCode.value = hex;
+			}
+			
+			this.previewNode.style.backgroundColor = hex;
+			
+			if (this.webSafe) {
+				this.safePreviewNode.style.backgroundColor = webSafeFromHex(hex);
+			}
+		},
+		
 		_setHuePoint: function(/* Event */evt){ 
 			// summary: set the hue picker handle on relative y coordinates
 			var ypos = evt.layerY - this._shift.hue.y;
 			if(this.animatePoint){
-				dojo.fx.slideTo({ 
+				d.fx.slideTo({ 
 					node: this.hueCursorNode, 
 					duration:this.slideDuration,
 					top: ypos,
 					left: 0,
-					onEnd: dojo.hitch(this, "_updateColor", true)
+					onEnd: d.hitch(this, "_updateColor", true)
 				}).play();
 			}else{
-				dojo.style(this.hueCursorNode, "top", ypos + "px");
+				d.style(this.hueCursorNode, "top", ypos + "px");
 				this._updateColor(false); 
 			}
 		},
-
+		
 		_setPoint: function(/* Event */evt){
 			// summary: set our picker point based on relative x/y coordinates
-		//	evt.preventDefault();
-			var newTop = evt.layerY - this._shift.picker.y;
-			var newLeft = evt.layerX - this._shift.picker.x;
+			//  evt.preventDefault();
+			var newTop = evt.layerY - this._shift.picker.y,
+				newLeft = evt.layerX - this._shift.picker.x
+			;
 			if(evt){ dijit.focus(evt.target); }
 
 			if(this.animatePoint){
-				dojo.fx.slideTo({ 
+				d.fx.slideTo({ 
 					node: this.cursorNode, 
-					duration:this.slideDuration,
+					duration: this.slideDuration,
 					top: newTop,
 					left: newLeft,
-					onEnd: dojo.hitch(this,"_updateColor", true)
+					onEnd: d.hitch(this,"_updateColor", true)
 				}).play();
 			}else{
-				dojo.style(this.cursorNode, {
+				d.style(this.cursorNode, {
 					left: newLeft + "px",
 					top: newTop + "px"	
 				});
@@ -336,11 +367,11 @@ dojo.require("dojo.fx");
 			}
 		},
 		
-		_handleKey: function(e){
+		_handleKey: function(/* Event */e){
 			// FIXME: not implemented YET
-			var keys = dojo.keys;
+			// var keys = d.keys;
 		}
 		
 	});
-
-})();
+	
+})(dojo);

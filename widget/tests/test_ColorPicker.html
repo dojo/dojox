@@ -2,8 +2,8 @@
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>Dojox ColorPicker Test</title>
 	
+	<title>Dojox ColorPicker Test</title>
 	
 	<!-- required: a default theme file, and ColorPicker css -->
 	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css">
@@ -35,7 +35,6 @@
 		var handler = function(val,id){
 			dojo.byId(id).value = val;
 		};
-		
 	</script>
 </head>
 <body class="tundra">
@@ -44,6 +43,7 @@
 
 	<h3>defaults:</h3>
 	<div id="picker" dojoType="dojox.widget.ColorPicker"
+		value="#9ebf6c"
 		onChange="handler(arguments[0],'onchangeOne')"
 	></div>
 	<p>Current value: <input readonly="true" id="onchangeOne" value="???" /></p>
@@ -68,8 +68,7 @@
 	
 	<div id="absolutey">
 		<h3>To See how it positions in an absolute node (editor plugin, input popup)</h3>
-		<div dojoType="dojox.widget.ColorPicker"></div>
-		
+		<input dojoType="dojox.widget.ColorPicker" value="#ededed">
 	</div>
 	
 	<p>that's all folks!</p>
