@@ -573,7 +573,7 @@ dojo.declare("dojox.data.AndOrWriteStore", dojox.data.AndOrReadStore, {
 			if(item !== null){
 				var serializableItem = {};
 				for(var key in item){
-					if(key !== this._storeRefPropName && key !== this._itemNumPropName){
+					if(key !== this._storeRefPropName && key !== this._itemNumPropName && key !== this._reverseRefMap && key !== this._rootItemPropName){
 						var attribute = key;
 						var valueArray = this.getValues(item, attribute);
 						if(valueArray.length == 1){
