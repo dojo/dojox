@@ -81,7 +81,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 			if(i == 0){ 
 				this._roller = item; 
 				this._idx = 0; 
-			}else{ dojo.destroyElement(item); }
+			}else{ dojo.destroy(item); }
 		}, this);
 		
 		// handle the case where items[] were passed, and no srcNodeRef exists
