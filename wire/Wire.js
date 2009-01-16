@@ -277,7 +277,7 @@ dojo.declare("dojox.wire.Wire", null, {
 			value = object.getPropertyValue(property);
 		}else{
 			var getter = "get" + property.charAt(0).toUpperCase() + property.substring(1);
-			if(this._useDijitAttr(object, property)){
+			if(this._useAttr(object)){
 				value = object.attr(property);
 			} else if(object[getter]){
 				value = object[getter]();
@@ -325,7 +325,7 @@ dojo.declare("dojox.wire.Wire", null, {
 			object.setPropertyValue(property, value);
 		}else{
 			var setter = "set" + property.charAt(0).toUpperCase() + property.substring(1);
-			if(this._useDijitAttr(object, property)){
+			if(this._useAttr(object)){
 				object.attr(property, value);
 			}else if(object[setter]){
 				object[setter](value);
@@ -335,22 +335,14 @@ dojo.declare("dojox.wire.Wire", null, {
 		}
 	},
 
-	_useDijitAttr: function(object, property) {
+	_useAttr: function(object) {
 		//	summary:
-	   	//		Function to detect if dijit.attr support exists on the target and
-		//		if it supports the property in question
+	   	//		Function to detect if dijit.attr support exists on the target
 		//	object:
 		//		The target object to set the property of.
-		//	property:
-		//		The property we want to see if we can modify via attr.
 		var useAttr = false;
-		var m = object.attributeMap;
-		if(m){
-			//Have to do an explicit check for undefined, since empty string "", evals false, etc.
-			//and may be in the attr map.
-			if(m[property] !== undefined && dojo.isFunction(object.attr)){
-				useAttr = true;
-			}
+		if(dojo.isFunction(object.attr)){
+			useAttr = true;
 		}
 		return useAttr;
 	}

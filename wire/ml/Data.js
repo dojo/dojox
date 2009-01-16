@@ -90,6 +90,10 @@ dojo.declare("dojox.wire.ml.DataProperty", [dijit._Widget, dijit._Container], {
 	type: "",
 	value: "",
 
+	_getValueAttr: function(){
+		return this.getValue();
+	},
+
 	getValue: function(){
 		//	summary:
 		//		Returns a property value
