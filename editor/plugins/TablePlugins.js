@@ -58,6 +58,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 				return dojo.withGlobal(this.window, "getAncestorElement",dijit._editor.selection, [tagName]);
 			},
 			hasAncestorElement: function(tagName){
+				return true
 				return dojo.withGlobal(this.window, "hasAncestorElement",dijit._editor.selection, [tagName]);
 			},
 			selectElement: function(elem){
@@ -85,8 +86,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		this.initialized = true;
 		this.editor = editor;
 		
-		
-		this.editorDomNode = this.editor.iframe ? this.editor.document : this.editor.editNode;
+		this.editorDomNode = this.editor.editNode || this.editor.iframe.document.body.firstChild;
 		
 		// RichText should have a mouseup connection to recognize drag-selections
 		// Example would be selecting multiple table cells
@@ -470,7 +470,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary
 			//		Building context menu for right-click shortcuts within a table
 			//
-			var node = dojo.isFF ? this.editor.editNode : this.editor.document.firstChild;
+			var node = dojo.isFF ? this.editor.editNode : this.editorDomNode;
 			
 			pMenu = new dijit.Menu({targetNodeIds:[node], id:"progMenu", contextMenuForWindow:dojo.isIE});
 			var _M = dijit.MenuItem;
