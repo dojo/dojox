@@ -3,7 +3,7 @@ dojo.provide("dojox.analytics.Urchin");
 /*=====
 dojo.mixin(djConfig,{
 	// urchin: String
-	//		Used by dojox.analytics.Urchin as the default UA-123456-7 account
+	//		Used by `dojox.analytics.Urchin` as the default UA-123456-7 account
 	//		number used when being created. Alternately, you can pass an acct:"" 
 	//		parameter to the constructor a la: new dojox.analytics.Urchin({ acct:"UA-123456-7" });
 	urchin: ""
@@ -11,7 +11,8 @@ dojo.mixin(djConfig,{
 =====*/
 
 dojo.declare("dojox.analytics.Urchin", null, {
-	// summary: A Google-analytics helper, for post-onLoad inclusion of the tracker 
+	// summary: A Google-analytics helper, for post-onLoad inclusion of the tracker, and 
+	//		dynamic tracking during long-lived page cycles. 
 	//
 	// description:
 	//		A small class object will allows for lazy-loading the Google Analytics API
@@ -37,8 +38,11 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	//	example: 
 	//	|	// define the urchin djConfig option:
 	//	|	var djConfig = { urchin: "UA-123456-7" };
+	//	|
 	//	|	// and in markup:
 	//	|	<div dojoType="dojox.analytics.Urchin"></div>
+	//	|	// or code:
+	//	|	new dojox.analytics.Urchin();
 	//
 	//	example:
 	//	|	// create and define all analytics with one tag. 
@@ -61,9 +65,9 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	_loadGA: function(){
 		// summary: load the ga.js file and begin initialization process
 		var gaHost = ("https:" == document.location.protocol) ? "https://ssl." : "http://www.";
-		var s = dojo.doc.createElement('script');
-		s.src = gaHost + "google-analytics.com/ga.js";
-		dojo.doc.getElementsByTagName("head")[0].appendChild(s);
+		dojo.create('script', {
+			src: gaHost + "google-analytics.com/ga.js"
+		}, dojo.doc.getElementsByTagName("head")[0]);
 		setTimeout(dojo.hitch(this, "_checkGA"), this.loadInterval);
 	},
 
@@ -77,7 +81,7 @@ dojo.declare("dojox.analytics.Urchin", null, {
 		// summary: initialize the tracker
 		this.tracker = _gat._getTracker(this.acct);
 		this.tracker._initData();
-		this.GAonLoad.apply(this,arguments);
+		this.GAonLoad.apply(this, arguments);
 	},
 	
 	GAonLoad: function(){
@@ -87,6 +91,19 @@ dojo.declare("dojox.analytics.Urchin", null, {
 		//		complete and initialized. The initial trackPageView (with
 		//		no arguments) is called here as well, so remeber to call 
 		//		manually if overloading this method.
+		//
+		//	example:
+		//	Create an Urchin tracker that will track a specific page on init
+		//	after page load (or parsing, if parseOnLoad is true)
+		//	|	dojo.addOnLoad(function(){
+		//	|		new dojox.ananlytics.Urchin({
+		//	|			acct:"UA-12345-67", 
+		//	|			GAonLoad: function(){
+		//	|				this.trackPageView("/custom-page");
+		//	|			}
+		//	|		});
+		//	|	});
+		
 		this.trackPageView();
 	},
 	
@@ -96,6 +113,16 @@ dojo.declare("dojox.analytics.Urchin", null, {
 		//
 		//	url: String
 		//		A location to tell the tracker to track, eg: "/my-ajaxy-endpoint"
+		//
+		//	example:
+		//	Track clicks from a container of anchors and populate a `ContentPane`
+		//	|	// 'tracker' is our `Urchin` instance, pane is the `ContentPane` ref.
+		//	|	dojo.connect(container, "onclick", function(e){
+		//	|		var ref = dojo.attr(e.target, "href");
+		//	|		tracker.trackPageView(ref);
+		//	|		pane.attr("href", ref); 
+		//	|	});
+		
 		this.tracker._trackPageview.apply(this, arguments);
 	}
 	
