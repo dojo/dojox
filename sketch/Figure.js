@@ -291,10 +291,10 @@ dojo.require("dojox.sketch.UndoStack");
 		//	then scale it.
 		this.backgroundRect.setShape({ x:0, y:0, width:Math.max(w,this.size.w), height:Math.max(h,this.size.h) })
 		this.group.setTransform(dojox.gfx.matrix.scale(this.zoomFactor, this.zoomFactor));
-		if(dojo.isIE){
+		/*if(dojo.isIE){
 			this.image.rawNode.style.width=Math.max(w,this.size.w);
 			this.image.rawNode.style.height=Math.max(h,this.size.h);
-		}
+		}*/
 		for(var i=0; i<this.shapes.length; i++){
 			this.shapes[i].zoom(this.zoomFactor);
 		}
