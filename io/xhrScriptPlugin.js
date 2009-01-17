@@ -28,7 +28,7 @@ dojox.io.xhrScriptPlugin = function(/*String*/url, /*String*/callbackParamName, 
 				}
 				return dojo.io.script.get(args);
 			}
-			return (httpAdapter ? httpAdapter(send, true) : send)(method, args, hasBody); // use the windowName transport
+			return (httpAdapter ? httpAdapter(send, true) : send)(method, args, hasBody); // use the JSONP transport
 		}
 	);
 };
