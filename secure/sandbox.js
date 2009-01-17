@@ -51,7 +51,7 @@ dojo.require("dojo.NodeList-fx");
 		var wrap = dojox.secure.DOM(element);
 		element = wrap(element);
 		var document = element.ownerDocument;
-		var dojo = dojox.secure._safeDojoFunctions(element,wrap);
+		var mixin, dojo = dojox.secure._safeDojoFunctions(element,wrap);
 		var imports= [];
 		var safeCalls = ["isNaN","isFinite","parseInt","parseFloat","escape","unescape",
 										"encodeURI","encodeURIComponent","decodeURI","decodeURIComponent",
@@ -168,7 +168,7 @@ dojo.require("dojo.NodeList-fx");
 					// this is the first argument, so we can define the prototype ourselves
 					// link up the prototype chain to the superclass's prototype, so we are a subtype
 					superConstructor = arg;
-					F = function() {};
+					var F = function() {};
 					F.prototype = arg.prototype;
 					proto = new F;
 				}
