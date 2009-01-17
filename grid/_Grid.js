@@ -299,13 +299,18 @@ dojo.requireLocalization("dijit", "loading");
 			if(typeof ah == "boolean"){
 				this._autoHeight = ah;
 			}else if(typeof ah == "number"){
-				this._autoHeight = (ah >= this.rowCount);
+				this._autoHeight = (ah >= this.attr('rowCount'));
 			}else{
 				this._autoHeight = false;
 			}
 			if(this._started && !skipRender){
 				this.render();
 			}
+		},
+
+		_getRowCountAttr: function(){
+			return this.updating && this.invalidated && this.invalidated.rowCount != undefined ?
+				this.invalidated.rowCount : this.rowCount;
 		},
 		
 		styleChanged: function(){
@@ -659,7 +664,7 @@ dojo.requireLocalization("dijit", "loading");
 					});
 				}
 			}
-			if(this.autoHeight === true || h != -1 || (typeof this.autoHeight == "number" && this.autoHeight >= this.rowCount)){
+			if(this.autoHeight === true || h != -1 || (typeof this.autoHeight == "number" && this.autoHeight >= this.attr('rowCount'))){
 				this.scroller.windowHeight = h;
 			}else{
 				this.scroller.windowHeight = Math.max(this.domNode.clientHeight - t, 0);
@@ -694,7 +699,7 @@ dojo.requireLocalization("dijit", "loading");
 		},
 
 		_render: function(){
-			this.scroller.init(this.rowCount, this.keepRows, this.rowsPerPage);
+			this.scroller.init(this.attr('rowCount'), this.keepRows, this.rowsPerPage);
 			this.prerender();
 			this.setScrollTop(0);
 			this.postrender();
@@ -1090,13 +1095,13 @@ dojo.requireLocalization("dijit", "loading");
 		addRow: function(){
 			// summary:
 			//		Add a row to the grid.
-			this.updateRowCount(this.rowCount+1);
+			this.updateRowCount(this.attr('rowCount')+1);
 		},
 
 		removeSelectedRows: function(){
 			// summary:
 			//		Remove the selected rows from the grid.
-			this.updateRowCount(Math.max(0, this.rowCount - this.selection.getSelected().length));
+			this.updateRowCount(Math.max(0, this.attr('rowCount') - this.selection.getSelected().length));
 			this.selection.clear();
 		}
 

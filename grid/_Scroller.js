@@ -244,7 +244,7 @@ dojo.provide("dojox.grid._Scroller");
 			
 			// Calculate the average row height and update the defaults (row and page).
 			this.needPage(this.page, this.pageTop);
-			var rowsOnPage = (this.page < this.pageCount - 1) ? this.rowsPerPage : (this.rowCount % this.rowsPerPage);
+			var rowsOnPage = (this.page < this.pageCount - 1) ? this.rowsPerPage : ((this.rowCount % this.rowsPerPage) || this.rowsPerPage);
 			var pageHeight = this.getPageHeight(this.page);
 			this.averageRowHeight = (pageHeight > 0 && rowsOnPage > 0) ? (pageHeight / rowsOnPage) : 0;
 		},
