@@ -55,7 +55,7 @@ dojox.json.ref = {
 		var F = function(){};
 		function walk(it, stop, defaultId, schema, defaultObject){
 			// this walks the new graph, resolving references and making other changes
-		 	var update, val, id = it[idAttribute] || defaultId;
+		 	var update, val, id = idAttribute in it ? it[idAttribute] : defaultId;
 		 	if(id !== undefined){
 		 		id = (prefix + id).replace(pathResolveRegex,'$2$3');
 		 	}
