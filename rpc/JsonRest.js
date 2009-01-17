@@ -148,7 +148,7 @@ dojo.require("dojox.rpc.Rest");
 					
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
 					left = -1; // first make sure that success isn't called
-					kwArgs.onError();
+					kwArgs.onError(value);
 				});
 			}
 			// revert back to the normal XHR handler
