@@ -2,10 +2,10 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink" 
 	xmlns:dojoxsketch="http://dojotoolkit.org/dojox/sketch" 
 	width="1000" 
-	height="1000"
+	height="855"
 >
 	<g>
-		<image xlink:href="images/figure2.gif" x="0" y="0" width="1000" height="1000" />
+		<image xlink:href="images/figure2.gif" x="0" y="0" width="1000" height="855" />
 		<g id="ann-1" dojoxsketch:type="Lead" transform="translate(437,169)">
 			<path style="stroke:blue;stroke-width:2;fill:none;" d="M0,0 Q100,-50 200,0" />
 			<text style="fill:blue;text-anchor:start" font-weight="bold" x="204" y="-2">1</text>
