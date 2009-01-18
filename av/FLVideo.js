@@ -37,6 +37,11 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		// summary:
 		// Initialize the media.
 		//
+		//
+		// File can only be run from a server, due to SWF dependency.
+		if(location.href.toLowerCase().indexOf("file://")>-1){
+			throw new Error("dojox.av.FLVideo can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
+		}
 		this._subs = [];
 		this._cons = [];
 		this.mediaUrl = this._normalizeUrl(this.mediaUrl);
@@ -77,7 +82,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			this.isStopped = !this.autoPlay;
 			this.onLoad(this.flashMedia);
 			this._initStatus();
-			this._update();											 
+			this._update();			 
 		});
 	},
 	
@@ -124,7 +129,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			}
 			this.flashMedia.setVolume(this._normalizeVolume(vol));
 		}
-		if(!this.flashMedia) {
+		if(!this.flashMedia || !this.flashMedia.doGetVolume) {
 			return this.initialVolume;
 		}
 		return this.flashMedia.getVolume(); // Float	
@@ -184,6 +189,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		if(this.duration){
 			this._checkBuffer(time, dObj.buffer);	
 		}
+		// FIXME: need to remove this on destroy
 		setTimeout(dojo.hitch(this, "_update"), this.updateTime);
 	},
 	

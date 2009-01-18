@@ -12,7 +12,9 @@
 <script>
 	djConfig={
 		isDebug:true,
-		parseOnLoad:true
+		parseOnLoad:true,
+		debugAtAllCosts:true,
+		popup:true
 	}
 </script>
 <script src="../../../dojo/dojo.js"></script>
@@ -24,6 +26,7 @@ dojo.require("dojox.av.widget.PlayButton");
 dojo.require("dojox.av.widget.VolumeButton");
 dojo.require("dojox.av.widget.ProgressSlider");
 dojo.require("dojox.av.widget.Status");
+console.log("ready")
 </script>
 
 </head>
@@ -32,7 +35,7 @@ dojo.require("dojox.av.widget.Status");
     <div dojoType="dojox.av.widget.Player" playerWidth="100%">
         <!--testing download progress: "https://user.sitepen.com/~mwilcox/dojotoolkit/dojox/av/tests/video/Grog.flv" -->
         <div controlType="video" initialVolume=".1"
-			mediaUrl="video/BillHappy.flv" autoPlay="true" isDebug="false" dojoType="dojox.av.FLVideo"></div>
+			mediaUrl="video/Grog.flv" autoPlay="true" isDebug="false" dojoType="dojox.av.FLVideo"></div>
         
         <div controlType="play" dojoType="dojox.av.widget.PlayButton"></div>
         <div controlType="volume" dojoType="dojox.av.widget.VolumeButton"></div>

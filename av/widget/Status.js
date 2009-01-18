@@ -13,7 +13,16 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 	//
 	templatePath: dojo.moduleUrl("dojox.av.widget","resources/Status.html"),
 	//
-	postCreate: function(){},
+	postCreate: function(){
+		this.titleNode = dojo.query(".Status", this.domNode);
+		this.durNode = dojo.query(".Duration", this.domNode);
+		this.timeNode = dojo.query(".Time", this.domNode);
+		
+		console.log("this.timeNode:", this.timeNode)
+		console.log("this.durNode:", this.durNode)
+		console.log("this.titleNode:", this.titleNode)
+		
+	},
 	
 	setMedia: function(/* Object */med){
 		// summary:
@@ -26,7 +35,7 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 			this.durNode.innerHTML = this.toSeconds(this.duration);
 		});
 		dojo.connect(this.media, "onPosition", this, function(time){
-			this.timeNode.innerHTML = this.toSeconds(time);													  
+			//this.timeNode.innerHTML = this.toSeconds(time);													  
 		});
 		
 		var cons = ["onMetaData", "onPosition", "onStart", "onBuffer", "onPlay", "onPause", "onStop", "onEnd", "onError", "onLoad"];
@@ -56,7 +65,8 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 		}
 	},
 	onPosition:function(time){
-		this.timeNode.innerHTML = this.toSeconds(time);													  
+		//console.log("onPosition:", time)
+		//	this.timeNode.innerHTML = this.toSeconds(time);													  
 	},
 	onStart: function(){
 		this.setStatus("Starting");
@@ -94,6 +104,7 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 				str = "buffering...";	
 			}
 		}
+		//console.log(this.titleNode, "title:",this.title, "str:",str)
 		this.titleNode.innerHTML = '<span class="statusTitle">'+this.title+'</span> <span class="statusInfo">'+str+'</span>';
 	},
 	

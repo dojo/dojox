@@ -57,6 +57,9 @@
 	border-collapse:collapse;
 }
 .Status{
+	height:20px;
+	background:#ff0000;
+	table-layout:fixed;
 }
 .Status.statusError .statusTitle, .Status.statusError .statusInfo{
 	color:#FF0000;

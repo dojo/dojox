@@ -185,7 +185,9 @@ dojo.declare("dojox.av._Media", null, {
 		// 		playing, stopped, bufering, etc.
 	},
 	
-	
+	onResize: function(){
+		
+	},
 	
 	_figureStatus: function(){
 		// summary:
