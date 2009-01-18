@@ -40,7 +40,18 @@ dojo.declare("dojox.data.ServiceStore",
 			//		This can be a preexisting id provided by the server.  
 			//		If an ID isn't already provided when an object
 			//		is fetched or added to the store, the autoIdentity system
-			//		will generate an id for it and add it to the index. 
+			//		will generate an id for it and add it to the index.
+			// 
+			// The *estimateCountFactor* parameter
+			// 		This parameter is used by the ServiceStore to estimate the total count. When
+			//		paging is indicated in a fetch and the response includes the full number of items
+			//	 	requested by the fetch's count parameter, then the total count will be estimated
+			//		to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
+			//		does not support paging, and the response is the full set of items, where the
+			// 		total count is equal to the numer of items returned. If the server does support
+			//		paging, an estimateCountFactor of 2 is a good value for estimating the total count
+			//		It is also possible to override _processResults if the server can provide an exact 
+			// 		total count.
 			//
 			// The *syncMode* parameter
 			//		Setting this to true will set the store to using synchronous calls by default.
@@ -85,6 +96,7 @@ dojo.declare("dojox.data.ServiceStore",
 		schema: null,
 		idAttribute: "id",
 		syncMode: false,
+		estimateCountFactor: 1,
 		getSchema: function(){
 			return this.schema; 
 		},
@@ -248,7 +260,7 @@ dojo.declare("dojox.data.ServiceStore",
 				}
 			}
 			var count = results.length;
-			return {totalCount: deferred.request.count == count ? (deferred.request.start || 0) + count * 2 : count, items: results};
+			return {totalCount: deferred.request.count == count ? (deferred.request.start || 0) + count * this.estimateCountFactor : count, items: results};
 		},
 		close: function(request){
 			return request && request.abort && request.abort();
