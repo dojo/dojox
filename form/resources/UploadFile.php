@@ -111,6 +111,9 @@ if( isset($_FILES[$fieldName])){
 		return $data;
 	}
 
+
+
+
 }elseif( isset($_FILES['uploadedfile']) ){
 	//
 	// 	If the data passed has 'uploadedfile', then it's HTML. 
@@ -119,6 +122,9 @@ if( isset($_FILES[$fieldName])){
 	$m = move_uploaded_file($_FILES['uploadedfile']['tmp_name'],  $upload_path . $_FILES['uploadedfile']['name']);
 	trace("moved:".$m);
 	trace("Temp:".$_FILES['uploadedfile']['tmp_name']);
+	
+	
+	
 	
 	trace("HTML single POST:");
 	trace($_POST, true);

@@ -1,7 +1,7 @@
 dojo.provide("dojox.form.FileUploader");
 dojo.experimental("dojox.form.FileUploader");
 var swfPath = dojo.config.uploaderPath || dojo.moduleUrl("dojox.form", "resources/uploader.swf");
-
+console.log(location)
 
 dojo.require("dojox.embed.Flash");
 dojo.require("dojo.io.iframe");
@@ -181,6 +181,11 @@ dojo.declare("dojox.form.FileUploader", null, {
 		// summary:
 		//		Calling init function instead of doing operations in 
 		//		constructor, to allow for patches and over-writes.
+		//
+		// File can only be run from a server, due to SWF dependency.
+		if(location.href.toLowerCase().indexOf("file://")>-1){
+			throw new Error("dojox.form.FileUploader can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
+		}
 		this.init(options);
 	},
 	
