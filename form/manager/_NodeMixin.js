@@ -288,19 +288,7 @@ dojo.require("dojox.form.manager._Mixin");
 						return this;	// self
 					}
 					// getter
-					var result = dojo.query("> option", elem).filter(function(opt){
-						return opt.selected;
-					}).map(function(opt){
-						return opt.value;
-					});
-					return result.length == 1 ? result[0] : "";	// String
-				case "textarea":
-					if(isSetter){
-						elem.value = "" + value;
-						return this;
-					}
-					// getter
-					return elem.value;
+					return elem.value || ""; // String
 				case "button":
 					if(isSetter){
 						elem.innerHTML = "" + value;
