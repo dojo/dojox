@@ -235,6 +235,11 @@ dojo.provide("dojox.embed.Flash");
 		//	|		height: 300,
 		//	|		style: "position:absolute;top:0;left:0"
 		//	|	}, myWrapperNode);
+		//
+		// File can only be run from a server, due to SWF dependency.
+		if(location.href.toLowerCase().indexOf("file://")>-1){
+			throw new Error("dojox.av.FLVideo can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
+		}
 		this.id = null;
 		this.movie = null;
 		this.domNode = null;
