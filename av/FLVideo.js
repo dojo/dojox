@@ -38,10 +38,6 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		// Initialize the media.
 		//
 		//
-		// File can only be run from a server, due to SWF dependency.
-		if(location.href.toLowerCase().indexOf("file://")>-1){
-			throw new Error("dojox.av.FLVideo can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
-		}
 		this._subs = [];
 		this._cons = [];
 		this.mediaUrl = this._normalizeUrl(this.mediaUrl);
