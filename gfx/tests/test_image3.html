@@ -1,0 +1,53 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>Testing image 3</title>
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript">
+dojo.require("dojox.gfx");
+
+var surface, image = null, grid_size = 1000, grid_step = 50,
+	m = dojox.gfx.matrix;
+
+makeShapes = function(){
+	surface = dojox.gfx.createSurface("test", 800, 600);
+	for(var i = 0; i <= grid_size; i += grid_step){
+		surface.createLine({x1: 0, x2: grid_size, y1: i, y2: i}).setStroke("black");
+		surface.createLine({y1: 0, y2: grid_size, x1: i, x2: i}).setStroke("black");
+	}
+    image = surface.createImage({width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+    image.connect("onclick", function(){ alert("You didn't expect a download, did you?"); });
+};
+
+transformImage = function(){
+	if(window.scaled){
+		surface.setDimensions(800,600);
+		image.setTransform({});
+	}else{
+		surface.setDimensions(1000,600);
+	    image.setTransform({xx: 6, yy: 6});
+	}
+	window.scaled=!window.scaled;
+};
+
+dojo.addOnLoad(makeShapes);
+
+</script>
+</head>
+<body>
+<h1>dojox.gfx Image tests</h1>
+<p>Clicking the following button should enlarge the surface and the image.
+	The image should not be cropped on the right and the background of grid should be red.
+	currently in IE, the right side of the image are cropped (the part which exceeds the original size of the surface),
+	and the red background does not cover the part of the extended surface area</p>
+<p>
+<input type="button" onclick="transformImage()" value="scale/reset"/><br />
+</p>
+<div id="test" style="background-color:red"></div>
+<p>That's all Folks!</p>
+</body>
+</html>
