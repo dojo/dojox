@@ -230,6 +230,16 @@ dojo.require("dojox.gfx.arc");
 			}
 			return this;
 		},
+		
+		_setDimensions: function(width, height){
+			// summary: sets the width and height of the rawNode,
+			//	if the surface sixe has been changed
+			// width: String: width in pixels
+			// height: String: height in pixels
+			
+			// default implementation does nothing
+			return this; // self
+		},
 
 		setRawNode: function(rawNode){
 			// summary:
@@ -242,7 +252,6 @@ dojo.require("dojox.gfx.arc");
 		},
 
 		// move family
-
 
 		_moveToFront: function(){
 			// summary: moves a shape to front of its parent's list of shapes (VML)
@@ -281,6 +290,17 @@ dojo.require("dojox.gfx.arc");
 				this.children[i]._updateParentMatrix(matrix);
 			}
 			return this;	// self
+		},
+		_setDimensions: function(width, height){
+			// summary: sets the width and height of the rawNode,
+			//	if the surface sixe has been changed
+			// width: String: width in pixels
+			// height: String: height in pixels
+			
+			for(var i = 0; i < this.children.length; ++i){
+				this.children[i]._setDimensions(width, height);
+			}
+			return this; // self
 		}
 	});
 	g.Group.nodeType = "group";
@@ -438,8 +458,8 @@ dojo.require("dojox.gfx.arc");
 		},
 		_applyTransform: function() {
 			var matrix = this._getRealMatrix(),
-				img = this.rawNode,
-				s = img.style,
+				rawNode = this.rawNode,
+				s = rawNode.style,
 				shape = this.shape;
 			if(matrix){
 				matrix = m.multiply(matrix, {dx: shape.x, dy: shape.y});
@@ -448,7 +468,7 @@ dojo.require("dojox.gfx.arc");
 			}
 			matrix = m.multiply(matrix,
 				{xx: shape.width / parseInt(s.width), yy: shape.height / parseInt(s.height)});
-			var f = this.rawNode.filters["DXImageTransform.Microsoft.Matrix"];
+			var f = rawNode.filters["DXImageTransform.Microsoft.Matrix"];
 			if(f){
 				f.M11 = matrix.xx;
 				f.M12 = matrix.xy;
@@ -457,11 +477,22 @@ dojo.require("dojox.gfx.arc");
 				f.Dx = matrix.dx;
 				f.Dy = matrix.dy;
 			}else{
-				this.rawNode.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx +
+				s.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx +
 					", M12=" + matrix.xy + ", M21=" + matrix.yx + ", M22=" + matrix.yy +
 					", Dx=" + matrix.dx + ", Dy=" + matrix.dy + ")";
 			}
 			return this; // self
+		},
+		_setDimensions: function(width, height){
+			// summary: sets the width and height of the rawNode,
+			//	if the surface sixe has been changed
+			// width: String: width in pixels
+			// height: String: height in pixels
+
+			var s = this.rawNode.style;
+			s.width  = width;
+			s.height = height;
+			return this._applyTransform(); // self
 		}
 	});
 	g.Image.nodeType = "rect";
@@ -905,7 +936,7 @@ dojo.require("dojox.gfx.arc");
 			if(!this.rawNode) return this;
 			var cs = this.clipNode.style,
 				r = this.rawNode, rs = r.style,
-				bs = this.bgNode.style;
+				bs = this.bgNode.style, i;
 			cs.width  = width;
 			cs.height = height;
 			cs.clip = "rect(0px " + width + "px " + height + "px 0px)";
@@ -914,7 +945,9 @@ dojo.require("dojox.gfx.arc");
 			r.coordsize = width + " " + height;
 			bs.width = width;
 			bs.height = height;
-			//TODO: update dimensions on relevant children
+			for(i = 0; i < this.children.length; ++i){
+				this.children[i]._setDimensions(width, height);
+			}
 			return this;	// self
 		},
 		getDimensions: function(){
