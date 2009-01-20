@@ -210,18 +210,25 @@ dojo.require("dojox.sketch._Plugin");
 	};
 	p.zoom=function(pct){
 		pct = pct || this.figure.zoomFactor;
-		if(this.pathShape){
-			var s=dojo.clone(this.property('stroke'));
-			s.width=pct>1?s.width:Math.ceil(s.width/pct)+"px";
-			this.pathShape.setStroke(s);
-		}
 		if(this.labelShape){
 			var f=dojo.clone(this.property('font'));
 			f.size=Math.ceil(f.size/pct)+"px";
 			this.labelShape.setFont(f);
 		}
+		
 		for(var n in this.anchors){
 			this.anchors[n].zoom(pct);
+		}
+		
+		//In VML, path are always the same width no matter scaling factors,
+		//so aways use 1 for VML
+		if(dojox.gfx.renderer=='vml'){
+        	pct=1;
+        }
+		if(this.pathShape){
+			var s=dojo.clone(this.property('stroke'));
+			s.width=pct>1?s.width:Math.ceil(s.width/pct)+"px";
+			this.pathShape.setStroke(s);
 		}
 	};
 	p.writeCommonAttrs=function(){

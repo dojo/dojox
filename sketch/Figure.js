@@ -182,7 +182,9 @@ dojo.require("dojox.sketch.UndoStack");
 					width:Math.abs(self._start.x-self._absEnd.x),
 					height:Math.abs(self._start.y-self._absEnd.y)
 				}
-				self._ctool.onMouseMove(e,rect);
+				if(rect.width && rect.height){
+					self._ctool.onMouseMove(e,rect);
+				}
 			}
 		};
 		this._mu=function(e){
@@ -232,8 +234,8 @@ dojo.require("dojox.sketch.UndoStack");
 	p.initialize=function(node){
 		this.node=node;
 		this.surface=dojox.gfx.createSurface(node, this.size.w, this.size.h);
-		this.backgroundRect=this.surface.createRect({ x:0, y:0, width:this.size.w, height:this.size.h })
-			.setFill("white");
+		//this.backgroundRect=this.surface.createRect({ x:0, y:0, width:this.size.w, height:this.size.h })
+		//	.setFill("white");
 		this.group=this.surface.createGroup();
 
 		
@@ -259,7 +261,7 @@ dojo.require("dojox.sketch.UndoStack");
 			dojo.connect(es.ownerDocument, 'onkeydown', this._keydown));
 		
 		//	rect hack.  Fcuking VML.
-		this.groupBackground=this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
+		//this.groupBackground=this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
 		this.image=this.group.createImage({ width:this.size.w, height:this.size.h, src:this.imageSrc });
 	};
 
@@ -275,7 +277,8 @@ dojo.require("dojox.sketch.UndoStack");
 		dojo.forEach(this._cons, dojo.disconnect);
 		this._cons=[];
 
-		this.node.removeChild(this.surface.getEventSource());
+		//TODO: how to destroy a surface properly?
+		//this.node.removeChild(this.surface.getEventSource());
 		this.group=this.surface=null;
 		this.obj={};
 		this.shapes=[];
@@ -289,16 +292,11 @@ dojo.require("dojox.sketch.UndoStack");
 		var h=this.size.h*this.zoomFactor;
 		this.surface.setDimensions(w, h);
 		//	then scale it.
-		this.backgroundRect.setShape({ x:0, y:0, width:Math.max(w,this.size.w), height:Math.max(h,this.size.h) })
 		this.group.setTransform(dojox.gfx.matrix.scale(this.zoomFactor, this.zoomFactor));
-		/*if(dojo.isIE){
-			this.image.rawNode.style.width=Math.max(w,this.size.w);
-			this.image.rawNode.style.height=Math.max(h,this.size.h);
-		}*/
+
 		for(var i=0; i<this.shapes.length; i++){
 			this.shapes[i].zoom(this.zoomFactor);
 		}
-		//this.rect.setShape({width:w,height:h});
 	};
 	p.getFit=function(){
 		//	assume fitting the parent node.

@@ -137,8 +137,9 @@ dojo.require("dojox.sketch.Anchor");
 	p.zoom=function(pct){
 		if(this.rectShape){
 			pct = pct || this.figure.zoomFactor;
-			this.rectShape.setStroke({color:this.property('fill'), width:1/pct});
 			ta.Annotation.prototype.zoom.call(this,pct);
+			pct = dojox.gfx.renderer=='vml'?1:pct;
+			this.rectShape.setStroke({color:this.property('fill'), width:1/pct});
 		}
 	};
 	p.serialize=function(){

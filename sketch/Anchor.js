@@ -25,7 +25,8 @@ dojo.require("dojox.gfx");
 		this.zoom=function(pct){
 			if(this.shape){
 				var rs=Math.floor(size/pct);
-				this.shape.setShape({ x:an[id].x-rs, y:an[id].y-rs, width:rs*2, height:rs*2 }).setStroke({ color:"black", width:1/pct }); //For IE, maybe we need Math.ceil(1/pct)||1
+				var width=dojox.gfx.renderer=='vml'?1:1/pct
+				this.shape.setShape({ x:an[id].x-rs, y:an[id].y-rs, width:rs*2, height:rs*2 }).setStroke({ color:"black", width:width }); //For IE, maybe we need Math.ceil(1/pct)||1
 			}
 		}
 		/*this.doChange=function(pt){

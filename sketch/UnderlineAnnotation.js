@@ -106,6 +106,7 @@ dojo.require("dojox.sketch.Anchor");
 		if(this.lineShape){
 			pct = pct || this.figure.zoomFactor;
 			ta.Annotation.prototype.zoom.call(this,pct);
+			pct = dojox.gfx.renderer=='vml'?1:pct;
 			this.lineShape.setShape({ x1:1, x2:this.labelShape.getTextWidth()+1, y1:2, y2:2 })
 				.setStroke({ color:this.property('fill'), width:1/pct });
 			if(this.mode==ta.Annotation.Modes.Edit){
