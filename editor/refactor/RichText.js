@@ -1164,6 +1164,7 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		var c = dojox.editor.refactor.RichText._commands;
 		var handler;
 		if(handler = c.match(command.toLowerCase())){
+			/*
 			console.debug("applying custom handler for:", handler.name, "with arg:", argument);
 			this.editNode.normalize();
 
@@ -1177,12 +1178,13 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 					var r = selection.getRangeAt(0);
 					// console.dir(r);
 
-					// console.debug(r.startContainer, r.startOffset);
-					// console.debug(r.endContainer, r.endOffset);
+					console.debug(r.startContainer, r.startOffset);
+					console.debug(r.endContainer, r.endOffset);
 				}
 			}catch(e){
 				console.debug(e);
 			}
+			*/
 
 			// console.dir(r);
 			return handler.applyCommand(this, argument);
@@ -1742,13 +1744,22 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		}
 		return [ startMarker, endMarker ];
 	},
-	_getRangeNodes: function(/*Selection*/ s){
+	_getRangeNodes: function(/*Selection?*/ s){
 		// on sane browsers, this returns a docment fragment
 		// containing the contents of the range
+
+		if(!s){
+			s = dijit.range.getSelection(this.window);
+		}
+		// make sure we're dealing with a range object
+		if(!s.startContainer && s.focusNode){
+			s = s.getRangeAt(0);
+		}
 		var r = [];
 		r.last = function(){
 			return this[this.length-1];
 		}
+		// console.dir(s);
 		var commonAncestor = s.commonAncestorContainer;
 		// if we're not the start of the text in the node, or if we're not
 		// at the end, split the text node such that we have an individual
@@ -1762,8 +1773,8 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 		if(sc === ec){
 			// the start and end are in the same node. It's pretty
 			// straight-forward from here: just split twice (starting at
-			var collpased = (dojo.isIE) ? !s.text.length : s.collapsed;
 			// the end) and return the new "middle" node
+			var collpased = (dojo.isIE) ? !s.text.length : s.collapsed;
 			if(collpased){
 				// console.dir(s);
 				// it's a collapsed selection. Split once and insert a new
@@ -1791,18 +1802,19 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 					// otherwise our container is a block of text, so split it
 					// up into individual nodes along the selection boundaries
 					sc.splitText(eo); // break off any trailing text at the end
+					// FIXME: it looks to me like we're getting coalesced back together on FF!!!
 					r.push(sc.splitText(so)); // split/add just the selected text
 				}
 			}
 			return r;
 		}
-		// console.debug("not the same node!, ", sc.nodeType, sc, so, sc.parentNode == commonAncestor);
+		// console.debug("start and end not the same node!, ", sc.nodeType, sc, so, sc.parentNode == commonAncestor);
 		if(3 == sc.nodeType){
 			var l = String(sc.value).length;
 			if(0 == so){
-				// console.debug("at the start of a node:", sc.outerHTML);
+				// console.debug("at the start of a node:", sc);
 
-				if(sc.parentNode != commonAncestor && !sc.previousSibling){
+				if((sc.parentNode != commonAncestor) && !sc.previousSibling){
 					// we're at the beginning, so all the contents are
 					// selected. Just put the parent elements in and move
 					// on.
@@ -1814,7 +1826,7 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 					r.push(sc);
 				}
 			}else if(l == so){ 
-				// console.debug("at the end of a node:", sc.outerHTML);
+				// console.debug("at the end of a node:", sc);
 
 				// it's at the end, select the parent's next sibling,
 				// assuming that the parent isn't our common ancestor or
@@ -1835,18 +1847,18 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 					}
 				}
 			}else{
-				// console.debug("at the intermediate offset:", so, l, sc.outerHTML);
+				// console.debug("at the intermediate offset:", so, l, sc);
 				// not start or end, so split where we are and add the
 				// stuff at the end of our element to the selection
 				r.push(sc.splitText(so));
 				ec.splitText(eo);
 			}
 		}else if(1 == sc.nodeType){
-			// FIXME: what if nodeType suggests it's an element?
 			// console.debug("not the same, but starting from an element. Offset:", so, "in", sc);
 			// console.debug("start container is common ancestor:", sc === commonAncestor);
-			var cn = sc.childNodes;
+			var cn = dojo._toArray(sc.childNodes);
 			if(sc === commonAncestor){
+				// console.debug("starting in common ancestor");
 				var end = false;
 				dojo.forEach(cn, function(item, idx, arr){
 					if(end){ return; }
@@ -1859,6 +1871,7 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 					}
 				});
 			}else if(sc.parentNode === commonAncestor){
+				// console.debug("starting container parent is the common ancestor");
 				// run to the end internally and *then* pop up
 				dojo.forEach(cn, function(item, idx, arr){
 					if(idx >= so){
@@ -1873,7 +1886,13 @@ dojo.declare("dojox.editor.refactor.RichText", dijit._Widget, {
 					next = next.nextSibling;
 				}
 			}else{
-				r.push(sc);
+				// console.debug("using startContainer directly");
+				if(so){
+					// grab children from the offset
+					r.push.apply(r, cn.slice(so));
+				}else{
+					r.push(sc);
+				}
 			}
 		}
 		this._collectNodes(r, commonAncestor, ec, eo);
@@ -2102,13 +2121,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		//		which might over-ride the command we're about to apply and
 		//		replace/remove them upon application
 
-		var selection = dijit.range.getSelection(rt.window);
-		// var selection = rt.window.getSelection();
-		console.dir(selection);
-		var r = selection.getRangeAt(0);
-		console.dir(r);
-
-		var rangeNodes = rt._getRangeNodes(r);
+		var rangeNodes = rt._getRangeNodes();
 		// console.debug(rangeNodes);
 		var bookmark = rt._getBookmark(rangeNodes);
 		// console.debug(bookmark);
@@ -2122,13 +2135,16 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 			this._isntAppliedToNode,
 			this
 		);
+		// dojo.forEach(rangeNodes, console.debug, console);
 
 		if(!nodes.length){
 			// console.debug("applied!");
+			console.debug("removing:", this.name);
 			dojo.forEach(rangeNodes, this._removeFromNode, this);
 			dojo.forEach(rangeNodes, dojo.hitch(this, "removalHelper", arg));
 		}else{
 			// console.debug("not applied to:", nodes);
+			console.debug("applying:", this.name);
 			dojo.forEach(nodes, this._applyToNode, this);
 			dojo.forEach(nodes, dojo.hitch(this, "applicationHelper", arg));
 		}
@@ -2141,16 +2157,14 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		return true;
 	},
 	queryState: function(/*dijit._editor.RichText*/ rt){
-		var selection = dijit.range.getSelection(rt.window);
-		var r = selection.getRangeAt(0);
-		return this._isApplied(rt._getRangeNodes(r));
+		return this._isApplied(rt._getRangeNodes());
 	},
 	_isApplied: function(/*Array*/ rn){
-		var a = (
+		var r = (
 			0 == dojo.filter(rn, this._isntAppliedToNode, this)
 		);
 		// console.debug(this.name, (a ? "is" : "isn't"), "applied, from:", rn.length);
-		return a;
+		return r;
 	},
 	_isntAppliedToNode: function(node){
 		// summary:
@@ -2224,7 +2238,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		dojo.attr(el, this._nameAttr, "applied");
 		return el;
 	},
-	_singleRemoveFromNode: function(node){
+	_removeFromSingleNode: function(node){
 		try{
 			dojo.removeAttr(node, this._nameAttr);
 		}catch(e){}
@@ -2282,12 +2296,12 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 			return; // short-circuit
 		}
 		if(dojo.attr(node, this._nameAttr)){
-			this._singleRemoveFromNode(node);
+			this._removeFromSingleNode(node);
 		}
 
 		// find all children which might have the rule applied and remove
 		// it from them as well
-		dojo.query("["+this._nameAttr+"]", node).forEach(this._singleRemoveFromNode, this);
+		dojo.query("["+this._nameAttr+"]", node).forEach(this._removeFromSingleNode, this);
 
 		// FIXME: we should prune here too
 	}
@@ -2298,8 +2312,9 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 	// set up the commands which are available to all editor instances
 	var de = dojox.editor.refactor;
 	var c = de.RichText._commands = new dojo.AdapterRegistry(true);
+	var TRC = de.TagWrapCommand;
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "bold",
 		tag: "span",
 		attrs: {
@@ -2310,7 +2325,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		registry: c
 	});
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "italic",
 		tag: "span",
 		attrs: {
@@ -2321,7 +2336,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		registry: c
 	});
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "strikethrough",
 		tag: "span",
 		attrs: {
@@ -2332,7 +2347,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		registry: c
 	});
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "underline",
 		tag: "span",
 		attrs: {
@@ -2343,7 +2358,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		registry: c
 	});
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "subscript",
 		tag: "span",
 		attrs: {
@@ -2354,7 +2369,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		registry: c
 	});
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "superscript",
 		tag: "span",
 		attrs: {
@@ -2365,7 +2380,7 @@ dojo.declare("dojox.editor.refactor.TagWrapCommand", dojox.editor.refactor.Comma
 		registry: c
 	});
 
-	new de.TagWrapCommand({
+	new TRC({
 		name: "fontname",
 		tag: "span",
 		applicationHelper: function(arg, node){
