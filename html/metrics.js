@@ -101,6 +101,7 @@ dojo.provide("dojox.html.metrics");
 		fs.width = "5em";
 		fs.height = "10em";
 		fs.top = "-10000px";
+		f.src = dojo.config["dojoBlankHtmlUrl"] || dojo.moduleUrl("dojo", "resources/blank.html");
 		dojo.body().appendChild(f);
 
 		if(dojo.isIE){
