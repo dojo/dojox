@@ -290,7 +290,8 @@ dojox.json.ref = {
 						var keyStr;
 						if(typeof i == "number"){
 							keyStr = '"' + i + '"';
-						}else if(typeof i == "string" && i.charAt(0) != '_'){
+						}else if(typeof i == "string" && (i.charAt(0) != '_' || i.charAt(1) != '_')){
+							// we don't serialize our internal properties __id and __clientId
 							keyStr = dojo._escapeString(i);
 						}else{
 							// skip non-string or number keys

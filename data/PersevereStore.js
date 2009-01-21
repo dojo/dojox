@@ -52,10 +52,6 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 							schema.prototype = schema.prototype || {};
 							schema.prototype[j] = (function(methodName){
 								return function(){
-									var args = [];
-									for(var i = 0; i < arguments.length; i++){
-										args[i] = arguments[i];
-									}
 									// execute a JSON-RPC call
 									var deferred = dojo.rawXhrPost({
 										url: this.__id,
@@ -63,7 +59,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 										postData: dojo.toJson({
 											method: methodName,
 											id: callId++,
-											params: args
+											params: dojo._toArray(arguments)
 										}),
 										handleAs: "json"
 									});

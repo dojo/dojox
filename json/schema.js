@@ -37,6 +37,14 @@ dojox.json.schema.checkPropertyChange = function(/*Any*/value,/*Object*/schema){
 	//
 	return this._validate(value,schema,true);
 };
+dojox.json.schema.mustBeValid = function(result){
+	//	summary:
+	//		This checks to ensure that the result is valid and will throw an appropriate error message if it is not
+	// result: the result returned from checkPropertyChange or validate
+	if(!result.valid){
+		throw new Error(dojo.map(result.errors,function(error){return error.property + ' ' + error.message;}).join(","));
+	}	
+}
 dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolean*/ _changing){
 	
 	var errors = [];
@@ -101,7 +109,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 				}
 				if(value instanceof Array){
 					if(schema.items){
-						for(var i=0,l=value.length; i<l; i++){
+						for(i=0,l=value.length; i<l; i++){
 							errors.concat(checkProp(value[i],schema.items,path,i));
 						}							
 					}
@@ -169,9 +177,9 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 			}
 		}
 		for(i in instance){
-			if(instance.hasOwnProperty(i) && objTypeDef && !objTypeDef[i] && additionalProp===false){
+			if(instance.hasOwnProperty(i) && (i.charAt(0) != '_' || i.charAt(0) != '_') && objTypeDef && !objTypeDef[i] && additionalProp===false){
 				errors.push({property:path,message:(typeof value) + "The property " + i +
-						" is not defined in the objTypeDef and the objTypeDef does not allow additional properties"});
+						" is not defined in the schema and the schema does not allow additional properties"});
 			}
 			var requires = objTypeDef && objTypeDef[i] && objTypeDef[i].requires;
 			if(requires && !(requires in instance)){

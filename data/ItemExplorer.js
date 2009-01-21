@@ -363,73 +363,77 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		var editDialog = this._editDialog;
 		var store = this.store;
         function setValue(){
-            var itemVal, propPath = [];
-            var prop = vals.property;
-            if(editingItem){
-                while(!store.isItem(item.parent, true)){
-                    node = node.getParent();
-                    propPath.push(item.property);
-                    item = node.item;
-                }
-                if(propPath.length == 0){
-                    // working with an item attribute already
-                    store.setValue(item.parent, item.property, val);
-                }else{
-                    // need to walk back down the item property to the object
-                    storeItemVal = getValue(store, item.parent, item.property);
-                    if(storeItemVal instanceof Array){
-                    	// create a copy for modification
-                    	storeItemVal = storeItemVal.concat();
-                    }
-                    itemVal = storeItemVal;
-                    while(propPath.length > 1){
-                        itemVal = itemVal[propPath.pop()];
-                    }
-                    itemVal[propPath] = val; // this change is reflected in storeItemVal as well
-                    store.setValue(item.parent, item.property, storeItemVal);
-                }              
-            }else{
-                // adding a property
-                if(store.isItem(value, true)){
-                    // adding a top-level property to an item
-    				if (!store.isItemLoaded(value)) {
-                        // fetch the value and see if it is an array
-                        store.loadItem({
-                            item: value,
-                            onItem: function(loadedItem){
-                                if (loadedItem instanceof Array) {
-                                    prop = loadedItem.length;
-                                }
-                                store.setValue(loadedItem, prop, val);
-                            }
-                        });
-                    } else {
-                        if (value instanceof Array) {
-                            prop = value.length;
-                        }
-                        store.setValue(value, prop, val);
-                    }
-                }else{
-                    // adding a property to a lower level in an item
-                    if(item.value instanceof Array){
-                        propPath.push(item.value.length);
-                    }else{
-                        propPath.push(vals.property);
-                    }
-                    while(!store.isItem(item.parent, true)){
-                        node = node.getParent();
-                        propPath.push(item.property);
-                        item = node.item;
-                    }
-                    storeItemVal = getValue(store, item.parent, item.property);
-                    itemVal = storeItemVal;
-                    while(propPath.length > 1){
-                        itemVal = itemVal[propPath.pop()];
-                    }
-                    itemVal[propPath] = val;
-                    store.setValue(item.parent, item.property, storeItemVal);
-                }
-            }
+        	try{
+	            var itemVal, propPath = [];
+	            var prop = vals.property;
+	            if(editingItem){
+	                while(!store.isItem(item.parent, true)){
+	                    node = node.getParent();
+	                    propPath.push(item.property);
+	                    item = node.item;
+	                }
+	                if(propPath.length == 0){
+	                    // working with an item attribute already
+	                    store.setValue(item.parent, item.property, val);
+	                }else{
+	                    // need to walk back down the item property to the object
+	                    storeItemVal = getValue(store, item.parent, item.property);
+	                    if(storeItemVal instanceof Array){
+	                    	// create a copy for modification
+	                    	storeItemVal = storeItemVal.concat();
+	                    }
+	                    itemVal = storeItemVal;
+	                    while(propPath.length > 1){
+	                        itemVal = itemVal[propPath.pop()];
+	                    }
+	                    itemVal[propPath] = val; // this change is reflected in storeItemVal as well
+	                    store.setValue(item.parent, item.property, storeItemVal);
+	                }              
+	            }else{
+	                // adding a property
+	                if(store.isItem(value, true)){
+	                    // adding a top-level property to an item
+	    				if (!store.isItemLoaded(value)) {
+	                        // fetch the value and see if it is an array
+	                        store.loadItem({
+	                            item: value,
+	                            onItem: function(loadedItem){
+	                                if (loadedItem instanceof Array) {
+	                                    prop = loadedItem.length;
+	                                }
+	                                store.setValue(loadedItem, prop, val);
+	                            }
+	                        });
+	                    } else {
+	                        if (value instanceof Array) {
+	                            prop = value.length;
+	                        }
+	                        store.setValue(value, prop, val);
+	                    }
+	                }else{
+	                    // adding a property to a lower level in an item
+	                    if(item.value instanceof Array){
+	                        propPath.push(item.value.length);
+	                    }else{
+	                        propPath.push(vals.property);
+	                    }
+	                    while(!store.isItem(item.parent, true)){
+	                        node = node.getParent();
+	                        propPath.push(item.property);
+	                        item = node.item;
+	                    }
+	                    storeItemVal = getValue(store, item.parent, item.property);
+	                    itemVal = storeItemVal;
+	                    while(propPath.length > 1){
+	                        itemVal = itemVal[propPath.pop()];
+	                    }
+	                    itemVal[propPath] = val;
+	                    store.setValue(item.parent, item.property, storeItemVal);
+	                }
+	            }
+        	}catch(e){
+        		alert(e);
+        	}
         }
 
         if(editDialog.validate()){
@@ -537,28 +541,32 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
         if(dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
             alert("Cannot Delete an Identifier!");
         }else{
-            if(propPath.length > 0){
-                // not deleting a top-level property of an item so get the top-level store item to change
-                var itemVal, storeItemVal = getValue(this.store, item.parent, item.property);
-                itemVal = storeItemVal;
-                // walk back down the object if needed
-                while(propPath.length > 1){
-                    itemVal = itemVal[propPath.pop()];
-                }
-                // delete the property
-                if(dojo.isArray(itemVal)){
-                    // the value being deleted represents an array element
-                    itemVal.splice(propPath, 1);
-                }else{
-                    // object property
-                    delete itemVal[propPath];
-                }
-                // save it back to the store
-                this.store.setValue(item.parent, item.property, storeItemVal);
-            }else{
-                // deleting an item property
-                this.store.unsetAttribute(item.parent, item.property);
-            }       
+        	try{
+	            if(propPath.length > 0){
+	                // not deleting a top-level property of an item so get the top-level store item to change
+	                var itemVal, storeItemVal = getValue(this.store, item.parent, item.property);
+	                itemVal = storeItemVal;
+	                // walk back down the object if needed
+	                while(propPath.length > 1){
+	                    itemVal = itemVal[propPath.pop()];
+	                }
+	                // delete the property
+	                if(dojo.isArray(itemVal)){
+	                    // the value being deleted represents an array element
+	                    itemVal.splice(propPath, 1);
+	                }else{
+	                    // object property
+	                    delete itemVal[propPath];
+	                }
+	                // save it back to the store
+	                this.store.setValue(item.parent, item.property, storeItemVal);
+	            }else{
+	                // deleting an item property
+	                this.store.unsetAttribute(item.parent, item.property);
+	            }
+        	}catch(e){
+        		alert(e);
+        	}       
         }
     },
     _addProperty: function(){

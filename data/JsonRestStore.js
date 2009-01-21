@@ -235,10 +235,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			var store = item.__id ? dojox.data._getStoreForItem(item) : this;
 			if(dojox.json.schema && store.schema && store.schema.properties){
 				// if we have a schema and schema validator available we will validate the property change
-				var result = dojox.json.schema.checkPropertyChange(value,store.schema.properties[attribute]);
-				if(!result.valid){
-					throw new Error(dojo.map(result.errors,function(error){return error.message;}).join(","));
-				}
+				dojox.json.schema.mustBeValid(dojox.json.schema.checkPropertyChange(value,store.schema.properties[attribute]));
 			}
 			if(attribute == store.idAttribute){
 				throw new Error("Can not change the identity attribute for an item");

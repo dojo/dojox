@@ -72,7 +72,7 @@ dojo.require("dojox.rpc.Rest");
 			}
 			dojo.connect(kwArgs,"onError",function(){
 				var postCommitDirtyObjects = dirtyObjects;
-				var dirtyObject = savingObjects;
+				dirtyObjects = savingObjects;
 				var numDirty = 0; // make sure this does't do anything if it is called again
 				jr.revert(); // revert if there was an error
 				dirtyObjects = postCommitDirtyObjects;
@@ -258,6 +258,9 @@ dojo.require("dojox.rpc.Rest");
 				Rest._index[this.__id = this.__clientId = 
 						service.servicePath + (this[idAttribute] || 
 							Math.random().toString(16).substring(2,14) + '@' + ((dojox.rpc.Client && dojox.rpc.Client.clientId) || "client"))] = this;
+				if(dojox.json.schema && properties){
+					dojox.json.schema.mustBeValid(dojox.json.schema.validate(this, service._schema));
+				} 
 				dirtyObjects.push({object:this, save: true});
 			};
 			return dojo.mixin(service._constructor, service._schema, {load:service});
