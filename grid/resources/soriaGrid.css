@@ -107,6 +107,11 @@
 	background-color: #aec7e3;
 }
 
+.dijit_a11y .soria .dojoxGridRowSelected { 
+    background-color: #aec7e3;     
+    border-style: solid;     
+}   
+
 /* cells */
 
 .soria .dojoxGridCell {

@@ -135,6 +135,11 @@
 	background-color: #aec7e3;
 }
 
+.dijit_a11y .tundra .dojoxGridRowSelected { 
+    background-color: #aec7e3;     
+    border-style: solid;     
+}   
+
 /* cells */
 
 .tundra .dojoxGridCell {
