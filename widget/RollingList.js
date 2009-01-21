@@ -3,6 +3,7 @@ dojo.experimental("dojox.widget.RollingList");
 
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout._LayoutWidget");
 dojo.require("dijit.Menu");
 dojo.require("dojox.html.metrics");
 dojo.require("dijit.form.Button");
