@@ -218,7 +218,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 			this.fileInputs = [];
 			this.fileCount = 0;
 			
-			if (dojo.isIE && dojo.isIE<7) { //PATCH
+			if (dojo.isIE && dojo.isIE<7) {
 				// if we are create more than one FileInputOverlay,
 				// IE6 needs a breather or it locks up
 				setTimeout(dojo.hitch(this, "createHtmlUploader"), 1);
@@ -501,14 +501,19 @@ dojo.declare("dojox.form.FileUploader", null, {
 	setFlashPosition: function(){
 		//	summary:
 		//		Get size and location of the 'fake' node (the button)
-		//		Resize, set position of teh SWF
+		//		Resize, set position of the SWF
 		var dim = this.getFakeButtonSize();
-		dojo.style(this.flashDiv, "position", "absolute");
-		dojo.style(this.flashDiv, "top", dim.y + "px");
-		dojo.style(this.flashDiv, "left", dim.x + "px");
-		dojo.style(this.flashDiv, "width", dim.w + "px");
-		dojo.style(this.flashDiv, "height", dim.h + "px");
-		dojo.style(this.flashDiv, "zIndex", 2001);
+		// IE mainly needs the help for the timeout.
+		// but may as well do it for all then the check
+		// for whether we are in a dialog 
+		setTimeout(dojo.hitch(this, function(){
+			dojo.style(this.flashDiv, "position", "absolute");
+			dojo.style(this.flashDiv, "top", dim.y + "px");
+			dojo.style(this.flashDiv, "left", dim.x + "px");
+			dojo.style(this.flashDiv, "width", dim.w + "px");
+			dojo.style(this.flashDiv, "height", dim.h + "px");
+			dojo.style(this.flashDiv, "zIndex", 2001);
+		}), 100);
 	},
 	
 	setHtmlPosition: function(){
