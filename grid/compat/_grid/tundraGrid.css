@@ -69,13 +69,13 @@
 }
 
 .tundra .dojoxGrid-sort-down {
-	background: url(../../../../dijit/themes/tundra/images/arrowDown.png) right no-repeat;
+	background: url(../../../../dijit/themes/tundra/images/smallArrowDown.png) right no-repeat;
 	padding-left: 0px;
 	margin-left: 0px;
 }
 
 .tundra .dojoxGrid-sort-up {
-	background: url(../../../../dijit/themes/tundra/images/arrowUp.png) right no-repeat;
+	background: url(../../../../dijit/themes/tundra/images/smallArrowUp.png) right no-repeat;
 	padding-left: 0px;
 	margin-left: 0px;
 }
