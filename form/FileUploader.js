@@ -506,13 +506,13 @@ dojo.declare("dojox.form.FileUploader", null, {
 		// IE mainly needs the help for the timeout.
 		// but may as well do it for all then the check
 		// for whether we are in a dialog 
-		setTimeout(dojo.hitch(this, function(){
-			dojo.style(this.flashDiv, "position", "absolute");
-			dojo.style(this.flashDiv, "top", dim.y + "px");
-			dojo.style(this.flashDiv, "left", dim.x + "px");
-			dojo.style(this.flashDiv, "width", dim.w + "px");
-			dojo.style(this.flashDiv, "height", dim.h + "px");
-			dojo.style(this.flashDiv, "zIndex", 2001);
+		setTimeout(dojo.partial(dojo.style, this.flashDiv, {
+			position:"absolute",
+			top: dim.y + "px",
+			left: dim.x + "px",
+			width: dim.w + "px",
+			height: dim.h + "px",
+			zIndex: 2001
 		}), 100);
 	},
 	
