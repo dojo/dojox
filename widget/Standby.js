@@ -106,7 +106,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 			//Address margins as they shift the position..
 			var marginLeft = dojo.style(this.target, "marginLeft");
-			if(dojo.isWebkit||dojo.isSafari||dojo.isChrome){
+			if(dojo.isWebkit){
 				//Safari and others work differently here.  Needs to be doubled.
 				//Don't ask me why. :)
 				marginLeft = marginLeft*2;
