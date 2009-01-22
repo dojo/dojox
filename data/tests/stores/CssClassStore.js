@@ -17,8 +17,8 @@ dojox.data.tests.stores.CssClassStore.createStore = function(context){
 			link.rel = "stylesheet";
 			link.type = "text/css";
 			head.appendChild(link);
-                        var style;
-                        var text;
+			var style;
+			var text;
 			if(dojo.isIE){
 				style = document.createStyleSheet();
 				style.cssText = '@import "'+dojo.moduleUrl('dojox.data.tests.stores', 'test2.css').toString()+'";';
