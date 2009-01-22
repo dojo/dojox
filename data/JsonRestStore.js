@@ -386,7 +386,7 @@ dojox.data._getStoreForItem = function(item){
 	if(item.__id){
 		var servicePath = item.__id.match(/.*\//)[0];
 		var service = dojox.rpc.JsonRest.services[servicePath];
-		return service ? service._store : new dojox.data.JsonRestStore(servicePath);
+		return service ? service._store : new dojox.data.JsonRestStore({target:servicePath});
 	}
 	return null;
 };

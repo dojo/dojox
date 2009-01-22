@@ -101,37 +101,33 @@ dojox.json.ref = {
 					}else if((typeof val =='object') && val && !(val instanceof Date)){
 						ref=val.$ref;
 						if(ref){ // a reference was found
-							var stripped = ref.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');// trim it
-							if(/[\w\[\]\.\$# \/\r\n\t]/.test(stripped) && !/\=|((^|\W)new\W)/.test(stripped)){
-								// make sure it is a safe reference
-								delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
-								var path = ref.replace(/(#)([^\.\[])/,'$1.$2').match(/(^([^\[]*\/)?[^#\.\[]*)#?([\.\[].*)?/); // divide along the path
-								if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')])){  // a $ indicates to start with the root, otherwise start with an id
-									// // starting point was found, use eval to resolve remaining property references
-									// // need to also make reserved words safe by replacing with index operator
-									try{
-										ref = path[3] ? eval('ref' + path[3].replace(/^#/,'').replace(/^([^\[\.])/,'.$1').replace(/\.([\w$_]+)/g,'["$1"]')) : ref;
-									}catch(e){
-										ref = null;
-									}
+							// make sure it is a safe reference
+							delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
+							var path = ref.replace(/(#)([^\.\[])/,'$1.$2').match(/(^([^\[]*\/)?[^#\.\[]*)#?([\.\[].*)?/); // divide along the path
+							if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')])){  // a $ indicates to start with the root, otherwise start with an id
+								// if there is a path, we will iterate through the path references
+								if(path[3]){
+									path[3].replace(/(\[([^\]]+)\])|(\.?([^\.\[]+))/g,function(t,a,b,c,d){
+										ref = ref && ref[b ? b.replace(/[\"\'\\]/,'') : d];
+									});
 								}
-								if(ref){
-									// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have
-									// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet,
-									// we will wait for the second loop
-									val = ref;
-								}else{
-									if(!stop){
-										var rewalking;
-										if(!rewalking){
-											reWalk.push(target); // we need to rewalk it to resolve references
-										}
-										rewalking = true; // we only want to add it once
-									}else{
-										val = walk(val, false, val.$ref, propertyDefinition);
-										// create a lazy loaded object
-										val._loadObject = args.loader;
+							}
+							if(ref){
+								// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have
+								// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet,
+								// we will wait for the second loop
+								val = ref;
+							}else{
+								if(!stop){
+									var rewalking;
+									if(!rewalking){
+										reWalk.push(target); // we need to rewalk it to resolve references
 									}
+									rewalking = true; // we only want to add it once
+								}else{
+									val = walk(val, false, val.$ref, propertyDefinition);
+									// create a lazy loaded object
+									val._loadObject = args.loader;
 								}
 							}
 						}else{
@@ -206,7 +202,11 @@ dojox.json.ref = {
 		function ref(target){ // support call styles references as well
 			return {$ref:target};
 		}
-		var root = eval('(' + str + ')'); // do the eval
+		try{
+			var root = eval('(' + str + ')'); // do the eval
+		}catch(e){
+			throw new SyntaxError("Invalid JSON string: " + e.message + " parsing: "+ str);
+		}		
 		if(root){
 			return this.resolveJson(root, args);
 		}
@@ -321,11 +321,7 @@ dojox.json.ref = {
 		return json;
 	},
 	_addProp: function(id, prop){
-		return id + (id.match(/#/) ? '' : '#') +
-					(typeof prop == 'string' ? // is it a string
-						prop.match(/^[a-zA-Z]\w*$/) ? ('.' + prop) : // yes, otherwise we have to escape it
-							('[' + dojo._escapeString(prop).replace(/"/g,"'") + ']') :
-						('[' + prop + ']'));
+		return id + (id.match(/#/) ? id.length == 1 ? '' : '.' : '#') + prop;
 	},
 	_useRefs: false,
 	serializeFunctions: false
