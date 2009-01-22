@@ -5,6 +5,9 @@ dojo.provide("dojox.grid.util");
 	var dgu = dojox.grid.util;
 
 	dgu.na = '...';
+	dgu.rowIndexTag = "gridRowIndex";
+	dgu.gridViewTag = "gridView";
+
 
 	dgu.fire = function(ob, ev, args){
 		var fn = ob && ev && ob[ev];
