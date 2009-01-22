@@ -8,7 +8,7 @@ dojox.data.tests.stores.CssClassStore.createStore = function(context){
 	//		A simple helper function for getting the sample data used in each of the tests.
 	//  description:
 	//		A simple helper function for getting the sample data used in each of the tests.
-
+	var store = null;
 	if(dojo.isBrowser){
 		if(!dojox.data.tests.stores.CssClassStore._loaded){
 			var head = dojo.doc.getElementsByTagName('head')[0];
@@ -17,12 +17,14 @@ dojox.data.tests.stores.CssClassStore.createStore = function(context){
 			link.rel = "stylesheet";
 			link.type = "text/css";
 			head.appendChild(link);
+                        var style;
+                        var text;
 			if(dojo.isIE){
-				var style = document.createStyleSheet();
+				style = document.createStyleSheet();
 				style.cssText = '@import "'+dojo.moduleUrl('dojox.data.tests.stores', 'test2.css').toString()+'";';
 			}else{
-				var style = document.createElement('style');
-				var text = document.createTextNode('@import "'+dojo.moduleUrl('dojox.data.tests.stores', 'test2.css').toString()+'";');
+				style = document.createElement('style');
+				text = document.createTextNode('@import "'+dojo.moduleUrl('dojox.data.tests.stores', 'test2.css').toString()+'";');
 				style.appendChild(text);
 				head.appendChild(style);
 			}
@@ -31,20 +33,20 @@ dojox.data.tests.stores.CssClassStore.createStore = function(context){
 				style.cssText = '.embeddedTestClass { text-align: center; }';
 			}else{
 				style = document.createElement('style');
-				var text = document.createTextNode('.embeddedTestClass { text-align: center; }');
+				text = document.createTextNode('.embeddedTestClass { text-align: center; }');
 				style.appendChild(text);
 				head.appendChild(style);
 			}
 			dojox.data.tests.stores.CssClassStore._loaded = true;
 		}
-		return new dojox.data.CssClassStore({context: context});
+		store = new dojox.data.CssClassStore({context: context});
 	}else{
 		// When running tests in Rhino, xhrGet is not available,
 		// so we have the file data in the code below.
 		
 		// TODO: What are the stipulations re: DOM ? Can I do the same as above?
 	}
-	return;
+	return store;
 };
 
 dojox.data.tests.stores.CssClassStore.verifyItems = function(cssClassStore, items, attribute, compareArray){
@@ -54,7 +56,7 @@ dojox.data.tests.stores.CssClassStore.verifyItems = function(cssClassStore, item
 	if(items.length != compareArray.length){ return false; }
 	for(var i = 0; i < items.length; i++){
 		// Safari is dumb, see comment in CssClassStore about bug in selectorText
-		if(!(cssClassStore.getValue(items[i], attribute) === (dojo.isSafari?compareArray[i].toLowerCase():compareArray[i]))){
+		if(!(cssClassStore.getValue(items[i], attribute) === (dojo.isWebKit?compareArray[i].toLowerCase():compareArray[i]))){
 			return false; //Boolean
 		}
 	}
@@ -290,7 +292,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			function onComplete(items, request){
 				done[0] = true;
 				t.is(1, items.length);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is('.linktestclass', cssClassStore.getValue(items[0], 'class'));
 				}else{
@@ -304,7 +306,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			function onItem(item){
 				done[1] = true;
 				t.assertTrue(item !== null);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is('.embeddedtestclass', cssClassStore.getValue(item, 'class'));
 				}else{
@@ -377,7 +379,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 
 			function dumpSecondFetch(items, request){
 				t.is(1, items.length);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is('.embeddedtestclass', cssClassStore.getValue(items[0], 'class'));
 				}else{
@@ -418,7 +420,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 				t.assertEqual(items.length, 1);
 				var label = cssClassStore.getLabel(items[0]);
 				t.assertTrue(label !== null);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.assertEqual(".linktestclass", label);
 				}else{
@@ -465,7 +467,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is('.linktestclass', cssClassStore.getValue(item,'class'));
 					t.is('linktestclass', cssClassStore.getValue(item,'classSans'));
@@ -492,7 +494,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is('.importtestclass', cssClassStore.getValue(item,'class'));
 					t.is('importtestclass', cssClassStore.getValue(item,'classSans'));
@@ -522,7 +524,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 				var values = cssClassStore.getValues(item,'class');
 				t.assertTrue(dojo.isArray(values));
 				t.is(1, values.length);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is('.embeddedtestclass', values[0]);
 				}else{
@@ -603,7 +605,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			var d = new doh.Deferred();
 			function onItem(item){
 				t.assertTrue(item !== null);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.assertTrue(cssClassStore.containsValue(item, 'class', '.embeddedtestclass'));
 					t.assertTrue(cssClassStore.containsValue(item, 'classSans', 'embeddedtestclass'));
@@ -703,7 +705,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(1, items.length);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.assertTrue(cssClassStore.getValue(items[0], 'class') === '.linktestclass');
 				}else{
@@ -728,7 +730,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			var cssClassStore = dojox.data.tests.stores.CssClassStore.createStore();
 			var d = new doh.Deferred();
 			function completed(items, request){
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.is(1, items.length);
 				}else{
@@ -914,7 +916,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			var d = new doh.Deferred();
 			function completed(items, request){
 				t.is(3, items.length);
-				if(dojo.isSafari){
+				if(dojo.isWebKit){
 					// Safari is dumb, see comment in CssClassStore about bug in selectorText
 					t.assertTrue(cssClassStore.getIdentity(items[0]) === '.embeddedtestclass');
 					t.assertTrue(cssClassStore.getIdentity(items[1]) === '.importtestclass');
