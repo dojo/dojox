@@ -20,10 +20,11 @@ dojo.require("dijit.Editor");
 (function(){
 	var dgc = dojox.grid.cells;
 	dojo.declare("dojox.grid.cells._Widget", dgc._Base, {
-		widgetClass: "dijit.form.TextBox",
+		widgetClass: dijit.form.TextBox,
 		constructor: function(inCell){
 			this.widget = null;
 			if(typeof this.widgetClass == "string"){
+				dojo.deprecated("Passing a string to widgetClass is deprecated", "pass the widget class object instead", "2.0");
 				this.widgetClass = dojo.getObject(this.widgetClass);
 			}
 		},
@@ -103,7 +104,7 @@ dojo.require("dijit.Editor");
 	}
 
 	dojo.declare("dojox.grid.cells.ComboBox", dgc._Widget, {
-		widgetClass: "dijit.form.ComboBox",
+		widgetClass: dijit.form.ComboBox,
 		getWidgetProps: function(inDatum){
 			var items=[];
 			dojo.forEach(this.options, function(o){
@@ -135,7 +136,7 @@ dojo.require("dijit.Editor");
 	}
 
 	dojo.declare("dojox.grid.cells.DateTextBox", dgc._Widget, {
-		widgetClass: "dijit.form.DateTextBox",
+		widgetClass: dijit.form.DateTextBox,
 		setValue: function(inRowIndex, inValue){
 			if(this.widget){
 				this.widget.setValue(new Date(inValue));
@@ -154,7 +155,7 @@ dojo.require("dijit.Editor");
 	}
 
 	dojo.declare("dojox.grid.cells.CheckBox", dgc._Widget, {
-		widgetClass: "dijit.form.CheckBox",
+		widgetClass: dijit.form.CheckBox,
 		getValue: function(){
 			return this.widget.checked;
 		},
@@ -174,7 +175,7 @@ dojo.require("dijit.Editor");
 	}
 
 	dojo.declare("dojox.grid.cells.Editor", dgc._Widget, {
-		widgetClass: "dijit.Editor",
+		widgetClass: dijit.Editor,
 		getWidgetProps: function(inDatum){
 			return dojo.mixin({}, this.widgetProps||{}, {
 				height: this.widgetHeight || "100px"

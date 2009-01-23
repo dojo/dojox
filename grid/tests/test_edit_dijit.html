@@ -55,7 +55,7 @@
 			defaultCell: { width: 8, editable: true, type: dojox.grid.cells._Widget, styles: 'text-align: right;'  },
 			rows: [
 				{ name: 'Id', field: 'id',
-					widgetClass: "dijit.form.NumberSpinner" },
+					widgetClass: dijit.form.NumberSpinner },
 				{ name: 'Date', field: 'col8', width: 10,
 					type: dojox.grid.cells.DateTextBox, 
 					formatter: formatDate, 
@@ -69,9 +69,9 @@
 				{ name: 'Message', field: 'col4', styles: '', width: '100%', 
 					type: dojox.grid.cells.Editor, editorToolbar: true },
 				{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
-					widgetClass: "dijit.form.CurrencyTextBox" },
+					widgetClass: dijit.form.CurrencyTextBox },
 				{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
-					widgetClass: "dijit.form.HorizontalSlider", width: 10}
+					widgetClass: dijit.form.HorizontalSlider, width: 10}
 			]
 		}];
 		// ==========================================================================
