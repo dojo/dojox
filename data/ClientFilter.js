@@ -119,17 +119,21 @@ dojo.require("dojo.data.util.filter");
 					return false;
 				}
 				var clientQuery = dojo.mixin({},argsSub.query);
-				for(var i in argsSuper.query){
-					if(clientQuery[i] == argsSuper.query[i]){
-						delete clientQuery[i];
-					}else if(!(typeof argsSuper.query[i] == 'string' && 
-							// if it is a pattern, we can test to see if it is a sub-pattern 
-							// FIXME: This is not technically correct, but it will work for the majority of cases
-							dojo.data.util.filter.patternToRegExp(argsSuper.query[i]).test(clientQuery[i]))){  
-						return false;
+				if(typeof argsSub.query == 'object' && argsSub.query == 'object'){
+					for(var i in argsSuper.query){
+						if(clientQuery[i] == argsSuper.query[i]){
+							delete clientQuery[i];
+						}else if(!(typeof argsSuper.query[i] == 'string' && 
+								// if it is a pattern, we can test to see if it is a sub-pattern 
+								// FIXME: This is not technically correct, but it will work for the majority of cases
+								dojo.data.util.filter.patternToRegExp(argsSuper.query[i]).test(clientQuery[i]))){  
+							return false;
+						}
 					}
+					return clientQuery;
+				}else{
+					return false;
 				}
-				return clientQuery;
 			},
 			//	This is the point in the version notification history at which it is known that the server is in sync, this should
 			//	be updated to this._updates.length on commit operations.
