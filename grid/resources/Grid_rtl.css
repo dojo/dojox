@@ -8,3 +8,7 @@
 .dijitRtl .dojoxGridContent {
 	float:left;
 }
+
+.dijitRtl .dojoxGridCell {
+	text-align:right;
+}
