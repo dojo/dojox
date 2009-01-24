@@ -54,12 +54,29 @@ dojo.declare("dojox.analytics.Urchin", null, {
 
 	// loadInterval: Integer
 	//		Time (in ms) to wait before checking for a ready Analytics API
-	loadInterval: 420,
+	loadInterval: 42,
+	
+	// decay: Float
+	// 		Multipler for the interval loadInterval to ensure timer does not
+	//		run amok in the event our _gat object is never defined. This 
+	//		is multiplied against the last `loadInterval` and added, causing
+	//		the interval to continuosly become longer, until a `timeout` 
+	//		limit is reached.
+	decay: 0.5,
+	
+	// timeout: Integer
+	//		Time (in ms) for the load interval to reach before giving up
+	//		all together. Note: this isn't an overall time, this is the
+	//		time of the interval being adjusted by the `decay` property.
+	timeout: 4200,
 
 	constructor: function(args){
+		// summary: initialize this Urchin instance. Immediately starts the load
+		//		sequence, so defer construction until (ideally) after onLoad and
+		//		potentially widget parsing.
 		this.tracker = null;
 		dojo.mixin(this, args);
-		this._loadGA.apply(this, arguments);
+		this._loadGA();
 	},
 	
 	_loadGA: function(){
@@ -74,7 +91,9 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	_checkGA: function(){
 		// summary: sniff the global _gat variable Google defines and either check again
 		//		or fire onLoad if ready.
+		if(this.loadInterval > this.timeout){ return; }
 		setTimeout(dojo.hitch(this, !window["_gat"] ? "_checkGA" : "_gotGA"), this.loadInterval);
+		this.loadInterval *= (this.decay + 1);
 	},
 
 	_gotGA: function(){
