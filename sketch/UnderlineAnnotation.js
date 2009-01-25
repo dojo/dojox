@@ -67,6 +67,7 @@ dojo.require("dojox.sketch.Anchor");
 				x:0, 
 				y:0, 
 				text:this.property('label'), 
+				decoration:"underline",
 				align:"start"
 			})
 			//.setFont(font)
@@ -92,8 +93,9 @@ dojo.require("dojox.sketch.Anchor");
 	};
 	p.getBBox=function(){
 		var b=this.getTextBox();
-//		console.log('getBBox',b,this.getLabel());
-		return { x:0, y:(b.h*-1+4)/this.figure.zoomFactor, width:(b.w+2)/this.figure.zoomFactor, height:b.h/this.figure.zoomFactor };
+		var z=this.figure.zoomFactor;
+
+		return { x:0, y:(b.h*-1+4)/z, width:(b.w+2)/z, height:b.h/z };
 	};
 	p.draw=function(obj){
 		this.apply(obj);
@@ -103,11 +105,12 @@ dojo.require("dojox.sketch.Anchor");
 		this.zoom();
 	};
 	p.zoom=function(pct){
-		if(this.lineShape){
+		if(this.labelShape){
 			pct = pct || this.figure.zoomFactor;
+			var textwidthadj=dojox.gfx.renderer=='vml'?0:2/pct;
 			ta.Annotation.prototype.zoom.call(this,pct);
 			pct = dojox.gfx.renderer=='vml'?1:pct;
-			this.lineShape.setShape({ x1:1, x2:this.labelShape.getTextWidth()+1, y1:2, y2:2 })
+			this.lineShape.setShape({ x1:0, x2:this.getBBox().width-textwidthadj, y1:2, y2:2 })
 				.setStroke({ color:this.property('fill'), width:1/pct });
 			if(this.mode==ta.Annotation.Modes.Edit){
 				this.drawBBox(); //the bbox is dependent on the size of the text, so need to update it here

@@ -187,8 +187,8 @@ dojo.require("dojox.sketch.Anchor");
 	p.zoom=function(pct){
 		if(this.startArrow){
 			pct = pct || this.figure.zoomFactor;
-			pct = dojox.gfx.renderer=='vml'?1:pct;
 			ta.Annotation.prototype.zoom.call(this,pct);
+			//pct = dojox.gfx.renderer=='vml'?1:pct;
 			if(this._curPct!==pct){
 				this._curPct=pct;
 				var l=pct>1?20:Math.floor(20/pct), w=pct>1?5:Math.floor(5/pct),h=pct>1?3:Math.floor(3/pct);
