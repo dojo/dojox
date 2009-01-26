@@ -7,7 +7,6 @@ dojo.require("dojox.rpc.Rest");
 (function(){
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
-	var parentIdRegex = /(.*?)((#|\.)[^\.]+)$/;
 	var jr;
 	function resolveJson(service, deferred, value, defaultId){
 		var timeStamp = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Last-Modified");
@@ -45,14 +44,13 @@ dojo.require("dojox.rpc.Rest");
 					if(object){
 						if(old){
 							// changed object
-							while(object.__id.match(parentIdRegex)){ // it is a path reference
-								// this means it is a sub object and the server doesn't support directly putting to
-								// this object by path, we must go to the parent object and save it
-								var parentId = object.__id.match(parentIdRegex)[1];
-								// record that we are saving
-								object = Rest._index[parentId];
+							var pathParts;
+							if((pathParts = object.__id.match(/(.*)#.*/))){ // it is a path reference
+								// this means it is a sub object, we must go to the parent object and save it
+								object = Rest._index[pathParts[1]];
 							}
 							if(!(object.__id in alreadyRecorded)){// if it has already been saved, we don't want to repeat it
+								// record that we are saving
 								alreadyRecorded[object.__id] = object;
 								actions.push({method:"put",target:object,content:object});
 							}
@@ -122,7 +120,7 @@ dojo.require("dojox.rpc.Rest");
 					dfd.addCallback(function(value){
 						try{
 							// Implements id assignment per the HTTP specification
-							var newId = dfd.ioArgs.xhr.getResponseHeader("Location");
+							var newId = dfd.ioArgs.xhr && dfd.ioArgs.xhr.getResponseHeader("Location");
 							//TODO: match URLs if the servicePath is relative...
 							if(newId){
 								// if the path starts in the middle of an absolute URL for Location, we will use the just the path part 
@@ -148,7 +146,7 @@ dojo.require("dojox.rpc.Rest");
 					
 					// on an error we want to revert, first we want to separate any changes that were made since the commit
 					left = -1; // first make sure that success isn't called
-					kwArgs.onError(value);
+					kwArgs.onError.call(kwArgs.scope, value);
 				});
 			}
 			// revert back to the normal XHR handler
