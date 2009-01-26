@@ -7,7 +7,6 @@
 .dijitFileInputReal {
 	position:absolute;
 	z-index:2;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 	filter:alpha(opacity:0);
 	opacity:0;
 	cursor:pointer;

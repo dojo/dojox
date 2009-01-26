@@ -102,7 +102,6 @@
     background:#e4e4e4 url("../../../dijit/themes/tundra/images/buttonDisabled.png") top repeat-x;
 }
 .dj_ie .tundra .dojoxDropDownSelectDisabled  .dijitButtonNode * {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	filter: gray() alpha(opacity=50); 
 }
 
@@ -181,7 +180,6 @@
     background:#c3d3e5 url("../../../dijit/themes/soria/images/buttonDisabled.png") top repeat-x;
 }
 .dj_ie .soria .dojoxDropDownSelectDisabled  .dijitButtonNode * {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	filter: gray() alpha(opacity=50); 
 }
 
@@ -257,7 +255,6 @@
     background:#fafafa url("../../../dijit/themes/nihilo/images/buttonDisabled.png") top repeat-x;
 }
 .dj_ie .nihilo .dojoxDropDownSelectDisabled  .dijitButtonNode * {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	filter: gray() alpha(opacity=50); 
 }
 
