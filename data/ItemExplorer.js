@@ -276,9 +276,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
              
         // textarea
         var textarea = new dijit.form.Textarea({
-            name: "jsonVal",
-            // this is a hack until http://bugs.dojotoolkit.org/ticket/8392 is fixed
-            value: ' '
+            name: "jsonVal"
         }).placeAt(valueDiv);
         pane.appendChild(valueDiv);
         
