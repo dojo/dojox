@@ -33,7 +33,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 	_resizeCheck: null, //Handle to interval function that chects the target for changes.
 	
-	target: "", //The target to overlay when active.  Can be a widget id or a dom id.  The widget will try to get the dom node from it.
+	target: "", //The target to overlay when active.  Can be a widget id, a dom id, or a direct node reference.
 
 	color: "#C0C0C0",  //Default color for the translucent overlay.  (light gray.)
 
@@ -90,7 +90,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		//	summary:
 		//		Internal function that handles resizing the overlay and centering of the image on window resizing.
 		if(this._displayed){
-			//Gotta show, then hide the image, but with a huge negative zindex, shouldn't actually show up on anything (I hope).
+			//Show the image and make sure the zIndex is set high.
 			var curStyle = dojo.style(this._imageNode, "display"); 
 			dojo.style(this._imageNode, "display", "block");
 			var box = dojo.coords(this.target);
@@ -106,21 +106,24 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 			//Address margins as they shift the position..
 			var marginLeft = dojo.style(this.target, "marginLeft");
-			if(dojo.isWebkit){
-				//Safari and others work differently here.  Needs to be doubled.
+			if(dojo.isWebKit && marginLeft){
+				//Webkit works differently here.  Needs to be doubled.
 				//Don't ask me why. :)
 				marginLeft = marginLeft*2;
 			}
+
 			if(marginLeft){
 				box.w = box.w - marginLeft;
 			}
-			if (!(dojo.isSafari||dojo.isWebKit||dojo.isChrome)) {
-				//Safari and others work differently here.  
+ 		
+			if (!dojo.isWebKit) {
+				//Webkit and others work differently here.  
 				var marginRight = dojo.style(this.target, "marginRight");
 				if(marginRight){
 					box.w = box.w - marginRight;
 				}
-			}
+    		}
+
 			var marginTop = dojo.style(this.target, "marginTop");
 			if(marginTop){
 				box.h = box.h - marginTop;
@@ -137,23 +140,21 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 				dojo.style(this._underlayNode, "top", (box.y + sVal.y) + "px");
 				dojo.style(this._underlayNode, "left", (box.x + sVal.x) + "px");
 
-				///Clone any curving if possible.
-				dojo.style(this._underlayNode, "borderRadius", dojo.style(this.target, "borderRadius"));
-				dojo.style(this._underlayNode, "borderTopLeftRadius", dojo.style(this.target, "borderTopLeftRadius"));
-				dojo.style(this._underlayNode, "borderTopRightRadius", dojo.style(this.target, "borderTopRightRadius"));
-				dojo.style(this._underlayNode, "borderBottomLeftRadius", dojo.style(this.target, "borderBottomLeftRadius"));
-				dojo.style(this._underlayNode, "borderBottomRightRadius", dojo.style(this.target, "borderBottomRightRadius"));
+
+				//Apply curving styles if present.
+				var cloneStyles = function(list, scope){
+					dojo.forEach(list, function(style){
+						dojo.style(this._underlayNode,style,dojo.style(this.target,style));
+					}, scope);
+				};
+				var styles = ["borderRadius", "borderTopLeftRadius", "borderTopRightRadius","borderBottomLeftRadius", "borderBottomRightRadius"];
+				cloneStyles(styles, this);
 				if(!dojo.isIE){
-					dojo.style(this._underlayNode, "MozBorderRadius", dojo.style(this.target, "MozBorderRadius"));
-					dojo.style(this._underlayNode, "MozBorderRadiusTopleft", dojo.style(this.target, "MozBorderRadiusTopleft"));
-					dojo.style(this._underlayNode, "MozBorderRadiusTopright", dojo.style(this.target, "MozBorderRadiusTopright"));
-					dojo.style(this._underlayNode, "MozBorderRadiusBottomleft", dojo.style(this.target, "MozBorderRadiusBottomleft"));
-					dojo.style(this._underlayNode, "MozBorderRadiusBottomright", dojo.style(this.target, "MozBorderRadiusBottomright"));
-					dojo.style(this._underlayNode, "WebkitBorderRadius", dojo.style(this.target, "WebkitBorderRadius"));
-					dojo.style(this._underlayNode, "WebkitBorderTopLeftRadius", dojo.style(this.target, "WebkitBorderTopLeftRadius"));
-					dojo.style(this._underlayNode, "WebkitBorderTopRightRadius", dojo.style(this.target, "WebkitBorderTopRightRadius"));
-					dojo.style(this._underlayNode, "WebkitBorderBottomLeftRadius", dojo.style(this.target, "WebkitBorderBottomLeftRadius"));
-					dojo.style(this._underlayNode, "WebkitBorderBottomRightRadius", dojo.style(this.target, "WebkitBorderBottomRightRadius"));
+					//Browser specific styles to try and clone if non-IE.
+					styles = ["MozBorderRadius", "MozBorderRadiusTopleft", "MozBorderRadiusTopright","MozBorderRadiusBottomleft", "MozBorderRadiusBottomright",
+						"WebkitBorderRadius", "WebkitBorderTopLeftRadius", "WebkitBorderTopRightRadius", "WebkitBorderBottomLeftRadius","WebkitBorderBottomRightRadius"
+					];
+					cloneStyles(styles, this);
 				}
 				var imgTop = (box.h/2) - (img.h/2);
 				var imgLeft = (box.w/2) - (img.w/2);
@@ -211,5 +212,12 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			 event.preventDefault();
 			 event.stopPropagation();
 		 }
+	},
+
+	uninitialize: function(){
+		//	summary:	
+		//		Over-ride to hide the widget, which clears intervals, before cleanup.
+		this.hide();
 	}
+
 });	

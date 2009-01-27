@@ -8,6 +8,7 @@
 
 .standbyImageNode {
 	opacity: 0;
+        display: none;
 	z-index: -10000;
 	position: absolute;
 	top: 0px;
