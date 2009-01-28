@@ -41,43 +41,40 @@
 			
 			var tabContainer = new dijit.layout.TabContainer({
 				id: "0",
-				tabPosition: "top"
+				tabPosition: "top",
+				style:"height:400px"
 			}).placeAt(parent);
 			
-			tabContainer.domNode.style.height="200px";
-
-			var cp1 = new dijit.layout.ContentPane({
-				id: "0.1",
-				title: "Tab 1"
-			}).placeAt(tabContainer);
-
 			var cp2 = new dijit.layout.ContentPane({
 				id: "0.2",
-				title: "Tab 2"
+				title: "Tab 1"
 			}).placeAt(tabContainer);
-
+			
 			tabContainer.startup();
-			constructBorderContainerExpandoPaneTest(cp1, "0.1");
+			constructBorderContainerExpandoPaneTest(tabContainer, "0.1");
 			// FIXME: if cp2 isn't visible, Expando's collapse to 0px? TitleHeight calc'd at 0?!
 			//constructBorderContainerExpandoPaneTest(cp2, "0.2");
-
+			
 		}
 		
 		var constructBorderContainerExpandoPaneTest = function(parent, cid){
 			console.log ("Parent id is: " + parent.id);
-
+			
 			var borderContainer = new dijit.layout.BorderContainer({
 				id: cid + "." + 0,
+				title:"Tab 2",
 				design: "horizontal",
-				style: "width: 98%; height:99%; border:1px solid black;"
-			}).placeAt(parent.domNode);
-
+				style: "height:350px;",
+				selected:true
+			}).placeAt(parent);
+			parent.selectChild(borderContainer);
+			
 			// add a center region:
 			var cr = new dijit.layout.ContentPane({
-				id: cid + ".center",
+				id: cid + "center",
 				region: "center"
 			}).placeAt(borderContainer);
-
+			
 			var ep = new dojox.layout.ExpandoPane({
 				id: cid + "." + 1,
 				title: "Left Section Test",
@@ -93,7 +90,7 @@
 			}).placeAt(borderContainer);
 			
 			borderContainer.startup();
-
+			
 		}
 		
 		// build the UI immediately onload:
