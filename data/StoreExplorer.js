@@ -139,7 +139,8 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 							field: key, 
 							name: key, 
 							_score: 1, 
-							formatter: formatCell, 
+							formatter: formatCell,
+							styles: "white-space:nowrap; ", 
 							editable: true
 						});
 					}
