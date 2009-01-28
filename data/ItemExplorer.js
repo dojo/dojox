@@ -493,7 +493,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
         }else{
             this._editDialog.attr("title", "Edit Property");
             // make sure the property input is disabled
-            dijit.getEnclosingWidget(dojo.query("input[name='property']", this._editDialog.containerNode)[0]).attr("disabled", true);
+            dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);
             if(this.store.isItem(item.value, true)){
                 // root node || Item reference
                 if(item.parent){
@@ -583,10 +583,10 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
             if(value instanceof Array){
                 // preset the property to the next index in the array and disable the property field
                 property = value.length;
-                dijit.getEnclosingWidget(dojo.query("input[name='property']", this._editDialog.containerNode)[0]).attr("disabled", true);  
+                dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);  
             }else{
                 // enable the property TextBox
-                dijit.getEnclosingWidget(dojo.query("input[name='property']", this._editDialog.containerNode)[0]).attr("disabled", false);
+                dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", false);
             }
             this._editDialog.attr("title", "Add Property");
             // default to a value type
