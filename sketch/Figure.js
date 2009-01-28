@@ -278,10 +278,8 @@ dojo.require("dojox.sketch.UndoStack");
 		this._cons=[];
 
 		//TODO: how to destroy a surface properly?
-		var n=this.node;
-		while(n.firstChild){
-			n.removeChild(n.firstChild);
-		}
+		dojo.empty(this.node);
+
 		//this.node.removeChild(this.surface.getEventSource());
 		this.group=this.surface=null;
 		this.obj={};
