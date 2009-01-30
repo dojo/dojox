@@ -55,10 +55,10 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		dojo.attr(this._imageNode, "alt", this.imageText);
 		this.connect(this._underlayNode, "onclick", "_ignore");
 
-		//Last thing to do is move the widgets parent, if any, to the document body.  Avoids having to deal with
+		//Last thing to do is move the widgets parent, if any, to the current document body.  Avoids having to deal with
 		//parent relative/absolute mess.  Otherwise positioning goes goofy.
-		if(this.domNode.parentNode && this.domNode.parentNode != document.body){
-			document.body.appendChild(this.domNode);
+		if(this.domNode.parentNode && this.domNode.parentNode != dojo.body()){
+			dojo.body().appendChild(this.domNode);
 		} 
 	},
 
