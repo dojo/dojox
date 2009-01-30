@@ -24,6 +24,7 @@ Project state:
 [Wizard]	experimental
 [AnalogGauge]   experimental
 [BarGauge]      experimental
+[Standby]	experimental
 -------------------------------------------------------------------------------
 Credits:
 
@@ -45,6 +46,7 @@ Credits:
 [Wizard] Peter Higgins (dante)
 [AnalogGauge] Benjamin Schell (bmschell) CCLA
 [BarGauge] Benjamin Schell (bmschell) CCLA 
+[Standby] Jared Jurkiewicz (jaredj) CCLA 
 
 -------------------------------------------------------------------------------
 Project description
@@ -151,12 +153,16 @@ Other Notes (Brief widget list):
 		Requires dojo >= 1.1 
                 
 	* AnalogGauge - an analog style customizable gauge for displaying values in an
-                animated fashion and with multiple indicators.  Supports easings for 
-                indicator animations, transparent overlays, etc.  Very flexible.
-                Requires dojo >= 1.2
+		animated fashion and with multiple indicators.  Supports easings for 
+		indicator animations, transparent overlays, etc.  Very flexible.
+		Requires dojo >= 1.2
 	
-        * BarGauge - a bar style gauge for displaying values in an animated fashion 
-                and with multiple indicators.  Supports easings for indicator animations,
-                etc.  Very flexible.
-                Requires dojo >= 1.2
+	* BarGauge - a bar style gauge for displaying values in an animated fashion 
+		and with multiple indicators.  Supports easings for indicator animations,
+		etc.  Very flexible.
+		Requires dojo >= 1.2
+
+	* Standby - a 'blocker' style widget to overlay a translucent div + image over a DOM node/widget to indicate busy.
+		Overlay color, image, and alt text can all be customized.
+		Requires dojo >= 1.3
 
