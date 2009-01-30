@@ -707,7 +707,7 @@ dojo.requireLocalization("dijit", "loading");
 
 		prerender: function(){
 			// if autoHeight, make sure scroller knows not to virtualize; everything must be rendered.
-			this.keepRows = this._autoHeight ? 0 : this.constructor.prototype.keepRows;
+			this.keepRows = this._autoHeight ? 0 : this.keepRows;
 			this.scroller.setKeepInfo(this.keepRows);
 			this.views.render();
 			this._resize();

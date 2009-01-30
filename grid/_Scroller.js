@@ -177,7 +177,7 @@ dojo.provide("dojox.grid._Scroller");
 				this.contentNodes[i].appendChild(this.pageNodes[i][inPageIndex]);
 			}
 		},
-		preparePage: function(inPageIndex, inPos, inReuseNode){
+		preparePage: function(inPageIndex, inReuseNode){
 			var p = (inReuseNode ? this.popPage() : null);
 			for(var i=0; i<this.colCount; i++){
 				var nodes = this.pageNodes[i];
