@@ -65,7 +65,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 
 	_onNew: function(item, parentInfo){
 		var rowCount = this.attr('rowCount');
+		this._addingItem = true;
 		this.updateRowCount(rowCount+1);
+		this._addingItem = false;
 		this._addItem(item, rowCount);
 		this.showMessage();
 	},
@@ -327,7 +329,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_preparePage: function(inRowIndex){
-		if(inRowIndex < this._bop || inRowIndex >= this._eop){
+		if((inRowIndex < this._bop || inRowIndex >= this._eop) && !this._addingItem){
 			var pageIndex = this._rowToPage(inRowIndex);
 			this._needPage(pageIndex);
 			this._bop = pageIndex * this.rowsPerPage;

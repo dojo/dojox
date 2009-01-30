@@ -46,6 +46,10 @@
 		<button dojoType="dijit.form.Button"> 
 			<script type="dojo/method" event="onClick"> 
 				numItems++; 
+				dojo.connect(jsonStore, "fetch", function(){
+					console.error("Calling newItem should not trigger a fetch.");
+					throw new Error("Calling newItem should not trigger a fetch.");
+				});
 				jsonStore.newItem({
 					name: numItems + "-person Land", 
 					type: "city", 
