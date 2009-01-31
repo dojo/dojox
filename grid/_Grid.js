@@ -677,7 +677,9 @@ dojo.requireLocalization("dijit", "loading");
 			
 			this.inherited(arguments);
 
-			this.render();
+			if(this.autoRender){
+				this.render();
+			}
 		},
 
 		// render
