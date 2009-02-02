@@ -545,24 +545,7 @@ dojo.requireLocalization("dijit", "loading");
 		resize: function(changeSize, resultSize){
 			// summary:
 			//		Update the grid's rendering dimensions and resize it
-			// sizeBox: Object?
-			//		{w: int, h: int, l: int, t: int}
-
-			// see dijit.layout._LayoutWidget for details on resize argument meaning
-			// TODO: even when Grid is a child of BorderContainer,
-			// the current code in _resize() calls contentBox() to set the size,
-			// which is inappropriate since BorderContainer has already done that.
-			// Should pass changeSize and resultSize to _resize(), and only act on
-			// changeSize
-			var sizeBox = {};
-			dojo.mixin(sizeBox, resultSize || {});
-			dojo.mixin(sizeBox, changeSize || {});
-
-			// FIXME: If grid is not sized explicitly, sometimes bogus scrollbars
-			// can appear in our container, which may require an extra call to 'resize'
-			// to sort out.
-			this._sizeBox = sizeBox;
-			this._resize();
+			this._resize(changeSize, resultSize);
 			this.sizeChange();
 		},
 
@@ -579,7 +562,7 @@ dojo.requireLocalization("dijit", "loading");
 			return t;
 		},
 		
-		_resize: function(){
+		_resize: function(changeSize, resultSize){
 			// if we have set up everything except the DOM, we cannot resize
 			var pn = this.domNode.parentNode;
 			if(!pn || pn.nodeType != 1 || !this.hasLayout() || pn.style.visibility == "hidden" || pn.style.display == "none"){
@@ -607,8 +590,8 @@ dojo.requireLocalization("dijit", "loading");
 				}
 			}
 			// if we are given dimensions, size the grid's domNode to those dimensions
-			if(this._sizeBox){
-				dojo.contentBox(this.domNode, this._sizeBox);	// TODO: should be marginBox() to match dijit behavior
+			if(changeSize){
+				dojo.marginBox(this.domNode, changeSize);
 			}else if(this.fitTo == "parent"){
 				var h = dojo._getContentBox(pn).h;
 				dojo.marginBox(this.domNode, { h: Math.max(0, h) });
