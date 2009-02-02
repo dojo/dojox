@@ -36,7 +36,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		}else{
 			this._type = {type: "radio", baseClass: "dijitRadio"};
 		}
-		this.disabled = this.option.disabled||false;
+		this.disabled = this.option.disabled = this.option.disabled||false;
 		this.inherited(arguments);
 	},
 
