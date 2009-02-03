@@ -68,8 +68,8 @@
 		}
 		
 		function resizeGrid() {
-			grid.autoHeight = false;
-			grid.autoWidth = false;
+			dojo.attr('autoHeight', false);
+			dojo.attr('autoWidth', false);
 			var
 				w = Number(dojo.byId('gridWidth').value),
 				h = Number(dojo.byId('gridHeight').value);
@@ -79,26 +79,26 @@
 		}
 		
 		function fitWidth() {
-			grid.autoWidth = true;
-			grid.autoHeight = false;
+			dojo.attr('autoWidth', true);
+			dojo.attr('autoHeight', false);
 			grid.update();
 		}
 		
 		function fitHeight() {
-			grid.autoWidth = false;
-			grid.autoHeight = true;
+			dojo.attr('autoWidth', false);
+			dojo.attr('autoHeight', true);
 			grid.update();
 		}
 		
 		function fitBoth() {
-			grid.autoWidth = true;
-			grid.autoHeight = true;
+			dojo.attr('autoWidth', true);
+			dojo.attr('autoHeight', true);
 			grid.update();
 		}
 		
 		function sizeDefault() {
-			grid.autoWidth = false;
-			grid.autoHeight = false;
+			dojo.attr('autoWidth', false);
+			dojo.attr('autoHeight', false);
 			grid.domNode.style.width = '';
 			grid.domNode.style.height = 0;
 			grid.update();

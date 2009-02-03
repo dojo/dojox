@@ -64,8 +64,8 @@
 		}
 		
 		function resizeGrid() {
-			grid.autoHeight = false;
-			grid.autoWidth = false;
+			grid.attr('autoHeight', false);
+			grid.attr('autoWidth', false);
 			var
 				w = Number(dojo.byId('gridWidth').value),
 				h = Number(dojo.byId('gridHeight').value);
@@ -75,26 +75,26 @@
 		}
 		
 		function fitWidth() {
-			grid.autoWidth = true;
-			grid.autoHeight = false;
+			grid.attr('autoHeight', false);
+			grid.attr('autoWidth', true);
 			grid.update();
 		}
 		
 		function fitHeight() {
-			grid.autoWidth = false;
-			grid.autoHeight = true;
+			grid.attr('autoHeight', true);
+			grid.attr('autoWidth', false);
 			grid.update();
 		}
 		
 		function fitBoth() {
-			grid.autoWidth = true;
-			grid.autoHeight = true;
+			grid.attr('autoHeight', true);
+			grid.attr('autoWidth', true);
 			grid.update();
 		}
 		
 		function sizeDefault() {
-			grid.autoWidth = false;
-			grid.autoHeight = false;
+			grid.attr('autoHeight', false);
+			grid.attr('autoWidth', false);
 			grid.domNode.style.width = '';
 			grid.domNode.style.height = 0;
 			grid.update();
