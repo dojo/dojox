@@ -53,8 +53,9 @@
 	float:right; 
 }
 .soria .dojoxFloatingMinimizeIcon {
-		background:url("../../../dijit/themes/soria/images/spriteRoundedIconsSmallBl.png") no-repeat -15px top;
-
+	background:url("../../../dijit/themes/soria/images/spriteRoundedIconsSmallBl.png") no-repeat -15px top;
+	width: 14px;
+	margin: 0px 2px;
 }
 
 .floatingPaneMaximized .dojoxFloatingMaximizeIcon { display:none; }
