@@ -43,6 +43,113 @@ dojo.requireLocalization("dijit", "loading");
 		}
 	};
 
+	/*=====
+	dojox.grid.__CellDef = function(){
+		//	name: String?
+		//		The text to use in the header of the grid for this cell.
+		//	get: Function?
+		//		function(rowIndex){} rowIndex is of type Integer.  This
+		//		function will be called when a cell	requests data.  Returns the
+		//		unformatted data for the cell.
+		//	value: String?
+		//		If "get" is not specified, this is used as the data for the cell.
+		//	defaultValue: String?
+		//		If "get" and "value" aren't specified or if "get" returns an undefined
+		//		value, this is used as the data for the cell.  "formatter" is not run
+		//		on this if "get" returns an undefined value.
+		//	formatter: Function?
+		//		function(data, rowIndex){} data is of type anything, rowIndex
+		//		is of type Integer.  This function will be called after the cell
+		//		has its data but before it passes it back to the grid to render.
+		//		Returns the formatted version of the cell's data.
+		//	type: dojox.grid.cells._Base|Function?
+		//		TODO
+		//	editable: Boolean?
+		//		Whether this cell should be editable or not.
+		//	hidden: Boolean?
+		//		If true, the cell will not be displayed.
+		//	width: Integer|String?
+		//		A CSS size.  If it's an Integer, the width will be in em's.
+		//	colSpan: Integer?
+		//		How many columns to span this cell.  Will not work in the first
+		//		sub-row of cells.
+		//	rowSpan: Integer?
+		//		How many sub-rows to span this cell.
+		//	styles: String?
+		//		A string of styles to apply to both the header cell and main
+		//		grid cells.  Must end in a ';'.
+		//	headerStyles: String?
+		//		A string of styles to apply to just the header cell.  Must end
+		//		in a ';'
+		//	cellStyles: String?
+		//		A string of styles to apply to just the main grid cells.  Must
+		//		end in a ';'
+		//	classes: String?
+		//		A space separated list of classes to apply to both the header
+		//		cell and the main grid cells.
+		//	headerClasses: String?
+		//		A space separated list of classes to apply to just the header
+		//		cell.
+		//	cellClasses: String?
+		//		A space separated list of classes to apply to just the main
+		//		grid cells.
+		//	attrs: String?
+		//		A space separated string of attribute='value' pairs to add to
+		//		the header cell element and main grid cell elements.
+		this.name = name;
+		this.value = value;
+		this.get = get;
+		this.formatter = formatter;
+		this.type = type;
+		this.editable = editable;
+		this.hidden = hidden;
+		this.width = width;
+		this.colSpan = colSpan;
+		this.rowSpan = rowSpan;
+		this.styles = styles;
+		this.headerStyles = headerStyles;
+		this.cellStyles = cellStyles;
+		this.classes = classes;
+		this.headerClasses = headerClasses;
+		this.cellClasses = cellClasses;
+		this.attrs = attrs;
+	}
+	=====*/
+
+	/*=====
+	dojox.grid.__ViewDef = function(){
+		//	noscroll: Boolean?
+		//		If true, no scrollbars will be rendered without scrollbars.
+		//	width: Integer|String?
+		//		A CSS size.  If it's an Integer, the width will be in em's. If
+		//		"noscroll" is true, this value is ignored.
+		//	cells: dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]]?
+		//		The structure of the cells within this grid.
+		//	type: String?
+		//		A string containing the constructor of a subclass of
+		//		dojox.grid._View.  If this is not specified, dojox.grid._View
+		//		is used.
+		//	defaultCell: dojox.grid.__CellDef?
+		//		A cell definition with default values for all cells in this view.  If
+		//		a property is defined in a cell definition in the "cells" array and
+		//		this property, the cell definition's property will override this
+		//		property's property.
+		//	onBeforeRow: Function?
+		//		function(rowIndex, cells){} rowIndex is of type Integer, cells
+		//		is of type Array[dojox.grid.__CellDef[]].  This function is called
+		//		before each row of data is rendered.  Before the header is
+		//		rendered, rowIndex will be -1.  "cells" is a reference to the
+		//		internal structure of this view's cells so any changes you make to
+		//		it will persist between calls.
+		this.noscroll = noscroll;
+		this.width = width;
+		this.cells = cells;
+		this.type = type;
+		this.defaultCell = defaultCell;
+		this.onBeforeRow = onBeforeRow;
+	}
+	=====*/
+
 	dojo.declare('dojox.grid._Grid',
 		[ dijit._Widget, dijit._Templated, dojox.grid._Events ],
 		{
@@ -137,8 +244,8 @@ dojo.requireLocalization("dijit", "loading");
 		//		if the height: css attribute exists on the source node.
 		height: '',
 
-		// structure: Object|String
-		//		View layout defintion. Can be set to a layout object, or to the (string) name of a layout object.
+		// structure: dojox.grid.__ViewDef|dojox.grid.__ViewDef[]|dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]]|String
+		//		View layout defintion.
 		structure: '',
 
 		// elasticView: Integer
@@ -356,6 +463,8 @@ dojo.requireLocalization("dijit", "loading");
 		},
 
 		createSelection: function(){
+			// summary:	Creates a new Grid selection manager.
+
 			// selection manager
 			this.selection = new dojox.grid.Selection(this);
 		},

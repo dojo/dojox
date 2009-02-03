@@ -3,11 +3,44 @@ dojo.provide("dojox.grid.DataGrid");
 dojo.require("dojox.grid._Grid");
 dojo.require("dojox.grid.DataSelection");
 
+/*=====
+dojo.declare("dojox.grid.__DataCellDef", dojox.grid.__CellDef, {
+	constructor: function(){
+		//	field: String?
+		//		The attribute to read from the dojo.data item for the row.
+		//	get: Function?
+		//		function(rowIndex, item?){} rowIndex is of type Integer, item is of type
+		//		Object.  This function will be called when a cell requests data.  Returns
+		//		the unformatted data for the cell.
+	}
+});
+=====*/
+
+/*=====
+dojo.declare("dojox.grid.__DataViewDef", dojox.grid.__ViewDef, {
+	constructor: function(){
+		//	cells: dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]?
+		//		The structure of the cells within this grid.
+		//	defaultCell: dojox.grid.__DataCellDef?
+		//		A cell definition with default values for all cells in this view.  If
+		//		a property is defined in a cell definition in the "cells" array and
+		//		this property, the cell definition's property will override this
+		//		property's property.
+	}
+});
+=====*/
+
 dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	store: null,
 	query: null,
 	queryOptions: null,
 	fetchText: '...',
+
+/*=====
+	// structure: dojox.grid.__DataViewDef|dojox.grid.__DataViewDef[]|dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]|String
+	//		View layout defintion.
+	structure: '',
+=====*/
 
 	// You can specify items instead of a query, if you like.  They do not need
 	// to be loaded - but the must be items in the store
