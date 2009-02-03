@@ -80,58 +80,56 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 		output.append(node.nodeValue);
 	}else{
 		var name = node.nodeName.toLowerCase();
+		if(!name){ return; }
 
 		if (!output) {
 			output = new dojox.string.Builder();
 		}
 		output.append("<").append(name);
 
-		var attributes = dojo.filter(tokens, function(token){
-			if(token[0] == dojox.dtl.TOKEN_ATTR){
-				for(var i = 0, group; group = clones[i]; i++){
-					// group is any set of nodes that were originally the sam
-					var count = 0;
-					for(var j = 0, item; item = group[j]; j++){
-						if(item === token[1] || item === node){
-							if(count++){
-								// This is entered when we have 2 hits within a clone group.
-								//		The first would be the original node
-								//		The second would be if our current node is a clone
-								//		of the original
-								return true;
-							}
-						}
-					}
-				}
+		var found = {};
+		var attributes = dojo.filter(tokens, function(item){
+			return item[0] == dojox.dtl.TOKEN_ATTR && dojo.isString(item[3]) && dojo.trim(item[3]);
+		});
+		attributes = dojo.map(attributes, "return item[2];");
+		attributes = dojo.filter(attributes, function(attribute){
+			if(!found[attribute]){
+				return found[attribute] = true;
 			}
 		});
 
 		for(var i = 0, attribute; attribute = attributes[i]; i++){
 			var value = "";
-			if(attribute[2] == "class"){
+			if(attribute == "class"){
 				value = node.className || value;
-			}else if(attribute[2] == "for"){
+			}else if(attribute == "for"){
 				value = node.htmlFor || value;
-			}else if(node.getAttribute){
-				value = node.getAttribute(attribute[2], 2) || value;
-				if(attribute[2] == "type" && node.tagName == "TEXTAREA"){
+			}else{
+				var bools = {checked: 1, disabled: 1, readonly: 1};
+				if(bools[attribute] && typeof node[attribute] == "boolean"){
+					value = dojo.attr(node, attribute) ? "true" : "false";
+				}else{
+					value = node.getAttribute(attribute, 2) || value;
+				}
+				if(node.tagName == "TEXTAREA" && (attribute == "type" || attribute == "value")){
 					continue;
 				}
-				if(dojo.isIE && (attribute[2] == "href" || attribute[2] == "src")){
-					if(dojo.isIE){
-						var hash = location.href.lastIndexOf(location.hash);
-						var href = location.href.substring(0, hash).split("/");
-						href.pop();
-						href = href.join("/") + "/";
-						if(value.indexOf(href) == 0){
-							value = value.replace(href, "");
-						}
-						value = decodeURIComponent(value);
+				if(node.tagName == "INPUT" && attribute == "type" && value == "text"){
+					continue;
+				}
+				if(dojo.isIE && (attribute == "href" || attribute == "src")){
+					var hash = location.href.lastIndexOf(location.hash);
+					var href = location.href.substring(0, hash).split("/");
+					href.pop();
+					href = href.join("/") + "/";
+					if(value.indexOf(href) == 0){
+						value = value.replace(href, "");
 					}
+					value = decodeURIComponent(value);
 				}
 			}
-			if(value){
-				output.append(" ").append(attribute[2]).append('="').append(value.replace(/"/g, '\\"')).append('"');
+			if(value !== ""){
+				output.append(" ").append(attribute).append('="').append(value.replace(/"/g, '\\"')).append('"');
 			}
 		}
 

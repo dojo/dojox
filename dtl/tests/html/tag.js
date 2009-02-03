@@ -64,29 +64,6 @@ doh.register("dojox.dtl.html.tag",
 			}
 			t.t(found);
 		},
-		function test_structures(t){
-			var dd = dojox.dtl;
-
-			var context = new dd.Context({
-				actions: ["ate", "picked"],
-				items: [
-					{
-						name: "apple"
-					},
-					{
-						name: "banana",
-						date: new Date(2007, 2, 16, 14, 30, 10)
-					},
-					{
-						name: "orange",
-						date: new Date(2008, 0, 1, 12, 0, 0)
-					}
-				]
-			});
-
-			var template = new dd.HtmlTemplate('<div><ul>I {% for action in actions %}{% if not forloop.first %}, {% endif %}{{ action }}{% endfor %} the following:<ul>{% for item in items %}<li>{{ item.name }}{% if item.date %} at {{ item.date|date:"P" }}{% endif %}</li>{% endfor %}</ul></ul></div>');
-			t.is('<div><ul>I ate, picked the following:<ul><li>apple</li><li>banana at 2:30 pm</li><li>orange at noon</li></ul></ul></div>', dd.tests.html.util.render(template, context));
-		},
 		function test_tag_attributes(){
 			var dd = dojox.dtl;
 
@@ -200,13 +177,13 @@ doh.register("dojox.dtl.html.tag",
 			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><span>banana</span><br/><p>yellow</p></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
 
 			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}<li>{% ifequal item.name edit_item %}<label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label>{% else %}<span>{{ item.name }}</span><br/><p>{{ item.color }}</p>{% endifequal %}</li>{% endfor %}</ul></div>");
-			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
+			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
 
 			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}<li>{% ifequal item.name edit_item %}<div><label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label></div>{% else %}<div><span>{{ item.name }}</span><br/><p>{{ item.color }}</p></div>{% endifequal %}</li>{% endfor %}</ul></div>");
-			t.is('<div><ul><li><div><span>apple</span><br/><p>red</p></div></li><li><div><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></div></li><li><div><span>pear</span><br/><p>green</p></div></li><li><div><span>kiwi</span><br/><p>brown</p></div></li></ul></div>', dd.tests.html.util.render(template, context));
+			t.is('<div><ul><li><div><span>apple</span><br/><p>red</p></div></li><li><div><label>Name: <input name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></div></li><li><div><span>pear</span><br/><p>green</p></div></li><li><div><span>kiwi</span><br/><p>brown</p></div></li></ul></div>', dd.tests.html.util.render(template, context));
 
 			template = new dd.HtmlTemplate("<div><ul>{% for item in items %}{% ifequal item.name edit_item %}<li><label>Name: <input type='text' name='name' value=\"{{ item.name }}\"/></label><br/><label>Color: <textarea name='color'>{{ item.color }}</textarea></label></li>{% else %}<li><span>{{ item.name }}</span><br/><p>{{ item.color }}</p></li>{% endifequal %}{% endfor %}</ul></div>");
-			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input type="text" name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
+			t.is('<div><ul><li><span>apple</span><br/><p>red</p></li><li><label>Name: <input name="name" value="banana"/></label><br/><label>Color: <textarea name="color">yellow</textarea></label></li><li><span>pear</span><br/><p>green</p></li><li><span>kiwi</span><br/><p>brown</p></li></ul></div>', dd.tests.html.util.render(template, context));
 		},
 		function test_tag_include(t){
 			var dd = dojox.dtl;
@@ -260,6 +237,58 @@ doh.register("dojox.dtl.html.tag",
 
 			var template = new dd.HtmlTemplate("<div>abc{% comment %}{% endif %}<div>{% ssi hello parsed %}</div>{% for item in items %}{% endcomment %}xyz</div>");
 			t.is("<div>abcxyz</div>", dd.tests.html.util.render(template, context));
+		},
+		function test_annoying_nesting(){
+			// In Safari:  table/tr, tr/th, tr/td, thead/tr, tbody/tr
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({items: ["apple", "banana", "orange"]});
+
+			// All: select/option
+			var template = new dd.HtmlTemplate("<div><select>{% for item in items %}{% ifequal item 'apple' %}<option>=====</option>{% endifequal %}<option>{{ item }}</option>{% endfor %}</select></div>");
+			doh.is("<div><select><option>=====</option><option>apple</option><option>banana</option><option>orange</option></select></div>", dd.tests.html.util.render(template, context));
+
+			// Safari: table/tr
+			template = new dd.HtmlTemplate('<div><table><tr><td>Fruit</td></tr>{% for fruit in items %}<tr><td>{{ fruit }}</td></tr>{% endfor %}</table></div>');
+			doh.is('<div><table><tbody><tr><td>Fruit</td></tr><tr><td>apple</td></tr><tr><td>banana</td></tr><tr><td>orange</td></tr></tbody></table></div>', dd.tests.html.util.render(template, context));
+
+			// Safari: tbody/tr
+			template = new dd.HtmlTemplate('<div><table><tbody><tr><td>Fruit</td></tr>{% for fruit in items %}<tr><td>{{ fruit }}</td></tr>{% endfor %}</tbody></table></div>');
+			doh.is('<div><table><tbody><tr><td>Fruit</td></tr><tr><td>apple</td></tr><tr><td>banana</td></tr><tr><td>orange</td></tr></tbody></table></div>', dd.tests.html.util.render(template, context));
+
+			// Safari: tr/th
+			template = new dd.HtmlTemplate("<div><table><tr>{% for item in items %}{% ifequal item 'apple' %}<th>=====</th>{% endifequal %}<th>{{ item }}</th>{% endfor %}</tr></table></div>");
+			doh.is("<div><table><tbody><tr><th>=====</th><th>apple</th><th>banana</th><th>orange</th></tr></tbody></table></div>", dd.tests.html.util.render(template, context));
+
+			// Safari: tr/th
+			template = new dd.HtmlTemplate("<div><table><tr>{% for item in items %}{% ifequal item 'apple' %}<td>=====</td>{% endifequal %}<td>{{ item }}</td>{% endfor %}</tr></table></div>");
+			doh.is("<div><table><tbody><tr><td>=====</td><td>apple</td><td>banana</td><td>orange</td></tr></tbody></table></div>", dd.tests.html.util.render(template, context));
+		},
+		function test_custom_attributes(){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({frag: {start: 10, stop: 20}});
+
+			var template = new dd.HtmlTemplate('<div startLine="{{ frag.start }}" stopLine="{{ frag.stop }}">abc</div>');
+			doh.is('<div startline="10" stopline="20">abc</div>', dd.tests.html.util.render(template, context));
+		},
+		function test_emptiness(){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({});
+			var template = new dd.HtmlTemplate('<div>{% if data %}{% else %}<p>Please select a file using the left panel.</p>{% endif %}</div>');
+			doh.is('<div><p>Please select a file using the left panel.</p></div>', dd.tests.html.util.render(template, context));
+
+			context.data = true;
+			doh.is('<div/>', dd.tests.html.util.render(template, context));
+		},
+		function test_bools(){
+			// checked, disabled, readonly
+			var dd = dojox.dtl;
+
+			var context = new dd.Context({checked: false});
+			var template = new dd.HtmlTemplate('<div><input checked="{{ checked }}"></div>');
+			doh.is('<div><input checked="false"/></div>', dd.tests.html.util.render(template, context));
 		}
 	]
 );

@@ -6,21 +6,34 @@ dojo.require("dojox.dtl.html");
 	var dd = dojox.dtl;
 	var ddch = dd.contrib.html;
 
+	var simple = {render: function(){ return this.contents; }};
+
 	ddch.StyleNode = dojo.extend(function(styles){
 		this.contents = {};
+		this._current = {};
 		this._styles = styles;
 		for(var key in styles){
-			this.contents[key] = new dd.Template(styles[key]);
+			if(styles[key].indexOf("{{") != -1){
+				var node = new dd.Template(styles[key]);
+			}else{
+				var node = dojo.delegate(simple);
+				node.contents = styles[key];
+			}
+			this.contents[key] = node;
 		}
 	},
 	{
 		render: function(context, buffer){
 			for(var key in this.contents){
-				dojo.style(buffer.getParent(), key, this.contents[key].render(context));
+				var value = this.contents[key].render(context);
+				if(this._current[key] != value){
+					dojo.style(buffer.getParent(), key, this._current[key] = value);
+				}
 			}
 			return buffer;
 		},
 		unrender: function(context, buffer){
+			this._current = {};
 			return buffer;
 		},
 		clone: function(buffer){
@@ -134,15 +147,15 @@ dojo.require("dojox.dtl.html");
 			dojo.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead")
 			return parser.create_variable_node(token.contents.slice(5) + "|safe");
 		},
-		tstyle: function(parser, token){
+		style_: function(parser, token){
 			var styles = {};
-			token = token.contents.replace(/^tstyle\s+/, "");
+			token = token.contents.replace(/^style\s+/, "");
 			var rules = token.split(/\s*;\s*/g);
 			for(var i = 0, rule; rule = rules[i]; i++){
 				var parts = rule.split(/\s*:\s*/g);
 				var key = parts[0];
-				var value = parts[1];
-				if(value.indexOf("{{") == 0){
+				var value = dojo.trim(parts[1]);
+				if(value){
 					styles[key] = value;
 				}
 			}
@@ -151,6 +164,6 @@ dojo.require("dojox.dtl.html");
 	});
 
 	dd.register.tags("dojox.dtl.contrib", {
-		"html": ["html", "attr:tstyle", "buffer"]
+		"html": ["html", "attr:style", "buffer"]
 	});
 })();

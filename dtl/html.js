@@ -6,6 +6,7 @@ dojo.require("dojox.dtl.Context");
 (function(){
 	var dd = dojox.dtl;
 
+	dd.BOOLS = {checked: 1, disabled: 1, readonly: 1};
 	dd.TOKEN_CHANGE = -11;
 	dd.TOKEN_ATTR = -12;
 	dd.TOKEN_CUSTOM = -13;
@@ -14,7 +15,10 @@ dojo.require("dojox.dtl.Context");
 	var ddt = dd.text;
 	var ddh = dd.html = {
 		_attributes: {},
+		_uppers: {},
 		_re4: /^function anonymous\(\)\s*{\s*(.*)\s*}$/,
+		_reTrim: /(?:^\s*(\{%)?\s*|\s*(%\})?\s*$)/g,
+		_reSplit: /\s*%\}\s*\{%\s*/g,
 		getTemplate: function(text){
 			if(typeof this._commentable == "undefined"){
 				// Check to see if the browser can handle comments
@@ -31,14 +35,22 @@ dojo.require("dojox.dtl.Context");
 				text = text.replace(/<!--({({|%).*?(%|})})-->/g, "$1");
 			}
 
+			if(dojo.isIE){
+				text = text.replace(/\b(checked|disabled|readonly|style)="/g, 't$1="');
+			}
+			text = text.replace(/\bstyle="/g, 'tstyle="');
+
 			var match;
 			var pairs = [
 				[true, "select", "option"],
 				[dojo.isSafari, "tr", "th"],
 				[dojo.isSafari, "tr", "td"],
 				[dojo.isSafari, "thead", "tr", "th"],
-				[dojo.isSafari, "tbody", "tr", "td"]
+				[dojo.isSafari, "tbody", "tr", "td"],
+				[dojo.isSafari, "table", "tbody", "tr", "td"],
+				[dojo.isSafari, "table", "tr", "td"],
 			];
+			var replacements = [];
 			// Some tags can't contain text. So we wrap the text in tags that they can have.
 			for(var i = 0, pair; pair = pairs[i]; i++){
 				if(!pair[0]){
@@ -46,26 +58,36 @@ dojo.require("dojox.dtl.Context");
 				}
 				if(text.indexOf("<" + pair[1]) != -1){
 					var selectRe = new RegExp("<" + pair[1] + "[\\s\\S]*?>([\\s\\S]+?)</" + pair[1] + ">", "ig");
-					while(match = selectRe.exec(text)){
+					tagLoop: while(match = selectRe.exec(text)){
 						// Do it like this to make sure we don't double-wrap
 						var found = false;
 						var tokens = dojox.string.tokenize(match[1], new RegExp("(<" + pair[2] + "[\\s\\S]*?>[\\s\\S]*?</" + pair[2] + ">)", "ig"), function(child){ found = true; return {data: child}; });
 						if(found){
 							var replace = [];
 							for(var j = 0; j < tokens.length; j++) {
-								if(dojo.isObject(tokens[j])){
-									replace.push(tokens[j].data);
+								var token = tokens[j];
+								if(dojo.isObject(token)){
+									replace.push(token.data);
 								}else{
-									var close = pair[pair.length - 1];
-									var k, replacement = "";
-									for(k = 2; k < pair.length - 1; k++){
-										replacement += "<" + pair[k] + ">";
+									var stripped = token.replace(this._reTrim, "");
+									if(stripped == token){ continue tagLoop; /* Handle mixed nestings */ }
+									token = stripped.split(this._reSplit);
+									for(var k = 0, kl = token.length; k < kl; k++){
+										var replacement = "";
+										for(var p = 2, pl = pair.length; p < pl; p++){
+											replacement += "<" + pair[p];
+											if(p == 2){
+												replacement += ' dtlinstruction="{% ' + token[k].replace('"', '\\"') + ' %}"';
+											}
+											replacement += ">";
+										}
+										replacement += "DTL";
+										for(var p = pair.length - 1; p > 1; p--){
+											replacement += "</" + pair[p] + ">";
+										}
+										replace.push("\xFF" + replacements.length);
+										replacements.push(replacement);
 									}
-									replacement += "<" + close + ' iscomment="true">' + dojo.trim(tokens[j]) + "</" + close + ">";
-									for(k = 2; k < pair.length - 1; k++){
-										replacement += "</" + pair[k] + ">";
-									}
-									replace.push(replacement);
 								}
 							}
 							text = text.replace(match[1], replace.join(""));
@@ -74,9 +96,18 @@ dojo.require("dojox.dtl.Context");
 				}
 			}
 
+			for(var i=replacements.length; i--;){
+				text = text.replace("\xFF" + i, replacements[i]);
+			}
+
 			var re = /\b([a-zA-Z_:][a-zA-Z0-9_\-\.:]*)=['"]/g;
 			while(match = re.exec(text)){
-				this._attributes[match[1].toLowerCase()] = true;
+				var lower = match[1].toLowerCase();
+				if(lower == "dtlinstruction"){ continue; }
+				if(lower != match[1]){
+					this._uppers[lower] = match[1];
+				}
+				this._attributes[lower] = true;
 			}
 			var div = document.createElement("div");
 			div.innerHTML = text;
@@ -160,6 +191,8 @@ dojo.require("dojox.dtl.Context");
 			}
 
 			for(var key in this._attributes){
+				var clear = false;
+
 				var value = "";
 				if(key == "class"){
 					value = node.className || value;
@@ -182,10 +215,25 @@ dojo.require("dojox.dtl.Context");
 							value = decodeURIComponent(value);
 						}
 						if(value.indexOf("{%") != -1 || value.indexOf("{{") != -1){
-							node.setAttribute(key, "");
+							clear = key;
 						}
+					}else if(key == "tstyle"){
+						clear = key;
+						key = "style";
+					}else if(dd.BOOLS[key.slice(1)]){
+						clear = key;
+						key = key.slice(1);
+					}else if(this._uppers[key]){
+						clear = this._uppers[key];
+						node.setAttribute(key, value);
 					}
 				}
+
+				if(clear){
+					node.setAttribute(clear, "");
+					node.removeAttribute(clear);
+				}
+
 				if(typeof value == "function"){
 					value = value.toString().replace(this._re4, "$1");
 				}
@@ -195,17 +243,22 @@ dojo.require("dojox.dtl.Context");
 					tokens.push([dd.TOKEN_CHANGE, node]);
 					change = true;
 				}
-				// We'll have to resolve attributes during parsing
+
+				// We'll have to resolve attributes during parsing (some ref plugins)
+
 				tokens.push([dd.TOKEN_ATTR, node, key, value]);
 			}
 
 			for(i = 0, child; child = children[i]; i++){
-				if(child.nodeType == 1 && child.getAttribute("iscomment")){
-					child.parentNode.removeChild(child);
-					child = {
-						nodeType: 8,
-						data: child.innerHTML
-					};
+				if(child.nodeType == 1){
+					var instruction = child.getAttribute("dtlinstruction");
+					if(instruction){
+						child.parentNode.removeChild(child);
+						child = {
+							nodeType: 8,
+							data: instruction
+						};
+					}
 				}
 				this.__tokenize(child, tokens);
 			}
@@ -779,11 +832,11 @@ dojo.require("dojox.dtl.Context");
 		}
 	});
 
-	var bools = {checked: 1, disabled: 1, readonly: 1};
 	dd.AttributeNode = dojo.extend(function(key, value){
 		// summary: Works on attributes
 		this.key = key;
 		this.value = value;
+		this.contents = value;
 		if(this._pool[value]){
 			this.nodelist = this._pool[value];
 		}else{
@@ -800,23 +853,16 @@ dojo.require("dojox.dtl.Context");
 		render: function(context, buffer){
 			var key = this.key;
 			var value = this.nodelist.dummyRender(context);
-			if(bools[key]){
+			if(dd.BOOLS[key]){
 				value = !(value == "false" || value == "undefined" || !value);
 			}
-			if(this._rendered){
-				if(value != this.contents){
-					this.contents = value;
-					return buffer.setAttribute(key, value);
-				}
-			}else{
-				this._rendered = true;
+			if(value !== this.contents){
 				this.contents = value;
 				return buffer.setAttribute(key, value);
 			}
 			return buffer;
 		},
 		unrender: function(context, buffer){
-			this._rendered = false;
 			return buffer.remove(this.key);
 		},
 		clone: function(buffer){

@@ -133,7 +133,7 @@ dojo.require("dojox.string.tokenize");
 
 			var parent = dojo.getObject(require);
 
-			return parent[fn || name] || parent[name + "_"];
+			return parent[fn || name] || parent[name + "_"] || parent[fn + "_"];
 		},
 		getTag: function(name, errorless){
 			return ddt._get("tag", name, errorless);
