@@ -70,7 +70,7 @@ dojo.require("dojo.dnd.Manager");
 
 		// focus 
 		focus: function(){
-			if(dojo.isSafari || dojo.isOpera){
+			if(dojo.isWebKit || dojo.isOpera){
 				this.hiddenFocusNode.focus();
 			}else{
 				this.scrollboxNode.focus();
@@ -78,7 +78,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		setStructure: function(inStructure){
-			var vs = this.structure = inStructure;
+			var vs = (this.structure = inStructure);
 			// FIXME: similar logic is duplicated in layout
 			if(vs.width && !isNaN(vs.width)){
 				this.viewWidth = vs.width + 'em';
