@@ -91,10 +91,12 @@ dojo.declare("dojox.grid._Layout", null, {
 			var w = 0;
 			if(inDef.colSpan > 1){
 				w = 0;
-			}else if(!isNaN(inDef.width)){
-				w = inDef.width + "em";
 			}else{
 				w = inDef.width || self._defaultCellProps.width || self.defaultWidth;
+
+				if(!isNaN(w)){
+					w = w + "em";
+				}
 			}
 			return w;
 		};
