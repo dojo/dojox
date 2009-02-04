@@ -76,6 +76,11 @@
 				onBeforeRow: function(inDataIndex, inSubRows) {
 					inSubRows[1].hidden = !detailRows[inDataIndex];
 				},
+				onAfterRow: function(rowIndex, subRows, rowNode) {
+					if(detailRows[rowIndex]){
+						buildSubgrid(rowIndex, subRows[1][0]);
+					}
+				},
 				cells: [[
 					{ name: '', width: 3, get: getCheck, styles: 'text-align: center;' }, { name: 'Name', get: getName, width: 40 }
 				], [
@@ -94,8 +99,6 @@
 		// provide html for the Detail cell in the master grid		
 		function getDetail(inRowIndex) {
 			var cell = this;
-			// we can affect styles and content here, but we have to wait to access actual nodes
-			setTimeout(function() { buildSubgrid(inRowIndex, cell); }, 1);
 			// look for a subgrid
 			var subGrid = dijit.byId(makeSubgridId(inRowIndex));
 			var h = (subGrid ? subGrid.cacheHeight : "120") + "px";
@@ -104,7 +107,6 @@
 		}
 		
 		// the Detail cell contains a subgrid which we set up below
-		
 			var subGridCells = [{
 				noscroll: true,
 				cells: [
@@ -126,14 +128,15 @@
 	
 			// identify subgrids by their row indices
 			function makeSubgridId(inRowIndex) {
-				return grid.widgetId + "_subGrid_" + inRowIndex;
+				return grid.id + "_subGrid_" + inRowIndex;
 			}
 	
 			// if a subgrid exists at inRowIndex, detach it from the DOM
 			function detachSubgrid(inRowIndex) {
 				var subGrid = dijit.byId(makeSubgridId(inRowIndex));
-				if (subGrid)
+				if(subGrid){
 					dojox.grid.util.removeNode(subGrid.domNode);
+				}
 			}
 			
 			// render a subgrid into inCell at inRowIndex
@@ -143,14 +146,14 @@
 				var subGrid = dijit.byId(id);
 				if (subGrid) {
 					n.appendChild(subGrid.domNode);
-					subGrid.render();
 				} else {
 					subGridProps.dataRow = inRowIndex;
-					subGridProps.widgetId = id;
+					subGridProps.id = id;
 					subGrid = new dojox.grid._Grid(subGridProps, n);
 					subGrid.startup();
 				}
-				if (subGrid) {
+				subGrid.render();
+				if(subGrid){
 					subGrid.cacheHeight = subGrid.domNode.offsetHeight;
 					inCell.grid.rowHeightChanged(inRowIndex);
 				}	
@@ -159,13 +162,17 @@
 			// destroy subgrid at inRowIndex
 			function destroySubgrid(inRowIndex) {
 				var subGrid = dijit.byId(makeSubgridId(inRowIndex));
-				if (subGrid) subGrid.destroy();
+				if(subGrid){
+					subGrid.destroy();
+				}
 			}
 		
 		// when user clicks the +/-
 		detailRows = [];
 		function toggleDetail(inIndex, inShow) {
-			if (!inShow) detachSubgrid(inIndex);
+			if(!inShow){
+				detachSubgrid(inIndex);
+			}
 			detailRows[inIndex] = inShow;
 			grid.updateRow(inIndex);
 		}

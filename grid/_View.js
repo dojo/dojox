@@ -86,6 +86,7 @@ dojo.require("dojo.dnd.Manager");
 				this.viewWidth = vs.width || (vs.noscroll ? 'auto' : this.viewWidth); //|| this.defaultWidth;
 			}
 			this.onBeforeRow = vs.onBeforeRow;
+			this.onAfterRow = vs.onAfterRow;
 			this.noscroll = vs.noscroll;
 			if(this.noscroll){
 				this.scrollboxNode.style.overflow = "hidden";
@@ -289,6 +290,7 @@ dojo.require("dojo.dnd.Manager");
 				this.contentWidth = this.getContentWidth();
 				this.headerContentNode.firstChild.style.width = this.contentWidth;
 			}
+			dojox.grid.util.fire(this, "onAfterRow", [-1, this.structure.cells, this.headerContentNode]);
 		},
 
 		// note: not called in 'view' context
@@ -454,6 +456,7 @@ dojo.require("dojo.dnd.Manager");
 				// FIXME: accessing firstChild here breaks encapsulation
 				inRowNode.firstChild.style.width = this.contentWidth;
 			}
+			dojox.grid.util.fire(this, "onAfterRow", [inRowIndex, this.structure.cells, inRowNode]);
 		},
 
 		rowRemoved:function(inRowIndex){

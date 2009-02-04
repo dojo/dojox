@@ -141,12 +141,20 @@ dojo.requireLocalization("dijit", "loading");
 		//		rendered, rowIndex will be -1.  "cells" is a reference to the
 		//		internal structure of this view's cells so any changes you make to
 		//		it will persist between calls.
+		//	onAfterRow: Function?
+		//		function(rowIndex, cells, rowNode){} rowIndex is of type Integer, cells
+		//		is of type Array[dojox.grid.__CellDef[]], rowNode is of type DOMNode.
+		//		This function is called	after each row of data is rendered.  After the
+		//		header is rendered, rowIndex will be -1.  "cells" is a reference to the
+		//		internal structure of this view's cells so any changes you make to
+		//		it will persist between calls.
 		this.noscroll = noscroll;
 		this.width = width;
 		this.cells = cells;
 		this.type = type;
 		this.defaultCell = defaultCell;
 		this.onBeforeRow = onBeforeRow;
+		this.onAfterRow = onAfterRow;
 	}
 	=====*/
 
