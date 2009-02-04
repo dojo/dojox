@@ -36,8 +36,8 @@ dojo.require("dijit.Editor");
 			return this.widget.attr('value');
 		},
 		setValue: function(inRowIndex, inValue){
-			if(this.widget&&this.widget.setValue){
-				this.widget.setValue(inValue);
+			if(this.widget&&this.widget.attr){
+				this.widget.attr('value', inValue);
 			}else{
 				this.inherited(arguments);
 			}
@@ -139,7 +139,7 @@ dojo.require("dijit.Editor");
 		widgetClass: dijit.form.DateTextBox,
 		setValue: function(inRowIndex, inValue){
 			if(this.widget){
-				this.widget.setValue(new Date(inValue));
+				this.widget.attr('value', new Date(inValue));
 			}else{
 				this.inherited(arguments);
 			}
@@ -160,8 +160,8 @@ dojo.require("dijit.Editor");
 			return this.widget.checked;
 		},
 		setValue: function(inRowIndex, inValue){
-			if(this.widget&&this.widget.setAttribute){
-				this.widget.setAttribute("checked", inValue);
+			if(this.widget&&this.widget.attributeMap.checked){
+				this.widget.attr("checked", inValue);
 			}else{
 				this.inherited(arguments);
 			}
@@ -200,7 +200,7 @@ dojo.require("dijit.Editor");
 			}
 		},
 		populateEditor: function(){
-			this.widget.setValue(this.content);
+			this.widget.attr('value', this.content);
 			this.widget.placeCursorAtEnd();
 		}
 	});
