@@ -188,13 +188,11 @@ dojo.require("dojox.sketch.Anchor");
 		if(this.startArrow){
 			pct = pct || this.figure.zoomFactor;
 			ta.Annotation.prototype.zoom.call(this,pct);
-			//pct = dojox.gfx.renderer=='vml'?1:pct;
-			if(this._curPct!==pct){
-				this._curPct=pct;
-				var l=pct>1?20:Math.floor(20/pct), w=pct>1?5:Math.floor(5/pct),h=pct>1?3:Math.floor(3/pct);
-				this.startArrow.setShape("M0,0 l"+l+",-"+w+" -"+h+","+w+" "+h+","+w+" Z");//.setFill(this.property('fill'));
-				this.endArrow.setShape("M" + this.end.x + "," + this.end.y + " l-"+l+",-"+w+" "+h+","+w+" -"+h+","+w+" Z");
-			}
+
+			var l=pct>1?20:Math.floor(20/pct), w=pct>1?5:Math.floor(5/pct),h=pct>1?3:Math.floor(3/pct);
+			this.startArrow.setShape("M0,0 l"+l+",-"+w+" -"+h+","+w+" "+h+","+w+" Z");//.setFill(this.property('fill'));
+
+			this.endArrow.setShape("M" + this.end.x + "," + this.end.y + " l-"+l+",-"+w+" "+h+","+w+" -"+h+","+w+" Z");
 		}
 	};
 	
