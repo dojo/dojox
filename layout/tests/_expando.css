@@ -28,7 +28,7 @@ body, html {
 	left: 0;
 	right: 0;
 	height: 25px;
-	border-bottom: 1px solid #666;
+	border-bottom: 1px solid #ccc;
 	background: #fafafa;
 }
 .searchBar p {

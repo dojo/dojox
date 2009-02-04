@@ -8,17 +8,17 @@ dojo.require("dijit._Container");
 dojo.declare("dojox.layout.ExpandoPane",
 	[dijit.layout.ContentPane, dijit._Templated],
 	{
-	// summary: An experimental expando-pane for dijit.layout.BorderContainer
+	// summary: An experimental collapsing-pane for dijit.layout.BorderContainer
 	//
 	// description:
 	//		Works just like a ContentPane inside of a borderContainer. Will expand/collapse on
 	//		command, and supports having Layout Children as direct descendants
-	//		via a custom "attachParent" attribute on the child.
+	//	
 
 	maxHeight: "",
 	maxWidth: "",
 	splitter: "",
-
+	
 	templatePath: dojo.moduleUrl("dojox.layout","resources/ExpandoPane.html"),
 
 	// easeOut: String|Function
@@ -32,7 +32,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 	// duration: Integer
 	//		duration to run show/hide animations
 	duration: 420,
-	
+
+	// startExpanded: Boolean
+	//		Does this widget start in an open (true) or closed (false) state
 	startExpanded: true, 
 
 	baseClass: "dijitExpandoPane",
@@ -77,11 +79,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 		});
 	},
 	
-	startup: function(){
-		this.inherited(arguments);
+	_startupSizes: function(){
 		
 		this._container = this.getParent();
-		this._closedSize = this._titleHeight = dojo.marginBox/*_getBorderBox*/(this.titleWrapper).h;
+		this._closedSize = this._titleHeight = dojo.marginBox(this.titleWrapper).h;
 		
 		if(this.splitter){
 			// find our splitter and tie into it's drag logic
@@ -104,6 +105,8 @@ dojo.declare("dojox.layout.ExpandoPane",
 			this._hideWrapper();
 			this._hideAnim.gotoPercent(99,true);
 		}
+		
+		this._hasSizes = true;
 	},
 	
 	_afterResize: function(e){
@@ -123,7 +126,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			this._hideWrapper();
 			this._hideAnim.gotoPercent(89,true);
 		}
-
+		
 	},
 	
 	_setupAnims: function(){
@@ -148,7 +151,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			end: this._closedSize, 
 			unit:"px"
 		};
-
+		
 		this._showAnim = dojo.animateProperty(dojo.mixin(_common,{
 			easing:this.easeIn,
 			properties: showProps 
@@ -196,25 +199,32 @@ dojo.declare("dojox.layout.ExpandoPane",
 	},
 	
 	_hideEnd: function(){
+		// summary: Callback for the hide animation - "close"
 		setTimeout(dojo.hitch(this._container, "layout"), 15);
 	},
 	
-	resize: function(){
+	resize: function(/* Object? */psize){
 		// summary: we aren't a layout widget, but need to act like one:
+		//
+		// psize: Object
+		//		The size object optionally passed to us by our parent. 
 		
-		// FIXME: this feels like I'm mis-interpreting what resize() is 
-		// possibly going to send to us, if anything at all. might be able
-		// to omit this check as we're always in a bordercontainer. 
-		var size = dojo.marginBox(this.domNode),
-			h = size.h - this._titleHeight;
-			
+		if(!this._hasSizes){ this._startupSizes(psize); }
+		
+		// it looks like two marginBox calls, but sometimes psize comes in with only one member
+		var	size = (psize && psize.h) ? psize : dojo.marginBox(this.domNode),
+			h = size.h - this._titleHeight,
+			w = size.w || dojo.marginBox(this.domNode);
+					
 		dojo.style(this.containerNode, "height", h + "px");
 		if(this._singleChild && this._singleChild.resize){
-			this._singleChild.resize({ w: size.w, h: h });
+			this._singleChild.resize({ w: w, h: h });
 		}
+		
 	},
 	
 	_trap: function(e){
+		// summary: Trap stray events
 		dojo.stopEvent(e);
 	}
 

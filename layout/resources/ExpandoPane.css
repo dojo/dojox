@@ -2,7 +2,7 @@
 
 	.dojoxExpandoPane {
 		overflow:hidden;
-		z-index:440;
+		z-index:440 !important;
 	}
 	
 	.dojoxExpandoPane .dojoxExpandoWrapper {
@@ -10,7 +10,7 @@
 	}
 
 	.dojoxExpandoClosed .dojoxExpandoTitleNode {
-		visibility:hidden;
+		display:none;
 	}
 
 	/* hide all layout children scrollbars when closed */
@@ -32,12 +32,12 @@
 	.dojoxExpandoTop .dojoxExpandoIcon,
 	.dojoxExpandoLeft .dojoxExpandoIcon {
 		float:right;
-		margin-right:5px;
+		margin-right:2px;
 	}
 
 	.dojoxExpandoRight .dojoxExpandoIcon {
 		float:left;
-		margin-left:5px;
+		margin-left:2px;
 	}
 
 	.dojoxExpandoIcon {
@@ -49,11 +49,11 @@
 
 	.dojoxExpandoClosed .dojoxExpandoIcon {
 		background-position: 0px 0px;
+		margin:0 auto;
 	}
 	
 	.dijitBorderContainer-dijitExpandoPane {
-		border: 0px solid;
-		
+		border: none !important; 
 	}
 
 	/* soria definitions */
@@ -79,7 +79,7 @@
 	.soria .dojoxExpandoClosed {
 		background: none;
 		background-color: #F0F4FC;
-		border: 1px solid #B1BADF;
+		border: 1px solid #B1BADF !important;
 	}
 	
 	.soria .dojoxExpandoIcon {
@@ -89,30 +89,32 @@
 	
 	.soria .dojoxExpandoClosed .dojoxExpandoIcon {
 		background-position:0px 0px;
+		margin-right:3px;
 	}
 	
 	/* tundra styles */
 	.tundra .dojoxExpandoTitle {
 		font-weight: bold;
-		padding: 3px;
+		padding: 5px;
 		padding-top: 6px;
-		padding-bottom: 4px;
+		padding-bottom: 6px;
 		background: #fafafa url("../../../dijit/themes/tundra/images/accordionItemActive.gif") repeat-x scroll left top;
 		border-top: 1px solid #ccc;
 		border-left: 1px solid #ccc;
 		border-right: 1px solid #ccc;
 	}
-	
+		
 	.tundra .dojoxExpandoClosed .dojoxExpandoTitle {
 		background: none;
 		background-color: #fafafa;
 		border: none;
+		padding:3px;
 	}
 	
 	.tundra .dojoxExpandoClosed {
 		background: none;
 		background-color: #fafafa;
-		border: 1px solid #ccc;
+		border: 1px solid #ccc !important;
 	}
 
 	.tundra .dojoxExpandoRight .dojoxExpandoTitle,
@@ -124,10 +126,12 @@
 
 	/* open/closed states */
 	.tundra .dojoxExpandoIcon {
-		background: url('../../../dijit/themes/tundra/images/minusButton.gif') no-repeat;
+		background: url('../../../dijit/themes/tundra/images/minusButton.gif') no-repeat center center;
+		
 	}
 	.tundra .dojoxExpandoClosed .dojoxExpandoIcon {
 		background: url('../../../dijit/themes/tundra/images/plusButton.gif') no-repeat;
+		margin:3px;
 	}
 	
 	/* nihilo theme styles */
@@ -156,7 +160,7 @@
 	.nihilo .dojoxExpandoClosed {
 		background: none;
 		background-color: #fafafa;
-		border: 1px solid #ccc;
+		border: 1px solid #ccc !important;
 	}
 	
 	.nihilo .dojoxExpandoIcon {
