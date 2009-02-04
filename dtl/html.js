@@ -48,7 +48,7 @@ dojo.require("dojox.dtl.Context");
 				[dojo.isSafari, "thead", "tr", "th"],
 				[dojo.isSafari, "tbody", "tr", "td"],
 				[dojo.isSafari, "table", "tbody", "tr", "td"],
-				[dojo.isSafari, "table", "tr", "td"],
+				[dojo.isSafari, "table", "tr", "td"]
 			];
 			var replacements = [];
 			// Some tags can't contain text. So we wrap the text in tags that they can have.
