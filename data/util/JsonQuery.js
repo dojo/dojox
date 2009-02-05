@@ -2,18 +2,36 @@ dojo.provide("dojox.data.util.JsonQuery");
 // this is a mixin to convert object attribute queries to 
 // JSONQuery/JSONPath syntax to be sent to the server.
 dojo.declare("dojox.data.util.JsonQuery", null, {
+	useFullIdInQueries: false,
 	_toJsonQuery: function(args, jsonQueryPagination){
-
+		var first = true;
+		var self = this;
+		function buildQuery(path, query){
+			if(query.__id){
+				// it is a reference to a persisted object, need to make it a query by id
+				var newQuery = {};
+				newQuery[self.idAttribute] = self.useFullIdInQueries ? query.__id : query[self.idAttribute];
+				query = newQuery;
+			}
+			for(var i in query){
+				// iterate through each property, adding them to the overall query
+				var value = query[i];
+				var newPath = path + (/^[a-zA-Z_][\w_]*$/.test(i) ? '.' + i : '[' + dojo._escapeString(i) + ']');
+				if(value && typeof value == "object"){
+					buildQuery(newPath, value);
+				}else if(value!="*"){ // full wildcards can be ommitted
+					jsonQuery += (first ? "" : "&") + newPath +
+						((args.queryOptions && args.queryOptions.ignoreCase) ? "~" : "=") +
+						 dojo.toJson(value);
+					first = false;
+				}
+			}			
+		}
 		// performs conversion of Dojo Data query objects and sort arrays to JSONQuery strings
 		if(args.query && typeof args.query == "object"){
 			// convert Dojo Data query objects to JSONQuery
-			var jsonQuery = "[?(", first = true;
-			for(var i in args.query){
-				if(args.query[i]!="*"){ // full wildcards can be ommitted
-					jsonQuery += (first ? "" : "&") + "@[" + dojo._escapeString(i) + "]=" + dojox.json.ref.toJson(args.query[i]);
-					first = false;
-				}
-			}
+			var jsonQuery = "[?(";
+			buildQuery("@", args.query);
 			if(!first){
 				// use ' instead of " for quoting in JSONQuery, and end with ]
 				jsonQuery += ")]"; 

@@ -33,7 +33,7 @@ doh.register("dojox.data.tests.stores.JsonQueryRestStore",
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:{name:"Car"}, 
 					onComplete: function(items, request){
-						t.is(lastQuery,"[?(@['name']='Car')]");
+						t.is(lastQuery,"[?(@.name='Car')]");
 						d.callback(true);
 					},
 					onError: dojo.partial(dojox.data.tests.stores.JsonQueryRestStore.error, doh, d)
@@ -51,7 +51,7 @@ doh.register("dojox.data.tests.stores.JsonQueryRestStore",
 				jsonStore.fetch({query:{name:"Car"},
 					sort:[{attribute:"price"}], 
 					onComplete: function(items, request){
-						t.is(lastQuery,"[?(@['name']='Car')][/@['price']]");
+						t.is(lastQuery,"[?(@.name='Car')][/@['price']]");
 						d.callback(true);
 					},
 					onError: dojo.partial(dojox.data.tests.stores.JsonQueryRestStore.error, doh, d)
