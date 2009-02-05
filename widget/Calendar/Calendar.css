@@ -264,6 +264,9 @@ div.dojoxCalendar tr.dojoxCal-MY-G-Template td.dijitCalendarSelectedDate {
 .dojoxCal-MY-btns button {
 	font-size: 8pt;
 }
+.dojoxCalendar .dojoxCal-MY-btns .dijitDisabled button {
+	color: #999;
+}
 .dojoxCal-hidden {
 	visibility: hidden;
 }
