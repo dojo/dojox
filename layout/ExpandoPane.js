@@ -94,7 +94,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			}));
 		}
 		
-		this._currentSize = dojo.marginBox(this.domNode);
+		this._currentSize = dojo.contentBox(this.domNode);	// TODO: can compute this from passed in value to resize(), see _LayoutWidget for example
 		this._showSize = this._currentSize[(this._isHorizontal ? "h" : "w")];
 		this._setupAnims();
 
@@ -110,8 +110,8 @@ dojo.declare("dojox.layout.ExpandoPane",
 	},
 	
 	_afterResize: function(e){
-		var tmp = this._currentSize;
-		this._currentSize = dojo.marginBox(this.domNode);
+		var tmp = this._currentSize;						// the old size
+		this._currentSize = dojo.marginBox(this.domNode);	// the new size
 		var n = this._currentSize[(this._isHorizontal ? "h" : "w")] 
 		if(n > this._titleHeight){
 			if(!this._showing){	
@@ -210,17 +210,17 @@ dojo.declare("dojox.layout.ExpandoPane",
 		//		The size object optionally passed to us by our parent. 
 		
 		if(!this._hasSizes){ this._startupSizes(psize); }
-		
+
+		// compute size of container (ie, size left over after title bar)
 		// it looks like two marginBox calls, but sometimes psize comes in with only one member
-		var	size = (psize && psize.h) ? psize : dojo.marginBox(this.domNode),
-			h = size.h - this._titleHeight,
-			w = size.w || dojo.marginBox(this.domNode);
+		var	size = (psize && psize.h) ? psize : dojo.marginBox(this.domNode);
+		this._contentBox = {
+			w: size.w || dojo.marginBox(this.domNode).w,
+			h: size.h - this._titleHeight
+		};
 					
-		dojo.style(this.containerNode, "height", h + "px");
-		if(this._singleChild && this._singleChild.resize){
-			this._singleChild.resize({ w: w, h: h });
-		}
-		
+		dojo.style(this.containerNode, "height", this._contentBox.h + "px");
+		this._layoutChildren();
 	},
 	
 	_trap: function(e){
