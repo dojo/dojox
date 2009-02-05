@@ -256,6 +256,11 @@ dojo.declare('dojox.grid._ViewManager', null, {
 		var top = inTop;
 		for(var i=0, v; v=this.views[i]; i++){
 			top = v.setScrollTop(inTop);
+			// Work around IE not firing scroll events that cause header offset
+			// issues to occur.
+			if(dojo.isIE && v.headerNode && v.scrollboxNode){
+				v.headerNode.scrollLeft = v.scrollboxNode.scrollLeft;
+			}
 		}
 		return top;
 		//this.onEach("setScrollTop", [ inTop ]);
