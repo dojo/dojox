@@ -60,7 +60,7 @@ dojo.declare("dojox.grid._Events", null, {
 					if(colIdx >= 0) {
 						this.setSortIndex(colIdx);
 					}else {
-						this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+						this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 					}
 					dojo.stopEvent(e);
 				}
@@ -78,7 +78,7 @@ dojo.declare("dojox.grid._Events", null, {
 					if(colIdx >= 0) {
 						this.setSortIndex(colIdx);
 					}else {
-						this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+						this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 					}
 					dojo.stopEvent(e);
 				}
@@ -99,14 +99,14 @@ dojo.declare("dojox.grid._Events", null, {
 				if(!this.edit.isEditing() && this.focus.rowIndex != 0){
 					dojo.stopEvent(e);
 					this.focus.move(-1, 0);
-					this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+					this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 				}
 				break;
 			case dk.DOWN_ARROW:
 				if(!this.edit.isEditing() && this.store && this.focus.rowIndex+1 != this.rowCount){
 					dojo.stopEvent(e);
 					this.focus.move(1, 0);
-					this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+					this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 				}
 				break;
 			case dk.PAGE_UP:

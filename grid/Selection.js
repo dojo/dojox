@@ -229,7 +229,7 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	clickSelectEvent: function(e){
-		this.clickSelect(e.rowIndex, e.ctrlKey, e.shiftKey);
+		this.clickSelect(e.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 	},
 
 	clear: function(){
