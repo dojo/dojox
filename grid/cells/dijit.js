@@ -37,7 +37,15 @@ dojo.require("dijit.Editor");
 		},
 		setValue: function(inRowIndex, inValue){
 			if(this.widget&&this.widget.attr){
-				this.widget.attr('value', inValue);
+				//Look for lazy-loading editor and handle it via its deferred.
+				if(this.widget.onLoadDeferred){
+					var self = this;
+					this.widget.onLoadDeferred.addCallback(function(){
+						self.widget.attr("value",inValue==null?"":inValue); 
+					});
+				}else{
+					this.widget.attr("value", inValue); 
+				}
 			}else{
 				this.inherited(arguments);
 			}

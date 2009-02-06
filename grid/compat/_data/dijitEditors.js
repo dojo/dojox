@@ -27,7 +27,15 @@ dojo.declare("dojox.grid.editors.Dijit", dojox.grid.editors.base, {
 	},
 	setValue: function(inRowIndex, inValue){
 		if(this.editor&&this.editor.setValue){
-			this.editor.setValue(inValue);
+			//Look for lazy-loading editor and handle it via its deferred.
+			if(this.editor.onLoadDeferred){
+				var self = this;
+				this.editor.onLoadDeferred.addCallback(function(){
+					 self.editor.setValue(inValue==null?"":inValue); 
+				});
+			}else{
+				this.editor.setValue(inValue); 
+			}
 		}else{
 			this.inherited(arguments);
 		}
