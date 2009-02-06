@@ -55,6 +55,15 @@ dojo.declare("dojox.grid._Events", null, {
 				this.edit.cancel();
 				break;
 			case dk.ENTER:
+				if(!this.edit.isEditing()){
+					var colIdx = this.focus.getHeaderIndex();
+					if(colIdx >= 0) {
+						this.setSortIndex(colIdx);
+					}else {
+						this.selection.clickSelect(this.focus.rowIndex, e.ctrlKey, e.shiftKey);
+					}
+					dojo.stopEvent(e);
+				}
 				if(!e.shiftKey){
 					var isEditing = this.edit.isEditing();
 					this.edit.apply();
