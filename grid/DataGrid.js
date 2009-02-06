@@ -37,7 +37,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	fetchText: '...',
 
 /*=====
-	// structure: dojox.grid.__DataViewDef|dojox.grid.__DataViewDef[]|dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]|String
+	// structure: dojox.grid.__DataViewDef|dojox.grid.__DataViewDef[]|dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]
 	//		View layout defintion.
 	structure: '',
 =====*/

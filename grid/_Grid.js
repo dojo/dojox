@@ -252,9 +252,9 @@ dojo.requireLocalization("dijit", "loading");
 		//		if the height: css attribute exists on the source node.
 		height: '',
 
-		// structure: dojox.grid.__ViewDef|dojox.grid.__ViewDef[]|dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]]|String
+		// structure: dojox.grid.__ViewDef|dojox.grid.__ViewDef[]|dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]]
 		//		View layout defintion.
-		structure: '',
+		structure: null,
 
 		// elasticView: Integer
 		//	Override defaults and make the indexed grid view elastic, thus filling available horizontal space.
@@ -356,8 +356,8 @@ dojo.requireLocalization("dijit", "loading");
 			// replace stock styleChanged with one that triggers an update
 			this.styleChanged = this._styleChanged;
 			this._placeholders = [];
-			this.setHeaderMenu(this.headerMenu);
-			this.setStructure(this.structure);
+			this._setHeaderMenuAttr(this.headerMenu);
+			this._setStructureAttr(this.structure);
 			this._click = [];
 		},
 
@@ -519,26 +519,13 @@ dojo.requireLocalization("dijit", "loading");
 			this.scroller.setContentNodes(this.views.getContentNodes());
 		},
 
-		setStructure: function(inStructure){
-			// summary:
-			//		Install a new structure and rebuild the grid.
-			// inStructure: Object
-			//		Structure object defines the grid layout and provides various
-			//		options for grid views and columns
-			//	description:
-			//		A grid structure is an array of view objects. A view object can
-			//		specify a view type (view class), width, noscroll (boolean flag
-			//		for view scrolling), and cells. Cells is an array of objects
-			//		corresponding to each grid column. The view cells object is an
-			//		array of subrows comprising a single row. Each subrow is an
-			//		array of column objects. A column object can have a name,
-			//		width, value (default), get function to provide data, styles,
-			//		and span attributes (rowSpan, colSpan).
-
-			var s = inStructure;
+		_setStructureAttr: function(structure){
+			var s = structure;
 			if(s && dojo.isString(s)){
+				dojo.deprecated("dojox.grid._Grid.attr('structure', 'objVar')", "use dojox.grid._Grid.attr('structure', objVar) instead", "2.0");
 				s=dojo.getObject(s);
 			}
+			this.structure = s;
 			if(!s){
 				if(this.layout.structure){
 					s = this.layout.structure;
@@ -551,6 +538,12 @@ dojo.requireLocalization("dijit", "loading");
 				this.layout.setStructure(s);
 			}
 			this._structureChanged();
+		},
+
+		setStructure: function(/* dojox.grid.__ViewDef|dojox.grid.__ViewDef[]|dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]] */ inStructure){
+			// summary:
+			//		Install a new structure and rebuild the grid.
+			dojo.deprecated("dojox.grid._Grid.setStructure(obj)", "use dojox.grid._Grid.attr('structure', obj) instead.", "2.0");
 		},
 		
 		getColumnTogglingItems: function(){
@@ -599,7 +592,7 @@ dojo.requireLocalization("dijit", "loading");
 			}, this); // dijit.CheckedMenuItem[]
 		},
 
-		setHeaderMenu: function(menu){
+		_setHeaderMenuAttr: function(menu){
 			if(this._placeholders.length){
 				dojo.forEach(this._placeholders, function(p){
 					p.unReplace(true);
@@ -616,6 +609,10 @@ dojo.requireLocalization("dijit", "loading");
 			if(this.headerMenu.getPlaceholders){
 				this._placeholders = this.headerMenu.getPlaceholders(this.placeholderLabel);
 			}
+		},
+
+		setHeaderMenu: function(/* dijit.Menu */ menu){
+			dojo.deprecated("dojox.grid._Grid.setHeaderMenu(obj)", "use dojox.grid._Grid.attr('headerMenu', obj) instead.", "2.0");
 		},
 		
 		setupHeaderMenu: function(){
