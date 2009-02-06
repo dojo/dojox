@@ -12,6 +12,7 @@ Credits
 	Wolfram Kriesing (http://wolfram.kriesing.de/blog/): Sequence
 	Jonathan Bond-Caron (jbondc AT gmail.com): port of Timer and Streamer
 	Pete Higgins (phiggins AT gmail.com): port of Sequence
+	Mike Wilcox (anm8tr AT yahoo.com): dojo.doLater
 -------------------------------------------------------------------------------
 Project description
 
@@ -36,6 +37,10 @@ intervals.
 The DojoX Timing ThreadPool is a port from the original implementation in the
 f(m) library.  It allows a user to feed a set of callback functions (wrapped
 in a Thread constructor) to a pool for background processing.
+
+dojo.doLater() provides a simple mechanism that checks a conditional before allowing
+your function to continue. If the conditional is false, the function is blocked and continually
+re-called, with arguments, until the conditional passes.
 -------------------------------------------------------------------------------
 Dependencies:
 
