@@ -942,7 +942,10 @@ dojo.require("dojox.gfx.arc");
 			if(!this.rawNode) return this;
 			var cs = this.clipNode.style,
 				r = this.rawNode, rs = r.style,
-				bs = this.bgNode.style, i;
+				bs = this.bgNode.style,
+				ps = this._parent.style, i;
+			ps.width = width;
+			ps.height = height;
 			cs.width  = width;
 			cs.height = height;
 			cs.clip = "rect(0px " + width + "px " + height + "px 0px)";
