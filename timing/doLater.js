@@ -10,12 +10,9 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	//		arguments, using the supplied context or 
 	//		window.
 	//	description:
-	//		dojo.doLater(conditional) is testing if the call
+	//		dojox.timing.doLater(conditional) is testing if the call
 	//		should be done later. So it returns
-	//		true if the param is false. Note the Alias
-	//		for this call is dojo.doLater(), but you can
-	//		use the qualified name of
-	//		dojox.timing.doLater().
+	//		true if the param is false. 
 	//	arguments:
 	//		conditional: anything
 	//			Can be a property that eventually gets set, or
@@ -28,7 +25,7 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	//			Poll time to check conditional in Milliseconds 
 	// example:
 	//		| setTimeout(function(){
-	//		| 		if(dojo.doLater(app.ready)){return;}
+	//		| 		if(dojox.timing.doLater(app.ready)){return;}
 	//		| 		console.log("Code is ready! anonymous.function SUCCESS")
 	//		| 	},700);
 	//
@@ -43,5 +40,3 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	},interval);
 	return true; // Boolean
 }
-// Alias for dojo
-dojo.doLater = dojox.timing.doLater;
