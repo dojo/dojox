@@ -154,7 +154,11 @@
 			}
 			
 		});
-		
+		var _disabled = false
+		disableButton = function(){
+			_disabled = !_disabled;
+			dijit.byId("btn0").attr("disabled", _disabled);
+		}
 		cleanUp = function(){
 			dojo.byId("rgtCol").innerHTML = "";
 			dojo.byId("uploadedFiles").value = "";
@@ -231,11 +235,14 @@
             <div id="fbm" onClick="showMulti()" dojoType="dijit.form.Button">Switch to Multi-File mode</div>
             <div id="fbs" onClick="showSingle()" dojoType="dijit.form.Button">Switch to Single-File mode</div>
             
-            <p>The following is an example of FileUploader trigger FileInputFlash act's with the same APIs as FileInputOverlay, so you can build your own file input. <em>For the file to actually upload, you'll need to have PHP enabled. </em></p>
+            <p>The following is an example of FileUploader trigger FileInputFlash act's with the same APIs as FileInputOverlay,
+			so you can build your own file input. <em>For the file to actually upload, you'll need to have PHP enabled. </em>
+			<button onclick="disableButton();">Test Disabled Button</button>
+			</p>
             <p id="fMulti">Multiple-file mode. You may choose multiple files from the System Dialog.</p>
             <p id="fSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
-        
+        <div></div>
         <div id="noFlash">
             <h1>
             	dojox.form.FileUploader - Degraded to FileInputOverlay
