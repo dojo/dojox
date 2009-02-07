@@ -142,6 +142,9 @@ dojo.declare("dojox.form.FileUploader", null, {
 	//		FLASH ONLY - In HTML, append the vars to the uploadUrl
 	//		Sends data via POST to the server along with the uploaded
 	//		files.
+	//	NEW:
+	//		You can also pass postData in the upload method
+	//		which can be different with each upload
 	postData:null,
 	//
 	//	swfPath: String
@@ -298,12 +301,18 @@ dojo.declare("dojox.form.FileUploader", null, {
 		console.warn("FLASH/ERROR " + evtObject.type.toUpperCase() + ":", evtObject);
 	},
 	
-	upload: function(){
+	upload: function(/*Object ? */data){
 		// summary:
-		// 		When called, begins file upload 
-		this.log("UPLOAD.TYPE:", this.uploaderType)
+		// 		When called, begins file upload
+		//	data: Object
+		//		postData to be sent to server
+		if(data){
+			this.postData = data;
+		}
+		this.log("UPLOAD.TYPE:", this.uploaderType, "postData:", this.postData);
+		
 		if (this.uploaderType == "flash") {
-			this.flashMovie.doUpload();
+			this.flashMovie.doUpload(this.postData);
 		}else{
 			//this.log("POST FORM")
 			//this.log("FORM:", this._formNode)
@@ -477,6 +486,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 	},
 	
 	setFlashVars: function(){
+		console.log("setFlashVars postData --------> ", this.postData);
 		try{	
 			this.flashMovie.setFileMask(this.fileMask);
 			if(this.postData){
@@ -521,7 +531,6 @@ dojo.declare("dojox.form.FileUploader", null, {
 		//		Get size and location of the 'fake' node (the button)
 		//		Resize, set position of the SWF
 		var dim = this.getFakeButtonSize();
-		console.dir(dim);
 		// IE mainly needs the help for the timeout.
 		// but may as well do it for all then the check
 		// for whether we are in a dialog 

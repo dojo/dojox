@@ -116,12 +116,13 @@
 				uploadOnChange:false, 
 				selectMultipleFiles:selectMultipleFiles,
 				fileMask:fileMask,
-				isDebug:true
+				isDebug:true,
+				postData:{sessionid:"TestStuff won't be sent", userId:"DojoMan"}
 			});
 			
 			doUpload = function(){
 				dojo.byId("fileToUpload").innerHTML = "uploading...";
-				f0.upload();
+				f0.upload({postdata:dojo.byId("postdata").value});
 			}
 			dojo.connect(f0, "onChange", function(data){
 				console.log("DATA:", data);
@@ -183,41 +184,33 @@
 		#wrapper{
 			width:100%;
 		}
-		
-		.browse{
-		
-		}
-		#uploadBtn{
-		
-		}
-		.uploadBtn{
-	
-		}
 		#fileToUpload{
-		border:#CCCCCC 1px solid;
-		overflow-y:auto;
-		overflow-x:hidden;
-		}
-		.uploadedFilesLabel{
-		
+			border:#CCCCCC 1px solid;
+			overflow-y:auto;
+			overflow-x:hidden;
 		}
 		#uploadedFiles{
-		border:#CCCC00 1px solid;
-		background:#FFFFCC;
+			border:#CCCC00 1px solid;
+			background:#FFFFCC;
 		}
 		.leftCol{
-		width:500px;
-		padding:5px;
-		vertical-align:top;
+			width:500px;
+			padding:5px;
+			vertical-align:top;
 		}
 		.rgtCol{
-		vertical-align:top;
+			vertical-align:top;
 		}
 		textarea{
-		display:block;
+			display:block;
+		}
+		#postdata{
+			display:block;
+			margin-top:5px;
+			width:405px;
 		}
 		#noFlash button, #hasFlash button{
-		font-size:9px;
+			font-size:9px;
 		}
 	</style>
 </head>
@@ -261,7 +254,7 @@
         <span id="fTypes">Choose from these types:</span>
         
         <textarea cols="50" rows="6" id="fileToUpload"></textarea>
-        
+        <input type="text" id="postdata" value="Add Post Data Here" />
         <div id="uploadBtn" class="uploadBtn" onClick="doUpload();" dojoType="dijit.form.Button">Upload</div>
         
         <div class="uploadedFilesLabel">Uploaded Files:</div>

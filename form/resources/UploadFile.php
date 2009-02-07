@@ -81,6 +81,9 @@ if( isset($_FILES[$fieldName])){
 	trace("Flash POST:");
 	trace($_POST, true);
 	
+	trace("POSTDATA:");
+	trace($postdata, true);
+	
 	trace("GET:");
 	trace($_GET, true);
 	
