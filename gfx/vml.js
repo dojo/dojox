@@ -296,7 +296,13 @@ dojo.require("dojox.gfx.arc");
 			//	if the surface sixe has been changed
 			// width: String: width in pixels
 			// height: String: height in pixels
-			
+			var r = this.rawNode, rs = r.style,
+				bs = this.bgNode.style;
+			rs.width = width;
+			rs.height = height;
+			r.coordsize = width + " " + height;
+			bs.width = width;
+			bs.height = height;
 			for(var i = 0; i < this.children.length; ++i){
 				this.children[i]._setDimensions(width, height);
 			}
