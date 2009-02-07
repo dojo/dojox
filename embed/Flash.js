@@ -268,7 +268,8 @@ dojo.provide("dojox.embed.Flash");
 			this.destroy();		//	ensure we are clean first.
 			node = dojo.byId(node || this.domNode);
 			if(!node){ throw new Error("dojox.embed.Flash: no domNode reference has been passed."); }
-
+			
+			var p = 0;
 			this._poller = null;
 			this._pollCount = 0, this._pollMax = 250;
 			if(dojox.embed.Flash.initialized){
@@ -279,7 +280,14 @@ dojo.provide("dojox.embed.Flash");
 					this.onReady(this.movie);
 
 					this._poller = setInterval(dojo.hitch(this, function(){
-						if(this.movie.PercentLoaded() == 100 || this._pollCount++ > this._pollMax){
+						// causes incremental errors, but the code works through it. very strange.
+						try{
+							p = (this.movie && this.movie.PercentLoaded) ? this.movie.PercentLoaded() : 0;	
+						}catch(e){
+							/*squelch*/
+							//FIXME: Error at dojox/trunk/embed/Flash.js:286 Code has no side effects
+						};
+						if(p == 100 || this._pollCount++ > this._pollMax){
 							clearInterval(this._poller);
 							delete this._poller;
 							delete this._pollCount;
