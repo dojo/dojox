@@ -60,7 +60,7 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 						formatter: dojo.hitch(self,"_formatCell"), 
 						editable: true
 					});
-				self.grid.setStructure(self.gridLayout);
+				self.grid.attr("structure",self.gridLayout);
 			}
 		});
 		var grid = this.grid = new dojox.grid.DataGrid(
@@ -159,7 +159,7 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 				column.width=Math.round(100/layout.length) + '%';
 			}
 			grid._onFetchComplete = defaultOnComplete; 
-			grid.setStructure(layout);
+			grid.attr("structure",layout);
 			var retValue = defaultOnComplete.apply(this, arguments);
 			
 		}
