@@ -23,7 +23,7 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	//			evaluated.
 	//		context:	Object
 	//			The namespace where the call originated.
-	//			Defaults to window and anonymous functions
+	//			Defaults to global and anonymous functions
 	//		interval:	Number
 	//			Poll time to check conditional in Milliseconds 
 	// example:
@@ -36,7 +36,7 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	var callback = dojox.timing.doLater.caller,
 		args = dojox.timing.doLater.caller.arguments;
 	interval = interval || 100;
-	context = context || window;
+	context = context || dojo.global;
 	
 	setTimeout(function(){
 		callback.apply(context, args);
