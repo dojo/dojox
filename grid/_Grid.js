@@ -544,6 +544,7 @@ dojo.requireLocalization("dijit", "loading");
 			// summary:
 			//		Install a new structure and rebuild the grid.
 			dojo.deprecated("dojox.grid._Grid.setStructure(obj)", "use dojox.grid._Grid.attr('structure', obj) instead.", "2.0");
+			this._setStructureAttr(inStructure);
 		},
 		
 		getColumnTogglingItems: function(){
