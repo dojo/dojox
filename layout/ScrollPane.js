@@ -3,7 +3,6 @@ dojo.experimental("dojox.layout.ScrollPane");
 
 dojo.require("dijit.layout._LayoutWidget");
 dojo.require("dijit._Templated");
-dojo.require("dijit._Container");
 
 dojo.declare("dojox.layout.ScrollPane",
 	[dijit.layout._LayoutWidget, dijit._Templated],
