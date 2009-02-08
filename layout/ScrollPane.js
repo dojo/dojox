@@ -46,7 +46,7 @@ dojo.declare("dojox.layout.ScrollPane",
 			vert = this._vertical,
 			val = this.containerNode[(vert ? "scrollHeight" : "scrollWidth")];
 		
-		dojo.style(this.wrapper, dir, this.domNode.style[dir] + "px");
+		dojo.style(this.wrapper, dir, "100%");
 		
 		this._lo = dojo.coords(this.wrapper, true);
 		
@@ -79,9 +79,11 @@ dojo.declare("dojox.layout.ScrollPane",
 			dojo.addClass(this.containerNode,"dijitInline");
 			this._dir = "width";
 			this._edge = "left";
+			this._scroll = "scrollLeft";
 		}else{
 			this._dir = "height";
 			this._edge = "top";
+			this._scroll = "scrollTop";
 		}
 		
 		this._hideAnim.play();
@@ -91,7 +93,7 @@ dojo.declare("dojox.layout.ScrollPane",
 	
 	_set: function(/* Float */n){
 		// summary: set the pane's scroll offset, and position the virtual scroll helper 
-		this.wrapper[(this._vertical ? "scrollTop" : "scrollLeft")] = Math.floor(this._line.getValue(n));
+		this.wrapper[this._scroll] = Math.floor(this._line.getValue(n));
 		dojo.style(this.helper, this._edge, Math.floor(this._helpLine.getValue(n)) + "px");    
 	},
 	
