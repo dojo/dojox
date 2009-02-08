@@ -3,9 +3,10 @@ dojo.experimental("dojox.layout.ScrollPane");
 
 dojo.require("dijit.layout._LayoutWidget");
 dojo.require("dijit._Templated");
+dojo.require("dijit._Container");
 
 dojo.declare("dojox.layout.ScrollPane",
-	[dijit.layout._LayoutWidget,dijit._Templated],
+	[dijit.layout._LayoutWidget, dijit._Templated],
 	{
 	// summary: A pane that "scrolls" its content based on the mouse poisition inside
 	//
@@ -39,15 +40,13 @@ dojo.declare("dojox.layout.ScrollPane",
 	
 	templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
 	
-	layout: function(){
+	resize: function(){
 		// summary: calculates required sizes. Call this if you add/remove content manually, or reload the content.
-
 		var dir = this._dir,
 			vert = this._vertical,
 			val = this.containerNode[(vert ? "scrollHeight" : "scrollWidth")];
-		
+
 		dojo.style(this.wrapper, dir, "100%");
-		
 		this._lo = dojo.coords(this.wrapper, true);
 		
 		this._size = Math.max(0, val - this._lo[(vert ? "h" : "w")]);
@@ -68,7 +67,6 @@ dojo.declare("dojox.layout.ScrollPane",
 	
 	postCreate: function(){
 		this.inherited(arguments);
-	
 		// for the helper
 		this._showAnim = dojo._fade({ node:this.helper, end:0.5, duration:350 });
 		this._hideAnim = dojo.fadeOut({ node:this.helper, duration: 750 });
@@ -99,6 +97,7 @@ dojo.declare("dojox.layout.ScrollPane",
 	
 	_calc: function(/* Event */e){
 		// summary: calculate the relative offset of the cursor over the node, and call _set
+		if(!this._lo){ this.resize(); }
 		this._set(this._vertical ? 
 			((e.pageY - this._lo.y) / this._lo.h) :
 			((e.pageX - this._lo.x) / this._lo.w)
