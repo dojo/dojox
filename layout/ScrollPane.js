@@ -39,8 +39,18 @@ dojo.declare("dojox.layout.ScrollPane",
 	
 	templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
 	
-	resize: function(){
+	resize: function(size){
 		// summary: calculates required sizes. Call this if you add/remove content manually, or reload the content.
+		
+		// if size is passed, it means we need to take care of sizing ourself (this is for IE<8)
+		if(size){
+			if(size.h){
+				dojo.style(this.domNode,'height',size.h+'px');
+			}
+			if(size.w){
+				dojo.style(this.domNode,'width',size.w+'px');
+			}
+		}
 		var dir = this._dir,
 			vert = this._vertical,
 			val = this.containerNode[(vert ? "scrollHeight" : "scrollWidth")];
