@@ -55,7 +55,7 @@ dojo.declare("dojox.layout.ScrollPane",
 			vert = this._vertical,
 			val = this.containerNode[(vert ? "scrollHeight" : "scrollWidth")];
 
-		dojo.style(this.wrapper, dir, "100%");
+		//dojo.style(this.wrapper, dir, "100%");
 		this._lo = dojo.coords(this.wrapper, true);
 		
 		this._size = Math.max(0, val - this._lo[(vert ? "h" : "w")]);
