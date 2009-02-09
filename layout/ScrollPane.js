@@ -59,6 +59,12 @@ dojo.declare("dojox.layout.ScrollPane",
 		this._lo = dojo.coords(this.wrapper, true);
 		
 		this._size = Math.max(0, val - this._lo[(vert ? "h" : "w")]);
+		if(!this._size){
+			this.helper.style.display="none";
+			return;
+		}else{
+			this.helper.style.display="";
+		}
 		this._line = new dojo._Line(0 - this._offset, this._size + (this._offset * 2));
 	
 		// share a relative position w the scroll offset via a line
@@ -99,6 +105,7 @@ dojo.declare("dojox.layout.ScrollPane",
 	},	
 	
 	_set: function(/* Float */n){
+		if(!this._size){ return; }
 		// summary: set the pane's scroll offset, and position the virtual scroll helper 
 		this.wrapper[this._scroll] = Math.floor(this._line.getValue(n));
 		dojo.style(this.helper, this._edge, Math.floor(this._helpLine.getValue(n)) + "px");    
