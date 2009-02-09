@@ -1,5 +1,6 @@
 .dojoxScrollWindow {
 	position:relative;
+	overflow:hidden;
 }
 
 .dojoxScrollHelper .helperInner {

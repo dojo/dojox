@@ -1,11 +1,11 @@
 dojo.provide("dojox.layout.ScrollPane");
 dojo.experimental("dojox.layout.ScrollPane");
 
-dojo.require("dijit.layout._LayoutWidget");
+dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit._Templated");
 
 dojo.declare("dojox.layout.ScrollPane",
-	[dijit.layout._LayoutWidget, dijit._Templated],
+	[dijit.layout.ContentPane, dijit._Templated],
 	{
 	// summary: A pane that "scrolls" its content based on the mouse poisition inside
 	//
