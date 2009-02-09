@@ -614,6 +614,7 @@ dojo.requireLocalization("dijit", "loading");
 
 		setHeaderMenu: function(/* dijit.Menu */ menu){
 			dojo.deprecated("dojox.grid._Grid.setHeaderMenu(obj)", "use dojox.grid._Grid.attr('headerMenu', obj) instead.", "2.0");
+			this._setHeaderMenuAttr(menu);
 		},
 		
 		setupHeaderMenu: function(){
