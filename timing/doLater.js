@@ -1,7 +1,7 @@
 dojo.provide("dojox.timing.doLater");
 dojo.experimental("dojox.timing.doLater"); 
 
-dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* Number ? */interval, /* Float ? */decay){
+dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* Number ? */interval){
 	// summary:
 	//		Check if a parameter is ready, and if not,
 	//		"do later". doLater will ping the parameter
@@ -22,12 +22,7 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	//			The namespace where the call originated.
 	//			Defaults to global and anonymous functions
 	//		interval:	Number
-	//			Poll time to check conditional in Milliseconds
-	//		decay: Float
-	//			A number that will be multiplied with the interval
-	//			to either increase or decrease the poll time. A typical
-	//			example would be 1.2, which will gradually increase the time.
-	//			Less than 1 will poll progressivly faster. 1 will do nothing.
+	//			Poll time to check conditional in Milliseconds 
 	// example:
 	//		| setTimeout(function(){
 	//		| 		if(dojox.timing.doLater(app.ready)){return;}
@@ -40,8 +35,6 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	interval = interval || 100;
 	context = context || dojo.global;
 	
-	interval = callback._decay ? interval * callback._decay : interval;
-	callback._decay = callback._decay ? callback._decay * decay : decay;
 	setTimeout(function(){
 		callback.apply(context, args);
 	},interval);
