@@ -187,57 +187,6 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		}
 		// FIXME: need to remove this on destroy
 		setTimeout(dojo.hitch(this, "_update"), this.updateTime);
-	},
-	
-	_normalizeUrl: function(_url){
-		// summary:
-		//		Checks that path is relative to HTML file or
-		//		convertes it to an absolute path. 
-		//
-		if(_url && _url.toLowerCase().indexOf("http")<0){
-			//
-			// Appears to be a relative path. Attempt to  convert it to absolute, 
-			// so it will better target the SWF.
-			var loc = window.location.href.split("/");
-			loc.pop();
-			loc = loc.join("/")+"/";
-			
-			_url = loc+_url;
-		}
-		return _url;
-	},
-	_normalizeVolume: function(vol){
-		// summary:
-		//		Ensures volume is less than one
-		//
-		if(vol>1){
-			while(vol>1){
-				vol*=.1	
-			}
-		}
-		return vol;
-	},
-	_sub: function(topic, method){
-		// summary:
-		// helper for subscribing to topics
-		dojo.subscribe(this.id+"/"+topic, this, method);
-	},
-	destroy: function(){
-		// summary:
-		// 		destroys flash
-		if(!this.flashMedia){
-			this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));	
-			return;
-		}
-		dojo.forEach(this._subs, function(s){
-			dojo.unsubscribe(s);								  
-		});
-		dojo.forEach(this._cons, function(c){
-			dojo.disconnect(c);								  
-		});
-		this._flashObject.destroy();
-		//dojo._destroyElement(this.flashDiv);
-		
 	}
 	
 });
