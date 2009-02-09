@@ -37,6 +37,9 @@ dojo.declare("dojox.layout.ScrollPane",
 	//		either "horizontal" or "vertical" for scroll orientation. 
 	orientation: "vertical",
 	
+	// alwaysShow: Boolean
+	//		whether the scroll helper should hide when mouseleave
+	autoHide: true,
 	templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
 	
 	resize: function(size){
@@ -61,6 +64,8 @@ dojo.declare("dojox.layout.ScrollPane",
 		this._size = Math.max(0, val - this._lo[(vert ? "h" : "w")]);
 		if(!this._size){
 			this.helper.style.display="none";
+			//make sure we reset scroll position, otherwise the content may be hidden
+			this.wrapper[this._scroll]=0;
 			return;
 		}else{
 			this.helper.style.display="";
@@ -83,8 +88,10 @@ dojo.declare("dojox.layout.ScrollPane",
 	postCreate: function(){
 		this.inherited(arguments);
 		// for the helper
-		this._showAnim = dojo._fade({ node:this.helper, end:0.5, duration:350 });
-		this._hideAnim = dojo.fadeOut({ node:this.helper, duration: 750 });
+		if(this.autoHide){
+			this._showAnim = dojo._fade({ node:this.helper, end:0.5, duration:350 });
+			this._hideAnim = dojo.fadeOut({ node:this.helper, duration: 750 });
+		}
 	
 		// orientation helper
 		this._vertical = (this.orientation == "vertical");
@@ -99,7 +106,9 @@ dojo.declare("dojox.layout.ScrollPane",
 			this._scroll = "scrollTop";
 		}
 
-		this._hideAnim.play();
+		if(this._hideAnim){
+			this._hideAnim.play();
+		}
 		dojo.style(this.wrapper,"overflow","hidden");
 	
 	},	
@@ -121,14 +130,18 @@ dojo.declare("dojox.layout.ScrollPane",
 	},
 	
 	_enter: function(e){
-		if(this._hideAnim && this._hideAnim.status() == "playing"){ 
-			this._hideAnim.stop(); 
+		if(this._hideAnim){
+			if(this._hideAnim.status() == "playing"){ 
+				this._hideAnim.stop(); 
+			}
+			this._showAnim.play();
 		}
-		this._showAnim.play();
 	},
 	
 	_leave: function(e){
-		this._hideAnim.play();
+		if(this._hideAnim){
+			this._hideAnim.play();
+		}
 	}
     
 });
