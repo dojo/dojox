@@ -83,6 +83,16 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 			return this.inherited(arguments);
 		}
 		return "";
+	},
+
+	_setBlurValue: function(){
+		// TextBox._setBlurValue calls this._setValueAttr(this.attr('value'), ...)
+		// Because we are overridding _getValueAttr to return "" when the containerWidget
+		// is not valid, TextBox._setBlurValue will cause OldPWBox's value to be set to ""
+		//
+		// So, we directly call ValidationTextBox._getValueAttr to bypass our _getValueAttr
+		var value = dijit.form.ValidationTextBox.prototype._getValueAttr.call(this);
+		this._setValueAttr(value, (this.isValid ? this.isValid() : true));
 	}
 });
 
