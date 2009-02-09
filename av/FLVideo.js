@@ -131,8 +131,115 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		return this.flashMedia.getVolume(); // Float	
 	},
 	
+	//  =============  //
+	//  Player Events  //
+	//  =============  //
 	
+	/*=====
+	onLoad: function(mov){
+		// summary:
+		// 		Fired when the SWF player has loaded
+		// 		NOT when the video has loaded
+	},
 	
+	onDownloaded: function(percent){
+		// summary:
+		//		Fires the amount of that the media has been 
+		//		downloaded. Number, 0-100
+	},
+	
+	onClick: function(evt){ 
+		// summary:
+		// 		Fires when the player is clicked
+		// 		Could be used to toggle play/pause, or 
+		// 		do an external activity, like opening a new
+		//		window.
+	},
+	
+	onSwfSized: function(data){
+		// summary:
+		// 		Fired on SWF resize, or when its
+		// 		toggled between fullscreen.
+	},
+	
+	onMetaData: function(data, evt){
+		// summary:
+		// 		The video properties. Width, height, duration, etc.
+		// 		NOTE: 	if data is empty, this is an older FLV with no meta data.
+		// 				Duration cannot be determined. In original FLVs, duration 
+		//				could only be obtained with Flash Media Server.
+		// 		NOTE: 	Older FLVs can still return width and height
+		//				and will do so on a second event call
+	},
+	
+	onPosition: function( time){
+		// summary:
+		//		The position of the playhead in seconds 
+	},
+	
+	onStart: function( data){
+		// summary:
+		// 		Fires when video starts
+		// 		Good for setting the play button to pause
+		// 		during an autoPlay for example
+	},
+	
+	onPlay: function(data){
+		// summary:
+		// 		Fires when video starts and resumes
+	},
+	
+	onPause: function(data){
+		// summary:
+		// 		Fires when the pause button is clicked
+	},
+	
+	onEnd: function(data){
+		// summary:
+		// 		Fires when video ends
+		// 		Could be used to change pause button to play
+		// 		or show a post video graphic, like YouTube
+	},
+	
+	onStop: function(){
+		// summary:
+		// Fire when the Stop button is clicked
+		// TODO: 	This is not hooked up yet and shouldn't
+		//			fire.
+	},
+	
+	onBuffer: function(isBuffering){
+		// summary:
+		//		Fires a boolean to tell if media
+		//		is paused for buffering or if buffering
+		//		has finished
+		this.isBuffering = isBuffering;
+	},
+	
+	onError: function(data, url){
+		// summary:
+		// 		Fired when the player encounters an error
+		// example:
+		//		| console.warn("ERROR-"+data.type.toUpperCase()+":", 
+		//		|		data.info.code, " - URL:", url);
+	},
+	
+	onStatus: function(data){
+		// summary:
+		// 		Simple status
+	},
+	
+	onPlayerStatus: function(data){
+		// summary:
+		// 		The status of the video from the SWF
+		// 		playing, stopped, bufering, etc.
+	},
+	
+	onResize: function(){
+		// summary:
+		//		Fired on page resize
+	},
+	=====*/
 	
 	//  ===============  //
 	//  Private Methods  //

@@ -23,7 +23,9 @@ dojo.declare("dojox.av.FLAudio", null, {
 	//
 	//	TODO:
 	//		Streaming, playback events, crossdomain, CDN support,
-	//		global volume, ID3 tag
+	//		(alternate SWF location), global volume, ID3 tag,
+	//		factor out doLater, onLoadStatus needs work,
+	//		play(position) / seek()
 	//
 	// example:
 	//		|	new dojox.av.FLAudio({
@@ -32,6 +34,9 @@ dojo.declare("dojox.av.FLAudio", null, {
 	//		|		autoPlay:false
 	//		|	});
 	//
+	//  id: String?
+	//		The id of this widget and the id of the SWF movie.
+	id:"",
 	//
 	//	initialVolume: Number
 	//		From 0-1
@@ -65,6 +70,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 	//
 	constructor: function(/*Object*/options){
 		dojo.mixin(this, options || {});
+		if(!this.id){ this.id = "flaudio_"+new Date().getTime(); }
 		this.domNode = dojo.doc.createElement("div");
 		dojo.style(this.domNode, {
 			postion:"absolute",
@@ -135,14 +141,20 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//		id: String
 		//			(optional) an identifier to later determine
 		//			which media to control.
-		//		
-		if(dojox.timing.doLater(this.flashMedia, this)){ /*console.log("ping");*/ return; }
+		//	returns:
+		//		The normalized url, which can be used to identify the
+		//		audio.
+		//
+		if(dojox.timing.doLater(this.flashMedia, this)){ return false; }
 		if(!options.url){
-			throw new Error("An url is required for loading media")
+			throw new Error("An url is required for loading media");
+			return false;
 		}else{
 			options.url = this._normalizeUrl(options.url);
 		}
 		this.flashMedia.load(options);
+		
+		return options.url; // String
 	},
 	
 	//  =============================  //
@@ -217,6 +229,29 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//		
 		this.flashMedia.setPan(options);
 	},
+	
+	getVolume: function(/*Object*/options){
+		// summary:
+		//		Get media volume, based on identifier in
+		//		the options passed.
+		// options:
+		//		index:Number OR id:String OR url:String
+		//			See doPlay()
+		//		
+		return this.flashMedia.getVolume(options);
+	},
+	
+	getPan: function(/*Object*/options){
+		// summary:
+		//		Set media pan, based on identifier in
+		//		the options passed.
+		// options:
+		//		index:Number OR id:String OR url:String
+		//			See doPlay()
+		//		
+		return this.flashMedia.getPan(options);
+	},
+	
 	
 	//  =============  //
 	//  Sound Events   //
