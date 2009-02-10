@@ -9,22 +9,25 @@ dojo.provide("dojox.gfx._base");
 		//		Returns whether or not the specified classes are a portion of the
 		//		class list currently applied to the node.
 		// return (new RegExp('(^|\\s+)'+classStr+'(\\s+|$)')).test(node.className)	// Boolean
-		return ((" "+node.getAttribute("className")+" ").indexOf(" "+classStr+" ") >= 0);  // Boolean
+		var cls = node.getAttribute("className");
+		return cls && (" " + cls + " ").indexOf(" " + classStr + " ") >= 0;  // Boolean
 	}
 	g._addClass = function(/*DomNode*/node, /*String*/classStr){
 		//	summary:
 		//		Adds the specified classes to the end of the class list on the
 		//		passed node.
-		var cls = node.getAttribute("className");
-		if((" "+cls+" ").indexOf(" "+classStr+" ") < 0){
-			node.setAttribute("className", cls + (cls ? ' ' : '') + classStr);
+		var cls = node.getAttribute("className") || "";
+		if(!cls || (" " + cls + " ").indexOf(" " + classStr + " ") < 0){
+			node.setAttribute("className", cls + (cls ? " " : "") + classStr);
 		}
 	}
 	g._removeClass = function(/*DomNode*/node, /*String*/classStr){
 		//	summary: Removes classes from node.
-		node.setAttribute("className", node.getAttribute("className").replace(new RegExp('(^|\\s+)'+classStr+'(\\s+|$)'), "$1$2"));
+		var cls = node.getAttribute("className");
+		if(cls){
+			node.setAttribute("className", cls.replace(new RegExp('(^|\\s+)' + classStr + '(\\s+|$)'), "$1$2"));
+		}
 	}
-
 
 	// candidate for dojox.html.metrics (dynamic font resize handler is not implemented here)
 
