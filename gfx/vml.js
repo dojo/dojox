@@ -474,20 +474,34 @@ dojo.require("dojox.gfx.arc");
 			}else{
 				matrix = m.normalize({dx: shape.x, dy: shape.y});
 			}
-			matrix = m.multiply(matrix,
-				{xx: shape.width / parseInt(s.width), yy: shape.height / parseInt(s.height)});
-			var f = rawNode.filters["DXImageTransform.Microsoft.Matrix"];
-			if(f){
-				f.M11 = matrix.xx;
-				f.M12 = matrix.xy;
-				f.M21 = matrix.yx;
-				f.M22 = matrix.yy;
-				f.Dx = matrix.dx;
-				f.Dy = matrix.dy;
+			if(matrix.xy == 0 && matrix.yx == 0 && matrix.xx > 0 && matrix.yy > 0){
+				// special case to avoid filters
+				s.filter = "";
+				s.width  = Math.floor(matrix.xx * shape.width);
+				s.height = Math.floor(matrix.yy * shape.height);
+				s.left   = Math.floor(matrix.dx);
+				s.top    = Math.floor(matrix.dy);
 			}else{
-				s.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx +
-					", M12=" + matrix.xy + ", M21=" + matrix.yx + ", M22=" + matrix.yy +
-					", Dx=" + matrix.dx + ", Dy=" + matrix.dy + ")";
+				var ps = rawNode.parentNode.style;
+				s.left   = "0px";
+				s.top    = "0px";
+				s.width  = ps.width;
+				s.height = ps.height;
+				matrix = m.multiply(matrix,
+					{xx: shape.width / parseInt(s.width), yy: shape.height / parseInt(s.height)});
+				var f = rawNode.filters["DXImageTransform.Microsoft.Matrix"];
+				if(f){
+					f.M11 = matrix.xx;
+					f.M12 = matrix.xy;
+					f.M21 = matrix.yx;
+					f.M22 = matrix.yy;
+					f.Dx = matrix.dx;
+					f.Dy = matrix.dy;
+				}else{
+					s.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx +
+						", M12=" + matrix.xy + ", M21=" + matrix.yx + ", M22=" + matrix.yy +
+						", Dx=" + matrix.dx + ", Dy=" + matrix.dy + ")";
+				}
 			}
 			return this; // self
 		},
@@ -497,10 +511,14 @@ dojo.require("dojox.gfx.arc");
 			// width: String: width in pixels
 			// height: String: height in pixels
 
-			var s = this.rawNode.style;
-			s.width  = width;
-			s.height = height;
-			return this._applyTransform(); // self
+			var r = this.rawNode, f = r.filters["DXImageTransform.Microsoft.Matrix"];
+			if(f){
+				var s = r.style;
+				s.width  = width;
+				s.height = height;
+				return this._applyTransform(); // self
+			}
+			return this;	// self
 		}
 	});
 	g.Image.nodeType = "rect";
