@@ -452,8 +452,6 @@ dojo.require("dojox.gfx.arc");
 	});
 	g.Polyline.nodeType = "shape";
 
-
-	// image: variant 2
 	dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
 		// summary: an image (VML)
 		setShape: function(newShape){
@@ -522,89 +520,6 @@ dojo.require("dojox.gfx.arc");
 		}
 	});
 	g.Image.nodeType = "rect";
-
-/*
-	dojo.declare("dojox.gfx.Image", dojox.gfx.shape.Image, {
-		// summary: an image (VML)
-		constructor: function(rawNode){
-			if(rawNode) rawNode.setAttribute("dojoGfxType", "image");
-		},
-		getEventSource: function() {
-			// summary: returns a Node, which is used as
-			//	a source of events for this shape
-			return this.rawNode ? this.rawNode.firstChild : null;	// Node
-		},
-		setShape: function(newShape){
-			// summary: sets an image shape object (VML)
-			// newShape: Object: an image shape object
-			var shape = this.shape = g.makeParameters(this.shape, newShape);
-			this.bbox = null;
-			this.rawNode.firstChild.src = shape.src;
-			return this.setTransform(this.matrix);	// self
-		},
-		_setDims: function(s, w, h){
-			if(w || h){
-				s.width  = w + "px";
-				s.height = h + "px";
-			}
-		},
-		_resetImage: function(){
-			var s = this.rawNode.firstChild.style,
-				shape = this.shape;
-			s.left = "0px";
-			s.top  = "0px";
-			this._setDims(s, shape.width, shape.height);
-		},
-		_applyTransform: function() {
-			var matrix = this._getRealMatrix(),
-				r = this.rawNode,
-				rs = r.style,
-				img = r.firstChild,
-				is = img.style,
-				shape = this.shape;
-			if(matrix){
-				matrix = m.multiply(matrix, {dx: shape.x, dy: shape.y});
-			}else{
-				matrix = m.normalize({dx: shape.x, dy: shape.y});
-			}
-			if(matrix.xy == 0 && matrix.yx == 0 && matrix.xx > 0 && matrix.yy > 0){
-				// special case to avoid filters
-				rs.filter = "";
-				is.left = Math.floor(matrix.dx) + "px";
-				is.top  = Math.floor(matrix.dy) + "px";
-				this._setDims(is, Math.floor(matrix.xx * shape.width), Math.floor(matrix.yy * shape.height));
-			}else{
-				this._resetImage();
-				var f = r.filters["DXImageTransform.Microsoft.Matrix"];
-				if(f){
-					f.M11 = matrix.xx;
-					f.M12 = matrix.xy;
-					f.M21 = matrix.yx;
-					f.M22 = matrix.yy;
-					f.Dx = matrix.dx;
-					f.Dy = matrix.dy;
-				}else{
-					rs.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + matrix.xx +
-						", M12=" + matrix.xy + ", M21=" + matrix.yx + ", M22=" + matrix.yy +
-						", Dx=" + matrix.dx + ", Dy=" + matrix.dy + ")";
-				}
-			}
-			return this;
-		},
-		_setDimensions: function(width, height){
-			// summary: sets the width and height of the rawNode,
-			//	if the surface sixe has been changed
-			// width: String: width in pixels
-			// height: String: height in pixels
-
-			var s = this.rawNode.style;
-			s.width  = width;
-			s.height = height;
-			return this._applyTransform(); // self
-		}
-	});
-	g.Image.nodeType = "div";
-*/
 
 	dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		// summary: an anchored text (VML)
@@ -1191,8 +1106,6 @@ dojo.require("dojox.gfx.arc");
 			node.bgNode = r;
 			return node;	// dojox.gfx.Group
 		},
-
-		// image: variant 2
 		createImage: function(image){
 			// summary: creates a VML image shape
 			// image: Object: an image object (see dojox.gfx.defaultImage)
@@ -1211,34 +1124,6 @@ dojo.require("dojox.gfx.arc");
 			this.add(shape);
 			return shape;	// dojox.gfx.Image
 		},
-
-		/*
-		createImage: function(image){
-			// summary: creates a VML image shape
-			// image: Object: an image object (see dojox.gfx.defaultImage)
-			if(!this.rawNode) return null;
-			var shape = new dojox.gfx.Image(),
-				r = this.rawNode, doc = r.ownerDocument,
-				node = doc.createElement('div'),
-				img  = doc.createElement('img'),
-				ns = node.style, is = img.style, rs = r.style;
-			ns.display = "inline-block";
-			ns.position = "absolute";
-			ns.width  = rs.width;
-			ns.height = rs.height;
-			ns.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, Dx=0, Dy=0)";
-			is.display = "inline-block";
-			is.position = "relative";
-			is.width  = g.normalizedLength(image.width)  + "px";
-			is.height = g.normalizedLength(image.height) + "px";
-			node.appendChild(img);
-			shape.setRawNode(node);
-			r.appendChild(node);
-			shape.setShape(image);
-			this.add(shape);
-			return shape;	// dojox.gfx.Image
-		},
-		*/
 		createObject: function(shapeType, rawShape) {
 			// summary: creates an instance of the passed shapeType class
 			// shapeType: Function: a class constructor to create an instance of
