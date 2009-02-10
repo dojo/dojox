@@ -30,13 +30,14 @@ dojo.loadInit(function(){
 					iPhoneOsBuild = parseInt(match[4].substr(0,3), 16);
 				}
 			}
-
+		}
+		if(dojo.isWebKit){
 			// Android detection
 			if(!iPhoneOsBuild){
 				match = ua.match(/Android\s+(\d+\.\d+)/);
 				if(match){
 					androidVersion = parseFloat(match[1]);
-					// Android 1.0 doesn't support SVG but supports Canvas
+					// Android 1.0-1.1 doesn't support SVG but supports Canvas
 				}
 			}
 		}

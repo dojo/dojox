@@ -180,11 +180,7 @@ dojo.extend(dojox.gfx.Shape, {
 			defs.appendChild(fill);
 		}
 		if(nodeType == "pattern"){
-			if(dojo.isSafari){
-				fill.setAttributeNS(null, "patternUnits", "userSpaceOnUse");
-			}else{
-				fill.setAttribute("patternUnits", "userSpaceOnUse");
-			}
+			fill.setAttribute("patternUnits", "userSpaceOnUse");
 			var img = document.createElementNS(svgns, "image");
 			img.setAttribute("x", 0);
 			img.setAttribute("y", 0);
@@ -193,11 +189,7 @@ dojo.extend(dojox.gfx.Shape, {
 			img.setAttributeNS(dojox.gfx.svg.xmlns.xlink, "href", f.src);
 			fill.appendChild(img);
 		}else{
-			if(dojo.isSafari){
-				fill.setAttributeNS(null, "gradientUnits", "userSpaceOnUse");
-			}else{
-				fill.setAttribute("gradientUnits", "userSpaceOnUse");
-			}
+			fill.setAttribute("gradientUnits", "userSpaceOnUse");
 			for(var i = 0; i < f.colors.length; ++i){
 				var c = f.colors[i], t = document.createElementNS(svgns, "stop"),
 					cc = c.color = dojox.gfx.normalizeColor(c.color);
