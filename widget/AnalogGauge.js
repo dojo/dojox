@@ -322,9 +322,11 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 			var angle = this._getDegrees(Math.atan2(y - this.cy, x - this.cx) + Math.PI/2);
 			//if(angle > this.endAngle){angle = angle - 360;}
 			var value = this._getValueForAngle(angle);
-			for(var i=0; (i<this._rangeData.length) && !range; i++){
-				if((Number(this._rangeData[i].low) <= value) && (Number(this._rangeData[i].high) >= value)){
-					range = this._rangeData[i];
+			if(this._rangeData){
+				for(var i=0; (i<this._rangeData.length) && !range; i++){
+					if((Number(this._rangeData[i].low) <= value) && (Number(this._rangeData[i].high) >= value)){
+						range = this._rangeData[i];
+					}
 				}
 			}
 		}

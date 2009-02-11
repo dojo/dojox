@@ -236,14 +236,6 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 			if(this.image.overlay){
 				this._img.getEventSource().setAttribute('overlay',true);
 			}
-			if(dojox.gfx.vml && dojo.isIE < 7){
-				var end = this.image.substring(this.image.url.length - 3);
-				if((end == 'png') || (end == 'PNG')){
-					// use DirectX filter to correctly handle PNG transparency
-					this._img.rawNode.firstChild.src = dojo.moduleUrl('dojo.resources', 'blank.gif');
-					this._img.rawNode.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this.image.url+"',sizingMethod='scale');";
-				}
-			}
 			if(this.image.x || this.image.y){
 				this._img.setTransform({dx: this.image.x || 0, dy: this.image.y || 0});
 			}

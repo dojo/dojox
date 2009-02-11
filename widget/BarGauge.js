@@ -262,9 +262,11 @@ dojo.declare("dojox.widget.BarGauge",dojox.widget.gauge._Gauge,{
 		var pos = dojo.coords(this.gaugeContent);
 		var x = event.clientX - pos.x;
 		var value = this._getValueForPosition(x);
-		for(var i=0; (i<this._rangeData.length) && !range; i++) {
-			if((Number(this._rangeData[i].low) <= value) && (Number(this._rangeData[i].high) >= value)){
-				range = this._rangeData[i];
+		if(this._rangeData){
+			for(var i=0; (i<this._rangeData.length) && !range; i++) {
+				if((Number(this._rangeData[i].low) <= value) && (Number(this._rangeData[i].high) >= value)){
+					range = this._rangeData[i];
+				}
 			}
 		}
 		return range;
