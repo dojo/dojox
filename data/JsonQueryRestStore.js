@@ -8,4 +8,8 @@ dojo.requireIf(!!dojox.data.ClientFilter,"dojox.json.query"); // this is so we c
 // JSONQuery/JSONPath syntax to be sent to the server. This also enables
 //	JSONQuery/JSONPath queries to be performed locally if dojox.data.ClientFilter
 //	has been loaded
-dojo.declare("dojox.data.JsonQueryRestStore",[dojox.data.JsonRestStore,dojox.data.util.JsonQuery]);
+dojo.declare("dojox.data.JsonQueryRestStore",[dojox.data.JsonRestStore,dojox.data.util.JsonQuery],{
+	matchesQuery: function(item,request){
+		return item.__id && (item.__id.indexOf("#") == -1) && this.inherited(arguments);
+	}
+});

@@ -41,9 +41,23 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 	var stores = {};
 	var callId = 0;
 	dfd.addCallback(function(schemas){
+		dojox.json.ref.resolveJson(schemas, {
+			index: dojox.rpc.Rest._index,
+			idPrefix: "/Class/",
+			assignAbsoluteIds: true
+		});
+		function setupHierarchy(schema){
+			if(schema['extends'] && schema['extends'].prototype){
+				if(!schema.prototype || !schema.prototype.isPrototypeOf(schema['extends'].prototype)){
+					setupHierarchy(schema['extends']);
+					dojox.rpc.Rest._index[schema.prototype.__id] = schema.prototype = dojo.mixin(dojo.delegate(schema['extends'].prototype), schema.prototype);
+				}
+			}
+		}
 		for(var i in schemas){
 			if(typeof schemas[i] == 'object'){
 				var schema = schemas[i];
+				setupHierarchy(schema);
 				if(schema.methods){
 					for(var j in schema.methods){
 						var methodDef = schema.methods[j];
