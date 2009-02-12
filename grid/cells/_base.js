@@ -247,14 +247,15 @@ dojo.require("dojox.grid.util");
 		if(alwaysEditing){
 			cellDef.alwaysEditing = !(alwaysEditing.toLowerCase()=="false");
 		}
-		var styles = d.trim(d.attr(node, "styles")||"");
-		if(styles){
-			cellDef.styles = styles;
-		}
-		var classes = d.trim(d.attr(node, "classes")||"");
-		if(classes){
-			cellDef.classes = classes;
-		}
+		var getStrAttr = function(attr){
+			return d.trim(d.attr(node, attr)||"")||undefined;
+		};
+		cellDef.styles = getStrAttr("styles");
+		cellDef.headerStyles = getStrAttr("headerStyles");
+		cellDef.cellStyles = getStrAttr("cellStyles");
+		cellDef.classes = getStrAttr("classes");
+		cellDef.headerClasses = getStrAttr("headerClasses");
+		cellDef.cellClasses = getStrAttr("cellClasses");
 	}
 
 	dojo.declare("dojox.grid.cells.Cell", dgc._Base, {
