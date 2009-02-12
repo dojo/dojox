@@ -61,11 +61,11 @@ dojo.declare("dojox.widget.gauge.AnalogLineIndicator",[dojox.widget.gauge._Indic
 				var x=this._gauge.cx+(len+5)*Math.sin(this._gauge._getRadians(a));
 				var y=this._gauge.cy-(len+5)*Math.cos(this._gauge._getRadians(a));
 				var align = 'start';
-				if(a <= -30){align = 'end';}
-				if(a > -30 && a < 30){align='middle';}
+				if(a <= -10){align = 'end';}
+				if(a > -10 && a < 10){align='middle';}
 				var vAlign = 'bottom';
 				if((a < -90) || (a > 90)){vAlign = 'top';}
-				this.text = this._gauge.drawText(''+this.label, x, y, align, vAlign, this.color);
+				this.text = this._gauge.drawText(''+this.label, x, y, align, vAlign, this.color, this.font);
 			}
 			this.currentValue = this.value;
 		}

@@ -48,21 +48,21 @@
 		gauge = dojo.byId("defaultGauge");
 		gauge = new dojox.widget.AnalogGauge({
 			id: "defaultGauge",
-			width: 300,
+			width: 350,
 			height: 200,
-			cx: 150,
+			cx: 175,
 			cy: 175,
 			radius: 125,
 			ranges: ranges1,
 			minorTicks: {
 				offset: 125,
-				interval: 5,
+				interval: 2.5,
 				length: 5,
 				color: 'gray'
 			},
 			majorTicks: {
 				offset: 125,
-				interval: 10,
+				interval: 5,
 				length: 10
 			},
 			indicators: [
@@ -102,9 +102,9 @@
 		gauge = dojo.byId("programmaticGauge");
 		gauge = new dojox.widget.AnalogGauge({
 			id: "programmaticGauge",
-			width: 300,
+			width: 350,
 			height: 200,
-			cx: 150,
+			cx: 175,
 			cy: 175,
 			radius: 125,
 			background: fill,
@@ -112,7 +112,7 @@
 				url: "images/gaugeOverlay.png",
 				width: 280,
 				height: 155,
-				x: 10,
+				x: 35,
 				y: 38,
 				overlay: true
 			},
@@ -123,7 +123,8 @@
 		gauge.setMajorTicks({
 			length: 5,
 			interval: 5,
-			offset: 125
+			offset: 125,
+			font: {family: "Arial", style: "italic", variant: 'small-caps', weight: 'bold', size: "18px"}
 		});
 		valueIndicator = new dojox.widget.gauge.AnalogArrowIndicator({
 			value:17, 

@@ -70,10 +70,13 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 	//		length: The length of the mark
 	//		interval: The interval the ticks should be added on
 	//		color: The color of the mark and text
+	//		font: an object with any/all of the following parameters:
+	//			{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
 	majorTicks: null,
 	
 	// minorTicks: Object
 	// An object of the same format as majorTicks, indicating where the minor (label-less) marks should be placed
+	// The font parameter is ignored if provided since minor tick marks have no text label.
 	minorTicks: null,
 
 	// _defaultIndicator: Objection
@@ -185,6 +188,7 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 				  offset: newTicks.offset,
 				  noChange: true};
 		if(newTicks.color){ t.color = newTicks.color; }
+		if(newTicks.font){ t.font = newTicks.font; }
 		newTicks._ticks = [];
 		for(i=this.min; i<=this.max; i+=newTicks.interval){
 			t.value = i;
@@ -377,7 +381,7 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 		//			Indicates the color of the text
 		// font?:	Object
 		//			A font object, generally of the following format:
-		//			{family: "Helvetica", style: "italic", size: "18pt", rotated: true}
+		//			{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
 
 		var t = this.surface.createText({x: x, y: y, text: txt, align: align});
 		t.setFill(color);
