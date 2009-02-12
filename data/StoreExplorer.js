@@ -63,14 +63,17 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 				self.grid.attr("structure",self.gridLayout);
 			}
 		});
+        var centerCP = new dijit.layout.ContentPane({
+            region:'center'
+        }).placeAt(this);
 		var grid = this.grid = new dojox.grid.DataGrid(
-				{store: this.store, region: 'center', splitter: true}
-			).placeAt(this);
+				{store: this.store}
+			);
+        centerCP.attr("content", grid);
 		grid.canEdit = function(inCell, inRowIndex){
 			var value = this._copyAttr(inRowIndex, inCell.field);
 			return !(value && typeof value == 'object') || value instanceof Date; 
 		}
-		grid.startup();
 		
 		var trailingCP = new dijit.layout.ContentPane({
 			region: 'trailing', 
@@ -80,7 +83,8 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
         
         var tree = this.tree = new dojox.data.ItemExplorer({
 			store: this.store}
-			).placeAt(trailingCP);
+			);
+        trailingCP.attr("content", tree);
 		
 		dojo.connect(grid, "onCellClick", function(){
 			var selected = grid.selection.getSelected()[0];
@@ -89,7 +93,6 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 
 		this.gridOnFetchComplete = grid._onFetchComplete;
 		this.setStore(this.store);
-		tree.startup();
 	},
 	setQuery: function(query){
 		this.grid.setQuery(query);
