@@ -9,22 +9,29 @@
 					dojo.require("dojo.data.ItemFileReadStore");
 					dojo.require("dojo.parser");
 
-					dojo.declare("demo.Tree", [dijit._Widget, dojox.dtl._HtmlTemplated], {
-						store: new dojo.data.ItemFileReadStore({ url: dojo.moduleUrl("dijit.tests._data", "countries.json") }),
-						countrychildren: dojo.moduleUrl("dojox.dtl.demos.templates", "countrychildren.html"),
-						postCreate: function(){
-							this.store.fetch({
-								query: {
-									type: "continent"
-								},
-								onComplete: dojo.hitch(this, function(items){
-									this.items = items;
-									this.render();
-								})
-							});
-						},
-						templateString: '{% load dojox.dtl.contrib.data %}{% bind_data items to store as countries %}<ul>{% for country in countries %}{% include countrychildren %}{% endfor %}</ul>'
-					});
+					(function(){
+						var data = {};
+
+						// The only way to get ItemFileReadStore to work
+						// synchronously (necessary for the bind_data format
+						// we'll be using below) at the time of this writing
+						// was to feed it data
+						dojo.xhrGet({
+							url: dojo.moduleUrl("dijit.tests._data", "countries.json"),
+							handleAs: "json",
+							sync: true,
+							load: function(json){
+								data = json;
+							}
+						});
+
+						dojo.declare("demo.Tree", [dijit._Widget, dojox.dtl._HtmlTemplated], {
+							store: new dojo.data.ItemFileReadStore({ data: data }),
+							query: { type: "continent" },
+							templateString: '{% load dojox.dtl.contrib.data %}{% bind_query query to store as countries %}<ul>{% for country in countries %}{% include countrychildren %}{% endfor %}</ul>',
+							countrychildren: "<li>{{ country.type }}: {{ country.name }}{% if country.children %}<ul>{% for country in country.children %}{% include countrychildren %}{% endfor %}</ul>{% endif %}</li>",
+						});
+					})();
 			</script>
 	</head>
 	<body>

@@ -60,20 +60,41 @@ dojo.require("dojox.dtl._base");
 	});
 	ddcd._BoundItem.prototype.get.safe = true;
 
-	ddcd.BindDataNode = dojo.extend(function(items, store, alias){
-		this.items = new dd._Filter(items);
+	ddcd.BindDataNode = dojo.extend(function(items, query, store, alias){
+		this.items = items && new dd._Filter(items);
+		this.query = query && new dd._Filter(query)
 		this.store = new dd._Filter(store);
 		this.alias = alias;
 	},
 	{
 		render: function(context, buffer){
-			var items = this.items.resolve(context);
+			var items = this.items && this.items.resolve(context);
+			var query = this.query && this.query.resolve(context);
 			var store = this.store.resolve(context);
-			if(!store){
+			if(!store || !store.getFeatures){
 				throw new Error("data_bind didn't receive a store");
 			}
 
+			if(query){
+				var sync = false;
+
+				store.fetch({
+					query: query,
+					sync: true,
+					scope: this,
+					onComplete: function(it){
+						sync = true;
+						items = it;
+					}
+				});
+
+				if(!sync){
+					throw new Error("The bind_data tag only works with a query if the store executed synchronously");
+				}
+			}
+
 			var list = [];
+
 			if(items){
 				for(var i = 0, item; item = items[i]; i++){
 					list.push(new ddcd._BoundItem(item, store));
@@ -98,18 +119,40 @@ dojo.require("dojox.dtl._base");
 			}
 		},
 		bind_data: function(parser, token){
+			// summary: Turns a list of data store items into DTL compatible items
+			// example:
+			//	`contextItems` and `contextStore` should be an item list
+			//	and a data store that get assigned to `newVariable`
+			//
+			//	|	{% bind_data contextItems to contextStore as newVariable %}
 			var parts = token.contents.split();
 
 			if(parts[2] != 'to' || parts[4] != 'as' || !parts[5]){
 				throw new Error("data_bind expects the format: 'data_bind items to store as varName'");
 			}
 
-			return new ddcd.BindDataNode(parts[1], parts[3], parts[5]);
+			return new ddcd.BindDataNode(parts[1], null, parts[3], parts[5]);
+		},
+		bind_query: function(parser, token){
+			// summary: Queries a data store and makes the returned items DTL compatible
+			// example:
+			//	You can only use this with data stores that work in a synchronous
+			//	way (meaning that `onComplete` is fired during the `fetch` call).
+			//	A `sync` flag is sent to the fetch call so that stores that usually
+			//	work asynchronously make themselves syncrhonous if possible.
+			//	|	{% bind_query contextQuery to contextStore as newVariable %}
+			var parts = token.contents.split();
+
+			if(parts[2] != 'to' || parts[4] != 'as' || !parts[5]){
+				throw new Error("data_bind expects the format: 'bind_query query to store as varName'");
+			}
+
+			return new ddcd.BindDataNode(null, parts[1], parts[3], parts[5]);
 		}
 	});
 	ddcd._get.safe = true;
 
 	dd.register.tags("dojox.dtl.contrib", {
-		"data": ["bind_data"]
+		"data": ["bind_data", "bind_query"]
 	});
 })();

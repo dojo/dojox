@@ -3,6 +3,8 @@ dojo.provide("dojox.dtl._base");
 dojo.require("dojox.string.Builder");
 dojo.require("dojox.string.tokenize");
 
+dojo.experimental("dojox.dtl");
+
 (function(){
 	var dd = dojox.dtl;
 
@@ -372,6 +374,18 @@ dojo.require("dojox.string.tokenize");
 				if(path == "null" || path == "None"){ return null; }
 				parts = path.split(".");
 				current = context.get(parts[0]);
+
+				if(dojo.isFunction(current)){
+					var self = context.getThis && context.getThis();
+					if(current.alters_data){
+						current = "";
+					}else if(self){
+						current = current.call(self);
+					}else{
+						current = "";
+					}
+				}
+
 				for(var i = 1; i < parts.length; i++){
 					var part = parts[i];
 					if(current){
