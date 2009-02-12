@@ -68,6 +68,8 @@ dojo.requireLocalization("dijit", "loading");
 		//		Whether this cell should be editable or not.
 		//	hidden: Boolean?
 		//		If true, the cell will not be displayed.
+		//	noresize: Boolean?
+		//		If true, the cell will not be able to be resized.
 		//	width: Integer|String?
 		//		A CSS size.  If it's an Integer, the width will be in em's.
 		//	colSpan: Integer?
