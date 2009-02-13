@@ -327,6 +327,9 @@ doh.register("dojox.dtl.text.tag",
 				t.is("No tag found for endif", e.message);
 			}
 			t.t(found);
+
+			template = new dd.Template('{% ifequal empty "" %}empty{% endifequal %}');
+			doh.is('empty', template.render());
 		},
 		function test_tag_ifnotequal(t){
 			var dd = dojox.dtl;

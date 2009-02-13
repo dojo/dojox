@@ -1,6 +1,6 @@
 dojo.provide("dojox.dtl.contrib.dijit");
 
-dojo.require("dojox.dtl.html");
+dojo.require("dojox.dtl.dom");
 dojo.require("dojo.parser");
 
 (function(){
@@ -139,14 +139,14 @@ dojo.require("dojo.parser");
 			node = cloneNode(node);
 			var old = ddcd.widgetsInTemplate;
 			ddcd.widgetsInTemplate = false;
-			this._template = new dd.HtmlTemplate(node);
+			this._template = new dd.DomTemplate(node);
 			ddcd.widgetsInTemplate = old;
 		}
 	},
 	{
 		render: function(context, buffer){
 			if(this._parsed){
-				var _buffer = new dd.HtmlBuffer();
+				var _buffer = new dd.DomBuffer();
 				this._template.render(context, _buffer);
 				var root = cloneNode(_buffer.getRootNode());
 				var div = document.createElement("div");

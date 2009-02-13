@@ -342,6 +342,10 @@ dojo.experimental("dojox.dtl");
 			return this.contents;
 		},
 		resolve: function(context){
+			if(typeof this.key == "undefined"){
+				return "";
+			}
+
 			var str = this.resolvePath(this.key, context);
 
 			for(var i = 0, filter; filter = this.filters[i]; i++){

@@ -5,7 +5,7 @@
 				djConfig="isDebug: true, parseOnLoad: true"></script>
 			<script type="text/javascript" src="../../../dijit/dijit.js"></script>
 			<script type="text/javascript">
-					dojo.require("dojox.dtl._HtmlTemplated");
+					dojo.require("dojox.dtl._DomTemplated");
 					dojo.require("dojo.data.ItemFileReadStore");
 					dojo.require("dojo.parser");
 
@@ -25,7 +25,7 @@
 							}
 						});
 
-						dojo.declare("demo.Tree", [dijit._Widget, dojox.dtl._HtmlTemplated], {
+						dojo.declare("demo.Tree", [dijit._Widget, dojox.dtl._DomTemplated], {
 							store: new dojo.data.ItemFileReadStore({ data: data }),
 							query: { type: "continent" },
 							templateString: '{% load dojox.dtl.contrib.data %}{% bind_query query to store as countries %}<ul>{% for country in countries %}{% include countrychildren %}{% endfor %}</ul>',

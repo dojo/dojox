@@ -1,10 +1,10 @@
-dojo.provide("dojox.dtl.tests.html.util");
+dojo.provide("dojox.dtl.tests.dom.util");
 
-dojo.require("dojox.dtl.html");
-dojo.require("dojox.dtl.render.html");
+dojo.require("dojox.dtl.dom");
+dojo.require("dojox.dtl.render.dom");
 dojo.require("dojox.string.Builder");
 
-dojox.dtl.HtmlBuffer.prototype.onClone = function(from, to){
+dojox.dtl.DomBuffer.prototype.onClone = function(from, to){
 	var clones = this._clones = this._clones || [];
 
 	for(var i = 0, group; group = clones[i]; i++){
@@ -21,7 +21,7 @@ dojox.dtl.HtmlBuffer.prototype.onClone = function(from, to){
 
 	clones.push([from, to]);
 }
-dojox.dtl.HtmlBuffer.prototype.onAddEvent = function(node, type, description){
+dojox.dtl.DomBuffer.prototype.onAddEvent = function(node, type, description){
 	var events = this._events = this._events || [];
 
 	var found = false;
@@ -38,7 +38,7 @@ dojox.dtl.HtmlBuffer.prototype.onAddEvent = function(node, type, description){
 	}
 }
 
-dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context*/ context) {
+dojox.dtl.tests.dom.util.render = function(/*DomTemplate*/ template, /*Context*/ context) {
 	try {
 		var div = document.createElement("div");
 		dojo.style(div, "visibility", "hidden");
@@ -47,19 +47,19 @@ dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context
 		dojo.body().appendChild(div);
 
 		var buffer = template.getBuffer();
-		var canvas = new dojox.dtl.render.html.Render(attach, template);
+		var canvas = new dojox.dtl.render.dom.Render(attach, template);
 		canvas.render(context, template, buffer);
 		var clones = buffer._clones;
 		var events = buffer._events;
 
-		var first = dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
+		var first = dojox.dtl.tests.dom.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
 
 		buffer = template.getBuffer();
 		buffer._clones = clones;
 		buffer._events = events;
 		canvas.render(context, template, buffer);
 
-		var second = dojox.dtl.tests.html.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
+		var second = dojox.dtl.tests.dom.util.serialize(canvas.domNode, template.tokens, clones, events).toString();
 
 		doh.is("Compare re-render: " + first, "Compare re-render: " + second);
 		return first;
@@ -71,8 +71,8 @@ dojox.dtl.tests.html.util.render = function(/*HtmlTemplate*/ template, /*Context
 	}
 }
 
-dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, output) {
-	var types = dojox.dtl.html.types;
+dojox.dtl.tests.dom.util.serialize = function(node, tokens, clones, events, output) {
+	var types = dojox.dtl.dom.types;
 	clones = clones || [];
 	events = events || [];
 
@@ -147,7 +147,7 @@ dojox.dtl.tests.html.util.serialize = function(node, tokens, clones, events, out
 		}else{
 			output.append(">");
 			dojo.forEach(node.childNodes, function(node){
-				dojox.dtl.tests.html.util.serialize(node, tokens, clones, events, output);
+				dojox.dtl.tests.dom.util.serialize(node, tokens, clones, events, output);
 			});
 			output.append("</").append(name).append(">");
 		}

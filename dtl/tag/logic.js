@@ -73,8 +73,11 @@ dojo.require("dojox.dtl._base");
 	},
 	{
 		render: function(context, buffer){
+			debugger;
 			var var1 = this.var1.resolve(context);
 			var var2 = this.var2.resolve(context);
+			var1 = (typeof var1 != "undefined") ? var1 : "";
+			var2 = (typeof var1 != "undefined") ? var2 : "";
 			if((this.negate && var1 != var2) || (!this.negate && var1 == var2)){
 				if(this.falses){
 					buffer = this.falses.unrender(context, buffer, this);

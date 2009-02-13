@@ -45,11 +45,6 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 
 		this._attachTemplateNodes(node);
 
-		var source = this.srcNodeRef;
-		if(source && source.parentNode){
-			source.parentNode.replaceChild(node, source);
-		}
-
 		if(this.widgetsInTemplate){
 			var childWidgets = dojo.parser.parse(node);
 			this._attachTemplateNodes(childWidgets, function(n,p){
@@ -64,7 +59,7 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 		}
 		this.domNode = node;
 
-		this._fillContent(source);
+		this._fillContent(this.srcNodeRef);
 	},
 	_templateCache: {},
 	getCachedTemplate: function(templatePath, templateString, alwaysUseString){
