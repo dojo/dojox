@@ -51,36 +51,28 @@ dojo.declare("dojox.layout.RadioGroup",
 		this._size = dojo.coords(this.containerNode);
 		if(this.hasButtons){
 			dojo.style(this.buttonHolder,"display","block");
-			dojo.forEach(this._children,this._makeButton,this);
 		}
 	},
 
-	// private:
-	_makeButton: function(/* dijit._Widget */child){
+	_setupChild: function(/* dijit._Widget */child){
 		// summary: Creates a hover button for a child node of the RadioGroup
-		dojo.style(child.domNode,"position","absolute");
-
-		var tmp = dojo.doc.createElement('td');
-		this.buttonNode.appendChild(tmp);
-		var tmpt = tmp.appendChild(dojo.doc.createElement('div'));
-		var _Button = dojo.getObject(this.buttonClass);
-		var tmpw = new _Button({
-			label: child.title,
-			page: child
-		},tmpt);
-
-		dojo.mixin(child, { _radioButton: tmpw });
-		tmpw.startup();
-
-	},
-
-	addChild: function(/* dijit._Widget */child){
-		// summary: Add a child to this Group and create a button if necessary
-		this.inherited(arguments);
 		if(this.hasButtons){
-			this._makeButton(child);
+			
+			dojo.style(child.domNode,"position","absolute");
+			
+			var tmp = this.buttonNode.appendChild(dojo.create('td'));
+			var n = dojo.create("div", null, tmp),
+				_Button = dojo.getObject(this.buttonClass),
+				tmpw = new _Button({
+					label: child.title,
+					page: child
+				}, n)
+			;
+			
+			dojo.mixin(child, { _radioButton: tmpw });
+			tmpw.startup();
 		}
-		
+		child.domNode.style.display = "none";
 	},
 	
 	removeChild: function(child){
@@ -125,7 +117,7 @@ dojo.declare("dojox.layout.RadioGroup",
 
 	_hideChild: function(/*Widget*/ page){
 		// summary: hide the specified child widget
-		page.selected=false;
+		page.selected = false;
 		page.domNode.style.display="none";
 		if(page.onHide){
 			page.onHide();
@@ -151,7 +143,7 @@ dojo.declare("dojox.layout.RadioGroupFade",
 	_showChild: function(page){
 		// summary: show the specified child widget
 		this.inherited(arguments);
-		dojo.style(page.domNode,"opacity",0);
+		dojo.style(page.domNode, "opacity", 0);
 		dojo.fadeIn({
 			node:page.domNode,
 			duration:this.duration
@@ -183,30 +175,28 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 		}
 	},
 	
-	startup: function(){
-		// summary: on startup, set each of the panes off-screen (_showChild is called later)
-		this.inherited(arguments);
-		dojo.forEach(this._children, this._positionChild, this);
-	},
-
 	_positionChild: function(page){
 		// summary: set the child out of view immediately after being hidden
+		
+		if(!this._size){ return; } // FIXME: is there a real "size" floating around always?
+		
+		// there should be a contest: obfuscate this function as best you can. 
 		var rA = true, rB = true;
 		switch(page.slideFrom){
-			// there should be a contest: obfuscate this function as best you can. 
 			case "bottom" : rB = !rB; break;
 			case "right" : 	rA = !rA; rB = !rB; break;
 			case "top" : 	break;
 			case "left" : 	rA = !rA; break;
 			default:
 				rA = Math.round(Math.random());
-				rB = Math.round(Math.random());			
+				rB = Math.round(Math.random());
 				break;
 		}
-		var prop = rA ? "top" : "left";
-		var val = (rB ? "-" : "") + this._size[rA ? "h" : "w" ] + "px";	
+		var prop = rA ? "top" : "left",
+			val = (rB ? "-" : "") + (this._size[rA ? "h" : "w" ] + 20) + "px";	
+			
 		dojo.style(page.domNode, prop, val);
-		
+
 	},
 
 	_showChild: function(page){
@@ -218,7 +208,7 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 		page.selected = true;
 
 		dojo.style(page.domNode,{
-			display:"", zIndex: this.zTop
+			zIndex: this.zTop, display:"" 
 		})
 
 		if(this._anim && this._anim.status()=="playing"){
@@ -236,25 +226,21 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 			onEnd: dojo.hitch(page, function(){
 				if(this.onShow){ this.onShow(); }
 				if(this._onShow){ this._onShow(); }
-			})
+			}),
+			beforeBegin: dojo.hitch(this, "_positionChild", page)
 		});
 		this._anim.play();
 	},
 
 	_hideChild: function(page){
 		// summary: reset the position of the hidden pane out of sight
-		if(this._tmpConnect){ dojo.disconnect(this._tmpConnect); }
-		page.selected=false;
+
+		page.selected = false;
 		page.domNode.style.zIndex = this.zTop - 1;
 		if(page.onHide){
 			page.onHide();
 		}
-		this._tmpConnect = dojo.connect(this._anim, "onEnd", dojo.hitch(this, "_positionChild", page));
-	},
-	
-	addChild: function(child){
-		this.inherited(arguments);
-		this._positionChild(child);
+
 	}
 	
 });
@@ -278,7 +264,7 @@ dojo.declare("dojox.layout._RadioButton",
 	
 	startup: function(){
 		// summary: start listening to mouseOver
-		this.connect(this.domNode,"onmouseover","_onMouse");
+		this.connect(this.domNode, "onmouseenter", "_onMouse");
 	},
 	
 	_onMouse: function(/* Event */e){
@@ -286,6 +272,7 @@ dojo.declare("dojox.layout._RadioButton",
 		this.getParent().selectChild(this.page);
 		this._clearSelected();
 		dojo.addClass(this.domNode,"dojoxRadioButtonSelected");
+
 	},
 
 	_clearSelected: function(){
@@ -293,9 +280,9 @@ dojo.declare("dojox.layout._RadioButton",
 		//	than setting up an additional connection to onMouseOut
 		
 		// FIXME: this relies on the template being [div][span]node[/span][/div]
-		dojo.query(".dojoxRadioButtonSelected",this.domNode.parentNode.parentNode).forEach(function(n){
-			dojo.removeClass(n,"dojoxRadioButtonSelected");
-		});
+		dojo.query(".dojoxRadioButtonSelected", this.domNode.parentNode.parentNode)
+			.removeClass("dojoxRadioButtonSelected")
+		;
 	}
 	
 });

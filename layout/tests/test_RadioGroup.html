@@ -40,6 +40,13 @@
 			background:#fefefe url('../../../util/resources/logo/positive/dijit.logo.png') no-repeat center center !important;
 		}
 
+		#newestone .dijitContentPane {
+			background:#fff;
+		}
+		#newestone .dijitContentPane p {
+			padding:20px;
+			font-size:200%;
+		}
 	</style>
 
 </head>
@@ -98,19 +105,46 @@
 		</button>
 	</div>
 
-	<div style="width:915px; margin:0 auto; height:300px;">
+	<div id="proggy" style="width:915px; margin:0 auto; height:300px;">
 		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px; float:left" hasButtons="true">
-			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
-			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
-			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dojo" class="dojoPane" style="width:300px; height:300px; "><p>1</p></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dijit" class="dijitPane" style="width:300px; height:300px; "><p>2</p></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="top" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "><p>3</p></div>
 		</div>
 	
 		<div dojoType="dojox.layout.RadioGroupSlide" style="width:300px; height:300px;" hasButtons="true">
-			<div dojoType="dijit.layout.ContentPane" slideFrom="left" title="Dojo" class="dojoPane" style="width:300px; height:300px; "></div>
-			<div dojoType="dijit.layout.ContentPane" slideFrom="bottom" title="Dijit" class="dijitPane" style="width:300px; height:300px; "></div>
-			<div dojoType="dijit.layout.ContentPane" slideFrom="right" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="left" title="Dojo" class="dojoPane" style="width:300px; height:300px; "><p>1</p></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="bottom" title="Dijit" class="dijitPane" style="width:300px; height:300px; "><p>2</p></div>
+			<div dojoType="dijit.layout.ContentPane" slideFrom="right" title="Dojox" class="dojoxPane" style="width:300px; height:300px; "><p>3</p></div>
 		</div>
 	</div>
+	
+	<script>
+		dojo.addOnLoad(function(){
+			
+			var x = 0, lorem = function(){ 
+				return "<p>Pane" + (++x) + " Content!</p>";
+			};
+			
+			// basic programatic instantiation
+			var g = new dojox.layout.RadioGroupSlide({
+				style:"width:300px; height:300px; float:left",
+				hasButtons:true,
+				id:"newestone"
+			}).placeAt("proggy");
+			
+			new dijit.layout.ContentPane({ title:"one", content:lorem() }).placeAt(g);
+			new dijit.layout.ContentPane({ title:"two", content:lorem() }).placeAt(g);
+			
+			g.startup();
+			
+			// testing addchild after startup
+			new dijit.layout.ContentPane({ title:"after", content:lorem() }).placeAt(g);
+			
+		})
+	</script>
+	
+
 
 </body>
 </html>
