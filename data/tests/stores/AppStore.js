@@ -4,18 +4,37 @@ dojo.require("dojo.data.api.Read");
 dojo.require("dojo.data.api.Write");
 dojo.require("dojo.data.api.Identity");
 
-dojox.data.tests.stores.AppStore.getStore = function(){
-	return new dojox.data.AppStore({url: dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeedEdit.xml')});
+dojox.data.tests.stores.AppStore.getStore = function(preventCache){
+	preventCache = preventCache?true:false;
+	return new dojox.data.AppStore({url: dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeedEdit.xml').toString(), urlPreventCache: preventCache});
 };
 
 doh.register("dojox.data.tests.stores.AppStore", 
 	[
 		function testReadAPI_fetch_all(t){
 			//	summary: 
-			//		Simple test of fetching all xml items through an XML element called isbn
+			//		Simple test of fetching all items 
 			//	description:
-			//		Simple test of fetching all xml items through an XML element called isbn
+			//		Simple test of fetching all items 
 			var store = dojox.data.tests.stores.AppStore.getStore();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.assertEqual(8, items.length);
+				d.callback(true);
+			}
+			function onError(error, request){
+				d.errback(error);
+			}
+			store.fetch({query:{title:"*"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_preventCache(t){
+			//	summary: 
+			//		Simple test of fetching all items 
+			//	description:
+			//		Simple test of fetching all items 
+			var store = dojox.data.tests.stores.AppStore.getStore(true);
 
 			var d = new doh.Deferred();
 			function onComplete(items, request){
@@ -30,9 +49,9 @@ doh.register("dojox.data.tests.stores.AppStore",
 		},
 		function testReadAPI_fetch_one(t){
 			//	summary: 
-			//		Simple test of fetching one xml items through an XML element called isbn
+			//		Simple test of fetching one item
 			//	description:
-			//		Simple test of fetching one xml items through an XML element called isbn
+			//		Simple test of fetching one item
 			var store = dojox.data.tests.stores.AppStore.getStore();
 
 			var d = new doh.Deferred();
@@ -48,9 +67,9 @@ doh.register("dojox.data.tests.stores.AppStore",
 		},
 		function testReadAPI_fetch_paging(t){
 			//	summary: 
-			//		Simple test of fetching one xml items through an XML element called isbn
+			//		Simple test of paging
 			//	description:
-			//		Simple test of fetching one xml items through an XML element called isbn
+			//		Simple test of paging
 			var store = dojox.data.tests.stores.AppStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -109,9 +128,9 @@ doh.register("dojox.data.tests.stores.AppStore",
 		},
 		function testReadAPI_fetch_pattern0(t){
 			//	summary: 
-			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
+			//		Simple test of fetching one item with ? pattern match
 			//	description:
-			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
+			//		Simple test of fetching one item with ? pattern match
 			var store = dojox.data.tests.stores.AppStore.getStore();
 			var d = new doh.Deferred();                                                             
 			function onComplete(items, request){
@@ -126,9 +145,9 @@ doh.register("dojox.data.tests.stores.AppStore",
 		},
 		function testReadAPI_fetch_pattern1(t){
 			//	summary: 
-			//		Simple test of fetching one xml items through an XML element called isbn with * pattern match
+			//		Simple test of fetching one item with * pattern match
 			//	description:
-			//		Simple test of fetching one xml items through an XML element called isbn with * pattern match
+			//		Simple test of fetching one item with * pattern match
 			var store = dojox.data.tests.stores.AppStore.getStore();
 			var d = new doh.Deferred();
 			function onComplete(items, request){
@@ -143,9 +162,9 @@ doh.register("dojox.data.tests.stores.AppStore",
 		},
 		function testReadAPI_fetch_pattern_caseInsensitive(t){
 			//	summary: 
-			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.
+			//		Simple test of fetching one item with * pattern match case insensitive
 			//	description:
-			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.
+			//		Simple test of fetching one item with * pattern match case insensitive
 			var store = dojox.data.tests.stores.AppStore.getStore();
 			var d = new doh.Deferred();                                                             
 			function onComplete(items, request){
@@ -448,9 +467,7 @@ doh.register("dojox.data.tests.stores.AppStore",
 			var features = store.getFeatures(); 
 			var count = 0;
 			for(var i in features){
-				t.assertTrue(( i === "dojo.data.api.Read" 
-							|| i === "dojo.data.api.Write" 
-							|| i === "dojo.data.api.Identity"));
+				t.assertTrue(( i === "dojo.data.api.Read" || i === "dojo.data.api.Write" || i === "dojo.data.api.Identity"));
 				count++;
 			}
 			t.assertEqual(3, count);

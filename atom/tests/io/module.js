@@ -97,7 +97,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(feed){
+			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(feed){
 				var i;
 				// regular callback
 				// Feed variables
@@ -236,7 +236,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeedEdit.xml'), function(feed){
+			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeedEdit.xml').toString(), function(feed){
 				t.is('Example.com', feed.title.value);
 				var e = feed.createEntry();
 				var str = e.getEditHref();
@@ -258,6 +258,33 @@ doh.register("dojox.atom.tests.io.module", [
 			return d;
 		}
 	},
+	{
+		name: "checkEntry_preventCache",
+		runTest: function(t){
+			var d = new doh.Deferred();
+			var atomio = new dojox.atom.io.Connection(false, true);
+			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeedEdit.xml').toString(), function(feed){
+				t.is('Example.com', feed.title.value);
+				var e = feed.createEntry();
+				var str = e.getEditHref();
+				t.t(str === null);
+
+				e = feed.getFirstEntry();
+				str = e.getEditHref();
+				t.t(str === null);
+
+				e = feed.getEntry('http://example.com/samplefeedEdit.xml/entry/10');
+				str = e.getEditHref();
+				t.t(str === 'http://example.com/samplefeedEdit.xml/entry/edit/10');
+
+				d.callback(true);
+			}, function(){
+                                // error callback
+			d.errback("Feed fetching failed");
+			});
+			return d;
+		}
+	},
 
 	// AtomIO tests
 	{
@@ -265,7 +292,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefee.xml'), function(feed){
+			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefee.xml').toString(), function(feed){
 				d.errback("Feed fetching succeeded when it should've failed");
 			}, function(error, args){
 				// error callback
@@ -280,7 +307,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(feed){
+			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(feed){
 				// Feed Fetching succeeded
 				t.t(feed.title.value === 'Example.com');
 				d.callback(true);
@@ -295,7 +322,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.io', 'sampleEntr.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.io', 'sampleEntr.xml').toString(), function(entry){
 				d.errback("Feed fetching succeeded when it should've failed");
 			}, function(error, args){
 				// error callback
@@ -310,7 +337,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.io', 'sampleEntry.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.io', 'sampleEntry.xml').toString(), function(entry){
 				t.t(entry.title.value === 'Test Entry #1');
 				t.t(entry.id === 'http://example.com/sampleEntry.xml/entry/1');
 				d.callback(true);
@@ -325,7 +352,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(entry){
 				// Using getEntry on a Feed URL yields the first Entry in the Feed.
 				t.t(entry.title.value === 'Test Entry #1');
 				t.t(entry.id === 'http://example.com/samplefeed.xml/entry/1');
@@ -341,7 +368,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getService(dojo.moduleUrl('dojox.atom.tests.io', 'service.xml'), function(service, domNode){
+			atomio.getService(dojo.moduleUrl('dojox.atom.tests.io', 'service.xml').toString(), function(service, domNode){
 				var collection = service.getCollection("http://example.com/feed");
 				t.t(collection[0].href === 'http://example.com/feed');
 				t.t(collection[0].title === 'Test Collection');
@@ -358,7 +385,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(entry){
 				// Using getEntry on a Feed URL yields the first Entry in the Feed.
 				t.t(entry.title.value === 'Test Entry #1');
 				t.t(entry.id === 'http://example.com/samplefeed.xml/entry/1');
@@ -383,7 +410,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(entry){
 				// Using getEntry on a Feed URL yields the first Entry in the Feed.
 				t.t(entry.title.value === 'Test Entry #1');
 				t.t(entry.id === 'http://example.com/samplefeed.xml/entry/1');
@@ -410,7 +437,7 @@ doh.register("dojox.atom.tests.io.module", [
 			entry.addAuthor('Test Person', 'test@example.com');
 			entry.content = new dojox.atom.io.model.Content('content', 'This is the content of my test new entry!', null, 'text');
 			var atomio = new dojox.atom.io.Connection();
-			atomio.addEntry(entry, dojo.moduleUrl('dojox.atom.tests.io', 'app.php'), function(entry, url){
+			atomio.addEntry(entry, dojo.moduleUrl('dojox.atom.tests.io', 'app.php').toString(), function(entry, url){
 				t.t(entry.title.value === 'Test Editable Entry #1');
 				t.t(url === 'http://example.com/samplefeed.xml/entry/10');
 				d.callback(true);
@@ -429,7 +456,7 @@ doh.register("dojox.atom.tests.io.module", [
 			// Missing title, author
 			entry.content = new dojox.atom.io.model.Content('content', 'This is the content of my test new entry!', null, 'text');
 			var atomio = new dojox.atom.io.Connection();
-			atomio.addEntry(entry, dojo.moduleUrl('dojox.atom.tests.io', 'appFail.php'), function(entry, url){
+			atomio.addEntry(entry, dojo.moduleUrl('dojox.atom.tests.io', 'appFail.php').toString(), function(entry, url){
 				// error callback
 				d.errback("Adding entry succeeded when it shouldn't!");
 			}, function(error, args){
@@ -443,7 +470,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(entry){
 				// Using getEntry on a Feed URL yields the first Entry in the Feed.
 				t.t(entry.title.value === 'Test Entry #1');
 				t.t(entry.id === 'http://example.com/samplefeed.xml/entry/1');
@@ -469,7 +496,7 @@ doh.register("dojox.atom.tests.io.module", [
 		runTest: function(t){
 			var d = new doh.Deferred();
 			var atomio = new dojox.atom.io.Connection();
-			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml'), function(entry){
+			atomio.getEntry(dojo.moduleUrl('dojox.atom.tests.widget', 'samplefeed.xml').toString(), function(entry){
 				// Using getEntry on a Feed URL yields the first Entry in the Feed.
 				t.t(entry.title.value === 'Test Entry #1');
 				t.t(entry.id === 'http://example.com/samplefeed.xml/entry/1');

@@ -11,7 +11,8 @@ dojo.declare("dojox.data.AppStore",
 	null,{
 
 	url: "",			// So the parser can instantiate the store via markup.
-	xmethod: false,		// Whether to use X-Method-Override for PUT/DELETE.
+	urlPreventCache: false, 	// Whether or not to pass the preventCache parameter to the connection
+	xmethod: false,			// Whether to use X-Method-Override for PUT/DELETE.
 	
 	_atomIO: null,
 	_feed: null,
@@ -32,9 +33,13 @@ dojo.declare("dojox.data.AppStore",
 		//	args:
 		//		An anonymous object to initialize properties.  It expects the following values:
 		//		url:		The url of the Collection to load.
+		//		urlPreventCache:	Whether or not to append on cache prevention params (as defined by dojo.xhr*)
 		
 		if(args && args.url){
 			this.url = args.url;
+		}
+		if(args && args.urlPreventCache){
+			this.urlPreventCache = args.urlPreventCache;
 		}
 		if(!this.url){
 			var _nlsResources = dojo.i18n.getLocalization("dojox.data", "AppStore");
@@ -297,7 +302,7 @@ dojo.declare("dojox.data.AppStore",
 			}
 			this._requests.push({request: request, fh: fetchHandler, eh: errorHandler});
 			if(flag){
-				this._atomIO = new dojox.atom.io.Connection();
+				this._atomIO = new dojox.atom.io.Connection(false, this.urlPreventCache);
 				this._atomIO.getFeed(this.url,this._setFeed, null, this);
 			}
 		}
@@ -507,7 +512,7 @@ dojo.declare("dojox.data.AppStore",
 				this._requests.push({add:entry});
 			}else{
 				this._requests = [{add:entry}];
-				this._atomIO = new dojox.atom.io.Connection();
+				this._atomIO = new dojox.atom.io.Connection(false, this.urlPreventCache);
 				this._atomIO.getFeed(this.url,dojo.hitch(this,this._setFeed));
 			}
 		}
@@ -532,7 +537,7 @@ dojo.declare("dojox.data.AppStore",
 				this._requests.push({remove:item});
 			}else{
 				this._requests = [{remove:item}];
-				this._atomIO = new dojox.atom.io.Connection();
+				this._atomIO = new dojox.atom.io.Connection(false, this.urlPreventCache);
 				this._atomIO.getFeed(this.url,dojo.hitch(this,this._setFeed));
 			}
 		}
