@@ -159,7 +159,7 @@ doh.register("dojox.atom.tests.io.module", [
 				feed.removeCategories("scheme2", "term");
 				t.t(feed.categories.length === 0);
 				
-				t.is(feed.extensions, []);
+				t.is(feed.extensions, null);
 				t.is(feed.getExtensions(), []);
 				feed.addExtension('nameSpace', 'element', [], 'A Test Element', 'sns');
 				feed.addExtension('nameSpace', 'element2', [], 'Another Test Element', 'sns');

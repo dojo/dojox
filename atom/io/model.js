@@ -742,7 +742,7 @@ dojo.declare("dojox.atom.io.model.Person",dojox.atom.io.model.Node,{
 	},
 	_getAttributeNames: function(){return null;},
 	_postBuild: function(){},
-	accept: function(tag){return false;},//don't accept any child nodes
+	accept: function(tag){return Boolean(this._accepts[tag]);},
 	buildFromDom: function(node){
 		//	summary: 
 		//		Function to do construction of the person data from the DOM node containing it.
