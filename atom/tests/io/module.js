@@ -3,59 +3,22 @@ dojo.require("dojox.atom.io.model");
 dojo.require("dojox.atom.io.Connection");
 dojo.require("dojox.data.dom");
 dojo.require("dojo.date.stamp");
+dojo.require("dojo.date");
 
 doh.register("dojox.atom.tests.io.module", [
 	// Public utility functions
 	// dojox.atom.io.model.util.createDate
 	function checkCreateDate(t){
 		var node = document.createElement("div");
-		var date = new Date(2007, 7, 7, 0, 0, 0, 0);
+		var knownDate = "2007-08-06T20:00:00-04:00";
+		var date = dojo.date.stamp.fromISOString(knownDate);
 
-		// No time
-		node.innerHTML = "2007-08-07";
-		var dateFromNode = dojox.atom.io.model.util.createDate(node);
-		t.is(date.getFullYear(), dateFromNode.getFullYear());
-		t.is(date.getMonth(), dateFromNode.getMonth());
-		t.is(date.getUTCDate(), dateFromNode.getUTCDate());
-		t.is(date.getUTCHours(), dateFromNode.getUTCHours());
-		t.is(date.getMinutes(), dateFromNode.getMinutes());
-		t.is(date.getSeconds(), dateFromNode.getSeconds());
+		//Make sure this function handles creating dates right with spaces and such in the text.
+		node.innerHTML = "  " + knownDate + "  ";
+		var dateWithSpaces = dojox.atom.io.model.util.createDate(node);
 
-		date.setUTCMilliseconds(0);
-		date.setUTCSeconds(0);
-		date.setUTCMinutes(0);
-		date.setUTCHours(1);
-		date.setUTCDate(8);
-
-		// No Timezone, this may change based on the timezone you're in!
-		node.innerHTML = "2007-08-07T21:00:00";
-		dateFromNode = dojox.atom.io.model.util.createDate(node);
-		t.is(date.getFullYear(), dateFromNode.getFullYear());
-		t.is(date.getMonth(), dateFromNode.getMonth());
-		t.is(date.getUTCDate(), dateFromNode.getUTCDate());
-		t.is(date.getUTCHours(), dateFromNode.getUTCHours());
-		t.is(date.getMinutes(), dateFromNode.getMinutes());
-		t.is(date.getSeconds(), dateFromNode.getSeconds());
-
-		// With timezone
-		node.innerHTML = "2007-08-07T20:00:00-05:00";
-		dateFromNode = dojox.atom.io.model.util.createDate(node);
-		t.is(date.getFullYear(), dateFromNode.getFullYear());
-		t.is(date.getMonth(), dateFromNode.getMonth());
-		t.is(date.getUTCDate(), dateFromNode.getUTCDate());
-		t.is(date.getUTCHours(), dateFromNode.getUTCHours());
-		t.is(date.getMinutes(), dateFromNode.getMinutes());
-		t.is(date.getSeconds(), dateFromNode.getSeconds());
-
-		// With spaces
-		node.innerHTML = "   2007-08-07T20:00:00-05:00   ";
-		dateFromNode = dojox.atom.io.model.util.createDate(node);
-		t.is(date.getFullYear(), dateFromNode.getFullYear());
-		t.is(date.getMonth(), dateFromNode.getMonth());
-		t.is(date.getUTCDate(), dateFromNode.getUTCDate());
-		t.is(date.getUTCHours(), dateFromNode.getUTCHours());
-		t.is(date.getMinutes(), dateFromNode.getMinutes());
-		t.is(date.getSeconds(), dateFromNode.getSeconds());
+		var res = dojo.date.compare(dateWithSpaces, date);
+		t.t(res === 0);
 	},
 
 	// dojox.atom.io.model.util.escapeHtml
@@ -158,7 +121,7 @@ doh.register("dojox.atom.tests.io.module", [
 				t.t(feed.categories.length === 1);
 				feed.removeCategories("scheme2", "term");
 				t.t(feed.categories.length === 0);
-				
+
 				t.is(feed.extensions, null);
 				t.is(feed.getExtensions(), []);
 				feed.addExtension('nameSpace', 'element', [], 'A Test Element', 'sns');
@@ -178,7 +141,7 @@ doh.register("dojox.atom.tests.io.module", [
 				t.t(feed.accept('title'));
 				t.t(feed.accept('entry'));
 				t.f(feed.accept('workspace'));
-				
+
 				var e = feed.getFirstEntry();
 				t.f(e === null);
 				t.t(e.id === 'http://example.com/samplefeed.xml/entry/1');
@@ -211,18 +174,23 @@ doh.register("dojox.atom.tests.io.module", [
 				e = feed.createEntry();
 				t.t(e.feedUrl === 'http://www.example.com/samplefeed.xml');
 				
+
 				for(i=2; i<7; i++){
 					e = feed.getEntry('http://example.com/samplefeed.xml/entry/'+i);
 					feed.removeEntry(e);
 				}
 				t.t(feed.entries.length === 4);
 
-				var str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:test=\"http://www.test.com\">\n<id>http://example.com/samplefeed.xml</id>\n<title  type=\"text\" >Example.com Atom Feed</title>\n<rights>Copyright Example.com</rights>\n<updated>2007-08-07T21:00:00-04:00</updated>\n<subtitle  type=\"text\" >Example.com's Sample Feed</subtitle>\n<author>\n\t<name>John</name>\n</author>\n<author>\n\t<name>Matt</name>\n\t<email>matt@example.com</email>\n</author>\n<author>\n\t<name>Joe</name>\n\t<email>joe@example.com</email>\n\t<uri>http://joe.example.com</uri>\n</author>\n<contributor>\n\t<name>Sam</name>\n</contributor>\n<contributor>\n\t<name>Dave</name>\n\t<email>Dave@example.com</email>\n</contributor>\n<contributor>\n\t<name>Harry</name>\n\t<email>harry@example.com</email>\n\t<uri>http://harry.example.com</uri>\n</contributor>\n<sns:element xmlns='nameSpace'>A Test Element</sns:element>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/1</id>\n</entry>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/2</id>\n</entry>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/3</id>\n</entry>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/4</id>\n</entry>\n</feed>";
-				t.t(feed.toString() === str);
+				//Make this test work in different timezones.
+				var isoString = dojo.date.stamp.toISOString(dojo.date.stamp.fromISOString('2007-08-07T20:00:00-05:00'));
+				var str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:test=\"http://www.test.com\">\n<id>http://example.com/samplefeed.xml</id>\n<title  type=\"text\" >Example.com Atom Feed</title>\n<rights>Copyright Example.com</rights>\n"
+				str +="<updated>" + isoString + "</updated>\n<subtitle  type=\"text\" >Example.com's Sample Feed</subtitle>\n<author>\n\t<name>John</name>\n</author>\n<author>\n\t<name>Matt</name>\n\t<email>matt@example.com</email>\n</author>\n<author>\n\t<name>Joe</name>\n\t<email>joe@example.com</email>\n\t<uri>http://joe.example.com</uri>\n</author>\n<contributor>\n\t<name>Sam</name>\n</contributor>\n<contributor>\n\t<name>Dave</name>\n\t<email>Dave@example.com</email>\n</contributor>\n<contributor>\n\t<name>Harry</name>\n\t<email>harry@example.com</email>\n\t<uri>http://harry.example.com</uri>\n</contributor>\n<sns:element xmlns='nameSpace'>A Test Element</sns:element>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/1</id>\n</entry>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/2</id>\n</entry>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/3</id>\n</entry>\n<entry>\n<id>http://example.com/samplefeed.xml/newentry/4</id>\n</entry>\n</feed>";
+				t.t(feed.toString() == str);
 
 				d.callback(true);
-			}, function(){
+			}, function(e){
 				// error callback
+				console.debug(e);
 				d.errback("Feed fetching failed");
 			});
 			return d;
