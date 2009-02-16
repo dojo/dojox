@@ -164,6 +164,6 @@ dojo.require("dojox.dtl.dom");
 	});
 
 	dd.register.tags("dojox.dtl.contrib", {
-		"html": ["html", "attr:style", "buffer"]
+		"dom": ["html", "attr:style", "buffer"]
 	});
 })();
