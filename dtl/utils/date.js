@@ -25,8 +25,12 @@ dojo.extend(dojox.dtl.utils.date.DateFormat, dojox.date.php.DateFormat.prototype
 		// description:
 		//		Examples: '1 a.m.', '1:30 p.m.', 'midnight', 'noon', '12:30 p.m.'
 		//		Proprietary extension.
-		if(!this.date.getMinutes() && !this.date.getHours()) return 'midnight';
-		if(!this.date.getMinutes() && this.date.getHours() == 12) return 'noon';
+		if(!this.date.getMinutes() && !this.date.getHours()){
+			return 'midnight';
+		}
+		if(!this.date.getMinutes() && this.date.getHours() == 12){
+			return 'noon';
+		}
 		return this.f() + " " + this.a();
 	}
 });

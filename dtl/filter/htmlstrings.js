@@ -16,7 +16,7 @@ dojo.mixin(dojox.dtl.filter.htmlstrings, {
 		value = value.replace(dh._linebreaksrn, "\n");
 		var parts = value.split(dh._linebreaksn);
 		for(var i = 0; i < parts.length; i++){
-			var part = parts[i].replace(dh._linebreakss, "").replace(dh._linebreaksbr, "<br />")
+			var part = parts[i].replace(dh._linebreakss, "").replace(dh._linebreaksbr, "<br />");
 			output.push("<p>" + part + "</p>");
 		}
 

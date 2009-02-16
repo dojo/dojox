@@ -71,7 +71,7 @@ dojo.require("dojox.string.tokenize");
 				var firstloop = (this.shared.last === null);
 				this.shared.last = change;
 				context = context.push();
-				context.ifchanged = {firstloop: firstloop}
+				context.ifchanged = {firstloop: firstloop};
 				buffer = this.nodes.render(context, buffer);
 				context = context.pop();
 			}else{
@@ -96,7 +96,7 @@ dojo.require("dojox.string.tokenize");
 	{
 		_push: function(container, grouper, stack){
 			if(stack.length){
-				container.push({ grouper: grouper, list: stack })
+				container.push({ grouper: grouper, list: stack });
 			}
 		},
 		render: function(context, buffer){

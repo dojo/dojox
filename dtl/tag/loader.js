@@ -43,7 +43,7 @@ dojo.require("dojox.dtl._base");
 			if(nodelist != this.nodelist){
 				this.parent = this;
 			}
-			context["block"] = this;
+			context.block = this;
 
 			if(buffer.getParent){
 				var bufferParent = buffer.getParent();
@@ -99,7 +99,7 @@ dojo.require("dojox.dtl._base");
 						parent = this.parent = this.parent.toString();
 					}
 				}
-				if(parent && parent.indexOf("shared:") == 0){
+				if(parent && parent.indexOf("shared:") === 0){
 					this.shared = true;
 					parent = this.parent = parent.substring(7, parent.length);
 				}

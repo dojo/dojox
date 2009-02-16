@@ -63,7 +63,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		//		always.
 		//		With a negative numeric argument, it will display that many decimal
 		//		places -- but only if there's places to be displayed.
-		arg = parseInt(arg || -1);
+		arg = parseInt(arg || -1, 10);
 		value = parseFloat(value);
 		var m = value - value.toFixed(0);
 		if(!m && arg < 0){
@@ -89,7 +89,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 	},
 	ljust: function(value, arg){
 		value = value + "";
-		arg = parseInt(arg);
+		arg = parseInt(arg, 10);
 		while(value.length < arg){
 			value = value + " ";
 		}
@@ -123,7 +123,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 	},
 	rjust: function(value, arg){
 		value = value + "";
-		arg = parseInt(arg);
+		arg = parseInt(arg, 10);
 		while(value.length < arg){
 			value = " " + value;
 		}
@@ -167,7 +167,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		// summary: Truncates a string after a certain number of words
 		// arg: Integer
 		//		Number of words to truncate after
-		arg = parseInt(arg);
+		arg = parseInt(arg, 10);
 		if(!arg){
 			return value;
 		}
@@ -192,7 +192,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 	_truncate_tag: /<(\/)?([^ ]+?)(?: (\/)| .*?)?>/,
 	_truncate_singlets: { br: true, col: true, link: true, base: true, img: true, param: true, area: true, hr: true, input: true },
 	truncatewords_html: function(value, arg){
-		arg = parseInt(arg);
+		arg = parseInt(arg, 10);
 
 		if(arg <= 0){
 			return "";

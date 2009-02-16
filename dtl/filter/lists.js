@@ -1,15 +1,19 @@
-dojo.provide("dojox.dtl.filter.lists")
+dojo.provide("dojox.dtl.filter.lists");
 
 dojo.require("dojox.dtl._base");
 
 dojo.mixin(dojox.dtl.filter.lists, {
 	_dictsort: function(a, b){
-		if(a[0] == b[0]) return 0;
+		if(a[0] == b[0]){
+			return 0;
+		}
 		return (a[0] < b[0]) ? -1 : 1;
 	},
 	dictsort: function(value, arg){
 		// summary: Takes a list of dicts, returns that list sorted by the property given in the argument.
-		if(!arg) return value;
+		if(!arg){
+			return value;
+		}
 
 		var i, item, items = [];
 		if(!dojo.isArray(value)){

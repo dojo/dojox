@@ -62,7 +62,7 @@ dojo.require("dojox.dtl._base");
 
 	ddcd.BindDataNode = dojo.extend(function(items, query, store, alias){
 		this.items = items && new dd._Filter(items);
-		this.query = query && new dd._Filter(query)
+		this.query = query && new dd._Filter(query);
 		this.store = new dd._Filter(store);
 		this.alias = alias;
 	},

@@ -31,7 +31,7 @@ dojo.mixin(dojox.dtl.filter.misc, {
 		var singular = parts[0];
 		var plural = parts[1];
 
-		if(parseInt(value) != 1){
+		if(parseInt(value, 10) != 1){
 			return plural;
 		}
 		return singular;

@@ -144,7 +144,7 @@ dojo.require("dojox.dtl.dom");
 			return new ddch.BufferNode(nodelist, options);
 		},
 		html: function(parser, token){
-			dojo.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead")
+			dojo.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead");
 			return parser.create_variable_node(token.contents.slice(5) + "|safe");
 		},
 		style_: function(parser, token){
