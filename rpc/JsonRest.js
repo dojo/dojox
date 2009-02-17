@@ -244,17 +244,28 @@ dojo.require("dojox.rpc.Rest");
 				//
 				//	data:
 				//		object to mixed in
-				if(service._schema){
-					var properties = service._schema.properties;
-					for(var i in properties){
-						if("default" in properties[i]){
-							this[i] = properties[i]["default"];
+				var self = this;
+				var args = arguments;
+				var properties;
+				function addDefaults(schema){
+					if(schema){
+						addDefaults(schema['extends']);
+						properties = schema.properties;
+						for(var i in properties){
+							var propDef = properties[i]; 
+							if(propDef && (typeof propDef == 'object') && ("default" in propDef)){
+								self[i] = propDef["default"];
+							}
 						}
 					}
+					if(data){
+						dojo.mixin(self,data);
+					}
+					if(schema && schema.prototype && schema.prototype.initialize){
+						schema.prototype.initialize.apply(self, args);
+					}
 				}
-				if(data){
-					dojo.mixin(this,data);
-				}
+				addDefaults(service._schema);
 				var idAttribute = jr.getIdAttribute(service);
 				Rest._index[this.__id = this.__clientId = 
 						service.servicePath + (this[idAttribute] || 
