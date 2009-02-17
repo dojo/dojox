@@ -27,7 +27,7 @@ dojo.require("dojox.html._base");
 
 dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	// summary:
-	//		An extended version of dijit.layout.ContentPane
+	//		An extended version of dijit.layout.ContentPane.
 	//		Supports infile scripts and external ones declared by <script src=''
 	//		relative path adjustments (content fetched from a different folder)
 	//		<style> and <link rel='stylesheet' href='..'> tags,
@@ -37,15 +37,15 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	//		Many widgets need to be required at page load to work properly
 
 	// adjustPaths: Boolean
-	//		Adjust relative paths in html string content to point to this page
-	//		Only usefull if you grab content from a another folder then the current one
+	//		Adjust relative paths in html string content to point to this page.
+	//		Only useful if you grab content from a another folder then the current one
 	adjustPaths: false,
 
 	// cleanContent: Boolean
 	//	summary:
-	//		cleans content to make it less likly to generate DOM/JS errors.
+	//		cleans content to make it less likely to generate DOM/JS errors.
 	//	description:
-	//		useful if you send contentpane a complete page, instead of a html fragment
+	//		useful if you send ContentPane a complete page, instead of a html fragment
 	//		scans for 
 	//
 	//			* style nodes, inserts in Document head
