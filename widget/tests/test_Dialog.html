@@ -41,6 +41,19 @@
 			},"codeMade");
 			thinger.startup();
 			
+			// programatic with content: 
+			var thing2 = new dojox.widget.Dialog({
+				content:"<p>I am teh inner content</p>"
+			});
+			thing2.startup();
+			// a button to show it (though the error is from before showing)
+			new dijit.form.Button({
+				onClick:function(){
+					thing2.show()
+				},
+				label:"show prog."
+			}).placeAt("testholder");
+			
 			// make the "stock" buttons dijit Buttons, but skip the 
 			// dojoType="" for the purists.
 			dojo.query("button")
@@ -59,7 +72,7 @@
 	
 	<p>This is the DojoX version of the dijit.Dialog. It's very different.</p>
 
-	<div class="tests">
+	<div id='testholder' class="tests">
 		<button onclick="dijit.byId('firstTest').show()">Defaults only</button>
 		
 		<div id="firstTest" dojoType="dojox.widget.Dialog" title="A Dialog Thinger">

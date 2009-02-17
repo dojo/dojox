@@ -97,10 +97,10 @@ dojo.declare('dojox.widget.Dialog',
 		var tc = this.containerNode,
 			vpSized = this.sizeToViewport
 		;
-		this._displaysize = {
+		return this._displaysize = {
 			w: vpSized ? tc.scrollWidth : this.dimensions[0],
 			h: vpSized ? tc.scrollHeight : this.dimensions[1]
-		};
+		}; // Object
 	},
 	
 	show: function(){
@@ -209,7 +209,7 @@ dojo.declare('dojox.widget.Dialog',
 			method: this.sizeMethod
 		};
 
-		var ds = this._displaysize;
+		var ds = this._displaysize || this._setSize();
 		props['width'] = ds.w = (ds.w + pad >= this._vp.w || this.sizeToViewport) 
 			? this._vp.w - pad : ds.w;
 			
