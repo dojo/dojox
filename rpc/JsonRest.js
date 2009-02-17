@@ -10,6 +10,9 @@ dojo.require("dojox.rpc.Rest");
 	var jr;
 	function resolveJson(service, deferred, value, defaultId){
 		var timeStamp = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Last-Modified");
+		if(timeStamp && Rest._timeStamps){
+			Rest._timeStamps[defaultId] = timeStamp;
+		}
 		return value && dojox.json.ref.resolveJson(value, {
 			defaultId: defaultId, 
 			index: Rest._index,
@@ -131,7 +134,7 @@ dojo.require("dojox.rpc.Rest");
 								object.__id = newId;
 								Rest._index[newId] = object;
 							}
-							value = resolveJson(service, dfd, value);
+							value = resolveJson(service, dfd, value, object && object.__id);
 						}catch(e){}
 						if(!(--left)){
 							if(kwArgs.onComplete){
@@ -140,7 +143,7 @@ dojo.require("dojox.rpc.Rest");
 						}
 						return value;
 					});
-				})(isPost && action.content, dfd, service);
+				})(action.content, dfd, service);
 								
 				dfd.addErrback(function(value){
 					
