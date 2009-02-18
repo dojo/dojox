@@ -11,11 +11,13 @@ dojo.require("dojox.dtl._base");
 	{
 		render: function(context, buffer){
 			var keys = context.getKeys();
-			var debug = "";
+			var debug = [];
+			var only = {};
 			for(var i = 0, key; key = keys[i]; i++){
-				console.debug("DEBUG", key, ":", context[key]);
-				debug += key + ": " + dojo.toJson(context[key]) + "\n\n";
+				only[key] = context[key];
+				debug += "[" + key + ": " + typeof context[key] + "]\n";
 			}
+			console.debug(only);
 			return this.text.set(debug).render(context, buffer, this);
 		},
 		unrender: function(context, buffer){
