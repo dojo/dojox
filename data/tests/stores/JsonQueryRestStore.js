@@ -137,6 +137,26 @@ doh.register("dojox.data.tests.stores.JsonQueryRestStore",
 			}
 		},
 		{
+			name: "Fetch using a JSONQuery with operator and paging",
+			timeout:	10000, //10 seconds.
+			runTest: function(t) {
+				//	summary: 
+				//		Simple test of a basic fetch on JsonQueryRestStore of a simple query.
+				var d = new doh.Deferred();
+				lastQuery = null;
+				jsonStore.fetch({query:"?price<20",start:1, count:1, 
+					onComplete: function(items, request){
+						t.is(1, items.length);
+						t.is(lastQuery, null); // should not be sent to the service
+						d.callback(true);
+					},
+					onError: dojo.partial(dojox.data.tests.stores.JsonQueryRestStore.error, doh, d),
+					queryOptions:{cache:true}
+				});
+				return d; //Object
+			}
+		},
+		{
 			name: "Sorting",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {

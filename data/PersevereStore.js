@@ -10,6 +10,7 @@ dojo.declare("dojox.data.PersevereStore",dojox.data.JsonQueryRestStore,{
 	useFullIdInQueries: true, // in JSONQuerys use the full id
 	jsonQueryPagination: false // use the Range headers instead	
 });
+	
 dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync){
 	// summary:
 	//		Creates Dojo data stores for all the table/classes on a Persevere server
@@ -54,42 +55,45 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 				}
 			}
 		}
+		function setupMethods(methodsDefinitions, methodsTarget){
+			if(methodsDefinitions && methodsTarget){
+				for(var j in methodsDefinitions){
+					var methodDef = methodsDefinitions[j];
+					// if any method definitions indicate that the method should run on the server, than add 
+					// it to the prototype as a JSON-RPC method
+					if(methodDef.runAt == "server" && !methodsTarget[j]){
+						methodsTarget[j] = (function(methodName){
+							return function(){
+								// execute a JSON-RPC call
+								var deferred = dojo.rawXhrPost({
+									url: this.__id,
+									// the JSON-RPC call
+									postData: dojo.toJson({
+										method: methodName,
+										id: callId++,
+										params: dojo._toArray(arguments)
+									}),
+									handleAs: "json"
+								});
+								deferred.addCallback(function(response){
+									// handle the response
+									return response.error ?
+										new Error(response.error) :
+										response.result;
+								});
+								return deferred;
+							}
+						})(j);	
+					}
+				}
+			}
+		}
 		for(var i in schemas){
 			if(typeof schemas[i] == 'object'){
 				var schema = schemas[i];
 				setupHierarchy(schema);
-				if(schema.methods){
-					for(var j in schema.methods){
-						var methodDef = schema.methods[j];
-						// if any method definitions indicate that the method should run on the server, than add 
-						// it to the prototype as a JSON-RPC method
-						if(methodDef.runAt == "server" && !schema.prototype[j]){
-							schema.prototype = schema.prototype || {};
-							schema.prototype[j] = (function(methodName){
-								return function(){
-									// execute a JSON-RPC call
-									var deferred = dojo.rawXhrPost({
-										url: this.__id,
-										// the JSON-RPC call
-										postData: dojo.toJson({
-											method: methodName,
-											id: callId++,
-											params: dojo._toArray(arguments)
-										}),
-										handleAs: "json"
-									});
-									deferred.addCallback(function(response){
-										// handle the response
-										return response.error ?
-											new Error(response.error) :
-											response.result;
-									});
-									return deferred;
-								}
-							})(j);	
-						}
-					}
-				}
+				setupMethods(schema.methods, schema.prototype = schema.prototype || {});
+				setupMethods(schema.staticMethods, schema);
 				stores[schemas[i].id] = new dojox.data.PersevereStore({target:new dojo._Url(path,schemas[i].id) + '',schema:schema});
 			}
 		}
