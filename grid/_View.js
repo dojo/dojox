@@ -578,9 +578,11 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		update: function(){
-			var left = this.scrollboxNode.scrollLeft;
 			this.content.update();
 			this.grid.update();
+			//get scroll after update or scroll left setting goes wrong on IE.
+			//See trac: #8040
+			var left = this.scrollboxNode.scrollLeft;
 			this.scrollboxNode.scrollLeft = left;
 			this.headerNode.scrollLeft = left;
 		}
