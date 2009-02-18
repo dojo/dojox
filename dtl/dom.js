@@ -866,6 +866,7 @@ dojo.require("dojox.dtl.Context");
 			return buffer;
 		},
 		unrender: function(context, buffer){
+			this.contents = "";
 			return buffer.remove(this.key);
 		},
 		clone: function(buffer){

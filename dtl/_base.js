@@ -627,14 +627,14 @@ dojo.experimental("dojox.dtl");
 		_any: function(type, base, locations){
 			for(var path in locations){
 				for(var i = 0, fn; fn = locations[path][i]; i++){
-					var key = fn;
+					var key = fn.toLowerCase();
 					if(dojo.isArray(fn)){
 						key = fn[0];
 						fn = fn[1];
 					}
 					if(typeof key == "string"){
 						if(key.substr(0, 5) == "attr:"){
-							var attr = fn;
+							var attr = fn.toLowerCase();
 							if(attr.substr(0, 5) == "attr:"){
 								attr = attr.slice(5);
 							}
