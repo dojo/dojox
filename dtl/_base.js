@@ -632,10 +632,9 @@ dojo.experimental("dojox.dtl");
 						key = fn[0];
 						fn = fn[1];
 					}
-					fn = fn.toLowerCase();
 					if(typeof key == "string"){
 						if(key.substr(0, 5) == "attr:"){
-							var attr = fn;
+							var attr = fn.toLowerCase();
 							if(attr.substr(0, 5) == "attr:"){
 								attr = attr.slice(5);
 							}
