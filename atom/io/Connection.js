@@ -14,8 +14,9 @@ dojo.declare("dojox.atom.io.Connection",null,{
 		this.preventCache = preventCache;
 	},
 
-	useCache: false,
-	alertsEnabled: false,
+	preventCache: false, //Flag to denote if the instance should use the xhr prevent cache mechanism
+
+	alertsEnabled: false, //Flag to turn on alerts instead of throwing errors.
 
 	getFeed: function(/*String*/url, /*Function*/callback, /*Function*/errorCallback, scope){
 		// 	summary: 
