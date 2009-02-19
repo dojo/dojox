@@ -49,7 +49,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			// The *reloadDataOnReconnect* parameter:
 			// 		This indicates whether RestChannels should re-download data when a connection
 			// 		is restored (value of true), or if it should re-subscribe with retroactive subscriptions
-			// 		(X-Subscribe-Since header) using HEAD requests (value of false). The 
+			// 		(Subscribe-Since header) using HEAD requests (value of false). The 
 			// 		default is true.	
 			dojo.mixin(this,options);
 			// If we have a Rest service available and we are auto subscribing, we will augment the Rest service 
@@ -79,7 +79,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 		absoluteUrl: function(baseUrl,relativeUrl){
 			return new dojo._Url(baseUrl,relativeUrl)+'';
 		},
-		acceptType: "x-application/rest+json,application/http;q=0.9,*/*;q=0.7",
+		acceptType: "application/rest+json,application/http;q=0.9,*/*;q=0.7",
 		subscriptions: {},
 		subCallbacks: {},
 		autoReconnectTime: 3000,
@@ -98,7 +98,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			this.started = true;
 			if(!this.connected){
 				this.connectionId = dojox.rpc.Client.clientId;
-				var clientIdHeader = this.createdClientId ? 'X-Client-Id' : 'X-Create-Client-Id';
+				var clientIdHeader = this.createdClientId ? 'Client-Id' : 'Create-Client-Id';
 				this.createdClientId = true;
 				var headers = {Accept:this.acceptType};
 				headers[clientIdHeader] = this.connectionId;
@@ -183,7 +183,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 					method:method,
 					content: data,
 					params:args.content,
-					subscribe:args.headers["X-Subscribe"]
+					subscribe:args.headers["Subscribe"]
 				});
 				args.url = this.url;
 				method = "POST";
@@ -245,9 +245,9 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 				headers["Cache-Control"] = "max-age=0";
 				since = typeof since == 'number' ? new Date(since).toUTCString() : since;
 				if(since){
-					headers["X-Subscribe-Since"] = since;
+					headers["Subscribe-Since"] = since;
 				}
-				headers["X-Subscribe"] = args.unsubscribe ? 'none' : '*';
+				headers["Subscribe"] = args.unsubscribe ? 'none' : '*';
 				var dfd = this._send(method,args);
 				
 				var self = this;
@@ -258,7 +258,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 							args.confirmation();
 						}
 					}
-					if(xhr && xhr.getResponseHeader("X-Subscribed")  == "OK"){
+					if(xhr && xhr.getResponseHeader("Subscribed")  == "OK"){
 						var lastMod = xhr.getResponseHeader('Last-Modified');
 						
 						if(xhr.responseText){ 
@@ -308,7 +308,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			return this._send("POST",{url:channel,contentType : 'application/json'},data);
 		},
 		_processMessage: function(message){
-			message.event = message.event || message.getResponseHeader('X-Event');
+			message.event = message.event || message.getResponseHeader('Event');
 			if(message.event=="connection-conflict"){
 				return "conflict"; // indicate an error
 			}

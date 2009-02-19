@@ -8,12 +8,12 @@ dojo.provide("dojox.rpc.Client");
 		// a specific client. Many servers rely on sessions for this, but sessions are shared
 		// between tabs/windows, so this is not appropriate for application state, it
 		// really only useful for storing user authentication
-		headers["X-Client-Id"] = dojox.rpc.Client.clientId;
+		headers["Client-Id"] = dojox.rpc.Client.clientId;
 		// set the sequence id. HTTP is non-deterministic, message can arrive at the server
 		// out of order. In complex Ajax applications, it may be more to ensure that messages
 		// can be properly sequenced deterministically. This applies a sequency id to each
 		// XHR request so that the server can order them.
-		headers["X-Seq-Id"] = dojox._reqSeqId = (dojox._reqSeqId||0)+1;
+		headers["Seq-Id"] = dojox._reqSeqId = (dojox._reqSeqId||0)+1;
 		return dojo._defaultXhr.apply(dojo,arguments);
 	}
 })();

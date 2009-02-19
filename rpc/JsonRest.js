@@ -93,7 +93,7 @@ dojo.require("dojox.rpc.Rest");
 				// keep the transaction open as we send requests
 				args.headers = args.headers || {};
 				// the last one should commit the transaction
-				args.headers['X-Transaction'] = actions.length - 1 == i ? "commit" : "open";
+				args.headers['Transaction'] = actions.length - 1 == i ? "commit" : "open";
 				if(conflictDateHeader && timeStamp){
 					args.headers[conflictDateHeader] = timeStamp; 
 				}
