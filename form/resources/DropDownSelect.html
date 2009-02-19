@@ -1,20 +1,14 @@
-<span class="dijit dijitReset dijitLeft dijitInline"
-	dojoAttachPoint="dropDownNode"
+<table class='dijit dijitReset dijitInline dijitLeft'
+	dojoAttachPoint="dropDownNode,tableNode" cellspacing='0' cellpadding='0' waiRole="presentation"
 	dojoAttachEvent="onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse"
-	><span class='dijitReset dijitRight dijitInline'
-		><span class='dijitReset dijitInline dijitButtonNode'
-			><table class="dojoxDropDownSelectTable" dojoAttachPoint="tableNode" cellpadding="0" cellspacing="0" border="0"><tbody><tr
-				><td class="dojoxDropDownSelectTableContent" 
-					><span class="dijitReset dijitInline dijitButtonText"  dojoAttachPoint="containerNode,popupStateNode" id="${id}_label"></span
-					><input type="hidden" name="${name}" dojoAttachPoint="valueNode" value="${value}" />
-				</td><td class="dojoxDropDownSelectTableButton" 
-					><button class="dijitReset dijitStretch dijitButtonContents" type="button"
-						dojoAttachPoint="focusNode,titleNode" waiRole="button" waiState="haspopup-true,labelledby-${id}_label"
-						><span class="dijitReset dijitInline dijitArrowButtonInner">&thinsp;</span
-						><span class="dijitReset dijitInline dijitArrowButtonChar" waiRole="presentation">&#9660;</span
-					></button
-				></td
-			></tr></tbody></table
-		></span
-	></span
-></span>
+	><tbody waiRole="presentation"><tr waiRole="presentation"
+		><td class="dijitReset dijitStretch dijitButtonContents dijitButtonNode" 
+			><span class="dijitReset dijitInline dijitButtonText"  dojoAttachPoint="containerNode,popupStateNode" id="${id}_label"></span
+			><input type="hidden" name="${name}" dojoAttachPoint="valueNode" value="${value}" />
+		</td><td class="dijitReset dijitRight dijitButtonNode dijitArrowButton dijitDownArrowButton" 
+				dojoAttachPoint="focusNode,titleNode" waiRole="button" waiState="haspopup-true,labelledby-${id}_label"
+			><div class="dijitReset dijitArrowButtonInner">&thinsp;</div
+			><div class="dijitReset dijitArrowButtonChar" waiRole="presentation">&#9660;</div
+		></td
+	></tr></tbody
+></table>

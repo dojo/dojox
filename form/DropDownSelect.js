@@ -167,6 +167,9 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		if(dojo.attr(this.srcNodeRef, "disabled")){
 			this.attr("disabled", true);
 		}
+		if(this.tableNode.style.width){
+			dojo.addClass(this.domNode, this.baseClass + "FixedWidth");
+		}
 	},
 
 	startup: function(){

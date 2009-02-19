@@ -6,6 +6,12 @@
 .dojoxDropDownSelect {
 	margin: 0.2em;
 }
+.dojoxDropDownSelect .dijitButtonNode {
+	text-align: left;
+}
+.dijitRtl .dojoxDropDownSelect .dijitButtonNode {
+	text-align: right;
+}
 .dijitToolbar .dojoxDropDownSelect {
 	margin: 0;
 }
@@ -20,8 +26,14 @@
 }
 .dojoxDropDownSelect .dijitButtonContents {
 	padding: 0px;
-	border: none;
+	border-right: none;
 	background: transparent none;
+}
+.dojoxDropDownSelectFixedWidth .dijitButtonContents {
+	width: 100%;
+}
+.dojoxDropDownSelect .dijitArrowButton {
+	width: 16px;
 }
 
 /* Fix the baseline of our label (for multi-size font elements) */
@@ -35,22 +47,13 @@
 	font-weight: bold;
 }
 
-/* And remove the arrow when we are read-only or disabled (1 or 0 options) */
-.dojoxDropDownSelectDisabled .dijitArrowButtonInner,
-.dojoxDropDownSelectReadOnly .dijitArrowButtonInner {
-    display: none;
-}
-
 /* Fix the styling of the dropdown menu to be more combobox-like */
 .dojoxDropDownSelectMenu {
 	border-width: 1px;
 }
 
 /* Style the different areas of the button to look like a "real" dropdown */
-.dojoxDropDownSelectTable {
-	border-collapse: collapse;
-}
-.dojoxDropDownSelectTableContent {
+.dojoxDropDownSelect .dijitButtonContents {
 	white-space: nowrap;
 }
 
@@ -71,29 +74,20 @@
 }
 
 /* Make unselected content portion "look" more like a text box and less like a button */
-.tundra .dojoxDropDownSelectTableContent {
+.tundra .dojoxDropDownSelect .dijitButtonContents {
 	padding-top: 1px;
     background:#fff url("../../../dijit/themes/tundra/images/validationInputBg.png") repeat-x top left;
     #background:#fff url('../../../dijit/themes/tundra/images/validationInputBg.gif') repeat-x top left;
 }
-.tundra .dojoxDropDownSelectHover .dojoxDropDownSelectTableContent,
-.tundra .dojoxDropDownSelectActive .dojoxDropDownSelectTableContent,
-.tundra .dojoxDropDownSelectOpened .dojoxDropDownSelectTableContent,
-.tundra .dojoxDropDownSelectDisabled .dojoxDropDownSelectTableContent,
-.tundra .dojoxDropDownSelectReadOnly .dojoxDropDownSelectTableContent{
+.tundra .dojoxDropDownSelectHover .dijitButtonContents,
+.tundra .dojoxDropDownSelectActive .dijitButtonContents,
+.tundra .dojoxDropDownSelectOpened .dijitButtonContents,
+.tundra .dojoxDropDownSelectDisabled .dijitButtonContents,
+.tundra .dojoxDropDownSelectReadOnly .dijitButtonContents{
 	background: transparent none;
 }
-.dj_ie .tundra .dojoxDropDownSelectTableContent {
+.dj_ie .tundra .dojoxDropDownSelect .dijitButtonContents {
 	padding-top: 0px;
-}
-.tundra .dojoxDropDownSelectTableButton {
-	width: 1px;
-	border-left: 1px solid #c0c0c0;
-}
-.tundra .dojoxDropDownSelectDisabled .dojoxDropDownSelectTableButton,
-.tundra .dojoxDropDownSelectReadOnly .dojoxDropDownSelectTableButton{
-	border-left-color: transparent;
-	border-left-width: 0px;
 }
 
 /* Mirror DropDownButton */
@@ -149,29 +143,20 @@
 }
 
 /* Make unselected "look" more like a text box and less like a button */
-.soria .dojoxDropDownSelectTableContent {
+.soria .dojoxDropDownSelect .dijitButtonContents {
 	padding-top: 1px;
     background:#fff url("../../../dijit/themes/soria/images/validationInputBg.png") repeat-x top left;
     #background:#fff url('../../../dijit/themes/soria/images/validationInputBg.gif') repeat-x top left;
 }
-.soria .dojoxDropDownSelectHover .dojoxDropDownSelectTableContent,
-.soria .dojoxDropDownSelectActive .dojoxDropDownSelectTableContent,
-.soria .dojoxDropDownSelectOpened .dojoxDropDownSelectTableContent,
-.soria .dojoxDropDownSelectDisabled .dojoxDropDownSelectTableContent,
-.soria .dojoxDropDownSelectReadOnly .dojoxDropDownSelectTableContent{
+.soria .dojoxDropDownSelectHover .dijitButtonContents,
+.soria .dojoxDropDownSelectActive .dijitButtonContents,
+.soria .dojoxDropDownSelectOpened .dijitButtonContents,
+.soria .dojoxDropDownSelectDisabled .dijitButtonContents,
+.soria .dojoxDropDownSelectReadOnly .dijitButtonContents{
 	background: transparent none;
 }
-.dj_ie .soria .dojoxDropDownSelectTableContent {
+.dj_ie .soria .dojoxDropDownSelect .dijitButtonContents {
 	padding-top: 0px;
-}
-.soria .dojoxDropDownSelectTableButton {
-	width: 1px;
-	border-left: 1px solid #8ba0bd;
-}
-.soria .dojoxDropDownSelectDisabled .dojoxDropDownSelectTableButton,
-.soria .dojoxDropDownSelectReadOnly .dojoxDropDownSelectTableButton{
-	border-left-color: transparent;
-	border-left-width: 0px;
 }
 
 /* Mirror DropDownButton */
@@ -224,29 +209,20 @@
 }
 
 /* Make unselected "look" more like a text box and less like a button */
-.nihilo .dojoxDropDownSelectTableContent {
+.nihilo .dojoxDropDownSelect .dijitButtonContents {
 	padding-top: 1px;
     background:#fff url("../../../dijit/themes/nihilo/images/validationInputBg.png") repeat-x top left;
     #background:#fff url('../../../dijit/themes/nihilo/images/validationInputBg.gif') repeat-x top left;
 }
-.nihilo .dojoxDropDownSelectHover .dojoxDropDownSelectTableContent,
-.nihilo .dojoxDropDownSelectActive .dojoxDropDownSelectTableContent,
-.nihilo .dojoxDropDownSelectOpened .dojoxDropDownSelectTableContent,
-.nihilo .dojoxDropDownSelectDisabled .dojoxDropDownSelectTableContent,
-.nihilo .dojoxDropDownSelectReadOnly .dojoxDropDownSelectTableContent{
+.nihilo .dojoxDropDownSelectHover .dijitButtonContents,
+.nihilo .dojoxDropDownSelectActive .dijitButtonContents,
+.nihilo .dojoxDropDownSelectOpened .dijitButtonContents,
+.nihilo .dojoxDropDownSelectDisabled .dijitButtonContents,
+.nihilo .dojoxDropDownSelectReadOnly .dijitButtonContents{
 	background: transparent none;
 }
-.dj_ie .nihilo .dojoxDropDownSelectTableContent {
+.dj_ie .nihilo .dojoxDropDownSelect .dijitButtonContents {
 	padding-top: 0px;
-}
-.nihilo .dojoxDropDownSelectTableButton {
-	width: 1px;
-	border-left: 1px solid #dedede;
-}
-.nihilo .dojoxDropDownSelectDisabled .dojoxDropDownSelectTableButton,
-.nihilo .dojoxDropDownSelectReadOnly .dojoxDropDownSelectTableButton{
-	border-left-color: transparent;
-	border-left-width: 0px;
 }
 
 /* Mirror DropDownButton */
