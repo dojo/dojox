@@ -163,6 +163,11 @@ dojo.declare("dojox.widget.WizardPane",
 		}
 	},
 
+	_onShow: function(){
+		if(this.isFirstChild){ this.canGoBack = false; }
+		this.inherited(arguments);
+	},
+
 	_checkPass: function(){
 		// summary:
 		//		Called when the user presses the "next" button.
