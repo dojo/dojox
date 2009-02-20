@@ -238,7 +238,7 @@ dojo.provide("dojox.embed.Flash");
 		//
 		// File can only be run from a server, due to SWF dependency.
 		if(location.href.toLowerCase().indexOf("file://")>-1){
-			throw new Error("dojox.av.FLVideo can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
+			throw new Error("dojox.embed.Flash can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
 		}
 		this.id = null;
 		this.movie = null;
@@ -271,7 +271,7 @@ dojo.provide("dojox.embed.Flash");
 			
 			var p = 0;
 			this._poller = null;
-			this._pollCount = 0, this._pollMax = 250;
+			this._pollCount = 0, this._pollMax = 50;
 			if(dojox.embed.Flash.initialized){
 				this.id = dojox.embed.Flash.place(kwArgs, node);
 				this.domNode = node;
@@ -285,14 +285,35 @@ dojo.provide("dojox.embed.Flash");
 							p = (this.movie && this.movie.PercentLoaded) ? this.movie.PercentLoaded() : 0;	
 						}catch(e){
 							/*squelch*/
-							//FIXME: Error at dojox/trunk/embed/Flash.js:286 Code has no side effects
+							//FIXME: Error at dojox/trunk/embed/Flash.js:290 Code has no side effects
+							console.info("this.movie.PercentLoaded FAILED", e);
 						};
-						if(p == 100 || this._pollCount++ > this._pollMax){
+						if(p == 100){
+							// if percent = 100, movie is fully loaded and we're communicating
 							clearInterval(this._poller);
 							delete this._poller;
 							delete this._pollCount;
 							delete this._pollMax;
+							console.log("SWF loaded, call onLoad", p+"%");
 							this.onLoad(this.movie);
+						}else if(this._pollCount++ > this._pollMax){
+							// If we have maxed out our poll attempts and we are still at zero percent
+							//	we have a bad SWF build. The SWF has possibly loaded and could be very
+							// functional and talking to JS, but JS can't talk to it. - #8867
+							this.retryBuildFlash = this.retryBuildFlash===undefined ? 0 : this.retryBuildFlash + 1;
+							if(this.retryBuildFlash>4){
+								// if we fail 5 times, just give it up.
+								console.error("Building SWF failed after several attempts.")
+								return;
+							}
+							console.info("this.movie load FAILED - rebuilding....");
+							clearInterval(this._poller);
+							this._pollCount = 0;
+							// this trick might not work in IE, but it's FF that seems to be
+							// the one that's failing
+							this.domNode.innerHTML =  this.domNode.innerHTML;
+							 
+							this.init(kwArgs, node);
 						}
 					}), 10);
 				}), 1);
@@ -425,6 +446,7 @@ dojo.provide("dojox.embed.Flash");
 		}
 	}else{
 		dojox.embed.Flash.place = function(kwArgs, node){
+			
 			var o = fMarkup(kwArgs);
 			node = dojo.byId(node);
 			if(!node){ 
@@ -432,7 +454,7 @@ dojo.provide("dojox.embed.Flash");
 				node.id = o.id+"-container";
 				dojo.body().appendChild(node);
 			}
-			if(o){
+			if(o){console.warn("CREATE FLASH", o.markup)
 				node.innerHTML = o.markup;
 			//	return document[o.id];
 				return o.id;
