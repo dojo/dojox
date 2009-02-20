@@ -286,7 +286,7 @@ dojo.provide("dojox.embed.Flash");
 						}catch(e){
 							/*squelch*/
 							//FIXME: Error at dojox/trunk/embed/Flash.js:290 Code has no side effects
-							console.info("this.movie.PercentLoaded FAILED", e);
+							console.info("this.movie.PercentLoaded FAILED", e);  
 						};
 						if(p == 100){
 							// if percent = 100, movie is fully loaded and we're communicating
