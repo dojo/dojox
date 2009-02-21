@@ -263,6 +263,13 @@ doh.register("dojox.dtl.dom.tag",
 			// Safari: tr/th
 			template = new dd.DomTemplate("<div><table><tr>{% for item in items %}{% ifequal item 'apple' %}<td>=====</td>{% endifequal %}<td>{{ item }}</td>{% endfor %}</tr></table></div>");
 			doh.is("<div><table><tbody><tr><td>=====</td><td>apple</td><td>banana</td><td>orange</td></tr></tbody></table></div>", dd.tests.dom.util.render(template, context));
+
+			var old = dojo.isWebKit;
+			dojo.isWebKit = true;
+			// Force WebKit because linebreaks work differently when nesting is parsed
+			template = new dd.DomTemplate('<div><table>\n<thead><tr><th>Name</th><th>Count</th></tr></thead>\n<tbody>\n{% for fruit in items %}\n<tr><td>{{ fruit }}</td><td>{{ fruit }}</td></tr>\n{% endfor %}\n</tbody></table></div>');
+			doh.is('<div><table><thead><tr><th>Name</th><th>Count</th></tr></thead><tbody><tr><td>apple</td><td>apple</td></tr><tr><td>banana</td><td>banana</td></tr><tr><td>orange</td><td>orange</td></tr></tbody></table></div>', dd.tests.dom.util.render(template, context));
+			dojo.isWebKit = old;
 		},
 		function test_custom_attributes(){
 			var dd = dojox.dtl;

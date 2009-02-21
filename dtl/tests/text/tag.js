@@ -123,7 +123,7 @@ doh.register("dojox.dtl.text.tag",
 				unplugged: "Torrey"
 			});
 			var template = new dd.Template("{% debug %}");
-			t.is('items: ["apple","banana","lemon"]\n\nunplugged: "Torrey"\n\n', template.render(context));
+			t.is('[items: object]\n[unplugged: string]\n', template.render(context));
 		},
 		function test_tag_filter(t){
 			var dd = dojox.dtl;

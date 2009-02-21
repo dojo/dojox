@@ -17,8 +17,8 @@ dojo.require("dojox.dtl.Context");
 		_attributes: {},
 		_uppers: {},
 		_re4: /^function anonymous\(\)\s*{\s*(.*)\s*}$/,
-		_reTrim: /(?:^\s*(\{%)?\s*|\s*(%\})?\s*$)/g,
-		_reSplit: /\s*%\}\s*\{%\s*/g,
+		_reTrim: /(?:^[\n\s]*(\{%)?\s*|\s*(%\})?[\n\s]*$)/g,
+		_reSplit: /\s*%\}[\n\s]*\{%\s*/g,
 		getTemplate: function(text){
 			if(typeof this._commentable == "undefined"){
 				// Check to see if the browser can handle comments
@@ -41,14 +41,13 @@ dojo.require("dojox.dtl.Context");
 			text = text.replace(/\bstyle="/g, 'tstyle="');
 
 			var match;
-			var pairs = [
+			var table = dojo.isWebKit;
+			var pairs = [ // Format: [enable, parent, allowed children (first for nesting), nestings]
 				[true, "select", "option"],
-				[dojo.isSafari, "tr", "th"],
-				[dojo.isSafari, "tr", "td"],
-				[dojo.isSafari, "thead", "tr", "th"],
-				[dojo.isSafari, "tbody", "tr", "td"],
-				[dojo.isSafari, "table", "tbody", "tr", "td"],
-				[dojo.isSafari, "table", "tr", "td"]
+				[table, "tr", "td|th"],
+				[table, "thead", "tr", "th"],
+				[table, "tbody", "tr", "td"],
+				[table, "table", "tbody|thead|tr", "tr", "td"],
 			];
 			var replacements = [];
 			// Some tags can't contain text. So we wrap the text in tags that they can have.
@@ -57,33 +56,55 @@ dojo.require("dojox.dtl.Context");
 					continue;
 				}
 				if(text.indexOf("<" + pair[1]) != -1){
-					var selectRe = new RegExp("<" + pair[1] + "[\\s\\S]*?>([\\s\\S]+?)</" + pair[1] + ">", "ig");
+					var selectRe = new RegExp("<" + pair[1] + "(?:.|\n)*?>((?:.|\n)+?)</" + pair[1] + ">", "ig");
 					tagLoop: while(match = selectRe.exec(text)){
 						// Do it like this to make sure we don't double-wrap
-						var found = false;
-						var tokens = dojox.string.tokenize(match[1], new RegExp("(<" + pair[2] + "[\\s\\S]*?>[\\s\\S]*?</" + pair[2] + ">)", "ig"), function(child){ found = true; return {data: child}; });
-						if(found){
+						var inners = pair[2].split("|");
+						var innerRe = [];
+						for(var j = 0, inner; inner = inners[j]; j++){
+							innerRe.push("<" + inner + "(?:.|\n)*?>(?:.|\n)*?</" + inner + ">");
+						}
+						var tags = [];
+						var tokens = dojox.string.tokenize(match[1], new RegExp("(" + innerRe.join("|") + ")", "ig"), function(data){
+							var tag = /<(\w+)/.exec(data)[1];
+							if(!tags[tag]){
+								tags[tag] = true;
+								tags.push(tag);
+							}
+							return {data: data};
+						});
+						if(tags.length){
+							var tag = (tags.length == 1) ? tags[0] : pair[2].split("|")[0];
+
 							var replace = [];
-							for(var j = 0; j < tokens.length; j++) {
+							for(var j = 0, jl = tokens.length; j < jl; j++) {
 								var token = tokens[j];
 								if(dojo.isObject(token)){
 									replace.push(token.data);
 								}else{
 									var stripped = token.replace(this._reTrim, "");
-									if(stripped == token){ continue tagLoop; /* Handle mixed nestings */ }
+									if(!stripped){ continue; }
 									token = stripped.split(this._reSplit);
 									for(var k = 0, kl = token.length; k < kl; k++){
 										var replacement = "";
 										for(var p = 2, pl = pair.length; p < pl; p++){
-											replacement += "<" + pair[p];
 											if(p == 2){
-												replacement += ' dtlinstruction="{% ' + token[k].replace('"', '\\"') + ' %}"';
+												replacement += "<" + tag + ' dtlinstruction="{% ' + token[k].replace('"', '\\"') + ' %}">';
+											}else if(tag == pair[p]) {
+												continue;
+											}else{
+												replacement += "<" + pair[p] + ">";
 											}
-											replacement += ">";
 										}
 										replacement += "DTL";
 										for(var p = pair.length - 1; p > 1; p--){
-											replacement += "</" + pair[p] + ">";
+											if(p == 2){
+												replacement += "</" + tag + ">";
+											}else if(tag == pair[p]) {
+												continue;
+											}else{
+												replacement += "</" + pair[p] + ">";
+											}
 										}
 										replace.push("\xFF" + replacements.length);
 										replacements.push(replacement);
