@@ -202,7 +202,8 @@ dojo.declare("dojox.form.FileUploader", null, {
 		//		Determine which uploader to use and initialize it.
 		//
 		dojo.mixin(this, options);
-		console.warn("isdebug:", this.isDebug, options.isDebug, this.id)
+		//this.isDebug = true;
+		console.info("isdebug:", this.isDebug, options.isDebug, this.id)
 		this.id = this.id || dijit.getUniqueId("uploader");
 		dijit.registry.add(this);
 		this.log("init Flash:", (dojox.embed.Flash.available >= this.minFlashVersion || this.force=="flash"), dojox.embed.Flash.available >= this.minFlashVersion, this.force=="flash")
@@ -309,10 +310,15 @@ dojo.declare("dojox.form.FileUploader", null, {
 		if(data){
 			this.postData = data;
 		}
-		this.log("UPLOAD.TYPE:", this.uploaderType, "postData:", this.postData);
+		this.log("upload type:", this.uploaderType, " - postData:", this.postData);
 		
 		if (this.uploaderType == "flash") {
-			this.flashMovie.doUpload(this.postData);
+			try{
+				this.flashMovie.doUpload(this.postData);	
+			}catch(err){
+				throw new Error("Sorry, the SWF failed to initialize properly. The page will have to be refreshed. ERROR:" + err)
+			}
+			
 		}else{
 			//this.log("POST FORM")
 			//this.log("FORM:", this._formNode)
@@ -486,14 +492,25 @@ dojo.declare("dojox.form.FileUploader", null, {
 	},
 	
 	setFlashVars: function(){
-		console.log("setFlashVars postData --------> ", this.postData);
+		
+		this.flashMovie.setFileMask(this.fileMask);
+		this.flashMovie.setPostData(this.postData);
+		console.log("setFlashVars / postData --------> ", this.postData);
+		return;
 		try{	
 			this.flashMovie.setFileMask(this.fileMask);
 			if(this.postData){
 				this.flashMovie.setPostData(this.postData);
 			}
 		}catch(e){
-			setTimeout(dojo.hitch(this, "setFlashVars"), 100);
+			if(this.setvarTries===undefined) this.setvarTries = 0;
+			this.setvarTries++
+			if(this.setvarTries<10){
+				setTimeout(dojo.hitch(this, "setFlashVars"), 500);	
+			}else{
+				console.warn("Tried to set Flash Vars and Post data but failed.")
+			}
+			
 		}
 			
 	},
@@ -627,21 +644,18 @@ dojo.declare("dojox.form.FileUploader", null, {
 		this._connectCommon();
 		
 	},
-	_checkHtmlCancel: function(mouseType){
-		if(mouseType=="change"){
-			this.dialogIsOpen = false;
-		}
-		if(mouseType=="up"){
-			this.dialogIsOpen = true;
-		}
-		if(mouseType=="off"){
-			this.dialogIsOpen = false;
-			this.onCancel();
-		}
-	},
+	
 	_connectCommon: function(){
 		this._cons.push(dojo.connect(window, "resize", this, "setPosition"));
-		
+		// a bit of a hack...
+		// if all else fails, and the stupid button still isn't
+		// in position, if the fakeButton is clicked on, that
+		// will move it. Would require two clicks in this case.
+		if(this.button.domNode){
+			this._cons.push(dojo.connect(this.button, "onClick", this, "setPosition"));	
+		}else{
+			this._cons.push(dojo.connect(this.button, "click", this, "setPosition"));
+		}
 		var dialog = this._dialogParent();
 		if(dialog){
 			this._cons.push(dojo.connect(dialog, "show", this, function(){
@@ -661,7 +675,18 @@ dojo.declare("dojox.form.FileUploader", null, {
 		//	are initially misplaced
 		setTimeout(dojo.hitch(this, "setPosition"), 500);
 	},
-	
+	_checkHtmlCancel: function(mouseType){
+		if(mouseType=="change"){
+			this.dialogIsOpen = false;
+		}
+		if(mouseType=="up"){
+			this.dialogIsOpen = true;
+		}
+		if(mouseType=="off"){
+			this.dialogIsOpen = false;
+			this.onCancel();
+		}
+	},
 	_error: function(evt){
 		this.onError(evt);
 	},
@@ -680,6 +705,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 		}
 		this._progress(this.fileList);
 		this.fileList = [];
+		
 		this.onComplete(dataArray);
 	},
 	

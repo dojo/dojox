@@ -121,12 +121,12 @@
 			});
 			
 			doUpload = function(){
-				dojo.byId("fileToUpload").innerHTML = "uploading...";
+				dojo.byId("fileToUpload").value = "uploading...";
 				f0.upload({postdata:dojo.byId("postdata").value});
 			}
-			dojo.connect(f0, "onChange", function(data){
-				console.log("DATA:", data);
-				dojo.forEach(data, function(d){
+			dojo.connect(f0, "onChange", function(dataArray){
+				console.log("onChange.data:", dataArray);
+				dojo.forEach(dataArray, function(d){
 					//file.type no workie from flash selection (Mac?)
 					if(selectMultipleFiles){
 						dojo.byId("fileToUpload").value += d.name+" "+Math.ceil(d.size*.001)+"kb \n";
@@ -135,16 +135,18 @@
 					}
 				});
 			});
-			dojo.connect(f0, "onProgress", function(data){
-				dojo.byId("fileToUpload").value = "";
-				dojo.forEach(data, function(d){
-					dojo.byId("fileToUpload").value += "("+d.percent+"%) "+d.name+" \n";
+			dojo.connect(f0, "onProgress", function(dataArray){
+				console.warn("test.onProgress", dataArray);
+				dojo.forEach(dataArray, function(d){
+					dojo.byId("fileToUpload").value += "onProgress: ("+d.percent+"%) "+d.name+" \n";
 					
 				});
 			});
-			dojo.connect(f0, "onComplete", function(data){
-				dojo.forEach(data, function(d){
-					dojo.byId("uploadedFiles").value += d.file+" \n";
+			dojo.connect(f0, "onComplete", function(dataArray){
+				console.warn("test.onComplete", dataArray);
+				dojo.forEach(dataArray, function(d){
+					dojo.byId("fileToUpload").value += "onComplete: "+d.file+" \n";
+					dojo.byId("uploadedFiles").value += "onComplete: "+d.file+" \n";
 					dojo.byId("rgtCol").innerHTML += '<img src="'+d.file+'" />';
 					rmFiles+=d.file+";";
 				});
