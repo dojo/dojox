@@ -39,7 +39,7 @@
 	padding: 10px;
 }
 
-.gridContainerTable tbody, .gridContainerTable tr {
+.gridContainerTable tbody.gridContainerBody, .gridContainerTable tr.gridContainerRow {
 	height: 100%;
 }
 

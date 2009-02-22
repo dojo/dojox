@@ -36,13 +36,15 @@ dojo.declare("dojox.layout.dnd.PlottedDnd", [dojo.dnd.Source], {
 	_calculateCoords : function(/*Boolean*/height){
 		// summary: Calculate each position of children
 		dojo.forEach(this.node.childNodes, function(child){
+			var c = dojo.coords(child, true);
 			child.coords = {
-				xy: dojo.coords(child, true),
+				xy: c,
 				w: child.offsetWidth / 2,
-				h: child.offsetHeight / 2
+				h: child.offsetHeight / 2,
+				mw: c.w
 			};
 			if(height){
-				child.coords.mh = dojo.marginBox(child).h;
+				child.coords.mh = c.h;
 			}
 		}, this);
 	},
@@ -89,10 +91,11 @@ dojo.declare("dojox.layout.dnd.PlottedDnd", [dojo.dnd.Source], {
 		this.firstIndicator = (source == this);
 		this._calculateCoords(true);
 		//this.isDropped = true;
+		var m = dojo.dnd.manager();
 		if(nodes[0].coords){
 			this._drop.style.height = nodes[0].coords.mh + "px";
+			dojo.style(m.avatar.node, "width", nodes[0].coords.mw + "px");
 		}else{
-			var m = dojo.dnd.manager();
 			this._drop.style.height = m.avatar.node.clientHeight+"px";
 		}
 		this.dndNodes = nodes;
@@ -145,11 +148,13 @@ dojo.declare("dojox.layout.dnd.PlottedDnd", [dojo.dnd.Source], {
 			}
 		}
 		if(this.current !== null){
+			var c = dojo.coords(this.current, true);
 			this.current.coords = {
-				xy: dojo.coords(this.current, true),
+				xy: c,
 				w: this.current.offsetWidth / 2,
 				h: this.current.offsetHeight / 2,
-				mh: dojo.marginBox(this.current).h
+				mh: c.h,
+				mw: c.w
 			};
 			this._drop.style.height = this.current.coords.mh + "px";
 			

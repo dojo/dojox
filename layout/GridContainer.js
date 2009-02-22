@@ -151,6 +151,7 @@ dojo.declare("dojox.layout.GridContainer",
 	},
 	
 	startup:function(){
+		this.inherited(arguments);
 		this._createCells();
 		if(this.usepref !== true){
 			this[(this.isAutoOrganized ? "_organizeServices" : "_organizeServicesManually")]();
@@ -158,7 +159,10 @@ dojo.declare("dojox.layout.GridContainer",
 			//console.info("GridContainer organised by UserPref");
 			return;
 		}
-		this.init();	
+		this.init();
+		dojo.forEach(this.getChildren(), function(child){
+			!child.started && !child._started && child.startup();
+		});
 	},
 	
 	init: function(){
