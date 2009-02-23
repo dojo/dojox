@@ -19,14 +19,14 @@ dojox.dtl._DomTemplated = {
 				var ddcd = dojox.dtl.contrib.dijit;
 				var old = ddcd.widgetsInTemplate;
 				ddcd.widgetsInTemplate = this.widgetsInTemplate;
-				this._template = this._getCachedTemplate(this.templatePath, this.templateString);
-				this._render = new dojox.dtl.render.dom.Render(this.domNode, this._template);
+				this.template = this.template || this._getCachedTemplate(this.templatePath, this.templateString);
+				this._render = new dojox.dtl.render.dom.Render(this.domNode, this.template);
 				ddcd.widgetsInTemplate = old;
 			}
 
 			this.render();
 
-			this.domNode = this._template.getRootNode();
+			this.domNode = this.template.getRootNode();
 			if(this.srcNodeRef && this.srcNodeRef.parentNode){
 				dojo.destroy(this.srcNodeRef);
 				delete this.srcNodeRef;
@@ -36,17 +36,17 @@ dojox.dtl._DomTemplated = {
 			// summary:
 			//		Quickly switch between templated by location
 			if(dojox.dtl.text._isTemplate(template)){
-				this._template = this._getCachedTemplate(null, template);
+				this.template = this._getCachedTemplate(null, template);
 			}else{
-				this._template = this._getCachedTemplate(template);
+				this.template = this._getCachedTemplate(template);
 			}
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context, /*dojox.dtl.DomTemplate?*/ tpl){
 			if(tpl){
-				this._template = tpl;
+				this.template = tpl;
 			}
-			this._render.render(this._getContext(context), this._template);
+			this._render.render(this._getContext(context), this.template);
 		},
 		_getContext: function(context){
 			if (!(context instanceof dojox.dtl.Context)) {
