@@ -296,6 +296,13 @@ doh.register("dojox.dtl.dom.tag",
 			var context = new dd.Context({checked: false});
 			var template = new dd.DomTemplate('<div><input checked="{{ checked }}"></div>');
 			doh.is('<div><input checked="false"/></div>', dd.tests.dom.util.render(template, context));
+		},
+		function test_style(){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			var template = new dd.DomTemplate('<div style="overflow:auto">content</div>');
+			doh.is('<div style="overflow:auto">content</div>', dd.tests.dom.util.render(template, context));
 		}
 	]
 );
