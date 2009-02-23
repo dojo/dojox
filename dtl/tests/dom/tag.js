@@ -309,22 +309,22 @@ doh.register("dojox.dtl.dom.tag",
 			var dd = dojox.dtl;
 
 			var context = new dd.Context();
-			var template = new dd.DomTemplate('<div style="overflow: auto;">content</div>');
-			t.reg(/style="overflow:\s*auto;?"/i,dd.tests.dom.util.render(template, context));
+			var template = new dd.DomTemplate('<div style="float: left;">content</div>');
+			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
 		},
 		function test_contrib_style(t){
 			var dd = dojox.dtl;
 
 			var context = new dd.Context();
-			var template = new dd.DomTemplate('{% load dojox.dtl.contrib.dom %}<div style="overflow: auto;">content</div>');
-			t.reg(/style="overflow:\s*auto;?"/i,dd.tests.dom.util.render(template, context));
+			var template = new dd.DomTemplate('{% load dojox.dtl.contrib.dom %}<div style="float: left;">content</div>');
+			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
 		},
 		function test_contrib_dynamic_style(t){
 			var dd = dojox.dtl;
 
-			var context = new dd.Context({overflow: 'auto'});
-			var template = new dd.DomTemplate('<div style="overflow: {{ overflow }};">content</div>');
-			t.reg(/style="overflow:\s*auto;?"/i,dd.tests.dom.util.render(template, context));
+			var context = new dd.Context({'float': 'left'});
+			var template = new dd.DomTemplate('<div style="float: {{ float }};">content</div>');
+			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
 		}
 	]
 );
