@@ -4,14 +4,6 @@ dojo.require("dojox.dtl.dom");
 dojo.require("dojox.dtl.Context");
 dojo.require("dojox.dtl.tests.dom.util");
 
-//TODO: push this to doh?
-doh.reg=function(reg, str, hint){
-	if(!reg.test(str)){
-		throw new doh._AssertFailure("reg() failed:\n\tregular expression\n\t\t"+reg+"\n\tdoes not match\n\t\t"+str+"\n\n", hint);
-	}
-	return true;
-}
-
 doh.register("dojox.dtl.dom.tag", 
 	[
 		function test_errors(t){
@@ -304,27 +296,6 @@ doh.register("dojox.dtl.dom.tag",
 			var context = new dd.Context({checked: false});
 			var template = new dd.DomTemplate('<div><input checked="{{ checked }}"></div>');
 			doh.is('<div><input checked="false"/></div>', dd.tests.dom.util.render(template, context));
-		},
-		function test_style(t){
-			var dd = dojox.dtl;
-
-			var context = new dd.Context();
-			var template = new dd.DomTemplate('<div style="float: left;">content</div>');
-			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
-		},
-		function test_contrib_style(t){
-			var dd = dojox.dtl;
-
-			var context = new dd.Context();
-			var template = new dd.DomTemplate('{% load dojox.dtl.contrib.dom %}<div style="float: left;">content</div>');
-			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
-		},
-		function test_contrib_dynamic_style(t){
-			var dd = dojox.dtl;
-
-			var context = new dd.Context({'float': 'left'});
-			var template = new dd.DomTemplate('<div style="float: {{ float }};">content</div>');
-			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
 		},
 		function test_mixedCase(){
 			var dd = dojox.dtl;
