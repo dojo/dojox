@@ -1,4 +1,5 @@
 dojo.provide("dojox.flash._base");
+dojo.experimental("dojox.flash");
 
 // for dijit.getViewport(), needed by dojox.flash.Embed.center()
 dojo.require("dijit._base.place");
