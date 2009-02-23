@@ -481,7 +481,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 		//	or it will get created twice - seems okay after
 		this.setPosition();
 		
-		this.flashObject = new dojox.embed.Flash(args, this.flashDiv);
+		this.flashObject = new dojox.embed.Flash(args, this.flashDiv, "testLoaded");
 		this.flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.log("ONLOAD", mov)
 			this.flashMovie = mov;

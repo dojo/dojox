@@ -144,10 +144,12 @@
 			});
 			dojo.connect(f0, "onComplete", function(dataArray){
 				console.warn("test.onComplete", dataArray);
+				totalFiles = dataArray.length;
+				filesLoaded = 0;
 				dojo.forEach(dataArray, function(d){
 					dojo.byId("fileToUpload").value += "onComplete: "+d.file+" \n";
 					dojo.byId("uploadedFiles").value += "onComplete: "+d.file+" \n";
-					dojo.byId("rgtCol").innerHTML += '<img src="'+d.file+'" />';
+					dojo.byId("rgtCol").innerHTML += '<img src="'+d.file+'" onload="onFilesLoaded()"/>';
 					rmFiles+=d.file+";";
 				});
 			});
@@ -162,9 +164,24 @@
 			_disabled = !_disabled;
 			dijit.byId("btn0").attr("disabled", _disabled);
 		}
-		cleanUp = function(){
+		
+		var totalFiles = 0;
+		var filesLoaded = 0;
+		onFilesLoaded = function(){
+			filesLoaded++;
+			console.log("FILE LOADED!!", filesLoaded, "of", totalFiles);
+			if(filesLoaded>=totalFiles){
+				console.log(" * * ALL FILES LOADED");
+				// remove them from the server now
+				serverCleanUp();
+			}
+		}
+		clearFiles = function(){
 			dojo.byId("rgtCol").innerHTML = "";
 			dojo.byId("uploadedFiles").value = "";
+			serverCleanUp();
+		}
+		serverCleanUp = function(){
 			dojo.xhrGet({
 				url:uploadUrl,
 				handleAs:"text",
@@ -176,8 +193,7 @@
 			
 		}
 		dojo.addOnUnload(function(){
-			console.log("You're leaving the page");
-			cleanUp();
+			
 		});
 		
 
@@ -263,7 +279,7 @@
         
         <textarea cols="50" rows="4" id="uploadedFiles"></textarea>
         
-        <div onClick="cleanUp()" dojoType="dijit.form.Button">Remove Files</div>
+        <div onClick="clearFiles()" dojoType="dijit.form.Button">Remove Files</div>
         <!-- Test destroy: <div onClick="Destroy()" dojoType="dijit.form.Button">Destroy()</div> -->
     </td>
     <td id="rgtCol">&nbsp;</td>
