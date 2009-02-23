@@ -1,14 +1,24 @@
 dojo.provide("dojox.io.OAuth");
 dojo.require("dojox.encoding.digests.SHA1");
 
-/*	dojox.io.OAuth
- *
- * 	Helper class to assemble OAuth URL parameters.
- * 	Based on OAuth implementation at http://oauth.googlecode.com/svn/code/javascript/
- * 	as provided by Netflix.
- */
-
 dojox.io.OAuth = new (function(){
+	//	summary:
+	//		Helper singleton for signing any kind of Ajax request using the OAuth 1.0 protocol.
+	//	description:
+	//		dojox.io.OAuth is a singleton class designed to allow anyone to sign a request,
+	//		based on the OAuth 1.0 specification, made with any of the Dojo Toolkit's Ajax
+	//		methods (such as dojo.xhr[verb], dojo.io.iframe, etc.).
+	//
+	//		The main method of dojox.io.OAuth is the sign method (see documentation for .sign);
+	//		the idea is that you will "sign" the kwArgs object you'd normally pass to any of 
+	//		the Ajax methods, and then pass the signed object along.  As long as the token
+	//		object used is valid (and the client's date and time are synced with a public
+	//		time server), a signed object should be passed along correctly.
+	//
+	//		dojox.io.OAuth does not deal with the OAuth handshake process at all.
+	//
+	//		This object was developed against the Netflix API (OAuth-based service); see
+	//		http://developer.netflix.com for more details.
 	var encode = this.encode = function(s){
 		if(!s){ return ""; }
 		return encodeURIComponent(s)
