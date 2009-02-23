@@ -325,6 +325,13 @@ doh.register("dojox.dtl.dom.tag",
 			var context = new dd.Context({'float': 'left'});
 			var template = new dd.DomTemplate('<div style="float: {{ float }};">content</div>');
 			t.reg(/style="float:\s*left;?\s*"/i,dd.tests.dom.util.render(template, context));
+		},
+		function test_mixedCase(){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			var template = new dd.DomTemplate('<div simplecase="simple" mixedCase="mixed">content</div>');
+			doh.is('<div simplecase="simple" mixedcase="mixed">content</div>', dd.tests.dom.util.render(template, context));
 		}
 	]
 );

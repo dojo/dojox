@@ -235,25 +235,19 @@ dojo.require("dojox.dtl.Context");
 							}
 							value = decodeURIComponent(value);
 						}
-						if(value.indexOf("{%") != -1 || value.indexOf("{{") != -1){
-							clear = key;
-						}
 					}else if(key == "tstyle"){
-						clear = key;
+						clear = key; // Placeholder because we can't use style
 						key = "style";
-					}else if(dd.BOOLS[key.slice(1)]){
-						clear = key;
+					}else if(dd.BOOLS[key.slice(1)] && dojo.trim(value)){
 						key = key.slice(1);
-					}else if(this._uppers[key]){
-						clear = this._uppers[key];
-						node.setAttribute(clear, "");
-						node.removeAttribute(clear);
-						clear = null;
-						node.setAttribute(key, value);
+					}else if(this._uppers[key] && dojo.trim(value)){
+						clear = this._uppers[key]; // Replaced by lowercase
 					}
 				}
 
 				if(clear){
+					// Clear out values that are different than will
+					// be used in plugins
 					node.setAttribute(clear, "");
 					node.removeAttribute(clear);
 				}
@@ -474,7 +468,13 @@ dojo.require("dojox.dtl.Context");
 			if(this.onChangeAttribute && old != value){
 				this.onChangeAttribute(this._parent, key, old, value);
 			}
-			dojo.attr(this._parent, key, value);
+			if(key == "style"){
+				console.log(value);
+				this._parent.style.cssText = value;
+			}else{
+				dojo.attr(this._parent, key, value);
+				console.log(this._parent, key, value);
+			}
 			return this;
 		},
 		addEvent: function(context, type, fn, /*Array|Function*/ args){
@@ -956,9 +956,18 @@ dojo.require("dojox.dtl.Context");
 				}else if(type == dd.TOKEN_ATTR){
 					var fn = ddt.getTag("attr:" + token[2], true);
 					if(fn && token[3]){
+						if (token[3].indexOf("{%") != -1 || token[3].indexOf("{{") != -1) {
+							value.setAttribute(token[2], "");
+						}
 						nodelist.push(fn(null, new dd.Token(type, token[2] + " " + token[3])));
-					}else if(dojo.isString(token[3]) && (token[3].indexOf("{%") != -1 || token[3].indexOf("{{") != -1)){
-						nodelist.push(new dd.AttributeNode(token[2], token[3]));
+					}else if(dojo.isString(token[3])){
+						if(token[2] == "style" || token[3].indexOf("{%") != -1 || token[3].indexOf("{{") != -1){
+							nodelist.push(new dd.AttributeNode(token[2], token[3]));
+						}else if(dojo.trim(token[3])){
+							try{
+								dojo.attr(value, token[2], token[3]);
+							}catch(e){}
+						}
 					}
 				}else if(type == dd.TOKEN_NODE){
 					var fn = ddt.getTag("node:" + value.tagName.toLowerCase(), true);
