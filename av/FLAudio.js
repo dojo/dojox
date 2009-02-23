@@ -73,9 +73,9 @@ dojo.declare("dojox.av.FLAudio", null, {
 		if(!this.id){ this.id = "flaudio_"+new Date().getTime(); }
 		this.domNode = dojo.doc.createElement("div");
 		dojo.style(this.domNode, {
-			postion:"absolute",
-			width:"1px",
-			height:"1px",
+			postion:"relative",
+			width:"100px",
+			height:"100px",
 			top:"1px",
 			left:"1px"
 		});
@@ -93,10 +93,10 @@ dojo.declare("dojox.av.FLAudio", null, {
 		
 		var args = {
 			path:this._swfPath.uri,
-			width:"1px",
-			height:"1px",
+			width:"100px",
+			height:"100px",
 			params:{
-				wmode:"transparent"
+				//wmode:"transparent"
 			},
 			// only pass in simple variables - no deep objects
 			vars:{
@@ -115,7 +115,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 		this._sub("mediaPosition", "onPlayStatus");
 		this._sub("mediaMeta",     "onID3");
 		
-		this._flashObject = new dojox.embed.Flash(args, this.domNode);
+		this._flashObject = new dojox.embed.Flash(args, this.domNode, "testAudioLoaded");
 		this._flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.flashMedia = mov;
 			this.isPlaying = this.autoPlay;
@@ -201,7 +201,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
 		//		
-		this.flashMedia.stop(options);
+		this.flashMedia.doStop(options);
 	},
 	
 	setVolume: function(/*Object*/options){
