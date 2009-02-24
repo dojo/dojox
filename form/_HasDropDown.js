@@ -266,9 +266,6 @@ dojo.declare("dojox.form._HasDropDown",
 			dojo.addClass(self.popupStateNode, "dojoxHasDropDownOpen");
 			this._opened=true;
 			this.state="Opened";
-			if(dropDown.focus){
-				dropDown.focus();
-			}
 			// TODO: set this.checked and call setStateClass(), to affect button look while drop down is shown
 			return retVal;
 		},
