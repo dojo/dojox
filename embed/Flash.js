@@ -11,6 +11,7 @@ dojo.provide("dojox.embed.Flash");
 		var movie=new dojox.embed.Flash({ args }, containerNode);
 	 ******************************************************/
 	var fMarkup, fVersion;
+	var minimumVersion = 11; // anything below this will throw an error (may overwrite)
 	var keyBase = "dojox-embed-flash-", keyCount=0;
 	var _baseKwArgs = {
 		expressInstall: false,
@@ -176,6 +177,8 @@ dojo.provide("dojox.embed.Flash");
 		//		The width of the embedded movie; the default value is 320px.
 		//	height: Number?
 		//		The height of the embedded movie; the default value is 240px
+		//	minimumVersion: Number ?
+		//		The minimum targeted version of the Flash Player (defaults to 9) 
 		//	style: String?
 		//		Any CSS style information (i.e. style="background-color:transparent") you want
 		//		to define on the markup.
@@ -190,6 +193,7 @@ dojo.provide("dojox.embed.Flash");
 		this.id=id;
 		this.path=path;
 		this.width=width;
+		this.minimumVersion=minimumVersion;
 		this.height=height;
 		this.style=style;
 		this.params=params;
@@ -248,16 +252,29 @@ dojo.provide("dojox.embed.Flash");
 		if(location.href.toLowerCase().indexOf("file://")>-1){
 			throw new Error("dojox.embed.Flash can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
 		}
+		this.available = dojox.embed.Flash.available;
+		this.minimumVersion = kwArgs.minimumVersion || minimumVersion;
+		//console.log("AVAILABLE:", this);
 		this.id = null;
 		this.movie = null;
 		this.domNode = null;
 		if(node){
 			node = dojo.byId(node);
 		}
-		// Fixes #8743 - creating double SWFs
+		// setTimeout Fixes #8743 - creating double SWFs
+		// also allows time for code to attach to onError
 		setTimeout(dojo.hitch(this, function(){
-			if(kwArgs && node){
-				this.init(kwArgs, node);
+			if(this.available && this.available >= this.minimumVersion){
+				if(kwArgs && node){
+					this.init(kwArgs, node);
+				}// FIXME: else what?
+				
+			}else{
+				if(!this.available){
+					this.onError("Flash is not installed.");
+				}else{
+					this.onError("Flash version detected: "+this.available+" is out of date. Minimum required: "+this.minimumVersion);
+				}
 			}
 		}), 100);
 	};
@@ -272,6 +289,9 @@ dojo.provide("dojox.embed.Flash");
 			//	summary:
 			//		Stub function for you to attach to when the movie has finished downloading
 			//		and is ready to be manipulated.
+		},
+		onError: function(msg){
+			
 		},
 		_onload: function(){
 			// summary:
@@ -291,7 +311,7 @@ dojo.provide("dojox.embed.Flash");
 			
 			// vars to help determine load status
 			var p = 0, testLoaded=false;
-			this._poller = null; this._pollCount = 0; this._pollMax = 500; this.pollTime = 10;
+			this._poller = null; this._pollCount = 0; this._pollMax = 5; this.pollTime = 100;
 			
 			if(dojox.embed.Flash.initialized){
 				
@@ -411,7 +431,8 @@ dojo.provide("dojox.embed.Flash");
 		//		is fired, and you will get an error.  Use dojo.addOnLoad instead.
 		minSupported : 8,
 		available: fVersion.major,
-		supported: (fVersion.major >= 8),
+		supported: (fVersion.major >= fVersion.required),
+		minimumRequired: fVersion.required,
 		version: fVersion,
 		initialized: false,
 		onInitialize: function(){
