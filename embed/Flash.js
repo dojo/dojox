@@ -11,7 +11,7 @@ dojo.provide("dojox.embed.Flash");
 		var movie=new dojox.embed.Flash({ args }, containerNode);
 	 ******************************************************/
 	var fMarkup, fVersion;
-	var minimumVersion = 11; // anything below this will throw an error (may overwrite)
+	var minimumVersion = 9; // anything below this will throw an error (may overwrite)
 	var keyBase = "dojox-embed-flash-", keyCount=0;
 	var _baseKwArgs = {
 		expressInstall: false,
