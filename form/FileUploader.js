@@ -476,12 +476,12 @@ dojo.declare("dojox.form.FileUploader", null, {
 		
 		this._connectFlash();
 		
-		// F10 BUG
+		// Flash 10 BUG
 		// Must set the position before creating the embed object
 		//	or it will get created twice - seems okay after
 		this.setPosition();
 		
-		this.flashObject = new dojox.embed.Flash(args, this.flashDiv, "testLoaded");
+		this.flashObject = new dojox.embed.Flash(args, this.flashDiv);
 		this.flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.log("ONLOAD", mov)
 			this.flashMovie = mov;
