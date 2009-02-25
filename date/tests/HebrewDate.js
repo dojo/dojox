@@ -2,16 +2,32 @@ dojo.provide("dojox.date.tests.HebrewDate");
 dojo.require("dojox.date.HebrewDate");
 dojo.require("dojox.date.HebrewLocale");
 
-dojo.locale = 'he';
-
 dojo.requireLocalization("dojo.cldr", "gregorian"); 
 dojo.requireLocalization("dojo.cldr", "hebrew");
 
-
-
 tests.register("dojox.date.tests.HebrewDate", 
 	[
-		
+		{
+			// see tests for dojo.date.locale for setup info
+
+			name: "dojox.date.tests.posix",
+			setUp: function(){
+				var partLocaleList = ["he"];
+
+				dojo.forEach(partLocaleList, function(locale){
+					dojo.requireLocalization("dojo.cldr", "gregorian", locale);
+					dojo.requireLocalization("dojo.cldr", "hebrew", locale);
+				});
+			},
+			runTest: function(t){
+			},
+			tearDown: function(){
+				//Clean up bundles that should not exist if
+				//the test is re-run.
+				delete dojo.cldr.nls.gregorian;
+				delete dojo.cldr.nls.hebrew;
+			}
+		},	
 		{
 			name: "toGregorian",
 			runTest: function(t){
