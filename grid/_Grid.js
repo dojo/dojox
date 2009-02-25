@@ -708,7 +708,11 @@ dojo.requireLocalization("dijit", "loading");
 				}
 			}
 			// if we are given dimensions, size the grid's domNode to those dimensions
-			if(changeSize){
+			if(resultSize){
+				dojo.marginBox(this.domNode, resultSize);
+				this.height = this.domNode.style.height;
+				delete this.fitTo;
+			}else if(changeSize){
 				dojo.marginBox(this.domNode, changeSize);
 			}else if(this.fitTo == "parent"){
 				var h = dojo._getContentBox(pn).h;
