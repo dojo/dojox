@@ -439,6 +439,7 @@ dojo.declare("dojox.form.FileUploader", null, {
 		var w = "100%";
 		var h = "100%";
 		var args = {
+			expressInstall:true,
 			path: this.swfPath.uri || this.swfPath,
 			width: w,
 			height: h,
@@ -482,6 +483,9 @@ dojo.declare("dojox.form.FileUploader", null, {
 		this.setPosition();
 		
 		this.flashObject = new dojox.embed.Flash(args, this.flashDiv);
+		this.flashObject.onError = function(msg){
+			console.warn("Flash Error:", msg);
+		}
 		this.flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.log("ONLOAD", mov)
 			this.flashMovie = mov;
