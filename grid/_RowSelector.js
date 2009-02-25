@@ -17,7 +17,7 @@ dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 	},
 	buildRowContent: function(inRowIndex, inRowNode){
 		var w = this.contentNode.offsetWidth - this.padBorderWidth 
-		inRowNode.innerHTML = '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"><tr><td class="dojoxGridRowbarInner">&nbsp;</td></tr></table>';
+		inRowNode.innerHTML = '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;" border="0" cellspacing="0" cellpadding="0" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"><tr><td class="dojoxGridRowbarInner">&nbsp;</td></tr></table>';
 	},
 	renderHeader: function(){
 	},

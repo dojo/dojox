@@ -60,10 +60,11 @@ dojo.require("dojo.dnd.Moveable");
 		// generate starting tags for a cell
 		generateCellMarkup: function(inCell, inMoreStyles, inMoreClasses, isHeader){
 			var result = [], html;
-			if (isHeader){
-				html = [ '<th tabIndex="-1" role="wairole:columnheader"' ];
+			var waiPrefix = dojo.isFF<3 ? "wairole:" : "";
+			if(isHeader){
+				html = ['<th tabIndex="-1" role="', waiPrefix, 'columnheader"'];
 			}else{
-				html = [ '<td tabIndex="-1" role="wairole:gridcell"' ];
+				html = ['<td tabIndex="-1" role="', waiPrefix, 'gridcell"'];
 			}
 			inCell.colSpan && html.push(' colspan="', inCell.colSpan, '"');
 			inCell.rowSpan && html.push(' rowspan="', inCell.rowSpan, '"');
