@@ -132,7 +132,7 @@ dojo.provide("dojox.embed.Flash");
 			var s = '<embed type="application/x-shockwave-flash" '
 				+ 'src="' + path + '" '
 				+ 'id="' + kwArgs.id + '" '
-				+ 'name="' + kwArgs.id + '" '
+				//+ 'name="' + kwArgs.id + '" '
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '"'
 				+ ((kwArgs.style)?' style="' + kwArgs.style + '" ':'')
@@ -200,7 +200,7 @@ dojo.provide("dojox.embed.Flash");
 	=====*/
 
 	//	the main entry point
-	dojox.embed.Flash = function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode*/ node, /* ? String*/testCall){
+	dojox.embed.Flash = function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode*/ node){
 		//	summary:
 		//		Creates a wrapper object around a Flash movie.  Wrapper object will
 		//		insert the movie reference in node; when the browser first starts
@@ -219,14 +219,6 @@ dojo.provide("dojox.embed.Flash");
 		//
 		//		node:	DomNode
 		//			The node where the embed object will be placed
-		//
-		//		testCall:	String
-		//			A callback function created by the Flash movie's ExternalInterface
-		//			While this is optional, it is highly reccommended. Several attempts
-		//			have been made to check the load status of a SWF cross-browser, and
-		//			there are numerous problems in both FF and IE. Testing a callback
-		//			seems to be the only reliable way of determining that the SWF is
-		//			loaded and ready to receieve commands.
 		//
 		// 	properties:
 		//		id: String
@@ -262,9 +254,12 @@ dojo.provide("dojox.embed.Flash");
 		if(node){
 			node = dojo.byId(node);
 		}
-		if(kwArgs && node){
-			this.init(kwArgs, node, testCall);
-		}
+		// Fixes #8743 - creating double SWFs
+		setTimeout(dojo.hitch(this, function(){
+			if(kwArgs && node){
+				this.init(kwArgs, node);
+			}
+		}), 100);
 	};
 
 	dojo.extend(dojox.embed.Flash, {
@@ -285,12 +280,9 @@ dojo.provide("dojox.embed.Flash");
 			delete this._poller;
 			delete this._pollCount;
 			delete this._pollMax;
-			delete this._failedTries;
-			delete this._failedAttempts;
-			console.log("SWF loaded, call onLoad");
 			this.onLoad(this.movie);
 		},
-		init: function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode?*/ node, /*String*/testCall){
+		init: function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode?*/ node){
 			//	summary
 			//		Initialize (i.e. place and load) the movie based on kwArgs.
 			this.destroy();		//	ensure we are clean first.
@@ -299,8 +291,7 @@ dojo.provide("dojox.embed.Flash");
 			
 			// vars to help determine load status
 			var p = 0, testLoaded=false;
-			this._poller = null; this._pollCount = 0; this._pollMax = 50; this.pollTime = 100;
-			this._failedTries = 0; this._failedAttempts = 5;
+			this._poller = null; this._pollCount = 0; this._pollMax = 500; this.pollTime = 10;
 			
 			if(dojox.embed.Flash.initialized){
 				
@@ -308,69 +299,27 @@ dojo.provide("dojox.embed.Flash");
 				this.domNode = node;
 
 				setTimeout(dojo.hitch(this, function(){
-					this.movie = (dojo.isIE) ? dojo.byId(this.id) : document[this.id];
+					this.movie = dojox.embed.Flash.byId(this.id);
 					this.onReady(this.movie);
 					
 					this._poller = setInterval(dojo.hitch(this, function(){
 						
-						// Massive workarounds to get the SWF to load properly.
-						// 	In FF the SWF will often load but can't be communicated with.
-						// 	In IE, it usually loads fine, but PercentLoaded often fails.
-						// 	In IE, using a testCall function works much better than the
-						//		native PercentLoaded().
-						// 	In FF, testCall helps, but the SWF still needs to be
-						//		rebuilt every few times. Bad Flash Player bug.
-						//
+						// catch errors if not quite ready.
 						try{
-							if(testCall){
-								console.info("testCall:", testCall);
-								this.movie[testCall]();
-								testLoaded = true;
-								p = 100;
-							}else{
-								p = this.movie.PercentLoaded();
-								console.info("percent loaded:", p+"%");
-								
-							}
-						
+							p = this.movie.PercentLoaded();
 						}catch(e){
 							/* squelch */
-							console.warn("this.movie." + (testCall ? testCall+"() failed." : "PercentLoaded() failed"));
+							console.warn("this.movie.PercentLoaded() failed");
 						};
 						
-						if(p == 100 || testLoaded){
+						if(p == 100){
 							// if percent = 100, movie is fully loaded and we're communicating
 							this._onload();
 						
-						}else if(p==0 || this._failedTries++ > this._failedAttempts || this._pollCount++ > this._pollMax){
-							//
-							// If we have maxed out our poll attempts and we are still at zero percent
-							//	we have a bad SWF build. The SWF has possibly loaded and could be very
-							// functional and talking to JS, but JS can't talk to it. - #8867
-							//
-							this.retryBuildFlash = this.retryBuildFlash===undefined ? 0 : this.retryBuildFlash + 1;
-							
-							if(this.retryBuildFlash>4){
-								// if we fail 5 times, just give it up.
-								//
-								throw new Error("Building SWF failed after several attempts ("+this.retryBuildFlash+")")
-								return;
-							}
-							
-							if(dojo.isIE){
-								// don't rebuild the SWF in IE
-								this._onload();	
-							
-							}else{
-								// FF occasionally fails to initialize the SWF properly.
-								// rebuilding it seems to work.
-								console.warn("this.movie load FAILED - rebuilding....");
-								clearInterval(this._poller);
-								this._pollCount = 0;
-								this.domNode.innerHTML =  this.domNode.innerHTML;
-								this.init(kwArgs, node);	
-							}
-							
+						}else if(p==0 && this._pollCount++ > this._pollMax){
+							// after several attempts, we're not past zero.
+							// FIXME: What if we get stuck on 33% or something?
+							throw new Error("Building SWF failed.");
 						}
 					}), this.pollTime);
 				}), 1);
@@ -413,7 +362,27 @@ dojo.provide("dojox.embed.Flash");
 			}
 		}
 	});
-
+	dojo.mixin(dojox.embed.Flash, {
+		// 	summary:
+		//		Gets Flash movie by id.
+		//	description:
+		//		Probably includes methods for outdated
+		//		browsers, but this should catch all cases.
+		//	example:
+		//	| var movie = dojox.embed.Flash.byId("myId");
+		//
+		byId: function (movieName){
+			if(document.embeds[movieName])
+				return document.embeds[movieName];
+			if(window.document[movieName])
+				return window.document[movieName];
+			if(window[movieName])
+				return window[movieName];
+			if(document[movieName])
+				return document[movieName];
+			return null;
+		}
+	});
 	//	expose information through the constructor function itself.
 	dojo.mixin(dojox.embed.Flash, {
 		//	summary:
@@ -446,7 +415,6 @@ dojo.provide("dojox.embed.Flash");
 		version: fVersion,
 		initialized: false,
 		onInitialize: function(){
-			console.log("----------------->onInitialize")
 			dojox.embed.Flash.initialized = true;
 		},
 		__ie_markup__: function(kwArgs){
@@ -504,7 +472,6 @@ dojo.provide("dojox.embed.Flash");
 		}
 	}else{
 		dojox.embed.Flash.place = function(kwArgs, node){
-			
 			var o = fMarkup(kwArgs);
 			node = dojo.byId(node);
 			if(!node){ 
