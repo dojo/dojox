@@ -47,6 +47,8 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			path:this._swfPath.uri,
 			width:"100%",
 			height:"100%",
+			minimumVersion:9,
+			expressInstall:true,
 			params:{
 				allowFullScreen:true,
 				wmode:"transparent"
@@ -72,6 +74,10 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		this._sub("mediaEnd",    "onEnd");
 	
 		this._flashObject = new dojox.embed.Flash(args, this.domNode);
+		this._flashObject.onError = function(err){
+			console.warn("Flash Error:", err);
+			alert(err);
+		};
 		this._flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.flashMedia = mov;
 			this.isPlaying = this.autoPlay;
@@ -80,6 +86,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			this._initStatus();
 			this._update();			 
 		});
+		
 	},
 	
 	//  =============================  //
