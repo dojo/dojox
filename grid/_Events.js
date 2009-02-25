@@ -59,6 +59,7 @@ dojo.declare("dojox.grid._Events", null, {
 					var colIdx = this.focus.getHeaderIndex();
 					if(colIdx >= 0) {
 						this.setSortIndex(colIdx);
+						break;
 					}else {
 						this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 					}
@@ -71,12 +72,18 @@ dojo.declare("dojox.grid._Events", null, {
 						this.edit.setEditCell(this.focus.cell, this.focus.rowIndex);
 					}
 				}
+				if (!this.edit.isEditing()){
+					var curView = this.focus.focusView || this.views.views[0];  //if no focusView than only one view
+					curView.content.decorateEvent(e);
+					this.onRowClick(e);
+				}
 				break;
 			case dk.SPACE:
 				if(!this.edit.isEditing()){
 					var colIdx = this.focus.getHeaderIndex();
 					if(colIdx >= 0) {
 						this.setSortIndex(colIdx);
+						break;
 					}else {
 						this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 					}
@@ -118,10 +125,11 @@ dojo.declare("dojox.grid._Events", null, {
 						this.setScrollTop(this.scroller.findScrollTop(this.focus.rowIndex-1));
 						this.focus.move(this.scroller.firstVisibleRow-this.scroller.lastVisibleRow+1, 0);
 					}
+					this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey); 
 				}
 				break;
 			case dk.PAGE_DOWN:
-				if(!this.edit.isEditing() && this.store && this.focus.rowIndex+1 != this.store.count){
+				if(!this.edit.isEditing() && this.focus.rowIndex+1 != this.rowCount){
 					dojo.stopEvent(e);
 					if(this.focus.rowIndex != this.scroller.lastVisibleRow-1){
 						this.focus.move(this.scroller.lastVisibleRow-this.focus.rowIndex-1, 0);
@@ -129,6 +137,7 @@ dojo.declare("dojox.grid._Events", null, {
 						this.setScrollTop(this.scroller.findScrollTop(this.focus.rowIndex+1));
 						this.focus.move(this.scroller.lastVisibleRow-this.scroller.firstVisibleRow-1, 0);
 					}
+					this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
 				}
 				break;
 		}

@@ -16,6 +16,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		this._connects.push(dojo.connect(this.grid.domNode, "onblur", this, "doBlur"));
 		this._connects.push(dojo.connect(this.grid.lastFocusNode, "onfocus", this, "doLastNodeFocus"));
 		this._connects.push(dojo.connect(this.grid.lastFocusNode, "onblur", this, "doLastNodeBlur"));
+		this._connects.push(dojo.connect(this.grid,"_onFetchComplete", this, "_delayedCellFocus"));
+		this._connects.push(dojo.connect(this.grid,"postrender", this, "_delayedHeaderFocus"));
 	},
 	destroy: function(){
 		dojo.forEach(this._connects, dojo.disconnect);
@@ -81,6 +83,28 @@ dojo.declare("dojox.grid._FocusManager", null, {
 					}
 				}catch(e){}
 			}
+		}
+	},
+	_delayedCellFocus: function(){
+		if(this.isNavHeader()){
+				return;
+		}
+		var n = this.cell && this.cell.getNode(this.rowIndex);
+		if(n){ 
+			try{
+				if(!this.grid.edit.isEditing()){
+					dojo.toggleClass(n, this.focusClass, true);
+					dojox.grid.util.fire(n, "focus");
+				}
+			} 
+			catch(e){}
+		}
+	},
+	_delayedHeaderFocus: function(){
+		if(this.isNavHeader()){
+			this.focusHeader();
+			//this._focusifyCellNode(false);
+			// may need click select??
 		}
 	},
 	_initColumnHeaders: function(){
@@ -246,12 +270,26 @@ dojo.declare("dojox.grid._FocusManager", null, {
 				this._scrollHeader(currentIdx);
 			}
 		}else{
-		// Handle grid proper.
-			var rc = this.grid.rowCount-1,
-				cc = this.grid.layout.cellCount-1,
+			// Handle grid proper.
+			var sc = this.grid.scroller,
 				r = this.rowIndex,
+				rc = this.grid.rowCount-1,
+				row = Math.min(rc, Math.max(0, r+inRowDelta));
+			if(inRowDelta){
+				if(inRowDelta>0){
+					if(row > sc.getLastPageRow(sc.page)){
+						//need to load additional data, let scroller do that
+						this.grid.setScrollTop(this.grid.scrollTop+sc.findScrollTop(row)-sc.findScrollTop(r));
+					}
+				}else if(inRowDelta<0){
+					if(row <= sc.getPageRow(sc.page)){
+						//need to load additional data, let scroller do that
+						this.grid.setScrollTop(this.grid.scrollTop-sc.findScrollTop(r)-sc.findScrollTop(row));
+					}
+				}
+			}
+			var cc = this.grid.layout.cellCount-1,
 				i = this.cell.index,
-				row = Math.min(rc, Math.max(0, r+inRowDelta)),
 				col = Math.min(cc, Math.max(0, i+inColDelta));
 			this.setFocusIndex(row, col);
 			if(inRowDelta){
@@ -271,16 +309,27 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		}
 	},
 	nextKey: function(e) {
+		var isEmpty = this.grid.rowCount == 0;
 		if(e.target === this.grid.domNode){
 			this.focusHeader();
 			dojo.stopEvent(e);
 		}else if(this.isNavHeader()){
-			// if tabbing from col header, then go to grid proper.
+			// if tabbing from col header, then go to grid proper. If grid is empty this.grid.rowCount == 0
 			this._colHeadNode = null;
-			if(this.isNoFocusCell()){
+			if(this.isNoFocusCell() && !isEmpty){
 				this.setFocusIndex(0, 0);
-			}else if(this.cell){
+				if (!this.grid.selection.isSelected(0)){
+					this.grid.selection.clickSelect(0, false, false);
+				}
+			}else if(this.cell && !isEmpty){
+				if(this.focusView && !this.focusView.rowNodes[this.rowIndex]){
+				// if rowNode for current index is undefined (likely as a result of a sort and because of #7304) 
+				// scroll to that row
+					this.grid.scrollToRow(this.rowIndex);
+				}
 				this.focusGrid();
+			}else{
+				this.tabOut(this.grid.lastFocusNode);
 			}
 		}else if(this.grid.edit.isEditing()){
 			dojo.stopEvent(e);
@@ -308,7 +357,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			this._colHeadNode = headerNodes[this.cell.index];
 		}
 		if(this._colHeadNode){
-			this._colHeadNode.focus();
+			dojox.grid.util.fire(this._colHeadNode, "focus");
 			this._focusifyCellNode(false);
 		}
 	},
@@ -334,8 +383,13 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	doLastNodeFocus: function(e){
 		if (this.tabbingOut){
 			this._focusifyCellNode(false);
-		}else{
+		}else if(this.grid.rowCount >0){
+			if (this.isNoFocusCell()){
+				this.setFocusIndex(0,0);
+			}
 			this._focusifyCellNode(true);
+		}else {
+			this.focusHeader();
 		}
 		this.tabbingOut = false;
 		dojo.stopEvent(e);	 // FF2
