@@ -68,7 +68,10 @@
 					var w = dojo.marginBox(progressNode).w - 12; //slider width * 2
 					var p = time/dur;
 					var x = p*w
-					dojo.style(sliderNode, "left", x+"px");
+					if(x){
+						dojo.style(sliderNode, "left", x+"px");	
+					}
+					
 				}
 			};
 			
@@ -101,7 +104,6 @@
 			dojo.connect(w, "onLoad", function(){
 				volDim = dojo.coords(volumeNode);
 				var v = w.volume(); // returns 0 - 1
-				console.log("init vol:", volDim.w, v, volDim.w*v);
 				dojo.style(volsliderNode, "left", volDim.w*v+"px");
 			});
 			
@@ -125,6 +127,7 @@
 				endVolDrag();
 				endSeek();
 			});
+			console.log("init'd")
 		});
 		
 		

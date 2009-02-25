@@ -71,7 +71,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		this._sub("mediaStart",  "onStart");
 		this._sub("mediaEnd",    "onEnd");
 	
-		this._flashObject = new dojox.embed.Flash(args, this.domNode, "testLoaded");
+		this._flashObject = new dojox.embed.Flash(args, this.domNode);
 		this._flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.flashMedia = mov;
 			this.isPlaying = this.autoPlay;
