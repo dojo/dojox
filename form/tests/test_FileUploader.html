@@ -136,14 +136,14 @@
 				});
 			});
 			dojo.connect(f0, "onProgress", function(dataArray){
-				console.warn("test.onProgress", dataArray);
+				console.info("test.onProgress", dataArray);
 				dojo.forEach(dataArray, function(d){
 					dojo.byId("fileToUpload").value += "onProgress: ("+d.percent+"%) "+d.name+" \n";
 					
 				});
 			});
 			dojo.connect(f0, "onComplete", function(dataArray){
-				console.warn("test.onComplete", dataArray);
+				console.info("test.onComplete", dataArray);
 				totalFiles = dataArray.length;
 				filesLoaded = 0;
 				dojo.forEach(dataArray, function(d){
