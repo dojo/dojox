@@ -315,7 +315,10 @@ dojo.require("dojox.encoding.crypto._base");
 		// 		is HIGHLY PROBABLE that it will NOT be usable by other AES implementations.
 		// 		2) All encoding is done in hex format; other encoding formats (such
 		// 		as base 64) are not supported.
-		// 		
+		// 		3) The bit depth of the key is hardcoded at 256, despite the ability
+		// 		of the code to handle all three recommended bit depths.
+		// 		4) The passed key will be padded (as opposed to enforcing a strict
+		// 		length) with null bytes.
 		this.encrypt = function(/* String */plaintext, /* String */key){
 			//	summary:
 			//		Encrypt the passed plaintext using the key, with a 
