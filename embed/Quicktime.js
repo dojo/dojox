@@ -136,7 +136,7 @@ dojo.provide("dojox.embed.Quicktime");
 		//
 		//	example:
 		//		Embed a QuickTime movie in a document using the new operator, and get a reference to it.
-		//	|	var movie = new dojox.embed.QuickTime({
+		//	|	var movie = new dojox.embed.Quicktime({
 		//	|		path: "path/to/my/movie.mov",
 		//	|		width: 400,
 		//	|		height: 300
@@ -144,7 +144,7 @@ dojo.provide("dojox.embed.Quicktime");
 		//
 		//	example:
 		//		Embed a movie in a document without using the new operator.
-		//	|	var movie = dojox.embed.QuickTime({
+		//	|	var movie = dojox.embed.Quicktime({
 		//	|		path: "path/to/my/movie.mov",
 		//	|		width: 400,
 		//	|		height: 300
