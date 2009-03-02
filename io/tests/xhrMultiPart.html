@@ -61,15 +61,15 @@
 	<p>
 		<button onclick="testXhrMulti()">Test xhrMultiPart</button>
 	</p>
-	<p>
+	<div>
 		<form id="formTest" onsubmit="return testXhrMultiForm()">
 			<input type="hidden" name="foo" value="FOObarbaz" />
 			<input type="hidden" name="bar" value="fooBARbaz" />
 			<input type="hidden" name="baz" value="foobarBAZ" />
 			<input type="submit" value="Test xhrMultiPart with form values" />
 		</form>
-	</p>
-	<p>
+	</div>
+	<div>
 		<form id="formTestWithFile" onsubmit="return testXhrMultiFormWithFile()">
 			<input type="hidden" name="foo" value="FOObarbaz" />
 			<input type="hidden" name="bar" value="fooBARbaz" />
@@ -77,6 +77,6 @@
 			<input type="file" name="fileTest" value="" />
 			<input type="submit" value="Test xhrMultiPart (prevent file upload)" />
 		</form>
-	</p>
+	</div>
 </body>
 </html>
