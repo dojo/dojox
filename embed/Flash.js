@@ -319,7 +319,7 @@ dojo.provide("dojox.embed.Flash");
 				this.domNode = node;
 
 				setTimeout(dojo.hitch(this, function(){
-					this.movie = dojox.embed.Flash.byId(this.id);
+					this.movie = this.byId(this.id, kwArgs.doc);
 					this.onReady(this.movie);
 					
 					this._poller = setInterval(dojo.hitch(this, function(){
@@ -339,6 +339,7 @@ dojo.provide("dojox.embed.Flash");
 						}else if(p==0 && this._pollCount++ > this._pollMax){
 							// after several attempts, we're not past zero.
 							// FIXME: What if we get stuck on 33% or something?
+							clearInterval(this._poller);
 							throw new Error("Building SWF failed.");
 						}
 					}), this.pollTime);
@@ -380,29 +381,39 @@ dojo.provide("dojox.embed.Flash");
 			} else {
 				this._destroy();
 			}
-		}
-	});
-	dojo.mixin(dojox.embed.Flash, {
-		// 	summary:
-		//		Gets Flash movie by id.
-		//	description:
-		//		Probably includes methods for outdated
-		//		browsers, but this should catch all cases.
-		//	example:
-		//	| var movie = dojox.embed.Flash.byId("myId");
-		//
-		byId: function (movieName){
-			if(document.embeds[movieName])
-				return document.embeds[movieName];
-			if(window.document[movieName])
-				return window.document[movieName];
-			if(window[movieName])
+		},
+		byId: function (movieName, doc){
+			// 	summary:
+			//		Gets Flash movie by id.
+			//	description:
+			//		Probably includes methods for outdated
+			//		browsers, but this should catch all cases.
+			// arguments:
+			//		movieName: String
+			//			The name of the SWF
+			//		doc: Object
+			//			The document, if not current window
+			//			(not fully supported)
+			//	example:
+			//	| var movie = dojox.embed.Flash.byId("myId");
+			//
+			doc = doc || document;
+			if(doc.embeds[movieName]){
+				return doc.embeds[movieName];
+			}
+			if(doc[movieName]){
+				return doc[movieName];
+			}
+			if(window[movieName]){
 				return window[movieName];
-			if(document[movieName])
+			}
+			if(document[movieName]){
 				return document[movieName];
+			}
 			return null;
 		}
 	});
+	
 	//	expose information through the constructor function itself.
 	dojo.mixin(dojox.embed.Flash, {
 		//	summary:
