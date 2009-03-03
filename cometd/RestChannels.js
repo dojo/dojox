@@ -163,7 +163,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			  	
 	  			 
 				if(window.attachEvent){// IE needs a little help with cleanup
-					attachEvent("onunload",function(){
+					window.attachEvent("onunload",function(){
 						self.connected= false;
 						if(xhr){
 							xhr.abort();
