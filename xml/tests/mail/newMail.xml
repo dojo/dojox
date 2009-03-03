@@ -1,3 +1,4 @@
+<xml>
 <dijit:Editor dojoType="dijit.Editor" style="overflow:auto"
 	extraPlugins="[{name:'dijit._editor.plugins.LinkDialog'}]"
 >
@@ -12,3 +13,4 @@
 <br/><br/> give it a whirl.
 </i>
 </dijit:Editor>
+</xml>
