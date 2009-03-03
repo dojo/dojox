@@ -950,9 +950,7 @@ dojo.declare("dojox.data.jsonPathStore",
 
 				}
 				this.onDelete(item);		
-				delete item;
-				this.index[id] = null;
-				delete this.index[id]
+				delete this.index[item[this.idAttribute]];
 			}
 		},
 
