@@ -161,7 +161,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		//if (nDay > this.getDaysInHebrewMonth(_month, this._year)){
 		//	nDay = this.getDaysInHebrewMonth(this._month, this._year);
 		//}
-			return nDay;		
+		return nDay;		
 	};
 	
 	dojox.date.HebrewNumerals.getMonthHebrewLetters =  function(monthNum, /* bool hebrew numbers ?*/ isNum, /*Number ?*/ year){
@@ -185,7 +185,7 @@ dojo.experimental("dojox.date.HebrewNumerals");
 		// |		
 			
 		//month number from 0 to 12
-		var monnum = dojox.date.HebrewNumerals.parseDayHebrewLetters(monthStr) - 1; 
+		var monnum = dojox.date.HebrewNumerals.parseDayHebrewLetters(monthStr) - 1;
 
 		if(monnum == -1){
 			console.warn("The month name is incorrect , set 0"); // TODO: perhaps throw instead?
