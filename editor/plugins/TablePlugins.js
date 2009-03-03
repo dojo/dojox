@@ -347,6 +347,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 			var o = this.getTableInfo();
 			//console.log("TAB ", o.tdIndex, o);
 			// modifying the o.tdIndex in the tableData directly, because we may save it
+			// FIXME: tabTo is a global
 			o.tdIndex = (this.shiftKeyDown) ? o.tdIndex-1 : tabTo = o.tdIndex+1;
 			if(o.tdIndex>=0 && o.tdIndex<o.tds.length){
 				
@@ -472,7 +473,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			//
 			var node = dojo.isFF ? this.editor.editNode : this.editorDomNode;
 			
-			pMenu = new dijit.Menu({targetNodeIds:[node], id:"progMenu", contextMenuForWindow:dojo.isIE});
+			var pMenu = new dijit.Menu({targetNodeIds:[node], id:"progMenu", contextMenuForWindow:dojo.isIE});
 			var _M = dijit.MenuItem;
 			var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
 			pMenu.addChild(new _M({label: messages.selectTableLabel, onClick: dojo.hitch(this, "selectTable")}));
