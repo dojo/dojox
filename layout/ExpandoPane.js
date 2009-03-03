@@ -6,7 +6,7 @@ dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 
 dojo.declare("dojox.layout.ExpandoPane",
-	[dijit.layout.ContentPane, dijit._Templated],
+	[dijit.layout.ContentPane, dijit._Templated, dijit._Contained],
 	{
 	// summary: An experimental collapsing-pane for dijit.layout.BorderContainer
 	//
