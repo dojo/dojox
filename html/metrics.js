@@ -107,12 +107,12 @@ dojo.provide("dojox.html.metrics");
 		if(dojo.isIE){
 			f.onreadystatechange = function(){
 				if(f.contentWindow.document.readyState == "complete"){
-					f.onresize = Function('window.parent.'+dojox._scopeName+'.html.metrics._fontresize()');
+                    f.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
 				}
 			};
 		}else{
 			f.onload = function(){
-				f.contentWindow.onresize = Function('window.parent.'+dojox._scopeName+'.html.metrics._fontresize()');
+                f.contentWindow.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
 			};
 		}
 		dhm.initOnFontResize = function(){};
