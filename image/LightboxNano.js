@@ -4,42 +4,12 @@ dojo.require("dojo.fx");
 (function(d){
 
 var getViewport = function(){
-	//	summary: Returns the dimensions and scroll position of the viewable area of a browser window
-
-	var _window = d.global,
-		_document = d.doc,
-		w = 0,
-		h = 0,
-		de = _document.documentElement,
-		dew = de.clientWidth,
-		deh = de.clientHeight,
-		scroll = d._docScroll();
-
-	if(d.isMozilla){
-		var minw = dbw, minh = dbh, maxw = dew, maxh = deh, dbw = _document.body.clientWidth, dbh = _document.body.clientHeight;
-		if(dbw > dew){
-			minw = dew;
-			maxw = dbw;
-		}
-		if(dbh > deh){
-			minh = deh;
-			maxh = dbh;
-		}
-		w = (maxw > _window.innerWidth) ? minw : maxw;
-		h = (maxh > _window.innerHeight) ? minh : maxh;
-	}else if(_window.innerWidth){
-		w = _window.innerWidth;
-		h = _window.innerHeight;
-	}else if(d.isIE && de && deh){
-		w = dew;
-		h = deh;
-	}else if(d.body().clientWidth){
-		w = d.body().clientWidth;
-		h = d.body().clientHeight;
-	}
-
-	return { w: w, h: h, l: scroll.x, t: scroll.y }; // object
-};
+		//	summary: Returns the dimensions and scroll position of the viewable area of a browser window
+		var scrollRoot = (d.doc.compatMode == "BackCompat") ? d.body() : d.doc.documentElement,
+			scroll = dojo._docScroll();
+		return { w: scrollRoot.clientWidth, h: scrollRoot.clientHeight, l: scroll.x, t: scroll.y };
+	},
+	abs = "absolute";
 
 d.declare("dojox.image.LightboxNano", null, {
 	//	summary:
@@ -72,42 +42,6 @@ d.declare("dojox.image.LightboxNano", null, {
 	//		The delay in milliseconds after the LightboxNano is created before preloading the larger image.
 	preloadDelay: 5000,
 
-	//	_node: DomNode
-	//		A reference the initial DOM node.
-	_node: null,
-
-	//	_start: Object
-	//		Contains the top, left, width, and height dimensions of the original image.
-	_start: null,
-
-	//	_end: Object
-	//		Contains the top, left, width, and height dimensions of the lightbox image.
-	_end: null,
-
-	//	_img: DomNode
-	//		A reference the lightbox image DOM node.
-	_img: null,
-
-	//	_bg: DomNode
-	//		A reference to the background DOM node.
-	_bg: null,
-
-	//	_onClickEvt: Event handle
-	//		An event handle for the onclick event attached to the initial DOM node.
-	_onClickEvt: null,
-
-	//	_connects: Array
-	//		An array of events that exist during the lifetime of the lightbox.
-	_connects: null,
-
-	//	_loading: boolean
-	//		A flag that indicates that the large image is being loaded by the browser.
-	_loading: false,
-
-	//	_loadingNode: DomNode
-	//		A reference to the animated loading DOM node.
-	_loadingNode: null,
-
 	constructor: function(p, n){
 		// summary: Initializes the DOM node and connect onload event
 		var _this = this;
@@ -116,11 +50,8 @@ d.declare("dojox.image.LightboxNano", null, {
 		n = dojo.byId(n);
 
 		if(!/a/i.test(n.tagName)){
-			var a = d.doc.createElement("a");
-			a.href = _this.href;
-			a.className = n.className;
+			var a = d.create("a", { href: _this.href, "class": n.className }, n, "after");
 			n.className = "";
-			d.place(a, n, "after");
 			a.appendChild(n);
 			n = a;
 		}
@@ -129,7 +60,7 @@ d.declare("dojox.image.LightboxNano", null, {
 			display: "block",
 			position: "relative"
 		});
-		d.place(_this._createDiv("dojoxEnlarge"), n);
+		_this._createDiv("dojoxEnlarge", n);
 
 		_this._node = n;
 		d.setSelectable(n, false);
@@ -145,19 +76,13 @@ d.declare("dojox.image.LightboxNano", null, {
 		// summary: Destroys the LightboxNano and it's DOM node
 		var a = this._connects || [];
 		a.push(this._onClickEvt);
-		d.forEach(a, function(e){ d.disconnect(e); });
+		d.forEach(a, d.disconnect);
 		d.destroy(this._node);
 	},
 
-	_createDiv: function(/*String*/cssClass, /*boolean*/display){
+	_createDiv: function(/*String*/cssClass, /*DomNode*/refNode, /*boolean*/display){
 		// summary: Creates a div for the enlarge icon and loading indicator layers
-		var e = d.doc.createElement("div");
-		e.className = cssClass;
-		d.style(e, {
-			position: "absolute",
-			display: display ? "" : "none"
-		});
-		return e; // DomNode
+		return d.create("div", { "class": cssClass, style: { position: abs, display: display ? "" : "none" } }, refNode); // DomNode
 	},
 	
 	_load: function(/*Event*/e){
@@ -174,12 +99,20 @@ d.declare("dojox.image.LightboxNano", null, {
 				a = d._abs(n, true),
 				c = d.contentBox(n),
 				b = d._getBorderExtents(n),
-				i = d.doc.createElement("img"),
+				i = _this._img = d.create("img", {
+					style: {
+						visibility: "hidden",
+						cursor: "pointer",
+						position: abs,
+						top: 0,
+						left: 0,
+						zIndex: 9999999
+					}
+				}, d.body()),
 				ln = _this._loadingNode;
 
 			if(ln == null){
-				_this._loadingNode = ln = _this._createDiv("dojoxLoading", true)
-				d.place(ln, _this._node);
+				_this._loadingNode = ln = _this._createDiv("dojoxLoading", _this._node, true)
 				var l = d.marginBox(ln);
 				d.style(ln, {
 					left: parseInt((c.w - l.w) / 2) + "px",
@@ -191,18 +124,7 @@ d.declare("dojox.image.LightboxNano", null, {
 			c.y = a.y - 10 + b.t;
 			_this._start = c;
 
-			_this._img = i;
 			_this._connects = [d.connect(i, "onload", _this, "_show")];
-
-			d.style(i, {
-				visibility: "hidden",
-				cursor: "pointer",
-				position: "absolute",
-				top: 0,
-				left: 0,
-				zIndex: 9999999
-			});
-			d.body().appendChild(i);
 
 			i.src = _this.href;
 		}
@@ -225,7 +147,14 @@ d.declare("dojox.image.LightboxNano", null, {
 			vpw = parseInt((vp.w - 20) * 0.9),
 			vph = parseInt((vp.h - 20) * 0.9),
 			dd = d.doc,
-			bg = dd.createElement("div"),
+			bg = _this._bg = d.create("div", {
+				style: {
+					backgroundColor: "#000",
+					opacity: 0.0,
+					position: abs,
+					zIndex: 9999998
+				}
+			}, d.body()),
 			ln = _this._loadingNode;
 
 		if(_this._loadingNode){
@@ -261,14 +190,6 @@ d.declare("dojox.image.LightboxNano", null, {
 			h: h
 		};
 
-		d.style(bg, {
-			backgroundColor: "#000",
-			opacity: 0.0,
-			position: "absolute",
-			zIndex: 9999998
-		});
-		d.body().appendChild(bg);
-		_this._bg = bg;
 		_this._sizeBg();
 
 		d.fx.combine([
@@ -307,7 +228,7 @@ d.declare("dojox.image.LightboxNano", null, {
 	_hide: function(){
 		// summary: Closes the lightbox
 		var _this = this;
-		d.forEach(_this._connects, function(e){ d.disconnect(e); });
+		d.forEach(_this._connects, d.disconnect);
 		_this._connects = [];
 		d.fx.combine([
 			_this._anim(_this._img, _this._coords(_this._end, _this._start), "_reset"),
