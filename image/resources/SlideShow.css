@@ -99,7 +99,7 @@
 	background-image: url("images/buttons.png");
 	cursor: pointer;
 }
-.dj_ie6 .slideShowCtrl span {
+.dj_ie .slideShowCtrl span {
 	background-image: url("images/buttons.gif");
 }
 
