@@ -269,7 +269,7 @@
 }
 
 .dijit_a11y .dojoxGridRowSelected {
-	border-bottom: 1px dashed black;
+	border: 1px solid black !important;
 }
 
 /* Drag and Drop */
