@@ -283,6 +283,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		createPageNode: function(){
 			var p = document.createElement('div');
+			dojo.attr(p,"role","presentation");
 			p.style.position = 'absolute';
 			//p.style.width = '100%';
 			p.style[dojo._isBodyLtr() ? "left" : "right"] = '0';

@@ -305,7 +305,7 @@ dojo.require("dojo.dnd.Manager");
 							inCell.grid.sortInfo > 0 ? 'dojoxGridSortUp' : 'dojoxGridSortDown',
 							'"><div class="dojoxGridArrowButtonChar">',
 							inCell.grid.sortInfo > 0 ? '&#9650;' : '&#9660;',
-							'</div><div class="dojoxGridArrowButtonNode"></div>' ]);
+							'</div><div class="dojoxGridArrowButtonNode" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"></div>' ]);
 			}
 			ret = ret.concat([n, '</div>']);
 			return ret.join('');
@@ -439,6 +439,7 @@ dojo.require("dojo.dnd.Manager");
 		createRowNode: function(inRowIndex){
 			var node = document.createElement("div");
 			node.className = this.classTag + 'Row';
+			dojo.attr(node,"role","row");
 			node[dojox.grid.util.gridViewTag] = this.id;
 			node[dojox.grid.util.rowIndexTag] = inRowIndex;
 			this.rowNodes[inRowIndex] = node;
