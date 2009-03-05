@@ -45,7 +45,7 @@ dojo.require("dojo.dnd.Moveable");
 	},{
 		view: null,
 		// boilerplate HTML
-		_table: '<table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
+		_table: '<table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"',
 
 		// Returns the table variable as an array - and with the view width, if specified
 		getTableArray: function(){
@@ -62,7 +62,8 @@ dojo.require("dojo.dnd.Moveable");
 			var result = [], html;
 			var waiPrefix = dojo.isFF<3 ? "wairole:" : "";
 			if(isHeader){
-				html = ['<th tabIndex="-1" role="', waiPrefix, 'columnheader"'];
+				var sortInfo = inCell.index != inCell.grid.getSortIndex() ? "" : inCell.grid.sortInfo > 0 ? 'aria-sort="ascending"' : 'aria-sort="descending"';
+				html = ['<th tabIndex="-1" role="', waiPrefix, 'columnheader"', sortInfo];
 			}else{
 				html = ['<td tabIndex="-1" role="', waiPrefix, 'gridcell"'];
 			}
