@@ -101,12 +101,23 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	onStartup: function(/*Object*/ info){
 		// summary: Called when the stack container is started up
 		var selPane = info.selected;
-		dojo.forEach(info.children, function(c){
-			this.onAddChild(c);
-			if(this._savedValue && this._optionValFromPane(c.id)){
+		this.addOption(dojo.filter(dojo.map(info.children, function(c){
+			var v = this._optionValFromPane(c.id);
+			var toAdd = null;
+			if(!this._panes[c.id]){
+				this._panes[c.id] = c;
+				toAdd = {value: v, label: c.title};
+			}
+			if(!c.onShow || !c.onHide || c._shown == undefined){
+				c.onShow = dojo.hitch(this, "_togglePane", c, true);
+				c.onHide = dojo.hitch(this, "_togglePane", c, false);
+				c.onHide();
+			}
+			if(this._savedValue && v){
 				selPane = c;
 			}
-		}, this);
+			return toAdd;
+		}, this), function(i){ return i;}));
 		delete this._savedValue;
 		this.onSelectChild(selPane);
 		if(!selPane._shown){
@@ -144,7 +155,8 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	onChange: function(/*String*/ val){
 		// summary: Called when form select widget's value has changed
 		var pane = this._panes[this._paneIdFromOption(val)];
-		if (pane)
+		if (pane){
 			dijit.byId(this.stackId).selectChild(pane);
+		}
 	}
 });
