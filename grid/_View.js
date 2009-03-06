@@ -356,8 +356,9 @@ dojo.require("dojo.dnd.Manager");
 			// Fix any percentage widths to be pixel values
 			var hasPct = false;
 			var cellNodes = dojo.query("th", this.headerContentNode);
-			var fixedWidths = dojo.map(cellNodes, function(c){
+			var fixedWidths = dojo.map(cellNodes, function(c, vIdx){
 				var w = c.style.width;
+				dojo.attr(c, "vIdx", vIdx);
 				if(w && w.slice(-1) == "%"){
 					hasPct = true;
 					return dojo.contentBox(c).w;
@@ -369,9 +370,13 @@ dojo.require("dojo.dnd.Manager");
 			if(hasPct){
 				dojo.forEach(this.grid.layout.cells, function(cell, idx){
 					if(cell.view == this){
-						var vIdx = cell.layoutIndex;
-						this.setColWidth(idx, fixedWidths[vIdx]);
-						cellNodes[vIdx].style.width = cell.unitWidth;
+						var cellNode = cell.view.getHeaderCellNode(cell.index);
+						if(cellNode && dojo.hasAttr(cellNode, "vIdx")){
+							var vIdx = window.parseInt(dojo.attr(cellNode, "vIdx"));
+							this.setColWidth(idx, fixedWidths[vIdx]);
+							cellNodes[vIdx].style.width = cell.unitWidth;
+							dojo.removeAttr(cellNode, "vIdx");
+						}
 					}
 				}, this);
 				return true;
