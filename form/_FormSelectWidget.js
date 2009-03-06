@@ -2,6 +2,24 @@ dojo.provide("dojox.form._FormSelectWidget");
 
 dojo.require("dijit.form._FormWidget");
 
+/*=====
+dojox.form.__SelectOption = function(){
+	//	value: String
+	//		The value of the option.  Setting to empty (or missing) will
+	//		place a separator at that location
+	//	label: String
+	//		The label for our option.  It can contain html tags.
+	//  selected: Boolean
+	//		Whether or not we are a selected option
+	//	disabled: Boolean
+	//		Whether or not this specific option is disabled
+	this.value = value;
+	this.label = label;
+	this.selected = selected;
+	this.disabled = disabled;
+}
+=====*/
+
 dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 	// multiple: Boolean
 	//		Matches the select's "multiple=" value
@@ -10,24 +28,6 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 	// _multiValue: Boolean
 	//		Whether or not we are multi-valued (for form)
 	_multiValue: false,
-
-	/*=====
-	dojox.form.__SelectOption = function(){
-		//	value: String
-		//		The value of the option.  Setting to empty (or missing) will
-		//		place a separator at that location
-		//	label: String
-		//		The label for our option.  It can contain html tags.
-		//  selected: Boolean
-		//		Whether or not we are a selected option
-		//	disabled: Boolean
-		//		Whether or not this specific option is disabled
-		this.value = value;
-		this.label = label;
-		this.selected = selected;
-		this.disabled = disabled;
-	}
-	=====*/
 
 	// options: dojox.form.__SelectOption[]
 	//		The set of options for our select item.  Roughly corresponds to

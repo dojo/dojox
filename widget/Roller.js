@@ -58,7 +58,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 /*=====
 	// items: Array
 	//		If populated prior to instantiation, is used as the Items over the children
-	items: []
+	items: [],
 =====*/	
 
 	// _idx: Integer
