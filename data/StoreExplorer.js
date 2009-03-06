@@ -17,7 +17,8 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 			region:'top'			
 		}).placeAt(this);
 		function addButton(name, action){
-			var button = new dijit.form.Button({label: name}).placeAt(contentPane);
+			var button = new dijit.form.Button({label: name}); 
+			contentPane.containerNode.appendChild(button.domNode);
 			button.onClick = action;
 			return button;
 		}
