@@ -44,10 +44,16 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		return (this.cell == inCell) && (this.rowIndex == inRowIndex);
 	},
 	isLastFocusCell: function(){
-		return (this.rowIndex == this.grid.rowCount-1) && (this.cell.index == this.grid.layout.cellCount-1);
+		if(this.cell){
+			return (this.rowIndex == this.grid.rowCount-1) && (this.cell.index == this.grid.layout.cellCount-1);
+		}
+		return false;
 	},
 	isFirstFocusCell: function(){
-		return (this.rowIndex == 0) && (this.cell.index == 0);
+		if(this.cell){
+			return (this.rowIndex == 0) && (this.cell.index == 0);
+		}
+		return false;
 	},
 	isNoFocusCell: function(){
 		return (this.rowIndex < 0) || !this.cell;
@@ -226,30 +232,34 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	next: function(){
 		// summary:
 		//	focus next grid cell
-		var row=this.rowIndex, col=this.cell.index+1, cc=this.grid.layout.cellCount-1, rc=this.grid.rowCount-1;
-		if(col > cc){
-			col = 0;
-			row++;
+		if(this.cell){
+			var row=this.rowIndex, col=this.cell.index+1, cc=this.grid.layout.cellCount-1, rc=this.grid.rowCount-1;
+			if(col > cc){
+				col = 0;
+				row++;
+			}
+			if(row > rc){
+				col = cc;
+				row = rc;
+			}
+			this.setFocusIndex(row, col);
 		}
-		if(row > rc){
-			col = cc;
-			row = rc;
-		}
-		this.setFocusIndex(row, col);
 	},
 	previous: function(){
 		// summary:
 		//	focus previous grid cell
-		var row=(this.rowIndex || 0), col=(this.cell.index || 0) - 1;
-		if(col < 0){
-			col = this.grid.layout.cellCount-1;
-			row--;
+		if(this.cell){
+			var row=(this.rowIndex || 0), col=(this.cell.index || 0) - 1;
+			if(col < 0){
+				col = this.grid.layout.cellCount-1;
+				row--;
+			}
+			if(row < 0){
+				row = 0;
+				col = 0;
+			}
+			this.setFocusIndex(row, col);
 		}
-		if(row < 0){
-			row = 0;
-			col = 0;
-		}
-		this.setFocusIndex(row, col);
 	},
 	move: function(inRowDelta, inColDelta) {
 		// summary:
@@ -270,30 +280,32 @@ dojo.declare("dojox.grid._FocusManager", null, {
 				this._scrollHeader(currentIdx);
 			}
 		}else{
-			// Handle grid proper.
-			var sc = this.grid.scroller,
-				r = this.rowIndex,
-				rc = this.grid.rowCount-1,
-				row = Math.min(rc, Math.max(0, r+inRowDelta));
-			if(inRowDelta){
-				if(inRowDelta>0){
-					if(row > sc.getLastPageRow(sc.page)){
-						//need to load additional data, let scroller do that
-						this.grid.setScrollTop(this.grid.scrollTop+sc.findScrollTop(row)-sc.findScrollTop(r));
-					}
-				}else if(inRowDelta<0){
-					if(row <= sc.getPageRow(sc.page)){
-						//need to load additional data, let scroller do that
-						this.grid.setScrollTop(this.grid.scrollTop-sc.findScrollTop(r)-sc.findScrollTop(row));
+			if(this.cell){
+				// Handle grid proper.
+				var sc = this.grid.scroller,
+					r = this.rowIndex,
+					rc = this.grid.rowCount-1,
+					row = Math.min(rc, Math.max(0, r+inRowDelta));
+				if(inRowDelta){
+					if(inRowDelta>0){
+						if(row > sc.getLastPageRow(sc.page)){
+							//need to load additional data, let scroller do that
+							this.grid.setScrollTop(this.grid.scrollTop+sc.findScrollTop(row)-sc.findScrollTop(r));
+						}
+					}else if(inRowDelta<0){
+						if(row <= sc.getPageRow(sc.page)){
+							//need to load additional data, let scroller do that
+							this.grid.setScrollTop(this.grid.scrollTop-sc.findScrollTop(r)-sc.findScrollTop(row));
+						}
 					}
 				}
-			}
-			var cc = this.grid.layout.cellCount-1,
-				i = this.cell.index,
-				col = Math.min(cc, Math.max(0, i+inColDelta));
-			this.setFocusIndex(row, col);
-			if(inRowDelta){
-				this.grid.updateRow(r);
+				var cc = this.grid.layout.cellCount-1,
+					i = this.cell.index,
+					col = Math.min(cc, Math.max(0, i+inColDelta));
+				this.setFocusIndex(row, col);
+				if(inRowDelta){
+					this.grid.updateRow(r);
+				}
 			}
 		}
 	},

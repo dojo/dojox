@@ -123,6 +123,11 @@ dojo.provide("dojox.grid._Scroller");
 			this.rowCount = inRowCount;
 			// update page count, adjust document height
 			var oldPageCount = this.pageCount;
+			if(oldPageCount === 0){
+				//We want to have at least 1px in height to keep scroller.  Otherwise with an
+				//empty grid you can't scroll to see the header.
+				this.height = 1;
+			}
 			this.pageCount = this._getPageCount(this.rowCount, this.rowsPerPage);
 			if(this.pageCount < oldPageCount){
 				for(var i=oldPageCount-1; i>=this.pageCount; i--){
@@ -239,7 +244,9 @@ dojo.provide("dojox.grid._Scroller");
 				this.windowHeight = this.scrollboxNode.clientHeight;
 			}
 			for(var i=0; i<this.colCount; i++){
-				dojox.grid.util.setStyleHeightPx(this.contentNodes[i], this.height);
+				//We want to have 1px in height min to keep scroller.  Otherwise can't scroll
+				//and see header in empty grid.
+				dojox.grid.util.setStyleHeightPx(this.contentNodes[i], Math.max(1,this.height));
 			}
 			
 			// Calculate the average row height and update the defaults (row and page).
