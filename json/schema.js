@@ -109,7 +109,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 				}
 				if(value instanceof Array){
 					if(schema.items){
-						for(i=0,l=value.length; i<l; i++){
+						for(var i=0,l=value.length; i<l; i++){
 							errors.concat(checkProp(value[i],schema.items,path,i));
 						}							
 					}
