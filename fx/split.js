@@ -58,7 +58,7 @@ dojo.mixin(dojox.fx,{
 			for(var x = 0; x < args.columns; x++){
 				// Create the piece
 				piece = dojo.clone(pieceHelper);
-				pieceContents = dojo.clone(node);
+				var pieceContents = dojo.clone(node);
 
 				// IE hack
 				pieceContents.style.filter = "";
