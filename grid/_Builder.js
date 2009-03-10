@@ -94,11 +94,7 @@ dojo.require("dojo.dnd.Moveable");
 			// SLOT: result[5] => content
 			result.push('');
 			// result[6] => td closes
-			if(isHeader){
-				result.push('</th>');
-			}else{
-				result.push('</td>');
-			}
+			result.push(isHeader?'</th>':'</td>');
 			return result; // Array
 		},
 
