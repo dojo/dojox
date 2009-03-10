@@ -3,7 +3,6 @@ dojo.provide("dojox.data.AppStore");
 dojo.require("dojox.atom.io.Connection");
 dojo.require("dojo.data.util.simpleFetch");
 dojo.require("dojo.data.util.filter");
-dojo.requireLocalization("dojox.data", "AppStore");
 
 dojo.experimental("dojox.data.AppStore");
 
@@ -42,8 +41,7 @@ dojo.declare("dojox.data.AppStore",
 			this.urlPreventCache = args.urlPreventCache;
 		}
 		if(!this.url){
-			var _nlsResources = dojo.i18n.getLocalization("dojox.data", "AppStore");
-			throw new Error(_nlsResources.missingUrl);
+			throw new Error("A URL is required to instantiate an APP Store object");
 		}
 	},
 	
@@ -107,8 +105,10 @@ dojo.declare("dojox.data.AppStore",
 		//	item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){ 
-			var _nlsResources = dojo.i18n.getLocalization("dojox.data", "AppStore");
-			throw new Error(_nlsResources.invalidItem);
+			throw new Error("This error message is provided when a function is called in the following form: "
+				+ "getAttribute(argument, attributeName).  The argument variable represents the member "
+				+ "or owner of the object. The error is created when an item that does not belong "
+				+ "to this store is specified as an argument.");
 		}
 	},
 
@@ -123,8 +123,8 @@ dojo.declare("dojox.data.AppStore",
 		//
 		// returns: Returns a boolean indicating whether this is a valid attribute.
 		if(typeof attribute !== "string"){ 
-			var _nlsResources = dojo.i18n.getLocalization("dojox.data", "AppStore");
-			throw new Error(_nlsResources.invalidAttributeType);
+			throw new Error("The attribute argument must be a string. The error is created"
+			+ "when a different type of variable is specified such as an array or object.");
 		}
 
 		for(var key in dojox.atom.io.model._actions){
@@ -265,10 +265,7 @@ dojo.declare("dojox.data.AppStore",
 	isItem: function(/* anything */ something){
 		//	summary: 
 		//		See dojo.data.api.Read.isItem()
-		if(something && something.store && something.store === this){
-			return true; //boolean
-		}
-		return false; //boolean
+		return something && something.store && something.store === this; //boolean
 	},
 
 	isItemLoaded: function(/* anything */ something){
