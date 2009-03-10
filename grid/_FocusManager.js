@@ -349,9 +349,6 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			this._colHeadNode = this._colHeadFocusIdx= null;
 			if(this.isNoFocusCell() && !isEmpty){
 				this.setFocusIndex(0, 0);
-				if (!this.grid.selection.isSelected(0)){
-					this.grid.selection.clickSelect(0, false, false);
-				}
 			}else if(this.cell && !isEmpty){
 				if(this.focusView && !this.focusView.rowNodes[this.rowIndex]){
 				// if rowNode for current index is undefined (likely as a result of a sort and because of #7304) 
