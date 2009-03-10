@@ -25,11 +25,12 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		delete this.cell;
 	},
 	_colHeadNode: null,
+	_colHeadFocusIdx: null,
 	tabbingOut: false,
 	focusClass: "dojoxGridCellFocus",
 	focusView: null,
 	initFocusView: function(){
-		this.focusView = this.grid.views.getFirstScrollingView();
+		this.focusView = this.grid.views.getFirstScrollingView() || this.focusView;
 		this._initColumnHeaders();
 	},
 	isFocusCell: function(inCell, inRowIndex){
@@ -109,8 +110,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	_delayedHeaderFocus: function(){
 		if(this.isNavHeader()){
 			this.focusHeader();
-			//this._focusifyCellNode(false);
-			// may need click select??
+			//this may need clickSelect?
 		}
 	},
 	_initColumnHeaders: function(){
@@ -214,7 +214,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		//	grid row index
 		if(inCell && !this.isFocusCell(inCell, inRowIndex)){
 			this.tabbingOut = false;
-			this._colHeadNode = null;
+			this._colHeadNode = this._colHeadFocusIdx = null;
 			this.focusGridView();
 			this._focusifyCellNode(false);
 			this.cell = inCell;
@@ -242,6 +242,15 @@ dojo.declare("dojox.grid._FocusManager", null, {
 				col = cc;
 				row = rc;
 			}
+			if(this.grid.edit.isEditing()){ //when editing, only navigate to editable cells
+				var nextCell = this.grid.getCell(col);
+				if (!this.isLastFocusCell() && !nextCell.editable){
+					this.cell=nextCell;
+					this.rowIndex=row;
+					this.next();
+					return;
+				}
+			}
 			this.setFocusIndex(row, col);
 		}
 	},
@@ -257,6 +266,15 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			if(row < 0){
 				row = 0;
 				col = 0;
+			}
+			if(this.grid.edit.isEditing()){ //when editing, only navigate to editable cells
+				var prevCell = this.grid.getCell(col);
+				if (!this.isFirstFocusCell() && !prevCell.editable){
+					this.cell=prevCell;
+					this.rowIndex=row;
+					this.previous();
+					return;
+				}
 			}
 			this.setFocusIndex(row, col);
 		}
@@ -276,6 +294,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			currentIdx += inColDelta;
 			if((currentIdx >= 0) && (currentIdx < headers.length)){
 				this._colHeadNode = headers[currentIdx];
+				this._colHeadFocusIdx = currentIdx;
 				this._colHeadNode.focus();
 				this._scrollHeader(currentIdx);
 			}
@@ -310,12 +329,12 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		}
 	},
 	previousKey: function(e){
-		if(!this.isNavHeader()){
-			this.focusHeader();
-			dojo.stopEvent(e);
-		}else if(this.grid.edit.isEditing()){
+		if(this.grid.edit.isEditing()){
 			dojo.stopEvent(e);
 			this.previous();
+		}else if(!this.isNavHeader()){
+			this.focusHeader();
+			dojo.stopEvent(e);
 		}else{
 			this.tabOut(this.grid.domNode);
 		}
@@ -327,7 +346,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			dojo.stopEvent(e);
 		}else if(this.isNavHeader()){
 			// if tabbing from col header, then go to grid proper. If grid is empty this.grid.rowCount == 0
-			this._colHeadNode = null;
+			this._colHeadNode = this._colHeadFocusIdx= null;
 			if(this.isNoFocusCell() && !isEmpty){
 				this.setFocusIndex(0, 0);
 				if (!this.grid.selection.isSelected(0)){
@@ -363,11 +382,16 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	focusHeader: function(){
 		var headerNodes = this._findHeaderCells();
-		if(this.isNoFocusCell()){
-			this._colHeadNode = headerNodes[0];
-		}else{
-			this._colHeadNode = headerNodes[this.cell.index];
+
+		if (!this._colHeadFocusIdx) {
+			if (this.isNoFocusCell()) {
+				this._colHeadFocusIdx = 0;
+			}
+			else {
+				this._colHeadFocusIdx = this.cell.index;
+			}
 		}
+		this._colHeadNode = headerNodes[this._colHeadFocusIdx];
 		if(this._colHeadNode){
 			dojox.grid.util.fire(this._colHeadNode, "focus");
 			this._focusifyCellNode(false);

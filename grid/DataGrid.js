@@ -206,6 +206,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this._isLoaded = true;
 			if(!items || !items.length){
 				this.showMessage(this.noDataMessage);
+				this.focus.initFocusView();
 			}else{
 				this.showMessage();
 			}
