@@ -123,7 +123,7 @@ dojo.declare("dojox.data.AppStore",
 		//
 		// returns: Returns a boolean indicating whether this is a valid attribute.
 		if(typeof attribute !== "string"){ 
-			throw new Error("The attribute argument must be a string. The error is created"
+			throw new Error("The attribute argument must be a string. The error is created "
 			+ "when a different type of variable is specified such as an array or object.");
 		}
 
