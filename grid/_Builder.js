@@ -299,7 +299,7 @@ dojo.require("dojo.dnd.Moveable");
 							cell.headerClasses = 'dojoDndItem';
 						}
 						if(cell.attrs){
-							if(cell.attrs.indexOf("dndType='gridColumn'") == -1){
+							if(cell.attrs.indexOf("dndType='gridColumn_") == -1){
 								cell.attrs += " dndType='gridColumn_" + this.grid.id + "'";
 							}
 						}else{
