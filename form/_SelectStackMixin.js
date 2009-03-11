@@ -128,6 +128,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	postMixInProperties: function(){
 		this._savedValue = this.value;
 		this.inherited(arguments);
+		this.connect(this, "onChange", "_handleSelfOnChange");
 	},
 	
 	postCreate: function(){
@@ -152,7 +153,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		this.inherited("destroy", arguments);
 	},
 	
-	onChange: function(/*String*/ val){
+	_handleSelfOnChange: function(/*String*/ val){
 		// summary: Called when form select widget's value has changed
 		var pane = this._panes[this._paneIdFromOption(val)];
 		if (pane){
