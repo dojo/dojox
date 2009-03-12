@@ -59,7 +59,7 @@ tests.register("dojox.date.tests.HebrewDate",
 		{
 			name: "fromGregorian",
 			runTest: function(t){
-				var dateGregorian = new Date();
+				var dateGregorian = new Date(2009, 3, 12);
 				var dateHebrewFromGreg= dojox.date.HebrewDate.fromGregorian(dateGregorian);
 				t.is(0, dojo.date.compare( dateHebrewFromGreg.toGregorian(), dateGregorian, "date"));
 				t.is(0, dojo.date.compare( dateHebrewFromGreg.toGregorian(), dateGregorian));
@@ -92,7 +92,7 @@ tests.register("dojox.date.tests.HebrewDate",
 		{
 			name: "compare",
 			runTest: function(t){
-				var dateHebrew = new dojox.date.HebrewDate();
+				var dateHebrew = new dojox.date.HebrewDate(5769, 5, 16);
 				var dateHebrew1 = new dojox.date.HebrewDate(5758,  10,  25);
 				t.is(1, dojo.date.compare(dateHebrew.toGregorian(), dateHebrew1.toGregorian()));
 				t.is(-1, dojo.date.compare(dateHebrew1.toGregorian(), dateHebrew.toGregorian()));
@@ -101,36 +101,46 @@ tests.register("dojox.date.tests.HebrewDate",
 		{
 			name: "add_and_difference",
 			runTest: function(t){
-				var dateHebrew = new dojox.date.HebrewDate();
+				var dateHebrew = new dojox.date.HebrewDate(5769, 5, 16);
+				var dateHebrewLeap = new dojox.date.HebrewDate(5768, 5, 16);
 				
-				var dateHebrewAdd= dojox.date.HebrewDate.add(dateHebrew, "month",  18);
-				t.is(0,  18 - dojox.date.HebrewDate.difference(dateHebrewAdd, dateHebrew, "month"));
-				
+				var dateHebrewAdd = dojox.date.HebrewDate.add(dateHebrew, "month",  18);
+				var dateHebrewAddLeap = dojox.date.HebrewDate.add(dateHebrewLeap, "month",  18);
+				t.is(0, 18 - dojox.date.HebrewDate.difference(dateHebrewAdd, dateHebrew, "month"));
+				t.is(0, 18 - dojox.date.HebrewDate.difference(dateHebrewAddLeap, dateHebrewLeap, "month"));
+								
 				var dateHebrewAdd1= dojox.date.HebrewDate.add(dateHebrew, "year", 2);
 				t.is(0,  2 - dojox.date.HebrewDate.difference(dateHebrewAdd1, dateHebrew, "year"));
+				t.is(0,  2 - dojox.date.HebrewDate.difference(dojox.date.HebrewDate.add(dateHebrewLeap, "year", 2), dateHebrewLeap, "year"));
 				
 				var dateHebrewAdd2= dojox.date.HebrewDate.add(dateHebrew, "week",  12);
 				t.is(0, 12 - dojox.date.HebrewDate.difference(dateHebrewAdd2, dateHebrew, "week"));
+				t.is(0,  12 - dojox.date.HebrewDate.difference(dojox.date.HebrewDate.add(dateHebrewLeap, "week", 12), dateHebrewLeap,"week"));
 								
 				var dateHebrewAdd3= dojox.date.HebrewDate.add(dateHebrew, "weekday", 20);
 				 t.is(0, 20 - dojox.date.HebrewDate.difference(dateHebrewAdd3, dateHebrew, "weekday")); 
-				 
+				 t.is(0,  20 - dojox.date.HebrewDate.difference(dojox.date.HebrewDate.add(dateHebrewLeap, "weekday", 20), dateHebrewLeap,"weekday"));
+				
 				var dateHebrewAdd4= dojox.date.HebrewDate.add(dateHebrew, "day", -50)
 				t.is(0, -50 - dojox.date.HebrewDate.difference(dateHebrewAdd4, dateHebrew, "day")); 
+				t.is(0, -50 - dojox.date.HebrewDate.difference(dojox.date.HebrewDate.add(dateHebrewLeap, "day", -50), dateHebrewLeap,"day"));
 											
 				var dateHebrewAdd5= dojox.date.HebrewDate.add(dateHebrew, "hour", 200);
 				t.is(0, 200 - dojox.date.HebrewDate.difference(dateHebrewAdd5, dateHebrew, "hour"));  
+				t.is(0, 200 - dojox.date.HebrewDate.difference(dojox.date.HebrewDate.add(dateHebrewLeap, "hour", 200), dateHebrewLeap,"hour"));
 				
 				var dateHebrewAdd6= dojox.date.HebrewDate.add(dateHebrew, "minute", -200);
-				t.is(0, -200 - dojox.date.HebrewDate.difference(dateHebrewAdd6, dateHebrew, "minute"));  
+				t.is(0, -200 - dojox.date.HebrewDate.difference(dateHebrewAdd6, dateHebrew, "minute")); 
+				t.is(0, -200 - dojox.date.HebrewDate.difference(dojox.date.HebrewDate.add(dateHebrewLeap, "minute", -200), dateHebrewLeap,"minute")); 
 				
-				t.is(0, dojox.date.HebrewDate.difference(dateHebrew));  
+				var dateHebrewDiff = new dojox.date.HebrewDate(5769, 5, 17);
+				t.is(1, dojox.date.HebrewDate.difference(dateHebrewDiff, dateHebrew)); 
 			}
 		},
 		{
 			name: "parse_and_format",
 			runTest: function(t){
-				var dateHebrew = new dojox.date.HebrewDate();
+				var dateHebrew = new dojox.date.HebrewDate(5769, 5, 16);
 					
 				var options = {formatLength:'short'};
 				str= dojox.date.HebrewLocale.format(dateHebrew, options);
