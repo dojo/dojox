@@ -361,11 +361,10 @@ dojo.require("dojo.dnd.Manager");
 				dojo.attr(c, "vIdx", vIdx);
 				if(w && w.slice(-1) == "%"){
 					hasPct = true;
-					return dojo.contentBox(c).w;
 				}else if(w && w.slice(-2) == "px"){
 					return window.parseInt(w, 10);
 				}
-				return -1;
+				return dojo.contentBox(c).w;
 			});
 			if(hasPct){
 				dojo.forEach(this.grid.layout.cells, function(cell, idx){
