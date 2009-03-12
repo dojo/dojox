@@ -598,7 +598,7 @@ dojo.requireLocalization("dijit", "loading");
 		},
 
 		_setHeaderMenuAttr: function(menu){
-			if(this._placeholders.length){
+			if(this._placeholders && this._placeholders.length){
 				dojo.forEach(this._placeholders, function(p){
 					p.unReplace(true);
 				});
