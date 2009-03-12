@@ -82,7 +82,7 @@ dojo.require("dojox.grid.util");
 		},
 		canResize: function(){
 			var uw = this.unitWidth;
-			return uw && (uw=='auto');
+			return uw && (uw!=='auto');
 		},
 		isFlex: function(){
 			var uw = this.unitWidth;

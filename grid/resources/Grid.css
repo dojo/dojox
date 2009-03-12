@@ -95,6 +95,21 @@
 .dojoxGridArrowButtonChar {
 	display:inline;
 }
+
+/* Need to explicitly define how to treat hovering over the arrow on IE */ 
+.dojoxGridArrowButtonNode:hover {
+        cursor: default;
+}
+.dojoxGridArrowButtonChar:hover {
+        cursor: default;
+}
+.dojoxGridSortUp:hover {
+        cursor: default;
+}
+.dojoxGridSortDown:hover {
+        cursor: default;
+}
+
 .dijit_a11y .dojoxGridArrowButtonChar {
 	display:inline !important;
 }
