@@ -182,14 +182,19 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	_scrollHeader: function(currentIdx){
 		var info = null;
 		if(this._colHeadNode){
-			info = this._scrollInfo(this.grid.getCell(currentIdx), this._colHeadNode);
+			var cell = this.grid.getCell(currentIdx);
+			info = this._scrollInfo(cell, cell.getNode(0));
 		}
 		if(info){
 			// scroll horizontally as needed.
-			if(info.n.offsetLeft + info.n.offsetWidth > info.sr.l + info.sr.w){
+			var scroll = info.sr.l + info.sr.w;
+			if(info.n.offsetLeft + info.n.offsetWidth > scroll){
 				info.s.scrollLeft = info.n.offsetLeft + info.n.offsetWidth - info.sr.w;
 			}else if(info.n.offsetLeft < info.sr.l){
 				info.s.scrollLeft = info.n.offsetLeft;
+			}else if(dojo.isIE <= 7 && cell && cell.view.headerNode){
+				// Trac 7158: scroll dojoxGridHeader for IE7 and lower
+				cell.view.headerNode.scrollLeft = info.s.scrollLeft;
 			}
 		}
 	},
@@ -295,8 +300,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			if((currentIdx >= 0) && (currentIdx < headers.length)){
 				this._colHeadNode = headers[currentIdx];
 				this._colHeadFocusIdx = currentIdx;
-				this._colHeadNode.focus();
 				this._scrollHeader(currentIdx);
+				this._colHeadNode.focus();
 			}
 		}else{
 			if(this.cell){
@@ -432,6 +437,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	doColHeaderFocus: function(e){
 		dojo.toggleClass(e.target, this.focusClass, true);
+		this._scrollHeader(this.getHeaderIndex());
 	},
 	doColHeaderBlur: function(e){
 		dojo.toggleClass(e.target, this.focusClass, false);
