@@ -139,21 +139,25 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	scrollIntoView: function(){
 		var info = (this.cell ? this._scrollInfo(this.cell) : null);
-		if(!info){
+		if(!info || !info.s){
 			return null;
 		}
 		var rt = this.grid.scroller.findScrollTop(this.rowIndex);
 		// place cell within horizontal view
-		if(info.n.offsetLeft + info.n.offsetWidth > info.sr.l + info.sr.w){
-			info.s.scrollLeft = info.n.offsetLeft + info.n.offsetWidth - info.sr.w;
-		}else if(info.n.offsetLeft < info.sr.l){
-			info.s.scrollLeft = info.n.offsetLeft;
+		if(info.n && info.sr){
+			if(info.n.offsetLeft + info.n.offsetWidth > info.sr.l + info.sr.w){
+				info.s.scrollLeft = info.n.offsetLeft + info.n.offsetWidth - info.sr.w;
+			}else if(info.n.offsetLeft < info.sr.l){
+				info.s.scrollLeft = info.n.offsetLeft;
+			}
 		}
 		// place cell within vertical view
-		if(rt + info.r.offsetHeight > info.sr.t + info.sr.h){
-			this.grid.setScrollTop(rt + info.r.offsetHeight - info.sr.h);
-		}else if(rt < info.sr.t){
-			this.grid.setScrollTop(rt);
+		if(info.r && info.sr){
+			if(rt + info.r.offsetHeight > info.sr.t + info.sr.h){
+				this.grid.setScrollTop(rt + info.r.offsetHeight - info.sr.h);
+			}else if(rt < info.sr.t){
+				this.grid.setScrollTop(rt);
+			}
 		}
 
 		return info.s.scrollLeft;
@@ -185,7 +189,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			var cell = this.grid.getCell(currentIdx);
 			info = this._scrollInfo(cell, cell.getNode(0));
 		}
-		if(info){
+		if(info && info.s && info.sr && info.n){
 			// scroll horizontally as needed.
 			var scroll = info.sr.l + info.sr.w;
 			if(info.n.offsetLeft + info.n.offsetWidth > scroll){
