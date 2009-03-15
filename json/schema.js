@@ -78,7 +78,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 				if(typeof type == 'string' && type != 'any' && 
 						(type == 'null' ? value !== null : typeof value != type) && 
 						!(value instanceof Array && type == 'array') &&
-						!(type == 'integer' && !(value%1))){
+						!(type == 'integer' && value%1===0)){
 					return [{property:path,message:(typeof value) + " value found, but a " + type + " is required"}];
 				}
 				if(type instanceof Array){
@@ -109,7 +109,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 				}
 				if(value instanceof Array){
 					if(schema.items){
-						for(var i=0,l=value.length; i<l; i++){
+						for(i=0,l=value.length; i<l; i++){
 							errors.concat(checkProp(value[i],schema.items,path,i));
 						}							
 					}
