@@ -845,7 +845,8 @@ dojox.date.HebrewDate.add = function(/*HebrewDate*/date, /*String*/interval, /*i
 			break;
 		case "month":
 			var month = date.getMonth(); 
-			newHebrDate.setMonth(date.getMonth() + amount );
+			if(!date.isLeapYear(date.getFullYear()) && month > 5){month --;}
+			newHebrDate.setMonth(month + amount );
 			break;
 		case "hour":
 			newHebrDate.setHours(date.getHours() + amount );
