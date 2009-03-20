@@ -191,6 +191,8 @@ dojo.declare('dojox.widget.Dialog',
 
 	_position: function(){
 		
+		if(!this._started){ return; } // prevent content: from firing this anim #8914
+		
 		if(this._sizing){
 			this._sizing.stop();	
 			this.disconnect(this._sizingConnect);
