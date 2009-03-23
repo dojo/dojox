@@ -670,52 +670,52 @@ dojox.gfx.shape.Creator = {
 		return null;
 	},
 	createGroup: function(){
-		// summary: creates an SVG group shape
+		// summary: creates a group shape
 		return this.createObject(dojox.gfx.Group);	// dojox.gfx.Group
 	},
 	createRect: function(rect){
-		// summary: creates an SVG rectangle shape
+		// summary: creates a rectangle shape
 		// rect: Object: a path object (see dojox.gfx.defaultRect)
 		return this.createObject(dojox.gfx.Rect, rect);	// dojox.gfx.Rect
 	},
 	createEllipse: function(ellipse){
-		// summary: creates an SVG ellipse shape
+		// summary: creates an ellipse shape
 		// ellipse: Object: an ellipse object (see dojox.gfx.defaultEllipse)
 		return this.createObject(dojox.gfx.Ellipse, ellipse);	// dojox.gfx.Ellipse
 	},
 	createCircle: function(circle){
-		// summary: creates an SVG circle shape
+		// summary: creates a circle shape
 		// circle: Object: a circle object (see dojox.gfx.defaultCircle)
 		return this.createObject(dojox.gfx.Circle, circle);	// dojox.gfx.Circle
 	},
 	createLine: function(line){
-		// summary: creates an SVG line shape
+		// summary: creates a line shape
 		// line: Object: a line object (see dojox.gfx.defaultLine)
 		return this.createObject(dojox.gfx.Line, line);	// dojox.gfx.Line
 	},
 	createPolyline: function(points){
-		// summary: creates an SVG polyline/polygon shape
+		// summary: creates a polyline/polygon shape
 		// points: Object: a points object (see dojox.gfx.defaultPolyline)
 		//	or an Array of points
 		return this.createObject(dojox.gfx.Polyline, points);	// dojox.gfx.Polyline
 	},
 	createImage: function(image){
-		// summary: creates an SVG image shape
+		// summary: creates a image shape
 		// image: Object: an image object (see dojox.gfx.defaultImage)
 		return this.createObject(dojox.gfx.Image, image);	// dojox.gfx.Image
 	},
 	createText: function(text){
-		// summary: creates an SVG text shape
+		// summary: creates a text shape
 		// text: Object: a text object (see dojox.gfx.defaultText)
 		return this.createObject(dojox.gfx.Text, text);	// dojox.gfx.Text
 	},
 	createPath: function(path){
-		// summary: creates an SVG path shape
+		// summary: creates a path shape
 		// path: Object: a path object (see dojox.gfx.defaultPath)
 		return this.createObject(dojox.gfx.Path, path);	// dojox.gfx.Path
 	},
 	createTextPath: function(text){
-		// summary: creates an SVG text shape
+		// summary: creates a text shape
 		// text: Object: a textpath object (see dojox.gfx.defaultTextPath)
 		return this.createObject(dojox.gfx.TextPath, {}).setText(text);	// dojox.gfx.TextPath
 	},
