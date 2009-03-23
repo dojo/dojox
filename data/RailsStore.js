@@ -124,5 +124,44 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 		}
 
 		return this.inherited(arguments);
+	},
+	_processResults: function(results, deferred){
+		var items;
+		
+		/*
+		 * depending on the ActiveRecord::Base.include_root_in_json setting,
+		 * you might get back an array of attribute objects, or an array of
+		 * objects with the attribute object nested under an attribute having
+		 * the same name as the (remote and unguessable) model class.
+		 *
+		 * 'Example' without root_in_json: [{'id':1, 'text':'first'}]
+		 * 'Example' with root_in_json: [{'example':{'id':1, 'text':'first'}}]
+		 */
+		if((typeof this.rootAttribute == 'undefined') && results[0]){
+			if(results[0][this.idAttribute]){
+				this.rootAttribute = false;
+				console.debug('RailsStore: without root_in_json');
+			}else{
+				for(var attribute in results[0]){
+					if(results[0][attribute][this.idAttribute]){
+						this.rootAttribute = attribute;
+						console.debug('RailsStore: with root_in_json, attribute: ' + attribute);
+					}
+				}
+			}
+		}
+		
+		if(this.rootAttribute){
+			items = dojo.map(results, function(item){
+				return item[this.rootAttribute];
+			}, this);
+		}else{
+			items = results;
+		}
+		
+		// index the results
+		var count = results.length;
+		// if we don't know the length, and it is partial result, we will guess that it is twice as big, that will work for most widgets
+		return {totalCount:deferred.fullLength || (deferred.request.count == count ? (deferred.request.start || 0) + count * 2 : count), items: items};
 	}
 });
