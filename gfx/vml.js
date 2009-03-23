@@ -339,7 +339,7 @@ dojo.require("dojox.gfx.arc");
 			if(dojo.isIE > 7){
 				var node = this.rawNode.ownerDocument.createElement("v:roundrect");
 				node.arcsize = r;
-				node.style.display  = "inline-block";
+				node.style.display = "inline-block";
 				this.rawNode = node;
 			}else{
 				this.rawNode.arcsize = r;
@@ -1013,7 +1013,7 @@ dojo.require("dojox.gfx.arc");
 			cs = c.style, rs = r.style;
 
 		if(dojo.isIE > 7){
-			rs.display  = "inline-block";
+			rs.display = "inline-block";
 		}
 
 		s._parent = p;
@@ -1146,7 +1146,7 @@ dojo.require("dojox.gfx.arc");
 			var shape = new g.Rect,
 				node = this.rawNode.ownerDocument.createElement("v:roundrect");
 			if(dojo.isIE > 7){
-				node.style.display  = "inline-block";
+				node.style.display = "inline-block";
 			}
 			shape.setRawNode(node);
 			this.rawNode.appendChild(node);
