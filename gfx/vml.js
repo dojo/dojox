@@ -39,9 +39,9 @@ dojo.require("dojox.gfx.arc");
 				this.rawNode.filled = "f";
 				return this;
 			}
+			var i, f, fo, a, s;
 			if(typeof fill == "object" && "type" in fill){
 				// gradient
-				var i, f, fo, a, s;
 				switch(fill.type){
 					case "linear":
 						var matrix = this._getRealMatrix();
@@ -141,10 +141,14 @@ dojo.require("dojox.gfx.arc");
 			}
 			// color object
 			this.fillStyle = g.normalizeColor(fill);
-			this.rawNode.fill.method = "any";
-			this.rawNode.fill.type = "solid";
+			fo = this.rawNode.fill;
+			if(!fo){
+				fo = this.rawNode.ownerDocument.createElement("v:fill");
+			}
+			fo.method = "any";
+			fo.type = "solid";
+			fo.opacity = this.fillStyle.a;
 			this.rawNode.fillcolor = this.fillStyle.toHex();
-			this.rawNode.fill.opacity = this.fillStyle.a;
 			this.rawNode.filled = true;
 			return this;	// self
 		},
@@ -318,26 +322,28 @@ dojo.require("dojox.gfx.arc");
 			// newShape: Object: a rectangle shape object
 			var shape = this.shape = g.makeParameters(this.shape, newShape);
 			this.bbox = null;
-			var style = this.rawNode.style;
-			style.left   = shape.x.toFixed();
-			style.top    = shape.y.toFixed();
-			style.width  = (typeof shape.width == "string" && shape.width.indexOf("%") >= 0)  ? shape.width  : shape.width.toFixed();
-			style.height = (typeof shape.width == "string" && shape.height.indexOf("%") >= 0) ? shape.height : shape.height.toFixed();
 			var r = Math.min(1, (shape.r / Math.min(parseFloat(shape.width), parseFloat(shape.height)))).toFixed(8);
 			// a workaround for the VML's arcsize bug: cannot read arcsize of an instantiated node
 			var parent = this.rawNode.parentNode, before = null;
 			if(parent){
-				if(parent.lastChild != this.rawNode){
+				if(parent.lastChild !== this.rawNode){
 					for(var i = 0; i < parent.childNodes.length; ++i){
-						if(parent.childNodes[i] == this.rawNode){
-							before = parent.childNodes[i+1];
+						if(parent.childNodes[i] === this.rawNode){
+							before = parent.childNodes[i + 1];
 							break;
 						}
 					}
 				}
 				parent.removeChild(this.rawNode);
 			}
-			this.rawNode.arcsize = r;
+			if(dojo.isIE > 7){
+				var node = this.rawNode.ownerDocument.createElement("v:roundrect");
+				node.arcsize = r;
+				node.style.display  = "inline-block";
+				this.rawNode = node;
+			}else{
+				this.rawNode.arcsize = r;
+			}
 			if(parent){
 				if(before){
 					parent.insertBefore(this.rawNode, before);
@@ -345,6 +351,11 @@ dojo.require("dojox.gfx.arc");
 					parent.appendChild(this.rawNode);
 				}
 			}
+			var style = this.rawNode.style;
+			style.left   = shape.x.toFixed();
+			style.top    = shape.y.toFixed();
+			style.width  = (typeof shape.width == "string" && shape.width.indexOf("%") >= 0)  ? shape.width  : shape.width.toFixed();
+			style.height = (typeof shape.width == "string" && shape.height.indexOf("%") >= 0) ? shape.height : shape.height.toFixed();
 			// set all necessary styles, which are lost by VML (yes, it's a VML's bug)
 			return this.setTransform(this.matrix).setFill(this.fillStyle).setStroke(this.strokeStyle);	// self
 		}
@@ -533,7 +544,7 @@ dojo.require("dojox.gfx.arc");
 			// newShape: Object: a text shape object
 			this.shape = g.makeParameters(this.shape, newShape);
 			this.bbox = null;
-			var r = this.rawNode, s = this.shape, x = s.x, y = s.y.toFixed();
+			var r = this.rawNode, s = this.shape, x = s.x, y = s.y.toFixed(), path;
 			switch(s.align){
 				case "middle":
 					x -= 5;
@@ -542,8 +553,7 @@ dojo.require("dojox.gfx.arc");
 					x -= 10;
 					break;
 			}
-			this.rawNode.path.v = "m" + x.toFixed() + "," + y +
-				"l" + (x + 10).toFixed() + "," + y + "e";
+			path = "m" + x.toFixed() + "," + y + "l" + (x + 10).toFixed() + "," + y + "e";
 			// find path and text path
 			var p = null, t = null, c = r.childNodes;
 			for(var i = 0; i < c.length; ++i){
@@ -557,13 +567,14 @@ dojo.require("dojox.gfx.arc");
 				}
 			}
 			if(!p){
-				p = this.rawNode.ownerDocument.createElement("v:path");
+				p = r.ownerDocument.createElement("v:path");
 				r.appendChild(p);
 			}
 			if(!t){
-				t = this.rawNode.ownerDocument.createElement("v:textpath");
+				t = r.ownerDocument.createElement("v:textpath");
 				r.appendChild(t);
 			}
+			p.v = path;
 			p.textPathOk = true;
 			t.on = true;
 			var a = vml.text_alignment[s.align];
@@ -1001,6 +1012,10 @@ dojo.require("dojox.gfx.arc");
 			r = s.rawNode = p.ownerDocument.createElement("v:group"),
 			cs = c.style, rs = r.style;
 
+		if(dojo.isIE > 7){
+			rs.display  = "inline-block";
+		}
+
 		s._parent = p;
 		s._nodes.push(c);	// other elements will be deleted as parts of "c"
 
@@ -1123,6 +1138,21 @@ dojo.require("dojox.gfx.arc");
 			shape.setShape(image);
 			this.add(shape);
 			return shape;	// dojox.gfx.Image
+		},
+		createRect: function(rect){
+			// summary: creates a rectangle shape
+			// rect: Object: a path object (see dojox.gfx.defaultRect)
+			if(!this.rawNode) return null;
+			var shape = new g.Rect,
+				node = this.rawNode.ownerDocument.createElement("v:roundrect");
+			if(dojo.isIE > 7){
+				node.style.display  = "inline-block";
+			}
+			shape.setRawNode(node);
+			this.rawNode.appendChild(node);
+			shape.setShape(rect);
+			this.add(shape);
+			return shape;	// dojox.gfx.Rect
 		},
 		createObject: function(shapeType, rawShape) {
 			// summary: creates an instance of the passed shapeType class
