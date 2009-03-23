@@ -2,6 +2,7 @@ dojo.provide("dojox.charting.action2d.Magnify");
 
 dojo.require("dojox.charting.action2d.Base");
 dojo.require("dojox.gfx.matrix");
+dojo.require("dojo.fx");
 
 (function(){
 	var DEFAULT_SCALE = 2,
