@@ -246,7 +246,8 @@ dojo.mixin(dojox.gfx, {
 		//	update:   Object
 		//		the object, which properties are to be cloned during updating
 		if(!update){
-			return dojo.clone(defaults);
+			// return dojo.clone(defaults);
+			return dojo.delegate(defaults);
 		}
 		var result = {};
 		for(var i in defaults){
