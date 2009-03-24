@@ -25,7 +25,10 @@ dojo.provide("dojox.gfx._base");
 		//	summary: Removes classes from node.
 		var cls = node.getAttribute("className");
 		if(cls){
-			node.setAttribute("className", cls.replace(new RegExp('(^|\\s+)' + classStr + '(\\s+|$)'), "$1$2"));
+			node.setAttribute(
+				"className", 
+				cls.replace(new RegExp('(^|\\s+)' + classStr + '(\\s+|$)'), "$1$2")
+			);
 		}
 	}
 
@@ -33,11 +36,13 @@ dojo.provide("dojox.gfx._base");
 
 	//	derived from Morris John's emResized measurer
 	b._getFontMeasurements = function(){
-		//	summary
-		//	Returns an object that has pixel equivilents of standard font size values.
+		//	summary:
+		//		Returns an object that has pixel equivilents of standard font
+		//		size values.
 		var heights = {
-			'1em':0, '1ex':0, '100%':0, '12pt':0, '16px':0, 'xx-small':0, 'x-small':0,
-			'small':0, 'medium':0, 'large':0, 'x-large':0, 'xx-large':0
+			'1em': 0, '1ex': 0, '100%': 0, '12pt': 0, '16px': 0, 'xx-small': 0,
+			'x-small': 0, 'small': 0, 'medium': 0, 'large': 0, 'x-large': 0,
+			'xx-large': 0
 		};
 
 		if(dojo.isIE){
@@ -47,18 +52,19 @@ dojo.provide("dojox.gfx._base");
 		}
 
 		//	set up the measuring node.
-		var div=dojo.doc.createElement("div");
-		div.style.position="absolute";
-		div.style.left="-100px";
-		div.style.top="0";
-		div.style.width="30px";
-		div.style.height="1000em";
-		div.style.border="0";
-		div.style.margin="0";
-		div.style.padding="0";
-		div.style.outline="0";
-		div.style.lineHeight="1";
-		div.style.overflow="hidden";
+		var div = dojo.doc.createElement("div");
+		var s = div.style;
+		s.position = "absolute";
+		s.left = "-100px";
+		s.top = "0px";
+		s.width = "30px";
+		s.height = "1000em";
+		s.border = "0px";
+		s.margin = "0px";
+		s.padding = "0px";
+		s.outline = "none";
+		s.lineHeight = "1";
+		s.overflow = "hidden";
 		dojo.body().appendChild(div);
 
 		//	do the measurements.
@@ -85,27 +91,29 @@ dojo.provide("dojox.gfx._base");
 
 	var measuringNode = null, empty = {};
 	b._getTextBox = function(/* String */ text, /* Object */ style, /* String? */ className){
-		var m;
+		var m, s;
 		if(!measuringNode){
 			m = measuringNode = dojo.doc.createElement("div");
-			m.style.position = "absolute";
-			m.style.left = "-10000px";
-			m.style.top = "0";
+			s = m.style;
+			s.position = "absolute";
+			s.left = "-10000px";
+			s.top = "0";
 			dojo.body().appendChild(m);
 		}else{
 			m = measuringNode;
+			s = m.style;
 		}
 		// reset styles
 		m.className = "";
-		m.style.border = "0";
-		m.style.margin = "0";
-		m.style.padding = "0";
-		m.style.outline = "0";
+		s.border = "0";
+		s.margin = "0";
+		s.padding = "0";
+		s.outline = "0";
 		// set new style
 		if(arguments.length > 1 && style){
 			for(var i in style){
 				if(i in empty){ continue; }
-				m.style[i] = style[i];
+				s[i] = style[i];
 			}
 		}
 		// set classes
@@ -131,39 +139,94 @@ dojo.provide("dojox.gfx._base");
 })();
 
 dojo.mixin(dojox.gfx, {
-	// summary: defines constants, prototypes, and utility functions
+	//	summary:
+	// 		defines constants, prototypes, and utility functions
 
 	// default shapes, which are used to fill in missing parameters
-	defaultPath:     {type: "path",     path: ""},
-	defaultPolyline: {type: "polyline", points: []},
-	defaultRect:     {type: "rect",     x: 0, y: 0, width: 100, height: 100, r: 0},
-	defaultEllipse:  {type: "ellipse",  cx: 0, cy: 0, rx: 200, ry: 100},
-	defaultCircle:   {type: "circle",   cx: 0, cy: 0, r: 100},
-	defaultLine:     {type: "line",     x1: 0, y1: 0, x2: 100, y2: 100},
-	defaultImage:    {type: "image",    x: 0, y: 0, width: 0, height: 0, src: ""},
-	defaultText:     {type: "text",     x: 0, y: 0, text: "",
-		align: "start", decoration: "none", rotated: false, kerning: true },
-	defaultTextPath: {type: "textpath", text: "",
-		align: "start", decoration: "none", rotated: false, kerning: true },
+	defaultPath: {
+		type: "path", path: ""
+	},
+	defaultPolyline: {
+		type: "polyline", points: []
+	},
+	defaultRect: {
+		type: "rect", x: 0, y: 0, width: 100, height: 100, r: 0
+	},
+	defaultEllipse: {
+		type: "ellipse", cx: 0, cy: 0, rx: 200, ry: 100
+	},
+	defaultCircle: {
+		type: "circle", cx: 0, cy: 0, r: 100
+	},
+	defaultLine: {
+		type: "line", x1: 0, y1: 0, x2: 100, y2: 100
+	},
+	defaultImage: {
+		type: "image", x: 0, y: 0, width: 0, height: 0, src: ""
+	},
+	defaultText: {
+		type: "text", x: 0, y: 0, text: "", align: "start",
+		decoration: "none", rotated: false, kerning: true
+	},
+	defaultTextPath: {
+		type: "textpath", text: "", align: "start",
+		decoration: "none", rotated: false, kerning: true
+	},
 
 	// default geometric attributes
-	defaultStroke: {type: "stroke", color: "black", style: "solid", width: 1, cap: "butt", join: 4},
-	defaultLinearGradient: {type: "linear", x1: 0, y1: 0, x2: 100, y2: 100,
-		colors: [{offset: 0, color: "black"}, {offset: 1, color: "white"}]},
-	defaultRadialGradient: {type: "radial", cx: 0, cy: 0, r: 100,
-		colors: [{offset: 0, color: "black"}, {offset: 1, color: "white"}]},
-	defaultPattern: {type: "pattern", x: 0, y: 0, width: 0, height: 0, src: ""},
-	defaultFont: {type: "font", style: "normal", variant: "normal", weight: "normal",
-		size: "10pt", family: "serif"},
+	defaultStroke: {
+		type: "stroke", color: "black", style: "solid", width: 1, 
+		cap: "butt", join: 4
+	},
+	defaultLinearGradient: {
+		type: "linear", x1: 0, y1: 0, x2: 100, y2: 100,
+		colors: [
+			{ offset: 0, color: "black" }, { offset: 1, color: "white" }
+		]
+	},
+	defaultRadialGradient: {
+		type: "radial", cx: 0, cy: 0, r: 100,
+		colors: [
+			{ offset: 0, color: "black" }, { offset: 1, color: "white" }
+		]
+	},
+	defaultPattern: {
+		type: "pattern", x: 0, y: 0, width: 0, height: 0, src: ""
+	},
+	defaultFont: {
+		type: "font", style: "normal", variant: "normal", 
+		weight: "normal", size: "10pt", family: "serif"
+	},
+
+	getDefault: (function(){
+		var typeCtorCache = {};
+		// a memoized delegate()
+		return function(/*String*/ type){
+			var t = typeCtorCache[type];
+			if(t){
+				return new t();
+			}
+			t = typeCtorCache[type] = function(){};
+			t.prototype = dojox.gfx[ "default" + type ];
+			return new t();
+		}
+	})(),
 
 	normalizeColor: function(/*Color*/ color){
-		// summary: converts any legal color representation to normalized dojo.Color object
+		//	summary:
+		// 		converts any legal color representation to normalized
+		// 		dojo.Color object
 		return (color instanceof dojo.Color) ? color : new dojo.Color(color); // dojo.Color
 	},
 	normalizeParameters: function(existed, update){
-		// summary: updates an existing object with properties from an "update" object
-		// existed: Object: the "target" object to be updated
-		// update:  Object: the "update" object, whose properties will be used to update the existed object
+		//	summary:
+		// 		updates an existing object with properties from an "update"
+		// 		object
+		//	existed: Object
+		//		the "target" object to be updated
+		//	update:  Object
+		//		the "update" object, whose properties will be used to update
+		//		the existed object
 		if(update){
 			var empty = {};
 			for(var x in existed){
@@ -175,10 +238,16 @@ dojo.mixin(dojox.gfx, {
 		return existed;	// Object
 	},
 	makeParameters: function(defaults, update){
-		// summary: copies the original object, and all copied properties from the "update" object
-		// defaults: Object: the object to be cloned before updating
-		// update:   Object: the object, which properties are to be cloned during updating
-		if(!update) return dojo.clone(defaults);
+		//	summary:
+		// 		copies the original object, and all copied properties from the
+		// 		"update" object
+		//	defaults: Object
+		//		the object to be cloned before updating
+		//	update:   Object
+		//		the object, which properties are to be cloned during updating
+		if(!update){
+			return dojo.clone(defaults);
+		}
 		var result = {};
 		for(var i in defaults){
 			if(!(i in result)){
@@ -214,7 +283,7 @@ dojo.mixin(dojox.gfx, {
 	splitFontString: function(str){
 		// summary: converts a CSS font string to a font object
 		// str:		String:	a CSS font string
-		var font = dojo.clone(dojox.gfx.defaultFont);
+		var font = dojox.gfx.getDefault("Font");
 		var t = str.split(/\s+/);
 		do{
 			if(t.length < 5){ break; }
