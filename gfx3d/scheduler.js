@@ -12,7 +12,7 @@ dojo.mixin(dojox.gfx3d.scheduler, {
 	},
 
 	bsp: function(buffer, outline){
-		console.debug("BSP scheduler");
+		// console.debug("BSP scheduler");
 		outline = outline ? outline : dojox.gfx3d.scheduler.outline;
 		var p = new dojox.gfx3d.scheduler.BinarySearchTree(buffer[0], outline);
 		dojo.forEach(buffer.slice(1), function(item){ p.add(item, outline); });
@@ -54,22 +54,39 @@ dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 	},
 
 	add: function(obj, outline){
-		var epsilon = 0.5, o = outline(obj), v = dojox.gfx3d.vector, n = this.normal, a = this.orient;
+		var epsilon = 0.5,
+			o = outline(obj),
+			v = dojox.gfx3d.vector,
+			n = this.normal,
+			a = this.orient,
+			BST = dojox.gfx3d.scheduler.BinarySearchTree;
 
-		if(dojo.every(o, function(item){ return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) <= 0; })){
+		if(
+			dojo.every(o, function(item){
+				return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) <= 0;
+			})
+		){
 			if(this.minus){
 				this.minus.add(obj, outline);
-			} else {
-				this.minus = new dojox.gfx3d.scheduler.BinarySearchTree(obj, outline);
+			}else{
+				this.minus = new BST(obj, outline);
 			}
-		} else if(dojo.every(o, function(item){ return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) >= 0; })){
+		}else if(
+			dojo.every(o, function(item){ 
+				return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) >= 0; 
+			})
+		){
 			if(this.plus){
 				this.plus.add(obj, outline);
 			} else {
-				this.plus = new dojox.gfx3d.scheduler.BinarySearchTree(obj, outline);
+				this.plus = new BST(obj, outline);
 			}
-		} else {
-			dojo.forEach(o, function(item){ console.debug(v.dotProduct(n, v.substract(item, a))); });
+		}else{
+			/*
+			dojo.forEach(o, function(item){
+				console.debug(v.dotProduct(n, v.substract(item, a)));
+			});
+			*/
 			throw "The case: polygon cross siblings' plate is not implemneted yet";
 		}
 	},
@@ -82,15 +99,17 @@ dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 		// FIXME: using Infinity here?
 		var view = {x: 0, y: 0, z: -10000};
 		if(Math.floor( epsilon + v.dotProduct(this.normal, v.substract(view, this.orient))) <= 0){
-		subs = [this.plus, this.minus];
-		} else {
+			subs = [this.plus, this.minus];
+		}else{
 			subs = [this.minus, this.plus];
 		}
 
 		if(subs[0]){ 
 			sorted = sorted.concat(subs[0].iterate());
 		}
+
 		sorted.push(this.object);
+
 		if(subs[1]){ 
 			sorted = sorted.concat(subs[1].iterate());
 		}
@@ -101,7 +120,7 @@ dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 
 dojo.mixin(dojox.gfx3d.drawer, {
 	conservative: function(todos, objects, viewport){
-		console.debug('conservative draw');
+		// console.debug('conservative draw');
 		dojo.forEach(this.objects, function(item){
 			item.destroy();
 		});
@@ -112,7 +131,8 @@ dojo.mixin(dojox.gfx3d.drawer, {
 	chart: function(todos, objects, viewport){
 		// NOTE: ondemand may require the todos' objects to use setShape
 		// to redraw themselves to maintain the z-order.
-		console.debug('chart draw');
+
+		// console.debug('chart draw');
 		dojo.forEach(this.todos, function(item){
 			item.draw(viewport.lighting);
 		});
