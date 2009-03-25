@@ -17,7 +17,8 @@ dojo.experimental("dojox.charting.DataChart");
 		natural:false,
 		stroke: "black",
 		majorTick: {stroke: "black", length: 8},
-		minorTick: {stroke: "gray", length: 2}
+		minorTick: {stroke: "gray", length: 2},
+		majorLabels:true
 	};
 		
 	var _xaxis = {
@@ -29,7 +30,6 @@ dojo.experimental("dojox.charting.DataChart");
 		fixUpper:"major",
 		stroke: "black",
 		htmlLabels: true,                                                                    
-		labelFunc: null,
 		from:1
 	};
 	
@@ -156,20 +156,11 @@ dojo.experimental("dojox.charting.DataChart");
 			this.xaxis = dojo.mixin(dojo.mixin({}, _xaxis), kwArgs.xaxis);
 			if(this.xaxis.labelFunc == "seriesLabels"){
 				this.xaxis.labelFunc = dojo.hitch(this, "seriesLabels");
-			}else if(!this.xaxis.labelFunc && !this.xaxis.labels){
-				this.xaxis.labelFunc = dojo.hitch(this, "makeLabel");
-			}else{
-				delete this.xaxis.labelFunc;		
 			}
-			
 			
 			this.yaxis = dojo.mixin(dojo.mixin({}, _yaxis), kwArgs.yaxis);
 			if(this.yaxis.labelFunc == "seriesLabels"){
 				this.yaxis.labelFunc = dojo.hitch(this, "seriesLabels");
-			}else if(!this.yaxis.labelFunc && !this.yaxis.labels){
-				this.yaxis.labelFunc = dojo.hitch(this, "makeLabel");
-			}else{
-				delete this.yaxis.labelFunc;		
 			}
 			
 			
@@ -245,7 +236,7 @@ dojo.experimental("dojox.charting.DataChart");
 			}
 		},
 		
-		onSet: function(item){console.log("onSet item:", item)
+		onSet: function(item){
 			//	summary:
 			//		Fired when a store item changes.
 			//		Collects the item calls and when
@@ -421,24 +412,13 @@ dojo.experimental("dojox.charting.DataChart");
 			this.store.fetch({query:this.query, queryOptions:this.queryOptions, onComplete:dojo.hitch(this, "onData"), onError:dojo.hitch(this, "onError")});
 		},
 		
-		makeLabel: function(/*Number*/value, /*Number*/number, /*Number*/precision){
-			// summary:
-			// 		makes updated label for x axis
-			//		This function is connected in the xaxis
-			//		properties.
-			//		You should overwrite this method to provide
-			//		custom labels.
-			//
-			return value; //Number
-			
-		},
-		
 		convertLabels: function(axis){
 			// summary:
 			//		Convenience method to convert a label array of strings
 			//		into an array of objects
 			//
 			if(!axis.labels || dojo.isObject(axis.labels[0])){ return null; }
+			console.warn("CONVERT", axis)
 			axis.labels = dojo.map(axis.labels, function(ele, i){
 				return {value:i, text:ele};
 			});
@@ -447,16 +427,17 @@ dojo.experimental("dojox.charting.DataChart");
 		
 		seriesLabels: function(val){
 			// summary:
-			//		Convenience function that sets series labels based on item labels.
+			//		Convenience method that sets series labels based on item labels.
 			val--;
 			if(this.series.length<1 || (!this.comparative && val>this.series.length)){ return "-"; }
 			if(this.comparative){
 				return this.store.getLabel(this.items[val]);
 				
 			}else{
+				// FIXME:
 				// Here we are setting the label base on if there is data in the array slot.
 				//	A typical series may look like: [0,0,3.1,0,0,0] which mean the data is populated in the
-				//	3rd row or column. Thi works well and keeps the labels aligned but has a side effect
+				//	3rd row or column. This works well and keeps the labels aligned but has a side effect
 				//	of not showing the label is the data is zero. Work around is to not go lower than
 				//	0.01 or something.
 				for(var i=0;i<this.series.length; i++){

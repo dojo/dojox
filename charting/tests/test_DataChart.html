@@ -55,13 +55,7 @@ var store = new dojo.data.ItemFileWriteStore({ url:"stock.json" });
 		
 makeCharts = function(){
 	
-	var linesC = new dojox.charting.DataChart("linesC", {
-		displayRange:6,
-		xaxis:{labelFunc:"seriesLabels"},
-		type: dojox.charting.plot2d.Lines,
-		comparative:true
-	});
-	linesC.setStore(store, {symbol:"*"}, "price");
+	
 	
 	var lines = new dojox.charting.DataChart("lines", {
 		displayRange:7,
@@ -69,6 +63,23 @@ makeCharts = function(){
 		type: dojox.charting.plot2d.Lines
 	});
 	lines.setStore(store, {symbol:"*"}, "historicPrice");
+	
+	var linesC = new dojox.charting.DataChart("linesC", {
+		displayRange:6,
+		xaxis:{labelFunc:"seriesLabels"},
+		yaxis:{minorLabels:true},
+		type: dojox.charting.plot2d.Lines,
+		comparative:true
+	});
+	linesC.setStore(store, {symbol:"*"}, "price");
+	
+	var cols = new dojox.charting.DataChart("cols", {
+		displayRange:8,
+		scroll:false,
+		xaxis:{labelFunc:"seriesLabels"},
+		type: dojox.charting.plot2d.Columns
+	});
+	cols.setStore(store, {symbol:"*"}, "price");
 	
 	var bars = new dojox.charting.DataChart("bars", {
 		displayRange:10,
@@ -78,14 +89,6 @@ makeCharts = function(){
 	});
 	bars.setStore(store, {symbol:"*"}, "price");
 				 
-	var cols = new dojox.charting.DataChart("cols", {
-		displayRange:8,
-		scroll:false,
-		xaxis:{labelFunc:"seriesLabels"},
-		type: dojox.charting.plot2d.Columns
-	});
-	cols.setStore(store, {symbol:"*"}, "price");
-	
 	var pie = new dojox.charting.DataChart("pie", {
 		type: dojox.charting.plot2d.Pie,
 		comparative:true
