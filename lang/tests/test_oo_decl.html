@@ -1,0 +1,233 @@
+<html>
+	<head>
+		<title>OO/decl</title>
+		<style type="text/css">
+			@import "../../../dojo/resources/dojo.css";
+		</style>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+		<script type="text/javascript">
+			dojo.require("dojox.lang.oo.declare");
+
+			var oo = dojox.lang.oo,
+                decl = oo.declare, md = oo.makeDeclare,
+                //decl = dojo.declare,
+                t;
+
+			var test1 = function(){
+                var A = decl("A", null, {
+                    constructor: function(){
+                        console.log("A.constructor:", arguments);
+                    },
+                    m1: function(){
+                        console.log("A.m1:", arguments);
+                    }
+                });
+                var a = new A(1);
+                a.m1(2);
+                var B = decl("B", A, {
+                    constructor: function(){
+                        console.log("B.constructor:", arguments);
+                    },
+                    m2: function(){
+                        console.log("B.m2:", arguments);
+                    }
+                });
+                var b = new B(1);
+                b.m1(2);
+                b.m2(3);
+                var C = decl("C", B, {
+                    constructor: function(){
+                        console.log("C.constructor:", arguments);
+                    },
+                    m2: function(){
+                        this.inherited(arguments);
+                        console.log("C.m2:", arguments);
+                        this.inherited(arguments);
+                    }
+                });
+                var c = new C(1);
+                c.m1(2);
+                c.m2(3);
+                if(md){
+                    var decl2 = md(null, ["m1"]);
+                    var D = decl2("D", C, {
+                        constructor: function(){
+                            console.log("D.constructor:", arguments);
+                        },
+                        m1: function(){
+                            console.log("D.m1:", arguments);
+                        },
+                        m2: function(){
+                            console.log("D.m2:", arguments);
+                            this.inherited(arguments);
+                        },
+                        m3: function(){
+                            console.log("D.m3:", arguments);
+                            this.m2.apply(this, arguments);
+                        }
+                    });
+                    var d = new D(1);
+                    d.m1(2);
+                    d.m2(3);
+                    d.m3(4);
+                    var decl3 = md(["m1"]);
+                    var E = decl3("E", C, {
+                        constructor: function(){
+                            console.log("E.constructor:", arguments);
+                        },
+                        m1: function(){
+                            console.log("E.m1:", arguments);
+                        },
+                        m2: function(){
+                            console.log("E.m2:", arguments);
+                            this.inherited(arguments);
+                        },
+                        m3: function(){
+                            console.log("E.m3:", arguments);
+                            B.prototype.m2.apply(this, arguments);
+                            this.m2.apply(this, arguments);
+                        }
+                    });
+                    var e = new E(1);
+                    e.m1(2);
+                    e.m2(3);
+                    e.m3(4);
+                }
+                var F = function(){
+                    console.log("F.constructor:", arguments);
+                };
+                dojo.extend(F, {
+                    m1: function(){
+                        console.log("F.m1:", arguments);
+                    },
+                    m2: function(){
+                        console.log("F.m2:", arguments);
+                    },
+                    m3: function(){
+                        console.log("F.m3:", arguments);
+                    }
+                });
+                var G = decl("G", null, {
+                    constructor: function(){
+                        console.log("G.constructor:", arguments);
+                    },
+                    m1: function(){
+                        console.log("G.m1:", arguments);
+                        this.inherited(arguments);
+                    },
+                    m2: function(){
+                        console.log("G.m2:", arguments);
+                    },
+                    m3: function(){
+                        console.log("G.m3:", arguments);
+                    }
+                });
+                var H = decl("H", null, {
+                    constructor: function(){
+                        console.log("H.constructor:", arguments);
+                    },
+                    m1: function(){
+                        console.log("H.m1:", arguments);
+                    },
+                    m2: function(){
+                        console.log("H.m2:", arguments);
+                    },
+                    m3: function(){
+                        console.log("H.m3:", arguments);
+                    }
+                });
+                if(md){
+                    var decl4 = md(["m3"], ["m2"])
+                    var I = decl4("I", [H, F, G], {
+                        constructor: function(){
+                            console.log("I.constructor:", arguments);
+                        },
+                        m1: function(){
+                            console.log("I.m1:", arguments);
+                            this.inherited(arguments);
+                        },
+                        m2: function(){
+                            console.log("I.m2:", arguments);
+                        },
+                        m3: function(){
+                            console.log("I.m3:", arguments);
+                        }
+                    });
+                    var i = new I(1);
+                    i.m1(2);
+                    i.m2(3);
+                    i.m3(4);
+                }
+                var J = decl("J", C, {
+                    m2: function(){
+                        console.log("J.m2:", arguments);
+                        this.inherited(arguments);
+                    }
+                });
+                var j = new J(1);
+                j.m1(2);
+                j.m2(3);
+			};
+
+            var superclassRef = function(){
+                decl("tests._base.declare.tmp10", null, {
+                    foo: "thonk"
+                });
+                decl("tests._base.declare.tmp11", tests._base.declare.tmp10, {
+                    constructor: function(){
+                        this.foo = "blah";
+                    }
+                });
+                var tmp = new tests._base.declare.tmp11();
+                console.log("blah", tmp.foo);
+                console.log("thonk", tests._base.declare.tmp11.superclass.foo);
+            }
+
+            var inheritedExplicitCall = function(){
+                var foo = "xyzzy";
+                decl("tests._base.declare.tmp14", null, {
+                    foo: "thonk",
+                    bar: function(arg1, arg2){
+                        if(arg1){
+                            this.foo = arg1;
+                        }
+                        if(arg2){
+                            foo = arg2;
+                        }
+                    }
+                });
+                decl("tests._base.declare.tmp15", tests._base.declare.tmp14, {
+                    constructor: function(){
+                        this.foo = "blah";
+                    },
+                    bar: function(arg1, arg2){
+                        this.inherited("bar", arguments, [arg2, arg1]);
+                    },
+                    baz: function(arg1, arg2){
+                        tests._base.declare.tmp15.superclass.bar.apply(this, arguments);
+                    }
+                });
+                var tmp = new tests._base.declare.tmp15();
+                console.log("blah", tmp.foo);
+                console.log("xyzzy", foo);
+                tmp.baz("zot");
+                console.log("zot", tmp.foo);
+                console.log("xyzzy", foo);
+                tmp.bar("trousers", "squiggle");
+                console.log("squiggle", tmp.foo);
+                console.log("trousers", foo);
+            }
+
+            var test2 = function(){
+                superclassRef();
+                inheritedExplicitCall();
+            }
+
+			//dojo.addOnLoad(test1);
+		</script>
+	</head>
+	<body>
+		<p>This test is meant to run with Firebug. Open the console to see the output.</p>
+		<p><button onclick="test1()">Start</button></p>
+	</body>
+</html>
