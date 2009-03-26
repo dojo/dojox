@@ -356,7 +356,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			var id = args.identity;
 			var store = this;
 			// if it is an absolute id, we want to find the right store to query
-			if(id.match(/^(\w*:)?\//)){
+			if(id.toString().match(/^(\w*:)?\//)){
 				var serviceAndId = dojox.rpc.JsonRest.getServiceAndId(id);
 				store = serviceAndId.service._store;
 				args.identity = serviceAndId.id; 
@@ -384,7 +384,7 @@ dojo.declare("dojox.data.JsonRestStore",
 );
 dojox.data._getStoreForItem = function(item){
 	if(item.__id){
-		var servicePath = item.__id.match(/.*\//)[0];
+		var servicePath = item.__id.toString().match(/.*\//)[0];
 		var service = dojox.rpc.JsonRest.services[servicePath];
 		return service ? service._store : new dojox.data.JsonRestStore({target:servicePath});
 	}

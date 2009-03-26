@@ -360,26 +360,26 @@ dojo.declare("dojox.layout.dnd.PlottedDnd", [dojo.dnd.Source], {
 		;
 		//Down
 		if( (e.pageY - node.offsetTop +30 ) > node.clientHeight ){
-			autoScrollActive = true;
+			this.autoScrollActive = true;
 			this._autoScrollDown(node);
 		} else if ( (node.scrollTop > 0) && (e.pageY - y) < 30){
 			//Up
-			autoScrollActive = true;
+			this.autoScrollActive = true;
 			this._autoScrollUp(node);
 		}
 	},
 
 	_autoScrollUp: function(node){
-		if( autoScrollActive && node.scrollTop > 0) {
+		if( this.autoScrollActive && node.scrollTop > 0) {
 			node.scrollTop -= 30;
-			this._timer = setTimeout(dojo.hitch(this, function(){this._autoScrollUp(node);}),"100");
+			this._timer = setTimeout(dojo.hitch(this,"_autoScrollUp",node), 100);
 		}
 	},
 
 	_autoScrollDown: function(node){
-		if( autoScrollActive && (node.scrollTop < (node.scrollHeight-node.clientHeight))){
+		if( this.autoScrollActive && (node.scrollTop < (node.scrollHeight-node.clientHeight))){
 			node.scrollTop += 30;
-			this._timer = setTimeout(dojo.hitch(this, function(){this._autoScrollDown(node);}),"100");
+			this._timer = setTimeout(dojo.hitch(this, "_autoScrollDown",node), 100);
 		}
 	},
 
@@ -500,7 +500,7 @@ if(dojo.isIE){
 	dojox.layout.dnd.handdleIE = [
 		dojo.subscribe("/dnd/start", null, function(){
 			IEonselectstart = document.body.onselectstart;
-			document.body.onselectstart = function (e) {return false;};
+			document.body.onselectstart = function(){ return false; };
 		}),
 		dojo.subscribe("/dnd/cancel", null, function(){
 			document.body.onselectstart = IEonselectstart;

@@ -20,10 +20,10 @@
 		$queryOptions = $_GET['queryOptions'];
 		$queryOptions = str_replace("\\\"", "\"", $queryOptions);
 		$queryOptions = json_decode($queryOptions);
-		if ($queryOptions->deep) {
+		if (property_exists($queryOptions, "deep")) {
 			$deep = $queryOptions->deep;
 		}
-		if ($queryOptions->ignoreCase) {
+		if (property_exists($queryOptions, "ignoreCase")) {
 			$ignoreCase = $queryOptions->ignoreCase;
 		}
 	}

@@ -43,7 +43,7 @@ dojo.declare("dojox.widget.SortList",
 
 	_addItem: function(item){
 		dojo.create("li", {
-			innerHTML: this.store.getValue(item, this.key)
+			innerHTML: this.store.getValue(item, this.key).replace(/</g, "&lt;")
 		}, this.containerNode);
 	},
 

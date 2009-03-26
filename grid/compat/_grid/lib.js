@@ -21,7 +21,7 @@ dojo.mixin(dojox.grid,{
 	},
 	
 	getTd: function(rowOwner, rowIndex, cellIndex){
-		return (dojox.grid.getTr(inTable, rowIndex)||0)[cellIndex];
+		return (dojox.grid.getTr(rowOwner, rowIndex)||0)[cellIndex];
 	},
 	
 	findTable: function(node){

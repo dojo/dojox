@@ -87,7 +87,7 @@ dojo.require("dojox.color");
 		// don't change to d.moduleUrl, build won't intern it.
 		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html"),
 		
-		buildRendering: function(){
+		postCreate: function(){
 			this.inherited(arguments);
 
 			// summary: As quickly as we can, set up ie6 alpha-filter support for our
@@ -107,6 +107,7 @@ dojo.require("dojox.color");
 			this._offset = 0; 
 			var cmb = d.marginBox(this.cursorNode);
 			var hmb = d.marginBox(this.hueCursorNode);
+
 			this._shift = {
 				hue: {
 					x: Math.round(hmb.w / 2) - 1,
@@ -120,6 +121,7 @@ dojo.require("dojox.color");
 			
 			//setup constants
 			this.PICKER_HUE_H = d.coords(this.hueNode).h;
+			
 			var cu = d.coords(this.colorUnderlay);
 			this.PICKER_SAT_VAL_H = cu.h;
 			this.PICKER_SAT_VAL_W = cu.w;
@@ -150,7 +152,13 @@ dojo.require("dojox.color");
 			
 		},
 		
+		startup: function(){
+			this._started = true;
+			this.attr("value", this.value);
+		},
+		
 		_setValueAttr: function(value){
+			if(!this._started){ return; }
 			this.setColor(value, true);
 		},
 		
@@ -197,6 +205,7 @@ dojo.require("dojox.color");
 				h = Math.round(360 - (_huetop / this.PICKER_HUE_H * 360)),
 				col = dojox.color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
 			;
+
 			
 			this._updateColorInputs(col);
 			this._updateValue(col, true);

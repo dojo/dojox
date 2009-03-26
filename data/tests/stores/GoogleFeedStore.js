@@ -426,7 +426,6 @@ doh.register("dojox.data.tests.stores.GoogleFeedStore",
 					t.assertTrue(googleStore.hasAttribute(items[0], "link"));
 					t.assertTrue(googleStore.hasAttribute(items[0], "content"));
 					t.assertTrue(googleStore.hasAttribute(items[0], "author"));
-					t.assertTrue(googleStore.hasAttribute(items[0], "summary"));
 					t.assertTrue(googleStore.hasAttribute(items[0], "published"));
 					t.assertTrue(googleStore.hasAttribute(items[0], "categories"));
 					t.assertTrue(!googleStore.hasAttribute(items[0], "I dont exist"));

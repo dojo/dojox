@@ -94,25 +94,26 @@ dojo.extend(dojox.gfx.Shape, {
 	},
 
 	setStroke: function(stroke){
-		// summary: sets a stroke object (SVG)
-		// stroke: Object: a stroke object
-		//	(see dojox.gfx.defaultStroke)
+		//	summary:
+		//		sets a stroke object (SVG)
+		//	stroke: Object
+		// 		a stroke object (see dojox.gfx.defaultStroke)
 
+		var rn = this.rawNode;
 		if(!stroke){
 			// don't stroke
 			this.strokeStyle = null;
-			this.rawNode.setAttribute("stroke", "none");
-			this.rawNode.setAttribute("stroke-opacity", 0);
+			rn.setAttribute("stroke", "none");
+			rn.setAttribute("stroke-opacity", 0);
 			return this;
 		}
 		// normalize the stroke
 		if(typeof stroke == "string" || dojo.isArray(stroke) || stroke instanceof dojo.Color){
-			stroke = {color: stroke};
+			stroke = { color: stroke };
 		}
 		var s = this.strokeStyle = dojox.gfx.makeParameters(dojox.gfx.defaultStroke, stroke);
 		s.color = dojox.gfx.normalizeColor(s.color);
 		// generate attributes
-		var rn = this.rawNode;
 		if(s){
 			rn.setAttribute("stroke", s.color.toCss());
 			rn.setAttribute("stroke-opacity", s.color.a);
@@ -125,9 +126,11 @@ dojo.extend(dojox.gfx.Shape, {
 				rn.setAttribute("stroke-linejoin",   s.join);
 			}
 			var da = s.style.toLowerCase();
-			if(da in dojox.gfx.svg.dasharray){ da = dojox.gfx.svg.dasharray[da]; }
+			if(da in dojox.gfx.svg.dasharray){
+				da = dojox.gfx.svg.dasharray[da];
+			}
 			if(da instanceof Array){
-				da = dojo.clone(da);
+				da = dojo._toArray(da);
 				for(var i = 0; i < da.length; ++i){
 					da[i] *= s.width;
 				}

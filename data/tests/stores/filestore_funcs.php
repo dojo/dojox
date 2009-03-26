@@ -77,7 +77,7 @@
 						$fileObj = generateFileObj($file, $dir, $rootDir,$expand,$showHiddenFiles);
 						if (is_dir($rootDir."/".$path)) {
 							if ($recurse) {
-								if (!showHiddenFiles || $fileObj["name"][0] != '.') {
+								if ($showHiddenFiles || $fileObj["name"][0] != '.') {
 									$subfiles = getAllfiles($path,$rootDir,$recurse,$dirsOnly,$expand,$showHiddenFiles);
 									$length = count($subfiles);
 									for ($i = 0; $i < $length; $i++) {
@@ -87,7 +87,7 @@
 							}
 						}
 						if (!$dirsOnly || $fileObj["directory"]) {
-							if (!showHiddenFiles || $fileObj["name"][0] !== '.') {
+							if ($showHiddenFiles || $fileObj["name"][0] !== '.') {
 								$files[] = $fileObj;
 							}
 						}
@@ -161,7 +161,7 @@
 			while($cFile = readdir($dirHandle)) {
 				if ($cFile) {
 					if ($cFile != ".." && $cFile != ".") {
-						if (!showHiddenFiles || $cFile[0] != '.') {
+						if ($showHiddenFiles || $cFile[0] != '.') {
 							if (!$expand) {
 								$children[] = $cFile;
 							}else{
@@ -214,7 +214,7 @@
 				$ret = -1;
 			}
 
-			if ($this->descending) {
+			if (property_exists($this, "descending") && $this->descending == true) {
 				$ret = $ret * -1;
 			}
 
@@ -274,7 +274,11 @@
 		$size = count($sortSpec);
 		for ($i = 0; $i < $size; $i++) {
 			$sort = $sortSpec[$i];
-			$fileComp = new FieldComparator($sort->attribute,$sort->descending);
+			$desc = false;
+			if(property_exists($sort, "descending")){
+				$desc = $sort->descending;
+			}
+			$fileComp = new FieldComparator($sort->attribute,$desc);
 			$comparator->addComparator($fileComp);
 		}
 		return $comparator;
@@ -311,14 +315,14 @@
 					}
 					if ($matched) {
 						if (!$dirsOnly || $item["directory"]) {
-							if (!showHiddenFiles || $item["name"][0] != '.') {
+							if ($showHiddenFiles || $item["name"][0] != '.') {
 								$files[] = $item;
 							}
 						}
 					}
 
 					if (is_dir($rootDir."/".$item["path"]) && $recurse) {
-						if (!showHiddenFiles || $item["name"][0] != '.') {
+						if ($showHiddenFiles || $item["name"][0] != '.') {
 							$files = array_merge($files, matchFiles($query, $patterns, $ignoreCase, $item["path"], $rootDir, $recurse, $dirsOnly, $expand, $showHiddenFiles));
 						}
 					}
@@ -344,7 +348,7 @@
 		if ($possibleValue === null && $value === null) {
 			$matched = true;
 		} else {
-			if ($rExp != null && is_string(possibleValue)) {
+			if ($rExp != null && is_string($possibleValue)) {
 				if ($ignoreCase) {
 					$matched = eregi($rExp, $possibleValue);
 				} else {

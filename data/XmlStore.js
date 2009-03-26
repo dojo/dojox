@@ -381,7 +381,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 			errorHandler(new Error("No URL specified."));
 			return;
 		}
-		var localRequest = (!this.sendQuery ? request : null); // use request for _getItems()
+		var localRequest = (!this.sendQuery ? request : {}); // use request for _getItems()
 
 		var self = this;
 		var getArgs = {
@@ -490,7 +490,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 			if(node.nodeType != 1 /*ELEMENT_NODE*/){
 				continue;
 			}
-            var item = this._getItem(node);
+			var item = this._getItem(node);
 			if(query){
 				var found = true;
 				var ignoreCase = request.queryOptions ? request.queryOptions.ignoreCase : false; 
@@ -1385,7 +1385,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 				handleDocument = function(data){
 					var item = null;
 					if(data){
-						var items = self._getItems(items, null);
+						var items = self._getItems(items, {});
 						if(items.length === 1){
 							item = items[0];
 						}else{

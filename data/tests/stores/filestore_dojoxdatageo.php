@@ -20,10 +20,10 @@
 		$queryOptions = $_GET['queryOptions'];
 		$queryOptions = str_replace("\\\"", "\"", $queryOptions);
 		$queryOptions = json_decode($queryOptions);
-		if ($queryOptions->deep) {
+		if (property_exists($queryOptions, "deep")) {
 			$deep = $queryOptions->deep;
 		}
-		if ($queryOptions->ignoreCase) {
+		if (property_exists($queryOptions, "ignoreCase")) {
 			$ignoreCase = $queryOptions->ignoreCase;
 		}
 	}
@@ -47,7 +47,6 @@
 			$showHiddenFiles = true;
 		}
 	}
-
 
 	//See if a specific file was requested, or if it is just a query for files.
 	$path = false;

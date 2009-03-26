@@ -29,7 +29,7 @@
 
 					dojo.declare("demo.Table", [dijit._Widget, dojox.dtl._DomTemplated], {
 						pos: 0,
-						preCreate: function(){
+						postMixInProperties: function(){
 							this.ths = dojo.query("th", this.domNode).map(function(item){
 								return item.innerHTML;
 							});

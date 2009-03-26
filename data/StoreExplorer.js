@@ -14,7 +14,7 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		var self = this;
 		this.inherited(arguments);
 		var contentPane = new dijit.layout.ContentPane({
-			region:'top'			
+			region:'top'
 		}).placeAt(this);
 		function addButton(name, action){
 			var button = new dijit.form.Button({label: name}); 
@@ -79,7 +79,7 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		var trailingCP = new dijit.layout.ContentPane({
 			region: 'trailing', 
 			splitter: true, 
-			style: "width: 300px",
+			style: "width: 300px"
         }).placeAt(this);
         
         var tree = this.tree = new dojox.data.ItemExplorer({

@@ -469,11 +469,11 @@ dojo.require("dojox.dtl.Context");
 				this.onChangeAttribute(this._parent, key, old, value);
 			}
 			if(key == "style"){
-				console.log(value);
+				//console.log(value);
 				this._parent.style.cssText = value;
 			}else{
 				dojo.attr(this._parent, key, value);
-				console.log(this._parent, key, value);
+				//console.log(this._parent, key, value);
 			}
 			return this;
 		},

@@ -487,9 +487,9 @@ dojo.declare("dojox.gfx.Rectangle", null, {
 
 dojo.declare("dojox.gfx.shape.Rect", dojox.gfx.Shape, {
 	// summary: a generic rectangle
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
-		this.shape = dojo.clone(dojox.gfx.defaultRect);
+		this.shape = dojox.gfx.getDefault("Rect");
 		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
@@ -500,9 +500,9 @@ dojo.declare("dojox.gfx.shape.Rect", dojox.gfx.Shape, {
 
 dojo.declare("dojox.gfx.shape.Ellipse", dojox.gfx.Shape, {
 	// summary: a generic ellipse
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
-		this.shape = dojo.clone(dojox.gfx.defaultEllipse);
+		this.shape = dojox.gfx.getDefault("Ellipse");
 		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
@@ -519,9 +519,9 @@ dojo.declare("dojox.gfx.shape.Ellipse", dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.shape.Circle", dojox.gfx.Shape, {
 	// summary: a generic circle
 	//	(this is a helper object, which is defined for convenience)
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
-		this.shape = dojo.clone(dojox.gfx.defaultCircle);
+		this.shape = dojox.gfx.getDefault("Circle");
 		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
@@ -538,9 +538,9 @@ dojo.declare("dojox.gfx.shape.Circle", dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.shape.Line", dojox.gfx.Shape, {
 	// summary: a generic line
 	//	(this is a helper object, which is defined for convenience)
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
-		this.shape = dojo.clone(dojox.gfx.defaultLine);
+		this.shape = dojox.gfx.getDefault("Line");
 		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
@@ -561,9 +561,9 @@ dojo.declare("dojox.gfx.shape.Line", dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape, {
 	// summary: a generic polyline/polygon
 	//	(this is a helper object, which is defined for convenience)
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
-		this.shape = dojo.clone(dojox.gfx.defaultPolyline);
+		this.shape = dojox.gfx.getDefault("Polyline");
 		this.rawNode = rawNode;
 	},
 	setShape: function(points, closed){
@@ -609,9 +609,9 @@ dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape, {
 dojo.declare("dojox.gfx.shape.Image", dojox.gfx.Shape, {
 	// summary: a generic image
 	//	(this is a helper object, which is defined for convenience)
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
-		this.shape = dojo.clone(dojox.gfx.defaultImage);
+		this.shape = dojox.gfx.getDefault("Image");
 		this.rawNode = rawNode;
 	},
 	getBoundingBox: function(){
@@ -630,10 +630,10 @@ dojo.declare("dojox.gfx.shape.Image", dojox.gfx.Shape, {
 
 dojo.declare("dojox.gfx.shape.Text", dojox.gfx.Shape, {
 	// summary: a generic text
-	constructor: function(rawNode) {
+	constructor: function(rawNode){
 		// rawNode: Node: a DOM Node
 		this.fontStyle = null;
-		this.shape = dojo.clone(dojox.gfx.defaultText);
+		this.shape = dojox.gfx.getDefault("Text");
 		this.rawNode = rawNode;
 	},
 	getFont: function(){
@@ -656,66 +656,67 @@ dojox.gfx.shape.Creator = {
 		// summary: creates a shape object based on its type; it is meant to be used
 		//	by group-like objects
 		// shape: Object: a shape descriptor object
+		var gfx = dojox.gfx;
 		switch(shape.type){
-			case dojox.gfx.defaultPath.type:		return this.createPath(shape);
-			case dojox.gfx.defaultRect.type:		return this.createRect(shape);
-			case dojox.gfx.defaultCircle.type:		return this.createCircle(shape);
-			case dojox.gfx.defaultEllipse.type:		return this.createEllipse(shape);
-			case dojox.gfx.defaultLine.type:		return this.createLine(shape);
-			case dojox.gfx.defaultPolyline.type:	return this.createPolyline(shape);
-			case dojox.gfx.defaultImage.type:		return this.createImage(shape);
-			case dojox.gfx.defaultText.type:		return this.createText(shape);
-			case dojox.gfx.defaultTextPath.type:	return this.createTextPath(shape);
+			case gfx.defaultPath.type:		return this.createPath(shape);
+			case gfx.defaultRect.type:		return this.createRect(shape);
+			case gfx.defaultCircle.type:		return this.createCircle(shape);
+			case gfx.defaultEllipse.type:		return this.createEllipse(shape);
+			case gfx.defaultLine.type:		return this.createLine(shape);
+			case gfx.defaultPolyline.type:	return this.createPolyline(shape);
+			case gfx.defaultImage.type:		return this.createImage(shape);
+			case gfx.defaultText.type:		return this.createText(shape);
+			case gfx.defaultTextPath.type:	return this.createTextPath(shape);
 		}
 		return null;
 	},
 	createGroup: function(){
-		// summary: creates an SVG group shape
+		// summary: creates a group shape
 		return this.createObject(dojox.gfx.Group);	// dojox.gfx.Group
 	},
 	createRect: function(rect){
-		// summary: creates an SVG rectangle shape
+		// summary: creates a rectangle shape
 		// rect: Object: a path object (see dojox.gfx.defaultRect)
 		return this.createObject(dojox.gfx.Rect, rect);	// dojox.gfx.Rect
 	},
 	createEllipse: function(ellipse){
-		// summary: creates an SVG ellipse shape
+		// summary: creates an ellipse shape
 		// ellipse: Object: an ellipse object (see dojox.gfx.defaultEllipse)
 		return this.createObject(dojox.gfx.Ellipse, ellipse);	// dojox.gfx.Ellipse
 	},
 	createCircle: function(circle){
-		// summary: creates an SVG circle shape
+		// summary: creates a circle shape
 		// circle: Object: a circle object (see dojox.gfx.defaultCircle)
 		return this.createObject(dojox.gfx.Circle, circle);	// dojox.gfx.Circle
 	},
 	createLine: function(line){
-		// summary: creates an SVG line shape
+		// summary: creates a line shape
 		// line: Object: a line object (see dojox.gfx.defaultLine)
 		return this.createObject(dojox.gfx.Line, line);	// dojox.gfx.Line
 	},
 	createPolyline: function(points){
-		// summary: creates an SVG polyline/polygon shape
+		// summary: creates a polyline/polygon shape
 		// points: Object: a points object (see dojox.gfx.defaultPolyline)
 		//	or an Array of points
 		return this.createObject(dojox.gfx.Polyline, points);	// dojox.gfx.Polyline
 	},
 	createImage: function(image){
-		// summary: creates an SVG image shape
+		// summary: creates a image shape
 		// image: Object: an image object (see dojox.gfx.defaultImage)
 		return this.createObject(dojox.gfx.Image, image);	// dojox.gfx.Image
 	},
 	createText: function(text){
-		// summary: creates an SVG text shape
+		// summary: creates a text shape
 		// text: Object: a text object (see dojox.gfx.defaultText)
 		return this.createObject(dojox.gfx.Text, text);	// dojox.gfx.Text
 	},
 	createPath: function(path){
-		// summary: creates an SVG path shape
+		// summary: creates a path shape
 		// path: Object: a path object (see dojox.gfx.defaultPath)
 		return this.createObject(dojox.gfx.Path, path);	// dojox.gfx.Path
 	},
 	createTextPath: function(text){
-		// summary: creates an SVG text shape
+		// summary: creates a text shape
 		// text: Object: a textpath object (see dojox.gfx.defaultTextPath)
 		return this.createObject(dojox.gfx.TextPath, {}).setText(text);	// dojox.gfx.TextPath
 	},

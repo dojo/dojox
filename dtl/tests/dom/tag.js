@@ -303,6 +303,22 @@ doh.register("dojox.dtl.dom.tag",
 			var context = new dd.Context();
 			var template = new dd.DomTemplate('<div simplecase="simple" mixedCase="mixed">content</div>');
 			doh.is('<div simplecase="simple" mixedcase="mixed">content</div>', dd.tests.dom.util.render(template, context));
+		},
+		function test_tabindex_lowercase(){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			var template = new dd.DomTemplate('<div tabindex="-1"></div>');
+			//the following should not throw errors
+			dd.tests.dom.util.render(template, context);
+		},
+		function test_tabIndex(){
+			var dd = dojox.dtl;
+
+			var context = new dd.Context();
+			var template = new dd.DomTemplate('<div tabIndex="-1"></div>');
+			//the following should not throw errors in IE
+			dd.tests.dom.util.render(template, context);
 		}
 	]
 );

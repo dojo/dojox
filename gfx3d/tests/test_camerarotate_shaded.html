@@ -36,7 +36,7 @@
 				m.cameraRotateYg(angles.y), 
 				m.cameraRotateZg(angles.z)
 				]);
-			console.debug(t);
+			// console.debug(t);
 			view.setCameraTransform(t);
 			view.render();
 		}
@@ -45,8 +45,12 @@
 			var surface = dojox.gfx.createSurface("test", 500, 500);
 			view = surface.createViewport();
 
-			view.setLights([{direction: {x: -10, y: -5, z: 5}, color: "white"}], 
-					{color:"white", intensity: 2}, "white");
+			view.setLights([
+					{ direction: { x: -10, y: -5, z: 5 }, color: "white"}
+				], 
+				{ color:"white", intensity: 2 },
+				"white"
+			);
 
 			var c = {bottom: {x: 0, y: 0, z: 0}, top :{x: 100, y: 100, z: 100}};
 			var xaxis = [{x: 0, y: 0, z: 0}, {x: 200, y: 0, z: 0}];
@@ -71,7 +75,7 @@
 
 			view.applyCameraTransform(camera);
 			view.render();
-			window.setInterval(rotate, 50);
+			setInterval(rotate, 50);
 		};
 
 		dojo.addOnLoad(makeObjects);

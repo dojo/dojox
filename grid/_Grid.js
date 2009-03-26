@@ -398,18 +398,20 @@ dojo.requireLocalization("dijit", "loading");
 					ah = true;
 				}else{
 					ah = window.parseInt(ah, 10);
-					if(isNaN(ah)){
-						ah = false;
-					}
-					// Autoheight must be at least 1, if it's a number.  If it's
-					// less than 0, we'll take that to mean "all" rows (same as 
-					// autoHeight=true - if it is equal to zero, we'll take that
-					// to mean autoHeight=false
-					if(ah < 0){
-						ah = true;
-					}else if (ah === 0){
-						ah = false;
-					}
+				}
+			}
+			if(typeof ah == "number"){
+				if(isNaN(ah)){
+					ah = false;
+				}
+				// Autoheight must be at least 1, if it's a number.  If it's
+				// less than 0, we'll take that to mean "all" rows (same as 
+				// autoHeight=true - if it is equal to zero, we'll take that
+				// to mean autoHeight=false
+				if(ah < 0){
+					ah = true;
+				}else if (ah === 0){
+					ah = false;
 				}
 			}
 			this.autoHeight = ah;
@@ -596,7 +598,7 @@ dojo.requireLocalization("dijit", "loading");
 		},
 
 		_setHeaderMenuAttr: function(menu){
-			if(this._placeholders.length){
+			if(this._placeholders && this._placeholders.length){
 				dojo.forEach(this._placeholders, function(p){
 					p.unReplace(true);
 				});

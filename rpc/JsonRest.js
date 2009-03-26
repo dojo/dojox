@@ -85,7 +85,7 @@ dojo.require("dojox.rpc.Rest");
 			var xhrSendId;
 			var plainXhr = dojo.xhr;
 			var left = actions.length;// this is how many changes are remaining to be received from the server
-			var contentLocation;
+			var i, contentLocation;
 			var timeStamp;
 			var conflictDateHeader = this.conflictDateHeader;
 			// add headers for extra information
@@ -168,7 +168,7 @@ dojo.require("dojox.rpc.Rest");
 				var object = dirty.object;
 				var old = dirty.old;
 				if(!(service && (object || old) && 
-					(object || old).__id.indexOf(kwArgs.service.servicePath))){
+					(object || old).__id.indexOf(service.servicePath))){
 					// if we are in the specified store or if this is a global revert
 					if(object && old){
 						// changed

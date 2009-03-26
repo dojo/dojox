@@ -4,7 +4,10 @@ dojo.provide("dojox.gfx.matrix");
 	var m = dojox.gfx.matrix;
 
 	// candidates for dojox.math:
-	m._degToRad = function(degree){ return Math.PI * degree / 180; };
+	var _degToRadCache = {};
+	m._degToRad = function(degree){
+		return _degToRadCache[degree] || (_degToRadCache[degree] = (Math.PI * degree / 180));
+	};
 	m._radToDeg = function(radian){ return radian / Math.PI * 180; };
 
 	m.Matrix2D = function(arg){
