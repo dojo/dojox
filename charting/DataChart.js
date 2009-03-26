@@ -98,6 +98,15 @@ dojo.experimental("dojox.charting.DataChart");
 		//			Option used for fetching items
 		queryOptions: "",
 		//
+		/*=====
+			//	start:Number
+			//		first item to fetch from store
+			//	count:Number
+			//		Total amount of items to fetch from store
+			//	sort:Object
+			//		Paramaters to sort the fetched items from store
+		=====*/
+		//
 		//		fieldName: String
 		//			The field in the store item that is getting charted
 		fieldName: "value",
@@ -108,7 +117,13 @@ dojo.experimental("dojox.charting.DataChart");
 		//
 		//		displayRange: Number
 		//			The number of major ticks to show on the xaxis
-		displayRange:10,
+		displayRange:0,
+		//
+		// 		stretchToFit: Boolean
+		//			If true, chart is sized to data. If false, chart is a
+		//			fixed size. Note, is overridden by displayRange.
+		//			TODO: Stretch for the y-axis?
+		stretchToFit:true,
 		//
 		//		minWidth: Number
 		//			The the smallest the chart width can be
@@ -180,8 +195,14 @@ dojo.experimental("dojox.charting.DataChart");
 			this.chartTheme.plotarea.stroke = {color: "gray", width: 3};
 			
 			this.setTheme(this.chartTheme);
-			this.xaxis.to = this.displayRange;
 			
+			// displayRange overrides stretchToFit
+			if(this.displayRange){
+				this.stretchToFit = false;
+			}
+			if(!this.stretchToFit){
+				this.xaxis.to = this.displayRange;
+			}
 			this.addAxis("x", this.xaxis);
 			this.addAxis("y", this.yaxis);
 			chartPlot.type = kwArgs.type || "Markers"
@@ -236,14 +257,19 @@ dojo.experimental("dojox.charting.DataChart");
 			}
 		},
 		
-		onSet: function(item){
+		onSet: function(/*storeObject*/item){
 			//	summary:
 			//		Fired when a store item changes.
 			//		Collects the item calls and when
 			//		done (after 200ms), sends item
 			//		array to onData().
 			//
-			var nm = this.getProperty(item, this.label)
+			// FIXME: Using labels instead of IDs for item
+			//	identifiers here and in the chart series. This
+			//	is obviously short sighted, but currently used
+			//	for seriesLabels. Workaround for potential bugs
+			//	is to assign a label for which all items are unique.
+			var nm = this.getProperty(item, this.label);
 			
 			// FIXME: why the check for if-in-runs?
 			if(nm in this.runs || this.comparative){
@@ -263,19 +289,24 @@ dojo.experimental("dojox.charting.DataChart");
 			}
 		},
 		
-		onError: function(err){
+		onError: function(/*Error*/err){
 			// stub
 			//	Fires on fetch error
 			console.error(err);
 		},
 
-		onDataReceived: function(items){
+		onDataReceived: function(/*Array*/items){
 			// summary:
 			//		stub. Fires after data is received but
 			//		before data is parsed and rendered
 		},
 		
-		getProperty: function(item, prop){
+		getProperty: function(/*storeObject*/item, prop){
+			// summary:
+			//		The main use of this function is to determine
+			//		between a single value and an array of values.
+			//		Other property types included for convenience.
+			//
 			if(prop==this.label){
 				return this.store.getLabel(item);
 			}
@@ -288,7 +319,7 @@ dojo.experimental("dojox.charting.DataChart");
 			}
 			return value;
 		},
-		onData: function(items){
+		onData: function(/*Array*/items){
 			//	summary:
 			//		Called after a completed fetch
 			//		or when store items change.
@@ -310,7 +341,9 @@ dojo.experimental("dojox.charting.DataChart");
 				}, this);
 				items = this.items;
 			}
-			
+			if(this.stretchToFit){
+				this.displayRange = items.length;
+			}
 			this.onDataReceived(items);
 			this.items = items;
 			
@@ -328,7 +361,8 @@ dojo.experimental("dojox.charting.DataChart");
 				}, this);
 				
 			}else{
-				// each items is a seperate series.
+				
+				// each item is a seperate series.
 				dojo.forEach(items, function(m, i){
 					var nm = this.store.getLabel(m);
 					if(!this.seriesData[nm]){
@@ -377,7 +411,7 @@ dojo.experimental("dojox.charting.DataChart");
 				// First time around we need to add the series (chart lines)
 				//	to the chart.
 				this.firstRun = false;
-				for(var nm in this.seriesData){
+				for(nm in this.seriesData){
 					this.addSeries(nm, this.seriesData[nm]);
 					displayData = this.seriesData[nm];
 				}
@@ -387,7 +421,8 @@ dojo.experimental("dojox.charting.DataChart");
 				// update existing series
 				for(nm in this.seriesData){
 					displayData = this.seriesData[nm];
-					if(displayData.length > this.displayRange){
+					
+					if(this.scroll && displayData.length > this.displayRange){
 						// chart lines have gone beyond the right boundary.
 						this.dataOffset = displayData.length-this.displayRange - 1;
 						displayData = displayData.slice(displayData.length-this.displayRange, displayData.length);
@@ -409,7 +444,8 @@ dojo.experimental("dojox.charting.DataChart");
 			//		are received via onSet in data store.
 			//
 			if(!this.store){ return; }
-			this.store.fetch({query:this.query, queryOptions:this.queryOptions, onComplete:dojo.hitch(this, "onData"), onError:dojo.hitch(this, "onError")});
+			
+			this.store.fetch({query:this.query, queryOptions:this.queryOptions, start:this.start, count:this.count, sort:this.sort, onComplete:dojo.hitch(this, "onData"), onError:dojo.hitch(this, "onError")});
 		},
 		
 		convertLabels: function(axis){
@@ -418,20 +454,20 @@ dojo.experimental("dojox.charting.DataChart");
 			//		into an array of objects
 			//
 			if(!axis.labels || dojo.isObject(axis.labels[0])){ return null; }
-			console.warn("CONVERT", axis)
+			
 			axis.labels = dojo.map(axis.labels, function(ele, i){
-				return {value:i, text:ele};
+				return {value:i, text:ele}; 
 			});
-			return null;
+			return null; // null
 		},
 		
-		seriesLabels: function(val){
+		seriesLabels: function(/*Number*/val){
 			// summary:
 			//		Convenience method that sets series labels based on item labels.
 			val--;
 			if(this.series.length<1 || (!this.comparative && val>this.series.length)){ return "-"; }
 			if(this.comparative){
-				return this.store.getLabel(this.items[val]);
+				return this.store.getLabel(this.items[val]);// String
 				
 			}else{
 				// FIXME:
@@ -442,11 +478,11 @@ dojo.experimental("dojox.charting.DataChart");
 				//	0.01 or something.
 				for(var i=0;i<this.series.length; i++){
 					if(this.series[i].data[val]>0){
-						return this.series[i].name;
+						return this.series[i].name; // String
 					}
-				};
+				}
 			}
-			return "-";
+			return "-"; // String
 			
 		},
 		
