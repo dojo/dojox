@@ -12,7 +12,7 @@ dojo.require("dojox.sketch.Anchor");
 		this.end={ x:200, y:0 };
 		this.textPosition={ x:0, y:0 };
 		this.textOffset=4;
-		this.textAlign="middle";
+		//this.textAlign="middle";
 		this.textYOffset=10;
 
 //		this.property('label',this.id);
@@ -33,6 +33,7 @@ dojo.require("dojox.sketch.Anchor");
 	p._pos=function(){
 		var offset=this.textOffset, x=0, y=0;
 		var slope=this.calculate.slope(this.control, this.end);
+		this.textAlign="middle";
 		if(Math.abs(slope)>=1){
 			x=this.end.x+this.calculate.dx(this.control, this.end, offset);
 			if(this.control.y>this.end.y){ 
