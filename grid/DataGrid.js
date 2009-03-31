@@ -35,6 +35,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	query: null,
 	queryOptions: null,
 	fetchText: '...',
+	sortFields: null,
 
 /*=====
 	// structure: dojox.grid.__DataViewDef|dojox.grid.__DataViewDef[]|dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]
@@ -412,6 +413,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	getSortProps: function(){
 		var c = this.getCell(this.getSortIndex());
 		if(!c){
+			if(this.sortFields){
+				return this.sortFields;
+			}
 			return null;
 		}else{
 			var desc = c["sortDesc"];
