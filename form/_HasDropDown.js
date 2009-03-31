@@ -35,6 +35,11 @@ dojo.declare("dojox.form._HasDropDown",
 		//		default width
 		autoWidth: true,
 		
+		//  maxHeight: Integer
+		//		The max height for our dropdown.  Set to 0 for no max height.
+		//		any dropdown taller than this will have scrollbars
+		maxHeight: 0,
+		
 		//	_stopClickEvents: Boolean
 		//		When set to false, the click events will not be stopped, in
 		//		case you want to use them in your subwidget
@@ -85,18 +90,23 @@ dojo.declare("dojox.form._HasDropDown",
 			var dropDown = this.dropDown, overMenu = false;
 			
 			if(e && this._opened){
-				// Find out if our target is somewhere in our dropdown widget
-				var t = e.target;
-				while(t && !overMenu){
-					if(dojo.hasClass(t, "dijitPopup")){
-						overMenu = true;
-					}else{
-						t = t.parentNode;
+				// Find out if our target is somewhere in our dropdown widget,
+				// but not over our dropDownNode (the clickable node)
+				var c = dojo.coords(this.dropDownNode)
+				if(!(e.pageX >= c.l && e.pageX <= c.l + c.w) || 
+					!(e.pageY >= c.t && e.pageY <= c.t + c.h)){
+					var t = e.target;
+					while(t && !overMenu){
+						if(dojo.hasClass(t, "dijitPopup")){
+							overMenu = true;
+						}else{
+							t = t.parentNode;
+						}
 					}
-				}
-				if(overMenu){
-					this._onMenuMouseup(e);
-					return;
+					if(overMenu){
+						this._onMenuMouseup(e);
+						return;
+					}
 				}
 			}
 			if(this._opened && dropDown.focus){
@@ -131,11 +141,6 @@ dojo.declare("dojox.form._HasDropDown",
 		postCreate: function(){
 			this._setupDropdown();
 			this.inherited("postCreate", arguments);
-		},
-		
-		startup: function(){
-			dijit.popup.prepare(this.dropDown.domNode);
-			this.inherited("startup", arguments);
 		},
 		
 		destroyDescendants: function(){
@@ -221,9 +226,33 @@ dojo.declare("dojox.form._HasDropDown",
 			// summary: opens the dropdown for this widget - it returns the 
 			//			return value of dijit.popup.open
 			var dropDown = this.dropDown;
-			var oldWidth=dropDown.domNode.style.width;
+			var ddNode = dropDown.domNode;
 			var self = this;
 
+			// Prepare our popup's height and honor maxHeight if it exists.
+			if(this._preparedNode){
+				dojo.style(ddNode, {width: "", height: "", display: "", visibility: "hidden"});
+			}else{
+				dijit.popup.prepare(ddNode);
+				this._preparedNode = true;
+			}
+			if(this.maxHeight || this.autoWidth){
+				var mb = dojo.marginBox(ddNode);
+				var overHeight = (this.maxHeight && mb.h > this.maxHeight);
+				dojo.style(ddNode, {overflow: overHeight ? "auto" : "hidden"});
+				if(this.autoWidth){
+					mb.w = Math.max(mb.w, this.domNode.offsetWidth);
+				}
+				if(overHeight){
+					mb.h = this.maxHeight;
+					mb.w += 16;
+				}
+				if(dojo.isFunction(dropDown.resize)){
+					dropDown.resize(mb);
+				}else{
+					dojo.marginBox(ddNode, mb);
+				}
+			}			
 			var retVal = dijit.popup.open({
 				parent: this,
 				popup: dropDown,
@@ -239,29 +268,12 @@ dojo.declare("dojox.form._HasDropDown",
 					self.closeDropDown(true);
 				},
 				onClose: function(){
-					dropDown.domNode.style.width = oldWidth;
 					dojo.attr(self.popupStateNode, "popupActive", false);
 					dojo.removeClass(self.popupStateNode, "dojoxHasDropDownOpen");
 					self._opened = false;
 					self.state = "";
 				}
 			});
-			if(this.autoWidth && this.domNode.offsetWidth > dropDown.domNode.offsetWidth){
-				var adjustNode = null;
-				if(!this.isLeftToRight()){
-					adjustNode = dropDown.domNode.parentNode;
-					var oldRight = adjustNode.offsetLeft + adjustNode.offsetWidth;
-				}
-				// make menu at least as wide as the node
-				if(dropDown.resize){
-					dropDown.resize({w: this.domNode.offsetWidth});
-				}else{
-					dojo.marginBox(dropDown.domNode, {w: this.domNode.offsetWidth});
-				}
-				if(adjustNode){
-					adjustNode.style.left = oldRight - this.domNode.offsetWidth + "px";
-				}
-			}
 			dojo.attr(this.popupStateNode, "popupActive", "true");
 			dojo.addClass(self.popupStateNode, "dojoxHasDropDownOpen");
 			this._opened=true;

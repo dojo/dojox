@@ -57,7 +57,12 @@
 	white-space: nowrap;
 }
 
-/*
+/* Remove margins on the sub-table */
+.dojoxDropDownSelectMenu .dijitMenuTable {
+	margin: 0px;
+	background-color: transparent;
+}
+
 **----------------------------------------------------------------------------
 **  Tundra stylings
 **----------------------------------------------------------------------------
