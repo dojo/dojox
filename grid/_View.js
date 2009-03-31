@@ -177,7 +177,13 @@ dojo.require("dojo.dnd.Manager");
 				// Create the top and bottom markers
 				var bottomMarkerId = "dojoxGrid_bottomMarker";
 				var topMarkerId = "dojoxGrid_topMarker";
+				if(this.bottomMarker){
+					dojo.destroy(this.bottomMarker);
+				}
 				this.bottomMarker = dojo.byId(bottomMarkerId);
+				if(this.topMarker){
+					dojo.destroy(this.topMarker);
+				}
 				this.topMarker = dojo.byId(topMarkerId);
 				if (!this.bottomMarker) {
 					this.bottomMarker = dojo.create("div", {
@@ -264,8 +270,14 @@ dojo.require("dojo.dnd.Manager");
 						dojo.disconnect(this._source_conn);
 						dojo.unsubscribe(this._source_sub);
 						dojo.dnd.Source.prototype.destroy.call(this.source);
-						this._hide(this.bottomMarker);
-						this._hide(this.topMarker);
+						if(this.bottomMarker){
+							dojo.destroy(this.bottomMarker);
+							delete this.bottomMarker;
+						}
+						if(this.topMarker){
+							dojo.destroy(this.topMarker);
+							delete this.topMarker;
+						}
 					})
 				});
 				this._source_can_conn = dojo.connect(this.source, "onDndCancel", dojo.hitch(this, function(){
