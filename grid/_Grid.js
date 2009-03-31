@@ -782,9 +782,7 @@ dojo.requireLocalization("dijit", "loading");
 		// startup
 		startup: function(){
 			if(this._started){return;}
-			
 			this.inherited(arguments);
-
 			if(this.autoRender){
 				this.render();
 			}
@@ -834,6 +832,7 @@ dojo.requireLocalization("dijit", "loading");
 			// views are position absolute, so they do not inflate the parent
 			if(this._autoHeight){
 				var size = Math.max(this.views.measureContent()) + 'px';
+				
 				this.viewsNode.style.height = size;
 			}
 		},

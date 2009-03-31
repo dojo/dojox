@@ -129,7 +129,8 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		getColumnsWidth: function(){
-			return this.headerContentNode.firstChild.offsetWidth; // Integer
+			var h = this.headerContentNode;
+			return h && h.firstChild ? h.firstChild.offsetWidth : 0; // Integer
 		},
 
 		setColumnsWidth: function(width){
@@ -172,6 +173,30 @@ dojo.require("dojo.dnd.Manager");
 				if(this.source){
 					this.source.destroy();
 				}
+				
+				// Create the top and bottom markers
+				var bottomMarkerId = "dojoxGrid_bottomMarker";
+				var topMarkerId = "dojoxGrid_topMarker";
+				this.bottomMarker = dojo.byId(bottomMarkerId);
+				this.topMarker = dojo.byId(topMarkerId);
+				if (!this.bottomMarker) {
+					this.bottomMarker = dojo.create("div", {
+						"id": bottomMarkerId,
+						"class": "dojoxGridColPlaceBottom"
+					}, dojo.body());
+					this._hide(this.bottomMarker);
+
+					
+					this.topMarker = dojo.create("div", {
+						"id": topMarkerId,
+						"class": "dojoxGridColPlaceTop"
+					}, dojo.body());
+					this._hide(this.topMarker);
+				}
+				this.arrowDim = dojo.contentBox(this.bottomMarker);
+
+				var headerHeight = dojo.contentBox(this.headerContentNode.firstChild.rows[0]).h;
+				
 				this.source = new dojo.dnd.Source(this.headerContentNode.firstChild.rows[0], {
 					horizontal: true,
 					accept: [ "gridColumn_" + this.grid.id ],
@@ -190,7 +215,10 @@ dojo.require("dojo.dnd.Manager");
 								dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
 							}
 						}
+						dojo.style(this.bottomMarker, "visibility", "visible");
+						dojo.style(this.topMarker, "visibility", "visible");
 					}),
+
 					_markTargetAnchor: dojo.hitch(this, function(before){
 						var src = this.source;
 						if(src.current == src.targetAnchor && src.before == before){ return; }
@@ -198,9 +226,31 @@ dojo.require("dojo.dnd.Manager");
 							src._removeItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
 						}
 						dojo.dnd.Source.prototype._markTargetAnchor.call(src, before);
+						
+						var target = before ? src.targetAnchor : getSibling(src.targetAnchor, src.before);
+						var endAdd = 0;
+
+						if (!target) {
+							target = src.targetAnchor;
+							endAdd = dojo.contentBox(target).w + this.arrowDim.w/2 + 2;
+						}
+
+						var pos = dojo._abs(target, true);
+						var left = Math.floor(pos.x - this.arrowDim.w/2 + endAdd);
+
+						dojo.style(this.bottomMarker, {
+							"left": left + "px",
+							"top" : (headerHeight + pos.y) + "px"
+						});
+
+						dojo.style(this.topMarker, {
+							"left": left + "px",
+							"top" : (pos.y - this.arrowDim.h) + "px"
+						});
+
 						if(src.targetAnchor && getSibling(src.targetAnchor, src.before)){
 							src._addItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
-						}						
+						}
 					}),
 					_unmarkTargetAnchor: dojo.hitch(this, function(){
 						var src = this.source;
@@ -214,12 +264,28 @@ dojo.require("dojo.dnd.Manager");
 						dojo.disconnect(this._source_conn);
 						dojo.unsubscribe(this._source_sub);
 						dojo.dnd.Source.prototype.destroy.call(this.source);
+						this._hide(this.bottomMarker);
+						this._hide(this.topMarker);
 					})
 				});
+				this._source_can_conn = dojo.connect(this.source, "onDndCancel", dojo.hitch(this, function(){
+					dojo.disconnect(this._source_can_conn);
+					this._hide(this.bottomMarker);
+					this._hide(this.topMarker);
+				}));
+
 				this._source_conn = dojo.connect(this.source, "onDndDrop", this, "_onDndDrop");
 				this._source_sub = dojo.subscribe("/dnd/drop/before", this, "_onDndDropBefore");
 				this.source.startup();
 			}
+		},
+		
+		_hide: function(node){
+			dojo.style(node, {
+				left: "-10000px",
+				top: "-10000px",
+				"visibility": "hidden"
+			});
 		},
 
 		_onDndDropBefore: function(source, nodes, copy){
@@ -250,6 +316,8 @@ dojo.require("dojo.dnd.Manager");
 				}
 				return;
 			}
+			this._hide(this.bottomMarker);
+			this._hide(this.topMarker);
 
 			var getIdx = function(n){
 				return n ? dojo.attr(n, "idx") : null;
@@ -451,8 +519,12 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		buildRow: function(inRowIndex, inRowNode){
+			
 			this.buildRowContent(inRowIndex, inRowNode);
+		  	
 			this.styleRow(inRowIndex, inRowNode);
+		  
+		 
 		},
 
 		buildRowContent: function(inRowIndex, inRowNode){

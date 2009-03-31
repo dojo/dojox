@@ -458,11 +458,24 @@ dojo.require("dojo.dnd.Moveable");
 			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
 			dojo.body().appendChild(this.moverDiv);
 			var m = this.moveable = new dojo.dnd.Moveable(this.moverDiv);
+			
+			this.lineDiv = document.createElement('div');
+ 
+			var vw = dojo._abs(e.sourceView.headerNode, true);
+			var headContentBox = dojo.contentBox(e.sourceView.headerNode);
+			var bodyContentBox = dojo.contentBox(e.sourceView.domNode);
+			dojo.style(this.lineDiv, {
+				top: vw.y + "px",
+				left:e.clientX + "px",
+			  height: (bodyContentBox.h + headContentBox.h) + "px"
+				});
+			dojo.addClass(this.lineDiv, "dojoxGridResizeColLine")
+			this.lineDiv._origLeft = e.clientX;
+			dojo.body().appendChild(this.lineDiv);
 
 			var spanners = [], nodes = this.tableMap.findOverlappingNodes(e.cellNode);
 			for(var i=0, cell; (cell=nodes[i]); i++){
 				spanners.push({ node: cell, index: this.getCellNodeIndex(cell), width: cell.offsetWidth });
-				//console.log("spanner: " + this.getCellNodeIndex(cell));
 			}
 
 			var view = e.sourceView;
@@ -479,7 +492,7 @@ dojo.require("dojo.dnd.Moveable");
 				node: e.cellNode,
 				index: e.cellIndex,
 				w: dojo.contentBox(e.cellNode).w,
-				vw: dojo.contentBox(view.headerNode).w,
+				vw: headContentBox.w,
 				table: table,
 				tw: dojo.contentBox(table).w,
 				spanners: spanners,
@@ -512,24 +525,11 @@ dojo.require("dojo.dnd.Moveable");
 			var w = inDrag.w + deltaX;
 			var vw = inDrag.vw + deltaX;
 			var tw = inDrag.tw + deltaX;
+			
+			this.dragRecord = {inDrag: inDrag, mover: mover, leftTop:leftTop};
+			
 			if(w >= this.minColWidth){
-				for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
-					sw = s.width + deltaX;
-					s.node.style.width = sw + 'px';
-					inDrag.view.setColWidth(s.index, sw);
-					//console.log('setColWidth', '#' + s.index, sw + 'px');
-				}
-				for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
-					fl = f.left + deltaX;
-					f.node.style.left = fl + 'px';
-				}
-				inDrag.node.style.width = w + 'px';
-				inDrag.view.setColWidth(inDrag.index, w);
-				inDrag.view.headerNode.style.width = vw + 'px';
-				inDrag.view.setColumnsWidth(tw);
-				if(!isLtr){
-					inDrag.view.headerNode.scrollLeft = inDrag.scrollLeft + deltaX;
-				}
+				dojo.style(this.lineDiv, "left", (this.lineDiv._origLeft + deltaX) + "px");
 			}
 			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
 				var t = findTable(inDrag.node);
@@ -538,6 +538,33 @@ dojo.require("dojo.dnd.Moveable");
 		},
 
 		endResizeColumn: function(inDrag){
+			var leftTop = this.dragRecord.leftTop;
+			var isLtr = dojo._isBodyLtr();
+			var deltaX = isLtr ? leftTop.l : -leftTop.l;
+			var w = inDrag.w + deltaX;
+			var vw = inDrag.vw + deltaX;
+			var tw = inDrag.tw + deltaX;			
+			
+			// Only resize the columns when the drag has finished
+			for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
+				sw = s.width + deltaX;
+				s.node.style.width = sw + 'px';
+				inDrag.view.setColWidth(s.index, sw);
+			}
+			for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
+				fl = f.left + deltaX;
+				f.node.style.left = fl + 'px';
+			}
+			inDrag.node.style.width = w + 'px';
+			inDrag.view.setColWidth(inDrag.index, w);
+			inDrag.view.headerNode.style.width = vw + 'px';
+			inDrag.view.setColumnsWidth(tw);
+			if(!isLtr){
+				inDrag.view.headerNode.scrollLeft = inDrag.scrollLeft + deltaX;
+			}
+			
+			dojo.destroy(this.lineDiv);
+ 			dojo.destroy(this.moverDiv);
 			dojo.destroy(this.moverDiv);
 			delete this.moverDiv;
 			this._skipBogusClicks = true;
@@ -592,7 +619,6 @@ dojo.require("dojo.dnd.Moveable");
 				for(var i=0, cell; (cell=row[i]); i++){
 					h += cell.r + ',' + cell.c + '   ';
 				}
-				//console.log(h);
 			}
 		},
 
