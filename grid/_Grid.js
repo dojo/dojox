@@ -309,11 +309,15 @@ dojo.requireLocalization("dijit", "loading");
 		//  span with class 'dojoxGridNoData' if you want it to be
 		//  styled similar to the loading and error messages
 		noDataMessage: "",
-
+		
 		// private
 		sortInfo: 0,
 		themeable: true,
 		_placeholders: null,
+
+		// _layoutClass: Object
+		//	The class to use for our layout - can be overridden by grid subclasses
+		_layoutClass: dojox.grid._Layout,
 
 		// initialization
 		buildRendering: function(){
@@ -492,7 +496,7 @@ dojo.requireLocalization("dijit", "loading");
 
 		createLayout: function(){
 			// summary: Creates a new Grid layout
-			this.layout = new dojox.grid._Layout(this);
+			this.layout = new this._layoutClass(this);
 			this.connect(this.layout, "moveColumn", "onMoveColumn");
 		},
 

@@ -41,6 +41,14 @@ dojo.require("dojo.dnd.Manager");
 		//		Width of the column being toggled (-1 for none)
 		_togglingColumn: -1,
 		
+		// _headerBuilderClass: Object
+		//		The class to use for our header builder
+		_headerBuilderClass: dojox.grid._HeaderBuilder,
+		
+		// _contentBuilderClass: Object
+		//		The class to use for our content builder
+		_contentBuilderClass: dojox.grid._ContentBuilder,
+		
 		postMixInProperties: function(){
 			this.rowNodes = [];
 		},
@@ -49,8 +57,8 @@ dojo.require("dojo.dnd.Manager");
 			this.connect(this.scrollboxNode,"onscroll","doscroll");
 			dojox.grid.util.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
 			dojox.grid.util.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
-			this.content = new dojox.grid._ContentBuilder(this);
-			this.header = new dojox.grid._HeaderBuilder(this);
+			this.content = new this._contentBuilderClass(this);
+			this.header = new this._headerBuilderClass(this);
 			//BiDi: in RTL case, style width='9000em' causes scrolling problem in head node
 			if(!dojo._isBodyLtr()){
 				this.headerNodeContainer.style.width = "";
