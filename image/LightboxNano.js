@@ -56,10 +56,7 @@ d.declare("dojox.image.LightboxNano", null, {
 			n = a;
 		}
 
-		d.style(n, {
-			display: "block",
-			position: "relative"
-		});
+		d.style(n, "position", "relative");
 		_this._createDiv("dojoxEnlarge", n);
 
 		_this._node = n;
