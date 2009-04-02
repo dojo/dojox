@@ -3,8 +3,9 @@
 	<head>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="locale: 'he', parseOnLoad: true, isDebug: true, extraLocale: ['he', 'ru']"></script>
 		<script language="javascript" type="text/javascript">
-			dojo.require("dojox.date.HebrewDate");
-			dojo.require("dojox.date.HebrewLocale");
+			dojo.require("dojox.date.hebrew");
+			dojo.require("dojox.date.hebrew.Date");
+			dojo.require("dojox.date.hebrew.locale");
 			dojo.require("dijit.form.Button");
 		</script>
 	</head>
@@ -16,26 +17,26 @@
 		<label for="list_input">Date input Hebrew calendar</label>
 		<input type="text" id="list_input" NAME="list_input" style="width: 400px;">
 			<script type="text/javascript">
-				var date = new dojox.date.HebrewDate();
+				var date = new dojox.date.hebrew.Date();
 				var year = date.getFullYear();
 				function onButtonClick(){ //from gregorian to hebrew, use pattern
-					var date = new dojox.date.HebrewDate();
+					var date = new dojox.date.hebrew.Date();
 					var grdate = new Date();
 					var pat = dojo.trim(document.getElementById('Text5').value);
 					var options = {datePattern:pat, selector:'date'};
-					document.getElementById('Text4').value = dojox.date.HebrewLocale.format(date.fromGregorian(grdate), options);
+					document.getElementById('Text4').value = dojox.date.hebrew.locale.format(date.fromGregorian(grdate), options);
 				}
 				function onButtonClickH(){ //from hebrew, use pattern
 					var str = dojo.trim(document.getElementById('list_input').value);
-					var pattstr =  dojo.trim(document.getElementById('Text2').value);
+					var pattstr = dojo.trim(document.getElementById('Text2').value);
 					// timePattern:'hh:mm:ss'
 					var options = {datePattern:pattstr, selector:'date'};
-					var dateH = dojox.date.HebrewLocale.parse (str,  options);
+					var dateH = dojox.date.hebrew.locale.parse (str,  options);
 					document.getElementById('Text3').value = dateH.toGregorian();
 				}	
 				function ListChange(){
 						var dropdownIndex = document.getElementById('setvaluetest').selectedIndex;
-						var dropdownValue =document.getElementById('setvaluetest')[dropdownIndex].value;
+						var dropdownValue = document.getElementById('setvaluetest')[dropdownIndex].value;
 						document.getElementById('Text2').value = dropdownValue;
 				}			
 			</script>
@@ -113,12 +114,12 @@
 				
 		<script type="text/javascript">
 			function onButtonClickAdd(){
-				var dateHebrew= new dojox.date.HebrewDate();
+				var dateHebrew= new dojox.date.hebrew.Date();
 				var num = parseInt(document.getElementById('Text6').value);
 				var sel = document.getElementById('Select2');
-				var dateHebrewAdd= dojox.date.HebrewDate.add(dateHebrew, sel.options[sel.selectedIndex].value, num);
+				var dateHebrewAdd= dojox.date.hebrew.add(dateHebrew, sel.options[sel.selectedIndex].value, num);
 				var options = {datePattern:'EEEE dd MMMM yyyy HH:mm:ss', selector:'date'};
-				document.getElementById('Text7').value	= dojox.date.HebrewLocale.format(dateHebrewAdd,options);
+				document.getElementById('Text7').value	= dojox.date.hebrew.locale.format(dateHebrewAdd,options);
 			}	
 		</script>				
 		<br>		
@@ -155,10 +156,10 @@
 				
 		<script type="text/javascript">
 			function onButtonClickDiff(){
-				var dateHebrew1 = dojox.date.HebrewLocale.parse(dojo.trim(document.getElementById('Text8').value), {datePattern:'dd MMMM yyyy HH:mm:ss', selector:'date'});
-				var dateHebrew2= dojox.date.HebrewLocale.parse(dojo.trim(document.getElementById('Text9').value),  {datePattern:'dd MMMM yyyy HH:mm:ss', selector:'date'});
+				var dateHebrew1 = dojox.date.hebrew.locale.parse(dojo.trim(document.getElementById('Text8').value), {datePattern:'dd MMMM yyyy HH:mm:ss', selector:'date'});
+				var dateHebrew2= dojox.date.hebrew.locale.parse(dojo.trim(document.getElementById('Text9').value),  {datePattern:'dd MMMM yyyy HH:mm:ss', selector:'date'});
 				var sel = document.getElementById('Select3');
-				var dif= dojox.date.HebrewDate.difference(dateHebrew1, dateHebrew2, sel.options[sel.selectedIndex].value);
+				var dif= dojox.date.hebrew.difference(dateHebrew1, dateHebrew2, sel.options[sel.selectedIndex].value);
 				document.getElementById('Text10').value= dif;
 			}	
 		</script>				
