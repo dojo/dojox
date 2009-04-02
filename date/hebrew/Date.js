@@ -150,13 +150,15 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 			this.fromGregorian(new Date());
 		}else if(len == 1){
 			var arg0 = arguments[0];
+			if(typeof arg0 == "number"){ // this is time "valueof"
+				arg0 = new Date(arg0);
+			}
+
 			if(arg0 instanceof Date){
 				this.fromGregorian(arg0);
-			}else if(typeof arg0 == "number"){  // this is time "valueof"
-				this.fromGregorian(new Date(arg0));
 			}else if(arg0 == ""){
 				// date should be invalid.  Dijit relies on this behavior.
-				this._Date = new Date("");
+				this._date = new Date("");
 			}else{  // this is hebrew.Date object
 				this._year = arg0._year;
 				this._month =  arg0._month;  
@@ -321,19 +323,19 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		date1.setMonth(0); //first month
 		var newMonth = month;
 					
-		if(!this.isLeapYear(this._year) && newMonth >= 5){newMonth ++;}
+		if(!this.isLeapYear(this._year) && newMonth >= 5){newMonth++;}
 			
 		if(newMonth>=0){
 			while(newMonth >12){
 				this._year++;
 				newMonth -= 13;
-				if (!this.isLeapYear(this._year) && newMonth >= 5){newMonth ++;}	
+				if (!this.isLeapYear(this._year) && newMonth >= 5){newMonth++;}	
 			}
 		}else{
 			while(newMonth<0){
 				this._year--;
 				newMonth += 13;
-				if (!this.isLeapYear(this._year) && newMonth < 5){newMonth --;}	
+				if (!this.isLeapYear(this._year) && newMonth < 5){newMonth--;}	
 			}		
 		}
 		
