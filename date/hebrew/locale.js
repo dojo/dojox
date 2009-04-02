@@ -25,7 +25,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 			
 			switch(c){
 				case 'y':
-					if (locale.match(/^he/)){
+					if(locale.match(/^he/)){
 						s = dojox.date.hebrew.numerals.getYearHebrewLetters(dateObject.getFullYear());
 					}else{
 						s = String(dateObject.getFullYear());
@@ -34,9 +34,8 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 				case 'M':
 					var m = dateObject.getMonth();
 					if(l<3){
-						if ( !dateObject.isLeapYear(dateObject.getFullYear())  &&  m>5)
-							{m--;}
-						if (locale.match(/^he/)){
+						if(!dateObject.isLeapYear(dateObject.getFullYear()) && m>5){m--;}
+						if(locale.match(/^he/)){
 							s = dojox.date.hebrew.numerals.getMonthHebrewLetters(m);
 						}else{
 							s = m+1; pad = true;
@@ -47,7 +46,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 					}
 					break;
 				case 'd':
-					if (locale.match(/^he/)){
+					if(locale.match(/^he/)){
 						s = "\u202B" /*RLE*/  + dateObject.getDate(); //for  calendar "geresh" position problem
 					}else{
 						s = dateObject.getDate(true); pad = true;
@@ -132,8 +131,7 @@ dojox.date.hebrew.locale.format = function(/*hebrew.Date*/dateObject, /*object?*
 		var year = dateObject.getFullYear();
 		if(locale.match(/^he/)){ 
 			return dojox.date.hebrew.numerals.getYearHebrewLetters(year);
-		}
-		else {return year;}
+		}else{return year;}
 	}
 	if(options.selector != "time"){
 		var datePattern = options.datePattern || bundle["dateFormat-"+formatLength];
@@ -155,8 +153,7 @@ dojox.date.hebrew.locale.regexp = function(/*object?*/options){
 
 	return dojox.date.hebrew.locale._parseInfo(options).regexp; // String
 };
-	
-	
+
 dojox.date.hebrew.locale._parseInfo = function(/*oblect?*/options){
 /* based on and similar to dojo.date.locale._parseInfo */
 
@@ -233,7 +230,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 		var l=token.length;
 		switch(token.charAt(0)){
 			case 'y':
-				if (locale.match(/^he/)){
+				if(locale.match(/^he/)){
 					result[0] = dojox.date.hebrew.numerals.parseYearHebrewLetters(v);
 				}else{
 					result[0] = Number(v);
@@ -256,7 +253,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 					}
 					mLength = l;
 				}else{
-					if (locale.match(/^he/)){
+					if(locale.match(/^he/)){
 						v = dojox.date.hebrew.numerals.parseMonthHebrewLetters(v); 
 					}else{
 						v--;
@@ -268,7 +265,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 				result[1] = 0;
 				// fallthrough...
 			case 'd':
-				if (locale.match(/^he/)){
+				if(locale.match(/^he/)){
 					result[2] = dojox.date.hebrew.numerals.parseDayHebrewLetters(v);
 				}else{
 					result[2] =  Number(v);
@@ -320,7 +317,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 	}
 	var dateObject = new dojox.date.hebrew.Date(result[0], result[1], result[2], result[3], result[4], result[5], result[6]); // hebrew.Date
 	//for non leap year, the  index of the full month start from nisan should be decreased by 1
-	if ((mLength > 2) && (result[1] > 5) && !dateObject.isLeapYear(dateObject.getFullYear())){
+	if((mLength > 2) && (result[1] > 5) && !dateObject.isLeapYear(dateObject.getFullYear())){
 		dateObject = new dojox.date.hebrew.Date(result[0], result[1]-1, result[2], result[3], result[4], result[5], result[6]);
 	}	
 
@@ -378,15 +375,14 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					s = '\\S+';
 					break;
 				case 'M':
-					if (locale == 'he')
-					{
-						s =  (l>2) ? '\\S+ ?\\S+' : '\\S{1,4}';
+					if(locale.match('^he')){
+						s = (l>2) ? '\\S+ ?\\S+' : '\\S{1,4}';
 					}else{
 						s = (l>2) ?  '\\S+ ?\\S+' : p2+'[1-9]|1[0-2]';
 					}	
 					break;
 				case 'd':
-					if (locale == 'he'){
+					if(locale.match('^he')){
 						//s = '\\S[\'\"\']{1,2}\\S?';
 						s = '.?\\S[\'\"\']{1,2}\\S?'; //for special unicode char - RLE added  - .?
 					}else{
@@ -394,8 +390,7 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					}
 					break;
 				case 'E':
-					if (locale == 'he')
-					{
+					if(locale.match('^he')){
 						s = (l>3) ? '\\S+ ?\\S+' : '\\S';
 					}else{
 						s = '\\S+';

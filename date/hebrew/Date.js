@@ -13,7 +13,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 	// |	dojo.require("dojox.date.hebrew.Date");
 	// |		
 	// |	var date = new dojox.date.hebrew.Date();
-	// |	document.writeln(date.getFullYear()+'\'+date.getMonth()+'\'+date.getDate());
+	// |	console.log(date.getFullYear()+'\'+date.getMonth()+'\'+date.getDate());
 
 	// Hebrew date calculations are performed in terms of days, hours, and
 	// "parts" (or halakim), which are 1/1080 of an hour, or 3 1/3 seconds.
@@ -195,25 +195,24 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		this._day = ((day+1) % 7);
 	},
 	
-	getDate: function(/*boolean ?*/isNumber){
+	getDate: function(/*boolean?*/isNumber){
 		// summary: This function returns the date value (1 - 30)
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
-		// |		document.writeln(date1.getDate);
+		// |		console.log(date1.getDate());
 
 		return isNumber ? this._date : dojox.date.hebrew.numerals.getDayHebrewLetters(this._date);
 	},
 
-//FIXME: 'yes' is unused
-	getMonth: function(/*bool ? */ yes){
+	getMonth: function(){
 		// summary: This function return the month value ( 0 - 11 )
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
-		// |		document.writeln(date1.getMonth()+1);
+		// |		console.log(date1.getMonth()+1);
 
 		return this._month;
 	},
@@ -225,7 +224,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
-		// |		document.writeln(date1.getFullYear());
+		// |		console.log(date1.getFullYear());
 		return this._year;
 	},
 			
@@ -258,19 +257,21 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		date1.setDate(2);
 
 		if(date>0){
+			//FIXME: do..while?
 			for(var mdays = this.getDaysInHebrewMonth(this._month, this._year);
 					date > mdays;
 					date -= mdays,mdays = this.getDaysInHebrewMonth(this._month, this._year)){
-				this._month ++;
-				if(!this.isLeapYear(this._year)&&(this._month==5)) { this._month ++;}
+				this._month++;
+				if(!this.isLeapYear(this._year) && this._month==5) { this._month ++;}
 				if(this._month >= 13){this._year++; this._month -= 13;}
 			}
-			
+
 			this._date = date;
 		}else{
-			for(mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12 ,((this._month-1)>=0)? this._year : this._year-1);
+			//FIXME: do..while?
+			for(mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12, ((this._month-1)>=0)? this._year : this._year-1);
 					date<=0;
-					mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12,((this._month-1)>=0)? this._year : this._year-1) ){
+					mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12, ((this._month-1)>=0)? this._year : this._year-1)){
 				this._month--;
 				if(!this.isLeapYear(this._year) && this._month == 5){ this._month--; }
 				if(this._month < 0){this._year--; this._month += 13;}
@@ -459,10 +460,12 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 	},
 
 	setMilliseconds: function(/*number*/milliseconds){
-	//summary: set the setMilliseconds
+		//summary: set the milliseconds
+
+		//FIXME: use mod instead of iterate for overflow? same for methods above.
 		while(milliseconds >= 1000){
 			this.setSeconds++;
-			if(this.setSeconds >= 60){
+			if(this._seconds >= 60){
 				this._minutes++;
 				this._seconds -= 60;
 				if(this._minutes >= 60){
@@ -502,21 +505,17 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// | 
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
-		// |		document.writeln(date1.toString());
+		// |		console.log(date1.toString());
 
 		return this._date + ", " + ((!this.isLeapYear(this._year) && this._month>5) ? this._month : (this._month+1)) + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
 	},
-
-	//valueOf: function(){
-	//	return this.toGregorian().valueOf();
-	//},
 
 	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	getDaysInHebrewMonth: function(/*number*/month, /*number*/ year){
 		// summary: returns the number of days in the month used
 
 		// These two months can vary: 1=HESHVAN, 2=KISLEV.  The rest are a fixed length
-		var yearType = (month == 1 || month == 2) ? this._yearType[year] : 0;
+		var yearType = (month == 1 || month == 2) ? this._yearType(year) : 0;
 		return this._MONTH_LENGTH[month][yearType];
 	},
 
@@ -691,7 +690,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
-		// |		document.writeln(date1.getDay());
+		// |		console.log(date1.getDay());
 
 		var hYear = this._year,
 			hMonth = this._month,
@@ -728,9 +727,9 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		
 		julianDay += d;
 		return julianDay;
-	}     
+	}
 });
 
 dojox.date.hebrew.Date.prototype.valueOf = function(){
 	return this.toGregorian().valueOf();
-};	
+};

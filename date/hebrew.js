@@ -8,8 +8,10 @@ dojo.require("dojo.date"); // for compare
 
 	// added for compat to date
 dojox.date.hebrew.getDaysInMonth = function(/*hebrew.Date*/month){
-		return month.getDaysInHebrewMonth(month.getMonth(), month.getFullYear());
+	return month.getDaysInHebrewMonth(month.getMonth(), month.getFullYear());
 };
+
+//TODO: define hebrew.isLeapYear?  Or should it be invalid, since it has different meaning?
 
 dojox.date.hebrew.compare = function(/*hebrew.Date*/dateheb1, /*hebrew.Date*/dateheb2, /*String?*/portion){
 	//	summary:
@@ -36,7 +38,7 @@ dojox.date.hebrew.compare = function(/*hebrew.Date*/dateheb1, /*hebrew.Date*/dat
 };
 
 
-dojox.date.hebrew.add = function(/*hebrew.Date*/date, /*String*/interval, /*int*/amount){
+dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/interval, /*int*/amount){
 	//	based on and similar to dojo.date.add
 	//	summary:
 	//		Add to a Date in intervals of different size, from milliseconds to years
@@ -105,10 +107,10 @@ dojox.date.hebrew.add = function(/*hebrew.Date*/date, /*String*/interval, /*int*
 			break;
 	}
 
-	return newHebrDate; // Date
+	return newHebrDate; // dojox.date.hebrew.Date
 }; 
 
-dojox.date.hebrew.difference = function(/*hebrew.Date*/date1, /*hebrew.Date?*/date2, /*String?*/interval){
+dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox.date.hebrew.Date?*/date2, /*String?*/interval){
 	//	based on and similar to dojo.date.difference
 	//	summary:
 	//        date1 - date2
