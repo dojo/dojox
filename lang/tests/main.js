@@ -1,4 +1,4 @@
-﻿dojo.provide("dojox.lang.tests.main");
+dojo.provide("dojox.lang.tests.main");
 
 try{
 	// functional block
@@ -12,6 +12,7 @@ try{
 	dojo.require("dojox.lang.tests.oo_mixin");
 	dojo.require("dojox.lang.tests.recomb");
 	dojo.require("dojox.lang.tests.observable");
+	dojo.require("dojox.lang.tests.docs");
 }catch(e){
 	doh.debug(e);
 }

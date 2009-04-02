@@ -19,6 +19,16 @@ helpers. Later we can add other JS language-related helpers.
 dojox.lang.observable - Provides construction of objects that such that 
 property access and modification can be controlled, i.e. provides a form of
 getters/setters.
+
+dojox.lang.typed - Provides type checking for JavaScript classes, enforcing 
+types on properties and method parameters using JSON Schema definitions.
+
+dojox.lang.docs - Provides schemas on Dojo's classes from the API 
+documentation. This can used for runtime access to class metadata information
+such as descriptions and type information. This can be used in conjunction with
+dojox.lang.typed to enforce typing on Dojo's classes using the API information.
+
+
 -------------------------------------------------------------------------------
 Dependencies:
 
