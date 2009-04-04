@@ -20,6 +20,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	
 	chartRef:   "",
 	horizontal: true,
+	swatchSize: 18,
 	
 	templateString: "<table dojoAttachPoint='legendNode' class='dojoxLegendNode'><tbody dojoAttachPoint='legendBody'></tbody></table>",
 	
@@ -102,8 +103,8 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 			div  = dojo.doc.createElement("div");
 		dojo.addClass(icon, "dojoxLegendIcon");
 		dojo.addClass(text, "dojoxLegendText");
-		div.style.width  = "20px";
-		div.style.height = "20px";
+		div.style.width  = this.swatchSize + "px";
+		div.style.height = this.swatchSize + "px";
 		icon.appendChild(div);
 		
 		// create a skeleton
@@ -124,7 +125,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 		text.innerHTML = String(label);
 	},
 	_makeIcon: function(div, dyn){
-		var mb = {h: 14, w: 14};
+		var mb = { h: this.swatchSize, w: this.swatchSize };
 		var surface = dojox.gfx.createSurface(div, mb.w, mb.h);
 		this._surfaces.push(surface);
 		if(dyn.fill){
