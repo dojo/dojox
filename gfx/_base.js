@@ -90,8 +90,10 @@ dojo.provide("dojox.gfx._base");
 	// candidate for dojox.html.metrics
 
 	var measuringNode = null, empty = {};
-	b._getTextBox = function(/* String */ text, /* Object */ style, /* String? */ className){
-		var m, s;
+	b._getTextBox = function(	/*String*/ text,
+								/*Object*/ style,
+								/*String?*/ className){
+		var m, s, al = arguments.length;
 		if(!measuringNode){
 			m = measuringNode = dojo.doc.createElement("div");
 			s = m.style;
@@ -110,19 +112,25 @@ dojo.provide("dojox.gfx._base");
 		s.padding = "0";
 		s.outline = "0";
 		// set new style
-		if(arguments.length > 1 && style){
+		if(al > 1 && style){
 			for(var i in style){
 				if(i in empty){ continue; }
 				s[i] = style[i];
 			}
 		}
 		// set classes
-		if(arguments.length > 2 && className){
+		if(al > 2 && className){
 			m.className = className;
 		}
 		// take a measure
 		m.innerHTML = text;
-		return dojo.marginBox(m);
+
+		if(m["getBoundingClientRect"]){
+			var mcr = m.getBoundingClientRect();
+			return { w: mcr.width, h: mcr.height };
+		}else{
+			return dojo.marginBox(m);
+		}
 	};
 
 	// candidate for dojo.dom
