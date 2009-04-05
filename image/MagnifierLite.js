@@ -45,22 +45,21 @@ dojo.declare("dojox.image.MagnifierLite", dijit._Widget,
 	_createGlass: function(){
 		// summary: make img and glassNode elements as children of the body
 
-		var node = this.glassNode = dojo.doc.createElement('div');
-		this.surfaceNode = node.appendChild(dojo.doc.createElement('div'));
-		dojo.addClass(node,"glassNode");
-		dojo.body().appendChild(node);
-		dojo.style(node,{
-			height: this.glassSize + "px",
-			width: this.glassSize + "px"
-		});
+		var node = this.glassNode = dojo.create('div', {
+			style:{
+				height: this.glassSize + "px",
+				width: this.glassSize + "px"
+			},
+			className:"glassNode"
+		}, dojo.body());
 		
-		this.img = dojo.clone(this.domNode);
-		node.appendChild(this.img);
+		this.surfaceNode = node.appendChild(dojo.create('div'));
+
+		this.img = dojo.place(dojo.clone(this.domNode), node);
 		// float the image around inside the .glassNode 
 		dojo.style(this.img, {
 			position: "relative",
-			top: 0,
-			left: 0,
+			top: 0, left: 0,
 			width: this._zoomSize.w + "px",
 			height: this._zoomSize.h + "px"
 		});
@@ -111,10 +110,11 @@ dojo.declare("dojox.image.MagnifierLite", dijit._Widget,
 	_setImage: function(e){
 		// summary: set the image's offset in the clipping window relative to the mouse position
 
-		var xOff = (e.pageX - this.offset.l) / this.offset.w;
-		var yOff = (e.pageY - this.offset.t) / this.offset.h;
-		var x = (this._zoomSize.w * xOff * -1) + (this.glassSize * xOff);
-		var y = (this._zoomSize.h * yOff * -1) + (this.glassSize * yOff);
+		var xOff = (e.pageX - this.offset.l) / this.offset.w,
+			yOff = (e.pageY - this.offset.t) / this.offset.h,
+			x = (this._zoomSize.w * xOff * -1) + (this.glassSize * xOff),
+			y = (this._zoomSize.h * yOff * -1) + (this.glassSize * yOff);
+
 		dojo.style(this.img, {
 			top: y + "px",
 			left: x + "px"
