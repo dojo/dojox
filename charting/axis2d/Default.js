@@ -87,6 +87,15 @@ dojo.require("dojox.lang.utils");
 		getWindowOffset: function(){
 			return "offset" in this ? this.offset : 0;
 		},
+		_groupLabelWidth: function(labels, font){
+			var l = labels;
+			if(l[0]["text"]){
+				l = dojo.map(l, "return item.text");
+			}
+			var s = l.join(this.opt.htmlLabels ? "<br>" : "\n");
+			console.debug(s);
+			return dojox.gfx._base._getTextBox(s, { font: font }).w||0;
+		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){ return this; }
 			this.labels = "labels" in this.opt ? this.opt.labels : labels;
@@ -136,9 +145,7 @@ dojo.require("dojox.lang.utils");
 					if(this.opt.labelFunc && this.opt.maxLabelSize){
 						labelWidth = this.opt.maxLabelSize;
 					}else if(this.labels){
-						labelWidth = df.foldl(df.map(this.labels, function(label){
-							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
-						}), "Math.max(a, b)", 0);
+						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
 						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(this.scaler.bounds.from),
 								Math.abs(this.scaler.bounds.to))) / Math.LN10),
@@ -166,8 +173,9 @@ dojo.require("dojox.lang.utils");
 			return this.ticks;
 		},
 		getOffsets: function(){
-			var offsets = {l: 0, r: 0, t: 0, b: 0}, labelWidth, a, b, c, d,
-				gtb = dojox.gfx._base._getTextBox, gl = dc.scaler.common.getNumericLabel,
+			var offsets = { l: 0, r: 0, t: 0, b: 0 },
+				labelWidth, a, b, c, d,
+				gl = dc.scaler.common.getNumericLabel,
 				offset = 0, ta = this.chart.theme.axis,
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
 				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
@@ -182,15 +190,15 @@ dojo.require("dojox.lang.utils");
 					if(this.opt.labelFunc && this.opt.maxLabelSize){
 						labelWidth = this.opt.maxLabelSize;
 					}else if(this.labels){
-						labelWidth = df.foldl(df.map(this.labels, function(label){
-							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
-						}), "Math.max(a, b)", 0);
+						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
-						a = gtb(gl(s.major.start, s.major.prec, this.opt), {font: taFont}).w;
-						b = gtb(gl(s.major.start + s.major.count * s.major.tick, s.major.prec, this.opt), {font: taFont}).w;
-						c = gtb(gl(s.minor.start, s.minor.prec, this.opt), {font: taFont}).w;
-						d = gtb(gl(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec, this.opt), {font: taFont}).w;
-						labelWidth = Math.max(a, b, c, d);
+						var ma = s.major, mi = s.minor;
+						labelWidth = this._groupLabelWidth([
+							gl(ma.start, ma.prec, this.opt),
+							gl(ma.start + ma.count * ma.tick, ma.prec, this.opt),
+							gl(mi.start, mi.prec, this.opt),
+							gl(mi.start + mi.count * mi.tick, mi.prec, this.opt)
+						], taFont);
 					}
 					offset = labelWidth + labelGap;
 				}
@@ -207,15 +215,15 @@ dojo.require("dojox.lang.utils");
 					if(this.opt.labelFunc && this.opt.maxLabelSize){
 						labelWidth = this.opt.maxLabelSize;
 					}else if(this.labels){
-						labelWidth = df.foldl(df.map(this.labels, function(label){
-							return dojox.gfx._base._getTextBox(label.text, {font: taFont}).w;
-						}), "Math.max(a, b)", 0);
+						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
-						a = gtb(gl(s.major.start, s.major.prec, this.opt), {font: taFont}).w;
-						b = gtb(gl(s.major.start + s.major.count * s.major.tick, s.major.prec, this.opt), {font: taFont}).w;
-						c = gtb(gl(s.minor.start, s.minor.prec, this.opt), {font: taFont}).w;
-						d = gtb(gl(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec, this.opt), {font: taFont}).w;
-						labelWidth = Math.max(a, b, c, d);
+						var ma = s.major, mi = s.minor;
+						labelWidth = this._groupLabelWidth([
+							gl(ma.start, ma.prec, this.opt),
+							gl(ma.start + ma.count * ma.tick, ma.prec, this.opt),
+							gl(mi.start, mi.prec, this.opt),
+							gl(mi.start + mi.count * mi.tick, mi.prec, this.opt)
+						], taFont);
 					}
 					offsets.l = offsets.r = labelWidth / 2;
 				}
@@ -225,43 +233,44 @@ dojo.require("dojox.lang.utils");
 		render: function(dim, offsets){
 			if(!this.dirty){ return this; }
 			// prepare variable
+			var o = this.opt;
 			var start, stop, axisVector, tickVector, labelOffset, labelAlign,
 				ta = this.chart.theme.axis,
-				taStroke = "stroke" in this.opt ? this.opt.stroke : ta.stroke,
-				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
-				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
-				taMicroTick = "microTick" in this.opt ? this.opt.microTick : ta.minorTick,
-				taFont = "font" in this.opt ? this.opt.font : ta.font,
-				taFontColor = "fontColor" in this.opt ? this.opt.fontColor : ta.fontColor,
+				taStroke = "stroke" in o ? o.stroke : ta.stroke,
+				taMajorTick = "majorTick" in o ? o.majorTick : ta.majorTick,
+				taMinorTick = "minorTick" in o ? o.minorTick : ta.minorTick,
+				taMicroTick = "microTick" in o ? o.microTick : ta.minorTick,
+				taFont = "font" in o ? o.font : ta.font,
+				taFontColor = "fontColor" in o ? o.fontColor : ta.fontColor,
 				tickSize = Math.max(taMajorTick.length, taMinorTick.length),
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){
-				start = {y: dim.height - offsets.b};
-				stop  = {y: offsets.t};
-				axisVector = {x: 0, y: -1};
-				if(this.opt.leftBottom){
+				start = { y: dim.height - offsets.b };
+				stop  = { y: offsets.t };
+				axisVector = { x: 0, y: -1 };
+				if(o.leftBottom){
 					start.x = stop.x = offsets.l;
-					tickVector = {x: -1, y: 0};
+					tickVector = { x: -1, y: 0 };
 					labelAlign = "end";
 				}else{
 					start.x = stop.x = dim.width - offsets.r;
 					tickVector = {x: 1, y: 0};
 					labelAlign = "start";
 				}
-				labelOffset = {x: tickVector.x * (tickSize + labelGap), y: size * 0.4};
+				labelOffset = { x: tickVector.x * (tickSize + labelGap), y: size * 0.4 };
 			}else{
-				start = {x: offsets.l};
-				stop  = {x: dim.width - offsets.r};
+				start = { x: offsets.l };
+				stop  = { x: dim.width - offsets.r };
 				axisVector = {x: 1, y: 0};
 				labelAlign = "middle";
-				if(this.opt.leftBottom){
+				if(o.leftBottom){
 					start.y = stop.y = dim.height - offsets.b;
-					tickVector = {x: 0, y: 1};
-					labelOffset = {y: tickSize + labelGap + size};
+					tickVector = { x: 0, y: 1 };
+					labelOffset = { y: tickSize + labelGap + size };
 				}else{
 					start.y = stop.y = offsets.t;
-					tickVector = {x: 0, y: -1};
-					labelOffset = {y: -tickSize - labelGap};
+					tickVector = { x: 0, y: -1 };
+					labelOffset = { y: -tickSize - labelGap };
 				}
 				labelOffset.x = 0;
 			}

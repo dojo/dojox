@@ -5,7 +5,7 @@ dojo.require("dojox.gfx");
 (function(){
 	var g = dojox.gfx;
 	
-	function clearNode(s){
+	var clearNode = function(s){
 		s.marginLeft   = "0px";
 		s.marginTop    = "0px";
 		s.marginRight  = "0px";
@@ -18,7 +18,16 @@ dojo.require("dojox.gfx");
 		s.borderTopWidth    = "0px";
 		s.borderRightWidth  = "0px";
 		s.borderBottomWidth = "0px";
-	}
+	};
+	
+	var getBoxWidth = function(n){
+		// marginBox is incredibly slow, so avoid it if we can
+		if(n["getBoundingClientRect"]){
+			return n.getBoundingClientRect().width;
+		}else{
+			return dojo.marginBox(n).w;
+		}
+	};
 	
 	dojo.mixin(dojox.charting.axis2d.common, {
 		createText: {
@@ -39,16 +48,22 @@ dojo.require("dojox.gfx");
 				s.left = "-10000px";
 				dojo.body().appendChild(p);
 				var size = g.normalizedLength(g.splitFontString(font).size),
-					box = dojo.marginBox(p);
+					boxWidth = getBoxWidth(p);
+					// boxWidth = dojo.marginBox(p);
+				
 				// new settings for the text node
+
 				dojo.body().removeChild(p);
+				
 				s.position = "relative";
 				switch(align){
 					case "middle":
-						s.left = Math.floor(x - box.w / 2) + "px";
+						s.left = Math.floor(x - boxWidth / 2) + "px";
+						// s.left = Math.floor(x - p.offsetWidth / 2) + "px";
 						break;
 					case "end":
-						s.left = Math.floor(x - box.w) + "px";
+						s.left = Math.floor(x - boxWidth) + "px";
+						// s.left = Math.floor(x - p.offsetWidth) + "px";
 						break;
 					//case "start":
 					default:

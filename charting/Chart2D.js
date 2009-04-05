@@ -207,7 +207,7 @@ dojo.require("dojox.charting.plot2d.Bubble");
 					box = width;
 					break;
 				default:
-					box = {w: width, h: height};
+					box = { w: width, h: height };
 					break;
 			}
 			dojo.marginBox(this.node, box);
