@@ -7,7 +7,7 @@ dojo.require("dojox.fx._base");
 dojo.declare("dojox.image.Lightbox",
 	dijit._Widget, {
 	// summary:
-	//	A dojo-based Lightbox implementation. 
+	//		A dojo-based Lightbox implementation. 
 	//
 	// description:
 	//	An Elegant, keyboard accessible, markup and store capable Lightbox widget to show images
@@ -48,6 +48,12 @@ dojo.declare("dojox.image.Lightbox",
 	//		durations for the various actions (dialog fadein, sizeing, img fadein ...) 
 	duration: 500,
 
+	// modal: Boolean
+	// 		If true, this Dialog instance will be truly modal and prevent closing until
+	//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
+	//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
+	modal: false,
+
 	// _allowPassthru: Boolean
 	//		Privately set this to disable/enable natural link of anchor tags
 	_allowPassthru: false,
@@ -80,7 +86,7 @@ dojo.declare("dojox.image.Lightbox",
 		this._attachedDialog.addImage({
 			href: this.href,
 			title: this.title
-		},this.group||null);
+		}, this.group || null);
 	},
 
 	_handleClick: function(/* Event */e){
@@ -94,7 +100,13 @@ dojo.declare("dojox.image.Lightbox",
 		// summary: Show the Lightbox with this instance as the starting point
 		this._attachedDialog.show(this);
 	},
+	
+	hide: function(){
+		// summary: Hide the Lightbox currently showing
+		this._attachedDialog.hide();
+	},
 
+	// FIXME: switch to .attr, deprecate eventually.
 	disable: function(){
 		// summary: Disables event clobbering and dialog, and follows natural link
 		this._allowPassthru = true;
@@ -155,6 +167,12 @@ dojo.declare("dojox.image.LightboxDialog",
 	//		seems sane in most use cases.
 	adjust: true,
 
+	// modal: Boolean
+	// 		If true, this Dialog instance will be truly modal and prevent closing until
+	//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
+	//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
+	modal: false,
+	
 	// an object of arrays, each array (of objects) being a unique 'group'
 	_groups: { XnoGroupX: [] },
 
@@ -164,27 +182,18 @@ dojo.declare("dojox.image.LightboxDialog",
 
 	_fixSizes: false, // janktastic solution to #8967
 
-/*
-	// privates:
-	_imageReady: false,
-	_clone: null, // the "untained" image
-	_wasStyled: null, // indicating taint on the imgNode
-
-	// animation holders:
-	_loadingAnim:null, 
-	_showImageAnim: null,
-	_showNavAnim: null,
-	_animConnects: [],
-*/
 	
 	templatePath: dojo.moduleUrl("dojox.image","resources/Lightbox.html"),
 
 	startup: function(){
 		// summary: Add some extra event handlers, and startup our superclass.
+		//
+		// returns: dijit._Widget
+		//		Perhaps the only `dijit._Widget` that returns itself to allow
+		//		'chaining' or var referencing with .startup()
 
 		this.inherited(arguments);
 		this._animConnects = [];
-		this._clone = dojo.clone(this.imgNode);
 		this.connect(this.nextNode, "onclick", "_nextImage");
 		this.connect(this.prevNode, "onclick", "_prevImage");
 		this.connect(this.closeNode, "onclick", "hide");
@@ -211,13 +220,17 @@ dojo.declare("dojox.image.LightboxDialog",
 				dojo.connect(dojo.global, "onresize", this, "_position"),
 				dojo.connect(dojo.body(), "onkeypress", this, "_handleKey")
 			);
+			if(!groupData.modal){
+				this._modalconnects.push(
+					dojo.connect(dijit._underlay.domNode, "onclick", this, "onCancel")
+				);
+			}
 		}
 		
 		if(this._wasStyled){
 			// ugly fix for IE being stupid:
 			dojo.destroy(_t.imgNode);
-			_t.imgNode = dojo.clone(_t._clone);
-			dojo.place(_t.imgNode,_t.imageContainer,"first");
+			_t.imgNode = dojo.create("img", null, _t.imageContainer, 'first');
 			_t._makeAnims();
 			_t._wasStyled = false;
 		}
@@ -225,25 +238,24 @@ dojo.declare("dojox.image.LightboxDialog",
 		dojo.style(_t.imgNode,"opacity","0"); 
 		dojo.style(_t.titleNode,"opacity","0");
 		
-		_t._imageReady = false; 
-		_t.imgNode.src = groupData.href;
+		var src = groupData.href;
 		
 		if((groupData.group && groupData !== "XnoGroupX") || _t.inGroup){ 
 			if(!_t.inGroup){ 
 				_t.inGroup = _t._groups[(groupData.group)];
 				// determine where we were or are in the show 
-				dojo.forEach(_t.inGroup,function(g,i){
+				dojo.forEach(_t.inGroup, function(g, i){
 					if(g.href == groupData.href){
-						_t._positionIndex = i;
+						_t._index = i;
 					}
 				},_t);
 			}
-			if(!_t._positionIndex){
-				_t._positionIndex=0;
-				_t.imgNode.src = _t.inGroup[_t._positionIndex].href;
+			if(!_t._index){
+				_t._index = 0;
+				src = _t.inGroup[_t._index].href;
 			}
 			// FIXME: implement titleTemplate
-			_t.groupCount.innerHTML = " (" +(_t._positionIndex+1) +" of "+_t.inGroup.length+")";
+			_t.groupCount.innerHTML = " (" + (_t._index + 1) + " of " + _t.inGroup.length + ")";
 			_t.prevNode.style.visibility = "visible";
 			_t.nextNode.style.visibility = "visible";
 		}else{
@@ -253,48 +265,47 @@ dojo.declare("dojox.image.LightboxDialog",
 			_t.nextNode.style.visibility = "hidden";
 		}
 		_t.textNode.innerHTML = groupData.title;
+	
+		_t._ready(src);
+	},
+	
+	_ready: function(src){	
+		// summary: A function to trigger all 'real' showing of some src
 		
-		if(!_t._imageReady || _t.imgNode.complete === true){
-			// connect to the onload of the image
-			_t._imgConnect = dojo.connect(_t.imgNode, "onload", _t, function(){
-				_t._imageReady = true;
-				_t.resizeTo({
-					w: _t.imgNode.width,
-					h: _t.imgNode.height,
-					duration:_t.duration
-				});
-				// cleanup
-				dojo.disconnect(_t._imgConnect);
-				if(_t._imgError){ dojo.disconnect(_t._imgError); }
+		var _t = this;
+		
+		// connect to the onload of the image
+		_t._imgConnect = dojo.connect(_t.imgNode, "load", _t, function(e){
+			_t.resizeTo({
+				w: _t.imgNode.width,
+				h: _t.imgNode.height,
+				duration:_t.duration
 			});
-			
-			// listen for 404's:
-			_t._imgError = dojo.connect(_t.imgNode, "onerror", _t, function(){
-				dojo.disconnect(_t._imgError);
-				// trigger the above onload with a new src:
-				_t.imgNode.src = _t.errorImg;
-				_t._imageReady = true;
-				_t.textNode.innerHTML = _t.errorMessage;
-			});
+			// cleanup
+			dojo.disconnect(_t._imgConnect);
+			if(_t._imgError){ 
+				dojo.disconnect(_t._imgError); 
+			}
+		});
+		
+		// listen for 404's:
+		_t._imgError = dojo.connect(_t.imgNode, "error", _t, function(){
+			dojo.disconnect(_t._imgError);
+			// trigger the above onload with a new src:
+			_t.imgNode.src = _t.errorImg;
+			_t.textNode.innerHTML = _t.errorMessage;
+		});
 
-			// onload doesn't fire in IE if you connect before you set the src. 
-			// hack to re-set the src after onload connection made:
-			if(dojo.isIE){ _t.imgNode.src = _t.imgNode.src; }
-
-		}else{
-			// do it quickly. kind of a hack, but image is ready now
-			_t.resizeTo({ w: _t.imgNode.width, h: _t.imgNode.height, duration: 1 });
-		}
-
+		_t.imgNode.src = src;
 	},
 
 	_nextImage: function(){
 		// summary: Load next image in group
 		if(!this.inGroup){ return; }
-		if(this._positionIndex + 1 < this.inGroup.length){
-			this._positionIndex++;
+		if(this._index + 1 < this.inGroup.length){
+			this._index++;
 		}else{
-			this._positionIndex = 0;
+			this._index = 0;
 		}
 		this._loadImage();
 	},
@@ -302,10 +313,10 @@ dojo.declare("dojox.image.LightboxDialog",
 	_prevImage: function(){
 		// summary: Load previous image in group
 		if(this.inGroup){ 
-			if(this._positionIndex == 0){
-				this._positionIndex = this.inGroup.length - 1;
+			if(this._index == 0){
+				this._index = this.inGroup.length - 1;
 			}else{
-				this._positionIndex--;
+				this._index--;
 			}
 			this._loadImage();
 		}
@@ -320,18 +331,23 @@ dojo.declare("dojox.image.LightboxDialog",
 		// summary: A localized hook to accompany _loadImage
 		this._imageReady = false; 
 		this.show({
-			href: this.inGroup[this._positionIndex].href,
-			title: this.inGroup[this._positionIndex].title
+			href: this.inGroup[this._index].href,
+			title: this.inGroup[this._index].title
 		});
 	},
 
 	resizeTo: function(/* Object */size){
 		// summary: Resize our dialog container, and fire _showImage
 		
-		// 22 == current styled margins or paddings, can calculate programatically if needed
-		var adjustSize = ((dojo.boxModel == "border-box")) ? 22 : 0;
+		var adjustSize = dojo.boxModel == "border-box" ? 
+			dojo._getBorderExtents(this.domNode).w : 0;
+		;
 		
-		if(this.adjust && (size.h + adjustSize + 80 > this._vp.h || size.w + adjustSize + 50 > this._vp.w)){
+		if(this.adjust && 
+			(size.h + adjustSize + 80 > this._vp.h || 
+			 size.w + adjustSize + 50 > this._vp.w
+			)
+		){
 			size = this._scaleToFit(size);
 		}
 		
@@ -341,7 +357,7 @@ dojo.declare("dojox.image.LightboxDialog",
 			width: size.w + adjustSize, 
 			height: size.h + 30 + adjustSize
 		});
-		this.connect(_sizeAnim,"onEnd","_showImage");
+		this.connect(_sizeAnim, "onEnd", "_showImage");
 		_sizeAnim.play(15);
 	},
 
@@ -360,16 +376,15 @@ dojo.declare("dojox.image.LightboxDialog",
 		dojo.fadeOut({
 			node: this.titleNode, 
 			duration: 200,
-			onEnd: dojo.hitch(this,function(){
-				// refs #5112 - if you _don't_ change the .src, safari will _never_ fire onload for this image
-				this.imgNode.src = this._blankGif; 
-			}) 
+			// #5112 - if you _don't_ change the .src, safari will 
+			// _never_ fire onload for this image
+			onEnd: dojo.partial(dojo.attr, this.imgNode, "src", this._blankGif)
 		}).play(5);
 
 		this.inherited(arguments);
 
 		this.inGroup = null;
-		this._positionIndex = null;
+		this._index = null;
 	},
 
 	addImage: function(child, group){
@@ -397,21 +412,23 @@ dojo.declare("dojox.image.LightboxDialog",
 		if(!this.open){ return; }
 
 		var dk = dojo.keys;
-		var key = (e.charCode == dk.SPACE ? dk.SPACE : e.keyCode);
-		switch(key){
+		switch(e.charOrCode){
 			
 			case dk.ESCAPE: 
-				this.hide(); break;
+				this.hide(); 
+				break;
 
 			case dk.DOWN_ARROW:
 			case dk.RIGHT_ARROW:
 			case 78: // key "n"
-				this._nextImage(); break;
+				this._nextImage();
+				break;
 
 			case dk.UP_ARROW:
 			case dk.LEFT_ARROW:
 			case 80: // key "p" 
-				this._prevImage(); break;
+				this._prevImage();
+				break;
 		}
 	},
 	
@@ -424,11 +441,11 @@ dojo.declare("dojox.image.LightboxDialog",
 		// one of the dimensions is too big, go with the smaller viewport edge:
 		if(this._vp.h > this._vp.w){
 			// don't actually touch the edges:
-			ns.w = this._vp.w - 70;
+			ns.w = this._vp.w - 80;
 			ns.h = ns.w * (size.h / size.w);
 		}else{
 			// give a little room for the titlenode, too:
-			ns.h = this._vp.h - 80;
+			ns.h = this._vp.h - 90;
 			ns.w = ns.h * (size.w / size.h);
 		}
 
@@ -442,13 +459,18 @@ dojo.declare("dojox.image.LightboxDialog",
 
 		ns.duration = size.duration;
 		return ns; // Object
-
 	},
+
+	_size: function(){
+		// no-op, clobbering the _other_ size which is now setting overflow:auto for us.
+		// maybe _scaleToFit should override this? should test that.
+	},
+	
 	
 	_position: function(/* Event */e){
 		// summary: we want to know the viewport size any time it changes
-		this.inherited(arguments);
 		this._vp = dijit.getViewport();
+		this.inherited(arguments);
 	},
 	
 	_makeAnims: function(){
