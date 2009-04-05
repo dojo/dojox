@@ -64,10 +64,10 @@ dojo.declare("dojox.widget.FisheyeLite",
 	//			into the animation directly. eg: height:{ end:20, unit:"em" }
 	properties: null,
 	
-	// unit: String
+	// units: String
 	//		Sometimes, you need to specify a unit. Should be part of
 	//		properties attrib, but was trying to shorthand the logic there
-	unit:"px",
+	units:"px",
 	
 	constructor: function(props, node){
 		this.properties = props.properties || {
@@ -115,8 +115,8 @@ dojo.declare("dojox.widget.FisheyeLite",
 			// note: do not set negative scale for [a list of properties] for IE support
 			// note: filter:'s are your own issue, too ;)
 			// FIXME: this.unit here is bad, likely. d._toPixelValue ?
-			_out[p] = { end: v, unit:this.unit };
-			_in[p] = deep ? prop : { end: prop * v, unit:this.unit };
+			_out[p] = { end: v, units:this.units };
+			_in[p] = deep ? prop : { end: prop * v, units:this.units };
 		}
 		
 		this._runningIn = dojo.animateProperty({

@@ -261,14 +261,14 @@ dojo.declare("dojox.layout.ResizeHandle",
 					dojo.animateProperty({
 						node: this.targetDomNode,
 						properties: { 
-							width: { start: this.startSize.w, end: tmp.w, unit:'px' } 
+							width: { start: this.startSize.w, end: tmp.w } 
 						},	
 						duration: this.animateDuration
 					}),
 					dojo.animateProperty({
 						node: this.targetDomNode,
 						properties: { 
-							height: { start: this.startSize.h, end: tmp.h, unit:'px' }
+							height: { start: this.startSize.h, end: tmp.h }
 						},
 						duration: this.animateDuration
 					})

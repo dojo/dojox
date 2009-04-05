@@ -144,12 +144,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 		;
 
 		showProps[dimension] = { 
-			end: this._showSize, 
-			unit:"px" 
+			end: this._showSize
 		};
 		hideProps[dimension] = { 
-			end: this._closedSize, 
-			unit:"px"
+			end: this._closedSize
 		};
 		
 		this._showAnim = dojo.animateProperty(dojo.mixin(_common,{

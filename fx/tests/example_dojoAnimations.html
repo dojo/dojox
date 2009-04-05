@@ -125,12 +125,12 @@
 		<script type="dojo/method" event="onClick">
 			dojo.animateProperty({
 				node:"testSlide",
-				properties:{ height:{ end:1, unit:"px" } },
+				properties:{ height:{ end:1 } },
 				onEnd:function(){
 					dojo.animateProperty({
 						node:"testSlide",
 						delay:300,
-						properties:{ height:{ end:175, unit:"px" } }
+						properties:{ height:175 }
 					}).play();	
 				}
 			}).play();
@@ -142,12 +142,12 @@
 		<script type="dojo/method" event="onClick">
 			dojo.animateProperty({
 				node:"testSlide",
-				properties:{ width:{ end:1, unit:"px" } },
+				properties:{ width:1 },
 				onEnd:function(){
 					dojo.animateProperty({
 						node:"testSlide",
 						delay:300,
-						properties:{ width:{ end:175, unit:"px" } }
+						properties:{ width:175 }
 					}).play();	
 				}
 			}).play();
@@ -169,13 +169,13 @@
 			dojo.animateProperty({
 				node:"lorem",
 				properties:{
-					marginLeft:{ end:322, unit:"px", start:1 }
+					marginLeft:{ end:322, start:1 }
 				},
 				onEnd: function(){
 					dojo.animateProperty({
 						node:"lorem",
 						properties:{
-							marginLeft:{ end:1, start:322, unit:"px" }
+							marginLeft:{ end:1, start:322 }
 						},
 						delay:300
 					}).play();
@@ -194,14 +194,14 @@
 						end: dojo.marginBox("cssNodeWrap").w - 195,
 						unit:"px"
 					},
-					paddingTop:{ end:17, unit:"px", start:4 }
+					paddingTop:{ end:17, start:4 }
 				},
 				onEnd: function(){
 					dojo.animateProperty({
 						node:"lorem",
 						properties:{
-							paddingTop:{ end:4, start:17, unit:"px" },
-							left: { end: 10, unit:"px" }
+							paddingTop:{ end:4, start:17 },
+							left:10
 						},
 						delay:300
 					}).play();
@@ -216,15 +216,15 @@
 			dojo.animateProperty({
 				node:"lorem",
 				properties:{
-					width: { end:700, unit:"px", start:175 },
-					fontSize:{ end:21, unit:"pt", start:11 }
+					width: { end:700, start:175 },
+					fontSize:{ end:21, units:"pt", start:11 }
 				},
 				onEnd: function(){
 					dojo.animateProperty({
 						node:"lorem",
 						properties:{
-							width: { end:175, unit:"px" },
-							fontSize:{ end:11, start:21, unit:"pt" }
+							width:175, 
+							fontSize:{ end:11, start:21, units:"pt" }
 						},
 						delay:700
 					}).play();
@@ -304,10 +304,7 @@
 			var anim2 = dojo.animateProperty({
 				node:"testSlideToo",
 				properties:{
-					left:{
-						end: dojo.marginBox("testSlideTooWrap").w - 195,
-						unit: "px"
-					}
+					left: dojo.marginBox("testSlideTooWrap").w - 195
 				},
 				onEnd: function(){
 					dojo.fx.slideTo({ node:"testSlideToo", top:10, left:10 }).play(123);
@@ -352,14 +349,14 @@
 		<script type="dojo/method" event="onClick">
 			dojo.query(".odd","queryUl").animateProperty({
 				properties:{
-					marginLeft:{ end:34, unit:"px" }
+					marginLeft:34
 				},
 				duration:300,
 				onEnd:function(){
 					dojo.query(".odd","queryUl").animateProperty({
 						delay: 300,
 						properties:{
-							marginLeft:{ end:1, unit:"px" }
+							marginLeft:1
 						}
 					}).play();	
 				}
@@ -373,7 +370,7 @@
 			dojo.query(".odd","queryUl").animateProperty({
 				easing:dojo.fx.easing.backOut,
 				properties:{
-					marginLeft:{ end:34, unit:"px" }
+					marginLeft:34
 				},
 				duration:600,
 				onEnd:function(){
@@ -382,7 +379,7 @@
 						duration:1300,
 						easing:dojo.fx.easing.bounceOut,
 						properties:{
-							marginLeft:{ end:1, unit:"px" }
+							marginLeft:1
 						}
 					}).play();	
 				}
