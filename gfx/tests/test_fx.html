@@ -69,7 +69,7 @@ var animateFont = function(){
 		duration:	5000,
 		shape: 		text,
 		variant:	{values: ["normal", "small-caps"]},
-		size:		{start: 10, end: 50, unit: "pt"}
+		size:		{start: 10, end: 50, units: "pt"}
 	});
 	dojo.byId("font").disabled = "disabled";
 	dojo.connect(anim, "onEnd", function(){ dojo.byId("font").disabled = ""; });
