@@ -93,7 +93,7 @@ dojo.require("dojox.lang.utils");
 				l = dojo.map(l, "return item.text");
 			}
 			var s = l.join(this.opt.htmlLabels ? "<br>" : "\n");
-			console.debug(s);
+			// console.debug(s);
 			return dojox.gfx._base._getTextBox(s, { font: font }).w||0;
 		},
 		calculate: function(min, max, span, labels){
@@ -174,9 +174,14 @@ dojo.require("dojox.lang.utils");
 		},
 		getOffsets: function(){
 			var offsets = { l: 0, r: 0, t: 0, b: 0 },
-				labelWidth, a, b, c, d,
+				labelWidth,
+				a,
+				b,
+				c,
+				d,
 				gl = dc.scaler.common.getNumericLabel,
-				offset = 0, ta = this.chart.theme.axis,
+				offset = 0,
+				ta = this.chart.theme.axis,
 				taFont = "font" in this.opt ? this.opt.font : ta.font,
 				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
 				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
@@ -185,6 +190,7 @@ dojo.require("dojox.lang.utils");
 			if(!s){
 				return offsets;
 			}
+			var ma = s.major, mi = s.minor;
 			if(this.vertical){
 				if(size){
 					if(this.opt.labelFunc && this.opt.maxLabelSize){
@@ -192,7 +198,6 @@ dojo.require("dojox.lang.utils");
 					}else if(this.labels){
 						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
-						var ma = s.major, mi = s.minor;
 						labelWidth = this._groupLabelWidth([
 							gl(ma.start, ma.prec, this.opt),
 							gl(ma.start + ma.count * ma.tick, ma.prec, this.opt),
@@ -217,7 +222,6 @@ dojo.require("dojox.lang.utils");
 					}else if(this.labels){
 						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
-						var ma = s.major, mi = s.minor;
 						labelWidth = this._groupLabelWidth([
 							gl(ma.start, ma.prec, this.opt),
 							gl(ma.start + ma.count * ma.tick, ma.prec, this.opt),
