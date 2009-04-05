@@ -16,13 +16,13 @@ dojo.require("dojox.gfx.matrix");
 		}
 	});
 
-	var InterpolUnit = function(start, end, unit){
+	var InterpolUnit = function(start, end, units){
 		this.start = start, this.end = end;
-		this.unit = unit;
+		this.units = units;
 	};
 	d.extend(InterpolUnit, {
 		getValue: function(r){
-			return (this.end - this.start) * r + this.start + this.unit;
+			return (this.end - this.start) * r + this.start + this.units;
 		}
 	});
 
@@ -219,7 +219,7 @@ dojo.require("dojox.gfx.matrix");
 		//	|		shape: shape,
 		//	|		duration: 500,
 		//	|		variant: {values: ["normal", "small-caps"]},
-		//	|		size:  {end: 10, unit: "pt"}
+		//	|		size:  {end: 10, units: "pt"}
 		//	|	}).play();
 		if(!args.easing){ args.easing = d._defaultEasing; }
 		var anim = new d._Animation(args), shape = args.shape, font;
@@ -242,10 +242,10 @@ dojo.require("dojox.gfx.matrix");
 				values.family = new InterpolValues(prop.values);
 			}
 			prop = args.size;
-			if(prop && prop.unit){
+			if(prop && prop.units){
 				start = parseFloat(prop.start ? prop.start : (shape.font && shape.font.size || "0"));
 				end = parseFloat(prop.end ? prop.end : (shape.font && shape.font.size || "0"));
-				values.size = new InterpolUnit(start, end, prop.unit);
+				values.size = new InterpolUnit(start, end, prop.units);
 			}
 			this.curve = new InterpolObject(values, font);
 		});
