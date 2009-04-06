@@ -12,6 +12,13 @@
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
 		body, html { width:100%; height:100%; margin:0; padding:0; } 
+		
+		#customTitleThing {
+			height:75px;
+			border:1px solid #ededed;
+			overflow:auto;
+			width:92%;
+		}
 	</style>
 	
 	<!-- required: dojo.js -->
@@ -23,8 +30,29 @@
 	<!-- for debugging: -->
 	<script type="text/javascript" src="../Lightbox.js"></script>
 	<script type="text/javascript">
+		dojo.require("dijit.form.Button");
 		dojo.require("dojox.image.Lightbox"); 
 		dojo.require("dojox.data.FlickrStore");
+		dojo.addOnLoad(function(){
+			// sample with super-rich text content (no widgets or undelegated events please).
+			
+			var title = dojo.byId("customExample").innerHTML;
+			dojo.empty("customExample");
+			
+			var lb = new dojox.image.Lightbox({
+				href:"images/square.jpg",
+				title: title
+			});
+			lb.startup();
+			
+			new dijit.form.Button({
+				onClick: function(){
+					lb.show();
+				},
+				label:"Custom HTML"
+			}).placeAt(dojo.body());
+			
+		})
 	</script>
 
 	<script type="text/javascript">
@@ -103,6 +131,17 @@
 
 		<input id="flickrButton" type="button" onclick="dijit.byId('fromStore').show()" value="show flickr lightbox" disabled="disabled">
 	
+	</div>
+
+	<div id="customExample">
+		<div id="customTitleThing">
+			<p>lorem ipsum dolor amit</p>
+			<p>lorem ipsum dolor amit</p>
+			<p>lorem ipsum dolor amit</p>
+			<p>lorem ipsum dolor amit</p>
+			<p>lorem ipsum dolor amit</p>
+			<p>lorem ipsum dolor amit</p>
+		</div>
 	</div>
 
 </body>

@@ -336,13 +336,15 @@ dojo.declare("dojox.image.LightboxDialog",
 		});
 	},
 
-	resizeTo: function(/* Object */size){
+	resizeTo: function(/* Object */size, forceTitle){
 		// summary: Resize our dialog container, and fire _showImage
 		
 		var adjustSize = dojo.boxModel == "border-box" ? 
 			dojo._getBorderExtents(this.domNode).w : 0,
-			titleSize = dojo.marginBox(this.titleNode)
+			titleSize = forceTitle || { h:30 }
 		;
+		
+		this._lastTitleSize = titleSize;
 		
 		if(this.adjust && 
 			(size.h + titleSize.h + adjustSize + 80 > this._vp.h ||
@@ -352,6 +354,7 @@ dojo.declare("dojox.image.LightboxDialog",
 			this._lastSize = size;
 			size = this._scaleToFit(size);
 		}
+		this._currentSize = size;
 		
 		var _sizeAnim = dojox.fx.sizeTo({ 
 			node: this.containerNode,
@@ -376,7 +379,7 @@ dojo.declare("dojox.image.LightboxDialog",
 			ns.h = ns.w * (size.h / size.w);
 		}else{
 			// give a little room for the titlenode, too:
-			ns.h = this._vp.h - 90;
+			ns.h = this._vp.h - 60 - this._lastTitleSize.h;
 			ns.w = ns.h * (size.w / size.h);
 		}
 
@@ -425,7 +428,12 @@ dojo.declare("dojox.image.LightboxDialog",
 
 	_showNav: function(){
 		// summary: Fade in the footer, and setup our connections.
-		this._showNavAnim.play(1);
+		var titleSizeNow = dojo.marginBox(this.titleNode);
+		if(titleSizeNow.h > this._lastTitleSize.h){
+			this.resizeTo(this._wasStyled ? this._lastSize : this._currentSize, titleSizeNow);
+		}else{
+			this._showNavAnim.play(1);
+		}
 	},
 
 	hide: function(){
