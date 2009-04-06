@@ -55,6 +55,11 @@ dojo.require("dojo.data.util.filter");
 				this._updates= [];
 				this._fetchCache = [];				
 			},
+			clearCache: function(){
+				//	summary:
+				//		Clears the cache of client side queries
+				this._fetchCache = [];
+			},
 			updateResultSet: function(/*Array*/ resultSet, /*Object*/ request){
 				//	summary:
 				//		Attempts to update the given result set based on previous notifications
