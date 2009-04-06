@@ -28,7 +28,7 @@
 }
 
 .dojoxLightboxFooter {
-	height:50px; 
+	padding-bottom:5px;
 	position:relative;
 	bottom:0;
 	left:0;

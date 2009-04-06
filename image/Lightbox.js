@@ -274,6 +274,14 @@ dojo.declare("dojox.image.LightboxDialog",
 		
 		var _t = this;
 		
+		// listen for 404's:
+		_t._imgError = dojo.connect(_t.imgNode, "error", _t, function(){
+			dojo.disconnect(_t._imgError);
+			// trigger the above onload with a new src:
+			_t.imgNode.src = _t.errorImg;
+			_t.textNode.innerHTML = _t.errorMessage;
+		});
+		
 		// connect to the onload of the image
 		_t._imgConnect = dojo.connect(_t.imgNode, "load", _t, function(e){
 			_t.resizeTo({
@@ -288,14 +296,6 @@ dojo.declare("dojox.image.LightboxDialog",
 			}
 		});
 		
-		// listen for 404's:
-		_t._imgError = dojo.connect(_t.imgNode, "error", _t, function(){
-			dojo.disconnect(_t._imgError);
-			// trigger the above onload with a new src:
-			_t.imgNode.src = _t.errorImg;
-			_t.textNode.innerHTML = _t.errorMessage;
-		});
-
 		_t.imgNode.src = src;
 	},
 
@@ -340,25 +340,82 @@ dojo.declare("dojox.image.LightboxDialog",
 		// summary: Resize our dialog container, and fire _showImage
 		
 		var adjustSize = dojo.boxModel == "border-box" ? 
-			dojo._getBorderExtents(this.domNode).w : 0;
+			dojo._getBorderExtents(this.domNode).w : 0,
+			titleSize = dojo.marginBox(this.titleNode)
 		;
 		
 		if(this.adjust && 
-			(size.h + adjustSize + 80 > this._vp.h || 
-			 size.w + adjustSize + 50 > this._vp.w
+			(size.h + titleSize.h + adjustSize + 80 > this._vp.h ||
+			 size.w + adjustSize + 60 > this._vp.w
 			)
 		){
+			this._lastSize = size;
 			size = this._scaleToFit(size);
 		}
 		
 		var _sizeAnim = dojox.fx.sizeTo({ 
 			node: this.containerNode,
 			duration: size.duration||this.duration,
-			width: size.w + adjustSize, 
-			height: size.h + 30 + adjustSize
+			width: size.w + adjustSize,
+			height: size.h + titleSize.h + adjustSize
 		});
 		this.connect(_sizeAnim, "onEnd", "_showImage");
 		_sizeAnim.play(15);
+	},
+
+	_scaleToFit: function(/* Object */size){
+		// summary: resize an image to fit within the bounds of the viewport
+		// size: Object
+		//		The 'size' object passed around for this image
+		var ns = {};
+
+		// one of the dimensions is too big, go with the smaller viewport edge:
+		if(this._vp.h > this._vp.w){
+			// don't actually touch the edges:
+			ns.w = this._vp.w - 80;
+			ns.h = ns.w * (size.h / size.w);
+		}else{
+			// give a little room for the titlenode, too:
+			ns.h = this._vp.h - 90;
+			ns.w = ns.h * (size.w / size.h);
+		}
+
+		// we actually have to style this image, it's too big
+		this._wasStyled = true;
+		this._setImageSize(ns);
+
+		ns.duration = size.duration;
+		return ns; // Object
+	},
+	
+	_setImageSize: function(size){
+		// summary: Reset the image size to some actual size.
+		var s = this.imgNode;
+		s.height = size.h;
+		s.width = size.w;
+	},
+
+	// clobber inherited function, it is useless.
+	_size: function(){},
+	
+	_position: function(/* Event */e){
+		// summary: we want to know the viewport size any time it changes
+		this._vp = dijit.getViewport();
+		this.inherited(arguments);
+		
+		// determine if we need to scale up or down, if at all.
+		if(e && e.type == "resize"){
+			if(this._wasStyled){
+				this._setImageSize(this._lastSize);
+				this.resizeTo(this._lastSize);
+			}else{
+				if(this.imgNode.height + 80 > this._vp.h || this.imgNode.width + 60 > this._vp.h){
+					this.resizeTo({
+						w: this.imgNode.width, h: this.imgNode.height
+					});
+				}
+			}
+		}
 	},
 
 	_showImage: function(){
@@ -378,7 +435,9 @@ dojo.declare("dojox.image.LightboxDialog",
 			duration: 200,
 			// #5112 - if you _don't_ change the .src, safari will 
 			// _never_ fire onload for this image
-			onEnd: dojo.partial(dojo.attr, this.imgNode, "src", this._blankGif)
+			onEnd: dojo.hitch(this, function(){
+				this.imgNode.src = this._blankGif;
+			})
 		}).play(5);
 
 		this.inherited(arguments);
@@ -431,48 +490,7 @@ dojo.declare("dojox.image.LightboxDialog",
 				break;
 		}
 	},
-	
-	_scaleToFit: function(/* Object */size){
-		// summary: resize an image to fit within the bounds of the viewport
-		// size: Object
-		//		The 'size' object passed around for this image
-		var ns = {};
-
-		// one of the dimensions is too big, go with the smaller viewport edge:
-		if(this._vp.h > this._vp.w){
-			// don't actually touch the edges:
-			ns.w = this._vp.w - 80;
-			ns.h = ns.w * (size.h / size.w);
-		}else{
-			// give a little room for the titlenode, too:
-			ns.h = this._vp.h - 90;
-			ns.w = ns.h * (size.w / size.h);
-		}
-
-		// trigger the nasty width="auto" workaround in show()
-		this._wasStyled = true;
-
-		// we actually have to style this image, it's too big
-		var s = this.imgNode.style;
-		s.height = ns.h + "px";	
-		s.width = ns.w + "px";
-
-		ns.duration = size.duration;
-		return ns; // Object
-	},
-
-	_size: function(){
-		// no-op, clobbering the _other_ size which is now setting overflow:auto for us.
-		// maybe _scaleToFit should override this? should test that.
-	},
-	
-	
-	_position: function(/* Event */e){
-		// summary: we want to know the viewport size any time it changes
-		this._vp = dijit.getViewport();
-		this.inherited(arguments);
-	},
-	
+		
 	_makeAnims: function(){
 		// summary: make and cleanup animation and animation connections
 		
