@@ -45,7 +45,9 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 			deleteButton.attr('label',"Delete " + name);
 		}
 		addButton("Save",function(){
-			self.store.save();
+			self.store.save({onError:function(error){
+				alert(error);
+			}});
 			//refresh the tree
 			self.tree.refreshItem();
 		});
