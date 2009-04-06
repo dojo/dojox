@@ -1,6 +1,6 @@
 <div class="dojoxLightbox" dojoAttachPoint="containerNode">
 	<div style="position:relative">
-		<div dojoAttachPoint="imageContainer" class="dojoxLightboxContainer">
+		<div dojoAttachPoint="imageContainer" class="dojoxLightboxContainer" dojoAttachEvent="onclick: _onImageClick">
 			<img dojoAttachPoint="imgNode" src="${imgUrl}" class="dojoxLightboxImage" alt="${title}">
 			<div class="dojoxLightboxFooter" dojoAttachPoint="titleNode">
 				<div class="dijitInline LightboxClose" dojoAttachPoint="closeNode"></div>

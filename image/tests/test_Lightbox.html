@@ -50,7 +50,74 @@
 					lb.show();
 				},
 				label:"Custom HTML"
-			}).placeAt(dojo.body());
+			}).placeAt("container");
+			
+			// and example that has events:
+			var elb = new dojox.image.LightboxDialog({});
+			elb.connect(elb.textNode, "onclick", function(e){
+				e.preventDefault();
+				elb.show({
+					leaveTitle:true,
+					href: dojo.attr(e.target, "href")
+				});
+			})
+			elb.startup();
+			
+			var content = "<a href='images/chris1_lg.jpg'>chris1<a/>"  
+				+ " | <a href='images/chris2_lg.jpg'>chris2</a>"
+				+ " | <a href='images/chris3_lg.jpg'>chris3</a>"
+			;
+				
+			new dijit.form.Button({
+				onClick:function(){
+					elb.show({
+						title:content,
+						href:"images/chris1_lg.jpg"
+					});
+				},
+				label:"Custom Links"
+			}).placeAt("container");
+			
+			// and example of onClick for the image (to hide the lightbox);
+			var clb = new dojox.image.Lightbox({
+				title:"fun fun fun",
+				href:"images/chris1_lg.jpg",
+				onClick: function(){
+					this.hide();
+				}
+			});
+			clb.startup();
+			
+			new dijit.form.Button({
+				label:"Custom Click",
+				onClick: function(){
+					clb.show()
+				}
+			}).placeAt("container");
+
+			// and example of onClick for the image (to toggle between large/small);
+			var clb2 = new dojox.image.Lightbox({
+				title:"fun fun fun",
+				href:"images/chris1_sm.jpg",
+				onClick: function(info){
+					
+					this.href = info.href == "images/chris1_lg.jpg" ? "images/chris1_sm.jpg" : "images/chris1_lg.jpg";
+					this.show({
+						leaveTitle:true,
+						href: this.href
+					});
+				}
+			});
+			clb2.startup();
+			
+			new dijit.form.Button({
+				label:"Zoomish Click",
+				onClick: function(){
+					clb2.show()
+				}
+			}).placeAt("container");
+			
+			
 			
 		})
 	</script>
@@ -95,7 +162,7 @@
 </head>
 <body class="tundra">
 
-	<div style="padding:20px;">
+	<div id="container" style="padding:20px;">
 		<h1 class="testTitle">a Dojo based Lightbox implementation:</h1>
 
 		<h3>Individual</h3>

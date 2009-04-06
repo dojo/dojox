@@ -115,6 +115,11 @@ dojo.declare("dojox.image.Lightbox",
 	enable: function(){
 		// summary: Enables the dialog (prevents default link)
 		this._allowPassthru = false; 
+	},
+	
+	onClick: function(){
+		// summary:
+		//		Stub fired when the image in the lightbox is clicked.
 	}
 
 });
@@ -209,9 +214,11 @@ dojo.declare("dojox.image.LightboxDialog",
 		//
 		// groupData: Object
 		//		needs href and title attributes. the values for this image.
-		
+		//
+		//
 		var _t = this; // size
-
+		this._lastGroup = groupData;
+		
 		// we only need to call dijit.Dialog.show() if we're not already open.
 		if(!_t.open){ 
 			_t.inherited(arguments); 
@@ -264,8 +271,9 @@ dojo.declare("dojox.image.LightboxDialog",
 			_t.prevNode.style.visibility = "hidden";
 			_t.nextNode.style.visibility = "hidden";
 		}
-		_t.textNode.innerHTML = groupData.title;
-	
+		if(!groupData.leaveTitle){
+			_t.textNode.innerHTML = groupData.title;
+		}
 		_t._ready(src);
 	},
 	
@@ -515,5 +523,19 @@ dojo.declare("dojox.image.LightboxDialog",
 			]);
 		this._animConnects.push(dojo.connect(this._loadingAnim, "onEnd", this, "_prepNodes"));
 		this._showNavAnim = dojo.fadeIn({ node: this.titleNode, duration:225 });
+	},
+	
+	onClick: function(groupData){
+		// summary: a stub function, called with the currently displayed image as the only argument
+	},
+	_onImageClick: function(e){
+		if(e && e.target == this.imgNode){
+			this.onClick(this._lastGroup);
+			// also fire the onclick for the Lightbox widget which triggered, if you
+			// aren't working directly with the LBDialog
+			if(this._lastGroup.declaredClass){
+				this._lastGroup.onClick(this._lastGroup);
+			}
+		}
 	}
 });
