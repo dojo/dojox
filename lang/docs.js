@@ -13,30 +13,65 @@ dojo.provide("dojox.lang.docs");
 	});
 	// TODO: find the existing classes and patch them as well
 	var defaultDeclare = dojo.declare;
+	function tagValue(parent, tag){
+		var element = parent.getElementsByTagName(tag)[0];
+		return element && element.firstChild.nodeValue;
+	}
+	function getType(element, propertyDef){
+		var typeDef = element.getAttribute("type").toLowerCase();
+		typeDef = typeDef.replace(/\?/, function(){
+			propertyDef.optional = true;
+			return '';
+		});
+		return (typeDef == 'string' || typeDef == 'number' || typeDef == 'boolean' || typeDef == 'object' ||typeDef == 'array' || typeDef == 'integer') && 
+			typeDef;
+	}
 	dojo.declare = function(name){
 		var clazz = defaultDeclare.apply(this, arguments);
 		var docForClass = dojo.query("object[location='" + name + "']", api)[0];
 		if(docForClass){
-			var descriptionNode = docForClass.getElementsByTagName("description")[0];
-			clazz.description = descriptionNode && descriptionNode.firstChild.nodeValue;
+			clazz.description = tagValue(docForClass, "description");
+			// translate the properties to JSON Schema
 			clazz.properties = {};
 			var properties = docForClass.getElementsByTagName("property");
 			for(var i = 0; i < properties.length; i++){
 				var propertyDef = clazz.properties[properties[i].getAttribute("name")] = {};
-				var typeDef = properties[i].getAttribute("type").toLowerCase();
-				typeDef = typeDef.replace(/\?/, function(){
-					propertyDef.optional = true;
-					return '';
-				});
-				if(typeDef == 'string' || typeDef == 'number' || typeDef == 'boolean' || typeDef == 'object' ||typeDef == 'array' || typeDef == 'integer'){ 
+				var typeDef = getType(properties[i], propertyDef);
+				if(typeDef){ 
 					propertyDef.type = typeDef;
 				}
-				var description = properties[i].getElementsByTagName("description")[0];
-				if(description){
-					propertyDef.description = description.firstChild.nodeValue;
+				propertyDef.description = tagValue(properties[i], "description");
+			}
+			// translate the methods to JSON Schema
+			clazz.methods = {};
+			var methods = docForClass.getElementsByTagName("method");
+			for(i = 0; i < methods.length; i++){
+				name = methods[i].getAttribute("name");
+				if(name){
+					var methodDef = clazz.methods[name] = {};
+					methodDef.description = tagValue(methods[i], "description");
+					var parameters = methods[i].getElementsByTagName("parameter");
+					methodDef.parameters = [];
+					for(var j = 0; j < parameters.length; j++){
+						var paramElement = parameters[j];
+						methodDef.parameters[j] = {
+							name: paramElement.getAttribute("name"),
+							type: getType(paramElement, methodDef),
+							optional: "optional" == paramElement.getAttribute("usage")
+						};
+					}
+					var returnElement = methods[i].getElementsByTagName("return-type")[0];
+					if(returnElement){
+						methodDef.returns = { 
+							type: getType(returnElement, methodDef)
+						};
+					}
 				}
 			}
-			//TODO: add methods
+			var superclass = docForClass.getAttribute("superclass");
+			if(superclass){
+				clazz["extends"] = dojo.getObject(superclass);
+			}
 		}
 		return clazz;
 	};
