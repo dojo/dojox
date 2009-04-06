@@ -364,7 +364,15 @@ dojo.declare("dojox.data.ServiceStore",
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			var item = this._index[(args._prefix || '') + args.identity];
 			if(item && args.onItem){
-				args.onItem.call(args.scope, item);
+				// the item exists in the index
+				if(item._loadObject){
+					// we have a handle on the item, but it isn't loaded yet, so we need to load it 
+					args.item = item;
+					this.loadItem(args);
+				}else{
+					// it's already loaded, so we can immediately callback
+					args.onItem.call(args.scope, item);
+				}
 			}else{
 				// convert the different spellings
 				return this.fetch({
