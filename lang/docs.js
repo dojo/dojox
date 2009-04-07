@@ -2,15 +2,11 @@ dojo.provide("dojox.lang.docs");
 
 // Extracts information from the API docs to apply a schema representation to dojo classes.
 // This can be utilized for runtime metadata retrieval and type checking
-(function(){
-	var api;
-	dojo.xhrGet({
-		sync:true,
-		url: dojo.baseUrl + '../util/docscripts/api.xml',
-		handleAs: 'xml'
-	}).addCallback(function(result){
-		api = result;	
-	});
+dojo.xhrGet({
+	sync:true,
+	url: dojo.baseUrl + '../util/docscripts/api.xml',
+	handleAs: 'xml'
+}).addCallbacks(function(api){
 	// TODO: find the existing classes and patch them as well
 	var defaultDeclare = dojo.declare;
 	function tagValue(parent, tag){
@@ -76,4 +72,7 @@ dojo.provide("dojox.lang.docs");
 		return clazz;
 	};
 	dojo.mixin(dojo.declare, defaultDeclare);
-})();
+}, function(error){
+	console.log("Warning, the API docs must be available at ../util/docscripts/api.xml "+ 
+	"in order for dojox.lang.docs to supply schema information, but it could not be loaded: " + e);
+});
