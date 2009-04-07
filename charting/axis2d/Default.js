@@ -93,39 +93,47 @@ dojo.require("dojox.lang.utils");
 				l = dojo.map(l, "return item.text");
 			}
 			var s = l.join(this.opt.htmlLabels ? "<br>" : "\n");
-			// console.debug(s);
 			return dojox.gfx._base._getTextBox(s, { font: font }).w||0;
 		},
 		calculate: function(min, max, span, labels){
-			if(this.initialized()){ return this; }
-			this.labels = "labels" in this.opt ? this.opt.labels : labels;
-			this.scaler = lin.buildScaler(min, max, span, this.opt);
+			if(this.initialized()){
+				return this;
+			}
+			var o = this.opt;
+			this.labels = "labels" in o  ? o.labels : labels;
+			this.scaler = lin.buildScaler(min, max, span, o);
+			var tsb = this.scaler.bounds;
 			if("scale" in this){
 				// calculate new range
-				this.opt.from = this.scaler.bounds.lower + this.offset;
-				this.opt.to   = (this.scaler.bounds.upper - this.scaler.bounds.lower) / this.scale + this.opt.from;
+				o.from = tsb.lower + this.offset;
+				o.to   = (tsb.upper - tsb.lower) / this.scale + o.from;
 				// make sure that bounds are correct
-				if(!isFinite(this.opt.from) || isNaN(this.opt.from) || !isFinite(this.opt.to) || isNaN(this.opt.to) ||
-						this.opt.to - this.opt.from >= this.scaler.bounds.upper - this.scaler.bounds.lower){
+				if( !isFinite(o.from) ||
+					isNaN(o.from) ||
+					!isFinite(o.to) ||
+					isNaN(o.to) ||
+					o.to - o.from >= tsb.upper - tsb.lower
+				){
 					// any error --- remove from/to bounds
-					delete this.opt.from;
-					delete this.opt.to;
+					delete o.from;
+					delete o.to;
 					delete this.scale;
 					delete this.offset;
 				}else{
 					// shift the window, if we are out of bounds
-					if(this.opt.from < this.scaler.bounds.lower){
-						this.opt.to   += this.scaler.bounds.lower - this.opt.from;
-						this.opt.from  = this.scaler.bounds.lower;
-					}else if(this.opt.to > this.scaler.bounds.upper){
-						this.opt.from += this.scaler.bounds.upper - this.opt.to;
-						this.opt.to    = this.scaler.bounds.upper;
+					if(o.from < tsb.lower){
+						o.to += tsb.lower - o.from;
+						o.from = tsb.lower;
+					}else if(o.to > tsb.upper){
+						o.from += tsb.upper - o.to;
+						o.to = tsb.upper;
 					}
 					// update the offset
-					this.offset = this.opt.from - this.scaler.bounds.lower;
+					this.offset = o.from - tsb.lower;
 				}
 				// re-calculate the scaler
-				this.scaler = lin.buildScaler(min, max, span, this.opt);
+				this.scaler = lin.buildScaler(min, max, span, o);
+				tsb = this.scaler.bounds;
 				// cleanup
 				if(this.scale == 1 && this.offset == 0){
 					delete this.scale;
@@ -133,7 +141,7 @@ dojo.require("dojox.lang.utils");
 				}
 			}
 			var minMinorStep = 0, ta = this.chart.theme.axis,
-				taFont = "font" in this.opt ? this.opt.font : ta.font,
+				taFont = "font" in o ? o.font : ta.font,
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){
 				if(size){
@@ -142,28 +150,43 @@ dojo.require("dojox.lang.utils");
 			}else{
 				if(size){
 					var labelWidth, i;
-					if(this.opt.labelFunc && this.opt.maxLabelSize){
-						labelWidth = this.opt.maxLabelSize;
+					if(o.labelFunc && o.maxLabelSize){
+						labelWidth = o.maxLabelSize;
 					}else if(this.labels){
 						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
-						var labelLength = Math.ceil(Math.log(Math.max(Math.abs(this.scaler.bounds.from),
-								Math.abs(this.scaler.bounds.to))) / Math.LN10),
+						var labelLength = Math.ceil(
+								Math.log(
+									Math.max(
+										Math.abs(tsb.from),
+										Math.abs(tsb.to)
+									)
+								) / Math.LN10
+							),
 							t = [];
-						if(this.scaler.bounds.from < 0 || this.scaler.bounds.to < 0){ t.push("-"); }
+						if(tsb.from < 0 || tsb.to < 0){
+							t.push("-");
+						}
 						t.push(dojo.string.rep("9", labelLength));
-						var precision = Math.floor(Math.log(this.scaler.bounds.to - this.scaler.bounds.from) / Math.LN10);
+						var precision = Math.floor(
+							Math.log( tsb.to - tsb.from ) / Math.LN10
+						);
 						if(precision > 0){
 							t.push(".");
-							for(i = 0; i < precision; ++i){ t.push("9"); }
+							for(i = 0; i < precision; ++i){
+								t.push("9");
+							}
 						}
-						labelWidth = dojox.gfx._base._getTextBox(t.join(""), {font: taFont}).w;
+						labelWidth = dojox.gfx._base._getTextBox(
+							t.join(""),
+							{ font: taFont }
+						).w;
 					}
 					minMinorStep = labelWidth + labelGap;
 				}
 			}
 			this.scaler.minMinorStep = minMinorStep;
-			this.ticks = lin.buildTicks(this.scaler, this.opt);
+			this.ticks = lin.buildTicks(this.scaler, o);
 			return this;
 		},
 		getScaler: function(){
@@ -173,6 +196,7 @@ dojo.require("dojox.lang.utils");
 			return this.ticks;
 		},
 		getOffsets: function(){
+			var o = this.opt;
 			var offsets = { l: 0, r: 0, t: 0, b: 0 },
 				labelWidth,
 				a,
@@ -182,9 +206,9 @@ dojo.require("dojox.lang.utils");
 				gl = dc.scaler.common.getNumericLabel,
 				offset = 0,
 				ta = this.chart.theme.axis,
-				taFont = "font" in this.opt ? this.opt.font : ta.font,
-				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
-				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
+				taFont = "font" in o ? o.font : ta.font,
+				taMajorTick = "majorTick" in o ? o.majorTick : ta.majorTick,
+				taMinorTick = "minorTick" in o ? o.minorTick : ta.minorTick,
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
 				s = this.scaler;
 			if(!s){
@@ -193,52 +217,65 @@ dojo.require("dojox.lang.utils");
 			var ma = s.major, mi = s.minor;
 			if(this.vertical){
 				if(size){
-					if(this.opt.labelFunc && this.opt.maxLabelSize){
-						labelWidth = this.opt.maxLabelSize;
+					if(o.labelFunc && o.maxLabelSize){
+						labelWidth = o.maxLabelSize;
 					}else if(this.labels){
-						labelWidth = this._groupLabelWidth(this.labels, taFont);
+						labelWidth = this._groupLabelWidth(
+							this.labels,
+							taFont
+						);
 					}else{
 						labelWidth = this._groupLabelWidth([
-							gl(ma.start, ma.prec, this.opt),
-							gl(ma.start + ma.count * ma.tick, ma.prec, this.opt),
-							gl(mi.start, mi.prec, this.opt),
-							gl(mi.start + mi.count * mi.tick, mi.prec, this.opt)
+							gl(ma.start, ma.prec, o),
+							gl(ma.start + ma.count * ma.tick, ma.prec, o),
+							gl(mi.start, mi.prec, o),
+							gl(mi.start + mi.count * mi.tick, mi.prec, o)
 						], taFont);
 					}
 					offset = labelWidth + labelGap;
 				}
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
-				offsets[this.opt.leftBottom ? "l" : "r"] = offset;
+				offsets[o.leftBottom ? "l" : "r"] = offset;
 				offsets.t = offsets.b = size / 2;
 			}else{
 				if(size){
 					offset = size + labelGap;
 				}
 				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
-				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
+				offsets[o.leftBottom ? "b" : "t"] = offset;
 				if(size){
-					if(this.opt.labelFunc && this.opt.maxLabelSize){
-						labelWidth = this.opt.maxLabelSize;
+					if(o.labelFunc && o.maxLabelSize){
+						labelWidth = o.maxLabelSize;
 					}else if(this.labels){
 						labelWidth = this._groupLabelWidth(this.labels, taFont);
 					}else{
 						labelWidth = this._groupLabelWidth([
-							gl(ma.start, ma.prec, this.opt),
-							gl(ma.start + ma.count * ma.tick, ma.prec, this.opt),
-							gl(mi.start, mi.prec, this.opt),
-							gl(mi.start + mi.count * mi.tick, mi.prec, this.opt)
+							gl(ma.start, ma.prec, o),
+							gl(ma.start + ma.count * ma.tick, ma.prec, o),
+							gl(mi.start, mi.prec, o),
+							gl(mi.start + mi.count * mi.tick, mi.prec, o)
 						], taFont);
 					}
 					offsets.l = offsets.r = labelWidth / 2;
 				}
 			}
+			if(labelWidth){
+				this._cachedLabelWidth = labelWidth;
+			}
 			return offsets;
 		},
 		render: function(dim, offsets){
-			if(!this.dirty){ return this; }
+			if(!this.dirty){
+				return this;
+			}
 			// prepare variable
 			var o = this.opt;
-			var start, stop, axisVector, tickVector, labelOffset, labelAlign,
+			var start,
+				stop,
+				axisVector,
+				tickVector,
+				labelOffset,
+				labelAlign,
 				ta = this.chart.theme.axis,
 				taStroke = "stroke" in o ? o.stroke : ta.stroke,
 				taMajorTick = "majorTick" in o ? o.majorTick : ta.majorTick,
@@ -258,14 +295,17 @@ dojo.require("dojox.lang.utils");
 					labelAlign = "end";
 				}else{
 					start.x = stop.x = dim.width - offsets.r;
-					tickVector = {x: 1, y: 0};
+					tickVector = { x: 1, y: 0 };
 					labelAlign = "start";
 				}
-				labelOffset = { x: tickVector.x * (tickSize + labelGap), y: size * 0.4 };
+				labelOffset = {
+					x: tickVector.x * (tickSize + labelGap),
+					y: size * 0.4
+				};
 			}else{
 				start = { x: offsets.l };
 				stop  = { x: dim.width - offsets.r };
-				axisVector = {x: 1, y: 0};
+				axisVector = { x: 1, y: 0 };
 				labelAlign = "middle";
 				if(o.leftBottom){
 					start.y = stop.y = dim.height - offsets.b;
@@ -284,14 +324,22 @@ dojo.require("dojox.lang.utils");
 			this.cleanGroup();
 
 			try{
-				var s = this.group, c = this.scaler, t = this.ticks, canLabel,
+				var s = this.group,
+					c = this.scaler,
+					t = this.ticks,
+					canLabel,
 					f = lin.getTransformerFromModel(this.scaler),
-					forceHtmlLabels = dojox.gfx.renderer == "canvas",
+					forceHtmlLabels = (dojox.gfx.renderer == "canvas"),
 					labelType = forceHtmlLabels || this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
 					dx = tickVector.x * taMajorTick.length,
 					dy = tickVector.y * taMajorTick.length;
 
-				s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(taStroke);
+				s.createLine({
+					x1: start.x,
+					y1: start.y,
+					x2: stop.x,
+					y2: stop.y
+				}).setStroke(taStroke);
 
 				dojo.forEach(t.major, function(tick){
 					var offset = f(tick.value), elem,
@@ -303,10 +351,20 @@ dojo.require("dojox.lang.utils");
 							y2: y + dy
 						}).setStroke(taMajorTick);
 						if(tick.label){
-							elem = dc.axis2d.common.createText[labelType]
-											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
-												tick.label, taFont, taFontColor);
-							if(labelType == "html"){ this.htmlElements.push(elem); }
+							elem = dc.axis2d.common.createText[labelType](
+								this.chart,
+								s,
+								x + labelOffset.x,
+								y + labelOffset.y,
+								labelAlign,
+								tick.label,
+								taFont,
+								taFontColor,
+								this._cachedLabelWidth
+							);
+							if(labelType == "html"){
+								this.htmlElements.push(elem);
+							}
 						}
 				}, this);
 
@@ -323,10 +381,20 @@ dojo.require("dojox.lang.utils");
 							y2: y + dy
 						}).setStroke(taMinorTick);
 						if(canLabel && tick.label){
-							elem = dc.axis2d.common.createText[labelType]
-											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
-												tick.label, taFont, taFontColor);
-							if(labelType == "html"){ this.htmlElements.push(elem); }
+							elem = dc.axis2d.common.createText[labelType](
+								this.chart,
+								s,
+								x + labelOffset.x,
+								y + labelOffset.y,
+								labelAlign,
+								tick.label,
+								taFont,
+								taFontColor,
+								this._cachedLabelWidth
+							);
+							if(labelType == "html"){
+								this.htmlElements.push(elem);
+							}
 						}
 				}, this);
 
