@@ -25,7 +25,7 @@
 		var anim = null; 
 		var init = function(){
 			var node = dojo.byId('theNode');
-			anim = new dojo._Animation({
+			anim = new dojo.Animation({
 				curve: new dojo._Line(0,-500),
 				duration: 3000,
 				onEnd: (function(){ anim.play(); }), // loop indefinately
@@ -49,7 +49,7 @@
 </head>
 <body class="tundra">
 
-	<h1 class="testTitle">dojo._Animation test:</h1>
+	<h1 class="testTitle">dojo.Animation test:</h1>
 
 	<div class="dijitInline" id="theNode">Test</div>
 

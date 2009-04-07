@@ -151,7 +151,7 @@ dojo.require("dojox.gfx.matrix");
 		//	|		join:  {values: ["miter", "bevel", "round"]}
 		//	|	}).play();
 		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d._Animation(args), shape = args.shape, stroke;
+		var anim = new d.Animation(args), shape = args.shape, stroke;
 		d.connect(anim, "beforeBegin", anim, function(){
 			stroke = shape.getStroke();
 			var prop = args.color, values = {}, value, start, end;
@@ -185,7 +185,7 @@ dojo.require("dojox.gfx.matrix");
 			this.curve = new InterpolObject(values, stroke);
 		});
 		d.connect(anim, "onAnimate", shape, "setStroke");
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	};
 
 	g.fx.animateFill = function(/*Object*/ args){
@@ -199,7 +199,7 @@ dojo.require("dojox.gfx.matrix");
 		//	|		color: {start: "red", end: "green"}
 		//	|	}).play();
 		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d._Animation(args), shape = args.shape, fill;
+		var anim = new d.Animation(args), shape = args.shape, fill;
 		d.connect(anim, "beforeBegin", anim, function(){
 			fill = shape.getFill();
 			var prop = args.color, values = {};
@@ -208,7 +208,7 @@ dojo.require("dojox.gfx.matrix");
 			}
 		});
 		d.connect(anim, "onAnimate", shape, "setFill");
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	};
 
 	g.fx.animateFont = function(/*Object*/ args){
@@ -222,7 +222,7 @@ dojo.require("dojox.gfx.matrix");
 		//	|		size:  {end: 10, units: "pt"}
 		//	|	}).play();
 		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d._Animation(args), shape = args.shape, font;
+		var anim = new d.Animation(args), shape = args.shape, font;
 		d.connect(anim, "beforeBegin", anim, function(){
 			font = shape.getFont();
 			var prop = args.style, values = {}, value, start, end;
@@ -250,7 +250,7 @@ dojo.require("dojox.gfx.matrix");
 			this.curve = new InterpolObject(values, font);
 		});
 		d.connect(anim, "onAnimate", shape, "setFont");
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	};
 
 	g.fx.animateTransform = function(/*Object*/ args){
@@ -266,12 +266,12 @@ dojo.require("dojox.gfx.matrix");
 		//	|		]
 		//	|	}).play();
 		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d._Animation(args), shape = args.shape, original;
+		var anim = new d.Animation(args), shape = args.shape, original;
 		d.connect(anim, "beforeBegin", anim, function(){
 			original = shape.getTransform();
 			this.curve = new InterpolTransform(args.transform, original);
 		});
 		d.connect(anim, "onAnimate", shape, "setTransform");
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	};
 })();

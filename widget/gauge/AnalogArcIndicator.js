@@ -42,7 +42,7 @@ dojo.declare("dojox.widget.gauge.AnalogArcIndicator",[dojox.widget.gauge.AnalogL
 			if(dontAnimate){
 				this._createArc(v);
 			}else{
-				var anim = new dojo._Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
+				var anim = new dojo.Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
 				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createArc));
 				anim.play();
 			}

@@ -89,7 +89,7 @@ dojo.declare("dojox.widget.gauge.AnalogLineIndicator",[dojox.widget.gauge._Indic
 			}
 		}else{
 			if(c!=v){
-				var anim = new dojo._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+				var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
 				dojo.connect(anim, "onAnimate", dojo.hitch(this, function(step){
 					for(var i in this.shapes){
 						this.shapes[i].setTransform([{dx:this._gauge.cx,dy:this._gauge.cy}, dojox.gfx.matrix.rotateg(this._gauge._getAngle(step))]);

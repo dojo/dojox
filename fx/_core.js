@@ -23,7 +23,7 @@ dojox.fx._Line = function(start, end){
 	// example: 
 	// |	// this is 10 .. 100 and 50 .. 500
 	// |	var curve = new dojox.fx._Line([10,50],[100,500]);
-	// |	// dojo._Animation.onAnimate is called at every step of the animation
+	// |	// dojo.Animation.onAnimate is called at every step of the animation
 	// |	// to define current values. this _Line returns an array
 	// | 	// at each step. arguments[0] and [1] in this example. 
 	//

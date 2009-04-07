@@ -101,7 +101,7 @@ dojo.declare("dojox.widget.gauge.BarLineIndicator",[dojox.widget.gauge._Indicato
 		if(dontAnimate){
 			this.shapes[0].applyTransform(dojox.gfx.matrix.translate(v-(this.shapes[0].matrix?this.shapes[0].matrix.dx:0),0));
 		}else{
-			var anim = new dojo._Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+			var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
 			dojo.connect(anim, "onAnimate", dojo.hitch(this, function(jump){
 				this.shapes[0].applyTransform(dojox.gfx.matrix.translate(jump-(this.shapes[0].matrix?this.shapes[0].matrix.dx:0),0));
 			}));

@@ -15,8 +15,8 @@ dojo.mixin(dojox.fx,{
 		//		args.crop: Boolean - If true, pieces will only be visible inside node's boundries
 		//		args.rows: Integer - The number of horizontal pieces (default is 3)
 		//		args.columns: Integer - The number of vertical pieces (default is 3)
-		//		args.pieceAnimation: Function(piece, x, y, coords) - Returns either the dojo._Animation
-		//		or an array of dojo._Animation objects for the piece at location (x, y) in the node's grid;
+		//		args.pieceAnimation: Function(piece, x, y, coords) - Returns either the dojo.Animation
+		//		or an array of dojo.Animation objects for the piece at location (x, y) in the node's grid;
 		//		coords is the result of dojo.coords(args.node, true);
 
 		args.rows = args.rows || 3;
@@ -98,7 +98,7 @@ dojo.mixin(dojox.fx,{
 		if(args.onEnd){
 			dojo.connect(anim, "onEnd", anim, args.onEnd);
 		}
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	},
 
 	explode: function(/*Object*/ args){
@@ -214,7 +214,7 @@ dojo.mixin(dojox.fx,{
 				dojo.style(node, { opacity: "0" });
 			});
 		}
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	},
 
 	converge: function(/*Object*/ args){
@@ -309,7 +309,7 @@ dojo.mixin(dojox.fx,{
 				dojo.style(node, { opacity: "0" });
 			});
 		}
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	},
 
 	build: function(/*Object*/ args){
@@ -428,7 +428,7 @@ dojo.mixin(dojox.fx,{
 				dojo.style(node, { opacity: "0" });
 			});
 		}
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	},
 	
 	unShear: function(/*Object*/ args){
@@ -562,12 +562,12 @@ dojo.mixin(dojox.fx,{
 				dojo.style(node, { opacity: "0" });
 			});
 		}
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	},
 
 	unPinwheel: function(/*Object*/ args){
 		args.unhide = true;
-		return dojox.fx.pinwheel(args); // dojo._Animation
+		return dojox.fx.pinwheel(args); // dojo.Animation
 	},
 
 	blockFadeOut: function(/*Object*/ args){
@@ -628,12 +628,12 @@ dojo.mixin(dojox.fx,{
 				dojo.style(node, { opacity: "0" });
 			});
 		}
-		return anim; // dojo._Animation
+		return anim; // dojo.Animation
 	},
 
 	blockFadeIn: function(/*Object*/ args){
 		args.unhide = true;
-		return dojox.fx.blockFadeOut(args); // dojo._Animation
+		return dojox.fx.blockFadeOut(args); // dojo.Animation
 	}
 
 });

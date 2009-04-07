@@ -219,7 +219,7 @@ dojo.require("dojo.fx");
 			s.visibility = "hidden"; 
 		});
 
-		return dojo.fx.chain(anims); // dojo._Animation
+		return dojo.fx.chain(anims); // dojo.Animation
 
 	}
 
@@ -229,7 +229,7 @@ dojo.require("dojo.fx");
 		// description:
 		//		An extension to `dojox.fx.flip` providing a more 3d-like rotation. 
 		//		Behaves the same as `dojox.fx.flip`, using the same attributes and 
-		//		other standard `dojo._Animation` properties.
+		//		other standard `dojo.Animation` properties.
 		//
 		//	example:
 		//		See `dojox.fx.flip`
@@ -319,7 +319,7 @@ dojo.require("dojo.fx");
 		// description:
 		//		An extension to `dojox.fx.flip` providing a page flip effect.
 		//		Behaves the same as `dojox.fx.flip`, using the same attributes and
-		//		other standard `dojo._Animation` properties.
+		//		other standard `dojo.Animation` properties.
 		//
 		//	example:
 		//		See `dojox.fx.flip`
@@ -403,7 +403,7 @@ dojo.require("dojo.fx");
 		// description:
 		//		An extension to `dojox.fx.flip` providing a page flip effect.
 		//		Behaves the same as `dojox.fx.flip`, using the same attributes and
-		//		other standard `dojo._Animation` properties and
+		//		other standard `dojo.Animation` properties and
 		//
         //      cols: Integer columns
         //      rows: Integer rows

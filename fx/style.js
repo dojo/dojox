@@ -1,7 +1,7 @@
 dojo.provide("dojox.fx.style");
 dojo.experimental("dojox.fx.style"); 
 //
-// summary: dojox.fx CSS Class _Animations: 
+// summary: dojox.fx CSS Class Animations: 
 //
 // description: a set of functions to animate properties based on
 // 	normalized CSS class definitions.
@@ -11,7 +11,7 @@ dojo.experimental("dojox.fx.style");
 dojo.require("dojo.fx"); 
 
 // FIXME: should the call signatures match dojo.addClass/removeClass/toggleClass and extend
-// 	by having a third (or fourth) param to mix in additional _Animation args for advanced
+// 	by having a third (or fourth) param to mix in additional Animation args for advanced
 //	usage (delay: curve: repeat: easing: etc ... )
 (function(){
 		
@@ -105,7 +105,7 @@ dojo.require("dojo.fx");
 				properties: mixedProperties
 			}, args));
 			d.connect(_anim, "onEnd", _anim,pushClass); 
-			return _anim; // dojo._Animation
+			return _anim; // dojo.Animation
 		},
 	
 		removeClass: function(/*dojox.fx._arg.StyleArgs*/ args){
@@ -117,7 +117,7 @@ dojo.require("dojo.fx");
 			//	
 			//	calls dojo.removeClass(args.cssClass) onEnd of animation		
 			//
-			//	standard dojo._Animation object rules apply. 
+			//	standard dojo.Animation object rules apply. 
 			//
 			// example:
 			// |	// animate the removal of "foo" from a node with id="bar"
@@ -148,7 +148,7 @@ dojo.require("dojo.fx");
 				properties: mixedProperties
 			}, args));
 			d.connect(_anim, "onEnd", _anim, pullClass); 
-			return _anim; // dojo._Animation
+			return _anim; // dojo.Animation
 		},
 
 		toggleClass: function(/*DomNode|String*/node, /*String*/cssClass, /*Boolean?*/condition){
@@ -177,7 +177,7 @@ dojo.require("dojo.fx");
 			if(typeof condition == "undefined"){
 				condition = !d.hasClass(node, cssClass);
 			}
-			return dojox.fx[(condition ? "addClass" : "removeClass")]({ node: node, cssClass:cssClass }); // dojo._Animation
+			return dojox.fx[(condition ? "addClass" : "removeClass")]({ node: node, cssClass:cssClass }); // dojo.Animation
 			// TODO: support 4th param animMixin to allow passing of easing and duration and other _Animtion options
 		},
 	

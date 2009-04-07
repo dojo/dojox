@@ -117,7 +117,7 @@ dojox.fx.sizeTo = function(/* Object */args){
 
 	var anim = dojo.fx[(args.method == "combine" ? "combine" : "chain")]([anim1, anim2]);
 	dojo.connect(anim, "beforeBegin", anim, init);
-	return anim; // dojo._Animation
+	return anim; // dojo.Animation
 
 };
 
@@ -166,7 +166,7 @@ dojox.fx.slideBy = function(/* Object */args){
 		}
 	}, args));
 	dojo.connect(_anim, "beforeBegin", _anim, init);
-	return _anim; // dojo._Animation
+	return _anim; // dojo.Animation
 };
 
 dojox.fx.crossFade = function(/* Object */args){
@@ -192,7 +192,7 @@ dojox.fx.crossFade = function(/* Object */args){
 				node: node2
 			},args))
 		]);
-		return _anim; // dojo._Animation
+		return _anim; // dojo.Animation
 	}else{
 		// improper syntax in args, needs Array
 		return false; // Boolean
@@ -229,7 +229,7 @@ dojox.fx.highlight = function(/*Object*/ args){
 		});
 	}
 
-	return anim; // dojo._Animation
+	return anim; // dojo.Animation
 };
 
  
@@ -281,5 +281,5 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 	};
 
 	var anim = dojo.animateProperty(dojo.mixin({ properties: props }, args));
-	return anim; // dojo._Animation
+	return anim; // dojo.Animation
 };

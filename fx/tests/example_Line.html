@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>using a dojo._Line and dojo._Animation</title>
+	<title>using a dojo._Line and dojo.Animation</title>
 	<style type="text/css">
 	        @import "../../../dojo/resources/dojo.css";
 	        @import "../../../dijit/themes/tundra/tundra.css";
@@ -38,8 +38,8 @@
 				.setFill([0,0,255])
 				.setStroke({ color:[128,128,128], width: 1});
 			
-			// so we just make a raw _Animation
-			var _anim = new dojo._Animation({
+			// so we just make a raw Animation
+			var _anim = new dojo.Animation({
 				// the id of the shape	
 				node: node,
 				// some easing options

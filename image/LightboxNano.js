@@ -251,7 +251,7 @@ d.declare("dojox.image.LightboxNano", null, {
 
 	_anim: function(node, args, onEnd){
 		// summary: Creates the lightbox open/close and background fadein/out animations
-		return d.animateProperty({ // dojo._Animation
+		return d.animateProperty({ // dojo.Animation
 			node: node,
 			duration: this.duration,
 			properties: args,

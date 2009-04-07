@@ -24,7 +24,7 @@ dojox.fx.smoothScroll = function(/* Object */args){
 			args.win.scrollTop = val[1];
 		});
 
-	var anim = new dojo._Animation(dojo.mixin({
+	var anim = new dojo.Animation(dojo.mixin({
 		beforeBegin: function(){
 			if(this.curve){ delete this.curve; }
 			var current = isWindow ? dojo._docScroll() : {x: args.win.scrollLeft, y: args.win.scrollTop};
@@ -32,5 +32,5 @@ dojox.fx.smoothScroll = function(/* Object */args){
 		},
 		onAnimate: _anim
 	},args));
-	return anim; // dojo._Animation
+	return anim; // dojo.Animation
 };
