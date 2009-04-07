@@ -69,6 +69,9 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		if(keywordParameters.urlPreventCache !== undefined){
 			this.urlPreventCache = keywordParameters.urlPreventCache?true:false;
 		}
+		if(keywordParameters.hierarchical !== undefined){
+			this.hierarchical = keywordParameters.hierarchical?true:false;
+		}
 		if(keywordParameters.clearOnClose){
 			this.clearOnClose = true;
 		}
@@ -90,6 +93,13 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 	//Note this does not mean the store calls the server on each fetch, only that the data load has preventCache set as an option.
 	//Added for tracker: #6072
 	urlPreventCache: false,  
+
+	//Parameter to indicate to process data from the url as hierarchical 
+	//(data items can contain other data items in js form).  Default is true 
+	//for backwards compatibility.  False means only root items are processed 
+	//as items, all child objects outside of type-mapped objects and those in 
+	//specific reference format, are left straight JS data objects.
+	hierarchical: true,
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -557,6 +567,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		
 		// First, we define a couple little utility functions...
 		
+		var self = this;
 		function valueIsAnItem(/* anything */ aValue){
 			// summary:
 			//		Given any sort of value that could be in the raw json data,
@@ -579,12 +590,12 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 				(aValue.constructor == Object) &&
 				(typeof aValue._reference === "undefined") && 
 				(typeof aValue._type === "undefined") && 
-				(typeof aValue._value === "undefined")
+				(typeof aValue._value === "undefined") &&
+				self.hierarchical
 			);
 			return isItem;
 		}
 		
-		var self = this;
 		function addItemAndSubItemsToArrayOfAllItems(/* Item */ anItem){
 			self._arrayOfAllItems.push(anItem);
 			for(var attribute in anItem){
