@@ -202,6 +202,32 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			}
 		}
 	},
+	colSizeAdjust: function (e, colIdx, delta){ // adjust the column specified by colIdx by the specified delta px
+		var headers = this._findHeaderCells();
+		var view = this.focusView;
+		if (!view) {
+			for (var i = 0, cView; (cView = this.grid.views.views[i]); i++) {
+				// find first view with a tableMap in order to work with empty grid
+				if(cView.header.tableMap.map ){
+					view=cView;
+					break;		
+				}
+			}
+		}
+		var curHeader = headers[colIdx];
+		if (!view || (colIdx == headers.length-1 && colIdx == 0)){
+			return; // can't adjust single col. grid
+		}	
+		view.content.baseDecorateEvent(e);
+		if (view.header.canResize(e)){ 
+			var deltaObj = {
+				l: delta
+			};
+			drag = view.header.colResizeSetup(e,false);
+			view.header.doResizeColumn(drag, null, deltaObj);
+			setTimeout(dojo.hitch(view, "update"), 10);
+		}
+	},
 	styleRow: function(inRow){
 		return;
 	},

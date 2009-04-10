@@ -96,10 +96,17 @@ dojo.declare("dojox.grid._Events", null, {
 			case dk.LEFT_ARROW:
 			case dk.RIGHT_ARROW:
 				if(!this.edit.isEditing()){
+					var keyCode = e.keyCode;  // IE seems to lose after stopEvent when modifier keys
 					dojo.stopEvent(e);
-					var offset = (e.keyCode == dk.LEFT_ARROW) ? 1 : -1;
-					if(dojo._isBodyLtr()){ offset *= -1; }
-					this.focus.move(0, offset);
+					var colIdx = this.focus.getHeaderIndex();
+					if (colIdx >= 0 && (e.shiftKey && e.ctrlKey)){
+						this.focus.colSizeAdjust(e, colIdx, (keyCode == dk.LEFT_ARROW ? -1 : 1)*5);
+					}
+					else{
+						var offset = (keyCode == dk.LEFT_ARROW) ? 1 : -1;
+						if(dojo._isBodyLtr()){ offset *= -1; }
+						this.focus.move(0, offset);
+					}
 				}
 				break;
 			case dk.UP_ARROW:

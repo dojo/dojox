@@ -453,29 +453,30 @@ dojo.require("dojo.dnd.Moveable");
 		},
 
 		// column resizing
-		beginColumnResize: function(e){
-			this.moverDiv = document.createElement("div");
-			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
-			dojo.body().appendChild(this.moverDiv);
-			var m = this.moveable = new dojo.dnd.Moveable(this.moverDiv);
-			
-			this.lineDiv = document.createElement('div');
- 
-			var vw = dojo._abs(e.sourceView.headerNode, true);
+		colResizeSetup: function(/*Event Object*/e, /*boolean*/ isMouse ){
+			//Set up the drag object for column resizing
+			// Called with mouse event in case of drag and drop,
+			// Also called from keyboard shift-arrow event when focus is on a header
 			var headContentBox = dojo.contentBox(e.sourceView.headerNode);
-			var bodyContentBox = dojo.contentBox(e.sourceView.domNode);
-			dojo.style(this.lineDiv, {
-				top: vw.y + "px",
-				left:e.clientX + "px",
-			  height: (bodyContentBox.h + headContentBox.h) + "px"
+			
+			if (isMouse) {  //IE draws line even with no mouse down so separate from keyboard 
+				this.lineDiv = document.createElement('div');
+				
+				var vw = dojo._abs(e.sourceView.headerNode, true);
+				var bodyContentBox = dojo.contentBox(e.sourceView.domNode);
+				dojo.style(this.lineDiv, {
+					top: vw.y + "px",
+					left: e.clientX + "px",
+					height: (bodyContentBox.h + headContentBox.h) + "px"
 				});
-			dojo.addClass(this.lineDiv, "dojoxGridResizeColLine")
-			this.lineDiv._origLeft = e.clientX;
-			dojo.body().appendChild(this.lineDiv);
-
+				dojo.addClass(this.lineDiv, "dojoxGridResizeColLine")
+				this.lineDiv._origLeft = e.clientX;
+				dojo.body().appendChild(this.lineDiv);
+			}
 			var spanners = [], nodes = this.tableMap.findOverlappingNodes(e.cellNode);
 			for(var i=0, cell; (cell=nodes[i]); i++){
 				spanners.push({ node: cell, index: this.getCellNodeIndex(cell), width: cell.offsetWidth });
+				//console.log("spanner: " + this.getCellNodeIndex(cell));
 			}
 
 			var view = e.sourceView;
@@ -498,6 +499,15 @@ dojo.require("dojo.dnd.Moveable");
 				spanners: spanners,
 				followers: followers
 			};
+			return drag;
+		},
+		beginColumnResize: function(e){
+			this.moverDiv = document.createElement("div");
+			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
+			dojo.body().appendChild(this.moverDiv);
+			var m = this.moveable = new dojo.dnd.Moveable(this.moverDiv);
+
+			drag =this.colResizeSetup(e,true);
 
 			m.onMove = dojo.hitch(this, "doResizeColumn", drag);
 
@@ -511,7 +521,7 @@ dojo.require("dojo.dnd.Moveable");
 				this.moveable = null;
 			}));
 
-			view.convertColPctToFixed();
+			e.sourceView.convertColPctToFixed();
 
 			if(e.cellNode.setCapture){
 				e.cellNode.setCapture();
@@ -520,16 +530,25 @@ dojo.require("dojo.dnd.Moveable");
 		},
 
 		doResizeColumn: function(inDrag, mover, leftTop){
-			var isLtr = dojo._isBodyLtr();
-			var deltaX = isLtr ? leftTop.l : -leftTop.l;
-			var w = inDrag.w + deltaX;
-			var vw = inDrag.vw + deltaX;
-			var tw = inDrag.tw + deltaX;
+			var isL2r = dojo._isBodyLtr();
+			var changeX = isL2r ? leftTop.l : -leftTop.l;
+			var data = {
+				isLtr: isL2r,
+				deltaX: changeX,
+				w: inDrag.w + changeX,
+				vw: inDrag.vw + changeX,
+				tw: inDrag.tw + changeX
+			};
 			
 			this.dragRecord = {inDrag: inDrag, mover: mover, leftTop:leftTop};
 			
-			if(w >= this.minColWidth){
-				dojo.style(this.lineDiv, "left", (this.lineDiv._origLeft + deltaX) + "px");
+			if(data.w >= this.minColWidth){
+				if (mover == null) { // we are using keyboard do immediate resize
+					this.doResizeNow(inDrag, data);
+				}
+				else{
+					dojo.style(this.lineDiv, "left", (this.lineDiv._origLeft + data.deltaX) + "px");
+				}
 			}
 			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
 				var t = findTable(inDrag.node);
@@ -539,29 +558,18 @@ dojo.require("dojo.dnd.Moveable");
 
 		endResizeColumn: function(inDrag){
 			var leftTop = this.dragRecord.leftTop;
-			var isLtr = dojo._isBodyLtr();
-			var deltaX = isLtr ? leftTop.l : -leftTop.l;
-			var w = inDrag.w + deltaX;
-			var vw = inDrag.vw + deltaX;
-			var tw = inDrag.tw + deltaX;			
+			var isL2r = dojo._isBodyLtr();
+			var changeX = isL2r ? leftTop.l : -leftTop.l;
+			var data = {
+				isLtr: isL2r,
+				deltaX: changeX,
+				w: inDrag.w + changeX,
+				vw: inDrag.vw + changeX,
+				tw: inDrag.tw + changeX
+			};			
 			
 			// Only resize the columns when the drag has finished
-			for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
-				sw = s.width + deltaX;
-				s.node.style.width = sw + 'px';
-				inDrag.view.setColWidth(s.index, sw);
-			}
-			for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
-				fl = f.left + deltaX;
-				f.node.style.left = fl + 'px';
-			}
-			inDrag.node.style.width = w + 'px';
-			inDrag.view.setColWidth(inDrag.index, w);
-			inDrag.view.headerNode.style.width = vw + 'px';
-			inDrag.view.setColumnsWidth(tw);
-			if(!isLtr){
-				inDrag.view.headerNode.scrollLeft = inDrag.scrollLeft + deltaX;
-			}
+			this.doResizeNow(inDrag, data);
 			
 			dojo.destroy(this.lineDiv);
  			dojo.destroy(this.moverDiv);
@@ -573,6 +581,24 @@ dojo.require("dojo.dnd.Moveable");
 				this._skipBogusClicks = false;
 			});
 			setTimeout(dojo.hitch(inDrag.view, "update"), 50);
+		},
+		doResizeNow: function(inDrag, data){
+			for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
+				sw = s.width + data.deltaX;
+				s.node.style.width = sw + 'px';
+				inDrag.view.setColWidth(s.index, sw);
+			}
+			for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
+				fl = f.left + data.deltaX;
+				f.node.style.left = fl + 'px';
+			}
+			inDrag.node.style.width = data.w + 'px';
+			inDrag.view.setColWidth(inDrag.index, data.w);
+			inDrag.view.headerNode.style.width = data.vw + 'px';
+			inDrag.view.setColumnsWidth(data.tw);
+			if(!data.isLtr){
+				inDrag.view.headerNode.scrollLeft = inDrag.scrollLeft + data.deltaX;
+			}
 		}
 	});
 
