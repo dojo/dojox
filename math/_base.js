@@ -83,6 +83,53 @@ dojo.provide("dojox.math._base");
 			return (squares/a.length)-Math.pow(mean/a.length, 2);	//	Number
 		},
 
+		bestFit: function(/* Object[] */a, /* String? */xProp, /* String? */yProp){
+			//	summary:
+			//		Calculate the slope and intercept in a linear fashion.  An array
+			//		of objects is expected; optionally you can pass in the property
+			//		names for "x" and "y", else x/y is used as the default.
+			//
+			//		Note that this does NOT operate on a regular array of values because
+			//		we expect that for the purposes of best fit, x will not be linear.
+			xProp = xProp || "x", yProp = yProp || "y";
+			var sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0, stt = 0, sts = 0, n = a.length, t;
+			for(var i=0; i<n; i++){
+				sx += a[i][xProp];
+				sy += a[i][yProp];
+				sxx += Math.pow(a[i][xProp], 2);
+				syy += Math.pow(a[i][yProp], 2);
+				sxy += a[i][xProp] * a[i][yProp];
+			}
+
+			//	we use the following because it's more efficient and accurate for determining the slope.
+			for(i=0; i<n; i++){
+				t = a[i][xProp] - sx/n;
+				stt += t*t;
+				sts += t*a[i][yProp];
+			}
+			var slope = sts/(stt||1);	//	prevent divide by zero.
+
+			//	get Pearson's R
+			var d = Math.sqrt((sxx - Math.pow(sx,2)/n) * (syy - Math.pow(sy,2)/n));
+			if(d === 0){
+				throw new Error("dojox.math.bestFit: the denominator for Pearson's R is 0.");
+			}
+
+			var r = (sxy-(sx*sy/n)) / d;
+			var r2 = Math.pow(r, 2);
+			if(slope < 0){
+				r = -r;
+			}
+
+			//	to use:  y = slope*x + intercept;
+			return {	//	Object
+				slope: slope,
+				intercept: (sy - sx*slope)/(n||1),
+				r: r,
+				r2: r2
+			};
+		},
+
 		mean: function(/* Number[] */a){
 			//	summary:
 			//		Returns the mean value in the passed array.
