@@ -83,15 +83,21 @@ dojo.provide("dojox.math._base");
 			return (squares/a.length)-Math.pow(mean/a.length, 2);	//	Number
 		},
 
-		bestFit: function(/* Object[] */a, /* String? */xProp, /* String? */yProp){
+		bestFit: function(/* Object[] || Number[] */a, /* String? */xProp, /* String? */yProp){
 			//	summary:
 			//		Calculate the slope and intercept in a linear fashion.  An array
 			//		of objects is expected; optionally you can pass in the property
-			//		names for "x" and "y", else x/y is used as the default.
-			//
-			//		Note that this does NOT operate on a regular array of values because
-			//		we expect that for the purposes of best fit, x will not be linear.
+			//		names for "x" and "y", else x/y is used as the default.  If you
+			//		pass an array of numbers, it will be mapped to a set of {x,y} objects
+			//		where x = the array index.
 			xProp = xProp || "x", yProp = yProp || "y";
+			if(a[0] !== undefined && typeof(a[0]) == "number"){
+				//	this is an array of numbers, so use the index as x.
+				a = dojo.map(a, function(item, idx){
+					return { x: idx, y: item };
+				});
+			}
+
 			var sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0, stt = 0, sts = 0, n = a.length, t;
 			for(var i=0; i<n; i++){
 				sx += a[i][xProp];
