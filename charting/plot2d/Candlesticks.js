@@ -109,7 +109,7 @@ dojo.require("dojox.lang.functional.reversed");
 						close = vt(v.close),
 						high = vt(v.high),
 						low = vt(v.low);
-					if(v.mid){
+					if("mid" in v){
 						var mid = vt(v.mid);
 					}
 					if(low > high){
@@ -130,7 +130,7 @@ dojo.require("dojox.lang.functional.reversed");
 						shape.setTransform({dx: x, dy: 0 });
 						shape.createLine(line).setStroke(stroke);
 						shape.createRect(rect).setStroke(stroke).setFill(doFill?fill:"white");
-						if(v.mid){
+						if("mid" in v){
 							//	add the mid line.
 							shape.createLine({ x1: (stroke.width||1), x2: width-(stroke.width||1), y1: y - mid, y2: y - mid})
 								.setStroke(doFill?{color:"white"}:stroke);
