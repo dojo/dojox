@@ -14,14 +14,14 @@ dojo.require("dojox.lang.functional.reversed");
 
 	//	Candlesticks are based on the Bars plot type; we expect the following passed
 	//	as values in a series: 
-	//	{ x?, open, close, high, low }
+	//	{ x?, open, close, high, low, mid? }
 	//	if x is not provided, the array index is used.
 	//	failing to provide the OHLC values will throw an error.
 	dojo.declare("dojox.charting.plot2d.Candlesticks", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
-			gap:	1,		// gap between columns in pixels
+			gap:	2,		// gap between columns in pixels
 			shadows: null	// draw shadows
 		},
 		optionalParams: {
@@ -109,6 +109,9 @@ dojo.require("dojox.lang.functional.reversed");
 						close = vt(v.close),
 						high = vt(v.high),
 						low = vt(v.low);
+					if(v.mid){
+						var mid = vt(v.mid);
+					}
 					if(low > high){
 						var tmp = high;
 						high = low;
@@ -121,12 +124,17 @@ dojo.require("dojox.lang.functional.reversed");
 						var line = { x1: width/2, x2: width/2, y1: y - high, y2: y - low },
 							rect = {
 								x: 0, y: y-Math.max(open, close),
-								width: width-gap, height: doFill ? open-close : close-open
+								width: width, height: doFill ? open-close : close-open
 							};
 						shape = s.createGroup();
 						shape.setTransform({dx: x, dy: 0 });
 						shape.createLine(line).setStroke(stroke);
 						shape.createRect(rect).setStroke(stroke).setFill(doFill?fill:"white");
+						if(v.mid){
+							//	add the mid line.
+							shape.createLine({ x1: (stroke.width||1), x2: width-(stroke.width||1), y1: y - mid, y2: y - mid})
+								.setStroke(doFill?{color:"white"}:stroke);
+						}
 
 						//	TODO: double check this.
 						run.dyn.fill   = fill;

@@ -392,7 +392,7 @@
 				}
 			},
 			{
-				description: "Candlesticks with gaps, custom strokes and fills.",
+				description: "Candlesticks with gaps, custom strokes and fills, optional mid points.",
 				makeChart: function(node){
 					(new dojox.charting.Chart2D(node)).
 						addPlot("default", {type: "Candlesticks", gap: 1}).
@@ -400,19 +400,19 @@
 						addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true}).
 						addSeries("Series A", [
 								{ open: 20, close: 16, high: 22, low: 8 },
-								{ open: 16, close: 22, high: 26, low: 6 },
-								{ open: 22, close: 18, high: 22, low: 11 },
-								{ open: 18, close: 29, high: 32, low: 14 },
-								{ open: 29, close: 24, high: 29, low: 13 },
+								{ open: 16, close: 22, high: 26, low: 6, mid: 18 },
+								{ open: 22, close: 18, high: 22, low: 11, mid: 21 },
+								{ open: 18, close: 29, high: 32, low: 14, mid: 27 },
+								{ open: 29, close: 24, high: 29, low: 13, mid: 27 },
 								{ open: 24, close: 8, high: 24, low: 5 },
 								{ open: 8, close: 16, high: 22, low: 2 },
 								{ open: 16, close: 12, high: 19, low: 7 },
 								{ open: 12, close: 20, high: 22, low: 8 },
 								{ open: 20, close: 16, high: 22, low: 8 },
-								{ open: 16, close: 22, high: 26, low: 6 },
-								{ open: 22, close: 18, high: 22, low: 11 },
-								{ open: 18, close: 29, high: 32, low: 14 },
-								{ open: 29, close: 24, high: 29, low: 13 },
+								{ open: 16, close: 22, high: 26, low: 6, mid: 18 },
+								{ open: 22, close: 18, high: 22, low: 11, mid: 21 },
+								{ open: 18, close: 29, high: 32, low: 14, mid: 27 },
+								{ open: 29, close: 24, high: 29, low: 13, mid: 27 },
 								{ open: 24, close: 8, high: 24, low: 5 },
 								{ open: 8, close: 16, high: 22, low: 2 },
 								{ open: 16, close: 12, high: 19, low: 7 },
