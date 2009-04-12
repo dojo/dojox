@@ -30,6 +30,8 @@ dojo.require("dojox.charting.plot2d.ClusteredBars");
 dojo.require("dojox.charting.plot2d.Grid");
 dojo.require("dojox.charting.plot2d.Pie");
 dojo.require("dojox.charting.plot2d.Bubble");
+dojo.require("dojox.charting.plot2d.Candlesticks");
+dojo.require("dojox.charting.plot2d.OHLC");
 
 (function(){
 	var df = dojox.lang.functional, dc = dojox.charting,
