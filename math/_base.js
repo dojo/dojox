@@ -1,6 +1,8 @@
 dojo.provide("dojox.math._base");
 
 (function(){
+	var m = dojox.math;
+
 	dojo.mixin(dojox.math, {
 		degreesToRadians: function(/* Number */n){
 			//	summary
@@ -183,6 +185,53 @@ dojo.provide("dojox.math._base");
 			return r;	//	Number
 		},
 
+		approxLin: function(a, pos){
+			//	summary:
+			//		Returns a linearly approximated value from an array using
+			//		a normalized float position value.
+			//	a: Number[]:
+			//		a sorted numeric array to be used for the approximation.
+			//	pos: Number:
+			//		a position number from 0 to 1. If outside of this range it
+			//		will be clamped.
+			//	returns: Number
+			var p = pos * (a.length - 1), t = Math.ceil(p), f = t - 1;
+			if(f < 0){ return a[0]; }
+			if(t >= a.length){ return a[a.length - 1]; }
+			return a[f] * (t - p) + a[t] * (p - f);	// Number
+		},
+
+		getSummary: function(a, alreadySorted){
+			//	summary:
+			//		Returns a non-parametric collection of summary statistics:
+			//		the classic five-number summary extended to the Bowley's
+			//		seven-figure summary.
+			//	a: Number[]:
+			//		a numeric array to be appraised.
+			//	alreadySorted: Boolean?:
+			//		a Boolean flag to indicated that the array is already sorted.
+			//		This is an optional flag purely to improve the performance.
+			//		If skipped, the array will be assumed unsorted.
+			//	returns: Object
+			if(!alreadySorted){
+				a = a.slice(0);								// copy the array
+				a.sort(function(a, b){ return a - b; });	// sort it properly
+			}
+			var	l = m.approxLin,
+				result = {
+					// the five-number summary
+					min:	a[0],				// minimum
+					p25:	l(a, 0.25),			// lower quartile
+					med:	l(a, 0.5),			// median
+					p75:	l(a, 0.75),			// upper quartile
+					max:	a[a.length - 1],	// maximum
+					// extended to the Bowley's seven-figure summary
+					p10:	l(a, 0.1),			// first decile
+					p90:	l(a, 0.9)			// last decile
+				};
+			return result;	// Object
+		},
+
 		//	create a range of numbers
 		range: function(/* Number */a, /* Number? */b, /* Number? */step){
 			//	summary
@@ -226,5 +275,4 @@ dojo.provide("dojox.math._base");
 			return m;	//	Array
 		}
 	});
-
 })();

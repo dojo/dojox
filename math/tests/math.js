@@ -29,4 +29,40 @@ dojo.require("dojox.math");
 			t.assertEqual(0.212, Math.round(result.r*1000)/1000);
 		}
 	]);
+	var epsilon = 1e-6;
+		eq = function(t, a, b){
+			t.t(!isNaN(a) && ! isNaN(b));
+			var delta = Math.abs((a - b) / (a + b));
+			t.t(isNaN(delta) || delta < epsilon);
+		},
+		a1 = [1, 2, 1],
+		a2 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+	tests.register("dojox.math.tests.stats", [
+		function approx1(t){ eq(t, dojox.math.approxLin(a1, 0), 1); },
+		function approx2(t){ eq(t, dojox.math.approxLin(a1, 0.5), 2); },
+		function approx3(t){ eq(t, dojox.math.approxLin(a1, 1), 1); },
+		function approx4(t){ eq(t, dojox.math.approxLin(a1, 0.25), 1.5); },
+		function approx5(t){ eq(t, dojox.math.approxLin(a1, 0.75), 1.5); },
+		function approx6(t){ eq(t, dojox.math.approxLin(a1, 0.1), 1.2); },
+		function summary1(t){
+			var s = dojox.math.getSummary(a1);
+			eq(t, s.min, 1);
+			eq(t, s.p10, 1);
+			eq(t, s.p25, 1);
+			eq(t, s.med, 1);
+			eq(t, s.p75, 1.5);
+			eq(t, s.p90, 1.8);
+			eq(t, s.max, 2);
+		},
+		function summary2(t){
+			var s = dojox.math.getSummary(a2, true);
+			eq(t, s.min, 0);
+			eq(t, s.p10, 2);
+			eq(t, s.p25, 5);
+			eq(t, s.med, 10);
+			eq(t, s.p75, 15);
+			eq(t, s.p90, 18);
+			eq(t, s.max, 20);
+		}
+	]);
 })();
