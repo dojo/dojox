@@ -354,7 +354,7 @@
 	width: 1px;
 	background-color: #777;
 	position: absolute;
-	cursor: ew-resize;
+	cursor: col-resize;
 	z-index:10000;
 }
 
