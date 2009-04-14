@@ -414,7 +414,7 @@ dojo.require("dojo.dnd.Moveable");
 		domousemove: function(e){
 			//console.log(e.cellIndex, e.cellX, e.cellNode.offsetWidth);
 			if(!this.moveable){
-				var c = (this.overRightResizeArea(e) ? 'ew-resize' : (this.overLeftResizeArea(e) ? 'ew-resize' : ''));
+				var c = (this.overRightResizeArea(e) ? 'col-resize' : (this.overLeftResizeArea(e) ? 'col-resize' : ''));
 				if(c && !this.canResize(e)){
 					c = 'not-allowed';
 				}
