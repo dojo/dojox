@@ -13,10 +13,10 @@
 	<script type="text/javascript">
 		var djConfig = { 
 			parseOnLoad: true, 
-			isDebug: true, 
+			isDebug: true //,
 			// ALERT: you need a _real_ UA number, obtainable from
 			// signup @ http://google.com/analytics
-			urchin: "UA-123456-7"
+//			urchin: "UA-123456-7"
 		};
 	</script>
 	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
@@ -34,15 +34,19 @@
 			// 	you will need to manually create a tracker programatically, and save
 			//	a reference. This is done to avoid taking in _Widget overhead for
 			// this simple class.
-			console("dom ready, now loading Urchin in background");
-		})
+			console.log("dom ready, now loading Urchin in background");
+			console.log("passed:", inmarkup.acct == "UA-12345-6785");
+			console.log("passed:", fromconfig.acct == "UA-123456-7");
+		});
 	</script>
 
 </head>
 <body>
 
 	<h1>Simple Lazy loading of Google Analytics Code</h1>
-	<div dojoType="dojox.analytics.Urchin"></div>
+	
+	<div jsId="fromconfig" dojoType="dojox.analytics.Urchin" acct="UA-123456-7"></div>
+	<div jsId="inmarkup" dojoType="dojox.analytics.Urchin" acct="UA-12345-6785"></div>
 
 </body>
 </html>

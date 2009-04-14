@@ -50,7 +50,7 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	//
 	// acct: String
 	//		your GA urchin tracker account number. Overrides `djConfig.urchin`
-	acct: dojo.config.urchin,
+	acct: "",
 
 	// loadInterval: Integer
 	//		Time (in ms) to wait before checking for a ready Analytics API
@@ -71,11 +71,13 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	timeout: 4200,
 
 	constructor: function(args){
-		// summary: initialize this Urchin instance. Immediately starts the load
+		// summary: 
+		//		Initialize this Urchin instance. Immediately starts the load
 		//		sequence, so defer construction until (ideally) after onLoad and
 		//		potentially widget parsing.
 		this.tracker = null;
 		dojo.mixin(this, args);
+		this.acct = this.acct || dojo.config.urchin;
 		this._loadGA();
 	},
 	
