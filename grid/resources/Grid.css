@@ -49,6 +49,7 @@
 .dojoxGridHeader {
 	position: absolute;
 	overflow: hidden;
+	cursor: default;
 }
 
 .dojoxGridHeader {

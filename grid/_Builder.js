@@ -373,6 +373,10 @@ dojo.require("dojo.dnd.Moveable");
 		},
 
 		overLeftResizeArea: function(e){
+			// We are never over a resize area if we are in the process of moving
+			if(dojo.hasClass(dojo.body(), "dojoDndMove")){
+				return false;
+			}
 			//Bugfix for crazy IE problem (#8807).  IE returns position information for the icon and text arrow divs
 			//as if they were still on the left instead of returning the position they were 'float: right' to.
 			//So, the resize check ends up checking the wrong adjacent cell.  This checks to see if the hover was over 
@@ -393,6 +397,10 @@ dojo.require("dojo.dnd.Moveable");
 		},
 
 		overRightResizeArea: function(e){
+			// We are never over a resize area if we are in the process of moving
+			if(dojo.hasClass(dojo.body(), "dojoDndMove")){
+				return false;
+			}
 			//Bugfix for crazy IE problem (#8807).  IE returns position information for the icon and text arrow divs
 			//as if they were still on the left instead of returning the position they were 'float: right' to.
 			//So, the resize check ends up checking the wrong adjacent cell.  This checks to see if the hover was over 
