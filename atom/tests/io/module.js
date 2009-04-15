@@ -226,6 +226,34 @@ doh.register("dojox.atom.tests.io.module", [
 			return d;
 		}
 	},
+
+	// Entry parsing, entry functions that are unique (not AtomItem)
+	// Incidently, also tests success of AtomIO.getEntry
+	{
+		name: "checkXmlEntry",
+		runTest: function(t){
+			var d = new doh.Deferred();
+			var atomio = new dojox.atom.io.Connection();
+			atomio.getFeed(dojo.moduleUrl('dojox.atom.tests.io', 'sampleFeedXMLContent.xml'), function(feed){
+				try{
+					t.is('Example.com', feed.title.value);
+					var e = feed.getFirstEntry();
+					t.t(e.title.value == "Test Entry #1");
+					var c = e.content.value;
+					c = dojo.trim(c);
+					t.t(c.indexOf("<rootNode ") === 0);
+					d.callback(true);
+				}catch(err){
+					d.errback(err);
+				}
+			}, function(){
+				// error callback
+				d.errback("Feed fetching failed");
+			});
+			return d;
+		}
+	},
+
 	{
 		name: "checkEntry_preventCache",
 		runTest: function(t){

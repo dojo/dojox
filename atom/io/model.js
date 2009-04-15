@@ -634,7 +634,28 @@ dojo.declare("dojox.atom.io.model.Content",dojox.atom.io.model.Node,{
 		//
 		//	node: 
 		//		The DOM node to process for content.
-		if(node.innerHTML){
+		//Handle checking for XML content as the content type
+		var type = node.getAttribute("type");
+		if(type){
+			type = type.toLowerCase();
+			if(type == "xml" || "text/xml"){
+				type = this.XML;
+			}
+		}else{
+			type="text";
+		}
+		if(type === this.XML){
+			if(node.firstChild){
+				var i;
+				this.value = "";
+				for(i = 0; i < node.childNodes.length; i++){
+					var c = node.childNodes[i];
+					if(c){
+						this.value += dojox.xml.parser.innerXML(c);
+					}
+				}
+			}
+		} else if(node.innerHTML){
 			this.value = node.innerHTML;
 		}else{
 			this.value = dojox.xml.parser.textContent(node);
