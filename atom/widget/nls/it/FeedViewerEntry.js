@@ -1,3 +1,3 @@
 ({
-	deleteButton: "[Elimina]"
+	deleteButton: "[Cancella]"
 })

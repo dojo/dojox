@@ -1,5 +1,5 @@
 ({
 	add: "Aggiungi",
 	addAuthor: "Aggiungi autore",
-	addContributor: "Aggiungi partecipante"
+	addContributor: "Aggiungi collaboratori"
 })

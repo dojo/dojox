@@ -1,11 +1,11 @@
 ({
 	displayOptions: "[показать опции]",
-	title: "Заголовок",
+	title: "Название",
 	authors: "Авторы",
 	contributors: "Участники",
 	id: "ИД",
 	close: "[закрыть]",
-	updated: "Обновленный",
-	summary: "Обзор",
-	content: "Содержимое"
+	updated: "Обновлено",
+	summary: "Сводка",
+	content: "Информационное наполнение"
 })

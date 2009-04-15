@@ -1,11 +1,11 @@
 ({
-	displayOptions: "[opzioni di visualizzazione]",
+	displayOptions: "[visualizza opzioni]",
 	title: "Titolo",
 	authors: "Autori",
-	contributors: "Partecipanti",
+	contributors: "Collaboratori",
 	id: "ID",
 	close: "[chiudi]",
 	updated: "Aggiornato",
 	summary: "Riepilogo",
-	content: "Contenuto"
+	content: "Indice"
 })
