@@ -124,7 +124,7 @@ dojo.require("dojox.lang.functional.reversed");
 						var line = { x1: width/2, x2: width/2, y1: y - high, y2: y - low },
 							rect = {
 								x: 0, y: y-Math.max(open, close),
-								width: width, height: doFill ? open-close : close-open
+								width: width, height: Math.max(doFill ? open-close : close-open, 1)
 							};
 						shape = s.createGroup();
 						shape.setTransform({dx: x, dy: 0 });
