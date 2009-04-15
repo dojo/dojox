@@ -1,5 +1,5 @@
 ({
 next: "Próximo",
 previous: "Anterior",
-done: " Concluído"
+done: "Concluído"
 })
