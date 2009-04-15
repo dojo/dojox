@@ -1,5 +1,5 @@
 ({
-next: "Avançar",
-previous: "Voltar",
-done: "Concluído"
+next: "Próximo",
+previous: "Anterior",
+done: " Concluído"
 })

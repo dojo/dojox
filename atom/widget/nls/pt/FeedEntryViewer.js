@@ -1,5 +1,5 @@
 ({
-	displayOptions: "[opções de exibição]",
+	displayOptions: "[exibir opções]",
 	title: "Título",
 	authors: "Autores",
 	contributors: "Contribuidores",
@@ -7,5 +7,5 @@
 	close: "[fechar]",
 	updated: "Atualizado",
 	summary: "Resumo",
-	content: "Conteúdo "
+	content: "Conteúdo"
 })
