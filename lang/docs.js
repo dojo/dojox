@@ -24,6 +24,10 @@ try{
 				propertyDef.optional = true;
 				return '';
 			});
+			if(typeDef.match(/ string/)){
+				// HTML String and other "types" of strings are really just strings
+				typeDef = "string";
+			}
 			return (typeDef == 'string' || typeDef == 'number' || typeDef == 'boolean' || typeDef == 'object' ||typeDef == 'array' || typeDef == 'integer') && 
 				typeDef;
 		}
