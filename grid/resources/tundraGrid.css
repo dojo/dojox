@@ -71,6 +71,7 @@
 }
 .dj_ie6 .tundra .dojoxGridArrowButtonNode {
 	background-image:url("../../../dijit/themes/tundra/images/spriteArrows.gif");
+	margin-left: 0px;
 }
 
 .tundra .dojoxGridSortUp .dojoxGridArrowButtonNode {

@@ -49,6 +49,7 @@
 }
 .dj_ie6 .soria .dojoxGridArrowButtonNode {
 	background-image:url("../../../dijit/themes/soria/images/spriteArrows.gif");
+	margin-left: 0px;
 }
 
 .soria .dojoxGridSortUp .dojoxGridArrowButtonNode {
