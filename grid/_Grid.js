@@ -20,29 +20,6 @@ dojo.require("dojox.grid._Events");
 dojo.requireLocalization("dijit", "loading");
 
 (function(){
-	var jobs = {
-		cancel: function(inHandle){
-			if(inHandle){
-				clearTimeout(inHandle);
-			}
-		},
-
-		jobs: [],
-
-		job: function(inName, inDelay, inJob){
-			jobs.cancelJob(inName);
-			var job = function(){
-				delete jobs.jobs[inName];
-				inJob();
-			}
-			jobs.jobs[inName] = setTimeout(job, inDelay);
-		},
-
-		cancelJob: function(inName){
-			jobs.cancel(jobs.jobs[inName]);
-		}
-	};
-
 	/*=====
 	dojox.grid.__CellDef = function(){
 		//	name: String?
@@ -343,7 +320,6 @@ dojo.requireLocalization("dijit", "loading");
 			dojox.html.metrics.initOnFontResize();
 			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
 			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);
-			this.connect(this, "onShow", "renderOnIdle");
 		},
 		
 		postMixInProperties: function(){
@@ -359,8 +335,6 @@ dojo.requireLocalization("dijit", "loading");
 		},
 		
 		postCreate: function(){
-			// replace stock styleChanged with one that triggers an update
-			this.styleChanged = this._styleChanged;
 			this._placeholders = [];
 			this._setHeaderMenuAttr(this.headerMenu);
 			this._setStructureAttr(this.structure);
@@ -436,34 +410,12 @@ dojo.requireLocalization("dijit", "loading");
 				this.invalidated.rowCount : this.rowCount;
 		},
 		
-		styleChanged: function(){
-			this.setStyledClass(this.domNode, '');
-		},
-
-		_styleChanged: function(){
-			this.styleChanged();
-			this.update();
-		},
-
 		textSizeChanged: function(){
-			setTimeout(dojo.hitch(this, "_textSizeChanged"), 1);
-		},
-
-		_textSizeChanged: function(){
-			if(this.domNode){
-				this.views.forEach(function(v){
-					v.content.update();
-				});
-				this.render();
-			}
+			this.render();
 		},
 
 		sizeChange: function(){
-			jobs.job(this.id + 'SizeChange', 50, dojo.hitch(this, "update"));
-		},
-
-		renderOnIdle: function() {
-			setTimeout(dojo.hitch(this, "render"), 1);
+			this.update();
 		},
 
 		createManagers: function(){
@@ -502,7 +454,6 @@ dojo.requireLocalization("dijit", "loading");
 
 		onMoveColumn: function(){
 			this.render();
-			this._resize();
 		},
 
 		// views
@@ -669,7 +620,13 @@ dojo.requireLocalization("dijit", "loading");
 		resize: function(changeSize, resultSize){
 			// summary:
 			//		Update the grid's rendering dimensions and resize it
-			this._resize(changeSize, resultSize);
+			
+			// Calling sizeChange calls update() which calls _resize...so let's
+			// save our input values, if any, and use them there when it gets 
+			// called.  This saves us an extra call to _resize(), which can
+			// get kind of heavy.
+			this._pendingChangeSize = changeSize;
+			this._pendingResultSize = resultSize;
 			this.sizeChange();
 		},
 
@@ -687,6 +644,11 @@ dojo.requireLocalization("dijit", "loading");
 		},
 		
 		_resize: function(changeSize, resultSize){
+			// Restore our pending values, if any
+			changeSize = changeSize || this._pendingChangeSize;
+			resultSize = resultSize || this._pendingResultSize;
+			delete this._pendingChangeSize;
+			delete this._pendingResultSize;
 			// if we have set up everything except the DOM, we cannot resize
 			var pn = this.domNode.parentNode;
 			if(!pn || pn.nodeType != 1 || !this.hasLayout() || pn.style.visibility == "hidden" || pn.style.display == "none"){
@@ -694,7 +656,7 @@ dojo.requireLocalization("dijit", "loading");
 			}
 			// useful measurement
 			var padBorder = this._getPadBorder();
-			var hh = 0;
+			var hh = undefined;
 			// grid height
 			if(this._autoHeight){
 				this.domNode.style.height = 'auto';
@@ -726,14 +688,15 @@ dojo.requireLocalization("dijit", "loading");
 				dojo.marginBox(this.domNode, { h: Math.max(0, h) });
 			}
 
-			var h = dojo._getContentBox(this.domNode).h;
-			if(h == 0 && !this._autoHeight){
+			if(!this._autoHeight && dojo._getContentBox(this.domNode).h === 0){
 				// We need to hide the header, since the Grid is essentially hidden.
 				this.viewsHeaderNode.style.display = "none";
 			}else{
 				// Otherwise, show the header and give it an appropriate height.
 				this.viewsHeaderNode.style.display = "block";
-				hh = this._getHeaderHeight();
+				if(hh === undefined){
+					hh = this._getHeaderHeight();
+				}
 			}
 
 			// NOTE: it is essential that width be applied before height
@@ -759,7 +722,7 @@ dojo.requireLocalization("dijit", "loading");
 		adaptHeight: function(inHeaderHeight){
 			// private: measures and normalizes header height, then sets view heights, and then updates scroller
 			// content extent
-			var t = inHeaderHeight || this._getHeaderHeight();
+			var t = inHeaderHeight === undefined ? this._getHeaderHeight() : inHeaderHeight;
 			var h = (this._autoHeight ? -1 : Math.max(this.domNode.clientHeight - t, 0) || 0);
 			this.views.onEach('setSize', [0, h]);
 			this.views.onEach('adaptHeight');
@@ -1002,7 +965,14 @@ dojo.requireLocalization("dijit", "loading");
 				this.delayScroll = true;
 				this.scrollTop = inTop;
 				this.views.setScrollTop(inTop);
-				jobs.job('dojoxGridScroll', 200, dojo.hitch(this, "finishScrollJob"));
+				if(this._pendingScroll){
+					window.clearTimeout(this._pendingScroll);
+				}
+				var _this = this;
+				this._pendingScroll = window.setTimeout(function(){
+					delete _this._pendingScroll;
+					_this.finishScrollJob();
+				}, 200);
 			}else{
 				this.setScrollTop(inTop);
 			}

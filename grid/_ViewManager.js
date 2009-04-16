@@ -71,15 +71,21 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	},
 
 	normalizeRowNodeHeights: function(inRowNodes){
-		var h = 0; 
-		for(var i=0, n, o; (n=inRowNodes[i]); i++){
-			h = Math.max(h, dojo.marginBox(n.firstChild).h);
+		var h = 0;
+		var cStyles = [];
+		var currHeights = [];
+		for(var i=0, n; (n=inRowNodes[i]); i++){
+			cStyles[i] = dojo.getComputedStyle(n.firstChild);
+			currHeights[i] = dojo._getMarginBox(n.firstChild, cStyles[i]).h
+			h =  Math.max(h, currHeights[i]);
 		}
 		h = (h >= 0 ? h : 0);
 		//
 		//
 		for(var i=0, n; (n=inRowNodes[i]); i++){
-			dojo.marginBox(n.firstChild, {h:h});
+			if(currHeights[i] != h){
+				dojo._setMarginBox(n.firstChild, undefined, undefined, undefined, h, cStyles[i]);
+			}
 		}
 		//
 		//console.log('normalizeRowNodeHeights ', h);

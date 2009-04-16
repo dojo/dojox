@@ -529,8 +529,6 @@ dojo.require("dojo.dnd.Moveable");
 				this.moveable = null;
 			}));
 
-			e.sourceView.convertColPctToFixed();
-
 			if(e.cellNode.setCapture){
 				e.cellNode.setCapture();
 			}
@@ -558,39 +556,39 @@ dojo.require("dojo.dnd.Moveable");
 					dojo.style(this.lineDiv, "left", (this.lineDiv._origLeft + data.deltaX) + "px");
 				}
 			}
-			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
-				var t = findTable(inDrag.node);
-				t && (t.style.width = '');
-			}
 		},
 
 		endResizeColumn: function(inDrag){
-			var leftTop = this.dragRecord.leftTop;
-			var isL2r = dojo._isBodyLtr();
-			var changeX = isL2r ? leftTop.l : -leftTop.l;
-			var data = {
-				isLtr: isL2r,
-				deltaX: changeX,
-				w: inDrag.w + changeX,
-				vw: inDrag.vw + changeX,
-				tw: inDrag.tw + changeX
-			};			
-			
-			// Only resize the columns when the drag has finished
-			this.doResizeNow(inDrag, data);
+			if(this.dragRecord){
+				var leftTop = this.dragRecord.leftTop;
+				var isL2r = dojo._isBodyLtr();
+				var changeX = isL2r ? leftTop.l : -leftTop.l;
+				var data = {
+					isLtr: isL2r,
+					deltaX: changeX,
+					w: inDrag.w + changeX,
+					vw: inDrag.vw + changeX,
+					tw: inDrag.tw + changeX
+				};			
+				
+				// Only resize the columns when the drag has finished
+				this.doResizeNow(inDrag, data);
+			}
 			
 			dojo.destroy(this.lineDiv);
  			dojo.destroy(this.moverDiv);
 			dojo.destroy(this.moverDiv);
 			delete this.moverDiv;
 			this._skipBogusClicks = true;
-			var conn = dojo.connect(inDrag.view, "update", this, function(){
-				dojo.disconnect(conn);
-				this._skipBogusClicks = false;
-			});
-			setTimeout(dojo.hitch(inDrag.view, "update"), 50);
+			inDrag.view.update();
+			this._skipBogusClicks = false;
 		},
 		doResizeNow: function(inDrag, data){
+			inDrag.view.convertColPctToFixed();
+			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
+				var t = findTable(inDrag.node);
+				t && (t.style.width = '');
+			}
 			for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
 				sw = s.width + data.deltaX;
 				s.node.style.width = sw + 'px';

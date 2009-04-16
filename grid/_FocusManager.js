@@ -225,7 +225,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			};
 			drag = view.header.colResizeSetup(e,false);
 			view.header.doResizeColumn(drag, null, deltaObj);
-			setTimeout(dojo.hitch(view, "update"), 10);
+			view.update();
 		}
 	},
 	styleRow: function(inRow){
