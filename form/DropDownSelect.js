@@ -154,7 +154,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	
 	_setDisplay: function(/*String*/ newDisplay){
 		// summary: sets the display for the given value (or values)
-		this.containerNode.innerHTML = '<span class=" ' + this.baseClass + 'Label">' +
+		this.containerNode.innerHTML = '<span class="dijitReset dijitInline ' + this.baseClass + 'Label">' +
 					(newDisplay || this.emptyLabel || "&nbsp;") +
 					'</span>';
 		this._layoutHack();

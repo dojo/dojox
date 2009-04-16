@@ -6,6 +6,14 @@
 .dojoxDropDownSelect {
 	margin: 0.2em;
 }
+.dj_ie .dojoxDropDownSelect,
+.dj_ie7 .dojoxDropDownSelect,
+.dj_iequirks .dojoxDropDownSelect {
+	vertical-align: middle; /* Set this back for what we hack in dijit inline */
+}
+.dj_ie8 .dojoxDropDownSelect .dijitButtonText {
+	vertical-align: top;
+}
 .dojoxDropDownSelect .dijitButtonNode {
 	text-align: left;
 }
