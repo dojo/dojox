@@ -40,9 +40,9 @@ var biggerSchema = {
     "name": {"type":"string",
 	   length:5,
        "optional":false},
-    "tuple":[{"type":"integer"},
+    "tuple":{items:[{"type":"integer"},
     {"type":"string"},
-    {"type":"boolean"}],
+    {"type":"boolean"}]},
     "born" : {"type":["number","string"], //allow for a numeric year, or a full date
       "format":"date", //format when a string value is used
       "minimum":1900, //min/max for when a number value is used
@@ -222,6 +222,55 @@ doh.register("dojox.validate.tests.jsonSchema",
 			doh.f(dojox.json.schema.checkPropertyChange(biggerObj,biggerSchema).valid); //this should fail because of the 
 			doh.t(dojox.json.schema.checkPropertyChange(schemaForSchemas,schemaForSchemas).valid); //schema should be valid
 		}
-	}	
+	},
+	function disallow(t){
+		var schema={
+			disallow: [{maxLength:4}]
+		}		
+		doh.t(dojox.json.schema.validate("hello", schema).valid);
+		doh.f(dojox.json.schema.validate("hi", schema).valid);
+	},
+	function maxDecimal(t){
+		var schema={
+			maxDecimal: 4
+		}		
+		doh.t(dojox.json.schema.validate(4.44, schema).valid);
+		doh.f(dojox.json.schema.validate(4.444444, schema).valid);
+		
+	},
+	function tuple(t){
+		var schema={
+			items: [{type:"string"},{type:"number"}]
+		};		
+		doh.t(dojox.json.schema.validate(["hi",33], schema).valid);
+		doh.f(dojox.json.schema.validate([22,22], schema).valid);
+		
+	},
+	function union(t){
+		var schema={
+			type: ["string", "number"]
+		};		
+		doh.t(dojox.json.schema.validate(22, schema).valid);
+		doh.t(dojox.json.schema.validate("hi", schema).valid);
+		doh.f(dojox.json.schema.validate(null, schema).valid);
+		doh.f(dojox.json.schema.validate({foo:"bar"}, schema).valid);
+	},
+	function aLittleComplex(t){
+		var schema = {type:[
+			{type:"object", properties:{name:{type:"string"}, id:{type:"integer"}}, additionalProperties:false}, 
+			{type:"object", properties:{brand:{type:"string"}, id:{type:"integer"}}, additionalProperties:false}]
+		};
+		doh.t(dojox.json.schema.validate({name:"Bill", id:3}, schema).valid);
+		doh.t(dojox.json.schema.validate({brand:"Dojo", id:3}, schema).valid);
+		doh.f(dojox.json.schema.validate({foo:"bar"}, schema).valid);
+		doh.f(dojox.json.schema.validate({foo:"bar", brand:"Dojo", id:3}, schema).valid);
+		doh.f(dojox.json.schema.validate("a string", schema).valid);
+	},
+	function invalidSchema(t){
+		var schema = {
+			properties: { foo:"string"}
+		};
+		doh.f(dojox.json.schema.validate({foo:"bar"}, schema).valid);
+	}
 ]);
 

@@ -50,24 +50,18 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 	var errors = [];
 		// validate a value against a property definition
 	function checkProp(value, schema, path,i){
-		if(typeof schema != 'object'){
-			return null;
-		}			
 		path += path ? typeof i == 'number' ? '[' + i + ']' : typeof i == 'undefined' ? '' : '.' + i : i;
 		function addError(message){
 			errors.push({property:path,message:message});
 		}
+		if(typeof schema != 'object' || schema instanceof Array){
+			if(schema){
+				addError("Invalid schema/property definition " + schema);
+			}
+			return null;
+		}			
 		if(_changing && schema.readonly){
 			addError("is a readonly field, it can not be changed");
-		}
-		if(schema instanceof Array){
-			if(!(value instanceof Array)){
-				return [{property:path,message:"An array tuple is required"}];
-			}
-			for(i =0; i < schema.length; i++){
-				errors.concat(checkProp(value[i],schema[i],path,i));
-			}
-			return errors;
 		}
 		if(schema['extends']){ // if it extends another schema, it must pass that schema as well
 			checkProp(value,schema['extends'],path,i);
@@ -92,25 +86,36 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 						return unionErrors;
 					}
 				}else if(typeof type == 'object'){
+					var priorErrors = errors;
+					errors = []; 
 					checkProp(value,type,path);
+					var theseErrors = errors;
+					errors = priorErrors;
+					return theseErrors; 
 				} 
 			}
 			return [];
 		}
-		if(value !== null){
-			if(value === undefined){
-				if(!schema.optional){  
-					addError("is missing and it is not optional");
-				}
-			}else{
-				errors = errors.concat(checkType(schema.type,value));
-				if(schema.disallow && !checkType(schema.disallow,value).length){
-					addError(" disallowed value was matched");
-				}
+		if(value === undefined){
+			if(!schema.optional){  
+				addError("is missing and it is not optional");
+			}
+		}else{
+			errors = errors.concat(checkType(schema.type,value));
+			if(schema.disallow && !checkType(schema.disallow,value).length){
+				addError(" disallowed value was matched");
+			}
+			if(value !== null){
 				if(value instanceof Array){
 					if(schema.items){
-						for(i=0,l=value.length; i<l; i++){
-							errors.concat(checkProp(value[i],schema.items,path,i));
+						if(schema.items instanceof Array){
+							for(i=0,l=value.length; i<l; i++){
+								errors.concat(checkProp(value[i],schema.items[i],path,i));
+							}
+						}else{
+							for(i=0,l=value.length; i<l; i++){
+								errors.concat(checkProp(value[i],schema.items,path,i));
+							}
 						}							
 					}
 					if(schema.minItems && value.length < schema.minItems){
@@ -153,7 +158,8 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 						addError("does not have a value in the enumeration " + enumer.join(", "));
 					}
 				}
-				if(typeof schema.maxDecimal == 'number' && (value * 10^schema.maxDecimal)%1){
+				if(typeof schema.maxDecimal == 'number' && 
+					(value.toString().match(new RegExp("\\.[0-9]{" + (schema.maxDecimal + 1) + ",}")))){
 					addError("may only have " + schema.maxDecimal + " digits of decimal places");
 				}
 			}
@@ -198,7 +204,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 	if(schema){
 		checkProp(instance,schema,'','');
 	}
-	if(!_changing && instance.$schema){
+	if(!_changing && instance && instance.$schema){
 		checkProp(instance,instance.$schema,'','');
 	}
 	return {valid:!errors.length,errors:errors};
