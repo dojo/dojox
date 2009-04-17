@@ -208,13 +208,13 @@
 						
 					</div>
 					<div dojoType="dijit.layout.AccordionContainer" title="Panes" style="width:275px;" attachParent="true">
-						<div dojoType="dijit.layout.AccordionPane" title="Dojo">
+						<div dojoType="dijit.layout.ContentPane" title="Dojo">
 							<ul id="dojoList"></ul>
 						</div>
-						<div dojoType="dijit.layout.AccordionPane" title="Dijit">
+						<div dojoType="dijit.layout.ContentPane" title="Dijit">
 							<ul id="dijitList"></ul>
 						</div>
-						<div dojoType="dijit.layout.AccordionPane" title="DojoX">
+						<div dojoType="dijit.layout.ContentPane" title="DojoX">
 							<ul id="dojoxList"></ul>
 						</div>
 					</div>
@@ -248,7 +248,7 @@
 				easeOut="dojo.fx.easing.backInOut">
 
 				<div dojoType="dijit.layout.AccordionContainer" id="rightAccordion" style="width:275px;" attachParent="true">
-					<div dojoType="dijit.layout.AccordionPane" title="Easing Selection">
+					<div dojoType="dijit.layout.ContentPane" title="Easing Selection">
 						<div class="wrap">
 							<p>This select modifies the left Expando's easing function. An Expando can have an easeIn and an easeOut parameter. This sets both.</p> 
 							<select id="easingSelect" name="easingSelect">
@@ -258,7 +258,7 @@
 							<p>Some easing functions break when used with width: (negative width? but how?). <em>Be warned.</em></p>
 						</div>
 					</div>
-					<div dojoType="dijit.layout.AccordionPane" title="Children">
+					<div dojoType="dijit.layout.ContentPane" title="Children">
 						<div class="wrap">
 							<p>This is a BorderContainer (the window). Each of the panes is set to one of
 							"left", "right", or "center". The left and right panes are ExpandoPanes (they collapse).
@@ -290,7 +290,7 @@
 							<p>the end</p>
 						</div>
 					</div>
-					<div dojoType="dijit.layout.AccordionPane" title="Acc 3">c</div>
+					<div dojoType="dijit.layout.ContentPane" title="Acc 3">c</div>
 				</div>
 			</div>
 			<div dojoType="dojox.layout.ExpandoPane" 
