@@ -1,37 +1,36 @@
 dojo.provide("dojox.fx.style");
 dojo.experimental("dojox.fx.style"); 
 //
-// summary: dojox.fx CSS Class Animations: 
+// summary: 
+//		dojox.fx CSS Class Animations: 
 //
-// description: a set of functions to animate properties based on
-// 	normalized CSS class definitions.
+// description: 
+//		a set of functions to animate properties based on
+//		normalized CSS class definitions.
 //
 //	provides: addClass, removeClass, and toggleClass
 //	
 dojo.require("dojo.fx"); 
 
-// FIXME: should the call signatures match dojo.addClass/removeClass/toggleClass and extend
-// 	by having a third (or fourth) param to mix in additional Animation args for advanced
-//	usage (delay: curve: repeat: easing: etc ... )
 (function(){
 		
 	var d = dojo;
 
 	var _getStyleSnapshot = function(/* Object */cache){
 		// summary: 
-		//	uses a dojo.getComputedStyle(node) cache reference and
-		// 	iterates through the 'documented/supported animate-able'
-		// 	properties. 
+		//		uses a dojo.getComputedStyle(node) cache reference and
+		// 		iterates through the 'documented/supported animate-able'
+		// 		properties. 
 		//
 		// returns:  Array
-		//	an array of raw, calculcated values (no keys), to be normalized/compared
-		//	elsewhere	
-		return d.map(dojox.fx._allowedProperties,function(style){
+		//		an array of raw, calculcated values (no keys), to be normalized/compared
+		//		elsewhere	
+		return d.map(dojox.fx._allowedProperties, function(style){
 			return cache[style]; // String
 		}); // Array
 	};
 
-	var _getCalculatedStyleChanges = function(/*dojox.fx._arg.StyleArgs*/ args, /*Boolean*/addClass){
+	var _getCalculatedStyleChanges = function(node, cssClass, addClass){
 		// summary: Calculate the difference in style properties between two states
 		// description:
 		//	calculate and normalize(?) the differences between two states
@@ -42,17 +41,17 @@ dojo.require("dojo.fx");
 		// 	true to calculate what adding a class would do, 
 		// 	false to calculate what removing the class would do
 
-		var node = args.node = d.byId(args.node); 
-		var cs = d.getComputedStyle(node);
+		node = d.byId(node);
+		var	cs = d.getComputedStyle(node);
 
 		// take our snapShots
 		var _before = _getStyleSnapshot(cs);
-		d[(addClass ? "addClass" : "removeClass")](node, args.cssClass); 
+		d[(addClass ? "addClass" : "removeClass")](node, cssClass); 
 		var _after = _getStyleSnapshot(cs);
-		d[(addClass ? "removeClass" : "addClass")](node, args.cssClass); 
+		d[(addClass ? "removeClass" : "addClass")](node, cssClass); 
 
 		var calculated = {}, i = 0;
-		d.forEach(dojox.fx._allowedProperties,function(prop){
+		d.forEach(dojox.fx._allowedProperties, function(prop){
 			if(_before[i] != _after[i]){
 				// FIXME: the static unit: px is not good, either. need to parse unit from computed style?
 				calculated[prop] = parseInt(_after[i]) /* start: parseInt(_before[i]), unit: 'px' */ ; 
@@ -64,26 +63,38 @@ dojo.require("dojo.fx");
 
 	d.mixin(dojox.fx,{
 
-		addClass: function(/* dojox.fx._arg.StyleArgs */ args){
-			// summary: Animate the effects of adding a class to a node
-			// description:
-			//	Creates an animation that will animate
-			//	the properties of a node to the properties
-			//	defined in a standard CSS .class definition.
-			//	(calculating the differences itself)
+		addClass: function(node, cssClass, args){
+			// summary: 
+			//		Animate the effects of adding a class to a node
 			//
+			// description:
+			//		Creates an animation that will animate
+			//		the properties of a node to the properties
+			//		defined in a standard CSS .class definition.
+			//		(calculating the differences itself)
+			//
+			// node: String|DomNode
+			//		A String ID or DomNode referce to animate
+			//
+			// cssClass: String
+			//		The CSS class name to add to the node
+			//
+			// args: Object?
+			//		Additional optional `dojo.animateProperty` arguments, such as 
+			//		duration, easing and so on.
+			//	
 			// example:
-			// | 
-			// |	.bar { line-height: 12px; }
-			// |	.foo { line-height: 40px; }
-			// |	<div class="bar" id="test">
-			// |	Multi<br>line<br>text
-			// |	</div> 
-			// |
-			// |	// animate to line-height:40px
-			// |	dojo.fx.addClass({ node:"test", cssClass:"foo" }).play();
+			//	| 
+			//	|	.bar { line-height: 12px; }
+			//	|	.foo { line-height: 40px; }
+			//	|	<div class="bar" id="test">
+			//	|	Multi<br>line<br>text
+			//	|	</div> 
+			//	|
+			//	|	// animate to line-height:40px
+			//	|	dojo.fx.addClass("test", "foo").play();
 			// 
-			var node = args.node = d.byId(args.node); 
+			node = d.byId(node); 
 
 			var pushClass = (function(n){
 				// summary: onEnd we want to add the class to the node 
@@ -93,22 +104,23 @@ dojo.require("dojo.fx");
 				//	and will only apply the class so children can inherit 
 				//	after the animation is done (potentially more flicker)
 				return function(){
-					d.addClass(n, args.cssClass); 
+					d.addClass(n, cssClass); 
 					n.style.cssText = _beforeStyle; 
 				}
 			})(node);
 
 			// _getCalculatedStleChanges is the core of our style/class animations
-			var mixedProperties = _getCalculatedStyleChanges(args,true);
+			var mixedProperties = _getCalculatedStyleChanges(node, cssClass, true);
 			var _beforeStyle = node.style.cssText; 
 			var _anim = d.animateProperty(d.mixin({
+				node: node,
 				properties: mixedProperties
 			}, args));
-			d.connect(_anim, "onEnd", _anim,pushClass); 
+			d.connect(_anim, "onEnd", _anim, pushClass); 
 			return _anim; // dojo.Animation
 		},
 	
-		removeClass: function(/*dojox.fx._arg.StyleArgs*/ args){
+		removeClass: function(node, cssClass, args){
 			// summary: Animate the effects of removing a class from a node
 			// description:
 			//	Creates an animation that will animate the properties of a 
@@ -121,12 +133,9 @@ dojo.require("dojo.fx");
 			//
 			// example:
 			// |	// animate the removal of "foo" from a node with id="bar"
-			// |	dojox.fx.removeClass({
-			// |		node: "bar",
-			// |		cssClass: "foo"
-			// |	}).play();
+			// |	dojox.fx.removeClass("bar", "foo").play()
 
-			var node = (args.node = dojo.byId(args.node)); 
+			node = d.byId(node); 
 
 			var pullClass = (function(n){
 				// summary: onEnd we want to remove the class from the node 
@@ -137,21 +146,22 @@ dojo.require("dojo.fx");
 				//	animation is done (potentially more flicker)
 				//
 				return function(){
-					d.removeClass(n, args.cssClass); 
+					d.removeClass(n, cssClass); 
 					n.style.cssText = _beforeStyle; 
 				}
 			})(node);
 
-			var mixedProperties = _getCalculatedStyleChanges(args, false);
+			var mixedProperties = _getCalculatedStyleChanges(node, cssClass);
 			var _beforeStyle = node.style.cssText; 
 			var _anim = d.animateProperty(d.mixin({
+				node: node,
 				properties: mixedProperties
 			}, args));
 			d.connect(_anim, "onEnd", _anim, pullClass); 
 			return _anim; // dojo.Animation
 		},
 
-		toggleClass: function(/*DomNode|String*/node, /*String*/cssClass, /*Boolean?*/condition){
+		toggleClass: function(node, cssClass, condition, args){
 			// summary:
 			//		Animate the effects of Toggling a class on a Node
 			//
@@ -160,12 +170,15 @@ dojo.require("dojo.fx");
 			//		toggling a class on or off of a node.
 			//		Adds a class to node if not present, or removes if present.
 			//		Pass a boolean condition if you want to explicitly add or remove.
-			// node:
+			//
+			// node: String|DomNode
 			//		The domNode (or string of the id) to toggle
-			// cssClass:
-			//	String of the classname to add to the node	
-			// condition:
-			//	If passed, true means to add the class, false means to remove.
+			// cssClass: String
+			//		String of the classname to add to the node	
+			// condition: Boolean?
+			//		If passed, true means to add the class, false means to remove.
+			// args: Object?
+			//		Additional `dojo.Animation` args to pass along.
 			//
 			// example:
 			// |	// add the class "sampleClass" to a node id="theNode"
@@ -177,8 +190,7 @@ dojo.require("dojo.fx");
 			if(typeof condition == "undefined"){
 				condition = !d.hasClass(node, cssClass);
 			}
-			return dojox.fx[(condition ? "addClass" : "removeClass")]({ node: node, cssClass:cssClass }); // dojo.Animation
-			// TODO: support 4th param animMixin to allow passing of easing and duration and other _Animtion options
+			return dojox.fx[(condition ? "addClass" : "removeClass")](node, cssClass, args); // dojo.Animation
 		},
 	
 		_allowedProperties: [
@@ -219,7 +231,7 @@ dojo.require("dojo.fx");
 			// unit import/delicate?:
 			"lineHeight",
 			"letterSpacing",
-			"fontSize"	
+			"fontSize"
 		]
 	
 	});
