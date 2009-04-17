@@ -6,50 +6,52 @@ dojo.require("dojo.fx");
 dojo.mixin(dojox.fx, {
 
 	// anim: Function
-	//	Alias of dojo.anim - the shorthand dojo.animateProperty with auto-play
+	//	Alias of `dojo.anim` - the shorthand `dojo.animateProperty` with auto-play
 	anim: dojo.anim,
 
 	// animateProperty: Function
-	//	Alias of dojo.animateProperty - animate any CSS property
+	//	Alias of `dojo.animateProperty` - animate any CSS property
 	animateProperty: dojo.animateProperty,
 
 	// fadeTo: Function 
 	//		Fade an element from an opacity to an opacity.
-	//		Omit start: property to detect. End: property required
+	//		Omit start: property to detect. End: property required.
+	//		Ultimately an alias to `dojo._fade`
 	fadeTo: dojo._fade,
 
 	// fadeIn: Function
-	//	Alias of dojo.fadeIn - Fade a node in.
+	//	Alias of `dojo.fadeIn` - Fade a node in.
 	fadeIn: dojo.fadeIn,
 	
 	// fadeOut: Function
-	//	Alias of dojo.fadeOut - Fades a node out.
+	//	Alias of `dojo.fadeOut` - Fades a node out.
 	fadeOut: dojo.fadeOut,
 
 	// combine: Function
-	//	Alias of dojo.fx.combine - Run animations in parallel
+	//	Alias of `dojo.fx.combine` - Run an array of animations in parallel
 	combine: dojo.fx.combine,
 
 	// chain: Function
-	//	Alias of dojo.fx.chain - Run animations in sequence
+	//	Alias of `dojo.fx.chain` - Run an array of animations in sequence
 	chain: dojo.fx.chain,
 
 	// slideTo: Function
-	//	Alias of dojo.fx.slideTo - Slide a node to a defined top/left coordinate
+	//	Alias of `dojo.fx.slideTo` - Slide a node to a defined top/left coordinate
 	slideTo: dojo.fx.slideTo,
 
 	// wipeIn: Function
-	//	Alias of dojo.fx.wipeIn - Wipe a node to visible
+	//	Alias of `dojo.fx.wipeIn` - Wipe a node to visible
 	wipeIn: dojo.fx.wipeIn,
 
 	// wipeOut: Function
-	//	Alias of dojo.fx.wipeOut - Wipe a node to non-visible
+	//	Alias of `dojo.fx.wipeOut` - Wipe a node to non-visible
 	wipeOut: dojo.fx.wipeOut
 
 });
 
 dojox.fx.sizeTo = function(/* Object */args){
-	// summary: Creates an animation that will size a node 
+	// summary: 
+	//		Creates an animation that will size a node 
 	// description:
 	//		Returns an animation that will size the target node
 	//		defined in args Object about it's center to
@@ -80,13 +82,18 @@ dojox.fx.sizeTo = function(/* Object */args){
 
 	var init = (function(n){
 		return function(){
-			var cs = dojo.getComputedStyle(n);
-			var pos = cs.position;
+			console.log('init fired');
+			var cs = dojo.getComputedStyle(n),
+				pos = cs.position,
+				w = cs.width,
+				h = cs.height
+			;
+			
 			top = (pos == 'absolute' ? n.offsetTop : parseInt(cs.top) || 0);
 			left = (pos == 'absolute' ? n.offsetLeft : parseInt(cs.left) || 0);
-			width = parseInt(cs.width);
-			height = parseInt(cs.height);
-
+			width = (w == "auto" ? 0 : parseInt(w));
+			height = (h == "auto" ? 0 : parseInt(h));
+			
 			newLeft = left - Math.floor((args.width - width) / 2); 
 			newTop = top - Math.floor((args.height - height) / 2); 
 
@@ -100,23 +107,30 @@ dojox.fx.sizeTo = function(/* Object */args){
 			}
 		}
 	})(node);
-	init(); 
 
 	var anim1 = dojo.animateProperty(dojo.mixin({
 		properties: {
-			height: { start: height, end: args.height || 0, unit:"px" },
-			top: { start: top, end: newTop }
+			height: function(){
+				init();
+				return { end: args.height || 0, start: height };
+			},
+			top: function(){
+				return { start: top, end: newTop };
+			}
 		}
 	}, args));
 	var anim2 = dojo.animateProperty(dojo.mixin({
 		properties: {
-			width: { start: width, end: args.width || 0, unit:"px" },
-			left: { start: left, end: newLeft }
+			width: function(){
+				return { start: width, end: args.width || 0 }
+			},
+			left: function(){
+				return { start: left, end: newLeft }
+			}
 		}
 	}, args));
 
 	var anim = dojo.fx[(args.method == "combine" ? "combine" : "chain")]([anim1, anim2]);
-	dojo.connect(anim, "beforeBegin", anim, init);
 	return anim; // dojo.Animation
 
 };
@@ -136,8 +150,8 @@ dojox.fx.slideBy = function(/* Object */args){
 	// |		top: 50, left: -22 
 	// |	}).play();
 
-	var node = args.node = dojo.byId(args.node);	
-	var top = null; var left = null;
+	var node = args.node = dojo.byId(args.node),
+		top, left;
 
 	var init = (function(n){
 		return function(){
@@ -156,6 +170,7 @@ dojox.fx.slideBy = function(/* Object */args){
 		}
 	})(node);
 	init();
+	
 	var _anim = dojo.animateProperty(dojo.mixin({
 		properties: {
 			// FIXME: is there a way to update the _Line after creation?
@@ -177,26 +192,23 @@ dojox.fx.crossFade = function(/* Object */args){
 	//
 	// all other standard animation args mixins apply. args.node ignored.
 	//
-	if(dojo.isArray(args.nodes)){
-		// simple check for which node is visible, maybe too simple?
-		var node1 = args.nodes[0] = dojo.byId(args.nodes[0]);
-		var op1 = dojo.style(node1,"opacity");
-		var node2 = args.nodes[1] = dojo.byId(args.nodes[1]);
-		var op2 = dojo.style(node2, "opacity");
 
-		var _anim = dojo.fx.combine([
-			dojo[(op1 == 0 ? "fadeIn" : "fadeOut")](dojo.mixin({
-				node: node1
-			},args)),
-			dojo[(op1 == 0 ? "fadeOut" : "fadeIn")](dojo.mixin({
-				node: node2
-			},args))
-		]);
-		return _anim; // dojo.Animation
-	}else{
-		// improper syntax in args, needs Array
-		return false; // Boolean
-	}
+	// simple check for which node is visible, maybe too simple?
+	var node1 = args.nodes[0] = dojo.byId(args.nodes[0]),
+		op1 = dojo.style(node1,"opacity"),
+		node2 = args.nodes[1] = dojo.byId(args.nodes[1]),
+		op2 = dojo.style(node2, "opacity")
+	;
+	
+	var _anim = dojo.fx.combine([
+		dojo[(op1 == 0 ? "fadeIn" : "fadeOut")](dojo.mixin({
+			node: node1
+		},args)),
+		dojo[(op1 == 0 ? "fadeOut" : "fadeIn")](dojo.mixin({
+			node: node2
+		},args))
+	]);
+	return _anim; // dojo.Animation
 };
 
 dojox.fx.highlight = function(/*Object*/ args){
@@ -213,9 +225,10 @@ dojox.fx.highlight = function(/*Object*/ args){
 	args.duration = args.duration || 400;
 	
 	// Assign default color light yellow
-	var startColor = args.color || '#ffff99';
-	var endColor = dojo.style(node, "backgroundColor");
-	var wasTransparent = (endColor == "transparent" || endColor == "rgba(0, 0, 0, 0)") ? endColor : false;
+	var startColor = args.color || '#ffff99',
+		endColor = dojo.style(node, "backgroundColor"),
+		wasTransparent = (endColor == "transparent" || endColor == "rgba(0, 0, 0, 0)") ? endColor : false
+	;
 
 	var anim = dojo.animateProperty(dojo.mixin({
 		properties: {
@@ -256,10 +269,11 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 	args.node = dojo.byId(args.node);
 	var node = args.node, s = node.style;
 
-	var dir = (args.width ? "width" : "height");
-	var endVal = args[dir];
+	var dir = (args.width ? "width" : "height"),
+		endVal = args[dir],
+		props = {}
+	;
 
-	var props = {};
 	props[dir] = {
 		// wrapped in functions so we wait till the last second to query (in case value has changed)
 		start: function(){
@@ -276,8 +290,7 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 				return Math.max(now, 1);
 			}
 		},
-		end: endVal,
-		unit: "px"
+		end: endVal
 	};
 
 	var anim = dojo.animateProperty(dojo.mixin({ properties: props }, args));
