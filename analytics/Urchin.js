@@ -52,24 +52,6 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	//		your GA urchin tracker account number. Overrides `djConfig.urchin`
 	acct: "",
 
-	// loadInterval: Integer
-	//		Time (in ms) to wait before checking for a ready Analytics API
-	loadInterval: 42,
-	
-	// decay: Float
-	// 		Multipler for the interval loadInterval to ensure timer does not
-	//		run amok in the event our _gat object is never defined. This 
-	//		is multiplied against the last `loadInterval` and added, causing
-	//		the interval to continuosly become longer, until a `timeout` 
-	//		limit is reached.
-	decay: 0.5,
-	
-	// timeout: Integer
-	//		Time (in ms) for the load interval to reach before giving up
-	//		all together. Note: this isn't an overall time, this is the
-	//		time of the interval being adjusted by the `decay` property.
-	timeout: 4200,
-
 	constructor: function(args){
 		// summary: 
 		//		Initialize this Urchin instance. Immediately starts the load
@@ -78,24 +60,19 @@ dojo.declare("dojox.analytics.Urchin", null, {
 		this.tracker = null;
 		dojo.mixin(this, args);
 		this.acct = this.acct || dojo.config.urchin;
-		this._loadGA();
-	},
-	
-	_loadGA: function(){
-		// summary: load the ga.js file and begin initialization process
-		var gaHost = ("https:" == document.location.protocol) ? "https://ssl." : "http://www.";
-		dojo.create('script', {
-			src: gaHost + "google-analytics.com/ga.js"
-		}, dojo.doc.getElementsByTagName("head")[0]);
-		setTimeout(dojo.hitch(this, "_checkGA"), this.loadInterval);
-	},
 
-	_checkGA: function(){
-		// summary: sniff the global _gat variable Google defines and either check again
-		//		or fire onLoad if ready.
-		if(this.loadInterval > this.timeout){ return; }
-		setTimeout(dojo.hitch(this, !window["_gat"] ? "_checkGA" : "_gotGA"), this.loadInterval);
-		this.loadInterval *= (this.decay + 1);
+		var re = /loaded|complete/,
+			gaHost = ("https:" == dojo.doc.location.protocol) ? "https://ssl." : "http://www.";
+			n = dojo.create('script', {
+				src: gaHost + "google-analytics.com/ga.js"
+			}, dojo.doc.getElementsByTagName("head")[0]);
+
+		n.load = n.onreadystatechange = dojo.hitch(this, function(e){
+			if(e && e.type == "load" || re.test(n.readyState)){
+				this._gotGA();
+			}
+		});
+
 	},
 
 	_gotGA: function(){
@@ -106,7 +83,8 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	},
 	
 	GAonLoad: function(){
-		// summary: Stub function to fire when urchin is complete
+		// summary: 
+		//		Stub function to fire when urchin is complete
 		//	description:
 		//		This function is executed when the tracker variable is 
 		//		complete and initialized. The initial trackPageView (with
