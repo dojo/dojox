@@ -50,13 +50,20 @@
 		},{
 			cells: [
 				{name: 'Column 4', field: 'col4', width: "150px"},
-				{name: 'Column 5', field: 'col5'}
+				{name: 'Column 5', field: 'col5'},
+				{name: 'Column 6', field: 'col6'},
+				{name: 'Column 7', field: 'col7'},
+				{name: 'Column 8', field: 'col8'},
+				{name: 'Column 9', field: 'col9'}
 			]
 		}];
+		
+		
 	</script>
 </head>
 <body class="tundra">
 	<div class="heading">dojox.grid.Grid Column Display Toggling Test</div>
+	<div style="margin-top:20px;">Use header menu to change display of columns</div>
 	<div dojoType="dijit.Menu" jsid="gridMenu" id="gridMenu" style="display: none;">
 		<div dojoType="dijit.MenuItem" onClick="alert('Hello world');">Enabled Item</div>
 		<div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
@@ -102,5 +109,71 @@
 	<button dojoType="dijit.form.Button" onclick="popupItem1.destroyRecursive();">
 		Destroy third popup item
 	</button>
+	<div class="heading" style="margin-top:50px;">dojox.DataGrid with locked columns</div>
+	<div dojoType="dijit.Menu" jsid="gridMenu2" id="gridMenu2" style="display: none;">
+		<div dojoType="dijit.MenuItem" onClick="alert('Hello world');">Enabled Item</div>
+		<div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
+		<div dojoType="dijit.MenuSeparator"></div>
+		<div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCut"
+			onClick="alert('not actually cutting anything, just a test!')">Cut</div>
+		<div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCopy"
+			onClick="alert('not actually copying anything, just a test!')">Copy</div>
+		<div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconPaste"
+			onClick="alert('not actually pasting anything, just a test!')">Paste</div>
+		<div dojoType="dijit.MenuSeparator"></div>
+		<div dojoType="dojox.widget.PlaceholderMenuItem" label="GridColumns"></div>
+		<div dojoType="dijit.MenuSeparator"></div>
+		<div dojoType="dijit.PopupMenuItem">
+			<span>Show Columns</span>
+			<div dojoType="dijit.Menu" id="submenuX2">
+				<div dojoType="dojox.widget.PlaceholderMenuItem" label="GridColumns"></div>
+			</div>
+		</div>
+		<div dojoType="dijit.PopupMenuItem" disabled="true">
+			<span>Disabled Submenu</span>
+			<div dojoType="dijit.Menu" id="submenuX3" style="display: none;">
+				<div dojoType="dijit.MenuItem" onClick="alert('Submenu 1!')">Submenu Item One</div>
+				<div dojoType="dijit.MenuItem" onClick="alert('Submenu 2!')">Submenu Item Two</div>
+			</div>
+		</div>
+		<div dojoType="dijit.PopupMenuItem">
+			<span>Different popup</span>
+			<div dojoType="dijit.ColorPalette"></div>
+		</div>
+		<div dojoType="dijit.PopupMenuItem" jsid="popupItemX1">
+			<span>Show Columns</span>
+			<div dojoType="dijit.Menu" id="submenuX4">
+				<div dojoType="dojox.widget.PlaceholderMenuItem" label="GridColumns"></div>
+			</div>
+		</div>
+	</div>
+
+		<span dojoType="dojo.data.ItemFileReadStore" 
+		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+	</span>
+	
+
+	<table dojoType="dojox.grid.DataGrid"
+		store="jsonStore"
+		rowsPerPage="20"
+		query="{ name: '*' }"
+		style="width: 600px; height: 300px;"
+		rowSelector="20px"
+		headerMenu="gridMenu2">
+		<colgroup span="2" noscroll="true" width="200px"></colgroup>
+		<colgroup span="5"></colgroup>
+		<thead>
+			<tr>
+				<th field="name" width="auto">Country/Continent Name</th>
+				<th width="100px" field="population">Population</th>
+				<th width="100px" field="area">Land Mass</th>
+				<th width="100px" field="timezone">Time Zone</th>
+				<th width="5em" field="type">Type</th>
+				<th width="5em" field="hemisphere">Hemisphere</th>
+				<th width="5em" field="climate">Climate</th>
+			</tr>
+		</thead>
+	</table>
+
 </body>
 </html>
