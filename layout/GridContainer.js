@@ -153,6 +153,10 @@ dojo.declare("dojox.layout.GridContainer",
 	startup:function(){
 		this.inherited(arguments);
 		this._createCells();
+		
+		dojo.forEach(this.getChildren(), function(child){
+			!child.started && !child._started && child.startup();
+		});
 		if(this.usepref !== true){
 			this[(this.isAutoOrganized ? "_organizeServices" : "_organizeServicesManually")]();
 		}else{ 
@@ -160,9 +164,6 @@ dojo.declare("dojox.layout.GridContainer",
 			return;
 		}
 		this.init();
-		dojo.forEach(this.getChildren(), function(child){
-			!child.started && !child._started && child.startup();
-		});
 	},
 	
 	init: function(){
