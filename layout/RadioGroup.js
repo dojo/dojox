@@ -136,7 +136,7 @@ dojo.declare("dojox.layout.RadioGroupFade",
 		dojo.fadeOut({
 			node:page.domNode,
 			duration:this.duration,
-			onEnd: dojo.hitch(this,"inherited", arguments)
+			onEnd: dojo.hitch(this,"inherited", arguments, arguments)
 		}).play();
 	},
 
