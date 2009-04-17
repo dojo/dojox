@@ -71,6 +71,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 					break;
 			}
 			dojo.addClass(this.domNode, "dojoxExpando" + thisClass);
+			dojo.addClass(this.iconNode, "dojoxExpandoIcon" + thisClass);
 			this._isHorizontal = /top|bottom/.test(this.region);
 		}
 		dojo.style(this.domNode, {
@@ -181,6 +182,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 	_hideWrapper: function(){
 		// summary: Set the Expando state to "closed"
 		dojo.addClass(this.domNode, "dojoxExpandoClosed");
+		
 		dojo.style(this.cwrapper,{
 			visibility: "hidden",
 			opacity: "0",

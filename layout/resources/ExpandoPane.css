@@ -44,6 +44,7 @@
 		width:14px;
 		cursor:pointer;
 		background-position:-60px 0px;
+		background-repeat: no-repeat;
 		height:14px;
 	}
 
@@ -83,15 +84,9 @@
 	}
 	
 	.soria .dojoxExpandoIcon {
-		background: url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png') no-repeat center center;
-		background-position:-60px 0px;
+		background-image: url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png');
 	}
-	
-	.soria .dojoxExpandoClosed .dojoxExpandoIcon {
-		background-position:0px 0px;
-		margin-right:3px;
-	}
-	
+		
 	/* tundra styles */
 	.tundra .dojoxExpandoTitle {
 		font-weight: bold;
@@ -123,15 +118,16 @@
 	.tundra .dojoxExpandoClosed {
 		background-color: #fafafa;
 	}
-
-	/* open/closed states */
+	
 	.tundra .dojoxExpandoIcon {
-		background: url('../../../dijit/themes/tundra/images/minusButton.gif') no-repeat center center;
-		
+		background-image: url('../../../dijit/themes/tundra/images/spriteRoundedIconsSmall.gif');
 	}
-	.tundra .dojoxExpandoClosed .dojoxExpandoIcon {
-		background: url('../../../dijit/themes/tundra/images/plusButton.gif') no-repeat;
-		margin:3px;
+	
+	.tundra .dojoxExpandoClosed .dojoxExpandoIconLeft,
+	.tundra .dojoxExpandoClosed .dojoxExpandoIconRight,
+	.tundra .dojoxExpandoClosed .dojoxExpandoIconTop,
+	.tundra .dojoxExpandoClosed .dojoxExpandoIconBottom {
+		margin-top: 3px;
 	}
 	
 	/* nihilo theme styles */
@@ -164,16 +160,44 @@
 	}
 	
 	.nihilo .dojoxExpandoIcon {
-		background: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.png') no-repeat center center;
-		background-position:-60px 0px;
+		background-image: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.png');
 	}
-	
-	.nihilo .dojoxExpandoClosed .dojoxExpandoIcon {
-		background-position:0px 0px;
-	}
-	
+		
 	.nihilo .dojoxExpandoTop {
 		border-bottom:1px solid #ccc;
 		border-left:1px solid #ccc;
 		border-right:1px solid #ccc; 
+	}
+	
+	/* open/closed states */
+	
+	.dojoxExpandoClosed .dojoxExpandoIcon {
+		margin-right:4px;
+	}
+	.dojoxExpandoIconLeft {
+	  background-position: 0 0;
+	}
+	.dojoxExpandoClosed .dojoxExpandoIconLeft {
+	  background-position: -30px 0;
+		margin-right: 4px;
+	}
+	.dojoxExpandoIconRight {
+	  background-position: -30px 0;
+	}
+	.dojoxExpandoClosed .dojoxExpandoIconRight {
+	  background-position: 0 0;
+		margin-left: 4px;
+	}
+	.dojoxExpandoIconBottom {
+	  background-position: -15px 0;
+	}
+	.dojoxExpandoClosed .dojoxExpandoIconBottom {
+	  background-position: -45px 0;
+		margin-top:1px;
+	}
+	.dojoxExpandoIconTop {
+	  background-position: -45px 0;
+	}
+	.dojoxExpandoClosed .dojoxExpandoIconTop {
+	  background-position: -15px 0;
 	}
