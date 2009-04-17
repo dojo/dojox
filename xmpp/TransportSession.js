@@ -114,7 +114,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 		processScriptSrc: function(msg, rid) {
 			//console.log("processScriptSrc::", rid, msg);
 		//	var msgDom = dojox.xml.DomParser.parse(msg);
-			var msgDom = dojox.data.dom.createDocument(msg, "text/xml");
+			var msgDom = dojox.xml.parser.parse(msg, "text/xml");
 			//console.log("parsed mgs", msgDom);
 			//console.log("Queue", this.outboundQueue);
 			if(msgDom) {
@@ -222,9 +222,10 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				sid: this.sid
 			}
 
+			var envelope
 			if (this.protocolPacketQueue.length > 0){
 				req.rid= this.rid++;
-				var envelope = new dojox.string.Builder(dojox.xmpp.util.createElement("body", req, false));
+				envelope = new dojox.string.Builder(dojox.xmpp.util.createElement("body", req, false));
 				envelope.append(this.processProtocolPacketQueue());
 				envelope.append("</body>");
 				delete this.lastPollTime;
@@ -241,7 +242,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				} 
 				req.rid= this.rid++;
 				this.lastPollTime = new Date().getTime();
-				var envelope = new dojox.string.Builder(dojox.xmpp.util.createElement("body", req, true));
+				envelope = new dojox.string.Builder(dojox.xmpp.util.createElement("body", req, true));
 
 			}
 
@@ -291,11 +292,12 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				}
 			
 			}
+			return false;
 		},
 		
 		sendXml: function(message, rid){
 				if(this.isTerminated()) {
-					return;
+					return false;
 				}
 			//console.log("TransportSession::sendXml()"+ new Date().getTime() + " RID: ", rid, " MSG: ", message);
 			this.transmitState = "transmitting";
@@ -307,7 +309,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				iframe.contentWindow.rid=rid;
 				iframe.contentWindow.transmiting=true;
 				dojo.io.script.attach("rid-"+rid,this.serviceUrl+"?"+encodeURIComponent(message),iframeDoc);
-								
+				return false;	
 			} else {
 				var def = dojo.rawXhrPost({
 					contentType: "text/xml",
@@ -317,8 +319,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 					error: dojo.hitch(this, function(res, io) {
 						////console.log("foo", res, io.xhr.responseXML, io.xhr.status);
 						return this.processError(io.xhr.responseXML, io.xhr.status , rid);
-					}
-					),
+					}),
 					timeout: this.sendTimeout
 				});
 
@@ -328,12 +329,12 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				});
 				return def;
 			}
-
+			return false;
 		},
 
 		processDocument: function(doc, rid){
 			if(this.isTerminated()) {
-				return;
+				return false;
 			}
 			//console.log("TransportSession:processDocument() ", doc, rid);
 			this.transmitState = "idle";
@@ -343,7 +344,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				//console.log("TransportSession::processDocument() firstChild is not <body> element ", doc, " RID: ", rid);
 			}
 
-			if (this.outboundQueue.length<1){return;}
+			if (this.outboundQueue.length<1){return false;}
 
 			var expectedId = this.outboundQueue[0]["rid"];
 			//console.log("expectedId", expectedId);
@@ -470,13 +471,13 @@ dojo.extend(dojox.xmpp.TransportSession, {
 		processError: function(err, httpStatusCode,rid){
 			//console.log("Processing server error ", err, httpStatusCode,rid);
 			if(this.isTerminated()) {
-				return;
+				return false;
 			}
 			
 			
 			if(httpStatusCode != 200) {
 				this.setState("Terminate", errorMessage);
-				return;
+				return false;
 			}
 			
 			if (err && err.dojoType && err.dojoType=="timeout"){
@@ -495,7 +496,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 						errorMessage = "conflict"
 					}
 					this.setState("Terminate", errorMessage);
-					return;
+					return false;
 				}			
 			}
 			this.transmitState = "error";

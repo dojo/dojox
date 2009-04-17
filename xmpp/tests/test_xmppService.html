@@ -134,10 +134,10 @@
 
 			function login() {
 				
-					var bindUrl = dijit.byId("bindUrl").getValue();
-					var domain = dijit.byId("loginDomain").getValue();
-					var jid = dijit.byId("loginJid").getValue();
-					var password = dijit.byId("loginPassword").getValue();
+					var bindUrl = dijit.byId("bindUrl").attr("value");
+					var domain = dijit.byId("loginDomain").attr("value");
+					var jid = dijit.byId("loginJid").attr("value");
+					var password = dijit.byId("loginPassword").attr("value");
 				
 					var useScriptSrcTransport = false;
 					if(bindUrl.indexOf("http") == 0) {
@@ -381,12 +381,11 @@
 			
 			
 			function addUser() {
-			    var userJID = dijit.byId("userJID").getValue();
-				var userAlias = dijit.byId("userAlias").getValue();
-				var userGroups = dijit.byId("userGroups").getValue();
+			    var userJID = dijit.byId("userJID").attr("value");
+				var userAlias = dijit.byId("userAlias").attr("value");
+				var userGroups = dijit.byId("userGroups").attr("value");
 				
 				var groups = userGroups.split(",");
-				
 				session.rosterService.addRosterItem(userJID, userAlias, groups);
 			}
 			
@@ -426,24 +425,24 @@
 	</head>
 
 	<body class="tundra">
-		
+		foo
 		<div dojoType="dijit.Dialog" id="loginDialog" style="display: none; width:400px" title="Login">
 			<table>
 				<tr>
 					<td><label for="name">JID: </label></td>
-					<td><input dojoType="dijit.form.TextBox" type="text"  id="loginJid" value=""></td>
+					<td><input dojoType="dijit.form.TextBox" type="text"  id="loginJid" value="foo"></td>
 				</tr>
 				<tr>
 					<td><label for="loc">Password: </label></td>
-					<td><input dojoType="dijit.form.TextBox" type="password"  id="loginPassword" value=""></td>
+					<td><input dojoType="dijit.form.TextBox" type="password"  id="loginPassword" value="papajeza"></td>
 				</tr>
 				<tr>
 					<td><label for="loc">Domain: </label></td>
-					<td><input dojoType="dijit.form.TextBox" type="text"  id="loginDomain" value=""></td>
+					<td><input dojoType="dijit.form.TextBox" type="text"  id="loginDomain" value="mac"></td>
 				</tr>
 				<tr>
 					<td><label for="loc">HTTP-Bind URL: </label></td>
-					<td><input dojoType="dijit.form.TextBox" type="text"  id="bindUrl" value="/http-bind/"></td>
+					<td><input dojoType="dijit.form.TextBox" type="text"  id="bindUrl" value="http://127.0.0.1:7070/http-bind/"></td>
 				</tr>
 				<tr>
 					<td colspan="2"><small>Note: a relative Bind URL will use the standard XHR transport and a full URL will use the cross-domain BOSH script syntax.</small></td>
@@ -501,7 +500,7 @@
 						<option value="dnd">Do Not Disturb</option>
 						<option value="xa">Extended Away</option>
 					</select>
-							<button dojoType="dijit.form.Button" id="addUserButton" onClick="showAddBuddy()">Add Buddy</button>
+					<button dojoType="dijit.form.Button" id="addUserButton" onClick="showAddBuddy()">Add Buddy</button>
 				</div>
 			</div>
 		
