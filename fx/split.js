@@ -42,7 +42,8 @@ dojo.mixin(dojox.fx,{
 			height: coords.h + "px",
 			width: coords.w + "px",
 			background: "none",
-			overflow: args.crop ? "hidden" : "visible"
+			overflow: args.crop ? "hidden" : "visible",
+			zIndex: dojo.style(node, "zIndex")
 		});
 		node.parentNode.appendChild(container);
 		dojo.style(pieceHelper, {
@@ -54,26 +55,32 @@ dojo.mixin(dojox.fx,{
 			width: pieceWidth + "px",
 			overflow: "hidden"
 		});
-		for(var y = 0; y < args.rows; y++){
-			for(var x = 0; x < args.columns; x++){
+		for(var y = 0, ly = args.rows; y < ly; y++){
+			for(var x = 0, lx = args.columns; x < lx; x++){
 				// Create the piece
 				piece = dojo.clone(pieceHelper);
-				var pieceContents = dojo.clone(node);
+				var pieceContents = dojo.clone(node),
+					pTop = y * pieceHeight,
+					pLeft = x * pieceWidth
+				;
 
 				// IE hack
 				pieceContents.style.filter = "";
 
+				// removing the id attribute from the cloned nodes
+				dojo.removeAttr(pieceContents, "id");
+
 				dojo.style(piece, {
 					border: "none",
 					overflow: "hidden",
-					top: (pieceHeight * y) + "px",
-					left: (pieceWidth * x) + "px"
+					top: pTop + "px",
+					left: pLeft + "px"
 				});
 				dojo.style(pieceContents, {
 					position: "static",
 					opacity: "1",
-					marginTop: (-y * pieceHeight) + "px",
-					marginLeft: (-x * pieceWidth) + "px"
+					marginTop: -pTop + "px",
+					marginLeft: -pLeft + "px"
 				});
 				piece.appendChild(pieceContents);
 				container.appendChild(piece);
@@ -250,7 +257,7 @@ dojo.mixin(dojox.fx,{
 		if(typeof args.fade == "undefined"){
 			args.fade = true;
 		}
-		
+
 		var random = Math.abs(args.random),
 			duration = args.duration - (args.rows + args.columns) * args.interval;
 
@@ -259,7 +266,7 @@ dojo.mixin(dojox.fx,{
 
 			var randomDelay = Math.random() * (args.rows + args.columns) * args.interval,
 				ps = piece.style,
-			
+
 			// If distance is negative, start from the top right instead of bottom left
 				uniformDelay = (args.reverseOrder || args.distance < 0) ?
 					((x + y) * args.interval) :
@@ -430,7 +437,7 @@ dojo.mixin(dojox.fx,{
 		}
 		return anim; // dojo.Animation
 	},
-	
+
 	unShear: function(/*Object*/ args){
 		args.unhide = true;
 		return dojox.fx.shear(args);
