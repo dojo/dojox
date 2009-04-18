@@ -41,19 +41,7 @@
 			},"codeMade");
 			thinger.startup();
 			
-			// programatic with content: 
-			var thing2 = new dojox.widget.Dialog({
-				content:"<p>I am teh inner content</p>"
-			});
-			thing2.startup();
-			// a button to show it (though the error is from before showing)
-			new dijit.form.Button({
-				onClick:function(){
-					thing2.show()
-				},
-				label:"show prog."
-			}).placeAt("testholder");
-			
+
 			// make the "stock" buttons dijit Buttons, but skip the 
 			// dojoType="" for the purists.
 			dojo.query("button")
@@ -63,6 +51,20 @@
 						onClick: oc
 					},n)
 				});
+
+			// programatic with content: 
+			var thing2 = new dojox.widget.Dialog({
+				content:"<p>I am teh inner content</p>"
+			});
+			thing2.startup();
+				
+			new dijit.form.Button({
+				onClick:function(){
+					thing2.show()
+				},
+				label:"show prog."
+			}).placeAt("testholder");
+			
 		});
 	</script>
 </head>
@@ -210,7 +212,7 @@
 		<button onclick="dijit.byId('codeMade').show()">programatic</button>
 		<div id="codeMade"><h2 style="margin-top:0">Wow!</h2><p>A small dialog</p></div>
 
-		<button onclick="dijit.byId('modaltest').show()">modal:true</button>	
+		<button onclick="dijit.byId('modaltest').show()">modal:true</button>
 		<div id="modaltest" dojoType="dojox.widget.Dialog" modal="true"
 		 	easing="dojo.fx.easing.bounceOut" sizeDuration="600">
 			<h2 style="margin-top:0">Wow!</h2>
