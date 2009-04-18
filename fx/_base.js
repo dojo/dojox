@@ -82,7 +82,6 @@ dojox.fx.sizeTo = function(/* Object */args){
 
 	var init = (function(n){
 		return function(){
-			console.log('init fired');
 			var cs = dojo.getComputedStyle(n),
 				pos = cs.position,
 				w = cs.width,
