@@ -14,7 +14,7 @@ dojo.require("dojox.gfx");
 			f.call(o, object);
 			if(object instanceof g.Surface || object instanceof g.Group){
 				d.forEach(object.children, function(shape){
-					gu.inspect(shape, f, o);
+					gu.forEach(shape, f, o);
 				});
 			}
 		},
