@@ -75,6 +75,11 @@ dojo.declare('dojox.grid.views', null, {
 			h = Math.max(h, (n.firstChild.clientHeight)||(n.firstChild.offsetHeight));
 		}
 		h = (h >= 0 ? h : 0);
+
+		//Work around odd FF3 rendering bug: #8864.
+		//A one px increase fixes FireFox 3's rounding bug for fractional font sizes.
+		if(dojo.isFF>=3 && h){h++;}
+
 		//
 		var hpx = h + 'px';
 		for(var i=0, n; (n=inRowNodes[i]); i++){
