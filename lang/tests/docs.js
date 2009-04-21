@@ -10,6 +10,7 @@ tests.register("dojox.lang.tests.docs", [
 	function pastClassHasSchema(t){
 		dojox.lang.docs.init();
 		t.is(!!dijit.ColorPalette.description, true);
+		dojox.lang.docs.init(); // make sure it can be called twice without any problems
 		t.is(!!dijit.ColorPalette.properties.defaultTimeout.description, true);
 		t.is(dijit.ColorPalette.properties.defaultTimeout.type, "number");	
 		t.is(dijit.ColorPalette.methods.onChange.parameters[0].type, "string");	

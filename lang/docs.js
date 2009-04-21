@@ -20,7 +20,19 @@ dojo.provide("dojox.lang.docs");
 		return clazz;
 	};
 	dojo.mixin(dojo.declare, defaultDeclare);
-	dojox.lang.docs.init = function(async){
+	var initialized;
+	dojox.lang.docs.init = function(/*Boolean*/async){
+		// summary:
+		//		Loads the documentation and applies it to the previously defined classes 
+		// 		and any future defined classes
+		// 
+		// async:
+		// 		 If true, the documentation will be loaded asynchronously
+		
+		if(initialized){
+			return null;
+		}
+		initialized = true;
 		try{
 			dojo.xhrGet({
 				sync:!async,
@@ -99,5 +111,6 @@ dojo.provide("dojox.lang.docs");
 		}catch(e){
 			error(e);
 		}
+		return null;
 	}
 })();
