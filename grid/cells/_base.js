@@ -49,6 +49,7 @@ dojo.require("dojox.grid.util");
 			// grid row index
 			// returns: html for a given grid cell
 			var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex, inItem) : (this.value || this.defaultValue);
+			d = (d && d.replace) ? d.replace(/</g, '&lt;') : d;
 			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
 				return this.formatEditing(d, inRowIndex);
 			}else{
