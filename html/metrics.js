@@ -101,7 +101,7 @@ dojo.provide("dojox.html.metrics");
 		fs.width = "5em";
 		fs.height = "10em";
 		fs.top = "-10000px";
-                if(dojo.isIE){
+		if(dojo.isIE){
 			f.onreadystatechange = function(){
 				if(f.contentWindow.document.readyState == "complete"){
 					f.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
