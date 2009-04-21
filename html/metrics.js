@@ -101,10 +101,7 @@ dojo.provide("dojox.html.metrics");
 		fs.width = "5em";
 		fs.height = "10em";
 		fs.top = "-10000px";
-		f.setAttribute("src", "javascript: '<html><body></body></html>'");
-		dojo.body().appendChild(f);
-
-		if(dojo.isIE){
+                if(dojo.isIE){
 			f.onreadystatechange = function(){
 				if(f.contentWindow.document.readyState == "complete"){
 					f.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
@@ -115,6 +112,8 @@ dojo.provide("dojox.html.metrics");
 				f.contentWindow.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
 			};
 		}
+		f.setAttribute("src", "javascript: '<html><body></body></html>'");
+		dojo.body().appendChild(f);
 		dhm.initOnFontResize = function(){};
 	};
 
