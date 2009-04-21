@@ -97,7 +97,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		setKeepInfo: function(inKeepRows){
 			this.keepRows = inKeepRows;
-			this.keepPages = !this.keepRows ? this.keepRows : Math.max(Math.ceil(this.keepRows / this.rowsPerPage), 2);
+			this.keepPages = !this.keepRows ? this.keepPages : Math.max(Math.ceil(this.keepRows / this.rowsPerPage), 2);
 		},
 		// nodes
 		setContentNodes: function(inNodes){
