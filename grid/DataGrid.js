@@ -175,6 +175,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onFetchBegin: function(size, req){
+		if(!this.scroller){ return; }
 		if(this.rowCount != size){
 			if(req.isRender){
 				this.scroller.init(size, this.keepRows, this.rowsPerPage);
@@ -188,6 +189,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onFetchComplete: function(items, req){
+		if(!this.scroller){ return; }
 		if(items && items.length > 0){
 			//console.log(items);
 			dojo.forEach(items, function(item, idx){
