@@ -1041,7 +1041,7 @@ dojo.declare("dojox.widget.RollingList",
 			widgetItem.store = this.store;
 			widgetItem.item = item;
 			if(!widgetItem.label){
-				widgetItem.attr("label", this.store.getLabel(item));
+				widgetItem.attr("label", this.store.getLabel(item).replace(/</,"&lt;"));
 			}
 			if(widgetItem.focusNode){
 				var self = this;
