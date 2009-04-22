@@ -260,7 +260,9 @@
 							testHandle(t, handle);
 						}
 					},
-					/*{
+					/*
+						See #7351: due to cancel() race condition this can cause infinite loop in test.
+					{
 						name: 'handleFrom_setHref_and_refresh_and_cancelWorking',
 						timeout: 3400,
 						runTest: function(t){
