@@ -112,7 +112,7 @@ dojo.provide("dojox.html.metrics");
 				f.contentWindow.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
 			};
 		}
-		f.setAttribute("src", "javascript: '<html><body></body></html>'");
+		f.setAttribute("src", "javascript:'<html><head><script>if(\"loadFirebugConsole\" in window){window.loadFirebugConsole();}</script></head><body></body></html>'");
 		dojo.body().appendChild(f);
 		dhm.initOnFontResize = function(){};
 	};
