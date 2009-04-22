@@ -21,6 +21,10 @@ dojox.data.tests.stores.XmlStore.getCDataTestStore = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/cdata_test.xml").toString(), label: "title"});
 };
 
+dojox.data.tests.stores.XmlStore.getGeographyStore = function(){
+	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/geography2.xml").toString(), label: "text", keyAttribute: "text", attributeMap: {text: '@text'}, rootItem: "geography"});
+};
+
 doh.register("dojox.data.tests.stores.XmlStore", 
 	[
 		function testReadAPI_fetch_all(t){
@@ -1150,6 +1154,31 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			 store.fetchItemByIdentity({identity: "A9B5CC", onItem: onItem, onError: onError});
 			 return d; //Object
 		},
+
+		function testIdentityAPI_fetchItemByIdentity_usingKeyAttributeIdentity4(t) {
+			 //	summary: 
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 //	description:
+			 //		Simple test of the Identity getIdentity API where identity is specified by the keyAttribute param
+			 var store = dojox.data.tests.stores.XmlStore.getGeographyStore();
+
+			 var d = new doh.Deferred();
+			 function onItem(item, request) {
+				try{
+					t.assertTrue(item !== null);
+					t.assertEqual("Mexico City", store.getIdentity(item));
+					d.callback(true);
+				}catch(e){
+					d.errback(e);
+				}
+			 }
+			 function onError(error, request) {
+				 d.errback(error);
+			 }
+			 store.fetchItemByIdentity({identity: "Mexico City", onItem: onItem, onError: onError});
+			 return d; //Object
+		},
+
 
 		function testIdentityAPI_fetchItemByIdentity_fails(t) {
 			 //	summary: 
