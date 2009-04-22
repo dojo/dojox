@@ -112,6 +112,7 @@ dojo.provide("dojox.html.metrics");
 				f.contentWindow.onresize = f.contentWindow.parent[dojox._scopeName].html.metrics._fontresize;
 			};
 		}
+		//The script tag is to work around a known firebug race condition.  See comments in bug #9046
 		f.setAttribute("src", "javascript:'<html><head><script>if(\"loadFirebugConsole\" in window){window.loadFirebugConsole();}</script></head><body></body></html>'");
 		dojo.body().appendChild(f);
 		dhm.initOnFontResize = function(){};
