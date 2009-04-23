@@ -5,6 +5,6 @@ dojo.require("dojo.fx.easing");
 	dojox.fx.easing = {
 		// summary:
 		//		An Alias to `dojo.fx.easing`. Moved to Core in Dojo 1.2.
-	});
+	};
 =====*/
 dojox.fx.easing = dojo.fx.easing;

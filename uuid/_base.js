@@ -43,7 +43,7 @@ dojox.uuid.generateNilUuid = function(){
 	//		RFC 4122: http://tools.ietf.org/html/rfc4122#section-4.1.7
 	// examples: 
 	//		var string = dojox.uuid.generateNilUuid();
-	return dojox.uuid.NIL_UUID;; // String
+	return dojox.uuid.NIL_UUID; // String
 };
 
 dojox.uuid.isValid = function(/*String*/ uuidString){
