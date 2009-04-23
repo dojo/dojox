@@ -93,8 +93,8 @@ dojo.require("dojo.dnd.Manager");
 			}else{
 				this.viewWidth = vs.width || (vs.noscroll ? 'auto' : this.viewWidth); //|| this.defaultWidth;
 			}
-			this.onBeforeRow = vs.onBeforeRow;
-			this.onAfterRow = vs.onAfterRow;
+			this._onBeforeRow = vs.onBeforeRow||function(){};
+			this._onAfterRow = vs.onAfterRow||function(){};
 			this.noscroll = vs.noscroll;
 			if(this.noscroll){
 				this.scrollboxNode.style.overflow = "hidden";
@@ -104,6 +104,14 @@ dojo.require("dojo.dnd.Manager");
 			this.testFlexCells();
 			// accomodate new structure
 			this.updateStructure();
+		},
+		
+		onBeforeRow: function(inRowIndex, cells){
+			this._onBeforeRow(inRowIndex, cells);
+		},
+		
+		onAfterRow: function(inRowIndex, cells, inRowNode){
+			this._onAfterRow(inRowIndex, cells, inRowNode);
 		},
 
 		testFlexCells: function(){
