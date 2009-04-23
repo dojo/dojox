@@ -218,6 +218,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		//	summary:	
 		//		Over-ride to hide the widget, which clears intervals, before cleanup.
 		this.hide();
+		this.inherited(arguments);
 	}
 
 });	
