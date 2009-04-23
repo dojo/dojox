@@ -7,6 +7,7 @@
 			@import url(../../../dijit/themes/tundra/tundra.css);
 			@import url(../resources/DropDownSelect.css);
 			@import url(../../../dijit/tests/css/dijitTests.css);
+            @import url(../resources/CheckedMultiSelect.css);
 			.ark { text-decoration: underline; }
 		</style>
 	    <script type="text/javascript" 
@@ -19,6 +20,7 @@
 			dojo.require("dojox.form.DropDownSelect");
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.Form");
+            dojo.require("dojox.form.CheckedMultiSelect");
 			
 			var numOptions = 0;
 			var numChanges = 0;
@@ -32,7 +34,7 @@
 				doh.register("tests",
 					[
 						function test_setValue(t){
-							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY", s8:"AL"}, form.getValues());
+							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY", s8:"AL"}, form.attr("value"));
 							s1.attr("value", "WA");
 							t.is("WA", s1.value);
 							s1.attr("value", "UT");
@@ -173,7 +175,26 @@
 				<option value="SEL" selected="selected">DropDownSelect</option>
 				<option value="OTHER">Other</option>
 			</select>
-		<hr>
+
+            <h4 class="testSubtitle">DropDownSelect.updateOptions</h4>
+            <div>Click on the DropDownSelect to open the DropDown.  While the DropDown is opened, click on a checkbox.</div>
+            <select id="updateOptions" dojoType="dojox.form.DropDownSelect">
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+            </select>
+            <select multiple="true" dojoType="dojox.form.CheckedMultiSelect">
+                <script type="dojo/connect" event="onChange">
+                    var dds = dijit.byId("updateOptions");
+                    dds.updateOption(dds.getOptions());
+                </script>
+                <option value="TN">Tennessee</option>
+                <option value="VA" selected="selected">Virginia</option>
+                <option value="WA" selected="selected">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <hr>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					console.dir(form.getValues());

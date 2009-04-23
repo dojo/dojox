@@ -130,7 +130,14 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 		// summary: 
 		//		Resets the menu and the length attribute of the button - and
 		//		ensures that the label is appropriately set.
+
+		// this.inherited destroys this.dropDown's child widgets (MenuItems).
+		// Avoid this.dropDown (Menu widget) having a pointer to a destroyed widget (which will cause
+		// issues later in _setSelected).
+		delete this.dropDown.focusedChild;
+
 		this.inherited(arguments);
+
 		var len = this.options.length;
 		this._isLoaded = false;
 		this._childrenLoaded = true;
