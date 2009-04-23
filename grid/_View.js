@@ -215,6 +215,7 @@ dojo.require("dojo.dnd.Manager");
 					horizontal: true,
 					accept: [ "gridColumn_" + this.grid.id ],
 					viewIndex: this.index,
+					generateText: false,
 					onMouseDown: dojo.hitch(this, function(e){
 						this.header.decorateEvent(e);
 						if((this.header.overRightResizeArea(e) || this.header.overLeftResizeArea(e)) &&
@@ -745,7 +746,7 @@ dojo.require("dojo.dnd.Manager");
 	var oldMakeAvatar = dojo.dnd.manager().makeAvatar;
 	dojo.dnd.manager().makeAvatar = function(){
 		var src = this.source;
-		if(src.viewIndex !== undefined){
+		if(src.viewIndex !== undefined && !dojo.hasClass(dojo.body(),"dijit_a11y")){
 			return new dojox.grid._GridAvatar(this);
 		}
 		return oldMakeAvatar.call(dojo.dnd.manager());

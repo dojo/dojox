@@ -298,6 +298,12 @@
 .dojoxGrid .dojoDndItemAfter {
 	border-right-color: red;
 }
+.dijit_a11y .dojoDndItemBefore {
+	border-left: double;
+}
+.dijit_a11y .dojoDndItemAfter {
+	border-right: double;
+}
 .dojoxGridDndAvatarItem	td {
 	border: 1px solid;
 	border-color: #F6F4EB #ACA899 #ACA899 #F6F4EB;
