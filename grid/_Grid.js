@@ -665,7 +665,6 @@ dojo.requireLocalization("dijit", "loading");
 				var h = hh = this._getHeaderHeight();
 				h += (this.scroller.averageRowHeight * this.autoHeight);
 				this.domNode.style.height = h + "px";
-			}else if(this.flex > 0){
 			}else if(this.domNode.clientHeight <= padBorder.h){
 				if(pn == document.body){
 					this.domNode.style.height = this.defaultHeight;
@@ -687,6 +686,8 @@ dojo.requireLocalization("dijit", "loading");
 				var h = dojo._getContentBox(pn).h;
 				dojo.marginBox(this.domNode, { h: Math.max(0, h) });
 			}
+			
+			var hasFlex = dojo.some(this.views.views, function(v){ return v.flexCells; });
 
 			if(!this._autoHeight && dojo._getContentBox(this.domNode).h === 0){
 				// We need to hide the header, since the Grid is essentially hidden.
@@ -694,9 +695,12 @@ dojo.requireLocalization("dijit", "loading");
 			}else{
 				// Otherwise, show the header and give it an appropriate height.
 				this.viewsHeaderNode.style.display = "block";
-				if(hh === undefined){
+				if(!hasFlex && hh === undefined){
 					hh = this._getHeaderHeight();
 				}
+			}
+			if(hasFlex){
+				hh = undefined;
 			}
 
 			// NOTE: it is essential that width be applied before height
