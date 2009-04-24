@@ -173,12 +173,11 @@ dojo.require("dojox.dtl.Context");
 				}
 			}
 
-
 			for(i = 0; tag = swallowed[i]; i++){
 				var text = node.getAttribute(tag[0]);
 				if(text){
 					var swallowed = false;
-					var custom = (tag[2])({ swallowNode: function(){ swallowed = true; return node; }}, new dd.Token(dd.TOKEN_ATTR, text));
+					var custom = (tag[2])({ swallowNode: function(){ swallowed = true; return node; }}, new dd.Token(dd.TOKEN_ATTR, tag[0] + " " + text));
 					if(swallowed){
 						if(node.parentNode && node.parentNode.removeChild){
 							node.parentNode.removeChild(node);
