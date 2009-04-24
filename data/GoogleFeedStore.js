@@ -23,7 +23,9 @@ dojo.declare("dojox.data.GoogleFeedStore", dojox.data.GoogleSearchStore,{
 	_googleUrl: "http://ajax.googleapis.com/ajax/services/feed/load",
 	_attributes: ["title", "link", "author", "published",
 					"content", "summary", "categories"],
-	_queryAttr: "url",
+	_queryAttrs: {
+		"url":"q"
+	},
 
 	_processItem: function(item, request) {
 		this.inherited(arguments);
