@@ -124,7 +124,7 @@ dojo.provide("dojox.lang.docs");
 		initialized = true;
 
 		var getSplitDocs = function(moduleName, sync){
-			dojo.xhrGet({
+			return dojo.xhrGet({
 				sync: sync||!async,
 				url: dojo.baseUrl + '../util/docscripts/api/' + moduleName + '.json',
 				handleAs: 'json'
@@ -136,52 +136,52 @@ dojo.provide("dojox.lang.docs");
 				}
 			});
 		};
-		var firstMod = requiredModules.shift();
 		try{
-			getSplitDocs(firstMod, true);
-
-			requireDocs = function(moduleName){
-				if(!_docs[moduleName]){
-					try{
-						getSplitDocs(moduleName);
-					}catch(e){
-						_docs[moduleName] = {};
+			var firstMod = requiredModules.shift();
+			getSplitDocs(firstMod, true).addCallbacks(function(){
+				requireDocs = function(moduleName){
+					if(!_docs[moduleName]){
+						try{
+							getSplitDocs(moduleName);
+						}catch(e){
+							_docs[moduleName] = {};
+						}
 					}
+				};
+				//console.log(requiredModules);
+				dojo.forEach(requiredModules, function(mod){
+					requireDocs(mod);
+				});
+				requiredModules = null;
+
+				schemifyClass = actualSchemifyClass;
+
+				for(i in declaredClasses){
+					schemifyClass(declaredClasses[i], i);
 				}
-			};
-			//console.log(requiredModules);
-			dojo.forEach(requiredModules, function(mod){
-				requireDocs(mod);
+				declaredClasses = null;
+			},function(){
+				dojo.require = defaultRequire;
+				requiredModules = null;
+				try{
+					dojo.xhrGet({
+						sync:!async,
+						url: dojo.baseUrl + '../util/docscripts/api.json',
+						handleAs: 'json'
+					}).addCallbacks(function(obj){
+						_docs = obj;
+						schemifyClass = actualSchemifyClass;
+
+						for(var i in declaredClasses){
+							schemifyClass(declaredClasses[i], i);
+						}
+						declaredClasses = null;
+					}, error);
+				}catch(e){
+					error(e);
+				}
 			});
-			requiredModules = null;
-
-			schemifyClass = actualSchemifyClass;
-
-			for(i in declaredClasses){
-				schemifyClass(declaredClasses[i], i);
-			}
-			declaredClasses = null;
-		}catch(e){
-			dojo.require = defaultRequire;
-			requiredModules = null;
-			try{
-				dojo.xhrGet({
-					sync:!async,
-					url: dojo.baseUrl + '../util/docscripts/api.json',
-					handleAs: 'json'
-				}).addCallbacks(function(obj){
-					_docs = obj;
-					schemifyClass = actualSchemifyClass;
-
-					for(var i in declaredClasses){
-						schemifyClass(declaredClasses[i], i);
-					}
-					declaredClasses = null;
-				}, error);
-			}catch(e){
-				error(e);
-			}
-		}
+		}catch(e){}
 		return null;
 	}
 })();
