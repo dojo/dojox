@@ -12,13 +12,13 @@ dojo.require("dojo.io.script");
 dojo.experimental("dojox.data.GoogleSearchStore");
 
 dojo.declare("dojox.data.GoogleSearchStore",null,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//  This data store acts as a base class for Google searches,
-	//  and has a number of child data stores that implement different
-	//  searches. This store defaults to searching the web, and is functionally
-	//  identical to the dojox.data.GoogleWebSearchStore object.
-	//	The following attributes are supported on each item:
+	//	summary:
+	//		A data store for retrieving search results from Google.
+	//		This data store acts as a base class for Google searches,
+	//		and has a number of child data stores that implement different
+	//		searches. This store defaults to searching the web, and is functionally
+	//		identical to the dojox.data.GoogleWebSearchStore object.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>url - The URL for the item</li>
 	//			<li>unescapedUrl - The URL for the item, with URL escaping. This is often more readable</li>
@@ -28,13 +28,13 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	//			<li>titleNoFormatting - The page title in plain text</li>
 	//			<li>content - A snippet of information about the page</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 	constructor: function(/*Object*/args){
 		//	summary:
 		//		Initializer for the GoogleSearchStore store.
 		//	description:
 		//		The GoogleSearchStore is a Datastore interface to
-		//      the Google search service. The constructor accepts the following arguments:
+		//		the Google search service. The constructor accepts the following arguments:
 		//		<ul>
 		//			<li>label - the label attribute to use. Defaults to titleNoFormatting</li>
 		//			<li>key - The API key to use. This is optional</li>
@@ -74,7 +74,14 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	// _attributes: Array
 	// The list of attributes that this store supports
-	_attributes: ["unescapedUrl", "url", "visibleUrl", "cacheUrl", "title", "titleNoFormatting", "content"],
+	_attributes: [	"unescapedUrl", "url", "visibleUrl", "cacheUrl", "title", 
+			"titleNoFormatting", "content", "estimatedResultCount"],
+
+	// _aggregtedAttributes: Hash
+	// Maps per-query aggregated attributes that this store supports to the result keys that they come from.
+	_aggregatedAttributes: {
+		estimatedResultCount: "cursor.estimatedResultCount"
+	},
 
 	// label: String
 	// The default attribute which acts as a label for each item.
@@ -85,11 +92,15 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	// This should not be set directly. Instead use one of the child classes.
 	_type: "web",
 
-	_queryAttr: "text",
+	// _queryAttrs: Hash
+	// Maps query hash keys to Google query parameters. 
+	_queryAttrs: {
+		text: 'q'
+	},
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
-		//      This function tests whether the item passed in is indeed an item in the store.
+		//		This function tests whether the item passed in is indeed an item in the store.
 		//	item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
@@ -109,7 +120,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	getFeatures: function(){
 		//	summary:
-		//      See dojo.data.api.Read.getFeatures()
+		//		See dojo.data.api.Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
 		};
@@ -117,7 +128,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	getValue: function(item, attribute, defaultValue){
 		//	summary:
-		//      See dojo.data.api.Read.getValue()
+		//		See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values && values.length > 0){
 			return values[0];
@@ -127,13 +138,13 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	getAttributes: function(item){
 		//	summary:
-		//      See dojo.data.api.Read.getAttributes()
+		//		See dojo.data.api.Read.getAttributes()
 		return this._attributes;
 	},
 
 	hasAttribute: function(item, attribute){
 		//	summary:
-		//      See dojo.data.api.Read.hasAttributes()
+		//		See dojo.data.api.Read.hasAttributes()
 		if(this.getValue(item,attribute)){
 			return true;
 		}
@@ -142,30 +153,30 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	isItemLoaded: function(item){
 		 //	summary:
-		 //      See dojo.data.api.Read.isItemLoaded()
+		 //		See dojo.data.api.Read.isItemLoaded()
 		 return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
 		//	summary:
-		//      See dojo.data.api.Read.loadItem()
+		//		See dojo.data.api.Read.loadItem()
 	},
 
 	getLabel: function(item){
 		//	summary:
-		//      See dojo.data.api.Read.getLabel()
+		//		See dojo.data.api.Read.getLabel()
 		return this.getValue(item,this.label);
 	},
 
 	getLabelAttributes: function(item){
 		//	summary:
-		//      See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo.data.api.Read.getLabelAttributes()
 		return [this.label];
 	},
 
 	containsValue: function(item, attribute, value){
 		//	summary:
-		//      See dojo.data.api.Read.containsValue()
+		//		See dojo.data.api.Read.containsValue()
 		var values = this.getValues(item,attribute);
 		for(var i = 0; i < values.length; i++){
 			if(values[i] === value){
@@ -177,7 +188,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	getValues: function(item, attribute){
 		//	summary:
-		//      See dojo.data.api.Read.getValue()
+		//		See dojo.data.api.Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 		var val = item[attribute];
@@ -192,7 +203,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	isItem: function(item){
 		//	summary:
-		//      See dojo.data.api.Read.isItem()
+		//		See dojo.data.api.Read.isItem()
 		if(item && item[this._storeRef] === this){
 			return true;
 		}
@@ -201,7 +212,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	close: function(request){
 		//	summary:
-		//      See dojo.data.api.Read.close()
+		//		See dojo.data.api.Read.close()
 	},
 
 	_format: function(item, name){
@@ -221,19 +232,21 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 		var scope = request.scope || dojo.global;
 
-		if(!request.query || !request.query[this._queryAttr]){
+		if(!request.query){
 			if(request.onError){
-				request.onError.call(scope, new Error(this.declaredClass +
-					": A query must be specified, with a '" + [this._queryAttr] + "' parameter."));
+				request.onError.call(scope, new Error(this.declaredClass + 
+					": A query must be specified."));
 				return;
 			}
 		}
 		//Make a copy of the request object, in case it is
 		//modified outside the store in the middle of a request
-		var query = request.query[this._queryAttr];
+		var query = {};
+		for(var attr in this._queryAttrs) {
+			query[attr] = request.query[attr];
+		}		
 		request = {
-			query: {
-			},
+			query: query,
 			onComplete: request.onComplete,
 			onError: request.onError,
 			onItem: request.onItem,
@@ -241,9 +254,8 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 			start: request.start,
 			count: request.count
 		};
-		request.query[this._queryAttr] = query;
 
-        //Google's web api will only return a max of 8 results per page.
+		//Google's web api will only return a max of 8 results per page.
 		var pageSize = 8;
 
 		//Generate a unique function to be called back
@@ -265,7 +277,6 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		firstRequest = {start: request.start - request.start % pageSize};
 
 		var _this = this;
-		var handle = null;
 		var searchUrl = this._googleUrl + this._type;
 
 		var getArgs = {
@@ -411,6 +422,10 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 	_processItem: function(item, data) {
 		item[this._storeRef] = this;
+		// Copy aggregated attributes from query results to the item.
+		for(var attribute in this._aggregatedAttributes) {
+			item[attribute] = dojo.getObject(this._aggregatedAttributes[attribute], false, data);
+		}
 	},
 
 	_getItems: function(data){
@@ -418,21 +433,24 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	},
 
 	_createContent: function(query, callback, request){
-		return {
-				q: query,
-				v:"1.0",
-				rsz:"large",
-				callback: callback,
-				key:this._key,
-				hl: this._lang
-			};
+		var content = {
+			v: "1.0",
+			rsz: "large",
+			callback: callback,
+			key: this._key,
+			hl: this._lang
+		};
+		for(var attr in this._queryAttrs) {
+			content[this._queryAttrs[attr]] = query[attr];
+		}
+		return content;
 	}
 });
 
 dojo.declare("dojox.data.GoogleWebSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	//	Summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The page title in HTML format.</li>
 	//			<li>titleNoFormatting - The page title in plain text</li>
@@ -441,14 +459,15 @@ dojo.declare("dojox.data.GoogleWebSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>unescapedUrl - The URL for the item, with URL escaping. This is often more readable</li>
 	//			<li>visibleUrl - The URL with no protocol specified.</li>
 	//			<li>cacheUrl - The URL to the copy of the document cached by Google</li>
+	//			<li>estimatedResultCount - (aggregated per-query) estimated number of results</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 });
 
 dojo.declare("dojox.data.GoogleBlogSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	//	Summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The blog post title in HTML format.</li>
 	//			<li>titleNoFormatting - The  blog post title in plain text</li>
@@ -460,16 +479,18 @@ dojo.declare("dojox.data.GoogleBlogSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>author - The author of the blog post</li>
 	//			<li>publishedDate - The published date, in RFC-822 format</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 	_type: "blogs",
-	_attributes: ["blogUrl", "postUrl", "title", "titleNoFormatting", "content", "author", "publishedDate"]
+	_attributes: ["blogUrl", "postUrl", "title", "titleNoFormatting", "content", 
+			"author", "publishedDate"],
+	_aggregatedAttributes: { }
 });
 
 
 dojo.declare("dojox.data.GoogleLocalSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	//	summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The blog post title in HTML format.</li>
 	//			<li>titleNoFormatting - The  blog post title in plain text</li>
@@ -485,18 +506,38 @@ dojo.declare("dojox.data.GoogleLocalSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>ddUrl - A URL that can be used to provide driving directions from the center of the search results to this search results</li>
 	//			<li>ddUrlToHere - A URL that can be used to provide driving directions from this search result to a user specified location</li>
 	//			<li>staticMapUrl - The published date, in RFC-822 format</li>
+	//			<li>viewport - Recommended viewport for the query results (same for all results in a query)
+	//				<ul>
+	//					<li>center - contains lat, lng properties</li>
+	//					<li>span - lat, lng properties for the viewport span</li>
+	//					<li>ne, sw - lat, lng properties for the viewport corners<li>
+	//				</ul>
+	//			</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts the following parameters:
+	//		<ul>
+	//			<li>text - The string to search for</li>
+	//			<li>centerLatLong - Comma-separated lat & long for the center of the search (e.g. "48.8565,2.3509")</li>
+	//			<li>searchSpan - Comma-separated lat & long degrees indicating the size of the desired search area (e.g. "0.065165,0.194149")</li>
+	//		</ul>
 	_type: "local",
 	_attributes: ["title", "titleNoFormatting", "url", "lat", "lng", "streetAddress",
-					"city", "region", "country", "phoneNumbers", "ddUrl", "ddUrlToHere",
-					"ddUrlFromHere", "staticMapUrl"]
+			"city", "region", "country", "phoneNumbers", "ddUrl", "ddUrlToHere",
+			"ddUrlFromHere", "staticMapUrl", "viewport"],
+	_aggregatedAttributes: {
+		viewport: "viewport"
+	},
+	_queryAttrs: {
+		text: 'q',
+		centerLatLong: 'sll',
+		searchSpan: 'sspn'
+	}
 });
 
 dojo.declare("dojox.data.GoogleVideoSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	//	summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The blog post title in HTML format.</li>
 	//			<li>titleNoFormatting - The  blog post title in plain text</li>
@@ -510,16 +551,17 @@ dojo.declare("dojox.data.GoogleVideoSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>tbUrl - The URL to a thumbnail representation of the video.</li>
 	//			<li>playUrl - If present, supplies the url of the flash version of the video that can be played inline on your page. To play this video simply create and <embed> element on your page using this value as the src attribute and using application/x-shockwave-flash as the type attribute. If you want the video to play right away, make sure to append &autoPlay=true to the url..</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 	_type: "video",
 	_attributes: ["title", "titleNoFormatting", "content", "url", "published", "publisher",
-					"duration", "tbWidth", "tbHeight", "tbUrl", "playUrl"]
+			"duration", "tbWidth", "tbHeight", "tbUrl", "playUrl"],
+	_aggregatedAttributes: { }
 });
 
 dojo.declare("dojox.data.GoogleNewsSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	//	summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The news story title in HTML format.</li>
 	//			<li>titleNoFormatting - The news story title in plain text</li>
@@ -535,16 +577,17 @@ dojo.declare("dojox.data.GoogleNewsSearchStore", dojox.data.GoogleSearchStore,{
 	//				"title", "titleNoFormatting", "url", "unescapedUrl", "publisher", "location", "publishedDate".
 	//			</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 	_type: "news",
 	_attributes: ["title", "titleNoFormatting", "content", "url", "unescapedUrl", "publisher",
-					"clusterUrl", "location", "publishedDate", "relatedStories" ]
+			"clusterUrl", "location", "publishedDate", "relatedStories" ],
+	_aggregatedAttributes: { }
 });
 
 dojo.declare("dojox.data.GoogleBookSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	// 	summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The book title in HTML format.</li>
 	//			<li>titleNoFormatting - The book title in plain text</li>
@@ -555,16 +598,17 @@ dojo.declare("dojox.data.GoogleBookSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>pageCount - The number of pages in the book.</li>
 	//			<li>publishedYear - The year of publication.</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 	_type: "books",
 	_attributes: ["title", "titleNoFormatting", "authors", "url", "unescapedUrl", "bookId",
-					"pageCount", "publishedYear"]
+			"pageCount", "publishedYear"],
+	_aggregatedAttributes: { }
 });
 
 dojo.declare("dojox.data.GoogleImageSearchStore", dojox.data.GoogleSearchStore,{
-	// summary:
-	//	A data store for retrieving search results from Google.
-	//	The following attributes are supported on each item:
+	//	summary:
+	//		A data store for retrieving search results from Google.
+	//		The following attributes are supported on each item:
 	//		<ul>
 	//			<li>title - The image title in HTML format.</li>
 	//			<li>titleNoFormatting - The image title in plain text</li>
@@ -580,8 +624,10 @@ dojo.declare("dojox.data.GoogleImageSearchStore", dojox.data.GoogleSearchStore,{
 	//			<li>content - A snippet of information about the image, in HTML format</li>
 	//			<li>contentNoFormatting - A snippet of information about the image, in plain text</li>
 	//		</ul>
-	//	The query accepts one parameter: text - The string to search for
+	//		The query accepts one parameter: text - The string to search for
 	_type: "images",
-	_attributes: ["title", "titleNoFormatting", "visibleUrl", "url", "unescapedUrl", "originalContextUrl",
-					"width", "height", "tbWidth", "tbHeight", "tbUrl", "content", "contentNoFormatting"]
+	_attributes: ["title", "titleNoFormatting", "visibleUrl", "url", "unescapedUrl", 
+			"originalContextUrl", "width", "height", "tbWidth", "tbHeight", 
+			"tbUrl", "content", "contentNoFormatting"],
+	_aggregatedAttributes: { }
 });

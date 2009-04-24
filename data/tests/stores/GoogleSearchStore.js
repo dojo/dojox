@@ -506,7 +506,7 @@ doh.register("dojox.data.tests.stores.GoogleSearchStore",
 
 					var attributes = googleStore.getAttributes(items[0]);
 
-					t.is(7, attributes.length);
+					t.is(8, attributes.length);
 					d.callback(true);
 				}
 
