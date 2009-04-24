@@ -640,11 +640,11 @@ dojo.experimental("dojox.dtl");
 							}
 							dd.register._registry.attributes.push([attr.toLowerCase(), base + "." + path + "." + attr]);
 						}
-						key = key.toLowerCase();
+						key = key.toLowerCase()
 					}
 					dd.register._registry[type].push([
 						key,
-						fn.toLowerCase(),
+						fn,
 						base + "." + path
 					]);
 				}

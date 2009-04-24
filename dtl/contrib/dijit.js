@@ -192,16 +192,20 @@ dojo.require("dojo.parser");
 			return new ddcd.EventNode(token.contents.slice(16));
 		},
 		dojoType: function(parser, token){
+			var parsed = false;
+			if(token.contents.slice(-7) == " parsed"){
+				parsed = true;
+			}
+			var contents = token.contents.slice(9);
+			var dojoType = parsed ? contents.slice(0, -7) : contents.toString();
+
 			if(ddcd.widgetsInTemplate){
 				var node = parser.swallowNode();
-				var parsed = false;
-				if(token.contents.slice(-7) == " parsed"){
-					parsed = true;
-					node.setAttribute("dojoType", token.contents.slice(0, -7));
-				}
+				node.setAttribute("dojoType", dojoType);
 				return new ddcd.DojoTypeNode(node, parsed);
 			}
-			return dd._noOpNode;
+
+			return new dd.AttributeNode("dojoType", dojoType);
 		},
 		on: function(parser, token){
 			// summary: Associates an event type to a function (on the current widget) by name
