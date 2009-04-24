@@ -634,17 +634,17 @@ dojo.experimental("dojox.dtl");
 					}
 					if(typeof key == "string"){
 						if(key.substr(0, 5) == "attr:"){
-							var attr = fn.toLowerCase();
+							var attr = fn;
 							if(attr.substr(0, 5) == "attr:"){
 								attr = attr.slice(5);
 							}
-							dd.register._registry.attributes.push([attr, base + "." + path + "." + attr]);
+							dd.register._registry.attributes.push([attr.toLowerCase(), base + "." + path + "." + attr]);
 						}
 						key = key.toLowerCase();
 					}
 					dd.register._registry[type].push([
 						key,
-						fn,
+						fn.toLowerCase(),
 						base + "." + path
 					]);
 				}
