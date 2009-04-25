@@ -286,7 +286,12 @@ dojo.provide("dojox.grid._Scroller");
 				this.pageHeights[inPageIndex] = h;
 				if((h)&&(oh != h)){
 					this.updateContentHeight(h - oh)
-					this.repositionPages(inPageIndex);
+					var ah = this.grid.attr("autoHeight");
+					if((typeof ah == "number" && ah > this.rowCount)||ah === true){
+						this.grid.sizeChange();
+					}else{
+						this.repositionPages(inPageIndex);
+					}
 				}
 			}
 		},
