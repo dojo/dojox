@@ -13,6 +13,10 @@ dojox.data.tests.stores.XmlStore.getBooks2Store = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString(), label: "title"});
 };
 
+dojox.data.tests.stores.XmlStore.getBooks2StorePC = function(){
+	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.xml").toString(), label: "title", urlPreventCache: false});
+};
+
 dojox.data.tests.stores.XmlStore.getBooksStore = function(){
 	return new dojox.data.XmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books.xml").toString(), label: "title"});
 };
@@ -159,6 +163,25 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
 			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(4, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"A9B57?"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_pattern1_preventCacheOff(t){
+			//	summary: 
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
+			//		with preventCache off to test that it doesn't pass it when told not to.
+			//	description:
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
+			//		with preventCache off to test that it doesn't pass it when told not to.
+			var store = dojox.data.tests.stores.XmlStore.getBooks2StorePC();
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
 				t.assertEqual(4, items.length);
