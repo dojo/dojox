@@ -56,7 +56,7 @@ dojo.provide("dojox.lang.docs");
 			if(docForClass.methods){
 				var methods = docForClass.methods;
 				for(i=0, l=methods.length; i<l; i++){
-					var name = methods[i].name;
+					name = methods[i].name;
 					if(name){
 						var methodDef = clazz.methods[name] = {};
 						methodDef.description = methods[i].summary;
@@ -117,6 +117,27 @@ dojo.provide("dojox.lang.docs");
 		// 
 		// async:
 		// 		 If true, the documentation will be loaded asynchronously
+		function loadFullDocs(){
+			dojo.require = defaultRequire;
+			requiredModules = null;
+			try{
+				dojo.xhrGet({
+					sync:!async,
+					url: dojo.baseUrl + '../util/docscripts/api.json',
+					handleAs: 'text'
+				}).addCallbacks(function(obj){
+					_docs = (new Function("return " + obj))();
+					schemifyClass = actualSchemifyClass;
+
+					for(var i in declaredClasses){
+						schemifyClass(declaredClasses[i], i);
+					}
+					declaredClasses = null;
+				}, error);
+			}catch(e){
+				error(e);
+			}
+		}
 		
 		if(initialized){
 			return null;
@@ -127,8 +148,9 @@ dojo.provide("dojox.lang.docs");
 			return dojo.xhrGet({
 				sync: sync||!async,
 				url: dojo.baseUrl + '../util/docscripts/api/' + moduleName + '.json',
-				handleAs: 'json'
+				handleAs: 'text'
 			}).addCallback(function(obj){
+				obj = (new Function("return " + obj))();
 				for(var clazz in obj){
 					if(!_docs[clazz]){
 						_docs[clazz] = obj[clazz];
@@ -160,28 +182,10 @@ dojo.provide("dojox.lang.docs");
 					schemifyClass(declaredClasses[i], i);
 				}
 				declaredClasses = null;
-			},function(){
-				dojo.require = defaultRequire;
-				requiredModules = null;
-				try{
-					dojo.xhrGet({
-						sync:!async,
-						url: dojo.baseUrl + '../util/docscripts/api.json',
-						handleAs: 'json'
-					}).addCallbacks(function(obj){
-						_docs = obj;
-						schemifyClass = actualSchemifyClass;
-
-						for(var i in declaredClasses){
-							schemifyClass(declaredClasses[i], i);
-						}
-						declaredClasses = null;
-					}, error);
-				}catch(e){
-					error(e);
-				}
-			});
-		}catch(e){}
+			},loadFullDocs);
+		}catch(e){
+			loadFullDocs();
+		}
 		return null;
 	}
 })();
