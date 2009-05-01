@@ -77,7 +77,8 @@ dojo.require("dojo.AdapterRegistry");
 		hasAttribute: function(item, attribute){
 			//	summary: 
 			//      See dojo.data.api.Read.hasAttributes()
-			if(this.getValue(item,attribute)){
+			var v = this.getValue(item,attribute); 
+			if(v || v === "" || v === false){
 				return true;
 			}
 			return false;
