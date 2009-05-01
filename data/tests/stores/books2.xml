@@ -24,5 +24,9 @@
 		<isbn>A9B5CC</isbn>
 		<title>Title of 5</title>
 		<author>Author of 5</author>
+		<author>Second Author of 5</author>
+		<author>Third Author of 5</author>
+		<author>Fourth Author of 5</author>
+		<author>Fifth Author of 5</author>
 	</book>
 </books>

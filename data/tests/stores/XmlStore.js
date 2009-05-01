@@ -210,6 +210,40 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			store.fetch({query:{isbn:"A9*"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
+		function testReadAPI_fetch_pattern_multi(t){
+			//	summary: 
+			//		Simple test of fetching one xml items with a pattern of multiple attrs.
+			//	description:
+			//		Simple test of fetching one xml items with a pattern of multiple attrs.
+			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"A9B57?", title: "?itle of 3"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_pattern_multiValuedValue(t){
+			//	summary: 
+			//		Simple test of fetching one xml items with a pattern of multiple attrs.
+			//	description:
+			//		Simple test of fetching one xml items with a pattern of multiple attrs.
+			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{author:"Third Author of 5"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
 		function testReadAPI_fetch_pattern_caseInsensitive(t){
 			//	summary: 
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match and in case insensitive mode.

@@ -513,9 +513,11 @@ dojo.declare("dojox.data.XmlStore", null, {
 			}
 			var item = this._getItem(node);
 			if(query){
-				var found = true;
 				var ignoreCase = request.queryOptions ? request.queryOptions.ignoreCase : false; 
 				var value;
+				var match = false;
+				var j;
+				var emptyQuery = true;
                 
 				//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
 				//same value for each item examined.  Much more efficient.
@@ -527,36 +529,56 @@ dojo.declare("dojox.data.XmlStore", null, {
 					}
 				}
 				for(var attribute in query){
-					value = this.getValue(item, attribute);
-					if(value){
-						var queryValue = query[attribute];
-						if ((typeof value) === "string" && 
-							(regexpList[attribute])){
-							if((value.match(regexpList[attribute])) !== null){
-								continue;
-							}
-						}else if((typeof value) === "object"){
-							if(	value.toString && 
+					emptyQuery = false;
+					var values = this.getValues(item, attribute);
+					for(j = 0; j < values.length; j++){
+						value = values[j];
+						if(value){
+							var queryValue = query[attribute];
+							if ((typeof value) === "string" && 
 								(regexpList[attribute])){
-								var stringValue = value.toString();
-								if((stringValue.match(regexpList[attribute])) !== null){
-									continue;
+								if((value.match(regexpList[attribute])) !== null){
+									match = true;
+								}else{
+									match = false;
 								}
-							}else{
-								if(queryValue === "*" || queryValue === value){
-									continue;
+							}else if((typeof value) === "object"){
+								if(	value.toString && 
+									(regexpList[attribute])){
+									var stringValue = value.toString();
+									if((stringValue.match(regexpList[attribute])) !== null){
+										match = true;
+									}else{
+										match = false;
+									}
+								}else{
+									if(queryValue === "*" || queryValue === value){
+										match = true;
+									}else{
+										match = false;
+									}
 								}
 							}
 						}
+						//One of the multiValue values matched, 
+						//so quit looking.
+						if(match){
+							break;
+						}
 					}
-					found = false;
-					break;
+					if(!match){
+						break;
+					}
 				}
-				if(!found){
-					continue;
+				//Either the query was an empty object {}, which is match all, or 
+				//was an actual match.
+				if(emptyQuery || match){
+					items.push(item);
 				}
+			}else{
+				//No query, everything matches.
+				items.push(item);
 			}
-			items.push(item);
 		}
 		dojo.forEach(items,function(item){
 			if(item.element.parentNode){
