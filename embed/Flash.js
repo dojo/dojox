@@ -311,7 +311,7 @@ dojo.provide("dojox.embed.Flash");
 			
 			// vars to help determine load status
 			var p = 0, testLoaded=false;
-			this._poller = null; this._pollCount = 0; this._pollMax = 5; this.pollTime = 100;
+			this._poller = null; this._pollCount = 0; this._pollMax = 15; this.pollTime = 100;
 			
 			if(dojox.embed.Flash.initialized){
 				
