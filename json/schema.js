@@ -54,8 +54,13 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 		function addError(message){
 			errors.push({property:path,message:message});
 		}
+		
 		if(typeof schema != 'object' || schema instanceof Array){
-			if(schema){
+			if(typeof schema == 'function'){
+				if(!(instance instanceof schema)){
+					addError("is not an instance of the class/constructor " + schema.name);
+				}
+			}else if(schema){
 				addError("Invalid schema/property definition " + schema);
 			}
 			return null;
@@ -175,7 +180,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 			}
 			
 			for(var i in objTypeDef){ 
-				if(objTypeDef.hasOwnProperty(i)){
+				if(objTypeDef.hasOwnProperty(i) && "__id" != i){
 					var value = instance[i];
 					var propDef = objTypeDef[i];
 					checkProp(value,propDef,path,i);

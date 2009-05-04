@@ -258,7 +258,7 @@ dojo.require("dojox.rpc.Rest");
 							}
 						}
 					}
-					if(data){
+					if(data && typeof data == 'object'){
 						dojo.mixin(self,data);
 					}
 					if(schema && schema.prototype && schema.prototype.initialize){

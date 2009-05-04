@@ -178,7 +178,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			// fire an XHR with appropriate modification for JSON handling
 			if(this.sendAsJson){
 				// send use JSON Messaging
-				args.postBody = dojo.toJson({
+				args.postData = dojo.toJson({
 					target:args.url,
 					method:method,
 					content: data,
@@ -190,7 +190,7 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			}else{
 				args.postData = dojo.toJson(data);
 			}			
-			return dojo.xhr(method,args,args.postBody);
+			return dojo.xhr(method,args,args.postData);
 		}, 
 		subscribe: function(/*String*/channel, /*dojo.__XhrArgs?*/args){
 			// summary:

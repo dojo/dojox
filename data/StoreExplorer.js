@@ -174,7 +174,7 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		this.tree.setStore(store);
 	},
 	createNew: function(){
-		var props = prompt("Enter any properties to put in the new item (in JSON literal form):","{ }");
+		var props = prompt("Enter any properties (in JSON literal form) to put in the new item (passed to the newItem constructor):","{ }");
 		if(props){
 			try{
 				this.store.newItem(dojo.fromJson(props));
