@@ -129,6 +129,10 @@ dojo.declare("dojox.grid.Selection", null, {
 		}else{
 			if(this.onCanSelect(inIndex) !== false){
 				this.selectedIndex = inIndex;
+				var rowNode = this.grid.getRowNode(inIndex);
+				if(rowNode){
+					dojo.attr(rowNode,"aria-selected","true");
+				}
 				this._beginUpdate();
 				this.selected[inIndex] = true;
 				//this.grid.onSelected(inIndex);
@@ -148,6 +152,10 @@ dojo.declare("dojox.grid.Selection", null, {
 		if(this.selected[inIndex]){
 			if(this.onCanDeselect(inIndex) === false){
 				return;
+			}
+			var rowNode = this.grid.getRowNode(inIndex);
+			if(rowNode){
+				dojo.attr(rowNode,"aria-selected","false");
 			}
 			this._beginUpdate();
 			delete this.selected[inIndex];

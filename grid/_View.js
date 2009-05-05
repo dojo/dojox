@@ -531,7 +531,14 @@ dojo.require("dojo.dnd.Manager");
 		createRowNode: function(inRowIndex){
 			var node = document.createElement("div");
 			node.className = this.classTag + 'Row';
-			dojo.attr(node,"role","row");
+			if (this instanceof dojox.grid._RowSelector){
+				dojo.attr(node,"role","presentation");
+			}else{
+				dojo.attr(node,"role","row");
+				if (this.grid.selectionMode != "none") {
+					dojo.attr(node, "aria-selected", "false"); //rows can be selected so add aria-selected prop
+				}
+			}
 			node[dojox.grid.util.gridViewTag] = this.id;
 			node[dojox.grid.util.rowIndexTag] = inRowIndex;
 			this.rowNodes[inRowIndex] = node;

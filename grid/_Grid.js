@@ -320,6 +320,9 @@ dojo.requireLocalization("dijit", "loading");
 			dojox.html.metrics.initOnFontResize();
 			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
 			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);
+			if (this.selectionMode != "none") {
+				dojo.attr(this.domNode, "aria-multiselectable", this.selectionMode == "single" ? "false" : "true");
+			}
 		},
 		
 		postMixInProperties: function(){
@@ -930,7 +933,19 @@ dojo.requireLocalization("dijit", "loading");
 			//		Update the styles for a row after it's state has changed.
 			this.views.updateRowStyles(inRowIndex);
 		},
-
+		getRowNode: function(inRowIndex){
+			// summary:
+			//		find the rowNode that is not a rowSelector
+			if (this.focus.focusView && !(this.focus.focusView instanceof dojox.grid._RowSelector)){
+					return this.focus.focusView.rowNodes[inRowIndex];
+			}else{ // search through views
+				for (var i = 0, cView; (cView = this.views.views[i]); i++) {
+					if (!(cView instanceof dojox.grid._views)) {
+						return cView.rowNodes[inRowIndex];
+					}
+				}
+			}
+		},
 		rowHeightChanged: function(inRowIndex){
 			// summary:
 			//		Update grid when the height of a row has changed. Row height is handled automatically as rows
