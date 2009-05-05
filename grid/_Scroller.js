@@ -147,7 +147,7 @@ dojo.provide("dojox.grid._Scroller");
 		},
 		measurePage: function(inPageIndex){
 			var n = this.getDefaultPageNode(inPageIndex);
-			return (n&&n.innerHTML) ? n.offsetHeight : 0;
+			return (n&&n.innerHTML) ? n.offsetHeight : undefined;
 		},
 		positionPage: function(inPageIndex, inPos){
 			for(var i=0; i<this.colCount; i++){
@@ -282,9 +282,12 @@ dojo.provide("dojox.grid._Scroller");
 		updatePageHeight: function(inPageIndex){
 			if(this.pageExists(inPageIndex)){
 				var oh = this.getPageHeight(inPageIndex);
-				var h = (this.measurePage(inPageIndex))||(oh);
+				var h = (this.measurePage(inPageIndex));
+				if(h === undefined){
+					h = oh;
+				}
 				this.pageHeights[inPageIndex] = h;
-				if((h)&&(oh != h)){
+				if(oh != h){
 					this.updateContentHeight(h - oh)
 					var ah = this.grid.attr("autoHeight");
 					if((typeof ah == "number" && ah > this.rowCount)||ah === true){
@@ -347,9 +350,12 @@ dojo.provide("dojox.grid._Scroller");
 			var h = this.getPageHeight(inPageIndex), oh = h;
 			if(!this.pageExists(inPageIndex)){
 				this.buildPage(inPageIndex, this.keepPages&&(this.stack.length >= this.keepPages), inPos);
-				h = this.measurePage(inPageIndex) || h;
+				h = this.measurePage(inPageIndex);
+				if(h === undefined){
+					h = oh;
+				}
 				this.pageHeights[inPageIndex] = h;
-				if(h && (oh != h)){
+				if(oh != h){
 					this.updateContentHeight(h - oh)
 				}
 			}else{
