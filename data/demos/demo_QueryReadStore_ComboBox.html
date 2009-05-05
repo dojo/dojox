@@ -28,7 +28,7 @@
 			var w = dijit.byId("cb1");
 			<br /><input id="value1" type="text" /> = w.value
 			<br /><input id="itemId1" type="text" /> = w.item ? w.store.getValue(w.item, "id") : "-"
-			<br /><input id="displayedValue1" type="text" /> = w.getDisplayedValue()
+			<br /><input id="displayedValue1" type="text" /> = w.attr("displayedValue")
 			<br /><input id="isValid1" type="text" /> = w.isValid()
 			<br /><button dojoType="dijit.form.Button" onclick="refresh1()">refresh</button>
 		</div>
@@ -43,7 +43,7 @@
 		var refresh1 = function() {
 			dojo.byId("value1").value = w.value;
 			dojo.byId("itemId1").value = w.item ? w.store.getValue(w.item, "id") : "-";
-			dojo.byId("displayedValue1").value = w.getDisplayedValue();
+			dojo.byId("displayedValue1").value = w.attr("displayedValue");
 			dojo.byId("isValid1").value = w.isValid();
 		};
 		dojo.addOnLoad(function() {
