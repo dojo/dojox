@@ -35,7 +35,7 @@ dojo.declare("dojox.data.CouchDBRestStore",
 				delete args.start;
 			}
 			if(args.count){
-				args.query = (args.query ? (args.query + '&') : '') + 'count=' + args.count;
+				args.query = (args.query ? (args.query + '&') : '') + 'limit=' + args.count;
 				delete args.count;
 			}
 			return this.inherited(arguments);
