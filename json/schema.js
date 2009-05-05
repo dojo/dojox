@@ -42,7 +42,7 @@ dojox.json.schema.mustBeValid = function(result){
 	//		This checks to ensure that the result is valid and will throw an appropriate error message if it is not
 	// result: the result returned from checkPropertyChange or validate
 	if(!result.valid){
-		throw new Error(dojo.map(result.errors,function(error){return error.property + ' ' + error.message;}).join(","));
+		throw new TypeError(dojo.map(result.errors,function(error){return error.property + ' ' + error.message;}).join(","));
 	}	
 }
 dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolean*/ _changing){
@@ -55,7 +55,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 			errors.push({property:path,message:message});
 		}
 		
-		if(typeof schema != 'object' || schema instanceof Array){
+		if((typeof schema != 'object' || schema instanceof Array) && (path || typeof schema != 'function')){
 			if(typeof schema == 'function'){
 				if(!(instance instanceof schema)){
 					addError("is not an instance of the class/constructor " + schema.name);
@@ -129,7 +129,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 					if(schema.maxItems && value.length > schema.maxItems){
 						addError("There must be a maximum of " + schema.maxItems + " in the array");
 					}
-				}else if(schema.properties && typeof value == 'object'){
+				}else if(schema.properties){
 					errors.concat(checkObj(value,schema.properties,path,schema.additionalProperties));
 				}
 				if(schema.pattern && typeof value == 'string' && !value.match(schema.pattern)){

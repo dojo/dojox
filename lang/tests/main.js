@@ -13,6 +13,7 @@ try{
 	dojo.require("dojox.lang.tests.recomb");
 	dojo.require("dojox.lang.tests.observable");
 	dojo.require("dojox.lang.tests.docs");
+	dojo.require("dojox.lang.tests.typed");
 }catch(e){
 	doh.debug(e);
 }

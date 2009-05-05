@@ -17,21 +17,44 @@ dojo.provide("dojox.lang.docs");
 		// initial implementation records classes until they are ready
 		declaredClasses[name] = clazz;
 	};
-	var getType = function(type, propDef){
-		var typeDef = type || '';
-		typeDef = typeDef.toLowerCase();
-		typeDef = typeDef.replace(/\?/, function(){
-			propDef.optional = true;
+	var getType = function(typeDef){
+		var type = typeDef.type || '';		
+		var typeObj, optional = false, array = false, dontModify;
+		type = type.replace(/\?/, function(){
+			optional = true;
 			return '';
 		});
-		if(typeDef.match(/ string/)){
+		type = type.replace(/\[\]/, function(){
+			array = true;
+			return '';
+		});
+		if(type.match(/HTML/)){
 			// HTML String and other "types" of strings are really just strings
-			typeDef = "string";
+			type = "string";
+		}else if(type == 'String' || type == 'Number' ||
+				type == 'Boolean' || type == 'Object' ||
+				type == 'Array' || type == 'Integer' || type == "Function"){
+			type = type.toLowerCase();
+		}else if(type == "bool"){
+			type = "boolean";
+		}else{
+			typeObj = dojo.getObject(type) || {};
+			dontModify = true;
 		}
-		return (typeDef == 'string' || typeDef == 'number' ||
-				typeDef == 'boolean' || typeDef == 'object' ||
-				typeDef == 'array' || typeDef == 'integer')
-			&& typeDef;
+		typeObj = typeObj || {type:type};
+		if(array){
+			typeObj = {items:typeObj, type:"array"};
+			dontModify = false;
+		}
+		if(!dontModify){
+			if(optional){
+				typeObj.optional = true;
+			}
+			if(/const/.test(typeDef.tags)){
+				typeObj.readonly = true;
+			}
+		}
+		return typeObj;
 	};
 	var actualSchemifyClass = function(clazz, name){
 		var docForClass = _docs[name];
@@ -43,11 +66,7 @@ dojo.provide("dojox.lang.docs");
 			if(docForClass.properties){
 				var props = docForClass.properties;
 				for(var i=0, l=props.length; i<l; i++){
-					var propDef = clazz.properties[props[i].name] = {};
-					var typeDef = getType(props[i].type, propDef);
-					if(typeDef){
-						propDef.type = typeDef;
-					}
+					var propDef = clazz.properties[props[i].name] = getType(props[i]);
 					propDef.description = props[i].summary;
 				}
 			}
@@ -65,18 +84,14 @@ dojo.provide("dojox.lang.docs");
 							methodDef.parameters = [];
 							for(var j=0, k=parameters.length; j<k; j++){
 								var param = parameters[j];
-								methodDef.parameters[j] = {
-									name: param.name,
-									type: getType(param.type, methodDef),
-									optional: "optional" == param.usage
-								};
+								var paramDef = methodDef.parameters[j] = getType(param);
+								paramDef.name = param.name;
+								paramDef.optional =  "optional" == param.usage;
 							}
 						}
 						var ret = methods[i]['return-types'];
-						if(ret){
-							methodDef.returns = {
-								type: getType(ret[0].type, methodDef)
-							};
+						if(ret && ret[0]){
+							methodDef.returns = getType(ret[0]);
 						}
 					}
 				}
@@ -127,6 +142,7 @@ dojo.provide("dojox.lang.docs");
 					handleAs: 'text'
 				}).addCallbacks(function(obj){
 					_docs = (new Function("return " + obj))();
+					obj = null;
 					schemifyClass = actualSchemifyClass;
 
 					for(var i in declaredClasses){
