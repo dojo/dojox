@@ -54,7 +54,7 @@ dojo.provide("dojox.grid._RowManager");
 			this.updateStyles(this.overRow);
 		},
 		isOver: function(inRowIndex){
-			return (this.overRow == inRowIndex);
+			return (this.overRow == inRowIndex && !dojo.hasClass(this.grid.domNode, "dojoxGridColumnResizing"));
 		}
 	});
 })();

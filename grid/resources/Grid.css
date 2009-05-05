@@ -364,6 +364,17 @@
 	cursor: col-resize;
 	z-index:10000;
 }
+.dojoxGridColNoResize, 
+.dojoxGridColNoResize .dojoDndItemOver {
+	cursor: not-allowed !important;
+}
+.dojoxGridColResize, 
+.dojoxGridColResize .dojoDndItemOver,
+.dojoxGridColumnResizing,
+.dojoxGridColumnResizing .dojoDndItemOver,
+.dojoxGridColumnResizing .dojoxGridHeader {
+	cursor: col-resize !important;
+}
 
 .dojoxGridColPlaceBottom {
 	background: transparent url(images/grid_sort_up.gif) no-repeat scroll left top;

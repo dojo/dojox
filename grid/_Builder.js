@@ -422,16 +422,15 @@ dojo.require("dojo.dnd.Moveable");
 		domousemove: function(e){
 			//console.log(e.cellIndex, e.cellX, e.cellNode.offsetWidth);
 			if(!this.moveable){
-				var c = (this.overRightResizeArea(e) ? 'col-resize' : (this.overLeftResizeArea(e) ? 'col-resize' : ''));
+				var c = (this.overRightResizeArea(e) ? 'dojoxGridColResize' : (this.overLeftResizeArea(e) ? 'dojoxGridColResize' : ''));
 				if(c && !this.canResize(e)){
-					c = 'not-allowed';
+					c = 'dojoxGridColNoResize';
 				}
+				dojo.toggleClass(e.sourceView.headerNode, "dojoxGridColNoResize", (c == "dojoxGridColNoResize"));
+				dojo.toggleClass(e.sourceView.headerNode, "dojoxGridColResize", (c == "dojoxGridColResize"));
 				if(dojo.isIE){
 					var t = e.sourceView.headerNode.scrollLeft;
-					e.sourceView.headerNode.style.cursor = c || ''; //'default';
 					e.sourceView.headerNode.scrollLeft = t;
-				}else{
-					e.sourceView.headerNode.style.cursor = c || ''; //'default';
 				}
 				if(c){
 					dojo.stopEvent(e);
@@ -513,6 +512,7 @@ dojo.require("dojo.dnd.Moveable");
 			this.moverDiv = document.createElement("div");
 			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
 			dojo.body().appendChild(this.moverDiv);
+			dojo.addClass(this.grid.domNode, "dojoxGridColumnResizing");
 			var m = this.moveable = new dojo.dnd.Moveable(this.moverDiv);
 
 			drag =this.colResizeSetup(e,true);
@@ -527,6 +527,7 @@ dojo.require("dojo.dnd.Moveable");
 				this.moveable.destroy();
 				delete this.moveable;
 				this.moveable = null;
+				dojo.removeClass(this.grid.domNode, "dojoxGridColumnResizing");
 			}));
 
 			if(e.cellNode.setCapture){
