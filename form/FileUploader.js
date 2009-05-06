@@ -983,6 +983,7 @@ dojo.require("dojox.embed.flashVars");
 			//	Investigate removing fileInputs and resending form
 			//	multiple times adding each fileInput
 			//
+			dojo.destroy(this._fileInput);
 			this._setHtmlPostData();
 			if(this.showProgress){
 				this._animateProgress();
