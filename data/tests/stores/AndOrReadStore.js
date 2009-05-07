@@ -3072,6 +3072,32 @@ dojox.data.tests.stores.AndOrReadStore.getTests = function(){
 			}
 		},
 		{
+			name: "Read API: fetch() multiple, AND/OR, as json object, complex, with extra attrs and spaces",
+	 		runTest: function(t){
+				//	summary: 
+				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//	description:
+				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				var store = new dojox.data.AndOrReadStore(dojox.data.tests.stores.AndOrReadStore.getTestData("countries"));
+				
+				var d = new doh.Deferred();
+				var onComplete = function(items, request){
+					t.assertEqual(items.length, 1);
+					t.assertEqual("Equatorial Guinea", store.getValue(items[0], "name"));
+					d.callback(true);
+				};
+				var onError = function(errData, request){
+					t.assertTrue(false);
+					d.errback(errData);
+				};
+				store.fetch({ 	query: {complexQuery:'abbr: "g*" AND (capital:"A*" or capital: "M*")', name: "Equatorial G*"}, 
+										onComplete: onComplete, 
+										onError: onError
+									});
+				return d;
+			}
+		},
+		{
 			name: "Read API: fetch() multiple, AND/OR, as quoted json object, complex",
 	 		runTest: function(t){
 				//	summary: 

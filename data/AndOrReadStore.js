@@ -287,7 +287,13 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 									cq = "( " + cq + " )";
 									wrapped = true;
 								}
-								cq += " AND " + p + ":" + requestArgs.query[p];
+
+								//Make sure strings are quoted when going into complexQuery merge.
+								var v = requestArgs.query[p];
+								if(dojo.isString(v)){
+									v = "'" + v + "'";
+								}
+								cq += " AND " + p + ":" + v;
 								delete query[p];
 							}
 						}
