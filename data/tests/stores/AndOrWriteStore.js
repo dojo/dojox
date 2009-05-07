@@ -927,7 +927,7 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 				//		Simple test of a basic fetch on AndOrWriteStore of all items with hierarchy disabled
 				//		This should turn off processing child objects as data store items.  It will still process
 				//		references and type maps.
-				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrReadStore.getTestData("countries_references"));
+				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries_references"));
 				
 				//Set this as hierarchy off before fetch to make sure it traps and configs right.
 				store.hierarchical = false;
@@ -3092,6 +3092,35 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 					d.errback(errData);
 				};
 				store.fetch({ 	query: {complexQuery:'abbr: "e*" AND (capital:"A*" or capital: "Q*")', name: "Ec*"}, 
+										onComplete: onComplete, 
+										onError: onError
+									});
+				return d;
+			}
+		},
+		{
+			name: "Read API: fetch() multiple, AND/OR, as json object, complex, with extra attrs and spaces",
+	 		runTest: function(t){
+				//	summary: 
+				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				//	description:
+				//		Simple test of a basic fetch on AndOrReadStore of a single item.
+				var store = new dojox.data.AndOrWriteStore(dojox.data.tests.stores.AndOrWriteStore.getTestData("countries"));
+				
+				var d = new doh.Deferred();
+				var onComplete = function(items, request){
+					try{
+						t.assertEqual(items.length, 1);
+						t.assertEqual("Equatorial Guinea", store.getValue(items[0], "name"));
+						d.callback(true);
+					}catch(e){
+						d.errback(e);
+					}
+				};
+				var onError = function(errData, request){
+					d.errback(errData);
+				};
+				store.fetch({ 	query: {complexQuery:'abbr: "g*" AND (capital:"A*" or capital: "M*")', name: "Equatorial G*"}, 
 										onComplete: onComplete, 
 										onError: onError
 									});

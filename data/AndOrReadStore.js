@@ -287,7 +287,6 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 									cq = "( " + cq + " )";
 									wrapped = true;
 								}
-
 								//Make sure strings are quoted when going into complexQuery merge.
 								var v = requestArgs.query[p];
 								if(dojo.isString(v)){
@@ -295,6 +294,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 								}
 								cq += " AND " + p + ":" + v;
 								delete query[p];
+								
 							}
 						}
 						query.complexQuery = cq;
