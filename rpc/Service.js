@@ -86,6 +86,7 @@ dojo.declare("dojox.rpc.Service", null, {
 	_getRequest: function(method,args){
 		var smd = this._smd;
 		var envDef = dojox.rpc.envelopeRegistry.match(method.envelope || smd.envelope || "NONE");
+		var parameters = (method.parameters || []).concat(smd.parameters || []);
 		if(envDef.namedParams){
 			// the serializer is expecting named params
 			if((args.length==1) && dojo.isObject(args[0])){
@@ -101,7 +102,6 @@ dojo.declare("dojox.rpc.Service", null, {
 				}
 				args = data;
 			}
-			var parameters = (method.parameters || []).concat(smd.parameters || []);
 			if(method.strictParameters||smd.strictParameters){
 				//remove any properties that were not defined
 				for(i in args){
@@ -126,11 +126,11 @@ dojo.declare("dojox.rpc.Service", null, {
 					}
 				}
 			}
-		}else if(method.parameters && method.parameters[0] && method.parameters[0].name && (args.length==1) && dojo.isObject(args[0])){
+		}else if(parameters && parameters[0] && parameters[0].name && (args.length==1) && dojo.isObject(args[0])){
 			// looks like named params, we will convert
 			if(envDef.namedParams === false){
 				// the serializer is expecting ordered params, must be ordered
-				args = dojox.rpc.toOrdered(method, args);
+				args = dojox.rpc.toOrdered(parameters, args);
 			}else{
 				// named is ok
 				args = args[0];
@@ -189,11 +189,11 @@ dojox.rpc.getTarget = function(smd, method){
 	return dest;
 };
 
-dojox.rpc.toOrdered=function(method, args){
+dojox.rpc.toOrdered=function(parameters, args){
 	if(dojo.isArray(args)){ return args; }
 	var data=[];
-	for(var i=0;i<method.parameters.length;i++){
-		data.push(args[method.parameters[i].name]);
+	for(var i=0;i<parameters.length;i++){
+		data.push(args[parameters[i].name]);
 	}
 	return data;
 };

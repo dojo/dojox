@@ -50,6 +50,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 	var errors = [];
 		// validate a value against a property definition
 	function checkProp(value, schema, path,i){
+		var l;
 		path += path ? typeof i == 'number' ? '[' + i + ']' : typeof i == 'undefined' ? '' : '.' + i : i;
 		function addError(message){
 			errors.push({property:path,message:message});
