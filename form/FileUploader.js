@@ -1095,12 +1095,12 @@ dojo.require("dojox.embed.flashVars");
 			// summary:
 			//		Build the form that holds the fileInput
 			//
-			if (this._formNode) { return };
+			if(this._formNode){ return; }
 			
-			if (dojo.isIE) {
+			if(dojo.isIE){
 				this._formNode = document.createElement('<form enctype="multipart/form-data" method="post">');
 				this._formNode.encoding = "multipart/form-data";
-			}else {
+			}else{
 				this._formNode = document.createElement('form');
 				this._formNode.setAttribute("enctype", "multipart/form-data");
 			}
