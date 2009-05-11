@@ -330,7 +330,7 @@ dojo.provide("dojox.embed.Flash");
 						}catch(e){
 							/* squelch */
 							console.warn("this.movie.PercentLoaded() failed");
-						};
+						}
 						
 						if(p == 100){
 							// if percent = 100, movie is fully loaded and we're communicating
@@ -374,7 +374,7 @@ dojo.provide("dojox.embed.Flash");
 				}
 			}
 
-			//	pull the movie
+			//	poll the movie
 			if(this._poller){
 				//	wait until onLoad to destroy
 				dojo.connect(this, "onLoad", this, "_destroy");
