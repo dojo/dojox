@@ -976,7 +976,7 @@ dojo.require("dojox.embed.flashVars");
 			//		Internal. You could use this, but you should use upload() or submit();
 			//		which can also handle the post data.
 			//
-			// NOTE on deferredUploading 
+			// NOTE on deferredUploading:
 			// This is not enabled for HTML. Workaround would be to force
 			//	singleFile uploads.
 			//	TODO:
