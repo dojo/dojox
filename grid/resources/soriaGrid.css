@@ -175,3 +175,49 @@
 .soria .dojoxGrid .dojoDndItemAfter {
 	border-right-color: #4B5AAA;
 }
+
+/* Tree Grid */
+.soria .dojoxGridExpando {
+	float: left;
+	height: 18px;
+	width: 18px;
+	text-align: center;
+	margin-top: -3px;
+}
+.dijitRtl .soria .dojoxGridExpando {
+	float: right;
+}
+.soria .dojoxGridExpandoCell {
+	padding-top: 5px;
+}
+.soria .dojoxGridExpandoNode {
+	height: 18px;
+	background-image: url('../../../dijit/themes/soria/images/spriteTree.gif');
+}
+.soria .dojoxGridExpandoOpened .dojoxGridExpandoNode {
+	background: url('../../../dijit/themes/soria/images/spriteTree.gif') no-repeat -18px top;
+}
+.soria .dojoxGridExpandoLoading .dojoxGridExpandoNode {
+	background: url('../../../dijit/themes/soria/images/treeExpand_loading.gif');	
+}
+.soria .dojoxGridExpandoNodeInner {
+	visibility: hidden;
+}
+.dijit_a11y .dojoxGridExpandoNodeInner {
+	visibility: visible;
+}
+		
+.soria .dojoxGridSummaryRow .dojoxGridCell {
+	border-top-color: #999;
+	border-top-style: solid;
+}
+.soria .dojoxGridSpacerCell,
+.soria .dojoxGridExpandoCell,
+.soria .dojoxGridSummaryRow .dojoxGridSpacerCell {
+	border-color: transparent;
+	border-right-color: #D5CDB5;
+}
+.soria .dojoxGridSummaryRow .dojoxGridTotalCell,
+.soria .dojoxGridRowCollapsed .dojoxGridExpandoCell {
+	border-bottom-color: #D5CDB5;
+}

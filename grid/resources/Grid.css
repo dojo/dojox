@@ -398,3 +398,15 @@
 	background-color: #777;
 	position: absolute;
 }
+
+/* Tree Grid */
+.dojoxGridExpandoCell {
+	vertical-align: top;
+}
+.dojoxGridSummarySpan {
+	visibility: hidden;
+}
+.dojoxGridSummaryRow .dojoxGridSummarySpan,
+.dojoxGridRowCollapsed .dojoxGridSummarySpan {
+	visibility: visible;
+}

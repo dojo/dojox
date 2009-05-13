@@ -175,3 +175,49 @@
 	border-right-color: #ffe284;
 }
 
+
+/* Tree Grid */
+.nihilo .dojoxGridExpando {
+	float: left;
+	height: 18px;
+	width: 18px;
+	text-align: center;
+	margin-top: -3px;
+}
+.dijitRtl .nihilo .dojoxGridExpando {
+	float: right;
+}
+.nihilo .dojoxGridExpandoCell {
+	padding-top: 5px;
+}
+.nihilo .dojoxGridExpandoNode {
+	height: 18px;
+	background-image: url('../../../dijit/themes/nihilo/images/spriteTree.gif');
+}
+.nihilo .dojoxGridExpandoOpened .dojoxGridExpandoNode {
+	background: url('../../../dijit/themes/nihilo/images/spriteTree.gif') no-repeat -18px top;
+}
+.nihilo .dojoxGridExpandoLoading .dojoxGridExpandoNode {
+	background: url('../../../dijit/themes/nihilo/images/treeExpand_loading.gif');
+}
+.nihilo .dojoxGridExpandoNodeInner {
+	visibility: hidden;
+}
+.dijit_a11y .dojoxGridExpandoNodeInner {
+	visibility: visible;
+}
+		
+.nihilo .dojoxGridSummaryRow .dojoxGridCell {
+	border-top-color: #999;
+	border-top-style: solid;
+}
+.nihilo .dojoxGridSpacerCell,
+.nihilo .dojoxGridExpandoCell,
+.nihilo .dojoxGridSummaryRow .dojoxGridSpacerCell {
+	border-color: transparent;
+	border-right-color: #D5CDB5;
+}
+.nihilo .dojoxGridSummaryRow .dojoxGridTotalCell,
+.nihilo .dojoxGridRowCollapsed .dojoxGridExpandoCell {
+	border-bottom-color: #D5CDB5;
+}
