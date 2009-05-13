@@ -69,7 +69,7 @@ dojo.require("dojox.embed.flashVars");
 		
 		o.lh = dojo.style(node, "lineHeight");
 		o.ta = dojo.style(node, "textAlign");
-		o.ta = o.ta=="start"||!o.ta ? "left":o.ta;
+		o.ta = o.ta=="start" || !o.ta ? "left":o.ta;
 		o.va = isButton(node) ? "middle" : o.lh==o.h ? "middle" : dojo.style(node, "verticalAlign");
 		return o;
 	};
@@ -358,7 +358,7 @@ dojo.require("dojox.embed.flashVars");
 			//		Due to the excessive logging necessary to make this code happen,
 			//		It's easier to turn it on and off here in one place.
 			//		Also helpful if there are multiple uploaders on one page.
-			if (this.isDebug) {
+			if(this.isDebug){
 				console.log.apply(console, arguments);
 			}
 		},
@@ -638,13 +638,13 @@ dojo.require("dojox.embed.flashVars");
 			}
 			this.log("upload type:", this.uploaderType, " - postData:", this.postData);
 			
-			for (var i = 0; i < this.fileList.length; i++) {
+			for (var i=0;i<this.fileList.length;i++){
 				var f = this.fileList[i];
 				f.bytesLoaded = 0;
 				f.bytesTotal = f.size || 100000;
 				f.percent = 0;
 			}
-			if (this.uploaderType == "flash") {
+			if(this.uploaderType == "flash"){
 				this.uploadFlash();
 			}else{
 				this.uploadHTML();
@@ -674,7 +674,7 @@ dojo.require("dojox.embed.flashVars");
 					break;
 				}
 			}
-			if (this.uploaderType == "flash") {
+			if(this.uploaderType == "flash"){
 				this.flashMovie.removeFile(name);
 			}else if(!noListEdit){
 				dojo.destroy(this.fileInputs[i]);
@@ -694,7 +694,7 @@ dojo.require("dojox.embed.flashVars");
 		destroy: function(){
 			//	summary:
 			//		Destroys uploader button
-			if (this.uploaderType == "flash" && !this.flashMovie) {
+			if(this.uploaderType == "flash" && !this.flashMovie){
 				this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));
 				return;
 			}
@@ -707,7 +707,7 @@ dojo.require("dojox.embed.flashVars");
 			if(this.scrollConnect){
 				dojo.disconnect(this.scrollConnect);
 			}
-			if (this.uploaderType == "flash") {
+			if(this.uploaderType == "flash"){
 				this.flashObject.destroy();
 				dojo.destroy(this.flashDiv);
 			}
@@ -739,7 +739,7 @@ dojo.require("dojox.embed.flashVars");
 			//		Shows and updates the built-in progress bar.
 			//
 			if(display === true){
-				if (this.uploaderType == "flash") {
+				if(this.uploaderType == "flash"){
 					dojo.style(this.insideNode,"left", "-1000px");
 				}else{
 					dojo.style(this.insideNode,"display", "none");	
@@ -824,7 +824,7 @@ dojo.require("dojox.embed.flashVars");
 			}
 			this._addToFileList();
 			this.onChange(dataArray);
-			if (this.uploadOnChange) {
+			if(this.uploadOnChange){
 				this.upload();
 			}else if(this.uploaderType=="html" && this.selectMultipleFiles){
 				this._buildFileInput();
@@ -885,9 +885,9 @@ dojo.require("dojox.embed.flashVars");
 			//		Internal. Calculate progress
 			var total = 0;
 			var loaded = 0;
-			for (var i = 0; i < this.fileList.length; i++) {
+			for (var i = 0; i < this.fileList.length; i++){
 				var f = this.fileList[i];
-				if (f.name == dataObject.name) {
+				if(f.name == dataObject.name){
 					f.bytesLoaded = dataObject.bytesLoaded;
 					f.bytesTotal = dataObject.bytesTotal;
 					f.percent = Math.ceil(f.bytesLoaded / f.bytesTotal * 100);
@@ -1082,7 +1082,7 @@ dojo.require("dojox.embed.flashVars");
 			// summary:
 			//		Internal. After upload, this is called to clear the form and build a new
 			//		fileInput.
-			if (this.uploaderType == "html" && this._formNode) {
+			if(this.uploaderType == "html" && this._formNode){
 				dojo.query("*", this._formNode).forEach(function(n){
 					dojo.destroy(n);
 				});
@@ -1112,7 +1112,7 @@ dojo.require("dojox.embed.flashVars");
 			// summary:
 			//		Build the fileInput field
 			//
-			if (this._fileInput) {
+			if(this._fileInput){
 				this._disconnect();
 				// FIXME:
 				//	Just hiding it which works, but we lose
@@ -1126,7 +1126,7 @@ dojo.require("dojox.embed.flashVars");
 			// server will need to know this variable:
 			var nm = this.htmlFieldName;
 			var _id = this.id;
-			if (this.selectMultipleFiles) {
+			if(this.selectMultipleFiles){
 				nm += this.fileCount;
 				_id += this.fileCount;
 				this.fileCount++;
@@ -1163,7 +1163,7 @@ dojo.require("dojox.embed.flashVars");
 			// summary:
 			//		Internal.Apply postData to hidden fields in form
 			if(this.postData){
-				for (var nm in this.postData) {
+				for (var nm in this.postData){
 					var f = document.createElement('input');
 					dojo.attr(f, "type", "hidden");
 					dojo.attr(f, "name", nm);
