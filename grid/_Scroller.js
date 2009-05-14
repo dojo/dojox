@@ -296,7 +296,9 @@ dojo.provide("dojox.grid._Scroller");
 						this.repositionPages(inPageIndex);
 					}
 				}
+				return h;
 			}
+			return 0;
 		},
 		rowHeightChanged: function(inRowIndex){
 			this.updatePageHeight(Math.floor(inRowIndex / this.rowsPerPage));
@@ -350,14 +352,7 @@ dojo.provide("dojox.grid._Scroller");
 			var h = this.getPageHeight(inPageIndex), oh = h;
 			if(!this.pageExists(inPageIndex)){
 				this.buildPage(inPageIndex, this.keepPages&&(this.stack.length >= this.keepPages), inPos);
-				h = this.measurePage(inPageIndex);
-				if(h === undefined){
-					h = oh;
-				}
-				this.pageHeights[inPageIndex] = h;
-				if(oh != h){
-					this.updateContentHeight(h - oh)
-				}
+				h = this.updatePageHeight(inPageIndex);
 			}else{
 				this.positionPage(inPageIndex, inPos);
 			}
