@@ -3,28 +3,6 @@ dojo.provide("dojox.layout.ContentPane");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dojox.html._base"); 
 
-(function(){ // private scope, sort of a namespace
-
-	/*=====
-	dojox.layout.ContentPane.DeferredHandle = {
-		// cancel: Function
-		cancel: function(){
-			// summary: cancel a in flight download
-		},
-
-		addOnLoad: function(func){
-			// summary: add a callback to the onLoad chain
-			// func: Function
-		},
-
-		addOnUnload: function(func){
-			// summary: add a callback to the onUnload chain
-			// func: Function
-		}
-	}
-	=====*/
-
-
 dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	// summary:
 	//		An extended version of dijit.layout.ContentPane.
@@ -76,111 +54,19 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	// ioArgs: Object
 	//		makes it possible to add custom args to xhrGet, like ioArgs.headers['X-myHeader'] = 'true'
 	ioArgs: {},
-
-	// onLoadDeferred: dojo.Deferred
-	//		callbackchain will start when onLoad occurs
-	onLoadDeferred: new dojo.Deferred(),
-
-	// onUnloadDeferred: dojo.Deferred
-	//		callbackchain will start when onUnload occurs
-	onUnloadDeferred: new dojo.Deferred(),
-
-	setHref: function(url){
-		// summary: replace current content with url's content
-		return ;// dojox.layout.ContentPane.DeferredHandle
-	},
-
-	refresh: function(){
-		// summary: force a re-download of content
-		return ;// dojox.layout.ContentPane.DeferredHandle 
-	},
-
 	======*/
 
 	constructor: function(){
 		// init per instance properties, initializer doesn't work here because how things is hooked up in dijit._Widget
 		this.ioArgs = {};
 		this.ioMethod = dojo.xhrGet;
-		this.onLoadDeferred = new dojo.Deferred();
-		this.onUnloadDeferred = new dojo.Deferred();
-	},
-
-	postCreate: function(){
-		// override to support loadDeferred
-		this._setUpDeferreds();
-
-		dijit.layout.ContentPane.prototype.postCreate.apply(this, arguments);
 	},
 
 	onExecError: function(e){
-		// summary
+		// summary:
 		//		event callback, called on script error or on java handler error
 		//		overide and return your own html string if you want a some text 
 		//		displayed within the ContentPane
-	},
-
-	_setContentAttr: function(data){
-		var defObj = this._setUpDeferreds();
-		this.inherited(arguments);
-		return defObj; // dojox.layout.ContentPane.DeferredHandle
-	},
-
-	cancel: function(){
-		// summary: cancels a inflight download
-		if(this._xhrDfd && this._xhrDfd.fired == -1){
-			// we are still in flight, which means we should reset our DeferredHandle
-			// otherwise we will trigger onUnLoad chain of the canceled content,
-			// the canceled content have never gotten onLoad so it shouldn't get onUnload
-			this.onUnloadDeferred = null;
-		}
-		dijit.layout.ContentPane.prototype.cancel.apply(this, arguments);
-	},
-
-	_setUpDeferreds: function(){
-		var _t = this, cancel = function(){ _t.cancel();	};
-		var onLoad = (_t.onLoadDeferred = new dojo.Deferred());
-		var onUnload = (_t._nextUnloadDeferred = new dojo.Deferred());
-		return {
-			cancel: cancel,
-			addOnLoad: function(func){onLoad.addCallback(func);},
-			addOnUnload: function(func){onUnload.addCallback(func);}
-		};
-	},
-
-	_onLoadHandler: function(){
-		dijit.layout.ContentPane.prototype._onLoadHandler.apply(this, arguments);
-		if(this.onLoadDeferred){
-			this.onLoadDeferred.callback(true);
-		}
-	},
-
-	_onUnloadHandler: function(){
-		this.isLoaded = false;
-		this.cancel();// need to cancel so we don't get any inflight suprises
-		if(this.onUnloadDeferred){
-			this.onUnloadDeferred.callback(true);
-		}
-
-		dijit.layout.ContentPane.prototype._onUnloadHandler.apply(this, arguments);
-
-		if(this._nextUnloadDeferred){
-			this.onUnloadDeferred = this._nextUnloadDeferred;
-		}
-	},
-
-	_onError: function(type, err){
-		dijit.layout.ContentPane.prototype._onError.apply(this, arguments);
-		if(this.onLoadDeferred){
-			this.onLoadDeferred.errback(err);
-		}
-	},
-
-	refresh: function(){
-		// summary:
-		//		Sets up for a xhrLoad, load is deferred until widget is showing
-		var defObj = this._setUpDeferreds();
-		this.inherited(arguments);
-		return defObj;
 	},
 
 	_setContent: function(cont){
@@ -219,5 +105,3 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	}
 	// could put back _renderStyles by wrapping/aliasing dojox.html._ContentSetter.prototype._renderStyles
 });
-
-})();

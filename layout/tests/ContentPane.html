@@ -59,13 +59,6 @@
 			function ieTrimSpaceBetweenTags(str){
 				return str.replace(/(<[a-z]*[^>]*>)\s*/ig, "$1");
 			}
-			function testHandle(t, handle){
-				t.assertTrue(handle);
-				t.assertTrue(dojo.isFunction(handle.cancel));
-				t.assertTrue(dojo.isFunction(handle.addOnLoad));
-				t.assertTrue(dojo.isFunction(handle.addOnUnload));
-			}
-
 
 			doh.register("basicChecks", [
 					{
@@ -242,62 +235,45 @@
 							console.log("basicChecks: " + this.name);
 							var unLoadCalled, loadCalled;
 							var handle = pane1.attr('content', "test 'var handle = attr('content', '')'");
-							testHandle(t, handle);
 
-							handle.addOnLoad(function(){
+							handle.addCallback(function(){
 								loadCalled = true;
 							});
 
 							t.assertTrue(loadCalled);
-
-							handle.addOnUnload(function(){
-								unLoadCalled = true;
-							});
-
-							// test unLoad callback above
-							handle = pane1.attr('content', "testing 'addOnUnload(callback)'");
-							t.assertTrue(unLoadCalled);
-							testHandle(t, handle);
 						}
 					},
 					/*
-						See #7351: due to cancel() race condition this can cause infinite loop in test.
+						See #7531: due to cancel() race condition this can cause infinite loop in test.
 					{
 						name: 'handleFrom_setHref_and_refresh_and_cancelWorking',
 						timeout: 3400,
 						runTest: function(t){
 							console.log("basicChecks: " + this.name);
-							var unloadCalled, loadCalled;
-							var r_unloadCalled, r_loadCalled;
+							var loadCalled;
+							var r_loadCalled;
 							var r_handle, href = dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=test');
 
 							var handle = pane1.attr('href', href);
-							testHandle(t, handle);
-							handle.addOnLoad(function(){
+							t.assertTrue(handle);
+							handle.addCallback(function(){
 								console.log("handleFrom_setHref_and_refresh_and_cancelWorking: handle onLoad");
 								loadCalled = 'loadCalled';
 							});
-							handle.addOnUnload(function(){
-								console.log("handleFrom_setHref_and_refresh_and_cancelWorking: handle onUnLoad");
-								unloadCalled = 'unloadCalled';
-							});
 
+							// Since we cancel immediately the deferred should never fire
 							handle.cancel();
 
 							setTimeout(function(){
 								console.log("handleFrom_setHref_and_refresh_and_cancelWorking: setting href: " + href);
 								pane1.href = href;
 								handle = pane1.refresh();
-								testHandle(t, handle); // might throw and kill rest of test, infact we rely on that
+								t.assertTrue(handle);
 								r_handle = 'refreshHandle ok';
-								handle.addOnLoad(function(){
+								handle.addCallback(function(){
 									console.log("handleFrom_setHref_and_refresh_and_cancelWorking: 2ary handle onload");
 									r_loadCalled = 'refresh loadCalled';
 									pane1.attr('content', ''); // trigger unload
-								});
-								handle.addOnUnload(function(){
-									console.log("handleFrom_setHref_and_refresh_and_cancelWorking: 2ary handle onunload");
-									r_unloadCalled = 'refresh unloadCalled';
 								});
 							}, 1500); // wait for page load in case cancel didn't work
 
@@ -306,66 +282,15 @@
 							setTimeout(d.getTestCallback(function(){
 								// load from the href (was canceled)
 								t.assertEqual(undefined, loadCalled);
-								t.assertEqual(undefined, unloadCalled);
 
 								// load from the refresh
 								t.assertEqual('refreshHandle ok', r_handle);
 								t.assertEqual('refresh loadCalled', r_loadCalled);
-								t.assertEqual('refresh unloadCalled', r_unloadCalled);
 							}), 3200);
 
 							return d;
 						}
-					},*/
-					{
-						name: 'onLoadDeferred|onUnloadDeferred_call_order',
-						timeout: 6200,
-						runTest: function(t){
-							console.log("basicChecks: " + this.name);
-							pane1.preventCache = true;
-							var count = {u: 0, l: 0}; // need a object for the ref in closures
-							var href = dojo.moduleUrl('dijit', 'tests/layout/getResponse.php?delay=100&message=test').toString();
-		
-
-							function next(){
-								if(!isNaN(count.u) && !isNaN(count.l)){
-									if(count.u < 4 && count.l < 4){
-										pane1.attr('href', href);
-										pane1.onLoadDeferred.addCallback(makeCallback('l', 'u', 1));
-										pane1.onUnloadDeferred.addCallback(makeCallback('u', 'l', 0));
-									}else{
-										pane1.attr('content', ''); // unload to get even
-									}
-								}
-							}
-
-							function makeCallback(tryVar, compareVar, inc){
-								return function(){
-									//console.debug(tryVar, count[tryVar] + 1, count[compareVar] + inc)
-									if((++count[tryVar]) === (count[compareVar] + inc)){
-										count[tryVar];
-										if(tryVar == 'l'){
-											next(); // onload event, trigger new load
-										}
-									}else{
-										tryVar = 'failed '+(tryVar=='u'?'unload':'load')+' on '+count[tryVar]+' try';
-									}
-								}
-							}
-							
-							next(); // starts the loop
-	
-							var d = new t.Deferred();
-							setTimeout(d.getTestCallback(function(){
-								t.assertEqual(4, count.l, "4 loads");
-								t.assertEqual(4, count.u, "4 unloads")
-							}), 6000); // 1.5 sec max on each load should be enough
-							return d;
-						},
-						tearDown: function(){
-							delete pane1.preventCache;
-						}
-					}
+					}*/
 				]
 			);
 
