@@ -940,7 +940,7 @@ dojo.requireLocalization("dijit", "loading");
 					return this.focus.focusView.rowNodes[inRowIndex];
 			}else{ // search through views
 				for (var i = 0, cView; (cView = this.views.views[i]); i++) {
-					if (!(cView instanceof dojox.grid._views)) {
+					if (!(cView instanceof dojox.grid._RowSelector)) {
 						return cView.rowNodes[inRowIndex];
 					}
 				}
