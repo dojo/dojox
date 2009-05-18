@@ -76,6 +76,7 @@ dojox.json.ref = {
 				if(index[id] && ((it instanceof Array) == (index[id] instanceof Array))){ 
 					target = index[id];
 					delete target.$ref; // remove this artifact
+					delete target._loadObject;
 					update = true;
 				}else{
 				 	var proto = schema && schema.prototype; // and if has a prototype
@@ -128,7 +129,6 @@ dojox.json.ref = {
 									}
 									rewalking = true; // we only want to add it once
 									val = walk(val, false, val[refAttribute], propertyDefinition);
-								}else{
 									// create a lazy loaded object
 									val._loadObject = args.loader;
 								}

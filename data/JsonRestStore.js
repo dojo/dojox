@@ -3,7 +3,6 @@ dojo.provide("dojox.data.JsonRestStore");
 dojo.require("dojox.data.ServiceStore");
 dojo.require("dojox.rpc.JsonRest");
 
-
 dojo.declare("dojox.data.JsonRestStore",
 	dojox.data.ServiceStore,
 	{
@@ -109,15 +108,6 @@ dojo.declare("dojox.data.JsonRestStore",
 				}
 			});
 			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
-			//setup a byId alias to the api call
-			if(typeof options.target == 'string' && !this.service){
-				this.service = dojox.rpc.JsonRest.services[this.target] || 
-						dojox.rpc.Rest(this.target, true); 
-				// create a default Rest service
-			}
-			if(this.service._store){
-				return this.service._store;
-			}
 			dojox.rpc.JsonRest.registerService(this.service, options.target, this.schema);
 			this.schema = this.service._schema = this.schema || this.service._schema || {};
 			// wrap the service with so it goes through JsonRest manager 
@@ -131,8 +121,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			}
 			this._constructor.prototype = constructor.prototype;
 			this._index = dojox.rpc.Rest._index;
-			return this;
-			//given a url, load json data from as the store
 		},
 		referenceIntegrity: true,
 		target:"",
@@ -388,6 +376,24 @@ dojo.declare("dojox.data.JsonRestStore",
 
 	}
 );
+(function(){
+	var defaultJRS = dojox.data.JsonRestStore;
+	var newJRS = dojox.data.JsonRestStore = function(options){
+		dojo.mixin(this, options);
+		if(typeof this.target == 'string' && !this.service){
+			this.service = dojox.rpc.JsonRest.services[this.target] || 
+					dojox.rpc.Rest(this.target, true); 
+			// create a default Rest service
+		}
+		if(this.service._store){
+			return this.service._store;
+		}
+		defaultJRS.call(this,options);
+		return this;
+	}
+	dojo.mixin(newJRS, defaultJRS);
+	newJRS.prototype = defaultJRS.prototype;
+})();
 dojox.data._getStoreForItem = function(item){
 	if(item.__id){
 		var serviceAndId = dojox.rpc.JsonRest.getServiceAndId(item.__id);
