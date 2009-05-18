@@ -254,7 +254,9 @@ dojo.require("dojo.data.util.filter");
 				var current = sort.shift();
 				if(!current){
 					// sort order for ties and no sort orders
-					return function(){}; // keep the order unchanged
+					return function(){
+						return 0;// keep the order unchanged
+					}; 
 				}
 				var attribute = current.attribute;
 				var descending = !!current.descending;
