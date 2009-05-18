@@ -18,7 +18,7 @@ dojo.require("dojox.rpc.Rest");
 			index: Rest._index,
 			timeStamps: timeStamp && Rest._timeStamps,
 			time: timeStamp,
-			idPrefix: service.servicePath,
+			idPrefix: service.servicePath.replace(/[^\/]*$/,''),
 			idAttribute: jr.getIdAttribute(service),
 			schemas: jr.schemas,
 			loader:	jr._loader,
@@ -27,6 +27,7 @@ dojo.require("dojox.rpc.Rest");
 		
 	}
 	jr = dojox.rpc.JsonRest={
+		serviceClass: dojox.rpc.Rest,
 		conflictDateHeader: "If-Unmodified-Since",
 		commit: function(kwArgs){
 			// summary:
@@ -306,9 +307,18 @@ dojo.require("dojox.rpc.Rest");
 			// 		is returned as an object with a service property and an id property
 			//	absoluteId:
 			//		This is the absolute id of the object
-			var parts = absoluteId.match(/^(.*\/)([^\/]*)$/);
-			var svc = jr.services[parts[1]] || new dojox.rpc.Rest(parts[1], true); // use an existing or create one
-			return { service: svc, id:parts[2] };
+			var svc, parts = absoluteId.match(/^(.*\/)([^\/]*)$/);
+			for(var service in jr.services){
+				var re = new RegExp("^"+service);
+				if(absoluteId.match(re)){
+					svc = jr.services[service];
+					return {service: svc, id:absoluteId.substring(service.length)};
+				}
+			}
+			if (!svc){
+				svc = new jr.serviceClass(parts[1], true);
+			}			
+			return {service: svc, id:parts[2]};
 		},
 		services:{},
 		schemas:{},
@@ -321,8 +331,7 @@ dojo.require("dojox.rpc.Rest");
 			//		This is the path that is used for all the ids for the objects returned by service
 			//	schema:
 			//		This is a JSON Schema object to associate with objects returned by this service
-			servicePath = servicePath || service.servicePath;
-			servicePath = service.servicePath = servicePath.match(/\/$/) ? servicePath : (servicePath + '/'); // add a trailing / if needed
+			servicePath = service.servicePath = servicePath || service.servicePath;
 			service._schema = jr.schemas[servicePath] = schema || service._schema || {};
 			jr.services[servicePath] = service;
 		},

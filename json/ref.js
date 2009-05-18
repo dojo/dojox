@@ -1,15 +1,17 @@
 dojo.provide("dojox.json.ref");
 dojo.require("dojo.date.stamp");
 
-// summary:
-// Adds advanced JSON {de}serialization capabilities to the base json library.
-// This enhances the capabilities of dojo.toJson and dojo.fromJson,
-// adding referencing support, date handling, and other extra format handling.
-// On parsing, references are resolved. When references are made to
-// ids/objects that have been loaded yet, the loader function will be set to
-// _loadObject to denote a lazy loading (not loaded yet) object. 
 
 dojox.json.ref = {
+	// summary:
+	// 		Adds advanced JSON {de}serialization capabilities to the base json library.
+	// 		This enhances the capabilities of dojo.toJson and dojo.fromJson,
+	// 		adding referencing support, date handling, and other extra format handling.
+	// 		On parsing, references are resolved. When references are made to
+	// 		ids/objects that have been loaded yet, the loader function will be set to
+	// 		_loadObject to denote a lazy loading (not loaded yet) object. 
+
+
 	resolveJson: function(/*Object*/ root,/*Object?*/ args){
 		// summary:
 		// 		Indexes and resolves references in the JSON object.
@@ -45,6 +47,7 @@ dojox.json.ref = {
 		//		An object, the result of the processing
 		args = args || {};
 		var idAttribute = args.idAttribute || 'id';
+		var refAttribute = this.refAttribute;
 		var prefix = args.idPrefix || ''; 
 		var assignAbsoluteIds = args.assignAbsoluteIds;
 		var index = args.index || {}; // create an index if one doesn't exist
@@ -99,7 +102,7 @@ dojox.json.ref = {
 					if(propertyDefinition && propertyDefinition.format == 'date-time' && typeof val == 'string'){
 						val = dojo.date.stamp.fromISOString(val);
 					}else if((typeof val =='object') && val && !(val instanceof Date)){
-						ref=val.$ref;
+						ref=val[refAttribute];
 						if(ref){ // a reference was found
 							// make sure it is a safe reference
 							delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
@@ -124,7 +127,7 @@ dojox.json.ref = {
 										reWalk.push(target); // we need to rewalk it to resolve references
 									}
 									rewalking = true; // we only want to add it once
-									val = walk(val, false, val.$ref, propertyDefinition);
+									val = walk(val, false, val[refAttribute], propertyDefinition);
 								}else{
 									// create a lazy loaded object
 									val._loadObject = args.loader;
@@ -201,7 +204,9 @@ dojox.json.ref = {
 	// return:
 	//		An object, the result of the evaluation
 		function ref(target){ // support call styles references as well
-			return {$ref:target};
+			var refObject = {};
+			refObject[this.refAttribute] = target;
+			return refObject;
 		}
 		try{
 			var root = eval('(' + str + ')'); // do the eval
@@ -235,6 +240,7 @@ dojox.json.ref = {
 		//		a String representing the serialized version of the passed object.
 		var useRefs = this._useRefs;
 		var addProp = this._addProp;
+		var refAttribute = this.refAttribute;
 		idPrefix = idPrefix || ''; // the id prefix for this context
 		var paths={};
 		var generated = {};
@@ -259,9 +265,9 @@ dojox.json.ref = {
 								ref = id;
 							}
 						}
-						return serialize({
-							$ref: ref
-						},'#');
+						var refObject = {};
+						refObject[refAttribute] = ref;
+						return serialize(refObject,'#');
 					}
 					path = id;
 				}else{
@@ -324,6 +330,11 @@ dojox.json.ref = {
 	_addProp: function(id, prop){
 		return id + (id.match(/#/) ? id.length == 1 ? '' : '.' : '#') + prop;
 	},
+	//	refAttribute: String
+	//		This indicates what property is the reference property. This acts like the idAttribute
+	// 		except that this is used to indicate the current object is a reference or only partially 
+	// 		loaded. This defaults to "$ref". 
+	refAttribute: "$ref",
 	_useRefs: false,
 	serializeFunctions: false
 }

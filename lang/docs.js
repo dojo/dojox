@@ -37,9 +37,11 @@ dojo.provide("dojox.lang.docs");
 			type = type.toLowerCase();
 		}else if(type == "bool"){
 			type = "boolean";
-		}else{
+		}else if(type){
 			typeObj = dojo.getObject(type) || {};
 			dontModify = true;
+		}else{
+			typeObj = {};
 		}
 		typeObj = typeObj || {type:type};
 		if(array){
@@ -66,8 +68,10 @@ dojo.provide("dojox.lang.docs");
 			if(docForClass.properties){
 				var props = docForClass.properties;
 				for(var i=0, l=props.length; i<l; i++){
-					var propDef = clazz.properties[props[i].name] = getType(props[i]);
-					propDef.description = props[i].summary;
+					if(props[i].scope == "prototype"){
+						var propDef = clazz.properties[props[i].name] = getType(props[i]);
+						propDef.description = props[i].summary;
+					}
 				}
 			}
 
@@ -76,7 +80,7 @@ dojo.provide("dojox.lang.docs");
 				var methods = docForClass.methods;
 				for(i=0, l=methods.length; i<l; i++){
 					name = methods[i].name;
-					if(name){
+					if(name && methods[i].scope == "prototype"){
 						var methodDef = clazz.methods[name] = {};
 						methodDef.description = methods[i].summary;
 						var parameters = methods[i].parameters;
@@ -86,12 +90,15 @@ dojo.provide("dojox.lang.docs");
 								var param = parameters[j];
 								var paramDef = methodDef.parameters[j] = getType(param);
 								paramDef.name = param.name;
-								paramDef.optional =  "optional" == param.usage;
+								paramDef.optional = "optional" == param.usage;
 							}
 						}
 						var ret = methods[i]['return-types'];
 						if(ret && ret[0]){
-							methodDef.returns = getType(ret[0]);
+							var returns = getType(ret[0]);
+							if(returns.type){
+								methodDef.returns = returns;
+							}
 						}
 					}
 				}

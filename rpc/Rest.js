@@ -59,7 +59,6 @@ dojo.provide("dojox.rpc.Rest");
 		//		Creates a REST service using the provided path.
 		var service;
 		// it should be in the form /Table/
-		path = path.match(/\/$/) ? path : (path + '/');
 		service = function(id, args){
 			return drr._get(service, id, args);
 		};

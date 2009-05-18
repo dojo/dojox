@@ -13,7 +13,7 @@ dojo.require("dojox.json.schema");
 			this.__props__ = {};
 			for(i in methods){
 				value = this[i];
-				if(!value.__typedMethod__){
+				if(value && !value.__typedMethod__){
 					// add typing checking to the method, going up the proto chain to find the right one
 					var proto = this;
 					while(!proto.hasOwnProperty(i) && proto.__proto__){
@@ -56,7 +56,7 @@ dojo.require("dojox.json.schema");
 						});
 						self.__defineSetter__(i, function(value){
 							jsonSchema.mustBeValid(jsonSchema.checkPropertyChange(value, properties[i]));
-							this.__props__[i] = value;
+							return this.__props__[i] = value;
 						});
 					})(i);
 				}

@@ -111,7 +111,12 @@ dojo.declare("dojox.data.JsonRestStore",
 			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
 			//setup a byId alias to the api call
 			if(typeof options.target == 'string' && !this.service){
-				this.service = dojox.rpc.Rest(this.target,true); // create a default Rest service
+				this.service = dojox.rpc.JsonRest.services[this.target] || 
+						dojox.rpc.Rest(this.target, true); 
+				// create a default Rest service
+			}
+			if(this.service._store){
+				return this.service._store;
 			}
 			dojox.rpc.JsonRest.registerService(this.service, options.target, this.schema);
 			this.schema = this.service._schema = this.schema || this.service._schema || {};
@@ -126,6 +131,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			}
 			this._constructor.prototype = constructor.prototype;
 			this._index = dojox.rpc.Rest._index;
+			return this;
 			//given a url, load json data from as the store
 		},
 		referenceIntegrity: true,
@@ -384,9 +390,13 @@ dojo.declare("dojox.data.JsonRestStore",
 );
 dojox.data._getStoreForItem = function(item){
 	if(item.__id){
-		var servicePath = item.__id.toString().match(/.*\//)[0];
-		var service = dojox.rpc.JsonRest.services[servicePath];
-		return service ? service._store : new dojox.data.JsonRestStore({target:servicePath});
+		var serviceAndId = dojox.rpc.JsonRest.getServiceAndId(item.__id);
+		if(serviceAndId && serviceAndId.service._store){
+			return serviceAndId.service._store;
+		}else{
+			var servicePath = item.__id.toString().match(/.*\//)[0];
+			return new dojox.data.JsonRestStore({target:servicePath});
+		}
 	}
 	return null;
 };
