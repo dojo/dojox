@@ -103,7 +103,7 @@ dojox.json.ref = {
 						if(ref){ // a reference was found
 							// make sure it is a safe reference
 							delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
-							var path = ref.replace(/(#)([^\.\[])/,'$1.$2').match(/(^([^\[]*\/)?[^#\.\[]*)#?([\.\[].*)?/); // divide along the path
+							var path = ref.toString().replace(/(#)([^\.\[])/,'$1.$2').match(/(^([^\[]*\/)?[^#\.\[]*)#?([\.\[].*)?/); // divide along the path
 							if((ref = (path[1]=='$' || path[1]=='this' || path[1]=='') ? root : index[(prefix + path[1]).replace(pathResolveRegex,'$2$3')])){  // a $ indicates to start with the root, otherwise start with an id
 								// if there is a path, we will iterate through the path references
 								if(path[3]){
@@ -113,19 +113,19 @@ dojox.json.ref = {
 								}
 							}
 							if(ref){
+								val = ref;
+							}else{
 								// otherwise, no starting point was found (id not found), if stop is set, it does not exist, we have
 								// unloaded reference, if stop is not set, it may be in a part of the graph not walked yet,
 								// we will wait for the second loop
-								val = ref;
-							}else{
 								if(!stop){
 									var rewalking;
 									if(!rewalking){
 										reWalk.push(target); // we need to rewalk it to resolve references
 									}
 									rewalking = true; // we only want to add it once
-								}else{
 									val = walk(val, false, val.$ref, propertyDefinition);
+								}else{
 									// create a lazy loaded object
 									val._loadObject = args.loader;
 								}

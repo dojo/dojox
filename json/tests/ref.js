@@ -38,6 +38,13 @@ doh.register("dojox.json.tests.ref", [
 		t.t(testObj.barks);
 		t.t(testObj.aTime instanceof Date);
 		t.t(testObj.eats.meows);
+	},
+	function secondLevelLazy(t) {
+		var testStr = '[{$ref:1,foo:"bar"},{$ref:2, me:{$ref:2},first:{$ref:1}}]';
+		var mirrorObj = dojox.json.ref.fromJson(testStr);
+		t.is(mirrorObj[0].foo,"bar");
+		t.is(mirrorObj[1],mirrorObj[1].me);
+		t.is(mirrorObj[0],mirrorObj[1].first);
 	}
 	
 	/*,
