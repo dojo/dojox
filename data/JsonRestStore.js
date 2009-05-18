@@ -108,7 +108,15 @@ dojo.declare("dojox.data.JsonRestStore",
 				}
 			});
 			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
-			dojox.rpc.JsonRest.registerService(this.service, options.target, this.schema);
+			
+			if(typeof this.target == 'string' && !this.service){
+				this.target = this.target.match(/\/$/) || this.allowNoTrailingSlash ? this.target : (this.target + '/');
+				this.service = dojox.rpc.JsonRest.services[this.target] || 
+						dojox.rpc.Rest(this.target, true); 
+				// create a default Rest service
+			}
+			
+			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
 			this.schema = this.service._schema = this.schema || this.service._schema || {};
 			// wrap the service with so it goes through JsonRest manager 
 			this.service._store = this;
@@ -124,6 +132,11 @@ dojo.declare("dojox.data.JsonRestStore",
 		},
 		referenceIntegrity: true,
 		target:"",
+		// summary:
+		// 		Allow no trailing slash on target paths. This is generally discouraged since
+		// 		it creates prevents simple scalar values from being used a relative URLs.
+		// 		Disabled by default.  
+		allowNoTrailingSlash: false,		
 		//Write API Support
 		newItem: function(data, parentInfo){
 			// summary:
@@ -342,7 +355,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			if(!id){
 				return id;
 			}
-			var prefix = this.service.servicePath;
+			var prefix = this.service.servicePath.replace(/[^\/]*$/,'');
 			// support for relative or absolute referencing with ids 
 			return id.substring(0,prefix.length) != prefix ?  id : id.substring(prefix.length); // String
 		},
@@ -355,7 +368,7 @@ dojo.declare("dojox.data.JsonRestStore",
 				store = serviceAndId.service._store;
 				args.identity = serviceAndId.id; 
 			}
-			args._prefix = store.service.servicePath;
+			args._prefix = store.service.servicePath.replace(/[^\/]*$/,'');
 			return store.inherited(arguments);
 		},
 		//Notifcation Support
@@ -379,14 +392,13 @@ dojo.declare("dojox.data.JsonRestStore",
 (function(){
 	var defaultJRS = dojox.data.JsonRestStore;
 	var newJRS = dojox.data.JsonRestStore = function(options){
-		dojo.mixin(this, options);
-		if(typeof this.target == 'string' && !this.service){
-			this.service = dojox.rpc.JsonRest.services[this.target] || 
-					dojox.rpc.Rest(this.target, true); 
+		if(typeof options.target == 'string' && !options.service){
+			options.service = dojox.rpc.JsonRest.services[options.target] || 
+					dojox.rpc.Rest(options.target, true); 
 			// create a default Rest service
 		}
-		if(this.service._store){
-			return this.service._store;
+		if(options.service._store){
+			return options.service._store;
 		}
 		defaultJRS.call(this,options);
 		return this;

@@ -94,7 +94,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 				setupHierarchy(schema);
 				setupMethods(schema.methods, schema.prototype = schema.prototype || {});
 				setupMethods(schema.staticMethods, schema);
-				stores[schemas[i].id] = new dojox.data.PersevereStore({target:new dojo._Url(path,schemas[i].id) + '',schema:schema});
+				stores[schemas[i].id] = new dojox.data.PersevereStore({target:new dojo._Url(path,schemas[i].id) + '/',schema:schema});
 			}
 		}
 		return (results = stores);
