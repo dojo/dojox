@@ -54,15 +54,19 @@ var formatDate = function(inDatum, inRowIndex){
 var getImage = function(inRowIndex, inItem){
 	if(!inItem){ return '&nbsp;'; }
 	var thumb = getCellData(inItem, "Thumbnail");
-	var o = {
+	return {
 		href: getCellData(inItem, "ClickUrl"),
 		src: thumb.Url,
 		width: thumb.Width,
 		height: thumb.Height
-	}
-	return dojo.string.substitute(
-		'<a href="${href}" target="_blank"><img border=0 src="${src}" width="${width}" height="${height}"></a>', o);
+	};
 };
+
+var formatImage = function(result){
+	return typeof result == "object" ? dojo.string.substitute(
+		'<a href="${href}" target="_blank"><img border=0 src="${src}" width="${width}" height="${height}"></a>', result) :
+		result;	
+}
 
 var getDimensions = function(inRowIndex, inItem){
 	if(!inItem){ return '&nbsp;'; }
