@@ -119,23 +119,23 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 		// |		date1.setDate(2);
 		date = parseInt(date);
 
-		if(date > 0 && date <= this.getDaysInBuddhistMonth(this._month, this._year)){
+		if(date > 0 && date <= this._getDaysInMonth(this._month, this._year)){
 			this._date = date;
 		}else{
 			var mdays;
 			if(date>0){
-				for(mdays = this.getDaysInBuddhistMonth(this._month, this._year);	
+				for(mdays = this._getDaysInMonth(this._month, this._year);	
 					date > mdays; 
-						date -= mdays,mdays =this.getDaysInBuddhistMonth(this._month, this._year)){
+						date -= mdays,mdays = this._getDaysInMonth(this._month, this._year)){
 					this._month++;
 					if(this._month >= 12){this._year++; this._month -= 12;}
 				}
 
 				this._date = date;
 			}else{
-				for(mdays = this.getDaysInBuddhistMonth((this._month-1)>=0 ?(this._month-1) :11 ,((this._month-1)>=0)? this._year: this._year-1);	
+				for(mdays = this._getDaysInMonth((this._month-1)>=0 ?(this._month-1) :11 ,((this._month-1)>=0)? this._year: this._year-1);	
 						date <= 0; 
-							mdays = this.getDaysInBuddhistMonth((this._month-1)>=0 ? (this._month-1) :11,((this._month-1)>=0)? this._year: this._year-1)){
+							mdays = this._getDaysInMonth((this._month-1)>=0 ? (this._month-1) :11,((this._month-1)>=0)? this._year: this._year-1)){
 					this._month--;
 					if(this._month < 0){this._year--; this._month += 12;}
 
@@ -165,7 +165,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 		// |		date1.setMonth(0); //first month
 		this._year += Math.floor(month / 12);
 		this._month = Math.floor(month % 12);
-		for(;this._month<0;this._month=this._month+12);
+		for(; this._month < 0; this._month = this._month+12);
 	},
 			
 	setHours: function(){
@@ -190,7 +190,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 						
 		while(hours >= 24){
 			this._date++;
-			var mdays = this.getDaysInBuddhistMonth(this._month, this._year);
+			var mdays = this._getDaysInMonth(this._month, this._year);
 			if(this._date > mdays){
 					this._month ++;
 					if(this._month >= 12){this._year++; this._month -= 12;}
@@ -208,7 +208,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 			if(this._hours >= 24){		 
 				this._date++;
 				this._hours -= 24;
-				var mdays = this.getDaysInBuddhistMonth(this._month, this._year);
+				var mdays = this._getDaysInMonth(this._month, this._year);
 				if(this._date > mdays){
 						this._month ++;
 						if(this._month >= 12){this._year++; this._month -= 12;}
@@ -230,7 +230,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 				if(this._hours >= 24){		 
 					this._date++;
 					this._hours -= 24;
-					var mdays = this.getDaysInBuddhistMonth(this._month, this._year);
+					var mdays = this._getDaysInMonth(this._month, this._year);
 					if(this._date > mdays){
 						this._month ++;
 						if(this._month >= 12){this._year++; this._month -= 12;}
@@ -256,7 +256,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 					if(this._hours >= 24){		 
 						this._date++;
 						this._hours -= 24;
-						var mdays = this.getDaysInBuddhistMonth(this._month, this._year);
+						var mdays = this._getDaysInMonth(this._month, this._year);
 				if(this._date > mdays){
 					this._month ++;
 					if(this._month >= 12){this._year++; this._month -= 12;}
@@ -275,8 +275,8 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 		return this._date + ", " + this._month + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
 	},
 
-	getDaysInBuddhistMonth: function(/*number*/month, /*number*/ year){
-		// summary: returns the number of days in the month used
+//FIXME: remove this and replace usage with dojox.date.buddhist.getDaysInMonth?
+	_getDaysInMonth: function(/*number*/month, /*number*/ year){
 		return dojo.date.getDaysInMonth(new Date(year-543, month));
 	},
 
@@ -295,19 +295,13 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 	},
 
 	toGregorian: function(){
-		// summary: This returns the equevalent Grogorian date value in Date object
-		var gdate = new Date(this._year-543, this._month, this._date);
-		gdate.setHours(this._hours);
-		gdate.setMilliseconds(this._milliseconds);
-		gdate.setMinutes(this._minutes);
-		gdate.setSeconds(this._seconds); 
-		return gdate;
+		// summary: This returns the equivalent Gregorian date value as a Date object
+		return new Date(this._year-543, this._month, this._date, this._hours, this._minutes, this._seconds, this._milliseconds); // Date
 	},
 	
 	getDay: function(){
 		// summary: This function return Week Day value ( 0 - 6 )
-		var gd = this.toGregorian();
-		return gd.getDay();
+		return this.toGregorian().getDay(); // int
 	}
 });
 

@@ -6,15 +6,19 @@ dojo.require("dojo.date"); // for compare
 	
 // Utility methods to do arithmetic calculations with buddhist.Dates
 
-	// added for compat to date
-dojox.date.buddhist.getDaysInMonth = function(/*buddhist.Date*/month){
-	return month.getDaysInBuddhistMonth(month.getMonth(), month.getFullYear());
+dojox.date.buddhist.getDaysInMonth = function(/*buddhist.Date*/dateObject){
+	return dojo.date.getDaysInMonth(dateObject.toGregorian());
 };
 
+dojox.date.buddhist.isLeapYear = function(/*buddhist.Date*/dateObject){
+	return dojo.date.isLeapYear(dateObject.toGregorian());
+};
+
+//FIXME: reduce compare, add, diff also
 dojox.date.buddhist.compare = function(/*buddhist.Date*/date1, /*buddhist.Date*/date2, /*String?*/portion){
 //	summary:
 	//		Compare two buddhist date objects by date, time, or both.
-	return dojo.date.compare(date1,date2, portion);
+	return dojo.date.compare(date1,date2, portion); //FIXME
 };
 
 
