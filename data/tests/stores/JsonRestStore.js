@@ -297,7 +297,6 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 			}
 		},
 		function tryToLoadSameTarget(t){
-			t.is(jsonStore, new dojox.data.JsonRestStore({service:testServices.jsonRestStore}));
 			t.is(
 				new dojox.data.JsonRestStore({target:"/something/"}),
 				new dojox.data.JsonRestStore({target:"/something/"}));
