@@ -392,15 +392,14 @@ dojo.declare("dojox.data.JsonRestStore",
 (function(){
 	var defaultJRS = dojox.data.JsonRestStore;
 	var newJRS = dojox.data.JsonRestStore = function(options){
-		if(typeof options.target == 'string' && !options.service){
-			options.service = dojox.rpc.JsonRest.services[options.target] || 
-					dojox.rpc.Rest(options.target, true); 
-			// create a default Rest service
+		if(typeof options.target == 'string'){
+			options.target = options.target.match(/\/$/) || options.allowNoTrailingSlash ? options.target : (options.target + '/');
+			var store = (dojox.rpc.JsonRest.services[options.target] || {})._store;
+			if(store){
+				return store;
+			}
 		}
-		if(options.service._store){
-			return options.service._store;
-		}
-		defaultJRS.call(this,options);
+		defaultJRS.call(this, options);
 		return this;
 	}
 	dojo.mixin(newJRS, defaultJRS);

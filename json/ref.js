@@ -56,10 +56,10 @@ dojox.json.ref = {
 		var pathResolveRegex = /^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
 		var addProp = this._addProp;
 		var F = function(){};
-		function walk(it, stop, defaultId, schema, defaultObject){
+		function walk(it, stop, defaultId, needsPrefix, schema, defaultObject){
 			// this walks the new graph, resolving references and making other changes
 		 	var update, val, id = idAttribute in it ? it[idAttribute] : defaultId;
-		 	if(id !== undefined){
+		 	if((id !== undefined) && needsPrefix){
 		 		id = (prefix + id).replace(pathResolveRegex,'$2$3');
 		 	}
 		 	var target = defaultObject || it;
@@ -128,7 +128,7 @@ dojox.json.ref = {
 										reWalk.push(target); // we need to rewalk it to resolve references
 									}
 									rewalking = true; // we only want to add it once
-									val = walk(val, false, val[refAttribute], propertyDefinition);
+									val = walk(val, false, val[refAttribute], true, propertyDefinition);
 									// create a lazy loaded object
 									val._loadObject = args.loader;
 								}
@@ -139,7 +139,8 @@ dojox.json.ref = {
 								val = walk(
 									val,
 									reWalk==it,
-									id && addProp(id, i), // the default id to use
+									id === undefined ? undefined : addProp(id, i), // the default id to use
+									false,
 									propertyDefinition, 
 									// if we have an existing object child, we want to 
 									// maintain it's identity, so we pass it as the default object
@@ -185,7 +186,7 @@ dojox.json.ref = {
 			return target;
 		}
 		if(root && typeof root == 'object'){
-			root = walk(root,false,args.defaultId); // do the main walk through
+			root = walk(root,false,args.defaultId, true); // do the main walk through
 			walk(reWalk,false); // re walk any parts that were not able to resolve references on the first round
 		}
 		return root;

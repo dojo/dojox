@@ -248,6 +248,7 @@ dojo.require("dojox.rpc.Rest");
 				var self = this;
 				var args = arguments;
 				var properties;
+				var initializeCalled;
 				function addDefaults(schema){
 					if(schema){
 						addDefaults(schema['extends']);
@@ -259,14 +260,15 @@ dojo.require("dojox.rpc.Rest");
 							}
 						}
 					}
-					if(data && typeof data == 'object'){
-						dojo.mixin(self,data);
-					}
 					if(schema && schema.prototype && schema.prototype.initialize){
+						initializeCalled = true;
 						schema.prototype.initialize.apply(self, args);
 					}
 				}
 				addDefaults(service._schema);
+				if(!initializeCalled && data && typeof data == 'object'){
+					dojo.mixin(self,data);
+				}
 				var idAttribute = jr.getIdAttribute(service);
 				Rest._index[this.__id = this.__clientId = 
 						service.servicePath + (this[idAttribute] || 
@@ -307,18 +309,18 @@ dojo.require("dojox.rpc.Rest");
 			// 		is returned as an object with a service property and an id property
 			//	absoluteId:
 			//		This is the absolute id of the object
-			var svc, parts = absoluteId.match(/^(.*\/)([^\/]*)$/);
+			var serviceName = '';
+			
 			for(var service in jr.services){
-				var re = new RegExp("^"+service);
-				if(absoluteId.match(re)){
-					svc = jr.services[service];
-					return {service: svc, id:absoluteId.substring(service.length)};
+				if((absoluteId.substring(0, service.length) == service) && (service.length >= serviceName.length)){
+					serviceName = service;
 				}
 			}
-			if (!svc){
-				svc = new jr.serviceClass(parts[1], true);
+			if (serviceName){
+				return {service: jr.services[serviceName], id:absoluteId.substring(serviceName.length)};
 			}			
-			return {service: svc, id:parts[2]};
+			var parts = absoluteId.match(/^(.*\/)([^\/]*)$/);
+			return {service: new jr.serviceClass(parts[1], true), id:parts[2]};
 		},
 		services:{},
 		schemas:{},
