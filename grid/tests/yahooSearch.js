@@ -29,13 +29,18 @@ var getCellData = function(item, field){
 
 var getLink = function(inRowIndex, inItem){
 	if(!inItem){ return '&nbsp;'; }
-	var text = getCellData(inItem, 'Title');
-	var link = getCellData(inItem, 'ClickUrl');
-	return dojo.string.substitute(
-		'<a target="_blank" href="${href}">${text}</a>', 
-		{ href: link, text: text }
-	);
+	return {
+		text: getCellData(inItem, 'Title'),
+		href: getCellData(inItem, 'ClickUrl')
+	};
 };
+
+var formatLink = function(result){
+	return typeof result == 'object' ? dojo.string.substitute(
+		'<a target="_blank" href="${href}">${text}</a>', 
+		result
+	) : result;
+}
 
 var formatDate = function(inDatum, inRowIndex){
 	if(!inDatum){ return '&nbsp;'; }

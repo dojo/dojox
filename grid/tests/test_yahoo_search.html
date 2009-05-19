@@ -42,7 +42,7 @@
 			},
 			[
 				[
-					{ name: 'Site', width: 30, field: 'ClickUrl', get: getLink },
+					{ name: 'Site', width: 30, field: 'ClickUrl', get: getLink, formatter: formatLink },
 					{ name: 'Date', width: 10, field: 'ModificationDate', formatter: formatDate}
 				],[
 					{ name: 'Display Url', width: 30, field: 'Url', styles: 'color: green; size: small;' },
@@ -113,7 +113,7 @@
 	<input id="searchInput" type="text" value="apple">&nbsp;&nbsp;
 	<button onclick="doSearch()">Search</button><br><br>
 	<div dojoType="dojox.grid.DataGrid" 
-		jsId="grid" class="grid" id="grid" 
+		jsId="grid" class="grid" id="grid" escapeHTMLInData="false"
 		autoWidth="true" structure="webLayout" 
 		store="store" elasticView="1" 
 		query="{ query: 'apple' }" 

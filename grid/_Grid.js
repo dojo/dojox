@@ -287,6 +287,11 @@ dojo.requireLocalization("dijit", "loading");
 		//  styled similar to the loading and error messages
 		noDataMessage: "",
 		
+		// escapeHTMLInData: Boolean
+		//		This will escape brackets from the data to prevent XSS attacks with
+		//		user inputted data.
+		escapeHTMLInData: true,	
+		
 		// private
 		sortInfo: 0,
 		themeable: true,
