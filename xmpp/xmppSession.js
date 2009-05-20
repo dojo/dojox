@@ -13,6 +13,7 @@ dojox.xmpp.xmpp = {
 	STANZA_NS: 'urn:ietf:params:xml:ns:xmpp-stanzas',
 	SASL_NS: 'urn:ietf:params:xml:ns:xmpp-sasl',
 	BIND_NS: 'urn:ietf:params:xml:ns:xmpp-bind',
+	SESSION_NS: 'urn:ietf:params:xml:ns:xmpp-session',
 	BODY_NS: "http://jabber.org/protocol/httpbind",
 	
 	XHTML_BODY_NS: "http://www.w3.org/1999/xhtml",
@@ -167,6 +168,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			//console.log("xmppSession::featuresHandler() ",msg);
 			var authMechanisms = [];
 			var hasBindFeature = false;
+			var hasSessionFeature = false;
 
 			if(msg.hasChildNodes()){
 				for(var i=0; i<msg.childNodes.length;i++){
@@ -181,43 +183,52 @@ dojo.extend(dojox.xmpp.xmppSession, {
 							break;
 						case 'bind':
 							//if (n.getAttribute('xmlns')==dojox.xmpp.xmpp.BIND_NS) {
-								hasBindFeature = true;
+							hasBindFeature = true;
 						//	}
 							break;
+						case 'session':
+							hasSessionFeature = true;
 					}	
 				}
 			}
 			//console.log("Has connected/bind?", this.state, hasBindFeature, authMechanisms);
-			if (this.state == dojox.xmpp.xmpp.CONNECTED && hasBindFeature){
-				for(var i=0; i<authMechanisms.length; i++){
-					
-					if (authMechanisms[i]=="SUN-COMMS-CLIENT-PROXY-AUTH"){
-						dojox.xmpp.sasl.SunWebClientAuth(this);
-						break;
-					} else if (authMechanisms[i]=="PLAIN"){
-						dojox.xmpp.sasl.SaslPlain(this);
-						break;
-					}else {
-						console.error("No suitable auth mechanism found for: ", authMechanisms[i]);
+			if(this.state == dojox.xmpp.xmpp.CONNECTED){
+				if(!this.auth){
+					// start the login
+					for(var i=0; i<authMechanisms.length; i++){
+						try{
+							this.auth = dojox.xmpp.sasl.registry.match(authMechanisms[i], this);
+							break;
+						}catch(e){
+							console.warn("No suitable auth mechanism found for: ", authMechanisms[i]);
+						}
 					}
+				}else if(hasBindFeature){
+					this.bindResource(hasSessionFeature);
 				}
-
-				//delete the pass from memory so its not just sitting around waiting for 
-				//people to snatch it
-				delete this.password;
 			}
 		},
 
 		saslHandler: function(msg){
 			//console.log("xmppSession::saslHandler() ", msg);
-			if (msg.nodeName=="success"){
-				this.bindResource();
+			if(msg.nodeName=="success"){
+				this.auth.onSuccess();
 				return;
 			}
 
-			if (msg.hasChildNodes()){
-				this.onLoginFailure(msg.firstChild.nodeName);
+			if(msg.nodeName=="challenge"){
+				this.auth.onChallenge(msg);
+				return;
 			}
+
+			if(msg.hasChildNodes()){
+				this.onLoginFailure(msg.firstChild.nodeName);
+				this.session.setState('Terminate', msg.firstChild.nodeName);
+			}
+		},
+
+		sendRestart: function(){
+			this.session._sendRestart();
 		},
 
 
@@ -551,9 +562,8 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			return re;
 		},
 
-		bindResource: function(){
+		bindResource: function(hasSession){
 			var props = {
-				xmlns: "jabber:client",
 				id: this.getNextIqId(),
 				type: "set"
 			}
@@ -569,7 +579,10 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			bindReq.append("</bind></iq>");
 
 			var def = this.dispatchPacket(bindReq, "iq", props.id);
-			def.addCallback(this, "onBindResource");
+			def.addCallback(this, function(msg){
+				this.onBindResource(msg, hasSession);
+				return msg;
+			});
 		},
 
 		getNextIqId: function(){
@@ -645,7 +658,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			//console.log("xmppSession::onLoginFailure ", msg);
 		},
 
-		onBindResource: function(msg){
+		onBindResource: function(msg, hasSession){
 			//console.log("xmppSession::onBindResource() ", msg);
 		
 			if (msg.getAttribute('type')=='result'){
@@ -659,18 +672,40 @@ dojo.extend(dojox.xmpp.xmppSession, {
 							this.resource = this.getResourceFromJid(fulljid);
 						}
 					}
+					if(hasSession){
+						var props = {
+							id: this.getNextIqId(),
+							type: "set"
+						}
+						var bindReq = new dojox.string.Builder(dojox.xmpp.util.createElement("iq", props, false));
+						bindReq.append(dojox.xmpp.util.createElement("session", {xmlns: dojox.xmpp.xmpp.SESSION_NS}, true));
+						bindReq.append("</iq>");
+
+						var def = this.dispatchPacket(bindReq, "iq", props.id);
+						def.addCallback(this, "onBindSession");
+						return;
+					}
 				}else{
 					//console.log("xmppService::onBindResource() No Bind Element Found");
 				}
+
+				this.onLogin();
 		
-				this.onLogin();	
 			}else if(msg.getAttribute('type')=='error'){
 				//console.log("xmppSession::onBindResource() Bind Error ", msg);
 				var err = this.processXmppError(msg);
 				this.onLoginFailure(err);
 			}
+		},
 
-			return msg
+		onBindSession: function(msg){
+			if(msg.getAttribute('type')=='error'){
+				//console.log("xmppSession::onBindSession() Bind Error ", msg);
+				var err = this.processXmppError(msg);
+				this.onLoginFailure(err);
+			}else{
+				this.onLogin();
+			}
 		},
 
 		onSearchResults: function(results){

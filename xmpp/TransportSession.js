@@ -104,11 +104,29 @@ dojo.extend(dojox.xmpp.TransportSession, {
 					secure: this.secure,
 					wait: this.wait,
 					"xml:lang": this.lang,
-					xmlns: dojox.xmpp.xmpp.BODY_NS
+					"xmpp:version": "1.0",
+					xmlns: dojox.xmpp.xmpp.BODY_NS,
+					"xmlns:xmpp": "urn:xmpp:xbosh"
 				};
 
 				var msg = dojox.xmpp.util.createElement("body", req, true);
 				this.addToOutboundQueue(msg, rid);
+		},
+
+		_sendRestart: function(){
+			var rid = this.rid++;
+			var req = {
+				rid: rid,
+				sid: this.sid,
+				to: this.domain,
+				"xmpp:restart": "true",
+				"xml:lang": this.lang,
+				xmlns: dojox.xmpp.xmpp.BODY_NS,
+				"xmlns:xmpp": "urn:xmpp:xbosh"
+			};
+
+			var msg = dojox.xmpp.util.createElement("body", req, true);
+			this.addToOutboundQueue(msg, rid);
 		},
 		
 		processScriptSrc: function(msg, rid) {
@@ -219,7 +237,8 @@ dojo.extend(dojox.xmpp.TransportSession, {
 			}
 
 			var req = {
-				sid: this.sid
+				sid: this.sid,
+				xmlns: dojox.xmpp.xmpp.BODY_NS
 			}
 
 			var envelope
@@ -333,7 +352,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 		},
 
 		processDocument: function(doc, rid){
-			if(this.isTerminated()) {
+			if(this.isTerminated() || !doc.firstChild) {
 				return false;
 			}
 			//console.log("TransportSession:processDocument() ", doc, rid);
@@ -476,7 +495,16 @@ dojo.extend(dojox.xmpp.TransportSession, {
 			
 			
 			if(httpStatusCode != 200) {
-				this.setState("Terminate", errorMessage);
+				if(httpStatusCode >= 400 && httpStatusCode < 500){
+					/* Any status code between 400 and 500 should terminate
+					 * the connection */
+					this.setState("Terminate", errorMessage);
+					return false;
+				}else{
+					this.removeFromOutboundQueue(rid);	
+					setTimeout(dojo.hitch(this, function(){ this.dispatchPacket(); }), 200);	
+					return true;
+				}
 				return false;
 			}
 			
