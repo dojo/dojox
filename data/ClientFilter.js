@@ -152,7 +152,7 @@ dojo.require("dojo.data.util.filter");
 							defResult.callback(cachedArgs.cacheResults);
 						}
 						defResult.addCallback(function(results){
-							results = self.clientSideFetch({query:clientQuery,sort:args.sort,start:args.start,count:args.count}, results);
+							results = self.clientSideFetch(dojo.mixin(dojo.mixin({}, args),{query:clientQuery}), results);
 							defResult.fullLength = results._fullLength;
 							return results;
 						});
@@ -207,6 +207,9 @@ dojo.require("dojo.data.util.filter");
 				//		
 				//	baseResults:
 				//		This provides the result set to start with for client side querying
+				if(request.queryOptions && request.queryOptions.results){
+					baseResults = request.queryOptions.results;
+				}
 				if(request.query){
 					// filter by the query
 					var results = [];
