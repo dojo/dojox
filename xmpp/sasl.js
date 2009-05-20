@@ -2,8 +2,7 @@ dojo.provide("dojox.xmpp.sasl");
 dojo.require("dojox.xmpp.util");
 
 dojo.require("dojo.AdapterRegistry");
-dojo.require("dojox.encoding.base64");
-dojo.require("dojox.encoding.digests.auth");
+dojo.require("dojox.encoding.digests.MD5");
 
 dojox.xmpp.sasl.saslNS = "urn:ietf:params:xml:ns:xmpp-sasl";
 
