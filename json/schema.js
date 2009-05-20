@@ -181,7 +181,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 			}
 			
 			for(var i in objTypeDef){ 
-				if(objTypeDef.hasOwnProperty(i) && "__id" != i){
+				if(objTypeDef.hasOwnProperty(i) && !(i.charAt(0) == '_' && i.charAt(1) == '_')){
 					var value = instance[i];
 					var propDef = objTypeDef[i];
 					checkProp(value,propDef,path,i);
@@ -189,7 +189,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 			}
 		}
 		for(i in instance){
-			if(instance.hasOwnProperty(i) && (i.charAt(0) != '_' || i.charAt(0) != '_') && objTypeDef && !objTypeDef[i] && additionalProp===false){
+			if(instance.hasOwnProperty(i) && !(i.charAt(0) == '_' && i.charAt(1) == '_') && objTypeDef && !objTypeDef[i] && additionalProp===false){
 				errors.push({property:path,message:(typeof value) + "The property " + i +
 						" is not defined in the schema and the schema does not allow additional properties"});
 			}

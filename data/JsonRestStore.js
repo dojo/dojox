@@ -384,6 +384,15 @@ dojo.declare("dojox.data.JsonRestStore",
 			features["dojo.data.api.Write"] = true;
 			features["dojo.data.api.Notification"] = true;
 			return features;
+		},
+		
+		getParent: function(item){
+			//	summary:
+			//		Returns the parent item (or query) for the given item
+			//	item:
+			//		The item to find the parent of
+			
+			return item.__parent;
 		}
 
 

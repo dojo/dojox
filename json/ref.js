@@ -102,8 +102,11 @@ dojox.json.ref = {
 					var propertyDefinition = properties && properties[i];
 					if(propertyDefinition && propertyDefinition.format == 'date-time' && typeof val == 'string'){
 						val = dojo.date.stamp.fromISOString(val);
-					}else if((typeof val =='object') && val && !(val instanceof Date)){
+					}else if((typeof val =='object') && val && !(val instanceof Date) && i != '__parent'){
 						ref=val[refAttribute];
+						if(!ref || !val.__parent){
+							val.__parent = it;
+						}
 						if(ref){ // a reference was found
 							// make sure it is a safe reference
 							delete it[i];// remove the property so it doesn't resolve to itself in the case of id.propertyName lazy values
@@ -167,7 +170,7 @@ dojox.json.ref = {
 			if(update){
 				// this means we are updating, we need to remove deleted
 				for(i in target){
-					if(!target.__isDirty && target.hasOwnProperty(i) && !it.hasOwnProperty(i) && i != '__id' && i != '__clientId' && !(target instanceof Array && isNaN(i))){
+					if(!target.__isDirty && target.hasOwnProperty(i) && !it.hasOwnProperty(i) && !(i.charAt(0) == '_' && i.charAt(1) == '_') && !(target instanceof Array && isNaN(i))){
 						if(index.onUpdate && i != "_loadObject" && i != "_idAttr"){
 							index.onUpdate(target,i,target[i],undefined); // call the listener for each update
 						}
