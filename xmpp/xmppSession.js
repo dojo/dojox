@@ -75,7 +75,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 				if(user.indexOf('@') == -1) {
 					this.jid = this.jid + '@' + this.domain;
 				}
-        		}
+        	}
 
 			//allow null password here as its not needed in the SSO case
 			if (password) {

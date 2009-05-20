@@ -100,10 +100,7 @@ dojo.declare("dojox.xmpp.sasl.DigestMD5", dojox.xmpp.sasl._Base, {
 				return false;
 		}
 		var cnonce = dxed.MD5(Math.random() * 1234567890, dxedo.Hex);
-		var digest_uri = 'xmpp/' + ch.realm;
-		if(typeof ch.host != 'undefined'){
-			digest_uri += '/' + ch.host;
-		}
+		var digest_uri = 'xmpp/' + this.session.domain;
 
 		var username = this.session.jid;
 		var index = this.session.jid.indexOf('@');
