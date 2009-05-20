@@ -238,10 +238,13 @@ dojo.require("dojo.dnd.Manager");
 								dojo.dnd.Source.prototype.onMouseDown.call(this.source, e);
 							}
 						}
-						dojo.style(this.bottomMarker, "visibility", "visible");
-						dojo.style(this.topMarker, "visibility", "visible");
 					}),
-
+					onMouseOver: dojo.hitch(this, function(e){
+						var src = this.source;
+						if(src._getChildByEvent(e)){
+							dojo.dnd.Source.prototype.onMouseOver.apply(src, arguments);
+						}
+					}),
 					_markTargetAnchor: dojo.hitch(this, function(before){
 						var src = this.source;
 						if(src.current == src.targetAnchor && src.before == before){ return; }
@@ -261,6 +264,8 @@ dojo.require("dojo.dnd.Manager");
 						var pos = dojo._abs(target, true);
 						var left = Math.floor(pos.x - this.arrowDim.w/2 + endAdd);
 
+						dojo.style(this.bottomMarker, "visibility", "visible");
+						dojo.style(this.topMarker, "visibility", "visible");
 						dojo.style(this.bottomMarker, {
 							"left": left + "px",
 							"top" : (headerHeight + pos.y) + "px"
@@ -281,6 +286,8 @@ dojo.require("dojo.dnd.Manager");
 						if(src.targetAnchor && getSibling(src.targetAnchor, src.before)){
 							src._removeItemClass(getSibling(src.targetAnchor, src.before), src.before ? "After" : "Before");
 						}
+						this._hide(this.bottomMarker);
+						this._hide(this.topMarker);
 						dojo.dnd.Source.prototype._unmarkTargetAnchor.call(src);
 					}),
 					destroy: dojo.hitch(this, function(){

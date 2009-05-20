@@ -32,6 +32,7 @@ dojo.require("dojox.grid.util");
 		value: null,
 		hidden: false,
 		noresize: false,
+		draggable: true,
 		//private
 		_valueProp: "value",
 		_formatPending: false,
@@ -39,6 +40,9 @@ dojo.require("dojox.grid.util");
 		constructor: function(inProps){
 			this._props = inProps || {};
 			dojo.mixin(this, inProps);
+			if(this.draggable === undefined){
+				this.draggable = true;
+			}
 		},
 
 		// data source
@@ -241,6 +245,7 @@ dojo.require("dojox.grid.util");
 		cellDef.editable = getBoolAttr("editable");
 		cellDef.alwaysEditing = getBoolAttr("alwaysEditing");
 		cellDef.noresize = getBoolAttr("noresize");
+		cellDef.draggable = getBoolAttr("draggable");
 
 		var value = d.trim(d.attr(node, "loadingText")||d.attr(node, "defaultValue")||"");
 		if(value){

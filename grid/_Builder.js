@@ -291,12 +291,14 @@ dojo.require("dojo.dnd.Moveable");
 					cell.customClasses = [];
 					cell.customStyles = [];
 					if(this.view.simpleStructure){
-						if(cell.headerClasses){
-							if(cell.headerClasses.indexOf('dojoDndItem') == -1){
-								cell.headerClasses += ' dojoDndItem';
+						if(cell.draggable){
+							if(cell.headerClasses){
+								if(cell.headerClasses.indexOf('dojoDndItem') == -1){
+									cell.headerClasses += ' dojoDndItem';
+								}
+							}else{
+								cell.headerClasses = 'dojoDndItem';
 							}
-						}else{
-							cell.headerClasses = 'dojoDndItem';
 						}
 						if(cell.attrs){
 							if(cell.attrs.indexOf("dndType='gridColumn_") == -1){
