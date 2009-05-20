@@ -243,8 +243,6 @@
 							t.assertTrue(loadCalled);
 						}
 					},
-					/*
-						See #7531: due to cancel() race condition this can cause infinite loop in test.
 					{
 						name: 'handleFrom_setHref_and_refresh_and_cancelWorking',
 						timeout: 3400,
@@ -290,7 +288,7 @@
 
 							return d;
 						}
-					}*/
+					}
 				]
 			);
 
