@@ -21,6 +21,8 @@ dojox.io.xhrWindowNamePlugin = function(/*String*/url, /*Function?*/httpAdapter,
 		},
 		function(method,args,hasBody){
 			var send = dojox.io.windowName.send;
+			var load = args.load; 
+			args.load = undefined; //we don't want send to set this callback 
 			var dfd = (httpAdapter ? httpAdapter(send, true) : send)(method, args, hasBody); // use the windowName transport
 			dfd.addCallback(function(result){
 				var ioArgs = dfd.ioArgs;
@@ -40,6 +42,10 @@ dojox.io.xhrWindowNamePlugin = function(/*String*/url, /*Function?*/httpAdapter,
 				}
 				return dojo._contentHandlers[ioArgs.handleAs || "text"]({responseText:result}); 
 			});
+			args.load = load; 
+			if(load){ 
+ 				dfd.addCallback(load); 
+ 			}
 			return dfd;
 		}
 	);
