@@ -298,8 +298,8 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 		},
 		function tryToLoadSameTarget(t){
 			t.is(
-				dojox.data.JsonRestStore.makeStore({target:"/something/"},dojox.data.JsonRestStore),
-				dojox.data.JsonRestStore.makeStore({target:"/something/"}));
+				dojox.data.JsonRestStore.getStore({target:"/something/"},dojox.data.JsonRestStore),
+				dojox.data.JsonRestStore.getStore({target:"/something/"}));
 			
 		},
 		
