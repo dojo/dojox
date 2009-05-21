@@ -403,22 +403,25 @@ dojo.declare("dojox.data.JsonRestStore",
 
 	}
 );
-(function(){
-	var defaultJRS = dojox.data.JsonRestStore;
-	var newJRS = dojox.data.JsonRestStore = function(options){
-		if(typeof options.target == 'string'){
-			options.target = options.target.match(/\/$/) || options.allowNoTrailingSlash ? options.target : (options.target + '/');
-			var store = (dojox.rpc.JsonRest.services[options.target] || {})._store;
-			if(store){
-				return store;
-			}
+dojox.data.JsonRestStore.getStore = function(options, Class){
+	//	summary:
+	//		Will retrieve or create a store using the given options (the same options
+	//		that are passed to JsonRestStore constructor. Returns a JsonRestStore instance
+	//	options:
+	//		See the JsonRestStore constructor
+	//	Class:
+	//		Constructor to use (for creating stores from JsonRestStore subclasses). 
+	// 		This is optional and defaults to JsonRestStore.
+	if(typeof options.target == 'string'){
+		options.target = options.target.match(/\/$/) || options.allowNoTrailingSlash ? 
+				options.target : (options.target + '/');
+		var store = (dojox.rpc.JsonRest.services[options.target] || {})._store;
+		if(store){
+			return store;
 		}
-		defaultJRS.call(this, options);
-		return this;
 	}
-	dojo.mixin(newJRS, defaultJRS);
-	newJRS.prototype = defaultJRS.prototype;
-})();
+	return new (Class||dojox.data.JsonRestStore)(this, options);
+};
 dojox.data._getStoreForItem = function(item){
 	if(item.__id){
 		var serviceAndId = dojox.rpc.JsonRest.getServiceAndId(item.__id);
