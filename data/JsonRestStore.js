@@ -420,7 +420,7 @@ dojox.data.JsonRestStore.getStore = function(options, Class){
 			return store;
 		}
 	}
-	return new (Class||dojox.data.JsonRestStore)(this, options);
+	return new (Class||dojox.data.JsonRestStore)(options);
 };
 dojox.data._getStoreForItem = function(item){
 	if(item.__id){
