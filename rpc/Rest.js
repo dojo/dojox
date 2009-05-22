@@ -75,8 +75,8 @@ dojo.provide("dojox.rpc.Rest");
 		};
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id, args){
-			var request = {
-				url: path + (dojo.isObject(id) ? '?' + dojo.objectToQuery(id) : id == null ? "" : id), 
+			var query, request = {
+				url: path + (dojo.isObject(id) ? ((query = dojo.objectToQuery(id)) ? '?' + query : '') : id == null ? "" : id), 
 				handleAs: isJson ? 'json' : 'text', 
 				contentType: isJson ? 'application/json' : 'text/plain',
 				sync: dojox.rpc._sync,
