@@ -5,6 +5,8 @@ dojo.require("dojox.rpc.Service");
 	function jsonRpcEnvelope(version){
 		return {
 			serialize: function(smd, method, data, options){
+				//not converted to json it self. This  will be done, if
+				//appropriate, at the transport level
 	
 				var d = {
 					id: this._requestId++,
@@ -50,7 +52,4 @@ dojo.require("dojox.rpc.Service");
 		},
 		jsonRpcEnvelope("2.0")
 	);
-	dojox.rpc.JsonRPC = function(){
-		return new dojox.rpc.Service({});
-	}
 })();
