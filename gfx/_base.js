@@ -127,7 +127,7 @@ dojo.provide("dojox.gfx._base");
 
 		if(m["getBoundingClientRect"]){
 			var mcr = m.getBoundingClientRect();
-			return { w: mcr.width, h: mcr.height };
+			return { w: mcr.right-mcr.left, h: mcr.bottom-mcr.top, t: mcr.top, l: mcr.left };
 		}else{
 			return dojo.marginBox(m);
 		}
