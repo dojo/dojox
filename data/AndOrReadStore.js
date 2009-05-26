@@ -565,9 +565,11 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 	},
 
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
-		 //	summary: 
-		 //		See dojo.data.api.Read.close()
-		 if(this.clearOnClose){
+		//	summary: 
+		//		See dojo.data.api.Read.close()
+		if(this.clearOnClose &&
+			this._loadFinished &&
+			!this._loadInProgress){
 			 //Reset all internalsback to default state.  This will force a reload
 			 //on next fetch.  This also checks that the data or url param was set 
 			 //so that the store knows it can get data.  Without one of those being set,
