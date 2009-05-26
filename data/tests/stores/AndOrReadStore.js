@@ -5,7 +5,28 @@ dojo.require("dojo.data.api.Identity");
 dojo.require("dojo.date");
 dojo.require("dojo.date.stamp");
 
+dojo.declare("dojox.data.tests.Wrapper", null, {
+	//	summary:
+	//		Simple class to use for typeMap in order to	test out 
+	//		'falsy' values for _value.
+	_wrapped: null,
 
+	constructor: function(obj){
+		this._wrapped = obj;
+	},
+
+	getValue: function() {
+		return this._wrapped;
+	},
+
+	setValue: function(obj) {
+		this._wrapped = obj;
+	},
+
+	toString: function(){
+		 return "WRAPPER: [" + this._wrapped + "]";
+	}
+});
 
 
 //The test data-sets and tests are taken from ItemFileReadStore, to show 
@@ -2804,9 +2825,200 @@ dojox.data.tests.stores.AndOrReadStore.getTests = function(){
 			}
 		},
 		{
+			name: "Read API: custom_datatype_CustomObject 0 (False) value",
+			runTest: function(t){
+				//	summary: 
+				//		Function to test type mapping and _values that are false-like
+				var dataset = {
+					identifier:'name',
+					items: [
+						{ name:'Bob', species:'human', age: {_type:'dojox.data.tests.Wrapper', _value:0} },
+						{ name:'Nancy', species:'human', age: {_type:'dojox.data.tests.Wrapper', _value:32} }
+					]
+				};
+				var store = new dojox.data.AndOrReadStore({
+						data:dataset,
+						typeMap:{'dojox.data.tests.Wrapper': 	{	
+												type: dojox.data.tests.Wrapper,
+												deserialize: function(value){
+													return new dojox.data.tests.Wrapper(value);
+												}
+											}
+								}
+				});
+				var d = new doh.Deferred();
+				function onItem(item){
+					console.log(item);
+					t.assertTrue(item !== null);
+					var bob = item;
+					var age = store.getValue(item, "age");
+					t.assertTrue(age instanceof dojox.data.tests.Wrapper);
+					t.assertTrue(age.toString() == "WRAPPER: [0]");
+					d.callback(true);
+				}
+				function onError(errData){
+					d.errback(errData);
+				}
+				store.fetchItemByIdentity({identity:"Bob", onItem:onItem, onError:onError});
+				return d; // Deferred
+			}
+		},
+		{
+			name: "Read API: custom_datatype_CustomObject Boolean False values",
+			runTest: function(t){
+				//	summary: 
+				//		Function to test type mapping and _values that are false-like
+				var dataset = {
+					identifier:'name',
+					items: [
+						{ name:'Bob', isHuman: {_type:'dojox.data.tests.Wrapper', _value:false} },
+						{ name:'Nancy', isHuman: {_type:'dojox.data.tests.Wrapper', _value: true} }
+					]
+				};
+				var store = new dojox.data.AndOrReadStore({
+						data:dataset,
+						typeMap:{'dojox.data.tests.Wrapper': 	{	
+												type: dojox.data.tests.Wrapper,
+												deserialize: function(value){
+													return new dojox.data.tests.Wrapper(value);
+												}
+											}
+								}
+				});
+				var d = new doh.Deferred();
+				function onItem(item){
+					t.assertTrue(item !== null);
+					var bob = item;
+					var isHuman = store.getValue(item, "isHuman");
+					t.assertTrue(isHuman instanceof dojox.data.tests.Wrapper);
+					t.assertTrue(isHuman.toString() == "WRAPPER: [false]");
+					d.callback(true);
+				}
+				function onError(errData){
+					d.errback(errData);
+				}
+				store.fetchItemByIdentity({identity:"Bob", onItem:onItem, onError:onError});
+				return d; // Deferred
+			}
+		},
+		{
+			name: "Read API: custom_datatype_CustomObject Empty String values",
+			runTest: function(t){
+				//	summary: 
+				//		Function to test type mapping and _values that are false-like
+				var dataset = {
+					identifier:'name',
+					items: [
+						{ name:'Bob', lastName: {_type:'dojox.data.tests.Wrapper', _value:""} },
+						{ name:'Nancy', lastName: {_type:'dojox.data.tests.Wrapper', _value: "Doe"} }
+					]
+				};
+				var store = new dojox.data.AndOrReadStore({
+						data:dataset,
+						typeMap:{'dojox.data.tests.Wrapper': 	{	
+												type: dojox.data.tests.Wrapper,
+												deserialize: function(value){
+													return new dojox.data.tests.Wrapper(value);
+												}
+											}
+								}
+				});
+				var d = new doh.Deferred();
+				function onItem(item){
+					t.assertTrue(item !== null);
+					var bob = item;
+					var lastName = store.getValue(item, "lastName");
+					t.assertTrue(lastName instanceof dojox.data.tests.Wrapper);
+					t.assertTrue(lastName.toString() == "WRAPPER: []");
+					d.callback(true);
+				}
+				function onError(errData){
+					d.errback(errData);
+				}
+				store.fetchItemByIdentity({identity:"Bob", onItem:onItem, onError:onError});
+				return d; // Deferred
+			}
+		},
+		{
+			name: "Read API: custom_datatype_CustomObject explicit null values",
+			runTest: function(t){
+				//	summary: 
+				//		Function to test type mapping and _values that are false-like
+				var dataset = {
+					identifier:'name',
+					items: [
+						{ name:'Bob', lastName: {_type:'dojox.data.tests.Wrapper', _value:null} },
+						{ name:'Nancy', lastName: {_type:'dojox.data.tests.Wrapper', _value: "Doe"} }
+					]
+				};
+				var store = new dojox.data.AndOrReadStore({
+						data:dataset,
+						typeMap:{'dojox.data.tests.Wrapper': 	{	
+												type: dojox.data.tests.Wrapper,
+												deserialize: function(value){
+													return new dojox.data.tests.Wrapper(value);
+												}
+											}
+								}
+				});
+				var d = new doh.Deferred();
+				function onItem(item){
+					t.assertTrue(item !== null);
+					var bob = item;
+					var lastName = store.getValue(item, "lastName");
+					t.assertTrue(lastName instanceof dojox.data.tests.Wrapper);
+					t.assertTrue(lastName.toString() == "WRAPPER: [null]");
+					d.callback(true);
+				}
+				function onError(errData){
+					d.errback(errData);
+				}
+				store.fetchItemByIdentity({identity:"Bob", onItem:onItem, onError:onError});
+				return d; // Deferred
+			}
+		},
+		{
+			name: "Read API: custom_datatype_CustomObject explicit undefined value",
+			runTest: function(t){
+				//	summary: 
+				//		Function to test type mapping and _values that are false-like
+				var dataset = {
+					identifier:'name',
+					items: [
+						{ name:'Bob', lastName: {_type:'dojox.data.tests.Wrapper', _value: undefined} },
+						{ name:'Nancy', lastName: {_type:'dojox.data.tests.Wrapper', _value: "Doe"} }
+					]
+				};
+				var store = new dojox.data.AndOrReadStore({
+						data:dataset,
+						typeMap:{'dojox.data.tests.Wrapper': 	{	
+												type: dojox.data.tests.Wrapper,
+												deserialize: function(value){
+													return new dojox.data.tests.Wrapper(value);
+												}
+											}
+								}
+				});
+				var d = new doh.Deferred();
+				function onItem(item){
+					t.assertTrue(item !== null);
+					var bob = item;
+					var lastName = store.getValue(item, "lastName");
+					t.assertTrue(lastName instanceof dojox.data.tests.Wrapper);
+					t.assertTrue(lastName.toString() == "WRAPPER: [undefined]");
+					d.callback(true);
+				}
+				function onError(errData){
+					d.errback(errData);
+				}
+				store.fetchItemByIdentity({identity:"Bob", onItem:onItem, onError:onError});
+				return d; // Deferred
+			}
+		},
+
+		{
 			name: "Read API: hierarchical_data",
 	 		runTest: function(t){
-				//var store = new dojox.data.AndOrReadStore(tests.data.readOnlyItemFileTestTemplates.testFile["geography_hierarchy_small"]);
 				var store = new dojox.data.AndOrReadStore(dojox.data.tests.stores.AndOrReadStore.getTestData("geography_hierarchy_small"));
 				var d = new doh.Deferred();
 				var onComplete = function(items, request){
@@ -2833,7 +3045,6 @@ dojox.data.tests.stores.AndOrReadStore.getTests = function(){
 		{
 			name: "Read API: hierarchical_data, complex",
 	 		runTest: function(t){
-				//var store = new dojox.data.AndOrReadStore(tests.data.readOnlyItemFileTestTemplates.testFile["geography_hierarchy_small"]);
 				var store = new dojox.data.AndOrReadStore(dojox.data.tests.stores.AndOrReadStore.getTestData("geography_hierarchy_small"));
 				var d = new doh.Deferred();
 				var onComplete = function(items, request){
