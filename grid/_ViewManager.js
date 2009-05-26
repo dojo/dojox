@@ -72,12 +72,20 @@ dojo.declare('dojox.grid._ViewManager', null, {
 
 	normalizeRowNodeHeights: function(inRowNodes){
 		var h = 0;
-		var cStyles = [];
 		var currHeights = [];
+		if(inRowNodes.length <= 1){ 
+			// no need to normalize if we are the only one...
+			return; 
+		}
 		for(var i=0, n; (n=inRowNodes[i]); i++){
-			cStyles[i] = dojo.getComputedStyle(n.firstChild);
-			currHeights[i] = dojo._getMarginBox(n.firstChild, cStyles[i]).h
-			h =  Math.max(h, currHeights[i]);
+			// We only care about the height - so don't use marginBox.  This
+			// depends on the container not having any margin (which it shouldn't)
+			// Also - we only look up the height if the cell doesn't have the
+			// dojoxGridNonNormalizedCell class (like for row selectors)
+			if(!dojo.hasClass(n, "dojoxGridNonNormalizedCell")){
+				currHeights[i] = n.firstChild.offsetHeight;
+				h =  Math.max(h, currHeights[i]);
+			}
 		}
 		h = (h >= 0 ? h : 0);
 
@@ -85,19 +93,10 @@ dojo.declare('dojox.grid._ViewManager', null, {
 		//A one px increase fixes FireFox 3's rounding bug for fractional font sizes.
 		if(dojo.isFF>=3 && h){h++;}
 
-		//
-		//
 		for(var i=0, n; (n=inRowNodes[i]); i++){
 			if(currHeights[i] != h){
-				dojo._setMarginBox(n.firstChild, undefined, undefined, undefined, h, cStyles[i]);
+				n.firstChild.style.height = h + "px";
 			}
-		}
-		//
-		//console.log('normalizeRowNodeHeights ', h);
-		//
-		// querying the height here seems to help scroller measure the page on IE
-		if(inRowNodes&&inRowNodes[0]&&inRowNodes[0].parentNode){
-			inRowNodes[0].parentNode.offsetHeight;
 		}
 	},
 	
@@ -236,14 +235,16 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	},
 
 	// rendering
-	renderRow: function(inRowIndex, inNodes){
+	renderRow: function(inRowIndex, inNodes, skipRenorm){
 		var rowNodes = [];
 		for(var i=0, v, n, rowNode; (v=this.views[i])&&(n=inNodes[i]); i++){
 			rowNode = v.renderRow(inRowIndex);
 			n.appendChild(rowNode);
 			rowNodes.push(rowNode);
 		}
-		this.normalizeRowNodeHeights(rowNodes);
+		if(!skipRenorm){
+			this.normalizeRowNodeHeights(rowNodes);
+		}
 	},
 	
 	rowRemoved: function(inRowIndex){
@@ -251,11 +252,13 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	},
 	
 	// updating
-	updateRow: function(inRowIndex){
+	updateRow: function(inRowIndex, skipRenorm){
 		for(var i=0, v; v=this.views[i]; i++){
 			v.updateRow(inRowIndex);
 		}
-		this.renormalizeRow(inRowIndex);
+		if(!skipRenorm){
+			this.renormalizeRow(inRowIndex);
+		}
 	},
 	
 	updateRowStyles: function(inRowIndex){

@@ -164,16 +164,12 @@ dojo.provide("dojox.grid._Scroller");
 			//
 			var n = nodes[inPageIndex];
 			var y = (n ? this.getPageNodePosition(n) + this.getPageHeight(inPageIndex) : 0);
-			//console.log('detected height change, repositioning from #%d (%d) @ %d ', inPageIndex + 1, last, y, this.pageHeights[0]);
-			//
 			for(var p=inPageIndex+1; p<=last; p++){
 				n = nodes[p];
 				if(n){
-					//console.log('#%d @ %d', inPageIndex, y, this.getPageNodePosition(n));
 					if(this.getPageNodePosition(n) == y){
 						return;
 					}
-					//console.log('placing page %d at %d', p, y);
 					this.positionPage(p, y);
 				}
 				y += this.getPageHeight(p);
@@ -279,7 +275,7 @@ dojo.provide("dojox.grid._Scroller");
 			this.height += inDh;
 			this.resize();
 		},
-		updatePageHeight: function(inPageIndex){
+		updatePageHeight: function(inPageIndex, fromBuild){
 			if(this.pageExists(inPageIndex)){
 				var oh = this.getPageHeight(inPageIndex);
 				var h = (this.measurePage(inPageIndex));
@@ -290,7 +286,7 @@ dojo.provide("dojox.grid._Scroller");
 				if(oh != h){
 					this.updateContentHeight(h - oh)
 					var ah = this.grid.attr("autoHeight");
-					if((typeof ah == "number" && ah > this.rowCount)||ah === true){
+					if((typeof ah == "number" && ah > this.rowCount)||(ah === true && !fromBuild)){
 						this.grid.sizeChange();
 					}else{
 						this.repositionPages(inPageIndex);
@@ -301,7 +297,7 @@ dojo.provide("dojox.grid._Scroller");
 			return 0;
 		},
 		rowHeightChanged: function(inRowIndex){
-			this.updatePageHeight(Math.floor(inRowIndex / this.rowsPerPage));
+			this.updatePageHeight(Math.floor(inRowIndex / this.rowsPerPage), false);
 		},
 		// scroller core
 		invalidateNodes: function(){
@@ -352,7 +348,7 @@ dojo.provide("dojox.grid._Scroller");
 			var h = this.getPageHeight(inPageIndex), oh = h;
 			if(!this.pageExists(inPageIndex)){
 				this.buildPage(inPageIndex, this.keepPages&&(this.stack.length >= this.keepPages), inPos);
-				h = this.updatePageHeight(inPageIndex);
+				h = this.updatePageHeight(inPageIndex, true);
 			}else{
 				this.positionPage(inPageIndex, inPos);
 			}

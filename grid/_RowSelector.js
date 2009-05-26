@@ -16,19 +16,25 @@ dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 		return this.viewWidth || this.defaultWidth;
 	},
 	buildRowContent: function(inRowIndex, inRowNode){
-		var w = this.contentNode.offsetWidth - this.padBorderWidth 
-		inRowNode.innerHTML = '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;" border="0" cellspacing="0" cellpadding="0" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"><tr><td class="dojoxGridRowbarInner">&nbsp;</td></tr></table>';
+		var w = this.contentWidth || 0;
+		inRowNode.innerHTML = '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;height:1px;" border="0" cellspacing="0" cellpadding="0" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"><tr><td class="dojoxGridRowbarInner">&nbsp;</td></tr></table>';
 	},
 	renderHeader: function(){
+	},
+	updateRow: function(){
 	},
 	resize: function(){
 		this.adaptHeight();
 	},
 	adaptWidth: function(){
+		// Only calculate this here - rather than every call to buildRowContent
+		if(!("contentWidth" in this) && this.contentNode){
+			this.contentWidth = this.contentNode.offsetWidth - this.padBorderWidth;
+		}
 	},
 	// styling
 	doStyleRowNode: function(inRowIndex, inRowNode){
-		var n = [ "dojoxGridRowbar" ];
+		var n = [ "dojoxGridRowbar dojoxGridNonNormalizedCell" ];
 		if(this.grid.rows.isOver(inRowIndex)){
 			n.push("dojoxGridRowbarOver");
 		}

@@ -824,7 +824,7 @@ dojo.requireLocalization("dijit", "loading");
 
 		renderRow: function(inRowIndex, inNodes){
 			// summary: private, used internally to render rows
-			this.views.renderRow(inRowIndex, inNodes);
+			this.views.renderRow(inRowIndex, inNodes, this._skipRowRenormalize);
 		},
 
 		rowRemoved: function(inRowIndex){
@@ -913,7 +913,7 @@ dojo.requireLocalization("dijit", "loading");
 				}
 			}else{
 				for(var i=0; i<howMany; i++){
-					this.views.updateRow(i+startIndex);
+					this.views.updateRow(i+startIndex, this._skipRowRenormalize);
 				}
 				this.scroller.rowHeightChanged(startIndex);
 			}

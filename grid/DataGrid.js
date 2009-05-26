@@ -181,7 +181,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 				this.scroller.init(size, this.keepRows, this.rowsPerPage);
 				this.rowCount = size;
 				this._setAutoHeightAttr(this.autoHeight, true);
+				this._skipRowRenormalize = true;
 				this.prerender();
+				this._skipRowRenormalize = false;
 			}else{
 				this.updateRowCount(size);
 			}
@@ -195,7 +197,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			dojo.forEach(items, function(item, idx){
 				this._addItem(item, req.start+idx, true);
 			}, this);
+			if(this._autoHeight){
+				this._skipRowRenormalize = true;
+			}
 			this.updateRows(req.start, items.length);
+			if(this._autoHeight){
+				this._skipRowRenormalize = false;
+			}			
 			if(req.isRender){
 				this.setScrollTop(0);
 				this.postrender();
