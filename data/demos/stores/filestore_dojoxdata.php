@@ -52,7 +52,7 @@
 	//See if a specific file was requested, or if it is just a query for files.
 	$path = false;
 	if (array_key_exists("path", $_GET)) {
-		$path = json_decode($_GET['path']);
+		$path = $_GET['path'];
 	}
 
 	if (!is_string($path)) {
