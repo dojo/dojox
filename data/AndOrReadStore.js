@@ -47,6 +47,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		this._ccUrl = keywordParameters.url;
 		this.url = keywordParameters.url;
 		this._jsonData = keywordParameters.data;
+		this.data = null;
 		this._datatypeMap = keywordParameters.typeMap || {};
 		if(!this._datatypeMap['Date']){
 			//If no default mapping for dates, then set this as default.
@@ -462,6 +463,11 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 				this._jsonFileUrl = this.url;
 				this._ccUrl = this.url;
 			}
+			//See if there was any forced reset of data.
+			if(this.data != null && this._jsonData == null){
+				this._jsonData = this.data;
+				this.data = null;
+			}
 			if(this._jsonFileUrl){
 				//If fetches come in before the loading has finished, but while
 				//a load is in progress, we have to defer the fetching to be 
@@ -561,10 +567,20 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
 		 //	summary: 
 		 //		See dojo.data.api.Read.close()
-		 if(this.clearOnClose && (this._jsonFileUrl !== "")){
+		 if(this.clearOnClose){
 			 //Reset all internalsback to default state.  This will force a reload
-			 //on next fetch, but only if the data came from a url.  Passed in data
-			 //means it should not clear the data.
+			 //on next fetch.  This also checks that the data or url param was set 
+			 //so that the store knows it can get data.  Without one of those being set,
+			 //the next fetch will trigger an error.
+
+			 if(((this._jsonFileUrl == "" || this._jsonFileUrl == null) && 
+				 (this.url == "" || this.url == null)
+				) && this.data == null){
+				 console.debug("dojox.data.AndOrReadStore: WARNING!  Data reload " +
+					" information has not been provided." + 
+					"  Please set 'url' or 'data' to the appropriate value before" +
+					" the next fetch");
+			 }
 			 this._arrayOfAllItems = [];
 			 this._arrayOfTopLevelItems = [];
 			 this._loadFinished = false;
@@ -858,6 +874,11 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 				this._jsonFileUrl = this.url;
 				this._ccUrl = this.url;
 			}
+			//See if there was any forced reset of data.
+			if(this.data != null && this._jsonData == null){
+				this._jsonData = this.data;
+				this.data = null;
+			}
 			if(this._jsonFileUrl){
 
 				if(this._loadInProgress){
@@ -963,6 +984,11 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		}else if(this.url !== this._ccUrl){
 			this._jsonFileUrl = this.url;
 			this._ccUrl = this.url;
+		}
+		//See if there was any forced reset of data.
+		if(this.data != null && this._jsonData == null){
+			this._jsonData = this.data;
+			this.data = null;
 		}
 		if(this._jsonFileUrl){
 				var getArgs = {

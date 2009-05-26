@@ -3028,6 +3028,72 @@ dojox.data.tests.stores.AndOrReadStore.getTests = function(){
 			}
 		},
 		{
+			name: "Read API: close (clearOnClose: true, reset data.)",
+			runTest: function(t){
+				//	summary: 
+				//		Function to test that clear on close and reset of data works.
+				//	description:
+				//		Function to test that clear on close and reset of data works.
+				var store = new dojox.data.AndOrReadStore({data: { identifier: "uniqueId", 
+						items: [ {uniqueId: 1, value:"foo*bar"},
+							{uniqueId: 2, value:"bar*foo"}, 
+							{uniqueId: 3, value:"boomBam"},
+							{uniqueId: 4, value:"bit$Bite"},
+							{uniqueId: 5, value:"ouagadogou"},
+							{uniqueId: 6, value:"BaBaMaSaRa***Foo"},
+							{uniqueId: 7, value:"squawl"},
+							{uniqueId: 8, value:"seaweed"},
+							{uniqueId: 9, value:"jfq4@#!$!@Rf14r14i5u"}
+						]
+					}
+				});
+	
+				var d = new doh.Deferred();
+				var firstComplete = function(items, request){
+					t.assertEqual(items.length, 1);
+					var firstItem = items[0];
+	
+					//Set the store clearing options and the new data
+					store.clearOnClose = true;
+					store.data = { identifier: "uniqueId", 
+						items: [ {uniqueId: 1, value:"foo*bar"},
+							{uniqueId: 2, value:"bar*foo"}, 
+							{uniqueId: 3, value:"boomBam"},
+							{uniqueId: 4, value:"bit$Bite"},
+							{uniqueId: 5, value:"ouagadogou"},
+							{uniqueId: 6, value:"BaBaMaSaRa***Foo"},
+							{uniqueId: 7, value:"squawl"},
+							{uniqueId: 8, value:"seaweed"},
+							{uniqueId: 9, value:"jfq4@#!$!@Rf14r14i5u"}
+						]
+					};
+					store.close();
+	
+					//Do the next fetch and verify that the next item you get is not
+					//a reference to the same item (data cleared and reloaded.
+					var secondComplete = function(items, request){
+						try{
+							t.assertEqual(items.length, 1);
+							var secondItem = items[0];
+							t.assertTrue(firstItem != null);
+							t.assertTrue(secondItem != null);
+							t.assertTrue(firstItem != secondItem);
+							d.callback(true);
+						}catch(e){
+							d.errback(e);
+						}
+					}
+					store.fetch({query: {value: "bar\*foo"}, onComplete: secondComplete, onError: error});
+				}
+				function error(error, request){
+					t.assertTrue(false);
+					d.errback(error);
+				}
+				store.fetch({query: {value: "bar\*foo"}, onComplete: firstComplete, onError: error});
+				return d;
+			}
+		},
+		{
 			name: "Identity API: no_identifier_specified",
 	 		runTest: function(t){
 				var arrayOfItems = [
