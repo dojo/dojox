@@ -22,7 +22,7 @@ dojo.provide("dojox.grid._RowManager");
 				index: inRowIndex, 
 				node: inRowNode,
 				odd: Boolean(inRowIndex&1),
-				selected: this.grid.selection.isSelected(inRowIndex),
+				selected: !!this.grid.selection.isSelected(inRowIndex),
 				over: this.isOver(inRowIndex),
 				customStyles: "",
 				customClasses: "dojoxGridRow"
@@ -48,7 +48,7 @@ dojo.provide("dojox.grid._RowManager");
 		setOverRow: function(inRowIndex){
 			var last = this.overRow;
 			this.overRow = inRowIndex;
-			if((last!=this.overRow)&&(last >=0)){
+			if((last!=this.overRow)&&(dojo.isString(last) || last >= 0)){
 				this.updateStyles(last);
 			}
 			this.updateStyles(this.overRow);

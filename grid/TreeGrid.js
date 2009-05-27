@@ -5,6 +5,7 @@ dojo.provide("dojox.grid.TreeGrid");
 dojo.require("dojox.grid.DataGrid");
 dojo.require("dojox.grid._TreeView");
 dojo.require("dojox.grid.cells.tree");
+dojo.require("dojox.grid.TreeSelection");
 
 dojo.declare("dojox.grid._TreeAggregator", null, {
 	cells: [],
@@ -228,13 +229,21 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	
 	// Override this to get our "magic" layout
 	_layoutClass: dojox.grid._TreeLayout,
+
+	createSelection: function(){
+		this.selection = new dojox.grid.TreeSelection(this);
+	},
 		
-	getItem: function(/*integer|Array*/ idx){
+	getItem: function(/*integer|Array|String*/ idx){
 		// summary:
-		//		overridden so that you can pass in an array of indexes to get the
-		//		item based off its path...that is, passing in [1,3,2] will get the
+		//		overridden so that you can pass in a '/' delimited string of indexes to get the
+		//		item based off its path...that is, passing in "1/3/2" will get the
 		//		3rd (0-based) child from the 4th child of the 2nd top-level item.
 		var isArray = dojo.isArray(idx);
+		if(dojo.isString(idx) && idx.indexOf('/')){
+			idx = idx.split('/');
+			isArray = true;
+		}
 		if(isArray && idx.length == 1){
 			idx = idx[0];
 			isArray = false;
@@ -315,6 +324,42 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			}
 		}
 		return this.defaultOpen;
+	},
+	onStyleRow: function(row){
+		if(!this.layout._isCollapsable){
+			this.inherited(arguments);
+			return;
+		}
+		var base = dojo.attr(row.node, 'dojoxTreeGridBaseClasses');
+		if(base){
+			row.customClasses = base;
+		}
+		var i = row;
+		var tagName = i.node.tagName.toLowerCase();
+		i.customClasses += (i.odd?" dojoxGridRowOdd":"") +
+						   (i.selected&&tagName=='tr'?" dojoxGridRowSelected":"") +
+						   (i.over&&tagName=='tr'?" dojoxGridRowOver":"");
+		this.focus.styleRow(i);
+		this.edit.styleRow(i);
+	},
+	styleRowNode: function(inRowIndex, inRowNode){
+		if(inRowNode){
+			if(inRowNode.tagName.toLowerCase() == 'div'){
+				dojo.query("tr[dojoxTreeGridPath]", inRowNode).forEach(function(rowNode){
+					this.rows.styleRowNode(dojo.attr(rowNode, 'dojoxTreeGridPath'), rowNode);
+				},this);
+			}
+			this.rows.styleRowNode(inRowIndex, inRowNode);
+		}
+	},
+	onCanSelect: function(inRowIndex){
+		var nodes = dojo.query("tr[dojoxTreeGridPath='" + inRowIndex + "']", this.domNode);
+		if(nodes.length){
+			if(dojo.hasClass(nodes[0], 'dojoxGridSummaryRow')){
+				return false;
+			}
+		}
+		return this.inherited(arguments);
 	}
 });
 dojox.grid.TreeGrid.markupFactory = function(props, node, ctor, cellFunc){
