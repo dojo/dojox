@@ -92,6 +92,33 @@ doh.register("dojox.data.tests.ClientFilter",
 			t.t(finished); // this should finish synchronously, because we should have it in the cache
 			return d;
 		},
+		function repeatedQueries(t) {
+			var d = new doh.Deferred();
+			var finished;
+			jsonStore.fetch({queryOptions:{cache:true},query:{}, 
+				onComplete: function(items, request){
+					console.log("items",items);
+					t.is(6, items.length); // make sure we get the correct number of items
+					jsonStore.newItem({firstName:"Jack",lastName:"Jones"});
+					jsonStore.fetch({query:{}, 
+						onComplete: function(items, request){
+							t.is(7, items.length); // make sure we get the correct number of items
+						}
+					});
+					jsonStore.serverVersion = jsonStore._updates.length;
+					jsonStore.newItem({firstName:"Jack",lastName:"Jones"});
+					jsonStore.fetch({query:{}, 
+						onComplete: function(items, request){
+							finished = true;
+							t.is(8, items.length); // make sure we get the correct number of items
+							d.callback(true);
+						}
+					});
+				}
+			});
+			return d;
+		},
+		
 		function sorting(t) {
 			var d = new doh.Deferred();
 			var finished;

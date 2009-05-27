@@ -156,6 +156,8 @@ dojo.require("dojo.data.util.filter");
 							defResult.fullLength = results._fullLength;
 							return results;
 						});
+						args._version = cachedArgs._version;
+						break;
 					}
 				}
 				if(!defResult){
@@ -182,7 +184,7 @@ dojo.require("dojo.data.util.filter");
 					delete args._loading;
 					// update the result set in case anything changed while we were waiting for the fetch
 					if(results){
-						args._version = version;
+						args._version = args._version || version;
 						self.updateResultSet(results,args);
 						args.cacheResults = results;
 					}
