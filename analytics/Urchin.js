@@ -62,7 +62,7 @@ dojo.declare("dojox.analytics.Urchin", null, {
 		this.acct = this.acct || dojo.config.urchin;
 
 		var re = /loaded|complete/,
-			gaHost = ("https:" == dojo.doc.location.protocol) ? "https://ssl." : "http://www.";
+			gaHost = ("https:" == dojo.doc.location.protocol) ? "https://ssl." : "http://www.",
 			n = dojo.create('script', {
 				src: gaHost + "google-analytics.com/ga.js"
 			}, dojo.doc.getElementsByTagName("head")[0]);
