@@ -163,6 +163,7 @@ dojo.require("dojo.data.util.filter");
 				if(!defResult){
 					var serverArgs = dojo.mixin({}, args);
 					var putInCache = (args.queryOptions || 0).cache;
+					var fetchCache = this._fetchCache;
 					if(putInCache === undefined ? this.cacheByDefault : putInCache){
 						// we are caching this request, so we want to get all the data, and page on the client side
 						if(args.start || args.count){
@@ -174,9 +175,13 @@ dojo.require("dojo.data.util.filter");
 							});
 						}
 						args = serverArgs;
-						this._fetchCache.push(args);
+						fetchCache.push(args);
 					}
 					defResult= args._loading = this._doQuery(args);
+					 
+					defResult.addErrback(function(){
+						fetchCache.splice(dojo.indexOf(fetchCache, args), 1);
+					});
 				}
 				var version = this.serverVersion;
 				
