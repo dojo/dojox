@@ -10,12 +10,14 @@ Project state:
 [CalendarFx]	experimental
 [ColorPicker]	beta
 [Dialog]	experimental
+[FeedPortlet]	experimental
 [FilePicker]	experimental
 [FisheyeList]	experimental
 [FisheyeLite]	beta
 [Iterator]	experimental
 [Loader]	experimental
 [Pager]		experimental
+[Portlet]	experimental
 [PlaceholderMenuItem]	experimental
 [Roller]	experimental
 [RollingList]	experimental
@@ -32,6 +34,7 @@ Credits:
 [CalendarFx] Shane O'Sullivan
 [ColorPicker] Peter Higgins (dante)
 [Dialog] Peter Higgins (dante)
+[FeedPortlet] Shane O'Sullivan
 [FilePicker] Nathan Toone (toonetown)
 [FisheyeList] Karl Tiedt (kteidt)
 [FisheyeLite] Peter Higgins (dante)
@@ -39,6 +42,7 @@ Credits:
 [Loader] Peter Higgins (dante)
 [Pager] Nikolai Onken (nonken), Peter Higgins (dante);
 [PlaceholderMenuItem] Nathan Toone (toonetown)
+[Portlet] Shane O'Sullivan
 [Roller] Peter Higgins (dante)
 [RollingList] Nathan Toone (toonetown)
 [SortList] Peter Higgins (dante)
