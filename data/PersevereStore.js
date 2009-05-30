@@ -61,7 +61,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 					var methodDef = methodsDefinitions[j];
 					// if any method definitions indicate that the method should run on the server, than add 
 					// it to the prototype as a JSON-RPC method
-					if(methodDef.runAt == "server" && !methodsTarget[j]){
+					if(methodDef.runAt != "client" && !methodsTarget[j]){
 						methodsTarget[j] = (function(methodName){
 							return function(){
 								// execute a JSON-RPC call
