@@ -82,7 +82,7 @@ dojo.declare("dojox.grid._TreeAggregator", null, {
 		var storeCache = store._cachedAggregates = store._cachedAggregates || {};
 		var id = store.getIdentity(item);
 		var itemCache = storeCache[id] = storeCache[id] || [];
-		if(cell.declaredClass != "dojox.grid.cells.TreeCell"){
+		if(!cell.getOpenState){
 			cell = this.grid.getCell(cell.layoutIndex + level + 1);
 		}
 		var idx = cell.index;
@@ -141,11 +141,9 @@ dojo.declare("dojox.grid._TreeLayout", dojox.grid._Layout, {
 					n[k] = originalCell[k];
 				}
 				n = dojo.mixin(n, {
-					type: dojox.grid.cells.TreeCell,
 					level: level,
 					idxInParent: level > 0 ? idx : -1,
-					parentCell: level > 0 ? parentCell : null,
-					originalCell: originalCell
+					parentCell: level > 0 ? parentCell : null
 				});
 				return n;
 			};
@@ -194,6 +192,275 @@ dojo.declare("dojox.grid._TreeLayout", dojox.grid._Layout, {
 			arguments[0] = this._getInternalStructure(s);
 		}
 		this.inherited(arguments);
+	},
+
+	addCellDef: function(inRowIndex, inCellIndex, inDef){
+		var obj = this.inherited(arguments);
+		return dojo.mixin(obj, dojox.grid.cells.TreeCell);
+	}
+});
+
+dojo.declare("dojox.grid.TreePath", null, {
+	level: 0,
+	_str: "",
+	_arr: null,
+	grid: null,
+	store: null,
+	cell: null,
+	item: null,
+
+	constructor: function(/*String|Integer[]|Integer|dojox.grid.TreePath*/ path, /*dojox.grid.TreeGrid*/ grid){
+		if(dojo.isString(path)){
+			this._str = path;
+			this._arr = dojo.map(path.split('/'), "return parseInt(item);");
+		}else if(dojo.isArray(path)){
+			this._str = path.join('/');
+			this._arr = path.slice(0);
+		}else if(typeof path == "number"){
+			this._str = String(path);
+			this._arr = [path];
+		}else{
+			this._str = path._str;
+			this._arr = path._arr.slice(0);
+		}
+		this.level = this._arr.length-1;
+		this.grid = grid;
+		this.store = this.grid.store;
+		this.cell = grid.layout.cells[this.level];
+	},
+	item: function(){
+		// summary:
+		//	gets the dojo.data item associated with this path
+		if(!this._item){
+			this._item = this.grid.getItem(this._arr);
+		}
+		return this._item;
+	},
+	compare: function(path /*dojox.grid.TreePath|String|Array*/){
+		// summary:
+		//	compares two paths
+		if(dojo.isString(path) || dojo.isArray(path)){
+			if(this._str == path){ return 0; }
+			if(path.join && this._str == path.join('/')){ return 0; }
+			path = new dojox.grid.TreePath(path, this.grid);
+		}else if(path instanceof dojox.grid.TreePath){
+			if(this._str == path._str){ return 0; }
+		}
+		for(var i=0, l=(this._arr.length < path._arr.length ? this._arr.length : path._arr.length); i<l; i++){
+			if(this._arr[i]<path._arr[i]){ return -1; }
+			if(this._arr[i]>path._arr[i]){ return 1; }
+		}
+		if(this._arr.length<path._arr.length){ return -1; }
+		if(this._arr.length>path._arr.length){ return 1; }
+		return 0;
+	},
+	isOpen: function(){
+		// summary:
+		//	Returns the open state of this cell.
+		return this.cell.openStates && this.cell.getOpenState(this.item());
+	},
+	previous: function(){
+		// summary:
+		//	Returns the path that is before this path in the
+		//	grid. If no path is found, returns null.
+		var new_path = this._arr.slice(0);
+
+		if(this._str == "0"){
+			return null;
+		}
+
+		var last = new_path.length-1;
+
+		if(new_path[last] == 0){
+			new_path.pop();
+			return new dojox.grid.TreePath(new_path, this.grid);
+		}
+
+		new_path[last]--;
+		var path = new dojox.grid.TreePath(new_path, this.grid);
+		return path.lastChild(true);
+	},
+	next: function(){
+		// summary:
+		//	Returns the next path in the grid.  If no path
+		//	is found, returns null.
+		var new_path = this._arr.slice(0);
+
+		if(this.isOpen()){
+			new_path.push(0);
+		}else{
+			new_path[new_path.length-1]++;
+			for(var i=this.level; i>=0; i--){
+				var item = this.grid.getItem(new_path.slice(0, i+1));
+				if(i>0){
+					if(!item){
+						new_path.pop();
+						new_path[i-1]++;
+					}
+				}else{
+					if(!item){
+						return null;
+					}
+				}
+			}
+		}
+
+		return new dojox.grid.TreePath(new_path, this.grid);
+	},
+	children: function(){
+		// summary:
+		//	Returns the child data items of this row.  If this
+		//	row isn't open, returns null.
+		if(!this.isOpen()){
+			return null;
+		}
+		return this.store.getValues(this.item(), this.grid.layout.cells[this.cell.level+1].parentCell.field);
+	},
+	parent: function(){
+		// summary:
+		//	Returns the parent path of this path.  If this is a
+		//	top-level row, returns null.
+		if(this.level == 0){
+			return null;
+		}
+		return new dojox.grid.TreePath(this._arr.slice(0, this.level), this.grid);
+	},
+	lastChild: function(/*Boolean?*/ traverse){
+		// summary:
+		//	Returns the last child row below this path.  If traverse
+		//	is true, will traverse down to find the last child row
+		//	of this branch.  If there are no children, returns itself.
+		var children = this.children();
+		if(!children || !children.length){
+			return this;
+		}
+		var path = new dojox.grid.TreePath(this._str + "/" + String(children.length-1), this.grid);
+		if(!traverse){
+			return path;
+		}
+		return path.lastChild(true);
+	},
+	toString: function(){
+		return this._str;
+	}
+});
+
+dojo.declare("dojox.grid._TreeFocusManager", dojox.grid._FocusManager, {
+	setFocusCell: function(inCell, inRowIndex){
+		if(inCell && inCell.getNode(inRowIndex)){
+			this.inherited(arguments);
+		}
+	},
+	isLastFocusCell: function(){
+		if(this.cell && this.cell.index == this.grid.layout.cellCount-1){
+			var path = new dojox.grid.TreePath(this.grid.rowCount-1, this.grid);
+			path = path.lastChild(true);
+			return this.rowIndex == path._str;
+		}
+		return false;
+	},
+	next: function(){
+		// summary:
+		//	focus next grid cell
+		if(this.cell){
+			var row=this.rowIndex, col=this.cell.index+1, cc=this.grid.layout.cellCount-1;
+			var path = new dojox.grid.TreePath(this.rowIndex, this.grid);
+			if(col > cc){
+				var new_path = path.next();
+				if(!new_path){
+					col--;
+				}else{
+					col = 0;
+					path = new_path;
+				}
+			}
+			if(this.grid.edit.isEditing()){ //when editing, only navigate to editable cells
+				var nextCell = this.grid.getCell(col);
+				if (!this.isLastFocusCell() && !nextCell.editable){
+					this._focusifyCellNode(false);
+					this.cell=nextCell;
+					this.rowIndex=path._str;
+					this.next();
+					return;
+				}
+			}
+			this.setFocusIndex(path._str, col);
+		}
+	},
+	previous: function(){
+		// summary:
+		//	focus previous grid cell
+		if(this.cell){
+			var row=(this.rowIndex || 0), col=(this.cell.index || 0) - 1;
+			var path = new dojox.grid.TreePath(row, this.grid);
+			if(col < 0){
+				var new_path = path.previous();
+				if(!new_path){
+					col = 0;
+				}else{
+					col = this.grid.layout.cellCount-1;
+					path = new_path;
+				}
+			}
+			if(this.grid.edit.isEditing()){ //when editing, only navigate to editable cells
+				var prevCell = this.grid.getCell(col);
+				if (!this.isFirstFocusCell() && !prevCell.editable){
+					this._focusifyCellNode(false);
+					this.cell=prevCell;
+					this.rowIndex=path._str;
+					this.previous();
+					return;
+				}
+			}
+			this.setFocusIndex(path._str, col);
+		}
+	},
+	move: function(inRowDelta, inColDelta){
+		if(this.isNavHeader()){
+			this.inherited(arguments);
+			return;
+		}
+		if(!this.cell){ return; }
+		// Handle grid proper.
+		var sc = this.grid.scroller,
+			r = this.rowIndex,
+			rc = this.grid.rowCount-1,
+			path = new dojox.grid.TreePath(this.rowIndex, this.grid);
+		if(inRowDelta){
+			var row;
+			if(inRowDelta>0){
+				path = path.next();
+				row = path._arr[0];
+				if(row > sc.getLastPageRow(sc.page)){
+					//need to load additional data, let scroller do that
+					this.grid.setScrollTop(this.grid.scrollTop+sc.findScrollTop(row)-sc.findScrollTop(r));
+				}
+			}else if(inRowDelta<0){
+				path = path.previous();
+				row = path._arr[0];
+				if(row <= sc.getPageRow(sc.page)){
+					//need to load additional data, let scroller do that
+					this.grid.setScrollTop(this.grid.scrollTop-sc.findScrollTop(r)-sc.findScrollTop(row));
+				}
+			}
+		}
+		var cc = this.grid.layout.cellCount-1,
+		i = this.cell.index,
+		col = Math.min(cc, Math.max(0, i+inColDelta));
+		var cell = this.grid.getCell(col);
+		while(col>=0 && col < cc && cell && cell.hidden == true){
+			// skip hidden cells
+			col += colDir;
+			cell = this.grid.getCell(col);
+		}
+		if (!cell || cell.hidden == true){
+			// don't change col if would move to hidden
+			col = i;
+		}
+		if(inRowDelta){
+			this.grid.updateRow(r);
+		}
+		this.setFocusIndex(path._str, col);
 	}
 });
 
@@ -296,6 +563,18 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		this.scroller._origDefaultRowHeight = this.scroller.defaultRowHeight;
 	},
 	
+	createManagers: function(){
+		// summary:
+		//		create grid managers for various tasks including rows, focus, selection, editing
+
+		// row manager
+		this.rows = new dojox.grid._RowManager(this);
+		// focus manager
+		this.focus = new dojox.grid._TreeFocusManager(this);
+		// edit manager
+		this.edit = new dojox.grid._EditManager(this);
+	},
+
 	_setStore: function(store){
 		this.inherited(arguments);
 		if(this.aggregator){
@@ -360,6 +639,50 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			}
 		}
 		return this.inherited(arguments);
+	},
+	onKeyDown: function(e){
+		if(e.altKey || e.metaKey){
+			return;
+		}
+		var dk = dojo.keys;
+		switch(e.keyCode){
+			case dk.UP_ARROW:
+				if(!this.edit.isEditing() && this.focus.rowIndex != "0"){
+					dojo.stopEvent(e);
+					this.focus.move(-1, 0);
+				}
+				break;
+			case dk.DOWN_ARROW:
+				var currPath = new dojox.grid.TreePath(this.focus.rowIndex, this);
+				var lastPath = new dojox.grid.TreePath(this.rowCount-1, this);
+				lastPath = lastPath.lastChild(true);
+				if(!this.edit.isEditing() && currPath.toString() != lastPath.toString()){
+					dojo.stopEvent(e);
+					this.focus.move(1, 0);
+				}
+				break;
+			default:
+				this.inherited(arguments);
+				break;
+		}
+	},
+	canEdit: function(inCell, inRowIndex){
+		var node = inCell.getNode(inRowIndex);
+		return node && this._canEdit;
+	},
+	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
+		var item = this.getItem(inRowIndex);
+		var oldValue = this.store.getValue(item, inAttrName);
+		if(typeof oldValue == 'number'){
+			inValue = isNaN(inValue) ? inValue : parseFloat(inValue);
+		}else if(typeof oldValue == 'boolean'){
+			inValue = inValue == 'true' ? true : inValue == 'false' ? false : inValue;
+		}else if(oldValue instanceof Date){
+			var asDate = new Date(inValue);
+			inValue = isNaN(asDate.getTime()) ? inValue : asDate;
+		}
+		this.store.setValue(item, inAttrName, inValue);
+		this.onApplyCellEdit(inValue, inRowIndex, inAttrName);
 	}
 });
 dojox.grid.TreeGrid.markupFactory = function(props, node, ctor, cellFunc){

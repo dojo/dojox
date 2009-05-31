@@ -2,10 +2,7 @@ dojo.provide("dojox.grid.cells.tree");
 
 dojo.require("dojox.grid.cells");
 
-dojo.declare("dojox.grid.cells.TreeCell", dojox.grid.cells.Cell, {
-	postscript: function(){
-		this.openStates = {};
-	},
+dojox.grid.cells.TreeCell = {
 	formatAggregate: function(inItem, level, inRowIndexes){
 		var f, g=this.grid, i=g.edit.info, 
 			d=g.aggregator ? g.aggregator.getForCell(this, level, inItem, level === this.level ? "cnt" : this.parentCell.aggregate) : (this.value || this.defaultValue);
@@ -28,6 +25,7 @@ dojo.declare("dojox.grid.cells.TreeCell", dojox.grid.cells.Cell, {
 			itm = itemId;
 			itemId = store.getIdentity(itemId);
 		}
+		if(!this.openStates){ this.openStates = {}; }
 		if(typeof itemId != "string" || !(itemId in this.openStates)){
 			this.openStates[itemId] = grid.getDefaultOpenState(this, itm);
 		}
@@ -37,15 +35,16 @@ dojo.declare("dojox.grid.cells.TreeCell", dojox.grid.cells.Cell, {
 		if(!dojo.isArray(inRowIndexes)){
 			inRowIndexes = [inRowIndexes];
 		}
+		var result = "";
 		if(level > this.level || (level === this.level && summaryRow)){
 			cellClasses.push("dojoxGridSpacerCell");
 			if(level === this.level){
 				cellClasses.push("dojoxGridTotalCell");
 			}
-			return '<span></span>';
+			result = '<span></span>';
 		}else if(level < this.level){
 			cellClasses.push("dojoxGridSummaryCell");
-			return '<span class="dojoxGridSummarySpan">' + this.formatAggregate(inItem, level, inRowIndexes) + '</span>';
+			result = '<span class="dojoxGridSummarySpan">' + this.formatAggregate(inItem, level, inRowIndexes) + '</span>';
 		}else{
 			var ret = "";
 			if(this.isCollapsable){
@@ -57,10 +56,14 @@ dojo.declare("dojox.grid.cells.TreeCell", dojox.grid.cells.Cell, {
 				ret = '<span dojoType="dojox.grid._Expando" class="dojoxGridExpando"' +
 						'" toggleClass="' + toggleClass + '" itemId="' + id + '" cellIdx="' + this.index + '"></span>';
 			}
-			return ret + this.formatIndexes(inRowIndexes, inItem);
+			result = ret + this.formatIndexes(inRowIndexes, inItem);
 		}
+
+		if(this.grid.focus.cell && this.index == this.grid.focus.cell.index &&
+			inRowIndexes.join('/') == this.grid.focus.rowIndex){
+			cellClasses.push(this.grid.focus.focusClass);
+		}
+
+		return result;
 	}
-});
-dojox.grid.cells.TreeCell.markupFactory = function(node, cell){
-	dojox.grid.cells.Cell.markupFactory(node, cell);
 };

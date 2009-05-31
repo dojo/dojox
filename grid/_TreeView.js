@@ -201,6 +201,12 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 		}
 		return (n != this.domNode) ? n : null; 
 	},
+	getCellNode: function(inRowNode, inCellIndex){
+		var node = dojo.query("td[idx='" + inCellIndex + "']", inRowNode)[0];
+		if(node&&node.parentNode&&!dojo.hasClass(node.parentNode, "dojoxGridSummaryRow")){
+			return node;
+		}
+	},
 	decorateEvent: function(e){
 		e.rowNode = this.findRowTarget(e.target);
 		if(!e.rowNode){return false};
@@ -258,6 +264,12 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 		var rowNodes = dojo.query("tr[dojoxTreeGridPath='" + inRowIndex + "']", this.domNode);
 		if(rowNodes.length){
 			this.styleRowNode(inRowIndex, rowNodes[0]);
+		}
+	},
+	getCellNode: function(inRowIndex, inCellIndex){
+		var row = dojo.query("tr[dojoxTreeGridPath='" + inRowIndex + "']", this.domNode)[0];
+		if(row){
+			return this.content.getCellNode(row, inCellIndex);
 		}
 	},
 	destroy: function(){

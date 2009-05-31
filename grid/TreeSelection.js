@@ -182,95 +182,26 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 			grid = this.grid,
 			inFrom = String(inFrom),
 			inTo = String(inTo);
-		inFromStr = inFrom;
-		inToStr = inTo;
-		inFrom = dojo.map(inFrom.split('/'), 'return parseInt(item);');
-		inTo = dojo.map(inTo.split('/'), 'return parseInt(item);');
+		inFrom = new dojox.grid.TreePath(inFrom, grid);
+		inTo = new dojox.grid.TreePath(inTo, grid);
 
-		if(this._comparePaths(inFrom, inTo) > 0){
+		if(inFrom.compare(inTo) > 0){
 			var tmp = inFrom;
 			inFrom = inTo;
 			inTo = tmp;
-
-			tmp = inFromStr;
-			inFromStr = inToStr;
-			inToStr = tmp;
 		}
+
+		var inFromStr = inFrom._str, inToStr = inTo._str;
 
 		// select/deselect the first
 		func(inFromStr);
 
-		var _traversePaths = function(pCell, cell, item, pStack){
-			if(!pCell.getOpenState(item)){
-				return;
+		var p = inFrom;
+		while(p = p.next()){
+			if(p._str == inToStr){
+				break;
 			}
-
-			var children = store.getValues(item, cell.parentCell.field);
-			for(var i=0, l=children.length; i<l; i++){
-				pStack.push(i);
-				var pStackStr = pStack.join('/');
-				if(pStackStr == inToStr){
-					return true;
-				}
-				func(pStackStr);
-				if(_traversePaths(cell, cells[cell.index+1], children[i], pStack)){
-					return true;
-				}
-				pStack.pop();
-			}
-		};
-
-		var found = false;
-		if(inFrom.length > 1){
-			// traverse out from starting point
-			var lastIdx = inFrom.length-1;
-			for(var j=lastIdx; j>=1; j--){
-				var cell = cells[j];
-				var parentCell = cell.parentCell;
-				var pStack = inFrom.slice(0, j);
-				var item = this.grid.getItem(pStack);
-				var siblings = this.grid.store.getValues(item, parentCell.field);
-
-				// we want to possibly traverse down the starting point,
-				// but no others as we move out
-				for(var i=inFrom[j]+(j==lastIdx? 0 : 1), l=siblings.length; i<l; i++){
-					pStack.push(i);
-					var pStackStr = pStack.join('/');
-					if(pStackStr == inToStr){
-						found = true;
-						break;
-					}
-					func(pStackStr);
-					if(_traversePaths(cell, cells[j+1], siblings[i], pStack)){
-						found = true;
-						break;
-					}
-					pStack.pop();
-				}
-
-				if(found){
-					break;
-				}
-			}
-		}
-
-		if(inFrom[0] != inTo[0] || !found){
-			var cell = cells[0];
-			var parentCell = cell.parentCell;
-
-			for(var i=inFrom.length == 1 ? inFrom[0] : inFrom[0]+1; i<=inTo[0]; i++){
-				var pStack = [ i ];
-				var pStackStr = String(i);
-				var item = this.grid.getItem(pStack);
-
-				if(pStackStr == inToStr){
-					break;
-				}
-				func(pStackStr);
-				if(_traversePaths(cell, cells[1], item, pStack)){
-					break;
-				}
-			}
+			func(p._str);
 		}
 
 		// select/deselect the last

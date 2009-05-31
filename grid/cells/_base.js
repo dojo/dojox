@@ -237,30 +237,31 @@ dojo.require("dojox.grid.util");
 		if(get){
 			cellDef.get = dojo.getObject(get);
 		}
-		var getBoolAttr = function(attr){
+		var getBoolAttr = function(attr, cell, cellAttr){
 			var value = d.trim(d.attr(node, attr)||"");
-			return value ? !(value.toLowerCase()=="false") : undefined;
+			if(value){ cell[cellAttr||attr] = !(value.toLowerCase()=="false"); }
 		}
-		cellDef.sortDesc = getBoolAttr("sortDesc");
-		cellDef.editable = getBoolAttr("editable");
-		cellDef.alwaysEditing = getBoolAttr("alwaysEditing");
-		cellDef.noresize = getBoolAttr("noresize");
-		cellDef.draggable = getBoolAttr("draggable");
+		getBoolAttr("sortDesc", cellDef);
+		getBoolAttr("editable", cellDef);
+		getBoolAttr("alwaysEditing", cellDef);
+		getBoolAttr("noresize", cellDef);
+		getBoolAttr("draggable", cellDef);
 
 		var value = d.trim(d.attr(node, "loadingText")||d.attr(node, "defaultValue")||"");
 		if(value){
 			cellDef.defaultValue = value;
 		}
 
-		var getStrAttr = function(attr){
-			return d.trim(d.attr(node, attr)||"")||undefined;
+		var getStrAttr = function(attr, cell, cellAttr){
+			var value = d.trim(d.attr(node, attr)||"")||undefined;
+			if(value){ cell[cellAttr||attr] = value; }
 		};
-		cellDef.styles = getStrAttr("styles");
-		cellDef.headerStyles = getStrAttr("headerStyles");
-		cellDef.cellStyles = getStrAttr("cellStyles");
-		cellDef.classes = getStrAttr("classes");
-		cellDef.headerClasses = getStrAttr("headerClasses");
-		cellDef.cellClasses = getStrAttr("cellClasses");
+		getStrAttr("styles", cellDef);
+		getStrAttr("headerStyles", cellDef);
+		getStrAttr("cellStyles", cellDef);
+		getStrAttr("classes", cellDef);
+		getStrAttr("headerClasses", cellDef);
+		getStrAttr("cellClasses", cellDef);
 	}
 
 	dojo.declare("dojox.grid.cells.Cell", dgc._Base, {
