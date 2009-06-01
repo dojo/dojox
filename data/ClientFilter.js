@@ -190,7 +190,7 @@ dojo.require("dojo.data.util.filter");
 					delete args._loading;
 					// update the result set in case anything changed while we were waiting for the fetch
 					if(results){
-						args._version = args._version || version;
+						args._version = typeof args._version == "number" ? args._version : version;
 						self.updateResultSet(results,args);
 						args.cacheResults = results;
 					}
