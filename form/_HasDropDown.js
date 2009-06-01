@@ -7,35 +7,37 @@ dojo.declare("dojox.form._HasDropDown",
 	{
 		//	summary:
 		//		Mixin for widgets that need drop down ability.
-		//
-		//	dropDownNode: DomNode
-		//		responds to click events.  "dropDownNode" can be set via
-		//		a dojoAttachPoint assignment.  If missing, then either focusNode
-		//		or domNode (if focusNode is also missing) will be used.
+
+		//	dropDownNode: [protected] DomNode
+		//		The button/icon/node to click to display the drop down.
+		//		Can be set via a dojoAttachPoint assignment.  
+		//		If missing, then either focusNode or domNode (if focusNode is also missing) will be used.
 		dropDownNode: null,
 		
-		//	popupStateNode: DomNode
-		//		the node to set the popupActive class on.  If missing, then 
-		//		focusNode or dropDownNode (if focusNode is missing) will be used.
+		//	popupStateNode: [protected] DomNode
+		//		The node to set the popupActive class on.
+		//		Can be set via a dojoAttachPoint assignment.  
+		//		If missing, then focusNode or dropDownNode (if focusNode is missing) will be used.
 		popupStateNode: null,
 		
-		//	aroundNode: DomNode
-		//		the node to display the popup around.  If missing, then 
-		//		domNode will be used.
+		//	aroundNode: [protected] DomNode
+		//		The node to display the popup around.
+		//		Can be set via a dojoAttachPoint assignment.  
+		//		If missing, then domNode will be used.
 		aroundNode: null,
 		
-		//	dropDown: Widget
-		//		the widget to display in the popup.  This widget *must* be 
+		//	dropDown: [protected] Widget
+		//		The widget to display as a popup.  This widget *must* be 
 		//		defined before the startup function is called.
 		dropDown: null,
 		
-		//	autoWidth: Boolean
+		//	autoWidth: [protected] Boolean
 		//		Set to true to make the drop down at least as wide as this 
 		//		widget.  Set to false if the drop down should just be its
 		//		default width
 		autoWidth: true,
 		
-		//  maxHeight: Integer
+		//  maxHeight: [protected] Integer
 		//		The max height for our dropdown.  Set to 0 for no max height.
 		//		any dropdown taller than this will have scrollbars
 		maxHeight: 0,
@@ -46,24 +48,37 @@ dojo.declare("dojox.form._HasDropDown",
 		_stopClickEvents: true,
 		
 		_onMenuMouseup: function(/*Event*/ e){
-			// summary: called with the mouseup event if the mouseup occurred
-			//			over the menu.  You can try and use this event in
-			//			order to automatically execute your dropdown (as
-			//			if it were clicked).  You mightwant to close your menu 
-			//			as a part of this function.
+			// summary:
+			//		Called with the mouseup event if the mouseup occurred
+			//		over the menu.  You can try and use this event in
+			//		order to automatically execute your dropdown (as
+			//		if it were clicked).  You might want to close your menu 
+			//		as a part of this function.
+			//
+			//		This is useful for the common mouse movement pattern
+			//		with native browser <select> nodes:
+			//			1. mouse down on the select node (probably on the arrow)
+			//			2. move mouse to a menu item while holding down the mouse button
+			//			3. mouse up.  this selects the menu item as though the user had clicked it.
+			
+			// TODO: move code from DropDownSelect._onMenuMouseup (to call onItemClick()) into
+			// _HasDropDown, and then get rid of this extension function
 		},
 		
 		_onDropDownMouse: function(/*Event*/ e){
-			// summary: callback when the user mouse clicks on menu popup node
-			//
+			// summary:
+			//		Callback when the user mouse clicks on the arrow icon, or presses the down
+			//		arrow key, to open the drop down.
+
 			// We handle mouse events using onmousedown in order to allow for
-			// selecting via a drag.  So, our click is already handled, unless
+			// selecting via a drag.  So, our click is already handled, unless   (BK: what does this mean, selecting via drag?)
 			// we are executed via keypress - in which case, this._seenKeydown
 			// will be set to true.			
 			if(e.type == "click" && !this._seenKeydown){ return; }
 			this._seenKeydown = false;
 			
-			// If we are a mouse event, set up the mouseup handler
+			// If we are a mouse event, set up the mouseup handler.  See _onDropDownMouse() for
+			// details on this handler.
 			if(e.type == "mousedown"){
 				this._docHandler = this.connect(dojo.doc, "onmouseup", "_onDropDownMouseup");
 			}
@@ -80,16 +95,26 @@ dojo.declare("dojox.form._HasDropDown",
 		},
 
 		_onDropDownMouseup: function(/*Event?*/ e){
-			// summary: callback when the user lifts their mouse - if we are
-			//			over the menu, we execute it, otherwise, we focus our 
-			//			dropDown node.  If the event is missing, then we are not
-			//			a mouseup event.
+			// summary:
+			//		Callback when the user lifts their mouse after mouse down on the arrow icon.
+			//		If the drop is a simple menu and the mouse is over the menu, we execute it, otherwise, we focus our 
+			//		dropDown node.  If the event is missing, then we are not
+			//		a mouseup event.
+			//
+			//		This is useful for the common mouse movement pattern
+			//		with native browser <select> nodes:
+			//			1. mouse down on the select node (probably on the arrow)
+			//			2. move mouse to a menu item while holding down the mouse button
+			//			3. mouse up.  this selects the menu item as though the user had clicked it.
+
 			if(e && this._docHandler){
 				this.disconnect(this._docHandler);
 			}
 			var dropDown = this.dropDown, overMenu = false;
 			
 			if(e && this._opened){
+				// This code deals with the corner-case when the drop down covers the original widget,
+				// because it's so large.  In that case mouse-up shouldn't select a value from the menu.
 				// Find out if our target is somewhere in our dropdown widget,
 				// but not over our dropDownNode (the clickable node)
 				var c = dojo.coords(this.dropDownNode)
@@ -111,6 +136,8 @@ dojo.declare("dojox.form._HasDropDown",
 			}
 			if(this._opened && dropDown.focus){
 				// delay so that we don't steal our own focus.
+				// TODOC: this seems strange to focus on the drop down icon; I think it will break
+				// screen readers, and also, in dijit we never do this.  Is there a reason?  (BK)
 				window.setTimeout(dojo.hitch(dropDown, "focus"), 1);
 			}else{
 				dijit.focus(this.focusNode);
@@ -169,7 +196,9 @@ dojo.declare("dojox.form._HasDropDown",
 		},
 
 		_onKey: function(/*Event*/ e){
-			// summary: callback when the user presses a key on menu popup node
+			// summary:
+			//		Callback when the user presses a key on menu popup node
+
 			if(this.disabled || this.readOnly){ return; }
 			var d = this.dropDown;
 			if(d && this._opened && d.handleKey){
@@ -185,26 +214,40 @@ dojo.declare("dojox.form._HasDropDown",
 		},
 
 		_onBlur: function(){
-			// summary: called magically when focus has shifted away from this widget and it's dropdown
+			// summary:
+			//		Called magically when focus has shifted away from this widget and it's dropdown
+
 			this.closeDropDown();
 			// don't focus on button.  the user has explicitly focused on something else.
 			this.inherited("_onBlur", arguments);
 		},
 		
 		isLoaded: function(){
-			// summary: returns whether or not the dropdown is loaded.  This can
+			// summary:
+			//		Returns whether or not the dropdown is loaded.  This can
 			//		be overridden in order to force a call to loadDropDown().
+			// tags:
+			//		protected
+
 			return true;
 		},
 		
 		loadDropDown: function(/* Function */ loadCallback){
-			// summary: loads the data for the dropdown, and at some point, calls
+			// summary:
+			//		Loads the data for the dropdown, and at some point, calls
 			//		the given callback
+			// tags:
+			//		protected
+
 			loadCallback();
 		},
 
 		toggleDropDown: function(){
-			// summary: toggle the drop-down widget; if it is up, close it, if not, open it
+			// summary:
+			//		Toggle the drop-down widget; if it is up, close it, if not, open it
+			// tags:
+			//		protected
+			
 			if(this.disabled || this.readOnly){ return; }
 			this.focus();
 			var dropDown = this.dropDown;
@@ -223,13 +266,21 @@ dojo.declare("dojox.form._HasDropDown",
 		},
 		
 		openDropDown: function(){
-			// summary: opens the dropdown for this widget - it returns the 
-			//			return value of dijit.popup.open
+			// summary:
+			//		Opens the dropdown for this widget - it returns the 
+			//		return value of dijit.popup.open
+			// tags:
+			//		protected
+
 			var dropDown = this.dropDown;
 			var ddNode = dropDown.domNode;
 			var self = this;
 
 			// Prepare our popup's height and honor maxHeight if it exists.
+			
+			// TODO: isn't maxHeight dependent on the return value from dijit.popup.open(),
+			// ie, dependent on how much space is available (BK)
+
 			if(this._preparedNode){
 				dojo.style(ddNode, {width: "", height: "", display: "", visibility: "hidden"});
 			}else{
@@ -283,7 +334,11 @@ dojo.declare("dojox.form._HasDropDown",
 		},
 	
 		closeDropDown: function(/*Boolean*/ focus){
-			// summary: Closes the drop down on this widget
+			// summary:
+			//		Closes the drop down on this widget
+			// tags:
+			//		protected
+
 			if(this._opened){
 				dijit.popup.close(this.dropDown);
 				if(focus){ this.focus(); }
