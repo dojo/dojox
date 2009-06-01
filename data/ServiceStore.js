@@ -20,6 +20,7 @@ dojo.declare("dojox.data.ServiceStore",
 	// lightweight without it, but if it is provided, the ServiceStore will use it.
 	dojox.data.ClientFilter,  
 	{
+		service: null,
 		constructor: function(options){
 			//summary:
 			//		ServiceStore constructor, instantiate a new ServiceStore 

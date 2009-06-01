@@ -16,6 +16,7 @@ dojo.require("dojo.data.util.filter");
 	cf = dojo.declare("dojox.data.ClientFilter",
 		null,
 		{
+			cacheByDefault: false,
 			constructor: function(){
 				// summary:
 				//		This is an abstract class that data stores can extend to add updateable result set functionality
