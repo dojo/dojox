@@ -127,6 +127,21 @@ dojo.require("dojox.sketch.Anchor");
 			+ '</text>'
 			+ '</g>';
 	};
-
-	ta.Annotation.register("Underline");
+    
+    //customize AnnotationTool to place a underlilne shape onmouseup, no need
+	//to drag a box (like other shapes)
+    dojo.declare("dojox.sketch.UnderlineAnnotationTool", ta.AnnotationTool, {
+		onMouseDown: function(){},
+		onMouseUp: function(){
+			var f=this.figure;
+			if(!f._start){
+				return;
+			}
+			//zero out end so that the clickover is shown at the right pos
+			f._end={x:0,y:0};
+			this._create(f._start,{x:f._start.x+10,y:f._start.y+10});
+		},
+		onMouseMove: function(){}
+	});
+	ta.Annotation.register("Underline", ta.UnderlineAnnotationTool);
 })();

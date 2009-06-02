@@ -51,17 +51,17 @@ dojo.require("dojox.sketch._Plugin");
 			var _=f.nextKey();
 			var a=new (this.annotation)(f, _);
 			a.transform={
-				dx:start.x/f.zoomFactor, 
-				dy:start.y/f.zoomFactor
+				dx:f._calCol(start.x/f.zoomFactor), 
+				dy:f._calCol(start.y/f.zoomFactor)
 			};
 			a.end={ 
-				x:end.x/f.zoomFactor, 
-				y:end.y/f.zoomFactor 
+				x:f._calCol(end.x/f.zoomFactor), 
+				y:f._calCol(end.y/f.zoomFactor) 
 			};
 			if(a.control){
 				a.control={ 
-					x:Math.round((end.x/2)/f.zoomFactor),
-					y:Math.round((end.y/2)/f.zoomFactor) 
+					x:f._calCol((end.x/2)/f.zoomFactor),
+					y:f._calCol((end.y/2)/f.zoomFactor) 
 				};
 			}
 			f.onBeforeCreateShape(a);
