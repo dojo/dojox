@@ -17,13 +17,22 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		if(args && args.label){
 			this.label = args.label;
 		}
+		if("urlPreventCache" in args){
+			this.urlPreventCache = args.urlPreventCache?true:false;
+		}
 	},
 
 	_picasaUrl: "http://picasaweb.google.com/data/feed/api/all",
 
 	_storeRef: "_S",
 
+	//label: string
+	//The attribute to use from the picasa item as its label.
 	label: "title",
+
+	//urlPreventCache: boolean
+	//Flag denoting if preventCache should be passed to dojo.io.script.
+	urlPreventCache: false,
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -208,7 +217,7 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		};
 		var getArgs = {
 			url: this._picasaUrl,
-			// preventCache: true,
+			preventCache: this.urlPreventCache,
 			content: content,
 			callbackParamName: 'callback',
 			handle: myHandler
