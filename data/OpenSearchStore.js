@@ -17,11 +17,15 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 			this.label = args.label;
 			this.url = args.url;
 			this.itemPath = args.itemPath;
+			if("urlPreventCache" in args){
+				this.urlPreventCache = args.urlPreventCache?true:false;
+			}
 		}
 		var def = dojo.xhrGet({
 			url: this.url,
 			handleAs: "xml",
-			sync: true
+			sync: true,
+			preventCache: this.urlPreventCache
 		});
 		def.addCallback(this, "_processOsdd");
 		def.addErrback(function() {
@@ -34,7 +38,11 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 	itemPath: "",
 	_storeRef: "_S",
 	urlElement: null,
-	iframeElement: null,
+    iframeElement: null,
+
+	//urlPreventCache: boolean
+	//Flag denoting if xhrGet calls should use the preventCache option.
+	urlPreventCache: true,
 	
 	ATOM_CONTENT_TYPE: 3,
 	ATOM_CONTENT_TYPE_STRING: "atom",
@@ -209,7 +217,7 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 		var url = this._createSearchUrl(request);
 		var getArgs = {
 			url: url,
-			preventCache: true
+			preventCache: this.urlPreventCache
 		};
 
 		// Change to fetch the query results.
