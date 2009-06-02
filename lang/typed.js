@@ -84,6 +84,7 @@
 						this.__props__[i] = value;
 					}
 					(function(i){
+						delete self[i];
 						self.__defineGetter__(i, function(){
 							return i in this.__props__ ? this.__props__[i] : this.__proto__[i];
 						});
