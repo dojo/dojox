@@ -45,6 +45,9 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 
 	unescapeHTML: false,
 
+	//Configurable preventCache option for the URL.
+	urlPreventCache: false,
+
 	/* dojo.data.api.Read */
 
 	getValue: function(/* item */ item, /* attribute || attribute-name-string */ attribute, /* value? */ defaultValue){
@@ -327,8 +330,8 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		}else{
 			var getArgs = {
 				url: url,
-				handleAs: "xml"//,
-			//	preventCache: true
+				handleAs: "xml",
+				preventCache: this.urlPreventCache
 			};
 			var getHandler = dojo.xhrGet(getArgs);
 			getHandler.addCallback(docHandler);
