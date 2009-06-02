@@ -69,10 +69,17 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			}
 			this._indexItems();
 		}
+		if("urlPreventCache" in args){
+			this.urlPreventCache = args.urlPreventCache?true:false;
+		}
 	},
 
 	url: "",     // So the parser can instantiate the store via markup.
 	dataId: "", // So the parser can instantiate the store via markup.
+
+	//urlPreventCache: boolean
+	//Flag to denote if peventCache should be used on xhrGet calls.
+	urlPreventCache: false,
 	
 	_indexItems: function(){
 		this._getHeadings();
@@ -301,7 +308,8 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			}else{
 				var getArgs = {
 						url: this.url,
-						handleAs: "text"
+						handleAs: "text",
+						preventCache: this.urlPreventCache
 					};
 				var self = this;
 				var getHandler = dojo.xhrGet(getArgs);

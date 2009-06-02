@@ -51,6 +51,9 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 			if(args.lang){
 				this._lang = args.lang;
 			}
+			if("urlPreventCache" in args){
+				this.urlPreventCache = args.urlPreventCache?true:false;
+			}
 		}
 		this._id = dojox.data.GoogleSearchStore.prototype._id++;
 	},
