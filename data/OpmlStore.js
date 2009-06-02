@@ -30,11 +30,22 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		this._identityMap = {};
 		this._identCount = 0;
 		this._idProp = "_I";
+		if("urlPreventCache" in keywordParameters){
+			this.urlPreventCache = keywordParameters.urlPreventCache?true:false;
+		}
 	},
 
+	//label: string
+	//The attribute of the Opml item to act as a label.
 	label: "text",
 
+	//url: string
+	//The location from which to fetch the Opml document.
 	url: "",
+
+	//urlPreventCache: boolean
+	//Flag to denote if the underlying xhrGet call should set preventCache.
+	urlPreventCache: false,
 
 	_assertIsItem: function(/* item */ item){
 		if(!this.isItem(item)){ 
@@ -353,7 +364,8 @@ dojo.declare("dojox.data.OpmlStore", null, {
 					this._loadInProgress = true;
 					var getArgs = {
 							url: self.url, 
-							handleAs: "xml"
+							handleAs: "xml",
+							preventCache: self.urlPreventCache
 						};
 					var getHandler = dojo.xhrGet(getArgs);
 					getHandler.addCallback(function(data){

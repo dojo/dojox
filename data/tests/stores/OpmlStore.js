@@ -1,6 +1,7 @@
 dojo.provide("dojox.data.tests.stores.OpmlStore");
 dojo.require("dojox.data.OpmlStore");
 dojo.require("dojo.data.api.Read");
+dojo.require("dojo.data.api.Identity");
 
 dojox.data.tests.stores.OpmlStore.getDatasource = function(filepath){
 	//  summary:
@@ -1045,7 +1046,7 @@ doh.register("dojox.data.tests.stores.OpmlStore",
 			//	description:
 			//		Simple test identity API conformance.  Checks to see all declared functions are actual functions on the instances.
 
-			var testStore = new dojox.data.OpmlStore(dojox.data.tests.stores.CsvStore.getDatasource("stores/geography.xml"));
+			var testStore = new dojox.data.OpmlStore(dojox.data.tests.stores.OpmlStore.getDatasource("stores/geography.xml"));
 			var identityApi = new dojo.data.api.Identity();
 			var passed = true;
 
