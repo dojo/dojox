@@ -31,8 +31,8 @@ dojo.declare("dojox.data.FileStore", null, {
 		if(args && args.url){
 			this.url = args.url;
 		}
-		if (args && args.options) {
-			if (dojo.isArray(args.options)) {
+		if(args && args.options){
+			if(dojo.isArray(args.options)){
 				this.options = args.options;
 			}else{
 				if (dojo.isString(args.options)) {
@@ -40,8 +40,11 @@ dojo.declare("dojox.data.FileStore", null, {
 				}
 			}
 		}
-		if (args && args.pathAsQueryParam) {
+		if(args && args.pathAsQueryParam){
 			this.pathAsQueryParam = true;
+		}
+		if("urlPreventCache" in args){
+			this.urlPreventCache = args.urlPreventCache?true:false;
 		}
 	},
 
@@ -59,6 +62,10 @@ dojo.declare("dojox.data.FileStore", null, {
 	pathSeparator: "/",		//The path separator to use when chaining requests for children - can be overriden by the server on initial load
 	
 	options: [],	//Array of options to always send when doing requests.  Back end service controls this, like 'dirsOnly', 'showHiddenFiles', 'expandChildren', etc.
+
+	//urlPreventCache: boolean
+	//Flag to dennote if preventCache should be passed to xhrGet.
+	urlPreventCache: true,
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -159,7 +166,7 @@ dojo.declare("dojox.data.FileStore", null, {
 			url: this.pathAsQueryParam? this.url : this.url + "/" + item.parentPath + "/" + item.name,
 			handleAs: "json-comment-optional",
 			content: content,
-			preventCache: true
+			preventCache: this.urlPreventCache
 		};
 
 		var deferred = dojo.xhrGet(xhrData);
@@ -277,7 +284,7 @@ dojo.declare("dojox.data.FileStore", null, {
 
 		var getArgs = {
 			url: this.url,
-			preventCache: true,
+			preventCache: this.urlPreventCache,
 			handleAs: "json-comment-optional",
 			content: reqParams
 		};
@@ -313,7 +320,7 @@ dojo.declare("dojox.data.FileStore", null, {
 			url: this.pathAsQueryParam? this.url : this.url + "/" + path,
 			handleAs: "json-comment-optional",
 			content: content,
-			preventCache: true
+			preventCache: this.urlPreventCache
 		};
 
 		var deferred = dojo.xhrGet(xhrData);
