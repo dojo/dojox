@@ -1,8 +1,9 @@
 dojo.provide("dojox.lang.tests.typed");
-
+dojo.typeCheckAllClasses = true;
 dojo.require("dojox.lang.typed");
 (function(){
-	var TypedClass = dojox.lang.typed(
+	
+	dojox.lang.typed(
 		dojo.declare("dojox.lang.tests.TypedClass", null, {
 			constructor: function(makeDefaults){
 				if(makeDefaults){
@@ -14,6 +15,7 @@ dojo.require("dojox.lang.typed");
 				return a + b;
 			}
 	}));
+	var TypedClass = dojox.lang.tests.TypedClass;
 	TypedClass.properties = {
 		aString:{type:"string"}, 
 		self: TypedClass, 
@@ -29,6 +31,9 @@ dojo.require("dojox.lang.typed");
 		}
 	}
 	var hasGetters = {}.__defineGetter__;
+	if(!hasGetters){
+		console.warn("This platform does not support getters, property type checking will not be tested");
+	}
 	function mustThrow(testFunc){
 		try{
 			testFunc();
@@ -87,7 +92,6 @@ dojo.require("dojox.lang.typed");
 			typedInstance.add(22,33);
 		},
 		function typedDeclares(){
-			dojox.lang.typed.typeCheckAllClasses();			
 			dojo.declare("dojox.lang.tests.AutoTypedClass", null, {
 				constructor: function(){
 					this.foo = "bar";

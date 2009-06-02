@@ -21,7 +21,7 @@ dojox.json.schema.validate = function(/*Any*/instance,/*Object*/schema){
 	//
 	return this._validate(instance,schema,false);
 };
-dojox.json.schema.checkPropertyChange = function(/*Any*/value,/*Object*/schema){
+dojox.json.schema.checkPropertyChange = function(/*Any*/value,/*Object*/schema, /*String*/ property){
 	// summary:
 	// 		The checkPropertyChange method will check to see if an value can legally be in property with the given schema
 	// 		This is slightly different than the validate method in that it will fail if the schema is readonly and it will
@@ -35,7 +35,7 @@ dojox.json.schema.checkPropertyChange = function(/*Any*/value,/*Object*/schema){
 	// return: 
 	// 		see dojox.validate.jsonSchema.validate
 	//
-	return this._validate(value,schema,true);
+	return this._validate(value,schema, property || "property");
 };
 dojox.json.schema.mustBeValid = function(result){
 	//	summary:
@@ -58,7 +58,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 		
 		if((typeof schema != 'object' || schema instanceof Array) && (path || typeof schema != 'function')){
 			if(typeof schema == 'function'){
-				if(!(instance instanceof schema)){
+				if(!(value instanceof schema)){
 					addError("is not an instance of the class/constructor " + schema.name);
 				}
 			}else if(schema){
@@ -208,7 +208,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 		return errors;
 	}
 	if(schema){
-		checkProp(instance,schema,'','');
+		checkProp(instance,schema,'',_changing || '');
 	}
 	if(!_changing && instance && instance.$schema){
 		checkProp(instance,instance.$schema,'','');
