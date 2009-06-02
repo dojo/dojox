@@ -92,6 +92,11 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	// This should not be set directly. Instead use one of the child classes.
 	_type: "web",
 
+	// urlPreventCache: boolean
+	// Sets whether or not to pass preventCache to dojo.io.script.
+	urlPreventCache: true,
+
+
 	// _queryAttrs: Hash
 	// Maps query hash keys to Google query parameters. 
 	_queryAttrs: {
@@ -281,7 +286,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 		var getArgs = {
 			url: searchUrl,
-			preventCache: true,
+			preventCache: this.urlPreventCache,
 			content: content
 		};
 
