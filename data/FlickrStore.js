@@ -27,6 +27,9 @@ dojo.require("dojo.AdapterRegistry");
 
 		label: "title",
 
+		//Flag to allor control of if cache prevention is enabled or not.
+		urlPreventCache: true,
+
 		_assertIsItem: function(/* item */ item){
 			//	summary:
 			//      This function tests whether the item passed in is indeed an item in the store.
@@ -202,7 +205,7 @@ dojo.require("dojo.AdapterRegistry");
 			var handle = null;
 			var getArgs = {
 				url: dojox.data.FlickrStore.urlRegistry.match(request),
-				preventCache: true,
+				preventCache: this.urlPreventCache,
 				content: content
 			};
 			var myHandler = d.hitch(this, function(data){

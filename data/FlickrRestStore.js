@@ -265,7 +265,7 @@ dojo.declare("dojox.data.FlickrRestStore",
   		var handle = null;
   		var getArgs = {
 			url: this._flickrRestUrl,
-			preventCache: true,
+			preventCache: this.urlPreventCache,
 			content: content,
 			callbackParamName: "jsoncallback"
 		};
