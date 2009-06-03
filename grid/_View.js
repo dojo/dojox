@@ -106,12 +106,48 @@ dojo.require("dojo.dnd.Manager");
 			this.updateStructure();
 		},
 		
+		_cleanupRowWidgets: function(inRowNode){
+			// Summary:
+			//		Cleans up the widgets for the given row node so that
+			//		we can reattach them if needed
+			if(inRowNode){
+				dojo.forEach(dojo.query("[widgetId]", inRowNode).map(dijit.byNode), function(w){
+					if(w._destroyOnRemove){
+						w.destroy();
+						delete w;
+					}else if(w.domNode && w.domNode.parentNode){
+						w.domNode.parentNode.removeChild(w.domNode);
+					}
+				});
+			}
+		},
+		
 		onBeforeRow: function(inRowIndex, cells){
 			this._onBeforeRow(inRowIndex, cells);
+			if(inRowIndex >= 0){
+				this._cleanupRowWidgets(this.getRowNode(inRowIndex));
+			}
 		},
 		
 		onAfterRow: function(inRowIndex, cells, inRowNode){
 			this._onAfterRow(inRowIndex, cells, inRowNode);
+			var g = this.grid;
+			dojo.forEach(dojo.query(".dojoxGridStubNode", inRowNode), function(n){
+				if(n && n.parentNode){
+					var lw = n.getAttribute("linkWidget");
+					var cellIdx = window.parseInt(dojo.attr(n, "cellIdx"), 10);
+					var cellDef = g.getCell(cellIdx);
+					var w = dijit.byId(lw);
+					if(w){
+						n.parentNode.replaceChild(w.domNode, n);
+						if(!w._started){
+							w.startup();
+						}
+					}else{
+						n.innerHTML = "";
+					}
+				}
+			}, this);
 		},
 
 		testFlexCells: function(){
@@ -571,6 +607,9 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		rowRemoved:function(inRowIndex){
+			if(inRowIndex >= 0){
+				this._cleanupRowWidgets(this.getRowNode(inRowIndex));
+			}
 			this.grid.edit.save(this, inRowIndex);
 			delete this.rowNodes[inRowIndex];
 		},

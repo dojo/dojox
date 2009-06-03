@@ -298,6 +298,12 @@ dojo.requireLocalization("dijit", "loading");
 		// 		formatter functions is not filtered, even with escapeHTMLInData set to true).
 		escapeHTMLInData: true,	
 		
+		// formatterScope: Object
+		//		An object to execute format functions within.  If not set, the
+		//		format functions will execute within the scope of the cell that
+		//		has a format function.
+		formatterScope: null,
+		
 		// private
 		sortInfo: 0,
 		themeable: true,

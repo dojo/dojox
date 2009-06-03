@@ -8,6 +8,8 @@ dojo.declare("dojox.grid.__DataCellDef", dojox.grid.__CellDef, {
 	constructor: function(){
 		//	field: String?
 		//		The attribute to read from the dojo.data item for the row.
+		//  fields: String[]?
+		//		An array of fields to grab the values of and pass as an array to the grid
 		//	get: Function?
 		//		function(rowIndex, item?){} rowIndex is of type Integer, item is of type
 		//		Object.  This function will be called when a cell requests data.  Returns
@@ -78,7 +80,17 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	get: function(inRowIndex, inItem){
-		return (!inItem ? this.defaultValue : (!this.field ? this.value : this.grid.store.getValue(inItem, this.field)));
+		if(inItem && this.field == "_item" && !this.fields){
+			return inItem;
+		}else if(inItem && this.fields){
+			var ret = [];
+			var s = this.grid.store;
+			dojo.forEach(this.fields, function(f){
+				ret = ret.concat(s.getValues(inItem, f));
+			});
+			return ret;
+		}
+		return (!inItem ? this.defaultValue : (!this.field ? this.value : (this.field == "_item" ? inItem : this.grid.store.getValue(inItem, this.field))));
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
@@ -538,6 +550,10 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor, cellFunc){
 			cellDef.field = field;
 		}
 		cellDef.field = cellDef.field||cellDef.name;
+		var fields = dojo.trim(dojo.attr(node, "fields")||"");
+		if(fields){
+			cellDef.fields = fields.split(",");
+		}
 		if(cellFunc){
 			cellFunc(node, cellDef);
 		}

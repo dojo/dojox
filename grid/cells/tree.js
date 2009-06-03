@@ -6,8 +6,7 @@ dojox.grid.cells.TreeCell = {
 	formatAggregate: function(inItem, level, inRowIndexes){
 		var f, g=this.grid, i=g.edit.info, 
 			d=g.aggregator ? g.aggregator.getForCell(this, level, inItem, level === this.level ? "cnt" : this.parentCell.aggregate) : (this.value || this.defaultValue);
-		var v = (d != this.defaultValue && (f = this.formatter)) ? f.call(this, d, level - this.level, inRowIndexes) : d;
-		return (typeof v == "undefined" ? this.defaultValue : v);
+		return this._defaultFormat(d, [d, level - this.level, inRowIndexes]);
 	},
 	formatIndexes: function(inRowIndexes, inItem){
 		var f, g=this.grid, i=g.edit.info, 
@@ -15,8 +14,7 @@ dojox.grid.cells.TreeCell = {
 		if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndexes[0] && i.cell==this))){
 			return this.formatEditing(d, inRowIndexes[0], inRowIndexes);
 		}else{
-			var v = (d != this.defaultValue && (f = this.formatter)) ? f.call(this, d, inRowIndexes[0], inRowIndexes) : d;
-			return (typeof v == "undefined" ? this.defaultValue : v);
+			return this._defaultFormat(d, [d, inRowIndexes[0], inRowIndexes]);
 		}
 	},
 	getOpenState: function(itemId){
