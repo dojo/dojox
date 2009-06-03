@@ -1,6 +1,7 @@
 dojo.provide("dojox.date.tests.module");
 
 try{
+	dojo.require("dojox.date.tests.relative");
 	dojo.require("dojox.date.tests.hebrew.Date");
 	dojo.require("dojox.date.tests.IslamicDate");
 	dojo.require("dojox.date.tests.buddhist.Date");
