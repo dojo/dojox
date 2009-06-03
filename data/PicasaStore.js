@@ -207,7 +207,7 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		if(request.query.lang){
 			content.hl = request.query.lang;
 		}
-		content['max-results'] = "20";
+		content['max-results'] = this.maxResults;
 
 		//Linking this up to Picasa is a JOY!
 		var self = this;
