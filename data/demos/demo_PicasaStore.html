@@ -29,31 +29,32 @@
 		function init(){
 			var fViewWidgets = [];
 
-			//Set up an onComplete handler for flickrData
+			//Set up an onComplete handler for picasaData
 			function onComplete(items, request){
-				flickrViewsWidget.clearList();
+				picasaViewsWidget.clearList();
 				if(items.length > 0){
 					for(var i = 0; i < items.length; i++){
-						var flickrData = {
-							title: flickrStore.getValue(items[i],"title"),
-							author: flickrStore.getValue(items[i],"author"),
-							description: flickrStore.getValue(items[i],"description"),
-							iconUrl: flickrStore.getValue(items[i],"imageUrlSmall"),
-							imageUrl: flickrStore.getValue(items[i],"imageUrl")
+						var picasaData = {
+							title: picasaStore.getValue(items[i],"title"),
+							author: picasaStore.getValue(items[i],"author"),
+							description: picasaStore.getValue(items[i],"description"),
+							iconUrl: picasaStore.getValue(items[i],"imageUrlSmall"),
+							imageUrl: picasaStore.getValue(items[i],"imageUrl")
 						}
-						flickrViewsWidget.addView(flickrData);
+						picasaViewsWidget.addView(picasaData);
 					}
 				}
-				statusWidget.setValue("PROCESSING COMPLETE.");
+				statusWidget.attr("value", "PROCESSING COMPLETE.");
 
 			}
 			//What to do if a search fails...
 			function onError(error, request){
-				flickrViewsWidget.clearList();
-				statusWidget.setValue("PROCESSING ERROR.");
+                console.debug(error);
+				picasaViewsWidget.clearList();
+				statusWidget.attr("value", "PROCESSING ERROR.");
 			}
 
-			//Function to invoke the search of the FlickrStore
+			//Function to invoke the search of the PicasaStore
 			function invokeSearch(){
 				var request = {
 					query: {},
@@ -62,13 +63,13 @@
 				};
 
 				if(idWidget){
-					var userid = idWidget.getValue();
+					var userid = idWidget.attr("value");
 					if(userid && userid !== ""){
 						request.query.userid = userid;
 					}
 				}
 				if(tagsWidget){
-					var tags = tagsWidget.getValue();
+					var tags = tagsWidget.attr("value");
 					if(tags && tags !== ""){
 						var tagsArray = tags.split(" ");
 						tags = "";
@@ -82,18 +83,18 @@
 					}
 				}
 				if(countWidget){
-					request.count = countWidget.getValue();
+					request.count = countWidget.attr("value");
 				}
 
 				if(startWidget){
-					request.query.start = startWidget.getValue();
+					request.query.start = startWidget.attr("value");
 				}
 
 				if(statusWidget){
-					statusWidget.setValue("PROCESSING REQUEST");
+					statusWidget.attr("value","PROCESSING REQUEST");
 				}
 
-				flickrStore.fetch(request);
+				picasaStore.fetch(request);
 			}
 
 			//Lastly, link up the search event.
@@ -113,7 +114,7 @@
 		Description:
 	</h3>
 	<p>
-		This simple demo shows how services, such as Flickr, can be wrapped by the datastore API.  In this demo, you can search public Flickr images through a simple FlickrStore by specifying a series of tags (separated by spaces) to search on.  The results will be displayed below the search box.
+		This simple demo shows how services, such as Picasa, can be wrapped by the datastore API.  In this demo, you can search public Picasa images through a simple PicasaStore by specifying a series of tags (separated by spaces) to search on.  The results will be displayed below the search box.
 	</p>
 	<p>
 		For fun, search on the 3dny tag!
@@ -182,8 +183,8 @@
 	</table>
 	<hr/>
 	</blockquote>
-	<div dojoType="dojox.data.PicasaStore" jsId="flickrStore" label="title"></div>
-	<div dojoType="dojox.data.demos.widgets.PicasaViewList" id="flickrViews" jsId="flickrViewsWidget"></div>
+	<div dojoType="dojox.data.PicasaStore" jsId="picasaStore" label="title"></div>
+	<div dojoType="dojox.data.demos.widgets.PicasaViewList" id="picasaViews" jsId="picasaViewsWidget"></div>
 
 </body>
 </html>
