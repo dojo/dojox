@@ -20,6 +20,12 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		if(args && "urlPreventCache" in args){
 			this.urlPreventCache = args.urlPreventCache?true:false;
 		}
+		if(args && "maxResults" in args){
+			this.maxResults = parseInt(args.maxResults);
+			if(!this.maxResults){
+				this.maxResults = 20;
+			}
+		}
 	},
 
 	_picasaUrl: "http://picasaweb.google.com/data/feed/api/all",
@@ -33,6 +39,9 @@ dojo.declare("dojox.data.PicasaStore", null, {
 	//urlPreventCache: boolean
 	//Flag denoting if preventCache should be passed to dojo.io.script.
 	urlPreventCache: false,
+
+	//maxResults:  Define out how many results to return for a fetch.
+	maxResults: 20,
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -198,11 +207,7 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		if(request.query.lang){
 			content.hl = request.query.lang;
 		}
-		if(request.count){
-			content['max-results'] = request.count;
-		}else{
-			content['max-results'] = "20";
-		}
+		content['max-results'] = "20";
 
 		//Linking this up to Picasa is a JOY!
 		var self = this;
