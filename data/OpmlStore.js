@@ -30,7 +30,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		this._identityMap = {};
 		this._identCount = 0;
 		this._idProp = "_I";
-		if("urlPreventCache" in keywordParameters){
+		if(keywordParameters && "urlPreventCache" in keywordParameters){
 			this.urlPreventCache = keywordParameters.urlPreventCache?true:false;
 		}
 	},

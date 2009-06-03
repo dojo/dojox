@@ -69,7 +69,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			}
 			this._indexItems();
 		}
-		if("urlPreventCache" in args){
+		if(args && "urlPreventCache" in args){
 			this.urlPreventCache = args.urlPreventCache?true:false;
 		}
 	},

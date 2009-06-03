@@ -21,7 +21,7 @@ dojo.require("dojo.AdapterRegistry");
 			if(args && args.label){
 				this.label = args.label;
 			}
-			if(args && ("urlPreventCache" in args)){
+			if(args && "urlPreventCache" in args){
 				this.urlPreventCache = args.urlPreventCache?true:false;
 			}
 		},

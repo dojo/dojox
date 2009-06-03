@@ -34,7 +34,7 @@ dojo.declare("dojox.data.KeyValueStore", null, {
 		};
 		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
 		this._queuedFetches = [];
-		if("urlPreventCache" in keywordParameters){
+		if(keywordParameters && "urlPreventCache" in keywordParameters){
 			this.urlPreventCache = keywordParameters.urlPreventCache?true:false;
 		}
 	},

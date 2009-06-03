@@ -43,7 +43,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		if(args && args.pathAsQueryParam){
 			this.pathAsQueryParam = true;
 		}
-		if("urlPreventCache" in args){
+		if(args && "urlPreventCache" in args){
 			this.urlPreventCache = args.urlPreventCache?true:false;
 		}
 	},

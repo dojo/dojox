@@ -38,7 +38,7 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 	itemPath: "",
 	_storeRef: "_S",
 	urlElement: null,
-    iframeElement: null,
+	iframeElement: null,
 
 	//urlPreventCache: boolean
 	//Flag denoting if xhrGet calls should use the preventCache option.
