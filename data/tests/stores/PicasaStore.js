@@ -350,7 +350,7 @@ doh.register("dojox.data.tests.stores.PicasaStore",
 					t.assertTrue(flickrStore.isItem(items[0]));
 
 					var attributes = flickrStore.getAttributes(items[0]);
-					t.is(15, attributes.length);
+					t.is(21, attributes.length);
 					d.callback(true);
 				}
 

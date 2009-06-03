@@ -84,7 +84,10 @@ dojo.declare("dojox.data.PicasaStore", null, {
 	getAttributes: function(item){
 		//	summary: 
 		//      See dojo.data.api.Read.getAttributes()
-		return ["id", "published", "updated", "category", "title$type", "title", "summary$type", "summary", "rights$type", "rights", "link", "author", "gphoto$id", "gphoto$name", "location"]; 
+		 return ["id", "published", "updated", "category", "title$type", "title", 
+			 "summary$type", "summary", "rights$type", "rights", "link", "author", 
+			 "gphoto$id", "gphoto$name", "location", "imageUrlSmall", "imageUrlMedium",
+			 "imageUrl", "datePublished", "dateTaken","description"]; 
 	},
 
 	hasAttribute: function(item, attribute){
@@ -144,7 +147,9 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		}else if(attribute === "datePublished"){
 			return [dojo.date.stamp.fromISOString(item.published)];
 		}else if(attribute === "dateTaken"){
-			return [dojo.date.stamp.fromISOString(item.date_taken)];
+			return [dojo.date.stamp.fromISOString(item.published)];
+		}else if(attribute === "updated"){
+			return [dojo.date.stamp.fromISOString(item.updated)];
 		}else if(attribute === "imageUrlSmall"){
 			return [item.media.thumbnail[1].url];
 		}else if(attribute === "imageUrl"){
@@ -191,6 +196,7 @@ dojo.declare("dojox.data.PicasaStore", null, {
 
 		//Build up the content to send the request for.
 		var content = {alt: "jsonm", pp: "1", psc: "G"};
+
 		content['start-index'] = "1";
 		if(request.query.start){
 			content['start-index'] = request.query.start;
@@ -256,8 +262,10 @@ dojo.declare("dojox.data.PicasaStore", null, {
 		// returns: HTML String converted back to the normal text (unescaped) characters (<,>,&, ", etc,).
 		//
 		//TODO: Check to see if theres already compatible escape() in dojo.string or dojo.html
-		str = str.replace(/&amp;/gm, "&").replace(/&lt;/gm, "<").replace(/&gt;/gm, ">").replace(/&quot;/gm, "\"");
-		str = str.replace(/&#39;/gm, "'"); 
+		if(str){
+			str = str.replace(/&amp;/gm, "&").replace(/&lt;/gm, "<").replace(/&gt;/gm, ">").replace(/&quot;/gm, "\"");
+			str = str.replace(/&#39;/gm, "'"); 
+		}
 		return str;
 	}
 });
