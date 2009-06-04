@@ -45,6 +45,8 @@
 				this._widgets = [];
 			},
 			invalidateCache: function(){
+				// Called when we need to clean our cache and destroy our
+				// widgets.
 				dojo.forEach(this._widgets, function(w){
 					if(w && w.destroy){
 						w.destroy();
@@ -101,7 +103,13 @@
 			}
 		});
 			
-		dojo.addOnLoad(function(){							
+		dojo.addOnLoad(function(){
+			// Connect our invalidateCache function to the "important" places
+			// so we get cleaned up correctly.
+			dojo.connect(grid, "_structureChanged", myObject, "invalidateCache");
+			dojo.connect(grid, "_clearData", myObject, "invalidateCache");
+			dojo.connect(grid, "destroy", myObject, "invalidateCache");
+			
 			doh.register("tests",
 				[
 					function test_gridFormatters(t){
@@ -123,7 +131,8 @@
 		<h1 class="testTitle">Test: dojox.tests.grid.Grid Formatters</h1>
 		<div dojoType="dojo.data.ItemFileReadStore" jsId="readStore" url="support/countryStore.json?"></div>
 		<div dojoType="dojox.grid.formatterScopeObj" store="readStore" jsId="myObject"></div>
-		<table dojoType="dojox.grid.DataGrid" formatterScope="myObject" style="width: 65em;height: 25em;" store="readStore" queryOptions="{deep:true}" rowsPerPage="100">
+		<table dojoType="dojox.grid.DataGrid" jsId="grid" formatterScope="myObject" 
+				style="width: 65em;height: 25em;" store="readStore" queryOptions="{deep:true}" rowsPerPage="100">
 			<thead>
 				<tr>
 					<th field="name" relWidth="2">Name</th>
