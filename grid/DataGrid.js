@@ -543,19 +543,22 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	}
 });
 
+dojox.grid.DataGrid.cell_markupFactory = function(cellFunc, node, cellDef){
+	var field = dojo.trim(dojo.attr(node, "field")||"");
+	if(field){
+		cellDef.field = field;
+	}
+	cellDef.field = cellDef.field||cellDef.name;
+	var fields = dojo.trim(dojo.attr(node, "fields")||"");
+	if(fields){
+		cellDef.fields = fields.split(",");
+	}
+	if(cellFunc){
+		cellFunc(node, cellDef);
+	}
+}
+
 dojox.grid.DataGrid.markupFactory = function(props, node, ctor, cellFunc){
-	return dojox.grid._Grid.markupFactory(props, node, ctor, function(node, cellDef){
-		var field = dojo.trim(dojo.attr(node, "field")||"");
-		if(field){
-			cellDef.field = field;
-		}
-		cellDef.field = cellDef.field||cellDef.name;
-		var fields = dojo.trim(dojo.attr(node, "fields")||"");
-		if(fields){
-			cellDef.fields = fields.split(",");
-		}
-		if(cellFunc){
-			cellFunc(node, cellDef);
-		}
-	});
+	return dojox.grid._Grid.markupFactory(props, node, ctor, 
+					dojo.partial(dojox.grid.DataGrid.cell_markupFactory, cellFunc));
 }

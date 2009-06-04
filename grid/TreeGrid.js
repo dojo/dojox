@@ -742,9 +742,7 @@ dojox.grid.TreeGrid.markupFactory = function(props, node, ctor, cellFunc){
 						cell.hidden = d.attr(th, "hidden") == "true";
 					}
 					cell.field = cell.field||cell.name;
-					if(cellFunc){
-						cellFunc(th, cell);
-					}
+					dojox.grid.DataGrid.cell_markupFactory(cellFunc, th, cell);
 					cell.type = cell.type || dojox.grid.cells.Cell;
 				}
 				if(cell.type && cell.type.markupFactory){
