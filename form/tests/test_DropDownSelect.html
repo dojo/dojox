@@ -24,7 +24,10 @@
 			
 			var numOptions = 0;
 			var numChanges = 0;
-			var perfNum = 100;
+			var addNum = 10;
+			var testType;
+			// Uncomment below line to run perf tests - note SLOW to run
+			// testType = "perf";
 			
 			dojo.addOnLoad(function(){
 				dojo.connect(s1, "onChange", function(val){
@@ -41,20 +44,62 @@
 							t.is("TN", s1.value);
 							t.is(2, numChanges);
 						},
-						function test_performance(t){
-							var i, start, add, del, opts = [];
-							for(i = 0; i < perfNum; i++){
-								opts.push({value: i + "", label: "Option " + (i + 1)});
+						{
+							name: "test_performance_single",
+							testType: testType,
+							trialDuration: 100,
+							trialIterations: 100,
+							trialDelay: 100,
+							runTest: function(t){
+								var opt = {value: "Test", label: "Test Option"};
+								s6.addOption(opt);
+								s6.removeOption(opt);
 							}
-							start = new Date();
-							s6.addOption(opts);
-							add = new Date();
-							s6.removeOption(opts);
-							del = new Date();
-							console.log("Create (" + perfNum + "): " + (add.getTime() - start.getTime()) +
-										"ms, Remove: " + (del.getTime() - add.getTime()) + "ms");
-							t.t(true);
-						}
+						},
+						{
+							name: "test_performance_separate",
+							testType: testType,
+							trialDuration: 100,
+							trialIterations: 100,
+							trialDelay: 100,
+							setUp: function(t){
+								var opts = t.options = [];
+								for(var i = 0; i < addNum; i++){
+									opts.push({value: i + "", label: "Option " + (i + 1)});
+								}
+							},
+							runTest: function(t){
+								dojo.forEach(t.options, function(opt){
+									s6.addOption(opt);
+								});
+								dojo.forEach(t.options, function(opt){
+									s6.removeOption(opt);
+								});
+							},
+							tearDown: function(t){
+								delete t.options;
+							}
+						},
+						{
+							name: "test_performance_batch",
+							testType: testType,
+							trialDuration: 100,
+							trialIterations: 100,
+							trialDelay: 100,
+							setUp: function(t){
+								var opts = t.options = [];
+								for(var i = 0; i < addNum; i++){
+									opts.push({value: i + "", label: "Option " + (i + 1)});
+								}
+							},
+							runTest: function(t){
+								s6.addOption(t.options);
+								s6.removeOption(t.options);
+							},
+							tearDown: function(t){
+								delete t.options;
+							}
+						},
 					]
 				);
 				doh.run();
