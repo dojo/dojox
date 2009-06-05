@@ -77,16 +77,6 @@ dojo.declare("dojox.data.CsvStore", null, {
 		}
 	},
 	
-	_assertIsAttribute: function(/* item || String */ attribute){
-		//	summary:
-		//      This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
-		//	attribute: 
-		//		The attribute to test for being contained by the store.
-		if(!dojo.isString(attribute)){ 
-			throw new Error(this.declaredClass + ": a function was passed an attribute argument that was not an attribute object nor an attribute name string");
-		}
-	},
-
 	_getIndex: function(item){
 		//	summary:
 		//		Internal function to get the internal index to the item data from the item handle
@@ -110,15 +100,18 @@ dojo.declare("dojox.data.CsvStore", null, {
 		//		Note that for the CsvStore, an empty string value is the same as no value, 
 		// 		so the defaultValue would be returned instead of an empty string.
 		this._assertIsItem(item);
-		this._assertIsAttribute(attribute);
 		var itemValue = defaultValue;
-		if(this.hasAttribute(item, attribute)){
-			var itemData = this._dataArray[this._getIndex(item)];
-			itemValue = itemData[this._attributeIndexes[attribute]];
+		if(typeof attribute === "string"){
+			ai = this._attributeIndexes[attribute];
+			if(ai != null){
+				var itemData = this._dataArray[this._getIndex(item)];
+				itemValue = itemData[ai] || defaultValue;
+			}
+		}else{
+			throw new Error(this.declaredClass + ": a function was passed an attribute argument that was not a string");
 		}
 		return itemValue; //String
 	},
-
 
 	getValues: function(/* item */ item, 
 						/* attribute || attribute-name-string */ attribute){
@@ -146,17 +139,20 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	hasAttribute: function(	/* item */ item,
-							/* attribute || attribute-name-string */ attribute){
+							/* attribute-name-string */ attribute){
 		//	summary: 
 		//		See dojo.data.api.Read.hasAttribute()
 		// 		The hasAttribute test is true if attribute has an index number within the item's array length
 		// 		AND if the item has a value for that attribute. Note that for the CsvStore, an
 		// 		empty string value is the same as no value.
 		this._assertIsItem(item);
-		this._assertIsAttribute(attribute);
-		var attributeIndex = this._attributeIndexes[attribute];
-		var itemData = this._dataArray[this._getIndex(item)];
-		return (typeof attributeIndex !== "undefined" && attributeIndex < itemData.length && itemData[attributeIndex] !== ""); //Boolean
+		if(typeof attribute === "string"){
+			var attributeIndex = this._attributeIndexes[attribute];
+			var itemData = this._dataArray[this._getIndex(item)];
+			return (typeof attributeIndex !== "undefined" && attributeIndex < itemData.length && itemData[attributeIndex] !== ""); //Boolean
+		}else{
+			throw new Error(this.declaredClass + ": a function was passed an attribute argument that was not a string");
+		}
 	},
 
 	containsValue: function(/* item */ item, 
@@ -435,7 +431,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 								 ((lastChar == '"') && (secondToLastChar == '"') && (thirdToLastChar != '"')))){
 							if(j+1 === listOfFields.length){
 								// alert("The last field in record " + i + " is corrupted:\n" + field);
-								return null; //null
+								return; //null
 							}
 							var nextField = listOfFields[j+1];
 							listOfFields[j] = field_space + ',' + nextField;
@@ -515,7 +511,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		//Check that the specified Identifier is actually a column title, if provided.
 		if(this.identifier){
 			if(this._attributeIndexes[this.identifier] === undefined){
-				throw new Error(this.declaredClass + ": Identity specified is not a column header in the data set.")
+				throw new Error(this.declaredClass + ": Identity specified is not a column header in the data set.");
 			}
 		}
 
