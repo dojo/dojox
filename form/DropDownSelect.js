@@ -151,7 +151,10 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 			this.attr("disabled", (len === 0));
 			delete this._iDisabled;
 		}
-		this._setValueAttr(this.value);
+		if(!this._loadingStore){
+			// Don't call this if we are loading - since we will handle it later
+			this._setValueAttr(this.value);
+		}
 	},
 	
 	_setValueAttr: function(value){

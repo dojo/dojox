@@ -21,6 +21,7 @@
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.Form");
             dojo.require("dojox.form.CheckedMultiSelect");
+			dojo.require("dojo.data.ItemFileWriteStore");
 			
 			var numOptions = 0;
 			var numChanges = 0;
@@ -29,6 +30,42 @@
 			// Uncomment below line to run perf tests - note SLOW to run
 			// testType = "perf";
 			
+			// Data and stores here for store-based selects
+			var data = {
+				identifier: "value",
+				label: "label",
+				items: [
+					{value: "AL", label: "Alabama"},
+					{value: "AK", label: "Alaska"},
+					{value: "AZ", label: "Arizona"},
+					{value: "AR", label: "Arkansas"},
+					{value: "CA", label: "California"},
+					{value: "CO", label: "Colorado"},
+					{value: "CT", label: "Connecticut"}
+				]
+			};
+			var data2 = {
+				identifier: "value",
+				label: "label",
+				items: [
+					{value: "DE", label: "Deleware"},
+					{value: "FL", label: "Florida"},
+					{value: "GA", label: "Georgia"},
+					{value: "HI", label: "Hawaii"},
+					{value: "ID", label: "Idaho"},
+					{value: "IL", label: "Illinois"},
+					{value: "IN", label: "Indiana"}
+				]
+			};
+			
+			var readStore = new dojo.data.ItemFileReadStore({data:dojo.clone(data)});
+			var store2 = new dojo.data.ItemFileReadStore({data:dojo.clone(data2)});
+			var writeStore = new dojo.data.ItemFileWriteStore({data:dojo.clone(data)});			
+			
+			function wrapLabel(expected){
+				return ("<span class=\"dijitReset dijitInline dojoxDropDownSelectLabel\">" + expected + "</span>").toLowerCase().replace(/ */g, "");
+			}
+
 			dojo.addOnLoad(function(){
 				dojo.connect(s1, "onChange", function(val){
 					console.log("First Select Changed to " + val);
@@ -37,12 +74,109 @@
 				doh.register("tests",
 					[
 						function test_setValue(t){
-							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY", s8:"AL"}, form.attr("value"));
+							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY", s8:"AL",
+								s9:"CT", s10:"AL", s11:"AL", s12: "AL"}, form.attr("value"));
 							s1.attr("value", "WA");
 							t.is("WA", s1.value);
 							s1.attr("value", "UT");
 							t.is("TN", s1.value);
 							t.is(2, numChanges);
+						},
+						function test_changeSelected(t){
+							t.is("AL", s11.value);
+							t.is(wrapLabel("Alabama"), s11.containerNode.innerHTML.toLowerCase().replace(/ */g, ""));
+							s11.attr("value", "AK");
+							t.is("AK", s11.value);
+							t.is(wrapLabel("Alaska"), s11.containerNode.innerHTML.toLowerCase().replace(/ */g, ""));
+							var d = new doh.Deferred();
+							var cb = function(item){
+								try{
+									writeStore.setValue(item, "label", "North Pole");
+									s11.loadDropDown(function(){
+										try{
+											t.is("AK", s11.value);
+											t.is(wrapLabel("North Pole"), s11.containerNode.innerHTML.toLowerCase().replace(/ */g, ""));
+											d.callback(true);
+										}catch(e){ d.errback(e);}
+									});
+								}
+								catch(e){
+									d.errback(e);
+								}
+							}
+							writeStore.fetchItemByIdentity({identity: "AK", onItem: cb});
+							return d;
+						},
+						function test_deleteNonSelected(t){
+							t.is(7, s11._getChildren().length);
+							t.is("AK", s11.value);
+							var d = new doh.Deferred();
+							var cb = function(item){
+								try{
+									t.is(7, s11._getChildren().length);
+									writeStore.deleteItem(item);
+									s11.loadDropDown(function(){
+										try{
+											t.is("AK", s11.value);
+											t.is(6, s11._getChildren().length);
+											d.callback(true);
+										}catch(e){ d.errback(e);}										
+									});
+								}catch (e){
+									d.errback(e);
+								}
+							}
+							writeStore.fetchItemByIdentity({identity: "AZ", onItem: cb});
+							return d;
+						},
+						function test_deleteSelected(t){
+							t.is(6, s11._getChildren().length);
+							t.is("AK", s11.value);
+							var d = new doh.Deferred();
+							var cb = function(item){
+								try{
+									writeStore.deleteItem(item);
+									window.setTimeout(function(){
+										try{
+											t.is("AL", s11.value);
+											d.callback(true);
+										}catch(e){d.errback(e);}
+									}, 100);
+								}catch (e){
+									d.errback(e);
+								}
+							}
+							writeStore.fetchItemByIdentity({identity: "AK", onItem: cb});
+							return d;
+						},
+						function test_newItem(t){
+							t.is(5, s11._getChildren().length);
+							t.is("AL", s11.value);
+							s11.attr("value", "NY");
+							t.is("AL", s11.value);
+							var d = new doh.Deferred();
+							writeStore.newItem({value: "NY", label: "New York"});
+							window.setTimeout(function(){
+								try{
+									t.is(6, s11._getChildren().length);
+									s11.attr("value", "NY");
+									t.is("NY", s11.value);
+									d.callback(true);
+								} catch (e) {
+									d.errback(e);
+								}
+							}, 100);
+							return d;
+						},
+						function test_setStore(t){
+							t.is("AL", s12.value);
+							s12.setStore(store2, "FL");
+							t.is("FL", s12.value);
+							s12.setStore(readStore, "CA");
+							t.is("CA", s12.value);
+							s12.setStore(store2);
+							t.is("DE", s12.value);
+							t.is(7, s12._getChildren().length);
 						},
 						{
 							name: "test_performance_single",
@@ -99,7 +233,7 @@
 							tearDown: function(t){
 								delete t.options;
 							}
-						},
+						}
 					]
 				);
 				doh.run();
@@ -214,13 +348,24 @@
 				<option value="WI">Wisconsin</option>
 				<option value="WY">Wyoming</option>
 			</select>
+			<hr>
+			<h4 class="testSubtitle">Store-based</h4>
+			<select jsId="s9" name="s9" store="readStore" value="CT" dojoType="dojox.form.DropDownSelect">
+			</select>
+			<select jsId="s10" name="s10" store="readStore" dojoType="dojox.form.DropDownSelect">
+			</select>
+			<select jsId="s11" name="s11" store="writeStore" dojoType="dojox.form.DropDownSelect">
+			</select>
+			<select jsId="s12" name="s12" store="readStore" dojoType="dojox.form.DropDownSelect">
+			</select>
+			<hr>
 			<h4 class="testSubtitle">Inlined with text (all IE modes except for IE8 Standards)</h4>
 			Text Prompt:
 			<select dojoType="dojox.form.DropDownSelect">
 				<option value="SEL" selected="selected">DropDownSelect</option>
 				<option value="OTHER">Other</option>
 			</select>
-
+			<hr>
             <h4 class="testSubtitle">DropDownSelect.updateOptions</h4>
             <div>Click on the DropDownSelect to open the DropDown.  While the DropDown is opened, click on a checkbox.</div>
             <select id="updateOptions" dojoType="dojox.form.DropDownSelect">
@@ -238,8 +383,7 @@
                 <option value="FL">Florida</option>
                 <option value="CA">California</option>
             </select>
-
-            <hr>
+			<hr>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
 					console.dir(form.getValues());

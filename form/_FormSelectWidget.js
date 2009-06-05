@@ -1,6 +1,7 @@
 dojo.provide("dojox.form._FormSelectWidget");
 
 dojo.require("dijit.form._FormWidget");
+dojo.require("dojo.data.util.sorter");
 
 /*=====
 dojox.form.__SelectOption = function(){
@@ -21,6 +22,12 @@ dojox.form.__SelectOption = function(){
 =====*/
 
 dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
+	// summary:
+	//		Extends _FormValueWidget in order to provide "select-specific"
+	//		values - i.e., those values that are unique to <select> elements.
+	//		This also provides the mechanism for reading the elements from
+	//		a store, if desired.
+
 	// multiple: Boolean
 	//		Matches the select's "multiple=" value
 	multiple: "",
@@ -34,6 +41,38 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 	//      the html <option> tag.
 	options: null,
 	
+	// store: dojo.data.api.Identity
+	//		A store which, at the very least impelements dojo.data.api.Identity
+	//		to use for getting our list of options - rather than reading them
+	//		from the <option> html tags.
+	store: null,
+
+	// query: object
+	//		A query to use when fetching items from our store
+	query: null,
+
+	// queryOptions: object
+	//		Query options to use when fetching from the store
+	queryOptions: null,
+
+	// onFetch: Function
+	//		A callback to do with an onFetch - but before any items are actually
+	//		iterated over (i.e. to filter even futher what you want to add)
+	onFetch: null,
+
+	// sortByLabel: boolean
+	//		Flag to sort the options returned from a store by the label of
+	//		the store.
+	sortByLabel: true,
+
+	
+	// loadChildrenOnOpen: boolean
+	//		By default loadChildren is called when the items are fetched from the
+	//		store.  This property allows delaying loadChildren (and the creation
+	//		of the options/menuitems) until the user opens the click the button.
+	//		dropdown
+	loadChildrenOnOpen: false,
+
 	getOptions: function(/* anything */ valueOrIdx){
 		// summary:
 		//		Returns a given option (or options).
@@ -150,9 +189,98 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		this._loadChildren();
 	},
 
+	setStore: function(/* dojo.data.api.Identity */ store, 
+						/* anything? */ selectedValue, 
+						/* Object? */ fetchArgs){
+		// summary:
+		//		Sets the store you would like to use with this select widget.
+		//		The selected value is the value of the new store to set.  This 
+		//		function returns the original store, in case you want to reuse 
+		//		it or something.
+		// store: dojo.data.api.Identity
+		//		The store you would like to use - it MUST implement Identity,
+		//		and MAY implement Notification.
+		// selectedValue: anything?
+		//		The value that this widget should set itself to *after* the store
+		//		has been loaded
+		// fetchArgs: Object?
+		//		The arguments that will be passed to the store's fetch() function
+		var oStore = this.store;
+		fetchArgs = fetchArgs || {};
+		if(oStore !== store){
+			// Our store has changed, so update our notifications
+			dojo.forEach(this._notifyConnections||[], dojo.disconnect);
+			delete this._notifyConnections;
+			if(store && store.getFeatures()["dojo.data.api.Notification"]){
+				this._notifyConnections = [
+					dojo.connect(store, "onNew", this, "_onNewItem"),
+					dojo.connect(store, "onDelete", this, "_onDeleteItem"),
+					dojo.connect(store, "onSet", this, "_onSetItem")
+				];
+			}
+			this.store = store;
+		}
+		
+		// Turn off change notifications while we make all these changes
+		this._onChangeActive = false;
+		
+		// Remove existing options (if there are any)
+		if(this.options && this.options.length){
+			this.removeOption(this.options);
+		}
+		
+		// Add our new options
+		if(store){
+			var cb = function(items){
+				if(this.sortByLabel && !fetchArgs.sort && items.length){
+					items.sort(dojo.data.util.sorter.createSortFunction([{
+						attribute: store.getLabelAttributes(items[0])[0]
+					}], store));
+				}
+				
+				if(fetchArgs.onFetch){
+					items = fetchArgs.onFetch(items);
+				}
+				// TODO: Add these guys as a batch, instead of separately
+				dojo.forEach(items, function(i){
+					this._addOptionForItem(i);
+				}, this);
+				
+				// Set our value (which might be undefined), and then tweak
+				// it to send a change event with the real value
+				this._loadingStore = false;
+				this.attr("value", (("_pendingValue" in this) ? this._pendingValue : selectedValue));
+				delete this._pendingValue;
+
+				if(!this.loadChildrenOnOpen){
+					this._loadChildren();
+				}else{
+					this._pseudoLoadChildren(items);
+				}
+				this._fetchedWith = opts;
+				this._lastValueReported = this._multiValue ? [] : null;
+				this._onChangeActive = true;
+				this.onSetStore();
+				this._handleOnChange(this.value);
+			};
+			var opts = dojo.mixin({onComplete:cb, scope: this}, fetchArgs);
+			this._loadingStore = true;
+			store.fetch(opts);
+		}else{
+			delete this._fetchedWith;
+		}
+		return oStore;	// dojo.data.api.Identity
+	},
+
 	_setValueAttr: function(/*anything*/ newValue, /*Boolean, optional*/ priorityChange){
 		// summary: set the value of the widget.
 		// If a string is passed, then we set our value from looking it up.
+		if(this._loadingStore){
+			// Our store is loading - so save our value, and we'll set it when
+			// we're done
+			this._pendingValue = newValue;
+			return;
+		}
 		var opts = this.getOptions() || [];
 		if(!dojo.isArray(newValue)){
 			newValue = [newValue];
@@ -217,6 +345,7 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		// summary: 
 		//		Loads the children represented by this widget's optiosn.
 		// reset the menu to make it "populatable on the next click
+		if(this._loadingStore){ return; }
 		dojo.forEach(this._getChildren(), function(child){
 			child.destroyRecursive();
 		});	
@@ -274,6 +403,55 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		return "";
 	},
 	
+	// Internal functions to call when we have store notifications come in
+	_onNewItem: function(/* item */ item, /* Object? */ parentInfo){
+		if(!parentInfo || !parentInfo.parent){
+			// Only add it if we are top-level
+			this._addOptionForItem(item);
+		}
+	},
+	_onDeleteItem: function(/* item */ item){
+		var store = this.store;
+		this.removeOption(store.getIdentity(item));
+	},
+	_onSetItem: function(/* item */ item){
+		this.updateOption(this._getOptionObjForItem(item));
+	},
+
+	_getOptionObjForItem: function(item){
+		// summary:
+		//		Returns an option object based off the given item.  The "value"
+		//		of the option item will be the identity of the item, the "label"
+		//		of the option will be the label of the item.  If the item contains
+		//		children, the children value of the item will be set 
+		var store = this.store, label = store.getLabel(item), 
+			value = (label ? store.getIdentity(item) : null);
+		return {value: value, label: label, item:item}; // dojox.form.__SelectOption
+	},
+
+	_addOptionForItem: function(/* item */ item){
+		// summary:
+		//		Creates (and adds) the option for the given item
+		var store = this.store;
+		if(!store.isItemLoaded(item)){
+			// We are not loaded - so let's load it and add later
+			store.loadItem({item: item, onComplete: function(i){
+				this._addOptionForItem(item);
+			},
+			scope: this});
+			return;
+		}
+		var newOpt = this._getOptionObjForItem(item);
+		this.addOption(newOpt);
+	},	
+
+	constructor: function(/* Object */ keywordArgs){
+		// summary:
+		//		Saves off our value, if we have an initial one set so we
+		//		can use it if we have a store as well (see startup())
+		this._oValue = (keywordArgs||{}).value || null;
+	},
+	
 	postMixInProperties: function(){
 		this._multiValue = (this.multiple.toLowerCase() === "true");
 		this.inherited(arguments);
@@ -317,6 +495,32 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		this._setValueAttr(this.value, null);
 	},
 	
+	startup: function(){
+		// summary:
+		//		Connects in our store, if we have one defined
+		this.inherited(arguments);
+		var store = this.store, fetchArgs = {};
+		dojo.forEach(["query", "queryOptions", "onFetch"], function(i){
+			if(this[i]){
+				fetchArgs[i] = this[i];
+			}
+			delete this[i];
+		}, this);
+		if(store && store.getFeatures()["dojo.data.api.Identity"]){
+			// Temporarily set our store to null so that it will get set
+			// and connected appropriately
+			this.store = null;
+			this.setStore(store, this._oValue, fetchArgs);
+		}
+	},
+	
+	destroy: function(){
+		// summary:
+		//		Clean up our connections
+		dojo.forEach(this._notifyConnections||[], dojo.disconnect);
+		this.inherited(arguments);
+	},
+	
 	_addOptionItem: function(/* dojox.form.__SelectOption */ option){
 		// summary:
 		//		User-overridable function which, for the given option, adds an 
@@ -348,6 +552,18 @@ dojo.declare("dojox.form._FormSelectWidget", dijit.form._FormValueWidget, {
 		// summary: hooks into this.attr to provide a mechanism for getting the
 		//			option items for the current value of the widget.
 		return this.getOptions(this.attr("value"));
+	},
+	
+	_pseudoLoadChildren: function(/* item[] */ items){
+		// summary: a function that will "fake" loading children, if needed, and
+		//			if we have set to not load children until the widget opens.
+		// items: item[]
+		//			An array of items that will be loaded, when needed
+	},
+	
+	onSetStore: function(){
+		// summary: a function that can be connected to in order to receive a
+		//		notification that the store has finished loading and all options
+		//		from that store are available
 	}
-
 });
