@@ -101,11 +101,10 @@ dojo.declare("dojox.data.FileStore", null, {
 		//	summary: 
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
-		var value =  defaultValue;
 		if(values && values.length > 0){
-			value = values[0];
+			return values[0];
 		}
-		return value;
+		return defaultValue;
 	},
 
 	getAttributes: function(item){
@@ -116,11 +115,10 @@ dojo.declare("dojox.data.FileStore", null, {
 
 	hasAttribute: function(item, attribute){
 		//	summary: 
-		//      See dojo.data.api.Read.hasAttributes()
-		if(this.getValue(item,attribute)){
-			return true;
-		}
-		return false;
+		//      See dojo.data.api.Read.hasAttribute()
+		this._assertIsItem(item);
+		this._assertIsAttribute(attribute);
+		return (attribute in item);
 	},
 	
 	getIdentity: function(/* item */ item){

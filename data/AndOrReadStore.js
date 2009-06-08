@@ -165,7 +165,9 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 							/* attribute-name-string */ attribute) {
 		//	summary: 
 		//		See dojo.data.api.Read.hasAttribute()
-		return this.getValues(item, attribute).length > 0;
+		this._assertIsItem(item);
+		this._assertIsAttribute(attribute);
+		return (attribute in item);
 	},
 
 	containsValue: function(/* item */ item, 
