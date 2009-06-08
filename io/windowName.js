@@ -54,6 +54,8 @@ dojox.io.windowName = {
 		// |		location = loc;
 		// |	};
 		// |	</script></html>
+		//		When using windowName from a XD Dojo build, make sure to set the 
+		// 		dojo.dojoBlankHtmlUrl property to a local URL.
 		args.url += (args.url.match(/\?/) ? '&' : '?') + "windowname=" + (args.authElement ? "auth" : true); // indicate our desire for window.name communication
 		var authElement = args.authElement;
 		var cleanup = function(result){
@@ -92,7 +94,7 @@ dojox.io.windowName = {
 
 		var ioArgs = dfd.ioArgs;
 		var frameNum = dojox.io.windowName._frameNum++;
-		var sameDomainUrl = (dojo.config["dojoCallbackUrl"]||dojo.moduleUrl("dojo", "resources/blank.html")) + "#" + frameNum;
+		var sameDomainUrl = (dojo.config["dojoBlankHtmlUrl"]||dojo.moduleUrl("dojo", "resources/blank.html")) + "#" + frameNum;
 		var frameName = new dojo._Url(window.location, sameDomainUrl);
 		var doc = dojo.doc;
 		var frameContainer = authTarget || dojo.body();
