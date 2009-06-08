@@ -316,6 +316,15 @@ dojo.declare("dojox.grid.TreePath", null, {
 		}
 		return this.store.getValues(this.item(), this.grid.layout.cells[this.cell.level+1].parentCell.field);
 	},
+	childPaths: function(){
+		var childItems = this.children();
+		if(!childItems){
+			return [];
+		}
+		return dojo.map(childItems, function(item, index){
+			return new dojox.grid.TreePath(this._str + '/' + index, this.grid);
+		}, this);
+	},
 	parent: function(){
 		// summary:
 		//	Returns the parent path of this path.  If this is a
@@ -500,6 +509,20 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	createSelection: function(){
 		this.selection = new dojox.grid.TreeSelection(this);
 	},
+
+	_onSet: function(item, attribute, oldValue, newValue){
+		if(this.aggregator){
+			this.aggregator.clearSubtotalCache();
+		}
+		var idx = this.getItemIndex(item);
+		if(idx && idx!=-1){
+			if(idx.split){
+				this.updateRow(idx.split('/')[0]);
+			}else{
+				this.updateRow(idx);
+			}
+		}
+	},
 		
 	getItem: function(/*integer|Array|String*/ idx){
 		// summary:
@@ -532,6 +555,18 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		}
 		return itm || null;
 	},
+
+	_getItemIndex: function(item, isDeleted){
+		if(!isDeleted && !this.store.isItem(item)){
+			return -1;
+		}
+		var idx = this.inherited(arguments);
+		if(idx == -1){
+			var idty = this.store.getIdentity(item);
+			return this._by_idty_paths[idty] || -1;
+		}
+		return idx;
+	},
 	
 	postMixInProperties: function(){
 		var def = this.defaultOpen;
@@ -555,6 +590,7 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			}
 			return l;
 		});
+		this._by_idty_paths = {};
 		this.inherited(arguments);
 	},
 	
