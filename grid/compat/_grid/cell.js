@@ -19,7 +19,7 @@ dojo.declare("dojox.grid.cell", null, {
 		// grid row index
 		// returns: html for a given grid cell
 		var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex) : this.value;
-		d = (d && d.replace) ? d.replace(/</g, '&lt;') : d;
+		d = (d && d.replace && this.grid.escapeHTMLInData) ? d.replace(/</g, '&lt;') : d;
 		if(this.editor && (this.editor.alwaysOn || (i.rowIndex==inRowIndex && i.cell==this))){
 			return this.editor.format(d, inRowIndex);
 		}else{

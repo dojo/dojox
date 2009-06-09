@@ -112,6 +112,17 @@ dojo.declare('dojox.VirtualGrid',
 
 	// Used to store the last two clicks, to ensure double-clicking occurs based on the intended row
 	_click: null,
+
+	// escapeHTMLInData: Boolean
+	//		This will escape HTML brackets from the data to prevent HTML from 
+	// 		user-inputted data being rendered with may contain JavaScript and result in 
+	// 		XSS attacks. This is true by default, and it is recommended that it remain 
+	// 		true. Setting this to false will allow data to be displayed in the grid without 
+	// 		filtering, and should be only used if it is known that the data won't contain 
+	// 		malicious scripts. If HTML is needed in grid cells, it is recommended that 
+	// 		you use the formatter function to generate the HTML (the output of 
+	// 		formatter functions is not filtered, even with escapeHTMLInData set to true).
+	escapeHTMLInData: true,	
 	
 	// private
 	sortInfo: 0,
