@@ -38,6 +38,13 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	queryOptions: null,
 	fetchText: '...',
 	sortFields: null,
+	
+	// updateDelay: int
+	//		Time, in milliseconds, to delay updates automatically so that multiple
+	//		calls to onSet/onNew/onDelete don't keep rerendering the grid.  Set
+	//		to 0 to immediately cause updates.  A higher value will result in
+	//		better performance at the expense of responsiveness of the grid.
+	updateDelay: 1,
 
 /*=====
 	// structure: dojox.grid.__DataViewDef|dojox.grid.__DataViewDef[]|dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]
@@ -93,7 +100,29 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		return (!inItem ? this.defaultValue : (!this.field ? this.value : (this.field == "_item" ? inItem : this.grid.store.getValue(inItem, this.field))));
 	},
 
+	_checkUpdateStatus: function(){
+		if(this.updateDelay > 0){
+			var iStarted = false;
+			if(this._endUpdateDelay){
+				clearTimeout(this._endUpdateDelay);
+				delete this._endUpdateDelay;
+				iStarted = true;
+			}
+			if(!this.updating){
+				this.beginUpdate();
+				iStarted = true;
+			}
+			if(iStarted){
+				var _this = this;
+				this._endUpdateDelay = setTimeout(function(){
+					_this.endUpdate();
+				}, this.updateDelay);
+			}
+		}
+	},
+	
 	_onSet: function(item, attribute, oldValue, newValue){
+		this._checkUpdateStatus();
 		var idx = this.getItemIndex(item);
 		if(idx>-1){
 			this.updateRow(idx);
@@ -110,6 +139,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onNew: function(item, parentInfo){
+		this._checkUpdateStatus();
 		var rowCount = this.attr('rowCount');
 		this._addingItem = true;
 		this.updateRowCount(rowCount+1);
@@ -119,6 +149,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_onDelete: function(item){
+		this._checkUpdateStatus();
 		var idx = this._getItemIndex(item, true);
 
 		if(idx >= 0){
