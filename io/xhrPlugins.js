@@ -44,7 +44,7 @@ dojo.require("dojo._base.xhr");
 		//	|	dojo.xhr("GET",{url:"http://othersite.com/file"});
 		// 		It would result in the request (to your origin server):
 		//	|	GET /proxy?url=http%3A%2F%2Fothersite.com%2Ffile HTTP/1.1
-		
+		var plainXhr = dojo._defaultXhr || dojo.xhr;
 		dojox.io.xhrPlugins.register(
 			"proxy",
 			function(method,args){
@@ -77,11 +77,12 @@ dojo.require("dojo._base.xhr");
 		// 		it should respond with the header like:
 		//	|	Access-Control: allow <*>
 		//		see: http://www.w3.org/TR/access-control/
+		var plainXhr = dojo._defaultXhr || dojo.xhr;
 		if(csXhrSupport === undefined && window.XMLHttpRequest){
 			// just run this once to see if we have cross-site support
 			try{
 				var xhr = new XMLHttpRequest();
-				xhr.open("GET","http://fnadkfna.com",true);
+				xhr.open("GET","http://testing-cross-domain-capability.com",true);
 				csXhrSupport = true;
 			}catch(e){
 				csXhrSupport = false;
