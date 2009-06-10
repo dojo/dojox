@@ -115,6 +115,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			if(iStarted){
 				var _this = this;
 				this._endUpdateDelay = setTimeout(function(){
+					delete this._endUpdateDelay;
 					_this.endUpdate();
 				}, this.updateDelay);
 			}
