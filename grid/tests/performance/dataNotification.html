@@ -29,6 +29,7 @@
 				rowSelector: p.rowSelector
 			}, dojo.create("div", null, dojo.body()));
 			g.startup();
+			var cnt = p.rows + 1;
 			
 			var cb = function(items){
 				console.debug("HAVE ITEMS!", items.length);
@@ -71,7 +72,7 @@
 							if(doProfiling){
 								console.profile("newItem()");
 							}
-							var i = s.newItem({id: p.rows, 
+							var i = s.newItem({id: cnt, 
 												col1: "normal", 
 												col2: false, 
 												col3: "new", 
@@ -79,6 +80,7 @@
 												col5: 29.91, 
 												col6: 10, 
 												col7: false });
+							cnt++;
 							if(doProfiling){
 								console.profileEnd();
 								console.profile("deleteItem()");
