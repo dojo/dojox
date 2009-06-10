@@ -14,6 +14,10 @@ try{
 					dojo.moduleUrl("dojox.grid.tests.performance", "creation.html") + 
 									"?rows=" + r + "&layout=" + l.toLowerCase() + "&rowSelector=" + s,
 					300000);
+				doh.registerUrl("Grid dojo.data Notification - " + r + " Rows, " + l + " Layout" + (s ? "w/ selector" : ""), 
+					dojo.moduleUrl("dojox.grid.tests.performance", "dataNotification.html") + 
+									"?rows=" + r + "&layout=" + l.toLowerCase() + "&rowSelector=" + s,
+					300000);
 			});
 		});
 	});

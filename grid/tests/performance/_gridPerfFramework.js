@@ -105,7 +105,7 @@ dojo.provide("dojox.grid.tests.performance._gridPerfFramework");
 	// getRunFunction is the core function to call.  It gets the row, layout
 	// and selector values, as well as a boolean if it's a perf function or
 	// not.
-	dojo.setObject("getRLSTests", function(getRunFunction){
+	dojo.setObject("getRLSTests", function(getRunFunction, getSetUpFunction, getTearDownFunction){
 		var isTop = (window.top == window);
 		var obj = searchParamsAsObj(default_obj);		
 		var rows = parseInt(obj.rows, 10);
@@ -113,16 +113,22 @@ dojo.provide("dojox.grid.tests.performance._gridPerfFramework");
 		var rowSelector = (obj.rowSelector.toLowerCase() == "true");
 		var doProfiling = isTop && dojo.isFF && (obj.doProfiling.toLowerCase() == "true");
 		var name = layout + " Layout" + (rowSelector ? " w/ Row Selector" : "");
-		var tests = [
-			{
-				name: name,
-				runTest: getRunFunction(rows, layout, rowSelector, doProfiling, false)
-			}			
-		]
-		if(isTop){
+		var t = {
+			name: name,
+			runTest: getRunFunction(rows, layout, rowSelector, doProfiling, false)
+		};
+		if(getSetUpFunction){
+			t.setUp = getSetUpFunction(rows, layout, rowSelector, doProfiling, false);
+		}
+		if(getTearDownFunction){
+			t.tearDown = getTearDownFunction(rows, layout, rowSelector, doProfiling, false);
+		}
+		var tests = [ t ];
+		if(isTop && !window._buttonsAdded){
 			// Give buttons amd text boxes for changing views/rows/etc
-			dojo.create("span", {innerHTML: "Rows: "}, dojo.body());
-			dojo.create("input", {
+			var n = dojo.query(".heading")[0];
+			n = dojo.create("span", {innerHTML: "Rows: "}, n, "after");
+			n = dojo.create("input", {
 				type: "text",
 				value: rows,
 				size: 5,
@@ -135,41 +141,49 @@ dojo.provide("dojox.grid.tests.performance._gridPerfFramework");
 								"&doProfiling=" + (doProfiling ? "true" : "false");
 					}
 				}
-			}, dojo.body());
-			dojo.create("button", {
+			}, n, "after");
+			n = dojo.create("button", {
 				innerHTML: layout == "single" ? "Dual Layout" : "Single Layout",
 				onclick: function(){window.location.search="?rows=" + rows + 
 								"&layout=" + (layout == "single" ? "dual" : "single") + 
 								"&rowSelector=" + (rowSelector ? "true" : "false") +
 								"&doProfiling=" + (doProfiling ? "true" : "false")}
-			}, dojo.body());
-			dojo.create("button", {
+			}, n, "after");
+			n = dojo.create("button", {
 				innerHTML: rowSelector ? "Remove Row Selector" : "Add Row Selector",
 				onclick: function(){window.location.search="?rows=" + rows + 
 								"&layout=" + layout + 
 								"&rowSelector=" + (!rowSelector ? "true" : "false") +
 								"&doProfiling=" + (doProfiling ? "true" : "false")}
-			}, dojo.body());
+			}, n, "after");
 			if(dojo.isFF){
-				dojo.create("button", {
+				n = dojo.create("button", {
 					innerHTML: doProfiling ? "No Profiling" : "Do Profiling",
 					onclick: function(){window.location.search="?rows=" + rows + 
 									"&layout=" + layout + 
 									"&rowSelector=" + (rowSelector ? "true" : "false") +
 									"&doProfiling=" + (!doProfiling ? "true" : "false")}
-				}, dojo.body());
+				}, n, "after");
 			}
-		}else{
+			window._buttonsAdded = true;
+		}else if (!isTop){
 			// Only run the perf tests if we are within the runner (which
 			// gives us pretty graphs and statistics...)
-			tests.push({
+			t = {
 				name: "Perf " + name,
 				testType: "perf",
 				trialDuration: duration,
 				trialIterations: iterations,
 				trialDelay: delay,
 				runTest: getRunFunction(rows, layout, rowSelector, doProfiling, true)
-			});
+			}
+			if(getSetUpFunction){
+				t.setUp = getSetUpFunction(rows, layout, rowSelector, doProfiling, true);
+			}
+			if(getTearDownFunction){
+				t.tearDown = getTearDownFunction(rows, layout, rowSelector, doProfiling, true);
+			}
+			tests.push(t);
 		}
 		return tests;
 	})
