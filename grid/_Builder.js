@@ -566,6 +566,13 @@ dojo.require("dojo.dnd.Moveable");
 				var leftTop = this.dragRecord.leftTop;
 				var isL2r = dojo._isBodyLtr();
 				var changeX = isL2r ? leftTop.l : -leftTop.l;
+				// Make sure we are not under our minimum
+				// http://bugs.dojotoolkit.org/ticket/9390
+				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (changeX + inDrag.w);
+				if(dojo.isWebKit && inDrag.spanners.length){
+					// Webkit needs the pad border extents back in
+					changeX += dojo._getPadBorderExtents(inDrag.spanners[0].node).w;
+				}
 				var data = {
 					isLtr: isL2r,
 					deltaX: changeX,
@@ -573,7 +580,6 @@ dojo.require("dojo.dnd.Moveable");
 					vw: inDrag.vw + changeX,
 					tw: inDrag.tw + changeX
 				};			
-				
 				// Only resize the columns when the drag has finished
 				this.doResizeNow(inDrag, data);
 			}
