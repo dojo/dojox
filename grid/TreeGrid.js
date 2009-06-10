@@ -511,12 +511,13 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
+		this._checkUpdateStatus();
 		if(this.aggregator){
 			this.aggregator.clearSubtotalCache();
 		}
 		var idx = this.getItemIndex(item);
-		if(idx && idx!=-1){
-			if(idx.split){
+		if(typeof idx == "string" || idx > -1){
+			if(typeof idx == "string"){
 				this.updateRow(idx.split('/')[0]);
 			}else{
 				this.updateRow(idx);
