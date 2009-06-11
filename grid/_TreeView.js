@@ -158,9 +158,11 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 				}
 			}
 			html.push('</tr>');
-			var idty = store.getIdentity(rowItem);
-			if(typeof grid._by_idty_paths[idty] == "undefined"){
-				grid._by_idty_paths[idty] = rowStack.join('/');
+			if(rowItem && store.isItem(rowItem)){
+				var idty = store.getIdentity(rowItem);
+				if(typeof grid._by_idty_paths[idty] == "undefined"){
+					grid._by_idty_paths[idty] = rowStack.join('/');
+				}
 			}
 			if(rowItem && parentCell && !summaryRow){
 				var expandoCell = v.structure.cells[0][parentCell.level];
