@@ -143,9 +143,8 @@ dojox.atom.io.model.util = {
 		//		The string to escape
 		//	returns: 
 		//		HTML String with special characters (<,>,&, ", etc,) escaped.
-		str = str.replace(/&/gm, "&amp;").replace(/</gm, "&lt;").replace(/>/gm, "&gt;").replace(/"/gm, "&quot;");
-		str = str.replace(/'/gm, "&#39;"); 
-		return str;
+		return str.replace(/&/gm, "&amp;").replace(/</gm, "&lt;").replace(/>/gm, "&gt;").replace(/"/gm, "&quot;")
+			.replace(/'/gm, "&#39;"); // String
 	},
 	unEscapeHtml: function(/*String*/str){
 		//	summary: 
@@ -157,9 +156,8 @@ dojox.atom.io.model.util = {
 		//		The string to un-escape.
 		//	returns: 
 		//		HTML String converted back to the normal text (unescaped) characters (<,>,&, ", etc,).
-		str = str.replace(/&amp;/gm, "&").replace(/&lt;/gm, "<").replace(/&gt;/gm, ">").replace(/&quot;/gm, "\"");
-		str = str.replace(/&#39;/gm, "'"); 
-		return str;
+		return str.replace(/&lt;/gm, "<").replace(/&gt;/gm, ">").replace(/&quot;/gm, "\"")
+			.replace(/&#39;/gm, "'").replace(/&amp;/gm, "&"); // String
 	},
 	getNodename: function(/*DOM node*/node){
 		//	summary: 

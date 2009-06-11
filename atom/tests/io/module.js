@@ -35,6 +35,7 @@ doh.register("dojox.atom.tests.io.module", [
 		var unescaped = dojox.atom.io.model.util.unEscapeHtml(original);
 		var expected = "<html><head><title>This is a \"Test Title\"</title></head><body class=\"tundra\">Woo hoo, this is an awesome & exciting test case!</body></html>";
 		t.is(unescaped, expected);
+		t.is("&lt;", dojox.atom.io.model.util.unEscapeHtml("&amp;lt;"));
 	},
 
 	// dojox.atom.io.model.util.getNodename
