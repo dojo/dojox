@@ -21,7 +21,7 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 					buildQuery(newPath, value);
 				}else if(value!="*"){ // full wildcards can be ommitted
 					jsonQuery += (first ? "" : "&") + newPath +
-						((args.queryOptions && args.queryOptions.ignoreCase) ? "~" : "=") +
+						((typeof value == "string" && args.queryOptions && args.queryOptions.ignoreCase) ? "~" : "=") +
 						 dojo.toJson(value);
 					first = false;
 				}
