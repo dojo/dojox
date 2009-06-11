@@ -26,7 +26,7 @@ doh.register("dojox.atom.tests.io.module", [
 		var original = "<html><head><title>This is a \"Test Title\"</title></head><body class=\"tundra\">Woo hoo, this is an awesome & exciting test case!</body></html>";
 		var escaped = dojox.atom.io.model.util.escapeHtml(original);
 		var expected = "&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a &quot;Test Title&quot;&lt;/title&gt;&lt;/head&gt;&lt;body class=&quot;tundra&quot;&gt;Woo hoo, this is an awesome &amp; exciting test case!&lt;/body&gt;&lt;/html&gt;";
-		t.is(escaped, expected);
+		t.is(expected, escaped);
 	},
 	
 	// dojox.atom.io.model.util.unEscapeHtml
@@ -34,14 +34,14 @@ doh.register("dojox.atom.tests.io.module", [
 		var original = "&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a &quot;Test Title&quot;&lt;/title&gt;&lt;/head&gt;&lt;body class=&quot;tundra&quot;&gt;Woo hoo, this is an awesome &amp; exciting test case!&lt;/body&gt;&lt;/html&gt;";
 		var unescaped = dojox.atom.io.model.util.unEscapeHtml(original);
 		var expected = "<html><head><title>This is a \"Test Title\"</title></head><body class=\"tundra\">Woo hoo, this is an awesome & exciting test case!</body></html>";
-		t.is(unescaped, expected);
+		t.is(expected, unescaped);
 		t.is("&lt;", dojox.atom.io.model.util.unEscapeHtml("&amp;lt;"));
 	},
 
 	// dojox.atom.io.model.util.getNodename
 	function checkGetNodename(t){
 		var node = document.createElement("div");
-		t.is(dojox.atom.io.model.util.getNodename(node).toLowerCase(), "div");
+		t.is("div", dojox.atom.io.model.util.getNodename(node).toLowerCase());
 		
 		node = dojox.data.dom.createDocument("<root><first/><second/><third/></root>").firstChild;
 		t.is("root", dojox.atom.io.model.util.getNodename(node));
@@ -65,30 +65,30 @@ doh.register("dojox.atom.tests.io.module", [
 				var i;
 				// regular callback
 				// Feed variables
-				t.is(feed.title.value, 'Example.com');
+				t.is('Example.com', feed.title.value);
 				feed.setTitle('Example.com Atom Feed', 'text');
-				t.is(feed.title.value, 'Example.com Atom Feed');
-				t.is(feed.subtitle.value, 'Example.com\'s Sample Feed');
-				t.is(feed.rights, 'Copyright Example.com');
-				t.is(feed.id, 'http://example.com/samplefeed.xml');
-				t.is(feed.updated, dojo.date.stamp.fromISOString('2007-08-07T20:00:00-05:00'));
+				t.is('Example.com Atom Feed', feed.title.value);
+				t.is('Example.com\'s Sample Feed', feed.subtitle.value);
+				t.is('Copyright Example.com', feed.rights);
+				t.is('http://example.com/samplefeed.xml', feed.id);
+				t.is(dojo.date.stamp.fromISOString('2007-08-07T20:00:00-05:00'), feed.updated);
 
 				// AtomItem methods
 				feed.addNamespace('http://www.test.com');
-				t.is(feed.name_spaces, {});
+				t.is({}, feed.name_spaces);
 				feed.addNamespace('', 'test');
-				t.is(feed.name_spaces, {});
+				t.is({}, feed.name_spaces);
 				feed.addNamespace('http://www.test.com', 'test');
-				t.is(feed.name_spaces, {'test': 'http://www.test.com'});
+				t.is({'test': 'http://www.test.com'}, feed.name_spaces);
 
-				t.is(feed.authors, null);
+				t.is(null, feed.authors);
 				feed.addAuthor('John');
 				feed.addAuthor('Matt', 'matt@example.com');
 				feed.addAuthor('Joe', 'joe@example.com', 'http://joe.example.com');
 				t.t(dojo.isArray(feed.authors));
 				t.t(feed.authors.length === 3);
 
-				t.is(feed.contributors, null);
+				t.is(null, feed.contributors);
 				feed.addContributor('Sam');
 				feed.addContributor('Dave', 'Dave@example.com');
 				feed.addContributor('Harry', 'harry@example.com', 'http://harry.example.com');
@@ -106,7 +106,7 @@ doh.register("dojox.atom.tests.io.module", [
 				feed.removeBasicLinks();
 				t.t(feed.links.length === 2);
 
-				t.is(feed.categories, null);
+				t.is(null, feed.categories);
 				feed.addCategory("scheme", "term", "label");
 				feed.addCategory("scheme", "term2", "label2");
 				feed.addCategory("scheme2", "term", "label");
@@ -123,8 +123,8 @@ doh.register("dojox.atom.tests.io.module", [
 				feed.removeCategories("scheme2", "term");
 				t.t(feed.categories.length === 0);
 
-				t.is(feed.extensions, null);
-				t.is(feed.getExtensions(), []);
+				t.is(null, feed.extensions);
+				t.is([], feed.getExtensions());
 				feed.addExtension('nameSpace', 'element', [], 'A Test Element', 'sns');
 				feed.addExtension('nameSpace', 'element2', [], 'Another Test Element', 'sns');
 				feed.addExtension('anotherNameSpace', 'element', [], 'A Test Element', 'asns');
