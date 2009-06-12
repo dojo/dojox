@@ -85,6 +85,19 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		}
 	},
 	
+	_setValueAttr: function(v){
+		if("_savedValue" in this){
+			return;
+		}
+		this.inherited(arguments);
+	},
+	attr: function(/*String|Object*/name, /*Object?*/value){
+		if(name == "value" && arguments.length == 2 && "_savedValue" in this){
+			this._savedValue = value;
+		}
+		return this.inherited(arguments);
+	},
+
 	onRemoveChild: function(/*Widget*/ pane){
 		// summary: Called when the stack container removes a pane
 		if(this._panes[pane.id]){
@@ -113,15 +126,30 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 				c.onHide = dojo.hitch(this, "_togglePane", c, false);
 				c.onHide();
 			}
-			if(this._savedValue && v){
+			if("_savedValue" in this && v === this._savedValue){
 				selPane = c;
 			}
 			return toAdd;
 		}, this), function(i){ return i;}));
-		delete this._savedValue;
-		this.onSelectChild(selPane);
-		if(!selPane._shown){
-			this._togglePane(selPane, true);
+		var _this = this;
+		var fx = function(){
+			// This stuff needs to be run after we show our child, if
+			// the stack is going to show a different child than is 
+			// selected - see trac #9396
+			delete _this._savedValue;
+			_this.onSelectChild(selPane);
+			if(!selPane._shown){
+				_this._togglePane(selPane, true);
+			}			
+		};
+		if(selPane !== info.selected){
+			var stack = dijit.byId(this.stackId);
+			var c = this.connect(stack, "_showChild", function(sel){
+				this.disconnect(c);
+				fx();
+			});
+		}else{
+			fx();
 		}
 	},
 	

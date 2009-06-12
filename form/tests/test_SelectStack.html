@@ -27,10 +27,10 @@
 								dual: "second",
 								dualSecondBox: "Dual First Value on Second (RO)",
 								dualSecondBox2: "Dual Another Value"
-								}, form.getValues());
+								}, form.attr("value"));
 						},
 						function test_setValues(t){
-							form.setValues({
+							form.attr("value", {
 								dropDown: "first",
 								dropDownSecondBox: "Changed First Value",
 								radio: "first",
@@ -47,8 +47,8 @@
 								radio: "first",
 								radioFirstBox: "Changed Radio Value",
 								dual: "first"
-							}, form.getValues());
-							form.setValues({
+							}, form.attr("value"));
+							form.attr("value", {
 								dropDown: "second",
 								radio: "second",
 								dual: "second"});
@@ -61,7 +61,7 @@
 								dual: "second",
 								dualSecondBox: "Changed me too",
 								dualSecondBox2: "Dual Another Value"
-								}, form.getValues());
+								}, form.attr("value"));
 						}
 					]
 				);
@@ -120,7 +120,7 @@
 		<hr>
 			<button dojoType="dijit.form.Button">
 				<script type="dojo/method" event="onClick">
-					console.dir(form.getValues());
+					console.dir(form.attr("value"));
 				</script>
 				Get Values
 			</button>
