@@ -38,11 +38,23 @@ dojo.require("dojo.behavior");
 		var dp = d.place;
 		var iFrame = create("iframe", {className: "dojoxEllipsisIFrame",
 					src: "javascript:'<html><head><script>if(\"loadFirebugConsole\" in window){window.loadFirebugConsole();}</script></head><body></body></html>'"});
-		var rollRange = function(/* W3C Range */ r){
+		var rollRange = function(/* W3C Range */ r, /* int? */ cnt){
 			// Summary:
 			//		Rolls the given range back one character from the end
+			//
+			//	r: W3C Range
+			//		The range to roll back
+			//	cnt: int?
+			//		An optional number of times to roll back (defaults 1)
 			if(r.collapsed){
 				// Do nothing - we are already collapsed
+				return;
+			}
+			if(cnt > 0){
+				do{
+					rollRange(r);
+					cnt--;
+				}while(cnt);
 				return;
 			}
 			if(r.endContainer.nodeType == 3 && r.endOffset > 0){
@@ -94,10 +106,18 @@ dojo.require("dojo.behavior");
 				r.selectNodeContents(n);
 				ns.display = "none";
 				es.display = "";
+				var done = false;
 				do{
+					var numRolls = 1;
 					dp(r.cloneContents(), e, "only");
-					rollRange(r);
-				}while(!r.collapsed && e.scrollWidth > e.offsetWidth);
+					var sw = e.scrollWidth, ow = e.offsetWidth;
+					done = (sw <= ow);
+					var pct = (1 - ((ow * 1) / sw));
+					if(pct > 0){
+						numRolls = Math.max(Math.round(e.textContent.length * pct) - 1, 1);
+					}
+					rollRange(r, numRolls);
+				}while(!r.collapsed && !done);
 			};
 			i.onload = function(){
 				i.contentWindow.onresize = resizeNode;
@@ -108,9 +128,10 @@ dojo.require("dojo.behavior");
 
 		// Add our behavior
 		var b = d.behavior;
+		var hc = d.hasClass;
 		b.add({
 			".dojoxEllipsis": function(n){
-				if(n.textContent == n.innerHTML){
+				if(n.textContent == n.innerHTML && !hc(n, "dojoxEllipsisSelectable")){
 					// We can do the faster XUL version, instead of calculating
 					createXULEllipsis(n);
 				}else{
