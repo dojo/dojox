@@ -80,7 +80,12 @@
 <body>
 	<div class="heading">Within divs</div>
 	<div class="subheading">Fixed width (px):</div>
-	<div class="divContainer" style="width: 250px">
+	<div class="divContainer" style="width: 250px; margin-bottom: 0.25em">
+		<div class="dojoxEllipsis">
+			Short data that shouldn't wrap
+		</div>
+	</div>
+	<div class="divContainer" style="width: 250px">	
 		<div class="dojoxEllipsis">
 			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. 
 			Etiam mattis libero nec ante. Nam porta lacus eu ligula. Cras mauris. 
@@ -341,5 +346,26 @@
 			</td>
 		</tr>
 	</table>
+	<hr>
+	<div class="heading">With Markup</div>
+	<div class="subheading">Bold/Underline</div>
+	<div class="divContainer" style="width: 250px">
+		<div class="dojoxEllipsis">
+			Some dummy text that should wrap <b><u>right about here</u></b>
+		</div>
+	</div>
+	<div class="subheading">Font Sizes</div>
+	<div class="divContainer" style="width: 250px">
+		<div class="dojoxEllipsis">
+			<font size="1">Some</font> <font size="2">more</font> <font size="3">dummy</font> <font size="4">text</font> <font size="5">getting</font> 
+			<font size="4">bigger</font> <font size="3">and</font> <font size="2">then</font> <font size="1">smaller</font>
+		</div>
+	</div>
+	<div class="subheading">Link</div>
+	<div class="divContainer" style="width: 250px">
+		<div class="dojoxEllipsis">
+			Some dummy text with a <a href="#" onclick="alert('clicked'); return false;">link that should truncate</a>
+		</div>
+	</div>
 </body>
 </html>
