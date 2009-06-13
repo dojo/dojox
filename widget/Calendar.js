@@ -57,7 +57,6 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 	postCreate: function(){
 		// summary:
 		//		Instantiates the mixin views
-		this._height = dojo.style(this.containerNode, "height");
 		this.displayMonth = new Date(this.attr('value'));
 
 		var mixin = {
