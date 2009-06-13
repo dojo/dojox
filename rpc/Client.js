@@ -18,4 +18,4 @@ dojo.provide("dojox.rpc.Client");
 	}
 })();
 // initiate the client id to a good random number
-dojox.rpc.Client.clientId = (Math.random() + '').substring(2,14);
+dojox.rpc.Client.clientId = (Math.random() + '').substring(2,14) + (new Date().getTime() + '').substring(8,13);

@@ -11,7 +11,7 @@ dojo.require("dojox.storage");
 	var Rest = dojox.rpc.Rest;
 	var namespace = "dojox_rpc_OfflineRest";
 	var loaded;
-	var index = Rest._index;	
+	var index = Rest._index;
 	dojox.storage.manager.addOnLoad(function(){
 		// now that we are loaded we need to save everything in the index
 		loaded = dojox.storage.manager.available;
@@ -107,7 +107,7 @@ dojo.require("dojox.storage");
 		} 
 		var sync = dojox.rpc._sync;
 		dfd.addCallback(function(result){
-			saveObject(result, service.servicePath+id);
+			saveObject(result, service._getRequest(id).url);
 			return result;			
 		});
 		dfd.addErrback(function(error){
@@ -125,8 +125,13 @@ dojo.require("dojox.storage");
 						loadedObjects[id] = result;
 						for(var i in result){
 							var val = result[i]; // resolve references if we can
-							if (val && val.$ref){
-								result[i] = byId(val.$ref,val);
+							id = val && val.$ref;
+							if (id){
+								if(id.substring && id.substring(0,4) == "cid:"){
+									// strip the cid scheme, we should be able to resolve it locally
+									id = id.substring(4);
+								}
+								result[i] = byId(id,val);
 							}
 						}
 						if (result instanceof Array){
@@ -141,7 +146,7 @@ dojo.require("dojox.storage");
 					};
 					dontSave = true; // we don't want to be resaving objects when loading from local storage
 					//TODO: Should this reuse something from dojox.rpc.Rest
-					var result = byId(service.servicePath+id);
+					var result = byId(service._getRequest(id).url);
 					
 					if(!result){// if it is not found we have to just return the error
 						return error;
@@ -168,6 +173,40 @@ dojo.require("dojox.storage");
 		});
 		return dfd;
 	};
+	function changeOccurred(method, absoluteId, contentId, serializedContent, service){
+		if(method=='delete'){
+			dojox.storage.remove(getStorageKey(absoluteId),namespace);
+		}		
+		else{
+			// both put and post should store the actual object
+			dojox.storage.put(getStorageKey(contentId), serializedContent, function(){
+			},namespace);
+		}
+		var store = service && service._store;
+		// record all the updated queries
+		if(store){
+			store.updateResultSet(store._localBaseResults, store._localBaseFetch);
+			dojox.storage.put(getStorageKey(service._getRequest(store._localBaseFetch.query).url),dojox.json.ref.toJson(store._localBaseResults),function(){
+				},namespace);
+			
+		}
+		
+	}
+	dojo.addOnLoad(function(){
+		dojo.connect(dojox.data, "restListener", function(message){
+			var channel = message.channel;
+			var method = message.event.toLowerCase();
+			var service = dojox.rpc.JsonRest && dojox.rpc.JsonRest.getServiceAndId(channel).service;
+			changeOccurred(
+				method, 
+				channel,
+				method == "post" ? channel + message.result.id : channel,
+				dojo.toJson(message.result),
+				service
+			);
+			
+		});
+	});
 	//FIXME: Should we make changes after a commit to see if the server rejected the change
 	// or should we come up with a revert mechanism? 
 	var defaultChange = Rest._change;
@@ -175,23 +214,8 @@ dojo.require("dojox.storage");
 		if(!loaded){
 			return defaultChange.apply(this,arguments);
 		}
-		var absoluteId = service.servicePath + id;
-		if(method=='delete'){
-			dojox.storage.remove(getStorageKey(absoluteId),namespace);
-		}		
-		else{
-			// both put and post should store the actual object
-			dojox.storage.put(getStorageKey(dojox.rpc.JsonRest._contentId),serializedContent,function(){
-			},namespace);
-		}
-		// record all the updated queries
-		var store = service._store;
-		if(store){
-			store.updateResultSet(store._localBaseResults, store._localBaseFetch);
-			dojox.storage.put(getStorageKey(service.servicePath + store._localBaseFetch.query),dojox.json.ref.toJson(store._localBaseResults),function(){
-				},namespace);
-			
-		}
+		var absoluteId = service._getRequest(id).url;
+		changeOccurred(method, absoluteId, dojox.rpc.JsonRest._contentId, serializedContent, service);
 		var dirty = dojox.storage.get("dirty",namespace) || {};
 		if (method=='put' || method=='delete'){
 			// these supersede so we can overwrite anything using this id
