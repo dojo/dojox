@@ -199,7 +199,7 @@ dojo.declare("dojox.grid.selection",
 	},
 
 	clickSelectEvent: function(e){
-		this.clickSelect(e.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
+		this.clickSelect(e.rowIndex, dojo.isCopyKeyPressed(e), e.shiftKey);
 	},
 
 	clear: function(){

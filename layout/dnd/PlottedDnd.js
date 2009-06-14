@@ -227,7 +227,7 @@ dojo.declare("dojox.layout.dnd.PlottedDnd", [dojo.dnd.Source], {
 			if(this.mouseDown && this.isSource){
 				var nodes = this.getSelectedNodes();
 				if(nodes.length){
-					m.startDrag(this, nodes, this.copyState(dojo.dnd.getCopyKeyState(e)));
+					m.startDrag(this, nodes, this.copyState(dojo.isCopyKeyPressed(e)));
 				}
 			}
 

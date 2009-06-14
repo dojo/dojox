@@ -61,7 +61,7 @@ dojo.declare("dojox.grid._Events", null, {
 						this.setSortIndex(colIdx);
 						break;
 					}else {
-						this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
+						this.selection.clickSelect(this.focus.rowIndex, dojo.isCopyKeyPressed(e), e.shiftKey);
 					}
 					dojo.stopEvent(e);
 				}
@@ -85,7 +85,7 @@ dojo.declare("dojox.grid._Events", null, {
 						this.setSortIndex(colIdx);
 						break;
 					}else {
-						this.selection.clickSelect(this.focus.rowIndex, dojo.dnd.getCopyKeyState(e), e.shiftKey);
+						this.selection.clickSelect(this.focus.rowIndex, dojo.isCopyKeyPressed(e), e.shiftKey);
 					}
 					dojo.stopEvent(e);
 				}
