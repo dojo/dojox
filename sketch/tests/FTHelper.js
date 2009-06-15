@@ -31,14 +31,14 @@ dojo.declare('dojox.sketch.tests.FTHelper',null,{
             this.coords=dojo.coords(this.canvas);
         }
         end=end||start;
-        doh.robot.mouseMove(this.coords.x+start.x,this.coords.y+start.y,delay);
+        doh.robot.mouseMove(this.coords.x+start.x,this.coords.y+start.y,delay,1);
         doh.robot.mousePress({left:1},delay);
-        doh.robot.mouseMove(this.coords.x+end.x,this.coords.y+end.y,delay);
+        doh.robot.mouseMove(this.coords.x+end.x,this.coords.y+end.y,delay,1);
         doh.robot.mouseRelease({left:1},delay);
     },
     click: function(args,delay){
         delay=delay||this.defaultDelay;
-        doh.robot.mouseMove(this.coords.x+args.x,this.coords.y+args.y,delay);
+        doh.robot.mouseMove(this.coords.x+args.x,this.coords.y+args.y,delay,1);
         doh.robot.mouseClick(args,delay);
     }
 });

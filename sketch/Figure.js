@@ -18,6 +18,7 @@ dojo.require("dojox.sketch.UndoStack");
 		this.size={ w:0, h:0 };
 		this.surface=null;
 		this.group=null;
+		//node should have tabindex set, otherwise keyboard action does not work
 		this.node=null;
 
 		this.zoomFactor=1;	//	multiplier for zooming.
@@ -132,14 +133,21 @@ dojo.require("dojox.sketch.UndoStack");
 	
 		//	drag handlers.
 		this._md=function(e){
+			//in IE, when clicking into the drawing canvas, the node does not get focused,
+			//do it manually here to force it, otherwise the keydown event listener is 
+			//never triggered in IE.
+			if(dojox.gfx.renderer=='vml'){
+				self.node.focus();
+			}
 			var o=self._fromEvt(e);
 			self._startPoint={ x:e.pageX, y:e.pageY };
 
-			//	figure out the coordinates within the iframe
 			self._ctr=dojo._abs(self.node);
+			//	figure out the coordinates taking scroll into account
+			var scroll={x:self.node.scrollLeft,y:self.node.scrollTop};
 			//var win = dijit.getDocumentWindow(self.node.ownerDocument);
 			//var scroll=dojo.withGlobal(win,dojo._docScroll);
-			self._ctr={x:self._ctr.x, y:self._ctr.y}; //-scroll.x -scroll.y
+			self._ctr={x:self._ctr.x-scroll.x, y:self._ctr.y-scroll.y};
 			var X=e.clientX-self._ctr.x, Y=e.clientY-self._ctr.y;
 			self._lp={ x:X, y:Y };
 
@@ -247,7 +255,6 @@ dojo.require("dojox.sketch.UndoStack");
 		//	.setFill("white");
 		this.group=this.surface.createGroup();
 
-		
 		this._cons=[];
 		var es=this.surface.getEventSource();
 		this._cons.push(
@@ -267,10 +274,8 @@ dojo.require("dojox.sketch.UndoStack");
 			// misc hooks
 			dojo.connect(es, 'onclick', this, 'onClick'),
 			dojo.connect(es, 'ondblclick', this._dblclick),
-			dojo.connect(es.ownerDocument, 'onkeydown', this._keydown));
+			dojo.connect(node, 'onkeydown', this._keydown));
 		
-		//	rect hack.  Fcuking VML.
-		//this.groupBackground=this.group.createRect({ x:0, y:0, width:this.size.w, height:this.size.h });
 		this.image=this.group.createImage({ width:this.size.w, height:this.size.h, src:this.imageSrc });
 	};
 
