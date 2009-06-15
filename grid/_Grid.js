@@ -210,6 +210,14 @@ dojo.requireLocalization("dijit", "loading");
 		// autoWidth: Boolean
 		//		If autoWidth is true, grid width is automatically set to fit the data.
 		autoWidth: false,
+		
+		// initialWidth: String
+		//		A css string to use to set our initial width (only used if autoWidth
+		//		is true).  The first rendering of the grid will be this width, any
+		//		resizing of columns, etc will result in the grid switching to 
+		//		autoWidth mode.  Note, this width will override any styling in a
+		//		stylesheet or directly on the node.
+		initialWidth: "",
 
 		// autoHeight: Boolean|Integer
 		//		If autoHeight is true, grid height is automatically set to fit the data.
@@ -359,6 +367,10 @@ dojo.requireLocalization("dijit", "loading");
 			this._setHeaderMenuAttr(this.headerMenu);
 			this._setStructureAttr(this.structure);
 			this._click = [];
+			this.inherited(arguments)
+			if(this.domNode && this.autoWidth && this.initialWidth){
+				this.domNode.style.width = this.initialWidth;
+			}
 		},
 
 		destroy: function(){
@@ -736,11 +748,13 @@ dojo.requireLocalization("dijit", "loading");
 
 		adaptWidth: function() {
 			// private: sets width and position for views and update grid width if necessary
-			var w = this.autoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w),
+			var doAutoWidth = (!this.initialWidth && this.autoWidth);
+			var w = doAutoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w),
 				vw = this.views.arrange(1, w);
 			this.views.onEach("adaptWidth");
-			if (this.autoWidth)
+			if(doAutoWidth){
 				this.domNode.style.width = vw + "px";
+			}
 		},
 
 		adaptHeight: function(inHeaderHeight){

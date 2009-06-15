@@ -495,6 +495,7 @@ dojo.require("dojo.dnd.Manager");
 		convertColPctToFixed: function(){
 			// Fix any percentage widths to be pixel values
 			var hasPct = false;
+			this.grid.initialWidth = "";
 			var cellNodes = dojo.query("th", this.headerContentNode);
 			var fixedWidths = dojo.map(cellNodes, function(c, vIdx){
 				var w = c.style.width;
