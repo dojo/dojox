@@ -155,18 +155,19 @@ dojo.extend(dojox.gfx.Shape, {
 			if(da in dojox.gfx.silverlight.dasharray){ da = dojox.gfx.silverlight.dasharray[da]; }
 			if(da instanceof Array){
 				da = dojo.clone(da);
+				var i;
 				/*
 				for(var i = 0; i < da.length; ++i){
 					da[i] *= s.width;
 				}
 				*/
 				if(s.cap != "butt"){
-					for(var i = 0; i < da.length; i += 2){
+					for(i = 0; i < da.length; i += 2){
 						//da[i] -= s.width;
 						--da[i]
 						if(da[i] < 1){ da[i] = 1; }
 					}
-					for(var i = 1; i < da.length; i += 2){
+					for(i = 1; i < da.length; i += 2){
 						//da[i] += s.width;
 						++da[i];
 					}
@@ -443,9 +444,19 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		//	(no fill & stroke by default)
 		this.rawNode = rawNode;
 	},
+	getTextBoundingBox: function(){
+		return {
+			width: this.rawNode.actualWidth,
+			height: this.rawNode.actualHeight
+		}
+	},
 	getTextWidth: function(){
 		// summary: get the text width in pixels
 		return this.rawNode.actualWidth;
+	},
+	getTextHeight: function(){
+		// summary: get the text width in pixels
+		return this.rawNode.actualHeight;
 	}
 });
 dojox.gfx.Text.nodeType = "TextBlock";
