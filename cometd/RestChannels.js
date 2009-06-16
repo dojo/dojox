@@ -72,9 +72,6 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 					return result;
 				};
 			}
-			if(dojox.data && dojox.data.restListener){
-				this.receive = dojox.data.restListener;
-			}
 		},
 		absoluteUrl: function(baseUrl,relativeUrl){
 			return new dojo._Url(baseUrl,relativeUrl)+'';
@@ -387,6 +384,9 @@ dojo.requireIf(dojox.data && !!dojox.data.JsonRestStore,"dojox.data.restListener
 			//		Called when a message is received from the server
 			//	message:
 			//		A cometd/XHR message
+			if(dojox.data && dojox.data.restListener){
+				dojox.data.restListener(message);
+			}
 		},
 		disconnected: function(){
 			// summary:
