@@ -444,19 +444,9 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		//	(no fill & stroke by default)
 		this.rawNode = rawNode;
 	},
-	getTextBoundingBox: function(){
-		return {
-			width: this.rawNode.actualWidth,
-			height: this.rawNode.actualHeight
-		}
-	},
 	getTextWidth: function(){
 		// summary: get the text width in pixels
 		return this.rawNode.actualWidth;
-	},
-	getTextHeight: function(){
-		// summary: get the text width in pixels
-		return this.rawNode.actualHeight;
 	}
 });
 dojox.gfx.Text.nodeType = "TextBlock";

@@ -377,8 +377,8 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 		r.textContent = s.text;
 		return this;	// self
 	},
-	getTextBoundingBox: function(){
-		// summary: return coordinates of text box: x,y,w,h
+	getTextWidth: function(){
+		// summary: get the text width in pixels
 		var rawNode = this.rawNode,
 			oldParent = rawNode.parentNode,
 			_measurementNode = rawNode.cloneNode(true);
@@ -395,18 +395,8 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 				_width = parseInt(_measurementNode.getBBox().width);
 			}
 		}
-		
-		var bbox = _measurementNode.getBBox();
 		oldParent.removeChild(_measurementNode);
-		return bbox;
-	},
-	getTextWidth: function(){
-		// summary: get the text width in pixels
-		return this.getTextBoundingBox().width;
-	},
-	getTextHeight: function(){
-		// summary: get the text height in pixels
-		return this.getTextBoundingBox().height;
+		return _width;
 	}
 });
 dojox.gfx.Text.nodeType = "text";

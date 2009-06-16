@@ -610,26 +610,13 @@ dojo.require("dojox.gfx.arc");
 			}
 			return matrix;	// dojox.gfx.Matrix2D
 		},
-		getTextBoundingBox: function(){
-			// summary: return coordinates of text box: x,y,w,h
-			var rawNode = this.rawNode, _display = rawNode.style.display;
-			rawNode.style.display = "inline";
-			var o = {
-				width: g.pt2px(parseFloat(rawNode.currentStyle.width)),
-				height: g.pt2px(parseFloat(rawNode.currentStyle.height)),
-				y: g.pt2px(parseFloat(rawNode.currentStyle.top)),
-				x: g.pt2px(parseFloat(rawNode.currentStyle.left))
-			};
-			rawNode.style.display = _display;
-			return o;
-		},
 		getTextWidth: function(){
 			// summary: get the text width, in px
-			return this.getTextBoundingBox().width;
-		},
-		getTextHeight: function(){
-			// summary: get the text height, in px
-			return this.getTextBoundingBox().height;
+			var rawNode = this.rawNode, _display = rawNode.style.display;
+			rawNode.style.display = "inline";
+			var _width = g.pt2px(parseFloat(rawNode.currentStyle.width));
+			rawNode.style.display = _display;
+			return _width;
 		}
 	});
 	g.Text.nodeType = "shape";
