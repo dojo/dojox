@@ -132,7 +132,10 @@ dojo.declare("dojox.data.XmlStore", null, {
 			if(attribute.charAt(0) === '@'){
 				var name = attribute.substring(1);
 				var value = element.getAttribute(name);
-				return (value !== undefined) ? value : defaultValue; //object
+				//Note that getAttribute will return null or empty string for undefined/unset 
+				//attributes, therefore, we should just check the return was valid
+				//non-empty string and not null.
+				return (value) ? value : defaultValue; //object
 			}else{
 				for(i = 0; i < element.childNodes.length; i++){
 					node = element.childNodes[i];

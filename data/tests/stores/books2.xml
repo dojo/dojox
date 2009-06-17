@@ -15,7 +15,7 @@
 		<title>Title of 3</title>
 		<author>Author of 3</author>
 	</book>
-	<book>
+	<book xmlAttribute="xmlValue">
 		<isbn>A9B574</isbn>
 		<title>Title of 4</title>
 		<author>Author of 4</author>
@@ -29,4 +29,4 @@
 		<author>Fourth Author of 5</author>
 		<author>Fifth Author of 5</author>
 	</book>
-</books>
+</books>                                           

@@ -629,6 +629,9 @@ doh.register("dojox.data.tests.stores.XmlStore",
 				var item = items[0];
 				t.assertTrue(store.hasAttribute(item,"isbn"));
 				t.assertTrue(!store.hasAttribute(item,"bob"));
+				//Verify that XML attributes return false in this case.
+				t.assertTrue(store.hasAttribute(item,"@xmlAttribute"));
+				t.assertFalse(store.hasAttribute(item,"@bogus"));
 				d.callback(true);
 			}
 			function onError(error, request) {
@@ -855,7 +858,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			function onError(error, request) {
 				d.errback(error);
 			}
-			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
+			store.fetch({query:{isbn:"A9B577"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
 		function testWriteAPI_setValue(t){
