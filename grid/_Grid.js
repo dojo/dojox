@@ -487,6 +487,10 @@ dojo.requireLocalization("dijit", "loading");
 		onMoveColumn: function(){
 			this.render();
 		},
+		
+		onResizeColumn: function(/*int*/ cellIdx){
+			// Called when a column is resized.
+		},
 
 		// views
 		createViews: function(){

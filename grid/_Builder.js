@@ -591,6 +591,7 @@ dojo.require("dojo.dnd.Moveable");
 			this._skipBogusClicks = true;
 			inDrag.view.update();
 			this._skipBogusClicks = false;
+			this.grid.onResizeColumn(inDrag.index);
 		},
 		doResizeNow: function(inDrag, data){
 			inDrag.view.convertColPctToFixed();
