@@ -109,11 +109,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			});
 			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
 			
-			if(typeof this.target == 'string' && !this.service){
+			if(typeof this.target == 'string'){
 				this.target = this.target.match(/\/$/) || this.allowNoTrailingSlash ? this.target : (this.target + '/');
-				this.service = dojox.rpc.JsonRest.services[this.target] || 
-						dojox.rpc.Rest(this.target, true); 
-				// create a default Rest service
+				if(!this.service){
+					this.service = dojox.rpc.JsonRest.services[this.target] || 
+							dojox.rpc.Rest(this.target, true); 
+					// create a default Rest service
+				}
 			}
 			
 			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
