@@ -232,6 +232,12 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 				this.updateRowCount(size);
 			}
 		}
+		if(!size){
+			this.showMessage(this.noDataMessage);
+			this.focus.initFocusView();
+		}else{
+			this.showMessage();
+		}
 	},
 
 	_onFetchComplete: function(items, req){
@@ -259,12 +265,6 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		if(!this._isLoaded){
 			this._isLoading = false;
 			this._isLoaded = true;
-			if(!items || !items.length){
-				this.showMessage(this.noDataMessage);
-				this.focus.initFocusView();
-			}else{
-				this.showMessage();
-			}
 		}
 		this._pending_requests[req.start] = false;
 	},

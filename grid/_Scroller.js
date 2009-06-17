@@ -251,7 +251,7 @@ dojo.provide("dojox.grid._Scroller");
 			var needPage = (!this._invalidating);
 			if(!needPage){
 				var ah = this.grid.attr("autoHeight");
-				if(typeof ah == "number" && ah < Math.min(this.rowsPerPage, this.rowCount)){
+				if(typeof ah == "number" && ah <= Math.min(this.rowsPerPage, this.rowCount)){
 					needPage = true;
 				}
 			}
