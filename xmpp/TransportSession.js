@@ -79,14 +79,17 @@ dojo.extend(dojox.xmpp.TransportSession, {
 					"handleBOSH", this, "processScriptSrc");
 				
 				this.transportIframes = [];
-				
+
+				var transSessionStr = dojox._scopeName + '.xmpp.TransportSession';
 				for(var i = 0; i <= this.hold; i++) {
-					var iframe = dojo.io.iframe.create("xmpp-transport-" + i, dojox._scopeName + ".xmpp.TransportSession._iframeOnload("+i+");" );
+					var iframe = dojo.io.iframe.create("xmpp-transport-" + i, transSessionStr + "._iframeOnload("+i+");" );
 					this.transportIframes.push(iframe);
-					if(i ==0) {
-						dojo.connect(iframe, "onload",  this, "_sendLogin");
-					}
 				}
+				dojo.connect(dojo.getObject(transSessionStr), '_iframeOnload', this, function(index){
+					if(index==0){
+						this._sendLogin();
+					}
+				});
 				
 			
 			} else {
