@@ -94,7 +94,7 @@ dojox.io.windowName = {
 
 		var ioArgs = dfd.ioArgs;
 		var frameNum = dojox.io.windowName._frameNum++;
-		var sameDomainUrl = (dojo.config["dojoBlankHtmlUrl"]||dojo.config["dojoCallbackUrl"]||dojo.moduleUrl("dojo", "resources/blank.html")) + "#" + frameNum;
+		var sameDomainUrl = (dojo.config.dojoBlankHtmlUrl||dojo.config.dojoCallbackUrl||dojo.moduleUrl("dojo", "resources/blank.html")) + "#" + frameNum;
 		var frameName = new dojo._Url(window.location, sameDomainUrl);
 		var doc = dojo.doc;
 		var frameContainer = authTarget || dojo.body();
