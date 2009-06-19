@@ -129,8 +129,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		var headers = [];
 		for (var i = 0; i < allHeads.length; i++){
 			var aHead = allHeads[i];
-			var hasTabIdx = dojo.hasAttr(aHead, "tabindex");
-			var tabindex = dojo.attr(aHead, "tabindex");
+			var hasTabIdx = dojo.hasAttr(aHead, "tabIndex");
+			var tabindex = dojo.attr(aHead, "tabIndex");
 			if (hasTabIdx && tabindex < 0) {
 				headers.push(aHead);
 			}
