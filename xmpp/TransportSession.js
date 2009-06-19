@@ -10,7 +10,6 @@ dojox.xmpp.TransportSession = function(props) {
 		dojo.mixin(this, props);
 		if(this.useScriptSrcTransport){
 			this.transportIframes = [];
-		
 		}
 	}
 	
@@ -81,17 +80,23 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				this.transportIframes = [];
 
 				var transSessionStr = dojox._scopeName + '.xmpp.TransportSession';
+				var delayLogin = !dojo.byId('xmpp-transport-0');
 				for(var i = 0; i <= this.hold; i++) {
-					var iframe = dojo.io.iframe.create("xmpp-transport-" + i, transSessionStr + "._iframeOnload("+i+");" );
+					var iframe = dojo.byId('xmpp-transport-'+i);
+					if(!iframe){
+						iframe = dojo.io.iframe.create("xmpp-transport-" + i, transSessionStr + "._iframeOnload("+i+");" );
+					}
 					this.transportIframes.push(iframe);
 				}
-				dojo.connect(dojo.getObject(transSessionStr), '_iframeOnload', this, function(index){
-					if(index==0){
-						this._sendLogin();
-					}
-				});
-				
-			
+				if(delayLogin){
+					dojo.connect(dojo.getObject(transSessionStr), '_iframeOnload', this, function(index){
+						if(index==0){
+							this._sendLogin();
+						}
+					});
+				}else{
+					this._sendLogin();
+				}
 			} else {
 				this._sendLogin();
 			}
@@ -331,7 +336,7 @@ dojo.extend(dojox.xmpp.TransportSession, {
 				iframe.contentWindow.rid=rid;
 				iframe.contentWindow.transmiting=true;
 				dojo.io.script.attach("rid-"+rid,this.serviceUrl+"?"+encodeURIComponent(message),iframeDoc);
-				return false;	
+				return false;
 			} else {
 				var def = dojo.rawXhrPost({
 					contentType: "text/xml",
