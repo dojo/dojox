@@ -17,7 +17,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 
 	maxHeight: "",
 	maxWidth: "",
-	splitter: "",
+	splitter: false,
 	
 	templatePath: dojo.moduleUrl("dojox.layout","resources/ExpandoPane.html"),
 
