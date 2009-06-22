@@ -605,7 +605,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 	/* The following are functions that tie into _Widget.attr() */
 
-    _setTextAttr: function(text){
+	_setTextAttr: function(text){
 		//	summary:
 		//		Function to allow widget.attr to set the text displayed in center 
 		//		if using text display.
@@ -615,7 +615,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		this.text = text;
 	},
 
-    _setColorAttr: function(c){
+	_setColorAttr: function(c){
 		//	summary:
 		//		Function to allow widget.attr to set the color used for the translucent
 		//		div overlay.
@@ -625,7 +625,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		this.color = c;
 	},
 
-    _setImageTextAttr: function(text){
+	_setImageTextAttr: function(text){
 		//	summary:
 		//		Function to allow widget.attr to set the ALT text text displayed for
 		//		the image (if using image center display).
@@ -635,7 +635,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		this.imageText = text;
 	},
 
-    _setImageAttr: function(url){
+	_setImageAttr: function(url){
 		//	summary:
 		//		Function to allow widget.attr to set the url source for the center image
 		//	text: String
@@ -644,7 +644,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		this.image = url;
 	},
 
-    _setCenterIndicatorAttr: function(indicator){
+	_setCenterIndicatorAttr: function(indicator){
 		//	summary:
 		//		Function to allow widget.attr to set the node used for the center indicator,
 		//		either the image or the text.
