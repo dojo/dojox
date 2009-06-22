@@ -99,6 +99,7 @@ dojo.require("dojo.data.util.filter");
 						// do the sort if needed
 						resultSet.sort(this.makeComparator(request.sort.concat()));
 					}
+					resultSet._fullLength = resultSet.length;
 					if(request.count && updated){
 						// do we really need to do this?
 						// make sure we still find within the defined paging set
@@ -193,6 +194,7 @@ dojo.require("dojo.data.util.filter");
 						args._version = typeof args._version == "number" ? args._version : version;
 						self.updateResultSet(results,args);
 						args.cacheResults = results;
+						defResult.fullLength = results.length;
 					}
 					return results;
 				});
@@ -251,7 +253,7 @@ dojo.require("dojo.data.util.filter");
 					var value = this.getValue(item,i);
 					if((typeof match == 'string' && (match.match(/[\*\.]/) || ignoreCase)) ?
 						!dojo.data.util.filter.patternToRegExp(match, ignoreCase).test(value) :
-						value != match){	  
+						value != match){
 						return false;
 					}
 				}
