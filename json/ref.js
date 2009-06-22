@@ -157,7 +157,8 @@ dojox.json.ref = {
 						var old = target[i];
 						target[i] = val; // only update if it changed
 						if(update && val !== old && // see if it is different 
-								!target._loadObject && // no updates if we are just lazy loading 
+								!target._loadObject && // no updates if we are just lazy loading
+								!(i.charAt(0) == '_' && i.charAt(1) == '_') && i != "$ref" &&  
 								!(val instanceof Date && old instanceof Date && val.getTime() == old.getTime()) && // make sure it isn't an identical date
 								!(typeof val == 'function' && typeof old == 'function' && val.toString() == old.toString()) && // make sure it isn't an indentical function
 								index.onUpdate){
@@ -167,8 +168,8 @@ dojox.json.ref = {
 				}
 			}
 	
-			if(update){
-				// this means we are updating, we need to remove deleted
+			if(update && (idAttribute in it)){
+				// this means we are updating with a full representation of the object, we need to remove deleted
 				for(i in target){
 					if(!target.__isDirty && target.hasOwnProperty(i) && !it.hasOwnProperty(i) && !(i.charAt(0) == '_' && i.charAt(1) == '_') && !(target instanceof Array && isNaN(i))){
 						if(index.onUpdate && i != "_loadObject" && i != "_idAttr"){
