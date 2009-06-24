@@ -7,7 +7,8 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 		var first = true;
 		var self = this;
 		function buildQuery(path, query){
-			if(query.__id){
+			var isDataItem = query.__id; 
+			if(isDataItem){
 				// it is a reference to a persisted object, need to make it a query by id
 				var newQuery = {};
 				newQuery[self.idAttribute] = self.useFullIdInQueries ? query.__id : query[self.idAttribute];
@@ -21,7 +22,7 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 					buildQuery(newPath, value);
 				}else if(value!="*"){ // full wildcards can be ommitted
 					jsonQuery += (first ? "" : "&") + newPath +
-						((typeof value == "string" && args.queryOptions && args.queryOptions.ignoreCase) ? "~" : "=") +
+						((!isDataItem && typeof value == "string" && args.queryOptions && args.queryOptions.ignoreCase) ? "~" : "=") +
 						 dojo.toJson(value);
 					first = false;
 				}
