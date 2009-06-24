@@ -109,7 +109,7 @@
 	};
 	if(inDojo){
 		dojox.lang.typed = typedFunction;
-		if(dojo.typeCheckAllClasses){
+		if(dojo.config.typeCheckAllClasses){
 			//	This will add type checking to all classes that will be declared via dojo.declare
 			//	(only ones to be declared in the future)
 			
