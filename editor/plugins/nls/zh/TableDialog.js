@@ -7,7 +7,7 @@
 	cellPadding: "单元格边距：",
 	cellSpacing: "单元格间距：",
 	tableWidth: "表宽度：",
-	backgroundColor: "背景颜色：",
+	backgroundColor: "背景色：",
 	borderColor: "边框颜色：",
 	borderThickness: "边框厚度",
 	pixels: "像素",
@@ -17,7 +17,7 @@
 	left: "左",
 	center: "居中",
 	right: "右",
-	buttonSet: "集合", // translated elsewhere?
+	buttonSet: "设置", // translated elsewhere?
 	buttonInsert: "插入",
 
 	selectTableLabel: "选择表",
