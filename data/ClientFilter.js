@@ -194,7 +194,9 @@ dojo.require("dojo.data.util.filter");
 						args._version = typeof args._version == "number" ? args._version : version;
 						self.updateResultSet(results,args);
 						args.cacheResults = results;
-						defResult.fullLength = results.length;
+						if(!args.count || results.length < args.count){
+							defResult.fullLength = results.length;
+						}
 					}
 					return results;
 				});
