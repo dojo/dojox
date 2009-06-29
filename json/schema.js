@@ -58,7 +58,7 @@ dojox.json.schema._validate = function(/*Any*/instance,/*Object*/schema,/*Boolea
 		
 		if((typeof schema != 'object' || schema instanceof Array) && (path || typeof schema != 'function')){
 			if(typeof schema == 'function'){
-				if(!(value instanceof schema)){
+				if(!(Object(value) instanceof schema)){
 					addError("is not an instance of the class/constructor " + schema.name);
 				}
 			}else if(schema){
