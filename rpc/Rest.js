@@ -75,8 +75,16 @@ dojo.provide("dojox.rpc.Rest");
 		};
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id, args){
-			var query, request = {
-				url: path + (dojo.isObject(id) ? ((query = dojo.objectToQuery(id)) ? '?' + query : '') : id == null ? "" : id), 
+			if(dojo.isObject(id)){
+				var sort = args.sort && args.sort[0];
+				if(sort && sort.attribute){
+					id.sort = (sort.descending ? '-' : '') + sort.attribute; 
+				}
+				id = dojo.objectToQuery(id);
+				id = id ? "?" + id: "";
+			}		
+			var request = {
+				url: path + (id == null ? "" : id),
 				handleAs: isJson ? 'json' : 'text', 
 				contentType: isJson ? 'application/json' : 'text/plain',
 				sync: dojox.rpc._sync,
