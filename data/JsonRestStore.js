@@ -289,7 +289,11 @@ dojo.declare("dojox.data.JsonRestStore",
 
 			if(!(kwArgs && kwArgs.global)){
 				(kwArgs = kwArgs || {}).service = this.service;
-			} 
+			}
+			if("syncMode" in kwArgs ? kwArgs.syncMode : this.syncMode){
+				dojox.rpc._sync = true;	
+			}
+			
 			var actions = dojox.rpc.JsonRest.commit(kwArgs);
 			this.serverVersion = this._updates && this._updates.length;
 			return actions;
