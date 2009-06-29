@@ -184,6 +184,7 @@ dojo.require("dojox.rpc.Rest");
 							}
 						}
 					}
+					delete (object || old).__isDirty;
 					dirtyObjects.splice(i, 1);
 				}
 			}
