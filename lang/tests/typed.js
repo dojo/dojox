@@ -1,5 +1,5 @@
 dojo.provide("dojox.lang.tests.typed");
-dojo.typeCheckAllClasses = true;
+dojo.config.typeCheckAllClasses = true;
 dojo.require("dojox.lang.typed");
 (function(){
 	
@@ -17,7 +17,7 @@ dojo.require("dojox.lang.typed");
 	}));
 	var TypedClass = dojox.lang.tests.TypedClass;
 	TypedClass.properties = {
-		aString:{type:"string"}, 
+		aString:String, 
 		self: TypedClass, 
 		anInt: {type:"integer", maximum: 100, optional: true}
 	};
