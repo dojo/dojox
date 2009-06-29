@@ -52,7 +52,7 @@ dojox.json.ref = {
 		var assignAbsoluteIds = args.assignAbsoluteIds;
 		var index = args.index || {}; // create an index if one doesn't exist
 		var timeStamps = args.timeStamps;
-		var ref,reWalk=[];
+		var i,ref,reWalk=[];
 		var pathResolveRegex = /^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
 		var addProp = this._addProp;
 		var F = function(){};
@@ -91,18 +91,26 @@ dojox.json.ref = {
 					timeStamps[id] = args.time;
 				}
 			}
-			var properties = schema && schema.properties; 
+			while(schema){
+				var properties = schema.properties;
+				if(properties){
+					for(i in it){
+						var propertyDefinition = properties[i];
+						if(propertyDefinition && propertyDefinition.format == 'date-time' && typeof it[i] == 'string'){
+							it[i] = dojo.date.stamp.fromISOString(it[i]);
+						}
+					}
+				}
+				schema = schema["extends"];
+			}
 			var length = it.length;
-			for(var i in it){
+			for(i in it){
 				if(i==length){
 					break;		
 				}
 				if(it.hasOwnProperty(i)){
 					val=it[i];
-					var propertyDefinition = properties && properties[i];
-					if(propertyDefinition && propertyDefinition.format == 'date-time' && typeof val == 'string'){
-						val = dojo.date.stamp.fromISOString(val);
-					}else if((typeof val =='object') && val && !(val instanceof Date) && i != '__parent'){
+					if((typeof val =='object') && val && !(val instanceof Date) && i != '__parent'){
 						ref=val[refAttribute];
 						if(!ref || !val.__parent){
 							val.__parent = it;
