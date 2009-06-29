@@ -312,6 +312,11 @@ dojo.requireLocalization("dijit", "loading");
 		//		has a format function.
 		formatterScope: null,
 		
+		// editable: boolean
+		// indicates if the grid contains editable cells, default is false
+		// set to true if editable cell encountered during rendering 
+		editable: false,
+		
 		// private
 		sortInfo: 0,
 		themeable: true,
@@ -370,6 +375,10 @@ dojo.requireLocalization("dijit", "loading");
 			this.inherited(arguments)
 			if(this.domNode && this.autoWidth && this.initialWidth){
 				this.domNode.style.width = this.initialWidth;
+			}
+			if (this.domNode && !this.editable){
+				// default value for aria-readonly is false, set to true if grid is not editable
+				dojo.attr(this.domNode,"aria-readonly", "true");
 			}
 		},
 
@@ -473,7 +482,6 @@ dojo.requireLocalization("dijit", "loading");
 			// summary: Creates a new virtual scroller
 			this.scroller = new dojox.grid._Scroller();
 			this.scroller.grid = this;
-			this.scroller._pageIdPrefix = this.id + '-';
 			this.scroller.renderRow = dojo.hitch(this, "renderRow");
 			this.scroller.removeRow = dojo.hitch(this, "rowRemoved");
 		},

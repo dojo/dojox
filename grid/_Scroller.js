@@ -186,7 +186,6 @@ dojo.provide("dojox.grid._Scroller");
 				var nodes = this.pageNodes[i];
 				var new_p = (p === null ? this.createPageNode() : this.invalidatePageNode(p, nodes));
 				new_p.pageIndex = inPageIndex;
-				new_p.id = (this._pageIdPrefix || "") + 'page-' + inPageIndex;
 				nodes[inPageIndex] = new_p;
 			}
 		},

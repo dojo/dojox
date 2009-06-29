@@ -63,9 +63,14 @@ dojo.require("dojo.dnd.Moveable");
 			var waiPrefix = dojo.isFF<3 ? "wairole:" : "";
 			if(isHeader){
 				var sortInfo = inCell.index != inCell.grid.getSortIndex() ? "" : inCell.grid.sortInfo > 0 ? 'aria-sort="ascending"' : 'aria-sort="descending"';
-				html = ['<th tabIndex="-1" role="', waiPrefix, 'columnheader"', sortInfo];
+				// column headers are not editable, mark as aria-readonly=true
+				html = ['<th tabIndex="-1" aria-readonly="true" role="', waiPrefix, 'columnheader"', sortInfo];
 			}else{
-				html = ['<td tabIndex="-1" role="', waiPrefix, 'gridcell"'];
+				// cells inherit grid aria-readonly property; default value for aria-readonly is false(grid is editable)
+				// if grid is editable (had any editable cells), mark non editable cells as aria-readonly=true
+				// if no editable cells, grid's aria-readonly value will have been set to true and cells will inherit
+				var editInfo = this.grid.editable && !inCell.editable ? 'aria-readonly="true"' : "";
+				html = ['<td tabIndex="-1" role="', waiPrefix, 'gridcell"', editInfo];
 			}
 			inCell.colSpan && html.push(' colspan="', inCell.colSpan, '"');
 			inCell.rowSpan && html.push(' rowspan="', inCell.rowSpan, '"');
@@ -215,6 +220,9 @@ dojo.require("dojo.dnd.Moveable");
 				for(var i=0, cell; (cell=row[i]); i++){
 					cell.get = cell.get || (cell.value == undefined) && defaultGet;
 					cell.markup = this.generateCellMarkup(cell, cell.cellStyles, cell.cellClasses, false);
+					if (!this.grid.editable && cell.editable){
+						this.grid.editable = true;
+					}
 				}
 			}
 		},
