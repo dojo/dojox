@@ -259,8 +259,8 @@ dojo.declare("dojox.data.ServiceStore",
 				for (var i in results){
 					results[i] = this._processResults(results[i], deferred).items;
 				}
+				var count = results.length;
 			}
-			var count = results.length;
 			return {totalCount: deferred.request.count == count ? (deferred.request.start || 0) + count * this.estimateCountFactor : count, items: results};
 		},
 		close: function(request){
