@@ -80,6 +80,12 @@ dojo.require("dojox.color.Palette");
 				length:3, 
 				position:"center"
 			},	
+			microTick:	{ //	minor ticks on axis, and used for minor gridlines
+				color:"#666", 
+				width:0.5, 
+				length:1, 
+				position:"center"
+			},	
 			font: "normal normal normal 7pt Tahoma", //	labels on axis
 			fontColor:"#333"						//	color of labels
 		},
