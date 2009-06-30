@@ -1,6 +1,6 @@
 dojo.provide("dojox.embed.Quicktime");
 
-(function(){
+(function(d){
 	/*******************************************************
 		dojox.embed.Quicktime
 
@@ -8,42 +8,46 @@ dojo.provide("dojox.embed.Quicktime");
 		into a document on the fly.
 	 ******************************************************/
 
-	var qtMarkup, qtVersion, installed, __def__={
-		width: 320,
-		height: 240,
-		redirect: null
-	};
-	var keyBase="dojox-embed-quicktime-", keyCount=0;
-
-	//	reference to the test movie we will use for getting QT info from the browser.
-	var testMovieUrl=dojo.moduleUrl("dojox", "embed/resources/version.mov");
+	var qtMarkup,
+		qtVersion = { major: 0, minor: 0, rev: 0 },
+		installed,
+		__def__ = {
+			width: 320,
+			height: 240,
+			redirect: null
+		},
+		keyBase = "dojox-embed-quicktime-",
+		keyCount = 0,
+		getQTMarkup = 'This content requires the <a href="http://www.apple.com/quicktime/download/" title="Download and install QuickTime.">QuickTime plugin</a>.';
 
 	//	*** private methods *********************************************************
 	function prep(kwArgs){
-		kwArgs = dojo.mixin(dojo.clone(__def__), kwArgs || {});
-		if(!("path" in kwArgs)){
+		kwArgs = d.mixin(d.clone(__def__), kwArgs || {});
+		if(!("path" in kwArgs) && !kwArgs.testing){
 			console.error("dojox.embed.Quicktime(ctor):: no path reference to a QuickTime movie was provided.");
 			return null;
 		}
+		if(kwArgs.testing){
+			kwArgs.path = "";
+		}
 		if(!("id" in kwArgs)){
-			kwArgs.id=(keyBase + keyCount++);
+			kwArgs.id = keyBase + keyCount++;
 		}
 		return kwArgs;
 	}
-	
-	var getQTMarkup = 'This content requires the <a href="http://www.apple.com/quicktime/download/" title="Download and install QuickTime.">QuickTime plugin</a>.';
-	if(dojo.isIE){
-		qtVersion = 0;
+
+	if(d.isIE){
 		installed = (function(){
 			try{
 				var o = new ActiveXObject("QuickTimeCheckObject.QuickTimeCheck.1");
 				if(o!==undefined){
 					//	pull the qt version too
-					var v=o.QuickTimeVersion.toString(16);
-					qtVersion={
-						major: parseInt(v.substring(0,1),10)||0,
-						minor: parseInt(v.substring(1,2),10)||0,
-						rev: parseInt(v.substring(2,3), 10)||0
+					var v = o.QuickTimeVersion.toString(16);
+					function p(i){ return (v.substring(i, i+1)-0) || 0; }
+					qtVersion = {
+						major: p(0),
+						minor: p(1),
+						rev: p(2)
 					};
 					return o.IsQuickTimeAvailable(0);
 				}
@@ -61,19 +65,17 @@ dojo.provide("dojox.embed.Quicktime");
 				+ 'id="' + kwArgs.id + '" '
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '">'
-				+ '<param name="src" value="' + kwArgs.path + '" />';
-			if(kwArgs.params){
-				for(var p in kwArgs.params){
-					s += '<param name="' + p + '" value="' + kwArgs.params[p] + '" />';
-				}
+				+ '<param name="src" value="' + kwArgs.path + '"/>';
+			for(var p in kwArgs.params||{}){
+				s += '<param name="' + p + '" value="' + kwArgs.params[p] + '"/>';
 			}
 			s += '</object>';
 			return { id: kwArgs.id, markup: s };
 		}
 	} else {
 		installed = (function(){
-			for(var i=0, l=navigator.plugins.length; i<l; i++){
-				if(navigator.plugins[i].name.indexOf("QuickTime")>-1){
+			for(var i=0, p=navigator.plugins, l=p.length; i<l; i++){
+				if(p[i].name.indexOf("QuickTime")>-1){
 					return true;
 				}
 			}
@@ -92,10 +94,8 @@ dojo.provide("dojox.embed.Quicktime");
 				+ 'enablejavascript="true" '
 				+ 'width="' + kwArgs.width + '" '
 				+ 'height="' + kwArgs.height + '"';
-			if(kwArgs.params){
-				for(var p in kwArgs.params){
-					s += ' ' + p + '="' + kwArgs.params[p] + '"';
-				}
+			for(var p in kwArgs.params||{}){
+				s += ' ' + p + '="' + kwArgs.params[p] + '"';
 			}
 			s += '></embed>';
 			return { id: kwArgs.id, markup: s };
@@ -153,7 +153,7 @@ dojo.provide("dojox.embed.Quicktime");
 		return dojox.embed.Quicktime.place(kwArgs, node);	//	HTMLObject
 	};
 
-	dojo.mixin(dojox.embed.Quicktime, {
+	d.mixin(dojox.embed.Quicktime, {
 		//	summary:
 		//		A singleton object used internally to get information
 		//		about the QuickTime player available in a browser, and
@@ -193,17 +193,14 @@ dojo.provide("dojox.embed.Quicktime");
 		place: function(kwArgs, node){
 			var o = qtMarkup(kwArgs);
 
-			node = dojo.byId(node);
-			if(!node){
-				node=dojo.doc.createElement("div");
-				node.id=o.id+"-container";
-				dojo.body().appendChild(node);
+			if(!(node = d.byId(node))){
+				node=d.create("div", { id:o.id+"-container" }, d.body());
 			}
 			
 			if(o){
 				node.innerHTML = o.markup;
 				if(o.id){
-					return (dojo.isIE)? dojo.byId(o.id) : document[o.id];	//	QuickTimeObject
+					return d.isIE? d.byId(o.id) : document[o.id];	//	QuickTimeObject
 				}
 			}
 			return null;	//	QuickTimeObject
@@ -211,76 +208,54 @@ dojo.provide("dojox.embed.Quicktime");
 	});
 
 	//	go get the info
-	if(!dojo.isIE){
-		// FIXME: Opera does not like this at all for some reason, and of course there's no event references easily found.
-		qtVersion = dojox.embed.Quicktime.version = { major: 0, minor: 0, rev: 0 };
-		var o = qtMarkup({ path: testMovieUrl, width:4, height:4 });
+	if(!d.isIE){
+		var id = "-qt-version-test",
+			o = qtMarkup({ testing:true , width:4, height:4 }),
+			c = 10; // counter to prevent infinite looping
 
-		function qtInsert(){
-			if(!dojo._initFired){
-				var s='<div style="top:0;left:0;width:1px;height:1px;;overflow:hidden;position:absolute;" id="-qt-version-test">'
-					+ o.markup
-					+ '</div>';
-				document.write(s);
-			} else {
-				var n = document.createElement("div");
-				n.id="-qt-version-test";
-				n.style.cssText = "top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute;";
-				dojo.body().appendChild(n);
-				n.innerHTML = o.markup;
-			}
-		}
+		function getVer(){
+			setTimeout(function(){
+				var qt = document[o.id],
+					n = d.byId(id);
 
-		function qtGetInfo(mv){
-			var qt, n, v = [ 0, 0, 0 ];
-			if(mv){
-				qt=mv, n=qt.parentNode;
-			} else {
-				if(o.id) {
-					qtInsert();
-					if(!dojo.isOpera){
-						setTimeout(function(){ qtGetInfo(document[o.id]); }, 50);
-					} else {
-						var fn=function(){ 
-							setTimeout(function(){ qtGetInfo(document[o.id]) }, 50); 
-						};
-						if(!dojo._initFired){
-							dojo.addOnLoad(fn);
-						} else {
-							dojo.connect(document[o.id], "onload", fn);
+				if(qt){
+					try{
+						var v = qt.GetQuickTimeVersion().split(".");
+						dojox.embed.Quicktime.version = { major: parseInt(v[0]||0), minor: parseInt(v[1]||0), rev: parseInt(v[2]||0) };
+						if(dojox.embed.Quicktime.supported = v[0]){
+							dojox.embed.Quicktime.onInitialize();
+						}else{
+							console.log("quicktime is not installed.");
+						}
+						c = 0;
+					} catch(e){
+						if(c--){
+							getVer();
 						}
 					}
 				}
-				return;
-			}
 
-			if(qt){
-				try {
-					v = qt.GetQuickTimeVersion().split(".");
-					qtVersion = { major: parseInt(v[0]||0), minor: parseInt(v[1]||0), rev: parseInt(v[2]||0) };
-				} catch(e){ 
-					qtVersion = { major: 0, minor: 0, rev: 0 };
-				}
-			}
-
-			dojox.embed.Quicktime.supported = v[0];
-			dojox.embed.Quicktime.version = qtVersion;
-			if(dojox.embed.Quicktime.supported){
-				dojox.embed.Quicktime.onInitialize();
-			} else {
-				console.log("quicktime is not installed.");
-			}
-
-			try {
-				if(!mv){
-					dojo.body().removeChild(n);
-				}
-			} catch(e){ }
+				if(!c && n){ d.destroy(n); }
+			}, 20);
 		}
 
-		qtGetInfo();
-	}
-	else if(dojo.isIE && installed){
+		if(d._initFired){
+			// if onload has already fired, then body is available and we can create a new node
+			d.create("div", {
+				innerHTML: o.markup,
+				id: id,
+				style: { top:0, left:0, width:"1px", height:"1px", overflow:"hidden", position:"absolute" }
+			}, d.body());
+		}else{
+			// body isn't loaded yet, so we need to document.write the QuickTime markup
+			var s = '<div style="top:0;left:0;width:1px;height:1px;overflow:hidden;position:absolute" id="' + id + '">'
+					+ o.markup
+					+ '</div>';
+			document.write(s);
+		}
+		getVer();
+	}else if(d.isIE && installed){
+		// we already know if IE has QuickTime installed
 		dojox.embed.Quicktime.onInitialize();
 	}
-})();
+})(dojo);

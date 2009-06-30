@@ -12,16 +12,22 @@
 
 			//	what a pain.  We hate having to deal with async loading issues.
 			dojo.addOnLoad(function(){
-				console.log("getting the Quicktime version...");
-				var fn=function(){
-					var v=dojox.embed.Quicktime.version || { major: 0, minor: 0, rev: 0 };
-					dojo.byId("results").innerHTML = v.major
-						+ '.' + v.minor
-						+ '.' + v.rev;
-				}
-				if(dojox.embed.Quicktime.initialized){
+				console.log("Getting the Quicktime version...");
+				var r=dojo.byId("results"),
+					fn=function(){
+						var v=dojox.embed.Quicktime.version || { major: 0, minor: 0, rev: 0 };
+						r.innerHTML = v.major
+							+ '.' + v.minor
+							+ '.' + v.rev;
+					};
+				if(!dojox.embed.Quicktime.available){
+					r.innerHTML = "QuickTime plugin not installed";
+				}else if(!dojox.embed.Quicktime.supported){
+					r.innerHTML = "QuickTime not supported";
+				}else if(dojox.embed.Quicktime.initialized){
 					fn();
-				} else {
+				}else{
+					console.log("dojox.embed.Quicktime not initialized yet... waiting");
 					var h=dojo.connect(dojox.embed.Quicktime, "onInitialize", function(){
 						fn();
 						dojo.disconnect(h);
@@ -32,10 +38,9 @@
 	</head>
 	<body>
 		<h1>DojoX A/V: QuickTime detection tests.</h1>
-		<p>
-			This page is testing the base QuickTime movie generator.  See the Firebug log for details.
-		</p>
-		<input type="submit" value="Get Quicktime Version" onclick="getVersion()" />	
+		
+		<p>This page is testing the base QuickTime movie generator.  See the Firebug log for details.</p>
+		
 		<p>Installed QuickTime version: <span id="results"></span></p>
 	</body>
 </html>
