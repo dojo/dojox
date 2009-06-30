@@ -62,7 +62,7 @@ dojox.secure.capability = {
 		});
 		function findOuterRefs(block,func) {
 			var outerRefs = {};
-			block.replace(/#\d/g,function(b) { // graft in the outer references from the inner scopes
+			block.replace(/#\d+/g,function(b) { // graft in the outer references from the inner scopes
 				var refs = blocks[b.substring(1)];
 				for (var i in refs) {
 					if(i == badThis) {
@@ -87,12 +87,12 @@ dojox.secure.capability = {
 		}	
 		var newScript,outerRefs;
 		function parseBlock(t,func,a,b,params,block) {
-			block.replace(/(^|,)0:\s*function#(\d)/g,function(t,a,b) { // find functions in object literals
+			block.replace(/(^|,)0:\s*function#(\d+)/g,function(t,a,b) { // find functions in object literals
 			// note that if named functions are allowed, it could be possible to have label: function name() {} which is a security breach
 					var refs = blocks[b]; 
 					refs[':method'] = 1;//mark it as a method
 			});
-			block = block.replace(/(^|[^_\w\$])Class\s*\(\s*([_\w\$]+\s*,\s*)*#(\d)/g,function(t,p,a,b) { // find Class calls
+			block = block.replace(/(^|[^_\w\$])Class\s*\(\s*([_\w\$]+\s*,\s*)*#(\d+)/g,function(t,p,a,b) { // find Class calls
 					var refs = blocks[b];
 					delete refs[badThis];
 					return (p||'') + (a||'') + "#" + b;
