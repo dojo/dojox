@@ -228,7 +228,9 @@ dojo.extend(dojox.gfx.Shape, {
 		//	shape. Once set, transforms, gradients, etc, can be applied.
 		//	(no fill & stroke by default)
 		var r = this.rawNode = rawNode;
-		r.setAttribute("fill", "none");
+		if(this.shape.type!="image"){
+			r.setAttribute("fill", "none");
+		}
 		r.setAttribute("fill-opacity", 0);
 		r.setAttribute("stroke", "none");
 		r.setAttribute("stroke-opacity", 0);
@@ -617,6 +619,7 @@ dojo.mixin(dojox.gfx.shape.Creator, {
 		if(!this.rawNode){ return null; }
 		var shape = new shapeType(),
 			node = document.createElementNS(dojox.gfx.svg.xmlns.svg, shapeType.nodeType);
+		
 		shape.setRawNode(node);
 		this.rawNode.appendChild(node);
 		shape.setShape(rawShape);
