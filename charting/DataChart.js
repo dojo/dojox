@@ -298,7 +298,6 @@ dojo.experimental("dojox.charting.DataChart");
 		},
 
 		onDataReceived: function(/*Array*/items){
-			console.log("onDataReceived", items)
 			// summary:
 			//		stub. Fires after data is received but
 			//		before data is parsed and rendered
