@@ -233,9 +233,10 @@ dojo.experimental("dojox.charting.DataChart");
 			this.fieldName = fieldName || this.fieldName;
 			this.label = this.store.getLabelAttributes();
 			this.queryOptions = queryOptions || queryOptions;
-			this.fetch();
+			
 			dojo.connect(this.store, "onSet", this, "onSet");
 			dojo.connect(this.store, "onError", this, "onError");
+			this.fetch();
 		},
 		
 		show: function(){
@@ -269,6 +270,7 @@ dojo.experimental("dojox.charting.DataChart");
 			//	is obviously short sighted, but currently used
 			//	for seriesLabels. Workaround for potential bugs
 			//	is to assign a label for which all items are unique.
+			
 			var nm = this.getProperty(item, this.label);
 			
 			// FIXME: why the check for if-in-runs?
@@ -292,10 +294,11 @@ dojo.experimental("dojox.charting.DataChart");
 		onError: function(/*Error*/err){
 			// stub
 			//	Fires on fetch error
-			console.error(err);
+			console.error("DataChart Error:", err);
 		},
 
 		onDataReceived: function(/*Array*/items){
+			console.log("onDataReceived", items)
 			// summary:
 			//		stub. Fires after data is received but
 			//		before data is parsed and rendered
@@ -327,8 +330,7 @@ dojo.experimental("dojox.charting.DataChart");
 			//		then updates chart and legends.
 			//
 			//console.log("Store:", store);console.log("items: (", items.length+")", items);console.log("Chart:", this);
-			
-			if(!items.length){ return; }
+			if(!items || !items.length){ return; }
 			
 			if(this.items && this.items.length != items.length){
 				dojo.forEach(items, function(m){
@@ -444,8 +446,14 @@ dojo.experimental("dojox.charting.DataChart");
 			//		are received via onSet in data store.
 			//
 			if(!this.store){ return; }
-			
-			this.store.fetch({query:this.query, queryOptions:this.queryOptions, start:this.start, count:this.count, sort:this.sort, onComplete:dojo.hitch(this, "onData"), onError:dojo.hitch(this, "onError")});
+			this.store.fetch({query:this.query, queryOptions:this.queryOptions, start:this.start, count:this.count, sort:this.sort,
+				onComplete:dojo.hitch(this, function(data){
+					setTimeout(dojo.hitch(this, function(){
+						this.onData(data)
+					}),0);
+				}),
+				onError:dojo.hitch(this, "onError")
+			});
 		},
 		
 		convertLabels: function(axis){
