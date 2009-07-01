@@ -52,13 +52,13 @@ dojox.json.ref = {
 		var assignAbsoluteIds = args.assignAbsoluteIds;
 		var index = args.index || {}; // create an index if one doesn't exist
 		var timeStamps = args.timeStamps;
-		var i,ref,reWalk=[];
+		var ref,reWalk=[];
 		var pathResolveRegex = /^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/;
 		var addProp = this._addProp;
 		var F = function(){};
 		function walk(it, stop, defaultId, needsPrefix, schema, defaultObject){
 			// this walks the new graph, resolving references and making other changes
-		 	var update, val, id = idAttribute in it ? it[idAttribute] : defaultId;
+		 	var i, update, val, id = idAttribute in it ? it[idAttribute] : defaultId;
 		 	if(idAttribute in it || ((id !== undefined) && needsPrefix)){
 		 		id = (prefix + id).replace(pathResolveRegex,'$2$3');
 		 	}
