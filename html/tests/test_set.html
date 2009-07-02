@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+		"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<title>dojox.html.set test</title>
@@ -881,6 +881,103 @@
 				]
 			);
 
+			var remoteScriptsSetter;
+			var previousContent;
+			doh.register("remoteScripts", [
+				{
+					name: 'testCommentedScriptTag',
+					setUp: function() {
+						remoteScriptsSetter = new dojox.html._ContentSetter({
+							renderStyles: true, 
+							cleanContent: true,
+							executeScripts: true,
+							node: dojo.byId("node4")
+						});
+						previousContent = dojo.byId("node4").innerHTML;
+					},
+					tearDown: function(){
+						dojo.byId("node4").innerHTML = previousContent;    
+					},
+					timeout: 10000,
+					runTest: function(t){
+						var deferred = new doh.Deferred(); 
+						var xhrDef = dojo.xhrGet({
+							url: "remote/commentedScript.html",
+							preventCache: true,
+							handleAs: "text"
+						});
+						xhrDef.addCallback(function(text){
+							remoteScriptsSetter.set(text);
+							var intv = setInterval(function(){
+								if(window.__remotePaneLoaded){
+									clearInterval(intv);
+									window.__remotePaneLoaded = null;
+									try{
+										//Test that entity characters in a src url for a script 
+										//are properly converted to correct form
+										var node = document.getElementById("should_not_be_here"); 
+										doh.assertTrue(node == null);
+										deferred.callback(true);
+									}catch(e){
+										deferred.errback(new Error(e));
+									}
+								}
+							}, 500);
+						});
+						xhrDef.addErrback(function(e){
+							deferred.errback(e);
+						});
+						return deferred;
+					}
+				},
+				{
+					name: 'testEntityChars',
+					setUp: function() {
+						remoteScriptsSetter = new dojox.html._ContentSetter({
+							renderStyles: true, 
+							cleanContent: true,
+							executeScripts: true,
+							node: dojo.byId("node4")
+						});
+						previousContent = dojo.byId("node4").innerHTML;
+					},
+					tearDown: function(){
+						dojo.byId("node4").innerHTML = previousContent;    
+					},
+					timeout: 10000,
+					runTest: function(t){
+						var deferred = new doh.Deferred(); 
+						var xhrDef = dojo.xhrGet({
+							url: "remote/commentedScript.html",
+							preventCache: true,
+							handleAs: "text"
+						});
+						xhrDef.addCallback(function(text){
+							remoteScriptsSetter.set(text);
+							var intv = setInterval(function(){
+								if(window.__remotePaneLoaded2){
+									clearInterval(intv);
+									window.__remotePaneLoaded2 = null;
+									try{
+										//Test that entity characters in a src url for a script 
+										//are properly converted to correct form
+										var node = document.getElementById("should_not_be_here2"); 
+										doh.assertTrue(node == null);
+										deferred.callback(true);
+									}catch(e){
+										deferred.errback(new Error(e));
+									}
+								}
+							}, 500);
+						});
+						xhrDef.addErrback(function(e){
+							deferred.errback(e);
+						});
+						return deferred;
+					}
+				}
+				
+			]);
 
 			doh.run();
 		});
@@ -906,7 +1003,7 @@
 			background-color: #C0E209 ;
 		}
 		
-		
+		              
 	</style>
 </head>
 <body class='tundra'>
@@ -925,6 +1022,10 @@
 	<div class='box' id='node3'>
 		Initial value
 	</div>
+
+	<div class='box' id='node4'>
+		Initial value
+	</div>                                        
 
 	<table id='tableTest' class='box'>
 		<thead>

@@ -80,7 +80,14 @@
 				header('Content-type: text/javascript; charset=utf-8');
 				echo "unTypedVarInDocScope = false;";
 				break;
-	
+			case 'entityChars':
+				header('Content-type: text/css; charset=utf-8');
+				if($_GET['entityEscaped'] == null){                                                                                    
+					print("var div = document.createElement(\"div\"); document.body.appendChild(div); div.innerHTML = \"<div id=\\\"should_not_be_here2\\\"></div>\"; window.__remotePaneLoaded2 = true;" );
+				}else{
+					print("window.__remotePaneLoaded2 = true;");
+				}
+				break;
 			default:
 				echo "unkown mode {$_GET['mode']}";
 		}
