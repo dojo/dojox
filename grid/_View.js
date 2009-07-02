@@ -50,7 +50,7 @@ dojo.require("dojo.dnd.Manager");
 		_contentBuilderClass: dojox.grid._ContentBuilder,
 		
 		postMixInProperties: function(){
-			this.rowNodes = [];
+			this.rowNodes = {};
 		},
 
 		postCreate: function(){
@@ -68,8 +68,10 @@ dojo.require("dojo.dnd.Manager");
 		destroy: function(){
 			dojo.destroy(this.headerNode);
 			delete this.headerNode;
-			dojo.forEach(this.rowNodes, dojo.destroy);
-			this.rowNodes = [];
+			for(var i in this.rowNodes){
+				dojo.destroy(this.rowNodes[i]);
+			}
+			this.rowNodes = {};
 			if(this.source){
 				this.source.destroy();
 			}

@@ -234,7 +234,6 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 	},
 	postMixInProperties: function(){
 		this.inherited(arguments);
-		this.rowNodes = {};
 		this._expandos = [];
 	},
 	onBeforeRow: function(inRowIndex, cells){
@@ -278,12 +277,5 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 		if(row){
 			return this.content.getCellNode(row, inCellIndex);
 		}
-	},
-	destroy: function(){
-		for(var i in this.rowNodes){
-			dojo.destroy(this.rowNodes[i]);
-		}
-		this.rowNodes = []; // so the parent function doesn't choke
-		this.inherited(arguments);
 	}
 });
