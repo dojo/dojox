@@ -157,7 +157,8 @@ dojo.require("dojo.html");
 						case "amp"	: return "&";
 						case "gt"	: return ">";
 						case "lt"	: return "<";
-						return name.charAt(0)=="#" ? String.fromCharCode(name.substring(1)) : "&"+name+";";
+						default:
+							return name.charAt(0)=="#" ? String.fromCharCode(name.substring(1)) : "&"+name+";";
 					}
 				});
 				dojo.xhrGet({
