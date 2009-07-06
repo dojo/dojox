@@ -62,6 +62,10 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		}
 	},
 	_setOpen: function(open){
+		if(open && this._tableRow && dojo.hasClass(this._tableRow, "dojoxGridNoChildren")){
+			this._setOpen(false);
+			return;
+		}
 		this.expandoInner.innerHTML = open ? "-" : "+";
 		dojo.removeClass(this.domNode, "dojoxGridExpandoLoading");
 		dojo.toggleClass(this.domNode, "dojoxGridExpandoOpened", open);
@@ -170,18 +174,22 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 				if(store.hasAttribute(rowItem, parentCell.field)){
 					var tToggle = tcJoin.split('|');
 					tToggle.pop();
-					html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tToggle.join(' ') + ' dojoxGridExpandoRow">';
 					var values = store.getValues(rowItem, parentCell.field);
-					var iStack = dojo.map(rowStack, "return item;");
-					dojo.forEach(values, function(cItm, idx){
-						var nToggle = tcJoin.split('|');
-						nToggle.push(nToggle[nToggle.length - 1] + "-" + idx);
-						iStack.push(idx);
-						createRow(nextLevel, cItm, false, nToggle, iStack, parentOpen);
-						iStack.pop();
-					});
-					iStack.push(values.length);
-					createRow(level, rowItem, true, toggleClasses, iStack, parentOpen);
+					if(values.length){
+						html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tToggle.join(' ') + ' dojoxGridExpandoRow">';
+						var iStack = dojo.map(rowStack, "return item;");
+						dojo.forEach(values, function(cItm, idx){
+							var nToggle = tcJoin.split('|');
+							nToggle.push(nToggle[nToggle.length - 1] + "-" + idx);
+							iStack.push(idx);
+							createRow(nextLevel, cItm, false, nToggle, iStack, parentOpen);
+							iStack.pop();
+						});
+						iStack.push(values.length);
+						createRow(level, rowItem, true, toggleClasses, iStack, parentOpen);
+					}else{
+						html[rowNodeIdx] = '<tr class="' + tcString + ' dojoxGridNoChildren" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tcString + ' dojoxGridNoChildren">';					
+					}
 				}else{
 					if(!store.isItemLoaded(rowItem)){
 						html[0] = html[0].replace("dojoxGridRowTable", "dojoxGridRowTable dojoxGridRowTableNeedsRowUpdate");

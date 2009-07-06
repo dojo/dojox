@@ -410,3 +410,6 @@
 .dojoxGridRowCollapsed .dojoxGridSummarySpan {
 	visibility: visible;
 }
+.dojoxGridNoChildren .dojoxGridExpando {
+	display: none !important;
+}
