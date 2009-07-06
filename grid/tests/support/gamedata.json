@@ -15,7 +15,7 @@
         {
           id: "2",
           label: "Season 1",
-          numGames: 1,
+          numGames: 2,
           numQtrs: 1,
           totPts: 15,
           totReb: 8,
@@ -40,17 +40,27 @@
                   tp: 9
                 }
               ]
+            },
+            {
+              id: "5",
+              label: "Game 2",
+              numQtrs: 0,
+              totPts: 0,
+              totReb: 0,
+              totAst: 0,
+              totTP: 0,
+              qtrs: []
             }
           ]
         }
       ]
     },
 	{ 
-      id: "5",
+      id: "6",
       label: "Player 2",
       seasns: [
         {
-          id: "6",
+          id: "7",
           label: "Season 1",
 		  numGames: 5,
 		  numQtrs: 20,
@@ -60,20 +70,12 @@
 		  totTP: 180,
           games: [
             {
-              id: "7",
+              id: "8",
               label: "Game 1",
               qtrs: [
                 {
-                  id: "8",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "9",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -81,7 +83,7 @@
                 },
 				{
                   id: "10",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -89,6 +91,14 @@
                 },
 				{
                   id: "11",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "12",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -103,20 +113,12 @@
               totTP: 36
             },
 			{
-              id: "12",
+              id: "13",
               label: "Game 2",
               qtrs: [
                 {
-                  id: "13",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "14",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -124,7 +126,7 @@
                 },
 				{
                   id: "15",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -132,6 +134,14 @@
                 },
 				{
                   id: "16",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "17",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -146,20 +156,12 @@
               totTP: 36
             },
 			{
-              id: "17",
+              id: "18",
               label: "Game 3",
               qtrs: [
                 {
-                  id: "18",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "19",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -167,7 +169,7 @@
                 },
 				{
                   id: "20",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -175,6 +177,14 @@
                 },
 				{
                   id: "21",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "22",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -189,20 +199,12 @@
               totTP: 36
             },
 			{
-              id: "22",
+              id: "23",
               label: "Game 4",
               qtrs: [
                 {
-                  id: "23",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "24",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -210,7 +212,7 @@
                 },
 				{
                   id: "25",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -218,6 +220,14 @@
                 },
 				{
                   id: "26",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "27",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -232,11 +242,11 @@
               totTP: 36
             },
 			{
-              id: "27",
+              id: "28",
               label: "Game 5",
               qtrs: [
                 {
-                  id: "28",
+                  id: "29",
                   label: "Quarter 1",
                   pts: 15,
                   reb: 8,
@@ -244,7 +254,7 @@
                   tp: 9
                 },
 				{
-                  id: "29",
+                  id: "30",
                   label: "Quarter 2",
                   pts: 15,
                   reb: 8,
@@ -252,7 +262,7 @@
                   tp: 9
                 },
 				{
-                  id: "30",
+                  id: "31",
                   label: "Quarter 3",
                   pts: 15,
                   reb: 8,
@@ -260,7 +270,7 @@
                   tp: 9
                 },
 				{
-                  id: "31",
+                  id: "32",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -277,7 +287,7 @@
           ]
         },
 		{
-          id: "32",
+          id: "33",
           label: "Season 2",
 		  numGames: 5,
 		  numQtrs: 20,
@@ -287,20 +297,12 @@
 		  totTP: 180,
           games: [
             {
-              id: "33",
+              id: "34",
               label: "Game 1",
               qtrs: [
                 {
-                  id: "34",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "35",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -308,7 +310,7 @@
                 },
 				{
                   id: "36",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -316,6 +318,14 @@
                 },
 				{
                   id: "37",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "38",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -330,20 +340,12 @@
               totTP: 36
             },
 			{
-              id: "38",
+              id: "39",
               label: "Game 2",
               qtrs: [
                 {
-                  id: "39",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "40",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -351,7 +353,7 @@
                 },
 				{
                   id: "41",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -359,6 +361,14 @@
                 },
 				{
                   id: "42",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "43",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -373,20 +383,12 @@
               totTP: 36
             },
 			{
-              id: "43",
+              id: "44",
               label: "Game 3",
               qtrs: [
                 {
-                  id: "44",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "45",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -394,7 +396,7 @@
                 },
 				{
                   id: "46",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -402,6 +404,14 @@
                 },
 				{
                   id: "47",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "48",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -416,20 +426,12 @@
               totTP: 36
             },
 			{
-              id: "48",
+              id: "49",
               label: "Game 4",
               qtrs: [
                 {
-                  id: "49",
-                  label: "Quarter 1",
-                  pts: 15,
-                  reb: 8,
-                  ast: 12,
-                  tp: 9
-                },
-				{
                   id: "50",
-                  label: "Quarter 2",
+                  label: "Quarter 1",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -437,7 +439,7 @@
                 },
 				{
                   id: "51",
-                  label: "Quarter 3",
+                  label: "Quarter 2",
                   pts: 15,
                   reb: 8,
                   ast: 12,
@@ -445,6 +447,14 @@
                 },
 				{
                   id: "52",
+                  label: "Quarter 3",
+                  pts: 15,
+                  reb: 8,
+                  ast: 12,
+                  tp: 9
+                },
+				{
+                  id: "53",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,
@@ -459,11 +469,11 @@
               totTP: 36
             },
 			{
-              id: "53",
+              id: "54",
               label: "Game 5",
               qtrs: [
                 {
-                  id: "54",
+                  id: "55",
                   label: "Quarter 1",
                   pts: 15,
                   reb: 8,
@@ -471,7 +481,7 @@
                   tp: 9
                 },
 				{
-                  id: "55",
+                  id: "56",
                   label: "Quarter 2",
                   pts: 15,
                   reb: 8,
@@ -479,7 +489,7 @@
                   tp: 9
                 },
 				{
-                  id: "56",
+                  id: "57",
                   label: "Quarter 3",
                   pts: 15,
                   reb: 8,
@@ -487,7 +497,7 @@
                   tp: 9
                 },
 				{
-                  id: "57",
+                  id: "58",
                   label: "Quarter 4",
                   pts: 15,
                   reb: 8,

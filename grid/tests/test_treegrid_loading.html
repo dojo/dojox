@@ -49,6 +49,17 @@
 				sync: true
 			}).addCallback(function(res){
 				var p2 = res.items[1];
+				p2.seasns.push({
+					games: [],
+					id: 60,
+					label: "Season 3",
+					numGames: 0,
+					numQtrs: 0,
+					totAst: 0,
+					totPts: 0,
+					totReb: 0,
+					totTP: 0
+				});
 				for(var i = 0, l = p2.seasns.length; i<l; i++){
 					var item = p2.seasns[i];
 					data_full[item.id] = dojo.mixin({}, item);
@@ -62,7 +73,7 @@
 				cacheByDefault: true
 			});
 			dojo.parser.parse();
-			dojo.connect(window, "onresize", grid4, "resize");
+			dojo.connect(window, "onresize", grid, "resize");
 		});
 
 		function formatTime(value, rowIdx){
@@ -105,7 +116,7 @@
 	<h1 class="testTitle">Test: dojox.tests.grid.TreeGrid</h1>
 	<h4 class="testSubtitle">dojox.grid.TreeGrid Large 4-Level - calculated totals and openAtLevels</h4>
 	<table dojoType="dojox.grid.TreeGrid" class="grid" style="height: 45em;width: 100%;"
-		store="store" rowsPerPage="20" jsId="grid4" rowSelector="true" openAtLevels="false,true,3">
+		store="store" rowsPerPage="20" jsId="grid" rowSelector="true" openAtLevels="false,true,3">
 			<thead>
 				<tr>
 					<th field="label" relWidth="2" formatter="seasonSummary">Players</th>
