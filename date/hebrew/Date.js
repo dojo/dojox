@@ -158,7 +158,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 				this.fromGregorian(arg0);
 			}else if(arg0 == ""){
 				// date should be invalid.  Dijit relies on this behavior.
-				this._date = new Date("");
+				this._date = new Date(""); //TODO: should this be NaN?  _date is not a Date object
 			}else{  // this is hebrew.Date object
 				this._year = arg0._year;
 				this._month =  arg0._month;  
@@ -195,7 +195,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		this._day = ((day+1) % 7);
 	},
 	
-	getDate: function(/*boolean?*/isNumber){
+	getDate: function(){
 		// summary: This function returns the date value (1 - 30)
 		//
 		// example:
@@ -203,7 +203,20 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |
 		// |		console.log(date1.getDate());
 
-		return isNumber ? this._date : dojox.date.hebrew.numerals.getDayHebrewLetters(this._date);
+		return this._date; // int
+	},
+
+	getDateLocalized: function(/*String?*/locale){
+		// summary: This function returns the date value as hebrew numerals for the Hebrew locale,
+		//		a number for all others.
+		//
+		// example:
+		// |		var date1 = new dojox.date.hebrew.Date();
+		// |
+		// |		console.log(date1.getDate());
+
+		return locale.match(/^he(?:-.+)?$/) ?
+			dojox.date.hebrew.numerals.getDayHebrewLetters(this._date) : this.getDate();
 	},
 
 	getMonth: function(){

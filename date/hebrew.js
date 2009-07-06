@@ -55,15 +55,15 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 
 	switch(interval){
 		case "day":
-			newHebrDate.setDate(date.getDate(true) + amount);
+			newHebrDate.setDate(date.getDate() + amount);
 			break;
 		case "weekday":
 			var day = date.getDay();
-			if (((day + amount) < 5) && ((day + amount) >0)) {
-				 newHebrDate.setDate(date.getDate(true) + amount);
-			}else{ 
-				var adddays = 0; /*weekend */
-				var remdays = 0;
+			if(((day + amount) < 5) && ((day + amount) > 0)){
+				 newHebrDate.setDate(date.getDate() + amount);
+			}else{
+				var adddays = 0, /*weekend */
+					remdays = 0;
 				if (day == 5) {//friday
 					day = 4;
 					remdays = (amount > 0) ?  -1 : 1;
@@ -71,22 +71,22 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 					day = 4;
 					remdays = (amount > 0) ? -2 : 2;		
 				}
-				var add = (amount > 0) ? (5 - day - 1) : ( 0-day);
+				var add = (amount > 0) ? (5 - day - 1) : -day 
 				var amountdif = amount - add;
-				var div=parseInt(amountdif /5);
-				if ((amountdif %5) != 0){
+				var div = parseInt(amountdif / 5);
+				if (amountdif % 5 != 0){
 					adddays = (amount > 0)  ? 2 : -2;
 				}
-				adddays = adddays + div*7 + amountdif %5 + add;
-				newHebrDate.setDate(date.getDate(true) + adddays +  remdays);
+				adddays = adddays + div * 7 + amountdif % 5 + add;
+				newHebrDate.setDate(date.getDate() + adddays +  remdays);
 			}
 			break;
 		case "year":
-			newHebrDate.setFullYear(date.getFullYear() + amount );
+			newHebrDate.setFullYear(date.getFullYear() + amount);
 			break;
 		case "week":
 			amount *= 7;
-			newHebrDate.setDate(date.getDate(true) + amount);
+			newHebrDate.setDate(date.getDate() + amount);
 			break;
 		case "month":
 			var month = date.getMonth(); 
@@ -94,16 +94,16 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 			newHebrDate.setMonth(month + amount);
 			break;
 		case "hour":
-			newHebrDate.setHours(date.getHours() + amount );
+			newHebrDate.setHours(date.getHours() + amount);
 			break;	
 		case "minute":
-			newHebrDate.setMinutes(date.getMinutes() + amount );
+			newHebrDate.setMinutes(date.getMinutes() + amount);
 			break;	
 		case "second":
-			newHebrDate.setSeconds(date.getSeconds() + amount );
+			newHebrDate.setSeconds(date.getSeconds() + amount);
 			break;	
 		case "millisecond":
-			newHebrDate.setMilliseconds(date.getMilliseconds() + amount );
+			newHebrDate.setMilliseconds(date.getMilliseconds() + amount);
 			break;
 	}
 
@@ -145,7 +145,7 @@ dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox
 				// Mark the date advanced by the number of
 				// round weeks (may be zero)
 				var dtMark = new dojox.date.hebrew.Date(date2);
-				dtMark.setDate(dtMark.getDate(true)+(weeks*7));
+				dtMark.setDate(dtMark.getDate()+(weeks*7));
 				var dayMark = dtMark.getDay();
 	
 				// Spare change days -- 6 or less
