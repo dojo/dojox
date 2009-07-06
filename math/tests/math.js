@@ -1,4 +1,4 @@
-dojo.provide("dojox.lang.tests.array");
+dojo.provide("dojox.math.tests.math");
 
 dojo.require("dojox.math");
 
@@ -8,6 +8,7 @@ dojo.require("dojox.math");
 		function fact5(t){ t.assertEqual(120, dojox.math.factorial(5)); },
 		function factneg(t){ t.assertTrue(isNaN(dojox.math.factorial(-1))); }
 	]);
+
 	tests.register("dojox.math.tests.bestFit", [
 		function bf(t){
 			var points = [
@@ -29,6 +30,7 @@ dojo.require("dojox.math");
 			t.assertEqual(0.212, Math.round(result.r*1000)/1000);
 		}
 	]);
+
 	var epsilon = 1e-6;
 		eq = function(t, a, b){
 			t.t(!isNaN(a) && ! isNaN(b));
