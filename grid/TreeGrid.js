@@ -11,6 +11,7 @@ dojo.declare("dojox.grid._TreeAggregator", null, {
 	cells: [],
 	grid: null,
 	childFields: [],
+	
 	constructor: function(kwArgs){
 		this.cells = kwArgs.cells || [];
 		this.childFields = kwArgs.childFields || [];
@@ -176,19 +177,24 @@ dojo.declare("dojox.grid._TreeLayout", dojox.grid._Layout, {
 	setStructure: function(inStructure){
 		// Mangle the structure a bit and make it work as desired
 		var s = inStructure;
+		var g = this.grid;
 		// Only supporting single-view, single row or else we
 		// are not collapsable
 		if(s.length == 1 && s[0].cells.length == 1){
-			var childCells = dojo.filter(s[0].cells[0], function(c){
-				return ("children" in c);
-			});
-			if(childCells.length === 1){
+			if(g && g.treeModel){
+				s[0].type = "dojox.grid._TreeView";
 				this._isCollapsable = true;
+				s[0].cells[0][0].isCollapsable = true;
 			}else{
-				this._isCollapsable = false;
+				var childCells = dojo.filter(s[0].cells[0], function(c){
+					return ("children" in c);
+				});
+				if(childCells.length === 1){
+					this._isCollapsable = true;
+				}			
 			}
 		}
-		if(this._isCollapsable){
+		if(this._isCollapsable && (!g || !g.treeModel)){
 			arguments[0] = this._getInternalStructure(s);
 		}
 		this.inherited(arguments);
@@ -497,6 +503,13 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	//		that)
 	openAtLevels: [],
 	
+	// treeModel: dijit.tree.ForestStoreModel
+	//		A dijit.Tree model that will be used instead of using aggregates.
+	//		Setting this value will make the TreeGrid behave like a columnar
+	//		tree.  When setting this value, defaultOpen will always be false,
+	//		and openAtLevels will be ignored.
+	treeModel: null,
+	
 	// private values
 	// aggregator: Object
 	//		The aggregator class - it will be populated automatically if we
@@ -595,6 +608,28 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		this.inherited(arguments);
 	},
 	
+    postCreate: function(){
+        this.inherited(arguments);
+		if(this.treeModel){
+			this._setModel(this.treeModel);
+		}
+    },
+
+	setModel: function(treeModel){
+		this._setModel(treeModel);
+		this._refresh(true);
+	},
+	
+	_setModel: function(treeModel){
+		if(treeModel && (!dijit.tree.ForestStoreModel || !(treeModel instanceof dijit.tree.ForestStoreModel))){
+			throw new Error("dojox.grid.TreeGrid: treeModel must be an instance of dijit.tree.ForestStoreModel");			
+		}
+		this.treeModel = treeModel;
+		dojo.toggleClass(this.domNode, "dojoxGridTreeModel", this.treeModel ? true : false);
+		this._setQuery(treeModel ? treeModel.query : null);
+		this._setStore(treeModel ? treeModel.store : null);
+	},
+
 	createScroller: function(){
 		this.inherited(arguments);
 		this.scroller._origDefaultRowHeight = this.scroller.defaultRowHeight;
@@ -627,7 +662,8 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		//		not.
 		var cf;
 		var store = this.store;
-		if(!cellDef || !store || !store.isItem(item) || 
+		if(this.treeModel){ return false; }
+		if(!cellDef || !store || !store.isItem(item) ||
 				!(cf = this.aggregator.childFields[cellDef.level])){
 			return this.defaultOpen;
 		}
@@ -660,7 +696,7 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	},
 	styleRowNode: function(inRowIndex, inRowNode){
 		if(inRowNode){
-			if(inRowNode.tagName.toLowerCase() == 'div'){
+			if(inRowNode.tagName.toLowerCase() == 'div' && this.aggregator){
 				dojo.query("tr[dojoxTreeGridPath]", inRowNode).forEach(function(rowNode){
 					this.rows.styleRowNode(dojo.attr(rowNode, 'dojoxTreeGridPath'), rowNode);
 				},this);

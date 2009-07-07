@@ -411,5 +411,6 @@
 	visibility: visible;
 }
 .dojoxGridNoChildren .dojoxGridExpando {
-	display: none !important;
+	visibility: hidden !important;
+	width: 0px !important;
 }

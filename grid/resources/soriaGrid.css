@@ -218,6 +218,7 @@
 	border-right-color: #D5CDB5;
 }
 .soria .dojoxGridSummaryRow .dojoxGridTotalCell,
-.soria .dojoxGridRowCollapsed .dojoxGridExpandoCell {
+.soria .dojoxGridRowCollapsed .dojoxGridExpandoCell,
+.soria .dojoxGridTreeModel .dojoxGridExpandoCell {
 	border-bottom-color: #D5CDB5;
 }

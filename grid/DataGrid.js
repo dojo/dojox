@@ -129,11 +129,15 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this.updateRow(idx);
 		}
 	},
+	
+	_createItem: function(item, index){
+		var idty = this._hasIdentity ? this.store.getIdentity(item) : dojo.toJson(this.query) + ":idx:" + index + ":sort:" + dojo.toJson(this.getSortProps());
+		var o = this._by_idty[idty] = { idty: idty, item: item };
+		return o;
+	},
 
 	_addItem: function(item, index, noUpdate){
-		var idty = this._hasIdentity ? this.store.getIdentity(item) : dojo.toJson(this.query) + ":idx:" + index + ":sort:" + dojo.toJson(this.getSortProps());
-		var o = { idty: idty, item: item };
-		this._by_idty[idty] = this._by_idx[index] = o;
+		this._by_idx[index] = this._createItem(item, index);
 		if(!noUpdate){
 			this.updateRow(index);
 		}
