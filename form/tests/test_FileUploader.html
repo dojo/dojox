@@ -111,12 +111,12 @@
 			
 			var f0 = new dojox.form.FileUploader({
 				button:dijit.byId("btn0"), 
-				degradable:true,
 				uploadUrl:uploadUrl, 
 				uploadOnChange:false, 
 				selectMultipleFiles:selectMultipleFiles,
 				fileMask:fileMask,
-				isDebug:false,
+				isDebug:true,
+				devMode:true,
 				postData:{sessionid:"TestStuff won't be sent", userId:"DojoMan"}
 			});
 			
@@ -230,6 +230,12 @@
 		#noFlash button, #hasFlash button{
 			font-size:9px;
 		}
+		#cont{
+			width:200px;
+			height:100px;
+			overflow:scroll;
+			background-color:transparent;
+		}
 	</style>
 </head>
 <body class="tundra">
@@ -268,8 +274,10 @@
             <p id="hSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
         
+        <div id="cont">
         <div id="btn0" class="browse" dojoType="dijit.form.Button">Select Images...</div>
-        <span id="fTypes">Choose from these types:</span>
+        </div>
+		<span id="fTypes">Choose from these types:</span>
         
         <textarea cols="50" rows="6" id="fileToUpload"></textarea>
         <input type="text" id="postdata" value="Add Post Data Here" />
