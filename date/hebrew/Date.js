@@ -191,8 +191,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		if(this._month != 0){
 			day += (this.isLeapYear(this._year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(this._year)];
 		}
-		day += (this._date - 1);
-		this._day = ((day+1) % 7);
+		day += this._date - 1;
+		this._day = (day+1) % 7;
 	},
 	
 	getDate: function(){
@@ -269,6 +269,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |		date1.setDate(2);
 
+		date = +date;
 		if(date>0){
 			//FIXME: do..while?
 			for(var mdays = this.getDaysInHebrewMonth(this._month, this._year);
@@ -298,8 +299,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		if(this._month != 0){
 			day += (this.isLeapYear(this._year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(this._year)];
 		}
-		day += (this._date - 1);
-		this._day = ((day+1) % 7);
+		day += this._date - 1;
+		this._day = (day+1) % 7;
 		return this;
 	},
 	
@@ -312,48 +313,48 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		date1.setFullYear(5768);
 		// |		date1.setFullYear(5768, 1, 1);
 		
-		this._year = year;
-		if(!this.isLeapYear(this._year) && this._month==5){ 
+		this._year = year = +year;
+		if(!this.isLeapYear(year) && this._month==5){ 
 			this._month++; 
 		} 
-		var day = this._startOfYear(this._year);
+		var day = this._startOfYear(year);
 		if(this._month != 0){
-			day += (this.isLeapYear(this._year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(this._year)];
+			day += (this.isLeapYear(year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(year)];
 		}
-		day += (this._date - 1);
-		this._day = ((day+1) % 7);
-				
-		if(month){this.setMonth (month);}
-		if(date){this.setDate(date);}
+		day += this._date - 1;
+		this._day = (day+1) % 7;
+
+		if(month !== undefined){this.setMonth(month);}
+		if(date !== undefined){this.setDate(date);}
 
 		return this;
 	},
-			
+
 	setMonth: function(/*number*/month){
 		// summary: This function set Month
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |		date1.setMonth(0); //first month
-		var newMonth = month;
-					
-		if(!this.isLeapYear(this._year) && newMonth >= 5){newMonth++;}
-			
-		if(newMonth>=0){
-			while(newMonth >12){
+
+		month = +month; // coerce to a Number					
+		if(!this.isLeapYear(this._year) && month >= 5){month++;}
+
+		if(month>=0){
+			while(month >12){
 				this._year++;
-				newMonth -= 13;
-				if (!this.isLeapYear(this._year) && newMonth >= 5){newMonth++;}	
+				month -= 13;
+				if (!this.isLeapYear(this._year) && month >= 5){month++;}	
 			}
 		}else{
-			while(newMonth<0){
+			while(month<0){
 				this._year--;
-				newMonth += 13;
-				if (!this.isLeapYear(this._year) && newMonth < 5){newMonth--;}	
+				month += 13;
+				if (!this.isLeapYear(this._year) && month < 5){month--;}	
 			}		
 		}
 		
-		this._month = newMonth;
+		this._month = month;
 
 		var dnum = this.getDaysInHebrewMonth(this._month, this._year);
 		if(dnum < this._date){
@@ -368,26 +369,26 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		this._day = ((day+1) % 7);
 		return this;
 	},
-			
-	setHours: function(){
+
+	setHours: function(/*TODOC*/){
 		//summary: set the Hours  0-23
-		
+
 		var hours_arg_no = arguments.length;
 		var hours = 0;
 		if(hours_arg_no >= 1){
-			hours += arguments[0];
+			hours += +arguments[0];
 		}
 
 		if(hours_arg_no >= 2){
-			this._minutes += arguments[1];
+			this._minutes += +arguments[1];
 		}
 
 		if(hours_arg_no >= 3){
-			this._seconds += arguments[2];
+			this._seconds += +arguments[2];
 		}
 
 		if(hours_arg_no == 4){
-			this._milliseconds += arguments[3];
+			this._milliseconds += +arguments[3];
 		}
 
 		while(hours >= 24){
@@ -407,13 +408,14 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		if(this._month != 0){
 			day += (this.isLeapYear(this._year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(this._year)];
 		}
-		day += (this._date - 1);
-		this._day = ((day+1) % 7);
+		day += this._date - 1;
+		this._day = (day+1) % 7;
 		return this;
 	},
 
 	setMinutes: function(/*number*/minutes){
 		//summary: set the Minutes  frm 0-59
+		minutes = +minutes;
 		while(minutes >= 60){
 			this._hours++;
 			if(this._hours >= 24){     
@@ -434,14 +436,15 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		if(this._month != 0){
 			day += (this.isLeapYear(this._year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(this._year)];
 		}
-		day += (this._date - 1);
-		this._day = ((day+1) % 7);
+		day += this._date - 1;
+		this._day = (day+1) % 7;
 		return this;
 	},
 
 	setSeconds: function(/*number*/seconds){
 		//summary: set the Seconds  from 0-59
-	
+
+		seconds = +seconds;
 		while(seconds >= 60){
 			this._minutes++;
 			if(this._minutes >= 60){
@@ -475,6 +478,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 	setMilliseconds: function(/*number*/milliseconds){
 		//summary: set the milliseconds
 
+		milliseconds = +milliseconds;
 		//FIXME: use mod instead of iterate for overflow? same for methods above.
 		while(milliseconds >= 1000){
 			this.setSeconds++;
@@ -507,8 +511,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		if(this._month != 0){
 			day += (this.isLeapYear(this._year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(this._year)];
 		}
-		day += (this._date - 1);
-		this._day = ((day+1) % 7);
+		day += this._date - 1;
+		this._day = (day+1) % 7;
 		return this;
 	},
 
