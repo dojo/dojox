@@ -5,7 +5,7 @@ dojo.require("dojox.html.styles");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dojox.embed.flashVars");
-	
+dojo.experimental("dojox.form.FileUploader");
 	//	Usage Notes:
 	//		To center text vertically, use vertical-align:middle;
 	//			which emulates a boxModel button. Using line-height to center text
