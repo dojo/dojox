@@ -1,5 +1,5 @@
 ({
 next: "Næste",
-previous: "Foregående",
+previous: "Forrige",
 done: "Udført"
 })
