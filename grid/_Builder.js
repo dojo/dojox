@@ -113,8 +113,8 @@ dojo.require("dojo.dnd.Moveable");
 		},
 		
 		getCellNode: function(inRowNode, inCellIndex){
-			for(var i=0, row; row=getTr(inRowNode.firstChild, i); i++){
-				for(var j=0, cell; cell=row.cells[j]; j++){
+			for(var i=0, row; (row=getTr(inRowNode.firstChild, i)); i++){
+				for(var j=0, cell; (cell=row.cells[j]); j++){
 					if(this.getCellNodeIndex(cell) == inCellIndex){
 						return cell;
 					}
@@ -242,7 +242,7 @@ dojo.require("dojo.dnd.Moveable");
 				}
 				html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGridInvisible">');
 				for(var i=0, cell, m, cc, cs; (cell=row[i]); i++){
-					m = cell.markup, cc = cell.customClasses = [], cs = cell.customStyles = [];
+					m = cell.markup; cc = cell.customClasses = []; cs = cell.customStyles = [];
 					// content (format can fill in cc and cs as side-effects)
 					m[5] = cell.format(inRowIndex, item);
 					// classes
@@ -333,16 +333,16 @@ dojo.require("dojo.dnd.Moveable");
 
 		// event helpers
 		getCellX: function(e){
-			var x = e.layerX;
+			var n, x = e.layerX;
 			if(dojo.isMoz){
-				var n = ascendDom(e.target, makeNotTagName("th"));
+				n = ascendDom(e.target, makeNotTagName("th"));
 				x -= (n && n.offsetLeft) || 0;
 				var t = e.sourceView.getScrollbarWidth();
 				if(!dojo._isBodyLtr() && e.sourceView.headerNode.scrollLeft < t)
 					x -= t;
 				//x -= getProp(ascendDom(e.target, mkNotTagName("td")), "offsetLeft") || 0;
 			}
-			var n = ascendDom(e.target, function(){
+			n = ascendDom(e.target, function(){
 				if(!n || n == e.cellNode){
 					return false;
 				}
@@ -476,7 +476,7 @@ dojo.require("dojo.dnd.Moveable");
 			// Also called from keyboard shift-arrow event when focus is on a header
 			var headContentBox = dojo.contentBox(e.sourceView.headerNode);
 			
-			if (isMouse) {  //IE draws line even with no mouse down so separate from keyboard 
+			if(isMouse){  //IE draws line even with no mouse down so separate from keyboard 
 				this.lineDiv = document.createElement('div');
 				
 				var vw = dojo._abs(e.sourceView.headerNode, true);
@@ -500,7 +500,7 @@ dojo.require("dojo.dnd.Moveable");
 			var adj = dojo._isBodyLtr() ? 1 : -1;
 			var views = e.grid.views.views;
 			var followers = [];
-			for(var i=view.idx+adj, cView; (cView=views[i]); i=i+adj){
+			for(var j=view.idx+adj, cView; (cView=views[j]); j=j+adj){
 				followers.push({ node: cView.headerNode, left: window.parseInt(cView.headerNode.style.left) });
 			}
 			var table = view.headerContentNode.firstChild;
@@ -523,9 +523,9 @@ dojo.require("dojo.dnd.Moveable");
 			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
 			dojo.body().appendChild(this.moverDiv);
 			dojo.addClass(this.grid.domNode, "dojoxGridColumnResizing");
-			var m = this.moveable = new dojo.dnd.Moveable(this.moverDiv);
+			var m = (this.moveable = new dojo.dnd.Moveable(this.moverDiv));
 
-			drag =this.colResizeSetup(e,true);
+			drag = this.colResizeSetup(e,true);
 
 			m.onMove = dojo.hitch(this, "doResizeColumn", drag);
 
@@ -644,12 +644,12 @@ dojo.require("dojo.dnd.Moveable");
 			}
 			// map which columns and rows fill which cells
 			this.map = [];
-			for(var j=0, row; (row=inRows[j]); j++){
-				this.map[j] = [];
+			for(var k=0, row; (row=inRows[k]); k++){
+				this.map[k] = [];
 			}
 			for(var j=0, row; (row=inRows[j]); j++){
 				for(var i=0, x=0, cell, colSpan, rowSpan; (cell=row[i]); i++){
-					while (this.map[j][x]){x++};
+					while(this.map[j][x]){x++};
 					this.map[j][x] = { c: i, r: j };
 					rowSpan = cell.rowSpan || 1;
 					colSpan = cell.colSpan || 1;
