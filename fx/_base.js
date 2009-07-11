@@ -225,9 +225,18 @@ dojox.fx.highlight = function(/*Object*/ args){
 	
 	// Assign default color light yellow
 	var startColor = args.color || '#ffff99',
-		endColor = dojo.style(node, "backgroundColor"),
-		wasTransparent = (endColor == "transparent" || endColor == "rgba(0, 0, 0, 0)") ? endColor : false
+		endColor = dojo.style(node, "backgroundColor")
 	;
+
+	// safari "fix"
+	// safari reports rgba(0, 0, 0, 0) (black) as transparent color, while
+	// other browsers return "transparent", rendered as white by default by
+	// dojo.Color; now dojo.Color maps "transparent" to
+	// djConfig.transparentColor ([r, g, b]), if present; so we can use
+	// the color behind the effect node
+	if(endColor == "rgba(0, 0, 0, 0)"){
+		endColor = "transparent";
+	}
 
 	var anim = dojo.animateProperty(dojo.mixin({
 		properties: {
@@ -235,9 +244,9 @@ dojox.fx.highlight = function(/*Object*/ args){
 		}
 	}, args));
 
-	if(wasTransparent){
+	if(endColor == "transparent"){
 		dojo.connect(anim, "onEnd", anim, function(){
-			node.style.backgroundColor = wasTransparent;
+			node.style.backgroundColor = endColor;
 		});
 	}
 
