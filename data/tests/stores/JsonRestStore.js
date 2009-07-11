@@ -301,8 +301,7 @@ doh.register("dojox.data.tests.stores.JsonRestStore",
 				dojox.data.JsonRestStore.getStore({target:"/something/"},dojox.data.JsonRestStore),
 				dojox.data.JsonRestStore.getStore({target:"/something/"}));
 			
-		},
-		
+		}
 	]
 );
 performanceTest = function (){

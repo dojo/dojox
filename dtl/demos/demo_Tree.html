@@ -37,7 +37,7 @@
 							store: new dojo.data.ItemFileReadStore({ data: data }),
 							query: { type: "continent" },
 							templateString: '{% load dojox.dtl.contrib.objects %}{% load dojox.dtl.contrib.data %}{% bind_query query to store as countries %}<ul dojoAttachEvent="onclick: toggle">{% for country in countries %}{% include countrychildren %}{% endfor %}</ul>',
-							countrychildren: '<li dataid="{{ country.getIdentity }}">{{ country.type }}: {{ country.name }}{% if country.children %}{% if disabled|key:country.getIdentity %} &crarr;{% else %}<ul>{% for country in country.children %}{% include countrychildren %}{% endfor %}</ul>{% endif %}{% endif %}</li>',
+							countrychildren: '<li dataid="{{ country.getIdentity }}">{{ country.type }}: {{ country.name }}{% if country.children %}{% if disabled|key:country.getIdentity %} &crarr;{% else %}<ul>{% for country in country.children %}{% include countrychildren %}{% endfor %}</ul>{% endif %}{% endif %}</li>'
 						});
 					})();
 			</script>

@@ -52,14 +52,14 @@ dojo.provide("dojox.grid.tests.performance._gridPerfFramework");
 						{name: 'Column 2', field: 'col2', width: '100px' },
 						{name: 'Column 3', field: 'col3', width: '100px' }
 					],
-					noscroll: true,
+					noscroll: true
 				},{
 					cells: [
 						{name: 'Column 4', field: 'col4', width: '300px' },
 						{name: 'Column 5', field: 'col5', width: '150px' },
 						{name: 'Column 6', field: 'col6', width: '150px' },
 						{name: 'Column 7', field: 'col7', width: '150px' },
-						{name: 'Column 8', field: 'col8', width: '150px' },
+						{name: 'Column 8', field: 'col8', width: '150px' }
 					]
 				}];
 			case "single":
