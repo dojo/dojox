@@ -47,7 +47,7 @@ dojo.require("dojox.dtl.Context");
 				[table, "tr", "td|th"],
 				[table, "thead", "tr", "th"],
 				[table, "tbody", "tr", "td"],
-				[table, "table", "tbody|thead|tr", "tr", "td"],
+				[table, "table", "tbody|thead|tr", "tr", "td"]
 			];
 			var replacements = [];
 			// Some tags can't contain text. So we wrap the text in tags that they can have.
