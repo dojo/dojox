@@ -462,7 +462,7 @@ dojo.require("dojo.dnd.Manager");
 					}else if(style == "scroll"){
 						this._hasHScroll = true;
 					}else{
-						this._hasHScroll = (this.scrollboxNode.offsetWidth < this.contentNode.offsetWidth);
+						this._hasHScroll = (this.scrollboxNode.scrollWidth > this.scrollboxNode.clientWidth);
 					}
 				}
 			}
@@ -484,7 +484,7 @@ dojo.require("dojo.dnd.Manager");
 					}else if(style == "scroll"){
 						this._hasVScroll = true;
 					}else{
-						this._hasVScroll = (this.scrollboxNode.offsetHeight < this.contentNode.offsetHeight);
+						this._hasVScroll = (this.scrollboxNode.scrollHeight > this.scrollboxNode.clientHeight);
 					}
 				}
 			}
