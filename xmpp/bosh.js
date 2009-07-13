@@ -52,8 +52,8 @@ dojox.xmpp.bosh = {
 			var iframe = dojo.byId('xmpp-transport-'+i);
 			if(iframe){
 				// we have to clean up the dojo.io.iframe references
-				if(window[fname]){ delete window[fname]; }
-				if(window.frames[fname]){ delete window.frames[fname]; }
+				if(window[fname]){ window[fname] = null; }
+				if(window.frames[fname]){ window.frames[fname] = null; }
 				dojo.destroy(iframe);
 			}
 			iframe = dojo.io.iframe.create("xmpp-transport-" + i, scopedObj + "._iframeOnload("+i+");" );
