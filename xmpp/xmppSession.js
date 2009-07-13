@@ -47,6 +47,9 @@ dojox.xmpp.xmpp = {
 };
 
 dojox.xmpp.xmppSession = function(props){
+	this.roster = [];
+	this.chatRegister = [];
+	this._iqId = Math.round(Math.random() * 1000000000);
 
 	//mixin any options that we want to provide to this service
 	if (props && dojo.isObject(props)) {
@@ -64,7 +67,7 @@ dojo.extend(dojox.xmpp.xmppSession, {
 
 		roster: [],
 		chatRegister: [],
-		_iqId: Math.round(Math.random() * 1000000000),
+		_iqId: 0,
 	
 		open: function(user, password, resource){
 
