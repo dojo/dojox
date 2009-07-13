@@ -38,27 +38,26 @@ dojox.xmpp.bosh = {
 	initialize: function(/*dojox.xmpp.bosh.__initArgs*/ args){
 		this.transportIframes = [];
 
-		var delay_callback = !dojo.byId('xmpp-transport-0');
 		var scopedObj = dojox._scopeName + '.xmpp.bosh';
 
-		if(delay_callback){
-			dojo.connect(dojo.getObject(scopedObj), '_iframeOnload', this, function(index){
-				if(index==0){
-					args.load();
-				}
-			});
-		}
+		var c = dojo.connect(dojo.getObject(scopedObj), '_iframeOnload', this, function(index){
+			if(index==0){
+				args.load();
+				dojo.disconnect(c);
+			}
+		});
 
 		for(var i = 0; i < args.iframes; i++){
+			var fname = 'xmpp-transport-'+i;
 			var iframe = dojo.byId('xmpp-transport-'+i);
-			if(!iframe){
-				iframe = dojo.io.iframe.create("xmpp-transport-" + i, scopedObj + "._iframeOnload("+i+");" );
+			if(iframe){
+				// we have to clean up the dojo.io.iframe references
+				if(window[fname]){ delete window[fname]; }
+				if(window.frames[fname]){ delete window.frames[fname]; }
+				dojo.destroy(iframe);
 			}
+			iframe = dojo.io.iframe.create("xmpp-transport-" + i, scopedObj + "._iframeOnload("+i+");" );
 			this.transportIframes.push(iframe);
-		}
-
-		if(!delay_callback){
-			args.load();
 		}
 	},
 
