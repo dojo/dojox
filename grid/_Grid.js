@@ -20,6 +20,10 @@ dojo.require("dojox.grid._Events");
 dojo.requireLocalization("dijit", "loading");
 
 (function(){
+	if(!dojo.isCopyKey){
+		// backwards compatibility with 1.3
+		dojo.isCopyKey = dojo.dnd.getCopyKeyState;
+	}
 	/*=====
 	dojox.grid.__CellDef = function(){
 		//	name: String?
