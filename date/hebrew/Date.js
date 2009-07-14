@@ -276,7 +276,6 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 					date > mdays;
 					date -= mdays,mdays = this.getDaysInHebrewMonth(this._month, this._year)){
 				this._month++;
-				if(!this.isLeapYear(this._year) && this._month==5) { this._month ++;}
 				if(this._month >= 13){this._year++; this._month -= 13;}
 			}
 
@@ -287,7 +286,6 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 					date<=0;
 					mdays = this.getDaysInHebrewMonth((this._month-1)>=0 ? (this._month-1) : 12, ((this._month-1)>=0)? this._year : this._year-1)){
 				this._month--;
-				if(!this.isLeapYear(this._year) && this._month == 5){ this._month--; }
 				if(this._month < 0){this._year--; this._month += 13;}
 
 				date += mdays;
@@ -533,6 +531,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 
 		// These two months can vary: 1=HESHVAN, 2=KISLEV.  The rest are a fixed length
 		var yearType = (month == 1 || month == 2) ? this._yearType(year) : 0;
+		if (!this.isLeapYear(this._year) && month == 5) {return 0};
 		return this._MONTH_LENGTH[month][yearType];
 	},
 
