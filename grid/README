@@ -41,4 +41,8 @@ Install into the following directory structure:
 /dojox/html/
 
 ...which should be at the same level as your Dojo checkout.
+
+If you wish us use the old (compat / 1.2) grid, you can untar the
+compatGrid.tar.gz archive.  This version of the grid is no longer maintained
+or updated - but should work with any newer version of the dojo library.
 -------------------------------------------------------------------------------
