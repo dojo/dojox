@@ -47,7 +47,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 					break;
 				case 'd':
 					if(locale.match(/^he(?:-.+)?$/)){
-						s = "\u202B" /*RLE*/  + dateObject.getDateLocalized(locale); //for  calendar "geresh" position problem
+						s =  dateObject.getDateLocalized(locale);
 					}else{
 						s = dateObject.getDate(); pad = true;
 					}	
@@ -382,8 +382,7 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					break;
 				case 'd':
 					if(locale.match('^he(?:-.+)?$')){
-						//s = '\\S[\'\"\']{1,2}\\S?';
-						s = '.?\\S[\'\"\']{1,2}\\S?'; //for special unicode char - RLE added  - .?
+						s = '\\S[\'\"\'\u05F3]{1,2}\\S?';
 					}else{
 						s = '[12]\\d|'+p2+'[1-9]|30';
 					}
