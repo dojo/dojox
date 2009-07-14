@@ -890,7 +890,7 @@ dojo.requireLocalization("dijit", "loading");
 					this.updateRow(Number(r));
 				}
 			}
-			this.invalidated = null;
+			this.invalidated = [];
 		},
 
 		// update
