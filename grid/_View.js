@@ -451,7 +451,6 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		hasHScrollbar: function(reset){
-			var hadScroll = this._hasHScroll||false;
 			if(this._hasHScroll == undefined || reset){
 				if(this.noscroll){
 					this._hasHScroll = false;
@@ -466,14 +465,10 @@ dojo.require("dojo.dnd.Manager");
 					}
 				}
 			}
-			if(hadScroll !== this._hasHScroll){
-				this.grid.update();
-			}
 			return this._hasHScroll; // Boolean
 		},
 
 		hasVScrollbar: function(reset){
-			var hadScroll = this._hasVScroll||false;
 			if(this._hasVScroll == undefined || reset){
 				if(this.noscroll){
 					this._hasVScroll = false;
@@ -487,9 +482,6 @@ dojo.require("dojo.dnd.Manager");
 						this._hasVScroll = (this.scrollboxNode.scrollHeight > this.scrollboxNode.clientHeight);
 					}
 				}
-			}
-			if(hadScroll !== this._hasVScroll){
-				this.grid.update();
 			}
 			return this._hasVScroll; // Boolean
 		},
@@ -571,6 +563,16 @@ dojo.require("dojo.dnd.Manager");
 			var rowNode = this.createRowNode(inRowIndex);
 			this.buildRow(inRowIndex, rowNode);
 			this.grid.edit.restore(this, inRowIndex);
+
+			if(this._pendingUpdate){
+				window.clearTimeout(this._pendingUpdate);
+			}
+			this._pendingUpdate = window.setTimeout(dojo.hitch(this, function(){
+				window.clearTimeout(this._pendingUpdate);
+				delete this._pendingUpdate;
+				this.grid._resize();
+			}), 1);
+
 			return rowNode;
 		},
 
