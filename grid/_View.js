@@ -451,6 +451,7 @@ dojo.require("dojo.dnd.Manager");
 		},
 
 		hasHScrollbar: function(reset){
+			var hadScroll = this._hasHScroll||false;
 			if(this._hasHScroll == undefined || reset){
 				if(this.noscroll){
 					this._hasHScroll = false;
@@ -461,14 +462,18 @@ dojo.require("dojo.dnd.Manager");
 					}else if(style == "scroll"){
 						this._hasHScroll = true;
 					}else{
-						this._hasHScroll = (this.scrollboxNode.scrollWidth > this.scrollboxNode.clientWidth);
+						this._hasHScroll = (this.scrollboxNode.offsetWidth - this.getScrollbarWidth() < this.contentNode.offsetWidth );
 					}
 				}
+			}
+			if(hadScroll !== this._hasHScroll){
+				this.grid.update();
 			}
 			return this._hasHScroll; // Boolean
 		},
 
 		hasVScrollbar: function(reset){
+			var hadScroll = this._hasVScroll||false;
 			if(this._hasVScroll == undefined || reset){
 				if(this.noscroll){
 					this._hasVScroll = false;
@@ -482,6 +487,9 @@ dojo.require("dojo.dnd.Manager");
 						this._hasVScroll = (this.scrollboxNode.scrollHeight > this.scrollboxNode.clientHeight);
 					}
 				}
+			}
+			if(hadScroll !== this._hasVScroll){
+				this.grid.update();
 			}
 			return this._hasVScroll; // Boolean
 		},
@@ -520,7 +528,18 @@ dojo.require("dojo.dnd.Manager");
 		adaptHeight: function(minusScroll){
 			if(!this.grid._autoHeight){
 				var h = this.domNode.clientHeight;
-				if(minusScroll){
+				var self = this;
+				var checkOtherViewScrollers = function(){
+					var v;
+					for(var i in self.grid.views.views){
+						v = self.grid.views.views[i];
+						if(v !== self && v.hasHScrollbar()){
+							return true;
+						}
+					}
+					return false;
+				};
+				if(minusScroll || (this.noscroll && checkOtherViewScrollers())){
 					h -= dojox.html.metrics.getScrollbar().h;
 				}
 				dojox.grid.util.setStyleHeightPx(this.scrollboxNode, h);
@@ -563,16 +582,6 @@ dojo.require("dojo.dnd.Manager");
 			var rowNode = this.createRowNode(inRowIndex);
 			this.buildRow(inRowIndex, rowNode);
 			this.grid.edit.restore(this, inRowIndex);
-
-			if(this._pendingUpdate){
-				window.clearTimeout(this._pendingUpdate);
-			}
-			this._pendingUpdate = window.setTimeout(dojo.hitch(this, function(){
-				window.clearTimeout(this._pendingUpdate);
-				delete this._pendingUpdate;
-				this.grid._resize();
-			}), 1);
-
 			return rowNode;
 		},
 
