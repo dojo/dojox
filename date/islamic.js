@@ -1,48 +1,47 @@
-dojo.provide("dojox.date.hebrew");
-dojo.experimental("dojox.date.hebrew");
+dojo.provide("dojox.date.islamic");
+dojo.experimental("dojox.date.islamic");
 
-dojo.require("dojox.date.hebrew.Date");
+dojo.require("dojox.date.islamic.Date");
 dojo.require("dojo.date"); // for compare
 	
-// Utility methods to do arithmetic calculations with hebrew.Dates
+// Utility methods to do arithmetic calculations with islamic.Dates
 
 	// added for compat to date
-dojox.date.hebrew.getDaysInMonth = function(/*hebrew.Date*/month){
-	return month.getDaysInHebrewMonth(month.getMonth(), month.getFullYear());
+dojox.date.islamic.getDaysInMonth = function(/*islamic.Date*/month){
+	return month.getDaysInIslamicMonth(month.getMonth(), month.getFullYear());
 };
 
-//TODO: define hebrew.isLeapYear?  Or should it be invalid, since it has different meaning?
+//TODO: define islamic.isLeapYear?  Or should it be invalid, since it has different meaning?
 
-dojox.date.hebrew.compare = function(/*hebrew.Date*/dateheb1, /*hebrew.Date*/dateheb2, /*String?*/portion){
+dojox.date.islamic.compare = function(/*islamic.Date*/date1, /*islamic.Date*/date2, /*String?*/portion){
 	//	summary:
-	//		Compare two hebrew date objects by date, time, or both.
+	//		Compare two islamic date objects by date, time, or both.
 	//	description:
 	//  	Returns 0 if equal, positive if a > b, else negative.
 	//	date1:
-	//		hebrew.Date object
+	//		islamic.Date object
 	//	date2:
-	//		hebrew.Date object.  If not specified, the current hebrew.Date is used.
+	//		islamic.Date object.  If not specified, the current islamic.Date is used.
 	//	portion:
 	//		A string indicating the "date" or "time" portion of a Date object.
 	//		Compares both "date" and "time" by default.  One of the following:
 	//		"date", "time", "datetime"
 
-	if(dateheb1 instanceof dojox.date.hebrew.Date){
-		dateheb1 = dateheb1.toGregorian();
+	if(date1 instanceof dojox.date.islamic.Date){
+		date1 = date1.toGregorian();
 	}
-	if(dateheb2 instanceof dojox.date.hebrew.Date){
-		dateheb2 = dateheb2.toGregorian();
+	if(date2 instanceof dojox.date.islamic.Date){
+		date2 = date2.toGregorian();
 	}
 	
 	return dojo.date.compare.apply(null, arguments);
 };
 
-
-dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/interval, /*int*/amount){
+dojox.date.islamic.add = function(/*dojox.date.islamic.Date*/date, /*String*/interval, /*int*/amount){
 	//	based on and similar to dojo.date.add
 	//	summary:
 	//		Add to a Date in intervals of different size, from milliseconds to years
-	//	date: hebrew.Date
+	//	date: islamic.Date
 	//		Date object to start with
 	//	interval:
 	//		A string representing the interval.  One of the following:
@@ -51,16 +50,16 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 	//	amount:
 	//		How much to add to the date.
 
-	var newHebrDate = new dojox.date.hebrew.Date(date);
+	var newIslamDate = new dojox.date.islamic.Date(date);
 
 	switch(interval){
 		case "day":
-			newHebrDate.setDate(date.getDate() + amount);
+			newIslamDate.setDate(date.getDate() + amount);
 			break;
 		case "weekday":
 			var day = date.getDay();
 			if(((day + amount) < 5) && ((day + amount) > 0)){
-				 newHebrDate.setDate(date.getDate() + amount);
+				 newIslamDate.setDate(date.getDate() + amount);
 			}else{
 				var adddays = 0, /*weekend */
 					remdays = 0;
@@ -78,57 +77,56 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 					adddays = (amount > 0)  ? 2 : -2;
 				}
 				adddays = adddays + div * 7 + amountdif % 5 + add;
-				newHebrDate.setDate(date.getDate() + adddays +  remdays);
+				newIslamDate.setDate(date.getDate() + adddays +  remdays);
 			}
 			break;
 		case "year":
-			newHebrDate.setFullYear(date.getFullYear() + amount);
+			newIslamDate.setFullYear(date.getFullYear() + amount);
 			break;
 		case "week":
 			amount *= 7;
-			newHebrDate.setDate(date.getDate() + amount);
+			newIslamDate.setDate(date.getDate() + amount);
 			break;
 		case "month":
 			var month = date.getMonth(); 
-			if(!date.isLeapYear(date.getFullYear()) && month > 5){month --;}
-			newHebrDate.setMonth(month + amount);
+			newIslamDate.setMonth(month + amount);
 			break;
 		case "hour":
-			newHebrDate.setHours(date.getHours() + amount);
+			newIslamDate.setHours(date.getHours() + amount);
 			break;	
 		case "minute":
-			newHebrDate.setMinutes(date.getMinutes() + amount);
+			newIslamDate.setMinutes(date.getMinutes() + amount);
 			break;	
 		case "second":
-			newHebrDate.setSeconds(date.getSeconds() + amount);
+			newIslamDate.setSeconds(date.getSeconds() + amount);
 			break;	
 		case "millisecond":
-			newHebrDate.setMilliseconds(date.getMilliseconds() + amount);
+			newIslamDate.setMilliseconds(date.getMilliseconds() + amount);
 			break;
 	}
 
-	return newHebrDate; // dojox.date.hebrew.Date
+	return newIslamDate; // dojox.date.islamic.Date
 }; 
 
-dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox.date.hebrew.Date?*/date2, /*String?*/interval){
+dojox.date.islamic.difference = function(/*dojox.date.islamic.Date*/date1, /*dojox.date.islamic.Date?*/date2, /*String?*/interval){
 	//	based on and similar to dojo.date.difference
 	//	summary:
 	//        date1 - date2
-	//	 date2 is hebrew.Date object.  If not specified, the current hebrew.Date is used.
+	//	 date2 is islamic.Date object.  If not specified, the current islamic.Date is used.
 	//	interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",
 	//			"millisecond",  "week", "weekday"
 	//		Defaults to "day".
 
-	date2 = date2 || new dojox.date.hebrew.Date();
+	date2 = date2 || new dojox.date.islamic.Date();
 	interval = interval || "day";
 	var yearDiff = date1.getFullYear() - date2.getFullYear();
 	var delta = 1; // Integer return value
 	switch(interval){
 		case "weekday":
-			var days = Math.round(dojox.date.hebrew.difference(date1, date2, "day"));
-			var weeks = parseInt(dojox.date.hebrew.difference(date1, date2, "week"));
+			var days = Math.round(dojox.date.islamic.difference(date1, date2, "day"));
+			var weeks = parseInt(dojox.date.islamic.difference(date1, date2, "week"));
 			var mod = days % 7;
 
 			// Even number of weeks
@@ -144,7 +142,7 @@ dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox
 				mod = days % 7;
 				// Mark the date advanced by the number of
 				// round weeks (may be zero)
-				var dtMark = new dojox.date.hebrew.Date(date2);
+				var dtMark = new dojox.date.islamic.Date(date2);
 				dtMark.setDate(dtMark.getDate()+(weeks*7));
 				var dayMark = dtMark.getDay();
 	
@@ -209,26 +207,25 @@ dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox
 			var month1 = startdate.getMonth();
 			var month2 = enddate.getMonth();
 			
-			if(yearDiff == 0){
-				delta = ( !date1.isLeapYear(date1.getFullYear())  && startdate.getMonth() > 5 && enddate.getMonth() <=5) ? (startdate.getMonth() - enddate.getMonth() - 1) :
-						(startdate.getMonth() - enddate.getMonth() );
+			if (yearDiff == 0){
+				delta = startdate.getMonth() - enddate.getMonth() ;
 			}else{
-				delta = (!enddate.isLeapYear(enddate.getFullYear()) &&  month2 < 6) ? (13-month2-1) : (13-month2);
-				delta +=  (!startdate.isLeapYear(startdate.getFullYear()) &&  month1 > 5) ? (month1 -1): month1;
-				var i = enddate.getFullYear()  + 1;
+				delta = 12-month2;
+				delta +=  month1;
+				var i = enddate.getFullYear()+1;
 				var e = startdate.getFullYear();
 				for (i;   i < e;  i++){
-					delta += enddate.isLeapYear(i) ? 13 : 12; 
+					delta += 12; 
 				}
 			}
-			if(date1.toGregorian() < date2.toGregorian()){
+			if (date1.toGregorian() < date2.toGregorian()){
 				delta = -delta;
 			}
 			break;
 		case "week":
 			// Truncate instead of rounding
 			// Don't use Math.floor -- value may be negative
-			delta = parseInt(dojox.date.hebrew.difference(date1, date2, "day")/7);
+			delta = parseInt(dojox.date.islamic.difference(date1, date2, "day")/7);
 			break;
 		case "day":
 			delta /= 24;

@@ -136,7 +136,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
  	constructor: function(){
 		// summary: This is the constructor
 		// description:
-		//	This fucntion initialize the date object values
+		//	This function initialize the date object values
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();

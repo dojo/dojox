@@ -1,8 +1,8 @@
-dojo.provide("dojox.date.tests.IslamicDate");
-dojo.require("dojox.date.IslamicDate");
+dojo.provide("dojox.date.tests.islamic.Date");
+dojo.require("dojox.date.islamic.Date");
 dojo.require("dojo.date");
 
-tests.register("dojox.date.tests.IslamicDate", 
+tests.register("dojox.date.tests.islamic.Date", 
 	[
 		{
 			// Test formatting and parsing of dates in various locales pre-built in dojo.cldr
@@ -28,7 +28,7 @@ tests.register("dojox.date.tests.IslamicDate",
 		{
 			name: "toGregorian",
 			runTest: function(t){
-				var dateIslamic = new dojox.date.IslamicDate(1429,11,20); // Dec 19, 2008 -- is this right??
+				var dateIslamic = new dojox.date.islamic.Date(1429,11,20); // Dec 19, 2008 -- is this right??
 				var dateGregorian = dateIslamic.toGregorian();
 				t.is(0, dojo.date.compare(new Date(2008, 11, 19), dateGregorian, "date"));
 				// add exhaustive tests here
