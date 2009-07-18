@@ -318,6 +318,11 @@
 						<script type="dojo/connect" event="attr" args="name, value">
 							if(name == "selectedIndex"){
 								dojo.cookie(this.id + "-selectedIndex", value);
+
+								// Set a custom title when selection changes.
+								if (this.portlet){
+									this.portlet.attr("title", "Cool Blogs - " + this.text.options[value].innerHTML);
+								}
 							}
 						</script>
 						<option value="http://shaneosullivan.wordpress.com/category/dojo/feed/">Dojo Blatherings</option>
@@ -329,6 +334,8 @@
 					Click the settings icon in the title bar to choose a feed to load.
 					This Portlet also maintains its state using a cookie, so when you choose
 					a feed to show and refresh the page, that same feed will be selected.
+					this example also shows how to modify the title of the portlet when a new
+					feed is selected.
 					</div>
 				</div>
 				<div dojoType="dojox.widget.ExpandableFeedPortlet" title="Cool Blogs -> onlyOpenOne == true" 
