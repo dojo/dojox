@@ -99,7 +99,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
 				return this.formatEditing(d, inRowIndex);
 			}else{
-				return this._defaultFormat(d, [d, inRowIndex]);
+				return this._defaultFormat(d, [d, inRowIndex, this]);
 			}
 		},
 		formatEditing: function(inDatum, inRowIndex){
