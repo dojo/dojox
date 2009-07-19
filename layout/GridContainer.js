@@ -25,10 +25,6 @@ dojo.declare("dojox.layout.GridContainer",
 	templatePath: dojo.moduleUrl("dojox.layout", "resources/GridContainer.html"),
 	isContainer: true,
 
-	//	i18n: Object
-	//		Contain i18n ressources.
-	i18n: null,
-	
 	//isAutoOrganized: Boolean:
 	//	Define auto organisation of children into the grid container.
 	isAutoOrganized : true,
@@ -126,10 +122,6 @@ dojo.declare("dojox.layout.GridContainer",
 		this._children = [];
 	},
 
-	postMixInProperties: function(){
-		this.i18n = dojo.i18n.getLocalization("dojox.layout", "GridContainer"); 
-	},
-	
 	_createCells: function(){
 		if(this.nbZones === 0){ this.nbZones = 1; }
 		var wCol = 100 / this.nbZones;
@@ -649,18 +641,13 @@ dojo.declare("dojox.layout.GridContainer",
 					}
 					if(count.length < delta){
 						//Not enough empty columns
-						console.error(this.i18n.err_onSetNbColsRightMode);
+						console.error("Move boxes in first columns, in all tabs before changing the organization of the page");
 					}
 				}else{ // mode="left"
-					if(this.isLeftFixed && this.grid.length>0){
-						start=1;
-					}else{
-						start=0;
-					}
+					start = (this.isLeftFixed && this.grid.length>0) ? 1 : 0;
+					end = this.grid.length;
 					if(this.isRightFixed){
-						end=this.grid.length-1;
-					}else{
-						end=this.grid.length;
+						end--;
 					}
 					for(z=start;z<end;z++){
 						nbChildren = 0;
@@ -682,7 +669,8 @@ dojo.declare("dojox.layout.GridContainer",
 					
 					if(count.length<delta){
 						//Not enough empty columns
-						alert(this.i18n.err_onSetNbColsLeftMode);	
+						//FIXME: alert, bad.
+						alert("Move boxes in last columns, in all tabs before changing the organization of the page");	
 					}
 				}
 			}else{
@@ -1048,7 +1036,7 @@ dojo.declare("dojox.layout.GridContainer",
 		if(this._canDisplayPopup){
 			var popup = dojo.doc.createElement("div");
 			dojo.addClass(popup, "gridContainerPopup");
-			popup.innerHTML = this.i18n.alertPopup;
+			popup.innerHTML = "this widget type is not accepted to be moved!"; //TODO: i18n with improved wording, or preferably find an alternate UI
 			var attachPopup = this.containerNode.appendChild(popup);
 			this._canDisplayPopup = false;
 			setTimeout(dojo.hitch(this, function(){
