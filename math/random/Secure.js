@@ -34,8 +34,18 @@ dojo.declare("dojox.math.random.Secure", null, {
 		this.seedTime();
 
 		if(!noEvents){
-			dojo.connect(dojo.body(), "onclick",    this, "seedTime");
-			dojo.connect(dojo.body(), "onkeypress", this, "seedTime");
+			this.h = [
+				dojo.connect(dojo.body(), "onclick",    this, "seedTime"),
+				dojo.connect(dojo.body(), "onkeypress", this, "seedTime")
+			];
+		}
+	},
+	
+	destroy: function(){
+		// summary:
+		//	Disconnects events, if any, preparing the object for GC.
+		if(this.h){
+			dojo.forEach(this.h, dojo.disconnect);
 		}
 	},
 

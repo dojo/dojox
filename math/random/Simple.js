@@ -4,6 +4,12 @@ dojo.declare("dojox.math.random.Simple", null, {
 	// summary:
 	//	Super simple implementation of a random number generator,
 	//	which relies on Math.random().
+
+	destroy: function(){
+		// summary:
+		//	Prepares the object for GC. (empty in this case)
+	},
+
 	nextBytes: function(/* Array */ byteArray){
 		// summary:
 		//	Fills in an array of bytes with random numbers
