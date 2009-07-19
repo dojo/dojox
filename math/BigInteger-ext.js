@@ -1,5 +1,6 @@
-dojo.provide("BigInteger-ext");
-dojo.require("BigInteger");
+dojo.provide("dojox.math.BigInteger-ext");
+
+dojo.require("dojox.math.BigInteger");
 
 // Copyright (c) 2005  Tom Wu
 // All Rights Reserved.
@@ -8,8 +9,11 @@ dojo.require("BigInteger");
 // Extended JavaScript BN functions, required for RSA private ops.
 
 (function(){
-	var BigInteger = dojox.math.BigInteger;
-
+	var BigInteger = dojox.math.BigInteger,
+		nbi = BigInteger._nbi, nbv = BigInteger._nbv,
+		nbits = BigInteger._nbits,
+		Montgomery = BigInteger._Montgomery;
+	
 	// (public)
 	function bnClone() { var r = nbi(); this._copyTo(r); return r; }
 

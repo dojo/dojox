@@ -18,8 +18,8 @@ dojo.provide("dojox.math.BigInteger");
 	// (public) Constructor
 	function BigInteger(a,b,c) {
 	  if(a != null)
-		if("number" == typeof a) this.fromNumber(a,b,c);
-		else if(b == null && "string" != typeof a) this._fromString(a,256);
+		if("number" == typeof a) this._fromNumber(a,b,c);
+		else if(!b && "string" != typeof a) this._fromString(a,256);
 		else this._fromString(a,b);
 	}
 
@@ -176,7 +176,7 @@ dojo.provide("dojox.math.BigInteger");
 	  else if(b == 2) k = 1;
 	  else if(b == 32) k = 5;
 	  else if(b == 4) k = 2;
-	  else return this.toRadix(b);
+	  else return this._toRadix(b);
 	  var km = (1<<k)-1, d, m = false, r = "", i = this.t;
 	  var p = this._DB-(i*this._DB)%k;
 	  if(i-- > 0) {
@@ -206,22 +206,22 @@ dojo.provide("dojox.math.BigInteger");
 	// (public) return + if this > a, - if this < a, 0 if equal
 	function bnCompareTo(a) {
 	  var r = this.s-a.s;
-	  if(r != 0) return r;
+	  if(r) return r;
 	  var i = this.t;
 	  r = i-a.t;
-	  if(r != 0) return r;
-	  while(--i >= 0) if((r=this[i]-a[i]) != 0) return r;
+	  if(r) return r;
+	  while(--i >= 0) if((r = this[i] - a[i])) return r;
 	  return 0;
 	}
 
 	// returns bit length of the integer x
 	function nbits(x) {
 	  var r = 1, t;
-	  if((t=x>>>16) != 0) { x = t; r += 16; }
-	  if((t=x>>8) != 0) { x = t; r += 8; }
-	  if((t=x>>4) != 0) { x = t; r += 4; }
-	  if((t=x>>2) != 0) { x = t; r += 2; }
-	  if((t=x>>1) != 0) { x = t; r += 1; }
+	  if((t=x>>>16)) { x = t; r += 16; }
+	  if((t=x>>8)) { x = t; r += 8; }
+	  if((t=x>>4)) { x = t; r += 4; }
+	  if((t=x>>2)) { x = t; r += 2; }
+	  if((t=x>>1)) { x = t; r += 1; }
 	  return r;
 	}
 
@@ -569,7 +569,15 @@ dojo.provide("dojox.math.BigInteger");
 	dojo._mixin(BigInteger, {
 		// "constants"
 		ZERO:	nbv(0),
-		ONE:	nbv(1)
+		ONE:	nbv(1),
+		
+		// internal functions
+		_nbi: nbi,
+		_nbv: nbv,
+		_nbits: nbits,
+		
+		// internal classes
+		_Montgomery: Montgomery
 	});
 
 	// export to DojoX
