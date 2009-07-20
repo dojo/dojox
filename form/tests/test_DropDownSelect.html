@@ -74,19 +74,19 @@
 				doh.register("tests",
 					[
 						function test_setValue(t){
+							var d = new doh.Deferred();
 							t.is({s1:"VA", s2:"CA", s3:"AL", s4: "AK", s5: "move", s7:"NY", s8:"AL",
 								s9:"CT", s10:"AL", s11:"AL", s12: "AL"}, form.attr("value"));
 							s1.attr("value", "WA");
 							t.is("WA", s1.value);
-							s1.attr("value", "UT");
-							t.is("TN", s1.value);
-							var d = new doh.Deferred();
-							setTimeout(function(){
-								try{
+							setTimeout(function(){ try{ // allow onChange to fire
+								s1.attr("value", "UT");
+								t.is("TN", s1.value);
+								setTimeout(function(){ try{ // allow onChange to fire
 									t.is(2, numChanges);
-							                d.callback(true);
-							        }catch(e){ d.errback(e); }
-							}, 500);
+									d.callback(true);
+								}catch(e){ d.errback(e); }}, 0);
+							}catch(e){ d.errback(e); }}, 0);
 							return d;
 						},
 						function test_changeSelected(t){
