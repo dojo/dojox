@@ -80,7 +80,14 @@
 							t.is("WA", s1.value);
 							s1.attr("value", "UT");
 							t.is("TN", s1.value);
-							t.is(2, numChanges);
+							var d = new doh.Deferred();
+							setTimeout(function(){
+								try{
+									t.is(2, numChanges);
+							                d.callback(true);
+							        }catch(e){ d.errback(e); }
+							}, 500);
+							return d;
 						},
 						function test_changeSelected(t){
 							t.is("AL", s11.value);
