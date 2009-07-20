@@ -1,7 +1,5 @@
 dojo.provide("dojox.html.ellipsis");
 
-dojo.require("dojo.behavior");
-
 (function(d){
 	if(d.isFF){
 		// The delay (in ms) to wait so that we don't keep querying when many 
@@ -126,41 +124,56 @@ dojo.require("dojo.behavior");
 			c.appendChild(i);
 		};
 
-		// Add our behavior
-		var b = d.behavior;
+		// Function for updating the ellipsis
 		var hc = d.hasClass;
-		b.add({
-			".dojoxEllipsis": function(n){
+		var doc = d.doc;
+		var s, fn, opt;
+		if(doc.querySelectorAll){
+			s = doc;
+			fn = "querySelectorAll";
+			opt = ".dojoxEllipsis";
+		}else if(doc.getElementsByClassName){
+			s = doc;
+			fn = "getElementsByClassName";
+			opt = "dojoxEllipsis";
+		}else{
+			s = d;
+			fn = "query";
+			opt = ".dojoxEllipsis";
+		}
+		fx = function(){
+			d.forEach(s[fn].apply(s, [opt]), function(n){
+				if(!n || n._djx_ellipsis_done){ return; }
+				n._djx_ellipsis_done = true;
 				if(n.textContent == n.innerHTML && !hc(n, "dojoxEllipsisSelectable")){
 					// We can do the faster XUL version, instead of calculating
 					createXULEllipsis(n);
 				}else{
 					createIFrameEllipsis(n);
 				}
-			}
-		});
+			});
+		};
 		
 		d.addOnLoad(function(){
 			// Apply our initial stuff
-			b.apply();
 			var t = null;
-			var running = false;
-			
-			// Connect to the modified function so that we can catch
-			// future changes
-			d.connect(d.body(), "DOMSubtreeModified", function(){
-				if(running){ 
-					// We are in the process of applying - so we just return
-					return;
+			var c = null;
+			var connFx = function(){
+				if(c){
+					// disconnect us - so we don't fire anymore
+					d.disconnect(c);
+					c = null;
 				}
 				if(t){ clearTimeout(t); }
 				t = setTimeout(function(){
 					t = null;
-					running = true;
-					b.apply();
-					running = false;
+					fx();
+					// Connect to the modified function so that we can catch
+					// our next change
+					c = d.connect(d.body(), "DOMSubtreeModified", connFx);
 				}, delay);
-			});
+			};
+			connFx();
 		});
 	}
 })(dojo);
