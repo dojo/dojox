@@ -43,7 +43,7 @@ dojo.require("dojox.embed.flashVars");
 	
 	var urlencode = function(url){
 		// Using symbols in place of URL chars that will break in Flash serialization.
-		if(!url || url=="none"){
+		if(!url || url == "none"){
 			return false;
 		}
 		return url.replace(/:/g,"||").replace(/\./g,"^^").replace("url(", "").replace(")","").replace(/'/g,"").replace(/"/g,"");
@@ -52,7 +52,7 @@ dojo.require("dojox.embed.flashVars");
 	var isButton = function(node){
 		// testing if button for styling purposes
 		var tn = node.tagName.toLowerCase();
-		return tn=="button" || tn=="input";
+		return tn == "button" || tn == "input";
 	};
 	
 	var getTextStyle = function(node){
@@ -69,8 +69,8 @@ dojo.require("dojox.embed.flashVars");
 		
 		o.lh = dojo.style(node, "lineHeight");
 		o.ta = dojo.style(node, "textAlign");
-		o.ta = o.ta=="start" || !o.ta ? "left":o.ta;
-		o.va = isButton(node) ? "middle" : o.lh==o.h ? "middle" : dojo.style(node, "verticalAlign");
+		o.ta = o.ta == "start" || !o.ta ? "left" : o.ta;
+		o.va = isButton(node) ? "middle" : o.lh == o.h ? "middle" : dojo.style(node, "verticalAlign");
 		return o;
 	};
 	
@@ -99,7 +99,7 @@ dojo.require("dojox.embed.flashVars");
 		// if no color, Safari sets #000000 and alpha=0
 		// 	since we don't support alpha, it makes black
 		//	- make it white
-		o.bc = clr.a==0 ? "#ffffff" : clr.toHex();
+		o.bc = clr.a == 0 ? "#ffffff" : clr.toHex();
 		o.bc = parseInt(o.bc.substring(1,Infinity),16);
 		var url = urlencode(dojo.style(node, "backgroundImage"));
 		if(url){
@@ -112,8 +112,8 @@ dojo.require("dojox.embed.flashVars");
 				// IE does Xpx and Ypx, not "X% Y%"
 				var rx = dojo.style(node, "backgroundPositionX");
 				var ry = dojo.style(node, "backgroundPositionY");
-				rx = (rx=="left") ? "0%" : (rx=="right") ? "100%" : rx;
-				ry = (ry=="top") ? "0%" : (ry=="bottom") ? "100%" : ry;
+				rx = (rx == "left") ? "0%" : (rx == "right") ? "100%" : rx;
+				ry = (ry == "top") ? "0%" : (ry == "bottom") ? "100%" : ry;
 				o.bi.pos = escape(rx+" "+ry);
 			}
 		}
@@ -372,7 +372,7 @@ dojo.require("dojox.embed.flashVars");
 			this.fileCount = 0;
 			this.flashReady = false;
 			this._disabled = false;
-			this.uploaderType = ((dojox.embed.Flash.available >= this.minFlashVersion || this.force=="flash") && this.force!="html") ? "flash" : "html";
+			this.uploaderType = ((dojox.embed.Flash.available >= this.minFlashVersion || this.force=="flash") && this.force != "html") ? "flash" : "html";
 			
 			if(!this.swfPath){
 				this.swfPath = swfPath;
@@ -382,7 +382,7 @@ dojo.require("dojox.embed.flashVars");
 		
 		postCreate: function(){
 			this.setButtonStyle();
-			if(this.uploaderType=="flash"){
+			if(this.uploaderType == "flash"){
 				this.uploaderType = "flash";
 				this.createFlashUploader();
 			}else{
@@ -420,13 +420,15 @@ dojo.require("dojox.embed.flashVars");
 				this.hoverClass = "dijitButtonHover";
 				this.pressClass = "dijitButtonActive";
 				this.disabledClass = "dijitButtonDisabled";
+			}else if(!this.srcNodeRef && this.button){
+				this.srcNodeRef = this.button;
 			}
 			
 			this.norm = getStyle(this.srcNodeRef);
 			this.width = this.norm.w;
 			this.height = this.norm.h;
 			
-			if(this.uploaderType=="flash"){
+			if(this.uploaderType == "flash"){
 				if(this.hoverClass){
 					this.over = getTempNodeStyle(this.srcNodeRef, this.hoverClass, this.isDijitButton);
 				}else{
@@ -518,7 +520,7 @@ dojo.require("dojox.embed.flashVars");
 				//	MAKE this stuff up.
 				//
 				console.warn("IE inline node", this.domNode.outerHTML)
-				if(this.uploaderType=="flash"){
+				if(this.uploaderType == "flash"){
 				this.insideNode = this.insideNode.parentNode.removeChild(this.insideNode);
 					dojo.body().appendChild(this.insideNode);
 					this.insideNode.innerHTML = this.fhtml.cn;
@@ -623,17 +625,17 @@ dojo.require("dojox.embed.flashVars");
 				
 				var node = dijit.byId(this.progressWidgetId).domNode;
 				console.warn("PROGRESS BAR", node, dojo.style(node, "display"));
-				if(dojo.style(node, "display")=="none"){
+				if(dojo.style(node, "display") == "none"){
 					this.restoreProgDisplay = "none";
 					dojo.style(node, "display", "block");
 				}
-				if(dojo.style(node, "visibility")=="hidden"){
+				if(dojo.style(node, "visibility") == "hidden"){
 					this.restoreProgDisplay = "hidden";
 					dojo.style(node, "visibility", "visible");
 				}
 			}
 			
-			if(data){
+			if(data && !data.target){
 				this.postData = data;
 			}
 			this.log("upload type:", this.uploaderType, " - postData:", this.postData);
@@ -667,7 +669,7 @@ dojo.require("dojox.embed.flashVars");
 			//
 			var i;
 			for(i=0;i<this.fileList.length;i++){
-				if(this.fileList[i].name==name){
+				if(this.fileList[i].name == name){
 					if(!noListEdit){ // if onComplete, don't do this
 						this.fileList.splice(i,1);
 					}
@@ -826,7 +828,7 @@ dojo.require("dojox.embed.flashVars");
 			this.onChange(dataArray);
 			if(this.uploadOnChange){
 				this.upload();
-			}else if(this.uploaderType=="html" && this.selectMultipleFiles){
+			}else if(this.uploaderType == "html" && this.selectMultipleFiles){
 				this._buildFileInput();
 				this._connectInput();
 			}
@@ -872,7 +874,7 @@ dojo.require("dojox.embed.flashVars");
 				// using timeout so prog shows on screen for at least a short time
 				setTimeout(dojo.hitch(this, function(){
 					dojo.style(dijit.byId(this.progressWidgetId).domNode,
-						this.restoreProgDisplay=="none" ? "display" : "visibility",
+						this.restoreProgDisplay == "none" ? "display" : "visibility",
 						this.restoreProgDisplay
 					);
 				}), 700);
@@ -917,7 +919,7 @@ dojo.require("dojox.embed.flashVars");
 			//		Internal. To set disabled use: widget.attr("disabled", true | false);
 			if(this._disabled == disabled){ return; }
 			
-			if(this.uploaderType=="flash"){
+			if(this.uploaderType == "flash"){
 				if(!this.flashReady){
 					var _fc = dojo.connect(this, "onReady", this, function(){
 						dojo.disconnect(_fc);
@@ -1050,13 +1052,13 @@ dojo.require("dojox.embed.flashVars");
 		_checkHtmlCancel: function(mouseType){
 			// summary:
 			//		Internal. Check if the dialog was opened and canceled without file selection.
-			if(mouseType=="change"){
+			if(mouseType == "change"){
 				this.dialogIsOpen = false;
 			}
-			if(mouseType=="up"){
+			if(mouseType == "up"){
 				this.dialogIsOpen = true;
 			}
-			if(mouseType=="off"){
+			if(mouseType == "off"){
 				if(this.dialogIsOpen){
 					this.onCancel();
 				}
@@ -1069,8 +1071,8 @@ dojo.require("dojox.embed.flashVars");
 			var o = this.fhtml.nr;
 			dojo.style(this.insideNode, {
 				width:o.w+"px",
-				height:o.va=="middle"?o.h+"px":"auto",
-				lineHeight:o.va=="middle"?o.h+"px":"auto",
+				height:o.va == "middle"?o.h+"px":"auto",
+				lineHeight:o.va == "middle"?o.h+"px":"auto",
 				textAlign:o.ta,
 				paddingTop:o.p[0]+"px",
 				paddingRight:o.p[1]+"px",
@@ -1226,7 +1228,7 @@ dojo.require("dojox.embed.flashVars");
 					uploadDataFieldName: this.flashFieldName,
 					uploadUrl: this.uploadUrl,
 					uploadOnSelect: this.uploadOnChange,
-					deferredUploading:this.deferredUploading,
+					deferredUploading:this.deferredUploading || "",
 					selectMultipleFiles: this.selectMultipleFiles,
 					id: this.id,
 					isDebug: this.isDebug,
