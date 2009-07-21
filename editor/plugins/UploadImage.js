@@ -13,7 +13,7 @@ dojo.declare("dojox.editor.plugins.UploadImage",
 		//	any file type
 		
 		tempImageUrl: "",
-		iconClassPrefix: "dijitEditorIcon",
+		iconClassPrefix: "editorIcon",
 		useDefaultCommand: false,
 		uploadUrl: "",
 		fileInput:null,

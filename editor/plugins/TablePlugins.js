@@ -403,7 +403,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		//	NOT IMPLEMENTED: Not handling cell merge, span or split
 		//
 		
-		iconClassPrefix: "dijitEditorIcon",
+		iconClassPrefix: "editorIcon",
 		useDefaultCommand: false,
 		buttonClass: dijit.form.Button,
 		commandName:"",
