@@ -126,17 +126,24 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 
 	_getChildren: function(){ return this.dropDown.getChildren(); },
 	
-	_loadChildren: function(){
+	_loadChildren: function(/* boolean */ loadMenuItems){
 		// summary: 
 		//		Resets the menu and the length attribute of the button - and
 		//		ensures that the label is appropriately set.
+		//	loadMenuItems: boolean
+		//		actually loads the child menu items - we only do this when we are
+		//		populating for showing the dropdown.
 
-		// this.inherited destroys this.dropDown's child widgets (MenuItems).
-		// Avoid this.dropDown (Menu widget) having a pointer to a destroyed widget (which will cause
-		// issues later in _setSelected).
-		delete this.dropDown.focusedChild;
+		if(loadMenuItems === true){
+			// this.inherited destroys this.dropDown's child widgets (MenuItems).
+			// Avoid this.dropDown (Menu widget) having a pointer to a destroyed widget (which will cause
+			// issues later in _setSelected).
+			delete this.dropDown.focusedChild;
 
-		this.inherited(arguments);
+			this.inherited(arguments);
+		}else{
+			this._updateSelection();
+		}
 
 		var len = this.options.length;
 		this._isLoaded = false;
@@ -258,7 +265,7 @@ dojo.declare("dojox.form.DropDownSelect", [dojox.form._FormSelectWidget, dojox.f
 	
 	loadDropDown: function(/* Function */ loadCallback){
 		// summary: populates the menu
-		this._loadChildren();
+		this._loadChildren(true);
 		this._isLoaded = true;
 		loadCallback();
 	},

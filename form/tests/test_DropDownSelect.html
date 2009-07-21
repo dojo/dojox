@@ -115,17 +115,17 @@
 							return d;
 						},
 						function test_deleteNonSelected(t){
-							t.is(7, s11._getChildren().length);
+							t.is(7, s11.getOptions().length);
 							t.is("AK", s11.value);
 							var d = new doh.Deferred();
 							var cb = function(item){
 								try{
-									t.is(7, s11._getChildren().length);
+									t.is(7, s11.getOptions().length);
 									writeStore.deleteItem(item);
 									s11.loadDropDown(function(){
 										try{
 											t.is("AK", s11.value);
-											t.is(6, s11._getChildren().length);
+											t.is(6, s11.getOptions().length);
 											d.callback(true);
 										}catch(e){ d.errback(e);}										
 									});
@@ -137,7 +137,7 @@
 							return d;
 						},
 						function test_deleteSelected(t){
-							t.is(6, s11._getChildren().length);
+							t.is(6, s11.getOptions().length);
 							t.is("AK", s11.value);
 							var d = new doh.Deferred();
 							var cb = function(item){
@@ -157,7 +157,7 @@
 							return d;
 						},
 						function test_newItem(t){
-							t.is(5, s11._getChildren().length);
+							t.is(5, s11.getOptions().length);
 							t.is("AL", s11.value);
 							s11.attr("value", "NY");
 							t.is("AL", s11.value);
@@ -165,7 +165,7 @@
 							writeStore.newItem({value: "NY", label: "New York"});
 							window.setTimeout(function(){
 								try{
-									t.is(6, s11._getChildren().length);
+									t.is(6, s11.getOptions().length);
 									s11.attr("value", "NY");
 									t.is("NY", s11.value);
 									d.callback(true);
@@ -183,7 +183,7 @@
 							t.is("CA", s12.value);
 							s12.setStore(store2);
 							t.is("DE", s12.value);
-							t.is(7, s12._getChildren().length);
+							t.is(7, s12.getOptions().length);
 						},
 						{
 							name: "test_performance_single",
