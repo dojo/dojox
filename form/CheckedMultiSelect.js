@@ -1,7 +1,7 @@
 dojo.provide("dojox.form.CheckedMultiSelect");
 
 dojo.require("dijit.form.CheckBox");
-dojo.require("dojox.form._FormSelectWidget");
+dojo.require("dijit.form._FormSelectWidget");
 
 dojo.declare("dojox.form._CheckedMultiSelectItem", 
 	[dijit._Widget, dijit._Templated],
@@ -110,7 +110,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	}
 });
 
-dojo.declare("dojox.form.CheckedMultiSelect", dojox.form._FormSelectWidget, {
+dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	// summary:
 	//		Extends the core dijit MultiSelect to provide a "checkbox" selector
 

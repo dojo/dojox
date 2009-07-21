@@ -2,7 +2,7 @@ dojo.provide("dojox.form._SelectStackMixin");
 
 dojo.declare("dojox.form._SelectStackMixin", null, {
 	// summary:
-	//		Mix this class in to a dojox.form._FormSelectWidget in order to 
+	//		Mix this class in to a dijit.form._FormSelectWidget in order to 
 	//		provide support for "selectable" multiforms.  The widget is pointed
 	//		to a dijit.layout.StackContainer and will handle displaying and 
 	//		submitting the values of only the appropriate pane.

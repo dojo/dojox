@@ -2,11 +2,11 @@ dojo.provide("dojox.form.FilePickerTextBox");
 
 dojo.require("dojox.widget.FilePicker");
 dojo.require("dijit.form.ValidationTextBox");
-dojo.require("dojox.form._HasDropDown");
+dojo.require("dijit._HasDropDown");
 
 dojo.declare(
 	"dojox.form.FilePickerTextBox",
-	[dijit.form.ValidationTextBox, dojox.form._HasDropDown],
+	[dijit.form.ValidationTextBox, dijit._HasDropDown],
 	{
 		// summary:
 		//		A validating text box tied to a file picker popup
