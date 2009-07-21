@@ -311,7 +311,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 			// type is a number/ms
 			this.availableCurrentlySet = true;
 			setTimeout(dojo.hitch(this, function(){
-				this.availableCurrentlySet = false;											 
+				this.availableCurrentlySet = false;
 			}), type);
 		}
 		
@@ -403,7 +403,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		//	NOT IMPLEMENTED: Not handling cell merge, span or split
 		//
 		
-		iconClassPrefix: "editorIcon",
+		iconClassPrefix: "dijitEditorIcon",
 		useDefaultCommand: false,
 		buttonClass: dijit.form.Button,
 		commandName:"",
