@@ -457,7 +457,6 @@ dojo.extend(dojox.xmpp.xmppSession, {
 			}
 
 			var fromRes = this.getResourceFromJid(msg.getAttribute('from'));
-			if(!fromRes){return;}
 
 			var p = {
 				from: this.getBareJid(msg.getAttribute('from')),
