@@ -1069,10 +1069,13 @@ dojo.require("dojox.embed.flashVars");
 			// summary:
 			//		Internal.Apply style to node
 			var o = this.fhtml.nr;
+			
+			// TODO:test 'inherit' in all browsers
+			var lh = dojo.isIE ? "auto" : "auto";
 			dojo.style(this.insideNode, {
 				width:o.w+"px",
 				height:o.va == "middle"?o.h+"px":"auto",
-				lineHeight:o.va == "middle"?o.h+"px":"auto",
+				lineHeight:o.va == "middle"?o.h+"px":lh,
 				textAlign:o.ta,
 				paddingTop:o.p[0]+"px",
 				paddingRight:o.p[1]+"px",
