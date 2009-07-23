@@ -12,6 +12,7 @@ dojo.require("dojo._base.xhr");
 		//	summary:
 		// 		overrides the default xhr handler to implement a registry of
 		// 		xhr handlers
+		var plainXhr = getPlainXhr();
 		if(!registry){
 			registry = new dojo.AdapterRegistry();
 			// replaces the default xhr() method. Can we just use connect() instead?
@@ -29,7 +30,7 @@ dojo.require("dojo._base.xhr");
 					var root = window.location.href.match(/^.*?\/\/.*?\//)[0];
 					return args.url.substring(0, root.length) == root; // or check to see if we have the same path
 				},
-				getPlainXhr()
+				plainXhr
 			);
 		}
 		return registry.register.apply(registry, arguments);
