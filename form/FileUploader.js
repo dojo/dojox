@@ -1071,7 +1071,7 @@ dojo.require("dojox.embed.flashVars");
 			var o = this.fhtml.nr;
 			
 			// TODO:test 'inherit' in all browsers
-			var lh = dojo.isIE ? "auto" : "auto";
+			var lh = dojo.isIE ? "inherit" : "auto";
 			dojo.style(this.insideNode, {
 				width:o.w+"px",
 				height:o.va == "middle"?o.h+"px":"auto",
