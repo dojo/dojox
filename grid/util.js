@@ -33,7 +33,7 @@ dojo.provide("dojox.grid.util");
 		for (var i=0, l=evts.length; i<l; i++){
 			inObject.connect(inNode, 'on' + evts[i], inMethod);
 		}
-	},
+	};
 
 	dgu.removeNode = function(inNode){
 		inNode = dojo.byId(inNode);
