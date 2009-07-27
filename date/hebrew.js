@@ -59,26 +59,19 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 			break;
 		case "weekday":
 			var day = date.getDay();
-			if(((day + amount) < 5) && ((day + amount) > 0)){
-				 newHebrDate.setDate(date.getDate() + amount);
+			var remdays = 0;
+			if (amount < 0 && day == 6) {day = 5,  remdays = -1;}
+			
+			if((day + amount) < 5 && (day + amount) >= 0){ //in the same week
+				 newHebrDate.setDate(date.getDate() + amount + remdays);
 			}else{
-				var adddays = 0, /*weekend */
-					remdays = 0;
-				if(day == 5){//friday
-					day = 4;
-					remdays = (amount > 0) ?  -1 : 1;
-				}else if(day == 6){ //shabat
-					day = 4;
-					remdays = (amount > 0) ? -2 : 2;		
-				}
-				var add = (amount > 0) ? (5 - day - 1) : -day 
-				var amountdif = amount - add;
-				var div = parseInt(amountdif / 5);
-				if(amountdif % 5 != 0){
-					adddays = (amount > 0)  ? 2 : -2;
-				}
-				adddays = adddays + div * 7 + amountdif % 5 + add;
-				newHebrDate.setDate(date.getDate() + adddays +  remdays);
+				var add = (amount > 0) ? 5 : -1;
+				var adddays = (amount > 0) ? 2 : -2 ; /*first weekend */
+				if  (amount > 0 && (day == 5 || day == 6)) { remdays =  4 - day; day = 4;}
+				var newamount  =  day + amount - add;
+				var weeks = parseInt(newamount / 5);
+				var newday = newamount%5;
+				newHebrDate.setDate(date.getDate() - day+ adddays + weeks * 7 + remdays + newday + add);
 			}
 			break;
 		case "year":
@@ -90,8 +83,12 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 			break;
 		case "month":
 			var month = date.getMonth(); 
-			if(!date.isLeapYear(date.getFullYear()) && month > 5){month --;}
-			newHebrDate.setMonth(month + amount);
+			var add = month + amount;
+			if ( !date.isLeapYear(date.getFullYear())){
+				if(month < 5 && add >= 5){ add++;}
+				else if (month > 5 && add <= 5){ add--;}	
+			}
+			newHebrDate.setMonth(add);
 			break;
 		case "hour":
 			newHebrDate.setHours(date.getHours() + amount);

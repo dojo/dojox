@@ -45,19 +45,19 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 
 	_MONTH_LENGTH:  [
 		// Deficient  Normal     Complete
-		[   30,	    30,	    30	],		 //Tishri
-		[   29,	    29,	    30	],		 //Heshvan
-		[   29,	    30,	    30	],		 //Kislev
-		[   29,	    29,	    29	],		 //Tevet
-		[   30,	    30,	    30	],		 //Shevat
-		[   30,	    30,	    30	],		 //Adar I (leap years only)
-		[   29,	    29,	    29	],		 //Adar
-		[   30,	    30,	    30	],		 //Nisan
-		[   29,	    29,	    29	],		 //Iyar
-		[   30,	    30,	    30	],		 //Sivan
-		[   29,	    29,	    29	],		 //Tammuz
-		[   30,	    30,	    30	],		 //Av
-		[   29,	    29,	    29	]		 //Elul
+		[   30,	    30,	    30	],		 //Tishri    0
+		[   29,	    29,	    30	],		 //Heshvan   1
+		[   29,	    30,	    30	],		 //Kislev   2
+		[   29,	    29,	    29	],		 //Tevet  3
+		[   30,	    30,	    30	],		 //Shevat  4
+		[   30,	    30,	    30	],		 //Adar I (leap years only)  5
+		[   29,	    29,	    29	],		 //Adar  6
+		[   30,	    30,	    30	],		 //Nisan  7
+		[   29,	    29,	    29	],		 //Iyar  8
+		[   30,	    30,	    30	],		 //Sivan  9
+		[   29,	    29,	    29	],		 //Tammuz  10
+		[   30,	    30,	    30	],		 //Av  11
+		[   29,	    29,	    29	]		 //Elul  12
 	],
 
 	/**
@@ -174,11 +174,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 			this._month += arguments[1];
 			this._date += arguments[2];
 			
-			if(!this.isLeapYear(this._year) && this._month>=5){
-				this._month++;
-			}
-			if(this._month >12 || (!this.isLeapYear(this._year) && this._month > 11)){
-				console.warn("the month is incorrect , set 0");
+			if(this._month >12){
+				console.warn("the month is incorrect , set 0  " + this._month +"   " + this._year );
 				this._month = 0;			
 			}
 			this._hours += arguments[3] || 0;
@@ -229,7 +226,6 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 
 		return this._month;
 	},
-
 
 	getFullYear: function(){
 		// summary: This function return the Year value 
@@ -312,18 +308,25 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		date1.setFullYear(5768, 1, 1);
 		
 		this._year = year = +year;
-		if(!this.isLeapYear(year) && this._month==5){ 
+		if(!this.isLeapYear(year) && this._month==5){  //incorrect month number for non leap year
 			this._month++; 
 		} 
+		
+		if(month !== undefined){this.setMonth(month);}
+		if(date !== undefined){this.setDate(date);}
+		
+		var dnum = this.getDaysInHebrewMonth(this._month, this._year);
+		if(dnum < this._date){
+			this._date = dnum;
+		} // if the date in this month more than number of the days in this month
+		
+		
 		var day = this._startOfYear(year);
 		if(this._month != 0){
 			day += (this.isLeapYear(year) ? this._LEAP_MONTH_START : this._MONTH_START)[this._month][this._yearType(year)];
 		}
 		day += this._date - 1;
 		this._day = (day+1) % 7;
-
-		if(month !== undefined){this.setMonth(month);}
-		if(date !== undefined){this.setDate(date);}
 
 		return this;
 	},
@@ -336,8 +339,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		date1.setMonth(0); //first month
 
 		month = +month; // coerce to a Number					
-		if(!this.isLeapYear(this._year) && month >= 5){month++;}
-
+		if(!this.isLeapYear(this._year) && month == 5){month++;}
+	
 		if(month>=0){
 			while(month >12){
 				this._year++;
@@ -347,8 +350,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		}else{
 			while(month<0){
 				this._year--;
-				month += 13;
-				if (!this.isLeapYear(this._year) && month < 5){month--;}	
+				month += (!this.isLeapYear(this._year)  &&  month < -7) ? 12 : 13; 
 			}		
 		}
 		
@@ -369,7 +371,13 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 	},
 
 	setHours: function(/*TODOC*/){
-		//summary: set the Hours  0-23
+		//summary: 
+		//depends on the number of the arguments
+		// set the Hours  0-23, minutes, seconds, milliseconds
+		//		
+		// example:
+		// |		var date1 = new dojox.date.hebrew.Date();
+		// |		date1.setHours(1); 
 
 		var hours_arg_no = arguments.length;
 		var hours = 0;
@@ -521,8 +529,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |		console.log(date1.toString());
-
-		return this._date + ", " + ((!this.isLeapYear(this._year) && this._month>5) ? this._month : (this._month+1)) + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
+		return this._date + ", " + this._month + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
 	},
 
 	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/

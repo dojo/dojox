@@ -23,6 +23,55 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		}
 		return str; // String
 	};
+	 
+	var parseStrToNumber = function(str){
+		var num = 0;
+		for(var j=0; j < str.length; j++){
+//TODO: use indexOf instead of loops to search?
+			for(var i=1; i <= 5; i++){
+				if(str.charAt(j) == HUN[i-1]){
+					num += 100*i;
+					continue;
+				}
+			}
+			for(i=1; i <= 9; i++){
+				if(str.charAt(j) == TEN[i-1]){
+					num += 10*i;
+					continue;
+				}
+			}
+			for(i=1; i <= 9; i++){
+				if(str.charAt(j) == DIG[i-1]){
+					num += i;
+				}
+			}						
+		} 
+		return num; //Number
+	 };
+	 
+	var convertNumberToStr = function(num){
+			var str  = "", n = 4, j = 9;
+	  		while(num){ 
+				if(num >= n*100){
+					str += HUN[n-1];
+					num -= n*100;
+					continue;
+				}else if(n > 1){
+					n--;
+					continue;
+				}else if(num >= j*10){
+					str += TEN[j-1];
+					num -= j*10;
+				}else if (j > 1){
+					j--;
+					continue;
+				}else if(num > 0){
+					str += DIG[num-1];
+					num = 0;
+				}		
+			}
+			return str; //String	
+	  };
 
 	dojox.date.hebrew.numerals.getYearHebrewLetters = function(/*Number */ year){
 		// summary: This function return year written in Hebrew numbers-letters, 
@@ -31,31 +80,10 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
 		// |		document.writeln(dojox.date.hebrew.numerals.getYearHebrewLetters(date1.getFullYear());	
-		var str  = "", i = 0, n = 4, j = 9;
-
-		year = year % 1000;
-
-		while(year){ 
-			if(year >= n*100){
-				str += HUN[n-1];
-				year -= n*100;
-				continue;
-			}else if(n > 1){
-				n--;
-				continue;
-			}else if(year >= j*10){
-				str += TEN[j-1];
-				year -= j*10;
-			}else if (j > 1){
-				j--;
-				continue;
-			}else if(year > 0){
-				str += DIG[year-1];
-				year = 0;
-			}		
-		}
 		
-		return transformChars(str); // String
+		var y = year % 1000;
+		if(!y){ throw new Error("Hebrew year "+year+" is not in range 5001-5999");}
+		return transformChars(convertNumberToStr(y)); // String
 	};
 	
 	dojox.date.hebrew.numerals.parseYearHebrewLetters  = function(/*String hebrew year*/ year){
@@ -63,30 +91,9 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		//                   
 		// example:
 		// |		var date = new dojox.date.hebrew.Date();
-		// |        	date.setFullYear(dojox.date.hebrew.numerals.parseYearHebrewLetters('תשס"ח'));	
-		// |		
-	
-		var nYear = 0;
-		for(var j=0; j < year.length; j++){
-			for(var i=1; i <= 5; i++){
-				if(year.charAt(j) == HUN[i-1]){
-					nYear += 100*i;
-					continue;
-				}
-			}
-			for(i=1; i <= 9; i++){
-				if(year.charAt(j) == TEN[i-1]){
-					nYear += 10*i;
-					continue;
-				}
-			}
-			for(i=1; i <= 9; i++){
-				if(year.charAt(j) == DIG[i-1]){
-					nYear += i;
-				}
-			}						
-		} 
-		return nYear + 5000; // int
+		// |        	date.setFullYear(dojox.date.hebrew.numerals.parseYearHebrewLetters('תשס"ח'));
+
+		return parseStrToNumber(year) + 5000; // int
 	};
 	
 	dojox.date.hebrew.numerals.getDayHebrewLetters =  function(day, /*boolean?*/ nogrsh){
@@ -96,21 +103,8 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
 		// |		document.writeln(dojox.date.hebrew.numerals.getDayHebrewLetters(date1.getDay());
-		var str = "", j = 3;
-		while(day){
-			if(day >= j*10){
-				str += TEN[j-1];
-				day -= j*10;
-			}else if (j > 1){
-				j--;
-				continue;
-			}else if(day > 0){
-				str += DIG[day-1];
-				day = 0;
-			}		
-		}
 
-		return transformChars(str, nogrsh); // String
+		return transformChars(convertNumberToStr(day), nogrsh); // String
 	};
 	
 	dojox.date.hebrew.numerals.parseDayHebrewLetters =  function(/*String hebrew*/ day){
@@ -120,32 +114,10 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
 		// |		date1.setDate(dojox.date.hebrew.numerals.parseDayHebrewLetters('א'));
-		
-		//remove special chars
-		day =  day.replace(/[\u200E\u200F\u202A-\u202E]/g, "");	
-
-		var nDay = 0;
-		for (var j=0; j < day.length; j++){
-			for(var i=1; i <= 9; i++){
-				if(day.charAt(j) == TEN[i-1]){
-					nDay += 10*i;
-					continue;
-				}
-			}
-			for(i=1; i <= 9; i++){
-				if(day.charAt(j) == DIG[i - 1]){
-					nDay += i;
-				}
-			}						
-		} 
-		//if (nDay > this.getDaysInHebrewMonth(_month, this._year)){
-		//	nDay = this.getDaysInHebrewMonth(this._month, this._year);
-		//}
-		return nDay;		
+		return parseStrToNumber(day); // int
 	};
 
-//TODO: what are the second and third args for?
-	dojox.date.hebrew.numerals.getMonthHebrewLetters =  function(/*int*/monthNum, /* bool hebrew numbers ?*/ isNum, /*Number ?*/ year){
+	dojox.date.hebrew.numerals.getMonthHebrewLetters =  function(/*int*/monthNum){
 		// summary: This function return month written in Hebrew numerals
 		//
 		// example:
@@ -161,16 +133,13 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		// example:
 		// |		var date = new dojox.date.hebrew.Date();
 		// |            var number = dojox.date.hebrew.numerals.parseMonthHebrewLetters("תמוז");
-		// |		if ( !date.isLeapYear(date.getFullYear())  &&  number >5) {number--;}
-		// |		date.setMonth(number);	
-		// |		
+		// |		date.setMonth(number);
 			
 		//month number from 0 to 12
 		var monnum = dojox.date.hebrew.numerals.parseDayHebrewLetters(monthStr) - 1;
 
-		if(monnum == -1){
-			console.warn("The month name is incorrect , set 0"); // TODO: perhaps throw instead?
-			monnum = 0;
+		if(monnum == -1 || monnum > 12){
+			throw new Error("The month name is incorrect , month = " + monnum); 
 		}
 		return monnum;
 	};
