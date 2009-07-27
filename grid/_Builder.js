@@ -573,8 +573,7 @@ dojo.require("dojo.dnd.Moveable");
 				var changeX = dojo._isBodyLtr() ? leftTop.l : -leftTop.l;
 				// Make sure we are not under our minimum
 				// http://bugs.dojotoolkit.org/ticket/9390
-				//FIXME: does this take into account bidi?
-//				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (changeX + inDrag.w);
+				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (inDrag.w + changeX);
 				if(dojo.isWebKit && inDrag.spanners.length){
 					// Webkit needs the pad border extents back in
 					changeX += dojo._getPadBorderExtents(inDrag.spanners[0].node).w;
