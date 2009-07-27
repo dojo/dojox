@@ -181,7 +181,13 @@ dojo.declare('dojox.grid._ViewManager', null, {
 
 			if(!dojo._isBodyLtr()){
 				ds.right = l + 'px';
-				hs.right = l + 'px';
+				// fixed rtl, the scrollbar is on the right side in FF
+				if (dojo.isMoz) {
+					hs.right = l + v.getScrollbarWidth() + 'px';
+					hs.width = parseInt(hs.width) - v.getScrollbarWidth() + 'px';
+				}else{
+					hs.right = l + 'px';					
+				}
 			}else{
 				ds.left = l + 'px';
 				hs.left = l + 'px';

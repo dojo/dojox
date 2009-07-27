@@ -547,10 +547,8 @@ dojo.require("dojo.dnd.Moveable");
 		},
 
 		doResizeColumn: function(inDrag, mover, leftTop){
-			var isL2r = dojo._isBodyLtr();
-			var changeX = isL2r ? leftTop.l : -leftTop.l;
+			var changeX = leftTop.l;
 			var data = {
-				isLtr: isL2r,
 				deltaX: changeX,
 				w: inDrag.w + changeX,
 				vw: inDrag.vw + changeX,
@@ -572,22 +570,21 @@ dojo.require("dojo.dnd.Moveable");
 		endResizeColumn: function(inDrag){
 			if(this.dragRecord){
 				var leftTop = this.dragRecord.leftTop;
-				var isL2r = dojo._isBodyLtr();
-				var changeX = isL2r ? leftTop.l : -leftTop.l;
+				var changeX = dojo._isBodyLtr() ? leftTop.l : -leftTop.l;
 				// Make sure we are not under our minimum
 				// http://bugs.dojotoolkit.org/ticket/9390
-				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (changeX + inDrag.w);
+				//FIXME: does this take into account bidi?
+//				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (changeX + inDrag.w);
 				if(dojo.isWebKit && inDrag.spanners.length){
 					// Webkit needs the pad border extents back in
 					changeX += dojo._getPadBorderExtents(inDrag.spanners[0].node).w;
 				}
 				var data = {
-					isLtr: isL2r,
 					deltaX: changeX,
 					w: inDrag.w + changeX,
 					vw: inDrag.vw + changeX,
 					tw: inDrag.tw + changeX
-				};			
+				};
 				// Only resize the columns when the drag has finished
 				this.doResizeNow(inDrag, data);
 			}
@@ -620,7 +617,7 @@ dojo.require("dojo.dnd.Moveable");
 			inDrag.view.setColWidth(inDrag.index, data.w);
 			inDrag.view.headerNode.style.width = data.vw + 'px';
 			inDrag.view.setColumnsWidth(data.tw);
-			if(!data.isLtr){
+			if(!dojo._isBodyLtr()){
 				inDrag.view.headerNode.scrollLeft = inDrag.scrollLeft + data.deltaX;
 			}
 		}

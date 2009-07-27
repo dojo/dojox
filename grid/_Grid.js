@@ -1084,7 +1084,7 @@ dojo.requireLocalization("dijit", "loading");
 			return this.layout.cells[inIndex];
 		},
 
-		setCellWidth: function(inIndex, inUnitWidth) {
+		setCellWidth: function(inIndex, inUnitWidth){
 			this.getCell(inIndex).unitWidth = inUnitWidth;
 		},
 
