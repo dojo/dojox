@@ -26,52 +26,42 @@ dojo.experimental("dojox.date.hebrew.numerals");
 	 
 	var parseStrToNumber = function(str){
 		var num = 0;
-		for(var j=0; j < str.length; j++){
-//TODO: use indexOf instead of loops to search?
-			for(var i=1; i <= 5; i++){
-				if(str.charAt(j) == HUN[i-1]){
-					num += 100*i;
-					continue;
-				}
+		dojo.forEach(str, function(ch){
+			var i;
+			if((i = HUN.indexOf(ch)) != -1){
+				num += 100 * ++i;
+			}else if ((i = TEN.indexOf(ch)) != -1){
+				num += 10 * ++i;
+			}else if ((i = DIG.indexOf(ch)) != -1){
+				num += ++i;
 			}
-			for(i=1; i <= 9; i++){
-				if(str.charAt(j) == TEN[i-1]){
-					num += 10*i;
-					continue;
-				}
-			}
-			for(i=1; i <= 9; i++){
-				if(str.charAt(j) == DIG[i-1]){
-					num += i;
-				}
-			}						
-		} 
+		});
 		return num; //Number
-	 };
+	};
 	 
 	var convertNumberToStr = function(num){
-			var str  = "", n = 4, j = 9;
-	  		while(num){ 
-				if(num >= n*100){
-					str += HUN[n-1];
-					num -= n*100;
-					continue;
-				}else if(n > 1){
-					n--;
-					continue;
-				}else if(num >= j*10){
-					str += TEN[j-1];
-					num -= j*10;
-				}else if (j > 1){
-					j--;
-					continue;
-				}else if(num > 0){
-					str += DIG[num-1];
-					num = 0;
-				}		
-			}
-			return str; //String	
-	  };
+		var str  = "", n = 4, j = 9;
+  		while(num){ 
+			if(num >= n*100){
+				str += HUN[n-1];
+				num -= n*100;
+				continue;
+			}else if(n > 1){
+				n--;
+				continue;
+			}else if(num >= j*10){
+				str += TEN[j-1];
+				num -= j*10;
+			}else if (j > 1){
+				j--;
+				continue;
+			}else if(num > 0){
+				str += DIG[num-1];
+				num = 0;
+			}		
+		}
+		return str; //String	
+	};
 
 	dojox.date.hebrew.numerals.getYearHebrewLetters = function(/*Number */ year){
 		// summary: This function return year written in Hebrew numbers-letters, 
@@ -82,7 +72,7 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		// |		document.writeln(dojox.date.hebrew.numerals.getYearHebrewLetters(date1.getFullYear());	
 		
 		var y = year % 1000;
-		if(!y){ throw new Error("Hebrew year "+year+" is not in range 5001-5999");}
+		if(!y){ throw new Error("Hebrew year "+year+" is not in range 5001-5999");} // FIXME: wrong test
 		return transformChars(convertNumberToStr(y)); // String
 	};
 	
