@@ -28,12 +28,12 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		var num = 0;
 		dojo.forEach(str, function(ch){
 			var i;
-			if((i = HUN.indexOf(ch)) != -1){
-				num += 100 * ++i;
-			}else if ((i = TEN.indexOf(ch)) != -1){
-				num += 10 * ++i;
-			}else if ((i = DIG.indexOf(ch)) != -1){
+			if((i = dojo.indexOf(DIG, ch)) != -1){
 				num += ++i;
+			}else if ((i = dojo.indexOf(TEN, ch)) != -1){
+				num += 10 * ++i;
+			}else if ((i = dojo.indexOf(HUN, ch)) != -1){
+				num += 100 * ++i;
 			}
 		});
 		return num; //Number
