@@ -72,7 +72,7 @@ dojo.declare("dojox.analytics.Urchin", null, {
 			if(e && e.type == "load" || re.test(n.readyState)){
 				n.onload = n.onreadystatechange = null;
 				this._gotGA();
-				h.removeChild(s);
+				h.removeChild(n);
 			}
 		});
 
