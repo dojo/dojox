@@ -23,6 +23,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	postCreate: function(){
 		// summary:
 		//	stores initial label and timeout for reference
+		this.inherited(arguments);
 		this._label = this.containerNode.innerHTML;
 		this._initTimeout = this.timeout;
 		
