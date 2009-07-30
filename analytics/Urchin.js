@@ -63,13 +63,16 @@ dojo.declare("dojox.analytics.Urchin", null, {
 
 		var re = /loaded|complete/,
 			gaHost = ("https:" == dojo.doc.location.protocol) ? "https://ssl." : "http://www.",
+			h = dojo.doc.getElementsByTagName("head")[0],
 			n = dojo.create('script', {
 				src: gaHost + "google-analytics.com/ga.js"
-			}, dojo.doc.getElementsByTagName("head")[0]);
+			}, h);
 
 		n.onload = n.onreadystatechange = dojo.hitch(this, function(e){
 			if(e && e.type == "load" || re.test(n.readyState)){
+				n.onload = n.onreadystatechange = null;
 				this._gotGA();
+				h.removeChild(s);
 			}
 		});
 
