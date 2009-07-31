@@ -86,16 +86,20 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		this.initialized = true;
 		this.editor = editor;
 		
-		this.editorDomNode = this.editor.editNode || this.editor.iframe.document.body.firstChild;
-		
-		// RichText should have a mouseup connection to recognize drag-selections
-		// Example would be selecting multiple table cells
-		dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick"); 
-		
-		dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable");
-		
-		this.doMixins();
-		this.connectDraggable();
+		//Editor loads async, can't assume doc is ready yet.  So, use the deferred of the
+		//editor to init at the right time.
+		editor.onLoadDeferred.addCallback(dojo.hitch(this, function(){
+			this.editorDomNode = this.editor.editNode || this.editor.iframe.document.body.firstChild;
+			
+			// RichText should have a mouseup connection to recognize drag-selections
+			// Example would be selecting multiple table cells
+			dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick"); 
+
+			dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable");
+
+			this.doMixins();
+			this.connectDraggable();
+		}));
 	},
 	
 	getTableInfo: function(forceNewData){
@@ -437,8 +441,10 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 					break;
 				
 				case "tableContextMenu":
-					this.connect(this, "setEditor", function(){
-						this._createContextMenu();
+					this.connect(this, "setEditor", function(editor){
+						editor.onLoadDeferred.addCallback(dojo.hitch(this, function() {
+							this._createContextMenu();
+						}));
 						this.button.domNode.style.display = "none";
 					});
 					break;
