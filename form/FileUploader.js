@@ -563,6 +563,7 @@ dojo.require("dojox.embed.flashVars");
 			// 		Event is an array of all files uploading
 			//		Can be connected to for HTML uploader,
 			//		but will not return anything.
+			console.log("onProgress-------------------------", dataArray)
 		},
 		
 		onComplete: function(dataArray){
@@ -570,6 +571,7 @@ dojo.require("dojox.embed.flashVars");
 			// stub to connect 
 			// Fires when all files have uploaded
 			// Event is an array of all files
+			console.warn("----------------------------ONCOMPLETE")
 		},
 		
 		onCancel: function(){
@@ -1254,7 +1256,7 @@ dojo.require("dojox.embed.flashVars");
 				//console.log("READY");
 			});
 			this.flashObject.onLoad = dojo.hitch(this, function(mov){
-				//console.log("ONLOAD")
+				console.log("ONLOAD", mov)
 				this.flashMovie = mov;
 				this.flashReady = true;
 				this.onReady();
