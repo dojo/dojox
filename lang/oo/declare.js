@@ -52,14 +52,14 @@ dojo.experimental("dojox.lang.oo.mixin");
 
 			inherited = function(name, args, a){
 				var c = this.constructor, m = c._meta, cache = c._cache,
-					xargs = aps.call(arguments, 0),
 					caller, i, l, f, n, ch, s, x;
 
 				// crack arguments
-				typeof name != "string" && xargs.unshift("");
-				name = xargs[0];
-				args = xargs[1];
-				a = xargs[2];
+				if(typeof name != "string"){
+					a = args;
+					args = name;
+					name = "";
+				}
 
 				caller = inherited.caller;
 				n = caller.nom;
