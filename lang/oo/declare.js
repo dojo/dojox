@@ -5,7 +5,7 @@ dojo.experimental("dojox.lang.oo.mixin");
 // a copy of the version #7 (with makeDeclare() yet a drop-in replacement for dojo.declare())
 
 (function(){
-	var d = dojo, oo = dojox.lang.oo, op = Object.prototype,
+	var d = dojo, oo = dojox.lang.oo, op = Object.prototype, aps = Array.prototype.slice,
 		isF = d.isFunction, xtor = function(){}, i,
 
 		each = function(a, f){ for(var i = 0, l = a.length; i < l; ++i){ f(a[i]); } },
@@ -51,25 +51,29 @@ dojo.experimental("dojox.lang.oo.mixin");
 			},
 
 			inherited = function(name, args, a){
-				var c = this.constructor, m = c._meta, cache = c._cache, caller,
-					i, l, f, n, ch, s, x;
+				var c = this.constructor, m = c._meta, cache = c._cache,
+					xargs = aps.call(arguments, 0),
+					caller, i, l, f, n, ch, s, x;
+
 				// crack arguments
-				if(typeof name != "string"){
-					a = args;
-					args = name;
-					name = "";
-				}
+				typeof name != "string" && xargs.unshift("");
+				name = xargs[0];
+				args = xargs[1];
+				a = xargs[2];
+
 				caller = inherited.caller;
 				n = caller.nom;
 				error(n && name && n !== name, "calling inherited() with a different name: " + name);
 				name = name || n;
 				ch = cache[name];
+
 				// get the cached method list
 				if(!ch){
 					error(!name, "can't deduce a name to call inherited()");
 					error(typeof chains[name] == "string", "chained method: " + name);
 					ch = cache[name] = buildMethodList(m, name);
 				}
+
 				// check the stack
 				do{
 					s = this._inherited, n = s.length - 1;
@@ -102,14 +106,14 @@ dojo.experimental("dojox.lang.oo.mixin");
 		each(after,  function(name){ chains[name] = "after";  });
 
 		return function(className, superclass, props){
-			var mixins, proto, i, l, t, f, ctor, hidden = {}, meta = {bases: []};
+			var mixins, proto, i, l, t, f, ctor, hidden = {}, meta = {bases: []},
+				xargs = aps.call(arguments, 0);
 
 			// crack parameters
-			if(typeof className != "string"){
-				props = superclass;
-				superclass = className;
-				className = "";
-			}
+			typeof className != "string" && xargs.unshift("");
+			className = xargs[0];
+			superclass = xargs[1];
+			props = xargs[2];
 			if(d.isArray(superclass)){
 				mixins = superclass;
 				superclass = mixins[0];
@@ -119,6 +123,7 @@ dojo.experimental("dojox.lang.oo.mixin");
 			if(superclass){
 				collect(meta, superclass);
 				if(mixins){
+					// skip the first one: it is a superclass
 					for(i = 1, l = mixins.length; i < l; ++i){
 						// the assignment on the next line is intentional
 						error(!(t = mixins[i]), "mixin #" + i + " is null");
