@@ -6,7 +6,7 @@ dojo.experimental("dojox.lang.oo.mixin");
 
 (function(){
 	var d = dojo, oo = dojox.lang.oo, op = Object.prototype,
-		isF = d.isFunction, xtor = function(){}, extraNames, i,
+		isF = d.isFunction, xtor = function(){}, i,
 
 		each = function(a, f){ for(var i = 0, l = a.length; i < l; ++i){ f(a[i]); } },
 
@@ -24,7 +24,7 @@ dojo.experimental("dojox.lang.oo.mixin");
 
 		mixer = function(target, source, mix){
 			for(var name in source){ mix(target, source, name); }
-			each(extraNames, function(name){ if(name in source) mix(target, source, name); });
+			each(d._extraNames, function(name){ if(name in source) mix(target, source, name); });
 		},
 
 		collect = function(meta, base){
@@ -32,10 +32,6 @@ dojo.experimental("dojox.lang.oo.mixin");
 			m && mb.push(m.bases);
 			mb.push(base);
 		};
-
-	for(i in {toString: 1}){ extraNames = []; break; }
-	extraNames = extraNames || ["hasOwnProperty", "valueOf", "isPrototypeOf",
-			"propertyIsEnumerable", "toLocaleString", "toString"];
 
 	oo.makeDeclare = function(before, after){
 
