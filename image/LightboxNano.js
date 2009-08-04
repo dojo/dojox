@@ -99,7 +99,7 @@ d.declare("dojox.image.LightboxNano", null, {
 			_this._reset();
 
 			var n = d.query("img", _this._node)[0],
-				a = d._abs(n, true),
+				a = d.position(n, true),
 				c = d.contentBox(n),
 				b = d._getBorderExtents(n),
 				i = _this._img = d.create("img", {

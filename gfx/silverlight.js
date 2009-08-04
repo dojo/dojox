@@ -722,7 +722,7 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.shape.Creator);
 				ev.y = ev.offsetY = ev.layerY = p.y;
 				// calculate clientX and clientY
 				var parent = surfaces[s.getHost().content.root.name];
-				var t = dojo._abs(parent);
+				var t = dojo.position(parent);
 				ev.clientX = t.x + p.x;
 				ev.clientY = t.y + p.y;
 			}catch(e){

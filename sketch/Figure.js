@@ -142,7 +142,7 @@ dojo.require("dojox.sketch.UndoStack");
 			var o=self._fromEvt(e);
 			self._startPoint={ x:e.pageX, y:e.pageY };
 
-			self._ctr=dojo._abs(self.node);
+			self._ctr=dojo.position(self.node);
 			//	figure out the coordinates taking scroll into account
 			var scroll={x:self.node.scrollLeft,y:self.node.scrollTop};
 			//var win = dijit.getDocumentWindow(self.node.ownerDocument);

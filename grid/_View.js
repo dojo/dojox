@@ -299,7 +299,7 @@ dojo.require("dojo.dnd.Manager");
 							endAdd = dojo.contentBox(target).w + this.arrowDim.w/2 + 2;
 						}
 
-						var pos = dojo._abs(target, true);
+						var pos = dojo.position(target, true);
 						var left = Math.floor(pos.x - this.arrowDim.w/2 + endAdd);
 
 						dojo.style(this.bottomMarker, "visibility", "visible");
