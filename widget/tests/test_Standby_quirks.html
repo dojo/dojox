@@ -146,9 +146,9 @@
 			var button36 = dijit.byId("overlay18Button2");
 			var overlay18= dijit.byId("standby18");
 			connects.push(dojo.connect(button35, "onClick", function(){
-                showCount++;
-                console.log(overlay18.attr("text"));
-                overlay18.attr("text", "Shown: " + showCount);
+				showCount++;
+				console.log(overlay18.attr("text"));
+				overlay18.attr("text", "Shown: " + showCount);
 				overlay18.show()}));
 			connects.push(dojo.connect(button36, "onClick", function(){overlay18.hide()}));
 
@@ -158,24 +158,23 @@
 			var button38 = dijit.byId("overlay19Button2");
 			var overlay19= dijit.byId("standby19");
 			connects.push(dojo.connect(button37, "onClick", function(){
-                showCount++;
-                console.log(overlay19.attr("color"));
-                overlay19.attr("color", colors[cPos]);
-                cPos++;
-                if(cPos === colors.length - 1){
-                    cPos = 0;
+				console.log(overlay19.attr("color"));
+				overlay19.attr("color", colors[cPos]);
+				cPos++;
+				if(cPos === colors.length - 1){
+					cPos = 0;
 				}
 				overlay19.show()}));
 			connects.push(dojo.connect(button38, "onClick", function(){overlay19.hide()}));
-            dijit.byId("dialog").show();
+			dijit.byId("dialog").show();
 		}
 		dojo.addOnLoad(init);
 
 		//Cleanup, so I can check for leaks in the widget itself.
 		dojo.addOnUnload(function(){
 			var i;
-            for(i = 0; i < connects.length; i++){
-                dojo.disconnect(connects[i]);
+			for(i = 0; i < connects.length; i++){
+				dojo.disconnect(connects[i]);
 			}
 		});
 
@@ -190,20 +189,20 @@
 	<button id ="overlay14Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
 	<br>
 	<button id ="overlay14Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
-    <div style="width: 250px; height: 100px; overflow: auto">
+	<div style="width: 250px; height: 100px; overflow: auto">
         <br>
         <br>
         <br>
         <br>
         <br>
-	    <div id ="overlayTarget14" style="width: 200px; height: 200px; background-color: darkblue;"></div>
+	<div id ="overlayTarget14" style="width: 200px; height: 200px; background-color: darkblue;"></div>
         <div style="width: 400px; height: 5px"></div>
         <br>
         <br>
         <br>
         <br>
         <br>
-    </div>
+	</div>
 	<div id ="standby14" target="overlayTarget14" dojoType="dojox.widget.Standby"></div>
 	<hr>
 

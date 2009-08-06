@@ -263,7 +263,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			//Show the image and make sure the zIndex is set high.
 			var curStyle = dojo.style(this._centerNode, "display"); 
 			dojo.style(this._centerNode, "display", "block");
-			var box = dojo.coords(target, true);
+			var box = dojo.position(target, true);
 			var cntrIndicator = dojo.marginBox(this._centerNode);
 			dojo.style(this._centerNode, "display", curStyle);
 
@@ -293,41 +293,12 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			dojo.style(this._centerNode, "zIndex", ziIn);
 			dojo.style(this._underlayNode, "zIndex", ziUl);
 
-			//Address margins as they shift the position..
-			var marginLeft = dojo.style(target, "marginLeft");
-			if(dojo.isWebKit && marginLeft){
-				//Webkit works differently here.  Needs to be doubled.
-				//Don't ask me why. :)
-				marginLeft = marginLeft*2;
-			}
-
-			if(marginLeft){
-				box.w = box.w - marginLeft;
-			}
- 		
-			if(!dojo.isWebKit){
-				//Webkit and others work differently here.  
-				var marginRight = dojo.style(target, "marginRight");
-				if(marginRight){
-					box.w = box.w - marginRight;
-				}
-    		}
-
-			var marginTop = dojo.style(target, "marginTop");
-			if(marginTop){
-				box.h = box.h - marginTop;
-			}
-
-			var marginBottom = dojo.style(target, "marginBottom");
-			if(marginBottom){
-				box.h = box.h - marginBottom;
-			}
 
 			var pn = target.parentNode;
 			if(pn){
 				var obh = box.h;
 				var obw = box.w;
-				var pnBox = dojo.coords(pn, true);
+				var pnBox = dojo.position(pn, true);
 
 				//More IE zoom corrections.  Grr.
 				if(this._ieFixNode){
