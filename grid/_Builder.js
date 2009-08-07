@@ -478,8 +478,9 @@ dojo.require("dojo.dnd.Moveable");
 			
 			if(isMouse){  //IE draws line even with no mouse down so separate from keyboard 
 				this.lineDiv = document.createElement('div');
-				
-				var vw = dojo.position(e.sourceView.headerNode, true);
+
+				// NOTE: this is for backwards compatibility with Dojo 1.3
+				var vw = (dojo.position||dojo._abs)(e.sourceView.headerNode, true);
 				var bodyContentBox = dojo.contentBox(e.sourceView.domNode);
 				dojo.style(this.lineDiv, {
 					top: vw.y + "px",
