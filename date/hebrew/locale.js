@@ -137,9 +137,6 @@ dojox.date.hebrew.locale.format = function(/*hebrew.Date*/dateObject, /*object?*
 	}
 	if(options.selector != "time"){
 		var datePattern = options.datePattern || bundle["dateFormat-"+formatLength];
-		if(locale.match(/^he(?:-.+)?$/) && options.datePattern && datePattern.match(/MMM/)){  // added bet before month name: 1 betamuz
-			datePattern = datePattern.replace(/MMM/, "\u05D1MMM");
-		}
 		if(datePattern){str.push(_processPattern(datePattern, sauce));}
 	}
 	if(options.selector != "date"){
@@ -168,9 +165,6 @@ dojox.date.hebrew.locale._parseInfo = function(/*oblect?*/options){
 
 	var formatLength = options.formatLength || 'short';
 	var datePattern = options.datePattern || bundle["dateFormat-" + formatLength];
-	if( locale.match(/^he(?:-.+)?$/)  && options.datePattern &&  datePattern.match(/MMM/)){ // added bet before month name: 1 betamuz
-		datePattern= options.datePattern.replace(/MMM/, "\u05D1MMM");
-	}	
 	var timePattern = options.timePattern || bundle["timeFormat-" + formatLength];
 
 	var pattern;
@@ -179,7 +173,7 @@ dojox.date.hebrew.locale._parseInfo = function(/*oblect?*/options){
 	}else if(options.selector == 'time'){
 		pattern = timePattern;
 	}else{
-		pattern = (typeof (timePattern) == "undefined") ? datePattern : datePattern + ' ' + timePattern; //hebrew resource file does not contain time patterns - a bug?
+		pattern = (timePattern === undefined) ? datePattern : datePattern + ' ' + timePattern; //hebrew resource file does not contain time patterns - a bug?
 	}
 
 	var tokens = [];
