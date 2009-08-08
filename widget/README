@@ -51,6 +51,7 @@ Credits:
 [AnalogGauge] Benjamin Schell (bmschell) CCLA
 [BarGauge] Benjamin Schell (bmschell) CCLA 
 [Standby] Jared Jurkiewicz (jaredj) CCLA 
+[UpgradeBar] Mike Wilcox (mwilcox), Revin Guillen
 
 -------------------------------------------------------------------------------
 Project description
@@ -170,3 +171,6 @@ Other Notes (Brief widget list):
 		Overlay color, image, and alt text can all be customized.
 		Requires dojo >= 1.3
 
+	* UpgradeBar - Displays the "yellow bar" at the top of a page to indicate the user
+ 		needs to upgrade their browser or a plugin
+		Requires dojo >= 1.3
