@@ -57,9 +57,9 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		if(!props.notifications && node){
 			// From markup. Create the notifications Array from the
 			//	srcRefNode children.
-			for(var i=0;i<node.childNodes.length; i++){
-				var n = node.childNodes[i];
+			dojo.forEach(node.childNodes, function(n){
 				if(n.nodeType==1){
+					var val = dojo.attr(n, "validate");
 					this.notifications.push({
 						message:n.innerHTML,
 						validate:function(){
@@ -67,13 +67,13 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 							// bar shows or not.
 							var evals = true;
 							try{
-								evals = dojo.eval(dojo.attr(n, "validate"));
+								evals = dojo.eval(val);
 							}catch(e){ /* squelch. it's true.*/ }
 							return evals;
 						}
 					});
 				}
-			}
+			}, this);
 		}
 		
 	},
@@ -87,7 +87,6 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		//
 		if(!this.notifications.length){
 			// odd. why use the bar but not set any notifications?
-			this.notify("test")
 			return;
 		}
 		
@@ -104,7 +103,9 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 	
 	postCreate: function(){
 		this.inherited(arguments);
-		
+		if(this.domNode.parentNode){
+			dojo.style(this.domNode, "display", "none");
+		}
 		dojo.mixin(this.attributeMap, {
 			message:{ node:"messageNode", type:"innerHTML" }
 		});
@@ -133,7 +134,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		//this.checkNotifications();
 	},
 
-	notify: function(msg){
+	notify: function(msg){ 
 		// 	summary:
 		//		Triggers the bar to display. An internal function,
 		//		but could ne called externally for fun.
@@ -142,6 +143,8 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		//
 		if(!this.domNode.parentNode){
 			document.body.appendChild(this.domNode);
+		}else{
+			dojo.style(this.domNode, "display", "");
 		}
 		
 		if(msg){
