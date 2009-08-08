@@ -4,6 +4,8 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dojo.fx");
 dojo.require("dojo.cookie");
+dojo.experimental("dojox.widget.UpgradeBar");
+
 
 dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 	//	summary:
