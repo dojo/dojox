@@ -141,6 +141,10 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		// tags:
 		//		protected
 		//
+		if(dojo.cookie("disableUpgradeReminders")){
+			return;
+		}
+		
 		if(!this.domNode.parentNode){
 			document.body.appendChild(this.domNode);
 		}else{
@@ -150,9 +154,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		if(msg){
 			this.attr("message", msg);
 		}
-		if(!dojo.cookie("disableUpgradeReminders")){
-			this.show();
-		}
+		
 	},
 
 	show: function(){
