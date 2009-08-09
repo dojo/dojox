@@ -5,10 +5,9 @@ dojo.experimental("dojox.date.hebrew.numerals");
 
 (function(){
 
-	var DIG=["א","ב","ג","ד","ה","ו","ז","ח","ט"];
-	var	TEN=["י","כ","ל","מ","נ","ס","ע","פ","צ"];
-	var	HUN=["ק","ר","ש","ת"];
-	var MONTHS =["א'","ב'","ג'","ד'","ה'","ו'","ז'","ח'","ט'","י'","י\"א","י\"ב","י\"ג"];		
+	var DIG="אבגדהוזחט";
+	var	TEN="יכלמנסעפצ";
+	var	HUN="קרשת";
 
 	var transformChars = function(str, nogrsh){
 		str = str.replace("יה", "טו").replace("יו", "טז");
@@ -28,11 +27,11 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		var num = 0;
 		dojo.forEach(str, function(ch){
 			var i;
-			if((i = dojo.indexOf(DIG, ch)) != -1){
+			if((i = DIG.indexOf(ch)) != -1){
 				num += ++i;
-			}else if ((i = dojo.indexOf(TEN, ch)) != -1){
+			}else if((i = TEN.indexOf(ch)) != -1){
 				num += 10 * ++i;
-			}else if ((i = dojo.indexOf(HUN, ch)) != -1){
+			}else if((i = HUN.indexOf(ch)) != -1){
 				num += 100 * ++i;
 			}
 		});
@@ -43,20 +42,20 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		var str  = "", n = 4, j = 9;
   		while(num){ 
 			if(num >= n*100){
-				str += HUN[n-1];
+				str += HUN.charAt(n-1);
 				num -= n*100;
 				continue;
 			}else if(n > 1){
 				n--;
 				continue;
 			}else if(num >= j*10){
-				str += TEN[j-1];
+				str += TEN.charAt(j-1);
 				num -= j*10;
-			}else if (j > 1){
+			}else if(j > 1){
 				j--;
 				continue;
 			}else if(num > 0){
-				str += DIG[num-1];
+				str += DIG.charAt(num-1);
 				num = 0;
 			}		
 		}
@@ -107,14 +106,15 @@ dojo.experimental("dojox.date.hebrew.numerals");
 		return parseStrToNumber(day); // int
 	};
 
-	dojox.date.hebrew.numerals.getMonthHebrewLetters =  function(/*int*/monthNum){
+	dojox.date.hebrew.numerals.getMonthHebrewLetters =  function(/*int*/month){
 		// summary: This function return month written in Hebrew numerals
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
 		// |		document.writeln(dojox.date.hebrew.numerals.getMonthHebrewLetters(date1.getMonth());
-		return MONTHS[monthNum]; // String
+
+		return transformChars(convertNumberToStr(month+1)); // String
 	};	
 
 	dojox.date.hebrew.numerals.parseMonthHebrewLetters = function(/*String*/monthStr){
