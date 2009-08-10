@@ -26,11 +26,8 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	//		useful if you send ContentPane a complete page, instead of a html fragment
 	//		scans for 
 	//
-	//			* style nodes, inserts in Document head
 	//			* title Node, remove
 	//			* DOCTYPE tag, remove
-	//			* `<!-- *JS code here* -->`
-	//			* `<![CDATA[ *JS code here* ]]>`
 	cleanContent: false,
 
 	// renderStyles: Boolean
