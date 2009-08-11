@@ -251,7 +251,8 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 				if(store.hasAttribute(rowItem, parentCell.field)){
 					var tToggle = tcJoin.split('|');
 					tToggle.pop();
-					var values = store.getValues(rowItem, parentCell.field);
+					var path = new dojox.grid.TreePath(rowStack.join('/'), grid);
+					var values = path.children(true)||[];
 					if(values.length){
 						html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tToggle.join(' ') + ' dojoxGridExpandoRow">';
 						var iStack = dojo.map(rowStack, "return item;");

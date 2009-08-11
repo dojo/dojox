@@ -313,14 +313,33 @@ dojo.declare("dojox.grid.TreePath", null, {
 
 		return new dojox.grid.TreePath(new_path, this.grid);
 	},
-	children: function(){
+	children: function(alwaysReturn){
 		// summary:
 		//	Returns the child data items of this row.  If this
-		//	row isn't open, returns null.
-		if(!this.isOpen()){
+		//	row isn't open and alwaysReturn is falsey, returns null.
+		if(!this.isOpen()&&!alwaysReturn){
 			return null;
 		}
-		return this.store.getValues(this.item(), this.grid.layout.cells[this.cell.level+1].parentCell.field);
+		var items = this.store.getValues(this.item(), this.grid.layout.cells[this.cell.level+1].parentCell.field);
+		if(items.length>1&&this.grid.sortChildItems){
+			var sortProps = this.grid.getSortProps();
+			if(sortProps&&sortProps.length){
+				var attr = sortProps[0].attribute;
+				if(attr&&items[0][attr]){
+					var desc = !!sortProps[0].descending;
+					items = items.slice(0); // don't touch the array in the store, make a copy
+					items.sort(function(a, b){
+						var av = a[attr];
+						var bv = b[attr];
+						if(av != bv){
+							return av < bv == desc ? 1 : -1;
+						}
+						return 0;
+					});
+				}
+			}
+		}
+		return items;
 	},
 	childPaths: function(){
 		var childItems = this.children();
@@ -495,7 +514,12 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	// defaultOpen: Boolean
 	//		Whether or not we default to open (all levels)
 	defaultOpen: true,
-	
+
+	// sortChildItems: Boolean
+	// 		If true, child items will be returned sorted according to the sorting
+	// 		properties of the grid.
+	sortChildItems: false,
+
 	// openAtLevels: Array
 	//		Which levels we are open at (overrides defaultOpen for the values
 	//		that exist here).  Its values can be a boolean (true/false) or an
