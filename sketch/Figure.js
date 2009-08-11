@@ -318,8 +318,8 @@ dojo.require("dojox.sketch.UndoStack");
 		//	assume fitting the parent node.
 //		var box=dojo.html.getContentBox(this.node.parentNode);
 		//the following should work under IE and FF, not sure about others though
-		var wF=(this.node.parentNode.clientWidth-5)/this.size.w;
-		var hF=(this.node.parentNode.clientHeight-5)/this.size.h;
+		var wF=(this.node.parentNode.offsetWidth-5)/this.size.w;
+		var hF=(this.node.parentNode.offsetHeight-5)/this.size.h;
 		return Math.min(wF, hF)*100;
 	};
 	p.unzoom=function(){
@@ -449,7 +449,7 @@ dojo.require("dojox.sketch.UndoStack");
 		var obj=dojox.xml.DomParser.parse(text);
 		var node=this.node;
 		this.load(obj,node);
-		this.zoom(this.zoomFactor*100); //zoom to orignal scale
+		//this.zoom(this.zoomFactor*100); //zoom to orignal scale
 	};
 	p.load=function(obj, n){
 		//	create from pseudo-DOM

@@ -4,7 +4,7 @@ dojo.require("dijit.form.HorizontalSlider");
 
 dojo.declare("dojox.sketch.Slider",dojox.sketch._Plugin,{
 	_initButton: function(){
-		this.slider=new dijit.form.HorizontalSlider({minimum:20,maximum:200,value:20,style:"width:200px;float:right"});
+		this.slider=new dijit.form.HorizontalSlider({minimum:20,maximum:200,style:"width:200px;float:right"});
 		this.slider._movable.node.title='Double Click to "Zoom to Fit"'; //I18N
 		this.connect(this.slider,'onChange','_setZoom');
 		this.connect(this.slider.sliderHandle,'ondblclick','_zoomToFit');
@@ -23,6 +23,10 @@ dojo.declare("dojox.sketch.Slider",dojox.sketch._Plugin,{
 		if(!t._reset2Zoom){
 			t._reset2Zoom=true;
 			this.connect(t,'reset','_zoomToFit');
+			if(t.figure && t.figure.surface){
+				//already loaded, do a _zoomToFit
+				this._zoomToFit();
+			}
 		}
 	}
 });
