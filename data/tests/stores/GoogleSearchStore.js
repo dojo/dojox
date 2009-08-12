@@ -318,7 +318,7 @@ doh.register("dojox.data.tests.stores.GoogleSearchStore",
 				//		Simple test of the getValue function of the store.
 				var googleStore = dojox.data.tests.stores.GoogleSearchStore.getStore();
 
-                var d = new doh.Deferred();
+                		var d = new doh.Deferred();
 				function completedAll(items){
 					t.is(1, items.length);
 					var summary = googleStore.getValues(items[0], "unescapedUrl");
@@ -516,6 +516,39 @@ doh.register("dojox.data.tests.stores.GoogleSearchStore",
 							text: "kinsale"
 						},
 						count: 1,
+						onComplete: onComplete,
+						onError: dojo.partial(dojox.data.tests.stores.GoogleSearchStore.error, t, d)
+					});
+				return d; //Object
+			}
+		},
+		{
+			name: "GoogleSearchStore:  DOM Cleanup",
+			timeout:	30000, // 30 seconds
+			runTest: function(t) {
+				//	summary:
+				//		Simple test of the getAttributes function of the store
+				//	description:
+				//		Simple test of the getAttributes function of the store
+
+				var googleStore = dojox.data.tests.stores.GoogleSearchStore.getStore();
+
+				var d = new doh.Deferred();
+				
+				var preScriptCount = dojo.query("head script").length;
+				
+				function onComplete(items){
+					var postScriptCount = dojo.query("head script").length;					
+					t.is(preScriptCount, postScriptCount);
+					d.callback(true);
+				}
+
+				//Get everything...
+				googleStore.fetch({
+						query: {
+							text: "kinsale"
+						},
+						count: 50,
 						onComplete: onComplete,
 						onError: dojo.partial(dojox.data.tests.stores.GoogleSearchStore.error, t, d)
 					});

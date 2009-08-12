@@ -298,6 +298,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		var finished = false;
 		var lastOnItem = request.start -1;
 		var numRequests = 0;
+		var scriptIds = [];
 
 		// Performs the remote request.
 		function doRequest(req){
@@ -306,6 +307,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 			getArgs.content.context = getArgs.content.start = req.start;
 
 			var deferred = dojo.io.script.get(getArgs);
+			scriptIds.push(deferred.ioArgs.id);
 
 			//We only set up the errback, because the callback isn't ever really used because we have
 			//to link to the jsonp callback function....
@@ -318,9 +320,15 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 
 		// Function to handle returned data.
 		var myHandler = function(start, data){
+			if (scriptIds.length > 0) {
+				// Delete the script node that was created.
+				dojo.query("#" + scriptIds.splice(0,1)).forEach(dojo.destroy);
+			}
 			if(finished){return;}
+
 			var results = _this._getItems(data);
 			var cursor = data ? data['cursor']: null;
+
 			if(results){
 				//Process the results, adding the store reference to them
 				for(var i = 0; i < results.length && i + start < request.count + request.start; i++) {
@@ -383,12 +391,6 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		var callbacks = [];
 		var lastCallback = firstRequest.start - 1;
 
-		var sortFn = function(a,b){
-			if(a.start < b.start){return -1;}
-			if(b.start < a.start){return 1;}
-			return 0;
-		};
-
 		// Attach a callback function to the global namespace, where Google can call it.
 		dojo.global[callbackFn] = function(start, data, responseCode, errorMsg){
 			try {
@@ -406,7 +408,7 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 	
 					//make sure that the callbacks happen in the correct sequence
 					if(callbacks.length > 0){
-						callbacks.sort(sortFn);
+						callbacks.sort(_this._getSort());
 						//In case the requsts do not come back in order, sort the returned results.
 						while(callbacks.length > 0 && callbacks[0].start == lastCallback + 1){
 							myHandler(Number(callbacks[0].start), callbacks[0].data);
@@ -426,6 +428,14 @@ dojo.declare("dojox.data.GoogleSearchStore",null,{
 		// we will have a list of pages, which can then be
 		// gone through
 		doRequest(firstRequest);
+	},
+	
+	_getSort: function() {
+		return function(a,b){
+			if(a.start < b.start){return -1;}
+			if(b.start < a.start){return 1;}
+			return 0;
+		};
 	},
 
 	_processItem: function(item, data) {
