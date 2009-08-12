@@ -1180,6 +1180,49 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			csvStore.fetch({sort: sortAttributes, onComplete: completed, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
 			return d; //Object
 		},
+
+		{
+			name: "testReadAPI_fetch_abort",
+			runTest: function(t){
+				//	summary: 
+				//		Simple test of a basic fetch abort on CsvStore.
+				//	description:
+				//		Simple test of a basic fetch abort on CsvStore.
+				//Can only async abort in a browser, so disable this test from rhino
+				if(dojo.isBrowser){                                            
+					var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+					var store = new dojox.data.CsvStore(args);
+				
+					var d = new doh.Deferred();
+					var abortCalled = false;
+					function completedAll(items, request){
+						t.is(7, items.length);
+						if(abortCalled){
+							console.log("Made it to complete callback and abort was called.  Problem.");
+							d.errback(new Error("Should not be here."));
+						}else{
+							//We beat out calling abort, so this is okay.  Timing.
+							console.log("in onComplete and abort has not been called.  Timing.  This is okay.");
+							d.callback(true);
+						}
+					}
+					function error(errData, request){
+						//An abort should throw a cancel error, so we should
+						//reach this.
+						t.assertTrue(true);
+						d.callback(true);
+					}
+	
+					//Get everything...
+					var req = store.fetch({ onComplete: completedAll, onError: error});
+					abortCalled=true;
+					console.log("Calling abort.");
+					req.abort();
+					return d;
+				}
+			}
+		},
+
 		function testReadAPI_functionConformance(t){
 			//	summary: 
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.

@@ -102,7 +102,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		this._assertIsItem(item);
 		var itemValue = defaultValue;
 		if(typeof attribute === "string"){
-			ai = this._attributeIndexes[attribute];
+			var ai = this._attributeIndexes[attribute];
 			if(ai != null){
 				var itemData = this._dataArray[this._getIndex(item)];
 				itemValue = itemData[ai] || defaultValue;
@@ -350,6 +350,24 @@ dojo.declare("dojox.data.CsvStore", null, {
 							throw error;
 						}
 					});
+					//Wire up the cancel to abort of the request
+					//This call cancel on the deferred if it hasn't been called
+					//yet and then will chain to the simple abort of the
+					//simpleFetch keywordArgs
+					var oldAbort = null;
+					if(keywordArgs.abort){
+						oldAbort = keywordArgs.abort;
+					}
+					keywordArgs.abort = function(){
+						var df = getHandler;
+						if (df && df.fired === -1){
+							df.cancel();
+							df = null;
+						}
+						if(oldAbort){
+							oldAbort.call(keywordArgs);
+						}
+					};
 				}
 			}else if(this._csvData){
 				try{
@@ -403,7 +421,6 @@ dojo.declare("dojox.data.CsvStore", null, {
 		 *     { "Title":0, "Year":1, "Producer":2 }
 		 */
 		if(dojo.isString(csvFileContents)){
-			var lineEndingCharacters = new RegExp("\r\n|\n|\r");
 			var leadingWhiteSpaceCharacters = new RegExp("^\\s+",'g');
 			var trailingWhiteSpaceCharacters = new RegExp("\\s+$",'g');
 			var doubleQuotes = new RegExp('""','g');
