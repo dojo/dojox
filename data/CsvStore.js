@@ -59,6 +59,9 @@ dojo.declare("dojox.data.CsvStore", null, {
 		}else{
 			this._idMap = {};
 		}
+		if("separator" in keywordParameters){
+			this.separator = keywordParameters.separator;
+		}
 	},
 
 	url: "", //Declarative hook for setting Csv source url.
@@ -66,6 +69,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 	label: "", //Declarative hook for setting the label attribute. 
 
 	identifier: "", //Declarative hook for setting the identifier.
+
+	separator: ",", //Declatative and programmatic hook for defining the separator character used in the Csv style file. 
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -431,7 +436,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 			for(i = 0; i < arrayOfInputLines.length; ++i){
 				var singleLine = arrayOfInputLines[i];
 				if(singleLine.length > 0){
-					var listOfFields = singleLine.split(',');
+					var listOfFields = singleLine.split(this.separator);
 					var j = 0;
 					while(j < listOfFields.length){
 						var space_field_space = listOfFields[j];
@@ -451,7 +456,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 								return; //null
 							}
 							var nextField = listOfFields[j+1];
-							listOfFields[j] = field_space + ',' + nextField;
+							listOfFields[j] = field_space + this.separator + nextField;
 							listOfFields.splice(j+1, 1); // delete element [j+1] from the list
 						}else{
 							if((firstChar == '"') && (lastChar == '"')){

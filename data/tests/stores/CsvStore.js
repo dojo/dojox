@@ -72,6 +72,33 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += "7, \n";
 				csvData += "5, 123abc\n";
 				break;
+			case "stores/semicolonSeparator.csv":
+				csvData += "article;price\n";
+				csvData += "1008;4,59\n";
+				csvData += "1010;10,09\n";
+				csvData += "1011;5,13\n";
+				csvData += "1016;16,68\n";
+				csvData += "1019;15,5\n";
+				csvData += "1022;10,36\n";
+				break;
+			case "stores/pipeSeparator.csv":
+				csvData += "article|price\n";
+				csvData += "1008|4,59\n";
+				csvData += "1010|10,09\n";
+				csvData += "1011|5,13\n";
+				csvData += "1016|16,68\n";
+				csvData += "1019|15,5\n";
+				csvData += "1022|10,36\n";
+				break;
+			case "stores/pipeSeparatorInData.csv":
+				csvData += "article|price\n";
+				csvData += "1008|\"4,59|4,54\"\n";
+				csvData += "1010|10,09\n";
+				csvData += "1011|5,13\n";
+				csvData += "1016|16,68\n";
+				csvData += "1019|15,5\n";
+				csvData += "1022|10,36\n";
+				break;
 		}
 		dataSource.data = csvData;
 	}
@@ -114,6 +141,64 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var d = new doh.Deferred();
 			function completedAll(items){
 				t.assertTrue((items.length === 7));
+				d.callback(true);
+			}
+
+			//Get everything...
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_semicolon(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore with separator defined as |.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore with separator defined as |.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/semicolonSeparator.csv");
+			args.separator = ";";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completedAll(items){
+				t.assertEqual(6, items.length);
+				d.callback(true);
+			}
+
+			//Get everything...
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_pipe(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore with separator defined as |.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore with separator defined as |
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/pipeSeparator.csv");
+			args.separator = "|";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completedAll(items){
+				t.assertEqual(6, items.length);
+				d.callback(true);
+			}
+
+			//Get everything...
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_pipe_indata(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore with separator defined as |.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore with separator defined as |
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/pipeSeparatorInData.csv");
+			args.separator = "|";
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completedAll(items){
+				t.assertEqual(6, items.length);
 				d.callback(true);
 			}
 
@@ -1195,7 +1280,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				
 					var d = new doh.Deferred();
 					var abortCalled = false;
-					function completedAll(items, request){
+					var completedAll = function(items, request){
 						t.is(7, items.length);
 						if(abortCalled){
 							console.log("Made it to complete callback and abort was called.  Problem.");
@@ -1205,13 +1290,13 @@ doh.register("dojox.data.tests.stores.CsvStore",
 							console.log("in onComplete and abort has not been called.  Timing.  This is okay.");
 							d.callback(true);
 						}
-					}
-					function error(errData, request){
+					};
+					var error = function(errData, request){
 						//An abort should throw a cancel error, so we should
 						//reach this.
 						t.assertTrue(true);
 						d.callback(true);
-					}
+					};
 	
 					//Get everything...
 					var req = store.fetch({ onComplete: completedAll, onError: error});
