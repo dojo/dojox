@@ -19,19 +19,16 @@ dojo.declare("dojox.sketch.Slider",dojox.sketch._Plugin,{
 		}
 	},
 	reset: function(){
-		//reset slider to NaN so that onChange will be fired no matter what value is set in _zoomToFit
-		this.slider.attr('value',NaN);
+		//reset slider to maximum so that onChange will be fired when _zoomToFit is called
+		this.slider.attr('value',this.slider.maximum);
 		this._zoomToFit();
 	},
 	setToolbar: function(t){
+		this._initButton();
 		t.addChild(this.slider);
 		if(!t._reset2Zoom){
 			t._reset2Zoom=true;
 			this.connect(t,'reset','reset');
-			if(t.figure && t.figure.surface){
-				//already loaded, do a _zoomToFit
-				this._zoomToFit();
-			}
 		}
 	}
 });

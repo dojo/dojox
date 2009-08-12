@@ -60,11 +60,10 @@ dojo.declare("dojox.sketch._Plugin", null, {
 	setFigure: function(/*Widget*/figure){
 		// FIXME: detatch from previous figure!!
 		this.figure = figure;
-
-		// FIXME: prevent creating this if we don't need to (i.e., figure can't handle our command)
-		this._initButton();
 	},
 	setToolbar: function(/*Widget*/toolbar){
+		// FIXME: prevent creating this if we don't need to (i.e., figure can't handle our command)
+		this._initButton();
 		if(this.button){
 			toolbar.addChild(this.button);
 		}

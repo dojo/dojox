@@ -35,7 +35,6 @@ dojo.declare("dojox.sketch.Toolbar", dijit.Toolbar, {
 		this.inherited(arguments);
 		this.shapeGroup=new dojox.sketch.ButtonGroup;
 
-		this.connect(this.figure,'onLoad','reset');
 		if(!this.plugins){
 			this.plugins=['Slider','Lead','SingleArrow','DoubleArrow','Underline','Preexisting'];
 		}
@@ -45,12 +44,18 @@ dojo.declare("dojox.sketch.Toolbar", dijit.Toolbar, {
 			var name=dojo.isString(obj)?obj:obj.name;
 			var p=new dojox.sketch.tools[name](obj.args||{});
 			this._plugins.push(p);
-			p.setFigure(this.figure);
 			p.setToolbar(this);
 			if(!this._defaultTool && p.button){
 				this._defaultTool=p;
 			}
 		},this);
+	},
+	setFigure: function(f){
+		this.figure = f;
+		this.connect(f,'onLoad','reset');
+		dojo.forEach(this._plugins, function(p){
+			p.setFigure(f);
+		});
 	},
 	destroy: function(){
 		dojo.forEach(this._plugins,function(p){
@@ -85,7 +90,8 @@ dojo.declare("dojox.sketch.Toolbar", dijit.Toolbar, {
 });
 
 dojox.sketch.makeToolbar=function(node,figure){
-	var toolbar=new dojox.sketch.Toolbar({"figure":figure});
+	var toolbar=new dojox.sketch.Toolbar();
+	toolbar.setFigure(figure);
 	node.appendChild(toolbar.domNode);
 	return toolbar;
 };
