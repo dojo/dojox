@@ -30,13 +30,29 @@
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojox.grid._CheckBoxSelector");
+		dojo.require("dojox.grid._RadioSelector");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
 	</script>
 	<script type="text/javascript" src="support/test_data.js"></script>
 	<script type="text/javascript">
-		var layout = [{
+		var layout_check = [{
 			type: "dojox.grid._CheckBoxSelector"
+		},{ cells: [[
+			new dojox.grid.cells.RowIndex({ width: 5 }),
+			{name: 'Column 1', field: 'col1'},
+			{name: 'Column 2', field: 'col2'},
+			{name: 'Column 3', field: 'col3'},
+			{name: 'Column 4', field: 'col4', width: "150px"},
+			{name: 'Column 5', field: 'col5'}
+		],[
+			{name: 'Column 6', field: 'col6', colSpan: 2},
+			{name: 'Column 7', field: 'col7'},
+			{name: 'Column 8'},
+			{name: 'Column 9', field: 'col3', colSpan: 2}
+		]]}];
+		var layout_radio = [{
+			type: "dojox.grid._RadioSelector"
 		},{ cells: [[
 			new dojox.grid.cells.RowIndex({ width: 5 }),
 			{name: 'Column 1', field: 'col1'},
@@ -53,9 +69,13 @@
 	</script>
 </head>
 <body class="tundra">
-	<div class="heading">dojox.grid.Grid Basic Test</div>
-	<div jsId="grid" id="grid" dojoType="dojox.grid.DataGrid" 
+	<div class="heading">dojox.grid.Grid CheckBox Selector</div>
+	<div jsId="grid_check" id="grid_check" dojoType="dojox.grid.DataGrid" 
 		store="test_store" query="{ id: '*' }" 
-		structure="layout"></div>
+		structure="layout_check"></div>
+	<div class="heading">dojox.grid.Grid Radio Selector</div>
+	<div jsId="grid_radio" id="grid_radio" dojoType="dojox.grid.DataGrid" 
+		store="test_store" query="{ id: '*' }" 
+		structure="layout_radio"></div>
 </body>
 </html>
