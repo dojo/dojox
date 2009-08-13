@@ -324,17 +324,13 @@ dojo.declare("dojox.grid.TreePath", null, {
 		if(items.length>1&&this.grid.sortChildItems){
 			var sortProps = this.grid.getSortProps();
 			if(sortProps&&sortProps.length){
-				var attr = sortProps[0].attribute;
+				var attr = sortProps[0].attribute,
+					grid = this.grid;
 				if(attr&&items[0][attr]){
 					var desc = !!sortProps[0].descending;
 					items = items.slice(0); // don't touch the array in the store, make a copy
 					items.sort(function(a, b){
-						var av = a[attr];
-						var bv = b[attr];
-						if(av != bv){
-							return av < bv == desc ? 1 : -1;
-						}
-						return 0;
+						return grid._childItemSorter(a, b, attr, desc);
 					});
 				}
 			}
@@ -545,6 +541,15 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 
 	createSelection: function(){
 		this.selection = new dojox.grid.TreeSelection(this);
+	},
+
+	_childItemSorter: function(a, b, attribute, descending){
+		var av = this.store.getValue(a, attribute);
+		var bv = this.store.getValue(b, attribute);
+		if(av != bv){
+			return av < bv == descending ? 1 : -1;
+		}
+		return 0;
 	},
 
 	_onSet: function(item, attribute, oldValue, newValue){
