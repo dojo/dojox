@@ -3,7 +3,6 @@ dojo.provide("dojox.atom.io.model");
 dojo.require("dojox.xml.parser");
 dojo.require("dojo.string");
 dojo.require("dojo.date.stamp");
-dojo.requireLocalization("dojox.atom.io", "messages");
 
 dojox.atom.io.model._Constants = {
 	//	summary: 
@@ -989,8 +988,7 @@ dojo.declare("dojox.atom.io.model.Feed",dojox.atom.io.model.AtomItem,{
 		//	entry: 
 		//		The entry object to add.
 		if(!entry.id){
-			var _nlsResources = dojo.i18n.getLocalization("dojox.atom.io", "messages");
-			throw new Error(_nlsResources.noId);
+			throw new Error("The entry object must be assigned an ID attribute.");
 		}
 		if(!this.entries){this.entries = [];}
 		entry.feedUrl = this.getSelfHref();
@@ -1238,8 +1236,7 @@ dojo.declare("dojox.atom.io.model.Workspace",dojox.atom.io.model.AtomItem,{
 						this.title = dojox.xml.parser.textContent(child);
 					}
 				}else{/*Only accept the PURL name_space for now */
-					var _nlsResources = dojo.i18n.getLocalization("dojox.atom.io", "messages");
-					throw new Error(_nlsResources.badNS);
+					throw new Error("The library encountered a namespace that is not valid when it was parsing the XML file.");
 				}
 			}
 		}
