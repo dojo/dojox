@@ -29,6 +29,8 @@
 dojo.experimental("dojox.date.timezone");
 dojo.provide("dojox.date.timezone");
 
+dojo.require("dojo.date.locale");
+
 (function(_d){
 	var cfg = _d.config;
 	var _zoneFiles = [ "africa", "antarctica", "asia", "australasia", "backward", 
@@ -676,4 +678,35 @@ dojo.provide("dojox.date.timezone");
 			loadZoneFile(f);
 		});
 	}
+	
+	// And enhance the default formatting functions
+	// If you pass "timezone" as a parameter to your format options,
+	// then you get the date formatted (and offset) for that timezone
+	var oLocaleFmt = _d.date.locale.format;
+	var oGetZone = _d.date.locale._getZone;
+	_d.date.locale.format = function(dateObject, options){
+		if(options.timezone && !options._tzInfo){
+			// Store it in our options so we can use it later
+			options._tzInfo = dojox.date.timezone.getTzInfo(dateObject, options.timezone);
+		}
+		if(options._tzInfo){
+			// Roll our date to display the correct time according to the 
+			// desired offset
+			var offset = dateObject.getTimezoneOffset() - options._tzInfo.tzOffset;
+			dateObject = new Date(dateObject.getTime() + (offset * 60 * 1000));
+		}
+		return oLocaleFmt.call(this, dateObject, options);
+	};
+	_d.date.locale._getZone = function(dateObject, getName, options){
+		if(options._tzInfo){
+			if(getName){
+				return options._tzInfo.tzAbbr;
+			}else{
+				return options._tzInfo.tzOffset;
+			}
+		}
+		return oGetZone.call(this, dateObject, getName, options);
+	};
+	
+	
 })(dojo);
