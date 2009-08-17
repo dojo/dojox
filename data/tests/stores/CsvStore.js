@@ -264,6 +264,27 @@ doh.register("dojox.data.tests.stores.CsvStore",
 							});
 			return d; //Object
 		},
+		function testReadAPI_fetch_one_preventcache(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore of a single item.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore of a single item.
+
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
+			args.urlPreventCache = true;
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function onComplete(items, request){
+				t.is(1, items.length);
+				d.callback(true);
+			}
+			csvStore.fetch({ 	query: {Title: "*Sequel*"}, 
+								onComplete: onComplete, 
+								onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)
+							});
+			return d; //Object
+		},
 		function testReadAPI_fetch_Multiple(t){
 			//	summary: 
 			//		Simple test of a basic fetch on CsvStore of a single item.

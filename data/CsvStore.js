@@ -62,6 +62,9 @@ dojo.declare("dojox.data.CsvStore", null, {
 		if("separator" in keywordParameters){
 			this.separator = keywordParameters.separator;
 		}
+		if("urlPreventCache" in keywordParameters){
+			this.urlPreventCache = keywordParameters.urlPreventCache?true:false;
+		}
 	},
 
 	url: "", //Declarative hook for setting Csv source url.
@@ -71,6 +74,10 @@ dojo.declare("dojox.data.CsvStore", null, {
 	identifier: "", //Declarative hook for setting the identifier.
 
 	separator: ",", //Declatative and programmatic hook for defining the separator character used in the Csv style file. 
+
+	//Parameter to allow specifying if preventCache should be passed to the xhrGet call or not when loading data from a url.
+	//Note this does not mean the store calls the server on each fetch, only that the data load has preventCache set as an option.
+	urlPreventCache: false,
 
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -335,7 +342,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 					this._loadInProgress = true;
 					var getArgs = {
 							url: self.url, 
-							handleAs: "text"
+							handleAs: "text",
+							preventCache: self.urlPreventCache
 						};
 					var getHandler = dojo.xhrGet(getArgs);
 					getHandler.addCallback(function(data){
