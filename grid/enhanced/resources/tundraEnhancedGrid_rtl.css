@@ -1,0 +1,35 @@
+@import url("../../resources/Grid_rtl.css");
+
+.dijitRtl .tundra .dojoxGridContent {
+	/*need to overwrite .dijitRtl .dojoxGridContent in Grid_rtl.css*/
+	float:none;
+}
+
+.dijitRtl .tundra .dojoxGridNestedSort, 
+.dijitRtl .tundra .dojoxGridUnarySort {
+	text-align: right;
+}
+
+.dijitRtl .tundra .dojoxGridSortWrapper {
+	left: 0;
+	right: auto;
+}
+
+.dijitRtl .tundra .dojoxGridCell_not_used {
+	text-align: right;
+}
+
+.dijitRtl .tundra .dojoxGridCell .dojoxGridHeaderCellSelectRegion {
+	float: right;
+	text-align: right;
+}
+
+.dijitRtl .tundra .dojoxGridSortSeparatorOn,
+.dijitRtl .tundra .dojoxGridNestedSortWrapper,
+.dijitRtl .tundra .dojoxGridUnarySortWrapper {
+	float: right;
+}
+
+.dijitRtl .dojoxGridContent {
+	float:none;
+}

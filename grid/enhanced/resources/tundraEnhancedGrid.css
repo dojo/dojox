@@ -1,0 +1,222 @@
+@import url("../../resources/tundraGrid.css");
+
+.tundra .dojoxGridHeader .dojoxGridCell{
+	background: #fafafa url(../../../../dijit/themes/tundra/images/titleBar.png) repeat-x bottom left;
+	border-top: 1px solid #bfbfbf;
+	/*border-left-width: 0px;*/
+}
+
+.tundra .dojoxGridCell{
+	/*border-left-width: 0px;*/
+}
+
+.tundra .dojoxGridHeader .dojoxGridSortCell,
+.tundra .dojoxGridSortCell{
+	padding:0px;
+	/*display:inline;*/
+	/*position:relative;*/
+}
+
+.tundra .dojoxGridSortCellContent{
+	padding:3px;
+}
+
+.tundra .dojoxGridCell .dojoxGridSortRoot{
+	position: relative; 
+	width: 100%;
+}
+
+.tundra .dojoxGridCell .dojoxGridHeaderCellSelectRegion{
+	text-align: left;
+	padding:3px;
+	/*position:absolute;*/
+	overflow: hidden;
+	white-space:nowrap;
+}
+
+.dj_ie .tundra .dojoxGridCell .dojoxGridHeaderCellSelectRegion{
+	padding-left:4px;
+}
+
+.tundra .dojoxGridCell .dojoxGridSelectRegionHover{
+	border-color:		#a5beda; 
+	border-bottom-color:#5c7590; 
+	cursor:pointer;
+	color:#243C5F;
+	background: #f8fafd url("../../../../dijit/themes/tundra/images/accordionItemHover.gif") bottom repeat-x;
+}
+
+.tundra .dojoxGridCell .dojoxGridSortHover{
+	border-color:		#a5beda; 
+	border-bottom-color:#5c7590; 
+	color:#243C5F;
+	background: #f8fafd url("../../../../dijit/themes/tundra/images/accordionItemHover.gif") bottom repeat-x;
+	cursor:pointer;
+}
+
+.tundra .dojoxGridSortWrapper{
+	/*float:right;*/
+	position:absolute;
+	right:0px;
+	/*left: auto;*/
+	z-index: 1;
+	background: #fafafa url(../../../../dijit/themes/tundra/images/titleBar.png) repeat-x bottom left;
+}
+
+.tundra .dojoxGridNestedSortWrapper{
+	float:left;
+}
+
+.tundra .dojoxGridSortPos{
+	float:left;
+	margin-left:3px;
+}
+
+.dj_ff2 .tundra .dojoxGridSortPos{
+	padding: 3px 0;
+	line-height: normal;
+}
+
+.tundra .dojoxGridSortPosOff{
+	display:none;
+}
+
+.tundra .dojoxGridNestedSort{
+	text-indent: -5000em;
+}
+
+.tundra .dojoxGridUnarySortWrapper{
+	float:left;
+}
+
+.tundra .dojoxGridSort{
+	display: block;
+	float: left;
+	background:url("images/nestedSortArrows.png") no-repeat left center;
+	width: 8px;
+	margin-right:3px;
+	margin-left:3px;
+	text-align:center;
+}
+
+.tundra .dojoxGridUnarySort{
+	text-indent: -5000em;
+	margin-left:4px;
+}
+
+.tundra .dojoxGridAscending{
+	background-position: -9px;
+}
+
+.tundra .dojoxGridUnsorted{
+	display:none;
+}
+
+.tundra .dojoxGridAscendingTip{
+	background:url("images/nestedSortArrows.png") no-repeat left center;
+	background-position: -30px;
+	display:block;
+	cursor:pointer;
+}
+
+.tundra .dojoxGridDescendingTip{
+	background:url("images/nestedSortArrows.png") no-repeat left center;
+	background-position: -20px;
+	display:block;
+	cursor:pointer;
+}
+
+.tundra .dojoxGridUnsortedTip{
+	background:url("images/nestedSortArrows.png") no-repeat left center;
+	background-position: -39.5px;
+	display:block;
+	cursor:pointer;
+}
+
+.tundra .dojoxGridSortHiddenTip{
+	display:none;
+}
+
+.tundra .dojoxGridSortSeparatorOff{
+	width: 0px;
+	border-right-color: #999999;
+	border-right-style:solid;
+	border-right-width:1px;
+	display: none;
+}
+
+.tundra .dojoxGridSortSeparatorOn{
+	display: block;
+	float: left;
+}
+
+.tundra .dojoxGridSortInProgress{
+	cursor:progress;
+}
+
+/* Indirect Selection */
+.tundra .dojoxGridWidgetHidden{
+	visibility:hidden;
+}
+
+.dijit_a11y .dojoxGridNestedSort, .dijit_a11y .dojoxGridUnarySort {
+	text-indent: 0;
+	font-size: 14px;
+	/* background-image: none !important; - for testing*/
+}
+
+/* fix safari focus border */
+.dj_webkit .tundra .dojoxGridCell,
+.dj_webkit .tundra .dojoxGridCellFocus,
+.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridHeaderCellSelectRegion,
+.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridUnarySortWrapper,
+.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridNestedSortWrapper,
+.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridSortRoot{
+	outline: none;
+}
+
+/* focus border */
+.tundra .dojoxGridHeader .dojoxGridRowTable .dojoxGridCellFocus
+ {
+	border-color: darkblue !important;
+	border-style: dashed !important;
+	border-width: 1px !important;
+}
+
+.tundra .dojoxGridFocusBorderBox {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+}
+.tundra .dojoxGridFocusBorder {
+	border-top: 1px dashed darkblue;
+	border-left: 1px dashed darkblue;
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+	position: absolute;
+	z-index: 999;
+	top: 0;
+	left: 0;
+}
+
+/** for dnd **/
+.tundra .dojoxGridSelectedDIV{
+	background-color: #3366CC;
+	position:absolute;
+	opacity:0.2;
+	cursor:move;
+}
+
+.dj_ie .tundra .dojoxGridSelectedDIV{
+	filter: alpha(opacity = 30);
+}
+
+.tundra .dojoxGridBorderDIV{
+	width:3px;
+	background-color: gray;
+	font-size:0em;
+	position:absolute;
+}
