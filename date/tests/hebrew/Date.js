@@ -311,7 +311,6 @@ tests.register("dojox.date.tests.hebrew.Date",
 			var nonLeap = "5766, 5767, 5769, 5770, 5772, 5772, 5773, 5775";
 		        var leap = "5765, 5768, 5771, 5774";	
 		// ELUL - 12,  ADAR -6, ADARI -5
-				var dateHebrew, dateHebrew1;
 				var dateHebrew = new dojox.date.hebrew.Date(5765, 1, 1);
 				for (var year = 5766; year < 5866; year++){
 					dateHebrew.setFullYear(year);
@@ -358,27 +357,37 @@ tests.register("dojox.date.tests.hebrew.Date",
 			runTest: function(t){
 	
 				//test Hebrew and English locale
-				var dateHebrew = new dojox.date.hebrew.Date(5769, 5, 16);
+												
+				var dates = [	
+							[5768, 5, 1],
+							[5768, 1, 29],
+							[5769, 5, 16],
+							[5769, 11, 2],
+							[5770, 0, 2]
+						];
+						
+				var dateHebrew, dateHebrew1;		
+				dojo.forEach(dates, function(date, i){
+					dateHebrew = new dojox.date.hebrew.Date(date[0], date[1], date[2]);
 					
-				var options = [{formatLength:'full', locale:'he'},{formatLength:'long', locale:'he'},{formatLength:'medium', locale:'he'},{formatLength:'short', locale:'he'},
-					{formatLength:'full', locale:'en'},{formatLength:'long', locale:'en'},{formatLength:'medium', locale:'en'},{formatLength:'short', locale:'en'}];
-				
-				dojo.forEach(options, function(opt, i){
-					str= dojox.date.hebrew.locale.format(dateHebrew, opt);
-					var option = "{" +opt+", locale:'he'}";
-					var dateHebrew1 = dojox.date.hebrew.locale.parse(str, opt);
-					t.is(0, dojo.date.compare(dateHebrew.toGregorian(), dateHebrew1.toGregorian(), 'date'));
+					var options = [{formatLength:'full', locale:'he'},{formatLength:'long', locale:'he'},{formatLength:'medium', locale:'he'},{formatLength:'short', locale:'he'},
+						{formatLength:'full', locale:'en'},{formatLength:'long', locale:'en'},{formatLength:'medium', locale:'en'},{formatLength:'short', locale:'en'}];					
+					dojo.forEach(options, function(opt, i){
+						str= dojox.date.hebrew.locale.format(dateHebrew, opt);
+						var option = "{" +opt+", locale:'he'}";
+						dateHebrew1 = dojox.date.hebrew.locale.parse(str, opt);
+						t.is(0, dojo.date.compare(dateHebrew.toGregorian(), dateHebrew1.toGregorian(), 'date'));
+					}); 
+					
+					var pattern = ['d M yy', 'dd/MM/yy h:m:s',  'dd#MM#yy HH$mm$ss', 'dd MMMM yyyy'];
+					dojo.forEach( pattern, function(pat, i){
+						options = {datePattern:pat, selector:'date', locale:'he'};
+						str= dojox.date.hebrew.locale.format(dateHebrew, options);
+						dateHebrew1 = dojox.date.hebrew.locale.parse(str, options);
+						t.is(0, dojo.date.compare(dateHebrew.toGregorian(), dateHebrew1.toGregorian(), 'date'));
+					});
 				}); 
-				
-				var pattern = ['d M yy', 'dd/MM/yy h:m:s',  'dd#MM#yy HH$mm$ss', 'dd MMMM yyyy'];
-				dojo.forEach( pattern, function(pat, i){
-					options = {datePattern:pat, selector:'date', locale:'he'};
-					str= dojox.date.hebrew.locale.format(dateHebrew, options);
-					dateHebrew1 = dojox.date.hebrew.locale.parse(str, options);
-					 t.is(0, dojo.date.compare(dateHebrew.toGregorian(), dateHebrew1.toGregorian(), 'date'));
-				});
-				
-					
+						
 				dateHebrew = new dojox.date.hebrew.Date(5769, 6, 3, 15, 3, 59);
 				pattern = 'HH$mm$ss';
 				options = {timePattern:pattern, selector:'time'};

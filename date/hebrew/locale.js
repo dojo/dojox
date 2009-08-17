@@ -319,8 +319,10 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 		result[3] = 0; //12am -> 0
 	}
 	var dateObject = new dojox.date.hebrew.Date(result[0], result[1], result[2], result[3], result[4], result[5], result[6]); // hebrew.Date
-	//for non leap year, the  index of the short month start from adar should be increased by 1
-	if(!dojox.date.hebrew.getDaysInMonth(dateObject)){ dateObject.setMonth(result[1]+1);}	
+	//for non leap year, the index of the short month start from adar should be increased by 1
+	if(mLength < 3 && result[1] >= 5 && !dateObject.isLeapYear(dateObject.getFullYear())){
+		dateObject.setMonth(result[1]+1);
+	}
 	return dateObject; // hebrew.Date 
 };
 
