@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Dojo Table Test #1 (A) - V 0.1</title>
+	<title>Test dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
 		@import "../../../../dijit/themes/tundra/tundra.css";
@@ -14,11 +14,7 @@
 			padding: 0.5em;
 		}
 		.title {
-			font-weight: bold;
-			font-size: 150%;
 			text-align:center;
-			padding-top: 0.5em;
-			padding-bottom: 1em;
 		}
 		
  		#grid1, #grid2 {
@@ -83,49 +79,83 @@
 	<script type="text/javascript" src="support/test_ue.js"></script>
 </head>
 <body class="tundra">
-	<div class="title">Dojo Table UE Demo #1 - V 0.1</div>
+	<h1 class="title">Test dojox.grid.EnhancedGrid Phase 1 Features</h1>
+	<p>
+		<li><b>EnhancedGrid phase 1 provides the following features:</b></li>
+		<li>1. Nested Sorting</li>
+		<li>2. Built-in support for Indirect Selection (radio buttons and check boxes)</li>
+		<li>3. Declarative context menu<li>
+		<li>4. Selecting rows/columns via swipe<li>
+		<li>5. Drag-n-drop: columns,rows - MOVE</li>
+	</p>
+	
+	<p>
+		<li><b>Keyboard support:</b></li>
+		<li>1. Use <b>TAB or SHIFT + TAB</b> to navigate keyboard focus among column headers, row headers and cell regions</li><br/>
+		<li>2. When focus is on column header:</li>
+			<li> - Use <b>LEFT/RIGHT</b> to navigate keyboard focus among column headers </li>
+			<li> - Use <b>SPACE</b> to choose a column or sorting choice</li>
+			<li> - Use <b>SHIFT + LEFT/RIGHT</b> to select multiple columns</li>
+			<li> - Use <b>CTRL + LEFT/RIGHT</b> to move columns</li><br/>
+		<li>3. When focus is on row header or column of checkbox:</li>
+			<li> - Use <b>UP/DOWN</b> to navigate keyboard focus among row headers </li>
+			<li> - Use <b>SPACE</b> to choose a row</li>
+			<li> - Use <b>SHIFT + UP/DOWN</b> to select multiple rows</li>
+			<li> - Use <b>CTRL + UP/DOWN</b> to move rows</li>
+	</p>
+	
+	<p>	
+		<li><b>Some known issues (plan to fix in phase 2):</b></li>
+		<li>1. EnhancedGrid doesn't support complicated layout(e.g. multiple rows in column header), TreeGrid(SubGrid).</li>
+		<li>2. EnhancedGrid hasn't been fully tested with editable feature.</li>		
+	</p>
 	<!--span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore1" url="support/music-for-demo.part.csv">
 	</span-->
-	<div id="grid1" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" 
-		plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
-		store="csvStore1" structure="layout" rowSelector="20px">
-		<div dojoType="dijit.Menu" id="headerMenu"  style="display: none;">
-			<div dojoType="dijit.MenuItem">Header Menu Item 1</div>
-			<div dojoType="dijit.MenuItem">Header Menu Item 2</div>
-			<div dojoType="dijit.MenuItem">Header Menu Item 3</div>
-			<div dojoType="dijit.MenuItem">Header Menu Item 4</div>
+	<p>
+		<li>Multiple selection mode:</li>
+		<div id="grid1" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" 
+			plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
+			store="csvStore1" structure="layout" rowSelector="20px">
+			<div dojoType="dijit.Menu" id="headerMenu"  style="display: none;">
+				<div dojoType="dijit.MenuItem">Header Menu Item 1</div>
+				<div dojoType="dijit.MenuItem">Header Menu Item 2</div>
+				<div dojoType="dijit.MenuItem">Header Menu Item 3</div>
+				<div dojoType="dijit.MenuItem">Header Menu Item 4</div>
+			</div>
+			<div dojoType="dijit.Menu" id="rowMenu"  style="display: none;">
+				<div dojoType="dijit.MenuItem">Row Menu Item 1</div>
+				<div dojoType="dijit.MenuItem">Row Menu Item 2</div>
+				<div dojoType="dijit.MenuItem">Row Menu Item 3</div>
+				<div dojoType="dijit.MenuItem">Row Menu Item 4</div>
+			</div>
+			<div dojoType="dijit.Menu" id="cellMenu"  style="display: none;">
+				<div dojoType="dijit.MenuItem">Cell Menu Item 1</div>
+				<div dojoType="dijit.MenuItem">Cell Menu Item 2</div>
+				<div dojoType="dijit.MenuItem">Cell Menu Item 3</div>
+				<div dojoType="dijit.MenuItem">Cell Menu Item 4</div>
+			</div>
+			<div dojoType="dijit.Menu" id="selectedRegionMenu"  style="display: none;">
+				<div dojoType="dijit.MenuItem">Action 1 for Selected Region</div>
+				<div dojoType="dijit.MenuItem">Action 2 for Selected Region</div>
+				<div dojoType="dijit.MenuItem">Action 3 for Selected Region</div>
+				<div dojoType="dijit.MenuItem">Action 4 for Selected Region</div>
+			</div>
 		</div>
-		<div dojoType="dijit.Menu" id="rowMenu"  style="display: none;">
-			<div dojoType="dijit.MenuItem">Row Menu Item 1</div>
-			<div dojoType="dijit.MenuItem">Row Menu Item 2</div>
-			<div dojoType="dijit.MenuItem">Row Menu Item 3</div>
-			<div dojoType="dijit.MenuItem">Row Menu Item 4</div>
-		</div>
-		<div dojoType="dijit.Menu" id="cellMenu"  style="display: none;">
-			<div dojoType="dijit.MenuItem">Cell Menu Item 1</div>
-			<div dojoType="dijit.MenuItem">Cell Menu Item 2</div>
-			<div dojoType="dijit.MenuItem">Cell Menu Item 3</div>
-			<div dojoType="dijit.MenuItem">Cell Menu Item 4</div>
-		</div>
-		<div dojoType="dijit.Menu" id="selectedRegionMenu"  style="display: none;">
-			<div dojoType="dijit.MenuItem">Action 1 for Selected Region</div>
-			<div dojoType="dijit.MenuItem">Action 2 for Selected Region</div>
-			<div dojoType="dijit.MenuItem">Action 3 for Selected Region</div>
-			<div dojoType="dijit.MenuItem">Action 4 for Selected Region</div>
-		</div>
-	</div>
-	<br/>
-	<input type='button' value='Select All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(true)'/>
-	&nbsp;&nbsp;
-	<input type='button' value='Deselect All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(false)'/>
-	<br/><br/>
+		<br/>
+		<input type='button' value='Select All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(true)'/>
+		&nbsp;&nbsp;
+		<input type='button' value='Deselect All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(false)'/>
+	</p>
 	<!--div id="gridDiv"></div-->
 	
-	<!--div id="grid2" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" 
-		plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
-		store="csvStore1" structure="layout" rowSelector="20px"  
-	</div-->
+	<p>
+		<li>Single selection mode:</li>
+		<div id="grid2" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" selectionMode="single"
+			plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
+			store="csvStore1" structure="layout" rowSelector="20px"  
+		</div>
+	</p>
 
 </body>
 </html>
