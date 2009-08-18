@@ -316,32 +316,29 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			//console.debug("locked");
 			return;
 		}
-		var leftPosition = rightPosition = 0;
+		var leftPosition = (rightPosition = 0);
 		var top = null,
 			headerHeight = null;
 		if(dojo._isBodyLtr()){
-			dojo.forEach(this.getHeaderNodes(), function(node, index) {
+			dojo.forEach(this.getHeaderNodes(), function(node, index){
+				var coord = dojo.coords(node);
 				if(index == leftBorderIndex){
-					var coord = dojo.coords(node);
 					leftPosition = coord.x;
 					top = coord.y + coord.h;
 					headerHeight = coord.h;
 				}
 				if(index == rightBorderIndex){
-					var coord = dojo.coords(node);
 					rightPosition = coord.x + coord.w;
 				}
 			});
 		} else {
-			dojo.forEach(this.getHeaderNodes(), function(node, index) {
+			dojo.forEach(this.getHeaderNodes(), function(node, index){
+				var coord = dojo.coords(node);
 				if(index == leftBorderIndex){
-					var coord = dojo.coords(node);
 					rightPosition = coord.x + coord.w;
-					
 					headerHeight = coord.h;
 				}
 				if(index == rightBorderIndex){
-					var coord = dojo.coords(node);
 					leftPosition = coord.x;
 					top = coord.y + coord.h;
 				}
@@ -818,27 +815,26 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		handle keyboard dnd
 		var inColSelection = this.selectedColumns.length > 0;
 		var inRowSelection = dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype['getFirstSelected'])() >= 0;
-		var dk = dojo.keys;
+		var i, colAmount, dk = dojo.keys;
 		switch (keyEvent.keyCode) {
 			case dk.LEFT_ARROW:
 				if(!inColSelection){return;}
-				var colAmount = this.getHeaderNodes().length;
-				for(var i = 0; i < colAmount; i++) {
+				colAmount = this.getHeaderNodes().length;
+				for(i = 0; i < colAmount; i++) {
 					if(this.isColSelected(i)){
 						this.drugDestIndex = i - 1;
 						this.drugBefore = true;
 						break;
 					}
 				}
-				if(this.drugDestIndex > 0){
-					this.startMoveCols();
-				}
+				var minBoundary = this.grid.indirectSelection ? 1 : 0;
+				(this.drugDestIndex >= minBoundary) ? this.startMoveCols() : (this.drugDestIndex = minBoundary);
 			break;
 			case dk.RIGHT_ARROW:
 				if(!inColSelection){return;}
-				var colAmount = this.getHeaderNodes().length;
+				colAmount = this.getHeaderNodes().length;
 				this.drugBefore = true;
-				for(var i = 0; i < colAmount; i++) {
+				for(i = 0; i < colAmount; i++) {
 					if(this.isColSelected(i) && !this.isColSelected(i + 1)){
 						this.drugDestIndex = i + 2;
 						if(this.drugDestIndex == colAmount) {
@@ -861,7 +857,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			break;
 			case dk.DOWN_ARROW:
 				if(!inRowSelection){return;}
-				for(var i = 0; i < this.grid.rowCount; i++) {
+				for(i = 0; i < this.grid.rowCount; i++) {
 					if(this.grid.selection.selected[i] && !this.grid.selection.selected[i + 1]){
 						this.avaOnRowIndex = i + 2;
 						break;
