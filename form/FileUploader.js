@@ -5,6 +5,7 @@ dojo.require("dojox.html.styles");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dojox.embed.flashVars");
+dojo.experimental("dojox.form.FileUploader");
 	
 	//	Usage Notes:
 	//		To center text vertically, use vertical-align:middle;
@@ -399,7 +400,8 @@ dojo.require("dojox.embed.flashVars");
 				});
 			}
 			
-	//		this._animateProgress();
+			// cleaning up solves memory leak issues in the HTML version
+			dojo.addOnUnload(this, this.destroy);
 		},
 		
 		getButtonStyle: function(){
@@ -409,6 +411,7 @@ dojo.require("dojox.embed.flashVars");
 			//		assigned styles
 			//
 			if(!this.srcNodeRef && this.button && this.button.domNode){
+				this.log("isDijitButton")
 				// backwards compat for a Dijit button
 				this.isDijitButton = true;
 				var cls = this.button.domNode.className + " dijitButtonNode";
@@ -423,7 +426,6 @@ dojo.require("dojox.embed.flashVars");
 			}else if(!this.srcNodeRef && this.button){
 				this.srcNodeRef = this.button;
 			}
-			
 			this.norm = getStyle(this.srcNodeRef);
 			this.width = this.norm.w;
 			this.height = this.norm.h;
@@ -499,6 +501,8 @@ dojo.require("dojox.embed.flashVars");
 					backgroundRepeat:"repeat-x",
 					backgroundColor:this.progressBackgroundColor
 				});
+			}else{
+				dojo.destroy(this.progNode);
 			}
 			dojo.style(this.insideNode,{
 				position:"absolute",
@@ -519,7 +523,6 @@ dojo.require("dojox.embed.flashVars");
 				//	an inline element. Alert us with an "Unknown Runtime Error". You can't
 				//	MAKE this stuff up.
 				//
-				console.warn("IE inline node", this.domNode.outerHTML)
 				if(this.uploaderType == "flash"){
 				this.insideNode = this.insideNode.parentNode.removeChild(this.insideNode);
 					dojo.body().appendChild(this.insideNode);
@@ -535,6 +538,7 @@ dojo.require("dojox.embed.flashVars");
 			
 			
 			this.flashDiv = this.insideNode; //backwards compat - rem in 1.5
+			
 		},
 		
 		
@@ -563,7 +567,6 @@ dojo.require("dojox.embed.flashVars");
 			// 		Event is an array of all files uploading
 			//		Can be connected to for HTML uploader,
 			//		but will not return anything.
-			console.log("onProgress-------------------------", dataArray)
 		},
 		
 		onComplete: function(dataArray){
@@ -571,7 +574,6 @@ dojo.require("dojox.embed.flashVars");
 			// stub to connect 
 			// Fires when all files have uploaded
 			// Event is an array of all files
-			console.warn("----------------------------ONCOMPLETE")
 		},
 		
 		onCancel: function(){
@@ -626,7 +628,6 @@ dojo.require("dojox.embed.flashVars");
 			if(this.progressWidgetId){
 				
 				var node = dijit.byId(this.progressWidgetId).domNode;
-				console.warn("PROGRESS BAR", node, dojo.style(node, "display"));
 				if(dojo.style(node, "display") == "none"){
 					this.restoreProgDisplay = "none";
 					dojo.style(node, "display", "block");
@@ -714,6 +715,10 @@ dojo.require("dojox.embed.flashVars");
 			if(this.uploaderType == "flash"){
 				this.flashObject.destroy();
 				dojo.destroy(this.flashDiv);
+			}else{
+				dojo.destroy(dojo.byId("dojoIoIframe"));
+				dojo.destroy(this._fileInput);
+				dojo.destroy(this._formNode);
 			}
 			this.inherited(arguments);
 		},
@@ -895,7 +900,7 @@ dojo.require("dojox.embed.flashVars");
 					f.bytesLoaded = dataObject.bytesLoaded;
 					f.bytesTotal = dataObject.bytesTotal;
 					f.percent = Math.ceil(f.bytesLoaded / f.bytesTotal * 100);
-					console.info(f.name, "percent:", f.percent)
+					this.log(f.name, "percent:", f.percent)
 				} 
 				loaded += Math.ceil(.001 * f.bytesLoaded);
 				total += Math.ceil(.001 * f.bytesTotal);
@@ -987,7 +992,9 @@ dojo.require("dojox.embed.flashVars");
 			//	Investigate removing fileInputs and resending form
 			//	multiple times adding each fileInput
 			//
-			dojo.destroy(this._fileInput);
+			if(this.selectMultipleFiles){
+				dojo.destroy(this._fileInput);
+			}
 			this._setHtmlPostData();
 			if(this.showProgress){
 				this._animateProgress();
@@ -1072,18 +1079,24 @@ dojo.require("dojox.embed.flashVars");
 			//		Internal.Apply style to node
 			var o = this.fhtml.nr;
 			
-			// TODO:test 'inherit' in all browsers
-			var lh = dojo.isIE ? "inherit" : "auto";
 			dojo.style(this.insideNode, {
 				width:o.w+"px",
 				height:o.va == "middle"?o.h+"px":"auto",
-				lineHeight:o.va == "middle"?o.h+"px":lh,
 				textAlign:o.ta,
 				paddingTop:o.p[0]+"px",
 				paddingRight:o.p[1]+"px",
 				paddingBottom:o.p[2]+"px",
 				paddingLeft:o.p[3]+"px"
 			});
+			
+			try{
+				dojo.style(this.insideNode, "lineHeight", "inherit");
+			}catch(e){
+				// There are certain cases where IE refuses to set lineHeight.
+				// For the life of me I cannot figure out the combination of
+				// styles that IE doesn't like. Steaming. Pile. ...
+			}
+			
 		},
 		_resetHTML: function(){
 			// summary:
@@ -1248,7 +1261,6 @@ dojo.require("dojox.embed.flashVars");
 			};
 			
 			this.flashObject = new dojox.embed.Flash(args, this.insideNode);
-			console.log("start flash...")
 			this.flashObject.onError = function(msg){
 				console.warn("Flash Error:", msg);
 			};
@@ -1256,7 +1268,7 @@ dojo.require("dojox.embed.flashVars");
 				//console.log("READY");
 			});
 			this.flashObject.onLoad = dojo.hitch(this, function(mov){
-				console.log("ONLOAD", mov)
+				this.log("flashObject onload", mov)
 				this.flashMovie = mov;
 				this.flashReady = true;
 				this.onReady();
@@ -1290,7 +1302,7 @@ dojo.require("dojox.embed.flashVars");
 				this.flashMovie.focus();
 				this.flashMovie.doFocus();
 				dojo.connect(document, "keydown", function(evt){
-					console.log(evt.keyCode)
+					//console.log(evt.keyCode)
 				});
 			});
 			if(this.tabIndex>=0){
