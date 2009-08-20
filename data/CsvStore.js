@@ -322,9 +322,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 			}else{
 				// We want a copy to pass back in case the parent wishes to sort the array.  We shouldn't allow resort 
 				// of the internal list so that multiple callers can get lists and sort without affecting each other.
-				if(arrayOfAllItems.length> 0){
-					items = arrayOfAllItems.slice(0,arrayOfAllItems.length); 
-				}
+				items = arrayOfAllItems.slice(0,arrayOfAllItems.length); 
+				
 			}
 			findCallback(items, requestArgs);
 		};

@@ -37,6 +37,9 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 				csvData += '"The Sequel to ""Dances With Wolves.""", 1982, Ridley Scott\n';
 				csvData += '"Caine Mutiny, The", 1954, "Dymtryk ""the King"", Edward"\n';
 				break;
+			case "stores/empty.csv":
+				csvData += "Title, Year, Producer\n";
+				break;
 			case "stores/movies3.csv":
 				csvData += "Title, Year, Producer\n";
 				csvData += "\"City\n of God\", 2002, Katia Lund\n";
@@ -141,6 +144,25 @@ doh.register("dojox.data.tests.stores.CsvStore",
 			var d = new doh.Deferred();
 			function completedAll(items){
 				t.assertTrue((items.length === 7));
+				d.callback(true);
+			}
+
+			//Get everything...
+			csvStore.fetch({ onComplete: completedAll, onError: dojo.partial(dojox.data.tests.stores.CsvStore.error, t, d)});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_empty(t){
+			//	summary: 
+			//		Simple test of a basic fetch on CsvStore that's empty.
+			//	description:
+			//		Simple test of a basic fetch on CsvStore that's empty.
+			
+			var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/empty.csv");
+			var csvStore = new dojox.data.CsvStore(args);
+			
+			var d = new doh.Deferred();
+			function completedAll(items){
+				t.assertTrue((items.length === 0));
 				d.callback(true);
 			}
 
