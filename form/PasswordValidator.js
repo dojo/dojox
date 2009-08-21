@@ -250,6 +250,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 		if (this.oldName && !widgets[0]){
 			throw new Error("Need to specify pwType=\"old\" if using oldName");
 		}
+		this.containerNode = this.domNode;
 		this._createSubWidgets();
 		this.connect(this._inputWidgets[1], "_setValueAttr", "_childValueAttr");
 		this.connect(this._inputWidgets[2], "_setValueAttr", "_childValueAttr");		
