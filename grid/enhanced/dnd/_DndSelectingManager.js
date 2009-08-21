@@ -1,4 +1,3 @@
-
 dojo.provide("dojox.grid.enhanced.dnd._DndSelectingManager");
 
 dojo.require("dojox.grid.util");
@@ -8,7 +7,6 @@ dojo.require("dojox.grid.enhanced.dnd._DndBuilder");
 dojo.require("dojox.grid.enhanced.dnd._DndRowSelector");
 dojo.require("dojox.grid.enhanced.dnd._DndFocusManager");
 dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
-	
 	//summary:
 	//		_DndSelectingManager is used to enable grid DND selecting feature
 	//		
@@ -56,7 +54,6 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		// inGrid: dojox.Grid
 		//		The dojox.Grid this editor should be attached to
 		this.grid = inGrid;
-		
 		this.typeSelectingMode = [];
 		this.selectingDisabledTypes = [];
 		this.selectedColumns = [];
@@ -72,7 +69,6 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		
 		dojo.connect(this.grid, "_onFetchComplete",dojo.hitch(this, "refreshColumnSelection"));
 		dojo.connect(this.grid.scroller, "scroll",dojo.hitch(this, "refreshColumnSelection"));
-		
 		//dojo.connect(document, 'onmousedown', this.grid.focus, '_blurRowBar');
 		
 		dojo.subscribe(this.grid.rowSelectionChangedTopic, dojo.hitch(this,function(publisher){
@@ -80,13 +76,13 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 				if(publisher.grid == this.grid && publisher != this){
 					this.cleanCellSelection();
 				}
-			} catch(e){
+			}catch(e){
 				console.debug(e);
 			}
 		}));
 	},
 	
-	extendGridForDnd: function(inGrid) {
+	extendGridForDnd: function(inGrid){
 		//summary:
 		//       Ectend the current class to enable the DND feature
 		//		 inclucing:
@@ -116,15 +112,12 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		dojo.forEach(inGrid.views.views, function(view){
 			//extend dojox._Builder
 			dojo.mixin(view.content, new dojox.grid.enhanced.dnd._DndBuilder());
-			
 			//extend dojox._HeaderBuilder
 			dojo.mixin(view.header, new dojox.grid.enhanced.dnd._DndHeaderBuilder());
-			
-			if(view.declaredClass =="dojox.grid._RowSelector") {
+			if(view.declaredClass =="dojox.grid._RowSelector"){
 				//extend dojox._RowSelector
 				dojo.mixin(view, new dojox.grid.enhanced.dnd._DndRowSelector());
 			}
-			
 			// Change the funnelEvents of views, add mouseup and mouseover event
 			//dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", [ 'mouseup','mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
 			dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", [ 'mouseup']);
@@ -132,7 +125,6 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 			dojox.grid.util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
 
 		});
-	
 		dojo.forEach(this.grid.dndDisabledTypes, function(type){
 			this.disableSelecting(type);
 		}, this);
@@ -142,16 +134,13 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 	disableFeatures: function(){
 		//summary:
 		//		disable selecting features according to the configuration
-		
 		if(this.selectingDisabledTypes["cell"]){
 			this.cellClick = function(){/*console.debug("_DndSelectingManager.cellClick is disabled");*/};
 			this.drugSelectCell = function(){/*console.debug("_DndSelectingManager.drugSelectCell is disabled");*/};
 		}
-		
 		if(this.selectingDisabledTypes["row"]){
 			this.drugSelectRow = function(){/*console.debug("_DndSelectingManager.drugSelectRow is disabled");*/};
 		}
-		
 		if(this.selectingDisabledTypes["col"]){
 			this.selectColumn = function(){/*console.debug("_DndSelectingManager.selectColumn is disabled");*/};
 			this.drugSelectColumn = function(){/*console.debug("_DndSelectingManager.drugSelectColumn is disabled");*/};
@@ -173,7 +162,6 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		//		the selecting mode type
 		//return: Boolean
 		//		whether the selecting manager is in 'type' selecting mode
-		
 		return !!this.typeSelectingMode[type];
 	},
 	
@@ -184,7 +172,6 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		//		the selecting mode will be set, should be 'cell', 'row', or 'col'
 		//isEnable: Boolean
 		//		the 'type' selecting mode is 'isEnable'ed
-		
 		this.typeSelectingMode[type] = isEnable;
 	},
 	
@@ -194,20 +181,18 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		this.typeSelectingMode = [];
 	},
 	
-	getHeaderNodes: function() {
+	getHeaderNodes: function(){
 		//summary:
 		//       Util function 
 		//		 Get  the header nodes list of the grid
-		// 
 		// return:
 		//		 the header nodes list of the grid 
-		
 		return this.headerNodes == null? dojo.query("[role*='columnheader']", this.grid.viewsHeaderNode) : this.headerNode;
 	},
 
 	_range: function(inFrom, inTo, func){
 		//summary:
-		// fire a function for each item in a range
+		// 		fire a function for each item in a range
 		var s = (inFrom >= 0 ? inFrom : inTo), e = inTo;
 		if(s > e){
 			e = s;
@@ -220,15 +205,12 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 	
 	cellClick: function(inColIndex, inRowIndex){
 		//summary:
-		// handle the click event on cell
-		// select the cell call this.addCellToSelection
-		//
-		// inColIndex:
+		// 		handle the click event on cell, select the cell call this.addCellToSelection
+		// inColIndex: Integer
 		//		the Y position  of the cell that fired the click event
-		// inRowIndex:
+		// inRowIndex: Integer
 		//		the Y position of the cell that fired the click event
-		//
-		if (inColIndex > this.exceptColumnsTo) {
+		if(inColIndex > this.exceptColumnsTo){
 			this.grid.selection.clear();
 			this.publishRowChange();
 			var cellNode = this.getCellNode(inColIndex, inRowIndex);
@@ -237,16 +219,14 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		}
 	},
 	
-	setDrugStartPoint: function(inColIndex, inRowIndex) {
+	setDrugStartPoint: function(inColIndex, inRowIndex){
 		//summary:
 		//		set drug selecting start point
 		//		also add mouse move and mouse up handler on the whole window to monitor whether the mouse move out of the grid when druging
-		//
-		// inColIndex:
+		// inColIndex: Integer
 		//			column index of the point
-		//inRowIndex:
+		//inRowIndex: Integer
 		//			row index of the point
-		
 		this.drugSelectionStart.colIndex = inColIndex;
 		this.drugSelectionStart.rowIndex = inRowIndex;
 		this.drugCurrentPoint.colIndex = inColIndex;
@@ -255,23 +235,22 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		// monitor mouse move
 		// when move out the grid bottom, auto scroll the grid
 		var moveHandler = dojo.connect(dojo.doc, "onmousemove", dojo.hitch(this, function(e){
-			this.outRangeValue = e.clientY - this.grid.domNode.offsetTop - this.grid.domNode.offsetHeight;
+			this.outRangeValue = e.clientY - dojo.coords(this.grid.domNode).y/*this.grid.domNode.offsetTop*/ - this.grid.domNode.offsetHeight;
 			if(this.outRangeValue > 0){
-				if(this.drugSelectionStart.colIndex == -1) {
-					if(!this.outRangeY) {
+				if(this.drugSelectionStart.colIndex == -1){
+					if(!this.outRangeY){
 						this.autoRowScrollDrug(e);
 					}
-				} else if(this.drugSelectionStart.rowIndex == -1) {
-					
-				} else {
+				}else if(this.drugSelectionStart.rowIndex == -1){
+					//...
+				}else {
 					this.autoCellScrollDrug(e);
 				}
-			}else  {
+			}else {
 				this.firstOut = true;
 				this.outRangeY = false;
 			}
 		}));
-		
 		// monitor the mouse up event
 		// when mouse up during drug selecting, stop the auto scroll and clean the handlers
 		var upHandler = dojo.connect(dojo.doc, "onmouseup", dojo.hitch(this, function(e){
@@ -283,39 +262,36 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		
 	}, 
 	
-	autoRowScrollDrug: function(e) {
+	autoRowScrollDrug: function(e){
 		//summary:
 		//		start auto scroll and select the next row
-		//
 		this.outRangeY = true;
 		this.autoSelectNextRow();
 	},
 	
-	autoSelectNextRow: function() {
+	autoSelectNextRow: function(){
 		//summary:
 		//		auto scroll the grid to next row and select the row
-		
-		if (this.grid.select.outRangeY ) {			
+		if(this.grid.select.outRangeY ){			
 			this.grid.scrollToRow(this.grid.scroller.firstVisibleRow + 1);
 			this.drugSelectRow(this.drugCurrentPoint.rowIndex + 1);
 			setTimeout(dojo.hitch(this, 'autoSelectNextRow', this.drugCurrentPoint.rowIndex + 1), this.getAutoScrollRate());
 		}
 	},
 	
-	autoCellScrollDrug: function(e) {
+	autoCellScrollDrug: function(e){
 		//summary:
 		// 		start auto scroll the grid to next row
 		//		reset the selected column range when mouse move to another column
-		
 		var mouseOnCol = null;
-		dojo.forEach(this.getHeaderNodes(), function(node) {
+		dojo.forEach(this.getHeaderNodes(), function(node){
 			var coord = dojo.coords(node);
 			if(e.clientX >= coord.x && e.clientX <=coord.x+coord.w){
-					mouseOnCol = Number(node.attributes.getNamedItem("idx").value);
+				mouseOnCol = Number(node.attributes.getNamedItem("idx").value);
 			}
 		});
-		if (mouseOnCol != this.drugCurrentPoint.colIndex || this.firstOut) {
-			if(!this.firstOut) {
+		if(mouseOnCol != this.drugCurrentPoint.colIndex || this.firstOut){
+			if(!this.firstOut){
 				this.colChanged = true;
 				this.drugCurrentPoint.colIndex = mouseOnCol;
 			}
@@ -325,19 +301,17 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		}
 	},
 	
-	autoSelectCellInNextRow: function() {
+	autoSelectCellInNextRow: function(){
 		//summary:
 		//		auto scroll the grid to next row and select the cells
-		
-		if (this.grid.select.outRangeY ) {			
+		if(this.grid.select.outRangeY ){			
 			this.grid.scrollToRow(this.grid.scroller.firstVisibleRow + 1);
 			this.drugSelectCell(this.drugCurrentPoint.colIndex, this.drugCurrentPoint.rowIndex + 1);
-			if(this.grid.select.colChanged) {
+			if(this.grid.select.colChanged){
 				this.grid.select.colChanged = false;
-			} else {
+			}else {
 				setTimeout(dojo.hitch(this, 'autoSelectCellInNextRow', this.drugCurrentPoint.rowIndex + 1), this.getAutoScrollRate());
 			}
-			
 		}
 	},
 	
@@ -350,11 +324,10 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 	},
 	
 	
-	resetStartPoint: function() {
+	resetStartPoint: function(){
 		//summary:
 		//		reset the DND selecting start point
-		
-		if(this.drugSelectionStart.colIndex == -1 && this.drugSelectionStart.rowIndex == -1) {
+		if(this.drugSelectionStart.colIndex == -1 && this.drugSelectionStart.rowIndex == -1){
 			return;
 		}
 		this.lastDrugSelectionStart = dojo.clone(this.drugSelectionStart);
@@ -368,7 +341,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		this.drugSelectionStart = dojo.clone(this.lastDrugSelectionStart);
 	},
 	
-	drugSelectCell : function(inColumnIndex, inRowIndex) {
+	drugSelectCell : function(inColumnIndex, inRowIndex){
 		//summary:
 		// Handle the Dnd selecting cell operation
 		// use this.grid.drugSelectionStart as the start point
@@ -388,61 +361,61 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		
 		// Use Min(inRowIndex, this.drugSelectionStart.rowIndex) as the Y value of top left point
 		//	   Max(inRowIndex, this.drugSelectionStart.rowIndex) as the Y value bottum right point
-		if(inRowIndex < this.drugSelectionStart.rowIndex) {
+		if(inRowIndex < this.drugSelectionStart.rowIndex){
 			fromRow = inRowIndex;
 			toRow = this.drugSelectionStart.rowIndex;
-		} else {
+		}else {
 			fromRow = this.drugSelectionStart.rowIndex;
 			toRow = inRowIndex;
 		}
 		
 		// Use Min(inColumnIndex, this.drugSelectionStart.colIndex) as the X value of top left point
 		//	   Max(inColumnIndex, this.drugSelectionStart.colIndex) as the X value bottum right point
-		if(inColumnIndex < this.drugSelectionStart.colIndex) {
+		if(inColumnIndex < this.drugSelectionStart.colIndex){
 			fromCol = inColumnIndex;
 			toCol = this.drugSelectionStart.colIndex;
-		} else {
+		}else {
 			fromCol = this.drugSelectionStart.colIndex;
 			toCol = inColumnIndex;
 		}
-		
-		for(var i = fromCol; i <= toCol; i++) {
+		for(var i = fromCol; i <= toCol; i++){
 			this.addColumnRangeToSelection(i, fromRow, toRow);
 		}
 		
 	},
 	
-	selectColumn : function (columnIndex) {
+	selectColumn : function (columnIndex){
 		//summary:
-		// Handle the header cell click event
+		// 		Handle the header cell click event
 		// columnIndex:
 		//		the colIndex of the header cell that fired the click event
 		this.addColumnToSelection(columnIndex);
 		
 	},
 	
-	drugSelectColumn : function(currentColumnIndex) {
-		// Handle Dnd select operation
+	drugSelectColumn : function(currentColumnIndex){
+		//summary:		
+		// 		Handle Dnd select operation
 		// currentColumnIndex:
 		// 		the colIndex of the col that fired mouseover event
 		this.selectColumnRange(this.drugSelectionStart.colIndex, currentColumnIndex);
 	}, 
 	
-	drugSelectColumnToMax: function(dir) {
+	drugSelectColumnToMax: function(dir){
 		//summary:
 		//		select the column to the last one in the direction 'dir'
 		//dir: String
 		//		the direction to extend column selection
-		if(dir == "left") {
+		if(dir == "left"){
 			this.selectColumnRange(this.drugSelectionStart.colIndex, 0);
-		} else {
+		}else {
 			this.selectColumnRange(this.drugSelectionStart.colIndex, this.getHeaderNodes().length -1);
 		}
 	},
 	
-	selectColumnRange : function(startIndex, endIndex) {
+	selectColumnRange : function(startIndex, endIndex){
 		//summary:
-		// select a range of columns
+		// 		select a range of columns
 		// startIndex:
 		//		the start col index of the range
 		// endIndex:
@@ -450,24 +423,23 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		if(!this.keepState)
 			this.cleanAll();
 		this._range(startIndex, endIndex, dojo.hitch(this, "addColumnToSelection"));
-//		this.clearDrugDivs();
-//		this.setSelectedColDivs();
-		
+		//this.clearDrugDivs();
+		//this.setSelectedColDivs();
 	},
 		
-	addColumnToSelection : function (columnIndex) {
+	addColumnToSelection : function (columnIndex){
 		//summary:
 		// 		add all the cells in a column to selection
 		// columnIndex:
 		//		the index of the col
 		this.selectedColumns[columnIndex] = true;
 		dojo.toggleClass(this.getHeaderNodes()[columnIndex], "dojoxGridHeaderSelected", true);
-//		this.addColumnRangeToSelection(columnIndex, -1, Number.POSITIVE_INFINITY);
+		//this.addColumnRangeToSelection(columnIndex, -1, Number.POSITIVE_INFINITY);
 		this._rangCellsInColumn(columnIndex, -1, Number.POSITIVE_INFINITY, this.addCellToSelection);
-//		this.setSelectedDiv();
+		//this.setSelectedDiv();
 	},
 	
-	addColumnRangeToSelection : function (columnIndex, from, to) {
+	addColumnRangeToSelection : function (columnIndex, from, to){
 		//summary:
 		// Add a range of cells in the specified column to selection
 		// columnIndex:
@@ -482,13 +454,10 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		var dndManager = this;
 		
 		// As there's no reference of domNode for cell, get it manully
-		dojo.forEach(viewManager.views, function(view) {
+		dojo.forEach(viewManager.views, function(view){
 			dojo.forEach(this.getViewRowNodes(view.rowNodes), function(rowNode, rowIndex){
-				if (!rowNode) {
-					// row not loaded
-					return;
-				}
-				if(rowIndex >= from && rowIndex <= to) {
+				if(!rowNode){ return; /* row not loaded */}
+				if(rowIndex >= from && rowIndex <= to){
 					dojo.forEach(rowNode.firstChild.rows[0].cells, function(cell){
 						
 						// get the cells of the row in the view by 
@@ -496,7 +465,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 						// rowNode is the Div which is the domNode for a row, the firstChild is a table, and each row should have only one
 						// row in the table, so get rows[0] should be ok.
 						
-						if (cell && cell.attributes && (idx = cell.attributes.getNamedItem("idx")) && Number(idx.value) == columnIndex ) {
+						if(cell && cell.attributes && (idx = cell.attributes.getNamedItem("idx")) && Number(idx.value) == columnIndex ){
 							dndManager.addCellToSelection(cell);
 						}
 					});
@@ -505,7 +474,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		}, this);		
 	},
 	
-	_rangCellsInColumn : function (columnIndex, from, to, func) {
+	_rangCellsInColumn : function (columnIndex, from, to, func){
 		//summary:
 		// 		Add a range of cells in the specified column to selection
 		// 		columnIndex:
@@ -520,21 +489,16 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		var dndManager = this;
 		
 		// As there's no reference of domNode for cell, get it manully
-		dojo.forEach(viewManager.views, function(view) {
+		dojo.forEach(viewManager.views, function(view){
 			dojo.forEach(this.getViewRowNodes(view.rowNodes), function(rowNode, rowIndex){
-				if (!rowNode) {
-					// row not loaded
-					return;
-				}
-				if(rowIndex >= from && rowIndex <= to) {
+				if(!rowNode){return;/* row not loaded */}
+				if(rowIndex >= from && rowIndex <= to){
 					dojo.forEach(rowNode.firstChild.rows[0].cells, function(cell){
-						
 						// get the cells of the row in the view by 
 						// rowNode.firstChild.rows[0].cells
 						// rowNode is the Div which is the domNode for a row, the firstChild is a table, and each row should have only one
 						// row in the table, so get rows[0] should be ok.
-						
-						if (cell && cell.attributes && (idx = cell.attributes.getNamedItem("idx")) && Number(idx.value) == columnIndex ) {
+						if(cell && cell.attributes && (idx = cell.attributes.getNamedItem("idx")) && Number(idx.value) == columnIndex ){
 							func(cell, dndManager);
 						}
 					});
@@ -571,65 +535,54 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		//		select the row to the last one in the direction 'dir'
 		//dir: String
 		//		the direction to extend row selection		
-		if(dir == "up") {
+		if(dir == "up"){
 			this.drugSelectRow(0);
-		} else {
+		}else {
 			this.drugSelectRow(this.grid.rowCount);
 		}
 	},
 
-	getCellNode: function( /*Integer */ inCellIndex,
-						   /*Integer */ inRowIndex){
+	getCellNode: function(inCellIndex, inRowIndex){
 		//summary:
-		//As there's no reference of domNode for cell, get it manully
-		//inCellIndex:
-		//			Offset of the cell in the row, stands for the X index of the cell in the grid
+		//		As there's no reference of domNode for cell, get it manully
+		//inCellIndex: Integer
+		//		Offset of the cell in the row, stands for the X index of the cell in the grid
 		//inRowIndex : Integer
-		//			Offset of the row in the grid, stands forthe Y index of the cell in the grid
+		//		Offset of the row in the grid, stands forthe Y index of the cell in the grid
 		//Description: Integer
-		//			Get the DOM node for the cell in a give position
+		//		Get the DOM node for the cell in a give position
 		//Return: Object
-		//			DOM node reference of the cell
-		
-		
-		var rowNodes = [];
+		//		DOM node reference of the cell
+		var rowNodes = [], cellNode = null;
 		var viewManager = this.grid.views;
 		for(var i=0, v, n; (v=viewManager.views[i])&&(n=v.getRowNode(inRowIndex)); i++){
 			rowNodes.push(n);
 		}
-		
-		var idx = null;
-		var cellNode = null;
-		dojo.forEach(rowNodes, dojo.hitch(function(rowNode, viewIndex) {
-
-			if(cellNode) { 
-				// get the cell from the previous view
-				return;
-			}
+		dojo.forEach(rowNodes, dojo.hitch(function(rowNode, viewIndex){
+			if(cellNode){ return;/* get the cell from the previous view */}
 			var cells = dojo.query("[idx='" + inCellIndex + "']",rowNode);
-			if(cells && cells[0]) {
+			if(cells && cells[0]){
 				cellNode = cells[0];
 			}
 		}));
 		return cellNode;
 	},
 	
-	addCellToSelection : function(cellNode, dndManager) {
+	addCellToSelection : function(cellNode, dndManager){
 		//summary:
 		//	 	add a cell to selection list and change it into selected state
 		//cellNode: Object
 		//		the cell node will be added to select
 		//dndManager: _DndSelectionManager
 		//		reference to the instance of _DndSelectionManager
-		
-		if(!dndManager) {
+		if(!dndManager){
 			dndManager = this;
 		}
 		dndManager.selectedCells[dndManager.selectedCells.length] = cellNode;
 		dojo.toggleClass(cellNode, dndManager.selectedClass, true);
 	},
 	
-	isColSelected: function(inColIndex) {
+	isColSelected: function(inColIndex){
 		//summary:
 		//		wether the column in of index value "inColIndex" is selected
 		//inColIndex: Integer
@@ -639,7 +592,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		return this.selectedColumns[inColIndex];
 	},
 	
-	isRowSelected: function(inRowIndex) {
+	isRowSelected: function(inRowIndex){
 		//summary:
 		//		wether the row in of index value "inRowIndex" is selected
 		//inRowIndex: Integer
@@ -649,10 +602,9 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		return this.grid.selection.selected[inRowIndex];
 	},
 	
-	cleanCellSelection : function() {
+	cleanCellSelection : function(){
 		//summary:
 		//		change all the selected cell to unselected and umpty the selected-cell list
-		
 		dojo.forEach(this.selectedCells, dojo.hitch(this, "removeCellSelectedState"));
 		this.selectedCells = [];
 		dojo.forEach(this.selectedColumns, function(selected, index){
@@ -664,16 +616,15 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		this.selectedColumns = [];
 	},
 	
-	removeCellSelectedState : function(cell) {
+	removeCellSelectedState : function(cell){
 		//summary:
 		//		change the cell style to un-selected
-		//
 		//cell:
 		//		the cell dom-node the style to be changed
 		dojo.toggleClass(cell, this.selectedClass, false);
 	}, 
 	
-	cleanAll : function() {
+	cleanAll : function(){
 		//summary:
 		//Clear all the selected cells, columns and rows
 		// row selection is reused from dojox.grid._Selection, 
@@ -681,13 +632,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		
 		// clear cell and column selection effect 
 		this.cleanCellSelection();
-		
 		// clear row selection effect
 		this.grid.selection.clear();
-		
 		// clear Column/Row 
-//		this.selectedColumns = [];
-//		this.selectedRows = [];
+		//this.selectedColumns = [];
+		//this.selectedRows = [];
 		this.publishRowChange();
 	},
 	
@@ -695,7 +644,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		//summary:
 		//		handle grid scroll, keep column selected state
 		dojo.forEach(this.selectedColumns, dojo.hitch(this, function(selectedColumn, colIndex){
-			if(selectedColumn) {
+			if(selectedColumn){
 				this.grid.select.addColumnToSelection(colIndex);
 			}
 		}));
@@ -719,13 +668,13 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		dojo.publish(this.grid.rowSelectionChangedTopic, [this]);
 	}, 
 	
-	getViewRowNodes: function(viewRowNodes) {
+	getViewRowNodes: function(viewRowNodes){
+		//summary:
+		//		Get view row nodes in array form
 		var rowNodes = [];
-		for(i in viewRowNodes) {
+		for(i in viewRowNodes){
 			rowNodes.push(viewRowNodes[i]);
 		}
 		return rowNodes;
 	}
-	
-	
 });

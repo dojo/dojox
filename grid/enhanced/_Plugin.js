@@ -146,7 +146,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		//		True - fixed| False - not fixed
 
 		//target cell can use Boolean attributes named "isRowSelector" or "positionFixed" to mark it's a fixed cell(column)
-		return cell && (cell.isRowSelector || cell.declaredClass == 'dojox.grid.cells.RowIndex' || cell.positionFixed);
+		return cell && (cell.isRowSelector || cell.positionFixed);
 	},
 	
 	getFixedCellNumber: function(){
