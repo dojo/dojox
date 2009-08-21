@@ -81,7 +81,6 @@ dojo.declare("dojox.analytics.Urchin", null, {
 	_gotGA: function(){
 		// summary: initialize the tracker
 		this.tracker = _gat._getTracker(this.acct);
-		this.tracker._initData();
 		this.GAonLoad.apply(this, arguments);
 	},
 	
