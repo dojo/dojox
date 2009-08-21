@@ -286,6 +286,24 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	kwArgs.global:
 			//		This will cause the save to commit the dirty data for all 
 			// 		JsonRestStores as a single transaction.
+			//
+			//	kwArgs.revertOnError
+			//		This will cause the changes to be reverted if there is an
+			//		error on the save. By default a revert is executed unless
+			//		a value of false is provide for this parameter.
+			//
+			//	kwArgs.incrementalUpdates
+			//		For items that have been updated, if this is enabled, the server will be sent a POST request
+			// 		with a JSON object containing the changed properties. By default this is
+			// 		not enabled, and a PUT is used to deliver an update, and will include a full
+			// 		serialization of all the properties of the item/object. 
+			//
+			//	kwArgs.alwaysPostNewItems
+			//		If this is true, new items will always be sent with a POST request. By default
+			//		this is not enabled, and the JsonRestStore will send a POST request if
+			//		the item does not include its identifier (expecting server assigned location/
+			//		identifier), and will send a PUT request if the item does include its identifier
+			//		(the PUT will be sent to the URI corresponding to the provided identifier).
 
 			if(!(kwArgs && kwArgs.global)){
 				(kwArgs = kwArgs || {}).service = this.service;
@@ -306,25 +324,6 @@ dojo.declare("dojox.data.JsonRestStore",
 			//	kwArgs.global:
 			//		This will cause the revert to undo all the changes for all 
 			// 		JsonRestStores in a single operation.
-			var dirtyObjects = dojox.rpc.JsonRest.getDirtyObjects().concat([]);
-			while (dirtyObjects.length>0){
-				var d = dirtyObjects.pop();
-				var store = dojox.data._getStoreForItem(d.object || d.old);
-				if(!d.object){
-					// was a deletion, we will add it back
-					store.onNew(d.old);
-				}else if(!d.old){
-					// was an addition, remove it
-					store.onDelete(d.object);
-				}else{
-					// find all the properties that were modified
-					for(var i in d.object){
-						if(d.object[i] != d.old[i]){
-							store.onSet(d.object, i, d.object[i], d.old[i]);
-						}
-					}
-				}
-			}
 			dojox.rpc.JsonRest.revert(kwArgs && kwArgs.global && this.service);
 		},
 
@@ -347,7 +346,30 @@ dojo.declare("dojox.data.JsonRestStore",
 		},
 		_doQuery: function(args){
 			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
-			return dojox.rpc.JsonRest.query(this.service,query, args);
+			var deferred = dojox.rpc.JsonRest.query(this.service,query, args);
+			var self = this;
+			deferred.addCallback(function(result){
+				var contentType = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Content-Type");
+				var schemaRef = contentType && contentType.match(/schema\s*=\s*([^;]*)/);
+				if(contentType && !schemaRef){
+					schemaRef = deferred.ioArgs.xhr.getResponseHeader("Link").match(/<[^>]*>;\s*rel="?schema"?/);
+				}	
+				schemaRef = schemaRef && schemaRef[1];
+				if(schemaRef){
+					var serviceAndId = dojox.rpc.JsonRest.getServiceAndId((self.target + schemaRef).replace(/^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/,"$2$3"));
+					var schemaDeferred = dojox.rpc.JsonRest.byId(serviceAndId.service, serviceAndId.id);
+					schemaDeferred.addCallbacks(function(newSchema){
+						dojo.mixin(self.schema, newSchema);
+						return result;
+					}, function(error){
+						console.error(error); // log it, but don't let it cause the main request to fail
+						return result;
+					});
+					return schemaDeferred;
+				}
+				return undefined;//don't change anything, and deal with the stupid post-commit lint complaints
+			});
+			return deferred;
 		},
 		_processResults: function(results, deferred){
 			// index the results
