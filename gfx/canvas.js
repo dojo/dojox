@@ -9,10 +9,10 @@ dojo.require("dojox.gfx.decompose");
 dojo.experimental("dojox.gfx.canvas");
 
 (function(){
-	var g = dojox.gfx, gs = g.shape, ga = g.arc,
+	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc,
 		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2;
 
-	dojo.extend(g.Shape, {
+	d.extend(g.Shape, {
 		_render: function(/* Object */ ctx){
 			// summary: render the shape
 			ctx.save();
@@ -111,7 +111,7 @@ dojo.experimental("dojox.gfx.canvas");
 							f = fs.type == "linear" ?
 								ctx.createLinearGradient(fs.x1, fs.y1, fs.x2, fs.y2) :
 								ctx.createRadialGradient(fs.cx, fs.cy, 0, fs.cx, fs.cy, fs.r);
-							dojo.forEach(fs.colors, function(step){
+							d.forEach(fs.colors, function(step){
 								f.addColorStop(step.offset, g.normalizeColor(step.color).toString());
 							});
 							break;
@@ -321,7 +321,7 @@ dojo.experimental("dojox.gfx.canvas");
 			return g.Path.superclass.setShape.apply(this, arguments);
 		},
 		_updateWithSegment: function(segment){
-			var last = dojo.clone(this.last);
+			var last = d.clone(this.last);
 			this[pathRenderers[segment.action]](this.canvasPath, segment.action, segment.args);
 			this.last = last;
 			g.Path.superclass._updateWithSegment.apply(this, arguments);
@@ -518,7 +518,7 @@ dojo.experimental("dojox.gfx.canvas");
 					args[i + 3] ? 1 : 0, args[i + 4] ? 1 : 0,
 					x1, y1
 				);
-				dojo.forEach(arcs, function(p){
+				d.forEach(arcs, function(p){
 					result.push("bezierCurveTo", p);
 				});
 				this.last.x = x1;
@@ -531,7 +531,7 @@ dojo.experimental("dojox.gfx.canvas");
 			this.lastControl = {};
 		}
 	});
-	dojo.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo",
+	d.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo",
 		"smoothCurveTo", "qCurveTo", "qSmoothCurveTo", "arcTo", "closePath"],
 		function(method){ modifyMethod(g.Path, method); }
 	);
@@ -585,7 +585,7 @@ dojo.experimental("dojox.gfx.canvas");
 		makeDirty: function(){
 			// summary: internal method, which is called when we may need to redraw
 			if(!this.pendingImagesCount && !("pendingRender" in this)){
-				this.pendingRender = setTimeout(dojo.hitch(this, this._render), 0);
+				this.pendingRender = setTimeout(d.hitch(this, this._render), 0);
 			}
 		},
 		downloadImage: function(img, url){
@@ -595,7 +595,7 @@ dojo.experimental("dojox.gfx.canvas");
 			//		the image object
 			// url: String:
 			//		the url of the image
-			var handler = dojo.hitch(this, this.onImageLoad);
+			var handler = d.hitch(this, this.onImageLoad);
 			if(!this.pendingImageCount++ && "pendingRender" in this){
 				clearTimeout(this.pendingRender);
 				delete this.pendingRender;
@@ -621,13 +621,25 @@ dojo.experimental("dojox.gfx.canvas");
 		// width: String: width of surface, e.g., "100px"
 		// height: String: height of surface, e.g., "100px"
 
-		if(!width){ width = "100%"; }
-		if(!height){ height = "100%"; }
+		if(!width && !height){
+			var pos = d.position(parentNode);
+			width  = width  || pos.w;
+			height = height || pos.h;
+		}
+		if(typeof width == "number"){
+			width = width + "px";
+		}
+		if(typeof height == "number"){
+			height = height + "px";
+		}
+
 		var s = new g.Surface(),
-			p = dojo.byId(parentNode),
+			p = d.byId(parentNode),
 			c = p.ownerDocument.createElement("canvas");
-		c.width  = width;
-		c.height = height;
+
+		c.width  = dojox.gfx.normalizedLength(width);	// in pixels
+		c.height = dojox.gfx.normalizedLength(height);	// in pixels
+
 		p.appendChild(c);
 		s.rawNode = c;
 		s._parent = p;
@@ -660,7 +672,7 @@ dojo.experimental("dojox.gfx.canvas");
 		}
 	};
 
-	dojo.mixin(gs.Creator, {
+	d.mixin(gs.Creator, {
 		// summary: Canvas shape creators
 		createObject: function(shapeType, rawShape) {
 			// summary: creates an instance of the passed shapeType class
@@ -675,9 +687,9 @@ dojo.experimental("dojox.gfx.canvas");
 		}
 	});
 
-	dojo.extend(g.Group, Container);
-	dojo.extend(g.Group, gs.Creator);
+	d.extend(g.Group, Container);
+	d.extend(g.Group, gs.Creator);
 
-	dojo.extend(g.Surface, Container);
-	dojo.extend(g.Surface, gs.Creator);
+	d.extend(g.Surface, Container);
+	d.extend(g.Surface, gs.Creator);
 })();

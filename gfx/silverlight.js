@@ -530,6 +530,18 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	// width: String: width of surface, e.g., "100px"
 	// height: String: height of surface, e.g., "100px"
 
+	if(!width && !height){
+		var pos = d.position(parentNode);
+		width  = width  || pos.w;
+		height = height || pos.h;
+	}
+	if(typeof width == "number"){
+		width = width + "px";
+	}
+	if(typeof height == "number"){
+		height = height + "px";
+	}
+
 	var s = new dojox.gfx.Surface();
 	parentNode = dojo.byId(parentNode);
 	s._parent = parentNode;
