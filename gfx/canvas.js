@@ -164,7 +164,7 @@ dojo.experimental("dojox.gfx.canvas");
 				ctx.arc(xr2, yt2, r, -halfPI, 0, false);
 				ctx.arc(xr2, yb2, r, 0, halfPI, false);
 				ctx.arc(xl2, yb2, r, halfPI, pi, false);
-				ctx.arc(xl2, yt2, r, pi, halfPI, false);
+				ctx.arc(xl2, yt2, r, pi, pi + halfPI, false);
 			}else{
 				ctx.lineTo(xr2, yt);
 				ctx.lineTo(xr, yb2);
