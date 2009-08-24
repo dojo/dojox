@@ -197,7 +197,7 @@ StencilArgs: function(options){
 	data:null,
 	//
 	// 	marginZero [readonly] Number
-	// 		How closely shape can get to y:0 or x:0. Less than zero has
+	// 		How closely shape can get to y:0 or x:0. Less than zero has
 	//		bugs in VML. This is set with defaults, and should be equal
 	//		to half the size of an anchor point (5 px)
 	marginZero:0,
