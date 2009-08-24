@@ -352,7 +352,8 @@ dojo.declare("dojox.data.JsonRestStore",
 				var contentType = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Content-Type");
 				var schemaRef = contentType && contentType.match(/schema\s*=\s*([^;]*)/);
 				if(contentType && !schemaRef){
-					schemaRef = deferred.ioArgs.xhr.getResponseHeader("Link").match(/<[^>]*>;\s*rel="?schema"?/);
+					schemaRef = deferred.ioArgs.xhr.getResponseHeader("Link");
+					schemaRef = schemaRef && schemaRef.match(/<([^>]*)>;\s*rel="?schema"?/);
 				}	
 				schemaRef = schemaRef && schemaRef[1];
 				if(schemaRef){
