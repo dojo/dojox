@@ -7,6 +7,18 @@ dojo.require("dojox.gfx.path");
 (function(){
 	var d = dojo, g = dojox.gfx, gs = g.shape, svg = g.svg;
 
+        var _createElementNS = function(ns, nodeType){
+		// summary:
+		//		Internal helper to deal with creating elements that
+		//		are namespaced.  Mainly to get SVG markup output
+		//		working on IE.
+		if(document.createElementNS){
+			return document.createElementNS(ns,nodeType);
+                }else{
+			return document.createElement(nodeType);
+		}
+	}
+
 	svg.xmlns = {
 		xlink: "http://www.w3.org/1999/xlink",
 		svg:   "http://www.w3.org/2000/svg"
@@ -172,7 +184,7 @@ dojo.require("dojox.gfx.path");
 				if(fill.tagName.toLowerCase() != nodeType.toLowerCase()){
 					var id = fill.id;
 					fill.parentNode.removeChild(fill);
-					fill = document.createElementNS(svgns, nodeType);
+					fill = _createElementNS(svgns, nodeType);
 					fill.setAttribute("id", id);
 					defs.appendChild(fill);
 				}else{
@@ -181,13 +193,13 @@ dojo.require("dojox.gfx.path");
 					}
 				}
 			}else{
-				fill = document.createElementNS(svgns, nodeType);
+				fill = _createElementNS(svgns, nodeType);
 				fill.setAttribute("id", g._base._getUniqueId());
 				defs.appendChild(fill);
 			}
 			if(nodeType == "pattern"){
 				fill.setAttribute("patternUnits", "userSpaceOnUse");
-				var img = document.createElementNS(svgns, "image");
+				var img = _createElementNS(svgns, "image");
 				img.setAttribute("x", 0);
 				img.setAttribute("y", 0);
 				img.setAttribute("width",  f.width .toFixed(8));
@@ -197,7 +209,7 @@ dojo.require("dojox.gfx.path");
 			}else{
 				fill.setAttribute("gradientUnits", "userSpaceOnUse");
 				for(var i = 0; i < f.colors.length; ++i){
-					var c = f.colors[i], t = document.createElementNS(svgns, "stop"),
+					var c = f.colors[i], t = _createElementNS(svgns, "stop"),
 						cc = c.color = g.normalizeColor(c.color);
 					t.setAttribute("offset",       c.offset.toFixed(8));
 					t.setAttribute("stop-color",   cc.toCss());
@@ -379,7 +391,11 @@ dojo.require("dojox.gfx.path");
 			r.setAttribute("rotate", s.rotated ? 90 : 0);
 			r.setAttribute("kerning", s.kerning ? "auto" : 0);
 			r.setAttribute("text-rendering", "optimizeLegibility");
-			r.textContent = s.text;
+			if(!dojo.isIE){
+				r.textContent = s.text;
+			}else{
+				r.appendChild(document.createTextNode(s.text));
+			}
 			return this;	// self
 		},
 		getTextWidth: function(){
@@ -445,7 +461,7 @@ dojo.require("dojox.gfx.path");
 			if(typeof this.shape.path != "string"){ return; }
 			var r = this.rawNode;
 			if(!r.firstChild){
-				var tp = document.createElementNS(svg.xmlns.svg, "textPath"),
+				var tp = _createElementNS(svg.xmlns.svg, "textPath"),
 					tx = document.createTextNode("");
 				tp.appendChild(tx);
 				r.appendChild(tp);
@@ -456,7 +472,7 @@ dojo.require("dojox.gfx.path");
 				var surface = this._getParentSurface();
 				if(surface){
 					var defs = surface.defNode;
-					path = document.createElementNS(svg.xmlns.svg, "path");
+					path = _createElementNS(svg.xmlns.svg, "path");
 					var id = g._base._getUniqueId();
 					path.setAttribute("id", id);
 					defs.appendChild(path);
@@ -470,7 +486,7 @@ dojo.require("dojox.gfx.path");
 		_setText: function(){
 			var r = this.rawNode;
 			if(!r.firstChild){
-				var tp = document.createElementNS(svg.xmlns.svg, "textPath"),
+				var tp = _createElementNS(svg.xmlns.svg, "textPath"),
 					tx = document.createTextNode("");
 				tp.appendChild(tx);
 				r.appendChild(tp);
@@ -534,7 +550,7 @@ dojo.require("dojox.gfx.path");
 		// height: String: height of surface, e.g., "100px"
 
 		var s = new g.Surface();
-		s.rawNode = document.createElementNS(svg.xmlns.svg, "svg");
+		s.rawNode = _createElementNS(svg.xmlns.svg, "svg");
 		if(width){
 			s.rawNode.setAttribute("width",  width);
 		}
@@ -542,7 +558,7 @@ dojo.require("dojox.gfx.path");
 			s.rawNode.setAttribute("height", height);
 		}
 
-		var defNode = document.createElementNS(svg.xmlns.svg, "defs");
+		var defNode = _createElementNS(svg.xmlns.svg, "defs");
 		s.rawNode.appendChild(defNode);
 		s.defNode = defNode;
 
@@ -625,7 +641,7 @@ dojo.require("dojox.gfx.path");
 			// rawShape: Object: properties to be passed in to the classes "setShape" method
 			if(!this.rawNode){ return null; }
 			var shape = new shapeType(),
-				node = document.createElementNS(svg.xmlns.svg, shapeType.nodeType);
+				node = _createElementNS(svg.xmlns.svg, shapeType.nodeType);
 
 			shape.setRawNode(node);
 			this.rawNode.appendChild(node);

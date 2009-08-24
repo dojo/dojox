@@ -9,6 +9,12 @@ dojo.loadInit(function(){
 	//has not been defined yet.
 	var gfx = dojo.getObject("dojox.gfx", true), sl, flag, match;
 	if(!gfx.renderer){
+		//Have a way to force a GFX renderer, if so desired.
+		//Useful for being able to serialize GFX data in a particular format.
+		if(dojo.config.forceGfxRenderer){
+			dojox.gfx.renderer = dojo.config.forceGfxRenderer;
+			return;
+		}
 		var renderers = (typeof dojo.config.gfxRenderer == "string" ?
 			dojo.config.gfxRenderer : "svg,vml,silverlight,canvas").split(",");
 
