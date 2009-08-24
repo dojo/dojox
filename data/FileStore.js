@@ -63,6 +63,8 @@ dojo.declare("dojox.data.FileStore", null, {
 	
 	options: [],	//Array of options to always send when doing requests.  Back end service controls this, like 'dirsOnly', 'showHiddenFiles', 'expandChildren', etc.
 
+	failOk: false,  // Flag to pass on to xhr functions to check if we are OK to fail the call silently
+
 	//urlPreventCache: boolean
 	//Flag to dennote if preventCache should be passed to xhrGet.
 	urlPreventCache: true,
@@ -164,7 +166,8 @@ dojo.declare("dojox.data.FileStore", null, {
 			url: this.pathAsQueryParam? this.url : this.url + "/" + item.parentPath + "/" + item.name,
 			handleAs: "json-comment-optional",
 			content: content,
-			preventCache: this.urlPreventCache
+			preventCache: this.urlPreventCache,
+			failOk: this.failOk
 		};
 
 		var deferred = dojo.xhrGet(xhrData);
@@ -283,6 +286,7 @@ dojo.declare("dojox.data.FileStore", null, {
 		var getArgs = {
 			url: this.url,
 			preventCache: this.urlPreventCache,
+			failOk: this.failOk,
 			handleAs: "json-comment-optional",
 			content: reqParams
 		};
@@ -318,7 +322,8 @@ dojo.declare("dojox.data.FileStore", null, {
 			url: this.pathAsQueryParam? this.url : this.url + "/" + path,
 			handleAs: "json-comment-optional",
 			content: content,
-			preventCache: this.urlPreventCache
+			preventCache: this.urlPreventCache,
+			failOk: this.failOk
 		};
 
 		var deferred = dojo.xhrGet(xhrData);
