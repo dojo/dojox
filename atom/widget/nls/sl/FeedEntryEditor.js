@@ -1,6 +1,6 @@
 ({
 	doNew: "[novo]",
-	edit: "[uredi]",
+	edit: "[urejanje]",
 	save: "[shrani]",
 	cancel: "[prekliči]"
 })
