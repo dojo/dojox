@@ -73,26 +73,29 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	normalizeRowNodeHeights: function(inRowNodes){
 		var h = 0;
 		var currHeights = [];
-		if(inRowNodes.length <= 1){ 
-			// no need to normalize if we are the only one...
-			return; 
-		}
-		for(var i=0, n; (n=inRowNodes[i]); i++){
-			// We only care about the height - so don't use marginBox.  This
-			// depends on the container not having any margin (which it shouldn't)
-			// Also - we only look up the height if the cell doesn't have the
-			// dojoxGridNonNormalizedCell class (like for row selectors)
-			if(!dojo.hasClass(n, "dojoxGridNonNormalizedCell")){
-				currHeights[i] = n.firstChild.offsetHeight;
-				h =  Math.max(h, currHeights[i]);
+		if(this.grid.rowHeight){
+			h = this.grid.rowHeight;
+		}else{
+			if(inRowNodes.length <= 1){ 
+				// no need to normalize if we are the only one...
+				return; 
 			}
+			for(var i=0, n; (n=inRowNodes[i]); i++){
+				// We only care about the height - so don't use marginBox.  This
+				// depends on the container not having any margin (which it shouldn't)
+				// Also - we only look up the height if the cell doesn't have the
+				// dojoxGridNonNormalizedCell class (like for row selectors)
+				if(!dojo.hasClass(n, "dojoxGridNonNormalizedCell")){
+					currHeights[i] = n.firstChild.offsetHeight;
+					h =  Math.max(h, currHeights[i]);
+				}
+			}
+			h = (h >= 0 ? h : 0);
+	
+			//Work around odd FF3 rendering bug: #8864.
+			//A one px increase fixes FireFox 3's rounding bug for fractional font sizes.
+			if(dojo.isFF>=3 && h){h++;}
 		}
-		h = (h >= 0 ? h : 0);
-
-		//Work around odd FF3 rendering bug: #8864.
-		//A one px increase fixes FireFox 3's rounding bug for fractional font sizes.
-		if(dojo.isFF>=3 && h){h++;}
-
 		for(var i=0, n; (n=inRowNodes[i]); i++){
 			if(currHeights[i] != h){
 				n.firstChild.style.height = h + "px";

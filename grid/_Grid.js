@@ -230,6 +230,13 @@ dojo.requireLocalization("dijit", "loading");
 		//		that many rows if there are more
 		autoHeight: '',
 
+		// rowHeight: Integer
+		//		If rowHeight is set to a positive number, it will define the height of the rows
+		//		in pixels. This can provide a significant performance advantage, since it
+		//		eliminates the need to measure row sizes during rendering, which is one
+		// 		the primary bottlenecks in the DataGrid's performance. 
+		rowHeight: 0,
+		
 		// autoRender: Boolean
 		//		If autoRender is true, grid will render itself after initialization.
 		autoRender: true,
@@ -731,13 +738,13 @@ dojo.requireLocalization("dijit", "loading");
 				this.height = this.domNode.style.height;
 				delete this.fitTo;
 			}else if(this.fitTo == "parent"){
-				var h = dojo._getContentBox(pn).h;
-				dojo.marginBox(this.domNode, { h: Math.max(0, h) });
+				var h = this._parentContentBoxHeight = this._parentContentBoxHeight || dojo._getContentBox(pn).h;
+				this.domNode.style.height = Math.max(0, h) + "px";
 			}
 			
 			var hasFlex = dojo.some(this.views.views, function(v){ return v.flexCells; });
 
-			if(!this._autoHeight && dojo._getContentBox(this.domNode).h === 0){
+			if(!this._autoHeight && (h || dojo._getContentBox(this.domNode).h) === 0){
 				// We need to hide the header, since the Grid is essentially hidden.
 				this.viewsHeaderNode.style.display = "none";
 			}else{

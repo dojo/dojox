@@ -528,7 +528,7 @@ dojo.require("dojo.dnd.Manager");
 
 		adaptHeight: function(minusScroll){
 			if(!this.grid._autoHeight){
-				var h = this.domNode.clientHeight;
+				var h = (this.domNode.style.height && parseInt(this.domNode.style.height.replace(/px/,''))) || this.domNode.clientHeight;
 				var self = this;
 				var checkOtherViewScrollers = function(){
 					var v;

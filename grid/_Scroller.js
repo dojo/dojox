@@ -146,8 +146,15 @@ dojo.provide("dojox.grid._Scroller");
 			return Boolean(this.getDefaultPageNode(inPageIndex));
 		},
 		measurePage: function(inPageIndex){
+			if(this.grid.rowHeight){
+				var height = this.grid.rowHeight + 1;
+				return ((inPageIndex + 1) * this.rowsPerPage > this.rowCount ?
+					this.rowCount - inPageIndex * this.rowsPerPage :
+					this.rowsPerPage) * height;
+					 
+			}
 			var n = this.getDefaultPageNode(inPageIndex);
-			return (n&&n.innerHTML) ? n.offsetHeight : undefined;
+			return (n && n.innerHTML) ? n.offsetHeight : undefined;
 		},
 		positionPage: function(inPageIndex, inPos){
 			for(var i=0; i<this.colCount; i++){
