@@ -97,9 +97,9 @@ dojo.require("dojox.lang.functional.reversed");
 				}
 				if(this.opt.lines || this.opt.markers){
 					// need a stroke
-					stroke = run.stroke ? dc.makeStroke(run.stroke) : dc.augmentStroke(t.series.stroke, color);
+					stroke = run.dyn.stroke = run.stroke ? dc.makeStroke(run.stroke) : dc.augmentStroke(t.series.stroke, color);
 					if(run.outline || t.series.outline){
-						outline = dc.makeStroke(run.outline ? run.outline : t.series.outline);
+						outline = run.dyn.outline = dc.makeStroke(run.outline ? run.outline : t.series.outline);
 						outline.width = 2 * outline.width + stroke.width;
 					}
 				}
