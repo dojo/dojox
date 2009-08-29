@@ -36,7 +36,7 @@ dojox.drawing.plugins.tools.Pan = dojox.drawing.util.oo.declare(
 		});
 		this._mouseHandle = this.mouse.register(this);
 		// This HAS to be called after setting initial objects or things get screwy.
-		//this.checkBounds();	
+		//this.checkBounds();
 	},{
 		selected:false,
 		type:"dojox.drawing.plugins.tools.Pan",
@@ -46,11 +46,13 @@ dojox.drawing.plugins.tools.Pan = dojox.drawing.util.oo.declare(
 				this.onSetPan(false);
 			}
 		},
+		
 		onKeyDown: function(evt){
 			if(evt.keyCode == 32){
 				this.onSetPan(true);
 			}
 		},
+		
 		onSetPan: function(/*Boolean | Event*/ bool){
 			if(bool === true || bool === false){
 				this.selected = !bool;
@@ -83,6 +85,7 @@ dojox.drawing.plugins.tools.Pan = dojox.drawing.util.oo.declare(
 			// issues with TextBlock deselection
 			//this.checkBounds();
 		},
+		
 		checkBounds: function(){
 			
 			//watch("CHECK BOUNDS DISABLED", true); return;
@@ -192,7 +195,9 @@ dojox.drawing.plugins.tools.Pan = dojox.drawing.util.oo.declare(
 );
 
 dojox.drawing.plugins.tools.Pan.setup = {
-	name:"dojox.drawing.tools.Pan",
+	name:"dojox.drawing.plugins.tools.Pan",
 	tooltip:"Pan Tool",
 	iconClass:"iconPan"
 };
+
+dojox.drawing.register(dojox.drawing.plugins.tools.Pan.setup, "plugin");

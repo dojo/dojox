@@ -104,3 +104,4 @@ dojox.drawing.tools.custom.Vector.setup = {
 	tooltip:"Vector Tool",
 	iconClass:"iconVector"
 };
+dojox.drawing.register(dojox.drawing.tools.custom.Vector.setup, "tool");

@@ -419,3 +419,4 @@ dojox.drawing.tools.custom.Axes.setup = {
 	tooltip:"Axes Tool",
 	iconClass:"iconAxes"
 };
+dojox.drawing.register(dojox.drawing.tools.custom.Axes.setup, "tool");

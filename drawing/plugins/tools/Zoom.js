@@ -118,3 +118,6 @@ dojox.drawing.plugins.tools.Zoom = dojox.drawing.util.oo.declare(
 		}
 	}
 );
+
+
+//dojox.drawing.register(dojox.drawing.plugins.tools.Pan, "plugin");

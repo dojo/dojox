@@ -101,3 +101,7 @@ StencilPoints = [
 		
 	}
 );
+
+dojox.drawing.register({
+	name:"dojox.drawing.stencil.Ellipse"	
+}, "stencil");

@@ -1,8 +1,16 @@
 dojo.provide("dojox.drawing.Toolbar");
+dojo.deprecated("dojox.drawing.Toolbar", "It may not even make it to the 1.4 release.", 1.4);
 
 (function(){
 	
 	dojo.declare("dojox.drawing.Toolbar", [], {
+		// NOTE:
+		//			dojox.drawing.Toolbar is DEPRECATED.
+		//			The intention never was to use HTML as buttons for a Drawing.
+		//			This was implemented in order to finish the project for which
+		//			Drawing was developed.
+		//			Instead use: drawing/ui/Toolbar.js
+		//
 		// summary:
 		//	Creates a Toolbar to be used with a DojoX Drawing.
 		// description:
@@ -146,6 +154,10 @@ dojo.provide("dojox.drawing.Toolbar");
 					this.createTool(node);
 					
 				}else if(plugin){
+					
+					
+					
+					
 					var p = {name:plugin, options:{}},
 						opt = dojo.attr(node, "options");
 					if(opt){
@@ -153,7 +165,12 @@ dojo.provide("dojox.drawing.Toolbar");
 					}
 					p.options.node = node;
 					node.innerHTML = "";
-					this.drawing.addPlugin(p);
+			this.drawing.addPlugin(p);
+					
+					
+					
+					
+					
 					this.createIcon(node, dojo.getObject(dojo.attr(node, "plugin")));
 				}
 				

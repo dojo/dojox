@@ -129,3 +129,7 @@ StencilPoints: [
 		
 	}
 );
+
+dojox.drawing.register({
+	name:"dojox.drawing.stencil.Line"	
+}, "stencil");

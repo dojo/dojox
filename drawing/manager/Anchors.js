@@ -78,6 +78,10 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 				var mx = a.shape.getTransform();
 				pts.push({x:mx.dx + a.org.x, y:mx.dy+ a.org.y});
 				
+				if(a.point.t){
+					pts[pts.length-1].t = a.point.t;
+				}
+				
 			}, this);
 			item.setPoints(pts);
 			item.onTransform(anchor);

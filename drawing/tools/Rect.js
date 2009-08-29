@@ -60,4 +60,5 @@ dojox.drawing.tools.Rect.setup = {
 	name:"dojox.drawing.tools.Rect",
 	tooltip:"Rectangle Tool",
 	iconClass:"iconRect"
-}
+};
+dojox.drawing.register(dojox.drawing.tools.Rect.setup, "tool");

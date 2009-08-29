@@ -61,3 +61,5 @@ dojox.drawing.tools.Ellipse.setup = {
 	tooltip:"Ellipse Tool",
 	iconClass:"iconEllipse"
 };
+
+dojox.drawing.register(dojox.drawing.tools.Ellipse.setup, "tool");

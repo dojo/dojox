@@ -185,6 +185,25 @@ StencilPoints: [
 			
 			this._setNodeAtts(this.hit);
 			this.hit.moveToBack();
+		},
+		makeFit: function(text, w){
+			var span = dojo.create('span', {innerHTML:text, id:"foo"}, document.body);
+			var sz = 1;
+			dojo.style(span, "fontSize", sz+"px")
+			var cnt = 30;
+			while(dojo.marginBox(span).w<w){
+				sz++;
+				dojo.style(span, "fontSize", sz+"px")
+				if(cnt--<=0) break;
+			}
+			sz--;
+			var box = dojo.marginBox(span);
+			dojo.destroy(span);
+			
+			return {size:sz, box:box};
 		}
 	}
 );
+dojox.drawing.register({
+	name:"dojox.drawing.stencil.Text"	
+}, "stencil");

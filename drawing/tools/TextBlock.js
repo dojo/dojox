@@ -643,5 +643,7 @@ StencilData: {
 		name:"dojox.drawing.tools.TextBlock",
 		tooltip:"Text Tool",
 		iconClass:"iconText"
-	}
+	};
+	dojox.drawing.register(dojox.drawing.tools.TextBlock.setup, "tool");
+	
 })();

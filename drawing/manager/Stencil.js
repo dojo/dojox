@@ -26,7 +26,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 			this.stencils = {};
 			this.selectedStencils = {};
 			this._mouseHandle = this.mouse.register(this);
-			var _scrollTimeout;
+			
 			dojo.connect(this.keys, "onArrow", this, "onArrow");
 			dojo.connect(this.keys, "onEsc", this, "deselect");
 			dojo.connect(this.keys, "onDelete", this, "onDelete");
@@ -45,7 +45,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				//		them to this, but they won't have selection
 				//		or drag ability.
 				//
-				//console.log("Selection.register ::::::", stencil.id, "TEXT:", stencil._text)
+				console.log("Selection.register ::::::", stencil.id)
 				if(stencil.isText && !stencil.editMode && stencil.deleteEmptyCreate && !stencil.getText()){
 					// created empty text field
 					// defaults say to delete
@@ -53,7 +53,9 @@ dojo.provide("dojox.drawing.manager.Stencil");
 					stencil.destroy();
 					return false;
 				}
+				
 				this.stencils[stencil.id] = stencil;
+				
 				if(stencil.execText){
 					if(stencil._text && !stencil.editMode){
 						console.log("select text")
@@ -364,15 +366,21 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				this.setConstraint();
 			},
 			
-			onStencilDown: function(/*EventObject*/obj){
+			onStencilDown: function(/*EventObject*/obj, evt){
 				// summary:
 				//		Event fired on mousedown on a stencil
 				//
-				//console.info("onStencilDown:", obj.id, this.keys.meta)
+				console.info(" >>> onStencilDown:", obj.id, this.keys.meta)
+				if(!this.stencils[obj.id]){ return; }
 				this._isBusy = true;
+				
+				
 				if(this.selectedStencils[obj.id] && this.keys.meta){
-					
-					//console.log("shift remove");
+					if(dojo.isMac && this.keys.cmmd){
+						// block context menu
+						
+					}
+					console.log("    shift remove");
 					this.onDeselect(this.selectedStencils[obj.id]);
 					if(this.hasSelected()==1){
 						this.withSelected(function(m){
@@ -384,6 +392,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 					return;
 				
 				}else if(this.selectedStencils[obj.id]){
+					console.log("    clicked on selected")
 					// clicking on same selected item(s)
 					// RESET OFFSETS
 					var mx = this.group.getTransform();
@@ -393,14 +402,14 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				
 				}else if(!this.keys.meta){
 					
-					console.log("deselect all");
+					console.log("    deselect all");
 					this.deselect();
 				
 				}else{
 					// meta-key add
 					//console.log("reset sel and add stencil")
 				}
-				
+				console.log("    add stencil to selection")
 				// add a stencil
 				this.selectItem(obj.id);
 				
@@ -513,7 +522,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				//		Array of objects.
 				var items = [];
 				for(var m in this.stencils){
-					items.push(this.stencils[m].exporter());
+					this.stencils[m].enabled && items.push(this.stencils[m].exporter());
 				}
 				return items; // Array
 			},

@@ -99,3 +99,5 @@ dojox.drawing.tools.Line.setup = {
 	tooltip:"Line Tool",
 	iconClass:"iconLine"
 };
+
+dojox.drawing.register(dojox.drawing.tools.Line.setup, "tool");

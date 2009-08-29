@@ -125,6 +125,13 @@ StencilPoints: [
 			if(this._gettingSize){ return; } // IE gets it twice (will need to mod if src changes)
 			this._gettingSize = true;
 			var img = dojo.create("img", {src:this.data.src}, dojo.body());
+			var err = dojo.connect(img, "error", this, function(){
+				dojo.disconnect(c);
+				dojo.disconnect(err);
+				console.error("Error loading image:", this.data.src)
+				console.warn("Error image:", this.data)
+				
+			});
 			var c = dojo.connect(img, "load", this, function(){
 				var dim = dojo.marginBox(img);
 				this.setData({
@@ -141,3 +148,8 @@ StencilPoints: [
 		}
 	}
 );
+
+
+dojox.drawing.register({
+	name:"dojox.drawing.stencil.Image"	
+}, "stencil");

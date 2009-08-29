@@ -199,6 +199,18 @@ dojo.require("dojox.math.round");
 			return str + uidMap[str]; // String
 		},
 		
+		abbr: function(type){
+			// summary:
+			//		Converts a namespace (typically a tool or a stencil) into
+			//		an abbreviation
+			return type.substring(type.lastIndexOf(".")+1).charAt(0).toLowerCase()
+				+ type.substring(type.lastIndexOf(".")+2);
+		},
+		mixin: function(o1, o2){
+			// TODO: make faster
+			//return dojo.mixin(dojo.clone(o1), dojo.clone(o2));	
+		},
+		
 		objects:{}, //private?
 		register: function(/*Object*/obj){
 			// summary:

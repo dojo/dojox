@@ -69,7 +69,8 @@ StencilPoints = [
 				x: s.x,
 				y: s.y,
 				width: e.x-s.x,
-				height: e.y-s.y
+				height: e.y-s.y,
+				r:this.data.r || 0
 			};
 			return this.data;
 			
@@ -82,6 +83,7 @@ StencilPoints = [
 			//		multiple shapes in one stencil.
 			//
 			//console.log("render rect", d)
+			//console.log("rect sty:", sty)
 			this.remove(this[shp]);
 			this[shp] = this.container.createRect(d)
 				.setStroke(sty)
@@ -102,3 +104,7 @@ StencilPoints = [
 		}
 	}
 );
+
+dojox.drawing.register({
+	name:"dojox.drawing.stencil.Rect"	
+}, "stencil");

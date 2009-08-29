@@ -20,6 +20,9 @@ dojox.drawing.manager.Mouse = dojox.drawing.util.oo.declare(
 	function(/* Object */options){
 		this.util = options.util;
 		this.keys = options.keys;
+		this.id = options.id || this.util.uid("mouse");
+		this.currentNodeId = "";
+		this.registered = {};
 	},
 	
 	{
@@ -29,7 +32,7 @@ dojox.drawing.manager.Mouse = dojox.drawing.util.oo.declare(
 		doublClickSpeed:400,
 		
 		// private properties
-		registerd:{},
+		
 		_lastx:0,
 		_lasty:0,
 		__reg:0,
@@ -119,6 +122,15 @@ EventObject: function(){
 			this.setCanvas();
 			var c;
 			var _isDown = false;
+			dojo.connect(this.container, "rightclick", this, function(evt){
+				console.warn("RIGHTCLICK")
+			});
+			
+			dojo.connect(document.body, "mousedown", this, function(evt){
+				//evt.preventDefault();
+				//dojo.stopEvent(evt);
+			});
+			
 			dojo.connect(this.container, "mousedown", this, function(evt){
 				this.down(evt);
 				_isDown = true;
@@ -166,15 +178,15 @@ EventObject: function(){
 			// See: CustomEventMethod and EventObject
 			//
 			var handle = scope.id || "reg_"+(this.__reg++);
-			if(!this.registerd[handle]) { this.registerd[handle] = scope; }
+			if(!this.registered[handle]) { this.registered[handle] = scope; }
 			return handle; // String
 		},
 		unregister: function(handle){
 			// summary:
 			// 		Disconnects object. Mouse events are no longer
 			//		called for it.
-			if(!this.registerd[handle]){ return; }
-			delete this.registerd[handle];
+			if(!this.registered[handle]){ return; }
+			delete this.registered[handle];
 		},
 		
 		_broadcastEvent:function(strEvt, obj){
@@ -182,8 +194,8 @@ EventObject: function(){
 			//		Fire events to all registered objects.
 			//
 			//console.log("mouse.broadcast:", strEvt, obj)
-			for(var nm in this.registerd){
-				if(this.registerd[nm][strEvt]) this.registerd[nm][strEvt](obj);
+			for(var nm in this.registered){
+				if(this.registered[nm][strEvt]) this.registered[nm][strEvt](obj);
 			}
 		},
 		
@@ -218,6 +230,18 @@ EventObject: function(){
 			this._broadcastEvent("onMove", obj);
 		},
 		
+		onOver: function(obj){
+			// summary:
+			//
+			this._broadcastEvent("onOver", obj);
+		},
+		
+		onOut: function(obj){
+			// summary:
+			//
+			this._broadcastEvent("onOut", obj);
+		},
+		
 		onUp: function(obj){
 			// summary:
 			// 		Create on[xx]Up event and send to broadcaster.
@@ -234,7 +258,7 @@ EventObject: function(){
 				this._selected = false;
 			}
 			
-			console.info("Up Event:", nm, "id:", obj.id);
+			console.info("Up Event:", this.id, nm, "id:", obj.id);
 			this._broadcastEvent(nm, obj);
 			
 			// Silverlight double-click handled in Silverlight class
@@ -282,6 +306,12 @@ EventObject: function(){
 			//
 			name = name.charAt(0).toUpperCase() + name.substring(1);
 			if(this.mode){
+				if(this.mode == "onPathEdit"){
+					return "on"+name;
+				}
+				if(this.mode == "onUI"){
+					//return "on"+name;
+				}
 				return this.mode + name;		
 			}else{
 				var dt = !this.drawingType || this.drawingType=="surface" || this.drawingType=="canvas" ? "" : this.drawingType;
@@ -301,37 +331,77 @@ EventObject: function(){
 			// summary:
 			//		Internal. Create onDown event
 			//
+			evt.preventDefault();
+			dojo.stopEvent(evt);
+			
 			this._downOnCanvas = true;
 			var sc = this.scrollOffset();
 			var dim = this._getXY(evt);
 			this._lastpagex = dim.x;
 			this._lastpagey = dim.y;
-			var x = dim.x - this.origin.x;
-			var y = dim.y - this.origin.y;
+			var o = this.origin;
+			var x = dim.x - o.x;
+			var y = dim.y - o.y;
 			
 			x*= this.zoom;
 			y*= this.zoom;
 			x += sc.left*this.zoom;
 			y += sc.top*this.zoom;
+			var withinCanvas = x>=0 && y>=0 && x<=o.w && y<=o.h;
 			
-			this.origin.startx = x;
-			this.origin.starty = y;
+			o.startx = x;
+			o.starty = y;
 			this._lastx = x;
 			this._lasty = y;
 			
 			this.drawingType = this.util.attr(evt, "drawingType") || "";
-		
-			//console.log("evt:", evt);
-			//console.log("this.drawingType:", this.drawingType)
-			this.onDown({x:x,y:y, pageX:dim.x, pageY:dim.y, id:this._getId(evt)});
-			dojo.stopEvent(evt);
+			var id = this._getId(evt);
+			console.log("DOWN:", this.id, id, withinCanvas);
+			console.log("this.drawingType:", this.drawingType)
+			this.onDown({
+				mid:this.id,
+				x:x,
+				y:y,
+				pageX:dim.x,
+				pageY:dim.y,
+				withinCanvas:withinCanvas,
+				id:id
+			});
+			
+		},
+		over: function(obj){
+			// summary:
+			//		Internal.
+			//
+			this.onOver(obj);
+		},
+		out: function(obj){
+			// summary:
+			//		Internal.
+			//
+			this.onOut(obj);
 		},
 		move: function(evt){
 			// summary:
 			//		Internal.
 			//
-			// TODO: move currently disabled
-			//this.onMove(this.create(evt));
+			var obj = this.create(evt);
+			if(this.id=="MUI"){
+				//console.log("obj.id:", obj.id, "was:", this.currentNodeId)
+			}
+			if(obj.id != this.currentNodeId){
+				// TODO: I wonder if an ID is god enough
+				//	that would avoid the mixin
+				var outObj = {};
+				for(var nm in obj){
+					outObj[nm] = obj[nm];
+				}
+				outObj.id = this.currentNodeId;
+				this.currentNodeId && this.out(outObj);
+				obj.id && this.over(obj);
+				this.currentNodeId = obj.id;
+			}
+			this.onMove(obj);
 		},
 		drag: function(evt){
 			// summary:
@@ -361,6 +431,7 @@ EventObject: function(){
 			var id = withinCanvas ? this._getId(evt, squelchErrors) : "";
 			
 			var ret = {
+				mid:this.id,
 				x:x,
 				y:y,
 				pageX:dim.x,

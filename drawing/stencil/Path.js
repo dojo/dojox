@@ -51,7 +51,8 @@ StencilPoints: [
 					if(i==0){
 						strAr.push("M " + o.x +" "+ o.y);
 					}else{
-						strAr.push("L " + o.x +" "+ o.y);
+						var cmd = o.t || "L ";
+						strAr.push(cmd + o.x +" "+ o.y); // Z + undefined works here
 					}
 				}, this);
 				if(this.closePath){
@@ -67,8 +68,10 @@ StencilPoints: [
 				this.closePath && this[shp].setFill(sty.fill);
 				
 				dojo.forEach(this.points, function(o, i){
-					if(i==0){
+					if(i==0 || o.t=="M"){
 						this[shp].moveTo(o.x, o.y);
+					}else if(o.t=="Z"){
+						this.closePath && this[shp].closePath();
 					}else{
 						this[shp].lineTo(o.x, o.y);
 					}
@@ -94,3 +97,7 @@ StencilPoints: [
 		
 	}
 );
+
+dojox.drawing.register({
+	name:"dojox.drawing.stencil.Path"	
+}, "stencil");

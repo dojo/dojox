@@ -7,7 +7,9 @@ dojox.drawing.plugins._Plugin = dojox.drawing.util.oo.declare(
 	//		When creating a plugin, use this class as the
 	//		base to ensure full functionality.
 	function(options){
+		this._cons = [];
 		dojo.mixin(this, options);
+		
 	},
 	{
 		util:null,
@@ -18,6 +20,18 @@ dojox.drawing.plugins._Plugin = dojox.drawing.util.oo.declare(
 		anchors:null,
 		canvas:null,
 		node:null,
-		type:"dojox.drawing.plugins._Plugin"
+		button:null,//gfx button
+		type:"dojox.drawing.plugins._Plugin",
+		connect: function(){
+			this._cons.push(dojo.connect.apply(dojo, arguments));	
+		},
+		disconnect: function(/*handle | Array*/handles){
+			// summary:
+			//		Removes connections based on passed
+			//		handles arguments
+			if(!handles) { return };
+			if(!dojo.isArray(handles)){ handles=[handles]; }
+			dojo.forEach(handles, dojo.disconnect, dojo);
+		}
 	}
 );

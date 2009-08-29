@@ -64,3 +64,5 @@ dojox.drawing.tools.Arrow.setup = {
 	tooltip:"Arrow Tool",
 	iconClass:"iconArrow"
 };
+
+dojox.drawing.register(dojox.drawing.tools.Arrow.setup, "tool");

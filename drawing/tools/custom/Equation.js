@@ -23,3 +23,4 @@ dojox.drawing.tools.custom.Equation.setup = {
 	tooltip:"Equation Tool",
 	iconClass:"iconEq"
 };
+dojox.drawing.register(dojox.drawing.tools.custom.Equation.setup, "tool");
