@@ -67,7 +67,8 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 				this.method = "createForEllipse"; break;
 			case "line":
 				this.method = "createForLine"; break;
-			//case "path":
+			case "path":
+				this.method = "createForPath"; break;
 				// 	path is a bit of a hassle. Plus I think in IE it would be
 				//slower than than the political process. Maybe TODO.
 			default:
@@ -95,11 +96,13 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 			var o = this.options,
 				size = o.size,
 				mult = o.mult,
-				d = this.stencil.data,
+				d = this.method == "createForPath"
+					? this.stencil.points
+					: this.stencil.data,
 				r = d.r || 1,
 				p = o.place,
 				c = o.color;
-				
+			
 			this[this.method](o, size, mult, d, r, p, c);	
 		},
 		
@@ -109,21 +112,70 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 				this.container.removeShape();
 			}
 		},
+		
 		show: function(){
 			if(!this.showing){
 				this.showing = true;
 				this.stencil.container.add(this.container);
 			}
 		},
+		
+		createForPath: function(o, size, mult, pts, r, p, c){
+			var sh = size * mult / 4,
+				shy = /B/.test(p) ? sh : /T/.test(p) ? sh*-1 : 0,
+				shx = /R/.test(p) ? sh : /L/.test(p) ? sh*-1 : 0;
+			
+			var closePath = true;
+			
+			for(var i=1;i<=size;i++){
+				var lineWidth = i * mult;
+				//var rect = this.container.createLine({x1:d.x1+shx, y1:d.y1+shy, x2:d.x2+shx, y2:d.y2+shy})
+				//	.setStroke({width:lineWidth, color:c, cap:"round"})		
+			
+				if(dojox.gfx.renderer=="svg"){
+					var strAr = [];
+					dojo.forEach(pts, function(o, i){
+						if(i==0){
+							strAr.push("M " + (o.x+shx) +" "+ (o.y+shy));
+						}else{
+							var cmd = o.t || "L ";
+							strAr.push(cmd + (o.x+shx) +" "+ (o.y+shy)); // Z + undefined works here
+						}
+					}, this);
+					if(closePath){
+						strAr.push("Z");
+					}
+					this.container.createPath(strAr.join(", ")).setStroke({width:lineWidth, color:c, cap:"round"})	
+					
+				}else{
+					// Leaving this code for VML. It seems slightly faster but times vary.
+					var pth = this.container.createPath({}).setStroke({width:lineWidth, color:c, cap:"round"})	
+					
+					dojo.forEach(this.points, function(o, i){
+						if(i==0 || o.t=="M"){
+							pth.moveTo(o.x+shx, o.y+shy);
+						}else if(o.t=="Z"){
+							closePath && pth.closePath();
+						}else{
+							pth.lineTo(o.x+shx, o.y+shy);
+						}
+					}, this);
+					
+					closePath && pth.closePath();
+				}
+			
+			
+			}
+		},
+		
 		createForLine: function(o, size, mult, d, r, p, c){
 			
 			var sh = size * mult / 4,
 				shy = /B/.test(p) ? sh : /T/.test(p) ? sh*-1 : 0,
 				shx = /R/.test(p) ? sh : /L/.test(p) ? sh*-1 : 0;
-			console.log("SH:", sh, d.rx, d.ry)
 			for(var i=1;i<=size;i++){
 				var lineWidth = i * mult;
-				var rect = this.container.createLine({x1:d.x1+shx, y1:d.y1+shy, x2:d.x2+shx, y2:d.y2+shy})
+				this.container.createLine({x1:d.x1+shx, y1:d.y1+shy, x2:d.x2+shx, y2:d.y2+shy})
 					.setStroke({width:lineWidth, color:c, cap:"round"})		
 			}
 		},
@@ -135,7 +187,7 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 			
 			for(var i=1;i<=size;i++){
 				var lineWidth = i * mult;
-				var rect = this.container.createEllipse({cx:d.cx+shx, cy:d.cy+shy, rx:d.rx-sh, ry:d.ry-sh, r:r})
+				this.container.createEllipse({cx:d.cx+shx, cy:d.cy+shy, rx:d.rx-sh, ry:d.ry-sh, r:r})
 					.setStroke({width:lineWidth, color:c})		
 			}
 		},
@@ -148,12 +200,12 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 			
 			for(var i=1;i<=size;i++){
 				var lineWidth = i * mult;
-				var rect = this.container.createRect({x:d.x+shx, y:d.y+shy, width:d.width-sh, height:d.height-sh, r:r})
+				this.container.createRect({x:d.x+shx, y:d.y+shy, width:d.width-sh, height:d.height-sh, r:r})
 					.setStroke({width:lineWidth, color:c})		
 			}
 		},
 		onTransform: function(){
-			this[this.method]();
+			this.render();
 		},
 		onRender: function(){
 			this.container.moveToBack();

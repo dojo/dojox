@@ -7,115 +7,186 @@ dojox.drawing.tools.Path = dojox.drawing.util.oo.declare(
 	dojox.drawing.stencil.Path,
 	function(){
 		// summary: constructor
-		this.revertRenderHit = this.renderHit;
-		this.renderHit = false;
-		//this.closePath = false;
+		
+		this.pathMode = "";
+		this.currentPathMode = "";
+		this._started = false;
+		this.oddEvenClicks = 0;
+		
 	},
 	{
 		draws:true,
-		closeRadius:10,
-		closeColor:{r:255,g:255,b:0,a:.5},
-		startedDrawing:false,
-		
 		onDown: function(obj){
-			if(!obj.withinCanvas){ return; }
-			this.closePath = false;
-			this.startedDrawing = true;
-			this.mouse.setEventMode("PathEdit");
+			if(!this._started){ 
+				this.onStartPath(obj);
+			}
 			
-			this.connect(this.keys, "onEsc", this, "onStop");
 		},
 		
-		onStop: function(){
-			// summary:
-			// 		Stop drawing Path. If more than one point has been
-			//		created, then we leave the open path. If one or less,
-			//		destroy the shape.
-			if(this.points.length>1){
-				// REDUNDANT
-				this.remove(this.closeGuide, this.guide);
-				this.renderHit = this.revertRenderHit;
-				this.renderedOnce = true;
-				this.onRender(this);
-				this.onMove = function(){}
-				this.onDrag = function(){}
-				this.onUp = function(){}
-				this.mouse.setEventMode("");
+		makeSubPath: function(_closePath){
+			if(_closePath){
+				if(this.currentPathMode=="Q"){
+					this.points.push({
+						x:this.points[0].x,
+						y:this.points[0].y
+					});
+				}
+				this.points.push({t:"Z"});
 				this.render();
-			}else{
-				this.remove(this.shape, this.closeGuide, this.guide);
 			}
+			this.currentPathMode = "";
+			this.pathMode = "M";
+		},
+		
+		onStartPath: function(obj){
+			this._started = true;
+			this.revertRenderHit = this.renderHit;
+			this.renderHit = false;
+			this.closePath = false;
+			
+			
+			this.mouse.setEventMode("PathEdit");
+			
+			this.closePoint = {x:obj.x, y:obj.y};
+			
+			this._kc1 = this.connect(this.keys, "onEsc", this, function(){
+				this.onCompletePath(false);
+			});
+			
+			this._kc2 = this.connect(this.keys, "onKeyUp", this, function(evt){
+				
+				switch(evt.letter){
+					case "c":
+						this.onCompletePath(true); break;		
+					case "l": this.pathMode = "L"; break;
+					case "m": this.makeSubPath(false); break;		
+					case "q": this.pathMode = "Q"; break;		
+					case "s": this.pathMode = "S"; break;
+					case "z": this.makeSubPath(true); break;
+				}
+				 
+				//console.log("KEY:", evt.letter);	
+			});
+		},
+		
+		onCompletePath:function(_closePath){
+			this.remove(this.closeGuide, this.guide);
+			var box = this.getBounds();
+			if(box.w<this.minimumSize && box.h<this.minimumSize){
+				this.remove(this.hit, this.shape, this.closeGuide);
+				this._started = false;
+				this.mouse.setEventMode("");
+				this.setPoints([]);
+				return;
+			}
+			
+			
+			if(_closePath){
+				if(this.currentPathMode=="Q"){
+					this.points.push({
+						x:this.points[0].x,
+						y:this.points[0].y
+					});
+				}
+				this.closePath = true;
+			}
+			
+			
+			this.renderHit = this.revertRenderHit;
+			this.renderedOnce = true;
+			this.onRender(this);
+			this.disconnect([this._kc1, this._kc2]);
+			this.mouse.setEventMode("");
+			this.render();
+			//console.log(this.stringPath);
 		},
 		
 		onUp: function(/*EventObject*/obj){
-			console.log("   Path UP", obj.mid, "within:", obj.withinCanvas)
+			//console.log("   Path UP", obj.mid, "within:", obj.withinCanvas)
 					
 				
-			if(!this.startedDrawing || !obj.withinCanvas){ return; }
+			if(!this._started || !obj.withinCanvas){ return; }
 			
-			
-			if(this.points.length>2 && this.closeRadius>this.util.distance(obj.x, obj.y, this.points[0].x, this.points[0].y)){
-				this.remove(this.closeGuide, this.guide);
-				this.renderHit = this.revertRenderHit;
-				
-				this.closePath = true;
-				this.renderedOnce = true;
-				this.onRender(this);
-				this.onMove = function(){}
-				this.onDrag = function(){}
-				this.onUp = function(){}
-				this.mouse.setEventMode("");
-				this.render();
+		
+			if(this.points.length>2 && this.closeRadius>this.util.distance(obj.x, obj.y, this.closePoint.x, this.closePoint.y)){
+				this.onCompletePath(true);
 				
 			}else {
-				this.points.push({
+				var p = {
 					x:obj.x,
 					y:obj.y
-				});
+				};
+				this.oddEvenClicks++;
+				if(this.currentPathMode != this.pathMode){
+					if(this.pathMode=="Q"){
+						p.t = "Q";
+						this.oddEvenClicks = 0;
+					}else if(this.pathMode=="L"){
+						p.t = "L";
+					}else if(this.pathMode=="M"){
+						p.t = "M";
+						this.closePoint = {x:obj.x, y:obj.y};
+					}
+					this.currentPathMode = this.pathMode;
+				}
+				
+				
+				this.points.push(p);
 				if(this.points.length>1){
 					this.remove(this.guide);
 					this.render();
 				}
+				
 			}
+			
+			//console.log(this.stringPath);
 		},
 		createGuide: function(obj){
-			if(this.points.length){
-				this.remove(this.guide);
-				var p = this.points[this.points.length-1];
-				var d = {
-					x1:p.x,
-					y1:p.y,
-					x2:obj.x,
-					y2:obj.y
-				}
-				this.guide = this.container.createLine(d)
-				.setStroke(this.style.current);
+			if(!this.points.length){ return; }
+			var realPoints = [].concat(this.points);
 			
-				var dist = this.util.distance(obj.x, obj.y, this.points[0].x, this.points[0].y);
-				if(this.points.length>1){
-					if(dist<this.closeRadius && !this.closeGuide){
-						var c = {
-							cx:this.points[0].x,
-							cy:this.points[0].y,
-							rx:this.closeRadius,
-							ry:this.closeRadius
-						}
-						this.closeGuide = this.container.createEllipse(c)
-							.setFill(this.closeColor);
-							
-					}else if(dist>this.closeRadius && this.closeGuide){
-						this.remove(this.closeGuide);
-						this.closeGuide = null;
+			var pt = {
+				x:obj.x,
+				y:obj.y
+			};
+			if(this.currentPathMode=="Q" && this.oddEvenClicks % 2){
+				// On a Q curve, every other click needs to be a
+				// straight line - the inbetween Q coords don't render
+				pt.t = "L"; // this is not permanent
+			}
+			
+			this.points.push(pt);
+			
+			this.render();
+			this.points = realPoints;
+			
+			
+			var dist = this.util.distance(obj.x, obj.y, this.closePoint.x, this.closePoint.y);
+			if(this.points.length>1){
+				if(dist<this.closeRadius && !this.closeGuide){
+					var c = {
+						cx:this.closePoint.x,
+						cy:this.closePoint.y,
+						rx:this.closeRadius,
+						ry:this.closeRadius
 					}
+					this.closeGuide = this.container.createEllipse(c)
+						.setFill(this.closeColor);
+						
+				}else if(dist>this.closeRadius && this.closeGuide){
+					this.remove(this.closeGuide);
+					this.closeGuide = null;
 				}
 			}
+			
 		},
+		
 		onMove: function(obj){
-			if(!this.startedDrawing){ return; }
+			if(!this._started){ return; }
 			this.createGuide(obj);
 		},
 		onDrag: function(obj){
-			if(!this.startedDrawing){ return; }
+			if(!this._started){ return; }
 			this.createGuide(obj);
 		}
 	}

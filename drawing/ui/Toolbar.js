@@ -27,9 +27,12 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	//
 	//
 	constructor: function(props, node){
-		//console.warn("GFX Toolbar:", props, node)
+		console.warn("GFX Toolbar:", props, node)
 		this.util = dojox.drawing.util.common;
+		
+		// no mixin. painful.
 		if(props.drawing){
+			// programmatic
 			this.toolDrawing = props.drawing;
 			this.drawing = this.toolDrawing;
 			this.width = this.toolDrawing.width;
@@ -37,14 +40,17 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			this.strSelected = props.selected;
 			this.strTools = props.tools;
 			this.strPlugs = props.plugs;
+			this._mixprops(["padding", "margin", "size", "radius"], props);
 			this.addBack()
 		}else{
+			// markup
 			var box = dojo.marginBox(node);
 			this.width = box.w;
 			this.height = box.h;
 			this.strSelected = dojo.attr(node, "selected");
 			this.strTools = dojo.attr(node, "tools");
 			this.strPlugs = dojo.attr(node, "plugs");
+			this._mixprops(["padding", "margin", "size", "radius"], node);
 			this.toolDrawing = new dojox.drawing.Drawing({mode:"ui"}, node);
 		}
 		
@@ -52,11 +58,13 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			this.makeButtons();
 		}else{
 			var c = dojo.connect(this.toolDrawing, "onSurfaceReady", this, function(){
+				console.log("TB built")
 				dojo.disconnect(c);
 				this.drawing = dojox.drawing.getRegistered("drawing", dojo.attr(node, "drawingId")); // 
 				this.makeButtons();
 			});
 		}
+		
 	},
 	
 	// padding:Number
@@ -71,6 +79,11 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	// radius: Number
 	//		The size of the button's rounded corner
 	radius:3,
+	//
+	// toolPlugGap: number
+	//		The distnce between the tool buttons and plug buttons
+	toolPlugGap:20,
+	
 	//	strSlelected | selected: String
 	//		The button that should be selected at startup.
 	strSlelected:"",
@@ -106,14 +119,18 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			
 			dojo.forEach(toolAr, function(t){
 				t = dojo.trim(t);
-				this.buttons.push(this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onToolClick"}));
-				if(this.strSlelected==t){
-					this.buttons[this.buttons.length-1].select();
+				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onToolClick"})
+				this.buttons.push(btn);
+				if(this.strSelected==t){
+					btn.select();
+					this.drawing.setTool(btn.toolType);
 				}
 				x += w + g;
 				
 			}, this);
 		}
+		
+		x += this.toolPlugGap;
 		
 		if(this.strPlugs){
 			var plugAr = [];
@@ -129,11 +146,10 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			
 			dojo.forEach(plugAr, function(p){
 				t = dojo.trim(p);
-				console.log("   PLUG", this.drawing.stencilTypeMap[t],t);
+				console.log("   plugin:", p)
 				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onPlugClick"})
 				this.plugins.push(btn);
 				x += w + g;
-				console.log("butt plug:", btn)
 				this.drawing.addPlugin({name:this.drawing.stencilTypeMap[p], options:{button:btn}});
 			}, this);
 		}
@@ -147,7 +163,6 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		// summary:
 		//		Tool click event. May be connected to.
 		//
-		console.log("click:", button.toolType, button);
 		dojo.forEach(this.buttons, function(b){
 			if(b.id==button.id){
 				b.select();
@@ -171,6 +186,16 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		var sym = dojox.drawing.library.icons;
 		var btn0 = gfxToolbar.addStencil("button", {data:{x:10, y:10, width:30, height:30, r:5}, icon:sym.ellipse, shadow:s});
 				
+	},
+	_mixprops: function(/*Array*/props, /*Object | Node*/objNode){
+		// summary:
+		//		Internally used for mixing in props from an object or
+		//		from a dom node.
+		dojo.forEach(props, function(p){
+			this[p] = objNode.tagName
+				? dojo.attr(objNode, p)===null ? this[p] : dojo.attr(objNode, p)
+				: objNode[p]===undefined ? this[p] : objNode[p];
+		}, this);
 	}
 	
 });

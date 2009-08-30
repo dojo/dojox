@@ -44,8 +44,8 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 			//	minors dont show on zoom out
 			//	draw minors first
 			//
-			var mjr = this.major * this.zoom;
-			var mnr = this.minor ? this.minor * this.zoom : mjr;
+			var mjr = Math.floor(this.major * this.zoom);
+			var mnr = this.minor ? Math.floor(this.minor * this.zoom) : mjr;
 			
 			this.grid && this.grid.removeShape();
 			
@@ -56,7 +56,6 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 			var b = 1;
 			var mj = "#00ffff";
 			var mn = "#d7ffff";
-			
 			
 			var createGridLine = function(x1,y1,x2,y2, c){
 				s.createLine({x1: x1, y1: y1, x2: x2, y2: y2}).setStroke({style: "Solid", width: b, cap: "round", color:c});

@@ -15,6 +15,7 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 		this.mouse = options.mouse;
 		this.undo = options.undo;
 		this.util = options.util;
+		this.drawing = options.drawing;
 		this.items = {};
 	},
 	{
@@ -59,7 +60,7 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 				
 				
 				if(anchor.id == a.id || anchor.stencil.anchorType!="group"){
-					// nothing ?
+					// nothing 
 				}else{
 					if(anchor.org.y == a.org.y){
 						a.setPoint({
@@ -128,6 +129,14 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 			var pts = item.points;
 			dojo.forEach(pts, function(p, i){
 				if(p.noAnchor){ return; }
+				if(i==0 || i == item.points.length-1){
+					console.log("ITEM TYPE:", item.type, item.shortType)
+					if(i==0){
+						
+					}else{
+						
+					}
+				}
 				var a = new dojox.drawing.manager.Anchor({stencil:item, point:p, pointIdx:i, mouse:this.mouse, util:this.util});
 				this.items[item.id]._cons = [
 					dojo.connect(a, "onRenderStencil", this, "onRenderStencil"),
@@ -143,6 +152,16 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 				this.items[item.id].anchors.push(a);
 				this.onAddAnchor(a);
 			}, this);
+			
+			if(item.shortType=="path"){
+				// check if we have a double-point of a closed-curve-path
+				var f = pts[0], l = pts[pts.length-1], a = this.items[item.id].anchors;
+				if(f.x ==l.x && f.y==l.y){
+					console.warn("LINK ANVHROS", a[0], a[a.length-1])
+					a[0].linkedAnchor = a[a.length-1];
+					a[a.length-1].linkedAnchor = a[0];
+				}
+			}
 			
 			if(item.anchorType=="group"){
 				dojo.forEach(this.items[item.id].anchors, function(anchor){
@@ -200,6 +219,7 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 		if(this.stencil.anchorPositionCheck){
 			this.anchorPositionCheck = dojo.hitch(this.stencil, this.stencil.anchorPositionCheck);
 		}
+		this._zCon = dojo.connect(this.mouse, "setZoom", this, "render");
 		this.render();
 		this.connectMouse();
 	},
@@ -213,8 +233,9 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 			//
 			this.shape && this.shape.removeShape();
 			var d = this.defaults.anchors,
-				b = d.width,
-				s = d.size,
+				z = this.mouse.zoom,
+				b = d.width * z,
+				s = d.size * z,
 				p = s/2,
 				line = {
 					width:b,
@@ -372,7 +393,13 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 					dx:x,
 					dy:y
 				});
-				
+				if(this.linkedAnchor){
+					// first and last points of a closed-curve-path
+					this.linkedAnchor.shape.setTransform({
+						dx:x,
+						dy:y
+					});
+				}
 				this.onTransformPoint(this);
 			}
 		},
@@ -417,6 +444,7 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 		destroy: function(){
 			// summary:
 			//		Destroys anchor.
+			dojo.disconnect(this._zCon);
 			this.disconnectMouse();
 			this.shape.removeShape();
 		}

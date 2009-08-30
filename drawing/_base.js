@@ -51,3 +51,11 @@ dojo.require("dojox.drawing.stencil.Ellipse");
 dojo.require("dojox.drawing.stencil.Path");
 dojo.require("dojox.drawing.stencil.Text");
 dojo.require("dojox.drawing.stencil.Image");
+
+// annotations are built within stencil/_Base.js
+// would like to optionally include them, but for
+// now it's mandatory.
+dojo.require("dojox.drawing.annotations.Label");
+dojo.require("dojox.drawing.annotations.Angle");
+dojo.require("dojox.drawing.annotations.Arrow");
+dojo.require("dojox.drawing.annotations.BoxShadow");

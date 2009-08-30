@@ -8,6 +8,8 @@ dojo.provide("dojox.drawing.manager.keys");
 	// Ref: enabled = false allows inputs outside of drawing to function
 	var enabled = true;
 	
+	var alphabet = "abcdefghijklmnopqrstuvwxyz";
+	
 	dojox.drawing.manager.keys = {
 		// summary:
 		//		A singleton, master object that detects
@@ -90,6 +92,13 @@ dojo.provide("dojox.drawing.manager.keys");
 			});	
 		},
 		
+		_getLetter: function(evt){
+			if(!evt.meta && evt.keyCode>=65 && evt.keyCode<=90){
+				return alphabet.charAt(evt.keyCode-65);	
+			}
+			return null;
+		},
+		
 		_mixin: function(evt){
 			// summary:
 			//		Internal. Mixes in key events.
@@ -97,6 +106,7 @@ dojo.provide("dojox.drawing.manager.keys");
 			evt.shift = this.shift;
 			evt.alt = this.alt;
 			evt.cmmd = this.cmmd;
+			evt.letter = this._getLetter(evt);
 			return evt;
 		},
 		

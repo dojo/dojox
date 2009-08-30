@@ -174,8 +174,10 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				}
 				this.withSelected(function(m){
 					this.anchors.remove(m);
+					var id = m.id;
 					console.log("delete:", m)
 					m.destroy();
+					delete this.stencils[id];
 				});
 				this.selectedStencils = {};
 			},

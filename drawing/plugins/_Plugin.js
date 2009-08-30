@@ -9,7 +9,9 @@ dojox.drawing.plugins._Plugin = dojox.drawing.util.oo.declare(
 	function(options){
 		this._cons = [];
 		dojo.mixin(this, options);
-		
+		if(this.button && this.onClick){
+			this.connect(this.button, "onClick", this, "onClick")
+		}
 	},
 	{
 		util:null,

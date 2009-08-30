@@ -27,11 +27,9 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 		this.style.button.down.fill.y2 = this.data.height;
 		this.style.button.selected.fill.y2 = this.data.height;
 		
-		this.onOut();
 		
 		
-		
-		if(options.icon){
+		if(options.icon && !options.icon.text){
 			var constr = this.drawing.getConstructor(options.icon.type);
 			var o = this.makeOptions(options.icon);
 			o.data = dojo.mixin(o.data, this.style.button.icon.norm)
@@ -45,8 +43,9 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			}
 			this.icon = new constr(o);
 			//console.log("  button:", this.toolType, this.style.button.icon)
-		}else if(options.text){
-			var o = this.makeOptions(options.text);
+		}else if(options.text || options.icon.text){
+			console.warn("button text:", options.text || options.icon.text)
+			var o = this.makeOptions(options.text || options.icon.text);
 			o.data.color = this.style.button.icon.norm.color //= o.data.fill;
 			this.style.button.icon.selected.color = this.style.button.icon.selected.fill;
 			this.icon = new dojox.drawing.stencil.Text(o);
@@ -55,6 +54,8 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 				y:((this.data.height-this.icon._lineHeight)/2)+this.data.y
 			});
 		}
+		
+		this.onOut();
 		
 	},{
 		
@@ -78,7 +79,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 				util: this.util,
 				mouse: this.mouse,
 				container: this.container,
-				annotation:true
+				subShape:true
 			}
 			
 			if(typeof(d)=="string"){
@@ -140,6 +141,10 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 		selected:false,
 		type:"drawing.library.UI.Button",
 		
+		// note:
+		//	need to move the Stencil's shape to front, not
+		// its container. Therefore we can't use the Stencil's
+		// moveTo.. methods.
 		select: function(){
 			this.selected = true;
 			this.icon.attr(this.style.button.icon.selected);
@@ -149,16 +154,19 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 		deselect: function(){
 			this.selected = false;
 			this.icon.attr(this.style.button.icon.norm);
-			this._change(this.style.button.norm);
 			this.shape.shadow && this.shape.shadow.show();
+			this._change(this.style.button.norm);
+			
 		},
 		
 		_change: function(/*Object*/sty){
 			this.shape.attr(sty);
-			this.shape.shape.moveToBack();
 			this.shape.shadow && this.shape.shadow.container.moveToBack();	
+			this.icon.shape.moveToFront();
+			
 		},
 		onOver: function(){
+			console.log("BUTTON OVER")
 			if(this.selected){ return; }
 			this._change(this.style.button.over);
 		},
@@ -171,6 +179,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			this._change(this.style.button.selected);
 		},
 		onUp: function(){
+			console.log("BUTTON UP")
 			this._change(this.style.button.over);
 			if(this.hitched){
 				this.hitched();

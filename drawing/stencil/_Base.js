@@ -378,7 +378,7 @@ ToolsSetup: {
 				this.container.superClass = this;
 			}
 			this._setNodeAtts(this);
-			//console.warn("ONRENDER", this.type, this._postRenderCon)
+			//console.warn("ONRENDER", this.id, this)
 		},
 		
 		onChangeStyle: function(/*Object*/stencil){ 
@@ -696,7 +696,7 @@ ToolsSetup: {
 		transformPoints: function(mx){
 			// summary:
 			//		Moves object to a new X Y location
-			//		mx is additive. So mx.dx=1 will move the shape
+			//		mx is additive. So mx.dx=1 will move the stencil
 			//		1 pixel to the right from wherever it was.
 			//
 			// An attempt is made to prevent < 0 errors, but

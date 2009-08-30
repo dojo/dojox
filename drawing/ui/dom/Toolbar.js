@@ -1,9 +1,9 @@
-dojo.provide("dojox.drawing.Toolbar");
-dojo.deprecated("dojox.drawing.Toolbar", "It may not even make it to the 1.4 release.", 1.4);
+dojo.provide("dojox.drawing.ui.dom.Toolbar");
+dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 1.4 release.", 1.4);
 
 (function(){
 	
-	dojo.declare("dojox.drawing.Toolbar", [], {
+	dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		// NOTE:
 		//			dojox.drawing.Toolbar is DEPRECATED.
 		//			The intention never was to use HTML as buttons for a Drawing.

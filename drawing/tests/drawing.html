@@ -40,7 +40,7 @@
 		dojo.require("dojo.parser");
 		dojo.require("dojox.drawing");
 		// custom Tools and Plugins need to be required
-		dojo.require("dojox.drawing.Toolbar");
+		dojo.require("dojox.drawing.ui.dom.Toolbar");
 		dojo.require("dojox.drawing.tools.TextBlock");
 		dojo.require("dojox.drawing.tools.Rect");
 		dojo.require("dojox.drawing.tools.Ellipse");
@@ -55,8 +55,8 @@
 		dojo.require("dojox.drawing.tools.custom.Vector");
 		dojo.require("dojox.drawing.tools.custom.Axes");				
 		dojo.require("dojox.drawing.tools.Arrow");
-		dojo.require("dojox.drawing.plugins.tools.Pan");
-		dojo.require("dojox.drawing.plugins.tools.Zoom");
+		dojo.require("dojox.drawing.ui.dom.Pan");
+		dojo.require("dojox.drawing.ui.dom.Zoom");
 		dojo.require("dojox.drawing.plugins.drawing.Grid");
 		
 		
@@ -146,7 +146,7 @@
     <h2>Drawing Test</h2>
 	<div id="conEdit" contenteditable="true"></div>
 	<div id="wrapper">
-		<div dojoType="dojox.drawing.Toolbar" drawingId="drawingNode" class="drawingToolbar vertical">
+		<div dojoType="dojox.drawing.ui.dom.Toolbar" drawingId="drawingNode" class="drawingToolbar vertical">
 			<div tool="dojox.drawing.tools.Line" selected="false">Line</div>
 			<div tool="dojox.drawing.tools.Rect" selected="false">Rect</div>
 			<div tool="dojox.drawing.tools.Ellipse" selected="false">Ellipse</div>
@@ -155,8 +155,8 @@
 			<div tool="dojox.drawing.tools.Arrow" selected="false">Arrow</div>
 			<div tool="dojox.drawing.tools.custom.Vector" selected="false">Vector</div>
 			<div tool="dojox.drawing.tools.custom.Axes" selected="false">Axes</div>
-			<div plugin="dojox.drawing.plugins.tools.Pan" options="{}">Pan</div>
-			<div plugin="dojox.drawing.plugins.tools.Zoom" options="{zoomInc:.1,minZoom:.5,maxZoom:2}">Zoom</div>
+			<div plugin="dojox.drawing.ui.dom.Pan" options="{}">Pan</div>
+			<div plugin="dojox.drawing.ui.dom.Zoom" options="{zoomInc:.1,minZoom:.5,maxZoom:2}">Zoom</div>
 			
 		</div>
 		

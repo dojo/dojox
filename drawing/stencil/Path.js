@@ -8,16 +8,13 @@ dojox.drawing.stencil.Path = dojox.drawing.util.oo.declare(
 	dojox.drawing.stencil._Base,
 	function(options){
 		dojo.disconnect(this._postRenderCon);
-
-		if(options.points){
-			//this.points = options.points;
-			//this.render();
-		}
 	},
 	{
 		type:"dojox.drawing.stencil.Path",
 		closePath: true,
 		baseRender:true,
+		closeRadius:10,
+		closeColor:{r:255,g:255,b:0,a:.5},
 		
 /*=====
 StencilData: {
@@ -41,7 +38,7 @@ StencilPoints: [
 			//
 			this.remove(this[shp]);
 			if(!this.points.length){ return; }
-			
+	
 			if(dojox.gfx.renderer=="svg"){
 				// NOTE:
 				// In order to avoid the Safari d="" errors,
@@ -51,14 +48,21 @@ StencilPoints: [
 					if(i==0){
 						strAr.push("M " + o.x +" "+ o.y);
 					}else{
-						var cmd = o.t || "L ";
-						strAr.push(cmd + o.x +" "+ o.y); // Z + undefined works here
+						var cmd = (o.t || "") + " ";
+						if(o.x===undefined){// Z + undefined works here, but checking anyway
+							strAr.push(cmd);
+						}else{
+							strAr.push(cmd + o.x +" "+ o.y); 
+						}
 					}
 				}, this);
 				if(this.closePath){
 					strAr.push("Z");
 				}
-				this[shp] = this.container.createPath(strAr.join(", ")).setStroke(sty);
+				
+				this.stringPath = strAr.join(" ");
+				
+				this[shp] = this.container.createPath(strAr.join(" ")).setStroke(sty);
 				this.closePath && this[shp].setFill(sty.fill);
 				
 			}else{
@@ -93,8 +97,66 @@ StencilPoints: [
 			this.renderHit && this._create("hit", this.style.currentHit);
 			this._create("shape", this.style.current);
 			//console.log("path render")
-		}		
+			
+			
+		//console.log("---------------------rend hit", this.renderHit, this.id)
+		},
+		getBounds: function(/* ? Boolean*/absolute){
+			// summary:
+			//	Overwriting _Base.getBounds. Not sure how absolute should
+			//	work for a path.
+			var minx = 10000, miny = 10000, maxx = 0, maxy = 0;
+			dojo.forEach(this.points, function(p){
+				if(p.x!==undefined && !isNaN(p.x)){
+					minx = Math.min(minx, p.x);
+					miny = Math.min(miny, p.y);
+					maxx = Math.max(maxx, p.x);
+					maxy = Math.max(maxy, p.y);
+				}
+			});
+			
+			return {
+				x1:minx,
+				y1:miny,
+				x2:maxx,
+				y2:maxy,
+				x:minx,
+				y:miny,
+				w:maxx-minx,
+				h:maxy-miny
+			};
+		},
 		
+		checkClosePoint: function(/*Object*/firstPt, /*Object*/currPt, /*Boolean*/remove){
+			// summary:
+			//		Checks if points are close enough to indicate that
+			//		path should be close. Provides a visual cue.
+			// description:
+			//		Not actually used in stencil.path - this is used for
+			//		drawable tools that extend it. Note that those tools
+			//		need to remove the shape created: this.closeGuide, or
+			//		add arg: remove
+			//
+			var dist = this.util.distance(firstPt.x, firstPt.y, currPt.x, currPt.y);
+			if(this.points.length>1){
+				if(dist<this.closeRadius && !this.closeGuide && !remove){
+					var c = {
+						cx:firstPt.x,
+						cy:firstPt.y,
+						rx:this.closeRadius,
+						ry:this.closeRadius
+					}
+					this.closeGuide = this.container.createEllipse(c)
+						.setFill(this.closeColor);
+						
+				}else if(remove || dist > this.closeRadius && this.closeGuide){
+					this.remove(this.closeGuide);
+					this.closeGuide = null;
+				}
+			}
+			// return if we are within close distance
+			return dist < this.closeRadius; // Boolean
+		}
 	}
 );
 

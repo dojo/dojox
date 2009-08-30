@@ -162,17 +162,14 @@ dojo.provide("dojox.drawing.Drawing");
 			}
 			
 			var stencils = dojox.drawing.getRegistered("stencil");
-			console.warn("Drawing register stencils :", stencils )
 			for(var nm in stencils){
 				this.registerTool(stencils[nm].name);
 			}
 			var tools = dojox.drawing.getRegistered("tool");
-			console.warn("Drawing register tools:", tools )
 			for(var nm in tools){
 				this.registerTool(tools[nm].name);
 			}
 			var plugs = dojox.drawing.getRegistered("plugin");
-			console.warn("Drawing register plugs:", plugs)
 			for(var nm in plugs){
 				this.registerTool(plugs[nm].name);
 			}
@@ -261,7 +258,7 @@ dojo.provide("dojox.drawing.Drawing");
 					anchors:this.anchors,
 					canvas:this.canvas
 				}, p.options || {});
-				console.log('drawing.plugin:::', p.name, props)
+				//console.log('drawing.plugin:::', p.name, props)
 				this.registerTool(p.name, dojo.getObject(p.name));
 				try{
 					this.plugins[i] = new this.tools[p.name](props);
@@ -282,10 +279,10 @@ dojo.provide("dojox.drawing.Drawing");
 			//		Fired when the canvas is ready and can be drawn to.
 			//
 			this.ready = true;
-			console.info("Surface ready")
+			//console.info("Surface ready")
 			this.mouse.init(this.canvas.domNode);
 			this.undo = new dojox.drawing.manager.Undo({keys:this.keys});
-			this.anchors = new dojox.drawing.manager.Anchors({mouse:this.mouse, undo:this.undo, util:this.util});
+			this.anchors = new dojox.drawing.manager.Anchors({drawing:this, mouse:this.mouse, undo:this.undo, util:this.util});
 			if(this.mode == "ui"){
 				this.uiStencils = new dojox.drawing.manager.StencilUI({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, keys:this.keys});
 			}else{
@@ -507,18 +504,18 @@ dojo.provide("dojox.drawing.Drawing");
 			}
 			
 			this.currentType = this.tools[type] ? type : this.stencilTypeMap[type];
-			console.log("new tool arg:", type, "curr:", this.currentType, "mode:", this.mode, "tools:", this.tools)
+			//console.log("new tool arg:", type, "curr:", this.currentType, "mode:", this.mode, "tools:", this.tools)
 			
-			//try{
+			try{
 				this.currentStencil = new this.tools[this.currentType]({container:this.canvas.surface.createGroup(), util:this.util, mouse:this.mouse, keys:this.keys});
 				console.log("new tool is:", this.currentStencil.id, this.currentStencil);
 				this.currentStencil.connect(this.currentStencil, "onRender", this, "onRenderStencil");
 				this.currentStencil.connect(this.currentStencil, "destroy", this, "onDeleteStencil");
-			//}catch(e){
-				//console.error("dojox.drawing.setTool Error:", e);
-				//console.error(this.currentType + " is not a constructor: ", this.tools[this.currentType]);
+			}catch(e){
+				console.error("dojox.drawing.setTool Error:", e);
+				console.error(this.currentType + " is not a constructor: ", this.tools[this.currentType]);
 				//console.trace();
-		//	}
+			}
 		},
 		
 		unSetTool: function(){

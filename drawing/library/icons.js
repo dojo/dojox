@@ -81,16 +81,74 @@ dojox.drawing.library.icons = {
 		closePath:false,
 		points:[ { x:50, y:20 }, { x:50, y:80 }, { t:"M", x:20, y:50 }, { x:80, y:50 } ]
 	},
-	minus:{
+	zoomIn:{
+		type:"path",
+		borderWidth:3,
+		closePath:false,
+		points:[ { x:50, y:20 }, { x:50, y:80 }, { t:"M", x:20, y:50 }, { x:80, y:50 } ]
+	},
+	zoomOut:{
 		type:"path",
 		borderWidth:3,
 		closePath:false,
 		points:[ {x:20, y:50 }, { x:80, y:50 } ]
 	},
+	zoom100:{
+		type:"text",
+		text:"100%"
+	},
 	iconize:{
 		type:"path",
-		borderWidth:3,
-		closePath:false,
-		points:[ { x:50, y:20 }, { x:50, y:80 }, { t:"M", x:20, y:50 }, { x:80, y:50 } ]
+		borderWidth:0,
+		closePath:true,
+		points:
+		
+[
+{	x:20,		y:38	},
+{	x:32,		y:26	},
+{	x:44,		y:26	},
+{	x:56,		y:38	},
+{	x:56,		y:50	},
+{	x:44,		y:62	},
+{	x:32,		y:62	},
+{	x:20,		y:56	},
+{	t:'Z'	},
+{	t:'M', x:38,		y:44	},
+{	x:68,		y:44	},
+{	x:68,		y:80	},
+{	x:38,		y:80	},
+{	t:'Z'	},
+{	t:'M', x:56,		y:62	},
+{	x:68,		y:20	},
+{	x:80,		y:62	}
+]
+		
+	},
+	pencil:{
+		type:"path",
+		borderWidth:0,
+		closePath:true,
+		points:
+		
+[
+{	x:20,		y:80	},
+{	x:26,		y:68	},
+{	x:68,		y:20	},
+{	x:80,		y:20	},
+{	x:80,		y:32	},
+{	x:38,		y:74	},
+{	t:'Z'	},
+{	t:'M', x:62,		y:32	},
+{	x:68,		y:26	},
+{	x:74,		y:26	},
+{	x:74,		y:32	},
+{	x:68,		y:38	},
+{	x:68,		y:32	},
+{	t:'Z'	},
+{	t:'M', x:56,		y:38	},
+{	x:62,		y:38	},
+{	x:32,		y:68	},
+{	x:32,		y:68	}
+]
 	}
 };

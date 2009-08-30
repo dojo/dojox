@@ -356,8 +356,8 @@ EventObject: function(){
 			
 			this.drawingType = this.util.attr(evt, "drawingType") || "";
 			var id = this._getId(evt);
-			console.log("DOWN:", this.id, id, withinCanvas);
-			console.log("this.drawingType:", this.drawingType)
+			//console.log("DOWN:", this.id, id, withinCanvas);
+			//console.log("this.drawingType:", this.drawingType)
 			this.onDown({
 				mid:this.id,
 				x:x,
