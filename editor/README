@@ -5,25 +5,52 @@ Version 0.5
 Release date: 7/10/2008
 -------------------------------------------------------------------------------
 Project state:
-experimental
+experimental, beta
 -------------------------------------------------------------------------------
 Credits
-	Mike Wilcox 	- Author
-    Dustin Machi 	- Technical Assistance
+	Mike Wilcox 	 - Author
+	Jared Jurkiewicz - Author (PrettyPrint)
+	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
 
-Space for extensions and additional plugins for dijit.Editor 
+Space for extensions and additional plugins for dijit.Editor.  The project 
+currently contains the following plugins:
+
+dojox.editor.plugins.TablePlugins:
+	Status: Experimental.
+	The Table Plugins provide a mechanism for editing tables withing the
+	dijit.Editor.  This plugin is experimental and does not work correctly
+	in all dojo supported browsers.
+
+dojox.editor.plugins.UploadImage:
+	Status: Experimental.
+	The UploadImage plugin makes use of the dojox upload widgets to provide
+	a mechanism to upload images to your server for use in the editor.
+
+dojox.editor.plugins.PrettyPrint:
+	Status: Supported (stable).
+	The PrettyPrint plugin provides a mechanism by which the output from
+	editor.getValue()/editor.attr("value") is nicely formatted.  Optional
+	format parameters are how many spaces to indent by (default is tab),
+	the maximum text line length (not including indent), and what 
+	characters in text strings should be encoded to their &<enc>; 
+	representation.
+  
 -------------------------------------------------------------------------------
 Dependencies:
 
 dijit
 dojox.form
+dojox.html.format
 
 -------------------------------------------------------------------------------
 Documentation
 
 The plugins directory contains extensions which work with dijit.Editor.
+
+See also:
+	http://docs.dojocampus.org/dojox/editor/plugins/PrettyPrint
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -31,14 +58,24 @@ Plugin Installation instructions
 Get dojo and dijit from svn. Include the Editor and plugins in your page:
 
 dojo.require("dijit.Editor");
-dojo.require("dojox.editor.plugins.TablePlugins");
-dojo.require("dojox.editor.plugins.UploadImage");
 
-And the style sheet:
+For the TablePlugins:
+	dojo.require("dojox.editor.plugins.TablePlugins");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/editorPlugins.css" type="text/css" rel="stylesheet" />
 
-<link href="[path]dojox/editor/plugins/resources/editorPlugins.css" type="text/css" rel="stylesheet" />
-<link href="[path]dojox/form/resources/FileInput.css" type="text/css" rel="stylesheet" />
+For the UploadImage plugin:
+	dojo.require("dojox.editor.plugins.UploadImage");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/editorPlugins.css" type="text/css" rel="stylesheet" />
+	<link href="[path]dojox/form/resources/FileInput.css" type="text/css" rel="stylesheet" />
+
+For the PrettyPrint plugin:
+	dojo.require("dojox.editor.plugins.PrettyPrint");
+	and CSS:
+	No CSS required.
 
 See tests for examples:
-dojox/editor/plugins/tests/editorTablePlugs.html
-dojox/editor/plugins/tests/editorUploadPlug.html
+	dojox/editor/plugins/tests/editorTablePlugs.html
+	dojox/editor/plugins/tests/editorUploadPlug.html
+	dojox/editor/plugins/tests/editorPrettyPrint.html
