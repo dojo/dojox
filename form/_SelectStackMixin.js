@@ -185,7 +185,12 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		// summary: Called when form select widget's value has changed
 		var pane = this._panes[this._paneIdFromOption(val)];
 		if (pane){
-			dijit.byId(this.stackId).selectChild(pane);
+			var s = dijit.byId(this.stackId);
+			if(pane == s.selectedChildWidget){
+				s._transition(pane);
+			}else{
+				s.selectChild(pane);
+			}
 		}
 	}
 });
