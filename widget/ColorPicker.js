@@ -1,10 +1,14 @@
 dojo.provide("dojox.widget.ColorPicker");
-dojo.experimental("dojox.widget.ColorPicker"); // level: beta
+dojo.experimental("dojox.widget.ColorPicker"); // level: beta //TODO: which?
+
+dojo.requireLocalization("dojox.widget","ColorPicker");
+dojo.requireLocalization("dojo.cldr","number");
 
 dojo.require("dijit.form._FormWidget");
 dojo.require("dojo.dnd.move"); 
 dojo.require("dojo.fx"); 
 dojo.require("dojox.color");
+dojo.require("dojo.i18n");
 
 ;(function(d){
 	
@@ -86,7 +90,13 @@ dojo.require("dojox.color");
 		_underlay: d.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
 		// don't change to d.moduleUrl, build won't intern it.
 		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html"),
-		
+
+		postMixInProperties: function(){
+			dojo.mixin(this, dojo.i18n.getLocalization("dojox.widget", "ColorPicker"));
+			dojo.mixin(this, dojo.i18n.getLocalization("dojo.cldr", "number"));
+			this.inherited(arguments);
+		},
+
 		postCreate: function(){
 			this.inherited(arguments);
 
