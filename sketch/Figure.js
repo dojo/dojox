@@ -111,11 +111,11 @@ dojo.require("dojox.sketch.UndoStack");
 		this._keydown=function(e){
 			var prevent=false;
 			if(e.ctrlKey){
-				if(e.keyCode===90){ //ctrl+z
+				if(e.keyCode===90 || e.keyCode===122){ //ctrl+z
 					self.undo();
 					prevent = true;
 				}
-				else if(e.keyCode===89){ //ctrl+y
+				else if(e.keyCode===89 || e.keyCode===121){ //ctrl+y
 					self.redo();
 					prevent = true;
 				}
@@ -276,7 +276,7 @@ dojo.require("dojox.sketch.UndoStack");
 			dojo.connect(es, 'ondblclick', this._dblclick),
 			dojo.connect(node, 'onkeydown', this._keydown));
 		
-		this.image=this.group.createImage({ width:this.size.w, height:this.size.h, src:this.imageSrc });
+		this.image=this.group.createImage({ width:this.imageSize.w, height:this.imageSize.h, src:this.imageSrc });
 	};
 
 	p.destroy=function(isLoading){
@@ -461,6 +461,10 @@ dojo.require("dojox.sketch.UndoStack");
 		};
 		var g=node.childrenByName("g")[0];
 		var img=g.childrenByName("image")[0];
+		this.imageSize={
+			w:parseFloat(img.getAttribute('width'),10), 
+			h:parseFloat(img.getAttribute('height'),10) 
+		};
 		this.imageSrc=img.getAttribute("xlink:href");
 		this.initialize(n);
 
