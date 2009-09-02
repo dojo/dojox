@@ -64,18 +64,21 @@ dojo.require("dojox.rpc.Rest");
 								if(kwArgs.incrementalUpdates 
 									&& !pathParts){ // I haven't figured out how we would do incremental updates on sub-objects yet
 									// make an incremental update using a POST
-									var incremental = {};
-									for(var j in object){
-										if(object.hasOwnProperty(j)){
-											if(object[j] !== old[j]){
-												incremental[j] = object[j];
+									var incremental = (typeof kwArgs.incrementalUpdates == 'function' ?
+										kwArgs.incrementalUpdates : function(){
+											incremental = {};
+											for(var j in object){
+												if(object.hasOwnProperty(j)){
+													if(object[j] !== old[j]){
+														incremental[j] = object[j];
+													}
+												}else if(old.hasOwnProperty(j)){
+													// we can't use incremental updates to remove properties
+													return null;
+												}
 											}
-										}else if(old.hasOwnProperty(j)){
-											// we can't use incremental updates to remove properties
-											delete incremental;
-											break;
-										}
-									}
+											return incremental;
+										})(object, old);
 								}
 								
 								if(incremental){
@@ -87,12 +90,13 @@ dojo.require("dojox.rpc.Rest");
 							}
 						}else{
 							// new object
-							var idAttribute = jr.getIdAttribute(kwArgs.service);
+							var service = jr.getServiceAndId(object.__id).service;
+							var idAttribute = jr.getIdAttribute(service);
 							if((idAttribute in object) && !kwArgs.alwaysPostNewItems){
 								// if the id attribute is specified, then we should know the location
 								actions.push({method:"put",target:object, content:object});
 							}else{
-								actions.push({method:"post",target:{__id:jr.getServiceAndId(object.__id).service.servicePath},
+								actions.push({method:"post",target:{__id:service.servicePath},
 														content:object});
 							}
 						}

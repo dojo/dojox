@@ -132,6 +132,8 @@ dojo.declare("dojox.data.JsonRestStore",
 			this._constructor.prototype = constructor.prototype;
 			this._index = dojox.rpc.Rest._index;
 		},
+		
+		
 		referenceIntegrity: true,
 		target:"",
 		// summary:
@@ -297,6 +299,10 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 		with a JSON object containing the changed properties. By default this is
 			// 		not enabled, and a PUT is used to deliver an update, and will include a full
 			// 		serialization of all the properties of the item/object. 
+			//		If this is true, the POST request body will consist of a JSON object with 
+			// 		only the changed properties. The incrementalUpdates parameter may also
+			//		be a function, in which case it will be called with the updated and previous objects
+			//		and an object update representation can be returned.
 			//
 			//	kwArgs.alwaysPostNewItems
 			//		If this is true, new items will always be sent with a POST request. By default
