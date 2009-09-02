@@ -210,7 +210,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |
 		// |		console.log(date1.getDate());
 
-		return locale.match(/^he(?:-.+)?$/) ?
+		return (locale || dojo.locale).match(/^he(?:-.+)?$/) ?
 			dojox.date.hebrew.numerals.getDayHebrewLetters(this._date) : this.getDate();
 	},
 
