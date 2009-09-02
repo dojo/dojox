@@ -1,4 +1,5 @@
 dojo.provide("dojox.editor.plugins.Smiley");
+dojo.experimental("dojox.editor.plugins.Smiley");
 
 dojo.require("dijit._editor._Plugin");
 
