@@ -335,7 +335,6 @@ dojo.require("dojox.html.entities");
 
 			//Make sure contents aren't double-encoded.
 			var commentText = decode(n.nodeValue, map);
-			console.log("Processing comment node: " + commentText);
 			indent();
 			content.push("<!--");
 			newline();
@@ -355,8 +354,6 @@ dojo.require("dojox.html.entities");
 				var i;
 				for(i = 0; i < children.length; i++){
 					var n = children[i];
-					console.log("Node type: " + n.nodeType);
-
 					if(n.nodeType === 1){
 						if(dojo.isIE && n.parentNode != node){
 							// IE is broken.  DOMs are supposed to be a tree.  
