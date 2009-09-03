@@ -308,7 +308,7 @@ dojo.require("dojox.html.entities");
 			if(textContent && !inline){
 				// Process any text content we have that occurred 
 				// before the close tag.
-				content.push(decode(formatText(textContent), map));
+				content.push(formatText(textContent));
 				textContent = "";
 			}
 			var ct = closeTags.pop();
