@@ -45,6 +45,7 @@ dojo.require("dojox.html.entities");
 
 		//Local alias to our entity encoder.
 		var encode = dojox.html.entities.encode;
+		var decode = dojox.html.entities.decode;
 
 		/** Define a bunch of formatters to format the output. **/
 
@@ -307,7 +308,7 @@ dojo.require("dojox.html.entities");
 			if(textContent && !inline){
 				// Process any text content we have that occurred 
 				// before the close tag.
-				content.push(formatText(textContent));
+				content.push(decode(formatText(textContent), map));
 				textContent = "";
 			}
 			var ct = closeTags.pop();
@@ -326,6 +327,26 @@ dojo.require("dojox.html.entities");
 			}
 		};
 
+		var processCommentNode = function(n){
+			// summary:
+			//		Function to handle processing a comment node.
+			// n:
+			//		The comment node to process.
+
+			//Make sure contents aren't double-encoded.
+			var commentText = decode(n.nodeValue, map);
+			console.log("Processing comment node: " + commentText);
+			indent();
+			content.push("<!--");
+			newline();
+			indentDepth++;
+			content.push(formatText(commentText));
+			indentDepth--;
+			indent();
+			content.push("-->");
+			newline();
+		};
+
 		var processNode = function(node) {
 			// summary:
 			//		Entrypoint for processing all the text!
@@ -334,6 +355,8 @@ dojo.require("dojox.html.entities");
 				var i;
 				for(i = 0; i < children.length; i++){
 					var n = children[i];
+					console.log("Node type: " + n.nodeType);
+
 					if(n.nodeType === 1){
 						if(dojo.isIE && n.parentNode != node){
 							// IE is broken.  DOMs are supposed to be a tree.  
@@ -345,6 +368,7 @@ dojo.require("dojox.html.entities");
 							continue;
 						}
 
+						
 						//Process non-dup elements!
 						openTag(n);
 						if(n.tagName.toLowerCase() === "script"){
@@ -368,6 +392,8 @@ dojo.require("dojox.html.entities");
 						closeTag();
 					}else if(n.nodeType === 3 || n.nodeType === 4){
 						processTextNode(n);
+					}else if(n.nodeType === 8){
+						processCommentNode(n);
 					}
 				}
 			}

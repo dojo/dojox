@@ -35,6 +35,28 @@ doh.register("dojox.html.tests.format",
 			}
 		},
 		{
+			name: "Format:  Basic HTML Format test with comment node",
+			runTest: function(t) {
+				// summary: 
+				//		Simple test of basic HTML formatting with a comment node"
+				// description:
+				//		Simple test of basic HTML formatting with a comment node"
+				if(!dojo.isIE){
+					// Hurray for IE, it sometimes just strips comment nodes from the
+					// dom.  So we can't test this reliably.
+					var txt = "<div><!-- This is a comment! --><br></div>";
+					var expected = 	"<div>\n" +
+									"   <!--\n" +
+									"      This is a comment!\n" +
+									"   -->\n" +
+									"   <br>\n" +
+									"</div>\n";
+					var formattedTxt = dojox.html.format.prettyPrint(txt, 3);
+					doh.assertEqual(expected, formattedTxt);
+				}
+			}
+		},
+		{
 			name: "Format:  Basic HTML Format test with inline tags",
 			runTest: function(t) {
 				// summary: 
@@ -228,7 +250,6 @@ doh.register("dojox.html.tests.format",
 							}catch(e){
 								deferred.errback(e);
 							}
-
 						});
 						fd.addErrback(function(error){
 							deferred.errback(error);
