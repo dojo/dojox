@@ -9,7 +9,7 @@ experimental, beta
 -------------------------------------------------------------------------------
 Credits
 	Mike Wilcox 	 - Author
-	Jared Jurkiewicz - Author (PrettyPrint)
+	Jared Jurkiewicz - Author (PrettyPrint, PageBreak)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -37,6 +37,12 @@ dojox.editor.plugins.PrettyPrint:
 	characters in text strings should be encoded to their &<enc>; 
 	representation.
   
+dojox.editor.plugins.PageBreak:
+	Status: Supported (stable).
+	A simple plugin that allows you to insert 'page breaks' into the doc
+	being edited.  These page break styles will then cause the document 
+	to break to another page when printed.
+ 
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -51,6 +57,7 @@ The plugins directory contains extensions which work with dijit.Editor.
 
 See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/PrettyPrint
+	http://docs.dojocampus.org/dojox/editor/plugins/PageBreak
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -74,6 +81,11 @@ For the PrettyPrint plugin:
 	dojo.require("dojox.editor.plugins.PrettyPrint");
 	and CSS:
 	No CSS required.
+
+For the PageBreak plugin:
+        dojo.require("dojox.editor.plugins.PageBreak");
+        and CSS:
+        No CSS required.
 
 See tests for examples:
 	dojox/editor/plugins/tests/editorTablePlugs.html
