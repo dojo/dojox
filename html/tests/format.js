@@ -35,6 +35,21 @@ doh.register("dojox.html.tests.format",
 			}
 		},
 		{
+			name: "Format:  Basic HTML Format test with three space indent and custom encoding",
+			runTest: function(t) {
+				// summary: 
+				//		Simple test of basic HTML formatting with spaced indenting instead of tab
+				// description:
+				//		Simple test of basic HTML formatting with spaced indenting instead of tab
+				var txt = "<div><b>hello</b> this is \"some\" entities & text.</div>";
+				var expected = 	"<div>\n" +
+								"   <b>hello</b> this is \"some\" entities &amp; text.\n" +
+								"</div>\n";
+				var formattedTxt = dojox.html.format.prettyPrint(txt, 3, -1, [["&", "amp"]]);
+				doh.assertEqual(expected, formattedTxt);
+			}
+		},
+		{
 			name: "Format:  Basic HTML Format test with comment node",
 			runTest: function(t) {
 				// summary: 

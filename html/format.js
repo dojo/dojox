@@ -111,7 +111,7 @@ dojo.require("dojox.html.entities");
 			//		insertion
 			// n:
 			//		The text node to process.
-			textContent += encode(n.nodeValue);
+			textContent += encode(n.nodeValue, map);
 		};
 
 		var formatText = function(txt){
