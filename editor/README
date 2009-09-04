@@ -5,11 +5,11 @@ Version 0.5
 Release date: 7/10/2008
 -------------------------------------------------------------------------------
 Project state:
-experimental, beta
+experimental, beta, stable
 -------------------------------------------------------------------------------
 Credits
 	Mike Wilcox 	 - Author
-	Jared Jurkiewicz - Author (PrettyPrint, PageBreak)
+	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -42,6 +42,12 @@ dojox.editor.plugins.PageBreak:
 	A simple plugin that allows you to insert 'page breaks' into the doc
 	being edited.  These page break styles will then cause the document 
 	to break to another page when printed.
+
+dojox.editor.plugins.ShowBlockNodes:
+	Status: Supported (stable).
+        A simple plugin that allows you to toggle on and off a CSS 'view' of
+	how the page is laid out in terms of the block nodes used for its
+	formatting.
  
 -------------------------------------------------------------------------------
 Dependencies:
@@ -58,6 +64,7 @@ The plugins directory contains extensions which work with dijit.Editor.
 See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/PrettyPrint
 	http://docs.dojocampus.org/dojox/editor/plugins/PageBreak
+	http://docs.dojocampus.org/dojox/editor/plugins/ShowBlockNodes
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -85,9 +92,17 @@ For the PrettyPrint plugin:
 For the PageBreak plugin:
         dojo.require("dojox.editor.plugins.PageBreak");
         and CSS:
-        No CSS required.
+	<link href="[path]dojox/editor/plugins/resources/css/PageBreak.css" type="text/css" rel="stylesheet" />
+
+For the ShowBlockNodes plugin:
+	dojo.require("dojox.editor.plugins.ShowBockNodes");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/ShowBlockNodes.css" type="text/css" rel="stylesheet" />
+
 
 See tests for examples:
 	dojox/editor/plugins/tests/editorTablePlugs.html
 	dojox/editor/plugins/tests/editorUploadPlug.html
 	dojox/editor/plugins/tests/editorPrettyPrint.html
+	dojox/editor/plugins/tests/editorPageBreak.html
+	dojox/editor/plugins/tests/editorShowBlockNodes.html
