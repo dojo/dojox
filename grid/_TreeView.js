@@ -14,7 +14,7 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 	rowIdx: -1,
 	expandoCell: null,
 	level: 0,
-	templatePath: dojo.moduleUrl("dojox.grid", "resources/Expando.html"),
+	templateString: dojo.cache("dojox.grid", "resources/Expando.html"),
 	_toggleRows: function(toggleClass, open){
 		if(!toggleClass || !this.rowNode){ return; }
 		if(dojo.query("table.dojoxGridRowTableNeedsRowUpdate").length){

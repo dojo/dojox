@@ -18,7 +18,7 @@ dojo.declare(
 	//
 	
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("dojox.widget", "Wizard/Wizard.html"),
+	templateString: dojo.cache("dojox.widget", "Wizard/Wizard.html"),
 	
 	// nextButtonLabel: String
 	//		Label override for the "Next" button.

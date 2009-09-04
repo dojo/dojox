@@ -12,7 +12,7 @@ dojo.declare("dojox.av.widget.VolumeButton", [dijit._Widget, dijit._Templated], 
 	//		opens a slider on click that is used to adjust the volume.
 	//		The icon changes according to the volume level.
 	//
-	templatePath: dojo.moduleUrl("dojox.av.widget","resources/VolumeButton.html"),
+	templateString: dojo.cache("dojox.av.widget","resources/VolumeButton.html"),
 	//
 	postCreate: function(){
 		// summary:

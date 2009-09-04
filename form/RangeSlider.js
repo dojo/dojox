@@ -372,7 +372,7 @@ dojo.require("dojox.fx");
 		{
 			// summary:
 			// 	A form widget that allows one to select a range with two horizontally draggable images
-			templatePath: dojo.moduleUrl('dojox.form','resources/HorizontalRangeSlider.html')
+			templateString: dojo.cache('dojox.form','resources/HorizontalRangeSlider.html')
 		}
 	);
 
@@ -381,7 +381,7 @@ dojo.require("dojox.fx");
 		{
 			// summary:
 			// 	A form widget that allows one to select a range with two vertically draggable images
-			templatePath: dojo.moduleUrl('dojox.form','resources/VerticalRangeSlider.html')
+			templateString: dojo.cache('dojox.form','resources/VerticalRangeSlider.html')
 		}
 	);
 

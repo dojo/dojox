@@ -39,7 +39,7 @@ dojo.declare("dojox.widget.SortList",
 	
 	baseClass: "dojoxSortList",
 
-	templatePath: dojo.moduleUrl("dojox.widget","SortList/SortList.html"),
+	templateString: dojo.cache("dojox.widget","SortList/SortList.html"),
 
 	_addItem: function(item){
 		dojo.create("li", {

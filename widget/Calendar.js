@@ -8,9 +8,9 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 	// summary: 
 	//		The Root class for all _Calendar extensions
 
-	// templatePath: URL
-	//		the path to the template to be used to construct the widget.
-	templatePath: dojo.moduleUrl("dojox.widget","Calendar/Calendar.html"),
+	// templateString: String
+	//		The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget","Calendar/Calendar.html"),
 
 	// _views: Array
 	//		The list of mixin views available on this calendar.
@@ -414,9 +414,9 @@ dojo.declare("dojox.widget._CalendarDayView", [dojox.widget._CalendarView, dijit
 	//		This should not be mixed in directly with dojox.widget._CalendarBase.
 	//		Instead, use dojox.widget._CalendarDay
 
-	// templatePath: URL
-	//		The path to the template to be used to construct the widget.
-	templatePath: dojo.moduleUrl("dojox.widget","Calendar/CalendarDay.html"),
+	// templateString: String
+	//		The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget","Calendar/CalendarDay.html"),
 
 	// datePart: String
 	//		Specifies how much to increment the displayed date when the user
@@ -597,9 +597,9 @@ dojo.declare("dojox.widget._CalendarMonthYearView", [dojox.widget._CalendarView,
 	// summary:
 	//		A Calendar view listing the 12 months of the year
 
-	// templatePath: URL
-	//		The path to the template to be used to construct the widget.
-	templatePath: dojo.moduleUrl("dojox.widget","Calendar/CalendarMonthYear.html"),
+	// templateString: String
+	//		The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget","Calendar/CalendarMonthYear.html"),
 
 	// datePart: String
 	//		Specifies how much to increment the displayed date when the user

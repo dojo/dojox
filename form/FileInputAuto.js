@@ -47,7 +47,7 @@ dojo.declare("dojox.form.FileInputAuto",
 	_sent: false,
 
 	// small template changes, new attachpoint: overlay
-	templatePath: dojo.moduleUrl("dojox.form","resources/FileInputAuto.html"),
+	templateString: dojo.cache("dojox.form","resources/FileInputAuto.html"),
 
 	startup: function(){
 		// summary: add our extra blur listeners

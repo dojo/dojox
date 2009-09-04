@@ -14,9 +14,9 @@ dojo.declare("dojox.widget._FileInfoPane",
 	//	delete our template string
 	templateString: "",
 	
-	// templatePath: string
-	//	Our template path
-	templatePath: dojo.moduleUrl("dojox.widget", "FilePicker/_FileInfoPane.html"),
+	// templateString: String
+	//		The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget", "FilePicker/_FileInfoPane.html"),
 	
 	postMixInProperties: function(){
 		this._messages = dojo.i18n.getLocalization("dojox.widget", "FilePicker", this.lang);

@@ -92,7 +92,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	// The attribute name for accessing the title from the data store
 	titleAttr: "title",
 	
-	templatePath: dojo.moduleUrl("dojox.image", "resources/ThumbnailPicker.html"), 
+	templateString: dojo.cache("dojox.image", "resources/ThumbnailPicker.html"), 
 	
 	// thumbs: Array
 	// Stores the image nodes for the thumbnails.

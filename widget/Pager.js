@@ -11,7 +11,7 @@ dojo.declare("dojox.widget.Pager",
 	// summary: A Pager, displaying a list of sized nodes
 	
 	
-	templatePath: dojo.moduleUrl("dojox.widget", "Pager/Pager.html"),
+	templateString: dojo.cache("dojox.widget", "Pager/Pager.html"),
 
 /*=====	
 	// iconPrevious: String?

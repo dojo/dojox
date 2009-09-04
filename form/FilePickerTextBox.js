@@ -13,7 +13,7 @@ dojo.declare(
 		
 		baseClass: "dojoxFilePickerTextBox",
 		
-		templatePath: dojo.moduleUrl("dojox.form", "resources/FilePickerTextBox.html"),
+		templateString: dojo.cache("dojox.form", "resources/FilePickerTextBox.html"),
 		
 		// searchDelay: Integer
 		//		Delay in milliseconds between when user types something and we start

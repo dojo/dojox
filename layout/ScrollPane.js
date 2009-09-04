@@ -40,7 +40,7 @@ dojo.declare("dojox.layout.ScrollPane",
 	// alwaysShow: Boolean
 	//		whether the scroll helper should hide when mouseleave
 	autoHide: true,
-	templatePath: dojo.moduleUrl("dojox.layout","resources/ScrollPane.html"),
+	templateString: dojo.cache("dojox.layout","resources/ScrollPane.html"),
 	
 	resize: function(size){
 		// summary: calculates required sizes. Call this if you add/remove content manually, or reload the content.

@@ -96,7 +96,7 @@ dojo.declare("dojox.image.SlideShow",
 	// Time, in seconds, between image transitions during a slideshow.
 	slideshowInterval: 3,
 	
-	templatePath: dojo.moduleUrl("dojox.image", "resources/SlideShow.html"),
+	templateString: dojo.cache("dojox.image", "resources/SlideShow.html"),
 	
 	// _imageCounter: Number
 	//	A counter to keep track of which index image is to be loaded next

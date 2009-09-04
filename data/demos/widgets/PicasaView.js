@@ -5,7 +5,7 @@ dojo.require("dijit._Widget");
 dojo.declare("dojox.data.demos.widgets.PicasaView", [dijit._Widget, dijit._Templated], {
 	//Simple demo widget for representing a view of a Picasa Item.
 
-	templatePath: dojo.moduleUrl("dojox", "data/demos/widgets/templates/PicasaView.html"),
+	templateString: dojo.cache("dojox", "data/demos/widgets/templates/PicasaView.html"),
 
 	//Attach points for reference.
 	titleNode: null, 

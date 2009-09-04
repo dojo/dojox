@@ -116,7 +116,7 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 
 	// internal data
 	gaugeContent: undefined,
-	templatePath: dojo.moduleUrl("dojox.widget.gauge", "_Gauge.html"),
+	templateString: dojo.cache("dojox.widget.gauge", "_Gauge.html"),
 	_backgroundDefault: {color: '#E0E0E0'},
 	_rangeData: null,
 	_indicatorData: null,
@@ -681,7 +681,7 @@ dojo.declare("dojox.widget.gauge._Indicator",[dijit._Widget, dijit._Contained, d
 	// The title of the indicator, to be displayed next to it's input box for the text-representation.
 	title: "",
 
-	templatePath: dojo.moduleUrl("dojox.widget.gauge", "_Indicator.html"),
+	templateString: dojo.cache("dojox.widget.gauge", "_Indicator.html"),
 
 	startup: function() {
 		if(this.onDragMove){

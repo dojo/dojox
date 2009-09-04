@@ -40,7 +40,7 @@ dojo.declare("dojox.av.widget.Player", [dijit._Widget, dijit._Templated], {
 	//videoHeight: 240,
 	
 	widgetsInTemplate:true,
-	templatePath: dojo.moduleUrl("dojox.av.widget","resources/Player.html"),
+	templateString: dojo.cache("dojox.av.widget","resources/Player.html"),
 	
 	_fillContent: function(){ 
 		// summary

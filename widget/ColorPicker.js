@@ -89,7 +89,7 @@ dojo.require("dojo.i18n");
 		
 		_underlay: d.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
 		// don't change to d.moduleUrl, build won't intern it.
-		templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html"),
+		templateString: dojo.cache("dojox.widget","ColorPicker/ColorPicker.html"),
 
 		postMixInProperties: function(){
 			dojo.mixin(this, dojo.i18n.getLocalization("dojox.widget", "ColorPicker"));

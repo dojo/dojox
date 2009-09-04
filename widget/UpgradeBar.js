@@ -52,7 +52,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 	//		link is not displayed.
 	noRemindButton:"Don't Remind Me Again",
 	
-	templatePath: dojo.moduleUrl("dojox.widget","UpgradeBar/UpgradeBar.html"),
+	templateString: dojo.cache("dojox.widget","UpgradeBar/UpgradeBar.html"),
 	
 	constructor: function(props, node){
 		

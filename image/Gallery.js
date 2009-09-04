@@ -62,7 +62,7 @@ dojo.declare("dojox.image.Gallery",
 	//		Time, in seconds, between image changes in the slide show.
 	slideshowInterval: 3,
 	
-	templatePath: dojo.moduleUrl("dojox.image", "resources/Gallery.html"), 
+	templateString: dojo.cache("dojox.image", "resources/Gallery.html"), 
 
 	postCreate: function(){
 		// summary: 

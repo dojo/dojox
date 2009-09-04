@@ -19,7 +19,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 	maxWidth: "",
 	splitter: false,
 	
-	templatePath: dojo.moduleUrl("dojox.layout","resources/ExpandoPane.html"),
+	templateString: dojo.cache("dojox.layout","resources/ExpandoPane.html"),
 
 	// easeOut: String|Function
 	//		easing function used to hide pane

@@ -18,9 +18,9 @@ dojo.declare("dojox.widget._CalendarMonth", null, {
 dojo.declare("dojox.widget._CalendarMonthView", [dojox.widget._CalendarView, dijit._Templated], {
 	// summary: A Calendar view listing the 12 months of the year
 
-	// templatePath: URL
-	//	the path to the template to be used to construct the widget.
-	templatePath: dojo.moduleUrl("dojox.widget","Calendar/CalendarMonth.html"),
+	// templateString: String
+	//	The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget","Calendar/CalendarMonth.html"),
 
 	// datePart: String
 	//	Specifies how much to increment the displayed date when the user
@@ -75,9 +75,9 @@ dojo.declare("dojox.widget._CalendarYear", null, {
 dojo.declare("dojox.widget._CalendarYearView", [dojox.widget._CalendarView, dijit._Templated], {
 	// summary: A Calendar view listing 12 years
 
-	// templatePath: URL
-	//	the path to the template to be used to construct the widget.
-	templatePath: dojo.moduleUrl("dojox.widget","Calendar/CalendarYear.html"),
+	// templateString: String
+	//		The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget","Calendar/CalendarYear.html"),
 
 	displayedYears: 6,
 

@@ -44,20 +44,9 @@ dojo.declare("dojox.editor.plugins.,SmileyPalette", dijit.ColorPalette, {
 		
 	},
 
-	// templatePath: String
-	//		Path to the template of this widget.
-	templatePath: dojo.moduleUrl("dijit", "templates/ColorPalette.html"),
-
-	// _paletteDims: [protected] Object
-	//		Size of the supported palettes for alignment purposes.
-	_paletteDims: {
-		"7x10": {"width": "206px", "height": "145px"},
-		"3x4": {"width": "86px", "height": "64px"}
-	},
-
-	// templatePath: String
-	//		Path to the template of this widget.
-	templatePath: dojo.moduleUrl("dijit", "templates/ColorPalette.html"),
+	// templateString: String
+	//		Template of this widget.
+	templateString: dojo.cache("dijit", "templates/ColorPalette.html"),
 
 	// _paletteDims: [protected] Object
 	//		Size of the supported palettes for alignment purposes.
@@ -65,5 +54,4 @@ dojo.declare("dojox.editor.plugins.,SmileyPalette", dijit.ColorPalette, {
 		"7x10": {"width": "206px", "height": "145px"},
 		"3x4": {"width": "86px", "height": "64px"}
 	}
-	
 });

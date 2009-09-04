@@ -74,8 +74,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	_allFPs: [],
 	_startZ: 100,
 
-	templateString: null,
-	templatePath: dojo.moduleUrl("dojox.layout","resources/FloatingPane.html"),
+	templateString: dojo.cache("dojox.layout","resources/FloatingPane.html"),
 	
 	postCreate: function(){
 	

@@ -7,7 +7,7 @@ dojo.declare("dojox.av.widget.PlayButton", [dijit._Widget, dijit._Templated], {
 	// summary:
 	//		A Play/Pause button widget to use with dojox.av.widget.Player
 	//
-	templatePath: dojo.moduleUrl("dojox.av.widget","resources/PlayButton.html"),
+	templateString: dojo.cache("dojox.av.widget","resources/PlayButton.html"),
 	//
 	postCreate: function(){
 		// summary:

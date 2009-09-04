@@ -10,7 +10,7 @@
 				dojo.require("dojo.parser");
 
 				dojo.declare("demo.Gallery", [dijit._Widget, dojox.dtl._Templated], {
-					templatePath: dojo.moduleUrl("dojox.dtl.demos.templates", "gallery.html"),
+					templateString: dojo.cache("dojox.dtl.demos.templates", "gallery.html"),
 					store: new dojox.data.FlickrRestStore(),
 					selectThumbnail: function(e){
 						this.selected = e.target.className;

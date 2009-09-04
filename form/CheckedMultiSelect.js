@@ -10,7 +10,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	//		The individual items for a CheckedMultiSelect
 
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("dojox.form", "resources/_CheckedMultiSelectItem.html"),
+	templateString: dojo.cache("dojox.form", "resources/_CheckedMultiSelectItem.html"),
 
 	baseClass: "dojoxMultiSelectItem",
 
@@ -115,7 +115,7 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	//		Extends the core dijit MultiSelect to provide a "checkbox" selector
 
 	templateString: "",
-	templatePath: dojo.moduleUrl("dojox.form", "resources/CheckedMultiSelect.html"),
+	templateString: dojo.cache("dojox.form", "resources/CheckedMultiSelect.html"),
 
 	baseClass: "dojoxMultiSelect",
 

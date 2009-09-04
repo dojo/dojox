@@ -857,7 +857,7 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 	baseClass:"EditorTableDialog",
 				
 	widgetsInTemplate:true,
-	templatePath: dojo.moduleUrl("dojox.editor.plugins", "resources/insertTable.html"),
+	templateString: dojo.cache("dojox.editor.plugins", "resources/insertTable.html"),
 
 	postMixInProperties: function(){
 		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
@@ -916,7 +916,7 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	widgetsInTemplate:true,
 	table:null, //html table to be modified
 	tableAtts:{},
-	templatePath: dojo.moduleUrl("dojox.editor.plugins", "resources/modifyTable.html"),
+	templateString: dojo.cache("dojox.editor.plugins", "resources/modifyTable.html"),
 
 	postMixInProperties: function(){
 		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);

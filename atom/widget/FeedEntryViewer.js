@@ -28,7 +28,7 @@ dojo.declare("dojox.atom.widget.FeedEntryViewer",[dijit._Widget, dijit._Template
 	_optionButtonDisplayed: true,
 
 	//Templates for the HTML rendering.  Need to figure these out better, admittedly.
-	templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/FeedEntryViewer.html"),
+	templateString: dojo.cache("dojox.atom", "widget/templates/FeedEntryViewer.html"),
 	
 	_entry: null,			//The entry that is being viewed/edited.
 	_feed:  null,			//The feed the entry came from.
@@ -754,7 +754,7 @@ dojo.declare("dojox.atom.widget.EntryHeader",[dijit._Widget, dijit._Templated, d
 	//	description:
 	//		Widget representing a header in a FeedEntryViewer/Editor
 	title: "",
-	templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/EntryHeader.html"),
+	templateString: dojo.cache("dojox.atom", "widget/templates/EntryHeader.html"),
 
 	postCreate: function(){
 		this.setListHeader();

@@ -8,7 +8,7 @@ dojo.declare("dojox.data.demos.widgets.FlickrViewList",
 		store: null,
 		items: null,
 
-		templatePath: dojo.moduleUrl("dojox", "data/demos/widgets/templates/FlickrViewList.html"),
+		templateString: dojo.cache("dojox", "data/demos/widgets/templates/FlickrViewList.html"),
 	
 		fetch: function(request){
 			request.onComplete = dojo.hitch(this, "onComplete");

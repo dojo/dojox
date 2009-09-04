@@ -25,7 +25,7 @@ dojo.declare("dojox.form.FileInput",
 	//	ugh, this should be pulled from this.domNode
 	name: "uploadFile",
 
-	templatePath: dojo.moduleUrl("dojox.form","resources/FileInput.html"),
+	templateString: dojo.cache("dojox.form","resources/FileInput.html"),
 	
 	startup: function(){
 		// summary: listen for changes on our real file input

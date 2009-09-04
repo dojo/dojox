@@ -11,7 +11,7 @@ dojo.declare("dojox.av.widget.Status", [dijit._Widget, dijit._Templated], {
 	//		(playing, paused, buffering, etc.) in the middle. Displays
 	//		the playhead time on the left and the duration on the right.
 	//
-	templatePath: dojo.moduleUrl("dojox.av.widget","resources/Status.html"),
+	templateString: dojo.cache("dojox.av.widget","resources/Status.html"),
 	//
 	postCreate: function(){
 		this.titleNode = dojo.query(".Status", this.domNode);

@@ -18,7 +18,7 @@ dojo.declare('dojox.widget.Dialog',
 	//		It works identically to a `dijit.Dialog` with several 
 	//		additional parameters.
 	
-	templatePath: dojo.moduleUrl('dojox.widget','Dialog/Dialog.html'),
+	templateString: dojo.cache('dojox.widget','Dialog/Dialog.html'),
 	
 	// sizeToViewport: Boolean
 	//		If true, fix the size of the dialog to the Viewport based on 

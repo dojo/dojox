@@ -181,7 +181,7 @@ dojo.requireLocalization("dijit", "loading");
 		//	|		structure="structure"
 		//	|		dojoType="dojox.grid._Grid"></div>
 
-		templatePath: dojo.moduleUrl("dojox.grid","resources/_Grid.html"),
+		templateString: dojo.cache("dojox.grid","resources/_Grid.html"),
 
 		// classTag: String
 		// 		CSS class applied to the grid's domNode

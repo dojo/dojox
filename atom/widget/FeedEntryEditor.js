@@ -27,7 +27,7 @@ dojo.declare("dojox.atom.widget.FeedEntryEditor",dojox.atom.widget.FeedEntryView
 	_editable: false,		//Flag denoting if the current entry is editable or not.
 
 	//Templates for the HTML rendering.  Need to figure these out better, admittedly.
-	templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/FeedEntryEditor.html"),
+	templateString: dojo.cache("dojox.atom", "widget/templates/FeedEntryEditor.html"),
 
 	postCreate: function(){
 		if(this.entrySelectionTopic !== ""){
@@ -994,7 +994,7 @@ dojo.declare("dojox.atom.widget.PeopleEditor",[dijit._Widget, dijit._Templated, 
 		//	description: 
 		//		An editor for dojox.atom.io.model.Person objects.  Displays multiple rows for the respective arrays
 		//		of people.  Can add/remove rows on the fly.
-		templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/PeopleEditor.html"),
+		templateString: dojo.cache("dojox.atom", "widget/templates/PeopleEditor.html"),
 
 		_rows: [],
 		_editors: [],

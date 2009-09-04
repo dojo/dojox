@@ -584,9 +584,9 @@ dojo.declare("dojox.widget.RollingList",
 	[dijit._Widget, dijit._Templated, dijit._Container], {
 	// summary: a rolling list that can be tied to a data store with children
 		
-	// templatePath: string
-	//	our template to use
-	templatePath: dojo.moduleUrl("dojox.widget", "RollingList/RollingList.html"),
+	// templateString: String
+	//		The template to be used to construct the widget.
+	templateString: dojo.cache("dojox.widget", "RollingList/RollingList.html"),
 	widgetsInTemplate: true,
 	
 	// className: string

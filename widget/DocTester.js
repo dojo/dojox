@@ -11,7 +11,7 @@ dojo.declare('dojox.widget.DocTester',
 	{
 		// summary: A widget to run DocTests inside an HTML page.
 		// 
-		templatePath: dojo.moduleUrl('dojox.widget','DocTester/DocTester.html'),
+		templateString: dojo.cache('dojox.widget','DocTester/DocTester.html'),
 		widgetsInTemplate: true,
 	
 		_fillContent:function(/*DomNode*/source){

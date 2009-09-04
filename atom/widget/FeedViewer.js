@@ -21,7 +21,7 @@ dojo.declare("dojox.atom.widget.FeedViewer",[dijit._Widget, dijit._Templated, di
 	localSaveOnly: false,
 
 	//Templates for the HTML rendering.  Need to figure these out better, admittedly.
-	templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/FeedViewer.html"),
+	templateString: dojo.cache("dojox.atom", "widget/templates/FeedViewer.html"),
 
 	_feed: null,
 	_currentSelection: null, // Currently selected entry
@@ -615,7 +615,7 @@ dojo.declare("dojox.atom.widget.FeedViewerEntry",[dijit._Widget, dijit._Template
 	//		Widget for handling the display of an entry and specific events associated with it.
 	//		description: Widget for handling the display of an entry and specific events associated with it.
 
-	templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/FeedViewerEntry.html"),
+	templateString: dojo.cache("dojox.atom", "widget/templates/FeedViewerEntry.html"),
 
 	entryNode: null,
 	timeNode: null,
@@ -718,7 +718,7 @@ dojo.declare("dojox.atom.widget.FeedViewerGrouping",[dijit._Widget, dijit._Templ
 	//		Grouping of feed entries.
 	//	description: 
 	//		Grouping of feed entries.
-	templatePath: dojo.moduleUrl("dojox.atom", "widget/templates/FeedViewerGrouping.html"),
+	templateString: dojo.cache("dojox.atom", "widget/templates/FeedViewerGrouping.html"),
 	
 	groupingNode: null,
 	titleNode: null,

@@ -144,7 +144,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 	//		The name to send our old password as (when form is posted)
 	oldName: "",
 	
-	templatePath: dojo.moduleUrl("dojox.form", "resources/PasswordValidator.html"),
+	templateString: dojo.cache("dojox.form", "resources/PasswordValidator.html"),
 	
 	_hasBeenBlurred: false,
 

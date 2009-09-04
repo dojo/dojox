@@ -20,7 +20,7 @@ dojo.declare("dojox.layout.GridContainer",
 	//		The position of other children is automatically calculated when a child is moved
 	//	
 
-	templatePath: dojo.moduleUrl("dojox.layout", "resources/GridContainer.html"),
+	templateString: dojo.cache("dojox.layout", "resources/GridContainer.html"),
 	isContainer: true,
 
 	//isAutoOrganized: Boolean:
