@@ -131,6 +131,10 @@
 	color: #000;
 }
 
+.tundra .dojoxGridRowOver .dojoxGridCell .dijitDisabled {
+	color: gray;
+}
+
 .tundra .dojoxGridRowOdd {
 	background-color: #f2f5f9;
 }
