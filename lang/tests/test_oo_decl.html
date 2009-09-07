@@ -291,6 +291,7 @@
             }
 
             var test2 = function(){
+				test1();
                 superclassRef();
                 inheritedExplicitCall();
             }
@@ -300,6 +301,6 @@
 	</head>
 	<body>
 		<p>This test is meant to run with Firebug. Open the console to see the output.</p>
-		<p><button onclick="test1()">Start</button></p>
+		<p><button onclick="test2()">Start</button></p>
 	</body>
 </html>
