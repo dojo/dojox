@@ -9,16 +9,16 @@ dojo.experimental("dojox.lang.oo.declare");
 		cname = "constructor", has = "hasOwnProperty", dname = "declaredClass",
 		isF = d.isFunction, each = d.forEach, xtor = function(){}, counter = 0;
 
-	function error(cond, msg){ if(cond){ throw new Error("declare: " + msg); } }
+	function err(msg){ throw new Error("declare: " + msg); }
 
 	// C3 Method Resolution Order (see http://www.python.org/download/releases/2.3/mro/)
 	function c3mro(bases){
-		var result = [null], l = bases.length, classes = new Array(l),
+		var result = [0], l = bases.length, classes = new Array(l),
 			i = 0, j, m, m2, c, cls, lin, clsNum = 0;
 
 		// initialize
 		each(bases, function(c, i){
-			error(!c, "mixin #" + i + " is null");
+			if(!c) err("mixin #" + i + " is null");
 			lin = c._meta && c._meta.bases || [c];
 			clsNum += lin.length;
 			m = {};
@@ -59,7 +59,7 @@ dojo.experimental("dojox.lang.oo.declare");
 					}
 				}
 			}
-			error(i < 0, "can't build consistent linearization");
+			if(i < 0) err("can't build consistent linearization");
 		}
 
 		return result;
@@ -85,7 +85,7 @@ dojo.experimental("dojox.lang.oo.declare");
 
 		function inherited(args, a, b){
 			var c = this.constructor, m = c._meta, cache = c._cache,
-				caller, i, l, f, n, ch, s, x, name;
+				caller, i, l, f, n, ch, x, name;
 
 			// crack arguments
 			if(typeof args == "string"){
@@ -96,38 +96,30 @@ dojo.experimental("dojox.lang.oo.declare");
 
 			caller = inherited.caller;
 			n = caller.nom;
-			error(n && name && n !== name, "calling inherited() with a different name: " + name);
+			if(n && name && n !== name) err("calling inherited() with a different name: " + name);
 			name = name || n;
 			ch = cache[has](name) && cache[name];
 
 			// get the cached method list
 			if(!ch){
-				error(!name, "can't deduce a name to call inherited()");
-				error(name == cname && ctorSpecial, "calling constructor as inherited");
-				error(chains[has](name), "calling chained method as inherited: " + name);
+				if(!name) err("can't deduce a name to call inherited()");
+				if(name == cname && ctorSpecial) err("calling constructor as inherited");
+				if(chains[has](name)) err("calling chained method as inherited: " + name);
 				ch = cache[name] = buildMethodList(m.bases, name);
 			}
 
-			// check the stack
-			do{
-				s = this._inherited;
-				n = s.length - 1;
-				x = s[n];
-				if(x && x.name === name && ch[x.pos] === caller && caller.caller === inherited) break;
+			// alternative (simpler) caching
+			x = this._inherited;
+			if(!x || x.name !== name || ch[x.pos] !== caller || caller.caller !== inherited){
 				// find the caller
 				for(i = 0, l = ch.length; i < l && ch[i] !== caller; ++i);
 				// the assignment on the next line is intentional
-				if(i == l) this[name] === caller && (i = -1) || error(1, "can't find the caller for inherited()");
+				if(i == l) this[name] === caller && (i = -1) || err("can't find the caller for inherited()");
 				// the assignment on the next line is intentional
-				s.push(x = {name: name, start: i, pos: i});
-			}while(false);
-			f = ch[++x.pos];
-
-			try{
-				return f ? f.apply(this, a || args) : undefined;
-			}finally{
-				x.start == --x.pos && s.pop();
+				this._inherited = x = {name: name, pos: i};
 			}
+			f = ch[++x.pos];
+			return f ? f.apply(this, a || args) : undefined;
 		}
 
 		return function(className, superclass, props){
@@ -145,7 +137,7 @@ dojo.experimental("dojox.lang.oo.declare");
 			if(superclass){
 				// multiple inheritance (potentially)
 				bases = d.isArray(superclass) ? c3mro(superclass) :
-					[null].concat((t = superclass._meta) && t.bases || [superclass]);
+					[0].concat((t = superclass._meta) && t.bases || [superclass]);
 				// the assignment on the next line is intentional
 				superclass = bases[l = bases.length - 1];
 				for(i = l - 1;;){
@@ -159,9 +151,9 @@ dojo.experimental("dojox.lang.oo.declare");
 					ctor.prototype = proto;
 					superclass = proto.constructor = ctor;
 				}
-				xtor.prototype = null;	// cleanup
+				xtor.prototype = 0;	// cleanup
 			}else{
-				bases = [null];
+				bases = [0];
 				proto = {};
 			}
 
@@ -177,7 +169,7 @@ dojo.experimental("dojox.lang.oo.declare");
 				// compatibility mode with the legacy dojo.declare()
 				ctor = function(){
 					var a = arguments, args = a, a0, f, i, l, h, preArgs;
-					this._inherited = [];
+					this._inherited = 0;
 					// perform the shaman's rituals of the original dojo.declare()
 					// 1) call two types of the preamble
 					if((a0 = a[0]) && a0.preamble || this.preamble){
@@ -211,7 +203,7 @@ dojo.experimental("dojox.lang.oo.declare");
 					// chained constructor
 					ctor = function(){
 						var a = arguments, f, i, l;
-						this._inherited = [];
+						this._inherited = 0;
 						// perform the shaman's rituals of the original dojo.declare()
 						// 1) do not call the preamble
 						// 2) call the constructor with the same parameters
@@ -224,7 +216,7 @@ dojo.experimental("dojox.lang.oo.declare");
 					// plain vanilla constructor
 					ctor = function(){
 						var a = arguments, f;
-						this._inherited = [];
+						this._inherited = 0;
 						// perform the shaman's rituals of the original dojo.declare()
 						// 1) do not call the preamble
 						// 2) call our original constructor
