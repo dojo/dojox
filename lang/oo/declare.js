@@ -14,25 +14,28 @@ dojo.experimental("dojox.lang.oo.declare");
 	// C3 Method Resolution Order (see http://www.python.org/download/releases/2.3/mro/)
 	function c3mro(bases){
 		var result = [0], l = bases.length, classes = new Array(l),
-			i = 0, j, m, m2, c, cls, lin, clsNum = 0;
+			i = 0, j, m, m2, c, cls, lin, proto, name, clsNum = 0;
 
 		// initialize
-		each(bases, function(c, i){
+		for(; i < l; ++i){
+			c = bases[i];
 			if(!c) err("mixin #" + i + " is null");
 			lin = c._meta && c._meta.bases || [c];
 			clsNum += lin.length;
 			m = {};
-			each(lin, function(c){
-				var proto = c.prototype, name = proto[has](dname) && proto[dname];
+			for(j = 0, m2 = lin.length; j < m2; ++j){
+				// the assignment on the next line is intentional
+				proto = (cls = lin[j]).prototype;
+				name = proto[has](dname) && proto[dname];
 				if(!name) name = proto[dname] = "dojoUniqClassName_" + (counter++);
-				m[name] = c;
-			});
+				m[name] = cls;
+			}
 			classes[i] = {
 				idx: 0,
 				map: m,
 				lin: d.map(lin, function(c){ return c.prototype[dname]; })
 			};
-		});
+		}
 
 		// C3 MRO algorithm
 		while(clsNum){
