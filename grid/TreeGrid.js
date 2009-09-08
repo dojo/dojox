@@ -715,7 +715,7 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		//		not.
 		var cf;
 		var store = this.store;
-		if(this.treeModel){ return false; }
+		if(this.treeModel){ return this.defaultOpen; }
 		if(!cellDef || !store || !store.isItem(item) ||
 				!(cf = this.aggregator.childFields[cellDef.level])){
 			return this.defaultOpen;

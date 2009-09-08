@@ -92,6 +92,17 @@
         rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
 
         <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level</h4>
+        <table dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
+            <thead>
+                <tr>
+                    <th field="name" width="auto">Name</th>
+                    <th field="population" width="auto">Population</th>
+                    <th field="timezone" width="auto">Timezone</th>
+                </tr>
+            </thead>
+        </table>
+	<hr>
+        <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level - defaultOpen=false, dojo.data notifications</h4>
         <button dojoType="dijit.form.Button">
             Add Belgium
             <script type="dojo/connect" event="onClick">
@@ -116,7 +127,7 @@
                 add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
             </script>
         </button>
-        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
+        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel" defaultOpen="false">
             <thead>
                 <tr>
                     <th field="name" width="auto">Name</th>
