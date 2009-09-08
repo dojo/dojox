@@ -121,10 +121,24 @@
 				jsonStore.fetchItemByIdentity({
 					identity: 'IT',
 					onItem: function(item){
-						jsonStore.deleteItem(item);
+						if(item){
+							jsonStore.deleteItem(item);
+						}
 					}
 				});
-                add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
+            </script>
+        </button>
+        <button dojoType="dijit.form.Button">
+            Delete California
+            <script type="dojo/connect" event="onClick">
+				jsonStore.fetchItemByIdentity({
+					identity: 'US_CA',
+					onItem: function(item){
+						if(item){
+							jsonStore.deleteItem(item);
+						}
+					}
+				});
             </script>
         </button>
         <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel" defaultOpen="false">
