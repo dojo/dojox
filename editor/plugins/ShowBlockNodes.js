@@ -92,8 +92,16 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 				   !(modurl.match(/^file:\/\//i))){
 					// We have to root it to the page location on webkit for some nutball reason. 
 					// Probably has to do with how iframe was loaded.
-					var bUrl = this._calcBaseUrl(dojo.doc.location.href);
-					if(bUrl[bUrl.length - 1] !== "/"){
+					var bUrl;
+					if(modurl.charAt(0) === "/"){
+						//Absolute path on the server, so lets handle...
+						var proto = dojo.doc.location.protocol;
+						var hostn = dojo.doc.location.host;
+						bUrl = 	proto + "//" + hostn;
+					}else{
+						bUrl = this._calcBaseUrl(dojo.global.location.href);
+					}
+					if(bUrl[bUrl.length - 1] !== "/" && modurl.charAt(0) !== "/"){
 						bUrl += "/";
 					}
 					modurl = bUrl + modurl;
