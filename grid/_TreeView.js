@@ -59,19 +59,35 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		if(open && dojo.hasClass(this.domNode, "dojoxGridExpandoLoading")){
 			open = false;
 		}
-		var grid = this.view.grid;
+		var view = this.view;
+		var grid = view.grid;
 		var store = grid.store;
 		var treeModel = grid.treeModel;
 		if(treeModel && this._initialized){
-			if(open){
-				this.expandoInner.innerHTML = "o";
-				dojo.addClass(this.domNode, "dojoxGridExpandoLoading");
-				var d = this;
-				var idx = this.rowIdx;
-				var me = grid._by_idx[idx];
-				if(me.children){
-					this._setOpen(open);
-				}else{
+			var d = this;
+			var idx = this.rowIdx;
+			var me = grid._by_idx[idx];
+			if(me.children){
+				if(!open){
+					dojo.forEach(me.children, function(i){
+						if(i.children && i.children.length){
+							var id = grid.store.getIdentity(i.item);
+							var exps = view._expandos[grid.store.getIdentity(i.item)]
+							for(var k in exps){
+								exps[k].setOpen(false);
+							}
+						}
+						delete grid._by_idty[i.idty];
+					});
+					grid._by_idx.splice(idx + 1, me.children.length);
+					grid.updateRowCount(grid.attr("rowCount") - me.children.length);
+					delete me.children;
+				}
+				this._setOpen(open);
+			}else{
+				if(open){
+					this.expandoInner.innerHTML = "o";
+					dojo.addClass(this.domNode, "dojoxGridExpandoLoading");
 					treeModel.getChildren(grid.getItem(idx), dojo.hitch(grid, function(items){
 						if(items.length > 0){
 							this._checkUpdateStatus();
@@ -99,8 +115,6 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 						}
 					}));
 				}
-			}else{
-				this._setOpen(open);
 			}
 		}else if(!treeModel && store){
 			if(open){
