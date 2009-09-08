@@ -40,8 +40,7 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 		this.inherited(arguments);
 		delete this.command; // kludge so setEditor doesn't make the button invisible
 
-		this.connect(this.button, "onClick", 
-			dojo.hitch(this, this._insertPageBreak));
+		this.connect(this.button, "onClick", "_insertPageBreak"); 
 
 		ed.onLoadDeferred.addCallback(
 			dojo.hitch(this, function(){

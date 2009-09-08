@@ -38,13 +38,8 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 		this.inherited(arguments);
 		delete this.command; // kludge so setEditor doesn't make the button invisible
 
-		this.connect(this.button, "onChange", 
-			dojo.hitch(this, this._showBlocks));
-
-		this.editor.addKeyHandler(dojo.keys.F9, true, true, dojo.hitch(this, function(){
-			// Enable the CTRL-SHIFT-F9 hotkey for ViewBlockNodes
-			this.toggle();
-		}));
+		this.connect(this.button, "onChange","_showBlocks"); 
+		this.editor.addKeyHandler(dojo.keys.F9, true, true, dojo.hitch(this, this.toggle));
 	},
 
 	toggle: function(){
@@ -58,7 +53,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 		//		Function to trigger printing of the editor document
 		// tags:
 		//		private
-		var doc = this.editor.iframe.contentWindow.document;
+		var doc = this.editor.document;
 		if(!this._styled){
 			try{
 				//Attempt to inject our specialized style rules for doing this.
