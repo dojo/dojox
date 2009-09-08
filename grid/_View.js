@@ -30,7 +30,7 @@ dojo.require("dojo.dnd.Manager");
 		// 		Width for the view, in valid css unit
 		viewWidth: "",
 
-		templateString: dojo.cache("dojox.grid","resources/View.html"),
+		templatePath: dojo.moduleUrl("dojox.grid","resources/View.html"),
 		
 		themeable: false,
 		classTag: 'dojoxGrid',
