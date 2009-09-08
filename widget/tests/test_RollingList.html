@@ -49,8 +49,8 @@
 				return; 
 			}
 			addedT = true;
-			continentStore.fetchItemByIdentity({identity: "Mexico", onItem: function(i){
-				continentStore.newItem({name: "Tijuana", type: "city"}, 
+			continentStore.fetchItemByIdentity({identity: "MX", onItem: function(i){
+				continentStore.newItem({id: "Tijuana", name: "Tijuana", type: "city"}, 
 										{parent: i, attribute: "children"});
 				continentStore.save();
 			}});
@@ -61,8 +61,8 @@
 				return; 
 			}			
 			addedD = true;
-			continentStore.fetchItemByIdentity({identity: "United States of America", onItem: function(i){
-				continentStore.newItem({name: "Washington DC", type: "city"}, 
+			continentStore.fetchItemByIdentity({identity: "US", onItem: function(i){
+				continentStore.newItem({id: "Washington DC", name: "Washington DC", type: "city"}, 
 										{parent: i, attribute: "children"});
 				continentStore.save();
 			}});
@@ -72,7 +72,7 @@
 				console.log("Antarctica is already added");
 				return; 
 			}
-			continentStore.newItem({name: "Antarctica", type: "continent"});
+			continentStore.newItem({id: "Antarctica", name: "Antarctica", type: "continent"});
 			addedA = true;
 		}
 		removeTijuana = function(){
@@ -92,7 +92,7 @@
 				return; 
 			}			
 			removedC = true;
-			continentStore.fetchItemByIdentity({identity: "Canada", onItem: function(i){
+			continentStore.fetchItemByIdentity({identity: "CA", onItem: function(i){
 				continentStore.deleteItem(i);
 			}});
 		}
@@ -102,7 +102,7 @@
 				return; 
 			}			
 			removedE = true;
-			continentStore.fetchItemByIdentity({identity: "Europe", onItem: function(i){
+			continentStore.fetchItemByIdentity({identity: "EU", onItem: function(i){
 				continentStore.deleteItem(i);
 			}});
 		}
@@ -186,7 +186,7 @@
 	<button dojoType="dijit.form.Button" onClick="doResize()">Resize widget</button>
 	<hr>
 	<button dojoType="dijit.form.Button" onClick="setValue('Guadalajara')">Set Value to Guadalajara</button>
-	<button dojoType="dijit.form.Button" onClick="setValue('Africa')">Set Value to Africa</button>
+	<button dojoType="dijit.form.Button" onClick="setValue('AF')">Set Value to Africa</button>
 	<button dojoType="dijit.form.Button" onClick="setValue('Toronto')">Set Value to Toronto</button>
 	<button dojoType="dijit.form.Button" onClick="setValue('')">Set No Value</button>
 	<hr>
