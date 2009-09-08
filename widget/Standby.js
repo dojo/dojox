@@ -136,7 +136,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		//		Over-ride of the basic widget startup function.  
 		//		Configures the target node and sets the image to use.
 		if(!this._started){
-            if(typeof this.target === "string"){
+			if(typeof this.target === "string"){
 				var w = dijit.byId(this.target);
 				if(w){
 					this.target = w.domNode;
@@ -242,7 +242,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		this.target = null;
 		this._imageNode = null;
 		this._textNode = null;
-        this._centerNode = null;
+		this._centerNode = null;
 		this.inherited(arguments);
 	},
 
@@ -270,9 +270,11 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			//IE has a horrible zoom bug.  So, we have to try and account for 
 			//it and fix up the scaling.
 			if(this._ieFixNode){
-                _ie7zoom = -this._ieFixNode.offsetTop / 1000;
+				_ie7zoom = -this._ieFixNode.offsetTop / 1000;
 				box.x = Math.floor((box.x + 0.9) / _ie7zoom);
 				box.y = Math.floor((box.y + 0.9) / _ie7zoom);
+				box.w = Math.floor((box.w + 0.9) / _ie7zoom);
+				box.h = Math.floor((box.h + 0.9) / _ie7zoom);
 			}
 
 			//Figure out how to zIndex this thing over the target.
@@ -295,7 +297,13 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 
 			var pn = target.parentNode;
-			if(pn){
+			if(pn && pn !== dojo.body()){
+				// If the parent is the body tag itself,
+				// we can avoid all this, the body takes 
+				// care of overflow for me.  Besides, browser
+				// weirdness with height and width on body causes 
+				// problems with this sort of intersect testing 
+				// anyway.
 				var obh = box.h;
 				var obw = box.w;
 				var pnBox = dojo.position(pn, true);
@@ -305,6 +313,8 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 					_ie7zoom = -this._ieFixNode.offsetTop / 1000;
 					pnBox.x = Math.floor((pnBox.x + 0.9) / _ie7zoom);
 					pnBox.y = Math.floor((pnBox.y + 0.9) / _ie7zoom);
+					pnBox.w = Math.floor((pnBox.w + 0.9) / _ie7zoom);
+					pnBox.h = Math.floor((pnBox.h + 0.9) / _ie7zoom);
 				}
 				
 				//Shift the parent width/height a bit if scollers are present.
