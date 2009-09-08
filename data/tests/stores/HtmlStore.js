@@ -16,6 +16,14 @@ dojox.data.tests.stores.HtmlStore.getBooksStore = function(){
 	return new dojox.data.HtmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books.html").toString(), dataId: "books"});
 };
 
+dojox.data.tests.stores.HtmlStore.getBooksStoreWhitespace = function(){
+	return new dojox.data.HtmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/booksWhitespace.html").toString(), dataId: "books", trimWhitespace: true});
+};
+
+dojox.data.tests.stores.HtmlStore.getBooks3StoreWhitespace = function(){
+	return new dojox.data.HtmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books3Whitespace.html").toString(), dataId: "books3", trimWhitespace: true});
+};
+
 doh.register("dojox.data.tests.stores.HtmlStore", 
 	[
 /***************************************
@@ -27,6 +35,24 @@ doh.register("dojox.data.tests.stores.HtmlStore",
 			//	description:
 			//		Simple test of fetching all xml items through an XML element called isbn
 			var store = dojox.data.tests.stores.HtmlStore.getBooksStore();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(20, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"*"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_all_table_Whitespace(t){
+			//	summary: 
+			//		Simple test of fetching all table row items through an header called isbn
+			//	description:
+			//		Simple test of fetching all table row items through an header called isbn
+			var store = dojox.data.tests.stores.HtmlStore.getBooksStoreWhitespace();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
@@ -75,12 +101,47 @@ doh.register("dojox.data.tests.stores.HtmlStore",
 			store.fetch({query:{isbn:"A9B574"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
+		function testReadAPI_fetch_one_table_Whitespace(t){
+			//	summary: 
+			//		Simple test of fetching one item through an element called isbn
+			//	description:
+			//		Simple test of fetching one item through an element called isbn
+			var store = dojox.data.tests.stores.HtmlStore.getBooksStoreWhitespace();
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn:"19"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
 		function testReadAPI_fetch_one_list(t){
 			//	summary: 
 			//		Simple test of fetching one xml items through an XML element called isbn
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn
 			var store = dojox.data.tests.stores.HtmlStore.getBooks3Store();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{name:"A9B57C - Title of 1 - Author of 1"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_one_list_Whitespace(t){
+			//	summary: 
+			//		Simple test of fetching one item through an attribute called name
+			//	description:
+			//		Simple test of fetching one item through an attribute called name
+			var store = dojox.data.tests.stores.HtmlStore.getBooks3StoreWhitespace();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
