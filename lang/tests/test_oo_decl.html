@@ -239,6 +239,107 @@
 					dd.m2();
 					console.log(dd.toLocaleString());
 				}
+				// chained constructor (but no preamble)
+				if(md){
+					var decl5 = md(false, {constructor: "after", destroy: "before"}),
+						A = decl5(null, {
+							constructor: function(){
+								console.log("A.constructor");
+							},
+							destroy: function(){
+								console.log("A.destroy");
+							}
+						}),
+						B = decl5(A, {
+							constructor: function(){
+								console.log("B.constructor");
+							},
+							destroy: function(){
+								console.log("B.destroy");
+							}
+						}),
+						C = decl5(B, {
+							constructor: function(){
+								console.log("C.constructor");
+							},
+							destroy: function(){
+								console.log("C.destroy");
+							}
+						});
+					new A().destroy();
+					new B().destroy();
+					new C().destroy();
+				}
+				// constructor is not chained
+				if(md){
+					var decl6 = md(false),
+						A = decl6(null, {
+							constructor: function(){
+								console.log("A.constructor");
+							}
+						}),
+						B = decl6(A, {
+							constructor: function(){
+								console.log("B.constructor");
+								this.inherited(arguments);
+							}
+						}),
+						C = decl6(B, {
+							constructor: function(){
+								console.log("C.constructor");
+								this.inherited(arguments);
+							}
+						});
+					new A();
+					new B();
+					new C();
+				}
+				// preamble() test #1
+				var A = decl(null, {
+						constructor: function(){
+							console.log("A.constructor: ", arguments);
+						}
+					}),
+					B = decl(A, {
+						constructor: function(){
+							console.log("B.constructor: ", arguments);
+						},
+						preamble: function(a, b){
+							return [2 * a, 2 * b];
+						}
+					}),
+					C = decl(B, {
+						constructor: function(){
+							console.log("C.constructor: ", arguments);
+						},
+						preamble: function(a, b){
+							var dict = {a: 1, b: 2};
+							return [dict[a], dict[b]];
+						}
+					});
+				new C("a", "b");
+				// preamble() test #2
+				var A = decl(null, {
+						constructor: function(){
+							console.log("A.constructor: ", arguments);
+						}
+					}),
+					B = decl(A, {
+						constructor: function(){
+							console.log("B.constructor: ", arguments);
+						}
+					}),
+					C = decl(B, {
+						constructor: function(){
+							console.log("C.constructor: ", arguments);
+						}
+					}),
+					P = decl(null, {
+						preamble: function(x, a, b){
+							return [x, 2 * a, 2 * b];
+						}
+					});
+				new C(new P, 1, 2);
 			};
 
             var superclassRef = function(){
