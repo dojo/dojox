@@ -137,28 +137,26 @@ dojo.experimental("dojox.lang.oo.declare");
 			props = props || {};
 
 			// build a prototype
-			if(superclass){
-				// multiple inheritance (potentially)
-				bases = d.isArray(superclass) ? c3mro(superclass) :
-					[0].concat((t = superclass._meta) && t.bases || [superclass]);
-				// the assignment on the next line is intentional
-				superclass = bases[l = bases.length - 1];
-				for(i = l - 1;;){
-					t = bases[i--];
-					// delegation
-					xtor.prototype = superclass.prototype;
-					proto = new xtor;
-					if(!t) break;
-					d._mixin(proto, t.prototype);
-					(ctor = function(){}).superclass = superclass;
-					ctor.prototype = proto;
-					superclass = proto.constructor = ctor;
-				}
-				xtor.prototype = 0;	// cleanup
-			}else{
+			if(d.isArray(superclass)) bases = c3mro(superclass);
+			else{
 				bases = [0];
-				proto = {};
+				if(superclass) (t = superclass._meta) && (bases = bases.concat(t.bases)) || bases.push(superclass);
 			}
+			// the assignment on the next line is intentional
+			superclass = bases[l = bases.length - 1];
+			if(superclass) for(i = l - 1;;){
+				t = bases[i--];
+				// delegation
+				xtor.prototype = superclass.prototype;
+				proto = new xtor;
+				if(!t) break;
+				d._mixin(proto, t.prototype);
+				(ctor = function(){}).superclass = superclass;
+				ctor.prototype = proto;
+				superclass = proto.constructor = ctor;
+			}
+			else proto = {};
+			xtor.prototype = 0;	// cleanup
 
 			// add metadata for incoming functions
 			for(name in props) (t = props[name]) !== op[name] && isF(t) && (t.nom = name);
