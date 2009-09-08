@@ -101,8 +101,8 @@ For the ShowBlockNodes plugin:
 
 
 See tests for examples:
-	dojox/editor/plugins/tests/editorTablePlugs.html
-	dojox/editor/plugins/tests/editorUploadPlug.html
-	dojox/editor/plugins/tests/editorPrettyPrint.html
-	dojox/editor/plugins/tests/editorPageBreak.html
-	dojox/editor/plugins/tests/editorShowBlockNodes.html
+	dojox/editor/tests/editorTablePlugs.html
+	dojox/editor/tests/editorUploadPlug.html
+	dojox/editor/tests/editorPrettyPrint.html
+	dojox/editor/tests/editorPageBreak.html
+	dojox/editor/tests/editorShowBlockNodes.html
