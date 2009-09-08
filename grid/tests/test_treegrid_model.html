@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
         <style type="text/css">
             @import "../../../dojo/resources/dojo.css";
+            @import "../../../dijit/themes/tundra/tundra.css";
             @import "../../../dojox/grid/resources/Grid.css";
             @import "../../../dojox/grid/resources/tundraGrid.css";
             .grid {
@@ -17,6 +18,7 @@
             dojo.require("dojox.grid.TreeGrid");
             dojo.require("dijit.tree.ForestStoreModel");
             dojo.require("dojo.data.ItemFileWriteStore");
+            dojo.require("dijit.form.Button");
             dojo.require("dojo.parser");
             var dataItems = {
                 identifier: 'id',
@@ -64,6 +66,19 @@
                     { id: 'BR', name:'Brazil', type:'country', population:'186 million' },
                     { id: 'AR', name:'Argentina', type:'country', population:'40 million' }
                 ]};
+
+            function add_item(child, parentId){
+                if(child){
+                    jsonStore.fetchItemByIdentity({
+                        identity: parentId,
+                        onItem: function(item){
+                            if(item){
+                                continentModel.newItem(child, item);
+                            }
+                        }
+                    });
+                }
+            }
         </script>
     </head>
     <body class="tundra">
@@ -73,11 +88,35 @@
         </span>
 
         <div dojoType="dijit.tree.ForestStoreModel" jsId="continentModel"
-		store="jsonStore" query="{type:'continent'}"
-		rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
+        store="jsonStore" query="{type:'continent'}"
+        rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
 
         <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level</h4>
-        <table dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
+        <button dojoType="dijit.form.Button">
+            Add Belgium
+            <script type="dojo/connect" event="onClick">
+                add_item({ id: 'EU_BE', name: 'Belgium', type: 'country' }, "EU");
+            </script>
+        </button>
+        <button dojoType="dijit.form.Button">
+            Add California
+            <script type="dojo/connect" event="onClick">
+                add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
+            </script>
+        </button>
+        <button dojoType="dijit.form.Button">
+            Delete Italy
+            <script type="dojo/connect" event="onClick">
+				jsonStore.fetchItemByIdentity({
+					identity: 'IT',
+					onItem: function(item){
+						jsonStore.deleteItem(item);
+					}
+				});
+                add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
+            </script>
+        </button>
+        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
             <thead>
                 <tr>
                     <th field="name" width="auto">Name</th>

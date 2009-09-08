@@ -110,7 +110,7 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 		var ss = this.sorted_stol;
 
 		var lpath = index.split('/');
-		lpath = dojo.map(lpath, "return parseInt(item);");
+		lpath = dojo.map(lpath, function(item){ return parseInt(item); });
 		sl[lpath] = index;
 		ss[index] = lpath;
 

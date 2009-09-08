@@ -269,7 +269,7 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 					var values = path.children(true)||[];
 					if(values.length){
 						html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tToggle.join(' ') + ' dojoxGridExpandoRow">';
-						var iStack = dojo.map(rowStack, "return item;");
+						var iStack = rowStack.concat([]);
 						dojo.forEach(values, function(cItm, idx){
 							var nToggle = tcJoin.split('|');
 							nToggle.push(nToggle[nToggle.length - 1] + "-" + idx);

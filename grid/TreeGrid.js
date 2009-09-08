@@ -218,7 +218,7 @@ dojo.declare("dojox.grid.TreePath", null, {
 	constructor: function(/*String|Integer[]|Integer|dojox.grid.TreePath*/ path, /*dojox.grid.TreeGrid*/ grid){
 		if(dojo.isString(path)){
 			this._str = path;
-			this._arr = dojo.map(path.split('/'), "return parseInt(item);");
+			this._arr = dojo.map(path.split('/'), function(item){ return parseInt(item); });
 		}else if(dojo.isArray(path)){
 			this._str = path.join('/');
 			this._arr = path.slice(0);
@@ -552,6 +552,18 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		return 0;
 	},
 
+	_onNew: function(item, parentInfo){
+		if(!parentInfo || !parentInfo.item){
+			this.inherited(arguments);
+		}else{
+			var idx = this.getItemIndex(parentInfo.item);
+			if(idx > -1){
+				var path = new dojox.grid.TreePath(idx, this);
+				this.updateRow(idx);
+			}
+		}
+	},
+
 	_onSet: function(item, attribute, oldValue, newValue){
 		this._checkUpdateStatus();
 		if(this.aggregator){
@@ -566,7 +578,16 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			}
 		}
 	},
-		
+
+	_addItem: function(item, index, noUpdate, dontUpdateRoot){
+		// add our root items to the root of the model's children
+		// list since we don't query the model
+		if(!dontUpdateRoot && this.model && dojo.indexOf(this.model.root.children, item) == -1){
+			this.model.root.children[index] = item;
+		}
+		this.inherited(arguments);
+	},
+
 	getItem: function(/*integer|Array|String*/ idx){
 		// summary:
 		//		overridden so that you can pass in a '/' delimited string of indexes to get the
@@ -678,6 +699,9 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 
 	_setStore: function(store){
 		this.inherited(arguments);
+		if(this.treeModel&&!this.treeModel.root.children){
+			this.treeModel.root.children = [];
+		}
 		if(this.aggregator){
 			this.aggregator.store = store;
 		}
