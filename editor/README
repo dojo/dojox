@@ -9,7 +9,8 @@ experimental, beta, stable
 -------------------------------------------------------------------------------
 Credits
 	Mike Wilcox 	 - Author
-	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes)
+	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
+		Preview)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -49,6 +50,13 @@ dojox.editor.plugins.ShowBlockNodes:
 	how the page is laid out in terms of the block nodes used for its
 	formatting.
  
+dojox.editor.plugins.Preview:
+	Status: Supported (beta).
+	A simple plugin that allows you to display the content of the editor
+	in a new window and apply a set of styles to it so you can see how
+	content will look with various styles applied.  It is likely this
+	plugin will still evolve a bit.
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -62,9 +70,11 @@ Documentation
 The plugins directory contains extensions which work with dijit.Editor.
 
 See also:
+	http://docs.dojocampus.org/dojox/editor/plugins/TablePlugins
 	http://docs.dojocampus.org/dojox/editor/plugins/PrettyPrint
 	http://docs.dojocampus.org/dojox/editor/plugins/PageBreak
 	http://docs.dojocampus.org/dojox/editor/plugins/ShowBlockNodes
+	http://docs.dojocampus.org/dojox/editor/plugins/Preview
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -99,6 +109,10 @@ For the ShowBlockNodes plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/ShowBlockNodes.css" type="text/css" rel="stylesheet" />
 
+For the Preview plugin:
+	dojo.require("dojox.editor.plugins.Preview");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/Preview.css" type="text/css" rel="stylesheet" />
 
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
@@ -106,3 +120,4 @@ See tests for examples:
 	dojox/editor/tests/editorPrettyPrint.html
 	dojox/editor/tests/editorPageBreak.html
 	dojox/editor/tests/editorShowBlockNodes.html
+	dojox/editor/tests/editorPreview.html
