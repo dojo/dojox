@@ -82,22 +82,24 @@
 					}
 				},
 				cells: [[
-					{ name: '', width: 3, get: getCheck, styles: 'text-align: center;' }, { name: 'Name', get: getName, width: 40 }
+					{ name: '', width: 3, get: getBlank, formatter: fmtCheck, styles: 'text-align: center;' }, { name: 'Name', get: getName, width: 40 }
 				], [
-					{ name: '', get: getDetail, colSpan: 2, styles: 'padding: 0; margin: 0;'}
+					{ name: '', get: getBlank, formatter: fmtDetail, colSpan: 2, styles: 'padding: 0; margin: 0;'}
 				]]
 			}
 		];
 		
+		function getBlank(inRowIndex){ return ""; }
+		
 		// html for the +/- cell
-		function getCheck(inRowIndex) { 
+		function fmtCheck(data, inRowIndex) { 
 			var image = (detailRows[inRowIndex] ? 'open.gif' : 'closed.gif');
 			var show = (detailRows[inRowIndex] ? 'false' : 'true')
 			return '<img height="11" width="11" src="images/' + image + '" onclick="toggleDetail(' + inRowIndex + ', ' + show + ')">';
 		}
 		
 		// provide html for the Detail cell in the master grid		
-		function getDetail(inRowIndex) {
+		function fmtDetail(data, inRowIndex) {
 			var cell = this;
 			// look for a subgrid
 			var subGrid = dijit.byId(makeSubgridId(inRowIndex));
