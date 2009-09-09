@@ -34,14 +34,13 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 		//		Over-ride for creation of the resize button.
 		var ed = this.editor;
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "PageBreak");
-		this.command = "pageBreak";
-		ed.commands[this.command] = strings["pageBreak"];
-		this._label = strings["pageBreak"];
-		this.inherited(arguments);
-		delete this.command; // kludge so setEditor doesn't make the button invisible
-
-		this.connect(this.button, "onClick", "_insertPageBreak"); 
-
+		this.button = new dijit.form.Button({
+			label: strings["pageBreak"],
+			showLabel: false,
+			iconClass: this.iconClassPrefix + " " + this.iconClassPrefix + "PageBreak",
+			tabIndex: "-1",
+			onClick: dojo.hitch(this, "_insertPageBreak")
+		});
 		ed.onLoadDeferred.addCallback(
 			dojo.hitch(this, function(){
 				//Register our hotkey to CTRL-SHIFT-ENTER.
@@ -57,6 +56,15 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 				}
 			})
 		);
+	},
+
+	setEditor: function(editor){
+		// summary:
+		//		Over-ride for the setting of the editor.
+		// editor: Object
+		//		The editor to configure for this plugin to use.
+		this.editor = editor;
+		this._initButton();
 	},
 
 	_style: function(){
