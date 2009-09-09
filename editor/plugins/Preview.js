@@ -29,7 +29,7 @@ dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 	iconClassPrefix: "dijitAdditionalEditorIcon",
 
 	_initButton: function(){
-		//	summary:
+		// summary:
 		//		Over-ride for creation of the preview button.
 		this._nlsResources = dojo.i18n.getLocalization("dojox.editor.plugins", "Preview");
 		this.button = new dijit.form.Button({
@@ -51,8 +51,10 @@ dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 	},
 
 	_preview: function(){
-		//	summary:
+		// summary:
 		//		Function to trigger previewing of the editor document
+		// tags:
+		//		private
 		try{
 			var content = this.editor.attr("value");
 			var head = "\t\t<meta http-equiv='Content-Type' content='text/html; charset='UTF-8'>\n";
