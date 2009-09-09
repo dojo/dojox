@@ -66,6 +66,7 @@
                     { id: 'BR', name:'Brazil', type:'country', population:'186 million' },
                     { id: 'AR', name:'Argentina', type:'country', population:'40 million' }
                 ]};
+			var dataItems2 = dojo.clone(dataItems);
 
             function add_item(child, parentId){
                 if(child){
@@ -79,6 +80,28 @@
                     });
                 }
             }
+
+			dojo.addOnLoad(function(){
+				var layout = [
+					{ name: "Name", field: "name", width: "auto" },
+					{ name: "Population", field: "population", width: "auto" },
+					{ name: "Timezone", field: "timezone", width: "auto" }
+				];
+				var jsonStore2 = new dojo.data.ItemFileWriteStore({ data: dataItems2 });
+				var treeModel2 = new dijit.tree.ForestStoreModel({
+					store: jsonStore2,
+					query: { type: 'continent' },
+					rootId: 'continentRoot',
+					rootLabel: 'Continents',
+					childrenAttrs: 'children'
+				});
+				grid2 = new dojox.grid.TreeGrid({
+					treeModel: treeModel2,
+					structure: layout,
+					defaultOpen: false
+				}, 'programmatic_grid');
+				grid2.startup();
+			});
         </script>
     </head>
     <body class="tundra">
@@ -150,6 +173,9 @@
                 </tr>
             </thead>
         </table>
+
+		<h4 class="testSubtitle">dojox.grid.TreeGrid Programmatic</h4>
+		<div id="programmatic_grid"></div>
 
     </body>
 </html>
