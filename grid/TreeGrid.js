@@ -180,6 +180,11 @@ dojo.declare("dojox.grid._TreeLayout", dojox.grid._Layout, {
 		var g = this.grid;
 		// Only supporting single-view, single row or else we
 		// are not collapsable
+		if(g && g.treeModel && !dojo.every(s, function(i){
+			return ("cells" in i);
+		})){
+			s = arguments[0] = [{cells:[s]}];			
+		}
 		if(s.length == 1 && s[0].cells.length == 1){
 			if(g && g.treeModel){
 				s[0].type = "dojox.grid._TreeView";
