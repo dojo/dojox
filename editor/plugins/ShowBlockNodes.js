@@ -1,6 +1,7 @@
 dojo.provide("dojox.editor.plugins.ShowBlockNodes");
 
 dojo.require("dijit._editor._Plugin");
+dojo.require("dijit.form.Button");
 dojo.require("dojo.i18n");
 
 dojo.requireLocalization("dojox.editor.plugins", "ShowBlockNodes");
@@ -13,11 +14,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 	//		exposed/extracted when the editor value is obtained, it is purely for help
 	//		while working on the page.
 
-	// buttonClass [protected]
-	//		Over-ride indicating the class of button to use, in this case a toggle.
-	buttonClass: dijit.form.ToggleButton,
-
-	// useDefaultCommand [protected]
+	// useDefaultCommand [protected] boolean
 	//		Over-ride indicating that the command processing is done all by this plugin.
 	useDefaultCommand: false,
 
@@ -25,21 +22,31 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 	//		The CSS class name for the button node is formed from `iconClassPrefix` and `command`
 	iconClassPrefix: "dijitAdditionalEditorIcon",
 
-	// _styled [private]
+	// _styled [private] boolean
 	//		Flag indicating the document has had the style updates applied.
 	_styled: false,
 
 	_initButton: function(){
 		//	summary:
-		//		Over-ride for creation of the resize button.
+		//		Over-ride for creation of the preview button.
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "ShowBlockNodes");
-		this.command = "showBlockNodes";
-		this.editor.commands[this.command] = strings["showBlockNodes"];
-		this.inherited(arguments);
-		delete this.command; // kludge so setEditor doesn't make the button invisible
-
-		this.connect(this.button, "onChange","_showBlocks"); 
+		this.button = new dijit.form.ToggleButton({
+			label: strings["showBlockNodes"],
+			showLabel: false,
+			iconClass: this.iconClassPrefix + " " + this.iconClassPrefix + "ShowBlockNodes",
+			tabIndex: "-1",
+			onChange: dojo.hitch(this, "_showBlocks")
+		});
 		this.editor.addKeyHandler(dojo.keys.F9, true, true, dojo.hitch(this, this.toggle));
+	},
+
+	setEditor: function(editor){
+		// summary:
+		//		Over-ride for the setting of the editor.
+		// editor: Object
+		//		The editor to configure for this plugin to use.
+		this.editor = editor;
+		this._initButton();
 	},
 
 	toggle: function(){
@@ -133,7 +140,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 		// summary:
 		//		Internal function used to figure out the full root url (no relatives)
 		//		for loading images in the styles in the iframe.
-		// fullUrl:
+		// fullUrl: String
 		//		The full url to tear down to the base.
 		// tags:
 		//		private
