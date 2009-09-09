@@ -98,9 +98,10 @@
 				grid2 = new dojox.grid.TreeGrid({
 					treeModel: treeModel2,
 					structure: layout,
-					defaultOpen: false
+					defaultOpen: true
 				}, 'programmatic_grid');
 				grid2.startup();
+				dojo.connect(window, "onresize", grid2, "resize");
 			});
         </script>
     </head>
@@ -115,27 +116,11 @@
         rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
 
         <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level</h4>
-        <table dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
-            <thead>
-                <tr>
-                    <th field="name" width="auto">Name</th>
-                    <th field="population" width="auto">Population</th>
-                    <th field="timezone" width="auto">Timezone</th>
-                </tr>
-            </thead>
-        </table>
-	<hr>
-        <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level - defaultOpen=false, dojo.data notifications</h4>
         <button dojoType="dijit.form.Button">
             Add Belgium
             <script type="dojo/connect" event="onClick">
                 add_item({ id: 'EU_BE', name: 'Belgium', type: 'country' }, "EU");
-            </script>
-        </button>
-        <button dojoType="dijit.form.Button">
-            Add California
-            <script type="dojo/connect" event="onClick">
-                add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
+				this.attr("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button">
@@ -149,9 +134,18 @@
 						}
 					}
 				});
+				this.attr("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button">
+            Add California
+            <script type="dojo/connect" event="onClick">
+                add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
+				delCal.attr("disabled", false);
+				this.attr("disabled", true);
+            </script>
+        </button>
+        <button dojoType="dijit.form.Button" disabled jsId="delCal">
             Delete California
             <script type="dojo/connect" event="onClick">
 				jsonStore.fetchItemByIdentity({
@@ -162,9 +156,10 @@
 						}
 					}
 				});
+				this.attr("disabled", true);
             </script>
         </button>
-        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel" defaultOpen="false">
+        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
             <thead>
                 <tr>
                     <th field="name" width="auto">Name</th>
@@ -173,10 +168,8 @@
                 </tr>
             </thead>
         </table>
-
-		<h4 class="testSubtitle">dojox.grid.TreeGrid Programmatic</h4>
+		<h4 class="testSubtitle">dojox.grid.TreeGrid Programmatic - defaultOpen true</h4>
 		<div id="programmatic_grid"></div>
-
     </body>
 </html>
 

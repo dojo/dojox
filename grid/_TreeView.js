@@ -63,12 +63,13 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		var grid = view.grid;
 		var store = grid.store;
 		var treeModel = grid.treeModel;
+		var d = this;
+		var idx = this.rowIdx;
+		var me = grid._by_idx[idx];
+		if(!me){ return; }
 		if(treeModel && this._initialized){
-			var d = this;
-			var idx = this.rowIdx;
-			var me = grid._by_idx[idx];
-			if(me.children){
-				if(!open){
+			if(!open){
+				if(me.children){
 					dojo.forEach(me.children, function(i){
 						if(i.children && i.children.length){
 							var id = grid.store.getIdentity(i.item);
@@ -85,37 +86,65 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 				}
 				this._setOpen(open);
 			}else{
-				if(open){
-					this.expandoInner.innerHTML = "o";
-					dojo.addClass(this.domNode, "dojoxGridExpandoLoading");
-					treeModel.getChildren(grid.getItem(idx), dojo.hitch(grid, function(items){
-						if(items.length > 0){
-							this._checkUpdateStatus();
-							var rowCount = this.attr('rowCount');
-							this._addingItem = true;
-							me.children = [];
-							var _by_idx = [idx + 1, 0];
-							dojo.forEach(items, function(i, itmIdx){
-								var o = this._createItem(i, idx + itmIdx + 1);
+				this.expandoInner.innerHTML = "o";
+				dojo.addClass(this.domNode, "dojoxGridExpandoLoading");
+				treeModel.getChildren(grid.getItem(idx), dojo.hitch(grid, function(items){
+					if(items.length > 0){
+						this._checkUpdateStatus();
+						var rowCount = this.attr('rowCount');
+						this._addingItem = true;
+						var oKids = me.children||[];
+						me.children = [];
+						var _by_idx = [idx + oKids.length + 1, 0];
+						dojo.forEach(items, function(i, itmIdx){
+							var o;
+							if(dojo.some(oKids, function(k){
+								return (k && k.item == i);
+							})){
+								o = this._by_idty[this.store.getIdentity(i)];
+							}else{
+								o = this._createItem(i, idx + itmIdx + 1);
 								o.level = (me.level||0) + 1;
 								o.parentItem = me;
 								_by_idx.push(o);
-								me.children.push(o);
 								rowCount++;
-							}, this);
+							}
+							me.children.push(o);
+						}, this);
+						if(_by_idx.length > 2){
 							Array.prototype.splice.apply(this._by_idx, _by_idx);
 							this.updateRowCount(rowCount);
-							this._addingItem = false;
-							var c = this.connect(this, "endUpdate", function(){
-								this.disconnect(c);
-								d._setOpen(open);
-							});
-						}else{
-							d._setOpen(open);
 						}
-					}));
-				}
+						this._addingItem = false;
+						var c = this.connect(this, "endUpdate", function(){
+							this.disconnect(c);
+							d._setOpen(open);
+						});
+					}else{
+						// Delete any children we may have
+						delete me.children;
+						d._setOpen(open);
+					}
+				}));
 			}
+		}else if(treeModel){
+			if(open){
+				grid._pendingRenders = grid._pendingRenders||[];
+				grid._pendingRenders.push(this);
+				if(grid._pendingRenderTO){
+					clearTimeout(grid._pendingRenderTO);
+				}
+				grid._pendingRenderTO = setTimeout(function(){
+					delete grid._pendingRenderTO;
+					// Save it off first - in case our children try to add to it
+					var renders = grid._pendingRenders||[];
+					delete grid._pendingRenders;
+					dojo.forEach(renders, function(r){
+						r.setOpen(open);
+					});
+				}, 1);
+			}
+			this._setOpen(open);
 		}else if(!treeModel && store){
 			if(open){
 				var data = grid._by_idx[this.rowIdx];
@@ -157,6 +186,8 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 			}else{
 				if((" " + base + " ").indexOf(' dojoxGridRowCollapsed ') < 0){
 					new_base = base + (base ? ' ' : '' ) + 'dojoxGridRowCollapsed';
+				}else{
+					new_base = base;
 				}
 			}
 			dojo.attr(this._tableRow, 'dojoxTreeGridBaseClasses', new_base);
@@ -181,6 +212,7 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		this._initialized = true;
 	},
 	onToggle: function(e){
+		this._toggleTo = !this.open;
 		this.setOpen(!this.open);
 		dojo.stopEvent(e);
 	},
@@ -195,7 +227,12 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		if(d && d.parentNode && d.parentNode.parentNode){
 			this._tableRow = d.parentNode.parentNode;
 		}
-		this.open = this.expandoCell.getOpenState(this.itemId);
+		if("_toggleTo" in this){
+			this.open = this._toggleTo;
+			delete this._toggleTo;
+		}else{
+			this.open = this.expandoCell.getOpenState(this.itemId);
+		}
 		if(view.grid.treeModel){
 			dojo.style(this.domNode , "marginLeft" , (this.level * 15) + "px");
 		}

@@ -513,7 +513,8 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	//		top-level items.
 	
 	// defaultOpen: Boolean
-	//		Whether or not we default to open (all levels)
+	//		Whether or not we default to open (all levels).  This defaults to
+	//		false for grids with a treeModel.
 	defaultOpen: true,
 
 	// sortChildItems: Boolean
@@ -531,7 +532,7 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	// treeModel: dijit.tree.ForestStoreModel
 	//		A dijit.Tree model that will be used instead of using aggregates.
 	//		Setting this value will make the TreeGrid behave like a columnar
-	//		tree.  When setting this value, defaultOpen will always be false,
+	//		tree.  When setting this value, defaultOpen will default to false,
 	//		and openAtLevels will be ignored.
 	treeModel: null,
 	
@@ -638,6 +639,11 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	},
 	
 	postMixInProperties: function(){
+		if(this.treeModel && !("defaultOpen" in this.params)){
+			// Default open to false for tree models, true for other tree
+			// grids.
+			this.defaultOpen = false;
+		}
 		var def = this.defaultOpen;
 		this.openAtLevels = dojo.map(this.openAtLevels, function(l){
 			if(typeof l == "string"){
