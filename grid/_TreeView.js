@@ -18,28 +18,28 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 	_toggleRows: function(toggleClass, open){
 		if(!toggleClass || !this.rowNode){ return; }
 		if(dojo.query("table.dojoxGridRowTableNeedsRowUpdate").length){
-			this.view.grid.updateRow(this.rowIdx);
+			if(this._initialized){
+				this.view.grid.updateRow(this.rowIdx);
+			}
 			return;
 		}
 		var self = this;
 		var g = this.view.grid
 		if(g.treeModel){
-			dojo.forEach(g._by_idx[this.rowIdx].children||[], function(c){
-				var rn = g.getRowNode(g.getItemIndex(c.item));
-				if(rn){
-					dojo.query("tr", rn).forEach(function(n){
-						var en = dojo.query(".dojoxGridExpando", n)[0];
-						if(en){
-							var ew = dijit.byNode(en);
-							if(ew){
-								ew._toggleRows(toggleClass, ew.open&&open);
-							}
+			var p = this._tableRow ? dojo.attr(this._tableRow, "dojoxTreeGridPath") : "";
+			if(p){
+				dojo.query("tr[dojoxTreeGridPath^=\"" + p + "/\"]", this.rowNode).forEach(function(n){
+					var en = dojo.query(".dojoxGridExpando", n)[0];
+					if(en && en.parentNode && en.parentNode.parentNode && 
+								!dojo.hasClass(en.parentNode.parentNode, "dojoxGridNoChildren")){
+						var ew = dijit.byNode(en);
+						if(ew){
+							ew._toggleRows(toggleClass, ew.open&&open);
 						}
-						c.isHidden = !open;
-						n.style.display = open ? "" : "none";
-					});
-				}
-			});
+					}
+					n.style.display = open ? "" : "none";
+				});
+			}
 		}else{
 			dojo.query("tr." + toggleClass, this.rowNode).forEach(function(n){
 				if(dojo.hasClass(n, "dojoxGridExpandoRow")){
@@ -67,84 +67,23 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		var idx = this.rowIdx;
 		var me = grid._by_idx[idx];
 		if(!me){ return; }
-		if(treeModel && this._initialized){
-			if(!open){
-				if(me.children){
-					dojo.forEach(me.children, function(i){
-						if(i.children && i.children.length){
-							var id = grid.store.getIdentity(i.item);
-							var exps = view._expandos[grid.store.getIdentity(i.item)]
-							for(var k in exps){
-								exps[k].setOpen(false);
-							}
-						}
-						delete grid._by_idty[i.idty];
-					});
-					grid._by_idx.splice(idx + 1, me.children.length);
-					grid.updateRowCount(grid.attr("rowCount") - me.children.length);
-					delete me.children;
-				}
-				this._setOpen(open);
-			}else{
-				this.expandoInner.innerHTML = "o";
-				dojo.addClass(this.domNode, "dojoxGridExpandoLoading");
-				treeModel.getChildren(grid.getItem(idx), dojo.hitch(grid, function(items){
-					if(items.length > 0){
-						this._checkUpdateStatus();
-						var rowCount = this.attr('rowCount');
-						this._addingItem = true;
-						var oKids = me.children||[];
-						me.children = [];
-						var _by_idx = [idx + oKids.length + 1, 0];
-						dojo.forEach(items, function(i, itmIdx){
-							var o;
-							if(dojo.some(oKids, function(k){
-								return (k && k.item == i);
-							})){
-								o = this._by_idty[this.store.getIdentity(i)];
-							}else{
-								o = this._createItem(i, idx + itmIdx + 1);
-								o.level = (me.level||0) + 1;
-								o.parentItem = me;
-								_by_idx.push(o);
-								rowCount++;
-							}
-							me.children.push(o);
-						}, this);
-						if(_by_idx.length > 2){
-							Array.prototype.splice.apply(this._by_idx, _by_idx);
-							this.updateRowCount(rowCount);
-						}
-						this._addingItem = false;
-						var c = this.connect(this, "endUpdate", function(){
-							this.disconnect(c);
-							d._setOpen(open);
-						});
-					}else{
-						// Delete any children we may have
-						delete me.children;
-						d._setOpen(open);
-					}
-				}));
-			}
-		}else if(treeModel){
+		if(treeModel && !this._loadedChildren){
 			if(open){
-				grid._pendingRenders = grid._pendingRenders||[];
-				grid._pendingRenders.push(this);
-				if(grid._pendingRenderTO){
-					clearTimeout(grid._pendingRenderTO);
-				}
-				grid._pendingRenderTO = setTimeout(function(){
-					delete grid._pendingRenderTO;
-					// Save it off first - in case our children try to add to it
-					var renders = grid._pendingRenders||[];
-					delete grid._pendingRenders;
-					dojo.forEach(renders, function(r){
-						r.setOpen(open);
+				// Do this to make sure our children are fully-loaded
+				var itm = grid.getItem(dojo.attr(this._tableRow, "dojoxTreeGridPath"));
+				if(itm){
+					this.expandoInner.innerHTML = "o";
+					dojo.addClass(this.domNode, "dojoxGridExpandoLoading");
+					treeModel.getChildren(itm, function(items){
+						d._loadedChildren = true;
+						d._setOpen(open);
 					});
-				}, 1);
+				}else{
+					this._setOpen(open);
+				}
+			}else{
+				this._setOpen(open);
 			}
-			this._setOpen(open);
 		}else if(!treeModel && store){
 			if(open){
 				var data = grid._by_idx[this.rowIdx];
@@ -212,7 +151,6 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		this._initialized = true;
 	},
 	onToggle: function(e){
-		this._toggleTo = !this.open;
 		this.setOpen(!this.open);
 		dojo.stopEvent(e);
 	},
@@ -227,12 +165,7 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		if(d && d.parentNode && d.parentNode.parentNode){
 			this._tableRow = d.parentNode.parentNode;
 		}
-		if("_toggleTo" in this){
-			this.open = this._toggleTo;
-			delete this._toggleTo;
-		}else{
-			this.open = this.expandoCell.getOpenState(this.itemId);
-		}
+		this.open = this.expandoCell.getOpenState(this.itemId);
 		if(view.grid.treeModel){
 			dojo.style(this.domNode , "marginLeft" , (this.level * 15) + "px");
 		}
@@ -266,9 +199,6 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 			var tcString = toggleClasses[toggleClasses.length - 1];
 			var clString = tcString + (summaryRow ? " dojoxGridSummaryRow" : "");
 			var sString = "";
-			if(grid.treeModel && grid._by_idx && grid._by_idx[inRowIndex] && grid._by_idx[inRowIndex].isHidden){
-				sString = "display: none;";
-			}
 			if(grid.treeModel && rowItem && !grid.treeModel.mayHaveChildren(rowItem)){
 				clString += " dojoxGridNoChildren";
 			}
@@ -296,17 +226,35 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 					grid._by_idty_paths[idty] = rowStack.join('/');
 				}
 			}
-			if(rowItem && parentCell && !summaryRow){
-				var expandoCell = v.structure.cells[0][parentCell.level];
-				var parentOpen = expandoCell.getOpenState(rowItem) && shown;
+			var expandoCell;
+			var parentOpen;
+			var path;
+			var values;
+			var iStack = rowStack.concat([]);
+			if(grid.treeModel && rowItem){
+				if(grid.treeModel.mayHaveChildren(rowItem)){
+					expandoCell = v.structure.cells[0][0];
+					parentOpen = expandoCell.getOpenState(rowItem) && shown;
+					path = new dojox.grid.TreePath(rowStack.join('/'), grid);
+					values = path.children(true)||[];
+					dojo.forEach(values, function(cItm, idx){
+						var nToggle = tcJoin.split('|');
+						nToggle.push(nToggle[nToggle.length - 1] + "-" + idx);
+						iStack.push(idx);
+						createRow(nextLevel, cItm, false, nToggle, iStack, parentOpen);
+						iStack.pop();
+					});
+				}
+			}else if(rowItem && parentCell && !summaryRow){
+				expandoCell = v.structure.cells[0][parentCell.level];
+				parentOpen = expandoCell.getOpenState(rowItem) && shown;
 				if(store.hasAttribute(rowItem, parentCell.field)){
 					var tToggle = tcJoin.split('|');
 					tToggle.pop();
-					var path = new dojox.grid.TreePath(rowStack.join('/'), grid);
-					var values = path.children(true)||[];
+					path = new dojox.grid.TreePath(rowStack.join('/'), grid);
+					values = path.children(true)||[];
 					if(values.length){
 						html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tToggle.join(' ') + ' dojoxGridExpandoRow">';
-						var iStack = rowStack.concat([]);
 						dojo.forEach(values, function(cItm, idx){
 							var nToggle = tcJoin.split('|');
 							nToggle.push(nToggle[nToggle.length - 1] + "-" + idx);
@@ -330,11 +278,7 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 				html[rowNodeIdx] = '<tr class="' + toggleClasses[toggleClasses.length - 2] + '" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + toggleClasses[toggleClasses.length - 2] + '">';
 			}
 		};
-		var lvl = 0;
-		if(grid.treeModel && grid._by_idx && grid._by_idx[inRowIndex]){
-			lvl = grid._by_idx[inRowIndex].level || 0;
-		}
-		createRow(lvl, item, false, ["dojoxGridRowToggle-" + inRowIndex], [inRowIndex], true);
+		createRow(0, item, false, ["dojoxGridRowToggle-" + inRowIndex], [inRowIndex], true);
 		html.push('</table>');
 		return html.join(''); // String
 	},

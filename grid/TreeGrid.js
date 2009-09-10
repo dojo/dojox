@@ -237,7 +237,11 @@ dojo.declare("dojox.grid.TreePath", null, {
 		this.level = this._arr.length-1;
 		this.grid = grid;
 		this.store = this.grid.store;
-		this.cell = grid.layout.cells[this.level];
+		if(grid.treeModel){
+			this.cell = grid.layout.cells[0];
+		}else{
+			this.cell = grid.layout.cells[this.level];
+		}
 	},
 	item: function(){
 		// summary:
@@ -325,18 +329,31 @@ dojo.declare("dojox.grid.TreePath", null, {
 		if(!this.isOpen()&&!alwaysReturn){
 			return null;
 		}
-		var items = this.store.getValues(this.item(), this.grid.layout.cells[this.cell.level+1].parentCell.field);
-		if(items.length>1&&this.grid.sortChildItems){
-			var sortProps = this.grid.getSortProps();
-			if(sortProps&&sortProps.length){
-				var attr = sortProps[0].attribute,
-					grid = this.grid;
-				if(attr&&items[0][attr]){
-					var desc = !!sortProps[0].descending;
-					items = items.slice(0); // don't touch the array in the store, make a copy
-					items.sort(function(a, b){
-						return grid._childItemSorter(a, b, attr, desc);
-					});
+		var items = [];
+		var model = this.grid.treeModel;
+		if(model){
+			var item = this.item();
+			var store = model.store;
+			if(!model.mayHaveChildren(item)){
+				return null;
+			}
+			dojo.forEach(model.childrenAttrs, function(attr){
+				items = items.concat(store.getValues(item, attr));
+			});
+		}else{
+			items = this.store.getValues(this.item(), this.grid.layout.cells[this.cell.level+1].parentCell.field);
+			if(items.length>1&&this.grid.sortChildItems){
+				var sortProps = this.grid.getSortProps();
+				if(sortProps&&sortProps.length){
+					var attr = sortProps[0].attribute,
+						grid = this.grid;
+					if(attr&&items[0][attr]){
+						var desc = !!sortProps[0].descending;
+						items = items.slice(0); // don't touch the array in the store, make a copy
+						items.sort(function(a, b){
+							return grid._childItemSorter(a, b, attr, desc);
+						});
+					}
 				}
 			}
 		}
@@ -613,8 +630,13 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		}
 		var s = this.store;
 		var itm = dojox.grid.DataGrid.prototype.getItem.call(this, idx[0]);
+		var cf;
 		if(this.aggregator){
-			var cf = this.aggregator.childFields||[];
+			cf = this.aggregator.childFields||[];
+		}else if(this.treeModel){
+			cf = this.treeModel.childrenAttrs||[];
+		}
+		if(cf){
 			for(var i = 0; i < idx.length - 1 && itm; i++){
 				if(cf[i]){
 					itm = (s.getValues(itm, cf[i])||[])[idx[i + 1]];
