@@ -158,9 +158,11 @@ dojo.declare("dojox.grid._EditManager", null, {
 	},
 
 	_editorDo: function(inMethod){
-		var c = this.info.cell
+		var c = this.info.cell;
 		//c && c.editor && c.editor[inMethod](c, this.info.rowIndex);
-		c && c.editable && c[inMethod](this.info.rowIndex);
+		if(c && c.editable){
+			c[inMethod](this.info.rowIndex);
+		}
 	},
 
 	editorApply: function(){

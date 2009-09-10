@@ -223,7 +223,7 @@ dojo.declare("dojox.grid.TreePath", null, {
 	constructor: function(/*String|Integer[]|Integer|dojox.grid.TreePath*/ path, /*dojox.grid.TreeGrid*/ grid){
 		if(dojo.isString(path)){
 			this._str = path;
-			this._arr = dojo.map(path.split('/'), function(item){ return parseInt(item); });
+			this._arr = dojo.map(path.split('/'), function(item){ return parseInt(item, 10); });
 		}else if(dojo.isArray(path)){
 			this._str = path.join('/');
 			this._arr = path.slice(0);
@@ -286,7 +286,7 @@ dojo.declare("dojox.grid.TreePath", null, {
 
 		var last = new_path.length-1;
 
-		if(new_path[last] == 0){
+		if(new_path[last] === 0){
 			new_path.pop();
 			return new dojox.grid.TreePath(new_path, this.grid);
 		}
@@ -372,7 +372,7 @@ dojo.declare("dojox.grid.TreePath", null, {
 		// summary:
 		//	Returns the parent path of this path.  If this is a
 		//	top-level row, returns null.
-		if(this.level == 0){
+		if(this.level === 0){
 			return null;
 		}
 		return new dojox.grid.TreePath(this._arr.slice(0, this.level), this.grid);
@@ -500,12 +500,13 @@ dojo.declare("dojox.grid._TreeFocusManager", dojox.grid._FocusManager, {
 		i = this.cell.index,
 		col = Math.min(cc, Math.max(0, i+inColDelta));
 		var cell = this.grid.getCell(col);
-		while(col>=0 && col < cc && cell && cell.hidden == true){
+		var colDir = inColDelta < 0 ? -1 : 1;
+		while(col>=0 && col < cc && cell && cell.hidden === true){
 			// skip hidden cells
 			col += colDir;
 			cell = this.grid.getCell(col);
 		}
-		if (!cell || cell.hidden == true){
+		if (!cell || cell.hidden === true){
 			// don't change col if would move to hidden
 			col = i;
 		}
@@ -677,7 +678,7 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 						return false;
 						break;
 					default:
-						var r = parseInt(l);
+						var r = parseInt(l, 10);
 						if(isNaN(r)){
 							return def;
 						}

@@ -52,7 +52,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	isFirstFocusCell: function(){
 		if(this.cell){
-			return (this.rowIndex == 0) && (this.cell.index == 0);
+			return (this.rowIndex === 0) && (this.cell.index === 0);
 		}
 		return false;
 	},
@@ -236,7 +236,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			}
 		}
 		var curHeader = headers[colIdx];
-		if (!view || (colIdx == headers.length-1 && colIdx == 0)){
+		if (!view || (colIdx == headers.length-1 && colIdx === 0)){
 			return; // can't adjust single col. grid
 		}	
 		view.content.baseDecorateEvent(e);
@@ -244,7 +244,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			var deltaObj = {
 				l: delta
 			};
-			drag = view.header.colResizeSetup(e,false);
+			var drag = view.header.colResizeSetup(e,false);
 			view.header.doResizeColumn(drag, null, deltaObj);
 			view.update();
 		}
@@ -383,12 +383,12 @@ dojo.declare("dojox.grid._FocusManager", null, {
 				i = this.cell.index,
 				col = Math.min(cc, Math.max(0, i+inColDelta));
 				var cell = this.grid.getCell(col);
-				while(col>=0 && col < cc && cell && cell.hidden == true){
+				while(col>=0 && col < cc && cell && cell.hidden === true){
 					// skip hidden cells
 					col += colDir;
 					cell = this.grid.getCell(col);
 				}
-				if (!cell || cell.hidden == true){
+				if (!cell || cell.hidden === true){
 					// don't change col if would move to hidden
 					col = i;
 				}
@@ -412,7 +412,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		}
 	},
 	nextKey: function(e) {
-		var isEmpty = this.grid.rowCount == 0;
+		var isEmpty = (this.grid.rowCount === 0);
 		if(e.target === this.grid.domNode){
 			this.focusHeader();
 			dojo.stopEvent(e);
@@ -447,7 +447,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		//		false if no cell found to set focus onto
 		
 		var didFocus = true;
-		var isEmpty = this.grid.rowCount == 0; // If grid is empty this.grid.rowCount == 0
+		var isEmpty = (this.grid.rowCount === 0); // If grid is empty this.grid.rowCount == 0
 		if (this.isNoFocusCell() && !isEmpty){
 			var cellIdx = 0;
 			var cell = this.grid.getCell(cellIdx);
@@ -486,10 +486,11 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			}
 		}
 		this._colHeadNode = headerNodes[this._colHeadFocusIdx];
-		while(this._colHeadNode && this._colHeadFocusIdx >=0 && this._colHeadFocusIdx < headerNodes.length 
-				&& this._colHeadNode.style.display == "none"){
+		while(this._colHeadNode && this._colHeadFocusIdx >=0 && this._colHeadFocusIdx < headerNodes.length &&
+				this._colHeadNode.style.display == "none"){
 			// skip over hidden column headers
-			this._colHeadNode = headerNodes[++this._colHeadFocusIdx];
+			this._colHeadFocusIdx++;
+			this._colHeadNode = headerNodes[this._colHeadFocusIdx];
 		}
 		if(this._colHeadNode && this._colHeadNode.style.display != "none"){			
 			dojox.grid.util.fire(this._colHeadNode, "focus");

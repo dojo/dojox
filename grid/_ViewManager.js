@@ -96,7 +96,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 			//A one px increase fixes FireFox 3's rounding bug for fractional font sizes.
 			if(dojo.isFF>=3 && h){h++;}
 		}
-		for(var i=0, n; (n=inRowNodes[i]); i++){
+		for(i=0; (n=inRowNodes[i]); i++){
 			if(currHeights[i] != h){
 				n.firstChild.style.height = h + "px";
 			}
@@ -187,7 +187,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 				// fixed rtl, the scrollbar is on the right side in FF
 				if (dojo.isMoz) {
 					hs.right = l + v.getScrollbarWidth() + 'px';
-					hs.width = parseInt(hs.width) - v.getScrollbarWidth() + 'px';
+					hs.width = parseInt(hs.width, 10) - v.getScrollbarWidth() + 'px';
 				}else{
 					hs.right = l + 'px';					
 				}
@@ -197,7 +197,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 			}
 			ds.top = 0 + 'px';
 			hs.top = 0;
-		}
+		};
 		// for views left of the client
 		//BiDi TODO: The left and right should not appear in BIDI environment. Should be replaced with 
 		//leading and tailing concept.
@@ -296,6 +296,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 				return v;
 			}
 		}
+		return null;
 	}
 	
 });

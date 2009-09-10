@@ -24,7 +24,7 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 			return;
 		}
 		var self = this;
-		var g = this.view.grid
+		var g = this.view.grid;
 		if(g.treeModel){
 			var p = this._tableRow ? dojo.attr(this._tableRow, "dojoxTreeGridPath") : "";
 			if(p){
@@ -300,7 +300,7 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 	},
 	decorateEvent: function(e){
 		e.rowNode = this.findRowTarget(e.target);
-		if(!e.rowNode){return false};
+		if(!e.rowNode){return false;}
 		e.rowIndex = dojo.attr(e.rowNode, 'dojoxTreeGridPath');
 		this.baseDecorateEvent(e);
 		e.cell = this.grid.getCell(e.cellIndex);
@@ -346,7 +346,7 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 				if(expando){
 					dojo.place(expando.domNode, n, "replace");
 					expando.itemId = n.getAttribute("itemId");
-					expando.cellIdx = parseInt(n.getAttribute("cellIdx"));
+					expando.cellIdx = parseInt(n.getAttribute("cellIdx"), 10);
 					if(isNaN(expando.cellIdx)){
 						expando.cellIdx = -1;
 					}

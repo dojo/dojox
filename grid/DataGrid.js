@@ -288,7 +288,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_fetch: function(start, isRender){
-		var start = start || 0;
+		start = start || 0;
 		if(this.store && !this._pending_requests[start]){
 			if(!this._isLoaded && !this._isLoading){
 				this._isLoading = true;
@@ -300,7 +300,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 				if(this.items){
 					var items = this.items;
 					var store = this.store;
-					this.rowsPerPage = items.length
+					this.rowsPerPage = items.length;
 					var req = {
 						start: start,
 						count: this.rowsPerPage,
@@ -592,9 +592,9 @@ dojox.grid.DataGrid.cell_markupFactory = function(cellFunc, node, cellDef){
 	if(cellFunc){
 		cellFunc(node, cellDef);
 	}
-}
+};
 
 dojox.grid.DataGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return dojox.grid._Grid.markupFactory(props, node, ctor, 
 					dojo.partial(dojox.grid.DataGrid.cell_markupFactory, cellFunc));
-}
+};

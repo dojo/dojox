@@ -104,17 +104,17 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 		return 0;
 	},
 	_insertSortedSelection: function(index){
-		var index = String(index);
+		index = String(index);
 		var s = this.sorted_sel;
 		var sl = this.sorted_ltos;
 		var ss = this.sorted_stol;
 
 		var lpath = index.split('/');
-		lpath = dojo.map(lpath, function(item){ return parseInt(item); });
+		lpath = dojo.map(lpath, function(item){ return parseInt(item, 10); });
 		sl[lpath] = index;
 		ss[index] = lpath;
 
-		if(s.length==0){
+		if(s.length === 0){
 			s.push(lpath);
 			return;
 		}
@@ -129,12 +129,12 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 		this.sorted_sel.splice(idx, 0, lpath);
 	},
 	_removeSortedSelection: function(index){
-		var index = String(index);
+		index = String(index);
 		var s = this.sorted_sel;
 		var sl = this.sorted_ltos;
 		var ss = this.sorted_stol;
 
-		if(s.length==0){
+		if(s.length === 0){
 			return;
 		}
 
@@ -162,7 +162,7 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 	},
 	getNextSelected: function(inPrev){
 		if(!this.sorted_sel.length||this.mode == 'none'){ return -1; }
-		var inPrev = String(inPrev);
+		inPrev = String(inPrev);
 		var prevPath = this.sorted_stol[inPrev];
 		if(!prevPath){ return -1; }
 
@@ -179,11 +179,9 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 		}
 		var cells = this.grid.layout.cells,
 			store = this.grid.store,
-			grid = this.grid,
-			inFrom = String(inFrom),
-			inTo = String(inTo);
-		inFrom = new dojox.grid.TreePath(inFrom, grid);
-		inTo = new dojox.grid.TreePath(inTo, grid);
+			grid = this.grid;
+		inFrom = new dojox.grid.TreePath(String(inFrom), grid);
+		inTo = new dojox.grid.TreePath(String(inTo), grid);
 
 		if(inFrom.compare(inTo) > 0){
 			var tmp = inFrom;
@@ -197,7 +195,7 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 		func(inFromStr);
 
 		var p = inFrom;
-		while(p = p.next()){
+		while((p = p.next())){
 			if(p._str == inToStr){
 				break;
 			}

@@ -19,12 +19,12 @@ dojo.require("dojo.dnd.Moveable");
 	};
 
 	var findTable = function(node){
-		for(var n=node; n && n.tagName!='TABLE'; n=n.parentNode);
+		for(var n=node; n && n.tagName!='TABLE'; n=n.parentNode){}
 		return n;
 	};
 	
 	var ascendDom = function(inNode, inWhile){
-		for(var n=inNode; n && inWhile(n); n=n.parentNode);
+		for(var n=inNode; n && inWhile(n); n=n.parentNode){}
 		return n;
 	};
 	
@@ -72,11 +72,19 @@ dojo.require("dojo.dnd.Moveable");
 				var editInfo = this.grid.editable && !inCell.editable ? 'aria-readonly="true"' : "";
 				html = ['<td tabIndex="-1" role="', waiPrefix, 'gridcell"', editInfo];
 			}
-			inCell.colSpan && html.push(' colspan="', inCell.colSpan, '"');
-			inCell.rowSpan && html.push(' rowspan="', inCell.rowSpan, '"');
+			if(inCell.colSpan){
+				html.push(' colspan="', inCell.colSpan, '"');
+			}
+			if(inCell.rowSpan){
+				html.push(' rowspan="', inCell.rowSpan, '"');
+			}
 			html.push(' class="dojoxGridCell ');
-			inCell.classes && html.push(inCell.classes, ' ');
-			inMoreClasses && html.push(inMoreClasses, ' ');
+			if(inCell.classes){
+				html.push(inCell.classes, ' ');
+			}
+			if(inMoreClasses){
+				html.push(inMoreClasses, ' ');
+			}
 			// result[0] => td opener, style
 			result.push(html.join(''));
 			// SLOT: result[1] => td classes 
@@ -86,13 +94,17 @@ dojo.require("dojo.dnd.Moveable");
 				inMoreStyles += ';';
 			}
 			html.push(inCell.styles, inMoreStyles||'', inCell.hidden?'display:none;':'');
-			inCell.unitWidth && html.push('width:', inCell.unitWidth, ';');
+			if(inCell.unitWidth){
+				html.push('width:', inCell.unitWidth, ';');
+			}
 			// result[2] => markup
 			result.push(html.join(''));
 			// SLOT: result[3] => td style 
 			result.push('');
 			html = [ '"' ];
-			inCell.attrs && html.push(" ", inCell.attrs);
+			if(inCell.attrs){
+				html.push(" ", inCell.attrs);
+			}
 			html.push('>');
 			// result[4] => td postfix
 			result.push(html.join(''));
@@ -120,6 +132,7 @@ dojo.require("dojo.dnd.Moveable");
 					}
 				}
 			}
+			return null;
 		},
 		
 		findCellTarget: function(inSourceNode, inTopNode){
@@ -127,7 +140,7 @@ dojo.require("dojo.dnd.Moveable");
 			while(n && (!this.isCellNode(n) || (n.offsetParent && gridViewTag in n.offsetParent.parentNode && n.offsetParent.parentNode[gridViewTag] != this.view.id)) && (n!=inTopNode)){
 				n = n.parentNode;
 			}
-			return n!=inTopNode ? n : null 
+			return n!=inTopNode ? n : null;
 		},
 		
 		// event decoration
@@ -176,6 +189,7 @@ dojo.require("dojo.dnd.Moveable");
 			if(e.dispatch in this){
 				return this[e.dispatch](e);
 			}
+			return false;
 		},
 
 		// dispatched event handlers
@@ -200,7 +214,7 @@ dojo.require("dojo.dnd.Moveable");
 		domousedown: function(e){
 			if (e.cellNode)
 				this.grid.onMouseDown(e);
-			this.grid.onMouseDownRow(e)
+			this.grid.onMouseDownRow(e);
 		}
 	});
 
@@ -260,7 +274,7 @@ dojo.require("dojo.dnd.Moveable");
 
 		decorateEvent: function(e){
 			e.rowNode = this.findRowTarget(e.target);
-			if(!e.rowNode){return false};
+			if(!e.rowNode){return false;}
 			e.rowIndex = e.rowNode[rowIndexTag];
 			this.baseDecorateEvent(e);
 			e.cell = this.grid.getCell(e.cellIndex);
@@ -467,6 +481,7 @@ dojo.require("dojo.dnd.Moveable");
 				dojo.stopEvent(e);
 				return true;
 			}
+			return false;
 		},
 
 		// column resizing
@@ -487,7 +502,7 @@ dojo.require("dojo.dnd.Moveable");
 					left: e.clientX + "px",
 					height: (bodyContentBox.h + headContentBox.h) + "px"
 				});
-				dojo.addClass(this.lineDiv, "dojoxGridResizeColLine")
+				dojo.addClass(this.lineDiv, "dojoxGridResizeColLine");
 				this.lineDiv._origLeft = e.clientX;
 				dojo.body().appendChild(this.lineDiv);
 			}
@@ -526,7 +541,7 @@ dojo.require("dojo.dnd.Moveable");
 			dojo.addClass(this.grid.domNode, "dojoxGridColumnResizing");
 			var m = (this.moveable = new dojo.dnd.Moveable(this.moverDiv));
 
-			drag = this.colResizeSetup(e,true);
+			var drag = this.colResizeSetup(e,true);
 
 			m.onMove = dojo.hitch(this, "doResizeColumn", drag);
 
@@ -559,7 +574,7 @@ dojo.require("dojo.dnd.Moveable");
 			this.dragRecord = {inDrag: inDrag, mover: mover, leftTop:leftTop};
 			
 			if(data.w >= this.minColWidth){
-				if (mover == null) { // we are using keyboard do immediate resize
+				if (!mover) { // we are using keyboard do immediate resize
 					this.doResizeNow(inDrag, data);
 				}
 				else{
@@ -602,14 +617,17 @@ dojo.require("dojo.dnd.Moveable");
 			inDrag.view.convertColPctToFixed();
 			if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
 				var t = findTable(inDrag.node);
-				t && (t.style.width = '');
+				if(t){
+					(t.style.width = '');
+				}
 			}
-			for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
+			var i, s, sw, f, fl;
+			for(i=0; (s=inDrag.spanners[i]); i++){
 				sw = s.width + data.deltaX;
 				s.node.style.width = sw + 'px';
 				inDrag.view.setColWidth(s.index, sw);
 			}
-			for(var i=0, f, fl; (f=inDrag.followers[i]); i++){
+			for(i=0; (f=inDrag.followers[i]); i++){
 				fl = f.left + data.deltaX;
 				f.node.style.left = fl + 'px';
 			}
@@ -641,12 +659,13 @@ dojo.require("dojo.dnd.Moveable");
 			}
 			// map which columns and rows fill which cells
 			this.map = [];
-			for(var k=0, row; (row=inRows[k]); k++){
+			var row;
+			for(var k=0; (row=inRows[k]); k++){
 				this.map[k] = [];
 			}
-			for(var j=0, row; (row=inRows[j]); j++){
+			for(var j=0; (row=inRows[j]); j++){
 				for(var i=0, x=0, cell, colSpan, rowSpan; (cell=row[i]); i++){
-					while(this.map[j][x]){x++};
+					while(this.map[j][x]){x++;}
 					this.map[j][x] = { c: i, r: j };
 					rowSpan = cell.rowSpan || 1;
 					colSpan = cell.colSpan || 1;
@@ -692,7 +711,6 @@ dojo.require("dojo.dnd.Moveable");
 			var nodes = [];
 			var m = this.getMapCoords(inRow, inCol);
 			//console.log("node j: %d, i: %d", m.j, m.i);
-			var row = this.map[m.j];
 			for(var j=0, row; (row=this.map[j]); j++){
 				if(j == m.j){ continue; }
 				var rw = row[m.i];

@@ -166,7 +166,7 @@ dojo.require("dojox.grid._Builder");
 			}
 			this.connect(this.grid.selection, 'onSelected', 'onSelected');
 			this.connect(this.grid.selection, 'onDeselected', 'onDeselected');
-		}
+		};
 	}
 
 	dojo.declare("dojox.grid._RadioSelector", dojox.grid._Selector, {

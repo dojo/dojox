@@ -213,8 +213,8 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 			//	value of editor
 			var n = this.getEditNode(inRowIndex);
 			if(n){
-				n[this._valueProp] = inValue
-			};
+				n[this._valueProp] = inValue;
+			}
 		},
 		focus: function(inRowIndex, inNode){
 			// summary:
@@ -281,7 +281,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 		var getBoolAttr = function(attr, cell, cellAttr){
 			var value = d.trim(d.attr(node, attr)||"");
 			if(value){ cell[cellAttr||attr] = !(value.toLowerCase()=="false"); }
-		}
+		};
 		getBoolAttr("sortDesc", cellDef);
 		getBoolAttr("editable", cellDef);
 		getBoolAttr("alwaysEditing", cellDef);
@@ -303,7 +303,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 		getStrAttr("classes", cellDef);
 		getStrAttr("headerClasses", cellDef);
 		getStrAttr("cellClasses", cellDef);
-	}
+	};
 
 	dojo.declare("dojox.grid.cells.Cell", dgc._Base, {
 		// summary
@@ -346,7 +346,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 		if(keyFilter){
 			cellDef.keyFilter = new RegExp(keyFilter);
 		}
-	}
+	};
 
 	dojo.declare("dojox.grid.cells.RowIndex", dgc.Cell, {
 		name: 'Row',
@@ -360,7 +360,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 	});
 	dgc.RowIndex.markupFactory = function(node, cellDef){
 		dgc.Cell.markupFactory(node, cellDef);
-	}
+	};
 
 	dojo.declare("dojox.grid.cells.Select", dgc.Cell, {
 		// summary:
@@ -415,7 +415,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 				cell.values = v;
 			}
 		}
-	}
+	};
 
 	dojo.declare("dojox.grid.cells.AlwaysEdit", dgc.Cell, {
 		// summary:
@@ -432,7 +432,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 	});
 	dgc.AlwaysEdit.markupFactory = function(node, cell){
 		dgc.Cell.markupFactory(node, cell);
-	}
+	};
 
 	dojo.declare("dojox.grid.cells.Bool", dgc.AlwaysEdit, {
 		// summary:
@@ -449,5 +449,5 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 	});
 	dgc.Bool.markupFactory = function(node, cell){
 		dgc.AlwaysEdit.markupFactory(node, cell);
-	}
+	};
 })();
