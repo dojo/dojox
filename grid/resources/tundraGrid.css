@@ -252,3 +252,9 @@
 .tundra .dojoxGridTreeModel .dojoxGridExpandoCell {
 	border-bottom-color: #D5CDB5;
 }
+.tundra .dojoxGridSubRowAlt {
+	background-color: #F8F8F8;
+}
+.tundra .dojoxGridRowOdd .dojoxGridSubRowAlt {
+	background-color: #EDEFF3;
+}

@@ -222,3 +222,9 @@
 .nihilo .dojoxGridTreeModel .dojoxGridExpandoCell {
 	border-bottom-color: #D5CDB5;
 }
+.nihilo .dojoxGridSubRowAlt {
+	background-color: #F8F8F8;
+}
+.nihilo .dojoxGridRowOdd .dojoxGridSubRowAlt {
+	background-color: #EDEFF3;
+}

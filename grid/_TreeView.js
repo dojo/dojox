@@ -254,7 +254,7 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 					path = new dojox.grid.TreePath(rowStack.join('/'), grid);
 					values = path.children(true)||[];
 					if(values.length){
-						html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tToggle.join(' ') + ' dojoxGridExpandoRow">';
+						html[rowNodeIdx] = '<tr class="' + tToggle.join(' ') +' dojoxGridExpandoRow" dojoxTreeGridPath="' + rowStack.join('/') + '">';
 						dojo.forEach(values, function(cItm, idx){
 							var nToggle = tcJoin.split('|');
 							nToggle.push(nToggle[nToggle.length - 1] + "-" + idx);
@@ -265,17 +265,17 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 						iStack.push(values.length);
 						createRow(level, rowItem, true, toggleClasses, iStack, parentOpen);
 					}else{
-						html[rowNodeIdx] = '<tr class="' + tcString + ' dojoxGridNoChildren" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tcString + ' dojoxGridNoChildren">';					
+						html[rowNodeIdx] = '<tr class="' + tcString + ' dojoxGridNoChildren" dojoxTreeGridPath="' + rowStack.join('/') + '">';					
 					}
 				}else{
 					if(!store.isItemLoaded(rowItem)){
 						html[0] = html[0].replace("dojoxGridRowTable", "dojoxGridRowTable dojoxGridRowTableNeedsRowUpdate");
 					}else{
-						html[rowNodeIdx] = '<tr class="' + tcString + ' dojoxGridNoChildren" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + tcString + ' dojoxGridNoChildren">';
+						html[rowNodeIdx] = '<tr class="' + tcString + ' dojoxGridNoChildren" dojoxTreeGridPath="' + rowStack.join('/') + '">';
 					}
 				}
 			}else if(rowItem && !summaryRow && toggleClasses.length > 1){
-				html[rowNodeIdx] = '<tr class="' + toggleClasses[toggleClasses.length - 2] + '" dojoxTreeGridPath="' + rowStack.join('/') + '" dojoxTreeGridBaseClasses="' + toggleClasses[toggleClasses.length - 2] + '">';
+				html[rowNodeIdx] = '<tr class="' + toggleClasses[toggleClasses.length - 2] + '" dojoxTreeGridPath="' + rowStack.join('/') + '">';
 			}
 		};
 		createRow(0, item, false, ["dojoxGridRowToggle-" + inRowIndex], [inRowIndex], true);
@@ -361,6 +361,12 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 				}
 			}
 		}, this);
+		var alt = false;
+		dojo.query("tr[dojoxTreeGridPath]", inRowNode).forEach(function(n){
+			dojo.toggleClass(n, "dojoxGridSubRowAlt", alt);
+			dojo.attr(n, "dojoxTreeGridBaseClasses", n.className);
+			alt = !alt;
+		});
 		this.inherited(arguments);
 	},
 	updateRowStyles: function(inRowIndex){
