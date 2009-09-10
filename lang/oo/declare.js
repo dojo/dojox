@@ -14,14 +14,13 @@ dojo.experimental("dojox.lang.oo.declare");
 	// C3 Method Resolution Order (see http://www.python.org/download/releases/2.3/mro/)
 	function c3mro(bases){
 		var result = [0], l = bases.length, classes = new Array(l),
-			i = 0, j, m, m2, c, cls, lin, proto, name, clsNum = 0;
+			i = 0, j, m, m2, c, cls, lin, proto, name, t;
 
 		// initialize
 		for(; i < l; ++i){
 			c = bases[i];
 			if(!c) err("mixin #" + i + " is null");
 			lin = c._meta && c._meta.bases || [c];
-			clsNum += lin.length;
 			m = {};
 			for(j = 0, m2 = lin.length; j < m2; ++j){
 				// the assignment on the next line is intentional
@@ -38,15 +37,24 @@ dojo.experimental("dojox.lang.oo.declare");
 		}
 
 		// C3 MRO algorithm
-		while(clsNum){
+		while(l){
+			if(l == 1){
+				c = classes[0];
+				m = c.map;
+				return result.concat(d.map(c.lin.slice(c.idx), function(c){ return m[c]; }));
+			}
 			for(i = l; i--;){
 				m = classes[i];
 				c = m.lin[m.idx];
 				if(c){
 					// check if it is in the tail of any classes
+					t = 1;
 					for(j = l; j--;){
 						m2 = classes[j];
-						if(i != j && (c in m2.map) && c != m2.lin[m2.idx]) break;
+						if(i != j && (c in m2.map)){
+							if(c == m2.lin[m2.idx]) ++t;
+							else break;
+						}
 					}
 					if(j < 0){
 						result.push(m.map[c]);
@@ -55,14 +63,17 @@ dojo.experimental("dojox.lang.oo.declare");
 							m = classes[j];
 							if(c == m.lin[m.idx]){
 								++m.idx;
-								--clsNum
+								if(!--t) break;
 							}
 						}
 						break;
 					}
+				}else{
+					classes.splice(i, 1);
+					--l
 				}
 			}
-			if(i < 0) err("can't build consistent linearization");
+			if(i < 0 && l > 0) err("can't build consistent linearization");
 		}
 
 		return result;
@@ -112,8 +123,7 @@ dojo.experimental("dojox.lang.oo.declare");
 			}
 
 			// alternative (simpler) caching
-			x = this._inherited;
-			if(!x || x.name !== name || ch[x.pos] !== caller || caller.caller !== inherited){
+			if((x = this._inherited).name !== name || ch[x.pos] !== caller){
 				// find the caller
 				for(i = 0, l = ch.length; i < l && ch[i] !== caller; ++i);
 				// the assignment on the next line is intentional
@@ -137,25 +147,37 @@ dojo.experimental("dojox.lang.oo.declare");
 			props = props || {};
 
 			// build a prototype
-			if(d.isArray(superclass)) bases = c3mro(superclass);
-			else{
+			t = 0;
+			if(d.isArray(superclass)){
+				if(superclass.length > 1){
+					// C3 MRO
+					bases = c3mro(superclass);
+					// build a chain
+					// the assignment on the next line is intentional
+					superclass = bases[l = bases.length - 1];
+					for(i = l - 1;;){
+						t = bases[i--];
+						// delegation
+						xtor.prototype = superclass.prototype;
+						proto = new xtor;
+						if(!t) break;
+						d._mixin(proto, t.prototype);
+						(ctor = function(){}).superclass = superclass;
+						ctor.prototype = proto;
+						superclass = proto.constructor = ctor;
+					}
+					t = 1;
+				}else superclass = superclass[0];
+			}
+			if(!t){
 				bases = [0];
-				if(superclass) (t = superclass._meta) && (bases = bases.concat(t.bases)) || bases.push(superclass);
+				if(superclass){
+					(t = superclass._meta) && (bases = bases.concat(t.bases)) || bases.push(superclass);
+					// delegation
+					xtor.prototype = superclass.prototype;
+					proto = new xtor;
+				}else proto = {};
 			}
-			// the assignment on the next line is intentional
-			superclass = bases[l = bases.length - 1];
-			if(superclass) for(i = l - 1;;){
-				t = bases[i--];
-				// delegation
-				xtor.prototype = superclass.prototype;
-				proto = new xtor;
-				if(!t) break;
-				d._mixin(proto, t.prototype);
-				(ctor = function(){}).superclass = superclass;
-				ctor.prototype = proto;
-				superclass = proto.constructor = ctor;
-			}
-			else proto = {};
 			xtor.prototype = 0;	// cleanup
 
 			// add metadata for incoming functions
@@ -170,7 +192,7 @@ dojo.experimental("dojox.lang.oo.declare");
 				// compatibility mode with the legacy dojo.declare()
 				ctor = function(){
 					var a = arguments, args = a, a0, f, i, l, h, preArgs;
-					this._inherited = 0;
+					this._inherited = {};
 					// perform the shaman's rituals of the original dojo.declare()
 					// 1) call two types of the preamble
 					if((a0 = a[0]) && a0.preamble || this.preamble){
@@ -204,7 +226,7 @@ dojo.experimental("dojox.lang.oo.declare");
 					// chained constructor
 					ctor = function(){
 						var a = arguments, f, i, l;
-						this._inherited = 0;
+						this._inherited = {};
 						// perform the shaman's rituals of the original dojo.declare()
 						// 1) do not call the preamble
 						// 2) call the constructor with the same parameters
@@ -217,7 +239,7 @@ dojo.experimental("dojox.lang.oo.declare");
 					// plain vanilla constructor
 					ctor = function(){
 						var a = arguments, f;
-						this._inherited = 0;
+						this._inherited = {};
 						// perform the shaman's rituals of the original dojo.declare()
 						// 1) do not call the preamble
 						// 2) call our original constructor
