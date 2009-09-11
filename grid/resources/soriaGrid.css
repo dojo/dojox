@@ -204,10 +204,6 @@
 	visibility: visible !important;
 	width: 18px !important;
 }
-.soria .dojoxGridTreeModel .dojoxGridExpandoCell {
-	background-image: url('../../../dijit/themes/soria/images/treeI.gif');
-	background-repeat: repeat-y;
-}
 .soria .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpandoNode {
 	background: url('../../../dijit/themes/soria/images/spriteTree.gif') no-repeat -36px top;
 }

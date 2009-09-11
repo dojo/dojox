@@ -234,12 +234,9 @@
 	visibility: visible !important;
 	width: 18px !important;
 }
-.tundra .dojoxGridTreeModel .dojoxGridExpandoCell {
-	background-image: url('../../../dijit/themes/tundra/images/i.gif');
-	background-repeat: repeat-y;
-}
 .tundra .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpandoNode {
 	background-image: url('../../../dijit/themes/tundra/images/treeExpand_leaf.gif');
+	background-position: -3px;
 }
 .tundra .dojoxGridExpandoNodeInner {
 	visibility: hidden;
