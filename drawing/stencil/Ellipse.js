@@ -1,5 +1,25 @@
 dojo.provide("dojox.drawing.stencil.Ellipse");
 
+/*=====
+__StencilData = {
+	// summary:
+	//		the data used to create the dojox.gfx Shape
+	//
+
+	// 	cx: Number
+	//		Center point x
+	cx:0,
+	// 	cy: Number
+	//		Center point y
+	cy:0,
+	// 	rx: Number
+	//		Horizontal radius
+	rx:0,
+	// 	ry: Number
+	//		Vertical radius
+	ry:0
+}
+=====*/
 
 dojox.drawing.stencil.Ellipse = dojox.drawing.util.oo.declare(
 	// summary:
@@ -11,33 +31,6 @@ dojox.drawing.stencil.Ellipse = dojox.drawing.util.oo.declare(
 		//		constructor
 	},
 	{
-/*=====
-StencilData: {
-	// summary:
-	//		the data used to create the dojox.gfx Shape
-	// 	cx: Number
-	//		Center point x
-	// 	cy: Number
-	//		Center point y
-	// 	rx: Number
-	//		Horizontal radius
-	// 	ry: Number
-	//		Vertical radius
-},
-
-StencilPoints = [
-	// summary:
-	//		An Array of dojox.__StencilPoint objects that describe the Stencil
-	// 	0: Object
-	//		Top left point
-	// 	1: Object
-	//		Top right point
-	// 	2: Object
-	//		Bottom right point
-	// 	3: Object
-	//		Bottom left point
-],
-=====*/
 		
 		type:"dojox.drawing.stencil.Ellipse",
 		anchorType: "group",
@@ -75,7 +68,7 @@ StencilPoints = [
 		
 		},
 		
-		_create: function(/*String*/shp, /*StencilData*/d, /*Object*/sty){
+		_create: function(/*String*/shp, /*__StencilData*/d, /*Object*/sty){
 			// summary:
 			//		Creates a dojox.gfx.shape based on passed arguments.
 			//		Can be called many times by implementation to create

@@ -1,6 +1,143 @@
 dojo.provide("dojox.drawing.stencil._Base");
 
 
+/*=====
+StencilArgs = {
+//	container: [readonly] dojo.gfx.group
+//		The parent shape that contains all
+//		shapes used in a Stencil
+container:null,
+//
+//	anchorType: String
+//		Optionally blank or 'group'. 'group' tells
+//		an anchor point that it must constrain
+//		itself to other anchor points.
+anchorType:"",
+//
+// 	isText: Boolean
+//		Whether this is a text object or not
+//		(either stencil.text or tools.TextBlock)
+isText:false,
+//
+// 	shortType: String
+//		The type of stencil that corresponds with the types and
+//		constructors used in Drawing.registerTool
+shortType:"",
+//
+//	annotation: Boolean
+//		A Stencil used within a Stencil. An annotation
+//		is not selectable or clickable. A Label would
+//		be one example.
+annotation:false,
+//
+//	subShape: Boolean
+//		A Stencil used within a Stencil. A subShape
+//		is clickable. An arrow head would be an example.
+subShape:false,
+//
+//	style: Object
+//		An instance of the styles and defaults used within
+//		the Stencil.
+style:null,
+//
+//	util: Object
+//		Pointer to util.common
+util:null,
+//
+//	mouse: Object
+//		Pointer to the mouse instance
+mouse:null,
+//
+//	keys: Object
+//		Pointer to the keys class
+keys:null,
+//
+//	points: StencilPoints
+//		Points is an array of objects that make up the
+//		description of a Stencil. The points to a Rect
+//		that is 100x100 and at x:10 and y:10 would look like:
+//		[{x:10,y:10}, {x:110, y:10}, {x:110, y:110}, {x:10, y:110}]
+//		Points go clockwise from the top left. In the case of Paths,
+//		they would go in the order that the Stencil would be drawn.
+//		Always when the points Array is set, a data Object is created
+//		as well. So never set points directly, always use setPoints().
+//	See:
+//		setPoints()
+points:[],
+//
+//	data: StencilData
+//		A data object typically (but not always) resembles the data
+//		that is used to create the dojox.gfx Shape. The same Rect
+//		example shown in points above would look like:
+//		{x:10, y:10, width:100, height:100}
+//		And an Ellipse with the same coordinates:
+//		{cx:55, cy:55, rx:50, ry:50}
+//		The only Stencil that does not support data (at this time)
+//		is the Path. While x1,x2,x3... culd be used in a data object
+//		it doesn't provide much benefit.
+//		Always when a data object is set, a set of points is created
+//		as well. So never set data directly, always use setData().
+//	See:
+//		setData()
+data:null,
+//
+// 	marginZero [readonly] Number
+// 		How closely shape can get to y:0 or x:0. Less than zero has
+//		bugs in VML. This is set with defaults, and should be equal
+//		to half the size of an anchor point (5 px)
+marginZero:0,
+//
+//	created [readonly] Boolean
+//		Whether the Stencil has been rendered for the first time or
+//		not.
+created: false,
+//
+//	highlighted [readonly] Boolean
+//		Whether the Stencil is highlighted or not.
+highlighted:false,
+//
+//	selected [readonly] Boolean
+//		Whether the Stencil is selected or not.
+selected:false,
+//
+//	draws [readonly] Boolean
+//		Whether the Stencil can draw with a mouse drag or can just
+//		be created programmtically. If the Stencil comes from the
+//		stencil package, it should be draw:false. If it comes from
+//		the tools package it should be draw:true.
+draws:false
+}
+
+StencilPoint = {
+// summary:
+//	One point Object in the points Array 
+//	x: Number
+//		x position of point
+//	y: Number
+//		y position of point
+}
+
+ToolsSetup = {
+// summary:
+//	An object attached to a Tool's constructor
+//	used to inform the toolbar of its information
+//	and properties.
+// description:
+//	This object is inserted into the *function* of
+//	a tool (not a stencil). Like: function.ToolsSetup
+//	It must be attached after constructr creation, so
+//	this object is found at the botton of the file.
+//
+//	name:String
+//		Fully qualified name of constructor
+//	tooltip: Stirng
+//		Text to display on toolbar button hover
+//	iconClass: String
+//		CSS class with icon information to attach
+//		to toolbar button.
+}
+=====*/
+
 dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 	// summary:
 	//		The base class used for all Stencils.
@@ -140,143 +277,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			
 	},
 	{
-/*=====
-StencilArgs: function(options){
-	//	container: [readonly] dojo.gfx.group
-	//		The parent shape that contains all
-	//		shapes used in a Stencil
-	container:null,
-	//
-	//	anchorType: String
-	//		Optionally blank or 'group'. 'group' tells
-	//		an anchor point that it must constrain
-	//		itself to other anchor points.
-	anchorType:""
-	//
-	// 	isText: Boolean
-	//		Whether this is a text object or not
-	//		(either stencil.text or tools.TextBlock)
-	isText:false,
-	//
-	// 	shortType: String
-	//		The type of stencil that corresponds with the types and
-	//		constructors used in Drawing.registerTool
-	shortType:""
-	//
-	//	annotation: Boolean
-	//		A Stencil used within a Stencil. An annotation
-	//		is not selectable or clickable. A Label would
-	//		be one example.
-	annotation:false,
-	//
-	//	subShape: Boolean
-	//		A Stencil used within a Stencil. A subShape
-	//		is clickable. An arrow head would be an example.
-	subShape:false,
-	//
-	//	style: Object
-	//		An instance of the styles and defaults used within
-	//		the Stencil.
-	style:null,
-	//
-	//	util: Object
-	//		Pointer to util.common
-	util:null,
-	//
-	//	mouse: Object
-	//		Pointer to the mouse instance
-	mouse:null,
-	//
-	//	keys: Object
-	//		Pointer to the keys class
-	keys:null,
-	//
-	//	points: StencilPoints
-	//		Points is an array of objects that make up the
-	//		description of a Stencil. The points to a Rect
-	//		that is 100x100 and at x:10 and y:10 would look like:
-	//		[{x:10,y:10}, {x:110, y:10}, {x:110, y:110}, {x:10, y:110}]
-	//		Points go clockwise from the top left. In the case of Paths,
-	//		they would go in the order that the Stencil would be drawn.
-	//		Always when the points Array is set, a data Object is created
-	//		as well. So never set points directly, always use setPoints().
-	//	See:
-	//		setPoints()
-	points:[],
-	//
-	//	data: StencilData
-	//		A data object typically (but not always) resembles the data
-	//		that is used to create the dojox.gfx Shape. The same Rect
-	//		example shown in points above would look like:
-	//		{x:10, y:10, width:100, height:100}
-	//		And an Ellipse with the same coordinates:
-	//		{cx:55, cy:55, rx:50, ry:50}
-	//		The only Stencil that does not support data (at this time)
-	//		is the Path. While x1,x2,x3... culd be used in a data object
-	//		it doesn't provide much benefit.
-	//		Always when a data object is set, a set of points is created
-	//		as well. So never set data directly, always use setData().
-	//	See:
-	//		setData()
-	data:null,
-	//
-	// 	marginZero [readonly] Number
-	// 		How closely shape can get to y:0 or x:0. Less than zero has
-	//		bugs in VML. This is set with defaults, and should be equal
-	//		to half the size of an anchor point (5 px)
-	marginZero:0,
-	//
-	//	created [readonly] Boolean
-	//		Whether the Stencil has been rendered for the first time or
-	//		not.
-	created: false,
-	//
-	//	highlighted [readonly] Boolean
-	//		Whether the Stencil is highlighted or not.
-	highlighted:false,
-	//
-	//	selected [readonly] Boolean
-	//		Whether the Stencil is selected or not.
-	selected:false,
-	//
-	//	draws [readonly] Boolean
-	//		Whether the Stencil can draw with a mouse drag or can just
-	//		be created programmtically. If the Stencil comes from the
-	//		stencil package, it should be draw:false. If it comes from
-	//		the tools package it should be draw:true.
-	draws:false,
-	
-},
-
-StencilPoint: {
-	// summary:
-	//	One point Object in the points Array 
-	//	x: Number
-	//		x position of point
-	//	y: Number
-	//		y position of point
-},
-
-ToolsSetup: {
-	// summary:
-	//	An object attached to a Tool's constructor
-	//	used to inform the toolbar of its information
-	//	and properties.
-	// description:
-	//	This object is inserted into the *function* of
-	//	a tool (not a stencil). Like: function.ToolsSetup
-	//	It must be attached after constructr creation, so
-	//	this object is found at the botton of the file.
-	//
-	//	name:String
-	//		Fully qualified name of constructor
-	//	tooltip: Stirng
-	//		Text to display on toolbar button hover
-	//	iconClass: String
-	//		CSS class with icon information to attach
-	//		to toolbar button.
-},
-=====*/
 		
 		// type: String
 		//		The type of Stencil this is. Should be overridden

@@ -37,16 +37,6 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 		closePath:false,
 		baseRender:false,
 
-/*=====
-StencilData: {
-	// TODO: Doc this
-},
-
-StencilPoints = [
-	// TODO: Doc this
-],
-=====*/
-
 		createLabels: function(){
 			// summary:
 			//		Creates the label for each axis.

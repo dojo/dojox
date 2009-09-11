@@ -18,34 +18,6 @@ dojox.drawing.stencil.Rect = dojox.drawing.util.oo.declare(
 		anchorType: "group",
 		baseRender:true,
 		
-/*=====
-StencilData: {
-	// summary:
-	//		The data used to create the dojox.gfx Shape
-	// 	x: Number
-	//		Left point x
-	// 	y: Number
-	//		Top point y
-	// 	width: Number
-	//		width of rectangle
-	// 	height: Number
-	//		height of rectangle
-},
-
-StencilPoints = [
-	// summary:
-	//		An Array of dojox.__StencilPoint objects that describe the Stencil
-	// 	0: Object
-	//		Top left point
-	// 	1: Object
-	//		Top right point
-	// 	2: Object
-	//		Bottom right point
-	// 	3: Object
-	//		Bottom left point
-],
-=====*/
-		
 		dataToPoints: function(/*Object*/d){
 			//summary:
 			//		Converts data to points.

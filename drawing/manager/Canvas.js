@@ -56,51 +56,8 @@ dojo.provide("dojox.drawing.manager.Canvas");
 			this._mouseHandle = this.mouse.register(this);
 		},
 		{
-/*=====
-__CanvasArgs: function(node, duration, easing){
-	//	callback: Function
-	//		Method to be called when surface is ready
-	//	srcRefNode: HTMLNode
-	//		Node when surface is created.
-	//	width: [readonly] Number
-	//		Width to create surface  Changes on resize.
-	//	height: [readonly] Number
-	//		Height to create surface  Changes on resize.
-	//	id: ? String
-	//		Optional id
-	//	util: dojox.drawing.util
-	//		Pointer to util
-	//	mouse: dojox.drawing.mouse
-	//		Pointer to mouse
-	// 	useScrollbars: [readonly] Boolean
-	//		Whether Canvas scrolls or not
-	//		(the Pan plugin is needed and will set this)
-	//	parentWidth:  [readonly] Number
-	//		The width of the node that contains the node
-	//		from which the surface was created. Basically
-	//		the node that may resize, like a ContentPane.
-	//	parentHeight:  [readonly] Number
-	//		See parentWidth
-	//	baseClass: String
-	//		The class applied to the surface node.
-	//	surfaceReady: [readonly] Boolean
-	//		True when surface is created.
-	//
-	id:"",
-	width:0,
-	height:0,
-	parentHeight:0, // may change on pane or browser resize
-	parentWidth:0, // may change on pane or browser resize
-	domNode:null,
-	srcRefNode:null,
-	util:null,
-	mouse:null,
-	surfaceReady:false,
-},
-=====*/
-			
 			// zoom: [readonly] Number
-			//	The amount teh canvas is zoomed
+			//	The amount the canvas is zoomed
 			zoom:1,
 						
 			useScrollbars: true,
