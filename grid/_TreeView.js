@@ -167,7 +167,13 @@ dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 		}
 		this.open = this.expandoCell.getOpenState(this.itemId);
 		if(view.grid.treeModel){
-			dojo.style(this.domNode , "marginLeft" , (this.level * 15) + "px");
+			// TODO: Rather than hard-code the 18px and 3px, we should probably
+			// calculate them based off css or something...  However, all the 
+			// themes that we support use these values.
+			dojo.style(this.domNode , "marginLeft" , (this.level * 18) + "px");
+			if(this.domNode.parentNode){
+				dojo.style(this.domNode.parentNode, "backgroundPosition", ((this.level * 18) + (3)) + "px");
+			}
 		}
 		this.setOpen(this.open);
 		return true;

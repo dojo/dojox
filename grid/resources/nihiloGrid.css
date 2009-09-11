@@ -200,6 +200,17 @@
 .nihilo .dojoxGridExpandoLoading .dojoxGridExpandoNode {
 	background: url('../../../dijit/themes/nihilo/images/treeExpand_loading.gif');
 }
+.nihilo .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpando {
+	visibility: visible !important;
+	width: 18px !important;
+}
+.nihilo .dojoxGridTreeModel .dojoxGridExpandoCell {
+	background-image: url('../../../dijit/themes/nihilo/images/treeI.gif');
+	background-repeat: repeat-y;
+}
+.nihilo .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpandoNode {
+	background: url('../../../dijit/themes/nihilo/images/spriteTree.gif') no-repeat -36px top;
+}
 .nihilo .dojoxGridExpandoNodeInner {
 	visibility: hidden;
 }

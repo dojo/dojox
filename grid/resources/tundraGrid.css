@@ -230,6 +230,17 @@
 .tundra .dojoxGridExpandoLoading .dojoxGridExpandoNode {
 	background-image: url('../../../dijit/themes/tundra/images/treeExpand_loading.gif');		
 }
+.tundra .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpando {
+	visibility: visible !important;
+	width: 18px !important;
+}
+.tundra .dojoxGridTreeModel .dojoxGridExpandoCell {
+	background-image: url('../../../dijit/themes/tundra/images/i.gif');
+	background-repeat: repeat-y;
+}
+.tundra .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpandoNode {
+	background-image: url('../../../dijit/themes/tundra/images/treeExpand_leaf.gif');
+}
 .tundra .dojoxGridExpandoNodeInner {
 	visibility: hidden;
 }
