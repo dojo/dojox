@@ -3,9 +3,11 @@ dojo.provide("dojox.lang.oo.declare");
 dojo.experimental("dojox.lang.oo.declare");
 
 // a drop-in replacement for dojo.declare() with fixed bugs and enhancements
+// this is the obfuscated version (not really, but it is not up to the coding standard)
 
 (function(){
 	var d = dojo, oo = dojox.lang.oo, op = Object.prototype,
+		cname = "constructor", has = "hasOwnProperty", dname = "declaredClass",
 		isF = d.isFunction, each = d.forEach, xtor = function(){}, counter = 0;
 
 	function err(msg){ throw new Error("declare: " + msg); }
@@ -24,23 +26,20 @@ dojo.experimental("dojox.lang.oo.declare");
 			for(j = 0, m2 = lin.length; j < m2; ++j){
 				// the assignment on the next line is intentional
 				proto = (cls = lin[j]).prototype;
-				name = proto.hasOwnProperty("declaredClass") && proto.declaredClass;
-				if(!name){
-					name = proto.declaredClass = "dojoUniqClassName_" + (counter++);
-				}
+				name = proto[has](dname) && proto[dname];
+				if(!name) name = proto[dname] = "dojoUniqClassName_" + (counter++);
 				m[name] = cls;
 			}
 			classes[i] = {
 				idx: 0,
 				map: m,
-				lin: d.map(lin, function(c){ return c.prototype.declaredClass; })
+				lin: d.map(lin, function(c){ return c.prototype[dname]; })
 			};
 		}
 
 		// C3 MRO algorithm
 		while(l){
 			if(l == 1){
-				// just one chain of inheritance => copy it directly
 				c = classes[0];
 				m = c.map;
 				return result.concat(d.map(c.lin.slice(c.idx), function(c){ return m[c]; }));
@@ -54,12 +53,8 @@ dojo.experimental("dojox.lang.oo.declare");
 					for(j = l; j--;){
 						m2 = classes[j];
 						if(i != j && (c in m2.map)){
-							if(c == m2.lin[m2.idx]){
-								++t;
-							}else{
-								// there is a class in the tail => aborting
-								break;
-							}
+							if(c == m2.lin[m2.idx]) ++t;
+							else break;
 						}
 					}
 					if(j < 0){
@@ -69,10 +64,7 @@ dojo.experimental("dojox.lang.oo.declare");
 							m = classes[j];
 							if(c == m.lin[m.idx]){
 								++m.idx;
-								if(!--t){
-									// all proper heads are deleted => stop
-									break;
-								}
+								if(!--t) break;
 							}
 						}
 						break;
@@ -82,9 +74,7 @@ dojo.experimental("dojox.lang.oo.declare");
 					--l
 				}
 			}
-			if(i < 0 && l > 0){
-				err("can't build consistent linearization");
-			}
+			if(i < 0 && l > 0) err("can't build consistent linearization");
 		}
 
 		return result;
@@ -97,39 +87,14 @@ dojo.experimental("dojox.lang.oo.declare");
 			var methods = [], i = 0, l = bases.length, h, b;
 			for(;i < l; ++i){
 				b = bases[i];
-				h = b._meta;
-				if(h){
-					// this is a class created with dojo.declare()
-					h = h.hidden;
-					if(h.hasOwnProperty(name)){
-						// if this class has the method we need => add it
-						methods.push(h[name]);
-					}
-				}else{
-					// this is a native class
-					if(name == "constructor"){
-						// constructor => add it
-						methods.push(b);
-					}else{
-						h = b.prototype[name];
-						if(h && h !== op[name]){
-							// if this class has the method we need,
-							// and it is not default one => add it
-							methods.push(h);
-						}
-					}
-				}
+				// the assignment on the next line is intentional
+				if(h = b._meta) (h = h.hidden)[has](name) && methods.push(h[name]);
+				else
+					// the assignment on the next line is intentional
+					(name == cname) && methods.push(b) ||
+						(h = b.prototype[name]) && h !== op[name] && methods.push(h);
 			}
-			// the last method comes from Object
-			if(name != "constructor"){
-				// we already handled the native constructor above => skip it
-				h = op[name];
-				if(h){
-					// there is a native method with such name => add it
-					methods.push(h);
-				}
-			}
-			// reverse the chain for "after" methods
+			name != cname && (h = op[name]) && methods.push(h);
 			return chains[name] === "after" ? methods.reverse() : methods;
 		}
 
@@ -146,44 +111,28 @@ dojo.experimental("dojox.lang.oo.declare");
 
 			caller = inherited.caller;
 			n = caller.nom;
-			if(n && name && n !== name){
-				err("calling inherited() with a different name: " + name);
-			}
+			if(n && name && n !== name) err("calling inherited() with a different name: " + name);
 			name = name || n;
-			ch = cache.hasOwnProperty(name) && cache[name];
+			ch = cache[has](name) && cache[name];
 
 			// get the cached method list
 			if(!ch){
-				if(!name){
-					err("can't deduce a name to call inherited()");
-				}
-				if(name == "constructor" && ctorSpecial){
-					err("calling constructor as inherited");
-				}
-				if(chains.hasOwnProperty(name)){
-					err("calling chained method as inherited: " + name);
-				}
+				if(!name) err("can't deduce a name to call inherited()");
+				if(name == cname && ctorSpecial) err("calling constructor as inherited");
+				if(chains[has](name)) err("calling chained method as inherited: " + name);
 				ch = cache[name] = buildMethodList(m.bases, name);
 			}
 
-			// simple caching
-			x = this._inherited;
-			if(x.name !== name || ch[x.pos] !== caller){
+			// alternative (simpler) caching
+			if((x = this._inherited).name !== name || ch[x.pos] !== caller){
 				// find the caller
 				for(i = 0, l = ch.length; i < l && ch[i] !== caller; ++i);
-				if(i == l){
-					if(this[name] === caller){
-						i = -1;
-					}else{
-						err("can't find the caller for inherited()");
-					}
-				}
+				// the assignment on the next line is intentional
+				if(i == l) this[name] === caller && (i = -1) || err("can't find the caller for inherited()");
+				// the assignment on the next line is intentional
 				this._inherited = x = {name: name, pos: i};
 			}
-			
 			f = ch[++x.pos];
-			
-			// do not calling the inherited at the end of the chain
 			return f ? f.apply(this, a || args) : undefined;
 		}
 
@@ -199,77 +148,42 @@ dojo.experimental("dojox.lang.oo.declare");
 			props = props || {};
 
 			// build a prototype
-			t = 0; // flag: the superclass chain is not handled yet
+			t = 0;
 			if(d.isArray(superclass)){
-				// suspected multiple inheritance
 				if(superclass.length > 1){
-					// we have several base classes => C3 MRO
+					// C3 MRO
 					bases = c3mro(superclass);
 					// build a chain
-					l = bases.length - 1;
-					superclass = bases[l];
+					// the assignment on the next line is intentional
+					superclass = bases[l = bases.length - 1];
 					for(i = l - 1;;){
 						t = bases[i--];
 						// delegation
 						xtor.prototype = superclass.prototype;
 						proto = new xtor;
-						if(!t){
-							// stop if nothing to add (the last base)
-							break;
-						}
-						// mix in properties
+						if(!t) break;
 						d._mixin(proto, t.prototype);
-						// chain in new constructor
-						ctor = function(){};
-						ctor.superclass = superclass;
+						(ctor = function(){}).superclass = superclass;
 						ctor.prototype = proto;
 						superclass = proto.constructor = ctor;
 					}
-					t = 1; // flag: the superclass chain is handled
-				}else{
-					// false alarm: we have just one (or zero?) base class
-					superclass = superclass[0];
-				}
+					t = 1;
+				}else superclass = superclass[0];
 			}
 			if(!t){
-				// the supeclass chain is not handled yet
 				bases = [0];
 				if(superclass){
-					// we have a superclass
-					t = superclass._meta;
-					if(t){
-						// this class was made by dojo.declare() => add its bases
-						bases = bases.concat(t.bases);
-					}else{
-						// this is a native class => add it
-						bases.push(superclass);
-					}
+					(t = superclass._meta) && (bases = bases.concat(t.bases)) || bases.push(superclass);
 					// delegation
 					xtor.prototype = superclass.prototype;
 					proto = new xtor;
-				}else{
-					// no superclass
-					proto = {};
-				}
+				}else proto = {};
 			}
 			xtor.prototype = 0;	// cleanup
 
 			// add metadata for incoming functions
-			for(name in props){
-				t = props[name];
-				if(t !== op[name] && isF(t)){
-					// non-trivial function method => attach its name
-					t.nom = name;
-				}
-			}
-			// process unenumerable methods on IE
-			each(d._extraNames, function(name, t){
-				t = props[name];
-				if(t !== op[name] && isF(t)){
-					// non-trivial function method => attach its name
-					t.nom = name;
-				}
-			});
+			for(name in props) (t = props[name]) !== op[name] && isF(t) && (t.nom = name);
+			each(d._extraNames, function(name, t){ (t = props[name]) !== op[name] && isF(t) && (t.nom = name); });
 
 			// add props
 			d._mixin(proto, props);
@@ -278,56 +192,38 @@ dojo.experimental("dojox.lang.oo.declare");
 			if(ctorSpecial){
 				// compatibility mode with the legacy dojo.declare()
 				ctor = function(){
-					var a = arguments, args = a, a0 = a[0], f, i, l, h, preArgs;
+					var a = arguments, args = a, a0, f, i, l, h, preArgs;
 					this._inherited = {};
 					// perform the shaman's rituals of the original dojo.declare()
 					// 1) call two types of the preamble
-					if(a0 && a0.preamble || this.preamble){
+					if((a0 = a[0]) && a0.preamble || this.preamble){
 						// full blown ritual
 						preArgs = new Array(bases.length);
 						// prepare parameters
 						preArgs[0] = a;
 						for(i = 0, l = bases.length - 1; i < l;){
-							// process the preamble of the 1st argument
-							a0 = a[0];
-							if(a0){
-								f = a0.preamble;
-								if(f){
-									a = f.apply(this, a) || a;
-								}
-								
-							}
-							// process the preamble of this class
-							f = bases[i]._meta.hidden.preamble;
-							if(f){
-								a = f.apply(this, a) || a;
-							}
+							// the assignment on the next line is intentional
+							a = (a0 = a[0]) && (f = a0.preamble) && f.apply(this, a) || a;
+							// the assignment on the next line is intentional
+							a = (f = bases[i]._meta.hidden.preamble) && f.apply(this, a) || a;
 							preArgs[++i] = a;
 						}
-						// call all unique constructors using prepared arguments
+						// call all constructors
 						for(; i >= 0; --i){
 							h = bases[i]._meta.hidden;
-							if(h.hasOwnProperty("constructor")){
-								h.constructor.apply(this, preArgs[i]);
-							}
+							h[has](cname) && h.constructor.apply(this, preArgs[i]);
 						}
 					}else{
 						// reduced ritual
 						// 2) call the constructor with the same parameters
-						for(i = ctorChain.length - 1; i >= 0; --i){
-							ctorChain[i].apply(this, a);
-						}
+						for(i = ctorChain.length - 1; i >= 0; ctorChain[i--].apply(this, a));
 					}
 					// 3) continue the original ritual: call the postscript
 					// the assignment on the next line is intentional
-					f = this.postscript;
-					if(f){
-						f.apply(this, args);
-					}
+					(f = this.postscript) && f.apply(this, args);
 				};
 			}else{
-				// new construction (no preabmle, chaining is allowed)
-				if(chains.hasOwnProperty("constructor")){
+				if(chains[has](cname)){
 					// chained constructor
 					ctor = function(){
 						var a = arguments, f, i, l;
@@ -335,18 +231,13 @@ dojo.experimental("dojox.lang.oo.declare");
 						// perform the shaman's rituals of the original dojo.declare()
 						// 1) do not call the preamble
 						// 2) call the constructor with the same parameters
-						for(i = 0, l = ctorChain.length; i < l; ++i){
-							ctorChain[i].apply(this, a)
-						}
+						for(i = 0, l = ctorChain.length; i < l; ctorChain[i++].apply(this, a));
 						// 3) call the postscript
 						// the assignment on the next line is intentional
-						f = this.postscript;
-						if(f){
-							f.apply(this, args);
-						}
+						(f = this.postscript) && f.apply(this, a);
 					};
 				}else{
-					// plain vanilla constructor (can use inherited() to call its base constructor)
+					// plain vanilla constructor
 					ctor = function(){
 						var a = arguments, f;
 						this._inherited = {};
@@ -354,16 +245,10 @@ dojo.experimental("dojox.lang.oo.declare");
 						// 1) do not call the preamble
 						// 2) call our original constructor
 						// the assignment on the next line is intentional
-						f = ctorChain[0];
-						if(f){
-							f.apply(this, a);
-						}
+						(f = ctorChain[0]) && f.apply(this, a);
 						// 3) call the postscript
 						// the assignment on the next line is intentional
-						f = this.postscript;
-						if(f){
-							f.apply(this, args);
-						}
+						(f = this.postscript) && f.apply(this, a);
 					};
 				}
 			}
@@ -381,42 +266,29 @@ dojo.experimental("dojox.lang.oo.declare");
 			proto.inherited = inherited;
 			proto.isInstanceOf = function(cls){
 				for(var i = 0, l = bases.length; i < l; ++i){
-					if(bases[i] === cls){
-						return true;
-					}
+					if(bases[i] === cls) return true;
 				}
 				return this instanceof cls;
 			};
 
-			// process named classes
-			if(className){
-				proto.declaredClass = className;
-				d.setObject(className, ctor);
-			}
+			// the assignment on the next line is intentional
+			className && d.setObject(proto[dname] = className, ctor);
 
 			// build chains and add them to the prototype
 			function bindChain(name){
 				if(typeof chains[name] == "string")
-					var f = proto[name] = function(){
+					(proto[name] = function(){
 						var t = buildMethodList(bases, name), l = t.length,
 							f = function(){ for(var i = 0; i < l; ++i){ t[i].apply(this, arguments); } };
 						f.nom = name;
 						// memoization
-						ctor.prototype[name] = f;
-						f.apply(this, arguments);
-					};
-					f.nom = name;
+						// the assignment on the next line is intentional
+						(ctor.prototype[name] = f).apply(this, arguments);
+					}).nom = name;
 			}
-			for(name in chains){
-				bindChain(name);
-			}
+			for(name in chains){ bindChain(name); }
 			//each(d._extraNames, bindChain); // no need to chain functions
-			
-			// get the constructor chain (used directly in constructors)
-			ctorChain = buildMethodList(bases, "constructor");
-			if(!ctorSpecial && !chains.hasOwnProperty(name)){
-				ctor._cache.constructor = ctorChain;
-			}
+			ctorChain = buildMethodList(bases, cname);
 
 			return ctor;	// Function
 		};
