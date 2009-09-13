@@ -201,15 +201,21 @@ dojo.experimental("dojox.lang.oo.declare");
 						preArgs = new Array(bases.length);
 						// prepare parameters
 						preArgs[0] = a;
-						for(i = 0, l = bases.length - 1; i < l;){
+						for(i = 0, l = bases.length;;){
 							// the assignment on the next line is intentional
 							a = (a0 = a[0]) && (f = a0.preamble) && f.apply(this, a) || a;
 							// the assignment on the next line is intentional
 							a = (f = bases[i]._meta.hidden.preamble) && f.apply(this, a) || a;
-							preArgs[++i] = a;
+							// one pecularity of the preamble:
+							// it is called if it is not needed,
+							// e.g., there is no constructor to call
+							// let's watch for the last constructor
+							// (see ticket #9795)
+							if(++i == l) break;
+							preArgs[i] = a;
 						}
 						// call all constructors
-						for(; i >= 0; --i){
+						for(--i; i >= 0; --i){
 							h = bases[i]._meta.hidden;
 							h[has](cname) && h.constructor.apply(this, preArgs[i]);
 						}

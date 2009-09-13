@@ -18,12 +18,14 @@ dojo.experimental("dojox.lang.oo.declare");
 		// initialize
 		for(; i < l; ++i){
 			c = bases[i];
-			if(!c) err("mixin #" + i + " is null");
+			if(!c){
+				err("mixin #" + i + " is null");
+			}
 			lin = c._meta && c._meta.bases || [c];
 			m = {};
 			for(j = 0, m2 = lin.length; j < m2; ++j){
-				// the assignment on the next line is intentional
-				proto = (cls = lin[j]).prototype;
+				cls = lin[j];
+				proto = cls.prototype;
 				name = proto.hasOwnProperty("declaredClass") && proto.declaredClass;
 				if(!name){
 					name = proto.declaredClass = "dojoUniqClassName_" + (counter++);
@@ -70,7 +72,7 @@ dojo.experimental("dojox.lang.oo.declare");
 							if(c == m.lin[m.idx]){
 								++m.idx;
 								if(!--t){
-									// all proper heads are deleted => stop
+									// all heads are deleted => stop
 									break;
 								}
 							}
@@ -78,6 +80,7 @@ dojo.experimental("dojox.lang.oo.declare");
 						break;
 					}
 				}else{
+					// remove the empty class list
 					classes.splice(i, 1);
 					--l
 				}
@@ -287,7 +290,7 @@ dojo.experimental("dojox.lang.oo.declare");
 						preArgs = new Array(bases.length);
 						// prepare parameters
 						preArgs[0] = a;
-						for(i = 0, l = bases.length - 1; i < l;){
+						for(i = 0, l = bases.length;;){
 							// process the preamble of the 1st argument
 							a0 = a[0];
 							if(a0){
@@ -302,10 +305,18 @@ dojo.experimental("dojox.lang.oo.declare");
 							if(f){
 								a = f.apply(this, a) || a;
 							}
-							preArgs[++i] = a;
+							// one pecularity of the preamble:
+							// it is called if it is not needed,
+							// e.g., there is no constructor to call
+							// let's watch for the last constructor
+							// (see ticket #9795)
+							if(++i == l){
+								break;
+							}
+							preArgs[i] = a;
 						}
 						// call all unique constructors using prepared arguments
-						for(; i >= 0; --i){
+						for(--i; i >= 0; --i){
 							h = bases[i]._meta.hidden;
 							if(h.hasOwnProperty("constructor")){
 								h.constructor.apply(this, preArgs[i]);
@@ -319,7 +330,6 @@ dojo.experimental("dojox.lang.oo.declare");
 						}
 					}
 					// 3) continue the original ritual: call the postscript
-					// the assignment on the next line is intentional
 					f = this.postscript;
 					if(f){
 						f.apply(this, args);
@@ -339,7 +349,6 @@ dojo.experimental("dojox.lang.oo.declare");
 							ctorChain[i].apply(this, a)
 						}
 						// 3) call the postscript
-						// the assignment on the next line is intentional
 						f = this.postscript;
 						if(f){
 							f.apply(this, args);
@@ -353,13 +362,11 @@ dojo.experimental("dojox.lang.oo.declare");
 						// perform the shaman's rituals of the original dojo.declare()
 						// 1) do not call the preamble
 						// 2) call our original constructor
-						// the assignment on the next line is intentional
 						f = ctorChain[0];
 						if(f){
 							f.apply(this, a);
 						}
 						// 3) call the postscript
-						// the assignment on the next line is intentional
 						f = this.postscript;
 						if(f){
 							f.apply(this, args);
