@@ -123,7 +123,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	var name = o.args.name.toLowerCase();
 	if(name ===  "save"){
 		o.plugin = new dojox.editor.plugins.Save({
-			url: ("url" in o.args)?o.args.url:""
+			url: ("url" in o.args)?o.args.url:"",
+			logResults: ("logResults" in o.args)?o.args.logResults:true
 		});
 	}
 });
