@@ -73,15 +73,17 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 					"pre", "hr", "ins", "noscript", "li", "map", "button", 
 					"dd", "dt"];
 
-				var template = ".editorShowBlocks {TAG} {\n" +
-					"\tbackground-image: url({MODURL}/images/blockelems/{TAG}.gif);\n" +
-					"\tbackground-repeat: no-repeat;\n"	+
-					"\tbackground-position: top left;\n" +
-					"\tborder-width: 1px;\n" +
-					"\tborder-style: dashed;\n" +
-					"\tborder-color: #D0D0D0;\n" +
-					"\tpadding-top: 15px;\n" +
-					"\tpadding-left: 15px;\n" +
+				var template = "@media screen {\n" +
+						"\t.editorShowBlocks {TAG} {\n" +
+						"\t\tbackground-image: url({MODURL}/images/blockelems/{TAG}.gif);\n" +
+						"\t\tbackground-repeat: no-repeat;\n"	+
+						"\t\tbackground-position: top left;\n" +
+						"\t\tborder-width: 1px;\n" +
+						"\t\tborder-style: dashed;\n" +
+						"\t\tborder-color: #D0D0D0;\n" +
+						"\t\tpadding-top: 15px;\n" +
+						"\t\tpadding-left: 15px;\n" +
+					"\t}\n" +
 				"}\n";
 
 				dojo.forEach(blocks, function(tag){
@@ -110,7 +112,6 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 				}
 				// Update all the urls.
 				style = style.replace(/\{MODURL\}/gi, modurl);
-
 				if(!dojo.isIE){
 					var sNode = doc.createElement("style");
 					sNode.appendChild(doc.createTextNode(style));
