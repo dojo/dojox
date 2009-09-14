@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 dojox.editor
 -------------------------------------------------------------------------------
-Version 0.5
-Release date: 7/10/2008
+Version 0.9
+Release date: 9/14/2009
 -------------------------------------------------------------------------------
 Project state:
 experimental, beta, stable
@@ -10,7 +10,7 @@ experimental, beta, stable
 Credits
 	Mike Wilcox 	 - Author
 	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
-		Preview)
+		Preview, Save)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -37,7 +37,7 @@ dojox.editor.plugins.PrettyPrint:
 	the maximum text line length (not including indent), and what 
 	characters in text strings should be encoded to their &<enc>; 
 	representation.
-  
+
 dojox.editor.plugins.PageBreak:
 	Status: Supported (stable).
 	A simple plugin that allows you to insert 'page breaks' into the doc
@@ -46,10 +46,15 @@ dojox.editor.plugins.PageBreak:
 
 dojox.editor.plugins.ShowBlockNodes:
 	Status: Supported (stable).
-        A simple plugin that allows you to toggle on and off a CSS 'view' of
+	A simple plugin that allows you to toggle on and off a CSS 'view' of
 	how the page is laid out in terms of the block nodes used for its
 	formatting.
- 
+
+dojox.editor.plugins.Save:
+	Status: Supported (beta).
+	A simple plugin that allows you to POST the content of the editor back
+	to a URL.
+
 dojox.editor.plugins.Preview:
 	Status: Supported (beta).
 	A simple plugin that allows you to display the content of the editor
@@ -75,6 +80,7 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/PageBreak
 	http://docs.dojocampus.org/dojox/editor/plugins/ShowBlockNodes
 	http://docs.dojocampus.org/dojox/editor/plugins/Preview
+	http://docs.dojocampus.org/dojox/editor/plugins/Save
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -100,8 +106,8 @@ For the PrettyPrint plugin:
 	No CSS required.
 
 For the PageBreak plugin:
-        dojo.require("dojox.editor.plugins.PageBreak");
-        and CSS:
+	dojo.require("dojox.editor.plugins.PageBreak");
+	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/PageBreak.css" type="text/css" rel="stylesheet" />
 
 For the ShowBlockNodes plugin:
@@ -114,6 +120,11 @@ For the Preview plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/Preview.css" type="text/css" rel="stylesheet" />
 
+For the Save plugin:
+	dojo.require("dojox.editor.plugins.Save");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/Save.css" type="text/css" rel="stylesheet" />
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -121,3 +132,4 @@ See tests for examples:
 	dojox/editor/tests/editorPageBreak.html
 	dojox/editor/tests/editorShowBlockNodes.html
 	dojox/editor/tests/editorPreview.html
+	dojox/editor/tests/editorSave.html

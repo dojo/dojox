@@ -97,8 +97,10 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 				"\tpadding: 0px 0px 0px 0px;\n" +
 			"}\n\n" +
 			"@media print {\n" +
-				"\t.dijitEditorPageBreak { page-break-after: always; "+
-				"background-color: transparent; border-style: none; height: 1px; }\n" +
+				"\t.dijitEditorPageBreak { page-break-after: always; " +
+				"background-color: rgba(0,0,0,0); color: rgba(0,0,0,0); " +
+				"border: 0px none rgba(0,0,0,0); display: hidden; " +
+				"width: 0px; height: 0px;}\n" +
 			"}";
 
 			if(!dojo.isIE){

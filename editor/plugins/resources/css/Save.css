@@ -1,13 +1,13 @@
-.dijitAdditionalEditorIconPageBreak {
-	background-image: url(../icons/pageBreak.gif);
+.dijitAdditionalEditorIconSave {
+	background-image: url(../icons/save.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 18px;
 	height: 18px;
 }
 
-.dijitDisabled .dijitAdditionalEditorIconPageBreak {
-	background-image: url(../icons/pageBreakDisabled.gif);
+.dijitDisabled .dijitAdditionalEditorIconSave {
+	background-image: url(../icons/saveDisabled.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 18px;
