@@ -1334,7 +1334,8 @@ dojo.requireLocalization("dijit", "loading");
 					var cell = {
 						name: d.trim(d.attr(th, "name")||th.innerHTML),
 						colSpan: parseInt(d.attr(th, "colspan")||1, 10),
-						type: d.trim(d.attr(th, "cellType")||"")
+						type: d.trim(d.attr(th, "cellType")||""),
+						id: d.trim(d.attr(th,"id")||"")
 					};
 					cellCount += cell.colSpan;
 					var rowSpan = d.attr(th, "rowspan");

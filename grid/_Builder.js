@@ -63,8 +63,11 @@ dojo.require("dojo.dnd.Moveable");
 			var waiPrefix = dojo.isFF<3 ? "wairole:" : "";
 			if(isHeader){
 				var sortInfo = inCell.index != inCell.grid.getSortIndex() ? "" : inCell.grid.sortInfo > 0 ? 'aria-sort="ascending"' : 'aria-sort="descending"';
+				if (!inCell.id){
+					inCell.id = this.grid.id + "Hdr" + inCell.index;
+				}
 				// column headers are not editable, mark as aria-readonly=true
-				html = ['<th tabIndex="-1" aria-readonly="true" role="', waiPrefix, 'columnheader"', sortInfo];
+				html = ['<th tabIndex="-1" aria-readonly="true" role="', waiPrefix, 'columnheader"', sortInfo, 'id="', inCell.id, '"'];
 			}else{
 				// cells inherit grid aria-readonly property; default value for aria-readonly is false(grid is editable)
 				// if grid is editable (had any editable cells), mark non editable cells as aria-readonly=true
