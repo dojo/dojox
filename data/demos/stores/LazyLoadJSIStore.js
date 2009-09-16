@@ -68,7 +68,7 @@ dojo.declare("dojox.data.demos.stores.LazyLoadJSIStore", dojo.data.ItemFileReadS
 			delete item.parent;
 
 			//Set up the loaded values in the format ItemFileReadStore uses for attributes.
-			for (i in data) {
+			for (var i in data) {
 				if (dojo.isArray(data[i])) {
 					item[i] = data[i];
 				}else{
