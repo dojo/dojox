@@ -127,13 +127,9 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 
 		// Apply/remove the classes based on state.
 		if(show){
-			dojo.withDoc(doc, function(){
-				dojo.addClass(dojo.body(), "editorShowBlocks");
-			});
+			dojo.addClass(this.editor.editNode, "editorShowBlocks");
 		}else{
-			dojo.withDoc(doc, function(){
-				dojo.removeClass(dojo.body(), "editorShowBlocks");
-			});
+			dojo.removeClass(this.editor.editNode, "editorShowBlocks");
 		}
 	},
 
