@@ -104,6 +104,7 @@ dojo.declare('dojox.widget.Dialog',
 	},
 	
 	show: function(){
+		if(this.open){ return; }
 		
 		this._setSize();
 		dojo.style(this.closeButtonNode,"opacity", 0);
@@ -228,7 +229,11 @@ dojo.declare('dojox.widget.Dialog',
 		// summary: Show the inner container after sizing animation
 
 		var container = this.containerNode;
-		dojo.style(this.domNode,"overflow","visible");
+		dojo.style(this.domNode, {
+			overflow: "visible",
+			opacity: 1
+		});
+		dojo.style(this.closeButtonNode,"opacity",1);
 		dojo.style(container, {
 			height: this._displaysize.h + "px",
 			width: this._displaysize.w + "px",

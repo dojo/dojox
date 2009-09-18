@@ -64,6 +64,20 @@
 				},
 				label:"show prog."
 			}).placeAt("testholder");
+
+			// test double show (but #9147)
+			var dblDialog = new dojox.widget.Dialog({
+				content:"<p>.show() is called twice on me</p>"
+			});
+			dblDialog.startup();
+
+			new dijit.form.Button({
+				onClick:function(){
+					dblDialog.show();
+					dblDialog.show(); // intentially calling show() on an already shown dialog
+				},
+				label:"double show."
+			}).placeAt("testholder");
 			
 		});
 	</script>
