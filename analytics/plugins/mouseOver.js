@@ -1,3 +1,4 @@
+dojo.require("dojox.analytics._base");
 dojo.provide("dojox.analytics.plugins.mouseOver");
 
 dojox.analytics.plugins.mouseOver = new (function(){

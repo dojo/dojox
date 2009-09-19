@@ -1,3 +1,4 @@
+dojo.require("dojox.analytics._base");
 dojo.provide("dojox.analytics.plugins.dojo");
 
 dojox.analytics.plugins.dojo = new (function(){
