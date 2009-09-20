@@ -329,7 +329,7 @@ dojo.declare("dojox.layout._ResizeHelper",
 		dojo.fadeIn({ 
 			node: this.domNode, 
 			duration: 120, 
-			beforeBegin: dojo.partial(dojo.style, this.domNode, "display", "")
+			beforeBegin: function(n){ dojo.style(n, "display", "") }
 		}).play();
 	},
 	
@@ -338,7 +338,7 @@ dojo.declare("dojox.layout._ResizeHelper",
 		dojo.fadeOut({ 
 			node: this.domNode, 
 			duration: 250,
-			onEnd: dojo.partial(dojo.style, this.domNode, "display", "none")
+			onEnd: function(n){ dojo.style(n, "display", "none") }
 		}).play();
 	},
 	
