@@ -84,6 +84,14 @@ dojo.declare("dojox.layout.ResizeHandle",
 	//		operation. Animated resizing is not affected by this setting.
 	intermediateChanges: false,
 
+	// startTopic: String
+	//		The name of the topic this resizehandle publishes when resize is starting
+	startTopic: "/dojo/resize/start",
+	
+	// endTopic: String
+	//		The name of the topic this resizehandle publishes when resize is complete
+	endTopic:"/dojo/resize/stop",
+
 	templateString: '<div dojoAttachPoint="resizeHandle" class="dojoxResizeHandle"><div></div></div>',
 
 	postCreate: function(){
@@ -137,6 +145,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 		
 		if(this._isSizing){ return false; }
 
+		dojo.publish(this.startTopic, [ this ]);
 		this.targetWidget = dijit.byId(this.targetId);
 
 		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : dojo.byId(this.targetId);
@@ -277,7 +286,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 			}else{
 				dojo.style(this.targetDomNode,{
 					width: tmp.w + "px",
-					height: tmp.h + "px"	
+					height: tmp.h + "px"
 				});
 			}
 		}
@@ -289,9 +298,13 @@ dojo.declare("dojox.layout.ResizeHandle",
 	_endSizing: function(/*Event*/ e){
 		// summary: disconnect listenrs and cleanup sizing
 		dojo.forEach(this._pconnects, dojo.disconnect);
+		var pub = dojo.partial(dojo.publish, this.endTopic, [ this ]);
 		if(!this.activeResize){
 			this._resizeHelper.hide();
 			this._changeSizing(e);
+			setTimeout(pub, this.animateDuration + 15);
+		}else{
+			pub();
 		}
 		this._isSizing = false;
 		this.onResize(e);

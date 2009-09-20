@@ -23,6 +23,27 @@
 			resizer.startup();
 		}
 		dojo.addOnLoad(makeNewSizer);
+		
+		// HOWTO use the resize topics
+		dojo.subscribe("/dojo/resize/start", function(inst){
+			// inst is the resizehandle instance. Lookup any members about 
+			// which node/widget/etc that way.
+			dojo.byId("status").innerHTML = "Resizing: " + inst;
+		});
+		var timer;
+		dojo.subscribe("/dojo/resize/stop", function(inst){
+			dojo.byId("status").innerHTML = "Finished: " + inst;
+			timer && clearTimeout(timer);
+			timer = setTimeout(function(){
+				dojo.fadeOut({
+					node: "status",
+					onEnd: function(n){
+						n.innerHTML = "Waiting.";
+						dojo.anim(n, { opacity: 1});
+					}
+				}).play();
+			}, 300);
+		});
 
 	</script>
 	<style type="text/css">
@@ -48,6 +69,8 @@
 
 	<h1 class="testTitle">dojox.layout.ResizeHandle test</h1>
 
+	<div id="status">Status Node</div>
+	
 	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam facilisis enim. 
 	Pellentesque in elit et lacus euismod dignissim. Aliquam dolor pede, convallis eget, 
 	dictum a, blandit ac, urna. Pellentesque sed nunc ut justo volutpat egestas. Class 
