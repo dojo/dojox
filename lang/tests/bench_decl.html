@@ -13,7 +13,7 @@
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
 		<script type="text/javascript">
-			dojo.require("dojox.lang.oo.declare");
+			dojo.require("dojox.lang.tests.declare-old");
 
 			var d = dojo, oo = dojox.lang.oo, nothing = function(){};
             
@@ -157,7 +157,7 @@
             
             // actual benchmarks
             
-            var decl0 = d.declare, declx = oo.declare, mdx = oo.makeDeclare;
+            var decl0 = dojox.lang.tests.declareOld, declx = d.declare, mdx = d.makeDeclare;
             
             var benchmarkClassCreation = function(){
                 d.place("<h1>Create a class (single inheritance)</h1>", "result");
@@ -172,35 +172,35 @@
 					
                     group = [
                         {
-                            name: "d.declare/A",
+                            name: "old/A",
                             fun:  function(){ decl0("temp.test.A", null, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/A",
+                            name: "new/A",
                             fun:  function(){ declx("temp.test.A", null, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "d.declare/B",
+                            name: "old/B",
                             fun:  function(){ decl0("temp.test.B", temp.A0, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/B",
+                            name: "new/B",
                             fun:  function(){ declx("temp.test.B", temp.Ax, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "d.declare/C",
+                            name: "old/C",
                             fun:  function(){ decl0("temp.test.C", temp.B0, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/C",
+                            name: "new/C",
                             fun:  function(){ declx("temp.test.C", temp.Bx, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "d.declare/D",
+                            name: "old/D",
                             fun:  function(){ decl0("temp.test.D", temp.C0, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/D",
+                            name: "new/D",
                             fun:  function(){ declx("temp.test.D", temp.Cx, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         }
                     ];
@@ -220,27 +220,27 @@
                     
                     group = [
                         {
-                            name: "d.declare/A",
+                            name: "old/A",
                             fun:  function(){ decl0("temp.test.A", temp.A0, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/A",
+                            name: "new/A",
                             fun:  function(){ declx("temp.test.A", temp.Ax, {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "d.declare/A,B",
+                            name: "old/A,B",
                             fun:  function(){ decl0("temp.test.B", [temp.A0, temp.B0], {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/A,B",
+                            name: "new/A,B",
                             fun:  function(){ declx("temp.test.B", [temp.Ax, temp.Bx], {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "d.declare/A,B,C",
+                            name: "old/A,B,C",
                             fun:  function(){ decl0("temp.test.C", [temp.A0, temp.B0, temp.C0], {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         },
                         {
-                            name: "oo.declare/A,B,C",
+                            name: "new/A,B,C",
                             fun:  function(){ declx("temp.test.C", [temp.Ax, temp.Bx, temp.Cx], {m1: function(){}, m2: function(){}, m3: function(){}}); }
                         }
                     ];
@@ -262,35 +262,35 @@
 
                     group = [
                         {
-                            name: "d.declare/A",
+                            name: "old/A",
                             fun:  function(){ var t = new A0("a"); }
                         },
                         {
-                            name: "oo.declare/A",
+                            name: "new/A",
                             fun:  function(){ var t = new Ax("a"); }
                         },
                         {
-                            name: "d.declare/B",
+                            name: "old/B",
                             fun:  function(){ var t = new B0("a", "b"); }
                         },
                         {
-                            name: "oo.declare/B",
+                            name: "new/B",
                             fun:  function(){ var t = new Bx("a", "b"); }
                         },
                         {
-                            name: "d.declare/C",
+                            name: "old/C",
                             fun:  function(){ var t = new C0("a", "b", "c"); }
                         },
                         {
-                            name: "oo.declare/C",
+                            name: "new/C",
                             fun:  function(){ var t = new Cx("a", "b", "c"); }
                         },
                         {
-                            name: "d.declare/D",
+                            name: "old/D",
                             fun:  function(){ var t = new D0("a", "b", "c", "d"); }
                         },
                         {
-                            name: "oo.declare/D",
+                            name: "new/D",
                             fun:  function(){ var t = new Dx("a", "b", "c", "d"); }
                         }
                     ];
@@ -315,35 +315,35 @@
                     
                     group = [
                         {
-                            name: "d.declare/A",
+                            name: "old/A",
                             fun:  function(){ d0.ma("x"); }
                         },
                         {
-                            name: "oo.declare/A",
+                            name: "new/A",
                             fun:  function(){ dx.ma("x"); }
                         },
                         {
-                            name: "d.declare/B",
+                            name: "old/B",
                             fun:  function(){ d0.mb("x"); }
                         },
                         {
-                            name: "oo.declare/B",
+                            name: "new/B",
                             fun:  function(){ dx.mb("x"); }
                         },
                         {
-                            name: "d.declare/C",
+                            name: "old/C",
                             fun:  function(){ d0.mc("x"); }
                         },
                         {
-                            name: "oo.declare/C",
+                            name: "new/C",
                             fun:  function(){ dx.mc("x"); }
                         },
                         {
-                            name: "d.declare/D",
+                            name: "old/D",
                             fun:  function(){ d0.md("x"); }
                         },
                         {
-                            name: "oo.declare/D",
+                            name: "new/D",
                             fun:  function(){ dx.md("x"); }
                         }
                     ];
@@ -374,27 +374,27 @@
                     
                     group = [
                         {
-                            name: "d.declare/B",
+                            name: "old/B",
                             fun:  function(){ b0.m("x"); }
                         },
                         {
-                            name: "oo.declare/B",
+                            name: "new/B",
                             fun:  function(){ bx.m("x"); }
                         },
                         {
-                            name: "d.declare/C",
+                            name: "old/C",
                             fun:  function(){ c0.m("x"); }
                         },
                         {
-                            name: "oo.declare/C",
+                            name: "new/C",
                             fun:  function(){ cx.m("x"); }
                         },
                         {
-                            name: "d.declare/D",
+                            name: "old/D",
                             fun:  function(){ d0.m("x"); }
                         },
                         {
-                            name: "oo.declare/D",
+                            name: "new/D",
                             fun:  function(){ dx.m("x"); }
                         }
                     ];
@@ -427,27 +427,27 @@
                     
                     group = [
                         {
-                            name: "d.declare/B",
+                            name: "old/B",
                             fun:  function(){ b0.m("x"); }
                         },
                         {
-                            name: "oo.declare/B",
+                            name: "new/B",
                             fun:  function(){ bx.m("x"); }
                         },
                         {
-                            name: "d.declare/C",
+                            name: "old/C",
                             fun:  function(){ c0.m("x"); }
                         },
                         {
-                            name: "oo.declare/C",
+                            name: "new/C",
                             fun:  function(){ cx.m("x"); }
                         },
                         {
-                            name: "d.declare/D",
+                            name: "old/D",
                             fun:  function(){ d0.m("x"); }
                         },
                         {
-                            name: "oo.declare/D",
+                            name: "new/D",
                             fun:  function(){ dx.m("x"); }
                         }
                     ];
