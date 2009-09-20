@@ -29,6 +29,10 @@ dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 	//		Size in PX of each thumbnail
 	cellSize: 50,
 	
+	// cellMargin: Integer
+	//		Size in PX to adjust for cell margins
+	cellMargin: 1,
+	
 	// delay: Integer
 	//		Time (in ms) to show the image before sizing down again
 	delay: 2000,
@@ -66,25 +70,28 @@ dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 
 				var _col = _idx % this.cols,
 					t = _row * _w,
-					l = _col * _w;
+					l = _col * _w,
+					m = this.cellMargin * 2;
 			
 				dojo.style(n, {
 		 			top: t + "px",
 		 			left: l + "px",
-					width: _w - 2 + "px",
-					height: _w - 2 + "px"
+					width: _w - m + "px",
+					height: _w - m + "px"
 		 		});
 
 				if(_col == this.cols - 1){ _row++; }
 				dojo.addClass(n, this.baseClass + "Image");
 				
-			}, this);
+			}, this)
 		;
 		
 		var l = this._nl.length;
 		while(this.threads--){
 			var s = Math.floor(Math.random() * l);
-			setTimeout(dojo.hitch(this,"_enbiggen", { target: this._nl[s] }), this.delay * this.threads);
+			setTimeout(dojo.hitch(this, "_enbiggen", { 
+				target: this._nl[s]
+			}), this.delay * this.threads);
 		}
 		
 	},
@@ -113,11 +120,13 @@ dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 		if (_pos){
 			// we have a node, and know where it is
 
-			var _cc = (this.cellSize * 2) - 2; 
-			var props = {
-				height: _cc,
-				width: _cc
-			};
+			var m = this.cellMargin,
+				_cc = (this.cellSize * 2) - (m * 2),
+				props = {
+					height: _cc,
+					width: _cc
+				}
+			;
 			
 			var _tehDecider = function(){
 				// if we have room, we'll want to decide which direction to go
@@ -127,12 +136,12 @@ dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 			
 			if(_pos.x == this.cols - 1 || (_pos.x > 0 && _tehDecider() )){
 				// we have to go left, at right edge (or we want to and not on left edge)
-				props.left = this.cellSize * (_pos.x - 1);
+				props.left = this.cellSize * (_pos.x - m);
 			}
 			
 			if(_pos.y == this.rows - 1 || (_pos.y > 0 && _tehDecider() )){
 				// we have to go up, at bottom edge (or we want to and not at top)
-				props.top = this.cellSize * (_pos.y - 1);
+				props.top = this.cellSize * (_pos.y - m);
 			}
 
 			var bc = this.baseClass;
@@ -190,7 +199,7 @@ dojo.declare("dojox.image.Badge", [dijit._Widget, dijit._Templated], {
 		if(props.left >= 0){
 			props.left += this.cellSize; 
 		}
-		var _cc = this.cellSize - 2;
+		var _cc = this.cellSize - (this.cellMargin * 2);
 		dojo.animateProperty({
 			node: info.n, 
 			properties: dojo.mixin(props, {
