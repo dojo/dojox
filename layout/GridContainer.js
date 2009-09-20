@@ -115,8 +115,9 @@ dojo.declare("dojox.layout.GridContainer",
 
 	constructor: function(props, node){
 		// FIXME: does this need a "scopeName"
-		this.acceptTypes = props["acceptTypes"] || ["dijit.layout.ContentPane"];
-		this.dragOffset = props["dragOffset"] || { x:0, y:0 };
+		props = props || {};
+		this.acceptTypes = props.acceptTypes || ["dijit.layout.ContentPane"];
+		this.dragOffset = props.dragOffset || { x:0, y:0 };
 		this._children = [];
 	},
 
