@@ -119,6 +119,21 @@ doh.register("dojox.html.tests.format",
 			}
 		},
 		{
+			name: "Format:  Basic HTML Format test with attributes (sorting attributes)",
+			runTest: function(t) {
+				// summary: 
+				//		Simple test of basic HTML formatting with an id attr set.
+				// description:
+				//		Simple test of basic HTML formatting with an id attr set.
+				var txt = "<div id=\"myID\" style=\"font-weight: bold; font-style: italic;\" foo=\"bar\"><b>hello</b> this is some text.</div>";
+				var expected = 	"<div foo=\"bar\" id=\"myID\" style=\"font-style: italic; font-weight: bold;\">\n" +
+								"\t<b>hello</b> this is some text.\n" +
+								"</div>\n";
+				var formattedTxt = dojox.html.format.prettyPrint(txt);
+				doh.assertEqual(expected, formattedTxt);
+			}
+		},
+		{
 			name: "Format:  Basic HTML Format test with style",
 			runTest: function(t) {
 				// summary: 
@@ -127,6 +142,21 @@ doh.register("dojox.html.tests.format",
 				//		Simple test of basic HTML formatting with an id attr set.
 				var txt = "<div style=\"font-weight: bold;\"><b>hello</b> this is some text.</div>";
 				var expected = 	"<div style=\"font-weight: bold;\">\n" +
+								"\t<b>hello</b> this is some text.\n" +
+								"</div>\n";
+				var formattedTxt = dojox.html.format.prettyPrint(txt);
+				doh.assertEqual(expected, formattedTxt);
+			}
+		},
+		{
+			name: "Format:  Basic HTML Format test with multi style",
+			runTest: function(t) {
+				// summary: 
+				//		Simple test of basic HTML formatting with an id attr set.
+				// description:
+				//		Simple test of basic HTML formatting with an id attr set.
+				var txt = "<div style=\"font-weight: bold; color: red\"><b>hello</b> this is some text.</div>";
+				var expected = 	"<div style=\"color: red; font-weight: bold;\">\n" +
 								"\t<b>hello</b> this is some text.\n" +
 								"</div>\n";
 				var formattedTxt = dojox.html.format.prettyPrint(txt);
@@ -178,6 +208,32 @@ doh.register("dojox.html.tests.format",
 								"   </script>\n" +
 								"</div>\n";
 				var formattedTxt = dojox.html.format.prettyPrint(txt, 3);
+				doh.assertEqual(expected, formattedTxt);
+			}
+		},
+		{
+			name: "Format:  Basic HTML Format with script test and three space indent, XHTML",
+			runTest: function(t) {
+				// summary: 
+				//		Simple test of basic HTML formatting with an embedded script tag.
+				// description:
+				//		Simple test of basic HTML formatting with an embedded script tag.
+				var txt = "<div><div>hello<br><hr></div>this is some text.<script>var foo=\"bar\";\nif(foo !== \"bar\"){\n alert(\"Should not be here!\");\n}</script></div>";
+				var expected = 	"<div>\n" +
+								"   <div>\n" +
+								"      hello\n" +
+								"      <br />\n" +
+								"      <hr />\n" +
+								"   </div>\n"+
+								"   this is some text.\n" +
+								"   <script>\n"+
+								"      var foo=\"bar\";\n" +
+								"      if(foo !== \"bar\"){\n" +
+								"         alert(\"Should not be here!\");\n" +
+								"      }\n" +
+								"   </script>\n" +
+								"</div>\n";
+				var formattedTxt = dojox.html.format.prettyPrint(txt, 3, -1, null, true);
 				doh.assertEqual(expected, formattedTxt);
 			}
 		},

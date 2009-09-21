@@ -3,7 +3,7 @@ dojo.provide("dojox.html.format");
 dojo.require("dojox.html.entities");
 
 (function(){
-	dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, maxLineLength /*Integer?*/, map/*Array?*/){
+	dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, maxLineLength /*Integer?*/, map/*Array?*/, /*boolean*/ xhtml){
 		// summary:
 		//		Function for providing a 'pretty print' version of HTML content from
 		//		the provided string.  It's nor perfect by any means, but it does
@@ -21,6 +21,9 @@ dojo.require("dojox.html.entities");
 		//		Optional array of entity mapping characters to use when processing the 
 		//		HTML Text content.  By default it uses the default set used by the 
 		//		dojox.html.entities.encode function.
+		// xhtml: boolean
+		//		Optional parameter that declares that the returned HTML should try to be 'xhtml' compatible.
+		//		This means normally unclosed tags are terminated with /> instead of >.  Example: <hr> -> <hr />
 		var content = [];
 		var indentDepth = 0;
 		var closeTags = [];
@@ -248,10 +251,6 @@ dojo.require("dojox.html.entities");
 			// Generate the outer node content (tag with attrs)
 			var nText = dojo.trim(outerHTML(node));
 			var tag = nText.substring(0, nText.indexOf(">") + 1);
-			
-			// Okay, there's a chance the casing will be off (thanks, IE!)
-			// so we need to 'fix' it.
-			tag = tag.replace(new RegExp("<" + name, "i"), "<" + name);
 
 			// Also thanks to IE, we need to check for quotes around 
 			// attributes and insert if missing.
@@ -263,17 +262,57 @@ dojo.require("dojox.html.entities");
 			});
 
 			// And lastly, thanks IE for changing style casing and end
-			// semi-colon.
-			tag = tag.replace(/style=("|').+\1/gi, function(match){
-				match = match.substring(0,7) + 
-					match.substring(7, match.length).toLowerCase();
-				if(match.charAt(match.length - 2) !== ";"){
-					match = match.substring(0,match.length - 1) + 
-						";" + match.charAt(match.length - 1);
-				}
-				return match;
+			// semi-colon and webkit adds spaces, so lets clean it up by
+			// sorting, etc, while we're at it.
+			tag = tag.replace(/style=("[^"]*"|'[^']*'|\S*)/gi, function(match){
+				var sL = match.substring(0,6);
+				var style = match.substring(6, match.length).toLowerCase();
+				var closure = style.charAt(0);
+				style = dojo.trim(style.substring(1,style.length -1));
+				style = style.split(";");
+				var trimmedStyles = [];
+				dojo.forEach(style, function(s){
+					s = dojo.trim(s);
+					if(s){
+						trimmedStyles.push(s);
+					}
+				});
+                trimmedStyles = trimmedStyles.sort();
+				
+				// Reassemble and return the styles in sorted order.
+				style = trimmedStyles.join("; ");
+				style += ";";
+				return sL + closure + style + closure;
 			});
 
+			// Try and sort the attributes while we're at it.
+			var attrs = [];
+			tag = tag.replace(/\s\w+=("[^"]*"|'[^']*'|\S*)/gi, function(attr){
+				attrs.push(dojo.trim(attr));
+				return "";
+			});
+			attrs = attrs.sort();
+
+			// Reassemble the tag with sorted attributes!
+			tag = "<" + name;
+			if(attrs.length){
+				 tag += " " + attrs.join(" ");
+			}
+
+			// Determine closure status.  If xhtml, 
+			// then close the tag properly as needed.
+			if(nText.indexOf("</") != -1){
+				closeTags.push(name);
+				tag += ">";
+			}else{
+				if(xhtml){
+					tag += " />";
+				}else{
+					tag += ">";
+				}
+				closeTags.push(false);
+			}
+            
 			var inline = isInlineFormat(name);
 			inlineStyle.push(inline); 
 			if(textContent && !inline){
@@ -284,12 +323,6 @@ dojo.require("dojox.html.entities");
 			}
 			
 			// Determine if this has a closing tag or not!
-			if(nText.indexOf("</") != -1){
-				closeTags.push(name);
-			}else{
-				closeTags.push(false);
-			}
-
 			if(!inline){
 				indent();
 				content.push(tag);
