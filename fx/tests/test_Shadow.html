@@ -15,7 +15,7 @@
 	<script type="text/javascript">
 		dojo.require("dojo.dnd.Moveable");
 		dojo.require("dojox.layout.FloatingPane");
-		dojo.require("dijit._Calendar"); 
+		dojo.require("dijit.Calendar"); 
 		var enabled = true, randInt=0;
 		dojo.addOnLoad(function(){
 			
@@ -53,7 +53,7 @@
 
 			//dojo.addClass(testNode,"dijitInline"); 
 
-			var aDijit = new dijit._Calendar({},div);
+			var aDijit = new dijit.Calendar({},div);
 			aDijit.startup();
 
 			var testShadow = new dojox.fx.Shadow({ node: aDijit.domNode }); 

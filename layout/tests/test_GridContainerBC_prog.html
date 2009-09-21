@@ -66,7 +66,7 @@
 			dojo.require("dijit.layout.BorderContainer");
 			dojo.require("dijit.layout.AccordionContainer");
 			dojo.require("dijit.form.Button");
-			dojo.require("dijit._Calendar");
+			dojo.require("dijit.Calendar");
 			dojo.require("dojo.fx.easing");
 			var GC1;
 			function setColumns(){
@@ -82,7 +82,7 @@
 				document.body.appendChild(bc.domNode);
 				ep = new dojox.layout.ExpandoPane({title: 'Left Side', splitter:true, style:{width:'200px'}, region: 'left', easin:dojo.fx.easing.backOut, duration: 600});
 				bc.addChild(ep);
-				gc1 = new dojox.layout.GridContainer({acceptTypes: [dijit.TitlePane, dijit.layout.AccordionContainer, dijit._Calendar], hasResizableColumns:false, opacity:.3, nbZones:1, style:{height: '100%'}, allowAutoScroll:true, withHandles: true});
+				gc1 = new dojox.layout.GridContainer({acceptTypes: [dijit.TitlePane, dijit.layout.AccordionContainer, dijit.Calendar], hasResizableColumns:false, opacity:.3, nbZones:1, style:{height: '100%'}, allowAutoScroll:true, withHandles: true});
 				ep.containerNode.appendChild(gc1.domNode);
 				tp1 = new dijit.TitlePane({attachParent:true, title:'Panel 1'});
 				tp1.attr('content', 'lorem ipsum');
@@ -93,7 +93,7 @@
 				tp3 = new dijit.TitlePane({title:'Panel 3'});
 				tp3.attr('content', 'lorem ipsum');
 				gc1.addChild(tp3);
-				gc2 = new dojox.layout.GridContainer({region: 'center', nbZones:3, opacity:.42, allowAutoScroll:true,hasResizableColumns:false,withHandles:true,acceptTypes:[dijit.layout.ContentPane, dijit.TitlePane, dijit.ColorPalette, dijit._Calendar, dijit.layout.AccordionPane]});
+				gc2 = new dojox.layout.GridContainer({region: 'center', nbZones:3, opacity:.42, allowAutoScroll:true,hasResizableColumns:false,withHandles:true,acceptTypes:[dijit.layout.ContentPane, dijit.TitlePane, dijit.ColorPalette, dijit.Calendar, dijit.layout.AccordionPane]});
 				bc.addChild(gc2);
 				cp1 = new dijit.layout.ContentPane({class:'cpane', label:'Content Pane'});
 				cp1.attr('content', 'ContentPane n*1 !');
@@ -113,7 +113,7 @@
 				cp5 = new dijit.layout.ContentPane({class:'cpane', label:'Content Pane'});
 				cp5.attr('content', 'Content Pane n*4 !');
 				gc2.addChild(cp5);
-				dp = new dijit._Calendar({});
+				dp = new dijit.Calendar({});
 				gc2.addChild(dp);
 				gc3 = new dojox.layout.GridContainer({region: 'right', nbZones:1, opacity:.3, allowAutoScroll:true,hasResizableColumns:false,withHandles:true,acceptTypes:[dijit.TitlePane], style: {width:'200px'}, splitter:true});
 				bc.addChild(gc3);

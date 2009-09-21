@@ -1,7 +1,7 @@
 dojo.provide("dojox.widget.Calendar");
 dojo.experimental("dojox.widget.Calendar");
 
-dojo.require("dijit._Calendar");
+dojo.require("dijit.Calendar");
 dojo.require("dijit._Container");
 
 dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dijit._Container], {
@@ -314,7 +314,7 @@ dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dij
 
 	_adjustDisplay: function(/*String*/part, /*int*/amount, noSlide){
 		// summary:
-		//		This function overrides the base function defined in dijit._Calendar.
+		//		This function overrides the base function defined in dijit.Calendar.
 		//		It changes the displayed years, months and days depending on the inputs.
 		var child = this._children[this._currentChild];
 
