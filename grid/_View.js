@@ -775,7 +775,7 @@ dojo.require("dojo.dnd.Manager");
 			var source = this.manager.source, node;
 			if(source.creator){
 				// create an avatar representation of the node
-				node = source._normailzedCreator(source.getItem(this.manager.nodes[0].id).data, "avatar").node;
+				node = source._normalizedCreator(source.getItem(this.manager.nodes[0].id).data, "avatar").node;
 			}else{
 				// or just clone the node and hope it works
 				node = this.manager.nodes[0].cloneNode(true);
