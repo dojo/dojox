@@ -277,7 +277,7 @@ dojo.require("dojox.html.entities");
 						trimmedStyles.push(s);
 					}
 				});
-                trimmedStyles = trimmedStyles.sort();
+				trimmedStyles = trimmedStyles.sort();
 				
 				// Reassemble and return the styles in sorted order.
 				style = trimmedStyles.join("; ");
@@ -312,7 +312,7 @@ dojo.require("dojox.html.entities");
 				}
 				closeTags.push(false);
 			}
-            
+
 			var inline = isInlineFormat(name);
 			inlineStyle.push(inline); 
 			if(textContent && !inline){
