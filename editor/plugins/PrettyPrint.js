@@ -31,6 +31,10 @@ dojo.declare("dojox.editor.plugins.PrettyPrint",dijit._editor._Plugin,{
 	//		HTML + cent, pound, yen, ellipsis, copyright, registered trademark.
 	entityMap: null,
 
+	// xhtml: [public] boolean
+	//		Flag to denote that the PrettyPrint plugin try to generate XHTML compliant 
+	//		markup.
+
 	_initButton: function(){
 		// summary:
 		//		Over-ride for creation of the resize button.
@@ -53,7 +57,7 @@ dojo.declare("dojox.editor.plugins.PrettyPrint",dijit._editor._Plugin,{
 			self.editor._prettyprint_getValue = self.editor.getValue;
 			self.editor.getValue = function(){
 				var val = self.editor._prettyprint_getValue(arguments);
-				return dojox.html.format.prettyPrint(val, self.indentBy, self.lineLength, self.entityMap);
+				return dojox.html.format.prettyPrint(val, self.indentBy, self.lineLength, self.entityMap, self.xhtml);
 			};
 		});
 	}
@@ -71,8 +75,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 				["\u00A2","cent"],["\u00A3","pound"],["\u20AC","euro"],
 				["\u00A5","yen"],["\u00A9","copy"],["\u00A7","sect"],
 				["\u2026","hellip"],["\u00AE","reg"]
-			])
-
+			]),
+			xhtml: ("xhtml" in o.args)?o.args.xhtml:false
 		});
 	}
 });
