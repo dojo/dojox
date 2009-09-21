@@ -140,7 +140,7 @@
 }
 
 .tundra .dojoxGridRowSelected {
-	background-color: #aec7e3;
+	background-color: #aec7e3 !important;
 }
 
 .dijit_a11y .tundra .dojoxGridRowSelected { 
