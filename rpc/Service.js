@@ -26,7 +26,7 @@ dojo.declare("dojox.rpc.Service", null, {
 		var url;
 		var self = this;
 		function processSmd(smd){
-			smd._baseUrl = new dojo._Url(location.href,url || '.') + '';
+			smd._baseUrl = new dojo._Url((dojo.isBrowser ? location.href : dojo.config.baseUrl) ,url || '.') + '';
 			self._smd = smd;
 
 			//generate the methods
