@@ -477,20 +477,6 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 		this._visibleLoadPending = window.setTimeout(dojo.hitch(this, "_loadVisibleItems"), 500);
 	},
 	
-	_layoutHack: function(){
-		// summary: work around table sizing bugs on FF2 by forcing redraw
-		//		note - this function is taken from dijit.form._FormWidget
-		if(dojo.isFF == 2 && !this._layoutHackHandle){
-			var node=this.domNode;
-			var old = node.style.opacity;
-			node.style.opacity = "0.999";
-			this._layoutHackHandle = setTimeout(dojo.hitch(this, function(){
-				this._layoutHackHandle = null;
-				node.style.opacity = old;
-			}), 0);
-		}
-	},
-	
 	_loadVisibleItems: function(){
 		// summary: loads the items that are currently visible in the pane
 		delete this._visibleLoadPending
@@ -541,7 +527,6 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 				oItem.destroy();
 			}, this);
 			this._checkScrollConnection(false);
-			this._layoutHack();
 		});
 		this._doLoadItems(itemsToLoad, onItems);
 	},
@@ -570,13 +555,6 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 				this.parentWidget._updateClass(i.domNode, "Item", {"Selected": (item && (i == item && !i.disabled))});
 			}, this);
 		}
-	},
-	
-	destroy: function(){
-		if(this._layoutHackHandle){
-			clearTimeout(this._layoutHackHandle);
-		}
-		this.inherited(arguments);
 	}
 });
 

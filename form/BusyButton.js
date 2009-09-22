@@ -85,7 +85,6 @@ dojo.declare("dojox.form._BusyButtonMixin",
 		}
 		this.containerNode.innerHTML = this.label;
 		
-		this._layoutHack();
 		if(this.showLabel == false && !(dojo.attr(this.domNode, "title"))){
 			this.titleNode.title=dojo.trim(this.containerNode.innerText || this.containerNode.textContent || '');
 		}
