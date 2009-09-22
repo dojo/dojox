@@ -66,14 +66,14 @@
 
 .dojoxEntityPalettePreviewHeader {
 	font-size: .8em;
-        padding: 3px 3px 3px 3px;
+	padding: 3px 3px 3px 3px;
 }
 
 .dojoxEntityPalettePreviewDetailEntity {
 	font-size: 3em;
 	font-weight: bold;
 	width: 1em;
-        text-align: center;
+	text-align: center;
 }
 
 .dojoxEntityPalettePreviewDetail {
