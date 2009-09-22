@@ -42,8 +42,8 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 					'						<tbody>\n' +
 					'					    	<tr>\n' +
 					'								<th class="dojoxEntityPalettePreviewHeader">Preview</th>\n' +
-					'								<th class="dojoxEntityPalettePreviewHeader">Code</th>\n' +
-					'								<th class="dojoxEntityPalettePreviewHeader">Name</th>\n' +
+					'								<th class="dojoxEntityPalettePreviewHeader" dojoAttachPoint="codeHeader">Code</th>\n' +
+					'								<th class="dojoxEntityPalettePreviewHeader" dojoAttachPoint="entityHeader">Name</th>\n' +
 					'								<th class="dojoxEntityPalettePreviewHeader">Description</th>\n' +
 					'							</tr>\n' +
 					'							<tr>\n' +
@@ -60,25 +60,33 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 					'	</table>\n' +
 					'</div>',
 
-	// defaultTimeout: Number
+	// defaultTimeout: [public] Number
 	//		Number of milliseconds before a held key or button becomes typematic
 	defaultTimeout: 500,
 
-	// timeoutChangeRate: Number
+	// timeoutChangeRate: [public] Number
 	//		Fraction of time used to change the typematic timer between events
 	//		1.0 means that each typematic event fires at defaultTimeout intervals
 	//		< 1.0 means that each typematic event fires at an increasing faster rate
 	timeoutChangeRate: 0.90,
 	
-	// showPreview: Boolean
+	// showPreview: [public] Boolean
 	//      Whether the preview pane will be displayed, to show details about the selected entity.
 	showPreview: true,
 
-	// palette: String
+	// showCode: [public] boolean
+	//		Show the character code for the entity.
+	showCode: false,
+
+	// showentityName: [public] boolean
+	//		Show the entity name for the entity.
+	showEntityName: false,
+
+	// palette: [public] String
 	//		The symbol pallete to display.  The only current one is 'latin'.
 	palette: "latin",
 
-	// value: String
+	// value: [public] String
 	//		The value of the selected entity.
 	value: null,
 
@@ -94,15 +102,17 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 	///		This is the number of entity rows down.
 	_yDim: null,
 
-	// tabIndex: String
+	// tabIndex: [public] String
 	//		Widget tab index.
 	tabIndex: "0",
 
+	// _created: [private] boolean
+	//		Flag indicating the widget has initialized.
 	_created: false,
 
 	postCreate: function(){
 		if(!this._created){
-			this._created = true;
+            this._created = true;
 			// A name has to be given to the colorMap, this needs to be unique per Palette.
 			this.domNode.style.position = "relative";
 			this._cellNodes = [];
@@ -117,6 +127,16 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 			var currChoiceIdx = 0;
 			var rowNode = null;
 			var cellNode;
+			
+			console.log(this.showCode, this);
+			console.log(this.showEntityName, this);
+
+			// Show the code and entity name (if enabled to do so.)
+			dojo.style(this.codeHeader, "display", this.showCode?"":"none");
+			dojo.style(this.codeNode, "display", this.showCode?"":"none");
+			dojo.style(this.entityHeader, "display", this.showEntityName?"":"none");
+			dojo.style(this.entityNode, "display", this.showEntityName?"":"none");
+
 			for(entityKey in choices){
 				var newRow = currChoiceIdx % numRows === 0;
 				if (newRow){

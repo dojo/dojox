@@ -26,11 +26,10 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 	_initButton: function(){
 		// summary:
 		//		Over-ride for creation of the save button.
-		this.dropDown = new dojox.editor.plugins.EntityPalette();
+		this.dropDown = new dojox.editor.plugins.EntityPalette({showCode: this.showCode, showEntityName: this.showEntityName});
 		this.connect(this.dropDown, "onChange", function(entity){
 			this.editor.focus();
 			if(dojo.isIE){
-				 //Have to call this or IE doesn't insert right.
 				this.editor._restoreSelection();
 			}
 			this.editor.execCommand("inserthtml",entity);
@@ -81,19 +80,6 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 		// tags:
 		//		private.
 		return dojox.html.entities.encode(s, dojox.html.entities.latin);
-	},
-	
-	constructor: function(){
-		// Instantiate and show the palette.
-		this.dropDown = new dojox.editor.plugins.EntityPalette();
-		this.connect(this.dropDown, "onChange", function(entity){
-			this.editor.focus();
-			if(dojo.isIE){
-				//Have to call this or IE doesn't insert right.
-				this.editor._restoreSelection();
-			}
-			this.editor.execCommand("inserthtml",entity);
-		});
 	}
 });
 
@@ -102,6 +88,9 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name? o.args.name.toLowerCase() : "";
 	if(name === "insertentity"){
-		o.plugin = new dojox.editor.plugins.InsertEntity();
+		o.plugin = new dojox.editor.plugins.InsertEntity({
+			showCode: ("showCode" in o.args)?o.args.showCode:false,
+			showEntityName: ("showEntityName" in o.args)?o.args.showEntityName:false
+		});
 	}
 });

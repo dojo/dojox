@@ -66,18 +66,21 @@
 
 .dojoxEntityPalettePreviewHeader {
 	font-size: .8em;
+        padding: 3px 3px 3px 3px;
 }
 
 .dojoxEntityPalettePreviewDetailEntity {
 	font-size: 3em;
 	font-weight: bold;
-	padding: 2px;
+	width: 1em;
+        text-align: center;
 }
 
 .dojoxEntityPalettePreviewDetail {
 	font-size: 1em;
 	vertical-align: middle;
 	font-weight: bold;
+	padding: 3px 3px 3px 3px;
 }
 
 .dijit_a11y .dojoxEntityPaletteCell {
