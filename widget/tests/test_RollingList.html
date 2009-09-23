@@ -170,13 +170,14 @@
 			}
 		</script>
 		<script type="dojo/method" event="getPaneForItem" args="item,parentPane,children">
-			var ret = this.inherited("getPaneForItem", arguments);
+			var ret = dojox.widget.RollingList.prototype.getPaneForItem.apply(this, arguments);
 
 			if(!ret){
 				ret = new dojox.widget._RollingListPane({
 									onItems: function(){
-										this._setContentAndScroll("Details for " + this.store.getLabel(this.items[0]).replace(/</,"&lt;"));
-										this._onLoadHandler();
+										if(this.items.length){
+											this._setContentAndScroll("Details for " + this.store.getLabel(this.items[0]).replace(/</,"&lt;"));
+										}
 									}});
 			}
 			return ret;
