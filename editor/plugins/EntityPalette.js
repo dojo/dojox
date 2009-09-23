@@ -128,9 +128,6 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 			var rowNode = null;
 			var cellNode;
 			
-			console.log(this.showCode, this);
-			console.log(this.showEntityName, this);
-
 			// Show the code and entity name (if enabled to do so.)
 			dojo.style(this.codeHeader, "display", this.showCode?"":"none");
 			dojo.style(this.codeNode, "display", this.showCode?"":"none");
