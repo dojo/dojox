@@ -7,13 +7,13 @@ dojo.require("dojo.fx.easing");
 dojo.declare("dojox.widget.FisheyeLite",
 	dijit._Widget,
 	{
-	//	summary:  A Light-weight Fisheye Component, or an exhanced version
-	//		of `dojo.fx.Toggler`. Apply hover-behavior to a node.
+	// summary:  A Light-weight Fisheye Component, or an exhanced version
+	//		of dojo.fx.Toggler ... 
 	//
-	//	description:
+	// description:
 	//		A Simple FisheyeList-like widget which (in the interest of
 	//		performance) relies on well-styled content for positioning,
-	//		and natural page layout for rendering.
+	// 		and natural page layout for rendering.
 	//
 	//		use position:absolute/relative nodes to prevent layout
 	//		changes, and use caution when seleting properties to
@@ -25,34 +25,35 @@ dojo.declare("dojox.widget.FisheyeLite",
 	//		unless it finds a node class="fisheyeTarget" in the container
 	//		being turned into a FisheyeLite instance
 	//
-	//	example:
+	// example:
 	//	|	// make all the LI's in a node Fisheye's:
-	//	|	dojo.query("#node li").forEach(function(n){
-	//	|		new dojox.widget.FisheyeLite({},n);
+	//	|   dojo.query("#node li").forEach(function(n){
+	// 	|		new dojox.widget.FisheyeLite({},n);
 	//	|	});
 	//
-	//	example:
+	//
+	// example:
 	//	|	new dojox.widget.FisheyeLite({ 
 	//	|		properties:{
 	//	|			// height is literal, width is multiplied
 	//	|			height:{ end: 200 }, width:2.3
 	//	|		}
 	//	|	}, "someNode");
-
-	//	duationIn: Integer
+	//
+	// duationIn: Integer
 	//		The time (in ms) the run the show animation
 	durationIn: 350,
-
-	//	easeIn: Function
+	
+	// easeIn: Function
 	//		An easing function to use for the show animation
 	easeIn: dojo.fx.easing.backOut,
-
-	//	durationOut: Integer
+	
+	// durationOut: Integer
 	//		The Time (in ms) to run the hide animation
 	durationOut: 1420,
-
-	//	easeOut: Function
-	//		An easing function to use for the hide animation
+	
+	// easeOut: Function	
+	// 		An easing function to use for the hide animation
 	easeOut: dojo.fx.easing.elasticOut,
 
 	//	properties: Object
@@ -62,16 +63,16 @@ dojo.declare("dojox.widget.FisheyeLite",
 	//			is used. If the named property is an object, that object is mixed
 	//			into the animation directly. eg: height:{ end:20, unit:"em" }
 	properties: null,
-
-	//	units: String
+	
+	// units: String
 	//		Sometimes, you need to specify a unit. Should be part of
 	//		properties attrib, but was trying to shorthand the logic there
 	units:"px",
-
+	
 	constructor: function(props, node){
-		this.properties = this.properties || {
+		this.properties = props.properties || {
 			fontSize: 2.75
-		};
+		}
 	},
 	
 	postCreate: function(){
@@ -101,8 +102,8 @@ dojo.declare("dojox.widget.FisheyeLite",
 	},
 	
 	_makeAnims: function(){
-		//	summary:
-		//		Pre-generate the animations. 
+		// summary:
+		//		Pre-generate the animations
 
 		// create two properties: objects, one for each "state"
 		var _in = {}, _out = {}, cs = dojo.getComputedStyle(this._target);
@@ -136,15 +137,13 @@ dojo.declare("dojox.widget.FisheyeLite",
 	},
 	
 	onClick: function(/* Event */e){
-		//	summary: 
-		//		Stub function fired when target is clicked
+		// summary: stub function fired when target is clicked
 		//		connect or override to use.
 	},
 	
 	onSelected: function(/* Object */e){
-		//	summary:
-		//		Stub function fired when Fisheye Item is fully visible and
-		//		hovered. connect or override use.
+		// summary: stub function fired when Fisheye Item is fully visible and
+		// 		hovered. connect or override use.
 	}
 	
 });
