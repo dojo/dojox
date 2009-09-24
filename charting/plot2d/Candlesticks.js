@@ -128,11 +128,12 @@ dojo.require("dojox.lang.functional.reversed");
 							};
 						shape = s.createGroup();
 						shape.setTransform({dx: x, dy: 0 });
-						shape.createLine(line).setStroke(stroke);
-						shape.createRect(rect).setStroke(stroke).setFill(doFill?fill:"white");
+						var inner = shape.createGroup();
+						inner.createLine(line).setStroke(stroke);
+						inner.createRect(rect).setStroke(stroke).setFill(doFill?fill:"white");
 						if("mid" in v){
 							//	add the mid line.
-							shape.createLine({ x1: (stroke.width||1), x2: width-(stroke.width||1), y1: y - mid, y2: y - mid})
+							inner.createLine({ x1: (stroke.width||1), x2: width-(stroke.width||1), y1: y - mid, y2: y - mid})
 								.setStroke(doFill?{color:"white"}:stroke);
 						}
 
@@ -147,9 +148,14 @@ dojo.require("dojox.lang.functional.reversed");
 								plot:    this,
 								hAxis:   this.hAxis || null,
 								vAxis:   this.vAxis || null,
-								shape:   shape,
-								x:       v,
-								y:       j + 1.5
+								shape:   inner,
+								x:       x,
+								y:       y-Math.max(open, close),
+								cx:		 width/2,
+								cy:		 (y-Math.max(open, close)) + (Math.max(doFill ? open-close : close-open, 1)/2),
+								width:	 width,
+								height:  Math.max(doFill ? open-close : close-open, 1),
+								data:	 v
 							};
 							this._connectEvents(shape, o);
 						}

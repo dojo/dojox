@@ -13,6 +13,15 @@ dojo.require("dojox.lang.functional.fold");
 		if(t && typeof t == "object" && t.tooltip){
 			return t.tooltip;
 		}
+		if(o.element == "candlestick"){
+			return '<table cellpadding="1" cellspacing="0" border="0" style="font-size:0.9em;">'
+				+ '<tr><td>Open:</td><td align="right"><strong>' + o.data.open + '</strong></td></tr>'
+				+ '<tr><td>High:</td><td align="right"><strong>' + o.data.high + '</strong></td></tr>'
+				+ '<tr><td>Low:</td><td align="right"><strong>' + o.data.low + '</strong></td></tr>'
+				+ '<tr><td>Close:</td><td align="right"><strong>' + o.data.close + '</strong></td></tr>'
+				+ (o.data.mid !== undefined ? '<tr><td>Mid:</td><td align="right"><strong>' + o.data.mid + '</strong></td></tr>' : '')
+				+ '</table>';
+		}
 		return o.element == "bar" ? o.x : o.y;
 	};
 	
@@ -58,6 +67,12 @@ dojo.require("dojox.lang.functional.fold");
 					position = ["above", "below"];
 				case "bar":
 					aroundRect = dojo.clone(o.shape.getShape());
+					break;
+				case "candlestick":
+					aroundRect.x = o.x;
+					aroundRect.y = o.y;
+					aroundRect.width = o.width;
+					aroundRect.height = o.height;
 					break;
 				default:
 				//case "slice":
