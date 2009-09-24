@@ -1261,7 +1261,11 @@ dojo.requireLocalization("dijit", "loading");
 		removeSelectedRows: function(){
 			// summary:
 			//		Remove the selected rows from the grid.
-			this.updateRowCount(Math.max(0, this.attr('rowCount') - this.selection.getSelected().length));
+			if(this.allItemsSelected){
+				this.updateRowCount(0);
+			}else{
+				this.updateRowCount(Math.max(0, this.attr('rowCount') - this.selection.getSelected().length));
+			}
 			this.selection.clear();
 		}
 

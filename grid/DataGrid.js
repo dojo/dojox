@@ -570,10 +570,19 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		//		Remove the selected rows from the grid.
 		if(this._canEdit){
 			this.edit.apply();
-			var items = this.selection.getSelected();
-			if(items.length){
-				dojo.forEach(items, this.store.deleteItem, this.store);
-				this.selection.clear();
+			var fx = dojo.hitch(this, function(items){
+				if(items.length){
+					dojo.forEach(items, this.store.deleteItem, this.store);
+					this.selection.clear();
+				}			
+			});
+			if(this.allItemsSelected){
+				this.store.fetch({
+							query: this.query, 
+							queryOptions: this.queryOptions,
+							onComplete: fx});
+			}else{
+				fx(this.selection.getSelected());
 			}
 		}
 	}
