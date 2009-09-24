@@ -56,6 +56,10 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//pluginMgr: Object
 	//		Singleton plugin manager	
 	pluginMgr: null,
+	
+	//doubleAffordance: Boolean
+	//		For special cell hover style
+	doubleAffordance: false,
 
 	postMixInProperties: function(){
 		//load nls bundle
@@ -82,6 +86,49 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	startup: function(){
 		this.menuContainer && this._initMenus && this._initMenus();
 		this.inherited(arguments);
+		if(this.doubleAffordance){
+			dojo.addClass(this.domNode, 'dojoxGridDoubleAffordance');
+		}
+	},
+	
+	removeSelectedRows: function(){
+		// summary:
+		//		Overwritten, see DataGrid.removeSelectedRows()
+		if(this.indirectSelection && this._canEdit){
+			//cache the selected info before cleaned by DataGrid
+			var selected = dojo.clone(this.selection.selected);
+			this.inherited(arguments);
+			dojo.forEach(selected, function(value, index){
+				value && this.grid.rowSelectCell.toggleRow(index, false);
+			});
+		}
+	},
+	
+	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
+		// summary:
+		//		Overwritten, see DataGrid.doApplyCellEdit()
+		if(!inAttrName){
+			this.invalidated[inRowIndex] = true;
+			return;
+		}
+		this.inherited(arguments);
+	},	
+	
+	mixin: function(target, source){
+		var props = {};
+		for(p in source){
+			if(p == '_inherited' || p == 'declaredClass' || p == 'constructor'){ continue; }
+			props[p] = source[p];
+		}
+		dojo.mixin(target, props);
+	},
+	
+	_copyAttr: function(idx, attr){
+		// summary:
+		//		Overwritten, see DataGrid._copyAttr()
+		//		Fix cell TAB navigation for single click editting
+		if(!attr) return;
+		return this.inherited(arguments);
 	}
 });
 

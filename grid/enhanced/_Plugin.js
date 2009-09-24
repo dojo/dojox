@@ -83,9 +83,9 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		}
 		//overwrite header and content builders
 		if(grid.nestedSorting){
-			dojox.grid._View.prototype._headerBuilderClass = dojox.grid.enhanced._HeaderBuilder;
-			dojox.grid._View.prototype._contentBuilderClass = dojox.grid.enhanced._ContentBuilder;
+			dojox.grid._View.prototype._headerBuilderClass = dojox.grid.enhanced._HeaderBuilder;			
 		}
+		dojox.grid._View.prototype._contentBuilderClass = dojox.grid.enhanced._ContentBuilder;
 	},
 	
 	postInit: function(){
@@ -188,6 +188,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		dojo.forEach(this.grid.views.views, dojo.hitch(this, function(view){
 			//add more events handler - _View
 			dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", ['mouseup', 'mousemove']);
+			dojox.grid.util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
 			
 			//overwrite _View.setColumnsWidth()
 			this.funcMap[view.id + '-' +'setColumnsWidth'] = view.setColumnsWidth;
@@ -214,6 +215,12 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		//overwrite _Grid.updateRow()
 		this.funcMap['updateRow'] = this.grid.updateRow;		
 		this.grid.updateRow = this.updateRow;	
+		
+		if(this.grid.nestedSorting){
+			dojox.grid.cells._Base.prototype.getEditNode = this.getEditNode;
+			dojox.grid.cells._Widget.prototype.sizeWidget = this.sizeWidget;
+		}
+		dojox.grid._EditManager.prototype.styleRow = function(inRow){};		
 	},
 	
 	setColumnsWidth: function(width){
@@ -299,11 +306,25 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		//summary:
 		//		Overwrite _Scroller.renderPage(), "this" - _Grid scope
 		var caller = arguments.callee.caller;
-		if(caller.nom == "move" && caller.ctor.prototype.declaredClass == "dojox.grid._FocusManager" && !this.pluginMgr.needUpdateRow()){
+		if(caller.nom == "move" && /* caller.ctor.prototype.declaredClass == "dojox.grid._FocusManager" && */ !this.pluginMgr.needUpdateRow()){
 			//if is called from dojox.grid._FocusManager.move(), and no need to update row, then return
 			return;
 		}
 		//invoke _Grid.updateRow()
 		dojo.hitch(this, this.pluginMgr.funcMap['updateRow'])(inRowIndex);
-	}
+	},
+	
+	getEditNode: function(inRowIndex) {
+		//summary:
+		//		Overwrite dojox.grid.cells._Base.getEditNode, "this" - _Base scope
+		return ((this.getNode(inRowIndex) || 0).firstChild || 0).firstChild || 0;
+	},
+	
+	sizeWidget: function(inNode, inDatum, inRowIndex){
+		//summary:
+		//		Overwrite dojox.grid.cells._Widget.sizeWidget, "this" - _Widget scope
+		var p = this.getNode(inRowIndex).firstChild, 
+		box = dojo.contentBox(p);
+		dojo.marginBox(this.widget.domNode, {w: box.w});
+	}	
 });

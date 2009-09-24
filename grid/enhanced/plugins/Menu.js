@@ -10,7 +10,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 	//		</div>
 
 	constructor: function(inGrid){
-		dojo.mixin(inGrid, this);
+		inGrid.mixin(inGrid, this);
 	},
 	
 	_initMenus: function(){
@@ -51,10 +51,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 			//this.selectedRegionMenu.unBindDomNode(this.domNode);
 			this.selectedRegionMenu.bindDomNode(cover);
 			dojo.connect(cover, "contextmenu", dojo.hitch(this, function(e){
-				if(this.selectedRegionMenu){
-					this.selectedRegionMenu._openMyself(e);
-					dojo.stopEvent(e);
-				}
+				dojo.mixin(e, this.select.getSelectedRegionInfo());
+				this.onSelectedRegionContextMenu(e);
 			}));
 		}));
 	},

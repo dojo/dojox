@@ -254,11 +254,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//top: Integer
 		//		the position and shape of the border DIV		
 		var borderDIV = this.getBorderDiv();
-		//TODO: use dojo.style
-		borderDIV.style.height = height + "px";
-		borderDIV.style.top = top + "px";
-		borderDIV.style.width = width + "px";
-		borderDIV.style.left = left + "px";
+		dojo.style(borderDIV, {"height" : height + "px", "top" : top + "px", "width" : width + "px", "left" : left + "px"});
 		return borderDIV;
 	},
 	
@@ -485,9 +481,17 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		the first row index for mover to cover
 		// to:
 		//		the last row index for mover to cover
+
+		// scroll bar width sum, to fix the insufficient width of borderDIV/coverDIV for 2+ views
+		var scrollBarWidthSum = 0, views = this.grid.views.views;
+		dojo.forEach(views, function(view, index){
+			scrollBarWidthSum += view.getScrollbarWidth();
+		});
+		var lastScrollBarWidth = views[views.length-1].getScrollbarWidth();
+		var widthDelta = !dojo._isBodyLtr() ? (dojo.isIE ? scrollBarWidthSum - lastScrollBarWidth : scrollBarWidthSum) : 0;
 		
-		// get the width of grid
-		var gridWidth = this.getGridWidth();
+		// get the width of grid including the scroll bar width
+		var gridWidth = this.getGridWidth() + scrollBarWidthSum - lastScrollBarWidth;
 		
 		// use rowBar as row position identifier
 		var rowBarView = this.grid.views.views[0];
@@ -503,12 +507,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		
 		var coverMover = this.createCoverMover(gridWidth - this.getExceptColumnOffsetWidth(), // width
 											   (endCoord.y - startCoord.y + endCoord.h), // height
-												dojo._isBodyLtr()?(startCoord.x + startCoord.w + this.getExceptColumnOffsetWidth()):(startCoord.x - gridWidth), // left, when RTL rowbar is on grid right
+												dojo._isBodyLtr() ? (startCoord.x + startCoord.w + this.getExceptColumnOffsetWidth()) : (startCoord.x - gridWidth - widthDelta),
 											    startCoord.y,
 												"row"); // top
 		var borderDIV = this.setBorderDiv(gridWidth, 3,  // width & height
-									(dojo._isBodyLtr()?(endCoord.x + endCoord.w):(endCoord.x - gridWidth)) + dojo._docScroll().x, // left, when RTL rowbar is on grid right
-									 -100); // top
+									(dojo._isBodyLtr() ? (endCoord.x + endCoord.w) : (endCoord.x - gridWidth - widthDelta)) + dojo._docScroll().x, -100); // top
 			
 		var avaMoveStart = dojo.connect(coverMover, "onMoveStart", dojo.hitch(this, function(mover, leftTop){
 			this.mover = mover;

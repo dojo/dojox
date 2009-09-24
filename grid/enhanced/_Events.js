@@ -12,6 +12,22 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	//		Method map cached from dojox.grid._Events().
 	_events: null,
 
+	//headerCellActiveClass: String
+	// 		css class to apply to grid header cells when activated(mouse down)
+	headerCellActiveClass: 'dojoxGridHeaderActive',
+	
+	//cellActiveClass: String
+	// 		css class to apply to grid content cells when activated(mouse down)
+	cellActiveClass: 'dojoxGridCellActive',
+	
+	//rowActiveClass: String
+	// 		css class to apply to grid rows when activated(mouse down)
+	rowActiveClass: 'dojoxGridRowActive',		
+
+	//selectRegionHoverClass: String
+	// 		css class to apply to select regions in header cells when mouse over
+	selectRegionHoverClass: 'dojoxGridSelectRegionHover',	
+
 	constructor: function(inGrid){
 		//get the default Grid events
 		this._events = new dojox.grid._Events();
@@ -22,7 +38,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 			}
 		}
 		//mixin "this" to Grid
-		dojo.mixin(inGrid, this);
+		inGrid.mixin(inGrid, this);
 	},
 	
 	onStyleRow: function(inRow){
@@ -45,9 +61,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onKeyDown: function(e){
 		// summary:
 		// 		Overwritten, see dojox.grid._Events.onKeyDown()
-		if(e.altKey || e.metaKey){
-			return;
-		}
+		if(e.altKey || e.metaKey){ return; }
 		
 		if (e.ctrlKey && !e.shiftKey) {
 			dojo.publish("CTRL_KEY_DOWN", [this, e]);
@@ -235,6 +249,14 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		}
 	},
 	
+	onMouseUp: function(e){
+		// summary:
+		//		New - Event fired when mouse is up inside grid.
+		// e: Event
+		//		Decorated event object that contains reference to grid, cell, and rowIndex
+		e.rowIndex == -1 ? this.onHeaderCellMouseUp(e) : this.onCellMouseUp(e);
+	},
+	
 	onMouseOutRow: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onMouseOutRow()
@@ -275,16 +297,35 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		}
 	},
 	
+	onCellMouseOut: function(e){
+		// summary:
+		//		Overwritten, see dojox.grid._Events.onCellMouseOut()
+		
+		//invoke dojox.grid._Events.onCellMouseOut()
+		dojo.hitch(this, this._events.onCellMouseOut)(e);	
+		this.doubleAffordance && e.cellNode && dojo.removeClass(e.cellNode, this.cellActiveClass);
+	},
+	
 	onCellMouseDown: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onCellMouseDown()
-		if (this.isDndSelectEnable) {
-			// when the right button is down (show context menu), the dnd rowbar should blur.
+		dojo.addClass(e.cellNode, this.cellActiveClass);
+		dojo.addClass(e.rowNode, this.rowActiveClass);
+		if(this.isDndSelectEnable){
 			this.focus._blurRowBar();
 			if(e.cellIndex > this.select.exceptColumnsTo){
 				this.select.setInSelectingMode("cell", true);
 			}
 		}
+	},
+	
+	onCellMouseUp: function(e){
+		// summary:
+		//		New - Event fired when mouse is up inside content cell.
+		// e: Event
+		//		Decorated event object that contains reference to grid, cell, and rowIndex
+		dojo.removeClass(e.cellNode, this.cellActiveClass);
+		dojo.removeClass(e.rowNode, this.rowActiveClass);
 	},
 
 	onCellClick: function(e){
@@ -295,7 +336,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 			this._click[0] = this._click[1];
 			this._click[1] = e;
 			this.select.cellClick(e.cellIndex, e.rowIndex);
-			this.select.cleanAll();
+			!this.edit.isEditCell(e.rowIndex, e.cellIndex) && !this.edit.isEditing() && this.select.cleanAll();
 			this.focus.setFocusCell(e.cell, e.rowIndex);
 		} else {
 			//invoke dojox.grid._Events.onCellClick()
@@ -306,9 +347,8 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onCellDblClick: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onCellDblClick()
-		if(this.pluginMgr.isFixedCell(e.cell)){
-			return;
-		}
+		if(this.pluginMgr.isFixedCell(e.cell)){ return; }
+		(!this._click[0] || !this._click[1]) && (this._click[0] = this._click[1] = e);
 		//invoke dojox.grid._Events.onCellDblClick()
 		dojo.hitch(this, this._events.onCellDblClick)(e);
 	},
@@ -350,8 +390,20 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onRowContextMenu: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onRowContextMenu()
-		this.menus && this.showRowCellMenu(e);
+		!this.edit.isEditing() && this.menus && this.showRowCellMenu(e);
 		//dojo.stopEvent(e);
+	},
+	
+	onSelectedRegionContextMenu: function(e){
+		// summary:
+		//		New - Event fired when a selected region context menu is accessed via mouse right click.
+		// e: Event
+		//		Decorated event object which contains reference to grid and info of selected 
+		//		regions(selection type - row|column, selected index - [...])
+		if(this.selectedRegionMenu){
+			this.selectedRegionMenu._openMyself(e);
+			dojo.stopEvent(e);
+		}
 	},
 
 	onHeaderCellMouseOver: function(e){
@@ -374,11 +426,10 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 
 	onHeaderCellMouseOut: function(e){
 		// summary:
-		//		Event fired when mouse moves out of a header cell.
-		// e: Event
-		// 		Decorated event object which contains reference to grid, cell, and rowIndex
+		//		Overwritten, see dojox.grid._Events.onHeaderCellMouseOut()
 		if(e.cellNode){
 			dojo.removeClass(e.cellNode, this.cellOverClass);
+			dojo.removeClass(e.cellNode, this.headerCellActiveClass);
 			if(this.nestedSorting && !this.pluginMgr.isFixedCell(e.cell)){
 				if(this.focus.headerCellInFocus(e.cellIndex)){
 					this._toggleHighlight(e.sourceView, e, true);
@@ -389,12 +440,12 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		}
 	},
 	
-	onHeaderCellMouseDown: function(e) {
+	onHeaderCellMouseDown: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onHeaderCellMouseDown()
-		if(this.nestedSorting && !e.selectChoice){
-			return;
-		}
+		var node = !this.nestedSorting ? e.cellNode : this._getChoiceRegion(e.cellNode, e/*also contains choice info*/);
+		node && dojo.addClass(node, this.headerCellActiveClass);
+		if(this.nestedSorting && !e.selectChoice){ return; }
 		if (this.isDndSelectEnable) {
 			this.focus._blurRowBar(); //fix DnD blur
 			try{
@@ -416,6 +467,16 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 				}
 				this.select.drugSelectColumn(e.cellIndex);
 			}
+		}
+	},
+	
+	onHeaderCellMouseUp: function(e){
+		// summary:
+		//		Overwritten, see dojox.grid._Events.onHeaderCellMouseUp()
+		var node = !this.nestedSorting ? e.cellNode : this._getChoiceRegion(e.cellNode, e/*also contains choice info*/);
+		if(node){
+			dojo.removeClass(node, this.headerCellActiveClass);
+			e.selectChoice && dojo.addClass(node, this.selectRegionHoverClass);
 		}
 	},
 

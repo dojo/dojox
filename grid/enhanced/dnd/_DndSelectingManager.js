@@ -96,7 +96,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		
 		//extend dojox.Grid
 		var _ctr = inGrid.constructor;
-		dojo.mixin(inGrid, dojo.hitch(new dojox.grid.enhanced.dnd._DndGrid(this)));
+		inGrid.mixin(inGrid, dojo.hitch(new dojox.grid.enhanced.dnd._DndGrid(this)));
 		inGrid.constructor = _ctr;
 		
 		// workaround for mixin related issues
@@ -104,19 +104,19 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		//inGrid.constructor.prototype.onStyleRow = inGrid.onStyleRow;
 		
 		//extend dojox._FocusManager
-		dojo.mixin(inGrid.focus, new dojox.grid.enhanced.dnd._DndFocusManager());
+		inGrid.mixin(inGrid.focus, new dojox.grid.enhanced.dnd._DndFocusManager());
 		
 		// rewrite the clickSelect function of Selection
-		dojo.mixin(inGrid.selection, {clickSelect:function(){}});
+		inGrid.mixin(inGrid.selection, {clickSelect:function(){}});
 		
 		dojo.forEach(inGrid.views.views, function(view){
 			//extend dojox._Builder
-			dojo.mixin(view.content, new dojox.grid.enhanced.dnd._DndBuilder());
+			inGrid.mixin(view.content, new dojox.grid.enhanced.dnd._DndBuilder());
 			//extend dojox._HeaderBuilder
-			dojo.mixin(view.header, new dojox.grid.enhanced.dnd._DndHeaderBuilder());
+			inGrid.mixin(view.header, new dojox.grid.enhanced.dnd._DndHeaderBuilder());
 			if(view.declaredClass =="dojox.grid._RowSelector"){
 				//extend dojox._RowSelector
-				dojo.mixin(view, new dojox.grid.enhanced.dnd._DndRowSelector());
+				inGrid.mixin(view, new dojox.grid.enhanced.dnd._DndRowSelector());
 			}
 			// Change the funnelEvents of views, add mouseup and mouseover event
 			//dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", [ 'mouseup','mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
@@ -173,6 +173,25 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		//isEnable: Boolean
 		//		the 'type' selecting mode is 'isEnable'ed
 		this.typeSelectingMode[type] = isEnable;
+	},
+	
+	getSelectedRegionInfo: function(){
+		//summary:
+		//		Get the selected region info
+		//return: Array
+		//		Array of selected index, might be index of rows | columns | cells
+		var selectedIdx = [], type = '';
+		if(this.selectedColumns.length > 0){
+			type = 'col';
+			dojo.forEach(this.selectedColumns, function(item, index){
+				!!item && selectedIdx.push(index);
+			});
+		}else if(this.grid.selection.getSelectedCount() > 0){
+			type = 'row';
+			selectedIdx = dojox.grid.Selection.prototype.getSelected.call(this.grid.selection);
+		}
+		return {'selectionType': type, 'selectedIdx': selectedIdx};
+		//TODO for future cells
 	},
 	
 	clearInSelectingMode: function(){
@@ -614,6 +633,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		}, this);
 		
 		this.selectedColumns = [];
+		this.grid.edit.isEditing() && this.grid.edit.apply();
 	},
 	
 	removeCellSelectedState : function(cell){

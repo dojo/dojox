@@ -8,22 +8,19 @@
 	/*border-left-width: 0px;*/
 }
 
+.tundra .dojoxGridHeader .dojoxGridCell,
 .tundra .dojoxGridCell{
-	/*border-left-width: 0px;*/
-}
-
-.tundra .dojoxGridHeader .dojoxGridSortCell,
-.tundra .dojoxGridSortCell{
 	padding:0px;
 	/*display:inline;*/
 	/*position:relative;*/
+	/*border-left-width: 0px;*/
 }
 
-.dj_ie6 .tundra .dojoxGridCellOver {
+.dj_ie6 .tundra .dojoxGridCellOver{
 	border: 1px dashed #a6a6a6;
 }
 
-.dj_ie6 .tundra .dojoxGridHeader .dojoxGridCellOver {
+.dj_ie6 .tundra .dojoxGridHeader .dojoxGridCellOver{
 	border-bottom: none !important;
 	border-right: 1px solid #D5CDB5 !important;
 	border-top: 1px solid #D5CDB5 !important;
@@ -31,6 +28,11 @@
 
 .tundra .dojoxGridRowbarInner {
 	width:20px;
+}
+
+.tundra .dojoxGridHeader .dojoxGridCellOver .dojoxGridSortNode{
+	cursor:pointer;
+	background: #f8fafd url("../../../../dijit/themes/tundra/images/accordionItemHover.gif") bottom repeat-x;
 }
 /* end overwrite */
 

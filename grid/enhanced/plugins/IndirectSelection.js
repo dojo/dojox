@@ -129,6 +129,7 @@ dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
 			widget.attr('checked', value);
 		}
 		this.defaultValue = false;
+		this.grid.edit.isEditing() && this.grid.edit.apply();
 	},
 	
 	_toggleSingleRow: function(idx, value) {
@@ -220,7 +221,7 @@ dojo.declare("dojox.grid.cells._MultipleRowSelectorMixin", null, {
 		// e: Event
 		//		Mouse up event
 		dojo.isIE && this.view.content.decorateEvent(e);//TODO - why only e in IE hasn't been decoreated?
-		var inSwipeSelection = e.cellIndex >= 0 && (this.inIndirectSelectionMode() || this._inDndSelection);
+		var inSwipeSelection = e.cellIndex >= 0 && (this.inIndirectSelectionMode() || this._inDndSelection) && !this.grid.edit.isEditRow(e.rowIndex);
 		inSwipeSelection && this._focusEndingCell(e.rowIndex, e.cellIndex);
 		this._finisheSelect();
 	},

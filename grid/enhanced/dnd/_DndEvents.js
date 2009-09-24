@@ -7,19 +7,18 @@ dojo.declare("dojox.grid.enhanced.dnd._DndEvents", null, {
 		
 	onMouseUp: function(e){
 		// summary:
-		//		Event fired when mouse is down inside grid.
+		//		Event fired when mouse is up inside grid.
 		// e: Event
 		//		Decorated event object that contains reference to grid, cell, and rowIndex		
 		e.rowIndex == -1 ? this.onHeaderCellMouseUp(e) : this.onCellMouseUp(e);
 		this.select.resetStartPoint();
 		this.select.clearInSelectingMode();
 		!isNaN(e.rowIndex) && e.cellIndex == -1 && this.focus.focusRowBarNode(e.rowIndex);
-		
 	},
 	
 	onMouseUpRow: function(e){
 		// summary:
-		//		Event fired when mouse is down inside grid row
+		//		Event fired when mouse is up inside grid row
 		// e: Event
 		//		Decorated event object that contains reference to grid, cell, and rowIndex
 		if (this.dndSelectable) {
@@ -30,7 +29,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndEvents", null, {
 	
 	onCellMouseUp: function(e){
 		// summary:
-		//		Event fired when mouse is down in a header cell.
+		//		Event fired when mouse is up in a cell.
 		// e: Event
 		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 		if (e.cellIndex > this.select.exceptColumnsTo) {
@@ -71,16 +70,9 @@ dojo.declare("dojox.grid.enhanced.dnd._DndEvents", null, {
 	
 	onRowMouseUp: function(e){
 		// summary:
-		//		Event fired when mouse is down in a row.
+		//		Event fired when mouse is up in a row.
 		// e: Event
 		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 		this.select.setInSelectingMode("row", false);
-	},
-
-	onHeaderCellMouseUp: function(e) {
-		// summary:
-		//		Event fired when mouse is up in a header cell.
-		// e: Event
-		// 		Decorated event object which contains reference to grid, cell, and rowIndex
 	}
 });

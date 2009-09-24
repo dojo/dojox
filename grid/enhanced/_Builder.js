@@ -9,18 +9,22 @@ dojo.declare("dojox.grid.enhanced._BuilderMixin", null, {
 		// summary:
 		//		Overwritten, see dojox.grid._Builder.generateCellMarkup()
 		//		Add special css classes when nested sorting is on
-		if(!inMoreClasses){
-			inMoreClasses = ' dojoxGridSortCell '
-		}else if(inMoreClasses.indexOf('dojoxGridSortCell') == -1){
-			inMoreClasses +=' dojoxGridSortCell ';	
-		}		
 		var result = this.inherited(arguments);
 		if(!isHeader){
-			result[4] += '<div class="dojoxGridSortCellContent">';
+			result[4] += '<div class="dojoxGridCellContent">';
 			result[6] = '</div></td>';
 		}
 		return result;
-	}
+	},
+	
+	domouseup: function(e){
+	//summary:
+	//		Handler when there is a mouse up event either in header or grid content 
+	//e: Event
+	//		The mouse up event
+		if(e.cellNode)
+			this.grid.onMouseUp(e);
+	}	
 });
 
 dojo.declare("dojox.grid.enhanced._HeaderBuilder", [dojox.grid._HeaderBuilder, dojox.grid.enhanced._BuilderMixin], {
