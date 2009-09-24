@@ -123,24 +123,30 @@ dojo.require("dojox.lang.functional.reversed");
 							cl = { x1: width/2, x2: width, y1: y-close, y2: y-close };
 						shape = s.createGroup();
 						shape.setTransform({dx: x, dy: 0 });
-						shape.createLine(hl).setStroke(stroke);
-						shape.createLine(op).setStroke(stroke);
-						shape.createLine(cl).setStroke(stroke);
+						var inner = shape.createGroup();
+						inner.createLine(hl).setStroke(stroke);
+						inner.createLine(op).setStroke(stroke);
+						inner.createLine(cl).setStroke(stroke);
 
 						//	TODO: double check this.
 						run.dyn.fill   = fill;
 						run.dyn.stroke = stroke;
 						if(events){
 							var o = {
-								element: "ohlc",
+								element: "candlestick",
 								index:   j,
 								run:     run,
 								plot:    this,
 								hAxis:   this.hAxis || null,
 								vAxis:   this.vAxis || null,
-								shape:   shape,
-								x:       v,
-								y:       j + 1.5
+								shape:	 inner,
+								x:       x,
+								y:       y-Math.max(open, close),
+								cx:		 width/2,
+								cy:		 (y-Math.max(open, close)) + (Math.max(open > close ? open-close : close-open, 1)/2),
+								width:	 width,
+								height:  Math.max(open > close ? open-close : close-open, 1),
+								data:	 v
 							};
 							this._connectEvents(shape, o);
 						}
