@@ -117,10 +117,9 @@ dojo.require("dojox.lang.functional.reversed");
 					}
 
 					if(width >= 1){
-						//	draw the line and rect, set up as a group and pass that to the events.
 						var hl = { x1: width/2, x2: width/2, y1: y - high, y2: y - low },
-							op = { x1: 0, x2: width/2, y1: y-open, y2: y-open},
-							cl = { x1: width/2, x2: width, y1: y-close, y2: y-close };
+							op = { x1: 0, x2: ((width/2) + ((stroke.width||1)/2)), y1: y-open, y2: y-open},
+							cl = { x1: ((width/2) - ((stroke.width||1)/2)), x2: width, y1: y-close, y2: y-close };
 						shape = s.createGroup();
 						shape.setTransform({dx: x, dy: 0 });
 						var inner = shape.createGroup();
