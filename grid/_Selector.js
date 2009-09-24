@@ -11,7 +11,7 @@ dojo.require("dojox.grid._Builder");
 		generateHtml: function(){
 			var w = this.view.contentWidth || 0;
 			var selectedCount = this.view.grid.selection.getSelectedCount();
-			var checked = (selectedCount == this.view.grid.rowCount) ? 'checked="true" ':'';
+			var checked = (selectedCount && selectedCount == this.view.grid.rowCount) ? 'checked="true" ':'';
 			return '<table style="width:' + w + 'px;" ' +
 				'border="0" cellspacing="0" cellpadding="0" ' +
 				'role="' + (dojo.isFF<3 ? "wairole:" : "") + 'presentation"><tr><th>' +
