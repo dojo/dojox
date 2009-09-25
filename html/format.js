@@ -30,11 +30,16 @@ dojo.require("dojox.html.entities");
 		var iTxt = "\t";
 		var textContent = "";
 		var inlineStyle = [];
+		var i;
+
+		// Compile regexps once for this call.
+		var rgxp_fixIEAttrs = new RegExp("=[^\"']\\S+(\\s|>)", "g");
+		var rgxp_styleMatch = /style=("[^"]*"|'[^']*'|\S*)/gi ;
+		var rgxp_attrsMatch = /\s\w+=("[^"]*"|'[^']*'|\S*)/gi ;
 
 		// Check to see if we want to use spaces for indent instead
 		// of tab.
 		if(indentBy && indentBy > 0 && indentBy < 10){
-			var i;
 			iTxt = "";
 			for(i = 0; i < indentBy; i++){
 				iTxt += " ";
@@ -46,9 +51,39 @@ dojo.require("dojox.html.entities");
 		var contentDiv = dojo.doc.createElement("div");
 		contentDiv.innerHTML = html;
 
-		//Local alias to our entity encoder.
-		var encode = dojox.html.entities.encode;
-		var decode = dojox.html.entities.decode;
+		// We could use the dojox.html.entity encode/decode calls here, but 
+		// they get expensive, with the regexp creation, so lets take the 
+		// impl and inline it with a tweak so regexp creation is done once.
+		map = map || dojox.html.entities.html.concat(dojox.html.entities.latin);
+		var encMapper = {};
+		var encRegexp = ["["];
+		for(i = 0; i < map.length; i++){
+			encMapper[map[i][0]] = "&" + map[i][1] + ";";
+			encRegexp.push(map[i][0]);
+		}
+		encRegexp.push("]");
+		encRegexp = new RegExp(encRegexp.join(""), "g");
+		var encode = function(str){
+			return str.replace(encRegexp, function(c){
+				return encMapper[c];
+			});
+		};
+
+		var decMapper = {};
+		var decRegexp = ["("];
+		for(i = 0; i < map.length; i++){
+			var e = "&" + map[i][1] + ";";
+			if(i){decRegexp.push("|");}
+			decMapper[e] = map[i][0];
+			decRegexp.push(e);
+		}
+		decRegexp.push(")");
+		decRegexp = new RegExp(decRegexp.join(""), "g");
+		var decode = function(str){
+			return str.replace(decRegexp, function(c){
+				return decMapper[c];
+			});
+		};
 
 		/** Define a bunch of formatters to format the output. **/
 
@@ -82,6 +117,8 @@ dojo.require("dojox.html.entities");
 			}
 		};
 
+		//Create less divs.
+		var div = contentDiv.ownerDocument.createElement("div");
 		var outerHTML =  function(node){
 			// summary:
 			//		Function to return the outer HTML of a node.
@@ -89,9 +126,10 @@ dojo.require("dojox.html.entities");
 			//		allows avoiding looking at any child nodes, because in this
 			//		case, we don't want them.
 			var clone = node.cloneNode(false);
-			var div = dojo.doc.createElement("div");
 			div.appendChild(clone);
-			return div.innerHTML;
+			var html = div.innerHTML;
+			div.innerHTML = "";
+			return html;
 		};
 
 		var indent = function(){
@@ -254,7 +292,7 @@ dojo.require("dojox.html.entities");
 
 			// Also thanks to IE, we need to check for quotes around 
 			// attributes and insert if missing.
-			tag = tag.replace(new RegExp("=[^\"']\\S+(\\s|>)", "g"), function(match){
+			tag = tag.replace(rgxp_fixIEAttrs, function(match){
 				var endChar = match.length - 1;
 				match = "=\"" + match.substring(1, endChar) + 
 					"\"" + match.charAt(endChar);
@@ -264,7 +302,7 @@ dojo.require("dojox.html.entities");
 			// And lastly, thanks IE for changing style casing and end
 			// semi-colon and webkit adds spaces, so lets clean it up by
 			// sorting, etc, while we're at it.
-			tag = tag.replace(/style=("[^"]*"|'[^']*'|\S*)/gi, function(match){
+			tag = tag.replace(rgxp_styleMatch, function(match){
 				var sL = match.substring(0,6);
 				var style = match.substring(6, match.length).toLowerCase();
 				var closure = style.charAt(0);
@@ -287,7 +325,7 @@ dojo.require("dojox.html.entities");
 
 			// Try and sort the attributes while we're at it.
 			var attrs = [];
-			tag = tag.replace(/\s\w+=("[^"]*"|'[^']*'|\S*)/gi, function(attr){
+			tag = tag.replace(rgxp_attrsMatch, function(attr){
 				attrs.push(dojo.trim(attr));
 				return "";
 			});
