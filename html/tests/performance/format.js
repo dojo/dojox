@@ -62,6 +62,6 @@ doh.register("format.prettyprint.performance", [
 		runTest: function(){
 			var s = dojox.html.format.prettyPrint(dojox.html.tests.performance.docText);
 		}
-	},
+	}
 ]);
 
