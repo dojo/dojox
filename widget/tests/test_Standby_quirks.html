@@ -167,6 +167,15 @@
 				overlay19.show()}));
 			connects.push(dojo.connect(button38, "onClick", function(){overlay19.hide()}));
 			dijit.byId("dialog").show();
+
+			var button39 = dijit.byId("overlay20Button1");
+			var overlay20= dijit.byId("standby20");
+			connects.push(dojo.connect(button39, "onClick", function(){
+				overlay20.show();
+				setTimeout(function(){
+	                overlay20.hide();
+				}, 5000);
+			}));
 		}
 		dojo.addOnLoad(init);
 
@@ -181,27 +190,27 @@
 	</script>
 	
 </head>
-<body class="soria">
+<body class="soria" id="bodyId">
 	
 	<h1 class="testTitle">dojox.widget.Standby</h1>
-    
+
 	<h3>Testing a basic on a div contained in a scrolling div</h3>
 	<button id ="overlay14Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
 	<br>
 	<button id ="overlay14Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
 	<div style="width: 250px; height: 100px; overflow: auto">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
 	<div id ="overlayTarget14" style="width: 200px; height: 200px; background-color: darkblue;"></div>
-        <div style="width: 400px; height: 5px"></div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+		<div style="width: 400px; height: 5px"></div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
 	</div>
 	<div id ="standby14" target="overlayTarget14" dojoType="dojox.widget.Standby"></div>
 	<hr>
@@ -316,13 +325,13 @@
 	<hr>
 
    	<h3>Testing that this still works in a dialog after zIndex changes</h3>
-    <div dojoType="dijit.Dialog" id="dialog">
-    	<button id ="overlay15Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
-    	<br>
-    	<button id ="overlay15Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
-    	<div id ="overlayTarget15" style="width: 200px; height: 100px; background-color: darkblue;"></div>
-    	<div id ="standby15" target="overlayTarget15" dojoType="dojox.widget.Standby" zIndex="1000"></div>
-    </div>
+	<div dojoType="dijit.Dialog" id="dialog">
+		<button id ="overlay15Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
+		<br>
+		<button id ="overlay15Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
+		<div id ="overlayTarget15" style="width: 200px; height: 100px; background-color: darkblue;"></div>
+		<div id ="standby15" target="overlayTarget15" dojoType="dojox.widget.Standby" zIndex="1000"></div>
+	</div>
    	<hr>
 
 	<h3>Testing a basic on a node, using only centered text.</h3>
@@ -365,6 +374,13 @@
 		<div id ="overlayTarget12" class="curvedClass"></div>
 		<div id ="standby12" target="overlayTarget12" dojoType="dojox.widget.Standby"></div>
 	</div>        
-    
+
+	<br>
+	<br>
+	<br> 
+	<h3>Testing an overlay of the entire document body.</h3>
+	<button id ="overlay20Button1" dojoType="dijit.form.Button">Click to show the standby overlay on body for 5 seconds!</button>
+	<div id ="standby20" target="bodyId" dojoType="dojox.widget.Standby"></div>
+
 </body>
 </html>

@@ -6,43 +6,43 @@ dojo.require("dojo.fx");
 dojo.experimental("dojox.widget.Standby");
 
 dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
-	//	summary:
+	// summary:
 	//		A widget designed to act as a Standby/Busy/Disable/Blocking widget to indicate a 
 	//		particular DOM node is processing and cannot be clicked on at this time.
 	//		This widget uses absolute positioning to apply the overlay and image.
 	// 
-	//	image:	
+	// image:	
 	//		A URL to an image to center within the blocking overlay.  
 	//		The default is a basic spinner.
 	//
-	//	imageText:
+	// imageText:
 	//		Text to set on the ALT tag of the image.  
 	//		The default is 'Please wait...'
 	//
-	//	text:
+	// text:
 	//		Text to display in the center instead of an image.
 	//		Defaults to 'Please Wait...'
 	//
-	//	centerIndicator:
+	// centerIndicator:
 	//		Which to use as the center info, the text or the image.
 	//		Defaults to image.
 	//
-	//	color:
+	// color:
 	//		The color to use for the translucent overlay.  
 	//		Text string such as: darkblue, #FE02FD, etc.
 	//
-	//	duration:
+	// duration:
 	//		How long the fade in and out effects should run in milliseconds.
 	//		Default is 500ms
 	//
-	//	zIndex:
+	// zIndex:
 	//		Control that lets you specify if the zIndex for the overlay
 	//		should be auto-computed based off parent zIndex, or should be set
 	//		to a particular value.  This is useful when you want to overlay 
 	//		things in digit.Dialogs, you can specify a base zIndex to append from.
 	//		Default is 'auto'.
 
-	//	templateString: [protected] String
+	// templateString: [protected] String
 	//		The template string defining out the basics of the widget.  No need for an external
 	//		file.
 	templateString: 
@@ -56,75 +56,75 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 				"top: 0px;\" dojoAttachPoint=\"_textNode\"></div>" +
 		"</div>",
 
-	//	_underlayNode: [private] DOMNode
+	// _underlayNode: [private] DOMNode
 	//		The node that is the translucent underlay for the 
 	//		image that blocks access to the target.
 	_underlayNode: null,	
 
-	//	_imageNode: [private] DOMNode
+	// _imageNode: [private] DOMNode
 	//		The image node where we attach and define the image to display.
 	_imageNode: null,
 
-	//	_textNode: [private] DOMNode
+	// _textNode: [private] DOMNode
 	//		The div to attach text/HTML in the overlay center item.
 	_textNode: null,
 
-	//	_centerNode: [private] DOMNode
+	// _centerNode: [private] DOMNode
 	//		Which node to use as the center node, the image or the text node.
 	_centerNode: null,
 
-	//	image: String
+	// image: String
 	//		The URL to the image to center in the overlay.
 	image: dojo.moduleUrl("dojox", "widget/Standby/images/loading.gif").toString(), 
 
-	//	imageText: String
+	// imageText: String
 	//		Text for the ALT tag.
 	imageText: "Please Wait...", 
 
-	//	text: String
+	// text: String
 	//		Text/HTML to display in the center of the overlay
 	//		This is used if image center is disabled.
 	text: "Please wait...",
 
-	//	centerIndicator: String
+	// centerIndicator: String
 	//		Property to define if the image and its alt text should be used, or
 	//		a simple Text/HTML node should be used.  Allowable values are 'image'
 	//		and 'text'.
 	//		Default is 'image'.
 	centerIndicator: "image",
 
-	//	_displayed: [private] Boolean
+	// _displayed: [private] Boolean
 	//		Flag to indicate if the overlay is displayed or not.
 	_displayed: false, 
 
-	//	_resizeCheck: [private] Object
+	// _resizeCheck: [private] Object
 	//		Handle to interval function that checks the target for changes.
 	_resizeCheck: null, 
 	
-	//	target: DOMNode||DOMID(String)||WidgetID(String)
+	// target: DOMNode||DOMID(String)||WidgetID(String)
 	//		The target to overlay when active.  Can be a widget id, a 
 	//		dom id, or a direct node reference.
 	target: "", 
 
-	//	color:	String
+	// color:	String
 	//		The color to set the overlay.  Should be in #XXXXXX form.
 	//		Default color for the translucent overlay is light gray.
 	color: "#C0C0C0",
 
-	//	duration: integer
+	// duration: integer
 	//		Integer defining how long the show and hide effects should take.
 	duration: 500,
 
-	//	_started: [private] Boolean 
+	// _started: [private] Boolean 
 	//		Trap flag to ensure startup only processes once.
 	_started: false,
 
-	//	_parent: [private] DOMNode
+	// _parent: [private] DOMNode
 	//		Wrapping div for the widget, also used for IE 7 in dealing with the
 	//		zoom issue.
 	_parent: null,
 
-	//	zIndex: String
+	// zIndex: String
 	//		Control that lets you specify if the zIndex for the overlay
 	//		should be auto-computed based off parent zIndex, or should be set
 	//		to a particular value.  This is useful when you want to overlay 
@@ -132,7 +132,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	zIndex: "auto",
 
 	startup: function(args){
-		//	summary:
+		// summary:
 		//		Over-ride of the basic widget startup function.  
 		//		Configures the target node and sets the image to use.
 		if(!this._started){
@@ -185,17 +185,18 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	show: function(){
-		//	summary:
+		// summary:
 		//		Function to display the blocking overlay and busy/status icon or text.
 		if(!this._displayed){
 			this._displayed = true;
 			this._size();
+			this._disableOverflow();
 			this._fadeIn();
 		}
 	},
 
 	hide: function(){
-		//	summary:
+		// summary:
 		//		Function to hide the blocking overlay and status icon or text.
 		if(this._displayed){
 			this._size();
@@ -209,25 +210,25 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	isVisible: function(){
-		//	summary:
+		// summary:
 		//		Helper function so you can test if the widget is already visible or not.
-		//	returns:
+		// returns:
 		//		boolean indicating if the widget is in 'show' state or not.
 		return this._displayed; // boolean
 	},
 
 	onShow: function(){
-		//	summary:
+		// summary:
 		//		Event that fires when the display of the Standby completes.
 	},
 
 	onHide: function(){
-		//	summary:
+		// summary:
 		//		Event that fires when the display of the Standby completes.
 	},
 
 	uninitialize: function(){
-		//	summary:	
+		// summary:	
 		//		Over-ride to hide the widget, which clears intervals, before cleanup.
 		this._displayed = false;
 		if(this._resizeCheck){
@@ -247,10 +248,10 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_size: function(){
-		//	summary:
+		// summary:
 		//		Internal function that handles resizing the overlay and 
 		//		centering of the image on window resizing.
-		//	tags:
+		// tags:
 		//		private
 		if(this._displayed){
 			var dir = dojo.attr(dojo.body(), "dir");
@@ -264,6 +265,13 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			var curStyle = dojo.style(this._centerNode, "display"); 
 			dojo.style(this._centerNode, "display", "block");
 			var box = dojo.position(target, true);
+			if(target === dojo.body() || target === dojo.doc){
+				// Target is the whole doc, so scale to viewport.
+				box = dijit.getViewport();
+				box.x = box.l;
+				box.y = box.t;
+			}
+
 			var cntrIndicator = dojo.marginBox(this._centerNode);
 			dojo.style(this._centerNode, "display", curStyle);
 
@@ -297,7 +305,10 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 
 			var pn = target.parentNode;
-			if(pn && pn !== dojo.body()){
+			if(pn && pn !== dojo.body() && 
+			   target !== dojo.body() && 
+			   target !== dojo.doc){
+				
 				// If the parent is the body tag itself,
 				// we can avoid all this, the body takes 
 				// care of overflow for me.  Besides, browser
@@ -469,13 +480,13 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_cloneStyles: function(list){
-		//	summary:
+		// summary:
 		//		Internal function to clone a set of styles from the target to 
 		//		the underlay.
-		//	list: Array
+		// list: Array
 		//		An array of style names to clone.
 		//
-		//	tags:
+		// tags:
 		//		private
 		dojo.forEach(list, function(style){
 			dojo.style(this._underlayNode,style,dojo.style(this.target,style));
@@ -483,9 +494,9 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_fadeIn: function(){
-		//	summary:
+		// summary:
 		//		Internal function that does the opacity style fade in animation.
-		//	tags:
+		// tags:
 		//		private
 		var self = this;
 		var underlayNodeAnim = dojo.animateProperty({
@@ -506,9 +517,9 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_fadeOut: function(){
-		//	summary:
+		// summary:
 		//		Internal function that does the opacity style fade out animation.
-		//	tags:
+		// tags:
 		//		private
 		var self = this;
 		var underlayNodeAnim = dojo.animateProperty({
@@ -516,7 +527,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			node: self._underlayNode, 
 			properties: {opacity: {start: 0.75, end: 0}},
 			onEnd: function(){
-				dojo.style(self._underlayNode, "display", "none");
+				dojo.style(self._underlayNode,{"display":"none", "zIndex": "-1000"});
 			}
 		});
 		var imageAnim = dojo.animateProperty({
@@ -524,8 +535,9 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			node: self._centerNode, 
 			properties: {opacity: {start: 1, end: 0}},
 			onEnd: function(){
-				dojo.style(self._centerNode, "display", "none");
+				dojo.style(self._centerNode,{"display":"none", "zIndex": "-1000"});
 				self.onHide();
+				self._enableOverflow();
 			}
 		});
 		var anim = dojo.fx.combine([underlayNodeAnim,imageAnim]);
@@ -533,11 +545,11 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_ignore: function(event){
-		//	summary:
+		// summary:
 		//		Function to ignore events that occur on the overlay.
-		//	event: Event
+		// event: Event
 		//		The event to halt
-		//	tags:
+		// tags:
 		//		private
 		if(event){
 			dojo.stopEvent(event);
@@ -545,13 +557,13 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	},
 
 	_scrollerWidths: function(){
-		//	summary:
+		// summary:
 		//		This function will calculate the size of the vertical and
 		//		horizontaol scrollbars.
-		//	returns:
+		// returns:
 		//		Object of form: {v: Number, h: Number} where v is vertical scrollbar width
 		//		and h is horizontal scrollbar width.
-		//	tags:
+		// tags:
 		//		private
 		var div = dojo.doc.createElement("div");
 		dojo.style(div, {
@@ -587,49 +599,49 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 	/* The following are functions that tie into _Widget.attr() */
 
 	_setTextAttr: function(text){
-		//	summary:
+		// summary:
 		//		Function to allow widget.attr to set the text displayed in center 
 		//		if using text display.
-		//	text: String
+		// text: String
 		//		The text to set.
 		this._textNode.innerHTML = text;
 		this.text = text;
 	},
 
 	_setColorAttr: function(c){
-		//	summary:
+		// summary:
 		//		Function to allow widget.attr to set the color used for the translucent
 		//		div overlay.
-		//	c: String
+		// c: String
 		//		The color to set the background underlay to in #XXXXXX format..
 		dojo.style(this._underlayNode, "backgroundColor", c);
 		this.color = c;
 	},
 
 	_setImageTextAttr: function(text){
-		//	summary:
+		// summary:
 		//		Function to allow widget.attr to set the ALT text text displayed for
 		//		the image (if using image center display).
-		//	text: String
+		// text: String
 		//		The text to set.
 		dojo.attr(this._imageNode, "alt", text);
 		this.imageText = text;
 	},
 
 	_setImageAttr: function(url){
-		//	summary:
+		// summary:
 		//		Function to allow widget.attr to set the url source for the center image
-		//	text: String
+		// text: String
 		//		The url to set for the image.
 		dojo.attr(this._imageNode, "src", url);
 		this.image = url;
 	},
 
 	_setCenterIndicatorAttr: function(indicator){
-		//	summary:
+		// summary:
 		//		Function to allow widget.attr to set the node used for the center indicator,
 		//		either the image or the text.
-		//	indicator: String
+		// indicator: String
 		//		The indicator to use, either 'image' or 'text'.
 		this.centerIndicator = indicator;
 		if(indicator === "image"){
@@ -638,6 +650,65 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		}else{
 			this._centerNode = this._textNode;
 			dojo.style(this._imageNode, "display", "none");
+		}
+	},
+
+	_disableOverflow: function(){
+		 // summary:
+		 //		Function to disable scrollbars on the body.  Only used if the overlay 
+		 //		targets the body or the document.
+		 if(this.target === dojo.body() || this.target === dojo.doc){
+			 // Store the overflow state we have to restore later.
+			 // IE had issues, so have to check that it's defined.  Ugh.
+			 this._overflowDisabled = true;
+			 var body = dojo.body();
+			 if(body.style && body.style.overflow){
+				 this._oldOverflow = dojo.style(body, "overflow");
+			 }else{
+				 this._oldOverflow = "";
+			 }
+			 if(dojo.isIE && !dojo.isQuirks){
+				 // IE will put scrollbars in anyway, html (parent of body)
+				 // also controls them in standards mode, so we have to 
+				 // remove them, argh.
+				 if(body.parentNode && 
+					body.parentNode.style && 
+					body.parentNode.style.overflow){
+					 this._oldBodyParentOverflow = body.parentNode.style.overflow;
+				 }else{
+					 this._oldBodyParentOverflow = "scroll";
+				 }
+				 dojo.style(body.parentNode, "overflow", "hidden");
+			 }
+			 dojo.style(body, "overflow", "hidden");
+		 }
+	},
+
+	_enableOverflow: function(){
+		 // summary:
+		 //		Function to restore scrollbars on the body.  Only used if the overlay 
+		 //		targets the body or the document.
+		 if(this._overflowDisabled){
+			delete this._overflowDisabled;
+			var body = dojo.body();
+			// Restore all the overflow.
+			if(dojo.isIE && !dojo.isQuirks){
+				body.parentNode.style.overflow = this._oldBodyParentOverflow;
+				delete this._oldBodyParentOverflow;
+			}
+			dojo.style(body, "overflow", this._oldOverflow);
+			if(dojo.isWebKit){
+				//Gotta poke WebKit, or scrollers don't come back. :-(
+				var div = dojo.create("div", { style: {
+						height: "2px"
+					}
+				});
+				body.appendChild(div);
+				setTimeout(function(){
+					body.removeChild(div);
+				}, 0);
+			}
+			delete this._oldOverflow;
 		}
 	}
 });	
