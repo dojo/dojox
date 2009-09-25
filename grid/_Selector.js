@@ -104,7 +104,6 @@ dojo.require("dojox.grid._Builder");
 			}
 			this.connect(this.grid.selection, 'onSelected', 'onSelected');
 			this.connect(this.grid.selection, 'onDeselected', 'onDeselected');
-			this.connect(this.grid, 'onSelectionChanged', 'onSelectionChanged');
 		},
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -145,13 +144,6 @@ dojo.require("dojox.grid._Builder");
 		},
 		onDeselected: function(inIndex){
 			this.grid.updateRow(inIndex);
-		},
-		onSelectionChanged: function(){
-			if(this._selectionChanging){ return; }
-			var input = dojo.query('input', this.headerNode)[0];
-			var g = this.grid;
-			var s = (g.rowCount && g.rowCount == g.selection.getSelectedCount());
-			g.allItemsSelected = input.checked = s||false;
 		}
 	});
 	if(!dojox.grid._View.prototype._headerBuilderClass &&
@@ -190,13 +182,31 @@ dojo.require("dojox.grid._Builder");
 			this.headerNode.style.visibility = "hidden";
 		},
 		
-		onSelectionChanged: function(){},
 		renderHeader: function(){}
 	});
 
 	dojo.declare("dojox.grid._CheckBoxSelector", dojox.grid._Selector, {
 		inputType: 'checkbox',
 		_headerBuilderClass: dojox.grid._InputSelectorHeaderBuilder,
-		_contentBuilderClass: dojox.grid._InputSelectorContentBuilder
+		_contentBuilderClass: dojox.grid._InputSelectorContentBuilder,
+		postCreate: function(){
+			this.inherited(arguments);
+			this.connect(this.grid, 'onSelectionChanged', 'onSelectionChanged');
+			this.connect(this.grid, 'updateRowCount', '_updateVisibility');
+		},
+		renderHeader: function(){
+			this.inherited(arguments);
+			this._updateVisibility(this.grid.rowCount);
+		},
+		_updateVisibility: function(rowCount){
+			this.headerNode.style.visibility = rowCount ? "" : "hidden";		
+		},
+		onSelectionChanged: function(){
+			if(this._selectionChanging){ return; }
+			var input = dojo.query('input', this.headerNode)[0];
+			var g = this.grid;
+			var s = (g.rowCount && g.rowCount == g.selection.getSelectedCount());
+			g.allItemsSelected = input.checked = s||false;
+		}
 	});
 })();
