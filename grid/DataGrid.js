@@ -237,6 +237,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			}
 		}
 		if(!size){
+			this.views.render();
+			this._resize();
 			this.showMessage(this.noDataMessage);
 			this.focus.initFocusView();
 		}else{
