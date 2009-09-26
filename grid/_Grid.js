@@ -705,6 +705,7 @@ dojo.requireLocalization("dijit", "loading");
 			delete this._pendingChangeSize;
 			delete this._pendingResultSize;
 			// if we have set up everything except the DOM, we cannot resize
+			if(!this.domNode){ return; }
 			var pn = this.domNode.parentNode;
 			if(!pn || pn.nodeType != 1 || !this.hasLayout() || pn.style.visibility == "hidden" || pn.style.display == "none"){
 				return;
