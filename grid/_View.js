@@ -80,7 +80,7 @@ dojo.require("dojo.dnd.Manager");
 
 		// focus 
 		focus: function(){
-			if(dojo.isWebKit || dojo.isOpera){
+			if(dojo.isIE || dojo.isWebKit || dojo.isOpera){
 				this.hiddenFocusNode.focus();
 			}else{
 				this.scrollboxNode.focus();
