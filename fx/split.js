@@ -22,44 +22,60 @@ dojo.mixin(dojox.fx,{
 		args.rows = args.rows || 3;
 		args.columns = args.columns || 3;
 		args.duration = args.duration || 1000;
+
 		var node = args.node = dojo.byId(args.node),
-			coords = dojo.coords(node, true),
-			pieceHeight = Math.ceil(coords.h / args.rows),
-			pieceWidth = Math.ceil(coords.w / args.columns),
-			container = dojo.create(node.tagName),
-			animations = [],
-			pieceHelper = dojo.create(node.tagName),
-			piece
+			parentNode = node.parentNode,
+			pNode = parentNode,
+			body = dojo.body(),
+			_pos = "position"
 		;
+
+		while(pNode && pNode != body && dojo.style(pNode, _pos) == "static"){
+			pNode = pNode.parentNode;
+		}
+
+		var pCoords = pNode != body ? dojo.position(pNode, true) : { x: 0, y: 0 },
+			coords = dojo.position(node, true),
+			nodeHeight = dojo.style(node, "height"),
+			nodeWidth = dojo.style(node, "width"),
+			hBorder = dojo.style(node, "borderLeftWidth") + dojo.style(node, "borderRightWidth"),
+			vBorder = dojo.style(node, "borderTopWidth") + dojo.style(node, "borderBottomWidth"),
+			pieceHeight = Math.ceil(nodeHeight / args.rows),
+			pieceWidth = Math.ceil(nodeWidth / args.columns),
+			container = dojo.create(node.tagName, {
+				style: {
+					position: "absolute",
+					padding: 0,
+					margin: 0,
+					border:"none",
+					top: coords.y - pCoords.y + "px",
+					left: coords.x - pCoords.x + "px",
+					height: nodeHeight + vBorder + "px",
+					width: nodeWidth + hBorder + "px",
+					background: "none",
+					overflow: args.crop ? "hidden" : "visible",
+					zIndex: dojo.style(node, "zIndex")
+				}
+			}, node, "after"),
+			animations = [],
+			pieceHelper = dojo.create(node.tagName, {
+				style: {
+					position: "absolute",
+					border: "none",
+					padding: 0,
+					margin: 0,
+					height: pieceHeight + hBorder + "px",
+					width: pieceWidth + vBorder + "px",
+					overflow: "hidden"
+				}
+			});
+
 		// Create the pieces and their animations
-		dojo.style(container, {
-			position: "absolute",
-			padding: "0",
-			margin: "0",
-			border:"none",
-			top: coords.y + "px",
-			left: coords.x + "px",
-			height: coords.h + "px",
-			width: coords.w + "px",
-			background: "none",
-			overflow: args.crop ? "hidden" : "visible",
-			zIndex: dojo.style(node, "zIndex")
-		});
-		node.parentNode.appendChild(container);
-		dojo.style(pieceHelper, {
-			position: "absolute",
-			border: "none",
-			padding: '0',
-			margin: '0',
-			height: pieceHeight + "px",
-			width: pieceWidth + "px",
-			overflow: "hidden"
-		});
 		for(var y = 0, ly = args.rows; y < ly; y++){
 			for(var x = 0, lx = args.columns; x < lx; x++){
 				// Create the piece
-				piece = dojo.clone(pieceHelper);
-				var pieceContents = dojo.clone(node),
+				var piece = dojo.clone(pieceHelper),
+					pieceContents = dojo.clone(node),
 					pTop = y * pieceHeight,
 					pLeft = x * pieceWidth
 				;
