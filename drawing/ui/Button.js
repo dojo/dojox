@@ -9,7 +9,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 	function(options){
 		options.subShape = true;
 		dojo.mixin(this, options);
-		
+		//console.log("  button:", this);
 		this.width = options.data.width;
 		this.height = options.data.height;
 		this.id = this.id || this.util.uid(this.type);
@@ -21,13 +21,14 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 		
 		this.shape = new dojox.drawing.stencil.Rect(options)
 		
+		var setGrad = function(s, p, v){
+			dojo.forEach(["norm", "over", "down", "selected"], function(nm){
+				s[nm].fill[p] = v;
+			});
+		}
 		// for button backs, not for icons
-		this.style.button.norm.fill.y2 = this.data.height;
-		this.style.button.over.fill.y2 = this.data.height;
-		this.style.button.down.fill.y2 = this.data.height;
-		this.style.button.selected.fill.y2 = this.data.height;
-		
-		
+		setGrad(this.style.button, "y2", this.data.height + this.data.y);
+		setGrad(this.style.button, "y1", this.data.y);
 		
 		if(options.icon && !options.icon.text){
 			var constr = this.drawing.getConstructor(options.icon.type);
@@ -44,7 +45,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			this.icon = new constr(o);
 			//console.log("  button:", this.toolType, this.style.button.icon)
 		}else if(options.text || options.icon.text){
-			console.warn("button text:", options.text || options.icon.text)
+			//console.warn("button text:", options.text || options.icon.text)
 			var o = this.makeOptions(options.text || options.icon.text);
 			o.data.color = this.style.button.icon.norm.color //= o.data.fill;
 			this.style.button.icon.selected.color = this.style.button.icon.selected.fill;
@@ -53,6 +54,11 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 				height:	this.icon._lineHeight,
 				y:((this.data.height-this.icon._lineHeight)/2)+this.data.y
 			});
+		}
+		
+		var c = this.drawing.getConstructor(this.toolType);
+		if(c){
+			this.drawing.addUI("tooltip", {data:{text:c.setup.tooltip}, button:this});
 		}
 		
 		this.onOut();
@@ -166,7 +172,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			
 		},
 		onOver: function(){
-			console.log("BUTTON OVER")
+			//console.log("BUTTON OVER")
 			if(this.selected){ return; }
 			this._change(this.style.button.over);
 		},
@@ -179,7 +185,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			this._change(this.style.button.selected);
 		},
 		onUp: function(){
-			console.log("BUTTON UP")
+			//console.log("BUTTON UP")
 			this._change(this.style.button.over);
 			if(this.hitched){
 				this.hitched();

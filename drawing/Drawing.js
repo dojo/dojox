@@ -328,6 +328,12 @@ dojo.provide("dojox.drawing.Drawing");
 			if(options && !options.data && !options.points){
 				options = {data:options}
 			}
+			if(!this.stencilTypes[type]){
+				if(type != "tooltip") {
+					console.warn("Not registered:", type);
+				}
+				return null;
+			}
 			var s = this.uiStencils.register( new this.stencilTypes[type](this.getShapeProps(options, "ui")));
 			return s;
 		},

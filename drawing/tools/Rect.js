@@ -58,7 +58,8 @@ dojox.drawing.tools.Rect.setup = {
 	// summary: See stencil._Base ToolsSetup
 	//
 	name:"dojox.drawing.tools.Rect",
-	tooltip:"Rectangle Tool",
+	tooltip:'<span class="drawingTipTitle">Rectangle Tool</span><br/>'
+		+ '<span class="drawingTipDesc">SHIFT - constrain to square</span>',
 	iconClass:"iconRect"
 };
 dojox.drawing.register(dojox.drawing.tools.Rect.setup, "tool");

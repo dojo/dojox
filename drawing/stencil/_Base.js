@@ -1,5 +1,5 @@
 dojo.provide("dojox.drawing.stencil._Base");
-
+dojo.require("dojo.fx.easing");
 
 /*=====
 StencilArgs = {
@@ -417,6 +417,71 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.render();
 		},
 		
+		animate: function(options, create){
+			console.warn("ANIMATE..........................")
+			var d = 	options.d || options.duration || 1000;
+			var ms = 	options.ms || 20;
+			var ease = 	options.ease || dojo.fx.easing.linear;
+			var steps = options.steps;
+			var ts = 	new Date().getTime();
+			var w = 	100;
+			var cnt = 	0;
+			var isArray = true;
+			
+			if(dojo.isArray(options.start)){
+				var sp =	options.start;
+				var ep = 	options.end;
+			
+			}else if (dojo.isObject(options.start)){
+				var sp =	options.start;
+				var ep = 	options.end;
+				isArray = 	false;
+			}else{
+				
+				console.warn("No data provided to animate")
+			}
+			
+			var v = setInterval(dojo.hitch(this, function(){
+				var t = new Date().getTime() - ts;
+				var p = ease(1-t/d);
+				if(t > d || cnt++ > 100){
+					clearInterval(v);
+					return;
+				}
+				
+				if(isArray){
+					var pnts = [];
+					dojo.forEach(sp, function(pt, i){
+						
+						var o = {
+							x: (ep[i].x-sp[i].x)*p + sp[i].x, 	
+							y: (ep[i].y-sp[i].y)*p + sp[i].y 	
+						};
+						pnts.push(o);
+					});
+					this.setPoints(pnts);
+					this.render();
+				
+				}else{
+					
+					var o = {};
+					for(var nm in sp){
+						o[nm] = (ep[nm] - sp[nm]) * p + sp[nm];
+					}
+					
+					this.attr(o);
+					
+				}
+				//console.dir(pnts)
+				
+				
+				//this.attr("height", w);
+				////console.log("W:", w)
+				//w += 5;
+				
+			}), ms);
+		},
+		
 		attr: function(/*String | Object*/key, /* ? String | Number */value){
 			// summary
 			//		Changes properties in the normal-style. Also can be used to
@@ -443,7 +508,9 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			var coords = {
 				x:true,
 				y:true,
+				r:true,
 				height:true,
+				width:true,
 				r:true,
 				radius:true,
 				angle:true
@@ -478,6 +545,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 					}else if(nm == "angle" && o.radius===undefined){
 						o.radius = coords.radius = this.getRadius();
 					}
+					
 				}
 				if(nm == "text"){
 					this.setText(o.text);
@@ -505,6 +573,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				return;
 			}
 			
+			// basic transform
 			if(o.x!==undefined || o.y!==undefined){
 				var box = this.getBounds(true);
 				var mx = { dx:0, dy:0 };	
@@ -516,6 +585,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				this.transformPoints(mx);
 			}
 			
+			
 			var p = this.points;
 			if(o.angle!==undefined){
 				this.dataToPoints({
@@ -524,15 +594,23 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 					angle:o.angle,
 					radius:o.radius
 				});
+			
 			} else if(width!==undefined){
 				p[1].x = p[2].x = p[0].x + width;
 				this.pointsToData(p);	
 			}
+			
 			if(o.height!==undefined && o.angle===undefined){
-				
+			console.log("Doing P2D-2")	
 				p[2].y = p[3].y = p[0].y + o.height;
 				this.pointsToData(p);
 			}
+			
+			if(o.r!==undefined){
+				this.data.r = Math.max(0, o.r);
+			}
+			
+			//console.dir(this.data);
 			if(propChange || textWas!=dojo.toJson(t) || styleWas != dojo.toJson(n)){
 				// to trigger the render
 				// other events will be called post render

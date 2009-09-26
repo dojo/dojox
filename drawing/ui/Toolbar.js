@@ -27,7 +27,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	//
 	//
 	constructor: function(props, node){
-		console.warn("GFX Toolbar:", props, node)
+		//console.warn("GFX Toolbar:", props, node)
 		this.util = dojox.drawing.util.common;
 		
 		// no mixin. painful.
@@ -54,11 +54,13 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			this.toolDrawing = new dojox.drawing.Drawing({mode:"ui"}, node);
 		}
 		
+		this.horizontal = this.width > this.height;
+		
 		if(this.toolDrawing.ready){
 			this.makeButtons();
 		}else{
 			var c = dojo.connect(this.toolDrawing, "onSurfaceReady", this, function(){
-				console.log("TB built")
+				//console.log("TB built")
 				dojo.disconnect(c);
 				this.drawing = dojox.drawing.getRegistered("drawing", dojo.attr(node, "drawingId")); // 
 				this.makeButtons();
@@ -125,12 +127,19 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 					btn.select();
 					this.drawing.setTool(btn.toolType);
 				}
-				x += w + g;
-				
+				if(this.horizontal){
+					y += h + g;
+				}else{
+					y += h + g;
+				}
 			}, this);
 		}
 		
-		x += this.toolPlugGap;
+		if(this.horizontal){
+			y += this.toolPlugGap;
+		}else{
+			y += this.toolPlugGap;
+		}
 		
 		if(this.strPlugs){
 			var plugAr = [];
@@ -146,14 +155,27 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			
 			dojo.forEach(plugAr, function(p){
 				t = dojo.trim(p);
-				console.log("   plugin:", p)
+				//console.log("   plugin:", p)
 				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onPlugClick"})
 				this.plugins.push(btn);
-				x += w + g;
+				if(this.horizontal){
+					y += h + g;
+				}else{
+					y += h + g;
+				}
 				this.drawing.addPlugin({name:this.drawing.stencilTypeMap[p], options:{button:btn}});
 			}, this);
 		}
 	},
+	
+	addTool: function(){
+		// TODO: ad button here
+	},
+	
+	addPlugin: function(){
+		// TODO: ad button here
+	},
+	
 	addBack: function(){
 		// summary:
 		//		Internal. Adds the back, behind the toolbar.
@@ -178,15 +200,6 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		//		Plugin click event. May be connected to.
 	},
 	
-	buildButton: function(tool, selected){
-		// summary:
-		//		Internal. Build a button.
-		//
-		var s = {place:"BR", size:2, mult:4};
-		var sym = dojox.drawing.library.icons;
-		var btn0 = gfxToolbar.addStencil("button", {data:{x:10, y:10, width:30, height:30, r:5}, icon:sym.ellipse, shadow:s});
-				
-	},
 	_mixprops: function(/*Array*/props, /*Object | Node*/objNode){
 		// summary:
 		//		Internally used for mixing in props from an object or

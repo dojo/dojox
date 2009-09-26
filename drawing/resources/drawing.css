@@ -24,3 +24,18 @@ html, body{
 	padding:3px;
 	margin:0;
 }
+
+.drawingTooltip{
+	font-family:sans-serif;
+	font-family:sans-serif;
+	font-weight:normal;
+	padding:5px;
+}
+.drawingTipTitle{
+	font-size:12px;
+	font-weight:bold;
+}
+.drawingTipDesc{
+	font-size:11px;
+	padding-left:10px;
+}

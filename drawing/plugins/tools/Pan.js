@@ -42,7 +42,6 @@ dojox.drawing.plugins.tools.Pan = dojox.drawing.util.oo.declare(
 		// This HAS to be called after setting initial objects or things get screwy.
 		//this.checkBounds();
 		
-		console.warn("PAN INITD")
 	},{
 		selected:false,
 		type:"dojox.drawing.plugins.tools.Pan",
@@ -114,10 +113,10 @@ dojox.drawing.plugins.tools.Pan = dojox.drawing.util.oo.declare(
 			// logging stuff here so it can be turned on and off. This method is
 			// very high maintenance.
 			var log = function(){
-				console.log.apply(console, arguments);
+				//console.log.apply(console, arguments);
 			}
 			var warn = function(){
-				console.warn.apply(console, arguments);
+				//console.warn.apply(console, arguments);
 			}
 			//console.clear();
 			//console.time("check bounds");
