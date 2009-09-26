@@ -46,6 +46,10 @@ dojo.declare("dojox.layout.GridContainer",
 	//opacity: Integer
 	//		Define the opacity of the DnD Avatar.
 	opacity:1,
+	
+	// colWidths: Array
+	//		The percentage widths of columns. If not set, then each column is the same percentage width.
+	colWidths: [],
 
 	// minColWidth: Integer
 	//		Minimum column width in percentage.
@@ -123,21 +127,26 @@ dojo.declare("dojox.layout.GridContainer",
 
 	_createCells: function(){
 		if(this.nbZones === 0){ this.nbZones = 1; }
-		var wCol = 100 / this.nbZones;
+		
+		// What is this for?
 		if(dojo.isIE && dojo.marginBox(this.gridNode).height){
 			var space = document.createTextNode(" ");
 			this.gridNode.appendChild(space);
 		}
+
 		var grid = [];
 		this.cell = [];
 		var i = 0;
 		while(i < this.nbZones){
-			var node = dojo.doc.createElement("td");
-			dojo.addClass(node, "gridContainerZone");
-			node.id = this.id + "_dz" + i;
-			node.style.width = wCol + "%";	
-			var zone = this.gridNode.appendChild(node);
-			this.cell[i] = zone;
+			var node = dojo.create("td", {
+				id: this.id + "_dz" + i,
+				className: "gridContainerZone",
+				style: {
+					width: this._getColWidth(i) + "%"
+				}
+			}, this.gridNode);
+
+			this.cell[i] = node;
 			i++;
 		}
 	},
@@ -807,18 +816,30 @@ dojo.declare("dojox.layout.GridContainer",
 		this._updateColumnsWidth();
 	},
 	
+	_getColWidth: function(idx){
+		if(idx < this.colWidths.length){
+			return this.colWidths[idx];
+		}
+		var totalWidth = 100;
+		dojo.forEach(this.colWidths, function(width){
+			totalWidth -= width;
+		});
+		return totalWidth / (this.nbZones - this.colWidths.length);
+	},
+	
 	_updateColumnsWidth: function(){
-		//summary: Update the columns width.
-		var wCol = 100 / this.nbZones;
+		//summary: 
+		//		Update the columns width.
+
 		var zone;
 		for(var z = 0; z < this.grid.length; z++){
-			zone = this.grid[z].node;
-			zone.style.width = wCol + "%";
+			this.grid[z].node.style.width = this._getColWidth(z) + "%";
 	 	}		
 	},
 	
 	_selectFocus: function(/*Event*/event){
-		//summary: 	Enable a11y into the GridContainer :
+		//summary: 	
+		//		Enable a11y into the GridContainer :
 		//		- Possibility to move focus into the GridContainer (TAB, LEFT ARROW, RIGHT ARROW, UP ARROW, DOWN ARROW).
 		//		- Possibility to move GridContainer's children (Drag and Drop) with keyboard. (SHIFT +	ARROW). 
 		//		If the type of widget is not draggable, a popup is displayed. 
