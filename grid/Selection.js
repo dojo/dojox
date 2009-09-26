@@ -123,6 +123,10 @@ dojo.declare("dojox.grid.Selection", null, {
 
 	addToSelection: function(inIndex){
 		if(this.mode == 'none'){ return; }
+		if(dojo.isArray(inIndex)){
+			dojo.forEach(inIndex, this.addToSelection, this);
+			return;
+		}
 		inIndex = Number(inIndex);
 		if(this.selected[inIndex]){
 			this.selectedIndex = inIndex;
@@ -145,6 +149,10 @@ dojo.declare("dojox.grid.Selection", null, {
 
 	deselect: function(inIndex){
 		if(this.mode == 'none'){ return; }
+		if(dojo.isArray(inIndex)){
+			dojo.forEach(inIndex, this.deselect, this);
+			return;
+		}
 		inIndex = Number(inIndex);
 		if(this.selectedIndex == inIndex){
 			this.selectedIndex = -1;
@@ -171,6 +179,10 @@ dojo.declare("dojox.grid.Selection", null, {
 	},
 
 	toggleSelect: function(inIndex){
+		if(dojo.isArray(inIndex)){
+			dojo.forEach(inIndex, this.toggleSelect, this);
+			return;
+		}
 		this.setSelected(inIndex, !this.selected[inIndex]);
 	},
 
