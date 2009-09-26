@@ -283,6 +283,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			this._isLoaded = true;
 			this.showMessage(this.errorMessage);
 		}
+		this._pending_requests[req.start] = false;
 		this.onFetchError(err, req);
 	},
 
