@@ -103,6 +103,30 @@
 			doSubscribe();
 		});
 
+		function changeStore(){
+			var flickrRestStore = new dojox.data.FlickrRestStore();
+			var req = {
+				query: {
+					userid: "44153025@N00",
+					apikey: "8c6803164dbc395fb7131c9d54843627",
+					sort: [
+						   {
+							attribute: "interestingness",
+							descending: true
+							}
+						   ],
+					tag_mode: "any"
+				},
+				count: 20
+			};
+			dijit.byId('thumbPicker2').setDataStore(flickrRestStore, req, {
+			  imageThumbAttr: "imageUrlThumb",
+			  imageLargeAttr: "imageUrl",
+			  titleAttr: "title"
+			  
+			});				
+		}
+
 	</script>
 </head>
 <body>
@@ -122,6 +146,8 @@
 	This ThumbnailPicker should have 5 thumbnails. Clicking on a thumbnail should NOT
 	open a URL, and the cursor should not change when over an image that is not an arrow.
 	
+	
+	<button onclick="changeStore()">Change Datastore</button>
     <div id="thumbPicker2" dojoType="dojox.image.ThumbnailPicker" size="400"
 		isClickable="false"></div>
 	<div jsId="imageItemStore" dojoType="dojo.data.ItemFileReadStore" url="images.json"></div>

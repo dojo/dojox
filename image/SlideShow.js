@@ -204,13 +204,10 @@ dojo.declare("dojox.image.SlideShow",
 		//		Resets the widget to its initial state
 		// description: 
 		//		Removes all previously loaded images, and clears all caches.
-		while(this.largeNode.firstChild){
-			this.largeNode.removeChild(this.largeNode.firstChild);
-		}
+		dojo.query("> *", this.largeNode).orphan();
 		this.largeNode.appendChild(this._tmpImage);
-		while(this.hiddenNode.firstChild){
-			this.hiddenNode.removeChild(this.hiddenNode.firstChild);
-		}
+		
+		dojo.query("> *", this.hiddenNode).orphan();
 		dojo.forEach(this.images, function(img){
 			if(img && img.parentNode){ img.parentNode.removeChild(img); }
 		});
@@ -357,10 +354,11 @@ dojo.declare("dojox.image.SlideShow",
 						url: img.getAttribute("src")
 					}]);
 
-        			if(callback) { callback(a,b,c); }
+        				if(callback) { 
+        					callback(a,b,c);
+        				}
 					_this._setTitle(title);
-					
-        		};
+	        		};
 				
 				dojo.fadeIn({
 					node: _this.images[index],
@@ -385,7 +383,7 @@ dojo.declare("dojox.image.SlideShow",
 				onEnd: function(){
 					_this.hiddenNode.appendChild(current[0]);
 					showOrLoadIt();
-			}
+				}
 			}).play();
 		}else{
 			showOrLoadIt();
@@ -453,30 +451,35 @@ dojo.declare("dojox.image.SlideShow",
 			}else{ /* Squelch - console.log("Got an empty set of items"); */ }
 		}
 
-		var _this = this;	
+		var _this = this;
+		var store = this.imageStore;
 		var loadIt = function(item){			
 			var url = _this.imageStore.getValue(item, _this.imageLargeAttr);
 			
 			var img = new Image();	// when creating img with "createElement" IE doesnt has width and height, so use the Image object
-			var div = document.createElement("div");
+			var div = dojo.create("div", {
+				id: _this.id + "_imageDiv" + index
+			});
 			div._img = img;
 
 			var link = _this.imageStore.getValue(item,_this.linkAttr);
 			if(!link || _this.noLink){ 
 				div.appendChild(img); 
 			}else{
-				var a = document.createElement("a");
-				a.setAttribute("href", link);
-				a.setAttribute("target","_blank");
-				div.appendChild(a);
+				var a = dojo.create("a", {
+					"href": link,
+					"target": "_blank"
+				}, div);
 				a.appendChild(img);
 			}
 
-			div.setAttribute("id",_this.id + "_imageDiv" + index);
 			dojo.connect(img, "onload", function(){
+				if(store != _this.imageStore){
+					// If the store has changed, ignore this load event.
+					return;
+				}
 				_this._fitImage(img);
-				div.setAttribute("width", _this.imageWidth);
-				div.setAttribute("height", _this.imageHeight);				
+				dojo.attr(div, {"width": _this.imageWidth, "height": _this.imageHeight});
 				
 				// make a short timeout to prevent IE6/7 stack overflow at line 0 ~ still occuring though for first image 
 				dojo.publish(_this.getLoadTopicName(), [index]);
@@ -486,15 +489,15 @@ dojo.declare("dojox.image.SlideShow",
 			});
 			_this.hiddenNode.appendChild(div);
 
-			var titleDiv = document.createElement("div");
-			dojo.addClass(titleDiv, "slideShowTitle");
-			div.appendChild(titleDiv);
-		
+			var titleDiv = dojo.create("div", {
+				className: "slideShowTitle"
+			}, div);
+
 			_this.images[index] = div;
-			img.setAttribute("src", url);
+			dojo.attr(img, "src", url);
 			
 			var title = _this.imageStore.getValue(item, _this.titleAttr);
-			if(title){ img.setAttribute("title", title); } 
+			if(title){ dojo.attr(img, "title", title); } 
 		}
 		this.imageStore.fetch(this._request);
 	},
@@ -547,8 +550,8 @@ dojo.declare("dojox.image.SlideShow",
 		this.navNext._size = dojo.marginBox(this.navNext);
 		
 		dojo._setOpacity(this.navNode, 0);
-		dojo.style(this.navNode, "position", "");
-		dojo.style(this.navNode, "top", "");		
+		
+		dojo.style(this.navNode, {"position": "", top: ""});
 	},
 
 	_setTitle: function(title){
@@ -604,7 +607,10 @@ dojo.declare("dojox.image.SlideShow",
 		//		currently visible.
 		if(this._navShowing && !force){return;}
 		dojo.style(this.navNode, "marginTop", "0px");
-		dojo.style(this.navPlay, "marginLeft", "0px");
+		
+		var navPlayPos = dojo.style(this.navNode, "width")/2 - this.navPlay._size.w/2 - this.navPrev._size.w;
+		
+		dojo.style(this.navPlay, "marginLeft", navPlayPos + "px");
 		var wrapperSize = dojo.marginBox(this.outerNode);
 		
 		var margin = this._currentImage.height - this.navPlay._size.h - 10 + this._getTopPadding();
