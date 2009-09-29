@@ -51,42 +51,12 @@ dojo.require("dojox.html.entities");
 		var contentDiv = dojo.doc.createElement("div");
 		contentDiv.innerHTML = html;
 
-		// We could use the dojox.html.entity encode/decode calls here, but 
-		// they get expensive, with the regexp creation, so lets take the 
-		// impl and inline it with a tweak so regexp creation is done once.
-		map = map || dojox.html.entities.html.concat(dojox.html.entities.latin);
-		var encMapper = {};
-		var encRegexp = ["["];
-		for(i = 0; i < map.length; i++){
-			encMapper[map[i][0]] = "&" + map[i][1] + ";";
-			encRegexp.push(map[i][0]);
-		}
-		encRegexp.push("]");
-		encRegexp = new RegExp(encRegexp.join(""), "g");
-		var encode = function(str){
-			return str.replace(encRegexp, function(c){
-				return encMapper[c];
-			});
-		};
-
-		var decMapper = {};
-		var decRegexp = ["("];
-		for(i = 0; i < map.length; i++){
-			var e = "&" + map[i][1] + ";";
-			if(i){decRegexp.push("|");}
-			decMapper[e] = map[i][0];
-			decRegexp.push(e);
-		}
-		decRegexp.push(")");
-		decRegexp = new RegExp(decRegexp.join(""), "g");
-		var decode = function(str){
-			return str.replace(decRegexp, function(c){
-				return decMapper[c];
-			});
-		};
+		// Use the entity encode/decode functions, they cache on the map,
+		// so it won't multiprocess a map.
+		var encode = dojox.html.entities.encode;
+		var decode = dojox.html.entities.decode;
 
 		/** Define a bunch of formatters to format the output. **/
-
 		var isInlineFormat = function(tag){
 			// summary:
 			//		Function to determine if the current tag is an inline

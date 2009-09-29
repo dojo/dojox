@@ -9,16 +9,33 @@ dojo.provide("dojox.html.entities");
 		//		Private internal function for performing encoding of entity characters.
 		// tags:
 		//		private
-		var mapper = {};
-		var regexp = ["["];
-		var i;
-		for(i = 0; i < map.length; i++){
-			mapper[map[i][0]] = "&" + map[i][1] + ";";
-			regexp.push(map[i][0]);
+
+		// Check to see if we have genned and cached a regexp for this map yet
+		// If we have, use it, if not, gen it, cache, then use.
+		var mapper, regexp;
+		if(map._encCache && 
+		   map._encCache.regexp && 
+		   map._encCache.mapper && 
+		   map.length == map._encCache.length){
+			mapper = map._encCache.mapper;
+			regexp = map._encCache.regexp;
+		}else{
+			mapper = {};
+			regexp = ["["];
+			var i;
+			for(i = 0; i < map.length; i++){
+				mapper[map[i][0]] = "&" + map[i][1] + ";";
+				regexp.push(map[i][0]);
+			}
+			regexp.push("]");
+			regexp = new RegExp(regexp.join(""), "g");
+			map._encCache = {
+				mapper: mapper,
+				regexp: regexp,
+				length: map.length
+			};
 		}
-		regexp.push("]");
-		regexp = regexp.join("");
-		str = str.replace(new RegExp(regexp, "g"), function(c){
+		str = str.replace(regexp, function(c){
 			return mapper[c];
 		});
 		return str;
@@ -29,18 +46,32 @@ dojo.provide("dojox.html.entities");
 		//		Private internal function for performing deecoding of entity characters.
 		// tags:
 		//		private
-		var mapper = {};
-		var regexp = ["("];
-		var i;
-		for(i = 0; i < map.length; i++){
-			var e = "&" + map[i][1] + ";";
-			if(i){regexp.push("|");}
-			mapper[e] = map[i][0];
-			regexp.push(e);
+		var mapper, regexp;
+		if(map._decCache && 
+		   map._decCache.regexp && 
+		   map._decCache.mapper && 
+		   map.length == map._decCache.length){
+			mapper = map._decCache.mapper;
+			regexp = map._decCache.regexp;
+		}else{
+			mapper = {};
+			regexp = ["("];
+			var i;
+			for(i = 0; i < map.length; i++){
+				var e = "&" + map[i][1] + ";";
+				if(i){regexp.push("|");}
+				mapper[e] = map[i][0];
+				regexp.push(e);
+			}
+			regexp.push(")");
+			regexp = new RegExp(regexp.join(""), "g");
+			map._decCache = {
+				mapper: mapper,
+				regexp: regexp,
+				length: map.length
+			};
 		}
-		regexp.push(")");
-		regexp = regexp.join("");
-		str = str.replace(new RegExp(regexp, "g"), function(c){
+		str = str.replace(regexp, function(c){
 			return mapper[c];
 		});
 		return str;

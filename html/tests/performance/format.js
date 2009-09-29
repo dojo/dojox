@@ -12,7 +12,6 @@ doh.register("format.prettyprint.performance", [
 		trialDelay: 50,
 		trialIterations: 50,
 		setUp: function() {
-			console.log("Meow!");
 			var deferred = dojo.xhrGet({
 				preventCache: true,
 				url: dojo.moduleUrl("dojox", "html/tests/performance/smalldoc.txt").toString(),
@@ -20,7 +19,6 @@ doh.register("format.prettyprint.performance", [
 				sync: true
 			});
 			deferred.addCallback(function(txt){
-				console.log("Purr");
 				dojox.html.tests.performance.docText = txt;
 			});
 			deferred.addErrback(function(e){
@@ -41,7 +39,6 @@ doh.register("format.prettyprint.performance", [
 		trialDelay: 50,
 		trialIterations: 50,
 		setUp: function() {
-			console.log("Meow!");
 			var deferred = dojo.xhrGet({
 				preventCache: true,
 				url: dojo.moduleUrl("dojox", "html/tests/performance/largedoc.txt").toString(),
@@ -49,7 +46,6 @@ doh.register("format.prettyprint.performance", [
 				sync: true
 			});
 			deferred.addCallback(function(txt){
-				console.log("Purr");
 				dojox.html.tests.performance.docText = txt;
 			});
 			deferred.addErrback(function(e){
