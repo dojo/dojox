@@ -1080,7 +1080,7 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 		if (e.target == this._colHeadNode) {
 			this._scrollHeader(this.getHeaderIndex());
 		}else {
-			this.focusView.header.baseDecorateEvent(e);
+			this.getFocusView(e).header.baseDecorateEvent(e);
 			this._addFocusBorder(e.target);
 			this._colHeadFocusIdx = e.cellIndex;
 			this._colHeadNode = this._findHeaderCells()[this._colHeadFocusIdx];
@@ -1105,10 +1105,28 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 		this._removeFocusBorder();
 		//if(!this.isNavHeader() || this.lastHeaderFocus.cellNode && this.lastHeaderFocus.cellNode != this._colHeadNode){
 		if(!this.isNavCellRegion){		
-			this.focusView.header.baseDecorateEvent(e);
+			this.getFocusView(e).header.baseDecorateEvent(e);
 			this.grid.removeHoverSortTip(e);
 			this.lastHeaderFocus.cellNode = this._colHeadNode;
 		}
+	},
+	
+	getFocusView: function(e){
+		// summary:
+		//		Get the current focus view
+		// e: Event
+		//		Event that triggers the current focus
+		// return: Object
+		//		The current focus view
+		var focusView;
+		dojo.forEach(this.grid.views.views, function(view){
+			if(!focusView){
+				var viewBox = dojo.coords(view.domNode), targetBox = dojo.coords(e.target);
+				var inRange = targetBox.x >= viewBox.x && targetBox.x <= (viewBox.x + viewBox.w);
+				inRange && (focusView = view);
+			}
+		});
+		return (this.focusView = focusView);
 	},
 		
 	_mockEvt: function(region){

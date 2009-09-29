@@ -336,7 +336,12 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		}
 		
 		var width = rightPosition - leftPosition;
-		var height = Number(this.grid.views.views[0].domNode.style.height.replace("px", ""));
+		var colHeight = 0, view = this.grid.views.views[0];
+		var viewheight = Number(dojo.style(view.domNode, 'height'));
+		for(r in view.rowNodes){
+			colHeight += dojo.coords(view.rowNodes[r].firstChild.rows[0]).h;
+		};
+		var height = colHeight < viewheight ? colHeight : viewheight;
 		
 		var coverMover = this.createCoverMover(width, height, leftPosition, top, "col");
 		this.movers.push(coverMover);
@@ -802,8 +807,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		handle keyboard dnd
 		var inColSelection = this.selectedColumns.length > 0;
 		var inRowSelection = dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype['getFirstSelected'])() >= 0;
-		var i, colAmount, dk = dojo.keys;
-		switch (keyEvent.keyCode){
+		var i, colAmount, dk = dojo.keys, keyCode = keyEvent.keyCode;
+		if(!dojo._isBodyLtr()){
+			keyCode = (keyEvent.keyCode == dk.LEFT_ARROW) ? dk.RIGHT_ARROW : (keyEvent.keyCode == dk.RIGHT_ARROW ? dk.LEFT_ARROW : keyCode);
+		}
+		switch(keyCode){
 			case dk.LEFT_ARROW:
 				if(!inColSelection){return;}
 				colAmount = this.getHeaderNodes().length;
