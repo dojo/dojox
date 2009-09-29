@@ -158,6 +158,16 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		var idx = this._getItemIndex(item, true);
 
 		if(idx >= 0){
+			// When a row is deleted, all rest rows are shifted down,
+			// and migrate from page to page. If some page is not 
+			// loaded yet empty rows can migrate to initialized pages
+			// without refreshing. It causes empty rows in some pages, see:
+			// http://bugs.dojotoolkit.org/ticket/6818
+			// this code fix this problem by reseting loaded page info
+			this._pages = [];
+			this._bop = -1;
+			this._eop = -1;
+
 			var o = this._by_idx[idx];
 			this._by_idx.splice(idx, 1);
 			delete this._by_idty[o.idty];
