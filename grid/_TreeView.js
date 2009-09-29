@@ -322,6 +322,22 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 		}
 		this.inherited(arguments);
 	},
+	postCreate: function(){
+		this.inherited(arguments);
+		this.connect(this.grid, '_onDelete', '_cleanupExpandoCache');
+	},
+	_cleanupExpandoCache: function(item){
+		for(var i in this._expandos){
+			if(typeof this._expandos[i] != 'undefined'){
+				for(var j in this._expandos[i]){
+					if(typeof this._expandos[i][j] != 'undefined'){
+						this._expandos[i][j].destroy();
+					}
+				}
+			}
+		}
+		this._expandos = {};
+	},
 	postMixInProperties: function(){
 		this.inherited(arguments);
 		this._expandos = {};
