@@ -20,6 +20,7 @@
 		dojo.require("dijit.form.Button");
 		dojo.require("dojo.parser");
 		dojo.require("dojox.editor.plugins.PrettyPrint");
+		dojo.require("dijit._editor.plugins.ViewSource");
 
 		var init = function(){
 			var deb = dijit.byId("bEditorDefault");
@@ -58,7 +59,7 @@
    	<div dojoType="dijit.layout.AccordionContainer" style="width: 100%x; height: 550px; overflow: hidden">
 		<div dojoType="dijit.layout.ContentPane" title="PrettyPrint (with defaults)">
 			<h2>This is an example editor with PrettyPrint enabled and the default settings for indent, entity character mapping, and line length</h2>
-			<div dojoType="dijit.Editor" id="editor1" extraPlugins="['prettyprint']">
+			<div dojoType="dijit.Editor" id="editor1" extraPlugins="['prettyprint', 'viewsource']">
 				This instance is created from a div with an extra plugin, 'PrettyPrint' loaded.
 				<div>
 					<ul>

@@ -26,7 +26,10 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 	// templateString: [protected] String
 	//		The basic template used to render the palette.
 	//		Should generally be over-riddent to define different classes.
-	templateString: '<div class="dojoxEntityPalette">\n' +
+	templateString: '<table class="dojoxEntityPalette">\n' +
+					'<tbody>\n' +
+					'<tr>\n' +
+					'<td>\n' +
 					'	<table>\n' +
 					'		<tbody>\n' +
 					'			<tr>\n' +
@@ -58,7 +61,10 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 					'			</tr>\n' +
 					'		</tbody>\n' +
 					'	</table>\n' +
-					'</div>',
+					'</td>\n' +
+					'</tr>\n' +
+					'</tbody>\n' +
+					'</table>',
 
 	// defaultTimeout: [public] Number
 	//		Number of milliseconds before a held key or button becomes typematic

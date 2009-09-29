@@ -2,6 +2,7 @@ dojo.provide("dojox.editor.plugins.InsertEntity");
 
 dojo.require("dijit._editor._Plugin");
 dojo.require("dijit.form.Button");
+dojo.require("dijit.TooltipDialog");
 dojo.require("dojox.editor.plugins.EntityPalette");
 dojo.require("dojox.html.entities");
 
@@ -29,9 +30,6 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 		this.dropDown = new dojox.editor.plugins.EntityPalette({showCode: this.showCode, showEntityName: this.showEntityName});
 		this.connect(this.dropDown, "onChange", function(entity){
 			this.editor.focus();
-			if(dojo.isIE){
-				this.editor._restoreSelection();
-			}
 			this.editor.execCommand("inserthtml",entity);
 		});
 
