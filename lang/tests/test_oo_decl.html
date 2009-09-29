@@ -411,6 +411,21 @@
 				});
 				new ClassB;
 			};
+			
+			var duplicatedBases = function(){
+				console.log("duplicated bases");
+				var A = decl(null, {
+					constructor: function(){
+						console.log("A.constructor");
+					}
+				});
+				var B = decl([A, A, A], {
+					constructor: function(){
+						console.log("B.constructor");
+					}
+				});
+				new B;
+			}
 
 			var test = function(){
 				test1();
@@ -418,6 +433,7 @@
 				superclassRef();
 				inheritedExplicitCall();
 				feature9795();
+				duplicatedBases();
 			}
 
 			//dojo.addOnLoad(test1);
