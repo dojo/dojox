@@ -100,7 +100,7 @@ dojo.declare("dojox.layout.FloatingPane",
 		this.domNode.style.position = "absolute";
 		
 		this.bgIframe = new dijit.BackgroundIframe(this.domNode);
-		
+		this._naturalState = dojo.coords(this.domNode);
 	},
 	
 	startup: function(){
@@ -251,6 +251,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	
 	resize: function(/* Object */dim){
 		// summary: Size the FloatingPane and place accordingly
+		dim = dim || this._naturalState;
 		this._currentState = dim;
 
 		// From the ResizeHandle we only get width and height information
