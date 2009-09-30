@@ -88,12 +88,11 @@ dojo.require("dojox.lang.utils");
 			return "offset" in this ? this.offset : 0;
 		},
 		_groupLabelWidth: function(labels, font){
-			var l = labels;
-			if(l[0]["text"]){
-				l = dojo.map(l, "return item.text");
+			if(labels[0]["text"]){
+				labels = df.map(labels, function(label){ return label.text; });
 			}
-			var s = l.join(this.opt.htmlLabels ? "<br>" : "\n");
-			return dojox.gfx._base._getTextBox(s, { font: font }).w||0;
+			var s = labels.join("<br>");
+			return dojox.gfx._base._getTextBox(s, {font: font}).w || 0;
 		},
 		calculate: function(min, max, span, labels){
 			if(this.initialized()){

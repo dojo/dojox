@@ -126,8 +126,8 @@ dojo.provide("dojox.gfx._base");
 		m.innerHTML = text;
 
 		if(m["getBoundingClientRect"]){
-			var mcr = m.getBoundingClientRect();
-			return { w: mcr.right-mcr.left, h: mcr.bottom-mcr.top, t: mcr.top, l: mcr.left };
+			var bcr = m.getBoundingClientRect();
+			return {l: bcr.left, t: bcr.top, w: bcr.width || (bcr.right - bcr.left), h: bcr.height || (bcr.bottom - bcr.top)};
 		}else{
 			return dojo.marginBox(m);
 		}

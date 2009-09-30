@@ -23,7 +23,8 @@ dojo.require("dojox.gfx");
 	var getBoxWidth = function(n){
 		// marginBox is incredibly slow, so avoid it if we can
 		if(n["getBoundingClientRect"]){
-			return n.getBoundingClientRect().width;
+			var bcr = n.getBoundingClientRect();
+			return bcr.width || (bcr.right - bcr.left);
 		}else{
 			return dojo.marginBox(n).w;
 		}
@@ -36,19 +37,9 @@ dojo.require("dojox.gfx");
 					x: x, y: y, text: text, align: align
 				}).setFont(font).setFill(fontColor);
 			},
-			html: function(
-				chart,
-				creator,
-				x,
-				y,
-				align,
-				text,
-				font,
-				fontColor,
-				labelWidth
-			){
+			html: function(chart, creator, x, y, align, text, font, fontColor, labelWidth){
 				// setup the text node
-				var p = dojo.doc.createElement("div"), s = p.style;
+				var p = dojo.doc.createElement("div"), s = p.style, boxWidth;
 				clearNode(s);
 				s.font = font;
 				p.innerHTML = String(text).replace(/\s/g, "&nbsp;");
@@ -59,8 +50,12 @@ dojo.require("dojox.gfx");
 				dojo.body().appendChild(p);
 				var size = g.normalizedLength(g.splitFontString(font).size);
 				
-				// new settings for the text node
+				// do we need to calculate the label width?
+				if(!labelWidth){
+					boxWidth = getBoxWidth(p);
+				}
 
+				// new settings for the text node
 				dojo.body().removeChild(p);
 				
 				s.position = "relative";
@@ -70,19 +65,18 @@ dojo.require("dojox.gfx");
 					switch(align){
 						case "middle":
 							s.textAlign = "center";
-							s.left = (x-(labelWidth/2))+"px";
+							s.left = (x - labelWidth / 2) + "px";
 							break;
 						case "end":
 							s.textAlign = "right";
-							s.left = (x-labelWidth)+"px";
+							s.left = (x - labelWidth) + "px";
 							break;
 						default:
-							s.left = x+"px";
+							s.left = x + "px";
 							s.textAlign = "left";
 							break;
 					}
 				}else{
-					var boxWidth = getBoxWidth(p);
 					switch(align){
 						case "middle":
 							s.left = Math.floor(x - boxWidth / 2) + "px";
