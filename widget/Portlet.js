@@ -60,23 +60,23 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 		// Choose the class to add depending on if the portlet is draggable or not.
 		dojo.addClass(this.domNode, "dojoxPortlet-" + (!this.dragRestriction ? "movable" : "nonmovable"));
 
+		var _this = this;
 		if(this.resizeChildren){
 			// If children should be resized	when the portlet size changes,
 			// listen for items being dropped, when the window is resized,
 			// or when another portlet's size changes.
 
-			dojo.subscribe("/dnd/drop", dojo.hitch(this, "_updateSize"));
+			this.subscribe("/dnd/drop", function(){_this._updateSize();});
 
-			dojo.subscribe("/Portlet/sizechange", dojo.hitch(this, "onSizeChange"));
-			dojo.connect(window, "onresize", this, "_updateSize");
+			this.subscribe("/Portlet/sizechange", function(widget){_this.onSizeChange(widget);});
+			this.connect(window, "onresize", function(){_this._updateSize();});
 
 			// Subscribe to all possible child-selection events that could affect this
 			// portlet
-			var _this = this;
-			var doSelectSubscribe = function(id, lastId){
+			var doSelectSubscribe = dojo.hitch(this, function(id, lastId){
 				var widget = dijit.byId(id);
 				if(widget.selectChild){
-					var s = dojo.subscribe(id + "-selectChild", dojo.hitch(_this, function(child){
+					var s = this.subscribe(id + "-selectChild", function(child){
 						var n = _this.domNode.parentNode;
 
 						while(n){
@@ -84,13 +84,13 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 								
 								// Only fire this once, as the widget is now visible
 								// at least once, so child measurements should be accurate.
-								dojo.unsubscribe(s);
+								_this.unsubscribe(s);
 								_this._updateSize();
 								break;
 							}
 							n = n.parentNode;
 						}
-					}));
+					});
 
 					// Record the StackContainer and child widget that this portlet
 					// is in, so it can figure out whether or not it is visible.
@@ -100,7 +100,7 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 						_this._parents.push({parent: widget, child: child});
 					}
 				}
-			}
+			});
 			var lastId;
 			this._parents = [];
 
@@ -114,11 +114,20 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 				}
 			}
 		}
+		
+		// Prevent clicks on icons from causing a drag to start.
+		this.connect(this.titleBarNode, "onmousedown", function(evt){
+			if (dojo.hasClass(evt.target, "dojoxPortletIcon")) {
+				dojo.stopEvent(evt);
+				return false;
+			}
+			return true;
+		});
 
 		// Inform all portlets that the size of this one has changed,
 		// and therefore perhaps they have too
-		dojo.connect(this._wipeOut, "onEnd", this, "_publish");
-		dojo.connect(this._wipeIn, "onEnd", this, "_publish");
+		this.connect(this._wipeOut, "onEnd", function(){_this._publish();});
+		this.connect(this._wipeIn, "onEnd", function(){_this._publish();});
 
 		if(this.closable){
 			this.closeIcon = this._createIcon("dojoxCloseNode", "dojoxCloseNodeHover", dojo.hitch(this, "onClose"));
@@ -146,7 +155,7 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 
 		this.inherited(arguments);
 
-		this._updateSize();
+		//this._updateSize();
 		dojo.style(this.domNode, "visibility", "visible");
 	},
 
@@ -175,13 +184,13 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 		});
 		dojo.place(icon, this.arrowNode, "before");
 
-		dojo.connect(icon, "onclick", fn);
+		this.connect(icon, "onclick", fn);
 
 		if(hoverClazz){
-			dojo.connect(icon, "onmouseover", function(){
+			this.connect(icon, "onmouseover", function(){
 				dojo.addClass(icon, hoverClazz);
 			});
-			dojo.connect(icon, "onmouseout", function(){
+			this.connect(icon, "onmouseout", function(){
 				dojo.removeClass(icon, hoverClazz);
 			});
 		}
@@ -213,38 +222,40 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 		if(!this.open || !this._started || !this.resizeChildren){
 			return;
 		}
-		var size ={
-			w: dojo.style(this.domNode, "width"),
-			h: dojo.style(this.domNode, "height")
-		};
-
-		// If the Portlet is in a StackWidget, and it is not
-		// visible, do not update the size, as it could
-		// make child widgets miscalculate.
-		for(var i = 0; i < this._parents.length; i++){
-			var p = this._parents[i];
-			var sel = p.parent.selectedChildWidget
-			if(sel && sel != p.child){
-				return;
-			}
-		}
-
-		if(this._size){
-			// If the size of the portlet hasn't changed, don't
-			// resize the children, as this can be expensive
-			if(this._size.w == size.w && this._size.h == size.h){
-				return;
-			}
-		}
-		this._size = size;
-
+		
 		if(this._timer){
 			clearTimeout(this._timer);
 		}
-
 		// Delay applying the size change in case the size 
 		// changes very frequently, for performance reasons.
 		this._timer = setTimeout(dojo.hitch(this, function(){
+			var size ={
+				w: dojo.style(this.domNode, "width"),
+				h: dojo.style(this.domNode, "height")
+			};
+	
+			// If the Portlet is in a StackWidget, and it is not
+			// visible, do not update the size, as it could
+			// make child widgets miscalculate.
+			for(var i = 0; i < this._parents.length; i++){
+				var p = this._parents[i];
+				var sel = p.parent.selectedChildWidget
+				if(sel && sel != p.child){
+					return;
+				}
+			}
+	
+			if(this._size){
+				// If the size of the portlet hasn't changed, don't
+				// resize the children, as this can be expensive
+				if(this._size.w == size.w && this._size.h == size.h){
+					return;
+				}
+			}
+			this._size = size;
+	
+			
+
 			var fns = ["resize", "layout"];
 			this._timer = null;
 			var kids = this.getChildren();
@@ -296,6 +307,11 @@ dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
 		if(this._started && !child.started && !child._started){
 			child.startup();
 		}
+	},
+	
+	_setCss: function(){
+		this.inherited(arguments);
+		dojo.style(this.arrowNode, "display", this.toggleable ? "":"none");
 	}
 });
 
