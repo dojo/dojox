@@ -290,31 +290,36 @@ dojo.mixin(dojox.gfx, {
 		return font.style + " " + font.variant + " " + font.weight + " " + font.size + " " + font.family; // Object
 	},
 	splitFontString: function(str){
-		// summary: converts a CSS font string to a font object
-		// str:		String:	a CSS font string
+		// summary:
+		//		converts a CSS font string to a font object
+		// description:
+		//		Converts a CSS font string to a gfx font object. The CSS font
+		//		string components should follow the W3C specified order
+		//		(see http://www.w3.org/TR/CSS2/fonts.html#font-shorthand):
+		//		style, variant, weight, size, optional line height (will be
+		//		ignored), and family.
+		// str: String
+		//		a CSS font string
 		var font = dojox.gfx.getDefault("Font");
 		var t = str.split(/\s+/);
 		do{
 			if(t.length < 5){ break; }
-			font.style  = t[0];
-			font.varian = t[1];
-			font.weight = t[2];
+			font.style   = t[0];
+			font.variant = t[1];
+			font.weight  = t[2];
 			var i = t[3].indexOf("/");
 			font.size = i < 0 ? t[3] : t[3].substring(0, i);
 			var j = 4;
 			if(i < 0){
 				if(t[4] == "/"){
 					j = 6;
-					break;
-				}
-				if(t[4].substr(0, 1) == "/"){
+				}else if(t[4].charAt(0) == "/"){
 					j = 5;
-					break;
 				}
 			}
-			if(j + 3 > t.length){ break; }
-			font.size = t[j];
-			font.family = t[j + 1];
+			if(j < t.length){
+				font.family = t.slice(j).join(" ");
+			}
 		}while(false);
 		return font;	// Object
 	},
