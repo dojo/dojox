@@ -16,7 +16,7 @@
 			if(methodDef && methodDef.parameters){
 				var params = methodDef.parameters;
 				for(var j = 0; j < params.length; j++){
-					arguments[j] = validate(arguments[j], params[j], j.toString());					
+					arguments[j] = validate(arguments[j], params[j], j.toString());
 				}
 				if(methodDef.additionalParameters){
 					for(;j < arguments.length; j++){
@@ -53,7 +53,7 @@
 			var errorMessage = ""
 			var errors = result.errors;
 			for(var i = 0; i < errors.length; i++){
-				errorMessage += errors[i].property + ' ' + errors[i].message + '\n';				
+				errorMessage += errors[i].property + ' ' + errors[i].message + '\n';
 			}
 			throw new TypeError(errorMessage);
 		}
@@ -65,11 +65,11 @@
 		//		Adds type checking to a class, returning a new class with typing enabled
 		if(Class.__typedClass__){
 			// type checking has already been added
-			return Class; 
+			return Class;
 		}
 		var Wrapper = function(){
 			var i, value, properties = Wrapper.properties;
-			var methods = Wrapper.methods;	
+			var methods = Wrapper.methods;
 			Class.apply(this,arguments);
 			this.__props__ = {};
 			for(i in methods){
@@ -79,7 +79,8 @@
 						// add typing checking to the method, going up the proto chain to find the right one
 						var proto = this;
 						while(!proto.hasOwnProperty(i) && proto.__proto__){
-							proto = proto.__proto__;						}
+							proto = proto.__proto__;
+						}
 						(function(i){
 							proto[i] = validatingFunction(value, function(){
 								return methods[i];
@@ -131,7 +132,7 @@
 		if(dojo.config.typeCheckAllClasses){
 			//	This will add type checking to all classes that will be declared via dojo.declare
 			//	(only ones to be declared in the future)
-			
+
 			// hook into all declared classes
 			var defaultDeclare = dojo.declare;
 			dojo.declare = function(name){
