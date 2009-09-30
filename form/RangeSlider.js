@@ -14,7 +14,7 @@ dojo.require("dojox.fx");
 	
 		value:[0,100],
 		postMixInProperties: function(){
-			this.value = dojo.map(this.value, function(i){ return i });
+			this.value = dojo.map(this.value, function(i){ return parseInt(i, 10); });
 		},
 	
 		postCreate: function(){
