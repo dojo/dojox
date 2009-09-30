@@ -71,12 +71,29 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		}
 		pane._shown = shown;
 	},
+	
+	_connectTitle: function(/*Widget*/ pane, /*String*/ value){
+		var fx = dojo.hitch(this, function(title){
+			this.updateOption({value: value, label: title});
+		});
+		if(pane._setTitleAttr){
+			this.connect(pane, "_setTitleAttr", fx);
+		}else{
+			this.connect(pane, "attr", function(attr, val){
+				if(attr == "title" && arguments.length > 1){
+					fx(val);
+				}
+			});
+		}
+	},
 
 	onAddChild: function(/*Widget*/ pane, /*Integer?*/ insertIndex){
 		// summary: Called when the stack container adds a new pane
 		if(!this._panes[pane.id]){
 			this._panes[pane.id] = pane;
-			this.addOption({value: this._optionValFromPane(pane.id), label: pane.title});
+			var v = this._optionValFromPane(pane.id);
+			this.addOption({value: v, label: pane.title});
+			this._connectTitle(pane, v);
 		}
 		if(!pane.onShow || !pane.onHide || pane._shown == undefined){
 			pane.onShow = dojo.hitch(this, "_togglePane", pane, true);
@@ -116,6 +133,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		var selPane = info.selected;
 		this.addOption(dojo.filter(dojo.map(info.children, function(c){
 			var v = this._optionValFromPane(c.id);
+			this._connectTitle(c, v);
 			var toAdd = null;
 			if(!this._panes[c.id]){
 				this._panes[c.id] = c;
