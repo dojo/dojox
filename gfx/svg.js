@@ -539,7 +539,10 @@ dojo.require("dojox.gfx.path");
 		},
 		getDimensions: function(){
 			// summary: returns an object with properties "width" and "height"
-			return this.rawNode ? {width: this.rawNode.getAttribute("width"), height: this.rawNode.getAttribute("height")} : null; // Object
+			var t = this.rawNode ? {
+				width:  g.normalizedLength(this.rawNode.getAttribute("width")),
+				height: g.normalizedLength(this.rawNode.getAttribute("height"))} : null;
+			return t;	// Object
 		}
 	});
 
