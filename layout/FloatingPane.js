@@ -76,11 +76,13 @@ dojo.declare("dojox.layout.FloatingPane",
 
 	templateString: dojo.cache("dojox.layout","resources/FloatingPane.html"),
 	
-	postCreate: function(){
+	attributeMap: dojo.delegate(dijit._Widget.prototype.attributeMap, {
+		title: { type:"innerHTML", node:"titleNode" }
+	}),
 	
-		this.setTitle(this.title);
+	postCreate: function(){
 		this.inherited(arguments);
-		var move = new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
+		new dojo.dnd.Moveable(this.domNode,{ handle: this.focusNode });
 		//this._listener = dojo.subscribe("/dnd/move/start",this,"bringToTop"); 
 
 		if(!this.dockable){ this.dockNode.style.display = "none"; } 
@@ -92,9 +94,8 @@ dojo.declare("dojox.layout.FloatingPane",
 		if(!this.resizable){
 			this.resizeHandle.style.display = "none"; 	
 		}else{
-			var foo = dojo.marginBox(this.domNode); 
-			this.domNode.style.width = foo.w+"px"; 
-		}		
+			this.domNode.style.width = dojo.marginBox(this.domNode).w + "px"; 
+		}
 		this._allFPs.push(this);
 		this.domNode.style.position = "absolute";
 		
@@ -109,9 +110,9 @@ dojo.declare("dojox.layout.FloatingPane",
 
 		if(this.resizable){
 			if(dojo.isIE){
-					this.canvas.style.overflow = "auto";
+				this.canvas.style.overflow = "auto";
 			}else{
-					this.containerNode.style.overflow = "auto";
+				this.containerNode.style.overflow = "auto";
 			}
 			
 			this._resizeHandle = new dojox.layout.ResizeHandle({ 
@@ -132,7 +133,7 @@ dojo.declare("dojox.layout.FloatingPane",
 			}
 
 			if(!this.dockTo){
-				var tmpId; var tmpNode;
+				var tmpId, tmpNode;
 				// we need to make our dock node, and position it against
 				// .dojoxDockDefault .. this is a lot. either dockto="node"
 				// and fail if node doesn't exist or make the global one
@@ -141,12 +142,11 @@ dojo.declare("dojox.layout.FloatingPane",
 					tmpId = tmpName;
 					tmpNode = dojo.byId(tmpName); 
 				}else{
-					tmpNode = document.createElement('div');
-					dojo.body().appendChild(tmpNode);
+					tmpNode = dojo.create('div', null, dojo.body());
 					dojo.addClass(tmpNode,"dojoxFloatingDockDefault");
 					tmpId = 'dojoxGlobalFloatingDock';
 				}
-				this.dockTo = new dojox.layout.Dock({ id: tmpId, autoPosition: "south" },tmpNode);
+				this.dockTo = new dojox.layout.Dock({ id: tmpId, autoPosition: "south" }, tmpNode);
 				this.dockTo.startup(); 
 			}
 			
@@ -166,9 +166,10 @@ dojo.declare("dojox.layout.FloatingPane",
 
 	setTitle: function(/* String */ title){
 		// summary: Update the Title bar with a new string
-		this.titleNode.innerHTML = title; 
-		this.title = title; 
-	},	
+		dojo.deprecated("pane.setTitle", "Use pane.attr('title', someTitle)", "2.0");
+		this.attr("title", title);
+		// this.setTitle = dojo.hitch(this, "setTitle") ?? 
+	},
 		
 	close: function(){
 		// summary: Close and destroy this widget
@@ -223,7 +224,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	maximize: function(){
 		// summary: Make this FloatingPane full-screen (viewport)	
 		if(this._maximized){ return; }
-		this._naturalState = dojo.coords(this.domNode);
+		this._naturalState = dojo.position(this.domNode);
 		if(this._isDocked){
 			this.show();
 			setTimeout(dojo.hitch(this,"maximize"),this.duration);
@@ -254,8 +255,8 @@ dojo.declare("dojox.layout.FloatingPane",
 
 		// From the ResizeHandle we only get width and height information
 		var dns = this.domNode.style;
-		if("t" in dim.t){ dns.top = dim.t + "px"; }
-		if("l" in dim.l){ dns.left = dim.l + "px"; }
+		if("t" in dim){ dns.top = dim.t + "px"; }
+		if("l" in dim){ dns.left = dim.l + "px"; }
 		dns.width = dim.w + "px"; 
 		dns.height = dim.h + "px";
 
@@ -321,9 +322,12 @@ dojo.declare("dojox.layout.Dock",
 	addNode: function(refNode){
 		// summary: Instert a dockNode refernce into the dock
 		
-		var div = document.createElement('li');
-		this.containerNode.appendChild(div);
-		var node = new dojox.layout._DockNode({ title: refNode.title, paneRef: refNode },div);
+		var div = dojo.create('li', null, this.containerNode),
+			node = new dojox.layout._DockNode({ 
+				title: refNode.title,
+				paneRef: refNode 
+			}, div)
+		;
 		node.startup();
 		return node;
 	},
@@ -332,8 +336,8 @@ dojo.declare("dojox.layout.Dock",
 				
 		if (this.id == "dojoxGlobalFloatingDock" || this.isFixedDock) {
 			// attach window.onScroll, and a position like in presentation/dialog
-			dojo.connect(window,'onresize',this,"_positionDock");
-			dojo.connect(window,'onscroll',this,"_positionDock");
+			this.connect(window, 'onresize', "_positionDock");
+			this.connect(window, 'onscroll', "_positionDock");
 			if(dojo.isIE){
 				this.connect(this.domNode, "onresize", "_positionDock");
 			}
@@ -388,6 +392,7 @@ dojo.declare("dojox.layout._DockNode",
 		// summary: remove this dock item from parent dock, and call show() on reffed floatingpane
 		this.paneRef.show();
 		this.paneRef.bringToTop();
+		if(!this.paneRef.isLoaded){ this.paneRef.refresh(); }
 		this.destroy();
 	}
 
