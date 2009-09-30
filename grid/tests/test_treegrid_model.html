@@ -159,6 +159,20 @@
 				this.attr("disabled", true);
             </script>
         </button>
+        <button dojoType="dijit.form.Button" jsId="delEU">
+            Delete Europe
+            <script type="dojo/connect" event="onClick">
+				jsonStore.fetchItemByIdentity({
+					identity: 'EU',
+					onItem: function(item){
+						if(item){
+							jsonStore.deleteItem(item);
+						}
+					}
+				});
+				this.attr("disabled", true);
+            </script>
+        </button>
         <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
             <thead>
                 <tr>

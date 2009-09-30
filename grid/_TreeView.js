@@ -324,19 +324,43 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 	},
 	postCreate: function(){
 		this.inherited(arguments);
-		this.connect(this.grid, '_onDelete', '_cleanupExpandoCache');
+		this.connect(this.grid, '_cleanupExpandoCache', '_cleanupExpandoCache');
 	},
-	_cleanupExpandoCache: function(item){
-		for(var i in this._expandos){
-			if(typeof this._expandos[i] != 'undefined'){
-				for(var j in this._expandos[i]){
-					if(typeof this._expandos[i][j] != 'undefined'){
-						this._expandos[i][j].destroy();
+	_cleanupExpandoCache: function(index, identity, item){
+		if(index == -1){
+			return;
+		}
+		if(typeof index == "string" && index.indexOf('/') > -1){
+			var path = new dojox.grid.TreePath(index, this.grid);
+			var ppath = path.parent();
+			while(ppath){
+				path = ppath;
+				ppath = path.parent();
+			}
+			var idty = this.grid.store.getIdentity(path.item());
+			if(typeof this._expandos[idty] != 'undefined'){
+				for(var i in this._expandos[idty]){
+					var exp = this._expandos[idty][i];
+					if(exp){
+						exp.destroy();
+					}
+					delete this._expandos[idty][i];
+				}
+				delete this._expandos[idty];
+			}
+		}else{
+			for(var i in this._expandos){
+				if(typeof this._expandos[i] != 'undefined'){
+					for(var j in this._expandos[i]){
+						var exp = this._expandos[i][j];
+						if(exp){
+							exp.destroy();
+						}
 					}
 				}
 			}
+			this._expandos = {};
 		}
-		this._expandos = {};
 	},
 	postMixInProperties: function(){
 		this.inherited(arguments);

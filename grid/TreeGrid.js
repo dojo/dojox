@@ -581,8 +581,9 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			this.inherited(arguments);
 		}else{
 			var idx = this.getItemIndex(parentInfo.item);
-			if(idx > -1){
-				var path = new dojox.grid.TreePath(idx, this);
+			if(typeof idx == "string"){
+				this.updateRow(idx.split('/')[0]);
+			}else if(idx > -1){
 				this.updateRow(idx);
 			}
 		}
@@ -594,14 +595,19 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			this.aggregator.clearSubtotalCache();
 		}
 		var idx = this.getItemIndex(item);
-		if(typeof idx == "string" || idx > -1){
-			if(typeof idx == "string"){
-				this.updateRow(idx.split('/')[0]);
-			}else{
-				this.updateRow(idx);
-			}
+		if(typeof idx == "string"){
+			this.updateRow(idx.split('/')[0]);
+		}else if(idx > -1){
+			this.updateRow(idx);
 		}
 	},
+
+	_onDelete: function(item){
+		this._cleanupExpandoCache(this._getItemIndex(item, true), this.store.getIdentity(item), item);
+		this.inherited(arguments);
+	},
+
+	_cleanupExpandoCache: function(index, identity, item){},
 
 	_addItem: function(item, index, noUpdate, dontUpdateRoot){
 		// add our root items to the root of the model's children
