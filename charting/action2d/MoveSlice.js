@@ -47,7 +47,7 @@ dojo.require("dojox.lang.functional.fold");
 				}
 			}
 
-			var index = o.index, anim, endScale, startOffset, endOffset,
+			var index = o.index, anim, startScale, endScale, startOffset, endOffset,
 				angle = (this.angles[index] + this.angles[index + 1]) / 2,
 				rotateTo0  = m.rotateAt(-angle, o.cx, o.cy),
 				rotateBack = m.rotateAt( angle, o.cx, o.cy);
@@ -63,11 +63,13 @@ dojo.require("dojox.lang.functional.fold");
 			if(o.type == "onmouseover"){
 				startOffset = 0;
 				endOffset   = this.shift;
+				startScale  = 1;
 				endScale    = this.scale;
 			}else{
 				startOffset = this.shift;
 				endOffset   = 0;
-				endScale    = 1 / this.scale;
+				startScale  = this.scale;
+				endScale    = 1;
 			}
 			
 			anim.action = dojox.gfx.fx.animateTransform({
@@ -77,7 +79,7 @@ dojo.require("dojox.lang.functional.fold");
 				transform: [
 					rotateBack,
 					{name: "translate", start: [startOffset, 0], end: [endOffset, 0]},
-					{name: "scaleAt",   start: [1, o.cx, o.cy],  end: [endScale, o.cx, o.cy]},
+					{name: "scaleAt",   start: [startScale, o.cx, o.cy],  end: [endScale, o.cx, o.cy]},
 					rotateTo0
 				]
 			});
