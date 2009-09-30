@@ -254,10 +254,10 @@ dojo.declare("dojox.layout.FloatingPane",
 
 		// From the ResizeHandle we only get width and height information
 		var dns = this.domNode.style;
-		if(dim.t){ dns.top = dim.t+"px"; }
-		if(dim.l){ dns.left = dim.l+"px"; }
-		dns.width = dim.w+"px"; 
-		dns.height = dim.h+"px";
+		if("t" in dim.t){ dns.top = dim.t + "px"; }
+		if("l" in dim.l){ dns.left = dim.l + "px"; }
+		dns.width = dim.w + "px"; 
+		dns.height = dim.h + "px";
 
 		// Now resize canvas
 		var mbCanvas = { l: 0, t: 0, w: dim.w, h: (dim.h - this.focusNode.offsetHeight) };
