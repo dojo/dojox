@@ -481,7 +481,7 @@ dojo.require("dojox.charting.plot2d.OHLC");
 					axisName = verticalAxis ? "vAxis" : "hAxis";
 				if(plot[axisName]){
 					axis = this.axes[plot[axisName]];
-					if(axis.dependOnData()){
+					if(axis && axis.dependOnData()){
 						axis.dirty = true;
 						// find all plots and mark them dirty
 						dojo.forEach(this.stack, function(p){
