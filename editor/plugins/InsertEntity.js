@@ -29,10 +29,10 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 		//		Over-ride for creation of the save button.
 		this.dropDown = new dojox.editor.plugins.EntityPalette({showCode: this.showCode, showEntityName: this.showEntityName});
 		this.connect(this.dropDown, "onChange", function(entity){
+			this.button.closeDropDown();
 			this.editor.focus();
 			this.editor.execCommand("inserthtml",entity);
 		});
-
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "InsertEntity");
 		this.button = new dijit.form.DropDownButton({
 			label: strings["insertEntity"],
