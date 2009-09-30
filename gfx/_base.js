@@ -214,7 +214,7 @@ dojo.mixin(dojox.gfx, {
 			if(t){
 				return new t();
 			}
-			t = typeCtorCache[type] = function(){};
+			t = typeCtorCache[type] = new Function;
 			t.prototype = dojox.gfx[ "default" + type ];
 			return new t();
 		}
