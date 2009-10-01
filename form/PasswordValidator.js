@@ -36,6 +36,15 @@ dojo.declare("dojox.form._ChildTextBox", dijit.form.ValidationTextBox, {
 		if(!this.name){
 			dojo.removeAttr(this.focusNode, "name");
 		}
+		this.connect(this.focusNode, "onkeypress", "_onChildKeyPress");
+	},
+	
+	_onChildKeyPress: function(e){
+		// Check if we pressed <enter> - if so, set our blur value so that
+		// the parent widget will be updated correctly.
+		if(e && e.keyCode == dojo.keys.ENTER){
+			this._setBlurValue();
+		}
 	}
 });
 
