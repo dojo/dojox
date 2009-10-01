@@ -337,7 +337,11 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 				path = ppath;
 				ppath = path.parent();
 			}
-			var idty = this.grid.store.getIdentity(path.item());
+			var pitem = path.item();
+			if(!pitem){
+				return;
+			}
+			var idty = this.grid.store.getIdentity(pitem);
 			if(typeof this._expandos[idty] != 'undefined'){
 				for(var i in this._expandos[idty]){
 					var exp = this._expandos[idty][i];

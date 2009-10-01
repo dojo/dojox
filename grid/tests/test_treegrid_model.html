@@ -173,6 +173,24 @@
 				this.attr("disabled", true);
             </script>
         </button>
+        <button dojoType="dijit.form.Button" jsId="empty">
+            Empty
+            <script type="dojo/connect" event="onClick">
+				jsonStore.fetch({
+					query: { id: '*' },
+					queryOptions: { deep: true },
+					onComplete: function(items){
+						dojo.forEach(items, function(item){
+							if(item){
+								jsonStore.deleteItem(item);
+							}
+						});
+					}
+				});
+				jsonStore.save();
+				this.attr("disabled", true);
+            </script>
+        </button>
         <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
             <thead>
                 <tr>
