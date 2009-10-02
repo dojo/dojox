@@ -25,7 +25,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 
 	// templateString: [protected] String
 	//		The basic template used to render the palette.
-	//		Should generally be over-riddent to define different classes.
+	//		Should generally be over-ridden to define different classes.
 	templateString: '<div class="dojoxEntityPalette">\n' +
 					'	<table>\n' +
 					'		<tbody>\n' +
@@ -136,14 +136,14 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 
 			for(entityKey in choices){
 				var newRow = currChoiceIdx % numRows === 0;
-				if (newRow){
+				if(newRow){
 					rowNode = dojo.create("tr", {
 						tabIndex:"-1"//,
 					});
 				}
 				// Deal with entities that have keys which are reserved words.
-				var entityHtml = "&"+entityKey+";";
-				cellNode = dojo.create("td",{
+				var entityHtml = "&" + entityKey + ";";
+				cellNode = dojo.create("td", {
 						innerHTML: entityHtml,
 						tabIndex: "-1",
 						"class":"dojoxEntityPaletteCell"
@@ -154,7 +154,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 					this.connect(cellNode, "on" + handler.toLowerCase(), "_onCell" + handler);
 				}, this);
 
-				if (newRow) {dojo.place(rowNode, this.tableNode);}
+				if(newRow){ dojo.place(rowNode, this.tableNode); }
 
 				dijit.setWaiRole(cellNode, "gridcell");
 				cellNode.index = this._cellNodes.length;
@@ -201,7 +201,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 					}(),
 					this.timeoutChangeRate, this.defaultTimeout));
 			}
-			if (!this.showPreview){
+			if(!this.showPreview){
 				dojo.style(this.previewNode,"display","none");
 			} 
 		}
@@ -279,7 +279,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		//		private
 
 		var target = evt.currentTarget;
-		if (this._currentFocus != target.index){
+		if(this._currentFocus != target.index){
 			this._currentFocus = target.index;
 			setTimeout(function(){dijit.focus(target);}, 0);
 		}
@@ -324,7 +324,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		this._removeCellHighlight(this._currentFocus);
 		this._currentFocus = node.index;
 		dojo.addClass(node, "dojoxEntityPaletteCellHighlight");
-		if (this.showPreview){this._displayDetails(node);}
+		if(this.showPreview){this._displayDetails(node);}
 	},
 	
 	_displayDetails: function(/*Node*/node){
@@ -337,7 +337,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 			this.previewNode.innerHTML=node.innerHTML;
 			this.codeNode.innerHTML="&amp;#"+parseInt(node.innerHTML.charCodeAt(0), 10)+";";
 			this.entityNode.innerHTML="&amp;"+ename+";";
-			this.descNode.innerHTML=this.entities[this.palette][ename];
+			this.descNode.innerHTML=this.entities[this.palette][ename].replace("\n", "<br>");
 		}else{
 			this.previewNode.innerHTML="";
 			this.codeNode.innerHTML="";
@@ -371,7 +371,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		// tags:
 		//		private		
 		var selectNodeAssoc = dojo.filter(this._cellNodes, function(item){ return item.node == selectNode; });
-		if (selectNodeAssoc.length > 0){
+		if(selectNodeAssoc.length > 0){
 			this.onChange(this.value = selectNodeAssoc[0].html);
 		}
 	},
