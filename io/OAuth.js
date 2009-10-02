@@ -196,12 +196,12 @@ dojox.io.OAuth = new (function(){
 
 		//	encode.
 		var s = dojo.map(a, function(item){
-			return encode(item[0]) + "%3D" + encode(item[1]||"");
-		}).join("%26");
+			return encode(item[0]) + "=" + encode(item[1]||"");
+		}).join("&");
 
 		var baseString = method.toUpperCase()
 			+ "&" + encode(args._url) 
-			+ "&" + s;
+			+ "&" + encode(s);
 		return baseString;
 	}
 
