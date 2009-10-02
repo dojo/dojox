@@ -1,2 +1,21 @@
 ({
+	smiley: "Emoticon",
+	emoticonLabelSmile: "smile",
+	emoticonLabelLaughing: "laughing",
+	emoticonLabelWink: "wink",
+	emoticonLabelGrin: "grin",
+	emoticonLabelCool: "cool",
+	emoticonLabelAngry: "angry",  
+	emoticonLabelHalf: "half", 
+	emoticonLabelEyebrow: "eyebrow",
+	emoticonLabelFrown: "frown",
+	emoticonLabelShy: "shy",
+	emoticonLabelGoofy: "goofy",
+	emoticonLabelOops: "oops",
+	emoticonLabelTongue: "tongue",
+	emoticonLabelIdea: "idea",
+	emoticonLabelYes: "yes",
+	emoticonLabelNo: "no",	
+	emoticonLabelAngel: "angel",
+	emoticonLabelCrying: "crying"
 })

@@ -1,35 +1,90 @@
 dojo.provide("dojox.editor.plugins.Smiley");
 dojo.experimental("dojox.editor.plugins.Smiley");
 
+dojo.require("dojo.i18n");
 dojo.require("dijit._editor._Plugin");
+dojo.require("dijit.form.ToggleButton");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dojox.editor.plugins._SmileyPalette");
 
-(function(){
-dojo.declare("dojox.editor.plugins.Smiley",
-	dijit._editor._Plugin,
-	{
-		//	summary:
-		//		This plugin provides a dropdown with a choice of emoticons
+dojo.requireLocalization("dojox.editor.plugins", "Smiley");
 
-		// Override _Plugin.buttonClass to use DropDownButton (with SmileyPalette) to control this plugin
-		buttonClass: dijit.form.DropDownButton,
+dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin,{
+	// summary:
+	//		This plugin allows the user to select from emoticons or "smileys" 
+	//		to insert at the current cursor position.
+	//
+	// description:
+	//		The commands provided by this plugin are:
+	//		* insertEntity - inserts the selected HTML entity character
 
-//TODO: set initial focus/selection state?
+	// iconClassPrefix: [const] String
+	//		The CSS class name for the button node is formed from `iconClassPrefix` and `command`
+	iconClassPrefix: "dijitAdditionalEditorIcon",
 
-		constructor: function(){
-			this.dropDown = new dojox.editor.plugins._SmileyPalette();
-			this.connect(this.dropDown, "onChange", function(color){
-				this.editor.execCommand(this.command, color);
-			});
-		}
+	_initButton: function(){
+		// summary:
+		//		Over-ride for creation of the save button.
+		this.dropDown = new dojox.editor.plugins._SmileyPalette();
+		this.connect(this.dropDown, "onChange", function(entity){
+			this.button.closeDropDown();
+			this.editor.focus();
+			this.editor.execCommand("inserthtml",entity); //TODO: add markup
+		});
+		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "Smiley");
+		this.button = new dijit.form.DropDownButton({
+			label: strings.smiley,
+			showLabel: false,
+			iconClass: this.iconClassPrefix + " " + this.iconClassPrefix + "Smiley",
+			tabIndex: "-1",
+			dropDown: this.dropDown
+		});
+	},
+
+	setEditor: function(editor){
+		// summary:
+		//		Over-ride for the setting of the editor.
+		// editor: Object
+		//		The editor to configure for this plugin to use.
+		this.editor = editor;
+		this._initButton();
+
+/*
+		this.editor.addKeyHandler("s", true, true, dojo.hitch(this, function() {
+			this.button.openDropDown();
+			this.dropDown.focus();
+		}));
+*/
+
+//		editor.contentPreFilters.push(this._preFilterEntities);
+//		editor.contentPostFilters.push(this._postFilterEntities);
+	},
+
+	_preFilterEntities: function(s/*String content passed in*/){
+		// summary:
+		//		A function to filter out emoticons into their UTF-8 character form
+		//		displayed in the editor.  It gets registered with the preFilters
+		//		of the editor.
+		// tags:
+		//		private.
+//TODO
+	},
+
+	_postFilterEntities: function(s/*String content passed in*/){
+		// summary:
+		//		A function to filter out emoticons into encoded form so they 
+		//		are properly displayed in the editor.  It gets registered with the 
+		//		postFilters of the editor.
+		// tags:
+		//		private.
+//TODO
 	}
-);
-})();
+});
 
 // Register this plugin.
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
-	switch(o.args.name){
-	case "smiley":
-		o.plugin = new dijit._editor.plugins.Smiley({command: o.args.name});
+	if(o.args.name === "smiley"){
+		o.plugin = new dojox.editor.plugins.Smiley();
 	}
 });
