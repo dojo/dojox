@@ -33,7 +33,7 @@ dojo.require("dojox.html.entities");
 		var i;
 
 		// Compile regexps once for this call.
-		var rgxp_fixIEAttrs = /=[^"']\S+(\s|>)/g;
+		var rgxp_fixIEAttrs = /=([^"']+?)(\s|>)/g
 		var rgxp_styleMatch = /style=("[^"]*"|'[^']*'|\S*)/gi;
 		var rgxp_attrsMatch = /\s\w+=("[^"]*"|'[^']*'|\S*)/gi;
 
@@ -262,12 +262,7 @@ dojo.require("dojox.html.entities");
 
 			// Also thanks to IE, we need to check for quotes around 
 			// attributes and insert if missing.
-			tag = tag.replace(rgxp_fixIEAttrs, function(match){
-				var endChar = match.length - 1;
-				match = "=\"" + match.substring(1, endChar) + 
-					"\"" + match.charAt(endChar);
-				return match;
-			});
+			tag = tag.replace(rgxp_fixIEAttrs,'="$1"$2');
 
 			// And lastly, thanks IE for changing style casing and end
 			// semi-colon and webkit adds spaces, so lets clean it up by

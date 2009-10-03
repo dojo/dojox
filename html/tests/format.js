@@ -134,6 +134,21 @@ doh.register("dojox.html.tests.format",
 			}
 		},
 		{
+			name: "Format:  Basic HTML Format test with attributes (multiple unquoted)",
+			runTest: function(t) {
+				// summary: 
+				//		Simple test of basic HTML formatting with an id attr set.
+				// description:
+				//		Simple test of basic HTML formatting with an id attr set.
+				var txt = "<p><font id=\"myID\" size=\"6\"><b>hello</b> this is some text.</font></p>";
+				var expected = 	"<p>\n\t<font id=\"myID\" size=\"6\">" +
+								"<b>hello</b> this is some text." +
+								"</font>\n</p>\n";
+				var formattedTxt = dojox.html.format.prettyPrint(txt);
+				doh.assertEqual(expected, formattedTxt);
+			}
+		},
+		{
 			name: "Format:  Basic HTML Format test with style",
 			runTest: function(t) {
 				// summary: 
