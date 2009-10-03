@@ -283,11 +283,13 @@ dojo.require("dojo.fx");
 			//		the original srcNodeRef for the widget.
 			args = args || {}; 
 			this.href = args.href || this.href;
-			var vp = getViewport();
+
+			var n = d.byId(args.origin),
+				vp = getViewport();
 
 			// if we don't have a valid origin node, then create one as a reference
 			// that is centered in the viewport
-			this._node = d.byId(args.origin) || d.create("div", {
+			this._node = n || d.create("div", {
 					style: {
 						position: abs,
 						width: 0,
@@ -297,7 +299,14 @@ dojo.require("dojo.fx");
 					}
 				}, d.body())
 			;
+
 			this._load();
+
+			// if we don't have a valid origin node, then destroy the centered reference
+			// node since load() has already been called and it's not needed anymore.
+			if(!n){
+				d.destroy(this._node);
+			}
 		}
 	});
 
