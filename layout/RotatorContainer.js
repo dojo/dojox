@@ -262,7 +262,7 @@ dojo.declare("dojox.layout.RotatorContainer",
 		}
 	},
 
-	_transition: function(/*Widget*/next, /*Widget*/prev){
+	_transition: function(/*dijit._Widget*/ next, /*dijit._Widget*/ prev){
 		// summary: Dispatches the appropriate transition.
 		this._resetTimer();
 
@@ -285,7 +285,7 @@ dojo.declare("dojox.layout.RotatorContainer",
 		}
 	},
 
-	_fade: function(/*Widget*/next, /*Widget*/prev){
+	_fade: function(/*dijit._Widget*/ next, /*dijit._Widget*/ prev){
 		// summary: Crossfades two children.
 		this._styleNode(prev.domNode, 1, 1);
 		this._styleNode(next.domNode, 0, 2);

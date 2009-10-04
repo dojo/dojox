@@ -475,7 +475,7 @@ dojo.addOnLoad(function(){
 
 // Get Dojo widget events too!
 dojo.connect(dojo, "connect", 
-	function(/*Widget*/ widget, /*String*/ event, /*Function*/ f){
+	function(/*dijit._Widget*/ widget, /*String*/ event, /*Function*/ f){
 		// kill recursion
 		// check for private variable _mine to make sure this isn't a recursive loop
 		if(widget && (!f || !f._mine)){

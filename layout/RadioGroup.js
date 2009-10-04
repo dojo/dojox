@@ -85,7 +85,7 @@ dojo.declare("dojox.layout.RadioGroup",
 	
 	// FIXME: shouldn't have to rewriting these, need to take styling out of _showChild and _hideChild
 	//		and use classes on the domNode in _transition or something similar (in StackContainer)
-	_transition: function(/*Widget*/newWidget, /*Widget*/oldWidget){
+	_transition: function(/*dijit._Widget*/ newWidget, /*dijit._Widget*/ oldWidget){
 		// summary: called when StackContainer receives a selectChild call, used to transition the panes.
 		this._showChild(newWidget);
 		if(oldWidget){
@@ -99,7 +99,7 @@ dojo.declare("dojox.layout.RadioGroup",
 		}
 	},
 
-	_showChild: function(/*Widget*/ page){
+	_showChild: function(/*dijit._Widget*/ page){
 		// summary: show the selected child widget
 		var children = this.getChildren();
 		page.isFirstChild = (page == children[0]);
@@ -115,7 +115,7 @@ dojo.declare("dojox.layout.RadioGroup",
 		}
 	},
 
-	_hideChild: function(/*Widget*/ page){
+	_hideChild: function(/*dijit._Widget*/ page){
 		// summary: hide the specified child widget
 		page.selected = false;
 		page.domNode.style.display="none";

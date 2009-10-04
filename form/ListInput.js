@@ -344,7 +344,7 @@ dojo.declare("dojox.form.ListInput",
 		}finally{ range=null; }
 	},
 	
-	_onItemClose: function(/*Widget*/item){
+	_onItemClose: function(/*dijit._Widget*/ item){
 		// summary: 
 		//		Destroy a list element when close button is clicked
 		// tags:
@@ -363,7 +363,7 @@ dojo.declare("dojox.form.ListInput",
 		}
 	},
 	
-	_onItemKeyDown:  function(/*Widget*/item, /*event*/e){
+	_onItemKeyDown:  function(/*dijit._Widget*/ item, /*Event*/ e){
 		// summary: 
 		//		Call when item get a keypress
 		// tags:
@@ -406,7 +406,7 @@ dojo.declare("dojox.form.ListInput",
 		}
 	},
 	
-	_onItemChange: function(/*Widget*/item, /*String*/value){
+	_onItemChange: function(/*dijit._Widget*/ item, /*String*/ value){
 		// summary: 
 		//		Call when item value change
 		// tags:
@@ -422,7 +422,7 @@ dojo.declare("dojox.form.ListInput",
 		this._updateValues();
 	},
 	
-	_onItemEdit: function(/*Widget*/item){
+	_onItemEdit: function(/*dijit._Widget*/ item){
 		// summary: 
 		//		Call when item is edited
 		// tags:
@@ -639,7 +639,7 @@ dojo.declare("dojox.form.ListInput",
 		//		private
 		return this._getSomeItem();
 	},
-	_getSomeItem: function(/*Widget*/item,/*String*/position){
+	_getSomeItem: function(/*dijit._Widget*/ item,/*String*/ position){
 		// summary: 
 		//		return the item before the one in params
 		// tags:
@@ -671,14 +671,14 @@ dojo.declare("dojox.form.ListInput",
 		}
 		return lastItem;
 	},
-	_getPreviousItem: function(/*Widget*/item){
+	_getPreviousItem: function(/*dijit._Widget*/ item){
 		// summary: 
 		//		return the item before the one in params
 		// tags:
 		//		private
 		return this._getSomeItem(item,"before");
 	},
-	_getNextItem: function(/*Widget*/item){
+	_getNextItem: function(/*dijit._Widget*/ item){
 		// summary: 
 		//		return the item before the one in params
 		// tags:
@@ -686,7 +686,7 @@ dojo.declare("dojox.form.ListInput",
 		return this._getSomeItem(item,"after");
 	},
 	
-	_destroyItem: function(/*Widget*/item,/*Boolean, optional*/updateValue){
+	_destroyItem: function(/*dijit._Widget*/ item, /*Boolean?*/ updateValue){
 		// summary: 
 		//		destroy an item
 		// tags:

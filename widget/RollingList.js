@@ -684,7 +684,7 @@ dojo.declare("dojox.widget.RollingList",
 		}
 	},
 	
-	addChild: function(/*Widget*/ widget, /*int?*/ insertIndex){
+	addChild: function(/*dijit._Widget*/ widget, /*int?*/ insertIndex){
 		// summary: adds a child to this rolling list - if passed an insertIndex,
 		//  then all children from that index on will be removed and destroyed
 		//  before adding the child.
@@ -736,7 +736,7 @@ dojo.declare("dojox.widget.RollingList",
 		});
 	},
 	
-	scrollIntoView: function(/* Widget */ childWidget){
+	scrollIntoView: function(/*dijit._Widget*/ childWidget){
 		// summary: scrolls the given widget into view
 		if(this._scrollingTimeout){ 
 			window.clearTimeout(this._scrollingTimeout);
