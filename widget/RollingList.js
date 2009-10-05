@@ -10,7 +10,6 @@ dojo.require("dojox.html.metrics");
 dojo.require("dijit.form.Button");
 
 dojo.require("dojo.i18n"); 
-dojo.requireLocalization("dojox.widget", "RollingList"); 
 dojo.requireLocalization("dijit", "common");
 
 dojo.declare("dojox.widget._RollingListPane",
@@ -973,7 +972,7 @@ dojo.declare("dojox.widget.RollingList",
 		var store = this.store;
 		if(!item || !store || !store.isItem(item)){
 			var i = new dijit.MenuItem({
-				label: dojo.i18n.getLocalization("dojox.widget", "RollingList", this.lang).empty,
+				label: "---",
 				disabled: true,
 				iconClass: "dojoxEmpty",
 				focus: function(){
