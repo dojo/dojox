@@ -23,6 +23,7 @@ dojo.declare(
 	}
 );
 
+
 dojo.declare(
 	"dojox.form.DayTextBox",
 	dojox.form.DateTextBox,
@@ -34,7 +35,13 @@ dojo.declare(
 		//  The popup widget to use. In this case, a calendar with just a Month view.
 		popupClass: "dojox.widget.DailyCalendar",
 		
-		format: function(value){return value.getDate();},
+		parse: function(displayVal){
+			return displayVal;
+		},
+		
+		format: function(value){
+			return value.getDate ? value.getDate() : value;
+		},
 		validator: function(value) {
 			var num = Number(value);
 			var isInt = /(^-?\d\d*$)/.test(String(value));
@@ -46,7 +53,8 @@ dojo.declare(
 			this._picker.onValueSelected = dojo.hitch(this, function(value){
 				this.focus(); // focus the textbox before the popup closes to avoid reopening the popup
 				setTimeout(dojo.hitch(this, "_close"), 1); // allow focus time to take
-				dijit.form.TextBox.prototype._setValueAttr.call(this, value, true, String(value.getDate()));
+
+				dijit.form.TextBox.prototype._setValueAttr.call(this, String(value.getDate()), true, String(value.getDate()));
 			});			
 		}
 	}
@@ -57,30 +65,49 @@ dojo.declare(
 	dojox.form.DateTextBox, 
 	{
 		// summary:
-		//		A validating, serializable, range-bound date text box with a popup calendar that contains just months.
+		//		A validating, serializable, range-bound date text box with a popup calendar that contains only years
 		
 		// popupClass: String
-		//  The popup widget to use. In this case, a calendar with just a Month view.
+		//  The popup widget to use. In this case, a calendar with just a Year view.
 		popupClass: "dojox.widget.MonthlyCalendar",
 
-		format: function(value){return value + 1},
+		selector: "date",
+		
+		postMixInProperties: function(){
+			this.inherited(arguments);
+			this.constraints.datePattern = "MM";
+		},
+		
+		format: function(value) {
+			return Number(value) + 1;
+		},
+		
+		parse: function(value, constraints){
+			return Number(value) - 1;
+		},
+		
+		serialize: function(value, constraints) {
+			return String(value);
+		},
 
 		validator: function(value) {
 			var num = Number(value);
 			var isInt = /(^-?\d\d*$)/.test(String(value));
 			return value == "" || value == null || (isInt && num >= 1 && num <= 12);
 		},
+		
 		_open: function(){
 			this.inherited(arguments);
-			
+
 			this._picker.onValueSelected = dojo.hitch(this, function(value){
 				this.focus(); // focus the textbox before the popup closes to avoid reopening the popup
 				setTimeout(dojo.hitch(this, "_close"), 1); // allow focus time to take
-				dijit.form.TextBox.prototype._setValueAttr.call(this,value + 1, true, value + 1);
-			});			
+				dijit.form.TextBox.prototype._setValueAttr.call(this,value, true, value);
+			});						
 		}
 	}
 );
+
 
 dojo.declare(
 	"dojox.form.YearTextBox",
@@ -89,10 +116,18 @@ dojo.declare(
 		// summary:
 		//		A validating, serializable, range-bound date text box with a popup calendar that contains only years
 		
-		// popupClass: String
-		//  The popup widget to use. In this case, a calendar with just a Year view.
 		popupClass: "dojox.widget.YearlyCalendar",
-		format: function(value){return value;},
+
+		format: function(value) {
+			if (typeof value == "string"){
+				return value;
+			}
+			else if (value.getFullYear){
+				return value.getFullYear();
+			}
+			return value;
+		},
+		
 		validator: function(value) {
 			return value == "" || value == null || /(^-?\d\d*$)/.test(String(value));
 		},
@@ -105,6 +140,17 @@ dojo.declare(
 				setTimeout(dojo.hitch(this, "_close"), 1); // allow focus time to take
 				dijit.form.TextBox.prototype._setValueAttr.call(this,value, true, value);
 			});						
+		},
+		
+		parse: function(/*String*/value, /*dojo.date.locale.__FormatOptions*/constraints) {
+			return dojo.date.locale.parse("01/01/" + value, constraints) || (this._isEmpty(value) ? null : undefined); // Date
+		},
+
+		filter: function(val) {
+			if (val && val.getFullYear){
+				return val.getFullYear().toString();
+			}
+			return this.inherited(arguments);
 		}
 	}
 );
