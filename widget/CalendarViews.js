@@ -42,7 +42,6 @@ dojo.declare("dojox.widget._CalendarMonthView", [dojox.widget._CalendarView, dij
 	},
 
 	_setValueAttr: function(value){
-		console.log("set value " + value);
 		this.header.innerHTML = value.getFullYear();
 	},
 
