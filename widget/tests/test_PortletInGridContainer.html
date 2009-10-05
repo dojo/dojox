@@ -78,6 +78,7 @@
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 	
 	<script type="text/javascript" src="test_PortletInGridContainer.js"></script>
+	<script type="text/javascript" src="../FeedPortlet.js"></script>
 	<script type="text/javascript" src="CalendarStackLayout.js"></script>
 </head>
 <body class="soria">
@@ -305,7 +306,7 @@
 			>
 
 				<div dojoType="dojox.widget.ExpandableFeedPortlet" 
-						title="Cool Blogs -> Remembering Your Selection">
+						title="Cool Blogs -> Remembering Your Selection" showFeedTitle="false">
 					<select dojoType="dojox.widget.PortletFeedSettings" id="coolBlogsSettings">
 						<script type="dojo/connect">
 							this.attr("selectedIndex", dojo.cookie(this.id + "-selectedIndex") || 0);
@@ -331,6 +332,9 @@
 					a feed to show and refresh the page, that same feed will be selected.
 					this example also shows how to modify the title of the portlet when a new
 					feed is selected.
+					When a feed is loaded, it automatically sets the title of the Portlet to the 
+					title of the feed.  This portlet has disabled that behavior using
+					showFeedTitle="false"
 					</div>
 				</div>
 				<div dojoType="dojox.widget.ExpandableFeedPortlet" title="Cool Blogs -> onlyOpenOne == true" 
@@ -661,4 +665,3 @@
 
 </body>
 </html>
-

@@ -31,6 +31,11 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 	//		If true, when a link is clicked it will open in a new window.
 	//		If false, it will not.
 	openNew: true,
+
+	// useFeedTitle: Boolean
+	//		If true, the title of the loaded feed is displayed in the title bar of the portlet.
+	//		If false, the title remains unchanged.
+	showFeedTitle: true,
 	
 	postCreate: function(){
 		this.inherited(arguments);
@@ -132,7 +137,15 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 		var request = {
 			query: query,
 			count: this.maxResults,
-			onComplete: dojo.hitch(this, "generateResults"),
+			onComplete: dojo.hitch(this, function(items){
+				if (this.showFeedTitle && store.getFeedValue) {
+					var title = this.store.getFeedValue("title");
+					if(title){
+						this.attr("title", title.text ? title.text : title);
+					}
+				}
+				this.generateResults(items);
+			}),
 			onError: dojo.hitch(this, "onFeedError")
 		};
 		
@@ -145,7 +158,6 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 		//		Generates a list of hyperlinks and displays a tooltip
 		//		containing a summary when the mouse hovers over them.
 		var store = this.store;
-		
 		var timer;
 		var ul = this._resultList = 
 			dojo.create("ul", {"class" : "dojoxFeedPortletList"}, this.containerNode);

@@ -22,9 +22,30 @@ dojo.declare("dojox.data.GoogleFeedStore", dojox.data.GoogleSearchStore,{
 	_type: "",
 	_googleUrl: "http://ajax.googleapis.com/ajax/services/feed/load",
 	_attributes: ["title", "link", "author", "published",
-					"content", "summary", "categories"],
+			"content", "summary", "categories"],
 	_queryAttrs: {
 		"url":"q"
+	},
+	
+	getFeedValue: function(attribute, defaultValue){
+		// summary:
+		//		Non-API method for retrieving values regarding the Atom feed,
+		//		rather than the Atom entries.
+		var values = this.getFeedValues(attribute, defaultValue);
+		if(dojo.isArray(values)){
+			return values[0];
+		}
+		return values;
+	},
+
+	getFeedValues: function(attribute, defaultValue){
+		// summary:
+		//		Non-API method for retrieving values regarding the Atom feed,
+		//		rather than the Atom entries.
+		if(!this._feedMetaData){
+			return defaultValue;
+		}
+		return this._feedMetaData[attribute] || defaultValue;
 	},
 
 	_processItem: function(item, request) {
@@ -34,7 +55,16 @@ dojo.declare("dojox.data.GoogleFeedStore", dojox.data.GoogleSearchStore,{
 	},
 
 	_getItems: function(data){
-		return data['feed'] && data.feed[['entries']] ? data.feed[['entries']] : null;
+		if(data['feed']){
+			this._feedMetaData = {
+				title: data.feed.title,
+				desc: data.feed.description,
+				url: data.feed.link,
+				author: data.feed.author
+			};
+			return data.feed.entries;
+		}
+		return null;
 	},
 
 	_createContent: function(query, callback, request){
