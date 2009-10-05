@@ -1,4 +1,5 @@
 dojo.provide("dojox.form.DateTextBox");
+dojo.experimental("dojox.form.DateTextBox");
 
 dojo.require("dojox.widget.Calendar");
 dojo.require("dojox.widget.CalendarViews");
@@ -143,7 +144,7 @@ dojo.declare(
 		},
 		
 		parse: function(/*String*/value, /*dojo.date.locale.__FormatOptions*/constraints) {
-			return dojo.date.locale.parse("01/01/" + value, constraints) || (this._isEmpty(value) ? null : undefined); // Date
+			return value || (this._isEmpty(value) ? null : undefined); // Date
 		},
 
 		filter: function(val) {
