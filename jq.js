@@ -296,13 +296,7 @@ dojo.query differences that cause some tests to fail:
 
 	$.className = {
 		add: dojo.addClass,
-		remove: function(node, name){
-			if(!name){
-				node.className = "";
-			}else{
-				dojo.removeClass(node, name);
-			}
-		},
+		remove: dojo.removeClass,
 		has: dojo.hasClass
 	};
 
