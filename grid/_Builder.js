@@ -45,7 +45,7 @@ dojo.require("dojo.dnd.Moveable");
 	},{
 		view: null,
 		// boilerplate HTML
-		_table: '<table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"',
+		_table: '<table class="dojoxGridRowTable" border="0" cellspacing="0" cellpadding="0" role="presentation"',
 
 		// Returns the table variable as an array - and with the view width, if specified
 		getTableArray: function(){
@@ -60,20 +60,19 @@ dojo.require("dojo.dnd.Moveable");
 		// generate starting tags for a cell
 		generateCellMarkup: function(inCell, inMoreStyles, inMoreClasses, isHeader){
 			var result = [], html;
-			var waiPrefix = dojo.isFF<3 ? "wairole:" : "";
 			if(isHeader){
 				var sortInfo = inCell.index != inCell.grid.getSortIndex() ? "" : inCell.grid.sortInfo > 0 ? 'aria-sort="ascending"' : 'aria-sort="descending"';
 				if (!inCell.id){
 					inCell.id = this.grid.id + "Hdr" + inCell.index;
 				}
 				// column headers are not editable, mark as aria-readonly=true
-				html = ['<th tabIndex="-1" aria-readonly="true" role="', waiPrefix, 'columnheader"', sortInfo, 'id="', inCell.id, '"'];
+				html = ['<th tabIndex="-1" aria-readonly="true" role="columnheader"', sortInfo, 'id="', inCell.id, '"'];
 			}else{
 				// cells inherit grid aria-readonly property; default value for aria-readonly is false(grid is editable)
 				// if grid is editable (had any editable cells), mark non editable cells as aria-readonly=true
 				// if no editable cells, grid's aria-readonly value will have been set to true and cells will inherit
 				var editInfo = this.grid.editable && !inCell.editable ? 'aria-readonly="true"' : "";
-				html = ['<td tabIndex="-1" role="', waiPrefix, 'gridcell"', editInfo];
+				html = ['<td tabIndex="-1" role="gridcell"', editInfo];
 			}
 			if(inCell.colSpan){
 				html.push(' colspan="', inCell.colSpan, '"');

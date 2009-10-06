@@ -14,7 +14,7 @@ dojo.require("dojox.grid._Builder");
 			var checked = (selectedCount && selectedCount == this.view.grid.rowCount) ? ' dijitCheckBoxChecked dijitChecked' : '';
 			return '<table style="width:' + w + 'px;" ' +
 				'border="0" cellspacing="0" cellpadding="0" ' +
-				'role="' + (dojo.isFF<3 ? "wairole:" : "") + 'presentation"><tr><th style="text-align: center;">' +
+				'role="presentation"><tr><th style="text-align: center;">' +
 				'<div class="dojoxGridCheckSelector dijitReset dijitInline dijitCheckBox' + checked + '"></div></th></tr></table>';
 		},
 		doclick: function(e){
@@ -38,7 +38,7 @@ dojo.require("dojox.grid._Builder");
 		generateHtml: function(inDataIndex, inRowIndex){
 			var w = this.view.contentWidth || 0;
 			return '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;" border="0" ' + 
-				'cellspacing="0" cellpadding="0" role="'+(dojo.isFF<3 ? "wairole:" : "")+'presentation"><tr>' + 
+				'cellspacing="0" cellpadding="0" role="presentation"><tr>' + 
 				'<td  style="text-align: center;" class="dojoxGridRowbarInner">' + this.getCellContent(inRowIndex) + '</td></tr></table>';
 		},
 		getCellContent: function(inRowIndex){
