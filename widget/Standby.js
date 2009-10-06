@@ -338,7 +338,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 				//(and differently depending on browser, ugh!)
 				//WebKit and others still need work.
 				if(dir === "rtl"){
-					if(dojo.isFF == 2 || dojo.isOpera){
+					if(dojo.isOpera){
 						box.x += pn.scrollHeight > pn.clientHeight && 
 							pn.clientHeight > 0 ? scrollers.v: 0;
 						pnBox.x += pn.scrollHeight > pn.clientHeight && 
