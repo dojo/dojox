@@ -9,14 +9,14 @@ dojo.require("dojox.editor.plugins._SmileyPalette");
 
 dojo.requireLocalization("dojox.editor.plugins", "Smiley");
 
-dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin,{
+dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
 	// summary:
 	//		This plugin allows the user to select from emoticons or "smileys" 
 	//		to insert at the current cursor position.
 	//
 	// description:
 	//		The commands provided by this plugin are:
-	//		* insertEntity - inserts the selected HTML entity character
+	//		* smiley - inserts the selected emoticon
 
 	// iconClassPrefix: [const] String
 	//		The CSS class name for the button node is formed from `iconClassPrefix` and `command`

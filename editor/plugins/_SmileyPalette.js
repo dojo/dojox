@@ -131,7 +131,8 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 
 				var imgNode = dojo.create("img",{
 						src: dojo.moduleUrl("dojox.editor.plugins", "resources/emoticons/" + entityKey + ".gif"), //this._blankGif, implement as sprites
-						"class": "dojoxSmileyPaletteImg dojoxSmiley" + entityCap,
+						"class": "dojoxSmileyPaletteImg dojoxSmiley" + entityKey.charAt(0).toUpperCase() + entityKey.substring(1),
+						title: desc,
 						alt: desc
 				}, cellNode);
 
