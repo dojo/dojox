@@ -26,10 +26,10 @@ dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin,{
 		// summary:
 		//		Over-ride for creation of the save button.
 		this.dropDown = new dojox.editor.plugins._SmileyPalette();
-		this.connect(this.dropDown, "onChange", function(entity){
+		this.connect(this.dropDown, "onChange", function(emoticon){
 			this.button.closeDropDown();
 			this.editor.focus();
-			this.editor.execCommand("inserthtml",entity); //TODO: add markup
+			this.editor.execCommand("inserthtml", emoticon);
 		});
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "Smiley");
 		this.button = new dijit.form.DropDownButton({

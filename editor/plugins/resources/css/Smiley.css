@@ -1,5 +1,5 @@
 .dijitAdditionalEditorIconSmiley {
-	background-image: url(../icons/insertEntity.gif); /*TODO*/
+	background-image: url(../icons/smiley.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 18px;
@@ -58,34 +58,21 @@
 	outline:1px solid #dedede;
 }
 
-.dojoxEntityPalettePreviewTable {
-	table-layout: auto;
-	font-size: 1em;
-	width: 100%;
-}
-
-.dojoxEntityPalettePreviewHeader {
-	font-size: .8em;
-	padding: 3px;
-}
-
-.dojoxEntityPalettePreviewDetailEntity {
-	font-size: 3em;
-	font-weight: bold;
-	width: 1em;
-	text-align: center;
-}
-
-.dojoxEntityPalettePreviewDetail {
-	font-size: 1em;
-	vertical-align: middle;
-	font-weight: bold;
-	padding: 3px;
-}
-
 .dijit_a11y .dojoxEntityPaletteCell {
 	background-color:transparent !important;
 }
-.dijit_a11y .dojoxEntityPaletteImg {
+.dijit_a11y .dojoxSmileyPaletteImg {
 	background-color:transparent !important;
+}
+
+.dojoxSmileyPaletteImg {
+	width: 16px; /*This is the width of one color in the provided palettes. */
+	height: 14px; /* Height of one color in the provided palettes. */
+/*	position: absolute;*/
+	top: 1px;
+	left: 1px;
+	overflow: hidden;
+	cursor: default;
+	border:1px solid #999;
+	/* -moz-border-radius:2pt; */
 }

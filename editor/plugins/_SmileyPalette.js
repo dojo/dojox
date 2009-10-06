@@ -6,7 +6,7 @@ dojo.require("dojo.i18n");
 dojo.requireLocalization("dojox.editor.plugins", "Smiley");
 
 dojo.experimental("dojox.editor.plugins._SmileyPalette");
-// Based on dojox.editor.plugins.EntityPalette.  Should rebase both off dijit.ColorPalette, ideally
+// Copied from dojox.editor.plugins.EntityPalette.  TODO: Should rebase both off dijit.ColorPalette, ideally
 
 dojo.declare("dojox.editor.plugins._SmileyPalette",
 	[dijit._Widget, dijit._Templated],
@@ -28,17 +28,17 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 	//		The basic template used to render the palette.
 	//		Should generally be over-ridden to define different classes.
 	templateString: '<div class="dojoxEntityPalette">\n' +
-					'	<table>\n' +
-					'		<tbody>\n' +
-					'			<tr>\n' +
-					'				<td>\n' +
-					'					<table class="dojoxEntityPaletteTable"  waiRole="grid" tabIndex="${tabIndex}">\n' +
-					'						<tbody dojoAttachPoint="tableNode"></tbody>\n' +
-					'					</table>\n' +
-					'				</td>\n' +
-					'			</tr>\n' +
-					'		</tbody>\n' +
-					'	</table>\n' +
+						'<table>\n' +
+							'<tbody>\n' +
+								'<tr>\n' +
+									'<td>\n' +
+										'<table class="dojoxEntityPaletteTable"  waiRole="grid" tabIndex="${tabIndex}">\n' +
+											'<tbody dojoAttachPoint="tableNode"></tbody>\n' +
+										'</table>\n' +
+									'</td>\n' +
+								'</tr>\n' +
+							'</tbody>\n' +
+						'</table>\n' +
 					'</div>',
 
 	// defaultTimeout: [public] Number
@@ -51,29 +51,28 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 	//		< 1.0 means that each typematic event fires at an increasing faster rate
 	timeoutChangeRate: 0.90,
 	
-	// choices: [public] String
+	// smileys: [public] String
 	//		The symbol pallete to display.  The only current one is 'latin'.
-	choices:
-		{
-			emoticonLabelSmile: ":-)",
-			emoticonLabelLaughing: ":-D",
-			emoticonLabelWink: ";-)",
-			emoticonLabelGrin: "grin",
-			emoticonLabelCool: "cool",
-			emoticonLabelAngry: "angry",  
-			emoticonLabelHalf: "half", 
-			emoticonLabelEyebrow: "eyebrow",
-			emoticonLabelFrown: "frown",
-			emoticonLabelShy: "shy",
-			emoticonLabelGoofy: "goofy",
-			emoticonLabelOops: "oops",
-			emoticonLabelTongue: "tongue",
-			emoticonLabelIdea: "idea",
-			emoticonLabelYes: "yes",
-			emoticonLabelNo: "no",	
-			emoticonLabelAngel: "angel",
-			emoticonLabelCrying: "crying"
-		},
+	smileys: {
+		emoticonSmile: ":-)",
+		emoticonLaughing: "lol",
+		emoticonWink: ";-)",
+		emoticonGrin: ":-D",
+		emoticonCool: "8-)",
+		emoticonAngry: ":-@",
+		emoticonHalf: ":-/",
+		emoticonEyebrow: "/:)",
+		emoticonFrown: ":-(",
+		emoticonShy: ":-$",
+		emoticonGoofy: ":-S",
+		emoticonOops: ":-O",
+		emoticonTongue: ":-P",
+		emoticonIdea: "(i)",
+		emoticonYes: "(y)",
+		emoticonNo: "(n)",
+		emoticonAngel: "0:-)",
+		emoticonCrying: ":'("
+	},
 
 	// value: [public] String
 	//		The value of the selected entity.
@@ -107,28 +106,34 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 			this._cellNodes = [];
 			var numChoices = 0;
 			var entityKey;
-			for(entityKey in this.choices){numChoices++;}
+			for(entityKey in this.smileys){numChoices++;}
 			var choicesPerRow = Math.floor(Math.sqrt(numChoices)); 
 			var numRows = choicesPerRow;
 			var currChoiceIdx = 0;
 			var rowNode = null;
 			var cellNode;
 
-			for(entityKey in this.choices){
+			for(entityKey in this.smileys){
 				var newRow = currChoiceIdx % numRows === 0;
 				if(newRow){
 					rowNode = dojo.create("tr", {
 						tabIndex:"-1"//,
 					});
 				}
-				// Deal with entities that have keys which are reserved words.
-				var entityHtml = this.choices[entityKey]; //TODO: escapeHTML
+
+				var entityHtml = this.smileys[entityKey], //TODO: escapeHTML
+					desc = dojo.i18n.getLocalization("dojox.editor.plugins", "Smiley")[entityKey];
+
 				cellNode = dojo.create("td",{
-						innerHTML: entityHtml,
 						tabIndex: "-1",
 						"class":"dojoxEntityPaletteCell"
-						//alt: this.colorNames[color] // TODO: Need to construct tooltip using entity desc's
 					}, rowNode);
+
+				var imgNode = dojo.create("img",{
+						src: dojo.moduleUrl("dojox.editor.plugins", "resources/emoticons/" + entityKey + ".gif"), //this._blankGif, implement as sprites
+						"class": "dojoxSmileyPaletteImg dojoxSmiley" + entityCap,
+						alt: desc
+				}, cellNode);
 
 				dojo.forEach(["Dijitclick", "MouseEnter", "Focus", "Blur"], function(handler){
 					this.connect(cellNode, "on" + handler.toLowerCase(), "_onCell" + handler);
@@ -138,7 +143,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 
 				dijit.setWaiRole(cellNode, "gridcell");
 				cellNode.index = this._cellNodes.length;
-				this._cellNodes.push({node:cellNode,html:entityHtml});
+				this._cellNodes.push({node: cellNode, html: "<span class='" + entityKey + "'>" + this.smileys[entityKey] + "</span>"});  //TODO: escapeHTML
 				currChoiceIdx++;
 			}
 
@@ -148,8 +153,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 				cellNode = dojo.create("td",{
 						innerHTML: "",
 						tabIndex: "-1",
-						"class":"dojoxEntityPaletteNullCell"
-						//alt: this.colorNames[color] // TODO: Need to construct tooltip using entity desc's
+						"class": "dojoxEntityPaletteNullCell"
 					}, rowNode);
 				remainder--;
 			}
@@ -236,7 +240,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 
 	_onBlur: function(){
 		// summary:
-		//		Handler for when the EntityPalette and the entity cell inside of it lose focus
+		//		Handler for when the palette and the cell inside of it lose focus
 		// tags:
 		//		protected
 
