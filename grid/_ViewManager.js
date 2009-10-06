@@ -94,7 +94,7 @@ dojo.declare('dojox.grid._ViewManager', null, {
 	
 			//Work around odd FF3 rendering bug: #8864.
 			//A one px increase fixes FireFox 3's rounding bug for fractional font sizes.
-			if(dojo.isFF>=3 && h){h++;}
+			if(dojo.isMoz && h){h++;}
 		}
 		for(i=0; (n=inRowNodes[i]); i++){
 			if(currHeights[i] != h){
