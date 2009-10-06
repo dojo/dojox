@@ -71,7 +71,7 @@
 			dijit._Templated.getCachedTemplate(dojo.moduleUrl("dojox.grid", "resources/Expando.html"));
 			dijit._Templated.getCachedTemplate(dojo.moduleUrl("dojox.grid","resources/View.html"));
 			jsonStore.fetch({onComplete: function(){
-				doProfiling = (dojo.isFF && doProfiling);
+				doProfiling = dojo.isMoz && doProfiling;
 				dojo.connect(window, "onresize", function(){
 					var grids = dojo.filter(dojo.query(".grid").map(dijit.byNode), function(w){ return w && w.resize; });
 					var i = 0;

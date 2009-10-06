@@ -477,7 +477,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary
 			//		Building context menu for right-click shortcuts within a table
 			//
-			var node = dojo.isFF ? this.editor.editNode : this.editorDomNode;
+			var node = dojo.isMoz ? this.editor.editNode : this.editorDomNode;
 			
 			var pMenu = new dijit.Menu({targetNodeIds:[node], id:"progMenu", contextMenuForWindow:dojo.isIE});
 			var _M = dijit.MenuItem;

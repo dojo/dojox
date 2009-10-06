@@ -7,7 +7,7 @@ dojo.mixin(dojox.help, {
 	},
 	_displayLocated: function(located){
 		var obj = {};
-		dojo.forEach(located, function(item){ obj[item[0]] = (+dojo.isFF) ? { toString: function(){ return "Click to view"; }, item: item[1] } : item[1]; });
+		dojo.forEach(located, function(item){ obj[item[0]] = dojo.isMoz ? { toString: function(){ return "Click to view"; }, item: item[1] } : item[1]; });
 		console.dir(obj);
 	},
 	_displayHelp: function(loading, obj){

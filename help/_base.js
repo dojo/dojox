@@ -96,7 +96,7 @@ dojox.help = {
 		}
 
 		dojox.help._displayLocated(found);
-		if(!+dojo.isFF){
+		if(!dojo.isMoz){
 			return "";
 		}
 	},
@@ -254,7 +254,7 @@ dojox.help = {
 				}
 			});
 		}
-		if(!+dojo.isFF){
+		if(!dojo.isMoz){
 			return "";
 		}
 	},
@@ -327,7 +327,7 @@ dojox.help = {
 
 		var message = "function Loading info for " + this.__name__ + "... (watch console for result) {}";
 
-		if(!+dojo.isFF){
+		if(!dojo.isMoz){
 			this.__output__ = true;
 			return message;
 		}

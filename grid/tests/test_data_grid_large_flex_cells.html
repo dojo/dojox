@@ -50,7 +50,7 @@
 		var doProfiling = false;
 		
 		dojo.addOnLoad(function(){
-			doProfiling = (dojo.isFF && doProfiling);
+			doProfiling = dojo.isMoz && doProfiling;
 			if(doProfiling){
 				console.profile("Startup/Creation");
 				window.profiling = true;

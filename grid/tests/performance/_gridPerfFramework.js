@@ -111,7 +111,7 @@ dojo.provide("dojox.grid.tests.performance._gridPerfFramework");
 		var rows = parseInt(obj.rows, 10);
 		var layout = obj.layout;
 		var rowSelector = (obj.rowSelector.toLowerCase() == "true");
-		var doProfiling = isTop && dojo.isFF && (obj.doProfiling.toLowerCase() == "true");
+		var doProfiling = isTop && dojo.isMoz && obj.doProfiling.toLowerCase() == "true";
 		var name = layout + " Layout" + (rowSelector ? " w/ Row Selector" : "");
 		var t = {
 			name: name,
@@ -156,7 +156,7 @@ dojo.provide("dojox.grid.tests.performance._gridPerfFramework");
 								"&rowSelector=" + (!rowSelector ? "true" : "false") +
 								"&doProfiling=" + (doProfiling ? "true" : "false")}
 			}, n, "after");
-			if(dojo.isFF){
+			if(dojo.isMoz){
 				n = dojo.create("button", {
 					innerHTML: doProfiling ? "No Profiling" : "Do Profiling",
 					onclick: function(){window.location.search="?rows=" + rows + 

@@ -269,7 +269,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 
 	_getDomain: function(){
 		// see: https://bugzilla.mozilla.org/show_bug.cgi?id=357323
-		return ((location.hostname == "localhost" && dojo.isFF && dojo.isFF < 3) ? "localhost.localdomain" : location.hostname);
+		return ((location.hostname == "localhost" && dojo.isFF< 3) ? "localhost.localdomain" : location.hostname); //TODO: FF2 not supported. Confirm that this branch is still needed.  #9183
 	}
 });
 
