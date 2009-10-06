@@ -265,7 +265,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 		}else{
 			return "__" + namespace + "_" + key;
 		}
-	},
+	}
 });
 
 dojox.storage.manager.register("dojox.storage.WhatWGStorageProvider", 
