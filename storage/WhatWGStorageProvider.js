@@ -32,7 +32,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 		}
 		
 		// get current domain
-		this._domain = this._getDomain();
+		this._domain = location.hostname;
 		// console.debug(this._domain);
 		
 		// indicate that this storage provider is now loaded
@@ -42,7 +42,7 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 	
 	isAvailable: function(){
 		try{
-			var myStorage = globalStorage[this._getDomain()]; 
+			var myStorage = globalStorage[location.hostname]; 
 		}catch(e){
 			this._available = false;
 			return this._available;
@@ -266,11 +266,6 @@ dojo.declare("dojox.storage.WhatWGStorageProvider", [ dojox.storage.Provider ], 
 			return "__" + namespace + "_" + key;
 		}
 	},
-
-	_getDomain: function(){
-		// see: https://bugzilla.mozilla.org/show_bug.cgi?id=357323
-		return ((location.hostname == "localhost" && dojo.isFF< 3) ? "localhost.localdomain" : location.hostname); //TODO: FF2 not supported. Confirm that this branch is still needed.  #9183
-	}
 });
 
 dojox.storage.manager.register("dojox.storage.WhatWGStorageProvider", 
