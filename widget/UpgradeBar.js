@@ -39,7 +39,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 	//				bar should show or not. Should be a simple expression
 	//				if used in HTML:
 	//				|	<div validate="!google.gears">
-	//				|	<div validate="dojo.isFF<3">
+	//				|	<div validate="dojo.isIE<8">
 	notifications:[],
 	//
 	//	buttonCancel:String
