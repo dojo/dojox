@@ -146,6 +146,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		dojo.toggleClass(colHeaderNode,this.focusClass, true);
 		this._colHeadNode = colHeaderNode;
 		this._colHeadFocusIdx = colFocusIdx;
+		this._scrollHeader(this._colHeadFocusIdx);
 	},
 	scrollIntoView: function(){
 		var info = (this.cell ? this._scrollInfo(this.cell) : null);
