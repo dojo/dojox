@@ -184,9 +184,9 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 				this.removeIndicator(oldTicks._ticks[i]);
 			}
 		}
-		var t = { length: newTicks.length, 
-				  offset: newTicks.offset,
-				  noChange: true};
+		var t = {length: newTicks.length, 
+					offset: newTicks.offset,
+					noChange: true};
 		if(newTicks.color){ t.color = newTicks.color; }
 		if(newTicks.font){ t.font = newTicks.font; }
 		newTicks._ticks = [];
@@ -683,13 +683,13 @@ dojo.declare("dojox.widget.gauge._Indicator",[dijit._Widget, dijit._Contained, d
 
 	templateString: dojo.cache("dojox.widget.gauge", "_Indicator.html"),
 
-	startup: function() {
+	startup: function(){
 		if(this.onDragMove){
 			this.onDragMove = dojo.hitch(this.onDragMove);
 		}
 	},
 
-	postCreate: function() {
+	postCreate: function(){
 		if(this.title === ""){
 			dojo.style(this.domNode, "display", "none");
 		}

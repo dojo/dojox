@@ -306,8 +306,8 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 
 			var pn = target.parentNode;
 			if(pn && pn !== dojo.body() && 
-			   target !== dojo.body() && 
-			   target !== dojo.doc){
+				target !== dojo.body() && 
+				target !== dojo.doc){
 				
 				// If the parent is the body tag itself,
 				// we can avoid all this, the body takes 
@@ -349,8 +349,8 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 					}else if(dojo.isWebKit){
 						//TODO:  FIX THIS!
 					}
-				}  
-						
+				}
+
 				//Figure out if we need to adjust the overlay to fit a viewable 
 				//area, then resize it, we saved the original height/width above.
 				//This is causing issues on IE.  Argh!
@@ -376,7 +376,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 				var delta;
 				//Adjust the height now
 				if(bBottom > vpTop && 
-				   bTop < vpTop){
+					bTop < vpTop){
 					box.y = pnBox.y;
 					//intersecting top, need to do some shifting.
 					delta = vpTop - bTop;
@@ -390,20 +390,17 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 						box.h -= 2*(pn.scrollWidth > pn.clientWidth && 
 							pn.clientWidth > 0? scrollers.h: 0);
 					}
-				}else if(bTop < vpBottom && 
-						  bBottom > vpBottom){
+				}else if(bTop < vpBottom && bBottom > vpBottom){
 					//Intersecting bottom, just figure out how much 
 					//overlay to show.
 					box.h = vpBottom - bTop;
-				}else if(bBottom <= vpTop ||
-						  bTop >= vpBottom){
+				}else if(bBottom <= vpTop || bTop >= vpBottom){
 					//Outside view, hide it.
 					box.h = 0;
 				}
 
 				//adjust width
-				if(bRight > vpLeft && 
-				   bLeft < vpLeft){
+				if(bRight > vpLeft && bLeft < vpLeft){
 					box.x = pnBox.x;
 					//intersecting left, need to do some shifting.
 					delta = vpLeft - bLeft;
@@ -417,13 +414,11 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 						box.w -= 2*(pn.scrollHeight > pn.clientHeight && 
 							pn.clientHeight > 0? scrollers.w:0);
 					}
-				}else if(bLeft < vpRight && 
-						  bRight > vpRight){
+				}else if(bLeft < vpRight && bRight > vpRight){
 					//Intersecting right, just figure out how much 
 					//overlay to show.
 					box.w = vpRight - bLeft;
-				}else if(bRight <= vpLeft ||
-						  bLeft >= vpRight){
+				}else if(bRight <= vpLeft || bLeft >= vpRight){
 					//Outside view, hide it.
 					box.w = 0;
 				}

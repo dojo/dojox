@@ -172,7 +172,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 		this.cx = Number(this.cx);
 		if(!this.cx){this.cx = this.width/2;}
 		this.cy = Number(this.cy);
-		if (!this.cy){this.cy = this.height/2;}
+		if(!this.cy){this.cy = this.height/2;}
 		this.radius = Number(this.radius);
 		if(!this.radius){this.radius = Math.min(this.cx,this.cy) - 25;}
 		this._oppositeMiddle = (this.startAngle+this.endAngle)/2+180;
@@ -221,7 +221,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 		// description:
 		//		Draws the gauge by drawing the surface, the ranges, and the indicators.
 		var i;
-		if (this._rangeData){
+		if(this._rangeData){
 			for(i=0; i<this._rangeData.length; i++){
 				this.drawRange(this._rangeData[i]);
 			}
@@ -236,7 +236,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 		}
 	},
 
-	drawRange: function(/*Object*/range) {
+	drawRange: function(/*Object*/range){
 		// summary:
 		//		This function is used to draw (or redraw) a range
 		// description:
@@ -246,7 +246,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 		//		A range is a dojox.widget.gauge.Range or an object
 		//		with similar parameters (low, high, hover, etc.).
 		var path;
-		if(range.shape) {
+		if(range.shape){
 			this.surface.remove(range.shape);
 			range.shape = null;
 		}
