@@ -59,6 +59,27 @@ dojo.declare("dojox.editor.plugins.PrettyPrint",dijit._editor._Plugin,{
 				var val = self.editor._prettyprint_getValue(arguments);
 				return dojox.html.format.prettyPrint(val, self.indentBy, self.lineLength, self.entityMap, self.xhtml);
 			};
+
+			// The following are implemented as 'performance' functions.  Don't prettyprint
+			// content on internal state changes, just on calls to actually get values.
+			self.editor._prettyprint_endEditing = self.editor._endEditing;
+			self.editor._prettyprint_onBlur = self.editor._onBlur;
+			self.editor._endEditing = function(ignore_caret){
+				var v = self.editor._prettyprint_getValue(true);
+				self.editor._undoedSteps=[];//clear undoed steps
+				self.editor._steps.push({text: v, bookmark: self.editor._getBookmark()});
+			}
+			self.editor._onBlur = function(e){
+				this.inherited("_onBlur", arguments);
+				var _c=self.editor._prettyprint_getValue(true);
+				if(_c!=self.editor.savedContent){
+					self.editor.onChange(_c);
+					self.editor.savedContent=_c;
+				}
+				if(dojo.isMoz && self.editor.iframe){
+					self.editor.iframe.title = self.editor._localizedIframeTitles.iframeEditTitle;
+				} 
+			}
 		});
 	}
 });
