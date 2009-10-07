@@ -74,12 +74,12 @@ dojo.declare("dojox.wire.ml.Invocation", dojox.wire.ml.Action, {
 						}
 						//dojo.connect(arg, "onComplete", this, "onComplete");
 						this.connect(arg, "onComplete", "onComplete");
-                        if(!arg.onError){
+						if(!arg.onError){
 							arg.onError = function(){};
 						}
 						//dojo.connect(arg, "onError", this, "onError");
 						this.connect(arg, "onError", "onError");
-                        connected = true;
+						connected = true;
 					}
 				}
 				var r = func.apply(scope, args);
