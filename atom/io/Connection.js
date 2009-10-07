@@ -40,7 +40,7 @@ dojo.declare("dojox.atom.io.Connection",null,{
 		this._getXmlDoc(url, "feed", new dojox.atom.io.model.Feed(), dojox.atom.io.model._Constants.ATOM_NS, callback, /*handleDocumentRetrieved,*/ errorCallback, scope);
 	},
 	
-	getService: function(url, callback, errorCallback, scope){  
+	getService: function(url, callback, errorCallback, scope){
 		//	summary: 
 		//		Function to retrieve an introspection document from the given URL.
 		// 	description: 
@@ -334,7 +334,7 @@ dojo.declare("dojox.atom.io.Connection",null,{
 				}else{
 					//Function to handle the callback mapping of a getEntry after an update to return the
 					//entry and location.
-					var handleRetrieve = function(entry, dom, args) {
+					var handleRetrieve = function(entry, dom, args){
 						if(callback){
 							callback.call(scope, entry, location, args);
 						}else if(ae){
@@ -387,7 +387,7 @@ dojo.declare("dojox.atom.io.Connection",null,{
 		}
 
 		var url = null;
-		if(typeof(entry)=="string"){
+		if(typeof(entry) == "string"){
 			url = entry;
 		}else{
 			url = entry.getEditHref();
