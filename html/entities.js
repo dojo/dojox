@@ -14,9 +14,9 @@ dojo.provide("dojox.html.entities");
 		// If we have, use it, if not, gen it, cache, then use.
 		var mapper, regexp;
 		if(map._encCache && 
-		   map._encCache.regexp && 
-		   map._encCache.mapper && 
-		   map.length == map._encCache.length){
+			map._encCache.regexp && 
+			map._encCache.mapper && 
+			map.length == map._encCache.length){
 			mapper = map._encCache.mapper;
 			regexp = map._encCache.regexp;
 		}else{
@@ -48,9 +48,9 @@ dojo.provide("dojox.html.entities");
 		//		private
 		var mapper, regexp;
 		if(map._decCache && 
-		   map._decCache.regexp && 
-		   map._decCache.mapper && 
-		   map.length == map._decCache.length){
+			map._decCache.regexp && 
+			map._decCache.mapper && 
+			map.length == map._decCache.length){
 			mapper = map._decCache.mapper;
 			regexp = map._decCache.regexp;
 		}else{
