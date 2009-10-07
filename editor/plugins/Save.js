@@ -121,7 +121,7 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
-	if(name ===  "save"){
+	if(name === "save"){
 		o.plugin = new dojox.editor.plugins.Save({
 			url: ("url" in o.args)?o.args.url:"",
 			logResults: ("logResults" in o.args)?o.args.logResults:true

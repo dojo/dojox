@@ -84,7 +84,7 @@ dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
-	if(name ===  "preview"){
+	if(name === "preview"){
 		o.plugin = new dojox.editor.plugins.Preview({
 			styles: ("styles" in o.args)?o.args.styles:"",
 			stylesheets: ("stylesheets" in o.args)? o.args.stylesheets:null

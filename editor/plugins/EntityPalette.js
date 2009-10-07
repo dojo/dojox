@@ -112,7 +112,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 
 	postCreate: function(){
 		if(!this._created){
-            this._created = true;
+			this._created = true;
 			// A name has to be given to the colorMap, this needs to be unique per Palette.
 			this.domNode.style.position = "relative";
 			this._cellNodes = [];
@@ -150,7 +150,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 						//alt: this.colorNames[color] // TODO: Need to construct tooltip using entity desc's
 					}, rowNode);
 
-				dojo.forEach(["Dijitclick", "MouseEnter", "Focus", "Blur"], function(handler) {
+				dojo.forEach(["Dijitclick", "MouseEnter", "Focus", "Blur"], function(handler){
 					this.connect(cellNode, "on" + handler.toLowerCase(), "_onCell" + handler);
 				}, this);
 
@@ -192,10 +192,12 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 				LEFT_ARROW: -1
 			};
 			for(var key in keyIncrementMap){
-				this._connects.push(dijit.typematic.addKeyListener(this.domNode,
-					{charOrCode:dojo.keys[key], ctrlKey:false, altKey:false, shiftKey:false},
-					this,
-					function(){
+				this._connects.push(dijit.typematic.addKeyListener(this.domNode,{
+						charOrCode:dojo.keys[key], 
+						ctrlKey:false, 
+						altKey:false, 
+						shiftKey:false
+					},this,function(){
 						var increment = keyIncrementMap[key];
 						return function(count){ this._navigateByKey(increment, count); };
 					}(),
@@ -391,8 +393,7 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		if(typeCount == -1){ return; }
 
 		var newFocusIndex = this._currentFocus + increment;
-		if(newFocusIndex < this._cellNodes.length && newFocusIndex > -1)
-		{
+		if(newFocusIndex < this._cellNodes.length && newFocusIndex > -1){
 			var focusNode = this._cellNodes[newFocusIndex].node;
 			focusNode.focus();
 		}

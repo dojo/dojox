@@ -93,7 +93,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 				//Finally associate in the image locations based off the module url.
 				var modurl = dojo.moduleUrl(dojox._scopeName, "editor/plugins/resources").toString();
 				if(!(modurl.match(/^https?:\/\//i)) &&
-				   !(modurl.match(/^file:\/\//i))){
+					!(modurl.match(/^file:\/\//i))){
 					// We have to root it to the page location on webkit for some nutball reason. 
 					// Probably has to do with how iframe was loaded.
 					var bUrl;

@@ -88,7 +88,7 @@ dojo.declare("dojox.editor.plugins.PrettyPrint",dijit._editor._Plugin,{
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
-	if(name ===  "prettyprint"){
+	if(name === "prettyprint"){
 		o.plugin = new dojox.editor.plugins.PrettyPrint({
 			indentBy: ("indentBy" in o.args)?o.args.indentBy:-1,
 			lineLength: ("lineLength" in o.args)?o.args.lineLength:-1,

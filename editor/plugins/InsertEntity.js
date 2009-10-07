@@ -51,7 +51,7 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 		this.editor = editor;
 		this._initButton();
 
-		this.editor.addKeyHandler("s", true, true, dojo.hitch(this, function() {
+		this.editor.addKeyHandler("s", true, true, dojo.hitch(this, function(){
 			this.button.openDropDown();
 			this.dropDown.focus();
 		}));

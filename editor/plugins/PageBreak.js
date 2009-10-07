@@ -25,8 +25,8 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 	//		The nodes that should not allow page breaks to be inserted into them.
 	_unbreakableNodes: ["li", "ul", "ol"],
 
-        // _pbContent: [private] String
-        //              The markup used for the pagebreak insert.
+	// _pbContent: [private] String
+	//		The markup used for the pagebreak insert.
 	_pbContent: "<hr style='page-break-after: always;' class='dijitEditorPageBreak'>",
 
 	_initButton: function(){
@@ -153,7 +153,7 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
-	if(name ===  "pagebreak"){
+	if(name === "pagebreak"){
 		o.plugin = new dojox.editor.plugins.PageBreak({});
 	}
 });
