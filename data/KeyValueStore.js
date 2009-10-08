@@ -120,7 +120,7 @@ dojo.declare("dojox.data.KeyValueStore", null, {
 		//		See dojo.data.api.Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
-		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+			regexp = dojo.data.util.filter.patternToRegExp(value, false);
 		}
 		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
@@ -163,13 +163,13 @@ dojo.declare("dojox.data.KeyValueStore", null, {
 	isItem: function(/* anything */ something){
 		//	summary: 
 		//		See dojo.data.api.Read.isItem()
-		if (something && something[this._storeProp] === this) {
+		if(something && something[this._storeProp] === this){
 			return true; //Boolean
 		}
 		return false; //Boolean
 	},
 
-	isItemLoaded: function(/* anything */ something) {
+	isItemLoaded: function(/* anything */ something){
 		//	summary: 
 		//		See dojo.data.api.Read.isItemLoaded()
 		//		The KeyValueStore always loads all items, so if it's an item, then it's loaded.
@@ -378,7 +378,7 @@ dojo.declare("dojox.data.KeyValueStore", null, {
 		this.fetch(keywordArgs);
 	},
 	
-	_finishFetchItemByIdentity: function(/* Array */ items, /* object */ request) {
+	_finishFetchItemByIdentity: function(/* Array */ items, /* object */ request){
 		var scope = request.scope || dojo.global;
 		if(items.length){
 			request.oldOnItem.call(scope, items[0]);

@@ -21,7 +21,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		this._metadataNodes = null;
 		this._loadFinished = false;
 		this.url = keywordParameters.url;
-		this._opmlData = keywordParameters.data;  // XML DOM Document
+		this._opmlData = keywordParameters.data; // XML DOM Document
 		if(keywordParameters.label){
 			this.label = keywordParameters.label;
 		}
@@ -35,16 +35,16 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		}
 	},
 
-	//label: string
-	//The attribute of the Opml item to act as a label.
+	// label: [public] string
+	//		The attribute of the Opml item to act as a label.
 	label: "text",
 
-	//url: string
-	//The location from which to fetch the Opml document.
+	// url: [public] string
+	//		The location from which to fetch the Opml document.
 	url: "",
 
-	//urlPreventCache: boolean
-	//Flag to denote if the underlying xhrGet call should set preventCache.
+	// urlPreventCache: [public] boolean
+	//		Flag to denote if the underlying xhrGet call should set preventCache.
 	urlPreventCache: false,
 
 	_assertIsItem: function(/* item */ item){
@@ -143,7 +143,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		//	summary: 
 		//		Internal function to determine which list of items to search over.
 		//	queryOptions: The query options parameter, if any.
-		if(queryOptions && queryOptions.deep) {
+		if(queryOptions && queryOptions.deep){
 			return this._arrayOfAllItems; 
 		}
 		return this._arrayOfTopLevelItems;
@@ -161,7 +161,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		this._assertIsAttribute(attribute);
 		if(attribute == 'children'){
 			return (item.firstChild || defaultValue); //Object
-		} else {
+		}else{
 			var value = item.getAttribute(attribute);
 			return (value !== undefined) ? value : defaultValue; //Object
 		}
@@ -215,7 +215,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		//		See dojo.data.api.Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
-		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+			regexp = dojo.data.util.filter.patternToRegExp(value, false);
 		}
 		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
@@ -435,7 +435,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 						};
 					var getHandler = dojo.xhrGet(getArgs);
 					getHandler.addCallback(function(data){
-						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+						var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 						try{
 							self._processRawXmlTree(data);
 							var item = self._identityMap[keywordArgs.identity];
@@ -455,7 +455,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 					getHandler.addErrback(function(error){
 						this._loadInProgress = false;
 						if(keywordArgs.onError){
-							var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+							var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 							keywordArgs.onError.call(scope, error);
 						}
 					});
@@ -468,7 +468,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 					item = null;
 				}
 				if(keywordArgs.onItem){
-					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+					var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 			}
@@ -479,7 +479,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 				item = null;
 			}
 			if(keywordArgs.onItem){
-				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+				var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 				keywordArgs.onItem.call(scope, item);
 			}
 		}
@@ -498,7 +498,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 		//	summary: 
 		//		Internal function to execute delayed request in the store.
 		//Execute any deferred fetches now.
-		if (this._queuedFetches.length > 0) {
+		if(this._queuedFetches.length > 0){
 			for(var i = 0; i < this._queuedFetches.length; i++){
 				var fData = this._queuedFetches[i];
 				var delayedQuery = fData.args;

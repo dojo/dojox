@@ -28,7 +28,7 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 			preventCache: this.urlPreventCache
 		});
 		def.addCallback(this, "_processOsdd");
-		def.addErrback(function() {
+		def.addErrback(function(){
 			throw new Error("Unable to load OpenSearch Description document from " . args.url);					
 		});
 	},
@@ -229,7 +229,7 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 
 		xhr.addCallback(function(data){
 			var items = [];
-			if(data) {
+			if(data){
 				//Process the items...
 				items = self.process(data);
 				for(var i=0; i < items.length; i++){
@@ -290,10 +290,10 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 	
 	_getNodeXml: function(node, skipFirst){
 		var i;
-		switch(node.nodeType) {
+		switch(node.nodeType){
 			case 1:
 				var xml = [];
-				if(!skipFirst) {
+				if(!skipFirst){
 					xml.push("<"+node.tagName);
 					var attr;
 					for(i=0; i<node.attributes.length; i++){
@@ -339,7 +339,7 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 		var index = 0;
 		var currentType = types[0];
 		for(i=1; i<urlnodes.length; i++){
-			if(types[i]>currentType) {
+			if(types[i]>currentType){
 				index = i;
 				currentType = types[i];
 			}

@@ -183,7 +183,7 @@ dojo.require("dojo.AdapterRegistry");
 			//	errorHandler:
 			//		A function to call on error
 
-			var rq = request.query = request.query||{};
+			var rq = request.query = request.query || {};
 
 			//Build up the content to send the request for.
 			var content = {
@@ -198,7 +198,7 @@ dojo.require("dojo.AdapterRegistry");
 				}
 			);
 
-			content.id = rq.id||rq.userid||rq.groupid;
+			content.id = rq.id || rq.userid || rq.groupid;
 
 			if(rq.userids){
 				content.ids = rq.userids;

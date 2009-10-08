@@ -113,7 +113,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			//	According to the Read API comments in getValue() and exception is
 			//	thrown when an item is not an item or the attribute not a string!
 			this._assertIsItem(item);
-			if (!dojo.isString(attribute)) {
+			if(!dojo.isString(attribute)){
 				throw new Error(this._className+".getValue(): Invalid attribute, string expected!");
 			}
 			if(!this.hasAttribute(item, attribute)){
@@ -145,7 +145,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			return ret;
 		},
 	
-		hasAttribute: function(/* item */ item,	/* attribute-name-string */ attribute) {
+		hasAttribute: function(/* item */ item,	/* attribute-name-string */ attribute){
 			//	summary: 
 			//		See dojo.data.api.Read.hasAttribute()
 			return this.isItem(item) && typeof item.i[attribute]!="undefined";
@@ -155,7 +155,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			var values = this.getValues(item, attribute);
 			var len = values.length;
 			for(var i=0; i<len; i++){
-				if(values[i]==value){
+				if(values[i] == value){
 					return true;
 				}
 			}
@@ -181,12 +181,12 @@ dojo.declare("dojox.data.QueryReadStore",
 			// false
 			//
 			if(something){
-				return typeof something.r!="undefined" && something.r==this;
+				return typeof something.r != "undefined" && something.r == this;
 			}
 			return false;
 		},
 		
-		isItemLoaded: function(/* anything */ something) {
+		isItemLoaded: function(/* anything */ something){
 			// Currently we dont have any state that tells if an item is loaded or not
 			// if the item exists its also loaded.
 			// This might change when we start working with refs inside items ...
@@ -225,11 +225,11 @@ dojo.declare("dojox.data.QueryReadStore",
 				var aborted = false;
 				
 				var startIndex = requestObject.start?requestObject.start:0;
-				if (self.doClientPaging==false) {
+				if(self.doClientPaging == false){
 					// For client paging we dont need no slicing of the result.
 					startIndex = 0;
 				}
-				var endIndex   = requestObject.count?(startIndex + requestObject.count):items.length;
+				var endIndex = requestObject.count?(startIndex + requestObject.count):items.length;
 		
 				requestObject.abort = function(){
 					aborted = true;
@@ -258,10 +258,10 @@ dojo.declare("dojox.data.QueryReadStore",
 				}
 				if(requestObject.onComplete && !aborted){
 					var subset = null;
-					if (!requestObject.onItem) {
+					if(!requestObject.onItem){
 						subset = items.slice(startIndex, endIndex);
 					}
-					requestObject.onComplete.call(scope, subset, requestObject);   
+					requestObject.onComplete.call(scope, subset, requestObject);
 				}
 			};
 			this._fetchItems(request, _fetchHandler, _errorHandler);
@@ -296,7 +296,7 @@ dojo.declare("dojox.data.QueryReadStore",
 		
 		_xhrFetchHandler: function(data, request, fetchHandler, errorHandler){
 			data = this._filterResponse(data);
-			if (data.label){
+			if(data.label){
 				this._labelAttr = data.label;
 			}
 			var numRows = data.numRows || -1;
@@ -371,7 +371,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			if(!this.doClientPaging){
 				serverQuery.start = request.start || 0;
 				// Count might not be sent if not given.
-				if (request.count) {
+				if(request.count){
 					serverQuery.count = request.count;
 				}
 			}
@@ -389,13 +389,13 @@ dojo.declare("dojox.data.QueryReadStore",
 			}
 			// Compare the last query and the current query by simply json-encoding them,
 			// so we dont have to do any deep object compare ... is there some dojo.areObjectsEqual()???
-			if(this.doClientPaging && this._lastServerQuery!==null &&
-				dojo.toJson(serverQuery)==dojo.toJson(this._lastServerQuery)
+			if(this.doClientPaging && this._lastServerQuery !== null &&
+				dojo.toJson(serverQuery) == dojo.toJson(this._lastServerQuery)
 				){
 				this._numRows = (this._numRows === -1) ? this._items.length : this._numRows;
 				fetchHandler(this._items, request, this._numRows);
 			}else{
-				var xhrFunc = this.requestMethod.toLowerCase()=="post" ? dojo.xhrPost : dojo.xhrGet;
+				var xhrFunc = this.requestMethod.toLowerCase() == "post" ? dojo.xhrPost : dojo.xhrGet;
 				var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
 				xhrHandler.addCallback(dojo.hitch(this, function(data){
 					this._xhrFetchHandler(data, request, fetchHandler, errorHandler);
@@ -453,7 +453,7 @@ dojo.declare("dojox.data.QueryReadStore",
 				var item = this._itemsByIdentity[keywordArgs.identity];
 				if(!(item === undefined)){
 					if(keywordArgs.onItem){
-						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+						var scope = keywordArgs.scope ? keywordArgs.scope : dojo.global;
 						keywordArgs.onItem.call(scope, {i:item, r:this});
 					}
 					return;
@@ -463,7 +463,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			// Otherwise we need to go remote
 			// Set up error handler
 			var _errorHandler = function(errorData, requestObject){
-				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+				var scope = keywordArgs.scope ? keywordArgs.scope : dojo.global;
 				if(keywordArgs.onError){
 					keywordArgs.onError.call(scope, errorData);
 				}
@@ -471,7 +471,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			
 			// Set up fetch handler
 			var _fetchHandler = function(items, requestObject){
-				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+				var scope = keywordArgs.scope ? keywordArgs.scope : dojo.global;
 				try{
 					// There is supposed to be only one result
 					var item = null;

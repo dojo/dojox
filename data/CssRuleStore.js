@@ -42,7 +42,7 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 		// CSS files may not be finished loading by the time the store is constructed.  We need to 
 		// give them a little time, so setting the stylesheet loading to retry every 250ms.
 		function gatherRules(){
-			try {
+			try{
 				// Funkiness here is due to css that may still be loading.  This throws an DOM Access 
 				// error if css isnt completely loaded.
 				self.context = dojox.data.css.determineContext(self.context);
@@ -94,7 +94,7 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 		var attrs = this.getAttributes(item);
-		if(dojo.indexOf(attrs, attribute) != -1) {
+		if(dojo.indexOf(attrs, attribute) != -1){
 			return true;
 		}
 		return false;
@@ -144,7 +144,7 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 		}else if(attribute === "style"){
 			value = item.rule.style;
 		}else if(attribute === "cssText"){
-			if (dojo.isIE) {
+			if(dojo.isIE){
 				if(item.rule.style){
 					value = item.rule.style.cssText;
 					if(value){
@@ -219,7 +219,7 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 	fetch: function(request){
 		//	summary: 
 		//		See dojo.data.api.Read.fetch()
-		request =  request || {};
+		request = request || {};
 		if(!request.store){
 			request.store = this;
 		}

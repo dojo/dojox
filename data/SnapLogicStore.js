@@ -82,7 +82,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		//		See dojo.data.api.Read.hasAttributes()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
-		for(var i = 0; i < item.attributes.length;  ++i){
+		for(var i = 0; i < item.attributes.length; ++i){
 			if(attribute == item.attributes[i]){
 				return true;
 			}
@@ -164,7 +164,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		if(request.onItem || request.onComplete){
 			var response = request._dataResponse;
 
-			if (!response.length){
+			if(!response.length){
 				request.onError.call(scope, 
 									 new Error("dojox.data.SnapLogicStore: invalid response of length 0"),
 									 request);
@@ -193,7 +193,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 			if(request.onItem){
 				for(var i = 0; i < items.length; ++i){
-					if (request._aborted) {
+					if(request._aborted){
 						break;
 					}
 					request.onItem.call(scope, items[i], request);
@@ -237,7 +237,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 				request._countResponse = response;
 			}
 			if((!request._dataHandle || request._dataResponse !== null) && 
-			   (!request._countHandle || request._countResponse !== null)){
+				(!request._countHandle || request._countResponse !== null)){
 				this._fetchHandler(request);
 			}
 		}
@@ -269,7 +269,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 		};
 
 		// Only make the call for data if onItem or onComplete is used. Otherwise, onBegin will only
-	    // require the total row count.
+		// require the total row count.
 		if(request.onItem || request.onComplete){
 			var content = this._parameters || {};
 			if(request.start){

@@ -99,7 +99,7 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 			_inProgress.push(requestInfo);
 		}
 
-		while (_inProgress.length) {
+		while(_inProgress.length){
 			requestInfo = _inProgress.pop();
 			if(requestInfo.fetch){
 				this._handleFetchReturn(requestInfo.request);
@@ -143,7 +143,7 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 	fetchItemByIdentity: function(/* request */ request){
 		//	summary: 
 		//		See dojo.data.api.Identity.fetchItemByIdentity()
-		request =  request || {};
+		request = request || {};
 		if(!request.store){
 			request.store = this;
 		}

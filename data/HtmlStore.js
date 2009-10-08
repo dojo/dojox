@@ -80,24 +80,33 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		}
 	},
 
-	url: "",     // So the parser can instantiate the store via markup.
-	dataId: "", // So the parser can instantiate the store via markup.
+	// url: [public] string
+	//		The URL from which to load an HTML document for data loading
+	url: "",
+	
+	// dataId: [public] string
+	//		The id in the document for an element from which to get the data.
+	dataId: "",
 
-	// trimWhitepace: boolean
+	// trimWhitepace: [public] boolean
 	//		Boolean flag to denote if the store should trim whitepace around 
 	//		header and data content of a node.  This matters if reformatters
 	//		alter the white spacing around the tags.  The default is false for
 	//		backwards compat.
 	trimWhitespace: false, 
 
-	//urlPreventCache: boolean
-	//Flag to denote if peventCache should be used on xhrGet calls.
+	// urlPreventCache: [public] boolean
+	//		Flag to denote if peventCache should be used on xhrGet calls.
 	urlPreventCache: false,
 	
 	_indexItems: function(){
+		// summary:
+		//		Function to index items found under the id.
+		// tags:
+		//		private
 		this._getHeadings();
-		if (this._rootNode.rows){//tables
-			if(this._rootNode.tBodies && this._rootNode.tBodies.length > 0) {
+		if(this._rootNode.rows){//tables
+			if(this._rootNode.tBodies && this._rootNode.tBodies.length > 0){
 				this._rootNode = this._rootNode.tBodies[0];
 			}
 			var i;
@@ -108,7 +117,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		}else{//lists
 			var c=1;
 			for(i=0; i<this._rootNode.childNodes.length; i++){
-				if(this._rootNode.childNodes[i].nodeType===1){
+				if(this._rootNode.childNodes[i].nodeType === 1){
 					this._rootNode.childNodes[i].store = this;
 					this._rootNode.childNodes[i]._ident = c;
 					c++;
@@ -144,7 +153,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			}
 		}else{ //list
 			for(i=0; i<this._rootNode.childNodes.length; i++){
-				if (this._rootNode.childNodes[i].nodeType===1){
+				if(this._rootNode.childNodes[i].nodeType === 1){
 					items.push(this._rootNode.childNodes[i]);
 				}
 			}
@@ -235,7 +244,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		//		See dojo.data.api.Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
-		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+			regexp = dojo.data.util.filter.patternToRegExp(value, false);
 		}
 		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
@@ -383,7 +392,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 				var candidateItem = arrayOfAllItems[i];
 				for(key in request.query){
 					value = request.query[key]+'';
-					if (!this._containsValue(candidateItem, key, value, regexpList[key])){
+					if(!this._containsValue(candidateItem, key, value, regexpList[key])){
 						match = false;
 					}
 				}
@@ -469,7 +478,6 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		var self = this;
 		var item = null;
 		var scope = null;
-
 		if(!this._rootNode){
 			if(!this.url){
 				this._rootNode = dojo.byId(this.dataId);
@@ -478,8 +486,8 @@ dojo.declare("dojox.data.HtmlStore", null, {
 					item = this._rootNode.rows[identity + 1];
 				}else{ //Lists
 					for(var i = 0; i < self._rootNode.childNodes.length; i++){
-						if(self._rootNode.childNodes[i].nodeType === 1 && identity === dojox.xml.parser.textContent(self._rootNode.childNodes[i])) {
-								item = self._rootNode.childNodes[i];
+						if(self._rootNode.childNodes[i].nodeType === 1 && identity === dojox.xml.parser.textContent(self._rootNode.childNodes[i])){
+							item = self._rootNode.childNodes[i];
 						}
 					}
 				}
@@ -517,7 +525,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 						item = self._rootNode.rows[identity-1];
 					}else{ //List
 						for(var i = 0; i < self._rootNode.childNodes.length; i++){
-							if(self._rootNode.childNodes[i].nodeType === 1 && identity === dojox.xml.parser.textContent(self._rootNode.childNodes[i])) {
+							if(self._rootNode.childNodes[i].nodeType === 1 && identity === dojox.xml.parser.textContent(self._rootNode.childNodes[i])){
 									item = self._rootNode.childNodes[i];
 									break;
 							}

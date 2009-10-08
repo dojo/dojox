@@ -60,8 +60,13 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		}
 	},
 
-	url: "",     // So the parser can instantiate the store via markup.
-	tableId: "", // So the parser can instantiate the store via markup.
+	// url: [public] string
+	//		The URL from which to load an HTML document for data loading
+	url: "",
+	
+	// tableId: [public] string
+	//		The id of the table to load as store contents.
+	tableId: "",
 
 	_getHeadings: function(){
 		//	summary:
@@ -161,7 +166,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//		See dojo.data.api.Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
-		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+			regexp = dojo.data.util.filter.patternToRegExp(value, false);
 		}
 		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
@@ -222,7 +227,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		this._assertIsItem(keywordArgs.item);
 	},
 	
-	_fetchItems: function(request, fetchHandler, errorHandler) {
+	_fetchItems: function(request, fetchHandler, errorHandler){
 		//	summary:
 		//		Fetch items (XML elements) that match to a query
 		//	description:
@@ -277,7 +282,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 					d.innerHTML = data;
 					self._rootNode = findNode(d, self.tableId);
 					self._getHeadings.call(self);
-					for(var i=0; i<self._rootNode.rows.length; i++) {
+					for(var i=0; i<self._rootNode.rows.length; i++){
 						self._rootNode.rows[i].store = self;
 					}
 					self._finishFetchItems(request, fetchHandler, errorHandler);
@@ -301,8 +306,8 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 			//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
 			//same value for each item examined.  Much more efficient.
 			var regexpList = {};
-                        var value;
-                        var key;
+			var value;
+			var key;
 			for(key in request.query){
 				value = request.query[key]+'';
 				if(typeof value === "string"){
@@ -315,7 +320,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 				var candidateItem = arrayOfAllItems[i];
 				for(key in request.query){
 					value = request.query[key]+'';
-					if (!this._containsValue(candidateItem, key, value, regexpList[key])){
+					if(!this._containsValue(candidateItem, key, value, regexpList[key])){
 						match = false;
 					}
 				}
@@ -394,7 +399,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		var identity = keywordArgs.identity;
 		var self = this;
 		var item = null;
-                var scope = null;
+		var scope = null;
 
 		if(!this._rootNode){
 			if(!this.url){
@@ -404,7 +409,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 					this._rootNode.rows[i].store = this;
 				}
 				item = this._rootNode.rows[identity+1];
-				if (keywordArgs.onItem){
+				if(keywordArgs.onItem){
 					scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
@@ -420,7 +425,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 						if(node.id == id){
 							return node; //object
 						}
-						if(node.childNodes) {
+						if(node.childNodes){
 							for(var i=0; i<node.childNodes.length; i++){
 								var returnNode = findNode(node.childNodes[i], id);
 								if(returnNode){
@@ -438,7 +443,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 						self._rootNode.rows[i].store = self;
 					}
 					item = self._rootNode.rows[identity+1];
-					if (keywordArgs.onItem){
+					if(keywordArgs.onItem){
 						scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 						keywordArgs.onItem.call(scope, item);
 					}
@@ -454,7 +459,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		}else{
 			if(this._rootNode.rows[identity+1]){
 				item = this._rootNode.rows[identity+1];
-				if (keywordArgs.onItem){
+				if(keywordArgs.onItem){
 					scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
