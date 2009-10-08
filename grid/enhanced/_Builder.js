@@ -60,7 +60,7 @@ dojo.declare("dojox.grid.enhanced._HeaderBuilder", [dojox.grid._HeaderBuilder, d
 			}
             return x;
 		}
-		this.inherited(arguments);
+		return this.inherited(arguments);
 	},
 	
 	decorateEvent: function(e){
@@ -102,7 +102,16 @@ dojo.declare("dojox.grid.enhanced._HeaderBuilder", [dojox.grid._HeaderBuilder, d
 				dojo.disconnect(conn);
 			}));
 		}
-		return this.inherited(arguments);
+		var drag = this.inherited(arguments);
+		if(!dojo._isBodyLtr() && dojo.isIE && drag.followers){
+			//fix RTL in IE - left is NaN
+			dojo.forEach(drag.followers, function(follower){
+				if(!follower.left){
+					follower.left = dojo.position(follower.node).x;
+				}
+			});
+		}
+		return drag;
 	}	
 });
 
