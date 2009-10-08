@@ -5,9 +5,9 @@ dojo.provide("dojox.data.ServiceStore");
 // A ServiceStore is a readonly data store that provides a data.data interface to an RPC service.
 // var myServices = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.tests.resources", "test.smd"));
 // var serviceStore = new dojox.data.ServiceStore({service:myServices.ServiceStore});
-// 
+//
 // The ServiceStore also supports lazy loading. References can be made to objects that have not been loaded.
-//  For example if a service returned:
+//	For example if a service returned:
 // {"name":"Example","lazyLoadedObject":{"$ref":"obj2"}}
 //
 // And this object has accessed using the dojo.data API:
@@ -16,33 +16,32 @@ dojo.provide("dojox.data.ServiceStore");
 //
 
 dojo.declare("dojox.data.ServiceStore",
-	// ClientFilter is intentionally not required, ServiceStore does not need it, and is more 
+	// ClientFilter is intentionally not required, ServiceStore does not need it, and is more
 	// lightweight without it, but if it is provided, the ServiceStore will use it.
-	dojox.data.ClientFilter,  
-	{
+	dojox.data.ClientFilter,{
 		service: null,
 		constructor: function(options){
 			//summary:
-			//		ServiceStore constructor, instantiate a new ServiceStore 
-			// 		A ServiceStore can be configured from a JSON Schema. Queries are just 
+			//		ServiceStore constructor, instantiate a new ServiceStore
+			// 		A ServiceStore can be configured from a JSON Schema. Queries are just
 			// 		passed through to the underlying services
 			//
-			// options: 
+			// options:
 			// 		Keyword arguments
 			// The *schema* parameter
 			//		This is a schema object for this store. This should be JSON Schema format.
-			// 
+			//
 			// The *service* parameter
-			// 		This is the service object that is used to retrieve lazy data and save results 
+			// 		This is the service object that is used to retrieve lazy data and save results
 			// 		The function should be directly callable with a single parameter of an object id to be loaded
 			//
 			// The *idAttribute* parameter
 			//		Defaults to 'id'. The name of the attribute that holds an objects id.
-			//		This can be a preexisting id provided by the server.  
+			//		This can be a preexisting id provided by the server.
 			//		If an ID isn't already provided when an object
 			//		is fetched or added to the store, the autoIdentity system
 			//		will generate an id for it and add it to the index.
-			// 
+			//
 			// The *estimateCountFactor* parameter
 			// 		This parameter is used by the ServiceStore to estimate the total count. When
 			//		paging is indicated in a fetch and the response includes the full number of items
@@ -51,7 +50,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//		does not support paging, and the response is the full set of items, where the
 			// 		total count is equal to the numer of items returned. If the server does support
 			//		paging, an estimateCountFactor of 2 is a good value for estimating the total count
-			//		It is also possible to override _processResults if the server can provide an exact 
+			//		It is also possible to override _processResults if the server can provide an exact
 			// 		total count.
 			//
 			// The *syncMode* parameter
@@ -60,7 +59,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//		callbacks are unnecessary. This will only work with a synchronous capable service.
 			//
 			// description:
-			//		ServiceStore can do client side caching and result set updating if 
+			//		ServiceStore can do client side caching and result set updating if
 			// 		dojox.data.ClientFilter is loaded. Do this add:
 			//	|	dojo.require("dojox.data.ClientFilter")
 			//		prior to loading the ServiceStore (ClientFilter must be loaded before ServiceStore).
@@ -68,10 +67,10 @@ dojo.declare("dojox.data.ServiceStore",
 			//		client side and server side components by putting client side actions in
 			//		clientFilter property in fetch calls. For example you could override fetch:
 			//	|	fetch: function(args){
-  			//	|		// do the sorting and paging on the client side
-   			//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
-   			//	|		// args.query will be passed to the service object for the server side handling
-   			//	|		return this.inherited(arguments);
+				//	|		// do the sorting and paging on the client side
+	 			//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
+	 			//	|		// args.query will be passed to the service object for the server side handling
+	 			//	|		return this.inherited(arguments);
 			//	|	}
 			//		When extending this class, if you would like to create lazy objects, you can follow
 			//		the example from dojox.data.tests.stores.ServiceStore:
@@ -82,7 +81,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// |			callback(this);
 			// |		}
 			// |	};
-			//setup a byId alias to the api call	
+			//setup a byId alias to the api call
 			this.byId=this.fetchItemByIdentity;
 			this._index = {};
 			// if the advanced json parser is enabled, we can pass through object updates as onSet events
@@ -99,7 +98,7 @@ dojo.declare("dojox.data.ServiceStore",
 		syncMode: false,
 		estimateCountFactor: 1,
 		getSchema: function(){
-			return this.schema; 
+			return this.schema;
 		},
 
 		loadLazyValues:true,
@@ -108,30 +107,30 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			//	Gets the value of an item's 'property'
 			//
-			//	item: 
+			//	item:
 			//		The item to get the value from
-			//	property: 
-			//		property to look up value for	
-			//	defaultValue: 
+			//	property:
+			//		property to look up value for
+			//	defaultValue:
 			//		the default value
 			var value = item[property];
 			return value || // return the plain value since it was found;
-						(property in item ? // a truthy value was not found, see if we actually have it 
+						(property in item ? // a truthy value was not found, see if we actually have it
 							value : // we do, so we can return it
-							item._loadObject ? // property was not found, maybe because the item is not loaded, we will try to load it synchronously so we can get the property 
-								(dojox.rpc._sync = true) && arguments.callee.call(this,dojox.data.ServiceStore.prototype.loadItem({item:item}) || {}, property, defaultValue) : // load the item and run getValue again 
+							item._loadObject ? // property was not found, maybe because the item is not loaded, we will try to load it synchronously so we can get the property
+								(dojox.rpc._sync = true) && arguments.callee.call(this,dojox.data.ServiceStore.prototype.loadItem({item:item}) || {}, property, defaultValue) : // load the item and run getValue again
 								defaultValue);// not in item -> return default value
 		},
 		getValues: function(item, property){
 			// summary:
 			//		Gets the value of an item's 'property' and returns
-			//		it.  If this value is an array it is just returned,
+			//		it.	If this value is an array it is just returned,
 			//		if not, the value is added to an array and that is returned.
 			//
 			//	item: /* object */
 			//	property: /* string */
-			//		property to look up value for	
-	
+			//		property to look up value for
+
 			var val = this.getValue(item,property);
 			return val instanceof Array ? val : val === undefined ? [] : [val];
 		},
@@ -139,7 +138,7 @@ dojo.declare("dojox.data.ServiceStore",
 		getAttributes: function(item){
 			// summary:
 			//	Gets the available attributes of an item's 'property' and returns
-			//	it as an array. 
+			//	it as an array.
 			//
 			//	item: /* object */
 
@@ -158,7 +157,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//
 			//	item: /* object */
 			//	attribute: /* string */
-			return attribute in item;		
+			return attribute in item;
 		},
 
 		containsValue: function(item, attribute, value){
@@ -174,20 +173,20 @@ dojo.declare("dojox.data.ServiceStore",
 
 		isItem: function(item){
 			// summary:
-			//		Checks to see if the argument is an item 
+			//		Checks to see if the argument is an item
 			//
 			//	item: /* object */
 			//	attribute: /* string */
-		
+
 			// we have no way of determining if it belongs, we just have object returned from
 			// 	service queries
-			return (typeof item == 'object') && item && !(item instanceof Date); 
+			return (typeof item == 'object') && item && !(item instanceof Date);
 		},
 
 		isItemLoaded: function(item){
 			// summary:
-			//		Checks to see if the item is loaded. 
-			// 
+			//		Checks to see if the item is loaded.
+			//
 			//		item: /* object */
 
 			return item && !item._loadObject;
@@ -197,7 +196,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			// 		Loads an item and calls the callback handler. Note, that this will call the callback
 			// 		handler even if the item is loaded. Consequently, you can use loadItem to ensure
-			// 		that an item is loaded is situations when the item may or may not be loaded yet. 
+			// 		that an item is loaded is situations when the item may or may not be loaded yet.
 			// 		If you access a value directly through property access, you can use this to load
 			// 		a lazy value as well (doesn't need to be an item).
 			//
@@ -208,7 +207,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// 				// do something with the item
 			//			}
 			//		});
-			
+
 			var item;
 			if(args.item._loadObject){
 				args.item._loadObject(function(result){
@@ -216,26 +215,26 @@ dojo.declare("dojox.data.ServiceStore",
 					delete item._loadObject;
 					var func = result instanceof Error ? args.onError : args.onItem;
 					if(func){
-						func.call(args.scope, result);				
+						func.call(args.scope, result);
 					}
 				});
 			}else if(args.onItem){
-				// even if it is already loaded, we will use call the callback, this makes it easier to 
-				// use when it is not known if the item is loaded (you can always safely call loadItem). 
+				// even if it is already loaded, we will use call the callback, this makes it easier to
+				// use when it is not known if the item is loaded (you can always safely call loadItem).
 				args.onItem.call(args.scope, args.item);
 			}
 			return item;
 		},
 		_currentId : 0,
 		_processResults : function(results, deferred){
-			// this should return an object with the items as an array and the total count of 
+			// this should return an object with the items as an array and the total count of
 			// items (maybe more than currently in the result set).
 			// for example:
 			//	| {totalCount:10,[{id:1},{id:2}]}
-			
+
 			// index the results, assigning ids as necessary
 
-			if (results && typeof results == 'object'){
+			if(results && typeof results == 'object'){
 				var id = results.__id;
 				if(!id){// if it hasn't been assigned yet
 					if(this.idAttribute){
@@ -256,7 +255,7 @@ dojo.declare("dojox.data.ServiceStore",
 						this._index[id] = results;
 					}
 				}
-				for (var i in results){
+				for(var i in results){
 					results[i] = this._processResults(results[i], deferred).items;
 				}
 				var count = results.length;
@@ -270,26 +269,26 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			//		See dojo.data.api.Read.fetch
 			//
-			// The *queryOptions.cache* parameter 
-			//		If true, indicates that the query result should be cached for future use. This is only available 
-			// 		if dojox.data.ClientFilter has been loaded before the ServiceStore 
+			// The *queryOptions.cache* parameter
+			//		If true, indicates that the query result should be cached for future use. This is only available
+			// 		if dojox.data.ClientFilter has been loaded before the ServiceStore
 			//
 			//	The *syncMode* parameter
 			//		Indicates that the call should be fetch synchronously if possible (this is not always possible)
 			//
 			// The *clientFetch* parameter
 			//		This is a fetch keyword argument for explicitly doing client side filtering, querying, and paging
-			
+
 			args = args || {};
 
 			if("syncMode" in args ? args.syncMode : this.syncMode){
-				dojox.rpc._sync = true;	
+				dojox.rpc._sync = true;
 			}
 			var self = this;
-			
+
 			var scope = args.scope || self;
 			var defResult = this.cachingFetch ? this.cachingFetch(args) : this._doQuery(args);
-			defResult.request = args; 
+			defResult.request = args;
 			defResult.addCallback(function(results){
 				if(args.clientFetch){
 					results = self.clientSideFetch({query:args.clientFetch,sort:args.sort,start:args.start,count:args.count},results);
@@ -300,10 +299,10 @@ dojo.declare("dojox.data.ServiceStore",
 					args.onBegin.call(scope, resultSet.totalCount, args);
 				}
 				if(args.onItem){
-					for(var i=0; i<results.length;i++){	
+					for(var i=0; i<results.length;i++){
 						args.onItem.call(scope, results[i], args);
 					}
-				}					
+				}
 				if(args.onComplete){
 					args.onComplete.call(scope, args.onItem ? null : results, args);
 				}
@@ -325,9 +324,9 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			// 		return the store feature set
 
-			return { 
+			return {
 				"dojo.data.api.Read": true,
-				"dojo.data.api.Identity": true, 
+				"dojo.data.api.Identity": true,
 				"dojo.data.api.Schema": this.schema
 			};
 		},
@@ -335,7 +334,7 @@ dojo.declare("dojox.data.ServiceStore",
 		getLabel: function(item){
 			// summary
 			//		returns the label for an item. Just gets the "label" attribute.
-			//	
+			//
 			return this.getValue(item,this.labelAttribute);
 		},
 
@@ -347,27 +346,27 @@ dojo.declare("dojox.data.ServiceStore",
 
 		//Identity API Support
 
-		
+
 		getIdentity: function(item){
 			return item.__id;
 		},
 
 		getIdentityAttributes: function(item){
 			// summary:
-			//		returns the attributes which are used to make up the 
-			//		identity of an item.  Basically returns this.idAttribute
+			//		returns the attributes which are used to make up the
+			//		identity of an item.	Basically returns this.idAttribute
 
 			return [this.idAttribute];
 		},
 
 		fetchItemByIdentity: function(args){
-			// summary: 
+			// summary:
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			var item = this._index[(args._prefix || '') + args.identity];
 			if(item && args.onItem){
 				// the item exists in the index
 				if(item._loadObject){
-					// we have a handle on the item, but it isn't loaded yet, so we need to load it 
+					// we have a handle on the item, but it isn't loaded yet, so we need to load it
 					args.item = item;
 					this.loadItem(args);
 				}else{
@@ -385,6 +384,6 @@ dojo.declare("dojox.data.ServiceStore",
 			}
 			return item;
 		}
-	
+
 	}
 );

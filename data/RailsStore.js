@@ -1,6 +1,6 @@
 dojo.provide("dojox.data.RailsStore");
 dojo.require("dojox.data.JsonRestStore");
-// Contains code donated by Travis Tilley under CLA 
+// Contains code donated by Travis Tilley under CLA
 
 
 dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
@@ -20,7 +20,7 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 				var url = target;
 				var query;
 				var ident;
-				
+
 				if(dojo.isObject(id)){
 					ident = '';
 					query = '?' + dojo.objectToQuery(id);
@@ -34,18 +34,18 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 					ident = id ? id.toString() : '';
 					query = '';
 				}
-				
+
 				if(ident.indexOf('=') != -1){
 					query = ident;
 					ident = '';
 				}
-				
+
 				if(ident){
 					url = url + '/' + ident + '.json' + query;
 				}else{
 					url = url + '.json' + query;
 				}
-				
+
 				var isSync = dojox.rpc._sync;
 				dojox.rpc._sync = false;
 
@@ -91,7 +91,7 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 					return '&';
 				}
 			}
-			if (args.queryStr == null){
+			if(args.queryStr == null){
 				buildInitialQueryString();
 			}
 			args.queryStr = args.queryStr + separator() + dojo.objectToQuery(obj);
@@ -104,7 +104,7 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 			}
 			addToQueryStr({
 				page: ((args.start || 0) / args.count) + 1,
-				per_page: args.count 
+				per_page: args.count
 			});
 		}
 		if(args.sort){
@@ -127,7 +127,7 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 	},
 	_processResults: function(results, deferred){
 		var items;
-		
+
 		/*
 		 * depending on the ActiveRecord::Base.include_root_in_json setting,
 		 * you might get back an array of attribute objects, or an array of
@@ -150,7 +150,7 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 				}
 			}
 		}
-		
+
 		if(this.rootAttribute){
 			items = dojo.map(results, function(item){
 				return item[this.rootAttribute];
@@ -158,7 +158,7 @@ dojo.declare("dojox.data.RailsStore", dojox.data.JsonRestStore, {
 		}else{
 			items = results;
 		}
-		
+
 		// index the results
 		var count = results.length;
 		// if we don't know the length, and it is partial result, we will guess that it is twice as big, that will work for most widgets
