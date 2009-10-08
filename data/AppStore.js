@@ -9,9 +9,17 @@ dojo.experimental("dojox.data.AppStore");
 dojo.declare("dojox.data.AppStore",
 	null,{
 
-	url: "",			// So the parser can instantiate the store via markup.
-	urlPreventCache: false, 	// Whether or not to pass the preventCache parameter to the connection
-	xmethod: false,			// Whether to use X-Method-Override for PUT/DELETE.
+	// url: [public] string
+	//		So the parser can instantiate the store via markup.		
+	url: "",
+	
+	// urlPreventCache: [public] boolean
+	//		Whether or not to pass the preventCache parameter to the connection
+	urlPreventCache: false,
+
+	// xmethod: [public] boolean
+	//		Whether to use X-Method-Override for PUT/DELETE.
+	xmethod: false,
 	
 	_atomIO: null,
 	_feed: null,
@@ -23,13 +31,13 @@ dojo.declare("dojox.data.AppStore",
 	_deletes: null,
 	
 	constructor: function(/*Object*/args){
-		//	summary:
+		// summary:
 		//		The APP data store.  
-		//	description:
+		// description:
 		//		The APP Store is instantiated either in markup or programmatically by supplying a
 		//		url of the Collection to be used.
 		//
-		//	args:
+		// args:
 		//		An anonymous object to initialize properties.  It expects the following values:
 		//		url:		The url of the Collection to load.
 		//		urlPreventCache:	Whether or not to append on cache prevention params (as defined by dojo.xhr*)
@@ -45,18 +53,18 @@ dojo.declare("dojox.data.AppStore",
 		}
 	},
 	
-	_setFeed: function(feed, data) {
-		//	summary: 
+	_setFeed: function(feed, data){
+		// summary: 
 		//		Sets the internal feed using a dojox.atom.io.model.Feed object.
-		//	description:
+		// description:
 		//		Sets the internal feed using a dojox.atom.io.model.Feed object.  Also adds
 		//		a property to the entries to track that they belong to this store. It 
 		//		also parses stored requests (since we were waiting on a callback) and 
 		//		executes those as well.
 		//
-		//	feed: dojox.atom.io.model.Feed object
+		// feed: dojox.atom.io.model.Feed object
 		//		The Feed to use for this data store.
-		//	data: unused
+		// data: unused
 		//		Signature for this function is defined by AtomIO.getFeed, since this is a callback.
 		this._feed = feed;
 		var i;
@@ -64,15 +72,15 @@ dojo.declare("dojox.data.AppStore",
 			this._feed.entries[i].store = this;
 		}
 		if(this._requests){
-			for(i=0; i<this._requests.length; i++) {
+			for(i=0; i<this._requests.length; i++){
 				var request = this._requests[i];
-				if(request.request && request.fh && request.eh) {
+				if(request.request && request.fh && request.eh){
 					this._finishFetchItems(request.request, request.fh, request.eh);
-				} else if(request.clear) {
+				}else if(request.clear){
 					this._feed = null;	
-				} else if(request.add) {
+				}else if(request.add){
 					this._feed.addEntry(request.add);
-				} else if(request.remove){
+				}else if(request.remove){
 					this._feed.removeEntry(request.remove);
 				}
 			}
@@ -81,12 +89,12 @@ dojo.declare("dojox.data.AppStore",
 	},
 	
 	_getAllItems: function(){
-		//	summary:
+		// summary:
 		//		Function to return all entries in the Feed as an array of items.
-		//	description:
+		// description:
 		//		Function to return all entries in the Feed as an array of items.
 		//
-		//	returns:
+		// returns:
 		//		Array of all entries in the feed.
 		var items = [];
 		for(var i=0; i<this._feed.entries.length; i++){
@@ -96,13 +104,13 @@ dojo.declare("dojox.data.AppStore",
 	},
 	
 	_assertIsItem: function(/* item */ item){
-		//	summary:
+		// summary:
 		//		This function tests whether the item is an item.
-		//	description:
+		// description:
 		//		This function tests whether the item passed in is indeed an item 
 		//		in the store.
 		//
-		//	item:
+		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){ 
 			throw new Error("This error message is provided when a function is called in the following form: "
@@ -113,15 +121,16 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	_assertIsAttribute: function(/* String */ attribute){
-		//	summary:
+		// summary:
 		//		This function tests whether the item is an attribute.
-		//	description:
+		// description:
 		//		This function tests whether the item passed in is indeed a valid 
 		//		'attribute' like type for the store.
-		//	attribute: 
+		// attribute: 
 		//		The attribute to test for being contained by the store.
 		//
-		// returns: Returns a boolean indicating whether this is a valid attribute.
+		// returns:
+		//		Returns a boolean indicating whether this is a valid attribute.
 		if(typeof attribute !== "string"){ 
 			throw new Error("The attribute argument must be a string. The error is created "
 			+ "when a different type of variable is specified such as an array or object.");
@@ -136,12 +145,12 @@ dojo.declare("dojox.data.AppStore",
 	},
 	
 	_addUpdate: function(/* Object */ update){
-		//	summary:
+		// summary:
 		//		Internal function to add an updated entry to our updates array
-		//	description:
+		// description:
 		//		Internal function to add an updated entry to our updates array
 		//
-		//	update: dojox.atom.io.model.Entry object
+		// update: dojox.atom.io.model.Entry object
 		//		The updated Entry we've changed.
 		if(!this._updates){
 			this._updates = [update];
@@ -157,7 +166,7 @@ dojo.declare("dojox.data.AppStore",
 	getValue: function(	/* item */ item, 
 						/* attribute-name-string */ attribute, 
 						/* value? */ defaultValue){
-		//	summary: 
+		// summary: 
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		return (values.length > 0)?values[0]:defaultValue; //Object || int || Boolean
@@ -165,13 +174,13 @@ dojo.declare("dojox.data.AppStore",
 
 	getValues: function(/* item */ item, 
 						/* attribute-name-string */ attribute){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getValues()
 
 		this._assertIsItem(item);
 		var flag = this._assertIsAttribute(attribute);
 
-		if(flag) {
+		if(flag){
 			if((attribute === "author" || attribute === "contributor" || attribute === "link") && item[attribute+"s"]){
 				return item[attribute+"s"];
 			}
@@ -190,7 +199,7 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	getAttributes: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getAttributes()
 		this._assertIsItem(item);
 		var attributes = [];
@@ -204,7 +213,7 @@ dojo.declare("dojox.data.AppStore",
 
 	hasAttribute: function(	/* item */ item,
 							/* attribute-name-string */ attribute){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.hasAttribute()
 		return this.getValues(item, attribute).length > 0;
 	},
@@ -212,11 +221,11 @@ dojo.declare("dojox.data.AppStore",
 	containsValue: function(/* item */ item, 
 							/* attribute-name-string */ attribute, 
 							/* anything */ value){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
-		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+			regexp = dojo.data.util.filter.patternToRegExp(value, false);
 		}
 		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
@@ -226,27 +235,27 @@ dojo.declare("dojox.data.AppStore",
 								/* anything */ value,
 								/* RegExp?*/ regexp,
 								/* Boolean?*/ trim){
-		//	summary: 
+		// summary: 
 		//		Internal function for looking at the values contained by the item.
-		//	description: 
+		// description: 
 		//		Internal function for looking at the values contained by the item.  This 
 		//		function allows for denoting if the comparison should be case sensitive for
 		//		strings or not (for handling filtering cases where string case should not matter)
 		//	
-		//	item:
+		// item:
 		//		The data item to examine for attribute values.
-		//	attribute:
+		// attribute:
 		//		The attribute to inspect.
-		//	value:	
+		// value:	
 		//		The value to match.
-		//	regexp:
+		// regexp:
 		//		Optional regular expression generated off value if value was of string type to handle wildcarding.
 		//		If present and attribute values are string, then it can be used for comparison instead of 'value'
 		var values = this.getValues(item, attribute);
 		for(var i = 0; i < values.length; ++i){
 			var possibleValue = values[i];
 			if(typeof possibleValue === "string" && regexp){
-				if(trim) {
+				if(trim){
 					possibleValue = possibleValue.replace(new RegExp(/^\s+/),""); // START
 					possibleValue = possibleValue.replace(new RegExp(/\s+$/),""); // END
 				}
@@ -263,31 +272,33 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	isItem: function(/* anything */ something){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.isItem()
 		return something && something.store && something.store === this; //boolean
 	},
 
 	isItemLoaded: function(/* anything */ something){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.isItemLoaded()
 		return this.isItem(something);
 	},
 
 	loadItem: function(/* Object */ keywordArgs){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.loadItem()
 		this._assertIsItem(keywordArgs.item);
 	},
 	
-	_fetchItems: function(request, fetchHandler, errorHandler) {
-		//	summary: Fetch items (Atom entries) that match to a query
-		//	description: Fetch items (Atom entries) that match to a query
-		//	request:
+	_fetchItems: function(request, fetchHandler, errorHandler){
+		// summary: 
+		//		Fetch items (Atom entries) that match to a query
+		// description: 
+		//		Fetch items (Atom entries) that match to a query
+		// request:
 		//		A request object
-		//	fetchHandler:
+		// fetchHandler:
 		//		A function to call for fetched items
-		//	errorHandler:
+		// errorHandler:
 		//		A function to call on error
 		if(this._feed){
 			this._finishFetchItems(request, fetchHandler, errorHandler);
@@ -306,15 +317,17 @@ dojo.declare("dojox.data.AppStore",
 	},
 		
 	_finishFetchItems: function(request, fetchHandler, errorHandler){
-		// summary: Internal function for finishing a fetch request.
-		// description: Internal function for finishing a fetch request.  Needed since the feed
-		//				might not have been loaded, so we finish the fetch in a callback.
+		// summary: 
+		//		Internal function for finishing a fetch request.
+		// description: 
+		//		Internal function for finishing a fetch request.  Needed since the feed
+		//		might not have been loaded, so we finish the fetch in a callback.
 		//
-		//	request:
+		// request:
 		//		A request object
-		//	fetchHandler:
+		// fetchHandler:
 		//		A function to call for fetched items
-		//	errorHandler:
+		// errorHandler:
 		//		A function to call on error
 		var items = null;
 		var arrayOfAllItems = this._getAllItems();
@@ -339,7 +352,7 @@ dojo.declare("dojox.data.AppStore",
 				var candidateItem = arrayOfAllItems[i];
 				for(key in request.query){
 					value = request.query[key]+'';
-					if (!this._containsValue(candidateItem, key, value, regexpList[key], request.trim)){
+					if(!this._containsValue(candidateItem, key, value, regexpList[key], request.trim)){
 						match = false;
 					}
 				}
@@ -354,15 +367,15 @@ dojo.declare("dojox.data.AppStore",
 				items = arrayOfAllItems.slice(0,arrayOfAllItems.length); 
 			}
 		}
-		try {
+		try{
 			fetchHandler(items, request);
-		} catch(e){
+		}catch(e){
 			errorHandler(e, request);
 		}
 	},
 
 	getFeatures: function(){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true,
@@ -372,14 +385,14 @@ dojo.declare("dojox.data.AppStore",
 	},
 	
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
-		//	summary:
+		// summary:
 		//		See dojo.data.api.Read.close()
 		// nothing to do here!
 		this._feed = null;
 	},
 
 	getLabel: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getLabel()
 		if(this.isItem(item)){
 			return this.getValue(item, "title", "No Title");
@@ -388,7 +401,7 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	getLabelAttributes: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
 		return ["title"];
 	},
@@ -398,7 +411,7 @@ dojo.declare("dojox.data.AppStore",
 ***************************************/
 
 	getIdentity: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Identity.getIdentity()
 		this._assertIsItem(item);
 		return this.getValue(item, "id");
@@ -411,11 +424,11 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	fetchItemByIdentity: function(keywordArgs){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Identity.fetchItemByIdentity()
 
 		this._fetchItems({query:{id:keywordArgs.identity}, onItem: keywordArgs.onItem, scope: keywordArgs.scope},
-			function(items, request) {
+			function(items, request){
 				var scope = request.scope;
 				if(!scope){
 					scope = dojo.global;
@@ -433,30 +446,30 @@ dojo.declare("dojox.data.AppStore",
 ***************************************/
 
 	newItem: function(/* Object? */ keywordArgs){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.newItem()
 		var entry = new dojox.atom.io.model.Entry();
 		var value = null;
 		var temp = null;
 		var i;
 		for(var key in keywordArgs){
-			if(this._assertIsAttribute(key)) {
+			if(this._assertIsAttribute(key)){
 				value = keywordArgs[key];
 				switch(key){
 					case "link":
-						for(i in value) {
+						for(i in value){
 							temp = value[i];
 							entry.addLink(temp.href,temp.rel,temp.hrefLang,temp.title,temp.type);
 						}
 						break;
 					case "author":
-						for(i in value) {
+						for(i in value){
 							temp = value[i];
 							entry.addAuthor(temp.name, temp.email, temp.uri);
 						}
 						break;
 					case "contributor":
-						for(i in value) {
+						for(i in value){
 							temp = value[i];
 							entry.addContributor(temp.name, temp.email, temp.uri);
 						}
@@ -517,7 +530,7 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	deleteItem: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.deleteItem()
 		this._assertIsItem(item);
 
@@ -545,12 +558,12 @@ dojo.declare("dojox.data.AppStore",
 	setValue: function(	/* item */ item, 
 						/* string */ attribute,
 						/* almost anything */ value){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.setValue()
 		this._assertIsItem(item);
 		
 		var update = {item: item};
-		if(this._assertIsAttribute(attribute)) {
+		if(this._assertIsAttribute(attribute)){
 			switch(attribute){
 				case "link":
 					update.links = item.links;
@@ -623,7 +636,7 @@ dojo.declare("dojox.data.AppStore",
 	setValues: function(/* item */ item,
 						/* string */ attribute, 
 						/* array */ values){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.setValues()
 		if(values.length === 0){
 			return this.unsetAttribute(item, attribute);
@@ -633,12 +646,12 @@ dojo.declare("dojox.data.AppStore",
 		var update = {item: item};
 		var value;
 		var i;
-		if(this._assertIsAttribute(attribute)) {
+		if(this._assertIsAttribute(attribute)){
 			switch(attribute){
 				case "link":
 					update.links = item.links;
 					item.links = null;
-					for(i in values) {
+					for(i in values){
 						value = values[i];
 						item.addLink(value.href,value.rel,value.hrefLang,value.title,value.type);
 					}
@@ -647,7 +660,7 @@ dojo.declare("dojox.data.AppStore",
 				case "author":
 					update.authors = item.authors;
 					item.authors = null;
-					for(i in values) {
+					for(i in values){
 						value = values[i];
 						item.addAuthor(value.name, value.email, value.uri);
 					}
@@ -656,7 +669,7 @@ dojo.declare("dojox.data.AppStore",
 				case "contributor":
 					update.contributors = item.contributors;
 					item.contributors = null;
-					for(i in values) {
+					for(i in values){
 						value = values[i];
 						item.addContributor(value.name, value.email, value.uri);
 					}
@@ -665,7 +678,7 @@ dojo.declare("dojox.data.AppStore",
 				case "categories":
 					update.categories = item.categories;
 					item.categories = null;
-					for(i in values) {
+					for(i in values){
 						value = values[i];
 						item.addCategory(value.scheme, value.term, value.label);
 					}
@@ -710,11 +723,11 @@ dojo.declare("dojox.data.AppStore",
 
 	unsetAttribute: function(	/* item */ item, 
 								/* string */ attribute){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.unsetAttribute()
 		this._assertIsItem(item);
-		if(this._assertIsAttribute(attribute)) {
-			if(item[attribute] !== null) {
+		if(this._assertIsAttribute(attribute)){
+			if(item[attribute] !== null){
 				var update = {item: item};
 				switch(attribute){
 					case "author":
@@ -739,9 +752,9 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	save: function(/* object */ keywordArgs){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.save()
-		//	keywordArgs:
+		// keywordArgs:
 		//		{
 		//			onComplete: function
 		//			onError: function
@@ -775,7 +788,7 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	revert: function(){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.revert()
 		var i;
 		for(i in this._adds){
@@ -804,13 +817,13 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	isDirty: function(/* item? */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Write.isDirty()
-		if(item) {
+		if(item){
 			this._assertIsItem(item);
 			return item.isDirty?true:false; //boolean
 		}
-		return (this._adds!==null || this._updates!==null); //boolean
+		return (this._adds !== null || this._updates !== null); //boolean
 	}
 });
 dojo.extend(dojox.data.AppStore,dojo.data.util.simpleFetch);

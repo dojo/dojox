@@ -62,11 +62,11 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		}
 		this._features = {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true};
 		this._itemsByIdentity = null;
-		this._storeRefPropName = "_S";  // Default name for the store reference to attach to every item.
+		this._storeRefPropName = "_S"; // Default name for the store reference to attach to every item.
 		this._itemNumPropName = "_0"; // Default Item Id for isItem to attach to every item.
 		this._rootItemPropName = "_RI"; // Default Item Id for isItem to attach to every item.
 		this._reverseRefMap = "_RRM"; // Default attribute for constructing a reverse reference map for use with reference integrity
-		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
+		this._loadInProgress = false; //Got to track the initial load to prevent duelling loads of the dataset.
 		this._queuedFetches = [];
 
 		if(keywordParameters.urlPreventCache !== undefined){
@@ -80,15 +80,15 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		}
 	},
 	
-	url: "",  // use "" rather than undefined for the benefit of the parser (#3539)
+	url: "", // use "" rather than undefined for the benefit of the parser (#3539)
 
 	//Internal var, crossCheckUrl.  Used so that setting either url or _jsonFileUrl, can still trigger a reload
 	//when clearOnClose and close is used.
 	_ccUrl: "",
 
-	data: null,     //Make this parser settable.
+	data: null, //Make this parser settable.
 
-	typeMap: null,  //Make this parser settable.
+	typeMap: null, //Make this parser settable.
 
 	//Parameter to allow users to specify if a close call should force a reload or not.
 	//By default, it retains the old behavior of not clearing if close is called.  But
@@ -99,7 +99,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 	//Parameter to allow specifying if preventCache should be passed to the xhrGet call or not when loading data from a url.  
 	//Note this does not mean the store calls the server on each fetch, only that the data load has preventCache set as an option.
 	//Added for tracker: #6072
-	urlPreventCache: false,  
+	urlPreventCache: false,
 
 	//Parameter to indicate to process data from the url as hierarchical 
 	//(data items can contain other data items in js form).  Default is true 
@@ -162,7 +162,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 	},
 
 	hasAttribute: function(	/* item */ item,
-							/* attribute-name-string */ attribute) {
+							/* attribute-name-string */ attribute){
 		//	summary: 
 		//		See dojo.data.api.Read.hasAttribute()
 		this._assertIsItem(item);
@@ -357,7 +357,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 						match = false;
 					}else{
 						//process entire string for this i-th candidateItem.
-						complexQuery = complexQuerySave;  //restore query for next candidateItem.
+						complexQuery = complexQuerySave; //restore query for next candidateItem.
 						sQuery = "";
 						//work left to right, finding either key:value pair or logical operator at the beginning of the complexQuery string.
 						//when found, concatenate to sQuery and remove from complexQuery and loop back.
@@ -431,12 +431,14 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 						items.push(candidateItem);
 					}
 				} //end for/next of all items.
-				if(err){  //soft fail.
+				if(err){
+					//soft fail.
 					items = [];
 					console.log("The store's _fetchItems failed, probably due to a syntax error in query.");
 				}
 				findCallback(items, requestArgs);
-			}else{  // No query...
+			}else{
+				// No query...
 				// We want a copy to pass back in case the parent wishes to sort the array. 
 				// We shouldn't allow resort of the internal list, so that multiple callers 
 				// can get lists and sort without affecting each other.  We also need to
@@ -513,7 +515,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 					}
 					keywordArgs.abort = function(){
 						var df = getHandler;
-						if (df && df.fired === -1){
+						if(df && df.fired === -1){
 							df.cancel();
 							df = null;
 						}
@@ -541,7 +543,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		//	summary: 
 		//		Internal function to execute delayed request in the store.
 		//Execute any deferred fetches now.
-		if (this._queuedFetches.length > 0) {
+		if(this._queuedFetches.length > 0){
 			for(var i = 0; i < this._queuedFetches.length; i++){
 				var fData = this._queuedFetches[i];
 				var delayedQuery = fData.args;
@@ -560,7 +562,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		//	summary: 
 		//		Internal function to determine which list of items to search over.
 		//	queryOptions: The query options parameter, if any.
-		if(queryOptions && queryOptions.deep) {
+		if(queryOptions && queryOptions.deep){
 			return this._arrayOfAllItems; 
 		}
 		return this._arrayOfTopLevelItems;
@@ -691,8 +693,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 		for(i = 0; i < this._arrayOfAllItems.length; ++i){
 			item = this._arrayOfAllItems[i];
 			for(key in item){
-				if (key !== this._rootItemPropName)
-				{
+				if(key !== this._rootItemPropName){
 					var value = item[key];
 					if(value !== null){
 						if(!dojo.isArray(value)){
@@ -773,10 +774,10 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 			item = this._arrayOfAllItems[i]; // example: { name:['Kermit'], friends:[{_reference:{name:'Miss Piggy'}}] }
 			for(key in item){
 				arrayOfValues = item[key]; // example: [{_reference:{name:'Miss Piggy'}}]
-				for(var j = 0; j < arrayOfValues.length; ++j) {
+				for(var j = 0; j < arrayOfValues.length; ++j){
 					value = arrayOfValues[j]; // example: {_reference:{name:'Miss Piggy'}}
 					if(value !== null && typeof value == "object"){
-						if(("_type" in value) && ("_value" in  value)){
+						if(("_type" in value) && ("_value" in value)){
 							var type = value._type; // examples: 'Date', 'Color', or 'ComplexNumber'
 							var mappingObj = this._datatypeMap[type]; // examples: Date, dojo.Color, foo.math.ComplexNumber, {type: dojo.Color, deserialize(value){ return new dojo.Color(value)}}
 							if(!mappingObj){ 
@@ -896,7 +897,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 					};
 					var getHandler = dojo.xhrGet(getArgs);
 					getHandler.addCallback(function(data){
-						var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+						var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 						try{
 							self._getItemsFromLoadedData(data);
 							self._loadFinished = true;
@@ -916,7 +917,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 					getHandler.addErrback(function(error){
 						self._loadInProgress = false;
 						if(keywordArgs.onError){
-							var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+							var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 							keywordArgs.onError.call(scope, error);
 						}
 					});
@@ -929,7 +930,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 				self._loadFinished = true;
 				var item = self._getItemByIdentity(keywordArgs.identity);
 				if(keywordArgs.onItem){
-					var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+					var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 			} 
@@ -937,7 +938,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 			// Already loaded.  We can just look it up and call back.
 			var item = this._getItemByIdentity(keywordArgs.identity);
 			if(keywordArgs.onItem){
-				var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+				var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 				keywordArgs.onItem.call(scope, item);
 			}
 		}
