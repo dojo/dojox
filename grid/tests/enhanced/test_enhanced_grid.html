@@ -113,7 +113,7 @@
 	<!--span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore1" url="support/music-for-demo.part.csv">
 	</span-->
-	<p>
+	<div>
 		<li>Multiple selection mode:</li>
 		<div id="grid1" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" 
 			plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
@@ -147,7 +147,7 @@
 		<input type='button' value='Select All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(true)'/>
 		&nbsp;&nbsp;
 		<input type='button' value='Deselect All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(false)'/>
-	</p>
+	</div>
 	
 	<!-- Un-comment this block to see more usages
 	<div id="gridDiv"></div>
