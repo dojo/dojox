@@ -83,7 +83,7 @@ dojo.require("dojo.data.util.filter");
 						var remove = this._updates[i].remove;
 						if(remove){
 							for(var j = 0; j < resultSet.length;j++){
-								if(resultSet[j]==remove){
+								if(resultSet[j] == remove){
 									resultSet.splice(j--,1);
 									var updated = true;
 								}
@@ -132,7 +132,7 @@ dojo.require("dojo.data.util.filter");
 					}else if(!(typeof argsSuper.query[i] == 'string' && 
 							// if it is a pattern, we can test to see if it is a sub-pattern 
 							// FIXME: This is not technically correct, but it will work for the majority of cases
-							dojo.data.util.filter.patternToRegExp(argsSuper.query[i]).test(clientQuery[i]))){  
+							dojo.data.util.filter.patternToRegExp(argsSuper.query[i]).test(clientQuery[i]))){
 						return false;
 					}
 				}

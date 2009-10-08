@@ -32,7 +32,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 	//		A string that can be parsed into an XML document and should be formatted according
 	//		to the CDF spec.
 	//	example:
-	//		| 	'<data jsxid="jsxroot"><record jsxtext="A"/><record jsxtext="B" jsxid="2" jsxid="2"/></data>'
+	//		|	'<data jsxid="jsxroot"><record jsxtext="A"/><record jsxtext="B" jsxid="2" jsxid="2"/></data>'
 	xmlStr:"",
 	//
 	//	data:	Object
@@ -47,7 +47,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 	//		This store supports syncronous fetches if this property is set to dojox.data.SYNC_MODE.
 	mode:dojox.data.ASYNC_MODE,
 	
-	constructor: function(/* Object */ args) {
+	constructor: function(/* Object */ args){
 		// summary:
 		//	Constructor for the CDF store. Instantiate a new CdfStore. 
 		//
@@ -111,12 +111,12 @@ dojo.declare("dojox.data.CdfStore", null, {
 		//
 		var values = this.getValues(item, property);
 		for(var i = 0; i < values.length; i++){
-			if(values[i]===null){ continue; }
+			if(values[i] === null){ continue; }
 			if((typeof value === "string")){
 				if(values[i].toString && values[i].toString() === value){
 					return true;
 				}
-			}else if (values[i] === value){
+			}else if(values[i] === value){
 				return true; //boolean
 			}
 		}
@@ -241,7 +241,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 		if(!request.store){
 			request.store = this;
 		}
-		if(request.mode!==undefined){
+		if(request.mode !== undefined){
 			this.mode = request.mode;
 		}
 		var self = this;
@@ -261,7 +261,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 			var aborted = false;
 	
 			var startIndex = requestObject.start?requestObject.start:0;
-			var endIndex   = (requestObject.count && (requestObject.count !== Infinity))?(startIndex + requestObject.count):items.length;
+			var endIndex = (requestObject.count && (requestObject.count !== Infinity))?(startIndex + requestObject.count):items.length;
 	
 			requestObject.abort = function(){
 				aborted = true;
@@ -290,13 +290,13 @@ dojo.declare("dojox.data.CdfStore", null, {
 				}
 			}
 			if(requestObject.onComplete && !aborted){
-				if (!requestObject.onItem) {
+				if(!requestObject.onItem){
 					items = items.slice(startIndex, endIndex);
 					if(requestObject.byId){
 						items = items[0];	
 					}
 				}
-				requestObject.onComplete.call(scope, items, requestObject);   
+				requestObject.onComplete.call(scope, items, requestObject);
 			}else{
 				items = items.slice(startIndex, endIndex);
 				if(requestObject.byId){
@@ -312,7 +312,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 		}
 		var localRequest = request || "*"; // use request for _getItems()
 		
-		if(this.mode==dojox.data.SYNC_MODE){
+		if(this.mode == dojox.data.SYNC_MODE){
 			// sync mode. items returned directly	
 			var res = this._loadCDF();
 			if(res instanceof Error){
@@ -326,9 +326,9 @@ dojo.declare("dojox.data.CdfStore", null, {
 			this.cdfDoc = res;
 			
 			var items = this._getItems(this.cdfDoc, localRequest);
-			if (items && items.length > 0) {
+			if(items && items.length > 0){
 				items = fetchHandler(items, request);
-			} else {
+			}else{
 				items = fetchHandler([], request);
 			}
 			return items;
@@ -339,9 +339,9 @@ dojo.declare("dojox.data.CdfStore", null, {
 			var dfd = this._loadCDF();
 			dfd.addCallbacks(dojo.hitch(this, function(cdfDoc){
 				var items = this._getItems(this.cdfDoc, localRequest);
-				if (items && items.length > 0) {
+				if(items && items.length > 0){
 					fetchHandler(items, request);
-				} else {
+				}else{
 					fetchHandler([], request);
 				}
 			}),
@@ -361,7 +361,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 		//		load the data or url, and return the doc or a deferred.
 		var dfd = new dojo.Deferred();
 		if(this.cdfDoc){
-			if(this.mode==dojox.data.SYNC_MODE){
+			if(this.mode == dojox.data.SYNC_MODE){
 				return this.cdfDoc; // jsx3.xml.CDF
 			}else{
 				setTimeout(dojo.hitch(this, function(){
@@ -389,14 +389,14 @@ dojo.declare("dojox.data.CdfStore", null, {
 			}
 		}
 		
-		if(this.mode==dojox.data.SYNC_MODE){
+		if(this.mode == dojox.data.SYNC_MODE){
 			return this.cdfDoc; // jsx3.xml.CDF
 		}else{
 			return dfd;			// dojo.Deferred
 		}
 	},
 	
-	_getItems: function(/* jsx3.xml.Entity */cdfDoc, /* Object */request) {
+	_getItems: function(/* jsx3.xml.Entity */cdfDoc, /* Object */request){
 		// summary:
 		//		Internal method.
 		//		Requests the items from jsx3.xml.Entity with an xpath query.
@@ -427,9 +427,9 @@ dojo.declare("dojox.data.CdfStore", null, {
 			// as a property
 			if(keywordArgs.tagName!="record"){
 				// TODO: How about some sort of group?
-				console.warn("Only record inserts are supported at this time")
+				console.warn("Only record inserts are supported at this time");
 			}
-			delete keywordArgs.tagName
+			delete keywordArgs.tagName;
 		}
 		keywordArgs.jsxid = keywordArgs.jsxid || this.cdfDoc.getKey();
 		if(this.isItem(parentInfo)){
@@ -498,9 +498,9 @@ dojo.declare("dojox.data.CdfStore", null, {
 		//		Check whether an item is new, modified or deleted.
 		//		If no item is passed, checks if anything in the store has changed.
 		//
-		if (item) {
+		if(item){
 			return !!this._modifiedItems[this.getIdentity(item)]; // Boolean
-		} else {
+		}else{
 			var _dirty = false;
 			for(var nm in this._modifiedItems){ _dirty = true; break; }
 			return _dirty; // Boolean
@@ -520,12 +520,12 @@ dojo.declare("dojox.data.CdfStore", null, {
 	},
 	
 	
-    _makeXmlString: function(obj){
+	_makeXmlString: function(obj){
 		// summary:
 		//		Internal method.
 		//		Converts an object into an XML string.
 		//
-		parseObj =  function(obj, name){
+		var parseObj = function(obj, name){
 			var xmlStr = "";
 			var nm;
 			if(dojo.isArray(obj)){
@@ -536,13 +536,13 @@ dojo.declare("dojox.data.CdfStore", null, {
 				xmlStr += '<'+name+' ';
 				for(nm in obj){
 					if(!dojo.isObject(obj[nm])){
-						xmlStr += nm+'="'+obj[nm]+'" ';        
+						xmlStr += nm+'="'+obj[nm]+'" ';
 					}
 				}
 				xmlStr +='>';
 				for(nm in obj){
 					if(dojo.isObject(obj[nm])){
-						xmlStr += parseObj(obj[nm], nm);        
+						xmlStr += parseObj(obj[nm], nm);
 					}
 				}
 				xmlStr += '</'+name+'>';
@@ -550,13 +550,13 @@ dojo.declare("dojox.data.CdfStore", null, {
 			return xmlStr;
 		};
 		return parseObj(obj, "data");
-    },
+	},
 
 	/*************************************
 	 * Dojo.data Identity implementation *
 	 *************************************/
 	getIdentity: function(/* jsx3.xml.Entity */ item){
-        //	summary:
+		//	summary:
 		//		Returns the identifier for an item.  
 		//
 		return this.getValue(item, this.identity); // String
@@ -577,14 +577,14 @@ dojo.declare("dojox.data.CdfStore", null, {
 		//	Note:
 		//		This method can be synchronous if mode is set.
 		//		Also, there is a more finger friendly alias of this method, byId();
-		if (dojo.isString(args)){
+		if(dojo.isString(args)){
 			var id = args;
-			args = {query:"//record[@jsxid='"+id+"']", mode: dojox.data.SYNC_MODE}
+			args = {query:"//record[@jsxid='"+id+"']", mode: dojox.data.SYNC_MODE};
 		}else{
-			if (args){
-				args.query = "//record[@jsxid='"+args.identity+"']"
+			if(args){
+				args.query = "//record[@jsxid='"+args.identity+"']";
 			}
-			if (!args.mode){args.mode = this.mode}	
+			if(!args.mode){args.mode = this.mode;}
 		}
 		args.byId = true;
 		return this.fetch(args); // dojo.Deferred || Array

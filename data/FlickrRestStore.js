@@ -14,10 +14,10 @@ dojo.declare("dojox.data.FlickrRestStore",
 		//	This store cannot do * and ? filtering as the flickr service 
 		//	provides no interface for wildcards.
 		if(args){
-			if(args.label) {
+			if(args.label){
 				this.label = args.label;
 			}
-			if(args.apikey) {
+			if(args.apikey){
 				this._apikey = args.apikey;
 			}
 		}
@@ -30,44 +30,44 @@ dojo.declare("dojox.data.FlickrRestStore",
 	},
 	
 	// _id: Integer
-	// A unique identifier for this store.
+	// 		A unique identifier for this store.
 	_id: 0,
 	
 	// _requestCount: Integer
-	// A counter for the number of requests made. This is used to define
-	// the callback function that Flickr will use.
+	//		A counter for the number of requests made. This is used to define
+	//		the callback function that Flickr will use.
 	_requestCount: 0,
 	
 	// _flickrRestUrl: String
-	//	The URL to the Flickr REST services.
+	//		The URL to the Flickr REST services.
 	_flickrRestUrl: "http://www.flickr.com/services/rest/",
 
 	// _apikey: String
-	//	The users API key to be used when accessing Flickr REST services.
+	//		The users API key to be used when accessing Flickr REST services.
 	_apikey: null,
 	
 	// _storeRef: String
-	//	A key used to mark an data store item as belonging to this store.
+	//		A key used to mark an data store item as belonging to this store.
 	_storeRef: "_S",
 	
 	// _cache: Array
-	//	An Array of all previously downloaded picture info.
+	//		An Array of all previously downloaded picture info.
 	_cache: null,
 	
 	// _prevRequests: Object
-	//	A HashMap used to record the signature of a request to prevent duplicate 
-	//	request being made.
+	//		A HashMap used to record the signature of a request to prevent duplicate 
+	//		request being made.
 	_prevRequests: null,
 	
 	// _handlers: Object
-	//	A HashMap used to record the handlers registered for a single remote request.  Multiple 
-	//	requests may be made for the same information before the first request has finished. 
-	//	Each element of this Object is an array of handlers to call back when the request finishes.
-	//	This prevents multiple requests being made for the same information.  
+	//		A HashMap used to record the handlers registered for a single remote request.  Multiple 
+	//		requests may be made for the same information before the first request has finished. 
+	//		Each element of this Object is an array of handlers to call back when the request finishes.
+	//		This prevents multiple requests being made for the same information.  
 	_handlers: null,
 	
 	// _sortAttributes: Object
-	// A quick lookup of valid attribute names in a sort query.
+	//		A quick lookup of valid attribute names in a sort query.
 	_sortAttributes: {
 		"date-posted": true,
 		"date-taken": true,
