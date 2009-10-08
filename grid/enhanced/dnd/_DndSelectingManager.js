@@ -621,6 +621,21 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		return this.grid.selection.selected[inRowIndex];
 	},
 	
+	isContinuousSelection: function(selected){
+		//summary:
+		//		Whether a selection is continuous
+		//selected: Array
+		//		the selection states for columns or rows
+		//return: Boolean 
+		var preSelectedIdx = -1;
+		for(var i = 0; i < selected.length; i++){
+			if(!selected[i]){ continue; }
+			if(preSelectedIdx < 0 || i - preSelectedIdx == 1 ){ preSelectedIdx = i; }
+			else if(i - preSelectedIdx >= 2 ){ return false; }
+		}
+		return preSelectedIdx >= 0 ? true : false;
+	},
+	
 	cleanCellSelection : function(){
 		//summary:
 		//		change all the selected cell to unselected and umpty the selected-cell list
