@@ -9,10 +9,10 @@ dojo.declare("dojox.data.JsonRestStore",
 		constructor: function(options){
 			//summary:
 			//		JsonRestStore is a Dojo Data store interface to JSON HTTP/REST web
-			//		storage services that support read and write through GET, PUT, POST, and DELETE. 
-			// options: 
+			//		storage services that support read and write through GET, PUT, POST, and DELETE.
+			// options:
 			// 		Keyword arguments
-			//	
+			//
 			// The *schema* parameter
 			//		This is a schema object for this store. This should be JSON Schema format.
 			//
@@ -24,8 +24,8 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 			post(id,value) - posts (appends) the value at the given id
 			// 			delete(id) - deletes the value corresponding to the given id
 			//		Note that it is critical that the service parses responses as JSON.
-			//		If you are using dojox.rpc.Service, the easiest way to make sure this 
-			// 		happens is to make the responses have a content type of 
+			//		If you are using dojox.rpc.Service, the easiest way to make sure this
+			// 		happens is to make the responses have a content type of
 			// 		application/json. If you are creating your own service, make sure you
 			//		use handleAs: "json" with your XHR requests.
 			//
@@ -51,22 +51,22 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 		When using a Rest store on a public network, it is important to implement proper security measures to
 			//		control access to resources.
 			//		On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.
-			//		GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a 
-			// 			query (like /table/?name=foo). 
-			//		PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will 
+			//		GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a
+			// 			query (like /table/?name=foo).
+			//		PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will
 			// 			provide the modified object
 			//		POST - This should create a new object. The URL will correspond to the target store (like /table/)
 			// 			and the body should be the properties of the new object. The server's response should include a
 			// 			Location header that indicates the id of the newly created object. This id will be used for subsequent
 			// 			PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
-			//			the temporary randomly generated id used by client, and this location is used for subsequent 
-			// 			PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior 
-			// 			to receiving a response from the server. 
+			//			the temporary randomly generated id used by client, and this location is used for subsequent
+			// 			PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior
+			// 			to receiving a response from the server.
 			// 		DELETE - This should delete an object by id.
 			// 		These articles include more detailed information on using the JsonRestStore:
 			//		http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/
 			//		http://blog.medryx.org/2008/07/24/jsonreststore-overview/
-			//		
+			//
 			//	example:
 			// 		A JsonRestStore takes a REST service or a URL and uses it the remote communication for a
 			// 		read/write dojo.data implementation. A JsonRestStore can be created with a simple URL like:
@@ -97,7 +97,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			// 		And this object has accessed using the dojo.data API:
 			//	|	var obj = jsonStore.getValue(myObject,"lazyLoadedObject");
 			//		The object would automatically be requested from the server (with an object id of "obj2").
-			//	
+			//
 
 			dojo.connect(dojox.rpc.Rest._index,"onUpdate",this,function(obj,attrName,oldValue,newValue){
 				var prefix = this.service.servicePath;
@@ -108,19 +108,19 @@ dojo.declare("dojox.data.JsonRestStore",
 				}
 			});
 			this.idAttribute = this.idAttribute || 'id';// no options about it, we have to have identity
-			
+
 			if(typeof this.target == 'string'){
 				this.target = this.target.match(/\/$/) || this.allowNoTrailingSlash ? this.target : (this.target + '/');
 				if(!this.service){
-					this.service = dojox.rpc.JsonRest.services[this.target] || 
-							dojox.rpc.Rest(this.target, true); 
+					this.service = dojox.rpc.JsonRest.services[this.target] ||
+							dojox.rpc.Rest(this.target, true);
 					// create a default Rest service
 				}
 			}
-			
+
 			dojox.rpc.JsonRest.registerService(this.service, this.target, this.schema);
 			this.schema = this.service._schema = this.schema || this.service._schema || {};
-			// wrap the service with so it goes through JsonRest manager 
+			// wrap the service with so it goes through JsonRest manager
 			this.service._store = this;
 			this.schema._idAttr = this.idAttribute;
 			var constructor = dojox.rpc.JsonRest.getConstructor(this.service);
@@ -132,15 +132,15 @@ dojo.declare("dojox.data.JsonRestStore",
 			this._constructor.prototype = constructor.prototype;
 			this._index = dojox.rpc.Rest._index;
 		},
-		
-		
+
+
 		referenceIntegrity: true,
 		target:"",
 		// summary:
 		// 		Allow no trailing slash on target paths. This is generally discouraged since
 		// 		it creates prevents simple scalar values from being used a relative URLs.
-		// 		Disabled by default.  
-		allowNoTrailingSlash: false,		
+		// 		Disabled by default.
+		allowNoTrailingSlash: false,
 		//Write API Support
 		newItem: function(data, parentInfo){
 			// summary:
@@ -165,7 +165,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		deletes item and any references to that item from the store.
 			//
 			//	item:
-			//  	item to delete
+			//		item to delete
 			//
 
 			//	If the desire is to delete only one reference, unsetAttribute or
@@ -185,10 +185,10 @@ dojo.declare("dojox.data.JsonRestStore",
 					for(var i in parent){
 						var value = parent[i];
 						if(value == item){
-							if(parent != index){ // make sure we are just operating on real objects 
+							if(parent != index){ // make sure we are just operating on real objects
 								if(parent instanceof Array){
 									// mark it as needing to be spliced, don't do it now or it will mess up the index into the array
-									(toSplice = toSplice || []).push(i);	
+									(toSplice = toSplice || []).push(i);
 								}else{
 									// property, just delete it.
 									(dojox.data._getStoreForItem(parent) || store).unsetAttribute(parent, i);
@@ -226,14 +226,14 @@ dojo.declare("dojox.data.JsonRestStore",
 					// remove the checked marker
 					delete checked[i++].__checked;
 				}
-			}			
+			}
 			dojox.rpc.JsonRest.deleteObject(item);
 
 			store.onDelete(item);
 		},
 		changing: function(item,_deleting){
 			// summary:
-			//		adds an item to the list of dirty items.  This item
+			//		adds an item to the list of dirty items.	This item
 			//		contains a reference to the item itself as well as a
 			//		cloned and trimmed version of old item for use with
 			//		revert.
@@ -286,7 +286,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		Saves the dirty data using REST Ajax methods. See dojo.data.api.Write for API.
 			//
 			//	kwArgs.global:
-			//		This will cause the save to commit the dirty data for all 
+			//		This will cause the save to commit the dirty data for all
 			// 		JsonRestStores as a single transaction.
 			//
 			//	kwArgs.revertOnError
@@ -298,8 +298,8 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		For items that have been updated, if this is enabled, the server will be sent a POST request
 			// 		with a JSON object containing the changed properties. By default this is
 			// 		not enabled, and a PUT is used to deliver an update, and will include a full
-			// 		serialization of all the properties of the item/object. 
-			//		If this is true, the POST request body will consist of a JSON object with 
+			// 		serialization of all the properties of the item/object.
+			//		If this is true, the POST request body will consist of a JSON object with
 			// 		only the changed properties. The incrementalUpdates parameter may also
 			//		be a function, in which case it will be called with the updated and previous objects
 			//		and an object update representation can be returned.
@@ -315,9 +315,9 @@ dojo.declare("dojox.data.JsonRestStore",
 				(kwArgs = kwArgs || {}).service = this.service;
 			}
 			if("syncMode" in kwArgs ? kwArgs.syncMode : this.syncMode){
-				dojox.rpc._sync = true;	
+				dojox.rpc._sync = true;
 			}
-			
+
 			var actions = dojox.rpc.JsonRest.commit(kwArgs);
 			this.serverVersion = this._updates && this._updates.length;
 			return actions;
@@ -328,7 +328,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		returns any modified data to its original state prior to a save();
 			//
 			//	kwArgs.global:
-			//		This will cause the revert to undo all the changes for all 
+			//		This will cause the revert to undo all the changes for all
 			// 		JsonRestStores in a single operation.
 			dojox.rpc.JsonRest.revert(kwArgs && kwArgs.global && this.service);
 		},
@@ -360,7 +360,7 @@ dojo.declare("dojox.data.JsonRestStore",
 				if(contentType && !schemaRef){
 					schemaRef = deferred.ioArgs.xhr.getResponseHeader("Link");
 					schemaRef = schemaRef && schemaRef.match(/<([^>]*)>;\s*rel="?schema"?/);
-				}	
+				}
 				schemaRef = schemaRef && schemaRef[1];
 				if(schemaRef){
 					var serviceAndId = dojox.rpc.JsonRest.getServiceAndId((self.target + schemaRef).replace(/^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/,"$2$3"));
@@ -396,8 +396,8 @@ dojo.declare("dojox.data.JsonRestStore",
 				return id;
 			}
 			var prefix = this.service.servicePath.replace(/[^\/]*$/,'');
-			// support for relative or absolute referencing with ids 
-			return id.substring(0,prefix.length) != prefix ?  id : id.substring(prefix.length); // String
+			// support for relative or absolute referencing with ids
+			return id.substring(0,prefix.length) != prefix ?	id : id.substring(prefix.length); // String
 		},
 		fetchItemByIdentity: function(args){
 			var id = args.identity;
@@ -406,7 +406,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			if(id.toString().match(/^(\w*:)?\//)){
 				var serviceAndId = dojox.rpc.JsonRest.getServiceAndId(id);
 				store = serviceAndId.service._store;
-				args.identity = serviceAndId.id; 
+				args.identity = serviceAndId.id;
 			}
 			args._prefix = store.service.servicePath.replace(/[^\/]*$/,'');
 			return store.inherited(arguments);
@@ -425,13 +425,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			features["dojo.data.api.Notification"] = true;
 			return features;
 		},
-		
+
 		getParent: function(item){
 			//	summary:
 			//		Returns the parent item (or query) for the given item
 			//	item:
 			//		The item to find the parent of
-			
+
 			return item && item.__parent;
 		}
 
@@ -445,17 +445,17 @@ dojox.data.JsonRestStore.getStore = function(options, Class){
 	//	options:
 	//		See the JsonRestStore constructor
 	//	Class:
-	//		Constructor to use (for creating stores from JsonRestStore subclasses). 
+	//		Constructor to use (for creating stores from JsonRestStore subclasses).
 	// 		This is optional and defaults to JsonRestStore.
 	if(typeof options.target == 'string'){
-		options.target = options.target.match(/\/$/) || options.allowNoTrailingSlash ? 
+		options.target = options.target.match(/\/$/) || options.allowNoTrailingSlash ?
 				options.target : (options.target + '/');
 		var store = (dojox.rpc.JsonRest.services[options.target] || {})._store;
 		if(store){
 			return store;
 		}
 	}
-	return new (Class||dojox.data.JsonRestStore)(options);
+	return new (Class || dojox.data.JsonRestStore)(options);
 };
 dojox.data._getStoreForItem = function(item){
 	if(item.__id){

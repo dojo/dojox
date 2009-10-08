@@ -12,8 +12,7 @@ dojo.declare("dojox.data.jsonPathStore",
 		//				The jsonPathStore implements dojo.data.read, write, notify, and identity api's.	It is a local (in memory) store
 	//		and can take a javascript object with any arbitrary format and attach to it to provide a dojo.data interface to that object
 	//		data.	It uses jsonPath as the query language to search agains this store.
-	null,
-	{
+	null,{
 		mode: dojox.data.ASYNC_MODE,
 		metaLabel: "_meta",
 		hideMetaAttributes: false,
@@ -397,7 +396,6 @@ dojo.declare("dojox.data.jsonPathStore",
 				dojo.mixin(item[this.metaLabel], props);
 				return;
 			}
-
 			item[this.metaLabel]=props;
 		},
 
