@@ -25,7 +25,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		var self = this;
 		var initialRootValue = {};
 		var root = this.rootModelNode = {value:initialRootValue,id:"root"};
-		
+
 		this._modelNodeIdMap = {};
 		this._modelNodePropMap = {};
 		var nextId = 1;
@@ -61,9 +61,9 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 					if(isItem){
 						// get the properties through the dojo data API
 						keys = self.store.getAttributes(item);
-	                    parent = item;
+						parent = item;
 					}else if(item && typeof item == 'object'){
-	                    parent = parentModelNode.value;
+						parent = parentModelNode.value;
 						keys = [];
 						// also we want to be able to drill down into plain JS objects/arrays
 						for(var i in item){
@@ -75,9 +75,9 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 					if(keys){
 						for(var key, k=0; key = keys[k++];){
 							children.push({
-								property:key, 
+								property:key,
 								value: isItem ? getValue(self.store, item, key) : item[key],
-								parent:  parent});
+								parent:	parent});
 						}
 						children.push({addNew:true, parent: parent, parentNode : parentModelNode});
 					}
@@ -93,7 +93,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 					if(self.store){
 						if(self.store.isItem(modelNode.value)){
 							var identity = self.store.getIdentity(modelNode.value);
-							(self._modelNodeIdMap[identity] = self._modelNodeIdMap[identity] || []).push(modelNode); 
+							(self._modelNodeIdMap[identity] = self._modelNodeIdMap[identity] || []).push(modelNode);
 						}
 						if(modelNode.parent){
 							identity = self.store.getIdentity(modelNode.parent) + '.' + modelNode.property;
@@ -105,9 +105,9 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			},
 			getLabel: function(modelNode){
 				return modelNode === root ?
-						"Object Properties" : 
-							modelNode.addNew ? (modelNode.parent instanceof Array ? "Add new value" : "Add new property") : 
-								modelNode.property + ": " + 
+						"Object Properties" :
+							modelNode.addNew ? (modelNode.parent instanceof Array ? "Add new value" : "Add new property") :
+								modelNode.property + ": " +
 									(modelNode.value instanceof Array ? "(" + modelNode.value.length + " elements)" : modelNode.value);
 			},
 			onChildrenChange: function(modelNode){
@@ -129,7 +129,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			}
 		});
 		var contextMenu = new dijit.Menu({
-			targetNodeIds: [this.rootNode.domNode], 
+			targetNodeIds: [this.rootNode.domNode],
 			id: "contextMenu"
 			});
 		dojo.connect(contextMenu, "_openMyself", this, function(e){
@@ -176,20 +176,20 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			this._editDialog.destroyRecursive();
 			delete this._editDialog;
 		}
-		// i think we should just destroy this._editDialog and let _createEditDialog take care of everything 
+		// i think we should just destroy this._editDialog and let _createEditDialog take care of everything
 		// once it gets called again by either _editProperty or _addProperty - it will create everything again
-		// using the new store.  this way we don't need to keep track of what is in the dialog if we change it.
+		// using the new store.	this way we don't need to keep track of what is in the dialog if we change it.
 		/*if(this._editDialog && this.useSelect){
 			dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
-	            dijit.getEnclosingWidget(node).attr("store", store);
-	        });
+				dijit.getEnclosingWidget(node).attr("store", store);
+			});
 		}*/
 		dojo.connect(store, "onSet", function(item, attribute, oldValue, newValue){
 			var nodes, i, identity = self.store.getIdentity(item);
 			nodes = self._modelNodeIdMap[identity];
-			
-			if(nodes && 
-					(oldValue === undefined || newValue === undefined || 
+
+			if(nodes &&
+					(oldValue === undefined || newValue === undefined ||
 					oldValue instanceof Array || newValue instanceof Array || typeof oldValue == 'object' || typeof newValue == 'object')){
 				for(i = 0; i < nodes.length; i++){
 					(function(node){
@@ -200,7 +200,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 				}
 			}
 			nodes = self._modelNodePropMap[identity + "." + attribute];
-			
+
 			if(nodes){
 				for(i = 0; i < nodes.length; i++){
 					nodes[i].value = newValue;
@@ -212,28 +212,28 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 	},
 	setItem: function(item){
 		// this is called to show a different item
-		
+
 		// reset the maps, for the root getIdentity is not called, so we pre-initialize it here
 		(this._modelNodeIdMap = {})[this.store.getIdentity(item)] = [this.rootModelNode];
 		this._modelNodePropMap = {};
-		
+
 		this.rootModelNode.value = item;
 		var self = this;
 		this.model.getChildren(this.rootModelNode, function(children){
 			self.rootNode.setChildItems(children);
 		});
-		
+
 	},
 	refreshItem: function(){
 		this.setItem(this.rootModelNode.value);
 	},
 	_createEditDialog: function(){
 		this._editDialog = new dijit.Dialog({
-		   title: "Edit Property",
-		   execute: dojo.hitch(this, "_updateItem"),
-		   preload: true
+			 title: "Edit Property",
+			 execute: dojo.hitch(this, "_updateItem"),
+			 preload: true
 		});
-		this._editDialog.placeAt(dojo.body());  
+		this._editDialog.placeAt(dojo.body());
 		this._editDialog.startup();
 
 		// handle for dialog content
@@ -306,7 +306,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 				store: this.store,
 				searchAttr: this.refSelectSearchAttr || this.store.getIdentityAttributes()[0],
 				required: false,
-				value: null,        // need to file a ticket about the fetch that happens when declared with value: null
+				value: null,		// need to file a ticket about the fetch that happens when declared with value: null
 				pageSize: 10
 			}).placeAt(refDiv);
 		}else{
@@ -333,7 +333,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		pane.appendChild(buttons);
 
 		this._editDialog.attr("content", pane);
-	}, 
+	},
 	_enableFields: function(selection){
 		// enables/disables fields based on whether the value in this._editDialog is a reference or a primitive value
 		switch(selection){
@@ -362,73 +362,73 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		var store = this.store;
 		function setValue(){
 			try{
-	            var itemVal, propPath = [];
-	            var prop = vals.property;
-	            if(editingItem){
-	                while(!store.isItem(item.parent, true)){
-	                    node = node.getParent();
-	                    propPath.push(item.property);
-	                    item = node.item;
-	                }
-	                if(propPath.length == 0){
-	                    // working with an item attribute already
-	                    store.setValue(item.parent, item.property, val);
-	                }else{
-	                    // need to walk back down the item property to the object
-	                    storeItemVal = getValue(store, item.parent, item.property);
-	                    if(storeItemVal instanceof Array){
-	                    	// create a copy for modification
-	                    	storeItemVal = storeItemVal.concat();
-	                    }
-	                    itemVal = storeItemVal;
-	                    while(propPath.length > 1){
-	                        itemVal = itemVal[propPath.pop()];
-	                    }
-	                    itemVal[propPath] = val; // this change is reflected in storeItemVal as well
-	                    store.setValue(item.parent, item.property, storeItemVal);
-	                }              
-	            }else{
-	                // adding a property
-	                if(store.isItem(value, true)){
-	                    // adding a top-level property to an item
-	    				if (!store.isItemLoaded(value)) {
-	                        // fetch the value and see if it is an array
-	                        store.loadItem({
-	                            item: value,
-	                            onItem: function(loadedItem){
-	                                if (loadedItem instanceof Array) {
-	                                    prop = loadedItem.length;
-	                                }
-	                                store.setValue(loadedItem, prop, val);
-	                            }
-	                        });
-	                    } else {
-	                        if (value instanceof Array) {
-	                            prop = value.length;
-	                        }
-	                        store.setValue(value, prop, val);
-	                    }
-	                }else{
-	                    // adding a property to a lower level in an item
-	                    if(item.value instanceof Array){
-	                        propPath.push(item.value.length);
-	                    }else{
-	                        propPath.push(vals.property);
-	                    }
-	                    while(!store.isItem(item.parent, true)){
-	                        node = node.getParent();
-	                        propPath.push(item.property);
-	                        item = node.item;
-	                    }
-	                    storeItemVal = getValue(store, item.parent, item.property);
-	                    itemVal = storeItemVal;
-	                    while(propPath.length > 1){
-	                        itemVal = itemVal[propPath.pop()];
-	                    }
-	                    itemVal[propPath] = val;
-	                    store.setValue(item.parent, item.property, storeItemVal);
-	                }
-	            }
+				var itemVal, propPath = [];
+				var prop = vals.property;
+				if(editingItem){
+					while(!store.isItem(item.parent, true)){
+						node = node.getParent();
+						propPath.push(item.property);
+						item = node.item;
+					}
+					if(propPath.length == 0){
+						// working with an item attribute already
+						store.setValue(item.parent, item.property, val);
+					}else{
+						// need to walk back down the item property to the object
+						storeItemVal = getValue(store, item.parent, item.property);
+						if(storeItemVal instanceof Array){
+							// create a copy for modification
+							storeItemVal = storeItemVal.concat();
+						}
+						itemVal = storeItemVal;
+						while(propPath.length > 1){
+							itemVal = itemVal[propPath.pop()];
+						}
+						itemVal[propPath] = val; // this change is reflected in storeItemVal as well
+						store.setValue(item.parent, item.property, storeItemVal);
+					}
+				}else{
+					// adding a property
+					if(store.isItem(value, true)){
+						// adding a top-level property to an item
+						if(!store.isItemLoaded(value)){
+							// fetch the value and see if it is an array
+							store.loadItem({
+								item: value,
+								onItem: function(loadedItem){
+									if(loadedItem instanceof Array){
+										prop = loadedItem.length;
+									}
+									store.setValue(loadedItem, prop, val);
+								}
+							});
+						}else{
+							if(value instanceof Array){
+								prop = value.length;
+							}
+							store.setValue(value, prop, val);
+						}
+					}else{
+						// adding a property to a lower level in an item
+						if(item.value instanceof Array){
+							propPath.push(item.value.length);
+						}else{
+							propPath.push(vals.property);
+						}
+						while(!store.isItem(item.parent, true)){
+							node = node.getParent();
+							propPath.push(item.property);
+							item = node.item;
+						}
+						storeItemVal = getValue(store, item.parent, item.property);
+						itemVal = storeItemVal;
+						while(propPath.length > 1){
+							itemVal = itemVal[propPath.pop()];
+						}
+						itemVal[propPath] = val;
+						store.setValue(item.parent, item.property, storeItemVal);
+					}
+				}
 			}catch(e){
 				alert(e);
 			}
@@ -439,7 +439,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			item = node.item;
 			var value = item.value;
 			// var property = null;
-			if (item.addNew) {
+			if(item.addNew){
 				// we are adding a property to the parent item
 				// the real value of the parent is in the parent property of the lastFocused item
 				// this.lastFocused.getParent().item.value may be a reference to an item
@@ -463,7 +463,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 				case "value":
 					var jsonVal = vals.jsonVal;
 					val = dojo.fromJson(jsonVal);
-					// if it is a function we want to preserve the source (comments, et al)
+					// ifit is a function we want to preserve the source (comments, et al)
 					if(typeof val == 'function'){
 						val.toString = function(){
 							return jsonVal;
@@ -513,11 +513,11 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 					item.itemType = "value";
 					this._enableFields(item.itemType);
 					item.jsonVal = typeof item.value == 'function' ?
-							// use the plain toString for functions, dojo.toJson doesn't support functions 
+							// use the plain toString for functions, dojo.toJson doesn't support functions
 							item.value.toString() :
 								item.value instanceof Date ?
 									// A json-ish form of a date:
-									'new Date("' + item.value + '")' : 
+									'new Date("' + item.value + '")' :
 									dojo.toJson(item.value);
 					this._editDialog.attr("value", item);
 					this._editDialog.show();
@@ -540,31 +540,31 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			alert("Cannot Delete an Identifier!");
 		}else{
 			try{
-	            if(propPath.length > 0){
-	                // not deleting a top-level property of an item so get the top-level store item to change
-	                var itemVal, storeItemVal = getValue(this.store, item.parent, item.property);
-	                itemVal = storeItemVal;
-	                // walk back down the object if needed
-	                while(propPath.length > 1){
-	                    itemVal = itemVal[propPath.pop()];
-	                }
-	                // delete the property
-	                if(dojo.isArray(itemVal)){
-	                    // the value being deleted represents an array element
-	                    itemVal.splice(propPath, 1);
-	                }else{
-	                    // object property
-	                    delete itemVal[propPath];
-	                }
-	                // save it back to the store
-	                this.store.setValue(item.parent, item.property, storeItemVal);
-	            }else{
-	                // deleting an item property
-	                this.store.unsetAttribute(item.parent, item.property);
-	            }
+				if(propPath.length > 0){
+					// not deleting a top-level property of an item so get the top-level store item to change
+					var itemVal, storeItemVal = getValue(this.store, item.parent, item.property);
+					itemVal = storeItemVal;
+					// walk back down the object if needed
+					while(propPath.length > 1){
+						itemVal = itemVal[propPath.pop()];
+					}
+					// delete the property
+					if(dojo.isArray(itemVal)){
+						// the value being deleted represents an array element
+						itemVal.splice(propPath, 1);
+					}else{
+						// object property
+						delete itemVal[propPath];
+					}
+					// save it back to the store
+					this.store.setValue(item.parent, item.property, storeItemVal);
+				}else{
+					// deleting an item property
+					this.store.unsetAttribute(item.parent, item.property);
+				}
 			}catch(e){
 				alert(e);
-			}       
+			}
 		}
 	},
 	_addProperty: function(){
@@ -583,7 +583,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			if(value instanceof Array){
 				// preset the property to the next index in the array and disable the property field
 				property = value.length;
-				dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);  
+				dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);
 			}else{
 				// enable the property TextBox
 				dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", false);
@@ -595,7 +595,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			this._editDialog.show();
 		});
 
-		if (item.addNew) {
+		if(item.addNew){
 			// we are adding a property to the parent item
 			item = this.lastFocused.getParent().item;
 			// the real value of the parent is in the parent property of the lastFocused item
@@ -605,8 +605,8 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		if(item.property && dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
 			alert("Cannot add properties to an ID node!");
 		}else{
-			// if the value is an item then we need to get the item's value
-			if(this.store.isItem(value, true) && !this.store.isItemLoaded(value)) {
+			// ifthe value is an item then we need to get the item's value
+			if(this.store.isItem(value, true) && !this.store.isItemLoaded(value)){
 				// fetch the value and see if it is an array
 				this.store.loadItem({
 					item: value,
@@ -615,7 +615,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 						showDialog();
 					}
 				});
-			} else {
+			}else{
 				showDialog();
 			}
 //
