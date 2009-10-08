@@ -5,9 +5,10 @@
 	<title>Test dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<style type="text/css">
-		@import "../../../../dijit/themes/tundra/tundra.css";
 		@import "../../../../dojo/resources/dojo.css";
+		@import "../../../../dijit/themes/tundra/tundra.css";
 		@import "../../enhanced/resources/tundraEnhancedGrid.css";
+		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -17,7 +18,7 @@
 			text-align:center;
 		}
 		
- 		#grid1, #grid2 {
+ 		#grid1, #grid2, #grid3 {
 			width: 85.2em;
 			height: 50em;
 		}
@@ -51,7 +52,8 @@
 		];
 
 		var csvStore1 = new dojox.data.CsvStore({id:'csvStore1', url:"support/music-for-demo.part.csv"});
-		/*
+		
+		/* Un-comment this block to see more usages
 		var layout2 = [
 			[
 				{ field: "Genre", width: '10'},
@@ -66,11 +68,11 @@
 		];
 		dojo.addOnLoad(function(){
 			var grid = new dojox.grid.EnhancedGrid({
-				id: "grid2",
+				id: "grid3",
 				store: csvStore1,
 				structure: layout,
 				rowSelector: '20px',
-				plugins : {nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}
+				plugins : {nestedSorting: true, dnd: true, indirectSelection: {name: "Selection", width:"70px", styles:"text-align: center;"}, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}
 			}, dojo.byId('gridDiv'));
 			grid.startup();
 		});
@@ -146,15 +148,18 @@
 		&nbsp;&nbsp;
 		<input type='button' value='Deselect All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(false)'/>
 	</p>
-	<!--div id="gridDiv"></div-->
+	
+	<!-- Un-comment this block to see more usages
+	<div id="gridDiv"></div>
 	
 	<p>
 		<li>Single selection mode:</li>
 		<div id="grid2" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" selectionMode="single"
-			plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
+			plugins='{nestedSorting: true, dnd: true, indirectSelection: {name: "Selection", width:"60px", styles:"text-align: center;"}, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
 			store="csvStore1" structure="layout" rowSelector="20px"  
 		</div>
 	</p>
+	-->
 
 </body>
 </html>
