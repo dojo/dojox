@@ -9,19 +9,19 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.FilteringSelect");
 
 (function(){
-    var getValue = function(store, item, prop){
-        var value = store.getValues(item, prop);
-        if(value.length < 2){
-            value = store.getValue(item, prop);
-        }
-        return value;
-    }
-    
+	var getValue = function(store, item, prop){
+		var value = store.getValues(item, prop);
+		if(value.length < 2){
+			value = store.getValue(item, prop);
+		}
+		return value;
+	}
+
 dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
-    useSelect: false,
-    refSelectSearchAttr: null,
+	useSelect: false,
+	refSelectSearchAttr: null,
 	constructor: function(options){
-        dojo.mixin(this, options);
+		dojo.mixin(this, options);
 		var self = this;
 		var initialRootValue = {};
 		var root = this.rootModelNode = {value:initialRootValue,id:"root"};
@@ -108,7 +108,7 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 						"Object Properties" : 
 							modelNode.addNew ? (modelNode.parent instanceof Array ? "Add new value" : "Add new property") : 
 								modelNode.property + ": " + 
-                                    (modelNode.value instanceof Array ? "(" + modelNode.value.length + " elements)" : modelNode.value);
+									(modelNode.value instanceof Array ? "(" + modelNode.value.length + " elements)" : modelNode.value);
 			},
 			onChildrenChange: function(modelNode){
 			},
@@ -122,63 +122,63 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 		dojo.connect(this, "onClick", function(modelNode, treeNode){
 			this.lastFocused = treeNode;
 			if(modelNode.addNew){
-                //this.focusNode(treeNode.getParent());
-                this._addProperty();
+				//this.focusNode(treeNode.getParent());
+				this._addProperty();
 			}else{
-                this._editProperty();
-            }
+				this._editProperty();
+			}
 		});
-        var contextMenu = new dijit.Menu({
-            targetNodeIds: [this.rootNode.domNode], 
-            id: "contextMenu"
-            });
-        dojo.connect(contextMenu, "_openMyself", this, function(e){
-            var node = dijit.getEnclosingWidget(e.target);
-            if(node){
-                var item = node.item;
-                if(this.store.isItem(item.value, true) && !item.parent){
-                    contextMenu.getChildren().forEach(function(widget){
-                        widget.attr("disabled", (widget.label != "Add"));
-                    });
-                    this.lastFocused = node;
-                    // TODO: Root Node - allow Edit when mutli-value editing is possible
-                }else if(item.value && typeof item.value == 'object' && !(item.value instanceof Date)){
-                    // an object that's not a Date - could be a store item
-                    contextMenu.getChildren().forEach(function(widget){
-                        widget.attr("disabled", (widget.label != "Add") && (widget.label != "Delete"));
-                    });
-                    this.lastFocused = node;
-                    // TODO: Object - allow Edit when mutli-value editing is possible
-                }else if(item.property && dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){ // id node
-                    this.focusNode(node);
-                    alert("Cannot modify an Identifier node.");
-                }else if(item.addNew){
-                    this.focusNode(node);
-                }else{
-                    contextMenu.getChildren().forEach(function(widget){
-                        widget.attr("disabled", (widget.label != "Edit") && (widget.label != "Delete"));
-                    })
-                    // this won't focus the node but gives us a way to reference the node
-                    this.lastFocused = node;
-                }
-            }
-        });
-        contextMenu.addChild(new dijit.MenuItem({label: "Add", onClick: dojo.hitch(this, "_addProperty")}));
-        contextMenu.addChild(new dijit.MenuItem({label: "Edit", onClick: dojo.hitch(this, "_editProperty")}));
-        contextMenu.addChild(new dijit.MenuItem({label: "Delete", onClick: dojo.hitch(this, "_destroyProperty")}));
-        contextMenu.startup();
+		var contextMenu = new dijit.Menu({
+			targetNodeIds: [this.rootNode.domNode], 
+			id: "contextMenu"
+			});
+		dojo.connect(contextMenu, "_openMyself", this, function(e){
+			var node = dijit.getEnclosingWidget(e.target);
+			if(node){
+				var item = node.item;
+				if(this.store.isItem(item.value, true) && !item.parent){
+					contextMenu.getChildren().forEach(function(widget){
+						widget.attr("disabled", (widget.label != "Add"));
+					});
+					this.lastFocused = node;
+					// TODO: Root Node - allow Edit when mutli-value editing is possible
+				}else if(item.value && typeof item.value == 'object' && !(item.value instanceof Date)){
+					// an object that's not a Date - could be a store item
+					contextMenu.getChildren().forEach(function(widget){
+						widget.attr("disabled", (widget.label != "Add") && (widget.label != "Delete"));
+					});
+					this.lastFocused = node;
+					// TODO: Object - allow Edit when mutli-value editing is possible
+				}else if(item.property && dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){ // id node
+					this.focusNode(node);
+					alert("Cannot modify an Identifier node.");
+				}else if(item.addNew){
+					this.focusNode(node);
+				}else{
+					contextMenu.getChildren().forEach(function(widget){
+						widget.attr("disabled", (widget.label != "Edit") && (widget.label != "Delete"));
+					})
+					// this won't focus the node but gives us a way to reference the node
+					this.lastFocused = node;
+				}
+			}
+		});
+		contextMenu.addChild(new dijit.MenuItem({label: "Add", onClick: dojo.hitch(this, "_addProperty")}));
+		contextMenu.addChild(new dijit.MenuItem({label: "Edit", onClick: dojo.hitch(this, "_editProperty")}));
+		contextMenu.addChild(new dijit.MenuItem({label: "Delete", onClick: dojo.hitch(this, "_destroyProperty")}));
+		contextMenu.startup();
 	},
 	store: null,
 	setStore: function(store){
 		this.store = store;
 		var self = this;
-        if(this._editDialog){
-            this._editDialog.destroyRecursive();
-            delete this._editDialog;
-        }
-        // i think we should just destroy this._editDialog and let _createEditDialog take care of everything 
-        // once it gets called again by either _editProperty or _addProperty - it will create everything again
-        // using the new store.  this way we don't need to keep track of what is in the dialog if we change it.
+		if(this._editDialog){
+			this._editDialog.destroyRecursive();
+			delete this._editDialog;
+		}
+		// i think we should just destroy this._editDialog and let _createEditDialog take care of everything 
+		// once it gets called again by either _editProperty or _addProperty - it will create everything again
+		// using the new store.  this way we don't need to keep track of what is in the dialog if we change it.
 		/*if(this._editDialog && this.useSelect){
 			dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
 	            dijit.getEnclosingWidget(node).attr("store", store);
@@ -227,141 +227,141 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 	refreshItem: function(){
 		this.setItem(this.rootModelNode.value);
 	},
-    _createEditDialog: function(){
-    	this._editDialog = new dijit.Dialog({
-           title: "Edit Property",
-           execute: dojo.hitch(this, "_updateItem"),
-           preload: true
-        });
-        this._editDialog.placeAt(dojo.body());  
-        this._editDialog.startup();
-        
-        // handle for dialog content
-        var pane = dojo.doc.createElement('div');
-        
-        // label for property
-        var labelProp = dojo.doc.createElement('label');
-        dojo.attr(labelProp, "for", "property");
-        dojo.style(labelProp, "fontWeight", "bold");
-        dojo.attr(labelProp, "innerHTML", "Property:")
-        pane.appendChild(labelProp);
+	_createEditDialog: function(){
+		this._editDialog = new dijit.Dialog({
+		   title: "Edit Property",
+		   execute: dojo.hitch(this, "_updateItem"),
+		   preload: true
+		});
+		this._editDialog.placeAt(dojo.body());  
+		this._editDialog.startup();
 
-        // property name field
-        var propName = new dijit.form.ValidationTextBox({
-            name: "property",
-            value: "",
-            required: true,
-            disabled: true
-        }).placeAt(pane);
-        
-        pane.appendChild(dojo.doc.createElement("br"));
-        pane.appendChild(dojo.doc.createElement("br"));
-        
-        // radio button for "value"
-        var value = new dijit.form.RadioButton({
-            name: "itemType",
-            value: "value",
-            onClick: dojo.hitch(this, function(){this._enableFields("value");})
-        }).placeAt(pane);
-        
-        // label for value
-        var labelVal = dojo.doc.createElement('label');
-        dojo.attr(labelVal, "for", "value");
-        dojo.attr(labelVal, "innerHTML", "Value (JSON):")
-        pane.appendChild(labelVal);
-       
-         // container for value fields
-        var valueDiv = dojo.doc.createElement("div");
-        dojo.addClass(valueDiv, "value");
-             
-        // textarea
-        var textarea = new dijit.form.Textarea({
-            name: "jsonVal"
-        }).placeAt(valueDiv);
-        pane.appendChild(valueDiv);
-        
-        // radio button for "reference"
-        var reference = new dijit.form.RadioButton({
-            name: "itemType",
-            value: "reference",
-            onClick: dojo.hitch(this, function(){this._enableFields("reference");})
-        }).placeAt(pane);
-        
-        // label for reference
-        var labelRef = dojo.doc.createElement('label');
-        dojo.attr(labelRef, "for", "_reference");
-        dojo.attr(labelRef, "innerHTML", "Reference (ID):")
-        pane.appendChild(labelRef);
-        pane.appendChild(dojo.doc.createElement("br"));
-        
-        // container for reference fields
-        var refDiv = dojo.doc.createElement("div");
-        dojo.addClass(refDiv, "reference");
-        
-        if(this.useSelect){
-            // filteringselect
-            // TODO: see if there is a way to sort the items in this list
-            var refSelect = new dijit.form.FilteringSelect({
-                name: "_reference",
-                store: this.store,
-                searchAttr: this.refSelectSearchAttr || this.store.getIdentityAttributes()[0],
-                required: false,
-                value: null,        // need to file a ticket about the fetch that happens when declared with value: null
-                pageSize: 10
-            }).placeAt(refDiv);
-        }else{
-            var refTextbox = new dijit.form.ValidationTextBox({
-                name: "_reference",
-                value: "",
-                promptMessage: "Enter the ID of the item to reference",
-                isValid: dojo.hitch(this, function(isFocused){
-                    // don't validate while it's focused
-                    return true;//isFocused || this.store.getItemByIdentity(this._editDialog.attr("value")._reference);
-                })
-            }).placeAt(refDiv);
-        }
-        pane.appendChild(refDiv);
-        pane.appendChild(dojo.doc.createElement("br"));
-        pane.appendChild(dojo.doc.createElement("br"));
-        
-        // buttons
-        var buttons = document.createElement('div');
-        buttons.setAttribute("dir", "rtl");
-        var cancelButton = new dijit.form.Button({type: "reset", label: "Cancel"}).placeAt(buttons);
-        cancelButton.onClick = dojo.hitch(this._editDialog, "onCancel");
-        var okButton = new dijit.form.Button({type: "submit", label: "OK"}).placeAt(buttons);
-        pane.appendChild(buttons);
-        
-        this._editDialog.attr("content", pane);
-    }, 
-    _enableFields: function(selection){
-        // enables/disables fields based on whether the value in this._editDialog is a reference or a primitive value
-        switch(selection){
-            case "reference":
-                dojo.query(".value [widgetId]", this._editDialog.containerNode).forEach(function(node){
-                    dijit.getEnclosingWidget(node).attr("disabled", true);
-                });
-                dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
-                    dijit.getEnclosingWidget(node).attr("disabled", false);
-                });
-                break;
-            case "value":
-                dojo.query(".value [widgetId]", this._editDialog.containerNode).forEach(function(node){
-                    dijit.getEnclosingWidget(node).attr("disabled", false);
-                });
-                dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
-                    dijit.getEnclosingWidget(node).attr("disabled", true);
-                });
-                break;
-        }
-    },
-    _updateItem: function(vals){
-        // a single "execute" function that handles adding and editing of values and references.
-        var node, item, val, storeItemVal, editingItem = this._editDialog.attr("title") == "Edit Property";
+		// handle for dialog content
+		var pane = dojo.doc.createElement('div');
+
+		// label for property
+		var labelProp = dojo.doc.createElement('label');
+		dojo.attr(labelProp, "for", "property");
+		dojo.style(labelProp, "fontWeight", "bold");
+		dojo.attr(labelProp, "innerHTML", "Property:")
+		pane.appendChild(labelProp);
+
+		// property name field
+		var propName = new dijit.form.ValidationTextBox({
+			name: "property",
+			value: "",
+			required: true,
+			disabled: true
+		}).placeAt(pane);
+
+		pane.appendChild(dojo.doc.createElement("br"));
+		pane.appendChild(dojo.doc.createElement("br"));
+
+		// radio button for "value"
+		var value = new dijit.form.RadioButton({
+			name: "itemType",
+			value: "value",
+			onClick: dojo.hitch(this, function(){this._enableFields("value");})
+		}).placeAt(pane);
+
+		// label for value
+		var labelVal = dojo.doc.createElement('label');
+		dojo.attr(labelVal, "for", "value");
+		dojo.attr(labelVal, "innerHTML", "Value (JSON):")
+		pane.appendChild(labelVal);
+
+		 // container for value fields
+		var valueDiv = dojo.doc.createElement("div");
+		dojo.addClass(valueDiv, "value");
+
+		// textarea
+		var textarea = new dijit.form.Textarea({
+			name: "jsonVal"
+		}).placeAt(valueDiv);
+		pane.appendChild(valueDiv);
+
+		// radio button for "reference"
+		var reference = new dijit.form.RadioButton({
+			name: "itemType",
+			value: "reference",
+			onClick: dojo.hitch(this, function(){this._enableFields("reference");})
+		}).placeAt(pane);
+
+		// label for reference
+		var labelRef = dojo.doc.createElement('label');
+		dojo.attr(labelRef, "for", "_reference");
+		dojo.attr(labelRef, "innerHTML", "Reference (ID):")
+		pane.appendChild(labelRef);
+		pane.appendChild(dojo.doc.createElement("br"));
+
+		// container for reference fields
+		var refDiv = dojo.doc.createElement("div");
+		dojo.addClass(refDiv, "reference");
+
+		if(this.useSelect){
+			// filteringselect
+			// TODO: see if there is a way to sort the items in this list
+			var refSelect = new dijit.form.FilteringSelect({
+				name: "_reference",
+				store: this.store,
+				searchAttr: this.refSelectSearchAttr || this.store.getIdentityAttributes()[0],
+				required: false,
+				value: null,        // need to file a ticket about the fetch that happens when declared with value: null
+				pageSize: 10
+			}).placeAt(refDiv);
+		}else{
+			var refTextbox = new dijit.form.ValidationTextBox({
+				name: "_reference",
+				value: "",
+				promptMessage: "Enter the ID of the item to reference",
+				isValid: dojo.hitch(this, function(isFocused){
+					// don't validate while it's focused
+					return true;//isFocused || this.store.getItemByIdentity(this._editDialog.attr("value")._reference);
+				})
+			}).placeAt(refDiv);
+		}
+		pane.appendChild(refDiv);
+		pane.appendChild(dojo.doc.createElement("br"));
+		pane.appendChild(dojo.doc.createElement("br"));
+
+		// buttons
+		var buttons = document.createElement('div');
+		buttons.setAttribute("dir", "rtl");
+		var cancelButton = new dijit.form.Button({type: "reset", label: "Cancel"}).placeAt(buttons);
+		cancelButton.onClick = dojo.hitch(this._editDialog, "onCancel");
+		var okButton = new dijit.form.Button({type: "submit", label: "OK"}).placeAt(buttons);
+		pane.appendChild(buttons);
+
+		this._editDialog.attr("content", pane);
+	}, 
+	_enableFields: function(selection){
+		// enables/disables fields based on whether the value in this._editDialog is a reference or a primitive value
+		switch(selection){
+			case "reference":
+				dojo.query(".value [widgetId]", this._editDialog.containerNode).forEach(function(node){
+					dijit.getEnclosingWidget(node).attr("disabled", true);
+				});
+				dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
+					dijit.getEnclosingWidget(node).attr("disabled", false);
+				});
+				break;
+			case "value":
+				dojo.query(".value [widgetId]", this._editDialog.containerNode).forEach(function(node){
+					dijit.getEnclosingWidget(node).attr("disabled", false);
+				});
+				dojo.query(".reference [widgetId]", this._editDialog.containerNode).forEach(function(node){
+					dijit.getEnclosingWidget(node).attr("disabled", true);
+				});
+				break;
+		}
+	},
+	_updateItem: function(vals){
+		// a single "execute" function that handles adding and editing of values and references.
+		var node, item, val, storeItemVal, editingItem = this._editDialog.attr("title") == "Edit Property";
 		var editDialog = this._editDialog;
 		var store = this.store;
-        function setValue(){
-        	try{
+		function setValue(){
+			try{
 	            var itemVal, propPath = [];
 	            var prop = vals.property;
 	            if(editingItem){
@@ -429,117 +429,117 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 	                    store.setValue(item.parent, item.property, storeItemVal);
 	                }
 	            }
-        	}catch(e){
-        		alert(e);
-        	}
-        }
+			}catch(e){
+				alert(e);
+			}
+		}
 
-        if(editDialog.validate()){
-            node = this.lastFocused;
-            item = node.item;
-            var value = item.value;
-            // var property = null;
-            if (item.addNew) {
-                // we are adding a property to the parent item
-                // the real value of the parent is in the parent property of the lastFocused item
-                // this.lastFocused.getParent().item.value may be a reference to an item
-                value = node.item.parent;
-                node = node.getParent();
-                item = node.item;
-            }
-            val = null;
-            switch(vals.itemType){
-                case "reference":
-                    this.store.fetchItemByIdentity({identity:vals._reference,
-                    	onItem:function(item){
-                    		val = item;
-                    		setValue();
-                    	},
-                    	onError:function(){
-                    		alert("The id could not be found");
-                    	}
-                	});
-                    break;
-                case "value":
-                	var jsonVal = vals.jsonVal;
-                    val = dojo.fromJson(jsonVal);
-                    // if it is a function we want to preserve the source (comments, et al)
-                    if(typeof val == 'function'){
-                    	val.toString = function(){
-                    		return jsonVal;
-                    	}
-                    }
-                    setValue();
-                    break;
-            }
-        }else{
-            // the form didn't validate - show it again.
-            editDialog.show();
-        }
-    },
-    _editProperty: function(){
-        // this mixin stops us polluting the tree item with jsonVal etc.
-        // FIXME: if a store identifies items by instanceof checks, this will fail
-        var item = dojo.mixin({}, this.lastFocused.item);
-        // create the dialog or reset it if it already exists
-        if(!this._editDialog){
-            this._createEditDialog();
-        }else{
-            this._editDialog.reset();
-        }
-        // not allowed to edit an item's id - so check for that and stop it.
-        if(dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
-            alert("Cannot Edit an Identifier!");
-        }else{
-            this._editDialog.attr("title", "Edit Property");
-            // make sure the property input is disabled
-            dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);
-            if(this.store.isItem(item.value, true)){
-                // root node || Item reference
-                if(item.parent){
-                    // Item reference
-                    item.itemType = "reference";
-                    this._enableFields(item.itemType);
-                    item._reference = this.store.getIdentity(item.value);
-                    this._editDialog.attr("value", item);
-                    this._editDialog.show();
-                } // else root node
-            }else{
-                if(item.value && typeof item.value == 'object' && !(item.value instanceof Date)){
-                    // item.value is an object but it's NOT an item from the store - no-op
-                    // only allow editing on a property not on the node that represents the object/array
-                }else{
-                    // this is a primitive
-                    item.itemType = "value";
-                    this._enableFields(item.itemType);
-                    item.jsonVal = typeof item.value == 'function' ?
-                    		// use the plain toString for functions, dojo.toJson doesn't support functions 
-                    		item.value.toString() :
-                    			item.value instanceof Date ?
-                    				// A json-ish form of a date:
-                    				'new Date("' + item.value + '")' : 
-                    				dojo.toJson(item.value);
-                    this._editDialog.attr("value", item);
-                    this._editDialog.show();
-                }
-            }
-        }
-    },
-    _destroyProperty: function(){
-        var node = this.lastFocused;
-        var item = node.item;
-        var propPath = [];
-        // we have to walk up the tree to the item before we can know if we're working with the identifier
-        while(!this.store.isItem(item.parent, true) || item.parent instanceof Array){
-            node = node.getParent();
-            propPath.push(item.property);
-            item = node.item;
-        }
-        // this will prevent any part of the identifier from being changed
-        if(dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
-            alert("Cannot Delete an Identifier!");
-        }else{
-        	try{
+		if(editDialog.validate()){
+			node = this.lastFocused;
+			item = node.item;
+			var value = item.value;
+			// var property = null;
+			if (item.addNew) {
+				// we are adding a property to the parent item
+				// the real value of the parent is in the parent property of the lastFocused item
+				// this.lastFocused.getParent().item.value may be a reference to an item
+				value = node.item.parent;
+				node = node.getParent();
+				item = node.item;
+			}
+			val = null;
+			switch(vals.itemType){
+				case "reference":
+					this.store.fetchItemByIdentity({identity:vals._reference,
+						onItem:function(item){
+							val = item;
+							setValue();
+						},
+						onError:function(){
+							alert("The id could not be found");
+						}
+					});
+					break;
+				case "value":
+					var jsonVal = vals.jsonVal;
+					val = dojo.fromJson(jsonVal);
+					// if it is a function we want to preserve the source (comments, et al)
+					if(typeof val == 'function'){
+						val.toString = function(){
+							return jsonVal;
+						}
+					}
+					setValue();
+					break;
+			}
+		}else{
+			// the form didn't validate - show it again.
+			editDialog.show();
+		}
+	},
+	_editProperty: function(){
+		// this mixin stops us polluting the tree item with jsonVal etc.
+		// FIXME: if a store identifies items by instanceof checks, this will fail
+		var item = dojo.mixin({}, this.lastFocused.item);
+		// create the dialog or reset it if it already exists
+		if(!this._editDialog){
+			this._createEditDialog();
+		}else{
+			this._editDialog.reset();
+		}
+		// not allowed to edit an item's id - so check for that and stop it.
+		if(dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
+			alert("Cannot Edit an Identifier!");
+		}else{
+			this._editDialog.attr("title", "Edit Property");
+			// make sure the property input is disabled
+			dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);
+			if(this.store.isItem(item.value, true)){
+				// root node || Item reference
+				if(item.parent){
+					// Item reference
+					item.itemType = "reference";
+					this._enableFields(item.itemType);
+					item._reference = this.store.getIdentity(item.value);
+					this._editDialog.attr("value", item);
+					this._editDialog.show();
+				} // else root node
+			}else{
+				if(item.value && typeof item.value == 'object' && !(item.value instanceof Date)){
+					// item.value is an object but it's NOT an item from the store - no-op
+					// only allow editing on a property not on the node that represents the object/array
+				}else{
+					// this is a primitive
+					item.itemType = "value";
+					this._enableFields(item.itemType);
+					item.jsonVal = typeof item.value == 'function' ?
+							// use the plain toString for functions, dojo.toJson doesn't support functions 
+							item.value.toString() :
+								item.value instanceof Date ?
+									// A json-ish form of a date:
+									'new Date("' + item.value + '")' : 
+									dojo.toJson(item.value);
+					this._editDialog.attr("value", item);
+					this._editDialog.show();
+				}
+			}
+		}
+	},
+	_destroyProperty: function(){
+		var node = this.lastFocused;
+		var item = node.item;
+		var propPath = [];
+		// we have to walk up the tree to the item before we can know if we're working with the identifier
+		while(!this.store.isItem(item.parent, true) || item.parent instanceof Array){
+			node = node.getParent();
+			propPath.push(item.property);
+			item = node.item;
+		}
+		// this will prevent any part of the identifier from being changed
+		if(dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
+			alert("Cannot Delete an Identifier!");
+		}else{
+			try{
 	            if(propPath.length > 0){
 	                // not deleting a top-level property of an item so get the top-level store item to change
 	                var itemVal, storeItemVal = getValue(this.store, item.parent, item.property);
@@ -562,65 +562,65 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 	                // deleting an item property
 	                this.store.unsetAttribute(item.parent, item.property);
 	            }
-        	}catch(e){
-        		alert(e);
-        	}       
-        }
-    },
-    _addProperty: function(){
-        // item is what we are adding a property to
-        var item = this.lastFocused.item;
-        // value is the real value of the item - not a reference to a store item
-        var value = item.value;
-        var showDialog = dojo.hitch(this, function(){
-            var property = null;
-            if(!this._editDialog){
-                this._createEditDialog();
-            }else{
-                this._editDialog.reset();
-            }
-            // are we adding another item to an array?
-            if(value instanceof Array){
-                // preset the property to the next index in the array and disable the property field
-                property = value.length;
-                dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);  
-            }else{
-                // enable the property TextBox
-                dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", false);
-            }
-            this._editDialog.attr("title", "Add Property");
-            // default to a value type
-            this._enableFields("value");
-            this._editDialog.attr("value", {itemType: "value", property: property});
-            this._editDialog.show();
-        });
-        
-        if (item.addNew) {
-            // we are adding a property to the parent item
-            item = this.lastFocused.getParent().item;
-            // the real value of the parent is in the parent property of the lastFocused item
-            // this.lastFocused.getParent().item.value may be a reference to an item
-            value = this.lastFocused.item.parent;
-        }
-        if(item.property && dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
-            alert("Cannot add properties to an ID node!");
-        }else{
-            // if the value is an item then we need to get the item's value
-            if(this.store.isItem(value, true) && !this.store.isItemLoaded(value)) {
-                // fetch the value and see if it is an array
-                this.store.loadItem({
-                    item: value,
-                    onItem: function(loadedItem){
-                        value = loadedItem;
-                        showDialog();
-                    }
-                });
-            } else {
-                showDialog();
-            }
+			}catch(e){
+				alert(e);
+			}       
+		}
+	},
+	_addProperty: function(){
+		// item is what we are adding a property to
+		var item = this.lastFocused.item;
+		// value is the real value of the item - not a reference to a store item
+		var value = item.value;
+		var showDialog = dojo.hitch(this, function(){
+			var property = null;
+			if(!this._editDialog){
+				this._createEditDialog();
+			}else{
+				this._editDialog.reset();
+			}
+			// are we adding another item to an array?
+			if(value instanceof Array){
+				// preset the property to the next index in the array and disable the property field
+				property = value.length;
+				dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", true);  
+			}else{
+				// enable the property TextBox
+				dijit.getEnclosingWidget(dojo.query("input", this._editDialog.containerNode)[0]).attr("disabled", false);
+			}
+			this._editDialog.attr("title", "Add Property");
+			// default to a value type
+			this._enableFields("value");
+			this._editDialog.attr("value", {itemType: "value", property: property});
+			this._editDialog.show();
+		});
+
+		if (item.addNew) {
+			// we are adding a property to the parent item
+			item = this.lastFocused.getParent().item;
+			// the real value of the parent is in the parent property of the lastFocused item
+			// this.lastFocused.getParent().item.value may be a reference to an item
+			value = this.lastFocused.item.parent;
+		}
+		if(item.property && dojo.indexOf(this.store.getIdentityAttributes(), item.property) >= 0){
+			alert("Cannot add properties to an ID node!");
+		}else{
+			// if the value is an item then we need to get the item's value
+			if(this.store.isItem(value, true) && !this.store.isItemLoaded(value)) {
+				// fetch the value and see if it is an array
+				this.store.loadItem({
+					item: value,
+					onItem: function(loadedItem){
+						value = loadedItem;
+						showDialog();
+					}
+				});
+			} else {
+				showDialog();
+			}
 //
-        }
-    }
+		}
+	}
 });
 })();
 
