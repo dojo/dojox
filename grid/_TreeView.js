@@ -330,8 +330,15 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 		if(index == -1){
 			return;
 		}
+		var path = new dojox.grid.TreePath(index, this.grid);
+		dojo.forEach(this.grid.layout.cells, function(cell){
+			if(typeof cell['openStates'] != 'undefined'){
+				if(identity in cell.openStates){
+					delete cell.openStates[identity];
+				}
+			}
+		});
 		if(typeof index == "string" && index.indexOf('/') > -1){
-			var path = new dojox.grid.TreePath(index, this.grid);
 			var ppath = path.parent();
 			while(ppath){
 				path = ppath;
@@ -343,6 +350,7 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 			}
 			var idty = this.grid.store.getIdentity(pitem);
 			if(typeof this._expandos[idty] != 'undefined'){
+				var first;
 				for(var i in this._expandos[idty]){
 					var exp = this._expandos[idty][i];
 					if(exp){
