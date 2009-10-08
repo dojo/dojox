@@ -4,7 +4,7 @@ dojo.require("dojo.data.util.filter");
 dojo.require("dojo.data.util.simpleFetch");
 
 dojo.declare("dojox.data.CsvStore", null, {
-	//	summary:
+	// summary:
 	//		The CsvStore implements the dojo.data.api.Read API and reads
 	//		data from files in CSV (Comma Separated Values) format.
 	//		All values are simple string values. References to other items
@@ -18,14 +18,14 @@ dojo.declare("dojox.data.CsvStore", null, {
 	//
 	//		Note that values containing a comma must be enclosed with quotes ("")
 	//		Also note that values containing quotes must be escaped with two consecutive quotes (""quoted"")
-	
-	/* examples:
-	 *   var csvStore = new dojox.data.CsvStore({url:"movies.csv");
-	 *   var csvStore = new dojox.data.CsvStore({url:"http://example.com/movies.csv");
-	 */
+	//
+	// examples:
+	//		var csvStore = new dojox.data.CsvStore({url:"movies.csv");
+	//		var csvStore = new dojox.data.CsvStore({url:"http://example.com/movies.csv");
 
 	constructor: function(/* Object */ keywordParameters){
-		// summary: initializer
+		// summary: 
+		//		initializer
 		// keywordParameters: {url: String}
 		// keywordParameters: {data: String}
 		// keywordParameters: {label: String} The column label for the column to use for the label returned by getLabel.
@@ -54,7 +54,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
 		this._queuedFetches = [];
 		this.identifier = keywordParameters.identifier;
-		if (this.identifier === "") {
+		if(this.identifier === ""){
 			delete this.identifier;
 		}else{
 			this._idMap = {};
@@ -67,22 +67,34 @@ dojo.declare("dojox.data.CsvStore", null, {
 		}
 	},
 
-	url: "", //Declarative hook for setting Csv source url.
+	// url: [public] string
+	//		Declarative hook for setting Csv source url.		
+	url: "",
 
-	label: "", //Declarative hook for setting the label attribute. 
+	// label: [public] string
+	//		Declarative hook for setting the label attribute. 
+	label: "",
 
-	identifier: "", //Declarative hook for setting the identifier.
+	// identifier: [public] string
+	//		Declarative hook for setting the identifier.
+	identifier: "",
 
-	separator: ",", //Declatative and programmatic hook for defining the separator character used in the Csv style file. 
+	// separator: [public] string
+	//		Declatative and programmatic hook for defining the separator 
+	//		character used in the Csv style file. 
+	separator: ",",
 
-	//Parameter to allow specifying if preventCache should be passed to the xhrGet call or not when loading data from a url.
-	//Note this does not mean the store calls the server on each fetch, only that the data load has preventCache set as an option.
+	// separator: [public] string
+	//		Parameter to allow specifying if preventCache should be passed to 
+	//		the xhrGet call or not when loading data from a url.
+	//		Note this does not mean the store calls the server on each fetch, 
+	//		only that the data load has preventCache set as an option.
 	urlPreventCache: false,
 
 	_assertIsItem: function(/* item */ item){
-		//	summary:
+		// summary:
 		//      This function tests whether the item passed in is indeed an item in the store.
-		//	item: 
+		// item: 
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){ 
 			throw new Error(this.declaredClass + ": a function was passed an item argument that was not an item");
@@ -90,9 +102,9 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 	
 	_getIndex: function(item){
-		//	summary:
+		// summary:
 		//		Internal function to get the internal index to the item data from the item handle
-		//	item:
+		// item:
 		//		The idem handle to get the index for.
 		var idx = this.getIdentity(item);
 		if(this.identifier){
@@ -107,7 +119,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 	getValue: function(	/* item */ item, 
 						/* attribute || attribute-name-string */ attribute, 
 						/* value? */ defaultValue){
-		//	summary: 
+		// summary: 
 		//      See dojo.data.api.Read.getValue()
 		//		Note that for the CsvStore, an empty string value is the same as no value, 
 		// 		so the defaultValue would be returned instead of an empty string.
@@ -127,7 +139,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 
 	getValues: function(/* item */ item, 
 						/* attribute || attribute-name-string */ attribute){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getValues()
 		// 		CSV syntax does not support multi-valued attributes, so this is just a
 		// 		wrapper function for getValue().
@@ -136,7 +148,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	getAttributes: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getAttributes()
 		this._assertIsItem(item);
 		var attributes = [];
@@ -152,7 +164,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 
 	hasAttribute: function(	/* item */ item,
 							/* attribute-name-string */ attribute){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.hasAttribute()
 		// 		The hasAttribute test is true if attribute has an index number within the item's array length
 		// 		AND if the item has a value for that attribute. Note that for the CsvStore, an
@@ -170,11 +182,11 @@ dojo.declare("dojox.data.CsvStore", null, {
 	containsValue: function(/* item */ item, 
 							/* attribute || attribute-name-string */ attribute, 
 							/* anything */ value){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
-		   regexp = dojo.data.util.filter.patternToRegExp(value, false);
+			regexp = dojo.data.util.filter.patternToRegExp(value, false);
 		}
 		return this._containsValue(item, attribute, value, regexp); //boolean.
 	},
@@ -183,22 +195,24 @@ dojo.declare("dojox.data.CsvStore", null, {
 								/* attribute || attribute-name-string */ attribute, 
 								/* anything */ value,
 								/* RegExp?*/ regexp){
-		//	summary: 
+		// summary: 
 		//		Internal function for looking at the values contained by the item.
-		//	description: 
+		// description: 
 		//		Internal function for looking at the values contained by the item.  This 
 		//		function allows for denoting if the comparison should be case sensitive for
 		//		strings or not (for handling filtering cases where string case should not matter)
 		//	
-		//	item:
+		// item:
 		//		The data item to examine for attribute values.
-		//	attribute:
+		// attribute:
 		//		The attribute to inspect.
-		//	value:	
+		// value:	
 		//		The value to match.
-		//	regexp:
+		// regexp:
 		//		Optional regular expression generated off value if value was of string type to handle wildcarding.
 		//		If present and attribute values are string, then it can be used for comparison instead of 'value'
+		// tags:
+		//		private
 		var values = this.getValues(item, attribute);
 		for(var i = 0; i < values.length; ++i){
 			var possibleValue = values[i];
@@ -215,7 +229,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	isItem: function(/* anything */ something){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.isItem()
 		if(something && something[this._storeProp] === this){
 			var identity = something[this._idProp];
@@ -236,16 +250,16 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	isItemLoaded: function(/* anything */ something){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.isItemLoaded()
 		//		The CsvStore always loads all items, so if it's an item, then it's loaded.
 		return this.isItem(something); //Boolean
 	},
 
 	loadItem: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.loadItem()
-		//	description:
+		// description:
 		//		The CsvStore always loads all items, so if it's an item, then it's loaded.
 		//		From the dojo.data.api.Read.loadItem docs:
 		//			If a call to isItemLoaded() returns true before loadItem() is even called,
@@ -254,13 +268,13 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	getFeatures: function(){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getFeatures()
 		return this._features; //Object
 	},
 
 	getLabel: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getLabel()
 		if(this.label && this.isItem(item)){
 			return this.getValue(item,this.label); //String
@@ -269,7 +283,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	getLabelAttributes: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
 		if(this.label){
 			return [this.label]; //array
@@ -284,11 +298,11 @@ dojo.declare("dojox.data.CsvStore", null, {
 	_fetchItems: function(	/* Object */ keywordArgs, 
 							/* Function */ findCallback, 
 							/* Function */ errorCallback){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.util.simpleFetch.fetch()
-		
+		// tags:
+		//		protected
 		var self = this;
-
 		var filter = function(requestArgs, arrayOfAllItems){
 			var items = null;
 			if(requestArgs.query){
@@ -372,7 +386,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 					}
 					keywordArgs.abort = function(){
 						var df = getHandler;
-						if (df && df.fired === -1){
+						if(df && df.fired === -1){
 							df.cancel();
 							df = null;
 						}
@@ -409,29 +423,28 @@ dojo.declare("dojox.data.CsvStore", null, {
 	// -------------------------------------------------------------------
 	// Private methods
 	_getArrayOfArraysFromCsvFileContents: function(/* string */ csvFileContents){
-		/* summary:
-		 *   Parses a string of CSV records into a nested array structure.
-		 * description:
-		 *   Given a string containing CSV records, this method parses
-		 *   the string and returns a data structure containing the parsed
-		 *   content.  The data structure we return is an array of length
-		 *   R, where R is the number of rows (lines) in the CSV data.  The 
-		 *   return array contains one sub-array for each CSV line, and each 
-		 *   sub-array contains C string values, where C is the number of 
-		 *   columns in the CSV data.
-		 */
-		 
-		/* example:
-		 *   For example, given this CSV string as input:
-		 *     "Title, Year, Producer \n Alien, 1979, Ridley Scott \n Blade Runner, 1982, Ridley Scott"
-		 *   this._dataArray will be set to:
-		 *     [["Alien", "1979", "Ridley Scott"],
-		 *      ["Blade Runner", "1982", "Ridley Scott"]]
-		 *   And this._attributes will be set to:
-		 *     ["Title", "Year", "Producer"]
-		 *   And this._attributeIndexes will be set to:
-		 *     { "Title":0, "Year":1, "Producer":2 }
-		 */
+		// summary:
+		//		Parses a string of CSV records into a nested array structure.
+		// description:
+		//		Given a string containing CSV records, this method parses
+		//		the string and returns a data structure containing the parsed
+		//		content.  The data structure we return is an array of length
+		//		R, where R is the number of rows (lines) in the CSV data.  The 
+		//		return array contains one sub-array for each CSV line, and each 
+		//		sub-array contains C string values, where C is the number of 
+		//		columns in the CSV data.
+		// example:
+		//		For example, given this CSV string as input:
+		//			"Title, Year, Producer \n Alien, 1979, Ridley Scott \n Blade Runner, 1982, Ridley Scott"
+		//		this._dataArray will be set to:
+		//			[["Alien", "1979", "Ridley Scott"],
+		//			["Blade Runner", "1982", "Ridley Scott"]]
+		//		And this._attributes will be set to:
+		//			["Title", "Year", "Producer"]
+		//		And this._attributeIndexes will be set to:
+		//			{ "Title":0, "Year":1, "Producer":2 }
+		// tags:
+		//		private
 		if(dojo.isString(csvFileContents)){
 			var leadingWhiteSpaceCharacters = new RegExp("^\\s+",'g');
 			var trailingWhiteSpaceCharacters = new RegExp("\\s+$",'g');
@@ -454,7 +467,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 						var secondToLastChar = field.charAt(field.length - 2);
 						var thirdToLastChar = field.charAt(field.length - 3);
 						if(field.length === 2 && field == "\"\""){
-							listOfFields[j] = "";  //Special case empty string field.
+							listOfFields[j] = ""; //Special case empty string field.
 						}else if((firstChar == '"') && 
 								((lastChar != '"') || 
 								 ((lastChar == '"') && (secondToLastChar == '"') && (thirdToLastChar != '"')))){
@@ -468,7 +481,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 						}else{
 							if((firstChar == '"') && (lastChar == '"')){
 								field = field.slice(1, (field.length - 1)); // trim the " characters off the ends
-								field = field.replace(doubleQuotes, '"');   // replace "" with "
+								field = field.replace(doubleQuotes, '"'); // replace "" with "
 							}
 							listOfFields[j] = field;
 							j += 1;
@@ -489,10 +502,12 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	_splitLines: function(csvContent){
-		//	summary:
+		// summary:
 		//		Function to split the CSV file contents into separate lines.
 		//		Since line breaks can occur inside quotes, a Regexp didn't
 		//		work as well.  A quick passover parse should be just as efficient.
+		// tags:
+		//		private
 		var split = [];
 		var i;
 		var line = "";
@@ -510,7 +525,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 					}else{
 						split.push(line);
 						line = "";
-						if (i < (csvContent.length - 1) && csvContent.charAt(i + 1) == '\n') {
+						if(i < (csvContent.length - 1) && csvContent.charAt(i + 1) == '\n'){
 							i++; //Skip it, it's CRLF
 						}
 					}
@@ -534,6 +549,12 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 	
 	_processData: function(/* String */ data){
+		// summary:
+		//		Function for processing the string data from the server.
+		// data: String
+		//		The CSV data.
+		// tags:
+		//		private
 		this._getArrayOfArraysFromCsvFileContents(data);
 		this._arrayOfAllItems = [];
 
@@ -560,6 +581,12 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 	
 	_createItemFromIdentity: function(/* String */ identity){
+		// summary:
+		//		Function for creating a new item from its identifier.
+		// identity: String
+		//		The identity
+		// tags:
+		//		private
 		var item = {};
 		item[this._storeProp] = this;
 		item[this._idProp] = identity;
@@ -571,8 +598,10 @@ dojo.declare("dojox.data.CsvStore", null, {
      dojo.data.api.Identity API
 ***************************************/
 	getIdentity: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Identity.getIdentity()
+		// tags:
+		//		public
 		if(this.isItem(item)){
 			return item[this._idProp]; //String
 		}
@@ -580,10 +609,12 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	fetchItemByIdentity: function(/* Object */ keywordArgs){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Identity.fetchItemByIdentity()
+		// tags:
+		//		public
 		var item;
-		var scope =  keywordArgs.scope?keywordArgs.scope:dojo.global;
+		var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 		//Hasn't loaded yet, we have to trigger the load.
 		if(!this._loadFinished){
 			var self = this;
@@ -654,8 +685,10 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	getIdentityAttributes: function(/* item */ item){
-		//	summary: 
+		// summary: 
 		//		See dojo.data.api.Identity.getIdentifierAttributes()
+		// tags:
+		//		public
 		 
 		//Identity isn't a public attribute in the item, it's the row position index.
 		//So, return null.
@@ -667,10 +700,13 @@ dojo.declare("dojox.data.CsvStore", null, {
 	},
 
 	_handleQueuedFetches: function(){
-		//	summary: 
+		// summary: 
 		//		Internal function to execute delayed request in the store.
+		// tags:
+		//		private
+
 		//Execute any deferred fetches now.
-		if (this._queuedFetches.length > 0) {
+		if(this._queuedFetches.length > 0){
 			for(var i = 0; i < this._queuedFetches.length; i++){
 				var fData = this._queuedFetches[i];
 				var delayedFilter = fData.filter;
