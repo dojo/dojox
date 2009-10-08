@@ -322,8 +322,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 
 			if(items && items.length > 0){
 				fetchHandler(items, request);
-			}
-			else {
+			}else{
 				fetchHandler([], request);
 			}
 		};

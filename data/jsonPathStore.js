@@ -8,10 +8,10 @@ dojox.data.ASYNC_MODE = 0;
 dojox.data.SYNC_MODE = 1;
 
 dojo.declare("dojox.data.jsonPathStore",
-        //      summary:
-        //              The jsonPathStore implements dojo.data.read, write, notify, and identity api's.  It is a local (in memory) store
+		//		summary:
+		//				The jsonPathStore implements dojo.data.read, write, notify, and identity api's.	It is a local (in memory) store
 	//		and can take a javascript object with any arbitrary format and attach to it to provide a dojo.data interface to that object
-	//		data.  It uses jsonPath as the query language to search agains this store.
+	//		data.	It uses jsonPath as the query language to search agains this store.
 	null,
 	{
 		mode: dojox.data.ASYNC_MODE,
@@ -23,44 +23,44 @@ dojo.declare("dojox.data.jsonPathStore",
 		indexOnLoad: true,
 		labelAttribute: "",
 		url: "",
-		_replaceRegex: /\'\]/gi,
+		_replaceRegex: /'\]/gi,
 		noRevert : false,
-		
+
 		constructor: function(options){
 			//summary:
-			//	jsonPathStore constructor, instantiate a new jsonPathStore 
+			//	jsonPathStore constructor, instantiate a new jsonPathStore
 			//
 			//	Takes a single optional parameter in the form of a Javascript object
-			//	containing one or more of the following properties. 
+			//	containing one or more of the following properties.
 			//
-			//	data: /*JSON String*/ || /* Javascript Object */, 
+			//	data: /*JSON String*/ || /* Javascript Object */,
 			//		JSON String or Javascript object this store will control
 			//		JSON is converted into an object, and an object passed to
-			//		the store will be used directly.  If no data and no url
+			//		the store will be used directly.	If no data and no url
 			//		is provide, an empty object, {}, will be used as the initial
 			//		store.
 			//
-			//	url: /* string url */ 	
+			//	url: /* string url */
 			//		Load data from this url in JSON format and use the Object
 			//		created from the data as the data source.
 			//
-			//	indexOnLoad: /* boolean */ 
+			//	indexOnLoad: /* boolean */
 			//		Defaults to true, but this may change in the near future.
 			//		Parse the data object and set individual objects up as
-			//		appropriate.  This will add meta data and assign
+			//		appropriate.	This will add meta data and assign
 			//		id's to objects that dont' have them as defined by the
-			//		idAttribute option.  Disabling this option will keep this 
+			//		idAttribute option.	Disabling this option will keep this
 			//		parsing from happening until a query is performed at which
 			//		time only the top level of an item has meta info stored.
 			//		This might work in some situations, but you will almost
 			//		always want to indexOnLoad or use another option which
-			//		will create an index.  In the future we will support a 
+			//		will create an index.	In the future we will support a
 			//		generated index that maps by jsonPath allowing the
-			//		server to take some of this load for larger data sets. 
+			//		server to take some of this load for larger data sets.
 			//
 			//	idAttribute: /* string */
 			//		Defaults to '_id'. The name of the attribute that holds an objects id.
-			//		This can be a preexisting id provided by the server.  
+			//		This can be a preexisting id provided by the server.
 			//		If an ID isn't already provided when an object
 			//		is fetched or added to the store, the autoIdentity system
 			//		will generate an id for it and add it to the index. There
@@ -71,31 +71,31 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	metaLabel: /* string */
 			//		Defaults to '_meta' overrides the attribute name that is used by the store
 			//		for attaching meta information to an object while
-			//		in the store's control.  Defaults to '_meta'. 
-			//	
+			//		in the store's control.	Defaults to '_meta'.
+			//
 			//	hideMetaAttributes: /* boolean */
-			//		Defaults to False.  When enabled, calls to getAttributes() will not 
+			//		Defaults to False.	When enabled, calls to getAttributes() will not
 			//		include the meta attribute.
 			//
 			//	autoIdPrefix: /*string*/
-			//		Defaults to "_auto_".  This string is used as the prefix to any
+			//		Defaults to "_auto_".	This string is used as the prefix to any
 			//		objects which have a generated id. A numeric index is appended
 			//		to this string to complete the ID
 			//
 			//	mode: dojox.data.ASYNC_MODE || dojox.data.SYNC_MODE
-			//		Defaults to ASYNC_MODE.  This option sets the default mode for this store.
+			//		Defaults to ASYNC_MODE.	This option sets the default mode for this store.
 			//		Sync calls return their data immediately from the calling function
-			//		instead of calling the callback functions.  Functions such as 
+			//		instead of calling the callback functions.	Functions such as
 			//		fetchItemByIdentity() and fetch() both accept a string parameter in addtion
-			//		to the normal keywordArgs parameter.  When passed this option, SYNC_MODE will
+			//		to the normal keywordArgs parameter.	When passed this option, SYNC_MODE will
 			//		automatically be used even when the default mode of the system is ASYNC_MODE.
-			//		A normal request to fetch or fetchItemByIdentity (with kwArgs object) can also 
+			//		A normal request to fetch or fetchItemByIdentity (with kwArgs object) can also
 			//		include a mode property to override this setting for that one request.
 
-			//setup a byId alias to the api call	
+			//setup a byId alias to the api call
 			this.byId=this.fetchItemByIdentity;
 
-			if (options){
+			if(options){
 				dojo.mixin(this,options);
 			}
 
@@ -106,18 +106,18 @@ dojo.declare("dojox.data.jsonPathStore",
 			this._fetchQueue=[];
 			this.index={};
 
-			//regex to identify when we're travelling down metaObject (which we don't want to do) 
-			var expr="("+this.metaLabel+"\'\])";
+			//regex to identify when we're travelling down metaObject (which we don't want to do)
+			var expr="("+this.metaLabel+"'\])";
 			this.metaRegex = new RegExp(expr);
 
 
 			//no data or url, start with an empty object for a store
-			if (!this.data && !this.url){
+			if(!this.data && !this.url){
 				this.setData({});
-			}	
+			}
 
 			//we have data, but no url, set the store as the data
-			if (this.data && !this.url){
+			if(this.data && !this.url){
 				this.setData(this.data);
 
 				//remove the original refernce, we're now using _data from here on out
@@ -125,7 +125,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			}
 
 			//given a url, load json data from as the store
-			if (this.url){
+			if(this.url){
 				dojo.xhrGet({
 					url: options.url,
 					handleAs: "json",
@@ -138,19 +138,19 @@ dojo.declare("dojox.data.jsonPathStore",
 		_loadData: function(data){
 			// summary:
 			//	load data into the store. Index it if appropriate.
-			if (this._data){
+			if(this._data){
 				delete this._data;
 			}
 
-			if (dojo.isString(data)){
+			if(dojo.isString(data)){
 				this._data = dojo.fromJson(data);
 			}else{
 				this._data = data;
 			}
-			
-			if (this.indexOnLoad){
-				this.buildIndex();		
-			}	
+
+			if(this.indexOnLoad){
+				this.buildIndex();
+			}
 
 			this._updateMeta(this._data, {path: "$"});
 
@@ -159,64 +159,64 @@ dojo.declare("dojox.data.jsonPathStore",
 
 		onLoadData: function(data){
 			// summary
-			//	Called after data has been loaded in the store.  
+			//	Called after data has been loaded in the store.
 			//	If any requests happened while the startup is happening
 			//	then process them now.
 
-			while (this._fetchQueue.length>0){
+			while(this._fetchQueue.length>0){
 				var req = this._fetchQueue.shift();
 				this.fetch(req);
-			}	
+			}
 
 		},
 
 		setData: function(data){
 			// summary:
-			//	set the stores' data to the supplied object and then 
-			//	load and/or setup that data with the required meta info		
+			//	set the stores' data to the supplied object and then
+			//	load and/or setup that data with the required meta info
 			this._loadData(data);
 		},
 
 		buildIndex: function(path, item){
-			//summary: 
+			//summary:
 			//	parse the object structure, and turn any objects into
 			//	jsonPathStore items. Basically this just does a recursive
 			//	series of fetches which itself already examines any items
-			//	as they are retrieved and setups up the required meta information. 
+			//	as they are retrieved and setups up the required meta information.
 			//
 			//	path: /* string */
 			//		jsonPath Query for the starting point of this index construction.
 
-			if (!this.idAttribute){
+			if(!this.idAttribute){
 				throw new Error("buildIndex requires idAttribute for the store");
 			}
 
 			item = item || this._data;
 			var origPath = path;
-			path = path||"$";
+			path = path || "$";
 			path += "[*]";
 			var data = this.fetch({query: path,mode: dojox.data.SYNC_MODE});
 			for(var i=0; i<data.length;i++){
 				var parts, attribute;
 				if(dojo.isObject(data[i])){
 					var newPath = data[i][this.metaLabel]["path"];
-					if (origPath){
+					if(origPath){
 						//console.log("newPath: ", newPath);
 						//console.log("origPath: ", origPath);
 						//console.log("path: ", path);
 						//console.log("data[i]: ", data[i]);
-						parts = origPath.split("\[\'");
+						parts = origPath.split("\['");
 						attribute = parts[parts.length-1].replace(this._replaceRegex,'');
 						//console.log("attribute: ", attribute);
 						//console.log("ParentItem: ", item, attribute);
-						if (!dojo.isArray(data[i])){
+						if(!dojo.isArray(data[i])){
 							this._addReference(data[i], {parent: item, attribute:attribute});
 							this.buildIndex(newPath, data[i]);
 						}else{
 							this.buildIndex(newPath,item);
 						}
 					}else{
-						parts = newPath.split("\[\'");
+						parts = newPath.split("\['");
 						attribute = parts[parts.length-1].replace(this._replaceRegex,'');
 						this._addReference(data[i], {parent: this._data, attribute:attribute});
 						this.buildIndex(newPath, data[i]);
@@ -231,11 +231,11 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	and not a clone. Takes an item, matches it to the corresponding
 			//	item in the store and if it is the same, returns itself, otherwise
 			//	it returns the item from the store.
-		
-			if(this.index[item[this.idAttribute]] && (this.index[item[this.idAttribute]][this.metaLabel]===item[this.metaLabel])){
+
+			if(this.index[item[this.idAttribute]] && (this.index[item[this.idAttribute]][this.metaLabel] === item[this.metaLabel])){
 				return this.index[item[this.idAttribute]];
 			}
-			return item;	
+			return item;
 		},
 
 		getValue: function(item, property){
@@ -244,7 +244,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//
 			//	item: /* object */
 			//	property: /* string */
-			//		property to look up value for	
+			//		property to look up value for
 			item = this._correctReference(item);
 			return item[property];
 		},
@@ -252,13 +252,13 @@ dojo.declare("dojox.data.jsonPathStore",
 		getValues: function(item, property){
 			// summary:
 			//	Gets the value of an item's 'property' and returns
-			//	it.  If this value is an array it is just returned,
+			//	it.	If this value is an array it is just returned,
 			//	if not, the value is added to an array and that is returned.
 			//
 			//	item: /* object */
 			//	property: /* string */
-			//		property to look up value for	
-	
+			//		property to look up value for
+
 			item = this._correctReference(item);
 			return dojo.isArray(item[property]) ? item[property] : [item[property]];
 		},
@@ -273,8 +273,8 @@ dojo.declare("dojox.data.jsonPathStore",
 
 			item = this._correctReference(item);
 			var res = [];
-			for (var i in item){
-				if (this.hideMetaAttributes && (i==this.metaLabel)){continue;}
+			for(var i in item){
+				if(this.hideMetaAttributes && (i == this.metaLabel)){continue;}
 				res.push(i);
 			}
 			return res;
@@ -286,10 +286,10 @@ dojo.declare("dojox.data.jsonPathStore",
 			//
 			//	item: /* object */
 			//	attribute: /* string */
-		
+
 			item = this._correctReference(item);
-			if (attribute in item){return true;}
-			return false;	
+			if(attribute in item){return true;}
+			return false;
 		},
 
 		containsValue: function(item, attribute, value){
@@ -301,11 +301,11 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	value: /* anything */
 			item = this._correctReference(item);
 
-			if (item[attribute] && item[attribute]==value){return true}
-			if (dojo.isObject(item[attribute]) || dojo.isObject(value)){
-				if (this._shallowCompare(item[attribute],value)){return true}
+			if(item[attribute] && item[attribute] == value){return true}
+			if(dojo.isObject(item[attribute]) || dojo.isObject(value)){
+				if(this._shallowCompare(item[attribute],value)){return true}
 			}
-			return false;	
+			return false;
 		},
 
 		_shallowCompare: function(a, b){
@@ -314,59 +314,59 @@ dojo.declare("dojox.data.jsonPathStore",
 			//true if all props match. It will not descend into child objects
 			//but it will compare child date objects
 
-			if ((dojo.isObject(a) && !dojo.isObject(b))|| (dojo.isObject(b) && !dojo.isObject(a))) {
+			if((dojo.isObject(a) && !dojo.isObject(b)) || (dojo.isObject(b) && !dojo.isObject(a))){
 				return false;
 			}
 
-			if ( a["getFullYear"] || b["getFullYear"] ){
+			if( a["getFullYear"] || b["getFullYear"] ){
 				//confirm that both are dates
-				if ( (a["getFullYear"] && !b["getFullYear"]) || (b["getFullYear"] && !a["getFullYear"]) ){
+				if( (a["getFullYear"] && !b["getFullYear"]) || (b["getFullYear"] && !a["getFullYear"]) ){
 					return false;
 				}else{
-					if (!dojo.date.compare(a,b)){
+					if(!dojo.date.compare(a,b)){
 						return true;
 					}
 					return false;
-       				}
+		 				}
 			}
 
-			for (var i in b){	
-				if (dojo.isObject(b[i])){
-					if (!a[i] || !dojo.isObject(a[i])){return false}
+			for(var i in b){
+				if(dojo.isObject(b[i])){
+					if(!a[i] || !dojo.isObject(a[i])){return false}
 
-					if (b[i]["getFullYear"]){
+					if(b[i]["getFullYear"]){
 						if(!a[i]["getFullYear"]){return false}
-						if (dojo.date.compare(a,b)){return false}	
+						if(dojo.date.compare(a,b)){return false}
 					}else{
-						if (!this._shallowCompare(a[i],b[i])){return false}
+						if(!this._shallowCompare(a[i],b[i])){return false}
 					}
-				}else{	
-					if (!b[i] || (a[i]!=b[i])){return false}
+				}else{
+					if(!b[i] || (a[i]!=b[i])){return false}
 				}
 			}
 
 			//make sure there werent props on a that aren't on b, if there aren't, then
 			//the previous section will have already evaluated things.
 
-			for (i in a){
-				if (!b[i]){return false}
+			for(i in a){
+				if(!b[i]){return false}
 			}
-			
+
 			return true;
 		},
 
 		isItem: function(item){
 			// summary:
 			//	Checks to see if a passed 'item'
-			//	is really a jsonPathStore item.  Currently
-			//	it only verifies structure.  It does not verify
+			//	is really a jsonPathStore item.	Currently
+			//	it only verifies structure.	It does not verify
 			//	that it belongs to this store at this time.
 			//
 			//	item: /* object */
 			//	attribute: /* string */
-		
-			if (!dojo.isObject(item) || !item[this.metaLabel]){return false}
-			if (this.requireId && this._hasId && !item[this._id]){return false}
+
+			if(!dojo.isObject(item) || !item[this.metaLabel]){return false}
+			if(this.requireId && this._hasId && !item[this._id]){return false}
 			return true;
 		},
 
@@ -382,7 +382,7 @@ dojo.declare("dojox.data.jsonPathStore",
 
 		loadItem: function(item){
 			// summary:
-			//	returns true. Future implementatins might alter this 
+			//	returns true. Future implementatins might alter this
 			return true;
 		},
 
@@ -393,7 +393,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	if the meta attribute already exists, mix 'props'
 			//	into it.
 
-			if (item && item[this.metaLabel]){
+			if(item && item[this.metaLabel]){
 				dojo.mixin(item[this.metaLabel], props);
 				return;
 			}
@@ -406,7 +406,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	Recurses through 'data' and removes an
 			//	meta information that has been attached. This
 			//	function will also removes any id's that were autogenerated
-			//	from objects.  It will not touch id's that were not generated
+			//	from objects.	It will not touch id's that were not generated
 
 			data = data || this._data;
 
@@ -430,26 +430,26 @@ dojo.declare("dojox.data.jsonPathStore",
 					}
 				}
 			}
-		}, 
+		},
 
 		fetch: function(args){
 			//console.log("fetch() ", args);
 			// summary
-			//	
+			//
 			//	fetch takes either a string argument or a keywordArgs
 			//	object containing the parameters for the search.
 			//	If passed a string, fetch will interpret this string
-			//	as the query to be performed and will do so in 
+			//	as the query to be performed and will do so in
 			//	SYNC_MODE returning the results immediately.
-			//	If an object is supplied as 'args', its options will be 
-			// 	parsed and then contained query executed. 
+			//	If an object is supplied as 'args', its options will be
+			// 	parsed and then contained query executed.
 			//
 			//	query: /* string or object */
-			//		Defaults to "$..*". jsonPath query to be performed 
+			//		Defaults to "$..*". jsonPath query to be performed
 			//		on data store. **note that since some widgets
 			//		expect this to be an object, an object in the form
 			//		of {query: '$[*'], queryOptions: "someOptions"} is
-			//		acceptable	
+			//		acceptable
 			//
 			//	mode: dojox.data.SYNC_MODE || dojox.data.ASYNC_MODE
 			//		Override the stores default mode.
@@ -472,82 +472,82 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	onBegin: /* function */
 			//		called before any results are returned. Parameters
 			//		will be the count and the original fetch request
-			//	
+			//
 			//	onItem: /*function*/
-			//		called for each returned item.  Parameters will be
+			//		called for each returned item.	Parameters will be
 			//		the item and the fetch request
 			//
 			//	onComplete: /* function */
-			//		called on completion of the request.  Parameters will	
+			//		called on completion of the request.	Parameters will
 			//		be the complete result set and the request
 			//
 			//	onError: /* function */
 			//		colled in the event of an error
 
-			// we're not started yet, add this request to a queue and wait till we do	
-			if (!this._data){
+			// we're not started yet, add this request to a queue and wait till we do
+			if(!this._data){
 				this._fetchQueue.push(args);
 				return args;
-			}	
+			}
 			if(dojo.isString(args)){
 					query = args;
 					args={query: query, mode: dojox.data.SYNC_MODE};
-					
+
 			}
 
 			var query;
-			if (!args || !args.query){
-				if (!args){
-					var args={};	
+			if(!args || !args.query){
+				if(!args){
+					var args={};
 				}
 
-				if (!args.query){
+				if(!args.query){
 					args.query="$..*";
 					query=args.query;
 				}
 
 			}
 
-			if (dojo.isObject(args.query)){
-				if (args.query.query){
+			if(dojo.isObject(args.query)){
+				if(args.query.query){
 					query = args.query.query;
 				}else{
 					query = args.query = "$..*";
 				}
-				if (args.query.queryOptions){
+				if(args.query.queryOptions){
 					args.queryOptions=args.query.queryOptions
 				}
 			}else{
 				query=args.query;
 			}
 
-			if (!args.mode) {args.mode = this.mode;}
-			if (!args.queryOptions) {args.queryOptions={};}
+			if(!args.mode){args.mode = this.mode;}
+			if(!args.queryOptions){args.queryOptions={};}
 
 			args.queryOptions.resultType='BOTH';
 			var results = dojox.jsonPath.query(this._data, query, args.queryOptions);
 			var tmp=[];
 			var count=0;
-			for (var i=0; i<results.length; i++){
+			for(var i=0; i<results.length; i++){
 				if(args.start && i<args.start){continue;}
-				if (args.count && (count >= args.count)) { continue; }
+				if(args.count && (count >= args.count)){ continue; }
 
 				var item = results[i]["value"];
 				var path = results[i]["path"];
-				if (!dojo.isObject(item)){continue;}
+				if(!dojo.isObject(item)){continue;}
 				if(this.metaRegex.exec(path)){continue;}
 
 				//this automatically records the objects path
 				this._updateMeta(item,{path: results[i].path});
 
-				//if autoIdentity and no id, generate one and add it to the item
+				//ifautoIdentity and no id, generate one and add it to the item
 				if(this.autoIdentity && !item[this.idAttribute]){
 					var newId = this.autoIdPrefix + this._autoId++;
 					item[this.idAttribute]=newId;
 					item[this.metaLabel].autoId=true;
 				}
 
-				//add item to the item index if appropriate
+				//add item to the item index ifappropriate
 				if(item[this.idAttribute]){this.index[item[this.idAttribute]]=item}
 				count++;
 				tmp.push(item);
@@ -555,25 +555,25 @@ dojo.declare("dojox.data.jsonPathStore",
 			results = tmp;
 			var scope = args.scope || dojo.global;
 
-			if ("sort" in args){
+			if("sort" in args){
 				console.log("TODO::add support for sorting in the fetch");
-			}	
+			}
 
-			if (args.mode==dojox.data.SYNC_MODE){ 
-				return results; 
+			if(args.mode == dojox.data.SYNC_MODE){
+				return results;
 			};
 
-			if (args.onBegin){	
+			if(args.onBegin){
 				args["onBegin"].call(scope, results.length, args);
 			}
 
-			if (args.onItem){
-				for (var i=0; i<results.length;i++){	
+			if(args.onItem){
+				for(var i=0; i<results.length;i++){
 					args["onItem"].call(scope, results[i], args);
 				}
 			}
- 
-			if (args.onComplete){
+
+			if(args.onComplete){
 				args["onComplete"].call(scope, results, args);
 			}
 
@@ -589,9 +589,9 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	data: /* object */
 			//		Defaults to the root of the store.
 		 	//		The data to be exported.
-			//	
+			//
 			//	clone: /* boolean */
-			//		clone the data set before returning it 
+			//		clone the data set before returning it
 			//		or modifying it for export
 			//
 			//	cleanMeta: /* boolean */
@@ -605,28 +605,28 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	suppressExportMeta: /* boolean */
 			//		By default, when data is exported from the store
 			//		some information, such as as a timestamp, is
-			//		added to the root of exported data.  This
-			//		prevents that from happening.  It is mainly used
-			//		for making tests easier.
+			//		added to the root of exported data.	This
+			//		prevents that from happening.	It is mainly used
+			//		formaking tests easier.
 			//
 			//	type: "raw" || "json"
-			//		Defaults to 'json'. 'json' will convert the data into 
+			//		Defaults to 'json'. 'json' will convert the data into
 			//		json before returning it. 'raw' will just return a
-			//		reference to the object	 
+			//		reference to the object
 
 			var options = options || {};
 			var d = options.data || this._data;
-	
-			if (!options.suppressExportMeta && options.clone){
+
+			if(!options.suppressExportMeta && options.clone){
 				data = dojo.clone(d);
-				if (data[this.metaLabel]){
+				if(data[this.metaLabel]){
 					data[this.metaLabel]["clone"]=true;
 				}
 			}else{
 				var data=d;
 			}
 
-			if (!options.suppressExportMeta &&  data[this.metaLabel]){
+			if(!options.suppressExportMeta && 	data[this.metaLabel]){
 				data[this.metaLabel]["last_export"]=new Date().toString()
 			}
 
@@ -634,7 +634,7 @@ dojo.declare("dojox.data.jsonPathStore",
 				this.cleanMeta(data);
 			}
 
-			//console.log("Exporting: ", options, dojo.toJson(data));	
+			//console.log("Exporting: ", options, dojo.toJson(data));
 			switch(options.type){
 				case "raw":
 					return data;
@@ -642,13 +642,13 @@ dojo.declare("dojox.data.jsonPathStore",
 				default:
 					return dojo.toJson(data, options.pretty || false);
 			}
-		},	
+		},
 
 		getFeatures: function(){
 			// summary:
 			// 	return the store feature set
 
-			return { 
+			return {
 				"dojo.data.api.Read": true,
 				"dojo.data.api.Identity": true,
 				"dojo.data.api.Write": true,
@@ -659,24 +659,24 @@ dojo.declare("dojox.data.jsonPathStore",
 		getLabel: function(item){
 			// summary
 			//	returns the label for an item. The label
-			//	is created by setting the store's labelAttribute 
+			//	is created by setting the store's labelAttribute
 			//	property with either an attribute name	or an array
-			//	of attribute names.  Developers can also
+			//	of attribute names.	Developers can also
 			//	provide the store with a createLabel function which
-			//	will do the actaul work of creating the label.  If not
+			//	will do the actaul work of creating the label.	If not
 			//	the default will just concatenate any of the identified
 			//	attributes together.
 			item = this._correctReference(item);
 			var label="";
 
-			if (dojo.isFunction(this.createLabel)){
+			if(dojo.isFunction(this.createLabel)){
 				return this.createLabel(item);
 			}
 
-			if (this.labelAttribute){
-				if (dojo.isArray(this.labelAttribute))	{
+			if(this.labelAttribute){
+				if(dojo.isArray(this.labelAttribute))	{
 					for(var i=0; i<this.labelAttribute.length; i++){
-						if (i>0) { label+=" ";}
+						if(i>0){ label+=" ";}
 						label += item[this.labelAttribute[i]];
 					}
 					return label;
@@ -705,7 +705,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	returns the identity of an item or throws
 			//	a not found error.
 
-			if (this.isItem(item)){
+			if(this.isItem(item)){
 				return item[this.idAttribute];
 			}
 			throw new Error("Id not found for item");
@@ -713,56 +713,56 @@ dojo.declare("dojox.data.jsonPathStore",
 
 		getIdentityAttributes: function(item){
 			// summary:
-			//	returns the attributes which are used to make up the 
-			//	identity of an item.  Basically returns this.idAttribute
+			//	returns the attributes which are used to make up the
+			//	identity of an item.	Basically returns this.idAttribute
 
 			return [this.idAttribute];
 		},
 
 		fetchItemByIdentity: function(args){
-			// summary: 
+			// summary:
 			//	fetch an item by its identity. This store also provides
 			//	a much more finger friendly alias, 'byId' which does the
-			//	same thing as this function.  If provided a string
-			//	this call will be treated as a SYNC request and will 
-			//	return the identified item immediatly.  Alternatively it
+			//	same thing as this function.	If provided a string
+			//	this call will be treated as a SYNC request and will
+			//	return the identified item immediatly.	Alternatively it
 			// 	takes a object as a set of keywordArgs:
-			//	
+			//
 			//	identity: /* string */
 			//		the id of the item you want to retrieve
-			//	
+			//
 			//	mode: dojox.data.SYNC_MODE || dojox.data.ASYNC_MODE
 			//		overrides the default store fetch mode
-			//	
+			//
 			//	onItem: /* function */
-			//		Result call back.  Passed the fetched item.
+			//		Result call back.	Passed the fetched item.
 			//
 			//	onError: /* function */
-			//		error callback.	
-			var id;	
-			if (dojo.isString(args)){
+			//		error callback.
+			var id;
+			if(dojo.isString(args)){
 				id = args;
 				args = {identity: id, mode: dojox.data.SYNC_MODE}
 			}else{
-				if (args){
-					id = args["identity"];		
+				if(args){
+					id = args["identity"];
 				}
-				if (!args.mode){args.mode = this.mode}	
+				if(!args.mode){args.mode = this.mode}
 			}
 
-			if (this.index && (this.index[id] || this.index["identity"])){
-				
-				if (args.mode==dojox.data.SYNC_MODE){
+			if(this.index && (this.index[id] || this.index["identity"])){
+
+				if(args.mode == dojox.data.SYNC_MODE){
 					return this.index[id];
 				}
 
-				if (args.onItem){
+				if(args.onItem){
 					args["onItem"].call(args.scope || dojo.global, this.index[id], args);
 				}
 
 				return args;
 			}else{
-				if (args.mode==dojox.data.SYNC_MODE){
+				if(args.mode == dojox.data.SYNC_MODE){
 					return false;
 				}
 			}
@@ -771,16 +771,16 @@ dojo.declare("dojox.data.jsonPathStore",
 			if(args.onError){
 				args["onItem"].call(args.scope || dojo.global, new Error("Item Not Found: " + id), args);
 			}
-			
+
 			return args;
 		},
 
 		_makeItAnItem: function(data, pInfo){
 			// Summary:
 			//	add the meta data to the item and descendants
-			
+
 			var meta={};
-			
+
 			if(this.idAttribute && !data[this.idAttribute]){
 				if(this.requireId){
 					throw new Error("requireId is enabled, new items must have an id defined to be added");
@@ -795,11 +795,11 @@ dojo.declare("dojox.data.jsonPathStore",
 			if(!pInfo && !pInfo.attribute && !this.idAttribute && !data[this.idAttribute]){
 				throw new Error("Adding a new item requires, at a minimum, either the pInfo information, including the pInfo.attribute, or an id on the item in the field identified by idAttribute");
 			}
-			
+
 			if(!pInfo.attribute){
 				pInfo.attribute = data[this.idAttribute];
 			}
-			
+
 			//add this item to the index
 			if(data[this.idAttribute]){
 				this.index[data[this.idAttribute]]=data;
@@ -812,28 +812,28 @@ dojo.declare("dojox.data.jsonPathStore",
 
 			//mark this new item as dirty
 			this._setDirty(data);
-			
-			//Itemize the children the children if any
+
+			//Itemize the children the children ifany
 			if(data[pInfo.attribute] && dojo.isArray(data[pInfo.attribute])){
 				for(var i=0; i<data[pInfo.attribute].length; i++){
 					this._makeItAnItem(data[pInfo.attribute][i], {item: data, attribute: pInfo.attribute});
 				}
 			}
-			
+
 			return data;
 		},
-		
+
 		//Write API Support
 		newItem: function(data, options){
 			// summary:
 			//	adds a new item to the store at the specified point.
-			//	Takes two parameters, data, and options. 
+			//	Takes two parameters, data, and options.
 			//
 			//	data: /* object */
-			//		The data to be added in as an item.  This could be a
-			//		new javascript object, or it could be an item that 
-			//		already exists in the store.  If it already exists in the 
-			//		store, then this will be added as a reference.  
+			//		The data to be added in as an item.	This could be a
+			//		new javascript object, or it could be an item that
+			//		already exists in the store.	If it already exists in the
+			//		store, then this will be added as a reference.
 			//
 			//	options: /* object */
 			//
@@ -841,7 +841,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//			reference to an existing store item
 			//
 			//		attribute: /* string */
-			//			attribute to add the item at.  If this is
+			//			attribute to add the item at.	If this is
 			//			not provided, the item's id will be used as the
 			//			attribute name. If specified attribute is an
 			//			array, the new item will be push()d on to the
@@ -852,8 +852,8 @@ dojo.declare("dojox.data.jsonPathStore",
 			//default parent to the store root;
 			var pInfo ={item:this._data};
 
-			if (options){
-				if (options.parent){
+			if(options){
+				if(options.parent){
 					options.item = options.parent;
 				}
 
@@ -875,7 +875,7 @@ dojo.declare("dojox.data.jsonPathStore",
 			//Notification API
 			this.onNew(data, pInfo);
 
-			//Notification API for the children 
+			//Notification API for the children
 			if(data[pInfo.attribute] && dojo.isArray(data[pInfo.attribute])){
 				for(var i=0; i<data[pInfo.attribute].length; i++){
 					this.onNew(data[pInfo.attribute][i], {item: data, attribute: pInfo.attribute});
@@ -893,17 +893,17 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	only a string, the string for parent info, it will only
 			//	it will be treated as a string reference
 
-			//console.log("_addReference: ", item, pInfo);	
+			//console.log("_addReference: ", item, pInfo);
 			var rid = '_ref_' + this._referenceId++;
-			if (!item[this.metaLabel]["referenceIds"]){
+			if(!item[this.metaLabel]["referenceIds"]){
 				item[this.metaLabel]["referenceIds"]=[];
 			}
 
 			item[this.metaLabel]["referenceIds"].push(rid);
-			this._references[rid] = pInfo;				
+			this._references[rid] = pInfo;
 		},
 
-		deleteItem: function(item){	
+		deleteItem: function(item){
 			// summary
 			//	deletes item and any references to that item from the store.
 			//	If the desire is to delete only one reference, unsetAttribute or
@@ -911,7 +911,7 @@ dojo.declare("dojox.data.jsonPathStore",
 
 			item = this._correctReference(item);
 			console.log("Item: ", item);
-			if (this.isItem(item)){
+			if(this.isItem(item)){
 				while(item[this.metaLabel]["referenceIds"].length>0){
 					console.log("refs map: " , this._references);
 					console.log("item to delete: ", item);
@@ -920,43 +920,43 @@ dojo.declare("dojox.data.jsonPathStore",
 
 					console.log("deleteItem(): ", pInfo, pInfo.parent);
 					var parentItem = pInfo.parent;
-					var attribute = pInfo.attribute;	
+					var attribute = pInfo.attribute;
 					if(parentItem && parentItem[attribute] && !dojo.isArray(parentItem[attribute])){
 						this._setDirty(parentItem);
 						this.unsetAttribute(parentItem, attribute);
 						delete parentItem[attribute];
 					}
 
-					if (dojo.isArray(parentItem[attribute])){
+					if(dojo.isArray(parentItem[attribute])){
 						console.log("Parent is array");
 						var oldValue = this._trimItem(parentItem[attribute]);
 						var found=false;
-						for (var i=0; i<parentItem[attribute].length && !found;i++){
-							if (parentItem[attribute][i][this.metaLabel]===item[this.metaLabel]){
-								found=true;	
-							}			
-						}	
+						for(var i=0; i<parentItem[attribute].length && !found;i++){
+							if(parentItem[attribute][i][this.metaLabel]===item[this.metaLabel]){
+								found=true;
+							}
+						}
 
-						if (found){
+						if(found){
 							this._setDirty(parentItem);
-							var del =  parentItem[attribute].splice(i-1,1);
+							var del =	parentItem[attribute].splice(i-1,1);
 							delete del;
 						}
 
 						var newValue = this._trimItem(parentItem[attribute]);
-						this.onSet(parentItem,attribute,oldValue,newValue);	
+						this.onSet(parentItem,attribute,oldValue,newValue);
 					}
 					delete this._references[rid];
 
 				}
-				this.onDelete(item);		
+				this.onDelete(item);
 				delete this.index[item[this.idAttribute]];
 			}
 		},
 
 		_setDirty: function(item){
 			// summary:
-			//	adds an item to the list of dirty items.  This item
+			//	adds an item to the list of dirty items.	This item
 			//	contains a reference to the item itself as well as a
 			//	cloned and trimmed version of old item for use with
 			//	revert.
@@ -969,14 +969,14 @@ dojo.declare("dojox.data.jsonPathStore",
 			}
 			for(var i=0; i<this._dirtyItems.length; i++){
 				if(item[this.idAttribute]==this._dirtyItems[i][this.idAttribute]){
-					return; 
-				}	
+					return;
+				}
 			}
 
 
 			this._dirtyItems.push({item: item, old: this._trimItem(item)});
 			this._updateMeta(item, {isDirty: true});
-			
+
 		},
 
 		setValue: function(item, attribute, value){
@@ -998,7 +998,7 @@ dojo.declare("dojox.data.jsonPathStore",
 
 
 			item = this._correctReference(item);
-			if (!dojo.isArray(values)){throw new Error("setValues expects to be passed an Array object as its value");}
+			if(!dojo.isArray(values)){throw new Error("setValues expects to be passed an Array object as its value");}
 			this._setDirty(item);
 			var old = item[attribute] || null;
 			item[attribute]=values
@@ -1019,23 +1019,23 @@ dojo.declare("dojox.data.jsonPathStore",
 		save: function(kwArgs){
 			// summary:
 			//	Takes an optional set of keyword Args with
-			//	some save options.  Currently only format with options
-			//	being "raw" or "json".  This function goes through
+			//	some save options.	Currently only format with options
+			//	being "raw" or "json".	This function goes through
 			//	the dirty item lists, clones and trims the item down so that
 			//	the items children are not part of the data (the children are replaced
 			//	with reference objects). This data is compiled into a single array, the dirty objects
 			//	are all marked as clean, and the new data is then passed on to the onSave handler.
 
 			var data = [];
-		
-			if (!kwArgs){kwArgs={}}
-			while (this._dirtyItems.length > 0){
+
+			if(!kwArgs){kwArgs={}}
+			while(this._dirtyItems.length > 0){
 				var item = this._dirtyItems.pop()["item"];
 				var t = this._trimItem(item);
-				var d;	
-				switch(kwArgs.format){	
+				var d;
+				switch(kwArgs.format){
 					case "json":
-						d = dojo.toJson(t);	
+						d = dojo.toJson(t);
 						break;
 					case "raw":
 					default:
@@ -1052,16 +1052,16 @@ dojo.declare("dojox.data.jsonPathStore",
 			// summary
 			//	remove this meta information marking an item as "dirty"
 
-			if (item && item[this.metaLabel] && item[this.metaLabel]["isDirty"]){
+			if(item && item[this.metaLabel] && item[this.metaLabel]["isDirty"]){
 				delete item[this.metaLabel]["isDirty"];
-			}	
+			}
 		},
 
 		revert: function(){
 			// summary
 			//	returns any modified data to its original state prior to a save();
 
-			while (this._dirtyItems.length>0){
+			while(this._dirtyItems.length>0){
 				var d = this._dirtyItems.pop();
 				this._mixin(d.item, d.old);
 			}
@@ -1073,16 +1073,16 @@ dojo.declare("dojox.data.jsonPathStore",
 			//	specialized mixin that hooks up objects in the store where references are identified.
 			var mix;
 
-			if (dojo.isObject(data)){
-				if (dojo.isArray(data)){
+			if(dojo.isObject(data)){
+				if(dojo.isArray(data)){
 					while(target.length>0){target.pop();}
-					for (var i=0; i<data.length;i++){
-						if (dojo.isObject(data[i])){
-							if (dojo.isArray(data[i])){
+					for(var i=0; i<data.length;i++){
+						if(dojo.isObject(data[i])){
+							if(dojo.isArray(data[i])){
 								mix=[];
 							}else{
 								mix={};
-								if (data[i][this.metaLabel] && data[i][this.metaLabel]["type"] && data[i][this.metaLabel]["type"]=='reference'){
+								if(data[i][this.metaLabel] && data[i][this.metaLabel]["type"] && data[i][this.metaLabel]["type"]=='reference'){
 									target[i]=this.index[data[i][this.idAttribute]];
 									continue;
 								}
@@ -1093,19 +1093,19 @@ dojo.declare("dojox.data.jsonPathStore",
 						}else{
 							target.push(data[i]);
 						}
-					}	
+					}
 				}else{
-					for (var i in target){
-						if (i in data){continue;}
+					for(var i in target){
+						if(i in data){continue;}
 						delete target[i];
 					}
 
-					for (var i in data){
-						if (dojo.isObject(data[i])){
-							if (dojo.isArray(data[i])){
+					for(var i in data){
+						if(dojo.isObject(data[i])){
+							if(dojo.isArray(data[i])){
 								mix=[];
 							}else{
-								if (data[i][this.metaLabel] && data[i][this.metaLabel]["type"] && data[i][this.metaLabel]["type"]=='reference'){
+								if(data[i][this.metaLabel] && data[i][this.metaLabel]["type"] && data[i][this.metaLabel]["type"]=='reference'){
 									target[i]=this.index[data[i][this.idAttribute]];
 									continue;
 								}
@@ -1117,7 +1117,7 @@ dojo.declare("dojox.data.jsonPathStore",
 						}else{
 							target[i]=data[i];
 						}
-					}	
+					}
 
 				}
 			}
@@ -1150,42 +1150,42 @@ dojo.declare("dojox.data.jsonPathStore",
 			// 	copy an item recursively stoppying at other items that have id's
 			//	and replace them with a refrence object;
 			var copy;
-			if (dojo.isArray(item)){
+			if(dojo.isArray(item)){
 				copy = [];
-				for (var i=0; i<item.length;i++){
-					if (dojo.isArray(item[i])){
+				for(var i=0; i<item.length;i++){
+					if(dojo.isArray(item[i])){
 						copy.push(this._trimItem(item[i]))
 					}else if (dojo.isObject(item[i])){
-						if (item[i]["getFullYear"]){
+						if(item[i]["getFullYear"]){
 							copy.push(dojo.date.stamp.toISOString(item[i]));
 						}else if (item[i][this.idAttribute]){
 							copy.push(this._createReference(item[i]));
 						}else{
-							copy.push(this._trimItem(item[i]));	
+							copy.push(this._trimItem(item[i]));
 						}
-					} else {
-						copy.push(item[i]);	
+					}else{
+						copy.push(item[i]);
 					}
 				}
 				return copy;
-			} 
+			}
 
-			if (dojo.isObject(item)){
+			if(dojo.isObject(item)){
 				copy = {};
 
-				for (var attr in item){
-					if (!item[attr]){ copy[attr]=undefined;continue;}
-					if (dojo.isArray(item[attr])){
+				for(var attr in item){
+					if(!item[attr]){ copy[attr]=undefined;continue;}
+					if(dojo.isArray(item[attr])){
 						copy[attr] = this._trimItem(item[attr]);
 					}else if (dojo.isObject(item[attr])){
-						if (item[attr]["getFullYear"]){
-							copy[attr] =  dojo.date.stamp.toISOString(item[attr]);
+						if(item[attr]["getFullYear"]){
+							copy[attr] =	dojo.date.stamp.toISOString(item[attr]);
 						}else if(item[attr][this.idAttribute]){
 							copy[attr]=this._createReference(item[attr]);
-						} else {
+						}else{
 							copy[attr]=this._trimItem(item[attr]);
 						}
-					} else {
+					}else{
 						copy[attr]=item[attr];
 					}
 				}
@@ -1195,39 +1195,39 @@ dojo.declare("dojox.data.jsonPathStore",
 
 		/* dojo.data.api.Notification */
 		onSet: function(/* item */ item,
-		                /*attribute-name-string*/ attribute,
-		                /*object | array*/ oldValue,
-		                /*object | array*/ newValue){
+						/*attribute-name-string*/ attribute,
+						/*object | array*/ oldValue,
+						/*object | array*/ newValue){
 			// summary: See dojo.data.api.Notification.onSet()
 
-			// No need to do anything. This method is here just so that the 
-			// client code can connect observers to it. 
+			// No need to do anything. This method is here just so that the
+			// client code can connect observers to it.
 		},
-	
+
 		onNew: function(/* item */ newItem, /*object?*/ parentInfo){
 			// summary: See dojo.data.api.Notification.onNew()
 
-			// No need to do anything. This method is here just so that the 
-			// client code can connect observers to it. 
+			// No need to do anything. This method is here just so that the
+			// client code can connect observers to it.
 		},
 
 		onDelete: function(/* item */ deletedItem){
 			// summary: See dojo.data.api.Notification.onDelete()
 
-			// No need to do anything. This method is here just so that the 
-			// client code can connect observers to it. 
-		},	
-	
+			// No need to do anything. This method is here just so that the
+			// client code can connect observers to it.
+		},
+
 		onSave: function(items){
 			// summary:
-			//	notification of the save event..not part of the notification api, 
+			//	notification of the save event..not part of the notification api,
 			//	but probably should be.
 			//console.log("onSave() ", items);
 		},
 
 		onRevert: function(){
 			// summary:
-			//	notification of the revert event..not part of the notification api, 
+			//	notification of the revert event..not part of the notification api,
 			//	but probably should be.
 
 		}
