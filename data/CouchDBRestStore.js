@@ -10,7 +10,7 @@ dojo.require("dojox.data.JsonRestStore");
 dojo.declare("dojox.data.CouchDBRestStore",
 	dojox.data.JsonRestStore,
 	{
-		save: function(kwArgs) {
+		save: function(kwArgs){
 			var actions = this.inherited(arguments); // do the default save and then update for version numbers
 			var prefix = this.service.servicePath;
 			for(var i = 0; i < actions.length; i++){
@@ -47,7 +47,7 @@ dojo.declare("dojox.data.CouchDBRestStore",
 				var self = this;
 				for(var i = 0; i < rows.length;i++){
 					rows[i] = {
-						__id: prefix + rows[i].id, 
+						__id: prefix + rows[i].id,
 						_id: rows[i].id,
 						_loadObject: function(callback){
 							self.fetchItemByIdentity({
@@ -62,7 +62,7 @@ dojo.declare("dojox.data.CouchDBRestStore",
 			}else{
 				return {items:results};
 			}
-						
+
 		}
 	}
 );
