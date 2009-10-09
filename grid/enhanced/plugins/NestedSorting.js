@@ -906,6 +906,10 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 			item[this.storeItemSelected] && item[this.storeItemSelected][0] && this.selection.addToSelection(req.start+idx);
 		}, this);
 		dojo.publish(this.sortRowSelectionChangedTopic,[this]);
+		if(dojo.isMoz && this._by_idx.length == 0){
+			//Fix a weird issue in FF, when there are empty rows after page loaded
+			this.update();
+		}
 	}, 
 
 	allSelectionToggled: function(checked){

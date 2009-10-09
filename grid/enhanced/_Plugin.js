@@ -326,5 +326,30 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		var p = this.getNode(inRowIndex).firstChild, 
 		box = dojo.contentBox(p);
 		dojo.marginBox(this.widget.domNode, {w: box.w});
+	},
+	
+	getViewByCellIdx: function(cellIdx){
+		//summary:
+		//		Find view that contains the cell with 'cellIdx'
+		//cellIdx: Integer
+		//		Index of target cell
+		//return: Object
+		//		Matched view
+		var cellMatched = function(cells){
+			var j = 0, matched = false;
+			for(; j < cells.length; j++){
+				if(dojo.isArray(cells[j])){
+					if(cellMatched(cells[j])){ return true;}
+				}else if(cells[j].index == cellIdx){
+					return true;
+				}
+			}
+		};
+		var i = 0, views = this.grid.views.views;
+		for(; i < views.length; i++){
+			cells = views[i].structure.cells;
+			if(cellMatched(cells)){ return views[i]; }
+		}
+		return null;
 	}	
 });

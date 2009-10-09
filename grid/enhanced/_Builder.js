@@ -45,13 +45,7 @@ dojo.declare("dojox.grid.enhanced._HeaderBuilder", [dojox.grid._HeaderBuilder, d
 			var no = ascendDom(e.target, makeNotTagName("th"));
             //console.log(dojo.coords(no).x, e.clientX);
 			var x = no ? e.clientX - dojo.coords(no).x : -1;
-			//fix rtl in IE - the scroll bar is on the left side, the e.clientX need to minus it.
-			if(dojo.isIE && !dojo._isBodyLtr()) {
-				if(dojo.style(dojo.body(), 'overflow') != 'hidden') {
-					x -= dojox.html.metrics.getScrollbar().h;
-				}
-			}			
-			if (dojo.isIE) {
+			if(dojo.isIE){
 				//fix zoom issue in IE				
 				var rect = dojo.body().getBoundingClientRect();
 				var zoomLevel = (rect.right - rect.left) / document.body.clientWidth;
@@ -88,7 +82,7 @@ dojo.declare("dojox.grid.enhanced._HeaderBuilder", [dojox.grid._HeaderBuilder, d
 		}
 	},
 	
-	colResizeSetup: function(e, isMouse ){
+	colResizeSetup: function(e, isMouse){
 		// summary:
 		//		Overwritten, see dojox.grid._HeaderBuilder.colResizeSetup()
 		//		Set minimal column width for unfixed cells when nested sorting is on
