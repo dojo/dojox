@@ -83,38 +83,52 @@
 <body class="tundra">
 	<h1 class="title">Test dojox.grid.EnhancedGrid Phase 1 Features</h1>
 	<div>
-		<li><b>EnhancedGrid phase 1 provides the following features:</b></li>
-		<li>1. Nested Sorting</li>
-		<li>2. Built-in support for Indirect Selection (radio buttons and check boxes)</li>
-		<li>3. Declarative context menu</li>
-		<li>4. Selecting rows/columns via swipe</li>
-		<li>5. Drag-n-drop: columns,rows - MOVE</li>
-	</duv>
-	
-	<div>
-		<li><b>Keyboard support:</b></li>
-		<li>1. Use <b>TAB or SHIFT + TAB</b> to navigate keyboard focus among column headers, row headers and cell regions</li><br/>
-		<li>2. When focus is on column header:</li>
-			<li> - Use <b>LEFT/RIGHT</b> to navigate keyboard focus among column headers </li>
-			<li> - Use <b>SPACE</b> to choose a column or sorting choice</li>
-			<li> - Use <b>SHIFT + LEFT/RIGHT</b> to select multiple columns</li>
-			<li> - Use <b>CTRL + LEFT/RIGHT</b> to move columns</li><br/>
-		<li>3. When focus is on row header or column of checkbox:</li>
-			<li> - Use <b>UP/DOWN</b> to navigate keyboard focus among row headers </li>
-			<li> - Use <b>SPACE</b> to choose a row</li>
-			<li> - Use <b>SHIFT + UP/DOWN</b> to select multiple rows</li>
-			<li> - Use <b>CTRL + UP/DOWN</b> to move rows</li>
+		<b>EnhancedGrid phase 1 provides the following features:</b>
+		<ol>
+			<li>Nested Sorting</li>
+			<li>Built-in support for Indirect Selection (radio buttons and check boxes)</li>
+			<li>Declarative context menu</li>
+			<li>Selecting rows/columns via swipe</li>
+			<li>Drag-n-drop: columns,rows - MOVE</li>
+		</ol>
 	</div>
 	
-	<div>	
-		<li><b>Some known issues (plan to fix in phase 2):</b></li>
-		<li>EnhancedGrid doesn't support complicated layout(e.g. multiple rows in column header), TreeGrid(SubGrid).</li>
+	<div>
+		<b>Keyboard support:</b>
+		<ol>
+			<li>Use <b>TAB or SHIFT + TAB</b> to navigate keyboard focus among column headers, row headers and cell regions</li>
+			<li>When focus is on column header:<br>
+				<ol style="list-style: none;">
+					<li> - Use <b>LEFT/RIGHT</b> to navigate keyboard focus among column headers </li>
+					<li> - Use <b>SPACE</b> to choose a column or sorting choice</li>
+					<li> - Use <b>SHIFT + LEFT/RIGHT</b> to select multiple columns</li>
+					<li> - Use <b>CTRL + LEFT/RIGHT</b> to move columns</li>
+				</ol>
+			</li>
+			<li>When focus is on row header or column of checkbox:<br>
+				<ol style="list-style: none;">
+					<li> - Use <b>UP/DOWN</b> to navigate keyboard focus among row headers </li>
+					<li> - Use <b>SPACE</b> to choose a row</li>
+					<li> - Use <b>SHIFT + UP/DOWN</b> to select multiple rows</li>
+					<li> - Use <b>CTRL + UP/DOWN</b> to move rows</li>
+				</ol>
+			</li>
+		</ol>
+	</div>
+	
+	<div>
+		<b>Some known issues (plan to fix in phase 2):</b>
+		<ol>	
+			<li>EnhancedGrid doesn't support complicated layout(e.g. multiple rows in column header), TreeGrid(SubGrid).</li>
+		</ol>
 	</div>
 	<!--span dojoType="dojox.data.CsvStore" 
 		jsId="csvStore1" url="support/music-for-demo.part.csv">
 	</span-->
 	<div>
-		<li>Multiple selection mode:</li>
+		<b>
+		    Multiple selection mode:
+		</b>
 		<div id="grid1" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" 
 			plugins='{nestedSorting: true, dnd: true, indirectSelection: true, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
 			store="csvStore1" structure="layout" rowSelector="20px">
@@ -153,7 +167,9 @@
 	<div id="gridDiv"></div>
 	
 	<div>
-		<li>Single selection mode:</li>
+		<b>
+		    Single selection mode:
+		</b>
 		<div id="grid2" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" selectionMode="single"
 			plugins='{nestedSorting: true, dnd: true, indirectSelection: {name: "Selection", width:"60px", styles:"text-align: center;"}, menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}'
 			store="csvStore1" structure="layout" rowSelector="20px"  
