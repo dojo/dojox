@@ -26,7 +26,10 @@
 					grid: null,
 					timeout:5000,
 					setUp: function(){
-						this.grid = new dojo.global.dojox.grid.DataGrid({id:'prog_grid_1',structure:dojo.global.structure1},dojo.byId('prog_grid_1'));
+						var params = new dojo.global.Object();
+						params.id = 'prog_grid_1';
+						params.structure = dojo.global.structure1;
+						this.grid = new dojo.global.dojox.grid.DataGrid(params, dojo.byId('prog_grid_1'));
 						this.grid.startup();
 					},
 					runTest: function(){
@@ -57,7 +60,11 @@
 					grid: null,
 					timeout:5000,
 					setUp: function(){
-						this.grid = new dojo.global.dojox.grid.DataGrid({id:'prog_grid_1',structure:dojo.global.structure1,store:dojo.global.structure1_store1},dojo.byId('prog_grid_1'));
+						var params = new dojo.global.Object();
+						params.id = 'prog_grid_1';
+						params.structure = dojo.global.structure1;
+						params.store = dojo.global.structure1_store1;
+						this.grid = new dojo.global.dojox.grid.DataGrid(params, dojo.byId('prog_grid_1'));
 						this.grid.startup();
 					},
 					runTest: function(){
@@ -190,7 +197,12 @@
 					grid: null,
 					timeout:15000,
 					setUp: function(){
-						this.grid = new dojo.global.dojox.grid.DataGrid({id:'prog_grid_1',structure:dojo.global.structure1,store:dojo.global.structure1_store1,query:{ id: '*' }},dojo.byId('prog_grid_1'));
+						var params = new dojo.global.Object();
+						params.id = 'prog_grid_1';
+						params.structure = dojo.global.structure1;
+						params.store = dojo.global.structure1_store1;
+						params.query = { id: '*' };
+						this.grid = new dojo.global.dojox.grid.DataGrid(params,dojo.byId('prog_grid_1'));
 						this.grid.startup();
 					},
 					runTest: function(){
