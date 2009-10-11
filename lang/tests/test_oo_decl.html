@@ -9,10 +9,7 @@
 		<script type="text/javascript">
 			//dojo.require("dojox.lang.oo.declare");
 
-			var //oo = dojox.lang.oo,
-				//decl = oo.declare, md = oo.makeDeclare,
-			    decl = dojo.declare, md = dojo.makeDeclare,
-				t;
+			var decl = dojo.declare, t, chains = true;
 
 			var test1 = function(){
 				var A = decl("A", null, {
@@ -49,12 +46,12 @@
 				var c = new C(1);
 				c.m1(2);
 				c.m2(3);
-				if(md){
-					var decl2 = md(true, {m1: "after"});
-					var D = decl2("D", C, {
+				if(chains){
+					var D = decl("D", C, {
 						constructor: function(){
 							console.log("D.constructor:", arguments);
 						},
+						"-chains-": {m1: "after"},
 						m1: function(){
 							console.log("D.m1:", arguments);
 						},
@@ -71,11 +68,11 @@
 					d.m1(2);
 					d.m2(3);
 					d.m3(4);
-					var decl3 = md(true, {m1: "before"});
-					var E = decl3("E", C, {
+					var E = decl("E", C, {
 						constructor: function(){
 							console.log("E.constructor:", arguments);
 						},
+						"-chains-": {m1: "before"},
 						m1: function(){
 							console.log("E.m1:", arguments);
 						},
@@ -137,12 +134,12 @@
 						console.log("H.m3:", arguments);
 					}
 				});
-				if(md){
-					var decl4 = md(true, {m3: "before", m2: "after"});
-					var I = decl4("I", [H, F, G], {
+				if(chains){
+					var I = decl("I", [H, F, G], {
 						constructor: function(){
 							console.log("I.constructor:", arguments);
 						},
+						"-chains-": {m3: "before", m2: "after"},
 						m1: function(){
 							console.log("I.m1:", arguments);
 							this.inherited(arguments);
@@ -169,7 +166,7 @@
 				j.m1(2);
 				j.m2(3);
 				console.log("the classic diamond test");
-				if(md){
+				if(chains){
 					var DA = decl(null, {
 						constructor: function(){
 							console.log("DA.constructor");
@@ -240,17 +237,17 @@
 					console.log(dd.toLocaleString());
 				}
 				console.log("chained constructor (but no preamble)");
-				if(md){
-					var decl5 = md(false, {constructor: "after", destroy: "before"}),
-						A = decl5(null, {
+				if(chains){
+					var A = decl(null, {
 							constructor: function(){
 								console.log("A.constructor");
 							},
+							"-chains-": {constructor: "after", destroy: "before"},
 							destroy: function(){
 								console.log("A.destroy");
 							}
 						}),
-						B = decl5(A, {
+						B = decl(A, {
 							constructor: function(){
 								console.log("B.constructor");
 							},
@@ -258,7 +255,7 @@
 								console.log("B.destroy");
 							}
 						}),
-						C = decl5(B, {
+						C = decl(B, {
 							constructor: function(){
 								console.log("C.constructor");
 							},
@@ -271,20 +268,20 @@
 					new C().destroy();
 				}
 				console.log("constructor is not chained");
-				if(md){
-					var decl6 = md(false),
-						A = decl6(null, {
+				if(chains){
+					var A = decl(null, {
 							constructor: function(){
 								console.log("A.constructor");
-							}
+							},
+							"-chains-": {constructor: "manual"}
 						}),
-						B = decl6(A, {
+						B = decl(A, {
 							constructor: function(){
 								console.log("B.constructor");
 								this.inherited(arguments);
 							}
 						}),
-						C = decl6(B, {
+						C = decl(B, {
 							constructor: function(){
 								console.log("C.constructor");
 								this.inherited(arguments);
@@ -411,7 +408,7 @@
 				});
 				new ClassB;
 			};
-			
+
 			var duplicatedBases = function(){
 				console.log("duplicated bases");
 				var A = decl(null, {
