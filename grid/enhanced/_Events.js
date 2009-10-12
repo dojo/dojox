@@ -63,12 +63,12 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// 		Overwritten, see dojox.grid._Events.onKeyDown()
 		if(e.altKey || e.metaKey){ return; }
 		
-		if (e.ctrlKey && !e.shiftKey) {
+		if (e.ctrlKey && !e.shiftKey){
 			dojo.publish("CTRL_KEY_DOWN", [this, e]);
 		}
 		var executed = false;
 		
-		if(this.isDndSelectEnable && !e.ctrlKey) {
+		if(this.isDndSelectEnable && !e.ctrlKey){
 			this.select.keepState = false;
 		}
 		if(this.isDndSelectEnable && !e.shiftKey){
@@ -80,12 +80,12 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 				executed = true;
 				if(!this.edit.isEditing()){
 					var colIdx = this.focus.getHeaderIndex();
-					if(colIdx >= 0) {
+					if(colIdx >= 0){
 						this.nestedSorting && this.focus.focusView.header.decorateEvent(e);
 						var isRowSelector = e.cell && this.pluginMgr.isFixedCell(e.cell);
 						!e.selectChoice && !isRowSelector && this.setSortIndex(colIdx, null, e);
 						break;
-					}else {
+					}else{
 						!this.indirectSelection && this.selection.clickSelect(this.focus.rowIndex, dojo.isCopyKey(e), e.shiftKey);
 					}
 					dojo.stopEvent(e);
@@ -286,12 +286,12 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//invoke dojox.grid._Events.onCellMouseOver()
 		dojo.hitch(this, this._events.onCellMouseOver)(e);
 		var inIndirectSelectionMode = this.pluginMgr.isFixedCell(e.cell) || this.rowSelectCell && this.rowSelectCell.inIndirectSelectionMode();
-		if (this.isDndSelectEnable && !inIndirectSelectionMode) {
-			if(this.select.isInSelectingMode("col")) {
+		if(this.isDndSelectEnable && !inIndirectSelectionMode){
+			if(this.select.isInSelectingMode("col")){
 				this.select.drugSelectColumn(e.cell.index);
-			} else if(this.select.isInSelectingMode("cell")) {
+			}else if(this.select.isInSelectingMode("cell")){
 				this.select.drugSelectCell(e.cellIndex, e.rowIndex);
-			} else {
+			}else{
 				this.select.setDrugCoverDivs(e.cellIndex, e.rowIndex);
 			}
 		}
@@ -331,14 +331,14 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onCellClick: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onCellClick()
-		if(this.isDndSelectEnable) {
+		if(this.isDndSelectEnable){
 			this.focus._blurRowBar();	//fix DnD blur
 			this._click[0] = this._click[1];
 			this._click[1] = e;
 			this.select.cellClick(e.cellIndex, e.rowIndex);
 			!this.edit.isEditCell(e.rowIndex, e.cellIndex) && !this.edit.isEditing() && this.select.cleanAll();
 			this.focus.setFocusCell(e.cell, e.rowIndex);
-		} else {
+		}else{
 			//invoke dojox.grid._Events.onCellClick()
 			dojo.hitch(this, this._events.onCellClick)(e);
 		} 
@@ -348,7 +348,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onCellDblClick()
 		if(this.pluginMgr.isFixedCell(e.cell)){ return; }
-		(!this._click[0] || !this._click[1]) && (this._click[0] = this._click[1] = e);
+		this._click.length > 1 && (!this._click[0] || !this._click[1]) && (this._click[0] = this._click[1] = e);
 		//invoke dojox.grid._Events.onCellDblClick()
 		dojo.hitch(this, this._events.onCellDblClick)(e);
 	},
@@ -363,10 +363,10 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onRowMouseOver: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onRowMouseOver()
-		if (this.isDndSelectEnable && !this.pluginMgr.inSingleSelection()) {
-			if (this.select.isInSelectingMode("row")) {
+		if(this.isDndSelectEnable && !this.pluginMgr.inSingleSelection()){
+			if(this.select.isInSelectingMode("row")){
 				this.select.drugSelectRow(e.rowIndex);
-			} else {
+			}else{
 				//this.select.setDrugCoverDivs(e.cellIndex, e.rowIndex);
 			}
 		}
@@ -380,8 +380,8 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onRowMouseOut: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onRowMouseOut()
-		if (this.isDndSelectEnable) {
-			if (this.select.isInSelectingMode("row")) {
+		if(this.isDndSelectEnable){
+			if(this.select.isInSelectingMode("row")){
 				this.select.drugSelectRow(e.rowIndex);
 			}
 		}
@@ -414,10 +414,10 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 			if(this.nestedSorting && !this._inResize(e.sourceView) && !this.pluginMgr.isFixedCell(e.cell) && !(this.isDndSelectEnable && this.select.isInSelectingMode("col"))){
 				this.addHoverSortTip(e);
 			}			
-			if (this.isDndSelectEnable) {
-				if(this.select.isInSelectingMode("col")) {
+			if(this.isDndSelectEnable){
+				if(this.select.isInSelectingMode("col")){
 					this.select.drugSelectColumn(e.cell.index);
-				} else {
+				}else{
 					this.select.clearDrugDivs();
 				}
 			}
@@ -446,17 +446,17 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		var node = !this.nestedSorting ? e.cellNode : this._getChoiceRegion(e.cellNode, e/*also contains choice info*/);
 		node && dojo.addClass(node, this.headerCellActiveClass);
 		if(this.nestedSorting && !e.selectChoice){ return; }
-		if (this.isDndSelectEnable) {
+		if(this.isDndSelectEnable){
 			this.focus._blurRowBar(); //fix DnD blur
 			try{
 				this.focus.focusHeaderNode(e.cellIndex, false, true);
-			} catch(e){
+			}catch(e){
 				console.debug("Error fired in dojox.grid._event.js onHeaderCellMouseDown():" + e);
 			}
-			if(e.button == 2) {
+			if(e.button == 2){
 				return;//always return for oncontextmenu event to only show menu
 			}
-			if (e.cellNode) {
+			if(e.cellNode){
 				this.select.setInSelectingMode("col", true);
 				this.select.keepState = e.ctrlKey;
 				this.select.extendSelect = e.shiftKey;
