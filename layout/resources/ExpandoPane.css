@@ -86,6 +86,10 @@
 	.soria .dojoxExpandoIcon {
 		background-image: url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.png');
 	}
+	
+	.dj_ie6 .soria .dojoxExpandoIcon {
+		background-image: url('../../../dijit/themes/soria/images/spriteRoundedIconsSmall.gif');
+	}
 		
 	/* tundra styles */
 	.tundra .dojoxExpandoTitle {
@@ -161,6 +165,10 @@
 	
 	.nihilo .dojoxExpandoIcon {
 		background-image: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.png');
+	}
+	
+	.dj_ie6 .nihilo .dojoxExpandoIcon {
+		background-image: url('../../../dijit/themes/nihilo/images/spriteRoundedIconsSmall.gif');
 	}
 		
 	.nihilo .dojoxExpandoTop {
