@@ -15,7 +15,7 @@ dojo.mixin(dojox.fx, {
 
 	// fadeTo: Function 
 	//		Fade an element from an opacity to an opacity.
-	//		Omit start: property to detect. End: property required.
+	//		Omit `start:` property to detect. `end:` property is required.
 	//		Ultimately an alias to `dojo._fade`
 	fadeTo: dojo._fade,
 
@@ -51,7 +51,8 @@ dojo.mixin(dojox.fx, {
 
 dojox.fx.sizeTo = function(/* Object */args){
 	// summary: 
-	//		Creates an animation that will size a node 
+	//		Creates an animation that will size a node
+	//
 	// description:
 	//		Returns an animation that will size the target node
 	//		defined in args Object about it's center to
@@ -62,17 +63,18 @@ dojox.fx.sizeTo = function(/* Object */args){
 	//	- works best on absolutely or relatively positioned elements
 	//	
 	// example:
-	// |	// size #myNode to 400px x 200px over 1 second
-	// |	dojo.fx.sizeTo({
-	// |		node:'myNode',
-	// |		duration: 1000,
-	// |		width: 400,
-	// |		height: 200,
-	// |		method: "combine"
-	// |	}).play();
+	//	|	// size #myNode to 400px x 200px over 1 second
+	//	|	dojo.fx.sizeTo({
+	//	|		node:'myNode',
+	//	|		duration: 1000,
+	//	|		width: 400,
+	//	|		height: 200,
+	//	|		method: "combine"
+	//	|	}).play();
 	//
 
-	var node = args.node = dojo.byId(args.node);
+	var node = args.node = dojo.byId(args.node),
+		abs = "absolute";
 
 	var method = args.method || "chain"; 
 	if(!args.duration){ args.duration = 500; } // default duration needed
@@ -88,19 +90,19 @@ dojox.fx.sizeTo = function(/* Object */args){
 				h = cs.height
 			;
 			
-			top = (pos == 'absolute' ? n.offsetTop : parseInt(cs.top) || 0);
-			left = (pos == 'absolute' ? n.offsetLeft : parseInt(cs.left) || 0);
+			top = (pos == abs ? n.offsetTop : parseInt(cs.top) || 0);
+			left = (pos == abs ? n.offsetLeft : parseInt(cs.left) || 0);
 			width = (w == "auto" ? 0 : parseInt(w));
 			height = (h == "auto" ? 0 : parseInt(h));
 			
 			newLeft = left - Math.floor((args.width - width) / 2); 
 			newTop = top - Math.floor((args.height - height) / 2); 
 
-			if(pos != 'absolute' && pos != 'relative'){
+			if(pos != abs && pos != 'relative'){
 				var ret = dojo.coords(n, true);
 				top = ret.y;
 				left = ret.x;
-				n.style.position = "absolute";
+				n.style.position = abs;
 				n.style.top = top + "px";
 				n.style.left = left + "px";
 			}
@@ -135,19 +137,20 @@ dojox.fx.sizeTo = function(/* Object */args){
 };
 
 dojox.fx.slideBy = function(/* Object */args){
-	// summary: Returns an animation to slide a node by a defined offset.
+	// summary: 
+	//		Returns an animation to slide a node by a defined offset.
 	//
 	// description:
-	//	Returns an animation that will slide a node (args.node) from it's
-	//	current position to it's current posision plus the numbers defined
-	//	in args.top and args.left. standard dojo.fx mixin's apply. 
+	//		Returns an animation that will slide a node (args.node) from it's
+	//		current position to it's current posision plus the numbers defined
+	//		in args.top and args.left. standard dojo.fx mixin's apply. 
 	//	
 	// example:
-	// |	// slide domNode 50px down, and 22px left
-	// |	dojox.fx.slideBy({ 
-	// |		node: domNode, duration:400, 
-	// |		top: 50, left: -22 
-	// |	}).play();
+	//	|	// slide domNode 50px down, and 22px left
+	//	|	dojox.fx.slideBy({ 
+	//	|		node: domNode, duration:400, 
+	//	|		top: 50, left: -22 
+	//	|	}).play();
 
 	var node = args.node = dojo.byId(args.node),
 		top, left;
@@ -184,12 +187,13 @@ dojox.fx.slideBy = function(/* Object */args){
 };
 
 dojox.fx.crossFade = function(/* Object */args){
-	// summary: Returns an animation cross fading two element simultaneously
+	// summary: 
+	//		Returns an animation cross fading two element simultaneously
 	// 
 	// args:
 	//	args.nodes: Array - two element array of domNodes, or id's
 	//
-	// all other standard animation args mixins apply. args.node ignored.
+	//	all other standard animation args mixins apply. args.node ignored.
 	//
 
 	// simple check for which node is visible, maybe too simple?
@@ -211,13 +215,15 @@ dojox.fx.crossFade = function(/* Object */args){
 };
 
 dojox.fx.highlight = function(/*Object*/ args){
-	// summary: Highlight a node
+	// summary: 
+	//		Highlight a node
+	//
 	// description:
-	//	Returns an animation that sets the node background to args.color
-	//	then gradually fades back the original node background color
+	//		Returns an animation that sets the node background to args.color
+	//		then gradually fades back the original node background color
 	//	
 	// example:
-	//	dojox.fx.highlight({ node:"foo" }).play(); 
+	//	|	dojox.fx.highlight({ node:"foo" }).play(); 
 
 	var node = args.node = dojo.byId(args.node);
 
@@ -255,7 +261,8 @@ dojox.fx.highlight = function(/*Object*/ args){
 
  
 dojox.fx.wipeTo = function(/*Object*/ args){
-	// summary: Animate a node wiping to a specific width or height
+	// summary:
+	//		Animate a node wiping to a specific width or height
 	//	
 	// description:
 	//		Returns an animation that will expand the
@@ -265,11 +272,11 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 	//		default to height:, so leave height null and specify width:
 	//		to wipeTo a width. note: this may be deprecated by a 
 	//
-	//      Note that the final value should not include
-	//      units and should be an integer.  Thus a valid args object
-	//      would look something like this:
+	//		Note that the final value should not include
+	//		units and should be an integer.  Thus a valid args object
+	//		would look something like this:
 	//
-	//      dojox.fx.wipeTo({ node: "nodeId", height: 200 }).play();
+	//		|	dojox.fx.wipeTo({ node: "nodeId", height: 200 }).play();
 	//
 	//		Node must have no margin/border/padding, so put another
 	//		node inside your target node for additional styling.
