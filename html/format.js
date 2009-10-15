@@ -254,7 +254,6 @@ dojo.require("dojox.html.entities");
 		var openTag = function(node){
 			// summary:
 			//		Function to open a new tag for writing content.
-
 			var name = node.nodeName.toLowerCase();
 			// Generate the outer node content (tag with attrs)
 			var nText = dojo.trim(outerHTML(node));
@@ -286,8 +285,14 @@ dojo.require("dojox.html.entities");
 				
 				// Reassemble and return the styles in sorted order.
 				style = trimmedStyles.join("; ");
-				style += ";";
-				return sL + closure + style + closure;
+				var ts = dojo.trim(style);
+				if(!ts || ts === ";"){
+					// Just remove any style attrs that are empty.
+					return "";
+				}else{
+					style += ";";
+					return sL + closure + style + closure;
+				}
 			});
 
 			// Try and sort the attributes while we're at it.
