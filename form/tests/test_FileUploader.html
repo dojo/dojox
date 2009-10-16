@@ -111,22 +111,21 @@
 			
 			var f0 = new dojox.form.FileUploader({
 				button:dijit.byId("btn0"), 
+				degradable:true,
 				uploadUrl:uploadUrl, 
 				uploadOnChange:false, 
 				selectMultipleFiles:selectMultipleFiles,
 				fileMask:fileMask,
-				isDebug:true,
-				devMode:true,
-				postData:{sessionid:"TestStuff won't be sent", userId:"DojoMan"}
+				isDebug:true
 			});
 			
 			doUpload = function(){
-				dojo.byId("fileToUpload").value = "uploading...";
-				f0.upload({postdata:dojo.byId("postdata").value});
+				dojo.byId("fileToUpload").innerHTML = "uploading...";
+				f0.upload();
 			}
-			dojo.connect(f0, "onChange", function(dataArray){
-				console.log("onChange.data:", dataArray);
-				dojo.forEach(dataArray, function(d){
+			dojo.connect(f0, "onChange", function(data){
+				console.log("DATA:", data);
+				dojo.forEach(data, function(d){
 					//file.type no workie from flash selection (Mac?)
 					if(selectMultipleFiles){
 						dojo.byId("fileToUpload").value += d.name+" "+Math.ceil(d.size*.001)+"kb \n";
@@ -135,21 +134,17 @@
 					}
 				});
 			});
-			dojo.connect(f0, "onProgress", function(dataArray){
-				console.info("test.onProgress", dataArray);
-				dojo.forEach(dataArray, function(d){
-					dojo.byId("fileToUpload").value += "onProgress: ("+d.percent+"%) "+d.name+" \n";
+			dojo.connect(f0, "onProgress", function(data){
+				dojo.byId("fileToUpload").value = "";
+				dojo.forEach(data, function(d){
+					dojo.byId("fileToUpload").value += "("+d.percent+"%) "+d.name+" \n";
 					
 				});
 			});
-			dojo.connect(f0, "onComplete", function(dataArray){
-				console.info("test.onComplete", dataArray);
-				totalFiles = dataArray.length;
-				filesLoaded = 0;
-				dojo.forEach(dataArray, function(d){
-					dojo.byId("fileToUpload").value += "onComplete: "+d.file+" \n";
-					dojo.byId("uploadedFiles").value += "onComplete: "+d.file+" \n";
-					dojo.byId("rgtCol").innerHTML += '<img src="'+d.file+'" onload="onFilesLoaded()"/>';
+			dojo.connect(f0, "onComplete", function(data){
+				dojo.forEach(data, function(d){
+					dojo.byId("uploadedFiles").value += d.file+" \n";
+					dojo.byId("rgtCol").innerHTML += '<img src="'+d.file+'" />';
 					rmFiles+=d.file+";";
 				});
 			});
@@ -159,29 +154,10 @@
 			}
 			
 		});
-		var _disabled = false
-		disableButton = function(){
-			_disabled = !_disabled;
-			dijit.byId("btn0").attr("disabled", _disabled);
-		}
 		
-		var totalFiles = 0;
-		var filesLoaded = 0;
-		onFilesLoaded = function(){
-			filesLoaded++;
-			console.log("FILE LOADED!!", filesLoaded, "of", totalFiles);
-			if(filesLoaded>=totalFiles){
-				console.log(" * * ALL FILES LOADED");
-				// remove them from the server now
-				serverCleanUp();
-			}
-		}
-		clearFiles = function(){
+		cleanUp = function(){
 			dojo.byId("rgtCol").innerHTML = "";
 			dojo.byId("uploadedFiles").value = "";
-			serverCleanUp();
-		}
-		serverCleanUp = function(){
 			dojo.xhrGet({
 				url:uploadUrl,
 				handleAs:"text",
@@ -193,7 +169,8 @@
 			
 		}
 		dojo.addOnUnload(function(){
-			
+			console.log("You're leaving the page");
+			cleanUp();
 		});
 		
 
@@ -202,39 +179,41 @@
 		#wrapper{
 			width:100%;
 		}
+		
+		.browse{
+		
+		}
+		#uploadBtn{
+		
+		}
+		.uploadBtn{
+	
+		}
 		#fileToUpload{
-			border:#CCCCCC 1px solid;
-			overflow-y:auto;
-			overflow-x:hidden;
+		border:#CCCCCC 1px solid;
+		overflow-y:auto;
+		overflow-x:hidden;
+		}
+		.uploadedFilesLabel{
+		
 		}
 		#uploadedFiles{
-			border:#CCCC00 1px solid;
-			background:#FFFFCC;
+		border:#CCCC00 1px solid;
+		background:#FFFFCC;
 		}
 		.leftCol{
-			width:500px;
-			padding:5px;
-			vertical-align:top;
+		width:500px;
+		padding:5px;
+		vertical-align:top;
 		}
 		.rgtCol{
-			vertical-align:top;
+		vertical-align:top;
 		}
 		textarea{
-			display:block;
-		}
-		#postdata{
-			display:block;
-			margin-top:5px;
-			width:405px;
+		display:block;
 		}
 		#noFlash button, #hasFlash button{
-			font-size:9px;
-		}
-		#cont{
-			width:200px;
-			height:100px;
-			overflow:scroll;
-			background-color:transparent;
+		font-size:9px;
 		}
 	</style>
 </head>
@@ -252,14 +231,11 @@
             <div id="fbm" onClick="showMulti()" dojoType="dijit.form.Button">Switch to Multi-File mode</div>
             <div id="fbs" onClick="showSingle()" dojoType="dijit.form.Button">Switch to Single-File mode</div>
             
-            <p>The following is an example of FileUploader trigger FileInputFlash act's with the same APIs as FileInputOverlay,
-			so you can build your own file input. <em>For the file to actually upload, you'll need to have PHP enabled. </em>
-			<button onclick="disableButton();">Test Disabled Button</button>
-			</p>
+            <p>The following is an example of FileUploader trigger FileInputFlash act's with the same APIs as FileInputOverlay, so you can build your own file input. <em>For the file to actually upload, you'll need to have PHP enabled. </em></p>
             <p id="fMulti">Multiple-file mode. You may choose multiple files from the System Dialog.</p>
             <p id="fSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
-        <div></div>
+        
         <div id="noFlash">
             <h1>
             	dojox.form.FileUploader - Degraded to FileInputOverlay
@@ -274,20 +250,18 @@
             <p id="hSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
         
-        <div id="cont">
         <div id="btn0" class="browse" dojoType="dijit.form.Button">Select Images...</div>
-        </div>
-		<span id="fTypes">Choose from these types:</span>
+        <span id="fTypes">Choose from these types:</span>
         
         <textarea cols="50" rows="6" id="fileToUpload"></textarea>
-        <input type="text" id="postdata" value="Add Post Data Here" />
+        
         <div id="uploadBtn" class="uploadBtn" onClick="doUpload();" dojoType="dijit.form.Button">Upload</div>
         
         <div class="uploadedFilesLabel">Uploaded Files:</div>
         
         <textarea cols="50" rows="4" id="uploadedFiles"></textarea>
         
-        <div onClick="clearFiles()" dojoType="dijit.form.Button">Remove Files</div>
+        <div onClick="cleanUp()" dojoType="dijit.form.Button">Remove Files</div>
         <!-- Test destroy: <div onClick="Destroy()" dojoType="dijit.form.Button">Destroy()</div> -->
     </td>
     <td id="rgtCol">&nbsp;</td>

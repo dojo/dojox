@@ -90,7 +90,6 @@ dojo.experimental("dojox.form.FileUploader");
 		//	Flash movie understands.
 		var o = {};
 		var dim = dojo.contentBox(node);
-		
 		var pad = dojo._getPadExtents(node);
 		o.p = [pad.t, pad.w-pad.l, pad.h-pad.t, pad.l];
 		o.w = dim.w + pad.w;
@@ -429,7 +428,7 @@ dojo.experimental("dojox.form.FileUploader");
 			this.norm = getStyle(this.srcNodeRef);
 			this.width = this.norm.w;
 			this.height = this.norm.h;
-			
+			this.log("BTN TX:", txt, this.width, this.height)
 			if(this.uploaderType == "flash"){
 				if(this.hoverClass){
 					this.over = getTempNodeStyle(this.srcNodeRef, this.hoverClass, this.isDijitButton);
@@ -553,7 +552,7 @@ dojo.experimental("dojox.form.FileUploader");
 		// onMouseOver
 		// onMouseOut
 		
-		onChange: function(dataArray){
+		onChange: function(dataArray){ console.log("upl onchange", dataArray)
 			//	summary:
 			// 		stub to connect 
 			// 		Fires when files are selected
@@ -660,8 +659,8 @@ dojo.experimental("dojox.form.FileUploader");
 		removeFile: function(/*String*/name, /*Boolean*/noListEdit){
 			// summary:
 			//		Removes a file from the pending file list.
-			//		Removes pending data from teh Flash movie
-			//		and fileInputes from teh HTML uploader.
+			//		Removes pending data from the Flash movie
+			//		and fileInputes from the HTML uploader.
 			//		If a file container node is bound, the file
 			//		will also be removed.
 			// name:String
@@ -749,7 +748,7 @@ dojo.experimental("dojox.form.FileUploader");
 			//
 			if(display === true){
 				if(this.uploaderType == "flash"){
-					dojo.style(this.insideNode,"left", "-1000px");
+					dojo.style(this.insideNode,"left", "-2500px");
 				}else{
 					dojo.style(this.insideNode,"display", "none");	
 				}
@@ -1228,6 +1227,8 @@ dojo.experimental("dojox.form.FileUploader");
 					loc = loc.join("/")+"/";
 					this.uploadUrl = loc+this.uploadUrl;
 					this.log("SWF Fixed - Relative loc:", loc, " abs loc:", this.uploadUrl);
+				}else{
+					this.log("SWF URL unmodified:", this.uploadUrl)
 				}
 			}else{
 				//console.warn("Warning: no uploadUrl provided.");
@@ -1255,7 +1256,8 @@ dojo.experimental("dojox.form.FileUploader");
 					fileMask:dojox.embed.flashVars.serialize("fm", this.fileMask)
 				},
 				params: {
-					scale:"noscale"
+					scale:"noscale",
+					wmode:"opaque"
 				}
 				
 			};
@@ -1268,7 +1270,7 @@ dojo.experimental("dojox.form.FileUploader");
 				//console.log("READY");
 			});
 			this.flashObject.onLoad = dojo.hitch(this, function(mov){
-				this.log("flashObject onload", mov)
+				//this.log("flashObject onload", mov)
 				this.flashMovie = mov;
 				this.flashReady = true;
 				this.onReady();
