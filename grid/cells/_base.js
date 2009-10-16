@@ -95,7 +95,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 			// grid row index
 			// returns: html for a given grid cell
 			var f, i=this.grid.edit.info, d=this.get ? this.get(inRowIndex, inItem) : (this.value || this.defaultValue);
-			d = (d && d.replace && this.grid.escapeHTMLInData) ? d.replace(/</g, '&lt;') : d;
+			d = (d && d.replace && this.grid.escapeHTMLInData) ? d.replace(/&/g, '&amp;').replace(/</g, '&lt;') : d;
 			if(this.editable && (this.alwaysEditing || (i.rowIndex==inRowIndex && i.cell==this))){
 				return this.formatEditing(d, inRowIndex);
 			}else{
