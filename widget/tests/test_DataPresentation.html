@@ -17,6 +17,7 @@
 	<script type="text/javascript">
 
     dojo.require("dojox.widget.DataPresentation");
+    dojo.require("dojox.charting.themes.Minty");
     
 		var jsondata0 = {
 				"title"  : "Softdrink Sales (2007)",
@@ -97,16 +98,16 @@
 
 			  dp = new dojox.widget.DataPresentation("chartdiv", {
 				  type: "chart",
-				  chartType: "hybrid",
+				  chartType: "Hybrid",
 				  data: jsondata,
-          refresh: 3000,
+          refreshInterval: 3000,
 				  series: makeseries(jsondata),
           legendNode: "legenddiv",
           legendVertical: true,
           gridNode: "griddiv",
           titleNode: "title",
           footerNode: "footer",
-          scheme: "alternative-1"
+          theme: "dojox.charting.themes.Minty"
 			  });
 
 		});

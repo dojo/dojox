@@ -11,34 +11,15 @@ dojo.require("dojo.data.ItemFileWriteStore");
 
 (function(){
 	
-	// FIXME use themes for setting the fill and stroke colors
-	var defaultFillColors = {
-			"default": ["#497c91","#59a0bd","#9dc7d9","#c7e0e9","#7b78a4","#8d88c7","#ada9d6","#c9c6e4","#768b4e","#677e13","#a8c179","#c0d0a0","#b7b35c","#e8e667","#eeea99","#f0eebb","#b39c53","#e9c756","#ebcf81","#efdeb0","#956649","#b17044","#c28b69","#cfb09b","#815454","#a05a5a","#c99999","#ddc0c0","#868686","#a5a5a5","#bebebe","#d8d8d8"],
-	        "alternative-1": ["#497c91","#ada9d6","#768b4e","#eeea99","#b39c53","#c28b69","#815454","#bebebe","#59a0bd","#c9c6e4","#677e13","#f0eebb","#e9c756","#cfb09b","#a05a5a","#d8d8d8","#9dc7d9","#7b78a4","#a8c179","#b7b35c","#ebcf81","#956649","#c99999","#868686","#c7e0e9","#8d88c7","#c0d0a0","#e8e667","#efdeb0","#b17044","#ddc0c0","#a5a5a5"],
-	        "alternative-2": ["#497c91","#59a0bd","#dc7d90","#c7e0e9","#7b78a4","#8d88c7","#ada9d6","#c9c6e4","#768b4e","#677e13","#a8c179","#c0d0a0","#b7b35c","#e8e667","#eeea99","#f0eebb","#b39c53","#e9c756","#ebcf81","#efdeb0","#956649","#b17044","#c28b69","#cfb09b","#815454","#a05a5a","#c99999","#ddc0c0","#868686","#a5a5a5","#bebebe","#d8d8d8"]
-	};
-	
-	var defaultStrokeColors = {
-			"default": ["#22627d","#1a80a8","#71b2cb","#a6cedd","#5e5996","#6d66b9","#8a84c5","#b1add8","#5b6b1f","#85a54a","#88aa47","#a2bb6b","#918e38","#c8c548","#d4cf76","#dddb9d","#947b30","#cfab39","#cdb360","#d2c086","#74482e","#8c4f29","#a96e47","#b7927a","#572828","#7f3333","#ab6d6d","#cca0a0","#535353","#7f7f7f","#a2a2a2","#c7c7c7" ],
-			"alternative-1": ["#22627d","#8a84c5","#5b6b1f","#d4cf76","#947b30","#a96e47","#572828","#a2a2a2","#1a80a8","#b1add8","#85a54a","#dddb9d","#cfab39","#b7927a","#7f3333","#c7c7c7","#71b2cb","#5e5996","#88aa47","#918e38","#cdb360","#74482e","#ab6d6d","#535353","#a6cedd","#6d66b9","#a2bb6b","#c8c548","#d2c086","#8c4f29","#cca0a0","#7f7f7f"],
-			"alternative-2": ["#22627d","#1a80a8","#71b2cb","#a6cedd","#5e5996","#6d66b9","#8a84c5","#b1add8","#5b6b1f","#85a54a","#88aa47","#a2bb6b","#918e38","#c8c548","#d4cf76","#dddb9d","#947b30","#cfab39","#cdb360","#d2c086","#74482e","#8c4f29","#a96e47","#b7927a","#572828","#7f3333","#ab6d6d","#cca0a0","#535353","#7f7f7f","#a2a2a2","#c7c7c7"]
-	};
-
-	// set up a chart presentation
-	var setupChart = function(/*DomNode*/domNode, /*Object?*/chart, /*String*/type, /*Boolean*/reverse, /*Integer*/labelMod, /*String*/scheme, /*Object?*/store, /*String?*/query, /*String?*/queryOptions){
-		var _chart = chart;
-		
-		if(!_chart){
-			domNode.innerHTML = "";  // any other content in the node disrupts the chart rendering
-			_chart = new dojox.charting.Chart2D(domNode);
-		}
+	// sort out the labels for the independant axis of the chart
+	var getLabels = function(rangevalues, labelMod, reverse, charttype, domNode){
 		
 		// prepare labels for the independent axis
 		var labels = [], labelmod = labelMod;
 		// add empty label, hack
 		labels[0] = {value: 0, text: ''};
 
-		var range = store.series_data[0].slice(0);
+		var range = rangevalues.slice(0);
 			
 		// reverse the labels if requested
 		if(reverse){
@@ -48,26 +29,18 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		var nlabels = range.length;
 
 	    // auto-set labelmod for horizontal charts if the labels will otherwise collide
-	    switch(type.toLowerCase()){
-	    	case 'hybrid':
-	    	case 'clusteredcolumns':
-	    	case 'areas':
-	    	case 'stackedcolumns':
-	    	case 'stackedareas':
-	    	case 'lines':
-	    		var cwid = domNode.offsetWidth;
-	    		var tmp = range[0].length * range.length * 7; // *assume* 7 pixels width per character ( was 9 )
-	    	  
-	    		if(labelmod == 1){
-	    			for(var z = 1; z < 500; ++z){
-	    				if((tmp / z) < cwid){
-	    					break;
-	    				}
-	    				++labelmod;
-	    			}
-	    		}
-	    		
-	    		break;
+		if((charttype !== "ClusteredBars") && (charttype !== "StackedBars")){
+    		var cwid = domNode.offsetWidth;
+    		var tmp = ("" + range[0]).length * range.length * 7; // *assume* 7 pixels width per character ( was 9 )
+    	  
+    		if(labelmod == 1){
+    			for(var z = 1; z < 500; ++z){
+    				if((tmp / z) < cwid){
+    					break;
+    				}
+    				++labelmod;
+    			}
+    		}
 	    }
 
 		// now set the labels
@@ -79,22 +52,207 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				labels.push({value: (i+1), text: "" });
 			}
 		}
+		
 		// add empty label again, hack
 		labels.push({value:(nlabels + 1),text:''});
+		
+		return labels;
+	};
+	
+	// get the configuration of an independent axis for the chart
+	var getIndependentAxisArgs = function(charttype, labels){
 
-		// used for hybrid charts
-		_chart.addPlot("misc", {type: "Lines", markers: true, shadows: {dx: 2, dy: 2, dw: 2}});			
+		var args = { vertical: false, labels: labels, min: 0, max: labels.length-1, majorTickStep: 1, minorTickStep: 1 };
+		
+		// clustered or stacked bars have a vertical independent axis 
+		if((charttype === "ClusteredBars") || (charttype === "StackedBars")){
+			args.vertical = true;
+		}
+		
+		// lines, areas and stacked areas don't need the extra slots at each end
+		if((charttype === "Lines") || (charttype === "Areas") || (charttype === "StackedAreas")){
+			args.min++;
+			args.max--;
+		}
 
-		// maximum data value and minimum value
+		return args;
+	};
+
+	// get the configuration of a dependent axis for the chart
+	var getDependentAxisArgs = function(charttype, axistype, minval, maxval){
+		
+		var args = { vertical: true, fixLower: "major", fixUpper: "major" };
+		
+		// secondary dependent axis is not left-bottom
+		if(axistype === "secondary"){
+			args.leftBottom = false;
+		}
+
+		// clustered or stacked bars have horizontal dependent axes 
+		if((charttype === "ClusteredBars") || (charttype === "StackedBars")){
+			args.vertical = false;
+		}
+		
+		// settings for clustered or stacked bars, clustered columns and hybrid
+		// FIXME why not stacked columns and stacked areas? and why not areas and lines, for that matter?
+		if((charttype === "ClusteredBars") || (charttype === "StackedBars") || (charttype === "ClusteredColumns") || (charttype === "Hybrid")){
+			args.natural = true;
+			args.min = 0;
+		}
+
+		// settings for areas and lines
+		// FIXME why do we do this?
+		if((charttype === "Areas") || (charttype === "Lines")){
+
+			// determine the majortickstep to use based on the range of values found
+			var mts = 10, valrange = maxval - minval, nextsize = 100;
+			
+			if(valrange > 100){
+				mts = 20;
+			}
+			
+			while(valrange > 5 * nextsize){
+				mts = nextsize;
+				nextsize *= 10;
+			}
+			
+			args.min = minval - (minval % mts);
+			args.max = maxval - (maxval % mts) + mts;
+			args.majorTickStep = mts;
+		}
+		
+		return args;
+	};
+	
+	// get the configuration of a plot for the chart
+	var getPlotArgs = function(charttype, axistype){
+		
+		var args = { type: charttype, hAxis: "independent", vAxis: "dependent-" + axistype, gap: 4, lines: false, areas: false, markers: false };
+		
+		// clustered or stacked bars have horizontal dependent axes 
+		if((charttype === "ClusteredBars") || (charttype === "StackedBars")){
+			args.hAxis = args.vAxis;
+			args.vAxis = "independent";
+		}
+
+		// turn on lines for Lines, Areas and StackedAreas 
+		if((charttype === "Lines") || (charttype === "Hybrid-Lines") || (charttype === "Areas") || (charttype === "StackedAreas")){
+			args.lines = true;
+		}
+		
+		// turn on areas for Areas and StackedAreas 
+		if((charttype === "Areas") || (charttype === "StackedAreas")){
+			args.areas = true;
+		}
+		
+		// turn on markers and shadow for Lines 
+		if(charttype === "Lines"){
+			args.markers = true;
+		}
+		
+		// turn on shadow for Hybrid-Lines 
+		// also, Hybrid-Lines is not a true chart type: use Lines for the actual plot
+		if(charttype === "Hybrid-Lines"){
+			args.shadows = {dx: 2, dy: 2, dw: 2};
+			args.type = "Lines";
+		}
+		
+		// also, Hybrid-ClusteredColumns is not a true chart type: use ClusteredColumns for the actual plot
+		if(charttype === "Hybrid-ClusteredColumns"){
+			args.type = "ClusteredColumns";
+		}
+		
+		return args;
+	};
+
+	// set up a chart presentation
+	var setupChart = function(/*DomNode*/domNode, /*Object?*/chart, /*String*/type, /*Boolean*/reverse, /*Integer*/labelMod, /*String*/theme, /*Object?*/store, /*String?*/query, /*String?*/queryOptions){
+		var _chart = chart;
+		
+		if(!_chart){
+			domNode.innerHTML = "";  // any other content in the node disrupts the chart rendering
+			_chart = new dojox.charting.Chart2D(domNode);
+		}
+		
+		// set the theme
+		if(theme){
+
+			// workaround for a theme bug: its _clone method
+			// does not transfer the markers, so we repair
+			// that omission here
+			// FIXME this should be removed once the theme bug is fixed
+	        theme._clone = function(){
+			      var result = new dojox.charting.Theme({
+			        chart: this.chart,
+			        plotarea: this.plotarea,
+			        axis: this.axis,
+			        series: this.series,
+			        marker: this.marker,
+			        antiAlias: this.antiAlias,
+			        assignColors: this.assignColors,
+			        assignMarkers: this.assigneMarkers,
+			        colors: dojo.delegate(this.colors)
+			      });
+			      
+			      result.markers = this.markers;
+			      result._buildMarkerArray();
+			      
+			      return result;
+	        };
+			
+			_chart.setTheme(theme);
+		}
+
+		var labels = getLabels(store.series_data[0], labelMod, reverse, type, domNode);
+
+		// collect details of whether primary and/or secondary axes are required 
+		// and what plots we have instantiated using each type of axis
+		var plots = {};
+		
+		// collect maximum and minimum data values
 		var maxval = 0;
 		var minval = 10000000;
-		tnum = 0;
 
 		// set x values & max data value
 		var nseries = store.series_name.length;
 		for(var i = 0; i < nseries; i++){
 			// only include series with chart=true and with some data values in
 			if(store.series_chart[i] && (store.series_data[i].length > 0)){
+				
+				var charttype = type;
+				var axistype = store.series_axis[i];
+				
+				if(charttype == "Hybrid"){
+					if (store.series_charttype[i] == 'line'){
+						charttype = "Hybrid-Lines";
+					}else{
+						charttype = "Hybrid-ClusteredColumns";
+					}
+				}
+				
+				// ensure we have recorded that we are using this axis type
+				if(!plots[axistype]){
+					plots[axistype] = {};
+				}
+				
+				// ensure we have the correct type of plot for this series
+				if(!plots[axistype][charttype]){
+					var axisname = axistype + "-" + charttype;
+					
+					// create the plot and enable tooltips
+					_chart.addPlot(axisname, getPlotArgs(charttype, axistype));					
+					new dojox.charting.action2d.Tooltip(_chart, axisname);
+					
+					// add highlighting, except for lines
+					if ((charttype !== "Lines") && (charttype !== "Hybrid-Lines")){
+						new dojox.charting.action2d.Highlight(_chart, axisname);
+					}
+					
+					// record that this plot type is now created
+					plots[axistype][charttype] = true;
+				}
+				
+				// extract the series values
 				var xvals = [];
 				var valen = store.series_data[i].length;
 				for(var j = 0; j < valen; j++){
@@ -106,82 +264,22 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					if(val < minval){
 						minval = val;
 					}
-					++tnum;
 				}
-				var legend = store.series_name[i];
 					
 				// reverse the values if requested
 				if(reverse){
 					xvals.reverse();
 				}
 					
-				if(type == 'hybrid' && (store.series_charttype[i] == 'line')){
-					   _chart.addSeries(legend, xvals, { plot: "misc", stroke: { color: defaultStrokeColors[scheme][i] }, fill: defaultFillColors[scheme][i] });
-				}else{
-					   _chart.addSeries(legend, xvals, { stroke: { color: defaultStrokeColors[scheme][i] }, fill: defaultFillColors[scheme][i] });
-				}
+			    _chart.addSeries(store.series_name[i], xvals, { plot: axistype + "-" + charttype });
 			}
 		}
-
-		// determine the majortickstep to use based on the maximum value found
-		var mts = 10;
-		if(maxval > 50000){
-			mts = 10000;
-		}else if(maxval > 5000){
-			mts = 1000;
-		}else if(maxval > 500){
-			mts = 100;
-		}else if(maxval > 100){
-			mts = 20;
-		}
-
-		// check chart type
-		switch(type.toLowerCase()){
-			case 'hybrid':
-			case 'clusteredcolumns':
-				_chart.addAxis("y",{vertical:true,fixLower:"major",fixUpper:"major",natural:true,min:0});
-				_chart.addAxis("x",{vertical:false,labels:labels,min:0,max:range.length+1,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"ClusteredColumns",gap:4});
-				break;
-			case 'clusteredbars':
-				//log('uxd_chart => drawing ClusteredBars chart');
-				_chart.addAxis("x",{fixLower:"major",fixUpper:"major",natural:true,min:0});
-				_chart.addAxis("y",{vertical:true,labels:labels,min:0,max:range.length+1,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"ClusteredBars",gap:4});
-				break;
-			case 'areas':
-				//log('uxd_chart => drawing Areas chart');
-				_chart.addAxis("y",{vertical:true,fixLower:"major",fixUpper:"major",max:maxval,min:minval,majorTickStep:mts});
-				_chart.addAxis("x",{vertical:false,labels:labels,min:1,max:range.length,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"Areas",lines:true,areas:true,markers:false});
-				break;
-			case 'stackedcolumns':
-				_chart.addAxis("y",{vertical:true,fixLower:"major",fixUpper:"major"});
-				_chart.addAxis("x",{vertical:false,labels:labels,min:0,max:range.length+1,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"StackedColumns",gap:4});
-				break;
-			case 'stackedbars':
-				_chart.addAxis("x",{fixLower:"major",fixUpper:"major",natural:true,min:0});
-				_chart.addAxis("y",{vertical:true,labels:labels,min:0,max:range.length+1,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"StackedBars",gap:4});
-				break;
-			case 'stackedareas':
-				_chart.addAxis("y",{vertical:true,fixLower:"major",fixUpper:"major"});
-				_chart.addAxis("x",{vertical:false,labels:labels,min:1,max:range.length,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"StackedAreas",lines:true,areas:true,markers:false});
-				break;
-			case 'lines':
-				_chart.addAxis("y",{vertical:true,fixLower:"major",fixUpper:"major",max:maxval,min:minval,majorTickStep:mts});
-				_chart.addAxis("x",{vertical:false,labels:labels,min:1,max:range.length,majorTickStep:1,minorTickStep:1});
-				_chart.addPlot("default",{type:"Lines",markers:true});
-				break;
-		}		
 		
-		// create tooltips
-		var htip = new dojox.charting.action2d.Tooltip(_chart,"misc");
-		var dtip = new dojox.charting.action2d.Tooltip(_chart,"default");
-		var hl = new dojox.charting.action2d.Highlight(_chart,"default");
-
+		// create axes
+		_chart.addAxis("independent", getIndependentAxisArgs(type, labels));
+		_chart.addAxis("dependent-primary", getDependentAxisArgs(type, "primary", minval, maxval));
+		_chart.addAxis("dependent-secondary", getDependentAxisArgs(type, "secondary", minval, maxval));
+		
 		_chart.render();
 		return _chart;
 	};		
@@ -301,16 +399,26 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//  url: String
 		//      URL to fetch data from in JSON format. If supplied on
 		//      construction this property will override any values supplied
-		//      for the 'store' and/or 'data' properties.
+		//      for the 'store' and/or 'data' properties. Note that the data
+		//      can also be comment-filtered JSON, although this will trigger
+		//      a warning message in the console unless djConfig.useCommentedJson
+		//      has been set to true.
 		//
-		//  refresh: Number
+		//  urlError: function
+		//      A function to be called if an error is encountered when fetching
+		//      data from the supplied URL. This function will be supplied with
+		//      two parameters exactly as the error function supplied to the
+		//      dojo.xhrGet function. This function may be called multiple times
+		//      if a refresh interval has been supplied.
+		//
+		//  refreshInterval: Number
 		//      the time interval in milliseconds after which the data supplied
 		//      via the 'data' property or fetched from a URL via the 'url'
 		//      property should be regularly refreshed. This property is
 		//      ignored if neither the 'data' nor 'url' property has been
-		//      supplied. If the refresh is zero, no regular refresh is done.
+		//      supplied. If the refresh interval is zero, no regular refresh is done.
 		//
-		//  refreshInterval:
+		//  refreshIntervalPending:
 		//      the JavaScript set interval currently in progress, if any
 		//
 		//  series: Array
@@ -332,6 +440,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//			chart: true if the series should be included in a chart presentation (default: true)
 		//          charttype: the type of presentation of the series in the chart, which can be
 		//				"range", "line", "bar" (default: "bar")
+		//          axis: the dependant axis to which the series will be attached in the chart,
+		//              which can be "primary" or "secondary"
         //			grid: true if the series should be included in a data grid presentation (default: true)
         //			gridformatter: an optional formatter to use for this series in the data grid
 		//
@@ -371,10 +481,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//      is false (legend rendered horizontally).
 		legendVertical: false,
 		//
-		//  scheme: String
-		//      the name of a colour scheme to use. Valid names are "default",
-		//      "alternative-1" and "alternative-2". The default is "default".
-		scheme: "default",
+		//  theme: String|Theme
+		//      a theme to use for the chart, or the name of a theme.
 		//
 		//  chartNode: String|DomNode
 		//      an optional DOM node or the id of a DOM node to receive a
@@ -437,6 +545,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			// also apply the DOM attach point as the node for the presentation type
 			this[this.type + "Node"] = this.domNode;
 			
+			// load the theme if provided by name
+			if(typeof this.theme == 'string'){
+				this.theme = dojo.getObject(this.theme);
+			}
+			
 			// resolve any the nodes that were supplied as ids
 			this.chartNode = dojo.byId(this.chartNode);
 			this.legendNode = dojo.byId(this.legendNode);
@@ -445,11 +558,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			this.footerNode = dojo.byId(this.footerNode);
 			
 			if(this.url){
-				this.setURL(null, this.refresh);
+				this.setURL(null, this.refreshInterval);
 			}
 			else{
 				if(this.data){
-					this.setData(null, this.refresh);
+					this.setData(null, this.refreshInterval);
 				}
 				else{
 					this.setStore();
@@ -457,51 +570,55 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			}
 		},
 		
-		setURL: function(/*String?*/url, /*Number?*/refresh){
+		setURL: function(/*String?*/url, /*Number?*/refreshInterval){
 			// summary:
 			//      Sets the URL to fetch data from, and an optional
 			//      refresh interval in milliseconds (0=no refresh)
-			if(refresh && this.refreshInterval){
-				// cancel any existing refresh if a new interval is supplied
-				clearInterval(this.refreshInterval);
-				this.refreshInterval = undefined;
+
+			// if a refresh interval is supplied we will start a fresh
+			// refresh after storing the supplied url
+			if(refreshInterval){
+				this.cancelRefresh();
 			}
 			
 			this.url = url || this.url;
-			this.refresh = refresh || this.refresh;
+			this.refreshInterval = refreshInterval || this.refreshInterval;
 			
 			var me = this;
 			
 			dojo.xhrGet({
 				url: this.url,
-				handleAs: 'json',
+				handleAs: 'json-comment-optional',
 				load: function(response, ioArgs){
 					me.setData(response);
 				},
 				error: function(xhr, ioArgs){
-					log("oops");
+					if(me.urlError && (typeof me.urlError == "function")){
+						me.urlError(xhr, ioArgs);
+					}
 				}
 			});
 			
-			if(refresh && (this.refresh > 0)){
-				this.refreshInterval = setInterval(function(){
+			if(refreshInterval && (this.refreshInterval > 0)){
+				this.refreshIntervalPending = setInterval(function(){
 					me.setURL();
-				}, this.refresh);
+				}, this.refreshInterval);
 			}
 		},
 		
-		setData: function(/*Object?*/data, /*Number?*/refresh){
+		setData: function(/*Object?*/data, /*Number?*/refreshInterval){
 			// summary:
 			//      Sets the data to be presented, and an optional
 			//      refresh interval in milliseconds (0=no refresh)
-			if(refresh && this.refreshInterval){
-				// cancel any existing refresh if a new interval is supplied
-				clearInterval(this.refreshInterval);
-				this.refreshInterval = undefined;
+			
+			// if a refresh interval is supplied we will start a fresh
+			// refresh after storing the supplied data reference
+			if(refreshInterval){
+				this.cancelRefresh();
 			}
 			
 			this.data = data || this.data;
-			this.refresh = refresh || this.refresh;
+			this.refreshInterval = refreshInterval || this.refreshInterval;
 			
 			// TODO if no 'series' property was provided, build one intelligently here
 			// (until that is done, a 'series' property must be supplied)
@@ -513,6 +630,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			var series_name = [];
 			var series_chart = [];
 			var series_charttype = [];
+			var series_axis = [];
 			var series_grid = [];
 			var series_gridformatter = [];
 			var maxlen = 0;
@@ -529,6 +647,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				series_name[ser] = _series[ser].name || (_series[ser].namefield ? getSubfield(this.data, _series[ser].namefield) : null) || ("series " + ser);
 				series_chart[ser] = (_series[ser].chart !== false);
 				series_charttype[ser] = _series[ser].charttype || "bar";
+				series_axis[ser] = _series[ser].axis || "primary";
 				series_grid[ser] = (_series[ser].grid !== false);
 				series_gridformatter[ser] = _series[ser].gridformatter;
 			}
@@ -548,10 +667,12 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					if(datasets[ser] && (datasets[ser].length > point)){
 						datavalue = getSubfield(datasets[ser][point], _series[ser].field);
 						
-						// convert the data value to a float if possible
-						fdatavalue = parseFloat(datavalue);						
-						if(!isNaN(fdatavalue)){
-							datavalue = fdatavalue;
+						if(series_chart[ser]){
+							// convert the data value to a float if possible
+							fdatavalue = parseFloat(datavalue);						
+							if(!isNaN(fdatavalue)){
+								datavalue = fdatavalue;
+							}
 						}
 						
 						datapoint["data." + ser] = datavalue;
@@ -578,16 +699,41 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			store.series_name = series_name; 
 			store.series_chart = series_chart; 
 			store.series_charttype = series_charttype; 
+			store.series_axis = series_axis; 
 			store.series_grid = series_grid; 
 			store.series_gridformatter = series_gridformatter;
 			
 			this.setPreparedStore(store);			
 			
-			if(refresh && (this.refresh > 0)){
+			if(refreshInterval && (this.refreshInterval > 0)){
 				var me = this;
-				this.refreshInterval = setInterval(function(){
+				this.refreshIntervalPending = setInterval(function(){
 					me.setData();
-				}, this.refresh);
+				}, this.refreshInterval);
+			}
+		},
+		
+		refresh: function(){
+			// summary:
+			//      If a URL or data has been supplied, refreshes the
+			//      presented data from the URL or data. If a refresh
+			//      interval is also set, the periodic refresh is
+			//      restarted. If a URL or data was not supplied, this
+			//      method has no effect.
+			if(this.url){
+				this.setURL(this.url, this.refreshInterval);
+			}else if(this.data){
+				this.setData(this.data, this.refreshInterval);
+			}
+		},
+		
+		cancelRefresh: function(){
+			// summary:
+			//      Cancels any and all outstanding data refreshes
+			if(this.refreshIntervalPending){
+				// cancel existing refresh
+				clearInterval(this.refreshIntervalPending);
+				this.refreshIntervalPending = undefined;
 			}
 		},
 	
@@ -606,7 +752,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 			if(this.preparedstore){
 				if(this.chartNode){
-					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.labelMod, this.scheme, this.preparedstore, this.query, this,queryOptions);
+					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.labelMod, this.theme, this.preparedstore, this.query, this,queryOptions);
 				}
 				if(this.legendNode){
 					this.legendWidget = setupLegend(this.legendNode, this.legendWidget, this.chartWidget, this.legendVertical);
@@ -635,6 +781,49 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			//      Returns the grid widget (if any) created if the type
 			//      is "grid" or the "gridNode" property was supplied.
 			return this.gridWidget;
+		},
+		
+		destroy: function(){
+			// summary:
+			//		Destroys the widget and all components and resources.
+
+			// cancel any outstanding refresh requests
+			this.cancelRefresh();
+			
+			if(this.chartWidget){
+				this.chartWidget.destroy();
+				this.chartWidget = undefined;
+			}
+			
+			if(this.legendWidget){
+				// no legend.destroy()
+				this.legendWidget = undefined;				
+			}
+
+			if(this.gridWidget){
+				// no grid.destroy()
+				this.gridWidget = undefined;
+			}
+			
+			if(this.chartNode){
+				this.chartNode.innerHTML = "";
+			}
+			
+			if(this.legendNode){
+				this.legendNode.innerHTML = "";
+			}
+			
+			if(this.gridNode){
+				this.gridNode.innerHTML = "";
+			}
+			
+			if(this.titleNode){
+				this.titleNode.innerHTML = "";
+			}
+			
+			if(this.footerNode){
+				this.footerNode.innerHTML = "";
+			}
 		}
 		
 	});
