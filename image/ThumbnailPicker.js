@@ -152,7 +152,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		this._totalSize = 0;
 		this.init();
 	},
-	
+
 	init: function(){
 		// summary:
 		//		Creates DOM nodes for thumbnail images and initializes their listeners 
@@ -269,6 +269,32 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var offset = img[pos] - this.thumbsNode[pos];
 		return (offset >= this.thumbScroller[scrollAttr]
 			&& offset + img[size] <= this.thumbScroller[scrollAttr] + this._scrollerSize);	
+	},
+	
+	resize: function(dim){
+		var sizeParam = this.isHorizontal ? "w": "h";
+
+		var total = 0;
+
+		if(this._thumbs.length > 0 && dojo.marginBox(this._thumbs[0]).w == 0){
+			// Skip the resize if the widget is not visible
+			return;
+		}
+
+		// Calculate the complete size of the thumbnails
+		dojo.forEach(this._thumbs, dojo.hitch(this, function(imgContainer){
+			var mb = dojo.marginBox(imgContainer.firstChild);
+			var size = mb[sizeParam];
+			total += (Number(size) + 10);
+			
+			if(this.useLoadNotifier && mb.w > 0){
+				dojo.style(imgContainer.lastChild, "width", (mb.w - 4) + "px");
+			}
+			dojo.style(imgContainer, "width", mb.w + "px");
+		}));
+
+		dojo.style(this.thumbsNode, this._sizeProperty, total + "px");
+		this._updateNavControls();
 	},
 	
 	_next: function() {
@@ -460,6 +486,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	_loadImage: function(data, index, callback){
 		// summary:
 		//		Loads an image.
+
 		var store = this.imageStore;
 		var url = store.getValue(data,this.imageThumbAttr);
 		
@@ -494,28 +521,26 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		}
 		size = size[sizeParam];
 		var sl = this.thumbScroller.scrollLeft, st = this.thumbScroller.scrollTop;
+
 		dojo.style(this.thumbsNode, this._sizeProperty, (size + defaultSize + 20) + "px");
+
 		//Remember the scroll values, as changing the size can alter them
 		this.thumbScroller.scrollLeft = sl;
 		this.thumbScroller.scrollTop = st;
 		this.thumbsNode.appendChild(imgContainer);
 	
-		dojo.connect(img, "onload", this, function(){
+		dojo.connect(img, "onload", this, dojo.hitch(this, function(){
 			if(store != this.imageStore){
 				// If the store has changed, ignore this load event
 				return false;
 			}
-			var realSize = dojo.marginBox(img)[sizeParam];
-			this._totalSize += (Number(realSize) + 4);
-			dojo.style(this.thumbsNode, this._sizeProperty, this._totalSize + "px");
-	
-			if(this.useLoadNotifier){
-				dojo.style(loadingDiv, "width", (img.width - 4) + "px"); 
-			}
-			dojo.style(imgContainer, "width", img.width + "px");
-			callback();
+			this.resize();
+						
+			// Have to use a timeout here to prevent a call stack that gets
+			// so deep that IE throws stack overflow errors
+			setTimeout(callback, 0);
 			return false;
-		});
+		}));
 	
 		dojo.connect(img, "onclick", this, function(evt){
 			dojo.publish(this.getClickTopicName(),	[{

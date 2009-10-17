@@ -168,6 +168,10 @@ dojo.declare("dojox.image.Gallery",
 		this.slideShow.showImage(index, callback);
 	},
 	
+	resize: function(dim){
+		this.thumbPicker.resize(dim);
+	},
+	
 	_centerChildren: function() {
 		// summary: 
 		//		Ensures that the ThumbnailPicker and the SlideShow widgets
