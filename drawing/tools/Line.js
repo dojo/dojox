@@ -14,21 +14,27 @@ dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
 			// summary:
 			//	Overwrites _Base.onTransformEnd
 			//
-			//var toggle = this.selected;
-			//toggle && this.deselect();
 			this._toggleSelected();
-			var d = this.data;
-			var obj = {start:{x:d.x1,y:d.y1},x:d.x2,y:d.y2};
-			var pt = this.util.snapAngle(obj, this.angleSnap/180);
-			this.setPoints([
-				{x:d.x1, y:d.y1},
-				{x:pt.x, y:pt.y}
-			]);
+			//ace: This sets the zero length vector to zero within the minimum size 
+			if(this.getRadius()<this.minimumSize){ 
+				var p = this.points; 
+				this.setPoints([ 
+					{x:p[0].x, y:p[0].y}, 
+					{x:p[0].x, y:p[0].y} 
+				]); 
+			} else {
 			
-			this._isBeingModified = false;
-			this.onModify(this);
-			
-			//toggle && this.select();
+				var d = this.data;
+				var obj = {start:{x:d.x1,y:d.y1},x:d.x2,y:d.y2};
+				var pt = this.util.snapAngle(obj, this.angleSnap/180);
+				this.setPoints([
+					{x:d.x1, y:d.y1},
+					{x:pt.x, y:pt.y}
+				]);
+				
+				this._isBeingModified = false;
+				this.onModify(this);
+			}
 		},
 		
 		onDrag: function(/*EventObject*/obj){
@@ -84,7 +90,6 @@ dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
 				{x:p[0].x, y:p[0].y},
 				{x:pt.x, y:pt.y}
 			]);
-			
 			
 			this.renderedOnce = true;
 			this.onRender(this);

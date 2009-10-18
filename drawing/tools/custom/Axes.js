@@ -102,8 +102,8 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			//		broken up into the two labels.
 			// arguments:
 			//		value: [optional] String
-			//			If no argument is passed, defaults to lables
-			//			'x' and 'y'. If an arugument is passed, that
+			//			If no argument is passed, defaults to two labels
+			//			'x' and 'y'. If an argument is passed, that
 			//			text will be split on the word 'and' to determine
 			//			the two labels.
 			//
@@ -112,16 +112,25 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			var x = "x";
 			var y = "y";
 			if(value){
-				value = value.replace(/and|(\+)/, " "); // what other words would they use?
-				var lbls = value.match(/(\b\w+\b)/g);
-				if(lbls.length==2){
-					x = lbls[0];
-					y = lbls[1];
+				// match first "and" or "&" and trim whitespace.
+				// Non-greedy matches are not supported in older
+				// browsers such as Netscape Navigator 4 or
+				// Microsoft Internet Explorer 5.0.
+				value.replace(/^\s+/,"");
+				value.replace(/\s+$/,"");
+				var lbls = value.match(/(.*?)(and|&)(.*)/i);
+				if(lbls.length>2){
+					x = lbls[1].replace(/\s+$/,"");
+					y = lbls[3].replace(/^\s+/,"");
 				}
 			}
 			this.labelX.setLabel(x);
 			this.labelY.setLabel(y);
 			this._labelsCreated = true;
+			
+			
+
+
 		},
 		getLabel: function(){
 			// summary:

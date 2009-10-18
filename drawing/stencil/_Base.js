@@ -427,14 +427,15 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			var w = 	100;
 			var cnt = 	0;
 			var isArray = true;
+			var sp, ep;
 			
 			if(dojo.isArray(options.start)){
-				var sp =	options.start;
-				var ep = 	options.end;
+				sp =	options.start;
+				ep = 	options.end;
 			
 			}else if (dojo.isObject(options.start)){
-				var sp =	options.start;
-				var ep = 	options.end;
+				sp =	options.start;
+				ep = 	options.end;
 				isArray = 	false;
 			}else{
 				
@@ -560,7 +561,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			if(this.useSelectedStyle){
 				// using the orginal selected style copy as
 				// a reference map of what props to copy
-				for(var nm in this.style.norm){
+				for(nm in this.style.norm){
 					if(this.selCopy[nm]===undefined){
 						this.style.selected[nm] = this.style.norm[nm];
 					}
@@ -915,7 +916,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			//		canvas. Therefore Lines could get flipped. Use absolute
 			//		to prevent this.
 			//
-			var p = this.points, x1, x1, x2, y2;
+			var p = this.points, x1, y1, x2, y2;
 			if(p.length==2){
 				if(absolute){
 					x1 = p[0].x;
