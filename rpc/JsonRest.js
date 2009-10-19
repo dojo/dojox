@@ -26,6 +26,7 @@ dojo.require("dojox.rpc.Rest");
 			idAttribute: jr.getIdAttribute(service),
 			schemas: jr.schemas,
 			loader:	jr._loader,
+			idAsRef: service.idAsRef, 
 			assignAbsoluteIds: true
 		});
 		dojox.json.ref.refAttribute  = "$ref";

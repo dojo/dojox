@@ -122,6 +122,7 @@ dojo.declare("dojox.data.JsonRestStore",
 			this.schema = this.service._schema = this.schema || this.service._schema || {};
 			// wrap the service with so it goes through JsonRest manager
 			this.service._store = this;
+			this.service.idAsRef = this.idAsRef;
 			this.schema._idAttr = this.idAttribute;
 			var constructor = dojox.rpc.JsonRest.getConstructor(this.service);
 			var self = this;
@@ -132,8 +133,13 @@ dojo.declare("dojox.data.JsonRestStore",
 			this._constructor.prototype = constructor.prototype;
 			this._index = dojox.rpc.Rest._index;
 		},
-
-
+		
+		// summary:
+		//		Will load any schemas referenced content-type header or in Link headers
+		loadReferencedSchema: true,
+		// summary:
+		//		Treat objects in queries as partially loaded objects
+		idAsRef: false,
 		referenceIntegrity: true,
 		target:"",
 		// summary:
@@ -354,28 +360,30 @@ dojo.declare("dojox.data.JsonRestStore",
 			var query= typeof args.queryStr == 'string' ? args.queryStr : args.query;
 			var deferred = dojox.rpc.JsonRest.query(this.service,query, args);
 			var self = this;
-			deferred.addCallback(function(result){
-				var contentType = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Content-Type");
-				var schemaRef = contentType && contentType.match(/schema\s*=\s*([^;]*)/);
-				if(contentType && !schemaRef){
-					schemaRef = deferred.ioArgs.xhr.getResponseHeader("Link");
-					schemaRef = schemaRef && schemaRef.match(/<([^>]*)>;\s*rel="?schema"?/);
-				}
-				schemaRef = schemaRef && schemaRef[1];
-				if(schemaRef){
-					var serviceAndId = dojox.rpc.JsonRest.getServiceAndId((self.target + schemaRef).replace(/^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/,"$2$3"));
-					var schemaDeferred = dojox.rpc.JsonRest.byId(serviceAndId.service, serviceAndId.id);
-					schemaDeferred.addCallbacks(function(newSchema){
-						dojo.mixin(self.schema, newSchema);
-						return result;
-					}, function(error){
-						console.error(error); // log it, but don't let it cause the main request to fail
-						return result;
-					});
-					return schemaDeferred;
-				}
-				return undefined;//don't change anything, and deal with the stupid post-commit lint complaints
-			});
+			if(this.loadReferencedSchema){
+				deferred.addCallback(function(result){
+					var contentType = deferred.ioArgs && deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Content-Type");
+					var schemaRef = contentType && contentType.match(/schema\s*=\s*([^;]*)/);
+					if(contentType && !schemaRef){
+						schemaRef = deferred.ioArgs.xhr.getResponseHeader("Link");
+						schemaRef = schemaRef && schemaRef.match(/<([^>]*)>;\s*rel="?schema"?/);
+					}
+					schemaRef = schemaRef && schemaRef[1];
+					if(schemaRef){
+						var serviceAndId = dojox.rpc.JsonRest.getServiceAndId((self.target + schemaRef).replace(/^(.*\/)?(\w+:\/\/)|[^\/\.]+\/\.\.\/|^.*\/(\/)/,"$2$3"));
+						var schemaDeferred = dojox.rpc.JsonRest.byId(serviceAndId.service, serviceAndId.id);
+						schemaDeferred.addCallbacks(function(newSchema){
+							dojo.mixin(self.schema, newSchema);
+							return result;
+						}, function(error){
+							console.error(error); // log it, but don't let it cause the main request to fail
+							return result;
+						});
+						return schemaDeferred;
+					}
+					return undefined;//don't change anything, and deal with the stupid post-commit lint complaints
+				});
+			}
 			return deferred;
 		},
 		_processResults: function(results, deferred){

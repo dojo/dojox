@@ -48,6 +48,7 @@ dojox.json.ref = {
 		args = args || {};
 		var idAttribute = args.idAttribute || 'id';
 		var refAttribute = this.refAttribute;
+		var idAsRef = args.idAsRef;
 		var prefix = args.idPrefix || ''; 
 		var assignAbsoluteIds = args.assignAbsoluteIds;
 		var index = args.index || {}; // create an index if one doesn't exist
@@ -111,7 +112,7 @@ dojox.json.ref = {
 				if(it.hasOwnProperty(i)){
 					val=it[i];
 					if((typeof val =='object') && val && !(val instanceof Date) && i != '__parent'){
-						ref=val[refAttribute];
+						ref=val[refAttribute] || (idAsRef && val[idAttribute]);
 						if(!ref || !val.__parent){
 							val.__parent = it;
 						}
