@@ -3,7 +3,7 @@ dojo.provide("dojox.widget.Portlet");
 dojo.require("dijit.TitlePane");
 dojo.require("dojo.fx");
 
-dojo.declare("dojox.widget.Portlet", [dijit._Container, dijit.TitlePane],{
+dojo.declare("dojox.widget.Portlet", [dijit.TitlePane, dijit._Container],{
 	// summary: A container widget that is designed to be contained
 	//		in a dojox.layout.GridContainer. Child widgets can insert
 	//		an icon into the title bar of the Portlet, which when
