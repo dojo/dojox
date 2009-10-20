@@ -176,17 +176,6 @@ dojo.query differences that cause some tests to fail:
 	//do not have to placed on $ -- they can be used directly off dojo.NodeList.
 	$._wrap = dojo.NodeList._wrap;
 
-	f._filterQueryResult = function(nodeList, query){
-		//summmary: Replacement for dojo._filterQueryResult that does a full
-		//query. Slower, but allows for more types of queries.
-		//TODO: swap this in for dojo._filterQueryResult for all calls made with our NodeList.
-		var filter = dojo.filter(nodeList, function(node){
-			return dojo.query(query, node.parentNode).indexOf(node) != -1;
-		});
-		var result = $(filter);
-		return result;
-	}
-
 	//Add in some pseudos selectors
 	var headerRegExp = /^H\d/i;
 	var pseudos = dojo.query.pseudos;
