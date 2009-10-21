@@ -113,6 +113,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//		property to look up value for
 			//	defaultValue:
 			//		the default value
+
 			var value = item[property];
 			return value || // return the plain value since it was found;
 						(property in item ? // a truthy value was not found, see if we actually have it
@@ -230,7 +231,7 @@ dojo.declare("dojox.data.ServiceStore",
 			// this should return an object with the items as an array and the total count of
 			// items (maybe more than currently in the result set).
 			// for example:
-			//	| {totalCount:10,[{id:1},{id:2}]}
+			//	| {totalCount:10, items: [{id:1},{id:2}]}
 
 			// index the results, assigning ids as necessary
 
@@ -363,13 +364,13 @@ dojo.declare("dojox.data.ServiceStore",
 			// summary:
 			//		fetch an item by its identity, by looking in our index of what we have loaded
 			var item = this._index[(args._prefix || '') + args.identity];
-			if(item && args.onItem){
+			if(item){
 				// the item exists in the index
 				if(item._loadObject){
 					// we have a handle on the item, but it isn't loaded yet, so we need to load it
 					args.item = item;
-					this.loadItem(args);
-				}else{
+					return this.loadItem(args);
+				}else if(args.onItem){
 					// it's already loaded, so we can immediately callback
 					args.onItem.call(args.scope, item);
 				}
