@@ -15,8 +15,7 @@
 var djConfig = {
 	isDebug: true,
 	parseOnLoad: true,
-	debugAtAllCosts:false
-	//popup:true,
+	popup:true
 	//forceFirebugLite:true
 };
 </script>
@@ -26,6 +25,7 @@ var djConfig = {
 	dojo.require("dojo.parser");
 	dojo.require("dijit.Editor");
 	dojo.require("dojox.editor.plugins.TablePlugins");
+	dojo.require("dojox.html.selection");
 	
 	dojo.addOnLoad(function(){
 		console.log(dojo.version.toString());
@@ -43,7 +43,7 @@ margin:20px 100px;
 </head>
 <body class="tundra">
 <div id="main">
-	<div dojoType="dijit.Editor" plugins="[
+	<div dojoType="dijit.Editor" style="height:200px;" plugins="[
                         'undo', 'redo', 'bold','italic','|',
                         {name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
                        	{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'},
@@ -72,7 +72,7 @@ margin:20px 100px;
           <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td bgcolor="#00FFFF">&nbsp;</td>
+            <td bgcolor="#00FFFF">Text</td>
           </tr>
         </table> 
     </div>

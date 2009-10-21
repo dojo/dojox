@@ -132,27 +132,52 @@
 }
 
 .dojoxDropDownSelect {
-background:#FFFFFF url(images/dropBk.png) repeat-x scroll left top;
-border: 1px solid;
-border-top-color:#cccccc;
-border-right-color:#cccccc;
-border-left-color:#999999;
-border-bottom-color:#ffffff;
+	background:#FFFFFF url(images/dropBk.png) repeat-x scroll left top;
+	border: 1px solid;
+	border-top-color:#cccccc;
+	border-right-color:#cccccc;
+	border-left-color:#999999;
+	border-bottom-color:#ffffff;
 }
 .dojoxDropDownSelect.dojoxDropDownSelectHover{
-background-image:url(images/dropBkOver.png);
+	background-image:url(images/dropBkOver.png);
 }
 .dojoxDropDownSelect button{
-line-height:16px;
-height:16px;
-width:100px;
-text-align:left;
-color:#8397b9;
+	line-height:16px;
+	height:16px;
+	width:100px;
+	text-align:left;
+	color:#8397b9;
 }
 
 .dijitButtonNode .dijitArrowButtonInner{
-/* fixing the dijit drop arrows - can't figure why the broke */
-background:url(../../../../dijit/themes/tundra/images/spriteArrows.png) no-repeat left top;
-width:7px;
+	/* fixing the dijit drop arrows - can't figure why this broke */
+	background:url(../../../../dijit/themes/tundra/images/spriteArrows.png) no-repeat left top;
+	width:7px;
+}
 
+.dojoxEditorUploadNorm{
+	font-family:Arial;
+	font-size:12px;
+	
+	
+	vertical-align: middle;
+	
+	margin:0;
+	line-height:normal;
+	text-align:center;
+	white-space: nowrap;
+	
+	cursor: pointer;
+	background: #ccc url("images/uploadImageIcon.gif") no-repeat 2px 2px;
+}
+
+.dojoxEditorUploadHover{
+	background: #ccc url("images/uploadImageIcon.gif") no-repeat 2px 0px;
+}
+.dojoxEditorUploadActive{
+	background: #ccc url("images/uploadImageIcon.gif") no-repeat 2px 4px;
+}
+.dojoxEditorUploadDisabled{
+	background: #ccc url("images/uploadImageIcon.gif") no-repeat 2px 2px;
 }

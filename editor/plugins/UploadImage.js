@@ -16,29 +16,42 @@ dojo.declare("dojox.editor.plugins.UploadImage",
 		iconClassPrefix: "editorIcon",
 		useDefaultCommand: false,
 		uploadUrl: "",
-		fileInput:null,
+		button:null,
+		label:"Upload",
 		
-		label:"Mike",
+		setToolbar: function(toolbar){
+			this.button.destroy();
+			this.createFileInput();
+			toolbar.addChild(this.button);
+		},
 		_initButton: function(){
 			this.command = "uploadImage";
 			this.editor.commands[this.command] = "Upload Image";
 			this.inherited("_initButton", arguments);
 			delete this.command;
-			setTimeout(dojo.hitch(this, "createFileInput"), 200);
 		},
 		
 		createFileInput: function(){
-			var fileMask = [
-			["Jpeg File", 	"*.jpg;*.jpeg"],
-			["GIF File", 	"*.gif"],
-			["PNG File", 	"*.png"],
-			["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"]
-		];
-			console.warn("downloadPath:", this.downloadPath);
-			this.fileInput = new dojox.form.FileUploader({isDebug:true,button:this.button, uploadUrl:this.uploadUrl, uploadOnChange:true, selectMultipleFiles:false, fileMask:fileMask});
-			
-			dojo.connect(this.fileInput, "onChange", this, "insertTempImage");
-			dojo.connect(this.fileInput, "onComplete", this, "onComplete");
+			var node = dojo.create('span', {innerHTML:"."}, document.body)
+			dojo.style(node, {
+				width:"40px",
+				height:"20px",
+				paddingLeft:"8px",
+				paddingRight:"8px"
+			})
+			this.button = new dojox.form.FileUploader({
+				isDebug:true,
+				//force:"html",
+				uploadUrl:this.uploadUrl,
+				uploadOnChange:true,
+				selectMultipleFiles:false,
+				baseClass:"dojoxEditorUploadNorm",
+				hoverClass:"dojoxEditorUploadHover",
+				activeClass:"dojoxEditorUploadActive",
+				disabledClass:"dojoxEditorUploadDisabled"
+			}, node);
+			this.connect(this.button, "onChange", "insertTempImage");
+			this.connect(this.button, "onComplete", "onComplete");
 		},
 		
 		onComplete: function(data,ioArgs,widgetRef){
