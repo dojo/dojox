@@ -16,6 +16,9 @@
 	cursor: pointer;
 }
 
+.uploaderInsideNode{
+	visibility:hidden;
+}
 .dojoxUploaderHover{
 	border-color:		#a5beda; 
 	border-bottom-color:#5c7590; 

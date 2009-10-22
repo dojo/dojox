@@ -60,13 +60,15 @@ dojo.experimental("dojox.form.FileUploader");
 		// getting font info
 		var o = {};
 		o.ff = dojo.style(node, "fontFamily");
-		o.ff = o.ff.replace(/\"|\'/g, "");
-		o.ff = o.ff == "sans-serif" ? "Arial" : o.ff; // Flash doesn't know what sans-serif is
-		o.fw = dojo.style(node, "fontWeight");
-		o.fi = dojo.style(node, "fontStyle");
-		o.fs = parseInt(dojo.style(node, "fontSize"), 10);
-		o.fc = new dojo.Color(dojo.style(node, "color")).toHex();
-		o.fc = parseInt(o.fc.substring(1,Infinity),16);
+		if(o.ff){
+			o.ff = o.ff.replace(/\"|\'/g, "");
+			o.ff = o.ff == "sans-serif" ? "Arial" : o.ff; // Flash doesn't know what sans-serif is
+			o.fw = dojo.style(node, "fontWeight");
+			o.fi = dojo.style(node, "fontStyle");
+			o.fs = parseInt(dojo.style(node, "fontSize"), 10);
+			o.fc = new dojo.Color(dojo.style(node, "color")).toHex();
+			o.fc = parseInt(o.fc.substring(1,Infinity),16);
+		}
 		o.lh = dojo.style(node, "lineHeight");
 		o.ta = dojo.style(node, "textAlign");
 		o.ta = o.ta == "start" || !o.ta ? "left" : o.ta;
@@ -212,7 +214,7 @@ dojo.experimental("dojox.form.FileUploader");
 		//		flashVar problem.
 		//
 		
-		templateString:'<div><div dojoAttachPoint="progNode"><div dojoAttachPoint="progTextNode"></div></div><div dojoAttachPoint="insideNode"></div></div>',
+		templateString:'<div><div dojoAttachPoint="progNode"><div dojoAttachPoint="progTextNode"></div></div><div dojoAttachPoint="insideNode" class="uploaderInsideNode"></div></div>',
 		
 		// uploadUrl: String
 		//		The url targeted for upload. An absolute URL is preferred. Relative URLs are
@@ -365,7 +367,13 @@ dojo.experimental("dojox.form.FileUploader");
 		//		The widget id of a Dijit Progress bar. The Uploader will bind to it and update it
 		//		automatically.
 		progressWidgetId:"",
-		
+		//
+		// skipServerCheck: Boolean
+		// 		If true, will not verify that the server was sent the correct format.
+		//		This can be safely set to true. The purpose of the server side check
+		//		is mainly to show the dev if they've implemented the different returns
+		//		correctly.
+		skipServerCheck:false,
 		
 		log: function(){
 			//	summary:
@@ -376,9 +384,11 @@ dojo.experimental("dojox.form.FileUploader");
 				console.log.apply(console, arguments);
 			}
 		},
+		
 		constructor: function(){
-		this._subs = [];
+			this._subs = [];
 		},
+		
 		postMixInProperties: function(){
 			// internal stuff:
 			this.fileList = [];
@@ -410,7 +420,7 @@ dojo.experimental("dojox.form.FileUploader");
 			}
 			
 			if(this.fileListId){
-				dojo.connect(dojo.byId(this.fileListId), "click", this, function(evt){
+				this.connect(dojo.byId(this.fileListId), "click", function(evt){
 					var p = evt.target.parentNode.parentNode.parentNode; // in a table
 					if(p.id && p.id.indexOf("file_")>-1){
 						this.removeFile(p.id.split("file_")[1]);
@@ -614,10 +624,18 @@ dojo.experimental("dojox.form.FileUploader");
 			
 		},
 		
-		onReady: function(){
+		onReady: function(/* dojox.form.FileUploader */ uploader){
 			// summary:
-			//		Stub - when uploader is finished building
+			//		Stub - Fired when uploader is finished building
 		},
+		
+		onLoad: function(/* dojox.form.FileUploader */ uploader){
+			// summary:
+			//		Stub - Fired when dojox.embed.Flash has created the
+			//		Flash object, but it has not necessarilly) finished
+			//		downaloding
+		},
+		
 		/*************************
 		 *	   Public Methods	 *
 		 *************************/
@@ -1269,7 +1287,8 @@ dojo.experimental("dojox.form.FileUploader");
 					isDebug: this.isDebug,
 					devMode:this.devMode,
 					flashButton:dojox.embed.flashVars.serialize("fh", this.fhtml),
-					fileMask:dojox.embed.flashVars.serialize("fm", this.fileMask)
+					fileMask:dojox.embed.flashVars.serialize("fm", this.fileMask),
+					noReturnCheck: this.skipServerCheck
 				},
 				params: {
 					scale:"noscale",
@@ -1283,12 +1302,15 @@ dojo.experimental("dojox.form.FileUploader");
 				this._error("Flash Error: " + msg);
 			};
 			this.flashObject.onReady = dojo.hitch(this, function(){
+				dojo.style(this.insideNode, "visibility", "visible");
 				this.log("FileUploader flash object ready");
+				this.onReady(this);
 			});
 			this.flashObject.onLoad = dojo.hitch(this, function(mov){
 				this.flashMovie = mov;
 				this.flashReady = true;
-				this.onReady();
+				
+				this.onLoad(this);
 			});
 			this._connectFlash();
 		},
