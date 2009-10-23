@@ -19,7 +19,7 @@
 		
         dojo.addOnLoad(function(){
 			
-			var propsDft = {
+			var props = {
 				isDebug:false,
 				hoverClass:"btnDftHover",
 				activeClass:"btnDftActive"
@@ -170,11 +170,11 @@
 		file-browse dialog, but otherwise the uploading is non-functional. This page is for testing
 		rendering and layout. This takes a while to render in IE, but it's not a real-world test.
 	</h3>
-	
+
 	<div class="note">
 		Testing default, markup (don't use a DIV unless you style it, the width is not controlled by default)
 	</div>
-	<button dojoType="dojox.form.FileUploader">Default Markup Flash</button>
+	<button isDebug="true" devMode="true" dojoType="dojox.form.FileUploader">Default Markup Flash</button>
 	<button force="html" dojoType="dojox.form.FileUploader">Default Markup HTML</button>
 	
 	<div class="note">

@@ -116,7 +116,8 @@
 				uploadOnChange:false, 
 				selectMultipleFiles:selectMultipleFiles,
 				fileMask:fileMask,
-				isDebug:true
+				isDebug:0,
+				devMode:0
 			});
 			
 			doUpload = function(){
@@ -176,6 +177,9 @@
 
 	</script>
     <style>
+	body{
+		font-size:100%;
+	}
 		#wrapper{
 			width:100%;
 		}
@@ -190,30 +194,30 @@
 	
 		}
 		#fileToUpload{
-		border:#CCCCCC 1px solid;
-		overflow-y:auto;
-		overflow-x:hidden;
+			border:#CCCCCC 1px solid;
+			overflow-y:auto;
+			overflow-x:hidden;
 		}
 		.uploadedFilesLabel{
 		
 		}
 		#uploadedFiles{
-		border:#CCCC00 1px solid;
-		background:#FFFFCC;
+			border:#CCCC00 1px solid;
+			background:#FFFFCC;
 		}
 		.leftCol{
-		width:500px;
-		padding:5px;
-		vertical-align:top;
+			width:500px;
+			padding:5px;
+			vertical-align:top;
 		}
 		.rgtCol{
-		vertical-align:top;
+			vertical-align:top;
 		}
 		textarea{
-		display:block;
+			display:block;
 		}
 		#noFlash button, #hasFlash button{
-		font-size:9px;
+			font-size:9px;
 		}
 	</style>
 </head>
