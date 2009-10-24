@@ -1,6 +1,5 @@
 dojo.provide("dojox.widget.Rotator");
 dojo.require("dojo.parser");
-dojo.require("dojo.fx");
 
 (function(d){
 
