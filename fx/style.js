@@ -53,8 +53,8 @@ dojo.require("dojo.fx");
 		var calculated = {}, i = 0;
 		d.forEach(dojox.fx._allowedProperties, function(prop){
 			if(_before[i] != _after[i]){
-				// FIXME: the static unit: px is not good, either. need to parse unit from computed style?
-				calculated[prop] = parseInt(_after[i]) /* start: parseInt(_before[i]), unit: 'px' */ ; 
+				// FIXME: the static units: px is not good, either. need to parse unit from computed style?
+				calculated[prop] = parseInt(_after[i]) /* start: parseInt(_before[i]), units: 'px' */ ; 
 			} 
 			i++;
 		});

@@ -61,7 +61,7 @@ dojo.declare("dojox.widget.FisheyeLite",
 	//			defaults to font-size with a scale of 2.75
 	//			If a named property is an integer or float, the "scale multiplier"
 	//			is used. If the named property is an object, that object is mixed
-	//			into the animation directly. eg: height:{ end:20, unit:"em" }
+	//			into the animation directly. eg: height:{ end:20, units:"em" }
 	properties: null,
 	
 	// units: String
