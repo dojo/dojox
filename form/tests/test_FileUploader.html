@@ -9,7 +9,7 @@
 		@import "../../../dijit/themes/tundra/form/Button.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
 		
-		@import "../resources/FileInput.css"; 
+		@import "../resources/FileUploader.css"; 
 	</style>
 	<script>
 		passthrough = function(msg){
@@ -110,15 +110,14 @@
 	
 			
 			var f0 = new dojox.form.FileUploader({
-				button:dijit.byId("btn0"), 
 				degradable:true,
 				uploadUrl:uploadUrl, 
 				uploadOnChange:false, 
 				selectMultipleFiles:selectMultipleFiles,
 				fileMask:fileMask,
-				isDebug:0,
-				devMode:0
-			});
+				isDebug:true,
+				devMode:true
+			}, "selectBtn");
 			
 			doUpload = function(){
 				dojo.byId("fileToUpload").innerHTML = "uploading...";
@@ -177,21 +176,11 @@
 
 	</script>
     <style>
-	body{
-		font-size:100%;
-	}
+		body{
+			font-size:100%;
+		}
 		#wrapper{
 			width:100%;
-		}
-		
-		.browse{
-		
-		}
-		#uploadBtn{
-		
-		}
-		.uploadBtn{
-	
 		}
 		#fileToUpload{
 			border:#CCCCCC 1px solid;
@@ -254,8 +243,10 @@
             <p id="hSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
         
-        <div id="btn0" class="browse" dojoType="dijit.form.Button">Select Images...</div>
-        <span id="fTypes">Choose from these types:</span>
+        
+		<span id="selectBtn">Select Images...</span>
+        
+		<span id="fTypes">Choose from these types:</span>
         
         <textarea cols="50" rows="6" id="fileToUpload"></textarea>
         
