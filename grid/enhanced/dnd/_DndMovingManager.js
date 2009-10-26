@@ -51,7 +51,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		get the width of the grid
 		//return: Integer
 		//		the width of the grid
-		return dojo.coords(this.grid.domNode).w - this.grid.views.views[0].getWidth().replace("px","");
+		return dojo.contentBox(this.grid.domNode).w - this.grid.views.views[0].getWidth().replace("px","");
 	},
 	
 	isColSelected: function(inColIndex){
@@ -96,23 +96,25 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		return normalizedOffsetWidth > 0 ? normalizedOffsetWidth : 0;		
 	},
 	
-	getGridCoords: function(){
+	getGridCoords: function(noCache){
 		//summary:
 		//		get the coords values of the grid
+		// noCache: Boolean
+		//		force a realtime calculation
 		//return: Object
 		//		the coords values of the grid
-		if(!this.gridCoords){
+		if(!this.gridCoords || noCache){
 			this.gridCoords = new Object();
 			if(!this.headerHeight){
 				this.headerHeight = dojo.coords(this.getHeaderNodes()[0]).h;
 			}
 			var rowBarDomNodeCoords = dojo.coords(this.grid.views.views[0].domNode);
-			
 			var gridDomCoords = dojo.coords(this.grid.domNode);
-			this.gridCoords.h = gridDomCoords.h - this.headerHeight - this.getHScrollBarHeight();
+			var gridDomBox = dojo.contentBox(this.grid.domNode);//use contentBox.h/w to exclude any margins
+			this.gridCoords.h = gridDomBox.h - this.headerHeight - this.getHScrollBarHeight();
 			this.gridCoords.t = gridDomCoords.y;
-			this.gridCoords.l = gridDomCoords.x + rowBarDomNodeCoords.w;
-			this.gridCoords.w = gridDomCoords.w - rowBarDomNodeCoords.w
+			this.gridCoords.l = dojo._isBodyLtr() ? (gridDomCoords.x + rowBarDomNodeCoords.w) : gridDomCoords.x;
+			this.gridCoords.w = gridDomBox.w - rowBarDomNodeCoords.w;
 		}
 		return this.gridCoords;
 	},
@@ -148,10 +150,10 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		var gridBottom = getGridCoords.t + getGridCoords.h + this.headerHeight;
 		
 		var avatarTop = 0;
-		if(top < getGridCoords.t+this.headerHeight){
-			avatarTop = (getGridCoords.t+this.headerHeight) ;
+		if(top < getGridCoords.t + this.headerHeight){
+			avatarTop = (getGridCoords.t + this.headerHeight);
 		}else if(top > gridBottom){
-			//avatar  should not be showed
+			//avatar should not be shown
 			avatarTop = 10000;
 		}else{
 			avatarTop = top ;
@@ -218,14 +220,14 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		and set the move constraint box to make it move horizontally or vertically
 		
 		var gridCoords = this.getGridCoords(), includeHScroll = (type == "col" ? true : false);
-		var box = {box: {l: (type == "row" ? left : gridCoords.l) + dojo._docScroll().x, 
-						 t: (type == "col" ? top : gridCoords.t) + dojo._docScroll().y, 
+		var params = {box: {l: (type == "row" ? left : gridCoords.l) + dojo._docScroll().x, 
+						 t: (type == "col" ? top : gridCoords.t + this.headerHeight) + dojo._docScroll().y, 
 						 w: type == "row" ? 1 : gridCoords.w,					// keep the moving horizontally
-						 h: type == "col" ? 1 : gridCoords.h + this.headerHeight // keep the moving vertically
-						 },
+						 h: type == "col" ? 1 : gridCoords.h // keep the moving vertically
+						 }, within:true, movingType: type,
 				   mover: dojox.grid.enhanced.dnd._DndMover};
-		return new dojo.dnd.move.boxConstrainedMoveable(this.createAvatar(width, height, left, top, includeHScroll), 
-		box);
+		return new dojox.grid.enhanced.dnd._DndBoxConstrainedMoveable(this.createAvatar(width, height, left, top, includeHScroll), 
+		params);
 	},
 	
 	getBorderDiv: function(){
@@ -352,13 +354,17 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			this.moveColBorder(mover, mousePos, borderDIV);
 		}));
 		dojo.connect(coverMover, "onMoveStop", dojo.hitch(this,function(mover){
-			this.isMoving = false;
-			this.mover = null;
 			if(this.drugDestIndex == null || this.isContinuousSelection(this.selectedColumns) 
 			   && (this.drugDestIndex == leadingBorderIdx || this.drugDestIndex == trailingBorderIdx || this.drugDestIndex == (trailingBorderIdx + 1) && this.drugBefore)){ 
 			   this.movingIgnored = true;
+			   if(this.isMoving){
+			   		this.isMoving = false;
+					this.clearDrugDivs();
+			   }
 			   return; 
 			}			
+			this.isMoving = false;
+			this.mover = null;
 			this.startMoveCols();
 			this.drugDestIndex = null;
 		}));
@@ -418,20 +424,30 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//borderDIV:Object
 		//		reference to the borderDIV
 		var docScroll = dojo._docScroll(), rtl = !dojo._isBodyLtr();
-		mousePos.x -= docScroll.x;
+		mousePos.x -= docScroll.x;		
+
+		var views = this.grid.views.views, gridCoords = this.getGridCoords();
+		var leftViewNode = views[!rtl ? 1 : views.length-1].scrollboxNode;
+		var rightViewNode = views[!rtl ? views.length-1 : 1].scrollboxNode;
+			
+		var leftX = (!rtl || !dojo.isIE) ? gridCoords.l : (gridCoords.l + leftViewNode.offsetWidth - leftViewNode.clientWidth);
+		var rightX = (!rtl || dojo.isMoz) ? (gridCoords.l + gridCoords.w - (rightViewNode.offsetWidth - rightViewNode.clientWidth)) : (gridCoords.l + gridCoords.w);
 		
 		dojo.forEach(this.getHeaderNodes(), dojo.hitch(this,function(node, index){
 			if(index > this.exceptColumnsTo){
-				var coord = dojo.coords(node);
+				var x, coord = dojo.coords(node);
 				if(mousePos.x >= coord.x && mousePos.x <= coord.x + coord.w){
 					if(!this.selectedColumns[index] || !this.selectedColumns[index - 1]){
-						borderDIV.style.left = (coord.x +  docScroll.x + (rtl ? coord.w : 0)) + "px";
+						x = coord.x +  docScroll.x + (rtl ? coord.w : 0);
+						if(mousePos.x < leftX || mousePos.x > rightX || x < leftX || x > rightX){ return; }
+						dojo.style(borderDIV, 'left', x + 'px');
 						this.drugDestIndex = index;
 						this.drugBefore = true;
 						!dojo.isIE && this.normalizeColBorderHeight(borderDIV, index);
 					}
 				}else if(this.getHeaderNodes()[index + 1] == null && (!rtl ? (mousePos.x > coord.x + coord.w) : (mousePos.x < coord.x))){
-						borderDIV.style.left = (coord.x + docScroll.x + (rtl ? 0 : coord.w)) + "px";
+						x = mousePos.x < leftX ? leftX : (mousePos.x > rightX ? rightX : (coord.x + docScroll.x + (rtl ? 0 : coord.w)));
+						dojo.style(borderDIV, 'left', x + 'px');
 						this.drugDestIndex = index;
 						this.drugBefore = false;
 						!dojo.isIE && this.normalizeColBorderHeight(borderDIV, index);
@@ -580,14 +596,18 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
         }));
 		
 		var avaMoveStop = dojo.connect(coverMover, "onMoveStop", dojo.hitch(this,function(mover){
+			if(this.avaOnRowIndex == null || this.isContinuousSelection(this.grid.selection.selected) && (this.avaOnRowIndex == from || this.avaOnRowIndex == (to + 1))){
+			   	this.movingIgnored = true;
+				if(this.isMoving){
+					this.isMoving = false;
+					this.clearDrugDivs();
+				}
+				return; 
+			}			
 			this.isMoving = false;
 			this.mover = null;
 			this.grid.select.outRangeY = false;
 			this.grid.select.moveOutTop = false;
-			if(this.avaOnRowIndex == null || this.isContinuousSelection(this.grid.selection.selected) && (this.avaOnRowIndex == from || this.avaOnRowIndex == (to + 1))){
-			   	this.movingIgnored = true;
-				return; 
-			}			
 			/*fix - blank Grid page when moving rows at bottom page, this only occurs the first time Grid get loaded*/		
 			this.grid.scroller.findScrollTop(this.grid.scroller.page * this.grid.scroller.rowsPerPage);
 			this.startMoveRows();
@@ -623,45 +643,46 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		reference to the borderDIV
 		//mousePos: Object
 		//		the current position of the mover - {x:.., Y:..}	
-		var gridCoords = this.getGridCoords(), docScroll = dojo._docScroll();
-		leftTop.t -= docScroll.y;
-		mousePos.y -= docScroll.y;
-		
-        if(leftTop.t - dojo.coords(this.grid.domNode).y/*this.grid.domNode.offsetTop*/ - this.grid.domNode.offsetHeight > 0){
-			if(!this.grid.select.outRangeY && mousePos.y >= gridCoords.t + gridCoords.h){
-	            this.grid.select.outRangeY = true;
-	            this.autoMoveToNextRow();
-	        }
+		var gridCoords = this.getGridCoords(true), docScroll = dojo._docScroll();
+		var gridBottomY = gridCoords.t + this.headerHeight + gridCoords.h
+		leftTop.t -= docScroll.y, mousePos.y -= docScroll.y;
+		if(mousePos.y >= gridBottomY){
+            this.grid.select.outRangeY = true;
+            this.autoMoveToNextRow();
         }else if(mousePos.y <= gridCoords.t + this.headerHeight){
-			if(!this.grid.select.moveOutTop){
-	        	this.grid.select.moveOutTop = true;
-	            this.autoMoveToPreRow();
-			}
+        	this.grid.select.moveOutTop = true;
+            this.autoMoveToPreRow();
 		}else{
-            this.grid.select.outRangeY = false;
-			this.grid.select.moveOutTop = false;
-
-			var rowBarView = this.grid.views.views[0], rowBarNodes = this.getViewRowNodes(rowBarView.rowNodes);
+            this.grid.select.outRangeY = this.grid.select.moveOutTop = false;
+			var rowBarView = this.grid.views.views[0], rowBarNodes = rowBarView.rowNodes;
 			var colHeight =  dojo.coords(rowBarView.contentNode).h;
-			var bottomRowCoords = dojo.coords(rowBarNodes[rowBarNodes.length - 1]);
+			var rowCount = 0, bottomRowIndex = -1;
+			for(i in rowBarNodes){
+				++rowCount;
+				if(i > bottomRowIndex){ bottomRowIndex = i; }
+			}
+			var bottomRowCoords = dojo.coords(rowBarNodes[bottomRowIndex]);
 			
 			if(colHeight < gridCoords.h && mousePos.y > (bottomRowCoords.y + bottomRowCoords.h)){
-				this.avaOnRowIndex = rowBarNodes.length;
+				this.avaOnRowIndex = rowCount;
 				dojo.style(borderDIV, {"top" : bottomRowCoords.y + bottomRowCoords.h + docScroll.y + "px"});
 				return;
 			}
 			
-			var coord;
-			dojo.forEach(rowBarNodes, function(rowBarNode, index){
-				if(!rowBarNode || isNaN(parseInt(index))){ return; }
-				coord = dojo.coords(rowBarNode);
-				if(mousePos.y > coord.y && mousePos.y < coord.y + coord.h){ // 2 is the buffer size of the moving to make it not that sensitive
+			var coord, rowBarNode, inView;
+			for(var index in rowBarNodes){
+				index = parseInt(index);
+				if(isNaN(index)){ continue; }
+				rowBarNode = rowBarNodes[index];
+				if(!rowBarNode){ continue; }
+				coord = dojo.coords(rowBarNode), inView = (coord.y <= gridBottomY);
+				if(inView && mousePos.y > coord.y && mousePos.y < coord.y + coord.h){
 					if(!this.grid.selection.selected[index] || !this.grid.selection.selected[index - 1]){
 						this.avaOnRowIndex = index;
 						dojo.style(borderDIV, {"top" : coord.y + docScroll.y + "px"});
 					}
 				}
-			}, this);
+			}
         }
 	},
 	
@@ -680,15 +701,23 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 	autoMoveBorderDivPre: function(){
 		//summary:
 		//		auto move the border DIV to the previous row of the current one
-		this.avaOnRowIndex--;
-		var borderDIV = this.getBorderDiv();
-		borderDIV.style.top = dojo.coords(this.grid.views.views[0].rowNodes[this.avaOnRowIndex]).y + dojo._docScroll().y + "px";
+		var docScroll = dojo._docScroll(), gridCoords = this.getGridCoords();
+		var viewTopY = gridCoords.t + this.headerHeight + docScroll.y;
+		var preRowY, borderDIV = this.getBorderDiv();
+		if(this.avaOnRowIndex - 1 <= 0){
+			this.avaOnRowIndex = 0;
+			preRowY = viewTopY;
+		}else{
+			this.avaOnRowIndex--;
+			preRowY = dojo.coords(this.grid.views.views[0].rowNodes[this.avaOnRowIndex]).y + docScroll.y;
+		}
+		borderDIV.style.top = (preRowY < viewTopY ? viewTopY : preRowY)+ "px";
 	},
 	
 	autoMoveToNextRow: function(){
 		//summary:
 		//		auto move the mover to the next row of the current one
-		if(this.grid.select.outRangeY ){			
+		if(this.grid.select.outRangeY){
 			this.grid.scrollToRow(this.grid.scroller.firstVisibleRow + 1);
 			this.autoMoveBorderDiv();
 			setTimeout(dojo.hitch(this, 'autoMoveToNextRow'), this.autoScrollRate);
@@ -697,10 +726,18 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 	
 	autoMoveBorderDiv: function(){
 		//Summary:
-		//		auto move the drop indicator to the next row when avatar is moved out of the grid bottom 
-		this.avaOnRowIndex++;
-		var borderDIV = this.getBorderDiv();
-		borderDIV.style.top = dojo.coords(this.grid.views.views[0].rowNodes[this.avaOnRowIndex]).y + dojo._docScroll().y + "px";
+		//		auto move the drop indicator to the next row when avatar is moved out of the grid bottom
+		var docScroll = dojo._docScroll(), gridCoords = this.getGridCoords();
+		var viewBottomY = gridCoords.t + this.headerHeight + gridCoords.h + docScroll.y;
+		var nextRowY, borderDIV = this.getBorderDiv();
+		if(this.avaOnRowIndex + 1 >= this.grid.scroller.rowCount){
+			this.avaOnRowIndex = this.grid.scroller.rowCount;
+			nextRowY = viewBottomY;
+		}else{
+			this.avaOnRowIndex++;
+			nextRowY = dojo.coords(this.grid.views.views[0].rowNodes[this.avaOnRowIndex]).y + docScroll.y;
+		}
+		borderDIV.style.top = (nextRowY > viewBottomY ? viewBottomY : nextRowY) + "px";
 	},
 	
 	startMoveRows: function(){

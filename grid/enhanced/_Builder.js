@@ -44,7 +44,7 @@ dojo.declare("dojox.grid.enhanced._HeaderBuilder", [dojox.grid._HeaderBuilder, d
 			};
 			var no = ascendDom(e.target, makeNotTagName("th"));
             //console.log(dojo.coords(no).x, e.clientX);
-			var x = no ? e.clientX - dojo.coords(no).x : -1;
+			var x = no ? e.pageX - dojo.coords(no, true).x : -1;
 			if(dojo.isIE){
 				//fix zoom issue in IE				
 				var rect = dojo.body().getBoundingClientRect();

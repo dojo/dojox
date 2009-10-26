@@ -48,7 +48,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 	
 	selectedClass: "dojoxGridRowSelected",
 	
-	autoScrollRate: 500,
+	autoScrollRate: 1000,
 	
 	constructor: function(inGrid){
 		// inGrid: dojox.Grid
