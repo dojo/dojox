@@ -174,7 +174,7 @@
 	border: 1px dotted #a6a6a6;
 }
 
-.tundra .dojoxGridCellFocus.dojoxGridCellOver {
+.tundra .dojoxGridCellFocus .dojoxGridCellOver {
 	border: 1px dashed darkblue !important;
 }
 
