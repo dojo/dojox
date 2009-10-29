@@ -420,7 +420,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			dojo.stopEvent(e);
 			this.previous();
 		}else if(!this.isNavHeader() && !this._isHeaderHidden()) {
-			this.focusHeader();
+			this.grid.domNode.focus(); // will call doFocus and set focus into header.
 			dojo.stopEvent(e);
 		}else{
 			this.tabOut(this.grid.domNode);
