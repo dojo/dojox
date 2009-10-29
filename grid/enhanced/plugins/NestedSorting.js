@@ -586,14 +586,17 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 				w += dojo.marginBox(node).w;
 			})
 			sortWrapperBox.w = w;
-			sortWrapperBox.l = sortWrapperBox.t = 'null';
+			sortWrapperBox.l = (sortWrapperBox.t = 0);
 			dojo.marginBox(sortWrapper, sortWrapperBox);
 		}				
 		if(selectRegionBox.w != (parentBox.w - sortWrapperBox.w)){
-			selectRegionBox.w = parentBox.w - sortWrapperBox.w;			
-			// fix font increase & decrease issue in Safari & Chrome
-			dojo.isWebKit && (selectRegionBox.h = dojo.contentBox(parentBox).h);			
-			dojo.marginBox(selectRegion,selectRegionBox);
+			selectRegionBox.w = parentBox.w - sortWrapperBox.w;
+			if(!dojo.isWebKit){
+				dojo.marginBox(selectRegion,selectRegionBox);	
+			}else{//fix insufficient width of select region in Safari & Chrome when zoomed in
+				selectRegionBox.h = dojo.contentBox(parentBox).h;
+				dojo.style(selectRegion, "width", (selectRegionBox.w - 4) + "px");
+			}
 		}
 	},
 	
@@ -806,10 +809,10 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		if(!this._inResize(e.sourceView)){
 			this.addHoverSortTip(e);
 		}else{
-			if(e.target.offsetParent != e.cellNode && dojo.hasClass(e.target.offsetParent, 'dojoxGridCell')){
-				e.cellNode = e.target.offsetParent;
-				var nd = dojo.query("[id^=selectCol]", e.cellNode)[0];
-				e.cellIndex = nd ? nd.id.substring('selectCol'.length) : e.cellIndex;
+			var idx = e.cellIndex;
+			if(!this._sortTipMap[e.cellIndex]){
+				e.cellIndex = this._sortTipMap[idx + 1] ? (idx + 1) : (this._sortTipMap[idx - 1] ? (idx - 1) : idx);
+				e.cellNode = e.cellNode.parentNode.childNodes[e.cellIndex];
 			}
 			this.removeHoverSortTip(e);
 		}
@@ -1076,7 +1079,9 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 		if(e.target == this._colHeadNode){
 			this._scrollHeader(this.getHeaderIndex());
 		}else{
-			this.getFocusView(e).header.baseDecorateEvent(e);
+			var focusView = this.getFocusView(e);
+			if(!focusView){ return; }		
+			focusView.header.baseDecorateEvent(e);
 			this._addFocusBorder(e.target);
 			this._colHeadFocusIdx = e.cellIndex;
 			this._colHeadNode = this._findHeaderCells()[this._colHeadFocusIdx];
@@ -1100,8 +1105,10 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 		this.inherited(arguments);
 		this._removeFocusBorder();
 		//if(!this.isNavHeader() || this.lastHeaderFocus.cellNode && this.lastHeaderFocus.cellNode != this._colHeadNode){
-		if(!this.isNavCellRegion){		
-			this.getFocusView(e).header.baseDecorateEvent(e);
+		if(!this.isNavCellRegion){
+			var focusView = this.getFocusView(e);
+			if(!focusView){ return; }		
+			focusView.header.baseDecorateEvent(e);
 			this.grid.removeHoverSortTip(e);
 			this.lastHeaderFocus.cellNode = this._colHeadNode;
 		}
@@ -1258,6 +1265,8 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 		dojo.toggleClass(node, "dojoxGridSelectRegionFocus", true);
 		dojo.toggleClass(node, "dojoxGridSelectRegionHover", false);
 		
+		//cache the height - in IE6 the value will be doubled after 'node.insertBefore()'
+		var nodeH = node.offsetHeight;
 		if(node.hasChildNodes()){
 			node.insertBefore(this._focusBorderBox, node.firstChild);
 		}else{
@@ -1273,7 +1282,7 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 			x: dojo.coords(node).x - dojo.coords(this._focusBorderBox).x ,
 			y: dojo.coords(node).y - dojo.coords(this._focusBorderBox).y,
 			w: node.offsetWidth,
-			h: node.offsetHeight
+			h: nodeH
 		};
 		for(var i in _d){
 			var n = _d[i];
