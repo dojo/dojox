@@ -249,7 +249,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					xvals.reverse();
 				}
 					
-			    _chart.addSeries(store.series_name[i], xvals, { plot: axistype + "-" + charttype });
+				var seriesargs = { plot: axistype + "-" + charttype };
+				if(store.series_linestyle[i]){
+					seriesargs.stroke = { style: store.series_linestyle[i] };
+				}
+			    _chart.addSeries(store.series_name[i], xvals, seriesargs);
 			}
 		}
 		
@@ -418,6 +422,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//			chart: true if the series should be included in a chart presentation (default: true)
 		//          charttype: the type of presentation of the series in the chart, which can be
 		//				"range", "line", "bar" (default: "bar")
+		//          linestyle: the stroke style for lines (if applicable) (default: "Solid")
 		//          axis: the dependant axis to which the series will be attached in the chart,
 		//              which can be "primary" or "secondary"
         //			grid: true if the series should be included in a data grid presentation (default: true)
@@ -603,15 +608,16 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 			var _series = (typeof this.series == 'function') ? this.series(this.data) : this.series;
 
-			var datasets = [];
-			var series_data = [];
-			var series_name = [];
-			var series_chart = [];
-			var series_charttype = [];
-			var series_axis = [];
-			var series_grid = [];
-			var series_gridformatter = [];
-			var maxlen = 0;
+			var datasets = [],
+				series_data = [],
+				series_name = [],
+				series_chart = [],
+				series_charttype = [],
+				series_linestyle = [],
+				series_axis = [],
+				series_grid = [],
+				series_gridformatter = [],
+				maxlen = 0;
 			
 			// identify the dataset arrays in which series values can be found
 			for(var ser = 0; ser < _series.length; ser++){
@@ -625,6 +631,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				series_name[ser] = _series[ser].name || (_series[ser].namefield ? getSubfield(this.data, _series[ser].namefield) : null) || ("series " + ser);
 				series_chart[ser] = (_series[ser].chart !== false);
 				series_charttype[ser] = _series[ser].charttype || "bar";
+				series_linestyle[ser] = _series[ser].linestyle;
 				series_axis[ser] = _series[ser].axis || "primary";
 				series_grid[ser] = (_series[ser].grid !== false);
 				series_gridformatter[ser] = _series[ser].gridformatter;
@@ -677,6 +684,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			store.series_name = series_name; 
 			store.series_chart = series_chart; 
 			store.series_charttype = series_charttype; 
+			store.series_linestyle = series_linestyle; 
 			store.series_axis = series_axis; 
 			store.series_grid = series_grid; 
 			store.series_gridformatter = series_gridformatter;
