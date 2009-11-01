@@ -12,7 +12,7 @@ dojo.require("dojox.form.manager._DisplayMixin");
 dojo.require("dojox.form.manager._ClassMixin");
 
 dojo.declare("dojox.form.Manager", [
-		dijit._Widget, dijit._Templated,
+		dijit._Widget,
 		dojox.form.manager._Mixin,
 		dojox.form.manager._NodeMixin,
 		dojox.form.manager._FormMixin,
@@ -27,20 +27,17 @@ dojo.declare("dojox.form.Manager", [
 	//		This widget hosts dojox.form.manager mixins.
 	//		See dojox.form.manager._Mixin for more info.
 
-	widgetsInTemplate: true,
-
 	buildRendering: function(){
 		var node = this.domNode = this.srcNodeRef;
 		if(!this.containerNode){
 			// all widgets with descendants must set containerNode
 				this.containerNode = node;
 		}
-		this._attachTemplateNodes(node);
+		this._attachPoints = [];
+		dijit._Templated.prototype._attachTemplateNodes.call(this, node);
 	},
-
-	startup: function(){
-		if(this._started){ return; }
-		this._attachTemplateNodes(this.getDescendants(), function(n,p){ return n[p]; });
-		this.inherited(arguments);
+	
+	destroyRendering: function(){
+		dijit._Templated.prototype.destroyRendering.call(this);
 	}
 });
