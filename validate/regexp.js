@@ -108,7 +108,7 @@ dojo.mixin(dojox.validate.regexp, {
 		var portRE = flags.allowPort ? "(\\:\\d+)?" : "";
 
 		// build host RE
-		var hostNameRE = "((?:" + domainLabelRE + "\\.)*" + domainNameRE + "\\.?)";
+		var hostNameRE = "((?:" + domainLabelRE + "\\.)+" + domainNameRE + "\\.?)";
 		if(flags.allowIP){ hostNameRE += "|" +  dojox.validate.regexp.ipAddress(flags); }
 		if(flags.allowLocal){ hostNameRE += "|localhost"; }
 		if(flags.allowNamed){ hostNameRE += "|^[^-][a-zA-Z0-9_-]*"; }

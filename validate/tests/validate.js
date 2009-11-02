@@ -143,6 +143,7 @@ tests.register("dojox.validate.tests.validate",
 		name: "isEmailAddress",
 		runTest: function(tests) {
 			tests.t(dojox.validate.isEmailAddress('x@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x@yahoo'));
 			tests.t(dojox.validate.isEmailAddress('x.y.z.w@yahoo.com'));
 			tests.f(dojox.validate.isEmailAddress('x..y.z.w@yahoo.com'));
 			tests.f(dojox.validate.isEmailAddress('x.@yahoo.com'));
