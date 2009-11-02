@@ -236,10 +236,10 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				for(var j = 0; j < valen; j++){
 					var val = store.series_data[i][j];
 					xvals.push(val);
-					if(!maxval || (val > maxval)){
+					if(maxval === null || val > maxval){
 						maxval = val;
 					}
-					if(!minval || (val < minval)){
+					if(minval === null || val < minval){
 						minval = val;
 					}
 				}
