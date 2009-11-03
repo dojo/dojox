@@ -238,7 +238,7 @@ dojo.declare('dojox.widget.Dialog',
 		});
 		dojo.style(this.closeButtonNode,"opacity",1);
 		dojo.style(container, {
-			height: this._displaysize.h + "px",
+			height: this._displaysize.h - this.titleNode.offsetHeight + "px",
 			width: this._displaysize.w + "px",
 			overflow:"auto"
 		});
