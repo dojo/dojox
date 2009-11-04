@@ -264,11 +264,12 @@ dojo.provide("dojox.embed.Flash");
 		// setTimeout Fixes #8743 - creating double SWFs
 		// also allows time for code to attach to onError
 		setTimeout(dojo.hitch(this, function(){
-			if(this.available && this.available >= this.minimumVersion){
+			if(kwArgs.expressInstall || this.available && this.available >= this.minimumVersion){
 				if(kwArgs && node){
 					this.init(kwArgs, node);
-				}// FIXME: else what?
-				
+				}else{
+					this.onError("embed.Flash was not provided with teh proper arguments.");
+				}
 			}else{
 				if(!this.available){
 					this.onError("Flash is not installed.");
@@ -281,11 +282,13 @@ dojo.provide("dojox.embed.Flash");
 
 	dojo.extend(dojox.embed.Flash, {
 		onReady: function(/*HTMLObject*/ movie){
+			console.warn("embed.Flash.movie.onReady:", movie)
 			//	summary:
 			//		Stub function for you to attach to when the movie reference is first
 			//		pushed into the document.
 		},
 		onLoad: function(/*HTMLObject*/ movie){
+			console.warn("embed.Flash.movie.onLoad:", movie)
 			//	summary:
 			//		Stub function for you to attach to when the movie has finished downloading
 			//		and is ready to be manipulated.
@@ -303,6 +306,7 @@ dojo.provide("dojox.embed.Flash");
 			this.onLoad(this.movie);
 		},
 		init: function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode?*/ node){
+			console.log("embed.Flash.movie.init")
 			//	summary
 			//		Initialize (i.e. place and load) the movie based on kwArgs.
 			this.destroy();		//	ensure we are clean first.
