@@ -709,9 +709,11 @@ dojo.require("dojo.dnd.Manager");
 
 		setScrollTop: function(inTop){
 			// 'lastTop' is a semaphore to prevent feedback-loop with doScroll above
-			this.lastTop = inTop;
-			this.scrollboxNode.scrollTop = inTop;
-			return this.scrollboxNode.scrollTop;
+			if(this.lastTop !== inTop){
+				this.lastTop = inTop;
+				this.scrollboxNode.scrollTop = inTop;
+			}
+			return inTop;
 		},
 
 		// event handlers (direct from DOM)
