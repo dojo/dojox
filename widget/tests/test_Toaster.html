@@ -16,6 +16,8 @@
 		dojo.require("dojox.widget.Toaster");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 
+		dojo.require("dijit.Tooltip");
+		
 		var toast = null;
 		function showTestMessage(){
 			dojo.publish("testMessageTopic", 
@@ -67,6 +69,17 @@
 		displayed in the bottom right corner it should append the new message below
 		the old one with a separator between them.
 	</div>
+	
+	<h2>A Tooltip: (#10046)</h2>
+	<div><span id="one" class="tt" tabindex="0"> focusable text </span>
+		<span dojoType="dijit.Tooltip" connectId="one" id="one_tooltip">
+			<b>
+				<span style="color: blue;">rich formatting</span>
+				<span style="color: red; font-size: x-large;"><i>!</i></span>
+			</b>
+		</span>
+	</div>
+	
 	<p>
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean semper
 		sagittis velit. Cras in mi. Duis porta mauris ut ligula. Proin porta rutrum
@@ -143,5 +156,6 @@
 		sapien. Suspendisse imperdiet. Class aptent taciti sociosqu ad litora
 		torquent per conubia nostra, per inceptos hymenaeos.
 	</p>
+		
 </body>
 </html>
