@@ -1,4 +1,5 @@
 dojo.provide("dojox.math.BigInteger-ext");
+dojo.experimental("dojox.math.BigInteger-ext");
 
 dojo.require("dojox.math.BigInteger");
 

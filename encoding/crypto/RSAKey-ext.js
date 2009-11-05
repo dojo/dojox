@@ -1,4 +1,5 @@
 dojo.provide("dojox.encoding.crypto.RSAKey-ext");
+dojo.experimental("dojox.encoding.crypto.RSAKey-ext");
 
 dojo.require("dojox.encoding.crypto.RSAKey");
 dojo.require("dojox.math.BigInteger-ext");

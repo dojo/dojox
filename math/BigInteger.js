@@ -1,4 +1,5 @@
 dojo.provide("dojox.math.BigInteger");
+dojo.experimental("dojox.math.BigInteger");
 
 // Copyright (c) 2005  Tom Wu
 // All Rights Reserved.
