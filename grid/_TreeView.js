@@ -419,10 +419,12 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 			}
 		}, this);
 		var alt = false;
+		var self = this;
 		dojo.query("tr[dojoxTreeGridPath]", inRowNode).forEach(function(n){
 			dojo.toggleClass(n, "dojoxGridSubRowAlt", alt);
 			dojo.attr(n, "dojoxTreeGridBaseClasses", n.className);
 			alt = !alt;
+			self.grid.rows.styleRowNode(dojo.attr(n, 'dojoxTreeGridPath'), n);
 		});
 		this.inherited(arguments);
 	},
