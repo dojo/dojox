@@ -743,81 +743,76 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 	startMoveRows: function(){
 		//summary:
 		//		start to move the selected rows to target position
-		var startSetDiv = -1;
-		var deltaRowAmount = 0;
-		dojo.forEach(this.grid.selection.selected,function(row, index){
-			if(row){
-				if(startSetDiv == -1){
-					startSetDiv = index;
-				}
-				if(this.grid.selection.selected[index + 1] == null){
-					deltaRowAmount = this.moveRows(startSetDiv, index, deltaRowAmount);
-					startSetDiv = -1;
+		var start = Math.min(this.avaOnRowIndex, this.getFirstSelected());
+		var end = Math.max(this.avaOnRowIndex - 1, this.getLastSelected());
+		this.moveRows(start, end, this.getPageInfo());
+	},
+	
+	moveRows: function(start, end, pageInfo){
+		//summary:
+		//		Only move visible rows to avoid performance issue especially 
+		//		when there are many disperse selected rows across not-rendered pages
+		//start:Integer
+		//		the first row of the selected area to move
+		//end:Integer
+		//		the first row of the selected area to move deltaRowAmount
+		//pageInfo:Object
+		//		{topPage: xx, bottomPage: xx, invalidPages: [xx,xx,...]}
+		var i, rowMoved = false, selectedRows = (selectedRowsAboveBorderDIV = 0), tempArray = [];//all rows to be updated
+		var scroller = this.grid.scroller, rowsPerPage = scroller.rowsPerPage;
+		var topRow = pageInfo.topPage * rowsPerPage, bottomRow = (pageInfo.bottomPage + 1) * rowsPerPage - 1;
+		
+		var pushUnselectedRows = dojo.hitch(this, function(from, to){
+			for(i = from; i < to; i++){
+				if(!this.grid.selection.selected[i] || !this.grid._by_idx[i]){
+					tempArray.push(this.grid._by_idx[i]);
 				}
 			}
-		}, this);
+		});
+		
+		//push unselected rows above borderDIV to temp array
+		pushUnselectedRows(start, this.avaOnRowIndex);
+		
+		//push selected rows to temp array
+		for(i = start; i <= end; i++){
+			if(this.grid.selection.selected[i] && this.grid._by_idx[i]){
+				tempArray.push(this.grid._by_idx[i]);
+				selectedRows++;
+				if(this.avaOnRowIndex > i){ selectedRowsAboveBorderDIV++; } 
+			}
+		}
+		
+		//push unselected rows below borderDIV to temp array
+		pushUnselectedRows(this.avaOnRowIndex, end + 1);
+		
+		//update changed region
+		for(i = start, j = 0; i <= end; i++){
+			this.grid._by_idx[i] = tempArray[j++];
+			if(i >= topRow && i <= bottomRow){
+				this.grid.updateRow(i);
+				rowMoved = true;
+			}
+		}
+		this.avaOnRowIndex += selectedRows - selectedRowsAboveBorderDIV;
 		try{
-			
 			this.clearDrugDivs();
 			this.cleanAll();
-			this.drugSelectionStart.rowIndex = this.avaOnRowIndex - deltaRowAmount;
-			this.drugSelectRow(this.drugSelectionStart.rowIndex +  deltaRowAmount - 1);
+			this.drugSelectionStart.rowIndex = this.avaOnRowIndex - selectedRows;
+			this.drugSelectRow(this.drugSelectionStart.rowIndex +  selectedRows - 1);
+			if(rowMoved){
+				var stack = scroller.stack;
+				dojo.forEach(pageInfo.invalidPages, function(pageIndex){
+					scroller.destroyPage(pageIndex);
+					i = dojo.indexOf(stack, pageIndex);
+					if(i >= 0){
+						stack.splice(i, 1);
+					}
+				});			
+			}
 			this.publishRowMove();
 		}catch(e){
 			console.debug(e);
 		}
-	},
-	
-	moveRows: function(start, end, deltaRowAmount){
-		//summary:
-		//		move the selected rows to target position
-		//start:
-		//		the first row of the selected area to move
-		// end:
-		//		the first row of the selected area to move deltaRowAmount
-		if(this.avaOnRowIndex > end){
-			start -= deltaRowAmount;
-			end -= deltaRowAmount;
-		}
-		
-		var selectedAmount = end - start + 1;
-		deltaRowAmount += selectedAmount;
-		
-		var tempArray = [];
-		
-		for(var i = 0; i < selectedAmount; i++){
-			tempArray[i] = this.grid._by_idx[start + i];
-			this.grid._by_idx[start + i] = this.grid._by_idx[start + i + selectedAmount];
-		} 
-		
-		if(this.avaOnRowIndex  > end){
-			for(i = end + 1; i < this.avaOnRowIndex - selectedAmount; i++){
-				this.grid._by_idx[i] = this.grid._by_idx[i + selectedAmount];
-			}
-			
-			var insertPoint = this.avaOnRowIndex - selectedAmount;
-			for(i = insertPoint; i < this.avaOnRowIndex; i++){
-				this.grid._by_idx[i] = tempArray[i - insertPoint];
-			}
-			
-			for(i = start; i < this.avaOnRowIndex; i++){
-				this.grid.updateRow(i);
-			}
-		}else if(this.avaOnRowIndex  < end){
-			for(i = end; i > this.avaOnRowIndex + selectedAmount - 1; i--){
-				this.grid._by_idx[i] = this.grid._by_idx[i - selectedAmount];
-			}
-			for(i = this.avaOnRowIndex; i < this.avaOnRowIndex + selectedAmount; i++){
-				this.grid._by_idx[i] = tempArray[i - this.avaOnRowIndex];
-			}
-			for(i = this.avaOnRowIndex; i <= end; i++){
-				this.grid.updateRow(i);
-			}
-		}
-		if(this.avaOnRowIndex <= start){
-			this.avaOnRowIndex += selectedAmount;
-		}
-		return deltaRowAmount;
 	},
 	
 	clearDrugDivs: function(){
@@ -830,12 +825,12 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			borderDIV.style.left = -100 + "px";
 			
 	        dojo.forEach(this.coverDIVs, function(div){
-//					console.debug("del id=" + div.id);
-					dojo.forEach(div.connections, function(connection){
-						dojo.disconnect(connection);
-					});
-	                dojo.doc.body.removeChild(div);
-					delete div;
+				//console.debug("del id=" + div.id);
+				dojo.forEach(div.connections, function(connection){
+					dojo.disconnect(connection);
+				});
+	            dojo.doc.body.removeChild(div);
+				delete div;
 	        }, this);
 	        this.coverDIVs = [];
 		}
@@ -853,6 +848,36 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 				this.clearDrugDivs();
 			}
 		}
+	},
+	
+	getPageInfo: function(){
+		//summary:
+		//		Find pages that contain visible rows
+		//return: Object
+		//		{topPage: xx, bottomPage: xx, invalidPages: [xx,xx,...]}
+		var scroller = this.grid.scroller, topPage = (bottomPage = scroller.page);
+		var firstVisibleRow = scroller.firstVisibleRow, lastVisibleRow = scroller.lastVisibleRow;
+		var rowsPerPage = scroller.rowsPerPage, renderedPages = scroller.pageNodes[0];		
+		var topRow, bottomRow, invalidPages = [], matched;
+		
+		dojo.forEach(renderedPages, function(page, pageIndex){
+			if(!page){ return; }
+			matched = false;
+			topRow = pageIndex * rowsPerPage;
+			bottomRow = (pageIndex + 1) * rowsPerPage - 1;
+			if(firstVisibleRow >= topRow && firstVisibleRow <= bottomRow){
+				topPage = pageIndex;
+				matched = true;
+			}
+			if(lastVisibleRow >= topRow && lastVisibleRow <= bottomRow){
+				bottomPage = pageIndex;
+				matched = true;
+			}
+			if(!matched && (topRow > lastVisibleRow || bottomRow < firstVisibleRow)){
+				invalidPages.push(pageIndex);				
+			}
+		});
+		return {topPage: topPage, bottomPage: bottomPage, invalidPages: invalidPages};
 	},
 	
 	resetCellIdx: function(){

@@ -711,5 +711,25 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 			rowNodes.push(viewRowNodes[i]);
 		}
 		return rowNodes;
+	},
+	
+	getFirstSelected: function(){
+		//summary:
+		//		Get the first selected row index
+		//return: Integer
+		//		First selected row index
+		return dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype.getFirstSelected)();
+	},
+	
+	getLastSelected: function(){
+		//summary:
+		//		Get the last selected row index
+		//return: Integer
+		//		Last selected row index
+		var selected = this.grid.selection.selected;
+		for(var i = selected.length - 1; i >= 0; i--){
+			if(selected[i]){ return i; }
+		}
+		return -1;
 	}
 });
