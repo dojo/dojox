@@ -712,6 +712,9 @@ dojo.require("dojo.dnd.Manager");
 			if(this.lastTop !== inTop){
 				this.lastTop = inTop;
 				this.scrollboxNode.scrollTop = inTop;
+			}else{
+				// Rather than setting the scroll above, just call doscroll directly
+				this.doscroll();
 			}
 			return inTop;
 		},
