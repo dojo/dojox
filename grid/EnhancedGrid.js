@@ -91,6 +91,20 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		}
 	},
 	
+	textSizeChanged: function(){
+		// summary:
+		//		Overwritten, see _Grid.textSizeChanged()	
+		//      fix #10088 - in Webkit, this method is invoked by two parallel threads which caused #10088
+		if(!dojo.isWebKit){
+			this.inherited(arguments);
+		}else{
+			if(this.textSizeChanging){ return; }
+			this.textSizeChanging = true;
+			this.inherited(arguments);
+			this.textSizeChanging = false;
+		}
+	},
+	
 	removeSelectedRows: function(){
 		// summary:
 		//		Overwritten, see DataGrid.removeSelectedRows()
