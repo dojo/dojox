@@ -114,7 +114,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	// summary:
 	//		Extends the core dijit MultiSelect to provide a "checkbox" selector
 
-	templateString: "",
 	templateString: dojo.cache("dojox.form", "resources/CheckedMultiSelect.html"),
 
 	baseClass: "dojoxMultiSelect",
