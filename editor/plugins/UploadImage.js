@@ -68,6 +68,8 @@ dojo.declare("dojox.editor.plugins.UploadImage",
 			}
 			
 			tmpImgNode.src = file;
+			dojo.attr(tmpImgNode,'_djrealurl',file);
+
 			if(data.width){
 				tmpImgNode.width = data.width;
 				tmpImgNode.height = data.height;
