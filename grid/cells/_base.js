@@ -75,7 +75,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 				v = new dojox.grid._DeferredTextWidget({deferred: v},
 									dojo.create("span", {innerHTML: this.defaultValue}));
 			}
-			if(v && v.declaredClass){
+			if(v && v.declaredClass && v.startup){
 				return "<div class='dojoxGridStubNode' linkWidget='" +
 						v.id +
 						"' cellIdx='" +
