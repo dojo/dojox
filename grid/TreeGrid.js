@@ -189,7 +189,7 @@ dojo.declare("dojox.grid._TreeLayout", dojox.grid._Layout, {
 			if(g && g.treeModel){
 				s[0].type = "dojox.grid._TreeView";
 				this._isCollapsable = true;
-				s[0].cells[0][0].isCollapsable = true;
+				s[0].cells[0][(this.grid.treeModel?this.grid.expandoCell:0)].isCollapsable = true;
 			}else{
 				var childCells = dojo.filter(s[0].cells[0], function(c){
 					return ("children" in c);
@@ -238,7 +238,7 @@ dojo.declare("dojox.grid.TreePath", null, {
 		this.grid = grid;
 		this.store = this.grid.store;
 		if(grid.treeModel){
-			this.cell = grid.layout.cells[0];
+			this.cell = grid.layout.cells[grid.expandoCell];
 		}else{
 			this.cell = grid.layout.cells[this.level];
 		}
@@ -554,12 +554,18 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 	//		and openAtLevels will be ignored.
 	treeModel: null,
 	
+	// expandoCell: Integer
+	//		When used in conjunction with a treeModel (see above), this is a 0-based
+	//		index of the cell in which to place the actual expando
+	expandoCell: 0,
+	
 	// private values
 	// aggregator: Object
 	//		The aggregator class - it will be populated automatically if we
 	//		are a collapsable grid
 	aggregator: null,
-	
+
+
 	// Override this to get our "magic" layout
 	_layoutClass: dojox.grid._TreeLayout,
 

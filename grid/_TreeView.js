@@ -239,7 +239,7 @@ dojo.declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 			var iStack = rowStack.concat([]);
 			if(grid.treeModel && rowItem){
 				if(grid.treeModel.mayHaveChildren(rowItem)){
-					expandoCell = v.structure.cells[0][0];
+					expandoCell = v.structure.cells[0][grid.expandoCell||0];
 					parentOpen = expandoCell.getOpenState(rowItem) && shown;
 					path = new dojox.grid.TreePath(rowStack.join('/'), grid);
 					values = path.children(true)||[];
