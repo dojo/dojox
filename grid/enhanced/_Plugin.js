@@ -196,6 +196,11 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 			
 			//overwrite _View._getHeaderContent()
 			this.grid.nestedSorting && (view._getHeaderContent = this.grid._getNestedSortHeaderContent);
+			
+			//overwrite _View.setScrollTop(),
+			//#10273 fix of base DataGrid seems to bring some side effects to Enhanced Grid, 
+			//TODO - need a more close look post v.1.4 rather than simply overwrite it
+			this.grid.dnd && (view.setScrollTop = this.setScrollTop);
 		}));
 		
 		//overwrite _FocusManager.nextKey()
@@ -326,6 +331,14 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		var p = this.getNode(inRowIndex).firstChild, 
 		box = dojo.contentBox(p);
 		dojo.marginBox(this.widget.domNode, {w: box.w});
+	},
+	
+	setScrollTop: function(inTop){
+		//summary:
+		//		Overwrite dojox.grid._View.setScrollTop, "this" - _View scope
+		this.lastTop = inTop;
+		this.scrollboxNode.scrollTop = inTop;
+		return this.scrollboxNode.scrollTop;
 	},
 	
 	getViewByCellIdx: function(cellIdx){

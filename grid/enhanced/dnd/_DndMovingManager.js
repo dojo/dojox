@@ -718,9 +718,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//summary:
 		//		auto move the mover to the next row of the current one
 		if(this.grid.select.outRangeY){
-			this.grid.scrollToRow(this.grid.scroller.firstVisibleRow + 1);
-			this.autoMoveBorderDiv();
-			setTimeout(dojo.hitch(this, 'autoMoveToNextRow'), this.autoScrollRate);
+			if(this.avaOnRowIndex + 1 <= this.grid.scroller.rowCount){
+				this.grid.scrollToRow(this.grid.scroller.firstVisibleRow + 1);
+				this.autoMoveBorderDiv();
+				setTimeout(dojo.hitch(this, 'autoMoveToNextRow'), this.autoScrollRate);
+			}
 		}
 	},
 	
