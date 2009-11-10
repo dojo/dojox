@@ -355,7 +355,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 					});
 				}
 			}catch(e){
-				this._onFetchError(e);
+				this._onFetchError(e, {start: start, count: this.rowsPerPage});
 			}
 		}
 	},
