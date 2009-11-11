@@ -10,7 +10,8 @@ experimental, beta, stable
 Credits
 	Mike Wilcox 	 - Author
 	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
-		Preview, Save, ToolbarLineBreak, InsertEntity)
+		Preview, Save, ToolbarLineBreak, InsertEntity, 
+		NormalizeIndentOutdent)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -74,6 +75,13 @@ dojox.editor.plugins.InsertEntity:
 	basic latin (8859) set and a portion of greek symbols common to mathematics.
 	It has been marked experimental as it is likely this plugin will evolve a bit.
 
+dojox.editor.plugins.NormalizeIndentOutdent:
+	Status: Explerimental (unsupported).
+	A plugin that normalizes the behavior of indent/outdent to use margin styles instead
+	of <blockquote> tags.  Also fixes indent/outdent of lists to work properly.  This is new
+	and has been tested, but not extensively.  Therefore it is currently classed as experimental.
+
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -95,6 +103,7 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/Save
 	http://docs.dojocampus.org/dojox/editor/plugins/ToolbarLineBreak
 	http://docs.dojocampus.org/dojox/editor/plugins/InsertEntity
+	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeIndentOutdent
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -149,6 +158,12 @@ For the InsertEntity plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/InsertEntity.css" type="text/css" rel="stylesheet" />
 
+
+For the NormalizeIndentOutdent plugin:
+	dojo.require("dojox.editor.plugins.NormalizeIndentOutdent");
+	and CSS:
+	No CSS required.
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -159,3 +174,4 @@ See tests for examples:
 	dojox/editor/tests/editorSave.html
 	dojox/editor/tests/editorToolbarLineBreak.html
 	dojox/editor/tests/editorInsertEntity.html
+	dojox/editor/tests/editorNormalizeIndentOutdent.html
