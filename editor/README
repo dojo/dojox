@@ -11,7 +11,7 @@ Credits
 	Mike Wilcox 	 - Author
 	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
 		Preview, Save, ToolbarLineBreak, InsertEntity, 
-		NormalizeIndentOutdent)
+		NormalizeIndentOutdent, Breadcrumb)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -69,18 +69,23 @@ dojox.editor.plugins.ToolbarLineBreak:
 	toolbars for editor (lots of plugins enabled), can be broken up into multiple rows.
 
 dojox.editor.plugins.InsertEntity:
-	Status: Explerimental (unsupported).
+	Status: Experimental (unsupported).
 	A plugin that enables the ability to insert HTML/XML entity characters
 	into a page.  These are often called 'symbols'.  The set it provides are the
 	basic latin (8859) set and a portion of greek symbols common to mathematics.
 	It has been marked experimental as it is likely this plugin will evolve a bit.
 
 dojox.editor.plugins.NormalizeIndentOutdent:
-	Status: Explerimental (unsupported).
+	Status: Experimental (unsupported).
 	A plugin that normalizes the behavior of indent/outdent to use margin styles instead
 	of <blockquote> tags.  Also fixes indent/outdent of lists to work properly.  This is new
 	and has been tested, but not extensively.  Therefore it is currently classed as experimental.
 
+dojox.editor.plugins.Breadcrumb:
+	Status: Experimental (unsupported).
+	A plugin that adds a breadcrumb toolbar to the bottom of the editor.  Useful for seeing
+	where you aren and what operations you can perform.  This is new and has been tested, but not 
+	extensively.  Therefore it is currently classed as experimental.
 
 -------------------------------------------------------------------------------
 Dependencies:
@@ -104,6 +109,7 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/ToolbarLineBreak
 	http://docs.dojocampus.org/dojox/editor/plugins/InsertEntity
 	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeIndentOutdent
+	http://docs.dojocampus.org/dojox/editor/plugins/Breadcrumb
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -164,6 +170,11 @@ For the NormalizeIndentOutdent plugin:
 	and CSS:
 	No CSS required.
 
+For the Breadcrumb plugin:
+	dojo.require("dojox.editor.plugins.Breadcrumb");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/Breadcrumb.css" type="text/css" rel="stylesheet" />
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -175,3 +186,4 @@ See tests for examples:
 	dojox/editor/tests/editorToolbarLineBreak.html
 	dojox/editor/tests/editorInsertEntity.html
 	dojox/editor/tests/editorNormalizeIndentOutdent.html
+	dojox/editor/tests/editorBreadcrumb.html
