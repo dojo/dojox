@@ -45,7 +45,8 @@
         dojo.addOnLoad(function(){
 		
 			var props = {
-				isDebug:false,
+				isDebug:true,
+				devmode:true,
 				hoverClass:"uploadHover",
 				activeClass:"uploadPress",
 				disabledClass:"uploadDisabled",
@@ -65,7 +66,7 @@
 					showProgress:true,
 					fileListId:"fFiles",
 					tabIndex:5,
-					selectMultipleFiles:true,
+					selectMultipleFiles:false,
 					deferredUploading:false
 				},props), "btnF");
 				f.attr("disabled", dojo.byId("fGroup").value=="");
@@ -93,8 +94,10 @@
 					showProgress:true,
 					progressWidgetId:"progressBarHtml",
 					selectMultipleFiles:true,
+					//uploadOnChange:true,
 					fileListId:"hFiles",
-					tabIndex:11
+					tabIndex:11,
+					devMode:true
 				}, props), "btnH");
 				
 				h.attr("disabled", dojo.byId("hGroup").value=="");
@@ -110,6 +113,9 @@
 					dojo.forEach(dataArray, function(d){
 						addThumb(d, "hThumbs");
 					});
+				});
+				dojo.connect(h, "onError", function(err){
+					console.error("html error", err)
 				});
 			}
 			if(dijit.byId("btnD")){
@@ -223,7 +229,7 @@
     </style>
 </head>
 <body class="tundra">
-    <h1>FileUploader Widget Form Test</h1>
+  <h1>FileUploader Widget Form Test</h1>
 	<h3>Both forms on this page are the same except one is for testing the Flash Uploader and one
 	is for the HTML Uploader. The following features are being tested:</h3>
 	<ul>
@@ -273,7 +279,7 @@
 				<div indeterminate="false" id="progressBarHtml" class="progBar" dojoType="dijit.ProgressBar"></div>
 			</form>
 			<div id="hThumbs" class="thumbList"></div>
-		</td><!---->
+		</td>
 		</tr>
 	</table>
 </body>

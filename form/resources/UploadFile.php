@@ -43,8 +43,8 @@ trace("---------------------------------------------------------");
 //	EDIT ME: According to your local directory structure.
 // 	NOTE: Folders must have write permissions
 //
-$upload_path = "../resources/"; 	// where image will be uploaded, relative to this file
-$download_path = "../resources/";	// same folder as above, but relative to the HTML file
+$upload_path = "../resources/uploads/"; 	// where image will be uploaded, relative to this file
+$download_path = "../resources/uploads/";	// same folder as above, but relative to the HTML file
 
 //
 // 	NOTE: maintain this path for JSON services
@@ -111,6 +111,8 @@ if( isset($_FILES[$fieldName])){
 	$type = getImageType($file);
 	trace("file: " . $file ."  ".$type." ".$width);
 	// 		Flash gets a string back:
+	
+	//exit;
 	
 	$data .='file='.$file.',name='.$name.',width='.$width.',height='.$height.',type='.$type;
 	if($returnFlashdata){
@@ -222,4 +224,6 @@ trace("Json Data Returned:");
 trace($data);
 // in a text field:
 ?>
+
 <textarea><?php print $data; ?></textarea>
+
