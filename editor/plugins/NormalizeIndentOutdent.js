@@ -124,6 +124,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 		}else{
 			return this.editor._indentoutdent_queryCommandEnabled(command);
 		}
+		return false;
 	},
 
 	_indentImpl: function(/*String*/ html) {
@@ -203,6 +204,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 					}
 				}
 			}else{
+				var curNode;
 				// multi-node select.  We need to scan over them.
 				// Find the two containing nodes at start and end.
 				// then move the end one node past.  Then ... lets see
@@ -218,83 +220,82 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 					end = end.parentNode;
 				}
 				if(end === ed.editNode || end === ed.document.body){
-					// Unable to determine real selection end, so just make it 
-					// a single node indent of start + all following inline styles, if
-					// present.
-					tag = this._getTagName(start);
-					if(tag === "li"){
-						this._indentList(start);
-						return; 
-					}else if(this._isIndentableElement(tag) || 
-							 this._isTextElement(start) ||
-							 this._isInlineFormat(tag)){
-						// Element or textnode, So we want to indent it somehow
-						div = ed.document.createElement("div");
-						dojo.place(div, start, "after");
+					// Okay, selection end is somewhere after start, we need to find the last node
+					// that is safely in the range.
+					curNode = start;
+					while(curNode.nextSibling && this.inSelection(curNode, range)){
+						curNode = curNode.nextSibling;
+					}
+					end = curNode; 
+					if(end === ed.editNode || end === ed.document.body){
+						// Unable to determine real selection end, so just make it 
+						// a single node indent of start + all following inline styles, if
+						// present, then just exit.
+						tag = this._getTagName(start);
+						if(tag === "li"){
+							this._indentList(start);
+						}else if(this._isIndentableElement(tag)){
+							this._indentElement(start);
+						}else if(this._isTextElement(start) ||
+								 this._isInlineFormat(tag)){
+							// inline element or textnode, So we want to indent it somehow
+							div = ed.document.createElement("div");
+							dojo.place(div, start, "after");
 
-						// Find and move all inline tags following the one we inserted also into the 
-						// div so we don't split up content funny.
-						var next = start;
-						while(next && (
-							this._isTextElement(next) ||
-							(next.nodeType === 1 &&
-							this._isInlineFormat(this._getTagName(next))))){
-							div.appendChild(next);
-							next = div.nextSibling;
+							// Find and move all inline tags following the one we inserted also into the 
+							// div so we don't split up content funny.
+							var next = start;
+							while(next && (
+								this._isTextElement(next) ||
+								(next.nodeType === 1 &&
+								this._isInlineFormat(this._getTagName(next))))){
+								div.appendChild(next);
+								next = div.nextSibling;
+							}
+							this._indentElement(div);
 						}
-						this._indentElement(div);
 						return;
 					}
-				}else{
-					// Has a definite end somewhere, so lets try to indent up to it.
-					// requires looking at the selections and in some cases, moving nodes
-					// into indentable blocks.
-					end = end.nextSibling;
-					var curNode = start;
-					while(curNode && curNode !== end){
-						if(curNode.nodeType === 1){
-							tag = this._getTagName(curNode);
-							if(dojo.isIE){
-								// IE sometimes inserts blank P tags, which we want to skip 
-								// as they end up indented, which messes up layout.
-								if(tag === "p" && this._isEmpty(curNode)){
-									curNode = curNode.nextSibling;
-									continue;
-								}
+				}
+				
+				// Has a definite end somewhere, so lets try to indent up to it.
+				// requires looking at the selections and in some cases, moving nodes
+				// into indentable blocks.
+				end = end.nextSibling;
+				curNode = start;
+				while(curNode && curNode !== end){
+					if(curNode.nodeType === 1){
+						tag = this._getTagName(curNode);
+						if(dojo.isIE){
+							// IE sometimes inserts blank P tags, which we want to skip 
+							// as they end up indented, which messes up layout.
+							if(tag === "p" && this._isEmpty(curNode)){
+								curNode = curNode.nextSibling;
+								continue;
 							}
-							if(tag === "li"){
-								if(div){
-									if(this._isEmpty(div)){
-										div.parentNode.removeChild(div);
-									}else{
-										this._indentElement(div);
-									}
-									div = null;
-								}
-								this._indentList(curNode);
-							}else if(!this._isInlineFormat(tag) && this._isIndentableElement(tag)){
-								if(div){
-									if(this._isEmpty(div)){
-										div.parentNode.removeChild(div);
-									}else{
-										this._indentElement(div);
-									}
-									div = null;
-								}
-								curNode = this._indentElement(curNode);
-							}else if(this._isInlineFormat(tag)){
-								// inline tag.
-								if(!div){
-									div = ed.document.createElement("div");
-									dojo.place(div, curNode, "after");
-									div.appendChild(curNode);
-									curNode = div;
+						}
+						if(tag === "li"){
+							if(div){
+								if(this._isEmpty(div)){
+									div.parentNode.removeChild(div);
 								}else{
-									div.appendChild(curNode);
-									curNode = div;
+									this._indentElement(div);
 								}
+								div = null;
 							}
-						}else if(this._isTextElement(curNode)){
+							this._indentList(curNode);
+						}else if(!this._isInlineFormat(tag) && this._isIndentableElement(tag)){
+							if(div){
+								if(this._isEmpty(div)){
+									div.parentNode.removeChild(div);
+								}else{
+									this._indentElement(div);
+								}
+								div = null;
+							}
+							curNode = this._indentElement(curNode);
+						}else if(this._isInlineFormat(tag)){
+							// inline tag.
 							if(!div){
 								div = ed.document.createElement("div");
 								dojo.place(div, curNode, "after");
@@ -305,17 +306,27 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 								curNode = div;
 							}
 						}
-						curNode = curNode.nextSibling;
-					}
-					// Okay, indent everything we merged if we haven't yet..
-					if(div){
-						if(this._isEmpty(div)){
-							div.parentNode.removeChild(div);
+					}else if(this._isTextElement(curNode)){
+						if(!div){
+							div = ed.document.createElement("div");
+							dojo.place(div, curNode, "after");
+							div.appendChild(curNode);
+							curNode = div;
 						}else{
-							this._indentElement(div);
+							div.appendChild(curNode);
+							curNode = div;
 						}
-						div = null;
 					}
+					curNode = curNode.nextSibling;
+				}
+				// Okay, indent everything we merged if we haven't yet..
+				if(div){
+					if(this._isEmpty(div)){
+						div.parentNode.removeChild(div);
+					}else{
+						this._indentElement(div);
+					}
+					div = null;
 				}
 			}
 		}
@@ -377,8 +388,8 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 
 	_outdentImpl: function(/*String*/ html) {
 		// summary:
-		//		Improved implementation of indent, generates correct indent for 
-		//		ul/ol
+		//		Improved implementation of ondent, generates correct indent for 
+		//		ul/ol and other elements.
 		// tags:
 		//		private
 		var ed = this.editor;
@@ -430,6 +441,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 				}	
 			}
 		}
+		return null;
 	},
 
 
@@ -839,9 +851,55 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 			return true;
 		}
 		return false;
+	},
+
+	inSelection: function(node, range){
+		// summary:
+		//		This function determines if 'node' is
+		//		in the current selection.  Used for multi-line
+		//		select indention.
+		// node:
+		//		The node to check.
+		// range:
+		//		The WC3 (or pseudo W3C range)
+		//		range to check.
+		if(node && range){
+			var newRange;
+			var doc = this.editor.document;
+			if(range.compareBoundaryPoints && doc.createRange){
+				try{
+					newRange = doc.createRange();
+					newRange.setStart(node, 0);
+					if(range.compareBoundaryPoints(range.START_TO_END, newRange) === 1){
+						return true;
+					}
+				}catch(e){ /* squeltch */}
+			}else if(doc.selection){
+				// Probably IE, so we can't use the range object as the pseudo
+				// range doesn't implement the boundry checking, we have to 
+				// use IE specific crud.
+				range = doc.selection.createRange();
+				try{
+					newRange = node.ownerDocument.body.createControlRange();
+					if(newRange){
+						newRange.addElement(node);
+					}
+				}catch(e1){
+					try{
+						newRange = node.ownerDocument.body.createTextRange();
+						newRange.moveToElementText(node);
+					}catch(e2){/* squelch */}
+				}
+				if(range && newRange){
+					// We can finally compare similar to W3C
+					if(range.compareEndPoints("EndToStart", newRange) === 1){
+						return true;
+					}
+				}
+			}
+		}
+		return false; // boolean
 	}
-
-
 });
 
 // Register this plugin.
