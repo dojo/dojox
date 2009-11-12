@@ -223,7 +223,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 					// Okay, selection end is somewhere after start, we need to find the last node
 					// that is safely in the range.
 					curNode = start;
-					while(curNode.nextSibling && this.inSelection(curNode, range)){
+					while(curNode.nextSibling && this._inSelection(curNode, range)){
 						curNode = curNode.nextSibling;
 					}
 					end = curNode; 
@@ -853,7 +853,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 		return false;
 	},
 
-	inSelection: function(node, range){
+	_inSelection: function(node, range){
 		// summary:
 		//		This function determines if 'node' is
 		//		in the current selection.  Used for multi-line
@@ -863,6 +863,8 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 		// range:
 		//		The WC3 (or pseudo W3C range)
 		//		range to check.
+		// tags:
+		//		private
 		if(node && range){
 			var newRange;
 			var doc = this.editor.document;
@@ -873,7 +875,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 					if(range.compareBoundaryPoints(range.START_TO_END, newRange) === 1){
 						return true;
 					}
-				}catch(e){ /* squeltch */}
+				}catch(e){ /* squelch */}
 			}else if(doc.selection){
 				// Probably IE, so we can't use the range object as the pseudo
 				// range doesn't implement the boundry checking, we have to 
