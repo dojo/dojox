@@ -388,7 +388,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 
 	_outdentImpl: function(/*String*/ html) {
 		// summary:
-		//		Improved implementation of ondent, generates correct indent for 
+		//		Improved implementation of outdent, generates correct indent for 
 		//		ul/ol and other elements.
 		// tags:
 		//		private
