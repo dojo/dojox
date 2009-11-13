@@ -189,26 +189,28 @@ dojo.declare("dojox.data.JsonRestStore",
 					// mark it checked so we don't run into circular loops when encountering cycles
 					parent.__checked = 1;
 					for(var i in parent){
-						var value = parent[i];
-						if(value == item){
-							if(parent != index){ // make sure we are just operating on real objects
-								if(parent instanceof Array){
-									// mark it as needing to be spliced, don't do it now or it will mess up the index into the array
-									(toSplice = toSplice || []).push(i);
-								}else{
-									// property, just delete it.
-									(dojox.data._getStoreForItem(parent) || store).unsetAttribute(parent, i);
+						if(i.substring(0,2) != "__"){
+							var value = parent[i];
+							if(value == item){
+								if(parent != index){ // make sure we are just operating on real objects
+									if(parent instanceof Array){
+										// mark it as needing to be spliced, don't do it now or it will mess up the index into the array
+										(toSplice = toSplice || []).push(i);
+									}else{
+										// property, just delete it.
+										(dojox.data._getStoreForItem(parent) || store).unsetAttribute(parent, i);
+									}
 								}
-							}
-						}else{
-							if((typeof value == 'object') && value){
-								if(!value.__checked){
-									// recursively search
-									fixReferences(value);
-								}
-								if(typeof value.__checked == 'object' && parent != index){
-									// if it is a modified array, we will replace it
-									(dojox.data._getStoreForItem(parent) || store).setValue(parent, i, value.__checked);
+							}else{
+								if((typeof value == 'object') && value){
+									if(!value.__checked){
+										// recursively search
+										fixReferences(value);
+									}
+									if(typeof value.__checked == 'object' && parent != index){
+										// if it is a modified array, we will replace it
+										(dojox.data._getStoreForItem(parent) || store).setValue(parent, i, value.__checked);
+									}
 								}
 							}
 						}
