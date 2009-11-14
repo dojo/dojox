@@ -473,7 +473,7 @@ dojo.declare("dojox.layout.GridContainer",
 	getIndexZone : function(/*Node*/zone){
 		//summary: Return an integer by given a zone
 		for(var z = 0; z < this.grid.length; z++){
-			if(this.grid[z].domNode == zone){
+			if(this.grid[z].node.id == zone.id){
 				return z; // number
 			}
 		}
