@@ -702,21 +702,16 @@ dojo.require("dojo.dnd.Manager");
 			this.headerNode.scrollLeft = this.scrollboxNode.scrollLeft;
 			// 'lastTop' is a semaphore to prevent feedback-loop with setScrollTop below
 			var top = this.scrollboxNode.scrollTop;
-			if(top != this.lastTop){
+			if(top !== this.lastTop){
 				this.grid.scrollTo(top);
 			}
 		},
 
 		setScrollTop: function(inTop){
 			// 'lastTop' is a semaphore to prevent feedback-loop with doScroll above
-			if(this.lastTop !== inTop){
-				this.lastTop = inTop;
-				this.scrollboxNode.scrollTop = inTop;
-			}else{
-				// Rather than setting the scroll above, just call doscroll directly
-				this.doscroll();
-			}
-			return inTop;
+			this.lastTop = inTop;
+			this.scrollboxNode.scrollTop = inTop;
+			return this.scrollboxNode.scrollTop;
 		},
 
 		// event handlers (direct from DOM)

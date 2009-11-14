@@ -376,6 +376,7 @@ dojo.requireLocalization("dijit", "loading");
 			}
 			// Call this to update our autoheight to start out
 			this._setAutoHeightAttr(this.autoHeight, true);
+			this.lastScrollTop = this.scrollTop = 0;
 		},
 		
 		postCreate: function(){
@@ -915,10 +916,10 @@ dojo.requireLocalization("dijit", "loading");
 				return;
 			}
 			//this.edit.saveState(inRowIndex);
-			var lastScrollTop = this.scrollTop;
+			this.lastScrollTop = this.scrollTop;
 			this.prerender();
 			this.scroller.invalidateNodes();
-			this.setScrollTop(lastScrollTop);
+			this.setScrollTop(this.lastScrollTop);
 			this.postrender();
 			//this.edit.restoreState(inRowIndex);
 		},
