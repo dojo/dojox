@@ -82,8 +82,8 @@ dojo.declare("dojox.layout.GridContainer",
 	isOffset: false,
 
 	//offsetDrag: Object
-	//	 Allow to specify its own offset (x and y) onl when Parameter isOffset is true
-		offsetDrag : {}, //
+	//	 Allow to specify its own offset (x and y) only when Parameter isOffset is true
+	offsetDrag : {}, //
 
 	//withHandles: Boolean
 	//	Specify if there is a specific drag handle on widgets
@@ -113,7 +113,7 @@ dojo.declare("dojox.layout.GridContainer",
 		// FIXME: does this need a "scopeName"
 		props = props || {};
 		this.acceptTypes = props.acceptTypes || ["dijit.layout.ContentPane"];
-		this.dragOffset = props.dragOffset || { x:0, y:0 };
+		this.offsetDrag = props.offsetDrag || props.dragOffset || { x:0, y:0 };
 	},
 	postCreate: function(){
 		//build columns
