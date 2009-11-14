@@ -165,8 +165,10 @@
 				if(testGroups.length){
 					testGroups.shift()();
 				}else{
-					console.log("Done!");
-					alert("Done!");
+					setTimeout(function(){
+						console.log("Done!");
+						alert("Done!");
+					}, DELAY);
 				}
 			}
 
@@ -471,7 +473,7 @@
 	</head>
 	<body>
 		<p>Warning: the benchmark takes several minutes, wait for a dialog box.</p>
-		<p>Color legend: <span class="fastest">the fastest</span>, <span class="stablest">the most stable</span>, <span class="fastest stablest">the fastest and the stable</span></p>
+		<p>Color legend: <span class="fastest">the fastest</span>, <span class="stablest">the most stable</span>, <span class="fastest stablest">the fastest and the most stable</span></p>
 		<p><button onclick="startBenchmarks()">Start</button></p>
         <div id="result"></div>
 	</body>
