@@ -193,7 +193,7 @@ dojo.declare("dojox.layout.GridContainer",
 		//      Returns array of children widgets.
 		// description:
 		//      Returns the widgets that are directly under columns.
-		var children = dojo.query(".gridContainerZone >", this.containerNode).map(dijit.byNode); // Widget[]
+		var children = dojo.query(".gridContainerZone > [widgetId]", this.containerNode).map(dijit.byNode); // Widget[]
 		return children;
 	},
 
