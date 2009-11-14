@@ -236,7 +236,7 @@ dojo.declare("dojox.layout.GridContainer",
 		var children = this.getNewChildren();
 		for(var i = 0; i < children.length; i++){
 			try{
-				this._insertService(children[i].column - 1, i, 0, true);
+				this._insertService(children[i].column - 1, i, children[i], true);
 			}catch(e){
 				console.error("Unable to insert service in grid container", e, children[i]);
 			}
