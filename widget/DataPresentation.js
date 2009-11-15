@@ -103,7 +103,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	};
 	
 	// get the configuration of a plot for the chart
-	var getPlotArgs = function(charttype, axistype){
+	var getPlotArgs = function(charttype, axistype, animate){
 		
 		var args = { type: charttype, hAxis: "independent", vAxis: "dependent-" + axistype, gap: 4, lines: false, areas: false, markers: false };
 		
@@ -140,11 +140,16 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			args.type = "ClusteredColumns";
 		}
 		
+		// enable animation on the plot if animation is requested
+		if(animate){
+			args.animate = animate;
+		}
+		
 		return args;
 	};
 
 	// set up a chart presentation
-	var setupChart = function(/*DomNode*/domNode, /*Object?*/chart, /*String*/type, /*Boolean*/reverse, /*Integer*/labelMod, /*String*/theme, /*Object?*/store, /*String?*/query, /*String?*/queryOptions){
+	var setupChart = function(/*DomNode*/domNode, /*Object?*/chart, /*String*/type, /*Boolean*/reverse, /*Object*/animate, /*Integer*/labelMod, /*String*/theme, /*Object?*/store, /*String?*/query, /*String?*/queryOptions){
 		var _chart = chart;
 		
 		if(!_chart){
@@ -218,7 +223,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					var axisname = axistype + "-" + charttype;
 					
 					// create the plot and enable tooltips
-					_chart.addPlot(axisname, getPlotArgs(charttype, axistype));					
+					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));					
 					new dojox.charting.action2d.Tooltip(_chart, axisname);
 					
 					// add highlighting, except for lines
@@ -453,6 +458,15 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//  reverse: Boolean
 		//      true if the chart independant axis should be reversed.
 		reverse: false,
+		//
+		//  animate: Object
+		//      if an object is supplied, then the chart bars or columns will animate
+		//      into place. If the object contains a field 'duration' then the value
+		//      supplied is the duration of the animation in milliseconds, otherwise
+		//      a default duration is used. A boolean value true can alternatively be
+		//      supplied to enable animation with the default duration.
+		//      The default is null (no animation).
+		animate: null,
 		//
 		//  labelMod: Integer
 		//      the frequency of label annotations to be included on the
@@ -738,7 +752,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 			if(this.preparedstore){
 				if(this.chartNode){
-					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.labelMod, this.theme, this.preparedstore, this.query, this,queryOptions);
+					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.animate, this.labelMod, this.theme, this.preparedstore, this.query, this,queryOptions);
 				}
 				if(this.legendNode){
 					this.legendWidget = setupLegend(this.legendNode, this.legendWidget, this.chartWidget, this.legendVertical);

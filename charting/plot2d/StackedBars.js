@@ -88,6 +88,9 @@ dojo.require("dojox.lang.functional.reversed");
 							};
 							this._connectEvents(shape, o);
 						}
+						if(this.animate){
+							this._animateBar(shape, offsets.l, -width);
+						}
 					}
 				}
 				run.dirty = false;
