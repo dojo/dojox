@@ -45,13 +45,31 @@ dojo.require("dojox.lang.functional.reversed");
 						v = typeof value == "number" ? value : value.y,
 						vv = vt(v),
 						height = vv - baselineHeight,
-						h = Math.abs(height);
+						h = Math.abs(height),
+						specialColor  = color,
+						specialFill   = fill,
+						specialStroke = stroke;
+					if(typeof value != "number"){
+						if(value.color){
+							specialColor = new dojo.Color(value.color);
+						}
+						if("fill" in value){
+							specialFill = value.fill;
+						}else if(value.color){
+							specialFill = dc.augmentFill(t.series.fill, specialColor);
+						}
+						if("stroke" in value){
+							specialStroke = value.stroke;
+						}else if(value.color){
+							specialStroke = dc.augmentStroke(t.series.stroke, specialColor);
+						}
+					}
 					if(width >= 1 && h >= 1){
 						var shape = s.createRect({
 							x: offsets.l + ht(j + 0.5) + gap + shift,
 							y: dim.height - offsets.b - (v > baseline ? vv : baselineHeight),
 							width: width, height: h
-						}).setFill(fill).setStroke(stroke);
+						}).setFill(specialFill).setStroke(specialStroke);
 						run.dyn.fill   = shape.getFill();
 						run.dyn.stroke = shape.getStroke();
 						if(events){

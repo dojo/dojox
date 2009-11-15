@@ -79,13 +79,31 @@ dojo.require("dojox.lang.functional.reversed");
 						v = typeof value == "number" ? value : value.y,
 						hv = ht(v),
 						width = hv - baselineWidth,
-						w = Math.abs(width);
+						w = Math.abs(width),
+						specialColor  = color,
+						specialFill   = fill,
+						specialStroke = stroke;
+					if(typeof value != "number"){
+						if(value.color){
+							specialColor = new dojo.Color(value.color);
+						}
+						if("fill" in value){
+							specialFill = value.fill;
+						}else if(value.color){
+							specialFill = dc.augmentFill(t.series.fill, specialColor);
+						}
+						if("stroke" in value){
+							specialStroke = value.stroke;
+						}else if(value.color){
+							specialStroke = dc.augmentStroke(t.series.stroke, specialColor);
+						}
+					}
 					if(w >= 1 && height >= 1){
 						var shape = s.createRect({
 							x: offsets.l + (v < baseline ? hv : baselineWidth),
 							y: dim.height - offsets.b - vt(j + 1.5) + gap,
 							width: w, height: height
-						}).setFill(fill).setStroke(stroke);
+						}).setFill(specialFill).setStroke(specialStroke);
 						run.dyn.fill   = shape.getFill();
 						run.dyn.stroke = shape.getStroke();
 						if(events){

@@ -132,8 +132,8 @@ makeObjects = function(){
 	chart5.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
 	chart5.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", natural: true});
 	chart5.addPlot("default", {type: "ClusteredBars", gap: 5});
-	chart5.addSeries("Series A", [{y: 1, tooltip: "one"}, {y: 2}, {y: 3, tooltip: "three"}, {y: 4}, {y: 5, tooltip: "five"}], {stroke: {color: "black"}, fill: "red"});
-	chart5.addSeries("Series B", [{y: 5}, {y: 4, tooltip: "four"}, {y: 3}, {y: 2, tooltip: "two"}, {y: 1}], {stroke: {color: "black"}, fill: "blue"});
+	chart5.addSeries("Series A", [{y: 1, tooltip: "one/custom yellow", fill: "yellow"}, {y: 2}, {y: 3, tooltip: "three"}, {y: 4}, {y: 5, tooltip: "five"}], {stroke: {color: "black"}, fill: "red"});
+	chart5.addSeries("Series B", [{y: 5}, {y: 4, tooltip: "four"}, {y: 3, fill: "black", stroke: {width: 2, color: "#f80"}, tooltip: "custom black"}, {y: 2, tooltip: "two"}, {y: 1}], {stroke: {color: "black"}, fill: "blue"});
 	var anim5a = new dc.action2d.Highlight(chart5, "default", {
 		duration: dur,
 		easing:   dojo.fx.easing.bounceOut
