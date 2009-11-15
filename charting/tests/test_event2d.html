@@ -132,8 +132,8 @@ makeObjects = function(){
 	chart5.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true});
 	chart5.addAxis("y", {vertical: true, fixLower: "minor", fixUpper: "minor", natural: true});
 	chart5.addPlot("default", {type: "ClusteredBars", gap: 5});
-	chart5.addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "black"}, fill: "red"});
-	chart5.addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "black"}, fill: "blue"});
+	chart5.addSeries("Series A", [{y: 1, tooltip: "one"}, {y: 2}, {y: 3, tooltip: "three"}, {y: 4}, {y: 5, tooltip: "five"}], {stroke: {color: "black"}, fill: "red"});
+	chart5.addSeries("Series B", [{y: 5}, {y: 4, tooltip: "four"}, {y: 3}, {y: 2, tooltip: "two"}, {y: 1}], {stroke: {color: "black"}, fill: "blue"});
 	var anim5a = new dc.action2d.Highlight(chart5, "default", {
 		duration: dur,
 		easing:   dojo.fx.easing.bounceOut
@@ -244,7 +244,7 @@ dojo.addOnLoad(makeObjects);
 <p>4: Bars, axes aligned on major ticks, no minor ticks, custom strokes and fills. Actions: Highlight, Tooltip.</p>
 <div id="test4" style="width: 400px; height: 200px;"></div>
 <div id="legend4"></div>
-<p>5: Clustered bars, custom axes, custom strokes, fills, and gap. Actions: Highlight, Tooltip.</p>
+<p>5: Clustered bars, custom axes, custom strokes, fills, custom tooltips, and gap. Actions: Highlight, Tooltip.</p>
 <div id="test5" style="width: 400px; height: 200px;"></div>
 <div id="legend5"></div>
 <p>6: Clustered columns with positive and negative values, axes, and grid. Actions: Highlight, Shake, Tooltip.</p>

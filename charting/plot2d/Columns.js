@@ -73,7 +73,8 @@ dojo.require("dojox.lang.functional.reversed");
 				stroke = run.stroke ? run.stroke : dc.augmentStroke(t.series.stroke, color);
 				fill = run.fill ? run.fill : dc.augmentFill(t.series.fill, color);
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j],
+					var value = run.data[j],
+						v = typeof value == "number" ? value : value.y,
 						vv = vt(v),
 						height = vv - baselineHeight,
 						h = Math.abs(height);
@@ -120,7 +121,6 @@ dojo.require("dojox.lang.functional.reversed");
 					{name: "original"}
 				]
 			}, this.animate)).play();
-			
 		}
 	});
 })();

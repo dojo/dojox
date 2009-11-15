@@ -10,8 +10,8 @@ dojo.require("dojox.lang.functional.fold");
 (function(){
 	var DEFAULT_TEXT = function(o){
 		var t = o.run && o.run.data && o.run.data[o.index];
-		if(t && typeof t == "object" && t.tooltip){
-			return t.tooltip;
+		if(t && typeof t != "number" && (t.tooltip || t.text)){
+			return t.tooltip || t.text;
 		}
 		if(o.element == "candlestick"){
 			return '<table cellpadding="1" cellspacing="0" border="0" style="font-size:0.9em;">'
@@ -65,6 +65,7 @@ dojo.require("dojox.lang.functional.fold");
 					break;
 				case "column":
 					position = ["above", "below"];
+					// intentional fall down
 				case "bar":
 					aroundRect = dojo.clone(o.shape.getShape());
 					break;

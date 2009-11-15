@@ -29,7 +29,7 @@ dojo.require("dojox.lang.functional.reversed");
 			for(var i = 0; i < this.series.length; ++i){
 				var run = this.series[i];
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
+					var value = run.data[j], v = typeof value == "number" ? value : value.y;
 					if(isNaN(v)){ v = 0; }
 					acc[j] += v;
 				}
@@ -94,7 +94,7 @@ dojo.require("dojox.lang.functional.reversed");
 				run.dirty = false;
 				// update the accumulator
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
+					var value = run.data[j], v = typeof value == "number" ? value : value.y;
 					if(isNaN(v)){ v = 0; }
 					acc[j] -= v;
 				}
