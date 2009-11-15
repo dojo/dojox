@@ -522,7 +522,7 @@ dojo.experimental("dojox.dtl");
 			// description: Steps into tags are they're found. Blocks use the parse object
 			//		to find their closing tag (the stop_at array). stop_at is inclusive, it
 			//		returns the node that matched.
-			var terminators = {};
+			var terminators = {}, token;
 			stop_at = stop_at || [];
 			for(var i = 0; i < stop_at.length; i++){
 				terminators[stop_at[i]] = true;
