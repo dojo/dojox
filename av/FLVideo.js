@@ -75,8 +75,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 	
 		this._flashObject = new dojox.embed.Flash(args, this.domNode);
 		this._flashObject.onError = function(err){
-			console.warn("Flash Error:", err);
-			alert(err);
+			console.error("Flash Error:", err);
 		};
 		this._flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.flashMedia = mov;
@@ -86,7 +85,7 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			this._initStatus();
 			this._update();			 
 		});
-		
+		this.inherited(arguments);
 	},
 	
 	//  =============================  //

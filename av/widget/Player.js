@@ -97,33 +97,23 @@ dojo.declare("dojox.av.widget.Player", [dijit._Widget, dijit._Templated], {
 			dojo.style(this.media.domNode, "width", "100%");
 			dojo.style(this.media.domNode, "height", "100%");
 		}
-		
-		//dojo.style(this.media.domNode, "width", this.videoWidth+(dojo.isString(this.playerWidth)?"":"px"));
-		//dojo.style(this.media.domNode, "height", this.videoHeight+(dojo.isString(this.playerWidth)?"":"px"));
-		//return
-		//setTimeout(dojo.hitch(this, function(){
 		dojo.forEach(this.items, function(id){
-			//console.log("    ids:", id , this.mediaNode.id)
 			if(id !== this.mediaNode.id){
 				var child = dijit.byId(id);
 				this.children.push(child);	
 				if(child){
-					console.log("child:", child.declaredClass, "this.media:", this.media)	
 					child.setMedia(this.media, this);
 				}
 			}
 		}, this);
-		//}),1000)
 	},
+	
 	onResize: function(evt){
 		// summary:
 		//		If a player size is a percentage, this will fire an onResize
 		//		event for all children, passing the size of the player.
 		//
 		var dim = dojo.marginBox(this.domNode);
-		
-		
-		
 		if(this.media && this.media.onResize !== null){
 			this.media.onResize(dim);	
 		}

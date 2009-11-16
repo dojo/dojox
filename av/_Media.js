@@ -295,14 +295,18 @@ dojo.declare("dojox.av._Media", null, {
 		//		Checks that path is relative to HTML file or
 		//		convertes it to an absolute path. 
 		//
-		if(_url && _url.toLowerCase().indexOf("http")<0){
+		
+		console.log("  url:", _url);
+		
+		if(_url && (_url.toLowerCase().indexOf("http")<0 || _url.indexOf("/") == 0)){
 			//
 			// Appears to be a relative path. Attempt to  convert it to absolute, 
 			// so it will better target the SWF.
 			var loc = window.location.href.split("/");
 			loc.pop();
-			loc = loc.join("/")+"/";
 			
+			loc = loc.join("/")+"/";
+			console.log("  loc:", loc);
 			_url = loc+_url;
 		}
 		return _url;
