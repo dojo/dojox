@@ -118,7 +118,7 @@ dojo.provide("dojox.widget.rotator.Controller");
 							for(var j=0; j<r.panes.length; j++){
 								cb(
 									/*label*/ b == '#' ? j+1 : r.panes[j].title || "Tab " + (j+1),
-									/*css*/ (b == '#' ? _number : _tab) + ' ' + (j == r.idx ? _selected : ""),
+									/*css*/ (b == '#' ? _number : _tab) + ' ' + (j == r.idx ? _selected : "") + ' ' + _dojoxRotator + "Pane" + j,
 									/*action*/ ["go", j]
 								);
 							}
