@@ -212,16 +212,17 @@ dojo.declare("dojox.layout.GridContainer",
 			nbs = childs.length,
 			res = Math.floor(nbs / nbz),
 			mod = nbs % nbz,
-			i = 0
-		;
+			i = 0;
 		
 		for(var z = 0; z < nbz; z++){
 			for(var r = 0; r < res; r++){
-				this._insertService(z, i++, childs[i], true);
+				this._insertService(z, i, childs[i], true);
+				i++;
 			}
 			if(mod>0){
 				try{
-					this._insertService(z, i++, childs[i], true);
+					this._insertService(z, i, childs[i], true);
+					i++;
 				}
 				catch(e){
 					console.error("Unable to insert service in grid container", e, childs);
@@ -251,11 +252,11 @@ dojo.declare("dojox.layout.GridContainer",
 		// service: child to insert
 		// first:
 
-		if(typeof(service) == "undefined" )return;
+		if(service === undefined){ return; }
 		var zone = this.getZones()[z];
 
 		var kidsZone = zone.childNodes.length;
-		if(typeof(p) == "undefined" || p > kidsZone){ p = kidsZone; }
+		if(p === undefined || p > kidsZone){ p = kidsZone; }
 
 		var toto = dojo.place(service.domNode, zone, p);
 		service.domNode.setAttribute("tabIndex", 0);
@@ -447,7 +448,7 @@ dojo.declare("dojox.layout.GridContainer",
 
 		dojo.forEach(this.grid, function(zone){
 			if(zone.grip){
-				if(typeof(height) == "undefined" ){
+				if(height === undefined){
 					if(this.allowAutoScroll){
 						height = this.gridNode.scrollHeight;
 					}else{
