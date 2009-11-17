@@ -195,7 +195,7 @@ dojo.require("dojo.data.util.filter");
 						self.updateResultSet(results,args);
 						args.cacheResults = results;
 						if(!args.count || results.length < args.count){
-							defResult.fullLength = results.length;
+							defResult.fullLength = ((args.start)?args.start:0) + results.length;
 						}
 					}
 					return results;
