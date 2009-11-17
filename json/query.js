@@ -1,7 +1,7 @@
 dojo.provide("dojox.json.query");
 
 (function(){
-	function slice(obj,start,end,step){
+	function s(obj,start,end,step){
 		// handles slice operations: [3:6:2]
 		var len=obj.length,results = [];
 		end = end || len;
@@ -12,7 +12,7 @@ dojo.provide("dojox.json.query");
 	  	}
 		return results;
 	}
-	function expand(obj,name){
+	function e(obj,name){
 		// handles ..name, .*, [*], [val1,val2], [val]
 		// name can be a property to search for, undefined for full recursive, or an array for picking by index
 		var results = [];
@@ -210,7 +210,7 @@ dojo.provide("dojox.json.query");
 					var prefix = '';
 					if(t.match(/^\./)){
 						// recursive object search
-						call("expand");
+						call("e");
 						prefix = ",true)";
 					}
 					call(oper[1].match(/\=/) ? "dojo.map" : oper[1].match(/\^/) ? "distinctFilter" : "dojo.filter");
@@ -227,11 +227,11 @@ dojo.provide("dojox.json.query");
 				}
 				oper = t.match(/^\[(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)\]/); // slice [0:3]
 				if(oper){
-					call("slice");
+					call("s");
 					return "," + (oper[1] || 0) + "," + (oper[2] || 0) + "," + (oper[3] || 1) + ")"; 
 				}
 				if(t.match(/^\.\.|\.\*|\[\s*\*\s*\]|,/)){ // ..prop and [*]
-					call("expand");
+					call("e");
 					return (t.charAt(1) == '.' ? 
 							",'" + b + "'" : // ..prop 
 								t.match(/,/) ? 
