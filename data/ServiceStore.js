@@ -312,7 +312,7 @@ dojo.declare("dojox.data.ServiceStore",
 			defResult.addErrback(args.onError && dojo.hitch(scope, args.onError));
 			args.abort = function(){
 				// abort the request
-				defResult.ioArgs.xhr.abort();
+				defResult.cancel();
 			};
 			args.store = this;
 			return args;
