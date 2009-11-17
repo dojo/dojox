@@ -100,10 +100,10 @@ dojo.require("dojo.data.util.filter");
 						resultSet.sort(this.makeComparator(request.sort.concat()));
 					}
 					resultSet._fullLength = resultSet.length;
-					if(request.count && updated){
+					if(request.count && updated && request.count !== Infinity){
 						// do we really need to do this?
 						// make sure we still find within the defined paging set
-						resultSet.splice(request.count,resultSet.length);
+						resultSet.splice(request.count, resultSet.length);
 					}
 					request._version = this._updates.length;
 					return updated ? 2 : 1;
