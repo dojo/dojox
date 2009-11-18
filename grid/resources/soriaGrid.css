@@ -84,7 +84,7 @@
 }
 
 .soria .dojoxGridRowbarSelected {
-	background: #D9E8F9 url(../../../dijit/themes/soria/images/titleBar.png) #ddd no-repeat center;
+	background: url(../../../dijit/themes/soria/images/titleBar.png) #D9E8F9 no-repeat center;
 	border-right: 1px solid #ccc;
 }
 

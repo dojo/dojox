@@ -106,7 +106,7 @@
 }
 
 .tundra .dojoxGridRowbarSelected {
-	background: #D8E8F9 url(../../../dijit/themes/tundra/images/tabDisabled.png) #ddd no-repeat center;
+	background: url(../../../dijit/themes/tundra/images/tabDisabled.png) #D8E8F9 no-repeat center;
 	border-right: 1px solid #ccc;
 }
 
