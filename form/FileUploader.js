@@ -931,7 +931,7 @@ dojo.destroy(temp);
 				this.fileList = this.fileList.concat(dataArray);
 			}else{
 				if(this.fileList[0]){
-					this.removeFile(this.fileList[0].name);
+					this.removeFile(this.fileList[0].name, true);
 				}
 				this.fileList = dataArray;
 			}
