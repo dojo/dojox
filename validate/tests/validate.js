@@ -147,13 +147,29 @@ tests.register("dojox.validate.tests.validate",
 			tests.t(dojox.validate.isEmailAddress('x.y.z.w@yahoo.com'));
 			tests.f(dojox.validate.isEmailAddress('x..y.z.w@yahoo.com'));
 			tests.f(dojox.validate.isEmailAddress('x.@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('.x@yahoo.com'));
+			tests.t(dojox.validate.isEmailAddress('azAZ09!#$%.&\'*+-/=?_`{|}y@yahoo.com'));
+			tests.t(dojox.validate.isEmailAddress('x=y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x(y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x)y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x<y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x>y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x[y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x]y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x:y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x;y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x@y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x\\y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x,y@yahoo.com'));
+			tests.f(dojox.validate.isEmailAddress('x\"y@yahoo.com'));
 			tests.t(dojox.validate.isEmailAddress('x@z.com'));
 			tests.t(dojox.validate.isEmailAddress('x@yahoo.x'));
 			tests.t(dojox.validate.isEmailAddress('x@yahoo.museum'));
 			tests.t(dojox.validate.isEmailAddress("o'mally@yahoo.com"));
-			tests.f(dojox.validate.isEmailAddress("'mally@yahoo.com"));
+			tests.t(dojox.validate.isEmailAddress("o''mally@yahoo.com"));
+			tests.t(dojox.validate.isEmailAddress("'mally@yahoo.com"));
 			tests.t(dojox.validate.isEmailAddress("fred&barney@stonehenge.com"));
-			tests.f(dojox.validate.isEmailAddress("fred&&barney@stonehenge.com"));
+			tests.t(dojox.validate.isEmailAddress("fred&&barney@stonehenge.com"));
 		
 			// local addresses
 			tests.t(dojox.validate.isEmailAddress("fred&barney@localhost", {allowLocal: true} ));

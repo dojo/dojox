@@ -154,8 +154,8 @@ dojo.mixin(dojox.validate.regexp, {
 		if (typeof flags.allowCruft != "boolean") { flags.allowCruft = false; }
 		flags.allowPort = false; // invalid in email addresses
 
-		// user name RE - apostrophes are valid if there's not 2 in a row
-		var usernameRE = "([\\da-zA-Z]+[-._+&'])*[\\da-zA-Z]+";
+		// user name RE per rfc5322
+		var usernameRE = "([!#-'*+\\-\\/-9=?A-Z^-~]+[.])*[!#-'*+\\-\\/-9=?A-Z^-~]+";
 
 		// build emailAddress RE
 		var emailAddressRE = usernameRE + "@" + dojox.validate.regexp.host(flags);
