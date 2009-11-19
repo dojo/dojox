@@ -45,10 +45,10 @@ dojo.provide("dojox.rpc.Rest");
 
 	function index(deferred, service, range, id){
 		deferred.addCallback(function(result){
-			if(range){
-				// try to record the total number of items from the range header
-				range = deferred.ioArgs.xhr && deferred.ioArgs.xhr.getResponseHeader("Content-Range");
-				deferred.fullLength = range && (range=range.match(/\/(.*)/)) && parseInt(range[1]);
+			if(deferred.ioArgs.xhr && range){
+					// try to record the total number of items from the range header
+					range = deferred.ioArgs.xhr.getResponseHeader("Content-Range");
+					deferred.fullLength = range && (range=range.match(/\/(.*)/)) && parseInt(range[1]);
 			}
 			return result;
 		});
@@ -76,13 +76,17 @@ dojo.provide("dojox.rpc.Rest");
 		// the default XHR args creator:
 		service._getRequest = getRequest || function(id, args){
 			if(dojo.isObject(id)){
-				var sort = args.sort && args.sort[0];
-				if(sort && sort.attribute){
-					id.sort = (sort.descending ? '-' : '') + sort.attribute; 
-				}
 				id = dojo.objectToQuery(id);
 				id = id ? "?" + id: "";
-			}		
+			}
+			if(args && args.sort){
+				id += (id ? "&" : "?") + "sort("
+				for(var i = 0; i<args.sort.length; i++){
+					var sort = args.sort[i];
+					id += (i > 0 ? "," : "") + (sort.descending ? '-' : '+') + encodeURIComponent(sort.attribute); 
+				}
+				id += ")";
+			}
 			var request = {
 				url: path + (id == null ? "" : id),
 				handleAs: isJson ? 'json' : 'text', 
