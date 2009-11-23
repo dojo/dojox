@@ -12,7 +12,7 @@ Credits
 -------------------------------------------------------------------------------
 Project description
 
-DojoX jq is an compatibility layer that tries to match the jquery 1.3.2 API.
+DojoX jq is a compatibility layer that tries to match the jquery 1.3.2 API.
 -------------------------------------------------------------------------------
 Dependencies:
 

@@ -23,8 +23,16 @@ dojox = {
 	//	DojoX can also be an incubator for entirely new projects.
 }
 
-dojox._sql = { 
-	// summary: objects to support Dojo Offline (dojox.off)
+dojox.analytics = { 
+	// summary: TODOC 
+};
+
+dojox.atom = { 
+	// summary: TODOC 
+};
+
+dojox.av = { 
+	// summary: TODOC 
 };
 
 dojox.charting = { 
@@ -43,10 +51,6 @@ dojox.cometd = {
 	// summary: A cometd client written in Dojo
 };
 
-dojox.crypto = { 
-	// summary: Cryptography in JS.  DEPRECATED: use dojox.encoding instead.
-};	
-
 dojox.data = { 
 	// summary: Additional dojo.data data stores and demos
 };
@@ -55,8 +59,16 @@ dojox.date = {
 	// summary: Additional date manipulation functions
 };
 
+dojox.drawing = { 	
+	// summary: A vector drawing program
+};
+
 dojox.dtl = { 
 	// summary: Django Templating Language implementation	
+};
+
+dojox.editor = { 
+	// summary: Extensions for dijit.Editor
 };
 
 dojox.encoding = { 
@@ -65,6 +77,10 @@ dojox.encoding = {
 
 dojox.flash = { 
 	// summary: Utilities to embed and communicate with Flash-based objects
+};
+
+dojox.form = { 
+	// summary: Form-related widgets
 };
 
 dojox.fx = {
@@ -105,6 +121,10 @@ dojox.grid = {
 	// summary: An advanced Grid widget with virtual scrolling, cell editing, and much more 
 };	
 
+dojox.help = {
+	// summary: TODOC
+};
+
 dojox.highlight = { 
 	// summary: A client-side syntax highlighting engine.
 	// description:
@@ -119,6 +139,10 @@ dojox.highlight = {
 	//	
 };
 
+dojox.html = {
+	// summary: TODOC
+};
+
 dojox.image = { 
 	// summary: A collection of image related widgets
 };
@@ -127,12 +151,12 @@ dojox.io = {
 	// summary: Extensions to the Core dojo.io transports
 };
 
-dojox.jsonPath = { 
-	// summary: A query system for JavaScript objects
+dojox.jq = {
+	// summary: A JQuery compatibility layer
 };
 
-dojox.layout = { 
-	// summary: A collection of layout related Widgets
+dojox.jsonPath = { 
+	// summary: A query system for JavaScript objects
 };
 
 dojox.lang = { 
@@ -142,20 +166,32 @@ dojox.lang = {
 	}
 };
 
+dojox.layout = { 
+	// summary: A collection of layout related Widgets
+};
+
 dojox.math = { 
 	// summary: A collection of various advanced math functions.
 };
 
-dojox.off = { 
-	// summary: the Dojo Offline project
+dojox.robot = {
+	// summary: TODOC
 };
 
-dojox.presentation = {
-	// summary: A simple, experimental PowerPoint-like presentation project
+dojox.rpc = { 
+	// summary: TODOC
 };
 
-dojox.regexp = { 
-	// summary: Additional pre-made regular expressions for use
+dojox.secure = { 
+	// summary: TODOC
+};
+
+dojox.sketch = { 
+	// summary: TODOC
+};
+
+dojox.sql = { 
+	// summary: objects to support Dojo Offline (dojox.off)  DEPRECATED
 };
 
 dojox.storage = { 
@@ -164,6 +200,10 @@ dojox.storage = {
 
 dojox.string = {
 	// summary: A collection of various objects for advanced string manipulation, including a Builder and a tokenizer.
+};
+
+dojox.testing = {
+	// summary: TODOC
 };
 
 dojox.timing = {
@@ -185,7 +225,7 @@ dojox.validate = {
 };
 
 dojox.widget = { 
-	// summary: A collection of un-categorized widgets, or code not requiring it's own package.
+	// summary: A collection of un-categorized widgets, or code not requiring its own package.
 	// 
 	// description: 
 	// 	These are standalone widgets with varying levels of stability. Some are useful, 
@@ -200,5 +240,9 @@ dojox.wire = {
 
 dojox.xml = {
 	// summary: XML utilities.  Currently only includes a DomParser, which returns a psuedo-XML document in JSON-like form.
+};
+
+dojox.xmpp = {
+	// summary: TODOC
 };
 =====*/
