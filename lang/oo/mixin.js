@@ -69,7 +69,7 @@ dojo.require("dojox.lang.oo.Decorator");
 			prop = source[name];
 			if(!(name in empty) || empty[name] !== prop){
 				targetName = filter(name, target, source, prop);
-				if(!(targetName in target) || (target[targetName] !== prop && (!(targetName in empty) || empty[targetName] !== prop))){
+				if(targetName && (!(targetName in target) || !(targetName in empty) || empty[targetName] !== prop)){
 					// name is accepted
 					oldValue = target[targetName];
 					newValue = applyDecorator(decorator, targetName, prop, oldValue);
@@ -86,7 +86,7 @@ dojo.require("dojox.lang.oo.Decorator");
 				prop = source[name];
 				if(!(name in empty) || empty[name] !== prop){
 					targetName = filter(name, target, source, prop);
-					if(!(targetName in target) || (target[targetName] !== prop && (!(targetName in empty) || empty[targetName] !== prop))){
+					if(targetName && (!(targetName in target) || !(targetName in empty) || empty[targetName] !== prop)){
 						// name is accepted
 						oldValue = target[targetName];
 						newValue = applyDecorator(decorator, targetName, prop, oldValue);
