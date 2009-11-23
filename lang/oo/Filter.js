@@ -19,12 +19,13 @@ dojo.provide("dojox.lang.oo.Filter");
 		this.bag = bag;
 		this.filter = typeof filter == "object" ?
 			function(){ return filter.exec.apply(filter, arguments); } : filter;
-	};
+	},
 
 	// the default map-based filter object
-	var MapFilter = function(map){
+	MapFilter = function(map){
 		this.map = map;
 	};
+
 	MapFilter.prototype.exec = function(name){
 		return this.map.hasOwnProperty(name) ? this.map[name] : name;
 	};

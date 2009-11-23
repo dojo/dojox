@@ -3,7 +3,8 @@ dojo.provide("dojox.lang.oo.general");
 dojo.require("dojox.lang.oo.Decorator");
 
 (function(){
-	var oo = dojox.lang.oo, md = oo.makeDecorator, oog = oo.general;
+	var oo = dojox.lang.oo, md = oo.makeDecorator, oog = oo.general,
+		isF = dojo.isFunction;
 
 	// generally useful decorators
 
@@ -19,7 +20,7 @@ dojo.require("dojox.lang.oo.Decorator");
 
 	oog.shuffle = md(function(name, newValue, oldValue){
 		// summary: replaces arguments for an old method
-		return dojo.isFunction(oldValue) ?
+		return isF(oldValue) ?
 			function(){
 				return oldValue.apply(this, newValue.apply(this, arguments));
 			} : oldValue;
@@ -39,7 +40,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		//	summary:
 		//		creates a chain of calls where the new method is called
 		//		before the old method
-		return dojo.isFunction(oldValue) ?
+		return isF(oldValue) ?
 			function(){
 				newValue.apply(this, arguments);
 				return oldValue.apply(this, arguments);
@@ -50,7 +51,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		//	summary:
 		//		creates a chain of calls where the new method is called
 		//		after the old method
-		return dojo.isFunction(oldValue) ?
+		return isF(oldValue) ?
 			function(){
 				oldValue.apply(this, arguments);
 				return newValue.apply(this, arguments);

@@ -11,6 +11,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		defaultDecorator = function(name, newValue, oldValue){ return newValue; },
 		defaultMixer = function(target, name, newValue, oldValue){ target[name] = newValue; },
 		defaults = {},	// for the internal use in the mixin()
+		extraNames = dojo._extraNames, extraLen = extraNames.length,
 
 		applyDecorator = oo.applyDecorator = function(decorator, name, newValue, oldValue){
 			//	summary:
@@ -61,14 +62,14 @@ dojo.require("dojox.lang.oo.Decorator");
 		//	returns: Object:
 		//		target
 
-		var name, targetName, prop, newValue, oldValue;
-			
+		var name, targetName, prop, newValue, oldValue, i;
+
 		// start mixing in properties
 		for(name in source){
-			if(!(name in empty)){
-				prop = source[name];
+			prop = source[name];
+			if(!(name in empty) || empty[name] !== prop){
 				targetName = filter(name, target, source, prop);
-				if(targetName){
+				if(!(targetName in target) || (target[targetName] !== prop && (!(targetName in empty) || empty[targetName] !== prop))){
 					// name is accepted
 					oldValue = target[targetName];
 					newValue = applyDecorator(decorator, targetName, prop, oldValue);
@@ -78,7 +79,25 @@ dojo.require("dojox.lang.oo.Decorator");
 				}
 			}
 		}
-		
+		if(extraLen){
+			for(i = 0; i < extraLen; ++i){
+				name = extraNames[i];
+				// repeating the body above
+				prop = source[name];
+				if(!(name in empty) || empty[name] !== prop){
+					targetName = filter(name, target, source, prop);
+					if(!(targetName in target) || (target[targetName] !== prop && (!(targetName in empty) || empty[targetName] !== prop))){
+						// name is accepted
+						oldValue = target[targetName];
+						newValue = applyDecorator(decorator, targetName, prop, oldValue);
+						if(oldValue !== newValue){
+							mixer(target, targetName, newValue, oldValue);
+						}
+					}
+				}
+			}
+		}
+
 		return target;	// Object
 	};
 
@@ -92,7 +111,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		//		source of properties, more than one source is allowed
 		// returns: Object:
 		//		target
-		
+
 		var decorator, filter, i = 1, l = arguments.length;
 		for(; i < l; ++i){
 			source = arguments[i];
