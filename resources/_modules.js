@@ -24,15 +24,15 @@ dojox = {
 }
 
 dojox.analytics = { 
-	// summary: TODOC 
+	// summary: Website analytics and client monitoring system 
 };
 
 dojox.atom = { 
-	// summary: TODOC 
+	// summary: Implements the Atom Syndication Format and Atom Publishing Protocol 
 };
 
 dojox.av = { 
-	// summary: TODOC 
+	// summary: Provides Audio/Video capabilities 
 };
 
 dojox.charting = { 
@@ -69,6 +69,10 @@ dojox.dtl = {
 
 dojox.editor = { 
 	// summary: Extensions for dijit.Editor
+};
+
+dojox.embed = { 
+	// summary: Base code for embedding for external objects like Flash, Quicktime
 };
 
 dojox.encoding = { 
