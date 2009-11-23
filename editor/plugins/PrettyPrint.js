@@ -76,9 +76,6 @@ dojo.declare("dojox.editor.plugins.PrettyPrint",dijit._editor._Plugin,{
 					self.editor.onChange(_c);
 					self.editor.savedContent=_c;
 				}
-				if(dojo.isMoz && self.editor.iframe){
-					self.editor.iframe.title = self.editor._localizedIframeTitles.iframeEditTitle;
-				} 
 			}
 		});
 	}

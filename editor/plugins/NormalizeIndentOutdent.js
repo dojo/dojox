@@ -666,7 +666,7 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 		}
 	},
 
-	_isEmpty: function(node) {
+	_isEmpty: function(node){
 		// summary:
 		//		Internal function to determine if a node is 'empty'
 		//		Eg, contains only blank text.  Used to determine if
