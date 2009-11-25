@@ -10,7 +10,8 @@ experimental
 Credits
 	Paul Sowden (dojox.date.posix)
 	Neil Roberts (dojox.date.php)
-	Hossam Aldin Katory (dojox.date.IslamicCalendar, dojox.date.HebrewCalendar)
+	Hossam Aldin Katory (dojox.date.islamic, dojox.date.hebrew)
+	Helena Halperin, Moshe Wajnberg, Tomer Mahlin (dojox.date.hebrew)
 	Nathan Toone (dojox.date.relative, dojox.date.tzdate, dojox.date.timezone)
 -------------------------------------------------------------------------------
 Project description

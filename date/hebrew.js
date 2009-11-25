@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.hebrew");
-dojo.experimental("dojox.date.hebrew");
 
 dojo.require("dojox.date.hebrew.Date");
 dojo.require("dojo.date"); // for compare
@@ -60,7 +59,7 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 		case "weekday":
 			var day = date.getDay();
 			var remdays = 0;
-			if (amount < 0 && day == 6) {day = 5,  remdays = -1;}
+			if(amount < 0 && day == 6){ day = 5; remdays = -1; }
 			
 			if((day + amount) < 5 && (day + amount) >= 0){ //in the same week
 				 newHebrDate.setDate(date.getDate() + amount + remdays);
@@ -84,7 +83,7 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 		case "month":
 			var month = date.getMonth(); 
 			var add = month + amount;
-			if ( !date.isLeapYear(date.getFullYear())){
+			if(!date.isLeapYear(date.getFullYear())){
 				if(month < 5 && add >= 5){ add++;}
 				else if (month > 5 && add <= 5){ add--;}	
 			}

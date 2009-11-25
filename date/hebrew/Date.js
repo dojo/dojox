@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.hebrew.Date");
-dojo.experimental("dojox.date.hebrew.Date");
 
 dojo.require("dojox.date.hebrew.numerals");
 

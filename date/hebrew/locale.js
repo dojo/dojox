@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.hebrew.locale");
-dojo.experimental("dojox.date.hebrew.locale");
 
 
 dojo.require("dojox.date.hebrew.Date");

@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.hebrew.numerals");
-dojo.experimental("dojox.date.hebrew.numerals");
 
 //Conversion from "Hindi" numerals to Hebrew numerals and vice versa
 
