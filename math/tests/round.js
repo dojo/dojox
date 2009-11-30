@@ -13,8 +13,8 @@ tests.register("dojox.math.tests.round",
 				t.is(-0.1, dojox.math.round(-0.05, 1));
 				t.is(1.1, dojox.math.round(1.05, 1));
 				t.is(-1.1, dojox.math.round(-1.05, 1));
-				t.is(-162.29, dojox.math.round(-162.295, 2));
-				t.is(162.29, dojox.math.round(162.295, 2));
+				t.is(-162.3, dojox.math.round(-162.295, 2));
+				t.is(162.3, dojox.math.round(162.295, 2));
 			}
 		},
 		{
