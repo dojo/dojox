@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/">
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/">
 	<g id="torso" i:knockout="Off" i:layer="yes" i:dimmedPercent="50" i:rgbTrio="#4F008000FFFF">
 		<path id="leftArm" i:knockout="Off" fill="#FFE8B0" stroke="#000000" stroke-linecap="round" stroke-linejoin="bevel" d="
 			M156.007,292.675c2.737,1.778,5.563,3.321,8.752,3.946c7.099,1.391,19.25-5.666,23.136-11.698
