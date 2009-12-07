@@ -24,20 +24,57 @@ dojo.provide("dojox.math._base");
 			return m.toDegrees(n);	//	Number
 		},
 
+		_gamma: function(z){
+			//	summary:
+			//		Compute the gamma function for the passed number.
+			//		Approximately 14 dijits of precision with non-integers.
+			var answer = 1; // 0!
+			// gamma(n+1) = n * gamma(n)
+			while (--z >= 1){
+				answer *= z;
+			}
+			if(z == 0){ return answer; } // normal integer quick return
+			if(Math.floor(z) == z){ return NaN; } // undefined at nonpositive integers since sin() below will return 0
+			// assert: z < 1, remember this z is really z-1
+			if(z == -0.5){ return Math.sqrt(Math.PI); } // popular gamma(1/2)
+			if(z < -0.5){ // remember this z is really z-1
+				return Math.PI / (Math.sin(Math.PI * (z + 1)) * this._gamma(-z)); // reflection
+			}
+			// assert: -0.5 < z < 1
+			// Spouge approximation algorithm
+			var a = 13;
+			// c[0] = sqrt(2*PI) / exp(a)
+			// var kfact = 1
+			// for (var k=1; k < a; k++){
+			//      c[k] = pow(-k + a, k - 0.5) * exp(-k) / kfact
+			//      kfact *= -k  // (-1)^(k-1) * (k-1)!
+			// }
+			var c = [ // precomputed from the above algorithm
+					 5.6658056015186327e-6,
+					 1.2743717663379679,
+					-4.9374199093155115,
+					 7.8720267032485961,
+					-6.6760503749436087,
+					 3.2525298444485167,
+					-9.1852521441026269e-1,
+					 1.4474022977730785e-1,
+					-1.1627561382389853e-2,
+					 4.0117980757066622e-4,
+					-4.2652458386405744e-6,
+					 6.6651913290336086e-9,
+					-1.5392547381874824e-13
+				];
+			var sum = c[0];
+			for (var k=1; k < a; k++){
+				sum += c[k] / (z + k);
+			}
+			return answer * Math.pow(z + a, z + 0.5) / Math.exp(z) * sum;
+		},
+
 		factorial: function(/* Number */n){
 			//	summary:
 			//		Return the factorial of n
-			if(n === 0){ 
-				return 1;	// Number
-			}else if(n < 0 || Math.floor(n) != n){
-				return NaN; // NaN
-			}
-
-			var ret = 1;
-			for(var i = 1; i <= n; i++){
-				ret *= i;
-			}
-			return ret;	// Number
+			return this._gamma(n+1);	// Number
 		},
 
 		permutations: function(/* Number */n, /* Number */k){
