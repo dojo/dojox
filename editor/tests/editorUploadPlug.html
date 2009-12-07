@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Editor Table Plugins</title>
+<title>Editor File Upload Plugin</title>
 <style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
@@ -54,7 +54,7 @@ margin:20px 100px;
                        'paste','|',
                         {name: 'dojox.editor.plugins.UploadImage', command: 'uploadImage',
                         uploadUrl:'../../form/resources/UploadFile.php', 
-                        downloadPath:'../../form/resources/', tempImageUrl:'../images/busy.gif'}
+						downloadPath:'../../form/resources/uploads/', tempImageUrl:'../plugins/resources/images/busy.gif'} 
                     ]">
          <p>Click the upload icon to open a system dialog. Note that this will need to call a server script for the upload to work.</p>
          <p> 
