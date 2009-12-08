@@ -75,10 +75,10 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 				label: "body",
 				_selNode: editor.editNode,
 				dropDown: this._menu,
-				onClick: function(){
-					self._menuTarget = editor.editNode;
-					self._selectContents();
-				}
+				onClick: dojo.hitch(this, function(){
+					this._menuTarget = editor.editNode;
+					this._selectContents();
+				})
 			});
 			
 			// Build the menu
@@ -107,6 +107,10 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 				}));
 				this._selEMenu.attr("disabled", true);
 				this._delEMenu.attr("disabled", true);
+				this._selCMenu.attr("disabled", false);
+				this._delCMenu.attr("disabled", false);
+				this._moveSMenu.attr("disabled", false);
+				this._moveEMenu.attr("disabled", false);
 			}));
 			this.breadcrumbBar.addChild(body);
 			this.connect(this.editor, "onNormalizedDisplayChanged", "updateState");
@@ -119,11 +123,26 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 		//		Internal function for selecting the contents of a node.
 		this.editor.focus();
 		if(this._menuTarget){
-			dojo.withGlobal(this.editor.window, 
-				"collapse", dijit._editor.selection, [null]);
-			dojo.withGlobal(this.editor.window, 
-				"selectElementChildren", dijit._editor.selection, [this._menuTarget]);
-			this.editor.onDisplayChanged();
+			var nodeName = this._menuTarget.tagName.toLowerCase();
+			switch(nodeName){
+				case 'br':
+				case 'hr':
+				case 'img':
+				case 'input':
+				case 'base':
+				case 'meta':
+				case 'area':
+				case 'basefont':
+						break;
+				default: 
+					try{
+						dojo.withGlobal(this.editor.window, 
+							"collapse", dijit._editor.selection, [null]);
+						dojo.withGlobal(this.editor.window, 
+							"selectElementChildren", dijit._editor.selection, [this._menuTarget]);
+						this.editor.onDisplayChanged();
+					}catch(e){/*squelch*/}
+			}
 		}
 	},
 
@@ -135,7 +154,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 			this._selectContents();
 			dojo.withGlobal(this.editor.window, 
 				"remove", dijit._editor.selection, [this._menuTarget]);
-			this.editor.endditing();
+			this.editor.endEditing();
 			this._updateBreadcrumb();
 			this.editor.onDisplayChanged();
 		}
@@ -201,7 +220,11 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 			var sel = dijit.range.getSelection(ed.window);
 			if(sel && sel.rangeCount > 0){
 				var range = sel.getRangeAt(0);
-				var node = range.startContainer;
+                
+				// Check the getSelectedElement call.  Needed when dealing with img tags.
+				var node = dojo.withGlobal(ed.window, 
+					"getSelectedElement", dijit._editor.selection) || range.startContainer;
+				//var node = range.startContainer;
 				var bcList = [];
 
 				// Make sure we get a selection within the editor document,
@@ -238,16 +261,44 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 						});
 						b._ddConnect = dojo.connect(b, "openDropDown", dojo.hitch(b, function(){
 							self._menuTarget = this._selNode;
+							var nodeName = self._menuTarget.tagName.toLowerCase();
 							var title = dojo.string.substitute(self._titleTemplate,{
-								"nodeName": "&lt;" + self._menuTarget.tagName.toLowerCase() + "&gt;"
+								"nodeName": "&lt;" + nodeName + "&gt;"
 							});
 							self._menuTitle.attr("menuTitle", title);
-							self._selEMenu.attr("disabled", false);
-							self._delEMenu.attr("disabled", false);
+							switch(nodeName){
+								case 'br':
+								case 'hr':
+								case 'img':
+								case 'input':
+								case 'base':
+								case 'meta':
+								case 'area':
+								case 'basefont':
+									self._selCMenu.attr("disabled", true);
+									self._delCMenu.attr("disabled", true);
+									self._moveSMenu.attr("disabled", true);
+									self._moveEMenu.attr("disabled", true);
+									self._selEMenu.attr("disabled", false);
+									self._delEMenu.attr("disabled", false);
+									break;
+								default:
+									self._selCMenu.attr("disabled", false);
+									self._delCMenu.attr("disabled", false);
+									self._selEMenu.attr("disabled", false);
+									self._delEMenu.attr("disabled", false);
+									self._moveSMenu.attr("disabled", false);
+									self._moveEMenu.attr("disabled", false);
+							}
 						}));
 						this._buttons.push(b);
 						this.breadcrumbBar.addChild(b);
 					}
+					if(dojo.isIE){
+						// Prod it to fix layout.
+						this.breadcrumbBar.domNode.className = this.breadcrumbBar.domNode.className;
+					}
+					
 				}
 			}
 		}
