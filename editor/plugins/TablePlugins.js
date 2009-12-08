@@ -477,9 +477,8 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary
 			//		Building context menu for right-click shortcuts within a table
 			//
-			var node = dojo.isMoz ? this.editor.editNode : this.editorDomNode;
-			
-			var pMenu = new dijit.Menu({targetNodeIds:[node], id:"progMenu", contextMenuForWindow:dojo.isIE});
+		
+			var pMenu = new dijit.Menu({targetNodeIds:[this.editor.iframe]});
 			var _M = dijit.MenuItem;
 			var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
 			pMenu.addChild(new _M({label: messages.selectTableLabel, onClick: dojo.hitch(this, "selectTable")}));
@@ -492,69 +491,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			pMenu.addChild(new dijit.MenuSeparator());
 			pMenu.addChild(new _M({label: messages.deleteTableRowLabel, onClick: dojo.hitch(this, "modTable", "deleteTableRow" )}));
 			pMenu.addChild(new _M({label: messages.deleteTableColumnLabel, onClick: dojo.hitch(this, "modTable", "deleteTableColumn" )}));
-			
-			// overwriting this method, as the menu's coordinates
-			// are not accurate in the editor's iframe
-			// FIXME: Works well in IE - all others, sometimes inaccurate.
-			pMenu._openMyself = function(e){ 
-					
-				if(!tablePluginHandler.checkAvailable()){ return; }
 
-				if(this.leftClickToOpen && e.button>0){
-					return;
-				}
-				dojo.stopEvent(e);
-				
-				var x,y;
-				if(dojo.isIE){
-					x = e.x;
-					y = e.y;
-				}else{
-					x = e.screenX;
-					y = e.screenY + 25;
-				}
-				var self=this;
-				var savedFocus = dijit.getFocus(this);
-				function closeAndRestoreFocus(){
-					// user has clicked on a menu or popup
-					dijit.focus(savedFocus);
-					dijit.popup.close(self);
-				}
-				var res = dijit.popup.open({
-					popup: this,
-					x: x,
-					y: y,
-					onExecute: closeAndRestoreFocus,
-					onCancel: closeAndRestoreFocus,
-					orient: this.isLeftToRight() ? 'L' : 'R'
-				});
-				var v = dijit.getViewport();
-				if(res.y+res.h>v.h){
-					if(e.screenY-res.h>=0){
-						y = e.screenY - res.h;	
-					}else{
-						y = 0;	
-					}
-					dijit.popup.close(this);
-					// FIXME: Not very DRY here.
-					//	Reopening popup if the location was not good.
-					res = dijit.popup.open({
-						popup: this,
-						x: x,
-						y: y,
-						onExecute: closeAndRestoreFocus,
-						onCancel: closeAndRestoreFocus,
-						orient: this.isLeftToRight() ? 'L' : 'R'
-					});
-				}
-				console.log(dijit.getViewport());
-				this.focus();
-		
-				this._onBlur = function(){
-					this.inherited('_onBlur', arguments);
-					dijit.popup.close(this);
-				}
-			}
 			this.menu = pMenu;
 		},
 		
