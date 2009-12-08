@@ -409,7 +409,7 @@ doh.register("dojox.data.tests.stores.FlickrRestStore",
 					t.assertTrue(flickrStore.isItem(items[0]));
 
 					var attributes = flickrStore.getAttributes(items[0]);
-					t.is(9, attributes.length);
+					t.is(11, attributes.length);
 					d.callback(true);
 				}
 

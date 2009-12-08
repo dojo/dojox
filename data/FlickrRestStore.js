@@ -4,14 +4,14 @@ dojo.require("dojox.data.FlickrStore");
 
 dojo.declare("dojox.data.FlickrRestStore",
 	dojox.data.FlickrStore, {
-	constructor: function(/*Object*/args){ 
+	constructor: function(/*Object*/args){
 		// summary:
-		//	Initializer for the FlickrRestStore store.  
+		//	Initializer for the FlickrRestStore store.
 		// description:
 		//	The FlickrRestStore is a Datastore interface to one of the basic services
 		//	of the Flickr service, the public photo feed.  This does not provide
 		//	access to all the services of Flickr.
-		//	This store cannot do * and ? filtering as the flickr service 
+		//	This store cannot do * and ? filtering as the flickr service
 		//	provides no interface for wildcards.
 		if(args){
 			if(args.label){
@@ -28,16 +28,16 @@ dojo.declare("dojox.data.FlickrRestStore",
 		this._maxPhotosPerUser = {};
 		this._id = dojox.data.FlickrRestStore.prototype._id++;
 	},
-	
+
 	// _id: Integer
 	// 		A unique identifier for this store.
 	_id: 0,
-	
+
 	// _requestCount: Integer
 	//		A counter for the number of requests made. This is used to define
 	//		the callback function that Flickr will use.
 	_requestCount: 0,
-	
+
 	// _flickrRestUrl: String
 	//		The URL to the Flickr REST services.
 	_flickrRestUrl: "http://www.flickr.com/services/rest/",
@@ -45,27 +45,27 @@ dojo.declare("dojox.data.FlickrRestStore",
 	// _apikey: String
 	//		The users API key to be used when accessing Flickr REST services.
 	_apikey: null,
-	
+
 	// _storeRef: String
 	//		A key used to mark an data store item as belonging to this store.
 	_storeRef: "_S",
-	
+
 	// _cache: Array
 	//		An Array of all previously downloaded picture info.
 	_cache: null,
-	
+
 	// _prevRequests: Object
-	//		A HashMap used to record the signature of a request to prevent duplicate 
+	//		A HashMap used to record the signature of a request to prevent duplicate
 	//		request being made.
 	_prevRequests: null,
-	
+
 	// _handlers: Object
-	//		A HashMap used to record the handlers registered for a single remote request.  Multiple 
-	//		requests may be made for the same information before the first request has finished. 
+	//		A HashMap used to record the handlers registered for a single remote request.  Multiple
+	//		requests may be made for the same information before the first request has finished.
 	//		Each element of this Object is an array of handlers to call back when the request finishes.
-	//		This prevents multiple requests being made for the same information.  
+	//		This prevents multiple requests being made for the same information.
 	_handlers: null,
-	
+
 	// _sortAttributes: Object
 	//		A quick lookup of valid attribute names in a sort query.
 	_sortAttributes: {
@@ -73,9 +73,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 		"date-taken": true,
 		"interestingness": true
 	},
-			
-	_fetchItems: function(	/*Object*/ request, 
-							/*Function*/ fetchHandler, 
+
+	_fetchItems: function(	/*Object*/ request,
+							/*Function*/ fetchHandler,
 							/*Function*/ errorHandler){
 		//	summary: Fetch flickr items that match to a query
 		//	request:
@@ -88,18 +88,18 @@ dojo.declare("dojox.data.FlickrRestStore",
 		if(!request.query){
 			request.query = query = {};
 		} else {
-			dojo.mixin(query, request.query);	
+			dojo.mixin(query, request.query);
 		}
-		
+
 		var primaryKey = [];
 		var secondaryKey = [];
-		
+
 		//Build up the content to send the request for.
 		var content = {
 			format: "json",
 			method: "flickr.photos.search",
 			api_key: this._apikey,
-			extras: "owner_name,date_upload,date_taken"
+			extras: "owner_name,date_upload,date_taken,url_sq, url_t, url_s, url_m, url_o"
 		};
 		var isRest = false;
 		if(query.userid){
@@ -144,7 +144,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 					// If the first record requested is less than half the
 					// amount requested, then request from 0 to the count record
 					count = start + count;
-					start = 0; 
+					start = 0;
 				}else{
 					var divLimit = 20, div = 2;
 					for(var i = divLimit; i > 0; i--){
@@ -164,7 +164,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 				request._curStart = request.start;
 				request._curCount = request.count;
 			}
-			
+
 			content.page = (start / count) + 1;
 			secondaryKey.push("page" + content.page);
 		}
@@ -173,26 +173,26 @@ dojo.declare("dojox.data.FlickrRestStore",
 			content.per_page = request._curCount;
 			secondaryKey.push("count" + request._curCount);
 		}
-		
+
 		if(query.lang){
 			content.lang = request.query.lang;
 			primaryKey.push("lang" + request.lang);
 		}
-		
+
 		if(query.setid){
 			content.method = "flickr.photosets.getPhotos";
-			content.photoset_id = request.query.setid; 
+			content.photoset_id = request.query.setid;
 			primaryKey.push("set" + request.query.setid);
 		}
-		
+
 		if(query.tags){
 			if(query.tags instanceof Array){
 				content.tags = query.tags.join(",");
 			}else{
-				content.tags = query.tags;				
+				content.tags = query.tags;
 			}
 			primaryKey.push("tags" + content.tags);
-			
+
 			if(query["tag_mode"] && (query.tag_mode.toLowerCase() === "any" ||
 				query.tag_mode.toLowerCase() === "all")){
 				content.tag_mode = query.tag_mode;
@@ -202,15 +202,15 @@ dojo.declare("dojox.data.FlickrRestStore",
 			content.text=query.text;
 			primaryKey.push("text:"+query.text);
 		}
-		
+
 		//The store only supports a single sort attribute, even though the
 		//Read API technically allows multiple sort attributes
-		if(query.sort && query.sort.length > 0){			
+		if(query.sort && query.sort.length > 0){
 			//The default sort attribute is 'date-posted'
 			if(!query.sort[0].attribute){
 				query.sort[0].attribute = "date-posted";
 			}
-			
+
 			//If the sort attribute is valid, check if it is ascending or
 			//descending.
 			if(this._sortAttributes[query.sort[0].attribute]) {
@@ -225,13 +225,13 @@ dojo.declare("dojox.data.FlickrRestStore",
 			content.sort = "date-posted-asc";
 		}
 		primaryKey.push("sort:"+content.sort);
-	
-		//Generate a unique key for this request, so the store can 
+
+		//Generate a unique key for this request, so the store can
 		//detect duplicate requests.
 		primaryKey = primaryKey.join(".");
 		secondaryKey = secondaryKey.length > 0 ? "." + secondaryKey.join(".") : "";
 		var requestKey = primaryKey + secondaryKey;
-		
+
 		//Make a copy of the request, in case the source object is modified
 		//before the request completes
 		request = {
@@ -269,13 +269,13 @@ dojo.declare("dojox.data.FlickrRestStore",
 			content: content,
 			callbackParamName: "jsoncallback"
 		};
-		
+
   		var doHandle = dojo.hitch(this, function(processedData, data, handler){
 			var onBegin = handler.request.onBegin;
 			handler.request.onBegin = null;
 			var maxPhotos;
 			var req = handler.request;
-			
+
 			if(("_realStart" in req) && req._realStart != null){
 				req.start = req._realStart;
 				req.count = req._realCount;
@@ -291,9 +291,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 				}
 				if(photos && ("perpage" in photos) && ("pages" in photos)){
 					if(photos.perpage * photos.pages <= handler.request.start + handler.request.count){
-						//If the final page of results has been received, it is possible to 
+						//If the final page of results has been received, it is possible to
 						//know exactly how many photos there are
-						maxPhotos = handler.request.start + photos.photo.length;                
+						maxPhotos = handler.request.start + photos.photo.length;
 					}else{
 						//If the final page of results has not yet been received,
 						//it is not possible to tell exactly how many photos exist, so
@@ -313,8 +313,8 @@ dojo.declare("dojox.data.FlickrRestStore",
 				handler.request.onBegin = onBegin;
 			}
 		});
-		
-		//Define a callback for the script that iterates through a list of 
+
+		//Define a callback for the script that iterates through a list of
 		//handlers for this piece of data.  Multiple requests can come into
 		//the store for the same data.
 		var myHandler = dojo.hitch(this, function(data){
@@ -350,7 +350,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 		});
 
 		var data = this._prevRequests[requestKey];
-		
+
 		//If the data was previously retrieved, there is no need to fetch it again.
 		if(data){
 			this._handlers[requestKey] = null;
@@ -362,10 +362,10 @@ dojo.declare("dojox.data.FlickrRestStore",
 			doHandle(this._cache[primaryKey], null, thisHandler);
 			return;
 		}
-				
+
 		var deferred = dojo.io.script.get(getArgs);
 		deferred.addCallback(myHandler);
-		
+
 		//We only set up the errback, because the callback isn't ever really used because we have
 		//to link to the jsonFlickrFeed function....
 		deferred.addErrback(function(error){
@@ -373,16 +373,16 @@ dojo.declare("dojox.data.FlickrRestStore",
 			errorHandler(error, request);
 		});
 	},
-	
+
 	getAttributes: function(item){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getAttributes()
 		return [
 			"title", "author", "imageUrl", "imageUrlSmall", "imageUrlMedium",
-			"imageUrlThumb", "link", "dateTaken", "datePublished"
-		]; 
+			"imageUrlThumb", "imageUrlLarge", "imageUrlOriginal", "link", "dateTaken", "datePublished"
+		];
 	},
-	
+
 	getValues: function(item, attribute){
 		//	summary:
 		//      See dojo.data.api.Read.getValue()
@@ -398,6 +398,10 @@ dojo.declare("dojox.data.FlickrRestStore",
 				return [ item.media.s ]; // String
 			case "imageUrl":
 				return [ item.media.l ]; // String
+			case "imageUrlOriginal":
+                                return [ item.media.o ]; // String
+			case "imageUrlLarge":
+		                return [ item.media.l ]; // String
 			case "imageUrlMedium":
 				return [ item.media.m ]; // String
 			case "imageUrlThumb":
@@ -411,45 +415,38 @@ dojo.declare("dojox.data.FlickrRestStore",
 			default:
 				return undefined;
 		}
-		
+
 	},
 
 	_processFlickrData: function(/* Object */data, /* Object */request, /* String */ cacheKey){
 		// summary: Processes the raw data from Flickr and updates the internal cache.
-		// data: 
+		// data:
 		//		Data returned from Flickr
-		// request: 
+		// request:
 		//		The original dojo.data.Request object passed in by the user.
-		
+
 		// If the data contains an 'item' object, it has not come from the REST
 		// services, so process it using the FlickrStore.
 		if(data.items){
 			return dojox.data.FlickrStore.prototype._processFlickrData.apply(this,arguments);
 		}
 
-		var template = ["http://farm", null, ".static.flickr.com/", null, "/", null, "_", null];
-		
 		var items = [];
 		var photos = (data.photoset ? data.photoset : data.photos);
 		if(data.stat == "ok" && photos && photos.photo){
 			items = photos.photo;
-			
+
 			//Add on the store ref so that isItem can work.
 			for(var i = 0; i < items.length; i++){
 				var item = items[i];
 				item[this._storeRef] = this;
-				
-				template[1] = item.farm;
-				template[3] = item.server;
-				template[5] = item.id;
-				template[7] = item.secret;
-				 
-				var base = template.join("");
+
 				item.media = {
-					s: base + "_s.jpg",
-				 	m: base + "_m.jpg",
-				 	l: base + ".jpg",
-				 	t: base + "_t.jpg"
+					s: item.url_s,
+				 	m: item.url_m,
+				 	l: item.url_l,
+				 	t: item.url_t,
+				 	o: item.url_o
 				};
 				if(!item.owner && data.photoset){
 					item.owner = data.photoset.owner;
@@ -467,7 +464,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 
 		return arr; // Array
 	},
-	
+
 	_checkPrevRanges: function(primaryKey, start, count){
 		var end = start + count;
 		var arr = this._prevRequestRanges[primaryKey];
