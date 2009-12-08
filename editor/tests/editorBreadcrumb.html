@@ -18,6 +18,7 @@
 		dojo.require("dijit.form.Button");
 		dojo.require("dojo.parser");
 		dojo.require("dojox.editor.plugins.Breadcrumb");
+		dojo.require("dijit._editor.plugins.LinkDialog");
 	</script>
 </head>
 <body class="tundra">
@@ -30,7 +31,7 @@
 	delete contents or element, and position cursor in element.
 	<br>
 
-	<div dojoType="dijit.Editor" id="editor1" extraPlugins="['breadcrumb']">
+	<div dojoType="dijit.Editor" id="editor1" extraPlugins="['insertImage', 'breadcrumb']">
 		This instance is created from a div with an <b>extra</b> plugin, 'Breadcrumb' loaded.
 		<ul>
 			<li>List Item One</li>
@@ -39,6 +40,7 @@
 			<li>List Item Four</li>
 		</ul>
 		<br>
+		<div style="background-color: black"><img src="http://www.dojotoolkit.org/sites/all/themes/dtk/img/banner-logo-text.gif"></div>
 		<a href="http://www.dojotoolkit.org">The Dojo Toolkit</a>
 		<br>
 		<br>
