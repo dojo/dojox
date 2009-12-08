@@ -143,7 +143,7 @@ dojo.require("dojo.html");
 		//them up.
 		cont = cont.replace(/<[!][-][-](.|\s){5,}?[-][-]>/g,
 			function(comment){
-				return comment.replace(/<(\/?)script\b([^>]|\s)*\>/ig,"&lt;$1Script$2&gt;");
+				return comment.replace(/<(\/?)script\b/ig,"&lt;$1Script");
 			}
 		);
 
