@@ -30,7 +30,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 	},
 
 	// _id: Integer
-	// 		A unique identifier for this store.
+	//		A unique identifier for this store.
 	_id: 0,
 
 	// _requestCount: Integer
@@ -99,7 +99,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 			format: "json",
 			method: "flickr.photos.search",
 			api_key: this._apikey,
-			extras: "owner_name,date_upload,date_taken,url_sq, url_t, url_s, url_m, url_o"
+			extras: "owner_name,date_upload,date_taken"
 		};
 		var isRest = false;
 		if(query.userid){
@@ -247,30 +247,30 @@ dojo.declare("dojox.data.FlickrRestStore",
 
 		var thisHandler = {
 			request: request,
-	    	fetchHandler: fetchHandler,
-	    	errorHandler: errorHandler
-	   	};
+			fetchHandler: fetchHandler,
+			errorHandler: errorHandler
+		};
 
-	   	//If the request has already been made, but not yet completed,
-	   	//then add the callback handler to the list of handlers
-	   	//for this request, and finish.
-	   	if(this._handlers[requestKey]){
-	    	this._handlers[requestKey].push(thisHandler);
-	    	return;
-	   	}
+		//If the request has already been made, but not yet completed,
+		//then add the callback handler to the list of handlers
+		//for this request, and finish.
+		if(this._handlers[requestKey]){
+			this._handlers[requestKey].push(thisHandler);
+			return;
+		}
 
-  		this._handlers[requestKey] = [thisHandler];
+		this._handlers[requestKey] = [thisHandler];
 
-  		//Linking this up to Flickr is a PAIN!
-  		var handle = null;
-  		var getArgs = {
+		//Linking this up to Flickr is a PAIN!
+		var handle = null;
+		var getArgs = {
 			url: this._flickrRestUrl,
 			preventCache: this.urlPreventCache,
 			content: content,
 			callbackParamName: "jsoncallback"
 		};
 
-  		var doHandle = dojo.hitch(this, function(processedData, data, handler){
+		var doHandle = dojo.hitch(this, function(processedData, data, handler){
 			var onBegin = handler.request.onBegin;
 			handler.request.onBegin = null;
 			var maxPhotos;
@@ -430,6 +430,7 @@ dojo.declare("dojox.data.FlickrRestStore",
 		if(data.items){
 			return dojox.data.FlickrStore.prototype._processFlickrData.apply(this,arguments);
 		}
+        var template = ["http://farm", null, ".static.flickr.com/", null, "/", null, "_", null];
 
 		var items = [];
 		var photos = (data.photoset ? data.photoset : data.photos);
@@ -440,13 +441,17 @@ dojo.declare("dojox.data.FlickrRestStore",
 			for(var i = 0; i < items.length; i++){
 				var item = items[i];
 				item[this._storeRef] = this;
-
+                template[1] = item.farm;
+                template[3] = item.server;
+                template[5] = item.id;
+                template[7] = item.secret;
+                var base = template.join("");
 				item.media = {
-					s: item.url_s,
-				 	m: item.url_m,
-				 	l: item.url_l,
-				 	t: item.url_t,
-				 	o: item.url_o
+                    s: base + "_s.jpg",
+                    m: base + ".jpg",
+                    l: base + "_l.jpg",
+                    t: base + "_t.jpg",
+                    o: base + "_o.jpg"
 				};
 				if(!item.owner && data.photoset){
 					item.owner = data.photoset.owner;
