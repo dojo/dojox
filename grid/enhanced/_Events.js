@@ -401,7 +401,13 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//		Decorated event object which contains reference to grid and info of selected 
 		//		regions(selection type - row|column, selected index - [...])
 		if(this.selectedRegionMenu){
-			this.selectedRegionMenu._openMyself(e);
+			this.selectedRegionMenu._openMyself({
+				target: e.target,
+				coords: "pageX" in e ? {
+					x: e.pageX,
+					y: e.pageY
+				} : null
+			});
 			dojo.stopEvent(e);
 		}
 	},

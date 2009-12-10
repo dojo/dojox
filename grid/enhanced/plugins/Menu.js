@@ -87,7 +87,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 		this[menuType] = menu;
 		this[menuType].bindDomNode(this.domNode);
 	},
-	
+
+	// TODO: this code is not accessible.  Shift-F10 won't open a menu.  (I think
+	// this function never even gets called.)
 	showRowCellMenu: function(e){
 		//summary:
 		//		Show row or cell menus
@@ -98,7 +100,13 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 		// this.selection.isSelected(e.rowIndex) should remove?
 		//if(this.rowMenu && (!e.cell || this.selection.isSelected(e.rowIndex)) && (!this.focus.cell || this.focus.cell != e.cell)){
 		if(this.rowMenu && (!e.cell || this.selection.isSelected(e.rowIndex))){
-			this.rowMenu._openMyself(e);
+			this.rowMenu._openMyself({
+				target: e.target,
+				coords: "pageX" in e ? {
+					x: e.pageX,
+					y: e.pageY
+				} : null
+			});
 			dojo.stopEvent(e);
 			return;
 		}
@@ -110,6 +118,14 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 			this.select.cellClick(e.cellIndex, e.rowIndex);
 			this.focus.setFocusCell(e.cell, e.rowIndex);
 		}
-		this.cellMenu && this.cellMenu._openMyself(e);
+		if(this.cellMenu){
+			this.cellMenu._openMyself({
+				target: e.target,
+				coords: "pageX" in e ? {
+					x: e.pageX,
+					y: e.pageY
+				} : null
+			});
+		}
 	}
 });
