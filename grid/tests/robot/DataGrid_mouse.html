@@ -508,6 +508,35 @@
 						this.grid.edit.cancel();
 						this.grid = null;
 					}
+				},
+				{
+					name: "column 1px move should not reorder",
+					timeout:10000,
+					runTest: function(){
+						var d = new doh.Deferred();
+						var grid=dijit.byId('markup_grid_1');
+						doh.robot.mouseMoveAt('mainTabContainer_tablist_dijit_layout_ContentPane_0',500,1);
+						doh.robot.mouseClick({left:true},500);
+						doh.robot.sequence(function(){
+							grid.domNode.scrollTop = 0;
+							var columns = dojo.query('div.dojoxGridSortNode',grid.domNode);
+							var prevHTML = columns[1].innerHTML;
+							var priority = columns[2];
+							doh.robot.mouseMoveAt(priority,500,500,10,5);
+							doh.robot.mousePress({left:true},100);
+							// drag priority column 1px
+							doh.robot.mouseMoveAt(priority,500,1,9,5);
+							doh.robot.mouseRelease({left:true},100);
+							doh.robot.sequence(d.getTestCallback(function(){
+								var newColumns = dojo.query('div.dojoxGridSortNode',grid.domNode);
+								var newHTML = newColumns[1].innerHTML;
+								// the original nodes get orphaned so direct comparison is impossible
+								doh.is(prevHTML,newHTML,"1st column should still be id after nop dnd " + ' old = ['+prevHTML+'] new = [' + newHTML + ']');
+							}),2000);
+						},1);
+						// also, should not be able to drag columns to other dojo.dnd targets
+						return d;
+					}
 				}
 			]);
 			doh.run();
