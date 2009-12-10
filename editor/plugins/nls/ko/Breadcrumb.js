@@ -1,4 +1,4 @@
-({
+﻿({
 	"nodeActions": "${nodeName} 동작",
 	"selectContents": "내용 선택",
 	"selectElement": "요소 선택",

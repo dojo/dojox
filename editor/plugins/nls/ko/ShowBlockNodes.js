@@ -1,3 +1,3 @@
-({
-	"showBlockNodes": "HTML ºí·Ï ¿ä¼Ò º¸ÀÌ±â"
+ï»¿({
+	"showBlockNodes": "HTML ë¸”ë¡ ìš”ì†Œ ë³´ì´ê¸°"
 })
