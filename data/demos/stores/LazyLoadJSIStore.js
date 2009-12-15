@@ -83,7 +83,7 @@ dojo.declare("dojox.data.demos.stores.LazyLoadJSIStore", dojo.data.ItemFileReadS
 			//add to the items array of the store so they can be lazy-loaded later...
 			var attributes = self.getAttributes(item);
 			for(i in attributes){
-				var values = self.getValues(item, attributes[i]);
+				var values = item[attributes[i]];
 				for (var j = 0; j < values.length; j++) {
 					var value = values[j];
 					
