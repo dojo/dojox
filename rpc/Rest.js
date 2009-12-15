@@ -79,7 +79,7 @@ dojo.provide("dojox.rpc.Rest");
 				id = dojo.objectToQuery(id);
 				id = id ? "?" + id: "";
 			}
-			if(args && args.sort){
+			if(args && args.sort && !args.queryStr){
 				id += (id ? "&" : "?") + "sort("
 				for(var i = 0; i<args.sort.length; i++){
 					var sort = args.sort[i];

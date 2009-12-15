@@ -97,8 +97,8 @@ dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 		this.gridOnFetchComplete = grid._onFetchComplete;
 		this.setStore(this.store);
 	},
-	setQuery: function(query){
-		this.grid.setQuery(query);
+	setQuery: function(query, options){
+		this.grid.setQuery(query, options);
 	},
 	_formatCell: function(value){
 		if(this.store.isItem(value)){
