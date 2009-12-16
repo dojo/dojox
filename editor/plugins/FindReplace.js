@@ -204,6 +204,15 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 				this._displayed = false;
 			}
 		}
+
+		// Make resize calls.
+		var parent = this.editor.domNode.parentNode;
+		if(parent){
+			var container = dijit.getEnclosingWidget(parent);
+			if(container && container.resize){
+				container.resize();
+			}
+		}
 		this.editor.resize();
 	},
 
