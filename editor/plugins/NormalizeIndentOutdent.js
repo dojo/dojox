@@ -1,6 +1,7 @@
 dojo.provide("dojox.editor.plugins.NormalizeIndentOutdent");
 
 dojo.require("dijit._editor._Plugin");
+dojo.require("dijit._editor.selection");
 
 dojo.experimental("dojox.editor.plugins.NormalizeIndentOutdent");
 
@@ -223,7 +224,8 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 					// Okay, selection end is somewhere after start, we need to find the last node
 					// that is safely in the range.
 					curNode = start;
-					while(curNode.nextSibling && this._inSelection(curNode, range)){
+					while(curNode.nextSibling && 
+						dojo.withGlobal(ed.window, "inSelection", dijit._editor.selection, [curNode])){
 						curNode = curNode.nextSibling;
 					}
 					end = curNode; 
@@ -851,56 +853,6 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 			return true;
 		}
 		return false;
-	},
-
-	_inSelection: function(node, range){
-		// summary:
-		//		This function determines if 'node' is
-		//		in the current selection.  Used for multi-line
-		//		select indention.
-		// node:
-		//		The node to check.
-		// range:
-		//		The WC3 (or pseudo W3C range)
-		//		range to check.
-		// tags:
-		//		private
-		if(node && range){
-			var newRange;
-			var doc = this.editor.document;
-			if(range.compareBoundaryPoints && doc.createRange){
-				try{
-					newRange = doc.createRange();
-					newRange.setStart(node, 0);
-					if(range.compareBoundaryPoints(range.START_TO_END, newRange) === 1){
-						return true;
-					}
-				}catch(e){ /* squelch */}
-			}else if(doc.selection){
-				// Probably IE, so we can't use the range object as the pseudo
-				// range doesn't implement the boundry checking, we have to 
-				// use IE specific crud.
-				range = doc.selection.createRange();
-				try{
-					newRange = node.ownerDocument.body.createControlRange();
-					if(newRange){
-						newRange.addElement(node);
-					}
-				}catch(e1){
-					try{
-						newRange = node.ownerDocument.body.createTextRange();
-						newRange.moveToElementText(node);
-					}catch(e2){/* squelch */}
-				}
-				if(range && newRange){
-					// We can finally compare similar to W3C
-					if(range.compareEndPoints("EndToStart", newRange) === 1){
-						return true;
-					}
-				}
-			}
-		}
-		return false; // boolean
 	}
 });
 
