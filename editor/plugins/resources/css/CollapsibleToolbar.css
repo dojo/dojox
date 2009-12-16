@@ -1,0 +1,117 @@
+.dojoxCollapsibleToolbarContainer {
+	border-collapse: collapse;
+	padding: 0px;
+	margin: 0px;
+	border-style: none;
+}
+
+.dojoxCollapsibleToolbarCollapse {
+	margin: 1px;
+	border-style: hidden;
+	border-width: 1px;
+	border-color: black;
+	cursor: pointer;
+}
+
+.dojoxCollapsibleToolbarExpand {
+	border-style: hidden;
+	border-width: 1px;
+	border-color: black;
+}
+
+.dojoxCollapsibleToolbarButtonFocus {
+	border-style: dotted;
+	border-width: 1px;
+	border-color: black;
+}
+
+.tundra .dojoxCollapsibleToolbarCollapse {
+	background-image: url(../images/tundra/collapse.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 10px;
+	height: 10px;
+}
+
+.tundra .dojoxCollapsibleToolbarExpand {
+	background-image: url(../images/tundra/expand.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 10px;
+	height: 10px;
+}
+
+.tundra .dojoxCollapsibleToolbarContainer {
+	background-image: url(../images/tundra/sidebar.gif);
+	background-repeat: repeat-x;
+	background-position: top left;
+	background-color: #CCCCCC;
+}
+
+.tundra .dojoxCollapsibleToolbarControl {
+	vertical-align: top;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+.soria .dojoxCollapsibleToolbarCollapse {
+	background-image: url(../images/soria/collapse.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 10px;
+	height: 10px;
+}
+
+.soria .dojoxCollapsibleToolbarExpand {
+	background-image: url(../images/soria/expand.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 10px;
+	height: 10px;
+}
+
+.soria .dojoxCollapsibleToolbarContainer {
+	background-image: url(../images/soria/sidebar.gif);
+	background-repeat: repeat-x;
+	background-position: top left;
+	background-color: #CCCCCC;
+}
+
+.soria .dojoxCollapsibleToolbarControl {
+	vertical-align: top;    
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+.nihilo .dojoxCollapsibleToolbarCollapse {
+	margin: 1px;
+	background-image: url(../images/nihilo/collapse.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 10px;
+	height: 10px;
+}
+
+.nihilo .dojoxCollapsibleToolbarExpand {
+	background-image: url(../images/nihilo/expand.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 10px;
+	height: 10px;
+}
+
+.nihilo .dojoxCollapsibleToolbarContainer {
+	background-image: url(../images/nihilo/sidebar.gif);
+	background-repeat: repeat-x;
+	background-position: top left;
+	background-color: #CCCCCC;
+}
+
+.nihilo .dojoxCollapsibleToolbarControl {
+	vertical-align: top;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}

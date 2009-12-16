@@ -11,7 +11,8 @@ Credits
 	Mike Wilcox 	 - Author
 	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
 		Preview, Save, ToolbarLineBreak, InsertEntity, 
-		NormalizeIndentOutdent, Breadcrumb, FindReplace)
+		NormalizeIndentOutdent, Breadcrumb, FindReplace, 
+		CollapsibleToolbar)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -94,6 +95,11 @@ dojox.editor.plugins.FindReplace:
 	support.  This is new and has been tested, but not extensively.  Therefore it is currently 
 	classed as experimental.
 
+dojox.editor.plugins.CollapsibleToolbar:
+	Status: Supported (Stable).
+	A plugin that modified the header node of the editor so that it is 'collapsible'.  Meaning that
+	it can be closed (reduced), and reopened.  Useful for increasing editor real-estate.
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -118,6 +124,7 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeIndentOutdent
 	http://docs.dojocampus.org/dojox/editor/plugins/Breadcrumb
         http://docs.dojocampus.org/dojox/editor/plugins/FindReplace
+        http://docs.dojocampus.org/dojox/editor/plugins/CollapsibleToolbar
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -172,7 +179,6 @@ For the InsertEntity plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/InsertEntity.css" type="text/css" rel="stylesheet" />
 
-
 For the NormalizeIndentOutdent plugin:
 	dojo.require("dojox.editor.plugins.NormalizeIndentOutdent");
 	and CSS:
@@ -188,6 +194,11 @@ For the FindReplace plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/FindReplace.css" type="text/css" rel="stylesheet" />
 
+For the CollapsibleToolbar plugin:
+	dojo.require("dojox.editor.plugins.CollapsibleToolbar");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/CollapsibleToolbar.css" type="text/css" rel="stylesheet" />
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -201,3 +212,4 @@ See tests for examples:
 	dojox/editor/tests/editorNormalizeIndentOutdent.html
 	dojox/editor/tests/editorBreadcrumb.html
 	dojox/editor/tests/editorFindReplace.html
+	dojox/editor/tests/editorCollapsibleToolbar.html
