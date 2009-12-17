@@ -8,8 +8,10 @@
 		<!--<script type="text/javascript" src="../oo/declare.js"></script>-->
 		<script type="text/javascript">
 			//dojo.require("dojox.lang.oo.declare");
+			dojo.require("dojox.lang.tests.declare-old");
 
-			var decl = dojo.declare, t, chains = true;
+			var decl = dojo.declare, t, chains = true,
+				oldDecl = dojox.lang.tests.declareOld;
 
 			var test1 = function(){
 				var A = decl("A", null, {
@@ -422,7 +424,53 @@
 					}
 				});
 				new B;
-			}
+			};
+
+			var preambleTest = function(){
+				console.log("preamble tests");
+				var newA = decl(null, {
+						constructor: function(arg){
+							console.log("newA: expects 1 - " + arg);
+						}
+					}),
+					newB = decl(newA, {
+						constructor: function(arg){
+							console.log("newB expects A - " + arg);
+						},
+						preamble: function(arg){
+							console.log("newB/preamble expects A - " + arg);
+							return [1];
+						}
+					}),
+					newX = decl(null, {
+						constructor: function(arg){
+							console.log("newX expects object - " + (typeof arg));
+							this.obj = arg;
+						}
+					}),
+					newBi = new newB("A"), newXi = new newX(newBi);
+				oldDecl("oldA", null, {
+					constructor: function(arg){
+						console.log("oldA: expects 1 - " + arg);
+					}
+				});
+				oldDecl("oldB", oldA, {
+					constructor: function(arg){
+						console.log("oldB expects A - " + arg);
+					},
+					preamble: function(arg){
+						console.log("oldB/preamble expects A - " + arg);
+						return [1];
+					}
+				});
+				oldDecl("oldX", null, {
+					constructor: function(arg){
+						console.log("oldX expects object - " + (typeof arg));
+						this.obj = arg;
+					}
+				});
+				var oldBi = new oldB("A"), oldXi = new oldX(oldBi);
+			};
 
 			var test = function(){
 				test1();
@@ -431,7 +479,8 @@
 				inheritedExplicitCall();
 				feature9795();
 				duplicatedBases();
-			}
+				preambleTest();
+			};
 
 			//dojo.addOnLoad(test1);
 		</script>
