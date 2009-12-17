@@ -60,7 +60,11 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 	//		This plugin provides a weappable toolbar container to allow expand/collapse
 	//		of the editor toolbars.  This plugin should be registered first in most cases to
 	//		avoid conflicts in toolbar construction.
-	
+
+	// _myWidgets: [private] array
+	//		Container for widgets I allocate that will need to be destroyed.
+	_myWidgets: null,
+
 	setEditor: function(editor){
 		// summary:
 		//		Over-ride for the setting of the editor.
@@ -78,6 +82,7 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 		// tags:
 		//		private
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "CollapsibleToolbar");
+		this._myWidgets = [];
 		
 		// Build the containers.
 		var container = dojo.create("table", {style: { width: "100%" }, tabindex: -1, "class": "dojoxCollapsibleToolbarContainer"});
@@ -102,6 +107,9 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 			textClass: "dojoxCollapsibleToolbarExpandText"
 		});
 		dojo.place(expandButton.domNode, closeTd);
+
+		this._myWidgets.push(collapseButton);
+		this._myWidgets.push(expandButton);
 
 		// Attach everything in now.
 		dojo.style(closeTd, "display", "none");
@@ -164,6 +172,18 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 		 dojo.style(this.menu, "display", "");
 		 this.editor.resize({h: size.h});
 		 dijit.focus(this.openTd.firstChild);
+	},
+
+	destroy: function(){
+		// summary:
+		//		Over-ride of destroy method for cleanup.
+		this.inherited(arguments);
+		if(this._myWidgets){
+			while(this._myWidgets.length){
+				this._myWidgets.pop().destroy();
+			}
+			delete this._myWidgets;
+		}
 	}
 });
 
