@@ -193,6 +193,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		//		Function to toggle whether or not find/replace is displayed.
 		//	tags:
 		//		private
+		var size = dojo.marginBox(this.editor.domNode);
 		if(show && !dojo.isOpera){
 			dojo.style(this._frToolbar.domNode, "display", "block");
 			if(!ignoreState){
@@ -205,15 +206,8 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			}
 		}
 
-		// Make resize calls.
-		var parent = this.editor.domNode.parentNode;
-		if(parent){
-			var container = dijit.getEnclosingWidget(parent);
-			if(container && container.resize){
-				container.resize();
-			}
-		}
-		this.editor.resize();
+		// Resize the editor.
+		this.editor.resize({h: size.h});
 	},
 
 	setToolbar: function(toolbar){
