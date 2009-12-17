@@ -64,7 +64,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "Breadcrumb");
 		this._titleTemplate = strings.nodeActions;
 
-		editor.footer.appendChild(this.breadcrumbBar.domNode);
+		dojo.place(this.breadcrumbBar.domNode, editor.footer);
 		this.editor.onLoadDeferred.addCallback(dojo.hitch(this, function(){
 			this._menu = new dijit.Menu({});
 			dojo.addClass(this.breadcrumbBar.domNode, "dojoxEditorBreadcrumbArrow");
