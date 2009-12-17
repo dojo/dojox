@@ -30,12 +30,12 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 		
 		// Build the containers.
 		var container = dojo.create("table", {style: { width: "100%" }, tabindex: -1, "class": "dojoxCollapsibleToolbarContainer"});
-		var tbody = dojo.place(dojo.create("tbody", {tabindex: -1}), container);
-		var row = dojo.place(dojo.create("tr", {tabindex: -1}), tbody);
-		var openTd = dojo.place(dojo.create("td", {"class": "dojoxCollapsibleToolbarControl", tabindex: -1}), row);
-		var closeTd = dojo.place(dojo.create("td", {"class": "dojoxCollapsibleToolbarControl",  tabindex: -1}), row);
-		var menuTd = dojo.place(dojo.create("td", {style: { width: "100%" }, tabindex: -1}), row);
-		var m = dojo.place(dojo.create("span", {style: { width: "100%" }, tabindex: -1}), menuTd);
+		var tbody = dojo.create("tbody", {tabindex: -1}, container);
+		var row = dojo.create("tr", {tabindex: -1}, tbody);
+		var openTd = dojo.create("td", {"class": "dojoxCollapsibleToolbarControl", tabindex: -1}, row);
+		var closeTd = dojo.create("td", {"class": "dojoxCollapsibleToolbarControl",  tabindex: -1}, row);
+		var menuTd = dojo.create("td", {style: { width: "100%" }, tabindex: -1}, row);
+		var m = dojo.create("span", {style: { width: "100%" }, tabindex: -1}, menuTd);
 
 		// Put in actual clickable containers in the open/close holders.
 		openTd.appendChild(dojo.create("div", {
