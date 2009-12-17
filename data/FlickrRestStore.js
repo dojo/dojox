@@ -399,9 +399,9 @@ dojo.declare("dojox.data.FlickrRestStore",
 			case "imageUrl":
 				return [ item.media.l ]; // String
 			case "imageUrlOriginal":
-                                return [ item.media.o ]; // String
+				return [ item.media.o ]; // String
 			case "imageUrlLarge":
-		                return [ item.media.l ]; // String
+				return [ item.media.l ]; // String
 			case "imageUrlMedium":
 				return [ item.media.m ]; // String
 			case "imageUrlThumb":
