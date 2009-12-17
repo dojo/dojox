@@ -12,7 +12,7 @@ dojo.declare("dojox.editor.plugins._CollapsibleToolbarButton", [dijit._Widget, d
 	//		with A11Y support.
 	// tags:
 	//		private
-	templateString: "<div tabindex='0'roll='button'></div>",
+	templateString: "<div tabindex='0' roll='button'></div>",
 
 	// title [public] String
 	//		The text to read by a screen reader that gets button focus.
