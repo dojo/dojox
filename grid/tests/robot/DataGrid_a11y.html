@@ -11,6 +11,7 @@
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../../dojo/dojo.js"
 		djConfig="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dijit/tests/helpers.js"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit"); // optimize: load dijit layer
 		dojo.require("dijit.robotx");
@@ -116,6 +117,52 @@
 						// done editing
 						
 						this.grid.edit.cancel();
+						this.grid = null;
+					}
+				}
+			]);
+			doh.register("Context Menu",[
+				{
+					name: "invoke context menu",
+					timeout:10000,
+					grid: null,
+					setUp:function(){
+						this.grid = dijit.byId('markup_grid_1');
+					},
+					runTest: function(){
+						
+						var d = new doh.Deferred();
+						var grid=this.grid;
+						var initialFocus = dojo.byId('initialfocus');
+						initialFocus.focus();
+						// now move focus to first header cell of markup grid
+						var tabCount = dojo.isIE? 2:(dojo.isFF?3:5);
+						for(var i=0; i<tabCount; i++){
+							doh.robot.keyPress(dojo.keys.TAB,500);
+						}
+						// move to Date Column Header
+						doh.robot.keyPress(dojo.keys.RIGHT_ARROW,500);
+							// open context menu via keyboard
+							if (dojo.isMac) {
+								doh.robot.keyPress(dojo.keys.SPACE, 500, {
+									ctrl: true
+								});
+							}else {
+								doh.robot.keyPress(dojo.keys.F10, 500, {
+									shift: true
+								});
+							}
+
+						doh.robot.sequence(d.getTestCallback(function(){
+							var menu = dijit.byId("gridMenu"); 
+							doh.t(isVisible(menu), "menu is now shown");
+							doh.robot.keyPress(dojo.keys.ESCAPE,0, {}, true); // close context menu
+						}), 1500);
+						
+						return d;
+
+					},
+					tearDown:function(){
 						this.grid = null;
 					}
 				}

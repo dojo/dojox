@@ -12,8 +12,10 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		this.cell = null;
 		this.rowIndex = -1;
 		this._connects = [];
+		this.headerMenu = this.grid.headerMenu;
 		this._connects.push(dojo.connect(this.grid.domNode, "onfocus", this, "doFocus"));
 		this._connects.push(dojo.connect(this.grid.domNode, "onblur", this, "doBlur"));
+		this._connects.push(dojo.connect(this.grid.domNode, "oncontextmenu", this, "doContextMenu"));
 		this._connects.push(dojo.connect(this.grid.lastFocusNode, "onfocus", this, "doLastNodeFocus"));
 		this._connects.push(dojo.connect(this.grid.lastFocusNode, "onblur", this, "doLastNodeBlur"));
 		this._connects.push(dojo.connect(this.grid,"_onFetchComplete", this, "_delayedCellFocus"));
@@ -26,6 +28,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	_colHeadNode: null,
 	_colHeadFocusIdx: null,
+	_contextMenuBindNode: null,
 	tabbingOut: false,
 	focusClass: "dojoxGridCellFocus",
 	focusView: null,
@@ -101,7 +104,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			try{
 				if(!this.grid.edit.isEditing()){
 					dojo.toggleClass(n, this.focusClass, true);
-					dojo.removeAttr(this.grid.domNode,"aria-activedescendant");
+					this.blurHeader();
 					dojox.grid.util.fire(n, "focus");
 				}
 			} 
@@ -286,8 +289,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		if(inCell && !this.isFocusCell(inCell, inRowIndex)){
 			this.tabbingOut = false;
 			if (this._colHeadNode){
-				dojo.toggleClass(this._colHeadNode, this.focusClass, false);
-				dojo.removeAttr(this.grid.domNode,"aria-activedescendant");
+				this.blurHeader();
 			}
 			this._colHeadNode = this._colHeadFocusIdx = null;
 			this.focusGridView();
@@ -438,7 +440,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			dojo.stopEvent(e);
 		}else if(this.isNavHeader()){
 			// if tabbing from col header, then go to grid proper. 
-			dojo.toggleClass(this._colHeadNode, this.focusClass, false);
+			this.blurHeader();
 			if(!this.findAndFocusGridCell()){
 				this.tabOut(this.grid.lastFocusNode);
 			}
@@ -516,12 +518,32 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			this._colHeadNode = headerNodes[this._colHeadFocusIdx];
 		}
 		if(this._colHeadNode && this._colHeadNode.style.display != "none"){
+			// Column header cells know longer receive actual focus.  So, for keyboard invocation of
+			// contextMenu to work, the contextMenu must be bound to the grid.domNode rather than the viewsHeaderNode.
+			// unbind the contextmenu from the viewsHeaderNode and to the grid when header cells are active.  Reset
+			// the binding back to the viewsHeaderNode when header cells are no longer acive (in blurHeader) #10483
+			if (this.headerMenu && this._contextMenuBindNode != this.grid.domNode){
+				this.headerMenu.unBindDomNode(this.grid.viewsHeaderNode);
+				this.headerMenu.bindDomNode(this.grid.domNode);
+				this._contextMenuBindNode = this.grid.domNode;
+			}
 			this._setActiveColHeader(this._colHeadNode, this._colHeadFocusIdx, saveColHeadFocusIdx);
 			this._scrollHeader(this._colHeadFocusIdx);
 			this._focusifyCellNode(false);
 		}else {
 			// all col head nodes are hidden - focus the grid
 			this.findAndFocusGridCell();
+		}
+	},
+	blurHeader: function(){
+		dojo.removeClass(this._colHeadNode, this.focusClass);
+		dojo.removeAttr(this.grid.domNode,"aria-activedescendant");
+		// reset contextMenu onto viewsHeaderNode so right mouse on header will invoke (see focusHeader)
+		if (this.headerMenu && this._contextMenuBindNode == this.grid.domNode) {
+			var viewsHeader = this.grid.viewsHeaderNode;
+			this.headerMenu.unBindDomNode(this.grid.domNode);
+			this.headerMenu.bindDomNode(viewsHeader);
+			this._contextMenuBindNode = viewsHeader;
 		}
 	},
 	doFocus: function(e){
@@ -539,6 +561,12 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	doBlur: function(e){
 		dojo.stopEvent(e);	// FF2
+	},
+	doContextMenu: function(e){
+	//stop contextMenu event if no header Menu to prevent default/browser contextMenu
+		if (!this.headerMenu){
+			dojo.stopEvent(e); 
+		}
 	},
 	doLastNodeFocus: function(e){
 		if (this.tabbingOut){
