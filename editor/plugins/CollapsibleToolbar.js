@@ -12,7 +12,9 @@ dojo.declare("dojox.editor.plugins._CollapsibleToolbarButton", [dijit._Widget, d
 	//		with A11Y support.
 	// tags:
 	//		private
-	templateString: "<div tabindex='0' role='button'></div>",
+	templateString: "<div tabindex='0' role='button' title='${title}' class='${buttonClass}' " +
+		"dojoAttachEvent='ondijitclick: onClick'><span class='${textClass}'>${text}</span></div>",
+
 
 	// title [public] String
 	//		The text to read by a screen reader that gets button focus.
@@ -29,24 +31,6 @@ dojo.declare("dojox.editor.plugins._CollapsibleToolbarButton", [dijit._Widget, d
 	// textClass [public] String
 	//		The classname to apply to the expand/collapse text.
 	textClass: "",
-
-	postCreate: function(){
-		// summary:
-		//		Over-ride of post create to attach in all the titles, text, etc.
-		this.connect(this.domNode, "ondijitclick", "onClick");
-		if(this.title){
-			dojo.attr(this.domNode, "title", this.title);
-		}
-		if(this.buttonClass){
-			dojo.addClass(this.domNode, this.buttonClass);
-		}
-		if(this.text){
-			var tn = dojo.create("span", {innerHTML: this.text}, this.domNode);
-			if(this.textClass){
-				dojo.addClass(tn, this.textClass); 
-			}
-		}
-	},
 
 	onClick: function(e){
 		// summary:
@@ -123,23 +107,6 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 		// Establish the events to handle open/close.
 		this.connect(collapseButton, "onClick", "_onClose");
 		this.connect(expandButton, "onClick", "_onOpen");
-
-		// Set up some focus handlers so hilighting appears on IE.  Focus box needed 
-		// to be A11Y compliant.
-		if(dojo.isIE){
-			this.connect(collapseButton.domNode, "onfocus", function(){
-				dojo.addClass(collapseButton.domNode, "dojoxCollapsibleToolbarButtonFocus");
-			});
-			this.connect(collapseButton.domNode, "onblur", function(){
-				dojo.removeClass(collapseButton.domNode, "dojoxCollapsibleToolbarButtonFocus");
-			});
-			this.connect(expandButton.domNode, "onfocus", function(){
-				dojo.addClass(expandButton.domNode, "dojoxCollapsibleToolbarButtonFocus");
-			});
-			this.connect(expandButton.domNode, "onblur", function(){
-				dojo.removeClass(expandButton.domNode, "dojoxCollapsibleToolbarButtonFocus");
-			});
-		}
 	},
 
 	_onClose: function(e){
@@ -155,23 +122,33 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 		dojo.style(this.closeTd, "display", "");
 		dojo.style(this.menu, "display", "none");
 		this.editor.resize({h: size.h});
+		// work around IE rendering glitch in a11y mode.
+		if(dojo.isIE){
+			this.editor.header.className = this.editor.header.className;
+			this.editor.footer.className = this.editor.footer.className;
+		}
 		dijit.focus(this.closeTd.firstChild);
 	},
 
 	_onOpen: function(e) {
-		 // summary:
-		 //		Internal function for handling a click event that will open the toolbar.
-		 // e:
-		 //		The click event.
-		 // tags:
-		 //		private
-		 if(e){ dojo.stopEvent(e); }
-		 var size = dojo.marginBox(this.editor.domNode);
-		 dojo.style(this.closeTd, "display", "none");
-		 dojo.style(this.openTd, "display", "");
-		 dojo.style(this.menu, "display", "");
-		 this.editor.resize({h: size.h});
-		 dijit.focus(this.openTd.firstChild);
+		// summary:
+		//		Internal function for handling a click event that will open the toolbar.
+		// e:
+		//		The click event.
+		// tags:
+		//		private
+		if(e){ dojo.stopEvent(e); }
+		var size = dojo.marginBox(this.editor.domNode);
+		dojo.style(this.closeTd, "display", "none");
+		dojo.style(this.openTd, "display", "");
+		dojo.style(this.menu, "display", "");
+		this.editor.resize({h: size.h});
+		 // work around IE rendering glitch in a11y mode.
+		if(dojo.isIE){
+			this.editor.header.className = this.editor.header.className;
+			this.editor.footer.className = this.editor.footer.className;
+		}
+		dijit.focus(this.openTd.firstChild);
 	},
 
 	destroy: function(){
