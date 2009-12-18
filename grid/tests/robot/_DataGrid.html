@@ -28,6 +28,7 @@
 		dojo.require("dijit.layout.TabContainer");
 		dojo.require("dijit.layout.SplitContainer");
 		dojo.require("dijit.Tooltip");
+		dojo.require("dijit.Menu");
 		dojo.require("dijit.layout.LinkPane");
 		dojo.require("dijit.form.Button");
 		dojo.require("dojox.grid.DataGrid");
@@ -48,16 +49,21 @@
 
 	<h1 dojoType="dojo.dnd.Target" class="testTitle">dojox.grid.DataGrid tests</h1>
 	<input id="initialfocus"></input>
+		<div dojoType="dijit.Menu" jsid="gridMenu" id="gridMenu" style="display: none;">
+				<div dojoType="dijit.MenuItem" >Item One</div>
+				<div dojoType="dijit.MenuItem" >Item Two</div>
+				<div dojoType="dijit.MenuItem" >Item Three</div>
+		</div>
 	<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" tabStrip="true" style="width: 100%; height: 20em;">
 
 		<div dojoType="dijit.layout.ContentPane"  title="Markup 1">
-			<h1>Editable DataGrid, markup, pane shown on init.</h1>
-			<div id="markup_grid_1" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store1" query="{ id: '*' }" structure="structure1" rowSelector="20px" style="width: 100%;height:19em;"></div>
+			<h1>Editable DataGrid, markup, pane shown on init, context menu on header</h1>
+			<div id="markup_grid_1" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store1" query="{ id: '*' }" structure="structure1" rowSelector="20px" headerMenu="gridMenu" style="width: 100%;height:19em;"></div>
 		</div>
 
 		<div dojoType="dijit.layout.ContentPane" title="Markup 2">
 			<h1>Editable DataGrid, markup, pane hidden on init. This grid should be identical to the first tab.</h1>
-			<div id="markup_grid_2" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store2" query="{ id: '*' }" structure="structure1" rowSelector="20px" style="width: 100%;height:19em;"></div>
+			<div id="markup_grid_2" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store2" query="{ id: '*' }" structure="structure1" rowSelector="20px" headerMenu="gridMenu" style="width: 100%;height:19em;"></div>
 		</div>
 
 		<div dojoType="dijit.layout.ContentPane" title="Markup 3">
@@ -65,9 +71,9 @@
 			<h1>More filler text</h1>
 			<h1>Even more filler text</h1>
 			<h1>Editable DataGrid, markup, pane hidden on init. This grid should be identical to the first tab.</h1>
-			<div id="markup_grid_3" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store3" query="{ id: '*' }" structure="structure1" rowSelector="20px" style="width: 100%;height:19em;"></div>
+			<div id="markup_grid_3" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store3" query="{ id: '*' }" structure="structure1" rowSelector="20px" headerMenu="gridMenu" style="width: 100%;height:19em;"></div>
 		</div>
-		<div dojoType="dijit.layout.ContentPane"  title="Markup structure"><table id="markup_grid_markup_structure" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store4" query="{ id: '*' }" rowSelector="20px" style="width: 100%;">
+		<div dojoType="dijit.layout.ContentPane"  title="Markup structure"><table id="markup_grid_markup_structure" dojoType="dojox.grid.DataGrid" columnReordering="true" store="structure1_store4" query="{ id: '*' }" rowSelector="20px" headerMenu="gridMenu" style="width: 100%;">
 			<h1>Editable DataGrid, markup structure, pane hidden on init. This grid should be identical to the first tab.</h1>
 			<thead>
 					<tr>
