@@ -17,9 +17,16 @@ dojo.experimental("dojox.html.ext-dojo.style");
 		min = Math.min,
 		abs = Math.abs,
 		attr = d.attr,
+		docElemStyle = d.doc.documentElement.style,
 		degToRad = PI/180,
 		gradToRad = PI/200,
 		hasAttr = d.hasAttr,
+		_getTransform,
+		_setTransform,
+		_getTransformOrigin,
+		_setTransformOrigin,
+		tPropertyName,
+		toPropertyName,
 		dto = "dojo-transform-origin",
 		conversion = d.create("div", {
 			style: {
@@ -31,20 +38,55 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				backgroundPosition: "50% 50%"
 			}
 		}),
-		_getTransformOrigin = function(node){
-			return attr(node, dto) || "50% 50%";
-		},
 		toPx = function(measure){
-            if(measure.toLowerCase().indexOf("px") != -1){
+			if(typeof measure === "number"){
+				return measure + "px";
+			}else if(measure.toLowerCase().indexOf("px") != -1){
                 return measure;
             }
 			// "native" conversion in px
             !conversion.parentNode && d.place(conversion, d.body());
 			ds(conversion, "margin", measure);
 			return ds(conversion, "margin");
-		},
-		_setTransformOrigin = 
-			d.isIE ? function(/*DomNode*/node, /*String*/ transformOrigin){
+		};
+		_setTransformOrigin = _getTransformOrigin = function(){
+			console.warn("Sorry, this browser can't support transform-origin");
+		};
+		_setTransform = _getTransform = function(){
+			console.warn("Sorry, this browser can't support transform");
+		}
+	;
+
+	for(var i = 0, tPrefix = ["t", "WebkitT", "MozT"]; i < tPrefix.length; i++){
+		if(typeof docElemStyle[tPrefix[i] + "ransform"] === "string"){
+			tPropertyName = tPrefix[i] + "ransform";
+		}
+		if(typeof docElemStyle[tPrefix[i] + "ransformOrigin"] === "string"){
+			toPropertyName = tPrefix[i] + "ransformOrigin";
+		}
+	}
+	if(tPropertyName){
+		_setTransform = function(/*DomNode*/node, /*String*/ transform){
+			return ds(node, tPropertyName, transform);
+		};
+		_getTransform = function(/*DomNode*/node){
+			return ds(node, tPropertyName);
+		};
+	}
+	if(toPropertyName){
+		_setTransformOrigin = function(/*DomNode*/node, /*String*/ transformOrigin){
+			return ds(node, toPropertyName, transformOrigin);
+		};
+		_getTransformOrigin = function(/*DomNode*/node){
+			return ds(node, toPropertyName);
+		};
+	}
+	if(d.isIE){
+		if(!toPropertyName){
+			_getTransformOrigin = function(node){
+				return attr(node, dto) || "50% 50%";
+			},
+			_setTransformOrigin = function(/*DomNode*/node, /*String*/ transformOrigin){
 				var to = d.trim(transformOrigin)
 					.replace(" top", " 0")
 					.replace("left ", "0 ")
@@ -72,40 +114,21 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				}
 				attr(n, dto, toAry.join(" "));
 				t && _setTransform(node, t);
-			} :
-			d.isFF >= 3.5 && function(/*DomNode*/node, /*String*/ transformOrigin){
-				ds(node, "MozTransformOrigin", transformOrigin);
-			} ||
-			d.isWebKit &&
-			function(/*DomNode*/node, /*String*/ transformOrigin){
-				ds(node, "WebkitTransformOrigin", transformOrigin);
-			}
-			||
-			function(/*DomNode*/node, /*String*/ transform){
-
-			}
-		,
-		_getTransform = d.isIE ? function(/*DomNode*/node){
-			try{
-				var n = d.byId(node),
-					item = n.filters.item(0)
-				;
-				return "matrix(" + item.M11 + ", " + item.M12 + ", " + item.M21 + ", " +
-					item.M22 + ", " + (attr(node, "dojo-transform-tx") || "0") + ", " + (attr(node, "dojo-transform-ty") || "0") + ")";
-			}catch(e){
-				return "matrix(1, 0, 0, 1, 0, 0)";
-			}
-		} : d.isFF >= 3.5 && function(node){
-				return ds(node, "MozTransform");
-			} || d.isWebKit && function(/*DomNode*/node){
-				return ds(node, "WebkitTransform");
-			}
-			||
-			function(/*DomNode*/node){
-			}
-		,
-		_setTransform =
-			d.isIE ? function(/*DomNode*/node, /*String*/ transform){
+			};
+		}
+		if(!tPropertyName){
+			_getTransform = function(/*DomNode*/node){
+				try{
+					var n = d.byId(node),
+						item = n.filters.item(0)
+					;
+					return "matrix(" + item.M11 + ", " + item.M12 + ", " + item.M21 + ", " +
+						item.M22 + ", " + (attr(node, "dojo-transform-tx") || "0") + ", " + (attr(node, "dojo-transform-ty") || "0") + ")";
+				}catch(e){
+					return "matrix(1, 0, 0, 1, 0, 0)";
+				}
+			};
+			_setTransform = function(/*DomNode*/node, /*String*/ transform){
 				var t = transform.replace(/\s/g, ""),
 					n = d.byId(node),
 					transforms = t.split(")"),
@@ -259,7 +282,7 @@ dojo.experimental("dojox.html.ext-dojo.style");
 					",M12=" + m12 +
 					",M21=" + m21 +
 					",M22=" + m22 +
-//					",FilterType='nearest',Dx=0,Dy=0,sizingMethod='auto expand')"
+	//					",FilterType='nearest',Dx=0,Dy=0,sizingMethod='auto expand')"
 					",FilterType='bilinear',Dx=0,Dy=0,sizingMethod='auto expand')"
 				;
 				tx = parseInt(attr(n, "dojo-transform-matrix-tx") || "0");
@@ -290,18 +313,9 @@ dojo.experimental("dojox.html.ext-dojo.style");
 					left: x0 - parseInt(dx) + parseInt(xc) - (parseInt(xc)*m11 + parseInt(yc)*m12) + tx + "px",
 					top:  y0 - parseInt(dy) + parseInt(yc) - (parseInt(xc)*m21 + parseInt(yc)*m22) + ty + "px"
 				});
-			} :
-			d.isFF >= 3.5 && function(/*DomNode*/node, /*String*/ transform){
-				ds(node, "MozTransform", transform);
-			} ||
-			d.isWebKit &&
-			function(/*DomNode*/node, /*String*/ transform){
-				ds(node, "WebkitTransform", transform);
 			}
-			||
-			function(/*DomNode*/node, /*String*/ transform){
-			}
-	;
+		}
+	}
 	d.style = function(	/*DomNode|String*/ node,
 							/*String?|Object?*/ style,
 							/*String?*/ value){
