@@ -685,6 +685,7 @@ dojo.require("dojo.date.locale");
 	var oLocaleFmt = _d.date.locale.format;
 	var oGetZone = _d.date.locale._getZone;
 	_d.date.locale.format = function(dateObject, options){
+		options = options||{};
 		if(options.timezone && !options._tzInfo){
 			// Store it in our options so we can use it later
 			options._tzInfo = dojox.date.timezone.getTzInfo(dateObject, options.timezone);
