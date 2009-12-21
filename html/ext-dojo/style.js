@@ -57,7 +57,7 @@ dojo.experimental("dojox.html.ext-dojo.style");
 		}
 	;
 
-	for(var i = 0, tPrefix = ["t", "WebkitT", "MozT"]; i < tPrefix.length; i++){
+	for(var i = 0, tPrefix = ["WebkitT", "MozT", "t"]; i < tPrefix.length; i++){
 		if(typeof docElemStyle[tPrefix[i] + "ransform"] === "string"){
 			tPropertyName = tPrefix[i] + "ransform";
 		}
