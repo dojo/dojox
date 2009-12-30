@@ -129,6 +129,7 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				}
 			};
 			_setTransform = function(/*DomNode*/node, /*String*/ transform){
+				// Using the Matrix Filter to implement the transform property on IE
 				var t = transform.replace(/\s/g, ""),
 					n = d.byId(node),
 					transforms = t.split(")"),
@@ -156,9 +157,6 @@ dojo.experimental("dojox.html.ext-dojo.style");
 					w = ds(n, "width") + ds(n, "paddingLeft") + ds(n, "paddingRight"),
 					h = ds(n, "height") + ds(n, "paddingTop") + ds(n, "paddingBottom")
 				;
-				// ie8 bug, a filter is applied to positioned descendants
-				// only if the parent has z-index
-				ds(n, "zIndex") == "auto" && ds(node, "zIndex", "0");
 
 				!hasAttr(n, dto) && _setTransformOrigin(n, "50% 50%");
 				for(var i = 0, l = transforms.length; i < l; i++){
@@ -270,11 +268,19 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				;
 				dx = -Bx;
 				dy = -By;
-				if(d.isIE < 8 && newPosition != "absolute"){
-					var parentWidth = ds(node.parentNode, "width"),
-						wMax = max(abs(w*m11) + abs(h*m12), max(max(abs(w*m11), abs(h*m12)), 0))
-					;
-					dx -= (wMax - w) / 2 - (parentWidth > wMax ? 0 : (wMax - parentWidth) / 2);
+				if(d.isIE < 8){
+					// on IE < 8 the node must have hasLayout = true
+					n.style.zoom = "1";
+					if(newPosition != "absolute"){
+						var parentWidth = ds(node.parentNode, "width"),
+							wMax = max(abs(w*m11) + abs(h*m12), max(max(abs(w*m11), abs(h*m12)), 0))
+						;
+						dx -= (wMax - w) / 2 - (parentWidth > wMax ? 0 : (wMax - parentWidth) / 2);
+					}
+				}else if(d.isIE == 8){
+					// IE8 bug, a filter is applied to positioned descendants
+					// only if the parent has z-index
+					ds(n, "zIndex") == "auto" && (n.style.zIndex = "0");
 				}
 
 				n.style.filter =
