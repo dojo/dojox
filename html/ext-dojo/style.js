@@ -162,6 +162,13 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				for(var i = 0, l = transforms.length; i < l; i++){
 					currentTransform = transforms[i];
 					if(currentTransform.indexOf("matrix(") == 0){
+						// generic transformation
+						//
+						// matrix:
+						// m11        m12
+						//
+						// m21        m22
+						//
 						ct = currentTransform.replace(/matrix\(|\)/g, "");
 						var matrix = ct.split(",");
 						m11 = props[0]*matrix[0] + props[1]*matrix[2];
@@ -171,6 +178,16 @@ dojo.experimental("dojox.html.ext-dojo.style");
 						tx = props[4] + matrix[4];
 						ty = props[5] + matrix[5];
 					}else if(currentTransform.indexOf("rotate(") == 0){
+						// rotate
+						//
+						// rotation angle:
+						// a (rad, deg or grad)
+						//
+						// matrix:
+						// cos(a)     -sin(a)
+						//
+						// sin(a)     cos(a)
+						//
 						ct = currentTransform.replace(/rotate\(|\)/g, "");
 						toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
 						a = parseFloat(ct)*toRad;
@@ -182,6 +199,16 @@ dojo.experimental("dojox.html.ext-dojo.style");
 						m21 = props[2]*c + props[3]*s;
 						m22 = -props[2]*s + props[3]*c;
 					}else if(currentTransform.indexOf("skewX(") == 0){
+						// skewX
+						//
+						// skew angle:
+						// a (rad, deg or grad)
+						//
+						// matrix:
+						// 1          tan(a)
+						//
+						// 0          1
+						//
 						ct = currentTransform.replace(/skewX\(|\)/g, "");
 						toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
 						var ta = tan(parseFloat(ct)*toRad);
@@ -190,6 +217,16 @@ dojo.experimental("dojox.html.ext-dojo.style");
 						m21 = props[2];
 						m22 = props[2]*ta + props[3];
 					}else if(currentTransform.indexOf("skewY(") == 0){
+						// skewY
+						//
+						// skew angle:
+						// a (rad, deg or grad)
+						//
+						// matrix:
+						// 1          0
+						//
+						// tan(a)     1
+						//
 						ct = currentTransform.replace(/skewY\(|\)/g, "");
 						toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
 						ta = tan(parseFloat(ct)*toRad);
@@ -198,6 +235,17 @@ dojo.experimental("dojox.html.ext-dojo.style");
 						m21 = props[2] + props[3]*ta;
 						m22 = props[3];
 					}else if(currentTransform.indexOf("skew(") == 0){
+						// skew
+						//
+						// skew angles:
+						// a0 (rad, deg or grad)
+						// a1 (rad, deg or grad)
+						//
+						// matrix:
+						// 1          tan(a0)
+						//
+						// tan(a1)    1
+						//
 						ct = currentTransform.replace(/skew\(|\)/g, "");
 						var skewAry = ct.split(",");
 						skewAry[1] = skewAry[1] || "0";
@@ -211,21 +259,51 @@ dojo.experimental("dojox.html.ext-dojo.style");
 						m21 = props[2]+ props[3]*a1;
 						m22 = props[2]*a0 + props[3];
 					}else if(currentTransform.indexOf("scaleX(") == 0){
+						// scaleX
+						//
+						// scale factor:
+						// sx
+						//
+						// matrix:
+						// sx         0
+						//
+						// 0          1
+						//
 						ct = parseFloat(currentTransform.replace(/scaleX\(|\)/g, "")) || 1;
 						m11 = props[0]*ct;
 						m12 = props[1];
 						m21 = props[2]*ct;
 						m22 = props[3];
 					}else if(currentTransform.indexOf("scaleY(") == 0){
+						// scaleY
+						//
+						// scale factor:
+						// sy
+						//
+						// matrix:
+						// 1          0
+						//
+						// 0          sy
+						//
 						ct = parseFloat(currentTransform.replace(/scaleY\(|\)/g, "")) || 1;
 						m11 = props[0];
 						m12 = props[1]*ct;
 						m21 = props[2];
 						m22 = props[3]*ct;
 					}else if(currentTransform.indexOf("scale(") == 0){
+						// scale
+						//
+						// scale factor:
+						// sx, sy
+						//
+						// matrix:
+						// sx         0
+						//
+						// 0          sy
+						//
 						ct = currentTransform.replace(/scale\(|\)/g, "");
 						var scaleAry = ct.split(",");
-						scaleAry[1] = scaleAry[1] || 1;
+						scaleAry[1] = scaleAry[1] || scaleAry[0];
 						m11 = props[0]*scaleAry[0];
 						m12 = props[1]*scaleAry[1];
 						m21 = props[2]*scaleAry[0];
