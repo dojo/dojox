@@ -177,7 +177,7 @@ dojox.json.ref = {
 				}
 			}
 	
-			if(update && (idAttribute in it)){
+			if(update && (idAttribute in it || target instanceof Array)){
 				// this means we are updating with a full representation of the object, we need to remove deleted
 				for(i in target){
 					if(!target.__isDirty && target.hasOwnProperty(i) && !it.hasOwnProperty(i) && !(i.charAt(0) == '_' && i.charAt(1) == '_') && !(target instanceof Array && isNaN(i))){
