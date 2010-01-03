@@ -10,25 +10,78 @@
 		@import "../../../dijit/themes/tundra/tundra.css";
 		@import "../plugins/resources/css/Smiley.css";
 	</style>
-
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
 
 	<script type="text/javascript">
 		dojo.require("dijit.Editor");
 		dojo.require("dojo.parser");
-		dojo.require("dojox.editor.plugins.Smiley");
+        dojo.require("dojox.editor.plugins._SmileyPalette");
+        dojo.require("dojox.editor.plugins.Smiley");
 	</script>
 </head>
 <body class="tundra">
 	<br>
 	<h1 class="testTitle">Editor + Smiley Plugin</h1>
-
-
-	<div dojoType="dijit.Editor" id="editor1" extraPlugins="['smiley']">
+	<div dojoType="dijit.Editor" id="editor" extraPlugins="['smiley']">
 		This instance is created from a div with an extra plugin, 'smiley' plugin loaded.
 		<div>
-			<center>Smiley Plugin is not ready :-(</center>
+			<center>[:-)] Smiley Plugin is Ready !!! &nbsp;[:-)]</center>
 		</div>
-	</div>
+        <ul>
+        <li>
+		emoticonSmile: "[:-)]",
+        </li>
+        <li>
+		emoticonLaughing: "[lol]",
+        </li>
+        <li>
+		emoticonWink: "[;-)]",
+        </li>
+        <li>
+		emoticonGrin: "[:-D]",
+        </li>
+        <li>
+		emoticonCool: "[8-)]",
+        </li>
+        <li>        
+		emoticonAngry: "[:-@]",
+        </li>
+        <li>
+		emoticonHalf: "[:-/]",
+        </li>
+        <li>
+		emoticonEyebrow: "[/:)]",
+        </li>
+        <li>
+		emoticonFrown: "[:-(]",
+        </li>
+        <li>
+		emoticonShy: "[:-$]",
+        </li>
+        <li>
+		emoticonGoofy: "[:-S]",
+        </li>
+        <li>
+		emoticonOops: "[:-O]",
+        </li>
+        <li>
+		emoticonTongue: "[:-P]",
+        </li>
+        <li>
+		emoticonIdea: "[(i)]",
+        </li>
+        <li>
+		emoticonYes: "[(y)]",
+        </li>
+        <li>
+		emoticonNo: "[(n)]",
+        </li>
+        <li>
+		emoticonAngel: "[0:-)]",
+        </li>
+        <li>
+		emoticonCrying: "[:'(]"
+         </li>
+	</ul>
 </body>
 </html>

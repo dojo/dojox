@@ -1,0 +1,21 @@
+({
+	smiley: "이모티콘 넣기",
+	emoticonSmile: "웃음",
+	emoticonLaughing: "큰웃음",
+	emoticonWink: "윙크",
+	emoticonGrin: "씩웃음",
+	emoticonCool: "상쾌함",
+	emoticonAngry: "화남",  
+	emoticonHalf: "쓴웃음", 
+	emoticonEyebrow: "찡긋",
+	emoticonFrown: "언짢음",
+	emoticonShy: "수줌음",
+	emoticonGoofy: "엉뚱",
+	emoticonOops: "놀람",
+	emoticonTongue: "메롱",
+	emoticonIdea: "생각",
+	emoticonYes: "찬성",
+	emoticonNo: "반대",	
+	emoticonAngel: "천사",
+	emoticonCrying: "울음"
+})
