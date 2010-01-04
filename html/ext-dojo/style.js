@@ -27,6 +27,7 @@ dojo.experimental("dojox.html.ext-dojo.style");
 		_setTransformOrigin,
 		tPropertyName,
 		toPropertyName,
+		mstr = "DXImageTransform.Microsoft.Matrix",
 		dto = "dojo-transform-origin",
 		conversion = d.create("div", {
 			style: {
@@ -153,6 +154,7 @@ dojo.experimental("dojox.html.ext-dojo.style");
 					m22 = 1,
 					tx = 0,
 					ty = 0,
+					hasMatrix = false,
 					newPosition = ds(n, "position") == "absolute" ? "absolute" : "relative",
 					w = ds(n, "width") + ds(n, "paddingLeft") + ds(n, "paddingRight"),
 					h = ds(n, "height") + ds(n, "paddingTop") + ds(n, "paddingBottom")
@@ -361,14 +363,30 @@ dojo.experimental("dojox.html.ext-dojo.style");
 					ds(n, "zIndex") == "auto" && (n.style.zIndex = "0");
 				}
 
-				n.style.filter =
-					"progid:DXImageTransform.Microsoft.Matrix(M11=" + m11 +
-					",M12=" + m12 +
-					",M21=" + m21 +
-					",M22=" + m22 +
-	//					",FilterType='nearest',Dx=0,Dy=0,sizingMethod='auto expand')"
-					",FilterType='bilinear',Dx=0,Dy=0,sizingMethod='auto expand')"
-				;
+				try{
+					hasMatrix = !!n.filters.item(mstr);
+				}catch(e){
+					hasMatrix = false;
+				}
+				if(hasMatrix){
+					n.filters.item(mstr).M11 = m11;
+					n.filters.item(mstr).M12 = m12;
+					n.filters.item(mstr).M21 = m21;
+					n.filters.item(mstr).M22 = m22;
+					// use 'nearest' for a faster transform
+					n.filters.item(mstr).filterType = 'bilinear';
+					n.filters.item(mstr).Dx = 0;
+					n.filters.item(mstr).Dy = 0;
+					n.filters.item(mstr).sizingMethod = 'auto expand';
+				}else{
+					n.style.filter +=
+						" progid:" + mstr + "(M11=" + m11 +
+						",M12=" + m12 +
+						",M21=" + m21 +
+						",M22=" + m22 +
+						",FilterType='bilinear',Dx=0,Dy=0,sizingMethod='auto expand')"
+					;
+				}
 				tx = parseInt(attr(n, "dojo-transform-matrix-tx") || "0");
 				ty = parseInt(attr(n, "dojo-transform-matrix-ty") || "0");
 
