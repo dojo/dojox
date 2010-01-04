@@ -33,7 +33,7 @@
     padding: 2px 2px;
 }
 
-.dijitEditorSmileyPalette .dijitPaletteCellHighlight .dijitPaletteImg {
+.dijitEditorSmileyPalette .dijitPaletteCellHover .dijitPaletteImg {
 	border: 1px solid black;
 	padding: 1px 1px;
 }
