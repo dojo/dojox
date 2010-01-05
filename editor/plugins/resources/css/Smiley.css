@@ -1,19 +1,15 @@
 .dijitAdditionalEditorIconSmiley {
 	/* Toolbar icon for Smiley plugin */
-	background-image: url(../icons/smiley.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 18px;
 	height: 18px;
+	background-image: url(../icons/smiley.gif);
 }
 
 .dijitDisabled .dijitAdditionalEditorIconSmiley {
 	/* Toolbar icon for disabled Smiley plugin */
-	background-image: url(../icons/insertEntityDisabled.gif); /*TODO*/
-	background-repeat: no-repeat;
-	background-position: center center;
-	width: 18px;
-	height: 18px;
+	background-image: url(../icons/smileyDisabled.gif);
 }
 
 .dijitEditorSmileyPalette {

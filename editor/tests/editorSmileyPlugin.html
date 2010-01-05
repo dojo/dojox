@@ -17,13 +17,18 @@
 		dojo.require("dojo.parser");
         dojo.require("dojox.editor.plugins._SmileyPalette");
         dojo.require("dojox.editor.plugins.Smiley");
+		dojo.require("dijit._editor.plugins.ViewSource");
 	</script>
 </head>
 <body class="tundra">
 	<br>
 	<h1 class="testTitle">Editor + Smiley Plugin</h1>
-	<div dojoType="dijit.Editor" id="editor" extraPlugins="['smiley']">
-		This instance is created from a div with an extra plugin, 'smiley' plugin loaded.
+	<div dojoType="dijit.Editor" id="editor" extraPlugins="['smiley', 'viewsource']">
+		<p>
+			This editor is created with the 'smiley' plugin and 'viewsource' plugin.
+			Viewsource should convert the smiley images into ascii text, and vice-versa (on returning from view source to normal editing mode).
+			Also, the smiley plugin should be disabled while in view source mode.
+		</p>
 		<div>
 			<center>[:-)] Smiley Plugin is Ready !!! &nbsp;[:-)]</center>
 		</div>
