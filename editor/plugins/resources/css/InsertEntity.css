@@ -10,10 +10,6 @@
 .dijitDisabled .dijitAdditionalEditorIconInsertEntity {
 	/* icon in toolbar for this plugin, when the plugin is disabled */
 	background-image: url(../icons/insertEntityDisabled.gif);
-	background-repeat: no-repeat;
-	background-position: center center;
-	width: 18px;
-	height: 18px;
 }
 
 .dojoxEntityPalette {
@@ -27,15 +23,15 @@
 	/* individual cell of the drop down */
 	border: 1px dotted gray;
 	width: 20px;	/* todo: don't hardcode width/height; it's neither nececessary nor a11y safe */
-	height: 20px;
+    line-height: 18px;
 	overflow: hidden;
 	z-index: 10;
 	text-align: center;
 }
 
 .dojoxEntityPaletteCellHighlight {
-	width: 18px; 
-	height: 18px; 
+	width: 18px;
+    line-height: 16px;
 	overflow: hidden;
 	cursor: default;
 	border:2px solid #000;

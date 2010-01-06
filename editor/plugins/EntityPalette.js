@@ -137,6 +137,13 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		}
 	},
 
+	_onCellMouseEnter: function(/*Event*/ evt){ 
+		this.inherited(arguments);
+		if(this.showPreview){
+			this._displayDetails(evt.target);
+		}
+	},
+
 	_setCurrent: function(/*DOMNode*/ node){
 		// summary:
 		//		Called when a entity is hovered or focused.
