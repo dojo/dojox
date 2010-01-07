@@ -32,7 +32,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 	}
 	var plainXhr = dojo.xhr;
 	dojo.xhr = function(method,args){
-		(args.headers = args.headers || {})['Server-Methods'] = false;
+		(args.headers = args.headers || {})['Server-Methods'] = "false";
 		return plainXhr.apply(dojo,arguments);
 	}
 	var rootService= dojox.rpc.Rest(path,true);
