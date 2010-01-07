@@ -83,7 +83,7 @@ dojo.require("dojo.data.util.filter");
 						var remove = this._updates[i].remove;
 						if(remove){
 							for(var j = 0; j < resultSet.length;j++){
-								if(resultSet[j] == remove){
+								if(this.getIdentity(resultSet[j]) == this.getIdentity(remove)){
 									resultSet.splice(j--,1);
 									var updated = true;
 								}
