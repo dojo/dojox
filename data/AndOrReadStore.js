@@ -797,7 +797,7 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 							if(!dojo.isObject(referenceDescription)){
 								// example: 'Miss Piggy'
 								// from an item like: { name:['Kermit'], friends:[{_reference:'Miss Piggy'}]}
-								arrayOfValues[j] = this._itemsByIdentity[referenceDescription];
+								arrayOfValues[j] = this._getItemByIdentity(referenceDescription);
 							}else{
 								// example: {name:'Miss Piggy'}
 								// from an item like: { name:['Kermit'], friends:[{_reference:{name:'Miss Piggy'}}] }
