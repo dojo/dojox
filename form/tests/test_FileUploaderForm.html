@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <title>Flash HTML</title>
-    <link href="../../../dijit/themes/dijit.css" rel="stylesheet" />
-    <link href="../../../dijit/themes/tundra/form/Button.css" rel="stylesheet" />
-    <link href="../../../dijit/themes/tundra/ProgressBar.css" rel="stylesheet" />
-    <link href="../resources/FileUploader.css" rel="stylesheet" />
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/themes/dijit.css";
+		@import "../../../dijit/themes/tundra/form/Button.css";
+		@import "../../../dijit/themes/tundra/ProgressBar.css";
+		@import "../../../dijit/tests/css/dijitTests.css"; 
+		@import "../resources/FileUploader.css"; 
+	</style>
 	<script>
         djConfig = {
             isDebug: false,
@@ -50,7 +54,7 @@
 				hoverClass:"uploadHover",
 				activeClass:"uploadPress",
 				disabledClass:"uploadDisabled",
-				uploadUrl:dojo.moduleUrl("dojox.form", "resources/UploadFile.php"),
+				uploadUrl:dojo.moduleUrl("dojox.form", "tests/UploadFile.php"),
 				fileMask:[
 					["Jpeg File", 	"*.jpg;*.jpeg"],
 					["GIF File", 	"*.gif"],
@@ -230,6 +234,12 @@
 </head>
 <body class="tundra">
   <h1>FileUploader Widget Form Test</h1>
+  <p style="font-size:14px; width:480px; border:2px solid #ff0000; padding:3px;">
+		<strong>NOTE:</strong> This test does upload,
+		but the server scripts are renamed to <em>tests/UploadFile.php.<strong>disabled</strong></em> and
+		<em>tests/cLOG.php.<strong>disabled</strong></em> to prevent security attacks on hosted servers.
+		You should rename these files (removing <em>.disabled</em>) in your local copy to conduct tests. 
+	</p>
 	<h3>Both forms on this page are the same except one is for testing the Flash Uploader and one
 	is for the HTML Uploader. The following features are being tested:</h3>
 	<ul>
