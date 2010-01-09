@@ -9,24 +9,14 @@ dojo.experimental("dojox.html.ext-dojo.style");
 
 ;(function(d){
 	var ds = d.style,
-		PI = Math.PI,
-		cos = Math.cos,
-		sin = Math.sin,
-		tan = Math.tan,
-		max = Math.max,
-		min = Math.min,
-		abs = Math.abs,
 		attr = d.attr,
-		docElemStyle = d.doc.documentElement.style,
-		degToRad = PI/180,
-		gradToRad = PI/200,
 		hasAttr = d.hasAttr,
-		_getTransform,
-		_setTransform,
-		_getTransformOrigin,
-		_setTransformOrigin,
-		tPropertyName,
-		toPropertyName,
+		// Math functions
+		PI = Math.PI, cos = Math.cos, sin = Math.sin, tan = Math.tan, max = Math.max, min = Math.min, abs = Math.abs,
+		docElemStyle = d.doc.documentElement.style,
+		degToRad = PI/180, gradToRad = PI/200,
+		_getTransform, _setTransform, _getTransformOrigin, _setTransformOrigin,
+		tPropertyName, toPropertyName,
 		mstr = "DXImageTransform.Microsoft.Matrix",
 		dto = "dojo-transform-origin",
 		conversion = d.create("div", {
@@ -134,26 +124,18 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				var t = transform.replace(/\s/g, ""),
 					n = d.byId(node),
 					transforms = t.split(")"),
-					props = [1, 0, 0, 1, 0, 0],
-					toRad = 1,
-					toRad1 = 1,
+					toRad = 1, toRad1 = 1,
 					// current transform
-					ct = "",
-					currentTransform = "",
-					x0 = 0,
-					y0 = 0,
-					dx = 0,
-					dy = 0,
-					xc = 0,
-					yc = 0,
-					a = 0,
-					// default transform
-					m11 = 1,
-					m12 = 0,
-					m21 = 0,
-					m22 = 1,
-					tx = 0,
-					ty = 0,
+					ct = "", currentTransform = "",
+					matchingTransforms = [],
+					x0 = 0, y0 = 0, dx = 0, dy = 0, xc = 0, yc = 0, a = 0,
+
+					// default transform, identity matrix
+					m11 = 1, m12 = 0, m21 = 0, m22 = 1,
+
+					// no translation
+					tx = 0, ty = 0,
+					props = [m11, m12, m21, m22, tx, ty],
 					hasMatrix = false,
 					newPosition = ds(n, "position") == "absolute" ? "absolute" : "relative",
 					w = ds(n, "width") + ds(n, "paddingLeft") + ds(n, "paddingRight"),
@@ -161,184 +143,198 @@ dojo.experimental("dojox.html.ext-dojo.style");
 				;
 
 				!hasAttr(n, dto) && _setTransformOrigin(n, "50% 50%");
+
 				for(var i = 0, l = transforms.length; i < l; i++){
-					currentTransform = transforms[i];
-					if(currentTransform.indexOf("matrix(") == 0){
-						// generic transformation
-						//
-						// matrix:
-						// m11        m12
-						//
-						// m21        m22
-						//
-						ct = currentTransform.replace(/matrix\(|\)/g, "");
-						var matrix = ct.split(",");
-						m11 = props[0]*matrix[0] + props[1]*matrix[2];
-						m12 = props[0]*matrix[1] + props[1]*matrix[3];
-						m21 = props[2]*matrix[0] + props[3]*matrix[2];
-						m22 = props[2]*matrix[1] + props[3]*matrix[3];
-						tx = props[4] + matrix[4];
-						ty = props[5] + matrix[5];
-					}else if(currentTransform.indexOf("rotate(") == 0){
-						// rotate
-						//
-						// rotation angle:
-						// a (rad, deg or grad)
-						//
-						// matrix:
-						// cos(a)     -sin(a)
-						//
-						// sin(a)     cos(a)
-						//
-						ct = currentTransform.replace(/rotate\(|\)/g, "");
-						toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
-						a = parseFloat(ct)*toRad;
-						var s = sin(a),
-							c = cos(a)
-						;
-						m11 = props[0]*c + props[1]*s;
-						m12 = -props[0]*s + props[1]*c;
-						m21 = props[2]*c + props[3]*s;
-						m22 = -props[2]*s + props[3]*c;
-					}else if(currentTransform.indexOf("skewX(") == 0){
-						// skewX
-						//
-						// skew angle:
-						// a (rad, deg or grad)
-						//
-						// matrix:
-						// 1          tan(a)
-						//
-						// 0          1
-						//
-						ct = currentTransform.replace(/skewX\(|\)/g, "");
-						toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
-						var ta = tan(parseFloat(ct)*toRad);
-						m11 = props[0];
-						m12 = props[0]*ta + props[1];
-						m21 = props[2];
-						m22 = props[2]*ta + props[3];
-					}else if(currentTransform.indexOf("skewY(") == 0){
-						// skewY
-						//
-						// skew angle:
-						// a (rad, deg or grad)
-						//
-						// matrix:
-						// 1          0
-						//
-						// tan(a)     1
-						//
-						ct = currentTransform.replace(/skewY\(|\)/g, "");
-						toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
-						ta = tan(parseFloat(ct)*toRad);
-						m11 = props[0] + props[1]*ta;
-						m12 = props[1];
-						m21 = props[2] + props[3]*ta;
-						m22 = props[3];
-					}else if(currentTransform.indexOf("skew(") == 0){
-						// skew
-						//
-						// skew angles:
-						// a0 (rad, deg or grad)
-						// a1 (rad, deg or grad)
-						//
-						// matrix:
-						// 1          tan(a0)
-						//
-						// tan(a1)    1
-						//
-						ct = currentTransform.replace(/skew\(|\)/g, "");
-						var skewAry = ct.split(",");
-						skewAry[1] = skewAry[1] || "0";
-						toRad = skewAry[0].indexOf("deg") != -1 ? degToRad : skewAry[0].indexOf("grad") != -1 ? gradToRad : 1;
-						toRad1 = skewAry[1].indexOf("deg") != -1 ? degToRad : skewAry[1].indexOf("grad") != -1 ? gradToRad : 1;
-						var a0 = tan(parseFloat(skewAry[0])*toRad),
-							a1 = tan(parseFloat(skewAry[1])*toRad1)
-						;
-						m11 = props[0] + props[1]*a1;
-						m12 = props[0]*a0 + props[1];
-						m21 = props[2]+ props[3]*a1;
-						m22 = props[2]*a0 + props[3];
-					}else if(currentTransform.indexOf("scaleX(") == 0){
-						// scaleX
-						//
-						// scale factor:
-						// sx
-						//
-						// matrix:
-						// sx         0
-						//
-						// 0          1
-						//
-						ct = parseFloat(currentTransform.replace(/scaleX\(|\)/g, "")) || 1;
-						m11 = props[0]*ct;
-						m12 = props[1];
-						m21 = props[2]*ct;
-						m22 = props[3];
-					}else if(currentTransform.indexOf("scaleY(") == 0){
-						// scaleY
-						//
-						// scale factor:
-						// sy
-						//
-						// matrix:
-						// 1          0
-						//
-						// 0          sy
-						//
-						ct = parseFloat(currentTransform.replace(/scaleY\(|\)/g, "")) || 1;
-						m11 = props[0];
-						m12 = props[1]*ct;
-						m21 = props[2];
-						m22 = props[3]*ct;
-					}else if(currentTransform.indexOf("scale(") == 0){
-						// scale
-						//
-						// scale factor:
-						// sx, sy
-						//
-						// matrix:
-						// sx         0
-						//
-						// 0          sy
-						//
-						ct = currentTransform.replace(/scale\(|\)/g, "");
-						var scaleAry = ct.split(",");
-						scaleAry[1] = scaleAry[1] || scaleAry[0];
-						m11 = props[0]*scaleAry[0];
-						m12 = props[1]*scaleAry[1];
-						m21 = props[2]*scaleAry[0];
-						m22 = props[3]*scaleAry[1];
-					}else if(currentTransform.indexOf("translateX") == 0){
-						ct = parseInt(currentTransform.replace(/translateX\(|\)/g, "")) || 1;
-						m11 = props[0];
-						m12 = props[1];
-						m21 = props[2];
-						m22 = props[3];
-						tx = toPx(ct);
-						tx && attr(n, "dojo-transform-matrix-tx", tx);
-					}else if(currentTransform.indexOf("translateY(") == 0){
-						ct = parseInt(currentTransform.replace(/translateY\(|\)/g, "")) || 1;
-						m11 = props[0];
-						m12 = props[1];
-						m21 = props[2];
-						m22 = props[3];
-						ty = toPx(ct);
-						ty && attr(n, "dojo-transform-matrix-ty", ty);
-					}else if(currentTransform.indexOf("translate(") == 0){
-						ct = currentTransform.replace(/translate\(|\)/g, "");
-						m11 = props[0];
-						m12 = props[1];
-						m21 = props[2];
-						m22 = props[3];
-						var translateAry = ct.split(",");
-						translateAry[0] = parseInt(toPx(translateAry[0])) || 0;
-						translateAry[1] = parseInt(toPx(translateAry[1])) || 0;
-						tx = translateAry[0];
-						ty = translateAry[1];
-						tx && attr(n, "dojo-transform-matrix-tx", tx);
-						ty && attr(n, "dojo-transform-matrix-ty", ty);
+					matchingTransforms = transforms[i].match(/matrix|rotate|scaleX|scaleY|scale|skewX|skewY|skew|translateX|translateY|translate/);
+					currentTransform = matchingTransforms ? matchingTransforms[0] : "";
+					switch(currentTransform){
+						case "matrix":
+							// generic transformation
+							//
+							// matrix:
+							// m11        m12
+							//
+							// m21        m22
+							//
+							ct = transforms[i].replace(/matrix\(|\)/g, "");
+							var matrix = ct.split(",");
+							m11 = props[0]*matrix[0] + props[1]*matrix[2];
+							m12 = props[0]*matrix[1] + props[1]*matrix[3];
+							m21 = props[2]*matrix[0] + props[3]*matrix[2];
+							m22 = props[2]*matrix[1] + props[3]*matrix[3];
+							tx = props[4] + matrix[4];
+							ty = props[5] + matrix[5];
+						break;
+						case "rotate":
+							// rotate
+							//
+							// rotation angle:
+							// a (rad, deg or grad)
+							//
+							// matrix:
+							// cos(a)     -sin(a)
+							//
+							// sin(a)     cos(a)
+							//
+							ct = transforms[i].replace(/rotate\(|\)/g, "");
+							toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
+							a = parseFloat(ct)*toRad;
+							var s = sin(a),
+								c = cos(a)
+							;
+							m11 = props[0]*c + props[1]*s;
+							m12 = -props[0]*s + props[1]*c;
+							m21 = props[2]*c + props[3]*s;
+							m22 = -props[2]*s + props[3]*c;
+						break;
+						case "skewX":
+							// skewX
+							//
+							// skew angle:
+							// a (rad, deg or grad)
+							//
+							// matrix:
+							// 1          tan(a)
+							//
+							// 0          1
+							//
+							ct = transforms[i].replace(/skewX\(|\)/g, "");
+							toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
+							var ta = tan(parseFloat(ct)*toRad);
+							m11 = props[0];
+							m12 = props[0]*ta + props[1];
+							m21 = props[2];
+							m22 = props[2]*ta + props[3];
+						break;
+						case "skewY":
+							// skewY
+							//
+							// skew angle:
+							// a (rad, deg or grad)
+							//
+							// matrix:
+							// 1          0
+							//
+							// tan(a)     1
+							//
+							ct = transforms[i].replace(/skewY\(|\)/g, "");
+							toRad = ct.indexOf("deg") != -1 ? degToRad : ct.indexOf("grad") != -1 ? gradToRad : 1;
+							ta = tan(parseFloat(ct)*toRad);
+							m11 = props[0] + props[1]*ta;
+							m12 = props[1];
+							m21 = props[2] + props[3]*ta;
+							m22 = props[3];
+						break;
+						case "skew":
+							// skew
+							//
+							// skew angles:
+							// a0 (rad, deg or grad)
+							// a1 (rad, deg or grad)
+							//
+							// matrix:
+							// 1          tan(a0)
+							//
+							// tan(a1)    1
+							//
+							ct = transforms[i].replace(/skew\(|\)/g, "");
+							var skewAry = ct.split(",");
+							skewAry[1] = skewAry[1] || "0";
+							toRad = skewAry[0].indexOf("deg") != -1 ? degToRad : skewAry[0].indexOf("grad") != -1 ? gradToRad : 1;
+							toRad1 = skewAry[1].indexOf("deg") != -1 ? degToRad : skewAry[1].indexOf("grad") != -1 ? gradToRad : 1;
+							var a0 = tan(parseFloat(skewAry[0])*toRad),
+								a1 = tan(parseFloat(skewAry[1])*toRad1)
+							;
+							m11 = props[0] + props[1]*a1;
+							m12 = props[0]*a0 + props[1];
+							m21 = props[2]+ props[3]*a1;
+							m22 = props[2]*a0 + props[3];
+						break;
+						case "scaleX":
+							// scaleX
+							//
+							// scale factor:
+							// sx
+							//
+							// matrix:
+							// sx         0
+							//
+							// 0          1
+							//
+							ct = parseFloat(transforms[i].replace(/scaleX\(|\)/g, "")) || 1;
+							m11 = props[0]*ct;
+							m12 = props[1];
+							m21 = props[2]*ct;
+							m22 = props[3];
+						break;
+						case "scaleY":
+							// scaleY
+							//
+							// scale factor:
+							// sy
+							//
+							// matrix:
+							// 1          0
+							//
+							// 0          sy
+							//
+							ct = parseFloat(transforms[i].replace(/scaleY\(|\)/g, "")) || 1;
+							m11 = props[0];
+							m12 = props[1]*ct;
+							m21 = props[2];
+							m22 = props[3]*ct;
+						break;
+						case "scale":
+							// scale
+							//
+							// scale factor:
+							// sx, sy
+							//
+							// matrix:
+							// sx         0
+							//
+							// 0          sy
+							//
+							ct = transforms[i].replace(/scale\(|\)/g, "");
+							var scaleAry = ct.split(",");
+							scaleAry[1] = scaleAry[1] || scaleAry[0];
+							m11 = props[0]*scaleAry[0];
+							m12 = props[1]*scaleAry[1];
+							m21 = props[2]*scaleAry[0];
+							m22 = props[3]*scaleAry[1];
+						break;
+						case "translateX":
+							ct = parseInt(transforms[i].replace(/translateX\(|\)/g, "")) || 1;
+							m11 = props[0];
+							m12 = props[1];
+							m21 = props[2];
+							m22 = props[3];
+							tx = toPx(ct);
+							tx && attr(n, "dojo-transform-matrix-tx", tx);
+						break;
+						case "translateY":
+							ct = parseInt(transforms[i].replace(/translateY\(|\)/g, "")) || 1;
+							m11 = props[0];
+							m12 = props[1];
+							m21 = props[2];
+							m22 = props[3];
+							ty = toPx(ct);
+							ty && attr(n, "dojo-transform-matrix-ty", ty);
+						break;
+						case "translate":
+							ct = transforms[i].replace(/translate\(|\)/g, "");
+							m11 = props[0];
+							m12 = props[1];
+							m21 = props[2];
+							m22 = props[3];
+							var translateAry = ct.split(",");
+							translateAry[0] = parseInt(toPx(translateAry[0])) || 0;
+							translateAry[1] = parseInt(toPx(translateAry[1])) || 0;
+							tx = translateAry[0];
+							ty = translateAry[1];
+							tx && attr(n, "dojo-transform-matrix-tx", tx);
+							ty && attr(n, "dojo-transform-matrix-ty", ty);
+						break;
 					}
 					props = [m11, m12, m21, m22, tx, ty];
 				}
