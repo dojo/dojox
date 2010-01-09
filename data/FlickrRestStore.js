@@ -445,11 +445,12 @@ dojo.declare("dojox.data.FlickrRestStore",
                 template[3] = item.server;
                 template[5] = item.id;
                 template[7] = item.secret;
+                
                 var base = template.join("");
 				item.media = {
                     s: base + "_s.jpg",
-                    m: base + ".jpg",
-                    l: base + "_l.jpg",
+                    m: base + "_m.jpg",
+                    l: base + ".jpg",
                     t: base + "_t.jpg",
                     o: base + "_o.jpg"
 				};
