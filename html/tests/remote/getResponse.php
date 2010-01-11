@@ -89,7 +89,7 @@
 				}
 				break;
 			default:
-				echo "unkown mode {$_GET['mode']}";
+				echo "unkown mode {htmlentities($_GET['mode'])}";
 		}
 	}
 ?>
