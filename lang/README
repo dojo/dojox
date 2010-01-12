@@ -13,8 +13,15 @@ Credits
 -------------------------------------------------------------------------------
 Project description
 
-Implementation of common functional operations, and provisions, aspect-oriented
-helpers. Later we can add other JS language-related helpers.
+dojox.lang.functional - Provides lambda functions, and common functional
+operations.
+
+dojox.lang.aspect - Provides a framework for aspect-oriented programming.
+
+dojox.lang.oo - Provides mixers to support traits and mixins for object-oriented
+programming.
+
+dojox.lang.async - Provides helpers for event-driven programming.
 
 dojox.lang.observable - Provides construction of objects that such that 
 property access and modification can be controlled, i.e. provides a form of
@@ -40,6 +47,10 @@ For now:
 
 dojox.lang.functional:
 http://lazutkin.com/blog/2008/jan/12/functional-fun-javascript-dojo/
+http://lazutkin.com/blog/2008/jun/30/using-recursion-combinators-javascript/
+
+dojox.lang.aspect:
+http://lazutkin.com/blog/2008/may/18/aop-aspect-javascript-dojo/
 
 -------------------------------------------------------------------------------
 Installation instructions
