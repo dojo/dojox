@@ -105,7 +105,6 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		// summary:
 		//		Sets read only (or unsets) all the children as well
 		this.checkBox.attr("readOnly", value);
-		this.checkBox._setStateClass();
 		this.readOnly = value;
 	}
 });
@@ -176,7 +175,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 				node.attr("readOnly", value);
 			}
 		});
-		this._setStateClass();
 	},
 
 	uninitialize: function(){
