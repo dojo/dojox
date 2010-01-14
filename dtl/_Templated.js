@@ -71,7 +71,7 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 			return tmplts[key];
 		}
 
-		templateString = dojo.string.trim(templateString || dojo.cache(templatePath, {sanitize: true}));
+		templateString = dojo.string.trim(templateString || dijit._Templated._sanitizeTemplateString(dojo._getText(templatePath)));
 
 		if(	this._dijitTemplateCompat && 
 			(alwaysUseString || templateString.match(/\$\{([^\}]+)\}/g))
