@@ -27,6 +27,14 @@ makeShapes = function(){
 	image.connect("onclick", function(){ alert("image"); })
 	
 	main.add(image);
+	
+	// static images to see how the size
+
+	s.createImage({x: 0, y: 200, width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+	s.createImage({x: 0, y: 300, width: 314, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+	s.createImage({x: 0, y: 400, width: 157, height: 106, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+	
+	main.moveToFront();
 };
 
 trans = function(){

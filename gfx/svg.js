@@ -367,6 +367,7 @@ dojo.require("dojox.gfx.path");
 			for(var i in this.shape){
 				if(i != "type" && i != "src"){ rawNode.setAttribute(i, this.shape[i]); }
 			}
+			rawNode.setAttribute("preserveAspectRatio", "none");
 			rawNode.setAttributeNS(svg.xmlns.xlink, "href", this.shape.src);
 			return this;	// self
 		}
