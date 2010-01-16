@@ -386,7 +386,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			//		Fires when styles of shape has changed
 			//
 			this._isBeingModified = true; // need this to prevent onRender
-			
 			if(!this.enabled){
 				this.style.current = this.style.disabled;
 				this.style.currentText = this.style.textDisabled;	
@@ -409,7 +408,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				//this.style.current = this.style.highlighted;
 				this.style.currentHit = this.style.hitHighlighted;
 				//this.style.currentText = this.style.textHighlighted;
-				
 			}
 			
 			// NOTE: Can't just change props like setStroke
@@ -1181,7 +1179,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			// by default, object is ready to accept data
 			// turn this off for dragging or onRender will
 			// keep firing and register the shape
-			// NOTE: Not needed for all stencils. Axes needs it. 
+			// NOTE: Not needed for all stencils. Axes needs it.
+			this._downOnCanvas = true;
 			dojo.disconnect(this._postRenderCon);
 			this._postRenderCon = null;
 		},

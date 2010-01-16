@@ -12,10 +12,16 @@ dojox.drawing.defaults = {
 	// See:
 	//		Drawing.changeDefaults
 	//
+	//  Determines whether in draw or edit mode (whether stencils
+	//  are clickable.  If clickMode is false, the original 
+	//  functionality of silently switching between select modes
+	//  is enabled.
+	clickMode:true, /*true allows powerpoint functionality*/
+	clickable:true, /*true allows selection, false locks it*/
+	
 	// current: Object
 	// 	 current will point to either null or selected
 	current:null,
-	
 	// currentHit: Object
 	//		currentHit will point to either hitNorm or hitSelected
 	currentHit:null,

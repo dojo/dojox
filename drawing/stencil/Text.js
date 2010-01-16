@@ -89,9 +89,9 @@ StencilPoints: [
 			var w = o.width =="auto" ? 1 : o.width;
 			var h = o.height || this._lineHeight;
 			this.points = [
-				{x:o.x, y:o.y}, 						// TL
+				{x:o.x, y:o.y}, 				// TL
 				{x:o.x + w, y:o.y},				// TR
-				{x:o.x + w, y:o.y + h},	// BR
+				{x:o.x + w, y:o.y + h},			// BR
 				{x:o.x, y:o.y + h}				// BL
 			];
 			return this.points;

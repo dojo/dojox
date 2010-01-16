@@ -39,15 +39,29 @@ dojox.drawing.tools.Rect = dojox.drawing.util.oo.declare(
 		onUp: function(/*EventObject*/obj){
 			// summary: See stencil._Base.onUp
 			//
-			if(this.created || !this.shape){ return; }
+			if(this.created || !this._downOnCanvas){ return; }
+			this._downOnCanvas = false;
 			
-			// if too small, need to reset
-			var o = this.data;
-			if(o.width<this.minimumSize && o.height < this.minimumSize){
-				this.remove(this.shape, this.hit);
-				return;
+			//Default shape on single click
+			if(!this.shape){
+				s = obj.start;
+				e = this.minimumSize*4;
+				this.setPoints([
+					{x:s.x, y:s.y},
+					{x:s.x+e, y:s.y},
+					{x:s.x+e, y:s.y+e},
+					{x:s.x, y:s.y+e}
+				]);
+				this.render();
+			} else {
+			
+				// if too small, need to reset
+				var o = this.data;
+				if(o.width<this.minimumSize && o.height < this.minimumSize){
+					this.remove(this.shape, this.hit);
+					return;
+				}
 			}
-			
 			this.onRender(this);
 			
 		}

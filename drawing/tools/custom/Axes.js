@@ -376,8 +376,20 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 		onUp: function(/*EventObject*/obj){
 			// summary: See stencil._Base.onUp
 			//
+			if(!this._downOnCanvas) { return; }
+			this._downOnCanvas = false;
 			var p = this.points;
-			if(!p.length){ return; }
+			if(!p.length){
+				s = obj.start;			
+				this.points = [
+					{x:s.x+100, y:s.y+100},
+					{x:s.x, y:s.y+100, noAnchor:true},
+					{x:s.x, y:s.y, noAnchor:true}
+				];
+				this.pointsToData();
+				this.render();
+				var p = this.points;
+			}
 
 			var len = this.util.distance(p[1].x ,p[1].y ,p[0].x ,p[0].y );
 			if(!p || !p.length){

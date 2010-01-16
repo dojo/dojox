@@ -23,7 +23,6 @@ dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
 					{x:p[0].x, y:p[0].y} 
 				]); 
 			} else {
-			
 				var d = this.data;
 				var obj = {start:{x:d.x1,y:d.y1},x:d.x2,y:d.y2};
 				var pt = this.util.snapAngle(obj, this.angleSnap/180);
@@ -76,12 +75,24 @@ dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
 		onUp: function(/*EventObject*/obj){
 			// summary: See stencil._Base.onUp
 			//
-			if(this.created || !this.shape){ return; }
-			// if too small, need to reset
-			
-			if(this.getRadius()<this.minimumSize){
-				this.remove(this.shape, this.hit);
-				return;
+			if(this.created || !this._downOnCanvas){ return; }
+			this._downOnCanvas = false;
+			//Default shape on single click
+			if(!this.shape){
+				s = obj.start, e = this.minimumSize*4;
+				this.setPoints([
+					{x:s.x, y:s.y+e},
+					{x:s.x, y:s.y}
+				]);
+				this.render();
+				
+			} else {
+				// if too small, need to reset
+				
+				if(this.getRadius()<this.minimumSize){
+					this.remove(this.shape, this.hit);
+					return;
+				}
 			}
 			
 			var pt = this.util.snapAngle(obj, this.angleSnap/180);

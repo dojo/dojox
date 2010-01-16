@@ -1,7 +1,6 @@
 dojo.provide("dojox.drawing._base");
 dojo.experimental("dojox.drawing");
 
-
 dojo.require("dojox.drawing.manager._registry");
 dojo.require("dojox.gfx");
 dojo.require("dojox.drawing.Drawing");
