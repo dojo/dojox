@@ -168,14 +168,16 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			}, this);
 		}
 		
-		dojo.connect(this.drawing, "onRenderStencil", this, "onRenderStencil")
+		dojo.connect(this.drawing, "onRenderStencil", this, "onRenderStencil");
 	},
 	
 	onRenderStencil: function(/* Object */stencil){
 		// summary:
 		//		Stencil render event.
-		this.selected && this.selected.deselect();
-		this.selected = null;
+		if(!this.toolDrawing.defaults.clickMode){ 
+			this.selected && this.selected.deselect();
+			this.selected = null;
+		}
 	},
 	
 	addTool: function(){
