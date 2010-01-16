@@ -345,14 +345,10 @@ dojo.require("dojox.gfx.path");
 				this.shape = g.makeParameters(this.shape, points);
 			}
 			this.bbox = null;
+			this._normalizePoints();
 			var attr = [], p = this.shape.points;
 			for(var i = 0; i < p.length; ++i){
-				if(typeof p[i] == "number"){
-					attr.push(p[i].toFixed(8));
-				}else{
-					attr.push(p[i].x.toFixed(8));
-					attr.push(p[i].y.toFixed(8));
-				}
+				attr.push(p[i].x.toFixed(8), p[i].y.toFixed(8));
 			}
 			this.rawNode.setAttribute("points", attr.join(" "));
 			return this;	// self

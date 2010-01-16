@@ -432,27 +432,15 @@ dojo.require("dojox.gfx.arc");
 				this.shape = g.makeParameters(this.shape, points);
 			}
 			this.bbox = null;
+			this._normalizePoints();
 			var attr = [], p = this.shape.points;
 			if(p.length > 0){
 				attr.push("m");
-				var k = 1;
-				if(typeof p[0] == "number"){
-					attr.push(p[0].toFixed());
-					attr.push(p[1].toFixed());
-					k = 2;
-				}else{
-					attr.push(p[0].x.toFixed());
-					attr.push(p[0].y.toFixed());
-				}
-				if(p.length > k){
+				attr.push(p[0].x.toFixed(), p[0].y.toFixed());
+				if(p.length > 1){
 					attr.push("l");
-					for(var i = k; i < p.length; ++i){
-						if(typeof p[i] == "number"){
-							attr.push(p[i].toFixed());
-						}else{
-							attr.push(p[i].x.toFixed());
-							attr.push(p[i].y.toFixed());
-						}
+					for(var i = 1; i < p.length; ++i){
+						attr.push(p[i].x.toFixed(), p[i].y.toFixed());
 					}
 				}
 			}
