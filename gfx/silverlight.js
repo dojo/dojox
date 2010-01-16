@@ -342,7 +342,7 @@ dojo.declare("dojox.gfx.Polyline", dojox.gfx.shape.Polyline, {
 		}else{
 			this.shape = dojox.gfx.makeParameters(this.shape, points);
 		}
-		this.box = null;
+		this.bbox = null;
 		var p = this.shape.points, rp = [];
 		for(var i = 0; i < p.length; ++i){
 			if(typeof p[i] == "number"){

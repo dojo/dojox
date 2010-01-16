@@ -269,6 +269,7 @@ dojo.require("dojox.gfx.path");
 			for(var i in this.shape){
 				if(i != "type"){ this.rawNode.setAttribute(i, this.shape[i]); }
 			}
+			this.bbox = null;
 			return this;	// self
 		},
 
@@ -343,7 +344,7 @@ dojo.require("dojox.gfx.path");
 			}else{
 				this.shape = g.makeParameters(this.shape, points);
 			}
-			this.box = null;
+			this.bbox = null;
 			var attr = [], p = this.shape.points;
 			for(var i = 0; i < p.length; ++i){
 				if(typeof p[i] == "number"){
