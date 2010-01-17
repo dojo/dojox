@@ -62,6 +62,8 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 					'</div>',
 
 
+	baseClass: "dojoxEntityPalette",
+
 	// showPreview: [public] Boolean
 	//	  Whether the preview pane will be displayed, to show details about the selected entity.
 	showPreview: true,

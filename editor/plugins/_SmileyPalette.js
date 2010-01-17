@@ -31,6 +31,8 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 		'<table class="dijitInline dijitEditorSmileyPalette dijitPaletteTable"' +
 		' cellSpacing=0 cellPadding=0 dojoAttachPoint="gridNode"></table>',
 
+	baseClass: "dijitEditorSmileyPalette",
+
 	_palette: [
 			["smile", "laughing", "wink", "grin"],
 			["cool", "angry", "half", "eyebrow"],
