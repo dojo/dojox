@@ -4,7 +4,7 @@ dojo.provide("dojox.lang.async");
 	var d = dojo, Deferred = d.Deferred, each = d.forEach, some = d.some,
 		async = dojox.lang.async, aps = Array.prototype.slice,
 		opts = Object.prototype.toString;
-	
+
 	async.seq = function(x){
 		// summary:
 		//		Executes functions sequentially. Waits if any of them returns Deferred.
@@ -16,7 +16,7 @@ dojo.provide("dojox.lang.async");
 			return x;
 		};
 	};
-	
+
 	async.par = function(x){
 		// summary:
 		//		Executes functions in parallel. Waits for all of them to finish.
@@ -75,7 +75,7 @@ dojo.provide("dojox.lang.async");
 			return x;
 		};
 	};
-	
+
 	async.any = function(x){
 		// summary:
 		//		Executes functions in parallel. As soon as one of them finishes
@@ -124,7 +124,7 @@ dojo.provide("dojox.lang.async");
 			return x;
 		};
 	};
-	
+
 	async.select = function(cond, x){
 		// summary:
 		//		Executes a condition, waits for it if necessary, and executes
@@ -140,7 +140,7 @@ dojo.provide("dojox.lang.async");
 			}).callback(init);
 		};
 	};
-	
+
 	async.ifThen = function(cond, ifTrue, ifFalse){
 		// summary:
 		//		Executes a condition, waits for it if necessary, and executes
@@ -151,7 +151,7 @@ dojo.provide("dojox.lang.async");
 			}).callback(init);
 		};
 	};
-	
+
 	async.loop = function(cond, body){
 		// summary:
 		//		Executes a condition, waits for it if necessary, and executes
@@ -163,8 +163,7 @@ dojo.provide("dojox.lang.async");
 			function ifErr(v){ y.errback(v); }
 			function loop(v){
 				if(v){
-					x.addCallback(body);
-					x.addCallback(setUp);
+					x.addCallback(body).addCallback(setUp);
 				}else{
 					y.callback(v);
 				}
@@ -174,8 +173,8 @@ dojo.provide("dojox.lang.async");
 				x = new Deferred().
 					addCallback(cond).
 					addCallback(loop).
-					addErrback(ifErr).
-					callback(init);
+					addErrback(ifErr);
+				x.callback(init);
 			}
 			setUp(init);
 			return y;
