@@ -121,7 +121,7 @@ dojo.require("dojox.lang.async.topic");
 				fs = dojo.map(a, function(ms, i){
 					return waitAndExpect(i && a[i - 1], ms);
 				});
-			return async.seq.apply(async, fs)(0).addCallback(function(value){
+			return async.seq(fs)(0).addCallback(function(value){
 				if(a[a.length - 1] !== value){
 					console.log("ERROR: testSeq: wrong time");
 					throw new Error("testSeq: wrong time");
@@ -133,7 +133,7 @@ dojo.require("dojox.lang.async.topic");
 				fs = dojo.map(a, function(ms){
 					return waitAndExpect(0, ms);
 				});
-			return async.par.apply(async, fs)(0).addCallback(function(value){
+			return async.par(fs)(0).addCallback(function(value){
 				console.log(a, " - ", value);
 				if(!is(a, value)){
 					console.log("ERROR: testPar: wrong time");
@@ -147,7 +147,7 @@ dojo.require("dojox.lang.async.topic");
 				fs = dojo.map(a, function(ms){
 					return waitAndExpect(0, ms);
 				});
-			return async.any.apply(async, fs)(0).addCallback(function(value){
+			return async.any(fs)(0).addCallback(function(value){
 				console.log(min, " - ", value);
 				if(min !== value){
 					console.log("ERROR: testAny: wrong time");
