@@ -21,7 +21,7 @@ dojo.provide("dojox.lang.async.event");
 			return x;
 		};
 	};
-	
+
 	event.failOn = function(src, name){
 		return function(){
 			var h, cancel = function(){

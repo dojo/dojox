@@ -21,7 +21,7 @@ dojo.provide("dojox.lang.async.timeout");
 			return x;
 		};
 	};
-	
+
 	timeout.failOn = function(ms){
 		return function(){
 			var h, cancel = function(){
