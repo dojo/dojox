@@ -398,6 +398,10 @@ dojo.declare("dojox.data.FlickrRestStore",
 				return [ item.media.s ]; // String
 			case "imageUrl":
 				return [ item.media.l ]; // String
+			case "imageUrlOriginal":
+				return [ item.media.o ]; // String
+			case "imageUrlLarge":
+				return [ item.media.l ]; // String
 			case "imageUrlMedium":
 				return [ item.media.m ]; // String
 			case "imageUrlThumb":
@@ -449,7 +453,8 @@ dojo.declare("dojox.data.FlickrRestStore",
 					s: base + "_s.jpg",
 				 	m: base + "_m.jpg",
 				 	l: base + ".jpg",
-				 	t: base + "_t.jpg"
+				 	t: base + "_t.jpg",
+			    		o: base + "_o.jpg"
 				};
 				if(!item.owner && data.photoset){
 					item.owner = data.photoset.owner;
