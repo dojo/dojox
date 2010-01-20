@@ -269,6 +269,7 @@ dojo.require("dojox.gfx.path");
 			for(var i in this.shape){
 				if(i != "type"){ this.rawNode.setAttribute(i, this.shape[i]); }
 			}
+			this.bbox = null;
 			return this;	// self
 		},
 
@@ -343,15 +344,11 @@ dojo.require("dojox.gfx.path");
 			}else{
 				this.shape = g.makeParameters(this.shape, points);
 			}
-			this.box = null;
+			this.bbox = null;
+			this._normalizePoints();
 			var attr = [], p = this.shape.points;
 			for(var i = 0; i < p.length; ++i){
-				if(typeof p[i] == "number"){
-					attr.push(p[i].toFixed(8));
-				}else{
-					attr.push(p[i].x.toFixed(8));
-					attr.push(p[i].y.toFixed(8));
-				}
+				attr.push(p[i].x.toFixed(8), p[i].y.toFixed(8));
 			}
 			this.rawNode.setAttribute("points", attr.join(" "));
 			return this;	// self
@@ -370,6 +367,7 @@ dojo.require("dojox.gfx.path");
 			for(var i in this.shape){
 				if(i != "type" && i != "src"){ rawNode.setAttribute(i, this.shape[i]); }
 			}
+			rawNode.setAttribute("preserveAspectRatio", "none");
 			rawNode.setAttributeNS(svg.xmlns.xlink, "href", this.shape.src);
 			return this;	// self
 		}

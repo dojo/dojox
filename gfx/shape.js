@@ -581,6 +581,17 @@ dojo.declare("dojox.gfx.shape.Polyline", dojox.gfx.Shape, {
 		}
 		return this;	// self
 	},
+	_normalizePoints: function(){
+		// summary: normalize points to array of {x:number, y:number}
+		var p = this.shape.points, l = p && p.length;
+		if(l && typeof p[0] == "number"){
+			var points = [];
+			for(var i = 0; i < l; i += 2){
+				points.push({x: p[i], y: p[i + 1]});
+			}
+			this.shape.points = points;
+		}
+	},
 	getBoundingBox: function(){
 		// summary: returns the bounding box
 		if(!this.bbox && this.shape.points.length){
