@@ -13,6 +13,35 @@
 	cursor: pointer;
 }
 
+.lucid .dojoxCollapsibleToolbarCollapse {
+	background-image: url(../images/lucid/collapse.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 12px;
+	height: 12px;
+}
+
+.lucid .dojoxCollapsibleToolbarExpand {
+	background-image: url(../images/lucid/expand.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 12px;
+	height: 12px;
+}
+
+.lucid .dojoxCollapsibleToolbarContainer {
+	background-color: #F1F1F1;
+}
+
+.lucid .dojoxCollapsibleToolbarControl {
+	vertical-align: top;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+        margin-bottom: 1px;
+}
+
+
 .tundra .dojoxCollapsibleToolbarCollapse {
 	background-image: url(../images/tundra/collapse.gif);
 	background-repeat: no-repeat;
