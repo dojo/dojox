@@ -59,8 +59,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 		this.editor = editor;
 		this._buttons = [];
 		this.breadcrumbBar = new dijit.Toolbar();
-		dojo.style(this.breadcrumbBar.domNode, "height", "1.5em");
-
+        
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "Breadcrumb");
 		this._titleTemplate = strings.nodeActions;
 
@@ -115,6 +114,10 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 			this.connect(this.editor, "onNormalizedDisplayChanged", "updateState");
 		}));
 		this.breadcrumbBar.startup();
+		if(dojo.isIE){
+			// Sometimes IE will mess up layout and needs to be poked.
+            setTimeout(dojo.hitch(this, function(){this.breadcrumbBar.domNode.className = this.breadcrumbBar.domNode.className;}), 100);
+		}
 	},
 
 	_selectContents: function(){
@@ -229,7 +232,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 				// Make sure we get a selection within the editor document,
 				// have seen cases on IE where this wasn't true.
 				if(node && node.ownerDocument === ed.document){
-					while(node && node !== ed.editNode){
+					while(node && node !== ed.editNode && node != ed.document.body && node != ed.document){
 						if(node.nodeType === 1){
 							bcList.push({type: node.tagName.toLowerCase(), node: node}); 
 						}
@@ -314,6 +317,10 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 				dojo.style(this.breadcrumbBar.domNode, "display", "block");
 			}
 			this._updateBreadcrumb();
+
+			// Some themes do padding, so we have to resize again after display.
+			var size = dojo.marginBox(this.editor.domNode);
+			this.editor.resize({h: size.h});
 		}
 	},
 
