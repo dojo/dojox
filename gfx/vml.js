@@ -175,7 +175,6 @@ dojo.require("dojox.gfx.arc");
 			rn.stroked = true;
 			rn.strokecolor = s.color.toCss();
 			rn.strokeweight = s.width + "px";	// TODO: should we assume that the width is always in pixels?
-			console.log(" WGT:", rn.strokeweight)
 			if(rn.stroke) {
 				rn.stroke.opacity = s.color.a;
 				rn.stroke.endcap = this._translate(this._capMap, s.cap);

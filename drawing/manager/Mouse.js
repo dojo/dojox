@@ -487,17 +487,6 @@ EventObject: function(){
 			// summary:
 			//		Internal. Gets mouse coords to page.
 			return {x:evt.pageX, y:evt.pageY}; // Object
-		},
-		
-		setCursor: function(cursor,/* HTMLNode*/node){
-			// summary:
-			//		Sets the cursor for  a given node.  If no
-			//		node is specified the containing node is used.
-			if(!node) { 
-				dojo.style(this.container, "cursor", cursor); 
-			} else {
-				dojo.style(node, "cursor", cursor);
-			}
 		}
 	}
 );

@@ -156,7 +156,7 @@ dojo.experimental("dojox.charting.DataChart");
 			//			yaxis: Object
 			//				optional parameters for yaxis (see above)
 			//			store: Object
-			//				dojo.data store
+			//				dojo.data store (currently nly supports Persevere)
 			//			xaxis: Object
 			//				First query for store
 			//			grid: Object
