@@ -505,7 +505,7 @@ dojo.provide("dojox.drawing.Drawing");
 			if(!this.canvas || !this.canvas.surface){
 				var c = dojo.connect(this, "onSurfaceReady", this, function(){
 					dojo.disconnect(c);
-					if (!this.defaults.clickMode) this.setTool(type);
+					this.setTool(type);
 				});
 				return;
 			}

@@ -58,12 +58,14 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		
 		if(this.toolDrawing.ready){
 			this.makeButtons();
+			if(!this.strSelected && this.drawing.defaults.clickMode) dojo.style(this.drawing.id, "cursor", "default");
 		}else{
 			var c = dojo.connect(this.toolDrawing, "onSurfaceReady", this, function(){
 				//console.log("TB built")
 				dojo.disconnect(c);
 				this.drawing = dojox.drawing.getRegistered("drawing", dojo.attr(node, "drawingId")); // 
 				this.makeButtons();
+				if(!this.strSelected && this.drawing.defaults.clickMode) dojo.style(this.drawing.id, "cursor", "default");
 			});
 		}
 		
@@ -174,7 +176,8 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	onRenderStencil: function(/* Object */stencil){
 		// summary:
 		//		Stencil render event.
-		if(!this.toolDrawing.defaults.clickMode){ 
+		if(this.drawing.defaults.clickMode){
+ 			dojo.style(this.drawing.id, "cursor", "default");
 			this.selected && this.selected.deselect();
 			this.selected = null;
 		}
@@ -198,6 +201,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		// summary:
 		//		Tool click event. May be connected to.
 		//
+		if(this.drawing.defaults.clickMode) dojo.style(this.drawing.id, "cursor", "crosshair");
 		dojo.forEach(this.buttons, function(b){
 			if(b.id==button.id){
 				b.select();
