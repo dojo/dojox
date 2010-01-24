@@ -322,6 +322,7 @@ dojo.require("dojox.charting.plot2d.OHLC");
 				df.forIn(axis.getOffsets(), function(o, i){ offsets[i] += o; });
 			});
 			// add margins
+			console.log("MARGINS:", this.margins, offsets)
 			df.forIn(this.margins, function(o, i){ offsets[i] += o; });
 
 			// 2nd pass with realistic dimensions

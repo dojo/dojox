@@ -25,6 +25,7 @@ dojo.require("dojox.gfx.fx");
 		},
 
 		connect: function(){
+			console.log("connect!", this.plot, this.chart.plots)
 			this.handle = this.chart.connectToPlot(this.plot, this, "process");
 		},
 

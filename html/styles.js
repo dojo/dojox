@@ -17,6 +17,10 @@ dojo.provide("dojox.html.styles");
 	var titledSheets = [];
 	var styleIndicies = [];
 	
+	dojox.html.getRules = function(stylesheet){
+		return stylesheet.rules || stylesheet.cssRules;
+	};
+	
 	dojox.html.insertCssRule = function(/*String*/selector, /*String*/declaration, /*String*/styleSheetName){
 		// summary:
 		//	Creates a style and attaches it to a dynamically created stylesheet
@@ -41,11 +45,11 @@ dojo.provide("dojox.html.styles");
 		//
 		var ss = dojox.html.getDynamicStyleSheet(styleSheetName);
 		var styleText = selector + " {" + declaration + "}";
-		console.log("insertRule:", styleText)
+		//console.log("insertRule:", styleText)
 		if(dojo.isIE){
 			// Note: check for if(ss.cssText) does not work
 			ss.cssText+=styleText;
-			console.log("ss.cssText:", ss.cssText)
+			//console.log("ss.cssText:", ss.cssText)
 		}else if(ss.sheet){
 			ss.sheet.insertRule(styleText, ss._indicies.length);
 		}else{
@@ -130,7 +134,7 @@ dojo.provide("dojox.html.styles");
 			return dynamicStyleMap[styleSheetName || "default"];
 		}
 		if(!styleSheetName){
-			// no arg is nly good for the default style sheet 
+			// no arg is only good for the default style sheet 
 			// and it has not been created yet.
 			return false;
 		}
@@ -175,7 +179,7 @@ dojo.provide("dojox.html.styles");
 				dynamicStyleMap[styleSheetName] = dojo.doc.createElement("style");
 				dynamicStyleMap[styleSheetName].setAttribute("type", "text/css");
 				dojo.doc.getElementsByTagName("head")[0].appendChild(dynamicStyleMap[styleSheetName]);
-				console.log(styleSheetName, " ss created: ", dynamicStyleMap[styleSheetName].sheet);
+				//console.log(styleSheetName, " ss created: ", dynamicStyleMap[styleSheetName].sheet);
 			}
 			dynamicStyleMap[styleSheetName]._indicies = [];
 		}
@@ -291,14 +295,16 @@ dojo.provide("dojox.html.styles");
 		if(pageStyleSheets.collected) {return pageStyleSheets;}
 		
 		var sheets = dojo.doc.styleSheets;
-		//console.log("styleSheets:", sheets);
+		console.log("styleSheets:", sheets);
 		dojo.forEach(sheets, function(n){
 			var s = (n.sheet) ? n.sheet : n;
 			var name = s.title || s.href;
+			
 			if(dojo.isIE){
 				// IE attaches a style sheet for VML - do not include this
-				if(s.cssText.indexOf("#default#VML")==-1){
-					
+				if(s.cssText.indexOf("#default#VML")==-1 && (!s.href || s.href.indexOf("firebug")==-1)){
+						
+					console.log("sheet:", s)	
 					
 					if(s.href){
 						// linked		
@@ -335,7 +341,7 @@ dojo.provide("dojox.html.styles");
 		//console.log("pageStyleSheets:", pageStyleSheets);
 		
 		
-		pageStyleSheets.collected = true;
+		//pageStyleSheets.collected = true;
 		return pageStyleSheets; //Object
 	}
 	

@@ -36,6 +36,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		// methods
 		
 		buildRendering: function(){
+			console.log("build")
 			var n = this.domNode = this.srcNodeRef;
 			
 			// collect chart parameters

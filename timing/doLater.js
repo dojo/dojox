@@ -6,7 +6,7 @@ dojox.timing.doLater = function(/*anything*/conditional,/*Object ?*/context, /* 
 	//		Check if a parameter is ready, and if not,
 	//		"do later". doLater will ping the parameter
 	//		until it evaluates to something (truthy).
-	//		It thens calls the caller with original
+	//		It then calls the caller with original
 	//		arguments, using the supplied context or 
 	//		window.
 	//	description:

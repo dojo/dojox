@@ -15,9 +15,11 @@ dojox.drawing.defaults = {
 	//  Determines whether in draw or edit mode (whether stencils
 	//  are clickable.  If clickMode is false, the original 
 	//  functionality of silently switching between select modes
-	//  is enabled.
-	clickMode:true, /*true allows powerpoint functionality*/
-	clickable:true, /*true allows selection, false locks it*/
+	//  is enabled.  If clickMode is true, it allows powerpoint-
+	//  like functionality.  Clickable is used by powerpoint to
+	//  distinguish when things can be selected and when they can't
+	clickMode:true,
+	clickable:true,
 	
 	// current: Object
 	// 	 current will point to either null or selected

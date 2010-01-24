@@ -53,6 +53,7 @@ dojo.require("dojox.color");
 		},
 		
 		process: function(o){
+			console.log("PROCESS:", o)
 			if(!o.shape || !(o.type in this.overOutEvents)){ return; }
 			
 			var runName = o.run.name, index = o.index, anim, startFill, endFill;
