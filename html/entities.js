@@ -43,7 +43,7 @@ dojo.provide("dojox.html.entities");
 
 	var _applyDecodingMap = function(str, map){
 		// summary:
-		//		Private internal function for performing deecoding of entity characters.
+		//		Private internal function for performing decoding of entity characters.
 		// tags:
 		//		private
 		var mapper, regexp;
@@ -83,7 +83,7 @@ dojo.provide("dojox.html.entities");
 	];
 
 	// dojox.html.entities.latin [public] Array
-	//		Entity characters for latin characters and similar, represented as an array of 
+	//		Entity characters for Latin characters and similar, represented as an array of 
 	//		character code, entity name (minus & and ; wrapping.
 	dojox.html.entities.latin = [
 		["\u00A1","iexcl"],["\u00A2","cent"],["\u00A3","pound"],["\u20AC","euro"],
@@ -152,12 +152,12 @@ dojo.provide("dojox.html.entities");
 
 	dojox.html.entities.encode = function(str/*string*/, m /*array?*/){
 		// summary:
-		//		Function to obtain an entity encoding for a specified characer
+		//		Function to obtain an entity encoding for a specified character
 		// str:
 		//		The string to process for possible entity encoding.
 		// m:
 		//		An optional list of character to entity name mappings (array of 
-		//		arrays).  If not provided, it uses the and latin entities as the 
+		//		arrays).  If not provided, it uses the and Latin entities as the 
 		//		set to map and escape.
 		// tags:
 		//		public
@@ -177,13 +177,13 @@ dojo.provide("dojox.html.entities");
 
 	dojox.html.entities.decode = function(str/*string*/, m /*array?*/){
 		// summary:
-		//		Function to obtain an entity encoding for a specified characer
+		//		Function to obtain an entity encoding for a specified character
 		// str:
 		//		The string to process for possible entity encoding to decode.
 		// m:
 		//		An optional list of character to entity name mappings (array of 
-		//		arrays).  If not provided, it uses the and latin entities as the 
-		//		set to map and unencode.
+		//		arrays).  If not provided, it uses the HTML and Latin entities as the 
+		//		set to map and decode.
 		// tags:
 		//		public
 		if(str){
