@@ -17,7 +17,7 @@ dojo.require("dojox.charting.widget.Chart2D");
 dojo.require("dojox.charting.themes.Grasslands");
 dojo.require("dojox.charting.themes.PlotKit.orange");
 dojo.require("dojox.widget.Calendar");
-dojo.require("dojox.portlet");
+dojo.require("dojox.widget.FeedPortlet");
 dojo.require("dojox.layout.GridContainer");
 dojo.require("dojox.layout.TableContainer");
 dojo.require("dojox.grid.DataGrid");
