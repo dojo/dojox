@@ -3,9 +3,7 @@ dojo.experimental("dojox.math.BigInteger-ext");
 
 dojo.require("dojox.math.BigInteger");
 
-// Copyright (c) 2005  Tom Wu
-// All Rights Reserved.
-// See "LICENSE-BigInteger" for details.
+// Contributed under CLA by Tom Wu
 
 // Extended JavaScript BN functions, required for RSA private ops.
 
