@@ -77,30 +77,6 @@
 	opacity: 0.60;
 }
 
-
-
-.noir .dojoxUploaderNorm {
-	vertical-align:top;
-	height:30px;
-	font-family:inherit;
-	font-size:inherit;
-	background-color:transparent;
-	background-image:none;
-	padding:0px !important;
-	line-height:25px;	/* Safari only ??? */
-	color:#cccccc;
-}
-.noir .dojoxUploaderHover{
-	color:#fa4242;
-}
-.noir .dojoxUploaderActive{
-	color:#31d397;
-}
-.noir .dojoxUploaderDisabled{
-	color:#3f3f3f;
-}
-
-
 .fileToUpload,
 .fileToUploadClose,
 .fileToUploadName,
