@@ -40,7 +40,6 @@ dojo.provide("dojox.fx.ext-dojo.complex");
 				// for an instance of dojox.fx._Complex.
 				var ret = {};
 				for(var p in this._properties){
-					console.log("p:", p, this._properties[p])
 					var prop = this._properties[p],
 						start = prop.start;
 					if(start instanceof d.Color){
