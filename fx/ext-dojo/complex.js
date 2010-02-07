@@ -76,14 +76,14 @@ dojo.declare("dojox.fx._Complex", null, {
 	//		into seperate animatable units. The object has a getValue()
 	//		that will return a string with the modified units.
 	//
-	PROP: /\([\w|,|#|\.|\s]*\)/g,
+	PROP: /\([+-]?[\w|,|#|\.|\s]*\)/g,
 	constructor: function(options){
 		var beg = options.start.match(this.PROP);
 		var end = options.end.match(this.PROP);
 
 		var begProps = dojo.map(beg, this.getProps, this);
 		var endProps = dojo.map(end, this.getProps, this);
-		
+
 		this._properties = {};
 		this.strProp = options.start;
 		dojo.forEach(begProps, function(prop, i){
@@ -93,7 +93,7 @@ dojo.declare("dojox.fx._Complex", null, {
 			},this);
 		},this);
 	},
-	
+
 	getValue: function(/*Float*/r){
 		// summary:
 		// 		Returns a string with teh same integrity as the
