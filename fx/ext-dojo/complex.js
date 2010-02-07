@@ -88,7 +88,7 @@ dojo.declare("dojox.fx._Complex", null, {
 		this.strProp = options.start;
 		dojo.forEach(begProps, function(prop, i){
 			dojo.forEach(prop, function(p, j){
-				this.strProp = this.strProp.replace(p, "PROP_"+i+""+j)
+				this.strProp = this.strProp.replace(p, "PROP_"+i+""+j);
 				this._properties["PROP_"+i+""+j] = this.makePropObject(p, endProps[i][j])
 			},this);
 		},this);
@@ -101,12 +101,12 @@ dojo.declare("dojox.fx._Complex", null, {
 		var str = this.strProp;
 		for(var nm in this._properties){
 			var v, o = this._properties[nm];
-			if(o.unit == "isColor"){
+			if(o.units == "isColor"){
 				v = dojo.blendColors(o.beg, o.end, r).toCss(false);	
 			}else{
 				v = ((o.end - o.beg) * r) + o.beg;	
 			}
-			str = str.replace(nm, v + o.unit);
+			str = str.replace(nm, v + o.units);
 		}
 		
 		return str; // String
@@ -117,12 +117,12 @@ dojo.declare("dojox.fx._Complex", null, {
 		//		Returns an object that stores the numeric value and
 		//		units of the beggining and ending properties.
 		//		
-		var b = this.getNumAndUnit(beg);
-		var e = this.getNumAndUnit(end);
+		var b = this.getNumAndUnits(beg);
+		var e = this.getNumAndUnits(end);
 		return {
 			beg:b.num,
 			end:e.num,
-			unit:b.unit
+			units:b.units
 		}; // Object
 	},
 	
@@ -142,7 +142,7 @@ dojo.declare("dojox.fx._Complex", null, {
 		}
 		return s; // String
 	},
-	getNumAndUnit: function(prop){
+	getNumAndUnits: function(prop){
 		// summary:
 		//		Helper function that returns the numeric verion of the string
 		//		property (or dojo.Color object) and the unit in which it was
@@ -152,14 +152,14 @@ dojo.declare("dojox.fx._Complex", null, {
 		if(/#/.test(prop)){
 			return {
 				num: new dojo.Color(prop),
-				unit:"isColor"
+				units:"isColor"
 			}; // Object
 		}
 		var o = {
 			num:parseInt(/-*\d{1,}/.exec(prop).join("")) ////// Float?
-		}
-		o.unit = /[a-z]{1,}/.exec(prop)//.join("");
-		o.unit = o.unit && o.unit.length ? o.unit.join("") : "number";
+		};
+		o.units = /[a-z]{1,}/.exec(prop);//.join("");
+		o.units = o.units && o.units.length ? o.units.join("") : "";
 		return o; // Object
 	}
 });
