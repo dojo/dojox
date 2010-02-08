@@ -51,11 +51,11 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 	//		the message (sets a cookie). If this string is blank, this
 	//		link is not displayed.
 	noRemindButton:"Don't Remind Me Again",
-	
+
 	templateString: dojo.cache("dojox.widget","UpgradeBar/UpgradeBar.html"),
-	
+
 	constructor: function(props, node){
-		
+
 		if(!props.notifications && node){
 			// From markup. Create the notifications Array from the
 			//	srcRefNode children.
@@ -77,9 +77,9 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 				}
 			}, this);
 		}
-		
+
 	},
-	
+
 	checkNotifications: function(){
 		// 	summary:
 		//			Internal. Go through the notifications Array
@@ -91,7 +91,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 			// odd. why use the bar but not set any notifications?
 			return;
 		}
-		
+
 		for(var i=0;i<this.notifications.length;i++){
 			var evals = this.notifications[i].validate();
 			if(evals){
@@ -102,7 +102,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 			}
 		}
 	},
-	
+
 	postCreate: function(){
 		this.inherited(arguments);
 		if(this.domNode.parentNode){
@@ -129,14 +129,14 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 			this.connect(window, "resize", function(){
 				setWidth();
 			});
-			
+
 			setWidth();
 		}
 		dojo.addOnLoad(this, "checkNotifications");
 		//this.checkNotifications();
 	},
 
-	notify: function(msg){ 
+	notify: function(msg){
 		// 	summary:
 		//		Triggers the bar to display. An internal function,
 		//		but could ne called externally for fun.
@@ -146,17 +146,15 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		if(dojo.cookie("disableUpgradeReminders")){
 			return;
 		}
-		
-		if(!this.domNode.parentNode){
+
+		if(!this.domNode.parentNode.innerHTML){
 			document.body.appendChild(this.domNode);
-		}else{
-			dojo.style(this.domNode, "display", "");
 		}
-		
+		dojo.style(this.domNode, "display", "");
 		if(msg){
 			this.attr("message", msg);
 		}
-		
+
 	},
 
 	show: function(){
@@ -169,7 +167,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		this._bodyMarginTop = dojo.style(dojo.body(), "marginTop");
 		this._size = dojo.contentBox(this.domNode).h;
 		dojo.style(this.domNode, { display:"block", height:0, opacity:0 });
-		
+
 		if(!this._showAnim){
 			this._showAnim = dojo.fx.combine([
 				dojo.animateProperty({ node:dojo.body(), duration:500, properties:{ marginTop:this._bodyMarginTop+this._size } }),
