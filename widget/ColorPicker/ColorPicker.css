@@ -21,7 +21,7 @@
 }
 
 .dojoxColorPickerUnderlay {
-	position:absolute; 
+	position:relative; 
 	top:0; left:0;
 	width:150px; 
 	height:150px;
@@ -29,6 +29,15 @@
 }
 .tundra .dojoxColorPickerUnderlay {
 	border:1px solid #a0a0a0;
+}
+
+.lucid .dojoxColorPicker {
+	background:#ededed;
+	border:1px solid #cdcdcd;
+}
+
+.lucid .dojoxColorPickerUnderlay {
+	border:1px solid #cccccc;
 }
 
 .dojoxHuePickerUnderlay {

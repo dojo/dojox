@@ -10,12 +10,12 @@ dojo.require("dojo.fx");
 dojo.require("dojox.color");
 dojo.require("dojo.i18n");
 
-;(function(d){
+(function(d){
 	
 	var webSafeFromHex = function(hex){
 		// stub, this is planned later:
 		return hex;
-	}
+	};
 	
 	dojo.declare("dojox.widget.ColorPicker",
 		dijit.form._FormWidget,
@@ -98,11 +98,11 @@ dojo.require("dojo.i18n");
 		},
 
 		postCreate: function(){
+            // summary: 
+			//		As quickly as we can, set up ie6 alpha-filter support for our
+			//		underlay.  we don't do image handles (done in css), just the 'core' 
+			//		of this widget: the underlay. 
 			this.inherited(arguments);
-
-			// summary: As quickly as we can, set up ie6 alpha-filter support for our
-			// 	underlay.  we don't do image handles (done in css), just the 'core' 
-			//	of this widget: the underlay. 
 			if(d.isIE < 7){ 
 				this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
 				this.colorUnderlay.src = this._blankGif.toString();
@@ -113,35 +113,10 @@ dojo.require("dojo.i18n");
 			if(!this.showHex){ this.hexNode.style.display = "none"; } 
 			if(!this.webSafe){ this.safePreviewNode.style.visibility = "hidden"; } 
 			
-			// this._offset = ((d.marginBox(this.cursorNode).w)/2); 
-			this._offset = 0; 
-			var cmb = d.marginBox(this.cursorNode);
-			var hmb = d.marginBox(this.hueCursorNode);
-
-			this._shift = {
-				hue: {
-					x: Math.round(hmb.w / 2) - 1,
-					y: Math.round(hmb.h / 2) - 1
-				},
-				picker: {
-					x: Math.floor(cmb.w / 2),
-					y: Math.floor(cmb.h / 2)
-				}
-			};
-			
-			//setup constants
-			this.PICKER_HUE_H = d.coords(this.hueNode).h;
-			
-			var cu = d.coords(this.colorUnderlay);
-			this.PICKER_SAT_VAL_H = cu.h;
-			this.PICKER_SAT_VAL_W = cu.w;
-			
-			var ox = this._shift.picker.x;
-			var oy = this._shift.picker.y;
 			this._mover = new d.dnd.move.boxConstrainedMoveable(this.cursorNode, {
 				box: {
-					t:0 - oy,
-					l:0 - ox,
+					t:0,
+					l:0,
 					w:this.PICKER_SAT_VAL_W,
 					h:this.PICKER_SAT_VAL_H
 				}
@@ -149,7 +124,7 @@ dojo.require("dojo.i18n");
 			
 			this._hueMover = new d.dnd.move.boxConstrainedMoveable(this.hueCursorNode, {
 				box: {
-					t:0 - this._shift.hue.y,
+					t:0,
 					l:0,
 					w:0,
 					h:this.PICKER_HUE_H
@@ -198,9 +173,10 @@ dojo.require("dojo.i18n");
 		},
 		
 		_setHue: function(/* Decimal */h){
-			// summary: sets a natural color background for the 
-			// 	underlay image against closest hue value (full saturation) 
-			// h: 0..360 
+			// summary: 
+			//		Sets a natural color background for the 
+			//		underlay image against closest hue value (full saturation) 
+			//		h: 0..360 
 			d.style(this.colorUnderlay, "backgroundColor", dojox.color.fromHsv(h,100,100).toHex());
 			
 		},
@@ -208,9 +184,9 @@ dojo.require("dojo.i18n");
 		_updateColor: function(){
 			// summary: update the previewNode color, and input values [optional]
 			
-			var _huetop = d.style(this.hueCursorNode,"top") + this._shift.hue.y, 
-				_pickertop = d.style(this.cursorNode,"top") + this._shift.picker.y,
-				_pickerleft = d.style(this.cursorNode,"left") + this._shift.picker.x,
+			var _huetop = d.style(this.hueCursorNode,"top"), 
+				_pickertop = d.style(this.cursorNode,"top"),
+				_pickerleft = d.style(this.cursorNode,"left"),
 			
 				h = Math.round(360 - (_huetop / this.PICKER_HUE_H * 360)),
 				col = dojox.color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
@@ -250,7 +226,7 @@ dojo.require("dojo.i18n");
 				case this.Vval:
 					col = dojox.color.fromHsv(this.Hval.value, this.Sval.value, this.Vval.value);
 					hasit = true;
-					break
+					break;
 			}
 			
 			if(hasit){
@@ -278,9 +254,9 @@ dojo.require("dojo.i18n");
 			//summary: update handles on the pickers acording to color values
 			//  
 			var hsv = col.toHsv(),
-				ypos = Math.round(this.PICKER_HUE_H - hsv.h / 360 * this.PICKER_HUE_H - this._shift.hue.y),
-				newLeft = Math.round(hsv.s / 100 * this.PICKER_SAT_VAL_W - this._shift.picker.x),
-				newTop = Math.round(this.PICKER_SAT_VAL_H - hsv.v / 100 * this.PICKER_SAT_VAL_H - this._shift.picker.y)
+				ypos = Math.round(this.PICKER_HUE_H - hsv.h / 360 * this.PICKER_HUE_H),
+				newLeft = Math.round(hsv.s / 100 * this.PICKER_SAT_VAL_W),
+				newTop = Math.round(this.PICKER_SAT_VAL_H - hsv.v / 100 * this.PICKER_SAT_VAL_H)
 			;
 			
 			if (this.animatePoint) {
@@ -346,7 +322,7 @@ dojo.require("dojo.i18n");
 		
 		_setHuePoint: function(/* Event */evt){ 
 			// summary: set the hue picker handle on relative y coordinates
-			var ypos = evt.layerY - this._shift.hue.y;
+			var ypos = evt.layerY;
 			if(this.animatePoint){
 				d.fx.slideTo({ 
 					node: this.hueCursorNode, 
@@ -364,9 +340,9 @@ dojo.require("dojo.i18n");
 		_setPoint: function(/* Event */evt){
 			// summary: set our picker point based on relative x/y coordinates
 			//  evt.preventDefault();
-			var newTop = evt.layerY - this._shift.picker.y,
-				newLeft = evt.layerX - this._shift.picker.x
-			;
+			var newTop = evt.layerY;
+			var newLeft = evt.layerX;
+			
 			if(evt){ dijit.focus(evt.target); }
 
 			if(this.animatePoint){
