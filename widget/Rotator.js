@@ -143,7 +143,7 @@ dojo.require("dojo.parser");
 				});
 
 				if(q.id){
-					idm[id] = i;
+					idm[q.id] = i;
 				}
 
 				// cache the transition function
