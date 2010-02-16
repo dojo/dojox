@@ -12,7 +12,7 @@ Credits
 	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
 		Preview, Save, ToolbarLineBreak, InsertEntity, 
 		NormalizeIndentOutdent, Breadcrumb, FindReplace, 
-		CollapsibleToolbar)
+		CollapsibleToolbar, Blockquote)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -100,6 +100,12 @@ dojox.editor.plugins.CollapsibleToolbar:
 	A plugin that modified the header node of the editor so that it is 'collapsible'.  Meaning that
 	it can be closed (reduced), and reopened.  Useful for increasing editor real-estate.
 
+dojox.editor.plugins.Blockquote:
+	Status: Supported (Stable).
+	A plugin that puts a button on the toolbar that allows users to select text for a semantic 
+	'blockquote' tag-wrap action.  It toggles on and off during state changes to determine if
+	the current section is contained within a blockquote.
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -125,6 +131,7 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/Breadcrumb
         http://docs.dojocampus.org/dojox/editor/plugins/FindReplace
         http://docs.dojocampus.org/dojox/editor/plugins/CollapsibleToolbar
+	http://docs.dojocampus.org/dojox/editor/plugins/Blockquote
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -199,6 +206,11 @@ For the CollapsibleToolbar plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/CollapsibleToolbar.css" type="text/css" rel="stylesheet" />
 
+For the Blockquote plugin:
+	dojo.require("dojox.editor.plugins.Blockquote");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/Blockquote.css" type="text/css" rel="stylesheet" />
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -213,3 +225,4 @@ See tests for examples:
 	dojox/editor/tests/editorBreadcrumb.html
 	dojox/editor/tests/editorFindReplace.html
 	dojox/editor/tests/editorCollapsibleToolbar.html
+	dojox/editor/tests/editorBlockquote.html
