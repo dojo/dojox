@@ -28,3 +28,4 @@
 	deleteTableRowLabel: "Odstranit řádek",
 	deleteTableColumnLabel: "Odstranit sloupec"
 })
+

@@ -1,3 +1,4 @@
 ({
-	"pageBreak": "쪽 나누기"
+	"pageBreak": "페이지 나누기"
 })
+

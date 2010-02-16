@@ -1,26 +1,26 @@
 ({
-	insertTableTitle: "Wstaw tabelę",
-	modifyTableTitle: "Modyfikuj tabelę",
+	insertTableTitle: "Wstawianie tabeli",
+	modifyTableTitle: "Modyfikowanie tabeli",
 	rows: "Wiersze:",
 	columns: "Kolumny:",
-	align: "Wyrównaj:",
+	align: "Wyrównanie:",
 	cellPadding: "Dopełnianie komórek:",
 	cellSpacing: "Odstępy między komórkami:",
 	tableWidth: "Szerokość tabeli:",
 	backgroundColor: "Kolor tła:",
-	borderColor: "Kolor krawędzi:",
-	borderThickness: "Grubość krawędzi",
-	pixels: "piksle",
+	borderColor: "Kolor ramki:",
+	borderThickness: "Grubość ramki",
+	pixels: "Piksle",
 	percent: "procent",
 	pixels: "piksle",
-	"default": "wartość domyślna",
-	left: "do lewej",
-	center: "wyśrodkuj",
-	right: "do prawej",
+	"default": "domyślna",
+	left: "lewa strona",
+	center: "środek",
+	right: "prawa strona",
 	buttonSet: "Ustaw", // translated elsewhere?
 	buttonInsert: "Wstaw",
 
-	selectTableLabel: "Wybieranie tabeli",
+	selectTableLabel: "Wybierz tabelę",
 	insertTableRowBeforeLabel: "Dodaj wiersz przed",
 	insertTableRowAfterLabel: "Dodaj wiersz po",
 	insertTableColumnBeforeLabel: "Dodaj kolumnę przed",
@@ -28,3 +28,4 @@
 	deleteTableRowLabel: "Usuń wiersz",
 	deleteTableColumnLabel: "Usuń kolumnę"
 })
+
