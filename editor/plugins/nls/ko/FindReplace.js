@@ -1,11 +1,12 @@
 ({
-	"findLabel": "찾을 내용:",
-	"replaceLabel": "바꿀 내용:",
-	"findReplace": "찾기/바꾸기 토글",
-	"matchCase": "대소문자 구분", 
-	"backwards": "뒷방향으로",
-	"replaceAll": "모두 바꾸기", 
+	"findLabel": "찾을 문자열:",
+	"replaceLabel": "바꿀 대상:",
+	"findReplace": "토글 찾기/바꾸기",
+	"matchCase": "대소문자 일치", 
+	"backwards": "뒤로",
+	"replaceAll": "모든 어커런스", 
 	"findButton": "찾기",
 	"replaceButton": "바꾸기",
-	"replaceDialogText": "${0} 개의 내용이 변경되었습니다."
+	"replaceDialogText": "${0} 어커런스를 바꿨습니다."
 })
+

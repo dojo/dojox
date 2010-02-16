@@ -7,24 +7,25 @@
 	cellPadding: "Preenchimento de Célula:",
 	cellSpacing: "Espaçamento de Célula:",
 	tableWidth: "Largura da Tabela:",
-	backgroundColor: "Cor do Segundo Plano:",
+	backgroundColor: "Cor do Plano de Fundo:",
 	borderColor: "Cor da Borda:",
 	borderThickness: "Grossura da Borda",
 	pixels: "Pixels",
 	percent: "percentual",
 	pixels: "pixels",
-	"default": "padrão",
+	"default": "default",
 	left: "esquerda",
-	center: "centralizado",
+	center: "centro",
 	right: "direita",
-	buttonSet: "Definir", // translated elsewhere?
+	buttonSet: "Configurar", // translated elsewhere?
 	buttonInsert: "Inserir",
 
 	selectTableLabel: "Selecionar Tabela",
-	insertTableRowBeforeLabel: "Adicionar Linha Antes",
-	insertTableRowAfterLabel: "Adicionar Linha Depois",
-	insertTableColumnBeforeLabel: "Adicionar Coluna Antes",
-	insertTableColumnAfterLabel: "Adicionar Coluna Depois",
+	insertTableRowBeforeLabel: "Incluir Linha Antes",
+	insertTableRowAfterLabel: "Incluir Linha Depois",
+	insertTableColumnBeforeLabel: "Incluir Coluna Antes",
+	insertTableColumnAfterLabel: "Incluir Coluna Depois",
 	deleteTableRowLabel: "Excluir Linha",
 	deleteTableColumnLabel: "Excluir Coluna"
 })
+

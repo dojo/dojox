@@ -8,8 +8,8 @@
 	cellSpacing: "Zellenabstand:",
 	tableWidth: "Tabellenbreite:",
 	backgroundColor: "Hintergrundfarbe:",
-	borderColor: "Umrandungsfarbe:",
-	borderThickness: "Ränderdicke",
+	borderColor: "Randfarbe:",
+	borderThickness: "Randbreite",
 	pixels: "Pixel",
 	percent: "Prozent",
 	pixels: "Pixel",
@@ -21,10 +21,11 @@
 	buttonInsert: "Einfügen",
 
 	selectTableLabel: "Tabelle auswählen",
-	insertTableRowBeforeLabel: "Zeile davor einfügen",
-	insertTableRowAfterLabel: "Zeile danach einfügen",
-	insertTableColumnBeforeLabel: "Spalte davor einfügen",
-	insertTableColumnAfterLabel: "Spalte danach einfügen",
+	insertTableRowBeforeLabel: "Zeile oberhalb einfügen",
+	insertTableRowAfterLabel: "Zeile unterhalb einfügen",
+	insertTableColumnBeforeLabel: "Spalte oberhalb einfügen",
+	insertTableColumnAfterLabel: "Spalte unterhalb einfügen",
 	deleteTableRowLabel: "Zeile löschen",
 	deleteTableColumnLabel: "Spalte löschen"
 })
+

@@ -8,15 +8,15 @@
 	cellSpacing: "单元格间距：",
 	tableWidth: "表宽度：",
 	backgroundColor: "背景色：",
-	borderColor: "边框颜色：",
+	borderColor: "边框色：",
 	borderThickness: "边框厚度",
 	pixels: "像素",
 	percent: "百分比",
 	pixels: "像素",
 	"default": "缺省值",
-	left: "左",
-	center: "居中",
-	right: "右",
+	left: "左边对齐",
+	center: "中间对齐",
+	right: "右边对齐",
 	buttonSet: "设置", // translated elsewhere?
 	buttonInsert: "插入",
 
@@ -28,3 +28,4 @@
 	deleteTableRowLabel: "删除行",
 	deleteTableColumnLabel: "删除列"
 })
+

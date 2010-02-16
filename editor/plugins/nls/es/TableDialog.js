@@ -8,12 +8,12 @@
 	cellSpacing: "Espaciado de celda:",
 	tableWidth: "Ancho de tabla:",
 	backgroundColor: "Color de fondo:",
-	borderColor: "Color del borde:",
-	borderThickness: "Grosor del borde",
+	borderColor: "Color de borde:",
+	borderThickness: "Ancho de borde",
 	pixels: "Píxeles",
-	percent: "porcentaje",
+	percent: "por ciento",
 	pixels: "píxeles",
-	"default": "predeterminado",
+	"default": "default",
 	left: "izquierda",
 	center: "centro",
 	right: "derecha",
@@ -21,10 +21,11 @@
 	buttonInsert: "Insertar",
 
 	selectTableLabel: "Seleccionar tabla",
-	insertTableRowBeforeLabel: "Añadir tabla delante",
-	insertTableRowAfterLabel: "Añadir tabla detrás",
-	insertTableColumnBeforeLabel: "Añadir columna delante",
-	insertTableColumnAfterLabel: "Añadir columna detrás",
+	insertTableRowBeforeLabel: "Añadir fila antes",
+	insertTableRowAfterLabel: "Añadir fila después",
+	insertTableColumnBeforeLabel: "Añadir columna antes",
+	insertTableColumnAfterLabel: "Añadir columna después",
 	deleteTableRowLabel: "Suprimir fila",
 	deleteTableColumnLabel: "Suprimir columna"
 })
+
