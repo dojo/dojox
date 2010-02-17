@@ -1,8 +1,9 @@
 dojo.provide("dojox.form.FilePickerTextBox");
 
-dojo.require("dojox.widget.FilePicker");
+dojo.require("dojo.window");
 dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit._HasDropDown");
+dojo.require("dojox.widget.FilePicker");
 
 dojo.declare(
 	"dojox.form.FilePickerTextBox",
@@ -244,7 +245,7 @@ dojo.declare(
 								}
 								targetString = targetString.substring(dir.length);
 								window.setTimeout(function(){
-									dijit.scrollIntoView(first.domNode);
+									dojo.window.scrollIntoView(first.domNode);
 								}, 1);
 								fn.value = oVal + targetString;
 								dijit.selectInputText(fn, oVal.length);

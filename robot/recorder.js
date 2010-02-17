@@ -465,9 +465,9 @@ dojo.connect(document,!dojo.isMozilla ? "onmousewheel" : 'DOMMouseScroll',onmous
 
 dojo.addOnLoad(function(){
 	// get scrollIntoView for good measure
-	// catch: dijit might not be loaded (yet?) so addonload
-	if(window["dijit"] && dijit.scrollIntoView){
-		dojo.connect(dijit,"scrollIntoView",function(node){
+	// catch: dojo.window might not be loaded (yet?) so addonload
+	if(dojo.window){
+		dojo.connect(dojo.window,"scrollIntoView",function(node){
 			addCommand("doh.robot.scrollIntoView",[getSelector(node)]);
 		});
 	}
