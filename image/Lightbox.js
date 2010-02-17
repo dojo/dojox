@@ -1,6 +1,7 @@
 dojo.provide("dojox.image.Lightbox");
 dojo.experimental("dojox.image.Lightbox");
 
+dojo.require("dojo.window");
 dojo.require("dijit.Dialog"); 
 dojo.require("dojox.fx._base");
 
@@ -200,7 +201,7 @@ dojo.declare("dojox.image.LightboxDialog",
 		this.connect(this.prevNode, "onclick", "_prevImage");
 		this.connect(this.closeNode, "onclick", "hide");
 		this._makeAnims();
-		this._vp = dijit.getViewport();
+		this._vp = dojo.window.getBox();
 		return this;
 	},
 
@@ -408,7 +409,7 @@ dojo.declare("dojox.image.LightboxDialog",
 	
 	_position: function(/* Event */e){
 		// summary: we want to know the viewport size any time it changes
-		this._vp = dijit.getViewport();
+		this._vp = dojo.window.getBox();
 		this.inherited(arguments);
 		
 		// determine if we need to scale up or down, if at all.

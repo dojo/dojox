@@ -1,6 +1,7 @@
 dojo.provide('dojox.widget.Dialog');
 dojo.experimental('dojox.widget.Dialog');
 
+dojo.require("dojo.window");
 dojo.require('dijit.Dialog');
 dojo.require("dojox.layout.ContentPane");
 
@@ -96,7 +97,7 @@ dojo.declare('dojox.widget.Dialog',
 	
 	_setSize: function(){
 		// summary: cache and set our desired end position 
-		this._vp = dijit.getViewport();
+		this._vp = dojo.window.getBox();
 		var tc = this.containerNode,
 			vpSized = this.sizeToViewport
 		;

@@ -1,10 +1,13 @@
 dojo.provide("dojox.layout.FloatingPane");
 dojo.experimental("dojox.layout.FloatingPane"); 
 
-dojo.require("dojox.layout.ContentPane");
+dojo.require("dojo.window");
+
 dojo.require("dijit._Templated"); 
 dojo.require("dijit._Widget"); 
 dojo.require("dojo.dnd.Moveable");
+
+dojo.require("dojox.layout.ContentPane");
 dojo.require("dojox.layout.ResizeHandle"); 
 
 dojo.declare("dojox.layout.FloatingPane", 
@@ -230,7 +233,7 @@ dojo.declare("dojox.layout.FloatingPane",
 			setTimeout(dojo.hitch(this,"maximize"),this.duration);
 		}
 		dojo.addClass(this.focusNode,"floatingPaneMaximized");
-		this.resize(dijit.getViewport());
+		this.resize(dojo.window.getBox());
 		this._maximized = true;
 	},
 
@@ -354,7 +357,7 @@ dojo.declare("dojox.layout.Dock",
 				// Give some time for scrollbars to appear/disappear
 				setTimeout(dojo.hitch(this, function() {
 					this._inPositiononing = true;
-					var viewport = dijit.getViewport();
+					var viewport = dojo.window.getBox();
 					var s = this.domNode.style;
 					s.left = viewport.l + "px";
 					s.width = (viewport.w-2) + "px";

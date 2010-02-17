@@ -1,9 +1,12 @@
 dojo.provide("dojox.widget.UpgradeBar");
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+dojo.require("dojo.window");
 dojo.require("dojo.fx");
 dojo.require("dojo.cookie");
+
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
+
 dojo.experimental("dojox.widget.UpgradeBar");
 
 
@@ -123,7 +126,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 			//
 			var self = this;
 			var setWidth = function(){
-				var v = dijit.getViewport();
+				var v = dojo.window.getBox();
 				dojo.style(self.domNode, "width", v.w+"px");
 			}
 			this.connect(window, "resize", function(){
