@@ -65,17 +65,6 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		// refocus the parent
 		this.parent.focus();
 	},
-
-	_onMouse: function(e){
-		// summary:
-		//		Sets the hover state depending on mouse state (passes through
-		//		to the check box)
-		if(this.attr("disabled") || this.attr("readOnly")){
-			dojo.stopEvent(e);
-		}else{
-			this.checkBox._onMouse(e);
-		}
-	},
 	
 	_onClick: function(e){
 		// summary:
@@ -117,7 +106,7 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 
 	baseClass: "dojoxMultiSelect",
 
-	_mouseDown: function(e){
+	_onMouseDown: function(e){
 		// summary:
 		//		Cancels the mousedown event to prevent others from stealing
 		//		focus
