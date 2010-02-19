@@ -149,8 +149,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		if(dojo.cookie("disableUpgradeReminders")){
 			return;
 		}
-
-		if(!this.domNode.parentNode.innerHTML){
+		if(!this.domNode.parentNode || !this.domNode.parentNode.innerHTML){
 			document.body.appendChild(this.domNode);
 		}
 		dojo.style(this.domNode, "display", "");
