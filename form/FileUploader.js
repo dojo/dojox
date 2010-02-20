@@ -855,7 +855,9 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		this._addToFileList();
 		this.onChange(dataArray);
 		if(this.uploadOnChange){
-			this._buildFileInput();
+			if(this.uploaderType == "html"){
+				this._buildFileInput();
+			}
 			this.upload();
 		}else if(this.uploaderType == "html" && this.selectMultipleFiles){
 			this._buildFileInput();
@@ -1174,6 +1176,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		});
 		
 		dojo.addClass(this._fileInput, "dijitFileInputReal");
+		console.warn("BUILD FI")
 		this._formNode.appendChild(this._fileInput);
 		var real = dojo.marginBox(this._fileInput);
 		dojo.style(this._fileInput, {
@@ -1238,7 +1241,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			
 			var o = {};
 			for(var nm in this.postData){
-				o['"'+nm+'"'] = this.postData[nm];
+				o[nm] = this.postData[nm];
 			}
 			console.warn("this.postData:", o)
 			this.flashMovie.doUpload(o);

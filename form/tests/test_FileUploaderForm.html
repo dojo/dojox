@@ -71,8 +71,8 @@
 					fileListId:"fFiles",
 					tabIndex:5,
 					selectMultipleFiles:true,
-					deferredUploading:false,
-					postData:{sessionid:"ABCD1234", "user-id":"DojoMan"}
+					//uploadOnChange:true,
+					deferredUploading:false
 				},props), "btnF");
 				f.attr("disabled", dojo.byId("fGroup").value=="");
 				dojo.connect(dojo.byId("fGroup"), "keyup", function(){
@@ -103,8 +103,7 @@
 					//uploadOnChange:true,
 					fileListId:"hFiles",
 					tabIndex:11,
-					devMode:true,
-					postData:{sessionid:"ABCD1234", userId:"DojoMan"}
+					devMode:true
 				}, props), "btnH");
 				
 				h.attr("disabled", dojo.byId("hGroup").value=="");
@@ -264,7 +263,7 @@
 			<td>
 			<form id="formF" class="form">
 				<label>Group Name:</label>
-				<input class="field" tabIndex="1" type="text" value="" id="fGroup" name='f-group' /><br/>
+				<input class="field" tabIndex="1" type="text" value="" id="fGroup" name='fGroup' /><br/>
 				<label>Date:</label>
 				<input class="field" tabIndex="2" type="text" value="" id="fDate" name='date' /><br/>
 				<label>Author:</label>
