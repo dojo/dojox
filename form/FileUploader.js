@@ -422,7 +422,10 @@ dojo.destroy(temp);
 			}
 			
 			this._refNode = this.srcNodeRef;
+
 			this.getButtonStyle();
+
+			
 		},
 		
 		startup: function(){
@@ -431,8 +434,7 @@ dojo.destroy(temp);
 		
 		postCreate: function(){
 			this.inherited(arguments);
-			//this.getButtonStyle();
-			
+
 			// internal stuff:
 			this.setButtonStyle();
 			var createMethod;
@@ -443,10 +445,13 @@ dojo.destroy(temp);
 				createMethod = "createHtmlUploader";
 				
 			}
-			
-			if(this._hiddenNode){
-				var w = dijit.byNode(this._hiddenNode)
-				this.connect(w, "onShow", createMethod);
+
+			var w = this.getHiddenWidget();
+			if(w){
+				var __c = dojo.connect(w, "onShow", this, function(){
+					dojo.disconnect(__c);
+					this[createMethod]();
+				});
 			}else{
 				this[createMethod]();
 			}
@@ -464,6 +469,48 @@ dojo.destroy(temp);
 			dojo.addOnUnload(this, this.destroy);
 		},
 		
+		getHiddenWidget: function(){
+			// summary:
+			//		Internal.
+			//		If a parent widget has an onShow event, it is assumed
+			//		that it is hidden and the parsing of the uploader is
+			//		delayed until onShow fires. Note that the widget must
+			//		fire onShow even if it is defaulted to showing/selected.
+			//		this seems to work for Tabs (the primary fix).
+			//		
+			var node = this.domNode.parentNode;
+			while(node){
+				var id = node.getAttribute && node.getAttribute("widgetId");
+				if(id && dijit.byId(id).onShow){
+					return dijit.byId(id);
+				}
+				node = node.parentNode;
+			}
+			return null;	
+		},
+		
+		getHiddenNode: function(/*DomNode*/ node){
+			// summary:
+			//		Internal.
+			//		If a parent node is styled as display:none,
+			//		returns that node. This node will be temporarilly
+			//		changed to display:block. Note if the node is in
+			//		a widget that has an onShow event, this is
+			//		overridden.
+			//		
+			var hidden;
+			var p = node.parentNode;
+			while(p.tagName.toLowerCase() != "body"){
+				var d = dojo.style(p, "display");
+				if(d == "none"){
+					hidden = p;
+					break;
+				}
+				p = p.parentNode
+			}
+			return hidden;
+		},
+		
 		getButtonStyle: function(){
 			// summary:
 			//		Internal.
@@ -476,19 +523,12 @@ dojo.destroy(temp);
 			//		To call this from postCreate....
 			//		could do the style stuff initially, but if hidden they will be bad sizes
 			//		could then redo the sizes
-			//		alt is to create a genuine button and copy THAT	instead of how now
+			//		alt is to create a genuine button and copy THAT	instead of how doing now
 			 
-			var refNode = this.srcNodeRef//this.domNode;
-			var p = refNode.parentNode;
-			while(p.tagName.toLowerCase() != "body"){
-				var d = dojo.style(p, "display");
-				if(d == "none"){
-					this._hiddenNode = p;
-					break;
-				}
-				p = p.parentNode
-			}
+			var refNode = this.srcNodeRef;
+			this._hiddenNode = this.getHiddenNode(refNode);
 			if(this._hiddenNode){
+				console.info("Turning on hidden node")
 				dojo.style(this._hiddenNode, "display", "block");
 			}
 			
@@ -1376,8 +1416,8 @@ dojo.destroy(temp);
 					wmode:"opaque"
 				}
 				
-			};
-			
+			};			
+	
 			this.flashObject = new dojox.embed.Flash(args, this.insideNode);
 			this.flashObject.onError = dojo.hitch(function(msg){
 				this._error("Flash Error: " + msg);
@@ -1394,6 +1434,7 @@ dojo.destroy(temp);
 				this.onLoad(this);
 			});
 			this._connectFlash();
+
 		},
 		
 		_connectFlash: function(){
