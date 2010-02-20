@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-    <title>Flash HTML</title>
+    <title>Test dojox.form.FileUploader - Form</title>
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/dijit.css";
@@ -70,8 +70,9 @@
 					showProgress:true,
 					fileListId:"fFiles",
 					tabIndex:5,
-					selectMultipleFiles:false,
-					deferredUploading:false
+					selectMultipleFiles:true,
+					deferredUploading:false,
+					postData:{sessionid:"ABCD1234", "user-id":"DojoMan"}
 				},props), "btnF");
 				f.attr("disabled", dojo.byId("fGroup").value=="");
 				dojo.connect(dojo.byId("fGroup"), "keyup", function(){
@@ -84,6 +85,7 @@
 					console.log("onChange.data:", dataArray);
 				});
 				dojo.connect(f, "onComplete", function(dataArray){
+					console.log("onComplete Data:", dataArray)
 					dojo.forEach(dataArray, function(d){
 						addThumb(d, "fThumbs");
 					});
@@ -101,7 +103,8 @@
 					//uploadOnChange:true,
 					fileListId:"hFiles",
 					tabIndex:11,
-					devMode:true
+					devMode:true,
+					postData:{sessionid:"ABCD1234", userId:"DojoMan"}
 				}, props), "btnH");
 				
 				h.attr("disabled", dojo.byId("hGroup").value=="");
@@ -261,7 +264,7 @@
 			<td>
 			<form id="formF" class="form">
 				<label>Group Name:</label>
-				<input class="field" tabIndex="1" type="text" value="" id="fGroup" name='fGroup' /><br/>
+				<input class="field" tabIndex="1" type="text" value="" id="fGroup" name='f-group' /><br/>
 				<label>Date:</label>
 				<input class="field" tabIndex="2" type="text" value="" id="fDate" name='date' /><br/>
 				<label>Author:</label>
