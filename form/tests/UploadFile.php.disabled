@@ -59,6 +59,7 @@ $json = new Services_JSON();
 
 //		First combine relavant postVars
 $postdata = array();
+$htmldata = array();
 $data = "";
 foreach ($_POST as $nm => $val) {
 	$data .= $nm ."=" . $val . ",";	// string for flash
@@ -149,13 +150,18 @@ if( isset($_FILES[$fieldName])){
 	}
 	trace("file: " . $file );
 	
-	$postdata['file'] = $file;
-	$postdata['name'] = $name;
-	$postdata['width'] = $width;
-	$postdata['height'] = $height;
-	$postdata['type'] = $type;
-	$postdata['size'] = filesize($file);
-
+	foreach($postdata as $m){
+		
+	}
+	
+	$htmldata['file'] = $file;
+	$htmldata['name'] = $name;
+	$htmldata['width'] = $width;
+	$htmldata['height'] = $height;
+	$htmldata['type'] = $type;
+	$htmldata['size'] = filesize($file);
+	$htmldata['additionalParams'] = $postdata;
+	
 }elseif( isset($_FILES['uploadedfile0']) ){
 	//
 	//	Multiple files have been passed from HTML
@@ -164,11 +170,11 @@ if( isset($_FILES[$fieldName])){
 	trace("HTML multiple POST:");
 	trace($postdata, true);
 	
-	$_post = $postdata;
-	$postdata = array();
+	$_post = $htmldata;
+	$htmldata = array();
 	
 	while(isset($_FILES['uploadedfile'.$cnt])){
-	  trace("izzaa file");
+	  trace("HTML multiple POST");
 		$moved = move_uploaded_file($_FILES['uploadedfile'.$cnt]['tmp_name'],  $upload_path . $_FILES['uploadedfile'.$cnt]['name']);
 		trace("moved:" . $moved ."  ". $_FILES['uploadedfile'.$cnt]['name']);
 		if($moved){
@@ -189,18 +195,18 @@ if( isset($_FILES[$fieldName])){
 			$_post['height'] = $height;
 			$_post['type'] = $type;
 			$_post['size'] = filesize($file);
-		  
+			$_post['additionalParams'] = $postdata;
 			trace($_post, true);
 			
-			$postdata[$cnt] = $_post;
+			$htmldata[$cnt] = $_post;
 			
 		}elseif(strlen($_FILES['uploadedfile'.$cnt]['name'])){
-		  $postdata[$cnt] =array("ERROR" => "File could not be moved: ".$_FILES['uploadedfile'.$cnt]['name']);
+		  $htmldata[$cnt] = array("ERROR" => "File could not be moved: ".$_FILES['uploadedfile'.$cnt]['name']);
 		}
 		$cnt++;
 	}
 	trace("HTML multiple POST done:");
-	foreach($postdata as $key => $value){
+	foreach($htmldata as $key => $value){
 		trace($value, true);
 	}
 }elseif(isset($_GET['rmFiles'])){
@@ -215,11 +221,11 @@ if( isset($_FILES[$fieldName])){
 }else{
 	trace("IMROPER DATA SENT... $FILES:");
 	trace($_FILES);
-	$postdata = array("ERROR" => "Improper data sent - no files found");
+	$htmldata = array("ERROR" => "Improper data sent - no files found");
 }
 
 //HTML gets a json array back:
-$data = $json->encode($postdata);
+$data = $json->encode($htmldata);
 trace("Json Data Returned:");
 trace($data);
 // in a text field:
