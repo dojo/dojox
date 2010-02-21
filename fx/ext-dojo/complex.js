@@ -156,7 +156,7 @@ dojo.declare("dojox.fx._Complex", null, {
 			}; // Object
 		}
 		var o = {
-			num:parseInt(/-*\d{1,}/.exec(prop).join("")) ////// Float?
+			num:parseFloat(/-*[\d\.\d|\d]{1,}/.exec(prop).join(""))
 		};
 		o.units = /[a-z]{1,}/.exec(prop);//.join("");
 		o.units = o.units && o.units.length ? o.units.join("") : "";
