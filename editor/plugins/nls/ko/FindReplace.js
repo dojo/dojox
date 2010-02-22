@@ -4,9 +4,9 @@
 	"findReplace": "토글 찾기/바꾸기",
 	"matchCase": "대소문자 일치", 
 	"backwards": "뒤로",
-	"replaceAll": "모든 어커런스", 
+	"replaceAll": "모두 바꾸기", 
 	"findButton": "찾기",
 	"replaceButton": "바꾸기",
-	"replaceDialogText": "${0} 어커런스를 바꿨습니다."
+	"replaceDialogText": "${0} 개를 바꿨습니다."
 })
 
