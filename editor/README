@@ -12,7 +12,7 @@ Credits
 	Jared Jurkiewicz - Author (PrettyPrint, PageBreak, ShowBlockNodes, 
 		Preview, Save, ToolbarLineBreak, InsertEntity, 
 		NormalizeIndentOutdent, Breadcrumb, FindReplace, 
-		CollapsibleToolbar, Blockquote, PasteFromWord)
+		CollapsibleToolbar, Blockquote, PasteFromWord, InsertAnchor)
 	Dustin Machi 	 - Technical Assistance
 -------------------------------------------------------------------------------
 Project description
@@ -113,6 +113,11 @@ dojox.editor.plugins.PasteFromWord:
 	before injecting it into the RTE.   Experimental as the filter list may not be complete yet.
 	Feedback is welcome and appreciated.  Filters will be updated based on it.
 
+dojox.editor.plugins.InsertAnchor:
+	Status: Stable (supported).
+	A plugin that allows anchor points to be inserted into the document being edited.
+	The anchors are styled in the doc to make them easily visible/editable in the document.
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -140,6 +145,7 @@ See also:
         http://docs.dojocampus.org/dojox/editor/plugins/CollapsibleToolbar
 	http://docs.dojocampus.org/dojox/editor/plugins/Blockquote
 	http://docs.dojocampus.org/dojox/editor/plugins/PasteFromWord
+	http://docs.dojocampus.org/dojox/editor/plugins/InsertAnchor        
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -224,6 +230,11 @@ For the PasteFromWord plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/PasteFromWord.css" type="text/css" rel="stylesheet" />
 
+For the InsertAnchor plugin:
+        dojo.require("dojox.editor.plugins.InsertAnchor");
+        and CSS:
+        <link href="[path]dojox/editor/plugins/resources/css/InsertAnchor.css" type="text/css" rel="stylesheet" />
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -240,3 +251,4 @@ See tests for examples:
 	dojox/editor/tests/editorCollapsibleToolbar.html
 	dojox/editor/tests/editorBlockquote.html
 	dojox/editor/tests/editorPasteFromWord.html
+	dojox/editor/tests/editorInsertAnchor.html
