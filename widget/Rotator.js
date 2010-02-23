@@ -337,6 +337,12 @@ dojo.require("dojo.parser");
 			}
 		},
 
+		resize: function(/*int*/width, /*int*/height){
+			var b = this._domNodeContentBox = { w: width, h: height };
+			d.contentBox(this._domNode, b);
+			d.forEach(this.panes, function(p){ d.contentBox(p.node, b); });
+		},
+
 		onManualChange: function(){
 			//	summary:
 			//		Stub function that can be overriden or connected to.
