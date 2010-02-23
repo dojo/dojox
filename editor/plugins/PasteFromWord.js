@@ -46,7 +46,7 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 				"</table>",
 			   "</div>"].join(""),
 
-	// _filters: [private] String
+	// _filters: [private] Array
 	//		The filters is an array of regular expressions to try and strip out a lot
 	//		of style data MS Word likes to insert when pasting into a contentEditable.
 	//		Prettymuch all of it is junk and not good html.  The hander is a place to put a function 
@@ -88,7 +88,9 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 		this._dialog = new dijit.Dialog({title: strings["pasteFromWord"]}).placeAt(dojo.body());
 		this._dialog.attr("content", dojo.string.substitute(this._template, strings));
 
-		// Make it translucent so we can fade in the window
+		// Make it translucent so we can fade in the window when the RTE is created.
+		// the RTE has to be created 'visible, and this is a ncie trick to make the creation
+		// 'pretty'.
 		dojo.style(dojo.byId(this._uId + "_rte"), "opacity", 0.001);
 
 		// Link up the action buttons to perform the insert or cleanup.
@@ -133,7 +135,8 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 		// tags:
 		//		private
 
-		// Gather the content and try to format it a bit (makes regexp cleanup simpler);
+		// Gather the content and try to format it a bit (makes regexp cleanup simpler).
+		// It also normalizes tag names and styles, so regexps are the same across browsers.
 		var content = dojox.html.format.prettyPrint(this._rte.attr("value"));
 
 		//Close up the dialog and clear old content.
