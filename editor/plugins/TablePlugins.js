@@ -897,8 +897,8 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 		this.selectWidthType.attr("value", p);
 		
 		this.selectBorder.attr("value", dojo.attr(this.table, "border"));
-		this.selectPad.attr("value", dojo.attr(this.table, "cellpadding"));
-		this.selectSpace.attr("value", dojo.attr(this.table, "cellspacing"));
+		this.selectPad.attr("value", dojo.attr(this.table, "cellPadding"));
+		this.selectSpace.attr("value", dojo.attr(this.table, "cellSpacing"));
 		this.selectAlign.attr("value", dojo.attr(this.table, "align"));
 	},
 	
@@ -912,12 +912,12 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 		dojo.style(this.backgroundCol, "backgroundColor", color);
 	},
 	onSet: function(){
-		dojo.attr(this.table, "bordercolor", this.brdColor);
-		dojo.attr(this.table, "bgcolor", this.bkColor);
+		dojo.attr(this.table, "borderColor", this.brdColor);
+		dojo.attr(this.table, "bgColor", this.bkColor);
 		dojo.attr(this.table, "width", (this.selectWidth.attr("value") + ((this.selectWidthType.attr("value")=="pixels")?"":"%") ));
 		dojo.attr(this.table, "border", this.selectBorder.attr("value"));
-		dojo.attr(this.table, "cellpadding", this.selectPad.attr("value"));
-		dojo.attr(this.table, "cellspacing", this.selectSpace.attr("value"));
+		dojo.attr(this.table, "cellPadding", this.selectPad.attr("value"));
+		dojo.attr(this.table, "cellSpacing", this.selectSpace.attr("value"));
 		dojo.attr(this.table, "align", this.selectAlign.attr("value"));
 		
 		this.hide();
