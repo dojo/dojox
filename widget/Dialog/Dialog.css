@@ -94,6 +94,13 @@ div.dojoxDialogNoTitle {
 	background-image: url("images/dialogCloseButton.gif");
 }
 
+.dojoxDialog .dijitDialogCloseIconHover {
+    background-image: url("images/dialogCloseButton.png");
+}
+.dj_ie6 .dojoxDialog .dijitDialogCloseIconHover {
+    background-image: url("images/dialogCloseButton.gif");
+}
+
 .dojoxDialogNoTitle .dojoxDialogCloseIcon {
 	top: -15px;
 	left: -15px;
