@@ -49,7 +49,7 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 			
 			this.grid && this.grid.removeShape();
 			
-			var x1,x2,y1,y2,i,clr;
+			var x1,x2,y1,y2,i,clr,len;
 			var s = this.canvas.underlay.createGroup();
 			var w = 2000;//this.canvas.width;
 			var h = 1000;//this.canvas.height;
@@ -59,7 +59,7 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 			
 			var createGridLine = function(x1,y1,x2,y2, c){
 				s.createLine({x1: x1, y1: y1, x2: x2, y2: y2}).setStroke({style: "Solid", width: b, cap: "round", color:c});
-			}
+			};
 			
 			// horz
 			for(i=1,len = h/mnr; i<len; i++){
