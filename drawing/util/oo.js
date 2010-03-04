@@ -114,7 +114,7 @@ dojox.drawing.util.oo = {
 			}
 		}
 			
-		for(var n in sub.prototype){
+		for(n in sub.prototype){
 			f.prototype[n] = sub.prototype[n];
 		}
 		return f; // Function

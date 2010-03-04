@@ -44,8 +44,8 @@ dojox.drawing.tools.Rect = dojox.drawing.util.oo.declare(
 			
 			//Default shape on single click
 			if(!this.shape){
-				s = obj.start;
-				e = this.minimumSize*4;
+				var s = obj.start;
+				var e = this.minimumSize*4;
 				this.setPoints([
 					{x:s.x, y:s.y},
 					{x:s.x+e, y:s.y},
