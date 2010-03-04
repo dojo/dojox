@@ -157,22 +157,22 @@
 					} else {
 						header("HTTP/1.0 404 Not Found");
 						header("Status: 404 Not Found");
-						print("<b>Cannot access file: [".$path."]<b>");
+						print("<b>Cannot access file: [".htmlentities($path)."]<b>");
 					}
 				} else {
 						header("HTTP/1.0 404 Not Found");
 						header("Status: 404 Not Found");
-						print("<b>Cannot access file: [".$path."]<b>");
+						print("<b>Cannot access file: [".htmlentities($path)."]<b>");
 				}
 			} else {
 				header("HTTP/1.0 403 Forbidden");
 				header("Status: 403 Forbidden");
-				print("<b>Cannot access file: [".$path."].  It is outside of the root of the file service.<b>");
+				print("<b>Cannot access file: [".htmlentities($path)."].  It is outside of the root of the file service.<b>");
 			}
 		} else {
 				header("HTTP/1.0 404 Not Found");
 				header("Status: 404 Not Found");
-				print("<b>Cannot access file: [".$path."]<b>");
+				print("<b>Cannot access file: [".htmlentities($path)."]<b>");
 		}
 	}
 ?>
