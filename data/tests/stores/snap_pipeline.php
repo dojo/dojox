@@ -17,7 +17,7 @@ $rows = array(array("7369", '"SMITH,CLERK"', "7902", '"1993-06-13"', "800.00", "
               array("7902", '"FORD,ANALYST"', "7566", '"1997-12-05"', "3000.00", '""', "20"),
               array("7654", '"MARTIN,SALESMAN"', "7698", '"1998-12-05"', "1250.00", "1400.00", "30"));
 
-$prefix = $_GET["sn_stream_header"];
+$prefix = htmlentities($_GET["sn_stream_header"]);
 
 if($_GET["sn_count"]) {
     if($_GET["sn_count"] == "records"){

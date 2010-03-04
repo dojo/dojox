@@ -43,5 +43,12 @@
 		fwrite($fh, "\n\n");
 		fclose($fh);
 	}
+	function printr($ar){
+		$txt = "";
+		foreach ($ar as $nm => $val) {
+			$txt .= "    ".$nm ." = " . $val . "\n";
+		}
+		$this->write($txt);
+	}
 }
 ?>

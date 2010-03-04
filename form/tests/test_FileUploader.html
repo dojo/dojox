@@ -8,7 +8,6 @@
 		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/themes/tundra/form/Button.css";
 		@import "../../../dijit/tests/css/dijitTests.css"; 
-		
 		@import "../resources/FileInput.css"; 
 	</style>
 	<script>
@@ -65,7 +64,7 @@
 		//using this early for the forceNoFlash test:
 		dojo.require("dojox.embed.Flash");
 		
-		var uploadUrl = "../resources/UploadFile.php";
+		var uploadUrl = "../tests/UploadFile.php";
 		
 		var rmFiles = "";
 		var fileMask = [
@@ -218,6 +217,13 @@
 	</style>
 </head>
 <body class="tundra">
+	<p style="font-size:14px; width:480px; border:2px solid #ff0000; padding:3px;">
+		<strong>NOTE:</strong> This test does upload,
+		but the server scripts are renamed to <em>tests/UploadFile.php.<strong>disabled</strong></em> and
+		<em>tests/cLOG.php.<strong>disabled</strong></em> to prevent security attacks on hosted servers.
+		You should rename these files (removing <em>.disabled</em>) in your local copy to conduct tests. 
+	</p>
+	
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td class="leftCol">
