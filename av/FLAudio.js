@@ -69,6 +69,11 @@ dojo.declare("dojox.av.FLAudio", null, {
 	//
 	//
 	constructor: function(/*Object*/options){
+		
+		// Provide this function for the SWF to ensure that the it is playing
+		// in HTML. 
+		dojo.global.swfIsInHTML = function(){ return true; }
+		
 		dojo.mixin(this, options || {});
 		if(!this.id){ this.id = "flaudio_"+new Date().getTime(); }
 		this.domNode = dojo.doc.createElement("div");
