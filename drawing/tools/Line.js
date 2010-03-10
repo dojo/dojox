@@ -79,7 +79,7 @@ dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
 			this._downOnCanvas = false;
 			//Default shape on single click
 			if(!this.shape){
-				s = obj.start, e = this.minimumSize*4;
+				var s = obj.start, e = this.minimumSize*4;
 				this.setPoints([
 					{x:s.x, y:s.y+e},
 					{x:s.x, y:s.y}

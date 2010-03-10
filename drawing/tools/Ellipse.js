@@ -43,7 +43,7 @@ dojox.drawing.tools.Ellipse = dojox.drawing.util.oo.declare(
 			this._downOnCanvas = false;
 			//Default shape on single click
 			if (!this.shape) {
-				s = obj.start, e = this.minimumSize*2;
+				var s = obj.start, e = this.minimumSize*2;
 				this.data = {
 					cx: s.x+e,
 					cy: s.y+e,

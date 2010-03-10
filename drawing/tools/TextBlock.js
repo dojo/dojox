@@ -232,7 +232,7 @@ StencilData: {
 						self.keys.editMode(false);
 						self.mouse.setEventMode();
 						self.execText();
-					}
+					};
 					
 				kc1 = dojo.connect(conEdit, "keyup", this, function(evt){
 					// 	if text is empty, we need a height so the field's height
@@ -280,10 +280,9 @@ StencilData: {
 				
 				conEdit.focus();
 				
-				this.onDown = function(){}
-				this.onDrag = function(){}
+				this.onDown = function(){};
+				this.onDrag = function(){};
 				
-				var self = this;
 				setTimeout(dojo.hitch(this, function(){
 					// once again for Silverlight:
 					conEdit.focus();
@@ -366,7 +365,7 @@ StencilData: {
 					pageY: (d.y  ) / this.mouse.zoom- sc.top + org.y,
 					width:d.width / this.mouse.zoom,
 					height:d.height / this.mouse.zoom
-				}
+				};
 				
 				this.remove(this.shape, this.hit);
 				this.showParent(obj);
@@ -374,7 +373,7 @@ StencilData: {
 				this.connectTextField();
 				if(this._text){
 					//setTimeout(dojo.hitch(this, function(){
-					this.setSelection(conEdit, "end")
+					this.setSelection(conEdit, "end");
 					//}), 500)
 				}
 			},
@@ -392,7 +391,7 @@ StencilData: {
 						str = str.replace(new RegExp(nm, "gi"), chars[nm])
 					}
 					return str
-				}
+				};
 
 				if(removeBreaks){
 					dojo.forEach(['<br>', '<br/>', '<br />', '\\n', '\\r'], function(br){
@@ -514,7 +513,7 @@ StencilData: {
 					height:h+"px",
 					backgroundColor:d.fill,
 					border:b+"px " + d.style + " "+d.color
-				}
+				};
 				if(dojo.isIE){
 					s.paddingLeft = w + "px";
 					s.fontSize = w + "px"
@@ -612,7 +611,7 @@ StencilData: {
 					var selection = dojo.global.getSelection();
 					selection.removeAllRanges();
 					console.log(1)
-					var r = dojo.doc.createRange();
+					r = dojo.doc.createRange();
 					r.selectNodeContents(node);
 					console.log(2)
 					var nodes = getAllChildren(node);
