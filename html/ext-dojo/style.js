@@ -434,8 +434,8 @@ dojo.mixin(dojox.html["ext-dojo"].style, {
 		}
 		ds(n, {
 			position: newPosition,
-			left: x0 - parseInt(dx) + parseInt(xc) - (parseInt(xc)*m11 + parseInt(yc)*m12) + tx + "px",
-			top:  y0 - parseInt(dy) + parseInt(yc) - (parseInt(xc)*m21 + parseInt(yc)*m22) + ty + "px"
+			left: x0 - parseInt(dx) + parseInt(xc) - ((parseInt(xc) - tx)*m11 + (parseInt(yc) - ty)*m12) + "px",
+			top:  y0 - parseInt(dy) + parseInt(yc) - ((parseInt(xc) - tx)*m21 + (parseInt(yc) - ty)*m22) + "px"
 		});
 	},
 	_getTransformFilter: function(/*DomNode*/ node){
