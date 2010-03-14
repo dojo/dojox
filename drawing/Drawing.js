@@ -193,13 +193,13 @@ dojo.provide("dojox.drawing.Drawing");
 			//		If within a ContentPane this will get called automatically.
 			//		Can also be called directly.
 			//
-			dojo.style(this.domNode, {
+			box && dojo.style(this.domNode, {
 				width:box.w+"px",
 				height:box.h+"px"
 			});
 			if(!this.canvas){
 				this._createCanvas();		
-			}else{
+			}else if(box){
 				this.canvas.resize(box.w, box.h);
 			}
 		},
