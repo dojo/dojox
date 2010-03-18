@@ -194,7 +194,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		// |		date1.setMonth(2);
 
 		this._year += Math.floor(month / 12);
-		this._month = Math.floor(month % 12);
+		this._month = Math.floor((month % 12 + 12) % 12);
 	},
 
 	setHours:function(){
