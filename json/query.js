@@ -1,7 +1,7 @@
 dojo.provide("dojox.json.query");
 
 (function(){
-	function s(obj,start,end,step){
+	dojox.json._slice = function(obj,start,end,step){
 		// handles slice operations: [3:6:2]
 		var len=obj.length,results = [];
 		end = end || len;
@@ -12,7 +12,7 @@ dojo.provide("dojox.json.query");
 	  	}
 		return results;
 	}
-	function e(obj,name){
+	dojox.json._find = function e(obj,name){
 		// handles ..name, .*, [*], [val1,val2], [val]
 		// name can be a property to search for, undefined for full recursive, or an array for picking by index
 		var results = [];
@@ -55,7 +55,7 @@ dojo.provide("dojox.json.query");
 		return results;
 	}
 	
-	function distinctFilter(array, callback){
+	dojox.json._distinctFilter = function(array, callback){
 		// does the filter with removal of duplicates in O(n)
 		var outArr = [];
 		var primitives = {};
@@ -210,10 +210,10 @@ dojo.provide("dojox.json.query");
 					var prefix = '';
 					if(t.match(/^\./)){
 						// recursive object search
-						call("e");
+						call("dojox.json._find");
 						prefix = ",true)";
 					}
-					call(oper[1].match(/\=/) ? "dojo.map" : oper[1].match(/\^/) ? "distinctFilter" : "dojo.filter");
+					call(oper[1].match(/\=/) ? "dojo.map" : oper[1].match(/\^/) ? "dojox.json._distinctFilter" : "dojo.filter");
 					return prefix + ",function($obj){return " + oper[2] + "})"; 
 				}
 				oper = t.match(/^\[\s*([\/\\].*)\]/); // [/sortexpr,\sortexpr]
@@ -227,11 +227,11 @@ dojo.provide("dojox.json.query");
 				}
 				oper = t.match(/^\[(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)\]/); // slice [0:3]
 				if(oper){
-					call("s");
+					call("dojox.json._slice");
 					return "," + (oper[1] || 0) + "," + (oper[2] || 0) + "," + (oper[3] || 1) + ")"; 
 				}
 				if(t.match(/^\.\.|\.\*|\[\s*\*\s*\]|,/)){ // ..prop and [*]
-					call("e");
+					call("dojox.json._find");
 					return (t.charAt(1) == '.' ? 
 							",'" + b + "'" : // ..prop 
 								t.match(/,/) ? 
