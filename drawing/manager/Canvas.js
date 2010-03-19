@@ -81,7 +81,7 @@ dojo.provide("dojox.drawing.manager.Canvas");
 				//
 				// changing the size of the surface and setting scroll
 				// if items are off screen
-				var sw = this.getScrollWidth() //+ 10;
+				var sw = this.getScrollWidth(); //+ 10;
 				this.width = Math.max(width, this.parentWidth);
 				this.height = Math.max(height, this.parentHeight);
 				
@@ -142,16 +142,16 @@ dojo.provide("dojox.drawing.manager.Canvas");
 				// 		of the browser scrollbars. Becomes memoized.
 				//
 				var p = dojo.create('div');
-				p.innerHTML = '<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:0px;left:-1000px;"><div style="height:100px;"></div>';
+				p.innerHTML = '<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:0;left:-1000px;"><div style="height:100px;"></div>';
 				var div = p.firstChild;
 				dojo.body().appendChild(div);
 				var noscroll = dojo.contentBox(div).h;
-				dojo.style(div, "overflow", "scroll")
+				dojo.style(div, "overflow", "scroll");
 				var scrollWidth = noscroll - dojo.contentBox(div).h;
 				dojo.destroy(div);
 				this.getScrollWidth = function(){
 					return scrollWidth;
-				}
+				};
 				return scrollWidth; // Object
 			}
 		}

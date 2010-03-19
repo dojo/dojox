@@ -130,7 +130,7 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 			dojo.forEach(pts, function(p, i){
 				if(p.noAnchor){ return; }
 				if(i==0 || i == item.points.length-1){
-					console.log("ITEM TYPE:", item.type, item.shortType)
+					console.log("ITEM TYPE:", item.type, item.shortType);
 					if(i==0){
 						
 					}else{
@@ -157,7 +157,7 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 				// check if we have a double-point of a closed-curve-path
 				var f = pts[0], l = pts[pts.length-1], a = this.items[item.id].anchors;
 				if(f.x ==l.x && f.y==l.y){
-					console.warn("LINK ANVHROS", a[0], a[a.length-1])
+					console.warn("LINK ANVHROS", a[0], a[a.length-1]);
 					a[0].linkedAnchor = a[a.length-1];
 					a[a.length-1].linkedAnchor = a[0];
 				}
@@ -293,8 +293,8 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 				
 				var orgx = pmx.dx + this.org.x,
 					orgy = pmx.dy + this.org.y,
-					x = obj.x - orgx;
-					y = obj.y - orgy;
+					x = obj.x - orgx,
+					y = obj.y - orgy,
 					s = this.defaults.anchors.minSize;
 				
 				var conL, conR, conT, conB;

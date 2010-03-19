@@ -210,7 +210,7 @@ dojo.provide("dojox.drawing.manager.keys");
 				!isEdit && this.onKeyUp(this._mixin(evt));
 				
 				if(evt.keyCode==13){
-					console.warn("KEY ENTER")
+					console.warn("KEY ENTER");
 					this.onEnter(evt);
 					_stop = true;
 				}

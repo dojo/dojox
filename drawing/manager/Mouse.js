@@ -230,7 +230,7 @@ EventObject: function(){
 		},
 		
 		overName: function(obj,evt){
-			nm = obj.id.split(".");
+			var nm = obj.id.split(".");
 			evt = evt.charAt(0).toUpperCase() + evt.substring(1);
 			if(nm[0] == "dojox" && (dojox.drawing.defaults.clickable || !dojox.drawing.defaults.clickMode)) {
 				return "onStencil"+evt;	
@@ -325,7 +325,7 @@ EventObject: function(){
 				return this.mode + name;
 			}else{
 				//Allow a mode where stencils aren't clickable
-				if(!dojox.drawing.defaults.clickable && dojox.drawing.defaults.clickMode){return "on"+name;};
+				if(!dojox.drawing.defaults.clickable && dojox.drawing.defaults.clickMode){return "on"+name;}
 				var dt = !this.drawingType || this.drawingType=="surface" || this.drawingType=="canvas" ? "" : this.drawingType;
 				var t = !dt ? "" : dt.charAt(0).toUpperCase() + dt.substring(1);
 				return "on"+t+name;
