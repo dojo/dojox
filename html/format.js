@@ -466,6 +466,11 @@ dojo.require("dojox.html.entities");
 
 		//Okay, finally process the input string.
 		processNode(contentDiv);
+		if(textContent){
+			// Insert any trailing text.  See: #10854
+			content.push(formatText(textContent));
+			textContent = "";
+		}
 		return content.join(""); //String
 	};
 })();
