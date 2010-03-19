@@ -670,7 +670,7 @@ dojo.declare("dojox.atom.io.model.Content",dojox.atom.io.model.Node,{
 		//We need to unescape the HTML content here so that it can be displayed correctly when the value is fetched.
 		var lowerType = this.type.toLowerCase();
 		if(lowerType === "html" || lowerType === "text/html" || lowerType === "xhtml" || lowerType === "text/xhtml"){
-			this.value = dojox.atom.io.model.util.unEscapeHtml(this.value);
+			this.value = this.value?dojox.atom.io.model.util.unEscapeHtml(this.value):"";
 		}
 
 		if(this._postBuild){this._postBuild();}
