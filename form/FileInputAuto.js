@@ -45,10 +45,17 @@ dojo.declare("dojox.form.FileInputAuto",
 	triggerEvent: "onblur",
 	
 	_sent: false,
-
+	
 	// small template changes, new attachpoint: overlay
 	templateString: dojo.cache("dojox.form","resources/FileInputAuto.html"),
-
+	
+	onBeforeSend: function(){
+		// summary: Called immediately before a FileInput sends it's file via io.iframe.send. 
+		//		The return of this function is passed as the `content` member in the io.iframe IOArgs
+		//		object.
+		return {};
+	},
+	
 	startup: function(){
 		// summary: add our extra blur listeners
 		this._blurListener = this.connect(this.fileInput, this.triggerEvent, "_onBlur");
@@ -112,10 +119,11 @@ dojo.declare("dojox.form.FileInputAuto",
 			url: this.url,
 			form: _newForm,
 			handleAs: "json",
-			handle: dojo.hitch(this,"_handleSend")
+			handle: dojo.hitch(this,"_handleSend"),
+			content: this.onBeforeSend()
 		});
 	},
-
+	
 	_handleSend: function(data,ioArgs){
 		// summary: The callback to toggle the progressbar, and fire the user-defined callback
 
