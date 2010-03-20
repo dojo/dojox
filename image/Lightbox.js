@@ -50,7 +50,7 @@ dojo.declare("dojox.image.Lightbox",
 	duration: 500,
 
 	// modal: Boolean
-	// 		If true, this Dialog instance will be truly modal and prevent closing until
+	//		If true, this Dialog instance will be truly modal and prevent closing until
 	//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
 	//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
 	modal: false,
@@ -121,6 +121,11 @@ dojo.declare("dojox.image.Lightbox",
 	onClick: function(){
 		// summary:
 		//		Stub fired when the image in the lightbox is clicked.
+	},
+	
+	destroy: function(){
+		this._attachedDialog.removeImage(this);
+		this.inherited(arguments);
 	}
 
 });
@@ -128,12 +133,12 @@ dojo.declare("dojox.image.Lightbox",
 dojo.declare("dojox.image.LightboxDialog",
 	dijit.Dialog, {
 	// summary:
-	//		The "dialog" shared  between any Lightbox instances on the page, publically available
+	//		The "dialog" shared	 between any Lightbox instances on the page, publically available
 	//		for programatic manipulation.
 	//
 	// description:
 	//	
-	//		A widget that intercepts anchor links (typically around images) 	
+	//		A widget that intercepts anchor links (typically around images)		
 	//		and displays a modal Dialog. this is the actual Dialog, which you can
 	//		create and populate manually, though should use simple Lightbox's
 	//		unless you need the direct access.
@@ -148,7 +153,7 @@ dojo.declare("dojox.image.LightboxDialog",
 	//	|	dialog.show({ href: url, title:"My Remote Image"});
 	//	
 	// title: String
-	// 		The current title, read from object passed to show() 
+	//		The current title, read from object passed to show() 
 	title: "",
 
 	// FIXME: implement titleTemplate
@@ -164,7 +169,7 @@ dojo.declare("dojox.image.LightboxDialog",
 	imgUrl: dijit._Widget.prototype._blankGif,
 		
 	// errorMessage: String
-	// 		The text to display when an unreachable image is linked
+	//		The text to display when an unreachable image is linked
 	errorMessage: "Image not found.",
 
 	// adjust: Boolean
@@ -174,7 +179,7 @@ dojo.declare("dojox.image.LightboxDialog",
 	adjust: true,
 
 	// modal: Boolean
-	// 		If true, this Dialog instance will be truly modal and prevent closing until
+	//		If true, this Dialog instance will be truly modal and prevent closing until
 	//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
 	//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
 	modal: false,
@@ -197,9 +202,9 @@ dojo.declare("dojox.image.LightboxDialog",
 
 		this.inherited(arguments);
 		this._animConnects = [];
-		this.connect(this.nextNode, "onclick", "_nextImage");
-		this.connect(this.prevNode, "onclick", "_prevImage");
-		this.connect(this.closeNode, "onclick", "hide");
+		this.connect(this.nextButtonNode, "onclick", "_nextImage");
+		this.connect(this.prevButtonNode, "onclick", "_prevImage");
+		this.connect(this.closeButtonNode, "onclick", "hide");
 		this._makeAnims();
 		this._vp = dojo.window.getBox();
 		return this;
@@ -220,22 +225,25 @@ dojo.declare("dojox.image.LightboxDialog",
 		// we only need to call dijit.Dialog.show() if we're not already open.
 		if(!_t.open){ 
 			_t.inherited(arguments); 
-			this._modalconnects.push(
+			_t._modalconnects.push(
 				dojo.connect(dojo.global, "onscroll", this, "_position"),
 				dojo.connect(dojo.global, "onresize", this, "_position"),
 				dojo.connect(dojo.body(), "onkeypress", this, "_handleKey")
 			);
 			if(!groupData.modal){
-				this._modalconnects.push(
+				_t._modalconnects.push(
 					dojo.connect(dijit._underlay.domNode, "onclick", this, "onCancel")
 				);
 			}
 		}
 		
 		if(this._wasStyled){
-			// ugly fix for IE being stupid:
+			// ugly fix for IE being stupid. place the new image relative to the old
+			// image to allow for overriden templates to adjust the location of the
+			// titlebar. DOM will remain "unchanged" between views.
+			var tmpImg = dojo.create("img", null, _t.imgNode, "after");
 			dojo.destroy(_t.imgNode);
-			_t.imgNode = dojo.create("img", null, _t.imageContainer, 'first');
+			_t.imgNode = tmpImg;
 			_t._makeAnims();
 			_t._wasStyled = false;
 		}
@@ -252,22 +260,25 @@ dojo.declare("dojox.image.LightboxDialog",
 				dojo.forEach(_t.inGroup, function(g, i){
 					if(g.href == groupData.href){
 						_t._index = i;
+						//return false;
 					}
-				},_t);
+					//return true;
+				});
 			}
 			if(!_t._index){
 				_t._index = 0;
-				src = _t.inGroup[_t._index].href;
+				var sr = _t.inGroup[_t._index]; 
+				src = (sr && sr.href) || _t.errorImg;
 			}
 			// FIXME: implement titleTemplate
-			_t.groupCount.innerHTML = " (" + (_t._index + 1) + " of " + _t.inGroup.length + ")";
-			_t.prevNode.style.visibility = "visible";
-			_t.nextNode.style.visibility = "visible";
+			_t.groupCount.innerHTML = " (" + (_t._index + 1) + " of " + Math.max(1, _t.inGroup.length) + ")";
+			_t.prevButtonNode.style.visibility = "visible";
+			_t.nextButtonNode.style.visibility = "visible";
 		}else{
 			// single images don't have buttons, or counters:
 			_t.groupCount.innerHTML = "";
-			_t.prevNode.style.visibility = "hidden";
-			_t.nextNode.style.visibility = "hidden";
+			_t.prevButtonNode.style.visibility = "hidden";
+			_t.nextButtonNode.style.visibility = "hidden";
 		}
 		if(!groupData.leaveTitle){
 			_t.textNode.innerHTML = groupData.title;
@@ -336,10 +347,18 @@ dojo.declare("dojox.image.LightboxDialog",
 	_prepNodes: function(){
 		// summary: A localized hook to accompany _loadImage
 		this._imageReady = false; 
-		this.show({
-			href: this.inGroup[this._index].href,
-			title: this.inGroup[this._index].title
-		});
+		if(this.inGroup && this.inGroup[this._index]){
+			this.show({
+				href: this.inGroup[this._index].href,
+				title: this.inGroup[this._index].title
+			}); 
+		}else{
+			this.show({
+				title: this.errorMessage,
+				href: this.errorImg
+			});
+		}
+		
 	},
 
 	resizeTo: function(/* Object */size, forceTitle){
@@ -466,18 +485,40 @@ dojo.declare("dojox.image.LightboxDialog",
 		// child: Object
 		//		The image information to add.
 		//		href: String - link to image (required)
-		// 		title: String - title to display
+		//		title: String - title to display
 		//
 		// group: String?
 		//		attach to group of similar tag or null for individual image instance
 		var g = group;
 		if(!child.href){ return; }
-		if(g){ 	
+		if(g){	
 			if(!this._groups[g]){
 				this._groups[g] = [];
 			}
 			this._groups[g].push(child); 
 		}else{ this._groups["XnoGroupX"].push(child); }
+	},
+
+	removeImage: function(/* Widget */child){
+		// summary: Remove an image instance from this LightboxDialog.
+		// child: Object
+		//		A reference to the Lightbox child that was added (or an object literal)
+		//		only the .href member is compared for uniqueness. The object may contain
+		//		a .group member as well.
+		
+		var g = child.group || "XnoGroupX";
+		dojo.every(this._groups[g], function(item, i, ar){
+			if(item.href == child.href){
+				ar.splice(i, 1);
+				return false;
+			}
+			return true;
+		});
+	},
+	
+	removeGroup: function(group){
+		// summary: Remove all images in a passed group
+		if(this._groups[group]){ this._groups[group] = []; }
 	},
 
 	_handleKey: function(/* Event */e){

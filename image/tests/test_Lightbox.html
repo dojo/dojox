@@ -33,7 +33,7 @@
 		dojo.require("dijit.form.Button");
 		dojo.require("dojox.image.Lightbox"); 
 		dojo.require("dojox.data.FlickrStore");
-		dojo.addOnLoad(function(){
+		dojo.ready(function(){
 			// sample with super-rich text content (no widgets or undelegated events please).
 			
 			var title = dojo.byId("customExample").innerHTML;
@@ -117,8 +117,31 @@
 				}
 			}).placeAt("container");
 			
+			dojo.query("#groupremover").onclick(function(e){
+			    e.preventDefault();
+			    var g = dijit.byId("targetremover");
+			    console.warn(g);
+			    if(g){
+			        // destroying a dojox.image.Lightbox will remove itself from 
+			        // the LightboxDialog
+			        g.destroy();
+			    }
+			    
+			    // test showing group 3 after removal:
+			    var lbd = dijit.byId("dojoxLightboxDialog"); // the master
+			    lbd.show({
+			        title:"Should Only be three remaining",
+			        group:"group3"
+			    });
+			})
 			
-			
+			dojo.query("#groupkiller").onclick(function(e){
+			    e.preventDefault();
+			    var lbd = dijit.byId("dojoxLightboxDialog");
+			    lbd.removeGroup("group3");
+			    
+			    
+			})
 		})
 	</script>
 
@@ -190,6 +213,17 @@
 			<a href="images/imageHoriz.jpg" dojoType="dojox.image.Lightbox" group="group2" title="Antigua, Guatemala">4:3 image</a>
 			<a href="images/imageVert.jpg" dojoType="dojox.image.Lightbox" group="group2" title="More Guatemala...">tall</a>
 		</p>
+
+		<h3>RemoveGroup Group3:</h3>	
+		<p>
+			<a id="targetremover" href="images/imageHoriz2.jpg" dojoType="dojox.image.Lightbox" group="group3" title="hmm &lt;em&gt;right&lt;/em&gt; there is &lt;b&gt;rich text&lt;/b&gt; here">Rich Text Title</a>
+			<a href="images/square.jpg" dojoType="dojox.image.Lightbox" group="group3" title="1:1 aspect">square</a>
+			<a href="images/imageHoriz.jpg" dojoType="dojox.image.Lightbox" group="group3" title="Antigua, Guatemala">4:3 image</a>
+			<a href="images/imageVert.jpg" dojoType="dojox.image.Lightbox" group="group3" title="More Guatemala...">tall</a>
+		</p>
+        <p>
+                <a href='#' id="groupremover">remove one from group3, then show group</a> | <a href="#" id="groupkiller">remove group3</a>
+        </p>
 
 		<h3>From dojox.data.FlickrStore:</h3>
 

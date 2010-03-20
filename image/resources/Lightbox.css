@@ -6,7 +6,12 @@
 	background-color:#000; 
 }
 
-.dojoxLightbox {
+/* more specific to override .theme .dijitDialog name. might try baseClass="dojoxLightbox" 
+   but that would require additional overriden CSS on top of the original Dialog.css       */
+.lucid .dojoxLightbox,
+.soria .dojoxLightbox,
+.nihilo .dojoxLightbox,
+.tundra .dojoxLightbox {
 	position:absolute;
 	z-index:999;
 	overflow:hidden;
