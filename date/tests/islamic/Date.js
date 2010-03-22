@@ -28,9 +28,10 @@ tests.register("dojox.date.tests.islamic.Date",
 		{
 			name: "toGregorian",
 			runTest: function(t){
-				var dateIslamic = new dojox.date.islamic.Date(1429,11,20); // Dec 19, 2008 -- is this right??
+				var dateIslamic = new dojox.date.islamic.Date(1429,11,20); // Dec 20, 2008 -- is this right??
 				var dateGregorian = dateIslamic.toGregorian();
-				t.is(0, dojo.date.compare(new Date(2008, 11, 19), dateGregorian, "date"));
+				t.is(0, dojo.date.compare(new Date(2008, 11, 20), dateGregorian, "date"));
+				t.is(13, new dojox.date.islamic.Date((new dojox.date.islamic.Date(1430, 2, 13)).toGregorian()).getDate());
 				// add exhaustive tests here
 			}
 		}/*,

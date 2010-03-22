@@ -155,13 +155,15 @@ dojox.date.islamic.locale._parseInfo = function(/*oblect?*/options){
 dojox.date.islamic.locale.parse= function(/*String*/value, /*object?*/options){
 	// based on and similar to dojo.date.locale.parse
 	// summary: This function parse string date value according to options	
-	value =  value.replace(/[\u200E\u200F\u202A-\u202E]/g, ""); //remove special chars
+	
+	value =  value.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove special chars from Value
 	
 	if(!options){options={};}
 	var info = dojox.date.islamic.locale._parseInfo(options);
-	
+
 	var tokens = info.tokens, bundle = info.bundle;
-	var re = new RegExp("^" + info.regexp + "$");
+	var regexp = info.regexp.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove special chars from the pattern
+	var re = new RegExp("^" + regexp + "$");
 	
 	var match = re.exec(value);
 

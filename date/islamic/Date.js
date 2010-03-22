@@ -23,7 +23,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 	_hours: 0,
 	_minutes: 0,
 	_seconds: 0,
-	_milliseconds: 0,
+	_milliseconds: 1,
 	_day: 0,
 	_GREGORIAN_EPOCH : 1721425.5,
 	_ISLAMIC_EPOCH : 1948439.5,
@@ -56,7 +56,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 			}else if(arg0 == ""){
 				// date should be invalid.  Dijit relies on this behavior.
 				this._date = new Date(""); //TODO: should this be NaN?  _date is not a Date object
-			}else{  // this is hebrew.Date object
+			}else{  // this is Islamic.Date object
 				this._year = arg0._year;
 				this._month =  arg0._month;  
 				this._date = arg0._date;
@@ -186,7 +186,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		this._year = +year;
 	},
 
-	setMonth:function(/*number*/month){
+	setMonth: function(/*number*/month) {
 		// summary: This function set Month
 		//
 		// example:
@@ -194,7 +194,11 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		// |		date1.setMonth(2);
 
 		this._year += Math.floor(month / 12);
-		this._month = Math.floor((month % 12 + 12) % 12);
+		if(month > 0){
+			this._month = Math.floor(month % 12);
+		}else{
+			this._month = Math.floor(((month % 12) + 12) % 12);
+		}
 	},
 
 	setHours:function(){
@@ -314,7 +318,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		x.setMinutes(this._minutes);
 		x.setSeconds(this._seconds);
 		x.setMilliseconds(this._milliseconds);
-		return(this._month+" "+ this._date + " " + this._year + " " + x.toTimeString());
+		return this._month+" "+ this._date + " " + this._year + " " + x.toTimeString();
 	},
 		
 		
@@ -361,20 +365,15 @@ dojo.declare("dojox.date.islamic.Date", null, {
 					+ Math.floor((year - 1) / 400) + Math.floor((((367 * month) - 362) / 12) 
 					+ ((month <= 2) ? 0 : (dojo.date.isLeapYear(new Date(year,month,1)) ? -1 : -2)) + 1);
 					
-		var day = (wjd - tjd2);
+		var day = (wjd - tjd2) + 1;
 
-		var gdate = new Date(year, month-1, day);
-
-		gdate.setHours(this._hours);
-		gdate.setMilliseconds(this._milliseconds);
-		gdate.setMinutes(this._minutes);
-		gdate.setSeconds(this._seconds); 
+		var gdate = new Date(year, (month - 1), day, this._hours, this._minutes, this._seconds, this._milliseconds);
 
 		return gdate;
 	},
 
 	//TODO: would it make more sense to make this a constructor option? or a static?
-	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
+	// ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	fromGregorian:function(/*Date*/gdate){
 		// summary: This function returns the equivalent Islamic Date value for the Gregorian Date
 		// example:
@@ -393,8 +392,8 @@ dojo.declare("dojox.date.islamic.Date", null, {
 					+ (((gMonth+1) <= 2) ? 0 : (dojo.date.isLeapYear(date) ? -1 : -2)) + gDay) 
 					+(Math.floor(date.getSeconds() + 60 * (date.getMinutes() + 60 * date.getHours()) + 0.5) / 86400.0);
 		julianDay = Math.floor(julianDay) + 0.5;
-		
-		var days = julianDay - 1948440;
+
+		var days = julianDay - this._ISLAMIC_EPOCH;
 		var hYear  = Math.floor( (30 * days + 10646) / 10631.0 );
 		var hMonth = Math.ceil((days - 29 - this._yearStart(hYear)) / 29.5 );
 		hMonth = Math.min(hMonth, 11);
@@ -418,26 +417,26 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		return this.toGregorian().valueOf();
 	},
 
-	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
+	// ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	_yearStart:function(/*Number*/year){
 		//summary: return start of Islamic year
 		return (year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
-	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
+	// ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	_monthStart:function(/*Number*/year, /*Number*/month){
 		//summary: return the start of Islamic Month
 		return Math.ceil(29.5*month) +
 			(year-1)*354 + Math.floor((3+11*year)/30.0);
 	},
 
-	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
+	// ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	_civilLeapYear:function(/*Number*/year){
 		//summary: return Boolean value if Islamic leap year
 		return (14 + 11 * year) % 30 < 11;
 	},
 
-	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
+	// ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	getDaysInIslamicMonth:function(/*Number*/month, /*Number*/ year){
 		//summary: returns the number of days in the given Islamic Month
 		var length = 0;
