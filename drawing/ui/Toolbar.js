@@ -70,7 +70,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 					dojo.disconnect(c);
 					this.drawing.mouse.setCursor('default'); 
 					});
-				};
+				}
 			});
 		}
 		
@@ -128,7 +128,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			
 			dojo.forEach(toolAr, function(t){
 				t = dojo.trim(t);
-				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onToolClick"})
+				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onToolClick"});
 				this.buttons.push(btn);
 				if(this.strSelected==t){
 					btn.select();
@@ -152,19 +152,19 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		if(this.strPlugs){
 			var plugAr = [];
 			if(this.strPlugs=="all"){
-				for(var nm in dojox.drawing.getRegistered("plugin")){
+				for(nm in dojox.drawing.getRegistered("plugin")){
 					plugAr.push(this.util.abbr(nm));
 				}
 			}else{
-				plugAr = this.strPlugs.split(",")
+				plugAr = this.strPlugs.split(",");
 				dojo.map(plugAr, function(p){ return dojo.trim(p); });
 			}
 			
 			
 			dojo.forEach(plugAr, function(p){
-				t = dojo.trim(p);
+				var t = dojo.trim(p);
 				//console.log("   plugin:", p)
-				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onPlugClick"})
+				var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onPlugClick"});
 				this.plugins.push(btn);
 				if(this.horizontal){
 					y += h + g;
@@ -207,7 +207,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		// summary:
 		//		Tool click event. May be connected to.
 		//
-		if(this.drawing.defaults.clickMode) { this.drawing.mouse.setCursor("crosshair"); };
+		if(this.drawing.defaults.clickMode) { this.drawing.mouse.setCursor("crosshair"); }
 		dojo.forEach(this.buttons, function(b){
 			if(b.id==button.id){
 				b.select();

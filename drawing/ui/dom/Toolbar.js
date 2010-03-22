@@ -106,10 +106,10 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 			node.innerHTML = "";
 			var type = dojo.attr(node, "tool");
 			this.toolNodes[type] = node;
-			dojo.attr(node, "tabIndex", 1)
+			dojo.attr(node, "tabIndex", 1);
 			var constr = dojo.getObject(type);
 			
-			this.createIcon(node, constr)	
+			this.createIcon(node, constr);	
 			
 			this.drawing.registerTool(type, constr);
 			dojo.connect(node, "mouseup", this, function(evt){
@@ -194,10 +194,10 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 			// handles buttons clicks and selects or deselects
 			for(var n in this.toolNodes){
 				if(n == type){
-					dojo.addClass(this.toolNodes[type], "selected")	
+					dojo.addClass(this.toolNodes[type], "selected");
 					this.toolNodes[type].blur();
 				}else{
-					dojo.removeClass(this.toolNodes[n], "selected")
+					dojo.removeClass(this.toolNodes[n], "selected");
 				}
 				
 			}

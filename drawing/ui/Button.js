@@ -19,13 +19,13 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			this.hitched = dojo.hitch(this.scope || window, this.callback, this);
 		}
 		
-		this.shape = new dojox.drawing.stencil.Rect(options)
+		this.shape = new dojox.drawing.stencil.Rect(options);
 		
 		var setGrad = function(s, p, v){
 			dojo.forEach(["norm", "over", "down", "selected"], function(nm){
 				s[nm].fill[p] = v;
 			});
-		}
+		};
 		// for button backs, not for icons
 		setGrad(this.style.button, "y2", this.data.height + this.data.y);
 		setGrad(this.style.button, "y1", this.data.y);
@@ -33,7 +33,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 		if(options.icon && !options.icon.text){
 			var constr = this.drawing.getConstructor(options.icon.type);
 			var o = this.makeOptions(options.icon);
-			o.data = dojo.mixin(o.data, this.style.button.icon.norm)
+			o.data = dojo.mixin(o.data, this.style.button.icon.norm);
 			
 			if(o.data && o.data.borderWidth===0){
 				o.data.fill = this.style.button.icon.norm.fill = o.data.color;
@@ -46,8 +46,8 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			//console.log("  button:", this.toolType, this.style.button.icon)
 		}else if(options.text || options.icon.text){
 			//console.warn("button text:", options.text || options.icon.text)
-			var o = this.makeOptions(options.text || options.icon.text);
-			o.data.color = this.style.button.icon.norm.color //= o.data.fill;
+			o = this.makeOptions(options.text || options.icon.text);
+			o.data.color = this.style.button.icon.norm.color; //= o.data.fill;
 			this.style.button.icon.selected.color = this.style.button.icon.selected.fill;
 			this.icon = new dojox.drawing.stencil.Text(o);
 			this.icon.attr({
@@ -86,7 +86,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 				mouse: this.mouse,
 				container: this.container,
 				subShape:true
-			}
+			};
 			
 			if(typeof(d)=="string"){
 				
@@ -115,7 +115,7 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 				
 			}else{
 				//console.warn("data")
-				for(var n in d){
+				for(n in d){
 					if(/x|width/.test(n)){
 						d[n] = d[n] * this.data.width * .01 * s;
 					}else if(/y|height/.test(n)){

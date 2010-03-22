@@ -108,10 +108,10 @@ dojox.drawing.ui.dom.Pan = dojox.drawing.util.oo.declare(
 			// very high maintenance.
 			var log = function(){
 				///console.log.apply(console, arguments);
-			}
+			};
 			var warn = function(){
 				//console.warn.apply(console, arguments);
-			}
+			};
 			//console.clear();
 			//console.time("check bounds");
 			var t=Infinity, r=-Infinity, b=-Infinity, l=Infinity,
