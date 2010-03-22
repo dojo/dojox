@@ -23,7 +23,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 	_hours: 0,
 	_minutes: 0,
 	_seconds: 0,
-	_milliseconds: 1,
+	_milliseconds: 0,
 	_day: 0,
 	_GREGORIAN_EPOCH : 1721425.5,
 	_ISLAMIC_EPOCH : 1948439.5,
