@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>Icon</title>
+		<link href="../themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../themes/buttons.css" rel="stylesheet"></link>
+
+		<style>
+			.box {
+				border: 1px solid #A7C0E0;
+				width: 300px;
+				height: 250px;
+				background-image: url(images/widget-bg.png);
+				background-repeat: no-repeat;
+				background-color: white;
+			}
+		</style>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+
+		<script language="JavaScript" type="text/javascript">
+			dojo.require("dojox.mobile.parser");
+			dojo.require("dojox.mobile");
+			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+		</script>
+	</head>
+	<body>
+		<div id="myhome" dojoType="dojox.mobile.Page" selected="true">
+			<ul dojoType="dojox.mobile.IconContainer" type="slide">
+				<li dojoType="dojox.mobile.IconItem" title="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" title="test2" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" title="Welcome" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" title="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" title="test2" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" title="Welcome" icon="images/icon-1.png" moveTo="about" transition="slide"><div class="box"></div></li>
+			</ul>
+		</div>
+
+		<div id="about" dojoType="dojox.mobile.Page">
+			<h1 dojoType="dojox.mobile.Heading" back="My Home" moveTo="myhome">About</h1>
+			<h2 dojoType="dojox.mobile.RoundRectCategory">kami's iPhone</h2>
+			<ul dojoType="dojox.mobile.RoundRectList">
+				<li dojoType="dojox.mobile.ListItem" rightText="AcmePhone">
+					Network											   
+				</li>												   
+				<li dojoType="dojox.mobile.ListItem" rightText="AcmePhone">
+					Line
+				</li>
+				<li dojoType="dojox.mobile.ListItem" rightText="1024">
+					Songs
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
