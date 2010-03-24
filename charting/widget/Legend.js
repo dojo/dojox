@@ -10,7 +10,9 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	// summary: A legend for a chart. A legend contains summary labels for 
 	// each series of data contained in the chart.
 	//
-	// Set the boolean horizontal attribute to false to layout legend labels vertically.
+	// Set the horizontal attribute to boolean false to layout legend labels vertically.
+	// Set the horizontal attribute to a number to layout legend labels in horizontal
+	// rows each containing that number of labels (except possibly the last row).
 	//
 	// (Line or Scatter charts (colored lines with shape symbols) )
 	// -o- Series1		-X- Series2		-v- Series3
@@ -68,6 +70,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 			// make a container <tr>
 			this._tr = dojo.doc.createElement("tr");
 			this.legendBody.appendChild(this._tr);
+			this._inrow = 0;
 		}
 		
 		var s = this.series;
@@ -112,6 +115,12 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 			// horizontal
 			this._tr.appendChild(icon);
 			this._tr.appendChild(text);
+			if(++this._inrow === this.horizontal){
+				// make a fresh container <tr>
+				this._tr = dojo.doc.createElement("tr");
+				this.legendBody.appendChild(this._tr);
+				this._inrow = 0;
+			}
 		}else{
 			// vertical
 			var tr = dojo.doc.createElement("tr");

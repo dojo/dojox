@@ -292,16 +292,14 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	};		
 
 	// set up a legend presentation
-	var setupLegend = function(/*DomNode*/domNode, /*Legend*/legend, /*Chart2D*/chart, /*Boolean*/vertical){
+	var setupLegend = function(/*DomNode*/domNode, /*Legend*/legend, /*Chart2D*/chart, /*Boolean*/horizontal){
 		// destroy any existing legend and recreate
 		var _legend = legend;
 		
 		if(!_legend){
-			if(vertical){
-				_legend = new dojox.charting.widget.Legend({ chart: chart, horizontal: false }, domNode);
-			}else{
-				_legend = new dojox.charting.widget.Legend({ chart: chart, vertical: false }, domNode);
-			}
+			_legend = new dojox.charting.widget.Legend({ chart: chart, horizontal: horizontal }, domNode);
+		}else{
+			_legend.refresh();
 		}
 		
 		return _legend;
@@ -510,10 +508,13 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//      is to apply the default tooltip as defined by the
 		//      dojox.charting.action2D.Tooltip class.
 		//
-		//  legendVertical: Boolean
-		//      true if the legend should be rendered vertically. The default
-		//      is false (legend rendered horizontally).
-		legendVertical: false,
+		//  legendHorizontal: Boolean | Number
+		//      true if the legend should be rendered horizontally, or a number if
+		//      the legend should be rendered as horizontal rows with that number of
+		//      items in each row, or false if the legend should be rendered
+		//      vertically (same as specifying 1). The default is true (legend
+		//      rendered horizontally).
+		legendHorizontal: true,
 		//
 		//  theme: String|Theme
 		//      a theme to use for the chart, or the name of a theme.
@@ -586,6 +587,12 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			this.gridNode = dojo.byId(this.gridNode);
 			this.titleNode = dojo.byId(this.titleNode);
 			this.footerNode = dojo.byId(this.footerNode);
+			
+			// we used to support a 'legendVertical' so for now
+			// at least maintain backward compatibility
+			if(this.legendVertical){
+				this.legendHorizontal = !this.legendVertical;
+			}
 			
 			if(this.url){
 				this.setURL(null, null, this.refreshInterval);
@@ -792,7 +799,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					this.renderChartWidget();
 				}
 				if(this.legendNode){
-					this.legendWidget = setupLegend(this.legendNode, this.legendWidget, this.chartWidget, this.legendVertical);
+					this.legendWidget = setupLegend(this.legendNode, this.legendWidget, this.chartWidget, this.legendHorizontal);
 				}
 				if(this.gridNode){
 					this.gridWidget = setupGrid(this.gridNode, this.gridWidget, this.preparedstore, this.query, this.queryOptions);
