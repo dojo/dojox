@@ -28,7 +28,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 		var nlabels = range.length;
 
-	    // auto-set labelmod for horizontal charts if the labels will otherwise collide
+		// auto-set labelmod for horizontal charts if the labels will otherwise collide
 		if((charttype !== "ClusteredBars") && (charttype !== "StackedBars")){
     		var cwid = domNode.offsetWidth;
     		var tmp = ("" + range[0]).length * range.length * 7; // *assume* 7 pixels width per character ( was 9 )
@@ -46,15 +46,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		// now set the labels
 		for(var i = 0; i < nlabels; i++){
 			//sparse labels
-			if(i % labelmod == 0){
-				labels.push({value: (i+1), text: range[i]});
-			}else{
-				labels.push({value: (i+1), text: "" });
-			}
+			labels.push({value: i + 1, text: (i % labelmod) ? "" : range[i]});
 		}
 		
 		// add empty label again, hack
-		labels.push({value:(nlabels + 1),text:''});
+		labels.push({value: nlabels + 1, text:''});
 		
 		return labels;
 	};
@@ -195,6 +191,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		// collect maximum and minimum data values
 		var maxval = null;
 		var minval = null;
+		
+		var seriestoremove = {};
+		for(var sname in _chart.runs){
+			seriestoremove[sname] = true;
+		}
 
 		// set x values & max data value
 		var nseries = store.series_name.length;
@@ -223,9 +224,9 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					var axisname = axistype + "-" + charttype;
 					
 					// create the plot and enable tooltips
-					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));					
+					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));
 					new dojox.charting.action2d.Tooltip(_chart, axisname);
-					
+
 					// add highlighting, except for lines
 					if ((charttype !== "Lines") && (charttype !== "Hybrid-Lines")){
 						new dojox.charting.action2d.Highlight(_chart, axisname);
@@ -258,10 +259,17 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				if(store.series_linestyle[i]){
 					seriesargs.stroke = { style: store.series_linestyle[i] };
 				}
+
 			    _chart.addSeries(store.series_name[i], xvals, seriesargs);
+			    delete seriestoremove[store.series_name[i]];
 			}
 		}
 		
+		// remove any series that are no longer needed
+		for(sname in seriestoremove){
+			_chart.removeSeries(sname);
+		}
+
 		// create axes
 		_chart.addAxis("independent", getIndependentAxisArgs(type, labels));
 		_chart.addAxis("dependent-primary", getDependentAxisArgs(type, "primary", minval, maxval));
@@ -419,7 +427,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//			field: the name of the field within each data point which
 		//				contains the data for this data series. If not supplied,
 		//				each data point is assumed to be the value for the series.
-        //      	name: a name for the series, used in the legend and grid headings
+		//      	name: a name for the series, used in the legend and grid headings
 		//          namefield: the name of the field from the source data which
 		//              contains the name the series, used in the legend and grid
 		//              headings. If both name and namefield are supplied, name takes
@@ -430,10 +438,10 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//          linestyle: the stroke style for lines (if applicable) (default: "Solid")
 		//          axis: the dependant axis to which the series will be attached in the chart,
 		//              which can be "primary" or "secondary"
-        //			grid: true if the series should be included in a data grid presentation (default: true)
-        //			gridformatter: an optional formatter to use for this series in the data grid
+		//			grid: true if the series should be included in a data grid presentation (default: true)
+		//			gridformatter: an optional formatter to use for this series in the data grid
 		//
-	    //      a call-back function may alternatively be supplied. The function takes
+		//      a call-back function may alternatively be supplied. The function takes
 		//      a single parameter, which will be the data (from the 'data' field or
 		//      loaded from the value in the 'url' field), and should return the array
 		//      of objects describing the data series to be included in the data
@@ -792,17 +800,17 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 			if(this.chartWidget){
 				this.chartWidget.destroy();
-				this.chartWidget = undefined;
+				delete this.chartWidget;
 			}
 			
 			if(this.legendWidget){
 				// no legend.destroy()
-				this.legendWidget = undefined;				
+				delete this.legendWidget;				
 			}
 
 			if(this.gridWidget){
 				// no grid.destroy()
-				this.gridWidget = undefined;
+				delete this.gridWidget;
 			}
 			
 			if(this.chartNode){
