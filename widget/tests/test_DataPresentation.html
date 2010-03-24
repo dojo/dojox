@@ -103,11 +103,14 @@
           refreshInterval: 3000,
 				  series: makeseries(jsondata),
           legendNode: "legenddiv",
-          legendVertical: true,
+          legendHorizontal: 2,
+          //labelMod: 2,  // display every other x-axis label
+          //labelMod: 0,  // suppress x-axis labels
           gridNode: "griddiv",
           titleNode: "title",
           footerNode: "footer",
-          theme: "dojox.charting.themes.Minty"
+          theme: "dojox.charting.themes.Minty",
+          tooltip: "The value for this {0} for '{1}' in {2} is <b>{3}</b>"
 			  });
 
 		});

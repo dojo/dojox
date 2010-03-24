@@ -11,7 +11,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 
 (function(){
 	
-	// sort out the labels for the independant axis of the chart
+	// sort out the labels for the independent axis of the chart
 	var getLabels = function(rangevalues, labelMod, reverse, charttype, domNode){
 		
 		// prepare labels for the independent axis
@@ -145,7 +145,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	};
 
 	// set up a chart presentation
-	var setupChart = function(/*DomNode*/domNode, /*Object?*/chart, /*String*/type, /*Boolean*/reverse, /*Object*/animate, /*Integer*/labelMod, /*String*/theme, /*Object?*/store, /*String?*/query, /*String?*/queryOptions){
+	var setupChart = function(/*DomNode*/domNode, /*Object?*/chart, /*String*/type, /*Boolean*/reverse, /*Object*/animate, /*Integer*/labelMod, /*String*/theme, /*String*/tooltip, /*Object?*/store, /*String?*/query, /*String?*/queryOptions){
 		var _chart = chart;
 		
 		if(!_chart){
@@ -202,12 +202,11 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		for(var i = 0; i < nseries; i++){
 			// only include series with chart=true and with some data values in
 			if(store.series_chart[i] && (store.series_data[i].length > 0)){
-				
 				var charttype = type;
 				var axistype = store.series_axis[i];
-				
+
 				if(charttype == "Hybrid"){
-					if (store.series_charttype[i] == 'line'){
+					if(store.series_charttype[i] == 'line'){
 						charttype = "Hybrid-Lines";
 					}else{
 						charttype = "Hybrid-ClusteredColumns";
@@ -224,11 +223,22 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					var axisname = axistype + "-" + charttype;
 					
 					// create the plot and enable tooltips
-					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));
-					new dojox.charting.action2d.Tooltip(_chart, axisname);
+ 					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));
+ 
+ 					var tooltipArgs = {};
+ 					if(typeof tooltip == 'string'){
+ 						tooltipArgs.text = function(o){
+ 							var substitutions = [o.element, o.run.name, labels[o.index].text, ((charttype === "ClusteredBars") || (charttype === "StackedBars")) ? o.x : o.y];
+ 							return dojo.replace(tooltip, substitutions);  // from Dojo 1.4 onward
+ 							//return tooltip.replace(/\{([^\}]+)\}/g, function(_, token){ return dojo.getObject(token, false, substitutions); });  // prior to Dojo 1.4
+ 						}
+ 					}else if(typeof tooltip == 'function'){
+ 						tooltipArgs.text = tooltip;
+ 					}
+ 					new dojox.charting.action2d.Tooltip(_chart, axisname, tooltipArgs);
 
 					// add highlighting, except for lines
-					if ((charttype !== "Lines") && (charttype !== "Hybrid-Lines")){
+					if((charttype !== "Lines") && (charttype !== "Hybrid-Lines")){
 						new dojox.charting.action2d.Highlight(_chart, axisname);
 					}
 					
@@ -260,8 +270,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					seriesargs.stroke = { style: store.series_linestyle[i] };
 				}
 
-			    _chart.addSeries(store.series_name[i], xvals, seriesargs);
-			    delete seriestoremove[store.series_name[i]];
+				_chart.addSeries(store.series_name[i], xvals, seriesargs);
+				delete seriestoremove[store.series_name[i]];
 			}
 		}
 		
@@ -482,6 +492,20 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//      the frequency of label annotations to be included on the
 		//      independent axis. 1=every label. The default is 1.
 		labelMod: 1,
+		//
+		//  tooltip: String | Function
+		//      a string pattern defining the tooltip text to be applied to chart
+		//      data points, or a function which takes a single parameter and returns
+		//      the tooltip text to be applied to chart data points. The string pattern
+		//      will have the following substitutions applied:
+		//       {0} - the type of chart element ('bar', 'surface', etc)
+		//       {1} - the name of the data series
+		//       {2} - the independent axis value at the tooltip data point
+		//       {3} - the series value at the tooltip data point point
+		//      The function, if supplied, will receive a single parameter exactly
+		//      as per the dojox.charting.action2D.Tooltip class. The default value
+		//      is to apply the default tooltip as defined by the
+		//      dojox.charting.action2D.Tooltip class.
 		//
 		//  legendVertical: Boolean
 		//      true if the legend should be rendered vertically. The default
@@ -761,7 +785,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 			if(this.preparedstore){
 				if(this.chartNode){
-					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.animate, this.labelMod, this.theme, this.preparedstore, this.query, this,queryOptions);
+					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.animate, this.labelMod, this.theme, this.tooltip, this.preparedstore, this.query, this,queryOptions);
 					this.renderChartWidget();
 				}
 				if(this.legendNode){
