@@ -275,7 +275,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		_chart.addAxis("dependent-primary", getDependentAxisArgs(type, "primary", minval, maxval));
 		_chart.addAxis("dependent-secondary", getDependentAxisArgs(type, "secondary", minval, maxval));
 		
-		_chart.render();
 		return _chart;
 	};		
 
@@ -310,7 +309,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		}
 		
 		_grid.setStructure(structure);
-		_grid.render();
 		
 		return _grid;
 	};
@@ -761,12 +759,14 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			if(this.preparedstore){
 				if(this.chartNode){
 					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.animate, this.labelMod, this.theme, this.preparedstore, this.query, this,queryOptions);
+					this.renderChartWidget();
 				}
 				if(this.legendNode){
 					this.legendWidget = setupLegend(this.legendNode, this.legendWidget, this.chartWidget, this.legendVertical);
 				}
 				if(this.gridNode){
 					this.gridWidget = setupGrid(this.gridNode, this.gridWidget, this.preparedstore, this.query, this.queryOptions);
+					this.renderGridWidget();
 				}
 				if(this.titleNode){
 					setupTitle(this.titleNode, this.preparedstore);
@@ -774,6 +774,26 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				if(this.footerNode){
 					setupFooter(this.footerNode, this.preparedstore);
 				}
+			}
+		},
+		
+		renderChartWidget: function(){
+			// summary:
+			//      Renders the chart widget (if any). This method is
+			//      called whenever a chart widget is created or
+			//      configured, and may be connected to.
+			if(this.chartWidget){
+				this.chartWidget.render();
+			}
+		},
+		
+		renderGridWidget: function(){
+			// summary:
+			//      Renders the grid widget (if any). This method is
+			//      called whenever a grid widget is created or
+			//      configured, and may be connected to.
+			if(this.gridWidget){
+				this.gridWidget.render();
 			}
 		},
 		
