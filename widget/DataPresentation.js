@@ -15,7 +15,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	var getLabels = function(rangevalues, labelMod, reverse, charttype, domNode){
 		
 		// prepare labels for the independent axis
-		var labels = [], labelmod = labelMod;
+		var labels = [];
 		// add empty label, hack
 		labels[0] = {value: 0, text: ''};
 
@@ -28,17 +28,17 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 		var nlabels = range.length;
 
-		// auto-set labelmod for horizontal charts if the labels will otherwise collide
+		// auto-set labelMod for horizontal charts if the labels will otherwise collide
 		if((charttype !== "ClusteredBars") && (charttype !== "StackedBars")){
     		var cwid = domNode.offsetWidth;
     		var tmp = ("" + range[0]).length * range.length * 7; // *assume* 7 pixels width per character ( was 9 )
     	  
-    		if(labelmod == 1){
+    		if(labelMod == 1){
     			for(var z = 1; z < 500; ++z){
     				if((tmp / z) < cwid){
     					break;
     				}
-    				++labelmod;
+    				++labelMod;
     			}
     		}
 	    }
@@ -46,7 +46,10 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		// now set the labels
 		for(var i = 0; i < nlabels; i++){
 			//sparse labels
-			labels.push({value: i + 1, text: (i % labelmod) ? "" : range[i]});
+			labels.push({
+				value: i + 1,
+				text: (!labelMod || i % labelMod) ? "" : range[i]
+			});
 		}
 		
 		// add empty label again, hack
@@ -490,7 +493,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//
 		//  labelMod: Integer
 		//      the frequency of label annotations to be included on the
-		//      independent axis. 1=every label. The default is 1.
+		//      independent axis. 1=every label. 0=no labels. The default is 1.
 		labelMod: 1,
 		//
 		//  tooltip: String | Function
