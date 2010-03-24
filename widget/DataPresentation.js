@@ -397,6 +397,10 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//      a warning message in the console unless djConfig.useCommentedJson
 		//      has been set to true.
 		//
+		//  urlContent: Object   
+		//      Content to be passed to the URL when fetching data. If a URL has
+		//      not been supplied, this value is ignored.
+		//
 		//  urlError: function
 		//      A function to be called if an error is encountered when fetching
 		//      data from the supplied URL. This function will be supplied with
@@ -533,11 +537,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			//	arguments:
 			//		node: DomNode
 			//			The node to attach the data presentation to.
-			//		kwArgs:	Object
-			//			store: Object
-			//				optional data store (see above)
-			//			url: Object
-			//				optional URL to fetch data from (see above)
+			//		kwArgs:	Object (see above)
 			
 			// apply arguments directly
 			dojo.mixin(this, args);
@@ -561,7 +561,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			this.footerNode = dojo.byId(this.footerNode);
 			
 			if(this.url){
-				this.setURL(null, this.refreshInterval);
+				this.setURL(null, null, this.refreshInterval);
 			}
 			else{
 				if(this.data){
@@ -573,9 +573,10 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			}
 		},
 		
-		setURL: function(/*String?*/url, /*Number?*/refreshInterval){
+		setURL: function(/*String?*/url, /*Object?*/ urlContent, /*Number?*/refreshInterval){
 			// summary:
-			//      Sets the URL to fetch data from, and an optional
+			//      Sets the URL to fetch data from, with optional content
+			//      supplied with the request, and an optional
 			//      refresh interval in milliseconds (0=no refresh)
 
 			// if a refresh interval is supplied we will start a fresh
@@ -585,12 +586,14 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			}
 			
 			this.url = url || this.url;
+			this.urlContent = urlContent || this.urlContent;
 			this.refreshInterval = refreshInterval || this.refreshInterval;
 			
 			var me = this;
 			
 			dojo.xhrGet({
 				url: this.url,
+				content: this.urlContent,
 				handleAs: 'json-comment-optional',
 				load: function(response, ioArgs){
 					me.setData(response);
@@ -727,7 +730,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			//      restarted. If a URL or data was not supplied, this
 			//      method has no effect.
 			if(this.url){
-				this.setURL(this.url, this.refreshInterval);
+				this.setURL(this.url, this.urlContent, this.refreshInterval);
 			}else if(this.data){
 				this.setData(this.data, this.refreshInterval);
 			}
