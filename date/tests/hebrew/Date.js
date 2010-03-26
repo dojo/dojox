@@ -13,7 +13,7 @@ tests.register("dojox.date.tests.hebrew.Date",
 
 			name: "dojox.date.tests.posix",
 			setUp: function(){
-				var partLocaleList = ["he"];
+				var partLocaleList = ["he", "en"];
 
 				dojo.forEach(partLocaleList, function(locale){
 					dojo.requireLocalization("dojo.cldr", "gregorian", locale);
