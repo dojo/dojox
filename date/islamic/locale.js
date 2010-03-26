@@ -5,6 +5,7 @@ dojo.require("dojox.date.islamic.Date");
 dojo.require("dojo.regexp");
 dojo.require("dojo.string");
 dojo.require("dojo.i18n");
+dojo.require("dojo.date");
 
 dojo.requireLocalization("dojo.cldr", "islamic");
 
@@ -80,6 +81,25 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 				case 'S':
 					s = Math.round(dateObject.getMilliseconds() * Math.pow(10, l-3)); pad = true;
 					break;
+				case 'z':
+					// We only have one timezone to offer; the one from the browser
+					s = dojo.date.getTimezoneName(dateObject.toGregorian());
+					if(s){ break; }
+					l = 4;
+					// fallthrough... use GMT if tz not available
+				case 'Z':
+					var offset = dateObject.toGreforian().getTimezoneOffset();
+					var tz = [
+						(offset <= 0 ? "+" : "-"),
+						dojo.string.pad(Math.floor(Math.abs(offset) / 60), 2),
+						dojo.string.pad(Math.abs(offset) % 60, 2)
+					];
+					if(l == 4){
+						tz.splice(0, 0, "GMT");
+						tz.splice(3, 0, ":");
+					}
+					s = tz.join("");
+					break;
 				default:
 					throw new Error("dojox.date.islamic.locale.formatPattern: invalid pattern char: "+pattern);
 			}
@@ -88,9 +108,9 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 		});
 	}	
 	
-dojox.date.islamic.locale.format = function(/*islamic.Date*/dateObject, /*object?*/options){
-	// based on and similar to dojo.date.locale.format
-	//summary:
+// based on and similar to dojo.date.locale.format
+dojox.date.islamic.locale.format = function(/*islamic.Date*/dateObject, /*Object?*/options){
+	// summary:
 	//		Format a Date object as a String, using  settings.
 	options = options || {};
 
@@ -152,19 +172,19 @@ dojox.date.islamic.locale._parseInfo = function(/*oblect?*/options){
 
 
 
-dojox.date.islamic.locale.parse= function(/*String*/value, /*object?*/options){
+dojox.date.islamic.locale.parse= function(/*String*/value, /*Object?*/options){
 	// based on and similar to dojo.date.locale.parse
 	// summary: This function parse string date value according to options	
 	
-	value =  value.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove special chars from Value
-	
-	if(!options){options={};}
+	value =  value.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove bidi non-printing chars
+
+	if(!options){ options={}; }
 	var info = dojox.date.islamic.locale._parseInfo(options);
 
 	var tokens = info.tokens, bundle = info.bundle;
-	var regexp = info.regexp.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove special chars from the pattern
+	var regexp = info.regexp.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove bidi non-printing chars from the pattern
 	var re = new RegExp("^" + regexp + "$");
-	
+
 	var match = re.exec(value);
 
 	var locale = dojo.i18n.normalizeLocale(options.locale); 
