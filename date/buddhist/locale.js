@@ -48,7 +48,7 @@ dojo.requireLocalization("dojo.cldr", "buddhist");
 					break;
 				case 'a':
 					var timePeriod = (dateObject.getHours() < 12) ? 'am' : 'pm';
-					s = bundle[timePeriod];
+					s = bundle['dayPeriods-' + timePeriod + '-format-wide'];
 					break;
 				case 'h':
 				case 'H':
@@ -212,8 +212,8 @@ dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 					result[2] =  Number(v);
 				break;
 			case 'a': //am/pm
-				var am = options.am || bundle.am;
-				var pm = options.pm || bundle.pm;
+				var am = options.am || bundle['dayPeriods-am-format-wide'],
+					pm = options.pm || bundle['dayPeriods-pm-format-wide'];
 				if(!options.strict){
 					var period = /\./g;
 					v = v.replace(period,'').toLowerCase();
@@ -338,8 +338,8 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					s = '\\d{'+l+'}';
 					break;
 				case 'a':
-					var am = options.am || bundle.am || 'AM';
-					var pm = options.pm || bundle.pm || 'PM';
+					var am = options.am || bundle['dayPeriods-am-format-wide'],
+						pm = options.pm || bundle['dayPeriods-pm-format-wide'];
 					if(options.strict){
 						s = am + '|' + pm;
 					}else{
