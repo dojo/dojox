@@ -71,13 +71,13 @@ dojo.require("dojox.html.metrics");
 			var r, tmp="";
 			while((r=this._entityRe.exec(str))!==null){
 				if(r[1].charAt(1)=="x"){
-					tmp+=String.fromCharCode(r[1].slice(2), 16);
+					tmp+=String.fromCharCode(parseInt(r[1].slice(2), 16));
 				}
 				else if(!isNaN(parseInt(r[1].slice(1),10))){
-					tmp+=String.fromCharCode(r[1].slice(1));
+					tmp+=String.fromCharCode(parseInt(r[1].slice(1), 10));
 				}
 				else {
-					tmp+=xmlEntityMap(r[1]);
+					tmp+=xmlEntityMap[r[1]];
 				}
 			}
 			return tmp;	//	String
