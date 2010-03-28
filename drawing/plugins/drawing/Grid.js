@@ -14,6 +14,9 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 		if(options.gap){
 			this.major = options.gap;
 		}
+		this.majorColor = options.majorColor || this.majorColor;
+		this.minorColor = options.minorColor || this.minorColor;
+
 		this.setGrid();
 		dojo.connect(this.canvas, "setZoom", this, "setZoom");
 	},
@@ -25,6 +28,14 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 		gap:100,
 		major:100,
 		minor:0,
+		//
+		// majorColor: String
+		//		Major lines color
+		majorColor: "#00ffff",
+		//
+		// minorColor: String
+		//		Minor lines color
+		minorColor: "#d7ffff",
 		//
 		// zoom: [readonly] Number
 		//		The current zoom of the grid
@@ -54,8 +65,8 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 			var w = 2000;//this.canvas.width;
 			var h = 1000;//this.canvas.height;
 			var b = 1;
-			var mj = "#00ffff";
-			var mn = "#d7ffff";
+			var mj = this.majorColor;
+			var mn = this.minorColor;
 			
 			var createGridLine = function(x1,y1,x2,y2, c){
 				s.createLine({x1: x1, y1: y1, x2: x2, y2: y2}).setStroke({style: "Solid", width: b, cap: "round", color:c});
