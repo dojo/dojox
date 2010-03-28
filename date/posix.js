@@ -104,8 +104,7 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 
 			case "p": // either `am' or `pm' according to the given time value,
 				      // or the corresponding strings for the current locale
-				return bundle['dayPeriods-' + (dateObject.getHours() < 12 ? "am" : "pm")
-					      + '-format-wide'];
+				return bundle['dayPeriods-format-wide-' + (dateObject.getHours() < 12 ? "am" : "pm")];
 				
 			case "r": // time in a.m. and p.m. notation
 				return $("I") + ":" + $("M") + ":" + $("S") + " " + $("p");

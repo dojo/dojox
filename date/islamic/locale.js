@@ -49,7 +49,7 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 					break;
 				case 'a':
 					var timePeriod = (dateObject.getHours() < 12) ? 'am' : 'pm';
-					s = bundle['dayPeriods-' + timePeriod + '-format-wide'];
+					s = bundle['dayPeriods-format-wide-' + timePeriod];
 					break;
 				case 'h':
 				case 'H':
@@ -234,8 +234,8 @@ dojox.date.islamic.locale.parse= function(/*String*/value, /*Object?*/options){
 					result[2] =  Number(v);
 				break;
 			case 'a': //am/pm
-				var am = options.am || bundle['dayPeriods-am-format-wide'],
-					pm = options.pm || bundle['dayPeriods-pm-format-wide'];
+				var am = options.am || bundle['dayPeriods-format-wide-am'],
+					pm = options.pm || bundle['dayPeriods-format-wide-pm'];
 				if(!options.strict){
 					var period = /\./g;
 					v = v.replace(period,'').toLowerCase();
@@ -360,8 +360,8 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					s = '\\d{'+l+'}';
 					break;
 				case 'a':
-					var am = options.am || bundle['dayPeriods-am-format-wide'],
-						pm = options.pm || bundle['dayPeriods-pm-format-wide'];
+					var am = options.am || bundle['dayPeriods-format-wide-am'],
+						pm = options.pm || bundle['dayPeriods-format-wide-pm'];
 					if(options.strict){
 						s = am + '|' + pm;
 					}else{

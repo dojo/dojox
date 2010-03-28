@@ -62,7 +62,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 					break;
 				case 'a':
 					var timePeriod = (dateObject.getHours() < 12) ? 'am' : 'pm';
-					s = bundle['dayPeriods-' + timePeriod + '-format-wide'];
+					s = bundle['dayPeriods-format-wide-' + timePeriod];
 					break;
 				case 'h':
 				case 'H':
@@ -274,8 +274,8 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 				}
 				break;
 			case 'a': //am/pm
-				var am = options.am || bundle['dayPeriods-am-format-wide'],
-					pm = options.pm || bundle['dayPeriods-pm-format-wide'];
+				var am = options.am || bundle['dayPeriods-format-wide-am'],
+					pm = options.pm || bundle['dayPeriods-format-wide-pm'];
 				if(!options.strict){
 					var period = /\./g;
 					v = v.replace(period,'').toLowerCase();
@@ -416,8 +416,8 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					s = '\\d{'+l+'}';
 					break;
 				case 'a':
-					var am = options.am || bundle['dayPeriods-am-format-wide'],
-						pm = options.pm || bundle['dayPeriods-pm-format-wide'];
+					var am = options.am || bundle['dayPeriods-format-wide-am'],
+						pm = options.pm || bundle['dayPeriods-format-wide-pm'];
 					if(options.strict){
 						s = am + '|' + pm;
 					}else{
@@ -466,7 +466,7 @@ dojox.date.hebrew.locale._getHebrewBundle = function(/*String*/locale){
 
 dojox.date.hebrew.locale.addCustomFormats("dojo.cldr","hebrew");
 
-dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*String?*/context, /*String?*/locale, /*hebrew Date Object?*/date){
+dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*String?*/context, /*String?*/locale, /*dojox.date.hebrew.Date?*/date){
 	// summary:
 	//		Used to get localized strings from dojo.cldr for day or month names.
 	//
@@ -478,20 +478,36 @@ dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*S
 	//	'standAlone' || 'format' (default)
 	// locale:
 	//	override locale used to find the names
+	// date:
+	//	required for item=months to determine leap month name
 	//
-	// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he');
+	// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he', new dojox.date.hebrew.Date(5768, 2, 12));
 
-	var label;
-	var lookup = dojox.date.hebrew.locale._getHebrewBundle;
-	var props = [item, context, type];
+	var label,
+		lookup = dojox.date.hebrew.locale._getHebrewBundle,
+		props = [item, context, type];
 	if(context == 'standAlone'){
 		var key = props.join('-');
 		label = lookup(locale)[key];
 		// Fall back to 'format' flavor of name
-		if(label === lookup("ROOT")[key]){ label = undefined; } // a bit of a kludge, in the absense of real aliasing support in dojo.cldr
+		if(label === lookup("ROOT")[key]){ label = undefined; } // a bit of a kludge, in the absence of real aliasing support in dojo.cldr
 	}
 	props[1] = 'format';
 	
 	// return by copy so changes won't be made accidentally to the in-memory model
-	return (label || lookup(locale)[props.join('-')]).concat(); /*Array*/
+	var result = (label || lookup(locale)[props.join('-')]).concat();
+
+	if(item == "months"){
+		if(date.isLeapYear(date.getFullYear())){
+			// Adar I (6th position in the array) will be used.
+			// Substitute the leap month Adar II for the regular Adar (7th position)
+			props.push("leap");
+			result[6] = lookup(locale)[props.join('-')];
+		}else{
+			// Remove Adar I but leave an empty position in the array
+			delete result[5];
+		}
+	}
+
+	return result; /*Array*/
 };
