@@ -335,7 +335,8 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		}
 		
 		var coords = this.normalizeColMoverCoords(leftPosition, rightPosition, leadingBorderIdx, trailingBorderIdx);
-		var height = coords.h, width = coords.w, leftPosition = coords.l, rightPosition = coords.r;
+		var height = coords.h, width = coords.w;
+		leftPosition = coords.l, rightPosition = coords.r;
 		
 		var coverMover = this.createCoverMover(width, height, leftPosition, top, "col");
 		this.movers.push(coverMover);
@@ -658,6 +659,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			var colHeight =  dojo.coords(rowBarView.contentNode).h;
 			var rowCount = 0, bottomRowIndex = -1;
 			for(i in rowBarNodes){
+				i = parseInt(i);
 				++rowCount;
 				if(i > bottomRowIndex){ bottomRowIndex = i; }
 			}
