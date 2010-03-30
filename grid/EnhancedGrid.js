@@ -60,6 +60,14 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//doubleAffordance: Boolean
 	//		For special cell hover style
 	doubleAffordance: false,
+	
+	//minRowHeight: Integer
+	//		Minimal row height	
+	minRowHeight: 10,	
+
+	//keepSortSelection: Boolean
+	//		Whether keep selection after sort - only applicable when client-side data store is used.	
+	keepSortSelection: false,	
 
 	postMixInProperties: function(){
 		//load nls bundle
@@ -68,13 +76,11 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	},
 
 	postCreate: function(){
-		if(this.plugins){
-			//create plugin manager
-			this.pluginMgr = new dojox.grid.enhanced._Plugin(this);
-			this.pluginMgr.preInit();
-		}
+		//create plugin manager
+		this.pluginMgr = new dojox.grid.enhanced._Plugin(this);
+		this.pluginMgr.preInit();
 		this.inherited(arguments);
-		this.pluginMgr && this.pluginMgr.postInit();
+		this.pluginMgr.postInit();
 	},
 	
 	_fillContent: function(){

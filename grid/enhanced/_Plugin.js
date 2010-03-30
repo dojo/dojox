@@ -122,7 +122,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		this.fixedCellNum = this.getFixedCellNumber();
 		
 		//overwrite some default methods of DataGrid by method caching
-		this._bindFuncs();
+		this.grid.plugins && this._bindFuncs();
 	},
 	
 	getPluginClazz: function(clazzStr){
@@ -215,16 +215,18 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		if(this.grid.indirectSelection){
 			this.funcMap['renderPage'] = this.grid.scroller.renderPage;
 			this.grid.scroller.renderPage = this.renderPage;	
+			this.funcMap['measurePage'] = this.grid.scroller.measurePage;
+			this.grid.scroller.measurePage = this.measurePage;	
 		}
 		
 		//overwrite _Grid.updateRow()
 		this.funcMap['updateRow'] = this.grid.updateRow;		
 		this.grid.updateRow = this.updateRow;	
 		
-		if(this.grid.nestedSorting){
-			dojox.grid.cells._Base.prototype.getEditNode = this.getEditNode;
-			dojox.grid.cells._Widget.prototype.sizeWidget = this.sizeWidget;
+		if(this.grid.nestedSorting && dojox.grid.cells._Widget){			
+			 dojox.grid.cells._Widget.prototype.sizeWidget = this.sizeWidget;
 		}
+		dojox.grid.cells._Base.prototype.getEditNode = this.getEditNode;
 		dojox.grid._EditManager.prototype.styleRow = function(inRow){};		
 	},
 	
@@ -305,6 +307,15 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		
 		//invoke _Scroller.renderPage()
 		dojo.hitch(this, this.grid.pluginMgr.funcMap['renderPage'])(inPageIndex);
+	},
+	
+	measurePage: function(inPageIndex){
+		//summary:
+		//		Overwrite _Scroller.measurePage(), "this" - _Scroller scope
+		//		Fix a regression similar as #5552
+		//		invoke _Scroller.measurePage()
+		var pageHeight = dojo.hitch(this, this.grid.pluginMgr.funcMap['measurePage'])(inPageIndex);
+		return (!dojo.isIE || this.grid.rowHeight || pageHeight > this.rowsPerPage * this.grid.minRowHeight) ? pageHeight : undefined;
 	},
 	
 	updateRow: function(inRowIndex){

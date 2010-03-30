@@ -20,3 +20,11 @@
 .dijitRtl .dojoxGridUnarySortWrapper {
 	float: right;
 }
+
+.dijitRtl .dojoxGridLoading, 
+.dijitRtl .dojoxGridError,
+.dijitRtl .dojoxGridNoData {
+	background-position:right;
+	padding-right:25px;
+	padding-left:0px;
+}

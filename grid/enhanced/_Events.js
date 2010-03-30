@@ -45,7 +45,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onStyleRow()
 		var i = inRow;
-		i.customClasses += (i.odd?" dojoxGridRowOdd":"") + (i.selected?" dojoxGridRowSelected":"") + (i.over&&!this.isDndSelectEnable?" dojoxGridRowOver":"");
+		i.customClasses += (i.odd?" dojoxGridRowOdd":"") + (i.selected?" dojoxGridRowSelected":"") + (i.over/*&&!this.isDndSelectEnable*/?" dojoxGridRowOver":"");
 		this.focus.styleRow(inRow);
 		this.edit.styleRow(inRow);
 	},

@@ -4,6 +4,10 @@ dojo.declare("dojox.grid.enhanced.dnd._DndEvents", null, {
 	//summary:
 	//		This class declaration is used to be mixed in to dojox.grid._Event
 	//		to enable the _Event to handle several events for DND feature
+
+	//rowActiveClass: String
+	// 		css class to apply to grid rows when activated(mouse down)	
+	rowBarActiveClass: 'dojoxGridRowBarActive',
 		
 	onMouseUp: function(e){
 		// summary:
@@ -57,6 +61,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndEvents", null, {
 			this.select.restorLastDragPoint();
 		} 
 		this.select.drugSelectRow(e.rowIndex);
+		dojo.addClass(e.rowNode, this.rowBarActiveClass);
 		dojo.stopEvent(e);
 	},
 	
@@ -66,6 +71,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndEvents", null, {
 		//e: Event
 		//		The mouse up event
 		this.onMouseUp(e);
+		dojo.removeClass(e.rowNode, this.rowBarActiveClass);
 	},
 	
 	onRowMouseUp: function(e){
