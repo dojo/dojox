@@ -375,17 +375,14 @@ dojo.declare("dojox.data.QueryReadStore",
 					serverQuery.count = request.count;
 				}
 			}
-			if(!this.doClientSorting){
-				if(request.sort){
-					var sort = request.sort[0];
+			if(!this.doClientSorting && request.sort){
+				var sortInfo = [];
+				dojo.forEach(request.sort, function(sort){
 					if(sort && sort.attribute){
-						var sortStr = sort.attribute;
-						if(sort.descending){
-							sortStr = "-" + sortStr;
-						}
-						serverQuery.sort = sortStr;
+						sortInfo.push((sort.descending ? "-" : "") + sort.attribute);
 					}
-				}
+				});
+				serverQuery.sort = sortInfo.join(',');
 			}
 			// Compare the last query and the current query by simply json-encoding them,
 			// so we dont have to do any deep object compare ... is there some dojo.areObjectsEqual()???
