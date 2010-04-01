@@ -29,18 +29,6 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	//funcMap: Object
 	//		Map for caching default DataGrid methods.
 	funcMap:{},
-	
-	//rowSelectionChangedTopic: String
-	//		Topic fired when row selection is changed 
-	rowSelectionChangedTopic: 'ROW_SELECTION_CHANGED',
-	
-	//sortRowSelectionChangedTopic: String
-	//		Topic only fired when row selection is changed by sorting.
-	sortRowSelectionChangedTopic: 'SORT_ROW_SELECTION_CHANGED',
-	
-	//rowMovedTopic: String
-	//		Topic fired when selected rows are moved.
-	rowMovedTopic: 'ROW_MOVED',
 
 	constructor: function(inGrid){
 		this.grid = inGrid;
@@ -55,10 +43,6 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		
 		//mixin all plugin properties into Grid
 		grid.plugins && dojo.mixin(grid, grid.plugins);
-		
-		//add topics
-		grid.rowSelectionChangedTopic = this.rowSelectionChangedTopic;
-		grid.sortRowSelectionChangedTopic = this.sortRowSelectionChangedTopic;		
 		
 		//cell(column) of indirect selection
 		grid.rowSelectCell = null;

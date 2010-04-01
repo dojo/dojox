@@ -67,7 +67,19 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 
 	//keepSortSelection: Boolean
 	//		Whether keep selection after sort - only applicable when client-side data store is used.	
-	keepSortSelection: false,	
+	keepSortSelection: false,
+	
+	//rowSelectionChangedTopic: String
+	//		Topic fired when row selection is changed 
+	rowSelectionChangedTopic: 'ROW_SELECTION_CHANGED',
+	
+	//sortRowSelectionChangedTopic: String
+	//		Topic only fired when row selection is changed by sorting.
+	sortRowSelectionChangedTopic: 'SORT_ROW_SELECTION_CHANGED',
+	
+	//rowMovedTopic: String
+	//		Topic fired when selected rows are moved.
+	rowMovedTopic: 'ROW_MOVED',		
 
 	postMixInProperties: function(){
 		//load nls bundle
