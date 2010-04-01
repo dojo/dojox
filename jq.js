@@ -1232,7 +1232,7 @@ dojo.query differences that cause some tests to fail:
 			for (var evtFullName in sEvtData){
 				tEvtData[evtFullName] = {
 					fn: sEvtData[evtFullName].fn,
-					data: sEvtData[evtFullName].data,
+					data: sEvtData[evtFullName].data
 				};
 			}
 		}
