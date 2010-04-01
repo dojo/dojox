@@ -510,7 +510,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				r:true,
 				height:true,
 				width:true,
-				r:true,
 				radius:true,
 				angle:true
 			};
@@ -600,7 +599,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			}
 			
 			if(o.height!==undefined && o.angle===undefined){
-			console.log("Doing P2D-2")	
+			console.log("Doing P2D-2");
 				p[2].y = p[3].y = p[0].y + o.height;
 				this.pointsToData(p);
 			}
@@ -919,7 +918,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				if(absolute){
 					x1 = p[0].x;
 					y1 = p[0].y;
-					x2 = p[1].x
+					x2 = p[1].x;
 					y2 = p[1].y
 				}else{
 					x1 = p[0].x < p[1].x ? p[0].x : p[1].x;
@@ -1139,7 +1138,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			// summary:
 			//		Removes connections based on passed
 			//		handles arguments
-			if(!handles) { return };
+			if(!handles) { return }
 			if(!dojo.isArray(handles)){ handles=[handles]; }
 			dojo.forEach(handles, dojo.disconnect, dojo);
 		},
