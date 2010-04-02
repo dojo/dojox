@@ -87,6 +87,15 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	get: function(inRowIndex, inItem){
+		// summary: Default data getter.
+		// description:
+		//		Provides data to display in a grid cell. Called in grid cell context.
+		//		So this.cell.index is the column index.
+		// inRowIndex: Integer
+		//		Row for which to provide data
+		// returns:
+		//		Data to display for a given grid cell.
+		
 		if(inItem && this.field == "_item" && !this.fields){
 			return inItem;
 		}else if(inItem && this.fields){
@@ -96,6 +105,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 				ret = ret.concat(s.getValues(inItem, f));
 			});
 			return ret;
+		}else if(!inItem && typeof inRowIndex === "string"){
+			return this.inherited(arguments);
 		}
 		return (!inItem ? this.defaultValue : (!this.field ? this.value : (this.field == "_item" ? inItem : this.grid.store.getValue(inItem, this.field))));
 	},

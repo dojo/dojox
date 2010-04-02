@@ -187,17 +187,6 @@ dojo.requireLocalization("dijit", "loading");
 		// 		CSS class applied to the grid's domNode
 		classTag: 'dojoxGrid',
 
-		get: function(inRowIndex){
-			// summary: Default data getter.
-			// description:
-			//		Provides data to display in a grid cell. Called in grid cell context.
-			//		So this.cell.index is the column index.
-			// inRowIndex: Integer
-			//		Row for which to provide data
-			// returns:
-			//		Data to display for a given grid cell.
-		},
-
 		// settings
 		// rowCount: Integer
 		//		Number of rows to display.
