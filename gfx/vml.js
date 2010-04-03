@@ -4,6 +4,7 @@ dojo.require("dojox.gfx._base");
 dojo.require("dojox.gfx.shape");
 dojo.require("dojox.gfx.path");
 dojo.require("dojox.gfx.arc");
+dojo.require("dojox.gfx.gradient");
 
 (function(){
 	var d = dojo, g = dojox.gfx, m = g.matrix, gs = g.shape, vml = g.vml;
@@ -44,31 +45,31 @@ dojo.require("dojox.gfx.arc");
 				// gradient
 				switch(fill.type){
 					case "linear":
-						var matrix = this._getRealMatrix();
+						var matrix = this._getRealMatrix(), bbox = this.getBoundingBox(), tbbox = this.getTransformedBoundingBox();
 						s = [];
-						f = g.makeParameters(g.defaultLinearGradient, fill);
+						if(this.fillStyle !== fill){
+							this.fillStyle = g.makeParameters(g.defaultLinearGradient, fill);
+						}
+						f = g.gradient.project(matrix, this.fillStyle,
+								{x: bbox.x, y: bbox.y},
+								{x: bbox.x + bbox.width, y: bbox.y + bbox.height},
+								tbbox[0], tbbox[2]);
 						a = f.colors;
-						this.fillStyle = f;
-						d.forEach(a, function(v, i, a){
-							a[i].color = g.normalizeColor(v.color);
-						});
-						if(a[0].offset > 0){
-							s.push("0 " + a[0].color.toHex());
+						if(a[0].offset.toFixed(5) != "0.00000"){
+							s.push("0 " + g.normalizeColor(a[0].color).toHex());
 						}
 						for(i = 0; i < a.length; ++i){
-							s.push(a[i].offset.toFixed(8) + " " + a[i].color.toHex());
+							s.push(a[i].offset.toFixed(5) + " " + g.normalizeColor(a[i].color).toHex());
 						}
 						i = a.length - 1;
-						if(a[i].offset < 1){
-							s.push("1 " + a[i].color.toHex());
+						if(a[i].offset.toFixed(5) != "1.00000"){
+							s.push("1 " + g.normalizeColor(a[i].color).toHex());
 						}
 						fo = this.rawNode.fill;
 						fo.colors.value = s.join(";");
 						fo.method = "sigma";
 						fo.type = "gradient";
-						var fc1 = matrix ? m.multiplyPoint(matrix, f.x1, f.y1) : {x: f.x1, y: f.y1},
-							fc2 = matrix ? m.multiplyPoint(matrix, f.x2, f.y2) : {x: f.x2, y: f.y2};
-						fo.angle = (m._radToDeg(Math.atan2(fc2.x - fc1.x, fc2.y - fc1.y)) + 180) % 360;
+						fo.angle = (270 - m._radToDeg(f.angle)) % 360;
 						fo.on = true;
 						break;
 					case "radial":
@@ -103,7 +104,7 @@ dojo.require("dojox.gfx.arc");
 							s.push("0 " + a[i].color.toHex());
 						}
 						for(; i >= 0; --i){
-							s.push(a[i].offset.toFixed(8) + " " + a[i].color.toHex());
+							s.push(a[i].offset.toFixed(5) + " " + a[i].color.toHex());
 						}
 						fo = this.rawNode.fill;
 						fo.colors.value = s.join(";");
@@ -112,7 +113,7 @@ dojo.require("dojox.gfx.arc");
 						if(isNaN(w) || isNaN(h) || isNaN(l) || isNaN(t)){
 							fo.focusposition = "0.5 0.5";
 						}else{
-							fo.focusposition = ((f.cx - l) / w).toFixed(8) + " " + ((f.cy - t) / h).toFixed(8);
+							fo.focusposition = ((f.cx - l) / w).toFixed(5) + " " + ((f.cy - t) / h).toFixed(5);
 						}
 						fo.focussize = "0 0";
 						fo.on = true;
@@ -198,39 +199,40 @@ dojo.require("dojox.gfx.arc");
 		},
 
 		_applyTransform: function() {
-			if(this.fillStyle && this.fillStyle.type == "linear"){
-				this.setFill(this.fillStyle);
-			}
 			var matrix = this._getRealMatrix();
-			if(!matrix) return this;
-			var skew = this.rawNode.skew;
-			if(typeof skew == "undefined"){
-				for(var i = 0; i < this.rawNode.childNodes.length; ++i){
-					if(this.rawNode.childNodes[i].tagName == "skew"){
-						skew = this.rawNode.childNodes[i];
-						break;
+			if(matrix){
+				var skew = this.rawNode.skew;
+				if(typeof skew == "undefined"){
+					for(var i = 0; i < this.rawNode.childNodes.length; ++i){
+						if(this.rawNode.childNodes[i].tagName == "skew"){
+							skew = this.rawNode.childNodes[i];
+							break;
+						}
 					}
 				}
+				if(skew){
+					skew.on = "f";
+					var mt = matrix.xx.toFixed(8) + " " + matrix.xy.toFixed(8) + " " +
+						matrix.yx.toFixed(8) + " " + matrix.yy.toFixed(8) + " 0 0",
+						offset = Math.floor(matrix.dx).toFixed() + "px " + Math.floor(matrix.dy).toFixed() + "px",
+						s = this.rawNode.style,
+						l = parseFloat(s.left),
+						t = parseFloat(s.top),
+						w = parseFloat(s.width),
+						h = parseFloat(s.height);
+					if(isNaN(l)) l = 0;
+					if(isNaN(t)) t = 0;
+					if(isNaN(w) || !w) w = 1;
+					if(isNaN(h) || !h) h = 1;
+					var origin = (-l / w - 0.5).toFixed(8) + " " + (-t / h - 0.5).toFixed(8);
+					skew.matrix =  mt;
+					skew.origin = origin;
+					skew.offset = offset;
+					skew.on = true;
+				}
 			}
-			if(skew){
-				skew.on = "f";
-				var mt = matrix.xx.toFixed(8) + " " + matrix.xy.toFixed(8) + " " +
-					matrix.yx.toFixed(8) + " " + matrix.yy.toFixed(8) + " 0 0",
-					offset = Math.floor(matrix.dx).toFixed() + "px " + Math.floor(matrix.dy).toFixed() + "px",
-					s = this.rawNode.style,
-					l = parseFloat(s.left),
-					t = parseFloat(s.top),
-					w = parseFloat(s.width),
-					h = parseFloat(s.height);
-				if(isNaN(l)) l = 0;
-				if(isNaN(t)) t = 0;
-				if(isNaN(w) || !w) w = 1;
-				if(isNaN(h) || !h) h = 1;
-				var origin = (-l / w - 0.5).toFixed(8) + " " + (-t / h - 0.5).toFixed(8);
-				skew.matrix =  mt;
-				skew.origin = origin;
-				skew.offset = offset;
-				skew.on = true;
+			if(this.fillStyle && this.fillStyle.type == "linear"){
+				this.setFill(this.fillStyle);
 			}
 			return this;
 		},
@@ -609,18 +611,6 @@ dojo.require("dojox.gfx.arc");
 	});
 	g.Text.nodeType = "shape";
 
-	g.path._calcArc = function(alpha){
-		// return a start point, 1st and 2nd control points, and an end point
-		var cosa  = Math.cos(alpha), sina  = Math.sin(alpha),
-			p2 = {x: cosa + (4 / 3) * (1 - cosa), y: sina - (4 / 3) * cosa * (1 - cosa) / sina};
-		return {
-			s:  {x: cosa, y: -sina},
-			c1: {x: p2.x, y: -p2.y},
-			c2: p2,
-			e:  {x: cosa, y: sina}
-		};
-	};
-
 	dojo.declare("dojox.gfx.Path", g.path.Path, {
 		// summary: a path shape (VML)
 		constructor: function(rawNode){
@@ -635,6 +625,7 @@ dojo.require("dojox.gfx.arc");
 			// segment: Object: a segment
 			var last = d.clone(this.last);
 			g.Path.superclass._updateWithSegment.apply(this, arguments);
+			if(arguments.length > 1){ return; } // skip transfomed bbox calculations
 			// add a VML path segment
 			var path = this[this.renderers[segment.action]](segment, last);
 			if(typeof this.vmlPath == "string"){
@@ -857,6 +848,9 @@ dojo.require("dojox.gfx.arc");
 					p.push(" c");
 					var t = result[j];
 					this._addArgs(p, t, 0, t.length);
+					this._updateBBox(t[0], t[1]);
+					this._updateBBox(t[2], t[3]);
+					this._updateBBox(t[4], t[5]);
 				}
 				last.x = x1;
 				last.y = y1;
