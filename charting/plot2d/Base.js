@@ -60,7 +60,7 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 	resetEvents: function(){
 		this.plotEvent({type: "onplotreset", plot: this});
 	},
-
+	
 	// utilities
 	_calc: function(dim, stats){
 		// calculate scaler
@@ -81,7 +81,6 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
 		}
 	},
-
 	_connectEvents: function(shape, o){
 		shape.connect("onmouseover", this, function(e){
 			o.type  = "onmouseover";
