@@ -20,19 +20,19 @@ makeShapes = function(){
 	}
 
 	main = s.createGroup();
-	rect = main.createRect({x: 0, y: 0, width: 100, height: 100}).setStroke("black").setFill(new dojo.Color([255, 0, 255, 0.5]));
+	rect = main.createRect({x: 0, y: 0, width: 200, height: 200}).setStroke("black").setFill(new dojo.Color([255, 0, 255, 0.5]));
 	rect.connect("onclick", function(){ alert("rect"); })
     
-	image = s.createImage({width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+	image = s.createImage({width: 150, height: 100, src: "images/eugene-sm.jpg"});
 	image.connect("onclick", function(){ alert("image"); })
 	
 	main.add(image);
 	
 	// static images to see how the size
 
-	s.createImage({x: 0, y: 200, width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
-	s.createImage({x: 0, y: 300, width: 314, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
-	s.createImage({x: 0, y: 400, width: 157, height: 106, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+	s.createImage({x: 0,   y: 200, width: 150, height: 100, src: "images/eugene-sm.jpg"});
+	s.createImage({x: 0,   y: 300, width: 300, height: 100, src: "images/eugene-sm.jpg"});
+	s.createImage({x: 300, y: 200, width: 150, height: 200, src: "images/eugene-sm.jpg"});
 	
 	main.moveToFront();
 };

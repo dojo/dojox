@@ -19,12 +19,12 @@ makeShapes = function(){
 		surface.createLine({x1: 0, x2: grid_size, y1: i, y2: i}).setStroke("black");
 		surface.createLine({y1: 0, y2: grid_size, x1: i, x2: i}).setStroke("black");
 	}
-    image = surface.createImage({width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+    image = surface.createImage({width: 150, height: 100, src: "images/eugene-sm.jpg"});
     image.connect("onclick", function(){ alert("You didn't expect a download, did you?"); });
 
     //create second test
     surface2 = dojox.gfx.createSurface("test2", 600, 600);
-    image2 = surface2.createImage({width: 157, height: 53, src: "http://archive.dojotoolkit.org/nightly/checkout/util/resources/dojotoolkit.org/mini-dtk/images/logo.png"});
+    image2 = surface2.createImage({width: 150, height: 100, src: "images/eugene-sm.jpg"});
 };
 
 transformImage = function(){
