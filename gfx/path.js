@@ -1,5 +1,6 @@
 dojo.provide("dojox.gfx.path");
 
+dojo.require("dojox.gfx.matrix");
 dojo.require("dojox.gfx.shape");
 
 dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
@@ -10,11 +11,12 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// rawNode: Node: a DOM node to be used by this path object
 		this.shape = dojo.clone(dojox.gfx.defaultPath);
 		this.segments = [];
+		this.tbbox = null;
 		this.absolute = true;
 		this.last = {};
 		this.rawNode = rawNode;
 	},
-
+	
 	// mode manipulations
 	setAbsoluteMode: function(mode){
 		// summary: sets an absolute or relative mode for path points
@@ -32,16 +34,49 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		return (this.bbox && ("l" in this.bbox)) ? {x: this.bbox.l, y: this.bbox.t, width: this.bbox.r - this.bbox.l, height: this.bbox.b - this.bbox.t} : null; // dojox.gfx.Rectangle
 	},
 
+	getTransformedBoundingBox: function(){
+		// summary: returns an array of four points or null
+		//	four points represent four corners of the untransformed bounding box
+		if(this.tbbox){
+			return tbbox;	// Array
+		}
+		var bbox = this.bbox, matrix = this._getRealMatrix();
+		this.bbox = null;
+		for(var i = 0, len = this.segments.length; i < len; ++i){
+			this._updateWithSegment(this.segments[i], matrix);
+		}
+		var t = this.bbox;
+		this.bbox = bbox;
+		this.tbbox = [
+			{x: t.l, y: t.t},
+			{x: t.r, y: t.t},
+			{x: t.r, y: t.b},
+			{x: t.l, y: t.b}
+		];
+		return this.tbbox;	// Array
+	},
+
 	getLastPosition: function(){
 		// summary: returns the last point in the path, or null
 		return "x" in this.last ? this.last : null; // Object
 	},
 
+	_applyTransform: function(){
+		this.tbbox = null;
+		dojox.gfx.Shape.prototype._applyTransform.call(this);
+	},
+
 	// segment interpretation
-	_updateBBox: function(x, y){
+	_updateBBox: function(x, y, matrix){
 		// summary: updates the bounding box of path with new point
 		// x: Number: an x coordinate
 		// y: Number: a y coordinate
+		
+		if(matrix){
+			var t = dojox.gfx.matrix.multiplyPoint(matrix, x, y);
+			x = t.x;
+			y = t.y;
+		}
 
 		// we use {l, b, r, t} representation of a bbox
 		if(this.bbox && ("l" in this.bbox)){
@@ -53,7 +88,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 			this.bbox = {l: x, b: y, r: x, t: y};
 		}
 	},
-	_updateWithSegment: function(segment){
+	_updateWithSegment: function(segment, matrix){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
 		var n = segment.args, l = n.length;
@@ -66,7 +101,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 			case "Q":
 			case "T":
 				for(var i = 0; i < l; i += 2){
-					this._updateBBox(n[i], n[i + 1]);
+					this._updateBBox(n[i], n[i + 1], matrix);
 				}
 				this.last.x = n[l - 2];
 				this.last.y = n[l - 1];
@@ -74,14 +109,14 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 				break;
 			case "H":
 				for(var i = 0; i < l; ++i){
-					this._updateBBox(n[i], this.last.y);
+					this._updateBBox(n[i], this.last.y, matrix);
 				}
 				this.last.x = n[l - 1];
 				this.absolute = true;
 				break;
 			case "V":
 				for(var i = 0; i < l; ++i){
-					this._updateBBox(this.last.x, n[i]);
+					this._updateBBox(this.last.x, n[i], matrix);
 				}
 				this.last.y = n[l - 1];
 				this.absolute = true;
@@ -89,52 +124,52 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 			case "m":
 				var start = 0;
 				if(!("x" in this.last)){
-					this._updateBBox(this.last.x = n[0], this.last.y = n[1]);
+					this._updateBBox(this.last.x = n[0], this.last.y = n[1], matrix);
 					start = 2;
 				}
 				for(var i = start; i < l; i += 2){
-					this._updateBBox(this.last.x += n[i], this.last.y += n[i + 1]);
+					this._updateBBox(this.last.x += n[i], this.last.y += n[i + 1], matrix);
 				}
 				this.absolute = false;
 				break;
 			case "l":
 			case "t":
 				for(var i = 0; i < l; i += 2){
-					this._updateBBox(this.last.x += n[i], this.last.y += n[i + 1]);
+					this._updateBBox(this.last.x += n[i], this.last.y += n[i + 1], matrix);
 				}
 				this.absolute = false;
 				break;
 			case "h":
 				for(var i = 0; i < l; ++i){
-					this._updateBBox(this.last.x += n[i], this.last.y);
+					this._updateBBox(this.last.x += n[i], this.last.y, matrix);
 				}
 				this.absolute = false;
 				break;
 			case "v":
 				for(var i = 0; i < l; ++i){
-					this._updateBBox(this.last.x, this.last.y += n[i]);
+					this._updateBBox(this.last.x, this.last.y += n[i], matrix);
 				}
 				this.absolute = false;
 				break;
 			case "c":
 				for(var i = 0; i < l; i += 6){
-					this._updateBBox(this.last.x + n[i], this.last.y + n[i + 1]);
-					this._updateBBox(this.last.x + n[i + 2], this.last.y + n[i + 3]);
-					this._updateBBox(this.last.x += n[i + 4], this.last.y += n[i + 5]);
+					this._updateBBox(this.last.x + n[i], this.last.y + n[i + 1], matrix);
+					this._updateBBox(this.last.x + n[i + 2], this.last.y + n[i + 3], matrix);
+					this._updateBBox(this.last.x += n[i + 4], this.last.y += n[i + 5], matrix);
 				}
 				this.absolute = false;
 				break;
 			case "s":
 			case "q":
 				for(var i = 0; i < l; i += 4){
-					this._updateBBox(this.last.x + n[i], this.last.y + n[i + 1]);
-					this._updateBBox(this.last.x += n[i + 2], this.last.y += n[i + 3]);
+					this._updateBBox(this.last.x + n[i], this.last.y + n[i + 1], matrix);
+					this._updateBBox(this.last.x += n[i + 2], this.last.y += n[i + 3], matrix);
 				}
 				this.absolute = false;
 				break;
 			case "A":
 				for(var i = 0; i < l; i += 7){
-					this._updateBBox(n[i + 5], n[i + 6]);
+					this._updateBBox(n[i + 5], n[i + 6], matrix);
 				}
 				this.last.x = n[l - 2];
 				this.last.y = n[l - 1];
@@ -142,7 +177,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 				break;
 			case "a":
 				for(var i = 0; i < l; i += 7){
-					this._updateBBox(this.last.x += n[i + 5], this.last.y += n[i + 6]);
+					this._updateBBox(this.last.x += n[i + 5], this.last.y += n[i + 6], matrix);
 				}
 				this.absolute = false;
 				break;
@@ -159,13 +194,14 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		}
 	},
 
-	// a dictionary, which maps segment type codes to a number of their argemnts
+	// a dictionary, which maps segment type codes to a number of their arguments
 	_validSegments: {m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0},
 
 	_pushSegment: function(action, args){
 		// summary: adds a segment
 		// action: String: valid SVG code for a segment's type
 		// args: Array: a list of parameters for this segment
+		this.tbbox = null;
 		var group = this._validSegments[action.toLowerCase()];
 		if(typeof group == "number"){
 			if(group){
