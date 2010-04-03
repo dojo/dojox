@@ -112,7 +112,7 @@ dojo.require("dojox.gfx.matrix");
 				result.push([c1.x, c1.y, c2.x, c2.y, e.x, e.y]);
 				startAngle += 2 * step;
 			}
-			return result;	// Object
+			return result;	// Array
 		}
 	});
 })();
