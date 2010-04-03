@@ -353,6 +353,13 @@ dojox.gfx.shape.Container = {
 
 	// group management
 
+	openBatch: function() {
+		// summary: starts a new batch, subsequent new child shapes will be held in
+		//	the batch instead of appending to the container directly
+	},
+	closeBatch: function() {
+		// summary: submits the current batch, append all pending child shapes to DOM
+	},
 	add: function(shape){
 		// summary: adds a shape to the list
 		// shape: dojox.gfx.Shape: a shape

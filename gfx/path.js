@@ -15,22 +15,26 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this.absolute = true;
 		this.last = {};
 		this.rawNode = rawNode;
+		this.segmented = false;
 	},
-	
+
 	// mode manipulations
 	setAbsoluteMode: function(mode){
 		// summary: sets an absolute or relative mode for path points
 		// mode: Boolean: true/false or "absolute"/"relative" to specify the mode
+		this._confirmSegmented();
 		this.absolute = typeof mode == "string" ? (mode == "absolute") : mode;
 		return this; // self
 	},
 	getAbsoluteMode: function(){
 		// summary: returns a current value of the absolute mode
+		this._confirmSegmented();
 		return this.absolute; // Boolean
 	},
 
 	getBoundingBox: function(){
 		// summary: returns the bounding box {x, y, width, height} or null
+		this._confirmSegmented();
 		return (this.bbox && ("l" in this.bbox)) ? {x: this.bbox.l, y: this.bbox.t, width: this.bbox.r - this.bbox.l, height: this.bbox.b - this.bbox.t} : null; // dojox.gfx.Rectangle
 	},
 
@@ -58,6 +62,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 
 	getLastPosition: function(){
 		// summary: returns the last point in the path, or null
+		this._confirmSegmented();
 		return "x" in this.last ? this.last : null; // Object
 	},
 
@@ -239,6 +244,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	// segments
 	moveTo: function(){
 		// summary: formes a move segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "M" : "m", args);
@@ -246,6 +252,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	lineTo: function(){
 		// summary: formes a line segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "L" : "l", args);
@@ -253,6 +260,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	hLineTo: function(){
 		// summary: formes a horizontal line segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "H" : "h", args);
@@ -260,6 +268,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	vLineTo: function(){
 		// summary: formes a vertical line segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "V" : "v", args);
@@ -267,6 +276,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	curveTo: function(){
 		// summary: formes a curve segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "C" : "c", args);
@@ -274,6 +284,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	smoothCurveTo: function(){
 		// summary: formes a smooth curve segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "S" : "s", args);
@@ -281,6 +292,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	qCurveTo: function(){
 		// summary: formes a quadratic curve segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "Q" : "q", args);
@@ -288,6 +300,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	qSmoothCurveTo: function(){
 		// summary: formes a quadratic smooth curve segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "T" : "t", args);
@@ -295,6 +308,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	arcTo: function(){
 		// summary: formes an elliptic arc segment
+		this._confirmSegmented();
 		var args = [];
 		this._collectArgs(args, arguments);
 		this._pushSegment(this.absolute ? "A" : "a", args);
@@ -302,8 +316,22 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	},
 	closePath: function(){
 		// summary: closes a path
+		this._confirmSegmented();
 		this._pushSegment("Z", []);
 		return this; // self
+	},
+
+	_confirmSegmented: function() {
+		if (!this.segmented) {
+			var path = this.shape.path;
+			// switch to non-updating version of path building
+			this.shape.path = [];
+			this._setPath(path);
+			// switch back to the string path
+			this.shape.path = this.shape.path.join("");
+			// become segmented
+			this.segmented = true;
+		}
 	},
 
 	// setShape
@@ -338,12 +366,13 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// summary: forms a path using a shape
 		// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
 		dojox.gfx.Shape.prototype.setShape.call(this, typeof newShape == "string" ? {path: newShape} : newShape);
-		var path = this.shape.path;
-		// switch to non-updating version of path building
-		this.shape.path = [];
-		this._setPath(path);
-		// switch back to the string path
-		this.shape.path = this.shape.path.join("");
+		
+		if (dojox.gfx.lazyPathSegmentation) {
+			this.segmented = false;
+			this.segments = [];
+		} else {
+			this._confirmSegmented();
+		}
 		return this; // self
 	},
 
