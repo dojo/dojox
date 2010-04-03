@@ -105,13 +105,13 @@ dojo.declare("dojox.gfx.Shape", null, {
 			return null;	// null
 		}
 		var m = this._getRealMatrix();
-		var r = [];
-		var g = dojox.gfx.matrix;
-		r.push(g.multiplyPoint(m, b.x, b.y));
-		r.push(g.multiplyPoint(m, b.x + b.width, b.y));
-		r.push(g.multiplyPoint(m, b.x + b.width, b.y + b.height));
-		r.push(g.multiplyPoint(m, b.x, b.y + b.height));
-		return r;	// Array
+			gm = dojox.gfx.matrix;
+		return [	// Array
+				gm.multiplyPoint(m, b.x, b.y),
+				gm.multiplyPoint(m, b.x + b.width, b.y),
+				gm.multiplyPoint(m, b.x + b.width, b.y + b.height),
+				gm.multiplyPoint(m, b.x, b.y + b.height)
+			];
 	},
 	getEventSource: function(){
 		// summary: returns a Node, which is used as
