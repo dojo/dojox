@@ -58,6 +58,10 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 		return false;
 	},
 	resetEvents: function(){
+		if(this._events){
+			dojo.forEach(this._events, dojo.disconnect);
+			delete this._events;
+		}
 		this.plotEvent({type: "onplotreset", plot: this});
 	},
 	
@@ -82,20 +86,25 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 		}
 	},
 	_connectEvents: function(shape, o){
-		shape.connect("onmouseover", this, function(e){
-			o.type  = "onmouseover";
-			o.event = e;
-			this.plotEvent(o);
-		});
-		shape.connect("onmouseout", this, function(e){
-			o.type  = "onmouseout";
-			o.event = e;
-			this.plotEvent(o);
-		});
-		shape.connect("onclick", this, function(e){
-			o.type  = "onclick";
-			o.event = e;
-			this.plotEvent(o);
-		});
+		if(!this._events){
+			this._events = [];
+		}
+		this._events.push(
+			shape.connect("onmouseover", this, function(e){
+				o.type  = "onmouseover";
+				o.event = e;
+				this.plotEvent(o);
+			}),
+			shape.connect("onmouseout", this, function(e){
+				o.type  = "onmouseout";
+				o.event = e;
+				this.plotEvent(o);
+			}),
+			shape.connect("onclick", this, function(e){
+				o.type  = "onclick";
+				o.event = e;
+				this.plotEvent(o);
+			})
+		);
 	}
 });
