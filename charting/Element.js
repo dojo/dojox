@@ -1,5 +1,8 @@
 dojo.provide("dojox.charting.Element");
 
+dojo.require("dojox.gfx");
+
+
 dojo.declare("dojox.charting.Element", null, {
 	constructor: function(chart){
 		this.chart = chart;
@@ -47,23 +50,51 @@ dojo.declare("dojox.charting.Element", null, {
 	// fill utilities
 	_plotFill: function(fill, dim, offsets){
 		// process a plot-wide fill
-		if(!fill || fill.type !== "linear" || !fill.space){
+		if(!fill || !fill.type || !fill.space){
 			return fill;
 		}
-		// clone a fill so we can modify properly directly
-		fill = dojo.delegate(fill);
-		// process dimensions
-		if(fill.space === "plot" || fill.space === "shapeX"){
-			// process Y
-			var span = dim.height - offsets.t - offsets.b;
-			fill.y1 = offsets.t + span * fill.y1 / 100;
-			fill.y2 = offsets.t + span * fill.y2 / 100;
-		}
-		if(fill.space === "plot" || fill.space === "shapeY"){
-			// process X
-			var span = dim.width - offsets.l - offsets.r;
-			fill.x1 = offsets.l + span * fill.x1 / 100;
-			fill.x2 = offsets.l + span * fill.x2 / 100;
+		var space = fill.space;
+		switch(fill.type){
+			case "linear":
+				if(space === "plot" || space === "shapeX" || space === "shapeY"){
+					// clone a fill so we can modify properly directly
+					fill = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					fill.space = space;
+					// process dimensions
+					if(space === "plot" || space === "shapeX"){
+						// process Y
+						var span = dim.height - offsets.t - offsets.b;
+						fill.y1 = offsets.t + span * fill.y1 / 100;
+						fill.y2 = offsets.t + span * fill.y2 / 100;
+					}
+					if(space === "plot" || space === "shapeY"){
+						// process X
+						var span = dim.width - offsets.l - offsets.r;
+						fill.x1 = offsets.l + span * fill.x1 / 100;
+						fill.x2 = offsets.l + span * fill.x2 / 100;
+					}
+				}
+				break;
+			case "pattern":
+				if(space === "plot" || space === "shapeX" || space === "shapeY"){
+					// clone a fill so we can modify properly directly
+					fill = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					fill.space = space;
+					// process dimensions
+					if(space === "plot" || space === "shapeX"){
+						// process Y
+						var span = dim.height - offsets.t - offsets.b;
+						fill.y = offsets.t + span * fill.y / 100;
+						fill.height = span * fill.height / 100;
+					}
+					if(space === "plot" || space === "shapeY"){
+						// process X
+						var span = dim.width - offsets.l - offsets.r;
+						fill.x = offsets.l + span * fill.x / 100;
+						fill.width = span * fill.width / 100;
+					}
+				}
+				break;
 		}
 		return fill;
 	},
@@ -72,30 +103,60 @@ dojo.declare("dojox.charting.Element", null, {
 		if(!fill || !fill.space){
 			return fill;
 		}
-		if(fill.type === "linear"){
-			// clone a fill so we can modify properly directly
-			fill = dojo.delegate(fill);
-			// process dimensions
-			if(fill.space === "shape" || fill.space === "shapeX"){
-				// process X
-				var span = bbox.width;
-				fill.x1 = bbox.x + span * fill.x1 / 100;
-				fill.x2 = bbox.x + span * fill.x2 / 100;
-			}
-			if(fill.space === "shape" || fill.space === "shapeY"){
-				// process Y
-				var span = bbox.height;
-				fill.y1 = bbox.y + span * fill.y1 / 100;
-				fill.y2 = bbox.y + span * fill.y2 / 100;
-			}
-		}else if(fill.type === "radial" && fill.space === "shape"){
-			// this one is used exclusively for bubble charts and pie charts
-			// clone a fill so we can modify properly directly
-			fill = dojo.delegate(fill);
-			// process both dimensions
-			fill.cx = bbox.x + bbox.width / 2;
-			fill.cy = bbox.y + bbox.height / 2;
-			fill.r  = fill.r * bbox.width / 200;
+		var space = fill.space;
+		switch(fill.type){
+			case "linear":
+				if(space === "shape" || space === "shapeX" || space === "shapeY"){
+					// clone a fill so we can modify properly directly
+					fill = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					fill.space = space;
+					// process dimensions
+					if(space === "shape" || space === "shapeX"){
+						// process X
+						var span = bbox.width;
+						fill.x1 = bbox.x + span * fill.x1 / 100;
+						fill.x2 = bbox.x + span * fill.x2 / 100;
+					}
+					if(space === "shape" || space === "shapeY"){
+						// process Y
+						var span = bbox.height;
+						fill.y1 = bbox.y + span * fill.y1 / 100;
+						fill.y2 = bbox.y + span * fill.y2 / 100;
+					}
+				}
+				break;
+			case "radial":
+				if(space === "shape"){
+					// this one is used exclusively for bubble charts and pie charts
+					// clone a fill so we can modify properly directly
+					fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					fill.space = space;
+					// process both dimensions
+					fill.cx = bbox.x + bbox.width / 2;
+					fill.cy = bbox.y + bbox.height / 2;
+					fill.r  = fill.r * bbox.width / 200;
+				}
+				break;
+			case "pattern":
+				if(space === "shape" || space === "shapeX" || space === "shapeY"){
+					// clone a fill so we can modify properly directly
+					fill = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					fill.space = space;
+					// process dimensions
+					if(space === "shape" || space === "shapeX"){
+						// process X
+						var span = bbox.width;
+						fill.x = bbox.x + span * fill.x / 100;
+						fill.width = span * fill.width / 100;
+					}
+					if(space === "shape" || space === "shapeY"){
+						// process Y
+						var span = bbox.height;
+						fill.y = bbox.y + span * fill.y / 100;
+						fill.height = span * fill.height / 100;
+					}
+				}
+				break;
 		}
 		return fill;
 	},
@@ -104,9 +165,11 @@ dojo.declare("dojox.charting.Element", null, {
 		if(!fill || fill.type !== "radial" || fill.space !== "shape"){
 			return fill;
 		}
+		// clone and normalize fill
+		var space = fill.space;
+		fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+		fill.space = space;
 		if(arguments.length < 4){
-			// clone a fill so we can modify properly directly
-			fill = dojo.delegate(fill);
 			// process both dimensions
 			fill.cx = center.x;
 			fill.cy = center.y;
