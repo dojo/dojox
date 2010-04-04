@@ -221,7 +221,7 @@ dojo.require("dojox.gfx.path");
 				img.setAttribute("y", 0);
 				img.setAttribute("width",  f.width .toFixed(8));
 				img.setAttribute("height", f.height.toFixed(8));
-				img.setAttributeNS(svg.xmlns.xlink, "href", f.src);
+				img.setAttributeNS(svg.xmlns.xlink, "xlink:href", f.src);
 				fill.appendChild(img);
 			}else{
 				fill.setAttribute("gradientUnits", "userSpaceOnUse");
@@ -497,7 +497,7 @@ else
 					var id = g._base._getUniqueId();
 					path.setAttribute("id", id);
 					defs.appendChild(path);
-					r.firstChild.setAttributeNS(svg.xmlns.xlink, "href", "#" + id);
+					r.firstChild.setAttributeNS(svg.xmlns.xlink, "xlink:href", "#" + id);
 				}
 			}
 			if(path){
