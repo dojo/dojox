@@ -62,7 +62,7 @@ dojo.require("dojox.charting.plot2d.OHLC");
 			// create a surface
 			this.node = dojo.byId(node);
 			var box = dojo.marginBox(node);
-			this.surface = dojox.gfx.createSurface(this.node, box.w, box.h);
+			this.surface = dojox.gfx.createSurface(this.node, box.w || 400, box.h || 300);
 		},
 		destroy: function(){
 			dojo.forEach(this.series, destroy);
