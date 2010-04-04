@@ -207,6 +207,7 @@ dojo.require("dojo.number");
 					fill = this._plotFill(fill, dim, offsets);
 					fill = this._shapeFill(fill, {x: circle.cx - circle.r, y: circle.cy - circle.r, width: 2 * circle.r, height: 2 * circle.r});
 					fill = this._pseudoRadialFill(fill, {x: circle.cx, y: circle.cy}, circle.r);
+					var shape = s.createCircle(circle).setFill(fill).setStroke(stroke);
 					this.dyn.push({color: color, fill: fill, stroke: stroke});
 
 					if(events){
