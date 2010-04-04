@@ -38,11 +38,12 @@ dojo.require("dojox.lang.functional.fold");
 			
 			if(!this.angles){
 				// calculate the running total of slice angles
+				var startAngle = m._degToRad(o.plot.opt.startAngle);
 				if(typeof o.run.data[0] == "number"){
-					this.angles = df.map(df.scanl(o.run.data, "+", 0),
+					this.angles = df.map(df.scanl(o.run.data, "+", startAngle),
 						"* 2 * Math.PI / this", df.foldl(o.run.data, "+", 0));
 				}else{
-					this.angles = df.map(df.scanl(o.run.data, "a + b.y", 0),
+					this.angles = df.map(df.scanl(o.run.data, "a + b.y", startAngle),
 						"* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
 				}
 			}

@@ -27,7 +27,8 @@ dojo.require("dojo.number");
 			labelStyle:		"default",	// default/rows/auto
 			htmlLabels:		true,		// use HTML to draw labels
 			radGrad:        "native",	// or "linear", or "fan"
-			fanSize:		5			// maximum fan size in degrees
+			fanSize:		5,			// maximum fan size in degrees
+			startAngle:     0			// start angle for slices in degrees
 		},
 		optionalParams: {
 			font:		"",
@@ -125,7 +126,8 @@ dojo.require("dojo.number");
 				taFont = "font" in this.opt ? this.opt.font : t.axis.font,
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
 				taFontColor = "fontColor" in this.opt ? this.opt.fontColor : t.axis.fontColor,
-				start = 0, step, filteredRun, slices, labels, shift, labelR,
+				startAngle = m._degToRad(this.opt.startAngle),
+				start = startAngle, step, filteredRun, slices, labels, shift, labelR,
 				run = this.run.data,
 				events = this.events();
 			if(typeof run[0] == "number"){
@@ -231,7 +233,7 @@ dojo.require("dojo.number");
 				// calculate the geometry of the slice
 				var end = start + slice * 2 * Math.PI;
 				if(i + 1 == slices.length){
-					end = 2 * Math.PI;
+					end = startAngle + 2 * Math.PI;
 				}
 				var	step = end - start,
 					x1 = circle.cx + r * Math.cos(start),
@@ -329,7 +331,7 @@ dojo.require("dojo.number");
 			}, this);
 			// draw labels
 			if(this.opt.labels){
-				start = 0;
+				start = startAngle;
 				dojo.some(slices, function(slice, i){
 					if(slice <= 0){
 						// degenerated slice
@@ -346,7 +348,7 @@ dojo.require("dojo.number");
 					// calculate the geometry of the slice
 					var end = start + slice * 2 * Math.PI, v = run[i];
 					if(i + 1 == slices.length){
-						end = 2 * Math.PI;
+						end = startAngle + 2 * Math.PI;
 					}
 					var	labelAngle = (start + end) / 2,
 						x = circle.cx + labelR * Math.cos(labelAngle),

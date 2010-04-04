@@ -1,6 +1,7 @@
 dojo.provide("dojox.charting.action2d.Tooltip");
 
 dojo.require("dojox.charting.action2d.Base");
+dojo.require("dojox.gfx.matrix");
 dojo.require("dijit.Tooltip");
 
 dojo.require("dojox.lang.functional");
@@ -25,7 +26,7 @@ dojo.require("dojox.lang.functional.fold");
 		return o.element == "bar" ? o.x : o.y;
 	};
 	
-	var df = dojox.lang.functional, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
+	var df = dojox.lang.functional, m = dojox.gfx.matrix, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
 	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.Base, {
 		// the data description block for the widget parser
@@ -87,7 +88,8 @@ dojo.require("dojox.lang.functional.fold");
 								"* 2 * Math.PI / this", df.foldl(o.run.data, "a + b.y", 0));
 						}
 					}
-					var angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2;
+					var startAngle = m._degToRad(o.plot.opt.startAngle),
+						angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2 + startAngle;
 					aroundRect.x = o.cx + o.cr * Math.cos(angle);
 					aroundRect.y = o.cy + o.cr * Math.sin(angle);
 					aroundRect.width = aroundRect.height = 1;

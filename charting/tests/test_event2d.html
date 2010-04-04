@@ -210,7 +210,8 @@ makeObjects = function(){
 		font: "normal normal 11pt Tahoma", 
 		fontColor: "black", 
 		labelOffset: -30,
-		radius: 80
+		radius: 80,
+		startAngle: 45
 	});
 	chart10.addSeries("Series A", [
 		{y: 4, text: "Red",   color: "red",   stroke: "black", tooltip: "Red is 50%"},
@@ -260,7 +261,7 @@ dojo.addOnLoad(makeObjects);
 <p>9: Bubble chart, axes. Actions: Magnify, Highlight, Tooltip.</p>
 <div id="test9" style="width: 400px; height: 300px;"></div>
 <div id="legend9"></div>
-<p>10: Pie with internal custom labels, custom colors, and custom tooltips. Actions: MoveSlice, Highlight, Tooltip.</p>
+<p>10: Rotated pie with internal custom labels, custom colors, and custom tooltips. Actions: MoveSlice, Highlight, Tooltip.</p>
 <div id="test10" style="width: 300px; height: 300px;"></div>
 <div id="legend10"></div>
 <p>That's all Folks!</p>
