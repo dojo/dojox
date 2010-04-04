@@ -19,7 +19,7 @@ dojo.require("dojox.gfx.gradutils");
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
-			shadows: 0		// draw shadows
+			shadows: null	// draw shadows
 		},
 		optionalParams: {},	// no optional parameters
 		

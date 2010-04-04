@@ -19,8 +19,8 @@ dojo.require("dojox.lang.functional.reversed");
 			lines:   true,	// draw lines
 			areas:   false,	// draw areas
 			markers: false,	// draw markers
-			shadows: 0,		// draw shadows
-			tension: 0		// draw curved lines (tension>0)
+			shadows: null,	// draw shadows
+			tension: ""		// draw curved lines (tension is "X", "x", or "S")
 		},
 		optionalParams: {},	// no optional parameters
 		
