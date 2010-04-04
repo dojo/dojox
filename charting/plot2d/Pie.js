@@ -8,6 +8,8 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
 dojo.require("dojox.gfx");
 
+dojo.require("dojo.number");
+
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
@@ -364,7 +366,7 @@ dojo.require("dojox.gfx");
 
 		// utilities
 		_getLabel: function(number){
-			return this.opt.fixed ? number.toFixed(this.opt.precision) : number.toString();
+			return this.opt.fixed ? dojo.number.format(number, {places: this.opt.precision}) : number.toString();
 		}
 	});
 })();
