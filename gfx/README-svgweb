@@ -55,7 +55,6 @@ Summary / General findings
     * Line style is not working
     * getTextWidth() does not work, see svgweb bug 417
     * IE7 has memory issue, see svgweb bug 418 (IE8 seems fine)
-    * Image on IE breaks (used to work), see svgweb bug 442
 
 PASS test.roundrect.html
 PASS test_arc.html
