@@ -118,29 +118,29 @@
 			}).placeAt("container");
 			
 			dojo.query("#groupremover").onclick(function(e){
-			    e.preventDefault();
-			    var g = dijit.byId("targetremover");
-			    console.warn(g);
-			    if(g){
-			        // destroying a dojox.image.Lightbox will remove itself from 
-			        // the LightboxDialog
-			        g.destroy();
-			    }
-			    
-			    // test showing group 3 after removal:
-			    var lbd = dijit.byId("dojoxLightboxDialog"); // the master
-			    lbd.show({
-			        title:"Should Only be three remaining",
-			        group:"group3"
-			    });
+				e.preventDefault();
+				var g = dijit.byId("targetremover");
+				console.warn(g);
+				if(g){
+					// destroying a dojox.image.Lightbox will remove itself from 
+					// the LightboxDialog
+					g.destroy();
+				}
+				
+				// test showing group 3 after removal:
+				var lbd = dijit.byId("dojoxLightboxDialog"); // the master
+				lbd.show({
+					title:"Should Only be three remaining",
+					group:"group3"
+				});
 			})
 			
 			dojo.query("#groupkiller").onclick(function(e){
-			    e.preventDefault();
-			    var lbd = dijit.byId("dojoxLightboxDialog");
-			    lbd.removeGroup("group3");
-			    
-			    
+				e.preventDefault();
+				var lbd = dijit.byId("dojoxLightboxDialog");
+				lbd.removeGroup("group3");
+				
+				
 			})
 		})
 	</script>

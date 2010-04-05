@@ -20,11 +20,11 @@
 	border:11px solid #fff;
 	background:#fff url('images/loading.gif') no-repeat center center;
 
-        /* special safari + FF specific rounding + shadows */
+	/* special safari + FF specific rounding + shadows */
 	-webkit-box-shadow: 0px 6px 10px #636363; /* #adadad; */
 	-webkit-border-radius: 3px;
 	-moz-border-radius:4px;
-        border-radius: 4px;
+	border-radius: 4px;
 }
 
 .dojoxLightboxContainer {
@@ -100,4 +100,6 @@
 	background-position:0 0;
 }
 
-
+.dojoxLightboxText {
+	margin:0; padding:0; 
+}
