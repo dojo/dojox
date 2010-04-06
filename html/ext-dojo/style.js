@@ -56,11 +56,11 @@ dojo.mixin(dojox.html["ext-dojo"].style, {
 			}
 		};
 		// prefixes and property names
-		for(var i = 0, tPrefix = ["WebkitT", "MozT", "t"]; i < tPrefix.length; i++){
-			if(typeof docStyle[tPrefix[i] + "ransform"] === "string"){
+		for(var i = 0, tPrefix = ["WebkitT", "MozT", "OT", "t"]; i < tPrefix.length; i++){
+			if(typeof docStyle[tPrefix[i] + "ransform"] !== "undefined"){
 				this.tPropertyName = tPrefix[i] + "ransform";
 			}
-			if(typeof docStyle[tPrefix[i] + "ransformOrigin"] === "string"){
+			if(typeof docStyle[tPrefix[i] + "ransformOrigin"] !== "undefined"){
 				this.toPropertyName = tPrefix[i] + "ransformOrigin";
 			}
 		}
