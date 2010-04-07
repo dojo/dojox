@@ -24,6 +24,8 @@ dojox.mobile.parser = new function(){
 						params[prop] = val - 0;
 					}else if(typeof proto[prop] == "boolean"){
 						params[prop] = (val != "false");
+					}else if(typeof proto[prop] == "object"){
+						params[prop] = eval("(" + val + ")");
 					}
 				}
 				params["class"] = node.className;
@@ -49,7 +51,14 @@ dojox.mobile.parser = new function(){
 		if(!rootNode){ 
 			rootNode = dojo.body(); 
 		}
-		return this.instantiate(dojo.query("[dojoType]", rootNode));
+		var nodes = rootNode.getElementsByTagName("*");
+		var list = [];
+		for(var i = 0, len = nodes.length; i < len; i++){
+			if(nodes[i].getAttribute("dojoType")){
+				list.push(nodes[i]);
+			}
+		}
+		return this.instantiate(list);
 	};
 };
 dojo._loaders.unshift(function(){

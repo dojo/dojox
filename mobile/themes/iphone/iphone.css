@@ -12,7 +12,7 @@ body {
 	font-size: 17px;
 }
 
-/* ysl.mbl.Page */
+/* dojox.mobile.Page */
 .mblPage {
 	position: relative;
 	left: 0px;
@@ -104,8 +104,8 @@ body {
 	to { opacity: 1; }
 }
 
-/* ysl.mbl.Heading */
-h1.mblHeading {
+/* dojox.mobile.Heading */
+.mblHeading {
 	position: relative;
 	height: 42px;
 	margin: 0px;
@@ -171,15 +171,15 @@ h1.mblHeading {
 	border-color: #9CACC0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
 }
-h1.mblArrowButtonSelected .mblArrowButtonHead {
+.mblArrowButtonSelected .mblArrowButtonHead {
 	background: -webkit-gradient(linear, left top, right bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
 }
-h1.mblArrowButtonSelected .mblArrowButtonBody, h1.mblArrowButtonSelected .mblArrowButtonNeck {
+.mblArrowButtonSelected .mblArrowButtonBody, .mblArrowButtonSelected .mblArrowButtonNeck {
 	background: -webkit-gradient(linear, left top, left bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
 }
 
-/* ysl.mbl.RoundRect */
-div.mblRoundRect {
+/* dojox.mobile.RoundRect */
+.mblRoundRect {
 	margin: 7px 9px 16px;
 	padding: 8px;
 	border: 1px solid #ADAAAD;
@@ -187,12 +187,12 @@ div.mblRoundRect {
 	-moz-border-radius: 8px;
 	background-color: white;
 }
-div.mblRoundRect.mblShadow {
+.mblRoundRect.mblShadow {
 	-webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* ysl.mbl.EdgeToEdgeCategory */
-h2.mblEdgeToEdgeCategory {
+/* dojox.mobile.EdgeToEdgeCategory */
+.mblEdgeToEdgeCategory {
 	position: relative;
 	height: 22px;
 	padding: 0px 10px;
@@ -209,8 +209,8 @@ h2.mblEdgeToEdgeCategory {
 	text-overflow: ellipsis;
 }
 
-/* ysl.mbl.RoundRectCategory */
-h2.mblRoundRectCategory {
+/* dojox.mobile.RoundRectCategory */
+.mblRoundRectCategory {
 	color: #4C566C;
 	margin: 18px 0px 0px 20px;
 	text-shadow: rgba(255, 255, 255, 1) 0px 1px 0px;
@@ -221,7 +221,7 @@ h2.mblRoundRectCategory {
 	text-overflow: ellipsis;
 }
 
-/* ysl.mbl.RoundRectList */
+/* dojox.mobile.RoundRectList */
 .mblRoundRectList {
 	margin: 7px 9px 16px;
 	padding: 0px;
@@ -232,7 +232,7 @@ h2.mblRoundRectCategory {
 	position: relative; /* IE needs this */
 }
 
-/* ysl.mbl.EdgeToEdgeList */
+/* dojox.mobile.EdgeToEdgeList */
 ul.mblEdgeToEdgeList {
 	padding: 0px;
 	background-color: white;
@@ -240,7 +240,7 @@ ul.mblEdgeToEdgeList {
 	margin: 0px; /* IE needs this */
 }
 
-/* ysl.mbl.ListItem */
+/* dojox.mobile.ListItem */
 li.mblListItem {
 	list-style-type: none;
 	height: 43px;
@@ -436,7 +436,7 @@ li.mblIconItemSub {
 	clear: both;
 }
 
-div.mblIconArea {
+.mblIconArea {
 	font-family: Helvetica;
 	font-size: 12px;
 	height: 90px;
@@ -445,11 +445,11 @@ div.mblIconArea {
 	margin-bottom: 20px;
 }
 
-div.mblIconArea IMG {
+.mblIconArea IMG {
 	padding-bottom: 2px;
 }
 
-div.mblContent {
+.mblContent {
 	clear: both;
 	margin-bottom: 10px;
 	width: 320px;
@@ -585,7 +585,7 @@ table.mblClose {
 }
 
 /* Icon Content Heading */
-h2.mblIconContentHeading {
+.mblIconContentHeading {
 	position: relative;
 	clear: both;
 	height: 25px;
@@ -603,7 +603,7 @@ h2.mblIconContentHeading {
 	text-overflow: ellipsis;
 }
 
-/* ysl.mbl.Button */
+/* dojox.mobile.Button */
 .mblButton {
 	padding: 0px 10px;
 	height: 29px;

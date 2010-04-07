@@ -1,5 +1,6 @@
 dojo.provide("dojox.mobile.compat");
 dojo.require("dojo.fx");
+dojo.require("dojox.fx.flip");
 
 // summary:
 //		CSS3 compatibility module
@@ -9,11 +10,11 @@ dojo.require("dojo.fx");
 //		If you load this module, it directly replaces some of the methods of
 //		djMobile instead of subclassing. This way, html pages remains the same
 //		regardless of whether this compatibility module is used or not.
-//		Recommended usage is as follows. the code below loads dojox.mobile._compat
+//		Recommended usage is as follows. the code below loads dojox.mobile.compat
 //		only when isWebKit is true.
 //
 //		dojo.require("dojox.mobile");
-//		ojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+//		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 //
 //		This module also loads compatibility CSS files, which has -compat.css
 //		suffix. You should use the <link> tag instead of @import to load theme
@@ -24,7 +25,7 @@ dojo.require("dojo.fx");
 //		with the @import rule if you would like.
 
 dojo.extend(dojox.mobile.Page, {
-	performTransition: function(/*String|DomNode*/toNode, dir, transition, /*Object|null*/context, /*String|Function*/method /*optional args*/){
+	performTransition: function(/*String|DomNode*/moveTo, dir, transition, /*Object|null*/context, /*String|Function*/method /*optional args*/){
 		// summary:
 		//		Function to perform the various types of page transitions, such as fade, slide, and flip, using
 		//		dojo.animateProperty and dojox.gfx where possible.  Some effects cannot be simulated, such as flip.
@@ -41,27 +42,31 @@ dojo.extend(dojox.mobile.Page, {
 		//		TODO:  Followup with Kamiyama for better documentation.
 		// tags:
 		//		public
-		var a, _this;
-		this._context = context;
-		this._method = method;
-		var args = [];
-		if(context || method){
-			for(var i = 5; i < arguments.length; i++){
-				args.push(arguments[i]);
+		this._saveState.apply(this, arguments);
+		if(moveTo){
+			if(typeof(moveTo) == "string"){
+				moveTo.match(/(\w+)/);
+				toNode = RegExp.$1;
+			}else{
+				toNode = moveTo;
 			}
-		}
-		this._args = args;
-		if(!toNode){
+		}else{
 			if(!this._dummyNode){
 				this._dummyNode = dojo.doc.createElement("DIV");
 				dojo.body().appendChild(this._dummyNode);
 			}
 			toNode = this._dummyNode;
 		}
+		var anim;
 		var fromNode = this.domNode;
 		toNode = this.toNode = dojo.byId(toNode);
+		this.onBeforeTransitionOut.apply(this, arguments);
+		var toWidget = dijit.byNode(toNode);
+		if(toWidget && toWidget.onBeforeTransitionIn){
+			toWidget.onBeforeTransitionIn.apply(this, arguments);
+		}
 		this.wakeUp(toNode);
-        if(transition == "none"){
+		if(!transition || transition == "none"){
 			fromNode.style.display = "none";
 			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
@@ -84,15 +89,30 @@ dojo.extend(dojox.mobile.Page, {
 			toNode.style.left = w*dir + "px";
 			toNode.style.top = fromNode.offsetTop + "px";
 			toNode.style.display = "";
-			a = dojo.fx.combine([s1,s2]);
-			_this = this;
-			dojo.connect(a, "onEnd", function(){
+			anim = dojo.fx.combine([s1,s2]);
+			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
-				_this.invokeCallback();
+				this.invokeCallback();
 			});
-			a.play();
-		}else if(transition == "fade" || transition == "flip"){
-			a = dojo.fx.chain([
+			anim.play();
+		}else if(transition == "flip"){
+			anim = dojox.fx.flip({ 
+				node: fromNode,
+				dir: "right",
+				depth: .5,
+				duration: 400
+			})											  
+			toNode.style.position = "absolute";
+			toNode.style.left = "0px";
+			toNode.style.top = fromNode.offsetTop + "px";
+			dojo.connect(anim, "onEnd", this, function(){ 
+				fromNode.style.display = "none";
+				toNode.style.display = "";
+				this.invokeCallback();
+			})
+			anim.play(); 
+		}else if(transition == "fade"){
+			anim = dojo.fx.chain([
 				dojo.fadeOut({
 					node: fromNode,
 					duration: 600
@@ -107,13 +127,12 @@ dojo.extend(dojox.mobile.Page, {
 			toNode.style.top = fromNode.offsetTop + "px";
 			dojo.style(toNode, "opacity", 0);
 			toNode.style.display = "";
-			_this = this;
-			dojo.connect(a, "onEnd", function(){
+			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
 				dojo.style(fromNode, "opacity", 1);
-				_this.invokeCallback();
+				this.invokeCallback();
 			});
-			a.play();
+			anim.play();
 		}
 	},
 
@@ -127,6 +146,7 @@ dojo.extend(dojox.mobile.Page, {
 		//		public
 		if(dojo.isIE && !node._wokeup){
 			node._wokeup = true;
+			var disp = node.style.display;
 			node.style.display = "";
 			var nodes = node.getElementsByTagName("*");
 			for(var i = 0, len = nodes.length; i < len; i++){
@@ -135,6 +155,7 @@ dojo.extend(dojox.mobile.Page, {
 				nodes[i].style.display = "";
 				nodes[i].style.display = val;
 			}
+			node.style.display = disp;
 		}
 	},
 
@@ -341,7 +362,8 @@ dojo.addOnLoad(function(){
 	var elems = dojo.doc.getElementsByTagName("link");
 	for(var i = 0, len = elems.length; i < len; i++){
 		var href = elems[i].href;
-		if(href.indexOf("/themes/") != 0 && href.substring(href.length - 4) == ".css"){
+		if((href.indexOf("/mobile/themes/") != -1 || location.href.indexOf("/mobile/tests/") != -1)
+		   && href.substring(href.length - 4) == ".css"){
 			var compatCss = href.substring(0, href.length-4)+"-compat.css";
 			dojox.mobile.Page.prototype._loadCss(compatCss);
 		}

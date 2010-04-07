@@ -1,5 +1,5 @@
 /* mbl.widget.Heading */
-h1.mblHeading {
+.mblHeading {
 	background-image: url(compat/heading-bg.png);
 }
 
@@ -200,11 +200,11 @@ li.mblItemSelected span.mblArrow {
 }
 
 /* Icon Content Heading */
-h2.mblIconContentHeading {
+.mblIconContentHeading {
 	background-image: url(compat/icon-content-heading-bg.png);
 }
 
-/* ysl.mbl.Button */
+/* dojox.mobile.Button */
 .mblButton {
 	background-image: url(compat/blue-button-bg.png);
 }

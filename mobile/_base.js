@@ -1,18 +1,4 @@
 dojo.provide("dojox.mobile._base");
-dojo.provide("dojox.mobile.Page");
-dojo.provide("dojox.mobile.Heading");
-dojo.provide("dojox.mobile.RoundRect");
-dojo.provide("dojox.mobile.EdgeToEdgeCategory");
-dojo.provide("dojox.mobile.RoundRectCategory");
-dojo.provide("dojox.mobile.RoundRectList");
-dojo.provide("dojox.mobile.EdgeToEdgeList");
-dojo.provide("dojox.mobile.ListItem");
-dojo.provide("dojox.mobile.Switch");
-dojo.provide("dojox.mobile.IconContainer");
-dojo.provide("dojox.mobile.IconItem");
-dojo.provide("dojox.mobile.Button");
-dojo.provide("dojox.mobile.TabContainer");
-dojo.provide("dojox.mobile.TabPane");
 
 dojo.require("dijit._Widget");
 
@@ -29,7 +15,7 @@ dojo.require("dijit._Widget");
 //		rectangle, may not work, but you can still operate your application.
 //
 //		Furthermore, as a separate file, a compatibility module,
-//		dojox.mobile._compat, is available that simulates some of CSS3 features
+//		dojox.mobile.compat, is available that simulates some of CSS3 features
 //		used in this module. If you use the compatibility module, fancy visual
 //		effects work better even on non-CSS3 browsers.
 //
@@ -49,9 +35,8 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		dojox.mobile.Page._pillar = dojo.doc.createElement("DIV");
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
-		var hasHash = location.hash && location.hash.length > 1 && location.hash.indexOf("=") == -1;
-		this._visible = this.selected && !hasHash
-			|| hasHash && this.id == location.hash.substring(1);
+		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
+		this._visible = this.selected && !id || this.id == id;
 	},
 
 	startup: function(){
@@ -59,26 +44,64 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		setTimeout(function(){
 			if(!_this._visible){
 				_this.domNode.style.display = "none";
+			}else{
+				_this.onStartPage();
 			}
 			_this.domNode.style.visibility = "visible";
 		}, 0);
 	},
 
-	performTransition: function(/*String|DomNode*/toNode, dir, transition, /*Object|null*/context, /*String|Function*/method /*optional args*/){
+	onStartPage: function(){
+		// Stub function to connect to from your application.
+		// Called only when this page is shown at startup time.
+	},
+
+	onBeforeTransitionIn: function(moveTo, dir, transition, context, method){
+		// Stub function to connect to from your application.
+	},
+
+	onAfterTransitionIn: function(moveTo, dir, transition, context, method){
+		// Stub function to connect to from your application.
+	},
+
+	onBeforeTransitionOut: function(moveTo, dir, transition, context, method){
+		// Stub function to connect to from your application.
+	},
+
+	onAfterTransitionOut: function(moveTo, dir, transition, context, method){
+		// Stub function to connect to from your application.
+	},
+
+	_saveState: function(moveTo, dir, transition, context, method){
+		var i;
 		this._context = context;
 		this._method = method;
 		if(transition == "none" || !dojo.isWebKit){
 			transition = null;
 		}
 		this._transition = transition;
-		var args = [];
+		this._arguments = [];
+		for(i = 0; i < arguments.length; i++){
+			this._arguments.push(arguments[i]);
+		}
+		this._args = [];
 		if(context || method){
-			for(var i = 5; i < arguments.length; i++){
-				args.push(arguments[i]);
+			for(i = 5; i < arguments.length; i++){
+				this._args.push(arguments[i]);
 			}
 		}
-		this._args = args;
-		if(!toNode){
+	},
+
+	performTransition: function(/*String|DomNode*/moveTo, dir, transition, /*Object|null*/context, /*String|Function*/method /*optional args*/){
+		this._saveState.apply(this, arguments);
+		if(moveTo){
+			if(typeof(moveTo) == "string"){
+				moveTo.match(/(\w+)/);
+				toNode = RegExp.$1;
+			}else{
+				toNode = moveTo;
+			}
+		}else{
 			if(!this._dummyNode){
 				this._dummyNode = dojo.doc.createElement("DIV");
 			}
@@ -87,6 +110,11 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		var fromNode = this.domNode;
 		toNode = this.toNode = dojo.byId(toNode);
 		if(!toNode){ alert("dojox.mobile.Page#performTransition: destination page not found: "+toNode); }
+		this.onBeforeTransitionOut.apply(this, arguments);
+		var toWidget = dijit.byNode(toNode);
+		if(toWidget && toWidget.onBeforeTransitionIn){
+			toWidget.onBeforeTransitionIn.apply(this, arguments);
+		}
 		var rev = (dir == -1) ? " reverse" : "";
 
 		toNode.style.display = "";
@@ -119,7 +147,7 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 			li.style.display = "none";
 			dojo.removeClass(li, "mblCloseContent");
 		}
-		if(isOut/* || this.toNode && this.toNode == this._dummyNode*/){
+		if(isOut){
 			dojox.mobile.Page._pillar.parentNode.removeChild(dojox.mobile.Page._pillar);
 			this.invokeCallback();
 		}
@@ -127,6 +155,12 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 	},
 
 	invokeCallback: function(){
+		this.onAfterTransitionOut.apply(this, this._arguments);
+		var toWidget = dijit.byNode(this.toNode);
+		if(toWidget && toWidget.onAfterTransitionIn){
+			toWidget.onAfterTransitionIn.apply(this, this._arguments);
+		}
+
 		var c = this._context, m = this._method;
 		if(!c && !m){ return; }
 		if(!m){
@@ -265,6 +299,7 @@ dojo.declare(
 	href: "",
 	moveTo: "",
 	transition: "",
+	callback: null,
 
 	startup: function(){
 		if(!this.transition){
@@ -284,7 +319,7 @@ dojo.declare(
 		if(href){
 			w.performTransition(moveTo, 1, this.transition, this, function(){location.href = href;});
 		}else{
-			w.performTransition(moveTo, 1, this.transition);
+			w.performTransition(moveTo, 1, this.transition, this.callback && this, this.callback);
 		}
 	},
 
@@ -305,6 +340,9 @@ dojo.declare(
 		a.className = "mblListItemAnchor";
 		var span = dojo.create("SPAN");
 		span.className = "mblListItemSpan";
+		if(this.href && this.moveTo){
+			span.style.cursor = "pointer";
+		}
 		var r = this.srcNodeRef;
 		if(r){
 			for(var i = 0, len = r.childNodes.length; i < len; i++){
@@ -374,7 +412,7 @@ dojo.declare(
 			for(var p = e.target; p.tagName != "LI"; p = p.parentNode){
 				if(p.className == "mblListItemSpan"){
 					dojo.addClass(p, "mblListItemSpanSelected");
-					this.transitionTo(this.moveTo, this.href);
+					this.transitionTo(null, this.href);
 					return;
 				}
 			}
@@ -388,7 +426,7 @@ dojo.declare(
 		if(this.moveTo){
 			this.transitionTo(this.moveTo);
 		}else if(this.href){
-			this.transitionTo(this.moveTo, this.href);
+			this.transitionTo(null, this.href);
 		}
 	}
 });
@@ -549,6 +587,7 @@ dojo.declare(
 	//		Dynamic creation is not supported.
 	title: "",
 	lazy: false,
+	requires: "",
 	timeout: 10,
 
 	templateString: '<li class="mblIconItem">'+
@@ -648,14 +687,14 @@ dojo.declare(
 		var len = nodes.length;
 		var s;
 		for(var i = 0; i < len; i++){
-			s = nodes[i].getAttribute("dojoType")
+			s = nodes[i].getAttribute("dojoType");
 			if(s){
 				dojo["require"](s);
 			}
 		}
 
 		if(len > 0){
-			(dojo.global.lw&&lw.miniParser||dojo.parser).parse(this.containerNode);
+			(dojo.global.lw&&dojox.mobile.parser||dojo.parser).parse(this.containerNode);
 		}
 		this.lazy = false;
 	},
@@ -713,6 +752,11 @@ dojo.declare(
 		this.contentNode.style.display = "";
 		this.unhighlight();
 		if(this.lazy){
+			if(this.requires){
+				dojo.forEach(this.requires.split(/,/), function(c){
+					dojo["require"](c);
+				});
+			}
 			this.instantiateWidget();
 		}
 		this.contentNode.scrollIntoView();
@@ -891,7 +935,7 @@ dojo._loaders.unshift(function(){
 	var i, len, s;
 	len = nodes.length;
 	for(i = 0; i < len; i++){
-		s = nodes[i].getAttribute("dojoType")
+		s = nodes[i].getAttribute("dojoType");
 		if(s){
 			if(nodes[i].parentNode.getAttribute("lazy") == "true"){
 				nodes[i].setAttribute("__dojoType", s);
@@ -914,7 +958,7 @@ dojo.addOnLoad(function(){
 	var nodes = dojo.body().getElementsByTagName("*");
 	var i, len, s;
 	for(i = 0; i < len; i++){
-		s = nodes[i].getAttribute("__dojoType")
+		s = nodes[i].getAttribute("__dojoType");
 		if(s){
 			nodes[i].setAttribute("dojoType", s);
 			nodes[i].removeAttribute("__dojoType");

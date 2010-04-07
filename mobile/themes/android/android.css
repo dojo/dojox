@@ -12,7 +12,7 @@ body {
 	font-size: 17px;
 }
 
-/* ysl.mbl.Page */
+/* dojox.mobile.Page */
 .mblPage {
 	position: relative;
 	left: 0px;
@@ -104,8 +104,8 @@ body {
 	to { opacity: 1; }
 }
 
-/* ysl.mbl.Heading */
-h1.mblHeading {
+/* dojox.mobile.Heading */
+.mblHeading {
 	position: relative;
 	height: 25px;
 	margin: 0px;
@@ -117,26 +117,12 @@ h1.mblHeading {
 	font-family: Helvetica;
 	font-size: 14px;
 	color: white;
+	text-align: center;
 	line-height: 23px;
 	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-}
-h2.mblHeading {
-	height: 25px;
-	margin: 0px;
-	padding: 0px 0px 0px 4px;
-	background-color: #212021;
-	font-family: Helvetica;
-	font-size: 14px;
-	color: white;
-	line-height: 23px;
-	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	border-bottom: 1px solid #313431;
 }
 
 /* Heading Arrow Button */
@@ -184,29 +170,30 @@ h2.mblHeading {
 	border-color: #3F3E3E;
 	background: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
 }
-h1.mblArrowButtonSelected .mblArrowButtonHead {
+.mblArrowButtonSelected .mblArrowButtonHead {
 	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
 }
-h1.mblArrowButtonSelected .mblArrowButtonBody, h1.mblArrowButtonSelected .mblArrowButtonNeck {
+.mblArrowButtonSelected .mblArrowButtonBody, .mblArrowButtonSelected .mblArrowButtonNeck {
 	background-color: #FFC700;
 	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
 }
 
-/* ysl.mbl.RoundRect */
-div.mblRoundRect {
+/* dojox.mobile.RoundRect */
+.mblRoundRect {
 	margin: 7px 9px 16px;
 	padding: 8px;
 	border: 1px solid #ADAAAD;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
-	background-color: white;
+	color: white;
+	background-color: black;
 }
-div.mblRoundRect.mblShadow {
+.mblRoundRect.mblShadow {
 	-webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* ysl.mbl.EdgeToEdgeCategory */
-h2.mblEdgeToEdgeCategory {
+/* dojox.mobile.EdgeToEdgeCategory */
+.mblEdgeToEdgeCategory {
 	position: relative;
 	height: 22px;
 	padding: 0px 10px;
@@ -223,9 +210,9 @@ h2.mblEdgeToEdgeCategory {
 	text-overflow: ellipsis;
 }
 
-/* ysl.mbl.RoundRectCategory */
-h2.mblRoundRectCategory {
-	color: #4C566C;
+/* dojox.mobile.RoundRectCategory */
+.mblRoundRectCategory {
+	color: white;
 	margin: 18px 0px 0px 20px;
 	text-shadow: rgba(255, 255, 255, 1) 0px 1px 0px;
 	font-family: Helvetica;
@@ -235,7 +222,7 @@ h2.mblRoundRectCategory {
 	text-overflow: ellipsis;
 }
 
-/* ysl.mbl.RoundRectList */
+/* dojox.mobile.RoundRectList */
 .mblRoundRectList {
 	margin: 7px 9px 16px;
 	padding: 0px;
@@ -246,7 +233,7 @@ h2.mblRoundRectCategory {
 	position: relative; /* IE needs this */
 }
 
-/* ysl.mbl.EdgeToEdgeList */
+/* dojox.mobile.EdgeToEdgeList */
 ul.mblEdgeToEdgeList {
 	padding: 0px;
 	background-color: black;
@@ -254,7 +241,7 @@ ul.mblEdgeToEdgeList {
 	margin: 0px; /* IE needs this */
 }
 
-/* ysl.mbl.ListItem */
+/* dojox.mobile.ListItem */
 li.mblListItem {
 	list-style-type: none;
 	height: 64px;
@@ -263,6 +250,7 @@ li.mblListItem {
 	font-size: 21px;
 	position: relative;
 	color: white;
+	background-color: black;
 }
 .mblListItemIcon {
 	position: absolute;
@@ -333,7 +321,7 @@ li.mblItemSelected span.mblArrow {
 	position: absolute;
 	top: 20px;
 	right: 30px;
-	color: #324F85;
+	color: white;
 	line-height: normal;
 }
 li.mblListItem .mblRightButtonContainer {
@@ -455,20 +443,21 @@ li.mblIconItemSub {
 	clear: both;
 }
 
-div.mblIconArea {
+.mblIconArea {
 	font-family: Helvetica;
 	font-size: 12px;
 	height: 90px;
 	width: 74px;
 	text-align: center;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
+	color: white;
 }
 
-div.mblIconArea IMG {
+.mblIconArea IMG {
 	padding-bottom: 2px;
 }
 
-div.mblContent {
+.mblContent {
 	clear: both;
 	margin-bottom: 10px;
 	width: 320px;
@@ -604,7 +593,7 @@ table.mblClose {
 }
 
 /* Icon Content Heading */
-h2.mblIconContentHeading {
+.mblIconContentHeading {
 	position: relative;
 	clear: both;
 	height: 25px;
@@ -622,7 +611,7 @@ h2.mblIconContentHeading {
 	text-overflow: ellipsis;
 }
 
-/* ysl.mbl.Button */
+/* dojox.mobile.Button */
 .mblButton {
 	padding: 0px 10px;
 	height: 29px;

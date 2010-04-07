@@ -13,12 +13,6 @@ dependencies = {
 				"dojo._base.event",
 				"dojo._base.connect",
 				"dojo._base.html",
-				"dojo._base.query"
-			]
-		},
-		{
-			name: "../dojox/mobile.js",
-			dependencies: [
 				"dijit._Widget",
 				"dijit._base.manager",
 				"dijit._base.sniff",
@@ -29,6 +23,7 @@ dependencies = {
 		{
 			name: "../dojox/mobile/compat.js",
 			dependencies: [
+				"dojo._base.fx",
 				"dojox.mobile.compat"
 			]
 		}
