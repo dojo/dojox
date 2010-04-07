@@ -13,27 +13,27 @@
 	cursor: pointer;
 }
 
-.lucid .dojoxCollapsibleToolbarCollapse {
-	background-image: url(../images/lucid/collapse.gif);
+.claro .dojoxCollapsibleToolbarCollapse {
+	background-image: url(../images/claro/collapse.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 12px;
 	height: 12px;
 }
 
-.lucid .dojoxCollapsibleToolbarExpand {
-	background-image: url(../images/lucid/expand.gif);
+.claro .dojoxCollapsibleToolbarExpand {
+	background-image: url(../images/claro/expand.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 12px;
 	height: 12px;
 }
 
-.lucid .dojoxCollapsibleToolbarContainer {
+.claro .dojoxCollapsibleToolbarContainer {
 	background-color: #F1F1F1;
 }
 
-.lucid .dojoxCollapsibleToolbarControl {
+.claro .dojoxCollapsibleToolbarControl {
 	vertical-align: top;
 	border-bottom: 1px solid #ccc;
 	border-left: 1px solid #ccc;

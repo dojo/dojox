@@ -97,24 +97,24 @@
 	background:#b7cdee url('../../../dijit/themes/nihilo/images/buttonEnabled.png') repeat-x; 
 }
 
-/* Lucid */
-.lucid .dijitProgressOverlay {
+/* Claro */
+.claro .dijitProgressOverlay {
 	border:1px solid #769dc0;
 	background-color:#769dc0; 
 }
-.lucid .dijitFakeInput input {
+.claro .dijitFakeInput input {
 	border: 1px solid #bcc8dd;
 	background-color: #fff;
 	background-repeat: repeat-x;
 	background-position: top left;
-	background-image:url("../../../dijit/themes/lucid/images/textBox_back.png");
+	background-image:url("../../../dijit/themes/claro/images/textBox_back.png");
 	line-height:normal;
 	padding:0.2em 0.3em;
 }
 
-.lucid .dijitFileInputButton,
-.lucid .dijitFileInputText {
-	background-image: url("../../../dijit/themes/lucid/form/images/button_back_full.png");
+.claro .dijitFileInputButton,
+.claro .dijitFileInputText {
+	background-image: url("../../../dijit/themes/claro/form/images/button_back_full.png");
 	background-position: center top;
 	background-repeat: repeat-x;
 	background-color: #cde3f6;
