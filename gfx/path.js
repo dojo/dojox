@@ -42,7 +42,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// summary: returns an array of four points or null
 		//	four points represent four corners of the untransformed bounding box
 		if(this.tbbox){
-			return tbbox;	// Array
+			return this.tbbox;	// Array
 		}
 		var bbox = this.bbox, matrix = this._getRealMatrix();
 		this.bbox = null;
@@ -51,12 +51,14 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		}
 		var t = this.bbox;
 		this.bbox = bbox;
-		this.tbbox = [
-			{x: t.l, y: t.t},
-			{x: t.r, y: t.t},
-			{x: t.r, y: t.b},
-			{x: t.l, y: t.b}
-		];
+		if(t){
+			this.tbbox = [
+				{x: t.l, y: t.t},
+				{x: t.r, y: t.t},
+				{x: t.r, y: t.b},
+				{x: t.l, y: t.b}
+			];
+		}
 		return this.tbbox;	// Array
 	},
 
