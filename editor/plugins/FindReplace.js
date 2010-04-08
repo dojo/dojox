@@ -454,7 +454,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			
 			this._findButton = new dijit.form.Button({label: this._strings["findButton"], showLabel: true, 
 				iconClass: this.iconClassPrefix + " dijitEditorIconFind"});
-			this._findButton.titleNode.title = this._strings["findButtonTooltip"]
+			this._findButton.titleNode.title = this._strings["findButtonTooltip"];
 			_tb.addChild(this._findButton);
 			
 			this._replaceButton = new dijit.form.Button({label: this._strings["replaceButton"], showLabel: true,
@@ -626,7 +626,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 				setTimeout(dojo.hitch(this, function(){
 					this.editor.focus();
 				}), 0);
-			};
+			}
 			return isReplaced;
 		 }
 	},
@@ -651,7 +651,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		// The _replace will return false if the current selection deos not match
 		// the searched text. So try the first attempt so that the selection 
 		// is always the searched text if there is one that matches
-		if(this._replace(false)) replaced++;
+		if(this._replace(false)) { replaced++; }
 		// Do the replace via timeouts to avoid locking the browser up for a lot of replaces.
 		var loopBody = dojo.hitch(this, function(){
 			if(this._replace(false)){
