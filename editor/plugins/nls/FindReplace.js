@@ -1,11 +1,21 @@
 ({
-	"findLabel": "Find what:",
+	"findLabel": "Find:",
+	"findTooltip": "Enter text to find",
 	"replaceLabel": "Replace with:",
-	"findReplace": "Toggle Find/Replace",
-	"matchCase": "Match Case", 
+	"replaceTooltip": "Enter text to replace with",
+	"findReplace": "Find and Replace",
+	"matchCase": "Match case",
+	"matchCaseTooltip": "Match case",
 	"backwards": "Backwards",
-	"replaceAll": "All Occurances", 
+	"backwardsTooltip": "Search backwards for text",
+	"replaceAllButton": "Replace All",
+	"replaceAllButtonTooltip": "Replace all the text",
 	"findButton": "Find",
+	"findButtonTooltip": "Find the text",
 	"replaceButton": "Replace",
-	"replaceDialogText": "Replaced ${0} occurances."
+	"replaceButtonTooltip": "Replace the text",
+	"replaceDialogText": "Replaced ${0} occurrences.",
+	"eofDialogText": "Last occurrence ${0}",
+	"eofDialogTextFind": "found",
+	"eofDialogTextReplace": "replaced"
 })

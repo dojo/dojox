@@ -7,8 +7,9 @@
 	<style type="text/css">
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
-		@import "../../../dijit/themes/tundra/tundra.css";
+		@import "../../../dijit/themes/claro/claro.css";
 		@import "../plugins/resources/css/FindReplace.css";
+		@import "../plugins/resources/css/ShowBlockNodes.css";
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
@@ -18,9 +19,12 @@
 		dojo.require("dijit.form.Button");
 		dojo.require("dojo.parser");
 		dojo.require("dojox.editor.plugins.FindReplace");
+		dojo.require("dijit._editor.plugins.FullScreen");
+		dojo.require("dijit._editor.plugins.ViewSource");
+		dojo.require("dojox.editor.plugins.ShowBlockNodes");
 	</script>
 </head>
-<body class="tundra">
+<body class="claro">
 	<br>
 	<h1 class="testTitle">Editor + FindReplace Plugin</h1>
 
@@ -29,7 +33,7 @@
 	This plugin only supports IE, FF, and WebKit.  Opera will not function.  This is an experimental plugin.
 	<br>
 
-	<div dojoType="dijit.Editor" id="editor1" extraPlugins="['findreplace']">
+	<div dojoType="dijit.Editor" id="editor1" extraPlugins="['findreplace', 'fullscreen', 'viewsource', 'tabIndent', 'showblocknodes']">
 		This instance is created from a div with an <b>extra</b> plugin, 'FindReplace' loaded.
 		<ul>
 			<li>List Item One</li>

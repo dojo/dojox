@@ -1,67 +1,81 @@
-.dijitAdditionalEditorIconFindReplace {
-        background-image: url(../icons/findReplace.gif);
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 18px;
-        height: 18px;
+.dijitEditorIconsFindReplace,
+.dijitEditorIconsFindReplace {
+	background-image: url('../icons/editorIconsFindReplaceEnabled.png');
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	text-align: center;
 }
 
-.dijitDisabled .dijitAdditionalEditorIconFindReplace {
-        background-image: url(../icons/findReplaceDisabled.gif);
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 18px;
-        height: 18px;
+.dijitDisabled .dijitEditorIconsFindReplace,
+.dijitDisabled .dijitEditorIconsFindReplace {
+	background-image: url('../icons/editorIconsFindReplaceDisabled.png');
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	text-align: center;
 }
 
-.dijitAdditionalEditorIconFindRun {
-        background-image: url(../icons/findIcon.gif);
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 18px;
-        height: 18px;
-        padding-left: 5px;
-        padding-right: 5px;
+.dijitEditorIconFindString,
+.dijitEditorIconFindString { background-position: 0px; }
+
+.dijitEditorIconFind,
+.dijitEditorIconFind { background-position: -18px; }
+
+.dijitEditorIconReplace,
+.dijitEditorIconReplace { background-position: -36px; }
+
+.dijitEditorIconReplaceAll,
+.dijitEditorIconReplaceAll { background-position: -54px; }
+
+.dijitEditorFindReplaceCheckBox,
+.dijitEditorFindReplaceCheckBox {
+	padding-left: 10px;
+	padding-right: 10px;
+	text-align: center;
 }
 
-.dijitAdditionalEditorIconReplaceRun {
-        background-image: url(../icons/replaceIcon.gif);
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 18px;
-        height: 18px;
-        padding-left: 5px;
-        padding-right: 5px;
+.dijitEditorFindReplaceTextBox,
+.dijitEditorFindReplaceTextBox {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-right: 5px;
 }
 
-.dijitDisabled .dijitAdditionalEditorIconFindRun {
-        background-image: url(../icons/findIconDisabled.gif);
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 18px;
-        height: 18px;
-        padding-left: 5px;
-        padding-right: 5px;
+.dijitEditorFindReplaceTextBox .focusTextBox,
+.dijitEditorFindReplaceTextBox .focusTextBox {
+	width: 13em;
 }
 
-.dijitDisabled .dijitAdditionalEditorIconReplaceRun {
-        background-image: url(../icons/replaceIconDisabled.gif);
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 18px;
-        height: 18px;
-        padding-left: 5px;
-        padding-right: 5px;
+.tundra .dijitEditorIconsFindReplaceClose {
+        background-image: url('../icons/tundra/close.gif');
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	background-position: center; 
 }
 
-.findReplaceCheckBox {
-        padding-left: 10px;
-        padding-right: 10px;
-        text-align: center;
+.soria .dijitEditorIconsFindReplaceClose {
+        background-image: url('../icons/soria/close.gif');
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	background-position: center; 
 }
 
-.findReplaceTextBox {
-        padding-top: 3px;
-        padding-bottom: 3px;
+.nihilo .dijitEditorIconsFindReplaceClose {
+        background-image: url('../icons/nihilo/close.gif');
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	background-position: center; 
+}
+
+.claro .dijitEditorIconsFindReplaceClose {
+        background-image: url('../icons/claro/close.gif');
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	background-position: center; 
 }
 
