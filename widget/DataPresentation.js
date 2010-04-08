@@ -12,20 +12,13 @@ dojo.require("dojo.data.ItemFileWriteStore");
 (function(){
 	
 	// sort out the labels for the independent axis of the chart
-	var getLabels = function(rangevalues, labelMod, reverse, charttype, domNode){
+	var getLabels = function(range, labelMod, charttype, domNode){
 		
 		// prepare labels for the independent axis
 		var labels = [];
 		// add empty label, hack
 		labels[0] = {value: 0, text: ''};
 
-		var range = rangevalues.slice(0);
-			
-		// reverse the labels if requested
-		if(reverse){
-			range.reverse();
-		}
-			
 		var nlabels = range.length;
 
 		// auto-set labelMod for horizontal charts if the labels will otherwise collide
@@ -185,7 +178,14 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			_chart.setTheme(theme);
 		}
 
-		var labels = getLabels(store.series_data[0], labelMod, reverse, type, domNode);
+		var range = store.series_data[0].slice(0);
+		
+		// reverse the labels if requested
+		if(reverse){
+			range.reverse();
+		}
+			
+		var labels = getLabels(range, labelMod, type, domNode);
 
 		// collect details of whether primary and/or secondary axes are required 
 		// and what plots we have instantiated using each type of axis
@@ -205,6 +205,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		for(var i = 0; i < nseries; i++){
 			// only include series with chart=true and with some data values in
 			if(store.series_chart[i] && (store.series_data[i].length > 0)){
+
 				var charttype = type;
 				var axistype = store.series_axis[i];
 
@@ -226,22 +227,22 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					var axisname = axistype + "-" + charttype;
 					
 					// create the plot and enable tooltips
- 					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));
- 
- 					var tooltipArgs = {};
- 					if(typeof tooltip == 'string'){
- 						tooltipArgs.text = function(o){
- 							var substitutions = [o.element, o.run.name, labels[o.index].text, ((charttype === "ClusteredBars") || (charttype === "StackedBars")) ? o.x : o.y];
- 							return dojo.replace(tooltip, substitutions);  // from Dojo 1.4 onward
- 							//return tooltip.replace(/\{([^\}]+)\}/g, function(_, token){ return dojo.getObject(token, false, substitutions); });  // prior to Dojo 1.4
- 						}
- 					}else if(typeof tooltip == 'function'){
- 						tooltipArgs.text = tooltip;
- 					}
- 					new dojox.charting.action2d.Tooltip(_chart, axisname, tooltipArgs);
+					_chart.addPlot(axisname, getPlotArgs(charttype, axistype, animate));
 
+					var tooltipArgs = {};
+					if(typeof tooltip == 'string'){
+						tooltipArgs.text = function(o){
+							var substitutions = [o.element, o.run.name, range[o.index], ((charttype === "ClusteredBars") || (charttype === "StackedBars")) ? o.x : o.y];
+							return dojo.replace(tooltip, substitutions);  // from Dojo 1.4 onward
+							//return tooltip.replace(/\{([^\}]+)\}/g, function(_, token){ return dojo.getObject(token, false, substitutions); });  // prior to Dojo 1.4
+						}
+					}else if(typeof tooltip == 'function'){
+						tooltipArgs.text = tooltip;
+					}
+					new dojox.charting.action2d.Tooltip(_chart, axisname, tooltipArgs);
+					
 					// add highlighting, except for lines
-					if((charttype !== "Lines") && (charttype !== "Hybrid-Lines")){
+					if(charttype !== "Lines" && charttype !== "Hybrid-Lines"){
 						new dojox.charting.action2d.Highlight(_chart, axisname);
 					}
 					
@@ -267,7 +268,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				if(reverse){
 					xvals.reverse();
 				}
-					
+
 				var seriesargs = { plot: axistype + "-" + charttype };
 				if(store.series_linestyle[i]){
 					seriesargs.stroke = { style: store.series_linestyle[i] };
