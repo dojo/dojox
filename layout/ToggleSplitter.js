@@ -80,7 +80,7 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 
 		// update state
 		this._started = true; 
-		this.attr("open", this.open);
+		this.set("open", this.open);
 
 		return this;
 	},
@@ -236,7 +236,7 @@ dojo.declare("dojox.layout.ToggleSplitter", [ dijit.layout._Splitter ],
 		if(evt){
 			dojo.stopEvent(evt);
 		}
-		this.attr("open", !this.open);
+		this.set("open", !this.open);
 	},
 
 	_onKeyPress: function(/*Event*/ e){

@@ -104,7 +104,7 @@ dojo.declare(
 			this.inherited(arguments);
 			// Make sure our display is up-to-date with our value
 			if(this._opened){ 
-				this.dropDown.attr("pathValue", this.attr("value"));
+				this.dropDown.attr("pathValue", this.get("value"));
 			}
 		},
 		
@@ -152,7 +152,7 @@ dojo.declare(
 			// summary: sets the value of the widget once focus has left
 			if(this.dropDown && !this._settingBlurValue){
 				this._settingBlurValue = true;
-				this.attr("value", this.focusNode.value);
+				this.set("value", this.focusNode.value);
 			}else{
 				delete this._settingBlurValue;
 				this.inherited(arguments);

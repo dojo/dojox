@@ -120,7 +120,7 @@
             Add Belgium
             <script type="dojo/connect" event="onClick">
                 add_item({ id: 'EU_BE', name: 'Belgium', type: 'country' }, "EU");
-				this.attr("disabled", true);
+				this.set("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button">
@@ -134,7 +134,7 @@
 						}
 					}
 				});
-				this.attr("disabled", true);
+				this.set("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button">
@@ -142,7 +142,7 @@
             <script type="dojo/connect" event="onClick">
                 add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
 				delCal.attr("disabled", false);
-				this.attr("disabled", true);
+				this.set("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button" disabled jsId="delCal">
@@ -156,7 +156,7 @@
 						}
 					}
 				});
-				this.attr("disabled", true);
+				this.set("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button" jsId="delEU">
@@ -170,7 +170,7 @@
 						}
 					}
 				});
-				this.attr("disabled", true);
+				this.set("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button" jsId="empty">
@@ -188,7 +188,7 @@
 					}
 				});
 				jsonStore.save();
-				this.attr("disabled", true);
+				this.set("disabled", true);
             </script>
         </button>
         <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">

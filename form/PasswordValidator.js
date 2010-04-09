@@ -95,7 +95,7 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 	},
 
 	_setBlurValue: function(){
-		// TextBox._setBlurValue calls this._setValueAttr(this.attr('value'), ...)
+		// TextBox._setBlurValue calls this._setValueAttr(this.get('value'), ...)
 		// Because we are overridding _getValueAttr to return "" when the containerWidget
 		// is not valid, TextBox._setBlurValue will cause OldPWBox's value to be set to ""
 		//
@@ -131,7 +131,7 @@ dojo.declare("dojox.form._VerifyPWBox", dojox.form._ChildTextBox, {
 		// summary:
 		//		Validates that we match the "real" password
 		return this.inherited("isValid", arguments) &&
-			(this.attr("value") == this.containerWidget._inputWidgets[1].attr("value"));
+			(this.get("value") == this.containerWidget._inputWidgets[1].attr("value"));
 	}
 });
 
@@ -266,7 +266,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 	},
 	
 	_childValueAttr: function(v){
-		this.attr("value", this.isValid() ? v : "");
+		this.set("value", this.isValid() ? v : "");
 	},
 	
 	_setDisabledAttr: function(value){

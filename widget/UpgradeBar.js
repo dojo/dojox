@@ -154,7 +154,7 @@ dojo.declare("dojox.widget.UpgradeBar", [dijit._Widget, dijit._Templated], {
 		}
 		dojo.style(this.domNode, "display", "");
 		if(msg){
-			this.attr("message", msg);
+			this.set("message", msg);
 		}
 
 	},

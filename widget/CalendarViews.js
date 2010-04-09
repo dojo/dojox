@@ -53,7 +53,7 @@ dojo.declare("dojox.widget._CalendarMonthView", [dojox.widget._CalendarView, dij
 		// summary: Handles clicks on month names
 		if(!dojo.hasClass(evt.target, "dojoxCalendarMonthLabel")){dojo.stopEvent(evt); return;}
 		var month = evt.target.parentNode.cellIndex + (evt.target.parentNode.parentNode.rowIndex * 4);
-		var date = this.attr("value");
+		var date = this.get("value");
 		date.setMonth(month);
 		this.onValueSelected(date, month);
 	}
@@ -103,7 +103,7 @@ dojo.declare("dojox.widget._CalendarYearView", [dojox.widget._CalendarView, diji
 		// summary: Handles clicks on year values.
 		if(!dojo.hasClass(evt.target, "dojoxCalendarYearLabel")){dojo.stopEvent(evt); return;}
 		var year = Number(evt.target.innerHTML);
-		var date = this.attr("value");
+		var date = this.get("value");
 		date.setYear(year);
 		this.onValueSelected(date, year);
 	}

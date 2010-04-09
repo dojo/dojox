@@ -37,7 +37,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 		// summary:
 		//	sets state from idle to busy
 		this.isBusy = true;
-		this.attr("disabled", true);
+		this.set("disabled", true);
 			
 		this.setLabel(this.busyLabel, this.timeout);
 	},
@@ -46,7 +46,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 		// summary:
 		//	if no timeout is set or for other reason the user can put the button back
 		//  to being idle
-		this.attr("disabled", false);
+		this.set("disabled", false);
 		this.isBusy = false;
 		this.setLabel(this._label);
 		if(this._timeout){	clearTimeout(this._timeout); }

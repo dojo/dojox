@@ -412,7 +412,7 @@ dojo.declare("dojox.layout.RotatorPager", [dijit._Widget, dijit._Templated, diji
 			}
 			if(this.playPause){
 				dojo.connect(this.playPause, "onClick", function(){
-					this.attr('label', this.checked ? "Pause" : "Play");
+					this.set('label', this.checked ? "Pause" : "Play");
 					dojo.publish(p.id+"-state", [this.checked]);
 				});
 			}

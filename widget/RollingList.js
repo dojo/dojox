@@ -886,7 +886,7 @@ dojo.declare("dojox.widget.RollingList",
 					fx();
 				}
 			}else if(idx === 0){
-				this.attr("value", null);
+				this.set("value", null);
 			}
 		});
 		
@@ -1074,7 +1074,7 @@ dojo.declare("dojox.widget.RollingList",
 	
 	_resetValue: function(){
 		// Summary: function called when the value is reset.
-		this.attr("value", this._lastExecutedValue);
+		this.set("value", this._lastExecutedValue);
 	},
 	
 	_onCancel: function(){
@@ -1087,7 +1087,7 @@ dojo.declare("dojox.widget.RollingList",
 	_onExecute: function(){
 		// Summary: function called when the OK button is clicked or when an
 		//		item is selected (double-clicked or "enter" pressed on it)
-		this._lastExecutedValue = this.attr("value");
+		this._lastExecutedValue = this.get("value");
 		this.onExecute();
 	},
 	
@@ -1148,9 +1148,9 @@ dojo.declare("dojox.widget.RollingList",
 		this.connect(this, "addChild", "_updateChildClasses");
 		this.connect(this, "removeChild", "_updateChildClasses");
 		this._setStore(this.store);
-		this.attr("showButtons", this.showButtons);	
+		this.set("showButtons", this.showButtons);	
 		this.inherited(arguments);
-		this._lastExecutedValue = this.attr("value");
+		this._lastExecutedValue = this.get("value");
 	},
 	
 	getChildItems: function(/*item*/ item){

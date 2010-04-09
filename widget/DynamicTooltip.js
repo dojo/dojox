@@ -46,7 +46,7 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
 		//	// summary:
 		//	//		Deprecated.   Use set('href', ...) instead.
 		//	dojo.deprecated("dojox.widget.DynamicTooltip.setHref() is deprecated.	Use set('href', ...) instead.", "", "2.0");
-		//	return this.attr("href", href);
+		//	return this.set("href", href);
 		// },
 
 		_setHrefAttr: function(/*String|Uri*/ href){

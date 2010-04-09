@@ -139,7 +139,7 @@ dojo.require("dojo.i18n");
 		
 		startup: function(){
 			this._started = true;
-			this.attr("value", this.value);
+			this.set("value", this.value);
 		},
 		
 		_setValueAttr: function(value){

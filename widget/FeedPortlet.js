@@ -54,7 +54,7 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 		this.inherited(arguments);
 		var url = child.attr("feedPortletUrl");
 		if(url){
-			this.attr("url", url);
+			this.set("url", url);
 		}
 	},
 	
@@ -141,7 +141,7 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 				if (this.showFeedTitle && store.getFeedValue) {
 					var title = this.store.getFeedValue("title");
 					if(title){
-						this.attr("title", title.text ? title.text : title);
+						this.set("title", title.text ? title.text : title);
 					}
 				}
 				this.generateResults(items);
@@ -370,7 +370,7 @@ dojo.declare("dojox.widget.PortletFeedSettings",
 					// Set the selected index on the Select node.
 					dojo.some(this.text.options, dojo.hitch(this, function(opt, idx){
 						if(opt.selected){
-							this.attr("selectedIndex", idx);
+							this.set("selectedIndex", idx);
 							return true;
 						}
 						return false;
@@ -420,7 +420,7 @@ dojo.declare("dojox.widget.PortletFeedSettings",
 				this.text.attr("value", url);
 			}
 		}else{
-			this.portlet.attr("url", this.attr("feedPortletUrl"));
+			this.portlet.attr("url", this.get("feedPortletUrl"));
 		}
 	},
 	

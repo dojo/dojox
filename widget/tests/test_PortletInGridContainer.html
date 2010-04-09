@@ -309,7 +309,7 @@
 						title="Cool Blogs -> Remembering Your Selection" showFeedTitle="false">
 					<select dojoType="dojox.widget.PortletFeedSettings" id="coolBlogsSettings">
 						<script type="dojo/connect">
-							this.attr("selectedIndex", dojo.cookie(this.id + "-selectedIndex") || 0);
+							this.set("selectedIndex", dojo.cookie(this.id + "-selectedIndex") || 0);
 						</script>
 						<script type="dojo/connect" event="attr" args="name, value">
 							if(name == "selectedIndex"){

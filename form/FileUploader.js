@@ -641,7 +641,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			return false;
 		}
 		if(!this.showProgress){
-			this.attr("disabled", true);
+			this.set("disabled", true);
 		}
 		
 		if(this.progressWidgetId){
@@ -754,7 +754,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 	},
 	disable: function(/*Boolean*/disabled){
 		console.warn("DEPRECATED: FileUploader.disable() - will be removed in 1.5. Use set('disable', true) instead.")
-		this.attr("disable", disabled);
+		this.set("disable", disabled);
 	},
 	/*************************
 	 *	   Private Events	 *
@@ -895,7 +895,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		
 		this.fileList = [];
 		this._resetHTML();
-		this.attr("disabled", false);
+		this.set("disabled", false);
 		
 		
 		if(this.restoreProgDisplay){

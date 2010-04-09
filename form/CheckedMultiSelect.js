@@ -53,7 +53,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		//		Called to force the select to match the state of the check box
 		//		(only on click of the checkbox)  Radio-based calls _setValueAttr
 		//		instead.
-		if(this.attr("disabled") || this.attr("readOnly")){ return; }
+		if(this.get("disabled") || this.get("readOnly")){ return; }
 		if(this.parent.multiple){
 			this.option.selected = this.checkBox.attr('value') && true;
 		}else{
@@ -69,7 +69,7 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 	_onClick: function(e){
 		// summary:
 		//		Sets the click state (passes through to the check box)
-		if(this.attr("disabled") || this.attr("readOnly")){
+		if(this.get("disabled") || this.get("readOnly")){
 			dojo.stopEvent(e);
 		}else{
 			this.checkBox._onClick(e);

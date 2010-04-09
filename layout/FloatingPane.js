@@ -170,7 +170,7 @@ dojo.declare("dojox.layout.FloatingPane",
 	setTitle: function(/* String */ title){
 		// summary: Update the Title bar with a new string
 		dojo.deprecated("pane.setTitle", "Use pane.attr('title', someTitle)", "2.0");
-		this.attr("title", title);
+		this.set("title", title);
 		// this.setTitle = dojo.hitch(this, "setTitle") ?? 
 	},
 		
