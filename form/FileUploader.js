@@ -753,7 +753,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		dojo.style(this.domNode, 'display', '');
 	},
 	disable: function(/*Boolean*/disabled){
-		console.warn("DEPRECATED: FileUploader.disable() - will be removed in 1.5. Use attr('disable', true) instead.")
+		console.warn("DEPRECATED: FileUploader.disable() - will be removed in 1.5. Use set('disable', true) instead.")
 		this.attr("disable", disabled);
 	},
 	/*************************
