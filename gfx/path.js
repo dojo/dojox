@@ -51,14 +51,12 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		}
 		var t = this.bbox;
 		this.bbox = bbox;
-		if(t){
-			this.tbbox = [
-				{x: t.l, y: t.t},
-				{x: t.r, y: t.t},
-				{x: t.r, y: t.b},
-				{x: t.l, y: t.b}
-			];
-		}
+		this.tbbox = t ? [
+			{x: t.l, y: t.t},
+			{x: t.r, y: t.t},
+			{x: t.r, y: t.b},
+			{x: t.l, y: t.b}
+		] : null;
 		return this.tbbox;	// Array
 	},
 
