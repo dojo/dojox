@@ -18,7 +18,7 @@ dojo.provide("dojox.data.ServiceStore");
 dojo.declare("dojox.data.ServiceStore",
 	// ClientFilter is intentionally not required, ServiceStore does not need it, and is more
 	// lightweight without it, but if it is provided, the ServiceStore will use it.
-	dojox.data.ClientFilter,{
+	dojox.data.ClientFilter||null,{
 		service: null,
 		constructor: function(options){
 			//summary:
