@@ -52,7 +52,7 @@ dojo.declare("dojox.editor.plugins.Blockquote",dijit._editor._Plugin,{
 			var ed = this.editor;
 			ed.focus();
 
-			var quoteIt = this.button.attr("checked");
+			var quoteIt = this.button.get("checked");
 			var sel = dijit.range.getSelection(ed.window);
 			var range, elem, start, end;
 			if(sel && sel.rangeCount > 0){
@@ -335,7 +335,7 @@ dojo.declare("dojox.editor.plugins.Blockquote",dijit._editor._Plugin,{
 				elem = elem.parentNode;
 			}
 			// toggle whether or not the current selection is blockquoted.
-			this.button.attr("checked", found);
+			this.button.set("checked", found);
 		}
 	},
 

@@ -52,7 +52,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 	toggle: function(){
 		// summary:
 		//		Function to allow programmatic toggling of the view.
-		this.button.attr("checked", !this.button.attr("checked"));
+		this.button.set("checked", !this.button.get("checked"));
 	},
 
 	_showBlocks: function(show){

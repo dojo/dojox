@@ -55,7 +55,7 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 		//		Function to trigger saving of the editor document
 		// tags:
 		//		private
-		var content = this.editor.attr("value");
+		var content = this.editor.get("value");
 		this.save(content);
 	},
 
@@ -79,7 +79,7 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 				headers: headers,
 				handleAs: "text"
 			};
-			this.button.attr("disabled", true);
+			this.button.set("disabled", true);
 			var deferred = dojo.xhrPost(postArgs);
 			deferred.addCallback(dojo.hitch(this, this.onSuccess));
 			deferred.addErrback(dojo.hitch(this, this.onError));
@@ -96,7 +96,7 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 		//		The response from the server, if any, in text format.
 		// tags:
 		//		public
-		this.button.attr("disabled", false);
+		this.button.set("disabled", false);
 		if(this.logResults){
 			console.log(resp);
 		}
@@ -110,7 +110,7 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 		//		The response from the server, if any, in text format.
 		// tags:
 		//		public
-		this.button.attr("disabled", false);
+		this.button.set("disabled", false);
 		if(this.logResults){
 			console.log(error);
 		}

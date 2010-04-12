@@ -100,15 +100,15 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 
 			body._ddConnect = dojo.connect(body, "openDropDown", dojo.hitch(this, function(){
 				this._menuTarget = body._selNode;
-				this._menuTitle.attr("menuTitle", dojo.string.substitute(this._titleTemplate,{
+				this._menuTitle.set("menuTitle", dojo.string.substitute(this._titleTemplate,{
 						"nodeName": "&lt;body&gt;"
 				}));
-				this._selEMenu.attr("disabled", true);
-				this._delEMenu.attr("disabled", true);
-				this._selCMenu.attr("disabled", false);
-				this._delCMenu.attr("disabled", false);
-				this._moveSMenu.attr("disabled", false);
-				this._moveEMenu.attr("disabled", false);
+				this._selEMenu.set("disabled", true);
+				this._delEMenu.set("disabled", true);
+				this._selCMenu.set("disabled", false);
+				this._delCMenu.set("disabled", false);
+				this._moveSMenu.set("disabled", false);
+				this._moveEMenu.set("disabled", false);
 			}));
 			this.breadcrumbBar.addChild(body);
 			this.connect(this.editor, "onNormalizedDisplayChanged", "updateState");
@@ -267,7 +267,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 							var title = dojo.string.substitute(self._titleTemplate,{
 								"nodeName": "&lt;" + nodeName + "&gt;"
 							});
-							self._menuTitle.attr("menuTitle", title);
+							self._menuTitle.set("menuTitle", title);
 							switch(nodeName){
 								case 'br':
 								case 'hr':
@@ -277,20 +277,20 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 								case 'meta':
 								case 'area':
 								case 'basefont':
-									self._selCMenu.attr("disabled", true);
-									self._delCMenu.attr("disabled", true);
-									self._moveSMenu.attr("disabled", true);
-									self._moveEMenu.attr("disabled", true);
-									self._selEMenu.attr("disabled", false);
-									self._delEMenu.attr("disabled", false);
+									self._selCMenu.set("disabled", true);
+									self._delCMenu.set("disabled", true);
+									self._moveSMenu.set("disabled", true);
+									self._moveEMenu.set("disabled", true);
+									self._selEMenu.set("disabled", false);
+									self._delEMenu.set("disabled", false);
 									break;
 								default:
-									self._selCMenu.attr("disabled", false);
-									self._delCMenu.attr("disabled", false);
-									self._selEMenu.attr("disabled", false);
-									self._delEMenu.attr("disabled", false);
-									self._moveSMenu.attr("disabled", false);
-									self._moveEMenu.attr("disabled", false);
+									self._selCMenu.set("disabled", false);
+									self._delCMenu.set("disabled", false);
+									self._selEMenu.set("disabled", false);
+									self._delEMenu.set("disabled", false);
+									self._moveSMenu.set("disabled", false);
+									self._moveEMenu.set("disabled", false);
 							}
 						}));
 						this._buttons.push(b);

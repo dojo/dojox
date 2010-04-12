@@ -76,15 +76,15 @@ dojo.declare("dojox.editor.plugins._FindReplaceTextBox",
 	},
 
 	postCreate: function(){
-		this.textBox.attr("value", "");
-		this.disabled =  this.textBox.attr("disabled");
+		this.textBox.set("value", "");
+		this.disabled =  this.textBox.get("disabled");
 		this.connect(this.textBox, "onChange", "onChange");
 	},
 
 	_setValueAttr: function(/*String*/ value){
 		//If the value is not a permitted value, just set empty string to prevent showing the warning icon
 		this.value = value;
-		this.textBox.attr("value", value);
+		this.textBox.set("value", value);
 	},
 
 	focus: function(){
@@ -100,7 +100,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceTextBox",
 		// tags:
 		//		private 
 		this.disabled = value;
-		this.textBox.attr("disabled", value);
+		this.textBox.set("disabled", value);
 	},
 
 	onChange: function(/*String*/ val){
@@ -181,8 +181,8 @@ dojo.declare("dojox.editor.plugins._FindReplaceCheckBox",
 	},
 
 	postCreate: function(){
-		this.checkBox.attr("checked", false);
-		this.disabled =  this.checkBox.attr("disabled");
+		this.checkBox.set("checked", false);
+		this.disabled =  this.checkBox.get("disabled");
 		this.checkBox.isFocusable = function(){ return false; };
 	},
 
@@ -191,7 +191,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceCheckBox",
 		//		Passthrough for checkbox.
 		// tags:
 		//		private
-		this.checkBox.attr('value', value);
+		this.checkBox.set('value', value);
 	},
 
 	_getValueAttr: function(){
@@ -199,7 +199,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceCheckBox",
 		//		Passthrough for checkbox.
 		// tags:
 		//		private
-		return this.checkBox.attr('value');
+		return this.checkBox.get('value');
 	},
 
 	focus: function(){
@@ -219,7 +219,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceCheckBox",
 		// tags:
 		//		private
 		this.disabled = value;
-		this.checkBox.attr("disabled", value);
+		this.checkBox.set("disabled", value);
 	}
 });
 
@@ -336,12 +336,12 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		});
 		if(dojo.isOpera){
 			// Not currently supported on Opera!
-			this.button.attr("disabled", true);
+			this.button.set("disabled", true);
 		}
 		//Link up so that if the toggle is disabled, then the view of Find/Replace is closed.
-		this.connect(this.button, "attr", dojo.hitch(this, function(attr, val){
+		this.connect(this.button, "set", dojo.hitch(this, function(attr, val){
 			if(attr === "disabled"){
-	            this._toggleFindReplace((!val && this._displayed), true, true);
+				this._toggleFindReplace((!val && this._displayed), true, true);
 			}
 		}));
 	},
@@ -359,7 +359,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		//		Function to allow programmatic toggling of the find toolbar.
 		// tags:
 		//		public
-		this.button.attr("checked", !this.button.attr("checked"));
+		this.button.set("checked", !this.button.attr("checked"));
 	},
 
 	_toggleFindReplace: function(/*Boolean*/ show, /*Boolean?*/ ignoreState, /*Boolean?*/ buttonDisabled){
@@ -413,7 +413,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		var selectedTxt = dojo.withGlobal(ed.window, "getSelectedText", dijit._editor.selection, [null]);
 		if(this._findField && this._findField.textBox){
 			if(selectedTxt){
-				this._findField.textBox.attr("value", selectedTxt);
+				this._findField.textBox.set("value", selectedTxt);
 			}
 			this._findField.textBox.focus();
 			dijit.selectInputText(this._findField.textBox.focusNode);
@@ -478,9 +478,9 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 
 			// Set initial states, buttons should be disabled unless content is 
 			// present in the fields.
-			this._findButton.attr("disabled", true);
-			this._replaceButton.attr("disabled", true);
-			this._replaceAllButton.attr("disabled", true);
+			this._findButton.set("disabled", true);
+			this._replaceButton.set("disabled", true);
+			this._replaceAllButton.set("disabled", true);
 
 			// Connect the event to the status of the items
 			this.connect(this._findField, "onChange", "_checkButtons");
@@ -498,7 +498,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			// Prompt for the message
 			this._promDialog = new dijit.TooltipDialog();
 			this._promDialog.startup();
-			this._promDialog.attr("content", "");
+			this._promDialog.set("content", "");
 		}
 	},
 
@@ -506,17 +506,17 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		// summary:
 		//		Ensure that all the buttons are in a correct status
 		//		when certain events are fired.
-		var fText = this._findField.attr("value");
+		var fText = this._findField.get("value");
 
 		if(fText){
 			// Only enable if find text is not empty or just blank/spaces.
-			this._findButton.attr("disabled", false);
-			this._replaceButton.attr("disabled", false);
-			this._replaceAllButton.attr("disabled", false);
+			this._findButton.set("disabled", false);
+			this._replaceButton.set("disabled", false);
+			this._replaceAllButton.set("disabled", false);
 		}else{
-			this._findButton.attr("disabled", true);
-			this._replaceButton.attr("disabled", true);
-			this._replaceAllButton.attr("disabled", true);
+			this._findButton.set("disabled", true);
+			this._replaceButton.set("disabled", true);
+			this._replaceAllButton.set("disabled", true);
 		}
 	},
 	
@@ -546,13 +546,13 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		//		private.
 		// returns:
 		//		Boolean indicating if the content was found or not.
-		var txt = this._findField.attr("value") || ""; 
+		var txt = this._findField.get("value") || ""; 
 		if(txt){
-			var caseSensitive = this._caseSensitive.attr("value");
-			var backwards = this._backwards.attr("value");
+			var caseSensitive = this._caseSensitive.get("value");
+			var backwards = this._backwards.get("value");
 			var isFound = this._findText(txt, caseSensitive, backwards);
 			if(!isFound && showMessage){
-				this._promDialog.attr("content", dojo.string.substitute(
+				this._promDialog.set("content", dojo.string.substitute(
 					this._strings["eofDialogText"], {"0": this._strings["eofDialogTextFind"]}));
 				dijit.popup.open({popup: this._promDialog, around: this._findButton.domNode});
 				this._promDialogTimeout = setTimeout(dojo.hitch(this, function(){
@@ -583,13 +583,13 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		var isReplaced = false;
 		var ed = this.editor;
 		ed.focus();
-		var txt = this._findField.attr("value") || "";
-		var repTxt = this._replaceField.attr("value") || "";
+		var txt = this._findField.get("value") || "";
+		var repTxt = this._replaceField.get("value") || "";
 		 
 		if(txt){
-			var caseSensitive = this._caseSensitive.attr("value");
+			var caseSensitive = this._caseSensitive.get("value");
 			// Check if it is forced to be forwards or backwards
-			var backwards = this._backwards.attr("value");
+			var backwards = this._backwards.get("value");
 			
 			//Replace the current selected text if it matches the pattern
 			var selected = dojo.withGlobal(ed.window, "getSelectedText", dijit._editor.selection, [null]);
@@ -615,7 +615,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			}
 			
 			if(!this._find(false) && showMessage){	// Find the next
-				this._promDialog.attr("content", dojo.string.substitute(
+				this._promDialog.set("content", dojo.string.substitute(
 					this._strings["eofDialogText"], {"0": this._strings["eofDialogTextReplace"]}));
 				dijit.popup.open({popup: this._promDialog, around: this._replaceButton.domNode});
 				this._promDialogTimeout = setTimeout(dojo.hitch(this, function(){
@@ -640,7 +640,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		// tags:
 		//		private
 		var replaced = 0;
-		var backwards = this._backwards.attr("value");
+		var backwards = this._backwards.get("value");
 		
 		if(backwards){
 			this.editor.placeCursorAtEnd();
@@ -659,7 +659,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 				setTimeout(loopBody, 10);
 			}else{
 				if(showMessage){
-					this._promDialog.attr("content", dojo.string.substitute(
+					this._promDialog.set("content", dojo.string.substitute(
 						this._strings["replaceDialogText"], {"0": "" + replaced}));
 					dijit.popup.open({
 						popup: this._promDialog,

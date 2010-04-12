@@ -86,7 +86,7 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 		strings.height = this.height || "300px";
 
 		this._dialog = new dijit.Dialog({title: strings["pasteFromWord"]}).placeAt(dojo.body());
-		this._dialog.attr("content", dojo.string.substitute(this._template, strings));
+		this._dialog.set("content", dojo.string.substitute(this._template, strings));
 
 		// Make it translucent so we can fade in the window when the RTE is created.
 		// the RTE has to be created 'visible, and this is a ncie trick to make the creation
@@ -137,7 +137,7 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 
 		// Gather the content and try to format it a bit (makes regexp cleanup simpler).
 		// It also normalizes tag names and styles, so regexps are the same across browsers.
-		var content = dojox.html.format.prettyPrint(this._rte.attr("value"));
+		var content = dojox.html.format.prettyPrint(this._rte.get("value"));
 
 		//Close up the dialog and clear old content.
 		this._dialog.hide();
@@ -172,7 +172,7 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 		//		copy from dialog into the editor.
 		// tags:
 		//		private
-		this._rte.attr("value", "");
+		this._rte.set("value", "");
 	},
 
 	destroy: function(){
