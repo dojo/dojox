@@ -1,4 +1,3 @@
-.dijitEditorIconsFindReplace,
 .dijitEditorIconsFindReplace {
 	background-image: url('../icons/editorIconsFindReplaceEnabled.png');
 	background-repeat: no-repeat;
@@ -7,7 +6,6 @@
 	text-align: center;
 }
 
-.dijitDisabled .dijitEditorIconsFindReplace,
 .dijitDisabled .dijitEditorIconsFindReplace {
 	background-image: url('../icons/editorIconsFindReplaceDisabled.png');
 	background-repeat: no-repeat;
@@ -16,33 +14,26 @@
 	text-align: center;
 }
 
-.dijitEditorIconFindString,
 .dijitEditorIconFindString { background-position: 0px; }
 
-.dijitEditorIconFind,
 .dijitEditorIconFind { background-position: -18px; }
 
-.dijitEditorIconReplace,
 .dijitEditorIconReplace { background-position: -36px; }
 
-.dijitEditorIconReplaceAll,
 .dijitEditorIconReplaceAll { background-position: -54px; }
 
-.dijitEditorFindReplaceCheckBox,
 .dijitEditorFindReplaceCheckBox {
 	padding-left: 10px;
 	padding-right: 10px;
 	text-align: center;
 }
 
-.dijitEditorFindReplaceTextBox,
 .dijitEditorFindReplaceTextBox {
 	padding-top: 3px;
 	padding-bottom: 3px;
 	padding-right: 5px;
 }
 
-.dijitEditorFindReplaceTextBox .focusTextBox,
 .dijitEditorFindReplaceTextBox .focusTextBox {
 	width: 13em;
 }
