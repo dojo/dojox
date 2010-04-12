@@ -1,7 +1,6 @@
 dojo.provide("dojox.form.TimeSpinner");
 
 dojo.require("dijit.form._Spinner");
-dojo.require("dijit.form.NumberTextBox");
 dojo.require("dojo.date");
 dojo.require("dojo.date.locale");
 dojo.require("dojo.date.stamp");
