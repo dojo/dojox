@@ -27,6 +27,11 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
 	if(name ===  "||" || name === "toolbarlinebreak"){
-		o.plugin = new dijit._editor._Plugin({button: new dojox.editor.plugins._ToolbarLineBreak()});
+		o.plugin = new dijit._editor._Plugin({
+			button: new dojox.editor.plugins._ToolbarLineBreak(),
+			setEditor: function(editor){
+				this.editor = editor;
+			}
+		});
 	}
 });
