@@ -18,7 +18,7 @@
 
 /* Round Corner */
 .mblRoundCorner {
-	background-color: white;
+	background-color: black;
 	height: 1px;
 	font-size: 1px;
 	overflow: hidden;
@@ -28,7 +28,7 @@
 }
 .mblRoundRectContainer {
 	padding: 3px 8px;
-	background-color: white;
+	background-color: black;
 	border-style: solid;
 	border-color: #ADAAAD;
 	border-width: 0px 1px;
@@ -82,13 +82,17 @@
 }
 
 /* mbl.widget.ListItem */
-li.mblListItem span.mblArrow {
+*html li.mblListItem.mblVariableHeight { /* IE6 hack */
+	height: 0;
+}
+
+li.mblListItem .mblArrow {
 	border-style: none;
 	width: 9px;
 	height: 13px;
 	background-image: url(compat/gray-arrow.png);
 }
-li.mblItemSelected span.mblArrow {
+li.mblItemSelected .mblArrow {
 	background-image: url(compat/white-arrow.png);
 }
 
@@ -205,8 +209,11 @@ li.mblItemSelected span.mblArrow {
 }
 
 /* dojox.mobile.Button */
-.mblButton {
+.mblBlueButton {
 	background-image: url(compat/blue-button-bg.png);
+}
+.mblBlueButtonSelected {
+	background-image: url(compat/blue-button-sel-bg.png);
 }
 
 /* Tab Container */
@@ -227,4 +234,51 @@ li.mblItemSelected span.mblArrow {
 			el.style.behavior = "none";
 		})(this)
 	);
+}
+
+/* Progress Indicator */
+.mblProg {
+	position: absolute;
+	top: 0px;
+	width: 4px;
+	font-size: 1px;
+	height: 36px;
+	overflow: hidden;
+	background-color: #C0C0C0;
+}
+.mblProg0 {
+	left: 0px;
+}
+.mblProg1 {
+	left: 8px;
+}
+.mblProg2 {
+	left: 16px;
+}
+.mblProg3 {
+	left: 24px;
+}
+.mblProg4 {
+	left: 32px;
+}
+.mblProg5 {
+	left: 40px;
+}
+.mblProg6 {
+	left: 48px;
+}
+.mblProg7 {
+	left: 56px;
+}
+.mblProg8 {
+	left: 64px;
+}
+.mblProg9 {
+	left: 72px;
+}
+.mblProg10 {
+	left: 80px;
+}
+.mblProg11 {
+	left: 80px;
 }

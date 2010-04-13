@@ -22,7 +22,19 @@ dojo.require("dijit._Widget");
 //		Note that use of dijit._Container, dijit._Contained, dijit._Templated,
 //		and dojo.query is intentionally avoided to reduce download code size.
 
-dojo.declare("dojox.mobile.Page",dijit._Widget,{
+dojo.declare(
+	"dojox.mobile.View",
+	dijit._Widget,
+{
+	// summary:
+	//		A widget that represents a view that occupies the full screen
+	// description:
+	//		View acts as a container for any HTML and/or widgets. An entire HTML page
+	//		can have multiple View widgets and the user can navigate through
+	//		the views back and forth without page transitions.
+
+	// selected: Boolean
+	//		If true, the view is displayed at startup time.
 	selected: false,
 
 	constructor: function(){
@@ -31,12 +43,15 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
-		this.domNode.className = "mblPage";
-		dojox.mobile.Page._pillar = dojo.doc.createElement("DIV");
+		this.domNode.className = "mblView";
+		dojox.mobile.View._pillar = dojo.doc.createElement("DIV");
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
 		this._visible = this.selected && !id || this.id == id;
+		if(this.selected){
+			dojox.mobile._defaultView = this;
+		}
 	},
 
 	startup: function(){
@@ -45,15 +60,16 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 			if(!_this._visible){
 				_this.domNode.style.display = "none";
 			}else{
-				_this.onStartPage();
+				dojox.mobile._currentView = _this;
+				_this.onStartView();
 			}
 			_this.domNode.style.visibility = "visible";
 		}, 0);
 	},
 
-	onStartPage: function(){
+	onStartView: function(){
 		// Stub function to connect to from your application.
-		// Called only when this page is shown at startup time.
+		// Called only when this view is shown at startup time.
 	},
 
 	onBeforeTransitionIn: function(moveTo, dir, transition, context, method){
@@ -73,7 +89,6 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 	},
 
 	_saveState: function(moveTo, dir, transition, context, method){
-		var i;
 		this._context = context;
 		this._method = method;
 		if(transition == "none" || !dojo.isWebKit){
@@ -81,6 +96,7 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		}
 		this._transition = transition;
 		this._arguments = [];
+		var i;
 		for(i = 0; i < arguments.length; i++){
 			this._arguments.push(arguments[i]);
 		}
@@ -92,7 +108,39 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		}
 	},
 
-	performTransition: function(/*String|DomNode*/moveTo, dir, transition, /*Object|null*/context, /*String|Function*/method /*optional args*/){
+	performTransition: function(/*String*/moveTo, /*Number*/dir, /*String*/transition,
+								/*Object|null*/context, /*String|Function*/method /*optional args*/){
+		// summary:
+		//		Function to perform the various types of view transitions, such as fade, slide, and flip.
+		// moveTo: String
+		//		The destination view id to transition the current view to.
+		//		If null, transitions to a blank view.
+		// dir: Number
+		//		The transition direction. If 1, transition forward. If -1, transition backward.
+		//		For example, the slide transition slides the view from right to left when dir == 1,
+		//		and from left to right when dir == -1.
+		// transision: String
+		//		The type of transition to perform. "slide", "fade", or "flip"
+		// context: Object
+		//		The object that the callback function will receive as "this".
+		// method: String|Function
+		//		A callback function that is called when the transition has been finished.
+		//		A function reference, or name of a function in context.
+		// tags:
+		//		public
+		// example:
+		//		Transitions to the blank view, and then opens another page.
+		//	|	performTransition(null, 1, "slide", null, function(){location.href = href;});
+		if(dojo.hash){
+			if(typeof(moveTo) == "string" && moveTo.charAt(0) == '#' && !dojox.mobile._params){
+				dojox.mobile._params = [];
+				for(var i = 0; i < arguments.length; i++){
+					dojox.mobile._params.push(arguments[i]);
+				}
+				dojo.hash(moveTo);
+				return;
+			}
+		}
 		this._saveState.apply(this, arguments);
 		if(moveTo){
 			if(typeof(moveTo) == "string"){
@@ -104,22 +152,46 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		}else{
 			if(!this._dummyNode){
 				this._dummyNode = dojo.doc.createElement("DIV");
+				dojo.body().appendChild(this._dummyNode);
 			}
 			toNode = this._dummyNode;
 		}
 		var fromNode = this.domNode;
 		toNode = this.toNode = dojo.byId(toNode);
-		if(!toNode){ alert("dojox.mobile.Page#performTransition: destination page not found: "+toNode); }
+		if(!toNode){ console.error("dojox.mobile.View#performTransition: destination view not found: "+toNode); }
+		toNode.style.visibility = "hidden";
+		toNode.style.display = "";
 		this.onBeforeTransitionOut.apply(this, arguments);
 		var toWidget = dijit.byNode(toNode);
 		if(toWidget && toWidget.onBeforeTransitionIn){
+			// perform view transition keeping the scroll position
+			var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || window.pageYOffset || 0;
+			if(dir == 1){
+				toNode.style.top = "0px";
+				fromNode.style.top = -scrollTop + "px";
+				setTimeout(function(){ // iPhone needs setTimeout
+					window.scrollTo(0, 0);
+				}, 0);
+			}else{
+				var toTop = -toNode.offsetTop;
+				toNode.style.top = "0px";
+				fromNode.style.top = toTop - scrollTop + "px";
+				setTimeout(function(){ // iPhone needs setTimeout
+					window.scrollTo(0, toTop);
+				}, 0);
+			}
 			toWidget.onBeforeTransitionIn.apply(this, arguments);
+			toNode.style.display = "none";
+			toNode.style.visibility = "visible";
 		}
-		var rev = (dir == -1) ? " reverse" : "";
+		this._doTransition(fromNode, toNode, transition, dir);
+	},
 
+	_doTransition: function(fromNode, toNode, transition, dir){
+		var rev = (dir == -1) ? " reverse" : "";
 		toNode.style.display = "";
 		if(transition){
-			var pillar = dojox.mobile.Page._pillar;
+			var pillar = dojox.mobile.View._pillar;
 			pillar.style.height = fromNode.offsetHeight+"px";
 			fromNode.parentNode.appendChild(pillar);
 			dojo.addClass(fromNode, transition + " out" + rev);
@@ -142,16 +214,16 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 				dojo.removeClass(this.domNode, s);
 			}, this);
 		}
-		if(e.animationName.indexOf("shrink") == 0){
+		if(e.animationName.indexOf("shrink") === 0){
 			var li = e.target;
 			li.style.display = "none";
 			dojo.removeClass(li, "mblCloseContent");
 		}
 		if(isOut){
-			dojox.mobile.Page._pillar.parentNode.removeChild(dojox.mobile.Page._pillar);
+			dojox.mobile.View._pillar.parentNode.removeChild(dojox.mobile.View._pillar);
 			this.invokeCallback();
 		}
-		this.domNode.className = "mblPage";
+		this.domNode.className = "mblView";
 	},
 
 	invokeCallback: function(){
@@ -159,6 +231,10 @@ dojo.declare("dojox.mobile.Page",dijit._Widget,{
 		var toWidget = dijit.byNode(this.toNode);
 		if(toWidget && toWidget.onAfterTransitionIn){
 			toWidget.onAfterTransitionIn.apply(this, this._arguments);
+		}
+
+		if(dojo.hash){
+			dojox.mobile._currentView = toWidget;
 		}
 
 		var c = this._context, m = this._method;
@@ -332,24 +408,28 @@ dojo.declare(
 	"dojox.mobile.ListItem",
 	dojox.mobile.AbstractItem,
 {
+	label: "",
 	rightText: "",
 	btnClass: "",
 
 	buildRendering: function(){
 		var a = dojo.create("A");
 		a.className = "mblListItemAnchor";
-		var span = dojo.create("SPAN");
-		span.className = "mblListItemSpan";
+		var box = dojo.create("DIV");
+		box.className = "mblListItemTextBox";
 		if(this.href && this.moveTo){
-			span.style.cursor = "pointer";
+			box.style.cursor = "pointer";
 		}
 		var r = this.srcNodeRef;
 		if(r){
 			for(var i = 0, len = r.childNodes.length; i < len; i++){
-				span.appendChild(r.removeChild(r.firstChild));
+				box.appendChild(r.removeChild(r.firstChild));
 			}
 		}
-		a.appendChild(span);
+		if(this.label){
+			box.appendChild(dojo.doc.createTextNode(this.label));
+		}
+		a.appendChild(box);
 		if(this.rightText){
 			var txt = dojo.create("DIV");
 			txt.className = "mblRightText";
@@ -357,9 +437,9 @@ dojo.declare(
 			a.appendChild(txt);
 		}
 		if(this.moveTo || this.href){
-			span = dojo.create("SPAN");
-			span.className = "mblArrow";
-			a.appendChild(span);
+			var arrow = dojo.create("DIV");
+			arrow.className = "mblArrow";
+			a.appendChild(arrow);
 			this.connect(a, "onclick", "onClick");
 		}else if(this.btnClass){
 			var div = this.btnNode = dojo.create("DIV");
@@ -380,6 +460,9 @@ dojo.declare(
 					a.parentNode.style.height = a.parentNode.offsetHeight + "px";
 				}
 			});
+		}
+		if(this.moveTo && this.href){
+			box.style.display = "inline"; // to narrow the text region
 		}
 		var li = this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("LI");
 		li.className = "mblListItem";
@@ -410,8 +493,8 @@ dojo.declare(
 	onClick: function(e){
 		if(this.href && this.moveTo){
 			for(var p = e.target; p.tagName != "LI"; p = p.parentNode){
-				if(p.className == "mblListItemSpan"){
-					dojo.addClass(p, "mblListItemSpanSelected");
+				if(p.className == "mblListItemTextBox"){
+					dojo.addClass(p, "mblListItemTextBoxSelected");
 					this.transitionTo(null, this.href);
 					return;
 				}
@@ -560,11 +643,11 @@ dojo.declare(
 				ul.appendChild(w.subNode);
 			}
 		}else{
-			var page = new dojox.mobile.Page({id:"mblApplPage"});
-			page.domNode.style.display = "none";
+			var view = new dojox.mobile.View({id:"mblApplView"});
+			view.domNode.style.display = "none";
 			var heading = new dojox.mobile.Heading({back:"Home", moveTo:this.domNode.parentNode.id, transition:this.transition});
 			heading.domNode.appendChild(dojo.doc.createTextNode("My Application"));
-			page.domNode.appendChild(heading.domNode);
+			view.domNode.appendChild(heading.domNode);
 			ul = dojo.doc.createElement("UL");
 			len = this.domNode.childNodes.length;
 			for(i = 0; i < len; i++){
@@ -573,8 +656,8 @@ dojo.declare(
 				w = dijit.byNode(child);
 				ul.appendChild(w.subNode);
 			}
-			page.domNode.appendChild(ul);
-			dojo.doc.body.appendChild(page.domNode);
+			view.domNode.appendChild(ul);
+			dojo.doc.body.appendChild(view.domNode);
 		}
 	}
 });
@@ -694,7 +777,7 @@ dojo.declare(
 		}
 
 		if(len > 0){
-			(dojo.global.lw&&dojox.mobile.parser||dojo.parser).parse(this.containerNode);
+			(dojox.mobile.parser||dojo.parser).parse(this.containerNode);
 		}
 		this.lazy = false;
 	},
@@ -747,7 +830,7 @@ dojo.declare(
 
 	open: function(){
 		if(this.transition != "below"){
-			this.transitionTo("mblApplPage");
+			this.transitionTo("mblApplView");
 		}
 		this.contentNode.style.display = "";
 		this.unhighlight();
@@ -804,18 +887,21 @@ dojo.declare(
 	"dojox.mobile.Button",
 	dijit._Widget,
 {
+	btnClass: "mblBlueButton",
+	duration: 1000, // duration of selection, milliseconds
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("BUTTON");
-		this.domNode.className = "mblButton";
+		this.domNode.className = "mblButton "+this.btnClass;
 		this.connect(this.domNode, "onclick", "onClick");
 	},
 
 	onClick: function(e){
 		var button = this.domNode;
-		dojo.addClass(button, "mblButtonSelected");
+		var c = "mblButtonSelected "+this.btnClass+"Selected";
+		dojo.addClass(button, c);
 		setTimeout(function(){
-			dojo.removeClass(button, "mblButtonSelected");
-		}, 1000);
+			dojo.removeClass(button, c);
+		}, this.duration);
 	}
 });
 
@@ -921,6 +1007,61 @@ dojo.declare(
 	}
 });
 
+dojo.declare(
+	"dojox.mobile.ProgressIndicator",
+	null,
+{
+	interval: 100, // milliseconds
+	colors: [
+		"#C0C0C0", "#C0C0C0", "#C0C0C0", "#C0C0C0",
+		"#C0C0C0", "#C0C0C0", "#B8B9B8", "#AEAFAE",
+		"#A4A5A4", "#9A9A9A", "#8E8E8E", "#838383"
+	],
+	bars: [],
+
+	constructor: function(){
+		this.domNode = dojo.create("DIV");
+		this.domNode.className = "mblProgContainer";
+		for(var i = 0; i < 12; i++){
+			var div = dojo.create("DIV");
+			div.className = "mblProg mblProg"+i;
+			this.domNode.appendChild(div);
+			this.bars.push(div);
+		}
+	},
+
+	start: function(){
+		var cntr = 0;
+		var _this = this;
+		this.timer = setInterval(function(){
+			cntr--;
+			cntr = cntr < 0 ? 11 : cntr;
+			var c = _this.colors;
+			for(var i = 0; i < 12; i++){
+				var idx = (cntr + i) % 12;
+				_this.bars[i].style.backgroundColor = c[idx];
+			}
+		}, this.interval);
+	},
+
+	stop: function(){
+		if(this.timer){
+			clearInterval(this.timer);
+		}
+		this.timer = null;
+		if(this.domNode.parentNode){
+			this.domNode.parentNode.removeChild(this.domNode);
+		}
+	}
+});
+dojox.mobile.ProgressIndicator._instance = null;
+dojox.mobile.ProgressIndicator.getInstance = function(){
+	if(!dojox.mobile.ProgressIndicator._instance){
+		dojox.mobile.ProgressIndicator._instance = new dojox.mobile.ProgressIndicator();
+	}
+	return dojox.mobile.ProgressIndicator._instance;
+};
+
 dojo._loaders.unshift(function(){
 	// avoid use of dojo.query
 	/*
@@ -956,13 +1097,47 @@ dojo.addOnLoad(function(){
 	*/
 
 	var nodes = dojo.body().getElementsByTagName("*");
-	var i, len, s;
+	var i, len = nodes.length, s;
 	for(i = 0; i < len; i++){
 		s = nodes[i].getAttribute("__dojoType");
 		if(s){
 			nodes[i].setAttribute("dojoType", s);
 			nodes[i].removeAttribute("__dojoType");
 		}
+	}
+
+	if(dojo.hash){
+		// find widgets under root recursively
+		function findWidgets(root){
+			var arr;
+			var widgets = arr = dijit.findWidgets(root);
+			for(var i = 0; i < widgets.length; i++){
+				arr = arr.concat(findWidgets(widgets[i].containerNode));
+			}
+			return arr;
+		}
+		dojo.subscribe("/dojo/hashchange", null, function(value){
+			var view = dojox.mobile._currentView;
+			if(!view){ return; }
+			var params = dojox.mobile._params;
+			if(!params){ // browser back/forward button was pressed
+				var moveTo = value ? value : dojox.mobile._defaultView.id;
+				var widgets = findWidgets(view.domNode);
+				var dir = 1, transition = "slide";
+				for(i = 0; i < widgets.length; i++){
+					var w = widgets[i];
+					if("#"+moveTo == w.moveTo){
+						// found a widget that has the given moveTo
+						transition = w.transition;
+						dir = (w instanceof dojox.mobile.Heading) ? -1 : 1;
+						break;
+					}
+				}
+				params = [ moveTo, dir, transition ];
+			}
+			view.performTransition.apply(view, params);
+			dojox.mobile._params = null;
+		});
 	}
 });
 

@@ -11,10 +11,14 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+
+			function hideAddressBar(){
+				setTimeout(scrollTo, 100, 0, 0);
+			}
 		</script>
 	</head>
-	<body>
-		<div id="settings" dojoType="dojox.mobile.Page" selected="true">
+	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px">
+		<div id="settings" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Settings</h1>
 			<ul dojoType="dojox.mobile.EdgeToEdgeList" iconBase="images/i-icon-all.png">
 				<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29">
@@ -30,7 +34,7 @@
 			</ul>
 		</div>
 
-		<div id="hello" dojoType="dojox.mobile.Page">
+		<div id="hello" dojoType="dojox.mobile.View">
 			<h1 dojoType="dojox.mobile.Heading">Hello</h1>
 			<ul dojoType="dojox.mobile.EdgeToEdgeList">
 			<ul dojoType="dojox.mobile.EdgeToEdgeList">

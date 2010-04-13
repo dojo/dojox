@@ -24,71 +24,32 @@ dojo.require("dojox.fx.flip");
 //		Of course, you can explicitly load iphone.css and iphone-compat.css
 //		with the @import rule if you would like.
 
-dojo.extend(dojox.mobile.Page, {
-	performTransition: function(/*String|DomNode*/moveTo, dir, transition, /*Object|null*/context, /*String|Function*/method /*optional args*/){
-		// summary:
-		//		Function to perform the various types of page transitions, such as fade, slide, and flip, using
-		//		dojo.animateProperty and dojox.gfx where possible.  Some effects cannot be simulated, such as flip.
-		// toNode: DOMNode
-		//		The DOM	node to transition the view to.
-		// dir: Number
-		//		The direction to slide, positive for slide right, negative for slide left.
-		// transision: Object
-		//		The tioe of transition to perform.
-		// context: Object
-		//		The context object TODO: Doc this better, need to follow up with Kamiyama.
-		// method: String|Function
-		//		The method name or function to use as part of the transition
-		//		TODO:  Followup with Kamiyama for better documentation.
-		// tags:
-		//		public
-		this._saveState.apply(this, arguments);
-		if(moveTo){
-			if(typeof(moveTo) == "string"){
-				moveTo.match(/(\w+)/);
-				toNode = RegExp.$1;
-			}else{
-				toNode = moveTo;
-			}
-		}else{
-			if(!this._dummyNode){
-				this._dummyNode = dojo.doc.createElement("DIV");
-				dojo.body().appendChild(this._dummyNode);
-			}
-			toNode = this._dummyNode;
-		}
+dojo.extend(dojox.mobile.View, {
+	_doTransition: function(fromNode, toNode, transition, dir){
 		var anim;
-		var fromNode = this.domNode;
-		toNode = this.toNode = dojo.byId(toNode);
-		this.onBeforeTransitionOut.apply(this, arguments);
-		var toWidget = dijit.byNode(toNode);
-		if(toWidget && toWidget.onBeforeTransitionIn){
-			toWidget.onBeforeTransitionIn.apply(this, arguments);
-		}
 		this.wakeUp(toNode);
 		if(!transition || transition == "none"){
+			toNode.style.display = "";
 			fromNode.style.display = "none";
 			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
-			toNode.style.top = fromNode.offsetTop + "px";
-			toNode.style.display = "";
 			this.invokeCallback();
 		}else if(transition == "slide"){
+			toNode.style.display = "";
 			var w = fromNode.offsetWidth;
 			var s1 = dojo.fx.slideTo({
 				node: fromNode,
-				duration: 500,
-				left: -w*dir
+				duration: 300,
+				left: -w*dir,
+				top: fromNode.offsetTop
 			});
 			var s2 = dojo.fx.slideTo({
 				node: toNode,
-				duration: 500,
+				duration: 300,
 				left: 0
 			});
 			toNode.style.position = "absolute";
 			toNode.style.left = w*dir + "px";
-			toNode.style.top = fromNode.offsetTop + "px";
-			toNode.style.display = "";
 			anim = dojo.fx.combine([s1,s2]);
 			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
@@ -99,19 +60,19 @@ dojo.extend(dojox.mobile.Page, {
 			anim = dojox.fx.flip({ 
 				node: fromNode,
 				dir: "right",
-				depth: .5,
+				depth: 0.5,
 				duration: 400
-			})											  
+			});
 			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
-			toNode.style.top = fromNode.offsetTop + "px";
 			dojo.connect(anim, "onEnd", this, function(){ 
 				fromNode.style.display = "none";
 				toNode.style.display = "";
 				this.invokeCallback();
-			})
+			});
 			anim.play(); 
 		}else if(transition == "fade"){
+			toNode.style.display = "";
 			anim = dojo.fx.chain([
 				dojo.fadeOut({
 					node: fromNode,
@@ -124,9 +85,7 @@ dojo.extend(dojox.mobile.Page, {
 			]);
 			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
-			toNode.style.top = fromNode.offsetTop + "px";
 			dojo.style(toNode, "opacity", 0);
-			toNode.style.display = "";
 			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
 				dojo.style(fromNode, "opacity", 1);
@@ -300,19 +259,25 @@ dojo.extend(dojox.mobile.RoundRectList, {
 	},
 
 	postCreate: function(){
+		this.redrawBorders();
+	},
+
+	redrawBorders: function(){
 		// summary:
 		//		Function to adjust the creation of RoundRectLists on IE.
 		//		Removed undesired styles.
 		// tags:
-		//		protected
+		//		public
 
 		// Remove a border of the last ListItem.
 		// This is for browsers that do not support the last-child CSS pseudo-class.
+
+		var lastChildFound = false;
 		for(var i = this.containerNode.childNodes.length - 1; i >= 0; i--){
 			var c = this.containerNode.childNodes[i];
 			if(c.tagName == "LI"){
-				c.style.borderStyle = "none";
-				break;
+				c.style.borderBottomStyle = lastChildFound ? "solid" : "none";
+				lastChildFound = true;
 			}
 		}
 	}
@@ -365,7 +330,7 @@ dojo.addOnLoad(function(){
 		if((href.indexOf("/mobile/themes/") != -1 || location.href.indexOf("/mobile/tests/") != -1)
 		   && href.substring(href.length - 4) == ".css"){
 			var compatCss = href.substring(0, href.length-4)+"-compat.css";
-			dojox.mobile.Page.prototype._loadCss(compatCss);
+			dojox.mobile.View.prototype._loadCss(compatCss);
 		}
 	}
 });

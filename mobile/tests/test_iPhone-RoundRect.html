@@ -12,10 +12,14 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+
+			function hideAddressBar(){
+				setTimeout(scrollTo, 100, 0, 0);
+			}
 		</script>
 	</head>
-	<body>
-		<div id="foo" dojoType="dojox.mobile.Page" selected="true">
+	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px">
+		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Round Rectangle</h2>
 			<div dojoType="dojox.mobile.RoundRect" shadow="true">
 				This module provides some widgets that can be used to build web-based

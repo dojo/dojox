@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Round Rect List</title>
-		<link href="../themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../themes/android/android.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -12,27 +12,23 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-			function hideAddressBar(){
-				setTimeout(scrollTo, 100, 0, 0);
-			}
 		</script>
 	</head>
-	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px">
+	<body>
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Mobile Mashup</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Spaces</h2>
-			<ul dojoType="dojox.mobile.RoundRectList" iconBase="images/i-icon-all.png">
-				<li id="item1" dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29" rightText="Off" moveTo="bar" href="test_iPhone-Icon.html">
+			<ul dojoType="dojox.mobile.RoundRectList" iconBase="images/a-icon-2.png">
+				<li id="item1" dojoType="dojox.mobile.ListItem" rightText="Off" moveTo="bar" href="test_Android-Icon.html">
 					u1space
 				</li>
-				<li id="item12" dojoType="dojox.mobile.ListItem" iconPos="0,29,29,29" rightText="Off" moveTo="bar" href="test_iPhone-Icon.html">
+				<li id="item12" dojoType="dojox.mobile.ListItem" rightText="Off" moveTo="bar" href="test_Android-Icon.html">
 					u2space
 				</li>
-				<li id="item2" dojoType="dojox.mobile.ListItem" iconPos="0,58,29,29" rightText="Off" moveTo="bar" href="test_iPhone-Icon.html">
+				<li id="item2" dojoType="dojox.mobile.ListItem" rightText="Off" moveTo="bar" href="test_Android-Icon.html">
 					Wi-Fi
 				</li>
-				<li id="item3" dojoType="dojox.mobile.ListItem" iconPos="0,87,29,29" rightText="VPN" moveTo="bar" href="test_iPhone-Icon.html">
+				<li id="item3" dojoType="dojox.mobile.ListItem" rightText="VPN" moveTo="bar" href="test_Android-Icon.html">
 					VPN
 				</li>
 				<li id="item4" dojoType="dojox.mobile.ListItem" icon="none" rightText="Off">
@@ -40,7 +36,7 @@
 				</li>
 			</ul>
 			<div dojoType="dojox.mobile.RoundRect">
-				Tapping on an item label text opens a different page (test_iPhone-Icon.html), tapping on right-hand side of the label text shows another view in the same page.
+				Tapping on an item label text opens a different page (test_Android-Icon.html), tapping on right-hand side of the label text shows another view in the same page.
 			</div>
 		</div>
 
@@ -51,7 +47,7 @@
 				<li dojoType="dojox.mobile.ListItem" rightText="Off">
 					Video
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" rightText="VPN">
+				<li dojoType="dojox.mobile.ListItem" icon="images/a-icon-2.png" rightText="VPN">
 					Maps
 				</li>
 				<li dojoType="dojox.mobile.ListItem" rightText="Off">
