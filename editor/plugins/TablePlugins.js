@@ -92,11 +92,11 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 			
 			// RichText should have a mouseup connection to recognize drag-selections
 			// Example would be selecting multiple table cells
-			dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick"); 
+			this._myListeners = [];
+			this._myListeners.push(dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick")); 
 
-			dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable");
-			dojo.connect(this.editor, "onBlur", this, "checkAvailable");
-
+			this._myListeners.push(dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"));
+			this._myListeners.push(dojo.connect(this.editor, "onBlur", this, "checkAvailable"));
 			this.doMixins();
 			this.connectDraggable();
 		}));
@@ -259,8 +259,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		}
 		
 		this._tempAvailability(500);
-		
-		dojo.publish("available", [ this.currentlyAvailable ]);
+		dojo.publish(this.editor.id + "_tablePlugins", [ this.currentlyAvailable ]);
 		return this.currentlyAvailable;
 	},
 	
@@ -333,7 +332,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		var node = (this.editor.iframe) ? this.editor.document : this.editor.editNode;
 		this.cnKeyDn = dojo.connect(node, "onkeydown", this, "onKeyDown"); 
 		this.cnKeyUp = dojo.connect(node, "onkeyup", this, "onKeyUp");
-		dojo.connect(node, "onkeypress", this, "onKeyUp");
+		this._myListeners.push(dojo.connect(node, "onkeypress", this, "onKeyUp"));
 	},
 	disconnectTableKeys: function(){
 		//console.log("disconnect")
@@ -389,6 +388,28 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		this._tempStoreTableData(false);
 		this._tempAvailability(false);
 		this.checkAvailable();
+	},
+
+	uninitialize: function(editor){
+		// summary:
+		//		Function to handle cleaning up of connects
+		//		and such.  Note this global handler
+		//		needs to go, this is a workaround for problems
+		//		it has right now.
+		// editor:
+		//		The editor to detach from.
+		if(this.initialized && this.editor == editor){
+			if(this.tablesConnected){
+				this.disconnectTableKeys();
+			}
+			this.initialized = false;
+			dojo.forEach(this._myListeners, function(l){
+				dojo.disconnect(l);
+			});
+			delete this._myListeners;
+			delete this.editor;
+		}
+		this.inherited(arguments);
 	}
 });
 // global:
@@ -447,9 +468,6 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 					});
 					break;
 			}
-			
-			dojo.subscribe("available", this, "onDisplayChanged");
-			
 		},
 		onDisplayChanged: function(withinTable){
 			// subscribed to from the global object's publish method
@@ -463,6 +481,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		
 		setEditor: function(){
 			this.inherited(arguments);
+			this._availableTopic = dojo.subscribe(this.editor.id + "_tablePlugins", this, "onDisplayChanged");
 			this.onEditorLoaded();
 		},
 		onEditorLoaded: function(){
@@ -557,7 +576,12 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			var r, c, i;
 			var adjustColWidth = false;
 			//console.log("modTable:", sw)
-			
+
+			if(dojo.isIE){
+				// IE can lose selections on focus changes, so focus back
+				// in order to restore it.
+				this.editor.focus();
+			}
 			switch(sw){
 				case "insertTableRowBefore":
 					r = o.tbl.insertRow(o.trIndex);
@@ -601,6 +625,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 					// The one plugin that really needs use of the very verbose
 					//	getSelectedCells()
 					var tds = this.getSelectedCells(o.tbl);
+					console.log(tds);
 					dojo.forEach(tds, function(td){
 						dojo.style(td, "backgroundColor", args);				   
 					});
@@ -701,9 +726,8 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			var r;
 			
 			if(!dojo.isIE){
-				
 				r = dijit.range.getSelection(e.window);
-				
+
 				var foundFirst=false;
 				var foundLast=false;
 				
@@ -766,16 +790,41 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 				//	Can only get the htmlText, so we add IDs to the cells (above)
 				//	And pull them from the htmlText, then search for those cells
 				//
-				r = document.selection.createRange();
-				
+				r = this.editor.document.selection.createRange();
 				var str = r.htmlText.match(/id=\w*/g);
 				dojo.forEach(str, function(a){
 					var id = a.substring(3, a.length);
 					cells.push(e.byId(id));
 				}, this);
-				
+
+				if(cells.length == 0){
+					// Probably collapsed range, or text in a cell selected only, so lets see if we can find a parent cell.
+					// This case occurs with a cursor point in a cell, ot just text selected within a cell, but not the cell 
+					// boundry itself.
+					var parent = r.parentElement();
+					if(parent){
+						var td = dijit.range.getAncestor(parent, /td/i);
+						if(td){
+							cells.push(td);
+						}
+					}
+				}
 			}
 			return cells;
+		},
+
+		destroy: function(){
+			// summary:
+			//		Over-ridden destroy to do some cleanup.
+			this.inherited(arguments);
+			dojo.unsubscribe(this._availableTopic);
+
+			// Disconnect the editor from the global handler
+			// to clean up refs.  Really, that global NEEDS TO GO.
+			// it causes tons of issues, namely being able to use 
+			// multiple editors with table plugins in the same page.
+			// This is just a stop-gap fix for memory leak issues.
+			tablePluginHandler.uninitialize(this.editor);
 		}
 		
 	}

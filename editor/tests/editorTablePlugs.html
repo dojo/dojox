@@ -24,9 +24,20 @@
 		<script>
 			dojo.require("dojo.parser");
 			dojo.require("dijit.Editor");
+			dojo.require("dijit.form.Button");
 			dojo.require("dojox.editor.plugins.TablePlugins");
 			dojo.addOnLoad(function(){
 				console.log(dojo.version.toString());
+			});
+
+			dojo.addOnLoad(function(){
+				var editor = dijit.byId("editor");
+				var button = dijit.byId("removeButton");
+				var c = dojo.connect(button, "onClick", function(){
+					dojo.disconnect(c);
+					editor.close();
+					editor.destroy();
+				});
 			});
 		</script>
 		<style>
@@ -38,7 +49,7 @@
 	</head>
 	<body class="tundra">
 		<div id="main">
-			<div dojoType="dijit.Editor" height="200px" plugins="[
+			<div id="editor" dojoType="dijit.Editor" height="200px" plugins="[
 				'undo', 'redo', 'bold','italic','|',
 				{name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
 				{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'},
@@ -71,5 +82,6 @@
 				</table> 
 			</div>
 		</div>
+		<button id="removeButton" dojoType="dijit.form.Button">Remove Editor</button>
 	</body>
 </html>
