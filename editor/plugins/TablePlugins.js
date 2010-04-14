@@ -31,10 +31,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 //			This affect the 'colorTableCell' plugin. Cells can still be 
 //			colored individually or in rows.
 
-
-
-
-dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
+dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 	// summary:
 	//		A global object that handles common tasks for all the plugins. Since 
 	//		there are several plugins that are all calling common methods, it's preferable
@@ -49,7 +46,8 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 	tableData: null,
 	shiftKeyDown:false,
 	editorDomNode: null,
-	undoEnabled: dojo.isIE, //FIXME: 
+	undoEnabled: dojo.isIE, //FIXME:
+	refCount: 0, 
 	
 	doMixins: function(){
 		
@@ -79,11 +77,17 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 		//		Initialize the global handler upon a plugin's first instance of setEditor
 		//
 		
-		// 		All plugins will attempt initialization. We only need to do so once.
+		// All plugins will attempt initialization. We only need to do so once.
+		// But keep track so that it is cleaned up when all usage of it for an editor has
+		// been removed.
+		this.refCount++;
+
 		if(this.initialized){ return; }
 		
 		this.initialized = true;
 		this.editor = editor;
+
+		this.editor._tablePluginHandler = this;
 		
 		//Editor loads async, can't assume doc is ready yet.  So, use the deferred of the
 		//editor to init at the right time.
@@ -94,8 +98,7 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 			// Example would be selecting multiple table cells
 			this._myListeners = [];
 			this._myListeners.push(dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick")); 
-
-			this._myListeners.push(dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"));
+            this._myListeners.push(dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"));
 			this._myListeners.push(dojo.connect(this.editor, "onBlur", this, "checkAvailable"));
 			this.doMixins();
 			this.connectDraggable();
@@ -393,27 +396,30 @@ dojo.declare("dojox.editor.plugins.GlobalTableHandler", dijit._editor._Plugin,{
 	uninitialize: function(editor){
 		// summary:
 		//		Function to handle cleaning up of connects
-		//		and such.  Note this global handler
-		//		needs to go, this is a workaround for problems
-		//		it has right now.
+		//		and such.  It only finally destroys everything once
+		//		all 'references' to it have gone.  As in all plugins
+		//		that called init on it destroyed their refs in their 
+		//		cleanup calls.
 		// editor:
 		//		The editor to detach from.
-		if(this.initialized && this.editor == editor){
-			if(this.tablesConnected){
-				this.disconnectTableKeys();
+		if(this.editor == editor){
+			this.refCount--;
+			if(!this.refCount && this.initialized){
+				if(this.tablesConnected){
+					this.disconnectTableKeys();
+				}
+				this.initialized = false;
+				dojo.forEach(this._myListeners, function(l){
+					dojo.disconnect(l);
+				});
+				delete this._myListeners;
+				delete this.editor._tablePluginHandler;
+				delete this.editor;
 			}
-			this.initialized = false;
-			dojo.forEach(this._myListeners, function(l){
-				dojo.disconnect(l);
-			});
-			delete this._myListeners;
-			delete this.editor;
+			this.inherited(arguments);
 		}
-		this.inherited(arguments);
 	}
 });
-// global:
-tablePluginHandler = new dojox.editor.plugins.GlobalTableHandler(); //FIXME: no globals.
 
 dojo.declare("dojox.editor.plugins.TablePlugins",
 	dijit._editor._Plugin,
@@ -479,15 +485,22 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			}
 		},
 		
-		setEditor: function(){
+		setEditor: function(editor){
+			this.editor = editor;
 			this.inherited(arguments);
 			this._availableTopic = dojo.subscribe(this.editor.id + "_tablePlugins", this, "onDisplayChanged");
 			this.onEditorLoaded();
 		},
 		onEditorLoaded: function(){
-			//stub
-			// call global object to initialize it
-			tablePluginHandler.initialize(this.editor);
+			if(!this.editor._tablePluginHandler){
+				// Create it and init it off the editor.  This
+				// will create the _tablePluginHandler reference on
+				// the dijit.Editor instance.  This avoids a global.
+				var tablePluginHandler = new dojox.editor.plugins._TableHandler(); 
+				tablePluginHandler.initialize(this.editor);
+			}else{
+				this.editor._tablePluginHandler.initialize(this.editor);
+			}
 		},
 		
 		_createContextMenu: function(){
@@ -536,7 +549,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		},
 		
 		launchModifyDialog: function(){
-			if (!tablePluginHandler.checkAvailable()) {return;} 
+			if (!this.editor._tablePluginHandler.checkAvailable()) {return;} 
 			var o = this.getTableInfo();
 			//console.log("LAUNCH DIALOG");
 			var w = new dojox.editor.plugins.EditorModifyTableDialog({table:o.tbl});
@@ -646,7 +659,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		// UNDO HANDLERS
 		// Only works in IE
 		begEdit: function(){
-			if(tablePluginHandler.undoEnabled){
+			if(this.editor._tablePluginHandler.undoEnabled){
 				console.log("UNDO:", this.editor.customUndo);
 				if(this.editor.customUndo){
 					this.editor.beginEditing();
@@ -658,7 +671,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			}
 		},
 		endEdit: function(){
-			if(tablePluginHandler.undoEnabled){
+			if(this.editor._tablePluginHandler.undoEnabled){
 				if(this.editor.customUndo){
 					this.editor.endEditing();
 				}else{
@@ -695,7 +708,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			//	Gets the table in focus
 			//	Collects info on the table - see return params
 			//
-			return tablePluginHandler.getTableInfo(forceNewData);
+			return this.editor._tablePluginHandler.getTableInfo(forceNewData);
 		},
 		_makeTitle: function(str){
 			// Parses the commandName into a Title
@@ -721,7 +734,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			
 			var cells = [];
 			var tbl = this.getTableInfo().tbl;
-			var tds = tablePluginHandler._prepareTable(tbl);
+			var tds = this.editor._tablePluginHandler._prepareTable(tbl);
 			var e = this.editor;
 			var r;
 			
@@ -819,12 +832,10 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			this.inherited(arguments);
 			dojo.unsubscribe(this._availableTopic);
 
-			// Disconnect the editor from the global handler
-			// to clean up refs.  Really, that global NEEDS TO GO.
-			// it causes tons of issues, namely being able to use 
-			// multiple editors with table plugins in the same page.
-			// This is just a stop-gap fix for memory leak issues.
-			tablePluginHandler.uninitialize(this.editor);
+			// Disconnect the editor from the handler
+			// to clean up refs.  Moved to using a per-editor
+			// 'handler' to avoid collisions on the old global.
+			this.editor._tablePluginHandler.uninitialize(this.editor);
 		}
 		
 	}
