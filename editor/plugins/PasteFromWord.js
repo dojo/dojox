@@ -30,9 +30,9 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 	//		The height to use for the rich text area in the copy/pate dialog, in px.  Default is 300px.
 	height: "300px",
 
-	_template: ["<div>",
+	_template: ["<div class='dijitPasteFromWordEmbeddedRTE'>",
 				"<div style='width: ${width}; padding-top: 5px; padding-bottom: 5px;'>${instructions}</div>",
-				"<div id='${uId}_rte' style='width: ${width}; height: ${height}' class='dijitPasteFromWordEmbeddedRTE'></div>",
+				"<div id='${uId}_rte' style='width: ${width}; height: ${height}'></div>",
 				"<table style='width: ${width}' tabindex='-1'>", 
 					"<tbody>",
 						"<tr>",
