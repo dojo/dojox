@@ -75,6 +75,20 @@ dojo.declare("dojox.charting.Element", null, {
 					}
 				}
 				break;
+			case "radial":
+				if(space === "plot"){
+					// this one is used exclusively for scatter charts
+					// clone a fill so we can modify properly directly
+					fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					fill.space = space;
+					// process both dimensions
+					var spanX = dim.width  - offsets.l - offsets.r,
+						spanY = dim.height - offsets.t - offsets.b;
+					fill.cx = offsets.l + spanX * fill.cx / 100;
+					fill.cy = offsets.t + spanY * fill.cy / 100;
+					fill.r  = fill.r * Math.sqrt(spanX * spanX + spanY * spanY) / 200;
+				}
+				break;
 			case "pattern":
 				if(space === "plot" || space === "shapeX" || space === "shapeY"){
 					// clone a fill so we can modify properly directly
@@ -132,9 +146,9 @@ dojo.declare("dojox.charting.Element", null, {
 					fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
 					fill.space = space;
 					// process both dimensions
-					fill.cx = bbox.x + bbox.width / 2;
+					fill.cx = bbox.x + bbox.width  / 2;
 					fill.cy = bbox.y + bbox.height / 2;
-					fill.r  = fill.r * bbox.width / 200;
+					fill.r  = fill.r * bbox.width  / 200;
 				}
 				break;
 			case "pattern":

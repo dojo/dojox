@@ -77,7 +77,7 @@ dojo.require("dojox.charting.plot2d.OHLC");
 			return this.coords;
 		},
 		setTheme: function(theme){
-			this.theme = theme._clone();
+			this.theme = theme.clone();
 			this.dirty = true;
 			return this;
 		},
@@ -365,8 +365,8 @@ dojo.require("dojox.charting.plot2d.OHLC");
 			var offsets = this.offsets, dim = this.dim;
 
 			// get required colors
-			var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
-			this.theme.defineColors({num: requiredColors, cache: false});
+			//var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
+			//this.theme.defineColors({num: requiredColors, cache: false});
 
 			// clear old shapes
 			dojo.forEach(this.series, purge);

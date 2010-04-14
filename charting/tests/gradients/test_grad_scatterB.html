@@ -13,21 +13,10 @@
             var theme1 = new dojox.charting.Theme({
                     seriesThemes: [
                         {
+                            shadow: null,
                             fill: {
-                                type: "linear", space: "plot", x1: 0, y1: 0, x2: 100, y2: 100,
-                                colors: [{ offset: 0, color: "white" }, { offset: 1, color: "red" }]
-                            }
-                        },
-                        {
-                            fill: {
-                                type: "linear", space: "plot", x1: 0, y1: 100, x2: 100, y2: 0,
-                                colors: [{ offset: 0, color: "white" }, { offset: 1, color: "blue" }]
-                            }
-                        },
-                        {
-                            fill: {
-                                type: "linear", space: "plot", x1: 0, y1: 0, x2: 100, y2: 100,
-                                colors: [{ offset: 0, color: "white" }, { offset: 1, color: "green" }]
+                                type: "radial", space: "plot", cx: 50, cy: 50, r: 75,
+                                colors: [{ offset: 0, color: "red" }, { offset: 0.5, color: "yellow" }, { offset: 1, color: "green" }]
                             }
                         }
                     ]
@@ -58,7 +47,7 @@
 </head>
 <body>
     <p><button id="start" onclick="run();">Start!</button></p>
-	<h1>plot-space diagonal gradient</h1>
+	<h1>plot-space radial gradient</h1>
 	<p>Scatter</p>
     <div id="c1" style="position: relative; width: 600px; height: 400px;"></div>
 </body>

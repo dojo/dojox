@@ -16,6 +16,7 @@ dojo.require("dojox.lang.utils");
 		du = dojox.lang.utils,
 		g = dojox.gfx,
 		lin = dc.scaler.linear,
+		merge = du.merge,
 		labelGap = 4;	// in pixels
 
 	dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Base, {
@@ -55,6 +56,7 @@ dojo.require("dojox.lang.utils");
 			majorTick:		{},	// stroke + length for a tick
 			minorTick:		{},	// stroke + length for a tick
 			microTick:		{},	// stroke + length for a tick
+			tick:           {},	// stroke + length for a tick
 			font:			"",	// font for labels
 			fontColor:		""	// color for labels as a string
 		},
@@ -140,7 +142,8 @@ dojo.require("dojox.lang.utils");
 				}
 			}
 			var minMinorStep = 0, ta = this.chart.theme.axis,
-				taFont = "font" in o ? o.font : ta.font,
+				// TODO: we use one font --- of major tick, we need to use major and minor fonts
+				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){
 				if(size){
@@ -205,9 +208,10 @@ dojo.require("dojox.lang.utils");
 				gl = dc.scaler.common.getNumericLabel,
 				offset = 0,
 				ta = this.chart.theme.axis,
-				taFont = "font" in o ? o.font : ta.font,
-				taMajorTick = "majorTick" in o ? o.majorTick : ta.majorTick,
-				taMinorTick = "minorTick" in o ? o.minorTick : ta.minorTick,
+				// TODO: we use one font --- of major tick, we need to use major and minor fonts
+				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
+				taMajorTick = this.chart.theme.getTick("major", o),
+				taMinorTick = this.chart.theme.getTick("minor", o),
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
 				s = this.scaler;
 			if(!s){
@@ -276,13 +280,17 @@ dojo.require("dojox.lang.utils");
 				labelOffset,
 				labelAlign,
 				ta = this.chart.theme.axis,
+				
+				// TODO: we use one font --- of major tick, we need to use major and minor fonts
+				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
+				// TODO: we use one font color --- we need to use different colors
+				taFontColor = o.fontColor || (ta.majorTick && ta.majorTick.fontColor) || (ta.tick && ta.tick.fontColor) || "black",
+				taMajorTick = this.chart.theme.getTick("major", o),
+				taMinorTick = this.chart.theme.getTick("minor", o),
+				taMicroTick = this.chart.theme.getTick("micro", o),
+
+				tickSize = Math.max(taMajorTick.length, taMinorTick.length, taMicroTick.length),
 				taStroke = "stroke" in o ? o.stroke : ta.stroke,
-				taMajorTick = "majorTick" in o ? o.majorTick : ta.majorTick,
-				taMinorTick = "minorTick" in o ? o.minorTick : ta.minorTick,
-				taMicroTick = "microTick" in o ? o.microTick : ta.minorTick,
-				taFont = "font" in o ? o.font : ta.font,
-				taFontColor = "fontColor" in o ? o.fontColor : ta.fontColor,
-				tickSize = Math.max(taMajorTick.length, taMinorTick.length),
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
 			if(this.vertical){
 				start = { y: dim.height - offsets.b };

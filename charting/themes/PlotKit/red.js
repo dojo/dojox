@@ -17,23 +17,21 @@ dojo.require("dojox.charting.Theme");
 			line:{ color:"#fff",width:1 },
 			majorTick:{ color:"#fff", width:2, length:12 },
 			minorTick:{ color:"#fff", width:1, length:8 },
-			font:"normal normal normal 8pt Tahoma",
-			fontColor:"#999"
+			tick: {font:"normal normal normal 8pt Tahoma", fontColor:"#999"}
 		},
 		series:{
 			outline:{ width:1, color:"#fff" },
 			stroke:{ width:2, color:"#666" },
 			fill:new dojo.Color([0x66, 0x66, 0x66, 0.8]),
-			font:"normal normal normal 7pt Tahoma",	//	label
+			font:"normal normal normal 8pt Tahoma",	//	label
 			fontColor:"#000"
 		},
 		marker:{	//	any markers on a series.
 			stroke:{ width:2 },
 			fill:"#333",
-			font:"normal normal normal 7pt Tahoma",	//	label
+			font:"normal normal normal 8pt Tahoma",	//	label
 			fontColor:"#000"
 		},
-		colors:[]
+		colors: dxc.Theme.defineColors({hue:1, saturation:60, low:40, high:88})
 	});
-	dxc.themes.PlotKit.red.defineColors({ hue:1, saturation:60, low:40, high:88 });
 })();

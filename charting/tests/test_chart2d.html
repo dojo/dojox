@@ -74,7 +74,7 @@
 				makeChart: function(node){
 					(new dojox.charting.Chart2D(node)).
 						setTheme(dojox.charting.themes.SageToLime).
-						addPlot("default", { type: "Bubble", shadows: { dx: 2, dy: 2, dw: 2 } }).
+						addPlot("default", { type: "Bubble", shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]} }).
 						addAxis("x", {
 							min: 0,
 							max: 6,
@@ -125,7 +125,7 @@
 							labelFunc: function(value){
 								return value + " thingers";
 							},
-							maxLabelSize: 30,
+							maxLabelSize: 50,
 							vertical: true,
 							// htmlLabels: false,
 							microTicks: true,
@@ -293,14 +293,16 @@
 							{
 								min: 0,
 								max: 3,
-								stroke: { color: "red", width: 2 },
+								stroke: {color: "red", width: 2},
+								fill:   "red",
 								marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"
 							}
 						).
 						addSeries("Series B",
 							[ 2, 1, 2, 1, 2, 1, 2 ],
 							{
-								stroke: { color: "blue", width: 2 },
+								stroke: {color: "blue", width: 2},
+								fill:   "blue",
 								marker: "m-3,-3 l0,6 6,0 0,-6 z"
 							}
 						).
@@ -312,21 +314,23 @@
 				makeChart: function(node){
 					(new dojox.charting.Chart2D(node)).
 						addPlot("default", {
-							type: "Markers", shadows: { dx: 2, dy: 2, dw: 2 }
+							type: "Markers", shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]}
 						}).
 						addSeries("Series A",
 							[ 1, 2, 1, 2, 1, 2, 1 ],
 							{
 								min: 0,
 								max: 3,
-								stroke: { color: "red", width: 2, join: "round" },
+								stroke: {color: "red", width: 2, join: "round"},
+								fill:   "red",
 								marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"
 							}
 						).
 						addSeries("Series B",
 							[ 2, 1, 2, 1, 2, 1, 2 ],
 							{
-								stroke: { color: "blue", width: 2, join: "round" },
+								stroke: {color: "blue", width: 2, join: "round"},
+								fill:   "blue",
 								marker: "m-3,-3 l0,6 6,0 0,-6 z"
 							}
 						).
@@ -341,7 +345,7 @@
 							type: "StackedLines",
 							markers: true,
 							tension:"S",
-							shadows: {dx: 2, dy: 2, dw: 2}
+							shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]}
 						}).
 						addSeries("Series A",
 							[ 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6 ],
