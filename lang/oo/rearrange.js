@@ -2,7 +2,7 @@ dojo.provide("dojox.lang.oo.rearrange");
 
 (function(){
 	var extraNames = dojo._extraNames, extraLen = extraNames.length,
-		opts = Object.prototype.toString;
+		opts = Object.prototype.toString, empty = {};
 
 	dojox.lang.oo.rearrange = function(bag, map){
 		//	summary:
