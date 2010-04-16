@@ -57,7 +57,7 @@ var reflect = function(){
 };
 
 var update = function(){
-	chart.setWindow(scaleX, scaleY, offsetX, offsetY).render();
+	chart.setWindow(scaleX, scaleY, offsetX, offsetY, {duration: 1500}).render();
 	reflect();
 };
 
@@ -117,13 +117,13 @@ makeObjects = function(){
 		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
 	chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1, stroke: "grey",
 		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
-	chart.addPlot("default", {type: "Areas"});
+	chart.addPlot("default", {type: "Areas", animate: {duration: 1800}});
 	chart.addSeries("Series A", [0, 25, 5, 20, 10, 15, 5, 20, 0, 25]);
 	chart.addAxis("x2", {fixLower: "minor", natural: true, leftBottom: false, stroke: "grey",
 		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
 	chart.addAxis("y2", {vertical: true, min: 0, max: 20, leftBottom: false, stroke: "grey",
 		majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
-	chart.addPlot("plot2", {type: "Areas", hAxis: "x2", vAxis: "y2"});
+	chart.addPlot("plot2", {type: "Areas", hAxis: "x2", vAxis: "y2", animate: {duration: 1800}});
 	chart.addSeries("Series B", [15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15], {plot: "plot2"});
 	chart.addPlot("grid", {type: "Grid", hMinorLines: true});
 	chart.render();

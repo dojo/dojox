@@ -232,14 +232,42 @@ dojo.require("dojox.charting.plot2d.OHLC");
 			});
 			return ret;
 		},
-		setAxisWindow: function(name, scale, offset){
+		setAxisWindow: function(name, scale, offset, zoom){
+			//	summary: Zooms an axis and all dependent plots.
+			//		Can be used to zoom in 1D.
+			//	name: String:
+			//		axis name
+			//	scale: Number:
+			//		scale on target axis
+			//	offset: Number:
+			//		measured by axis tick 
+			//	zoom: Boolean|Object?:
+			//		chart zooming animation trigger, null by default,
+			//		e.g. {duration: 1200}, or just set true.
 			var axis = this.axes[name];
 			if(axis){
 				axis.setWindow(scale, offset);
+				dojo.forEach(this.stack,function(plot){
+					if(plot.hAxis == name || plot.vAxis == name){
+						plot.zoom = zoom;
+					}
+				})
 			}
 			return this;
 		},
-		setWindow: function(sx, sy, dx, dy){
+		setWindow: function(sx, sy, dx, dy, zoom){
+			//	summary: Zooms plots in 2D.
+			//	sx: Number:
+			//		scale for x axis
+			//	sy: Number:
+			//		scale for y axis
+			//	dx: Number:
+			//		offset(pixel) on x axis
+			//	dy: Number:
+			//		offset(pixel) on y axis
+			// zoom: Boolean|Object?:
+			//		chart zooming animation trigger, null by default,
+			//		e.g. {duration:1200}, or just set true.
 			if(!("plotArea" in this)){
 				this.calculateGeometry();
 			}
@@ -255,7 +283,28 @@ dojo.require("dojox.charting.plot2d.OHLC");
 				}
 				axis.setWindow(scale, offset);
 			});
+			dojo.forEach(this.stack, function(plot){ plot.zoom = zoom; });
 			return this;
+		},
+		zoomIn:	function(name, range){
+			//	summary: Zoom chart to a specific range on one axis
+			//		(calls the render() method directly).
+			//	name: String:
+			//		target axis
+			//	range: Array:
+			//		end points of zooming range, measured by axis ticks
+			var axis = this.axes[name];
+			if(axis){
+				var scale, offset, bounds = axis.getScaler().bounds;
+				var lower = Math.min(range[0],range[1]);
+				var upper = Math.max(range[0],range[1]);
+				lower = range[0] < bounds.lower ? bounds.lower : lower;
+				upper = range[1] > bounds.upper ? bounds.upper : upper;
+				scale = (bounds.upper - bounds.lower) / (upper - lower);
+				offset = lower - bounds.lower;
+				this.setAxisWindow(name, scale, offset);
+				this.render();
+			}
 		},
 		calculateGeometry: function(){
 			if(this.dirty){

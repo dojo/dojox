@@ -6,11 +6,14 @@ dojo.require("dojox.charting.plot2d.Base");
 dojo.require("dojox.lang.utils");
 dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.functional.reversed");
+dojo.require("dojox.gfx.fx");
 
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
+		
+	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
 	dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
 		defaultParams: {
@@ -19,7 +22,8 @@ dojo.require("dojox.lang.functional.reversed");
 			lines:   true,	// draw lines
 			areas:   false,	// draw areas
 			markers: false,	// draw markers
-			tension: ""		// draw curved lines (tension is "X", "x", or "S")
+			tension: "",	// draw curved lines (tension is "X", "x", or "S")
+			animate: false	// animate chart to place
 		},
 		optionalParams: {
 			// theme component
@@ -43,17 +47,80 @@ dojo.require("dojox.lang.functional.reversed");
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
+			
+			// animation properties
+			this.animate = this.opt.animate;
+			this.zoom = null,
+			this.zoomQueue = [];	// zooming action task queue
+			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
 		},
 		
 		calculateAxes: function(dim){
 			this._calc(dim, dc.collectSimpleStats(this.series));
 			return this;
 		},
+		
+		isDataDirty: function(){
+			return dojo.some(this.series, function(item){ return item.dirty; });
+		},
+		
+		performZoom: function(dim, offsets){
+			// get current zooming various
+			var vs = this._vAxis.scale || 1, 
+				hs = this._hAxis.scale || 1, 
+				vOffset = dim.height - offsets.b,
+				hBounds = this._hScaler.bounds,
+				xOffset = (hBounds.from - hBounds.lower) * hBounds.scale,
+				vBounds = this._vScaler.bounds,
+				yOffset = (vBounds.from - vBounds.lower) * vBounds.scale;
+				// get incremental zooming various
+				rVScale = vs / this.lastWindow.vscale,
+				rHScale = hs / this.lastWindow.hscale,
+				rXOffset = (this.lastWindow.xoffset - xOffset)/
+					((this.lastWindow.hscale == 1)? hs : this.lastWindow.hscale), 
+				rYOffset = (yOffset - this.lastWindow.yoffset)/
+					((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
+				
+				shape = this.group,
+				anim = dojox.gfx.fx.animateTransform(dojo.delegate({
+					shape: shape,
+					duration: DEFAULT_ANIMATION_LENGTH,
+					transform:[
+						{name:"translate", start:[0, 0], end: [offsets.l * (1 - rHScale), vOffset * (1 - rVScale)]},
+						{name:"scale", start:[1, 1], end: [rHScale, rVScale]},
+						{name:"original"},
+						{name:"translate", start: [0, 0], end: [rXOffset, rYOffset]}
+					]}, this.zoom));
+					
+			dojo.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
+			//add anim to zooming action queue, 
+			//in order to avoid several zooming action happened at the same time
+			this.zoomQueue.push(anim);
+			//perform each anim one by one in zoomQueue
+			dojo.connect(anim, "onEnd", this, function(){
+				this.zoom = null;
+				this.zoomQueue.shift();
+				if(this.zoomQueue.length > 0){
+					this.zoomQueue[0].play();
+				}
+			});
+			if(this.zoomQueue.length == 1){
+				this.zoomQueue[0].play();
+			}
+			return this;
+		},
+		
 		render: function(dim, offsets){
+			// make sure all the series is not modified
+			if(this.zoom && !this.isDataDirty()){
+				return this.performZoom(dim, offsets);
+			}
+			
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
 				this.cleanGroup();
+				this.group.setTransform(null);
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
@@ -190,6 +257,19 @@ dojo.require("dojox.lang.functional.reversed");
 					}
 				}
 				run.dirty = false;
+			}
+			if(this.animate){
+				// grow from the bottom
+				var plotGroup = this.group;
+				dojox.gfx.fx.animateTransform(dojo.delegate({
+					shape: plotGroup,
+					duration: DEFAULT_ANIMATION_LENGTH,
+					transform:[
+						{name:"translate", start: [0, dim.height - offsets.b], end: [0, 0]},
+						{name:"scale", start: [1, 0], end:[1, 1]},
+						{name:"original"}
+					]
+				}, this.animate)).play();
 			}
 			this.dirty = false;
 			return this;
