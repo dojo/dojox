@@ -2,6 +2,12 @@ dojo.provide("dojox.charting.scaler.primitive");
 
 dojox.charting.scaler.primitive = {
 	buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs){
+		if(min == max){
+			// artificially extend bounds
+			min -= 0.5;
+			max += 0.5;
+			// now the line will be centered
+		}
 		return {
 			bounds: {
 				lower: min,
