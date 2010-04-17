@@ -90,7 +90,10 @@ dojo.require("dojox.lang.utils");
 			return "offset" in this ? this.offset : 0;
 		},
 		_groupLabelWidth: function(labels, font){
-			if(labels[0]["text"]){
+			if(!labels.length){
+				return 0;
+			}
+			if(dojo.isObject(labels[0])){
 				labels = df.map(labels, function(label){ return label.text; });
 			}
 			var s = labels.join("<br>");
