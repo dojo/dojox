@@ -402,9 +402,9 @@ dojox.fx.text.backspace = function(/*Object*/ args){
 
 	// Returns the animation object for each piece
 	args.pieceAnimation = function(piece, pieceCoords, coords, number, numPieces){
-		var interval = args.interval || (args.duration / (1.5 * numPieces));
-		var text = piece.textContent;
-		var whitespace = text.match(/\s/g);
+		var interval = args.interval || (args.duration / (1.5 * numPieces)),
+			text = ("textContent" in piece) ? piece.textContent : piece.innerText,
+			whitespace = text.match(/\s/g);
 
 		if(typeof(args.wordDelay) == "undefined"){
 			args.wordDelay = interval * 2;
