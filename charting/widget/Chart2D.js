@@ -236,7 +236,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		t = ga("data");
 		if(t != null){
 			o.type = "data";
-			o.data = dojo.map(String(t).split(','), Number);
+			o.data = t ? dojo.map(String(t).split(','), Number) : [];
 			return o;
 		}
 		t = ga("array");

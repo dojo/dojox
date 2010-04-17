@@ -160,7 +160,7 @@ dojo.require("dojox.gfx.fx");
 
 				var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 
-				if(this.opt.areas){
+				if(this.opt.areas && lpoly.length > 1){
 					var fill = theme.series.fill;
 					var apoly = dojo.clone(lpoly);
 					if(this.opt.tension){
@@ -187,7 +187,7 @@ dojo.require("dojox.gfx.fx");
 					run.dyn.marker = theme.symbol;
 				}
 				var frontMarkers = null, outlineMarkers = null, shadowMarkers = null;
-				if(stroke && theme.series.shadow){
+				if(stroke && theme.series.shadow && lpoly.length > 1){
 					var shadow = theme.series.shadow,
 						spoly = dojo.map(lpoly, function(c){
 							return {x: c.x + shadow.dx, y: c.y + shadow.dy};
@@ -206,7 +206,7 @@ dojo.require("dojox.gfx.fx");
 						}, this);
 					}
 				}
-				if(this.opt.lines){
+				if(this.opt.lines && lpoly.length > 1){
 					if(outline){
 						if(this.opt.tension){
 							run.dyn.outline = s.createPath(lpath).setStroke(outline).getStroke();
