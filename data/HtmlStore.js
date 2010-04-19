@@ -369,7 +369,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 	_finishFetchItems: function(request, fetchHandler, errorHandler){
 		//	summary:
 		//		Internal function for processing the passed in request and locating the requested items.
-		var items = null;
+		var items = [];
 		var arrayOfAllItems = this._getAllItems();
 		if(request.query){
 			var ignoreCase = request.queryOptions ? request.queryOptions.ignoreCase : false; 
