@@ -84,7 +84,7 @@ dojox.validate.isValidCreditCardNumber = function(value, ccType){
 
 	var cardinfo = dojox.validate._cardInfo, results = [];
 	if(ccType){
-		var expr = cardinfo[ccType.toLowerCase()];
+		var expr = '^' + cardinfo[ccType.toLowerCase()] + '$';
 		return expr ? !!value.match(expr) : false; // boolean
 	}
 
