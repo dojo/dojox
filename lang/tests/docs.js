@@ -20,8 +20,8 @@ tests.register("dojox.lang.tests.docs", [
 	function futureClassHasSchema(t){
 		dojo.require("dijit.Dialog");
 		t.is(!!dijit.Dialog.description, true);
-		t.is(!!dijit.Dialog.properties.duration.description, true);
-		t.is(dijit.Dialog.properties.duration.type, "integer");	
+		t.is(!!dijit.Dialog.properties.autofocus.description, true);
+		t.is(dijit.Dialog.properties.autofocus.type, "boolean");	
 	},
 	function testSchema(t){
 		
