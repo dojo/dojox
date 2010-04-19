@@ -8,8 +8,7 @@
 	/*border-left-width: 0px;*/
 }
 
-.tundra .dojoxGridHeader .dojoxGridCell,
-.tundra .dojoxGridCell{
+.tundra .dojoxGridCell {
 	padding:0px;
 	/*display:inline;*/
 	/*position:relative;*/
@@ -30,13 +29,13 @@
 	width:20px;
 }
 
-.tundra .dojoxGridHeader .dojoxGridCellOver .dojoxGridSortNode{
+.tundra .dojoxGridCellOver .dojoxGridSortNode{
 	cursor:pointer;
 	background: #f8fafd url("../../../../dijit/themes/tundra/images/accordionItemHover.gif") bottom repeat-x;
 }
 /* end overwrite */
 
-.tundra .dojoxGridCell .dojoxGridSelectRegionHover{
+.tundra .dojoxGridSelectRegionHover{
 	border-color:		#a5beda; 
 	border-bottom-color:#5c7590; 
 	cursor:pointer;
@@ -44,7 +43,7 @@
 	background: #f8fafd url("../../../../dijit/themes/tundra/images/accordionItemHover.gif") bottom repeat-x;
 }
 
-.tundra .dojoxGridCell .dojoxGridSortHover{
+.tundra .dojoxGridSortHover{
 	border-color:		#a5beda; 
 	border-bottom-color:#5c7590; 
 	color:#243C5F;
@@ -60,21 +59,14 @@
 /* fix safari focus border - overwrite */
 .dj_webkit .tundra .dojoxGridCell,
 .dj_webkit .tundra .dojoxGridCellFocus,
-.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridHeaderCellSelectRegion,
-.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridUnarySortWrapper,
-.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridNestedSortWrapper,
-.dj_webkit .tundra .dojoxGridHeader .dojoxGridCell .dojoxGridSortRoot{
+.dj_webkit .tundra .dojoxGridHeaderCellSelectRegion,
+.dj_webkit .tundra .dojoxGridUnarySortWrapper,
+.dj_webkit .tundra .dojoxGridNestedSortWrapper,
+.dj_webkit .tundra .dojoxGridSortRoot{
 	outline: none;
 }
 
 /* focus border */
-.tundra .dojoxGridHeader .dojoxGridRowTable .dojoxGridCellFocus
- {
-	border-color: darkblue !important;
-	border-style: dashed !important;
-	border-width: 1px !important;
-}
-
 .tundra .dojoxGridFocusBorder {
 	border-top: 1px dashed darkblue;
 	border-left: 1px dashed darkblue;
