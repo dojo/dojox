@@ -24,8 +24,8 @@ dojo.require("dojox.lang.functional.reversed");
 			gap:	2		// gap between columns in pixels
 		},
 		optionalParams: {
-			minBarSize: 1,	// minimal bar size in pixels
-			maxBarSize: 1,	// maximal bar size in pixels
+			minBarSize:	1,	// minimal candle width in pixels
+			maxBarSize:	1,	// maximal candle width in pixels
 			// theme component
 			stroke:		{},
 			outline:	{},

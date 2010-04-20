@@ -21,8 +21,8 @@ dojo.require("dojox.lang.functional.reversed");
 			animate: null   // animate bars into place
 		},
 		optionalParams: {
-			minBarSize: 1,	// minimal bar size in pixels
-			maxBarSize: 1,	// maximal bar size in pixels
+			minBarSize:	1,	// minimal bar width in pixels
+			maxBarSize:	1,	// maximal bar width in pixels
 			// theme component
 			stroke:		{},
 			outline:	{},
