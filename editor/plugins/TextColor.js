@@ -103,6 +103,10 @@ dojo.declare("dojox.editor.plugins.TextColor", dijit._editor._Plugin, {
 	// Override _Plugin.buttonClass to use DropDownButton (with ColorPalette) to control this plugin
 	buttonClass: dijit.form.DropDownButton,
 	
+	// useDefaultCommand: Boolean
+	//		False as we do not use the default editor command/click behavior.
+	useDefaultCommand: false,
+
 	constructor: function(){
 		this._picker = new dojox.editor.plugins._TextColorDropDown();
 		dojo.body().appendChild(this._picker.domNode);
@@ -114,8 +118,6 @@ dojo.declare("dojox.editor.plugins.TextColor", dijit._editor._Plugin, {
 		this.connect(this._picker, "onCancel", function(){
 			this.editor.focus();
 		});
-		// We do not want default command/onclick stuff.
-		this.useDefaultCommand = false;
 	},
 
 	updateState: function(){
