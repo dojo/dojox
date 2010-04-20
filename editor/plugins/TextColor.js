@@ -41,6 +41,9 @@ dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._T
 		//		the template fills out.
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "TextColor");
 		dojo.mixin(this, strings);
+		
+		// We do not want default command/onclick stuff.
+		this.useDefaultCommand = false;
 	},
 
 	startup: function(){
