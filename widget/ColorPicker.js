@@ -145,42 +145,42 @@ dojo.require("dojo.i18n");
 
 			// Bind to up, down, left and right  arrows on the hue and saturation nodes.
 			this._keyListeners = [];
-			this._keyListeners.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
+			this._connects.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
 				charOrCode: dojo.keys.UP_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
 			}, this, dojo.hitch(this, this._updateHueCursorNode), 25, 25));
-			this._keyListeners.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
+			this._connects.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
 				charOrCode: dojo.keys.DOWN_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
 			}, this, dojo.hitch(this, this._updateHueCursorNode), 25, 25));
-			this._keyListeners.push(dijit.typematic.addKeyListener(this.cursorNode,{
+			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
 				charOrCode: dojo.keys.UP_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
 			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
-			this._keyListeners.push(dijit.typematic.addKeyListener(this.cursorNode,{
+			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
 				charOrCode: dojo.keys.DOWN_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
 			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
-			this._keyListeners.push(dijit.typematic.addKeyListener(this.cursorNode,{
+			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
 				charOrCode: dojo.keys.LEFT_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
 			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
-			this._keyListeners.push(dijit.typematic.addKeyListener(this.cursorNode,{
+			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
 				charOrCode: dojo.keys.RIGHT_ARROW,
 				shiftKey: false,
 				metaKey: false,
@@ -500,13 +500,9 @@ dojo.require("dojo.i18n");
 			//		Over-ride to clean up subscriptions, etc.
 			this.inherited(arguments);
 			dojo.forEach(this._subs, function(sub){
-				d.unsubscribe(sub);
+				dojo.unsubscribe(sub);
 			});
 			delete this._subs;
-			dojo.forEach(this._keyListeners, function(l){
-				d.disconnect(l);
-			});
-			delete this._keyListeners;
 		}
 	});
 })(dojo);
