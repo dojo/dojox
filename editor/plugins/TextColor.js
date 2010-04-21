@@ -24,9 +24,9 @@ dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._T
 			"<div dojoType='dojox.widget.ColorPicker' dojoAttachPoint='_colorPicker'></div>" +
 			"<br>" + 
 			"<center>" + 
-				"<button dojoType='dijit.form.Button' dojoAttachPoint='_setButton'>${setButtonText}</button>" +
+				"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_setButton'>${setButtonText}</button>" +
 				"&nbsp;" +
-				"<button dojoType='dijit.form.Button' dojoAttachPoint='_cancelButton'>${cancelButtonText}</button>" +
+				"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_cancelButton'>${cancelButtonText}</button>" +
 			"</center>" +
 		"</div>" +
 		"</div>",
