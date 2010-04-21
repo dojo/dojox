@@ -64,7 +64,7 @@ dojo.declare(
 				_this.onStartView();
 			}
 			_this.domNode.style.visibility = "visible";
-		}, 0);
+		}, dojo.isIE?100:0); // give IE a little time to complete drawing
 	},
 
 	onStartView: function(){
@@ -94,6 +94,8 @@ dojo.declare(
 		if(transition == "none" || !dojo.isWebKit){
 			transition = null;
 		}
+		this._moveTo = moveTo;
+		this._dir = dir;
 		this._transition = transition;
 		this._arguments = [];
 		var i;
@@ -142,6 +144,7 @@ dojo.declare(
 			}
 		}
 		this._saveState.apply(this, arguments);
+		var toNode;
 		if(moveTo){
 			if(typeof(moveTo) == "string"){
 				moveTo.match(/(\w+)/);
@@ -168,17 +171,25 @@ dojo.declare(
 			var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || window.pageYOffset || 0;
 			if(dir == 1){
 				toNode.style.top = "0px";
-				fromNode.style.top = -scrollTop + "px";
-				setTimeout(function(){ // iPhone needs setTimeout
-					window.scrollTo(0, 0);
-				}, 0);
+				if(scrollTop > 1){
+					fromNode.style.top = -scrollTop + "px";
+					if(dojo.config["mblHideAddressBar"] !== false){
+						setTimeout(function(){ // iPhone needs setTimeout
+							window.scrollTo(0, 1);
+						}, 0);
+					}
+				}
 			}else{
-				var toTop = -toNode.offsetTop;
-				toNode.style.top = "0px";
-				fromNode.style.top = toTop - scrollTop + "px";
-				setTimeout(function(){ // iPhone needs setTimeout
-					window.scrollTo(0, toTop);
-				}, 0);
+				if(scrollTop > 1 || toNode.offsetTop != 0){
+					var toTop = -toNode.offsetTop;
+					toNode.style.top = "0px";
+					fromNode.style.top = toTop - scrollTop + "px";
+					if(dojo.config["mblHideAddressBar"] !== false && toTop > 0){
+						setTimeout(function(){ // iPhone needs setTimeout
+							window.scrollTo(0, toTop + 1);
+						}, 0);
+					}
+				}
 			}
 			toWidget.onBeforeTransitionIn.apply(this, arguments);
 			toNode.style.display = "none";
@@ -265,7 +276,7 @@ dojo.declare(
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
 		this.domNode.className = "mblHeading";
 		if(this.back){
-			var text = this._text = this.domNode.innerHTML;
+			this._text = this.domNode.innerHTML;
 			var head = dojo.doc.createElement("DIV");
 			head.className = "mblArrowButtonHead";
 			var body = this._body = dojo.doc.createElement("DIV");
@@ -702,7 +713,7 @@ dojo.declare(
 
 		var nodes = div.getElementsByTagName("*");
 		var i, len, s1;
-		len = nodes.length
+		len = nodes.length;
 		for(i = 0; i < len; i++){
 			s1 = nodes[i].getAttribute("dojoAttachPoint");
 			if(s){
@@ -1087,6 +1098,16 @@ dojo._loaders.unshift(function(){
 });
 
 dojo.addOnLoad(function(){
+	//	You can disable hiding the address bar with the following djConfig.
+	//	var djConfig = { mblHideAddressBar: false };
+	if(dojo.config["mblHideAddressBar"] !== false){
+		var hideAddressBar = function(){
+			setTimeout(function(){ scrollTo(0, 1); }, 100);
+		};
+		hideAddressBar();
+		dojo.connect(dojo.body(), "onOrientationChange", hideAddressBar);
+	}
+
 	// avoid use of dojo.query
 	/*
 	var list = dojo.query('[__dojoType]', null);
@@ -1108,14 +1129,15 @@ dojo.addOnLoad(function(){
 
 	if(dojo.hash){
 		// find widgets under root recursively
-		function findWidgets(root){
+		var findWidgets = function(root){
 			var arr;
-			var widgets = arr = dijit.findWidgets(root);
+			arr = dijit.findWidgets(root);
+			var widgets = arr;
 			for(var i = 0; i < widgets.length; i++){
 				arr = arr.concat(findWidgets(widgets[i].containerNode));
 			}
 			return arr;
-		}
+		};
 		dojo.subscribe("/dojo/hashchange", null, function(value){
 			var view = dojox.mobile._currentView;
 			if(!view){ return; }
@@ -1142,10 +1164,11 @@ dojo.addOnLoad(function(){
 });
 
 dijit.getEnclosingWidget = function(node){
-	for(var n = node; node && node.tagName != "BODY"; node = (node._parentNode||node.parentNode)){
+	while(node && node.tagName !== "BODY"){
 		if(node.getAttribute && node.getAttribute("widgetId")){
 			return dijit.registry.byId(node.getAttribute("widgetId"));
 		}
+		node = node._parentNode || node.parentNode;
 	}
 	return null;
 };

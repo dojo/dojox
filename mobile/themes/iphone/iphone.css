@@ -4,11 +4,13 @@ html, body {
 	padding: 0px;
 }
 body {
+	visibility: hidden;
 	overflow-x: hidden;
 	-webkit-text-size-adjust: none;
 	background-color: rgb(197,204,211);
 	font-family: Helvetica;
 	font-size: 17px;
+	min-height: 416px;
 }
 
 /* dojox.mobile.View */
@@ -27,13 +29,13 @@ body {
 }
 
 .slide.out {
-	-webkit-animation-duration: .3s;
+	-webkit-animation-duration: .4s;
 	-webkit-animation-name: slideOut;
 	-webkit-animation-timing-function: linear;
 	-webkit-transform: translateX(-100%);
 }
 .slide.in {
-	-webkit-animation-duration: .3s;
+	-webkit-animation-duration: .4s;
 	-webkit-animation-name: slideIn;
 	-webkit-animation-timing-function: linear;
 	-webkit-transform: translateX(0px);
@@ -150,6 +152,7 @@ body {
 	font-size: 13px;
 	color: white;
 	line-height: 29px;
+	cursor: pointer;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	background-color: #5877A2;
@@ -433,7 +436,7 @@ li.mblListItem .mblRightButton {
 /* Icon Container */
 ul.mblIconContainer {
 	padding: 0px;
-	margin: 0px;
+	margin: 20px 0px 0px 10px;
 }
 li.mblIconItem {
 	list-style-type: none;
@@ -442,6 +445,7 @@ li.mblIconItem {
 li.mblIconItemSub {
 	list-style-type: none;
 	clear: both;
+	margin: -10px;
 }
 
 .mblIconArea {
@@ -450,7 +454,7 @@ li.mblIconItemSub {
 	height: 90px;
 	width: 74px;
 	text-align: center;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .mblIconArea IMG {

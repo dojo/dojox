@@ -16,16 +16,11 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser");  
-			// Use the lightweight parser.
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
 			dojo.require("dojo.hash");
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-			function hideAddressBar(){
-				setTimeout(scrollTo, 100, 0, 0);
-			}
 
 			function loadPage(moveTo){
 				if(!(moveTo.match(/#(\w+)/))){ return; }
@@ -51,7 +46,7 @@
 			});
 		</script>
 	</head>
-	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px">
+	<body>
 		<div id="home" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Animations</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Transition Effects</h2>

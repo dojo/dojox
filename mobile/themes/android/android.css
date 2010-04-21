@@ -4,11 +4,13 @@ html, body {
 	padding: 0px;
 }
 body {
+	visibility: hidden;
 	overflow-x: hidden;
 	-webkit-text-size-adjust: none;
 	background-color: black;
 	font-family: Helvetica;
 	font-size: 17px;
+	min-height: 440px;
 }
 
 /* dojox.mobile.View */
@@ -27,13 +29,13 @@ body {
 }
 
 .slide.out {
-	-webkit-animation-duration: .3s;
+	-webkit-animation-duration: .4s;
 	-webkit-animation-name: slideOut;
 	-webkit-animation-timing-function: linear;
 	-webkit-transform: translateX(-100%);
 }
 .slide.in {
-	-webkit-animation-duration: .3s;
+	-webkit-animation-duration: .4s;
 	-webkit-animation-name: slideIn;
 	-webkit-animation-timing-function: linear;
 	-webkit-transform: translateX(0px);
@@ -150,6 +152,7 @@ body {
 	font-size: 13px;
 	color: white;
 	line-height: 23px;
+	cursor: pointer;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	background-color: #ADADAD;

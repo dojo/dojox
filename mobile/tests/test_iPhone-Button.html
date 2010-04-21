@@ -19,6 +19,7 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
@@ -30,12 +31,9 @@
 					// do something
 				}
 			});
-			function hideAddressBar(){
-				setTimeout(scrollTo, 100, 0, 0);
-			}
 		</script>
 	</head>
-	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px;padding: 20px">
+	<body style="padding: 20px;visibility:visible">
 		<button id="btn1" dojoType="dojox.mobile.Button" style="width:120px">Default Button</button>
 		<p></p>
 		<button id="btn2" dojoType="dojox.mobile.Button" btnClass="redButton" style="width:120px">Custom Button</button>

@@ -20,16 +20,13 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-			function hideAddressBar(){
-				setTimeout(scrollTo, 100, 0, 0);
-			}
 		</script>
 	</head>
-	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px">
+	<body>
 		<div id="myhome" dojoType="dojox.mobile.View" selected="true">
 			<ul dojoType="dojox.mobile.IconContainer" type="slide">
 				<li dojoType="dojox.mobile.IconItem" title="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>

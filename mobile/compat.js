@@ -31,28 +31,28 @@ dojo.extend(dojox.mobile.View, {
 		if(!transition || transition == "none"){
 			toNode.style.display = "";
 			fromNode.style.display = "none";
-			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
 			this.invokeCallback();
 		}else if(transition == "slide"){
-			toNode.style.display = "";
 			var w = fromNode.offsetWidth;
 			var s1 = dojo.fx.slideTo({
 				node: fromNode,
-				duration: 300,
+				duration: 400,
 				left: -w*dir,
 				top: fromNode.offsetTop
 			});
 			var s2 = dojo.fx.slideTo({
 				node: toNode,
-				duration: 300,
+				duration: 400,
 				left: 0
 			});
 			toNode.style.position = "absolute";
 			toNode.style.left = w*dir + "px";
+			toNode.style.display = "";
 			anim = dojo.fx.combine([s1,s2]);
 			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
+				toNode.style.position = "relative";
 				this.invokeCallback();
 			});
 			anim.play();
@@ -67,12 +67,12 @@ dojo.extend(dojox.mobile.View, {
 			toNode.style.left = "0px";
 			dojo.connect(anim, "onEnd", this, function(){ 
 				fromNode.style.display = "none";
+				toNode.style.position = "relative";
 				toNode.style.display = "";
 				this.invokeCallback();
 			});
 			anim.play(); 
 		}else if(transition == "fade"){
-			toNode.style.display = "";
 			anim = dojo.fx.chain([
 				dojo.fadeOut({
 					node: fromNode,
@@ -85,9 +85,11 @@ dojo.extend(dojox.mobile.View, {
 			]);
 			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
+			toNode.style.display = "";
 			dojo.style(toNode, "opacity", 0);
 			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
+				toNode.style.position = "relative";
 				dojo.style(fromNode, "opacity", 1);
 				this.invokeCallback();
 			});

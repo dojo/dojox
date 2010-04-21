@@ -9,16 +9,13 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js"></script>
 
 		<script language="JavaScript" type="text/javascript">
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-			function hideAddressBar(){
-				setTimeout(scrollTo, 100, 0, 0);
-			}
 		</script>
 	</head>
-	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px;padding:15px">
+	<body style="padding:15px;visibility:visible">
 		<div dojoType="dojox.mobile.Switch" value="off"></div>
 		<hr>
 		<div dojoType="dojox.mobile.Switch" value="on" leftLabel="Start" rightLabel="Stop"></div>

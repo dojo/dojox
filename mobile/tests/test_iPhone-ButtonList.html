@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
@@ -31,12 +32,9 @@
 					dojo.addClass(btnDiv, "mblBluePlusButton");
 				}
 			}
-			function hideAddressBar(){
-				setTimeout(scrollTo, 100, 0, 0);
-			}
 		</script>
 	</head>
-	<body onLoad="hideAddressBar()" onOrientationChange="hideAddressBar()" style="min-height:416px">
+	<body>
 		<div id="mashups" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Mashups</h1>
 			<ul id="list" dojoType="dojox.mobile.EdgeToEdgeList">
