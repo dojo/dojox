@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+		"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	
@@ -29,12 +29,19 @@
 	<script type="text/javascript" src="../ColorPicker.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.widget.ColorPicker");
+		dojo.require("dijit.form.Button");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 
 		// generic onChange handler:
 		var handler = function(val,id){
 			dojo.byId(id).value = val;
 		};
+
+		dojo.addOnLoad(function(){
+			dojo.connect(dijit.byId("testFocusButton"), "onClick", function(){
+			dijit.byId("picker").focus();
+			});
+		});
 	</script>
 </head>
 <body class="tundra">
@@ -70,6 +77,8 @@
 		<h3>To See how it positions in an absolute node (editor plugin, input popup)</h3>
 		<input dojoType="dojox.widget.ColorPicker" value="#ededed">
 	</div>
+
+	<button id="testFocusButton" type="button" dojoType="dijit.form.Button">Click to focus first widget</button>
 	
 	<p>that's all folks!</p>
 	
