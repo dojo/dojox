@@ -22,11 +22,12 @@ dojo.declare("dojox.editor.plugins._FindReplaceCloseBox", [dijit._Widget, dijit.
 	btnId: "",
 	widget: null,
 	widgetsInTemplate: true,
+	useDefaultCommand: false,
 	
 	templateString:
 		"<span style='float: right' class='dijitInline' tabindex='-1'>" +
 			"<button class='dijit dijitReset dijitInline' " +
-				"id='${btnId}' dojoType='dijit.form.Button' tabindex='-1' iconClass='dijitEditorIconsFindReplaceClose' showLabel='false'>X</button>" +
+				"id='${btnId}' dojoAttachPoint='button' dojoType='dijit.form.Button' tabindex='-1' iconClass='dijitEditorIconsFindReplaceClose' showLabel='false'>X</button>" +
 		"</span>",
 	
 	postMixInProperties: function(){
@@ -34,6 +35,11 @@ dojo.declare("dojox.editor.plugins._FindReplaceCloseBox", [dijit._Widget, dijit.
 		this.id = dijit.getUniqueId(this.declaredClass.replace(/\./g,"_"));		
 		this.btnId = this.id + "_close";
 		this.inherited(arguments);
+	},
+	startup: function(){
+		this.connect(this.button, "onClick", "onClick");
+	},
+	onClick: function(){
 	}
 });
 
@@ -359,7 +365,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		//		Function to allow programmatic toggling of the find toolbar.
 		// tags:
 		//		public
-		this.button.set("checked", !this.button.attr("checked"));
+		this.button.set("checked", !this.button.get("checked"));
 	},
 
 	_toggleFindReplace: function(/*Boolean*/ show, /*Boolean?*/ ignoreState, /*Boolean?*/ buttonDisabled){
