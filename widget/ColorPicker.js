@@ -449,7 +449,7 @@ dojo.require("dojo.i18n");
 					duration:this.slideDuration,
 					top: ypos,
 					left: 0,
-					onEnd: d.hitch(this, "_updateColor", true)
+					onEnd: d.hitch(this, function() {this._updateColor(true); dijit.focus(this.hueCursorNode)})
 				}).play();
 			}else{
 				d.style(this.hueCursorNode, "top", ypos + "px");
@@ -471,7 +471,7 @@ dojo.require("dojo.i18n");
 					duration: this.slideDuration,
 					top: newTop,
 					left: newLeft,
-					onEnd: d.hitch(this,"_updateColor", true)
+					onEnd: d.hitch(this, function() {this._updateColor(true); dijit.focus(this.cursorNode)})
 				}).play();
 			}else{
 				d.style(this.cursorNode, {
