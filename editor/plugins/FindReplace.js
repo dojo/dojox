@@ -22,7 +22,6 @@ dojo.declare("dojox.editor.plugins._FindReplaceCloseBox", [dijit._Widget, dijit.
 	btnId: "",
 	widget: null,
 	widgetsInTemplate: true,
-	useDefaultCommand: false,
 	
 	templateString:
 		"<span style='float: right' class='dijitInline' tabindex='-1'>" +
