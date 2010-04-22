@@ -11,7 +11,8 @@ dojo.require("dojox.lang.functional");
 	dojo.declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
-			vAxis: "y"		// use a vertical axis named "y"
+			vAxis: "y",		// use a vertical axis named "y"
+			animate: null   // animate bars into place
 		},
 		optionalParams: {
 			// theme component
@@ -29,6 +30,7 @@ dojo.require("dojox.lang.functional");
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
+			this.animate = this.opt.animate;
 		},
 		
 		calculateAxes: function(dim){
@@ -38,6 +40,9 @@ dojo.require("dojox.lang.functional");
 
 		//	override the render so that we are plotting only circles.
 		render: function(dim, offsets){
+			if(this.zoom && !this.isDataDirty()){
+				return this.performZoom(dim, offsets);
+			}
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
@@ -87,9 +92,13 @@ dojo.require("dojox.lang.functional");
 					shadowCircles = dojo.map(points, function(item){
 						var finalTheme = t.addMixin(theme, "circle", item, true),
 							shadow = finalTheme.series.shadow;
-						return s.createCircle({
+						var shape = s.createCircle({
 							cx: item.x + shadow.dx, cy: item.y + shadow.dy, r: item.radius
 						}).setStroke(shadow).setFill(shadow.color);
+						if(this.animate){
+							this._animateBubble(shape, dim.height - offsets.b, item.radius);
+						}
+						return shape;
 					}, this);
 					if(shadowCircles.length){
 						run.dyn.shadow = shadowCircles[shadowCircles.length - 1].getStroke();
@@ -102,9 +111,13 @@ dojo.require("dojox.lang.functional");
 						var finalTheme = t.addMixin(theme, "circle", item, true),
 							outline = dc.makeStroke(finalTheme.series.outline);
 						outline.width = 2 * outline.width + theme.series.stroke.width;
-						return s.createCircle({
+						var shape = s.createCircle({
 							cx: item.x, cy: item.y, r: item.radius
 						}).setStroke(outline);
+						if(this.animate){
+							this._animateBubble(shape, dim.height - offsets.b, item.radius);
+						}
+						return shape;
 					}, this);
 					if(outlineCircles.length){
 						run.dyn.outline = outlineCircles[outlineCircles.length - 1].getStroke();
@@ -122,9 +135,13 @@ dojo.require("dojox.lang.functional");
 						};
 					var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 					specialFill = this._shapeFill(specialFill, rect);
-					return s.createCircle({
+					var shape = s.createCircle({
 						cx: item.x, cy: item.y, r: item.radius
 					}).setFill(specialFill).setStroke(finalTheme.series.stroke);
+					if(this.animate){
+						this._animateBubble(shape, dim.height - offsets.b, item.radius);
+					}
+					return shape;
 				}, this);
 				if(frontCircles.length){
 					run.dyn.fill   = frontCircles[frontCircles.length - 1].getFill();
@@ -158,6 +175,17 @@ dojo.require("dojox.lang.functional");
 			}
 			this.dirty = false;
 			return this;
+		},
+		_animateBubble: function(shape, offset, size){
+			dojox.gfx.fx.animateTransform(dojo.delegate({
+				shape: shape,
+				duration: 1200,
+				transform: [
+					{name: "translate", start: [0, offset], end: [0, 0]},
+					{name: "scale", start: [0, 1/size], end: [1, 1]},
+					{name: "original"}
+				]
+			}, this.animate)).play();
 		}
 	});
 })();

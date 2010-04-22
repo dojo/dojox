@@ -21,7 +21,8 @@ dojo.require("dojox.lang.functional.reversed");
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
-			gap:	2		// gap between columns in pixels
+			gap:	2,		// gap between columns in pixels
+			animate: null   // animate bars into place
 		},
 		optionalParams: {
 			minBarSize:	1,	// minimal candle width in pixels
@@ -42,6 +43,7 @@ dojo.require("dojox.lang.functional.reversed");
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
+			this.animate = this.opt.animate;
 		},
 
 		collectStats: function(series){
@@ -76,6 +78,9 @@ dojo.require("dojox.lang.functional.reversed");
 		},
 
 		render: function(dim, offsets){
+			if(this.zoom && !this.isDataDirty()){
+				return this.performZoom(dim, offsets);
+			}
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
@@ -166,12 +171,26 @@ dojo.require("dojox.lang.functional.reversed");
 							};
 							this._connectEvents(shape, o);
 						}
+						if(this.animate){
+							this._animateCandlesticks(shape, y - low, high - low);
+						}
 					}
 				}
 				run.dirty = false;
 			}
 			this.dirty = false;
 			return this;
+		},
+		_animateCandlesticks: function(shape, voffset, vsize){
+			dojox.gfx.fx.animateTransform(dojo.delegate({
+				shape: shape,
+				duration: 1200,
+				transform: [
+					{name: "translate", start: [0, voffset - (voffset/vsize)], end: [0, 0]},
+					{name: "scale", start: [1, 1/vsize], end: [1, 1]},
+					{name: "original"}
+				]
+			}, this.animate)).play();
 		}
 	});
 })();
