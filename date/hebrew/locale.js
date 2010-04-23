@@ -40,8 +40,8 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 							s = m+1; pad = true;
 						}	
 					}else{
-						var propM = ["months", "format", widthList[l-3]].join("-");
-						s = bundle[propM][m];
+						var monthNames = dojox.date.hebrew.locale.getNames('months',widthList[l-3], 'format', locale, dateObject);
+						s = monthNames[m];
 					}
 					break;
 				case 'd':
@@ -241,17 +241,24 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 			case 'M':
 				//if  it is short format, month is one letter or two letter with "geresh"
 				if(l>2){
-					var months = bundle['months-format-' + widthList[l-3]].concat();
+					//we do not know here if the year is leap or not
+					var months = dojox.date.hebrew.locale.getNames('months', widthList[l-3], 'format', locale, new dojox.date.hebrew.Date(5769, 1, 1)),
+						leapmonths = dojox.date.hebrew.locale.getNames('months', widthList[l-3], 'format', locale, new dojox.date.hebrew.Date(5768, 1, 1));
 					if(!options.strict){
 						//Tolerate abbreviating period in month part
 						//Case-insensitive comparison
 						v = v.replace(".","").toLowerCase();
 						months = dojo.map(months, function(s){ return s ? s.replace(".","").toLowerCase() : s; } );
+						leapmonths = dojo.map(leapmonths, function(s){ return s ? s.replace(".","").toLowerCase() : s; } );
 					}
-					v = dojo.indexOf(months, v);
+					var monthName = v; 
+					v = dojo.indexOf(months, monthName);
 					if(v == -1){
-//					console.debug("dojox.date.hebrew.locale.parse: Could not parse month name: '" + v + "'.");
-						return false;
+						v = dojo.indexOf(leapmonths, monthName);
+						if(v == -1){
+							//console.debug("dojox.date.hebrew.locale.parse: Could not parse month name:  second   " + v +"'.");
+							return false;
+						}
 					}
 					mLength = l;
 				}else{

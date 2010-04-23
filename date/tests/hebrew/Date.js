@@ -361,7 +361,7 @@ tests.register("dojox.date.tests.hebrew.Date",
 				var dates = [	
 							[5768, 5, 1],
 							[5768, 1, 29],
-							[5769, 5, 16],
+							[5769, 6, 16], // "absolute" index of month, non-leap year
 							[5769, 11, 2],
 							[5770, 0, 2]
 						];
