@@ -1434,7 +1434,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 				handleDocument = function(data){
 					var item = null;
 					if(data){
-						var items = self._getItems(items, {});
+						var items = self._getItems(data, {});
 						if(items.length === 1){
 							item = items[0];
 						}else{
