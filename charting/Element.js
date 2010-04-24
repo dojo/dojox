@@ -2,22 +2,52 @@ dojo.provide("dojox.charting.Element");
 
 dojo.require("dojox.gfx");
 
-
 dojo.declare("dojox.charting.Element", null, {
+	//	summary:
+	//		A base class that is used to build other elements of a chart, such as
+	//		a series.
+	//	chart: dojox.charting.Chart2D
+	//		The parent chart for this element.
+	//	group: dojox.gfx.Group
+	//		The visual GFX group representing this element.
+	//	htmlElement: Array
+	//		Any DOMNodes used as a part of this element (such as HTML-based labels).
+	//	dirty: Boolean
+	//		A flag indicating whether or not this element needs to be rendered.
+
+	chart: null,
+	group: null,
+	htmlElements: null,
+	dirty: true,
+
 	constructor: function(chart){
+		//	summary:
+		//		Creates a new charting element.
+		//	chart: dojox.charting.Chart2D
+		//		The chart that this element belongs to.
 		this.chart = chart;
 		this.group = null;
 		this.htmlElements = [];
 		this.dirty = true;
 	},
 	createGroup: function(creator){
+		//	summary:
+		//		Convenience function to create a new dojox.gfx.Group.
+		//	creator: dojox.gfx.Surface?
+		//		An optional surface in which to create this group.
+		//	returns: dojox.charting.Element
+		//		A reference to this object for functional chaining.
 		if(!creator){ creator = this.chart.surface; }
 		if(!this.group){
 			this.group = creator.createGroup();
 		}
-		return this;
+		return this;	//	dojox.charting.Element
 	},
 	purgeGroup: function(){
+		//	summary:
+		//		Clear any elements out of our group, and destroy the group.
+		//	returns: dojox.charting.Element
+		//		A reference to this object for functional chaining.
 		this.destroyHtmlElements();
 		if(this.group){
 			this.group.clear();
@@ -25,9 +55,15 @@ dojo.declare("dojox.charting.Element", null, {
 			this.group = null;
 		}
 		this.dirty = true;
-		return this;
+		return this;	//	dojox.charting.Element
 	},
 	cleanGroup: function(creator){
+		//	summary:
+		//		Clean any elements (HTML or GFX-based) out of our group, and create a new one.
+		//	creator: dojox.gfx.Surface?
+		//		An optional surface to work with.
+		//	returns: dojox.charting.Element
+		//		A reference to this object for functional chaining.
 		this.destroyHtmlElements();
 		if(!creator){ creator = this.chart.surface; }
 		if(this.group){
@@ -36,15 +72,19 @@ dojo.declare("dojox.charting.Element", null, {
 			this.group = creator.createGroup();
 		}
 		this.dirty = true;
-		return this;
+		return this;	//	dojox.charting.Element
 	},
 	destroyHtmlElements: function(){
+		//	summary:
+		//		Destroy any DOMNodes that may have been created as a part of this element.
 		if(this.htmlElements.length){
 			dojo.forEach(this.htmlElements, dojo.destroy);
 			this.htmlElements = [];
 		}
 	},
 	destroy: function(){
+		//	summary:
+		//		API addition to conform to the rest of the Dojo Toolkit's standard.
 		this.purgeGroup();
 	},
 	// fill utilities

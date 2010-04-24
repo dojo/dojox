@@ -4,6 +4,10 @@ dojo.require("dojox.charting.scaler.primitive");
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d.common");
 
+/*=====
+dojox.charting.plot2d.__PlotCtorArgs = function(){
+}
+=====*/
 dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 	constructor: function(chart, kwArgs){
 		this.zoom = null,

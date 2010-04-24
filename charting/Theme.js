@@ -5,6 +5,95 @@ dojo.require("dojox.color.Palette");
 dojo.require("dojox.lang.utils");
 
 dojo.declare("dojox.charting.Theme", null, {
+	//	summary:
+	//		A Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
+	//		style a chart.
+	//
+	//	description:
+	//		While you can set up style definitions on a chart directly (usually through the various add methods
+	//		on a dojox.charting.Chart2D object), a Theme simplifies this manual setup by allowing you to
+	//		pre-define all of the various visual parameters of each element in a chart.
+	//
+	//		Most of the properties of a Theme are straight-forward; if something is line-based (such as
+	//		an axis or the ticks on an axis), they will be defined using basic stroke parameters.  Likewise,
+	//		if an element is primarily block-based (such as the background of a chart), it will be primarily
+	//		fill-based.
+	//
+	//		In addition (for convenience), a Theme definition does not have to contain the entire JSON-based
+	//		structure.  Each theme is built on top of a default theme (which serves as the basis for the theme
+	//		"GreySkies"), and is mixed into the default theme object.  This allows you to create a theme based,
+	//		say, solely on colors for data series.
+	//
+	//		When you set a theme on a chart, the theme itself is deep-cloned.  This means that you cannot alter
+	//		the theme itself after setting the theme value on a chart, and expect it to change your chart.  If you
+	//		are looking to make alterations to a theme for a chart, the suggestion would be to create your own
+	//		theme, based on the one you want to use, that makes those alterations before it is applied to a chart.
+	//
+	//		Finally, a Theme contains a number of functions to facilitate rendering operations on a chart--the main
+	//		helper of which is the ~next~ method, in which a chart asks for the information for the next data series
+	//		to be rendered.
+	//
+	//		A note on colors:
+	//		The Theme constructor uses dojox.color.Palette (in general) for creating a visually distinct set of
+	//		colors for usage in a chart.  A palette is usually comprised of 5 different color definitions, and
+	//		no more.  If you have a need to render a chart with more than 5 data elements, you can simply "push"
+	//		new color definitions into the theme's .color array.  Make sure that you do that with the actual
+	//		theme object from a Chart, and not in the theme itself (i.e. either do that before using .setTheme
+	//		on a chart).
+	//
+	//		example:
+	//			The default theme (and structure) looks like so:
+	//	|	// all objects are structs used directly in dojox.gfx
+	//	|	chart:{ 
+	//	|		stroke: null,
+	//	|		fill: "white"
+	//	|	},
+	//	|	plotarea:{ 
+	//	|		stroke: null,
+	//	|		fill: "white"
+	//	|	},
+	//	|	axis:{
+	//	|		stroke:	{ // the axis itself
+	//	|			color: "#333",
+	//	|			width: 1
+	//	|		},
+	//	|		tick: {	// used as a foundation for all ticks
+	//	|			color:     "#666",
+	//	|			position:  "center",
+	//	|			font:      "normal normal normal 7pt Tahoma",	// labels on axis
+	//	|			fontColor: "#333"								// color of labels
+	//	|		},
+	//	|		majorTick:	{ // major ticks on axis, and used for major gridlines
+	//	|			width:  1, 
+	//	|			length: 6
+	//	|		},
+	//	|		minorTick:	{ // minor ticks on axis, and used for minor gridlines
+	//	|			width:  0.8, 
+	//	|			length: 3
+	//	|		},	
+	//	|		microTick:	{ // minor ticks on axis, and used for minor gridlines
+	//	|			width:  0.5, 
+	//	|			length: 1
+	//	|		}
+	//	|	},
+	//	|	series: {
+	//	|		stroke:  {width: 1.5, color: "#333"},		// line
+	//	|		outline: {width: 0.1, color: "#ccc"},		// outline
+	//	|		//shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]},
+	//	|		shadow: null,								// no shadow
+	//	|		fill:    "#ccc",							// fill, if appropriate
+	//	|		font:    "normal normal normal 8pt Tahoma",	// if there's a label
+	//	|		fontColor: "#000"							// color of labels
+	//	|	},
+	//	|	marker: {	// any markers on a series
+	//	|		stroke:  {width: 1.5, color: "#333"},		// stroke
+	//	|		outline: {width: 0.1, color: "#ccc"},		// outline
+	//	|		shadow: null,								// no shadow
+	//	|		fill:    "#ccc",							// fill if needed
+	//	|		font:    "normal normal normal 8pt Tahoma",	// label
+	//	|		fontColor: "#000"
+	//	|	}
+
 	shapeSpaces: {shape: 1, shapeX: 1, shapeY: 1},
 	
 	constructor: function(kwArgs){
