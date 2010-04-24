@@ -136,7 +136,7 @@ dojo.require("dojo.number");
 				run = this.run.data,
 				events = this.events();
 			if(typeof run[0] == "number"){
-				filteredRun = df.map(run, "Math.max(x, 0)");
+				filteredRun = df.map(run, "x ? Math.max(x, 0) : 0");
 				if(df.every(filteredRun, "<= 0")){
 					return this;
 				}
@@ -147,7 +147,7 @@ dojo.require("dojo.number");
 					}, this);
 				}
 			}else{
-				filteredRun = df.map(run, "Math.max(x.y, 0)");
+				filteredRun = df.map(run, "x ? Math.max(x.y, 0) : 0");
 				if(df.every(filteredRun, "<= 0")){
 					return this;
 				}
@@ -161,7 +161,7 @@ dojo.require("dojo.number");
 				}
 			}
 			var themes = df.map(run, function(v, i){
-				if(typeof v == "number"){
+				if(v === null || typeof v == "number"){
 					return t.next("slice", [this.opt, run], true);
 				}
 				return t.next("slice", [this.opt, run, v], true);

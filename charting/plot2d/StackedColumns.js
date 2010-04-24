@@ -29,9 +29,12 @@ dojo.require("dojox.lang.functional.reversed");
 			for(var i = 0; i < this.series.length; ++i){
 				var run = this.series[i];
 				for(var j = 0; j < run.data.length; ++j){
-					var value = run.data[j], v = typeof value == "number" ? value : value.y;
-					if(isNaN(v)){ v = 0; }
-					acc[j] += v;
+					var value = run.data[j];
+					if(value !== null){
+						var v = typeof value == "number" ? value : value.y;
+						if(isNaN(v)){ v = 0; }
+						acc[j] += v;
+					}
 				}
 			}
 			// draw runs in backwards
@@ -62,48 +65,53 @@ dojo.require("dojox.lang.functional.reversed");
 				run.cleanGroup();
 				var theme = t.next("column", [this.opt, run]), s = run.group;
 				for(var j = 0; j < acc.length; ++j){
-					var v = acc[j],
-						height = vt(v),
-						value = run.data[j],
-						finalTheme = typeof value != "number" ?
-							t.addMixin(theme, "column", value, true) :
-							t.post(theme, "column");
-					if(width >= 1 && height >= 1){
-						var rect = {
-							x: offsets.l + ht(j + 0.5) + gap,
-							y: dim.height - offsets.b - vt(v),
-							width: width, height: height
-						};
-						var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
-						specialFill = this._shapeFill(specialFill, rect);
-						var shape = s.createRect(rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
-						run.dyn.fill   = shape.getFill();
-						run.dyn.stroke = shape.getStroke();
-						if(events){
-							var o = {
-								element: "column",
-								index:   j,
-								run:     run,
-								plot:    this,
-								hAxis:   this.hAxis || null,
-								vAxis:   this.vAxis || null,
-								shape:   shape,
-								x:       j + 0.5,
-								y:       v
+					var value = run.data[j];
+					if(value !== null){
+						var v = acc[j],
+							height = vt(v),
+							finalTheme = typeof value != "number" ?
+								t.addMixin(theme, "column", value, true) :
+								t.post(theme, "column");
+						if(width >= 1 && height >= 1){
+							var rect = {
+								x: offsets.l + ht(j + 0.5) + gap,
+								y: dim.height - offsets.b - vt(v),
+								width: width, height: height
 							};
-							this._connectEvents(shape, o);
-						}
-						if(this.animate){
-							this._animateColumn(shape, dim.height - offsets.b, height);
+							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
+							specialFill = this._shapeFill(specialFill, rect);
+							var shape = s.createRect(rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
+							run.dyn.fill   = shape.getFill();
+							run.dyn.stroke = shape.getStroke();
+							if(events){
+								var o = {
+									element: "column",
+									index:   j,
+									run:     run,
+									plot:    this,
+									hAxis:   this.hAxis || null,
+									vAxis:   this.vAxis || null,
+									shape:   shape,
+									x:       j + 0.5,
+									y:       v
+								};
+								this._connectEvents(shape, o);
+							}
+							if(this.animate){
+								this._animateColumn(shape, dim.height - offsets.b, height);
+							}
 						}
 					}
 				}
 				run.dirty = false;
 				// update the accumulator
 				for(var j = 0; j < run.data.length; ++j){
-					var value = run.data[j], v = typeof value == "number" ? value : value.y;
-					if(isNaN(v)){ v = 0; }
-					acc[j] -= v;
+					var value = run.data[j];
+					if(value !== null){
+						var v = typeof value == "number" ? value : value.y;
+						if(isNaN(v)){ v = 0; }
+						acc[j] -= v;
+					}
 				}
 			}
 			this.dirty = false;

@@ -78,11 +78,11 @@ dojo.require("dojox.lang.functional");
 				
 				var theme = t.next("circle", [this.opt, run]), s = run.group,
 					points = dojo.map(run.data, function(v, i){
-						return {
+						return v ? {
 							x: ht(v.x) + offsets.l,
 							y: dim.height - offsets.b - vt(v.y),
 							radius: this._vScaler.bounds.scale * (v.size / 2)
-						};
+						} : null;
 					}, this);
 
 				var frontCircles = null, outlineCircles = null, shadowCircles = null;
@@ -90,15 +90,18 @@ dojo.require("dojox.lang.functional");
 				// make shadows if needed
 				if(theme.series.shadow){
 					shadowCircles = dojo.map(points, function(item){
-						var finalTheme = t.addMixin(theme, "circle", item, true),
-							shadow = finalTheme.series.shadow;
-						var shape = s.createCircle({
-							cx: item.x + shadow.dx, cy: item.y + shadow.dy, r: item.radius
-						}).setStroke(shadow).setFill(shadow.color);
-						if(this.animate){
-							this._animateBubble(shape, dim.height - offsets.b, item.radius);
+						if(item !== null){
+							var finalTheme = t.addMixin(theme, "circle", item, true),
+								shadow = finalTheme.series.shadow;
+							var shape = s.createCircle({
+								cx: item.x + shadow.dx, cy: item.y + shadow.dy, r: item.radius
+							}).setStroke(shadow).setFill(shadow.color);
+							if(this.animate){
+								this._animateBubble(shape, dim.height - offsets.b, item.radius);
+							}
+							return shape;
 						}
-						return shape;
+						return null;
 					}, this);
 					if(shadowCircles.length){
 						run.dyn.shadow = shadowCircles[shadowCircles.length - 1].getStroke();
@@ -108,16 +111,19 @@ dojo.require("dojox.lang.functional");
 				// make outlines if needed
 				if(theme.series.outline){
 					outlineCircles = dojo.map(points, function(item){
-						var finalTheme = t.addMixin(theme, "circle", item, true),
-							outline = dc.makeStroke(finalTheme.series.outline);
-						outline.width = 2 * outline.width + theme.series.stroke.width;
-						var shape = s.createCircle({
-							cx: item.x, cy: item.y, r: item.radius
-						}).setStroke(outline);
-						if(this.animate){
-							this._animateBubble(shape, dim.height - offsets.b, item.radius);
+						if(item !== null){
+							var finalTheme = t.addMixin(theme, "circle", item, true),
+								outline = dc.makeStroke(finalTheme.series.outline);
+							outline.width = 2 * outline.width + theme.series.stroke.width;
+							var shape = s.createCircle({
+								cx: item.x, cy: item.y, r: item.radius
+							}).setStroke(outline);
+							if(this.animate){
+								this._animateBubble(shape, dim.height - offsets.b, item.radius);
+							}
+							return shape;
 						}
-						return shape;
+						return null;
 					}, this);
 					if(outlineCircles.length){
 						run.dyn.outline = outlineCircles[outlineCircles.length - 1].getStroke();
@@ -126,22 +132,25 @@ dojo.require("dojox.lang.functional");
 
 				//	run through the data and add the circles.
 				frontCircles = dojo.map(points, function(item){
-					var finalTheme = t.addMixin(theme, "circle", item, true),
-						rect = {
-							x: item.x - item.radius,
-							y: item.y - item.radius,
-							width:  2 * item.radius,
-							height: 2 * item.radius
-						};
-					var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
-					specialFill = this._shapeFill(specialFill, rect);
-					var shape = s.createCircle({
-						cx: item.x, cy: item.y, r: item.radius
-					}).setFill(specialFill).setStroke(finalTheme.series.stroke);
-					if(this.animate){
-						this._animateBubble(shape, dim.height - offsets.b, item.radius);
+					if(item !== null){
+						var finalTheme = t.addMixin(theme, "circle", item, true),
+							rect = {
+								x: item.x - item.radius,
+								y: item.y - item.radius,
+								width:  2 * item.radius,
+								height: 2 * item.radius
+							};
+						var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
+						specialFill = this._shapeFill(specialFill, rect);
+						var shape = s.createCircle({
+							cx: item.x, cy: item.y, r: item.radius
+						}).setFill(specialFill).setStroke(finalTheme.series.stroke);
+						if(this.animate){
+							this._animateBubble(shape, dim.height - offsets.b, item.radius);
+						}
+						return shape;
 					}
-					return shape;
+					return null;
 				}, this);
 				if(frontCircles.length){
 					run.dyn.fill   = frontCircles[frontCircles.length - 1].getFill();
@@ -150,24 +159,26 @@ dojo.require("dojox.lang.functional");
 				
 				if(events){
 					dojo.forEach(frontCircles, function(s, i){
-						var o = {
-							element: "circle",
-							index:   i,
-							run:     run,
-							plot:    this,
-							hAxis:   this.hAxis || null,
-							vAxis:   this.vAxis || null,
-							shape:   s,
-							outline: outlineCircles && outlineCircles[i] || null,
-							shadow:  shadowCircles && shadowCircles[i] || null,
-							x:       run.data[i].x,
-							y:       run.data[i].y,
-							r:       run.data[i].size / 2,
-							cx:      points[i].x,
-							cy:      points[i].y,
-							cr:      points[i].radius
-						};
-						this._connectEvents(s, o);
+						if(s !== null){
+							var o = {
+								element: "circle",
+								index:   i,
+								run:     run,
+								plot:    this,
+								hAxis:   this.hAxis || null,
+								vAxis:   this.vAxis || null,
+								shape:   s,
+								outline: outlineCircles && outlineCircles[i] || null,
+								shadow:  shadowCircles && shadowCircles[i] || null,
+								x:       run.data[i].x,
+								y:       run.data[i].y,
+								r:       run.data[i].size / 2,
+								cx:      points[i].x,
+								cy:      points[i].y,
+								cr:      points[i].radius
+							};
+							this._connectEvents(s, o);
+						}
 					}, this);
 				}
 				

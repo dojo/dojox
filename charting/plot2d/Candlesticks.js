@@ -56,11 +56,13 @@ dojo.require("dojox.lang.functional.reversed");
 				var old_vmin = stats.vmin, old_vmax = stats.vmax;
 				if(!("ymin" in run) || !("ymax" in run)){
 					dojo.forEach(run.data, function(val, idx){
-						var x = val.x || idx + 1;
-						stats.hmin = Math.min(stats.hmin, x);
-						stats.hmax = Math.max(stats.hmax, x);
-						stats.vmin = Math.min(stats.vmin, val.open, val.close, val.high, val.low);
-						stats.vmax = Math.max(stats.vmax, val.open, val.close, val.high, val.low);
+						if(val !== null){
+							var x = val.x || idx + 1;
+							stats.hmin = Math.min(stats.hmin, x);
+							stats.hmax = Math.max(stats.hmax, x);
+							stats.vmin = Math.min(stats.vmin, val.open, val.close, val.high, val.low);
+							stats.vmax = Math.max(stats.vmax, val.open, val.close, val.high, val.low);
+						}
 					});
 				}
 				if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
@@ -108,68 +110,70 @@ dojo.require("dojox.lang.functional.reversed");
 				var theme = t.next("candlestick", [this.opt, run]), s = run.group;
 
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j],
-						finalTheme = t.addMixin(theme, "candlestick", v, true);
-
-					//	calculate the points we need for OHLC
-					var x = ht(v.x || (j+0.5)) + offsets.l + gap,
-						y = dim.height - offsets.b,
-						open = vt(v.open),
-						close = vt(v.close),
-						high = vt(v.high),
-						low = vt(v.low);
-					if("mid" in v){
-						var mid = vt(v.mid);
-					}
-					if(low > high){
-						var tmp = high;
-						high = low;
-						low = tmp;
-					}
-
-					if(width >= 1){
-						//	draw the line and rect, set up as a group and pass that to the events.
-						var doFill = open > close;
-						var line = { x1: width/2, x2: width/2, y1: y - high, y2: y - low },
-							rect = {
-								x: 0, y: y-Math.max(open, close),
-								width: width, height: Math.max(doFill ? open-close : close-open, 1)
-							};
-						shape = s.createGroup();
-						shape.setTransform({dx: x, dy: 0 });
-						var inner = shape.createGroup();
-						inner.createLine(line).setStroke(finalTheme.series.stroke);
-						inner.createRect(rect).setStroke(finalTheme.series.stroke).
-							setFill(doFill ? finalTheme.series.fill : "white");
+					var v = run.data[j];
+					if(v !== null){
+						var finalTheme = t.addMixin(theme, "candlestick", v, true);
+	
+						//	calculate the points we need for OHLC
+						var x = ht(v.x || (j+0.5)) + offsets.l + gap,
+							y = dim.height - offsets.b,
+							open = vt(v.open),
+							close = vt(v.close),
+							high = vt(v.high),
+							low = vt(v.low);
 						if("mid" in v){
-							//	add the mid line.
-							inner.createLine({
-								x1: (finalTheme.series.stroke.width||1), x2: width - (finalTheme.series.stroke.width || 1),
-								y1: y - mid, y2: y - mid
-							}).setStroke(doFill ? "white" : finalTheme.series.stroke);
+							var mid = vt(v.mid);
 						}
-
-						//	TODO: double check this.
-						run.dyn.fill   = finalTheme.series.fill;
-						run.dyn.stroke = finalTheme.series.stroke;
-						if(events){
-							var o = {
-								element: "candlestick",
-								index:   j,
-								run:     run,
-								plot:    this,
-								hAxis:   this.hAxis || null,
-								vAxis:   this.vAxis || null,
-								shape:   inner,
-								x:       x,
-								y:       y-Math.max(open, close),
-								cx:		 width/2,
-								cy:		 (y-Math.max(open, close)) + (Math.max(doFill ? open-close : close-open, 1)/2),
-								width:	 width,
-								height:  Math.max(doFill ? open-close : close-open, 1),
-								data:	 v
-							};
-							this._connectEvents(shape, o);
+						if(low > high){
+							var tmp = high;
+							high = low;
+							low = tmp;
+						}
+	
+						if(width >= 1){
+							//	draw the line and rect, set up as a group and pass that to the events.
+							var doFill = open > close;
+							var line = { x1: width/2, x2: width/2, y1: y - high, y2: y - low },
+								rect = {
+									x: 0, y: y-Math.max(open, close),
+									width: width, height: Math.max(doFill ? open-close : close-open, 1)
+								};
+							shape = s.createGroup();
+							shape.setTransform({dx: x, dy: 0 });
+							var inner = shape.createGroup();
+							inner.createLine(line).setStroke(finalTheme.series.stroke);
+							inner.createRect(rect).setStroke(finalTheme.series.stroke).
+								setFill(doFill ? finalTheme.series.fill : "white");
+							if("mid" in v){
+								//	add the mid line.
+								inner.createLine({
+									x1: (finalTheme.series.stroke.width||1), x2: width - (finalTheme.series.stroke.width || 1),
+									y1: y - mid, y2: y - mid
+								}).setStroke(doFill ? "white" : finalTheme.series.stroke);
+							}
+	
+							//	TODO: double check this.
+							run.dyn.fill   = finalTheme.series.fill;
+							run.dyn.stroke = finalTheme.series.stroke;
+							if(events){
+								var o = {
+									element: "candlestick",
+									index:   j,
+									run:     run,
+									plot:    this,
+									hAxis:   this.hAxis || null,
+									vAxis:   this.vAxis || null,
+									shape:   inner,
+									x:       x,
+									y:       y-Math.max(open, close),
+									cx:		 width/2,
+									cy:		 (y-Math.max(open, close)) + (Math.max(doFill ? open-close : close-open, 1)/2),
+									width:	 width,
+									height:  Math.max(doFill ? open-close : close-open, 1),
+									data:	 v
+								};
+								this._connectEvents(shape, o);
+							}
 						}
 						if(this.animate){
 							this._animateCandlesticks(shape, y - low, high - low);

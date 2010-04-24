@@ -56,11 +56,13 @@ dojo.require("dojox.lang.functional.reversed");
 				var old_vmin = stats.vmin, old_vmax = stats.vmax;
 				if(!("ymin" in run) || !("ymax" in run)){
 					dojo.forEach(run.data, function(val, idx){
-						var x = val.x || idx + 1;
-						stats.hmin = Math.min(stats.hmin, x);
-						stats.hmax = Math.max(stats.hmax, x);
-						stats.vmin = Math.min(stats.vmin, val.open, val.close, val.high, val.low);
-						stats.vmax = Math.max(stats.vmax, val.open, val.close, val.high, val.low);
+						if(val !== null){
+							var x = val.x || idx + 1;
+							stats.hmin = Math.min(stats.hmin, x);
+							stats.hmax = Math.max(stats.hmax, x);
+							stats.vmin = Math.min(stats.vmin, val.open, val.close, val.high, val.low);
+							stats.vmax = Math.max(stats.vmax, val.open, val.close, val.high, val.low);
+						}
 					});
 				}
 				if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
@@ -108,53 +110,55 @@ dojo.require("dojox.lang.functional.reversed");
 				var theme = t.next("candlestick", [this.opt, run]), s = run.group;
 
 				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j],
-						finalTheme = t.addMixin(theme, "candlestick", v, true);
-
-					//	calculate the points we need for OHLC
-					var x = ht(v.x || (j+0.5)) + offsets.l + gap,
-						y = dim.height - offsets.b,
-						open = vt(v.open),
-						close = vt(v.close),
-						high = vt(v.high),
-						low = vt(v.low);
-					if(low > high){
-						var tmp = high;
-						high = low;
-						low = tmp;
-					}
-
-					if(width >= 1){
-						var hl = {x1: width/2, x2: width/2, y1: y - high, y2: y - low},
-							op = {x1: 0, x2: ((width/2) + ((finalTheme.series.stroke.width||1)/2)), y1: y-open, y2: y-open},
-							cl = {x1: ((width/2) - ((finalTheme.series.stroke.width||1)/2)), x2: width, y1: y-close, y2: y-close};
-						shape = s.createGroup();
-						shape.setTransform({dx: x, dy: 0});
-						var inner = shape.createGroup();
-						inner.createLine(hl).setStroke(finalTheme.series.stroke);
-						inner.createLine(op).setStroke(finalTheme.series.stroke);
-						inner.createLine(cl).setStroke(finalTheme.series.stroke);
-
-						//	TODO: double check this.
-						run.dyn.stroke = finalTheme.series.stroke;
-						if(events){
-							var o = {
-								element: "candlestick",
-								index:   j,
-								run:     run,
-								plot:    this,
-								hAxis:   this.hAxis || null,
-								vAxis:   this.vAxis || null,
-								shape:	 inner,
-								x:       x,
-								y:       y-Math.max(open, close),
-								cx:		 width/2,
-								cy:		 (y-Math.max(open, close)) + (Math.max(open > close ? open-close : close-open, 1)/2),
-								width:	 width,
-								height:  Math.max(open > close ? open-close : close-open, 1),
-								data:	 v
-							};
-							this._connectEvents(shape, o);
+					var v = run.data[j];
+					if(v !== null){
+						var finalTheme = t.addMixin(theme, "candlestick", v, true);
+	
+						//	calculate the points we need for OHLC
+						var x = ht(v.x || (j+0.5)) + offsets.l + gap,
+							y = dim.height - offsets.b,
+							open = vt(v.open),
+							close = vt(v.close),
+							high = vt(v.high),
+							low = vt(v.low);
+						if(low > high){
+							var tmp = high;
+							high = low;
+							low = tmp;
+						}
+	
+						if(width >= 1){
+							var hl = {x1: width/2, x2: width/2, y1: y - high, y2: y - low},
+								op = {x1: 0, x2: ((width/2) + ((finalTheme.series.stroke.width||1)/2)), y1: y-open, y2: y-open},
+								cl = {x1: ((width/2) - ((finalTheme.series.stroke.width||1)/2)), x2: width, y1: y-close, y2: y-close};
+							shape = s.createGroup();
+							shape.setTransform({dx: x, dy: 0});
+							var inner = shape.createGroup();
+							inner.createLine(hl).setStroke(finalTheme.series.stroke);
+							inner.createLine(op).setStroke(finalTheme.series.stroke);
+							inner.createLine(cl).setStroke(finalTheme.series.stroke);
+	
+							//	TODO: double check this.
+							run.dyn.stroke = finalTheme.series.stroke;
+							if(events){
+								var o = {
+									element: "candlestick",
+									index:   j,
+									run:     run,
+									plot:    this,
+									hAxis:   this.hAxis || null,
+									vAxis:   this.vAxis || null,
+									shape:	 inner,
+									x:       x,
+									y:       y-Math.max(open, close),
+									cx:		 width/2,
+									cy:		 (y-Math.max(open, close)) + (Math.max(open > close ? open-close : close-open, 1)/2),
+									width:	 width,
+									height:  Math.max(open > close ? open-close : close-open, 1),
+									data:	 v
+								};
+								this._connectEvents(shape, o);
+							}
 						}
 						if(this.animate){
 							this._animateOHLC(shape, y - low, high - low);

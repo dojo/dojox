@@ -29,8 +29,10 @@ dojo.require("dojox.lang.functional.reversed");
 				var run = this.series[i];
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
-					if(isNaN(v)){ v = 0; }
-					acc[j] += v;
+					if(v !== null){
+						if(isNaN(v)){ v = 0; }
+						acc[j] += v;
+					}
 				}
 			}
 			// draw runs in backwards
@@ -160,8 +162,10 @@ dojo.require("dojox.lang.functional.reversed");
 				// update the accumulator
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
-					if(isNaN(v)){ v = 0; }
-					acc[j] -= v;
+					if(v !== null){
+						if(isNaN(v)){ v = 0; }
+						acc[j] -= v;
+					}
 				}
 			}
 			this.dirty = false;

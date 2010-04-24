@@ -41,41 +41,43 @@ dojo.require("dojox.lang.functional.reversed");
 				run.cleanGroup();
 				var theme = t.next("bar", [this.opt, run]), s = run.group;
 				for(var j = 0; j < run.data.length; ++j){
-					var value = run.data[j],
-						v = typeof value == "number" ? value : value.y,
-						hv = ht(v),
-						width = hv - baselineWidth,
-						w = Math.abs(width),
-						finalTheme = typeof value != "number" ?
-							t.addMixin(theme, "bar", value, true) :
-							t.post(theme, "bar");
-					if(w >= 1 && height >= 1){
-						var rect = {
-							x: offsets.l + (v < baseline ? hv : baselineWidth),
-							y: dim.height - offsets.b - vt(j + 1.5) + gap + shift,
-							width: w, height: height
-						};
-						var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
-						specialFill = this._shapeFill(specialFill, rect);
-						var shape = s.createRect(rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
-						run.dyn.fill   = shape.getFill();
-						run.dyn.stroke = shape.getStroke();
-						if(events){
-							var o = {
-								element: "bar",
-								index:   j,
-								run:     run,
-								plot:    this,
-								hAxis:   this.hAxis || null,
-								vAxis:   this.vAxis || null,
-								shape:   shape,
-								x:       v,
-								y:       j + 1.5
+					var value = run.data[j];
+					if(value !== null){
+						var v = typeof value == "number" ? value : value.y,
+							hv = ht(v),
+							width = hv - baselineWidth,
+							w = Math.abs(width),
+							finalTheme = typeof value != "number" ?
+								t.addMixin(theme, "bar", value, true) :
+								t.post(theme, "bar");
+						if(w >= 1 && height >= 1){
+							var rect = {
+								x: offsets.l + (v < baseline ? hv : baselineWidth),
+								y: dim.height - offsets.b - vt(j + 1.5) + gap + shift,
+								width: w, height: height
 							};
-							this._connectEvents(shape, o);
-						}
-						if(this.animate){
-							this._animateBar(shape, offsets.l + baselineWidth, -width);
+							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
+							specialFill = this._shapeFill(specialFill, rect);
+							var shape = s.createRect(rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
+							run.dyn.fill   = shape.getFill();
+							run.dyn.stroke = shape.getStroke();
+							if(events){
+								var o = {
+									element: "bar",
+									index:   j,
+									run:     run,
+									plot:    this,
+									hAxis:   this.hAxis || null,
+									vAxis:   this.vAxis || null,
+									shape:   shape,
+									x:       v,
+									y:       j + 1.5
+								};
+								this._connectEvents(shape, o);
+							}
+							if(this.animate){
+								this._animateBar(shape, offsets.l + baselineWidth, -width);
+							}
 						}
 					}
 				}
