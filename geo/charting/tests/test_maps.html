@@ -27,26 +27,11 @@
 			dojo.addOnLoad(function(){
 				var USStates = new dojox.geo.charting.Map("USStates", "../resources/data/USStates.json");
 				USStates.setMarkerData("../resources/markers/USStates.json");
-				
-				if(!dojo.isIE) {
-					var ContinentalEurope = new dojox.geo.charting.Map("ContinentalEurope", "../resources/data/ContinentalEurope.json");
-					var EuropeMiddleEastAfrica = new dojox.geo.charting.Map("EuropeMiddleEastAfrica", "../resources/data/EuropeMiddleEastAfrica.json");
-					var WorldCountries = new dojox.geo.charting.Map("WorldCountries", "../resources/data/WorldCountries.json");
-					var WorldCountriesMercator = new dojox.geo.charting.Map("WorldCountriesMercator", "../resources/data/WorldCountriesMercator.json");
-					var Americas = new dojox.geo.charting.Map("Americas", "../resources/data/Americas.json");
-					var AsiaPacific = new dojox.geo.charting.Map("AsiaPacific", "../resources/data/AsiaPacific.json");
-				}
 			});
 		</script>
 	</head>
 	<body class="tundra">
 		<h1>Simple Maps,support zoom in and zoom out.</h1>
 		<div class="mapContainer" style="display:block;" id="USStates"></div>
-		<div class="mapContainer" id="ContinentalEurope"></div>
-		<div class="mapContainer" id="EuropeMiddleEastAfrica"></div>
-		<div class="mapContainer" id="WorldCountries"></div>
-		<div class="mapContainer" id="WorldCountriesMercator"></div>
-		<div class="mapVerticalContainer" style="float:left;" id="Americas"></div>
-		<div class="mapVerticalContainer" style="float:left;" id="AsiaPacific"></div>
 	</body>
 </html>
