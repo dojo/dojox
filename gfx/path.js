@@ -41,6 +41,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	_getRealBBox: function(){
 		// summary: returns an array of four points or null
 		//	four points represent four corners of the untransformed bounding box
+		this._confirmSegmented();
 		if(this.tbbox){
 			return this.tbbox;	// Array
 		}
@@ -367,10 +368,9 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
 		dojox.gfx.Shape.prototype.setShape.call(this, typeof newShape == "string" ? {path: newShape} : newShape);
 		
-		if (dojox.gfx.lazyPathSegmentation) {
-			this.segmented = false;
-			this.segments = [];
-		} else {
+		this.segmented = false;
+		this.segments = [];
+		if(!dojox.gfx.lazyPathSegmentation){
 			this._confirmSegmented();
 		}
 		return this; // self
