@@ -45,7 +45,8 @@ dojo.require("dojox.gfx.gradient");
 				// gradient
 				switch(fill.type){
 					case "linear":
-						var matrix = this._getRealMatrix(), bbox = this.getBoundingBox(), tbbox = this.getTransformedBoundingBox();
+						var matrix = this._getRealMatrix(), bbox = this.getBoundingBox(),
+							tbbox = this._getRealBBox ? this._getRealBBox() : this.getTransformedBoundingBox();
 						s = [];
 						if(this.fillStyle !== fill){
 							this.fillStyle = g.makeParameters(g.defaultLinearGradient, fill);

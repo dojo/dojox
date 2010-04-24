@@ -38,7 +38,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		return (this.bbox && ("l" in this.bbox)) ? {x: this.bbox.l, y: this.bbox.t, width: this.bbox.r - this.bbox.l, height: this.bbox.b - this.bbox.t} : null; // dojox.gfx.Rectangle
 	},
 
-	getTransformedBoundingBox: function(){
+	_getRealBBox: function(){
 		// summary: returns an array of four points or null
 		//	four points represent four corners of the untransformed bounding box
 		if(this.tbbox){
@@ -68,7 +68,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 
 	_applyTransform: function(){
 		this.tbbox = null;
-		dojox.gfx.Shape.prototype._applyTransform.call(this);
+		return dojox.gfx.Shape.prototype._applyTransform.call(this);
 	},
 
 	// segment interpretation
