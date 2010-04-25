@@ -311,13 +311,13 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 	
 	var masterTT = null;
 	
-	function showChartingTooltip(/*String*/ innerHTML, /*DomNode*/ aroundNode, /*String[]?*/ position, alignment){
+	function showChartingTooltip(innerHTML, aroundNode, position, alignment){
 		if(!masterTT){ masterTT = new MasterTooltip(); }
 		return masterTT.show(innerHTML, aroundNode, position, alignment);
-	};
+	}
 	
 	function hideChartingTooltip(aroundNode){
 		if(!masterTT){ masterTT = new MasterTooltip(); }
 		return masterTT.hide(aroundNode);
-	};
+	}
 })();
