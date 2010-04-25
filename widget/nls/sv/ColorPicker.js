@@ -1,0 +1,5 @@
+({
+hueLabel: "n",
+saturationLabel: "m"
+})
+
