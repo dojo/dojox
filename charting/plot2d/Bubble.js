@@ -9,6 +9,9 @@ dojo.require("dojox.lang.functional");
 		purgeGroup = df.lambda("item.purgeGroup()");
 
 	dojo.declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Base, {
+		//	summary:
+		//		A plot representing bubbles.  Note that data for Bubbles requires 3 parameters,
+		//		in the form of:  { x, y, size }, where size determines the size of the bubble.
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
@@ -25,6 +28,12 @@ dojo.require("dojox.lang.functional");
 		},
 
 		constructor: function(chart, kwArgs){
+			//	summary:
+			//		Create a plot of bubbles.
+			//	chart: dojox.charting.Chart2D
+			//		The chart this plot belongs to.
+			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
+			//		Optional keyword arguments object to help define plot parameters.
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			this.series = [];
@@ -34,12 +43,26 @@ dojo.require("dojox.lang.functional");
 		},
 		
 		calculateAxes: function(dim){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	returns: dojox.charting.plot2d.Bubble
+			//		A reference to this plot for functional chaining.
 			this._calc(dim, dc.collectSimpleStats(this.series));
-			return this;
+			return this;	//	dojox.charting.plot2d.Bubble
 		},
 
 		//	override the render so that we are plotting only circles.
 		render: function(dim, offsets){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	offsets: Object
+			//		An object of the form { l, r, t, b}.
+			//	returns: dojox.charting.plot2d.Bubble
+			//		A reference to this plot for functional chaining.
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
@@ -185,7 +208,7 @@ dojo.require("dojox.lang.functional");
 				run.dirty = false;
 			}
 			this.dirty = false;
-			return this;
+			return this;	//	dojox.charting.plot2d.Bubble
 		},
 		_animateBubble: function(shape, offset, size){
 			dojox.gfx.fx.animateTransform(dojo.delegate({

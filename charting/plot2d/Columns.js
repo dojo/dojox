@@ -14,6 +14,8 @@ dojo.require("dojox.lang.functional.reversed");
 		purgeGroup = df.lambda("item.purgeGroup()");
 
 	dojo.declare("dojox.charting.plot2d.Columns", dojox.charting.plot2d.Base, {
+		//	summary:
+		//		The plot object representing a column chart (vertical bars).
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
@@ -33,6 +35,12 @@ dojo.require("dojox.lang.functional.reversed");
 		},
 
 		constructor: function(chart, kwArgs){
+			//	summary:
+			//		The constructor for a columns chart.
+			//	chart: dojox.charting.Chart2D
+			//		The chart this plot belongs to.
+			//	kwArgs: dojox.charting.plot2d.__BarCtorArgs?
+			//		An optional keyword arguments object to help define the plot.
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
@@ -43,13 +51,27 @@ dojo.require("dojox.lang.functional.reversed");
 		},
 
 		calculateAxes: function(dim){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	returns: dojox.charting.plot2d.Columns
+			//		A reference to this plot for functional chaining.
 			var stats = dc.collectSimpleStats(this.series);
 			stats.hmin -= 0.5;
 			stats.hmax += 0.5;
 			this._calc(dim, stats);
-			return this;
+			return this;	//	dojox.charting.plot2d.Columns
 		},
 		render: function(dim, offsets){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	offsets: Object
+			//		An object of the form { l, r, t, b}.
+			//	returns: dojox.charting.plot2d.Columns
+			//		A reference to this plot for functional chaining.
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
@@ -122,7 +144,7 @@ dojo.require("dojox.lang.functional.reversed");
 				run.dirty = false;
 			}
 			this.dirty = false;
-			return this;
+			return this;	//	dojox.charting.plot2d.Columns
 		},
 		_animateColumn: function(shape, voffset, vsize){
 			dojox.gfx.fx.animateTransform(dojo.delegate({

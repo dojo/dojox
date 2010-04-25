@@ -16,6 +16,8 @@ dojo.require("dojox.gfx.gradutils");
 		purgeGroup = df.lambda("item.purgeGroup()");
 
 	dojo.declare("dojox.charting.plot2d.Scatter", dojox.charting.plot2d.Base, {
+		//	summary:
+		//		A plot object representing a typical scatter chart.
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
@@ -33,6 +35,12 @@ dojo.require("dojox.gfx.gradutils");
 		},
 		
 		constructor: function(chart, kwArgs){
+			//	summary:
+			//		Create the scatter plot.
+			//	chart: dojox.charting.Chart2D
+			//		The chart this plot belongs to.
+			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
+			//		An optional keyword arguments object to help define this plot's parameters.
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			this.series = [];
@@ -42,11 +50,25 @@ dojo.require("dojox.gfx.gradutils");
 		},
 		
 		calculateAxes: function(dim){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	returns: dojox.charting.plot2d.Scatter
+			//		A reference to this plot for functional chaining.
 			this._calc(dim, dc.collectSimpleStats(this.series));
-			return this;
+			return this;	//	dojox.charting.plot2d.Scatter
 		},
 
 		render: function(dim, offsets){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	offsets: Object
+			//		An object of the form { l, r, t, b}.
+			//	returns: dojox.charting.plot2d.Scatter
+			//		A reference to this plot for functional chaining.
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
@@ -164,7 +186,7 @@ dojo.require("dojox.gfx.gradutils");
 				run.dirty = false;
 			}
 			this.dirty = false;
-			return this;
+			return this;	//	dojox.charting.plot2d.Scatter
 		},
 		_animateScatter: function(shape, offset){
 			dojox.gfx.fx.animateTransform(dojo.delegate({

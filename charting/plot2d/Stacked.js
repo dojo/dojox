@@ -12,13 +12,31 @@ dojo.require("dojox.lang.functional.reversed");
 		purgeGroup = df.lambda("item.purgeGroup()");
 
 	dojo.declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
+		//	summary:
+		//		Like the default plot, Stacked sets up lines, areas and markers
+		//		in a stacked fashion (values on the y axis added to each other)
+		//		as opposed to a direct one.
 		calculateAxes: function(dim){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	returns: dojox.charting.plot2d.Stacked
+			//		A reference to this plot for functional chaining.
 			var stats = dc.collectStackedStats(this.series);
 			this._maxRunLength = stats.hmax;
 			this._calc(dim, stats);
-			return this;
+			return this;	//	dojox.charting.plot2d.Stacked
 		},
 		render: function(dim, offsets){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	offsets: Object
+			//		An object of the form { l, r, t, b}.
+			//	returns: dojox.charting.plot2d.Stacked
+			//		A reference to this plot for functional chaining.
 			if(this._maxRunLength <= 0){
 				return this;
 			}
@@ -169,7 +187,7 @@ dojo.require("dojox.lang.functional.reversed");
 				}
 			}
 			this.dirty = false;
-			return this;
+			return this;	//	dojox.charting.plot2d.Stacked
 		}
 	});
 })();

@@ -10,6 +10,56 @@ dojo.require("dojox.gfx");
 
 dojo.require("dojo.number");
 
+/*=====
+dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
+	//	summary:
+	//		Specialized keyword arguments object for use in defining parameters on a Pie chart.
+
+	//	labels: Boolean?
+	//		Whether or not to draw labels within each pie slice.  Default is true.
+	labels:			true,
+
+	//	ticks: Boolean?
+	//		Whether or not to draw ticks to labels within each slice. Default is false.
+	ticks:			false,
+
+	//	fixed: Boolean?
+	//		TODO
+	fixed:			true,
+
+	//	precision: Number?
+	//		The precision at which to sum/add data values. Default is 1.
+	precision:		1,
+
+	//	labelOffset: Number?
+	//		The amount in pixels by which to offset labels.  Default is 20.
+	labelOffset:	20,
+
+	//	labelStyle: String?
+	//		Options as to where to draw labels.  Values include "default", "rows", and "auto". Default is "default".
+	labelStyle:		"default",	// default/rows/auto
+
+	//	htmlLabels: Boolean?
+	//		Whether or not to use HTML to render slice labels. Default is true.
+	htmlLabels:		true,
+
+	//	radGrad: String?
+	//		The type of radial gradient to use in rendering.  Default is "native".
+	radGrad:        "native",
+
+	//	fanSize: Number?
+	//		The amount for a radial gradient.  Default is 5.
+	fanSize:		5,		
+
+	//	startAngle: Number?
+	//		Where to being rendering gradients in slices, in degrees.  Default is 0.
+	startAngle:     0
+
+	//	radius: Number?
+	//		The size of the radial gradient.  Default is 0.
+	radius:		0
+});
+=====*/
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
@@ -18,6 +68,8 @@ dojo.require("dojo.number");
 		FUDGE_FACTOR = 0.2; // use to overlap fans
 
 	dojo.declare("dojox.charting.plot2d.Pie", dojox.charting.Element, {
+		//	summary:
+		//		The plot that represents a typical pie chart.
 		defaultParams: {
 			labels:			true,
 			ticks:			false,
@@ -42,6 +94,8 @@ dojo.require("dojo.number");
 		},
 
 		constructor: function(chart, kwArgs){
+			//	summary:
+			//		Create a pie plot.
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
@@ -49,28 +103,46 @@ dojo.require("dojo.number");
 			this.dyn = [];
 		},
 		destroy: function(){
+			//	summary:
+			//		Destroy any created elements for this plot.
 			this.resetEvents();
 			this.inherited(arguments);
 		},
 		clear: function(){
+			//	summary:
+			//		Clear out all of the information tied to this plot.
+			//	returns: dojox.charting.plot2d.Pie
+			//		A reference to this plot for functional chaining.
 			this.dirty = true;
 			this.dyn = [];
 			this.run = null;
-			return this;
+			return this;	//	dojox.charting.plot2d.Pie
 		},
 		setAxis: function(axis){
-			// nothing
-			return this;
+			//	summary:
+			//		Dummy method, since axes are irrelevant with a Pie chart.
+			//	returns: dojox.charting.plot2d.Pie
+			//		The reference to this plot for functional chaining.
+			return this;	//	dojox.charting.plot2d.Pie
 		},
 		addSeries: function(run){
+			//	summary:
+			//		Add a series of data to this plot.
+			//	returns: dojox.charting.plot2d.Pie
+			//		The reference to this plot for functional chaining.
 			this.run = run;
-			return this;
+			return this;	//	dojox.charting.plot2d.Pie
 		},
 		calculateAxes: function(dim){
-			// nothing
-			return this;
+			//	summary:
+			//		Dummy method, since axes are irrelevant with a Pie chart.
+			//	returns: dojox.charting.plot2d.Pie
+			//		The reference to this plot for functional chaining.
+			return this;	//	dojox.charting.plot2d.Pie
 		},
 		getRequiredColors: function(){
+			//	summary:
+			//		Return the number of colors needed to draw this plot.
 			return this.run ? this.run.data.length : 0;
 		},
 
@@ -79,10 +151,22 @@ dojo.require("dojo.number");
 			// intentionally empty --- used for events
 		},
 		connect: function(object, method){
+			//	summary:
+			//		Convenience method to connect methods to our plotEvent.
+			//	object: Object
+			//		The object connecting to our plotEvent.
+			//	method: String|Function?
+			//		The method to be executed when our plotEvent is fired.
+			//	returns: Array
+			//		A handle as returned from dojo.connect.
 			this.dirty = true;
-			return dojo.connect(this, "plotEvent", object, method);
+			return dojo.connect(this, "plotEvent", object, method);	//	Array
 		},
 		events: function(){
+			//	summary:
+			//		Find out of any handlers have been connected to our plot.
+			//	returns: Boolean
+			//		Whether or not there are handlers attached.
 			var ls = this.plotEvent._listeners;
 			if(!ls || !ls.length){ return false; }
 			for(var i in ls){
@@ -93,6 +177,8 @@ dojo.require("dojo.number");
 			return false;
 		},
 		resetEvents: function(){
+			//	summary:
+			//		Reset any handlers on our plot.
 			this.plotEvent({type: "onplotreset", plot: this});
 		},
 		_connectEvents: function(shape, o){
@@ -114,6 +200,14 @@ dojo.require("dojo.number");
 		},
 
 		render: function(dim, offsets){
+			//	summary:
+			//		Render the plot on the chart.
+			//	dim: Object
+			//		An object of the form { width, height }.
+			//	offsets: Object
+			//		An object of the form { l, r, t, b }.
+			//	returns: dojox.charting.plot2d.Pie
+			//		A reference to this plot for functional chaining.
 			if(!this.dirty){ return this; }
 			this.dirty = false;
 			this.cleanGroup();
@@ -340,7 +434,7 @@ dojo.require("dojo.number");
 					return false;	// continue
 				}, this);
 			}
-			return this;
+			return this;	//	dojox.charting.plot2d.Pie
 		},
 
 		// utilities

@@ -11,7 +11,17 @@ dojo.require("dojox.lang.functional.reversed");
 		purgeGroup = df.lambda("item.purgeGroup()");
 
 	dojo.declare("dojox.charting.plot2d.ClusteredBars", dojox.charting.plot2d.Bars, {
+		//	summary:
+		//		A plot representing grouped or clustered bars (horizontal bars)
 		render: function(dim, offsets){
+			//	summary:
+			//		Run the calculations for any axes for this plot.
+			//	dim: Object
+			//		An object in the form of { width, height }
+			//	offsets: Object
+			//		An object of the form { l, r, t, b}.
+			//	returns: dojox.charting.plot2d.ClusteredBars
+			//		A reference to this plot for functional chaining.
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
@@ -84,7 +94,7 @@ dojo.require("dojox.lang.functional.reversed");
 				run.dirty = false;
 			}
 			this.dirty = false;
-			return this;
+			return this;	//	dojox.charting.plot2d.ClusteredBars
 		}
 	});
 })();

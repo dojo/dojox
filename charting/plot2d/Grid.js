@@ -4,10 +4,43 @@ dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d.common");
 dojo.require("dojox.lang.functional");
 
+/*=====
+dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
+	//	summary:
+	//		A special keyword arguments object that is specific to a grid "plot".
+
+	//	hMajorLines: Boolean?
+	//		Whether to show lines at the major ticks along the horizontal axis. Default is true.
+	hMajorLines: true,
+
+	//	hMinorLines: Boolean?
+	//		Whether to show lines at the minor ticks along the horizontal axis. Default is false.
+	hMinorLines: false,
+
+	//	vMajorLines: Boolean?
+	//		Whether to show lines at the major ticks along the vertical axis. Default is true.
+	vMajorLines: true,
+
+	//	vMinorLines: Boolean?
+	//		Whether to show lines at the major ticks along the vertical axis. Default is false.
+	vMinorLines: false,
+
+	//	hStripes: String?
+	//		Whether or not to show stripes (alternating fills) along the horizontal axis. Default is "none".
+	hStripes: "none",
+
+	//	vStripes: String?
+	//		Whether or not to show stripes (alternating fills) along the vertical axis. Default is "none".
+	vStripes: "none"
+});
+=====*/
 (function(){
 	var du = dojox.lang.utils;
 
 	dojo.declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
+		//	summary:
+		//		A "faux" plot that can be placed behind other plots to represent
+		//		a grid against which other plots can be easily measured.
 		defaultParams: {
 			hAxis: "x",			// use a horizontal axis named "x"
 			vAxis: "y",			// use a vertical axis named "y"
@@ -22,6 +55,12 @@ dojo.require("dojox.lang.functional");
 		optionalParams: {},	// no optional parameters
 
 		constructor: function(chart, kwArgs){
+			//	summary:
+			//		Create the faux Grid plot.
+			//	chart: dojox.charting.Chart2D
+			//		The chart this plot belongs to.
+			//	kwArgs: dojox.charting.plot2d.__GridCtorArgs?
+			//		An optional keyword arguments object to help define the parameters of the underlying grid.
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			this.hAxis = this.opt.hAxis;
@@ -33,29 +72,56 @@ dojo.require("dojox.lang.functional");
 			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
 		},
 		clear: function(){
+			//	summary:
+			//		Clear out any parameters set on this plot.
+			//	returns: dojox.charting.plot2d.Grid
+			//		The reference to this plot for functional chaining.
 			this._hAxis = null;
 			this._vAxis = null;
 			this.dirty = true;
-			return this;
+			return this;	//	dojox.charting.plot2d.Grid
 		},
 		setAxis: function(axis){
+			//	summary:
+			//		Set an axis for this plot.
+			//	returns: dojox.charting.plot2d.Grid
+			//		The reference to this plot for functional chaining.
 			if(axis){
 				this[axis.vertical ? "_vAxis" : "_hAxis"] = axis;
 			}
-			return this;
+			return this;	//	dojox.charting.plot2d.Grid
 		},
 		addSeries: function(run){
-			// nothing
-			return this;
+			//	summary:
+			//		Ignored but included as a dummy method.
+			//	returns: dojox.charting.plot2d.Grid
+			//		The reference to this plot for functional chaining.
+			return this;	//	dojox.charting.plot2d.Grid
 		},
 		calculateAxes: function(dim){
-			// nothing
-			return this;
+			//	summary:
+			//		Ignored but included as a dummy method.
+			//	returns: dojox.charting.plot2d.Grid
+			//		The reference to this plot for functional chaining.
+			return this;	//	dojox.charting.plot2d.Grid
 		},
 		isDirty: function(){
-			return this.dirty || this._hAxis && this._hAxis.dirty || this._vAxis && this._vAxis.dirty;
+			//	summary:
+			//		Return whether or not this plot needs to be redrawn.
+			//	returns: Boolean
+			//		If this plot needs to be rendered, this will return true.
+			return this.dirty || this._hAxis && this._hAxis.dirty || this._vAxis && this._vAxis.dirty;	//	Boolean
 		},
 		performZoom: function(dim, offsets){
+			//	summary:
+			//		Create/alter any zooming windows on this plot.
+			//	dim: Object
+			//		An object of the form { width, height }.
+			//	offsets: Object
+			//		An object of the form { l, r, t, b }.
+			//	returns: dojox.charting.plot2d.Grid
+			//		A reference to this plot for functional chaining.
+
 			// get current zooming various
 			var vs = this._vAxis.scale || 1, 
 				hs = this._hAxis.scale || 1, 
@@ -98,12 +164,24 @@ dojo.require("dojox.lang.functional");
 			if(this.zoomQueue.length == 1){
 				this.zoomQueue[0].play();
 			}
-			return this;
+			return this;	//	dojox.charting.plot2d.Grid
 		},
 		getRequiredColors: function(){
-			return 0;
+			//	summary:
+			//		Ignored but included as a dummy method.
+			//	returns: Number
+			//		Returns 0, since there are no series associated with this plot type.
+			return 0;	//	Number
 		},
 		render: function(dim, offsets){
+			//	summary:
+			//		Render the plot on the chart.
+			//	dim: Object
+			//		An object of the form { width, height }.
+			//	offsets: Object
+			//		An object of the form { l, r, t, b }.
+			//	returns: dojox.charting.plot2d.Grid
+			//		A reference to this plot for functional chaining.
 			if(this.zoom){
 				return this.performZoom(dim, offsets);
 			}
@@ -184,7 +262,7 @@ dojo.require("dojox.lang.functional");
 				// squelch
 			}
 			this.dirty = false;
-			return this;
+			return this;	//	dojox.charting.plot2d.Grid
 		},
 		_animateGrid: function(shape, type, offset, size){
 			var transStart = type == "h" ? [offset, 0] : [0, offset];
