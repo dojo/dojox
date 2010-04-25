@@ -8,6 +8,17 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.fold");
 
+/*=====
+dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+	//	summary:
+	//		Additional arguments for tooltip actions.
+
+	//	text: Function?
+	//		The function that produces the text to be shown within a tooltip.  By default this will be 
+	//		set by the plot in question, by returning the value of the element.
+	text: null
+});
+=====*/
 (function(){
 	var DEFAULT_TEXT = function(o){
 		var t = o.run && o.run.data && o.run.data[o.index];
@@ -29,6 +40,9 @@ dojo.require("dojox.lang.functional.fold");
 	var df = dojox.lang.functional, m = dojox.gfx.matrix, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
 	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.Base, {
+		//	summary:
+		//		Create an action on a plot where a tooltip is shown when hovering over an element.
+
 		// the data description block for the widget parser
 		defaultParams: {
 			text: DEFAULT_TEXT	// the function to produce a tooltip from the object
@@ -36,13 +50,24 @@ dojo.require("dojox.lang.functional.fold");
 		optionalParams: {},	// no optional parameters
 
 		constructor: function(chart, plot, kwArgs){
-			// process optional named parameters
+			//	summary:
+			//		Create the tooltip action and connect it to the plot.
+			//	chart: dojox.charting.Chart2D
+			//		The chart this action belongs to.
+			//	plot: String?
+			//		The plot this action is attached to.  If not passed, "default" is assumed.
+			//	kwArgs: dojox.charting.action2d.__TooltipCtorArgs?
+			//		Optional keyword arguments object for setting parameters.
 			this.text = kwArgs && kwArgs.text ? kwArgs.text : DEFAULT_TEXT;
 			
 			this.connect();
 		},
 		
 		process: function(o){
+			//	summary:
+			//		Process the action on the given object.
+			//	o: dojox.gfx.Shape
+			//		The object on which to process the highlighting action.
 			if(o.type === "onplotreset" || o.type === "onmouseout"){
 				hideChartingTooltip(this.aroundRect);
 				this.aroundRect = null;

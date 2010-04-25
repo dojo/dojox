@@ -7,6 +7,20 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.fold");
 
+/*=====
+dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+	//	summary:
+	//		Additional arguments for highlighting actions.
+
+	//	scale: Number?
+	//		The amount to scale the pie slice.  Default is 1.05.
+	scale: 1.05,
+
+	//	shift: Number?
+	//		The amount in pixels to shift the pie slice.  Default is 7.
+	shift: 7
+});
+=====*/
 (function(){
 	var DEFAULT_SCALE = 1.05,
 		DEFAULT_SHIFT = 7,	// px
@@ -15,6 +29,9 @@ dojo.require("dojox.lang.functional.fold");
 		df = dojox.lang.functional;
 	
 	dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.Base, {
+		//	summary:
+		//		Create an action for a pie chart that moves and scales a pie slice.
+
 		// the data description block for the widget parser
 		defaultParams: {
 			duration: 400,	// duration of the action in ms
@@ -25,7 +42,14 @@ dojo.require("dojox.lang.functional.fold");
 		optionalParams: {},	// no optional parameters
 
 		constructor: function(chart, plot, kwArgs){
-			// process optional named parameters
+			//	summary:
+			//		Create the slice moving action and connect it to the plot.
+			//	chart: dojox.charting.Chart2D
+			//		The chart this action belongs to.
+			//	plot: String?
+			//		The plot this action is attached to.  If not passed, "default" is assumed.
+			//	kwArgs: dojox.charting.action2d.__MoveSliceCtorArgs?
+			//		Optional keyword arguments object for setting parameters.
 			if(!kwArgs){ kwArgs = {}; }
 			this.scale = typeof kwArgs.scale == "number" ? kwArgs.scale : DEFAULT_SCALE;
 			this.shift = typeof kwArgs.shift == "number" ? kwArgs.shift : DEFAULT_SHIFT;
@@ -34,6 +58,10 @@ dojo.require("dojox.lang.functional.fold");
 		},
 		
 		process: function(o){
+			//	summary:
+			//		Process the action on the given object.
+			//	o: dojox.gfx.Shape
+			//		The object on which to process the slice moving action.
 			if(!o.shape || o.element != "slice" || !(o.type in this.overOutEvents)){ return; }
 			
 			if(!this.angles){
