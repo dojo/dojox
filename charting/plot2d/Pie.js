@@ -53,7 +53,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 
 	//	startAngle: Number?
 	//		Where to being rendering gradients in slices, in degrees.  Default is 0.
-	startAngle:     0
+	startAngle:     0,
 
 	//	radius: Number?
 	//		The size of the radial gradient.  Default is 0.
