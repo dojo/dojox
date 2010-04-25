@@ -24,6 +24,9 @@ dojo.declare("dojox.charting.Theme", null, {
 	//		"GreySkies"), and is mixed into the default theme object.  This allows you to create a theme based,
 	//		say, solely on colors for data series.
 	//
+	//		Defining a new theme is relatively easy; see any of the themes in dojox.charting.themes for examples
+	//		on how to define your own.
+	//
 	//		When you set a theme on a chart, the theme itself is deep-cloned.  This means that you cannot alter
 	//		the theme itself after setting the theme value on a chart, and expect it to change your chart.  If you
 	//		are looking to make alterations to a theme for a chart, the suggestion would be to create your own
@@ -34,8 +37,8 @@ dojo.declare("dojox.charting.Theme", null, {
 	//		to be rendered.
 	//
 	//		A note on colors:
-	//		The Theme constructor uses dojox.color.Palette (in general) for creating a visually distinct set of
-	//		colors for usage in a chart.  A palette is usually comprised of 5 different color definitions, and
+	//		The Theme constructor was on the use of dojox.color.Palette (in general) for creating a visually distinct
+	//		set of colors for usage in a chart.  A palette is usually comprised of 5 different color definitions, and
 	//		no more.  If you have a need to render a chart with more than 5 data elements, you can simply "push"
 	//		new color definitions into the theme's .color array.  Make sure that you do that with the actual
 	//		theme object from a Chart, and not in the theme itself (i.e. either do that before using .setTheme
@@ -93,10 +96,21 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|		font:    "normal normal normal 8pt Tahoma",	// label
 	//	|		fontColor: "#000"
 	//	|	}
+	//
+	//	example:
+	//		Defining a new theme is pretty simple:
+	//	|	dojox.charting.themes.Grasslands = new dojox.charting.Theme({
+	//	|		colors: [ "#70803a", "#dde574", "#788062", "#b1cc5d", "#eff2c2" ]
+	//	|	});
+	//	|
+	//	|	myChart.setTheme(dojox.charting.themes.Grasslands);
 
 	shapeSpaces: {shape: 1, shapeX: 1, shapeY: 1},
 	
 	constructor: function(kwArgs){
+		//	summary:
+		//		Initialize a theme using the keyword arguments.  Note that the arguments
+		//		look like the example (above), and may include a few more parameters.
 		kwArgs = kwArgs || {};
 		
 		// populate theme with defaults updating them if needed
@@ -129,7 +143,11 @@ dojo.declare("dojox.charting.Theme", null, {
 	},
 	
 	clone: function(){
-		return new dojox.charting.Theme({
+		//	summary:
+		//		Clone the current theme.
+		//	returns: dojox.charting.Theme
+		//		The cloned theme; any alterations made will not affect the original.
+		return new dojox.charting.Theme({	//	dojox.charting.Theme
 			// theme components
 			chart: this.chart,
 			plotarea: this.plotarea,
@@ -148,11 +166,22 @@ dojo.declare("dojox.charting.Theme", null, {
 	},
 	
 	clear: function(){
+		//	summary:
+		//		Clear and reset the internal pointer to start fresh.
 		this._current = 0;
 	},
 	
 	next: function(elementType, mixin, doPost){
-		// process theme components
+		//	summary:
+		//		Get the next color or series theme.
+		//	elementType: String?
+		//		An optional element type (for use with series themes)
+		//	mixin: Object?
+		//		An optional object to mix into the theme.
+		//	doPost: Boolean?
+		//		A flag to post-process the results.
+		//	returns: Object
+		//		An object of the structure { series, marker, symbol }
 		var merge = dojox.lang.utils.merge, series, marker;
 		if(this.colors){
 			series = dojo.delegate(this.series);
@@ -213,14 +242,28 @@ dojo.declare("dojox.charting.Theme", null, {
 		if(doPost){
 			theme = this.post(theme, elementType);
 		}
-		return theme;
+		return theme;	//	Object
 	},
 	
 	skip: function(){
+		//	summary:
+		//		Skip the next internal color.
 		++this._current;
 	},
 	
 	addMixin: function(theme, elementType, mixin, doPost){
+		//	summary:
+		//		Add a mixin object to the passed theme and process.
+		//	theme: dojox.charting.Theme
+		//		The theme to mixin to.
+		//	elementType: String
+		//		The type of element in question. Can be "line", "bar" or "circle"
+		//	mixin: Object
+		//		The object to mix into the theme.
+		//	doPost: Boolean
+		//		If true, run the new theme through the post-processor.
+		//	returns: dojox.charting.Theme
+		//		The new theme.
 		var t = {};
 		if("color" in mixin){
 			if(elementType == "line"){
@@ -250,11 +293,18 @@ dojo.declare("dojox.charting.Theme", null, {
 		if(doPost){
 			newTheme = this.post(newTheme, elementType);
 		}
-		return newTheme;
+		return newTheme;	//	dojox.charting.Theme
 	},
 	
 	post: function(theme, elementType){
-		// process shape-space fills
+		//	summary:
+		//		Process any post-shape fills.
+		//	theme: dojox.charting.Theme
+		//		The theme to post process with.
+		//	elementType: String
+		//		The type of element being filled.  Can be "bar" or "circle".
+		//	returns: dojox.charting.Theme
+		//		The post-processed theme.
 		var fill = theme.series.fill, t;
 		if(!this.noGradConv && this.shapeSpaces[fill.space] && fill.type == "linear"){
 			if(elementType == "bar"){
@@ -278,15 +328,15 @@ dojo.declare("dojox.charting.Theme", null, {
 				return dojox.lang.utils.merge(theme, {series: {fill: t}});
 			}
 		}
-		return theme;
+		return theme;	//	dojox.charting.Theme
 	},
 	
 	getTick: function(name, mixin){
 		//	summary:
 		//		Calculates and merges tick parameters.
-		//	name: String:
+		//	name: String
 		//		Tick name, can be "major", "minor", or "micro".
-		//	mixin: Object?:
+		//	mixin: Object?
 		//		Optional object to mix in to the tick.
 		var tick = this.axis.tick, tickName = name + "Tick";
 			merge = dojox.lang.utils.merge;
@@ -306,7 +356,7 @@ dojo.declare("dojox.charting.Theme", null, {
 				tick = mixin[tickName];
 			}
 		}
-		return tick;
+		return tick;	//	Object
 	},
 
 	addMarker:function(/*String*/ name, /*String*/ segment){
