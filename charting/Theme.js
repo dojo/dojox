@@ -387,6 +387,36 @@ dojo.declare("dojox.charting.Theme", null, {
 	}
 });
 
+/*=====
+dojox.charting.Theme.__DefineColorArgs = function(num, colors, hue, saturation, low, high, base, generator){
+	//	summary:
+	//		The arguments object that can be passed to define colors for a theme.
+	//	num: Number?
+	//		The number of colors to generate.  Defaults to 5.
+	//	colors: String[]|dojo.Color[]?
+	//		A pre-defined set of colors; this is passed through to the Theme directly.
+	//	hue: Number?
+	//		A hue to base the generated colors from (a number from 0 - 359).
+	//	saturation: Number?
+	//		If a hue is passed, this is used for the saturation value (0 - 100).
+	//	low: Number?
+	//		An optional value to determine the lowest value used to generate a color (HSV model)
+	//	high: Number?
+	//		An optional value to determine the highest value used to generate a color (HSV model)
+	//	base: String|dojo.Color?
+	//		A base color to use if we are defining colors using dojox.color.Palette
+	//	generator: String?
+	//		The generator function name from dojox.color.Palette. 
+	this.num = num;
+	this.colors = colors;
+	this.hue = hue;
+	this.saturation = saturation;
+	this.low = low;
+	this.high = high;
+	this.base = base;
+	this.generator = generator;
+}
+=====*/
 dojo.mixin(dojox.charting.Theme, {
 	defaultMarkers: {
 		CIRCLE:   "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0", 
@@ -458,11 +488,28 @@ dojo.mixin(dojox.charting.Theme, {
 			fontColor: "#000"
 		}
 	},
-
 	defineColors: function(kwArgs){
 		//	summary:
 		//		Generate a set of colors for the theme based on keyword
 		//		arguments.
+		//	kwArgs: dojox.charting.Theme.__DefineColorArgs
+		//		The arguments object used to define colors.
+		//	returns: dojo.Color[]
+		//		An array of colors for use in a theme.
+		//
+		//	example:
+		//	|	var colors = dojox.charting.Theme.defineColors({
+		//	|		base: "#369",
+		//	|		generator: "compound"
+		//	|	});
+		//
+		//	example:
+		//	|	var colors = dojox.charting.Theme.defineColors({
+		//	|		hue: 60,
+		//	|		saturation: 90,
+		//	|		low: 30,
+		//	|		high: 80
+		//	|	});
 		kwArgs = kwArgs || {};
 		var c = [], n = kwArgs.num || 5;	// the number of colors to generate
 		if(kwArgs.colors){
@@ -471,7 +518,7 @@ dojo.mixin(dojox.charting.Theme, {
 			for(var i = 0; i < n; i++){
 				c.push(kwArgs.colors[i % l]);
 			}
-			return c;
+			return c;	//	dojo.Color[]
 		}
 		if(kwArgs.hue){
 			// single hue, generate a set based on brightness
@@ -489,6 +536,6 @@ dojo.mixin(dojox.charting.Theme, {
 			//	pass a base color and the name of a generator
 			return dojox.color.Palette.generate(kwArgs.base, kwArgs.generator).colors;
 		}
-		return c;
+		return c;	//	dojo.Color[]
 	}
 });
