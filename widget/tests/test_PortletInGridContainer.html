@@ -69,6 +69,12 @@
 		.portletNoBorder div.dijitTitlePaneContentInner {
 			padding: 0;
 		}
+		.dj_ie6 .dropIndicator, .dj_ie6 .dojoxPortlet{
+			margin: 5px;
+		}
+		.gridContainerZone > *{
+			margin: 5px !important;
+		}
 	</style>		
 
 	<!-- required: dojo.js -->
@@ -122,16 +128,10 @@
 			<div dojoType="dojox.layout.GridContainer"
 					id="gridContainer"
 					region="center"
-					acceptTypes="dojox.widget.Portlet,dojox.widget.FeedPortlet"
+					acceptTypes="Portlet"
 					hasResizableColumns="false"
-					opacity="0.3"
 					nbZones="2"
-					allowAutoScroll="true" 
-					withHandles="true"
-					handleClasses="dijitTitlePaneTitle"
-					minChildWidth="200"
-					minColWidth="10"
-			>
+					dragHandleClass="dijitTitlePaneTitle">
 				<div dojoType="dojox.widget.Portlet" title="Info" toggleable="false" dragRestriction="true">
 					<p onclick="text_explode_2(this)">This is a Portlet widget, which is similar to a dijit.TitlePane, 
 						but is designed to be used with the dojox.layout.GridContainer widget.  Each widget can be extended
@@ -149,6 +149,7 @@
 					id="todaysNews"
 					url="http://news.google.com/news?hl=en&topic=t&output=atom"
 					maxResults="5"
+					dndType="Portlet"
 					>
 					<div dojoType="dojox.widget.PortletFeedSettings"></div>
 					
@@ -161,7 +162,8 @@
 				</div>
 	
 				<div dojoType="dojox.widget.Portlet" title="Clients"  id="clients"
-					class="gridPortlet">
+					class="gridPortlet"
+					dndType="Portlet">
 					
 					<div id="staticGrid" 
 						dojoType="dojox.grid.DataGrid" 
@@ -183,7 +185,7 @@
 	
 				</div>
 	
-				<div dojoType="dojox.widget.Portlet" title="Line Chart" id="lineChartPortlet">
+				<div dojoType="dojox.widget.Portlet" title="Line Chart" id="lineChartPortlet" dndType="Portlet">
 					<div dojoType="dojox.widget.PortletDialogSettings" 
 							id="lineChartSettings" dimensions="[300, 117]" title="Line Chart Settings">
 						<div dojoType="dojox.layout.TableContainer" cols="1">
@@ -293,20 +295,13 @@
 		<div dojoType="dijit.layout.BorderContainer" title="My Interests">
 			<div dojoType="dojox.layout.GridContainer"
 				id="gridContainer2"
-				acceptTypes="dojox.widget.Portlet, dojox.widget.FeedPortlet,dojox.widget.ExpandableFeedPortlet"
+				acceptTypes="Portlet"
 				hasResizableColumns="false"
-				opacity="0.3"
 				nbZones="2"
-				allowAutoScroll="true" 
-				withHandles="true"
-				handleClasses="dijitTitlePaneTitle"
+				dragHandleClass="dijitTitlePaneTitle"
 				region="center"
-				minChildWidth="200"
-				minColWidth="40"
 			>
-
-				<div dojoType="dojox.widget.ExpandableFeedPortlet" 
-						title="Cool Blogs -> Remembering Your Selection" showFeedTitle="false">
+				<div dojoType="dojox.widget.ExpandableFeedPortlet" dndType="Portlet" title="Cool Blogs -> Remembering Your Selection" showFeedTitle="false">
 					<select dojoType="dojox.widget.PortletFeedSettings" id="coolBlogsSettings">
 						<script type="dojo/connect">
 							this.set("selectedIndex", dojo.cookie(this.id + "-selectedIndex") || 0);
@@ -337,8 +332,8 @@
 					showFeedTitle="false"
 					</div>
 				</div>
-				<div dojoType="dojox.widget.ExpandableFeedPortlet" title="Cool Blogs -> onlyOpenOne == true" 
-						onlyOpenOne="true">
+				<div dndType="Portlet" dojoType="dojox.widget.ExpandableFeedPortlet"  title="Cool Blogs -> onlyOpenOne == true" 
+						onlyOpenOne="true" >
 					<select dojoType="dojox.widget.PortletFeedSettings" id="multiOptions">
 						<option value="http://www.dojotoolkit.org/aggregator/rss/">Planet Dojo</option>
 						<option value="http://shaneosullivan.wordpress.com/category/dojo/feed/">Dojo Blatherings</option>
@@ -350,7 +345,7 @@
 					Click the settings icon in the title bar to choose a feed to load.
 					</div>
 				</div>
-				<div dojoType="dojox.widget.Portlet" title="Quotes of the Day" id="quotes">
+				<div dojoType="dojox.widget.Portlet" dndType="Portlet" title="Quotes of the Day" id="quotes">
 					<div dojoType="dojox.widget.PortletSettings">
 						<div dojoType="dojox.layout.TableContainer" cols="1">
 						  <div dojoType="dijit.form.TextBox" title="Option 3"></div>
@@ -365,7 +360,7 @@
 					</div>
 				</div>
 				
-				<div dojoType="dojox.widget.FeedPortlet" title="Dojo Campus - Local Feed" 
+				<div dojoType="dojox.widget.FeedPortlet" dndType="Portlet" title="Dojo Campus - Local Feed" 
 						url="testAtom.xml"
 						maxResults="5"
 						local="true"
@@ -377,7 +372,7 @@
 					</div>
 				</div>
 				
-				<div dojoType="dojox.widget.Portlet" title="My Flickr">
+				<div dojoType="dojox.widget.Portlet" dndType="Portlet" title="My Flickr">
 					<div dojoType="dojox.widget.PortletSettings">
 						<div dojoType="dojox.layout.TableContainer" cols="1">
 						  <div dojoType="dijit.form.TextBox" title="Option 3"></div>
@@ -430,17 +425,12 @@
 				
 				<div dojoType="dojox.layout.GridContainer"
 						region="center"
-						acceptTypes="dojox.widget.Portlet,dojox.widget.FeedPortlet"
+						acceptTypes="Portlet"
 						hasResizableColumns="false"
-						opacity="0.3"
 						nbZones="2"
-						allowAutoScroll="true" 
-						withHandles="true"
-						handleClasses="dijitTitlePaneTitle"
-						minChildWidth="200"
-						minColWidth="10"
+						dragHandleClass="dijitTitlePaneTitle"
 					>
-						<div dojoType="dojox.widget.Portlet" title="File Info" class="portletNoBorder">
+						<div dojoType="dojox.widget.Portlet" dndType="Portlet" title="File Info" class="portletNoBorder">
 							<script type="dojo/connect">
 								var mapping = {
 									"fileName" : "name", 
@@ -477,7 +467,7 @@
 							</div>
 						</div>
 					
-						<div dojoType="dojox.widget.Portlet" title="File Contents" 
+						<div dojoType="dojox.widget.Portlet" dndType="Portlet" title="File Contents" 
 							id="fileContentPortlet"
 								style="max-height: 350px;">
 							<script type="dojo/connect" event="startup">
@@ -514,7 +504,7 @@
 							</div>
 						</div>
 						
-						<div dojoType="dojox.widget.Portlet" title="Selected Files">
+						<div dojoType="dojox.widget.Portlet" dndType="Portlet" title="Selected Files">
 							<script type="dojo/connect">
 								console.log("connecting to fileModel", fileModel);
 								var timer;

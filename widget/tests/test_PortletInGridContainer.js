@@ -17,7 +17,7 @@ dojo.require("dojox.charting.widget.Chart2D");
 dojo.require("dojox.charting.themes.Grasslands");
 dojo.require("dojox.charting.themes.PlotKit.orange");
 dojo.require("dojox.widget.Calendar");
-dojo.require("dojox.portlet");
+dojo.require("dojox.widget.Portlet");
 dojo.require("dojox.layout.GridContainer");
 dojo.require("dojox.layout.TableContainer");
 dojo.require("dojox.grid.DataGrid");
@@ -110,6 +110,7 @@ dojo.addOnLoad(function(){
 function createProgrammaticPortlet() {
 	var portlet = new dojox.widget.FeedPortlet({
 		id: "ProgrammaticPortlet",
+		dndType: "Portlet", 
 		title: "Programmatic FeedPortlet with multiple feeds"
 	}, dojo.create("div", {
 		innerHTML: "This portlet was created programmatically, and has mulitple feeds to select from."

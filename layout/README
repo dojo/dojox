@@ -27,7 +27,7 @@ Credits
 [DragPane]	Peter Higgins (dante)
 [ExpandoPane] Peter Higgins (dante)
 [FloatingPane] Peter Higgins (dante)
-[GridContainer] Juff Cunat (jfcunat), Peter Higgins (dante)
+[GridContainer/GridContainerLite] Erwan Morvillez (emorvillez), Jeff Cunat (jfcunat), Guillaume Mouricou (gmouricou), Peter Higgins (dante)
 [RadioGroup/Fade/Slide] Peter Higgins (dante) 
 [ResizeHandle] Peter Higgins (dante)
 [RotatorContainer] Chris Barber (cb1)

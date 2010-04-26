@@ -13,6 +13,13 @@
 		
 		@import "../Portlet/Portlet.css";
 		@import "../../layout/resources/GridContainer.css";
+		
+		.dj_ie6 .dropIndicator, .dj_ie6 .dojoxPortlet{
+			margin: 5px;
+		}
+		.gridContainerZone > *{
+			margin: 5px !important;
+		}
 	</style>		
 
 	<!-- required: dojo.js -->
@@ -35,17 +42,12 @@
 	</div>
 	<div dojoType="dojox.layout.GridContainer"
 			id="gridContainer"
-			acceptTypes="dojox.widget.Portlet,dojox.widget.FeedPortlet"
 			isAutoOrganized="false"
 			hasResizableColumns="false"
-			opacity="0.3"
 			nbZones="3"
-			allowAutoScroll="true" 
-			withHandles="true"
-			handleClasses="dijitTitlePaneTitle"
-			minChildWidth="200"
-			minColWidth="10"
-			style="width:100%;height:600px;"
+			dragHandleClass="dijitTitlePaneTitle"
+			style="width:100%;"
+			doLayout="false"
 	>
 		<div dojoType="dojox.widget.Portlet" title="First Col, top" column="1">
 			This Portlet is placed in Column 1
