@@ -57,6 +57,7 @@
 		
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+		<script type="text/javascript" src="../GridContainerLite.js"></script>
 		<script type="text/javascript" src="../GridContainer.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
@@ -78,6 +79,12 @@
 					GC1.setColumns(nb);
 				}
 			}
+			
+			function setColumnWidths(){
+				GC1 = dijit.byId("GC1");
+				var widths = dojo.byId("colWidth").value;
+				GC1.set("colWidths", widths);
+			}
 		</script>
 
 	</head>
@@ -92,12 +99,17 @@
 		
 		<h2>Grid Container (allowAutoScroll="true", hasResizableColumns="false")</h2>
 			
-			<h5>Add / remove dynamically columns :</h5>
-			<input value="5" name="col" id="nbCol"/>
-			<button id="bt2" dojoType="dijit.form.Button" onclick="setColumns();">set Number of Columns</button>
+		<h5>Add / remove dynamically columns :</h5>
+		<input value="5" name="col" id="nbCol"/>
+		<button id="bt2" dojoType="dijit.form.Button" onclick="setColumns();">set Number of Columns</button>
+
+		<h5>Set the width of columns :</h5>
+		<input value="25,30,40" name="col" id="colWidth"/>
+		<button id="bt3" dojoType="dijit.form.Button" onclick="setColumnWidths();">Set Column Widths</button>
 		
 		<div>
 			<h4>Testing column width where the first column has a width fixed to 40%.  All other columns take up the remiaining space</h4>
+			
 			<div id="GC1" dojoType="dojox.layout.GridContainer" 
 				nbZones="3"
 				opacity="0.7" 

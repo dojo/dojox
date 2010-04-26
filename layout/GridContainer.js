@@ -233,15 +233,17 @@ dojo.declare(
 
 		this._isResized = true;
 
-		var tabSize = [], grid;
+		var tabSize = [];
+		var grid;
+		var i;
 
-		for(var i = 0; i < this._grid.length; i++){
+		for(i = 0; i < this._grid.length; i++){
 			tabSize[i] = dojo.contentBox(this._grid[i].node).w;
 		}
 
 		this._oldTabSize = tabSize;
 
-		for(var i = 0; i < this._grid.length; i++){
+		for(i = 0; i < this._grid.length; i++){
 			grid = this._grid[i];
 			if(this._activeGrip == grid.grip){
 				this._currentColumn = grid.node;
@@ -372,9 +374,10 @@ dojo.declare(
 			testSize = [],
 			tabWidth = this.gridContainerTable.clientWidth,
 			node,
-			update = false;
+			update = false,
+			i;
 
-		for(var i = 0; i < this._grid.length; i++){
+		for(i = 0; i < this._grid.length; i++){
 			node = this._grid[i].node;
 			if(dojo.isIE){
 				tabSize[i] = dojo.marginBox(node).w;
@@ -386,7 +389,7 @@ dojo.declare(
 			}
 		}
 
-		for(var i = 0; i < testSize.length; i++){
+		for(i = 0; i < testSize.length; i++){
 			if(testSize[i] != this._oldTabSize[i]){
 				update = true;
 				break;
@@ -395,7 +398,7 @@ dojo.declare(
 
 		if(update){
 			var mul = dojo.isIE ? 100 : 10000;
-			for(var i = 0; i < this._grid.length; i++){
+			for(i = 0; i < this._grid.length; i++){
 				this._grid[i].node.style.width = Math.round((100 * mul * tabSize[i]) / tabWidth) / mul + "%";
 			}
 			this.resize();
@@ -416,6 +419,7 @@ dojo.declare(
 		//		Number of columns
 
 		//console.log("dojox.layout.GridContainer ::: setColumns");
+		var z, j;
 		if(nbColumns > 0){
 			var length = this._grid.length,
 				delta = length - nbColumns;
@@ -426,10 +430,10 @@ dojo.declare(
 				if(this.mode == "right"){
 					end = (this.isLeftFixed && length > 0) ? 1 : 0;
 					start = (this.isRightFixed) ? length - 2 : length - 1
-					for(var z = start; z >= end; z--){
+					for(z = start; z >= end; z--){
 						nbChildren = 0;
 						zone = this._grid[z].node;
-						for(var j = 0; j < zone.childNodes.length; j++){
+						for(j = 0; j < zone.childNodes.length; j++){
 							if(zone.childNodes[j].nodeType == 1 && !(zone.childNodes[j].id == "")){
 								nbChildren++;
 								break;
@@ -448,10 +452,10 @@ dojo.declare(
 				else{ // mode = "left"
 					start = (this.isLeftFixed && length > 0) ? 1 : 0;
 					end = (this.isRightFixed) ? length - 1 : length;
-					for(var z = start; z < end; z++){
+					for(z = start; z < end; z++){
 						nbChildren = 0;
 						zone = this._grid[z].node;
-						for(var j = 0; j < zone.childNodes.length; j++){
+						for(j = 0; j < zone.childNodes.length; j++){
 							if(zone.childNodes[j].nodeType == 1 && !(zone.childNodes[j].id == "")){
 								nbChildren++;
 								break;
@@ -525,9 +529,9 @@ dojo.declare(
 			}
 			else{
 				if(this.isLeftFixed){
-					var i = (length == 1) ? 0 : 1;
+					index = (length == 1) ? 0 : 1;
 					this._grid.splice(1, 0, {
-						'node': this._grid[i].node.parentNode.appendChild(node, this._grid[i].node)
+						'node': this._grid[index].node.parentNode.appendChild(node, this._grid[index].node)
 					});
 					index = 1;
 				}
@@ -606,12 +610,7 @@ dojo.declare(
 		//		private
 
 		//console.log("dojox.layout.GridContainer ::: _updateColumnsWidth");
-		var wCol = 100 / this.nbZones,
-			length = this._grid.length;
-
-		for(var i = 0; i < length; i++){
-			this._grid[i].node.style.width = wCol + "%";
-	 	}
+	 	this.inherited(arguments);
 		manager._dropMode.updateAreas(manager._areaList);
 	},
 

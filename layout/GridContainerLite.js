@@ -82,6 +82,12 @@ dojo.declare(
 	// acceptTypes: Array
 	//		The GridContainer will only accept the children that fit to the types.
 	acceptTypes: [],
+	
+	// colWidths: String
+	//		A comma separated list of column widths. If the column widths do not add up
+	//		to 100, the remaining columns split the rest of the width evenly
+	//		between them.
+	colWidths: "",
 
 	constructor: function(/*Object*/props, /*DOMNode*/node){
 		this.acceptTypes = (props || {}).acceptTypes || ["text"];
@@ -100,7 +106,7 @@ dojo.declare(
 		this.subscribe("/dojox/mdnd/drag/start", "resizeChildAfterDragStart");
 
 		this._dragManager = dojox.mdnd.areaManager();
-		console.info("autorefresh ::: ", this.autoRefresh);
+		// console.info("autorefresh ::: ", this.autoRefresh);
 		this._dragManager.autoRefresh = this.autoRefresh;
 
 		//	Add specific dragHandleClass to the manager.
@@ -161,7 +167,7 @@ dojo.declare(
 
 		//console.log("dojox.layout.GridContainerLite ::: resizeChildAfterDrop");
 		if(this._disabled){
-			return;
+			return false;
 		}
 		if(dijit.getEnclosingWidget(targetArea.node) == this){
 			var widget = dijit.byNode(node);
@@ -194,7 +200,7 @@ dojo.declare(
 
 		//console.log("dojox.layout.GridContainerLite ::: resizeChildAfterDragStart");
 		if(this._disabled){
-			return;
+			return false;
 		}
 		if(dijit.getEnclosingWidget(sourceArea.node) == this){
 			this._draggedNode = node;
@@ -291,19 +297,38 @@ dojo.declare(
 
 		//console.log("dojox.layout.GridContainerLite ::: _createCells");
 		if(this.nbZones === 0){ this.nbZones = 1; }
-		var wCol = 100 / this.nbZones,
-			accept = this.acceptTypes.join(","),
+		var accept = this.acceptTypes.join(","),
 			i = 0;
+			
+		var origWidths = this.colWidths || [];
+		var widths = [];
+		var colWidth;
+		var widthSum = 0;
+		
+		// Calculate the widths of each column.
+		for(i = 0; i < this.nbZones; i++){
+			if(widths.length < origWidths.length){
+				widthSum += origWidths[i];
+				widths.push(origWidths[i]);
+			}else{
+				if(!colWidth){
+					colWidth = (100 - widthSum)/(this.nbZones - i);
+				}
+				widths.push(colWidth);
+			}
+		}
+
+		i = 0;
 		while(i < this.nbZones){
 			// Add the parameter accept in each zone used by AreaManager
-			// (see method dojox.mdnd.AreaManager:registerByNode)
+			// (see method dojox.mdnd.AreaManager:registerByNode)			
 			this._grid.push({
 				'node': dojo.create("td", {
 					'class': "gridContainerZone",
 					'accept': accept,
 					'id': this.id + "_dz" + i,
 					'style': {
-						'width': wCol + "%"
+						'width': widths[i] + "%"
 					}
 				}, this.gridNode)
 			});
@@ -461,6 +486,66 @@ dojo.declare(
 		}
 		return null; 	// Widget
 	},
+	
+	_setColWidthsAttr: function(value){
+		this.colWidths = dojo.isString(value) ? value.split(",") : (dojo.isArray(value) ? value : [value]);
+		
+		if(this._started){ 
+			this._updateColumnsWidth();
+		}
+	},
+	
+	_updateColumnsWidth: function(/*Object*/ manager){
+		// summary:
+		//		Update the columns width.
+		// manager:
+		//		dojox.mdnd.AreaManager singleton
+		// tags:
+		//		private
+
+		//console.log("dojox.layout.GridContainer ::: _updateColumnsWidth");
+		var length = this._grid.length;
+
+		var origWidths = this.colWidths || [];
+		var widths = [];
+		var colWidth;
+		var widthSum = 0;
+		var i;
+
+		// Calculate the widths of each column.
+		for(i = 0; i < length; i++){
+			if(widths.length < origWidths.length){
+				widthSum += origWidths[i] * 1;
+				widths.push(origWidths[i]);
+			}else{
+				if(!colWidth){
+					colWidth = (100 - widthSum)/(this.nbZones - i);
+					
+					// If the numbers don't work out, make the remaining columns
+					// an even width and let the code below average
+					// out the differences.
+					if(colWidth < 0){
+						colWidth = 100 / this.nbZones;
+					}
+				}
+				widths.push(colWidth);
+				widthSum += colWidth * 1;
+			}
+		}
+
+		// If the numbers are wrong, divide them all so they add up to 100
+		if(widthSum > 100){
+			var divisor = 100 / widthSum;
+			for(i = 0; i < widths.length; i++){
+				widths[i] *= divisor;
+			}
+		}
+
+		// Set the widths of each node
+		for(i = 0; i < length; i++){
+			this._grid[i].node.style.width = widths[i] + "%";
+		}
+	},
 
 	_selectFocus: function(/*Event*/event){
 		// summary:
@@ -478,16 +563,22 @@ dojo.declare(
 			focus = dijit.getFocus(),
 			focusNode = focus.node,
 			m = this._dragManager,
-			found;
+			found,
+			i,
+			j,
+			r,
+			children,
+			area,
+			widget;
 		if(focusNode == this.containerNode){
-			var area = this.gridNode.childNodes;
+			area = this.gridNode.childNodes;
 			switch(key){
 				case k.DOWN_ARROW:
 				case k.RIGHT_ARROW:
 					found = false;
-					for(var i = 0; i < area.length; i++){
-						var children = area[i].childNodes;
-						for(var	j = 0; j < children.length; j++){
+					for(i = 0; i < area.length; i++){
+						children = area[i].childNodes;
+						for(j = 0; j < children.length; j++){
 							zone = children[j];
 							if(zone != null && zone.style.display != "none"){
 								dijit.focus(zone);
@@ -501,11 +592,11 @@ dojo.declare(
 				break;
 				case k.UP_ARROW:
 				case k.LEFT_ARROW:
-					var area = this.gridNode.childNodes;
+					area = this.gridNode.childNodes;
 					found = false;
-					for(var i = area.length-1; i >= 0 ; i--){
-						var children = area[i].childNodes;
-						for(var j = children.length; j >= 0; j--){
+					for(i = area.length-1; i >= 0 ; i--){
+						children = area[i].childNodes;
+						for(j = children.length; j >= 0; j--){
 							zone = children[j];
 							if(zone != null && zone.style.display != "none"){
 								dijit.focus(zone);
@@ -530,9 +621,9 @@ dojo.declare(
 						found = false;
 						var focusTemp = focusNode;
 						while(!found){
-							var children = focusTemp.parentNode.childNodes;
+							children = focusTemp.parentNode.childNodes;
 							var num = 0;
-							for(var i = 0; i < children.length; i++){
+							for(i = 0; i < children.length; i++){
 								if(children[i].style.display != "none"){ num++ };
 								if(num > 1){ break; }
 							}
@@ -552,22 +643,22 @@ dojo.declare(
 						}
 						if(event.shiftKey){
 							var parent = focusNode.parentNode;
-							for(var i = 0; i < this.gridNode.childNodes.length; i++){
+							for(i = 0; i < this.gridNode.childNodes.length; i++){
 								if(parent == this.gridNode.childNodes[i]){
 									break;
 								}
 							}
-							var children = this.gridNode.childNodes[i].childNodes;
-							for(var j = 0; j < children.length; j++){
+							children = this.gridNode.childNodes[i].childNodes;
+							for(j = 0; j < children.length; j++){
 								if(zone == children[j]){
 									break;
 								}
 							}
 							if(dojo.isMoz || dojo.isWebKit){ i-- };
 
-							var widget = dijit.byNode(focusNode);
+							widget = dijit.byNode(focusNode);
 							if(!widget.dragRestriction){
-								var r = m.removeDragItem(parent, focusNode);
+								r = m.removeDragItem(parent, focusNode);
 								this.addChild(widget, i, j);
 								dojo.attr(focusNode, "tabIndex", "0");
 								dijit.focus(focusNode);
@@ -594,7 +685,7 @@ dojo.declare(
 								z = this.gridNode.childNodes.length - 2;
 							}
 							else{
-								for(var i = 0; i < this.gridNode.childNodes.length; i++){
+								for(i = 0; i < this.gridNode.childNodes.length; i++){
 									if(focusNode.parentNode[pos] == this.gridNode.childNodes[i]){
 										break;
 									}
@@ -602,7 +693,7 @@ dojo.declare(
 								}
 								if(dojo.isMoz || dojo.isWebKit){ z-- };
 							}
-							var widget = dijit.byNode(focusNode);
+							widget = dijit.byNode(focusNode);
 							var _dndType = focusNode.getAttribute("dndtype");
 							if(_dndType == null){
 								//check if it's a dijit object
@@ -617,8 +708,8 @@ dojo.declare(
 								_dndType = _dndType.split(/\s*,\s*/);
 							}
 							var accept = false;
-							for(var i = 0; i < this.acceptTypes.length; i++){
-								for(var j = 0; j < _dndType.length; j++){
+							for(i = 0; i < this.acceptTypes.length; i++){
+								for(j = 0; j < _dndType.length; j++){
 									if(_dndType[j] == this.acceptTypes[i]){
 										accept = true;
 										break;
@@ -634,7 +725,7 @@ dojo.declare(
 									place = this.gridNode.childNodes[t].childNodes.length;
 								}
 								// delete of manager :
-								var r = m.removeDragItem(parentSource, focusNode);
+								r = m.removeDragItem(parentSource, focusNode);
 								this.addChild(widget, z, place);
 								dojo.attr(r, "tabIndex", "0");
 								dijit.focus(r);
@@ -660,10 +751,10 @@ dojo.declare(
 								zone = node[child];
 								if(zone && zone.style.display == "none"){
 									// check that all elements are not hidden
-									var children = zone.parentNode.childNodes;
+									children = zone.parentNode.childNodes;
 									var childToSelect = null;
 									if(pos == "previousSibling"){
-										for(var i = children.length-1; i >= 0; i--){
+										for(i = children.length-1; i >= 0; i--){
 											if(children[i].style.display != "none"){
 												childToSelect = children[i];
 												break;
@@ -671,7 +762,7 @@ dojo.declare(
 										}
 									}
 									else{
-										for(var i = 0; i < children.length; i++){
+										for(i = 0; i < children.length; i++){
 											if(children[i].style.display != "none"){
 												childToSelect = children[i];
 												break;
