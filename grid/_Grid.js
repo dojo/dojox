@@ -353,6 +353,11 @@ dojo.requireLocalization("dijit", "loading");
 			if (this.selectionMode != "none") {
 				dojo.attr(this.domNode, "aria-multiselectable", this.selectionMode == "single" ? "false" : "true");
 			}
+
+			dojo.addClass(this.domNode, this.classTag);
+			if(!this.isLeftToRight()){
+				dojo.addClass(this.domNode, this.classTag+"Rtl");
+			}
 		},
 		
 		postMixInProperties: function(){
