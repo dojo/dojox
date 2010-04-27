@@ -51,10 +51,17 @@ dojo.require("dijit.Editor");
 			}
 		},
 		getWidgetProps: function(inDatum){
-			return dojo.mixin({}, this.widgetProps||{}, {
-				constraints: dojo.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
-				value: inDatum
-			});
+			return dojo.mixin(
+				{
+					dir: this.dir,
+					lang: this.lang
+				},
+				this.widgetProps||{},
+				{
+					constraints: dojo.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
+					value: inDatum
+				}
+			);
 		},
 		createWidget: function(inNode, inDatum, inRowIndex){
 			return new this.widgetClass(this.getWidgetProps(inDatum), inNode);

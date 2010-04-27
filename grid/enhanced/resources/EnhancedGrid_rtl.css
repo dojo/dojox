@@ -1,29 +1,29 @@
 @import url("../../resources/Grid_rtl.css");
 
-.dijitRtl .dojoxGridNestedSort, 
-.dijitRtl .dojoxGridUnarySort {
+.dojoxGridRtl .dojoxGridNestedSort, 
+.dojoxGridRtl .dojoxGridUnarySort {
 	text-align: right;
 }
 
-.dijitRtl .dojoxGridSortWrapper {
+.dojoxGridRtl .dojoxGridSortWrapper {
 	left: 0;
 	right: auto;
 }
 
-.dijitRtl .dojoxGridCell .dojoxGridHeaderCellSelectRegion {
+.dojoxGridRtl .dojoxGridCell .dojoxGridHeaderCellSelectRegion {
 	float: right;
 	text-align: right;
 }
 
-.dijitRtl .dojoxGridSortSeparatorOn,
-.dijitRtl .dojoxGridNestedSortWrapper,
-.dijitRtl .dojoxGridUnarySortWrapper {
+.dojoxGridRtl .dojoxGridSortSeparatorOn,
+.dojoxGridRtl .dojoxGridNestedSortWrapper,
+.dojoxGridRtl .dojoxGridUnarySortWrapper {
 	float: right;
 }
 
-.dijitRtl .dojoxGridLoading, 
-.dijitRtl .dojoxGridError,
-.dijitRtl .dojoxGridNoData {
+.dojoxGridRtl .dojoxGridLoading, 
+.dojoxGridRtl .dojoxGridError,
+.dojoxGridRtl .dojoxGridNoData {
 	background-position:right;
 	padding-right:25px;
 	padding-left:0px;
