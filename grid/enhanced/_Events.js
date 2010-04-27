@@ -489,11 +489,15 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onHeaderCellClick: function(e){
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onHeaderCellClick()
-		if(this.indirectSelection && e.cell && e.cell.isRowSelector){
-			return;//ignore if under column selection
+		if(this.nestedSorting){
+			if((e.unarySortChoice || e.nestedSortChoice) && !this._inResize(e.sourceView)){
+				this.setSortIndex(e.cell.index, null, e);//nested sorting
+			}
+		}else if(!(this.indirectSelection && e.cell && e.cell.isRowSelector)){
+			this.setSortIndex(e.cell.index);//single sorting
 		}
-		//invoke dojox.grid._Events.onHeaderCellClick()
-		dojo.hitch(this, this._events.onHeaderCellClick)(e);
+		//invoke dojox.grid._Events.onHeaderClick()
+		dojo.hitch(this, this._events.onHeaderClick)(e);
 	},
 	
 	onHeaderContextMenu: function(e){

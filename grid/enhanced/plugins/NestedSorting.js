@@ -773,37 +773,6 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		return !(e.nestedSortChoice || e.unarySortChoice || e.selectChoice);
 	},
 	
-	doheaderclick: function(e){
-		// summary:
-		//		Hanlder for events fired on column headers
-		// e: Event
-		//		Decorated event object which contains reference to grid, target cell etc.		
-		if(this.nestedSorting){
-			if(e.selectChoice){
-				this.onHeaderCellSelectClick(e);
-			}else if((e.unarySortChoice || e.nestedSortChoice) && !this._inResize(e.sourceView)){
-				this.onHeaderCellSortClick(e);
-			}
-			return;
-		}
-		this.inherited(arguments);
-	},
-	
-	onHeaderCellSelectClick: function(e){
-		// summary:
-		//		Event fired when selection region is clicked
-		// e: Event
-		//		Decorated event object which contains reference to grid, target cell etc.
-	},
-	
-	onHeaderCellSortClick: function(e){
-		// summary:
-		//		Event fired when unary or nested sort region is clicked
-		// e: Event
-		//		Decorated event object which contains reference to grid, target cell etc.
-		this.setSortIndex(e.cell.index, null, e);
-	},
-	
 	_sychronizeResize: function(e){
 		// summary:
 		//		Each time mouse moved in view.headerNode, check if need to add or remove sort tip
