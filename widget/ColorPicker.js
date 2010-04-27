@@ -88,10 +88,24 @@ dojo.require("dojo.i18n");
 		value: "#ffffff",
 		
 		_underlay: d.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
+
+		_hueUnderlay: d.moduleUrl("dojox.widget","ColorPicker/images/hue.png"),
+
+		_pickerPointer: d.moduleUrl("dojox.widget","ColorPicker/images/pickerPointer.png"),
+
+		_huePickerPointer: d.moduleUrl("dojox.widget","ColorPicker/images/hueHandle.png"),
+
+		_huePickerPointerAlly: d.moduleUrl("dojox.widget","ColorPicker/images/hueHandleA11y.png"),
+
 		// don't change to d.moduleUrl, build won't intern it.
 		templateString: dojo.cache("dojox.widget","ColorPicker/ColorPicker.html"),
 
 		postMixInProperties: function(){
+			if(dojo.hasClass(dojo.body(), "dijit_a11y")){
+				// Use the pointer that will show up in high contrast.
+				this._huePickerPointer = this._huePickerPointerAlly;
+			}
+			this._uId = dijit.getUniqueId(this.id);
 			dojo.mixin(this, dojo.i18n.getLocalization("dojox.widget", "ColorPicker"));
 			dojo.mixin(this, dojo.i18n.getLocalization("dojo.cldr", "number"));
 			this.inherited(arguments);
@@ -449,7 +463,7 @@ dojo.require("dojo.i18n");
 					duration:this.slideDuration,
 					top: ypos,
 					left: 0,
-					onEnd: d.hitch(this, function() {this._updateColor(true); dijit.focus(this.hueCursorNode)})
+					onEnd: d.hitch(this, function() {this._updateColor(true); dijit.focus(this.hueCursorNode);})
 				}).play();
 			}else{
 				d.style(this.hueCursorNode, "top", ypos + "px");
@@ -471,7 +485,7 @@ dojo.require("dojo.i18n");
 					duration: this.slideDuration,
 					top: newTop,
 					left: newLeft,
-					onEnd: d.hitch(this, function() {this._updateColor(true); dijit.focus(this.cursorNode)})
+					onEnd: d.hitch(this, function() {this._updateColor(true); dijit.focus(this.cursorNode);})
 				}).play();
 			}else{
 				d.style(this.cursorNode, {
@@ -493,6 +507,14 @@ dojo.require("dojo.i18n");
 			if(!this._focused){
 				dijit.focus(this.focusNode);
 			}
+		},
+
+		_stopDrag: function(e){
+			// summary:
+			//		Function to hald the mouse down default
+			//		to disable draggong of images out of the color
+			//		picker.
+			dojo.stopEvent(e);
 		},
 
 		destroy: function(){

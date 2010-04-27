@@ -43,12 +43,12 @@
 }
 
 .dojoxHuePickerUnderlay {
-	background:url(images/hue.png) no-repeat top center; 
 	position:relative;
 	top:0; left:0;
 	height:150px;
 	width:20px;
 	z-index:1;
+	text-align: center;
 }
 
 .dojoxHuePicker { position:relative; top: 0px; left: 0px; padding: 0px;}
@@ -59,16 +59,13 @@
 	width:20px;
 	height:8px;
 	z-index:3; 
-	background-color:#666; 
 	cursor:move;
-	background:url(images/hueHandle.png) no-repeat center center; 
 }
 
 .dojoxColorPickerPoint {
 	position:absolute;
 	width:10px; 
 	height:10px;
-	background: url(images/pickerPointer.png) no-repeat center center; 
 	border:0;
 	z-index:3; 
 	cursor:move; 
