@@ -15,6 +15,9 @@
 .dijitEditorSmileyPalette {
 	border: 1px solid black;
 	background: white;
+	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 .dijitEditorSmileyPalette .dijitPaletteCell {

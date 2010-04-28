@@ -29,7 +29,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 	//		The template of this widget.
 	templateString: 
 		'<table class="dijitInline dijitEditorSmileyPalette dijitPaletteTable"' +
-		' cellSpacing=0 cellPadding=0 dojoAttachPoint="gridNode"></table>',
+		' cellSpacing=0 cellPadding=0><tbody dojoAttachPoint="gridNode"></tbody></table>',
 
 	baseClass: "dijitEditorSmileyPalette",
 
