@@ -569,7 +569,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			this.inherited(arguments);
 			delete this.command;
 			
-			if(this.commandName != "colorTableCell"){ this.connect(this.button.domNode, "click", "modTable");}
+			if(this.commandName != "colorTableCell"){ this.connect(this.button, "onClick", "modTable");}
 			if(this.commandName=="tableContextMenu"){ this.button.domNode.display = "none";}
 			
 			this.onDisplayChanged(false);
