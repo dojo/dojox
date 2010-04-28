@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.islamic.locale");
-dojo.experimental("dojox.date.islamic.locale");
 
 dojo.require("dojox.date.islamic.Date");
 dojo.require("dojo.regexp");

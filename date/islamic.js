@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.islamic");
-dojo.experimental("dojox.date.islamic");
 
 dojo.require("dojox.date.islamic.Date");
 dojo.require("dojo.date"); // for compare

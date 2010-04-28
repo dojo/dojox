@@ -1,5 +1,4 @@
 dojo.provide("dojox.date.islamic.Date");
-dojo.experimental("dojox.date.islamic.Date");
 
 dojo.require("dojo.date");
 dojo.requireLocalization("dojo.cldr", "islamic");
