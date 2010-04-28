@@ -21,10 +21,6 @@ dojo.declare(
 		//		searching based on that value
 		searchDelay: 500,
 		
-		// _stopClickEvent: boolean
-		//		Set to false since we want to handle our own click events
-		_stopClickEvents: false,
-		
 		// valueItem: item
 		//		The item, in our store, of the directory relating to our value
 		valueItem: null,
