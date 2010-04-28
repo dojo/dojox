@@ -29,7 +29,7 @@
 	text-align: center;
 }
 
-.dojoxEntityPaletteCellHighlight {
+.dojoxEntityPaletteCellHover, .dojoxEntityPaletteCellActive, .dojoxEntityPaletteCellFocused {
 	width: 18px;
         line-height: 16px;
 	overflow: hidden;
@@ -37,6 +37,7 @@
 	border:1px dashed #000;
 	outline:1px dashed #dedede;
 }
+
 
 .dojoxEntityPalettePreviewTable {
 	table-layout: auto;

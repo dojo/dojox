@@ -87,7 +87,6 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 	paletteClass: 'editorLatinEntityPalette',
 
 	cellClass: "dojoxEntityPaletteCell",
-	highlightClass: "dojoxEntityPaletteCellHighlight",
 
 	postMixInProperties: function(){
 		// Convert hash of entities into two-dimensional rows/columns table (array of arrays)
@@ -125,13 +124,21 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 			i18n
 		);
 
-		// Link up the event to display the description.
 		var cells = dojo.query(".dojoxEntityPaletteCell", this.gridNode);
 		dojo.forEach(cells, function(cellNode){
-			dojo.forEach(["MouseEnter", "MouseLeave"], function(handler){
-				this.connect(cellNode, "on" + handler.toLowerCase(), "_onCell" + handler);
-			}, this);
+			this.connect(cellNode, "onmouseenter", "_onCellMouseEnter");
 		}, this);
+	},
+
+	_onCellMouseEnter: function(e){
+		// summary:
+		//		Simple function to handle updating the display at the bottom of
+		//		the palette.
+		// e:
+		//		The event.
+		// tags:
+		//		private
+		this._displayDetails(e.target);
 	},
 
 	postCreate: function(){
@@ -148,38 +155,6 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		}
 	},
 
-	_onCellMouseEnter: function(/*Event*/ evt){ 
-		this.inherited(arguments);
-		this._setCurrent(evt.currentTarget);
-		if(this.showPreview){
-			this._displayDetails(evt.target);
-		}
-	},
-
-	_onCellMouseLeave: function(/*Event*/ evt){
-		// summary:
-		//		Handler for onMouseLeave event on a cell. Remove highlight on the color under the mouse.
-		// evt:
-		//		The mouse event.
-		// tags:
-		//		private
-		dojo.removeClass(this._currentFocus, "dojoxEntityPaletteCellHighlight");
-	},
-
-	_onCellFocus: function(/*Event*/ evt){
-		// summary:
-		//		Handler for onFocus of a cell.
-		// description:
-		//		Removes highlight of the color that just lost focus, and highlights
-		//		the new color.  Also moves the tabIndex setting to the new cell.
-		//		
-		// evt:
-		//		The focus event.
-		// tags:
-		//		private
-		this._setCurrent(evt.currentTarget);
-	},
-
 	_setCurrent: function(/*DOMNode*/ node){
 		// summary:
 		//		Called when a entity is hovered or focused.
@@ -188,12 +163,10 @@ dojo.declare("dojox.editor.plugins.EntityPalette",
 		//		the new entity.
 		// tags:
 		//		protected
-		if(this._currentFocus) { dojo.removeClass(this._currentFocus, "dojoxEntityPaletteCellHighlight"); }
 		this.inherited(arguments);
 		if(this.showPreview){
 			this._displayDetails(node);
 		}
-		if(this._currentFocus) { dojo.addClass(this._currentFocus, "dojoxEntityPaletteCellHighlight"); }
 	},
 
 	_displayDetails: function(/*DOMNode*/ cell){
