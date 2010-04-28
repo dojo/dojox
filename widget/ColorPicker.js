@@ -80,7 +80,22 @@ dojo.require("dojo.i18n");
 		// PICKER_SAT_VAL_W: int
 		//     Width of the 2d picker, used to calculate positions    
 		PICKER_SAT_VAL_W: 150,
+
+		// PICKER_HUE_SELECTOR_H: int
+		//		Height of the hue selector DOM node, used to calc offsets so that selection
+		//		is center of the image node.
+		PICKER_HUE_SELECTOR_H: 8,
 		
+		// PICKER_SAT_SELECTOR_H: int
+		//		Height of the saturation selector DOM node, used to calc offsets so that selection
+		//		is center of the image node.
+		PICKER_SAT_SELECTOR_H: 10,
+
+		// PICKER_SAT_SELECTOR_W: int
+		//		Width of the saturation selector DOM node, used to calc offsets so that selection
+		//		is center of the image node.
+		PICKER_SAT_SELECTOR_W: 10,
+
 		// value: String
 		//	Default color for this component. Only hex values are accepted as incoming/returned
 		//	values. Adjust this value with `.attr`, eg: dijit.byId("myPicker").attr("value", "#ededed");
@@ -136,8 +151,8 @@ dojo.require("dojo.i18n");
 			this.set("value", this.value);
 			this._mover = new d.dnd.move.boxConstrainedMoveable(this.cursorNode, {
 				box: {
-					t:0,
-					l:0,
+					t: -(this.PICKER_SAT_SELECTOR_H/2),
+					l: -(this.PICKER_SAT_SELECTOR_W/2),
 					w:this.PICKER_SAT_VAL_W,
 					h:this.PICKER_SAT_VAL_H
 				}
@@ -145,7 +160,7 @@ dojo.require("dojo.i18n");
 			
 			this._hueMover = new d.dnd.move.boxConstrainedMoveable(this.hueCursorNode, {
 				box: {
-					t:0,
+					t: -(this.PICKER_HUE_SELECTOR_H/2),
 					l:0,
 					w:0,
 					h:this.PICKER_HUE_H
@@ -253,6 +268,10 @@ dojo.require("dojo.i18n");
 			//		The event.
 			if(count !== -1){
 				var y = dojo.style(this.hueCursorNode, "top");
+				var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
+
+				// Account for our offset
+				y += selCenter;
 				var update = false;
 				if(e.charOrCode == dojo.keys.UP_ARROW){
 					if(y > 0){
@@ -265,6 +284,7 @@ dojo.require("dojo.i18n");
 						update = true;
 					}
 				}
+				y -= selCenter;
 				if(update){
 					dojo.style(this.hueCursorNode, "top", y + "px");	
 				}
@@ -283,9 +303,17 @@ dojo.require("dojo.i18n");
 			//		The node generating the event.
 			// e:
 			//		The event.
+			var selCenterH = this.PICKER_SAT_SELECTOR_H/2;
+			var selCenterW = this.PICKER_SAT_SELECTOR_W/2;
+
 			if(count !== -1){
 				var y = dojo.style(this.cursorNode, "top");
 				var x = dojo.style(this.cursorNode, "left");
+				
+				// Account for our offsets to center
+				y += selCenterH;
+				x += selCenterW;
+
 				var update = false;
 				if(e.charOrCode == dojo.keys.UP_ARROW){
 					if(y > 0){
@@ -309,6 +337,9 @@ dojo.require("dojo.i18n");
 					}
 				}
 				if(update){
+					// Account for our offsets to center
+					y -= selCenterH;
+					x -= selCenterW;
 					dojo.style(this.cursorNode, "top", y + "px");	
 					dojo.style(this.cursorNode, "left", x + "px");	
 				}
@@ -320,10 +351,13 @@ dojo.require("dojo.i18n");
 		_updateColor: function(){
 			// summary: update the previewNode color, and input values [optional]
 			
-			var _huetop = d.style(this.hueCursorNode,"top"), 
-				_pickertop = d.style(this.cursorNode,"top"),
-				_pickerleft = d.style(this.cursorNode,"left"),
-			
+			var hueSelCenter = this.PICKER_HUE_SELECTOR_H/2,
+				satSelCenterH = this.PICKER_SAT_SELECTOR_H/2,
+				satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
+
+			var _huetop = d.style(this.hueCursorNode,"top") + hueSelCenter, 
+				_pickertop = d.style(this.cursorNode,"top") + satSelCenterH,
+				_pickerleft = d.style(this.cursorNode,"left") + satSelCenterW,
 				h = Math.round(360 - (_huetop / this.PICKER_HUE_H * 360)),
 				col = dojox.color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
 			;
@@ -386,11 +420,15 @@ dojo.require("dojo.i18n");
 		
 		_updatePickerLocations: function(/* dojox.color.Color */col){
 			//summary: update handles on the pickers acording to color values
-			//  
-			var hsv = col.toHsv(),
-				ypos = Math.round(this.PICKER_HUE_H - hsv.h / 360 * this.PICKER_HUE_H),
-				newLeft = Math.round(hsv.s / 100 * this.PICKER_SAT_VAL_W),
-				newTop = Math.round(this.PICKER_SAT_VAL_H - hsv.v / 100 * this.PICKER_SAT_VAL_H)
+			//
+			var hueSelCenter = this.PICKER_HUE_SELECTOR_H/2,
+				satSelCenterH = this.PICKER_SAT_SELECTOR_H/2,
+				satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
+
+            var hsv = col.toHsv(),
+				ypos = Math.round(this.PICKER_HUE_H - hsv.h / 360 * this.PICKER_HUE_H) - hueSelCenter,
+				newLeft = Math.round(hsv.s / 100 * this.PICKER_SAT_VAL_W) - satSelCenterW,
+				newTop = Math.round(this.PICKER_SAT_VAL_H - hsv.v / 100 * this.PICKER_SAT_VAL_H) - satSelCenterH
 			;
 			
 			if (this.animatePoint) {
@@ -456,7 +494,8 @@ dojo.require("dojo.i18n");
 		
 		_setHuePoint: function(/* Event */evt){ 
 			// summary: set the hue picker handle on relative y coordinates
-			var ypos = evt.layerY;
+			var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
+			var ypos = evt.layerY - selCenter;
 			if(this.animatePoint){
 				d.fx.slideTo({ 
 					node: this.hueCursorNode, 
@@ -474,8 +513,10 @@ dojo.require("dojo.i18n");
 		_setPoint: function(/* Event */evt){
 			// summary: set our picker point based on relative x/y coordinates
 			//  evt.preventDefault();
-			var newTop = evt.layerY;
-			var newLeft = evt.layerX;
+			var satSelCenterH = this.PICKER_SAT_SELECTOR_H/2;
+			var satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
+			var newTop = evt.layerY - satSelCenterH;
+			var newLeft = evt.layerX - satSelCenterW;
 			
 			if(evt){ dijit.focus(evt.target); }
 
