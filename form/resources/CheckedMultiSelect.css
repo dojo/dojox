@@ -98,3 +98,29 @@
 	border-color:#b3b3b3;
 }
 
+/*
+**----------------------------------------------------------------------------
+**  Claro theme (make look similar to text box)
+**----------------------------------------------------------------------------
+*/
+
+.claro .dojoxMultiSelect {
+	margin: 0em 0.1em;
+}
+
+.claro .dojoxMultiSelect {
+	border: 1px solid #b5bcc7;
+	background-color: #f7fcff;
+	line-height: normal;
+}
+
+.claro .dojoxMultiSelectHover {
+	border-color: #769dc0;
+	background-color: #e9f4fe;
+	background-image: url('../../../dijit/themes/claro/form/images/textBox_back.png');
+	background-repeat: repeat-x;
+}
+
+.claro .dojoxMultiSelectFocused {
+	border: 1px solid #769dc0;
+}
