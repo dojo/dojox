@@ -46,7 +46,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 	tableData: null,
 	shiftKeyDown:false,
 	editorDomNode: null,
-	undoEnabled: dojo.isIE, //FIXME:
+	undoEnabled: true, //Using custom undo for all browsers.
 	refCount: 0, 
 	
 	doMixins: function(){
@@ -81,6 +81,9 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 		// But keep track so that it is cleaned up when all usage of it for an editor has
 		// been removed.
 		this.refCount++;
+		
+		// Turn on custom undo for all.
+		editor.customUndo = true;
 
 		if(this.initialized){ return; }
 		
@@ -98,7 +101,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 			// Example would be selecting multiple table cells
 			this._myListeners = [];
 			this._myListeners.push(dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick")); 
-            this._myListeners.push(dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"));
+			this._myListeners.push(dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"));
 			this._myListeners.push(dojo.connect(this.editor, "onBlur", this, "checkAvailable"));
 			this.doMixins();
 			this.connectDraggable();
@@ -438,7 +441,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		commandName:"",
 		label:"",
 		alwaysAvailable:false,
-		undoEnabled:false,
+		undoEnabled:true,
 		
 		constructor: function(){
 			// summary 
@@ -467,8 +470,8 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 				
 				case "tableContextMenu":
 					this.connect(this, "setEditor", function(editor){
-						editor.onLoadDeferred.addCallback(dojo.hitch(this, function() {
-							this._createContextMenu();
+                        editor.onLoadDeferred.addCallback(dojo.hitch(this, function() {
+                            this._createContextMenu();
 						}));
 						this.button.domNode.style.display = "none";
 					});
@@ -487,6 +490,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		
 		setEditor: function(editor){
 			this.editor = editor;
+			this.editor.customUndo = true;
 			this.inherited(arguments);
 			this._availableTopic = dojo.subscribe(this.editor.id + "_tablePlugins", this, "onDisplayChanged");
 			this.onEditorLoaded();
@@ -656,11 +660,8 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			this.endEdit();
 		},
 		
-		// UNDO HANDLERS
-		// Only works in IE
 		begEdit: function(){
 			if(this.editor._tablePluginHandler.undoEnabled){
-				console.log("UNDO:", this.editor.customUndo);
 				if(this.editor.customUndo){
 					this.editor.beginEditing();
 				}else{
@@ -730,95 +731,41 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary
 			//	Gets the selected cells from the passed table
 			//	Returns: array of TDs or empty array
-			//
-			
 			var cells = [];
 			var tbl = this.getTableInfo().tbl;
 			var tds = this.editor._tablePluginHandler._prepareTable(tbl);
 			var e = this.editor;
-			var r;
-			
-			if(!dojo.isIE){
-				r = dijit.range.getSelection(e.window);
 
-				var foundFirst=false;
-				var foundLast=false;
-				
-				if(r.anchorNode && r.anchorNode.tagName && r.anchorNode.tagName.toLowerCase()=="tr"){
-					// Firefox
-					// 	Geez - and I thought IE was hard....
-					// 	In the Editor, FF refuses to grab a multiple cell selection at the TD level
-					//	in spite of multiple selection techniques
-					// 	Resorting to going ahead with its TR selection and selecting
-					// 	the entire row
-					//	Has no problem with individual cell selection though
-					//
-					var trs = dojo.query("tr", tbl);
-					var rows = [];
-					trs.forEach(function(tr, i){
-						
-						if(!foundFirst && (tr == r.anchorNode || tr == r.focusNode)){
-							rows.push(tr);
-							foundFirst = true;
-							if(r.anchorNode == r.focusNode){
-								foundLast = true;
-							}
-						}else if(foundFirst && !foundLast){
-							rows.push(tr);
-							if(tr == r.anchorNode || tr == r.focusNode){
-								foundLast = true;
-							}
-						}
-					});
-					dojo.forEach(rows, function(tr){
-						cells = cells.concat(dojo.query("td", tr));					
-					}, this);
-				}else{
-					// Safari
-					//	Yay! It works like expected
-					//	Getting the cells from anchorNode to focusNode
-					//
-					tds.forEach(function(td, i){
-						if(!foundFirst && (td.id == r.anchorNode.parentNode.id || td.id == r.focusNode.parentNode.id)){
-							cells.push(td);
-							foundFirst = true;
-							if(r.anchorNode.parentNode.id == r.focusNode.parentNode.id){
-								foundLast = true;
-							}
-						}else if(foundFirst && !foundLast){
-							cells.push(td);
-							if(td.id == r.focusNode.parentNode.id || td.id == r.anchorNode.parentNode.id){
-								foundLast = true;
-							}
-						}
-					});
-					console.log("SAF CELLS:", cells);
+			// Lets do this the way IE originally was (Looking up ids).  Walking the selection
+			// is inconsistent in the browsers (and painful), so going by ids is simpler..
+			var text = dojo.withGlobal(e.window, "getSelectedHtml",dijit._editor.selection, [null]);
+			var str = text.match(/id="*\w*"*/g);
+			dojo.forEach(str, function(a){
+				var id = a.substring(3, a.length);
+				if(id.charAt(0) == "\"" && id.charAt(id.length - 1) == "\""){
+					id = id.substring(1, id.length - 1);
 				}
-				
-			}
-			
-			if(dojo.isIE){
-				// IE
-				// 	Although the code is tight - there's some funkiness here
-				//	Can only get the htmlText, so we add IDs to the cells (above)
-				//	And pull them from the htmlText, then search for those cells
-				//
-				r = this.editor.document.selection.createRange();
-				var str = r.htmlText.match(/id=\w*/g);
-				dojo.forEach(str, function(a){
-					var id = a.substring(3, a.length);
-					cells.push(e.byId(id));
-				}, this);
+				var node = e.byId(id);
+				if(node && node.tagName.toLowerCase() == "td"){
+					cells.push(node);
+				}
+			}, this);
 
-				if(cells.length == 0){
-					// Probably collapsed range, or text in a cell selected only, so lets see if we can find a parent cell.
-					// This case occurs with a cursor point in a cell, ot just text selected within a cell, but not the cell 
-					// boundry itself.
-					var parent = r.parentElement();
-					if(parent){
-						var td = dijit.range.getAncestor(parent, /td/i);
-						if(td){
-							cells.push(td);
+			if(!cells.length){
+				//May just be in a cell (cursor point, so look upwards.
+				var sel = dijit.range.getSelection(e.window);
+				if(sel.rangeCount === 1){
+					var r = sel.getRangeAt(0);
+					if(r.collapsed){
+						var node = r.startContainer;
+						while(node && node != e.editNode && node != e.document){
+							if(node.nodeType === 1){
+								var tg = node.tagName ? node.tagName.toLowerCase() : "";
+								if(tg === "td"){
+									return [node];
+								}
+							}
+							node = node.parentNode;
 						}
 					}
 				}
