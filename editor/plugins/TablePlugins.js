@@ -737,7 +737,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			var e = this.editor;
 
 			// Lets do this the way IE originally was (Looking up ids).  Walking the selection
-			// is inconsistent in the browsers (and painful), so going by ids is simpler..
+			// is inconsistent in the browsers (and painful), so going by ids is simpler.
 			var text = dojo.withGlobal(e.window, "getSelectedHtml",dijit._editor.selection, [null]);
 			var str = text.match(/id="*\w*"*/g);
 			dojo.forEach(str, function(a){
@@ -752,7 +752,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			}, this);
 
 			if(!cells.length){
-				//May just be in a cell (cursor point, so look upwards.
+				//May just be in a cell (cursor point), so look upwards.
 				var sel = dijit.range.getSelection(e.window);
 				if(sel.rangeCount === 1){
 					var r = sel.getRangeAt(0);
