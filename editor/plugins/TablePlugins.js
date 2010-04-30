@@ -752,21 +752,20 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			}, this);
 
 			if(!cells.length){
-				//May just be in a cell (cursor point), so look upwards.
+				//May just be in a cell (cursor point, or selection in a cell), so look upwards.
+				//for a cell container.
 				var sel = dijit.range.getSelection(e.window);
-				if(sel.rangeCount === 1){
+				if(sel.rangeCount){
 					var r = sel.getRangeAt(0);
-					if(r.collapsed){
-						var node = r.startContainer;
-						while(node && node != e.editNode && node != e.document){
-							if(node.nodeType === 1){
-								var tg = node.tagName ? node.tagName.toLowerCase() : "";
-								if(tg === "td"){
-									return [node];
-								}
+					var node = r.startContainer;
+					while(node && node != e.editNode && node != e.document){
+						if(node.nodeType === 1){
+							var tg = node.tagName ? node.tagName.toLowerCase() : "";
+							if(tg === "td"){
+								return [node];
 							}
-							node = node.parentNode;
 						}
+						node = node.parentNode;
 					}
 				}
 			}
