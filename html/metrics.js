@@ -59,10 +59,22 @@ dojo.provide("dojox.html.metrics");
 		var m;
 		if(!measuringNode){
 			m = measuringNode = dojo.doc.createElement("div");
-			m.style.position = "absolute";
-			m.style.left = "0px";
-			m.style.top = "-10000px";
-			dojo.body().appendChild(m);
+			// Container that we can set contraints on so that it doesn't
+			// trigger a scrollbar.
+			var c = dojo.doc.createElement("div"); 
+			c.appendChild(m);
+			c.style.overflow='scroll';
+			c.style.position = "absolute";
+			c.style.left = "0px";
+			c.style.top = "-10000px";
+			c.style.width = "1px";
+			c.style.height = "1px";
+			c.style.visibility = "hidden";
+			c.style.border = "0";
+			c.style.margin = "0";
+			c.style.padding = "0";
+			c.style.outline = "0";
+			dojo.body().appendChild(c);
 		}else{
 			m = measuringNode;
 		}
@@ -85,7 +97,12 @@ dojo.provide("dojox.html.metrics");
 		}
 		// take a measure
 		m.innerHTML = text;
-		return dojo.marginBox(m);
+		var box = dojo.position(m);
+		// position doesn't report right (reports 1, since parent is 1)
+		// So we have to look at the scrollWidth to get the real width
+		// Height is right.
+		box.w = m.parentNode.scrollWidth;
+		return box;
 	};
 
 	//	determine the scrollbar sizes on load.
