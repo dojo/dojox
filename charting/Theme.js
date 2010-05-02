@@ -3,6 +3,7 @@ dojo.provide("dojox.charting.Theme");
 dojo.require("dojox.color");
 dojo.require("dojox.color.Palette");
 dojo.require("dojox.lang.utils");
+dojo.require("dojox.gfx.gradutils");
 
 dojo.declare("dojox.charting.Theme", null, {
 	//	summary:
@@ -47,11 +48,11 @@ dojo.declare("dojox.charting.Theme", null, {
 	//		example:
 	//			The default theme (and structure) looks like so:
 	//	|	// all objects are structs used directly in dojox.gfx
-	//	|	chart:{ 
+	//	|	chart:{
 	//	|		stroke: null,
 	//	|		fill: "white"
 	//	|	},
-	//	|	plotarea:{ 
+	//	|	plotarea:{
 	//	|		stroke: null,
 	//	|		fill: "white"
 	//	|	},
@@ -67,15 +68,15 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|			fontColor: "#333"								// color of labels
 	//	|		},
 	//	|		majorTick:	{ // major ticks on axis, and used for major gridlines
-	//	|			width:  1, 
+	//	|			width:  1,
 	//	|			length: 6
 	//	|		},
 	//	|		minorTick:	{ // minor ticks on axis, and used for minor gridlines
-	//	|			width:  0.8, 
+	//	|			width:  0.8,
 	//	|			length: 3
-	//	|		},	
+	//	|		},
 	//	|		microTick:	{ // minor ticks on axis, and used for minor gridlines
-	//	|			width:  0.5, 
+	//	|			width:  0.5,
 	//	|			length: 1
 	//	|		}
 	//	|	},
@@ -89,6 +90,7 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|		fontColor: "#000"							// color of labels
 	//	|	},
 	//	|	marker: {	// any markers on a series
+	//	|		symbol:  "m-3,3 l3,-6 3,6 z",				// symbol
 	//	|		stroke:  {width: 1.5, color: "#333"},		// stroke
 	//	|		outline: {width: 0.1, color: "#ccc"},		// outline
 	//	|		shadow: null,								// no shadow
@@ -106,23 +108,23 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|	myChart.setTheme(dojox.charting.themes.Grasslands);
 
 	shapeSpaces: {shape: 1, shapeX: 1, shapeY: 1},
-	
+
 	constructor: function(kwArgs){
 		//	summary:
 		//		Initialize a theme using the keyword arguments.  Note that the arguments
 		//		look like the example (above), and may include a few more parameters.
 		kwArgs = kwArgs || {};
-		
+
 		// populate theme with defaults updating them if needed
 		var def = dojox.charting.Theme.defaultTheme;
 		dojo.forEach(["chart", "plotarea", "axis", "series", "marker"], function(name){
 			this[name] = dojo.delegate(def[name], kwArgs[name]);
 		}, this);
-		
+
 		// personalize theme
 		if(kwArgs.seriesThemes && kwArgs.seriesThemes.length){
-			this.seriesThemes = kwArgs.seriesThemes.slice(0);
 			this.colors  = null;
+			this.seriesThemes = kwArgs.seriesThemes.slice(0);
 		}else{
 			this.seriesThemes = null;
 			this.colors = (kwArgs.colors || dojox.charting.Theme.defaultColors).slice(0);
@@ -136,18 +138,21 @@ dojo.declare("dojox.charting.Theme", null, {
 		// set flags
 		this.noGradConv = kwArgs.noGradConv;
 		this.noRadialConv = kwArgs.noRadialConv;
+		if(kwArgs.reverseFills){
+			this.reverseFills();
+		}
 
 		//	private housekeeping
 		this._current = 0;
 		this._buildMarkerArray();
 	},
-	
+
 	clone: function(){
 		//	summary:
 		//		Clone the current theme.
 		//	returns: dojox.charting.Theme
 		//		The cloned theme; any alterations made will not affect the original.
-		return new dojox.charting.Theme({	//	dojox.charting.Theme
+		var theme = new dojox.charting.Theme({
 			// theme components
 			chart: this.chart,
 			plotarea: this.plotarea,
@@ -163,14 +168,25 @@ dojo.declare("dojox.charting.Theme", null, {
 			noGradConv: this.noGradConv,
 			noRadialConv: this.noRadialConv
 		});
+		// copy custom methods
+		dojo.forEach(
+			["clone", "clear", "next", "skip", "addMixin", "post", "getTick"],
+			function(name){
+				if(this.hasOwnProperty(name)){
+					theme[name] = this[name];
+				}
+			},
+			this
+		);
+		return theme;	//	dojox.charting.Theme
 	},
-	
+
 	clear: function(){
 		//	summary:
 		//		Clear and reset the internal pointer to start fresh.
 		this._current = 0;
 	},
-	
+
 	next: function(elementType, mixin, doPost){
 		//	summary:
 		//		Get the next color or series theme.
@@ -227,30 +243,30 @@ dojo.declare("dojox.charting.Theme", null, {
 				merge(this.marker, this.markerThemes[this._current % this.markerThemes.length]) :
 				series;
 		}
-		var symbol = this._markers[this._current++ % this._markers.length]; // note the increment
-		
+
+		var symbol = marker && marker.symbol || this._markers[this._current % this._markers.length];
+
 		var theme = {series: series, marker: marker, symbol: symbol};
+		
+		// advance the counter
+		++this._current;
+
 		if(mixin){
-			if(dojo.isArray(mixin)){
-				for(var i = 0; i < mixin.length; ++i){
-					theme = this.addMixin(theme, elementType, mixin[i]);
-				}
-			}else{
-				theme = this.addMixin(theme, elementType, mixin);
-			}
+			theme = this.addMixin(theme, elementType, mixin);
 		}
 		if(doPost){
 			theme = this.post(theme, elementType);
 		}
+
 		return theme;	//	Object
 	},
-	
+
 	skip: function(){
 		//	summary:
 		//		Skip the next internal color.
 		++this._current;
 	},
-	
+
 	addMixin: function(theme, elementType, mixin, doPost){
 		//	summary:
 		//		Add a mixin object to the passed theme and process.
@@ -258,44 +274,50 @@ dojo.declare("dojox.charting.Theme", null, {
 		//		The theme to mixin to.
 		//	elementType: String
 		//		The type of element in question. Can be "line", "bar" or "circle"
-		//	mixin: Object
-		//		The object to mix into the theme.
+		//	mixin: Object|Array
+		//		The object or objects to mix into the theme.
 		//	doPost: Boolean
 		//		If true, run the new theme through the post-processor.
 		//	returns: dojox.charting.Theme
 		//		The new theme.
-		var t = {};
-		if("color" in mixin){
-			if(elementType == "line"){
-				dojo.setObject("series.stroke.color", mixin.color, t);
-				dojo.setObject("marker.stroke.color", mixin.color, t);
-			}else{
-				dojo.setObject("series.fill", mixin.color, t);
-			}
-		}
-		dojo.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor"], function(name){
-			var markerName = "marker" + name.charAt(0).toUpperCase() + name.substr(1),
-				b = markerName in mixin;
-			if(name in mixin){
-				dojo.setObject("series." + name, mixin[name], t);
-				if(!b){
-					dojo.setObject("marker." + name, mixin[name], t);
+		if(dojo.isArray(mixin)){
+			dojo.forEach(mixin, function(m){
+				theme = this.addMixin(theme, elementType, m);
+			}, this);
+		}else{
+			var t = {};
+			if("color" in mixin){
+				if(elementType == "line" || elementType == "area"){
+					dojo.setObject("series.stroke.color", mixin.color, t);
+					dojo.setObject("marker.stroke.color", mixin.color, t);
+				}else{
+					dojo.setObject("series.fill", mixin.color, t);
 				}
 			}
-			if(b){
-				dojo.setObject("marker." + name, mixin[markerName], t);
+			dojo.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor"], function(name){
+				var markerName = "marker" + name.charAt(0).toUpperCase() + name.substr(1),
+					b = markerName in mixin;
+				if(name in mixin){
+					dojo.setObject("series." + name, mixin[name], t);
+					if(!b){
+						dojo.setObject("marker." + name, mixin[name], t);
+					}
+				}
+				if(b){
+					dojo.setObject("marker." + name, mixin[markerName], t);
+				}
+			});
+			if("marker" in mixin){
+				t.symbol = mixin.marker;
 			}
-		});
-		if("marker" in mixin){
-			t.symbol = mixin.marker;
+			theme = dojox.lang.utils.merge(theme, t);
 		}
-		var newTheme = dojox.lang.utils.merge(theme, t);
 		if(doPost){
-			newTheme = this.post(newTheme, elementType);
+			theme = this.post(theme, elementType);
 		}
-		return newTheme;	//	dojox.charting.Theme
+		return theme;	//	dojox.charting.Theme
 	},
-	
+
 	post: function(theme, elementType){
 		//	summary:
 		//		Process any post-shape fills.
@@ -330,7 +352,7 @@ dojo.declare("dojox.charting.Theme", null, {
 		}
 		return theme;	//	dojox.charting.Theme
 	},
-	
+
 	getTick: function(name, mixin){
 		//	summary:
 		//		Calculates and merges tick parameters.
@@ -359,6 +381,26 @@ dojo.declare("dojox.charting.Theme", null, {
 		return tick;	//	Object
 	},
 
+	inspectObjects: function(f){
+		dojo.forEach(["chart", "plotarea", "axis", "series", "marker"], function(name){
+			f(this[name]);
+		}, this);
+		if(this.seriesThemes){
+			dojo.forEach(this.seriesThemes, f);
+		}
+		if(this.markerThemes){
+			dojo.forEach(this.markerThemes, f);
+		}
+	},
+
+	reverseFills: function(){
+		this.inspectObjects(function(o){
+			if(o && o.fill){
+				o.fill = dojox.gfx.gradutils.reverse(o.fill);
+			}
+		});
+	},
+
 	addMarker:function(/*String*/ name, /*String*/ segment){
 		//	summary:
 		//		Add a custom marker to this theme.
@@ -367,7 +409,7 @@ dojo.declare("dojox.charting.Theme", null, {
 		this.markers[name] = segment;
 		this._buildMarkerArray();
 	},
-	
+
 	setMarkers:function(/*Object*/ obj){
 		//	summary:
 		//		Set all the markers of this theme at once.  obj should be a
@@ -406,7 +448,7 @@ dojox.charting.Theme.__DefineColorArgs = function(num, colors, hue, saturation, 
 	//	base: String|dojo.Color?
 	//		A base color to use if we are defining colors using dojox.color.Palette
 	//	generator: String?
-	//		The generator function name from dojox.color.Palette. 
+	//		The generator function name from dojox.color.Palette.
 	this.num = num;
 	this.colors = colors;
 	this.hue = hue;
@@ -419,12 +461,12 @@ dojox.charting.Theme.__DefineColorArgs = function(num, colors, hue, saturation, 
 =====*/
 dojo.mixin(dojox.charting.Theme, {
 	defaultMarkers: {
-		CIRCLE:   "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0", 
-		SQUARE:   "m-3,-3 l0,6 6,0 0,-6 z", 
-		DIAMOND:  "m0,-3 l3,3 -3,3 -3,-3 z", 
-		CROSS:    "m0,-3 l0,6 m-3,-3 l6,0", 
-		X:        "m-3,-3 l6,6 m0,-6 l-6,6", 
-		TRIANGLE: "m-3,3 l3,-6 3,6 z", 
+		CIRCLE:   "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",
+		SQUARE:   "m-3,-3 l0,6 6,0 0,-6 z",
+		DIAMOND:  "m0,-3 l3,3 -3,3 -3,-3 z",
+		CROSS:    "m0,-3 l0,6 m-3,-3 l6,0",
+		X:        "m-3,-3 l6,6 m0,-6 l-6,6",
+		TRIANGLE: "m-3,3 l3,-6 3,6 z",
 		TRIANGLE_INVERTED: "m-3,-3 l3,6 3,-6 z"
 	},
 
@@ -435,11 +477,11 @@ dojo.mixin(dojox.charting.Theme, {
 
 	defaultTheme: {
 		// all objects are structs used directly in dojox.gfx
-		chart:{ 
+		chart:{
 			stroke: null,
 			fill: "white"
 		},
-		plotarea:{ 
+		plotarea:{
 			stroke: null,
 			fill: "white"
 		},
@@ -456,15 +498,15 @@ dojo.mixin(dojox.charting.Theme, {
 				fontColor: "#333"								// color of labels
 			},
 			majorTick:	{ // major ticks on axis, and used for major gridlines
-				width:  1, 
+				width:  1,
 				length: 6
 			},
 			minorTick:	{ // minor ticks on axis, and used for minor gridlines
-				width:  0.8, 
+				width:  0.8,
 				length: 3
-			},	
+			},
 			microTick:	{ // minor ticks on axis, and used for minor gridlines
-				width:  0.5, 
+				width:  0.5,
 				length: 1
 			}
 		},
@@ -488,6 +530,7 @@ dojo.mixin(dojox.charting.Theme, {
 			fontColor: "#000"
 		}
 	},
+
 	defineColors: function(kwArgs){
 		//	summary:
 		//		Generate a set of colors for the theme based on keyword
@@ -537,5 +580,31 @@ dojo.mixin(dojox.charting.Theme, {
 			return dojox.color.Palette.generate(kwArgs.base, kwArgs.generator).colors;
 		}
 		return c;	//	dojo.Color[]
+	},
+	
+	generateGradient: function(fillPattern, colorFrom, colorTo){
+		var fill = dojo.delegate(fillPattern);
+		fill.colors = [
+			{offset: 0, color: colorFrom},
+			{offset: 1, color: colorTo}
+		];
+		return fill;
+	},
+	
+	generateHslColor: function(color, luminance){
+		color = new dojox.color.Color(color);
+		var hsl    = color.toHsl(),
+			result = dojox.color.fromHsl(hsl.h, hsl.s, luminance);
+		result.a = color.a;	// add missing opacity
+		return result;
+	},
+
+	generateHslGradient: function(color, fillPattern, lumFrom, lumTo){
+		color = new dojox.color.Color(color);
+		var hsl       = color.toHsl(),
+			colorFrom = dojox.color.fromHsl(hsl.h, hsl.s, lumFrom),
+			colorTo   = dojox.color.fromHsl(hsl.h, hsl.s, lumTo);
+		colorFrom.a = colorTo.a = color.a;	// add missing opacity
+		return dojox.charting.Theme.generateGradient(fillPattern, colorFrom, colorTo);	// Object
 	}
 });
