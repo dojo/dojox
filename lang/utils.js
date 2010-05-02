@@ -79,7 +79,7 @@ dojo.provide("dojox.lang.utils");
 						}
 						return mixin.slice(0);
 					case "[object Object]":
-						if(mtype == otype){
+						if(mtype == otype && object){
 							t = dojo.delegate(object);
 							for(i in mixin){
 								if(i in object){
