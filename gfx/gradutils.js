@@ -55,9 +55,37 @@ dojo.require("dojox.gfx.matrix");
 						o = Math.sqrt(dx * dx + dy * dy) / fill.r;
 					break;
 			}
-			return findColor(o, fill.colors);
+			return findColor(o, fill.colors);	// dojo.Color
 		}
 		// simple color
-		return new C(fill || [0, 0, 0, 0]);
-	}
+		return new C(fill || [0, 0, 0, 0]);	// dojo.Color
+	};
+
+	dojox.gfx.gradutils.reverse = function(fill){
+		// summary:
+		//		reverses a gradient
+		// fill: Object:
+		//		fill object
+		if(fill){
+			switch(fill.type){
+				case "linear":
+				case "radial":
+					fill = dojo.delegate(fill);
+					if(fill.colors){
+						var c = fill.colors, l = c.length, i = 0, stop,
+							n = fill.colors = new Array(c.length);
+						for(; i < l; ++i){
+							stop = c[i];
+							n[i] = {
+								offset: 1 - stop.offset,
+								color:  stop.color
+							};
+						}
+						n.sort(function(a, b){ return a.offset - b.offset; });
+					}
+					break;
+			}
+		}
+		return fill;	// Object
+	};
 })();
