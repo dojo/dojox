@@ -662,16 +662,16 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 				stroke = t.plotarea && t.plotarea.stroke;
 			if(fill){
 				this.surface.createRect({
-					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r,
-					height: dim.height - offsets.t - offsets.b
+					x: offsets.l - 1, y: offsets.t - 1,
+					width:  dim.width  - offsets.l - offsets.r + 2,
+					height: dim.height - offsets.t - offsets.b + 2
 				}).setFill(fill);
 			}
 			if(stroke){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r - 1,
-					height: dim.height - offsets.t - offsets.b - 1
+					width:  dim.width  - offsets.l - offsets.r + 1,
+					height: dim.height - offsets.t - offsets.b + 1
 				}).setStroke(stroke);
 			}
 
@@ -703,7 +703,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 					this.surface.createRect({
 						x: dim.width - offsets.r,
 						width:  offsets.r + 1,
-						height: dim.height + 1
+						height: dim.height + 2
 					}).setFill(fill);
 				}
 				if(offsets.t){	// top
