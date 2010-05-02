@@ -1,5 +1,6 @@
 dojo.provide("dojox.charting.themes.Julie");
 
+dojo.require("dojox.gfx.gradutils");
 dojo.require("dojox.charting.Theme");
 
 // created by Julie Santilli
@@ -57,5 +58,13 @@ dojo.require("dojox.charting.Theme");
 			return theme;
 		}
 		return Theme.prototype.next.apply(this, arguments);
+	};
+
+	themes.Julie.post = function(theme, elementType){
+		theme = Theme.prototype.post.apply(this, arguments);
+		if(elementType == "slice" && theme.series.fill && theme.series.fill.type == "radial"){
+			theme.series.fill = dojox.gfx.gradutils.reverse(theme.series.fill);
+		}
+		return theme;
 	};
 })();

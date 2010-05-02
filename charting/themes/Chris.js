@@ -1,5 +1,6 @@
 dojo.provide("dojox.charting.themes.Chris");
 
+dojo.require("dojox.gfx.gradutils");
 dojo.require("dojox.charting.Theme");
 
 // created by Christopher Anderson
@@ -16,19 +17,15 @@ dojo.require("dojox.charting.Theme");
 		plotarea: {
 			fill: "#c1c1c1"
 		},
-		axis: {
-			tick: {
-				font:      "normal normal bold 9pt Arial",
-				fontColor: "#666"
-			}
-		},
 		series: {
 			stroke:  {width: 2, color: "white"},
-			outline: null
+			outline: null,
+			fontColor: "#333"
 		},
 		marker: {
 			stroke:  {width: 1, color: "white"},
-			outline: {width: 2, color: "white"}
+			outline: {width: 2, color: "white"},
+			fontColor: "#333"
 		},
 		seriesThemes: [
 			{fill: g(defaultFill, "#01b717", "#238c01")},	// green
@@ -68,5 +65,13 @@ dojo.require("dojox.charting.Theme");
 			return theme;
 		}
 		return Theme.prototype.next.apply(this, arguments);
+	};
+	
+	themes.Chris.post = function(theme, elementType){
+		theme = Theme.prototype.post.apply(this, arguments);
+		if(elementType == "slice" && theme.series.fill && theme.series.fill.type == "radial"){
+			theme.series.fill = dojox.gfx.gradutils.reverse(theme.series.fill);
+		}
+		return theme;
 	};
 })();
