@@ -179,24 +179,6 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			}
 			var t = this.chart.theme, stroke, outline, marker, events = this.events();
             
-            // create a closure to let us call on demand, but only once
-            // in each iteration, for successive colors from the theme
-            var color = function(){
-            	var nextcolor;
-        	    return {
-        		    clear: function(){
-        	    		nextcolor = null;
-        	      	},
-        	      	getColor: function()
-        	      	{
-        	      		if(!nextcolor){
-        	      			nextcolor = new dojo.Color(t.next("color"));
-        	      		}
-        	      		return nextcolor;
-        	      	}
-        	    };
-        	}();
-
 			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
@@ -211,12 +193,10 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 					continue;
 				}
 
-				var theme = t.next("line", [this.opt, run], true), s = run.group,
-					rsegments = [], startindexes = [], rseg = null, lpoly, 
+				var theme = t.next(this.opt.areas ? "area" : "line", [this.opt, run], true),
+					s = run.group, rsegments = [], startindexes = [], rseg = null, lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
-				
-				color.clear();
 				
                 // split the run data into dense segments (each containing no nulls)
                 for(var j = 0; j < run.data.length; j++){
@@ -290,7 +270,8 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 								run.dyn.shadow = s.createPolyline(spoly).setStroke(shadow).getStroke();
 							}
 						}
-						if(this.opt.markers){
+						if(this.opt.markers && theme.marker.shadow){
+							shadow = theme.marker.shadow;
 							shadowMarkers = dojo.map(spoly, function(c){
 								return s.createPath("M" + c.x + " " + c.y + " " + theme.symbol).
 									setStroke(shadow).setFill(shadow.color);
@@ -314,10 +295,15 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 					if(this.opt.markers){
 						frontMarkers = new Array(lpoly.length);
 						outlineMarkers = new Array(lpoly.length);
+						outline = null;
+						if(theme.marker.outline){
+							outline = dc.makeStroke(theme.marker.outline);
+							outline.width = 2 * outline.width + (theme.marker.stroke ? theme.marker.stroke.width : 0);
+						}
 						dojo.forEach(lpoly, function(c, i){
 							var path = "M" + c.x + " " + c.y + " " + theme.symbol;
 							if(outline){
-								outlineMarkers[i] = s.createPath(path).setStroke(theme.marker.outline);
+								outlineMarkers[i] = s.createPath(path).setStroke(outline);
 							}
 							frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
 						}, this);

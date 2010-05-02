@@ -77,7 +77,8 @@ dojo.require("dojox.lang.functional.reversed");
 					continue;
 				}
 				run.cleanGroup();
-				var theme = t.next("line", [this.opt, run], true), s = run.group, outline,
+				var theme = t.next(this.opt.areas ? "area" : "line", [this.opt, run], true),
+					s = run.group, outline,
 					lpoly = dojo.map(acc, function(v, i){
 						return {
 							x: ht(i + 1) + offsets.l,
@@ -125,6 +126,7 @@ dojo.require("dojox.lang.functional.reversed");
 						}
 					}
 					if(this.opt.markers){
+						shadow = theme.marker.shadow;
 						shadowMarkers = dojo.map(spoly, function(c){
 							return s.createPath("M" + c.x + " " + c.y + " " + theme.symbol).
 								setStroke(shadow).setFill(shadow.color);
@@ -148,12 +150,17 @@ dojo.require("dojox.lang.functional.reversed");
 				if(this.opt.markers){
 					frontMarkers = new Array(lpoly.length);
 					outlineMarkers = new Array(lpoly.length);
+					outline = null;
+					if(theme.marker.outline){
+						outline = dc.makeStroke(theme.marker.outline);
+						outline.width = 2 * outline.width + (theme.marker.stroke ? theme.marker.stroke.width : 0);
+					}
 					dojo.forEach(lpoly, function(c, i){
 						var path = "M" + c.x + " " + c.y + " " + theme.symbol;
 						if(outline){
-							outlineMarkers[i] = s.createPath(path).setStroke(theme.marker.outline);
+							outlineMarkers[i] = s.createPath(path).setStroke(outline);
 						}
-						frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.stroke.color);
+						frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
 					}, this);
 					if(events){
 						dojo.forEach(frontMarkers, function(s, i){
