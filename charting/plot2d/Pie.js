@@ -256,9 +256,9 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 			}
 			var themes = df.map(run, function(v, i){
 				if(v === null || typeof v == "number"){
-					return t.next("slice", [this.opt, run], true);
+					return t.next("slice", [this.opt, this.run], true);
 				}
-				return t.next("slice", [this.opt, run, v], true);
+				return t.next("slice", [this.opt, this.run, v], true);
 			}, this);
 			if(this.opt.labels){
 				shift = df.foldl1(df.map(labels, function(label, i){
