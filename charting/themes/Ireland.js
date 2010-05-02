@@ -5,10 +5,10 @@ dojo.require("dojox.charting.Theme");
 	var dxc=dojox.charting;
 	dxc.themes.Ireland=new dxc.Theme({
 		colors: [
-			"#abdbcb", 
+			"#abdbcb",
 			"#435a51",
 			"#70998b",
-			"#78q596",
+			"#78d596",
 			"#5f8074"
 		]
 	});
