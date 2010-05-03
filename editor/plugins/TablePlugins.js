@@ -352,7 +352,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 		var key = evt.keyCode;
 		//console.log(" -> DOWN:", key);
 		if(key == 16){ this.shiftKeyDown = true;}
-		if(key == 9) {console.log("TAB!:");
+		if(key == 9) {
 			var o = this.getTableInfo();
 			//console.log("TAB ", o.tdIndex, o);
 			// modifying the o.tdIndex in the tableData directly, because we may save it
@@ -837,8 +837,29 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 		
 		//console.log(t);
 		this.onBuildTable({htmlText:t, id:_id});
+		var cl = dojo.connect(this, "onHide", function(){
+			dojo.disconnect(cl);
+			var self = this;
+			setTimeout(function(){
+				self.destroyRecursive();
+			}, 10);
+		});
 		this.hide();
 	},
+
+	onCancel: function(){
+		// summary:
+		//		Function to clean up memory so that the dialog is destroyed 
+		//		when closed.
+		var c = dojo.connect(this, "onHide", function(){
+		  	dojo.disconnect(c);
+			var self = this;
+			setTimeout(function(){
+				self.destroyRecursive();
+			}, 10);
+		});
+	},
+
 	onBuildTable: function(tableText){
 		//stub
 	}
@@ -870,7 +891,6 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
 		this.inherited(arguments);
-		
 		this.connect(this.borderCol, "click", function(){
 			var div = document.createElement("div");
 			var w = new dijit.ColorPalette({}, div);
@@ -893,14 +913,22 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 		this.setBrdColor(dojo.attr(this.table, "bordercolor"));
 		this.setBkColor(dojo.attr(this.table, "bgcolor"));
 		var w = dojo.attr(this.table, "width");
+		if(!w){
+			w = this.table.style.width;
+		}
 		var p = "pixels";
-		if(w.indexOf("%")>-1){
+		if(dojo.isString(w) && w.indexOf("%")>-1){
 			p = "percent";
 			w = w.replace(/%/, "");
 		}
 		
-		this.selectWidth.set("value", w);
-		this.selectWidthType.set("value", p);
+		if(w){
+			this.selectWidth.set("value", w);
+			this.selectWidthType.set("value", p);
+		}else{
+			this.selectWidth.set("value", "");
+			this.selectWidthType.set("value", "percent");
+		}
 		
 		this.selectBorder.set("value", dojo.attr(this.table, "border"));
 		this.selectPad.set("value", dojo.attr(this.table, "cellPadding"));
@@ -920,14 +948,38 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	onSet: function(){
 		dojo.attr(this.table, "borderColor", this.brdColor);
 		dojo.attr(this.table, "bgColor", this.bkColor);
-		dojo.attr(this.table, "width", (this.selectWidth.get("value") + ((this.selectWidthType.get("value")=="pixels")?"":"%") ));
+		if(this.selectWidth.get("value")){
+			// Just in case, remove it from style since we're setting it as a table attribute.
+			dojo.style(this.table, "width", "");
+			dojo.attr(this.table, "width", (this.selectWidth.get("value") + ((this.selectWidthType.get("value")=="pixels")?"":"%") ));
+		}
 		dojo.attr(this.table, "border", this.selectBorder.get("value"));
 		dojo.attr(this.table, "cellPadding", this.selectPad.get("value"));
 		dojo.attr(this.table, "cellSpacing", this.selectSpace.get("value"));
 		dojo.attr(this.table, "align", this.selectAlign.get("value"));
-		
+		var c = dojo.connect(this, "onHide", function(){
+			dojo.disconnect(c);
+			var self = this;
+			setTimeout(function(){
+				self.destroyRecursive();
+			}, 10);
+		});
 		this.hide();
 	},
+
+	onCancel: function(){
+		// summary:
+		//		Function to clean up memory so that the dialog is destroyed 
+		//		when closed.
+		var c = dojo.connect(this, "onHide", function(){
+		  	dojo.disconnect(c);
+			var self = this;
+			setTimeout(function(){
+				self.destroyRecursive();
+			}, 10);
+		});
+	},
+
 	onSetTable: function(tableText){
 		//stub
 	}
