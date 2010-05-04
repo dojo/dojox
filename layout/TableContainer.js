@@ -238,6 +238,13 @@ dojo.declare("dojox.layout.TableContainer",
 		this.resize();
 	},
 	
+	destroyDescendants: function(/*Boolean*/ preserveDom){
+		// summary:
+		//      Destroys all the widgets inside this.containerNode,
+		//      but not this widget itself
+		dojo.forEach(this._children, function(child){ child.destroyRecursive(preserveDom); });
+	},
+	
 	_setSpacingAttr: function(value) {
 		// summary: 
 		//		Sets the spacing attribute.

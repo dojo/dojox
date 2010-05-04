@@ -170,6 +170,7 @@ dojo.declare("dojox.widget.Portlet", [dijit.TitlePane, dijit._Container],{
 				this._createIcon(child.portletIconClass, child.portletIconHoverClass, dojo.hitch(child, "toggle"));
 				dojo.place(child.domNode, this.containerNode, "before");
 				child.attr("portlet", this);
+				this._settingsWidget = child;
 			}
 		}));
 	},
@@ -306,6 +307,13 @@ dojo.declare("dojox.widget.Portlet", [dijit.TitlePane, dijit._Container],{
 		}
 		if(this._started && !child.started && !child._started){
 			child.startup();
+		}
+	},
+	
+	destroyDescendants: function(/*Boolean*/ preserveDom){
+		this.inherited(arguments);
+		if(this._settingsWidget){
+			this._settingsWidget.destroyRecursive(preserveDom);
 		}
 	},
 	
