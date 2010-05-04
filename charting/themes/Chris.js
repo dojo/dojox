@@ -23,7 +23,7 @@ dojo.require("dojox.charting.Theme");
 			fontColor: "#333"
 		},
 		marker: {
-			stroke:  {width: 1, color: "white"},
+			stroke:  {width: 2, color: "white"},
 			outline: {width: 2, color: "white"},
 			fontColor: "#333"
 		},
