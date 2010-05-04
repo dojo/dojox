@@ -6,7 +6,7 @@ dojo.require("dijit._Templated");
 dojo.require("dijit._Contained");
 
 dojo.declare("dojox.layout.ExpandoPane",
-	[dijit.layout.ContentPane, dijit._Templated, dijit._Contained],
+	[dijit.layout.ContentPane, dijit._Templated, dijit._Contained, dijit._Container],
 	{
 	// summary: An experimental collapsing-pane for dijit.layout.BorderContainer
 	//
@@ -15,9 +15,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 	//		command, and supports having Layout Children as direct descendants
 	//	
 
-	maxHeight: "",
-	maxWidth: "",
-	splitter: false,
+	//maxHeight: "",
+	//maxWidth: "",
+	//splitter: false,
 	
 	templateString: dojo.cache("dojox.layout","resources/ExpandoPane.html"),
 
@@ -36,6 +36,16 @@ dojo.declare("dojox.layout.ExpandoPane",
 	// startExpanded: Boolean
 	//		Does this widget start in an open (true) or closed (false) state
 	startExpanded: true, 
+
+	// previewOpacity: Float
+	//		A value from 0 .. 1 indicating the opacity to use on the container
+	//		when only showing a preview
+	previewOpacity: 0.75,
+	
+	// previewOnDblClick: Boolean
+	//		If true, will override the default behavior of a double-click calling a full toggle.
+	//		If false, a double-click will cause the preview to popup
+	previewOnDblClick: false,
 
 	baseClass: "dijitExpandoPane",
 
@@ -78,6 +88,15 @@ dojo.declare("dojox.layout.ExpandoPane",
 			overflow: "hidden",
 			padding:0
 		});
+		
+		this.connect(this.domNode, "ondblclick", this.previewOnDblClick ? "preview" : "toggle");
+		
+		if(this.previewOnDblClick){
+			this.connect(this.getParent(), "_layoutChildren", dojo.hitch(this, function(){
+				this._isonlypreview = false;
+			}));
+		}
+		
 	},
 	
 	_startupSizes: function(){
@@ -166,6 +185,15 @@ dojo.declare("dojox.layout.ExpandoPane",
 		];
 	},
 	
+	preview: function(){
+		// summary: Expand this pane in preview mode (does not affect surrounding layout)
+
+		if(!this._showing){
+			this._isonlypreview = !this._isonlypreview;
+		}
+		this.toggle();
+	},
+
 	toggle: function(){
 		// summary: Toggle this pane's visibility
 		if(this._showing){
@@ -192,15 +220,33 @@ dojo.declare("dojox.layout.ExpandoPane",
 	
 	_showEnd: function(){
 		// summary: Common animation onEnd code - "unclose"
-		dojo.style(this.cwrapper, { opacity: 0, visibility:"visible" });
-		dojo.fadeIn({ node:this.cwrapper, duration:227 }).play(1);
+		dojo.style(this.cwrapper, { 
+			opacity: 0,
+			visibility:"visible" 
+		});
+		dojo.anim(this.cwrapper, {
+			opacity: this._isonlypreview ? this.previewOpacity : 1
+		}, 227);
 		dojo.removeClass(this.domNode, "dojoxExpandoClosed");
-		setTimeout(dojo.hitch(this._container, "layout"), 15);
+		if(!this._isonlypreview){
+			setTimeout(dojo.hitch(this._container, "layout"), 15);
+		}else{
+			this._previewShowing = true;
+			this.resize();
+		}
 	},
 	
 	_hideEnd: function(){
 		// summary: Callback for the hide animation - "close"
-		setTimeout(dojo.hitch(this._container, "layout"), 15);
+
+		// every time we hide, reset the "only preview" state
+		if(!this._isonlypreview){
+			setTimeout(dojo.hitch(this._container, "layout"), 25);
+		}else{
+			this._previewShowing = false;
+		}
+		this._isonlypreview = false;
+		
 	},
 	
 	resize: function(/* Object? */psize){
@@ -210,7 +256,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 		//		The size object optionally passed to us by our parent. 
 		
 		if(!this._hasSizes){ this._startupSizes(psize); }
-
+		
 		// compute size of container (ie, size left over after title bar)
 		// it looks like two marginBox calls, but sometimes psize comes in with only one member
 		var	size = (psize && psize.h) ? psize : dojo.marginBox(this.domNode);
@@ -218,7 +264,7 @@ dojo.declare("dojox.layout.ExpandoPane",
 			w: size.w || dojo.marginBox(this.domNode).w,
 			h: size.h - this._titleHeight
 		};
-					
+		
 		dojo.style(this.containerNode, "height", this._contentBox.h + "px");
 		this._layoutChildren();
 	},

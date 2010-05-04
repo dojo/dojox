@@ -191,6 +191,7 @@
 				duration="125" 
 				region="left" 
 				title="Left Section" 
+				previewOnDblClick="true"
 				id="leftPane" 
 				maxWidth="275" 
 				style="width: 275px;">
@@ -228,7 +229,12 @@
 			</div>
 			<div dojoType="dijit.layout.TabContainer" region="center" id="centerPane" tabStrip="true">
 				<div dojoType="dijit.layout.ContentPane" title="tab 1">a</div>
-				<div dojoType="dijit.layout.ContentPane" title="tab 2">b</div>
+				<div dojoType="dijit.layout.ContentPane" title="tab 2">
+					<button dojoType="dijit.form.Button">Preview left
+						<script type="dojo/method" event="onClick">
+							dijit.byId("leftPane").preview();
+						</script>
+				</div>
 				<div dojoType="dijit.layout.ContentPane" title="Results" id="resultsPane">
 					<div class="wrap">
 						<div class="searchStuff">
