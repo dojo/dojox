@@ -26,7 +26,7 @@ dojo.provide("dojox.html.metrics");
 		ds.top="0";
 		ds.width="30px";
 		ds.height="1000em";
-		ds.border="0";
+		ds.borderWidth="0";
 		ds.margin="0";
 		ds.padding="0";
 		ds.outline="0";
@@ -56,39 +56,41 @@ dojo.provide("dojox.html.metrics");
 
 	var measuringNode = null, empty = {};
 	dhm.getTextBox = function(/* String */ text, /* Object */ style, /* String? */ className){
-		var m;
+		var m, s;
 		if(!measuringNode){
 			m = measuringNode = dojo.doc.createElement("div");
 			// Container that we can set contraints on so that it doesn't
 			// trigger a scrollbar.
 			var c = dojo.doc.createElement("div"); 
 			c.appendChild(m);
-			c.style.overflow='scroll';
-			c.style.position = "absolute";
-			c.style.left = "0px";
-			c.style.top = "-10000px";
-			c.style.width = "1px";
-			c.style.height = "1px";
-			c.style.visibility = "hidden";
-			c.style.border = "0";
-			c.style.margin = "0";
-			c.style.padding = "0";
-			c.style.outline = "0";
+			s = c.style;
+			s.overflow='scroll';
+			s.position = "absolute";
+			s.left = "0px";
+			s.top = "-10000px";
+			s.width = "1px";
+			s.height = "1px";
+			s.visibility = "hidden";
+			s.borderWidth = "0";
+			s.margin = "0";
+			s.padding = "0";
+			s.outline = "0";
 			dojo.body().appendChild(c);
 		}else{
 			m = measuringNode;
 		}
 		// reset styles
 		m.className = "";
-		m.style.border = "0";
-		m.style.margin = "0";
-		m.style.padding = "0";
-		m.style.outline = "0";
+		s = m.style;
+		s.borderWidth = "0";
+		s.margin = "0";
+		s.padding = "0";
+		s.outline = "0";
 		// set new style
 		if(arguments.length > 1 && style){
 			for(var i in style){
 				if(i in empty){ continue; }
-				m.style[i] = style[i];
+				s[i] = style[i];
 			}
 		}
 		// set classes
