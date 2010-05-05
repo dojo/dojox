@@ -69,7 +69,7 @@ dojo.require("dojox.charting.Theme");
 	
 	themes.Chris.post = function(theme, elementType){
 		theme = Theme.prototype.post.apply(this, arguments);
-		if(elementType == "slice" && theme.series.fill && theme.series.fill.type == "radial"){
+		if((elementType == "slice" || elementType == "circle") && theme.series.fill && theme.series.fill.type == "radial"){
 			theme.series.fill = dojox.gfx.gradutils.reverse(theme.series.fill);
 		}
 		return theme;
