@@ -26,7 +26,7 @@ dojo.provide("dojox.html.metrics");
 		ds.top="0";
 		ds.width="30px";
 		ds.height="1000em";
-		ds.border="0";
+		ds.borderWidth="0";
 		ds.margin="0";
 		ds.padding="0";
 		ds.outline="0";
@@ -68,7 +68,7 @@ dojo.provide("dojox.html.metrics");
 		}
 		// reset styles
 		m.className = "";
-		m.style.border = "0";
+		m.style.borderWidth = "0";
 		m.style.margin = "0";
 		m.style.padding = "0";
 		m.style.outline = "0";
