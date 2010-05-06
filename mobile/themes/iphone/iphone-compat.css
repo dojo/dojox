@@ -81,6 +81,11 @@
 	margin: 0px 5px;
 }
 
+/* dojox.mobile.EdgeToEdgeCategory */
+.mblEdgeToEdgeCategory {
+	background-image: url(compat/edge-categ-bg.png);
+}
+
 /* mbl.widget.ListItem */
 *html li.mblListItem.mblVariableHeight { /* IE6 hack */
 	height: 0;

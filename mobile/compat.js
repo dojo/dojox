@@ -1,4 +1,5 @@
 dojo.provide("dojox.mobile.compat");
+dojo.require("dojo._base.fx");
 dojo.require("dojo.fx");
 dojo.require("dojox.fx.flip");
 
@@ -118,39 +119,6 @@ dojo.extend(dojox.mobile.View, {
 			}
 			node.style.display = disp;
 		}
-	},
-
-	_loadCss: function (/*String|Array*/files){
-		// summary:
-		//		Function to load and register CSS files with the page
-		//	files: String|Array
-		//		The CSS files to load and register with the page.
-		// tags:
-		//		private
-		if(!dojo.global._loadedCss){dojo.global._loadedCss = {};}
-		if(!dojo.isArray(files)){ files = [files]; }
-		for(var i = 0; i < files.length; i++){
-			var file = files[i];
-			if(!dojo.global._loadedCss[file]){
-				dojo.global._loadedCss[file] = true;
-				if(dojo.doc.createStyleSheet){
-					// for some reason, IE hangs when you try to load
-					// multiple css files almost at once.
-					setTimeout(function(file){
-						return function(){
-							dojo.doc.createStyleSheet(file);
-						};
-					}(file), 0);
-				}else{
-					var link = dojo.doc.createElement("link");
-					link.href = file;
-					link.type = "text/css";
-					link.rel = "stylesheet";
-					var head = dojo.doc.getElementsByTagName('head')[0];
-					head.appendChild(link);
-				}
-			}
-		}
 	}
 });
 
@@ -249,6 +217,7 @@ dojo.extend(dojox.mobile.RoundRect, {
 	}
 });
 
+dojox.mobile.RoundRectList._addChild = dojox.mobile.RoundRectList.prototype.addChild;
 dojo.extend(dojox.mobile.RoundRectList, {
 	buildRendering: function(){
 		// summary:
@@ -262,6 +231,14 @@ dojo.extend(dojox.mobile.RoundRectList, {
 
 	postCreate: function(){
 		this.redrawBorders();
+	},
+
+	addChild: function(widget){
+		dojox.mobile.RoundRectList._addChild.apply(this, arguments);
+		this.redrawBorders();
+		if(dojox.mobile.applyPngFilter){
+			dojox.mobile.applyPngFilter(widget.domNode);
+		}
 	},
 
 	redrawBorders: function(){
@@ -285,6 +262,23 @@ dojo.extend(dojox.mobile.RoundRectList, {
 	}
 });
 
+dojo.extend(dojox.mobile.EdgeToEdgeList, {
+	buildRendering: function(){
+		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
+		this.domNode.className = "mblEdgeToEdgeList";
+	}
+});
+
+dojox.mobile.IconContainer._addChild = dojox.mobile.IconContainer.prototype.addChild;
+dojo.extend(dojox.mobile.IconContainer, {
+	addChild: function(widget){
+		dojox.mobile.IconContainer._addChild.apply(this, arguments);
+		if(dojox.mobile.applyPngFilter){
+			dojox.mobile.applyPngFilter(widget.domNode);
+		}
+	}
+});
+
 dojo.mixin(dojox.mobile, {
 	createRoundRect: function(_this, isList){
 		// summary:
@@ -292,20 +286,21 @@ dojo.mixin(dojox.mobile, {
 		//		Deals with IE's lack of borderRadius support
 		// tags:
 		//		public
+		var i;
 		_this.domNode = dojo.doc.createElement("DIV");
 		_this.domNode.style.padding = "0px";
 		_this.domNode.style.backgroundColor = "transparent";
 		_this.domNode.style.borderStyle = "none";
 		_this.containerNode = dojo.doc.createElement(isList?"UL":"DIV");
 		_this.containerNode.className = "mblRoundRectContainer";
-		_this.srcNodeRef.parentNode.replaceChild(_this.domNode, _this.srcNodeRef);
-		_this.domNode.appendChild(_this.containerNode);
-
-		var i;
-		for(i = 0, len = _this.srcNodeRef.childNodes.length; i < len; i++){
-			_this.containerNode.appendChild(_this.srcNodeRef.removeChild(_this.srcNodeRef.firstChild));
+		if(_this.srcNodeRef){
+			_this.srcNodeRef.parentNode.replaceChild(_this.domNode, _this.srcNodeRef);
+			for(i = 0, len = _this.srcNodeRef.childNodes.length; i < len; i++){
+				_this.containerNode.appendChild(_this.srcNodeRef.removeChild(_this.srcNodeRef.firstChild));
+			}
+			_this.srcNodeRef = null;
 		}
-		_this.srcNodeRef = null;
+		_this.domNode.appendChild(_this.containerNode);
 
 		for(i = 0; i <= 5; i++){
 			var top = dojo.create("DIV");
@@ -321,7 +316,66 @@ dojo.mixin(dojox.mobile, {
 
 } // if(dojo.isIE)
 
-dojo.addOnLoad(function(){
+if(dojo.isIE <= 6){
+dojox.mobile.applyPngFilter = function(root){
+	root = root || dojo.body();
+	var nodes = root.getElementsByTagName("IMG");
+	var blank = dojo.moduleUrl("dojo", "resources/blank.gif");
+	for(var i = 0, len = nodes.length; i < len; i++){
+		var img = nodes[i];
+		var w = img.offsetWidth;
+		var h = img.offsetHeight;
+		if(w === 0 || h === 0){ return; }
+		var src = img.src;
+		if(src.indexOf("resources/blank.gif") != -1){ continue; }
+		img.src = blank;
+		img.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src+"')";
+		img.style.width = w + "px";
+		img.style.height = h + "px";
+	}
+};
+} // if(dojo.isIE <= 6)
+
+dojox.mobile.loadCss = function(/*String|Array*/files){
+	// summary:
+	//		Function to load and register CSS files with the page
+	//	files: String|Array
+	//		The CSS files to load and register with the page.
+	// tags:
+	//		private
+	if(!dojo.global._loadedCss){
+		var obj = {};
+		dojo.forEach(dojo.doc.getElementsByTagName("link"), function(item){
+			obj[item.href] = true;
+		});
+		dojo.global._loadedCss = obj;
+	}
+	if(!dojo.isArray(files)){ files = [files]; }
+	for(var i = 0; i < files.length; i++){
+		var file = files[i];
+		if(!dojo.global._loadedCss[file]){
+			dojo.global._loadedCss[file] = true;
+			if(dojo.doc.createStyleSheet){
+				// for some reason, IE hangs when you try to load
+				// multiple css files almost at once.
+				setTimeout(function(file){
+					return function(){
+						dojo.doc.createStyleSheet(file);
+					};
+				}(file), 0);
+			}else{
+				var link = dojo.doc.createElement("link");
+				link.href = file;
+				link.type = "text/css";
+				link.rel = "stylesheet";
+				var head = dojo.doc.getElementsByTagName('head')[0];
+				head.appendChild(link);
+			}
+		}
+	}
+};
+
+dojox.mobile.loadCompatCssFiles = function(){
 	// summary:
 	//		Function to perform page-level adjustments on browsers such as
 	//		IE and firefox.  It loads compat specific css files into the 
@@ -332,7 +386,14 @@ dojo.addOnLoad(function(){
 		if((href.indexOf("/mobile/themes/") != -1 || location.href.indexOf("/mobile/tests/") != -1)
 		   && href.substring(href.length - 4) == ".css"){
 			var compatCss = href.substring(0, href.length-4)+"-compat.css";
-			dojox.mobile.View.prototype._loadCss(compatCss);
+			dojox.mobile.loadCss(compatCss);
 		}
+	}
+};
+
+dojo.addOnLoad(function(){
+	dojox.mobile.loadCompatCssFiles();
+	if(dojox.mobile.applyPngFilter){
+		dojox.mobile.applyPngFilter();
 	}
 });

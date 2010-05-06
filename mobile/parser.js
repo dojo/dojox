@@ -1,4 +1,5 @@
 dojo.provide("dojox.mobile.parser");
+dojo.provide("dojo.parser"); // not to load dojo.parser unexpectedly
 
 dojox.mobile.parser = new function(){
 	this.instantiate = function(list){

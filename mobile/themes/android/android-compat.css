@@ -138,55 +138,55 @@ li.mblItemSelected .mblArrow {
 }
 .mblSwitchCorner1T {
 	background-color: #848684;
-	margin: 0px 4px;
+	margin: 0px 1px;
 	border-width: 0px;
 }
 .mblSwitchCorner2T {
 	background-color: #C0C0C0;
-	margin: 0px 2px;
-	border-width: 0px 2px;
+	margin: 0px 0px;
+	border-width: 0px 1px;
 }
 .mblSwitchCorner3T {
 	background-color: #C6C7C6;
-	margin: 0px 1px;
+	margin: 0px 0px;
 	border-width: 0px 1px;
 }
 
 .mblSwitchCorner1B {
 	background-color: #FBFBFB;
-	margin: 0px 1px;
+	margin: 0px 0px;
 	border-width: 0px 1px;
 }
 .mblSwitchCorner2B {
 	background-color: #FBFBFB;
-	margin: 0px 2px;
-	border-width: 0px 2px;
+	margin: 0px 0px;
+	border-width: 0px 1px;
 }
 .mblSwitchCorner3B {
 	background-color: #878787;
-	margin: 0px 4px;
+	margin: 0px 1px;
 	border-width: 0px;
 }
 
 .mblSwitchBgLeft .mblSwitchCorner1T {
 	border-width: 0px 2px;
-	background-color: #093889;
+	background-color: #00A600;
 }
 .mblSwitchBgLeft .mblSwitchCorner2T {
-	background-color: #285AB2;
+	background-color: #00A600;
 }
 .mblSwitchBgLeft .mblSwitchCorner3T {
-	background-color: #285AB2;
+	background-color: #00A600;
 }
 
 .mblSwitchBgLeft .mblSwitchCorner1B {
-	background-color: #66A1F6;
+	background-color: #00D700;
 }
 .mblSwitchBgLeft .mblSwitchCorner2B {
-	background-color: #66A1F6;
+	background-color: #00D700;
 }
 .mblSwitchBgLeft .mblSwitchCorner3B {
-	background-color: #5289D7;
+	background-color: #00D700;
 }
 
 .mblSwitchText {
@@ -194,7 +194,7 @@ li.mblItemSelected .mblArrow {
 	line-height: 21px;
 }
 .mblSwitchTextLeft {
-	background-image: url(compat/switch-blue-bg.png);
+	background-image: url(compat/switch-green-bg.png);
 	border-left: 1px solid #848684;
 }
 .mblSwitchTextRight {

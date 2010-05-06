@@ -22,19 +22,13 @@
 				function onBtnClicked(e){
 					var listWidget = dijit.byId("list1");
 					for(var i = 1; i <= 3; i++){
-						var li = dojo.create("LI");
-						listWidget.containerNode.appendChild(li);
 						var itemWidget = new dojox.mobile.ListItem({
 							icon: "images/i-icon-"+i+".png",
 							moveTo: "#bar&myParam=000"+counter,
 							label: "Document 000"+counter
-						}, li);
-						itemWidget.startup();
+						});
+						listWidget.addChild(itemWidget);
 						counter++;
-					}
-					// IE needs re-initialization of borders
-					if(listWidget.redrawBorders){
-						listWidget.redrawBorders();
 					}
 				}
 			});

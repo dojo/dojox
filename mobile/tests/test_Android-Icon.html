@@ -26,20 +26,21 @@
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		</script>
 	</head>
-	<body style="background-color:#3b3a3b">
+	<body>
 		<div id="myhome" dojoType="dojox.mobile.View" selected="true">
+			<h1 dojoType="dojox.mobile.Heading">Icon Container</h1>
 			<ul dojoType="dojox.mobile.IconContainer" type="slide">
 				<li dojoType="dojox.mobile.IconItem" title="test1" icon="images/a-icon-3.png" lazy="true"><div class="box"></div></li>
 				<li dojoType="dojox.mobile.IconItem" title="test2" icon="images/a-icon-3.png" lazy="true"><div class="box"></div></li>
 				<li dojoType="dojox.mobile.IconItem" title="Welcome" icon="images/a-icon-3.png" lazy="true"><div class="box"></div></li>
 				<li dojoType="dojox.mobile.IconItem" title="test1" icon="images/a-icon-3.png" lazy="true"><div class="box"></div></li>
 				<li dojoType="dojox.mobile.IconItem" title="test2" icon="images/a-icon-3.png" lazy="true"><div class="box"></div></li>
-				<li dojoType="dojox.mobile.IconItem" title="Welcome" icon="images/a-icon-3.png" moveTo="about" transition="slide"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" title="About" icon="images/a-icon-3.png" moveTo="about" transition="slide"></li>
 			</ul>
 		</div>
 
 		<div id="about" dojoType="dojox.mobile.View" style="background-color:black;height:100%">
-			<h1 dojoType="dojox.mobile.Heading" back="My Home" moveTo="myhome">About</h1>
+			<h1 dojoType="dojox.mobile.Heading" back="Icon Container" moveTo="myhome">About</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">My Phone</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li dojoType="dojox.mobile.ListItem" rightText="AcmePhone">

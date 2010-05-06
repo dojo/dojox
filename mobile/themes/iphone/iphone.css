@@ -1,10 +1,13 @@
-html, body {
+body {
+	visibility: hidden;
+}
+
+html.mobile, .mobile body {
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
 }
-body {
-	visibility: hidden;
+.mobile body {
 	overflow-x: hidden;
 	-webkit-text-size-adjust: none;
 	background-color: rgb(197,204,211);
@@ -16,6 +19,7 @@ body {
 /* dojox.mobile.View */
 .mblView {
 	position: relative;
+	top: 0px;
 	left: 0px;
 	width: 100%;
 }
@@ -64,19 +68,20 @@ body {
 }
 
 .flip.out {
-	-webkit-animation-duration: .2s;
+	-webkit-animation-duration: .6s;
 	-webkit-animation-name: flipOut;
 	-webkit-animation-timing-function: ease-in;
 	-webkit-transform: rotateY(90deg);
 }
 .flip.in {
-	-webkit-animation-duration: .4s;
+	-webkit-animation-duration: .6s;
 	-webkit-animation-name: flipIn;
 	-webkit-animation-timing-function: ease-out;
 }
 @-webkit-keyframes flipOut {
-	from { -webkit-transform: rotateY(0deg) scale(1); }
-	to { -webkit-transform: rotateY(90deg) scale(.8); }
+	0% { -webkit-transform: rotateY(0deg) scale(1); }
+	50% { -webkit-transform: rotateY(90deg) scale(.8); }
+	100% { -webkit-transform: rotateY(90deg) scale(.8); }
 }
 
 @-webkit-keyframes flipIn {
@@ -197,6 +202,7 @@ body {
 .mblEdgeToEdgeCategory {
 	position: relative;
 	height: 22px;
+	margin: 0px;
 	padding: 0px 10px;
 	border-top: 1px solid #A4B0B9;
 	border-bottom: 1px solid #979DA3;
@@ -235,7 +241,7 @@ body {
 }
 
 /* dojox.mobile.EdgeToEdgeList */
-ul.mblEdgeToEdgeList {
+.mblEdgeToEdgeList {
 	padding: 0px;
 	background-color: white;
 	position: relative; /* IE needs this */
@@ -243,7 +249,7 @@ ul.mblEdgeToEdgeList {
 }
 
 /* dojox.mobile.ListItem */
-li.mblListItem {
+.mblListItem {
 	list-style-type: none;
 	height: 43px;
 	border-bottom: 1px solid #ADAAAD;
@@ -257,12 +263,12 @@ li.mblListItem {
 	position: absolute;
 	margin: 7px 0px 0px 8px;
 }
-li.mblListItem.mblVariableHeight {
+.mblListItem.mblVariableHeight {
 	line-height: normal;
 	height: auto;
 	padding: 11px 6px 10px 6px;
 }
-li.mblItemSelected {
+.mblItemSelected {
 	background-color: #048BF4;
 	background: -webkit-gradient(linear, left top, left bottom, from(#048BF4), to(#005CE5));
 }
@@ -272,40 +278,40 @@ li .mblListItemTextBox {
 li .mblListItemTextBoxSelected {
 	background-color: #048BF4;
 }
-ul.mblRoundRectList li.mblListItem:first-child {
+.mblRoundRectList .mblListItem:first-child {
 	-webkit-border-top-left-radius: 8px;
 	-webkit-border-top-right-radius: 8px;
 	-moz-border-radius-topleft: 8px;
 	-moz-border-radius-topright: 8px;
 }
-ul.mblRoundRectList li.mblListItem:last-child {
+.mblRoundRectList .mblListItem:last-child {
 	border-bottom-width: 0px;
 	-webkit-border-bottom-left-radius: 8px;
 	-webkit-border-bottom-right-radius: 8px;
 	-moz-border-radius-bottomleft: 8px;
 	-moz-border-radius-bottomright: 8px;
 }
-ul.mblEdgeToEdgeList li.mblListItem:last-child {
+.mblEdgeToEdgeList .mblListItem:last-child {
 	border-bottom-color: #707C84;
 }
-li.mblListItem a.mblListItemAnchor {
+.mblListItem a.mblListItemAnchor {
 	background-position: 9px 7px;
 	display: block;
 	padding-left: 48px;
 	text-decoration: none;
 	-webkit-tap-highlight-color: transparent;
 }
-li.mblListItem a.mblListItemAnchorNoIcon {
+.mblListItem a.mblListItemAnchorNoIcon {
 	padding-left: 10px;
 }
-li.mblItemSelected a {
+.mblItemSelected a.mblListItemAnchor {
 	color: white;
 }
-li.mblListItem a.mblListItemAnchorHasRightButton {
+.mblListItem a.mblListItemAnchorHasRightButton {
 	padding-right: 40px;
 }
 
-li.mblListItem .mblArrow {
+.mblListItem .mblArrow {
 	position: absolute;
 	top: 18px;
 	right: 12px;
@@ -317,10 +323,10 @@ li.mblListItem .mblArrow {
 	border-style: solid;
 	border-color: #808080;
 }
-li.mblItemSelected .mblArrow {
+.mblItemSelected .mblArrow {
 	border-color: white;
 }
-li.mblVariableHeight div.mblArrow {
+.mblVariableHeight div.mblArrow {
 	top: 50%;
 	margin-top: -4px;
 }
@@ -332,12 +338,12 @@ li.mblVariableHeight div.mblArrow {
 	color: #324F85;
 	line-height: normal;
 }
-li.mblListItem .mblRightButtonContainer {
+.mblListItem .mblRightButtonContainer {
 	position: absolute;
 	top: 50%;
 	right: 12px;
 }
-li.mblListItem .mblRightButton {
+.mblListItem .mblRightButton {
 	position: absolute;
 	top: -50%;
 }
@@ -434,91 +440,54 @@ li.mblListItem .mblRightButton {
 }
 
 /* Icon Container */
-ul.mblIconContainer {
+.mblIconContainer {
 	padding: 0px;
 	margin: 20px 0px 0px 10px;
+	padding: 0px 0px 40px 0px;
 }
-li.mblIconItem {
+.mblIconItem {
 	list-style-type: none;
 	float: left;
 }
-li.mblIconItemSub {
+.mblIconItemTerminator {
 	list-style-type: none;
+	height: 20px;
 	clear: both;
-	margin: -10px;
+}
+.mblIconItemSub {
+	list-style-type: none;
+	margin-left: -10px;
+	background-color: white;
 }
 
 .mblIconArea {
 	font-family: Helvetica;
 	font-size: 12px;
-	height: 90px;
+	height: 78px;
 	width: 74px;
 	text-align: center;
 	margin-bottom: 10px;
 }
 
+.mblIconArea DIV {
+	position: relative;
+	height: 65px;
+}
+
 .mblIconArea IMG {
-	padding-bottom: 2px;
+	position: absolute;
+	top: 0px;
+	left: 6px;
 }
 
 .mblContent {
 	clear: both;
-	margin-bottom: 10px;
-	width: 320px;
+	padding-bottom: 20px;
 }
 
 table.mblClose {
 	clear: both;
 	cursor: pointer;
-}
-
-/* Close Button */
-.mblCloseButtonHead {
-	position: absolute;
-	top: 5px;
-	left: 8px;
-	width: 19px;
-	height: 19px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #3A4655;
-	-webkit-transform: scale(.8,1) rotate(45deg);
-	background: -webkit-gradient(linear, left top, right bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
-}
-.mblCloseButtonBody {
-	position: absolute;
-	top: 0px;
-	left: 19px;
-	padding: 0px 10px 0px 3px;
-	height: 29px;
-	border-width: 1px 1px 1px 0px;
-	border-style: inset;
-	border-color: #9CACC0;
-	font-family: Helvetica;
-	font-size: 13px;
-	color: white;
-	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
-	line-height: 29px;
-	-webkit-border-radius: 5px;
-	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
-	-webkit-tap-highlight-color: transparent;
-}
-.mblCloseButtonNeck {
-	position: absolute;
-	top: 0px;
-	left: 19px;
-	width: 4px;
-	height: 29px;
-	border-width: 1px 0px 1px 0px;
-	border-style: inset;
-	border-color: #9CACC0;
-	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
-}
-.mblCloseButtonSelected .mblCloseButtonHead {
-	background: -webkit-gradient(linear, left top, right bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
-}
-.mblCloseButtonSelected .mblCloseButtonBody, .mblCloseButtonSelected .mblCloseButtonNeck {
-	background: -webkit-gradient(linear, left top, left bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
 }
 
 .mblVibrate{
@@ -602,6 +571,7 @@ table.mblClose {
 	clear: both;
 	height: 25px;
 	padding-left: 40px;
+	margin-top: 0px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#E0E4E7), to(#B4BEC6), color-stop(0.5, #C4CCD2), color-stop(0.5, #BFC8CE));
 	border-top: 1px solid #F1F3F4;
 	border-bottom: 1px solid #717D85;
@@ -679,7 +649,7 @@ table.mblClose {
 	background-color: #5877A2;
 	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
 }
-.mblTabButton IMG, .mblTabButton BR{
+.mblTabButtonImgDiv {
 	display: none;
 }
 
@@ -728,6 +698,8 @@ table.mblClose {
 	overflow: hidden;
 	-webkit-transform-origin: 0 2px;
 	background-color: #C0C0C0;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
 }
 .mblProg0 {
 	-webkit-transform: translate(18px,10px) rotate(-90deg);
