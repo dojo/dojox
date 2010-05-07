@@ -379,7 +379,7 @@ dojo.require("dojox.sketch.UndoStack");
 		if(idx>-1){ this.shapes.splice(idx, 1); }
 		return annotation;
 	};
-	p.get=function(id){
+	p.getAnnotator=function(id){
 		for(var i=0; i<this.shapes.length; i++){
 			if(this.shapes[i].id==id) {
 				return this.shapes[i];
