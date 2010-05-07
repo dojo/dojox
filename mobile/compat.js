@@ -6,10 +6,10 @@ dojo.require("dojox.fx.flip");
 // summary:
 //		CSS3 compatibility module
 // description:
-//		This module provides support for some of the CSS3 features to djMobile
+//		This module provides support for some of the CSS3 features to dojox.mobile
 //		for non-CSS3 browsers, such as IE or Firefox.
 //		If you load this module, it directly replaces some of the methods of
-//		djMobile instead of subclassing. This way, html pages remains the same
+//		dojox.mobile instead of subclassing. This way, html pages remains the same
 //		regardless of whether this compatibility module is used or not.
 //		Recommended usage is as follows. the code below loads dojox.mobile.compat
 //		only when isWebKit is true.

@@ -33,7 +33,7 @@
 					var iconContainerWidget = dijit.byId("ic1");
 					var itemWidget = new dojox.mobile.IconItem({
 						icon: "images/icon-1.png",
-						title: "new icon",
+						label: "new icon",
 						lazy: true
 					});
 					itemWidget.containerNode.innerHTML = "<div dojoType='dijit._Calendar'></div>";
@@ -45,7 +45,7 @@
 	<body class="tundra">
 		<div id="myhome" dojoType="dojox.mobile.View" selected="true">
 			<ul id="ic1" dojoType="dojox.mobile.IconContainer" type="slide" iconBase="images/i-icon-all.png">
-				<li dojoType="dojox.mobile.IconItem" title="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
+				<li dojoType="dojox.mobile.IconItem" label="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
 			</ul>
 			<button id="btn1" dojoType="dojox.mobile.Button" style="width:80px;margin-left:10px">More...</button>
 		</div>

@@ -160,7 +160,6 @@ html.mobile, .mobile body {
 	line-height: 23px;
 	cursor: pointer;
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	background-color: #ADADAD;
 	background: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
 	-webkit-tap-highlight-color: transparent;

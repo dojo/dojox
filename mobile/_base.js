@@ -310,16 +310,11 @@ dojo.declare(
 			var neck = dojo.doc.createElement("DIV");
 			neck.className = "mblArrowButtonNeck";
 
-			dojo.body().appendChild(body);
-			if(this.label.length > 12){
-				this.domNode.style.paddingLeft = body.offsetWidth + 30 + "px";
-				this.domNode.style.textAlign = "left";
-			}
-			dojo.body().removeChild(body);
-
 			this.domNode.appendChild(head);
 			this.domNode.appendChild(body);
 			this.domNode.appendChild(neck);
+
+			this.setLabel(this.label);
 		}
 	},
 
@@ -330,6 +325,29 @@ dojo.declare(
 			dojo.removeClass(h1, "mblArrowButtonSelected");
 		}, 1000);
 		this.goTo(this.moveTo, this.href);
+	},
+
+	setLabel: function(label){
+		if(label != this.label){
+			this.label = label;
+			this.domNode.firstChild.nodeValue = label;
+		}
+		var s = this.domNode.style;
+		if(this.label.length > 12){
+			// create a clone to calculate the arrow button width correctly
+			// even when the heading is in the invisible state.
+			var h = this.domNode.cloneNode(true);
+			h.style.visibility = "hidden";
+			dojo.body().appendChild(h);
+			var b = h.childNodes[2];
+			s.paddingLeft = b.offsetWidth + 30 + "px";
+			s.textAlign = "left";
+			dojo.body().removeChild(h);
+			h = null;
+		}else{
+			s.paddingLeft = "";
+			s.textAlign = "";
+		}
 	},
 
 	goTo: function(moveTo, href){
@@ -425,6 +443,7 @@ dojo.declare(
 	transition: "",
 	callback: null,
 	sync: true,
+	label: "",
 
 	inheritParams: function(){
 		var parent = this.getParentWidget();
@@ -571,7 +590,6 @@ dojo.declare(
 	"dojox.mobile.ListItem",
 	dojox.mobile.AbstractItem,
 {
-	label: "",
 	rightText: "",
 	btnClass: "",
 	anchorLabel: false,
@@ -789,6 +807,9 @@ dojo.declare(
 	pressedIconOpacity: 0.4,
 	iconBase: "",
 	iconPos: "",
+	back: "Home",
+	label: "My Application",
+	single: false,
 
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
@@ -799,33 +820,50 @@ dojo.declare(
 		this.domNode.appendChild(t);
 	},
 
+	_setupSubNodes: function(ul){
+		var len = this.domNode.childNodes.length - 1; // -1 for terminator
+		for(i = 0; i < len; i++){
+			child = this.domNode.childNodes[i];
+			if(child.nodeType != 1){ continue; }
+			w = dijit.byNode(child);
+			if(this.single){
+				w.subNode.firstChild.style.display = "none";
+			}
+			ul.appendChild(w.subNode);
+		}
+	},
+
 	startup: function(){
 		var ul, i, len, child, w;
 		if(this.transition == "below"){
-			ul = this.domNode;
-			len = this.domNode.childNodes.length - 1; // -1 for terminator
-			for(i = 0; i < len; i++){
-				child = this.domNode.childNodes[i];
-				if(child.nodeType != 1){ continue; }
-				w = dijit.byNode(child);
-				ul.appendChild(w.subNode);
-			}
+			this._setupSubNodes(this.domNode);
 		}else{
-			var view = new dojox.mobile.View({id:"mblApplView"});
-			view.domNode.style.display = "none";
-			var heading = new dojox.mobile.Heading({back:"Home", moveTo:this.domNode.parentNode.id, transition:this.transition});
-			heading.domNode.appendChild(dojo.doc.createTextNode("My Application"));
-			view.domNode.appendChild(heading.domNode);
+			var view = new dojox.mobile.View({id:this.id+"_mblApplView"});
+			var _this = this;
+			view.onAfterTransitionIn = function(moveTo, dir, transition, context, method){
+				_this._opening._open_1();
+			};
+			view.domNode.style.visibility = "hidden";
+			var heading = view._heading = new dojox.mobile.Heading({back:this.back, label:this.label, moveTo:this.domNode.parentNode.id, transition:this.transition});
+			view.addChild(heading);
 			ul = dojo.doc.createElement("UL");
-			len = this.domNode.childNodes.length;
-			for(i = 0; i < len; i++){
-				child = this.domNode.childNodes[i];
-				if(child.nodeType != 1){ continue; }
-				w = dijit.byNode(child);
-				ul.appendChild(w.subNode);
-			}
+			ul.className = "mblIconContainer";
+			ul.style.marginTop = "0px";
+			this._setupSubNodes(ul);
 			view.domNode.appendChild(ul);
 			dojo.doc.body.appendChild(view.domNode);
+		}
+	},
+
+	closeAll: function(){
+		var len = this.domNode.childNodes.length;
+		for(var i = 0; i < len; i++){
+			child = this.domNode.childNodes[i];
+			if(child.nodeType != 1){ continue; }
+			if(child == this._terminator){ break; }
+			w = dijit.byNode(child);
+			w.containerNode.parentNode.style.display = "none";
+			w.setOpacity(w.iconNode, 1);
 		}
 	},
 
@@ -846,25 +884,24 @@ dojo.declare(
 {
 	// description:
 	//		Dynamic creation is not supported.
-	title: "",
 	lazy: false,
 	requires: "",
 	timeout: 10,
 
 	templateString: '<li class="mblIconItem">'+
 						'<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
-							'<div><img src="${icon}" dojoAttachPoint="iconNode"></div>${title}'+
+							'<div><img src="${icon}" dojoAttachPoint="iconNode"></div>${label}'+
 						'</div>'+
 					'</li>',
 	templateStringSub: '<li class="mblIconItemSub" lazy="${lazy}" style="display:none;" dojoAttachPoint="contentNode">'+
 						'<h2 class="mblIconContentHeading" dojoAttachPoint="closeNode">'+
-							'<div class="mblBlueMinusButton" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"><div></div></div>${title}'+
+							'<div class="mblBlueMinusButton" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"><div></div></div>${label}'+
 						'</h2>'+
 						'<div class="mblContent" dojoAttachPoint="containerNode"></div>'+
 					'</li>',
 
 	createTemplate: function(s){
-		dojo.forEach(["lazy","icon","title"], function(v){
+		dojo.forEach(["lazy","icon","label"], function(v){
 			while(s.indexOf("${"+v+"}") != -1){
 				s = s.replace("${"+v+"}", this[v]);
 			}
@@ -974,11 +1011,6 @@ dojo.declare(
 	onMouseDownIcon: function (e){
 		var node = e.target;
 		this.setOpacity(node, this.getParentWidget().pressedIconOpacity);
-		if(this.transition != "below"){
-			setTimeout(dojo.hitch(this, function(d){
-				this.setOpacity(node, 1);
-			}), 1500);
-		}
 	},
 
 	iconClicked: function(e){
@@ -1002,9 +1034,25 @@ dojo.declare(
 	},
 
 	open: function(){
-		if(this.transition != "below"){
-			this.transitionTo("mblApplView");
+		var parent = this.getParentWidget(); // IconContainer
+		if(this.transition == "below"){
+			if(parent.single){
+				parent.closeAll();
+				this.setOpacity(this.iconNode, this.getParentWidget().pressedIconOpacity);
+			}
+			this._open_1();
+		}else{
+			parent._opening = this;
+			if(parent.single){
+				parent.closeAll();
+				var view = dijit.byId(parent.id+"_mblApplView");
+				view._heading.setLabel(this.label);
+			}
+			this.transitionTo(parent.id+"_mblApplView");
 		}
+	},
+
+	_open_1: function(){
 		this.contentNode.style.display = "";
 		this.unhighlight();
 		if(this.lazy){
@@ -1016,7 +1064,6 @@ dojo.declare(
 			this.instantiateWidget();
 		}
 		this.contentNode.scrollIntoView();
-
 		this.onOpen();
 	},
 
@@ -1058,6 +1105,7 @@ dojo.declare(
 {
 	btnClass: "mblBlueButton",
 	duration: 1000, // duration of selection, milliseconds
+
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("BUTTON");
 		this.domNode.className = "mblButton "+this.btnClass;
@@ -1078,7 +1126,8 @@ dojo.declare(
 	"dojox.mobile.TabContainer",
 	dijit._Widget,
 {
-	selectedPane: null, /* TabPane widget */
+	iconBase: "",
+	iconPos: "",
 
 	buildRendering: function(){
 		var node = this.domNode = this.srcNodeRef;
@@ -1113,8 +1162,8 @@ dojo.declare(
 			var pane = children[i];
 			if(pane.nodeType != 1){ continue; }
 			var widget = dijit.byNode(pane);
-			if(widget.selected || !this.selectedPane){
-				this.selectedPane = widget;
+			if(widget.selected || !this._selectedPane){
+				this._selectedPane = widget;
 			}
 			pane.style.display = "none";
 			var tab = dojo.doc.createElement("DIV");
@@ -1136,14 +1185,14 @@ dojo.declare(
 		}
 		div.appendChild(tbl);
 		this.tabHeaderNode.appendChild(div);
-		this.selectTab(this.selectedPane.tab);
+		this.selectTab(this._selectedPane.tab);
 	},
 
 	selectTab: function(/*DomNode*/tab){
-		this.selectedPane.domNode.style.display = "none";
-		dojo.removeClass(this.selectedPane.tab, "mblTabButtonSelected");
-		this.selectedPane = tab.pane;
-		this.selectedPane.domNode.style.display = "";
+		this._selectedPane.domNode.style.display = "none";
+		dojo.removeClass(this._selectedPane.tab, "mblTabButtonSelected");
+		this._selectedPane = tab.pane;
+		this._selectedPane.domNode.style.display = "";
 		dojo.addClass(tab, "mblTabButtonSelected");
 	},
 
@@ -1165,9 +1214,24 @@ dojo.declare(
 	icon: "",
 	iconPos: "",
 	selected: false,
+
+	inheritParams: function(){
+		var parent = this.getParentWidget();
+		if(parent){
+			if(!this.icon){ this.icon = parent.iconBase; }
+			if(!this.iconPos){ this.iconPos = parent.iconPos; }
+		}
+	},
+
 	buildRendering: function(){
+		this.inheritParams();
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblTabPane";
+	},
+
+	getParentWidget: function(){
+		var ref = this.srcNodeRef || this.domNode;
+		return ref && ref.parentNode ? dijit.getEnclosingWidget(ref.parentNode) : null;
 	}
 });
 
@@ -1181,7 +1245,8 @@ dojo.declare(
 		"#C0C0C0", "#C0C0C0", "#B8B9B8", "#AEAFAE",
 		"#A4A5A4", "#9A9A9A", "#8E8E8E", "#838383"
 	],
-	bars: [],
+
+	_bars: [],
 
 	constructor: function(){
 		this.domNode = dojo.create("DIV");
@@ -1190,7 +1255,7 @@ dojo.declare(
 			var div = dojo.create("DIV");
 			div.className = "mblProg mblProg"+i;
 			this.domNode.appendChild(div);
-			this.bars.push(div);
+			this._bars.push(div);
 		}
 	},
 
@@ -1203,7 +1268,7 @@ dojo.declare(
 			var c = _this.colors;
 			for(var i = 0; i < 12; i++){
 				var idx = (cntr + i) % 12;
-				_this.bars[i].style.backgroundColor = c[idx];
+				_this._bars[i].style.backgroundColor = c[idx];
 			}
 		}, this.interval);
 	},
