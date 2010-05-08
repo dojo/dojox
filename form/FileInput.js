@@ -33,6 +33,10 @@ dojo.declare("dojox.form.FileInput",
 		this._keyListener = this.connect(this.fileInput,"onkeyup","_matchValue");
 	},
 
+	//get rid of the this.connect in _FormWidget.postCreate to allow IE to show
+	//the file picker dialog properly
+	postCreate: function(){},
+	
 	_matchValue: function(){
 		// summary: set the content of the upper input based on the semi-hidden file input
 		this.inputNode.value = this.fileInput.value;
