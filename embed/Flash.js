@@ -167,46 +167,50 @@ dojo.provide("dojox.embed.Flash");
 	}
 
 
-	/*=====
-	dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars, expressInstall, redirect){
-		//	path: String
-		//		The URL of the movie to embed.
-		//	id: String?
-		//		A unique key that will be used as the id of the created markup.  If you don't
-		//		provide this, a unique key will be generated.
-		//	width: Number?
-		//		The width of the embedded movie; the default value is 320px.
-		//	height: Number?
-		//		The height of the embedded movie; the default value is 240px
-		//	minimumVersion: Number ?
-		//		The minimum targeted version of the Flash Player (defaults to 9) 
-		//	style: String?
-		//		Any CSS style information (i.e. style="background-color:transparent") you want
-		//		to define on the markup.
-		//	params: Object?
-		//		A set of key/value pairs that you want to define in the resultant markup.
-		//	vars: Object?
-		//		A set of key/value pairs that the Flash movie will interpret as FlashVars.
-		//	expressInstall: Boolean?
-		//		Whether or not to include any kind of expressInstall info. Default is false.
-		//	redirect: String?
-		//		A url to redirect the browser to if the current Flash version is not supported.
-		this.id=id;
-		this.path=path;
-		this.width=width;
-		this.minimumVersion=minimumVersion;
-		this.height=height;
-		this.style=style;
-		this.params=params;
-		this.vars=vars;
-		this.expressInstall=expressInstall;
-		this.redirect=redirect;
-	}
-	=====*/
+/*=====
+dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars, expressInstall, redirect){
+	//	path: String
+	//		The URL of the movie to embed.
+	//	id: String?
+	//		A unique key that will be used as the id of the created markup.  If you don't
+	//		provide this, a unique key will be generated.
+	//	width: Number?
+	//		The width of the embedded movie; the default value is 320px.
+	//	height: Number?
+	//		The height of the embedded movie; the default value is 240px
+	//	minimumVersion: Number ?
+	//		The minimum targeted version of the Flash Player (defaults to 9) 
+	//	style: String?
+	//		Any CSS style information (i.e. style="background-color:transparent") you want
+	//		to define on the markup.
+	//	params: Object?
+	//		A set of key/value pairs that you want to define in the resultant markup.
+	//	vars: Object?
+	//		A set of key/value pairs that the Flash movie will interpret as FlashVars.
+	//	expressInstall: Boolean?
+	//		Whether or not to include any kind of expressInstall info. Default is false.
+	//	redirect: String?
+	//		A url to redirect the browser to if the current Flash version is not supported.
+	this.id=id;
+	this.path=path;
+	this.width=width;
+	this.minimumVersion=minimumVersion;
+	this.height=height;
+	this.style=style;
+	this.params=params;
+	this.vars=vars;
+	this.expressInstall=expressInstall;
+	this.redirect=redirect;
+}
+=====*/
 
 	//	the main entry point
 	dojox.embed.Flash = function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode*/ node){
 		//	summary:
+		//		Create a wrapper object around a Flash movie; this is the DojoX equivilent
+		//		to SWFObject.
+		//
+		//	description:
 		//		Creates a wrapper object around a Flash movie.  Wrapper object will
 		//		insert the movie reference in node; when the browser first starts
 		//		grabbing the movie, onReady will be fired; when the movie has finished
@@ -218,19 +222,17 @@ dojo.provide("dojox.embed.Flash");
 		//		Flash movie will shoot several methods into the window object before
 		//		EI callbacks can be used properly).
 		//
-		//	arguments:
-		//		kwArgs: dojox.embed.__flashArgs
-		//			See dojox.embed.__flashArgs
+		//		*Important note*:  this code includes a workaround for the Eolas "fix" from
+		//		Microsoft; in order to work around the "click to activate this control" message
+		//		on any embedded Flash movie, this code will load a separate, non-dojo.require
+		//		javascript file in order to write the Flash movie into the document.  As such
+		//		it cannot be used with Dojo's scope map techniques for working with multiple
+		//		versions of Dojo on the same page.
 		//
-		//		node:	DomNode
-		//			The node where the embed object will be placed
-		//
-		// 	properties:
-		//		id: String
-		//			The ID of the internal embed/object tag.  Can be used to get a reference to
-		//			the movie itself.
-		//		movie: HTMLObject
-		//			A reference to the Flash movie itself.
+		//	kwArgs: dojox.embed.__flashArgs
+		//		The various arguments that will be used to help define the Flash movie.
+		//	node: DomNode
+		//		The node where the embed object will be placed
 		//
 		//	example:
 		//		Embed a flash movie in a document using the new operator, and get a reference to it.
@@ -253,11 +255,26 @@ dojo.provide("dojox.embed.Flash");
 		if(location.href.toLowerCase().indexOf("file://")>-1){
 			throw new Error("dojox.embed.Flash can't be run directly from a file. To instatiate the required SWF correctly it must be run from a server, like localHost.");
 		}
+
+		//	available: Number
+		//		If there is a flash player available, and if so what version.
 		this.available = dojox.embed.Flash.available;
+
+		//	minimumVersion: Number
+		//		The minimum version of Flash required to run this movie.
 		this.minimumVersion = kwArgs.minimumVersion || minimumVersion;
 		//console.log("AVAILABLE:", this);
+
+		//	id: String
+		//		The id of the DOMNode to be used for this movie.  Can be used with dojo.byId to get a reference.
 		this.id = null;
+
+		//	movie: FlashObject
+		//		A reference to the movie itself.
 		this.movie = null;
+
+		//	domNode: DOMNode
+		//		A reference to the DOMNode that contains this movie.
 		this.domNode = null;
 		if(node){
 			node = dojo.byId(node);
