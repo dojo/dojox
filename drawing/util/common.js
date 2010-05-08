@@ -2,7 +2,7 @@ dojo.provide("dojox.drawing.util.common");
 dojo.require("dojox.math.round");
 
 (function(){
-	
+
 	var uidMap = {};
 	var start = 0;
 	dojox.drawing.util.common	= {
@@ -34,20 +34,20 @@ dojo.require("dojox.math.round");
 			//		Convert the passed number to degrees.
 			return (n*180)/Math.PI;	//	Number
 		},
-		
+
 		degToRad: function(/*Numer*/n) {
 			// summary:
 			//		Convert the passed number to radians.
 			return (n*Math.PI)/180;	// Number
 		},
-		
+
 		angle: function(/*EventObject*/obj, /* ? Float */snap){
 			// summary:
 			//		Return angle based on mouse object
 			// arguments:
 			//		obj: EventObject
 			//			Manager.Mouse event.
-			// 		snap: Float 
+			// 		snap: Float
 			//			Returns nearest angle within snap limits
 			//
 			//obj = this.argsToObj.apply(this, arguments);
@@ -58,12 +58,12 @@ dojo.require("dojox.math.round");
 					rnd = dojox.math.round(radians/seg),
 					new_radian = rnd*seg;
 				return dojox.math.round(this.radToDeg(new_radian)); // Whole Number
-			
+
 			}else{
 				return this.radToDeg(this.radians(obj)); // Float
 			}
 		},
-		
+
 		radians: function(/*EventObject*/o){
 			// summary:
 			//		Return the radians derived from the coordinates
@@ -72,7 +72,7 @@ dojo.require("dojox.math.round");
 			//var o = this.argsToObj.apply(this, arguments);
 			return Math.atan2(o.start.y-o.y,o.start.x-o.x);
 		},
-		
+
 		length: function(/*EventObject*/o){
 			// summary:
 			//		Return the length derived from the coordinates
@@ -80,12 +80,12 @@ dojo.require("dojox.math.round");
 			//
 			return Math.sqrt(Math.pow(o.start.x-o.x, 2)+Math.pow(o.start.y-o.y, 2));
 		},
-		
+
 		lineSub: function(/*Number*/x1, /*Number*/y1, /*Number*/x2, /*Number*/y2, /*Number*/amt){
 			// summary:
 			//		Subtract an amount from a line
 			// description:
-			//		x1,y1,x2,y2 represents the Line. 'amt' represnets the amount
+			//		x1,y1,x2,y2 represents the Line. 'amt' represents the amount
 			//		to subtract from it.
 			//
 			var len = this.distance(this.argsToObj.apply(this, arguments));
@@ -95,7 +95,7 @@ dojo.require("dojox.math.round");
 			var y = y1 - (y1-y2) * pc;
 			return {x:x, y:y}; // Object
 		},
-		
+
 		argsToObj: function(){
 			// summary:
 			//		Attempts to determine in a Mouse Object
@@ -114,7 +114,7 @@ dojo.require("dojox.math.round");
 				//snap:a[4]
 			}; // Object
 		},
-		
+
 		distance: function(/*EventObject or x1,y1,x2,y2*/){
 			// summary:
 			//		Return the length derived from the coordinates
@@ -124,14 +124,14 @@ dojo.require("dojox.math.round");
 			var o = this.argsToObj.apply(this, arguments);
 			return Math.abs(Math.sqrt(Math.pow(o.start.x-o.x, 2)+Math.pow(o.start.y-o.y, 2))); // Number
 		},
-		
+
 		slope:function(/*Object*/p1, /*Object*/p2){
 			// summary:
 			//		Given two poits of a line, returns the slope.
 			if(!(p1.x-p2.x)){ return 0; }
 			return ((p1.y-p2.y)/(p1.x-p2.x)); // Number
 		},
-		
+
 		pointOnCircle: function(/*Number*/cx, /*Number*/cy, /*Number*/radius, /*Number*/angle){
 			// summary:
 			//		A *very* helpful method. If you know the center
@@ -146,7 +146,7 @@ dojo.require("dojox.math.round");
 				y:cy+y
 			}; // Object
 		},
-		
+
 		constrainAngle: function(/*EventObject*/obj, /*Number*/min, /*Number*/max){
 			// summary:
 			//		Ensures the angle in the Mouse Object is within the
@@ -161,7 +161,7 @@ dojo.require("dojox.math.round");
 			var new_angle = angle > max ? max : min - angle < 100 ? min : max;
 			return this.pointOnCircle(obj.start.x,obj.start.y,radius, new_angle); // Object
 		},
-		
+
 		snapAngle: function(/*EventObject*/obj, /*Float*/ca){
 			// summary:
 			//		Snaps a line to the nearest angle
@@ -181,12 +181,12 @@ dojo.require("dojox.math.round");
 				pt = this.pointOnCircle(obj.start.x,obj.start.y,radius,new_angle);
 			return pt;  // Object
 		},
-		
+
 		// helpers
 		idSetStart: function(num){
 			start=num;
 		},
-		
+
 		uid: function(/* ? String */str){
 			// summary:
 			//		Creates a unique ID.
@@ -199,7 +199,7 @@ dojo.require("dojox.math.round");
 			uidMap[str] = uidMap[str]===undefined ? start : uidMap[str] + 1;
 			return str + uidMap[str]; // String
 		},
-		
+
 		abbr: function(type){
 			// summary:
 			//		Converts a namespace (typically a tool or a stencil) into
@@ -209,9 +209,9 @@ dojo.require("dojox.math.round");
 		},
 		mixin: function(o1, o2){
 			// TODO: make faster
-			//return dojo.mixin(dojo.clone(o1), dojo.clone(o2));	
+			//return dojo.mixin(dojo.clone(o1), dojo.clone(o2));
 		},
-		
+
 		objects:{}, //private?
 		register: function(/*Object*/obj){
 			// summary:
@@ -220,7 +220,7 @@ dojo.require("dojox.math.round");
 			//		the Toolbar. Since multiple drawings can be on one
 			//		page, this function serves a little more use than
 			//		on first apearance.
-			this.objects[obj.id] = obj;	
+			this.objects[obj.id] = obj;
 		},
 		byId: function(/*String*/id){
 			// summary:
@@ -232,34 +232,34 @@ dojo.require("dojox.math.round");
 			// summary:
 			//		Helper function to attach attributes to SVG and VML raw nodes.
 			//
-			
+
 			if(!elem) { return false; }
 			try{
-				
+
 				// util is a crappy check, but we need to tell the diff
 				// between a Drawing shape and a GFX shape
 				if(elem.shape && elem.util){
 					elem = elem.shape;
 				}
-				
+
 				if(!value && prop=="id" && elem.target){
-			
+
 					var n = elem.target;
 					while(!dojo.attr(n, "id")){
 						n = n.parentNode;
 					}
 					return dojo.attr(n, "id");
 				}
-				
+
 				if(elem.rawNode || elem.target){
 					var args = Array.prototype.slice.call(arguments);
 					args[0] = elem.rawNode || elem.target;
-					return dojo.attr.apply(dojo, args);	
-				}		
+					return dojo.attr.apply(dojo, args);
+				}
 				return dojo.attr(elem, "id");
-				
-				
-				
+
+
+
 			}catch(e){
 				if(!squelchErrors){
 					// For debugging only. These errors actually cause errors in IE's console
@@ -271,5 +271,5 @@ dojo.require("dojox.math.round");
 			}
 		}
 	};
-	
+
 })();

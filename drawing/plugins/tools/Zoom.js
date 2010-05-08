@@ -5,7 +5,7 @@ dojo.require("dojox.drawing.plugins._Plugin");
 	//
 	// 	zoomInc: Float
 	//		The amount of zoom that will occur upon each click.
-	var zoomInc = .1,
+	var zoomInc = Math.pow(2.0,0.25),
 	//
 	//	maxZoom: Number
 	//		The maximum the canvas can be zoomed in. 10 = 1000%
@@ -13,7 +13,7 @@ dojo.require("dojox.drawing.plugins._Plugin");
 	//
 	//	minZoom: Float
 	//		The most the canvas can be zoomed out. .1 = 10%
-	minZoom = .1,
+	minZoom = 0.1,
 	//
 	//	zoomFactor: [readonly] Float
 	//		The current zoom amount
@@ -47,7 +47,7 @@ dojo.require("dojox.drawing.plugins._Plugin");
 				// summary:
 				//		Handles zoom in.
 				//
-				zoomFactor += zoomInc;
+				zoomFactor *= zoomInc;
 				zoomFactor = Math.min(zoomFactor, maxZoom);
 				this.canvas.setZoom(zoomFactor);
 				this.mouse.setZoom(zoomFactor);
@@ -92,7 +92,7 @@ dojo.require("dojox.drawing.plugins._Plugin");
 				// summary:
 				//		Handles zoom out.
 				//
-				zoomFactor -= zoomInc;
+				zoomFactor /= zoomInc;
 				zoomFactor = Math.max(zoomFactor, minZoom);
 				this.canvas.setZoom(zoomFactor);
 				this.mouse.setZoom(zoomFactor);

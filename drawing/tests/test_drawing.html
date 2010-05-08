@@ -6,11 +6,10 @@
 
 	<style>
 		href, body{
-			overflow:hidden;
 		}
 		.drawing{
 			width:800px;
-			height:400px;
+			height:500px;
 			border:1px solid #ccc;
 			cursor:crosshair;
 		}
@@ -33,7 +32,7 @@
 			border:1px solid #ccc;
 		}
 	</style>
-	
+
 	<script>
 		djConfig = {
 			isDebug:false,
@@ -44,8 +43,8 @@
 	<script>
 		dojo.require("dojo.parser");
 		dojo.require("dojox.drawing");
-		
-		
+
+
 		// custom Tools and Plugins need to be required
 		dojo.require("dojox.drawing.tools.TextBlock");
 		dojo.require("dojox.drawing.tools.Rect");
@@ -53,33 +52,33 @@
 		dojo.require("dojox.drawing.tools.Line");
 		dojo.require("dojox.drawing.tools.Path");
 		dojo.require("dojox.drawing.tools.Pencil");
-		
+
 		dojo.require("dojox.drawing.tools.custom.Vector");
-		dojo.require("dojox.drawing.tools.custom.Axes");				
+		dojo.require("dojox.drawing.tools.custom.Axes");
 		dojo.require("dojox.drawing.tools.Arrow");
-		
+
 		dojo.require("dojox.drawing.plugins.tools.Pan");
 		dojo.require("dojox.drawing.plugins.tools.Zoom");
 		dojo.require("dojox.drawing.plugins.tools.Iconize");
-		
+
 		dojo.require("dojox.drawing.plugins.drawing.Grid");
-		
+
 		dojo.require("dojox.drawing.ui.Toolbar");
 		dojo.require("dojox.drawing.ui.Button");
 		//dojo.require("dojox.drawing.ui.Tooltip");
-		
+
 		var doExport = function(){
-			var o = myDrawing.exporter();		
+			var o = myDrawing.exporter();
 			console.log("EXPORT:")
 			console.dir(o)
 			console.log(dojo.toJson(o));
 			dojo.byId("data").value = dojo.toJson(o, true);
 		}
-		
+
 		var doImport = function(){
 			myDrawing.importer(dojo.fromJson(dojo.byId("data").value));
 		}
-		
+
 		var doClear = function(){
 			myDrawing.removeAll();
 		}
@@ -95,16 +94,16 @@
 					radius:2,
 					margin:5
 				});
-							
+
 			});
-			
+
 			dojo.connect(dojo.byId("import"), "click", doImport);
 			dojo.connect(dojo.byId("export"), "click", doExport);
 			dojo.connect(dojo.byId("clear"), "click", doClear);
 			dojo.connect(dojo.byId("selectall"), "click", function(){
 				myDrawing.selectAll();
 			});
-			
+
 			dojo.connect(dojo.byId("red"), "click", function(){
 				myDrawing.changeDefaults({
 					norm:{
@@ -125,7 +124,7 @@
 			});
 			dojo.connect(dojo.byId("yellow"), "click", function(){
 				myDrawing.toSelected("attr", {
-					fill:"#ffff00"	
+					fill:"#ffff00"
 				});
 			});
 		})
@@ -140,7 +139,7 @@
 			 plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{minor:20, major:100}}]">
 		</div>
 	</div>
-	
+
 	<br/>
 	<button id="import">Import</button>
 	<button id="export">Export</button>
@@ -152,8 +151,8 @@
 	<button id="yellow">Change selected to Yellow</button>
 	<br/>
 	<br/>
-	
+
 	<textarea id="data"></textarea>
-	
+
 </body>
 </html>
