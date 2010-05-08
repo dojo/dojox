@@ -39,6 +39,11 @@
 		//	change the theme based on the select change.
 		var select = dojo.byId("themeChooser"), name = select.options[select.selectedIndex].value;
 		dojo.require("dojox.charting.themes." + name);
+		if(name == "Tom"){
+			dojo.style(dojo.body(), { backgroundColor: "#181818" });
+		} else {
+			dojo.style(dojo.body(), { backgroundColor: "inherit" });
+		}
 		var theme = dojo.getObject("dojox.charting.themes." + name);
 		if(theme){
 			for(var name in charts){
@@ -107,6 +112,7 @@
 				<option value="Julie" selected="selected">Julie</option>
 				<option value="ThreeD">ThreeD</option>
 				<option value="Chris">Chris</option>
+				<option value="Tom">Tom</option>
 				<option value="PrimaryColors">PrimaryColors</option>
 			</optgroup>
 			<optgroup label="Classic">
