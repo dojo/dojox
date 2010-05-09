@@ -679,8 +679,8 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			df.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
 
 			// pseudo-clipping: matting
-			fill   = this.fill   ? this.fill   : (t.chart && t.chart.fill);
-			stroke = this.stroke ? this.stroke : (t.chart && t.chart.stroke);
+			fill   = this.fill   !== undefined ? this.fill   : (t.chart && t.chart.fill);
+			stroke = this.stroke !== undefined ? this.stroke : (t.chart && t.chart.stroke);
 
 			//	TRT: support for "inherit" as a named value in a theme.
 			if(fill == "inherit"){

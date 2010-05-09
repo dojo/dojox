@@ -50,7 +50,8 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|	// all objects are structs used directly in dojox.gfx
 	//	|	chart:{
 	//	|		stroke: null,
-	//	|		fill: "white"
+	//	|		fill: "white",
+	//	|		pageStyle: null // suggested page style as an object suitable for dojo.style()
 	//	|	},
 	//	|	plotarea:{
 	//	|		stroke: null,
@@ -479,7 +480,8 @@ dojo.mixin(dojox.charting.Theme, {
 		// all objects are structs used directly in dojox.gfx
 		chart:{
 			stroke: null,
-			fill: "white"
+			fill: "white",
+			pageStyle: null
 		},
 		plotarea:{
 			stroke: null,

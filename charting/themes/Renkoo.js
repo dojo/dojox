@@ -11,7 +11,8 @@ dojo.require("dojox.charting.Theme");
 	
 	themes.Renkoo = new dc.Theme({
 		chart: {
-			fill:   "#123666"
+			fill:      "#123666",
+			pageStyle: {backgroundColor: "#123666", backgroundImage: "none", color: "#95afdb"}
 		},
 		plotarea: {
 			fill: "#123666"

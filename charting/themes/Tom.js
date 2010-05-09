@@ -11,8 +11,9 @@ dojo.require("dojox.charting.Theme");
 	
 	themes.Tom = new dc.Theme({
 		chart: {
-			fill:   "#181818",
-			stroke: {color: "#181818"}
+			fill:      "#181818",
+			stroke:    {color: "#181818"},
+			pageStyle: {backgroundColor: "#181818", backgroundImage: "none", color: "#eaf2cb"}
 		},
 		plotarea: {
 			fill: "#181818"

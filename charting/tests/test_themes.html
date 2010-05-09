@@ -33,28 +33,32 @@
 <script>
 	dojo.require("dojox.charting.Chart2D");
 
-	var charts = {}, backgroundImage;
+	var charts = {}, backgroundImage, lastThemeName = "";
 
 	function update(){
-		//	change the theme based on the select change.
-		var select = dojo.byId("themeChooser"), name = select.options[select.selectedIndex].value;
+		// change the theme based on the select change.
+		var select = dojo.byId("themeChooser"), name = select.options[select.selectedIndex].value,
+			usePageStyle = dojo.byId("pageStyleChooser").checked;
 		dojo.require("dojox.charting.themes." + name);
+		// retrieve the background image, if any
 		if(!backgroundImage){
 			backgroundImage = dojo.style(dojo.body(), "backgroundImage");
 		}
-		if(name == "Tom"){
-			dojo.style(dojo.body(), { backgroundColor: "#181818", backgroundImage: "none", color: "#eaf2cb" });
-		} else if (name=="Electric"){
-			dojo.style(dojo.body(), { backgroundColor: "#333", backgroundImage: "none", color: "#ccc" });
-		} else if (name=="Renkoo"){
-			dojo.style(dojo.body(), { backgroundColor: "#123666", backgroundImage: "none", color: "#95afdb" });
-		} else {
-			dojo.style(dojo.body(), { backgroundColor: "inherit", backgroundImage: backgroundImage, color: "inherit" });
+		var chartStyle = dojox.charting.themes[name].chart;
+		// set the suggested page style
+		if(usePageStyle && chartStyle.pageStyle){
+			dojo.style(dojo.body(), chartStyle.pageStyle);
+		}else{
+			dojo.style(dojo.body(), {backgroundColor: "inherit", backgroundImage: backgroundImage, color: "inherit"});
 		}
-		var theme = dojo.getObject("dojox.charting.themes." + name);
-		if(theme){
-			for(var name in charts){
-				charts[name].setTheme(theme).render();
+		// set the theme
+		if(lastThemeName != name){
+			lastThemeName = name;
+			var theme = dojox.charting.themes[name];
+			if(theme){
+				for(var chartName in charts){
+					charts[chartName].setTheme(theme).render();
+				}
 			}
 		}
 	}
@@ -106,6 +110,7 @@
 		update();
 
 		dojo.connect(dojo.byId("themeChooser"), "onchange", update);
+		dojo.connect(dojo.byId("pageStyleChooser"), "onclick", update);
 	}
 	dojo.addOnLoad(init);
 </script>
@@ -125,7 +130,7 @@
 				<option value="Renkoo">Renkoo</option>
 			</optgroup>
 			<optgroup label="Classic">
-		<option value="Adobebricks">Adobebricks</option>
+				<option value="Adobebricks">Adobebricks</option>
 				<option value="Algae">Algae</option>
 				<option value="Bahamation">Bahamation</option>
 				<option value="BlueDusk">BlueDusk</option>
@@ -159,6 +164,9 @@
 				<option value="PlotKit.red">PlotKit.red</option>
 			</optgroup>
 		</select>
+		&nbsp;&nbsp;&nbsp;
+		<input id="pageStyleChooser" type="checkbox" checked="checked" value="">
+		<label for="pageStyleChooser">&nbsp;use suggested page style</label>
 	</p>
 	<div id="chartContainer">
 		<div class="chart" id="bars"></div>
