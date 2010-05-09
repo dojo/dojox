@@ -46,7 +46,7 @@ dojo.require("dojox.charting.Theme");
 			{fill: g(defaultFill, "#bf004c", "#f06")},	
 			{fill: g(defaultFill, "#43bf00", "#6f0")},	
 			{fill: g(defaultFill, "#7300bf", "#90f")},	
-			{fill: g(defaultFill, "#bf0073", "#f90")},	
+			{fill: g(defaultFill, "#bf7300", "#f90")},	
 			{fill: g(defaultFill, "#00bf73", "#0f9")}	
 		],
 		markerThemes: [
