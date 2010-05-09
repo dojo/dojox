@@ -31,6 +31,7 @@ dojo.require("dojox.charting.themes.PrimaryColors"); // as a baseline theme
 		});
 
 	themes.ThreeD = themes.PrimaryColors.clone();
+	themes.ThreeD.series.shadow = {dx: 1, dy: 1, width: 3, color: [0, 0, 0, 0.15]};
 
 	themes.ThreeD.next = function(elementType, mixin, doPost){
 		if(elementType == "bar" || elementType == "column"){
