@@ -33,20 +33,23 @@
 <script>
 	dojo.require("dojox.charting.Chart2D");
 
-	var charts = {};
+	var charts = {}, backgroundImage;
 
 	function update(){
 		//	change the theme based on the select change.
 		var select = dojo.byId("themeChooser"), name = select.options[select.selectedIndex].value;
 		dojo.require("dojox.charting.themes." + name);
+		if(!backgroundImage){
+			backgroundImage = dojo.style(dojo.body(), "backgroundImage");
+		}
 		if(name == "Tom"){
-			dojo.style(dojo.body(), { backgroundColor: "#181818" });
+			dojo.style(dojo.body(), { backgroundColor: "#181818", backgroundImage: "none", color: "#eaf2cb" });
 		} else if (name=="Electric"){
-			dojo.style(dojo.body(), { backgroundColor: "#333" });
+			dojo.style(dojo.body(), { backgroundColor: "#333", backgroundImage: "none", color: "#ccc" });
 		} else if (name=="Renkoo"){
-			dojo.style(dojo.body(), { backgroundColor: "#123666" });
+			dojo.style(dojo.body(), { backgroundColor: "#123666", backgroundImage: "none", color: "#95afdb" });
 		} else {
-			dojo.style(dojo.body(), { backgroundColor: "inherit" });
+			dojo.style(dojo.body(), { backgroundColor: "inherit", backgroundImage: backgroundImage, color: "inherit" });
 		}
 		var theme = dojo.getObject("dojox.charting.themes." + name);
 		if(theme){
