@@ -1,4 +1,4 @@
-dojo.provide("dojox.charting.themes.Tom");
+dojo.provide("dojox.charting.themes.Electric");
 
 dojo.require("dojox.gfx.gradutils");
 dojo.require("dojox.charting.Theme");
@@ -7,76 +7,81 @@ dojo.require("dojox.charting.Theme");
 
 (function(){
 	var dc = dojox.charting, themes = dc.themes, Theme = dc.Theme, g = Theme.generateGradient,
-		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 0, y2: 100};
+		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 0, y2: 75};
 	
-	themes.Tom = new dc.Theme({
+	themes.Electric = new dc.Theme({
 		chart: {
-			fill:   "#181818",
-			stroke: {color: "#181818"}
+			fill:   "#333",
+			stroke: {color: "#333"}
 		},
 		plotarea: {
-			fill: "#181818"
+			fill: "#333"
 		},
 		axis:{
 			stroke:	{ // the axis itself
-				color: "#a0a68b",
+				color: "#aaa",
 				width: 1
 			},
 			tick: {	// used as a foundation for all ticks
-				color:     "#888c76",
+				color:     "#777",
 				position:  "center",
 				font:      "normal normal normal 7pt Helvetica, Arial, sans-serif",	// labels on axis
-				fontColor: "#888c76"								// color of labels
+				fontColor: "#777"								// color of labels
 			}
 		},
 		series: {
-			stroke:  {width: 2.5, color: "#eaf2cb"},
+			stroke:  {width: 2, color: "#ccc"},
 			outline: null,
 			font: "normal normal normal 8pt Helvetica, Arial, sans-serif",
-			fontColor: "#eaf2cb"
+			fontColor: "#ccc"
 		},
 		marker: {
-			stroke:  {width: 1.25, color: "#eaf2cb"},
-			outline: {width: 1.25, color: "#eaf2cb"},
+			stroke:  {width: 3, color: "#ccc"},
+			outline: null,
 			font: "normal normal normal 8pt Helvetica, Arial, sans-serif",
-			fontColor: "#eaf2cb"
+			fontColor: "#ccc"
 		},
 		seriesThemes: [
-			{fill: g(defaultFill, "#bf9e0a", "#ecc20c")},
-			{fill: g(defaultFill, "#73b086", "#95e5af")},	
-			{fill: g(defaultFill, "#c7212d", "#ed2835")},	
-			{fill: g(defaultFill, "#87ab41", "#b6e557")},	
-			{fill: g(defaultFill, "#b86c25", "#d37d2a")}	
+			{fill: g(defaultFill, "#004cbf", "#06f")},
+			{fill: g(defaultFill, "#bf004c", "#f06")},	
+			{fill: g(defaultFill, "#43bf00", "#6f0")},	
+			{fill: g(defaultFill, "#7300bf", "#90f")},	
+			{fill: g(defaultFill, "#bf0073", "#f90")},	
+			{fill: g(defaultFill, "#00bf73", "#0f9")}	
 		],
 		markerThemes: [
-			{fill: "#bf9e0a", stroke: {color: "#ecc20c"}},	
-			{fill: "#73b086", stroke: {color: "#95e5af"}},
-			{fill: "#c7212d", stroke: {color: "#ed2835"}},	
-			{fill: "#87ab41", stroke: {color: "#b6e557"}},	
-			{fill: "#b86c25", stroke: {color: "#d37d2a"}}	
+			{fill: "#06f", stroke: {color: "#06f"}},	
+			{fill: "#f06", stroke: {color: "#f06"}},
+			{fill: "#6f0", stroke: {color: "#6f0"}},	
+			{fill: "#90f", stroke: {color: "#90f"}},	
+			{fill: "#f90", stroke: {color: "#f90"}},	
+			{fill: "#0f9", stroke: {color: "#0f9"}}	
 		]
 	});
 	
-	themes.Tom.next = function(elementType, mixin, doPost){
+	themes.Electric.next = function(elementType, mixin, doPost){
 		var isLine = elementType == "line";
 		if(isLine || elementType == "area"){
 			// custom processing for lines: substitute colors
 			var s = this.seriesThemes[this._current % this.seriesThemes.length];
 			s.fill.space = "plot";
 			if(isLine){
-				s.stroke  = { width: 4, color: s.fill.colors[0].color};
+				s.stroke  = { width: 2.5, color: s.fill.colors[1].color};
+			}
+			if(elementType == "area"){
+				s.fill.y2 = 90;
 			}
 			var theme = Theme.prototype.next.apply(this, arguments);
 			// cleanup
-			delete s.outline;
 			delete s.stroke;
+			s.fill.y2 = 75;
 			s.fill.space = "shape";
 			return theme;
 		}
 		return Theme.prototype.next.apply(this, arguments);
 	};
 	
-	themes.Tom.post = function(theme, elementType){
+	themes.Electric.post = function(theme, elementType){
 		theme = Theme.prototype.post.apply(this, arguments);
 		if((elementType == "slice" || elementType == "circle") && theme.series.fill && theme.series.fill.type == "radial"){
 			theme.series.fill = dojox.gfx.gradutils.reverse(theme.series.fill);

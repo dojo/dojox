@@ -41,6 +41,8 @@
 		dojo.require("dojox.charting.themes." + name);
 		if(name == "Tom"){
 			dojo.style(dojo.body(), { backgroundColor: "#181818" });
+		} else if (name=="Electric"){
+			dojo.style(dojo.body(), { backgroundColor: "#333" });
 		} else {
 			dojo.style(dojo.body(), { backgroundColor: "inherit" });
 		}
@@ -114,6 +116,7 @@
 				<option value="Chris">Chris</option>
 				<option value="Tom">Tom</option>
 				<option value="PrimaryColors">PrimaryColors</option>
+				<option value="Electric">Electric</option>
 			</optgroup>
 			<optgroup label="Classic">
 		<option value="Adobebricks">Adobebricks</option>
