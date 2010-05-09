@@ -89,7 +89,7 @@ dojo.declare(
 		var sw = this.selectedChildWidget;
 		
 		var lastStep = sw.isLastChild;
-		this.nextButton.attr("disabled", lastStep);
+		this.nextButton.set("disabled", lastStep);
 		this._setButtonClass(this.nextButton);
 		if(sw.doneFunction){
 			//console.log(sw.doneFunction);
@@ -101,7 +101,7 @@ dojo.declare(
 			// #1438 issue here.
 			this.doneButton.domNode.style.display = "none";
 		}
-		this.previousButton.attr("disabled", !this.selectedChildWidget.canGoBack);
+		this.previousButton.set("disabled", !this.selectedChildWidget.canGoBack);
 		this._setButtonClass(this.previousButton);
 	},
 
