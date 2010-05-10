@@ -10,7 +10,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 //	summary:
 //		A series of plugins that give the Editor the ability to create and edit 
 //		HTML tables. See the end of this document for all avaiable plugins
-// 		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
+//		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
 //
 //  example:
 //		|	<div dojoType="dijit.Editor" plugins="[
@@ -18,13 +18,13 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 //		|			{name: 'dojox.editor.plugins.TablePlugins', command: 'insertTable'},
 //		|			{name: 'dojox.editor.plugins.TablePlugins', command: 'modifyTable'}
 //		|		]">
-//    	| 	   Editor text is here
+//		|		Editor text is here
 //		|	</div>
 //
 //	TODO:	
 //		Currently not supporting merging or splitting cells
 //
-//	FIXME: 	Undo is very buggy, and therefore unimeplented in all browsers 
+//	FIXME:	Undo is very buggy, and therefore unimeplented in all browsers 
 //			except IE - which itself has only been lightly tested.
 //
 //  FIXME:	Selecting multiple table cells in Firefox looks to be impossible.
@@ -206,7 +206,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 	onDragEnd: function(){
 		// summary
 		//	Detects that an object has been dragged into place
-		// 	Currently, this code is only used for when a table is dragged
+		//	Currently, this code is only used for when a table is dragged
 		//	and clears the "align" attribute, so that the table will look
 		//	to be more in the place that the user expected.
 		//	TODO: This code can be used for other things, most 
@@ -270,7 +270,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 	},
 	
 	_prepareTable: function(tbl){
-		// 	For IE's sake, we are adding IDs to the TDs if none is there
+		//	For IE's sake, we are adding IDs to the TDs if none is there
 		//	We go ahead and use it for other code for convenience
 		//	
 		var tds = this.editor.query("td", tbl);
@@ -541,14 +541,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			w.show();
 			var c = dojo.connect(w, "onBuildTable", this, function(obj){
 				dojo.disconnect(c);
-				
-				var res = this.editor.execCommand('inserthtml', obj.htmlText);
-				
-				// commenting this line, due to msg below
-				//var td = this.editor.query("td", this.editor.byId(obj.id));
-				
-				//HMMMM.... This throws a security error now. didn't used to.
-				//this.editor.selectElement(td);
+                this.editor.execCommand('inserthtml', obj.htmlText);
 			});
 		},
 		
@@ -714,7 +707,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 		_makeTitle: function(str){
 			// Parses the commandName into a Title
 			//	based on camelCase
-			var s = str.split(""), ns = [];
+			var ns = [];
 			dojo.forEach(str, function(c, i){
 				if(c.charCodeAt(0)<91 && i>0 && ns[i-1].charCodeAt(0)!=32){
 					ns.push(" ");
@@ -733,7 +726,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			//	Returns: array of TDs or empty array
 			var cells = [];
 			var tbl = this.getTableInfo().tbl;
-			var tds = this.editor._tablePluginHandler._prepareTable(tbl);
+			this.editor._tablePluginHandler._prepareTable(tbl);
 			var e = this.editor;
 
 			// Lets do this the way IE originally was (Looking up ids).  Walking the selection
@@ -816,13 +809,13 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 	onInsert: function(){
 		console.log("insert");
 		
-		var rows = 		this.selectRow.get("value") || 1,
-			cols = 		this.selectCol.get("value") || 1,
-			width = 	this.selectWidth.get("value"),
+		var rows =		this.selectRow.get("value") || 1,
+			cols =		this.selectCol.get("value") || 1,
+			width =		this.selectWidth.get("value"),
 			widthType = this.selectWidthType.get("value"),
-			border = 	this.selectBorder.get("value"),
-			pad = 		this.selectPad.get("value"),
-			space = 	this.selectSpace.get("value"),
+			border =	this.selectBorder.get("value"),
+			pad =		this.selectPad.get("value"),
+			space =		this.selectSpace.get("value"),
 			_id =		"tbl_"+(new Date().getTime()),
 			t = '<table id="'+_id+'"width="'+width+((widthType=="percent")?'%':'')+'" border="'+border+'" cellspacing="'+space+'" cellpadding="'+pad+'">\n';
 		
@@ -852,7 +845,7 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 		//		Function to clean up memory so that the dialog is destroyed 
 		//		when closed.
 		var c = dojo.connect(this, "onHide", function(){
-		  	dojo.disconnect(c);
+			dojo.disconnect(c);
 			var self = this;
 			setTimeout(function(){
 				self.destroyRecursive();
@@ -891,24 +884,33 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
 		this.inherited(arguments);
+		this._cleanupWidgets = [];
+		var w1 = new dijit.ColorPalette({});
+		this.connect(w1, "onChange", function(color){
+			dijit.popup.close(w1);
+			this.setBrdColor(color);
+		});
+		this.connect(w1, "onBlur", function(){
+			dijit.popup.close(w1);	
+		});
 		this.connect(this.borderCol, "click", function(){
-			var div = document.createElement("div");
-			var w = new dijit.ColorPalette({}, div);
-			dijit.popup.open({popup:w, around:this.borderCol});
-			this.connect(w, "onChange", function(color){
-				dijit.popup.close(w);
-				this.setBrdColor(color);
-			});
+			dijit.popup.open({popup:w1, around:this.borderCol});
+			w1.focus();
+		});
+		var w2 = new dijit.ColorPalette({});
+		this.connect(w2, "onChange", function(color){
+			dijit.popup.close(w2);
+			this.setBkColor(color);
+		});
+		this.connect(w2, "onBlur", function(){
+			dijit.popup.close(w2);	
 		});
 		this.connect(this.backgroundCol, "click", function(){
-			var div = document.createElement("div");
-			var w = new dijit.ColorPalette({}, div);
-			dijit.popup.open({popup:w, around:this.backgroundCol});
-			this.connect(w, "onChange", function(color){
-				dijit.popup.close(w);
-				this.setBkColor(color);
-			});
+            dijit.popup.open({popup:w2, around:this.backgroundCol});
+			w2.focus();
 		});
+		this._cleanupWidgets.push(w1);
+		this._cleanupWidgets.push(w2);
 		
 		this.setBrdColor(dojo.attr(this.table, "bordercolor"));
 		this.setBkColor(dojo.attr(this.table, "bgcolor"));
@@ -972,7 +974,7 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 		//		Function to clean up memory so that the dialog is destroyed 
 		//		when closed.
 		var c = dojo.connect(this, "onHide", function(){
-		  	dojo.disconnect(c);
+			dojo.disconnect(c);
 			var self = this;
 			setTimeout(function(){
 				self.destroyRecursive();
@@ -982,6 +984,18 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 
 	onSetTable: function(tableText){
 		//stub
+	},
+
+	destroy: function(){
+		// summary:
+		//		Cleanup function.
+		this.inherited(arguments);
+		dojo.forEach(this._cleanupWidgets, function(w){
+			if(w && w.destroy){
+				w.destroy();
+			}
+		});
+		delete this._cleanupWidgets;
 	}
 });
 
