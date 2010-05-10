@@ -12,7 +12,7 @@ dojo.require("dojox.charting.Theme");
 	themes.Charged = new dc.Theme({
 		chart: {
 			fill: "#ededdf",
-			pageStyle: {backgroundColor: "#ededdf", backgroundImage: "none"}
+			pageStyle: {backgroundColor: "#ededdf", backgroundImage: "none", color: "inherit"}
 		},
 		plotarea: {
 			fill: "transparent"
