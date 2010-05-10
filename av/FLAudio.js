@@ -1,13 +1,11 @@
 dojo.provide("dojox.av.FLAudio");
 dojo.experimental("dojox.av.FLAudio");
-dojo.require("dijit._Widget");
 dojo.require("dojox.embed.Flash");
-dojo.require("dojox.av._Media");
 dojo.require("dojox.timing.doLater");
 
 
 dojo.declare("dojox.av.FLAudio", null, {
-			 
+
 	// summary:
 	//		Play MP3 files through the Flash SWF built in the
 	//		DEFT project.
@@ -87,15 +85,15 @@ dojo.declare("dojox.av.FLAudio", null, {
 		dojo.body().appendChild(this.domNode);
 		this.init();
 	},
-	
+
 	init: function(){
 		// summary:
 		// Initialize the media.
 		//
 		//
 		this._subs = [];
-		this.initialVolume = this._normalizeVolume(this.initialVolume);	
-		
+		this.initialVolume = this._normalizeVolume(this.initialVolume);
+
 		var args = {
 			path:this._swfPath.uri,
 			width:"1px",
@@ -115,13 +113,14 @@ dojo.declare("dojox.av.FLAudio", null, {
 				isDebug:this.isDebug
 			}
 		};
-		
+
 		this._sub("mediaError",    "onError");
 		this._sub("filesProgress", "onLoadStatus");
 		this._sub("filesAllLoaded", "onAllLoaded");
 		this._sub("mediaPosition", "onPlayStatus");
+		this._sub("mediaEnd", "onComplete");
 		this._sub("mediaMeta",     "onID3");
-		
+
 		this._flashObject = new dojox.embed.Flash(args, this.domNode);
 		this._flashObject.onError = function(err){
 			console.warn("Flash Error:", err);
@@ -131,14 +130,14 @@ dojo.declare("dojox.av.FLAudio", null, {
 			this.flashMedia = mov;
 			this.isPlaying = this.autoPlay;
 			this.isStopped = !this.autoPlay;
-			this.onLoad(this.flashMedia);		 
+			this.onLoad(this.flashMedia);
 		});
 	},
-	
+
 	//  ==============  //
 	//  Loading Files   //
 	//  ==============  //
-	
+
 	load: function(/*Object*/options){
 		// summary:
 		//		Adds a media object to the playlist
@@ -164,14 +163,14 @@ dojo.declare("dojox.av.FLAudio", null, {
 			options.url = this._normalizeUrl(options.url);
 		}
 		this.flashMedia.load(options);
-		
+
 		return options.url; // String
 	},
-	
+
 	//  =============================  //
 	//  Methods to control the sound   //
 	//  =============================  //
-	
+
 	doPlay: function(/*Object*/options){
 		// summary:
 		//		Tell media to play, based on
@@ -192,7 +191,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//			an IE error.
 		this.flashMedia.doPlay(options);
 	},
-	
+
 	pause: function(/*Object*/options){
 		// summary:
 		//		Tell media to pause, based on identifier in
@@ -200,21 +199,21 @@ dojo.declare("dojox.av.FLAudio", null, {
 		// options: Object
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
-		//		
+		//
 		this.flashMedia.pause(options);
 	},
-	
+
 	stop: function(/*Object*/options){
 		// summary:
 		//		Tell media to stop, based on identifier in
 		//		the options passed.
-		// options: 
+		// options:
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
-		//		
+		//
 		this.flashMedia.doStop(options);
 	},
-	
+
 	setVolume: function(/*Object*/options){
 		// summary:
 		//		Set media volume, based on identifier in
@@ -224,10 +223,10 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//		0 to 1
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
-		//		
+		//
 		this.flashMedia.setVolume(options);
 	},
-	
+
 	setPan: function(/*Object*/options){
 		// summary:
 		//		Set media pan, based on identifier in
@@ -237,10 +236,10 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//			-1 to 1
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
-		//		
+		//
 		this.flashMedia.setPan(options);
 	},
-	
+
 	getVolume: function(/*Object*/options){
 		// summary:
 		//		Get media volume, based on identifier in
@@ -248,10 +247,10 @@ dojo.declare("dojox.av.FLAudio", null, {
 		// options:
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
-		//		
+		//
 		return this.flashMedia.getVolume(options);
 	},
-	
+
 	getPan: function(/*Object*/options){
 		// summary:
 		//		Set media pan, based on identifier in
@@ -259,11 +258,20 @@ dojo.declare("dojox.av.FLAudio", null, {
 		// options:
 		//		index:Number OR id:String OR url:String
 		//			See doPlay()
-		//		
+		//
 		return this.flashMedia.getPan(options);
 	},
-	
-	
+
+	getPosition: function(/*Object*/options){
+		// summary:
+		//		Get the current time.
+		// options:
+		//		index:Number OR id:String OR url:String
+		//			See doPlay()
+		//
+		return this.flashMedia.getPosition(options);
+	},
+
 	//  =============  //
 	//  Sound Events   //
 	//  =============  //
@@ -272,20 +280,25 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//		stub fired when an error occurs
 		console.warn("SWF ERROR:", msg)
 	},
-	
+
 	onLoadStatus: function(/*Array*/events){
 		// summary:
 	},
-	
+
 	onAllLoaded: function(){
 		// summary:
 		//		stub fired
 	},
-	
+
 	onPlayStatus: function(/*Array*/events){
 		// summary:
 	},
-	
+
+	onComplete: function(/*Array*/events){
+		// summary:
+		//		Fired at the end of a media file.
+	},
+
 	onLoad: function(){
 		// summary:
 		//		stub fired when SWF is ready
@@ -294,62 +307,62 @@ dojo.declare("dojox.av.FLAudio", null, {
 		//	summary:
 		//		Fired when the ID3 data is received.
 	},
-	
-	
-	
+
+
+
 	destroy: function(){
 		// summary:
 		// 		destroys flash
 		if(!this.flashMedia){
-			this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));	
+			this._cons.push(dojo.connect(this, "onLoad", this, "destroy"));
 			return;
 		}
 		dojo.forEach(this._subs, function(s){
-			dojo.unsubscribe(s);								  
+			dojo.unsubscribe(s);
 		});
 		dojo.forEach(this._cons, function(c){
-			dojo.disconnect(c);								  
+			dojo.disconnect(c);
 		});
 		this._flashObject.destroy();
 		//dojo._destroyElement(this.flashDiv);
 	},
-	
-	
-	
+
+
+
 	_sub: function(topic, method){
 		// summary:
 		// helper for subscribing to topics
 		dojo.subscribe(this.id+"/"+topic, this, method);
 	},
-	
+
 	_normalizeVolume: function(vol){
 		// summary:
 		//		Ensures volume is less than one
 		//
 		if(vol>1){
 			while(vol>1){
-				vol*=.1	
+				vol*=.1
 			}
 		}
 		return vol;
 	},
-	
+
 	_normalizeUrl: function(_url){
 		// summary:
 		//		Checks that path is relative to HTML file or
-		//		convertes it to an absolute path. 
+		//		convertes it to an absolute path.
 		//
 		if(_url && _url.toLowerCase().indexOf("http")<0){
 			//
-			// Appears to be a relative path. Attempt to  convert it to absolute, 
+			// Appears to be a relative path. Attempt to  convert it to absolute,
 			// so it will better target the SWF.
 			var loc = window.location.href.split("/");
 			loc.pop();
 			loc = loc.join("/")+"/";
-			
+
 			_url = loc+_url;
 		}
 		return _url;
 	}
-	
+
 });
