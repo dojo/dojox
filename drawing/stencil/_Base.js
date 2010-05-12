@@ -393,8 +393,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				
 			}else{
 				this.style.current = this.style.norm;
-				this.style.currentHit = this.style.hitNorm;
 				this.style.currentText = this.style.text;
+				this.style.currentHit = this.style.hitNorm;
 			}
 			
 			if(this.selected){
@@ -483,8 +483,9 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 		
 		attr: function(/*String | Object*/key, /* ? String | Number */value){
 			// summary
-			//		Changes properties in the normal-style. Also can be used to
-			//		change most position and size props.
+			//		Changes properties in the style or disabled styles,. 
+			//              depending on whether the object is enabled.
+			//              Also can be used to change most position and size props.
 			
 			// NOTE: JUST A SETTTER!! TODO!
 			
@@ -494,10 +495,10 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			
 			// FIXME
 			// 'width' attr is used for line width. How to change the width of a stencil?
-			
-			var n = this.style.norm,
-				t = this.style.text,
-				ts = this.textSelected || {},
+
+			var n = this.enabled?this.style.norm:this.style.disabled;
+			var t = this.enabled?this.style.text:this.style.textDisabled;
+			var ts = this.textSelected || {},
 				o,
 				nm,
 				width,
