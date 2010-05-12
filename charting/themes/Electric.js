@@ -11,12 +11,12 @@ dojo.require("dojox.charting.Theme");
 	
 	themes.Electric = new dc.Theme({
 		chart: {
-			fill:      "#333",
-			stroke:    {color: "#333"},
-			pageStyle: {backgroundColor: "#333", backgroundImage: "none", color: "#ccc"}
+			fill:      "#252525",
+			stroke:    {color: "#252525"},
+			pageStyle: {backgroundColor: "#252525", backgroundImage: "none", color: "#ccc"}
 		},
 		plotarea: {
-			fill: "#333"
+			fill: "#252525"
 		},
 		axis:{
 			stroke:	{ // the axis itself
