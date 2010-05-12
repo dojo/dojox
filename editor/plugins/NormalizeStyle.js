@@ -102,14 +102,14 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								case "700":
 								case "800":
 								case "900":
-									sTag = dojo.withGlobal(w, function() { return dojo.create("b", {}); });
+									sTag = dojo.withGlobal(w, "create", dojo, ["b", {}] );
 									cNode.style.fontWeight = "";
 									break;
 							}
 							cNode = wrapNodes(sTag, cNode);
 							sTag = null;
 							if(fs == "italic"){
-								sTag = dojo.withGlobal(w, function() { return dojo.create("i", {}); });
+								sTag = dojo.withGlobal(w, "create", dojo, ["i", {}] );
 								cNode.style.fontStyle = "";
 							}
 							cNode = wrapNodes(sTag, cNode);
@@ -120,10 +120,10 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								dojo.forEach(da, function(s){
 									switch(s){
 										case "underline":
-											sTag = dojo.withGlobal(w, function() { return dojo.create("u", {}); });
+											sTag = dojo.withGlobal(w, "create", dojo, ["u", {}] );
 											break;
 										case "line-through": 
-											sTag = dojo.withGlobal(w, function() { return dojo.create("strike", {}); });
+											sTag = dojo.withGlobal(w, "create", dojo, ["strike", {}] );
 											break;
 									}
 									count++;
@@ -151,7 +151,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								if(!size){
 									size = 3;
 								}
-								sTag = dojo.withGlobal(w, function() { return dojo.create("font", {size: size}); });
+								sTag = dojo.withGlobal(w, "create", dojo, ["font", {size: size}] );
 								cNode.style.fontSize = "";
 							}
 							cNode = wrapNodes(sTag, cNode);
@@ -159,13 +159,13 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 							if(bc && tag !== "font"){
 								// IE doesn't like non-font background color crud.
 								bc = new dojo.Color(bc).toHex();
-								sTag = dojo.withGlobal(w, function() { return dojo.create("font", {style: {backgroundColor: bc}}); });
+								sTag = dojo.withGlobal(w, "create", dojo, ["font", {style: {backgroundColor: bc}}] );
 								cNode.style.backgroundColor = "";
 							}
 							if(c && tag !== "font"){
 								// IE doesn't like non-font background color crud.
 								c = new dojo.Color(c).toHex();
-								sTag = dojo.withGlobal(w, function() { return dojo.create("font", {color: c}); });
+								sTag = dojo.withGlobal(w, "create", dojo, ["font", {color: c}] );
 								cNode.style.color = "";
 							}
 							cNode = wrapNodes(sTag, cNode);
@@ -214,7 +214,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								break;
 					}
 					if(tTag){
-						var nNode = dojo.withGlobal(w, function() { return dojo.create(tTag, null, n, "before"); });	 
+						var nNode = dojo.withGlobal(w, "create", dojo, [tTag, null, n, "before"] );	 
 						while(n.firstChild){
 							nNode.appendChild(n.firstChild);
 						}
@@ -246,18 +246,18 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 							switch(tag){
 								case "b":
 								case "strong": // Mainly IE
-									span = dojo.withGlobal(w, function() { return dojo.create("span", {style: {"fontWeight": "bold"}}); });
+									span = dojo.withGlobal(w, "create", dojo, ["span", {style: {"fontWeight": "bold"}}] );
 									break;
 								case "i":
 								case "em": // Mainly IE
-									span = dojo.withGlobal(w, function() { return dojo.create("span", {style: {"fontStyle": "italic"}}); });
+									span = dojo.withGlobal(w, "create", dojo, ["span", {style: {"fontStyle": "italic"}}] );
 									break;
 								case "u":
-									span = dojo.withGlobal(w, function() { return dojo.create("span", {style: {"textDecoration": "underline"}}); });
+									span = dojo.withGlobal(w, "create", dojo, ["span", {style: {"textDecoration": "underline"}}] );
 									break;
 								case "strike":
 								case "s": // Mainly WebKit.
-									span = dojo.withGlobal(w, function() { return dojo.create("span", {style: {"textDecoration": "line-through"}}); });
+									span = dojo.withGlobal(w, "create", dojo, ["span", {style: {"textDecoration": "line-through"}}] );
 									break;
 								case "font": // Try to deal with colors
 									var styles = {};
@@ -285,7 +285,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 									if(dojo.attr(cNode, "size")){
 										styles.fontSize = sizeMap[dojo.attr(cNode, "size")];
 									}
-									span = dojo.withGlobal(w, function() { return dojo.create("span", {style: styles}); });
+									span = dojo.withGlobal(w, "create", dojo, ["span", {style: styles}] );
 									break;
 							}
 							if(span){
@@ -366,7 +366,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 					while(c && c.nodeType == 1 && c.tagName && c.tagName.toLowerCase() == "span"){
 						if(c.tagName && c.tagName.toLowerCase() === "span"){
 							if(!dojo.attr(c, "class") && !dojo.attr(c, "id") && c.style){
-                                var s1 = genStyleMap(node.style.cssText);
+								var s1 = genStyleMap(node.style.cssText);
 								var s2 = genStyleMap(c.style.cssText);
 								if(s1 && s2){
 									// Maps, so lets see if we can combine them.
