@@ -64,13 +64,14 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 		//		private
 		if(node){
 			var w = this.editor.window;
+			var self = this;
 			var convertNode = function(cNode){
 				if(cNode.nodeType == 1){
 					if(cNode.id !== "dijitEditorBody"){
 						var style = cNode.style;
 						var tag = cNode.tagName?cNode.tagName.toLowerCase():"";
 						var sTag;
-						if(style){
+						if(style && self._isInline(tag)){
 							// Lets check and convert certain node/style types.
 							var fw = style.fontWeight? style.fontWeight.toLowerCase() : "";
 							var fs = style.fontStyle? style.fontStyle.toLowerCase() : "";
@@ -344,6 +345,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 									var ch = key.charAt(i);
 									if(ch == "-"){
 										i++;
+										ch = key.charAt(i);
 										nKey += ch.toUpperCase();
 									}else{
 										nKey += ch;
@@ -364,7 +366,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 					while(c && c.nodeType == 1 && c.tagName && c.tagName.toLowerCase() == "span"){
 						if(c.tagName && c.tagName.toLowerCase() === "span"){
 							if(!dojo.attr(c, "class") && !dojo.attr(c, "id") && c.style){
-								var s1 = genStyleMap(node.style.cssText);
+                                var s1 = genStyleMap(node.style.cssText);
 								var s2 = genStyleMap(c.style.cssText);
 								if(s1 && s2){
 									// Maps, so lets see if we can combine them.
@@ -421,8 +423,40 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 			}
 		};
 		compressSpans(node);
+	},
+	
+	_isInline: function(tag){
+		// summary:
+		//		Function to determine if the current tag is an inline
+		//		element that does formatting, as we don't want to 
+		//		try to combine inlines with divs on styles.
+		// tag:
+		//		The tag to examine
+		// tags:
+		//		private
+		switch(tag){
+			case "a":
+			case "b":
+			case "strong":
+			case "s":
+			case "strike":
+			case "i":
+			case "u":
+			case "em":
+			case "sup":
+			case "sub":
+			case "span":
+			case "font":
+			case "big":
+			case "cite":
+			case "q":
+			case "img":
+			case "small":
+				return true;
+			default:
+				return false;
+		}
 	}
-
 });
 
 // Register this plugin.
