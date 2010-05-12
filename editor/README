@@ -13,7 +13,7 @@ Credits
 		Preview, Save, ToolbarLineBreak, InsertEntity, 
 		NormalizeIndentOutdent, Breadcrumb, FindReplace, 
 		CollapsibleToolbar, Blockquote, PasteFromWord, InsertAnchor,
-		TextColor)
+		TextColor, NormalizeStyle)
 	Dustin Machi 	 - Technical Assistance
 	David Schwartz and Gu Yi He (IBM) - Contributed enhancements to the
 		look and feel of FindReplace, as well as behavioral
@@ -127,6 +127,11 @@ dojox.editor.plugins.TextColor:
 	A plugin that makes use of the dojox.widget.ColorPicker widget in lieu of the
 	dijit.ColorPalette.  
 
+dojox.editor.plugins.NormalizeStyle:
+	Status: Experimental (unsupported).
+	A plugin that tries to normalize the output from the editor as either CSS styled or semantic (<b>, <i>, etc)
+	style.
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -156,7 +161,8 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/Blockquote
 	http://docs.dojocampus.org/dojox/editor/plugins/PasteFromWord
 	http://docs.dojocampus.org/dojox/editor/plugins/InsertAnchor       
-	http://docs.dojocampus.org/dojox/editor/plugins/TextColor 
+	http://docs.dojocampus.org/dojox/editor/plugins/TextColor
+	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeStyle 
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -251,6 +257,11 @@ For the TextColor plugin:
 	and CSS:
 	<link href="[path]dojox/editor/plugins/resources/css/TextColor.css" type="text/css" rel="stylesheet" />
 
+For the NormalizeStyle plugin:
+	dojo.require("dojox.editor.plugins.NormalizeStyle");
+	and CSS:
+	No CSS required.
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -269,3 +280,4 @@ See tests for examples:
 	dojox/editor/tests/editorPasteFromWord.html
 	dojox/editor/tests/editorInsertAnchor.html
 	dojox/editor/tests/editorTextColor.html
+	dojox/editor/tests/editorNormalizeStyle.html
