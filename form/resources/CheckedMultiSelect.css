@@ -112,6 +112,8 @@
 	border: 1px solid #b5bcc7;
 	background-color: #f7fcff;
 	line-height: normal;
+	-webkit-transition-property:background-color, border;
+ 	-webkit-transition-duration:.35s;
 }
 
 .claro .dojoxMultiSelectHover {
@@ -119,8 +121,10 @@
 	background-color: #e9f4fe;
 	background-image: url('../../../dijit/themes/claro/form/images/textBox_back.png');
 	background-repeat: repeat-x;
+	-webkit-transition-duration:.25s;
 }
 
 .claro .dojoxMultiSelectFocused {
 	border: 1px solid #769dc0;
+	-webkit-transition-duration:.1s;
 }
