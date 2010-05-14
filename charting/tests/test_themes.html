@@ -35,10 +35,27 @@
 
 	var charts = {}, backgroundImage, lastThemeName = "";
 
-	function update(){
+	function update(name){
 		// change the theme based on the select change.
-		var select = dojo.byId("themeChooser"), name = select.options[select.selectedIndex].value,
+		var select = dojo.byId("themeChooser"), 
 			usePageStyle = dojo.byId("pageStyleChooser").checked;
+
+		var test = false;
+		if(name){
+			//	make sure it's in the list first.
+			for(var i=0, l=select.options.length; i<l; i++){
+				if(select.options[i].value == name){
+					select.options[i].selected = true;
+					test = true;
+					break;
+				}
+			}
+		}
+
+		if(!test){
+			name = select.options[select.selectedIndex].value;
+		}
+
 		dojo.require("dojox.charting.themes." + name);
 		// retrieve the background image, if any
 		if(!backgroundImage){
@@ -109,7 +126,15 @@
 			addPlot("default", {type: "Pie", radius: 60, labelOffset: -20, radGrad: "linear"}).
 			addSeries("Series A", [0.35, 0.25, 0.42, 0.53, 0.69]);
 
-		update();
+		var name;
+		if(window.location.search.indexOf("?")>-1){
+			name = window.location.search.substring(1);
+			dojo.create("div", {
+				innerHTML: '<a href="theme_preview.html">Back to the Theme Previewer</a>'
+			}, dojo.body());
+		}
+
+		update(name);
 
 		dojo.connect(dojo.byId("themeChooser"), "onchange", update);
 		dojo.connect(dojo.byId("pageStyleChooser"), "onclick", update);
