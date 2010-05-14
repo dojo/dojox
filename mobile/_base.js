@@ -1009,8 +1009,7 @@ dojo.declare(
 	},
 
 	onMouseDownIcon: function (e){
-		var node = e.target;
-		this.setOpacity(node, this.getParentWidget().pressedIconOpacity);
+		this.setOpacity(this.iconNode, this.getParentWidget().pressedIconOpacity);
 	},
 
 	iconClicked: function(e){
@@ -1020,6 +1019,9 @@ dojo.declare(
 		}
 		if(this.moveTo || this.href || this.url){
 			this.transitionTo(this.moveTo, this.href, this.url);
+			setTimeout(dojo.hitch(this, function(d){
+				this.setOpacity(this.iconNode, 1);
+			}), 1500);
 		}else{
 			this.open();
 		}
