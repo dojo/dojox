@@ -139,7 +139,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								
 							}
 							if(s){
-								var sizeMap = {
+                                var sizeMap = {
 									"xx-small": 1,
 									"x-small": 2,
 									"small": 3,
@@ -149,6 +149,46 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 									"xx-large": 7,
 									"-webkit-xxx-large": 7
 								};
+
+								// Convert point or px size to size 
+								// to something roughly mappable.
+								if(s.indexOf("pt") > 0){
+									s = s.substring(0,s.indexOf("pt"));
+									s = parseInt(s);
+									if(s < 5){
+										s = "xx-small";
+									}else if(s < 10){
+										s = "x-small";
+									}else if(s < 15){
+										s = "small";
+									}else if(s < 20){
+										s = "medium";
+									}else if(s < 25){
+										s = "large";
+									}else if(s < 30){
+										s = "x-large";
+									}else if(s > 30){
+										s = "xx-large";
+									}
+								}else if(s.indexOf("px") > 0){
+									s = s.substring(0,s.indexOf("px"));
+									s = parseInt(s);
+									if(s < 5){
+										s = "xx-small";
+									}else if(s < 10){
+										s = "x-small";
+									}else if(s < 15){
+										s = "small";
+									}else if(s < 20){
+										s = "medium";
+									}else if(s < 25){
+										s = "large";
+									}else if(s < 30){
+										s = "x-large";
+									}else if(s > 30){
+										s = "xx-large";
+									}
+								}
 								var size = sizeMap[s];
 								if(!size){
 									size = 3;
@@ -368,48 +408,44 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 					// Okay, a possibly compressable span
 					var c = node.firstChild;
 					while(c && c.nodeType == 1 && c.tagName && c.tagName.toLowerCase() == "span"){
-						if(c.tagName && c.tagName.toLowerCase() === "span"){
-							if(!dojo.attr(c, "class") && !dojo.attr(c, "id") && c.style){
-								var s1 = genStyleMap(node.style.cssText);
-								var s2 = genStyleMap(c.style.cssText);
-								if(s1 && s2){
-									// Maps, so lets see if we can combine them.
-									var combinedMap = {};
-									var i;
-									for(i in s1){
-										if(!s1[i] || !s2[i] || s1[i] == s2[i]){
-											combinedMap[i] = s1[i];
+						if(!dojo.attr(c, "class") && !dojo.attr(c, "id") && c.style){
+							var s1 = genStyleMap(node.style.cssText);
+							var s2 = genStyleMap(c.style.cssText);
+							if(s1 && s2){
+								// Maps, so lets see if we can combine them.
+								var combinedMap = {};
+								var i;
+								for(i in s1){
+									if(!s1[i] || !s2[i] || s1[i] == s2[i]){
+										combinedMap[i] = s1[i];
+										delete s2[i];
+									}else if(s1[i] != s2[i]){
+										// Collision, cannot merge.
+										// IE does not handle combined uderline strikethrough text
+										// decoraations on a single span.
+										if(i == "textDecoration"){
+											combinedMap[i] = s1[i] + " " + s2[i];
 											delete s2[i];
-										}else if(s1[i] != s2[i]){
-											// Collision, cannot merge.
-											// IE does not handle combined uderline strikethrough text
-											// decoraations on a single span.
-											if(i == "textDecoration"){
-												combinedMap[i] = s1[i] + " " + s2[i];
-												delete s2[i];
-											}else{
-												combinedMap = null;	
-											}
-											break;
 										}else{
-											combinedMap = null;
-											break;
+											combinedMap = null;	
 										}
-									}
-									if(combinedMap){
-										for(i in s2){
-											combinedMap[i] = s2[i];
-										}
-										dojo.style(node, combinedMap);
-										while(c.firstChild){
-											node.appendChild(c.firstChild);
-										}
-										var t = c.nextSibling;
-										c.parentNode.removeChild(c);
-										c = t;
+										break;
 									}else{
-										c = c.nextSibling;
+										combinedMap = null;
+										break;
 									}
+								}
+								if(combinedMap){
+									for(i in s2){
+										combinedMap[i] = s2[i];
+									}
+									dojo.style(node, combinedMap);
+									while(c.firstChild){
+										node.appendChild(c.firstChild);
+									}
+									var t = c.nextSibling;
+									c.parentNode.removeChild(c);
+									c = t;
 								}else{
 									c = c.nextSibling;
 								}
