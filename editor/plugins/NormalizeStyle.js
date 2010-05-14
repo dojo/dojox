@@ -1,6 +1,7 @@
 dojo.provide("dojox.editor.plugins.NormalizeStyle");
 
 dojo.require("dijit._editor._Plugin");
+dojo.require("dijit._editor.html");
 
 dojo.experimental("dojox.editor.plugins.NormalizeStyle");
 
@@ -33,7 +34,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 
 		if(this.mode === "semantic"){
 			this.editor.contentDomPostFilters.push(dojo.hitch(this, this._convertToSemantic));
-		}else if(this.mode === "css"){
+            }else if(this.mode === "css"){
 			this.editor.contentDomPostFilters.push(dojo.hitch(this, this._convertToCss));
 		}
 
@@ -42,16 +43,27 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 		if(dojo.isIE){
 			// IE still uses sematic tags most of the time, so convert to that.
 			this.editor.contentDomPreFilters.push(dojo.hitch(this, this._convertToSemantic));
+			this._browserFilter = this._convertToSemantic;
 		}else if(dojo.isWebKit){
 			this.editor.contentDomPreFilters.push(dojo.hitch(this, this._convertToCss));
+			this._browserFilter = this._convertToCss;
 		}else if(dojo.isMoz){
 			//Editor currently forces Moz into semantic mode, so we need to match.  Ideally
 			//editor could get rid of that and just use CSS mode, whitch would work cleaner
 			//That's why this is split out, to make it easy to change later.
 			this.editor.contentDomPreFilters.push(dojo.hitch(this, this._convertToSemantic));
+			this._browserFilter = this._convertToSemantic;
 		}else{
 			this.editor.contentDomPreFilters.push(dojo.hitch(this, this._convertToSemantic));
+			this._browserFilter = this._convertToSemantic;
 		}
+
+		// Set up the inserthtml impl over-ride.  This catches semi-paste events and
+		// tries to normalize them too.
+		if(this.editor._inserthtmlImpl){
+			this.editor._oldInsertHtmlImpl = this.editor._inserthtmlImpl;
+		}
+		this.editor._inserthtmlImpl = dojo.hitch(this, this._inserthtmlImpl);
 	},
 
 	_convertToSemantic: function(node){
@@ -496,6 +508,33 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 			default:
 				return false;
 		}
+	},
+
+	_inserthtmlImpl: function(html){
+		// summary:
+		//		Function to trap and over-ride the editor inserthtml implementation
+		//		to try and filter it to match the editor's internal styling mode.
+		//		Helpful for plugins like PasteFromWord, in that it extra-filters
+		//		and normalizes the input if it can.
+		// html:
+		//		The HTML string to insert.
+		// tags:
+		//		private
+		if(html){
+			var div = this.editor.document.createElement("div");
+			div.innerHTML = html;
+			div = this._browserFilter(div);
+			html = dijit._editor.getChildrenHtml(div);
+			div.innerHTML = "";
+
+			// Call the over-ride, or if not available, just execute it.
+			if(this.editor._oldInsertHtmlImpl){
+				return this.editor._oldInsertHtmlImpl(html);
+			}else{
+				return this.editor.execCommand("inserthtml", html);
+			}
+		}
+		return false;
 	}
 });
 
