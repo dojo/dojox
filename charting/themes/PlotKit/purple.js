@@ -6,32 +6,39 @@ dojo.require("dojox.charting.Theme");
 	dxc.themes.PlotKit.purple=new dxc.Theme({
 		chart:{
 			stroke:null,
-			fill: "white"
+			fill: "#eee6f5"
 		},
 		plotarea:{
 			stroke:null,
 			fill: "#eee6f5"
 		},
 		axis:{
-			stroke:{ color:"#fff",width:2 },
-			line:{ color:"#fff",width:1 },
-			majorTick:{ color:"#fff", width:2, length:12 },
-			minorTick:{ color:"#fff", width:1, length:8 },
-			tick: {font:"normal normal normal 8pt Tahoma", fontColor:"#999"}
+			stroke:{ color:"#fff",width:1 },
+			line:{ color:"#fff",width:.5 },
+			majorTick:{ color:"#fff", width:.5, length:6 },
+			minorTick:{ color:"#fff", width:.5, length:3 },
+			tick: {font:"normal normal normal 7pt Helvetica,Arial,sans-serif", fontColor:"#999"}
 		},
 		series:{
-			outline:{ width:1, color:"#fff" },
-			stroke:{ width:2, color:"#666" },
+			stroke:{ width: 2.5, color:"#fff" },
 			fill:new dojo.Color([0x66, 0x66, 0x66, 0.8]),
-			font:"normal normal normal 8pt Tahoma",	//	label
-			fontColor:"#000"
+			font:"normal normal normal 7.5pt Helvetica,Arial,sans-serif",	//	label
+			fontColor:"#666"
 		},
 		marker:{	//	any markers on a series.
 			stroke:{ width:2 },
 			fill:"#333",
-			font:"normal normal normal 8pt Tahoma",	//	label
-			fontColor:"#000"
+			font:"normal normal normal 7pt Helvetica,Arial,sans-serif",	//	label
+			fontColor:"#666"
 		},
 		colors: dxc.Theme.defineColors({hue:271, saturation:60, low:40, high:88})
 	});
+
+	dxc.themes.PlotKit.purple.next = function(elementType, mixin, doPost){
+		var theme = dxc.Theme.prototype.next.apply(this, arguments);
+		if(elementType != "line"){
+			theme.series.stroke.color = "#fff";
+		}
+		return theme;
+	};
 })();
