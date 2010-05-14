@@ -71,7 +71,9 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 						var style = cNode.style;
 						var tag = cNode.tagName?cNode.tagName.toLowerCase():"";
 						var sTag;
-						if(style && self._isInline(tag)){
+						if(style && tag != "table" && tag != "ul" && tag != "ol"){
+							// Avoid wrapper blocks that have specific underlying structure, as injecting
+							// spans/etc there is invalid.
 							// Lets check and convert certain node/style types.
 							var fw = style.fontWeight? style.fontWeight.toLowerCase() : "";
 							var fs = style.fontStyle? style.fontStyle.toLowerCase() : "";
@@ -156,8 +158,10 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 							}
 							cNode = wrapNodes(sTag, cNode);
 							sTag = null;
-							if(bc && tag !== "font"){
+							if(bc && tag !== "font" && self._isInline(tag)){
 								// IE doesn't like non-font background color crud.
+								// Also, don't move it in if the background color is set on a block style node, 
+								// as it won't color properly once put on inline font.
 								bc = new dojo.Color(bc).toHex();
 								sTag = dojo.withGlobal(w, "create", dojo, ["font", {style: {backgroundColor: bc}}] );
 								cNode.style.backgroundColor = "";
