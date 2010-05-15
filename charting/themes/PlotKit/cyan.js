@@ -37,6 +37,10 @@ dojo.require("dojox.charting.Theme");
 		var theme = dxc.Theme.prototype.next.apply(this, arguments);
 		if(elementType != "line"){
 			theme.series.stroke.color = "#fff";
+		} else {
+			theme.marker.outline = { width: 2, color: "#fff" };
+			theme.series.stroke.width = 3.5;
+			theme.marker.stroke.width = 2;
 		}
 		return theme;
 	};
