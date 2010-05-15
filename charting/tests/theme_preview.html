@@ -51,7 +51,7 @@
 			var chart = dojo.create("div", { className: "chart" }, container);
 			var title = dojo.create("div", { 
 				className: "title", 
-				innerHTML: '<a href="test_themes.html?' + theme + '">' + theme + '</a>' 
+				innerHTML: 'See more of "<a href="test_themes.html?' + theme + '">' + theme + '</a>"' 
 			}, container);
 			var c = new dojox.charting.Chart2D(chart).
 				setTheme(dojo.getObject("dojox.charting.themes." + theme)).
