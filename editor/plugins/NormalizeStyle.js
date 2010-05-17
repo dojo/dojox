@@ -34,7 +34,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 
 		if(this.mode === "semantic"){
 			this.editor.contentDomPostFilters.push(dojo.hitch(this, this._convertToSemantic));
-            }else if(this.mode === "css"){
+		}else if(this.mode === "css"){
 			this.editor.contentDomPostFilters.push(dojo.hitch(this, this._convertToCss));
 		}
 
@@ -151,7 +151,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								
 							}
 							if(s){
-                                var sizeMap = {
+								var sizeMap = {
 									"xx-small": 1,
 									"x-small": 2,
 									"small": 3,
