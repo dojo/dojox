@@ -21,7 +21,10 @@
 	background-image:url("../../../dijit/themes/claro/images/loadingAnimation.gif");
 }
 .claro .dojoxGridError {
-	background-image:url("../../../dijit/themes/claro/images/warning.png");
+	background-image: url('../../../dijit/icons/images/commonIconsObjActEnabled.png'); 
+	background-position: -496px;
+	width: 16px;
+	height: 16px;
 }
 
 /* header */
@@ -36,7 +39,7 @@
 	border-color:#BCBCBC #BCBCBC #BCBCBC transparent;
 }
 .dj_ie6 .claro .dojoxGridHeader .dojoxGridCell { 
-	border-left-color:#e5edf4;
+	border-color:#BCBCBC #BCBCBC #BCBCBC #e5edf4;
 }
 
 /* header sorting arrow */
@@ -174,6 +177,9 @@
 	border:solid 1px #769dc0;
 	background-color:#93cafe;
 	border-collapse:separate;/*FF*/
+}
+.claro .dojoxGridDoubleAffordance .dojoxGridRowActive .dojoxGridCell{	
+	background-image:url("images/row_back.png");
 }
 .claro .dojoxGridDoubleAffordance .dojoxGridRowActive .dojoxGridCellActive {	
 	background:url("images/td_button_down.png") #93cafe repeat-x;
