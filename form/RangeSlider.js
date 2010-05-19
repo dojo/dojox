@@ -11,9 +11,10 @@ dojo.require("dojox.fx");
 	;
 
 	dojo.declare("dojox.form._RangeSliderMixin", null, {
-	
-		value:[0,100],
+
+		value: [0,100],
 		postMixInProperties: function(){
+			this.inherited(arguments);
 			this.value = dojo.map(this.value, function(i){ return parseInt(i, 10); });
 		},
 	

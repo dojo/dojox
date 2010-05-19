@@ -1,4 +1,4 @@
-.dojoxRangeSlider .dijitSliderLeftBumperH, .dojoxRangeSlider .dijitSliderBottomBumperV  {
+.dojoxRangeSlider .dijitSliderLeftBumper, .dojoxRangeSlider .dijitSliderBottomBumper  {
     background:#FFFFFF !important;
 }
 
@@ -19,4 +19,12 @@
 .dojoxRangeSlider .dijitSliderProgressBarV {
     position:absolute !important;
     border-width: 0px;
+}
+
+.dojoxRangeSlider .dijitSliderImageHandleH {
+	left: -50%;
+}
+.dijitSlider .dojoxRangeSliderBarContainer .dijitSliderProgressBarH,
+.dojoxRangeSlider .dijitSliderMoveableH {
+        right:auto !important;
 }
