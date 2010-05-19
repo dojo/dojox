@@ -221,7 +221,7 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 		dojo.style(this.mouseNode, 'position', 'absolute');
 		dojo.style(this.mouseNode, 'z-index', '100');
 		if(this.useTooltip){
-			dijit.showTooltip('test',this.mouseNode);
+			dijit.showTooltip('test',this.mouseNode, !this.isLeftToRight());
 			dijit.hideTooltip(this.mouseNode);
 		}
 	},
@@ -405,7 +405,7 @@ dojo.declare("dojox.widget.gauge._Gauge",[dijit._Widget, dijit._Templated, dijit
 		if(this._lastHover != txt){
 			if(txt !== ''){ 
 				dijit.hideTooltip(this.mouseNode);
-				dijit.showTooltip(txt,this.mouseNode);
+				dijit.showTooltip(txt,this.mouseNode, !this.isLeftToRight());
 			}else{
 				dijit.hideTooltip(this.mouseNode);
 			}

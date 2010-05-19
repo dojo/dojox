@@ -159,8 +159,8 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 		//		containing a summary when the mouse hovers over them.
 		var store = this.store;
 		var timer;
-		var ul = this._resultList = 
-			dojo.create("ul", {"class" : "dojoxFeedPortletList"}, this.containerNode);
+		var ul = (this._resultList = 
+			dojo.create("ul", {"class" : "dojoxFeedPortletList"}, this.containerNode));
 
 		dojo.forEach(items, dojo.hitch(this, function(item){
 			var li = dojo.create("li", {
@@ -193,7 +193,7 @@ dojo.declare("dojox.widget.FeedPortlet", dojox.widget.Portlet, {
 					});
 					
 					// Hover the tooltip over the anchor tag
-					dijit.showTooltip(content, li.firstChild);
+					dijit.showTooltip(content, li.firstChild, !this.isLeftToRight());
 				}), 500);
 				
 				
@@ -235,9 +235,9 @@ dojo.declare("dojox.widget.ExpandableFeedPortlet", dojox.widget.FeedPortlet, {
 		var expandedCls = "dojoxPortletItemOpen";
 		
 		var timer;
-		var ul = this._resultList = dojo.create("ul", {
+		var ul = (this._resultList = dojo.create("ul", {
 			"class": "dojoxFeedPortletExpandableList"
-		}, this.containerNode);
+		}, this.containerNode));
 		
 		// Create the LI elements.	Each LI has two DIV elements, the 
 		// top DIV contains the toggle icon and title, and the bottom
