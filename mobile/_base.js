@@ -920,7 +920,7 @@ dojo.declare(
 		len = nodes.length;
 		for(i = 0; i < len; i++){
 			s1 = nodes[i].getAttribute("dojoAttachPoint");
-			if(s){
+			if(s1){
 				this[s1] = nodes[i];
 			}
 		}
