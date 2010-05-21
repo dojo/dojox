@@ -21,8 +21,16 @@
 	cursor: nw-resize;
 }
 
+.dijitRtl .dojoxResizeNW {
+        cursor: ne-resize;
+}
+
 .dojoxResizeNE {
 	cursor: ne-resize; 
+}
+
+.dijitRtl .dojoxResizeNE {
+        cursor: nw-resize;
 }
 
 .dojoxResizeW {
