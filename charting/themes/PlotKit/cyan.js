@@ -1,47 +1,10 @@
 dojo.provide("dojox.charting.themes.PlotKit.cyan");
-dojo.require("dojox.charting.Theme");
+dojo.require("dojox.charting.themes.PlotKit.base");
 
 (function(){
-	var dxc=dojox.charting;
-	dxc.themes.PlotKit.cyan=new dxc.Theme({
-		chart:{
-			stroke:null,
-			fill: "#e6f1f5"
-		},
-		plotarea:{
-			stroke:null,
-			fill: "#e6f1f5"
-		},
-		axis:{
-			stroke:{ color:"#fff",width:1 },
-			line:{ color:"#fff",width:.5 },
-			majorTick:{ color:"#fff", width:.5, length:6 },
-			minorTick:{ color:"#fff", width:.5, length:3 },
-			tick: {font:"normal normal normal 7pt Helvetica,Arial,sans-serif", fontColor:"#999"}
-		},
-		series:{
-			stroke:{ width: 2.5, color:"#fff" },
-			fill:"#666",
-			font:"normal normal normal 7.5pt Helvetica,Arial,sans-serif",	//	label
-			fontColor:"#666"
-		},
-		marker:{	//	any markers on a series.
-			stroke:{ width:2 },
-			fill:"#333",
-			font:"normal normal normal 7pt Helvetica,Arial,sans-serif",	//	label
-			fontColor:"#666"
-		},
-		colors: dxc.Theme.defineColors({hue:194, saturation:60, low:40, high:88})
-	});
-	dxc.themes.PlotKit.cyan.next = function(elementType, mixin, doPost){
-		var theme = dxc.Theme.prototype.next.apply(this, arguments);
-		if(elementType != "line"){
-			theme.series.stroke.color = "#fff";
-		} else {
-			theme.marker.outline = { width: 2, color: "#fff" };
-			theme.series.stroke.width = 3.5;
-			theme.marker.stroke.width = 2;
-		}
-		return theme;
-	};
+	var dc = dojox.charting, pk = dc.themes.PlotKit;
+
+	pk.cyan = pk.base.clone();
+	pk.cyan.chart.fill = pk.cyan.plotarea.fill = "#e6f1f5";
+	pk.cyan.colors = dc.Theme.defineColors({hue: 194, saturation: 60, low: 40, high: 88});
 })();
