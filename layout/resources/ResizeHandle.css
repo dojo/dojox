@@ -10,6 +10,13 @@
 	line-height: 0px;
 }
 
+.dijitRtl .dojoxResizeHandle {
+        float: right;
+        left: 0px;
+        right: auto;
+	background-image: url('icons/resizeRtl.png');
+}
+
 .dojoxResizeNW {
 	cursor: nw-resize;
 }
@@ -32,3 +39,6 @@
 	border:1px dashed #666; 
 	z-index:999; 
 }
+
+
+
