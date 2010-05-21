@@ -13,7 +13,7 @@ Credits
 		Preview, Save, ToolbarLineBreak, InsertEntity, 
 		NormalizeIndentOutdent, Breadcrumb, FindReplace, 
 		CollapsibleToolbar, Blockquote, PasteFromWord, InsertAnchor,
-		TextColor, NormalizeStyle)
+		TextColor, NormalizeStyle, StatusBar)
 	Dustin Machi 	 - Technical Assistance
 	David Schwartz and Gu Yi He (IBM) - Contributed enhancements to the
 		look and feel of FindReplace, as well as behavioral
@@ -132,6 +132,10 @@ dojox.editor.plugins.NormalizeStyle:
 	A plugin that tries to normalize the output from the editor as either CSS styled or semantic (<b>, <i>, etc)
 	style.
 
+dojox.editor.plugins.StatusBar:
+	Status: Experimental (unsupported).
+	A plugin that adds a status bar and an optional resize handle to the footer of the editor.
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -139,6 +143,7 @@ dijit
 dojox.form
 dojox.html.format
 dojox.widget.ColorPicker
+dojox.layout.ResizeHandle
 
 -------------------------------------------------------------------------------
 Documentation
@@ -162,7 +167,8 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/PasteFromWord
 	http://docs.dojocampus.org/dojox/editor/plugins/InsertAnchor       
 	http://docs.dojocampus.org/dojox/editor/plugins/TextColor
-	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeStyle 
+	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeStyle
+	http://docs.dojocampus.org/dojox/editor/plugins/StatusBar 
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -262,6 +268,11 @@ For the NormalizeStyle plugin:
 	and CSS:
 	No CSS required.
 
+For the StatusBar plugin:
+        dojo.require("dojox.editor.plugins.StatusBar");
+        and CSS:
+        <link href="[path]dojox/editor/plugins/resources/css/StatusBar.css" type="text/css" rel="stylesheet" />
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -281,3 +292,5 @@ See tests for examples:
 	dojox/editor/tests/editorInsertAnchor.html
 	dojox/editor/tests/editorTextColor.html
 	dojox/editor/tests/editorNormalizeStyle.html
+	dojox/editor/tests/editorStatusBar.html
+	dojox/editor/tests/testPluginsAll.html
