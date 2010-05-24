@@ -112,7 +112,7 @@ dojo.declare(
 			if(this._startX !== null){
 				dojo.disconnect(this.events.pop());
 				dojo.style(this.domNode, "display", "none");
-				this._startX = null;	// we use _startX as an indicator of an active drag
+				this._startX = this._endX = null;
 			}
 		},
 		
