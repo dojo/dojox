@@ -213,13 +213,15 @@ dojo.provide("dojox.drawing.Drawing");
 			// 		The common objects that are mixed into
 			//		a new Stencil. Mostly internal, but could be used.
 			//
+			var surface = data.stencilType;
+			var ui = this.mode=="ui" || mode=="ui"; 
 			return dojo.mixin({
-				container: this.mode=="ui" || mode=="ui" ? this.canvas.overlay.createGroup() : this.canvas.surface.createGroup(),
+				container: ui && !surface ? this.canvas.overlay.createGroup() : this.canvas.surface.createGroup(),
 				util:this.util,
 				keys:this.keys,
 				mouse:this.mouse,
 				drawing:this,
-				drawingType: this.mode=="ui" || mode=="ui" ? "ui" : "stencil",
+				drawingType: ui && !surface ? "ui" : "stencil",
 				style:this.defaults.copy()
 			}, data || {});
 		},

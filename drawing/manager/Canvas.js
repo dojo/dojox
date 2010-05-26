@@ -92,6 +92,7 @@ dojo.provide("dojox.drawing.manager.Canvas");
 					this.height -= sw;
 				}
 				
+				this.mouse.resize(this.width,this.height);
 				this.gfxSurface.setDimensions(this.width, this.height);
 
 			

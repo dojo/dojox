@@ -78,7 +78,7 @@ dojox.drawing.stencil.Ellipse = dojox.drawing.util.oo.declare(
 			this[shp] = this.container.createEllipse(d)
 				.setStroke(sty)
 				.setFill(sty.fill);
-			this.util.attr(this[shp], "drawingType", "stencil");
+			this._setNodeAtts(this[shp]);
 		},
 		
 		render: function(){

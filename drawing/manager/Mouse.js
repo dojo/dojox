@@ -166,6 +166,14 @@ EventObject: function(){
 				left:this.container.parentNode.scrollLeft		
 			}; // Object
 		},
+
+		resize: function(width,height){
+			if(this.origin){
+				this.origin.w=width;
+				this.origin.h=height;
+			}
+		},
+
 		register: function(/* Object*/scope){
 			// summary:
 			//		All objects (Stencils) should register here if they
