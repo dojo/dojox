@@ -9,7 +9,7 @@
 	@import "../../../dijit/tests/css/dijitTests.css";
 	#chartContainer {
 		position: relative;
-		height: 420px;
+		height: 660px;
 	}
 	.chart {
 		position: absolute;
@@ -26,15 +26,9 @@
 	}
 	#pieLin, #pieFan, #ohlc {
 		left:  640px;
-		width: 200px;
 	}
 	#candle, #columns, #ohlc {
 		top: 440px;
-		width: 300px;
-	}
-	#scatter {
-		top: 660px;
-		width: 300px;
 	}
 
 </style>
@@ -210,38 +204,13 @@
 					{ open: 16, close: 12, high: 19, low: 7 },
 					{ open: 12, close: 20, high: 22, low: 8 },
 					{ open: 20, close: 16, high: 22, low: 8 }]);
-		charts.scatter = new dojox.charting.Chart2D("scatter").
-			addPlot("default", {type: "Scatter"}).
-			addAxis("x", {
-				min: 0,
-				max: 6,
-				majorTick: { stroke: "black", length: 3 },
-				minorTick: { stroke: "gray", length: 3 }
-			}).
-			addAxis("y", {
-				vertical: true,
-				min: 0,
-				max: 10,
-				majorTick: { stroke: "black", length: 3 },
-				minorTick: { stroke: "gray", length: 3 }
-			}).
-			addSeries("Series A", [
-				{ x: 0.5, y: 5 },
-				{ x: 1.5, y: 1.5 },
-				{ x: 2, y: 9 },
-				{ x: 5, y: 0.3 }
-			]).
-			addSeries("Series B", [
-				{ x: 0.3, y: 8 },
-				{ x: 4, y: 6 },
-				{ x: 5.5, y: 2 }
-			]);
 		var name;
 		if(window.location.search.indexOf("?")>-1){
 			name = window.location.search.substring(1);
-			dojo.create("div", {
-				innerHTML: '<a href="theme_preview.html">Back to the Theme Previewer</a>'
-			}, dojo.body());
+			dojo.create("span", {
+				style: "display: inline-block; margin-left: 1em;",
+				innerHTML: '<a href="theme_preview.html">Back to the Theme Previewer &raquo;&raquo;</a>'
+			}, dojo.query("p.controls")[0]);
 		}
 
 		update(name);
@@ -255,7 +224,7 @@
 <body>
 	<h1>Example Dojo Chart Types</h1>
 	<p>Choose a theme from the list below, a theme will be loaded dynamically, and the charts will be rendered using it.</p>
-	<p><label for="themeChooser">Available themes:&nbsp;</label>
+	<p class="controls"><label for="themeChooser">Available themes:&nbsp;</label>
 		<select id="themeChooser">
 			<optgroup label="Gradients">
 				<option value="Julie" selected="selected">Julie</option>
