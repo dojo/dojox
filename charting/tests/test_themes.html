@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1"/> 
-<title>Charting Theme Tester</title>
+<title>Example Dojo Chart Types</title>
 <style>
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
@@ -18,16 +18,25 @@
 		width:  300px;
 		height: 200px;
 	}
-	#lines, #area {
+	#lines, #area, #columns {
 		left: 320px;
 	}
 	#bubbles, #area, #pieLin {
 		top: 220px;
 	}
-	#pieLin, #pieFan {
+	#pieLin, #pieFan, #ohlc {
 		left:  640px;
 		width: 200px;
 	}
+	#candle, #columns, #ohlc {
+		top: 440px;
+		width: 300px;
+	}
+	#scatter {
+		top: 660px;
+		width: 300px;
+	}
+
 </style>
 <script src="../../../dojo/dojo.js" djConfig="isDebug: false, gfxRenderer: 'svg,silverlight,vml,canvas'"></script>
 <script>
@@ -84,6 +93,15 @@
 
 	function init(){
 		charts.bars = new dojox.charting.Chart2D("bars").
+			addAxis("y", {fixLower: "minor", fixUpper: "minor", natural: true}).
+			addAxis("x", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
+			addPlot("default", {type: "ClusteredBars", gap: 5}).
+			addSeries("Series A", [0.53, 0.51]).
+			addSeries("Series B", [0.84, 0.79]).
+			addSeries("Series C", [0.68, 0.95]).
+			addSeries("Series D", [0.77, 0.66]);
+
+		charts.columns = new dojox.charting.Chart2D("columns").
 			addAxis("x", {fixLower: "minor", fixUpper: "minor", natural: true}).
 			addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
 			addPlot("default", {type: "ClusteredColumns", gap: 5}).
@@ -126,6 +144,98 @@
 			addPlot("default", {type: "Pie", radius: 60, labelOffset: -20, radGrad: "linear"}).
 			addSeries("Series A", [0.35, 0.25, 0.42, 0.53, 0.69]);
 
+		charts.candle = new dojox.charting.Chart2D("candle").
+			addPlot("default", {type: "Candlesticks", gap: 1}).
+			addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true}).
+			addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true}).
+			addSeries("Series A", [
+					{ open: 20, close: 16, high: 22, low: 8 },
+					{ open: 16, close: 22, high: 26, low: 6, mid: 18 },
+					{ open: 22, close: 18, high: 22, low: 11, mid: 21 },
+					{ open: 18, close: 29, high: 32, low: 14, mid: 27 },
+					{ open: 29, close: 24, high: 29, low: 13, mid: 27 },
+					{ open: 24, close: 8, high: 24, low: 5 },
+					{ open: 8, close: 16, high: 22, low: 2 },
+					{ open: 16, close: 12, high: 19, low: 7 },
+					{ open: 12, close: 20, high: 22, low: 8 },
+					{ open: 20, close: 16, high: 22, low: 8 },
+					{ open: 16, close: 22, high: 26, low: 6, mid: 18 },
+					{ open: 22, close: 18, high: 22, low: 11, mid: 21 },
+					{ open: 18, close: 29, high: 32, low: 14, mid: 27 },
+					{ open: 29, close: 24, high: 29, low: 13, mid: 27 },
+					{ open: 24, close: 8, high: 24, low: 5 },
+					{ open: 8, close: 16, high: 22, low: 2 },
+					{ open: 16, close: 12, high: 19, low: 7 },
+					{ open: 12, close: 20, high: 22, low: 8 },
+					{ open: 20, close: 16, high: 22, low: 8 },
+					{ open: 16, close: 22, high: 26, low: 6 },
+					{ open: 22, close: 18, high: 22, low: 11 },
+					{ open: 18, close: 29, high: 32, low: 14 },
+					{ open: 29, close: 24, high: 29, low: 13 },
+					{ open: 24, close: 8, high: 24, low: 5 },
+					{ open: 8, close: 16, high: 22, low: 2 },
+					{ open: 16, close: 12, high: 19, low: 7 },
+					{ open: 12, close: 20, high: 22, low: 8 },
+					{ open: 20, close: 16, high: 22, low: 8 }]);
+		charts.ohlc = new dojox.charting.Chart2D("ohlc").
+			addPlot("default", {type: "OHLC", gap: 1}).
+			addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true}).
+			addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true}).
+			addSeries("Series A", [
+					{ open: 20, close: 16, high: 22, low: 8 },
+					{ open: 16, close: 22, high: 26, low: 6 },
+					{ open: 22, close: 18, high: 22, low: 11 },
+					{ open: 18, close: 29, high: 32, low: 14 },
+					{ open: 29, close: 24, high: 29, low: 13 },
+					{ open: 24, close: 8, high: 24, low: 5 },
+					{ open: 8, close: 16, high: 22, low: 2 },
+					{ open: 16, close: 12, high: 19, low: 7 },
+					{ open: 12, close: 20, high: 22, low: 8 },
+					{ open: 20, close: 16, high: 22, low: 8 },
+					{ open: 16, close: 22, high: 26, low: 6 },
+					{ open: 22, close: 18, high: 22, low: 11 },
+					{ open: 18, close: 29, high: 32, low: 14 },
+					{ open: 29, close: 24, high: 29, low: 13 },
+					{ open: 24, close: 8, high: 24, low: 5 },
+					{ open: 8, close: 16, high: 22, low: 2 },
+					{ open: 16, close: 12, high: 19, low: 7 },
+					{ open: 12, close: 20, high: 22, low: 8 },
+					{ open: 20, close: 16, high: 22, low: 8 },
+					{ open: 16, close: 22, high: 26, low: 6 },
+					{ open: 22, close: 18, high: 22, low: 11 },
+					{ open: 18, close: 29, high: 32, low: 14 },
+					{ open: 29, close: 24, high: 29, low: 13 },
+					{ open: 24, close: 8, high: 24, low: 5 },
+					{ open: 8, close: 16, high: 22, low: 2 },
+					{ open: 16, close: 12, high: 19, low: 7 },
+					{ open: 12, close: 20, high: 22, low: 8 },
+					{ open: 20, close: 16, high: 22, low: 8 }]);
+		charts.scatter = new dojox.charting.Chart2D("scatter").
+			addPlot("default", {type: "Scatter"}).
+			addAxis("x", {
+				min: 0,
+				max: 6,
+				majorTick: { stroke: "black", length: 3 },
+				minorTick: { stroke: "gray", length: 3 }
+			}).
+			addAxis("y", {
+				vertical: true,
+				min: 0,
+				max: 10,
+				majorTick: { stroke: "black", length: 3 },
+				minorTick: { stroke: "gray", length: 3 }
+			}).
+			addSeries("Series A", [
+				{ x: 0.5, y: 5 },
+				{ x: 1.5, y: 1.5 },
+				{ x: 2, y: 9 },
+				{ x: 5, y: 0.3 }
+			]).
+			addSeries("Series B", [
+				{ x: 0.3, y: 8 },
+				{ x: 4, y: 6 },
+				{ x: 5.5, y: 2 }
+			]);
 		var name;
 		if(window.location.search.indexOf("?")>-1){
 			name = window.location.search.substring(1);
@@ -143,7 +253,7 @@
 </script>
 </head>
 <body>
-	<h1>DojoX Charting Theme Tester</h1>
+	<h1>Example Dojo Chart Types</h1>
 	<p>Choose a theme from the list below, a theme will be loaded dynamically, and the charts will be rendered using it.</p>
 	<p><label for="themeChooser">Available themes:&nbsp;</label>
 		<select id="themeChooser">
@@ -203,6 +313,10 @@
 		<div class="chart" id="bubbles"></div>
 		<div class="chart" id="area"></div>
 		<div class="chart" id="pieLin"></div>
+		<div class="chart" id="columns"></div>
+		<div class="chart" id="candle"></div>
+		<div class="chart" id="ohlc"></div>
+		<div class="chart" id="scatter"></div>
 	</div>
 </body>
 </html>

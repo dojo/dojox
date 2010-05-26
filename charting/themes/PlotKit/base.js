@@ -39,12 +39,14 @@ dojo.require("dojox.charting.Theme");
 
 	pk.base.next = function(elementType, mixin, doPost){
 		var theme = dc.Theme.prototype.next.apply(this, arguments);
-		if(elementType != "line"){
-			theme.series.stroke.color = "#fff";
-		} else {
+		if(elementType == "line"){
 			theme.marker.outline = {width: 2, color: "#fff"};
 			theme.series.stroke.width = 3.5;
 			theme.marker.stroke.width = 2;
+		} else if (elementType == "candlestick"){
+			theme.series.stroke.width = 1;
+		} else {
+			theme.series.stroke.color = "#fff";
 		}
 		return theme;
 	};
