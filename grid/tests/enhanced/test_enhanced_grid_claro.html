@@ -55,30 +55,16 @@
 	<script type="text/javascript" src="support/test_ue.js"></script>
 </head>
 <body class="claro">
-	<div class="title">Simple DataGrid - Single Affordance</div>
+	<div class="title">Simple DataGrid</div>
 	<div id="grid1" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30"
-		 store="csvStore1" structure="layout" rowSelector="0px">
-	</div>
-	
-	<br/>
-	<div class="title">Simple DataGrid - Double Affordance</div>
-	<div id="grid2" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" doubleAffordance = true
 		 store="csvStore1" structure="layout" rowSelector="0px">
 	</div>
 
 	<br/>
-	<div class="title">Enhanced Grid - Single Affordance</div>
+	<div class="title">Enhanced Grid</div>
 	<div id="grid3" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30"
 		plugins='{nestedSorting: true, dnd: true, indirectSelection: {width:"40px"}}'
 		store="csvStore1" structure="layout" rowSelector="20px">
-	</div>
-	
-	<br/>
-	<div class="title">Enhanced Grid - Double Affordance</div>
-	<div id="grid4" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30" doubleAffordance = true
-		plugins='{nestedSorting: true, dnd: true, indirectSelection: {width:"40px"}}'
-		store="csvStore1" structure="layout" rowSelector="20px">
-	</div>
-	
+	</div>	
 </body>
 </html>

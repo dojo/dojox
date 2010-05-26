@@ -10,8 +10,9 @@
 		@import "../resources/tundraGrid.css";
 		@import "../resources/soriaGrid.css";
 		@import "../resources/nihiloGrid.css";
+		@import "../resources/claroGrid.css";
 		
-		#grid, #grid2 {
+		#grid, #grid2, #grid3 {
 			width: 65em;
 			height: 25em;
 			padding: 1px;
@@ -22,6 +23,7 @@
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojo.data.ItemFileReadStore");
 		dojo.require("dojox.data.CsvStore");
 		dojo.require("dojo.parser");
@@ -74,8 +76,30 @@
 			</tr>
 		</thead>
 	</table>
+	
+	<h5>Simple Claro DataGrid(currently an EnhancedGrid without any feature plugins)</h5>
+	<script type="text/javascript">
+		var layout = [{
+			defaultCell: { width: 8, editable: false, type: dojox.grid.cells._Widget },
+			rows:
+			[
+				{ field: "Genre", width: '6'},
+				{ field: "Artist", width: '10'},
+				{ field: "Year", width: '6'},
+				{ field: "Album", width: '12'},
+				{ field: "Name", width: '17'},
+				{ field: "Length", width: '6'},
+				{ field: "Track", width: '6'},
+				{ field: "Composer", width: '15'}				
+			]}
+		];
+		var csvStore1 = new dojox.data.CsvStore({id:'csvStore1', url:"enhanced/support/music-for-demo.part.csv"});
+	</script>
+	<div class="claro" id="grid3" dojoType="dojox.grid.EnhancedGrid" query="{ Track: '*' }" rowsPerPage="30"
+		 store="csvStore1" structure="layout" rowSelector="0px">
+	</div>
+	
 
-	<h5>A "regular" Grid from markup (no table defintion, nihilo theme)</h5>
 	<script type="text/javascript">
 		var layoutCountries = [
 			// view 1
@@ -93,6 +117,7 @@
 		];
 	</script>
 
+	<h5>A "regular" Grid from markup (no table defintion, nihilo theme)</h5>
 	<div class="nihilo" id="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" 
 		store="jsonStore" query="{ name: '*' }" rowSelector="20px" rowsPerPage="20" structure="layoutCountries">
 	</div>

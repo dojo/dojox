@@ -2,12 +2,6 @@
 @import url("../../resources/claroGrid.css");
 
 /* overwrite claroGrid.css */
-.claro .dojoxGridCell {
-	padding:0px;
-}
-.claro .dojoxGridCellContent {
-	padding:4px 6px 4px 6px;
-}
 .claro .dojoxGridRowbarInner {
 	width:20px;
 }

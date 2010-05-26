@@ -131,6 +131,7 @@
 
 /* cells */
 .claro .dojoxGridCell {
+	padding:0px;
 	border:1px solid transparent;
 }
 .dj_ie6 .claro .dojoxGridCell {
@@ -150,6 +151,9 @@
 }
 .claro .dojoxGridCellFocus {
 	border:1px dashed darkblue !important;
+}
+.claro .dojoxGridCellContent {
+	padding:4px 6px 4px 6px;
 }
 
 /*  Single Affordance Hover Effect */
