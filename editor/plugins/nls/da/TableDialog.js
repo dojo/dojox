@@ -10,7 +10,6 @@
 	backgroundColor: "Baggrundsfarve:",
 	borderColor: "Kantfarve:",
 	borderThickness: "Kanttykkelse",
-	pixels: "Pixel",
 	percent: "percent",
 	pixels: "pixel",
 	"default": "standard",

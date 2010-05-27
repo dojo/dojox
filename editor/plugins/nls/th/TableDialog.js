@@ -10,7 +10,6 @@
 	backgroundColor: "สีพื้นหลัง:",
 	borderColor: "สีเส้นขอบ:",
 	borderThickness: "ความหนาเส้นขอบ",
-	pixels: "พิกเซล",
 	percent: "เปอร์เซ็นต์",
 	pixels: "พิกเซล",
 	"default": "ดีฟอลต์",

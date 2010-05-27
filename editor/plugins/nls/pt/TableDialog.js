@@ -10,7 +10,6 @@
 	backgroundColor: "Cor do Plano de Fundo:",
 	borderColor: "Cor da Borda:",
 	borderThickness: "Grossura da Borda",
-	pixels: "Pixels",
 	percent: "percentual",
 	pixels: "pixels",
 	"default": "default",

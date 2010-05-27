@@ -10,7 +10,6 @@
 	backgroundColor: "Χρώμα φόντου:",
 	borderColor: "Χρώμα περιγράμματος:",
 	borderThickness: "Πάχος περιγράμματος",
-	pixels: "Εικονοστοιχεία",
 	percent: "ποσοστό",
 	pixels: "εικονοστοιχεία",
 	"default": "προεπιλογή",

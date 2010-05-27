@@ -10,7 +10,6 @@
 	backgroundColor: "배경색:",
 	borderColor: "테두리 색:",
 	borderThickness: "테두리 굵기",
-	pixels: "픽셀",
 	percent: "백분율",
 	pixels: "픽셀",
 	"default": "기본값",

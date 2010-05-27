@@ -10,7 +10,6 @@
 	backgroundColor: "Arka Plan Rengi:",
 	borderColor: "Kenarlık Rengi: ",
 	borderThickness: "Kenarlık Kalınlığı",
-	pixels: "Piksel",
 	percent: "yüzde",
 	pixels: "piksel",
 	"default": "varsayılan",

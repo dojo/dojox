@@ -10,7 +10,6 @@
 	backgroundColor: "Цвет фона:",
 	borderColor: "Цвет рамки:",
 	borderThickness: "Толщина рамки",
-	pixels: "Пикселов",
 	percent: "процентов",
 	pixels: "пикселов",
 	"default": "по умолчанию",

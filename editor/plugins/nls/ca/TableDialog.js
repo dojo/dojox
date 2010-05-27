@@ -10,7 +10,6 @@
 	backgroundColor: "Color de fons:",
 	borderColor: "Color del contorn",
 	borderThickness: "Gruix del contorn",
-	pixels: "Píxels",
 	percent: "percentatge",
 	pixels: "píxels",
 	"default": "default",

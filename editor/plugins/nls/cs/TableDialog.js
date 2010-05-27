@@ -10,7 +10,6 @@
 	backgroundColor: "Barva pozadí:",
 	borderColor: "Barva ohraničení:",
 	borderThickness: "TloušťkaOhraničení",
-	pixels: "Pixely",
 	percent: "procent",
 	pixels: "pixelů",
 	"default": "výchozí",

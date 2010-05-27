@@ -10,7 +10,6 @@
 	backgroundColor: "لون الخلفية:",
 	borderColor: "لون الحدود:",
 	borderThickness: "سمك الحدود",
-	pixels: "عناصر الصورة",
 	percent: "نسبة مئوية",
 	pixels: "عنصر صورة",
 	"default": "المفترض",

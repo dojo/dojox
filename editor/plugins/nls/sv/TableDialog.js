@@ -10,7 +10,6 @@
 	backgroundColor: "Bakgrundsfärg:",
 	borderColor: "Ramfärg:",
 	borderThickness: "Ramtjocklek",
-	pixels: "bildpunkter",
 	percent: "%",
 	pixels: "bildpunkter",
 	"default": "standard",

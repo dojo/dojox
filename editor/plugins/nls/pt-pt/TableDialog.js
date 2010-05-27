@@ -10,7 +10,6 @@
 	backgroundColor: "Cor de segundo plano:",
 	borderColor: "Cor do contorno:",
 	borderThickness: "Espessura do contorno",
-	pixels: "Píxeis",
 	percent: "percentagem",
 	pixels: "píxeis",
 	"default": "predefinição",

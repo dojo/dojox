@@ -10,7 +10,6 @@
 	backgroundColor: "צבע רקע:",
 	borderColor: "צבע גבול:",
 	borderThickness: "עובי גבול",
-	pixels: "פיקסלים",
 	percent: "אחוז",
 	pixels: "פיקסלים",
 	"default": "ברירת מחדל",

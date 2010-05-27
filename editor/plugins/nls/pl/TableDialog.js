@@ -10,7 +10,6 @@
 	backgroundColor: "Kolor tła:",
 	borderColor: "Kolor ramki:",
 	borderThickness: "Grubość ramki",
-	pixels: "Piksle",
 	percent: "procent",
 	pixels: "piksle",
 	"default": "domyślna",

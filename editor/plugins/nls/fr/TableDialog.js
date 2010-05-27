@@ -10,7 +10,6 @@
 	backgroundColor: "Couleur d'arrière-plan :",
 	borderColor: "Couleur de la bordure :",
 	borderThickness: "Epaisseur de la bordure",
-	pixels: "Pixels",
 	percent: "pourcentage",
 	pixels: "pixels",
 	"default": "valeur par défaut",

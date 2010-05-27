@@ -10,7 +10,6 @@
 	backgroundColor: "Háttérszín: ",
 	borderColor: "Szegélyszín: ",
 	borderThickness: "Szegély vastagsága ",
-	pixels: "Képpont",
 	percent: "százalék",
 	pixels: "képpont",
 	"default": "alapértelmezett",

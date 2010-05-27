@@ -10,7 +10,6 @@
 	backgroundColor: "Background Color:",
 	borderColor: "Border Color:",
 	borderThickness: "BorderThickness",
-	pixels: "Pixels",
 	percent: "percent",
 	pixels: "pixels",
 	"default": "default",

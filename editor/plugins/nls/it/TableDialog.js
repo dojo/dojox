@@ -10,7 +10,6 @@
 	backgroundColor: "Colore sfondo:",
 	borderColor: "Colore bordo:",
 	borderThickness: "Spessore bordo",
-	pixels: "Pixel",
 	percent: "percento",
 	pixels: "pixel",
 	"default": "predefinito",

@@ -10,7 +10,6 @@
 	backgroundColor: "Achtergrondkleur:",
 	borderColor: "Randkleur",
 	borderThickness: "Randdikte",
-	pixels: "Pixels",
 	percent: "percent",
 	pixels: "pixels",
 	"default": "standaard",

@@ -10,7 +10,6 @@
 	backgroundColor: "Barva ozadja:",
 	borderColor: "Barva obrobe:",
 	borderThickness: "Debelina obrobe",
-	pixels: "Piksli",
 	percent: "odstotkov",
 	pixels: "pikslov",
 	"default": "privzeto",

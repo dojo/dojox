@@ -10,7 +10,6 @@
 	backgroundColor: "Taustaväri:",
 	borderColor: "Kehyksen väri:",
 	borderThickness: "Kehyksen paksuus",
-	pixels: "Kuvapisteet",
 	percent: "prosenttia",
 	pixels: "kuvapistettä",
 	"default": "oletus",

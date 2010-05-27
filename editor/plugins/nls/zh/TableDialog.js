@@ -10,7 +10,6 @@
 	backgroundColor: "背景色：",
 	borderColor: "边框色：",
 	borderThickness: "边框厚度",
-	pixels: "像素",
 	percent: "百分比",
 	pixels: "像素",
 	"default": "缺省值",

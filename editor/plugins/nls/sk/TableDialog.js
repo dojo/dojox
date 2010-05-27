@@ -10,7 +10,6 @@
 	backgroundColor: "Farba pozadia:",
 	borderColor: "Farba rámčeka:",
 	borderThickness: "Hrúbka rámčeka",
-	pixels: "Pixely",
 	percent: "percentá",
 	pixels: "pixely",
 	"default": "štandardne",
