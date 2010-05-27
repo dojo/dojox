@@ -360,14 +360,12 @@ EventObject: function(){
 			this._lastpagex = dim.x;
 			this._lastpagey = dim.y;
 			var o = this.origin;
-			var x = dim.x - o.x;
-			var y = dim.y - o.y;
+			var x = dim.x - o.x + sc.left;
+			var y = dim.y - o.y + sc.top;
 			
+			var withinCanvas = x>=0 && y>=0 && x<=o.w && y<=o.h;
 			x*= this.zoom;
 			y*= this.zoom;
-			x += sc.left*this.zoom;
-			y += sc.top*this.zoom;
-			var withinCanvas = x>=0 && y>=0 && x<=o.w && y<=o.h;
 			
 			o.startx = x;
 			o.starty = y;
@@ -438,16 +436,14 @@ EventObject: function(){
 			var pagex = dim.x;
 			var pagey = dim.y;
 			
-			var x = dim.x - this.origin.x;
-			var y = dim.y - this.origin.y;
 			var o = this.origin;
-			
-			x += sc.left;
-			y += sc.top;
+			var x = dim.x - o.x + sc.left;
+			var y = dim.y - o.y + sc.top;
+
+			var withinCanvas = x>=0 && y>=0 && x<=o.w && y<=o.h;
 			x*= this.zoom;
 			y*= this.zoom;
 			
-			var withinCanvas = x>=0 && y>=0 && x<=o.w && y<=o.h;
 			var id = withinCanvas ? this._getId(evt, squelchErrors) : "";
 			var ret = {
 				mid:this.id,
