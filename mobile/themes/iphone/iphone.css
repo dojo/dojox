@@ -95,6 +95,9 @@ html.mobile, .mobile body {
 	-webkit-animation-name: fadeOut;
 	-webkit-animation-timing-function: ease-in;
 }
+.fade.out.fast {
+	-webkit-animation-duration: 0.3s;
+}
 .fade.in {
 	-webkit-animation-duration: 1s;
 	-webkit-animation-name: fadeIn;
@@ -607,6 +610,15 @@ table.mblClose {
 }
 .mblBlueButtonSelected {
 	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+}
+.mblRedButton {
+	border-color: #9CACC0;
+	background-color: #366EDF;
+	background: -webkit-gradient(linear, left top, left bottom, from(#FA9D58), to(#EE4115), color-stop(0.5, #FF4D25), color-stop(0.5, #ED4D15));
+	-webkit-tap-highlight-color: transparent;
+}
+.mblRedButtonSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#C1A48E), to(#9B6C4A), color-stop(0.5, #A27758), color-stop(0.5, #996947));
 }
 
 /* Tab Container */

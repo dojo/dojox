@@ -2,7 +2,7 @@ dojo.provide("dojox.mobile.parser");
 dojo.provide("dojo.parser"); // not to load dojo.parser unexpectedly
 
 dojox.mobile.parser = new function(){
-	this.instantiate = function(list){
+	this.instantiate = function(list, defaultParams){
 		// summary:
 		//		Function for instantiating a list of widget nodes.
 		// list:
@@ -16,6 +16,12 @@ dojox.mobile.parser = new function(){
 				var cls = dojo.getObject(dojo.attr(node, "dojoType"));
 				var proto = cls.prototype;
 				var params = {};
+
+				if(defaultParams){
+					for(var name in defaultParams){
+					params[name] = defaultParams[name];
+					}
+				}
 				for(var prop in proto){
 					var val = dojo.attr(node, prop);
 					if(!val){ continue; }
@@ -42,15 +48,15 @@ dojox.mobile.parser = new function(){
 		return ws;
 	};
 
-	this.parse = function(rootNode){
+	this.parse = function(rootNode, defaultParams){
 		// summary:
 		//		Function to handle parsing for widgets in the current document.
 		//		It is not as powerful as the full dojo parser, but it will handle basic
 		//		use cases fine.
 		// rootNode:
 		//		The root node in the document to parse from
-		if(!rootNode){ 
-			rootNode = dojo.body(); 
+		if(!rootNode){
+			rootNode = dojo.body();
 		}
 		var nodes = rootNode.getElementsByTagName("*");
 		var list = [];
@@ -59,7 +65,7 @@ dojox.mobile.parser = new function(){
 				list.push(nodes[i]);
 			}
 		}
-		return this.instantiate(list);
+		return this.instantiate(list, defaultParams);
 	};
 };
 dojo._loaders.unshift(function(){

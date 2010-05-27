@@ -43,9 +43,9 @@ dojo.declare(
 
 	_started: false,
 
-	constructor: function(){
-		if(arguments.length > 1){
-			dojo.byId(arguments[1]).style.visibility = "hidden";
+	constructor: function(params, node){
+		if(node){
+			dojo.byId(node).style.visibility = "hidden";
 		}
 	},
 
@@ -55,7 +55,7 @@ dojo.declare(
 		dojox.mobile.View._pillar = dojo.doc.createElement("DIV");
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
-		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
+		var id = location.href.match(/#(w+)([^w = ]|$)/) ? RegExp.$1 : null;
 		this._visible = this.selected && !id || this.id == id;
 		if(this.selected){
 			dojox.mobile._defaultView = this;
@@ -157,7 +157,7 @@ dojo.declare(
 		var toNode;
 		if(moveTo){
 			if(typeof(moveTo) == "string"){
-				moveTo.match(/(\w+)/);
+				moveTo.match(/(w+)/);
 				toNode = RegExp.$1;
 			}else{
 				toNode = moveTo;
@@ -357,7 +357,14 @@ dojo.declare(
 		if(href){
 			this._view.performTransition(null, -1, this.transition, this, function(){location.href = href;});
 		}else{
-			this._view.performTransition(moveTo, -1, this.transition);
+			if(dojox.mobile.app){
+				// If in a full mobile app, then use its mechanisms to move back a scene
+				dojo.publish("/dojox/mobile/app/goback");
+			}
+			else{
+				this._view.performTransition(moveTo, -1, this.transition);
+			}
+
 		}
 	}
 });
@@ -439,6 +446,7 @@ dojo.declare(
 	iconPos: "", // top,left,width,height (ex. "0,0,29,29")
 	href: "",
 	moveTo: "",
+	clickable: false,
 	url: "",
 	transition: "",
 	callback: null,
@@ -495,7 +503,7 @@ dojo.declare(
 						}));
 						xhr.addErrback(function(error){
 							prog.stop();
-							alert("Failed to load "+url+"\n"+(error.description||error));
+							alert("Failed to load "+url+"n"+(error.description || error));
 						});
 						return;
 					}
@@ -525,7 +533,7 @@ dojo.declare(
 			view.setAttribute("_started", "true"); // to avoid startup() is called
 			view.style.visibility = "hidden";
 			dojo.body().appendChild(container);
-			(dojox.mobile.parser||dojo.parser).parse(container);
+			(dojox.mobile.parser || dojo.parser).parse(container);
 		}else if(text.charAt(0) == "{"){ // json
 			dojo.body().appendChild(container);
 			this._ws = [];
@@ -619,7 +627,8 @@ dojo.declare(
 			txt.innerHTML = this.rightText;
 			a.appendChild(txt);
 		}
-		if(this.moveTo || this.href || this.url){
+
+		if(this.moveTo || this.href || this.url || this.clickable){
 			var arrow = dojo.create("DIV");
 			arrow.className = "mblArrow";
 			a.appendChild(arrow);
@@ -707,14 +716,14 @@ dojo.declare(
 		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblSwitch";
 		this.domNode.innerHTML =
-			  '<div class="mblSwitchInner">'
-			+   '<div class="mblSwitchBg mblSwitchBgLeft">'
-			+     '<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
-			+   '</div>'
-			+   '<div class="mblSwitchBg mblSwitchBgRight">'
-			+     '<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
-			+   '</div>'
-			+   '<div class="mblSwitchKnob"></div>'
+				'<div class="mblSwitchInner">'
+			+	 '<div class="mblSwitchBg mblSwitchBgLeft">'
+			+	 '<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
+			+	 '</div>'
+			+	 '<div class="mblSwitchBg mblSwitchBgRight">'
+			+	 '<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
+			+	 '</div>'
+			+	 '<div class="mblSwitchKnob"></div>'
 			+ '</div>';
 		var n = this.inner = this.domNode.firstChild;
 		this.left = n.childNodes[0];
@@ -999,7 +1008,7 @@ dojo.declare(
 		}
 
 		if(len > 0){
-			(dojox.mobile.parser||dojo.parser).parse(this.containerNode);
+			(dojox.mobile.parser || dojo.parser).parse(this.containerNode);
 		}
 		this.lazy = false;
 	},
@@ -1108,9 +1117,16 @@ dojo.declare(
 	btnClass: "mblBlueButton",
 	duration: 1000, // duration of selection, milliseconds
 
+	label: null,
+
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("BUTTON");
 		this.domNode.className = "mblButton "+this.btnClass;
+
+	if(this.label){
+		this.domNode.innerHTML = this.label;
+	}
+
 		this.connect(this.domNode, "onclick", "onClick");
 	},
 
@@ -1312,7 +1328,7 @@ dojox.mobile.addClass = function(){
 dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 	if(iconNode && iconPos){
 		var arr = dojo.map(iconPos.split(/[ ,]/),
-							  function(item){ return item - 0; });
+								function(item){ return item - 0; });
 		var t = arr[0]; // top
 		var r = arr[1] + arr[2]; // right
 		var b = arr[0] + arr[3]; // bottom

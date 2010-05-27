@@ -58,7 +58,7 @@ dojo.extend(dojox.mobile.View, {
 			});
 			anim.play();
 		}else if(transition == "flip"){
-			anim = dojox.fx.flip({ 
+			anim = dojox.fx.flip({
 				node: fromNode,
 				dir: "right",
 				depth: 0.5,
@@ -66,13 +66,13 @@ dojo.extend(dojox.mobile.View, {
 			});
 			toNode.style.position = "absolute";
 			toNode.style.left = "0px";
-			dojo.connect(anim, "onEnd", this, function(){ 
+			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
 				toNode.style.position = "relative";
 				toNode.style.display = "";
 				this.invokeCallback();
 			});
-			anim.play(); 
+			anim.play();
 		}else if(transition == "fade"){
 			anim = dojo.fx.chain([
 				dojo.fadeOut({
@@ -132,34 +132,34 @@ dojo.extend(dojox.mobile.Switch, {
 		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblSwitch";
 		this.domNode.innerHTML =
-			  '<div class="mblSwitchInner">'
-			+   '<div class="mblSwitchBg mblSwitchBgLeft">'
-			+     '<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
-			+     '<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
-			+   '</div>'
-			+   '<div class="mblSwitchBg mblSwitchBgRight">'
-			+     '<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
-			+     '<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
-			+   '</div>'
-			+   '<div class="mblSwitchKnobContainer">'
-			+     '<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
-			+     '<div class="mblSwitchKnob"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
-			+     '<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
-			+   '</div>'
+				'<div class="mblSwitchInner">'
+			+	 '<div class="mblSwitchBg mblSwitchBgLeft">'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
+			+	 '<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
+			+	 '</div>'
+			+	 '<div class="mblSwitchBg mblSwitchBgRight">'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
+			+	 '<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
+			+	 '</div>'
+			+	 '<div class="mblSwitchKnobContainer">'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
+			+	 '<div class="mblSwitchKnob"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
+			+	 '<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
+			+	 '</div>'
 			+ '</div>';
 		var n = this.inner = this.domNode.firstChild;
 		this.left = n.childNodes[0];
@@ -317,23 +317,23 @@ dojo.mixin(dojox.mobile, {
 } // if(dojo.isIE)
 
 if(dojo.isIE <= 6){
-dojox.mobile.applyPngFilter = function(root){
-	root = root || dojo.body();
-	var nodes = root.getElementsByTagName("IMG");
-	var blank = dojo.moduleUrl("dojo", "resources/blank.gif");
-	for(var i = 0, len = nodes.length; i < len; i++){
-		var img = nodes[i];
-		var w = img.offsetWidth;
-		var h = img.offsetHeight;
-		if(w === 0 || h === 0){ return; }
-		var src = img.src;
-		if(src.indexOf("resources/blank.gif") != -1){ continue; }
-		img.src = blank;
-		img.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src+"')";
-		img.style.width = w + "px";
-		img.style.height = h + "px";
-	}
-};
+	dojox.mobile.applyPngFilter = function(root){
+		root = root || dojo.body();
+		var nodes = root.getElementsByTagName("IMG");
+		var blank = dojo.moduleUrl("dojo", "resources/blank.gif");
+		for(var i = 0, len = nodes.length; i < len; i++){
+			var img = nodes[i];
+			var w = img.offsetWidth;
+			var h = img.offsetHeight;
+			if(w === 0 || h === 0){ return; }
+			var src = img.src;
+			if(src.indexOf("resources/blank.gif") != -1){ continue; }
+			img.src = blank;
+			img.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src+"')";
+			img.style.width = w + "px";
+			img.style.height = h + "px";
+		}
+	};
 } // if(dojo.isIE <= 6)
 
 dojox.mobile.loadCss = function(/*String|Array*/files){
@@ -378,13 +378,13 @@ dojox.mobile.loadCss = function(/*String|Array*/files){
 dojox.mobile.loadCompatCssFiles = function(){
 	// summary:
 	//		Function to perform page-level adjustments on browsers such as
-	//		IE and firefox.  It loads compat specific css files into the 
+	//		IE and firefox.  It loads compat specific css files into the
 	//		page header.
 	var elems = dojo.doc.getElementsByTagName("link");
 	for(var i = 0, len = elems.length; i < len; i++){
 		var href = elems[i].href;
 		if((href.indexOf("/mobile/themes/") != -1 || location.href.indexOf("/mobile/tests/") != -1)
-		   && href.substring(href.length - 4) == ".css"){
+			 && href.substring(href.length - 4) == ".css"){
 			var compatCss = href.substring(0, href.length-4)+"-compat.css";
 			dojox.mobile.loadCss(compatCss);
 		}
