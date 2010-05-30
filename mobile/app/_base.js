@@ -8,7 +8,7 @@ dojo.require("dojox.mobile.app.SceneAssistant");
 dojo.require("dojox.mobile.app.AlertDialog");
 dojo.require("dojox.mobile.app.List");
 dojo.require("dojox.mobile.app.ListSelector");
-//dojo.require("dojox.mobile.app.TextBox");
+dojo.require("dojox.mobile.app.TextBox");
 
 (function(){
 
