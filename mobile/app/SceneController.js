@@ -40,9 +40,17 @@ dojo.require("dojox.mobile._base");
 
 		this.domNode.innerHTML = "<div>" + templateHtml + "</div>";
 
-		var sceneAssistantName = this.sceneAssistantName =
-								this.sceneName.substring(0, 1).toUpperCase()
-									+ this.sceneName.substring(1) + "Assistant";
+		var sceneAssistantName = "";
+									
+		var nameParts = this.sceneName.split("-");
+		
+		for(var i = 0; i < nameParts.length; i++){
+			sceneAssistantName += nameParts[i].substring(0, 1).toUpperCase()
+						+ nameParts[i].substring(1);
+		}
+		sceneAssistantName += "Assistant";
+		this.sceneAssistantName = sceneAssistantName;
+		
 		var assistant;
 		if(typeof(window[sceneAssistantName]) != "undefined"){
 			this._initAssistant();

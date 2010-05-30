@@ -1,10 +1,10 @@
 @import url("iphone.css");
 
 .alertDialog {
-  width: 100%;
-  padding-left: 2px;
-  padding-right: 2px;
-  z-index: 1000;
+	width: 100%;
+	padding-left: 2px;
+	padding-right: 2px;
+	z-index: 1000;
 }
 
 .alertDialogBody {
@@ -36,7 +36,7 @@
 	text-align: center;
 }
 
-.alertText {  
+.alertText {	
 	text-align: center;
 }
 
@@ -125,7 +125,7 @@
 
 .list .buttons .deleteBtn {
 	background-color: red;
-  
+	
 }
 .list .buttons .cancelBtn {
 	margin-left: 10px;
@@ -139,14 +139,14 @@
 }
 
 @-webkit-keyframes collapse-vert {
-  from {
-    height: 100%;
-    padding: 10px;
-  }
-  to {
-    height: 0px;
-    padding: 0px;
-  } 
+	from {
+		height: 100%;
+		padding: 10px;
+	}
+	to {
+		height: 0px;
+		padding: 0px;
+	} 
 }
 
 .listSelector {
@@ -172,4 +172,11 @@
  	border-bottom: none;
 }
 
+/* Form Input Styles */
 
+input {
+	-webkit-text-size-adjust: 140%;
+}
+ 
+ 
+ */
