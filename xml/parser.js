@@ -39,7 +39,7 @@ dojox.xml.parser.parse = function(/*String?*/ str, /*String?*/ mimetype){
 			if(!sourceText){
 				sourceText = sourceText.firstChild.data;
 			}
-        	throw new Error("Error parsing text " + nativeDoc.documentElement.firstChild.data + " \n" + sourceText);
+        	throw new Error("Error parsing text " + de.firstChild.data + " \n" + sourceText);
 		}
 		return doc;
 
