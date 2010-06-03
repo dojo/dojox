@@ -6,22 +6,20 @@
 
 		<style type="text/css">
 			@import "../../../dojo/resources/dojo.css";
-			@import "../../../dijit/themes/tundra/tundra.css";
-			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/tests/css/dijitTests.css";
+			@import "../../../dijit/themes/claro/claro.css";
 		</style>
 
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 
 		<script type="text/javascript">
 			dojo.require("dojox.form.TimeSpinner");
-			dojo.require("dojo.parser"); // scan page for widgets
 
 			function displayData() {
 				var spinner = dijit.byId("timeSpinner");
 
 				//accessing the widget property directly
-				console.log("TimeSpinner Value (raw, unserialized): ", spinner.getValue());
+				console.log("TimeSpinner Value (raw, unserialized): ", spinner.get('value'));
 
 				//accessing the widget from the form elements
 				var theForm = dojo.byId("form1");
@@ -36,34 +34,9 @@
                 	}
 
 		</script>
-		<style type="text/css">
-			#integerspinner2 .dojoSpinnerUpArrow {
-				border-bottom-color: blue;
-			}
-			#integerspinner2 .dojoSpinnerDownArrow {
-				border-top-color: red;
-			}
-			#integerspinner2 .dojoSpinnerButton {
-				background-color: yellow;
-			}
-			#integerspinner2 .dojoSpinnerButtonPushed {
-				background-color: gray;
-			}
-			#integerspinner2 .dojoSpinnerButtonPushed .dojoSpinnerDownArrow {
-				border-top-color: blue;
-			}
-			#integerspinner2 .dojoSpinnerButtonPushed .dojoSpinnerUpArrow {
-				border-bottom-color: red;
-			}
-
-			.dojoInputFieldValidationNormal#integerspinner2 {
-				color:blue;
-				background-color:pink;
-			}
-		</style>
 	</head>
 
-	<body class="tundra">
+	<body class="claro">
 	<h1 class="testTitle">Dojox TimeSpinner Test</h1>
 		Try typing values, and use the up/down arrow keys and/or the arrow push
 		buttons to spin
