@@ -42,7 +42,7 @@ dojox.drawing.tools.Ellipse = dojox.drawing.util.oo.declare(
 			if(this.created || !this._downOnCanvas){ return; }
 			this._downOnCanvas = false;
 			//Default shape on single click
-			if (!this.shape) {
+			if(!this.shape){
 				var s = obj.start, e = this.minimumSize*2;
 				this.data = {
 					cx: s.x+e,
@@ -52,7 +52,7 @@ dojox.drawing.tools.Ellipse = dojox.drawing.util.oo.declare(
 				};
 				this.dataToPoints();
 				this.render();
-			} else {
+			}else{
 			// if too small, need to reset
 				var o = this.pointsToData();
 				console.log("Create a default shape here, pt to data: ",o);

@@ -583,13 +583,13 @@ StencilData: {
 				//		text on edit.
 				//
 				console.warn("setSelection:");
-				if (dojo.doc.selection) { // IE
+				if(dojo.doc.selection){ // IE
 					var r = dojo.body().createTextRange();
 					r.moveToElementText(node);
 					r.collapse(false);
 					r.select();
 					
-				} else {
+				}else{
 					var getAllChildren = function(node, children){
 						children = children || [];
 						for(var i=0;i<node.childNodes.length; i++){
@@ -616,7 +616,7 @@ StencilData: {
 					console.log(2)
 					var nodes = getAllChildren(node);
 					console.log(3)
-					if (what == "end") {
+					if(what == "end"){
 						console.log("len:", nodes[nodes.length - 1].textContent.length)
 						r.setStart(nodes[nodes.length - 1], nodes[nodes.length - 1].textContent.length);
 						r.setEnd(nodes[nodes.length - 1], nodes[nodes.length - 1].textContent.length);

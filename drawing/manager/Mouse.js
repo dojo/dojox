@@ -186,7 +186,7 @@ EventObject: function(){
 			// See: CustomEventMethod and EventObject
 			//
 			var handle = scope.id || "reg_"+(this.__reg++);
-			if(!this.registered[handle]) { this.registered[handle] = scope; }
+			if(!this.registered[handle]){ this.registered[handle] = scope; }
 			return handle; // String
 		},
 		unregister: function(handle){
@@ -240,9 +240,9 @@ EventObject: function(){
 		overName: function(obj,evt){
 			var nm = obj.id.split(".");
 			evt = evt.charAt(0).toUpperCase() + evt.substring(1);
-			if(nm[0] == "dojox" && (dojox.drawing.defaults.clickable || !dojox.drawing.defaults.clickMode)) {
+			if(nm[0] == "dojox" && (dojox.drawing.defaults.clickable || !dojox.drawing.defaults.clickMode)){
 				return "onStencil"+evt;	
-			} else {
+			}else{
 				return "on"+evt;	
 			}
 			
@@ -497,9 +497,9 @@ EventObject: function(){
 			// summary:
 			//		Sets the cursor for  a given node.  If no
 			//		node is specified the containing node is used.
-			if(!node) { 
+			if(!node){ 
 				dojo.style(this.container, "cursor", cursor); 
-			} else {
+			}else{
 				dojo.style(node, "cursor", cursor);
 			}
 		}

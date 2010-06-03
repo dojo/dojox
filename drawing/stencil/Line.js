@@ -57,23 +57,6 @@ StencilPoints: [
 				// instead of using x1,x2,y1,y1,
 				// it's been set as x,y,angle,radius
 				
-				// forward angle:
-				// 90 -> 90
-				// 180 -> 0
-				// 0 -> 180
-				// 270 -> 270
-				// 120 -> 60
-				// 40 -> 140
-				// 315 -> 220
-				// 200 -> 340
-				
-				// reversing the angle for display: 0 -> 180, 90 -> 270
-				//angle = 180 - angle; angle = angle==360 ? 0 : angle;
-				
-				var was = o.angle
-				o.angle = (180-o.angle)<0 ? 180-o.angle+360 : 180-o.angle;
-				
-				//console.log(" ---- angle:", was, "to:", o.angle)
 				var pt = this.util.pointOnCircle(o.x,o.y,o.radius,o.angle);
 				//console.log(" ---- pts:", pt.x, pt.y);
 				this.data = o = {

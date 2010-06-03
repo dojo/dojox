@@ -19,7 +19,7 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 		this.stencil = options.stencil;
 		this.util = options.stencil.util;
 		this.mouse = options.stencil.mouse;
-		
+
 		this.stencil.connectMult([
 			["onDrag", this, "showAngle"],
 			["onUp", this, "hideAngle"],
@@ -31,7 +31,7 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 	{
 		type:"dojox.drawing.tools.custom",
 		angle:0,
-		
+
 		showAngle: function(){
 			//	summary:
 			//		Called to display angle
@@ -50,7 +50,7 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 			var dy = mx.dy / this.mouse.zoom;
 			pt.x /= this.mouse.zoom;
 			pt.y /= this.mouse.zoom;
-			
+
 			// adding _offX & _offY since this is HTML
 			// and we are from the page corner, not
 			// the canvas corner
@@ -61,10 +61,17 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 				top: 	y + "px",
 				align:pt.align
 			});
-			
-			node.innerHTML = Math.ceil(this.stencil.getAngle());
+
+			var angle=this.stencil.getAngle();
+			if(this.stencil.style.zAxis && this.stencil.shortType=="vector"){
+			  node.innerHTML = this.stencil.cosphi > 0 ? "out of" : "into";
+			}else if(this.stencil.shortType=="line"){
+			  node.innerHTML = this.stencil.style.zAxis?"out of":Math.ceil(angle%180);
+			}else{
+			  node.innerHTML = Math.ceil(angle);
+			}
 		},
-		
+
 		getAngleNode: function(){
 			//	summary:
 			//		Gets or creates HTMLNode used for display
@@ -75,13 +82,13 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 			}
 			return this._angleNode; //HTMLNode
 		},
-		
+
 		hideAngle: function(){
 			//	summary:
 			//		Turns display off.
 			//
 			if(this._angleNode && dojo.style(this._angleNode, "opacity")>0.9){
-				
+
 				dojo.fadeOut({node:this._angleNode,
 					duration:500,
 					onEnd: function(node){
@@ -90,8 +97,8 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 				}).play();
 				this._angleNode = null;
 			}
-			
+
 		}
 	}
-	
+
 )

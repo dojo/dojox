@@ -31,7 +31,7 @@ dojox.drawing.plugins._Plugin = dojox.drawing.util.oo.declare(
 			// summary:
 			//		Removes connections based on passed
 			//		handles arguments
-			if(!handles) { return };
+			if(!handles){ return };
 			if(!dojo.isArray(handles)){ handles=[handles]; }
 			dojo.forEach(handles, dojo.disconnect, dojo);
 		}

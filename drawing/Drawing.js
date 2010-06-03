@@ -208,7 +208,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//console.info("drawing startup")
 		},
 		
-		getShapeProps: function(/* Object */data, mode) {
+		getShapeProps: function(/* Object */data, mode){
 			// summary:
 			// 		The common objects that are mixed into
 			//		a new Stencil. Mostly internal, but could be used.
@@ -330,7 +330,7 @@ dojo.provide("dojox.drawing.Drawing");
 				options = {data:options}
 			}
 			if(!this.stencilTypes[type]){
-				if(type != "tooltip") {
+				if(type != "tooltip"){
 					console.warn("Not registered:", type);
 				}
 				return null;
@@ -462,10 +462,10 @@ dojo.provide("dojox.drawing.Drawing");
 			
 			this.stencils.register(stencil);
 			this.unSetTool();
-			if(!this.defaults.clickMode) { 
+			if(!this.defaults.clickMode){ 
 				this.setTool(this.currentType);
-			} else {
-				if (this.defaults.clickMode){this.defaults.clickable = true;}
+			}else{
+				if(this.defaults.clickMode){ this.defaults.clickable = true; }
 			}
 		},
 		
@@ -521,7 +521,7 @@ dojo.provide("dojox.drawing.Drawing");
 			try{
 				this.currentStencil = new this.tools[this.currentType]({container:this.canvas.surface.createGroup(), util:this.util, mouse:this.mouse, keys:this.keys});
 				console.log("new tool is:", this.currentStencil.id, this.currentStencil);
-				if (this.defaults.clickMode) this.defaults.clickable = false;
+				if(this.defaults.clickMode){ this.defaults.clickable = false; }
 				this.currentStencil.connect(this.currentStencil, "onRender", this, "onRenderStencil");
 				this.currentStencil.connect(this.currentStencil, "destroy", this, "onDeleteStencil");
 			}catch(e){

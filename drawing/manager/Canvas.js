@@ -137,7 +137,7 @@ dojo.provide("dojox.drawing.manager.Canvas");
 				}; // Object
 			},
 			
-			getScrollWidth: function() {
+			getScrollWidth: function(){
 				// summary:
 				//		Special method used to detect the width (and height)
 				// 		of the browser scrollbars. Becomes memoized.

@@ -156,7 +156,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.mouse = options.stencil.mouse;
 			this.container = options.stencil.container;
 			this.style = options.stencil.style;
-		}
+		}	
 		
 		// don't use the 'g' on these, it affects
 		// the global RegExp
@@ -263,7 +263,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.connectMouse();
 			this._postRenderCon = dojo.connect(this, "render", this, "_onPostRender");
 		}
-		
 		if(this.showAngle){
 			this.angleLabel = new dojox.drawing.annotations.Angle({stencil:this});
 		}
@@ -273,6 +272,10 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.moveToBack();
 			// some things render some don't...
 			this.render(options.data.text);
+		}
+		
+		if(this.shortType == "vector" && !options.data){
+			options.data = { cosphi:0 };
 		}
 			
 	},
@@ -372,7 +375,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.disconnectMouse();
 			
 			// for Silverlight 
-			if(this.shape) {
+			if(this.shape){
 				this.shape.superClass = this;
 			}else{
 				this.container.superClass = this;
@@ -393,8 +396,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				
 			}else{
 				this.style.current = this.style.norm;
-				this.style.currentText = this.style.text;
 				this.style.currentHit = this.style.hitNorm;
+				this.style.currentText = this.style.text;
 			}
 			
 			if(this.selected){
@@ -431,7 +434,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				sp =	options.start;
 				ep = 	options.end;
 			
-			}else if (dojo.isObject(options.start)){
+			}else if(dojo.isObject(options.start)){
 				sp =	options.start;
 				ep = 	options.end;
 				isArray = 	false;
@@ -483,9 +486,9 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 		
 		attr: function(/*String | Object*/key, /* ? String | Number */value){
 			// summary
-			//		Changes properties in the style or disabled styles,. 
-			//              depending on whether the object is enabled.
-			//              Also can be used to change most position and size props.
+			//		Changes properties in the style or disabled styles, 
+			//		depending on whether the object is enabled.
+			//		Also can be used to change most position and size props.
 			
 			// NOTE: JUST A SETTTER!! TODO!
 			
@@ -495,7 +498,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			
 			// FIXME
 			// 'width' attr is used for line width. How to change the width of a stencil?
-
 			var n = this.enabled?this.style.norm:this.style.disabled;
 			var t = this.enabled?this.style.text:this.style.textDisabled;
 			var ts = this.textSelected || {},
@@ -555,6 +557,10 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			}
 			if(o.borderWidth!==undefined){
 				n.width = o.borderWidth;
+			}
+			if(o.cosphi!=undefined){
+				this.cosphi = o.cosphi;
+				this.style.zAxis = o.cosphi!=0 ? true : false;	
 			}
 			if(this.useSelectedStyle){
 				// using the orginal selected style copy as
@@ -886,8 +892,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				y:d.y2
 			};
 			var angle = this.util.angle(obj, this.angleSnap);
-			// reversing the angle for display: 0 -> 180, 90 -> 270
-			angle = 180 - angle; angle = angle==360 ? 0 : angle;
+			// converting the angle for display: -180 -> 180, -90 -> 270
+			angle<0 ? angle = 360 + angle : angle;
 			return angle;
 		},
 		getRadius: function(){
@@ -1069,7 +1075,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				a = [this.shape];
 			}
 			for(var i=0;i<a.length;i++){
-				if(a[i]) {
+				if(a[i]){
 					a[i].removeShape();
 				}
 			}
@@ -1119,7 +1125,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			}else if(!m){
 				// ** object function function **
 				m = s; s = this;
-			}else if (once){
+			}else if(once){
 				// ** object function object function Boolean **
 				c = dojo.connect(o, e, function(evt){
 					dojo.hitch(s, m)(evt);
@@ -1139,7 +1145,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			// summary:
 			//		Removes connections based on passed
 			//		handles arguments
-			if(!handles) { return }
+			if(!handles){ return }
 			if(!dojo.isArray(handles)){ handles=[handles]; }
 			dojo.forEach(handles, dojo.disconnect, dojo);
 		},

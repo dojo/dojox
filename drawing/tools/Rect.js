@@ -53,7 +53,7 @@ dojox.drawing.tools.Rect = dojox.drawing.util.oo.declare(
 					{x:s.x, y:s.y+e}
 				]);
 				this.render();
-			} else {
+			}else{
 			
 				// if too small, need to reset
 				var o = this.data;

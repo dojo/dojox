@@ -16,7 +16,6 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 		//
 		this.id = this.id || this.util.uid(this.type);
 		this.util.attr(this.container, "id", this.id);
-		
 		if(this.callback){
 			this.hitched = dojo.hitch(this.scope || window, this.callback, this);
 		}
@@ -175,16 +174,27 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			this._change(this.style.button.norm);
 			
 		},
+		disable: function(){
+			if(!this.enabled){ return; }
+			this.enabled = false;
+			this._change(this.style.button.disabled);
+			this.icon.attr({color:this.style.button.norm.color});
+		},
+		enable: function(){
+			if(this.enabled){ return; }
+			this.enabled = true;
+			this._change(this.style.button.norm);
+			this.icon.attr({color:this.style.button.icon.norm.color});
+		},
 		
 		_change: function(/*Object*/sty){
 			this.shape.attr(sty);
 			this.shape.shadow && this.shape.shadow.container.moveToBack();	
 			if(this.icon){this.icon.shape.moveToFront();};
-			
 		},
 		onOver: function(){
 			//console.log("BUTTON OVER")
-			if(this.selected){ return; }
+			if(this.selected || !this.enabled){ return; }
 			this._change(this.style.button.over);
 		},
 		onOut: function(){
@@ -192,11 +202,12 @@ dojox.drawing.ui.Button =  dojox.drawing.util.oo.declare(
 			this._change(this.style.button.norm);
 		},
 		onDown: function(){
-			if(this.selected){ return; }
+			if(this.selected || !this.enabled){ return; }
 			this._change(this.style.button.selected);
 		},
 		onUp: function(){
 			//console.log("BUTTON UP")
+			if(!this.enabled){ return; }
 			this._change(this.style.button.over);
 			if(this.hitched){
 				this.hitched();

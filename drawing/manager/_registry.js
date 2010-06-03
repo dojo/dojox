@@ -6,7 +6,8 @@ dojo.provide("dojox.drawing.manager._registry");
 		tool:{},
 		stencil:{},
 		drawing:{},
-		plugin:{}
+		plugin:{},
+		button:{}
 	};
 	
 	dojox.drawing.register = function(item, type){
@@ -18,6 +19,8 @@ dojo.provide("dojox.drawing.manager._registry");
 			_registered.stencil[item.name] = item;	
 		}else if(type=="plugin"){
 			_registered.plugin[item.name] = item;	
+		}else if(type=="button"){
+			_registered.button[item.toolType] = item;
 		}
 	};
 	

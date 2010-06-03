@@ -58,9 +58,10 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 		this.options = dojo.mixin(shadowDefaults, options);
 		this.options.color = new dojo.Color(this.options.color)
 		this.options.color.a = this.options.alpha;
-		
 		switch(this.stencil.shortType){
 			case "image":
+			case "vector":
+				this.method = "createForZArrow"; break;
 			case "rect":
 				this.method = "createForRect"; break;
 			case "ellipse":
@@ -75,7 +76,13 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 				console.warn("A shadow cannot be made for Stencil type ", this.stencil.type);
 		}
 		
-		if(this.method){
+		if(this.method == "createForZArrow"){
+			this.stencil.connectMult([
+				[this.stencil, "onTransform", this, "onTransform"],
+				[this.stencil, "onDelete", this, "destroy"],
+				[this.stencil, "render", this, "render"]
+			]);
+		} else if(this.method){
 			this.render();
 			this.stencil.connectMult([
 				[this.stencil, "onTransform", this, "onTransform"],
@@ -102,7 +109,7 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 				r = d.r || 1,
 				p = o.place,
 				c = o.color;
-			
+				
 			this[this.method](o, size, mult, d, r, p, c);	
 		},
 		
@@ -204,6 +211,99 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 					.setStroke({width:lineWidth, color:c})		
 			}
 		},
+		
+		arrowPoints: function(){
+			// summary:
+			//	Creates data used to draw arrow head.
+			//
+			var d = this.stencil.data;
+			d.radius = this.stencil.getRadius();
+			d.angle = this.style.zAngle + 30;
+
+			var pt = this.util.pointOnCircle(d.x1, d.y1, d.radius*.75, d.angle);
+			var p = [
+				{x:d.x1, y:d.y1},
+				{x:pt.x, y:pt.y}
+			]; 
+			
+			var obj = {
+				start:{
+					x:p[0].x,
+					y:p[0].y
+				},
+				x:p[1].x,
+				y:p[1].y
+			}
+			var angle = this.util.angle(obj);
+			var lineLength = this.util.length(obj); 
+			var al = this.style.arrows.length;
+			var aw = this.style.arrows.width/3;
+			if(lineLength<al){
+				al = lineLength/2;
+			}
+
+			var p1 = this.util.pointOnCircle(p[1].x, p[1].y, -al, angle-aw);
+			var p2 = this.util.pointOnCircle(p[1].x, p[1].y, -al, angle+aw);
+			return [
+				{x:p[1].x, y:p[1].y},
+				p1,
+				p2
+			];
+		},
+		
+		createForZArrow: function(o, size, mult, pts, r, p, c){
+			if(this.stencil.cosphi<1 || (this.stencil.getRadius()<this.stencil.minimumSize)){ return; }
+			var sh = size * mult / 4,
+				shy = /B/.test(p) ? sh : /T/.test(p) ? sh*-1 : 0,
+				shx = /R/.test(p) ? sh : /L/.test(p) ? sh*-1 : 0;
+			var closePath = true;
+			
+			for(var i=1;i<=size;i++){
+				var lineWidth = i * mult;
+				var pts = this.arrowPoints();
+				if(!pts){ return; }
+				var p = this.stencil.points;
+				if(dojox.gfx.renderer=="svg"){
+					
+					var strAr = [];
+					dojo.forEach(pts, function(o, i){
+						if(i==0){
+							strAr.push("M " + (o.x+shx) +" "+ (o.y+shy));
+						}else{
+							var cmd = o.t || "L ";
+							strAr.push(cmd + (o.x+shx) +" "+ (o.y+shy)); // Z + undefined works here
+						}
+					}, this);
+					if(closePath){
+						strAr.push("Z");
+					}
+
+					this.container.createPath(strAr.join(", ")).setStroke({width:lineWidth, color:c, cap:"round"}).setFill(c);
+					
+				}else{
+					// Leaving this code for VML. It seems slightly faster but times vary.
+					var pth = this.container.createPath({}).setStroke({width:lineWidth, color:c, cap:"round"})	
+					
+					dojo.forEach(pts, function(o, i){
+						if(i==0 || o.t=="M"){
+							pth.moveTo(o.x+shx, o.y+shy);
+						}else if(o.t=="Z"){
+							closePath && pth.closePath();
+						}else{
+							pth.lineTo(o.x+shx, o.y+shy);
+						}
+					}, this);
+					
+					closePath && pth.closePath();
+				}
+				
+				this.container.createLine({x1:p[0].x, y1:p[0].y, x2:pts[0].x, y2:pts[0].y})
+					.setStroke({width:lineWidth, color:c, cap:"round"});
+			
+			}
+		},
+		
+		
 		onTransform: function(){
 			this.render();
 		},

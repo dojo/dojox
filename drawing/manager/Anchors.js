@@ -131,11 +131,6 @@ dojox.drawing.manager.Anchors = dojox.drawing.util.oo.declare(
 				if(p.noAnchor){ return; }
 				if(i==0 || i == item.points.length-1){
 					console.log("ITEM TYPE:", item.type, item.shortType);
-					if(i==0){
-						
-					}else{
-						
-					}
 				}
 				var a = new dojox.drawing.manager.Anchor({stencil:item, point:p, pointIdx:i, mouse:this.mouse, util:this.util});
 				this.items[item.id]._cons = [
@@ -218,6 +213,9 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 		this.stencil = options.stencil;
 		if(this.stencil.anchorPositionCheck){
 			this.anchorPositionCheck = dojo.hitch(this.stencil, this.stencil.anchorPositionCheck);
+		}
+		if(this.stencil.anchorConstrain){
+			this.anchorConstrain = dojo.hitch(this.stencil, this.stencil.anchorConstrain);
 		}
 		this._zCon = dojo.connect(this.mouse, "setZoom", this, "render");
 		this.render();
@@ -387,7 +385,12 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 						x = conL;
 					}
 				}
-				
+				//Constrains anchor point, returns null if not overwritten by stencil
+				var constrained = this.anchorConstrain(x, y);
+				if(constrained != null){ 
+					x=constrained.x;
+					y=constrained.y; 
+				}
 				
 				this.shape.setTransform({
 					dx:x,
@@ -402,6 +405,15 @@ dojox.drawing.manager.Anchor = dojox.drawing.util.oo.declare(
 				}
 				this.onTransformPoint(this);
 			}
+		},
+		
+		anchorConstrain: function(/* Number */x,/* Number */ y){
+			// summary:
+			//		To be over written by tool!
+			//		Add an anchorConstrain method to the tool
+			//		and it will automatically overwrite this stub.
+			//		Should return a constrained x & y value.
+			return null;
 		},
 		
 		anchorPositionCheck: function(/* Number */x,/* Number */ y, /* Anchor */anchor){
