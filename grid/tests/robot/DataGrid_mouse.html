@@ -317,27 +317,29 @@
 							grid.domNode.scrollTop = 0;
 							// try to size column headers
 							// Id width changes
-							var columns = dojo.query('div.dojoxGridSortNode',grid.domNode);
-							var box = dojo.coords(columns[0]);
-							doh.robot.mouseMoveAt(columns[0],500,100,box.w,0);
+							var columns = dojo.query('div.dojoxGridSortNode',grid.domNode).map(function(e){
+								return e.parentNode;
+							});;
+							var box = dojo.position(columns[0].firstChild);
+							doh.robot.mouseMoveAt(columns[1],500,100,0,box.h/2);
 							doh.robot.mousePress({left:true},500);
-							doh.robot.mouseMoveAt(columns[0],500,100,box.w/2,0);
+							doh.robot.mouseMoveAt(columns[1],500,100,-box.w/2,0);
 							doh.robot.mouseRelease({left:true},500); // this takes a long time
 							doh.robot.sequence(function(){
 								try{
 									columns = dojo.query('div.dojoxGridSortNode',grid.domNode);
-									var box2 = dojo.coords(columns[0]);
-									doh.is(box.w/2,box2.w,"ID column width did not shrink as expected.");
+									var box2 = dojo.position(columns[0]);
+									doh.t(Math.abs(box.w/2-box2.w)<1, "ID column width did not shrink as expected.");
 									// Message (col4) should be unsizeable
-									box = dojo.coords(columns[5]);
-									doh.robot.mouseMoveAt(columns[5],500,100,box.w,0);
+									box = dojo.position(columns[5]);
+									doh.robot.mouseMoveAt(columns[6],500,100,0,box.h/2);
 									doh.robot.mousePress({left:true},500);
-									doh.robot.mouseMoveAt(columns[5],500,100,box.w/2,0);
+									doh.robot.mouseMoveAt(columns[6],500,100,-box.w/2,box.h/2);
 									doh.robot.mouseRelease({left:true},500);  // this takes a long time
 									doh.robot.sequence(d.getTestCallback(function(){
 										columns = dojo.query('div.dojoxGridSortNode',grid.domNode);
-										box2 = dojo.coords(columns[5]);
-										doh.is(box.w,box2.w, "Message column width should not have changed.");
+										box2 = dojo.position(columns[5]);
+										doh.is(box.w, box2.w, "Message column width should not have changed.");
 										doh.is(0,grid.sortInfo,"Attempting to resize a non-resizable column should not set the sort order.");
 									}),5000);
 								}catch(e){
@@ -420,10 +422,11 @@
 							var columns = dojo.query('div.dojoxGridSortNode',grid.domNode);
 							var id=columns[0];
 							var priority=columns[2];
+							var expectedtext=[id.innerHTML,priority.innerHTML];
 							doh.robot.mouseMoveAt(id,500);
 							doh.robot.mousePress({left:true},500);
 							// position id left of priority
-							doh.robot.mouseMoveAt(priority,500,100,0,0);
+							doh.robot.mouseMoveAt(priority,500,1000,0,0);
 							doh.robot.mouseRelease({left:true},500);
 							doh.robot.sequence(function(){
 								try{
@@ -431,22 +434,23 @@
 									var newId = newColumns[1];
 									var newPriority = newColumns[2];
 									// the original nodes get orphaned so direct comparison is impossible
-									doh.is(id.innerHTML,newId.innerHTML,"2nd column should have been Id after dnd");
-									doh.is(priority.innerHTML,newPriority.innerHTML,"3rd column should have been Priority after dnd");
+									doh.is(expectedtext[0],newId.innerHTML,"2nd column should have been Id after dnd");
+									doh.is(expectedtext[1],newPriority.innerHTML,"3rd column should have been Priority after dnd");
 									// position message left of status
 									columns = newColumns;
 									var status=columns[4];
 									var message=columns[5];
+									expectedtext=[message.innerHTML,status.innerHTML,];
 									doh.robot.mouseMoveAt(message,500);
 									doh.robot.mousePress({left:true},500);
-									doh.robot.mouseMoveAt(status,500,0,0);
+									doh.robot.mouseMoveAt(status,500,1000,0,0);
 									doh.robot.mouseRelease({left:true},500);
 									doh.robot.sequence(d.getTestCallback(function(){
 										newColumns = dojo.query('div.dojoxGridSortNode',grid.domNode);
 										var newMessage = newColumns[4];
 										var newStatus = newColumns[5];
-										doh.is(message.innerHTML,newMessage.innerHTML,"5th column should have been Message after dnd");
-										doh.is(status.innerHTML,newStatus.innerHTML,"6th column should have been Status after dnd");
+										doh.is(expectedtext[0],newMessage.innerHTML,"5th column should have been Message after dnd");
+										doh.is(expectedtext[1],newStatus.innerHTML,"6th column should have been Status after dnd");
 									}),500);
 								}catch(e){
 									d.callback(e);
