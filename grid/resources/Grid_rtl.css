@@ -5,3 +5,11 @@
 .dojoxGridRtl .dojoxGridCell {
 	text-align:right;
 }
+
+.dj_ie8 .dojoxGridRtl .dojoxGridCell {
+	border-left: none;
+}
+
+.dojoxGridRtl .dojoxGridArrowButtonNode {
+	float:left;
+}
