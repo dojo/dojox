@@ -65,12 +65,32 @@ StencilPoints: [
 	//		Bottom left point
 ],
 =====*/
-		
+
+		typesetter: function(text){
+			// summary:
+			//		Register raw text, returning typeset form.
+			//		Uses function dojox.drawing.stencil.Text.typeset
+			//		for typesetting, if it exists.
+			//
+			if(dojox.drawing.stencil.Text.typeset){
+				this._rawText = text;
+				return dojox.drawing.stencil.Text.typeset(text);
+			}
+			return text;
+		},
+
 		setText: function(text){
 			// summary:
 			//		Setter for text.
 			//
+			// Only apply typesetting to objects that the user can modify.
+			// Else, it is assumed that typesetting is done elsewhere.
+			if(this.enabled){
+				text = this.typesetter(text);
+			}
+			// This only has an effect if text is null or this.created is false.
 			this._text = text;
+
 			this._textArray = [];
 			this.created && this.render(text);
 		},
@@ -79,7 +99,7 @@ StencilPoints: [
 			// summary:
 			//		Getter for text.
 			//
-			return this._text;	
+			return this._rawText || this._text;	
 		},
 		
 		dataToPoints: function(/*Object*/o){

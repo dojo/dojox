@@ -192,24 +192,24 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 				// browsers such as Netscape Navigator 4 or
 				// Microsoft Internet Explorer 5.0.
 				if(this.labelZ){
-				  var lbls = value.match(/(.*?)(and|&)(.*?)(and|&)(.*)/i);
-				  if(lbls.length>4){
-					x = lbls[1].replace(/^\s+/,"").replace(/\s+$/,"");
-					y = lbls[3].replace(/^\s+/,"").replace(/\s+$/,"");
-					z = lbls[5].replace(/^\s+/,"").replace(/\s+$/,"");
-				  }
-				}else {
-				  var lbls = value.match(/(.*?)(and|&)(.*)/i);
-				  if(lbls.length>2){
-				    x = lbls[1].replace(/^\s+/,"").replace(/\s+$/,"");
-				    y = lbls[3].replace(/^\s+/,"").replace(/\s+$/,"");
-				  }
+					var lbls = value.match(/(.*?)(and|&)(.*?)(and|&)(.*)/i);
+					if(lbls.length>4){
+						x = lbls[1].replace(/^\s+/,"").replace(/\s+$/,"");
+						y = lbls[3].replace(/^\s+/,"").replace(/\s+$/,"");
+						z = lbls[5].replace(/^\s+/,"").replace(/\s+$/,"");
+					}
+				}else{
+					var lbls = value.match(/(.*?)(and|&)(.*)/i);
+					if(lbls.length>2){
+						x = lbls[1].replace(/^\s+/,"").replace(/\s+$/,"");
+						y = lbls[3].replace(/^\s+/,"").replace(/\s+$/,"");
+					}
 				}
 			}
 			this.labelX.setLabel(x);
 			this.labelY.setLabel(y);
 			if(this.labelZ){
-			  this.labelZ.setLabel(z);
+				this.labelZ.setLabel(z);
 			}
 			this._labelsCreated = true;
 		},
@@ -219,9 +219,9 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			//
 			if(!this.labelX){ return {}; }
 			return {
-				x:this.labelX._text,
-				y:this.labelY._text,
-				z:this.labelZ?this.labelZ._text:null
+				x:this.labelX.getText(),
+				y:this.labelY.getText(),
+				z:this.labelZ?this.labelZ.getText():null
 			}; // Object
 		},
 
@@ -316,7 +316,7 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			this.labelX.setLabel();
 			this.labelY.setLabel();
 			if(this.labelZ){
-			  this.labelZ.setLabel();
+				this.labelZ.setLabel();
 			}
 
 			//this.select();
@@ -329,8 +329,8 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			//		Custom getBounds overwrites _Base.getBounds
 			//
 			var px = this.points[0],
-				pc = this.points[1],
-				py = this.points[2];
+			    pc = this.points[1],
+			    py = this.points[2];
 
 			if(absolute){
 				return {
@@ -345,10 +345,10 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 				};
 			}
 
-			var	x1 = py.x,
-				y1 = py.y < px.y ? py.y : px.y,
-				x2 = px.x,
-				y2 = pc.y;
+			var x1 = py.x,
+			    y1 = py.y < px.y ? py.y : px.y,
+			    x2 = px.x,
+			    y2 = pc.y;
 
 			return {
 				x1:x1,

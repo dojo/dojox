@@ -44,11 +44,15 @@ dojo.require("dojox.drawing.stencil.Text");
 			//
 			if(options.data){
 				var d = options.data;
+				var text = d.text;
 				var w = !d.width ? this.style.text.minWidth : d.width=="auto" ? "auto" : Math.max(d.width, this.style.text.minWidth)
 				var h = this._lineHeight;
 				
-				if(d.text && w=="auto"){
-					var o = this.measureText(this.cleanText(d.text, false), w);
+				// need to typeset before measuring width
+				text = this.typesetter(text);
+				
+				if(text && w=="auto"){
+					var o = this.measureText(this.cleanText(text, false), w);
 					w = o.w;
 					h = o.h;
 				}else{
@@ -63,7 +67,7 @@ dojo.require("dojox.drawing.stencil.Text");
 					{x:d.x, y:d.y+h}
 				];
 				
-				if(d.showEmpty || d.text){
+				if(d.showEmpty || text){
 					this.editMode = true;
 					
 				
@@ -72,13 +76,13 @@ dojo.require("dojox.drawing.stencil.Text");
 					this.connect(this, "render", this, "onRender", true);
 					
 					if(d.showEmpty){
-						this._text = d.text || "";
+						this._text = text || "";
 						this.edit();
-					}else if(d.text && d.editMode){
+					}else if(text && d.editMode){
 						this._text = "";
 						this.edit();
-					}else if(d.text){
-						this.render(d.text);
+					}else if(text){
+						this.render(text);
 					}
 					setTimeout(dojo.hitch(this, function(){
 						this.editMode = false;	
@@ -313,6 +317,9 @@ StencilData: {
 				conEdit.innerHTML = "";
 				conEdit.blur();
 				this.destroyAnchors();
+
+				// need to convert characters before measuring width.
+				txt = this.typesetter(txt);
 				
 				var o = this.measureText(txt, w);
 				var sc = this.mouse.scrollOffset();
@@ -343,16 +350,18 @@ StencilData: {
 					this._textArray = [];
 				}
 				this.render(o.text);
-				this.onChangeText(txt);
+				// Only for Combo objects (vectors, rectangle, or ellipse).
+				this.onChangeText(this.getText());
 			},
 			
 			edit: function(){
 				// summary:
 				//		Internal?
-				//		Method used to instanciate the contenteditable HTML node.
+				//		Method used to instantiate the contenteditable HTML node.
 				//
 				this.editMode = true;
-				console.log("EDIT TEXT:", this._text, " ", this._text.replace("/n", " "));
+				var text = this.getText() || "";
+				console.log("EDIT TEXT:",text, " ",text.replace("/n", " "));
 				// NOTE: no mouse obj
 				if(this.parentNode || !this.points){ return; }
 				var d = this.pointsToData();
@@ -369,9 +378,9 @@ StencilData: {
 				
 				this.remove(this.shape, this.hit);
 				this.showParent(obj);
-				this.createTextField(this._text.replace("/n", " "));
+				this.createTextField(text.replace("/n", " "));
 				this.connectTextField();
-				if(this._text){
+				if(text){
 					//setTimeout(dojo.hitch(this, function(){
 					this.setSelection(conEdit, "end");
 					//}), 500)
@@ -579,7 +588,7 @@ StencilData: {
 			},
 			setSelection: function(node, what){
 				// summary:
-				//		Used for placing teh cursor at the end of the
+				//		Used for placing the cursor at the end of the
 				//		text on edit.
 				//
 				console.warn("setSelection:");
@@ -610,14 +619,14 @@ StencilData: {
 					node.focus();
 					var selection = dojo.global.getSelection();
 					selection.removeAllRanges();
-					console.log(1)
+					console.log(1);
 					r = dojo.doc.createRange();
 					r.selectNodeContents(node);
-					console.log(2)
+					console.log(2);
 					var nodes = getAllChildren(node);
-					console.log(3)
+					console.log(3);
 					if(what == "end"){
-						console.log("len:", nodes[nodes.length - 1].textContent.length)
+						console.log("len:", nodes[nodes.length - 1].textContent.length);
 						r.setStart(nodes[nodes.length - 1], nodes[nodes.length - 1].textContent.length);
 						r.setEnd(nodes[nodes.length - 1], nodes[nodes.length - 1].textContent.length);
 					}else if(what=="beg" || what == "start"){

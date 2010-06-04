@@ -45,7 +45,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 			// is an event, not text:
 			if(text && !text.split){ text = null; }
 			
-			this.render(text);
+			this.render(this.typesetter(text));
 		},
 		
 		setLabel: function(/* String */text){
@@ -69,16 +69,16 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 				this._align = "end";
 			}
 			
-			if(!this.labelWidth || (text && text.split && text != this._text)){ //????????????????????????????????????
+			if(!this.labelWidth || (text && text.split && text != this.getText())){ //????????????????????????????????????
 				this.setData({
 					x:x,
 					y:y,
 					height:this._lineHeight,
 					width:this.style.text.minWidth
 				});
-			
-				this.labelWidth = this.style.text.minWidth
-				this.render(text);
+				
+				this.labelWidth = this.style.text.minWidth;
+				this.render(this.typesetter(text));
 				
 			}else{
 				
@@ -89,7 +89,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 					width:this.data.width
 				});
 				
-				this.render();	
+				this.render();
 			}
 			
 		},
