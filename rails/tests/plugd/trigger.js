@@ -1,4 +1,4 @@
-dojo.provide("plugd.trigger");
+dojo.provide("dojox.rails.tests.plugd.trigger");
 (function(d){
 	
 	var isfn = d.isFunction, 
