@@ -317,4 +317,151 @@ def somefunc(param1, param2):
 class SomeClass:<br>    pass
 </code></pre>
 
+	<p>Some XQuery code:</p>
+
+<pre><code class="xquery">
+declare variable $my:entityName as xs:string external;
+
+declare variable $databaseURI := concat('jdbc://getCreditDefaultSwapsByEntityName?cd&#37;&amp;', $my:entityName); 
+declare variable $creditDefaultSwaps := collection($databaseURI);
+
+(: This is a comment :)
+
+(: This is a multi-line
+comment :)
+declare function local:equityRows($root) {
+	for $equity in $root//equity
+	let $referenceEntity := $creditDefaultSwaps//fpml:referenceEntity
+	where $equity/name = $referenceEntity/fpml:entityName
+	return
+		&lt;tr xmlns="http://www.w3.org/1999/xhtml">
+			&lt;td>{ $equity/*:symbol/text() }&lt;/td>
+			&lt;td>{ $equity/*:name/text() }&lt;/td>
+			&lt;td>{ $equity/*:high/text() }&lt;/td>
+			&lt;td>{ $equity/*:currency/text() }&lt;/td>
+		&lt;/tr>
+};
+
+&lt;table border="1">
+&lt;tr>
+	&lt;th>Ticker Symbol&lt;/th>
+	&lt;th>Company Name&lt;/th>
+	&lt;th>High&lt;/th>
+	&lt;th>Currency&lt;/th>
+&lt;/tr>
+{ local:equityRows(/) }
+&lt;/table>
+</code></pre>
+
+	<p>Some Java code:</p>
+
+<pre><code class="java">
+import java.io.*;
+public final class DOHRobot extends Applet{
+	// The last reported mouse x,y.
+	// If this is different from the real one, something's up.
+	private int lastMouseX;
+	private int lastMouseY;
+	JSObject dohrobot = null;
+
+	final private class onvisible extends ComponentAdapter{
+		public void componentShown(ComponentEvent evt){
+			/* sets the security manager to fix a bug *
+			 * in liveconnect in Safari on Mac        */
+			if(key != -1){ return; }
+			Thread thread = new Thread(){
+				public void run(){
+					window = (JSObject) JSObject.getWindow(applet());   
+					AccessController.doPrivileged(new PrivilegedAction(){
+						public Object run(){
+							log("> init Robot");
+							try{
+								SecurityManager oldsecurity = System.getSecurityManager();
+								boolean needsSecurityManager = applet().getParameter("needsSecurityManager").equals("true");
+								log("Socket connections managed? "+needsSecurityManager);
+								try{
+									securitymanager.checkTopLevelWindow(null);
+									// xdomain
+									if(charMap == null){
+										if(!confirm("DOH has detected that the current Web page is attempting to access DOH,\n"+
+													"but belongs to a different domain than the one you agreed to let DOH automate.")){
+											return null;
+										}
+									}
+								}catch(Exception e){
+									e.printStackTrace();
+									securitymanager = new RobotSecurityManager(needsSecurityManager,
+											oldsecurity);
+									System.setSecurityManager(securitymanager);
+								}
+								// instantiate the Robot
+								robot = new Robot();
+								robot.setAutoWaitForIdle(true);
+							}catch(Exception e){
+								key = -2;
+								e.printStackTrace();
+							}
+							return null;
+						}
+					});
+					if(key == -2){
+						// applet not trusted
+						// start the test without it
+						window.eval("doh.robot._appletDead=true;doh.run();");
+					}
+				}
+			};
+			thread.start();
+		}
+	}
+}
+</code></pre>
+
+	<p>A Groovy fragment:</p>
+
+<pre><code class="groovy">
+/*
+* A comment test block
+* 
+* ?debug
+* ?nodebug
+* 
+*/
+
+def settings = [
+	debug: false,
+	compress: true,
+	console: false,
+	ping: false,
+	testing: false,
+	profile: false
+];
+
+// function calls
+init(settings);
+render(settings);
+
+def render(settings) {
+	request.header = settings;
+	render();
+}
+
+def init(settings) {
+
+	// Default parameter handling.
+	settings.each { key, value ->
+		def onkey = "${key}";
+		def offkey = "no${key}";
+		if (foo("/request/params/${onkey}",null) != null) {
+			settings[key] = true;
+		}
+		else if (foo("/request/params/${offkey}",null) != null) {
+			settings[key] = false;
+		}
+	}
+
+	return settings;
+}
+</code></pre>
+
 </body></html>
