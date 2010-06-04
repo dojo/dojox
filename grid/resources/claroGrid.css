@@ -32,7 +32,6 @@
 	background-color:#FFF;
 }
 .claro .dojoxGridHeader .dojoxGridCell { 
-	text-align:left;
 	background:url("images/header.png") #e5edf4 repeat-x top;
 	border-style:solid;
 	border-width:1px;

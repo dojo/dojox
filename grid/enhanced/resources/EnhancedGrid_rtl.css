@@ -13,6 +13,7 @@
 .dojoxGridRtl .dojoxGridCell .dojoxGridHeaderCellSelectRegion {
 	float: right;
 	text-align: right;
+	padding-right:4px;
 }
 
 .dojoxGridRtl .dojoxGridSortSeparatorOn,
