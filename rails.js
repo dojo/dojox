@@ -52,7 +52,6 @@ dojo.ready((function(d, dr, dg){
 
 			// ajax:loading, ajax:loaded, and ajax:interactive are not supported
 			d.publish("ajax:before", [el]);
-			console.debug("HANDLE AS: ", type);
 			var deferred = d.xhr(method, {
 				url:      url,
 				headers:  { "Accept": type == "text" ? "text" : "text/"+type },
