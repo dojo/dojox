@@ -17,7 +17,7 @@ dojo.ready((function(d, dr, dg){
 		};
 
 		var createFormForLink = function(url, method){
-			var form = '<form style="display:none" method="POST" action="'+ url +'">' +
+			var form = '<form style="display:none" method="post" action="'+ url +'">' +
 				'<input type="hidden" name="_method" value="'+ method +'" />' +
 				'<input type="hidden" name="'+ csrfParam +'" value="'+ csrfToken +'" />' +
 				'</form>';
@@ -44,34 +44,28 @@ dojo.ready((function(d, dr, dg){
 		};
 
 		var handleRemote = function(evt){
-			var el = evt.target, type = d.attr(el, "data-type") || "javascript";
+			var el = evt.target, tag = el.tagName.toLowerCase();
+			var content = tag.toLowerCase() == "form" ? d.formToObject(el) : {},
+					type   = d.attr(el, "data-type") || "javascript",
+					method = d.attr(el, "method")    || d.attr(el, "data-method") || "get",
+					url    = d.attr(el, "action")    || d.attr(el, "href");
 
-			var method, url, content;
-			if (el.tagName.toUpperCase() == "FORM"){
-				url = d.attr(el, "action");
-				method = (d.attr(el, "method") || "POST").toUpperCase();
-				content = d.formToObject(el);
-			}else{
-				url = d.attr(el, "href");
-				method = (d.attr(el, "data-method") || "GET").toUpperCase();
-				content = {};
-				if (method != "GET"){
+			if (tag != "form" && method != "get"){
 					el = createFormForLink(url, method);
 					method = "POST";
-				}
 			}
+			evt.preventDefault();
 
 			// ajax:loading, ajax:loaded, and ajax:interactive are not supported
 			d.publish("ajax:before", [el]);
-			evt.preventDefault();
 			var deferred = d.xhr(method, {
 				url:      url,
 				headers:  { "Accept": "text/"+type },
 				content:  content,
 				handleAs: type,
-				load:		  function(response, ioArgs) { d.publish("ajax:success",	[el, response, ioArgs]); },
-				error:	  function(response, ioArgs) { d.publish("ajax:failure",	[el, response, ioArgs]); },
-				handle:   function(response, ioArgs) { d.publish("ajax:complete", [el, response, ioArgs]); }
+				load:		  function(response, ioArgs) {d.publish("ajax:success",	 [el, response, ioArgs]);},
+				error:	  function(response, ioArgs) {d.publish("ajax:failure",  [el, response, ioArgs]);},
+				handle:   function(response, ioArgs) {d.publish("ajax:complete", [el, response, ioArgs]);}
 			});
 			d.publish("ajax:after", [el]);
 		};
@@ -94,8 +88,8 @@ dojo.ready((function(d, dr, dg){
 		};
 
 		var handleFormSubmit = function(evt){
-			var el = evt.target, disableElements = q("*[data-disable-with]", el);
-			if (disableElements.length){ disable(disableElements); }
+			var el = evt.target, elements = q("*[data-disable-with]", el);
+			if (elements.length){ disable(elements); }
 			if (d.attr(el, "data-remote")){
 				evt.preventDefault();
 				handleRemote(evt);
