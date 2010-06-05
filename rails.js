@@ -24,12 +24,6 @@ dojo.ready((function(d, dr, dg){
 			return dojo.place(form, dojo.body());
 		};
 
-		var handleConfirm = function(evt){
-			var proceed = dg.confirm(d.attr(evt.target, "data-confirm"));
-			if (!proceed){evt.preventDefault();}
-			return proceed;
-		};
-
 		var disable = function(elements){
 			d.forEach(elements, function(node){
 				if (!d.attr(node, "disabled")){
@@ -46,9 +40,9 @@ dojo.ready((function(d, dr, dg){
 		var handleRemote = function(evt){
 			var el = evt.target, tag = el.tagName.toLowerCase();
 			var content = tag.toLowerCase() == "form" ? d.formToObject(el) : {},
-					type   = d.attr(el, "data-type") || "javascript",
-					method = d.attr(el, "method")    || d.attr(el, "data-method") || "get",
-					url    = d.attr(el, "action")    || d.attr(el, "href");
+					type   =  d.attr(el, "data-type") || "javascript",
+					method = (d.attr(el, "method")    || d.attr(el, "data-method") || "get").toLowerCase(),
+					url    =  d.attr(el, "action")    || d.attr(el, "href");
 
 			if (tag != "form" && method != "get"){
 					el = createFormForLink(url, method);
@@ -58,9 +52,10 @@ dojo.ready((function(d, dr, dg){
 
 			// ajax:loading, ajax:loaded, and ajax:interactive are not supported
 			d.publish("ajax:before", [el]);
+			console.debug("HANDLE AS: ", type);
 			var deferred = d.xhr(method, {
 				url:      url,
-				headers:  { "Accept": "text/"+type },
+				headers:  { "Accept": type == "text" ? "text" : "text/"+type },
 				content:  content,
 				handleAs: type,
 				load:		  function(response, ioArgs) {d.publish("ajax:success",	 [el, response, ioArgs]);},
@@ -69,7 +64,6 @@ dojo.ready((function(d, dr, dg){
 			});
 			d.publish("ajax:after", [el]);
 		};
-
 
 		var handleEnable	= function(el){
 			q("*[data-disable-with][disabled]", el).forEach(function(node){
@@ -98,6 +92,16 @@ dojo.ready((function(d, dr, dg){
 			}
 		};
 
+		var handleConfirm = function(evt){
+			var proceed = dg.confirm(d.attr(evt.target, "data-confirm"));
+			if (!proceed){
+				evt.preventDefault();
+			}else if (d.attr(evt.target, "data-remote")){
+				handleRemote(evt);
+			}
+			return proceed;
+		};
+
 		// Register data-{action} elements.	 Order is important since the return values
 		// from previously called functions in the connect chain influence whether
 		// or not the next function in the chain is called.
@@ -109,7 +113,7 @@ dojo.ready((function(d, dr, dg){
 		d.subscribe("ajax:complete", handleEnable);
 
 		// Register data-remote elements
-		live("a[data-remote]", "click", handleRemote);
+		live("a[data-remote]:not([data-confirm])", "click", handleRemote);
 		live("a[data-method]:not([data-remote])", "click", handleDataMethod);
 
 		// Handle form submits

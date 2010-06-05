@@ -50,7 +50,7 @@
 			var q = dojo.query;
 			q('#data-confirm-link-container').append('<a href="/foo/url" data-confirm="Are you sure?">click me!</a>');
 			q('#data-confirm-input-container').append('<input data-confirm="Are you sure?" name="commit" type="submit" value="Post" />');
-			q('#data-remote-success-link-container').append('<a href="success_response.html" data-remote="true">click me to load!</a>');
+			q('#data-remote-success-link-container').append('<a href="success_response.html" data-type="text" data-remote="true">click me to load!</a>');
 			q('#data-remote-failure-link-container').append('<a href="failure_response.html" data-remote="true">click me to fail!</a>');
 		}
 
@@ -68,6 +68,7 @@
     function assertEvents(deferred, timeout, events){
       setTimeout(function(){
         for (var k in events){
+					console.debug("assertEvents: ", k, events[k]);
           if (!events[k]){
             deferred.errback(new Error(k + ' event was not dispatched'));
             return;
@@ -126,7 +127,7 @@
 
             dojo.query('#data-remote-get-form-container form').trigger('submit');
 
-            t.assertEqual('GET', method);
+            t.assertEqual('get', method);
             
             var expectedArgs = {
               url: '/posts',
