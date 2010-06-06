@@ -64,7 +64,7 @@ dojox.drawing.annotations.Angle = dojox.drawing.util.oo.declare(
 
 			var angle=this.stencil.getAngle();
 			if(this.stencil.style.zAxis && this.stencil.shortType=="vector"){
-			  node.innerHTML = this.stencil.cosphi > 0 ? "out of" : "into";
+			  node.innerHTML = this.stencil.data.cosphi > 0 ? "out of" : "into";
 			}else if(this.stencil.shortType=="line"){
 			  node.innerHTML = this.stencil.style.zAxis?"out of":Math.ceil(angle%180);
 			}else{

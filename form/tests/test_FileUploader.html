@@ -7,14 +7,14 @@
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/themes/tundra/form/Button.css";
-		@import "../../../dijit/tests/css/dijitTests.css"; 
-		@import "../resources/FileUploader.css"; 
+		/*@import "../../../dijit/tests/css/dijitTests.css";
+		@import "../resources/FileUploader.css";*/
 	</style>
 	<script>
 		passthrough = function(msg){
 			//for catching messages from Flash
 			if(window.console){
-				console.log(msg);	
+				console.log(msg);
 			}
 		}
 		forceNoFlash = false;
@@ -29,7 +29,7 @@
 				selectMultipleFiles = true;
 			}
 		 }
-		 
+
 		 setLoc = function(href){
 		 	window.location.href = window.location.href.split("?")[0] + href;
 		 }
@@ -40,7 +40,7 @@
 		 }
 		 showWithoutFlash = function(){
 		 	if(!forceNoFlash){
-				setLoc((selectMultipleFiles) ? "?forceNoFlash&multiMode" : "?forceNoFlash"); 
+				setLoc((selectMultipleFiles) ? "?forceNoFlash&multiMode" : "?forceNoFlash");
 			}
 		 }
 		 showMulti = function(){
@@ -50,22 +50,22 @@
 		 }
 		 showSingle = function(){
 		 	if(selectMultipleFiles){
-				setLoc((forceNoFlash) ? "?forceNoFlash" : ""); 
+				setLoc((forceNoFlash) ? "?forceNoFlash" : "");
 			}
 		 }
     </script>
-	<script type="text/javascript" src="../../../dojo/dojo.js" 
+	<script type="text/javascript" src="../../../dojo/dojo.js"
     	djConfig="isDebug:true, parseOnLoad: true, debugAtAllCosts:false"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.form.FileUploader");
-		dojo.require("dijit.form.Button"); 
+		dojo.require("dijit.form.Button");
 		dojo.require("dojo.parser");
-		
+
 		//using this early for the forceNoFlash test:
 		dojo.require("dojox.embed.Flash");
-		
+
 		var uploadUrl = "../tests/UploadFile.php";
-		
+
 		var rmFiles = "";
 		var fileMask = [
 			["Jpeg File", 	"*.jpg;*.jpeg"],
@@ -76,7 +76,7 @@
 		// For testing 1D array masks:
 		// var fileMask = 	["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"];
 		// var fileMask = 	["PNG File", 	"*.png"];
-		
+
 		dojo.addOnLoad(function(){
 			if(forceNoFlash){
 				dojox.embed.Flash.available = 0;
@@ -90,7 +90,7 @@
 					dojo.byId("fTypes").innerHTML+=fileMask[1];
 				}
 			}
-			
+
 			if(selectMultipleFiles){
 				dojo.byId("fmode").innerHTML = dojo.byId("hmode").innerHTML = "Multi-File Mode";
 				dojo.byId("fSingle").style.display = "none";
@@ -106,18 +106,18 @@
 			}
 			dojo.byId("uploadedFiles").value = "";
 			dojo.byId("fileToUpload").value = "";
-	
-			
+
+
 			var f0 = new dojox.form.FileUploader({
 				degradable:true,
-				uploadUrl:uploadUrl, 
-				uploadOnChange:false, 
+				uploadUrl:uploadUrl,
+				uploadOnChange:false,
 				selectMultipleFiles:selectMultipleFiles,
 				fileMask:fileMask,
 				isDebug:true,
 				devMode:true
 			}, "selectBtn");
-			
+
 			doUpload = function(){
 				dojo.byId("fileToUpload").innerHTML = "uploading...";
 				f0.upload();
@@ -137,7 +137,7 @@
 				dojo.byId("fileToUpload").value = "";
 				dojo.forEach(data, function(d){
 					dojo.byId("fileToUpload").value += "("+d.percent+"%) "+d.name+" \n";
-					
+
 				});
 			});
 			dojo.connect(f0, "onComplete", function(data){
@@ -147,13 +147,13 @@
 					rmFiles+=d.file+";";
 				});
 			});
-			
+
 			Destroy = function(){
 				f0.destroyAll();
 			}
-			
+
 		});
-		
+
 		cleanUp = function(){
 			dojo.byId("rgtCol").innerHTML = "";
 			dojo.byId("uploadedFiles").value = "";
@@ -165,13 +165,13 @@
 				}
 			});
 			rmFiles = "";
-			
+
 		}
 		dojo.addOnUnload(function(){
 			console.log("You're leaving the page");
 			cleanUp();
 		});
-		
+
 
 	</script>
     <style>
@@ -187,7 +187,7 @@
 			overflow-x:hidden;
 		}
 		.uploadedFilesLabel{
-		
+
 		}
 		#uploadedFiles{
 			border:#CCCC00 1px solid;
@@ -214,13 +214,13 @@
 		<strong>NOTE:</strong> This test does upload,
 		but the server scripts are renamed to <em>tests/UploadFile.php.<strong>disabled</strong></em> and
 		<em>tests/cLOG.php.<strong>disabled</strong></em> to prevent security attacks on hosted servers.
-		You should rename these files (removing <em>.disabled</em>) in your local copy to conduct tests. 
+		You should rename these files (removing <em>.disabled</em>) in your local copy to conduct tests.
 	</p>
-	
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td class="leftCol">
-	
+
     	<div id="hasFlash">
             <h1>
             	dojox.form.FileUploader - FileInputFlash Test
@@ -229,12 +229,12 @@
             <div onClick="showWithoutFlash()" dojoType="dijit.form.Button">Emulate No Flash Plugin</div>
             <div id="fbm" onClick="showMulti()" dojoType="dijit.form.Button">Switch to Multi-File mode</div>
             <div id="fbs" onClick="showSingle()" dojoType="dijit.form.Button">Switch to Single-File mode</div>
-            
+
             <p>The following is an example of FileUploader trigger FileInputFlash act's with the same APIs as FileInputOverlay, so you can build your own file input. <em>For the file to actually upload, you'll need to have PHP enabled. </em></p>
             <p id="fMulti">Multiple-file mode. You may choose multiple files from the System Dialog.</p>
             <p id="fSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
-        
+
         <div id="noFlash">
             <h1>
             	dojox.form.FileUploader - Degraded to FileInputOverlay
@@ -248,20 +248,20 @@
             <p id="hMulti">Multiple-file mode. You may upload multiple files by adding files to the upload list, one at a time.</p>
             <p id="hSingle">Single-file mode. You may choose only one from the System Dialog.</p>
         </div>
-        
-        
+
+
 		<span id="selectBtn">Select Images...</span>
-        
+
 		<span id="fTypes">Choose from these types:</span>
-        
+
         <textarea cols="50" rows="6" id="fileToUpload"></textarea>
-        
+
         <div id="uploadBtn" class="uploadBtn" onClick="doUpload();" dojoType="dijit.form.Button">Upload</div>
-        
+
         <div class="uploadedFilesLabel">Uploaded Files:</div>
-        
+
         <textarea cols="50" rows="4" id="uploadedFiles"></textarea>
-        
+
         <div onClick="cleanUp()" dojoType="dijit.form.Button">Remove Files</div>
         <!-- Test destroy: <div onClick="Destroy()" dojoType="dijit.form.Button">Destroy()</div> -->
     </td>

@@ -17,20 +17,31 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 
 		this.xArrow = new dojox.drawing.annotations.Arrow({stencil:this, idx1:0, idx2:1});
 		this.yArrow = new dojox.drawing.annotations.Arrow({stencil:this, idx1:2, idx2:1});
-		if(options.data){ this.style.zAxisEnabled = options.data.cosphi !=0 ? true : false; }
+		if(options.data){
+			//Allows import of z-axis in non-enabled canvas and xy-axis in
+			//enabled canvas
+			this.style.zAxisEnabled = options.data.cosphi == 1 ? true : false;
+			this.setData(options.data);
+		}
 		if(this.style.zAxisEnabled){
 			// If the z-axis is enabled, all axes will be created with a z-axis on the canvas.
 			// there is no switching back and forth for the axis, only for vectors.
-			this.cosphi = 1;
+			this.data.cosphi = 1;
 			var ops = {};
-			dojo.mixin(ops, dojo.mixin(options,{
+			dojo.mixin(ops,options);
+			dojo.mixin(ops,{
 				container:this.container.createGroup(),
 				style: this.style,
 				showAngle: false,
 				label: null
-			}));
+			});
+			if(options.data && (!ops.data.radius || !ops.data.angle)){
+				ops.data.x2 = ops.data.x4;
+				ops.data.y2 = ops.data.y4;
+			}
 			ops.style.zAxis = true;
 			this.zAxis = new dojox.drawing.tools.custom.Vector(ops);
+			this.zAxis.minimumSize = 5;
 			//console.log("-----constructing axes: ",this.zAxis);
 			this.connectMult([
 				[this, "onChangeStyle", this.zAxis, "onChangeStyle"],
@@ -47,13 +58,11 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 
 		if(this.points && this.points.length){
 			this.setPoints = this._postSetPoints;
-			// need to call render again. It's already been called in the _Base
-			// constructor by the time we get to this constructor
+			// render isn't called yet because baseRender is false
+			// instead it is called here
 			this.render();
-			// 	I don't know why Axes is different, but post-render calls won't
-			// 	happen with pre-data unless we call this here. It *should* happen
-			//	on first render.
-			this.onRender();
+			options.label && this.setLabel(options.label);
+			options.shadow && this.addShadow(options.shadow);
 		}
 	},
 	{
@@ -63,28 +72,26 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 		showAngle:true,
 		closePath:false,
 		baseRender:false,
-		cosphi:0,
 		zScale:.5,
 		
-		zPoints: function(){
+		zPoint: function(obj){
 			// summary:
 			//		Finds the point for the z axis.
-			var d = this.points[1];
-			d.radius = this.getRadius();
-			d.angle = this.style.zAngle;
-			
-			var pt = this.util.pointOnCircle(d.x, d.y, d.radius*this.zScale, d.angle);
-			var p = [
-				{x:d.x, y:d.y},
-				{x:pt.x, y:pt.y}
-			];			
-			return p;
+			obj.radius = this.util.length(obj);
+			var pt = this.util.pointOnCircle(obj.start.x, obj.start.y, obj.radius*this.zScale, this.style.zAngle);
+			return {x:pt.x, y:pt.y, skip:true, noAnchor:true};
 		},
 		
 		zSet: function(){
-			if(!this.zAxis || !this.zAxis.points[0]){ return; };
-			var p = this.zPoints();
-			this.zAxis.setPoints(p); 
+			if(!this.zAxis){ return; };
+			var c = this.points[1];
+			var z = this.points[3];
+			var p = [
+				{x:c.x, y:c.y},
+				{x:z.x, y:z.y}
+			];
+			var len = this.util.length({start:{x:c.x, y:c.y}, x:z.x, y:z.y});
+			len > this.zAxis.minimumSize ? this.zAxis.setPoints(p) : false; 
 			this.zAxis.cosphi = 1; 
 		},
 		
@@ -154,14 +161,15 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			// summary:
 			//		Custom placement for z-axis label
 			//
-			var p = this.zPoints();
+			var c = this.points[1];
+			var z = this.points[3];
 			
 			var dist = 40;
 			var offdist = 20;
 			var pt, px, py, pt2;
-			pt = this.util.lineSub(p[0].x, p[0].y, p[1].x, p[1].y, dist);
-			px = pt.x + (pt.y - p[1].y);
-			py = pt.y + (p[1].x - pt.x);
+			pt = this.util.lineSub(c.x, c.y, z.x, z.y, dist);
+			px = pt.x + (pt.y - z.y);
+			py = pt.y + (z.x - pt.x);
 			pt2 = this.util.lineSub(pt.x, pt.y, px, py, (dist-offdist));
 			
 			return {
@@ -217,7 +225,7 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			// summary:
 			//		Getter for the labels. returns an object.
 			//
-			if(!this.labelX){ return {}; }
+			if(!this.labelX){ return null; }
 			return {
 				x:this.labelX.getText(),
 				y:this.labelY.getText(),
@@ -274,11 +282,12 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 
 			var o = this.points[0];
 			var c = this.points[1];
-			var pt = this.util.constrainAngle({start:{x:c.x, y:c.y}, x:o.x, y:o.y}, 0, 89);
+			var obj = {start:{x:c.x,y:c.y},x:o.x, y:o.y};
+			var pt = this.util.constrainAngle(obj, 0, 89);
+			var zpt = this.style.zAxisEnabled ? this.zPoint(obj) : null;
 
 			if(pt.x==o.x && pt.y == o.y){
 				// we're within the constraint, so now we snap
-				var obj = {start:{x:c.x,y:c.y},x:o.x, y:o.y};
 				pt = this.util.snapAngle(obj, this.angleSnap/180);
 
 				obj.x = pt.x;
@@ -292,6 +301,7 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 				}
 				this.points = [{x:obj.x, y:obj.y}, {x:obj.start.x, y:obj.start.y, noAnchor:true}];
 				this.points.push({x:ox, y:oy, noAnchor:true});
+				if(zpt){ this.points.push(zpt);}
 				this.setPoints(this.points);
 
 				//this.select();
@@ -308,6 +318,7 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			var oy = c.y - (o.x - c.x);
 
 			this.points[2] = {x:ox, y:oy, noAnchor:true};
+			if(zpt){ this.points.push(zpt); }
 			this.setPoints(this.points);
 
 			// reset handles render
@@ -331,9 +342,10 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			var px = this.points[0],
 			    pc = this.points[1],
 			    py = this.points[2];
+			if(this.style.zAxisEnabled){ var pz = this.points[3]; }
 
 			if(absolute){
-				return {
+				var bounds = {
 					x:pc.x,
 					y:pc.y,
 					x1:pc.x,
@@ -343,12 +355,17 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 					x3:py.x,
 					y3:py.y
 				};
+				if(this.style.zAxisEnabled){
+					bounds.x4 = pz.x;
+					bounds.y4 = pz.y;
+				}
+				return bounds;
 			}
 
-			var x1 = py.x,
+			var x1 = this.style.zAxisEnabled ? (py.x < pz.x ? py.x : pz.x) : py.x;
 			    y1 = py.y < px.y ? py.y : px.y,
 			    x2 = px.x,
-			    y2 = pc.y;
+			    y2 = this.style.zAxisEnabled ? pz.y : pc.y;
 
 			return {
 				x1:x1,
@@ -387,6 +404,9 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			// 'noAnchor' on a point indicates an anchor should
 			// not be rendered. This is the Y point being set.
 			this.points[2] = {x:ox, y:oy, noAnchor:true};
+			if(this.style.zAxisEnabled){
+				this.points[3] = this.zPoint({start:{x:c.x, y:c.y}, x:o.x, y:o.y});
+			}
 			this.setPoints(this.points);
 			if(!this._isBeingModified){
 				this.onTransformBegin();
@@ -398,14 +418,30 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			//summary:
 			//		Converts points to data.
 			var p = this.points;
-			return {
+			var d = {
 				x1:p[1].x,
 				y1:p[1].y,
 				x2:p[0].x,
 				y2:p[0].y,
 				x3:p[2].x,
 				y3:p[2].y
-			};
+			}
+			if(this.style.zAxisEnabled){
+				d.x4 = p[3].x;
+				d.y4 = p[3].y;
+				d.cosphi = 1;
+			}
+			return d;
+			
+		},
+		
+		getRadius: function(){
+			//summary:
+			//		Possibility of z-axis makes bounds unreliable.
+			//		Use these points instead.
+			var p = this.points;
+			var line = {start:{x:p[1].x, y:p[1].y}, x:p[0].x, y:p[0].y};
+			return this.util.length(line);
 		},
 
 		dataToPoints: function(/* ? Object*/o){
@@ -415,26 +451,34 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			if(o.radius || o.angle){
 				// instead of using x1,x2,y1,y1,
 				// it's been set as x,y,angle,radius
-
-				var pt = this.util.pointOnCircle(o.x,o.y,o.radius,o.angle);
+				var pt = this.util.pointOnCircle(o.x,o.y,o.radius,o.angle), zpt;
 				var ox = o.x - (o.y - pt.y);
 				var oy = o.y - (pt.x - o.x);
-
+				if((o.cosphi && o.cosphi==1) || this.style.zAxisEnabled){
+					this.style.zAxisEnabled = true;
+					zpt = this.util.pointOnCircle(o.x, o.y, o.radius*this.zScale, this.style.zAngle);
+				}
 				this.data = o = {
-					x2:o.x,
-					y2:o.y,
-					x1:pt.x,
-					y1:pt.y,
+					x1:o.x,
+					y1:o.y,
+					x2:pt.x,
+					y2:pt.y,
 					x3:ox,
 					y3:oy
+				}
+				if(this.style.zAxisEnabled){
+					this.data.x4 = o.x4 = zpt.x;
+					this.data.y4 = o.y4 = zpt.y;
+					this.data.cosphi = 1;
 				}
 
 			}
 			this.points = [
-				{x:o.x1, y:o.y1},
-				{x:o.x2, y:o.y2, noAnchor:true},
+				{x:o.x2, y:o.y2},
+				{x:o.x1, y:o.y1, noAnchor:true},
 				{x:o.x3, y:o.y3, noAnchor:true}
 			];
+			if(this.style.zAxisEnabled){ this.points.push({x:o.x4, y:o.y4, skip:true, noAnchor:true}); }
 			return this.points;
 		},
 
@@ -453,6 +497,10 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			this.points = [{x:obj.x, y:obj.y}, {x:obj.start.x, y:obj.start.y, noAnchor:true}];
 
 			this.points.push({x:ox, y:oy, noAnchor:true});
+			if(this.style.zAxisEnabled){
+				var zpt = this.zPoint(obj);
+				this.points.push(zpt);
+			}
 			this.render();
 		},
 
@@ -463,15 +511,21 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			this._downOnCanvas = false;
 			var p = this.points;
 			if(!p.length){
-				s = obj.start;
+				var s = obj.start, d = 100;
 				this.points = [
-					{x:s.x+100, y:s.y+100},
-					{x:s.x, y:s.y+100, noAnchor:true},
+					{x:s.x+d, y:s.y+d},
+					{x:s.x, y:s.y+d, noAnchor:true},
 					{x:s.x, y:s.y, noAnchor:true}
 				];
+				if(this.style.zAxisEnabled){
+					var zpt = this.zPoint({start:{x:s.x, y:s.y+d}, x:s.x+d, y:s.y+d});
+					this.points.push(zpt);
+				}
+				this.setPoints = this._postSetPoints;
 				this.pointsToData();
 				this.render();
-				var p = this.points;
+				this.onRender(this);
+				return;
 			}
 
 			var len = this.util.distance(p[1].x ,p[1].y ,p[0].x ,p[0].y );
@@ -502,7 +556,7 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 			this.points = [{x:obj.x, y:obj.y}, {x:obj.start.x, y:obj.start.y, noAnchor:true}];
 
 			this.points.push({x:ox, y:oy, noAnchor:true});
-
+			if(this.style.zAxisEnabled){ this.points.push(this.zPoint(obj)); }
 			this.onRender(this);
 			this.setPoints = this._postSetPoints;
 		}

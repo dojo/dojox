@@ -147,7 +147,7 @@ dojox.drawing.plugins.drawing.Silverlight = dojox.drawing.util.oo.declare(
 		}
 		
 		this.util.attr = function(/* Object */ elem, /* property */ prop, /* ? value */ value, squelchErrors){
-			if(!elem) { return false; }
+			if(!elem){ return false; }
 			try{
 				
 				var t;

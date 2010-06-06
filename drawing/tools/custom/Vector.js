@@ -16,11 +16,6 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 	dojox.drawing.tools.Arrow,
 	function(options){
 		this.minimumSize = this.style.arrows.length;
-		if(this.style.zAxis || options.data.cosphi!=0)
-		{
-			this.cosphi = options.data.cosphi;
-			this.style.zAxis = "true";
-		}
 		this.addShadow({size:3, mult:2});
 	},
 	{
@@ -28,7 +23,6 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 		type:"dojox.drawing.tools.custom.Vector",
 		minimumSize:30,
 		showAngle:true,
-		cosphi:0,
 		
 		labelPosition: function(){
 			// summary:
@@ -50,11 +44,11 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			cosphi = cosphi!==undefined?cosphi:this.style.zAxis? 0 : 1;
 			if(cosphi == 0){
 				this.style.zAxis = false;
-				this.cosphi = 0;
+				this.data.cosphi = 0;
 			}else{
 				this.style.zAxis = true;
 				var p = this.points;
-				var pt = this.zPoints();
+				var pt = this.zPoint();
 				this.setPoints([
 					{x:p[0].x, y:p[0].y},
 					{x:pt.x, y:pt.y}
@@ -126,7 +120,7 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			}
 			
 			if(this.style.zAxis){
-				var pts = this.zPoints(obj);
+				var pts = this.zPoint(obj);
 				x2 = pts.x;
 				y2 = pts.y;
 			}
@@ -149,17 +143,13 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			// is for stencil move:
 			
 			this.setPoints(this.points);
-			if(this.style.zAxis){
-				var angle = this.getAngle();
-				this.cosphi = angle>135 && angle<315 ? 1 : -1;
-			}
 			this.render();			
 		},
 		
 		anchorConstrain: function(x, y){
 			//	summary:
 			//		Called from anchor point mouse drag
-			if(!this.style.zAxis){ return; }
+			if(!this.style.zAxis){ return null; }
 			var radians = this.style.zAngle*Math.PI/180;
 			//Constrain to angle
 			var test = x<0 ? x>-y : x<-y;
@@ -168,14 +158,14 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			return {x:dx, y:dy}
 		},
 		
-		zPoints: function(obj){
+		zPoint: function(obj){
 			//	summary:
 			//		Takes any point and converts it to
 			//		be on the z-axis.
 			if(obj===undefined){
-				if(!this.points[0] || (this.getRadius()<this.minimumSize)){ return; };
+				if(!this.points[0]){ return null; };
 				var d = this.pointsToData();
-				var obj = {
+				obj = {
 					start:{
 						x:d.x1,
 						y:d.y1
@@ -188,17 +178,61 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			var angle = this.util.angle(obj);
 			angle<0 ? angle = 360 + angle : angle;
 			
-			if(angle > 135 && angle < 315){
-				//Out angle
-				angle = this.style.zAngle;
-				this.cosphi = 1;
-			}else{
-				//In Angle
-				angle = this.util.oppAngle(this.style.zAngle);
-				this.cosphi = -1;
-			}
+			angle = angle > 135 && angle < 315 ? this.style.zAngle : this.util.oppAngle(this.style.zAngle);
 			
 			return this.util.pointOnCircle(obj.start.x, obj.start.y, radius, angle);
+		},
+		
+		pointsToData: function(p){
+			// summary:
+			//		Converts points to data
+			p = p || this.points;
+			var cosphi = 0;
+			var obj = {start:{x:p[0].x, y:p[0].y}, x:p[1].x, y:p[1].y};
+			if(this.style.zAxis && (this.util.length(obj)>this.minimumSize)){
+				
+				var angle = this.util.angle(obj);
+				angle<0 ? angle = 360 + angle : angle;
+				cosphi = angle > 135 && angle < 315 ? 1 : -1;
+			}
+			this.data = {
+				x1: p[0].x,
+				y1: p[0].y,
+				x2: p[1].x,
+				y2: p[1].y,
+				cosphi: cosphi
+			};
+			return this.data;
+		},
+		
+		dataToPoints: function(o){
+			//summary:
+			//		Converts data to points.
+			o = o || this.data;
+			if(o.radius || o.angle){
+				// instead of using x1,x2,y1,y1,
+				// it's been set as x,y,angle,radius
+				var cosphi = 0;
+				var pt = this.util.pointOnCircle(o.x,o.y,o.radius,o.angle);
+				if(this.style.zAxis || (o.cosphi && o.cosphi!=0)){
+					this.style.zAxis = true;
+					cosphi = o.angle > 135 && o.angle < 315 ? 1 : -1;
+				}
+				//console.log(" ---- pts:", pt.x, pt.y);
+				this.data = o = {
+					x1:o.x,
+					y1:o.y,
+					x2:pt.x,
+					y2:pt.y,
+					cosphi:cosphi
+				}
+				
+			}
+			this.points = [
+				{x:o.x1, y:o.y1},
+				{x:o.x2, y:o.y2}
+			];
+			return this.points;
 		},
 		
 		render: function(){
@@ -214,7 +248,7 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 				this._create("shape", this.data, this.style.current);
 			
 			}else{
-				this.cosphi = 0;
+				this.data.cosphi = 0;
 				this._createZeroVector("hit", this.data, this.style.currentHit);
 				this._createZeroVector("shape", this.data, this.style.current);
 			}
@@ -226,12 +260,12 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			this._downOnCanvas = false;
 			//Default vector for single click
 			if(!this.shape){
-				s = obj.start;
-				obj.y = obj.start.y + 100;
-				obj.x = obj.start.x
+				var d = 100;
+				obj.start.x = this.style.zAxis ? obj.start.x + d : obj.start.x;
+				obj.y = obj.y+d;
 				this.setPoints([
-					{x:s.x, y:s.y},
-					{x:s.x, y:s.y+100}
+					{x:obj.start.x, y:obj.start.y},
+					{x:obj.x, y:obj.y}
 				]);
 				this.render();
 			}
@@ -245,10 +279,10 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 					{x:p[0].x, y:p[0].y}, 
 					{x:p[0].x, y:p[0].y} 
 				]); 
-			} else { 			
+			}else{ 			
 				//needed as else to avoid zero length problem in snapAngle 
 				var p = this.points;
-				var pt = this.style.zAxis ? this.zPoints(obj) : this.util.snapAngle(obj, this.angleSnap/180);
+				var pt = this.style.zAxis ? this.zPoint(obj) : this.util.snapAngle(obj, this.angleSnap/180);
 				this.setPoints([
 					{x:p[0].x, y:p[0].y},
 					{x:pt.x, y:pt.y}
@@ -269,7 +303,7 @@ dojox.drawing.tools.custom.Vector.setup = {
 	iconClass:"iconVector"
 };
 
-if(dojox.drawing.defaults.zAxisEnabled) {
+if(dojox.drawing.defaults.zAxisEnabled){
 	dojox.drawing.tools.custom.Vector.setup.secondary = {
 		// summary:
 		//		Creates a secondary tool for the Vector Stencil.
@@ -307,6 +341,7 @@ if(dojox.drawing.defaults.zAxisEnabled) {
 			//		are tool specific.
 			var zAxis = dojox.drawing.defaults.zAxis;
 			this.zSelect = function(button){
+				if(!button.enabled){ return; }
 				zAxis = true;
 				dojox.drawing.defaults.zAxis = true;
 				button.select();
@@ -314,6 +349,7 @@ if(dojox.drawing.defaults.zAxisEnabled) {
 				this.zSelected = button;
 			};
 			this.zDeselect = function(button){
+				if(!button.enabled){ return; }
 				zAxis = false;
 				dojox.drawing.defaults.zAxis = false;
 				button.deselect();
@@ -340,7 +376,7 @@ if(dojox.drawing.defaults.zAxisEnabled) {
 								}
 							},this);
 							
-						} else {
+						}else{
 							//Update button to not be z-axis
 							dojo.forEach(this.buttons, function(b){
 								if(b.toolType=="vectorSecondary"){

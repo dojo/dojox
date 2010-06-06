@@ -253,8 +253,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.setData(options.data);
 			this.connect(this, "render", this, "onRender", true);
 			this.baseRender && this.enabled && this.render(options.data.text);
-			options.label && this.setLabel(options.label);
-			options.shadow && this.addShadow(options.shadow);
+			this.baseRender && options.label && this.setLabel(options.label);
+			this.baseRender && options.shadow && this.addShadow(options.shadow);
 
 		}else if(this.draws){
 			//console.log("_____________Base.constr", this.type, "draws")
@@ -272,10 +272,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this.moveToBack();
 			// some things render some don't...
 			this.render(options.data.text);
-		}
-
-		if(this.shortType == "vector" && !options.data){
-			options.data = { cosphi:0 };
 		}
 
 	},
@@ -558,10 +554,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			if(o.borderWidth!==undefined){
 				n.width = o.borderWidth;
 			}
-			if(o.cosphi!=undefined){
-				this.cosphi = o.cosphi;
-				this.style.zAxis = o.cosphi!=0 ? true : false;
-			}
+			
 			if(this.useSelectedStyle){
 				// using the orginal selected style copy as
 				// a reference map of what props to copy
@@ -622,6 +615,11 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				this.onChangeStyle(this);
 			}
 			o.width = width;
+			
+			if(o.cosphi!=undefined){
+				!this.data? this.data = {cosphi:o.cosphi} : this.data.cosphi = o.cosphi;
+				this.style.zAxis = o.cosphi!=0 ? true : false;
+			}
 		},
 
 		exporter: function(){
@@ -899,8 +897,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 		getRadius: function(){
 			// summary:
 			//		Gets radius (length) of Stencil
-			// NOTE: Only works for Lines, Arrows, Vectors and Axes
-			//		(not for Ellipse)
+			// NOTE: Only works for Lines, Arrows and Vectors
+			//	(not for Ellipse, Axes has its own version)
 			//
 			var box = this.getBounds(true);
 			var line = {start:{x:box.x1, y:box.y1}, x:box.x2, y:box.y2};

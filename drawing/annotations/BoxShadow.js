@@ -60,8 +60,6 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 		this.options.color.a = this.options.alpha;
 		switch(this.stencil.shortType){
 			case "image":
-			case "vector":
-				this.method = "createForZArrow"; break;
 			case "rect":
 				this.method = "createForRect"; break;
 			case "ellipse":
@@ -71,22 +69,18 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 			case "path":
 				this.method = "createForPath"; break;
 				// 	path is a bit of a hassle. Plus I think in IE it would be
-				//slower than than the political process. Maybe TODO.
+				//slower than the political process. Maybe TODO.
+			case "vector":
+				this.method = "createForZArrow"; break;
 			default:
 				console.warn("A shadow cannot be made for Stencil type ", this.stencil.type);
 		}
 		
-		if(this.method == "createForZArrow"){
-			this.stencil.connectMult([
-				[this.stencil, "onTransform", this, "onTransform"],
-				[this.stencil, "onDelete", this, "destroy"],
-				[this.stencil, "render", this, "render"]
-			]);
-		} else if(this.method){
+		if(this.method){
 			this.render();
 			this.stencil.connectMult([
 				[this.stencil, "onTransform", this, "onTransform"],
-				[this.stencil, "render", this, "onRender"],
+				this.method=="createForZArrow"?[this.stencil, "render", this, "render"]:[this.stencil, "render", this, "onRender"],
 				[this.stencil, "onDelete", this, "destroy"]
 			]);
 		}
@@ -217,22 +211,18 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 			//	Creates data used to draw arrow head.
 			//
 			var d = this.stencil.data;
-			d.radius = this.stencil.getRadius();
-			d.angle = this.style.zAngle + 30;
+			var radius = this.stencil.getRadius();
+			var angle = this.style.zAngle + 30;
 
-			var pt = this.util.pointOnCircle(d.x1, d.y1, d.radius*.75, d.angle);
-			var p = [
-				{x:d.x1, y:d.y1},
-				{x:pt.x, y:pt.y}
-			]; 
+			var pt = this.util.pointOnCircle(d.x1, d.y1, radius*.75, angle);
 			
 			var obj = {
 				start:{
-					x:p[0].x,
-					y:p[0].y
+					x:d.x1,
+					y:d.y1
 				},
-				x:p[1].x,
-				y:p[1].y
+				x:pt.x,
+				y:pt.y
 			}
 			var angle = this.util.angle(obj);
 			var lineLength = this.util.length(obj); 
@@ -242,27 +232,25 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 				al = lineLength/2;
 			}
 
-			var p1 = this.util.pointOnCircle(p[1].x, p[1].y, -al, angle-aw);
-			var p2 = this.util.pointOnCircle(p[1].x, p[1].y, -al, angle+aw);
+			var p1 = this.util.pointOnCircle(obj.x, obj.y, -al, angle-aw);
+			var p2 = this.util.pointOnCircle(obj.x, obj.y, -al, angle+aw);
 			return [
-				{x:p[1].x, y:p[1].y},
+				{x:obj.x, y:obj.y},
 				p1,
 				p2
 			];
 		},
 		
 		createForZArrow: function(o, size, mult, pts, r, p, c){
-			if(this.stencil.cosphi<1 || (this.stencil.getRadius()<this.stencil.minimumSize)){ return; }
+			if(this.stencil.data.cosphi<1 || !this.stencil.points[0]){ return; }
 			var sh = size * mult / 4,
 				shy = /B/.test(p) ? sh : /T/.test(p) ? sh*-1 : 0,
 				shx = /R/.test(p) ? sh : /L/.test(p) ? sh*-1 : 0;
 			var closePath = true;
-			
 			for(var i=1;i<=size;i++){
 				var lineWidth = i * mult;
-				var pts = this.arrowPoints();
+				pts = this.arrowPoints();
 				if(!pts){ return; }
-				var p = this.stencil.points;
 				if(dojox.gfx.renderer=="svg"){
 					
 					var strAr = [];
@@ -296,8 +284,8 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 					
 					closePath && pth.closePath();
 				}
-				
-				this.container.createLine({x1:p[0].x, y1:p[0].y, x2:pts[0].x, y2:pts[0].y})
+				var sp = this.stencil.points;
+				this.container.createLine({x1:sp[0].x, y1:sp[0].y, x2:pts[0].x, y2:pts[0].y})
 					.setStroke({width:lineWidth, color:c, cap:"round"});
 			
 			}
