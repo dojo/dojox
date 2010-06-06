@@ -14,8 +14,6 @@ dojox.mobile.parser = new function(){
 			for(i = 0; i < len; i++){
 				var node = list[i];
 				var cls = dojo.getObject(dojo.attr(node, "dojoType"));
-				console.log("CLS:", cls, dojo.attr(node, "dojoType"))
-				if(!cls) continue
 				var proto = cls.prototype;
 				var params = {};
 
