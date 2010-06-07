@@ -1,20 +1,35 @@
 dojo.provide("dojox.rails");
 dojo.require("dojo.NodeList-traverse");
 
+dojox.rails.live = function(selector, evtName, fn){
+	if (dojo.isIE && evtName.match(/^(on)?submit$/i)){
+		dojox.rails.live(selector, "click", function(evt){
+			var target = evt.target, tag = target.tagName.toLowerCase();
+			if ((tag == "input" || tag == "button") && dojo.attr(target, "type").toLowerCase() == "submit"){
+				 var form = dojo.query(target).closest("form");
+				 if (form.length){
+					var h = dojo.connect(form[0], "submit", function(evt){
+					 	dojo.disconnect(h);
+					 	fn.call(evt.target, evt);
+				 	});
+				}
+			}
+		});
+	}else{
+		dojo.connect(dojo.body(), evtName, function(evt){
+			var nl = dojo.query(evt.target).closest(selector);
+			if (nl.length){
+				fn.call(nl[0], evt);
+			}
+		});
+	}
+};
+
 dojo.ready((function(d, dr, dg){
 	return function() {
-		var q = d.query,
+		var q = d.query, live = dr.live,
 				csrfToken = q("meta[name=csrf-token]").attr("content"),
 		    csrfParam = q("meta[name=csrf-param]").attr("content");
-
-		var live = function(selector, evtName, fn){
-			d.connect(d.body(), evtName, function(evt){
-				var nl = q(evt.target).closest(selector);
-				if (nl.length){
-					fn.call(nl[0], evt);
-				}
-			});
-		};
 
 		var createFormForLink = function(url, method){
 			var form = '<form style="display:none" method="post" action="'+ url +'">' +
@@ -33,7 +48,7 @@ dojo.ready((function(d, dr, dg){
 					d.attr(node, "disabled", true);
 					d.attr(node, "data-original-value", originalValue);
 					d.attr(node, attr, message);
-				};
+				}
 			});
 		};
 
@@ -86,9 +101,7 @@ dojo.ready((function(d, dr, dg){
 			if (d.attr(el, "data-remote")){
 				evt.preventDefault();
 				handleRemote(evt);
-			}else{
-				el.submit();
-			}
+ 			}
 		};
 
 		var handleConfirm = function(evt){
@@ -98,7 +111,6 @@ dojo.ready((function(d, dr, dg){
 			}else if (d.attr(evt.target, "data-remote")){
 				handleRemote(evt);
 			}
-			return proceed;
 		};
 
 		// Register data-{action} elements.	 Order is important since the return values
