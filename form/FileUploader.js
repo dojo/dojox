@@ -288,7 +288,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		// internal stuff:
 		this.fileList = [];
 		this._cons = [];
-		this.fileMask = [];
+		this.fileMask = this.fileMask || [];
 		this.fileInputs = [];
 		this.fileCount = 0;
 		this.flashReady = false;
