@@ -55,7 +55,7 @@ dojo.declare(
 		dojox.mobile.View._pillar = dojo.doc.createElement("DIV");
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
-		var id = location.href.match(/#(w+)([^w = ]|$)/) ? RegExp.$1 : null;
+		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
 		this._visible = this.selected && !id || this.id == id;
 		if(this.selected){
 			dojox.mobile._defaultView = this;
@@ -157,7 +157,7 @@ dojo.declare(
 		var toNode;
 		if(moveTo){
 			if(typeof(moveTo) == "string"){
-				moveTo.match(/(w+)/);
+				moveTo.match(/(\w+)/);
 				toNode = RegExp.$1;
 			}else{
 				toNode = moveTo;
@@ -503,7 +503,7 @@ dojo.declare(
 						}));
 						xhr.addErrback(function(error){
 							prog.stop();
-							alert("Failed to load "+url+"n"+(error.description || error));
+							alert("Failed to load "+url+"\n"+(error.description||error));
 						});
 						return;
 					}
@@ -716,14 +716,14 @@ dojo.declare(
 		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblSwitch";
 		this.domNode.innerHTML =
-				'<div class="mblSwitchInner">'
-			+	 '<div class="mblSwitchBg mblSwitchBgLeft">'
-			+	 '<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
-			+	 '</div>'
-			+	 '<div class="mblSwitchBg mblSwitchBgRight">'
-			+	 '<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
-			+	 '</div>'
-			+	 '<div class="mblSwitchKnob"></div>'
+			  '<div class="mblSwitchInner">'
+			+	'<div class="mblSwitchBg mblSwitchBgLeft">'
+			+		'<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
+			+	'</div>'
+			+	'<div class="mblSwitchBg mblSwitchBgRight">'
+			+		'<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
+			+	'</div>'
+			+	'<div class="mblSwitchKnob"></div>'
 			+ '</div>';
 		var n = this.inner = this.domNode.firstChild;
 		this.left = n.childNodes[0];
@@ -1123,9 +1123,9 @@ dojo.declare(
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("BUTTON");
 		this.domNode.className = "mblButton "+this.btnClass;
 
-	if(this.label){
-		this.domNode.innerHTML = this.label;
-	}
+		if(this.label){
+			this.domNode.innerHTML = this.label;
+		}
 
 		this.connect(this.domNode, "onclick", "onClick");
 	},

@@ -19,7 +19,7 @@ dojox.mobile.parser = new function(){
 
 				if(defaultParams){
 					for(var name in defaultParams){
-					params[name] = defaultParams[name];
+						params[name] = defaultParams[name];
 					}
 				}
 				for(var prop in proto){
