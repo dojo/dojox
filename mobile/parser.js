@@ -57,7 +57,11 @@ dojox.mobile.parser = new function(){
 		//		The root node in the document to parse from
 		if(!rootNode){
 			rootNode = dojo.body();
-		}
+		}else if(!defaultParams && rootNode.rootNode){
+			// Case where 'rootNode' is really a params object.
+			rootNode = rootNode.rootNode;
+ 		}
+
 		var nodes = rootNode.getElementsByTagName("*");
 		var list = [];
 		for(var i = 0, len = nodes.length; i < len; i++){
