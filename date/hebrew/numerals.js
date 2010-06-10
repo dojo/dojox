@@ -62,30 +62,31 @@ dojo.provide("dojox.date.hebrew.numerals");
 	};
 
 	dojox.date.hebrew.numerals.getYearHebrewLetters = function(/*Number */ year){
-		// summary: This function return year written in Hebrew numbers-letters, 
+		// summary: converts the year from an integer to Hebrew numerals.
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
 		// |		document.writeln(dojox.date.hebrew.numerals.getYearHebrewLetters(date1.getFullYear());	
 		
-		var y = year % 1000;
-		if(!y){ throw new Error("Hebrew year "+year+" is not in range 5001-5999");} // FIXME: wrong test
-		return transformChars(convertNumberToStr(y)); // String
+		var rem = year % 1000;
+		//FIXME: tests include dates outside this range and seem to pass.
+		//	    	if((year - rem) / 1000 != 5){ throw new Error("Hebrew year "+year+" is not in range 5001-5999");}
+		return transformChars(convertNumberToStr(rem)); // String
 	};
 	
 	dojox.date.hebrew.numerals.parseYearHebrewLetters  = function(/*String hebrew year*/ year){
-		// summary: This function return year in format number from  the year written in Hebrew numbers-letters
+		// summary: converts the year written in Hebrew numerals to an integer
 		//                   
 		// example:
 		// |		var date = new dojox.date.hebrew.Date();
-		// |        	date.setFullYear(dojox.date.hebrew.numerals.parseYearHebrewLetters('תשס"ח'));
+		// |        	date.setFullYear(dojox.date.hebrew.numerals.parseYearHebrewLetters('\u05ea\u05e9\u05e1\u05f4\u05d7'));
 
 		return parseStrToNumber(year) + 5000; // int
 	};
 	
 	dojox.date.hebrew.numerals.getDayHebrewLetters =  function(day, /*boolean?*/ nogrsh){
-		// summary: This function return date written in Hebrew numbers-letter,  can be in format א or א' (with geresh)
+		// summary: converts an integer to a String representing the number in Hebrew numerals.   Can be formatted with or without geresh &#x05f3;
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
@@ -96,17 +97,17 @@ dojo.provide("dojox.date.hebrew.numerals");
 	};
 	
 	dojox.date.hebrew.numerals.parseDayHebrewLetters =  function(/*String hebrew*/ day){
-		// summary: This function return date in format number from  the date written in Hebrew numbers-letter
+		// summary: converts the string containing a Hebrew numeral to an integer
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
 		// |
-		// |		date1.setDate(dojox.date.hebrew.numerals.parseDayHebrewLetters('א'));
+		// |		date1.setDate(dojox.date.hebrew.numerals.parseDayHebrewLetters('\u05d0')); // ALEPH
 		return parseStrToNumber(day); // int
 	};
 
 	dojox.date.hebrew.numerals.getMonthHebrewLetters =  function(/*int*/month){
-		// summary: This function return month written in Hebrew numerals
+		// summary: converts an integer representing a  month to a String written in Hebrew numerals
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date();
@@ -117,11 +118,14 @@ dojo.provide("dojox.date.hebrew.numerals");
 	};	
 
 	dojox.date.hebrew.numerals.parseMonthHebrewLetters = function(/*String*/monthStr){
-		// summary: This function return month in format number from  the month written in Hebrew  word  or numbers-letters
-		//                   the return number is index in month name array, to use it for setMont, do correction for leap year
+		// summary: converts a Hebrew numeral string representing
+		//	a month to an integer.  The returned value
+		//	is indexed in the month name array.  To use it for
+		//	setMonth, do correction for leap year
+		//
 		// example:
 		// |		var date = new dojox.date.hebrew.Date();
-		// |            var number = dojox.date.hebrew.numerals.parseMonthHebrewLetters("תמוז");
+		// |            var number = dojox.date.hebrew.numerals.parseMonthHebrewLetters("\u05ea\u05de\u05d5\u05d6"); // Tammuz
 		// |		date.setMonth(number);
 			
 		//month number from 0 to 12
