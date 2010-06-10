@@ -1,6 +1,7 @@
 dojo.provide("dojox.mobile.app._base");
 dojo.experimental("dojox.mobile.app._base");
 
+dojo.require("dojox.mobile.app._event");
 dojo.require("dojox.mobile.app._Widget");
 dojo.require("dojox.mobile.app.StageController");
 dojo.require("dojox.mobile.app.SceneController");
@@ -9,6 +10,7 @@ dojo.require("dojox.mobile.app.AlertDialog");
 dojo.require("dojox.mobile.app.List");
 dojo.require("dojox.mobile.app.ListSelector");
 dojo.require("dojox.mobile.app.TextBox");
+dojo.require("dojox.mobile.app.ImageView");
 
 (function(){
 
@@ -33,7 +35,7 @@ dojo.require("dojox.mobile.app.TextBox");
 		//		An array of module names, e.g. 'dojox.mobile.AlertDialog'
 		
 		var moduleName = resources.pop();
-	
+
 		var url = dojo.baseUrl + dojo._getModuleSymbols(moduleName).join("/") + '.js';
 	
 		dojo.xhrGet({
@@ -48,31 +50,6 @@ dojo.require("dojox.mobile.app.TextBox");
 				dojox.mobile.app._pushFirstScene();
 			}
 		});
-	}
-
-	if(dojo.isSafari
-		&& (navigator.userAgent.indexOf("iPhone") > -1 ||
-			navigator.userAgent.indexOf("iPod") > -1
-		)){
-		// We are iPhone. Note, iPod touch reports "iPod" above and fails this test.
-		// Override the dojo._connect function to replace mouse events with touch events
-
-		dojox.mobile.app.isIPhone = true;
-		dojo._oldConnect = dojo._connect;
-	
-		var eventMap = {
-			onmousedown: "ontouchstart",
-			mousedown: "ontouchstart",
-			onmouseup: "ontouchend",
-			mouseup: "ontouchend",
-			onmousemove: "ontouchmove",
-			mousemove: "ontouchmove"
-		};
-	
-		dojo._connect = function(obj, event, context, method, dontFix){
-			event = eventMap[event] || event;
-			return dojo._oldConnect(obj, event, context, method, dontFix);
-		}
 	}
 
 	dojo.mixin(dojox.mobile.app, {

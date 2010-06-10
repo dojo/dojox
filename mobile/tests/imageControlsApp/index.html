@@ -3,7 +3,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<link href="../../themes/iphone/iphone-app.css" rel="stylesheet"></link>
+		<link href="../../themes/iphone/iphone-app.css" rel="stylesheet">
 		<style>
 		.lnk {
 			font-size: 17px;
@@ -12,22 +12,22 @@
 		}
 		</style>
 		<script type="text/javascript" src="../../../../dojo/dojo.js" 
-			djConfig="parseOnLoad: false,mobileAnim:'slide'"></script>
+				djConfig="parseOnLoad: false, mobileAnim:'slide'"></script>
     
-		<!-- 
-			Include the files directly, as some mobile operating systems do not
-			allow synchronous XHR, and therefore break dojo.require
-		-->
+    <!-- 
+      Include the files directly, as some mobile operating systems do not
+      allow synchronous XHR, and therefore break dojo.require
+    -->
 		<script type="text/javascript" src="../../../mobileApp.js"></script>
 		<script language="JavaScript" type="text/javascript">
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.app.compat");
+			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.appCompat");
       
 			var appInfo = {
-				id: "org.dojo.multiSceneApp",
-				title: "Multi Scene Mobile App",
+				id: "org.dojo.imageWidgetApp",
+				title: "Mobile App With Image Widgets",
 				initialScene: "main"
 			};
-      
+			
 			dojo.ready(dojox.mobile.app.init);
 		</script>
 	</head>

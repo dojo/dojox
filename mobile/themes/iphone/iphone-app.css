@@ -102,6 +102,9 @@
 	background-color: white;
 	z-index: 6; /* Must be greater than the .buttons z-index */
 }
+.list .row.mblListItem {
+	padding: 0px;
+}
 
 .list .row.last {
 	border-bottom: none;
@@ -170,6 +173,15 @@
 
 .listSelectorRow.last {
  	border-bottom: none;
+}
+
+.mblImageView, .mblImageView canvas {
+	width: 100%;
+	height: 100%;
+}
+
+.mblPillar {
+	display: none;
 }
 
 /* Form Input Styles */

@@ -31,10 +31,11 @@ dojo.declare("dojox.mobile.app.StageController", null,{
 		}
 		this._opInProgress = true;
 	
+		// Push new scenes as the first element on the page.
 		var node = dojo.create("div", {
 			"class": "scene-wrapper",
 			style: {
-			visibility: "hidden"
+				visibility: "hidden"
 			}
 		}, this.domNode);
 	
@@ -69,10 +70,14 @@ dojo.declare("dojox.mobile.app.StageController", null,{
 						null, 
 						function(){
 							// When the scene is ready, activate it.
+							console.log("before activate");
 							_this.scenes[_this.scenes.length - 1].assistant.activate(params);
+							console.log("after activate");
 							_this._opInProgress = false;
 						});
 			}
+			console.log("at end of callback after controller.init");
+			
 		});
 	},
 

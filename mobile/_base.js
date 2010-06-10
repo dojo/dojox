@@ -52,11 +52,13 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblView";
-		dojox.mobile.View._pillar = dojo.doc.createElement("DIV");
+//		dojox.mobile.View._pillar = dojo.create("DIV", {className:"mblPillar"});
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
+
 		this._visible = this.selected && !id || this.id == id;
+
 		if(this.selected){
 			dojox.mobile._defaultView = this;
 		}
@@ -216,9 +218,9 @@ dojo.declare(
 		var rev = (dir == -1) ? " reverse" : "";
 		toNode.style.display = "";
 		if(transition){
-			var pillar = dojox.mobile.View._pillar;
-			pillar.style.height = fromNode.offsetHeight+"px";
-			fromNode.parentNode.appendChild(pillar);
+//			var pillar = dojox.mobile.View._pillar;
+//			pillar.style.height = fromNode.offsetHeight+"px";
+//			fromNode.parentNode.appendChild(pillar);
 			dojo.addClass(fromNode, transition + " out" + rev);
 			dojo.addClass(toNode, transition + " in" + rev);
 		}else{
@@ -245,7 +247,7 @@ dojo.declare(
 			dojo.removeClass(li, "mblCloseContent");
 		}
 		if(isOut){
-			dojox.mobile.View._pillar.parentNode.removeChild(dojox.mobile.View._pillar);
+//			dojox.mobile.View._pillar.parentNode.removeChild(dojox.mobile.View._pillar);
 			this.invokeCallback();
 		}
 		this.domNode.className = "mblView";
