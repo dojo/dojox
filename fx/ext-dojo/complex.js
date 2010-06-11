@@ -98,15 +98,17 @@ dojo.declare("dojox.fx._Complex", null, {
 		// summary:
 		// 		Returns a string with teh same integrity as the
 		// 		original star and end, but with the modified units.
-		var str = this.strProp;
+		var str = this.strProp, u;
 		for(var nm in this._properties){
 			var v, o = this._properties[nm];
 			if(o.units == "isColor"){
-				v = dojo.blendColors(o.beg, o.end, r).toCss(false);	
+				v = dojo.blendColors(o.beg, o.end, r).toCss(false);
+				u = "";
 			}else{
-				v = ((o.end - o.beg) * r) + o.beg;	
+				v = ((o.end - o.beg) * r) + o.beg;
+				u = o.units;
 			}
-			str = str.replace(nm, v + o.units);
+			str = str.replace(nm, v + u);
 		}
 		
 		return str; // String
