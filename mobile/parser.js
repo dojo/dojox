@@ -72,6 +72,7 @@ dojox.mobile.parser = new function(){
 		return this.instantiate(list, defaultParams);
 	};
 };
-dojo._loaders.unshift(function(){
+dojo.addOnLoad(function(){
 	dojox.mobile.parser.parse();
 });
+
