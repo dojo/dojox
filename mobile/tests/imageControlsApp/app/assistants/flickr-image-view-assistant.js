@@ -89,7 +89,6 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 			_this.index + " of " + images.length
 			+ " " + images[_this.index].title;
 	});
-	
   },
   
   activate: function(){

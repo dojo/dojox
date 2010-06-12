@@ -25,6 +25,10 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 	//		Disables auto zoom
 	disableAutoZoom: false,
 	
+	// disableSwipe: Boolean
+	//		Disables the users ability to swipe from one image to the next.
+	disableSwipe: false,
+	
 	// autoZoomEvent: String
 	//		Overrides the default event listened to which invokes auto zoom
 	autoZoomEvent: null,
@@ -83,10 +87,14 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			}
 			if (_this.panX) {
 				_this.handleDragEnd();
-			}else {
-				downX = event.targetTouches ? event.targetTouches[0].clientX : event.pageX;
-				downY = event.targetTouches ? event.targetTouches[0].clientY : event.pageY;
 			}
+			
+			downX = event.targetTouches ? event.targetTouches[0].clientX : event.clientX;
+			downY = event.targetTouches ? event.targetTouches[0].clientY : event.clientY;
+			
+			upX = upY = null;
+			
+			dojo.publish("/debug", ["downX = " + downX]);
 		});
 
 		this.connect(this.domNode, "onmousemove", function(event){
@@ -94,7 +102,7 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				return;
 			}
 			if((!downX && downX !== 0) || (!downY && downY !== 0)){
-				// If the touch didn'g begin on this widget, ignore the movement
+				// If the touch didn't begin on this widget, ignore the movement
 				return;
 			}
 			
@@ -104,18 +112,21 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 						event.targetTouches[0].clientY : event.pageY;
 			
 			// If not zoomed in, then try to move to the next or prev image
-				
-			_this.panX = x - downX;
-			_this.panY = y - downY;
-			if(_this.zoom == 1){
-				if (Math.abs(_this.panX) > 10) {
-					_this.render();
+			
+			if((!_this.disableSwipe && _this.zoom == 1) 
+				|| (!_this.disableAutoZoom && _this.zoom != 1)){
+			
+				_this.panX = x - downX;
+				_this.panY = y - downY;
+				if(_this.zoom == 1){
+					if (Math.abs(_this.panX) > 10) {
+						_this.render();
+					}
+				}else{
+					if (Math.abs(_this.panX) > 10 || Math.abs(_this.panY) > 10) {
+						_this.render();
+					}
 				}
-			}else{
-				if (Math.abs(_this.panX) > 10 || Math.abs(_this.panY) > 10) {
-					_this.render();
-				}
-				
 			}
 		});
 		
@@ -141,10 +152,7 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 
 		// Set up AutoZoom, which zooms in a fixed amount when the user taps
 		// a part of the canvas
-			
-			
-		// Zoom in on the tapped point when the user taps the widget
-		this.connect(this.domNode, "onmouseup", function(event){
+		this.connect(this.domNode, "onclick", function(event){
 			if(_this.isAnimating()){
 				return;
 			}
@@ -152,8 +160,13 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				return;
 			}
 			
-			if(Math.abs(downX - event.pageX) > 14
-				|| Math.abs(downY - event.pageY) > 14){
+			var x = (event.targetTouches ? 
+						event.targetTouches[0].clientX : event.pageX);
+			var y = (event.targetTouches ? 
+						event.targetTouches[0].clientY : event.pageY);
+			
+			if(Math.abs(_this.panX) > 14
+				|| Math.abs(_this.panY) > 14){
 				downX = downY = null;
 				_this.handleDragEnd();
 				return;
@@ -177,9 +190,11 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				var xRatio = _this.size.w / _this._centerImg.width;
 				var yRatio = _this.size.h / _this._centerImg.height;
 				
-				_this.zoomTo(((event.pageX - pos.x) / xRatio) - _this.panX, ((event.pageY - pos.y) / yRatio) - _this.panY, _this.autoZoomLevel);
+				_this.zoomTo(((x - pos.x) / xRatio) - _this.panX, 
+					((x - pos.y) / yRatio) - _this.panY, _this.autoZoomLevel);
 			}
 		});
+		
 		
 		// Listen for Flick events
 		dojo.connect(this.domNode, "flick", this, "handleFlick");
