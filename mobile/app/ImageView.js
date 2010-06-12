@@ -84,8 +84,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			if (_this.panX) {
 				_this.handleDragEnd();
 			}else {
-				console.log("rightImg = ", _this._rightImg, 
-					"loaded=" + (_this._rightImg ? _this._rightImg._loaded : null));
 				downX = event.targetTouches ? event.targetTouches[0].clientX : event.pageX;
 				downY = event.targetTouches ? event.targetTouches[0].clientY : event.pageY;
 			}
@@ -105,13 +103,19 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			var y = event.targetTouches ? 
 						event.targetTouches[0].clientY : event.pageY;
 			
-			if(_this.zoom == 1){
-				// If not zoomed in, then try to move to the next or prev image
+			// If not zoomed in, then try to move to the next or prev image
 				
-				_this.panX = x - downX;
+			_this.panX = x - downX;
+			_this.panY = y - downY;
+			if(_this.zoom == 1){
 				if (Math.abs(_this.panX) > 10) {
 					_this.render();
 				}
+			}else{
+				if (Math.abs(_this.panX) > 10 || Math.abs(_this.panY) > 10) {
+					_this.render();
+				}
+				
 			}
 		});
 		
@@ -119,11 +123,12 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			if(_this.isAnimating()){
 				return;
 			}
-			if(_this.zoom == 1 && _this.panX){
+			//if(_this.zoom == 1){
 				// If not zoomed in, then try to move to the next or prev image
-				
-				_this.handleDragEnd();
-			}
+				if(_this.panX){
+					_this.handleDragEnd();
+				}
+			//}
 			if((!downX && downX !== 0) || (!downY && downY !== 0)){
 				// If the touch didn'g begin on this widget, ignore the movement
 				return;
@@ -186,23 +191,34 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 	
 	handleDragEnd: function(){
 		downX = downY = null;
-		if(!this.panX){
-			return;
-		}
 		
-		var doMove = 
-			!(Math.abs(this.panX) < this._centerImg._baseWidth / 2) &&
-			(
-				(this.panX > 0 && this._leftImg && this._leftImg._loaded ? 1:0) ||
-				(this.panX < 0 && this._rightImg && this._rightImg._loaded ? 1:0)
-			);
+		if(this.zoom == 1){
+			if(!this.panX){
+				return;
+			}
 			
-		console.log("doMove = " + doMove, "rightImg = ", this._rightImg);
-		
-		if(!doMove){
-			this._animPanTo(0, dojo.fx.easing.expoOut, 700);
+			var doMove = 
+				!(Math.abs(this.panX) < this._centerImg._baseWidth / 2) &&
+				(
+					(this.panX > 0 && this._leftImg && this._leftImg._loaded ? 1:0) ||
+					(this.panX < 0 && this._rightImg && this._rightImg._loaded ? 1:0)
+				);
+				
+			console.log("doMove = " + doMove, "rightImg = ", this._rightImg);
+			
+			if(!doMove){
+				this._animPanTo(0, dojo.fx.easing.expoOut, 700);
+			}else{
+				this.moveTo(this.panX);
+			}
 		}else{
-			this.moveTo(this.panX);
+			if(!this.panX && !this.panY){
+				return;
+			}
+			this.zoomCenterX -= (this.panX / this.zoom);
+			this.zoomCenterY -= (this.panY / this.zoom);
+			
+			this.panX = this.panY = 0;
 		}
 		
 	},
@@ -347,6 +363,7 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			return;
 		}
 		
+		// Render the center image
 		this._renderImg(
 			this._centerSmallImg, 
 			this._centerImg, 
@@ -393,12 +410,15 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 		var sourceWidth = this.dispWidth = img.width * (destWidth / desiredWidth);
 		var sourceHeight = this.dispHeight = img.height * (destHeight / desiredHeight);
 		
+		var zoomCenterX = this.zoomCenterX - (this.panX / this.zoom);
+		var zoomCenterY = this.zoomCenterY - (this.panY / this.zoom);
+		
 		// Calculate where the center of the view should be
 		var centerX = Math.floor(Math.max(sourceWidth / 2, 
-				Math.min(img.width - sourceWidth / 2, this.zoomCenterX)));
+				Math.min(img.width - sourceWidth / 2, zoomCenterX)));
 		var centerY = Math.floor(Math.max(sourceHeight / 2, 
-				Math.min(img.height - sourceHeight / 2, this.zoomCenterY)));
-				
+				Math.min(img.height - sourceHeight / 2, zoomCenterY)));
+
 	
 		var sourceX =  Math.max(0, 
 			Math.round((img.width - sourceWidth)/2 + (centerX - img._centerX)) );
@@ -411,6 +431,7 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 
 		var oldDestWidth = destWidth;
 		var oldSourceWidth = sourceWidth;
+
 		if(this.zoom == 1 && panDir && this.panX){
 			
 			if(this.panX < 0){
@@ -455,8 +476,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				sourceX = (sourceX + oldSourceWidth) - (sourceWidth);
 			}
 			sourceX = Math.floor(sourceX);
-//		}else{
-//			console.log("no pan, panX = ", this.panX, "panDir=", panDir,"zoom=", this.zoom);
 		}
 //		console.log("panX=", this.panX,
 //					"oldDestWidth = ", oldDestWidth, 

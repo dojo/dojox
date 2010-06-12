@@ -19,12 +19,9 @@ dojo.extend(dojox.mobile.app.AlertDialog, {
 	_doTransition: function(dir){
 		console.log("in _doTransition and this = ", this);
 
-		var anim;
 		var h = dojo.marginBox(this.domNode.firstChild).h;
 
-
 		var bodyHeight = this.controller.getWindowSize().h;
-		console.log("dialog height = " + h, " body height = " + bodyHeight);
 	
 		var high = bodyHeight - h;
 		var low = bodyHeight;
@@ -57,31 +54,45 @@ dojo.extend(dojox.mobile.app.AlertDialog, {
 
 dojo.extend(dojox.mobile.app.List, {
 	deleteRow: function(){
-	console.log("deleteRow in compat mode", row);
-
-	var row = this._selectedRow;
-	// First make the row invisible
-	// Put it back where it came from
-	dojo.style(row, {
-		visibility: "hidden",
-		minHeight: "0px"
-	});
-	dojo.removeClass(row, "hold");
-
-
-	// Animate reducing it's height to zero, then delete the data from the
-	// array
-	var height = dojo.contentBox(row).h;
-	dojo.animateProperty({
-			node: row,
-			duration: 800,
-			properties: {
-			height: {start: height, end: 1},
-			paddingTop: {end: 0},
-			paddingBottom: {end: 0}
-		},
-		onEnd: this._postDeleteAnim
-	}).play();
+		console.log("deleteRow in compat mode", row);
+	
+		var row = this._selectedRow;
+		// First make the row invisible
+		// Put it back where it came from
+		dojo.style(row, {
+			visibility: "hidden",
+			minHeight: "0px"
+		});
+		dojo.removeClass(row, "hold");
+	
+	
+		// Animate reducing it's height to zero, then delete the data from the
+		// array
+		var height = dojo.contentBox(row).h;
+		dojo.animateProperty({
+				node: row,
+				duration: 800,
+				properties: {
+				height: {start: height, end: 1},
+				paddingTop: {end: 0},
+				paddingBottom: {end: 0}
+			},
+			onEnd: this._postDeleteAnim
+		}).play();
 	}
 });
+
+if(dojox.mobile.app.ImageView && !dojo.create("canvas").getContext){
+	dojo.extend(dojox.mobile.app.ImageView, {
+		buildRendering: function(){
+			this.domNode.innerHTML = 
+				"ImageView widget is not supported on this browser."
+				+ "Please try again with a modern browser, e.g. "
+				+ "Safari, Chrome or Firefox";
+			this.canvas = {};
+		},
+		
+		postCreate: function(){}
+	});
+}
 
