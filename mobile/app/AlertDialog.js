@@ -32,7 +32,6 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 	},
 
 	buildRendering: function(){
-		console.log("AlertDialog buildRendering");
 		this.domNode = dojo.create("div",{
 			"class": "alertDialog"
 		});

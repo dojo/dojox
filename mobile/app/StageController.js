@@ -70,9 +70,7 @@ dojo.declare("dojox.mobile.app.StageController", null,{
 						null, 
 						function(){
 							// When the scene is ready, activate it.
-							console.log("before activate");
 							_this.scenes[_this.scenes.length - 1].assistant.activate(params);
-							console.log("after activate");
 							_this._opInProgress = false;
 						});
 			}

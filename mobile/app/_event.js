@@ -64,8 +64,6 @@ dojo.mixin(dojox.mobile.app, {
 		var onUp = function(event){
 			dojo.stopEvent(event);
 			
-			console.log("onMouseUp");
-			
 			connMove && dojo.disconnect(connMove);
 			connUp && dojo.disconnect(connUp);
 			

@@ -19,6 +19,17 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 	
 	var images;
 	
+	var loadingDiv = this.controller.query(".loading")[0];
+	
+	// When the first image loads, hide the loading indicator.
+	var loadConn = dojo.connect(viewer, "onLoad", function(type, url, isSmall){
+		if(type == "center"){
+			dojo.disconnect(loadConn);
+			dojo.destroy(loadingDiv);
+			loadingDiv = null;
+		}
+	});
+	
 	var deferred = dojo.io.script.get({
 		url: url,
 		content: { 
@@ -28,40 +39,31 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 		jsonp: "jsoncallback"
 	});
 	deferred.addBoth(function(res){
-		console.log("res = ", res);
 
 		if(res && res.photos && res.photos.photo){
 			images = res.photos.photo;
 			
 			var urls = [];
 			
+			var baseUrl;
+			
 			for(var i = 0; i < images.length; i++){
+				baseUrl = "http://farm" 
+							+ images[i].farm 
+							+ ".static.flickr.com/"
+							+ images[i].server
+							+ "/"
+							+ images[i].id
+							+ "_"
+							+ images[i].secret;
 				urls.push({
-					large: "http://farm" 
-							+ images[i].farm 
-							+ ".static.flickr.com/"
-							+ images[i].server
-							+ "/"
-							+ images[i].id
-							+ "_"
-							+ images[i].secret
-							+ "_m.jpg",
-					small: "http://farm" 
-							+ images[i].farm 
-							+ ".static.flickr.com/"
-							+ images[i].server
-							+ "/"
-							+ images[i].id
-							+ "_"
-							+ images[i].secret
-							+ "_s.jpg"
+					large: baseUrl + "_m.jpg",
+					small: baseUrl + "_t.jpg"
 				});
 			}
 			_this.urls = urls;
 			_this.index = 0;
-			
-			console.log("got " + urls.length + " urls, setting centerUrl to ", urls[0]);
-			
+
 			viewer.attr("centerUrl", urls[0]);
 			viewer.attr("rightUrl", urls[1]);
 			
@@ -72,20 +74,22 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 	
 	var index = 1;
 	
-	dojo.connect(viewer, "onChange", function(direction){
+	var reportDiv = this.controller.query(".report")[0];
+	
+	this.connect(viewer, "onChange", function(direction){
 		_this.index += direction;
 		
+		// If we are not at the first image, set the leftUrl attribute
 		if(_this.index > 0){
 			viewer.attr("leftUrl", _this.urls[_this.index - 1]);
 		}
+
+		// If we are not at the last image, set the rightUrl attribute
 		if(_this.index < _this.urls.length - 1){
-			console.log("setting right url to ", _this.urls[_this.index + 1])
 			viewer.attr("rightUrl", _this.urls[_this.index + 1]);
-		}else{
-			console.log("not setting right url")	
 		}
 		
-		_this.controller.query(".report")[0].innerHTML = 
+		reportDiv.innerHTML = 
 			_this.index + " of " + images.length
 			+ " " + images[_this.index].title;
 	});

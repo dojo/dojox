@@ -4,11 +4,17 @@ dojo.require("dojox.mobile.app._Widget");
 dojo.require("dojo.fx.easing");
 
 dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
-	
+
+	// zoom: Number
+	//		The current level of zoom.  This should not be set manually.
 	zoom: 1,
-	
+
+	// zoomCenterX: Number
+	//		The X coordinate in the image where the zoom is focused
 	zoomCenterX: 0, 
 	
+	// zoomCenterY: Number
+	//		The Y coordinate in the image where the zoom is focused
 	zoomCenterY: 0, 
 	
 	// maxZoom: Number
@@ -33,20 +39,31 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 	//		Overrides the default event listened to which invokes auto zoom
 	autoZoomEvent: null,
 	
+	// _leftImg: Node
+	//		The full sized image to the left
 	_leftImg: null,
 	
+	// _centerImg: Node
+	//		The full sized image in the center
 	_centerImg: null,
 	
+	// _rightImg: Node
+	//		The full sized image to the right
 	_rightImg: null,
 	
+	// _leftImg: Node
+	//		The small sized image to the left
 	_leftSmallImg: null,
 	
+	// _centerImg: Node
+	//		The small sized image in the center
 	_centerSmallImg: null,
 	
+	// _rightImg: Node
+	//		The small sized image to the right
 	_rightSmallImg: null,
 	
 	constructor: function(){
-		this._loadedImgs = [];
 		
 		this.panX = 0;
 		this.panY = 0;
@@ -79,8 +96,8 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 		
 		var _this = this;
 		
-		var downX;
-		var downY;
+		// Listen to the mousedown/touchstart event.  Record the position
+		// so we can use it to pan the image.
 		this.connect(this.domNode, "onmousedown", function(event){
 			if(_this.isAnimating()){
 				return;
@@ -89,40 +106,40 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				_this.handleDragEnd();
 			}
 			
-			downX = event.targetTouches ? event.targetTouches[0].clientX : event.clientX;
-			downY = event.targetTouches ? event.targetTouches[0].clientY : event.clientY;
-			
-			upX = upY = null;
-			
-			dojo.publish("/debug", ["downX = " + downX]);
+			_this.downX = event.targetTouches ? event.targetTouches[0].clientX : event.clientX;
+			_this.downY = event.targetTouches ? event.targetTouches[0].clientY : event.clientY;
 		});
 
+		// record the movement of the mouse.
 		this.connect(this.domNode, "onmousemove", function(event){
 			if(_this.isAnimating()){
 				return;
 			}
-			if((!downX && downX !== 0) || (!downY && downY !== 0)){
+			if((!_this.downX && _this.downX !== 0) || (!_this.downY && _this.downY !== 0)){
 				// If the touch didn't begin on this widget, ignore the movement
 				return;
 			}
 			
-			var x = event.targetTouches ? 
-						event.targetTouches[0].clientX : event.pageX;
-			var y = event.targetTouches ? 
-						event.targetTouches[0].clientY : event.pageY;
-			
-			// If not zoomed in, then try to move to the next or prev image
-			
 			if((!_this.disableSwipe && _this.zoom == 1) 
 				|| (!_this.disableAutoZoom && _this.zoom != 1)){
+				var x = event.targetTouches ? 
+							event.targetTouches[0].clientX : event.pageX;
+				var y = event.targetTouches ? 
+							event.targetTouches[0].clientY : event.pageY;
 			
-				_this.panX = x - downX;
-				_this.panY = y - downY;
+				_this.panX = x - _this.downX;
+				_this.panY = y - _this.downY;
+
 				if(_this.zoom == 1){
+					// If not zoomed in, then try to move to the next or prev image
+					// but only if the mouse has moved more than 10 pixels
+					// in the X direction
 					if (Math.abs(_this.panX) > 10) {
 						_this.render();
 					}
 				}else{
+					// If zoomed in, pan the image if the mouse has moved more
+					// than 10 pixels in either direction.
 					if (Math.abs(_this.panX) > 10 || Math.abs(_this.panY) > 10) {
 						_this.render();
 					}
@@ -131,23 +148,13 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 		});
 		
 		this.connect(this.domNode, "onmouseout", function(event){
-			if(_this.isAnimating()){
-				return;
+			if(!_this.isAnimating() && _this.panX){
+				_this.handleDragEnd();
 			}
-			//if(_this.zoom == 1){
-				// If not zoomed in, then try to move to the next or prev image
-				if(_this.panX){
-					_this.handleDragEnd();
-				}
-			//}
-			if((!downX && downX !== 0) || (!downY && downY !== 0)){
-				// If the touch didn'g begin on this widget, ignore the movement
-				return;
-			}
-			
 		});
+
 		this.connect(this.domNode, "onmouseover", function(event){
-			downX = downY = null;
+			_this.downX = _this.downY = null;
 		});
 
 		// Set up AutoZoom, which zooms in a fixed amount when the user taps
@@ -156,7 +163,7 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			if(_this.isAnimating()){
 				return;
 			}
-			if(downX == null || downY == null){
+			if(_this.downX == null || _this.downY == null){
 				return;
 			}
 			
@@ -165,13 +172,14 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			var y = (event.targetTouches ? 
 						event.targetTouches[0].clientY : event.pageY);
 			
-			if(Math.abs(_this.panX) > 14
-				|| Math.abs(_this.panY) > 14){
-				downX = downY = null;
+			// If the mouse/finger has moved more than 14 pixels from where it
+			// started, do not treat it as a click.  It is a drag.
+			if(Math.abs(_this.panX) > 14 || Math.abs(_this.panY) > 14){
+				_this.downX = _this.downY = null;
 				_this.handleDragEnd();
 				return;
 			}
-			downX = downY = null;
+			_this.downX = _this.downY = null;
 			
 			if (!_this.disableAutoZoom) {
 			
@@ -190,46 +198,66 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				var xRatio = _this.size.w / _this._centerImg.width;
 				var yRatio = _this.size.h / _this._centerImg.height;
 				
-				_this.zoomTo(((x - pos.x) / xRatio) - _this.panX, 
-					((x - pos.y) / yRatio) - _this.panY, _this.autoZoomLevel);
+				// Do an animated zoom to the point which was clicked.
+				_this.zoomTo(
+					((x - pos.x) / xRatio) - _this.panX, 
+					((y - pos.y) / yRatio) - _this.panY, 
+					_this.autoZoomLevel);
 			}
 		});
-		
-		
+
 		// Listen for Flick events
 		dojo.connect(this.domNode, "flick", this, "handleFlick");
 	},
 	
 	isAnimating: function(){
+		// summary:
+		//		Returns true if an animation is in progress, false otherwise.
 		return this._anim && this._anim.status() == "playing";
 	},
 	
 	handleDragEnd: function(){
-		downX = downY = null;
+		// summary:
+		//		Handles the end of a dragging event. If not zoomed in, it
+		//		determines if the next or previous image should be transitioned
+		//		to.
+		this.downX = this.downY = null;
+		console.log("handleDragEnd");
 		
 		if(this.zoom == 1){
 			if(!this.panX){
 				return;
 			}
 			
+			var leftLoaded = (this._leftImg && this._leftImg._loaded)
+							|| (this._leftSmallImg && this._leftSmallImg._loaded);
+			var rightLoaded = (this._rightImg && this._rightImg._loaded)
+							|| (this._rightSmallImg && this._rightSmallImg._loaded);
+			
+			// Check if the drag has moved the image more than half its length.
+			// If so, move to either the previous or next image.
 			var doMove = 
 				!(Math.abs(this.panX) < this._centerImg._baseWidth / 2) &&
 				(
-					(this.panX > 0 && this._leftImg && this._leftImg._loaded ? 1:0) ||
-					(this.panX < 0 && this._rightImg && this._rightImg._loaded ? 1:0)
+					(this.panX > 0 && leftLoaded ? 1 : 0) ||
+					(this.panX < 0 && rightLoaded ? 1 : 0)
 				);
 				
-			console.log("doMove = " + doMove, "rightImg = ", this._rightImg);
 			
 			if(!doMove){
+				// If not moving to another image, animate the sliding of the
+				// image back into place.
 				this._animPanTo(0, dojo.fx.easing.expoOut, 700);
 			}else{
+				// Move to another image.
 				this.moveTo(this.panX);
 			}
 		}else{
 			if(!this.panX && !this.panY){
 				return;
 			}
+			// Recenter the zoomed image based on where it was panned to 
+			// previously
 			this.zoomCenterX -= (this.panX / this.zoom);
 			this.zoomCenterY -= (this.panY / this.zoom);
 			
@@ -239,24 +267,40 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 	},
 	
 	handleFlick: function(event){
-		if(this.zoom == 1 && event.duration < 0.5){
+		// summary:
+		//		Handle a flick event.
+		if(this.zoom == 1 && event.duration < 500){
 			// Only handle quick flicks here, less than 0.5 seconds
 			
 			// If not zoomed in, then check if we should move to the next photo
 			// or not
 			if(event.direction == "ltr"){
-				this.moveTo(-1);
-			}else if(event.direction == "rtl"){
 				this.moveTo(1);
+			}else if(event.direction == "rtl"){
+				this.moveTo(-1);
 			}
 			// If an up or down flick occurs, it means nothing so ignore it
+			this.downX = this.downY = null;
 		}
 	},
 	
 	moveTo: function(direction){
 		direction = direction > 0 ? 1 : -1;
-		var toImg = direction < 1 ? this._rightImg : this._leftImg;
-		console.log("moveTo " + direction, toImg);
+		var toImg;
+		
+		if(direction < 1){
+			if(this._rightImg && this._rightImg._loaded){
+				toImg = this._rightImg;
+			}else if(this._rightSmallImg && this._rightSmallImg._loaded){
+				toImg = this._rightSmallImg;
+			}
+		}else{
+			if(this._leftImg && this._leftImg._loaded){
+				toImg = this._leftImg;
+			}else if(this._leftSmallImg && this._leftSmallImg._loaded){
+				toImg = this._leftSmallImg;
+			}
+		}
 		
 		this._moveDir = direction;
 		var _this = this;
@@ -266,20 +310,12 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			this._animPanTo(this.size.w * direction, null, 500, function(){
 				_this.panX = 0;
 				
-				console.log("anim end and direction = ", direction);
 				if(direction < 0){
 					// Moving to show the right image
 					_this._switchImage("left", "right");
 				}else{
 					// Moving to show the left image
 					_this._switchImage("right", "left");
-				}
-				_this._loadedImgs = [];
-				var imgs = [_this._leftImg, _this._centerImg, _this._rightImg];
-				for(var i = 0; i < imgs.length; i++){
-					if(imgs[i] && imgs[i]._loaded){
-						_this._loadedImgs.push(imgs[i]);
-					}
 				}
 				
 				_this.render();
@@ -298,7 +334,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 	},
 	
 	_switchImage: function(toImg, fromImg){
-		console.log("copying center to " + toImg + " and " + fromImg + " to center");
 		var toSmallImgName = "_" + toImg + "SmallImg";
 		var toImgName = "_" + toImg + "Img";
 
@@ -322,10 +357,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			this._centerSmallImg._type = "center";
 		}
 		this[fromImgName] = this[fromSmallImgName] = null;
-		
-		console.log("left = ", this._leftImg, 
-					"center = ",this._centerImg,
-					"right=",this._rightImg);
 	},
 	
 	_animPanTo: function(to, easing, duration, callback){
@@ -367,16 +398,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 		var cxt = this.canvas.getContext('2d');
 		
 		cxt.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		if(this._loadedImgs.length < 1){
-			return;
-		}
-		
-		// Check if the center image is loaded, if not show nothing at all,
-		// and ignore any panning.
-		
-		if(!this._centerImg && !this._centerImg._loaded){
-			return;
-		}
 		
 		// Render the center image
 		this._renderImg(
@@ -492,14 +513,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			}
 			sourceX = Math.floor(sourceX);
 		}
-//		console.log("panX=", this.panX,
-//					"oldDestWidth = ", oldDestWidth, 
-//					"destWidth", destWidth,
-//					"destX", destX
-//					, "oldSourceWidth=",oldSourceWidth,
-//					"sourceWidth=", sourceWidth,
-//					"sourceX = " + sourceX
-//		);
 
 		try {
 			
@@ -552,8 +565,6 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 				value = Math.min(this._centerImg.width, value);
 			}
 			this.zoomCenterX = Math.max(0, Math.round(value));
-			
-			console.log("set zoomCenterX based on " + this.size.w +  " and " + value);
 		}
 	},
 
@@ -614,24 +625,10 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 			largeUrl = urlOrObj.large;
 			smallUrl = urlOrObj.small;
 		}
-		console.log("got largeUrl " , largeUrl);
-		
+
 		if(this["_" + name + "Img"] && this["_" + name + "Img"]._src == largeUrl){
-			console.log("identical image for " + name);
+			// Identical URL, ignore it
 			return;
-		} else {
-			console.log("creating new image for " + name, largeUrl);
-			if(this["_" + name + "Img"]){
-				console.log("existing url for " + name, this["_" + name + "Img"].src);
-			}
-		}
-		
-		// Remove any previously loaded images
-		for(var i = 0; i < this._loadedImgs.length; i++){
-			if(this._loadedImgs[i]._type == name){
-				this._loadedImgs.splice(i, 1);
-				break;
-			}
 		}
 		
 		// Just do the large image for now
@@ -640,51 +637,40 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 		largeImg._loaded = false;
 		largeImg._src = largeUrl;
 		largeImg._conn = dojo.connect(largeImg, "onload", this.handleLoad);
+	
+		if(smallUrl){
+			// If a url to a small version of the image has been provided,
+			// load that image first.
+			var smallImg = this["_" + name + "SmallImg"] = new Image();
+			smallImg._type = name;
+			smallImg._loaded = false;
+			smallImg._conn = dojo.connect(smallImg, "onload", this.handleLoad);
+			smallImg._isSmall = true;
+			smallImg._src = smallUrl;
+			smallImg.src = smallUrl;
+		}
 		
+		// It's important that the large url's src is set after the small image
+		// to ensure it's loaded second.
 		largeImg.src = largeUrl;
 	},
 	
 	handleLoad: function(evt){
+		// summary:
+		//		Handles the loading of an image, both the large and small 
+		//		versions.  A render is triggered as a result of each image load.
+
 		var img = evt.target;
 		img._loaded = true;
 		
 		dojo.disconnect(img._conn);
 		
 		var type = img._type;
-		var arr = this._loadedImgs;
 		
-		console.log("loaded type " + type);
 		switch(type){
 			case "center":
-				if(arr.length < 1){
-					arr.push(img);
-				} else {
-					arr.splice(1, 0, img);
-				}
 				this.zoomCenterX = img.width / 2;
 				this.zoomCenterY = img.height / 2;
-				break;
-			case "left":
-				if(arr.length > 0){
-					if(arr[0]._type == type){
-						arr[0] = img;
-					}else{
-						arr.splice(0, 0, img);
-					}
-				}else{
-					arr.push(img);
-				}
-				break;
-			case "right":
-				if(arr.length > 0){
-					if(arr[arr.length - 1]._type == type){
-						arr[arr.length - 1] = img;
-					}else{
-						arr.push(img);
-					}
-				}else{
-					arr.push(img);
-				}
 				break;
 		}
 		
@@ -704,5 +690,20 @@ dojo.declare("dojox.mobile.app.ImageView", dojox.mobile.app._Widget, {
 		img._centerY = height / 2;
 		
 		this.render();
+		
+		this.onLoad(img._type, img._src, img._isSmall);
+	},
+	
+	onLoad: function(type, url, isSmall){
+		// summary:
+		//		Dummy function that is called whenever an image loads.
+		// type: String
+		//		The position of the image that has loaded, either 
+		//		"center", "left" or "right"
+		// url: String
+		//		The src of the image
+		// isSmall: Boolean
+		//		True if it is a small version of the image that has loaded,
+		//		false otherwise.
 	}
 });

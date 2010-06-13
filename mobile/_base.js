@@ -250,7 +250,9 @@ dojo.declare(
 //			dojox.mobile.View._pillar.parentNode.removeChild(dojox.mobile.View._pillar);
 			this.invokeCallback();
 		}
-		this.domNode.className = "mblView";
+		// this.domNode may be destroyed as a result of invoking the callback,
+		// so check for that before accessing it.
+		this.domNode && (this.domNode.className = "mblView");
 	},
 
 	invokeCallback: function(){
