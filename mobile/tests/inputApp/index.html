@@ -3,7 +3,6 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<title>Mobile App With Dialog Boxes</title>
 		<link href="../../themes/iphone/iphone-app.css" rel="stylesheet"></link>
 		<style>
 		.lnk {
@@ -20,15 +19,15 @@
     -->
 		<script type="text/javascript" src="../../../mobileApp.js"></script>
 		<script language="JavaScript" type="text/javascript">
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.appCompat");
+			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.app.compat");
       
-      var appInfo = {
-        id: "org.dojo.inputApp",
-        title: "Mobile App With Inputs",
-        initialScene: "text-input"
-      };
-      
-      dojo.ready(dojox.mobile.app.init);
+			var appInfo = {
+				id: "org.dojo.inputApp",
+				title: "Mobile App With Inputs",
+				initialScene: "text-input"
+			};
+
+			dojo.ready(dojox.mobile.app.init);
 		</script>
 	</head>
 	<body>

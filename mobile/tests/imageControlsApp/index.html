@@ -20,8 +20,9 @@
       allow synchronous XHR, and therefore break dojo.require
     -->
 		<script type="text/javascript" src="../../../mobileApp.js"></script>
+		<script type="text/javascript" src="../../../../dojo/io/script.js"></script>
 		<script language="JavaScript" type="text/javascript">
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.appCompat");
+			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.app.compat");
       
 			var appInfo = {
 				id: "org.dojo.imageWidgetApp",

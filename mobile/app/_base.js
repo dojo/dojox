@@ -1,6 +1,11 @@
 dojo.provide("dojox.mobile.app._base");
 dojo.experimental("dojox.mobile.app._base");
 
+dojo.require("dijit._base");
+dojo.require("dijit._Widget");
+dojo.require("dojox.mobile");
+dojo.require("dojox.mobile.parser");
+
 dojo.require("dojox.mobile.app._event");
 dojo.require("dojox.mobile.app._Widget");
 dojo.require("dojox.mobile.app.StageController");
@@ -60,8 +65,7 @@ dojo.require("dojox.mobile.app.ImageView");
 			rootNode = node || dojo.body();
 	
 			loadingDependencies = dojo.clone(jsDependencies);
-	
-			loadResources(loadingDependencies);
+//			loadResources(loadingDependencies);
 	
 			dojo.subscribe("/dojox/mobile/app/goback", function(){
 				stageController.popScene();
@@ -70,6 +74,8 @@ dojo.require("dojox.mobile.app.ImageView");
 			dojo.subscribe("/dojox/mobile/app/alert", function(params){
 				dojox.mobile.app.getActiveSceneController().showAlertDialog(params);
 			});
+			
+			dojox.mobile.app._pushFirstScene();
 		},
 	
 		getActiveSceneController: function(){

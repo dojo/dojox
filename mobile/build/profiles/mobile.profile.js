@@ -14,9 +14,9 @@ dependencies = {
 			]
 		},
 		{
-			name: "../dojox/app.js",
+			name: "../dojox/mobileApp.js",
 			dependencies: [
-				"dojox.mobile.app"
+				"dojox.mobileApp"
 			]
 		},
 		{
@@ -26,7 +26,7 @@ dependencies = {
 			]
 		},
 		{
-			name: "../dojox/mobile/app.compat.js",
+			name: "../dojox/mobile/app/compat.js",
 			dependencies: [
 				"dojox.mobile.app.compat"
 			]
