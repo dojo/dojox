@@ -87,7 +87,7 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 					l = 4;
 					// fallthrough... use GMT if tz not available
 				case 'Z':
-					var offset = dateObject.toGreforian().getTimezoneOffset();
+					var offset = dateObject.toGregorian().getTimezoneOffset();
 					var tz = [
 						(offset <= 0 ? "+" : "-"),
 						dojo.string.pad(Math.floor(Math.abs(offset) / 60), 2),
@@ -331,7 +331,7 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					s = '\\d+';
 					break;
 				case 'M':
-					s = (l>2) ?  '\\S+' : p2+'[1-9]|1[0-2]';
+					s = (l>2) ?  '\\S+ ?\\S+' : p2+'[1-9]|1[0-2]';
 					break;
 				case 'd':
 					s = '[12]\\d|'+p2+'[1-9]|3[01]';
