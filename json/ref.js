@@ -114,7 +114,9 @@ dojox.json.ref = {
 					if((typeof val =='object') && val && !(val instanceof Date) && i != '__parent'){
 						ref=val[refAttribute] || (idAsRef && val[idAttribute]);
 						if(!ref || !val.__parent){
-							val.__parent = it;
+							if(it != reWalk){
+								val.__parent = target;
+							}
 						}
 						if(ref){ // a reference was found
 							// make sure it is a safe reference
