@@ -694,7 +694,11 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 					body.parentNode.style.overflow){
 					 this._oldBodyParentOverflow = body.parentNode.style.overflow;
 				 }else{
-					 this._oldBodyParentOverflow = "scroll";
+					 try{
+						this._oldBodyParentOverflow = dojo.style(body.parentNode, "overflow");
+					 }catch(e){
+						 this._oldBodyParentOverflow = "scroll";
+					 }
 				 }
 				 dojo.style(body.parentNode, "overflow", "hidden");
 			 }
