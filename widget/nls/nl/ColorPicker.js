@@ -1,6 +1,6 @@
 ({
 hueLabel: "t",
-saturationLabel: "v",
-valueLabel: "w" /* aka intensity or brightness */
+saturationLabel: "i",
+valueLabel: "h" /* aka intensity or brightness */
 })
 

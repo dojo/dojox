@@ -1,5 +1,5 @@
 ({
-	singleSort: "Posamezna razvrstitev",
+	singleSort: "Razvrsti po vrsti",
 	nestedSort: "Ugnezdena razvrstitev",
 	ascending: "Naraščajoče",
 	descending: "Padajoče",

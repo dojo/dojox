@@ -3,8 +3,8 @@ redLabel: "κ",
 greenLabel: "π",
 blueLabel: "μ",
 hueLabel: "α",
-saturationLabel: "ο",
+saturationLabel: "κ",
 valueLabel: "τ", /* aka intensity or brightness */
-hexLabel: "δεκαεξαδικό"
+hexLabel: "16-αδικό"
 })
 

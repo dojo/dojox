@@ -1,5 +1,6 @@
 ({
 hueLabel: "n",
-saturationLabel: "m"
+saturationLabel: "m",
+valueLabel: "l" /* aka intensity or brightness */
 })
 
