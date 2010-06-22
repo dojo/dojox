@@ -1,11 +1,11 @@
 dojo.provide("dojox.mobile.app._FormWidget");
+dojo.experimental("dojox.mobile.app._FormWidget");
 
 dojo.require("dojo.window");
 
 dojo.require("dijit._Widget");
 
-dojo.declare("dojox.mobile.app._FormWidget", dijit._Widget,
-	{
+dojo.declare("dojox.mobile.app._FormWidget", dijit._Widget, {
 	// summary:
 	//		Base class for widgets corresponding to native HTML elements such as <checkbox> or <button>,
 	//		which can be children of a <form> node or a `dojox.mobile.app.Form` widget.
@@ -95,7 +95,7 @@ dojo.declare("dojox.mobile.app._FormWidget", dijit._Widget,
 		//		Tells if this widget is focusable or not.   Used internally by dijit.
 		// tags:
 		//		protected
-		return !this.disabled && !this.readOnly 
+		return !this.disabled && !this.readOnly
 			&& this.focusNode && (dojo.style(this.domNode, "display") != "none");
 	},
 
@@ -189,22 +189,22 @@ dojo.declare("dojox.mobile.app._FormWidget", dijit._Widget,
 		// this button should get focus (to mimics native browser buttons).
 		// This is also needed on chrome because otherwise buttons won't get focus at all,
 		// which leads to bizarre focus restore on Dialog close etc.
-		if(this.isFocusable()){ 
+		if(this.isFocusable()){
 			// Set a global event to handle mouseup, so it fires properly
 			// even if the cursor leaves this.domNode before the mouse up event.
 			var mouseUpConnector = this.connect(dojo.body(), "onmouseup", function(){
-				if (this.isFocusable()) {
+				if(this.isFocusable()){
 					this.focus();
 				}
 				this.disconnect(mouseUpConnector);
 			});
 		}
 	},
-	
+
 	selectInputText: function(/*DomNode*/element, /*Number?*/ start, /*Number?*/ stop){
 		// summary:
 		//		Select text in the input element argument, from start (default 0), to stop (default end).
-	
+
 		// TODO: use functions in _editor/selection.js?
 		var _window = dojo.global;
 		var _document = dojo.doc;
@@ -212,7 +212,7 @@ dojo.declare("dojox.mobile.app._FormWidget", dijit._Widget,
 		if(isNaN(start)){ start = 0; }
 		if(isNaN(stop)){ stop = element.value ? element.value.length : 0; }
 		dijit.focus(element);
-		
+
 		if(_window["getSelection"] && element.setSelectionRange){
 			element.setSelectionRange(start, stop);
 		}

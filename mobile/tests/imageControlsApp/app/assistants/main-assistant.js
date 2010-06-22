@@ -15,6 +15,10 @@ dojo.declare("MainAssistant", dojox.mobile.app.SceneAssistant, {
 		  {
 		    label: "Flickr ImageView Test",
 			scene: "flickr-image-view"
+		  },
+		  {
+		    label: "Browse Flickr",
+			scene: "flickr-search-selection"
 		  }
 		];
 		

@@ -18,7 +18,7 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 
 	// buttons: Array
 	buttons: null,
-	
+
 	defaultButtonLabel: "OK",
 
 	// onChoose: Function
@@ -35,16 +35,16 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 		this.domNode = dojo.create("div",{
 			"class": "alertDialog"
 		});
-	
+
 		// Create the outer dialog body
 		var dlgBody = dojo.create("div", {"class": "alertDialogBody"}, this.domNode);
 
 		// Create the title
 		dojo.create("div", {"class": "alertTitle", innerHTML: this.title || ""}, dlgBody);
-		
+
 		// Create the text
 		dojo.create("div", {"class": "alertText", innerHTML: this.text || ""}, dlgBody);
-		
+
 		// Create the node that encapsulates all the buttons
 		var btnContainer = dojo.create("div", {"class": "alertBtns"}, dlgBody);
 
@@ -56,9 +56,9 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 				"class": "affirmative"
 			}];
 		}
-	
+
 		var _this = this;
-	
+
 		// Create each of the buttons
 		dojo.forEach(this.buttons, function(btnInfo){
 			var btn = new dojox.mobile.Button({
@@ -69,7 +69,7 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 			dojo.place(btn.domNode, btnContainer);
 			_this.connect(btn, "onClick", _this._handleSelect);
 		});
-	
+
 		var viewportSize = this.controller.getWindowSize();
 
 		// Create the mask that blocks out the rest of the screen
@@ -80,27 +80,27 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 				height: viewportSize.h + "px"
 			}
 		}, this.controller.assistant.domNode);
-	
+
 		this.connect(this.mask, "onclick", function(){
 			_this.onChoose && _this.onChoose();
 			_this.hide();
 		});
 	},
-	
+
 	postCreate: function(){
 		this.subscribe("/dojox/mobile/app/goback", this._handleSelect);
 	},
-	
+
 	_handleSelect: function(event){
 		// summary:
 		//		Handle the selection of a value
 		var node;
 		console.log("handleSelect");
-		if (event && event.target) {
+		if(event && event.target){
 			node = event.target;
-			
+
 			// Find the widget that was tapped.
-			while (!dijit.byNode(node)) {
+			while(!dijit.byNode(node)){
 				node - node.parentNode;
 			}
 		}
@@ -141,7 +141,7 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 
 		var bodyHeight = this.controller.getWindowSize().h;
 		console.log("dialog height = " + h, " body height = " + bodyHeight);
-	
+
 		var high = bodyHeight - h;
 		var low = bodyHeight;
 
@@ -155,9 +155,9 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._Widget, {
 			node: this.mask,
 			duration: 400
 		});
-	
+
 		var anim = dojo.fx.combine([anim1, anim2]);
-	
+
 		var _this = this;
 
 		dojo.connect(anim, "onEnd", this, function(){

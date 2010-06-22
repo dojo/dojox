@@ -96,3 +96,14 @@ if(dojox.mobile.app.ImageView && !dojo.create("canvas").getContext){
 	});
 }
 
+if(dojox.mobile.app.ImageThumbView){
+	dojo.extend(dojox.mobile.app.ImageThumbView, {
+		place: function(node, x, y){
+			dojo.style(node, {
+				top: y + "px",
+				left: x + "px",
+				visibility: "visible"
+			});
+		}
+	})
+}

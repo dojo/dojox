@@ -203,7 +203,6 @@ dojo.require("dijit._Widget");
 			// If the user has dragged the row more than the threshold, slide
 			// it off the screen in preparation for deletion.
 			if(this._dragThreshold && this._dragThreshold < absDiff){
-				console.log("preDelete because " + this._dragThreshold + "<" + absDiff );
 				this.preDelete(diff);
 			}
 		},
@@ -215,7 +214,6 @@ dojo.require("dijit._Widget");
 			if(this._deleting){
 				return;
 			}
-			console.log("handleDragCancel NOT ignoring, since delete NOT in progress");
 	
 			dojo.removeClass(this._selectedRow, "hold");
 			this._selectedRow.style.left = 0;
@@ -271,7 +269,6 @@ dojo.require("dijit._Widget");
 		_postDeleteAnim: function(event){
 			// summary:
 			//		Completes the deletion of a row.
-			console.log("_postDeleteAnim");
 	
 			if(this._deleteAnimConn){
 				this.disconnect(this._deleteAnimConn);
@@ -449,7 +446,7 @@ dojo.require("dijit._Widget");
 			// summary:
 			//		Gets the DOM node of the row that is equal to or the parent
 			//		of the node passed to this function.
-			while(fromNode && !fromNode._data){
+			while(fromNode && !fromNode._data && fromNode != this.domNode){
 				if(!ignoreNoClick && dojo.hasClass(fromNode, "noclick")){
 					return null;
 				}
@@ -461,7 +458,6 @@ dojo.require("dijit._Widget");
 		render: function(){
 			// summary:
 			//		Renders the list.
-			console.log("render in List");
 
 			// Delete all existing nodes, except the deletion buttons.
 			dojo.query("> *:not(.buttons)", this.domNode).forEach(dojo.destroy);
@@ -470,7 +466,7 @@ dojo.require("dijit._Widget");
 			var row, i;
 	
 			dojo.addClass(this.domNode, "list");
-	
+			
 			for(i = 0; i < this.items.length; i++){
 				// Create a document fragment containing the templated row
 				row = dojo._toDom(dojo.string.substitute(
@@ -479,9 +475,8 @@ dojo.require("dijit._Widget");
 				rows.push(row);
 			}
 			for(i = 0; i < this.items.length; i++){
-				// The firstChild of each DocumentFragment is the actual row node.
-				rows[i].firstChild._data = this.items[i];
-				rows[i].firstChild._idx = i;
+				rows[i]._data = this.items[i];
+				rows[i]._idx = i;
 				this.domNode.appendChild(rows[i]);
 			}
 	
@@ -546,9 +541,9 @@ dojo.require("dijit._Widget");
 					sync: false,
 					handleAs: "text",
 					load: function(text){
-					templateCache[url] = text;
-					_this.set(thisAttr, templateCache[url]);
-					callback();
+						templateCache[url] = dojo.trim(text);
+						_this.set(thisAttr, templateCache[url]);
+						callback();
 					}
 				});
 			}

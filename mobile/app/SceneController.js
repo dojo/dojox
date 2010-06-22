@@ -78,6 +78,12 @@ dojo.require("dojox.mobile._base");
 			console.log("Instantiating the scene assistant " + this.sceneAssistantName);
 	
 			var cls = dojo.getObject(this.sceneAssistantName);
+			
+			if(!cls){
+				throw Error("Unable to resolve scene assistant "
+							+ this.sceneAssistantName);
+			}
+			
 			this.assistant = new cls(this.params);
 	
 			this.assistant.controller = this;

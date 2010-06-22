@@ -16,6 +16,7 @@ dojo.require("dojox.mobile.app.List");
 dojo.require("dojox.mobile.app.ListSelector");
 dojo.require("dojox.mobile.app.TextBox");
 dojo.require("dojox.mobile.app.ImageView");
+dojo.require("dojox.mobile.app.ImageThumbView");
 
 (function(){
 

@@ -1,4 +1,5 @@
 dojo.provide("dojox.mobile.app.TextBox");
+dojo.experimental("dojox.mobile.app.TextBox");
 
 dojo.require("dojox.mobile.app._Widget");
 dojo.require("dojox.mobile.app._FormWidget");

@@ -3,7 +3,7 @@ dojo.experimental("dojox.mobile.app._event.js");
 
 dojo.mixin(dojox.mobile.app, {
 	eventMap: {},
-	
+
 	connectFlick: function(target, context, method){
 		// summary:
 		//		Listens for a flick event on a DOM node.  If the mouse/touch
@@ -17,56 +17,56 @@ dojo.mixin(dojox.mobile.app, {
 		//		</ul>
 		// target: Node
 		//		The DOM node to connect to
-		
+
 		var startX;
 		var startY;
 		var isFlick = false;
-		
+
 		var currentX;
 		var currentY;
-		
+
 		var connMove;
 		var connUp;
-		
+
 		var direction;
-		
+
 		var time;
-		
+
 		// Listen to to the mousedown/touchstart event
 		var connDown = dojo.connect("onmousedown", target, function(event){
 			isFlick = false;
 			startX = event.targetTouches ? event.targetTouches[0].clientX : event.clientX;
-            startY = event.targetTouches ? event.targetTouches[0].clientY : event.clientY;
+			startY = event.targetTouches ? event.targetTouches[0].clientY : event.clientY;
 
 			time = (new Date()).getTime();
 
 			connMove = dojo.connect(target, "onmousemove", onMove);
 			connUp = dojo.connect(target, "onmouseup", onUp);
 		});
-		
+
 		// The function that handles the mousemove/touchmove event
 		var onMove = function(event){
 			dojo.stopEvent(event);
-			
+
 			currentX = event.targetTouches ? event.targetTouches[0].clientX : event.clientX;
 			currentY = event.targetTouches ? event.targetTouches[0].clientY : event.clientY;
-            if (Math.abs(Math.abs(currentX) - Math.abs(startX)) > 15) {
-                isFlick = true;
-				
+			if(Math.abs(Math.abs(currentX) - Math.abs(startX)) > 15){
+				isFlick = true;
+
 				direction = (currentX > startX) ? "ltr" : "rtl";
-            }else if (Math.abs(Math.abs(currentY) - Math.abs(startY)) > 15) {
-                isFlick = true;
-				
+			}else if(Math.abs(Math.abs(currentY) - Math.abs(startY)) > 15){
+				isFlick = true;
+
 				direction = (currentY > startY) ? "ttb" : "btt";
-            } 
+			}
 		};
 
 		var onUp = function(event){
 			dojo.stopEvent(event);
-			
+
 			connMove && dojo.disconnect(connMove);
 			connUp && dojo.disconnect(connUp);
-			
+
 			if(isFlick){
 				var flickEvt = {
 					target: target,
@@ -80,7 +80,7 @@ dojo.mixin(dojox.mobile.app, {
 				}
 			}
 		};
-		
+
 	}
 });
 
@@ -109,10 +109,10 @@ dojo._connect = function(obj, event, context, method, dontFix){
 	if(event == "flick" || event == "onflick"){
 		if(window["Mojo"]){
 			event = Mojo.Event.flick;
-		} else {
+		}else{
 			return dojox.mobile.app.connectFlick(obj, context, method);
 		}
 	}
-	
+
 	return dojo._oldConnect(obj, event, context, method, dontFix);
 }
