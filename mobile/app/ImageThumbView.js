@@ -45,8 +45,6 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		this.addThumb = dojo.hitch(this, this.addThumb);
 		this.handleImgLoad = dojo.hitch(this, this.handleImgLoad);
 
-//		this._urlToNode = {};
-
 		this._onLoadImages = {};
 
 		this.cache = [];
@@ -168,15 +166,13 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		}
 
 		var numRows = Math.ceil(pos / this.maxPerRow);
-		dojo.style(this.domNode, "height",
+		
+		if(this._numRows != numRows){
+			this._numRows = numRows;
+			dojo.style(this.domNode, "height",
 					(numRows * (this._thumbSize.h + this.padding * 2)) + "px");
+		}
 
-	},
-
-	show: function(node){
-
-		// TODO: Use css transitions
-		dojo.style(node, "visibility", "visible");
 	},
 
 	addThumb: function(item, url, index){
@@ -211,7 +207,7 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		thumbDiv._url = url;
 		thumbDiv._cached = false;
 
-		if(!this.thumbSize){
+		if(!this._thumbSize){
 			this._thumbSize = dojo.marginBox(thumbDiv);
 			this.calcPadding();
 		}
@@ -224,7 +220,7 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		img._thumbDiv._loading = false;
 
 		dojo.query(".mblThumbSrc", img._thumbDiv)
-				.style("background-image", "url(" + img._url + ")");
+				.style("backgroundImage", "url(" + img._url + ")");
 
 		delete this._onLoadImages[img._url];
 	},
@@ -246,8 +242,7 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		
 		
 		dojo.style(node, {
-			"-webkit-transform" :"translate(" + x + "px," + y + "px)",
-			visibility: "visible"
+			"-webkit-transform" :"translate(" + x + "px," + y + "px)"
 		});
 //		dojo.style(node, {
 //			top: y + "px",
