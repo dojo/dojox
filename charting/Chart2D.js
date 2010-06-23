@@ -56,7 +56,8 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 		purge = df.lambda("item.purgeGroup()"),
 		destroy = df.lambda("item.destroy()"),
 		makeClean = df.lambda("item.dirty = false"),
-		makeDirty = df.lambda("item.dirty = true");
+		makeDirty = df.lambda("item.dirty = true"),
+		getName = df.lambda("item.name");
 
 	dojo.declare("dojox.charting.Chart2D", null, {
 		//	summary:
@@ -316,6 +317,83 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 				});
 				// mark the chart as dirty
 				this.dirty = true;
+			}
+			return this;	//	dojox.charting.Chart2D
+		},
+		getPlotOrder: function(){
+			//	summary:
+			//		Returns an array of plot names in the current order
+			//		(the top-most plot is the first).
+			//	returns: Array
+			return df.map(this.stack, getName); // Array
+		},
+		setPlotOrder: function(newOrder){
+			//	summary:
+			//		Sets new order of plots. newOrder cannot add or remove
+			//		plots. Wrong names, or dups are ignored.
+			//	newOrder: Array:
+			//		Array of plot names compatible with getPlotOrder().
+			//	returns: dojox.charting.Chart2D
+			//		A reference to the current chart for functional chaining.
+			var names = {},
+				order = df.filter(newOrder, function(name){
+					if(!(name in this.plots) || (name in names)){
+						return false;
+					}
+					names[name] = 1;
+					return true;
+				}, this);
+			if(order.length < this.stack.length){
+				df.forEach(this.stack, function(plot){
+					var name = plot.name;
+					if(!(name in names)){
+						order.push(name);
+					}
+				});
+			}
+			var newStack = df.map(order, function(name){
+					return this.stack[this.plots[name]];
+				}, this);
+			df.forEach(newStack, function(plot, i){
+				this.plots[plot.name] = i;
+			}, this);
+			this.stack = newStack;
+			this.dirty = true;
+			return this;	//	dojox.charting.Chart2D
+		},
+		movePlotToFront: function(name){
+			//	summary:
+			//		Moves a given plot to front.
+			//	name: String:
+			//		Plot's name to move.
+			//	returns: dojox.charting.Chart2D
+			//		A reference to the current chart for functional chaining.
+			if(name in this.plots){
+				var index = this.plots[name];
+				if(index){
+					var newOrder = this.getPlotOrder();
+					newOrder.splice(index, 1);
+					newOrder.unshift(name);
+					return this.setPlotOrder(newOrder);	//	dojox.charting.Chart2D
+				}
+			}
+			return this;	//	dojox.charting.Chart2D
+		},
+		movePlotToBack: function(name){
+			//	summary:
+			//		Moves a given plot to back.
+			//	name: String:
+			//		Plot's name to move.
+			//	returns: dojox.charting.Chart2D
+			//		A reference to the current chart for functional chaining.
+			if(name in this.plots){
+				var index = this.plots[name];
+				if(index < this.stack.length - 1){
+					var newOrder = this.getPlotOrder();
+					newOrder.splice(index, 1);
+					newOrder.push(name);
+					return this.setPlotOrder(newOrder);	//	dojox.charting.Chart2D
+				}
 			}
 			return this;	//	dojox.charting.Chart2D
 		},
