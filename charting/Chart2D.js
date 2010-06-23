@@ -10,6 +10,7 @@ dojo.require("dojox.charting.Series");
 
 // require all axes to support references by name
 dojo.require("dojox.charting.axis2d.Default");
+dojo.require("dojox.charting.axis2d.Invisible");
 
 // require all plots to support references by name
 dojo.require("dojox.charting.plot2d.Default");
