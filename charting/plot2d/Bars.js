@@ -139,9 +139,6 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 									element: "bar",
 									index:   j,
 									run:     run,
-									plot:    this,
-									hAxis:   this.hAxis || null,
-									vAxis:   this.vAxis || null,
 									shape:   shape,
 									x:       v,
 									y:       j + 1.5

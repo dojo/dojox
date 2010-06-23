@@ -155,6 +155,21 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 		plotEvent: function(o){
 			// intentionally empty --- used for events
 		},
+		raiseEvent: function(o){
+			//	summary:
+			//		Raises events in predefined order
+			//	o: Object
+			//		An object intended to represent event parameters.
+			this.plotEvent(o);
+			var t = dojo.delegate(o);
+			t.original = o.type;
+			t.type = "onindirect";
+			dojo.forEach(this.chart.stack, function(plot){
+				if(plot !== this && plot.plotEvent){
+					plot.plotEvent(t);
+				}
+			}, this);
+		},
 		connect: function(object, method){
 			//	summary:
 			//		Convenience method to connect methods to our plotEvent.
@@ -184,23 +199,27 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 		resetEvents: function(){
 			//	summary:
 			//		Reset any handlers on our plot.
-			this.plotEvent({type: "onplotreset", plot: this});
+			this.raiseEvent({type: "onplotreset", plot: this});
 		},
 		_connectEvents: function(shape, o){
+			o.chart = this.chart;
+			o.plot  = this;
+			o.hAxis = null;
+			o.vAxis = null;
 			shape.connect("onmouseover", this, function(e){
 				o.type  = "onmouseover";
 				o.event = e;
-				this.plotEvent(o);
+				this.raiseEvent(o);
 			});
 			shape.connect("onmouseout", this, function(e){
 				o.type  = "onmouseout";
 				o.event = e;
-				this.plotEvent(o);
+				this.raiseEvent(o);
 			});
 			shape.connect("onclick", this, function(e){
 				o.type  = "onclick";
 				o.event = e;
-				this.plotEvent(o);
+				this.raiseEvent(o);
 			});
 		},
 
@@ -310,7 +329,6 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 							element: "slice",
 							index:   i,
 							run:     this.run,
-							plot:    this,
 							shape:   shape,
 							x:       i,
 							y:       typeof v == "number" ? v : v.y,
@@ -387,7 +405,6 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 						element: "slice",
 						index:   i,
 						run:     this.run,
-						plot:    this,
 						shape:   shape,
 						x:       i,
 						y:       typeof v == "number" ? v : v.y,

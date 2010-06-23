@@ -76,9 +76,6 @@ dojo.require("dojox.lang.functional.reversed");
 									element: "bar",
 									index:   j,
 									run:     run,
-									plot:    this,
-									hAxis:   this.hAxis || null,
-									vAxis:   this.vAxis || null,
 									shape:   shape,
 									x:       v,
 									y:       j + 1.5

@@ -202,6 +202,21 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 		//	o: Object
 		//		An object intended to represent event parameters.
 	},
+	raiseEvent: function(o){
+		//	summary:
+		//		Raises events in predefined order
+		//	o: Object
+		//		An object intended to represent event parameters.
+		this.plotEvent(o);
+		var t = dojo.delegate(o);
+		t.original = o.type;
+		t.type = "onindirect";
+		dojo.forEach(this.chart.stack, function(plot){
+			if(plot !== this && plot.plotEvent){
+				plot.plotEvent(t);
+			}
+		}, this);
+	},
 	connect: function(object, method){
 		//	summary:
 		//		Helper function to connect any object's method to our plotEvent.
@@ -235,11 +250,15 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			dojo.forEach(this._events, dojo.disconnect);
 			delete this._events;
 		}
-		this.plotEvent({type: "onplotreset", plot: this});
+		this.raiseEvent({type: "onplotreset", plot: this});
 	},
 	
 	// utilities
 	_connectEvents: function(shape, o){
+		o.chart = this.chart;
+		o.plot  = this;
+		o.hAxis = this.hAxis || null;
+		o.vAxis = this.vAxis || null;
 		if(!this._events){
 			this._events = [];
 		}
@@ -247,17 +266,17 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			shape.connect("onmouseover", this, function(e){
 				o.type  = "onmouseover";
 				o.event = e;
-				this.plotEvent(o);
+				this.raiseEvent(o);
 			}),
 			shape.connect("onmouseout", this, function(e){
 				o.type  = "onmouseout";
 				o.event = e;
-				this.plotEvent(o);
+				this.raiseEvent(o);
 			}),
 			shape.connect("onclick", this, function(e){
 				o.type  = "onclick";
 				o.event = e;
-				this.plotEvent(o);
+				this.raiseEvent(o);
 			})
 		);
 	}
