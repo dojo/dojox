@@ -143,17 +143,6 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			this.animate = this.opt.animate;
 		},
 		
-		calculateAxes: function(dim){
-			//	summary:
-			//		Run the calculations on the axes for this plot.
-			//	dim: Object
-			//		An object of the form { width, height }
-			//	returns: dojox.charting.plot2d.Default
-			//		A reference to this plot for functional chaining.
-			this._calc(dim, dc.collectSimpleStats(this.series));
-			return this;	//	dojox.charting.plot2d.Default
-		},
-		
 		render: function(dim, offsets){
 			//	summary:
 			//		Render/draw everything on this plot.

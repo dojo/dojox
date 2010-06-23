@@ -49,17 +49,6 @@ dojo.require("dojox.gfx.gradutils");
 			this.animate = this.opt.animate;
 		},
 		
-		calculateAxes: function(dim){
-			//	summary:
-			//		Run the calculations for any axes for this plot.
-			//	dim: Object
-			//		An object in the form of { width, height }
-			//	returns: dojox.charting.plot2d.Scatter
-			//		A reference to this plot for functional chaining.
-			this._calc(dim, dc.collectSimpleStats(this.series));
-			return this;	//	dojox.charting.plot2d.Scatter
-		},
-
 		render: function(dim, offsets){
 			//	summary:
 			//		Run the calculations for any axes for this plot.

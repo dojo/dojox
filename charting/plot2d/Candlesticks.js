@@ -70,7 +70,7 @@ dojo.require("dojox.lang.functional.reversed");
 
 			//	we have to roll our own, since we need to use all four passed
 			//	values to figure out our stats, and common only assumes x and y.
-			var stats = dojo.clone(dc.defaultStats);
+			var stats = dojo.delegate(dc.defaultStats);
 			for(var i=0; i<series.length; i++){
 				var run = series[i];
 				if(!run.data.length){ continue; }
@@ -92,18 +92,15 @@ dojo.require("dojox.lang.functional.reversed");
 			return stats;	//	Object
 		},
 
-		calculateAxes: function(dim){
+		getSeriesStats: function(){
 			//	summary:
-			//		Run the calculations for any axes for this plot.
-			//	dim: Object
-			//		An object in the form of { width, height }
-			//	returns: dojox.charting.plot2d.Candlesticks
-			//		A reference to this plot for functional chaining.
-			var stats = this.collectStats(this.series), t;
+			//		Calculate the min/max on all attached series in both directions.
+			//	returns: Object
+			//		{hmin, hmax, vmin, vmax} min/max in both directions.
+			var stats = this.collectStats(this.series);
 			stats.hmin -= 0.5;
 			stats.hmax += 0.5;
-			this._calc(dim, stats);
-			return this;	//	dojox.charting.plot2d.Candlesticks
+			return stats;
 		},
 
 		render: function(dim, offsets){

@@ -42,7 +42,7 @@ dojo.require("dojox.lang.functional");
 		},
 
 		collectSimpleStats: function(series){
-			var stats = dojo.clone(dc.defaultStats);
+			var stats = dojo.delegate(dc.defaultStats);
 			for(var i = 0; i < series.length; ++i){
 				var run = series[i];
 				for(var j = 0; j < run.data.length; j++){

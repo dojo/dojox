@@ -64,13 +64,21 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 		this.series.push(run);
 		return this;	//	dojox.charting.plot2d.Base
 	},
+	getSeriesStats: function(){
+		//	summary:
+		//		Calculate the min/max on all attached series in both directions.
+		//	returns: Object
+		//		{hmin, hmax, vmin, vmax} min/max in both directions.
+		return dojox.charting.plot2d.common.collectSimpleStats(this.series);
+	},
 	calculateAxes: function(dim){
 		//	summary:
-		//		Stub function for running the axis calculations.
+		//		Stub function for running the axis calculations (depricated).
 		//	dim: Object
 		//		An object of the form { width, height }
 		//	returns: dojox.charting.plot2d.Base
 		//		A reference to this plot for functional chaining.
+		this.initializeScalers(dim, this.getSeriesStats());
 		return this;	//	dojox.charting.plot2d.Base
 	},
 	isDirty: function(){
@@ -159,6 +167,33 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 		//		The number of colors needed.
 		return this.series.length;	//	Number
 	},
+	initializeScalers: function(dim, stats){
+		//	summary:
+		//		Initializes scalers using attached axes.
+		//	dim: Object:
+		//		Size of a plot area in pixels as {width, height}.
+		//	stats: Object:
+		//		Min/max of data in both directions as {hmin, hmax, vmin, vmax}.
+		//	returns: dojox.charting.plot2d.Base
+		//		A reference to this plot for functional chaining.
+		if(this._hAxis){
+			if(!this._hAxis.initialized()){
+				this._hAxis.calculate(stats.hmin, stats.hmax, dim.width);
+			}
+			this._hScaler = this._hAxis.getScaler();
+		}else{
+			this._hScaler = dojox.charting.scaler.primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
+		}
+		if(this._vAxis){
+			if(!this._vAxis.initialized()){
+				this._vAxis.calculate(stats.vmin, stats.vmax, dim.height);
+			}
+			this._vScaler = this._vAxis.getScaler();
+		}else{
+			this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
+		}
+		return this;	//	dojox.charting.plot2d.Base
+	},
 
 	// events
 	plotEvent: function(o){
@@ -204,25 +239,6 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 	},
 	
 	// utilities
-	_calc: function(dim, stats){
-		// calculate scaler
-		if(this._hAxis){
-			if(!this._hAxis.initialized()){
-				this._hAxis.calculate(stats.hmin, stats.hmax, dim.width);
-			}
-			this._hScaler = this._hAxis.getScaler();
-		}else{
-			this._hScaler = dojox.charting.scaler.primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
-		}
-		if(this._vAxis){
-			if(!this._vAxis.initialized()){
-				this._vAxis.calculate(stats.vmin, stats.vmax, dim.height);
-			}
-			this._vScaler = this._vAxis.getScaler();
-		}else{
-			this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
-		}
-	},
 	_connectEvents: function(shape, o){
 		if(!this._events){
 			this._events = [];

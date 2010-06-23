@@ -3,6 +3,7 @@ dojo.provide("dojox.charting.plot2d.Grid");
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d.common");
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.utils");
 
 /*=====
 dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -35,7 +36,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 });
 =====*/
 (function(){
-	var du = dojox.lang.utils;
+	var du = dojox.lang.utils, dc = dojox.charting.plot2d.common;
 
 	dojo.declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
 		//	summary:
@@ -98,12 +99,17 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 			//		The reference to this plot for functional chaining.
 			return this;	//	dojox.charting.plot2d.Grid
 		},
-		calculateAxes: function(dim){
+		getSeriesStats: function(){
 			//	summary:
-			//		Ignored but included as a dummy method.
-			//	returns: dojox.charting.plot2d.Grid
-			//		The reference to this plot for functional chaining.
-			return this;	//	dojox.charting.plot2d.Grid
+			//		Returns default stats (irrelevant for this type of plot).
+			//	returns: Object
+			//		{hmin, hmax, vmin, vmax} min/max in both directions.
+			return dojo.delegate(dc.defaultStats);
+		},
+		initializeScalers: function(){
+			//	summary:
+			//		Does nothing (irrelevant for this type of plot).
+			return this;
 		},
 		isDirty: function(){
 			//	summary:

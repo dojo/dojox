@@ -133,12 +133,17 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 			this.run = run;
 			return this;	//	dojox.charting.plot2d.Pie
 		},
-		calculateAxes: function(dim){
+		getSeriesStats: function(){
 			//	summary:
-			//		Dummy method, since axes are irrelevant with a Pie chart.
-			//	returns: dojox.charting.plot2d.Pie
-			//		The reference to this plot for functional chaining.
-			return this;	//	dojox.charting.plot2d.Pie
+			//		Returns default stats (irrelevant for this type of plot).
+			//	returns: Object
+			//		{hmin, hmax, vmin, vmax} min/max in both directions.
+			return dojo.delegate(dc.defaultStats);
+		},
+		initializeScalers: function(){
+			//	summary:
+			//		Does nothing (irrelevant for this type of plot).
+			return this;
 		},
 		getRequiredColors: function(){
 			//	summary:

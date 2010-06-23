@@ -525,14 +525,12 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			}
 
 			// calculate geometry
-			dojo.forEach(this.stack, function(plot){
-				if(	plot.dirty ||
-					(plot.hAxis && this.axes[plot.hAxis].dirty) ||
-					(plot.vAxis && this.axes[plot.vAxis].dirty)
-				){
-					plot.calculateAxes(this.plotArea);
-				}
-			}, this);
+			var dirty = dojo.filter(this.stack, function(plot){
+					return plot.dirty ||
+						(plot.hAxis && this.axes[plot.hAxis].dirty) ||
+						(plot.vAxis && this.axes[plot.vAxis].dirty);
+				}, this);
+			calculateAxes(dirty, this.plotArea);
 
 			return this;	//	dojox.charting.Chart2D
 		},
@@ -582,7 +580,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			dim.width  = dojox.gfx.normalizedLength(dim.width);
 			dim.height = dojox.gfx.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
-			dojo.forEach(this.stack, function(p){ p.calculateAxes(dim); });
+			calculateAxes(this.stack, dim);
 
 			// assumption: we don't have stacked axes yet
 			var offsets = this.offsets = { l: 0, r: 0, t: 0, b: 0 };
@@ -598,7 +596,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 				height: dim.height - offsets.t - offsets.b
 			};
 			df.forIn(this.axes, clear);
-			dojo.forEach(this.stack, function(plot){ plot.calculateAxes(this.plotArea); }, this);
+			calculateAxes(this.stack, this.plotArea);
 
 			return this;	//	dojox.charting.Chart2D
 		},
@@ -786,4 +784,53 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			}
 		}
 	});
+
+	function hSection(stats){
+		return {min: stats.hmin, max: stats.hmax};
+	}
+	
+	function vSection(stats){
+		return {min: stats.vmin, max: stats.vmax};
+	}
+	
+	function hReplace(stats, h){
+		stats.hmin = h.min;
+		stats.hmax = h.max;
+	}
+	
+	function vReplace(stats, v){
+		stats.vmin = v.min;
+		stats.vmax = v.max;
+	}
+	
+	function combineStats(target, source){
+		if(target && source){
+			target.min = Math.min(target.min, source.min);
+			target.max = Math.max(target.max, source.max);
+		}
+		return target || source;
+	}
+
+	function calculateAxes(stack, plotArea){
+		var plots = {}, axes = {};
+		dojo.forEach(stack, function(plot){
+			var stats = plots[plot.name] = plot.getSeriesStats();
+			if(plot.hAxis){
+				axes[plot.hAxis] = combineStats(axes[plot.hAxis], hSection(stats));
+			}
+			if(plot.vAxis){
+				axes[plot.vAxis] = combineStats(axes[plot.vAxis], vSection(stats));
+			}
+		});
+		dojo.forEach(stack, function(plot){
+			var stats = plots[plot.name];
+			if(plot.hAxis){
+				hReplace(stats, axes[plot.hAxis]);
+			}
+			if(plot.vAxis){
+				vReplace(stats, axes[plot.vAxis]);
+			}
+			plot.initializeScalers(plotArea, stats);
+		});
+	}
 })();

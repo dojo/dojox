@@ -13,19 +13,16 @@ dojo.require("dojox.lang.functional.reversed");
 	dojo.declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
 		//	summary:
 		//		The plot object representing a stacked column chart (vertical bars).
-		calculateAxes: function(dim){
+		getSeriesStats: function(){
 			//	summary:
-			//		Run the calculations for any axes for this plot.
-			//	dim: Object
-			//		An object in the form of { width, height }
-			//	returns: dojox.charting.plot2d.StackedColumns
-			//		A reference to this plot for functional chaining.
+			//		Calculate the min/max on all attached series in both directions.
+			//	returns: Object
+			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			var stats = dc.collectStackedStats(this.series);
 			this._maxRunLength = stats.hmax;
 			stats.hmin -= 0.5;
 			stats.hmax += 0.5;
-			this._calc(dim, stats);
-			return this;	//	dojox.charting.plot2d.StackedColumns
+			return stats;
 		},
 		render: function(dim, offsets){
 			//	summary:

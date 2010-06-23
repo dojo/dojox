@@ -63,21 +63,19 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 			this.animate = this.opt.animate;
 		},
 
-		calculateAxes: function(dim){
+		getSeriesStats: function(){
 			//	summary:
-			//		Run the calculations for any axes for this plot.
-			//	dim: Object
-			//		An object in the form of { width, height }
-			//	returns: dojox.charting.plot2d.Bars
-			//		A reference to this plot for functional chaining.
+			//		Calculate the min/max on all attached series in both directions.
+			//	returns: Object
+			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			var stats = dc.collectSimpleStats(this.series), t;
 			stats.hmin -= 0.5;
 			stats.hmax += 0.5;
 			t = stats.hmin, stats.hmin = stats.vmin, stats.vmin = t;
 			t = stats.hmax, stats.hmax = stats.vmax, stats.vmax = t;
-			this._calc(dim, stats);
-			return this;	//	dojox.charting.plot2d.Bars
+			return stats;
 		},
+
 		render: function(dim, offsets){
 			//	summary:
 			//		Run the calculations for any axes for this plot.
