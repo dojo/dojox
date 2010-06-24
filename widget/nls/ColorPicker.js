@@ -5,7 +5,7 @@ blueLabel: "b",
 hueLabel: "h",
 saturationLabel: "s",
 valueLabel: "v", /* aka intensity or brightness */
-degLabel: "°",
+degLabel: "\u00B0",
 hexLabel: "hex",
 huePickerTitle: "Hue Selector",
 saturationPickerTitle: "Saturation Selector"
