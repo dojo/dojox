@@ -249,23 +249,27 @@ dojo.declare("dojox.layout.ExpandoPane",
 		
 	},
 	
-	resize: function(/* Object? */psize){
-		// summary: we aren't a layout widget, but need to act like one:
-		//
-		// psize: Object
-		//		The size object optionally passed to us by our parent. 
-		
-		if(!this._hasSizes){ this._startupSizes(psize); }
+	resize: function(/* Object? */newSize, /*Object?*/ currentSize){
+		// summary:
+		//		we aren't a layout widget, but need to act like one:
+		// newSize: Object
+		//		The size object to resize to
+		// currentSize: Object
+		//		The size of my domNode that has already been set (by BorderContainer)
+
+		if(!this._hasSizes){ this._startupSizes(newSize); }
 		
 		// compute size of container (ie, size left over after title bar)
-		// it looks like two marginBox calls, but sometimes psize comes in with only one member
-		var	size = (psize && psize.h) ? psize : dojo.marginBox(this.domNode);
 		this._contentBox = {
-			w: size.w || dojo.marginBox(this.domNode).w,
-			h: size.h - this._titleHeight
-		};
-		
+			w: newSize && "w" in newSize ? newSize.w : currentSize.w,
+			h: (newSize && "h" in newSize ? newSize.h : currentSize.h) - this._titleHeight
+		};	
 		dojo.style(this.containerNode, "height", this._contentBox.h + "px");
+
+		if(newSize){
+			dojo.marginBox(this.domNode, newSize);
+		}
+
 		this._layoutChildren();
 	},
 	
