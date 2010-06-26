@@ -1,8 +1,6 @@
 dojo.provide("FlickrImageViewAssistant");
 dojo.require("dojox.mobile.app.SceneAssistant");
 
-dojo.require("dojo.io.script");
-
 dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
   
 	apiKey: "8c6803164dbc395fb7131c9d54843627",

@@ -1,8 +1,6 @@
 dojo.provide("FlickrSearchSelectionAssistant");
 dojo.require("dojox.mobile.app.SceneAssistant");
 
-dojo.require("dojo.io.script");
-
 dojo.declare("FlickrSearchSelectionAssistant", dojox.mobile.app.SceneAssistant, {
   
 	setup: function(){

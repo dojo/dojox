@@ -44,7 +44,7 @@ dojo.declare("dojox.mobile.app.StageController", null,{
 		if(this.scenes.length > 0){
 			this.scenes[0].assistant.deactivate();
 		}
-	
+
 		this.scenes.push(controller);
 	
 		var _this = this;

@@ -28,7 +28,6 @@ dojo.require("dojox.mobile._base");
 				handleAs: "text"
 			}).addCallback(dojo.hitch(this, this._setContents));
 	
-	
 			return this._deferredInit;
 		},
 	
@@ -51,22 +50,29 @@ dojo.require("dojox.mobile._base");
 			sceneAssistantName += "Assistant";
 			this.sceneAssistantName = sceneAssistantName;
 			
-			var assistant;
-			if(typeof(window[sceneAssistantName]) != "undefined"){
-				this._initAssistant();
-			}else{
-				var assistantUrl = app.resolveAssistant(this.sceneName);
-				var _this = this;
-		
-				dojo.xhrGet({
-					url: assistantUrl,
-					handleAs: "text"
-				}).addCallback(function(text){
-					dojo.eval(text);
-		
+			var _this = this;
+			
+			dojox.mobile.app.loadResourcesForScene(this.sceneName, function(){
+				
+				console.log("All resources for ",_this.sceneName," loaded");
+				
+				var assistant;
+				if(typeof(window[sceneAssistantName]) != "undefined"){
 					_this._initAssistant();
-				});
-			}
+				}else{
+					var assistantUrl = app.resolveAssistant(_this.sceneName);
+			
+					dojo.xhrGet({
+						url: assistantUrl,
+						handleAs: "text"
+					}).addCallback(function(text){
+						dojo.eval(text);
+			
+						_this._initAssistant();
+					});
+				}
+			});
+			
 		},
 	
 		_initAssistant: function(){

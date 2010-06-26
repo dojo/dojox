@@ -84,14 +84,15 @@ dojo.mixin(dojox.mobile.app, {
 	}
 });
 
-if(dojo.isSafari
+dojox.mobile.app.isIPhone = (dojo.isSafari
 	&& (navigator.userAgent.indexOf("iPhone") > -1 ||
 		navigator.userAgent.indexOf("iPod") > -1
-	)){
-	// We are iPhone. Note, iPod touch reports "iPod" above and fails this test.
-	// Override the dojo._connect function to replace mouse events with touch events
+	));
+dojox.mobile.app.isWebOS = (navigator.userAgent.indexOf("webOS") > -1);
 
-	dojox.mobile.app.isIPhone = true;
+if(dojox.mobile.app.isIPhone){
+	// We are touchable.
+	// Override the dojo._connect function to replace mouse events with touch events
 
 	dojox.mobile.app.eventMap = {
 		onmousedown: "ontouchstart",

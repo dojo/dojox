@@ -1,8 +1,6 @@
 dojo.provide("FlickrSearchGroupAssistant");
 dojo.require("dojox.mobile.app.SceneAssistant");
 
-dojo.require("dojo.io.script");
-
 dojo.declare("FlickrSearchGroupAssistant", dojox.mobile.app.SceneAssistant, {
   
 	setup: function(){
