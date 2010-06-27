@@ -6,4 +6,3 @@
 	{ "symbol":"CRCR", "name":"Corcor PLC",			"historicPrice":[8.44,8.44,8.54,8.60,9.65,8.42,8.44], "open":8.44,  "price":8.44, "updown":"--", "change":"+0.00 (+00%)", "low":8.22, "high":8.44 },
 	{ "symbol":"DTOA", "name":"Datio PLC",			"historicPrice":[2.11,2.47,3.11,3.06,3.01,3.01,3.00], "open":2.11,  "price":2.47, "updown":"^",  "change":"+0.36 (+36%)", "low":2.11, "high":3.01 }
 ]}
-  

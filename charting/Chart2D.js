@@ -35,7 +35,7 @@ dojo.require("dojox.charting.plot2d.Candlesticks");
 dojo.require("dojox.charting.plot2d.OHLC");
 
 /*=====
-dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
+dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 	//	summary:
 	//		The keyword arguments that can be passed in a Chart2D constructor.
 	//
@@ -45,9 +45,12 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 	//		An optional outline/stroke for the chart.
 	//	fill: dojox.gfx.Fill?
 	//		An optional fill for the chart.
+	//	delayInMs: Number
+	//		Delay in ms for delayedRender(). Default: 200.
 	this.margins = margins;
 	this.stroke = stroke;
 	this.fill = fill;
+	this.delayInMs = delayInMs;
 }
  =====*/
 (function(){
@@ -161,9 +164,10 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 
 			// initialize parameters
 			if(!kwArgs){ kwArgs = {}; }
-			this.margins = kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
-			this.stroke  = kwArgs.stroke;
-			this.fill    = kwArgs.fill;
+			this.margins   = kwArgs.margins ? kwArgs.margins : {l: 10, t: 10, r: 10, b: 10};
+			this.stroke    = kwArgs.stroke;
+			this.fill      = kwArgs.fill;
+			this.delayInMs = kwArgs.delayInMs || 200;
 
 			// default initialization
 			this.theme = null;
@@ -400,15 +404,20 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 		addSeries: function(name, data, kwArgs){
 			//	summary:
 			//		Add a data series to the chart for rendering.
-			//	name: String
+			//	name: String:
 			//		The name of the data series to be plotted.
-			//	data: Array
-			//		An array of either numbers or objects that represents the data to be plotted.
-			//	kwArgs: dojox.charting.__SeriesCtorArgs?
-			//		An optional keyword arguments object that will be mixed into the resultant series object.
-			//	returns: dojox.charting.Chart2D
+			//	data: Array|Object:
+			//		The array of data points (either numbers or objects) that
+			//		represents the data to be drawn. Or it can be an object. In
+			//		the latter case, it should have a property "data" (an array),
+			//		destroy(), and setSeriesObject().
+			//	kwArgs: dojox.charting.__SeriesCtorArgs?:
+			//		An optional keyword arguments object that will be mixed into
+			//		the resultant series object.
+			//	returns: dojox.charting.Chart2D:
 			//		A reference to the current chart for functional chaining.
 			var run = new dc.Series(this, data, kwArgs);
+			run.name = name;
 			if(name in this.runs){
 				this.series[this.runs[name]].destroy();
 				this.series[this.runs[name]] = run;
@@ -416,7 +425,6 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 				this.runs[name] = this.series.length;
 				this.series.push(run);
 			}
-			run.name = name;
 			this.dirty = true;
 			// fix min/max
 			if(!("ymin" in run) && "min" in run){ run.ymin = run.min; }
@@ -454,14 +462,16 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			//		Update the given series with a new set of data points.
 			//	name: String
 			//		The name of the series as defined in addSeries.
-			//	data: Array
-			//		An array of numbers or objects to replace the series' current data with.
+			//	data: Array|Object:
+			//		The array of data points (either numbers or objects) that
+			//		represents the data to be drawn. Or it can be an object. In
+			//		the latter case, it should have a property "data" (an array),
+			//		destroy(), and setSeriesObject().
 			//	returns: dojox.charting.Chart2D
 			//		A reference to the current chart for functional chaining.
 			if(name in this.runs){
 				var run = this.series[this.runs[name]];
-				run.data = data;
-				run.dirty = true;
+				run.update(data);
 				this._invalidateDependentPlots(run.plot, false);
 				this._invalidateDependentPlots(run.plot, true);
 			}
@@ -903,6 +913,26 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			if(this.surface.render){ this.surface.render(); };
 			// END FOR HTML CANVAS
 
+			return this;	//	dojox.charting.Chart2D
+		},
+		delayedRender: function(){
+			//	summary:
+			//		Delayed render, which is used to collect multiple updates
+			//		within a delayInMs time window.
+			//	returns: dojox.charting.Chart2D
+			//		A reference to the current chart for functional chaining.
+			
+			if(!this._delayedRenderHandle){
+				this._delayedRenderHandle = setTimeout(
+					dojo.hitch(this, function(){
+						clearTimeout(this._delayedRenderHandle);
+						this._delayedRenderHandle = null;
+						this.render();
+					}),
+					this.delayInMs
+				);
+			}
+			
 			return this;	//	dojox.charting.Chart2D
 		},
 		connectToPlot: function(name, object, method){
