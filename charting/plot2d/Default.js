@@ -158,6 +158,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 				return this.performZoom(dim, offsets);
 			}
 			
+			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
@@ -169,11 +170,11 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			}
 			var t = this.chart.theme, stroke, outline, marker, events = this.events();
             
-			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
+					this._reconnectEvents(run.name);
 					continue;
 				}
 				run.cleanGroup();
@@ -317,7 +318,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 									o.x = rsegments[seg][i].x;
 									o.y = rsegments[seg][i].y;
 								}
-								this._connectEvents(s, o);
+								this._connectEvents(o);
 								eventSeries[i] = o;
 							}, this);
 							// post-process events to restore the original indexing

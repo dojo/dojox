@@ -54,6 +54,7 @@ dojo.require("dojox.lang.functional.reversed");
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
+			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
@@ -66,12 +67,12 @@ dojo.require("dojox.lang.functional.reversed");
 			var t = this.chart.theme, events = this.events(),
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
-			this.resetEvents();
 
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
+					this._reconnectEvents(run.name);
 					continue;
 				}
 				run.cleanGroup();
@@ -175,7 +176,7 @@ dojo.require("dojox.lang.functional.reversed");
 								x:       i + 1,
 								y:       run.data[i]
 							};
-							this._connectEvents(s, o);
+							this._connectEvents(o);
 							eventSeries[i] = o;
 						}, this);
 						this._eventSeries[run.name] = eventSeries;

@@ -25,6 +25,7 @@ dojo.require("dojox.lang.functional.reversed");
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
+			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
@@ -42,11 +43,11 @@ dojo.require("dojox.lang.functional.reversed");
 			f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt, this.series.length);
 			gap = f.gap;
 			width = thickness = f.size;
-			this.resetEvents();
 			for(var i = 0; i < this.series.length; ++i){
 				var run = this.series[i], shift = thickness * i;
 				if(!this.dirty && !run.dirty){
 					t.skip();
+					this._reconnectEvents(run.name);
 					continue;
 				}
 				run.cleanGroup();
@@ -82,7 +83,7 @@ dojo.require("dojox.lang.functional.reversed");
 									x:       j + 0.5,
 									y:       v
 								};
-								this._connectEvents(shape, o);
+								this._connectEvents(o);
 								eventSeries[j] = o;
 							}
 							if(this.animate){

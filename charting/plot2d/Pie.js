@@ -156,11 +156,11 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 			//	returns: dojox.charting.plot2d.Pie
 			//		A reference to this plot for functional chaining.
 			if(!this.dirty){ return this; }
+			this.resetEvents();
 			this.dirty = false;
 			this._eventSeries = {};
 			this.cleanGroup();
 			var s = this.group, t = this.chart.theme;
-			this.resetEvents();
 
 			if(!this.run || !this.run.data.length){
 				return this;
@@ -261,7 +261,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 							cy:      circle.cy,
 							cr:      r
 						};
-						this._connectEvents(shape, o);
+						this._connectEvents(o);
 						eventSeries[i] = o;
 					}
 
@@ -338,7 +338,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 						cy:      circle.cy,
 						cr:      r
 					};
-					this._connectEvents(shape, o);
+					this._connectEvents(o);
 					eventSeries[i] = o;
 				}
 

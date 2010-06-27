@@ -89,6 +89,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 				return this.performZoom(dim, offsets);
 			}
 			this.dirty = this.isDirty();
+			this.resetEvents();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
@@ -105,11 +106,11 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 			f = dc.calculateBarSize(this._vScaler.bounds.scale, this.opt);
 			gap = f.gap;
 			height = f.size;
-			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
+					this._reconnectEvents(run.name);
 					continue;
 				}
 				run.cleanGroup();
@@ -145,7 +146,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 									x:       v,
 									y:       j + 1.5
 								};
-								this._connectEvents(shape, o);
+								this._connectEvents(o);
 								eventSeries[j] = o;
 							}
 							if(this.animate){

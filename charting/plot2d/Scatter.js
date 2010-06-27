@@ -61,6 +61,7 @@ dojo.require("dojox.gfx.gradutils");
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
+			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
@@ -70,11 +71,11 @@ dojo.require("dojox.gfx.gradutils");
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, events = this.events();
-			this.resetEvents();
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
+					this._reconnectEvents(run.name);
 					continue;
 				}
 				run.cleanGroup();
@@ -168,7 +169,7 @@ dojo.require("dojox.gfx.gradutils");
 							o.x = run.data[i].x;
 							o.y = run.data[i].y;
 						}
-						this._connectEvents(s, o);
+						this._connectEvents(o);
 						eventSeries[i] = o;
 					}, this);
 					this._eventSeries[run.name] = eventSeries;

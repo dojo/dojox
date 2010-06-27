@@ -69,28 +69,34 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 		}
 		this.raiseEvent({type: "onplotreset", plot: this});
 	},
-	_connectEvents: function(shape, o){
+	_connectEvents: function(o){
 		o.chart = this.chart;
 		o.plot  = this;
 		o.hAxis = this.hAxis || null;
 		o.vAxis = this.vAxis || null;
 		this._events.push(
-			shape.connect("onmouseover", this, function(e){
+			o.shape.connect("onmouseover", this, function(e){
 				o.type  = "onmouseover";
 				o.event = e;
 				this.raiseEvent(o);
 			}),
-			shape.connect("onmouseout", this, function(e){
+			o.shape.connect("onmouseout", this, function(e){
 				o.type  = "onmouseout";
 				o.event = e;
 				this.raiseEvent(o);
 			}),
-			shape.connect("onclick", this, function(e){
+			o.shape.connect("onclick", this, function(e){
 				o.type  = "onclick";
 				o.event = e;
 				this.raiseEvent(o);
 			})
 		);
+	},
+	_reconnectEvents: function(seriesName){
+		var a = this._eventSeries[seriesName];
+		if(a){
+			dojo.forEach(a, this._connectEvents, this);
+		}
 	},
 	fireEvent: function(seriesName, eventName, index){
 		var s = this._eventSeries[seriesName];
