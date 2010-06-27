@@ -36,7 +36,7 @@ dojox.charting.action2d.__BaseCtorArgs = function(duration, easing){
 			//	kwargs: dojox.charting.action2d.__BaseCtorArgs?
 			//		Optional arguments for the action.
 			this.chart = chart;
-			this.plot = plot ? plot : "default";
+			this.plot = plot || "default";
 			this.anim = {};
 
 			// process common optional named parameters
