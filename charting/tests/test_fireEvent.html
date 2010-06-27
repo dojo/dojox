@@ -75,12 +75,17 @@ function getZeroes(){
 	return dojox.lang.functional.repeat(size, "-> 0", 0);
 };
 
+var actions = [];
+
 function addActions(chart){
-    new dojox.charting.action2d.Highlight(chart);
-    new dojox.charting.action2d.Magnify(chart);
-    new dojox.charting.action2d.MoveSlice(chart);
-    new dojox.charting.action2d.Tooltip(chart);
-    new Listener(chart, "default", "def");
+	dojox.lang.functional.forEach(actions, ".destroy()");
+	actions = [
+		new dojox.charting.action2d.Highlight(chart),
+		new dojox.charting.action2d.Magnify(chart),
+		new dojox.charting.action2d.MoveSlice(chart),
+		new dojox.charting.action2d.Tooltip(chart),
+		new Listener(chart, "default", "def")
+	];
 }
 
 function makeObjects(){

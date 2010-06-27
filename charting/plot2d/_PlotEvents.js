@@ -2,7 +2,7 @@ dojo.provide("dojox.charting.plot2d._PlotEvents");
 
 dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 	constructor: function(){
-		this._events = [];
+		this._shapeEvents = [];
 		this._eventSeries = {};
 	},
 	destroy: function(){
@@ -63,34 +63,32 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 	resetEvents: function(){
 		//	summary:
 		//		Reset all events attached to our plotEvent (i.e. disconnect).
-		if(this._events.length){
-			dojo.forEach(this._events, dojo.disconnect);
-			this._events = [];
+		if(this._shapeEvents.length){
+			dojo.forEach(this._shapeEvents, function(item){
+				item.shape.disconnect(item.handle);
+			});
+			this._shapeEvents = [];
 		}
 		this.raiseEvent({type: "onplotreset", plot: this});
+	},
+	_connectSingleEvent: function(o, eventName){
+		this._shapeEvents.push({
+			shape:  o.shape,
+			handle: o.shape.connect(eventName, this, function(e){
+				o.type  = eventName;
+				o.event = e;
+				this.raiseEvent(o);
+			})
+		});
 	},
 	_connectEvents: function(o){
 		o.chart = this.chart;
 		o.plot  = this;
 		o.hAxis = this.hAxis || null;
 		o.vAxis = this.vAxis || null;
-		this._events.push(
-			o.shape.connect("onmouseover", this, function(e){
-				o.type  = "onmouseover";
-				o.event = e;
-				this.raiseEvent(o);
-			}),
-			o.shape.connect("onmouseout", this, function(e){
-				o.type  = "onmouseout";
-				o.event = e;
-				this.raiseEvent(o);
-			}),
-			o.shape.connect("onclick", this, function(e){
-				o.type  = "onclick";
-				o.event = e;
-				this.raiseEvent(o);
-			})
-		);
+		this._connectSingleEvent(o, "onmouseover");
+		this._connectSingleEvent(o, "onmouseout");
+		this._connectSingleEvent(o, "onclick");
 	},
 	_reconnectEvents: function(seriesName){
 		var a = this._eventSeries[seriesName];

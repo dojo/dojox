@@ -178,6 +178,8 @@ dojo.experimental("dojox.charting.DataChart");
 				this.yaxis.labelFunc = dojo.hitch(this, "seriesLabels");
 			}
 			
+			// potential event's collector
+			this._events = [];
 			
 			this.convertLabels(this.yaxis);
 			this.convertLabels(this.xaxis);
@@ -219,6 +221,11 @@ dojo.experimental("dojox.charting.DataChart");
 			}
 		},
 		
+		destroy: function(){
+			dojo.forEach(this._events, dojo.disconnect);
+			this.inherited(arguments);
+		},
+		
 		setStore: function(/*Object*/store, /* ? String*/query, /* ? String*/fieldName, /* ? Object */queryOptions){
 			//	 summary:
 			//		Sets the chart store and query
@@ -234,8 +241,11 @@ dojo.experimental("dojox.charting.DataChart");
 			this.label = this.store.getLabelAttributes();
 			this.queryOptions = queryOptions || queryOptions;
 			
-			dojo.connect(this.store, "onSet", this, "onSet");
-			dojo.connect(this.store, "onError", this, "onError");
+			dojo.forEach(this._events, dojo.disconnect);
+			this._events = [
+				dojo.connect(this.store, "onSet", this, "onSet"),
+				dojo.connect(this.store, "onError", this, "onError")
+			];
 			this.fetch();
 		},
 		
