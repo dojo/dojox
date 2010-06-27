@@ -97,7 +97,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,
 		purgeGroup = df.lambda("item.purgeGroup()");
-		
+
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
 	dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
@@ -125,7 +125,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			markerFont:			"",
 			markerFontColor:	""
 		},
-		
+
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Return a new plot.
@@ -138,11 +138,11 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			this.series = [];
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
-			
+
 			// animation properties
 			this.animate = this.opt.animate;
 		},
-		
+
 		render: function(dim, offsets){
 			//	summary:
 			//		Render/draw everything on this plot.
@@ -157,7 +157,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
-			
+
 			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
@@ -169,7 +169,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, stroke, outline, marker, events = this.events();
-            
+
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -188,7 +188,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 					s = run.group, rsegments = [], startindexes = [], rseg = null, lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
-				
+
                 // split the run data into dense segments (each containing no nulls)
                 for(var j = 0; j < run.data.length; j++){
                     if(run.data[j] != null){
@@ -219,9 +219,9 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 							};
 						}, this);
 					}
-	
+
 					var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
-	
+
 					if(this.opt.areas && lpoly.length > 1){
 						var fill = theme.series.fill;
 						var apoly = dojo.clone(lpoly);

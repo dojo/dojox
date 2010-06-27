@@ -86,7 +86,7 @@ dojo.require("dojox.lang.functional");
 							if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
 							if("ymax" in run){ stats.vmax = Math.max(old_vmax, run.ymax); }
 						}
-						
+
 						break;
 					}
 				}

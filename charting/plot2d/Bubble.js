@@ -41,7 +41,7 @@ dojo.require("dojox.lang.functional");
 			this.vAxis = this.opt.vAxis;
 			this.animate = this.opt.animate;
 		},
-		
+
 		//	override the render so that we are plotting only circles.
 		render: function(dim, offsets){
 			//	summary:
@@ -64,7 +64,7 @@ dojo.require("dojox.lang.functional");
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-		
+
 			var t = this.chart.theme,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
@@ -88,7 +88,7 @@ dojo.require("dojox.lang.functional");
 					console.warn("dojox.charting.plot2d.Bubble: the data in the following series cannot be rendered as a bubble chart; ", run);
 					continue;
 				}
-				
+
 				var theme = t.next("circle", [this.opt, run]), s = run.group,
 					points = dojo.map(run.data, function(v, i){
 						return v ? {
@@ -169,7 +169,7 @@ dojo.require("dojox.lang.functional");
 					run.dyn.fill   = frontCircles[frontCircles.length - 1].getFill();
 					run.dyn.stroke = frontCircles[frontCircles.length - 1].getStroke();
 				}
-				
+
 				if(events){
 					var eventSeries = new Array(frontCircles.length);
 					dojo.forEach(frontCircles, function(s, i){
@@ -196,7 +196,7 @@ dojo.require("dojox.lang.functional");
 				}else{
 					delete this._eventSeries[run.name];
 				}
-				
+
 				run.dirty = false;
 			}
 			this.dirty = false;

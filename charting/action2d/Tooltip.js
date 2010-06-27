@@ -36,7 +36,7 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 		}
 		return o.element == "bar" ? o.x : o.y;
 	};
-	
+
 	var df = dojox.lang.functional, m = dojox.gfx.matrix, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
 	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.Base, {

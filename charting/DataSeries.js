@@ -20,7 +20,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 		//		or empty string (the default), "value" field is extracted.
 		this.store = store;
 		this.kwArgs = kwArgs;
-		
+
 		if(value){
 			if(dojo.isFunction(value)){
 				this.value = value;
@@ -33,11 +33,11 @@ dojo.declare("dojox.charting.DataSeries", null, {
 		}else{
 			this.value = dojo.hitch(this, "_defaultValue");
 		}
-		
+
 		this.data = [];
-		
+
 		this._events = [];
-		
+
 		if(this.store.getFeatures()["dojo.data.api.Notification"]){
 			this._events.push(
 				dojo.connect(this.store, "onNew", this, "_onStoreNew"),
@@ -45,16 +45,16 @@ dojo.declare("dojox.charting.DataSeries", null, {
 				dojo.connect(this.store, "onSet", this, "_onStoreSet")
 			);
 		}
-		
+
 		this.fetch();
 	},
-	
+
 	destroy: function(){
 		//	summary:
 		//		Clean up before GC.
 		dojo.forEach(this._events, dojo.disconnect);
 	},
-	
+
 	setSeriesObject: function(series){
 		//	summary:
 		//		Sets a dojox.charting.Series object we will be working with.
@@ -72,17 +72,17 @@ dojo.declare("dojox.charting.DataSeries", null, {
 		});
 		return o;
 	},
-	
+
 	_fieldValue: function(field, store, item){
 		return store.getValue(item, field);
 	},
-	
+
 	_defaultValue: function(store, item){
 		return store.getValue(item, "value");
 	},
-	
+
 	// store fetch loop
-	
+
 	fetch: function(){
 		//	summary:
 		//		Fetches data from the store and updates a chart.
@@ -94,7 +94,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 			this.store.fetch(kwArgs);
 		}
 	},
-	
+
 	_onFetchComplete: function(items, request){
 		this.items = items;
 		this._buildItemMap();
@@ -104,7 +104,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 		this._pushDataChanges();
 		this._inFlight = false;
 	},
-	
+
 	onFetchError: function(errorData, request){
 		//	summary:
 		//		As stub to process fetch errors. Provide so user can attach to
@@ -112,7 +112,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 		//		details: onError property.
 		this._inFlight = false;
 	},
-	
+
 	_buildItemMap: function(){
 		if(this.store.getFeatures()["dojo.data.api.Identity"]){
 			var itemMap = {};
@@ -122,21 +122,21 @@ dojo.declare("dojox.charting.DataSeries", null, {
 			this.itemMap = itemMap;
 		}
 	},
-	
+
 	_pushDataChanges: function(){
 		if(this.series){
 			this.series.chart.updateSeries(this.series.name, this);
 			this.series.chart.delayedRender();
 		}
 	},
-	
+
 	// store notification handlers
-	
+
 	_onStoreNew: function(){
 		// the only thing we can do is to re-fetch items
 		this.fetch();
 	},
-	
+
 	_onStoreDelete: function(item){
 		// we cannot do anything with deleted item, the only way is to compare
 		// items for equality
@@ -155,7 +155,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 			}
 		}
 	},
-	
+
 	_onStoreSet: function(item){
 		if(this.itemMap){
 			// we can use our handy item map, if the store supports Identity

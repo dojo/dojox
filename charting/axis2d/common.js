@@ -4,7 +4,7 @@ dojo.require("dojox.gfx");
 
 (function(){
 	var g = dojox.gfx;
-	
+
 	var clearNode = function(s){
 		s.marginLeft   = "0px";
 		s.marginTop    = "0px";
@@ -19,7 +19,7 @@ dojo.require("dojox.gfx");
 		s.borderRightWidth  = "0px";
 		s.borderBottomWidth = "0px";
 	};
-	
+
 	var getBoxWidth = function(n){
 		// marginBox is incredibly slow, so avoid it if we can
 		if(n["getBoundingClientRect"]){
@@ -29,7 +29,7 @@ dojo.require("dojox.gfx");
 			return dojo.marginBox(n).w;
 		}
 	};
-	
+
 	dojo.mixin(dojox.charting.axis2d.common, {
 		//	summary:
 		//		Common methods to be used by any axis.  This is considered "static".
@@ -82,7 +82,7 @@ dojo.require("dojox.gfx");
 				//		The maximum width of the resultant DOM node.
 				//	returns: DOMNode
 				//		The resultant DOMNode (a "div" element).
-				
+
 				// setup the text node
 				var p = dojo.doc.createElement("div"), s = p.style, boxWidth;
 				clearNode(s);
@@ -94,7 +94,7 @@ dojo.require("dojox.gfx");
 				s.left = "-10000px";
 				dojo.body().appendChild(p);
 				var size = g.normalizedLength(g.splitFontString(font).size);
-				
+
 				// do we need to calculate the label width?
 				if(!labelWidth){
 					boxWidth = getBoxWidth(p);
@@ -102,7 +102,7 @@ dojo.require("dojox.gfx");
 
 				// new settings for the text node
 				dojo.body().removeChild(p);
-				
+
 				s.position = "relative";
 				if(labelWidth){
 					s.width = labelWidth + "px";

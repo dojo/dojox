@@ -26,12 +26,12 @@ dojo.require("dojox.lang.utils");
 		//		The default parameters used to define any axis.
 		//	optionalParams: Object
 		//		Any optional parameters needed to define an axis.
-				
+
 		/*
 		//	TODO: the documentation tools need these to be pre-defined in order to pick them up
 		//	correctly, but the code here is partially predicated on whether or not the properties
 		//	actually exist.  For now, we will leave these undocumented but in the code for later. -- TRT
-			
+
 		//	opt: Object
 		//		The actual options used to define this axis, created at initialization.
 		//	scalar: Object

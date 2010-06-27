@@ -86,7 +86,7 @@ dojo.require("dojox.lang.functional.reversed");
 					}, this);
 
 				var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
-				
+
 				if(this.opt.areas){
 					var apoly = dojo.clone(lpoly);
 					if(this.opt.tension){

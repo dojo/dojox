@@ -20,7 +20,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 	//		The maximum size for a bar in pixels.  Default is 1.
 	maxBarSize: 1
 });
-=====*/ 
+=====*/
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
 		dc = dojox.charting.plot2d.common,

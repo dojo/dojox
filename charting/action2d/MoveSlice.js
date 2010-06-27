@@ -27,7 +27,7 @@ dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.actio
 		m = dojox.gfx.matrix,
 		gf = dojox.gfx.fx,
 		df = dojox.lang.functional;
-	
+
 	dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.Base, {
 		//	summary:
 		//		Create an action for a pie chart that moves and scales a pie slice.
@@ -53,17 +53,17 @@ dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.actio
 			if(!kwArgs){ kwArgs = {}; }
 			this.scale = typeof kwArgs.scale == "number" ? kwArgs.scale : DEFAULT_SCALE;
 			this.shift = typeof kwArgs.shift == "number" ? kwArgs.shift : DEFAULT_SHIFT;
-			
+
 			this.connect();
 		},
-		
+
 		process: function(o){
 			//	summary:
 			//		Process the action on the given object.
 			//	o: dojox.gfx.Shape
 			//		The object on which to process the slice moving action.
 			if(!o.shape || o.element != "slice" || !(o.type in this.overOutEvents)){ return; }
-			
+
 			if(!this.angles){
 				// calculate the running total of slice angles
 				var startAngle = m._degToRad(o.plot.opt.startAngle);
@@ -80,15 +80,15 @@ dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.actio
 				angle = (this.angles[index] + this.angles[index + 1]) / 2,
 				rotateTo0  = m.rotateAt(-angle, o.cx, o.cy),
 				rotateBack = m.rotateAt( angle, o.cx, o.cy);
-	
+
 			anim = this.anim[index];
-			
+
 			if(anim){
 				anim.action.stop(true);
 			}else{
 				this.anim[index] = anim = {};
 			}
-			
+
 			if(o.type == "onmouseover"){
 				startOffset = 0;
 				endOffset   = this.shift;
@@ -100,7 +100,7 @@ dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.actio
 				startScale  = this.scale;
 				endScale    = 1;
 			}
-			
+
 			anim.action = dojox.gfx.fx.animateTransform({
 				shape:    o.shape,
 				duration: this.duration,
@@ -120,7 +120,7 @@ dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.actio
 			}
 			anim.action.play();
 		},
-		
+
 		reset: function(){
 			delete this.angles;
 		}

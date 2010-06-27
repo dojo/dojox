@@ -129,8 +129,8 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 			//		A reference to this plot for functional chaining.
 
 			// get current zooming various
-			var vs = this._vAxis.scale || 1, 
-				hs = this._hAxis.scale || 1, 
+			var vs = this._vAxis.scale || 1,
+				hs = this._hAxis.scale || 1,
 				vOffset = dim.height - offsets.b,
 				hBounds = this._hAxis.getScaler().bounds,
 				xOffset = (hBounds.from - hBounds.lower) * hBounds.scale,
@@ -140,10 +140,10 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 				rVScale = vs / this.lastWindow.vscale,
 				rHScale = hs / this.lastWindow.hscale,
 				rXOffset = (this.lastWindow.xoffset - xOffset)/
-					((this.lastWindow.hscale == 1)? hs : this.lastWindow.hscale), 
+					((this.lastWindow.hscale == 1)? hs : this.lastWindow.hscale),
 				rYOffset = (yOffset - this.lastWindow.yoffset)/
 					((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
-				
+
 				shape = this.group,
 				anim = dojox.gfx.fx.animateTransform(dojo.delegate({
 					shape: shape,
@@ -154,9 +154,9 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 						{name:"original"},
 						{name:"translate", start: [0, 0], end: [rXOffset, rYOffset]}
 					]}, this.zoom));
-					
+
 			dojo.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
-			//add anim to zooming action queue, 
+			//add anim to zooming action queue,
 			//in order to avoid several zooming action happened at the same time
 			this.zoomQueue.push(anim);
 			//perform each anim one by one in zoomQueue

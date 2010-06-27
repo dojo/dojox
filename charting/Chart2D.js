@@ -68,13 +68,13 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 		//		chart based on dojox.gfx.
 		//
 		//	description:
-		//		dojox.charting.Chart2D is the primary object used for any kind of charts.  It 
-		//		is simple to create--just pass it a node reference, which is used as the 
+		//		dojox.charting.Chart2D is the primary object used for any kind of charts.  It
+		//		is simple to create--just pass it a node reference, which is used as the
 		//		container for the chart--and a set of optional keyword arguments and go.
 		//
 		//		Note that like most of dojox.gfx, most of dojox.charting.Chart2D's methods are
 		//		designed to return a reference to the chart itself, to allow for functional
-		//		chaining.  This makes defining everything on a Chart very easy to do. 
+		//		chaining.  This makes defining everything on a Chart very easy to do.
 		//
 		//	example:
 		//		Create an area chart, with smoothing.
@@ -155,7 +155,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 		//		A boolean flag indicating whether or not the chart needs to be updated/re-rendered.
 		//	coords: Object
 		//		The coordinates on a page of the containing node, as returned from dojo.coords.
-				
+
 		constructor: function(/* DOMNode */node, /* dojox.charting.__Chart2DCtorArgs? */kwArgs){
 			//	summary:
 			//		The constructor for a new Chart2D.  Initializes all parameters used for a chart.
@@ -614,14 +614,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			return ret;	//	Object
 		},
 		setAxisWindow: function(name, scale, offset, zoom){
-			//	summary: 
+			//	summary:
 			//		Zooms an axis and all dependent plots. Can be used to zoom in 1D.
 			//	name: String
 			//		The name of the axis as defined by addAxis.
 			//	scale: Number
 			//		The scale on the target axis.
 			//	offset: Number
-			//		Any offest, as measured by axis tick 
+			//		Any offest, as measured by axis tick
 			//	zoom: Boolean|Object?
 			//		The chart zooming animation trigger.  This is null by default,
 			//		e.g. {duration: 1200}, or just set true.
@@ -639,7 +639,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			return this;	//	dojox.charting.Chart2D
 		},
 		setWindow: function(sx, sy, dx, dy, zoom){
-			//	summary: 
+			//	summary:
 			//		Zooms in or out any plots in two dimensions.
 			//	sx: Number
 			//		The scale for the x axis.
@@ -921,7 +921,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		within a delayInMs time window.
 			//	returns: dojox.charting.Chart2D
 			//		A reference to the current chart for functional chaining.
-			
+
 			if(!this._delayedRenderHandle){
 				this._delayedRenderHandle = setTimeout(
 					dojo.hitch(this, function(){
@@ -932,7 +932,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 					this.delayInMs
 				);
 			}
-			
+
 			return this;	//	dojox.charting.Chart2D
 		},
 		connectToPlot: function(name, object, method){
@@ -1009,21 +1009,21 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 	function hSection(stats){
 		return {min: stats.hmin, max: stats.hmax};
 	}
-	
+
 	function vSection(stats){
 		return {min: stats.vmin, max: stats.vmax};
 	}
-	
+
 	function hReplace(stats, h){
 		stats.hmin = h.min;
 		stats.hmax = h.max;
 	}
-	
+
 	function vReplace(stats, v){
 		stats.vmin = v.min;
 		stats.vmax = v.max;
 	}
-	
+
 	function combineStats(target, source){
 		if(target && source){
 			target.min = Math.min(target.min, source.min);

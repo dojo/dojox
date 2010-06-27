@@ -68,9 +68,7 @@ dojox.charting.action2d.__BaseCtorArgs = function(duration, easing){
 		destroy: function(){
 			//	summary:
 			//		Do any cleanup needed when destroying parent elements.
-			if(this.handle){
-				this.disconnect();
-			}
+			this.disconnect();
 			df.forIn(this.anim, function(o){
 				df.forIn(o, function(anim){
 					anim.action.stop(true);

@@ -50,7 +50,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 
 	//	fanSize: Number?
 	//		The amount for a radial gradient.  Default is 5.
-	fanSize:		5,		
+	fanSize:		5,
 
 	//	startAngle: Number?
 	//		Where to being rendering gradients in slices, in degrees.  Default is 0.

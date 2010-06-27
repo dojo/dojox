@@ -13,7 +13,7 @@ dojo.require("dojox.lang.functional.reversed");
 		purgeGroup = df.lambda("item.purgeGroup()");
 
 	//	Candlesticks are based on the Bars plot type; we expect the following passed
-	//	as values in a series: 
+	//	as values in a series:
 	//	{ x?, open, close, high, low }
 	//	if x is not provided, the array index is used.
 	//	failing to provide the OHLC values will throw an error.
@@ -147,7 +147,7 @@ dojo.require("dojox.lang.functional.reversed");
 					var v = run.data[j];
 					if(v !== null){
 						var finalTheme = t.addMixin(theme, "candlestick", v, true);
-	
+
 						//	calculate the points we need for OHLC
 						var x = ht(v.x || (j+0.5)) + offsets.l + gap,
 							y = dim.height - offsets.b,
@@ -160,7 +160,7 @@ dojo.require("dojox.lang.functional.reversed");
 							high = low;
 							low = tmp;
 						}
-	
+
 						if(width >= 1){
 							var hl = {x1: width/2, x2: width/2, y1: y - high, y2: y - low},
 								op = {x1: 0, x2: ((width/2) + ((finalTheme.series.stroke.width||1)/2)), y1: y-open, y2: y-open},
@@ -171,7 +171,7 @@ dojo.require("dojox.lang.functional.reversed");
 							inner.createLine(hl).setStroke(finalTheme.series.stroke);
 							inner.createLine(op).setStroke(finalTheme.series.stroke);
 							inner.createLine(cl).setStroke(finalTheme.series.stroke);
-	
+
 							//	TODO: double check this.
 							run.dyn.stroke = finalTheme.series.stroke;
 							if(events){

@@ -18,7 +18,7 @@ dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2
 	var DEFAULT_SCALE = 2,
 		m = dojox.gfx.matrix,
 		gf = dojox.gfx.fx;
-	
+
 	dojo.declare("dojox.charting.action2d.Magnify", dojox.charting.action2d.Base, {
 		//	summary:
 		//		Create an action that magnifies the object the action is applied to.
@@ -30,7 +30,7 @@ dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2
 			scale:    DEFAULT_SCALE	// scale of magnification
 		},
 		optionalParams: {},	// no optional parameters
-		
+
 		constructor: function(chart, plot, kwArgs){
 			//	summary:
 			//		Create the magnifying action.
@@ -43,32 +43,32 @@ dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2
 
 			// process optional named parameters
 			this.scale = kwArgs && typeof kwArgs.scale == "number" ? kwArgs.scale : DEFAULT_SCALE;
-			
+
 			this.connect();
 		},
-		
+
 		process: function(o){
 			//	summary:
 			//		Process the action on the given object.
 			//	o: dojox.gfx.Shape
 			//		The object on which to process the magnifying action.
-			if(!o.shape || !(o.type in this.overOutEvents) || 
+			if(!o.shape || !(o.type in this.overOutEvents) ||
 				!("cx" in o) || !("cy" in o)){ return; }
-			
+
 			var runName = o.run.name, index = o.index, vector = [], anim, init, scale;
-	
+
 			if(runName in this.anim){
 				anim = this.anim[runName][index];
 			}else{
 				this.anim[runName] = {};
 			}
-			
+
 			if(anim){
 				anim.action.stop(true);
 			}else{
 				this.anim[runName][index] = anim = {};
 			}
-			
+
 			if(o.type == "onmouseover"){
 				init  = m.identity;
 				scale = this.scale;
@@ -76,7 +76,7 @@ dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2
 				init  = m.scaleAt(this.scale, o.cx, o.cy);
 				scale = 1 / this.scale;
 			}
-			
+
 			var kwArgs = {
 				shape:    o.shape,
 				duration: this.duration,
@@ -97,12 +97,12 @@ dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2
 				kwArgs.shape = o.shadow;
 				vector.push(gf.animateTransform(kwArgs));
 			}
-			
+
 			if(!vector.length){
 				delete this.anim[runName][index];
 				return;
 			}
-			
+
 			anim.action = dojo.fx.combine(vector);
 			if(o.type == "onmouseout"){
 				dojo.connect(anim.action, "onEnd", this, function(){

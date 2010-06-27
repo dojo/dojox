@@ -128,12 +128,12 @@ dojo.require("dojox.lang.utils");
 		//		The default parameters used to define any axis.
 		//	optionalParams: Object
 		//		Any optional parameters needed to define an axis.
-				
+
 		/*
 		//	TODO: the documentation tools need these to be pre-defined in order to pick them up
 		//	correctly, but the code here is partially predicated on whether or not the properties
 		//	actually exist.  For now, we will leave these undocumented but in the code for later. -- TRT
-			
+
 		//	opt: Object
 		//		The actual options used to define this axis, created at initialization.
 		//	scalar: Object
@@ -301,7 +301,7 @@ dojo.require("dojox.lang.utils");
 				labelOffset,
 				labelAlign,
 				ta = this.chart.theme.axis,
-				
+
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
 				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
 				// TODO: we use one font color --- we need to use different colors

@@ -19,11 +19,11 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 		DEFAULT_LUMINOSITY2 = 50,	// %
 
 		c = dojox.color,
-		
+
 		cc = function(color){
 			return function(){ return color; };
 		},
-		
+
 		hl = function(color){
 			var a = new c.Color(color),
 				x = a.toHsl();
@@ -42,7 +42,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 			}
 			return c.fromHsl(x);
 		};
-	
+
 	dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.Base, {
 		//	summary:
 		//		Creates a highlighting action on a plot, where an element on that plot
@@ -57,7 +57,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 			highlight: "red"	// name for the highlight color
 								// programmatic instantiation can use functions and color objects
 		},
-		
+
 		constructor: function(chart, plot, kwArgs){
 			//	summary:
 			//		Create the highlighting action and connect it to the plot.
@@ -69,25 +69,25 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 			//		Optional keyword arguments object for setting parameters.
 			var a = kwArgs && kwArgs.highlight;
 			this.colorFun = a ? (dojo.isFunction(a) ? a : cc(a)) : hl;
-			
+
 			this.connect();
 		},
-		
+
 		process: function(o){
 			//	summary:
 			//		Process the action on the given object.
 			//	o: dojox.gfx.Shape
 			//		The object on which to process the highlighting action.
 			if(!o.shape || !(o.type in this.overOutEvents)){ return; }
-			
+
 			var runName = o.run.name, index = o.index, anim, startFill, endFill;
-	
+
 			if(runName in this.anim){
 				anim = this.anim[runName][index];
 			}else{
 				this.anim[runName] = {};
 			}
-			
+
 			if(anim){
 				anim.action.stop(true);
 			}else{
@@ -100,7 +100,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 					end:   this.colorFun(color)
 				};
 			}
-			
+
 			var start = anim.start, end = anim.end;
 			if(o.type == "onmouseout"){
 				// swap colors
@@ -108,7 +108,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 				start = end;
 				end = t;
 			}
-			
+
 			anim.action = dojox.gfx.fx.animateFill({
 				shape:    o.shape,
 				duration: this.duration,

@@ -33,7 +33,7 @@ dojo.require("dojox.gfx.gradutils");
 			markerFont:			"",
 			markerFontColor:	""
 		},
-		
+
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Create the scatter plot.
@@ -48,7 +48,7 @@ dojo.require("dojox.gfx.gradutils");
 			this.vAxis = this.opt.vAxis;
 			this.animate = this.opt.animate;
 		},
-		
+
 		render: function(dim, offsets){
 			//	summary:
 			//		Run the calculations for any axes for this plot.
@@ -85,7 +85,7 @@ dojo.require("dojox.gfx.gradutils");
 					continue;
 				}
 
-				var theme = t.next("marker", [this.opt, run]), s = run.group, lpoly, 
+				var theme = t.next("marker", [this.opt, run]), s = run.group, lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 				if(typeof run.data[0] == "number"){

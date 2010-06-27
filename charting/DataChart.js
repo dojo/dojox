@@ -1,18 +1,18 @@
 dojo.provide("dojox.charting.DataChart");
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.PlotKit.blue");
-dojo.experimental("dojox.charting.DataChart"); 
+dojo.experimental("dojox.charting.DataChart");
 
 (function(){
-	
+
 	// Defaults for axes
 	//	to be mixed in with xaxis/yaxis custom properties
 	// see dojox.charting.axis2d.Default for details.
 	var _yaxis = {
-		vertical: true, 
-		min: 0, 
-		max: 10, 
-		majorTickStep: 5, 
+		vertical: true,
+		min: 0,
+		max: 10,
+		majorTickStep: 5,
 		minorTickStep: 1,
 		natural:false,
 		stroke: "black",
@@ -20,7 +20,7 @@ dojo.experimental("dojox.charting.DataChart");
 		minorTick: {stroke: "gray", length: 2},
 		majorLabels:true
 	};
-		
+
 	var _xaxis = {
 		natural: true, 		// true - no fractions
 		majorLabels: true, 	//show labels on major ticks
@@ -29,17 +29,17 @@ dojo.experimental("dojox.charting.DataChart");
 		majorTick: {stroke: "black", length: 8},
 		fixUpper:"major",
 		stroke: "black",
-		htmlLabels: true,                                                                    
+		htmlLabels: true,
 		from:1
 	};
-	
+
 	// default for chart elements
 	var chartPlot = {
 		markers: true,
 		tension:2,
 		gap:2
 	};
-	
+
 	dojo.declare("dojox.charting.DataChart", [dojox.charting.Chart2D], {
 		//	summary:
 		//		DataChart
@@ -142,7 +142,7 @@ dojo.experimental("dojox.charting.DataChart");
 		//			The name field of the store item
 		//			DO NOT SET: Set from store.labelAttribute
 		label: "name",
-		
+
 		constructor: function(node, kwArgs){
 			// summary:
 			//		Set up properties and initialize chart build.
@@ -163,41 +163,41 @@ dojo.experimental("dojox.charting.DataChart");
 			//				Options for the grid plot
 			//			chartPlot: Object
 			//				Options for chart elements (lines, bars, etc)
-			
+
 			this.domNode = dojo.byId(node);
 
 			dojo.mixin(this, kwArgs);
-			
+
 			this.xaxis = dojo.mixin(dojo.mixin({}, _xaxis), kwArgs.xaxis);
 			if(this.xaxis.labelFunc == "seriesLabels"){
 				this.xaxis.labelFunc = dojo.hitch(this, "seriesLabels");
 			}
-			
+
 			this.yaxis = dojo.mixin(dojo.mixin({}, _yaxis), kwArgs.yaxis);
 			if(this.yaxis.labelFunc == "seriesLabels"){
 				this.yaxis.labelFunc = dojo.hitch(this, "seriesLabels");
 			}
-			
+
 			// potential event's collector
 			this._events = [];
-			
+
 			this.convertLabels(this.yaxis);
 			this.convertLabels(this.xaxis);
-			
+
 			this.onSetItems = {};
 			this.onSetInterval = 0;
 			this.dataLength = 0;
 			this.seriesData = {};
 			this.seriesDataBk = {};
 			this.firstRun =  true;
-			
+
 			this.dataOffset = 0;
-			
+
 			// FIXME: looks better with this, but it's custom
 			this.chartTheme.plotarea.stroke = {color: "gray", width: 3};
-			
+
 			this.setTheme(this.chartTheme);
-			
+
 			// displayRange overrides stretchToFit
 			if(this.displayRange){
 				this.stretchToFit = false;
@@ -209,23 +209,23 @@ dojo.experimental("dojox.charting.DataChart");
 			this.addAxis("y", this.yaxis);
 			chartPlot.type = kwArgs.type || "Markers"
 			this.addPlot("default", dojo.mixin(chartPlot, kwArgs.chartPlot));
-			
+
 			this.addPlot("grid", dojo.mixin(kwArgs.grid || {}, {type: "Grid", hMinorLines: true}));
-			
+
 			if(this.showing){
-				this.render();	
+				this.render();
 			}
-			
+
 			if(kwArgs.store){
-				this.setStore(kwArgs.store, kwArgs.query, kwArgs.fieldName, kwArgs.queryOptions);	
+				this.setStore(kwArgs.store, kwArgs.query, kwArgs.fieldName, kwArgs.queryOptions);
 			}
 		},
-		
+
 		destroy: function(){
 			dojo.forEach(this._events, dojo.disconnect);
 			this.inherited(arguments);
 		},
-		
+
 		setStore: function(/*Object*/store, /* ? String*/query, /* ? String*/fieldName, /* ? Object */queryOptions){
 			//	 summary:
 			//		Sets the chart store and query
@@ -240,7 +240,7 @@ dojo.experimental("dojox.charting.DataChart");
 			this.fieldName = fieldName || this.fieldName;
 			this.label = this.store.getLabelAttributes();
 			this.queryOptions = queryOptions || queryOptions;
-			
+
 			dojo.forEach(this._events, dojo.disconnect);
 			this._events = [
 				dojo.connect(this.store, "onSet", this, "onSet"),
@@ -248,12 +248,12 @@ dojo.experimental("dojox.charting.DataChart");
 			];
 			this.fetch();
 		},
-		
+
 		show: function(){
 			// summary:
 			//		If chart is hidden, show it
 			if(!this.showing){
-				dojo.style(this.domNode, "display", "");	
+				dojo.style(this.domNode, "display", "");
 				this.showing = true;
 				this.render();
 			}
@@ -267,7 +267,7 @@ dojo.experimental("dojox.charting.DataChart");
 				this.showing = false;
 			}
 		},
-		
+
 		onSet: function(/*storeObject*/item){
 			//	summary:
 			//		Fired when a store item changes.
@@ -280,9 +280,9 @@ dojo.experimental("dojox.charting.DataChart");
 			//	is obviously short sighted, but currently used
 			//	for seriesLabels. Workaround for potential bugs
 			//	is to assign a label for which all items are unique.
-			
+
 			var nm = this.getProperty(item, this.label);
-			
+
 			// FIXME: why the check for if-in-runs?
 			if(nm in this.runs || this.comparative){
 				clearTimeout(this.onSetInterval);
@@ -300,7 +300,7 @@ dojo.experimental("dojox.charting.DataChart");
 				}),200);
 			}
 		},
-		
+
 		onError: function(/*Error*/err){
 			// stub
 			//	Fires on fetch error
@@ -312,7 +312,7 @@ dojo.experimental("dojox.charting.DataChart");
 			//		stub. Fires after data is received but
 			//		before data is parsed and rendered
 		},
-		
+
 		getProperty: function(/*storeObject*/item, prop){
 			// summary:
 			//		The main use of this function is to determine
@@ -340,7 +340,7 @@ dojo.experimental("dojox.charting.DataChart");
 			//
 			//console.log("Store:", store);console.log("items: (", items.length+")", items);console.log("Chart:", this);
 			if(!items || !items.length){ return; }
-			
+
 			if(this.items && this.items.length != items.length){
 				dojo.forEach(items, function(m){
 					var id = this.getProperty(m, "id");
@@ -357,22 +357,22 @@ dojo.experimental("dojox.charting.DataChart");
 			}
 			this.onDataReceived(items);
 			this.items = items;
-			
-			
+
+
 			if(this.comparative){
 				// all items are gathered together and used as one
 				//	series so their properties can be compared.
 				var nm = "default";
-				
+
 				this.seriesData[nm] = [];
 				this.seriesDataBk[nm] = [];
 				dojo.forEach(items, function(m, i){
 					var field = this.getProperty(m, this.fieldName);
 					this.seriesData[nm].push(field);
 				}, this);
-				
+
 			}else{
-				
+
 				// each item is a seperate series.
 				dojo.forEach(items, function(m, i){
 					var nm = this.store.getLabel(m);
@@ -380,7 +380,7 @@ dojo.experimental("dojox.charting.DataChart");
 						this.seriesData[nm] = [];
 						this.seriesDataBk[nm] = [];
 					}
-					
+
 					// the property in the item we are using
 					var field = this.getProperty(m, this.fieldName);
 					if(dojo.isArray(field)){
@@ -388,9 +388,9 @@ dojo.experimental("dojox.charting.DataChart");
 						//	live, updating data
 						//
 						this.seriesData[nm] = field;
-			
+
 					}else{
-						if(!this.scroll){ 
+						if(!this.scroll){
 							// Data updates, and "moves in place". Columns and
 							//	line markers go up and down
 							//
@@ -399,7 +399,7 @@ dojo.experimental("dojox.charting.DataChart");
 							var ar = dojo.map(new Array(i+1), function(){ return 0; });
 							ar.push(Number(field));
 							this.seriesData[nm] = ar;
-						
+
 						}else{
 							// Data updates and scrolls to the left
 							if(this.seriesDataBk[nm].length > this.seriesData[nm].length){
@@ -414,7 +414,7 @@ dojo.experimental("dojox.charting.DataChart");
 					}
 				}, this);
 			}
-			
+
 			// displayData is the segment of the data array that is within
 			// the chart boundaries
 			var displayData;
@@ -426,13 +426,13 @@ dojo.experimental("dojox.charting.DataChart");
 					this.addSeries(nm, this.seriesData[nm]);
 					displayData = this.seriesData[nm];
 				}
-			
+
 			}else{
-				
+
 				// update existing series
 				for(nm in this.seriesData){
 					displayData = this.seriesData[nm];
-					
+
 					if(this.scroll && displayData.length > this.displayRange){
 						// chart lines have gone beyond the right boundary.
 						this.dataOffset = displayData.length-this.displayRange - 1;
@@ -442,13 +442,13 @@ dojo.experimental("dojox.charting.DataChart");
 				}
 			}
 			this.dataLength = displayData.length;
-			
+
 			if(this.showing){
-				this.render();	
+				this.render();
 			}
-			
+
 		},
-		
+
 		fetch: function(){
 			// summary:
 			//		Fetches initial data. Subsequent changes
@@ -464,20 +464,20 @@ dojo.experimental("dojox.charting.DataChart");
 				onError:dojo.hitch(this, "onError")
 			});
 		},
-		
+
 		convertLabels: function(axis){
 			// summary:
 			//		Convenience method to convert a label array of strings
 			//		into an array of objects
 			//
 			if(!axis.labels || dojo.isObject(axis.labels[0])){ return null; }
-			
+
 			axis.labels = dojo.map(axis.labels, function(ele, i){
-				return {value:i, text:ele}; 
+				return {value:i, text:ele};
 			});
 			return null; // null
 		},
-		
+
 		seriesLabels: function(/*Number*/val){
 			// summary:
 			//		Convenience method that sets series labels based on item labels.
@@ -485,7 +485,7 @@ dojo.experimental("dojox.charting.DataChart");
 			if(this.series.length<1 || (!this.comparative && val>this.series.length)){ return "-"; }
 			if(this.comparative){
 				return this.store.getLabel(this.items[val]);// String
-				
+
 			}else{
 				// FIXME:
 				// Here we are setting the label base on if there is data in the array slot.
@@ -500,9 +500,9 @@ dojo.experimental("dojox.charting.DataChart");
 				}
 			}
 			return "-"; // String
-			
+
 		},
-		
+
 		resizeChart: function(/*Object*/dim){
 			//	summary:
 			//		Call this function to change the chart size.
@@ -514,5 +514,4 @@ dojo.experimental("dojox.charting.DataChart");
 			this.resize(w, h);
 		}
 	});
-	
 })();
