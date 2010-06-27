@@ -3,6 +3,7 @@ dojo.provide("dojox.charting.plot2d.Pie");
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.plot2d.common");
+dojo.require("dojox.charting.plot2d._PlotEvents");
 
 dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
@@ -67,7 +68,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 		g = dojox.gfx, m = g.matrix,
 		FUDGE_FACTOR = 0.2; // use to overlap fans
 
-	dojo.declare("dojox.charting.plot2d.Pie", dojox.charting.Element, {
+	dojo.declare("dojox.charting.plot2d.Pie", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
 		//	summary:
 		//		The plot that represents a typical pie chart.
 		defaultParams: {
@@ -101,12 +102,6 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.run = null;
 			this.dyn = [];
-		},
-		destroy: function(){
-			//	summary:
-			//		Destroy any created elements for this plot.
-			this.resetEvents();
-			this.inherited(arguments);
 		},
 		clear: function(){
 			//	summary:
@@ -149,78 +144,6 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 			//	summary:
 			//		Return the number of colors needed to draw this plot.
 			return this.run ? this.run.data.length : 0;
-		},
-
-		// events
-		plotEvent: function(o){
-			// intentionally empty --- used for events
-		},
-		raiseEvent: function(o){
-			//	summary:
-			//		Raises events in predefined order
-			//	o: Object
-			//		An object intended to represent event parameters.
-			this.plotEvent(o);
-			var t = dojo.delegate(o);
-			t.original = o.type;
-			t.type = "onindirect";
-			dojo.forEach(this.chart.stack, function(plot){
-				if(plot !== this && plot.plotEvent){
-					plot.plotEvent(t);
-				}
-			}, this);
-		},
-		connect: function(object, method){
-			//	summary:
-			//		Convenience method to connect methods to our plotEvent.
-			//	object: Object
-			//		The object connecting to our plotEvent.
-			//	method: String|Function?
-			//		The method to be executed when our plotEvent is fired.
-			//	returns: Array
-			//		A handle as returned from dojo.connect.
-			this.dirty = true;
-			return dojo.connect(this, "plotEvent", object, method);	//	Array
-		},
-		events: function(){
-			//	summary:
-			//		Find out of any handlers have been connected to our plot.
-			//	returns: Boolean
-			//		Whether or not there are handlers attached.
-			var ls = this.plotEvent._listeners;
-			if(!ls || !ls.length){ return false; }
-			for(var i in ls){
-				if(!(i in Array.prototype)){
-					return true;
-				}
-			}
-			return false;
-		},
-		resetEvents: function(){
-			//	summary:
-			//		Reset any handlers on our plot.
-			this.raiseEvent({type: "onplotreset", plot: this});
-		},
-		_connectEvents: function(shape, o){
-			o.chart = this.chart;
-			o.plot  = this;
-			o.hAxis = null;
-			o.vAxis = null;
-			shape.connect("onmouseover", this, function(e){
-				o.type  = "onmouseover";
-				o.event = e;
-				this.raiseEvent(o);
-			});
-			shape.connect("onmouseout", this, function(e){
-				o.type  = "onmouseout";
-				o.event = e;
-				this.raiseEvent(o);
-			});
-			shape.connect("onclick", this, function(e){
-				o.type  = "onclick";
-				o.event = e;
-				this.raiseEvent(o);
-			});
 		},
 
 		render: function(dim, offsets){

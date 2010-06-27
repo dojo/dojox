@@ -3,6 +3,7 @@ dojo.provide("dojox.charting.plot2d.Base");
 dojo.require("dojox.charting.scaler.primitive");
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d.common");
+dojo.require("dojox.charting.plot2d._PlotEvents");
 
 /*=====
 dojox.charting.plot2d.__PlotCtorArgs = function(){
@@ -13,7 +14,7 @@ dojox.charting.plot2d.__PlotCtorArgs = function(){
 	//		details).
 }
 =====*/
-dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
+dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
 	constructor: function(chart, kwArgs){
 		//	summary:
 		//		Create a base plot for charting.
@@ -24,12 +25,6 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 		this.zoom = null,
 		this.zoomQueue = [];	// zooming action task queue
 		this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
-	},
-	destroy: function(){
-		//	summary:
-		//		Destroy any internal elements and event handlers.
-		this.resetEvents();
-		this.inherited(arguments);
 	},
 	clear: function(){
 		//	summary:
@@ -193,91 +188,5 @@ dojo.declare("dojox.charting.plot2d.Base", dojox.charting.Element, {
 			this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
 		}
 		return this;	//	dojox.charting.plot2d.Base
-	},
-
-	// events
-	plotEvent: function(o){
-		//	summary:
-		//		Stub function for use by specific plots.
-		//	o: Object
-		//		An object intended to represent event parameters.
-	},
-	raiseEvent: function(o){
-		//	summary:
-		//		Raises events in predefined order
-		//	o: Object
-		//		An object intended to represent event parameters.
-		this.plotEvent(o);
-		var t = dojo.delegate(o);
-		t.original = o.type;
-		t.type = "onindirect";
-		dojo.forEach(this.chart.stack, function(plot){
-			if(plot !== this && plot.plotEvent){
-				plot.plotEvent(t);
-			}
-		}, this);
-	},
-	connect: function(object, method){
-		//	summary:
-		//		Helper function to connect any object's method to our plotEvent.
-		//	object: Object
-		//		The object to connect to.
-		//	method: String|Function
-		//		The method to fire when our plotEvent is fired.
-		//	returns: Array
-		//		The handle as returned from dojo.connect (see dojo.connect).
-		this.dirty = true;
-		return dojo.connect(this, "plotEvent", object, method);	//	Array
-	},
-	events: function(){
-		//	summary:
-		//		Find out if any event handlers have been connected to our plotEvent.
-		//	returns: Boolean
-		//		A flag indicating that there are handlers attached.
-		var ls = this.plotEvent._listeners;
-		if(!ls || !ls.length){ return false; }
-		for(var i in ls){
-			if(!(i in Array.prototype)){
-				return true;
-			}
-		}
-		return false;
-	},
-	resetEvents: function(){
-		//	summary:
-		//		Reset all events attached to our plotEvent (i.e. disconnect).
-		if(this._events){
-			dojo.forEach(this._events, dojo.disconnect);
-			delete this._events;
-		}
-		this.raiseEvent({type: "onplotreset", plot: this});
-	},
-	
-	// utilities
-	_connectEvents: function(shape, o){
-		o.chart = this.chart;
-		o.plot  = this;
-		o.hAxis = this.hAxis || null;
-		o.vAxis = this.vAxis || null;
-		if(!this._events){
-			this._events = [];
-		}
-		this._events.push(
-			shape.connect("onmouseover", this, function(e){
-				o.type  = "onmouseover";
-				o.event = e;
-				this.raiseEvent(o);
-			}),
-			shape.connect("onmouseout", this, function(e){
-				o.type  = "onmouseout";
-				o.event = e;
-				this.raiseEvent(o);
-			}),
-			shape.connect("onclick", this, function(e){
-				o.type  = "onclick";
-				o.event = e;
-				this.raiseEvent(o);
-			})
-		);
 	}
 });
