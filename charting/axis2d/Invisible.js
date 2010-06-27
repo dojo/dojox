@@ -4,7 +4,6 @@ dojo.require("dojox.charting.scaler.linear");
 dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.axis2d.Base");
 
-dojo.require("dojo.colors");
 dojo.require("dojo.string");
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
@@ -266,21 +265,6 @@ dojo.require("dojox.lang.utils");
 			//	summary:
 			//		Get the pre-calculated ticks object.
 			return this.ticks;	//	Object
-		},
-		getOffsets: function(){
-			//	summary:
-			//		Unconditionally returns all zeros (irrelevant for this axis type).
-			//	returns: Object
-			//		The calculated offsets in the form of { l, r, t, b } (left, right, top, bottom).
-			return {l: 0, r: 0, t: 0, b: 0};	//	Object
-		},
-		render: function(){
-			//	summary:
-			//		Does nothing (irrelevant for this axis type).
-			//	returns: dojox.charting.axis2d.Default
-			//		The reference to the axis for functional chaining.
-			this.dirty = false;
-			return this;	//	dojox.charting.axis2d.Default
 		}
 	});
 })();

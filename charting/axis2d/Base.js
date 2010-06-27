@@ -63,6 +63,7 @@ dojo.declare("dojox.charting.axis2d.Base", dojox.charting.Element, {
 		//		Stub function to render this axis.
 		//	returns: dojox.charting.axis2d.Base
 		//		A reference to the axis for functional chaining.
+		this.dirty = false;
 		return this;	//	dojox.charting.axis2d.Base
 	}
 });
