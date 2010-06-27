@@ -918,6 +918,28 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill){
 			//		A handle to the connection, as defined by dojo.connect (see dojo.connect).
 			return name in this.plots ? this.stack[this.plots[name]].connect(object, method) : null;	//	Array
 		},
+		fireEvent: function(seriesName, eventName, index){
+			//	summary:
+			//		Fires a synthetic event for a series item.
+			//	seriesName: String:
+			//		Series name.
+			//	eventName: String:
+			//		Event name to simulate: onmouseover, onmouseout, onclick.
+			//	index: Number:
+			//		Valid data value index for the event.
+			//	returns: dojox.charting.Chart2D
+			//		A reference to the current chart for functional chaining.
+			if(seriesName in this.runs){
+				var plotName = this.series[this.runs[seriesName]].plot;
+				if(plotName in this.plots){
+					var plot = this.stack[this.plots[plotName]];
+					if(plot){
+						plot.fireEvent(seriesName, eventName, index);
+					}
+				}
+			}
+			return this;	//	dojox.charting.Chart2D
+		},
 		_makeClean: function(){
 			// reset dirty flags
 			dojo.forEach(this.axes,   makeClean);
