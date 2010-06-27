@@ -58,6 +58,7 @@ dojo.require("dojox.lang.functional");
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
+				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
@@ -170,6 +171,7 @@ dojo.require("dojox.lang.functional");
 				}
 				
 				if(events){
+					var eventSeries = new Array(frontCircles.length);
 					dojo.forEach(frontCircles, function(s, i){
 						if(s !== null){
 							var o = {
@@ -187,8 +189,12 @@ dojo.require("dojox.lang.functional");
 								cr:      points[i].radius
 							};
 							this._connectEvents(s, o);
+							eventSeries[i] = o;
 						}
 					}, this);
+					this._eventSeries[run.name] = eventSeries;
+				}else{
+					delete this._eventSeries[run.name];
 				}
 				
 				run.dirty = false;

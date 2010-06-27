@@ -161,6 +161,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
+				this._eventSeries = {};
 				this.cleanGroup();
 				this.group.setTransform(null);
 				var s = this.group;
@@ -297,6 +298,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 							frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
 						}, this);
 						if(events){
+							var eventSeries = new Array(frontMarkers.length);
 							dojo.forEach(frontMarkers, function(s, i){
 								var o = {
 									element: "marker",
@@ -316,7 +318,15 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 									o.y = rsegments[seg][i].y;
 								}
 								this._connectEvents(s, o);
+								eventSeries[i] = o;
 							}, this);
+							// post-process events to restore the original indexing
+							var esi = 0;
+							this._eventSeries[run.name] = df.map(run.data, function(v){
+								return v === null ? null : eventSeries[esi++];
+							});
+						}else{
+							delete this._eventSeries[run.name];
 						}
 					}
                 }

@@ -57,6 +57,7 @@ dojo.require("dojox.lang.functional.reversed");
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
+				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
@@ -76,7 +77,8 @@ dojo.require("dojox.lang.functional.reversed");
 					continue;
 				}
 				run.cleanGroup();
-				var theme = t.next("column", [this.opt, run]), s = run.group;
+				var theme = t.next("column", [this.opt, run]), s = run.group,
+					eventSeries = new Array(acc.length);
 				for(var j = 0; j < acc.length; ++j){
 					var value = run.data[j];
 					if(value !== null){
@@ -106,6 +108,7 @@ dojo.require("dojox.lang.functional.reversed");
 									y:       v
 								};
 								this._connectEvents(shape, o);
+								eventSeries[j] = o;
 							}
 							if(this.animate){
 								this._animateColumn(shape, dim.height - offsets.b, height);
@@ -113,6 +116,7 @@ dojo.require("dojox.lang.functional.reversed");
 						}
 					}
 				}
+				this._eventSeries[run.name] = eventSeries;
 				run.dirty = false;
 				// update the accumulator
 				for(var j = 0; j < run.data.length; ++j){

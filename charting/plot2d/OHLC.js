@@ -118,6 +118,7 @@ dojo.require("dojox.lang.functional.reversed");
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
+				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
@@ -139,8 +140,8 @@ dojo.require("dojox.lang.functional.reversed");
 					continue;
 				}
 				run.cleanGroup();
-				var theme = t.next("candlestick", [this.opt, run]), s = run.group;
-
+				var theme = t.next("candlestick", [this.opt, run]), s = run.group,
+					eventSeries = new Array(run.data.length);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
 					if(v !== null){
@@ -187,6 +188,7 @@ dojo.require("dojox.lang.functional.reversed");
 									data:	 v
 								};
 								this._connectEvents(shape, o);
+								eventSeries[j] = o;
 							}
 						}
 						if(this.animate){
@@ -194,6 +196,7 @@ dojo.require("dojox.lang.functional.reversed");
 						}
 					}
 				}
+				this._eventSeries[run.name] = eventSeries;
 				run.dirty = false;
 			}
 			this.dirty = false;

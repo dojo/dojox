@@ -157,6 +157,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 			//		A reference to this plot for functional chaining.
 			if(!this.dirty){ return this; }
 			this.dirty = false;
+			this._eventSeries = {};
 			this.cleanGroup();
 			var s = this.group, t = this.chart.theme;
 			this.resetEvents();
@@ -229,6 +230,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 
 			this.dyn = [];
 			// draw slices
+			var eventSeries = new Array(slices.length);
 			dojo.some(slices, function(slice, i){
 				if(slice <= 0){
 					// degenerated slice
@@ -260,6 +262,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 							cr:      r
 						};
 						this._connectEvents(shape, o);
+						eventSeries[i] = o;
 					}
 
 					return true;	// stop iteration
@@ -336,6 +339,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 						cr:      r
 					};
 					this._connectEvents(shape, o);
+					eventSeries[i] = o;
 				}
 
 				start = end;
@@ -379,6 +383,11 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 					return false;	// continue
 				}, this);
 			}
+			// post-process events to restore the original indexing
+			var esi = 0;
+			this._eventSeries[this.run.name] = df.map(run, function(v){
+				return v <= 0 ? null : eventSeries[esi++];
+			});
 			return this;	//	dojox.charting.plot2d.Pie
 		},
 

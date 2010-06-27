@@ -57,6 +57,7 @@ dojo.require("dojox.lang.functional.reversed");
 			this.dirty = this.isDirty();
 			if(this.dirty){
 				dojo.forEach(this.series, purgeGroup);
+				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
@@ -160,6 +161,7 @@ dojo.require("dojox.lang.functional.reversed");
 						frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
 					}, this);
 					if(events){
+						var eventSeries = new Array(frontMarkers.length);
 						dojo.forEach(frontMarkers, function(s, i){
 							var o = {
 								element: "marker",
@@ -174,7 +176,11 @@ dojo.require("dojox.lang.functional.reversed");
 								y:       run.data[i]
 							};
 							this._connectEvents(s, o);
+							eventSeries[i] = o;
 						}, this);
+						this._eventSeries[run.name] = eventSeries;
+					}else{
+						delete this._eventSeries[run.name];
 					}
 				}
 				run.dirty = false;
