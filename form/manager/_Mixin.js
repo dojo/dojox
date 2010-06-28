@@ -288,10 +288,10 @@ dojo.require("dijit._Widget");
 				// input/radio array of widgets
 				if(isSetter){
 					dojo.forEach(elem, function(widget){
-						widget.attr("checked", false);
+						widget.attr("checked", false, !this.watch);
 					});
 					dojo.forEach(elem, function(widget){
-						widget.attr("checked", widget.attr("value") === value);
+						widget.attr("checked", widget.attr("value") === value, !this.watch);
 					});
 					return this;	// self
 				}
@@ -311,7 +311,7 @@ dojo.require("dijit._Widget");
 			}
 			// all other elements
 			if(isSetter){
-				elem.attr("value", value);
+				elem.attr("value", value, !this.watch);
 				return this;	// self
 			}
 			return elem.attr("value");	// Object
