@@ -78,6 +78,7 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 				o.type  = eventName;
 				o.event = e;
 				this.raiseEvent(o);
+				o.event = null;
 			})
 		});
 	},
@@ -96,13 +97,26 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 			dojo.forEach(a, this._connectEvents, this);
 		}
 	},
-	fireEvent: function(seriesName, eventName, index){
+	fireEvent: function(seriesName, eventName, index, eventObject){
+		//	summary:
+		//		Emulates firing an event for a given data value (specified by
+		//		an index) of a given series.
+		//	seriesName: String:
+		//		Series name.
+		//	eventName: String:
+		//		Event name to emulate.
+		//	index:	Number:
+		//		Valid data value index used to raise an event.
+		//	eventObject: Object?:
+		//		Optional event object. Especially useful for synthetic events.
+		//		Default: null.
 		var s = this._eventSeries[seriesName];
 		if(s && s.length && index < s.length){
 			var o = s[index];
 			o.type  = eventName;
-			o.event = null;
+			o.event = eventObject || null;
 			this.raiseEvent(o);
+			o.event = null;
 		}
 	}
 });
