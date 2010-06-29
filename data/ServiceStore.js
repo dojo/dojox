@@ -91,10 +91,10 @@ dojo.declare("dojox.data.ServiceStore",
 			// We supply a default idAttribute for parser driven construction, but if no id attribute
 			//	is supplied, it should be null so that auto identification takes place properly
 			this.idAttribute = (options && options.idAttribute) || (this.schema && this.schema._idAttr);
-			this.labelAttribute = this.labelAttribute || "label";
 		},
 		schema: null,
 		idAttribute: "id",
+		labelAttribute: "label",
 		syncMode: false,
 		estimateCountFactor: 1,
 		getSchema: function(){
@@ -133,6 +133,13 @@ dojo.declare("dojox.data.ServiceStore",
 			//		property to look up value for
 
 			var val = this.getValue(item,property);
+			if(val instanceof Array){
+				return val;
+			}
+			if(!this.isItemLoaded(val)){
+				dojox.rpc._sync = true;
+				val = this.loadItem({item:val});
+			}
 			return val instanceof Array ? val : val === undefined ? [] : [val];
 		},
 
