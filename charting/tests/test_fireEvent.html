@@ -96,7 +96,7 @@ function makeObjects(){
 
 	chart.addAxis("y", {vertical: true, natural: true, includeZero: true, fixUpper: "minor"});
 
-	chart.addPlot("default", {type: dijit.byId("plot").attr("value"), gap: 2});
+	chart.addPlot("default", {type: dijit.byId("plot").get("value"), gap: 2});
     addActions(chart);
 
 	chart.addPlot("empty"); // just to see indirect events
@@ -117,7 +117,7 @@ function makeObjects(){
 dojo.addOnLoad(makeObjects);
 
 changePlot = function(){
-	var type = dijit.byId("plot").attr("value"),
+	var type = dijit.byId("plot").get("value"),
         opts = {type: type, gap: 2};
     switch(type){
         case "Lines":
@@ -136,9 +136,9 @@ changePlot = function(){
 
 fireEvent = function(type){
     chart.fireEvent(
-        dijit.byId("series").attr("value"),
+        dijit.byId("series").get("value"),
         type,
-        dijit.byId("index").attr("value")
+        dijit.byId("index").get("value")
     );
 }
 
