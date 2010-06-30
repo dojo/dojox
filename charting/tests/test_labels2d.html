@@ -140,6 +140,54 @@ makeObjects = function(){
 		}
 	);
 	chart4.render();
+
+	var chart5 = new dojox.charting.Chart2D("test5").
+			addAxis("x", {
+				fixLower: "major", fixUpper: "major", includeZero: true, 
+				labels: [
+					{value: 0, text: "zero"},
+					{value: 2, text: "two"},
+					{value: 4, text: "four"}
+				],
+				rotation: 30
+			}).
+			addAxis("y", {
+				vertical: true, fixLower: "major", fixUpper: "major", natural: true,
+				labels: [{value: 0, text: ""},
+					{value: 1, text: "January"}, {value: 2, text: "February"},
+					{value: 3, text: "March"}, {value: 4, text: "April"},
+					{value: 5, text: "May"}, {value: 6, text: "June"}
+				],
+				rotation: -30
+			}).
+			addPlot("default", {type: "Bars"}).
+			addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"}).
+			addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"}).
+			render();
+
+	var chart6 = new dojox.charting.Chart2D("test6").
+			addAxis("x", {
+				fixLower: "major", fixUpper: "major", includeZero: true, 
+				labels: [
+					{value: 0, text: "zero"},
+					{value: 2, text: "two"},
+					{value: 4, text: "four"}
+				],
+				rotation: 180
+			}).
+			addAxis("y", {
+				vertical: true, fixLower: "major", fixUpper: "major", natural: true, majorTickStep: 2,
+				labels: [{value: 0, text: ""},
+					{value: 1, text: "January"}, {value: 2, text: "February"},
+					{value: 3, text: "March"}, {value: 4, text: "April"},
+					{value: 5, text: "May"}, {value: 6, text: "June"}
+				],
+				rotation: 90
+			}).
+			addPlot("default", {type: "Bars"}).
+			addSeries("Series A", [1, 2, 3, 4, 5], {stroke: {color: "red"}, fill: "lightpink"}).
+			addSeries("Series B", [5, 4, 3, 2, 1], {stroke: {color: "blue"}, fill: "lightblue"}).
+			render();
 };
 
 dojo.addOnLoad(makeObjects);
@@ -155,8 +203,12 @@ dojo.addOnLoad(makeObjects);
 <div id="test2" style="width: 200px; height: 200px;"></div>
 <p>3: Bars, axes aligned on major ticks, no minor ticks, custom strokes and fills, custom labels with spaces.</p>
 <div id="test3" style="width: 200px; height: 200px;"></div>
-<p>4: Trying to make it look good</p>
+<p>4: Trying to make it look good.</p>
 <div id="test4" style="width: 200px; height: 200px;"></div>
+<p>5: Label rotation.</p>
+<div id="test5" style="width: 200px; height: 200px;"></div>
+<p>6: Label rotation (opposite).</p>
+<div id="test6" style="width: 200px; height: 200px;"></div>
 <p>That's all Folks!</p>
 </body>
 </html>

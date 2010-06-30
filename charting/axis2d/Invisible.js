@@ -16,7 +16,8 @@ dojo.require("dojox.lang.utils");
 		g = dojox.gfx,
 		lin = dc.scaler.linear,
 		merge = du.merge,
-		labelGap = 4;	// in pixels
+		labelGap = 4,			// in pixels
+		centerAnchorLimit = 45;	// in degrees
 
 	dojo.declare("dojox.charting.axis2d.Invisible", dojox.charting.axis2d.Base, {
 		//	summary:
@@ -63,7 +64,8 @@ dojo.require("dojox.lang.utils");
 			majorLabels: true,		// draw major labels
 			minorTicks:  true,		// draw minor ticks
 			minorLabels: true,		// draw minor labels
-			microTicks:  false		// draw micro ticks
+			microTicks:  false,		// draw micro ticks
+			rotation:    0			// label rotation angle in degrees
 		},
 		optionalParams: {
 			min:			0,	// minimal value on this axis
@@ -157,9 +159,9 @@ dojo.require("dojox.lang.utils");
 			//	max: Number
 			//		The largest value represented on this axis.
 			//	span: Number
-			//		The span over which axis calculations are made (TODO: Eugene, is this right?)
-			//	labels: dojox.charting.axis2d.__AxisCtorArgs?
-			//		Optional keyword argument object to help determine options (TODO: Eugene, is this right?)
+			//		The span in pixels over which axis calculations are made.
+			//	labels: String[]
+			//		Optional list of labels.
 			//	returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			if(this.initialized()){
@@ -206,18 +208,22 @@ dojo.require("dojox.lang.utils");
 					delete this.offset;
 				}
 			}
-			var minMinorStep = 0, ta = this.chart.theme.axis,
+
+			var ta = this.chart.theme.axis, labelWidth = 0, rotation = o.rotation % 360,
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
 				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
-				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
-			if(this.vertical){
-				if(size){
-					minMinorStep = size + labelGap;
-				}
-			}else{
-				if(size){
-					var labelWidth, i;
-					if(o.labelFunc && o.maxLabelSize){
+				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
+				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
+				sinr = Math.abs(Math.sin(rotation * Math.PI / 180));
+
+			if(rotation < 0){
+				rotation += 360;
+			}
+
+			if(size){
+				if(this.vertical && (rotation != 0 && rotation != 180) || (rotation != 90 && rotation != 270)){
+					// we need width of all labels
+					if(o.maxLabelSize){
 						labelWidth = o.maxLabelSize;
 					}else if(this.labels){
 						labelWidth = this._groupLabelWidth(this.labels, taFont);
@@ -240,19 +246,33 @@ dojo.require("dojox.lang.utils");
 						);
 						if(precision > 0){
 							t.push(".");
-							for(i = 0; i < precision; ++i){
-								t.push("9");
-							}
+							t.push(dojo.string.rep("9", precision));
 						}
 						labelWidth = dojox.gfx._base._getTextBox(
 							t.join(""),
 							{ font: taFont }
 						).w;
 					}
-					minMinorStep = labelWidth + labelGap;
+				}else{
+					labelWidth = size;
+				}
+				switch(rotation){
+					case 0:
+					case 90:
+					case 180:
+					case 270:
+						// trivial cases: use labelWidth
+						break;
+					default:
+						// rotated labels
+						var gap1 = Math.sqrt(labelWidth * labelWidth + size * size),									// short labels
+							gap2 = this.vertical ? size * cosr + labelWidth * sinr : labelWidth * cosr + size * sinr;	// slanted labels
+						labelWidth = Math.min(gap1, gap2);
+						break;
 				}
 			}
-			this.scaler.minMinorStep = minMinorStep;
+
+			this.scaler.minMinorStep = labelWidth + labelGap;
 			this.ticks = lin.buildTicks(this.scaler, o);
 			return this;	//	dojox.charting.axis2d.Default
 		},
