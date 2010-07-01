@@ -73,8 +73,8 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 	},
 	_connectSingleEvent: function(o, eventName){
 		this._shapeEvents.push({
-			shape:  o.shape,
-			handle: o.shape.connect(eventName, this, function(e){
+			shape:  o.eventMask,
+			handle: o.eventMask.connect(eventName, this, function(e){
 				o.type  = eventName;
 				o.event = e;
 				this.raiseEvent(o);
@@ -87,6 +87,7 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 		o.plot  = this;
 		o.hAxis = this.hAxis || null;
 		o.vAxis = this.vAxis || null;
+		o.eventMask = o.eventMask || o.shape;
 		this._connectSingleEvent(o, "onmouseover");
 		this._connectSingleEvent(o, "onmouseout");
 		this._connectSingleEvent(o, "onclick");
