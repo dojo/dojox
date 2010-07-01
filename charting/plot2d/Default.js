@@ -303,7 +303,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 							dojo.forEach(frontMarkers, function(s, i){
 								var o = {
 									element: "marker",
-									index:   i,
+									index:   i + startindexes[seg],
 									run:     run,
 									shape:   s,
 									outline: outlineMarkers[i] || null,
