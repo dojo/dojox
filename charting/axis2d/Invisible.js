@@ -221,7 +221,7 @@ dojo.require("dojox.lang.utils");
 			}
 
 			if(size){
-				if(this.vertical && (rotation != 0 && rotation != 180) || (rotation != 90 && rotation != 270)){
+				if(this.vertical ? rotation != 0 && rotation != 180 : rotation != 90 && rotation != 270){
 					// we need width of all labels
 					if(o.maxLabelSize){
 						labelWidth = o.maxLabelSize;

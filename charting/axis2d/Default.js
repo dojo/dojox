@@ -226,7 +226,7 @@ dojo.require("dojox.lang.utils");
 				taMajorTick = this.chart.theme.getTick("major", o),
 				taMinorTick = this.chart.theme.getTick("minor", o),
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
-				rotation = o.rotation % 360,
+				rotation = o.rotation % 360, leftBottom = o.leftBottom,
 				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
 				sinr = Math.abs(Math.sin(rotation * Math.PI / 180));
 			if(rotation < 0){
@@ -248,7 +248,7 @@ dojo.require("dojox.lang.utils");
 					], taFont);
 				}
 				if(this.vertical){
-					var side = o.leftBottom ? "l" : "r";
+					var side = leftBottom ? "l" : "r";
 					switch(rotation){
 						case 0:
 						case 180:
@@ -263,50 +263,50 @@ dojo.require("dojox.lang.utils");
 						default:
 							if(rotation <= centerAnchorLimit || (180 < rotation && rotation <= (180 + centerAnchorLimit))){
 								offsets[side] = size * sinr / 2 + labelWidth * cosr;
-								offsets[o.leftBottom ? "t" : "b"] = size * cosr / 2 + labelWidth * sinr;
-								offsets[o.leftBottom ? "b" : "t"] = size * cosr / 2;
+								offsets[leftBottom ? "t" : "b"] = size * cosr / 2 + labelWidth * sinr;
+								offsets[leftBottom ? "b" : "t"] = size * cosr / 2;
 							}else if(rotation > (360 - centerAnchorLimit) || (180 > rotation && rotation > (180 - centerAnchorLimit))){
 								offsets[side] = size * sinr / 2 + labelWidth * cosr;
-								offsets[o.leftBottom ? "b" : "t"] = size * cosr / 2 + labelWidth * sinr;
-								offsets[o.leftBottom ? "t" : "b"] = size * cosr / 2;
+								offsets[leftBottom ? "b" : "t"] = size * cosr / 2 + labelWidth * sinr;
+								offsets[leftBottom ? "t" : "b"] = size * cosr / 2;
 							}else if(rotation < 90 || (180 < rotation && rotation < 270)){
 								offsets[side] = size * sinr + labelWidth * cosr;
-								offsets[o.leftBottom ? "t" : "b"] = size * cosr + labelWidth * sinr;
+								offsets[leftBottom ? "t" : "b"] = size * cosr + labelWidth * sinr;
 							}else{
 								offsets[side] = size * sinr + labelWidth * cosr;
-								offsets[o.leftBottom ? "b" : "t"] = size * cosr + labelWidth * sinr;
+								offsets[leftBottom ? "b" : "t"] = size * cosr + labelWidth * sinr;
 							}
 							break;
 					}
 					offsets[side] += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
 				}else{
-					var side = o.leftBottom ? "b" : "t";
+					var side = leftBottom ? "b" : "t";
 					switch(rotation){
 						case 0:
 						case 180:
 							offsets[side] = size;
-							offsets.t = offsets.b = labelWidth / 2;
+							offsets.l = offsets.r = labelWidth / 2;
 							break;
 						case 90:
 						case 270:
 							offsets[side] = labelWidth;
-							offsets.t = offsets.b = size / 2;
+							offsets.l = offsets.r = size / 2;
 							break;
 						default:
 							if((90 - centerAnchorLimit) <= rotation && rotation <= 90 || (270 - centerAnchorLimit) <= rotation && rotation <= 270){
 								offsets[side] = size * sinr / 2 + labelWidth * cosr;
-								offsets[o.leftBottom ? "r" : "l"] = size * cosr / 2 + labelWidth * sinr;
-								offsets[o.leftBottom ? "l" : "r"] = size * cosr / 2;
+								offsets[leftBottom ? "r" : "l"] = size * cosr / 2 + labelWidth * sinr;
+								offsets[leftBottom ? "l" : "r"] = size * cosr / 2;
 							}else if(90 <= rotation && rotation <= (90 + centerAnchorLimit) || 270 <= rotation && rotation <= (270 + centerAnchorLimit)){
 								offsets[side] = size * sinr / 2 + labelWidth * cosr;
-								offsets[o.leftBottom ? "l" : "r"] = size * cosr / 2 + labelWidth * sinr;
-								offsets[o.leftBottom ? "r" : "l"] = size * cosr / 2;
+								offsets[leftBottom ? "l" : "r"] = size * cosr / 2 + labelWidth * sinr;
+								offsets[leftBottom ? "r" : "l"] = size * cosr / 2;
 							}else if(rotation < centerAnchorLimit || (180 < rotation && rotation < (180 - centerAnchorLimit))){
 								offsets[side] = size * sinr + labelWidth * cosr;
-								offsets[o.leftBottom ? "r" : "l"] = size * cosr + labelWidth * sinr;
+								offsets[leftBottom ? "r" : "l"] = size * cosr + labelWidth * sinr;
 							}else{
 								offsets[side] = size * sinr + labelWidth * cosr;
-								offsets[o.leftBottom ? "l" : "r"] = size * cosr + labelWidth * sinr;
+								offsets[leftBottom ? "l" : "r"] = size * cosr + labelWidth * sinr;
 							}
 							break;
 					}
