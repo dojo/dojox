@@ -377,14 +377,12 @@ dojo.require("dojox.lang.utils");
 							labelOffset.y = size * 0.4;
 						}else if(rotation < 90){
 							labelAlign = "end";
+							labelOffset.y = size * 0.4;
 						}else if(rotation < (180 - centerAnchorLimit)){
 							labelAlign = "start";
-						}else if(rotation < 180){
-							labelAlign = "start";
-							labelOffset.y = leftBottom ? size * 0.4 : -size * 0.4;
 						}else if(rotation < (180 + centerAnchorLimit)){
 							labelAlign = "start";
-							labelOffset.y = leftBottom ? -size * 0.4 : size * 0.4;
+							labelOffset.y = -size * 0.4;
 						}else if(rotation < 270){
 							labelAlign = "start";
 							labelOffset.x = leftBottom ? 0 : size * 0.4;
@@ -452,7 +450,7 @@ dojo.require("dojox.lang.utils");
 							labelOffset.y = leftBottom ? 0 : -size;
 						}else if(rotation < (270 + centerAnchorLimit)){
 							labelAlign = "end";
-							labelOffset.y = leftBottom ? 0 : -size * 0.4;
+							labelOffset.y = leftBottom ? size * 0.4 : 0;
 						}else{
 							labelAlign = "end";
 							labelOffset.y = leftBottom ? size : 0;
