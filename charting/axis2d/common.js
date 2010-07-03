@@ -138,6 +138,7 @@ dojo.require("dojox.gfx");
 					}
 				}
 				s.top = Math.floor(y - size) + "px";
+				s.whiteSpace = "nowrap";	// hack for WebKit
 				// setup the wrapper node
 				var wrap = dojo.doc.createElement("div"), w = wrap.style;
 				clearNode(w);
