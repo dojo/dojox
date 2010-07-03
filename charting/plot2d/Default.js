@@ -187,7 +187,8 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 				var theme = t.next(this.opt.areas ? "area" : "line", [this.opt, run], true),
 					s = run.group, rsegments = [], startindexes = [], rseg = null, lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
-					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
+					eventSeries = this._eventSeries[run.name] = new Array(run.data.length);
 
                 // split the run data into dense segments (each containing no nulls)
                 for(var j = 0; j < run.data.length; j++){
@@ -299,7 +300,6 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 							frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
 						}, this);
 						if(events){
-							var eventSeries = new Array(frontMarkers.length);
 							dojo.forEach(frontMarkers, function(s, i){
 								var o = {
 									element: "marker",
@@ -312,20 +312,15 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 									cy:      lpoly[i].y
 								};
 								if(typeof rsegments[seg][0] == "number"){
-									o.x = i + 1;
+									o.x = i + startindexes[seg] + 1;
 									o.y = rsegments[seg][i];
 								}else{
 									o.x = rsegments[seg][i].x;
 									o.y = rsegments[seg][i].y;
 								}
 								this._connectEvents(o);
-								eventSeries[i] = o;
+								eventSeries[i + startindexes[seg]] = o;
 							}, this);
-							// post-process events to restore the original indexing
-							var esi = 0;
-							this._eventSeries[run.name] = df.map(run.data, function(v){
-								return v === null ? null : eventSeries[esi++];
-							});
 						}else{
 							delete this._eventSeries[run.name];
 						}
