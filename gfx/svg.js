@@ -13,26 +13,26 @@ dojo.require("dojox.gfx.path");
 		//		Internal helper to deal with creating elements that
 		//		are namespaced.  Mainly to get SVG markup output
 		//		working on IE.
-		if(document.createElementNS){
-			return document.createElementNS(ns,nodeType);
+		if(dojo.doc.createElementNS){
+			return dojo.doc.createElementNS(ns,nodeType);
 		}else{
-			return document.createElement(nodeType);
+			return dojo.doc.createElement(nodeType);
 		}
 	}
 	
 	var _createTextNode = function(text) {
 		if (svg.useSvgWeb) {
-			return document.createTextNode(text, true);
+			return dojo.doc.createTextNode(text, true);
 		} else {
-			return document.createTextNode(text);
+			return dojo.doc.createTextNode(text);
 		}
 	}
 	
 	var _createFragment = function() {
 		if (svg.useSvgWeb) {
-			return document.createDocumentFragment(true);
+			return dojo.doc.createDocumentFragment(true);
 		} else {
-			return document.createDocumentFragment();
+			return dojo.doc.createDocumentFragment();
 		}
 	}
 
@@ -723,7 +723,7 @@ else
 			var id = parentNode.id ? parentNode.id+'_svgweb' : g._base._getUniqueId();
 			
 			// create dynamic svg root
-			var mockSvg = document.createElementNS(svg.xmlns.svg, 'svg');
+			var mockSvg = _createElementNS(svg.xmlns.svg, 'svg');
 			mockSvg.id = id;
 			mockSvg.setAttribute('width', width);
 			mockSvg.setAttribute('height', height);
