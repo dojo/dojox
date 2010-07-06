@@ -604,6 +604,12 @@ dojox.date.timezone = function(){
 	// summary:
 	//	mix-in to dojo.date to provide timezones based on
 	//	the Olson timezone data
+	//
+	// description:
+	//	mix-in to dojo.date to provide timezones based on
+	//	the Olson timezone data.
+	//	If you pass "timezone" as a parameter to your format options,
+	//	then you get the date formatted (and offset) for that timezone
 
 //TODOC
 };
