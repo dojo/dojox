@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * Dojo port of fleegix date plugin from
  *
  *   http://js.fleegix.org/plugins/date/date
@@ -8,7 +8,7 @@
  *
  * Credits: Ideas included from incomplete JS implementation of Olson
  * parser, "XMLDate" by Philippe Goetz (philippe.goetz@wanadoo.fr)
- ******************************************************************************/
+ *****************************************************************************/
 dojo.experimental("dojox.date.timezone");
 dojo.provide("dojox.date.timezone");
 
@@ -599,19 +599,35 @@ dojo.require("dojo.date.locale");
 		return res; // String
 	}
 	
+/*=====
+dojox.date.timezone = function(){
+	// summary:
+	//	mix-in to dojo.date to provide timezones based on
+	//	the Olson timezone data
+
+//TODOC
+};
+
+dojox.date.timezone.getTzInfo = function(dt, tz){
+	// summary:
+	//	Returns the timezone information for the given date and
+	//	timezone string
+	//
+	// dt: Date
+	//	The Date - a "proxyDate"
+	//
+	// tz: String
+	//	String representation of the timezone you want to get info
+	//	for date
+};
+
+dojox.date.timezone.getAllZones = function(){
+	// summary:
+	//	Returns an array of zones that have been loaded
+};
+=====*/
 	_d.setObject("dojox.date.timezone", {
 		getTzInfo: function(/* Date */ dt, /* String */ tz){
-			// summary:
-			//		Returns the timezone information for the given date and
-			//		timezone string
-			//
-			// dt: Date
-			//		The Date - a "proxyDate"
-			//
-			// tz: String
-			//		String representation of the timezone you want to get info
-			//		for date
-
 			// Lazy-load any zones not yet loaded
 			if(loadingScheme == "lazyLoad"){
 				// Get the correct region for the zone
@@ -643,8 +659,6 @@ dojo.require("dojo.date.locale");
 			return { tzOffset: off, tzAbbr: abbr }; // Object
 		},
 		getAllZones: function(){
-			// summary:
-			//		Returns an array of zones that have been loaded
 			var arr = [];
 			for(var z in _zones){ arr.push(z); }
 			arr.sort();
