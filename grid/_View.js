@@ -441,9 +441,10 @@ dojo.require("dojo.dnd.Manager");
 							inCell.grid.sortInfo > 0 ? 'dojoxGridSortUp' : 'dojoxGridSortDown',
 							'"><div class="dojoxGridArrowButtonChar">',
 							inCell.grid.sortInfo > 0 ? '&#9650;' : '&#9660;',
-							'</div><div class="dojoxGridArrowButtonNode" role="presentation"></div>']);
+							'</div><div class="dojoxGridArrowButtonNode" role="presentation"></div>',
+							'<div class="dojoxGridColCaption">']);
 			}
-			ret = ret.concat([n, '</div>']);
+			ret = ret.concat([n, '</div></div>']);
 			return ret.join('');
 		},
 
