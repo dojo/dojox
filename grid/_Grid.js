@@ -329,10 +329,6 @@ dojo.requireLocalization("dijit", "loading");
 		// initialization
 		buildRendering: function(){
 			this.inherited(arguments);
-			// reset get from blank function (needed for markup parsing) to null, if not changed
-			if(this.get == dojox.grid._Grid.prototype.get){
-				this.get = null;
-			}
 			if(!this.domNode.getAttribute('tabIndex')){
 				this.domNode.tabIndex = "0";
 			}
