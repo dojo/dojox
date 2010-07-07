@@ -46,8 +46,31 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 		this._attachTemplateNodes(node);
 
 		if(this.widgetsInTemplate){
-			var childWidgets = dojo.parser.parse(node);
-			this._attachTemplateNodes(childWidgets, function(n,p){
+			//Make sure dojoType is used for parsing widgets in template.
+			//The dojo.parser.query could be changed from multiversion support.
+			var parser = dojo.parser, qry, attr;
+			if(parser._query != "[dojoType]"){
+				qry = parser._query;
+				attr = parser._attrName;
+				parser._query = "[dojoType]";
+				parser._attrName = "dojoType";
+			}
+
+			//Store widgets that we need to start at a later point in time
+			var cw = (this._startupWidgets = dojo.parser.parse(node, {
+				noStart: !this._earlyTemplatedStartup,
+				inherited: {dir: this.dir, lang: this.lang}
+			}));
+
+			//Restore the query. 
+			if(qry){
+				parser._query = qry;
+				parser._attrName = attr;
+			}
+
+			this._supportingWidgets = dijit.findWidgets(node);
+
+			this._attachTemplateNodes(cw, function(n,p){
 				return n[p];
 			});
 		}
@@ -88,5 +111,13 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 	},
 	render: function(){
 		this.buildRendering();
+	},
+	startup: function(){
+		dojo.forEach(this._startupWidgets, function(w){
+			if(w && !w._started && w.startup){
+				w.startup();
+			}
+		});
+		this.inherited(arguments);
 	}
 });
