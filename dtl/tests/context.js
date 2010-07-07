@@ -13,9 +13,18 @@ doh.register("dojox.dtl.context",
 		function test_context_push(t){
 			var context = new dojox.dtl.Context({ foo: "foo", bar: "bar" });
 			context = context.push();
-			for(var key in context._dicts[0]){
-				t.t(key == "foo" || key == "bar");
+			var found = false;
+			for(var key in context){
+				if(key == "foo" || key == "bar"){
+					found = true;
+				}
 			}
+			t.t(found);
+		},
+		function test_context_getter(t){
+			var context = new dojox.dtl.Context({foo: "foo", bar: "bar", get: function(key){ return key + "TEST"; }});
+			var tpl = new dojox.dtl.Template("{{ foo }}-{{ bar }}");
+			t.is("fooTEST-barTEST", tpl.render(context));
 		},
 		function test_context_pop(t){
 			var context = new dojox.dtl.Context({ foo: "foo", bar: "bar" });
