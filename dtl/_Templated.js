@@ -24,8 +24,12 @@ dojo.declare("dojox.dtl._Templated", dijit._Templated, {
 			}
 		}
 		if(!node){
+			var context = new dojox.dtl._Context(this);
+			if(!this._created){
+				delete context._getter;
+			}
 			var nodes = dojo._toDom(
-				this._template.render(new dojox.dtl._Context(this))
+				this._template.render(context)
 			);
 			// TODO: is it really necessary to look for the first node?
 			if(nodes.nodeType !== 1 && nodes.nodeType !== 3){

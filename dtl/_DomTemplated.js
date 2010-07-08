@@ -24,7 +24,11 @@ dojox.dtl._DomTemplated.prototype = {
 			ddcd.widgetsInTemplate = old;
 		}
 
-		this.render();
+		var context = this._getContext();
+		if(!this._created){
+			delete context._getter;
+		}
+		this.render(context);
 
 		this.domNode = this.template.getRootNode();
 		if(this.srcNodeRef && this.srcNodeRef.parentNode){
