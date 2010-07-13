@@ -14,9 +14,9 @@ dependencies = {
 			]
 		},
 		{
-			name: "../dojox/mobileApp.js",
+			name: "../dojox/mobile/app.js",
 			dependencies: [
-				"dojox.mobileApp"
+				"dojox.mobile.app"
 			]
 		},
 		{
