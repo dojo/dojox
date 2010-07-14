@@ -707,7 +707,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:call-template name="transform-processor">
 			<xsl:with-param name="transforms" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>		
+		<xsl:text>}</xsl:text>		
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<!-- SVG Element Handling -->
@@ -741,7 +744,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:call-template name="common-attributes">
 			<xsl:with-param name="node" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:ellipse">
@@ -750,12 +756,15 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:apply-templates select="@id"/>
 		<xsl:text>shape:{type:"ellipse",</xsl:text>
 		<xsl:apply-templates select="@cx|@cy|@rx|@ry"/>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
 		<xsl:value-of select="$groupAttrs"/>
 		<xsl:call-template name="common-attributes">
 			<xsl:with-param name="node" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:g">
@@ -780,13 +789,19 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:apply-templates select="&SupportedElements;">
 			<xsl:with-param name="groupAttrs" select="$newGroupAttrs"/>
 		</xsl:apply-templates>
-		<xsl:text>],</xsl:text>
+		<xsl:text>]</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 		<!-- When GFX gets group fills etc., remove the following line and uncomment the ones below. -->
 		<xsl:apply-templates select="@transform"/>
 		<!--<xsl:call-template name="common-attributes">-->
 		<!--	<xsl:with-param name="node" select="."/>-->
 		<!--</xsl:call-template>-->
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:image">
@@ -823,7 +838,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:call-template name="common-attributes">
 			<xsl:with-param name="node" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:linearGradient">
@@ -849,7 +867,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<!-- Uncommenting the following would support it here. -->
 		<!-- <xsl:apply-templates select="@x1|@x2|@y1|@y2"/> -->
 		<!-- <xsl:apply-templates select="@gradientTransform"/> -->
-		<xsl:text>]},</xsl:text>
+		<xsl:text>]}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:path">
@@ -875,7 +896,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<!-- GFX only seems to handle image pattern type fills, so that's all we do -->
 		<xsl:text>{type:"pattern",</xsl:text>
 		<xsl:apply-templates select="@width|@height|@xlink:href"/>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:polygon|svg:polyline">
@@ -910,7 +934,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:call-template name="common-attributes">
 			<xsl:with-param name="node" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:radialGradient">
@@ -939,7 +966,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<!-- Uncommenting the following would support it here. -->
 		<!-- <xsl:apply-templates select="@cx|@cy|@r"/> -->
 		<!-- <xsl:apply-templates select="@gradientTransform"/> -->
-		<xsl:text>]},</xsl:text>
+		<xsl:text>]}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:rect">
@@ -959,7 +989,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:call-template name="common-attributes">
 			<xsl:with-param name="node" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:stop">
@@ -968,7 +1001,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:apply-templates select="@offset"/>
 		<xsl:text>color:</xsl:text>
 		<xsl:apply-templates select="@style"/>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="svg:text|svg:textPath">
@@ -1013,7 +1049,10 @@ GMail, etc.) or Eric (Saugus.net, ShellTown, etc.)
 		<xsl:call-template name="common-attributes">
 			<xsl:with-param name="node" select="."/>
 		</xsl:call-template>
-		<xsl:text>},</xsl:text>
+		<xsl:text>}</xsl:text>
+		<xsl:if test="not(position()=last())"> 
+			<xsl:text >,</xsl:text> 
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="svg:use">
