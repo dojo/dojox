@@ -52,6 +52,15 @@ dojo.ready((function(d, dr, dg){
 			});
 		};
 
+		var typeMap = {
+			"text":                  "text",
+			"json":                  "application/json",
+			"json-comment-optional": "text",
+			"json-comment-filtered": "text",
+			"javascript":            "application/javascript",
+			"xml":                   "text/xml"
+		};
+
 		var handleRemote = function(evt){
 			var el = evt.target, tag = el.tagName.toLowerCase();
 			var content = tag.toLowerCase() == "form" ? d.formToObject(el) : {},
@@ -65,11 +74,12 @@ dojo.ready((function(d, dr, dg){
 			}
 			evt.preventDefault();
 
+
 			// ajax:loading, ajax:loaded, and ajax:interactive are not supported
 			d.publish("ajax:before", [el]);
 			var deferred = d.xhr(method, {
 				url:      url,
-				headers:  { "Accept": type == "text" ? "text" : "text/"+type },
+				headers:  { "Accept": typeMap[type] },
 				content:  content,
 				handleAs: type,
 				load:		  function(response, ioArgs) {d.publish("ajax:success",	 [el, response, ioArgs]);},
