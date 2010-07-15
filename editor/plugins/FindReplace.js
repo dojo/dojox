@@ -409,7 +409,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 	_populateFindField: function(){
 		// summary:
 		//		Populate the Find field with selected text when dialog initially displayed.
-		//		Auto-select text in Find field after it’s populated.
+		//		Auto-select text in Find field after it is populated.
 		//		If nothing selected, restore previous entry from the same session.
 		// tags:
 		//		private
