@@ -96,7 +96,7 @@ dojo.require("dojo.date.locale");
 		return ret; // Object
 	};
 	
-	function loadZoneObj(/* Object */ data){
+	function loadZoneData(/* Object */ data){
 		// summary:
 		//		Loads the given data object into the zone database
 		//
@@ -127,7 +127,7 @@ dojo.require("dojo.date.locale");
 			url: timezoneFileBasePath + "/" + fileName,
 			sync: true, // Needs to be synchronous so we can return values
 			handleAs: "olson-zoneinfo",
-			load: loadZoneObj,
+			load: loadZoneData,
 			error: errorLoadingZoneFile
 		});
 	}
@@ -627,6 +627,14 @@ dojox.date.timezone.getTzInfo = function(dt, tz){
 	//	for date
 };
 
+dojox.date.timezone.loadZoneData = function(data){
+	// summary:
+	//		Loads the given data object into the zone database
+	//
+	// data: Object
+	//		The data to load - contains "zones" and "rules" parameters
+};
+
 dojox.date.timezone.getAllZones = function(){
 	// summary:
 	//	Returns an array of zones that have been loaded
@@ -664,6 +672,9 @@ dojox.date.timezone.getAllZones = function(){
 			var abbr = getAbbreviation(tz, zoneInfo, rule);
 			return { tzOffset: off, tzAbbr: abbr }; // Object
 		},
+		loadZoneData: function(data){
+			loadZoneData(data);
+		},   
 		getAllZones: function(){
 			var arr = [];
 			for(var z in _zones){ arr.push(z); }
