@@ -7,8 +7,13 @@ dojo.require("dojox.layout.ContentPane");
 
 dojo.require('dojox.fx');
 
-dojo.declare('dojox.widget.Dialog', 
-	[dojox.layout.ContentPane, dijit._DialogBase], 
+dojo.declare("dojox.widget.DialogSimple", [dojox.layout.ContentPane, dijit._DialogBase], {
+    // summary: A Simple Dialog Mixing the dojox.layout.ContentPane functionality over 
+    //      top of a vanilla dijit.Dialog. See `dojox.widget.Dialog` for a more flexible
+    //      dialog option allowing animations and different styles/theme support.    
+});
+
+dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple, 
 	{
 	// summary:
 	//		A Lightbox-like Modal-dialog for HTML Content
