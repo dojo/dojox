@@ -361,12 +361,17 @@ dojo.declare("dojox.image.LightboxDialog",
 		
 	},
 
+	_calcTitleSize: function(){
+		var sizes = dojo.map(dojo.query("> *", this.titleNode).position(), function(s){ return s.h; });
+		return { h: Math.max.apply(Math, sizes) };
+	},
+	
 	resizeTo: function(/* Object */size, forceTitle){
 		// summary: Resize our dialog container, and fire _showImage
 		
 		var adjustSize = dojo.boxModel == "border-box" ? 
 			dojo._getBorderExtents(this.domNode).w : 0,
-			titleSize = forceTitle || { h:30 }
+			titleSize = forceTitle || this._calcTitleSize()
 		;
 		
 		this._lastTitleSize = titleSize;
@@ -574,6 +579,7 @@ dojo.declare("dojox.image.LightboxDialog",
 	onClick: function(groupData){
 		// summary: a stub function, called with the currently displayed image as the only argument
 	},
+	
 	_onImageClick: function(e){
 		if(e && e.target == this.imgNode){
 			this.onClick(this._lastGroup);
