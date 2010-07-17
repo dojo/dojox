@@ -395,17 +395,24 @@ dojo.declare("dojox.image.LightboxDialog",
 		// summary: resize an image to fit within the bounds of the viewport
 		// size: Object
 		//		The 'size' object passed around for this image
-		var ns = {};
 
-		// one of the dimensions is too big, go with the smaller viewport edge:
-		if(this._vp.h > this._vp.w){
-			// don't actually touch the edges:
-			ns.w = this._vp.w - 80;
-			ns.h = ns.w * (size.h / size.w);
+		var ns = {},   // New size
+			nvp = {
+				w: this._vp.w - 80,
+				h: this._vp.h - 60 - this._lastTitleSize.h
+			};	// New viewport
+
+		// Calculate aspect ratio
+		var viewportAspect = nvp.w / nvp.h,
+			imageAspect = size.w / size.h;
+
+		// Calculate new image size
+		if(imageAspect >= viewportAspect){
+			ns.h = nvp.w / imageAspect;
+			ns.w = nvp.w;
 		}else{
-			// give a little room for the titlenode, too:
-			ns.h = this._vp.h - 60 - this._lastTitleSize.h;
-			ns.w = ns.h * (size.w / size.h);
+			ns.w = imageAspect * nvp.h;
+			ns.h = nvp.h;
 		}
 
 		// we actually have to style this image, it's too big
