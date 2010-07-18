@@ -938,13 +938,13 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 	},
 	_getDisabledAttr: function(){
 		// summary:
-		//		Internal. To get disabled use: widget.attr("disabled");
+		//		Internal. To get disabled use: widget.get("disabled");
 		return this._disabled;
 	},
 
 	_setDisabledAttr: function(disabled){
 		// summary:
-		//		Internal. To set disabled use: widget.attr("disabled", true | false);
+		//		Internal. To set disabled use: widget.set("disabled", true | false);
 		if(this._disabled == disabled){ return; }
 
 		if(this.uploaderType == "flash"){

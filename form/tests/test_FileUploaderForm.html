@@ -74,9 +74,9 @@
 					//uploadOnChange:true,
 					deferredUploading:false
 				},props), "btnF");
-				f.attr("disabled", dojo.byId("fGroup").value=="");
+				f.set("disabled", dojo.byId("fGroup").value=="");
 				dojo.connect(dojo.byId("fGroup"), "keyup", function(){
-					f.attr("disabled", dojo.byId("fGroup").value=="");
+					f.set("disabled", dojo.byId("fGroup").value=="");
 				});
 				dojo.connect(dijit.byId("fSubmit"), "onClick", function(){
 					f.submit(dojo.byId("formF"));
@@ -106,9 +106,9 @@
 					devMode:true
 				}, props), "btnH");
 				
-				h.attr("disabled", dojo.byId("hGroup").value=="");
+				h.set("disabled", dojo.byId("hGroup").value=="");
 				dojo.connect(dojo.byId("hGroup"), "keyup", function(){
-					h.attr("disabled", dojo.byId("hGroup").value=="");
+					h.set("disabled", dojo.byId("hGroup").value=="");
 				});
 				dojo.connect(dijit.byId("hSubmit"), "onClick", function(evt){
 					h.submit(dojo.byId("formH"));
@@ -126,9 +126,9 @@
 			}
 			if(dijit.byId("btnD")){
 				var d = new FlashHTML.widget(dojo.mixin({button:dijit.byId("btnD")}, props));
-				d.attr("disabled", dojo.byId("dTitle").value=="");
+				d.set("disabled", dojo.byId("dTitle").value=="");
 				dojo.connect(dojo.byId("dTitle"), "keyup", function(){
-					d.attr("disabled", dojo.byId("dTitle").value=="");
+					d.set("disabled", dojo.byId("dTitle").value=="");
 				});
 				dojo.connect(dijit.byId("fSubmit"), "onClick", function(evt){
 					f.submit(dojo.byId("formF"));

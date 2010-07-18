@@ -72,7 +72,7 @@ dojo.declare("dojox.form._OldPWBox", dojox.form._ChildTextBox, {
 		}
 		this.inherited(arguments);
 		// Trigger the containerWidget to recheck its value, if needed
-		this.containerWidget._childValueAttr(this.containerWidget._inputWidgets[1].attr("value"));
+		this.containerWidget._childValueAttr(this.containerWidget._inputWidgets[1].get("value"));
 	},
 
 	isValid: function(/* boolean */ isFocused){
@@ -131,7 +131,7 @@ dojo.declare("dojox.form._VerifyPWBox", dojox.form._ChildTextBox, {
 		// summary:
 		//		Validates that we match the "real" password
 		return this.inherited("isValid", arguments) &&
-			(this.get("value") == this.containerWidget._inputWidgets[1].attr("value"));
+			(this.get("value") == this.containerWidget._inputWidgets[1].get("value"));
 	}
 });
 
@@ -189,8 +189,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 		//		Turns the inputs inside this widget into "real" validation
 		//		widgets - and sets up the needed connections.
 		var widgets = this._inputWidgets,
-			msg = dojo.i18n.getLocalization("dojox.form", "PasswordValidator", 
-																	this.lang);
+			msg = dojo.i18n.getLocalization("dojox.form", "PasswordValidator", this.lang);
 		dojo.forEach(widgets, function(i, idx){
 			if(i){
 				var p = {containerWidget: this}, c;
@@ -250,8 +249,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 		// Turn my inputs into the correct stuff....
 		var widgets = this._inputWidgets = [];
 		dojo.forEach(["old","new","verify"], function(i){
-			widgets.push(dojo.query("input[pwType=" + i + "]", 
-									this.containerNode)[0]);
+			widgets.push(dojo.query("input[pwType=" + i + "]", this.containerNode)[0]);
 		}, this);
 		if (!widgets[1] || !widgets[2]){
 			throw new Error("Need at least pwType=\"new\" and pwType=\"verify\"");
@@ -272,7 +270,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 	_setDisabledAttr: function(value){
 		this.inherited(arguments);
 		dojo.forEach(this._inputWidgets, function(i){
-			if(i && i.attr){ i.attr("disabled", value);}
+			if(i && i.set){ i.set("disabled", value);}
 		});
 	},
 	
@@ -282,7 +280,7 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 		dijit.setWaiState(this.focusNode, "required", value);
 		this._refreshState();
 		dojo.forEach(this._inputWidgets, function(i){
-			if(i && i.attr){ i.attr("required", value);}
+			if(i && i.set){ i.set("required", value);}
 		});
 	},
 

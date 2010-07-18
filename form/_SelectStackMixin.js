@@ -54,7 +54,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 			savedStates = {};
 			dojo.forEach(widgets, function(w){
 				savedStates[w.id] = w.disabled;
-				w.attr("disabled", true);
+				w.set("disabled", true);
 			});
 			pane._savedStates = savedStates;
 		}else{
@@ -65,7 +65,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 				if(state == undefined){
 					state = false;
 				}
-				w.attr("disabled", state);
+				w.set("disabled", state);
 			});
 			delete pane._savedStates;
 		}

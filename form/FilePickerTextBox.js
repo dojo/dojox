@@ -50,8 +50,8 @@ dojo.declare(
 			// summary: sets the value of this widget
 			if(!this._searchInProgress){
 				this.inherited(arguments);
-				value = value||"";
-				var tVal = this.dropDown.attr("pathValue")||"";
+				value = value || "";
+				var tVal = this.dropDown.get("pathValue") || "";
 				if(value !== tVal){
 					this._skip = true;
 					var fx = dojo.hitch(this, "_setBlurValue");
@@ -91,7 +91,7 @@ dojo.declare(
 			// set width to 0 so that it will resize automatically
 			this.dropDown.domNode.style.width="0px";
 			if(!("minPaneWidth" in (this.constraints||{}))){
-				this.dropDown.attr("minPaneWidth", (this.domNode.offsetWidth / this.numPanes));
+				this.dropDown.set("minPaneWidth", (this.domNode.offsetWidth / this.numPanes));
 			}
 			this.inherited(arguments);
 		},
@@ -100,7 +100,7 @@ dojo.declare(
 			this.inherited(arguments);
 			// Make sure our display is up-to-date with our value
 			if(this._opened){ 
-				this.dropDown.attr("pathValue", this.get("value"));
+				this.dropDown.set("pathValue", this.get("value"));
 			}
 		},
 		
@@ -163,7 +163,7 @@ dojo.declare(
 				return value;
 			}
 			var dd = this.dropDown, topDir = dd.topDir, sep = dd.pathSeparator;
-			var ddVal = dd.attr("pathValue");
+			var ddVal = dd.get("pathValue");
 			var norm = function(v){
 				if(topDir.length && v.indexOf(topDir) === 0){
 					v = v.substring(topDir.length);

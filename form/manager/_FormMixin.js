@@ -115,7 +115,7 @@ dojo.require("dojox.form.manager._Mixin");
 			for(var name in this.formWidgets){
 				var stop = false;
 				aa(function(_, widget){
-					if(!widget.attr("disabled") && widget.isValid && !widget.isValid()){
+					if(!widget.get("disabled") && widget.isValid && !widget.isValid()){
 						stop = true;
 					}
 				}).call(this, null, this.formWidgets[name].widget);

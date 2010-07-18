@@ -153,9 +153,8 @@ dojo.declare("dojox.form.ListInput",
 		//		Change status and if needed, create the inputbox
 		// tags:
 		//		private
-		console.warn("_setReadOnlyInputAttr",this.id,value);
 		if(!this._started){ return this._createInputBox(); }
-		this.readOnlyInput=value;
+		this.readOnlyInput = value;
 		this._createInputBox();
 	},
 	
@@ -166,7 +165,7 @@ dojo.declare("dojox.form.ListInput",
 		//		private
 		if(!this._started){ return; }
 		for(var i in this._items){
-			this._items[i].attr("readOnlyItem",value);
+			this._items[i].set("readOnlyItem", value);
 		}
 	},
 	
@@ -175,13 +174,13 @@ dojo.declare("dojox.form.ListInput",
 		//		Create the input box
 		// tags:
 		//		private
-		console.warn("_createInputBox",this.id,this.readOnlyInput);
-		dojo[(this.readOnlyInput?"add":"remove")+"Class"](this._inputNode,"dijitHidden");
+		dojo.toggleClass(this._inputNode, "dijitHidden", this.readOnlyInput);
 		if(this.readOnlyInput){ return; }
 		if(this._input){ return; }
 				
 		if(this.inputHandler === null){
-			return !console.warn("you must add some handler to connect to input field");
+			console.warn("you must add some handler to connect to input field");
+			return false; 
 		}
 		if(dojo.isString(this.inputHandler)){
 			this.inputHandler = this.inputHandler.split(",");
@@ -211,8 +210,8 @@ dojo.declare("dojox.form.ListInput",
 		//		Compare 2 values (as returned by attr('value') for this widget).
 		// tags:
 		//		protected
-		val1=val1.join(",");
-		val2=val2.join(",");
+		val1 = val1.join(",");
+		val2 = val2.join(",");
 		if(val1 > val2){
 			return 1;
 		}else if(val1 < val2){
@@ -284,7 +283,7 @@ dojo.declare("dojox.form.ListInput",
 		}
 		
 		if(!this.readOnlyInput){
-			this._input.attr("value","");
+			this._input.set("value", "");
 		}
 		
 		if(this._onChangeActive){ this.onChange(this.value); }
@@ -411,9 +410,8 @@ dojo.declare("dojox.form.ListInput",
 		//		Call when item value change
 		// tags:
 		//		private
-		if(!value){
-			value=item.attr("value");
-		}
+
+		value = value || item.get("value");
 		
 		//revalidate content
 		this._testItem(item,value);
@@ -427,9 +425,7 @@ dojo.declare("dojox.form.ListInput",
 		//		Call when item is edited
 		// tags:
 		//		private
-		dojo.removeClass(item.domNode,"dijitError");
-		dojo.removeClass(item.domNode,this.baseClass+"Match");
-		dojo.removeClass(item.domNode,this.baseClass+"Mismatch");
+		dojo.removeClass(item.domNode,["dijitError", this.baseClass + "Match", this.baseClass + "Mismatch"]);
 	},
 	
 	_testItem: function(/*Object*/item,/*String*/value){
@@ -440,9 +436,9 @@ dojo.declare("dojox.form.ListInput",
 		var re = new RegExp(this.regExpGen(this.constraints));
 		var match = value.match(re);
 		
-		dojo.removeClass(item.domNode, this.baseClass+(!match ? "Match":"Mismatch"));
-		dojo.addClass(item.domNode, this.baseClass+(match ? "Match":"Mismatch"));
-		dojo[(!match?"add":"remove")+"Class"](item.domNode, "dijitError");
+		dojo.removeClass(item.domNode, this.baseClass + (!match ? "Match" : "Mismatch"));
+		dojo.addClass(item.domNode, this.baseClass + (match ? "Match" : "Mismatch"));
+		dojo.toggleClass(item.domNode, "dijitError", !match);
 		
 		if((this.showCloseButtonWhenValid && match) ||
 			(this.showCloseButtonWhenInvalid && !match)){
@@ -506,12 +502,12 @@ dojo.declare("dojox.form.ListInput",
 		//		private
 		if(!this.readOnlyItem){
 			for(var i in this._items){
-				this._items[i].attr("disabled",value);
+				this._items[i].set("disabled", value);
 			}
 		}
 		
 		if(!this.readOnlyInput){
-			this._input.attr("disabled",value);
+			this._input.set("disabled", value);
 		}
 		this.inherited(arguments);
 	},
@@ -550,13 +546,14 @@ dojo.declare("dojox.form.ListInput",
 		//		Used to add keybord interactivity
 		// tags:
 		//		private
-		this._currentItem=null;
+		this._currentItem = null;
+		var val = this._input.get("value");
 		
-		if(e.keyCode == dojo.keys.BACKSPACE && this._input.attr("value") == "" && this.get("lastItem")){
+		if(e.keyCode == dojo.keys.BACKSPACE && val == "" && this.get("lastItem")){
 			this._destroyItem(this.get("lastItem"));
-		}else if(e.keyCode == dojo.keys.ENTER && this._input.attr("value") != ""){
-			this.add(this._input.attr("value"));
-		}else if(e.keyCode == dojo.keys.LEFT_ARROW && this._getCursorPos(this._input.focusNode)==0 &&
+		}else if(e.keyCode == dojo.keys.ENTER && val != ""){
+			this.add(val);
+		}else if(e.keyCode == dojo.keys.LEFT_ARROW && this._getCursorPos(this._input.focusNode) == 0 &&
 			!this.readOnlyItem && this.useArrowForEdit){
 				this._editBefore();
 		}
@@ -567,8 +564,9 @@ dojo.declare("dojox.form.ListInput",
 		//		Remove focus class and act like pressing ENTER key
 		// tags:
 		//		private
-		if(this.useOnBlur && this._input.attr("value") != ""){
-			this.add(this._input.attr("value"));
+		var val = this._input.get('value');
+		if(this.useOnBlur && val != ""){
+			this.add(val);
 		}
 	},
 	
@@ -600,8 +598,8 @@ dojo.declare("dojox.form.ListInput",
 			if(item === null){
 				continue;
 			}
-			var itemValue=item.attr("value");
-			if (validator(itemValue)){
+			var itemValue = item.get("value");
+			if(validator(itemValue)){
 				value.push(itemValue);
 			}
 		}
@@ -822,7 +820,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 		if(!value){
 			this._createInlineEditBox();
 		}else if(this._editBox){
-			this._editBox.attr("disabled",true);
+			this._editBox.set("disabled", true);
 		}
 	},
 	
@@ -834,10 +832,10 @@ dojo.declare("dojox.form._ListInputInputItem",
 		if(this.readOnlyItem){ return; }
 		if(!this._started){ return; }
 		if(this._editBox){ 
-			this._editBox.attr("disabled",false);
+			this._editBox.set("disabled",false);
 			return; 
 		}
-		this._editBox=new dijit.InlineEditBox({
+		this._editBox = new dijit.InlineEditBox({
 			value:this.value,
 			editor: "dijit.form.ValidationTextBox",
 			editorParams:{
@@ -883,7 +881,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 		// tags:
 		//		private
 		if(!this.readOnlyItem){
-			this._editBox.attr("disabled",value);
+			this._editBox.set("disabled", value);
 		}
 	},
 	
@@ -892,7 +890,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		return value
 		// tags:
 		//		private
-		return (!this.readOnlyItem && this._started ? this._editBox.attr("value") : this.value);
+		return (!this.readOnlyItem && this._started ? this._editBox.get("value") : this.value);
 	},
 	
 	destroy: function(){
