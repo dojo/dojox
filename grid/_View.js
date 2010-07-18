@@ -10,12 +10,12 @@ dojo.require("dojo.dnd.Source");
 dojo.require("dojo.dnd.Manager");
 
 (function(){
-	// private
+	// a private function
 	var getStyleText = function(inNode, inStyleText){
 		return inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText;
 	};
 
-	// public
+	// some public functions
 	dojo.declare('dojox.grid._View', [dijit._Widget, dijit._Templated], {
 		// summary:
 		//		A collection of grid columns. A grid is comprised of a set of views that stack horizontally.
