@@ -50,15 +50,14 @@ dojo.declare("dojox.layout.RadioGroup",
 		this._buttons = this._children.length;
 		this._size = dojo.coords(this.containerNode);
 		if(this.hasButtons){
-			dojo.style(this.buttonHolder,"display","block");
+			dojo.style(this.buttonHolder, "display", "block");
 		}
 	},
 
 	_setupChild: function(/* dijit._Widget */child){
 		// summary: Creates a hover button for a child node of the RadioGroup
+		dojo.style(child.domNode, "position", "absolute");
 		if(this.hasButtons){
-			
-			dojo.style(child.domNode,"position","absolute");
 			
 			var tmp = this.buttonNode.appendChild(dojo.create('td'));
 			var n = dojo.create("div", null, tmp),
