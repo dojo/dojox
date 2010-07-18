@@ -563,10 +563,10 @@ dojo.declare("dojox.widget._CalendarDayView", [dojox.widget._CalendarView, dijit
 
 			var clazz2 = this.getClassForDate(date, this.getLang());
 			if(clazz2){
-				clazz += clazz2 + " " + clazz;
+				clazz = clazz2 + " " + clazz;
 			}
 
-			template.className =	clazz + "Month dijitCalendarDateTemplate";
+			template.className = clazz + "Month dijitCalendarDateTemplate";
 			template.dijitDateValue = date.valueOf();
 			var label = dojo.query(".dijitCalendarDateLabel", template)[0];
 			
