@@ -183,15 +183,22 @@ dojo.declare("dojox.image.LightboxDialog",
 	//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
 	//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
 	modal: false,
-	
-	// an object of arrays, each array (of objects) being a unique 'group'
+
+/*===== 
+	// _groups: Object
+	//		an object of arrays, each array (of objects) being a unique 'group'
 	_groups: { XnoGroupX: [] },
+
+=====*/
 
 	// errorImg: Url
 	//		Path to the image used when a 404 is encountered
 	errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),
 
 	templateString: dojo.cache("dojox.image","resources/Lightbox.html"),
+	constructor: function(args){
+		this._groups = this._groups || (args && args._groups) || { XnoGroupX:[] };
+	},
 
 	startup: function(){
 		// summary: Add some extra event handlers, and startup our superclass.
@@ -201,6 +208,7 @@ dojo.declare("dojox.image.LightboxDialog",
 		//		'chaining' or var referencing with .startup()
 
 		this.inherited(arguments);
+		
 		this._animConnects = [];
 		this.connect(this.nextButtonNode, "onclick", "_nextImage");
 		this.connect(this.prevButtonNode, "onclick", "_prevImage");
