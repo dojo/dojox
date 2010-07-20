@@ -66,12 +66,21 @@ dojo.declare("dojox.av.FLAudio", null, {
 	_swfPath: dojo.moduleUrl("dojox.av", "resources/audio.swf"),
 	//
 	//
+	// allowScriptAccess: String
+	//		Whether the SWF can access the container JS
+	allowScriptAccess:"always",
+	//
+	// allowNetworking: String
+	//		Whether SWF is restricted to a domain
+	allowNetworking: "all",
+	//
+
 	constructor: function(/*Object*/options){
-		
+
 		// Provide this function for the SWF to ensure that the it is playing
-		// in HTML. 
+		// in HTML.
 		dojo.global.swfIsInHTML = function(){ return true; }
-		
+
 		dojo.mixin(this, options || {});
 		if(!this.id){ this.id = "flaudio_"+new Date().getTime(); }
 		this.domNode = dojo.doc.createElement("div");
@@ -101,7 +110,9 @@ dojo.declare("dojox.av.FLAudio", null, {
 			minimumVersion:9, // this may need to be 10, not sure
 			expressInstall:true,
 			params:{
-				wmode:"transparent"
+				wmode:"transparent",
+				allowScriptAccess:this.allowScriptAccess,
+				allowNetworking:this.allowNetworking
 			},
 			// only pass in simple variables - no deep objects
 			vars:{
