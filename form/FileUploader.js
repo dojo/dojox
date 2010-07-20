@@ -1299,7 +1299,9 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			},
 			params: {
 				scale:"noscale",
-				wmode:"opaque"
+				wmode:"opaque",
+				allowScriptAccess:"always",
+				allowNetworking:"all"
 			}
 
 		};
