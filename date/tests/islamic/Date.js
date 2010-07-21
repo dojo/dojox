@@ -33,18 +33,18 @@ tests.register("dojox.date.tests.islamic.Date",
 		{
 			name: "toGregorian",
 			runTest: function(t) {
-				var dateIslamic = new dojox.date.islamic.Date(1431, 3, 6); // March 22 2010
+				var dateIslamic = new dojox.date.islamic.Date(1431, 3, 6, 15, 15, 10 ); // March 22 2010 3:15:10 PM
 				var dateGregorian = dateIslamic.toGregorian();
-				t.is(0, dojo.date.compare(new Date(2010, 2, 22), dateGregorian, "date"));
+				t.is(0, dojo.date.compare(new Date(2010, 2, 22, 15, 15, 10), dateGregorian, "date"));
 			}
 		},
 		{
 			name: "fromGregorian",
 			runTest: function(t) {
 				var dateIslamic = new dojox.date.islamic.Date();
-				var dateGregorian = new Date(2010, 2, 22);
+				var dateGregorian = new Date(2010, 2, 22, 15, 15, 10);
 				dateIslamic.fromGregorian(dateGregorian);
-				t.is(0, dojox.date.islamic.compare(new dojox.date.islamic.Date(1431, 3, 6), dateIslamic, "date"));
+				t.is(0, dojox.date.islamic.compare(new dojox.date.islamic.Date(1431, 3, 6, 15, 15, 10), dateIslamic, "date"));
 			}
 		},
 		{
