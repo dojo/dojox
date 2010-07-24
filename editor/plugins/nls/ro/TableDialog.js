@@ -19,12 +19,12 @@
 	buttonSet: "Setare", // translated elsewhere?
 	buttonInsert: "Inserare",
 
-	selectTableLabel: "Selectare tabelă ",
+	selectTableLabel: "Selectare tabelă",
 	insertTableRowBeforeLabel: "Adăugare rând înainte",
 	insertTableRowAfterLabel: "Adăugare rând după",
 	insertTableColumnBeforeLabel: "Adăugare coloană înainte",
 	insertTableColumnAfterLabel: "Adăugare coloană după",
-	deleteTableRowLabel: "Ştergere rând ",
+	deleteTableRowLabel: "Ştergere rând",
 	deleteTableColumnLabel: "Ştergere coloană"
 })
 
