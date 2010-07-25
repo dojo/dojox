@@ -25,6 +25,7 @@
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 	
 	<script type="text/javascript">
+	    dojo.require("dojox.widget.DialogSimple");
 		dojo.require("dojox.widget.Dialog");
 		dojo.require("dojo.fx.easing");
 		dojo.require("dijit.form.Button");
@@ -46,10 +47,10 @@
 			// dojoType="" for the purists.
 			dojo.query("button")
 				.forEach(function(n){
-					var oc = dojo.attr(n,"onclick");
+					var oc = dojo.attr(n, "onclick");
 					var button = new dijit.form.Button({
 						onClick: oc
-					},n)
+					}, n)
 				});
 
 			// programatic with content: 

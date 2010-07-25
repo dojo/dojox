@@ -58,7 +58,7 @@ dojo.declare("dojox.widget.Loader", [dijit._Widget,dijit._Templated], {
 		this._setMessage(this.loadMessage); 
 
 		// FIXME: create our connections.  would be easier, and this might be redundant
-		// if Deferred published something
+		// if Deferred published something. XHR published stuff. FIXME to use that.
 		this._xhrStart = this.connect(dojo,"_ioSetArgs","_show"); 
 		this._xhrEnd = this.connect(dojo.Deferred.prototype,"_fire","_hide"); 
 

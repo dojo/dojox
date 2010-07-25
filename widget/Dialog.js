@@ -2,16 +2,8 @@ dojo.provide('dojox.widget.Dialog');
 dojo.experimental('dojox.widget.Dialog');
 
 dojo.require("dojo.window");
-dojo.require('dijit.Dialog');
-dojo.require("dojox.layout.ContentPane");
-
 dojo.require('dojox.fx');
-
-dojo.declare("dojox.widget.DialogSimple", [dojox.layout.ContentPane, dijit._DialogBase], {
-    // summary: A Simple Dialog Mixing the dojox.layout.ContentPane functionality over 
-    //      top of a vanilla dijit.Dialog. See `dojox.widget.Dialog` for a more flexible
-    //      dialog option allowing animations and different styles/theme support.    
-});
+dojo.require("dojox.widget.DialogSimple");
 
 dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple, 
 	{
@@ -39,15 +31,14 @@ dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple,
 	
 	// viewportPadding: Integer
 	//		If sizeToViewport="true", this is the amount of padding in pixels to leave 
-	//    between the dialog border and the viewport edge.
-	//    This value is also used when sizeToViewport="false" and dimensions exceeded
-	//    by dialog content to ensure dialog does not go outside viewport boundary
-	//		 
+	//		between the dialog border and the viewport edge.
+	//		This value is also used when sizeToViewport="false" and dimensions exceeded
+	//		by dialog content to ensure dialog does not go outside viewport boundary
 	viewportPadding: 35,
 	
 	// dimensions: Array
 	//		A two-element array of [widht,height] to animate the Dialog to if sizeToViewport="false"
-	//    Defaults to [300,300]
+	//		Defaults to [300,300]
 	dimensions: null, 
 	
 	// easing: Function?|String?
@@ -59,7 +50,7 @@ dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple,
 	sizeDuration: dijit._defaultDuration,
 	
 	// sizeMethod: String
-	// 		To be passed to dojox.fx.sizeTo, one of "chain" or "combine" to effect
+	//		To be passed to dojox.fx.sizeTo, one of "chain" or "combine" to effect
 	//		the animation sequence.
 	sizeMethod: "chain",
 	
@@ -72,9 +63,9 @@ dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple,
 	draggable: false, // simply over-ride the default from dijit.Dialog 
 	
 	// modal: Boolean
-	// 		If true, this Dialog instance will be truly modal and prevent closing until
+	//		If true, this Dialog instance will be truly modal and prevent closing until
 	//		explicitly told to by calling hide() - Defaults to false to preserve previous
-	// 		behaviors.
+	//		behaviors.
 	modal: false,
 	
 	constructor: function(props, node){
@@ -84,7 +75,7 @@ dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple,
 	
 	_setup: function(){
 		// summary: Piggyback on dijit.Dialog's _setup for load-time options, deferred to 
-		//		
+
 		this.inherited(arguments);
 		if(!this._alreadyInitialized){			
 			this._navIn = dojo.fadeIn({ node: this.closeButtonNode });
