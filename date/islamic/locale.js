@@ -405,18 +405,18 @@ dojox.date.islamic.locale.getNames = function(/*String*/item, /*String*/type, /*
 	// summary:
 	//		Used to get localized strings from dojo.cldr for day or month names.
 	var label;
-	var lookup = dojox.date.islamic.locale._getIslamicBundle;
+	var lookup = dojox.date.islamic.locale._getIslamicBundle(locale);
 	var props = [item, context, type];
 	if(context == 'standAlone'){
 		var key = props.join('-');
-		label = lookup(locale)[key];
+		label = lookup[key];
 		// Fall back to 'format' flavor of name
-		if(label === lookup("ROOT")[key]){ label = undefined; } // a bit of a kludge, in the absense of real aliasing support in dojo.cldr
+		if(label[0] == 1){ label = undefined; } // kludge, in the absence of real aliasing support in dojo.cldr
 	}
 	props[1] = 'format';
 	
 	// return by copy so changes won't be made accidentally to the in-memory model
-	return (label || lookup(locale)[props.join('-')]).concat(); /*Array*/
+	return (label || lookup[props.join('-')]).concat(); /*Array*/
 };
 
 
