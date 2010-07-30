@@ -12,6 +12,7 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 		
 		this.handlePhotoLoad = dojo.hitch(this, this.handlePhotoLoad);
 		this.search = dojo.hitch(this, this.search);
+		this.resizeViewer = dojo.hitch(this, this.resizeViewer);
 		
 		this.textWidget = dijit.byId("searchTextThumbInput");
 		
@@ -40,6 +41,28 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 			if(!_this.timer){
 				_this.timer = setTimeout(_this.search, 1000);
 			}
+		});
+
+		this.connect(dijit.byId("btnSmall"), "onClick", function(event){
+			_this.setThumbSize("small");
+		});
+		this.connect(dijit.byId("btnMedium"), "onClick", function(event){
+			_this.setThumbSize("medium");
+		});
+		this.connect(dijit.byId("btnLarge"), "onClick", function(event){
+			_this.setThumbSize("large");
+		});
+		
+		var resizeTimer;
+		// Listen to the resize event on the window to make
+		// the thumbnails fill the horizontal space
+		// This is fairly pointless for mobile, but makes it work
+		// better in desktop browsers
+		this.connect(window, "resize", function(event){
+			if(resizeTimer){
+				clearTimeout(resizeTimer);
+			}
+			resizeTimer = setTimeout(_this.resizeViewer, 300);
 		});
 	},
   
@@ -71,6 +94,16 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 					console.log("unknown type " + this.dataType, options);
 			}
 		}
+	},
+	
+	setThumbSize: function(cls){
+		dojo.removeClass(this.viewer.domNode, ["small", "medium", "large"]);
+		dojo.addClass(this.viewer.domNode, cls);
+		this.resizeViewer();
+	},
+	
+	resizeViewer: function(){
+		this.viewer.resize();
 	},
 	
 	search: function(){
@@ -187,6 +220,7 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 			}
 			this.urls = urls;
 			this.index = 0;
+			this.viewer.attr("selectedIndex", this.index);
 			
 			this.viewer.attr("items", urls);
 		}else{

@@ -13,7 +13,7 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 	//		If an item is a string, it is expected to be a URL. Otherwise
 	//		by default it is expected to have a 'url' member.  This can
 	//		be configured using the 'urlParam' attribute on this widget.
-	items: null,
+	items: [],
 
 	// urlParam: String
 	//		The paramter name used to retrieve an image url from a JSON object
@@ -31,12 +31,22 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 	maxPerRow: 3,
 
 	baseClass: "mblImageThumbView",
+	
+	thumbSize: "medium",
 
 	selectedIndex: -1,
 
 	cache: null,
+	
+	clickEvent: "onclick",
+	
+	cacheBust: false,
+	
+	constructor: function(params, node){
+	},
 
 	postCreate: function(){
+		
 		this.inherited(arguments);
 		var _this = this;
 
@@ -49,8 +59,10 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 
 		this.cache = [];
 		this.visibleImages = [];
+		
+		this._cacheCounter = 0;
 
-		this.connect(this.domNode, "onclick", function(event){
+		this.connect(this.domNode, this.clickEvent, function(event){
 			var itemNode = _this._getItemNodeFromEvent(event);
 
 			if(itemNode){
@@ -59,6 +71,8 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 				dojo.addClass(itemNode, "selected");
 			}
 		});
+		
+		dojo.addClass(this.domNode, this.thumbSize);
 
 		this.resize();
 		this.render();
@@ -93,8 +107,8 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 	resize: function(){
 		this._thumbSize = null;
 
-		this._size = dojo.marginBox(this.domNode);
-
+		this._size = dojo.contentBox(this.domNode);
+		
 		this.render();
 	},
 
@@ -104,7 +118,7 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		var item;
 
 		var thumb;
-		while(this.visibleImages.length > 0){
+		while(this.visibleImages && this.visibleImages.length > 0){
 			thumb = this.visibleImages.pop();
 			this.cache.push(thumb);
 
@@ -115,7 +129,7 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 			//dojo.empty(this.domNode);
 			return;
 		}
-
+		
 
 		for(i = 0; i < this.items.length; i++){
 			item = this.items[i];
@@ -134,10 +148,8 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		var totalThumbWidth = this._thumbSize.w + (this.padding * 2);
 		var totalThumbHeight = this._thumbSize.h + (this.padding * 2);
 
-		var nodes = this.thumbNodes =
-			dojo.query(".mblThumb", this.domNode);
-
 		var pos = 0;
+		var nodes = this.visibleImages;
 		for(i = 0; i < nodes.length; i++){
 			if(nodes[i]._cached){
 				continue;
@@ -180,15 +192,23 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		var thumbDiv;
 		if(this.cache.length > 0){
 			// Reuse a previously created node if possible
-			thumbDiv = this.cache.pop();
+			
+			// Search for an image with the same url first
+			for(var i = 0; i < this.cache.length; i++){
+				if(this.cache[i]._url == url){
+					thumbDiv = this.cache.splice(i, 1)[0];
+					break
+				}
+			}
+			
+			// if no image with the same url is found, just take the last one
+			if(!thumbDiv){
+				thumbDiv = this.cache.pop();
+			}
+			dojo.removeClass(thumbDiv, "selected");
 		}else{
 			// Create a new thumb
-			thumbDiv = dojo.create("div", {
-				"class": "mblThumb hidden",
-				innerHTML: dojo.string.substitute(this.itemTemplate, {
-					url: url
-				}, null, this)
-			}, this.domNode);
+			thumbDiv = this.createThumb(url);
 		}
 		dojo.addClass(thumbDiv, "hidden");
 		var loader = dojo.create("img",{});
@@ -208,9 +228,28 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		thumbDiv._cached = false;
 
 		if(!this._thumbSize){
-			this._thumbSize = dojo.marginBox(thumbDiv);
+			this.calcSize();
 			this.calcPadding();
 		}
+	},
+	
+	calcSize: function(){
+		if(!this.sizeThumb){
+			this.sizeThumb = this.createThumb("");
+			dojo.removeClass(this.sizeThumb, "mblAnimated");
+		}
+		dojo.place(this.sizeThumb, this.domNode);
+		this._thumbSize = dojo.marginBox(this.sizeThumb);
+		this.domNode.removeChild(this.sizeThumb);
+	},
+	
+	createThumb: function(url){
+		return dojo.create("div", {
+			"class": "mblThumb hidden mblAnimated",
+			innerHTML: dojo.string.substitute(this.itemTemplate, {
+				url: url
+			}, null, this)
+		}, this.domNode)		
 	},
 
 	handleImgLoad: function(event){
@@ -218,9 +257,15 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		dojo.disconnect(img._conn);
 		dojo.removeClass(img._thumbDiv, "hidden");
 		img._thumbDiv._loading = false;
+		
+		var url = img._url;
+		if(this.cacheBust){
+			url += (url.indexOf("?") > -1 ? "&" : "?") 
+				+ "cacheBust=" + (new Date()).getTime() + "_" + (this._cacheCounter++); 
+		}
 
 		dojo.query(".mblThumbSrc", img._thumbDiv)
-				.style("backgroundImage", "url(" + img._url + ")");
+				.style("backgroundImage", "url(" + url + ")");
 
 		delete this._onLoadImages[img._url];
 	},
@@ -234,21 +279,42 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 
 		this.maxPerRow = Math.floor(width / imgBounds);
 
-		this.padding = (width - (thumbWidth * this.maxPerRow)) / (this.maxPerRow * 2);
+		this.padding = Math.floor((width - (thumbWidth * this.maxPerRow)) / (this.maxPerRow * 2));
 	},
 
 	place: function(node, x, y){
-		// TODO: replace this with webkit transforms
-		
-		
+		/*
+		// Use code to not overwrite other transform values if possible.
+		// TODO: Get this working
+		if(dojo.global["WebKitCSSMatrix"]){
+			var matrix = new WebKitCSSMatrix(node.style.webkitTransform);
+			var origX = x, origY = y;
+			if(node._x){
+				x = x - node._x;
+			}
+			if(node._y){
+				y = y - node._y;
+			}
+			node._x = origX;
+			node._y = origY;
+			
+			dojo.style(node, {
+				"-webkit-transform" : matrix.translate(x, y)
+			});
+		}else{
+			dojo.style(node, {
+				position: "absolute",
+				top: y + "px",
+				left: x + "px"
+			});
+		}*/
 		dojo.style(node, {
-			"-webkit-transform" :"translate(" + x + "px," + y + "px)"
+			"-webkit-transform" : "translate(" + x + "px," + y + "px)"
 		});
-//		dojo.style(node, {
-//			top: y + "px",
-//			left: x + "px",
-//			visibility: "visible"
-//		});
+	},
+	
+	_isTranslate: function(str){
+		return dojo.trim(str).indexOf("translate") != 0;
 	}
 
 });
