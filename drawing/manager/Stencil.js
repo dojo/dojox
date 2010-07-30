@@ -165,7 +165,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				// summary:
 				//		Event fired on deletion of a stencil
 				//
-				console.log("onDelete", noundo);
+				console.log("Stencil onDelete", noundo);
 				if(noundo!==true){
 					this.undo.add({
 						before:dojo.hitch(this, "unDelete", this.selectedStencils),

@@ -72,9 +72,9 @@ StencilPoints: [
 			//		Uses function dojox.drawing.stencil.Text.typeset
 			//		for typesetting, if it exists.
 			//
-			if(dojox.drawing.stencil.Text.typeset){
+			if(dojox.drawing.util.typeset){
 				this._rawText = text;
-				return dojox.drawing.stencil.Text.typeset(text);
+				return dojox.drawing.util.typeset.convertLaTeX(text);
 			}
 			return text;
 		},

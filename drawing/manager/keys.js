@@ -252,8 +252,8 @@ dojo.provide("dojox.drawing.manager.keys");
 					evt.x = x;
 					evt.y = y;
 					evt.shift = this.shift;
-					this.onArrow(evt);
 					if(!isEdit){
+						this.onArrow(evt);
 						dojo.stopEvent(evt);	
 					}
 				}
