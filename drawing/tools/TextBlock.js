@@ -293,7 +293,7 @@ StencilData: {
 							popup:dropdown,
 							around:this.parentNode,
 							orient:{'BL':'TL'}
-						})
+						});
 					}
 					if(!this._dropMode){
 						this._blockExec = false;
