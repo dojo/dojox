@@ -23,7 +23,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	//		|	});
 	//
 	//		| <div dojoType="dojox.drawing.ui.Toolbar" id="gfxToolbarNode" drawingId="drawingNode"
-	//		|		class="gfxToolbar" tools="all" plugs="all" selected="ellipse"></div>
+	//		|		class="gfxToolbar" tools="all" plugs="all" selected="ellipse" orient="H"></div>
 	//
 	//
 	constructor: function(props, node){
@@ -41,7 +41,8 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			this.strTools = props.tools;
 			this.strPlugs = props.plugs;
 			this._mixprops(["padding", "margin", "size", "radius"], props);
-			this.addBack()
+			this.addBack();
+			this.orient = props.orient ? props.orient : false;
 		}else{
 			// markup
 			var box = dojo.marginBox(node);
@@ -52,10 +53,11 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			this.strPlugs = dojo.attr(node, "plugs");
 			this._mixprops(["padding", "margin", "size", "radius"], node);
 			this.toolDrawing = new dojox.drawing.Drawing({mode:"ui"}, node);
+			this.orient = dojo.attr(node, "orient");
 		}
 		
-		this.horizontal = this.width > this.height;
-		
+		this.horizontal = this.orient ? this.orient == "H" : this.width > this.height;
+		console.log("this.hor: ",this.horizontal," orient: ",this.orient);
 		if(this.toolDrawing.ready){
 			this.makeButtons();
 			if(!this.strSelected && this.drawing.defaults.clickMode){ this.drawing.mouse.setCursor('default'); };
@@ -166,8 +168,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 					this.drawing.setTool(btn.toolType);
 				}
 				if(this.horizontal){
-					var space = secondary ? h/2 + g : h + g;
-					y += space;
+					x += h + g;
 				}else{
 					var space = secondary ? h/2 + g : h + g;
 					y += space;
@@ -176,7 +177,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		}
 		
 		if(this.horizontal){
-			y += this.toolPlugGap;
+			x += this.toolPlugGap;
 		}else{
 			y += this.toolPlugGap;
 		}
@@ -204,7 +205,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 					this.plugins.push(btn);
 					
 					if(this.horizontal){
-						y += h + g;
+						x += h + g;
 					}else{
 						y += h + g;
 					}
