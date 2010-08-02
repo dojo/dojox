@@ -509,7 +509,7 @@ dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*S
 			// Adar I (6th position in the array) will be used.
 			// Substitute the leap month Adar II for the regular Adar (7th position)
 			props.push("leap");
-			result[6] = lookup(locale)[props.join('-')];
+			result[6] = lookup[props.join('-')];
 		}else{
 			// Remove Adar I but leave an empty position in the array
 			delete result[5];
