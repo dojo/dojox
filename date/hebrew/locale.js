@@ -491,25 +491,25 @@ dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*S
 	// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he', new dojox.date.hebrew.Date(5768, 2, 12));
 
 	var label,
-		lookup = dojox.date.hebrew.locale._getHebrewBundle,
+		lookup = dojox.date.hebrew.locale._getHebrewBundle(locale),
 		props = [item, context, type];
 	if(context == 'standAlone'){
 		var key = props.join('-');
-		label = lookup(locale)[key];
+		label = lookup[key];
 		// Fall back to 'format' flavor of name
-		if(label === lookup("ROOT")[key]){ label = undefined; } // a bit of a kludge, in the absence of real aliasing support in dojo.cldr
+		if(label[0] == 1){ label = undefined; } // kludge, in the absence of real aliasing support in dojo.cldr
 	}
 	props[1] = 'format';
 	
 	// return by copy so changes won't be made accidentally to the in-memory model
-	var result = (label || lookup(locale)[props.join('-')]).concat();
+	var result = (label || lookup[props.join('-')]).concat();
 
 	if(item == "months"){
 		if(date.isLeapYear(date.getFullYear())){
 			// Adar I (6th position in the array) will be used.
 			// Substitute the leap month Adar II for the regular Adar (7th position)
 			props.push("leap");
-			result[6] = lookup(locale)[props.join('-')];
+			result[6] = lookup[props.join('-')];
 		}else{
 			// Remove Adar I but leave an empty position in the array
 			delete result[5];
