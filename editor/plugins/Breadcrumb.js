@@ -328,8 +328,12 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 		// summary:
 		//		Over-ride to clean up the breadcrumb toolbar.
 		if(this.breadcrumbBar){
-			this.breadcrumbBar.destroy();
+			this.breadcrumbBar.destroyRecursive();
 			this.breadcrumbBar = null;
+		}
+		if(this._menu){
+			this._menu.destroyRecursive();
+			delete this._menu;
 		}
 		this._buttons = null;
 		delete this.editor.breadcrumbBar;
