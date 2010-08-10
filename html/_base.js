@@ -126,7 +126,7 @@ dojo.require("dojo.html");
 					}
 					styles.attributes[i - 1] = atObj;
 				}
-				return ""; // squelsh the <style> or <link>
+				return "";
 			}
 		);
 	};
