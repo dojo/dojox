@@ -1,5 +1,7 @@
 dojo.provide("dojox.widget.PlaceholderMenuItem");
 
+dojo.experimental("dojox.widget.PlaceholderMenuItem");
+
 dojo.require("dijit.Menu");
 
 dojo.declare("dojox.widget.PlaceholderMenuItem", dijit.MenuItem, {
@@ -77,17 +79,17 @@ dojo.declare("dojox.widget.PlaceholderMenuItem", dijit.MenuItem, {
 dojo.extend(dijit.Menu, { 
 	getPlaceholders: function(/*String?*/ label){ 
 		// summary:
-		//		returns an array of placeholders with the given label.  There
+		//		Returns an array of placeholders with the given label.  There
 		//		can be multiples.
 		// label:
 		//		Label to search for - if not specified, then all placeholders
 		//		are returned
-		// returns:
+		// returns: Array
 		//		An array of placeholders that match the given label
 		var r = []; 
 
 		var children = this.getChildren(); 
-		children.forEach(function(child){ 
+		dojo.forEach(children, function(child){ 
 			if(child._isPlaceholder && (!label || child.label == label)){
 				r.push(child); 
 			}else if(child._started && child.popup && child.popup.getPlaceholders){
@@ -100,6 +102,6 @@ dojo.extend(dijit.Menu, {
 				}
 			}
 		}, this); 
-		return r; // dojox.widget.PlaceholderMenuItem[]
+		return r;
 	}
 }); 
