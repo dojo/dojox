@@ -243,7 +243,7 @@
 	mdash:"linie em",
 	lsquo:"ghilimele simple stânga",
 	rsquo:"ghilimele simple dreapta",
-	sbquo:"single low-9 semn de citare ",
+	sbquo:"single low-9 semn de citare",
 	ldquo:"ghilimele duble stânga",
 	rdquo:"ghilimele duble dreapta",
 	bdquo:"double low-9 semn de citare",
