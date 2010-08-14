@@ -117,7 +117,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 
 		this.connect(anim["out"], "onEnd", function(){
 			// onEnd of the `out` animation, select the next items and play `in` animation
-			this._set(this._idx + 1);
+			this._setIndex(this._idx + 1);
 			anim["in"].play(15);
 		});
 		
@@ -151,7 +151,7 @@ dojo.declare("dojox.widget.Roller", dijit._Widget, {
 		m["out"].stop();
 	},
 	
-	_set: function(i){
+	_setIndex: function(i){
 		// summary: Set the Roller to some passed index. If beyond range, go to first.
 		var l = this.items.length - 1;
 		if(i < 0){ i = l; }
