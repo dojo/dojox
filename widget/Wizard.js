@@ -79,9 +79,13 @@ dojo.declare(
 		this.connect(this.doneButton, "onClick", "done");
 
 		this._subscription = dojo.subscribe(this.id + "-selectChild", dojo.hitch(this,"_checkButtons"));
-		this._checkButtons();
 		this._started = true;
 		
+	},
+	
+	resize: function(){
+	    this.inherited(arguments);
+	    this._checkButtons();
 	},
 
 	_checkButtons: function(){
