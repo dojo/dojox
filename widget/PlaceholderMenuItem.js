@@ -65,7 +65,7 @@ dojo.declare("dojox.widget.PlaceholderMenuItem", dijit.MenuItem, {
 		dojo.forEach(this._replacedWith, function(item){ 
 			p.removeChild(item); 
 			if(destroy){ 
-				item.destroy(); 
+				item.destroyRecursive(); 
 			} 
 		}); 
 		this._replacedWith = []; 
