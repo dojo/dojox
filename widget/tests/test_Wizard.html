@@ -73,6 +73,64 @@
 	<h1 class="testTitle">dojox.widget.Wizard tests</h1>
 
 	<div class="floater">
+		<p>Test a wizard in a Dialog:</p>
+		<button data-dojo-type="dijit.form.Button" id="showDialog">
+			Show Dialog
+			<script type="dojo/connect" data-dojo-event="onClick">
+				dijit.byId("wizardDialog").show();
+			</script>
+		</button>
+		
+		<div id="wizardDialog" data-dojo-type="dijit.Dialog" data-dojo-props="title:'Wizard Dialog'">
+			<div data-dojo-type="dojox.widget.Wizard" data-dojo-props="style:'height:300px; width:400px'">
+				<div dojoType="dojox.widget.WizardPane">
+					<p>The next two (hidden) children container AccordionContainers. You'll have to be
+						more careful about the styling / sizing, as the child wants to take 100% of
+						it's height. You can size explicitly if you like, or add margin-bottom to
+						leave room for the buttons
+					</p>
+				</div>
+				<div dojoType="dojox.widget.WizardPane" style="padding:8px">
+					<div dojoType="dijit.layout.AccordionContainer">
+						<div title="foo" dojoType="dijit.layout.ContentPane">
+							foo.
+						</div>
+						<div title="bar" dojoType="dijit.layout.ContentPane">
+							foo.
+						</div>
+					</div>
+				</div>
+				<div dojoType="dojox.widget.WizardPane" style="padding:8px">
+					<div dojoType="dijit.layout.BorderContainer">
+						<div region="left" style="width:75px" dojoType="dijit.layout.ContentPane">
+							left pane
+						</div>
+						<div region="center" dojoType="dijit.layout.ContentPane">
+							main pane
+						</div>
+						<div dojoType="dijit.layout.ContentPane" region="right" style="width:75px">
+							right pane
+						</div>
+					</div>
+				</div>
+				<div dojoType="dojox.widget.WizardPane" style="padding:8px">
+					<div dojoType="dijit.layout.TabContainer">
+						<div title="tab1" dojoType="dijit.layout.ContentPane">
+							foo
+						</div>
+						<div title="tab2" dojoType="dijit.layout.ContentPane">
+							foo
+						</div>
+						<div title="tab3" dojoType="dijit.layout.ContentPane">
+							foo
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="floater">
 		
 		<p>This example shows a wizard with customized button labels.</p>
 		
@@ -251,62 +309,23 @@
 	</div>
 
 	<div class="floater">
-		<p>Test a wizard in a Dialog:</p>
-		<button data-dojo-type="dijit.form.Button" id="showDialog">
-			Show Dialog
-			<script type="dojo/connect" data-dojo-event="onClick">
-				dijit.byId("wizardDialog").show();
-			</script>
-		</button>
-		
-		<div id="wizardDialog" data-dojo-type="dijit.Dialog" data-dojo-props="title:'Wizard Dialog'">
-			<div data-dojo-type="dojox.widget.Wizard" data-dojo-props="style:'height:300px; width:400px'">
-				<div dojoType="dojox.widget.WizardPane">
-					<p>The next two (hidden) children container AccordionContainers. You'll have to be
-						more careful about the styling / sizing, as the child wants to take 100% of
-						it's height. You can size explicitly if you like, or add margin-bottom to
-						leave room for the buttons
-					</p>
-				</div>
-				<div dojoType="dojox.widget.WizardPane" style="padding:8px; margin-bottom:35px">
-					<div dojoType="dijit.layout.AccordionContainer">
-						<div title="foo" dojoType="dijit.layout.ContentPane">
-							foo.
-						</div>
-						<div title="bar" dojoType="dijit.layout.ContentPane">
-							foo.
-						</div>
-					</div>				
-				</div>
-				<div dojoType="dojox.widget.WizardPane" style="padding:8px; margin-bottom:35px">
-					<div dojoType="dijit.layout.BorderContainer">
-						<div region="left" style="width:75px" dojoType="dijit.layout.ContentPane">
-							left pane
-						</div>
-						<div region="center" dojoType="dijit.layout.ContentPane">
-							main pane
-						</div>
-						<div dojoType="dijit.layout.ContentPane" region="right" style="width:75px">
-							right pane
-						</div>
-					</div>
-				</div>
-				<div dojoType="dojox.widget.WizardPane" style="padding:8px; margin-bottom:35px">
-					<div dojoType="dijit.layout.TabContainer">
-						<div title="tab1" dojoType="dijit.layout.ContentPane">
-							foo
-						</div>
-						<div title="tab2" dojoType="dijit.layout.ContentPane">
-							foo
-						</div>
-						<div title="tab3" dojoType="dijit.layout.ContentPane">
-							foo
-						</div>
-					</div>
-				</div>
-			</div>
+		<p>This should overflow, <em>badly</em>:</p>
+		<div id="weezard" data-dojo-type="dojox.widget.Wizard" data-dojo-props="
+			style:'height:300px; width:300px'
+		">
+			<div data-dojo-type="dojox.widget.WizardPane" data-dojo-props="
+				href:'../../../dojo/LICENSE'
+			"></div>
+			<div data-dojo-type="dojox.widget.WizardPane" data-dojo-props="
+				href:'../../../dojo/LICENSE'
+			"></div>
+			<div data-dojo-type="dojox.widget.WizardPane" data-dojo-props="
+				href:'../../../dojo/LICENSE'
+			"></div>
 		</div>
 	</div>
+	
+	<div style="clear:both">That's all, folks.</div>
 	
 </body>
 </html>
