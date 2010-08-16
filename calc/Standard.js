@@ -62,12 +62,12 @@ dojo.declare(
 		if(isReadOnly){
 			store.fetch({
 				onComplete: dojo.hitch(this, saveReadOnlyFunctions),
-				onError: function(text){console.log(text)}
+				onError: function(text){console.error(text)}
 			});
 		}else{
 			store.fetch({
 				onComplete: dojo.hitch(this, saveFunctions),
-				onError: function(text){console.log(text)}
+				onError: function(text){console.error(text)}
 			});
 		}
 	},

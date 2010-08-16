@@ -40,7 +40,7 @@ dojo.declare(
 	},
 	onSaved: function(){
 		// this on save needs to be overriden if you want Executor parsing support
-		console.log("Save was pressed");
+		//console.log("Save was pressed");
 	},
 	clear: function(){
 		// summary
@@ -60,7 +60,7 @@ dojo.declare(
 	onReset: function(){
 		// summary
 		//	(Reset button on click event) reset the arguments and body to their previously saved state if the user says yes
-		console.log("Reset was pressed");
+		//console.log("Reset was pressed");
 		if(this.combo.get("value") in this.functions){
 			var answer = confirm("Do you want to reset this function?");
 			if(answer){
@@ -74,11 +74,11 @@ dojo.declare(
 		//	delete an item in the writestore
 		if (this.writeStore.isItem(item)){
 			// delete it
-			console.log("Found item "+item);
+			//console.log("Found item "+item);
 			this.writeStore.deleteItem(item);
 			this.writeStore.save();
 		}else{
-			console.log("Unable to locate the item");
+			//console.log("Unable to locate the item");
 		}
 	},
 	deleteFunction: function(name){
