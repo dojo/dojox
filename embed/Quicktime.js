@@ -255,7 +255,9 @@ dojo.provide("dojox.embed.Quicktime");
 		}
 		getVer();
 	}else if(d.isIE && installed){
-		// we already know if IE has QuickTime installed
-		dojox.embed.Quicktime.onInitialize();
+		// we already know if IE has QuickTime installed, but we need this to seem like a callback.
+		setTimeout(function(){
+			dojox.embed.Quicktime.onInitialize();
+		}, 10);
 	}
 })(dojo);
