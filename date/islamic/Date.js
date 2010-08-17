@@ -388,8 +388,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		var julianDay = (this._GREGORIAN_EPOCH - 1) + (365 * (gYear - 1)) + Math.floor((gYear - 1) / 4)
 					+ (-Math.floor((gYear - 1) / 100)) + Math.floor((gYear - 1) / 400)
 					+ Math.floor((((367 * (gMonth+1)) - 362) / 12)
-					+ (((gMonth+1) <= 2) ? 0 : (dojo.date.isLeapYear(date) ? -1 : -2)) + gDay) 
-					+(Math.floor(date.getSeconds() + 60 * (date.getMinutes() + 60 * date.getHours()) + 0.5) / 86400.0);
+					+ (((gMonth+1) <= 2) ? 0 : (dojo.date.isLeapYear(date) ? -1 : -2)) + gDay);
 		julianDay = Math.floor(julianDay) + 0.5;
 
 		var days = julianDay - this._ISLAMIC_EPOCH;
