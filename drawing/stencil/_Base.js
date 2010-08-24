@@ -864,7 +864,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 				this._label.setLabel(text);
 			}
 		},
-
+		
 		getLabel: function(){
 			// summary:
 			//		Get the text of the label.
@@ -1034,7 +1034,8 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			//		"onStencilUp". To disable the selectability,
 			//		make the att "", which causes a standard
 			//		mouse event.
-			var att = this.enabled && !this.annotation ? this.drawingType : "";
+			//		Labels are special and used to select master stencils.
+			var att = this.enabled && (!this.annotation || this.drawingType=="label") ? this.drawingType : "";
 			this.util.attr(shape, "drawingType", att);
 		},
 

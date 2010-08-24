@@ -29,6 +29,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 		}
 	},{
 		_align:"start",
+		drawingType:"label",
 		
 		setLabelCustom: function(/* ? String */text){
 			// summary:

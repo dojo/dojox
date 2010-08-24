@@ -343,6 +343,16 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				this.setConstraint();
 			},
 			
+			onLabelDoubleClick: function(/*EventObject*/obj){
+				// summary:
+				//		Event to connect a textbox to
+				//		for label edits
+				console.info("mgr.onLabelDoubleClick:", obj);
+				if(this.selectedStencils[obj.id]){
+					this.deselect();
+				}
+			},
+			
 			onStencilDoubleClick: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on the double-click of a stencil
@@ -438,10 +448,23 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				});
 			},
 			
+			onLabelDown: function(/*EventObject*/obj, evt){
+				// summary:
+				//		Event fired on mousedown of a stencil's label
+				//		Because it's an annotation the id will be the
+				//		master stencil.
+				//console.info("===============>>>Label click: ",obj, " evt: ",evt);
+				this.onStencilDown(obj,evt);
+			},
+			
 			onStencilUp: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on mouseup off of a stencil
 				//
+			},
+			
+			onLabelUp: function(/*EventObject*/obj){
+				this.onStencilUp(obj);
 			},
 			
 			onStencilDrag: function(/*EventObject*/obj){
@@ -479,6 +502,10 @@ dojo.provide("dojox.drawing.manager.Stencil");
 					
 					
 				}
+			},
+			
+			onLabelDrag: function(/*EventObject*/obj){
+				this.onStencilDrag(obj);
 			},
 			
 			onDragEnd: function(/*EventObject*/obj){
