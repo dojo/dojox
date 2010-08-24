@@ -185,16 +185,18 @@ dojo.declare(
 		// e: 
 		//		a DOM event
 
-		dojo.stopEvent(e);
-		this._isDragging = false;
-		if(this.autoScroll){
-			this.autoScroll.stopAutoScroll();
-		}
+		if (this._isDragging){
+			dojo.stopEvent(e);
+			this._isDragging = false;
+			if(this.autoScroll){
+				this.autoScroll.stopAutoScroll();
+			}
+			delete this.onMove;
+			this.onDragEnd(this.node);
+			this.node.focus();
+ 		}
 		dojo.disconnect(this.events.pop());
 		dojo.disconnect(this.events.pop());
-		delete this.onMove;
-		this.onDragEnd(this.node);
-		this.node.focus();
 	},
 	
 	onDragStart: function(/*DOMNode*/node, /*Object*/coords, /*Object*/size){
