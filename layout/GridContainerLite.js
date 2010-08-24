@@ -174,6 +174,10 @@ dojo.declare(
 			if(widget.resize && dojo.isFunction(widget.resize)){
 				widget.resize();
 			}
+
+			// Update the column of the widget
+			widget.set("column", node.parentNode.cellIndex);
+			
 			if(this.doLayout){
 				var domNodeHeight = this._contentBox.h,
 					divHeight = dojo.contentBox(this.gridContainerDiv).h;
@@ -335,6 +339,12 @@ dojo.declare(
 			i++;
 		}
 	},
+	
+	_getZonesAttr: function(){
+		// summary:
+		//   return array of zone (domNode) 
+		return dojo.query(".gridContainerZone",  this.containerNode);
+	},
 
 	enableDnd: function(){
 		// summary:
@@ -442,6 +452,7 @@ dojo.declare(
 				dojo.attr(child.domNode, "tabIndex", "0");
 			}
 		}
+		child.set("column", column);
 		return child; // Widget
 	},
 
