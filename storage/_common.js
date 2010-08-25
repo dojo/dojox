@@ -10,6 +10,7 @@ dojo.require("dojox.storage.manager");
 dojo.require("dojox.storage.GearsStorageProvider");
 //>>excludeStart("offlineProfileExclude", kwArgs.dojoxStorageBuildOption == "offline");
 dojo.require("dojox.storage.WhatWGStorageProvider");
+dojo.require("dojox.storage.IEStorageProvider");
 dojo.require("dojox.storage.FlashStorageProvider");
 //>>excludeEnd("offlineProfileExclude");
 
