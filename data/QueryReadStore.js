@@ -122,7 +122,6 @@ dojo.declare("dojox.data.QueryReadStore",
 				if(defaultValue){
 					return defaultValue;
 				}
-				console.log(this._className+".getValue(): Item does not have the attribute '"+attribute+"'.");
 			}
 			return item.i[attribute];
 		},
