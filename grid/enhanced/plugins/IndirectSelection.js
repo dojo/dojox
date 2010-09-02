@@ -2,18 +2,23 @@ dojo.provide("dojox.grid.enhanced.plugins.IndirectSelection");
 
 dojo.require("dojox.grid.cells.dijit");
 dojo.require("dojox.grid.cells._base");
+dojo.require("dojox.grid.enhanced.plugins._Mixin");
 
-dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", null, {
+dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhanced.plugins._Mixin, {
 	//	summary:
 	//		 Provides indirect selection feature - swipe selecting row(s)
 	// example:
 	// 		 <div dojoType="dojox.grid.EnhancedGrid" plugins="{indirectSelection: true}" ...></div>
 	// 	  or <div dojoType="dojox.grid.EnhancedGrid" plugins="{indirectSelection: {name: 'xxx', width:'30px', styles:'text-align: center;'}}" ...></div>	
 
+	//name: String
+	//		Plugin name
+	name: "indirectSelection",
+	
 	constructor: function(inGrid){
 		this.grid = inGrid;
 		//Hook grid.layout.setStructure(), so that indirect selection cell is included in the new structure
-		dojo.connect(inGrid.layout, 'setStructure', dojo.hitch(inGrid.layout, this.addRowSelectCell));
+		this.connect(inGrid.layout, 'setStructure', dojo.hitch(inGrid.layout, this.addRowSelectCell));
 	},
 	
 	addRowSelectCell: function(){
@@ -24,6 +29,12 @@ dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", null, {
 		}
 		var rowSelectCellAdded = false, inValidFields = ['get', 'formatter', 'field', 'fields'],
 		defaultCellDef = {type: dojox.grid.cells.DijitMultipleRowSelector, name: '', editable: true, width:'30px', styles:'text-align: center;'};
+
+		if(this.grid.rowSelectCell){//remove the existed one
+			defaultCellDef['defaultValue'] = this.grid.rowSelectCell['defaultValue'];
+			this.grid.rowSelectCell.destroy();
+		}
+		
 		dojo.forEach(this.structure, dojo.hitch(this, function(view){
 			var cells = view.cells;
 			if(cells && cells.length > 0 && !rowSelectCellAdded){
@@ -60,7 +71,13 @@ dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", null, {
 			}			
 		}));		
 		this.cellCount = this.cells.length;
-	}
+	},
+	
+	destroy: function(){
+		this.grid.rowSelectCell.destroy();
+		delete this.grid.rowSelectCell;
+		this.inherited(arguments);
+	}	
 });
 
 dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
@@ -74,7 +91,7 @@ dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
 	
 	//widgetMap: Object
 	//		Cache all the radio or checkbox widgets
-	widgetMap:{},
+	widgetMap:null,
 	
 	//widget: Object
 	//		The currently focused widget
@@ -87,6 +104,10 @@ dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
 	//defaultValue: Boolean
 	//		Default value for radio or checkbox widget
 	defaultValue: false,
+	
+	constructor: function(){
+		this.widgetMap = {};
+	},
 
 	formatEditing: function(inDatum, inRowIndex){
 		// summary:
@@ -107,11 +128,17 @@ dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
 		return;
 	},
 	
+	getValue: function(inRowIndex){
+		// summary:
+		//		Overwritten, see dojox.grid.cells._Widget
+		return this.get(inRowIndex);
+	},
+	
 	get: function(inRowIndex){
 		// summary:
 		//		Overwritten, see dojox.grid.cells._Base
 		//		return widget value of row(inRowIndex) -  true | false
-		var widget = this.widgetMap[this.view.id] ? this.widgetMap[this.view.id][inRowIndex] : null;
+		var widget = this.widgetMap[inRowIndex];
 		var value = widget ? widget.attr('checked') : '';
 		return value;
 	},
@@ -127,13 +154,13 @@ dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
 		//		Subscriber of rowSelectionChangedTopic, update row selection accordingly
 		// obj: Object
 		//		Object that fired the rowSelectionChangedTopic
-		if(obj == this || obj.grid && obj.grid != this.grid){
+		if(!obj || obj == this || obj.grid && obj.grid != this.grid){
 			//ignore if the topic is published by self
 			return;
 		}
-		for (var i in this.widgetMap[this.view.id]){
+		for (var i in this.widgetMap){
 			var idx = new Number(i);
-			var widget = this.widgetMap[this.view.id][idx];
+			var widget = this.widgetMap[idx];
 			var value = !!this.grid.selection.selected[idx];
 			widget.attr('checked', value);
 		}
@@ -148,13 +175,18 @@ dojo.declare("dojox.grid.cells._SingleRowSelectorMixin", null, {
 		//		Target row index
 		// value: Boolean
 		//		True - checked | False - unchecked
-		var widget;
-		dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[value ? 'addToSelection' : 'deselect'])(idx);
-		if(this.widgetMap[this.view.id] && (widget = this.widgetMap[this.view.id][idx])){
+		this._select(idx, value);
+		
+		var widget = this.widgetMap[idx];
+		if(widget){
 			widget.attr('checked', value);			
 		}
 		this._fireSelectionChanged();
-	},	
+	},
+
+	_select: function(index, value){
+		dojox.grid.Selection.prototype[value ? 'addToSelection' : 'deselect'].call(this.grid.selection, index);
+	},
 
 	inIndirectSelectionMode: function(){},
 	
@@ -251,7 +283,7 @@ dojo.declare("dojox.grid.cells._MultipleRowSelectorMixin", null, {
 		// rowIndex: Integer
 		//		Index of the start row
 		this.swipeStartRowIndex = this.swipeMinRowIndex = this.swipeMaxRowIndex = rowIndex;
-		this.toSelect = !this.widgetMap[this.view.id][rowIndex].attr('checked');
+		this.toSelect = !this.widgetMap[rowIndex].attr('checked');
 	},
 	
 	_updateSelection: function(e, delta){
@@ -272,19 +304,18 @@ dojo.declare("dojox.grid.cells._MultipleRowSelectorMixin", null, {
 		deltaRow > 0 && (this.swipeMaxRowIndex < e.rowIndex + delta) && (this.swipeMaxRowIndex = e.rowIndex + delta)
 		deltaRow < 0 && (this.swipeMinRowIndex > e.rowIndex + delta) && (this.swipeMinRowIndex = e.rowIndex + delta);
 		// only when the min != max, there is a RANGE for selection
-		if (this.swipeMinRowIndex != this.swipeMaxRowIndex) {
-			for (var i in this.widgetMap[this.view.id]) {
+		if(this.swipeMinRowIndex != this.swipeMaxRowIndex){
+			for (var i in this.widgetMap){
 				var idx = new Number(i);
 				var inRange = (idx >= (deltaRow > 0 ? this.swipeStartRowIndex : e.rowIndex + delta) &&
 				idx <= (deltaRow > 0 ? e.rowIndex + delta : this.swipeStartRowIndex));
 				var outOfRange = (idx >= this.swipeMinRowIndex && idx <= this.swipeMaxRowIndex);
-				if (inRange && !(deltaRow == 0 && !this.toSelect)) {
-					(this.widgetMap[this.view.id][idx]).attr('checked', this.toSelect);
-					dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[this.toSelect ? 'addToSelection' : 'deselect'])(idx);
-				//}else if (outOfRange && (this.toSelect || !byKey)) {
-				}else if (outOfRange && !byKey) {
-					(this.widgetMap[this.view.id][idx]).attr('checked', !this.toSelect);
-					dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[!this.toSelect ? 'addToSelection' : 'deselect'])(idx);
+				if (inRange && !(deltaRow == 0 && !this.toSelect)){
+					(this.widgetMap[idx]).attr('checked', this.toSelect);
+					this._select(idx, this.toSelect);
+				}else if (outOfRange && !byKey){
+					(this.widgetMap[idx]).attr('checked', !this.toSelect);
+					this._select(idx, !this.toSelect);
 				}
 			}
 		}
@@ -300,7 +331,7 @@ dojo.declare("dojox.grid.cells._MultipleRowSelectorMixin", null, {
 		// delta: Integer
 		//		Row index delta, used for swipe selection via Shift + Cursor
 		//		-1 : Shift +  Up, 1 : Shift + Down
-		if(this.swipeStartRowIndex < 0) {
+		if(this.swipeStartRowIndex < 0){
 			//A new swipe selection starts via Shift + Cursor			
 			this.swipeStartRowIndex = e.rowIndex;
 			if(delta > 0){//Shift + Down
@@ -310,7 +341,7 @@ dojo.declare("dojox.grid.cells._MultipleRowSelectorMixin", null, {
 				this.swipeMinRowIndex = e.rowIndex + delta;
 				this.swipeMaxRowIndex = e.rowIndex;	
 			}
-			this.toSelect = this.widgetMap[this.view.id][e.rowIndex].attr('checked');
+			this.toSelect = this.widgetMap[e.rowIndex].attr('checked');
 		}
 		this._updateSelection(e, delta);
 	},
@@ -337,11 +368,11 @@ dojo.declare("dojox.grid.cells._MultipleRowSelectorMixin", null, {
 		//		Toggle between select all and deselect all
 		// checked: Boolean
 		//		True - select all, False - deselect all
-		for (var i in this.widgetMap[this.view.id]){
+		for(var i in this.widgetMap){
 			var idx = new Number(i);
-			var widget = this.widgetMap[this.view.id][idx];
+			var widget = this.widgetMap[idx];
 			widget.attr('checked', checked);
-			dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[checked ? 'addToSelection' : 'deselect'])(idx);
+			this._select(idx, checked);
 		}
 		!checked && this.grid.selection.deselectAll();
 		this.defaultValue = checked;
@@ -358,51 +389,68 @@ dojo.declare("dojox.grid.cells.DijitSingleRowSelector", [dojox.grid.cells._Widge
 	//		widget class that will be used for indirect selection cell(column)
 	widgetClass: dijit.form.RadioButton,
 	
+	//_connects: Array
+	//		List of all connections.
+	_connects: null,
+	
+	//_subscribes: Array
+	//		List of all subscribes.
+	_subscribes: null,
+	
 	constructor: function(){
-		dojo.subscribe(this.grid.rowSelectionChangedTopic, this, this._selectionChanged);
-		dojo.subscribe(this.grid.sortRowSelectionChangedTopic, this, this._selectionChanged);
+		this._connects = {'col':[]}, this._subscribes = {'col':[]};
+		this._subscribes['col'].push(dojo.subscribe(this.grid.rowSelectionChangedTopic, this, this._selectionChanged));
+		this._subscribes['col'].push(dojo.subscribe(this.grid.sortRowSelectionChangedTopic, this, this._selectionChanged));
+		this._connects['col'].push(dojo.connect(this.grid.scroller, 'invalidatePageNode', this, '_pageDestroyed'));
 		this.grid.indirectSelector = this;
 	},
 
 	formatNode: function(inDatum, inRowIndex){
 		// summary:
 		//		Overwritten, see dojox.grid.cells._Widget
-		if(!this.widgetClass){
-			return inDatum;
-		}
-		!this.widgetMap[this.view.id] && (this.widgetMap[this.view.id] = {});
-		var currWidget = this.widgetMap[this.view.id][inRowIndex];
+		if(!this.widgetClass){ return inDatum; }
+		
+		var currWidget = this.widgetMap[inRowIndex];
 		
 		var cellNode = this.getNode(inRowIndex);
-		if(!cellNode){
-			return;
-		}
-		var noAttachedWidget = !cellNode.firstChild || (currWidget && currWidget.domNode != cellNode.firstChild);
-		var inNode = noAttachedWidget && !cellNode.firstChild ? cellNode.appendChild(dojo.create('div')) : cellNode.firstChild;
+		if(!cellNode){ return; }
 		
-		if(!currWidget || dojo.isIE){
-			!this.widgetProps && (this.widgetProps = {});
-			this.widgetProps.name = 'select_' + this.view.id;
-			var value = this.getDefaultValue(currWidget, inRowIndex);
-			this.widget = currWidget = this.createWidget(inNode, inDatum, inRowIndex);
-			this.widgetMap[this.view.id][inRowIndex] = currWidget;
-			this.widget.attr('checked', value);
-			dojo.connect(currWidget, '_onClick', dojo.hitch(this, function(e){
+		var inNode = cellNode.firstChild;
+		if(!inNode){ inNode = cellNode.appendChild(dojo.create('div')); console.warn('NO first child for cellNode');}
+		
+		if(!currWidget){
+			var value = this.getDefaultValue(false, inRowIndex);
+			if(!this.widgetProps){ this.widgetProps = {}; }
+			this.widgetProps.name = 'select_' + this.grid.id;
+			this.widgetProps.id = this.grid.id + '_row_' + inRowIndex;
+			this.widgetProps.checked = value;
+			
+			currWidget = this.createWidget(inNode, inDatum, inRowIndex);
+			this.widgetMap[inRowIndex] = currWidget;
+			var conns = this._connects[currWidget.id] = [];
+			conns.push(dojo.connect(currWidget, '_onClick', dojo.hitch(this, function(e){
 				this._selectRow(e, inRowIndex);
-			}));
-			dojo.connect(currWidget.domNode, 'onkeyup', dojo.hitch(this, function(e){
+			})));
+			conns.push(dojo.connect(currWidget.domNode, 'onkeyup', dojo.hitch(this, function(e){
 				e.keyCode == dojo.keys.SPACE && this._selectRow(e, inRowIndex, true);					
-			}));			
-			dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[value ? 'addToSelection' : 'deselect'])(inRowIndex);
-		}else{
-			this.widget = currWidget;
-			dojo.addClass(this.widget.domNode, 'dojoxGridWidgetHidden');
-			noAttachedWidget && this.attachWidget(inNode, inDatum, inRowIndex);
+			})));
+			this._select(inRowIndex, value);
+		}else if(currWidget.domNode != inNode){
+			cellNode.appendChild(currWidget.domNode);
 		}
-		this.grid.rowHeightChanged(inRowIndex);
-		//this.focus(inRowIndex);
-		dojo.removeClass(this.widget.domNode, 'dojoxGridWidgetHidden');
-		(inRowIndex == this.grid.lastRenderingRowIdx) && dojo.removeClass(this.grid.domNode, 'dojoxGridSortInProgress');
+		if(!this.widget){ this.widget = currWidget };//not really used, just compatible with dojox.grid.cells._Widget
+		
+		var views = this.grid.views, lastRows = this.grid.lastRenderingRows;	
+		views.views.length > 1 && views.renormalizeRow(inRowIndex)//only for multiple views
+
+		var matched = dojo.some(lastRows, function(row, i, rows){
+			if(inRowIndex == row){//reach the last row in current rendering page
+				dojo.hitch(this.grid.scroller, 'rowHeightChanged')(row);//updatePageHeight since  "formatNode()" is a setTimeOut()
+				rows.splice(i, 1);
+				return true;
+			}
+		});
+		matched && dojo.removeClass(this.grid.domNode, 'dojoxGridSortInProgress');
 	},
 	
 	getDefaultValue: function(widget, inRowIndex){
@@ -429,7 +477,7 @@ dojo.declare("dojox.grid.cells.DijitSingleRowSelector", [dojox.grid.cells._Widge
 		//		Set focus to the widget in the target row
 		// inRowIndex: Integer
 		//		Target row			
-		var widget = this.widgetMap[this.view.id][inRowIndex];
+		var widget = this.widgetMap[inRowIndex];
 		if(widget){
 			setTimeout(dojo.hitch(widget, function(){
 				dojox.grid.util.fire(this, "focus");
@@ -471,25 +519,25 @@ dojo.declare("dojox.grid.cells.DijitSingleRowSelector", [dojox.grid.cells._Widge
 		this.grid.selection.deselectAll();
 		this.grid.selection.addToSelection(inRowIndex);
 		
-		if (!dojo.isMoz) {//fix seleting radio by space only works in Moz
-			var widget = this.widgetMap[this.view.id][inRowIndex];
+		if(!dojo.isMoz){//fix seleting radio by space only works in Moz
+			var widget = this.widgetMap[inRowIndex];
 			widget.attr('checked', true);
 		}
 		this._fireSelectionChanged();
 	},
 	
-	toggleRow: function(idx, value) {
+	toggleRow: function(idx, value){
 		// summary:
 		//		toggle selection of a single row
 		// idx: Integer
 		//		Target row index
 		// value: Boolean
 		//		True - checked | False - unchecked
-		var currSelectIdx = dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype.getFirstSelected)();
+		var currSelectIdx = dojox.grid.Selection.prototype.getFirstSelected.call(this.grid.selection);
 		if(idx != currSelectIdx && !value || idx == currSelectIdx && value){return;}
 		
-		var widget;			
-		if(idx != currSelectIdx && value && this.widgetMap[this.view.id] && (widget = this.widgetMap[this.view.id][currSelectIdx])){
+		var widget;
+		if(idx != currSelectIdx && value && (widget = this.widgetMap[currSelectIdx])){
 			//fix - current selected widget isn't unchecked
 			widget.attr('checked', false);			
 		}
@@ -504,10 +552,51 @@ dojo.declare("dojox.grid.cells.DijitSingleRowSelector", [dojox.grid.cells._Widge
 		//		Row index
 		// disabled: Boolean
 		//		True - disabled | False - enabled
-		if(this.widgetMap[this.view.id]){
-			var widget = this.widgetMap[this.view.id][idx];
-			widget && widget.attr('disabled', disabled);
-		} 
+		var widget = this.widgetMap[idx];
+		widget && widget.attr('disabled', disabled);
+	},
+	
+	_pageDestroyed: function(inPageIndex){
+		// summary:
+		//		Explicitly destroy widgets in the "destroyed" page
+		//		See dojox.grid._Scroller.invalidatePageNode()
+		// inPageIndex: Integer
+		//		Index of destroyed page
+		var rowsPerPage = this.grid.scroller.rowsPerPage;
+		var start = inPageIndex * rowsPerPage, end = start + rowsPerPage - 1;
+		var r, w, map = this.widgetMap;
+		if(!map){ return; }
+		for(r = start; r <= end; r++){
+			w = map[r], rowId = this.grid.id + '_row_' + r;
+			if(this._connects[rowId]){//clean widget's connections
+				dojo.forEach(this._connects[rowId], dojo.disconnect);
+				delete this._connects[rowId];
+			}
+			if(w && w.destroy){
+				w.destroy();
+				delete map[r];
+			}
+		}
+		//console.log("Page ",inPageIndex, " widgetMap=",map, " , registry=" ,dijit.registry._hash, ' existed pages =', this.grid.scroller.stack, ' conns =',this._connects, ' subs=', this._subscribes,'------');
+	},
+	
+	destroy: function(){
+		var w, map = this.widgetMap;
+		for(w in map){
+			map[w].destroy && map[w].destroy();
+			delete map[w];
+		};
+		for(x in this._connects){
+			dojo.forEach(this._connects[x], dojo.disconnect);
+			delete this._connects[x];
+		}
+		for(x in this._subscribes){
+			dojo.forEach(this._subscribes[x], dojo.unsubscribe);
+			delete this._subscribes[x];
+		}
+		delete this._connects;
+		delete this._subscribes;
+		//console.log('.DijitSingle(Multiple)RowSelector.destroy() executed! dijit.registry._hash - ' ,dijit.registry._hash);
 	}
 });
 
@@ -520,7 +609,7 @@ dojo.declare("dojox.grid.cells.DijitMultipleRowSelector", [dojox.grid.cells.Diji
 	widgetClass: dijit.form.CheckBox,
 	
 	constructor: function(){
-		dojo.connect(dojo.doc, 'onmouseup', this, 'domouseup');
+		this._connects['col'].push(dojo.connect(dojo.doc, 'onmouseup', this, 'domouseup'));
 		this.grid.indirectSelector = this;
 	},
 	
@@ -528,7 +617,7 @@ dojo.declare("dojox.grid.cells.DijitMultipleRowSelector", [dojox.grid.cells.Diji
 		// summary:
 		//		Select the target row or range or rows
 		// e: Event
-		//		Event fired on the target row		
+		//		Event fired on the target row
 		// inRowIndex: Integer
 		//		Target row index
 		// preChange: Boolean
@@ -538,33 +627,33 @@ dojo.declare("dojox.grid.cells.DijitMultipleRowSelector", [dojox.grid.cells.Diji
 		this._focusEndingCell(inRowIndex, 0);
 		var delta = inRowIndex - this.lastClickRowIdx;
 		if(this.lastClickRowIdx >= 0 && !e.ctrlKey && !e.altKey && e.shiftKey){
-			var newValue = this.widgetMap[this.view.id][inRowIndex].attr('checked');
+			var newValue = this.widgetMap[inRowIndex].attr('checked');
 			newValue = preChange ? !newValue : newValue;
-			for (var i in this.widgetMap[this.view.id]) {
+			for(var i in this.widgetMap){
 				var idx = new Number(i);
 				var inRange = (idx >= (delta > 0 ? this.lastClickRowIdx : inRowIndex) 
 				  			   && idx <= (delta > 0 ? inRowIndex :this.lastClickRowIdx));
 				if(inRange){
-					var widget = this.widgetMap[this.view.id][idx];
+					var widget = this.widgetMap[idx];
 					widget.attr('checked', newValue);
-					dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[newValue ? 'addToSelection' : 'deselect'])(idx);
+					this._select(idx, newValue);
 				}
 			}
 		}else{
 			//this.grid.selection.clickSelect(inRowIndex, true);	
 			var value = !this.grid.selection.selected[inRowIndex];
-			var widget = this.widgetMap[this.view.id][inRowIndex];
+			var widget = this.widgetMap[inRowIndex];
 			widget.attr('checked', value);
-			dojo.hitch(this.grid.selection, dojox.grid.Selection.prototype[value ? 'addToSelection' : 'deselect'])(inRowIndex);
+			this._select(inRowIndex, value);
 		}
 		//this.defaultValue = false;
 		this.lastClickRowIdx = inRowIndex;
 		this._fireSelectionChanged();
 	},
 
-	toggleRow: function(idx, value) {
+	toggleRow: function(idx, value){
 		// summary:
 		//		Overwritten
 		this._toggleSingleRow(idx, value);
-	}	
+	}
 });

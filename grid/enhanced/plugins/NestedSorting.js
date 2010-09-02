@@ -1,20 +1,16 @@
 dojo.provide("dojox.grid.enhanced.plugins.NestedSorting");
 
-dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
+dojo.require("dojox.grid.enhanced.plugins._Mixin");
+dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced.plugins._Mixin, {
 	//	summary:
 	//		 Provides nested sorting feature
 	// example:
 	// 		 <div dojoType="dojox.grid.EnhancedGrid" plugins="{nestedSorting: true}" ...></div>
+	
+	//name: String
+	//		Plugin name
+	name: "nestedSorting",
 
-	//sortAttrs: Array
-	//		Sorting attributes, e.g.[{attr: 'col1', asc: 1|-1|0, cell: cell, cellNode: node}, {...}, ...]
-	sortAttrs: [],
-	
-	//_unarySortCell: Object
-	//		Cache for the current unary sort cell(the 1st column in sorting sequence)
-	//		will be set as {cell: cell, cellNode: node}
-	_unarySortCell:{},
-	
 	//_minColWidth: Integer
 	//		Used for calculating min cell width, will be updated dynamically
 	_minColWidth: 63,//58
@@ -26,10 +22,6 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 	//_minColWidthUpdated: Boolean
 	//		Flag to indicate whether the min col width has been updated
 	_minColWidthUpdated: false,
-
-	//_sortTipMap: Object
-	//		Cache the tip on/off status for each cell, e.g. {cellIndex: true|false}
-	_sortTipMap:{},
 	
 	//_overResizeWidth: Integer
 	//		Overwrite the default over resize width, 
@@ -40,13 +32,6 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 	//		Attribute used in data store to mark which row(s) are selected accross sortings
 	storeItemSelected: 'storeItemSelectedAttr',
 
-	//exceptionalSelectedItems: Array
-	//		Cache data store items with exceptional selection state.
-	//		Used to retain selection states accross sortings. User may first select/deselect all rows
-	//		and then deselect/select certain rows, these later changed rows have a different state
-	//		with the global selection state, that is exceptional selection state
-	exceptionalSelectedItems: [],
-
 	//_a11yText: Object
 	//		Characters for sorting arrows, used for a11y high contrast mode
 	_a11yText: {
@@ -56,42 +41,71 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		'dojoxGridDescendingTip': '&#1783;',
 		'dojoxGridUnsortedTip'  : 'x' //'&#10006;'
 	},
+		
+	//_unarySortCell: Object
+	//		Cache for the current unary sort cell(the 1st column in sorting sequence)
+	//		will be set as {cell: cell, cellNode: node}
+	_unarySortCell: null,
+	
+	//_sortTipMap: Object
+	//		Cache the tip on/off status for each cell, e.g. {cellIndex: true|false}
+	_sortTipMap: null,
+	
+	//sortAttrs: Array
+	//		Sorting attributes, e.g.[{attr: 'col1', asc: 1|-1|0, cell: cell, cellNode: node}, {...}, ...]	
+	sortAttrs: null,
+	
+	//exceptionalSelectedItems: Array
+	//		Cache data store items with exceptional selection state.
+	//		Used to retain selection states accross sortings. User may first select/deselect all rows
+	//		and then deselect/select certain rows, these later changed rows have a different state
+	//		with the global selection state, that is exceptional selection state
+	exceptionalSelectedItems: null,
 	
 	constructor: function(inGrid){
 		// summary:
 		//		Mixin in all the properties and methods into DataGrid		
-		inGrid.mixin(inGrid, this);		
+		this._unarySortCell = {}, this._sortTipMap = {};
+		this.sortAttrs = [], this.exceptionalSelectedItems = [];
+
+		inGrid.mixin(inGrid, this);
 		//init views
-		dojo.forEach(inGrid.views.views, function(view){
-			//some init work for the header cells
-			dojo.connect(view, 'renderHeader', dojo.hitch(view, inGrid._initSelectCols));	
-			dojo.connect(view.header, 'domousemove', view.grid, '_sychronizeResize');					
-		});	
+		dojo.forEach(inGrid.views.views, this.initView, this);
+		this.connect(inGrid.views, 'addView', dojo.hitch(this, this.initView));
 		//init sorting
-		this.initSort(inGrid);	
+		this.initSort(inGrid);
 		//keep selection after sorting if required		
-		inGrid.keepSortSelection && dojo.connect(inGrid, '_onFetchComplete', inGrid, 'updateNewRowSelection');
+		inGrid.keepSortSelection && this.connect(inGrid, '_onFetchComplete', dojo.hitch(inGrid, 'updateNewRowSelection'));
+		this.connect(inGrid.layout, 'setStructure', dojo.hitch(inGrid, 'clearSort'));
 		
 		if(inGrid.indirectSelection && inGrid.rowSelectCell.toggleAllSelection){
-			dojo.connect(inGrid.rowSelectCell, 'toggleAllSelection', inGrid, 'allSelectionToggled');			
+			this.connect(inGrid.rowSelectCell, 'toggleAllSelection', dojo.hitch(inGrid, 'allSelectionToggled'));
 		}
 		
-		dojo.subscribe(inGrid.rowMovedTopic, inGrid, inGrid.clearSort);		
-		dojo.subscribe(inGrid.rowSelectionChangedTopic, inGrid, inGrid._selectionChanged);
+		this.subscribe(inGrid.rowMovedTopic, dojo.hitch(inGrid, inGrid.clearSort));		
+		this.subscribe(inGrid.rowSelectionChangedTopic, dojo.hitch(inGrid, inGrid._selectionChanged));
 		
 		//init focus manager for nested sorting
 		inGrid.focus.destroy();
 		inGrid.focus = new dojox.grid.enhanced.plugins._NestedSortingFocusManager(inGrid);
 		
 		//set a11y ARAI information
-		dojo.connect(inGrid.views, 'render', inGrid, 'initAriaInfo');
+		this.connect(inGrid.views, 'render', dojo.hitch(inGrid, 'initAriaInfo'));
 	},
 	
 	initSort: function(inGrid){
 		// summary:
-		//		initiate sorting		
+		//		Initiate sorting		
 		inGrid.getSortProps = inGrid._getDsSortAttrs;
 		//TODO - set default sorting order
+	},
+	
+	initView: function(view){
+		// summary:
+		//		Initiate views		
+			//some init work for the header cells
+		this.connect(view, 'renderHeader', dojo.hitch(view, view.grid._initSelectCols));
+		this.connect(view.header, 'domousemove', dojo.hitch(view.grid, '_sychronizeResize'));
 	},
 	
 	setSortIndex: function(inIndex, inAsc, e){
@@ -280,7 +294,8 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		dojo.query("[id*='Sort']", this.viewsHeaderNode).forEach(function(region){
 			dojo.addClass(region, 'dojoxGridUnsorted');
 		});
-		this.sortAttrs = [];
+		this._unarySortCell = {}, this._sortTipMap = {};
+		this.sortAttrs = [], this.exceptionalSelectedItems = [];		
 		this.focus.clearHeaderFocus();
 	},
 	
@@ -340,7 +355,6 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		];
 		return ret.join('');
 	},
-
 	
 	addHoverSortTip: function(e){
 		// summary:
@@ -631,13 +645,14 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 	_initSelectCols: function(){
 		// summary:
 		//		Some initial works on the header cells, like event binding, resizing parameters etc.
+		//		Scope - dojox.grid._View
 		var selectRegions      = dojo.query(".dojoxGridHeaderCellSelectRegion", this.headerContentNode);
 		var unarySortWrappers  = dojo.query(".dojoxGridUnarySortWrapper", this.headerContentNode);
 		var nestedSortWrappers = dojo.query(".dojoxGridNestedSortWrapper", this.headerContentNode);
 		
 		selectRegions.concat(unarySortWrappers).concat(nestedSortWrappers).forEach(function(region){
-			dojo.connect(region, 'onmousemove', dojo.hitch(this.grid, this.grid._toggleHighlight, this/*view*/));
-			dojo.connect(region, 'onmouseout', dojo.hitch(this.grid, this.grid._removeActiveState));
+			this.connect(region, 'onmousemove', dojo.hitch(this.grid, this.grid._toggleHighlight, this/*view*/));
+			this.connect(region, 'onmouseout', dojo.hitch(this.grid, this.grid._removeActiveState));
 		}, this);
 		
 		this.grid._fixHeaderCellStyle(selectRegions, this/*view*/);
@@ -910,7 +925,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		//		Subscriber of rowSelectionChangedTopic, update global row selection state accordingly
 		// obj: Object
 		//		Object that fired the rowSelectionChangedTopic		
-		obj == this.select && (this.toggleAllValue = false);//from DnD
+		obj == this.select && (this.toggleAllValue = false);//only topics from DnD
 	},
 	
 	getStoreSelectedValue: function(rowIdx){
@@ -960,6 +975,12 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", null, {
 		// return: Boolean
 		//		True - in the current page | False - not in the current page
 		return rowIndex < this._bop || rowIndex >= this._eop;
+	},
+	
+	destroy: function(){
+		this._unarySortCell = this._sortTipMap = null;
+		this.sortAttrs = this.exceptionalSelectedItems = null;
+		this.inherited(arguments);
 	}
 });
 
@@ -969,7 +990,7 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 
 	//lastHeaderFocus: Object
 	//		Last header focus info
-	lastHeaderFocus :{cellNode:null, regionIdx:-1},
+	lastHeaderFocus: null,
 	
 	//currentHeaderFocusEvt: Object
 	//		Dummy event for current header focus	
@@ -982,6 +1003,10 @@ dojo.declare("dojox.grid.enhanced.plugins._NestedSortingFocusManager", dojox.gri
 	//_focusBorderBox: Dom node
 	//		Root of focus border divs
 	_focusBorderBox: null,
+	
+	constructor: function(){
+		this.lastHeaderFocus = {cellNode:null, regionIdx:-1};
+	},
 	
 	_initColumnHeaders: function(){
 		// summary:

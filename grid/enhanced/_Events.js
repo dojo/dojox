@@ -391,7 +391,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onRowContextMenu()
 		!this.edit.isEditing() && this.menus && this.showRowCellMenu(e);
-		//dojo.stopEvent(e);
+		dojo.stopEvent(e);
 	},
 	
 	onSelectedRegionContextMenu: function(e){

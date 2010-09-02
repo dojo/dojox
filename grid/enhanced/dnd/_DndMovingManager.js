@@ -18,11 +18,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 	
 	//coverDIVs: Array
 	//		the list that keep the reference to all cover DIVs for DND moving
-	coverDIVs: [],
+	coverDIVs: null,
 	
 	//movers: Array
 	//		the list that keep the reference to all dnd movers for DND moving
-	movers:[],
+	movers: null,
 	
 	constructor: function(inGrid){
 		//summary:
@@ -30,19 +30,19 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		if(this.grid.indirectSelection){
 			this.exceptColumnsTo = this.grid.pluginMgr.getFixedCellNumber() - 1;
 		}
-		this.coverDIVs = this.movers = [];
+		this.coverDIVs = [], this.movers = [];
 			
-		dojo.subscribe("CTRL_KEY_DOWN", dojo.hitch(this,function(publisher, keyEvent){
+		this.subscribe("CTRL_KEY_DOWN", function(publisher, keyEvent){
 			if(publisher == this.grid && publisher != this){
 				this.keyboardMove(keyEvent);
 			}
-		}));
+		});
 		
 		dojo.forEach(this.grid.views.views, function(view){
 			//fix the jumping issue of cover div when scrolled
-			dojo.connect(view.scrollboxNode, 'onscroll', dojo.hitch(this, function(){
+			this.connect(view.scrollboxNode, 'onscroll', function(){
 				this.clearDrugDivs();
-			}));
+			});
 		}, this);		
 	},
 	
@@ -171,12 +171,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		
 		dojo.doc.body.appendChild(avatar);
 		avatar.connections = [];
-		avatar.connections.push(dojo.connect(avatar, "onmouseout", this, function(){
+		avatar.connections.push(this.connect(avatar, "onmouseout", function(){
 			this.clearDrugDivs();
 		}));
-		
-		avatar.connections.push(dojo.connect(avatar, "onclick", this, "avataDivClick"));
-		avatar.connections.push(dojo.connect(avatar, "keydown", this, function(e){
+		avatar.connections.push(this.connect(avatar, "onclick", "avataDivClick"));
+		avatar.connections.push(this.connect(avatar, "keydown", function(e){
 			this.handleESC(e, this);
 		}));
 		this.coverDIVs.push(avatar);
@@ -235,14 +234,10 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		get the border DIV that is used identify the moving position
 		//return: Object
 		//		 the border DIV that is used identify the moving position
-		var borderDIV = dojo.byId("borderDIV" + this.grid.id);
-		if(borderDIV == null){
-			borderDIV = dojo.doc.createElement("DIV");
-			borderDIV.id = "borderDIV" + this.grid.id;
-			borderDIV.className = "dojoxGridBorderDIV";
-			dojo.doc.body.appendChild(borderDIV);
+		if(!this.borderDIV){
+			this.borderDIV = dojo.create("div", {id:"borderDIV"+this.grid.id, className:"dojoxGridBorderDIV"}, dojo.body());
 		}
-		return borderDIV;
+		return this.borderDIV;
 	},
 	
 	setBorderDiv: function(width, height, left, top){
@@ -267,7 +262,8 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			var movingDIV;
 			dojo.forEach(this.coverDIVs, function(div){
 				if(div.id != id){
-					dojo.doc.body.removeChild(div);
+					dojo.forEach(div.connections, this.disconnect, this);
+					dojo.destroy(div);
 				}else{
 					movingDIV = div;
 				}
@@ -342,19 +338,20 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		this.movers.push(coverMover);
 		var borderDIV = this.setBorderDiv(3, height, -1000, top + dojo._docScroll().y);
 		dojo.attr(borderDIV, 'colH', coords.colH);
-			
-		dojo.connect(coverMover, "onMoveStart", dojo.hitch(this, function(mover, leftTop){
+		
+		coverMover.connections = [];//disconnected once moving finished
+		coverMover.connections.push(this.connect(coverMover, "onMoveStart", function(mover, leftTop){
 			this.mover = mover;
 			this.removeOtherMovers(mover.node.id);
 		}));
-		dojo.connect(coverMover, "onMove", dojo.hitch(this, function(mover, leftTop, mousePos){
+		coverMover.connections.push(this.connect(coverMover, "onMove", function(mover, leftTop, mousePos){
 			if(mover.node == null || mover.node.parentNode == null){
 				return;
 			}
 			this.isMoving = true;
 			this.moveColBorder(mover, mousePos, borderDIV);
 		}));
-		dojo.connect(coverMover, "onMoveStop", dojo.hitch(this,function(mover){
+		coverMover.connections.push(this.connect(coverMover, "onMoveStop", function(mover){
 			if(this.drugDestIndex == null || this.isContinuousSelection(this.selectedColumns) 
 			   && (this.drugDestIndex == leadingBorderIdx || this.drugDestIndex == trailingBorderIdx || this.drugDestIndex == (trailingBorderIdx + 1) && this.drugBefore)){ 
 			   this.movingIgnored = true;
@@ -582,21 +579,20 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 												"row"); // top
 		var borderDIV = this.setBorderDiv(gridWidth, 3,  // width & height
 									(dojo._isBodyLtr() ? (endCoord.x + endCoord.w) : (endCoord.x - gridWidth - widthDelta)) + dojo._docScroll().x, -100); // top
-			
-		var avaMoveStart = dojo.connect(coverMover, "onMoveStart", dojo.hitch(this, function(mover, leftTop){
+		this.movers.push(coverMover);
+		coverMover.connections = [];//disconnected once moving finished
+		coverMover.connections.push(this.connect(coverMover, "onMoveStart", function(mover, leftTop){
 			this.mover = mover;
 			this.removeOtherMovers(mover.node.id);
 		}));
-		
-        var avaMove = dojo.connect(coverMover, "onMove", dojo.hitch(this, function(mover, leftTop, mousePos){
+		coverMover.connections.push(this.connect(coverMover, "onMove", function(mover, leftTop, mousePos){
 			if(mover.node == null || mover.node.parentNode == null){
 				return;
 			}
-            this.isMoving = true;
-            this.moveRowBorder(mover, leftTop, borderDIV, mousePos);
-        }));
-		
-		var avaMoveStop = dojo.connect(coverMover, "onMoveStop", dojo.hitch(this,function(mover){
+			this.isMoving = true;
+			this.moveRowBorder(mover, leftTop, borderDIV, mousePos);
+		}));
+		coverMover.connections.push(this.connect(coverMover, "onMoveStop", function(mover){
 			if(this.avaOnRowIndex == null || this.isContinuousSelection(this.grid.selection.selected) && (this.avaOnRowIndex == from || this.avaOnRowIndex == (to + 1))){
 			   	this.movingIgnored = true;
 				if(this.isMoving){
@@ -616,7 +612,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 			delete coverMover;
 		}));
 		
-//		var avaKEY = dojo.connect(coverMover.node, "keydown",  dojo.hitch(this,function(e){
+//		var avaKEY = this.connect(coverMover.node, "keydown", function(e){
 //			var dk = dojo.keys;
 //			switch(e.keyCode){
 //				case dk.ESCAPE:
@@ -630,7 +626,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 //					}
 //					break;
 //			}
-//		}));
+//		});
 	},
 	
 	moveRowBorder: function(mover, leftTop, borderDIV, mousePos){
@@ -824,19 +820,17 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 		//		remove cover DIVs for dnd moving
 		if(!this.isMoving){ 
 			var borderDIV = this.getBorderDiv();
-	        borderDIV.style.top = -100 + "px";
-			borderDIV.style.height = "0px";
-			borderDIV.style.left = -100 + "px";
-			
-	        dojo.forEach(this.coverDIVs, function(div){
-				//console.debug("del id=" + div.id);
-				dojo.forEach(div.connections, function(connection){
-					dojo.disconnect(connection);
-				});
-	            dojo.doc.body.removeChild(div);
-				delete div;
-	        }, this);
-	        this.coverDIVs = [];
+			dojo.style(borderDIV, {"top":-100+"px", "height":"0px", "left":-100+"px"});
+			dojo.forEach(this.coverDIVs, function(div){
+				dojo.forEach(div.connections, this.disconnect, this);
+				dojo.destroy(div);
+			}, this);
+			dojo.forEach(this.movers, function(m){
+				dojo.forEach(m.connections, this.disconnect, this);
+				m.destroy && m.destroy();
+				delete m;
+			}, this);
+			this.coverDIVs = [], this.movers = [];
 		}
 	},	
 	
@@ -984,5 +978,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndMovingManager", dojox.grid.enhanced.dn
 					this.startMoveRows();
 				}
 		}
+	},
+	
+	destroy: function(){
+		this.clearDrugDivs();
+		dojo.destroy(this.borderDIV);
+		this.inherited(arguments);
 	}
 });

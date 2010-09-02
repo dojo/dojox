@@ -1,6 +1,7 @@
 dojo.provide("dojox.grid.enhanced.plugins.Menu");
 
-dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
+dojo.require("dojox.grid.enhanced.plugins._Mixin");
+dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced.plugins._Mixin, {
 	//	summary:
 	//		 Provides context menu support, including header menu, row menu, cell menu and selected region menu
 	// example:
@@ -8,6 +9,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 	//			  plugins="{menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId", 
 	//							   selectedRegionMenu:"selectedRegionMenuId"}}" ...>
 	//		</div>
+	
+	//name: String
+	//		Plugin name
+	name: "menus",
 
 	constructor: function(inGrid){
 		inGrid.mixin(inGrid, this);
@@ -16,7 +21,6 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 	_initMenus: function(){
 		//summary:
 		//		Initilize all the required menus
-		var wrapper = this.menuContainer;
 		!this.headerMenu && (this.headerMenu = this._getMenuWidget(this.menus['headerMenu']));		
 		!this.rowMenu && (this.rowMenu = this._getMenuWidget(this.menus['rowMenu']));
 		!this.cellMenu && (this.cellMenu = this._getMenuWidget(this.menus['cellMenu']));
@@ -24,7 +28,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 		this.headerMenu && this.set('headerMenu', this.headerMenu) && this.setupHeaderMenu();
 		this.rowMenu && this.set('rowMenu', this.rowMenu);
 		this.cellMenu && this.set('cellMenu', this.cellMenu);
-		this.isDndSelectEnable && this.selectedRegionMenu && dojo.connect(this.select, 'setDrugCoverDivs', dojo.hitch(this, this._bindDnDSelectEvent));
+		if(this.isDndSelectEnable && this.selectedRegionMenu){
+			this.connect(this.select, 'setDrugCoverDivs', this._bindDnDSelectEvent);
+		}
 	},
 	
 	_getMenuWidget: function(menuId){
@@ -34,12 +40,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 		//		Id of the target menu widget
 		//return: Widget
 		//		Target menu widget
-		if(!menuId){
-			return;
-		}
+		if(!menuId){ return; }
 		var menu = dijit.byId(menuId);
 		if(!menu){
-			throw new Error("Menu '" + menuId +"' not existed");	
+			console.warn("Menu '" + menuId +"' not existed");	
 		}
 		return menu;
 	},
@@ -50,10 +54,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 		dojo.forEach(this.select.coverDIVs, dojo.hitch(this, function(cover){
 			//this.selectedRegionMenu.unBindDomNode(this.domNode);
 			this.selectedRegionMenu.bindDomNode(cover);
-			dojo.connect(cover, "contextmenu", dojo.hitch(this, function(e){
+			this.connect(cover, "contextmenu", function(e){
 				dojo.mixin(e, this.select.getSelectedRegionInfo());
 				this.onSelectedRegionContextMenu(e);
-			}));
+			});
 		}));
 	},
 	
@@ -127,5 +131,15 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", null, {
 				} : null
 			});
 		}
+	},
+	
+	destroy: function(){
+		//summary:
+		//		Destroy all resources.
+		//_Grid.destroy will un-bind this.headerMenu		
+		this.rowMenu && this.rowMenu.unBindDomNode(this.domNode);
+		this.cellMenu && this.cellMenu.unBindDomNode(this.domNode);
+		this.selectedRegionMenu && this.selectedRegionMenu.destroy();
+		this.inherited(arguments);
 	}
 });
