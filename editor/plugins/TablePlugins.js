@@ -705,7 +705,18 @@ dojo.declare("dojox.editor.plugins.TableContextMenu",
 				}));
 				this.button.domNode.style.display = "none";
 			});
-		},	
+		},
+
+		destroy: function(){
+			// summary:
+			//	Over-ride to do menu cleanup.
+			if(this.menu){
+				this.menu.destroyRecursive();
+				delete this.menu;
+			}
+			this.inherited(arguments);
+		},
+	
 		
 		_initButton: function(){
 			this.inherited(arguments);
