@@ -212,7 +212,7 @@
 	supe:"superset al sau egal cu",
 	oplus:"plus încercuit\nsumă directă",
 	otimes:"multiplicator încercuit\nprodus vectorial",
-	perp:"t întors\nortogonal la\nerpendicular",
+	perp:"up tack\northogonal to\nperpendicular",
 	sdot:"operator punct",
 	lceil:"plafon stânga\nAPL upstile",
 	rceil:"plafon dreapta",
