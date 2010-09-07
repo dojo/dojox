@@ -180,7 +180,7 @@
 	forall:"pentru toate",
 	part:"diferenţiale parţiale",
 	exist:"Există",
-	empty:"set gol\nset zero\ndiametru",
+	empty:"set gol\nset null\ndiametru",
 	nabla:"nabla\ndiferenţa înapoi",
 	isin:"element al",
 	notin:"nu este un element al",
