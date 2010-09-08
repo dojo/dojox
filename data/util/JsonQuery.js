@@ -53,6 +53,7 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 				args.queryStr += (first ? '[' : ',') + (sort[i].descending ? '\\' : '/') + "@[" + dojo._escapeString(sort[i].attribute) + "]";
 				first = false; 
 			}
+			args.queryStr += ']';
 		}
 		// this is optional because with client side paging JSONQuery doesn't yield the total count
 		if(jsonQueryPagination && (args.start || args.count)){
