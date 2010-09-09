@@ -213,6 +213,7 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	
 	_updateSelection: function(){
 		this.inherited(arguments);
+		this._handleOnChange(this.value);
 		dojo.forEach(this._getChildren(), function(c){ c._updateBox(); });
 	},
 	
