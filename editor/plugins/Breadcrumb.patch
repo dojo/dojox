@@ -1,0 +1,19 @@
+Index: Breadcrumb.js
+===================================================================
+--- Breadcrumb.js	(revision 22703)
++++ Breadcrumb.js	(working copy)
+@@ -328,9 +328,13 @@
+ 		// summary:
+ 		//		Over-ride to clean up the breadcrumb toolbar.
+ 		if(this.breadcrumbBar){
+-			this.breadcrumbBar.destroy();
++			this.breadcrumbBar.destroyRecursive();
+ 			this.breadcrumbBar = null;
+ 		}
++		if(this._menu){
++			this._menu.destroyRecursive();
++			delete this._menu;
++		}
+ 		this._buttons = null;
+ 		delete this.editor.breadcrumbBar;
+ 		this.inherited(arguments);
