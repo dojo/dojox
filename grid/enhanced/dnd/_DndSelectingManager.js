@@ -2,22 +2,23 @@ dojo.provide("dojox.grid.enhanced.dnd._DndSelectingManager");
 
 dojo.require("dojox.grid.util");
 dojo.require("dojox.grid._Builder");
+dojo.require("dojox.grid.enhanced.plugins._Mixin");
 dojo.require("dojox.grid.enhanced.dnd._DndGrid");
 dojo.require("dojox.grid.enhanced.dnd._DndBuilder");
 dojo.require("dojox.grid.enhanced.dnd._DndRowSelector");
 dojo.require("dojox.grid.enhanced.dnd._DndFocusManager");
-dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
+dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", dojox.grid.enhanced.plugins._Mixin, {
 	//summary:
 	//		_DndSelectingManager is used to enable grid DND selecting feature
 	//		
 	
 	// list, each item record whether the type is in selecting mode
 	// type: row, cell, col
-	typeSelectingMode: [],
+	typeSelectingMode: null,
 	
 	// list, each item record whether the type selecting is disabled
 	// type: row, cell, col
-	selectingDisabledTypes:[],
+	selectingDisabledTypes: null,
 	
 	// The start point of drag selection
 	drugSelectionStart: null,
@@ -41,7 +42,7 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 	selectedCells : null,
 	
 	// Record the columns selected
-	selectedColumns : [],
+	selectedColumns : null,
 	
 	// Record the rows selected
     //selectedRows : [],
@@ -67,19 +68,19 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 		
 		this.selectedCells = [];
 		
-		dojo.connect(this.grid, "_onFetchComplete",dojo.hitch(this, "refreshColumnSelection"));
-		dojo.connect(this.grid.scroller, "scroll",dojo.hitch(this, "refreshColumnSelection"));
+		this.connect(this.grid, "_onFetchComplete", "refreshColumnSelection");
+		this.connect(this.grid.scroller, "scroll", "refreshColumnSelection");
 		//dojo.connect(document, 'onmousedown', this.grid.focus, '_blurRowBar');
 		
-		dojo.subscribe(this.grid.rowSelectionChangedTopic, dojo.hitch(this,function(publisher){
+		this.subscribe(this.grid.rowSelectionChangedTopic, function(publisher){
 			try{
-				if(publisher.grid == this.grid && publisher != this){
+				if(publisher && publisher.grid == this.grid && publisher != this){
 					this.cleanCellSelection();
 				}
 			}catch(e){
 				console.debug(e);
 			}
-		}));
+		});
 	},
 	
 	extendGridForDnd: function(inGrid){
@@ -731,5 +732,11 @@ dojo.declare("dojox.grid.enhanced.dnd._DndSelectingManager", null, {
 			if(selected[i]){ return i; }
 		}
 		return -1;
+	},
+	
+	destroy: function(){
+		this.typeSelectingMode = this.selectingDisabledTypes = null;
+		this.selectedColumns = this.selectedCells = null;
+		this.inherited(arguments);
 	}
 });

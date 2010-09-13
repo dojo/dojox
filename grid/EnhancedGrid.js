@@ -2,6 +2,8 @@ dojo.provide("dojox.grid.EnhancedGrid");
 
 dojo.require("dojox.grid.DataGrid");
 dojo.require("dojox.grid.enhanced._Plugin");
+dojo.require("dojox.grid.enhanced._Layout");
+dojo.require("dojox.grid.enhanced._View");
 dojo.requireLocalization("dojox.grid.enhanced", "EnhancedGrid");
 
 dojo.experimental("dojox.grid.EnhancedGrid");
@@ -69,21 +71,43 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//		Whether keep selection after sort - only applicable when client-side data store is used.	
 	keepSortSelection: false,
 	
+	//_layoutClass: Object
+	//		Overwrite
+	_layoutClass: dojox.grid.enhanced._Layout,
+	
+	//_viewClass: Object
+	//		Default view class
+	_viewClassStr: 'dojox.grid.enhanced._View',
+		
 	//rowSelectionChangedTopic: String
-	//		Topic fired when row selection is changed 
-	rowSelectionChangedTopic: 'ROW_SELECTION_CHANGED',
+	//		Internal use only - topic only fired when row selection is changed 
+	rowSelectionChangedTopic: '',
 	
 	//sortRowSelectionChangedTopic: String
-	//		Topic only fired when row selection is changed by sorting.
-	sortRowSelectionChangedTopic: 'SORT_ROW_SELECTION_CHANGED',
+	//		Internal use only - topic only fired when row selection is changed by sorting.
+	sortRowSelectionChangedTopic: '',
 	
 	//rowMovedTopic: String
 	//		Topic fired when selected rows are moved.
-	rowMovedTopic: 'ROW_MOVED',		
+	rowMovedTopic: '',
+
+	//colMovedTopic: String
+	//		Topic fired when selected columns are moved.
+	colMovedTopic: '',
+
+	//lastRenderingRows: Array
+	//		Last row index for each rendering page	
+	lastRenderingRows: null,
 
 	postMixInProperties: function(){
 		//load nls bundle
 		this._nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "EnhancedGrid", this.lang);
+		var id = this.id;
+		this.rowMovedTopic = 'ROW_MOVED_' + id;
+		this.colMovedTopic = 'COLUMN_MOVED_' + id;
+		this.rowSelectionChangedTopic = 'ROW_SELECTION_CHANGED_' + id;
+		this.sortRowSelectionChangedTopic = 'SORT_ROW_SELECTION_CHANGED_' + id;
+		this.lastRenderingRows = [];
 		this.inherited(arguments);
 	},
 
@@ -149,7 +173,10 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	mixin: function(target, source){
 		var props = {};
 		for(p in source){
-			if(p == '_inherited' || p == 'declaredClass' || p == 'constructor'){ continue; }
+			if(p == '_inherited' || p == 'declaredClass' || p == 'constructor' 
+			   || source['privates'] && source['privates'][p]){
+			   	continue; 
+			}
 			props[p] = source[p];
 		}
 		dojo.mixin(target, props);
@@ -161,7 +188,16 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		//		Fix cell TAB navigation for single click editting
 		if(!attr) return;
 		return this.inherited(arguments);
-	}
+	},
+	
+	destroy: function(){
+		//summary:
+		//		Destroy all resources
+		delete this._nls;
+		delete this.lastRenderingRows;
+		this.pluginMgr.destroy();
+		this.inherited(arguments);
+	}	
 });
 
 

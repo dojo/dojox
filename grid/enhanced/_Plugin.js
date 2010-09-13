@@ -28,10 +28,19 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	
 	//funcMap: Object
 	//		Map for caching default DataGrid methods.
-	funcMap:{},
+	funcMap: null,
+
+	//_plugins: Array
+	//		Plugin list
+	_plugins: null,
+
+	//_connects: Array
+	//		List of all connections.
+	_connects: null,
 
 	constructor: function(inGrid){
 		this.grid = inGrid;
+		this.funcMap = {}, this._plugins = [], this._connects = [];
 		this._parseProps(this.grid);
 	},
 	
@@ -60,16 +69,13 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		//		See EnhancedGrid.postCreate()
 		var grid = this.grid;
 		//load Indirect Selection plugin
-		grid.indirectSelection && (new (this.getPluginClazz('dojox.grid.enhanced.plugins.IndirectSelection'))(grid));
+		if(grid.indirectSelection){
+			this._plugins.push(new (this.getPluginClazz('dojox.grid.enhanced.plugins.IndirectSelection'))(grid));
+		}
 		if(grid.dnd && (!grid.rowSelector || grid.rowSelector=="false")) {
 			//RowSelector should be used for DnD plugin.
 			grid.rowSelector = "20px";
 		}
-		//overwrite header and content builders
-		if(grid.nestedSorting){
-			dojox.grid._View.prototype._headerBuilderClass = dojox.grid.enhanced._HeaderBuilder;			
-		}
-		dojox.grid._View.prototype._contentBuilderClass = dojox.grid.enhanced._ContentBuilder;
 	},
 	
 	postInit: function(){
@@ -82,26 +88,22 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		new dojox.grid.enhanced._Events(grid);
 		
 		//load Menu plugin
-		grid.menus && (new (this.getPluginClazz('dojox.grid.enhanced.plugins.Menu'))(grid));
-		
+		if(grid.menus){
+			this._plugins.push(new (this.getPluginClazz('dojox.grid.enhanced.plugins.Menu'))(grid));
+		}
 		//load NestedSorting plugin
-		grid.nestedSorting && (new (this.getPluginClazz('dojox.grid.enhanced.plugins.NestedSorting'))(grid));
-		
+		if(grid.nestedSorting){
+			this._plugins.push(new (this.getPluginClazz('dojox.grid.enhanced.plugins.NestedSorting'))(grid));
+		}
 		//load DnD plugin
 		if(grid.dnd){
 			grid.isDndSelectEnable = grid.dnd;
 			//by default disable cell selection for EnhancedGrid M1
 			grid.dndDisabledTypes =  ["cell"];
 			//new dojox.grid.enhanced.dnd._DndMovingManager(grid);			
-			new (this.getPluginClazz('dojox.grid.enhanced.plugins.DnD'))(grid);
+			this._plugins.push(new (this.getPluginClazz('dojox.grid.enhanced.plugins.DnD'))(grid));
 		}
-		
-		//TODO - see if any better ways for this
-		//fix inherit issue for mixin, an null/undefined exception will be thrown from the "this.inherited(...)" in
-		//the following functions, like saying there is no "startup" in "this" scope
-		dojo.isChrome < 3 && (grid.constructor.prototype.startup = grid.startup);
-		//grid.constructor.prototype.onStyleRow = grid.onStyleRow;
-		
+
 		//get fixed cell(column) number
 		this.fixedCellNum = this.getFixedCellNumber();
 		
@@ -166,26 +168,29 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		return ((this.grid.indirectSelection || this.grid.isDndSelectEnable) ? this.grid.edit.isEditing() : true);		
 	},				
 	
+	_bindView: function(view){
+		//summary:
+		//		Overwrite several default behavior for all views(including _RowSelector view)
+		if(!view){ return; }
+				
+		//add more events handler - _View
+		dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", ['mouseup', 'mousemove']);
+		dojox.grid.util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
+		
+		//overwrite _View._getHeaderContent()
+		this.grid.nestedSorting && (view._getHeaderContent = this.grid._getNestedSortHeaderContent);
+		
+		//overwrite _View.setScrollTop(),
+		//#10273 fix of base DataGrid seems to bring some side effects to Enhanced Grid, 
+		//TODO - need a more close look post v.1.4 rather than simply overwrite it
+		this.grid.dnd && (view.setScrollTop = this.setScrollTop);
+	},
+	
 	_bindFuncs: function(){
 		//summary:
-		//		Overwrite some default methods of DataGrid by method caching		
-		dojo.forEach(this.grid.views.views, dojo.hitch(this, function(view){
-			//add more events handler - _View
-			dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", ['mouseup', 'mousemove']);
-			dojox.grid.util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
-			
-			//overwrite _View.setColumnsWidth()
-			this.funcMap[view.id + '-' +'setColumnsWidth'] = view.setColumnsWidth;
-			view.setColumnsWidth =  this.setColumnsWidth;
-			
-			//overwrite _View._getHeaderContent()
-			this.grid.nestedSorting && (view._getHeaderContent = this.grid._getNestedSortHeaderContent);
-			
-			//overwrite _View.setScrollTop(),
-			//#10273 fix of base DataGrid seems to bring some side effects to Enhanced Grid, 
-			//TODO - need a more close look post v.1.4 rather than simply overwrite it
-			this.grid.dnd && (view.setScrollTop = this.setScrollTop);
-		}));
+		//		Overwrite some default methods of DataGrid by method caching
+		dojo.forEach(this.grid.views.views, this._bindView, this);
+		this._connects.push(dojo.connect(this.grid.views, 'addView', dojo.hitch(this, this._bindView)));
 		
 		//overwrite _FocusManager.nextKey()
 		this.funcMap['nextKey'] = this.grid.focus.nextKey;
@@ -207,25 +212,10 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		this.funcMap['updateRow'] = this.grid.updateRow;		
 		this.grid.updateRow = this.updateRow;	
 		
-		if(this.grid.nestedSorting && dojox.grid.cells._Widget){			
-			 dojox.grid.cells._Widget.prototype.sizeWidget = this.sizeWidget;
-		}
-		dojox.grid.cells._Base.prototype.getEditNode = this.getEditNode;
-		dojox.grid._EditManager.prototype.styleRow = function(inRow){};		
+		var edit = this.grid.edit;
+		edit && (edit.styleRow = function(inRow){});
 	},
-	
-	setColumnsWidth: function(width){
-		//summary:
-		//		Overwrite _View.setColumnsWidth(), "this" - _View scope
-		//		Fix rtl issue in IE.
-		if(dojo.isIE && !dojo._isBodyLtr()) {
-			this.headerContentNode.style.width = width + 'px';
-			this.headerContentNode.parentNode.style.width = width + 'px';			
-		}
-		//invoke _View.setColumnsWidth()
-		dojo.hitch(this, this.grid.pluginMgr.funcMap[this.id + '-' +'setColumnsWidth'])(width);
-	},
-	
+		
 	previousKey: function(e){
 		//summary:
 		//		Overwrite _FocusManager.previousKey(), "this" - _FocusManager scope		
@@ -286,7 +276,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		//		Overwrite _Scroller.renderPage(), "this" - _Scroller scope
 		//		To add progress cursor when rendering the indirect selection cell(column) with checkbox
 		for(var i=0, j=inPageIndex*this.rowsPerPage; (i<this.rowsPerPage)&&(j<this.rowCount); i++, j++){}
-		this.grid.lastRenderingRowIdx = --j;
+		(--j >= 0) && this.grid.lastRenderingRows.push(j);
 		dojo.addClass(this.grid.domNode, 'dojoxGridSortInProgress');
 		
 		//invoke _Scroller.renderPage()
@@ -312,20 +302,6 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		}
 		//invoke _Grid.updateRow()
 		dojo.hitch(this, this.pluginMgr.funcMap['updateRow'])(inRowIndex);
-	},
-	
-	getEditNode: function(inRowIndex) {
-		//summary:
-		//		Overwrite dojox.grid.cells._Base.getEditNode, "this" - _Base scope
-		return ((this.getNode(inRowIndex) || 0).firstChild || 0).firstChild || 0;
-	},
-	
-	sizeWidget: function(inNode, inDatum, inRowIndex){
-		//summary:
-		//		Overwrite dojox.grid.cells._Widget.sizeWidget, "this" - _Widget scope
-		var p = this.getNode(inRowIndex).firstChild, 
-		box = dojo.contentBox(p);
-		dojo.marginBox(this.widget.domNode, {w: box.w});
 	},
 	
 	setScrollTop: function(inTop){
@@ -359,5 +335,17 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 			if(cellMatched(cells)){ return views[i]; }
 		}
 		return null;
+	},
+	
+	destroy: function(){
+		//summary:
+		//		Destroy all resources
+		dojo.forEach(this._connects, dojo.disconnect);
+		dojo.forEach(this._plugins, function(p){
+			p.destroy && p.destroy();
+			delete p;
+		});
+		delete this._connects;
+		delete this._plugins;
 	}	
 });
