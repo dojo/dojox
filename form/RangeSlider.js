@@ -26,22 +26,22 @@ dojo.require("dojox.fx");
 
 			// define a custom constructor for a SliderMoverMax that points back to me
 			var _self = this;
-			var mover = function(){
-				dijit.form._SliderMoverMax.apply(this, arguments);
-				this.widget = _self;
-			};
-			dojo.extend(mover, dijit.form._SliderMoverMax.prototype);
+            var mover = dojo.declare(dijit.form._SliderMoverMax, {
+                constructor: function(){
+                    this.widget = _self;
+                }
+            });
 
 			this._movableMax = new dojo.dnd.Moveable(this.sliderHandleMax,{ mover: mover });
 			dijit.setWaiState(this.focusNodeMax, "valuemin", this.minimum);
 			dijit.setWaiState(this.focusNodeMax, "valuemax", this.maximum);
 		
 			// a dnd for the bar!
-			var barMover = function(){
-				dijit.form._SliderBarMover.apply(this, arguments);
-				this.widget = _self;
-			};
-			dojo.extend(barMover, dijit.form._SliderBarMover.prototype);
+            var barMover = dojo.declare(dijit.form._SliderBarMover, {
+                constructor: function(){
+                    this.widget = _self;
+                }
+            });
 			this._movableBar = new dojo.dnd.Moveable(this.progressBar,{ mover: barMover });
 		},
 	
