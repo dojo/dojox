@@ -551,8 +551,8 @@ dojo.declare("dojox.grid.cells.DijitSingleRowSelector", [dojox.grid.cells._Widge
 			var widget = this.widgetMap[this.view.id][idx];
 			if(widget){
 				widget.attr('disabled', disabled);
-				this.disabledMap[idx] = disabled;
 			}
+			this.disabledMap[idx] = disabled;
 		} 
 	},
 	
@@ -577,7 +577,7 @@ dojo.declare("dojox.grid.cells.DijitSingleRowSelector", [dojox.grid.cells._Widge
 				delete map[r];
 			}
 		}
-		console.log("Page ",inPageIndex, " widgetMap=",map, " , registry=" ,dijit.registry._hash, ' existed pages =', this.grid.scroller.stack, ' conns =',this._connects, ' subs=', this._subscribes,'------');
+		//console.log("Page ",inPageIndex, " widgetMap=",map, " , registry=" ,dijit.registry._hash, ' existed pages =', this.grid.scroller.stack, ' conns =',this._connects, ' subs=', this._subscribes,'------');
 	},
 	
 	destroy: function(){
