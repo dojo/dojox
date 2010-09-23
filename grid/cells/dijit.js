@@ -80,7 +80,8 @@ dojo.require("dijit.Editor");
 				this.attachWidget.apply(this, arguments);
 			}
 			this.sizeWidget.apply(this, arguments);
-			this.grid.rowHeightChanged(inRowIndex);
+			this.grid.views.renormalizeRow(inRowIndex);
+			this.grid.scroller.rowHeightChanged(inRowIndex, true/*fix #11101*/);			 
 			this.focus();
 			return undefined;
 		},
