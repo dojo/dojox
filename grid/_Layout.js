@@ -67,6 +67,17 @@ dojo.declare("dojox.grid._Layout", null, {
 				}
 			}
 		}
+		
+		//Fix #9481 - reset idx in cell markup
+		dojo.forEach(this.cells, function(c){
+			var marks = c.markup[2].split(" ");
+			var oldIdx = parseInt(marks[1].substring(5));//get old "idx"
+			if(oldIdx != c.index){
+				marks[1] = "idx=\"" + c.index + "\"";
+				c.markup[2] = marks.join(" ");
+			}
+		});
+		
 		this.grid.setupHeaderMenu();
 		//this.grid.renderOnIdle();
 	},
