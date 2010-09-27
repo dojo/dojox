@@ -364,9 +364,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			//		only fire once. But the mechanism for determining
 			//		this is more complicated than it sounds.
 			//
-			//if(!this._postRenderCon){
-				this._postRenderCon = dojo.connect(this, "render", this, "_onPostRender");
-			//}
+			this._postRenderCon = dojo.connect(this, "render", this, "_onPostRender");
 			this.created = true;
 			this.disconnectMouse();
 

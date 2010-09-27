@@ -423,7 +423,7 @@ dojo.provide("dojox.drawing.Drawing");
 			}, this);	
 		},
 		
-		changeDefaults: function(/*Object*/newStyle){
+		changeDefaults: function(/*Object*/newStyle,/*boolean*/value){
 			// summary:
 			//		Change the defaults so that all Stencils from this
 			// 		point on will use the newly changed style.
@@ -432,8 +432,11 @@ dojo.provide("dojox.drawing.Drawing");
 			//			An object that represents one of the objects in
 			//			drawing.style that will be mixed in. Not all
 			//			properties are necessary. Only one object may
-			//			be changed at a time. Non-objects like angleSnap
-			//			cannot be changed in this manner.
+			//			be changed at a time. The object boolean parameter
+			//			is not required and if not set objects will automatically
+			//			be changed.
+			//			Changing non-objects like angleSnap requires value
+			//			to be true.
 			// example:
 			//		|	myDrawing.changeDefaults({
 			//		|		norm:{
@@ -443,14 +446,24 @@ dojo.provide("dojox.drawing.Drawing");
 			//		|		}
 			//		|	});
 			//
-			for(var nm in newStyle){
-				for(var n in newStyle[nm]){
-					console.log("  copy", nm, n, " to: ", newStyle[nm][n]);
-					this.defaults[nm][n] = newStyle[nm][n];
+			//console.log("----->>> changeDefault: ",newStyle, " value?: ",value);
+			if(value!=undefined && value){
+				for(var nm in newStyle){
+					this.defaults[nm] = newStyle[nm];
+				}
+			}else{
+				for(var nm in newStyle){
+					for(var n in newStyle[nm]){
+						//console.log("  copy", nm, n, " to: ", newStyle[nm][n]);
+						this.defaults[nm][n] = newStyle[nm][n];
+					}
 				}
 			}
-			this.unSetTool();
-			this.setTool(this.currentType);
+			
+			if(this.currentStencil!=undefined && (!this.currentStencil.created || this.defaults.clickMode)){
+				this.unSetTool();
+				this.setTool(this.currentType);
+			}
 		},
 		
 		onRenderStencil: function(/* Object */stencil){
