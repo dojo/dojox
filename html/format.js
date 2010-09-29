@@ -35,7 +35,7 @@ dojo.require("dojox.html.entities");
 		// Compile regexps once for this call.
 		var rgxp_fixIEAttrs = /[=]([^"']+?)(\s|>)/g;
 		var rgxp_styleMatch = /style=("[^"]*"|'[^']*'|\S*)/gi;
-		var rgxp_attrsMatch = /\s\w+=("[^"]*"|'[^']*'|\S*)/gi;
+		var rgxp_attrsMatch = /[\w-]+=("[^"]*"|'[^']*'|\S*)/gi;
 
 		// Check to see if we want to use spaces for indent instead
 		// of tab.
