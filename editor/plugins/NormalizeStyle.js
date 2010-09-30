@@ -6,7 +6,7 @@ dojo.require("dijit._editor.html");
 dojo.experimental("dojox.editor.plugins.NormalizeStyle");
 
 dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
-	//	summary:
+	// summary:
 	//		This plugin provides NormalizeStyle cabability to the editor.  It is
 	//		a headless plugin that tries to normalize how content is styled when
 	//		it comes out of th editor ('b' or css).   It also auto-converts
@@ -41,7 +41,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 		// Pre DOM filters are usually based on what browser, as they all use different ways to
 		// apply styles with actions and modify them.
 		if(dojo.isIE){
-			// IE still uses sematic tags most of the time, so convert to that.
+			// IE still uses semantic tags most of the time, so convert to that.
 			this.editor.contentDomPreFilters.push(dojo.hitch(this, this._convertToSemantic));
 			this._browserFilter = this._convertToSemantic;
 		}else if(dojo.isWebKit){
@@ -49,7 +49,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 			this._browserFilter = this._convertToCss;
 		}else if(dojo.isMoz){
 			//Editor currently forces Moz into semantic mode, so we need to match.  Ideally
-			//editor could get rid of that and just use CSS mode, whitch would work cleaner
+			//editor could get rid of that and just use CSS mode, which would work cleaner
 			//That's why this is split out, to make it easy to change later.
 			this.editor.contentDomPreFilters.push(dojo.hitch(this, this._convertToSemantic));
 			this._browserFilter = this._convertToSemantic;
@@ -69,7 +69,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	_convertToSemantic: function(node){
 		// summary:
 		//		A function to convert the HTML structure of 'node' into 
-		//		sematic tags where possible.
+		//		semantic tags where possible.
 		// node: DOMNode
 		//		The node to process.
 		// tags:
@@ -285,8 +285,8 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	_convertToCss: function(node){
 		// summary:
 		//		A function to convert the HTML structure of 'node' into 
-		//		css span styles around text instead of sematic tags.
-		//		Note:  It does not do compression of dpans together.
+		//		css span styles around text instead of semantic tags.
+		//		Note:  It does not do compression of spans together.
 		// node: DOMNode
 		//		The node to process
 		// tags:
@@ -417,7 +417,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 			if(node && node.nodeType == 1){
 				var tag = node.tagName? node.tagName.toLowerCase() : "";
 				if(tag === "span" && node.childNodes && node.childNodes.length === 1){
-					// Okay, a possibly compressable span
+					// Okay, a possibly compressible span
 					var c = node.firstChild;
 					while(c && c.nodeType == 1 && c.tagName && c.tagName.toLowerCase() == "span"){
 						if(!dojo.attr(c, "class") && !dojo.attr(c, "id") && c.style){
@@ -433,8 +433,8 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 										delete s2[i];
 									}else if(s1[i] != s2[i]){
 										// Collision, cannot merge.
-										// IE does not handle combined uderline strikethrough text
-										// decoraations on a single span.
+										// IE does not handle combined underline strikethrough text
+										// decorations on a single span.
 										if(i == "textDecoration"){
 											combinedMap[i] = s1[i] + " " + s2[i];
 											delete s2[i];
