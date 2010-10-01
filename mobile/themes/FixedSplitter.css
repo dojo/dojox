@@ -1,0 +1,37 @@
+.mblFixedSpliter {
+	width: 100%;
+	height: 100%;
+}
+
+.mblSplitPane {
+	position: absolute;
+}
+
+.mblSplitPaneH {
+	height: 100%;
+	top: 0px;
+}
+
+.mblSplitPaneV {
+	width: 100%;
+	left: 0px;
+}
+
+.mblSplitter {
+	-moz-user-select: none;
+	position: absolute;
+	font-size: 1px;
+	background-color: black;
+}
+
+.mblSplitterV {
+	left: 0px;
+	width: 100%;
+	height: 1px;
+}
+
+.mblSplitterH {
+	top: 0px;
+	width: 1px;
+	height: 100%;
+}
