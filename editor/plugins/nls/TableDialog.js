@@ -18,6 +18,7 @@
 	right: "right",
 	buttonSet: "Set", // translated elsewhere?
 	buttonInsert: "Insert",
+	buttonCancel: "Cancel",
 
 	selectTableLabel: "Select Table",
 	insertTableRowBeforeLabel: "Add Row Before",
@@ -27,3 +28,4 @@
 	deleteTableRowLabel: "Delete Row",
 	deleteTableColumnLabel: "Delete Column"
 })
+	

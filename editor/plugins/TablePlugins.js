@@ -283,7 +283,8 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 	},
 	
 	getTimeStamp: function(){
-		return Math.floor(new Date().getTime() * 0.00000001);
+		return new Date().getTime(); // Fixed the bug that this method always returns the same timestamp
+//		return Math.floor(new Date().getTime() * 0.00000001);
 	},
 	
 	_tempStoreTableData: function(type){
@@ -785,18 +786,129 @@ dojo.declare("dojox.editor.plugins.ModifyTable",
 		}	
 });
 
-dojo.declare("dojox.editor.plugins.ColorTableCell",
-	dojox.editor.plugins.TablePlugins,
-	{
-		
+dojo.require("dojox.widget.ColorPicker");
+
+dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._Templated], {
+	// summary:
+	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
+	//		passthroughs to the value of the color picker and convenient hook points.
+	// tags:
+	//		private
+
+	// templateString: String
+	//		The template used to create the ColorPicker.
+	templateString:
+		"<div style='display: none; position: absolute; top: -10000; z-index: -10000'>" +
+			"<div dojoType='dijit.TooltipDialog' dojoAttachPoint='dialog' class='dojoxEditorColorPicker'>" +
+				"<div dojoType='dojox.widget.ColorPicker' dojoAttachPoint='_colorPicker'></div>" +
+				"<div style='margin: 0.5em 0em 0em 0em'>" + 
+					"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_setButton'>${buttonSet}</button>" +
+					"&nbsp;" +
+					"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_cancelButton'>${buttonCancel}</button>" +
+				"</div>" +
+			"</div>" +
+		"</div>",
+
+	// widgetsInTemplate: Boolean
+	//		Flag denoting widgets are contained in the template.
+	widgetsInTemplate: true,
+
+	constructor: function(){
+		// summary:
+		//		Constructor over-ride so that the translated strings are mixsed in so
+		//		the template fills out.
+		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog");
+		dojo.mixin(this, strings);
+	},
+
+	startup: function(){
+		// summary:
+		//		Over-ride of startup to do the basic connect setups and such.
+		if(!this._started){
+			this.inherited(arguments);
+			this.connect(this._setButton, "onClick", function(){
+				this.onChange(this.get("value"));
+			});
+			this.connect(this._cancelButton, "onClick", function(){
+				dijit.popup.close(this.dialog);
+				this.onCancel();
+			});
+			// Fully statred, so go ahead and remove the hide.
+			dojo.style(this.domNode, "display", "block");
+		}
+	},
+
+	_setValueAttr: function(value, priorityChange){
+		// summary:
+		//		Passthrough function for the color picker value.
+		// value: String
+		//		The value to set in the color picker
+		// priorityChange:
+		//		Value to indicate whether or not to trigger an onChange event.
+		this._colorPicker.set("value", value, priorityChange);
+	},
+
+	_getValueAttr: function(){
+		// summary:
+		//		Passthrough function for the color picker value.
+		return this._colorPicker.get("value");
+	},
+
+	setColor: function(/*String*/ color){
+		this._colorPicker.setColor(color, false);
+	},
+	
+	onChange: function(value){
+		// summary:
+		//		Hook point to get the value when the color picker value is selected.
+		// value: String
+		//		The value from the color picker.
+	},
+
+	onCancel: function(){
+		// summary:
+		//		Hook point to get when the dialog is canceled.
+	}
+});
+
+dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePlugins, {		
 		constructor: function(){
 			// summary:
-			//		Initialize certain plugins
-			//
+			//		Initialize ColorTableCell plugin
+			this.closable = true;
 			this.buttonClass = dijit.form.DropDownButton;
-			this.dropDown = new dijit.ColorPalette();
-			this.connect(this.dropDown, "onChange", function(color){
+			var picker = new dojox.editor.plugins._CellColorDropDown();
+			dojo.body().appendChild(picker.domNode);
+			picker.startup();
+			this.dropDown = picker.dialog;
+			this.connect(picker, "onChange", function(color){
 				this.modTable(null, color);
+				this.editor.focus();
+			});
+			this.connect(picker, "onCancel", function(color){
+				this.editor.focus();
+			});
+			this.connect(picker.dialog, "onOpen", function(){
+				var o = this.getTableInfo(),
+					tds = this.getSelectedCells(o.tbl);
+				if(tds && tds.length > 0){
+					var t = tds[0] == this.lastObject ? tds[0] : tds[tds.length - 1],
+						color;
+					while(t && ((color = dojo.style(t, "backgroundColor")) == "transparent" || color.indexOf("rgba") == 0)){
+						t = t.parentNode;
+					}
+					color = dojo.style(t, "backgroundColor");
+					if(color != "transparent" && color.indexOf("rgba") != 0){
+						picker.setColor(color);
+					}
+				}
+			});
+			this.connect(this, "setEditor", function(editor){
+				editor.onLoadDeferred.addCallback(dojo.hitch(this, function(){
+					this.connect(this.editor.editNode, "onmouseup", function(evt){
+						this.lastObject = evt.target;
+					});
+				}));
 			});
 		},
 		
@@ -806,7 +918,7 @@ dojo.declare("dojox.editor.plugins.ColorTableCell",
 			this.label = this.editor.commands[this.command] = this._makeTitle(this.command);
 			this.inherited(arguments);
 			delete this.command;
-			
+
 			this.onDisplayChanged(false);
 		},
         
@@ -1049,9 +1161,6 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 		delete this._cleanupWidgets;
 	}
 });
-
-
-
 
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
