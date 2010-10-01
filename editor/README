@@ -18,7 +18,8 @@ Credits
 	David Schwartz and Gu Yi He (IBM) - Contributed enhancements to the
 		look and feel of FindReplace, as well as behavioral
 		improvements.
-	Eldon (IBM, CCLA) - LocalImage, AutoUrlLink
+	Eldon (IBM, CCLA) - LocalImage, AutoUrlLink, TablePluginsColorCell -
+		dojox.widget.ColorPicker.
 
 -------------------------------------------------------------------------------
 Project description
