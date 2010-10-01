@@ -543,7 +543,7 @@ dojo.declare("dojox.image.SlideShow",
 		dojo.style(this.navNode, "top", "-10000px");
 		
 		//Make the navigation controls visible
-		dojo._setOpacity(this.navNode, 99);
+		dojo._setOpacity(this.navNode, 1);
 		
 		this.navPlay._size = dojo.marginBox(this.navPlay);
 		this.navPrev._size = dojo.marginBox(this.navPrev);
