@@ -63,6 +63,7 @@
 		dojo.require("dojox.editor.plugins.StatusBar");
 		dojo.require("dojox.editor.plugins.LocalImage");
 		dojo.require("dojox.editor.plugins.AutoUrlLink");
+		dojo.require("dojox.editor.plugins.ResizeTableColumn");
 			
 		var plugins = ['collapsibletoolbar', 'newPage', 'save', {name: 'viewSource', stripScripts: true, stripComments: true}, 'showBlockNodes', '|',
 			{name: 'fullscreen', zIndex: 900}, 'preview', 'print', '|',
@@ -83,6 +84,7 @@
 			{name: 'dojox.editor.plugins.TablePlugins', command: 'deleteTableColumn'},
 			{name: 'dojox.editor.plugins.TablePlugins', command: 'colorTableCell'},
 			{name: 'dojox.editor.plugins.TablePlugins', command: 'tableContextMenu'},
+			{name: 'dojox.editor.plugins.TablePlugins', command: 'resizeTableColumn'},
 			{name: 'prettyprint', indentBy: "3", entityMap: dojox.html.entities.html.concat(dojox.html.entities.latin)},
 			{name: 'dijit._editor.plugins.EnterKeyHandling', blockNodeForEnter: "P"},
 			'autoUrlLink',

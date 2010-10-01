@@ -19,7 +19,7 @@ Credits
 		look and feel of FindReplace, as well as behavioral
 		improvements.
 	Eldon (IBM, CCLA) - LocalImage, AutoUrlLink, TablePluginsColorCell -
-		dojox.widget.ColorPicker.
+		dojox.widget.ColorPicker, ResizeTableColumn
 
 -------------------------------------------------------------------------------
 Project description
@@ -147,6 +147,11 @@ dojox.editor.plugins.AutoUrlLink
 	Status: Experimental (Unsupported)
 	A plugin that adds auto url link creation capability as a headless plugin to the editor
 
+dojox.editor.plugins.ResizeColumnPlugin
+	Status: Experimental (Unsupported)
+	A plugin that adds column resize to the editor table plugins.
+
+
 -------------------------------------------------------------------------------
 Dependencies:
 
@@ -182,6 +187,7 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/StatusBar 
 	http://docs.dojocampus.org/dojox/editor/plugins/LocalImage
 	http://docs.dojocampus.org/dojox/editor/plugins/AutoUrlLink
+	http://docs.dojocampus.org/dojox/editor/plugins/ResizeTableColumn
 
 -------------------------------------------------------------------------------
 Plugin Installation instructions
@@ -296,6 +302,11 @@ For the AutoUrlLink plugin:
 	and CSS:
         No CSS required.
 
+For the ResizeTableColumn plugin:
+        dojo.require("dojox.editor.plugins.ResizeTableColumn");
+        and CSS:
+        No CSS required in addition to the table plugins css.
+
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -318,4 +329,5 @@ See tests for examples:
 	dojox/editor/tests/editorStatusBar.html
 	dojox/editor/tests/editorLocalImage.html
 	dojox/editor/tests/editorAutoUrlLink.html
+	dojox/editor/tests/editorResizeTableColumn.html
 	dojox/editor/tests/testPluginsAll.html
