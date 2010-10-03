@@ -146,7 +146,7 @@ StencilPoints: [
 			this.remove(this.shape, this.hit);
 			//console.log("text render, outline:", !this.annotation, this.renderHit, (!this.annotation && this.renderHit))
 			!this.annotation && this.renderHit && this._renderOutline();
-			if(text){
+			if(text!=undefined){
 				this._text = text;
 				this._textArray = this._text.split("\n");	
 			}
