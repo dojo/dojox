@@ -858,7 +858,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 					container:this.container,
 					labelPosition:this.labelPosition
 				});
-			}else if(text){
+			}else if(text!=undefined){
 				this._label.setLabel(text);
 			}
 		},
