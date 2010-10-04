@@ -411,8 +411,8 @@ StencilData: {
 					this._textArray = [];
 				}
 				// Only for Combo objects (vectors, rectangle, or ellipse).
+				this.render(o.text);
 				this.onChangeText(this.getText());
-				this.render(this.getText());
 			},
 			
 			edit: function(){
