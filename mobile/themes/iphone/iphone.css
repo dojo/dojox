@@ -190,7 +190,7 @@ html.mobile, .mobile body {
 
 /* dojox.mobile.RoundRect */
 .mblRoundRect {
-	margin: 7px 9px 16px;
+	margin: 7px 9px 16px 9px;
 	padding: 8px;
 	border: 1px solid #ADAAAD;
 	-webkit-border-radius: 8px;
@@ -234,7 +234,7 @@ html.mobile, .mobile body {
 
 /* dojox.mobile.RoundRectList */
 .mblRoundRectList {
-	margin: 7px 9px 16px;
+	margin: 7px 9px 16px 9px;
 	padding: 0px;
 	border: 1px solid #ADAAAD;
 	-webkit-border-radius: 8px;
@@ -261,10 +261,11 @@ html.mobile, .mobile body {
 	position: relative;
 	color: black;
 	vertical-align: bottom; /* To avoid IE6 LI bug */
+	padding-left: 8px;
 }
 .mblListItemIcon {
 	position: absolute;
-	margin: 7px 0px 0px 8px;
+	top: 7px;
 }
 .mblListItem.mblVariableHeight {
 	line-height: normal;
@@ -300,7 +301,7 @@ li .mblListItemTextBoxSelected {
 .mblListItem a.mblListItemAnchor {
 	background-position: 9px 7px;
 	display: block;
-	padding-left: 48px;
+	padding-left: 40px;
 	text-decoration: none;
 	-webkit-tap-highlight-color: transparent;
 }

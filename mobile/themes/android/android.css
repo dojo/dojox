@@ -258,10 +258,11 @@ html.mobile, .mobile body {
 	position: relative;
 	color: white;
 	background-color: black;
+	padding-left: 7px;
 }
 .mblListItemIcon {
 	position: absolute;
-	margin: 18px 0px 0px 7px;
+	top: 18px;
 }
 .mblListItem.mblVariableHeight {
 	line-height: normal;

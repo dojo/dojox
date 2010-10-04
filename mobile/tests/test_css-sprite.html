@@ -13,59 +13,62 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+			if(dojo.isBB){
+				alert("CSS Sprite is not supported for the BlackBerry browser");
+			}
 		</script>
 	</head>
 	<body>
 		<div id="settings" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Settings</h1>
-			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png">
+			<ul dojoType="dojox.mobile.RoundRectList" iconBase="images/i-icon-all.png">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29">
 					Airplane Mode
 					<div class="mblItemSwitch" dojoType="dojox.mobile.Switch"></div>
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-2.png" rightText="mac" href="test_iPhone-Icon.html">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,29,29,29" rightText="mac" href="test_iPhone-Icon.html">
 					Wi-Fi
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" rightText="AcmePhone" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,58,29,29" rightText="AcmePhone" moveTo="general">
 					Carrier
 				</li>
 			</ul>
 
-			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-4.png" moveTo="general">
+			<ul dojoType="dojox.mobile.RoundRectList" iconBase="images/i-icon-all.png">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,87,29,29" moveTo="general">
 					Sounds
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,116,29,29" moveTo="general">
 					Brightness
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-6.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="29,0,29,29" moveTo="general">
 					Wallpaper
 				</li>
 			</ul>
 
-			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-7.png" moveTo="general">
+			<ul dojoType="dojox.mobile.RoundRectList" iconBase="images/i-icon-all.png">
+				<li dojoType="dojox.mobile.ListItem" iconPos="29,29,29,29" moveTo="general">
 					General
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-8.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="29,58,29,29" moveTo="general">
 					Mail, Contacts, Calendars
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-9.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="29,87,29,29" moveTo="general">
 					Phone
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-10.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="29,116,29,29" moveTo="general">
 					Safari
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29" moveTo="general">
 					SMS/MMS
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-2.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,29,29,29" moveTo="general">
 					iPod
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,58,29,29" moveTo="general">
 					Photos
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-4.png" moveTo="general">
+				<li dojoType="dojox.mobile.ListItem" iconPos="0,87,29,29" moveTo="general">
 					Store
 				</li>
 			</ul>

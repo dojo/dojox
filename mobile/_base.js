@@ -1,6 +1,7 @@
 dojo.provide("dojox.mobile._base");
 
 dojo.require("dijit._Widget");
+dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1);
 
 // summary:
 //		Mobile Widgets
@@ -52,7 +53,6 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblView";
-//		dojox.mobile.View._pillar = dojo.create("DIV", {className:"mblPillar"});
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
@@ -71,7 +71,7 @@ dojo.declare(
 			if(!_this._visible){
 				_this.domNode.style.display = "none";
 			}else{
-				dojox.mobile._currentView = _this;
+				dojox.mobile.currentView = _this;
 				_this.onStartView();
 			}
 			_this.domNode.style.visibility = "visible";
@@ -178,7 +178,7 @@ dojo.declare(
 		toNode.style.display = "";
 		this.onBeforeTransitionOut.apply(this, arguments);
 		var toWidget = dijit.byNode(toNode);
-		if(toWidget && toWidget.onBeforeTransitionIn){
+		if(toWidget){
 			// perform view transition keeping the scroll position
 			if(this.keepScrollPos && !dijit.getEnclosingWidget(this.domNode.parentNode)){
 				var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || window.pageYOffset || 0;
@@ -207,7 +207,7 @@ dojo.declare(
 			}else{
 				toNode.style.top = "0px";
 			}
-			toWidget.onBeforeTransitionIn.apply(this, arguments);
+			toWidget.onBeforeTransitionIn.apply(toWidget, arguments);
 		}
 		toNode.style.display = "none";
 		toNode.style.visibility = "visible";
@@ -217,15 +217,12 @@ dojo.declare(
 	_doTransition: function(fromNode, toNode, transition, dir){
 		var rev = (dir == -1) ? " reverse" : "";
 		toNode.style.display = "";
-		if(transition){
-//			var pillar = dojox.mobile.View._pillar;
-//			pillar.style.height = fromNode.offsetHeight+"px";
-//			fromNode.parentNode.appendChild(pillar);
-			dojo.addClass(fromNode, transition + " out" + rev);
-			dojo.addClass(toNode, transition + " in" + rev);
-		}else{
+		if(!transition || transition == "none"){
 			this.domNode.style.display = "none";
 			this.invokeCallback();
+		}else{
+			dojo.addClass(fromNode, transition + " out" + rev);
+			dojo.addClass(toNode, transition + " in" + rev);
 		}
 	},
 
@@ -247,7 +244,6 @@ dojo.declare(
 			dojo.removeClass(li, "mblCloseContent");
 		}
 		if(isOut){
-//			dojox.mobile.View._pillar.parentNode.removeChild(dojox.mobile.View._pillar);
 			this.invokeCallback();
 		}
 		// this.domNode may be destroyed as a result of invoking the callback,
@@ -258,13 +254,11 @@ dojo.declare(
 	invokeCallback: function(){
 		this.onAfterTransitionOut.apply(this, this._arguments);
 		var toWidget = dijit.byNode(this.toNode);
-		if(toWidget && toWidget.onAfterTransitionIn){
-			toWidget.onAfterTransitionIn.apply(this, this._arguments);
+		if(toWidget){
+			toWidget.onAfterTransitionIn.apply(toWidget, this._arguments);
 		}
 
-		if(dojo.hash){
-			dojox.mobile._currentView = toWidget;
-		}
+		dojox.mobile.currentView = toWidget;
 
 		var c = this._context, m = this._method;
 		if(!c && !m){ return; }
@@ -278,6 +272,30 @@ dojo.declare(
 		}else{
 			m.apply(c, this._args);
 		}
+	},
+
+	getShowingView: function(){
+		// summary:
+		//		Find the currently showing view from my sibling views.
+		// description:
+		//		Note that dojox.mobile.currentView is the last shown view.
+		//		If the page consists of a splitter, there are multiple showing views.
+		var nodes = this.domNode.parentNode.childNodes;
+		for(var i = 0; i < nodes.length; i++){
+			if(dojo.hasClass(nodes[i], "mblView") && dojo.style(nodes[i], "display") != "none"){
+				return dijit.byNode(nodes[i]);
+			}
+		}
+	},
+
+	show: function(){
+		// summary:
+		//		Shows this view without a transition animation.
+		var fs = this.getShowingView().domNode.style; // from-style
+		var ts = this.domNode.style; // to-style
+		fs.display = "none";
+		ts.display = "";
+		dojox.mobile.currentView = this;
 	},
 
 	addChild: function(widget){
@@ -436,6 +454,7 @@ dojo.declare(
 	"dojox.mobile.EdgeToEdgeList",
 	dojox.mobile.RoundRectList,
 {
+	stateful: false, // keep the selection state or not
 	buildRendering: function(){
 		this.inherited(arguments);
 		this.domNode.className = "mblEdgeToEdgeList";
@@ -466,15 +485,25 @@ dojo.declare(
 		}
 	},
 
-	transitionTo: function(moveTo, href, url){
+	findCurrentView: function(moveTo){
+		var w;
+		if(moveTo){
+			w = dijit.byId(moveTo);
+			if(w){ return w.getShowingView(); }
+		}
 		var n = this.domNode.parentNode;
-		var w; // the current view widget
 		while(true){
 			w = dijit.getEnclosingWidget(n);
-			if(!w){ return; }
+			if(!w){ return null; }
 			if(w.performTransition){ break; }
 			n = w.domNode.parentNode;
 		}
+		return w;
+	},
+
+	transitionTo: function(moveTo, href, url){
+		var w = this.findCurrentView(moveTo); // the current view widget
+		if(!w || moveTo && w === dijit.byId(moveTo)){ return; }
 		if(href){
 			w.performTransition(null, 1, this.transition, this, function(){location.href = href;});
 			return;
@@ -491,6 +520,7 @@ dojo.declare(
 					if(this.sync){
 						text = dojo.trim(dojo._getText(url));
 					}else{
+						dojo["require"]("dojo._base.xhr");
 						var prog = dojox.mobile.ProgressIndicator.getInstance();
 						dojo.body().appendChild(prog.domNode);
 						prog.start();
@@ -605,6 +635,8 @@ dojo.declare(
 	rightText: "",
 	btnClass: "",
 	anchorLabel: false,
+	noArrow: false,
+	selected: false,
 
 	buildRendering: function(){
 		this.inheritParams();
@@ -633,9 +665,12 @@ dojo.declare(
 		}
 
 		if(this.moveTo || this.href || this.url || this.clickable){
-			var arrow = dojo.create("DIV");
-			arrow.className = "mblArrow";
-			a.appendChild(arrow);
+			var parent = this.getParentWidget();
+			if(!this.noArrow && !(parent && parent.stateful)){
+				var arrow = dojo.create("DIV");
+				arrow.className = "mblArrow";
+				a.appendChild(arrow);
+			}
 			this.connect(a, "onclick", "onClick");
 		}else if(this.btnClass){
 			var div = this.btnNode = dojo.create("DIV");
@@ -655,13 +690,13 @@ dojo.declare(
 					// IE seems to ignore the height of LI without this..
 					a.parentNode.style.height = a.parentNode.offsetHeight + "px";
 				}
-			});
+			}, 0);
 		}
 		if(this.anchorLabel){
 			box.style.display = "inline"; // to narrow the text region
 		}
 		var li = this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("LI");
-		li.className = "mblListItem";
+		li.className = "mblListItem" + (this.selected ? " mblItemSelected" : "");
 		li.appendChild(a);
 		this.setIcon();
 	},
@@ -682,6 +717,9 @@ dojo.declare(
 	},
 
 	onClick: function(e){
+		var a = e.currentTarget;
+		var li = a.parentNode;
+		if(dojo.hasClass(li, "mblItemSelected")){ return; } // already selected
 		if(this.anchorLabel){
 			for(var p = e.target; p.tagName != "LI"; p = p.parentNode){
 				if(p.className == "mblListItemTextBox"){
@@ -694,12 +732,16 @@ dojo.declare(
 				}
 			}
 		}
-		var a = e.currentTarget;
-		var li = a.parentNode;
+		if(this.getParentWidget().stateful){
+			for(var i = 0, c = li.parentNode.childNodes; i < c.length; i++){
+				dojo.removeClass(c[i], "mblItemSelected");
+			}
+		}else{
+			setTimeout(function(){
+				dojo.removeClass(li, "mblItemSelected");
+			}, 1000);
+		}
 		dojo.addClass(li, "mblItemSelected");
-		setTimeout(function(){
-			dojo.removeClass(li, "mblItemSelected");
-		}, 1000);
 		this.transitionTo(this.moveTo, this.href, this.url);
 	},
 
@@ -1216,6 +1258,10 @@ dojo.declare(
 		this._selectedPane = tab.pane;
 		this._selectedPane.domNode.style.display = "";
 		dojo.addClass(tab, "mblTabButtonSelected");
+		if(dojo.isBB){
+			var ref = tab.nextSibling;
+			tab.parentNode.insertBefore(tab.parentNode.removeChild(tab), ref);
+		}
 	},
 
 	onTabClick: function(e){
@@ -1338,8 +1384,8 @@ dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 		var b = arr[0] + arr[3]; // bottom
 		var l = arr[1]; // left
 		iconNode.style.clip = "rect("+t+"px "+r+"px "+b+"px "+l+"px)";
-		iconNode.style.top = -t + "px";
-		iconNode.style.left = -l + "px";
+		iconNode.style.top = dojo.style(iconNode, "top") - t + "px";
+		iconNode.style.left = dojo.style(iconNode.parentNode, "paddingLeft") - l + "px";
 	}
 };
 
@@ -1380,7 +1426,7 @@ dojo.addOnLoad(function(){
 			setTimeout(function(){ scrollTo(0, 1); }, 100);
 		};
 		hideAddressBar();
-		//dojo.connect(dojo.body(), "onorientationchange", hideAddressBar);
+		//dojo.connect(dojo.global, "onorientationchange", hideAddressBar);
 	}
 
 	// avoid use of dojo.query
@@ -1414,7 +1460,7 @@ dojo.addOnLoad(function(){
 			return arr;
 		};
 		dojo.subscribe("/dojo/hashchange", null, function(value){
-			var view = dojox.mobile._currentView;
+			var view = dojox.mobile.currentView;
 			if(!view){ return; }
 			var params = dojox.mobile._params;
 			if(!params){ // browser back/forward button was pressed
