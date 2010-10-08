@@ -634,6 +634,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			}
 			return isReplaced;
 		 }
+		 return null;
 	},
 	
 	_replaceAll: function(/*Boolean?*/ showMessage){
@@ -794,6 +795,12 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			return new RegExp(rxp,"m"); //RegExp
 		}
 		
+	},
+	
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
 	},
 
 	destroy: function(){
