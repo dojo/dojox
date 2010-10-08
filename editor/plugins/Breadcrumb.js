@@ -310,7 +310,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 		// summary:
 		//		Over-ride of updateState to hide the toolbar when the iframe is not visible.
 		//		Also triggers the breadcrumb update.
-		if(dojo.style(this.editor.iframe, "display") === "none"){
+		if(dojo.style(this.editor.iframe, "display") === "none" || this.get("disabled")){
 			dojo.style(this.breadcrumbBar.domNode, "display", "none");
 		}else{
 			if(dojo.style(this.breadcrumbBar.domNode, "display") === "none"){
