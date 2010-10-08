@@ -43,6 +43,12 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 		});
 	},
 
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
+	},
+
 	setEditor: function(editor){
 		// summary:
 		//		Over-ride for the setting of the editor.

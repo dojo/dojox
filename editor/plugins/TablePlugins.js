@@ -677,6 +677,15 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			}
 			return cells;
 		},
+		
+		updateState: function(){
+			// summary:
+			//		Over-ride for button state control for disabled to work.
+			if(this.button){
+				this.button.set("disabled", this.get("disabled"));
+				this.onDisplayChanged(false);
+			}
+		},
 
 		destroy: function(){
 			// summary:

@@ -40,6 +40,12 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 			onClick: dojo.hitch(this, "_save")
 		});
 	},
+	
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
+	},
 
 	setEditor: function(editor){
 		// summary:

@@ -42,7 +42,7 @@ dojo.declare("dojox.editor.plugins.Blockquote",dijit._editor._Plugin,{
 		// relatively small.  
 		editor.customUndo = true;
 	},
-
+	
 	_toggleQuote: function(arg){
 		// summary:
 		//		Function to trigger previewing of the editor document
@@ -310,8 +310,15 @@ dojo.declare("dojox.editor.plugins.Blockquote",dijit._editor._Plugin,{
 		// tags:
 		//		protected
 		var ed = this.editor;
+		var disabled = this.get("disabled");
+		
 		if(!ed || !ed.isLoaded){ return; }
 		if(this.button){
+			this.button.set("disabled", disabled);
+			if(disabled){
+				return;
+			}
+
 			// Some browsers (WebKit) doesn't actually get the tag info right.
 			// So ... lets check it manually.
 			var elem;

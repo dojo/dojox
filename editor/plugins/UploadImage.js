@@ -31,6 +31,12 @@ dojo.declare("dojox.editor.plugins.UploadImage",
 			delete this.command;
 		},
 		
+		updateState: function(){
+			// summary:
+			//		Over-ride for button state control for disabled to work.
+			this.button.set("disabled", this.get("disabled"));
+		},
+		
 		createFileInput: function(){
 			var node = dojo.create('span', {innerHTML:"."}, document.body)
 			dojo.style(node, {

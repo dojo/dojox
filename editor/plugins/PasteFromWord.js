@@ -99,6 +99,12 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 		this.connect(this._dialog, "onHide", "_clearDialog");
 	},
 
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
+	},
+	
 	setEditor: function(editor){
 		// summary:
 		//		Over-ride for the setting of the editor.

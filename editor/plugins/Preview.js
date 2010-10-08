@@ -50,6 +50,12 @@ dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 		this._initButton();
 	},
 
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
+	},
+	
 	_preview: function(){
 		// summary:
 		//		Function to trigger previewing of the editor document

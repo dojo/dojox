@@ -132,8 +132,14 @@ dojo.declare("dojox.editor.plugins.TextColor", dijit._editor._Plugin, {
 			return;
 		}
 		
+		var disabled = this.get("disabled");
+		
 		var value;
 		if(this.button){
+			this.button.set("disabled", disabled);
+			if(disabled){
+				return;
+			}
 			try{
 				value = _e.queryCommandValue(_c)|| "";
 			}catch(e){

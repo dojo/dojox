@@ -103,6 +103,12 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 		this.editor.contentDomPostFilters.push(dojo.hitch(this, this._postDomFilter));
 		this._setup();
 	},
+	
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
+	},
 
 	setEditor: function(editor){
 		// summary:

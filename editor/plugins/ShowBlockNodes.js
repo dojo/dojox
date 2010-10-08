@@ -39,6 +39,12 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 		});
 		this.editor.addKeyHandler(dojo.keys.F9, true, true, dojo.hitch(this, this.toggle));
 	},
+	
+	updateState: function(){
+		// summary:
+		//		Over-ride for button state control for disabled to work.
+		this.button.set("disabled", this.get("disabled"));
+	},
 
 	setEditor: function(editor){
 		// summary:
