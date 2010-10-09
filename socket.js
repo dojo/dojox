@@ -67,7 +67,6 @@ dojox.socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 
 var cancelled = false,
 		first = true,
-		transport = args.transport || dojo.xhrPost,
 		connections = [];
 	
 	// create the socket object
@@ -76,11 +75,12 @@ var cancelled = false,
 			// summary:
 			// 		Send some data using XHR or provided transport
 			args.postData = data;
-			var deferred = first ? (first = false) || socket.firstRequest(args, transport) :
-				transport(args);
+			var deferred = first ? (first = false) || socket.firstRequest(args) :
+				socket.transport(args);
 			connections.push(deferred);
 			deferred.then(function(response){
 				// got a response
+				this.readyState = 1;
 				// remove the current connection
 				connections.splice(dojo.indexOf(connections, deferred), 1);
 				// reconnect to listen for the next message if there are no active connections, 
@@ -90,15 +90,16 @@ var cancelled = false,
 				}
 				if(response){
 					// now send the message along to listeners
-					fire("message", deferred, {data: response});
+					fire("message", {data: response}, deferred);
 				}
 			}, function(error){
 				connections.splice(dojo.indexOf(connections, deferred), 1);
 				// an error occurred, fire the appropriate event listeners
 				if(!cancelled){
-					fire("error", deferred, {error:error});
+					fire("error", {error:error}, deferred);
 					if(!connections.length){
-						fire("close", deferred, {wasClean:false});
+						this.readyState = 3;
+						fire("close", {wasClean:false}, deferred);
 					}
 				}
 			});
@@ -107,13 +108,27 @@ var cancelled = false,
 		close: function(){
 			// summary:
 			// 		Close the connection
+			this.readyState = 2;
 			cancelled = true;
 			for(var i = 0; i < connections.length; i++){
 				connections[i].cancel();
 			}
-			fire("close", deferred, {wasClean:true});
+			this.readyState = 3;
+			fire("close", {wasClean:true}, deferred);
 		},
-		firstRequest: function(args, transport){
+		transport: args.transport || dojo.xhrPost,
+		args: args,
+		url: args.url,
+		readyState: 0,
+		CONNECTING: 0,
+		OPEN: 1,
+		CLOSING: 2,
+		CLOSED: 3,
+		dispatchEvent: fire,
+		on: function(type, callback){
+			return dojo.connect(this, "on" + type, callback);
+		},
+		firstRequest: function(args){
 			// summary:
 			// 		This allows for special handling for the first request. This is useful for
 			//		providing information to disambiguate between the first request and
@@ -125,7 +140,7 @@ var cancelled = false,
 			var headers = (args.headers || (args.headers = {}));
 			headers.Pragma = "start-long-poll";
 			try{
-				return transport(args);
+				return this.transport(args);
 			}finally{
 				// cleanup the header so it is not used on subsequent requests
 				delete headers.Pragma;
@@ -138,13 +153,14 @@ var cancelled = false,
 			socket.send();
 		}
 	}
-	function fire(event, deferred, object){
+	function fire(event, object, deferred){
 		if(socket["on" + event]){
 			object.name = event;
 			object.ioArgs = deferred && deferred.ioArgs;
 			socket["on" + event](object);
 		}
 	}
+	socket.connect = socket.on;
 	// do the initial connection
 	setTimeout(connect);
 	return socket;
