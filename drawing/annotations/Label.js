@@ -43,8 +43,8 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 				height:d.h || this._lineHeight
 			});
 			
-			// is an event, not text:
-			if(text && !text.split){ text = null; }
+			// is an event, not text, so keep the old label:
+			if(text && !text.split){ text = this.getText(); }
 			
 			this.render(this.typesetter(text));
 		},
@@ -70,7 +70,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 				this._align = "end";
 			}
 			
-			if(!this.labelWidth || (text && text.split && text != this.getText())){ //????????????????????????????????????
+			if(!this.labelWidth || (text && text.split && text != this.getText())){
 				this.setData({
 					x:x,
 					y:y,
