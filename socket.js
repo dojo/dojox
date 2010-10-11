@@ -43,7 +43,9 @@ dojox.socket = function(/*dojo.__XhrArgs*/ argsOrUrl){
 dojox.socket.WebSocket = function(args){
 	// summary:
 	//		A wrapper for WebSocket, than handles standard args and relative URLs 
-	return new WebSocket(new dojo._Url(document.baseURI.replace(/^http/i,'ws').toString(), args.url));
+	var ws = new WebSocket(new dojo._Url(document.baseURI.replace(/^http/i,'ws'), args.url));
+	ws.on = ws.addEventListener;
+	return ws;
 };
 
 dojox.socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
@@ -80,7 +82,7 @@ var cancelled = false,
 			connections.push(deferred);
 			deferred.then(function(response){
 				// got a response
-				this.readyState = 1;
+				socket.readyState = 1;
 				// remove the current connection
 				connections.splice(dojo.indexOf(connections, deferred), 1);
 				// reconnect to listen for the next message if there are no active connections, 
@@ -98,7 +100,7 @@ var cancelled = false,
 				if(!cancelled){
 					fire("error", {error:error}, deferred);
 					if(!connections.length){
-						this.readyState = 3;
+						socket.readyState = 3;
 						fire("close", {wasClean:false}, deferred);
 					}
 				}
@@ -108,12 +110,12 @@ var cancelled = false,
 		close: function(){
 			// summary:
 			// 		Close the connection
-			this.readyState = 2;
+			socket.readyState = 2;
 			cancelled = true;
 			for(var i = 0; i < connections.length; i++){
 				connections[i].cancel();
 			}
-			this.readyState = 3;
+			socket.readyState = 3;
 			fire("close", {wasClean:true}, deferred);
 		},
 		transport: args.transport || dojo.xhrPost,
@@ -124,7 +126,9 @@ var cancelled = false,
 		OPEN: 1,
 		CLOSING: 2,
 		CLOSED: 3,
-		dispatchEvent: fire,
+		dispatchEvent: function(event){
+			fire(event.type, event);
+		},
 		on: function(type, callback){
 			return dojo.connect(this, "on" + type, callback);
 		},
@@ -148,6 +152,12 @@ var cancelled = false,
 		}
 	};
 	function connect(){
+		if(socket.readyState == 0){
+			// we fire the open event now because we really don't know when the "socket"
+			// is truly open, and this gives us a to do a send() and get it included in the
+			// HTTP request
+			fire("open",{});
+		}
 		// make the long-poll connection, to wait for response from the server
 		if(!connections.length){
 			socket.send();
@@ -155,7 +165,7 @@ var cancelled = false,
 	}
 	function fire(event, object, deferred){
 		if(socket["on" + event]){
-			object.name = event;
+			object.type = event;
 			object.ioArgs = deferred && deferred.ioArgs;
 			socket["on" + event](object);
 		}
