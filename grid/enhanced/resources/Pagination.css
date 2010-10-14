@@ -1,0 +1,153 @@
+.paginatorClass {
+	border-top:1px #DBDBDB solid;
+	text-align:center;
+	width: 100%;
+	height: 24px;
+	table-layout : fixed;
+	background-color: #EAEAEA;
+}
+
+.descriptionTdClass {
+	text-align: left;
+}
+
+.descriptionClass {
+	text-align: left;
+	margin-left: 9px;
+	width: 200px!important;
+	overflow: hidden;
+}
+
+.paginatorSwitchClass {
+	overflow: hidden;
+}
+
+.paginatorFastStepClass {
+	text-align: right;
+	width: 280px!important;
+	overflow: hidden;
+}
+
+.paginatorGotoTdClass {
+	width: 20px!important;
+}
+
+.paginatorGotoDivClass {
+	cursor: pointer;
+	width: 12px!important;
+	height: 16px!important;
+	margin: 0 6px 0 2px;
+	background: url("images/goto-page.png") center no-repeat;
+}
+
+.paginatorGotoDivDisabled {
+	background: url("images/goto-page-disabled.png") center no-repeat;
+}
+
+.wardButtonClass {
+	margin-top: 2px;
+	width: 12px!important;
+	height: 12px!important;
+	float: right;
+}
+
+.wardButtonInnerClass {
+	visibility: hidden;
+}
+
+.dijit_a11y .wardButtonInnerClass {
+	visibility: visible;
+	margin-bottom: 8px;
+}
+
+.firstPageBtnClass {
+	cursor: pointer;
+	margin-left: 1px;
+	background: url("images/Go_to_first.gif") center no-repeat;
+}
+
+.firstPageBtnDisableClass {
+	margin-left: 1px;
+	background: url("images/Go_to_first-disable.gif") center no-repeat;
+}
+
+.prevPageBtnClass {
+	cursor: pointer;
+	margin: 2px 5px 0 9px;
+	background: url("images/Previous.gif") center no-repeat;
+}
+
+.prevPageBtnDisableClass {
+	margin: 2px 2px 0 9px;
+	background: url("images/Previous-disable.gif") center no-repeat;
+}
+
+.lastPageBtnClass {
+	cursor: pointer;
+	margin: 2px 9px 0 9px;
+	background: url("images/Go_to_last.gif") center no-repeat;
+}
+
+.lastPageBtnDisableClass {
+	margin: 2px 9px 0 9px;
+	background: url("images/Go_to_last-disable.gif") center no-repeat;
+}
+
+.nextPageBtnClass {
+	cursor: pointer;
+	margin-left: 1px;
+	background: url("images/Next.gif") center no-repeat;
+}
+
+.nextPageBtnDisableClass {
+	margin-left: 1px;
+	background: url("images/Next-disable.gif") center no-repeat;
+}
+
+.inactiveClass {
+	font-weight: normal;
+	color: #5D88AF;
+	cursor: pointer;
+	margin: 1px 6px 0 5px;
+	float: right;
+	zoom: 1; /* for IE */
+}
+
+.activedClass {
+	font-weight: bold;
+	color: black;
+	margin: 1px 6px 0 5px;
+	float: right;
+	text-decoration: none!important; 
+	zoom: 1; /* for IE */
+}
+
+.inactiveSwitchClass {
+	font-weight: normal;
+	color: #5D88AF;
+	cursor: pointer;
+	margin: 1px 7px 0 7px;
+	zoom: 1; /* for IE */
+}
+
+.activedSwitchClass {
+	font-weight: bold;
+	color: black;
+	margin: 1px 7px 0 7px;
+	text-decoration: none!important; 
+	zoom: 1; /* for IE */
+}
+
+.hover {
+	text-decoration: underline;
+}
+
+.dialogMarginClass {
+	width: 220px!important;
+	margin-bottom: 10px;
+}
+
+.dialogButtonClass {
+	width: 220px!important;
+	text-align: right;
+}

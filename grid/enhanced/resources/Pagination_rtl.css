@@ -1,0 +1,52 @@
+.dojoxGridRtl .descriptionClass {
+	text-align: right;
+	margin-right: 9px;
+}
+
+
+.dojoxGridRtl .paginatorGotoDivClass {
+	margin: 0 2px 0 6px;
+}
+
+.dojoxGridRtl .wardButtonClass {
+	float: left;
+}
+
+.dojoxGridRtl .firstPageBtnClass {
+	margin-right: 1px;
+}
+
+.dojoxGridRtl .firstPageBtnDisableClass {
+	margin-left: 1px;
+}
+
+.dojoxGridRtl .prevPageBtnClass {
+	margin: 2px 9px 0 5px;
+}
+
+.dojoxGridRtl .prevPageBtnDisableClass {
+	margin: 2px 9px 0 5px;
+}
+
+.dojoxGridRtl .nextPageBtnClass {
+	margin-right: 1px;
+}
+
+.dojoxGridRtl .nextPageBtnDisableClass {
+	margin-right: 1px;
+}
+
+.dojoxGridRtl .inactiveClass {
+	margin: 1px 5px 0 6px;
+	float: left;
+}
+
+.dojoxGridRtl .activedClass {
+	margin: 1px 5px 0 6px;
+	float: left;
+}
+
+.dijitRtl .dialogButtonClass {
+	float: left;
+	margin-bottom: 10px;
+}
