@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html dir="ltr">
+<head>
+	<title>Test Filter plugin of dojox.grid.EnhancedGrid</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<style type="text/css">
+		@import "../../../../dojo/resources/dojo.css";
+		@import "../../../../dijit/tests/css/dijitTests.css";
+		@import "../../../../dijit/themes/claro/claro.css";		
+		@import "../../../../dijit/themes/tundra/tundra.css";
+		@import "../../enhanced/resources/claro/EnhancedGrid.css";
+		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
+		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
+		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
+
+		body {
+			font-size: 0.9em;
+			font-family: Geneva, Arial, Helvetica, sans-serif;
+			padding-right: 10em;
+		}
+		.title {
+			text-align:center;
+			margin:1em;
+		}
+		
+ 		#grid{
+			width: 100em;
+			height: 30em;
+		}
+	</style>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" 
+		djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript">
+		dojo.require("dojox.grid.EnhancedGrid");
+		dojo.require("dojox.grid.enhanced.plugins.Filter");
+		var startGridIndex = 0,
+			initialShowGrid = true,
+			hideCtrlPanel = true;
+		var gridAttrs = {
+				rowSelector: "20px",
+				plugins: {
+					filter: {
+//						isServerSide: true,
+//						setupFilterQuery: function(commands, request){
+//							if(commands.filter && commands.enable){
+//								console.log(commands.filter);
+//								request.query = {
+//									"Name": "L*"
+//								}	
+//							}
+//						}
+						itemsName:'songs'
+					}
+				}
+			};
+	</script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
+	<script type="text/javascript" src="support/test_layout_music.js"></script>
+	<script type="text/javascript" src="support/test_repeat.js"></script>
+</head>
+<body class="claro">
+	<h1 class="title" tabindex="0"
+		onfocus="console.log('focus a'),this.style.color='red';"
+		onblur="console.log('blur a'),this.style.color='black';">
+		dojox.grid.EnhancedGrid - Filter</h1>
+	<div id="ctrlBtns"></div><br/>
+	<div id="gridContainer"></div><br/>
+	<p><strong>Note:</strong> To see the tundra theme, just append <b style="color:blue;">?theme=tundra</b> to the URL.</p>
+</body>
+</html>
