@@ -1,7 +1,7 @@
 dojo.provide("dojox.grid.EnhancedGrid");
 
 dojo.require("dojox.grid.DataGrid");
-dojo.require("dojox.grid.enhanced._Plugin");
+dojo.require("dojox.grid.enhanced._PluginManager");
 dojo.require("dojox.grid.enhanced._Layout");
 dojo.require("dojox.grid.enhanced._View");
 dojo.requireLocalization("dojox.grid.enhanced", "EnhancedGrid");
@@ -20,7 +20,6 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//	description:
 	//		EnhancedGrid features are implemented as plugins that could be loaded on demand.
 	//		Explicit dojo.require() is needed to use these feature plugins.
-	//
 	//	
 	//  example:
 	//		A quick sample to use all EnhancedGrid features:
@@ -50,6 +49,18 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	// |			       ... }, dojo.byId('gridDiv'));
 	// |		grid.startup();
 	// |	</script>
+	//
+	//
+	//		Plugin Support
+	//		[Note: Plugin support is still experimental]
+	//		
+	//		EnhancedGrid provides the following default plugins(case sensitive):
+	//		- "nestedSorting", "dnd", "indirectSelection" and "menus"
+	//
+	//		You can either customize the default plugins or add new ones, more details please see
+	//		- dojox.grid.enhanced._PluginManager
+	//		- dojox.grid.enhanced._Plugin
+	//		- dojox.grid.enhanced.plugins.*
 
 	//plugins: Object
 	//		Plugin properties, e.g. {nestedSorting: true, dnd: true, ...}
@@ -81,7 +92,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	
 	//_pluginMgrClass: Object
 	//		Default plugin manager class	
-	_pluginMgrClass: dojox.grid.enhanced._Plugin,
+	_pluginMgrClass: dojox.grid.enhanced._PluginManager,
 		 
 	//rowMovedTopic: String
 	//		Topic fired when selected rows are moved.
@@ -131,6 +142,12 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		}
 	},
 	
+	postrender: function(){
+		this.inherited(arguments);
+		//to make header cell selectable
+		dojo.setSelectable(this.viewsHeaderNode, true);
+	},
+	
 	textSizeChanged: function(){
 		// summary:
 		//		Overwritten, see _Grid.textSizeChanged()	
@@ -156,6 +173,15 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 				value && this.grid.rowSelectCell.toggleRow(index, false);
 			});
 		}
+	},
+
+	doKeyEvent: function(e){
+		// summary:
+		//		Overwritten, see _Grid._copyAttr()
+		var view = this.focus.focusView;
+		view.content.decorateEvent(e);
+		!e.cell && view.header.decorateEvent(e);		
+		this.inherited(arguments);
 	},
 	
 	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
@@ -188,6 +214,38 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		return this.inherited(arguments);
 	},
 	
+	getCellByField: function(field){
+		var cells = this.layout.cells;
+		for(i in cells){
+			if(cells[i].field == field){
+				return cells[i];
+			}
+		}
+	},
+	
+	scrollToRow: function(rowIndex, select_it){
+		rowIndex = rowIndex || 0;
+		if(rowIndex < 0){
+			rowIndex = 0;
+		}else if(rowIndex >= this.rowCount){
+			rowIndex = this.rowCount - 1;
+		}
+		arguments[0]=rowIndex;
+		this.inherited(arguments);
+		if(select_it){
+			this.selection.select(rowIndex);
+		}
+		this.inherited(arguments);
+	},
+	
+	_getHeaderHeight: function(){
+		// summary:
+		//		Overwritten, see _Grid._getHeaderHeight()
+		//		Should include borders/margins of this.viewsHeaderNode
+		this.inherited(arguments);
+		return dojo.marginBox(this.viewsHeaderNode).h;
+	},
+	
 	destroy: function(){
 		//summary:
 		//		Destroy all resources
@@ -198,8 +256,11 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	}
 });
 
-
 dojox.grid.EnhancedGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return dojox.grid._Grid.markupFactory(props, node, ctor, 
 					dojo.partial(dojox.grid.DataGrid.cell_markupFactory, cellFunc));
+};
+
+dojox.grid.EnhancedGrid.registerPlugin = function(name, clazz, props){
+	dojox.grid.enhanced._PluginManager.registerPlugin(name, clazz, props);
 };

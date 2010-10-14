@@ -5,18 +5,6 @@ dojo.require("dojox.grid._Builder");
 dojo.declare("dojox.grid.enhanced._BuilderMixin", null, {
 	// summary:
 	//		Common methods shared between dojox.grid.enhanced._HeaderBuilder and dojox.grid.enhanced._ContentBuilder
-	generateCellMarkup: function(inCell, inMoreStyles, inMoreClasses, isHeader){
-		// summary:
-		//		Overwritten, see dojox.grid._Builder.generateCellMarkup()
-		//		Add special css classes when nested sorting is on
-		var result = this.inherited(arguments);
-		if(!isHeader){
-			result[4] += '<div class="dojoxGridCellContent">';
-			result[6] = '</div></td>';
-		}
-		return result;
-	},
-	
 	domouseup: function(e){
 	//summary:
 	//		Handler when there is a mouse up event either in header or grid content 
