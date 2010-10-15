@@ -19,7 +19,7 @@ Credits
 		look and feel of FindReplace, as well as behavioral
 		improvements.
 	Eldon (IBM, CCLA) - LocalImage, AutoUrlLink, TablePluginsColorCell -
-		dojox.widget.ColorPicker, ResizeTableColumn
+		dojox.widget.ColorPicker, ResizeTableColumn, AutoSave
 
 -------------------------------------------------------------------------------
 Project description
@@ -151,6 +151,10 @@ dojox.editor.plugins.ResizeColumnPlugin
 	Status: Experimental (Unsupported)
 	A plugin that adds column resize to the editor table plugins.
 
+dojox.editor.plugins.AutoSave
+	Status: Experimental (Unsupported)
+	A plugin that provides 'auto-save' capablity, eg, post back to some url at an interval.
+
 
 -------------------------------------------------------------------------------
 Dependencies:
@@ -177,8 +181,8 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/InsertEntity
 	http://docs.dojocampus.org/dojox/editor/plugins/NormalizeIndentOutdent
 	http://docs.dojocampus.org/dojox/editor/plugins/Breadcrumb
-        http://docs.dojocampus.org/dojox/editor/plugins/FindReplace
-        http://docs.dojocampus.org/dojox/editor/plugins/CollapsibleToolbar
+	http://docs.dojocampus.org/dojox/editor/plugins/FindReplace
+	http://docs.dojocampus.org/dojox/editor/plugins/CollapsibleToolbar
 	http://docs.dojocampus.org/dojox/editor/plugins/Blockquote
 	http://docs.dojocampus.org/dojox/editor/plugins/PasteFromWord
 	http://docs.dojocampus.org/dojox/editor/plugins/InsertAnchor       
@@ -188,7 +192,9 @@ See also:
 	http://docs.dojocampus.org/dojox/editor/plugins/LocalImage
 	http://docs.dojocampus.org/dojox/editor/plugins/AutoUrlLink
 	http://docs.dojocampus.org/dojox/editor/plugins/ResizeTableColumn
+	http://docs.dojocampus.org/dojox/editor/plugins/AutoSave
 
+	
 -------------------------------------------------------------------------------
 Plugin Installation instructions
 
@@ -273,9 +279,9 @@ For the PasteFromWord plugin:
 	<link href="[path]dojox/editor/plugins/resources/css/PasteFromWord.css" type="text/css" rel="stylesheet" />
 
 For the InsertAnchor plugin:
-        dojo.require("dojox.editor.plugins.InsertAnchor");
-        and CSS:
-        <link href="[path]dojox/editor/plugins/resources/css/InsertAnchor.css" type="text/css" rel="stylesheet" />
+	dojo.require("dojox.editor.plugins.InsertAnchor");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/InsertAnchor.css" type="text/css" rel="stylesheet" />
 
 For the TextColor plugin:
 	dojo.require("dojox.editor.plugins.TextColor");
@@ -288,9 +294,9 @@ For the NormalizeStyle plugin:
 	No CSS required.
 
 For the StatusBar plugin:
-        dojo.require("dojox.editor.plugins.StatusBar");
-        and CSS:
-        <link href="[path]dojox/editor/plugins/resources/css/StatusBar.css" type="text/css" rel="stylesheet" />
+	dojo.require("dojox.editor.plugins.StatusBar");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/StatusBar.css" type="text/css" rel="stylesheet" />
 
 For the LocalImage plugin:
 	dojo.require("dojox.editor.plugins.LocalImage");
@@ -300,13 +306,19 @@ For the LocalImage plugin:
 For the AutoUrlLink plugin:
 	dojo.require("dojox.editor.plugins.AutoUrlLink");
 	and CSS:
-        No CSS required.
+	No CSS required.
 
 For the ResizeTableColumn plugin:
-        dojo.require("dojox.editor.plugins.ResizeTableColumn");
-        and CSS:
-        No CSS required in addition to the table plugins css.
+	dojo.require("dojox.editor.plugins.ResizeTableColumn");
+	and CSS:
+	No CSS required in addition to the table plugins css.
 
+For the AutoSave plugin:
+	dojo.require("dojox.editor.plugins.AutoSave");
+	and CSS:
+	<link href="[path]dojox/editor/plugins/resources/css/AutoSave.css" type="text/css" rel="stylesheet" />
+        
+        
 See tests for examples:
 	dojox/editor/tests/editorTablePlugs.html
 	dojox/editor/tests/editorUploadPlug.html
@@ -330,4 +342,5 @@ See tests for examples:
 	dojox/editor/tests/editorLocalImage.html
 	dojox/editor/tests/editorAutoUrlLink.html
 	dojox/editor/tests/editorResizeTableColumn.html
+	dojox/editor/tests/editorAutoSave.html
 	dojox/editor/tests/testPluginsAll.html
