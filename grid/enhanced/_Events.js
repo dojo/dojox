@@ -270,16 +270,16 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	onRowSelectorMouseDown: function(e) {
 		this.focus.focusArea("rowHeader",e);
 	},
-	onRowSelectorMouseUp: function(e) {
+	onRowSelectorMouseUp: function(e){
 		
-	},	
+	},
 	//triggered in _View, see Selector plugin
 	onMouseUpRow: function(e){
 		if(e.rowIndex != -1){
 			this.onRowMouseUp(e);
 		}
-	}/*,
+	},
 	onRowMouseUp: function(e){
 		
-	}*/
+	}
 });

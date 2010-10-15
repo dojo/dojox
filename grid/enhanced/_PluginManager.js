@@ -1,0 +1,473 @@
+dojo.provide("dojox.grid.enhanced._PluginManager");
+
+dojo.require("dojox.grid.enhanced._Builder");
+dojo.require("dojox.grid.enhanced._Events");
+dojo.require("dojox.grid.enhanced._FocusManager");
+
+dojo.declare("dojox.grid.enhanced._PluginManager", null, {
+	//	summary:
+	//		Singleton plugin manager 
+	//
+	//	description:
+	//		Plugin manager is responsible for 
+	//		1. Loading required plugins
+	//		2. Handling collaboration and dependencies among plugins
+	//		3. Overwriting some default behavior of DataGrid
+	//		
+	//		Note: Mixin and method caching are used for #3, this might be refined once 
+	//		an overall plugin architecture is set up for DataGrid.
+	//
+	//      Some plugin dependencies:
+    //	   	- DnD plugin depends on NestedSorting plugin
+	//		- RowSelector should be used for DnD plugin. 
+	//		  e.g. <div dojoType="dojox.grid.EnhancedGrid"  plugins='{dnd: true, ...}}' rowSelector="20px" .../>
+	//		- "columnReordering" attribute won't work when either DnD or Indirect Selections plugin is on.
+		
+	//fixedCellNum: Integer
+	//		Number of fixed cells(columns), e.g. cell(column) of indirect selection is fixed and can't be moved	
+	fixedCellNum: -1,
+	
+	//funcMap: Object
+	//		Map for caching default DataGrid methods.
+	funcMap: null,
+	
+	//_options: Object
+	//		Normalized plugin options
+	_options: null,
+
+	//_plugins: Array
+	//		Plugin list
+	_plugins: null,
+
+	//_connects: Array
+	//		List of all connections.
+	_connects: null,
+
+	constructor: function(inGrid){
+		this.grid = inGrid;
+		this.funcMap = {}, this._options = {};
+		this._plugins = [], this._connects = [];
+		this._parseProps(this.grid.plugins);
+	},
+	
+	_parseProps: function(plugins){
+		// summary:
+		//		Parse plugins properties
+		// plugins: Object
+		//		Plugin properties defined by user
+		if(!plugins){ return; }
+		
+		var p, loading = {}, options = this._options, grid = this.grid; 
+		var registry = dojox.grid.enhanced._PluginManager.registry;//global plugin registry
+		for(p in plugins){
+			if(plugins[p]){//filter out boolean false e.g. {p:false}
+				this._normalize(p, plugins, registry, loading);
+			}
+		}
+		//"columnReordering" attribute won't work when either DnD or Indirect Selections plugin is used.
+		(options.dnd || options.indirectSelection) && (options.columnReordering = false);
+		
+		if(options.dnd && (!grid.rowSelector || grid.rowSelector=='false')){
+			//RowSelector should be used for DnD plugin.
+			options.rowSelector = '20px';
+		}
+		//mixin all plugin properties into Grid
+		dojo.mixin(grid, options);
+	},
+	
+	preInit: function(){
+		// summary:
+		//		Load appropriate plugins before DataGrid.postCreate(). 
+		//		See EnhancedGrid.postCreate()
+		this.grid.focus.destroy();
+		this.grid.focus = new dojox.grid.enhanced._FocusManager(this.grid);
+		new dojox.grid.enhanced._Events(this.grid);//overwrite some default events of DataGrid
+		this._init(true);
+		dojo.forEach(this._plugins, function(p){
+			p.afterPreInit();
+		});
+	},
+	
+	postInit: function(){
+		// summary:
+		//		Load plugins after DataGrid.postCreate() - the default phase when plugins are created 
+		//		See EnhancedGrid.postCreate()
+		this._init(false);
+		
+		//get fixed cell(column) number
+		this.fixedCellNum = this.getFixedCellNumber();
+		
+		//overwrite some default methods of DataGrid by method caching
+		this._plugins.length > 0 && this._bindFuncs();
+		console.log('Plugin list - ',this._plugins);
+		dojo.forEach(this._plugins, function(p){
+			p.afterPostInit();
+		});
+	},
+	
+	_init: function(pre){
+		//summary:
+		//		Find appropriate plugins and load them
+		//pre: Boolean
+		//		True - preInit | False - postInit(by default)
+		var p, preInit, options = this._options;
+		for(p in options){
+			preInit = options[p]['preInit'];
+			if((pre ? preInit : !preInit) && options[p]['class'] && !this.pluginExisted(p)){
+				this.loadPlugin(p);
+			}
+		}
+	},
+	
+	_normalize: function(p, plugins, registry, loading){
+		//summary:
+		//		Normalize plugin properties especially the dependency chain
+		//p: String
+		//		Plugin name
+		//plugins: Object
+		//		Plugin properties set by user		
+		//registry: Object
+		//		The global plugin registry
+		//loading: Object
+		//		Map for checking process state 				
+		if(!registry[p]){ throw new Error('Plugin ' + p + ' is required.');}
+		
+		if(loading[p]){ throw new Error('Recursive cycle dependency is not supported.'); }
+		
+		var options = this._options;
+		if(options[p]){ return options[p]; }
+		
+		loading[p] = true;
+		//TBD - more strict conditions?
+		options[p] = dojo.mixin({}, registry[p], dojo.isObject(plugins[p]) ? plugins[p] : {});
+		
+		var dependencies = options[p]['dependency'];
+		if(dependencies){
+			if(!dojo.isArray(dependencies)){
+				dependencies = options[p]['dependency'] = [dependencies];
+			}
+			dojo.forEach(dependencies, function(dependency){
+				if(!this._normalize(dependency, plugins, registry, loading)){
+					throw new Error('Plugin ' + dependency + ' is required.');	
+				};
+			}, this);
+		}
+		delete loading[p];
+		return options[p];
+	},
+	
+	loadPlugin: function(name){
+		//summary:
+		//		Load required plugin("name")
+		//name: String
+		//		Plugin name
+		//return: Object
+		//		The newly loaded plugin
+		var option = this._options[name];
+		if(!option){ return; } //return if no plugin option
+		
+		var plugin = this.getPlugin(name);
+		if(plugin){ return plugin; } //return if plugin("name") already existed
+		
+		var dependencies = option['dependency'];
+		dojo.forEach(dependencies, function(dependency){
+			if(!this.loadPlugin(dependency)){
+				throw new Error('Plugin ' + dependency + ' is required.');
+			}
+		}, this);
+		
+		plugin = new this.getPluginClazz(option['class'])(this.grid, option);
+		this._plugins.push(plugin);
+		return plugin;
+	},
+	
+	pluginExisted: function(name){
+		//summary:
+		//		Check if plugin("name") existed
+		//name: String
+		//		Plugin name
+		//return: Boolean
+		//		True - existed | False - not existed
+		return !!this.getPlugin(name);
+	},
+	
+	getPlugin: function(name){
+		//summary:
+		//		Get plugin("name")
+		//name: String
+		//		Plugin name
+		//return: Object
+		//		Plugin instance
+		var i, plugins = this._plugins, name = name.toLowerCase();
+		for(i = 0, len = plugins.length; i < len; i++){
+			if(name == plugins[i]['name'].toLowerCase()){
+				return plugins[i];
+			};
+		}
+	},	
+	
+	getPluginClazz: function(clazz){
+		//summary:
+		//		Load target plugin which must be already required (dojo.require(..))
+		//clazz: class | String
+		//		Plugin class
+		if(dojo.isFunction(clazz)){
+			return clazz;//return if it's already a clazz
+		}
+		var errorMsg = 'Please make sure Plugin "' + clazz + '" is existed.';
+		try{
+			var cls = dojo.getObject(clazz);
+			if(!cls){ throw new Error(errorMsg); }
+			return cls;
+		}catch(e){
+			throw new Error(errorMsg);
+		}
+	},
+	
+	isFixedCell: function(cell) {
+		//summary:
+		//		See if target cell(column) is fixed or not.
+		//cell: Object
+		//		Target cell(column)
+		//return: Boolean
+		//		True - fixed| False - not fixed
+
+		//target cell can use Boolean attributes named "isRowSelector" or "positionFixed" to mark it's a fixed cell(column)
+		return cell && (cell.isRowSelector || cell.positionFixed);
+	},
+	
+	getFixedCellNumber: function(){
+		//summary:
+		//		See if target cell(column) is fixed or not.
+		//return: Number
+		//		True - fixed| False - not fixed
+		if(this.fixedCellNum >= 0){
+			return this.fixedCellNum;
+		}
+		var i = 0;
+		dojo.forEach(this.grid.layout.cells, dojo.hitch(this, function(cell){
+			this.isFixedCell(cell) && (i++);
+		}));
+		return i;
+	},
+	
+	inSingleSelection: function(){
+		//summary:
+		//		See if Grid is in single selection mode
+		//return: Boolean
+		//		True - in single selection mode | False - not in single selection mode
+		return this.grid.selectionMode && this.grid.selectionMode == 'single';
+	},
+	
+	needUpdateRow: function(){
+		//summary:
+		//		See if needed to update row. See this.updateRow()
+		//return: Boolean
+		//		True - need update row | False - don't update row
+		
+		//always true when either indirect selection or DnD disabled
+		return ((this.grid.indirectSelection || this.grid.isDndSelectEnable) ? this.grid.edit.isEditing() : true);		
+	},
+	
+	_bindFuncs: function(){
+		//summary:
+		//		Overwrite some default methods of DataGrid by method caching
+		dojo.forEach(this.grid.views.views, this._bindView, this);
+		this._connects.push(dojo.connect(this.grid.views, 'addView', dojo.hitch(this, this._bindView)));	
+		
+		/*
+		//overwrite _FocusManager.nextKey()
+		this.funcMap['nextKey'] = this.grid.focus.nextKey;
+		this.grid.focus.nextKey = this.nextKey;
+
+		//overwrite _FocusManager.previousKey()
+		this.funcMap['previousKey'] = this.grid.focus.previousKey;
+		this.grid.focus.previousKey = this.previousKey;
+		*/
+
+		//overwrite _Scroller.renderPage()
+		if(this.grid.indirectSelection){
+			this.funcMap['renderPage'] = this.grid.scroller.renderPage;
+			this.grid.scroller.renderPage = this.renderPage;	
+			this.funcMap['measurePage'] = this.grid.scroller.measurePage;
+			this.grid.scroller.measurePage = this.measurePage;	
+		}
+		
+		//overwrite _Grid.updateRow()
+		this.funcMap['updateRow'] = this.grid.updateRow;		
+		this.grid.updateRow = this.updateRow;	
+
+		var edit = this.grid.edit;
+		edit && (edit.styleRow = function(inRow){});
+	},
+	
+	_bindView: function(view){
+		//summary:
+		//		Overwrite several default behavior for all views(including _RowSelector view)
+		if(!view){ return; }
+				
+		//add more events handler - _View
+		dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", ['mouseup', 'mousemove']);
+		dojox.grid.util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
+		
+		//overwrite _View._getHeaderContent()
+		this.grid.nestedSorting && (view._getHeaderContent = this.grid._getNestedSortHeaderContent);
+		
+		//overwrite _View.setScrollTop(),
+		//#10273 fix of base DataGrid seems to bring some side effects to Enhanced Grid, 
+		//TODO - need a more close look post v.1.4 rather than simply overwrite it
+		this.grid.dnd && (view.setScrollTop = this.setScrollTop);
+	},
+	
+	previousKey: function(e){
+		//summary:
+		//		Overwrite _FocusManager.previousKey(), "this" - _FocusManager scope		
+		var isEditing = this.grid.edit.isEditing();
+		if(!isEditing && !this.isNavHeader() && !this._isHeaderHidden()) {
+			if(!this.grid.isDndSelectEnable){
+				this.focusHeader();
+			}else{
+				if(!this.isRowBar()){
+					this.focusRowBar();
+				} else {
+					this._blurRowBar();
+					this.focusHeader();
+				}
+			}
+			dojo.stopEvent(e);
+			return;
+		}
+		//invoke _FocusManager.previousKey()
+		dojo.hitch(this, this.grid.pluginMgr.funcMap['previousKey'])(e);
+	},
+
+	nextKey: function(e) {
+		//summary:
+		//		Overwrite _FocusManager.nextKey(), "this" - _FocusManager scope		
+		var isEmpty = this.grid.rowCount == 0;
+		var isRootEvt = (e.target === this.grid.domNode);
+		if(!isRootEvt && this.grid.isDndSelectEnable && this.isNavHeader()){
+			// if tabbing from col header, then go to grid proper. If grid is empty this.grid.rowCount == 0
+			this._colHeadNode = this._colHeadFocusIdx= null;
+			this.focusRowBar();
+			return;
+		}else if(!isRootEvt && (!this.grid.isDndSelectEnable && this.isNavHeader()) || (this.grid.isDndSelectEnable && this.isRowBar())){
+			this._colHeadNode = this._colHeadFocusIdx= null;
+			if (this.grid.isDndSelectEnable) {
+				this._blurRowBar();
+			}
+			if(this.isNoFocusCell() && !isEmpty){
+				this.setFocusIndex(0, 0);
+			}else if(this.cell && !isEmpty){
+				if(this.focusView && !this.focusView.rowNodes[this.rowIndex]){
+				// if rowNode for current index is undefined (likely as a result of a sort and because of #7304) 
+				// scroll to that row
+					this.grid.scrollToRow(this.rowIndex);
+				}
+				this.focusGrid();
+			}else if(!this.findAndFocusGridCell()){
+				this.tabOut(this.grid.lastFocusNode);
+			}
+			return;
+		}
+		//invoke _FocusManager.nextKey()
+		dojo.hitch(this, this.grid.pluginMgr.funcMap['nextKey'])(e);
+	},
+	
+	renderPage: function(inPageIndex){
+		//summary:
+		//		Overwrite _Scroller.renderPage(), "this" - _Scroller scope
+		//		To add progress cursor when rendering the indirect selection cell(column) with checkbox
+		for(var i=0, j=inPageIndex*this.rowsPerPage; (i<this.rowsPerPage)&&(j<this.rowCount); i++, j++){}
+		(--j >= 0) && this.grid.lastRenderingRows.push(j);
+		dojo.addClass(this.grid.domNode, 'dojoxGridSortInProgress');
+		
+		//invoke _Scroller.renderPage()
+		dojo.hitch(this, this.grid.pluginMgr.funcMap['renderPage'])(inPageIndex);
+	},
+	
+	measurePage: function(inPageIndex){
+		//summary:
+		//		Overwrite _Scroller.measurePage(), "this" - _Scroller scope
+		//		Fix a regression similar as #5552
+		//		invoke _Scroller.measurePage()
+		var pageHeight = dojo.hitch(this, this.grid.pluginMgr.funcMap['measurePage'])(inPageIndex);
+		return (!dojo.isIE || this.grid.rowHeight || pageHeight > this.rowsPerPage * this.grid.minRowHeight) ? pageHeight : undefined;
+	},
+	
+	updateRow: function(inRowIndex){
+		//summary:
+		//		Overwrite _Scroller.renderPage(), "this" - _Grid scope
+		var caller = arguments.callee.caller;
+		if(caller.nom == "move" && /* caller.ctor.prototype.declaredClass == "dojox.grid._FocusManager" && */ !this.pluginMgr.needUpdateRow()){
+			//if is called from dojox.grid._FocusManager.move(), and no need to update row, then return
+			return;
+		}
+		//invoke _Grid.updateRow()
+		dojo.hitch(this, this.pluginMgr.funcMap['updateRow'])(inRowIndex);
+	},
+	
+	setScrollTop: function(inTop){
+		//summary:
+		//		Overwrite dojox.grid._View.setScrollTop, "this" - _View scope
+		this.lastTop = inTop;
+		this.scrollboxNode.scrollTop = inTop;
+		return this.scrollboxNode.scrollTop;
+	},
+	
+	getViewByCellIdx: function(cellIdx){
+		//summary:
+		//		Find view that contains the cell with 'cellIdx'
+		//cellIdx: Integer
+		//		Index of target cell
+		//return: Object
+		//		Matched view
+		var cellMatched = function(cells){
+			var j = 0, matched = false;
+			for(; j < cells.length; j++){
+				if(dojo.isArray(cells[j])){
+					if(cellMatched(cells[j])){ return true;}
+				}else if(cells[j].index == cellIdx){
+					return true;
+				}
+			}
+		};
+		var i = 0, views = this.grid.views.views;
+		for(; i < views.length; i++){
+			cells = views[i].structure.cells;
+			if(cellMatched(cells)){ return views[i]; }
+		}
+		return null;
+	},
+	
+	destroy: function(){
+		//summary:
+		//		Destroy all resources
+		dojo.forEach(this._connects, dojo.disconnect);
+		dojo.forEach(this._plugins, function(p){
+			p.destroy && p.destroy();
+			delete p;
+		});
+		delete this._connects;
+		delete this._plugins;
+		delete this._options;
+		console.log('PluginManager.destroy() executed!');
+	}
+});
+
+dojox.grid.enhanced._PluginManager.registerPlugin = function(name, clazz, props){
+		// summary:
+		//		Register plugins - TODO, a better way rather than global registry?
+		// name: String
+		//		Plugin name, e.g. "dnd"
+		// clazz: String
+		//		Full class name, e.g. "dojox.grid.enhanced.plugins.DnD"
+		// props: Object - Optional
+		//		Plugin properties e.g. {"dependency": ["nestedSorting"], ...}
+	if(!name || !clazz){ 
+		console.warn("Failed to register plugin ", (name ? name : (clazz ? clazz : "")), " name or class missed!");
+	}
+	var cls = dojox.grid.enhanced._PluginManager;
+	cls.registry = cls.registry || {};
+	cls.registry[name] = dojo.mixin({"class": clazz}, (props ? props : {}));
+};
