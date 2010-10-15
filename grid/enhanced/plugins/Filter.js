@@ -81,7 +81,7 @@ dojo.require("dijit.Dialog");
 		//		plugin name
 		name: "gridFilter",
 		
-		constructor: function(inGrid,args){
+		constructor: function(inGrid, args){
 			// summary: 
 			//		See constructor of dojox.grid.enhanced._Plugin.
 
@@ -97,16 +97,16 @@ dojo.require("dijit.Dialog");
 			this._wrapStore();
 			
 			//Install UI components 
-			var args = {
+			var obj = {
 				"plugin": this
 			};
 			this.clearFilterDialog = new dijit.Dialog({
 				title: this.nls["clearFilterDialogTitle"],
-				content: new fns.ClearFilterConfirm(args)
+				content: new fns.ClearFilterConfirm(obj)
 			});
-			this.filterDefDialog = new fns.FilterDefDialog(args);
-			this.filterBar = new fns.FilterBar(args);
-			this.filterStatusTip = new fns.FilterStatusTip(args);
+			this.filterDefDialog = new fns.FilterDefDialog(obj);
+			this.filterBar = new fns.FilterBar(obj);
+			this.filterStatusTip = new fns.FilterStatusTip(obj);
 			
 			this._store = inGrid.store;
 			this.connect(inGrid, "setStore", function(store){
